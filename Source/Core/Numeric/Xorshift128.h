@@ -15,6 +15,7 @@
 #define KVS_CORE_XORSHIFT_128_H_INCLUDE
 
 #include <kvs/ClassName>
+#include <kvs/Type>
 
 
 namespace kvs
@@ -31,10 +32,10 @@ class Xorshift128
 
 private:
 
-    unsigned long m_x;
-    unsigned long m_y;
-    unsigned long m_z;
-    unsigned long m_w;
+    kvs::UInt32 m_x;
+    kvs::UInt32 m_y;
+    kvs::UInt32 m_z;
+    kvs::UInt32 m_w;
 
 public:
 
@@ -42,7 +43,7 @@ public:
 
 public:
 
-    void setSeed( unsigned long );
+    void setSeed( kvs::UInt32 );
 
 public:
 
@@ -64,7 +65,7 @@ inline const float Xorshift128::rand( void )
 {
     const float t24 = 1.0 / 16777216.0; /* 0.5**24 */
 
-    unsigned long t = ( m_x ^ ( m_x << 11 ) );
+    kvs::UInt32 t = ( m_x ^ ( m_x << 11 ) );
 
     m_x = m_y;
     m_y = m_z;

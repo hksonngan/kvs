@@ -30,7 +30,7 @@ Xorshift128::Xorshift128( void )
     , m_z( 0 )
     , m_w( 0 )
 {
-    const unsigned long seed = static_cast<unsigned long>( time( 0 ) );
+    const kvs::UInt32 seed = static_cast<kvs::UInt32>( time( 0 ) );
 
     this->setSeed( seed );
 }
@@ -43,7 +43,7 @@ Xorshift128::Xorshift128( void )
  *  @return TODO
  */
 /*==========================================================================*/
-void Xorshift128::setSeed( unsigned long seed )
+void Xorshift128::setSeed( kvs::UInt32 seed )
 {
     m_x = seed = 1812433253UL * ( seed ^ ( seed >> 30 ) ) + 1;
     m_y = seed = 1812433253UL * ( seed ^ ( seed >> 30 ) ) + 2;
