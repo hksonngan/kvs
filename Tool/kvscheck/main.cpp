@@ -1,0 +1,62 @@
+/****************************************************************************/
+/**
+ *  @file main.cpp
+ */
+/*----------------------------------------------------------------------------
+ *
+ *  Copyright 2007-2008 Visualization Laboratory, Kyoto University.
+ *  All rights reserved.
+ *  See http://www.viz.media.kyoto-u.ac.jp/kvs/copyright/ for details.
+ *
+ *  $Id$
+ */
+/****************************************************************************/
+#include "Argument.h"
+#include "CompilerChecker.h"
+#include "FileChecker.h"
+#include "PlatformChecker.h"
+#include "VersionChecker.h"
+#include "SupportChecker.h"
+#include "OpenGLChecker.h"
+
+
+/*==========================================================================*/
+/**
+ *  Main function.
+ *  @param argc [in] argument count
+ *  @param argv [in] argument values
+ */
+/*==========================================================================*/
+int main( int argc, char** argv )
+{
+    kvscheck::Argument arg( argc, argv );
+    if( !arg.parse() ) return( false );
+
+    if( arg.hasOption("version") )
+    {
+        std::cout << kvscheck::VersionChecker() << std::endl;
+    }
+    if( arg.hasOption("platform") )
+    {
+        std::cout << kvscheck::PlatformChecker() << std::endl;
+    }
+    if( arg.hasOption("compiler") )
+    {
+        std::cout << kvscheck::CompilerChecker() << std::endl;
+    }
+    if( arg.hasOption("support") )
+    {
+        std::cout << kvscheck::SupportChecker() << std::endl;
+    }
+    if( arg.hasOption("opengl") )
+    {
+        std::cout << kvscheck::OpenGLChecker( argc, argv ) << std::endl;
+    }
+    if( arg.hasOption("file") )
+    {
+        const std::string filename = arg.value<std::string>();
+        std::cout << kvscheck::FileChecker( filename ) << std::endl;
+    }
+
+    return( true );
+}

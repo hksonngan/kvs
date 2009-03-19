@@ -1,0 +1,82 @@
+#*****************************************************************************
+#  $Id$
+#*****************************************************************************
+
+#=============================================================================
+#  Include.
+#=============================================================================
+include ../kvs.conf
+include ../Makefile.def
+
+
+#=============================================================================
+#  INCLUDE_PATH, LIBRARY_PATH, LINK_LIBRARY, INSTALL_DIR.
+#=============================================================================
+INCLUDE_PATH :=
+LIBRARY_PATH :=
+LINK_LIBRARY :=
+INSTALL_DIR  := $(KVS_DIR)
+
+
+#=============================================================================
+#  Sub directory.
+#=============================================================================
+SUBDIRS := Core
+
+ifeq "$(KVS_SUPPORT_GLUT)" "1"
+SUBDIRS += SupportGLUT
+endif
+
+ifeq "$(KVS_SUPPORT_GLEW)" "1"
+SUBDIRS += SupportGLEW
+endif
+
+ifeq "$(KVS_SUPPORT_QT)" "1"
+SUBDIRS += SupportQt
+endif
+
+ifeq "$(KVS_SUPPORT_SAGE)" "1"
+SUBDIRS += SupportSAGE
+endif
+
+
+#=============================================================================
+#  build.
+#=============================================================================
+build:
+	for i in $(SUBDIRS); do \
+	$(MAKE) -C $$i $(MFLAGS) $(MAKEOVERRIDES) build; done
+
+
+#=============================================================================
+#  clean.
+#=============================================================================
+clean:
+	for i in $(SUBDIRS); do \
+	$(MAKE) -C $$i $(MFLAGS) $(MAKEOVERRIDES) clean; done
+
+
+#=============================================================================
+#  install.
+#=============================================================================
+install:
+	$(MKDIR) $(INSTALL_DIR)/include/kvs
+	$(INSTALL) $(shell find kvs      -maxdepth 1 -type f) $(INSTALL_DIR)/include/kvs
+ifeq "$(KVS_SUPPORT_GLUT)" "1"
+	$(MKDIR) $(INSTALL_DIR)/include/kvs/glut
+	$(INSTALL) $(shell find kvs/glut -maxdepth 1 -type f) $(INSTALL_DIR)/include/kvs/glut
+endif
+ifeq "$(KVS_SUPPORT_GLEW)" "1"
+	$(MKDIR) $(INSTALL_DIR)/include/kvs/glew
+	$(INSTALL) $(shell find kvs/glew -maxdepth 1 -type f) $(INSTALL_DIR)/include/kvs/glew
+endif
+ifeq "$(KVS_SUPPORT_QT)" "1"
+	$(MKDIR) $(INSTALL_DIR)/include/kvs/qt
+	$(INSTALL) $(shell find kvs/qt   -maxdepth 1 -type f) $(INSTALL_DIR)/include/kvs/qt
+endif
+ifeq "$(KVS_SUPPORT_SAGE)" "1"
+	$(MKDIR) $(INSTALL_DIR)/include/kvs/sage
+	$(INSTALL) $(shell find kvs/sage   -maxdepth 1 -type f) $(INSTALL_DIR)/include/kvs/sage
+endif
+	for i in $(SUBDIRS); do \
+	$(MAKE) -C $$i $(MFLAGS) $(MAKEOVERRIDES) install; done

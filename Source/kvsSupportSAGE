@@ -1,0 +1,4 @@
+#include <SupportSAGE/SAGE.h>
+#include <SupportSAGE/Viewer/ApplicationInterface.h>
+#include <SupportSAGE/Viewer/GlobalBase.h>
+#include <SupportSAGE/Viewer/ScreenBase.h>

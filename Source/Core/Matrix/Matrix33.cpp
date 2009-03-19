@@ -1,0 +1,32 @@
+/****************************************************************************/
+/**
+ *  @file Matrix33.cpp
+ */
+/*----------------------------------------------------------------------------
+ *
+ *  Copyright 2007-2008 Visualization Laboratory, Kyoto University.
+ *  All rights reserved.
+ *  See http://www.viz.media.kyoto-u.ac.jp/kvs/copyright/ for details.
+ *
+ *  $Id$
+ */
+/****************************************************************************/
+#include "Matrix33.h"
+
+
+namespace kvs
+{
+
+// Template instantiation.
+// template class Matrix33<char>;
+// template class Matrix33<unsigned char>;
+// template class Matrix33<short>;
+// template class Matrix33<unsigned short>;
+// template class Matrix33<int>;
+// template class Matrix33<unsigned int>;
+// template class Matrix33<long>;
+// template class Matrix33<unsigned long>;
+template class Matrix33<float>;
+template class Matrix33<double>;
+
+} // end of namespace kvs

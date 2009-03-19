@@ -1,0 +1,317 @@
+/*****************************************************************************/
+/**
+ *  @file   DataArrayTag.h
+ */
+/*----------------------------------------------------------------------------
+ *
+ *  Copyright 2007 Visualization Laboratory, Kyoto University.
+ *  All rights reserved.
+ *  See http://www.viz.media.kyoto-u.ac.jp/kvs/copyright/ for details.
+ *
+ *  $Id$
+ */
+/*****************************************************************************/
+#ifndef KVS__KVSML__DATA_ARRAY_TAG_H_INCLUDE
+#define KVS__KVSML__DATA_ARRAY_TAG_H_INCLUDE
+
+#include <string>
+#include <kvs/ValueArray>
+#include <kvs/AnyValueArray>
+#include <kvs/File>
+#include <kvs/XMLNode>
+#include <kvs/XMLElement>
+#include <kvs/XMLDocument>
+#include "DataArray.h"
+
+
+namespace kvs
+{
+
+namespace kvsml
+{
+
+/*===========================================================================*/
+/**
+ *  @brief  Tag class for <DataArray>
+ */
+/*===========================================================================*/
+class DataArrayTag
+{
+protected:
+
+    kvs::XMLNode::SuperClass* m_node; ///< pointer to the node of the XML tree
+    bool m_has_type; ///< flag to check whether 'type' is specified or not
+    std::string m_type; ///< data type string
+    bool m_has_file; ///< flag to check whether 'file' is specified or not
+    std::string m_file; ///< external file name
+    bool m_has_format; ///< flag to check whether 'format' is specified or not
+    std::string m_format; ///< external file format
+
+public:
+
+    DataArrayTag( void );
+
+    virtual ~DataArrayTag( void );
+
+public:
+
+    kvs::XMLNode::SuperClass* node( void );
+
+    const kvs::XMLNode::SuperClass* node( void ) const;
+
+public:
+
+    const bool hasType( void ) const;
+
+    const std::string& type( void ) const;
+
+    const bool hasFile( void ) const;
+
+    const std::string& file( void ) const;
+
+    const bool hasFormat( void ) const;
+
+    const std::string& format( void ) const;
+
+public:
+
+    void setFile( const std::string& file );
+
+    void setFormat( const std::string& format );
+
+public:
+
+    const bool read( const kvs::XMLNode::SuperClass* parent, const size_t nelements, kvs::AnyValueArray* data );
+
+    template <typename T>
+    const bool read( const kvs::XMLNode::SuperClass* parent, const size_t nelements, kvs::ValueArray<T>* data );
+
+    const bool write( kvs::XMLNode::SuperClass* parent, const kvs::AnyValueArray& data );
+
+    template <typename T>
+    const bool write( kvs::XMLNode::SuperClass* parent, const kvs::ValueArray<T>& data );
+
+private:
+
+    const void read_attribute( void );
+
+    const bool read_data( const size_t nelements, kvs::AnyValueArray* data );
+
+    template <typename T>
+    const bool read_data( const size_t nelements, kvs::ValueArray<T>* data );
+};
+
+/*===========================================================================*/
+/**
+ *  @brief  Reads a data array tag.
+ *  @param  parent [in] pointer to the parent node
+ *  @param  nelements [in] number of elements of the data array
+ *  @param  data [out] data array
+ *  @return true, if the reading process is done successfully
+ */
+/*===========================================================================*/
+template <typename T>
+inline const bool DataArrayTag::read(
+    const kvs::XMLNode::SuperClass* parent,
+    const size_t nelements,
+    kvs::ValueArray<T>* data )
+{
+    m_node = kvs::XMLNode::FindChildNode( parent, "DataArray" );
+    if( !m_node )
+    {
+        kvsMessageError("Cannot find <DataArray>.");
+        return( false );
+    }
+
+    this->read_attribute();
+
+    return( this->read_data<T>( nelements, data ) );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Writes the data array.
+ *  @param  parent [in] pointer to the paranet node for writing
+ *  @param  data [in] data array
+ *  @return true, if the writing process is done successfully
+ */
+/*===========================================================================*/
+template <typename T>
+inline const bool DataArrayTag::write(
+    kvs::XMLNode::SuperClass* parent,
+    const kvs::ValueArray<T>& data )
+{
+    if ( data.size() == 0 ) return( true );
+
+    kvs::XMLElement element("DataArray");
+    element.setAttribute( "type", kvs::kvsml::DataArray::GetDataType( data ) );
+
+    // Internal data: <DataArray type="xxx">xxx</DataArray>
+    if ( !m_has_file )
+    {
+        // Write the data array to string-stream.
+        std::ostringstream oss( std::ostringstream::out );
+        const size_t data_size = data.size();
+        if ( typeid(T) == typeid(kvs::Int8) || typeid(T) == typeid(kvs::UInt8) )
+        {
+            for ( size_t i = 0; i < data_size; i++ ) oss << int(data.at(i)) << " ";
+        }
+        else
+        {
+            for ( size_t i = 0; i < data_size; i++ ) oss << data.at(i) << " ";
+        }
+
+        // Insert the data array as string-stream to the parent node.
+        TiXmlText text;
+        text.SetValue( oss.str() );
+
+        kvs::XMLNode::SuperClass* node = parent->InsertEndChild( element );
+        return( node->InsertEndChild( text ) != NULL );
+    }
+
+    // External data: <DataArray type="xxx" format="xxx" file="xxx"/>
+    else
+    {
+        if ( !m_has_format )
+        {
+            kvsMessageError( "'format' is not spcified in <DataArray>." );
+            return( false );
+        }
+
+        element.setAttribute( "file", m_file );
+        element.setAttribute( "format", m_format );
+        parent->InsertEndChild( element );
+
+        // Set text.
+        return( kvs::kvsml::DataArray::WriteExternalData( data, m_file, m_format ) );
+    }
+
+    return( true );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Reads a data array.
+ *  @param  nelements [in] number of elements
+ *  @param  data [out] pointer to the data array
+ *  @return true, if the reading process is done successfully
+ */
+/*===========================================================================*/
+template <typename T>
+const bool DataArrayTag::read_data( const size_t nelements, kvs::ValueArray<T>* data )
+{
+    // Internal data.
+    if ( m_file == "" )
+    {
+        const TiXmlText* array_text = kvs::XMLNode::ToText( m_node );
+        if ( !array_text )
+        {
+            kvsMessageError("No value in <DataArray>.");
+            return( false );
+        }
+
+        // <DataArray>xxx</DataArray>
+        const std::string delim(" \n");
+        kvs::Tokenizer tokenizer( array_text->Value(), delim );
+
+        if ( !kvs::kvsml::DataArray::ReadInternalData<T>( data, nelements, tokenizer ) )
+        {
+            kvsMessageError( "Cannot read the data array in <DataArray>." );
+            return( false );
+        }
+    }
+    // External data.
+    else
+    {
+        // <DataArray file="xxx" type="xxx" format="xxx"/>
+        if( m_format == "" )
+        {
+            kvsMessageError("'format' is not specified in <DataArray>.");
+            return( false );
+        }
+
+        // Filename as an absolute path.
+        const kvs::XMLDocument* document
+            = reinterpret_cast<kvs::XMLDocument*>( m_node->GetDocument() );
+        const std::string path = kvs::File( document->filename() ).pathName( true );
+        const std::string filename = path + kvs::File::Separator() + m_file;
+
+        if( m_type == "char" )
+        {
+            if ( !kvs::kvsml::DataArray::ReadExternalData<T,kvs::Int8>( data, nelements, filename, m_format ) )
+            {
+                kvsMessageError( "Cannot read the data array in <DataArray>." );
+                return( false );
+            }
+        }
+        else if( m_type == "unsigned char" || m_type == "uchar" )
+        {
+            if ( !kvs::kvsml::DataArray::ReadExternalData<T,kvs::UInt8>( data, nelements, filename, m_format ) )
+            {
+                kvsMessageError( "Cannot read the data array in <DataArray>." );
+                return( false );
+            }
+        }
+        else if( m_type == "short" )
+        {
+            if ( !kvs::kvsml::DataArray::ReadExternalData<T,kvs::Int16>( data, nelements, filename, m_format ) )
+            {
+                kvsMessageError( "Cannot read the data array in <DataArray>." );
+                return( false );
+            }
+        }
+        else if( m_type == "unsigned short" || m_type == "ushort" )
+        {
+            if ( !kvs::kvsml::DataArray::ReadExternalData<T,kvs::UInt16>( data, nelements, filename, m_format ) )
+            {
+                kvsMessageError( "Cannot read the data array in <DataArray>." );
+                return( false );
+            }
+        }
+        else if( m_type == "int" )
+        {
+            if ( !kvs::kvsml::DataArray::ReadExternalData<T,kvs::Int32>( data, nelements, filename, m_format ) )
+            {
+                kvsMessageError( "Cannot read the data array in <DataArray>." );
+                return( false );
+            }
+        }
+        else if( m_type == "unsigned int" || m_type == "uint" )
+        {
+            if ( !kvs::kvsml::DataArray::ReadExternalData<T,kvs::UInt32>( data, nelements, filename, m_format ) )
+            {
+                kvsMessageError( "Cannot read the data array in <DataArray>." );
+                return( false );
+            }
+        }
+        else if( m_type == "float" )
+        {
+            if ( !kvs::kvsml::DataArray::ReadExternalData<T,kvs::Real32>( data, nelements, filename, m_format ) )
+            {
+                kvsMessageError( "Cannot read the data array in <DataArray>." );
+                return( false );
+            }
+        }
+        else if( m_type == "double" )
+        {
+            if ( !kvs::kvsml::DataArray::ReadExternalData<T,kvs::Real64>( data, nelements, filename, m_format ) )
+            {
+                kvsMessageError( "Cannot read the data array in <DataArray>." );
+                return( false );
+            }
+        }
+        else
+        {
+            kvsMessageError( "'type' is not specified or unknown data type in <DataArray>." );
+            return( false );
+        }
+    }
+
+    return( true );
+}
+
+} // end of namespace kvsml
+
+} // end of namespace kvs
+
+#endif // KVS__KVSML__DATA_ARRAY_TAG_H_INCLUDE

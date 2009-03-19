@@ -1,0 +1,164 @@
+/****************************************************************************/
+/**
+ *  @file FrequencyTable.h
+ */
+/*----------------------------------------------------------------------------
+ *
+ *  Copyright 2007-2008 Visualization Laboratory, Kyoto University.
+ *  All rights reserved.
+ *  See http://www.viz.media.kyoto-u.ac.jp/kvs/copyright/ for details.
+ *
+ *  $Id$
+ */
+/****************************************************************************/
+#ifndef KVS_CORE_FREQUENCY_TABLE_H_INCLUDE
+#define KVS_CORE_FREQUENCY_TABLE_H_INCLUDE
+
+#include <kvs/ValueArray>
+#include <kvs/Type>
+#include <kvs/Math>
+#include <kvs/Message>
+#include <kvs/StructuredVolumeObject>
+#include <kvs/ImageObject>
+#include <kvs/ClassName>
+#include <list>
+
+
+namespace kvs
+{
+
+/*==========================================================================*/
+/**
+ *  Frequency distribution table class.
+ */
+/*==========================================================================*/
+class FrequencyTable
+{
+    kvsClassName( FrequencyTable );
+
+protected:
+
+    kvs::Real64             m_min_range;     ///< min. range value
+    kvs::Real64             m_max_range;     ///< max. range value
+    size_t                  m_max_count;     ///< min. count value
+    kvs::UInt64             m_nbins;         ///< number of bins
+    kvs::ValueArray<size_t> m_bin;           ///< bin array
+    std::list<kvs::Real64>  m_ignore_values; ///< ignore value list
+
+public:
+
+    FrequencyTable( void );
+
+    virtual ~FrequencyTable( void );
+
+public:
+
+    const kvs::Real64 minRange( void ) const;
+
+    const kvs::Real64 maxRange( void ) const;
+
+    const size_t maxCount( void ) const;
+
+    const kvs::UInt64 nbins( void ) const;
+
+    const kvs::ValueArray<size_t>& bin( void ) const;
+
+public:
+
+    void setIgnoreValue( const kvs::Real64 value );
+
+public:
+
+    void create( const kvs::StructuredVolumeObject* volume );
+
+    void create( const kvs::ImageObject* image, const size_t channel = 0 );
+
+public:
+
+    const kvs::UInt64 operator [] ( const size_t index ) const;
+
+    const kvs::UInt64 at( const size_t index ) const;
+
+private:
+
+    void calculate_range( const kvs::StructuredVolumeObject* volume );
+
+    void calculate_range( const kvs::ImageObject* image );
+
+    void count_bin( const kvs::StructuredVolumeObject* volume );
+
+    void count_bin( const kvs::ImageObject* image, const size_t channel );
+
+    template <typename T>
+    void binning( const kvs::StructuredVolumeObject* volume );
+
+    template <typename T>
+    void binning( const kvs::ImageObject* image, const size_t channel );
+
+    bool is_ignore_value( const kvs::Real64 value );
+};
+
+/*==========================================================================*/
+/**
+ *  Create a bin array.
+ *  @param volume [in] pointer to the structured volume object
+ */
+/*==========================================================================*/
+template <typename T>
+inline void FrequencyTable::binning( const kvs::StructuredVolumeObject* volume )
+{
+    const T* values = reinterpret_cast<const T*>( volume->values().pointer() );
+    const kvs::Real64 width = ( m_max_range - m_min_range ) / kvs::Real64( m_nbins - 1 );
+
+    const size_t nnodes = volume->nnodes();
+    for ( size_t i = 0; i < nnodes; i++ )
+    {
+        const T value = *( values + i );
+
+        if ( !this->is_ignore_value( value ) )
+        {
+            const size_t index = static_cast<size_t>( value / width );
+            m_bin[index] = m_bin[index] + 1;
+            m_max_count = kvs::Math::Max( m_max_count, m_bin[index] );
+        }
+    }
+}
+
+/*==========================================================================*/
+/**
+ *  Create a bin array.
+ *  @param image [in] pointer to the image object
+ *  @param channel [in] color element channel (0, 1, 2, 3)
+ */
+/*==========================================================================*/
+template <typename T>
+inline void FrequencyTable::binning( const kvs::ImageObject* image, const size_t channel )
+{
+    if ( channel >= image->nchannels() )
+    {
+        kvsMessageError("Specified channel is invalid.");
+        return;
+    }
+
+    const T* values = reinterpret_cast<const T*>( image->data().pointer() );
+
+    const kvs::Real64 width = ( m_max_range - m_min_range ) / kvs::Real64( m_nbins - 1 );
+
+    const size_t stride  = image->nchannels();
+    const size_t npixels = image->width() * image->height();
+    for ( size_t i = 0; i < npixels; i++ )
+    {
+        const T value = *( values + channel + i * stride );
+
+        if ( !this->is_ignore_value( value ) )
+        {
+            const size_t index = static_cast<size_t>( value / width );
+            m_bin[index] = m_bin[index] + 1;
+            m_max_count = kvs::Math::Max( m_max_count, m_bin[index] );
+        }
+    }
+}
+
+} // end of namespace kvs
+
+#endif // KVS_CORE_FREQUENCY_TABLE_H_INCLUDE

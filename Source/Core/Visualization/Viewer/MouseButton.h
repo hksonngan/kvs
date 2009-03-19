@@ -1,0 +1,42 @@
+/****************************************************************************/
+/**
+ *  @file MouseButton.h
+ */
+/*----------------------------------------------------------------------------
+ *
+ *  Copyright 2007-2008 Visualization Laboratory, Kyoto University.
+ *  All rights reserved.
+ *  See http://www.viz.media.kyoto-u.ac.jp/kvs/copyright/ for details.
+ *
+ *  $Id$
+ */
+/****************************************************************************/
+#ifndef KVS_CORE_MOUSE_BUTTON_H_INCLUDE
+#define KVS_CORE_MOUSE_BUTTON_H_INCLUDE
+
+
+namespace kvs
+{
+
+struct MouseButton
+{
+    enum Button
+    {
+        Left       = 0x00000000,
+        Middle     = 0x00000001,
+        Right      = 0x00000002,
+        WheelUp    = 0x00000003,
+        WheelDown  = 0x00000004
+
+    };
+
+    enum State
+    {
+        Down = 0x00000000,
+        Up   = 0x00000001
+    };
+};
+
+} // end of namespace kvs
+
+#endif // KVS_CORE_MOUSE_BUTTON_H_INCLUDE

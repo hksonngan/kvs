@@ -1,0 +1,248 @@
+#*****************************************************************************
+#  $Id$
+#*****************************************************************************
+
+#=============================================================================
+#  KVS_DIR.
+#=============================================================================
+ifndef KVS_DIR
+$(error KVS_DIR is not defined.)
+endif
+
+
+#=============================================================================
+#  Suffix rule.
+#=============================================================================
+.SUFFIXES:
+
+
+#=============================================================================
+#  Phony target.
+#=============================================================================
+.PHONY: all build lib clean distclean rebuild install uninstall reinstall
+
+
+#=============================================================================
+#  Command macro.
+#=============================================================================
+SHELL  := /bin/bash
+MAKE   := make
+CPP    := $(shell type -p ccache) g++
+LD     := $(CPP)
+AR     := ar -ru
+RANLIB := ranlib
+QMAKE  := qmake
+
+MKDIR := @mkdir -pv
+RM    := @rm -fv
+RMDIR := @rm -Rfv
+
+INSTALL     := @install -v -m 644
+INSTALL_EXE := @install -v -m 755
+
+
+#=============================================================================
+#  all.
+#=============================================================================
+all: build
+
+
+#=============================================================================
+#  rebuild.
+#=============================================================================
+rebuild: clean build
+
+
+#=============================================================================
+#  Makefile.
+#=============================================================================
+MAKEFILE := Makefile
+
+
+#=============================================================================
+#  KVS library.
+#=============================================================================
+LIB_KVS_CORE := libkvsCore.a
+
+LIB_KVS_SUPPORT_CAVE := libkvsSupportCAVE.a
+LIB_KVS_SUPPORT_GLEW := libkvsSupportGLEW.a
+LIB_KVS_SUPPORT_GLUT := libkvsSupportGLUT.a
+LIB_KVS_SUPPORT_QT   := libkvsSupportQt.a
+LIB_KVS_SUPPORT_SAGE := libkvsSupportSAGE.a
+
+
+#=============================================================================
+#  Solution.
+#=============================================================================
+ifdef DEBUG
+SOLUTION := Debug
+else
+SOLUTION := Release
+endif
+
+
+#=============================================================================
+#  Output directory.
+#=============================================================================
+OUTDIR := $(SOLUTION)
+
+
+#=============================================================================
+#  GL_INCLUDE_PATH, GL_LIBRARY_PATH, GL_LINK_LIBRARY
+#=============================================================================
+GL_INCLUDE_PATH :=
+GL_LIBRARY_PATH :=
+GL_LINK_LIBRARY :=
+ifeq "$(shell uname -s)" "Darwin"
+GL_LINK_LIBRARY += -framework OpenGL -framework Foundation
+else
+ifeq "$(findstring CYGWIN,$(shell uname -s))" "CYGWIN"
+GL_LINK_LIBRARY += -lglu32 -lopengl32
+else
+ifeq "$(shell uname -s)" "Linux"
+GL_LINK_LIBRARY += -lGLU -lGL -lm -lpthread
+endif
+endif
+endif
+
+
+#=============================================================================
+#  GLUT_INCLUDE_PATH, GLUT_LIBRARY_PATH, GLUT_LINK_LIBRARY
+#=============================================================================
+ifeq "$(KVS_SUPPORT_GLUT)" "1"
+GLUT_INCLUDE_PATH :=
+GLUT_LIBRARY_PATH :=
+ifdef KVS_GLUT_DIR
+GLUT_INCLUDE_PATH += -I$(KVS_GLUT_DIR)/include
+GLUT_LIBRARY_PATH += -L$(KVS_GLUT_DIR)/lib
+endif
+ifeq "$(shell uname -s)" "Darwin"
+GLUT_LINK_LIBRARY := -framework GLUT
+else
+ifeq "$(findstring CYGWIN,$(shell uname -s))" "CYGWIN"
+GLUT_LINK_LIBRARY := -lglut32
+else
+ifeq "$(shell uname -s)" "Linux"
+GLUT_LINK_LIBRARY := -lglut
+endif
+endif
+endif
+endif
+
+
+#=============================================================================
+#  GLEW_INCLUDE_PATH, GLEW_LIBRARY_PATH, GLEW_LINK_LIBRARY
+#=============================================================================
+ifeq "$(KVS_SUPPORT_GLEW)" "1"
+GLEW_INCLUDE_PATH :=
+GLEW_LIBRARY_PATH :=
+GLEW_LINK_LIBRARY += -lGLEW
+ifdef KVS_GLEW_DIR
+GLEW_INCLUDE_PATH += -I$(KVS_GLEW_DIR)/include
+GLEW_LIBRARY_PATH += -L$(KVS_GLEW_DIR)/lib
+endif
+endif
+
+
+#=============================================================================
+#  CUDA_INCLUDE_PATH, CUDA_LIBRARY_PATH, CUDA_LINK_LIBRARY
+#=============================================================================
+ifeq "$(KVS_SUPPORT_CUDA)" "1"
+CUDA_INCLUDE_PATH :=
+CUDA_LIBRARY_PATH :=
+#CUDA_LINK_LIBRARY := -lcuda -lcudart -lcutil $(KVS_CUDA_SDK_DIR)/common/lib/libGLEW.a
+CUDA_LINK_LIBRARY := -lcuda -lcudart -lcutil
+ifdef KVS_CUDA_DIR
+CUDA_INCLUDE_PATH += -I$(KVS_CUDA_DIR)/include
+CUDA_LIBRARY_PATH += -L$(KVS_CUDA_DIR)/lib
+endif
+ifdef KVS_CUDA_SDK_DIR
+CUDA_INCLUDE_PATH += -I$(KVS_CUDA_SDK_DIR)/common/inc
+CUDA_LIBRARY_PATH += -L$(KVS_CUDA_SDK_DIR)/lib
+endif
+
+NVCC := nvcc
+NVCCFLAGS := --host-compilation C++
+endif
+
+
+#=============================================================================
+#  CAVE_INCLUDE_PATH, CAVE_LIBRARY_PATH, CAVE_LINK_LIBRARY
+#=============================================================================
+ifeq "$(KVS_SUPPORT_CAVE)" "1"
+CAVE_INCLUDE_PATH :=
+CAVE_LIBRARY_PATH :=
+CAVE_LINK_LIBRARY := -lcave_ogl_mt
+ifdef KVS_CAVE_DIR
+CAVE_INCLUDE_PATH += -I$(KVS_CAVE_DIR)/include
+CAVE_LIBRARY_PATH += -L$(KVS_CAVE_DIR)/lib32
+endif
+endif
+
+
+#=============================================================================
+#  SAGE_INCLUDE_PATH, SAGE_LIBRARY_PATH, SAGE_LINK_LIBRARY
+#=============================================================================
+ifeq "$(KVS_SUPPORT_SAGE)" "1"
+SAGE_INCLUDE_PATH :=
+SAGE_LIBRARY_PATH :=
+SAGE_LINK_LIBRARY := -lsail
+ifdef KVS_SAGE_DIR
+SAGE_INCLUDE_PATH := -I$(KVS_SAGE_DIR)/include
+SAGE_LIBRARY_PATH := -L$(KVS_SAGE_DIR)/lib
+endif
+endif
+
+
+#=============================================================================
+#  Compiler option.
+#=============================================================================
+CPPFLAGS := -Wall
+
+ifdef DEBUG
+CPPFLAGS += -O0 -ggdb3
+else
+CPPFLAGS += -O3
+endif
+
+
+#=============================================================================
+#  Definition.
+#=============================================================================
+DEFINITIONS :=
+
+ifdef DEBUG
+DEFINITIONS += -D_DEBUG -DKVS_ENABLE_DEBUG
+else
+DEFINITIONS += -DNDEBUG
+endif
+
+
+ifeq "$(KVS_SUPPORT_CAVE)" "1"
+DEFINITIONS += -DKVS_SUPPORT_CAVE
+endif
+
+ifeq "$(KVS_SUPPORT_GLEW)" "1"
+DEFINITIONS += -DKVS_SUPPORT_GLEW
+# NOTE: Since the GLEW header file that is in SupportGLEW must be included before
+# the OpenGL header files, 'GLEW_INCLUDE_PATH' adds to 'DEFINITIONS' here.
+DEFINITIONS += $(GLEW_INCLUDE_PATH)
+endif
+
+ifeq "$(KVS_SUPPORT_GLUT)" "1"
+DEFINITIONS += -DKVS_SUPPORT_GLUT
+endif
+
+ifeq "$(KVS_SUPPORT_QT)" "1"
+DEFINITIONS += -DKVS_SUPPORT_QT
+endif
+
+ifeq "$(KVS_SUPPORT_SAGE)" "1"
+DEFINITIONS += -DKVS_SUPPORT_SAGE
+endif
+
+
+#=============================================================================
+#  Linker option.
+#=============================================================================
+LDFLAGS :=

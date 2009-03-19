@@ -1,0 +1,134 @@
+/*****************************************************************************/
+/**
+ *  @file   ProgramObject.h
+ */
+/*----------------------------------------------------------------------------
+ *
+ *  Copyright 2007 Visualization Laboratory, Kyoto University.
+ *  All rights reserved.
+ *  See http://www.viz.media.kyoto-u.ac.jp/kvs/copyright/ for details.
+ *
+ *  Initial coding by Masamichi Takatsu (DoGA Corporation, Japan).
+ *
+ *  $Id$
+ */
+/*****************************************************************************/
+#ifndef KVS__GLEW__PROGRAM_OBJECT_H_INCLUDE
+#define KVS__GLEW__PROGRAM_OBJECT_H_INCLUDE
+
+#include "../GLEW.h"
+#include "ShaderObject.h"
+#include "VertexShader.h"
+#include "FragmentShader.h"
+#include <kvs/ClassName>
+
+
+namespace kvs
+{
+
+namespace glew
+{
+
+/*===========================================================================*/
+/**
+ *  Program object class.
+ */
+/*===========================================================================*/
+class ProgramObject
+{
+    kvsClassName( ProgramObject );
+
+protected:
+
+    GLuint m_id; ///< shader ID
+
+public:
+
+    ProgramObject( void );
+
+    virtual ~ProgramObject( void );
+
+public:
+
+    const GLuint id( void ) const;
+
+    const std::string log( void );
+
+public:
+
+    void create( void );
+
+    void clear( void );
+
+    void attach( const kvs::glew::ShaderObject& shader );
+
+    const bool link(
+        const kvs::glew::VertexShader& vertex_shader,
+        const kvs::glew::FragmentShader& fragment_shader );
+
+    const bool link( void );
+
+    void bind( void );
+
+    void unbind( void );
+
+public:
+
+    const GLint uniformLocation( const GLchar* name );
+
+    const GLint attributeLocation( const GLchar* name );
+
+public:
+
+    void setUniformValuei(
+        const GLchar* name,
+        const GLint v0 );
+
+    void setUniformValuei(
+        const GLchar* name,
+        const GLint v0,
+        const GLint v1 );
+
+    void setUniformValuei(
+        const GLchar* name,
+        const GLint v0,
+        const GLint v1,
+        const GLint v2 );
+
+    void setUniformValuei(
+        const GLchar* name,
+        const GLint v0,
+        const GLint v1,
+        const GLint v2,
+        const GLint v3 );
+
+public:
+
+    void setUniformValuef(
+        const GLchar* name,
+        const GLfloat v0 );
+
+    void setUniformValuef(
+        const GLchar* name,
+        const GLfloat v0,
+        const GLfloat v1 );
+
+    void setUniformValuef(
+        const GLchar* name,
+        const GLfloat v0,
+        const GLfloat v1,
+        const GLfloat v2 );
+
+    void setUniformValuef(
+        const GLchar* name,
+        const GLfloat v0,
+        const GLfloat v1,
+        const GLfloat v2,
+        const GLfloat v3 );
+};
+
+} // end of namespace glew
+
+} // end of namespace kvs
+
+#endif // KVS__GLEW__SHADER_PROGRAM_H_INCLUDE
