@@ -12,10 +12,10 @@
  */
 /*****************************************************************************/
 #include "KVSMLTag.h"
-#include "TagParser.h"
 #include <kvs/Message>
 #include <kvs/XMLDocument>
 #include <kvs/XMLNode>
+#include <kvs/XMLElement>
 
 
 namespace kvs
@@ -89,6 +89,12 @@ const std::string& KVSMLTag::version( void ) const
     return( m_version );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets a KVSML version.
+ *  @param  version [in] version string
+ */
+/*===========================================================================*/
 void KVSMLTag::setVersion( const std::string& version )
 {
     m_has_version = true;
