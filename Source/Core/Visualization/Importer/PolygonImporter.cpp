@@ -184,30 +184,32 @@ kvs::ObjectBase* PolygonImporter::exec( const kvs::FileFormatBase* file_format )
 /*==========================================================================*/
 void PolygonImporter::import( const kvs::KVSMLObjectPolygon* kvsml )
 {
-    if ( kvsml->hasExternalCoord() )
+    if ( kvsml->objectTag().hasExternalCoord() )
     {
-        const kvs::Vector3f min_coord( kvsml->minExternalCoord() );
-        const kvs::Vector3f max_coord( kvsml->maxExternalCoord() );
+        const kvs::Vector3f min_coord( kvsml->objectTag().minExternalCoord() );
+        const kvs::Vector3f max_coord( kvsml->objectTag().maxExternalCoord() );
         SuperClass::setMinMaxExternalCoords( min_coord, max_coord );
     }
 
-    if ( kvsml->hasObjectCoord() )
+    if ( kvsml->objectTag().hasObjectCoord() )
     {
-        const kvs::Vector3f min_coord( kvsml->minObjectCoord() );
-        const kvs::Vector3f max_coord( kvsml->maxObjectCoord() );
+        const kvs::Vector3f min_coord( kvsml->objectTag().minObjectCoord() );
+        const kvs::Vector3f max_coord( kvsml->objectTag().maxObjectCoord() );
         SuperClass::setMinMaxObjectCoords( min_coord, max_coord );
     }
 
-    m_polygon_type = ::StringToPolygonType( kvsml->polygonType() );
-    m_color_type   = ::StringToColorType( kvsml->colorType() );
-    m_normal_type  = ::StringToNormalType( kvsml->normalType() );
-    m_coords       = kvsml->coords();
-    m_colors       = kvsml->colors();
-    m_connections  = kvsml->connections();
-    m_normals      = kvsml->normals();
-    m_opacities    = kvsml->opacities();
-
+    SuperClass::setPolygonType( ::StringToPolygonType( kvsml->polygonType() ) );
+    SuperClass::setColorType( ::StringToColorType( kvsml->colorType() ) );
+    SuperClass::setNormalType( ::StringToNormalType( kvsml->normalType() ) );
+    SuperClass::setCoords( kvsml->coords() );
+    SuperClass::setColors( kvsml->colors() );
+    SuperClass::setNormals( kvsml->normals() );
+    SuperClass::setConnections( kvsml->connections() );
+    SuperClass::setOpacities( kvsml->opacities() );
+//    SuperClass::updateMinMaxCoords();
     this->set_min_max_coord();
+
+    BaseClass::m_is_success = true;
 }
 
 /*==========================================================================*/

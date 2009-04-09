@@ -143,28 +143,30 @@ kvs::ObjectBase* LineImporter::exec( const kvs::FileFormatBase* file_format )
 /*==========================================================================*/
 void LineImporter::import( const kvs::KVSMLObjectLine* kvsml )
 {
-    if ( kvsml->hasExternalCoord() )
+    if ( kvsml->objectTag().hasExternalCoord() )
     {
-        const kvs::Vector3f min_coord( kvsml->minExternalCoord() );
-        const kvs::Vector3f max_coord( kvsml->maxExternalCoord() );
+        const kvs::Vector3f min_coord( kvsml->objectTag().minExternalCoord() );
+        const kvs::Vector3f max_coord( kvsml->objectTag().maxExternalCoord() );
         SuperClass::setMinMaxExternalCoords( min_coord, max_coord );
     }
 
-    if ( kvsml->hasObjectCoord() )
+    if ( kvsml->objectTag().hasObjectCoord() )
     {
-        const kvs::Vector3f min_coord( kvsml->minObjectCoord() );
-        const kvs::Vector3f max_coord( kvsml->maxObjectCoord() );
+        const kvs::Vector3f min_coord( kvsml->objectTag().minObjectCoord() );
+        const kvs::Vector3f max_coord( kvsml->objectTag().maxObjectCoord() );
         SuperClass::setMinMaxObjectCoords( min_coord, max_coord );
     }
 
-    m_line_type   = ::StringToLineType( kvsml->lineType() );
-    m_color_type  = ::StringToColorType( kvsml->colorType() );
-    m_coords      = kvsml->coords();
-    m_colors      = kvsml->colors();
-    m_connections = kvsml->connections();
-    m_sizes       = kvsml->sizes();
-
+    SuperClass::setLineType( ::StringToLineType( kvsml->lineType() ) );
+    SuperClass::setColorType( ::StringToColorType( kvsml->colorType() ) );
+    SuperClass::setCoords( kvsml->coords() );
+    SuperClass::setColors( kvsml->colors() );
+    SuperClass::setSizes( kvsml->sizes() );
+    SuperClass::setConnections( kvsml->connections() );
+//    SuperClass::updateMinMaxCoords();
     this->set_min_max_coord();
+
+    BaseClass::m_is_success = true;
 }
 
 /*==========================================================================*/

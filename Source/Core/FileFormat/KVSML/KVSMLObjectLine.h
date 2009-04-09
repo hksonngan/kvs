@@ -11,13 +11,15 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_KVSML_KVSML_OBJECT_LINE_H_INCLUDE
-#define KVS_CORE_KVSML_KVSML_OBJECT_LINE_H_INCLUDE
+#ifndef KVS__KVSML__KVSML_OBJECT_LINE_H_INCLUDE
+#define KVS__KVSML__KVSML_OBJECT_LINE_H_INCLUDE
 
 #include "../FileFormatBase.h"
 #include <kvs/ValueArray>
 #include <kvs/Type>
 #include <kvs/Vector3>
+#include "KVSMLTag.h"
+#include "ObjectTag.h"
 
 
 namespace kvs
@@ -43,12 +45,8 @@ public:
 
 protected:
 
-    bool m_has_external_coord; ///< flag to check whether 'external_coord' is specified or not
-    kvs::Vector3f m_min_external_coord; ///< min. external coordinate
-    kvs::Vector3f m_max_external_coord; ///< max. external coordinate
-    bool m_has_object_coord; ///< flag to check whether 'object_coord' is specified or not
-    kvs::Vector3f m_min_object_coord; ///< min. object coordinate
-    kvs::Vector3f m_max_object_coord; ///< max. object coordinate
+    kvs::kvsml::KVSMLTag m_kvsml_tag;   ///< KVSML tag information
+    kvs::kvsml::ObjectTag m_object_tag; ///< Object tag information
 
     WritingDataType              m_writing_type; ///< writing data type
     std::string                  m_line_type;    ///< line type
@@ -68,17 +66,9 @@ public:
 
 public:
 
-    const bool hasExternalCoord( void ) const;
+    const kvs::kvsml::KVSMLTag& KVSMLTag( void ) const;
 
-    const kvs::Vector3f& minExternalCoord( void ) const;
-
-    const kvs::Vector3f& maxExternalCoord( void ) const;
-
-    const bool hasObjectCoord( void ) const;
-
-    const kvs::Vector3f& minObjectCoord( void ) const;
-
-    const kvs::Vector3f& maxObjectCoord( void ) const;
+    const kvs::kvsml::ObjectTag& objectTag( void ) const;
 
 public:
 
@@ -127,4 +117,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_KVSML_KVSML_OBJECT_LINE_H_INCLUDE
+#endif // KVS__KVSML__KVSML_OBJECT_LINE_H_INCLUDE

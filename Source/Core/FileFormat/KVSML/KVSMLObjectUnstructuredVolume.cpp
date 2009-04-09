@@ -496,9 +496,9 @@ const bool KVSMLObjectUnstructuredVolume::write( const std::string& filename )
 
     // <Coord>
     kvs::kvsml::CoordTag coord_tag;
-    if ( !value_tag.write( node_tag.node() ) )
+    if ( !coord_tag.write( node_tag.node() ) )
     {
-        kvsMessageError( "Cannot write <Value>." );
+        kvsMessageError( "Cannot write <Coord>." );
         return( false );
     }
 
@@ -511,8 +511,8 @@ const bool KVSMLObjectUnstructuredVolume::write( const std::string& filename )
     }
     else if ( m_writing_type == ExternalBinary )
     {
-        values.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "coord" ) );
-        values.setFormat( "binary" );
+        coords.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "coord" ) );
+        coords.setFormat( "binary" );
     }
 
     if ( !coords.write( coord_tag.node(), m_coords ) )

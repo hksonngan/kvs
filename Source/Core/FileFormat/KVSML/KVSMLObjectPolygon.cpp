@@ -12,8 +12,16 @@
  */
 /****************************************************************************/
 #include "KVSMLObjectPolygon.h"
-#include "PolygonObjectParser.h"
-#include "TagParser.h"
+#include "PolygonObjectTag.h"
+#include "PolygonTag.h"
+#include "VertexTag.h"
+#include "CoordTag.h"
+#include "ColorTag.h"
+#include "ConnectionTag.h"
+#include "NormalTag.h"
+#include "OpacityTag.h"
+#include "DataArrayTag.h"
+#include "DataValueTag.h"
 #include <kvs/File>
 #include <kvs/XMLDocument>
 #include <kvs/XMLDeclaration>
@@ -27,189 +35,259 @@
 namespace kvs
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new KVSML polygon object class.
+ */
+/*===========================================================================*/
 KVSMLObjectPolygon::KVSMLObjectPolygon( void ):
-    m_has_external_coord( false ),
-    m_min_external_coord( -3.0f, -3.0f, -3.0f ),
-    m_max_external_coord(  3.0f,  3.0f,  3.0f ),
-    m_has_object_coord( false ),
-    m_min_object_coord( -3.0f, -3.0f, -3.0f ),
-    m_max_object_coord(  3.0f,  3.0f,  3.0f ),
     m_writing_type( kvs::KVSMLObjectPolygon::Ascii )
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new KVSML polygon object class.
+ *  @param  filename [in] filename
+ */
+/*===========================================================================*/
 KVSMLObjectPolygon::KVSMLObjectPolygon( const std::string& filename ):
-    m_has_external_coord( false ),
-    m_min_external_coord( -3.0f, -3.0f, -3.0f ),
-    m_max_external_coord(  3.0f,  3.0f,  3.0f ),
-    m_has_object_coord( false ),
-    m_min_object_coord( -3.0f, -3.0f, -3.0f ),
-    m_max_object_coord(  3.0f,  3.0f,  3.0f ),
     m_writing_type( kvs::KVSMLObjectPolygon::Ascii )
 {
-    if( this->read( filename ) ) { m_is_success = true; }
+    if ( this->read( filename ) ) { m_is_success = true; }
     else { m_is_success = false; }
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Destructs the KVSML polygon object class.
+ */
+/*===========================================================================*/
 KVSMLObjectPolygon::~KVSMLObjectPolygon( void )
 {
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Returns a flag to check whether 'external_coord' is specified or not.
- *  @return true, if 'external_coord' is specified
+ *  @brief  Returns the KVSML tag.
+ *  @return KVSML tag
  */
 /*===========================================================================*/
-const bool KVSMLObjectPolygon::hasExternalCoord( void ) const
+const kvs::kvsml::KVSMLTag& KVSMLObjectPolygon::KVSMLTag( void ) const
 {
-    return( m_has_external_coord );
+    return( m_kvsml_tag );
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Returns a min. external coordinate.
- *  @return min. external coordinate
+ *  @brief  Returns the object tag.
+ *  @return object tag
  */
 /*===========================================================================*/
-const kvs::Vector3f& KVSMLObjectPolygon::minExternalCoord( void ) const
+const kvs::kvsml::ObjectTag& KVSMLObjectPolygon::objectTag( void ) const
 {
-    return( m_min_external_coord );
+    return( m_object_tag );
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Returns a max. external coordinate.
- *  @return max. external coordinate
+ *  @brief  Returns the polygon type.
+ *  @return polygon type
  */
 /*===========================================================================*/
-const kvs::Vector3f& KVSMLObjectPolygon::maxExternalCoord( void ) const
-{
-    return( m_max_external_coord );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a flag to check whether 'object_coord' is specified or not.
- *  @return true, if 'object_coord' is specified
- */
-/*===========================================================================*/
-const bool KVSMLObjectPolygon::hasObjectCoord( void ) const
-{
-    return( m_has_object_coord );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a min. object coordinate.
- *  @return min. object coordinate
- */
-/*===========================================================================*/
-const kvs::Vector3f& KVSMLObjectPolygon::minObjectCoord( void ) const
-{
-    return( m_min_object_coord );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a max. object coordinate.
- *  @return max. object coordinate
- */
-/*===========================================================================*/
-const kvs::Vector3f& KVSMLObjectPolygon::maxObjectCoord( void ) const
-{
-    return( m_max_object_coord );
-}
-
 const std::string& KVSMLObjectPolygon::polygonType( void ) const
 {
     return( m_polygon_type );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the color type.
+ *  @return color type
+ */
+/*===========================================================================*/
 const std::string& KVSMLObjectPolygon::colorType( void ) const
 {
     return( m_color_type );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the normal type.
+ *  @return normal type
+ */
+/*===========================================================================*/
 const std::string& KVSMLObjectPolygon::normalType( void ) const
 {
     return( m_normal_type );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the coordinate value array.
+ *  @return coordinate value array
+ */
+/*===========================================================================*/
 const kvs::ValueArray<kvs::Real32>& KVSMLObjectPolygon::coords( void ) const
 {
     return( m_coords );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the connection data array.
+ *  @return connection data array
+ */
+/*===========================================================================*/
 const kvs::ValueArray<kvs::UInt32>& KVSMLObjectPolygon::connections( void ) const
 {
     return( m_connections );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the color value array.
+ *  @return color value array
+ */
+/*===========================================================================*/
 const kvs::ValueArray<kvs::UInt8>& KVSMLObjectPolygon::colors( void ) const
 {
     return( m_colors );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the opacity value array.
+ *  @return opacity value array
+ */
+/*===========================================================================*/
 const kvs::ValueArray<kvs::UInt8>& KVSMLObjectPolygon::opacities( void ) const
 {
     return( m_opacities );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the normal vector array.
+ *  @return normal vector array
+ */
+/*===========================================================================*/
 const kvs::ValueArray<kvs::Real32>& KVSMLObjectPolygon::normals( void ) const
 {
     return( m_normals );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets a writing type.
+ *  @param  writing_type [in] writing type
+ */
+/*===========================================================================*/
 void KVSMLObjectPolygon::setWritingDataType( const WritingDataType writing_type )
 {
     m_writing_type = writing_type;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets a polygon type.
+ *  @param  polygon_type [in] polygon type (triangle or quadrangle)
+ */
+/*===========================================================================*/
 void KVSMLObjectPolygon::setPolygonType( const std::string& polygon_type )
 {
     m_polygon_type = polygon_type;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets a color type.
+ *  @param  color_type [in] color type (vertex or polygon)
+ */
+/*===========================================================================*/
 void KVSMLObjectPolygon::setColorType( const std::string& color_type )
 {
     m_color_type = color_type;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets a normal vector type.
+ *  @param  normal_type [in] normal vector type
+ */
+/*===========================================================================*/
 void KVSMLObjectPolygon::setNormalType( const std::string& normal_type )
 {
     m_normal_type = normal_type;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Set a coordinate value array.
+ *  @param  coords [in] coordinate value array
+ */
+/*===========================================================================*/
 void KVSMLObjectPolygon::setCoords( const kvs::ValueArray<kvs::Real32>& coords )
 {
     m_coords = coords;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets a connection data array.
+ *  @param  connections [in] connection data array
+ */
+/*===========================================================================*/
 void KVSMLObjectPolygon::setConnections( const kvs::ValueArray<kvs::UInt32>& connections )
 {
     m_connections = connections;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets a color value array.
+ *  @param  colors [in] color value array
+ */
+/*===========================================================================*/
 void KVSMLObjectPolygon::setColors( const kvs::ValueArray<kvs::UInt8>& colors )
 {
     m_colors = colors;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets an opacity value array.
+ *  @param  opacities [in] opacity value array
+ */
+/*===========================================================================*/
 void KVSMLObjectPolygon::setOpacities( const kvs::ValueArray<kvs::UInt8>& opacities )
 {
     m_opacities = opacities;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets a normal vector array.
+ *  @param  normals [in] normal vector array
+ */
+/*===========================================================================*/
 void KVSMLObjectPolygon::setNormals( const kvs::ValueArray<kvs::Real32>& normals )
 {
     m_normals = normals;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Read a KVSMl polygon object file.
+ *  @param  filename [in] filename
+ *  @return true, if the reading process is successfully
+ */
+/*===========================================================================*/
 const bool KVSMLObjectPolygon::read( const std::string& filename )
 {
     m_filename = filename;
 
+    // XML document.
     kvs::XMLDocument document;
     if ( !document.read( filename ) )
     {
@@ -217,27 +295,235 @@ const bool KVSMLObjectPolygon::read( const std::string& filename )
         return( false );
     }
 
-    kvs::PolygonObjectParser parser;
-    if ( !parser.parse( document ) )
+    // <KVSML>
+    if ( !m_kvsml_tag.read( &document ) )
     {
-        kvsMessageError("'%s' is invalid.", filename.c_str());
+        kvsMessageError( "Cannot read <KVSML>." );
         return( false );
     }
 
-/*
-    m_npoints      = parser.npoints();
-    m_nconnections = parser.nconnections();
-    m_dimension    = parser.dimension();
-*/
-    m_polygon_type = parser.polygonType();
-    m_color_type   = parser.colorType();
-    m_normal_type  = parser.normalType();
+    // <Object>
+    if ( !m_object_tag.read( m_kvsml_tag.node() ) )
+    {
+        kvsMessageError( "Cannot read <Object>." );
+        return( false );
+    }
 
-    parser.setCoordsTo( &m_coords );
-    parser.setConnectionsTo( &m_connections );
-    parser.setColorsTo( &m_colors );
-    parser.setOpacitiesTo( &m_opacities );
-    parser.setNormalsTo( &m_normals );
+    // <PolygonObject>
+    kvs::kvsml::PolygonObjectTag polygon_object_tag;
+    if ( !polygon_object_tag.read( m_object_tag.node() ) )
+    {
+        kvsMessageError( "Cannot read <PolygonObject>." );
+        return( false );
+    }
+
+    m_polygon_type = "triangle"; // default
+    if ( polygon_object_tag.hasPolygonType() )
+    {
+        // triangle or quadrangle
+        m_polygon_type = polygon_object_tag.polygonType();
+    }
+
+    m_color_type = "polygon"; // default
+    if ( polygon_object_tag.hasColorType() )
+    {
+        // polygon or vertex
+        m_color_type = polygon_object_tag.colorType();
+    }
+
+    m_normal_type = "polygon"; // default
+    if ( polygon_object_tag.hasNormalType() )
+    {
+        // polygon or vertex
+        m_normal_type = polygon_object_tag.normalType();
+    }
+
+    // <Polygon>
+    kvs::kvsml::PolygonTag polygon_tag;
+    if ( kvs::XMLNode::FindChildNode( polygon_object_tag.node(), "Polygon" ) )
+    {
+        if ( !polygon_tag.read( polygon_object_tag.node() ) )
+        {
+            kvsMessageError( "Cannot read <Polygon>." );
+            return( false );
+        }
+
+        const size_t npolygons = polygon_tag.npolygons();
+
+        // <Connection>
+        if ( kvs::XMLNode::FindChildNode( polygon_tag.node(), "Connection" ) )
+        {
+            kvs::kvsml::ConnectionTag connection_tag;
+            if ( !connection_tag.read( polygon_tag.node() ) )
+            {
+                kvsMessageError( "Cannot read <Connection>." );
+                return( false );
+            }
+
+            // <DataArray>
+            size_t connection_nelements = 0;
+            if (      m_polygon_type == "triangle"   ) connection_nelements = npolygons * 3;
+            else if ( m_polygon_type == "quadrangle" ) connection_nelements = npolygons * 4;
+            kvs::kvsml::DataArrayTag connections;
+            if ( !connections.read( connection_tag.node(), connection_nelements, &m_connections ) )
+            {
+                kvsMessageError("Cannot read <DataArray> for <Connection>.");
+                return( false );
+            }
+        }
+
+        // <Opacity>
+        if ( kvs::XMLNode::FindChildNode( polygon_tag.node(), "Opacity" ) )
+        {
+            kvs::kvsml::OpacityTag opacity_tag;
+            if ( !opacity_tag.read( polygon_tag.node() ) )
+            {
+                kvsMessageError( "Cannot read <Opacity>." );
+                return( false );
+            }
+
+            // <DataValue>
+            if ( kvs::XMLNode::FindChildNode( opacity_tag.node(), "DataValue" ) )
+            {
+                const size_t opacity_nelements = 1;
+                kvs::kvsml::DataValueTag opacities;
+                if ( !opacities.read( opacity_tag.node(), opacity_nelements, &m_opacities ) )
+                {
+                    kvsMessageError("Cannot read <DataValue> for <Opacity>.");
+                    return( false );
+                }
+            }
+            // <DataArray>
+            else
+            {
+                const size_t opacity_nelements = npolygons;
+                kvs::kvsml::DataArrayTag opacities;
+                if ( !opacities.read( opacity_tag.node(), opacity_nelements, &m_opacities ) )
+                {
+                    kvsMessageError("Cannot read <DataArray> for <Opacity>.");
+                    return( false );
+                }
+            }
+        }
+        else
+        {
+            // default value.
+            m_opacities.allocate(1);
+            m_opacities.at(0) = 255;
+        }
+    }
+    else
+    {
+        // default value.
+        m_opacities.allocate(1);
+        m_opacities.at(0) = 255;
+    }
+
+    // <Vertex>
+    kvs::kvsml::VertexTag vertex_tag;
+    if ( !vertex_tag.read( polygon_object_tag.node() ) )
+    {
+        kvsMessageError( "Cannot read <Vertex>." );
+        return( false );
+    }
+
+    // <Coord>
+    kvs::kvsml::CoordTag coord_tag;
+    if ( !coord_tag.read( vertex_tag.node() ) )
+    {
+        kvsMessageError( "Cannot read <Coord>." );
+        return( false );
+    }
+
+    // <DataArray>
+    const size_t dimension = 3;
+    const size_t coord_nelements = vertex_tag.nvertices() * dimension;
+    kvs::kvsml::DataArrayTag coords;
+    if ( !coords.read( coord_tag.node(), coord_nelements, &m_coords ) )
+    {
+        kvsMessageError("Cannot read <DataArray> for <Coord>.");
+        return( false );
+    }
+
+    // <Color>
+    if ( kvs::XMLNode::FindChildNode( vertex_tag.node(), "Color" ) )
+    {
+        kvs::kvsml::ColorTag color_tag;
+        if ( !color_tag.read( vertex_tag.node() ) )
+        {
+            kvsMessageError( "Cannot read <Color>." );
+            return( false );
+        }
+
+        // <DataValue>
+        if ( kvs::XMLNode::FindChildNode( color_tag.node(), "DataValue" ) )
+        {
+            const size_t nchannels = 3;
+            const size_t ncolors = 1;
+            const size_t color_nelements = ncolors * nchannels;
+            kvs::kvsml::DataValueTag colors;
+            if ( !colors.read( color_tag.node(), color_nelements, &m_colors ) )
+            {
+                kvsMessageError("Cannot read <DataValue> for <Color>.");
+                return( false );
+            }
+        }
+        // <DataArray>
+        else
+        {
+            size_t ncolors = vertex_tag.nvertices();
+            if ( m_color_type == "polygon" )
+            {
+                ncolors = polygon_tag.npolygons();
+            }
+            const size_t nchannels = 3;
+            const size_t color_nelements = ncolors * nchannels;
+            kvs::kvsml::DataArrayTag colors;
+            if ( !colors.read( color_tag.node(), color_nelements, &m_colors ) )
+            {
+                kvsMessageError("Cannot read <DataArray> for <Color>.");
+                return( false );
+            }
+        }
+    }
+    else
+    {
+        // default value (black).
+        m_colors.allocate(3);
+        m_colors.at(0) = 0;
+        m_colors.at(1) = 0;
+        m_colors.at(2) = 0;
+    }
+
+    // <Normal>
+    if ( kvs::XMLNode::FindChildNode( vertex_tag.node(), "Normal" ) )
+    {
+        kvs::kvsml::NormalTag normal_tag;
+        if ( !normal_tag.read( vertex_tag.node() ) )
+        {
+            kvsMessageError( "Cannot read <Normal>." );
+            return( false );
+        }
+
+        // <DataArray>
+        size_t nnormals = vertex_tag.nvertices();
+        if ( m_normal_type == "polygon" )
+        {
+            const size_t nvertices_per_polygon = m_polygon_type == "triangle" ? 3 : 4;
+            nnormals = vertex_tag.nvertices() / nvertices_per_polygon;
+            if ( m_connections.size() > 0 )
+            {
+                nnormals = m_connections.size() / nvertices_per_polygon;
+            }
+        }
+        const size_t normal_nelements = nnormals * dimension;
+        kvs::kvsml::DataArrayTag normals;
+        if ( !normals.read( normal_tag.node(), normal_nelements, &m_normals ) )
+        {
+            kvsMessageError("Cannot read <DataArray> for <Normal>.");
+            return( false );
+        }
+    }
 
     return( true );
 }
@@ -246,93 +532,252 @@ const bool KVSMLObjectPolygon::write( const std::string& filename )
 {
     m_filename = filename;
 
-    kvs::XMLDocument doc;
-    doc.InsertEndChild( kvs::XMLDeclaration("1.0") );
-    doc.InsertEndChild( kvs::XMLComment(" Generated by kvs::KVSMLObjectPolygon::write() ") );
+    kvs::XMLDocument document;
+    document.InsertEndChild( kvs::XMLDeclaration("1.0") );
+    document.InsertEndChild( kvs::XMLComment(" Generated by kvs::KVSMLObjectPolygon::write() ") );
 
     // <KVSML>
-    TiXmlNode* kvs_node = doc.InsertEndChild( kvs::XMLElement("KVSML") );
+    kvs::kvsml::KVSMLTag kvsml_tag;
+    if ( !kvsml_tag.write( &document ) )
+    {
+        kvsMessageError( "Cannot write <KVSML>." );
+        return( false );
+    }
 
     // <Object type="PolygonObject">
-    kvs::XMLElement obj_elem("Object");
-    obj_elem.setAttribute("type","PolygonObject");
-    TiXmlNode* obj_node = kvs_node->InsertEndChild( obj_elem );
+    kvs::kvsml::ObjectTag object_tag;
+    object_tag.setType( "PolygonObject" );
+    if ( !object_tag.write( kvsml_tag.node() ) )
+    {
+        kvsMessageError( "Cannot write <Object>." );
+        return( false );
+    }
 
     // <PolygonObject>
-    kvs::XMLElement polygon_elem("PolygonObject");
-    polygon_elem.setAttribute("polygon_type",m_polygon_type);
-    polygon_elem.setAttribute("color_type",m_color_type);
-    polygon_elem.setAttribute("normal_type",m_normal_type);
-    TiXmlNode* polygon_node = obj_node->InsertEndChild( polygon_elem );
+    kvs::kvsml::PolygonObjectTag polygon_object_tag;
+    polygon_object_tag.setPolygonType( m_polygon_type );
+    polygon_object_tag.setColorType( m_color_type );
+    polygon_object_tag.setNormalType( m_normal_type );
+    if ( !polygon_object_tag.write( object_tag.node() ) )
+    {
+        kvsMessageError( "Cannot write <PolygonObject>." );
+        return( false );
+    }
 
     // <Vertex nvertices="xxx">
-    kvs::XMLElement vertex_elem("Vertex");
-    vertex_elem.setAttribute("nvertices", m_coords.size() / 3 );
-    TiXmlNode* vertex_node = polygon_node->InsertEndChild( vertex_elem );
-
-    // Writing data type.
-    const kvs::TagParser::WritingDataType writing_type =
-        static_cast<kvs::TagParser::WritingDataType>( m_writing_type );
+    const size_t dimension = 3;
+    kvs::kvsml::VertexTag vertex_tag;
+    vertex_tag.setNVertices( m_coords.size() / dimension );
+    if ( !vertex_tag.write( polygon_object_tag.node() ) )
+    {
+        kvsMessageError( "Cannot write <Vertex>." );
+        return( false );
+    }
 
     // <Coord>
-    if ( m_coords.size() > 0 )
+    kvs::kvsml::CoordTag coord_tag;
+    if ( !coord_tag.write( vertex_tag.node() ) )
     {
-        kvs::XMLElement coord_elem("Coord");
-        TiXmlNode* coord_node = vertex_node->InsertEndChild( coord_elem );
-        const std::string coord_file = kvs::TagParser::GetDataFilename( m_filename, "coord" );
-        if ( !kvs::TagParser::ComposeArray( coord_node, writing_type, m_coords, 3, coord_file ) )
-        {
-            kvsMessageError("Cannot compose the data array for <Coord>.");
-            return( false );
-        }
+        kvsMessageError( "Cannot write <Coord>." );
+        return( false );
+    }
+
+    // <DataArray>
+    kvs::kvsml::DataArrayTag coords;
+    if ( m_writing_type == ExternalAscii )
+    {
+        coords.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "coord" ) );
+        coords.setFormat( "ascii" );
+    }
+    else if ( m_writing_type == ExternalBinary )
+    {
+        coords.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "coord" ) );
+        coords.setFormat( "binary" );
+    }
+
+    if ( !coords.write( coord_tag.node(), m_coords ) )
+    {
+        kvsMessageError( "Cannot write <DataArray> for <Coord>." );
+        return( false );
     }
 
     // <Color>
     if ( m_colors.size() > 0 )
     {
-        kvs::XMLElement color_elem("Color");
-        TiXmlNode* color_node = vertex_node->InsertEndChild( color_elem );
-        const std::string color_file = kvs::TagParser::GetDataFilename( m_filename, "color" );
-        if ( !kvs::TagParser::ComposeArray( color_node, writing_type, m_colors, 3, color_file ) )
+        kvs::kvsml::ColorTag color_tag;
+        if ( !color_tag.write( vertex_tag.node() ) )
         {
-            kvsMessageError("Cannot compose the data array for <Color>.");
+            kvsMessageError( "Cannot write <Color>." );
             return( false );
+        }
+
+        // <DataValue>
+        if ( m_colors.size() == 3 )
+        {
+            kvs::kvsml::DataValueTag colors;
+            if ( !colors.write( color_tag.node(), m_colors ) )
+            {
+                kvsMessageError("Cannot write <DataValue> for <Color>.");
+                return( false );
+            }
+        }
+        // <DataArray>
+        else
+        {
+            kvs::kvsml::DataArrayTag colors;
+            if ( m_writing_type == ExternalAscii )
+            {
+                colors.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "color" ) );
+                colors.setFormat( "ascii" );
+            }
+            else if ( m_writing_type == ExternalBinary )
+            {
+                colors.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "color" ) );
+                colors.setFormat( "binary" );
+            }
+
+            if ( !colors.write( color_tag.node(), m_colors ) )
+            {
+                kvsMessageError( "Cannot write <DataArray> for <Color>." );
+                return( false );
+            }
         }
     }
 
     // <Normal>
     if ( m_normals.size() > 0 )
     {
-        kvs::XMLElement normal_elem("Normal");
-        TiXmlNode* normal_node = vertex_node->InsertEndChild( normal_elem );
-        const std::string normal_file = kvs::TagParser::GetDataFilename( m_filename, "normal" );
-        if ( !kvs::TagParser::ComposeArray( normal_node, writing_type, m_normals, 3, normal_file ) )
+        kvs::kvsml::NormalTag normal_tag;
+        if ( !normal_tag.write( vertex_tag.node() ) )
         {
-            kvsMessageError("Cannot compose the data array for <Normal>.");
+            kvsMessageError( "Cannot write <Normal>." );
             return( false );
+        }
+
+        // <DataValue>
+        if ( m_normals.size() == 3 )
+        {
+            kvs::kvsml::DataValueTag normals;
+            if ( !normals.write( normal_tag.node(), m_normals ) )
+            {
+                kvsMessageError("Cannot write <DataValue> for <Normal>.");
+                return( false );
+            }
+        }
+        // <DataArray>
+        else
+        {
+            kvs::kvsml::DataArrayTag normals;
+            if ( m_writing_type == ExternalAscii )
+            {
+                normals.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "normal" ) );
+                normals.setFormat( "ascii" );
+            }
+            else if ( m_writing_type == ExternalBinary )
+            {
+                normals.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "normal" ) );
+                normals.setFormat( "binary" );
+            }
+
+            if ( !normals.write( normal_tag.node(), m_normals ) )
+            {
+                kvsMessageError( "Cannot write <DataArray> for <Normal>." );
+                return( false );
+            }
         }
     }
 
-    // <Polygon>
-    kvs::XMLElement polygon_connect_elem("Polygon");
-    const size_t npolygons = m_polygon_type == "triangle" ? m_connections.size() / 3 : m_connections.size() / 4;
-    polygon_connect_elem.setAttribute("npolygons", npolygons );
-    TiXmlNode* polygon_connect_node = polygon_node->InsertEndChild( polygon_connect_elem );
-
-    // <Connection>
-    if ( m_connections.size() > 0 )
+    if ( m_connections.size() > 0 || m_opacities.size() > 0 )
     {
-        kvs::XMLElement connect_elem("Connection");
-        TiXmlNode* connect_node = polygon_connect_node->InsertEndChild( connect_elem );
-        const std::string connect_file = kvs::TagParser::GetDataFilename( m_filename, "connect" );
-        if ( !kvs::TagParser::ComposeArray( connect_node, writing_type, m_connections, 1, connect_file ) )
+        // <Polygon npolygons="xxx">
+        size_t npolygons = m_opacities.size();
+        if ( m_connections.size() > 0 )
         {
-            kvsMessageError("Cannot compose the data array for <Connection>.");
+            npolygons = m_polygon_type == "triangle" ? m_connections.size() / 3 : m_connections.size() / 4;
+        }
+        kvs::kvsml::PolygonTag polygon_tag;
+        polygon_tag.setNPolygons( npolygons );
+        if ( !polygon_tag.write( polygon_object_tag.node() ) )
+        {
+            kvsMessageError( "Cannot write <Polygon>." );
             return( false );
+        }
+
+        if ( m_connections.size() > 0 )
+        {
+            // <Connection>
+            kvs::kvsml::ConnectionTag connection_tag;
+            if ( !connection_tag.write( polygon_tag.node() ) )
+            {
+                kvsMessageError( "Cannot write <Connection>." );
+                return( false );
+            }
+
+            // <DataArray>
+            kvs::kvsml::DataArrayTag connections;
+            if ( m_writing_type == ExternalAscii )
+            {
+                connections.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "connect" ) );
+                connections.setFormat( "ascii" );
+            }
+            else if ( m_writing_type == ExternalBinary )
+            {
+                connections.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "connect" ) );
+                connections.setFormat( "binary" );
+            }
+
+            if ( !connections.write( connection_tag.node(), m_connections ) )
+            {
+                kvsMessageError( "Cannot write <DataArray> for <Connection>." );
+                return( false );
+            }
+        }
+
+        if ( m_opacities.size() > 0 )
+        {
+            // <Opacity>
+            kvs::kvsml::OpacityTag opacity_tag;
+            if ( !opacity_tag.write( polygon_tag.node() ) )
+            {
+                kvsMessageError( "Cannot write <Opacity>." );
+                return( false );
+            }
+
+            // <DataValue>
+            if ( m_opacities.size() == 1 )
+            {
+                kvs::kvsml::DataValueTag opacities;
+                if ( !opacities.write( opacity_tag.node(), m_opacities ) )
+                {
+                    kvsMessageError("Cannot write <DataValue> for <Opacity>.");
+                    return( false );
+                }
+            }
+            // <DataArray>
+            else
+            {
+                kvs::kvsml::DataArrayTag opacities;
+                if ( m_writing_type == ExternalAscii )
+                {
+                    opacities.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "opacity" ) );
+                    opacities.setFormat( "ascii" );
+                }
+                else if ( m_writing_type == ExternalBinary )
+                {
+                    opacities.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "opacity" ) );
+                    opacities.setFormat( "binary" );
+                }
+
+                if ( !opacities.write( opacity_tag.node(), m_opacities ) )
+                {
+                    kvsMessageError( "Cannot write <DataArray> for <Opacity>." );
+                    return( false );
+                }
+            }
         }
     }
 
-    return( doc.write( m_filename ) );
+    return( document.write( m_filename ) );
 }
 
 const bool KVSMLObjectPolygon::CheckFileExtension( const std::string& filename )
@@ -350,15 +795,23 @@ const bool KVSMLObjectPolygon::CheckFileExtension( const std::string& filename )
 const bool KVSMLObjectPolygon::CheckFileFormat( const std::string& filename )
 {
     kvs::XMLDocument document;
-    if ( document.read( filename ) )
-    {
-        if ( kvs::PolygonObjectParser::Check( document ) )
-        {
-            return( true );
-        }
-    }
+    if ( !document.read( filename ) ) return( false );
 
-    return( false );
+    // <KVSML>
+    kvs::kvsml::KVSMLTag kvsml_tag;
+    if ( !kvsml_tag.read( &document ) ) return( false );
+
+    // <Object>
+    kvs::kvsml::ObjectTag object_tag;
+    if ( !object_tag.read( kvsml_tag.node() ) ) return( false );
+
+    if ( object_tag.type() != "PolygonObject" ) return( false );
+
+    // <PolygonObject>
+    kvs::kvsml::PolygonObjectTag polygon_tag;
+    if ( !polygon_tag.read( object_tag.node() ) ) return( false );
+
+    return( true );
 }
 
 std::ostream& operator <<( std::ostream& os, const KVSMLObjectPolygon& rhs )
