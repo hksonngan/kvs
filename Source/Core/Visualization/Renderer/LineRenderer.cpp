@@ -32,6 +32,8 @@ namespace kvs
 LineRenderer::LineRenderer( void ):
     m_enable_anti_aliasing( false )
 {
+    // Disable shading since the line object don't have the normal vectors.
+    this->disableShading();
 }
 
 /*==========================================================================*/
