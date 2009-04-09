@@ -12,7 +12,6 @@
  */
 /*****************************************************************************/
 #include "ObjectTag.h"
-#include "TagParser.h"
 #include <kvs/Tokenizer>
 #include <kvs/XMLNode>
 #include <kvs/XMLElement>
