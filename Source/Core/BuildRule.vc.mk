@@ -19,6 +19,7 @@ $(OUTDIR)\.\FileFormat\DICOM\Value.obj \
 $(OUTDIR)\.\FileFormat\DICOM\Window.obj \
 $(OUTDIR)\.\FileFormat\FileFormatBase.obj \
 $(OUTDIR)\.\FileFormat\KVSML\CellTag.obj \
+$(OUTDIR)\.\FileFormat\KVSML\ColorMapTag.obj \
 $(OUTDIR)\.\FileFormat\KVSML\ColorTag.obj \
 $(OUTDIR)\.\FileFormat\KVSML\ConnectionTag.obj \
 $(OUTDIR)\.\FileFormat\KVSML\CoordTag.obj \
@@ -36,6 +37,7 @@ $(OUTDIR)\.\FileFormat\KVSML\LineTag.obj \
 $(OUTDIR)\.\FileFormat\KVSML\NodeTag.obj \
 $(OUTDIR)\.\FileFormat\KVSML\NormalTag.obj \
 $(OUTDIR)\.\FileFormat\KVSML\ObjectTag.obj \
+$(OUTDIR)\.\FileFormat\KVSML\OpacityMapTag.obj \
 $(OUTDIR)\.\FileFormat\KVSML\OpacityTag.obj \
 $(OUTDIR)\.\FileFormat\KVSML\PointObjectTag.obj \
 $(OUTDIR)\.\FileFormat\KVSML\PolygonObjectTag.obj \
@@ -44,6 +46,7 @@ $(OUTDIR)\.\FileFormat\KVSML\SizeTag.obj \
 $(OUTDIR)\.\FileFormat\KVSML\StructuredVolumeObjectTag.obj \
 $(OUTDIR)\.\FileFormat\KVSML\TagParser.obj \
 $(OUTDIR)\.\FileFormat\KVSML\TransferFunctionParser.obj \
+$(OUTDIR)\.\FileFormat\KVSML\TransferFunctionTag.obj \
 $(OUTDIR)\.\FileFormat\KVSML\UnstructuredVolumeObjectTag.obj \
 $(OUTDIR)\.\FileFormat\KVSML\ValueTag.obj \
 $(OUTDIR)\.\FileFormat\KVSML\VertexTag.obj \
