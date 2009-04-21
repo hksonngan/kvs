@@ -11,25 +11,43 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_KVSML_KVSML_TRANSFER_FUNCTION_H_INCLUDE
-#define KVS_CORE_KVSML_KVSML_TRANSFER_FUNCTION_H_INCLUDE
+#ifndef KVS__KVSML__KVSML_TRANSFER_FUNCTION_H_INCLUDE
+#define KVS__KVSML__KVSML_TRANSFER_FUNCTION_H_INCLUDE
 
 #include "../FileFormatBase.h"
 #include <kvs/ValueArray>
 #include <kvs/Type>
+#include "KVSMLTag.h"
 
 
 namespace kvs
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  KVSMLTransferFunction file format class.
+ */
+/*===========================================================================*/
 class KVSMLTransferFunction : public kvs::FileFormatBase
 {
     kvsClassName( KVSMLTransferFunction );
 
+public:
+
+    enum WritingDataType
+    {
+        Ascii = 0,
+        ExternalAscii,
+        ExternalBinary
+    };
+
 protected:
 
-    kvs::ValueArray<kvs::Real32> m_opacities;  ///< opacity array
-    kvs::ValueArray<kvs::UInt8>  m_colors;     ///< color(r,g,b) array
+    kvs::kvsml::KVSMLTag         m_kvsml_tag;    ///< KVSML tag information
+    WritingDataType              m_writing_type; ///< writing data type
+    size_t                       m_resolution;   ///< resolution
+    kvs::ValueArray<kvs::Real32> m_opacities;    ///< opacity array
+    kvs::ValueArray<kvs::UInt8>  m_colors;       ///< color (r,g,b) array
 
 public:
 
@@ -41,11 +59,19 @@ public:
 
 public:
 
+    const kvs::kvsml::KVSMLTag& KVSMLTag( void ) const;
+
+public:
+
+    const size_t resolution( void ) const;
+
     const kvs::ValueArray<kvs::Real32>& opacities( void ) const;
 
     const kvs::ValueArray<kvs::UInt8>& colors( void ) const;
 
 public:
+
+    void setWritingDataType( const WritingDataType writing_type );
 
     void setOpacities( const kvs::ValueArray<kvs::Real32>& opacities );
 
@@ -66,4 +92,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_KVSML_KVSML_TRANSFER_FUNCTION_H_INCLUDE
+#endif // KVS__KVSML__KVSML_TRANSFER_FUNCTION_H_INCLUDE
