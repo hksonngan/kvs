@@ -44,8 +44,6 @@ $(OUTDIR)/./FileFormat/KVSML/PolygonObjectTag.o \
 $(OUTDIR)/./FileFormat/KVSML/PolygonTag.o \
 $(OUTDIR)/./FileFormat/KVSML/SizeTag.o \
 $(OUTDIR)/./FileFormat/KVSML/StructuredVolumeObjectTag.o \
-$(OUTDIR)/./FileFormat/KVSML/TagParser.o \
-$(OUTDIR)/./FileFormat/KVSML/TransferFunctionParser.o \
 $(OUTDIR)/./FileFormat/KVSML/TransferFunctionTag.o \
 $(OUTDIR)/./FileFormat/KVSML/UnstructuredVolumeObjectTag.o \
 $(OUTDIR)/./FileFormat/KVSML/ValueTag.o \
