@@ -15,6 +15,7 @@
 #define KVS__KVSML__LINE_TAG_H_INCLUDE
 
 #include <kvs/XMLNode>
+#include "TagBase.h"
 
 
 namespace kvs
@@ -28,11 +29,14 @@ namespace kvsml
  *  @brief  Tag class for <Line>
  */
 /*===========================================================================*/
-class LineTag
+class LineTag : public kvs::kvsml::TagBase
 {
+public:
+
+    typedef kvs::kvsml::TagBase BaseClass;
+
 protected:
 
-    kvs::XMLNode::SuperClass* m_node; ///< pointer to the node of the XML tree
     bool m_has_nlines; ///< flag to check whether 'nlines' is specified or not
     size_t m_nlines; ///< number of lines
 
@@ -41,12 +45,6 @@ public:
     LineTag( void );
 
     virtual ~LineTag( void );
-
-public:
-
-    kvs::XMLNode::SuperClass* node( void );
-
-    const kvs::XMLNode::SuperClass* node( void ) const;
 
 public:
 

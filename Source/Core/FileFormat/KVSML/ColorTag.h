@@ -15,6 +15,7 @@
 #define KVS__KVSML__COLOR_TAG_H_INCLUDE
 
 #include <kvs/XMLNode>
+#include "TagBase.h"
 
 
 namespace kvs
@@ -28,23 +29,17 @@ namespace kvsml
  *  @brief  Tag class for <Color>
  */
 /*===========================================================================*/
-class ColorTag
+class ColorTag : public kvs::kvsml::TagBase
 {
-protected:
+public:
 
-    kvs::XMLNode::SuperClass* m_node; ///< pointer to the node of the XML tree
+    typedef kvs::kvsml::TagBase BaseClass;
 
 public:
 
     ColorTag( void );
 
     virtual ~ColorTag( void );
-
-public:
-
-    kvs::XMLNode::SuperClass* node( void );
-
-    const kvs::XMLNode::SuperClass* node( void ) const;
 
 public:
 

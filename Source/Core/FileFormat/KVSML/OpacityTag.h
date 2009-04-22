@@ -15,6 +15,7 @@
 #define KVS__KVSML__OPACITY_TAG_H_INCLUDE
 
 #include <kvs/XMLNode>
+#include "TagBase.h"
 
 
 namespace kvs
@@ -28,23 +29,17 @@ namespace kvsml
  *  @brief  Tag class for <Opacity>
  */
 /*===========================================================================*/
-class OpacityTag
+class OpacityTag : public kvs::kvsml::TagBase
 {
-protected:
+public:
 
-    kvs::XMLNode::SuperClass* m_node; ///< pointer to the node of the XML tree
+    typedef kvs::kvsml::TagBase BaseClass;
 
 public:
 
     OpacityTag( void );
 
     virtual ~OpacityTag( void );
-
-public:
-
-    kvs::XMLNode::SuperClass* node( void );
-
-    const kvs::XMLNode::SuperClass* node( void ) const;
 
 public:
 

@@ -30,7 +30,7 @@ namespace kvsml
  */
 /*===========================================================================*/
 OpacityMapTag::OpacityMapTag( void ):
-    m_node( NULL )
+    kvs::kvsml::TagBase( "OpacityMap" )
 {
 }
 
@@ -45,40 +45,6 @@ OpacityMapTag::~OpacityMapTag( void )
 
 /*===========================================================================*/
 /**
- *  @brief  Returns a pointer to the node without 'const'.
- *  @return pointer to the node
- */
-/*===========================================================================*/
-kvs::XMLNode::SuperClass* OpacityMapTag::node( void )
-{
-    return( m_node );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a pointer to the node with 'const'.
- *  @return pointer to the node
- */
-/*===========================================================================*/
-const kvs::XMLNode::SuperClass* OpacityMapTag::node( void ) const
-{
-    return( m_node );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Check whether the parent node has the OpacityMap tag or not.
- *  @param  parent [in] pointer to the parent node
- *  @return true, if the parent node has the OpacityMap tag
- */
-/*===========================================================================*/
-const bool OpacityMapTag::check( const kvs::XMLNode::SuperClass* parent ) const
-{
-    return( kvs::XMLNode::FindChildNode( parent, "OpacityMap" ) != NULL );
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Reads the coord tag.
  *  @param  parent [in] pointer to the parent node
  *  @return true, if the reading process is done successfully
@@ -86,10 +52,12 @@ const bool OpacityMapTag::check( const kvs::XMLNode::SuperClass* parent ) const
 /*===========================================================================*/
 const bool OpacityMapTag::read( const kvs::XMLNode::SuperClass* parent )
 {
-    m_node = kvs::XMLNode::FindChildNode( parent, "OpacityMap" );
-    if ( !m_node )
+    const std::string tag_name = BaseClass::name();
+
+    BaseClass::m_node = kvs::XMLNode::FindChildNode( parent, tag_name );
+    if ( !BaseClass::m_node )
     {
-        kvsMessageError("Cannot find <OpacityMap>.");
+        kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
         return( false );
     }
 
@@ -105,12 +73,13 @@ const bool OpacityMapTag::read( const kvs::XMLNode::SuperClass* parent )
 /*===========================================================================*/
 const bool OpacityMapTag::write( kvs::XMLNode::SuperClass* parent )
 {
-    kvs::XMLElement element("OpacityMap");
+    const std::string tag_name = BaseClass::name();
+    kvs::XMLElement element( tag_name );
 
-    m_node = parent->InsertEndChild( element );
-    if( !m_node )
+    BaseClass::m_node = parent->InsertEndChild( element );
+    if( !BaseClass::m_node )
     {
-        kvsMessageError("Cannot insert <OpacityMap>.");
+        kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
         return( false );
     }
 

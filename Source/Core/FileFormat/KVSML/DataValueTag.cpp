@@ -13,29 +13,30 @@
 /*****************************************************************************/
 #include "DataValueTag.h"
 
+
 namespace kvs
 {
 
 namespace kvsml
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new data value class.
+ */
+/*===========================================================================*/
 DataValueTag::DataValueTag( void ):
-    m_node( NULL )
+    kvs::kvsml::TagBase( "DataValue" )
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Destructs the data value class.
+ */
+/*===========================================================================*/
 DataValueTag::~DataValueTag( void )
 {
-}
-
-kvs::XMLNode::SuperClass* DataValueTag::node( void )
-{
-    return( m_node );
-}
-
-const kvs::XMLNode::SuperClass* DataValueTag::node( void ) const
-{
-    return( m_node );
 }
 
 } // end of namespace kvsml

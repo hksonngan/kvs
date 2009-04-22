@@ -30,7 +30,7 @@ namespace kvsml
  */
 /*===========================================================================*/
 NormalTag::NormalTag( void ):
-    m_node( NULL )
+    kvs::kvsml::TagBase( "Normal" )
 {
 }
 
@@ -45,28 +45,6 @@ NormalTag::~NormalTag( void )
 
 /*===========================================================================*/
 /**
- *  @brief  Returns a pointer to the node without 'const'.
- *  @return pointer to the node
- */
-/*===========================================================================*/
-kvs::XMLNode::SuperClass* NormalTag::node( void )
-{
-    return( m_node );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a pointer to the node with 'const'.
- *  @return pointer to the node
- */
-/*===========================================================================*/
-const kvs::XMLNode::SuperClass* NormalTag::node( void ) const
-{
-    return( m_node );
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Reads the normal tag.
  *  @param  parent [in] pointer to the parent node
  *  @return true, if the reading process is done successfully
@@ -74,10 +52,12 @@ const kvs::XMLNode::SuperClass* NormalTag::node( void ) const
 /*===========================================================================*/
 const bool NormalTag::read( const kvs::XMLNode::SuperClass* parent )
 {
-    m_node = kvs::XMLNode::FindChildNode( parent, "Normal" );
-    if ( !m_node )
+    const std::string tag_name = BaseClass::name();
+
+    BaseClass::m_node = kvs::XMLNode::FindChildNode( parent, tag_name );
+    if ( !BaseClass::m_node )
     {
-        kvsMessageError("Cannot find <Normal>.");
+        kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
         return( false );
     }
 
@@ -93,12 +73,13 @@ const bool NormalTag::read( const kvs::XMLNode::SuperClass* parent )
 /*===========================================================================*/
 const bool NormalTag::write( kvs::XMLNode::SuperClass* parent )
 {
-    kvs::XMLElement element("Normal");
+    const std::string tag_name = BaseClass::name();
+    kvs::XMLElement element( tag_name );
 
-    m_node = parent->InsertEndChild( element );
-    if( !m_node )
+    BaseClass::m_node = parent->InsertEndChild( element );
+    if( !BaseClass::m_node )
     {
-        kvsMessageError("Cannot insert <Normal>.");
+        kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
         return( false );
     }
 

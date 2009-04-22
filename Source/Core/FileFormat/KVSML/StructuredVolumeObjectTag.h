@@ -17,6 +17,7 @@
 #include <string>
 #include <kvs/XMLNode>
 #include <kvs/Vector3>
+#include "TagBase.h"
 
 
 namespace kvs
@@ -30,11 +31,14 @@ namespace kvsml
  *  @brief  Tag class for <StructuredVolumeObject>
  */
 /*===========================================================================*/
-class StructuredVolumeObjectTag
+class StructuredVolumeObjectTag : public kvs::kvsml::TagBase
 {
+public:
+
+    typedef kvs::kvsml::TagBase BaseClass;
+
 protected:
 
-    kvs::XMLNode::SuperClass* m_node; ///< pointer to the node of the XML tree
     bool m_has_grid_type; ///< flag to check whether 'grid_type' is specified or not
     std::string m_grid_type; ///< grid type
     bool m_has_resolution; ///< flag to check whether 'resolution' is specified or not
@@ -45,12 +49,6 @@ public:
     StructuredVolumeObjectTag( void );
 
     virtual ~StructuredVolumeObjectTag( void );
-
-public:
-
-    kvs::XMLNode::SuperClass* node( void );
-
-    const kvs::XMLNode::SuperClass* node( void ) const;
 
 public:
 

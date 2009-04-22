@@ -565,6 +565,13 @@ const bool KVSMLObjectPoint::write( const std::string& filename )
     return( document.write( m_filename ) );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Checks the file extension.
+ *  @param  filename [in] filename
+ *  @return true, if the given filename has the supported extension
+ */
+/*===========================================================================*/
 const bool KVSMLObjectPoint::CheckFileExtension( const std::string& filename )
 {
     const kvs::File file( filename );
@@ -577,6 +584,13 @@ const bool KVSMLObjectPoint::CheckFileExtension( const std::string& filename )
     return( false );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Check the file format.
+ *  @param  filename [in] filename
+ *  @return true, if the KVSMLObjectPoint class can read the given file
+ */
+/*===========================================================================*/
 const bool KVSMLObjectPoint::CheckFileFormat( const std::string& filename )
 {
     kvs::XMLDocument document;

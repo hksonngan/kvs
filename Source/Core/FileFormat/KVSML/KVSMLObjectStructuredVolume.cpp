@@ -360,9 +360,9 @@ const bool KVSMLObjectStructuredVolume::write( const std::string& filename )
 
 /*===========================================================================*/
 /**
- *  @brief  Tests whether the extension of the given file is the KVSML's or not.
+ *  @brief  Checks the file extension.
  *  @param  filename [in] filename
- *  @return true, if the extension of the given file is the KVSML's
+ *  @return true, if the given filename has the supported extension
  */
 /*===========================================================================*/
 const bool KVSMLObjectStructuredVolume::CheckFileExtension( const std::string& filename )
@@ -379,9 +379,9 @@ const bool KVSMLObjectStructuredVolume::CheckFileExtension( const std::string& f
 
 /*===========================================================================*/
 /**
- *  @brief  Tests whether the given file is KVSML format or not.
+ *  @brief  Check the file format.
  *  @param  filename [in] filename
- *  @return true, if the given file is KVSML format
+ *  @return true, if the KVSMLObjectStructuredVolume class can read the given file
  */
 /*===========================================================================*/
 const bool KVSMLObjectStructuredVolume::CheckFileFormat( const std::string& filename )

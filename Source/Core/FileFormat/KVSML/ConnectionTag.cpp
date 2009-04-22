@@ -30,7 +30,7 @@ namespace kvsml
  */
 /*===========================================================================*/
 ConnectionTag::ConnectionTag( void ):
-    m_node( NULL )
+    kvs::kvsml::TagBase( "Connection" )
 {
 }
 
@@ -45,28 +45,6 @@ ConnectionTag::~ConnectionTag( void )
 
 /*===========================================================================*/
 /**
- *  @brief  Returns a pointer to the node without 'const'.
- *  @return pointer to the node
- */
-/*===========================================================================*/
-kvs::XMLNode::SuperClass* ConnectionTag::node( void )
-{
-    return( m_node );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a pointer to the node with 'const'.
- *  @return pointer to the node
- */
-/*===========================================================================*/
-const kvs::XMLNode::SuperClass* ConnectionTag::node( void ) const
-{
-    return( m_node );
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Reads the connection tag.
  *  @param  parent [in] pointer to the parent node
  *  @return true, if the reading process is done successfully
@@ -74,10 +52,12 @@ const kvs::XMLNode::SuperClass* ConnectionTag::node( void ) const
 /*===========================================================================*/
 const bool ConnectionTag::read( const kvs::XMLNode::SuperClass* parent )
 {
-    m_node = kvs::XMLNode::FindChildNode( parent, "Connection" );
-    if ( !m_node )
+    const std::string tag_name = BaseClass::name();
+
+    BaseClass::m_node = kvs::XMLNode::FindChildNode( parent, tag_name );
+    if ( !BaseClass::m_node )
     {
-        kvsMessageError("Cannot find <Connection>.");
+        kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
         return( false );
     }
 
@@ -93,12 +73,13 @@ const bool ConnectionTag::read( const kvs::XMLNode::SuperClass* parent )
 /*===========================================================================*/
 const bool ConnectionTag::write( kvs::XMLNode::SuperClass* parent )
 {
-    kvs::XMLElement element("Connection");
+    const std::string tag_name = BaseClass::name();
+    kvs::XMLElement element( tag_name );
 
-    m_node = parent->InsertEndChild( element );
-    if( !m_node )
+    BaseClass::m_node = parent->InsertEndChild( element );
+    if( !BaseClass::m_node )
     {
-        kvsMessageError("Cannot insert <Connection>.");
+        kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
         return( false );
     }
 

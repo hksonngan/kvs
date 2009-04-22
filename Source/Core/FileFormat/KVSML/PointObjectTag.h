@@ -17,6 +17,7 @@
 #include <string>
 #include <kvs/XMLNode>
 #include <kvs/Vector3>
+#include "TagBase.h"
 
 
 namespace kvs
@@ -30,23 +31,17 @@ namespace kvsml
  *  @brief  Tag class for <PointObject>
  */
 /*===========================================================================*/
-class PointObjectTag
+class PointObjectTag : public kvs::kvsml::TagBase
 {
-protected:
+public:
 
-    kvs::XMLNode::SuperClass* m_node; ///< pointer to the node of the XML tree
+    typedef kvs::kvsml::TagBase BaseClass;
 
 public:
 
     PointObjectTag( void );
 
     virtual ~PointObjectTag( void );
-
-public:
-
-    kvs::XMLNode::SuperClass* node( void );
-
-    const kvs::XMLNode::SuperClass* node( void ) const;
 
 public:
 

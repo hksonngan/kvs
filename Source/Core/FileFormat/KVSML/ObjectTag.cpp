@@ -30,7 +30,7 @@ namespace kvsml
  */
 /*===========================================================================*/
 ObjectTag::ObjectTag( void ):
-    m_node( NULL ),
+    kvs::kvsml::TagBase( "Object" ),
     m_type( "" ),
     m_has_external_coord( false ),
     m_min_external_coord( -3.0f, -3.0f, -3.0f ),
@@ -48,28 +48,6 @@ ObjectTag::ObjectTag( void ):
 /*===========================================================================*/
 ObjectTag::~ObjectTag( void )
 {
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a pointer to the node without 'const'.
- *  @return pointer to the node
- */
-/*===========================================================================*/
-kvs::XMLNode::SuperClass* ObjectTag::node( void )
-{
-    return( m_node );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a pointer to the node.
- *  @return pointer to the node
- */
-/*===========================================================================*/
-const kvs::XMLNode::SuperClass* ObjectTag::node( void ) const
-{
-    return( m_node );
 }
 
 /*===========================================================================*/
@@ -197,16 +175,18 @@ void ObjectTag::setMinMaxObjectCoords( const kvs::Vector3f& min_coord, const kvs
 /*===========================================================================*/
 const bool ObjectTag::read( const kvs::XMLNode::SuperClass* parent )
 {
+    const std::string tag_name = BaseClass::name();
+
     // <Object>
-    m_node = kvs::XMLNode::FindChildNode( parent, "Object" );
-    if( !m_node )
+    BaseClass::m_node = kvs::XMLNode::FindChildNode( parent, tag_name );
+    if( !BaseClass::m_node )
     {
-        kvsMessageError("Cannot find <Object>.");
+        kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
         return( false );
     }
 
     // Element
-    const kvs::XMLElement::SuperClass* element = kvs::XMLNode::ToElement( m_node );
+    const kvs::XMLElement::SuperClass* element = kvs::XMLNode::ToElement( BaseClass::m_node );
 
     // type="xxx"
     const std::string type = kvs::XMLElement::AttributeValue( element, "type" );
@@ -228,7 +208,7 @@ const bool ObjectTag::read( const kvs::XMLNode::SuperClass* parent )
         {
             if ( t.isLast() )
             {
-                kvsMessageError("6 components are required for 'external_coord' in <Object>");
+                kvsMessageError( "6 components are required for 'external_coord' in <%s>", tag_name.c_str() );
                 return( false );
             }
 
@@ -252,7 +232,7 @@ const bool ObjectTag::read( const kvs::XMLNode::SuperClass* parent )
         {
             if ( t.isLast() )
             {
-                kvsMessageError("6 components are required for 'object_coord' in <Object>");
+                kvsMessageError( "6 components are required for 'object_coord' in <%s>", tag_name.c_str() );
                 return( false );
             }
 
@@ -276,7 +256,8 @@ const bool ObjectTag::read( const kvs::XMLNode::SuperClass* parent )
 /*===========================================================================*/
 const bool ObjectTag::write( kvs::XMLNode::SuperClass* parent )
 {
-    kvs::XMLElement element("Object");
+    const std::string tag_name = BaseClass::name();
+    kvs::XMLElement element( tag_name );
 
     if ( m_has_type )
     {
@@ -286,7 +267,7 @@ const bool ObjectTag::write( kvs::XMLNode::SuperClass* parent )
     }
     else
     {
-        kvsMessageError( "'type' is not specified in <Object>." );
+        kvsMessageError( "'type' is not specified in <%s>.", tag_name.c_str() );
         return( false );
     }
 
@@ -320,10 +301,10 @@ const bool ObjectTag::write( kvs::XMLNode::SuperClass* parent )
         element.setAttribute( name, value );
     }
 
-    m_node = parent->InsertEndChild( element );
-    if( !m_node )
+    BaseClass::m_node = parent->InsertEndChild( element );
+    if( !BaseClass::m_node )
     {
-        kvsMessageError("Cannot insert <Object>.");
+        kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
         return( false );
     }
 

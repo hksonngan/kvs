@@ -15,6 +15,7 @@
 #define KVS__KVSML__POLYGON_TAG_H_INCLUDE
 
 #include <kvs/XMLNode>
+#include "TagBase.h"
 
 
 namespace kvs
@@ -28,11 +29,14 @@ namespace kvsml
  *  @brief  Tag class for <Polygon>
  */
 /*===========================================================================*/
-class PolygonTag
+class PolygonTag : public kvs::kvsml::TagBase
 {
+public:
+
+    typedef kvs::kvsml::TagBase BaseClass;
+
 protected:
 
-    kvs::XMLNode::SuperClass* m_node; ///< pointer to the node of the XML tree
     bool m_has_npolygons; ///< flag to check whether 'npolygons' is specified or not
     size_t m_npolygons; ///< number of polygons
 
@@ -41,12 +45,6 @@ public:
     PolygonTag( void );
 
     virtual ~PolygonTag( void );
-
-public:
-
-    kvs::XMLNode::SuperClass* node( void );
-
-    const kvs::XMLNode::SuperClass* node( void ) const;
 
 public:
 

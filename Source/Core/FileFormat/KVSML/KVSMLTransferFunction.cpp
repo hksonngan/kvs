@@ -182,10 +182,10 @@ const bool KVSMLTransferFunction::read( const std::string& filename )
     // <ColorMap> and <OpacityMap>
     kvs::kvsml::ColorMapTag color_map_tag;
     kvs::kvsml::OpacityMapTag opacity_map_tag;
-    if ( color_map_tag.check( tfunc_tag.node() ) )
+    if ( color_map_tag.isExisted( tfunc_tag.node() ) )
     {
-        // Both <ColorMap> and <OpacityMap> are specified.
-        if ( opacity_map_tag.check( tfunc_tag.node() ) )
+        // Both <ColorMap> and <OpacityMap> are existed.
+        if ( opacity_map_tag.isExisted( tfunc_tag.node() ) )
         {
             if ( !color_map_tag.read( tfunc_tag.node() ) )
             {
@@ -218,7 +218,7 @@ const bool KVSMLTransferFunction::read( const std::string& filename )
             }
         }
 
-        // <ColorMap> is specified, but <OpacityMap> is not specified.
+        // <ColorMap> is existed, but <OpacityMap> is not existed.
         else
         {
             kvsMessageError( "Cannot find <OpacityMap>." );
@@ -227,8 +227,8 @@ const bool KVSMLTransferFunction::read( const std::string& filename )
     }
     else
     {
-        // <OpacityMap> is specified, but <ColorMap> is not specified.
-        if ( opacity_map_tag.check( tfunc_tag.node() ) )
+        // <OpacityMap> is existed, but <ColorMap> is not existed.
+        if ( opacity_map_tag.isExisted( tfunc_tag.node() ) )
         {
             kvsMessageError( "Cannot find <ColorMap>." );
             return( false );

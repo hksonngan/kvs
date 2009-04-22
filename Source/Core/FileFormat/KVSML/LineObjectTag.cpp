@@ -30,7 +30,7 @@ namespace kvsml
  */
 /*===========================================================================*/
 LineObjectTag::LineObjectTag( void ):
-    m_node( NULL ),
+    kvs::kvsml::TagBase( "LineObject" ),
     m_has_line_type( false ),
     m_line_type( "" ),
     m_has_color_type( false ),
@@ -45,28 +45,6 @@ LineObjectTag::LineObjectTag( void ):
 /*===========================================================================*/
 LineObjectTag::~LineObjectTag( void )
 {
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a pointer to the node without 'const'.
- *  @return pointer to the node
- */
-/*===========================================================================*/
-kvs::XMLNode::SuperClass* LineObjectTag::node( void )
-{
-    return( m_node );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a pointer to the node with 'const'.
- *  @return pointer to the node
- */
-/*===========================================================================*/
-const kvs::XMLNode::SuperClass* LineObjectTag::node( void ) const
-{
-    return( m_node );
 }
 
 /*===========================================================================*/
@@ -146,15 +124,17 @@ void LineObjectTag::setColorType( const std::string& color_type )
 /*===========================================================================*/
 const bool LineObjectTag::read( const kvs::XMLNode::SuperClass* parent )
 {
-    m_node = kvs::XMLNode::FindChildNode( parent, "LineObject" );
-    if ( !m_node )
+    const std::string tag_name = BaseClass::name();
+
+    BaseClass::m_node = kvs::XMLNode::FindChildNode( parent, tag_name );
+    if ( !BaseClass::m_node )
     {
-        kvsMessageError("Cannot find <LineObject>.");
+        kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
         return( false );
     }
 
     // Element
-    const kvs::XMLElement::SuperClass* element = kvs::XMLNode::ToElement( m_node );
+    const kvs::XMLElement::SuperClass* element = kvs::XMLNode::ToElement( BaseClass::m_node );
 
     // line_type="xxx"
     const std::string line_type = kvs::XMLElement::AttributeValue( element, "line_type" );
@@ -184,7 +164,8 @@ const bool LineObjectTag::read( const kvs::XMLNode::SuperClass* parent )
 /*===========================================================================*/
 const bool LineObjectTag::write( kvs::XMLNode::SuperClass* parent )
 {
-    kvs::XMLElement element("LineObject");
+    const std::string tag_name = BaseClass::name();
+    kvs::XMLElement element( tag_name );
 
     if ( m_has_line_type )
     {
@@ -194,7 +175,7 @@ const bool LineObjectTag::write( kvs::XMLNode::SuperClass* parent )
     }
     else
     {
-        kvsMessageError( "'line_type' is not specified in <LineObject>." );
+        kvsMessageError( "'line_type' is not specified in <%s>.", tag_name.c_str() );
         return( false );
     }
 
@@ -206,14 +187,14 @@ const bool LineObjectTag::write( kvs::XMLNode::SuperClass* parent )
     }
     else
     {
-        kvsMessageError( "'color_type' is not specified in <LineObject>." );
+        kvsMessageError( "'color_type' is not specified in <%s>.", tag_name.c_str() );
         return( false );
     }
 
-    m_node = parent->InsertEndChild( element );
-    if( !m_node )
+    BaseClass::m_node = parent->InsertEndChild( element );
+    if( !BaseClass::m_node )
     {
-        kvsMessageError("Cannot insert <LineObject>.");
+        kvsMessageError("Cannot insert <%s>.", tag_name.c_str() );
         return( false );
     }
 

@@ -15,6 +15,7 @@
 #define KVS__KVSML__COORD_TAG_H_INCLUDE
 
 #include <kvs/XMLNode>
+#include "TagBase.h"
 
 
 namespace kvs
@@ -28,23 +29,17 @@ namespace kvsml
  *  @brief  Tag class for <Coord>
  */
 /*===========================================================================*/
-class CoordTag
+class CoordTag : public kvs::kvsml::TagBase
 {
-protected:
+public:
 
-    kvs::XMLNode::SuperClass* m_node; ///< pointer to the node of the XML tree
+    typedef kvs::kvsml::TagBase BaseClass;
 
 public:
 
     CoordTag( void );
 
     virtual ~CoordTag( void );
-
-public:
-
-    kvs::XMLNode::SuperClass* node( void );
-
-    const kvs::XMLNode::SuperClass* node( void ) const;
 
 public:
 
@@ -57,4 +52,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS__KVSML__VALUE_TAG_H_INCLUDE
+#endif // KVS__KVSML__COORD_TAG_H_INCLUDE

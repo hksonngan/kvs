@@ -15,6 +15,7 @@
 #define KVS__KVSML__VERTEX_TAG_H_INCLUDE
 
 #include <kvs/XMLNode>
+#include "TagBase.h"
 
 
 namespace kvs
@@ -28,11 +29,14 @@ namespace kvsml
  *  @brief  Tag class for <Vertex>
  */
 /*===========================================================================*/
-class VertexTag
+class VertexTag : public kvs::kvsml::TagBase
 {
+public:
+
+    typedef kvs::kvsml::TagBase BaseClass;
+
 protected:
 
-    kvs::XMLNode::SuperClass* m_node; ///< pointer to the node of the XML tree
     bool m_has_nvertices; ///< flag to check whether 'nvertices' is specified or not
     size_t m_nvertices; ///< number of vertices
 
@@ -41,12 +45,6 @@ public:
     VertexTag( void );
 
     virtual ~VertexTag( void );
-
-public:
-
-    kvs::XMLNode::SuperClass* node( void );
-
-    const kvs::XMLNode::SuperClass* node( void ) const;
 
 public:
 

@@ -15,6 +15,7 @@
 #define KVS__KVSML__SIZE_TAG_H_INCLUDE
 
 #include <kvs/XMLNode>
+#include "TagBase.h"
 
 
 namespace kvs
@@ -28,23 +29,17 @@ namespace kvsml
  *  @brief  Tag class for <Size>
  */
 /*===========================================================================*/
-class SizeTag
+class SizeTag : public kvs::kvsml::TagBase
 {
-protected:
+public:
 
-    kvs::XMLNode::SuperClass* m_node; ///< pointer to the node of the XML tree
+    typedef kvs::kvsml::TagBase BaseClass;
 
 public:
 
     SizeTag( void );
 
     virtual ~SizeTag( void );
-
-public:
-
-    kvs::XMLNode::SuperClass* node( void );
-
-    const kvs::XMLNode::SuperClass* node( void ) const;
 
 public:
 

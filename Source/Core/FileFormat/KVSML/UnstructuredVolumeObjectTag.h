@@ -17,6 +17,7 @@
 #include <string>
 #include <kvs/XMLNode>
 #include <kvs/Vector3>
+#include "TagBase.h"
 
 
 namespace kvs
@@ -30,11 +31,14 @@ namespace kvsml
  *  @brief  Tag class for <UnstructuredVolumeObject>
  */
 /*===========================================================================*/
-class UnstructuredVolumeObjectTag
+class UnstructuredVolumeObjectTag : public kvs::kvsml::TagBase
 {
+public:
+
+    typedef kvs::kvsml::TagBase BaseClass;
+
 protected:
 
-    kvs::XMLNode::SuperClass* m_node; ///< pointer to the node of the XML tree
     bool m_has_cell_type; ///< flag to check whether 'cell_type' is specified or not
     std::string m_cell_type; ///< cell type
 
@@ -43,12 +47,6 @@ public:
     UnstructuredVolumeObjectTag( void );
 
     virtual ~UnstructuredVolumeObjectTag( void );
-
-public:
-
-    kvs::XMLNode::SuperClass* node( void );
-
-    const kvs::XMLNode::SuperClass* node( void ) const;
 
 public:
 

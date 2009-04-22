@@ -15,6 +15,7 @@
 #define KVS__KVSML__TRANSFER_FUNCTION_TAG_H_INCLUDE
 
 #include <kvs/XMLNode>
+#include "TagBase.h"
 
 
 namespace kvs
@@ -28,11 +29,14 @@ namespace kvsml
  *  @brief  Tag class for <TransferFunction>
  */
 /*===========================================================================*/
-class TransferFunctionTag
+class TransferFunctionTag : public kvs::kvsml::TagBase
 {
+public:
+
+    typedef kvs::kvsml::TagBase BaseClass;
+
 protected:
 
-    kvs::XMLNode::SuperClass* m_node; ///< pointer to the node of the XML tree
     bool m_has_file; ///< flag to check whether 'file' is specified or not
     std::string m_file; ///< name of external file for 'argb' data
     bool m_has_resolution; ///< flag to check whether 'resolution' is specified or not
@@ -43,12 +47,6 @@ public:
     TransferFunctionTag( void );
 
     virtual ~TransferFunctionTag( void );
-
-public:
-
-    kvs::XMLNode::SuperClass* node( void );
-
-    const kvs::XMLNode::SuperClass* node( void ) const;
 
 public:
 

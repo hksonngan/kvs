@@ -18,6 +18,7 @@
 #include <kvs/Vector3>
 #include <kvs/XMLDocument>
 #include <kvs/XMLNode>
+#include "TagBase.h"
 
 
 namespace kvs
@@ -28,14 +29,17 @@ namespace kvsml
 
 /*===========================================================================*/
 /**
- *  @brief  Object tag class.
+ *  @brief  Tag class for <Object>.
  */
 /*===========================================================================*/
-class ObjectTag
+class ObjectTag : public kvs::kvsml::TagBase
 {
+public:
+
+    typedef kvs::kvsml::TagBase BaseClass;
+
 protected:
 
-    kvs::XMLNode::SuperClass* m_node; ///< pointer to the node of the XML tree
     bool m_has_type; ///< flag to check whether 'type' is specified or not
     std::string m_type; ///< object type
     bool m_has_external_coord; ///< flag to check whether 'external_coord' is specified or not
@@ -50,12 +54,6 @@ public:
     ObjectTag( void );
 
     virtual ~ObjectTag( void );
-
-public:
-
-    kvs::XMLNode::SuperClass* node( void );
-
-    const kvs::XMLNode::SuperClass* node( void ) const;
 
 public:
 

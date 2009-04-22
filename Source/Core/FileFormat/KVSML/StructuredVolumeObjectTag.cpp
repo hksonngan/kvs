@@ -30,7 +30,7 @@ namespace kvsml
  */
 /*===========================================================================*/
 StructuredVolumeObjectTag::StructuredVolumeObjectTag( void ):
-    m_node( NULL ),
+    kvs::kvsml::TagBase( "StructuredVolumeObject" ),
     m_has_grid_type( false ),
     m_grid_type( "" ),
     m_has_resolution( false ),
@@ -45,28 +45,6 @@ StructuredVolumeObjectTag::StructuredVolumeObjectTag( void ):
 /*===========================================================================*/
 StructuredVolumeObjectTag::~StructuredVolumeObjectTag( void )
 {
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a pointer to the node without 'const'.
- *  @return pointer to the node
- */
-/*===========================================================================*/
-kvs::XMLNode::SuperClass* StructuredVolumeObjectTag::node( void )
-{
-    return( m_node );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a pointer to the node with 'const'.
- *  @return pointer to the node
- */
-/*===========================================================================*/
-const kvs::XMLNode::SuperClass* StructuredVolumeObjectTag::node( void ) const
-{
-    return( m_node );
 }
 
 /*===========================================================================*/
@@ -146,15 +124,17 @@ void StructuredVolumeObjectTag::setResolution( const kvs::Vector3ui& resolution 
 /*===========================================================================*/
 const bool StructuredVolumeObjectTag::read( const kvs::XMLNode::SuperClass* parent )
 {
-    m_node = kvs::XMLNode::FindChildNode( parent, "StructuredVolumeObject" );
-    if ( !m_node )
+    const std::string tag_name = BaseClass::name();
+
+    BaseClass::m_node = kvs::XMLNode::FindChildNode( parent, tag_name );
+    if ( !BaseClass::m_node )
     {
-        kvsMessageError("Cannot find <StructuredVolumeObject>.");
+        kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
         return( false );
     }
 
     // Element
-    const kvs::XMLElement::SuperClass* element = kvs::XMLNode::ToElement( m_node );
+    const kvs::XMLElement::SuperClass* element = kvs::XMLNode::ToElement( BaseClass::m_node );
 
     // grid_type="xxx"
     const std::string grid_type = kvs::XMLElement::AttributeValue( element, "grid_type" );
@@ -176,7 +156,7 @@ const bool StructuredVolumeObjectTag::read( const kvs::XMLNode::SuperClass* pare
         {
             if ( t.isLast() )
             {
-                kvsMessageError("3 components are required for 'resolution' in <StructuredVolumeObject>");
+                kvsMessageError( "3 components are required for 'resolution' in <%s>", tag_name.c_str() );
                 return( false );
             }
 
@@ -199,7 +179,8 @@ const bool StructuredVolumeObjectTag::read( const kvs::XMLNode::SuperClass* pare
 /*===========================================================================*/
 const bool StructuredVolumeObjectTag::write( kvs::XMLNode::SuperClass* parent )
 {
-    kvs::XMLElement element("StructuredVolumeObject");
+    const std::string tag_name = BaseClass::name();
+    kvs::XMLElement element( tag_name );
 
     if ( m_has_grid_type )
     {
@@ -209,7 +190,7 @@ const bool StructuredVolumeObjectTag::write( kvs::XMLNode::SuperClass* parent )
     }
     else
     {
-        kvsMessageError( "'grid_type' is not specified in <StructuredVolumeObject>." );
+        kvsMessageError( "'grid_type' is not specified in <%s>.", tag_name.c_str() );
         return( false );
     }
 
@@ -224,14 +205,14 @@ const bool StructuredVolumeObjectTag::write( kvs::XMLNode::SuperClass* parent )
     }
     else
     {
-        kvsMessageError( "'resolution' is not specified in <StructuredVolumeObject>." );
+        kvsMessageError( "'resolution' is not specified in <%s>.", tag_name.c_str() );
         return( false );
     }
 
-    m_node = parent->InsertEndChild( element );
-    if( !m_node )
+    BaseClass::m_node = parent->InsertEndChild( element );
+    if( !BaseClass::m_node )
     {
-        kvsMessageError("Cannot insert <StructuredVolumeObject>.");
+        kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
         return( false );
     }
 

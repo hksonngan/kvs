@@ -15,6 +15,7 @@
 #define KVS__KVSML__NODE_TAG_H_INCLUDE
 
 #include <kvs/XMLNode>
+#include "TagBase.h"
 
 
 namespace kvs
@@ -28,11 +29,14 @@ namespace kvsml
  *  @brief  Tag class for <Node>
  */
 /*===========================================================================*/
-class NodeTag
+class NodeTag : public kvs::kvsml::TagBase
 {
+public:
+
+    typedef kvs::kvsml::TagBase BaseClass;
+
 protected:
 
-    kvs::XMLNode::SuperClass* m_node; ///< pointer to the node of the XML tree
     bool m_has_nnodes; ///< flag to check whether 'nnodes' is specified or not
     size_t m_nnodes; ///< number of nodes
 
@@ -41,12 +45,6 @@ public:
     NodeTag( void );
 
     virtual ~NodeTag( void );
-
-public:
-
-    kvs::XMLNode::SuperClass* node( void );
-
-    const kvs::XMLNode::SuperClass* node( void ) const;
 
 public:
 

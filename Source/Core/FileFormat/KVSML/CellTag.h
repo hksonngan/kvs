@@ -15,6 +15,7 @@
 #define KVS__KVSML__CELL_TAG_H_INCLUDE
 
 #include <kvs/XMLNode>
+#include "TagBase.h"
 
 
 namespace kvs
@@ -25,14 +26,17 @@ namespace kvsml
 
 /*===========================================================================*/
 /**
- *  @brief  Tag class for <Node>
+ *  @brief  Tag class for <Cell>
  */
 /*===========================================================================*/
-class CellTag
+class CellTag : public kvs::kvsml::TagBase
 {
+public:
+
+    typedef kvs::kvsml::TagBase BaseClass;
+
 protected:
 
-    kvs::XMLNode::SuperClass* m_node; ///< pointer to the node of the XML tree
     bool m_has_ncells; ///< flag to check whether 'ncells' is specified or not
     size_t m_ncells; ///< number of cells
 
@@ -41,12 +45,6 @@ public:
     CellTag( void );
 
     virtual ~CellTag( void );
-
-public:
-
-    kvs::XMLNode::SuperClass* node( void );
-
-    const kvs::XMLNode::SuperClass* node( void ) const;
 
 public:
 

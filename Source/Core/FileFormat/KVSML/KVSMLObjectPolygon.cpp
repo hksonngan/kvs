@@ -528,6 +528,13 @@ const bool KVSMLObjectPolygon::read( const std::string& filename )
     return( true );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Writes the KVSML polygon object.
+ *  @param  filename [in] filename
+ *  @return true, if the writing process is done successfully
+ */
+/*===========================================================================*/
 const bool KVSMLObjectPolygon::write( const std::string& filename )
 {
     m_filename = filename;
@@ -780,6 +787,13 @@ const bool KVSMLObjectPolygon::write( const std::string& filename )
     return( document.write( m_filename ) );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Checks the file extension.
+ *  @param  filename [in] filename
+ *  @return true, if the given filename has the supported extension
+ */
+/*===========================================================================*/
 const bool KVSMLObjectPolygon::CheckFileExtension( const std::string& filename )
 {
     const kvs::File file( filename );
@@ -792,6 +806,13 @@ const bool KVSMLObjectPolygon::CheckFileExtension( const std::string& filename )
     return( false );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Check the file format.
+ *  @param  filename [in] filename
+ *  @return true, if the KVSMLObjectPolygon class can read the given file
+ */
+/*===========================================================================*/
 const bool KVSMLObjectPolygon::CheckFileFormat( const std::string& filename )
 {
     kvs::XMLDocument document;

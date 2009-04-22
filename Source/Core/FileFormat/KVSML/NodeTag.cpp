@@ -24,54 +24,81 @@ namespace kvs
 namespace kvsml
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new node tag class.
+ */
+/*===========================================================================*/
 NodeTag::NodeTag( void ):
-    m_node( NULL ),
+    kvs::kvsml::TagBase( "Node" ),
     m_has_nnodes( false ),
     m_nnodes( 0 )
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Destructs the node tag class.
+ */
+/*===========================================================================*/
 NodeTag::~NodeTag( void )
 {
 }
 
-kvs::XMLNode::SuperClass* NodeTag::node( void )
-{
-    return( m_node );
-}
-
-const kvs::XMLNode::SuperClass* NodeTag::node( void ) const
-{
-    return( m_node );
-}
-
+/*===========================================================================*/
+/**
+ *  @brief  Tests whether the node tag has the 'nnodes' atribute value.
+ *  @return true, if the node tag has the 'nnodes' attribute value
+ */
+/*===========================================================================*/
 const bool NodeTag::hasNNodes( void ) const
 {
     return( m_has_nnodes );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns a number of nodes.
+ *  @return number of nodes
+ */
+/*===========================================================================*/
 const size_t NodeTag::nnodes( void ) const
 {
     return( m_nnodes );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets a number of nodes.
+ *  @param  nnodes [in] number of nodes
+ */
+/*===========================================================================*/
 void NodeTag::setNNodes( const size_t nnodes )
 {
     m_has_nnodes = true;
     m_nnodes = nnodes;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Reads the node tag.
+ *  @param  parent [in] pointer to the parent node
+ *  @return true, if the reading process is done successfully
+ */
+/*===========================================================================*/
 const bool NodeTag::read( const kvs::XMLNode::SuperClass* parent )
 {
-    m_node = kvs::XMLNode::FindChildNode( parent, "Node" );
-    if ( !m_node )
+    const std::string tag_name = BaseClass::name();
+
+    BaseClass::m_node = kvs::XMLNode::FindChildNode( parent, tag_name );
+    if ( !BaseClass::m_node )
     {
-        kvsMessageError("Cannot find <Node>.");
+        kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
         return( false );
     }
 
     // Element
-    const kvs::XMLElement::SuperClass* element = kvs::XMLNode::ToElement( m_node );
+    const kvs::XMLElement::SuperClass* element = kvs::XMLNode::ToElement( BaseClass::m_node );
 
     // nnodes="xxx"
     const std::string nnodes = kvs::XMLElement::AttributeValue( element, "nnodes" );
@@ -84,9 +111,17 @@ const bool NodeTag::read( const kvs::XMLNode::SuperClass* parent )
     return( true );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Writes the node tag.
+ *  @param  parent [in] pointer to the parent node
+ *  @return true, if the writing process is done successfully
+ */
+/*===========================================================================*/
 const bool NodeTag::write( kvs::XMLNode::SuperClass* parent )
 {
-    kvs::XMLElement element("Node");
+    const std::string tag_name = BaseClass::name();
+    kvs::XMLElement element( tag_name );
 
     if ( m_has_nnodes )
     {
@@ -95,10 +130,10 @@ const bool NodeTag::write( kvs::XMLNode::SuperClass* parent )
         element.setAttribute( name, value );
     }
 
-    m_node = parent->InsertEndChild( element );
-    if( !m_node )
+    BaseClass::m_node = parent->InsertEndChild( element );
+    if( !BaseClass::m_node )
     {
-        kvsMessageError("Cannot insert <Node>.");
+        kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
         return( false );
     }
 

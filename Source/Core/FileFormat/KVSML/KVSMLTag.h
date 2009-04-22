@@ -17,6 +17,7 @@
 #include <string>
 #include <kvs/XMLDocument>
 #include <kvs/XMLNode>
+#include "TagBase.h"
 
 
 namespace kvs
@@ -25,11 +26,19 @@ namespace kvs
 namespace kvsml
 {
 
-class KVSMLTag
+/*===========================================================================*/
+/**
+ *  @brief  Tag class for <KVSML>.
+ */
+/*===========================================================================*/
+class KVSMLTag : public kvs::kvsml::TagBase
 {
+public:
+
+    typedef kvs::kvsml::TagBase BaseClass;
+
 protected:
 
-    kvs::XMLNode::SuperClass* m_node; ///< pointer to the node of the XML tree
     bool m_has_version; ///< flag to check whether 'version' is specified or not
     std::string m_version; ///< KVSML version
 
@@ -38,12 +47,6 @@ public:
     KVSMLTag( void );
 
     virtual ~KVSMLTag( void );
-
-public:
-
-    kvs::XMLNode::SuperClass* node( void );
-
-    const kvs::XMLNode::SuperClass* node( void ) const;
 
 public:
 
@@ -60,6 +63,12 @@ public:
     const bool read( const kvs::XMLDocument* document );
 
     const bool write( kvs::XMLDocument* document );
+
+private:
+
+    const bool read( const kvs::XMLNode::SuperClass* parent ) { return( true ); }
+
+    const bool write( kvs::XMLNode::SuperClass* parent ) { return( true ); }
 };
 
 } // end of namespace kvsml

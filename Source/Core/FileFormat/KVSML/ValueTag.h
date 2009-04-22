@@ -15,6 +15,7 @@
 #define KVS__KVSML__VALUE_TAG_H_INCLUDE
 
 #include <kvs/XMLNode>
+#include "TagBase.h"
 
 
 namespace kvs
@@ -28,11 +29,14 @@ namespace kvsml
  *  @brief  Tag class for <Value>
  */
 /*===========================================================================*/
-class ValueTag
+class ValueTag : public kvs::kvsml::TagBase
 {
+public:
+
+    typedef kvs::kvsml::TagBase BaseClass;
+
 protected:
 
-    kvs::XMLNode::SuperClass* m_node; ///< pointer to the node of the XML tree
     bool m_has_veclen; ///< flag to check whether 'veclen' is specified or not
     size_t m_veclen; ///< vector length
 
@@ -41,12 +45,6 @@ public:
     ValueTag( void );
 
     virtual ~ValueTag( void );
-
-public:
-
-    kvs::XMLNode::SuperClass* node( void );
-
-    const kvs::XMLNode::SuperClass* node( void ) const;
 
 public:
 

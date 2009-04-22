@@ -21,6 +21,7 @@
 #include <kvs/XMLElement>
 #include <kvs/XMLDocument>
 #include "DataArray.h"
+#include "TagBase.h"
 
 
 namespace kvs
@@ -29,11 +30,16 @@ namespace kvs
 namespace kvsml
 {
 
-class DataValueTag
+/*===========================================================================*/
+/**
+ *  @brief  Tag class for <DataValue>.
+ */
+/*===========================================================================*/
+class DataValueTag : public kvs::kvsml::TagBase
 {
-protected:
+public:
 
-    kvs::XMLNode::SuperClass* m_node;
+    typedef kvs::kvsml::TagBase BaseClass;
 
 public:
 
@@ -43,17 +49,17 @@ public:
 
 public:
 
-    kvs::XMLNode::SuperClass* node( void );
-
-    const kvs::XMLNode::SuperClass* node( void ) const;
-
-public:
-
     template <typename T>
     const bool read( const kvs::XMLNode::SuperClass* parent, const size_t nelements, kvs::ValueArray<T>* data );
 
     template <typename T>
     const bool write( kvs::XMLNode::SuperClass* parent, const kvs::ValueArray<T>& data );
+
+private:
+
+    const bool read( const kvs::XMLNode::SuperClass* parent ) { return( true ); }
+
+    const bool write( kvs::XMLNode::SuperClass* parent ) { return( true ); }
 };
 
 template <typename T>
@@ -62,17 +68,19 @@ inline const bool DataValueTag::read(
     const size_t nelements,
     kvs::ValueArray<T>* data )
 {
-    m_node = kvs::XMLNode::FindChildNode( parent, "DataValue" );
-    if ( !m_node )
+    const std::string tag_name = BaseClass::name();
+
+    BaseClass::m_node = kvs::XMLNode::FindChildNode( parent, tag_name );
+    if ( !BaseClass::m_node )
     {
-        kvsMessageError( "Cannot find <DataValue>" );
+        kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
         return( false );
     }
 
     const TiXmlText* array_text = kvs::XMLNode::ToText( m_node );
     if ( !array_text )
     {
-        kvsMessageError("No value in <DataValue>." );
+        kvsMessageError( "No value in <%s>.", tag_name.c_str() );
         return( false );
     }
 
@@ -80,7 +88,7 @@ inline const bool DataValueTag::read(
     kvs::Tokenizer tokenizer( array_text->Value(), delim );
     if ( !kvs::kvsml::DataArray::ReadInternalData<T>( data, nelements, tokenizer ) )
     {
-        kvsMessageError("Cannot read the data in <DataValue>.");
+        kvsMessageError( "Cannot read the data in <%s>.", tag_name.c_str() );
         return( false );
     }
 
@@ -94,7 +102,8 @@ inline const bool DataValueTag::write(
 {
     if ( data.size() == 0 ) return( true );
 
-    kvs::XMLElement element("DataValue");
+    const std::string tag_name = BaseClass::name();
+    kvs::XMLElement element( tag_name );
 
     std::ostringstream oss( std::ostringstream::out );
     const size_t data_size = data.size();

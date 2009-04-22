@@ -30,7 +30,7 @@ namespace kvsml
  */
 /*===========================================================================*/
 ColorMapTag::ColorMapTag( void ):
-    m_node( NULL )
+    kvs::kvsml::TagBase( "ColorMap" )
 {
 }
 
@@ -45,40 +45,6 @@ ColorMapTag::~ColorMapTag( void )
 
 /*===========================================================================*/
 /**
- *  @brief  Returns a pointer to the node without 'const'.
- *  @return pointer to the node
- */
-/*===========================================================================*/
-kvs::XMLNode::SuperClass* ColorMapTag::node( void )
-{
-    return( m_node );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a pointer to the node with 'const'.
- *  @return pointer to the node
- */
-/*===========================================================================*/
-const kvs::XMLNode::SuperClass* ColorMapTag::node( void ) const
-{
-    return( m_node );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Check whether the parent node has the ColorMap tag or not.
- *  @param  parent [in] pointer to the parent node
- *  @return true, if the parent node has the ColorMap tag
- */
-/*===========================================================================*/
-const bool ColorMapTag::check( const kvs::XMLNode::SuperClass* parent ) const
-{
-    return( kvs::XMLNode::FindChildNode( parent, "ColorMap" ) != NULL );
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Reads the coord tag.
  *  @param  parent [in] pointer to the parent node
  *  @return true, if the reading process is done successfully
@@ -86,10 +52,12 @@ const bool ColorMapTag::check( const kvs::XMLNode::SuperClass* parent ) const
 /*===========================================================================*/
 const bool ColorMapTag::read( const kvs::XMLNode::SuperClass* parent )
 {
-    m_node = kvs::XMLNode::FindChildNode( parent, "ColorMap" );
+    const std::string tag_name = this->name();
+
+    m_node = kvs::XMLNode::FindChildNode( parent, tag_name );
     if ( !m_node )
     {
-        kvsMessageError("Cannot find <ColorMap>.");
+        kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
         return( false );
     }
 
@@ -105,12 +73,13 @@ const bool ColorMapTag::read( const kvs::XMLNode::SuperClass* parent )
 /*===========================================================================*/
 const bool ColorMapTag::write( kvs::XMLNode::SuperClass* parent )
 {
-    kvs::XMLElement element("ColorMap");
+    const std::string tag_name = this->name();
+    kvs::XMLElement element( tag_name );
 
     m_node = parent->InsertEndChild( element );
     if( !m_node )
     {
-        kvsMessageError("Cannot insert <ColorMap>.");
+        kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
         return( false );
     }
 

@@ -642,6 +642,13 @@ const bool KVSMLObjectLine::write( const std::string& filename )
     return( document.write( m_filename ) );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Checks the file extension.
+ *  @param  filename [in] filename
+ *  @return true, if the given filename has the supported extension
+ */
+/*===========================================================================*/
 const bool KVSMLObjectLine::CheckFileExtension( const std::string& filename )
 {
     const kvs::File file( filename );
@@ -654,6 +661,13 @@ const bool KVSMLObjectLine::CheckFileExtension( const std::string& filename )
     return( false );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Check the file format.
+ *  @param  filename [in] filename
+ *  @return true, if the KVSMLObjectLine class can read the given file
+ */
+/*===========================================================================*/
 const bool KVSMLObjectLine::CheckFileFormat( const std::string& filename )
 {
     kvs::XMLDocument document;

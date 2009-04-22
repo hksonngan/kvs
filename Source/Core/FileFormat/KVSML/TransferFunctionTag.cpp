@@ -30,7 +30,7 @@ namespace kvsml
  */
 /*===========================================================================*/
 TransferFunctionTag::TransferFunctionTag( void ):
-    m_node( NULL ),
+    kvs::kvsml::TagBase( "TransferFunction" ),
     m_has_file( false ),
     m_file( "" ),
     m_has_resolution( false ),
@@ -45,28 +45,6 @@ TransferFunctionTag::TransferFunctionTag( void ):
 /*===========================================================================*/
 TransferFunctionTag::~TransferFunctionTag( void )
 {
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a pointer to the node.
- *  @return pointer to the node
- */
-/*===========================================================================*/
-kvs::XMLNode::SuperClass* TransferFunctionTag::node( void )
-{
-    return( m_node );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a pointer to the node.
- *  @return pointer to the node
- */
-/*===========================================================================*/
-const kvs::XMLNode::SuperClass* TransferFunctionTag::node( void ) const
-{
-    return( m_node );
 }
 
 /*===========================================================================*/
@@ -145,15 +123,17 @@ void TransferFunctionTag::setResolution( const size_t resolution )
 /*===========================================================================*/
 const bool TransferFunctionTag::read( const kvs::XMLNode::SuperClass* parent )
 {
-    m_node = kvs::XMLNode::FindChildNode( parent, "TransferFunction" );
-    if ( !m_node )
+    const std::string tag_name = BaseClass::name();
+
+    BaseClass::m_node = kvs::XMLNode::FindChildNode( parent, tag_name );
+    if ( !BaseClass::m_node )
     {
-        kvsMessageError("Cannot find <TransferFunction>.");
+        kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
         return( false );
     }
 
     // Element
-    const kvs::XMLElement::SuperClass* element = kvs::XMLNode::ToElement( m_node );
+    const kvs::XMLElement::SuperClass* element = kvs::XMLNode::ToElement( BaseClass::m_node );
 
     // resolution="xxx"
     const std::string resolution = kvs::XMLElement::AttributeValue( element, "resolution" );
@@ -183,7 +163,8 @@ const bool TransferFunctionTag::read( const kvs::XMLNode::SuperClass* parent )
 /*===========================================================================*/
 const bool TransferFunctionTag::write( kvs::XMLNode::SuperClass* parent )
 {
-    kvs::XMLElement element("TransferFunction");
+    const std::string tag_name = BaseClass::name();
+    kvs::XMLElement element( tag_name );
 
     // resolution="xxx"
     if ( m_has_resolution )
@@ -201,10 +182,10 @@ const bool TransferFunctionTag::write( kvs::XMLNode::SuperClass* parent )
         element.setAttribute( name, value );
     }
 
-    m_node = parent->InsertEndChild( element );
-    if( !m_node )
+    BaseClass::m_node = parent->InsertEndChild( element );
+    if( !BaseClass::m_node )
     {
-        kvsMessageError("Cannot insert <TransferFunction>.");
+        kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
         return( false );
     }
 

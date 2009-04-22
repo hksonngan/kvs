@@ -30,7 +30,7 @@ namespace kvsml
  */
 /*===========================================================================*/
 ValueTag::ValueTag( void ):
-    m_node( NULL ),
+    kvs::kvsml::TagBase( "Value" ),
     m_has_veclen( false ),
     m_veclen( 0 )
 {
@@ -43,28 +43,6 @@ ValueTag::ValueTag( void ):
 /*===========================================================================*/
 ValueTag::~ValueTag( void )
 {
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a pointer to the node without 'const'.
- *  @return pointer to the node
- */
-/*===========================================================================*/
-kvs::XMLNode::SuperClass* ValueTag::node( void )
-{
-    return( m_node );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a pointer to the node with 'const'.
- *  @return pointer to the node
- */
-/*===========================================================================*/
-const kvs::XMLNode::SuperClass* ValueTag::node( void ) const
-{
-    return( m_node );
 }
 
 /*===========================================================================*/
@@ -110,15 +88,17 @@ void ValueTag::setVeclen( const size_t veclen )
 /*===========================================================================*/
 const bool ValueTag::read( const kvs::XMLNode::SuperClass* parent )
 {
-    m_node = kvs::XMLNode::FindChildNode( parent, "Value" );
-    if ( !m_node )
+    const std::string tag_name = BaseClass::name();
+
+    BaseClass::m_node = kvs::XMLNode::FindChildNode( parent, tag_name );
+    if ( !BaseClass::m_node )
     {
-        kvsMessageError("Cannot find <Value>.");
+        kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
         return( false );
     }
 
     // Element
-    const kvs::XMLElement::SuperClass* element = kvs::XMLNode::ToElement( m_node );
+    const kvs::XMLElement::SuperClass* element = kvs::XMLNode::ToElement( BaseClass::m_node );
 
     // veclen="xxx"
     const std::string veclen = kvs::XMLElement::AttributeValue( element, "veclen" );
@@ -140,7 +120,8 @@ const bool ValueTag::read( const kvs::XMLNode::SuperClass* parent )
 /*===========================================================================*/
 const bool ValueTag::write( kvs::XMLNode::SuperClass* parent )
 {
-    kvs::XMLElement element("Value");
+    const std::string tag_name = BaseClass::name();
+    kvs::XMLElement element( tag_name );
 
     if ( m_has_veclen )
     {
@@ -150,14 +131,14 @@ const bool ValueTag::write( kvs::XMLNode::SuperClass* parent )
     }
     else
     {
-        kvsMessageError( "'veclen' is not specified in <Value>." );
+        kvsMessageError( "'veclen' is not specified in <%s>.", tag_name.c_str() );
         return( false );
     }
 
-    m_node = parent->InsertEndChild( element );
-    if( !m_node )
+    BaseClass::m_node = parent->InsertEndChild( element );
+    if( !BaseClass::m_node )
     {
-        kvsMessageError("Cannot insert <Value>.");
+        kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
         return( false );
     }
 
