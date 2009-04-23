@@ -21,6 +21,8 @@
 #include "SizeTag.h"
 #include "DataArrayTag.h"
 #include "DataValueTag.h"
+#include "DataReader.h"
+#include "DataWriter.h"
 #include <kvs/File>
 #include <kvs/XMLDocument>
 #include <kvs/XMLDeclaration>
@@ -284,40 +286,6 @@ const bool KVSMLObjectLine::read( const std::string& filename )
         m_color_type = line_object_tag.colorType();
     }
 
-    // <Line>
-    kvs::kvsml::LineTag line_tag;
-    if ( m_line_type != "strip" )
-    {
-        if ( !line_tag.read( line_object_tag.node() ) )
-        {
-            kvsMessageError( "Cannot read <Line>." );
-            return( false );
-        }
-
-        // <Connection>
-        if ( kvs::XMLNode::FindChildNode( line_tag.node(), "Connection" ) )
-        {
-            kvs::kvsml::ConnectionTag connection_tag;
-            if ( !connection_tag.read( line_tag.node() ) )
-            {
-                kvsMessageError( "Cannot read <Connection>." );
-                return( false );
-            }
-
-            // <DataArray>
-            size_t connection_nelements = 0;
-            if (      m_line_type == "uniline"  ) connection_nelements = line_tag.nlines();
-            else if ( m_line_type == "polyline" ) connection_nelements = line_tag.nlines() * 2;
-            else if ( m_line_type == "segment"  ) connection_nelements = line_tag.nlines() * 2;
-            kvs::kvsml::DataArrayTag connections;
-            if ( !connections.read( connection_tag.node(), connection_nelements, &m_connections ) )
-            {
-                kvsMessageError("Cannot read <DataArray> for <Connection>.");
-                return( false );
-            }
-        }
-    }
-
     // <Vertex>
     kvs::kvsml::VertexTag vertex_tag;
     if ( !vertex_tag.read( line_object_tag.node() ) )
@@ -325,109 +293,114 @@ const bool KVSMLObjectLine::read( const std::string& filename )
         kvsMessageError( "Cannot read <Vertex>." );
         return( false );
     }
-
-    // <Coord>
-    kvs::kvsml::CoordTag coord_tag;
-    if ( !coord_tag.read( vertex_tag.node() ) )
+    else
     {
-        kvsMessageError( "Cannot read <Coord>." );
-        return( false );
-    }
+        // Parent node.
+        const kvs::XMLNode::SuperClass* parent = vertex_tag.node();
 
-    // <DataArray>
-    const size_t dimension = 3;
-    const size_t coord_nelements = vertex_tag.nvertices() * dimension;
-    kvs::kvsml::DataArrayTag coords;
-    if ( !coords.read( coord_tag.node(), coord_nelements, &m_coords ) )
-    {
-        kvsMessageError("Cannot read <DataArray> for <Coord>.");
-        return( false );
-    }
-
-    // <Color>
-    if ( kvs::XMLNode::FindChildNode( vertex_tag.node(), "Color" ) )
-    {
-        kvs::kvsml::ColorTag color_tag;
-        if ( !color_tag.read( vertex_tag.node() ) )
+        // <Coord>
+        const size_t ncoords = vertex_tag.nvertices();
+        if ( !kvs::kvsml::ReadCoordData( parent, ncoords, &m_coords ) ) return( false );
+        if ( m_coords.size() == 0 )
         {
-            kvsMessageError( "Cannot read <Color>." );
+            kvsMessageError( "Cannot read the coord data." );
             return( false );
         }
 
-        // <DataValue>
-        if ( kvs::XMLNode::FindChildNode( color_tag.node(), "DataValue" ) )
+        // <Color>
+        if ( m_color_type == "vertex" )
         {
-            const size_t nchannels = 3;
-            const size_t ncolors = 1;
-            const size_t color_nelements = ncolors * nchannels;
-            kvs::kvsml::DataValueTag colors;
-            if ( !colors.read( color_tag.node(), color_nelements, &m_colors ) )
-            {
-                kvsMessageError("Cannot read <DataValue> for <Color>.");
-                return( false );
-            }
+            const size_t ncolors = vertex_tag.nvertices();
+            if ( !kvs::kvsml::ReadColorData( parent, ncolors, &m_colors ) ) return( false );
         }
-        // <DataArray>
+        if ( m_colors.size() == 0 )
+        {
+            // default value (black).
+            m_colors.allocate(3);
+            m_colors.at(0) = 0;
+            m_colors.at(1) = 0;
+            m_colors.at(2) = 0;
+        }
+
+        // <Size>
+        // WARNING: This tag should be described under <Line> since the size that is
+        // described in <Size> represents the line size not the vertex size. Therefore,
+        // we recommend that the size is described under <Line> not under <Vertex>.
+        // Current version of KVSML tentative supports both of the descriptions for the
+        // size in order to maintain backward compatibility.
+        const size_t nsizes = vertex_tag.nvertices();
+        if ( !kvs::kvsml::ReadSizeData( parent, nsizes, &m_sizes ) ) return( false );
+        if ( m_sizes.size() == 0 )
+        {
+            // default value (1).
+            m_sizes.allocate(1);
+            m_sizes.at(0) = 1;
+        }
+    }
+
+    // <Line>
+    kvs::kvsml::LineTag line_tag;
+    if ( line_tag.isExisted( line_object_tag.node() ) )
+    {
+        if ( !line_tag.read( line_object_tag.node() ) )
+        {
+            kvsMessageError( "Cannot read <Line>." );
+            return( false );
+        }
         else
         {
-            size_t ncolors = vertex_tag.nvertices();
+            // Parent node.
+            const kvs::XMLNode::SuperClass* parent = line_tag.node();
+            const size_t nvertices = vertex_tag.nvertices();
+            const size_t nlines = line_tag.nlines();
+
+            // <Size>
+            const size_t nsizes = nlines;
+            if ( !kvs::kvsml::ReadSizeData( parent, nsizes, &m_sizes ) ) return( false );
+            if ( m_sizes.size() == 0 )
+            {
+                // default value (1).
+                m_sizes.allocate(1);
+                m_sizes.at(0) = 1;
+            }
+
+            // <Color>
             if ( m_color_type == "line" )
             {
-                if ( m_line_type == "strip" ) ncolors = vertex_tag.nvertices() - 1;
-                else if ( m_line_type == "uniline" ) ncolors = line_tag.nlines() - 1;
-                else if ( m_line_type == "polyline" ) ncolors = line_tag.nlines();
-                else if ( m_line_type == "segment" ) ncolors = line_tag.nlines();
+                const size_t ncolors =
+                    ( m_line_type == "strip"    ) ? nvertices - 1 :
+                    ( m_line_type == "uniline"  ) ? nlines - 1 :
+                    ( m_line_type == "polyline" ) ? nlines :
+                    ( m_line_type == "segment"  ) ? nlines : 0;
+                if ( !kvs::kvsml::ReadColorData( parent, ncolors, &m_colors ) ) return( false );
             }
-            const size_t nchannels = 3;
-            const size_t color_nelements = ncolors * nchannels;
-            kvs::kvsml::DataArrayTag colors;
-            if ( !colors.read( color_tag.node(), color_nelements, &m_colors ) )
+            if ( m_colors.size() == 0 )
             {
-                kvsMessageError("Cannot read <DataArray> for <Color>.");
-                return( false );
+                // default value (black).
+                m_colors.allocate(3);
+                m_colors.at(0) = 0;
+                m_colors.at(1) = 0;
+                m_colors.at(2) = 0;
             }
+
+            // <Connection>
+            if ( m_line_type != "strip" )
+            {
+                const size_t nconnections =
+                    ( m_line_type == "uniline"  ) ? nlines :
+                    ( m_line_type == "polyline" ) ? nlines * 2 :
+                    ( m_line_type == "segment"  ) ? nlines * 2 : 0;
+                if ( !kvs::kvsml::ReadConnectionData( parent, nconnections, &m_connections ) ) return( false );
+            }
+
         }
     }
     else
     {
-        // default value (black).
-        m_colors.allocate(3);
-        m_colors.at(0) = 0;
-        m_colors.at(1) = 0;
-        m_colors.at(2) = 0;
-    }
-
-    // <Size>
-    if ( kvs::XMLNode::FindChildNode( vertex_tag.node(), "Size" ) )
-    {
-        kvs::kvsml::SizeTag size_tag;
-        if ( !size_tag.read( vertex_tag.node() ) )
+        if ( m_line_type != "strip" || m_color_type == "line" )
         {
-            kvsMessageError( "Cannot read <Size>." );
+            kvsMessageError( "Cannot find <%s>.", line_tag.name().c_str() );
             return( false );
-        }
-
-        // <DataValue>
-        if ( kvs::XMLNode::FindChildNode( size_tag.node(), "DataValue" ) )
-        {
-            const size_t size_nelements = 1;
-            kvs::kvsml::DataValueTag sizes;
-            if ( !sizes.read( size_tag.node(), size_nelements, &m_sizes ) )
-            {
-                kvsMessageError("Cannot read <DataValue> for <Size>.");
-                return( false );
-            }
-        }
-        // <DataArray>
-        else
-        {
-            const size_t size_nelements = vertex_tag.nvertices();
-            kvs::kvsml::DataArrayTag sizes;
-            if ( !sizes.read( size_tag.node(), size_nelements, &m_sizes ) )
-            {
-                kvsMessageError("Cannot read <DataArray> for <Size>.");
-                return( false );
-            }
         }
     }
 
@@ -453,7 +426,7 @@ const bool KVSMLObjectLine::write( const std::string& filename )
     kvs::kvsml::KVSMLTag kvsml_tag;
     if ( !kvsml_tag.write( &document ) )
     {
-        kvsMessageError( "Cannot write <KVSML>." );
+        kvsMessageError( "Cannot write <%s>.", kvsml_tag.name().c_str() );
         return( false );
     }
 
@@ -462,7 +435,7 @@ const bool KVSMLObjectLine::write( const std::string& filename )
     object_tag.setType( "LineObject" );
     if ( !object_tag.write( kvsml_tag.node() ) )
     {
-        kvsMessageError( "Cannot write <Object>." );
+        kvsMessageError( "Cannot write <%s>.", object_tag.name().c_str() );
         return( false );
     }
 
@@ -472,20 +445,70 @@ const bool KVSMLObjectLine::write( const std::string& filename )
     line_object_tag.setColorType( m_color_type );
     if ( !line_object_tag.write( object_tag.node() ) )
     {
-        kvsMessageError( "Cannot write <LineObject>." );
+        kvsMessageError( "Cannot write <%s>.", line_object_tag.name().c_str() );
         return( false );
     }
+
+    const size_t dimension = 3;
+    const size_t nvertices = m_coords.size() / dimension;
 
     // <Vertex nvertices="xxx">
-    const size_t dimension = 3;
     kvs::kvsml::VertexTag vertex_tag;
-    vertex_tag.setNVertices( m_coords.size() / dimension );
+    vertex_tag.setNVertices( nvertices );
     if ( !vertex_tag.write( line_object_tag.node() ) )
     {
-        kvsMessageError( "Cannot write <Vertex>." );
+        kvsMessageError( "Cannot write <%s>.", vertex_tag.name().c_str() );
         return( false );
     }
+    else
+    {
+        // Parent node and writing data type.
+        kvs::XMLNode::SuperClass* parent = vertex_tag.node();
+        const kvs::kvsml::WritingDataType type = static_cast<kvs::kvsml::WritingDataType>(m_writing_type);
 
+        // <Coord>
+        if ( !kvs::kvsml::WriteCoordData( parent, type, m_filename, m_coords ) ) return( false );
+
+        // <Color>
+        if ( m_color_type == "vertex" )
+        {
+            if ( !kvs::kvsml::WriteColorData( parent, type, m_filename, m_colors ) ) return( false );
+        }
+    }
+
+    // <Line nlines="xxx">
+    if ( m_color_type == "line" || m_sizes.size() > 0 || m_connections.size() > 0 )
+    {
+        const size_t nconnections = m_connections.size();
+        const size_t nlines =
+            ( m_line_type == "strip"   ) ? nvertices - 1 :
+            ( m_line_type == "uniline" ) ? nconnections : nconnections / 2;
+
+        kvs::kvsml::LineTag line_tag;
+        line_tag.setNLines( nlines );
+        if ( !line_tag.write( line_object_tag.node() ) )
+        {
+            kvsMessageError( "Cannot write <%s>.", line_tag.name().c_str() );
+            return( false );
+        }
+
+        // Parent node and writing data type.
+        kvs::XMLNode::SuperClass* parent = line_tag.node();
+        const kvs::kvsml::WritingDataType type = static_cast<kvs::kvsml::WritingDataType>(m_writing_type);
+
+        // <Connection>
+        if ( !kvs::kvsml::WriteConnectionData( parent, type, m_filename, m_connections ) ) return( false );
+
+        // <Size>
+        if ( !kvs::kvsml::WriteSizeData( parent, type, m_filename, m_sizes ) ) return( false );
+
+        // <Color>
+        if ( m_color_type == "line" )
+        {
+            if ( !kvs::kvsml::WriteColorData( parent, type, m_filename, m_colors ) ) return( false );
+        }
+    }
+/*
     // <Coord>
     kvs::kvsml::CoordTag coord_tag;
     if ( !coord_tag.write( vertex_tag.node() ) )
@@ -512,7 +535,9 @@ const bool KVSMLObjectLine::write( const std::string& filename )
         kvsMessageError( "Cannot write <DataArray> for <Coord>." );
         return( false );
     }
+*/
 
+/*
     // <Color>
     if ( m_colors.size() > 0 )
     {
@@ -555,7 +580,9 @@ const bool KVSMLObjectLine::write( const std::string& filename )
             }
         }
     }
+*/
 
+/*
     // <Size>
     if ( m_sizes.size() > 0 )
     {
@@ -638,6 +665,7 @@ const bool KVSMLObjectLine::write( const std::string& filename )
             return( false );
         }
     }
+*/
 
     return( document.write( m_filename ) );
 }
@@ -680,7 +708,6 @@ const bool KVSMLObjectLine::CheckFileFormat( const std::string& filename )
     // <Object>
     kvs::kvsml::ObjectTag object_tag;
     if ( !object_tag.read( kvsml_tag.node() ) ) return( false );
-
     if ( object_tag.type() != "LineObject" ) return( false );
 
     // <LineObject>

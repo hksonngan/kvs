@@ -20,6 +20,8 @@
 #include "SizeTag.h"
 #include "DataArrayTag.h"
 #include "DataValueTag.h"
+#include "DataReader.h"
+#include "DataWriter.h"
 #include <kvs/XMLDocument>
 #include <kvs/XMLDeclaration>
 #include <kvs/XMLElement>
@@ -56,7 +58,7 @@ KVSMLObjectPoint::KVSMLObjectPoint( void ):
 KVSMLObjectPoint::KVSMLObjectPoint( const std::string& filename ):
     m_writing_type( kvs::KVSMLObjectPoint::Ascii )
 {
-    if( this->read( filename ) ) { m_is_success = true; }
+    if ( this->read( filename ) ) { m_is_success = true; }
     else { m_is_success = false; }
 }
 
@@ -208,14 +210,14 @@ const bool KVSMLObjectPoint::read( const std::string& filename )
     // <KVSML>
     if ( !m_kvsml_tag.read( &document ) )
     {
-        kvsMessageError( "Cannot read <KVSML>." );
+        kvsMessageError( "Cannot read <%s>.", m_kvsml_tag.name().c_str() );
         return( false );
     }
 
     // <Object>
     if ( !m_object_tag.read( m_kvsml_tag.node() ) )
     {
-        kvsMessageError( "Cannot read <Object>." );
+        kvsMessageError( "Cannot read <%s>.", m_object_tag.name().c_str() );
         return( false );
     }
 
@@ -223,7 +225,7 @@ const bool KVSMLObjectPoint::read( const std::string& filename )
     kvs::kvsml::PointObjectTag point_tag;
     if ( !point_tag.read( m_object_tag.node() ) )
     {
-        kvsMessageError( "Cannot read <PointObject>." );
+        kvsMessageError( "Cannot read <%s>.", point_tag.name().c_str() );
         return( false );
     }
 
@@ -231,118 +233,42 @@ const bool KVSMLObjectPoint::read( const std::string& filename )
     kvs::kvsml::VertexTag vertex_tag;
     if ( !vertex_tag.read( point_tag.node() ) )
     {
-        kvsMessageError( "Cannot read <Vertex>." );
+        kvsMessageError( "Cannot read <%s>.", vertex_tag.name().c_str() );
         return( false );
     }
-
-    // <Coord>
-    kvs::kvsml::CoordTag coord_tag;
-    if ( !coord_tag.read( vertex_tag.node() ) )
+    else
     {
-        kvsMessageError( "Cannot read <Coord>." );
-        return( false );
-    }
+        // Parent node.
+        const kvs::XMLNode::SuperClass* parent = vertex_tag.node();
 
-    // <DataArray>
-    const size_t dimension = 3;
-    const size_t coord_nelements = vertex_tag.nvertices() * dimension;
-    kvs::kvsml::DataArrayTag coords;
-    if ( !coords.read( coord_tag.node(), coord_nelements, &m_coords ) )
-    {
-        kvsMessageError("Cannot read <DataArray> for <Coord>.");
-        return( false );
-    }
-
-    // <Color>
-    if ( kvs::XMLNode::FindChildNode( vertex_tag.node(), "Color" ) )
-    {
-        kvs::kvsml::ColorTag color_tag;
-        if ( !color_tag.read( vertex_tag.node() ) )
+        // <Coord>
+        const size_t ncoords = vertex_tag.nvertices();
+        if ( !kvs::kvsml::ReadCoordData( parent, ncoords, &m_coords ) ) return( false );
+        if ( m_coords.size() == 0 )
         {
-            kvsMessageError( "Cannot read <Color>." );
+            kvsMessageError( "Cannot read the coord data." );
             return( false );
         }
 
-        // <DataValue>
-        if ( kvs::XMLNode::FindChildNode( color_tag.node(), "DataValue" ) )
+        // <Color>
+        const size_t ncolors = vertex_tag.nvertices();
+        if ( !kvs::kvsml::ReadColorData( parent, ncolors, &m_colors ) ) return( false );
+        if ( m_colors.size() == 0 )
         {
-            const size_t nchannels = 3;
-            const size_t ncolors = 1;
-            const size_t color_nelements = ncolors * nchannels;
-            kvs::kvsml::DataValueTag colors;
-            if ( !colors.read( color_tag.node(), color_nelements, &m_colors ) )
-            {
-                kvsMessageError("Cannot read <DataValue> for <Color>.");
-                return( false );
-            }
-        }
-        // <DataArray>
-        else
-        {
-            const size_t nchannels = 3;
-            const size_t ncolors = vertex_tag.nvertices();
-            const size_t color_nelements = ncolors * nchannels;
-            kvs::kvsml::DataArrayTag colors;
-            if ( !colors.read( color_tag.node(), color_nelements, &m_colors ) )
-            {
-                kvsMessageError("Cannot read <DataArray> for <Color>.");
-                return( false );
-            }
-        }
-    }
-
-    // <Normal>
-    if ( kvs::XMLNode::FindChildNode( vertex_tag.node(), "Normal" ) )
-    {
-        kvs::kvsml::NormalTag normal_tag;
-        if ( !normal_tag.read( vertex_tag.node() ) )
-        {
-            kvsMessageError( "Cannot read <Normal>." );
-            return( false );
+            // default value (black).
+            m_colors.allocate(3);
+            m_colors.at(0) = 0;
+            m_colors.at(1) = 0;
+            m_colors.at(2) = 0;
         }
 
-        // <DataArray>
-        const size_t normal_nelements = vertex_tag.nvertices() * dimension;
-        kvs::kvsml::DataArrayTag normals;
-        if ( !normals.read( normal_tag.node(), normal_nelements, &m_normals ) )
-        {
-            kvsMessageError("Cannot read <DataArray> for <Normal>.");
-            return( false );
-        }
-    }
+        // <Normal>
+        const size_t nnormals = vertex_tag.nvertices();
+        if ( !kvs::kvsml::ReadNormalData( parent, nnormals, &m_normals ) ) return( false );
 
-    // <Size>
-    if ( kvs::XMLNode::FindChildNode( vertex_tag.node(), "Size" ) )
-    {
-        kvs::kvsml::SizeTag size_tag;
-        if ( !size_tag.read( vertex_tag.node() ) )
-        {
-            kvsMessageError( "Cannot read <Size>." );
-            return( false );
-        }
-
-        // <DataValue>
-        if ( kvs::XMLNode::FindChildNode( size_tag.node(), "DataValue" ) )
-        {
-            const size_t size_nelements = 1;
-            kvs::kvsml::DataValueTag sizes;
-            if ( !sizes.read( size_tag.node(), size_nelements, &m_sizes ) )
-            {
-                kvsMessageError("Cannot read <DataValue> for <Size>.");
-                return( false );
-            }
-        }
-        // <DataArray>
-        else
-        {
-            const size_t size_nelements = vertex_tag.nvertices();
-            kvs::kvsml::DataArrayTag sizes;
-            if ( !sizes.read( size_tag.node(), size_nelements, &m_sizes ) )
-            {
-                kvsMessageError("Cannot read <DataArray> for <Size>.");
-                return( false );
-            }
-        }
+        // <Size>
+        const size_t nsizes = vertex_tag.nvertices();
+        if ( !kvs::kvsml::ReadSizeData( parent, nsizes, &m_sizes ) ) return( false );
     }
 
     return( true );
@@ -397,169 +323,23 @@ const bool KVSMLObjectPoint::write( const std::string& filename )
         kvsMessageError( "Cannot write <Vertex>." );
         return( false );
     }
-
-    // <Coord>
-    kvs::kvsml::CoordTag coord_tag;
-    if ( !coord_tag.write( vertex_tag.node() ) )
-    {
-        kvsMessageError( "Cannot write <Coord>." );
-        return( false );
-    }
-
-    // <DataArray>
-    kvs::kvsml::DataArrayTag coords;
-    if ( m_writing_type == ExternalAscii )
-    {
-        coords.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "coord" ) );
-        coords.setFormat( "ascii" );
-    }
-    else if ( m_writing_type == ExternalBinary )
-    {
-        coords.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "coord" ) );
-        coords.setFormat( "binary" );
-    }
-
-    if ( !coords.write( coord_tag.node(), m_coords ) )
-    {
-        kvsMessageError( "Cannot write <DataArray> for <Coord>." );
-        return( false );
-    }
-
-    // <Color>
-    if ( m_colors.size() > 0 )
-    {
-        kvs::kvsml::ColorTag color_tag;
-        if ( !color_tag.write( vertex_tag.node() ) )
-        {
-            kvsMessageError( "Cannot write <Color>." );
-            return( false );
-        }
-
-        // <DataValue>
-        if ( m_colors.size() == 3 )
-        {
-            kvs::kvsml::DataValueTag colors;
-            if ( !colors.write( color_tag.node(), m_colors ) )
-            {
-                kvsMessageError("Cannot write <DataValue> for <Color>.");
-                return( false );
-            }
-        }
-        // <DataArray>
-        else
-        {
-            kvs::kvsml::DataArrayTag colors;
-            if ( m_writing_type == ExternalAscii )
-            {
-                colors.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "color" ) );
-                colors.setFormat( "ascii" );
-            }
-            else if ( m_writing_type == ExternalBinary )
-            {
-                colors.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "color" ) );
-                colors.setFormat( "binary" );
-            }
-
-            if ( !colors.write( color_tag.node(), m_colors ) )
-            {
-                kvsMessageError( "Cannot write <DataArray> for <Color>." );
-                return( false );
-            }
-        }
-    }
     else
     {
-        // default value (black).
-        m_colors.allocate(3);
-        m_colors.at(0) = 0;
-        m_colors.at(1) = 0;
-        m_colors.at(2) = 0;
-    }
+        // Parent node and writing data type.
+        kvs::XMLNode::SuperClass* parent = vertex_tag.node();
+        const kvs::kvsml::WritingDataType type = static_cast<kvs::kvsml::WritingDataType>(m_writing_type);
 
-    // <Normal>
-    if ( m_normals.size() > 0 )
-    {
-        kvs::kvsml::NormalTag normal_tag;
-        if ( !normal_tag.write( vertex_tag.node() ) )
-        {
-            kvsMessageError( "Cannot write <Normal>." );
-            return( false );
-        }
+        // <Coord>
+        if ( !kvs::kvsml::WriteCoordData( parent, type, m_filename, m_coords ) ) return( false );
 
-        // <DataValue>
-        if ( m_normals.size() == 3 )
-        {
-            kvs::kvsml::DataValueTag normals;
-            if ( !normals.write( normal_tag.node(), m_normals ) )
-            {
-                kvsMessageError("Cannot write <DataValue> for <Normal>.");
-                return( false );
-            }
-        }
-        // <DataArray>
-        else
-        {
-            kvs::kvsml::DataArrayTag normals;
-            if ( m_writing_type == ExternalAscii )
-            {
-                normals.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "normal" ) );
-                normals.setFormat( "ascii" );
-            }
-            else if ( m_writing_type == ExternalBinary )
-            {
-                normals.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "normal" ) );
-                normals.setFormat( "binary" );
-            }
+        // <Color>
+        if ( !kvs::kvsml::WriteColorData( parent, type, m_filename, m_colors ) ) return( false );
 
-            if ( !normals.write( normal_tag.node(), m_normals ) )
-            {
-                kvsMessageError( "Cannot write <DataArray> for <Normal>." );
-                return( false );
-            }
-        }
-    }
+        // <Normal>
+        if ( !kvs::kvsml::WriteNormalData( parent, type, m_filename, m_normals ) ) return( false );
 
-    // <Size>
-    if ( m_sizes.size() > 0 )
-    {
-        kvs::kvsml::SizeTag size_tag;
-        if ( !size_tag.write( vertex_tag.node() ) )
-        {
-            kvsMessageError( "Cannot write <Size>." );
-            return( false );
-        }
-
-        // <DataValue>
-        if ( m_sizes.size() == 1 )
-        {
-            kvs::kvsml::DataValueTag sizes;
-            if ( !sizes.write( size_tag.node(), m_sizes ) )
-            {
-                kvsMessageError("Cannot write <DataValue> for <Size>.");
-                return( false );
-            }
-        }
-        // <DataArray>
-        else
-        {
-            kvs::kvsml::DataArrayTag sizes;
-            if ( m_writing_type == ExternalAscii )
-            {
-                sizes.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "size" ) );
-                sizes.setFormat( "ascii" );
-            }
-            else if ( m_writing_type == ExternalBinary )
-            {
-                sizes.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "size" ) );
-                sizes.setFormat( "binary" );
-            }
-
-            if ( !sizes.write( size_tag.node(), m_sizes ) )
-            {
-                kvsMessageError( "Cannot write <DataArray> for <Size>." );
-                return( false );
-            }
-        }
+        // <Size>
+        if ( !kvs::kvsml::WriteSizeData( parent, type, m_filename, m_sizes ) ) return( false );
     }
 
     return( document.write( m_filename ) );
@@ -603,7 +383,6 @@ const bool KVSMLObjectPoint::CheckFileFormat( const std::string& filename )
     // <Object>
     kvs::kvsml::ObjectTag object_tag;
     if ( !object_tag.read( kvsml_tag.node() ) ) return( false );
-
     if ( object_tag.type() != "PointObject" ) return( false );
 
     // <PointObject>

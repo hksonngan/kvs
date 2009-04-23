@@ -22,6 +22,8 @@
 #include "OpacityTag.h"
 #include "DataArrayTag.h"
 #include "DataValueTag.h"
+#include "DataReader.h"
+#include "DataWriter.h"
 #include <kvs/File>
 #include <kvs/XMLDocument>
 #include <kvs/XMLDeclaration>
@@ -298,14 +300,14 @@ const bool KVSMLObjectPolygon::read( const std::string& filename )
     // <KVSML>
     if ( !m_kvsml_tag.read( &document ) )
     {
-        kvsMessageError( "Cannot read <KVSML>." );
+        kvsMessageError( "Cannot read <%s>.", m_kvsml_tag.name().c_str() );
         return( false );
     }
 
     // <Object>
     if ( !m_object_tag.read( m_kvsml_tag.node() ) )
     {
-        kvsMessageError( "Cannot read <Object>." );
+        kvsMessageError( "Cannot read <%s>.", m_object_tag.name().c_str() );
         return( false );
     }
 
@@ -313,7 +315,7 @@ const bool KVSMLObjectPolygon::read( const std::string& filename )
     kvs::kvsml::PolygonObjectTag polygon_object_tag;
     if ( !polygon_object_tag.read( m_object_tag.node() ) )
     {
-        kvsMessageError( "Cannot read <PolygonObject>." );
+        kvsMessageError( "Cannot read <%s>.", polygon_object_tag.name().c_str() );
         return( false );
     }
 
@@ -338,190 +340,107 @@ const bool KVSMLObjectPolygon::read( const std::string& filename )
         m_normal_type = polygon_object_tag.normalType();
     }
 
-    // <Polygon>
-    kvs::kvsml::PolygonTag polygon_tag;
-    if ( kvs::XMLNode::FindChildNode( polygon_object_tag.node(), "Polygon" ) )
-    {
-        if ( !polygon_tag.read( polygon_object_tag.node() ) )
-        {
-            kvsMessageError( "Cannot read <Polygon>." );
-            return( false );
-        }
-
-        const size_t npolygons = polygon_tag.npolygons();
-
-        // <Connection>
-        if ( kvs::XMLNode::FindChildNode( polygon_tag.node(), "Connection" ) )
-        {
-            kvs::kvsml::ConnectionTag connection_tag;
-            if ( !connection_tag.read( polygon_tag.node() ) )
-            {
-                kvsMessageError( "Cannot read <Connection>." );
-                return( false );
-            }
-
-            // <DataArray>
-            size_t connection_nelements = 0;
-            if (      m_polygon_type == "triangle"   ) connection_nelements = npolygons * 3;
-            else if ( m_polygon_type == "quadrangle" ) connection_nelements = npolygons * 4;
-            kvs::kvsml::DataArrayTag connections;
-            if ( !connections.read( connection_tag.node(), connection_nelements, &m_connections ) )
-            {
-                kvsMessageError("Cannot read <DataArray> for <Connection>.");
-                return( false );
-            }
-        }
-
-        // <Opacity>
-        if ( kvs::XMLNode::FindChildNode( polygon_tag.node(), "Opacity" ) )
-        {
-            kvs::kvsml::OpacityTag opacity_tag;
-            if ( !opacity_tag.read( polygon_tag.node() ) )
-            {
-                kvsMessageError( "Cannot read <Opacity>." );
-                return( false );
-            }
-
-            // <DataValue>
-            if ( kvs::XMLNode::FindChildNode( opacity_tag.node(), "DataValue" ) )
-            {
-                const size_t opacity_nelements = 1;
-                kvs::kvsml::DataValueTag opacities;
-                if ( !opacities.read( opacity_tag.node(), opacity_nelements, &m_opacities ) )
-                {
-                    kvsMessageError("Cannot read <DataValue> for <Opacity>.");
-                    return( false );
-                }
-            }
-            // <DataArray>
-            else
-            {
-                const size_t opacity_nelements = npolygons;
-                kvs::kvsml::DataArrayTag opacities;
-                if ( !opacities.read( opacity_tag.node(), opacity_nelements, &m_opacities ) )
-                {
-                    kvsMessageError("Cannot read <DataArray> for <Opacity>.");
-                    return( false );
-                }
-            }
-        }
-        else
-        {
-            // default value.
-            m_opacities.allocate(1);
-            m_opacities.at(0) = 255;
-        }
-    }
-    else
-    {
-        // default value.
-        m_opacities.allocate(1);
-        m_opacities.at(0) = 255;
-    }
-
     // <Vertex>
     kvs::kvsml::VertexTag vertex_tag;
     if ( !vertex_tag.read( polygon_object_tag.node() ) )
     {
-        kvsMessageError( "Cannot read <Vertex>." );
+        kvsMessageError( "Cannot read <%s>.", vertex_tag.name().c_str() );
         return( false );
-    }
-
-    // <Coord>
-    kvs::kvsml::CoordTag coord_tag;
-    if ( !coord_tag.read( vertex_tag.node() ) )
-    {
-        kvsMessageError( "Cannot read <Coord>." );
-        return( false );
-    }
-
-    // <DataArray>
-    const size_t dimension = 3;
-    const size_t coord_nelements = vertex_tag.nvertices() * dimension;
-    kvs::kvsml::DataArrayTag coords;
-    if ( !coords.read( coord_tag.node(), coord_nelements, &m_coords ) )
-    {
-        kvsMessageError("Cannot read <DataArray> for <Coord>.");
-        return( false );
-    }
-
-    // <Color>
-    if ( kvs::XMLNode::FindChildNode( vertex_tag.node(), "Color" ) )
-    {
-        kvs::kvsml::ColorTag color_tag;
-        if ( !color_tag.read( vertex_tag.node() ) )
-        {
-            kvsMessageError( "Cannot read <Color>." );
-            return( false );
-        }
-
-        // <DataValue>
-        if ( kvs::XMLNode::FindChildNode( color_tag.node(), "DataValue" ) )
-        {
-            const size_t nchannels = 3;
-            const size_t ncolors = 1;
-            const size_t color_nelements = ncolors * nchannels;
-            kvs::kvsml::DataValueTag colors;
-            if ( !colors.read( color_tag.node(), color_nelements, &m_colors ) )
-            {
-                kvsMessageError("Cannot read <DataValue> for <Color>.");
-                return( false );
-            }
-        }
-        // <DataArray>
-        else
-        {
-            size_t ncolors = vertex_tag.nvertices();
-            if ( m_color_type == "polygon" )
-            {
-                ncolors = polygon_tag.npolygons();
-            }
-            const size_t nchannels = 3;
-            const size_t color_nelements = ncolors * nchannels;
-            kvs::kvsml::DataArrayTag colors;
-            if ( !colors.read( color_tag.node(), color_nelements, &m_colors ) )
-            {
-                kvsMessageError("Cannot read <DataArray> for <Color>.");
-                return( false );
-            }
-        }
     }
     else
     {
-        // default value (black).
-        m_colors.allocate(3);
-        m_colors.at(0) = 0;
-        m_colors.at(1) = 0;
-        m_colors.at(2) = 0;
+        // Parent node.
+        const kvs::XMLNode::SuperClass* parent = vertex_tag.node();
+
+        // <Coord>
+        const size_t ncoords = vertex_tag.nvertices();
+        if ( !kvs::kvsml::ReadCoordData( parent, ncoords, &m_coords ) ) return( false );
+        if ( m_coords.size() == 0 )
+        {
+            kvsMessageError( "Cannot read the coord data." );
+            return( false );
+        }
+
+        // <Color>
+        if ( m_color_type == "vertex" )
+        {
+            const size_t ncolors = vertex_tag.nvertices();
+            if ( !kvs::kvsml::ReadColorData( parent, ncolors, &m_colors ) ) return( false );
+        }
+        if ( m_colors.size() == 0 )
+        {
+            // default value (black).
+            m_colors.allocate(3);
+            m_colors.at(0) = 0;
+            m_colors.at(1) = 0;
+            m_colors.at(2) = 0;
+        }
+
+        // <Normal>
+        if ( m_normal_type == "vertex" )
+        {
+            const size_t nnormals = vertex_tag.nvertices();
+            if ( !kvs::kvsml::ReadNormalData( parent, nnormals, &m_normals ) ) return( false );
+        }
     }
 
-    // <Normal>
-    if ( kvs::XMLNode::FindChildNode( vertex_tag.node(), "Normal" ) )
+    // <Polygon>
+    kvs::kvsml::PolygonTag polygon_tag;
+    if ( polygon_tag.isExisted( polygon_object_tag.node() ) )
     {
-        kvs::kvsml::NormalTag normal_tag;
-        if ( !normal_tag.read( vertex_tag.node() ) )
+        if ( !polygon_tag.read( polygon_object_tag.node() ) )
         {
-            kvsMessageError( "Cannot read <Normal>." );
+            kvsMessageError( "Cannot read <%s>.", polygon_object_tag.name().c_str() );
             return( false );
         }
+        else
+        {
+            // Parent node.
+            const kvs::XMLNode::SuperClass* parent = polygon_tag.node();
+            const size_t nvertices = vertex_tag.nvertices();
+            const size_t npolygons = polygon_tag.npolygons();
 
-        // <DataArray>
-        size_t nnormals = vertex_tag.nvertices();
-        if ( m_normal_type == "polygon" )
-        {
-            const size_t nvertices_per_polygon = m_polygon_type == "triangle" ? 3 : 4;
-            nnormals = vertex_tag.nvertices() / nvertices_per_polygon;
-            if ( m_connections.size() > 0 )
+            // <Connection>
+            const size_t nconnections =
+                ( m_polygon_type == "triangle"   ) ? npolygons * 3 :
+                ( m_polygon_type == "quadrangle" ) ? npolygons * 4 : 0;
+            if ( !kvs::kvsml::ReadConnectionData( parent, nconnections, &m_connections ) ) return( false );
+
+            // <Opacity>
+            const size_t nopacities = npolygons;
+            if ( !kvs::kvsml::ReadOpacityData( parent, nopacities, &m_opacities ) ) return( false );
+            if ( m_opacities.size() == 0 )
             {
-                nnormals = m_connections.size() / nvertices_per_polygon;
+                // default value (255).
+                m_opacities.allocate(1);
+                m_opacities.at(0) = 255;
             }
-        }
-        const size_t normal_nelements = nnormals * dimension;
-        kvs::kvsml::DataArrayTag normals;
-        if ( !normals.read( normal_tag.node(), normal_nelements, &m_normals ) )
-        {
-            kvsMessageError("Cannot read <DataArray> for <Normal>.");
-            return( false );
+
+            // <Color>
+            if ( m_color_type == "polygon" )
+            {
+                const size_t ncolors = npolygons;
+                if ( !kvs::kvsml::ReadColorData( parent, ncolors, &m_colors ) ) return( false );
+            }
+            if ( m_colors.size() == 0 )
+            {
+                // default value (black).
+                m_colors.allocate(3);
+                m_colors.at(0) = 0;
+                m_colors.at(1) = 0;
+                m_colors.at(2) = 0;
+            }
+
+            // <Normal>
+            if ( m_normal_type == "polygon" )
+            {
+                const size_t nconnections = m_connections.size();
+                const size_t nvertices_per_polygon = m_polygon_type == "triangle" ? 3 : 4;
+                const size_t nnormals = ( nconnections > 0 ) ?
+                    nconnections / nvertices_per_polygon :
+                    nvertices / nvertices_per_polygon;
+                if ( !kvs::kvsml::ReadNormalData( parent, nnormals, &m_normals ) ) return( false );
+            }
         }
     }
 
@@ -547,7 +466,7 @@ const bool KVSMLObjectPolygon::write( const std::string& filename )
     kvs::kvsml::KVSMLTag kvsml_tag;
     if ( !kvsml_tag.write( &document ) )
     {
-        kvsMessageError( "Cannot write <KVSML>." );
+        kvsMessageError( "Cannot write <%s>.", kvsml_tag.name().c_str() );
         return( false );
     }
 
@@ -556,7 +475,7 @@ const bool KVSMLObjectPolygon::write( const std::string& filename )
     object_tag.setType( "PolygonObject" );
     if ( !object_tag.write( kvsml_tag.node() ) )
     {
-        kvsMessageError( "Cannot write <Object>." );
+        kvsMessageError( "Cannot write <%s>.", object_tag.name().c_str() );
         return( false );
     }
 
@@ -567,10 +486,86 @@ const bool KVSMLObjectPolygon::write( const std::string& filename )
     polygon_object_tag.setNormalType( m_normal_type );
     if ( !polygon_object_tag.write( object_tag.node() ) )
     {
-        kvsMessageError( "Cannot write <PolygonObject>." );
+        kvsMessageError( "Cannot write <%s>.", polygon_object_tag.name().c_str() );
         return( false );
     }
 
+    const size_t dimension = 3;
+    const size_t nvertices = m_coords.size() / dimension;
+
+    // <Vertex nvertices="xxx">
+    kvs::kvsml::VertexTag vertex_tag;
+    vertex_tag.setNVertices( nvertices );
+    if ( !vertex_tag.write( polygon_object_tag.node() ) )
+    {
+        kvsMessageError( "Cannot write <%s>.", vertex_tag.name().c_str() );
+        return( false );
+    }
+    else
+    {
+        // Parent node and writing data type.
+        kvs::XMLNode::SuperClass* parent = vertex_tag.node();
+        const kvs::kvsml::WritingDataType type = static_cast<kvs::kvsml::WritingDataType>(m_writing_type);
+
+        // <Coord>
+        if ( !kvs::kvsml::WriteCoordData( parent, type, m_filename, m_coords ) ) return( false );
+
+        // <Color>
+        if ( m_color_type == "vertex" )
+        {
+            if ( !kvs::kvsml::WriteColorData( parent, type, m_filename, m_colors ) ) return( false );
+        }
+
+        // <Normal>
+        if ( m_normal_type == "vertex" )
+        {
+            if ( !kvs::kvsml::WriteNormalData( parent, type, m_filename, m_normals ) ) return( false );
+        }
+    }
+
+    // <Polygon npolygons="xxx">
+    if ( m_color_type == "polygon" || m_normal_type == "polygon" ||
+         m_opacities.size() > 0 || m_connections.size() > 0 )
+    {
+        const size_t nconnections = m_connections.size();
+        const size_t nvertices_per_polygon = m_polygon_type == "triangle" ? 3 : 4;
+        const size_t npolygons = ( nconnections > 0 ) ?
+            nconnections / nvertices_per_polygon :
+            nvertices / nvertices_per_polygon;
+
+        kvs::kvsml::PolygonTag polygon_tag;
+        polygon_tag.setNPolygons( npolygons );
+        if ( !polygon_tag.write( polygon_object_tag.node() ) )
+        {
+            kvsMessageError( "Cannot write <%s>.", polygon_tag.name().c_str() );
+            return( false );
+        }
+
+        // Parent node and writing data type.
+        kvs::XMLNode::SuperClass* parent = polygon_tag.node();
+        const kvs::kvsml::WritingDataType type = static_cast<kvs::kvsml::WritingDataType>(m_writing_type);
+
+        // <Connection>
+        if ( !kvs::kvsml::WriteConnectionData( parent, type, m_filename, m_connections ) ) return( false );
+
+        // <Opacity>
+        if ( !kvs::kvsml::WriteOpacityData( parent, type, m_filename, m_opacities ) ) return( false );
+
+        // <Color>
+        if ( m_color_type == "polygon" )
+        {
+            if ( !kvs::kvsml::WriteColorData( parent, type, m_filename, m_colors ) ) return( false );
+        }
+
+        // <Normal>
+        if ( m_normal_type == "polygon" )
+        {
+            if ( !kvs::kvsml::WriteNormalData( parent, type, m_filename, m_normals ) ) return( false );
+        }
+    }
+
+
+/*
     // <Vertex nvertices="xxx">
     const size_t dimension = 3;
     kvs::kvsml::VertexTag vertex_tag;
@@ -783,7 +778,7 @@ const bool KVSMLObjectPolygon::write( const std::string& filename )
             }
         }
     }
-
+*/
     return( document.write( m_filename ) );
 }
 

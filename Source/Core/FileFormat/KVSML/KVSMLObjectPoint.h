@@ -38,16 +38,15 @@ public:
 
     enum WritingDataType
     {
-        Ascii = 0,
-        ExternalAscii,
-        ExternalBinary
+        Ascii = 0,     ///< ascii data type
+        ExternalAscii, ///< external ascii data type
+        ExternalBinary ///< external binary data type
     };
 
 protected:
 
-    kvs::kvsml::KVSMLTag m_kvsml_tag;   ///< KVSML tag information
-    kvs::kvsml::ObjectTag m_object_tag; ///< Object tag information
-
+    kvs::kvsml::KVSMLTag         m_kvsml_tag;    ///< KVSML tag information
+    kvs::kvsml::ObjectTag        m_object_tag;   ///< Object tag information
     WritingDataType              m_writing_type; ///< writing data type
     kvs::ValueArray<kvs::Real32> m_coords;       ///< coordinate array
     kvs::ValueArray<kvs::UInt8>  m_colors;       ///< color(r,g,b) array
