@@ -24,7 +24,9 @@ $(OUTDIR)\.\FileFormat\KVSML\ColorTag.obj \
 $(OUTDIR)\.\FileFormat\KVSML\ConnectionTag.obj \
 $(OUTDIR)\.\FileFormat\KVSML\CoordTag.obj \
 $(OUTDIR)\.\FileFormat\KVSML\DataArrayTag.obj \
+$(OUTDIR)\.\FileFormat\KVSML\DataReader.obj \
 $(OUTDIR)\.\FileFormat\KVSML\DataValueTag.obj \
+$(OUTDIR)\.\FileFormat\KVSML\DataWriter.obj \
 $(OUTDIR)\.\FileFormat\KVSML\KVSMLObjectLine.obj \
 $(OUTDIR)\.\FileFormat\KVSML\KVSMLObjectPoint.obj \
 $(OUTDIR)\.\FileFormat\KVSML\KVSMLObjectPolygon.obj \
