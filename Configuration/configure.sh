@@ -30,7 +30,8 @@ printf 'success\n'
 #=============================================================================
 printf 'configure header list.. '
 
-rm -f $( find ../Source/kvs -type f -not -path '*/CVS/*' )
+#rm -f $( find ../Source/kvs -type f -not -path '*/CVS/*' )
+rm -f $( find ../Source/kvs -type f -not -path '*/.svn/*' )
 
 ./configure_header_list.py Core        kvs
 ./configure_header_list.py SupportGLUT kvs/glut
@@ -46,7 +47,8 @@ printf 'success\n'
 #=============================================================================
 printf 'configure permission... '
 
-chmod 644 $( grep -I -l '' $( find .. -type f -not -path '*/CVS/*' ) )
+#chmod 644 $( grep -I -l '' $( find .. -type f -not -path '*/CVS/*' ) )
+chmod 644 $( grep -I -l '' $( find .. -type f -not -path '*/.svn/*' ) )
 chmod 755 $( find .. -type d )
 chmod 755 $( find .. -name '*.sh' -o -name '*.py')
 
