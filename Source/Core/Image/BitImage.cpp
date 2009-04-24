@@ -18,10 +18,13 @@
 #include <kvs/Math>
 #include <kvs/Binary>
 #include <kvs/File>
+#include <kvs/KVSMLObjectImage>
 #include <kvs/Bmp>
 #include <kvs/Ppm>
 #include <kvs/Pgm>
 #include <kvs/Pbm>
+#include <kvs/Tiff>
+#include <kvs/Dicom>
 
 
 namespace
@@ -636,13 +639,13 @@ const size_t BitImage::count( void ) const
 /*==========================================================================*/
 const bool BitImage::read( const std::string& filename )
 {
-    const kvs::File file( filename );
-    const std::string extension = file.extension();
-
     // Color or Gray image.
-    if ( extension == "bmp" ||
-         extension == "ppm" ||
-         extension == "pgm" )
+    if ( kvs::KVSMLObjectImage::CheckFileExtension( filename ) ||
+         kvs::Bmp::CheckFileExtension( filename ) ||
+         kvs::Ppm::CheckFileExtension( filename ) ||
+         kvs::Pgm::CheckFileExtension( filename ) ||
+         kvs::Tiff::CheckFileExtension( filename ) ||
+         kvs::Dicom::CheckFileExtension( filename ) )
     {
         kvs::GrayImage image; image.read( filename );
         if ( !BaseClass::create( image.width(), image.height(), BaseClass::Bit ) )
@@ -655,19 +658,16 @@ const bool BitImage::read( const std::string& filename )
 
         return( true );
     }
+
     // Bit image.
-    else if ( extension == "pbm" )
+    if ( kvs::Pbm::CheckFileExtension( filename ) )
     {
         const kvs::Pbm pbm( filename );
         const kvs::UInt8* data = static_cast<const kvs::UInt8*>(pbm.data().pointer());
         return( BaseClass::create( pbm.width(), pbm.height(), BaseClass::Bit, data ) );
     }
-    // Not supported.
-    else
-    {
-        kvsMessageError("Unsupported image format '%s'.",extension.c_str());
-        return( false );
-    }
+
+    return( false );
 }
 
 /*==========================================================================*/
@@ -683,32 +683,33 @@ const bool BitImage::write( const std::string& filename )
     const std::string extension = file.extension();
 
     // Color image.
-    if ( extension == "bmp" ||
-         extension == "ppm" )
+    if ( kvs::KVSMLObjectImage::CheckFileExtension( filename ) ||
+         kvs::Bmp::CheckFileExtension( filename ) ||
+         kvs::Ppm::CheckFileExtension( filename ) )
     {
         kvs::ColorImage image( *this );
         return( image.write( filename ) );
     }
-    // Gray image.
-    else if ( extension == "pgm" )
+
+    // PGM image.
+    if ( kvs::Pgm::CheckFileExtension( filename ) )
     {
         kvs::GrayImage image( *this );
         return( image.write( filename ) );
     }
-    // Bit image.
-    else if ( extension == "pbm" )
+
+    // PBM image.
+    if ( kvs::Pbm::CheckFileExtension( filename ) )
     {
         const size_t nvalues = m_width * m_height;
         const kvs::UInt8* values = m_data.pointer();
         kvs::Pbm pbm( m_width, m_height, kvs::BitArray( values, nvalues) );
         return( pbm.write( filename ) );
     }
-    // Not supported.
-    else
-    {
-        kvsMessageError("Unsupported image format '%s'.",extension.c_str());
-        return( false );
-    }
+
+    // TIFF and DICOM has not been supported yet.
+
+    return( false );
 }
 
 /*===========================================================================*/

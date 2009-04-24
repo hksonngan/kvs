@@ -15,12 +15,15 @@
 #include "GrayImage.h"
 #include "BitImage.h"
 #include <kvs/IgnoreUnusedVariable>
+#include <kvs/KVSMLObjectImage>
 #include <kvs/RGBColor>
 #include <kvs/File>
 #include <kvs/Bmp>
 #include <kvs/Ppm>
 #include <kvs/Pgm>
 #include <kvs/Pbm>
+#include <kvs/Tiff>
+#include <kvs/Dicom>
 
 
 namespace kvs
@@ -347,38 +350,84 @@ void ColorImage::resize( const size_t width, const size_t height, ColorImage::Bi
 /*==========================================================================*/
 const bool ColorImage::read( const std::string& filename )
 {
-    const kvs::File file( filename );
-    const std::string extension = file.extension();
+    // KVSML image.
+    if ( kvs::KVSMLObjectImage::CheckFileExtension( filename ) )
+    {
+        const kvs::KVSMLObjectImage kvsml( filename );
+        if ( kvsml.pixelType() == "color" )
+        {
+            const BaseClass::ImageType type = BaseClass::Color;
+            return( BaseClass::create( kvsml.width(), kvsml.height(), type, kvsml.data() ) );
+        }
+        if ( kvsml.pixelType() == "gray" )
+        {
+            kvs::GrayImage image( kvsml.width(), kvsml.height(), kvsml.data() );
+            return( this->read_image( image ) );
+        }
+    }
 
-    // Color image.
-    if ( extension == "bmp" )
+    // Bitmap image.
+    if ( kvs::Bmp::CheckFileExtension( filename ) )
     {
         const kvs::Bmp bmp( filename );
-        return( BaseClass::create( bmp.width(), bmp.height(), BaseClass::Color, bmp.data() ) );
+        const BaseClass::ImageType type = BaseClass::Color;
+        return( BaseClass::create( bmp.width(), bmp.height(), type, bmp.data() ) );
     }
-    else if ( extension == "ppm" )
+
+    // PPM image.
+    if ( kvs::Ppm::CheckFileExtension( filename ) )
     {
         const kvs::Ppm ppm( filename );
-        return( BaseClass::create( ppm.width(), ppm.height(), BaseClass::Color, ppm.data() ) );
+        const BaseClass::ImageType type = BaseClass::Color;
+        return( BaseClass::create( ppm.width(), ppm.height(), type, ppm.data() ) );
     }
-    // Gray image.
-    else if ( extension == "pgb" )
+
+    // PGM image.
+    if ( kvs::Pgm::CheckFileExtension( filename ) )
     {
         kvs::GrayImage image; image.read( filename );
         return( this->read_image( image ) );
     }
-    // Bit image.
-    else if ( extension == "pbm" )
+
+    // PBM image.
+    if ( kvs::Pbm::CheckFileExtension( filename ) )
     {
         kvs::BitImage image; image.read( filename );
         return( this->read_image( image ) );
     }
-    // Not supported.
-    else
+
+    // TIFF image.
+    if ( kvs::Tiff::CheckFileExtension( filename ) )
     {
-        kvsMessageError("Unsupported image format '%s'.",extension.c_str());
-        return( false );
+        const kvs::Tiff tiff( filename );
+        if ( tiff.colorMode() == kvs::Tiff::Color24 )
+        {
+            const kvs::UInt8* data = static_cast<kvs::UInt8*>(tiff.rawData().pointer());
+            const BaseClass::ImageType type = BaseClass::Color;
+            return( BaseClass::create( tiff.width(), tiff.height(), type, data ) );
+        }
+        if ( tiff.colorMode() == kvs::Tiff::Gray8 )
+        {
+            const kvs::UInt8* data = static_cast<kvs::UInt8*>(tiff.rawData().pointer());
+            kvs::GrayImage image( tiff.width(), tiff.height(), data );
+            return( this->read_image( image ) );
+        }
+        if ( tiff.colorMode() == kvs::Tiff::Gray16 )
+        {
+            kvsMessageError( "TIFF image (16bits gray-scale) is not supported." );
+            return( false );
+        }
     }
+
+    // DICOM image.
+    if ( kvs::Dicom::CheckFileExtension( filename ) )
+    {
+        const kvs::Dicom dcm( filename );
+        kvs::GrayImage image( dcm.column(), dcm.row(), dcm.pixelData() );
+        return( this->read_image( image ) );
+    }
+
+    return( false );
 }
 
 /*==========================================================================*/
@@ -390,37 +439,49 @@ const bool ColorImage::read( const std::string& filename )
 /*==========================================================================*/
 const bool ColorImage::write( const std::string& filename )
 {
-    const kvs::File file( filename );
-    const std::string extension = file.extension();
+    // KVSML image.
+    if ( kvs::KVSMLObjectImage::CheckFileExtension( filename ) )
+    {
+        kvs::KVSMLObjectImage kvsml;
+        kvsml.setWidth( m_width );
+        kvsml.setHeight( m_height );
+        kvsml.setPixelType( "color" );
+        kvsml.setWritingDataType( kvs::KVSMLObjectImage::Ascii );
+        kvsml.setData( m_data );
+        return( kvsml.write( filename ) );
+    }
 
-    // Color image.
-    if ( extension == "bmp" )
+    // Bitmap image.
+    if ( kvs::Bmp::CheckFileExtension( filename ) )
     {
         kvs::Bmp bmp( m_width, m_height, m_data );
         return( bmp.write( filename ) );
     }
-    else if ( extension == "ppm" )
+
+    // PPM image.
+    if ( kvs::Ppm::CheckFileExtension( filename ) )
     {
         kvs::Ppm ppm( m_width, m_height, m_data );
         return( ppm.write( filename ) );
     }
-    // Gray image.
-    else if ( extension == "pgm" )
+
+    // PGM image.
+    if ( kvs::Pgm::CheckFileExtension( filename ) )
     {
         kvs::GrayImage image( *this );
         return( image.write( filename ) );
     }
-    // Bit image.
-    else if ( extension == "pbm" )
+
+    // PBM image.
+    if ( kvs::Pbm::CheckFileExtension( filename ) )
     {
         kvs::BitImage image( kvs::GrayImage( *this ) );
         return( image.write( filename ) );
     }
-    else
-    {
-        kvsMessageError("Unsupported image format '%s'.",extension.c_str());
-        return( false );
-    }
+
+    // TIFF and DICOM has not been supported yet.
+
+    return( false );
 }
 
 /*===========================================================================*/

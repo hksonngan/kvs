@@ -126,6 +126,8 @@ public:
 
 private:
 
+    const bool read_image( const kvs::ColorImage& image );
+
     const bool read_image( const kvs::BitImage& image );
 };
 
