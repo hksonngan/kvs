@@ -233,4 +233,11 @@ const bool Pbm::CheckFileFormat( const std::string& filename )
     return( header.isP1() || header.isP4() );
 }
 
+std::ostream& operator <<( std::ostream& os, const Pbm& rhs )
+{
+    os << rhs.m_header;
+
+    return( os );
+}
+
 } // end of namespace kvs

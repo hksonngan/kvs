@@ -516,4 +516,21 @@ const bool Tiff::CheckFileFormat( const std::string& filename )
     return( header.read( ifs ) );
 }
 
+std::ostream& operator << ( std::ostream& os, const Tiff& tiff )
+{
+    os << tiff.header() << std::endl;
+
+    kvs::tiff::ImageFileDirectory::EntryList::const_iterator entry = tiff.ifd().entryList().begin();
+    kvs::tiff::ImageFileDirectory::EntryList::const_iterator last = tiff.ifd().entryList().end();
+    while ( entry != last )
+    {
+        os << *entry;
+
+        ++entry;
+        if ( entry != last ) os << std::endl;
+    }
+
+    return( os );
+}
+
 } // end of namespace kvs

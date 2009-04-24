@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_KVSCHECK_KVSCHECK_MACRO_H_INCLUDE
-#define KVS_KVSCHECK_KVSCHECK_MACRO_H_INCLUDE
+#ifndef KVSCHECK__KVSCHECK_MACRO_H_INCLUDE
+#define KVSCHECK__KVSCHECK_MACRO_H_INCLUDE
 
 #include <string>
 
@@ -24,4 +24,4 @@ const std::string KVSCHECK_COMMAND_NAME = "kvscheck";
 
 }
 
-#endif // KVS_KVSCHECK_KVSCHECK_MACRO_H_INCLUDE
+#endif // KVSCHECK__KVSCHECK_MACRO_H_INCLUDE

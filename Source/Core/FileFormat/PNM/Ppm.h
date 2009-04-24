@@ -19,6 +19,7 @@
 #include <kvs/ValueArray>
 #include <kvs/Type>
 #include <string>
+#include <iostream>
 #include "Header.h"
 
 
@@ -81,6 +82,8 @@ public:
     static const bool CheckFileExtension( const std::string& filename );
 
     static const bool CheckFileFormat( const std::string& filename );
+
+    friend std::ostream& operator <<( std::ostream& os, const Ppm& rhs );
 };
 
 } // end of namespace kvs

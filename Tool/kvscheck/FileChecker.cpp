@@ -12,15 +12,22 @@
  */
 /****************************************************************************/
 #include "FileChecker.h"
+#include <kvs/AVSField>
+#include <kvs/AVSUcd>
+#include <kvs/Stl>
+#include <kvs/Bmp>
+#include <kvs/Ppm>
+#include <kvs/Pgm>
+#include <kvs/Pbm>
+#include <kvs/Tiff>
+#include <kvs/Dicom>
+#include <kvs/KVSMLObjectImage>
 #include <kvs/KVSMLObjectPoint>
 #include <kvs/KVSMLObjectLine>
 #include <kvs/KVSMLObjectPolygon>
 #include <kvs/KVSMLObjectStructuredVolume>
 #include <kvs/KVSMLObjectUnstructuredVolume>
-#include <kvs/AVSField>
-#include <kvs/AVSUcd>
-#include <kvs/Bmp>
-#include <kvs/Dicom>
+#include <kvs/KVSMLTransferFunction>
 #include <kvs/File>
 #include <kvs/Timer>
 #include <iostream>
@@ -29,6 +36,13 @@
 namespace
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  Outputs information of the file cheacker.
+ *  @param  os [out] output stream
+ *  @param  checker [in] file cheacker
+ */
+/*===========================================================================*/
 template <typename FileFormatClass>
 inline void PrintInformation( std::ostream& os, const kvscheck::FileChecker& checker )
 {
@@ -36,12 +50,24 @@ inline void PrintInformation( std::ostream& os, const kvscheck::FileChecker& che
     FileFormatClass file( checker.filename() );
     timer.stop();
     os << "File format class: " << "kvs::" << file.className() << std::endl;
-    os << "Reading time:      " << timer.sec() << " [sec]" << std::endl;
-    os << "Information:       " << std::endl << file;
+    os << "Reading time: " << timer.sec() << " [sec]" << std::endl;
+    os << "Information: " << std::endl << file;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Outputs information of the file cheacker for KVSML.
+ *  @param  os [out] output stream
+ *  @param  checker [in] file cheacker
+ */
+/*===========================================================================*/
 inline void PrintKVSMLInformation( std::ostream& os, const kvscheck::FileChecker& checker )
 {
+    if ( kvs::KVSMLObjectImage::CheckFileFormat( checker.filename() ) )
+    {
+        PrintInformation<kvs::KVSMLObjectImage>( os, checker ); return;
+    }
+
     if ( kvs::KVSMLObjectPoint::CheckFileFormat( checker.filename() ) )
     {
         PrintInformation<kvs::KVSMLObjectPoint>( os, checker ); return;
@@ -68,61 +94,104 @@ inline void PrintKVSMLInformation( std::ostream& os, const kvscheck::FileChecker
     }
 }
 
-}
+} // end of namespace
 
 
 namespace kvscheck
 {
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Constructor.
- *  @param filename [in] filename
+ *  @brief  Constructs a new FileCheacker class.
+ *  @param  filename [in] filename
  */
-/*==========================================================================*/
+/*===========================================================================*/
 FileChecker::FileChecker( const std::string& filename )
 {
     m_filename = filename;
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Get the filename.
- *  @retval filename
+ *  @brief  Returns a filename.
+ *  @return filename
  */
-/*==========================================================================*/
+/*===========================================================================*/
 const std::string& FileChecker::filename( void ) const
 {
     return( m_filename );
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Get the file format type.
+ *  @brief  Returns a file format type.
  *  @return file format type
  */
-/*==========================================================================*/
+/*===========================================================================*/
 const FileChecker::FormatType FileChecker::fileFormat( void ) const
 {
-    kvs::File file( m_filename );
-
-    if(      file.extension( false ) == "fld" )   return( FileChecker::AVSFieldFormat );
-    else if( file.extension( false ) == "inp" )   return( FileChecker::AVSUcdFormat );
-    else if( file.extension( false ) == "ucd" )   return( FileChecker::AVSUcdFormat );
-    else if( file.extension( false ) == "kvsml" ) return( FileChecker::KVSMLFormat );
-    else if( file.extension( false ) == "bmp" )   return( FileChecker::BitmapFormat );
-    else if( file.extension( false ) == "dcm" )   return( FileChecker::DICOMFormat );
-    else
+    if ( kvs::KVSMLObjectPoint::CheckFileExtension( m_filename ) )
     {
-        return( FileChecker::UnknownFormat );
+        /* NOTE: The KVSML object file have a same extension. Therefore,
+         * kvs::KVSMLObjectPoint is used in order to check the file extension
+         * for the KVSML format here.
+         */
+        return( FileChecker::KVSMLFormat );
     }
+
+    if ( kvs::AVSField::CheckFileExtension( m_filename ) )
+    {
+        return( FileChecker::AVSFieldFormat );
+    }
+
+    if ( kvs::AVSUcd::CheckFileExtension( m_filename ) )
+    {
+        return( FileChecker::AVSUcdFormat );
+    }
+
+    if ( kvs::Stl::CheckFileExtension( m_filename ) )
+    {
+        return( FileChecker::STLFormat );
+    }
+
+    if ( kvs::Bmp::CheckFileExtension( m_filename ) )
+    {
+        return( FileChecker::BitmapFormat );
+    }
+
+    if ( kvs::Ppm::CheckFileExtension( m_filename ) )
+    {
+        return( FileChecker::PPMFormat );
+    }
+
+    if ( kvs::Pgm::CheckFileExtension( m_filename ) )
+    {
+        return( FileChecker::PGMFormat );
+    }
+
+    if ( kvs::Pbm::CheckFileExtension( m_filename ) )
+    {
+        return( FileChecker::PBMFormat );
+    }
+
+    if ( kvs::Tiff::CheckFileExtension( m_filename ) )
+    {
+        return( FileChecker::TIFFFormat );
+    }
+
+    if ( kvs::Dicom::CheckFileExtension( m_filename ) )
+    {
+        return( FileChecker::DICOMFormat );
+    }
+
+    return( FileChecker::UnknownFormat );
 }
 
 /*==========================================================================*/
 /**
- *  Output file information.
- *  @param os [in] output stream
- *  @param checker [in] file checker
+ *  @brief  Output file information.
+ *  @param  os [in] output stream
+ *  @param  checker [in] file checker
  */
 /*==========================================================================*/
 std::ostream& operator << ( std::ostream& os, const FileChecker& checker )
@@ -148,21 +217,55 @@ std::ostream& operator << ( std::ostream& os, const FileChecker& checker )
         ::PrintInformation<kvs::AVSField>( os, checker );
         break;
     }
+
     case FileChecker::AVSUcdFormat:
     {
         ::PrintInformation<kvs::AVSUcd>( os, checker );
         break;
     }
+
+    case FileChecker::STLFormat:
+    {
+        ::PrintInformation<kvs::Stl>( os, checker );
+        break;
+    }
+
     case FileChecker::BitmapFormat:
     {
         ::PrintInformation<kvs::Bmp>( os, checker );
         break;
     }
+
+    case FileChecker::PPMFormat:
+    {
+        ::PrintInformation<kvs::Ppm>( os, checker );
+        break;
+    }
+
+    case FileChecker::PGMFormat:
+    {
+        ::PrintInformation<kvs::Pgm>( os, checker );
+        break;
+    }
+
+    case FileChecker::PBMFormat:
+    {
+        ::PrintInformation<kvs::Pbm>( os, checker );
+        break;
+    }
+
+    case FileChecker::TIFFFormat:
+    {
+        ::PrintInformation<kvs::Tiff>( os, checker );
+        break;
+    }
+
     case FileChecker::DICOMFormat:
     {
         ::PrintInformation<kvs::Dicom>( os, checker );
         break;
     }
+
     default:
         kvsMessageError("Unknown file format.");
         break;

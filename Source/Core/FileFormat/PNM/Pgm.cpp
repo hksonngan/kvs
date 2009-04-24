@@ -231,4 +231,11 @@ const bool Pgm::CheckFileFormat( const std::string& filename )
     return( header.isP2() || header.isP5() );
 }
 
+std::ostream& operator <<( std::ostream& os, const Pgm& rhs )
+{
+    os << rhs.m_header;
+
+    return( os );
+}
+
 } // end of namespace kvs

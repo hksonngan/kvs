@@ -18,32 +18,34 @@
 namespace kvscheck
 {
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Constructor.
+ *  @brief  Constructs a new CompilerChecker class.
  */
-/*==========================================================================*/
+/*===========================================================================*/
 CompilerChecker::CompilerChecker( void )
 {
     m_name    = kvs::Compiler::Name();
     m_version = kvs::Compiler::Version();
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Get the compiler name.
+ *  @brief  Returns a compiler name.
+ *  @return compiler name
  */
-/*==========================================================================*/
+/*===========================================================================*/
 const std::string& CompilerChecker::name( void ) const
 {
     return( m_name );
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Get the compiler version.
+ *  @brief  Returns a compiler version.
+ *  @return compiler version
  */
-/*==========================================================================*/
+/*===========================================================================*/
 const std::string& CompilerChecker::version( void ) const
 {
     return( m_version );
@@ -51,14 +53,14 @@ const std::string& CompilerChecker::version( void ) const
 
 /*==========================================================================*/
 /**
- *  Output version information.
+ *  @brief Outputs version information.
  *  @param os [in] output stream
  *  @param checker [in] compiler checker
  */
 /*==========================================================================*/
 std::ostream& operator << ( std::ostream& os, const CompilerChecker& checker )
 {
-    os << "Compiler: " << checker.name() << " (" << checker.version() << ")";
+    os << "Compiler: " << checker.name() << " (" << checker.version() << ")" << std::endl;
 
     return( os );
 }

@@ -81,6 +81,8 @@ public:
     static const bool CheckFileExtension( const std::string& filename );
 
     static const bool CheckFileFormat( const std::string& filename );
+
+    friend std::ostream& operator <<( std::ostream& os, const Pgm& rhs );
 };
 
 } // end of namespace kvs

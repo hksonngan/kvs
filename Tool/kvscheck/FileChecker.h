@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_KVSCHECK_FILE_CHECKER_H_INCLUDE
-#define KVS_KVSCHECK_FILE_CHECKER_H_INCLUDE
+#ifndef KVSCHECK__FILE_CHECKER_H_INCLUDE
+#define KVSCHECK__FILE_CHECKER_H_INCLUDE
 
 #include <string>
 #include <iostream>
@@ -32,12 +32,17 @@ public:
 
     enum FormatType
     {
-        UnknownFormat = 0,
-        KVSMLFormat,
-        AVSFieldFormat,
-        AVSUcdFormat,
-        BitmapFormat,
-        DICOMFormat
+        UnknownFormat = 0, ///< unknown format (not supported format)
+        KVSMLFormat,       ///< KVSML format
+        AVSFieldFormat,    ///< AVS Field format
+        AVSUcdFormat,      ///< AVS UCD format
+        STLFormat,         ///< STL format
+        BitmapFormat,      ///< Bitmap image format
+        PPMFormat,         ///< PPM image format
+        PGMFormat,         ///< PGM image format
+        PBMFormat,         ///< PBM image format
+        TIFFFormat,        ///< TIFF image format
+        DICOMFormat        ///< DICOM image format
     };
 
 private:
@@ -59,4 +64,4 @@ public:
 
 } // end of namespace kvscheck
 
-#endif // KVS_KVSCHECK_FILE_CHECKER_H_INCLUDE
+#endif // KVSCHECK__FILE_CHECKER_H_INCLUDE

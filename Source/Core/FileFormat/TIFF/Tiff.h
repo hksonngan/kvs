@@ -19,6 +19,7 @@
 #include <kvs/Type>
 #include <kvs/Message>
 #include <kvs/AnyValueArray>
+#include <iostream>
 #include "Header.h"
 #include "ImageFileDirectory.h"
 
@@ -123,6 +124,8 @@ public:
     static const bool CheckFileExtension( const std::string& filename );
 
     static const bool CheckFileFormat( const std::string& filename );
+
+    friend std::ostream& operator << ( std::ostream& os, const Tiff& tiff );
 };
 
 } // end of namespace kvs
