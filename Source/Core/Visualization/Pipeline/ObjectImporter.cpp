@@ -24,6 +24,8 @@
 #include <kvs/Pbm>
 #include <kvs/Stl>
 #include <kvs/Tiff>
+#include <kvs/Dicom>
+#include <kvs/KVSMLObjectImage>
 #include <kvs/KVSMLObjectPoint>
 #include <kvs/KVSMLObjectLine>
 #include <kvs/KVSMLObjectPolygon>
@@ -144,12 +146,24 @@ bool ObjectImporter::estimate_file_format( void )
         m_file_format = new kvs::Tiff;
     }
 
+    else if ( kvs::Dicom::CheckFileExtension( file.filePath() ) )
+    {
+        m_importer_type = ObjectImporter::Image;
+        m_file_format = new kvs::Dicom;
+    }
+
     else if ( file.extension() == "kvsml" ||
               file.extension() == "KVSML" ||
               file.extension() == "xml"   ||
               file.extension() == "XML" )
     {
-        if ( kvs::KVSMLObjectPoint::CheckFileFormat( file.filePath() ) )
+        if ( kvs::KVSMLObjectImage::CheckFileFormat( file.filePath() ) )
+        {
+            m_importer_type = ObjectImporter::Point;
+            m_file_format = new kvs::KVSMLObjectImage;
+        }
+
+        else if ( kvs::KVSMLObjectPoint::CheckFileFormat( file.filePath() ) )
         {
             m_importer_type = ObjectImporter::Point;
             m_file_format = new kvs::KVSMLObjectPoint;
