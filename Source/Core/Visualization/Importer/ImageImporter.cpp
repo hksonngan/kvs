@@ -60,7 +60,11 @@ ImageImporter::~ImageImporter( void )
 kvs::ObjectBase* ImageImporter::exec( const kvs::FileFormatBase* file_format )
 {
     const std::string class_name = file_format->className();
-    if ( class_name == "Bmp" )
+    if ( class_name == "KVSMLObjectImage" )
+    {
+        this->import( reinterpret_cast<const kvs::KVSMLObjectImage*>( file_format ) );
+    }
+    else if ( class_name == "Bmp" )
     {
         this->import( reinterpret_cast<const kvs::Bmp*>( file_format ) );
     }

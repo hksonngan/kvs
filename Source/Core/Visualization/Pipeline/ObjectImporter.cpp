@@ -159,7 +159,7 @@ bool ObjectImporter::estimate_file_format( void )
     {
         if ( kvs::KVSMLObjectImage::CheckFileFormat( file.filePath() ) )
         {
-            m_importer_type = ObjectImporter::Point;
+            m_importer_type = ObjectImporter::Image;
             m_file_format = new kvs::KVSMLObjectImage;
         }
 
