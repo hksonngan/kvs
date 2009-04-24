@@ -667,6 +667,9 @@ const bool BitImage::read( const std::string& filename )
         return( BaseClass::create( pbm.width(), pbm.height(), BaseClass::Bit, data ) );
     }
 
+    kvsMessageError( "Read-method for %s is not implemented.",
+                     filename.c_str() );
+
     return( false );
 }
 
@@ -707,7 +710,8 @@ const bool BitImage::write( const std::string& filename )
         return( pbm.write( filename ) );
     }
 
-    // TIFF and DICOM has not been supported yet.
+    kvsMessageError( "Write-method for %s is not implemented.",
+                     filename.c_str() );
 
     return( false );
 }

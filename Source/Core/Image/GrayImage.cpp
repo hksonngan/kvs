@@ -523,6 +523,9 @@ const bool GrayImage::read( const std::string& filename )
         return( BaseClass::create( dcm.width(), dcm.height(), type, dcm.pixelData() ) );
     }
 
+    kvsMessageError( "Read-method for %s is not implemented.",
+                     filename.c_str() );
+
     return( false );
 }
 
@@ -569,7 +572,8 @@ const bool GrayImage::write( const std::string& filename )
         return( image.write( filename ) );
     }
 
-    // TIFF and DICOM has not been supported yet.
+    kvsMessageError( "Write-method for %s is not implemented.",
+                     filename.c_str() );
 
     return( false );
 }

@@ -427,6 +427,9 @@ const bool ColorImage::read( const std::string& filename )
         return( this->read_image( image ) );
     }
 
+    kvsMessageError( "Read-method for %s is not implemented.",
+                     filename.c_str() );
+
     return( false );
 }
 
@@ -479,7 +482,8 @@ const bool ColorImage::write( const std::string& filename )
         return( image.write( filename ) );
     }
 
-    // TIFF and DICOM has not been supported yet.
+    kvsMessageError( "Write-method for %s is not implemented.",
+                     filename.c_str() );
 
     return( false );
 }
