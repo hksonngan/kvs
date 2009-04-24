@@ -27,6 +27,8 @@ $(OUTDIR)/./FileFormat/KVSML/DataArrayTag.o \
 $(OUTDIR)/./FileFormat/KVSML/DataReader.o \
 $(OUTDIR)/./FileFormat/KVSML/DataValueTag.o \
 $(OUTDIR)/./FileFormat/KVSML/DataWriter.o \
+$(OUTDIR)/./FileFormat/KVSML/ImageObjectTag.o \
+$(OUTDIR)/./FileFormat/KVSML/KVSMLObjectImage.o \
 $(OUTDIR)/./FileFormat/KVSML/KVSMLObjectLine.o \
 $(OUTDIR)/./FileFormat/KVSML/KVSMLObjectPoint.o \
 $(OUTDIR)/./FileFormat/KVSML/KVSMLObjectPolygon.o \
@@ -41,6 +43,7 @@ $(OUTDIR)/./FileFormat/KVSML/NormalTag.o \
 $(OUTDIR)/./FileFormat/KVSML/ObjectTag.o \
 $(OUTDIR)/./FileFormat/KVSML/OpacityMapTag.o \
 $(OUTDIR)/./FileFormat/KVSML/OpacityTag.o \
+$(OUTDIR)/./FileFormat/KVSML/PixelTag.o \
 $(OUTDIR)/./FileFormat/KVSML/PointObjectTag.o \
 $(OUTDIR)/./FileFormat/KVSML/PolygonObjectTag.o \
 $(OUTDIR)/./FileFormat/KVSML/PolygonTag.o \

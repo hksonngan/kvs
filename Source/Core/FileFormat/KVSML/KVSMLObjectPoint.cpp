@@ -293,7 +293,7 @@ const bool KVSMLObjectPoint::write( const std::string& filename )
     kvs::kvsml::KVSMLTag kvsml_tag;
     if ( !kvsml_tag.write( &document ) )
     {
-        kvsMessageError( "Cannot write <KVSML>." );
+        kvsMessageError( "Cannot write <%s>.", kvsml_tag.name().c_str() );
         return( false );
     }
 
@@ -302,7 +302,7 @@ const bool KVSMLObjectPoint::write( const std::string& filename )
     object_tag.setType( "PointObject" );
     if ( !object_tag.write( kvsml_tag.node() ) )
     {
-        kvsMessageError( "Cannot write <Object>." );
+        kvsMessageError( "Cannot write <%s>.", object_tag.name().c_str() );
         return( false );
     }
 
@@ -310,7 +310,7 @@ const bool KVSMLObjectPoint::write( const std::string& filename )
     kvs::kvsml::PointObjectTag point_tag;
     if ( !point_tag.write( object_tag.node() ) )
     {
-        kvsMessageError( "Cannot write <PointObject>." );
+        kvsMessageError( "Cannot write <%s>.", point_tag.name().c_str() );
         return( false );
     }
 
@@ -320,7 +320,7 @@ const bool KVSMLObjectPoint::write( const std::string& filename )
     vertex_tag.setNVertices( m_coords.size() / dimension );
     if ( !vertex_tag.write( point_tag.node() ) )
     {
-        kvsMessageError( "Cannot write <Vertex>." );
+        kvsMessageError( "Cannot write <%s>.", vertex_tag.name().c_str() );
         return( false );
     }
     else
@@ -355,8 +355,10 @@ const bool KVSMLObjectPoint::write( const std::string& filename )
 const bool KVSMLObjectPoint::CheckFileExtension( const std::string& filename )
 {
     const kvs::File file( filename );
-    if ( file.extension() == "kvsml" || file.extension() == "KVSML" ||
-         file.extension() == "xml"   || file.extension() == "XML" )
+    if ( file.extension() == "kvsml" ||
+         file.extension() == "KVSML" ||
+         file.extension() == "xml"   ||
+         file.extension() == "XML" )
     {
         return( true );
     }
@@ -392,9 +394,16 @@ const bool KVSMLObjectPoint::CheckFileFormat( const std::string& filename )
     return( true );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Output operator.
+ *  @param  os [out] output stream
+ *  @param  rhs [in] KVSML point object
+ */
+/*===========================================================================*/
 std::ostream& operator <<( std::ostream& os, const KVSMLObjectPoint& rhs )
 {
-    os << "Num. of vertices: " << rhs.m_coords.size() / 3 << std::endl;
+    os << "Num. of vertices: " << rhs.m_coords.size() / 3;
 
     return( os );
 }

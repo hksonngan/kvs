@@ -253,14 +253,14 @@ const bool KVSMLObjectLine::read( const std::string& filename )
     // <KVSML>
     if ( !m_kvsml_tag.read( &document ) )
     {
-        kvsMessageError( "Cannot read <KVSML>." );
+        kvsMessageError( "Cannot read <%s>.", m_kvsml_tag.name().c_str() );
         return( false );
     }
 
     // <Object>
     if ( !m_object_tag.read( m_kvsml_tag.node() ) )
     {
-        kvsMessageError( "Cannot read <Object>." );
+        kvsMessageError( "Cannot read <%s>.", m_object_tag.name().c_str() );
         return( false );
     }
 
@@ -268,7 +268,7 @@ const bool KVSMLObjectLine::read( const std::string& filename )
     kvs::kvsml::LineObjectTag line_object_tag;
     if ( !line_object_tag.read( m_object_tag.node() ) )
     {
-        kvsMessageError( "Cannot read <LineObject>." );
+        kvsMessageError( "Cannot read <%s>.", line_object_tag.name().c_str() );
         return( false );
     }
 
@@ -290,7 +290,7 @@ const bool KVSMLObjectLine::read( const std::string& filename )
     kvs::kvsml::VertexTag vertex_tag;
     if ( !vertex_tag.read( line_object_tag.node() ) )
     {
-        kvsMessageError( "Cannot read <Vertex>." );
+        kvsMessageError( "Cannot read <%s>.", vertex_tag.name().c_str() );
         return( false );
     }
     else
@@ -344,7 +344,7 @@ const bool KVSMLObjectLine::read( const std::string& filename )
     {
         if ( !line_tag.read( line_object_tag.node() ) )
         {
-            kvsMessageError( "Cannot read <Line>." );
+            kvsMessageError( "Cannot read <%s>.", line_tag.name().c_str() );
             return( false );
         }
         else
@@ -508,164 +508,6 @@ const bool KVSMLObjectLine::write( const std::string& filename )
             if ( !kvs::kvsml::WriteColorData( parent, type, m_filename, m_colors ) ) return( false );
         }
     }
-/*
-    // <Coord>
-    kvs::kvsml::CoordTag coord_tag;
-    if ( !coord_tag.write( vertex_tag.node() ) )
-    {
-        kvsMessageError( "Cannot write <Coord>." );
-        return( false );
-    }
-
-    // <DataArray>
-    kvs::kvsml::DataArrayTag coords;
-    if ( m_writing_type == ExternalAscii )
-    {
-        coords.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "coord" ) );
-        coords.setFormat( "ascii" );
-    }
-    else if ( m_writing_type == ExternalBinary )
-    {
-        coords.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "coord" ) );
-        coords.setFormat( "binary" );
-    }
-
-    if ( !coords.write( coord_tag.node(), m_coords ) )
-    {
-        kvsMessageError( "Cannot write <DataArray> for <Coord>." );
-        return( false );
-    }
-*/
-
-/*
-    // <Color>
-    if ( m_colors.size() > 0 )
-    {
-        kvs::kvsml::ColorTag color_tag;
-        if ( !color_tag.write( vertex_tag.node() ) )
-        {
-            kvsMessageError( "Cannot write <Color>." );
-            return( false );
-        }
-
-        // <DataValue>
-        if ( m_colors.size() == 3 )
-        {
-            kvs::kvsml::DataValueTag colors;
-            if ( !colors.write( color_tag.node(), m_colors ) )
-            {
-                kvsMessageError("Cannot write <DataValue> for <Color>.");
-                return( false );
-            }
-        }
-        // <DataArray>
-        else
-        {
-            kvs::kvsml::DataArrayTag colors;
-            if ( m_writing_type == ExternalAscii )
-            {
-                colors.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "color" ) );
-                colors.setFormat( "ascii" );
-            }
-            else if ( m_writing_type == ExternalBinary )
-            {
-                colors.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "color" ) );
-                colors.setFormat( "binary" );
-            }
-
-            if ( !colors.write( color_tag.node(), m_colors ) )
-            {
-                kvsMessageError( "Cannot write <DataArray> for <Color>." );
-                return( false );
-            }
-        }
-    }
-*/
-
-/*
-    // <Size>
-    if ( m_sizes.size() > 0 )
-    {
-        kvs::kvsml::SizeTag size_tag;
-        if ( !size_tag.write( vertex_tag.node() ) )
-        {
-            kvsMessageError( "Cannot write <Size>." );
-            return( false );
-        }
-
-        // <DataValue>
-        if ( m_sizes.size() == 1 )
-        {
-            kvs::kvsml::DataValueTag sizes;
-            if ( !sizes.write( size_tag.node(), m_sizes ) )
-            {
-                kvsMessageError("Cannot write <DataValue> for <Size>.");
-                return( false );
-            }
-        }
-        // <DataArray>
-        else
-        {
-            kvs::kvsml::DataArrayTag sizes;
-            if ( m_writing_type == ExternalAscii )
-            {
-                sizes.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "size" ) );
-                sizes.setFormat( "ascii" );
-            }
-            else if ( m_writing_type == ExternalBinary )
-            {
-                sizes.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "size" ) );
-                sizes.setFormat( "binary" );
-            }
-
-            if ( !sizes.write( size_tag.node(), m_sizes ) )
-            {
-                kvsMessageError( "Cannot write <DataArray> for <Size>." );
-                return( false );
-            }
-        }
-    }
-
-    if ( m_connections.size() > 0 )
-    {
-        // <Line nlines="xxx">
-        kvs::kvsml::LineTag line_tag;
-        const size_t nlines = m_line_type == "uniline" ? m_connections.size() : m_connections.size() / 2;
-        line_tag.setNLines( nlines );
-        if ( !line_tag.write( line_object_tag.node() ) )
-        {
-            kvsMessageError( "Cannot write <Line>." );
-            return( false );
-        }
-
-        // <Connection>
-        kvs::kvsml::ConnectionTag connection_tag;
-        if ( !connection_tag.write( line_tag.node() ) )
-        {
-            kvsMessageError( "Cannot write <Connection>." );
-            return( false );
-        }
-
-        // <DataArray>
-        kvs::kvsml::DataArrayTag connections;
-        if ( m_writing_type == ExternalAscii )
-        {
-            connections.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "connect" ) );
-            connections.setFormat( "ascii" );
-        }
-        else if ( m_writing_type == ExternalBinary )
-        {
-            connections.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "connect" ) );
-            connections.setFormat( "binary" );
-        }
-
-        if ( !connections.write( connection_tag.node(), m_connections ) )
-        {
-            kvsMessageError( "Cannot write <DataArray> for <Connection>." );
-            return( false );
-        }
-    }
-*/
 
     return( document.write( m_filename ) );
 }
@@ -680,8 +522,10 @@ const bool KVSMLObjectLine::write( const std::string& filename )
 const bool KVSMLObjectLine::CheckFileExtension( const std::string& filename )
 {
     const kvs::File file( filename );
-    if ( file.extension() == "kvsml" || file.extension() == "KVSML" ||
-         file.extension() == "xml"   || file.extension() == "XML" )
+    if ( file.extension() == "kvsml" ||
+         file.extension() == "KVSML" ||
+         file.extension() == "xml"   ||
+         file.extension() == "XML" )
     {
         return( true );
     }
@@ -717,11 +561,18 @@ const bool KVSMLObjectLine::CheckFileFormat( const std::string& filename )
     return( true );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Output operator.
+ *  @param  os [out] output stream
+ *  @param  rhs [in] KVSML line object
+ */
+/*===========================================================================*/
 std::ostream& operator <<( std::ostream& os, const KVSMLObjectLine& rhs )
 {
-    os << "Line type:  "       << rhs.m_line_type << std::endl;
-    os << "Color type: "       << rhs.m_color_type << std::endl;
-    os << "Num. of vertices: " << rhs.m_coords.size() / 3 << std::endl;
+    os << "Line type: " << rhs.m_line_type << std::endl;
+    os << "Color type: " << rhs.m_color_type << std::endl;
+    os << "Num. of vertices: " << rhs.m_coords.size() / 3;
 
     return( os );
 }

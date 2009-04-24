@@ -21,35 +21,42 @@
 namespace kvs
 {
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Defualt constructor.
+ *  @brief  Constructs a new ImageImporter class.
  */
-/*==========================================================================*/
+/*===========================================================================*/
 ImageImporter::ImageImporter( void )
 {
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Constructor.
- *  @param file_format [in] pointer to the file format class
+ *  @brief  Constructs a new ImageImporter class.
+ *  @param  file_format [in] pointer to the data
  */
-/*==========================================================================*/
+/*===========================================================================*/
 ImageImporter::ImageImporter( const kvs::FileFormatBase* file_format )
 {
     this->exec( file_format );
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Destructor.
+ *  @brief  Destructs the ImageImporter class.
  */
-/*==========================================================================*/
+/*===========================================================================*/
 ImageImporter::~ImageImporter( void )
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Imports image data.
+ *  @param  file_format [in] pointer to the image data
+ *  @return pointer to the imported object data
+ */
+/*===========================================================================*/
 kvs::ObjectBase* ImageImporter::exec( const kvs::FileFormatBase* file_format )
 {
     const std::string class_name = file_format->className();
@@ -85,10 +92,38 @@ kvs::ObjectBase* ImageImporter::exec( const kvs::FileFormatBase* file_format )
     return( this );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Imports KVSML image format data.
+ *  @param  kvsml [in] pointer to the KVSML image format data
+ */
+/*===========================================================================*/
+void ImageImporter::import( const kvs::KVSMLObjectImage* kvsml )
+{
+    kvs::ImageObject::PixelType pixel_type = kvs::ImageObject::Gray8;
+    if ( kvsml->pixelType() == "gray" )
+    {
+        pixel_type = kvs::ImageObject::Gray8;
+    }
+    else if ( kvsml->pixelType() == "color" )
+    {
+        pixel_type = kvs::ImageObject::Color24;
+    }
+    else
+    {
+        kvsMessageError("Unknown pixel type.");
+    }
+
+    SuperClass::m_width  = kvsml->width();
+    SuperClass::m_height = kvsml->height();
+    SuperClass::m_data   = kvsml->data(); // shallow copy
+    SuperClass::m_type   = pixel_type;
+}
+
 /*==========================================================================*/
 /**
- *  Import image data.
- *  @param bmp [in] pointer to a bitmap image
+ *  @brief  Imports BMP image format data.
+ *  @param  bmp [in] pointer to BMP image format data
  */
 /*==========================================================================*/
 void ImageImporter::import( const kvs::Bmp* bmp )
@@ -101,8 +136,8 @@ void ImageImporter::import( const kvs::Bmp* bmp )
 
 /*==========================================================================*/
 /**
- *  Import image data.
- *  @param tiff [in] pointer to a tiff image
+ *  @brief  Imports TIFF image format data.
+ *  @param  tiff [in] pointer to TIFF image format data
  */
 /*==========================================================================*/
 void ImageImporter::import( const kvs::Tiff* tiff )
@@ -137,8 +172,8 @@ void ImageImporter::import( const kvs::Tiff* tiff )
 
 /*==========================================================================*/
 /**
- *  Import image data.
- *  @param ppm [in] pointer to a ppm image
+ *  @brief  Imports PPM image format data.
+ *  @param  ppm [in] pointer to PPM image format data
  */
 /*==========================================================================*/
 void ImageImporter::import( const kvs::Ppm* ppm )
@@ -151,8 +186,8 @@ void ImageImporter::import( const kvs::Ppm* ppm )
 
 /*==========================================================================*/
 /**
- *  Import image data.
- *  @param pgm [in] pointer to a pgm image
+ *  @brief  Imports PGM image format data.
+ *  @param  pgm [in] pointer to PGM image format data
  */
 /*==========================================================================*/
 void ImageImporter::import( const kvs::Pgm* pgm )
@@ -165,8 +200,8 @@ void ImageImporter::import( const kvs::Pgm* pgm )
 
 /*==========================================================================*/
 /**
- *  Import image data.
- *  @param pbm [in] pointer to a pbm image
+ *  @brief  Imports PBM image format data.
+ *  @param  pbm [in] pointer to PBM image format data
  */
 /*==========================================================================*/
 void ImageImporter::import( const kvs::Pbm* pbm )
@@ -187,8 +222,8 @@ void ImageImporter::import( const kvs::Pbm* pbm )
 
 /*==========================================================================*/
 /**
- *  Import image data.
- *  @param pbm [in] pointer to a dicom image
+ *  @brief  Imports DICOM image format data.
+ *  @param  dicom [in] pointer to DICOM image format data
  */
 /*==========================================================================*/
 void ImageImporter::import( const kvs::Dicom* dicom )

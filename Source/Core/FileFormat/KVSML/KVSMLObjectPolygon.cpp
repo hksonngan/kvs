@@ -564,221 +564,6 @@ const bool KVSMLObjectPolygon::write( const std::string& filename )
         }
     }
 
-
-/*
-    // <Vertex nvertices="xxx">
-    const size_t dimension = 3;
-    kvs::kvsml::VertexTag vertex_tag;
-    vertex_tag.setNVertices( m_coords.size() / dimension );
-    if ( !vertex_tag.write( polygon_object_tag.node() ) )
-    {
-        kvsMessageError( "Cannot write <Vertex>." );
-        return( false );
-    }
-
-    // <Coord>
-    kvs::kvsml::CoordTag coord_tag;
-    if ( !coord_tag.write( vertex_tag.node() ) )
-    {
-        kvsMessageError( "Cannot write <Coord>." );
-        return( false );
-    }
-
-    // <DataArray>
-    kvs::kvsml::DataArrayTag coords;
-    if ( m_writing_type == ExternalAscii )
-    {
-        coords.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "coord" ) );
-        coords.setFormat( "ascii" );
-    }
-    else if ( m_writing_type == ExternalBinary )
-    {
-        coords.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "coord" ) );
-        coords.setFormat( "binary" );
-    }
-
-    if ( !coords.write( coord_tag.node(), m_coords ) )
-    {
-        kvsMessageError( "Cannot write <DataArray> for <Coord>." );
-        return( false );
-    }
-
-    // <Color>
-    if ( m_colors.size() > 0 )
-    {
-        kvs::kvsml::ColorTag color_tag;
-        if ( !color_tag.write( vertex_tag.node() ) )
-        {
-            kvsMessageError( "Cannot write <Color>." );
-            return( false );
-        }
-
-        // <DataValue>
-        if ( m_colors.size() == 3 )
-        {
-            kvs::kvsml::DataValueTag colors;
-            if ( !colors.write( color_tag.node(), m_colors ) )
-            {
-                kvsMessageError("Cannot write <DataValue> for <Color>.");
-                return( false );
-            }
-        }
-        // <DataArray>
-        else
-        {
-            kvs::kvsml::DataArrayTag colors;
-            if ( m_writing_type == ExternalAscii )
-            {
-                colors.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "color" ) );
-                colors.setFormat( "ascii" );
-            }
-            else if ( m_writing_type == ExternalBinary )
-            {
-                colors.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "color" ) );
-                colors.setFormat( "binary" );
-            }
-
-            if ( !colors.write( color_tag.node(), m_colors ) )
-            {
-                kvsMessageError( "Cannot write <DataArray> for <Color>." );
-                return( false );
-            }
-        }
-    }
-
-    // <Normal>
-    if ( m_normals.size() > 0 )
-    {
-        kvs::kvsml::NormalTag normal_tag;
-        if ( !normal_tag.write( vertex_tag.node() ) )
-        {
-            kvsMessageError( "Cannot write <Normal>." );
-            return( false );
-        }
-
-        // <DataValue>
-        if ( m_normals.size() == 3 )
-        {
-            kvs::kvsml::DataValueTag normals;
-            if ( !normals.write( normal_tag.node(), m_normals ) )
-            {
-                kvsMessageError("Cannot write <DataValue> for <Normal>.");
-                return( false );
-            }
-        }
-        // <DataArray>
-        else
-        {
-            kvs::kvsml::DataArrayTag normals;
-            if ( m_writing_type == ExternalAscii )
-            {
-                normals.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "normal" ) );
-                normals.setFormat( "ascii" );
-            }
-            else if ( m_writing_type == ExternalBinary )
-            {
-                normals.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "normal" ) );
-                normals.setFormat( "binary" );
-            }
-
-            if ( !normals.write( normal_tag.node(), m_normals ) )
-            {
-                kvsMessageError( "Cannot write <DataArray> for <Normal>." );
-                return( false );
-            }
-        }
-    }
-
-    if ( m_connections.size() > 0 || m_opacities.size() > 0 )
-    {
-        // <Polygon npolygons="xxx">
-        size_t npolygons = m_opacities.size();
-        if ( m_connections.size() > 0 )
-        {
-            npolygons = m_polygon_type == "triangle" ? m_connections.size() / 3 : m_connections.size() / 4;
-        }
-        kvs::kvsml::PolygonTag polygon_tag;
-        polygon_tag.setNPolygons( npolygons );
-        if ( !polygon_tag.write( polygon_object_tag.node() ) )
-        {
-            kvsMessageError( "Cannot write <Polygon>." );
-            return( false );
-        }
-
-        if ( m_connections.size() > 0 )
-        {
-            // <Connection>
-            kvs::kvsml::ConnectionTag connection_tag;
-            if ( !connection_tag.write( polygon_tag.node() ) )
-            {
-                kvsMessageError( "Cannot write <Connection>." );
-                return( false );
-            }
-
-            // <DataArray>
-            kvs::kvsml::DataArrayTag connections;
-            if ( m_writing_type == ExternalAscii )
-            {
-                connections.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "connect" ) );
-                connections.setFormat( "ascii" );
-            }
-            else if ( m_writing_type == ExternalBinary )
-            {
-                connections.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "connect" ) );
-                connections.setFormat( "binary" );
-            }
-
-            if ( !connections.write( connection_tag.node(), m_connections ) )
-            {
-                kvsMessageError( "Cannot write <DataArray> for <Connection>." );
-                return( false );
-            }
-        }
-
-        if ( m_opacities.size() > 0 )
-        {
-            // <Opacity>
-            kvs::kvsml::OpacityTag opacity_tag;
-            if ( !opacity_tag.write( polygon_tag.node() ) )
-            {
-                kvsMessageError( "Cannot write <Opacity>." );
-                return( false );
-            }
-
-            // <DataValue>
-            if ( m_opacities.size() == 1 )
-            {
-                kvs::kvsml::DataValueTag opacities;
-                if ( !opacities.write( opacity_tag.node(), m_opacities ) )
-                {
-                    kvsMessageError("Cannot write <DataValue> for <Opacity>.");
-                    return( false );
-                }
-            }
-            // <DataArray>
-            else
-            {
-                kvs::kvsml::DataArrayTag opacities;
-                if ( m_writing_type == ExternalAscii )
-                {
-                    opacities.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "opacity" ) );
-                    opacities.setFormat( "ascii" );
-                }
-                else if ( m_writing_type == ExternalBinary )
-                {
-                    opacities.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "opacity" ) );
-                    opacities.setFormat( "binary" );
-                }
-
-                if ( !opacities.write( opacity_tag.node(), m_opacities ) )
-                {
-                    kvsMessageError( "Cannot write <DataArray> for <Opacity>." );
-                    return( false );
-                }
-            }
-        }
-    }
-*/
     return( document.write( m_filename ) );
 }
 
@@ -792,8 +577,10 @@ const bool KVSMLObjectPolygon::write( const std::string& filename )
 const bool KVSMLObjectPolygon::CheckFileExtension( const std::string& filename )
 {
     const kvs::File file( filename );
-    if ( file.extension() == "kvsml" || file.extension() == "KVSML" ||
-         file.extension() == "xml"   || file.extension() == "XML" )
+    if ( file.extension() == "kvsml" ||
+         file.extension() == "KVSML" ||
+         file.extension() == "xml"   ||
+         file.extension() == "XML" )
     {
         return( true );
     }
@@ -830,12 +617,19 @@ const bool KVSMLObjectPolygon::CheckFileFormat( const std::string& filename )
     return( true );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Output operator.
+ *  @param  os [out] output stream
+ *  @param  rhs [in] KVSML polygon object
+ */
+/*===========================================================================*/
 std::ostream& operator <<( std::ostream& os, const KVSMLObjectPolygon& rhs )
 {
     os << "Polygon type:     " << rhs.m_polygon_type << std::endl;
     os << "Color type:       " << rhs.m_color_type << std::endl;
     os << "Normal type:      " << rhs.m_normal_type << std::endl;
-    os << "Num. of vertices: " << rhs.m_coords.size() / 3 << std::endl;
+    os << "Num. of vertices: " << rhs.m_coords.size() / 3;
 
     return( os );
 }

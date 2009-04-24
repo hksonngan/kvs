@@ -4,6 +4,7 @@ FileFormat/BMP/Bmp
 FileFormat/DICOM/Dicom
 FileFormat/DICOM/DicomList
 FileFormat/FileFormatBase
+FileFormat/KVSML/KVSMLObjectImage
 FileFormat/KVSML/KVSMLObjectLine
 FileFormat/KVSML/KVSMLObjectPoint
 FileFormat/KVSML/KVSMLObjectPolygon

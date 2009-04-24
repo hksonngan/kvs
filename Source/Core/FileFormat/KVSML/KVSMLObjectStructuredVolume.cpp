@@ -205,14 +205,14 @@ const bool KVSMLObjectStructuredVolume::read( const std::string& filename )
     // <KVSML>
     if ( !m_kvsml_tag.read( &document ) )
     {
-        kvsMessageError( "Cannot read <KVSML>." );
+        kvsMessageError( "Cannot read <%s>.", m_kvsml_tag.name().c_str() );
         return( false );
     }
 
     // <Object>
     if ( !m_object_tag.read( m_kvsml_tag.node() ) )
     {
-        kvsMessageError( "Cannot read <Object>." );
+        kvsMessageError( "Cannot read <%s>.", m_object_tag.name().c_str() );
         return( false );
     }
 
@@ -220,20 +220,20 @@ const bool KVSMLObjectStructuredVolume::read( const std::string& filename )
     kvs::kvsml::StructuredVolumeObjectTag volume_tag;
     if ( !volume_tag.read( m_object_tag.node() ) )
     {
-        kvsMessageError( "Cannot read <StructuredVolumeObject>." );
+        kvsMessageError( "Cannot read <%s>.", volume_tag.name().c_str() );
         return( false );
     }
 
     if ( !volume_tag.hasResolution() )
     {
-        kvsMessageError( "'resolution' is not specified in <StructuredVolumeObject>." );
+        kvsMessageError( "'resolution' is not specified in <%s>.", volume_tag.name().c_str() );
         return( false );
     }
     m_resolution = volume_tag.resolution();
 
     if ( !volume_tag.hasGridType() )
     {
-        kvsMessageError( "'grid_type' is not specified in <StructuredVolumeObject>." );
+        kvsMessageError( "'grid_type' is not specified in <%s>.", volume_tag.name().c_str() );
         return( false );
     }
     m_grid_type = volume_tag.gridType();
@@ -242,7 +242,7 @@ const bool KVSMLObjectStructuredVolume::read( const std::string& filename )
     kvs::kvsml::NodeTag node_tag;
     if ( !node_tag.read( volume_tag.node() ) )
     {
-        kvsMessageError( "Cannot read <Node>." );
+        kvsMessageError( "Cannot read <%s>.", node_tag.name().c_str() );
         return( false );
     }
 
@@ -250,13 +250,13 @@ const bool KVSMLObjectStructuredVolume::read( const std::string& filename )
     kvs::kvsml::ValueTag value_tag;
     if ( !value_tag.read( node_tag.node() ) )
     {
-        kvsMessageError( "Cannot read <Value>." );
+        kvsMessageError( "Cannot read <%s>.", value_tag.name().c_str() );
         return( false );
     }
 
     if ( !value_tag.hasVeclen() )
     {
-        kvsMessageError( "'veclen' is not specified in <Value>." );
+        kvsMessageError( "'veclen' is not specified in <%s>.", value_tag.name().c_str() );
         return( false );
     }
     m_veclen = value_tag.veclen();
@@ -269,7 +269,9 @@ const bool KVSMLObjectStructuredVolume::read( const std::string& filename )
     kvs::kvsml::DataArrayTag values;
     if ( !values.read( value_tag.node(), nelements, &m_values ) )
     {
-        kvsMessageError( "Cannot read <DataArray> for <Value>." );
+        kvsMessageError( "Cannot read <%s> for <%s>.",
+                         values.name().c_str(),
+                         value_tag.name().c_str() );
         return( false );
     }
 
@@ -296,7 +298,7 @@ const bool KVSMLObjectStructuredVolume::write( const std::string& filename )
     kvs::kvsml::KVSMLTag kvsml_tag;
     if ( !kvsml_tag.write( &document ) )
     {
-        kvsMessageError( "Cannot write <KVSML>." );
+        kvsMessageError( "Cannot write <%s>.", m_kvsml_tag.name().c_str() );
         return( false );
     }
 
@@ -305,7 +307,7 @@ const bool KVSMLObjectStructuredVolume::write( const std::string& filename )
     object_tag.setType( "StructuredVolumeObject" );
     if ( !object_tag.write( kvsml_tag.node() ) )
     {
-        kvsMessageError( "Cannot write <Object>." );
+        kvsMessageError( "Cannot write <%s>.", object_tag.name().c_str() );
         return( false );
     }
 
@@ -315,7 +317,7 @@ const bool KVSMLObjectStructuredVolume::write( const std::string& filename )
     volume_tag.setGridType( m_grid_type );
     if ( !volume_tag.write( object_tag.node() ) )
     {
-        kvsMessageError( "Cannot write <StructuredVolumeObject>." );
+        kvsMessageError( "Cannot write <%s>.", volume_tag.name().c_str() );
         return( false );
     }
 
@@ -323,7 +325,7 @@ const bool KVSMLObjectStructuredVolume::write( const std::string& filename )
     kvs::kvsml::NodeTag node_tag;
     if ( !node_tag.write( volume_tag.node() ) )
     {
-        kvsMessageError( "Cannot write <Node>." );
+        kvsMessageError( "Cannot write <%s>.", node_tag.name().c_str() );
         return( false );
     }
 
@@ -332,7 +334,7 @@ const bool KVSMLObjectStructuredVolume::write( const std::string& filename )
     value_tag.setVeclen( m_veclen );
     if ( !value_tag.write( node_tag.node() ) )
     {
-        kvsMessageError( "Cannot write <Value>." );
+        kvsMessageError( "Cannot write <%s>.", value_tag.name().c_str() );
         return( false );
     }
 
@@ -351,7 +353,9 @@ const bool KVSMLObjectStructuredVolume::write( const std::string& filename )
 
     if ( !values.write( value_tag.node(), m_values ) )
     {
-        kvsMessageError( "Cannot write <DataArray>." );
+        kvsMessageError( "Cannot write <%s> for <%s>.",
+                         values.name().c_str(),
+                         value_tag.name().c_str() );
         return( false );
     }
 
@@ -368,8 +372,10 @@ const bool KVSMLObjectStructuredVolume::write( const std::string& filename )
 const bool KVSMLObjectStructuredVolume::CheckFileExtension( const std::string& filename )
 {
     const kvs::File file( filename );
-    if ( file.extension() == "kvsml" || file.extension() == "KVSML" ||
-         file.extension() == "xml"   || file.extension() == "XML" )
+    if ( file.extension() == "kvsml" ||
+         file.extension() == "KVSML" ||
+         file.extension() == "xml"   ||
+         file.extension() == "XML" )
     {
         return( true );
     }
@@ -406,12 +412,19 @@ const bool KVSMLObjectStructuredVolume::CheckFileFormat( const std::string& file
     return( true );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Output operator.
+ *  @param  os [out] output stream
+ *  @param  rhs [in] KVSML structured volume object
+ */
+/*===========================================================================*/
 std::ostream& operator <<( std::ostream& os, const KVSMLObjectStructuredVolume& rhs )
 {
-    os << "Grid type:  " << rhs.m_grid_type << std::endl;
-    os << "Veclen:     " << rhs.m_veclen << std::endl;
+    os << "Grid type: " << rhs.m_grid_type << std::endl;
+    os << "Veclen: " << rhs.m_veclen << std::endl;
     os << "Resolution: " << rhs.m_resolution << std::endl;
-    os << "Value type: " << rhs.m_values.typeInfo()->typeName() << std::endl;
+    os << "Value type: " << rhs.m_values.typeInfo()->typeName();
 
     return( os );
 }
