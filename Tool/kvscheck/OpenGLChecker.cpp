@@ -65,6 +65,7 @@ OpenGLChecker::OpenGLChecker( int argc, char** argv )
 /*===========================================================================*/
 /**
  *  @brief  Returns vendor information.
+ *  @return vender information
  */
 /*===========================================================================*/
 const std::string& OpenGLChecker::vendor( void ) const
@@ -75,6 +76,7 @@ const std::string& OpenGLChecker::vendor( void ) const
 /*===========================================================================*/
 /**
  *  @brief  Returns renderer (GPU) information.
+ *  @return render information
  */
 /*===========================================================================*/
 const std::string& OpenGLChecker::renderer( void ) const
@@ -85,6 +87,7 @@ const std::string& OpenGLChecker::renderer( void ) const
 /*===========================================================================*/
 /**
  *  @brief  Returns OpenGL version.
+ *  @return GL version
  */
 /*===========================================================================*/
 const std::string& OpenGLChecker::GLVersion( void ) const
@@ -95,6 +98,7 @@ const std::string& OpenGLChecker::GLVersion( void ) const
 /*===========================================================================*/
 /**
  *  @brief  Returns GLU version.
+ *  @return GLU version
  */
 /*===========================================================================*/
 const std::string& OpenGLChecker::GLUVersion( void ) const
@@ -105,6 +109,7 @@ const std::string& OpenGLChecker::GLUVersion( void ) const
 /*===========================================================================*/
 /**
  *  @brief  Returns OpenGL extension list.
+ *  @return GL extension list
  */
 /*===========================================================================*/
 const kvs::StringList& OpenGLChecker::GLExtensions( void ) const
@@ -115,6 +120,7 @@ const kvs::StringList& OpenGLChecker::GLExtensions( void ) const
 /*===========================================================================*/
 /**
  *  @brief  Returns GLU extension list.
+ *  @return GLU extension list
  */
 /*===========================================================================*/
 const kvs::StringList& OpenGLChecker::GLUExtensions( void ) const

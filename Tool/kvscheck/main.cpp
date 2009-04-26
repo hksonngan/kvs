@@ -22,9 +22,9 @@
 
 /*==========================================================================*/
 /**
- *  Main function.
- *  @param argc [in] argument count
- *  @param argv [in] argument values
+ *  @brief  Main function.
+ *  @param  argc [in] argument count
+ *  @param  argv [in] argument values
  */
 /*==========================================================================*/
 int main( int argc, char** argv )

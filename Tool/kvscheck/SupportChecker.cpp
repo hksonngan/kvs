@@ -32,7 +32,7 @@ namespace kvscheck
 
 /*==========================================================================*/
 /**
- *  Constructor.
+ *  @brief  Constructs a new SupportChecker class.
  */
 /*==========================================================================*/
 SupportChecker::SupportChecker( void )
@@ -76,7 +76,8 @@ SupportChecker::SupportChecker( void )
 
 /*==========================================================================*/
 /**
- *  Get the description list of the supported libraries.
+ *  @brief  Returns a description list of the supported libraries.
+ *  @return description list of the supported libraries
  */
 /*==========================================================================*/
 const kvs::StringList& SupportChecker::descriptionList( void ) const
@@ -86,7 +87,8 @@ const kvs::StringList& SupportChecker::descriptionList( void ) const
 
 /*==========================================================================*/
 /**
- *  Get the version list of the supported libraries.
+ *  @brief  Returns a version list of the supported libraries.
+ *  @return version list of the supported libraries
  */
 /*==========================================================================*/
 const kvs::StringList& SupportChecker::versionList( void ) const
@@ -96,9 +98,9 @@ const kvs::StringList& SupportChecker::versionList( void ) const
 
 /*==========================================================================*/
 /**
- *  Output supported libraries information.
- *  @param os [in] output stream
- *  @param checker [in] supported library checker
+ *  @brief  Outputs supported libraries information.
+ *  @param  os [in] output stream
+ *  @param  checker [in] supported library checker
  */
 /*==========================================================================*/
 std::ostream& operator << ( std::ostream& os, const SupportChecker& checker )

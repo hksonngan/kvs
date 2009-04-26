@@ -213,58 +213,40 @@ std::ostream& operator << ( std::ostream& os, const FileChecker& checker )
     switch ( checker.fileFormat() )
     {
     case FileChecker::AVSFieldFormat:
-    {
         ::PrintInformation<kvs::AVSField>( os, checker );
         break;
-    }
 
     case FileChecker::AVSUcdFormat:
-    {
         ::PrintInformation<kvs::AVSUcd>( os, checker );
         break;
-    }
 
     case FileChecker::STLFormat:
-    {
         ::PrintInformation<kvs::Stl>( os, checker );
         break;
-    }
 
     case FileChecker::BitmapFormat:
-    {
         ::PrintInformation<kvs::Bmp>( os, checker );
         break;
-    }
 
     case FileChecker::PPMFormat:
-    {
         ::PrintInformation<kvs::Ppm>( os, checker );
         break;
-    }
 
     case FileChecker::PGMFormat:
-    {
         ::PrintInformation<kvs::Pgm>( os, checker );
         break;
-    }
 
     case FileChecker::PBMFormat:
-    {
         ::PrintInformation<kvs::Pbm>( os, checker );
         break;
-    }
 
     case FileChecker::TIFFFormat:
-    {
         ::PrintInformation<kvs::Tiff>( os, checker );
         break;
-    }
 
     case FileChecker::DICOMFormat:
-    {
         ::PrintInformation<kvs::Dicom>( os, checker );
         break;
-    }
 
     default:
         kvsMessageError("Unknown file format.");

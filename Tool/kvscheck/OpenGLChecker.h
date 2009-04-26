@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_KVSCHECK_OPENGL_CHECKER_H_INCLUDE
-#define KVS_KVSCHECK_OPENGL_CHECKER_H_INCLUDE
+#ifndef KVSCHECK__OPENGL_CHECKER_H_INCLUDE
+#define KVSCHECK__OPENGL_CHECKER_H_INCLUDE
 
 #include <string>
 #include <kvs/StringList>
@@ -60,4 +60,4 @@ public:
 
 } // end of namespace kvscheck
 
-#endif // KVS_KVSCHECK_OPENGL_CHECKER_H_INCLUDE
+#endif // KVSCHECK__OPENGL_CHECKER_H_INCLUDE

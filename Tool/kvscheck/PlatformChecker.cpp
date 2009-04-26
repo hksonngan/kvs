@@ -21,22 +21,22 @@
 namespace kvscheck
 {
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Constructor.
+ *  @brief  Constructs a new PlatformChecker class.
  */
-/*==========================================================================*/
+/*===========================================================================*/
 PlatformChecker::PlatformChecker( void )
 {
     m_name = kvs::Platform::Name();
     m_cpu  = kvs::Platform::CPUName();
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Returns platform name.
+ *  @brief  Returns a platform name.
  */
-/*==========================================================================*/
+/*===========================================================================*/
 const std::string& PlatformChecker::name( void ) const
 {
     return( m_name );
@@ -44,7 +44,7 @@ const std::string& PlatformChecker::name( void ) const
 
 /*==========================================================================*/
 /**
- *  Returns CPU name.
+ *  @brief  Returns a CPU name.
  */
 /*==========================================================================*/
 const std::string& PlatformChecker::cpu( void ) const
@@ -54,9 +54,9 @@ const std::string& PlatformChecker::cpu( void ) const
 
 /*==========================================================================*/
 /**
- *  Output platform information.
- *  @param os [in] output stream
- *  @param checker [in] platform checker
+ *  @brief  Output platform information.
+ *  @param  os [in] output stream
+ *  @param  checker [in] platform checker
  */
 /*==========================================================================*/
 std::ostream& operator << ( std::ostream& os, const PlatformChecker& checker )

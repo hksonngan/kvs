@@ -20,7 +20,7 @@ namespace kvscheck
 
 /*==========================================================================*/
 /**
- *  Constructor.
+ *  @brief  Constructs a new VersionChecker class.
  */
 /*==========================================================================*/
 VersionChecker::VersionChecker( void )
@@ -30,7 +30,7 @@ VersionChecker::VersionChecker( void )
 
 /*==========================================================================*/
 /**
- *  Get the KVS version name.
+ *  @brief  Returns a KVS version name.
  */
 /*==========================================================================*/
 const std::string& VersionChecker::name( void ) const
@@ -40,9 +40,9 @@ const std::string& VersionChecker::name( void ) const
 
 /*==========================================================================*/
 /**
- *  Output version information.
- *  @param os [in] output stream
- *  @param checker [in] version checker
+ *  @brief  Outputs version information.
+ *  @param  os [in] output stream
+ *  @param  checker [in] version checker
  */
 /*==========================================================================*/
 std::ostream& operator << ( std::ostream& os, const VersionChecker& checker )
