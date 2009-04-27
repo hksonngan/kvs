@@ -11,6 +11,7 @@
  *  $Id$
  */
 /****************************************************************************/
+#include <cstdlib>
 #include <string>
 
 #include <kvs/Compiler>
@@ -33,10 +34,9 @@
 
 /*==========================================================================*/
 /**
- *  @param argc [in] TODO.
- *  @param argv [in] TODO.
- *
- *  @return TODO.
+ *  @brief  Main function for kvsmake.
+ *  @param  argc [in] argument count
+ *  @param  argv [in] argument values
  */
 /*==========================================================================*/
 int main( int argc, char** argv )
@@ -140,7 +140,5 @@ int main( int argc, char** argv )
     const std::string command =
         kvsmake::MakeCommand + std::string( " -f " ) + kvsmake::Makefile + make_argument;
 
-    system( command.c_str() );
-
-    return( 0 );
+    return( system( command.c_str() ) );
 }

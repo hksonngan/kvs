@@ -633,15 +633,15 @@ void AVSUcd::read_coords( FILE* const ifs )
 
     while ( coord < end )
     {
-        fgets( buffer, ::MaxLineLength, ifs );
+        if ( fgets( buffer, ::MaxLineLength, ifs ) )
+        {
+            // Skip node index.
+            strtok( buffer, ::Delimiter );
 
-        // Skip node index.
-        strtok( buffer, ::Delimiter );
-
-        *( coord++ ) = static_cast<float>( atof( strtok( 0, ::Delimiter ) ) );
-        *( coord++ ) = static_cast<float>( atof( strtok( 0, ::Delimiter ) ) );
-        *( coord++ ) = static_cast<float>( atof( strtok( 0, ::Delimiter ) ) );
-
+            *( coord++ ) = static_cast<float>( atof( strtok( 0, ::Delimiter ) ) );
+            *( coord++ ) = static_cast<float>( atof( strtok( 0, ::Delimiter ) ) );
+            *( coord++ ) = static_cast<float>( atof( strtok( 0, ::Delimiter ) ) );
+        }
     }
 }
 
@@ -701,24 +701,25 @@ void AVSUcd::read_connections( FILE* const ifs )
 
         while ( connection < end )
         {
-            fgets( buffer, ::MaxLineLength, ifs );
-
-            // skip element index.
-            strtok( buffer, ::Delimiter );
-
-            // skip material index.
-            strtok( 0, ::Delimiter );
-
-            const char* const element_type = strtok( 0, ::Delimiter );
-            if ( strcmp( element_type, "tet" ) != 0 )
+            if ( fgets( buffer, ::MaxLineLength, ifs ) )
             {
-                throw "Multi-element type is not supported.";
-            }
+                // skip element index.
+                strtok( buffer, ::Delimiter );
 
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                // skip material index.
+                strtok( 0, ::Delimiter );
+
+                const char* const element_type = strtok( 0, ::Delimiter );
+                if ( strcmp( element_type, "tet" ) != 0 )
+                {
+                    throw "Multi-element type is not supported.";
+                }
+
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+            }
         }
     }
     else if ( m_element_type == Tetrahedra2 )
@@ -736,30 +737,31 @@ void AVSUcd::read_connections( FILE* const ifs )
 
         while ( connection < end )
         {
-            fgets( buffer, ::MaxLineLength, ifs );
-
-            // skip element index.
-            strtok( buffer, ::Delimiter );
-
-            // skip material index.
-            strtok( 0, ::Delimiter );
-
-            const char* const element_type = strtok( 0, ::Delimiter );
-            if ( strcmp( element_type, "tet" ) != 0 )
+            if ( fgets( buffer, ::MaxLineLength, ifs ) )
             {
-                throw "Multi-element type is not supported.";
-            }
+                // skip element index.
+                strtok( buffer, ::Delimiter );
 
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                // skip material index.
+                strtok( 0, ::Delimiter );
+
+                const char* const element_type = strtok( 0, ::Delimiter );
+                if ( strcmp( element_type, "tet" ) != 0 )
+                {
+                    throw "Multi-element type is not supported.";
+                }
+
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+            }
         }
     }
     else if ( m_element_type == Hexahedra )
@@ -775,28 +777,29 @@ void AVSUcd::read_connections( FILE* const ifs )
 
         while ( connection < end )
         {
-            fgets( buffer, ::MaxLineLength, ifs );
-
-            // Skip element index.
-            strtok( buffer, ::Delimiter );
-
-            // Skip material index.
-            strtok( 0, ::Delimiter );
-
-            const char* const element_type = strtok( 0, ::Delimiter );
-            if ( strcmp( element_type, "hex" ) != 0 )
+            if ( fgets( buffer, ::MaxLineLength, ifs ) )
             {
-                throw "Multi-element type is not supported.";
-            }
+                // Skip element index.
+                strtok( buffer, ::Delimiter );
 
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                // Skip material index.
+                strtok( 0, ::Delimiter );
+
+                const char* const element_type = strtok( 0, ::Delimiter );
+                if ( strcmp( element_type, "hex" ) != 0 )
+                {
+                    throw "Multi-element type is not supported.";
+                }
+
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+            }
         }
     }
     else if ( m_element_type == Hexahedra2 )
@@ -824,40 +827,41 @@ void AVSUcd::read_connections( FILE* const ifs )
 
         while ( connection < end )
         {
-            fgets( buffer, ::MaxLineLength, ifs );
-
-            // Skip element index.
-            strtok( buffer, ::Delimiter );
-
-            // Skip material index.
-            strtok( 0, ::Delimiter );
-
-            const char* const element_type = strtok( 0, ::Delimiter );
-            if ( strcmp( element_type, "hex2" ) != 0 )
+            if ( fgets( buffer, ::MaxLineLength, ifs ) )
             {
-                throw "Multi-element type is not supported.";
-            }
+                // Skip element index.
+                strtok( buffer, ::Delimiter );
 
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
-            *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                // Skip material index.
+                strtok( 0, ::Delimiter );
+
+                const char* const element_type = strtok( 0, ::Delimiter );
+                if ( strcmp( element_type, "hex2" ) != 0 )
+                {
+                    throw "Multi-element type is not supported.";
+                }
+
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+            }
         }
     }
     else
@@ -933,20 +937,21 @@ void AVSUcd::read_values( FILE* const ifs )
 
     while ( value < end )
     {
-        fgets( buffer, ::MaxLineLength, ifs );
-
-        // Skip node index
-        strtok( buffer, ::Delimiter );
-
-        // Skip other components
-        for ( size_t i = 0; i < nskips; ++i )
+        if ( fgets( buffer, ::MaxLineLength, ifs ) )
         {
-            strtok( 0, ::Delimiter );
-        }
+            // Skip node index
+            strtok( buffer, ::Delimiter );
 
-        for ( size_t i = 0; i < veclen; ++i )
-        {
-            *( value++ ) = static_cast<kvs::Real32>( atof( strtok( 0, ::Delimiter ) ) );
+            // Skip other components
+            for ( size_t i = 0; i < nskips; ++i )
+            {
+                strtok( 0, ::Delimiter );
+            }
+
+            for ( size_t i = 0; i < veclen; ++i )
+            {
+                *( value++ ) = static_cast<kvs::Real32>( atof( strtok( 0, ::Delimiter ) ) );
+            }
         }
     }
 }

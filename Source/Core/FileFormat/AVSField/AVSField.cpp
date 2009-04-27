@@ -67,8 +67,8 @@ const bool CheckHeader( FILE* ifs )
     char buf[ ::MaxLineLength ];
 
     // Read a head line and check the AVS format.
-    fgets( buf, ::MaxLineLength, ifs );
-    if( strncmp( buf, "# AVS", 5 ) != 0 ) return( false );
+    if ( !fgets( buf, ::MaxLineLength, ifs ) ) return( false );
+    if ( strncmp( buf, "# AVS", 5 ) != 0 ) return( false );
 
     return( true );
 }
@@ -737,7 +737,7 @@ bool AVSField::read_node( FILE* ifs )
 {
     ::SkipHeader( ifs );
 
-    size_t nelems = m_dim.x() * m_dim.y() * m_dim.z() * m_veclen;
+    const size_t nelems = m_dim.x() * m_dim.y() * m_dim.z() * m_veclen;
     switch( m_type )
     {
     case Byte:    m_values.allocate<unsigned char>( nelems ); break;
@@ -747,7 +747,12 @@ bool AVSField::read_node( FILE* ifs )
     case Double:  m_values.allocate<double>( nelems );        break;
     default: break;
     }
-    fread( m_values.pointer(), 1, m_values.byteSize(), ifs );
+
+    const size_t byte_size = m_values.byteSize();
+    if ( fread( m_values.pointer(), 1, byte_size, ifs ) != byte_size )
+    {
+        return( false );
+    }
 
 #if defined ( KVS_PLATFORM_BIG_ENDIAN )
     m_values.swapByte();
@@ -797,7 +802,6 @@ bool AVSField::read_coord( FILE* ifs )
     return true;
 }
 
-
 template <typename T>
 bool AVSField::read_coord_data(  FILE* ifs, const size_t nvertices )
 {
@@ -809,8 +813,10 @@ bool AVSField::read_coord_data(  FILE* ifs, const size_t nvertices )
         for( size_t i = 0; i < nvertices; i++ )
         {
             T data = T(0);
-            fread( &data, 1, sizeof(T), ifs );
-            m_coords[ i * m_nspace + nsp ] = static_cast<float>( data );
+            if ( fread( &data, sizeof(T), 1, ifs ) == 1 )
+            {
+                m_coords[ i * m_nspace + nsp ] = static_cast<float>( data );
+            }
         }
     }
 

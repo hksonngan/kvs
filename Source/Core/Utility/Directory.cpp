@@ -23,6 +23,8 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <dirent.h>
+#include <cstring>
+#include <cerrno>
 #endif
 
 
@@ -43,7 +45,11 @@ inline std::string GetCurrentPath( void )
     _getcwd( current_path, 256 );
 #else
     char current_path[PATH_MAX];
-    getcwd( current_path, PATH_MAX );
+    if ( !getcwd( current_path, PATH_MAX ) )
+    {
+        kvsMessageError("%s", strerror( errno ) );
+        return(".");
+     }
 #endif
 
     return( current_path );
@@ -82,7 +88,11 @@ inline std::string GetAbsolutePath( const std::string& path )
         return( GetCurrentPath() + "/" + path );
     }
 #endif
-    realpath( path.c_str(), absolute_path );
+    if ( !realpath( path.c_str(), absolute_path ) )
+    {
+        kvsMessageError("%s", strerror( errno ) );
+        return("");
+    }
 #endif
 
     return( absolute_path );

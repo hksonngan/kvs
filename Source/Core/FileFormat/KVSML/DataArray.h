@@ -281,7 +281,13 @@ inline const bool ReadExternalData(
             return( false );
         }
 
-        fread( data_array->pointer(), data_array->size(), sizeof(T), ifs );
+        const size_t data_size = data_array->size();
+        if ( fread( data_array->pointer(), sizeof(T), data_size, ifs ) != data_size )
+        {
+            kvsMessageError("Cannot read '%s'.", filename.c_str());
+            fclose( ifs );
+            return( false );
+        }
 
         fclose( ifs );
     }
@@ -370,7 +376,13 @@ inline const bool ReadExternalData(
 
         if( typeid(T1) == typeid(T2) )
         {
-            fread( data_array->pointer(), data_array->size(), sizeof(T1), ifs );
+            const size_t data_size = data_array->size();
+            if ( fread( data_array->pointer(), sizeof(T1), data_size, ifs ) != data_size )
+            {
+                kvsMessageError("Cannot read '%s'.",filename.c_str());
+                fclose( ifs );
+                return( false );
+            }
         }
         else
         {
@@ -378,7 +390,12 @@ inline const bool ReadExternalData(
             for( size_t i = 0; i < nloops; i++ )
             {
                 T2 data = T2(0);
-                fread( &data, 1, sizeof(T2), ifs );
+                if ( fread( &data, sizeof(T2), 1, ifs ) != 1 )
+                {
+                    kvsMessageError("Cannot read '%s'.",filename.c_str());
+                    fclose( ifs );
+                    return( false );
+                }
                 data_array->at(i) = static_cast<T1>( data );
             }
         }

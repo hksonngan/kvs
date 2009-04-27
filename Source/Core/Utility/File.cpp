@@ -19,6 +19,8 @@
 #include <windows.h>
 #else
 #include <sys/stat.h>
+#include <cstring>
+#include <cerrno>
 #endif
 
 #include <iostream>
@@ -42,7 +44,11 @@ std::string GetAbsolutePath( const std::string& path )
 #if defined ( KVS_PLATFORM_WINDOWS )
     _fullpath( absolute_path, const_cast<char*>( path.c_str() ), 256 );
 #else
-    realpath( path.c_str(), absolute_path );
+    if ( !realpath( path.c_str(), absolute_path ) )
+    {
+        kvsMessageError("%s", strerror( errno ) );
+        return("");
+    }
 #endif
 
     return( absolute_path );
