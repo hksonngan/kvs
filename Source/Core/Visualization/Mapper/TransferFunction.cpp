@@ -194,6 +194,23 @@ const bool TransferFunction::read( const std::string& filename )
 
 /*==========================================================================*/
 /**
+ *  @brief  Writes the trasfer function data.
+ *  @param  filename [in] filename
+ *  @return true, if the reading process is done successfully
+ */
+/*==========================================================================*/
+const bool TransferFunction::write( const std::string& filename )
+{
+    kvs::KVSMLTransferFunction transfer_function;
+    transfer_function.setWritingDataType( kvs::KVSMLTransferFunction::Ascii );
+    transfer_function.setColors( m_color_map.table() );
+    transfer_function.setOpacities( m_opacity_map.table() );
+
+    return( transfer_function.write( filename ) );
+}
+
+/*==========================================================================*/
+/**
  *  Substitution operator =.
  *  @param trunsfer_function [in] transfer function
  *  @retval transfer function

@@ -79,6 +79,8 @@ public:
 
     const bool read( const std::string& filename );
 
+    const bool write( const std::string& filename );
+
 public:
 
     TransferFunction& operator =( const TransferFunction& rhs );
