@@ -68,14 +68,17 @@ void ScreenBase::sage_send_buffer( void )
 /*===========================================================================*/
 void ScreenBase::sage_check_message( int value )
 {
-    sageMessage msg;
-    if ( 0 < kvs::sage::GlobalBase::sail->checkMsg( msg, false ) )
+    if ( kvs::sage::GlobalBase::sail->isInitialized() )
     {
-        switch ( msg.getCode() )
+        sageMessage msg;
+        if ( 0 < kvs::sage::GlobalBase::sail->checkMsg( msg, false ) )
         {
-        case APP_QUIT: exit( 0 );
-        case APP_REFRESH_FRAME: glutPostRedisplay(); break;
-        default: break;
+            switch ( msg.getCode() )
+            {
+            case APP_QUIT: exit( 0 );
+            case APP_REFRESH_FRAME: glutPostRedisplay(); break;
+            default: break;
+            }
         }
     }
 
