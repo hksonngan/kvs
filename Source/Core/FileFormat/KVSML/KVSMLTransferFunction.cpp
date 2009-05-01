@@ -107,6 +107,17 @@ const kvs::ValueArray<kvs::UInt8>& KVSMLTransferFunction::colors( void ) const
 
 /*===========================================================================*/
 /**
+ *  @brief  Sets a resolution.
+ *  @param  resolution [in] resolution
+ */
+/*===========================================================================*/
+void KVSMLTransferFunction::setResolution( const size_t resolution )
+{
+    m_resolution = resolution;
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Sets a writing data type.
  *  @param  writing_type [in] writing data type
  */

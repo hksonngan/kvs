@@ -71,6 +71,8 @@ public:
 
 public:
 
+    void setResolution( const size_t resolution );
+
     void setWritingDataType( const WritingDataType writing_type );
 
     void setOpacities( const kvs::ValueArray<kvs::Real32>& opacities );
