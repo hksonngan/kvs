@@ -202,6 +202,7 @@ const bool TransferFunction::read( const std::string& filename )
 const bool TransferFunction::write( const std::string& filename )
 {
     kvs::KVSMLTransferFunction transfer_function;
+    transfer_function.setResolution( this->resolution() );
     transfer_function.setWritingDataType( kvs::KVSMLTransferFunction::Ascii );
     transfer_function.setColors( m_color_map.table() );
     transfer_function.setOpacities( m_opacity_map.table() );
