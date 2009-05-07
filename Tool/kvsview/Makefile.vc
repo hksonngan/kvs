@@ -109,6 +109,7 @@ $(OUTDIR)/PointRenderer.obj \
 $(OUTDIR)/LineRenderer.obj \
 $(OUTDIR)/PolygonRenderer.obj \
 $(OUTDIR)/ObjectInformation.obj \
+$(OUTDIR)/TransferFunction.obj \
 $(OUTDIR)/main.obj \
 
 

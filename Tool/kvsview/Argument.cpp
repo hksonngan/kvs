@@ -19,6 +19,7 @@
 #include "Isosurface.h"
 #include "SlicePlane.h"
 #include "OrthoSlice.h"
+#include "TransferFunction.h"
 #include <kvs/Bounds>
 #include <kvs/AxisObject>
 #include <kvs/glut/AxisRenderer>
@@ -46,6 +47,7 @@ Argument::Argument( int argc, char** argv ):
     add_option( kvsview::Isosurface::CommandName, kvsview::Isosurface::Description, 0 );
     add_option( kvsview::SlicePlane::CommandName, kvsview::SlicePlane::Description, 0 );
     add_option( kvsview::OrthoSlice::CommandName, kvsview::OrthoSlice::Description, 0 );
+    add_option( kvsview::TransferFunction::CommandName, kvsview::TransferFunction::Description, 0 );
 
     add_value( "input data file", false );
 }

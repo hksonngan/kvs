@@ -121,6 +121,7 @@ $(OUTDIR)/PointRenderer.o \
 $(OUTDIR)/LineRenderer.o \
 $(OUTDIR)/PolygonRenderer.o \
 $(OUTDIR)/ObjectInformation.o \
+$(OUTDIR)/TransferFunction.o \
 $(OUTDIR)/main.o \
 
 
