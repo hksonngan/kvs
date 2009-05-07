@@ -205,6 +205,7 @@ $(OUTDIR)\.\Visualization\Viewer\MouseEvent.obj \
 $(OUTDIR)\.\Visualization\Viewer\ObjectManager.obj \
 $(OUTDIR)\.\Visualization\Viewer\RendererManager.obj \
 $(OUTDIR)\.\Visualization\Viewer\ScreenCore.obj \
+$(OUTDIR)\.\Visualization\Viewer\Texture1D.obj \
 $(OUTDIR)\.\Visualization\Viewer\Texture2D.obj \
 $(OUTDIR)\.\Visualization\Viewer\TextureBase.obj \
 $(OUTDIR)\.\Visualization\Viewer\Trackball.obj \
