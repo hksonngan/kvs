@@ -454,7 +454,7 @@ const bool KVSMLTransferFunction::CheckFileFormat( const std::string& filename )
     kvs::kvsml::TransferFunctionTag tfunc_tag;
     if ( !tfunc_tag.read( kvsml_tag.node() ) ) return( false );
 
-    return( false );
+    return( true );
 }
 
 } // end of namespace kvs
