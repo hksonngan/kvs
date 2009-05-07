@@ -178,6 +178,7 @@
 #include <Core/Visualization/Viewer/OpenGL.h>
 #include <Core/Visualization/Viewer/RendererManager.h>
 #include <Core/Visualization/Viewer/ScreenCore.h>
+#include <Core/Visualization/Viewer/Texture1D.h>
 #include <Core/Visualization/Viewer/Texture2D.h>
 #include <Core/Visualization/Viewer/TextureBase.h>
 #include <Core/Visualization/Viewer/Trackball.h>
