@@ -178,6 +178,7 @@ Visualization/Viewer/ObjectManager
 Visualization/Viewer/OpenGL
 Visualization/Viewer/RendererManager
 Visualization/Viewer/ScreenCore
+Visualization/Viewer/Texture1D
 Visualization/Viewer/Texture2D
 Visualization/Viewer/TextureBase
 Visualization/Viewer/Trackball
