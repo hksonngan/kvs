@@ -13,6 +13,7 @@
 /*****************************************************************************/
 #include "TransferFunction.h"
 #include "CommandName.h"
+#include <kvs/KVSMLTransferFunction>
 #include <kvs/TransferFunction>
 #include <kvs/glut/ScreenBase>
 #include <kvs/glut/GlobalBase>
@@ -25,6 +26,19 @@ namespace kvsview
 
 namespace TransferFunction
 {
+
+const bool Check( const std::string& filename )
+{
+    if ( kvs::KVSMLTransferFunction::CheckFileExtension( filename ) )
+    {
+        if ( kvs::KVSMLTransferFunction::CheckFileFormat( filename ) )
+        {
+            return( true );
+        }
+    }
+
+    return( false );
+}
 
 /*===========================================================================*/
 /**

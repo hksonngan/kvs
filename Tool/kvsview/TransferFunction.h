@@ -33,6 +33,8 @@ namespace TransferFunction
 const std::string CommandName("TransferFunction");
 const std::string Description("Rendering a transfer function. (optional)");
 
+const bool Check( const std::string& filename );
+
 /*===========================================================================*/
 /**
  *  @brief  Argument class.

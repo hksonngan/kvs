@@ -13,6 +13,7 @@
 /*****************************************************************************/
 #include "Default.h"
 #include "ObjectInformation.h"
+#include "TransferFunction.h"
 #include <kvs/VisualizationPipeline>
 #include <kvs/ImageObject>
 #include <kvs/glut/Global>
@@ -60,6 +61,12 @@ const bool Main::exec( void )
     // Parse specified arguments.
     Default::Argument arg( m_argc, m_argv );
     if( !arg.parse() ) return( false );
+
+    // In case of transfer function data file.
+    if ( kvsview::TransferFunction::Check( arg.value<std::string>() ) )
+    {
+        return( kvsview::TransferFunction::Main( m_argc, m_argv ).exec() );
+    }
 
     // Create a global and screen class.
     kvs::glut::Global global( m_argc, m_argv );
