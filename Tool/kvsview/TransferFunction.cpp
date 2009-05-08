@@ -13,6 +13,8 @@
 /*****************************************************************************/
 #include "TransferFunction.h"
 #include "CommandName.h"
+#include <kvs/XMLDocument>
+#include <kvs/XMLNode>
 #include <kvs/KVSMLTransferFunction>
 #include <kvs/TransferFunction>
 #include <kvs/glut/ScreenBase>
@@ -27,14 +29,37 @@ namespace kvsview
 namespace TransferFunction
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  Checks whether the given file is KVSML transfer function format or not.
+ *  @param  filename [in] filename
+ *  @return true, if the given file is KVSML transfer function format
+ */
+/*===========================================================================*/
 const bool Check( const std::string& filename )
 {
     if ( kvs::KVSMLTransferFunction::CheckFileExtension( filename ) )
     {
-        if ( kvs::KVSMLTransferFunction::CheckFileFormat( filename ) )
-        {
-            return( true );
-        }
+        // Find a TransferFunction tag without error messages.
+        kvs::XMLDocument document;
+        if ( !document.read( filename ) ) return( false );
+
+        // <KVSML>
+        const std::string kvsml_tag("KVSML");
+        const kvs::XMLNode::SuperClass* kvsml_node = kvs::XMLDocument::FindNode( &document, kvsml_tag );
+        if ( !kvsml_node ) return( false );
+
+        // <Object>
+        const std::string object_tag("Object");
+        const kvs::XMLNode::SuperClass* object_node = kvs::XMLNode::FindChildNode( kvsml_node, object_tag );
+        if ( !object_node ) return( false );
+
+        // <TransferFunction>
+        const std::string tfunc_tag("TransferFunction");
+        const kvs::XMLNode::SuperClass* tfunc_node = kvs::XMLNode::FindChildNode( object_node, tfunc_tag );
+        if ( !tfunc_node ) return( false );
+
+        return( true );
     }
 
     return( false );
