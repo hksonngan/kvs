@@ -53,7 +53,7 @@ Argument::Argument( int argc, char** argv ):
     // Parameters for the transfer function renderer class.
     add_option( kvsview::TransferFunction::CommandName, kvsview::TransferFunction::Description, 0 );
     add_option("c", "Display color map. (optional)", 0, false );
-    add_option("o", "Display opacity map. (optional)", 0, false );
+    add_option("a", "Display opacity (alpha) map. (optional)", 0, false );
 }
 
 const bool Argument::hasColorMapOption( void )
@@ -63,7 +63,7 @@ const bool Argument::hasColorMapOption( void )
 
 const bool Argument::hasOpacityMapOption( void )
 {
-    return( this->hasOption("o") );
+    return( this->hasOption("a") );
 }
 
 /*===========================================================================*/
@@ -247,8 +247,6 @@ void Screen::draw_color_map_texture( const GLenum src_factor, const GLenum dst_f
 {
     glEnable( GL_TEXTURE_1D );
     glDisable( GL_TEXTURE_2D );
-//    glBlendFunc( GL_ONE_MINUS_DST_ALPHA, GL_ONE );
-//    glBlendFunc( GL_ONE, GL_ZERO );
     glBlendFunc( src_factor, dst_factor );
     Global::color_map.bind();
     {
