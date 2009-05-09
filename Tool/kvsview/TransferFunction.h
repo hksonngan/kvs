@@ -59,10 +59,9 @@ class Global : public kvs::glut::GlobalBase
 {
 public:
 
-    static kvs::TransferFunction transfer_function;
-    static kvs::Texture1D color_map;
-    static kvs::Texture1D opacity_map;
-    static kvs::Texture2D checkerboard;
+    static kvs::TransferFunction transfer_function; ///< transfer function
+    static kvs::Texture1D color_map; ///< color map with opacity
+    static kvs::Texture2D checkerboard; ///< checkerboard (background)
 
 public:
 
@@ -89,15 +88,11 @@ public:
 
     static void initialize_color_map_texture( void );
 
-    static void initialize_opacity_map_texture( void );
-
     static void initialize_checkerboard_texture( void );
 
     static void paint_event( void );
 
     static void draw_checkerboard_texture( const GLenum src_factor, const GLenum dst_factor );
-
-    static void draw_opacity_map_texture( const GLenum src_factor, const GLenum dst_factor );
 
     static void draw_color_map_texture( const GLenum src_factor, const GLenum dst_factor );
 

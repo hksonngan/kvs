@@ -76,11 +76,23 @@ Argument::Argument( int argc, char** argv ):
     add_option("a", "Display opacity (alpha) map. (optional)", 0, false );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Checks whether the color map option is specified or not.
+ *  @return true, if the color map option is specified
+ */
+/*===========================================================================*/
 const bool Argument::hasColorMapOption( void )
 {
     return( this->hasOption("c") );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Checks whether the opacity map option is specified or not.
+ *  @return true, if the opacity map option is specified
+ */
+/*===========================================================================*/
 const bool Argument::hasOpacityMapOption( void )
 {
     return( this->hasOption("a") );
@@ -101,9 +113,15 @@ Global::Global( int argc, char** argv ):
 // Instantiation of global parameters.
 kvs::TransferFunction Global::transfer_function;
 kvs::Texture1D Global::color_map;
-kvs::Texture1D Global::opacity_map;
 kvs::Texture2D Global::checkerboard;
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new Screen class or displaying a transfer function.
+ *  @param  color_map_option [in] flag for the color map option
+ *  @param  opacity_map_option [in] flag for the opacity map option
+ */
+/*===========================================================================*/
 Screen::Screen( const bool color_map_option, const bool opacity_map_option )
 {
     has_color_map_option = color_map_option;
@@ -113,19 +131,38 @@ Screen::Screen( const bool color_map_option, const bool opacity_map_option )
     addPaintEvent( paint_event );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Inititalize function.
+ */
+/*===========================================================================*/
 void Screen::initialize_function( void )
 {
     // Setup textures.
     initialize_color_map_texture();
-    initialize_opacity_map_texture();
     initialize_checkerboard_texture();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Initialize function for the color map with opacity.
+ */
+/*===========================================================================*/
 void Screen::initialize_color_map_texture( void )
 {
-    const size_t nchannels  = 3;
+    const size_t nchannels  = 4; // rgba
     const size_t width = Global::transfer_function.colorMap().resolution();
-    const kvs::UInt8* data = Global::transfer_function.colorMap().table().pointer();
+    const kvs::UInt8* color_map = Global::transfer_function.colorMap().table().pointer();
+    const kvs::Real32* opacity_map = Global::transfer_function.opacityMap().table().pointer();
+
+    GLubyte data[width][nchannels];
+    for ( size_t i = 0, i3 = 0; i < width; i++, i3 += 3 )
+    {
+        data[i][0] = static_cast<GLubyte>(color_map[i3]);
+        data[i][1] = static_cast<GLubyte>(color_map[i3+1]);
+        data[i][2] = static_cast<GLubyte>(color_map[i3+2]);
+        data[i][3] = static_cast<GLubyte>(int(opacity_map[i] * 255.0f + 0.5));
+    }
 
     Global::color_map.setPixelFormat( nchannels, sizeof( kvs::UInt8 ) );
     Global::color_map.setMinFilter( GL_LINEAR );
@@ -134,41 +171,31 @@ void Screen::initialize_color_map_texture( void )
     Global::color_map.download( width, data );
 }
 
-void Screen::initialize_opacity_map_texture( void )
-{
-    const size_t nchannels  = 1;
-    const size_t width = Global::transfer_function.opacityMap().resolution();
-    const kvs::Real32* data = Global::transfer_function.opacityMap().table().pointer();
-
-    Global::opacity_map.setPixelFormat( nchannels, sizeof( kvs::Real32 ) );
-    Global::opacity_map.setMinFilter( GL_LINEAR );
-    Global::opacity_map.setMagFilter( GL_LINEAR );
-    Global::opacity_map.create( width );
-    Global::opacity_map.download( width, data );
-}
-
+/*===========================================================================*/
+/**
+ *  @brief  Initialize function for the checkerboard.
+ */
+/*===========================================================================*/
 void Screen::initialize_checkerboard_texture( void )
 {
+    const size_t nchannels = 3;
     const int width = 32;
     const int height = 32;
 
-    const int c0 = 255;
-    const int c1 = 230;
-
-    GLubyte data[width][height][3];
+    const int c1 = 255; // checkerboard color (gray value) 1
+    const int c2 = 230; // checkerboard color (gray value) 2
+    GLubyte data[width][height][nchannels];
     for ( int i = 0; i < height; i++ )
     {
         for ( int j = 0; j < width; j++ )
         {
-            int c = ((((i&0x8)==0)^((j&0x8))==0))*c0;
-            c = ( c == 0 ) ? c1 : c;
+            int c = ((((i&0x8)==0)^((j&0x8)==0))) * c1;
+            c = ( c == 0 ) ? c2 : c;
             data[i][j][0] = static_cast<GLubyte>(c);
             data[i][j][1] = static_cast<GLubyte>(c);
             data[i][j][2] = static_cast<GLubyte>(c);
         }
     }
-
-    const size_t nchannels  = 3;
 
     Global::checkerboard.setPixelFormat( nchannels, sizeof( kvs::UInt8 ) );
     Global::checkerboard.setMinFilter( GL_NEAREST );
@@ -179,6 +206,11 @@ void Screen::initialize_checkerboard_texture( void )
     Global::checkerboard.download( width, height, data );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Paint event function.
+ */
+/*===========================================================================*/
 void Screen::paint_event( void )
 {
     const kvs::RGBColor white( 255, 255, 255 );
@@ -212,18 +244,20 @@ void Screen::paint_event( void )
 
             if ( has_color_map_option && !has_opacity_map_option )
             {
+                // Draw the color map witout opacity.
                 draw_color_map_texture( GL_ONE, GL_ZERO );
             }
             else if ( !has_color_map_option && has_opacity_map_option )
             {
-                draw_checkerboard_texture( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-                draw_opacity_map_texture( GL_ZERO, GL_SRC_ALPHA );
+                // Draw the opacity map on the checkerboard.
+                draw_checkerboard_texture( GL_ONE, GL_ZERO );
+                draw_color_map_texture( GL_ZERO, GL_ONE_MINUS_SRC_ALPHA );
             }
             else
             {
-                draw_checkerboard_texture( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-                draw_opacity_map_texture( GL_ZERO, GL_ONE_MINUS_SRC_ALPHA );
-                draw_color_map_texture( GL_ONE_MINUS_DST_ALPHA, GL_ONE );
+                // Draw the color map with the opacity on the checkerboard.
+                draw_checkerboard_texture( GL_ONE, GL_ZERO );
+                draw_color_map_texture( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
             }
         }
         glPopMatrix();
@@ -234,8 +268,18 @@ void Screen::paint_event( void )
     glPopAttrib();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Draws a checkerboard.
+ *  @param  src_factor [in] blending factor for source color
+ *  @param  dst_factor [in] blending factor for destination color
+ */
+/*===========================================================================*/
 void Screen::draw_checkerboard_texture( const GLenum src_factor, const GLenum dst_factor )
 {
+    // Since the checkerboard is background, GL_ONE and GL_ZERO are always specified
+    // for src_factor and dst_factor, rescpectively.
+
     glDisable( GL_TEXTURE_1D );
     glEnable( GL_TEXTURE_2D );
     glBlendFunc( src_factor, dst_factor );
@@ -249,20 +293,13 @@ void Screen::draw_checkerboard_texture( const GLenum src_factor, const GLenum ds
     Global::checkerboard.unbind();
 }
 
-void Screen::draw_opacity_map_texture( const GLenum src_factor, const GLenum dst_factor )
-{
-    glEnable( GL_TEXTURE_1D );
-    glDisable( GL_TEXTURE_2D );
-    glBlendFunc( src_factor, dst_factor );
-    Global::opacity_map.bind();
-    {
-        const float texture_width = 1.0f;
-        const float texture_height = 1.0f;
-        draw_texture( texture_width, texture_height );
-    }
-    Global::opacity_map.unbind();
-}
-
+/*===========================================================================*/
+/**
+ *  @brief  Draw a color map.
+ *  @param  src_factor [in] blending factor for source color
+ *  @param  dst_factor [in] blending factor for destination color
+ */
+/*===========================================================================*/
 void Screen::draw_color_map_texture( const GLenum src_factor, const GLenum dst_factor )
 {
     glEnable( GL_TEXTURE_1D );
@@ -277,6 +314,13 @@ void Screen::draw_color_map_texture( const GLenum src_factor, const GLenum dst_f
     Global::color_map.unbind();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Draw a texture.
+ *  @param  texture_width [in] texture width
+ *  @param  texture_height [in] texture height
+ */
+/*===========================================================================*/
 void Screen::draw_texture( const float texture_width, const float texture_height )
 {
     const GLfloat x = 0;
