@@ -72,6 +72,11 @@ Argument::Common::Common( int argc, char** argv, const std::string& command ):
     this->set_options();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets common options.
+ */
+/*===========================================================================*/
 void Argument::Common::set_options( void )
 {
     add_help_option("help");
@@ -97,11 +102,23 @@ void Argument::Common::set_options( void )
     add_value("input data file");
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Checks whether the verbose mode option is specified or not.
+ *  @return true, if the verbose mode option is specified
+ */
+/*===========================================================================*/
 bool Argument::Common::verboseMode( void )
 {
     return( this->hasOption("verbose") );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Applys the specified options to the screen information.
+ *  @param  screen [in] screen
+ */
+/*===========================================================================*/
 void Argument::Common::applyTo( kvs::glut::Screen& screen )
 {
     int x = 0;
@@ -124,6 +141,13 @@ void Argument::Common::applyTo( kvs::glut::Screen& screen )
     screen.setSize( width, height );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Applys the specified options to the global information.
+ *  @param  global [in] global parameters
+ *  @param  pipe [in] visualization pipeline
+ */
+/*===========================================================================*/
 void Argument::Common::applyTo( kvs::glut::Global& global, kvs::VisualizationPipeline& pipe )
 {
     // Axis.

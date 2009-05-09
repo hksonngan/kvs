@@ -26,7 +26,7 @@ namespace kvsview
 
 /*===========================================================================*/
 /**
- *  Argument class.
+ *  @brief  Argument class for the kvsview command.
  */
 /*===========================================================================*/
 class Argument : public kvs::CommandLine
@@ -42,7 +42,7 @@ public:
 
 /*===========================================================================*/
 /**
- *  @brief  Common argument class.
+ *  @brief  Common argument class for the kvsview command.
  */
 /*===========================================================================*/
 class Argument::Common : public kvs::CommandLine
