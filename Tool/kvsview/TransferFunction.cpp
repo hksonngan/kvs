@@ -49,14 +49,9 @@ const bool Check( const std::string& filename )
         const kvs::XMLNode::SuperClass* kvsml_node = kvs::XMLDocument::FindNode( &document, kvsml_tag );
         if ( !kvsml_node ) return( false );
 
-        // <Object>
-        const std::string object_tag("Object");
-        const kvs::XMLNode::SuperClass* object_node = kvs::XMLNode::FindChildNode( kvsml_node, object_tag );
-        if ( !object_node ) return( false );
-
         // <TransferFunction>
         const std::string tfunc_tag("TransferFunction");
-        const kvs::XMLNode::SuperClass* tfunc_node = kvs::XMLNode::FindChildNode( object_node, tfunc_tag );
+        const kvs::XMLNode::SuperClass* tfunc_node = kvs::XMLNode::FindChildNode( kvsml_node, tfunc_tag );
         if ( !tfunc_node ) return( false );
 
         return( true );
