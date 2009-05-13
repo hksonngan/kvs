@@ -122,6 +122,8 @@ $(OUTDIR)/LineRenderer.o \
 $(OUTDIR)/PolygonRenderer.o \
 $(OUTDIR)/ObjectInformation.o \
 $(OUTDIR)/TransferFunction.o \
+$(OUTDIR)/ExtractEdges.o \
+$(OUTDIR)/ExtractVertices.o \
 $(OUTDIR)/main.o \
 
 

@@ -110,6 +110,8 @@ $(OUTDIR)/LineRenderer.obj \
 $(OUTDIR)/PolygonRenderer.obj \
 $(OUTDIR)/ObjectInformation.obj \
 $(OUTDIR)/TransferFunction.obj \
+$(OUTDIR)/ExtractEdges.obj \
+$(OUTDIR)/ExtractVertices.obj \
 $(OUTDIR)/main.obj \
 
 

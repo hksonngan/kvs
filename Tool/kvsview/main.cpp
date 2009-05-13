@@ -21,6 +21,8 @@
 #include "SlicePlane.h"
 #include "OrthoSlice.h"
 #include "TransferFunction.h"
+#include "ExtractEdges.h"
+#include "ExtractVertices.h"
 #include <kvs/Message>
 
 
@@ -61,6 +63,8 @@ bool Main::exec( void )
         if ( c == "SlicePlane" ) return( SlicePlane::Argument( m_argc, m_argv ).parse() );
         if ( c == "OrthoSlice" ) return( OrthoSlice::Argument( m_argc, m_argv ).parse() );
         if ( c == "TransferFunction" ) return( TransferFunction::Argument( m_argc, m_argv ).parse() );
+        if ( c == "ExtractEdges" ) return( ExtractEdges::Argument( m_argc, m_argv ).parse() );
+        if ( c == "ExtractVertices" ) return( ExtractVertices::Argument( m_argc, m_argv ).parse() );
 
         kvsMessageError( "Unknown viewer '%s'.", c.c_str() );
         return( false );
@@ -74,6 +78,8 @@ bool Main::exec( void )
     if ( arg.hasOption("SlicePlane") ) return( SlicePlane::Main( m_argc, m_argv ).exec() );
     if ( arg.hasOption("OrthoSlice") ) return( OrthoSlice::Main( m_argc, m_argv ).exec() );
     if ( arg.hasOption("TransferFunction") ) return( TransferFunction::Main( m_argc, m_argv ).exec() );
+    if ( arg.hasOption("ExtractEdges") ) return( ExtractEdges::Main( m_argc, m_argv ).exec() );
+    if ( arg.hasOption("ExtractVertices") ) return( ExtractVertices::Main( m_argc, m_argv ).exec() );
 
     return( Default::Main( m_argc, m_argv ).exec() );
 }
