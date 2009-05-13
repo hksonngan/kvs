@@ -249,7 +249,7 @@ std::ostream& operator << ( std::ostream& os, const LineObject& object )
     os << static_cast<const kvs::GeometryObjectBase&>( object ) << std::endl;
 #endif
     os << "Number of connections:  " << object.nconnections() << std::endl;
-    os << "Number of sizes:  " << object.nsizes();
+    os << "Number of sizes:  " << object.nsizes() << std::endl;
     os << "Line type:  " << ::GetLineTypeName( object.lineType() ) << std::endl;
     os << "Color type:  " << ::GetColorTypeName( object.colorType() );
 
