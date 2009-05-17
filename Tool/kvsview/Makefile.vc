@@ -112,6 +112,7 @@ $(OUTDIR)/ObjectInformation.obj \
 $(OUTDIR)/TransferFunction.obj \
 $(OUTDIR)/ExtractEdges.obj \
 $(OUTDIR)/ExtractVertices.obj \
+$(OUTDIR)/ExternalFaces.obj \
 $(OUTDIR)/main.obj \
 
 

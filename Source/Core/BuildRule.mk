@@ -143,6 +143,7 @@ $(OUTDIR)/./Visualization/Importer/UnstructuredVolumeImporter.o \
 $(OUTDIR)/./Visualization/Mapper/CellByCellMetropolisSampling.o \
 $(OUTDIR)/./Visualization/Mapper/CellByCellUniformSampling.o \
 $(OUTDIR)/./Visualization/Mapper/ColorMap.o \
+$(OUTDIR)/./Visualization/Mapper/ExternalFaces.o \
 $(OUTDIR)/./Visualization/Mapper/ExtractEdges.o \
 $(OUTDIR)/./Visualization/Mapper/ExtractVertices.o \
 $(OUTDIR)/./Visualization/Mapper/FrequencyTable.o \

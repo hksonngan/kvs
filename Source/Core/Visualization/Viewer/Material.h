@@ -58,22 +58,22 @@ public:
         const kvs::RGBAColor& ambient,
         const kvs::RGBAColor& diffuse,
         const kvs::RGBAColor& specular,
-        float                 shininess,
-        MaterialFace          face = Front );
+        const float shininess,
+        const MaterialFace face = FrontAndBack );
 
     Material(
-        const float  ambient[4],
-        const float  diffuse[4],
-        const float  specular[4],
-        float        shininess,
-        MaterialFace face = Front );
+        const float ambient[4],
+        const float diffuse[4],
+        const float specular[4],
+        const float shininess,
+        const MaterialFace face = FrontAndBack );
 
     Material(
-        float ambi_r, float ambi_g, float ambi_b, float ambi_a,
-        float diff_r, float diff_g, float diff_b, float diff_a,
-        float spec_r, float spec_g, float spec_b, float spec_a,
-        float shininess,
-        MaterialFace face = Front );
+        const float ambi_r, const float ambi_g, const float ambi_b, const float ambi_a,
+        const float diff_r, const float diff_g, const float diff_b, const float diff_a,
+        const float spec_r, const float spec_g, const float spec_b, const float spec_a,
+        const float shininess,
+        const MaterialFace face = FrontAndBack );
 
     Material( const Material& material );
 
@@ -101,27 +101,27 @@ public:
 
 public:
 
-    void setFace( MaterialFace face );
+    void setFace( const MaterialFace face );
 
-    void setAmbient( float r, float g, float b, float a );
+    void setAmbient( const float r, const float g, const float b, const float a );
 
     void setAmbient( const float ambient[4] );
 
     void setAmbient( const kvs::RGBAColor& ambient );
 
-    void setDiffuse( float r, float g, float b, float a );
+    void setDiffuse( const float r, const float g, const float b, const float a );
 
     void setDiffuse( const float diffuse[4] );
 
     void setDiffuse( const kvs::RGBAColor& diffuse );
 
-    void setSpecular( float r, float g, float b, float a );
+    void setSpecular( const float r, const float g, const float b, const float a );
 
     void setSpecular( const float specular[4] );
 
     void setSpecular( const kvs::RGBAColor& specular );
 
-    void setShininess( float shininess );
+    void setShininess( const float shininess );
 
 public:
 

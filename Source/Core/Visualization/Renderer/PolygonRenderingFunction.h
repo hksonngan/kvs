@@ -17,6 +17,7 @@
 
 #include <kvs/PolygonObject>
 #include <kvs/RGBColor>
+#include <kvs/Type>
 
 
 namespace
@@ -2410,12 +2411,15 @@ void Rendering_Quad_PN_VC_O( const kvs::PolygonObject* polygon )
 {
     glBegin( GL_QUADS );
     {
-        for( size_t i = 0; i < polygon->nnormals(); i++ )
+        const size_t nnormals = polygon->nnormals();
+        for( size_t i = 0; i < nnormals; i++ )
         {
-            size_t index = 12 * i;
-            glNormal3f( *(polygon->normals().pointer()    + i),
-                        *(polygon->normals().pointer()    + i+1),
-                        *(polygon->normals().pointer()    + i+2) );
+            size_t index = 3 * i;
+            glNormal3f( *(polygon->normals().pointer()    + index),
+                        *(polygon->normals().pointer()    + index+1),
+                        *(polygon->normals().pointer()    + index+2) );
+
+            index = 12 * i;
             glColor4ub( *(polygon->colors().pointer()   + index),
                         *(polygon->colors().pointer()   + index+1),
                         *(polygon->colors().pointer()   + index+2),
@@ -3178,118 +3182,121 @@ PolygonRenderingType GetPolygonRenderingType( const kvs::PolygonObject* polygon 
         }
     }
 
-    else if( normal_type == kvs::PolygonObject::VertexNormal )
+    else
     {
-        if( polygon_type == kvs::PolygonObject::Triangle )
+        if( normal_type == kvs::PolygonObject::VertexNormal )
         {
-            if( color_type == kvs::PolygonObject::VertexColor )
+            if( polygon_type == kvs::PolygonObject::Triangle )
             {
-                if( nopacities == 1 )
-                    return( ( nconnects == 0 ) ? Type_Tri_VN_VC_O : Type_Tri_VN_VC_O_Cs );
-                else
-                    return( ( nconnects == 0 ) ? Type_Tri_VN_VC_Os : Type_Tri_VN_VC_Os_Cs );
-            }
-            else if( color_type == kvs::PolygonObject::PolygonColor )
-            {
-                if( ncolors == 1 )
+                if( color_type == kvs::PolygonObject::VertexColor )
                 {
                     if( nopacities == 1 )
-                        return( ( nconnects == 0 ) ? Type_Tri_VN_PC_O : Type_Tri_VN_PC_O_Cs );
+                        return( ( nconnects == 0 ) ? Type_Tri_VN_VC_O : Type_Tri_VN_VC_O_Cs );
                     else
-                        return( ( nconnects == 0 ) ? Type_Tri_VN_PC_Os : Type_Tri_VN_PC_Os_Cs );
+                        return( ( nconnects == 0 ) ? Type_Tri_VN_VC_Os : Type_Tri_VN_VC_Os_Cs );
                 }
-                else
+                else if( color_type == kvs::PolygonObject::PolygonColor )
                 {
-                    if( nopacities == 1 )
-                        return( ( nconnects == 0 ) ? Type_Tri_VN_PCs_O : Type_Tri_VN_PCs_O_Cs );
+                    if( ncolors == 1 )
+                    {
+                        if( nopacities == 1 )
+                            return( ( nconnects == 0 ) ? Type_Tri_VN_PC_O : Type_Tri_VN_PC_O_Cs );
+                        else
+                            return( ( nconnects == 0 ) ? Type_Tri_VN_PC_Os : Type_Tri_VN_PC_Os_Cs );
+                    }
                     else
-                        return( ( nconnects == 0 ) ? Type_Tri_VN_PCs_Os : Type_Tri_VN_PCs_Os_Cs );
-                }
-            }
-        }
-        else if( polygon_type == kvs::PolygonObject::Quadrangle )
-        {
-            if( color_type == kvs::PolygonObject::VertexColor )
-            {
-                if( nopacities == 1 )
-                    return( ( nconnects == 0 ) ? Type_Quad_VN_VC_O : Type_Quad_VN_VC_O_Cs );
-                else
-                    return( ( nconnects == 0 ) ? Type_Quad_VN_VC_Os : Type_Quad_VN_VC_Os_Cs );
-            }
-            else if( color_type == kvs::PolygonObject::PolygonColor )
-            {
-                if( ncolors == 1 )
-                {
-                    if( nopacities == 1 )
-                        return( ( nconnects == 0 ) ? Type_Quad_VN_PC_O : Type_Quad_VN_PC_O_Cs );
-                    else
-                        return( ( nconnects == 0 ) ? Type_Quad_VN_PC_Os : Type_Quad_VN_PC_Os_Cs );
-                }
-                else
-                {
-                    if( nopacities == 1 )
-                        return( ( nconnects == 0 ) ? Type_Quad_VN_PCs_O : Type_Quad_VN_PCs_O_Cs );
-                    else
-                        return( ( nconnects == 0 ) ? Type_Quad_VN_PCs_Os : Type_Quad_VN_PCs_Os_Cs );
+                    {
+                        if( nopacities == 1 )
+                            return( ( nconnects == 0 ) ? Type_Tri_VN_PCs_O : Type_Tri_VN_PCs_O_Cs );
+                        else
+                            return( ( nconnects == 0 ) ? Type_Tri_VN_PCs_Os : Type_Tri_VN_PCs_Os_Cs );
+                    }
                 }
             }
-        }
-    }
-
-    else if( normal_type == kvs::PolygonObject::PolygonNormal )
-    {
-        if( polygon_type == kvs::PolygonObject::Triangle )
-        {
-            if( color_type == kvs::PolygonObject::VertexColor )
+            else if( polygon_type == kvs::PolygonObject::Quadrangle )
             {
-                if( nopacities == 1 )
-                    return( ( nconnects == 0 ) ? Type_Tri_PN_VC_O : Type_Tri_PN_VC_O_Cs );
-                else
-                    return( ( nconnects == 0 ) ? Type_Tri_PN_VC_Os : Type_Tri_PN_VC_Os_Cs );
-            }
-            else if( color_type == kvs::PolygonObject::PolygonColor )
-            {
-                if( ncolors == 1 )
+                if( color_type == kvs::PolygonObject::VertexColor )
                 {
                     if( nopacities == 1 )
-                        return( ( nconnects == 0 ) ? Type_Tri_PN_PC_O : Type_Tri_PN_PC_O_Cs );
+                        return( ( nconnects == 0 ) ? Type_Quad_VN_VC_O : Type_Quad_VN_VC_O_Cs );
                     else
-                        return( ( nconnects == 0 ) ? Type_Tri_PN_PC_Os : Type_Tri_PN_PC_Os_Cs );
+                        return( ( nconnects == 0 ) ? Type_Quad_VN_VC_Os : Type_Quad_VN_VC_Os_Cs );
                 }
-                else
+                else if( color_type == kvs::PolygonObject::PolygonColor )
                 {
-                    if( nopacities == 1 )
-                        return( ( nconnects == 0 ) ? Type_Tri_PN_PCs_O : Type_Tri_PN_PCs_O_Cs );
+                    if( ncolors == 1 )
+                    {
+                        if( nopacities == 1 )
+                            return( ( nconnects == 0 ) ? Type_Quad_VN_PC_O : Type_Quad_VN_PC_O_Cs );
+                        else
+                            return( ( nconnects == 0 ) ? Type_Quad_VN_PC_Os : Type_Quad_VN_PC_Os_Cs );
+                    }
                     else
-                        return( ( nconnects == 0 ) ? Type_Tri_PN_PCs_Os : Type_Tri_PN_PCs_Os_Cs );
+                    {
+                        if( nopacities == 1 )
+                            return( ( nconnects == 0 ) ? Type_Quad_VN_PCs_O : Type_Quad_VN_PCs_O_Cs );
+                        else
+                            return( ( nconnects == 0 ) ? Type_Quad_VN_PCs_Os : Type_Quad_VN_PCs_Os_Cs );
+                    }
                 }
             }
         }
 
-        else if( polygon_type == kvs::PolygonObject::Quadrangle )
+        else if( normal_type == kvs::PolygonObject::PolygonNormal )
         {
-            if( color_type == kvs::PolygonObject::VertexColor )
+            if( polygon_type == kvs::PolygonObject::Triangle )
             {
-                if( nopacities == 1 )
-                    return( ( nconnects == 0 ) ? Type_Quad_PN_VC_O : Type_Quad_PN_VC_O_Cs );
-                else
-                    return( ( nconnects == 0 ) ? Type_Quad_PN_VC_Os : Type_Quad_PN_VC_Os_Cs );
-            }
-            else if( color_type == kvs::PolygonObject::PolygonColor )
-            {
-                if( ncolors == 1 )
+                if( color_type == kvs::PolygonObject::VertexColor )
                 {
                     if( nopacities == 1 )
-                        return( ( nconnects == 0 ) ? Type_Quad_PN_PC_O : Type_Quad_PN_PC_O_Cs );
+                        return( ( nconnects == 0 ) ? Type_Tri_PN_VC_O : Type_Tri_PN_VC_O_Cs );
                     else
-                        return( ( nconnects == 0 ) ? Type_Quad_PN_PC_Os : Type_Quad_PN_PC_Os_Cs );
+                        return( ( nconnects == 0 ) ? Type_Tri_PN_VC_Os : Type_Tri_PN_VC_Os_Cs );
                 }
-                else
+                else if( color_type == kvs::PolygonObject::PolygonColor )
+                {
+                    if( ncolors == 1 )
+                    {
+                        if( nopacities == 1 )
+                            return( ( nconnects == 0 ) ? Type_Tri_PN_PC_O : Type_Tri_PN_PC_O_Cs );
+                        else
+                            return( ( nconnects == 0 ) ? Type_Tri_PN_PC_Os : Type_Tri_PN_PC_Os_Cs );
+                    }
+                    else
+                    {
+                        if( nopacities == 1 )
+                            return( ( nconnects == 0 ) ? Type_Tri_PN_PCs_O : Type_Tri_PN_PCs_O_Cs );
+                        else
+                            return( ( nconnects == 0 ) ? Type_Tri_PN_PCs_Os : Type_Tri_PN_PCs_Os_Cs );
+                    }
+                }
+            }
+
+            else if( polygon_type == kvs::PolygonObject::Quadrangle )
+            {
+                if( color_type == kvs::PolygonObject::VertexColor )
                 {
                     if( nopacities == 1 )
-                        return( ( nconnects == 0 ) ? Type_Quad_PN_PCs_O : Type_Quad_PN_PCs_O_Cs );
+                        return( ( nconnects == 0 ) ? Type_Quad_PN_VC_O : Type_Quad_PN_VC_O_Cs );
                     else
-                        return( ( nconnects == 0 ) ? Type_Quad_PN_PCs_Os : Type_Quad_PN_PCs_Os_Cs );
+                        return( ( nconnects == 0 ) ? Type_Quad_PN_VC_Os : Type_Quad_PN_VC_Os_Cs );
+                }
+                else if( color_type == kvs::PolygonObject::PolygonColor )
+                {
+                    if( ncolors == 1 )
+                    {
+                        if( nopacities == 1 )
+                            return( ( nconnects == 0 ) ? Type_Quad_PN_PC_O : Type_Quad_PN_PC_O_Cs );
+                        else
+                            return( ( nconnects == 0 ) ? Type_Quad_PN_PC_Os : Type_Quad_PN_PC_Os_Cs );
+                    }
+                    else
+                    {
+                        if( nopacities == 1 )
+                            return( ( nconnects == 0 ) ? Type_Quad_PN_PCs_O : Type_Quad_PN_PCs_O_Cs );
+                        else
+                            return( ( nconnects == 0 ) ? Type_Quad_PN_PCs_Os : Type_Quad_PN_PCs_Os_Cs );
+                    }
                 }
             }
         }

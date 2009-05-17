@@ -124,6 +124,7 @@ $(OUTDIR)/ObjectInformation.o \
 $(OUTDIR)/TransferFunction.o \
 $(OUTDIR)/ExtractEdges.o \
 $(OUTDIR)/ExtractVertices.o \
+$(OUTDIR)/ExternalFaces.o \
 $(OUTDIR)/main.o \
 
 

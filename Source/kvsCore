@@ -112,6 +112,7 @@
 #include <Core/Visualization/Mapper/CellByCellParticleGenerator.h>
 #include <Core/Visualization/Mapper/CellByCellUniformSampling.h>
 #include <Core/Visualization/Mapper/ColorMap.h>
+#include <Core/Visualization/Mapper/ExternalFaces.h>
 #include <Core/Visualization/Mapper/ExtractEdges.h>
 #include <Core/Visualization/Mapper/ExtractVertices.h>
 #include <Core/Visualization/Mapper/FrequencyTable.h>

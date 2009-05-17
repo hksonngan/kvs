@@ -29,7 +29,8 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-PolygonRenderer::PolygonRenderer( void )
+PolygonRenderer::PolygonRenderer( void ):
+    m_two_side_lighting_flag( true )
 {
 }
 
@@ -58,6 +59,16 @@ void PolygonRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::L
     kvs::PolygonObject* polygon = reinterpret_cast<kvs::PolygonObject*>( object );
 
     glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT );
+
+/*
+    if ( this->isShading() )
+    {
+        if ( polygon->normals().size() == 0 )
+        {
+            glEnable( GL_AUTO_NORMAL );
+        }
+    }
+*/
 
     RendererBase::initialize();
     polygon->applyMaterial();

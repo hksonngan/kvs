@@ -22,6 +22,7 @@
 #include "TransferFunction.h"
 #include "ExtractEdges.h"
 #include "ExtractVertices.h"
+#include "ExternalFaces.h"
 #include <kvs/Bounds>
 #include <kvs/AxisObject>
 #include <kvs/glut/AxisRenderer>
@@ -52,6 +53,7 @@ Argument::Argument( int argc, char** argv ):
     add_option( kvsview::TransferFunction::CommandName, kvsview::TransferFunction::Description, 0 );
     add_option( kvsview::ExtractEdges::CommandName, kvsview::ExtractEdges::Description, 0 );
     add_option( kvsview::ExtractVertices::CommandName, kvsview::ExtractVertices::Description, 0 );
+    add_option( kvsview::ExternalFaces::CommandName, kvsview::ExternalFaces::Description, 0 );
 
     add_value( "input data file", false );
 }

@@ -112,6 +112,7 @@ Visualization/Mapper/CellByCellMetropolisSampling
 Visualization/Mapper/CellByCellParticleGenerator
 Visualization/Mapper/CellByCellUniformSampling
 Visualization/Mapper/ColorMap
+Visualization/Mapper/ExternalFaces
 Visualization/Mapper/ExtractEdges
 Visualization/Mapper/ExtractVertices
 Visualization/Mapper/FrequencyTable
