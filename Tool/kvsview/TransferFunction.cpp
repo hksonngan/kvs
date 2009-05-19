@@ -155,20 +155,29 @@ void Screen::initialize_color_map_texture( void )
     const kvs::UInt8* color_map = Global::transfer_function.colorMap().table().pointer();
     const kvs::Real32* opacity_map = Global::transfer_function.opacityMap().table().pointer();
 
-    GLubyte data[width][nchannels];
+    GLubyte* data = new GLubyte [ width * nchannels ];
+    if ( !data )
+    {
+        kvsMessageError("Cannot allocate for the color map texture.");
+        return;
+    }
+
     for ( size_t i = 0, i3 = 0; i < width; i++, i3 += 3 )
     {
-        data[i][0] = static_cast<GLubyte>(color_map[i3]);
-        data[i][1] = static_cast<GLubyte>(color_map[i3+1]);
-        data[i][2] = static_cast<GLubyte>(color_map[i3+2]);
-        data[i][3] = static_cast<GLubyte>(int(opacity_map[i] * 255.0f + 0.5));
+        *(data++) = static_cast<GLubyte>(color_map[i3]);
+        *(data++) = static_cast<GLubyte>(color_map[i3+1]);
+        *(data++) = static_cast<GLubyte>(color_map[i3+2]);
+        *(data++) = static_cast<GLubyte>(int(opacity_map[i] * 255.0f + 0.5));
     }
+    data -= width * nchannels;
 
     Global::color_map.setPixelFormat( nchannels, sizeof( kvs::UInt8 ) );
     Global::color_map.setMinFilter( GL_LINEAR );
     Global::color_map.setMagFilter( GL_LINEAR );
     Global::color_map.create( width );
     Global::color_map.download( width, data );
+
+    delete [] data;
 }
 
 /*===========================================================================*/
@@ -182,20 +191,27 @@ void Screen::initialize_checkerboard_texture( void )
     const int width = 32;
     const int height = 32;
 
+    GLubyte* data = new GLubyte [ width * height * nchannels ];
+    if ( !data )
+    {
+        kvsMessageError("Cannot allocate for the checkerboard texture.");
+        return;
+    }
+
     const int c1 = 255; // checkerboard color (gray value) 1
     const int c2 = 230; // checkerboard color (gray value) 2
-    GLubyte data[width][height][nchannels];
     for ( int i = 0; i < height; i++ )
     {
         for ( int j = 0; j < width; j++ )
         {
             int c = ((((i&0x8)==0)^((j&0x8)==0))) * c1;
             c = ( c == 0 ) ? c2 : c;
-            data[i][j][0] = static_cast<GLubyte>(c);
-            data[i][j][1] = static_cast<GLubyte>(c);
-            data[i][j][2] = static_cast<GLubyte>(c);
+            *(data++) = static_cast<GLubyte>(c);
+            *(data++) = static_cast<GLubyte>(c);
+            *(data++) = static_cast<GLubyte>(c);
         }
     }
+    data -= width * height * nchannels;
 
     Global::checkerboard.setPixelFormat( nchannels, sizeof( kvs::UInt8 ) );
     Global::checkerboard.setMinFilter( GL_NEAREST );
@@ -204,6 +220,8 @@ void Screen::initialize_checkerboard_texture( void )
     Global::checkerboard.setWrapT( GL_REPEAT );
     Global::checkerboard.create( width, height );
     Global::checkerboard.download( width, height, data );
+
+    delete [] data;
 }
 
 /*===========================================================================*/
