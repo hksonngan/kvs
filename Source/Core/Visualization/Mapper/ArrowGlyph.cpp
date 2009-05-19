@@ -20,10 +20,14 @@ namespace
 
 const kvs::Real32 LineVertices[12] =
 {
-    0.0f,  0.5f, 0.0f,
-    0.0f, -0.5f, 0.0f,
-    -0.2f,  0.3f, 0.0f,
-    0.2f,  0.3f, 0.0f
+//    0.0f,  0.5f, 0.0f,
+//    0.0f, -0.5f, 0.0f,
+//    -0.2f,  0.3f, 0.0f,
+//    0.2f,  0.3f, 0.0f
+    0.0f,  1.0f, 0.0f,
+    0.0f, 0.0f, 0.0f,
+    -0.2f,  0.8f, 0.0f,
+    0.2f,  0.8f, 0.0f
 };
 const kvs::UInt32 LineConnections[6] =
 {
@@ -32,13 +36,15 @@ const kvs::UInt32 LineConnections[6] =
     0, 3
 };
 
-const kvs::Vector3f ConeTranslation = kvs::Vector3f( 0.0f, 0.0f, 0.2f );
+//const kvs::Vector3f ConeTranslation = kvs::Vector3f( 0.0f, 0.0f, 0.2f );
+const kvs::Vector3f ConeTranslation = kvs::Vector3f( 0.0f, 0.0f, 0.7f );
 const kvs::Real32 ConeHeight = 0.3f;
 const kvs::Real32 ConeRadius = 0.15f;
 const size_t ConeSlices = 20;
 const size_t ConeStacks = 5;
 
-const kvs::Vector3f CylinderTranslation = kvs::Vector3f( 0.0f, 0.0f, -0.5f );
+//const kvs::Vector3f CylinderTranslation = kvs::Vector3f( 0.0f, 0.0f, -0.5f );
+const kvs::Vector3f CylinderTranslation = kvs::Vector3f( 0.0f, 0.0f, 0.0f );
 const kvs::Real32 CylinderHeight = 0.7f;
 const kvs::Real32 CylinderRadius = 0.07f;
 const size_t CylinderSlices = 20;
@@ -101,6 +107,28 @@ ArrowGlyph::ArrowGlyph(
 ArrowGlyph::~ArrowGlyph( void )
 {
     gluDeleteQuadric( m_cylinder );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returs an arrow type.
+ *  @return arrow type
+ */
+/*===========================================================================*/
+const ArrowGlyph::ArrowType ArrowGlyph::type( void ) const
+{
+    return( m_type );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets an arrow type.
+ *  @param  type [in] arrow type
+ */
+/*===========================================================================*/
+void ArrowGlyph::setType( const ArrowType type )
+{
+    m_type = type;
 }
 
 /*===========================================================================*/
