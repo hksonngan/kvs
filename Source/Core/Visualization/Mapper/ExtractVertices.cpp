@@ -223,10 +223,9 @@ void ExtractVertices::calculate_colors( void )
         while( value < end )
         {
             kvs::Real64 magnitude = 0.0;
-
             for ( size_t i = 0; i < veclen; ++i )
             {
-                magnitude = kvs::Math::Square( static_cast<kvs::Real64>( *value ) );
+                magnitude += kvs::Math::Square( static_cast<kvs::Real64>( *value ) );
                 ++value;
             }
             magnitude = kvs::Math::SquareRoot( magnitude );
