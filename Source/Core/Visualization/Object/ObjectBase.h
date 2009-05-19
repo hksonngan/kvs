@@ -43,10 +43,12 @@ public:
 
     enum ObjectType
     {
-        Geometry = 0, ///< Geometric object.
-        Volume,       ///< Volumetric object.
-        Image,        ///< Image object
-        ObjectManager ///< Object manager
+        Geometry = 0,  ///< Geometric object.
+        Volume,        ///< Volumetric object.
+        Image,         ///< Image object
+        Glyph,         ///< glyph object
+        ObjectManager, ///< Object manager
+        UnknownObject  ///< unknown object (for user defined object data)
     };
 
     enum Face

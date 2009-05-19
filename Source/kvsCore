@@ -107,15 +107,18 @@
 #include <Core/Visualization/Importer/PolygonImporter.h>
 #include <Core/Visualization/Importer/StructuredVolumeImporter.h>
 #include <Core/Visualization/Importer/UnstructuredVolumeImporter.h>
+#include <Core/Visualization/Mapper/ArrowGlyph.h>
 #include <Core/Visualization/Mapper/CellBase.h>
 #include <Core/Visualization/Mapper/CellByCellMetropolisSampling.h>
 #include <Core/Visualization/Mapper/CellByCellParticleGenerator.h>
 #include <Core/Visualization/Mapper/CellByCellUniformSampling.h>
 #include <Core/Visualization/Mapper/ColorMap.h>
+#include <Core/Visualization/Mapper/DiamondGlyph.h>
 #include <Core/Visualization/Mapper/ExternalFaces.h>
 #include <Core/Visualization/Mapper/ExtractEdges.h>
 #include <Core/Visualization/Mapper/ExtractVertices.h>
 #include <Core/Visualization/Mapper/FrequencyTable.h>
+#include <Core/Visualization/Mapper/GlyphBase.h>
 #include <Core/Visualization/Mapper/HexahedralCell.h>
 #include <Core/Visualization/Mapper/HitAndMissSampling.h>
 #include <Core/Visualization/Mapper/Isosurface.h>
@@ -130,6 +133,7 @@
 #include <Core/Visualization/Mapper/QuadraticHexahedralCell.h>
 #include <Core/Visualization/Mapper/QuadraticTetrahedralCell.h>
 #include <Core/Visualization/Mapper/SlicePlane.h>
+#include <Core/Visualization/Mapper/SphereGlyph.h>
 #include <Core/Visualization/Mapper/Streamline.h>
 #include <Core/Visualization/Mapper/StreamlineBase.h>
 #include <Core/Visualization/Mapper/TetrahedralCell.h>
@@ -137,6 +141,7 @@
 #include <Core/Visualization/Module.h>
 #include <Core/Visualization/Object/AxisObject.h>
 #include <Core/Visualization/Object/GeometryObjectBase.h>
+#include <Core/Visualization/Object/GlyphObject.h>
 #include <Core/Visualization/Object/ImageObject.h>
 #include <Core/Visualization/Object/LineObject.h>
 #include <Core/Visualization/Object/ObjectBase.h>
@@ -148,6 +153,7 @@
 #include <Core/Visualization/Pipeline/ObjectImporter.h>
 #include <Core/Visualization/Pipeline/PipelineModule.h>
 #include <Core/Visualization/Pipeline/VisualizationPipeline.h>
+#include <Core/Visualization/Renderer/GlyphRenderer.h>
 #include <Core/Visualization/Renderer/ImageRenderer.h>
 #include <Core/Visualization/Renderer/LineRenderer.h>
 #include <Core/Visualization/Renderer/ParticleBuffer.h>
