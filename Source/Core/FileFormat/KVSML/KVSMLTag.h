@@ -66,9 +66,9 @@ public:
 
 private:
 
-    const bool read( const kvs::XMLNode::SuperClass* parent ) { return( true ); }
+    const bool read( const kvs::XMLNode::SuperClass* parent );
 
-    const bool write( kvs::XMLNode::SuperClass* parent ) { return( true ); }
+    const bool write( kvs::XMLNode::SuperClass* parent );
 };
 
 } // end of namespace kvsml

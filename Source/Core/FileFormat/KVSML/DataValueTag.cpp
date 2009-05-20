@@ -12,6 +12,7 @@
  */
 /*****************************************************************************/
 #include "DataValueTag.h"
+#include <kvs/IgnoreUnusedVariable>
 
 
 namespace kvs
@@ -37,6 +38,18 @@ DataValueTag::DataValueTag( void ):
 /*===========================================================================*/
 DataValueTag::~DataValueTag( void )
 {
+}
+
+const bool DataValueTag::read( const kvs::XMLNode::SuperClass* parent )
+{
+    kvs::IgnoreUnusedVariable( parent );
+    return( true );
+}
+
+const bool DataValueTag::write( kvs::XMLNode::SuperClass* parent )
+{
+    kvs::IgnoreUnusedVariable( parent );
+    return( true );
 }
 
 } // end of namespace kvsml

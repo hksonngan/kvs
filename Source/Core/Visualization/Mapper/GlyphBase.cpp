@@ -127,9 +127,9 @@ void GlyphBase::transform(
     const kvs::Vector3f c = ::DefaultDirection.cross( v );
     const float d = ::DefaultDirection.dot( v );
     const float s = static_cast<float>( std::sqrt( ( 1.0 + d ) * 2.0 ) );
-    const kvs::Quaternion<float> q( c.x()/s, c.y()/s, c.z()/s, s/2.0 );
+    const kvs::Quaternion<float> q( c.x()/s, c.y()/s, c.z()/s, s/2.0f );
     const kvs::Matrix33f rot = q.toMatrix();
-    const kvs::Xform xform( position, m_scale, rot );
+    const kvs::Xform xform( position, m_scale * size, rot );
 
     float array[16];
     xform.get( &array );
@@ -246,9 +246,9 @@ void GlyphBase::calculate_sizes( const kvs::VolumeObjectBase* volume )
     const size_t nnodes = volume->nnodes();
 
     if ( !volume->hasMinMaxValues() ) { volume->updateMinMaxValues(); }
-    const kvs::Real64 min_value = volume->minValue();
-    const kvs::Real64 max_value = volume->maxValue();
-    const kvs::Real64 normalize = 1.0 / ( max_value - min_value );
+    const kvs::Real32 min_value = static_cast<kvs::Real32>(volume->minValue());
+    const kvs::Real32 max_value = static_cast<kvs::Real32>(volume->maxValue());
+    const kvs::Real32 normalize = 1.0f / ( max_value - min_value );
 
     kvs::ValueArray<kvs::Real32> sizes( nnodes );
     kvs::Real32* size = sizes.pointer();
@@ -274,7 +274,7 @@ void GlyphBase::calculate_sizes( const kvs::VolumeObjectBase* volume )
                     static_cast<float>(value[index]),
                     static_cast<float>(value[index+1]),
                     static_cast<float>(value[index+2]));
-                size[i] = ::DefaultSize * normalize * ( v.length() - min_value );
+                size[i] = ::DefaultSize * normalize * ( static_cast<float>(v.length()) - min_value );
             }
         }
         break;
@@ -347,9 +347,9 @@ void GlyphBase::calculate_colors( const kvs::VolumeObjectBase* volume )
     const size_t nnodes = volume->nnodes();
 
     if ( !volume->hasMinMaxValues() ) { volume->updateMinMaxValues(); }
-    const kvs::Real64 min_value = volume->minValue();
-    const kvs::Real64 max_value = volume->maxValue();
-    const kvs::Real64 normalize = 1.0 / ( max_value - min_value );
+    const kvs::Real32 min_value = static_cast<kvs::Real32>(volume->minValue());
+    const kvs::Real32 max_value = static_cast<kvs::Real32>(volume->maxValue());
+    const kvs::Real32 normalize = 1.0f / ( max_value - min_value );
 
     kvs::ValueArray<kvs::UInt8> colors( 3 * nnodes );
     kvs::UInt8* color = colors.pointer();
@@ -371,7 +371,7 @@ void GlyphBase::calculate_colors( const kvs::VolumeObjectBase* volume )
         {
             for ( size_t i = 0; i < nnodes; i++ )
             {
-                const float d = normalize * static_cast<float>( value[i] - min_value );
+                const float d = normalize * ( static_cast<float>(value[i]) - min_value );
                 const size_t level = static_cast<size_t>( 255.0f * d );
                 const kvs::RGBColor c = color_map[ level ];
                 *( color++ ) = c.r();
@@ -387,7 +387,7 @@ void GlyphBase::calculate_colors( const kvs::VolumeObjectBase* volume )
                     static_cast<float>(value[index]),
                     static_cast<float>(value[index+1]),
                     static_cast<float>(value[index+2]));
-                const float d = normalize * static_cast<float>( v.length() - min_value );
+                const float d = normalize * ( static_cast<float>(v.length()) - min_value );
                 const size_t level = static_cast<size_t>( 255.0f * d );
                 const kvs::RGBColor c = color_map[ level ];
                 *( color++ ) = c.r();
@@ -429,9 +429,9 @@ void GlyphBase::calculate_opacities( const kvs::VolumeObjectBase* volume )
     const size_t nnodes = volume->nnodes();
 
     if ( !volume->hasMinMaxValues() ) { volume->updateMinMaxValues(); }
-    const kvs::Real64 min_value = volume->minValue();
-    const kvs::Real64 max_value = volume->maxValue();
-    const kvs::Real64 normalize = 255.0 / ( max_value - min_value );
+    const kvs::Real32 min_value = static_cast<kvs::Real32>(volume->minValue());
+    const kvs::Real32 max_value = static_cast<kvs::Real32>(volume->maxValue());
+    const kvs::Real32 normalize = 255.0f / ( max_value - min_value );
 
     kvs::ValueArray<kvs::UInt8> opacities( nnodes );
     kvs::UInt8* opacity = opacities.pointer();
@@ -446,7 +446,7 @@ void GlyphBase::calculate_opacities( const kvs::VolumeObjectBase* volume )
         {
             for( size_t i = 0; i < nnodes; i++ )
             {
-                opacity[i] = normalize * ( static_cast<float>(value[i]) - min_value );
+                opacity[i] = static_cast<kvs::UInt8>( normalize * ( static_cast<float>(value[i]) - min_value ) );
             }
         }
         else if ( veclen == 3 )
@@ -457,7 +457,7 @@ void GlyphBase::calculate_opacities( const kvs::VolumeObjectBase* volume )
                     static_cast<float>(value[index]),
                     static_cast<float>(value[index+1]),
                     static_cast<float>(value[index+2]));
-                opacity[i] = normalize * ( v.length() - min_value );
+                opacity[i] = static_cast<kvs::UInt8>( normalize * ( v.length() - min_value ) );
             }
         }
         break;

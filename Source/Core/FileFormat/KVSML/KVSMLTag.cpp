@@ -16,6 +16,7 @@
 #include <kvs/XMLDocument>
 #include <kvs/XMLNode>
 #include <kvs/XMLElement>
+#include <kvs/IgnoreUnusedVariable>
 
 
 namespace kvs
@@ -138,6 +139,18 @@ const bool KVSMLTag::write( kvs::XMLDocument* document )
         return( false );
     }
 
+    return( true );
+}
+
+const bool KVSMLTag::read( const kvs::XMLNode::SuperClass* parent )
+{
+    kvs::IgnoreUnusedVariable( parent );
+    return( true );
+}
+
+const bool KVSMLTag::write( kvs::XMLNode::SuperClass* parent )
+{
+    kvs::IgnoreUnusedVariable( parent );
     return( true );
 }
 

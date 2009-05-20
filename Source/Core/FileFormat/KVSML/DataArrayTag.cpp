@@ -19,6 +19,7 @@
 #include <kvs/File>
 #include <kvs/ValueArray>
 #include <kvs/AnyValueArray>
+#include <kvs/IgnoreUnusedVariable>
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -495,6 +496,18 @@ const bool DataArrayTag::read_data( const size_t nelements, kvs::AnyValueArray* 
         }
     }
 
+    return( true );
+}
+
+const bool DataArrayTag::read( const kvs::XMLNode::SuperClass* parent )
+{
+    kvs::IgnoreUnusedVariable( parent );
+    return( true );
+}
+
+const bool DataArrayTag::write( kvs::XMLNode::SuperClass* parent )
+{
+    kvs::IgnoreUnusedVariable( parent );
     return( true );
 }
 

@@ -148,7 +148,7 @@ const bool TransferFunctionTag::read( const kvs::XMLNode::SuperClass* parent )
     if ( file != "" )
     {
         m_has_file = true;
-        m_file = static_cast<size_t>( atoi( file.c_str() ) );
+        m_file = file;
     }
 
     return( true );
