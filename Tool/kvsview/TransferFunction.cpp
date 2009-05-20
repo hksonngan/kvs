@@ -343,8 +343,8 @@ void Screen::draw_texture( const float texture_width, const float texture_height
 {
     const GLfloat x = 0;
     const GLfloat y = 0;
-    const GLfloat width = Screen::m_width;
-    const GLfloat height = Screen::m_height;
+    const GLfloat width = static_cast<GLfloat>(Screen::m_width);
+    const GLfloat height = static_cast<GLfloat>(Screen::m_height);
 
     glBegin( GL_QUADS );
     {
