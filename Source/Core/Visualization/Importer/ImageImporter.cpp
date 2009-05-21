@@ -30,6 +30,149 @@ ImageImporter::ImageImporter( void )
 {
 }
 
+ImageImporter::ImageImporter( const std::string& filename )
+{
+    if ( kvs::KVSMLObjectImage::CheckFileExtension( filename ) )
+    {
+        kvs::KVSMLObjectImage* file_format = new kvs::KVSMLObjectImage( filename );
+        if( !file_format )
+        {
+            kvsMessageError("Cannot read '%s'.",filename.c_str());
+            return;
+        }
+
+        if( file_format->isFailure() )
+        {
+            kvsMessageError("Cannot read '%s'.",filename.c_str());
+            delete file_format;
+            return;
+        }
+
+        this->import( file_format );
+        delete file_format;
+    }
+    else if ( kvs::Bmp::CheckFileExtension( filename ) )
+    {
+        kvs::Bmp* file_format = new kvs::Bmp( filename );
+        if( !file_format )
+        {
+            kvsMessageError("Cannot read '%s'.",filename.c_str());
+            return;
+        }
+
+        if( file_format->isFailure() )
+        {
+            kvsMessageError("Cannot read '%s'.",filename.c_str());
+            delete file_format;
+            return;
+        }
+
+        this->import( file_format );
+        delete file_format;
+    }
+    else if ( kvs::Tiff::CheckFileExtension( filename ) )
+    {
+        kvs::Tiff* file_format = new kvs::Tiff( filename );
+        if( !file_format )
+        {
+            kvsMessageError("Cannot read '%s'.",filename.c_str());
+            return;
+        }
+
+        if( file_format->isFailure() )
+        {
+            kvsMessageError("Cannot read '%s'.",filename.c_str());
+            delete file_format;
+            return;
+        }
+
+        this->import( file_format );
+        delete file_format;
+    }
+    else if ( kvs::Ppm::CheckFileExtension( filename ) )
+    {
+        kvs::Ppm* file_format = new kvs::Ppm( filename );
+        if( !file_format )
+        {
+            kvsMessageError("Cannot read '%s'.",filename.c_str());
+            return;
+        }
+
+        if( file_format->isFailure() )
+        {
+            kvsMessageError("Cannot read '%s'.",filename.c_str());
+            delete file_format;
+            return;
+        }
+
+        this->import( file_format );
+        delete file_format;
+    }
+    else if ( kvs::Pgm::CheckFileExtension( filename ) )
+    {
+        kvs::Pgm* file_format = new kvs::Pgm( filename );
+        if( !file_format )
+        {
+            kvsMessageError("Cannot read '%s'.",filename.c_str());
+            return;
+        }
+
+        if( file_format->isFailure() )
+        {
+            kvsMessageError("Cannot read '%s'.",filename.c_str());
+            delete file_format;
+            return;
+        }
+
+        this->import( file_format );
+        delete file_format;
+    }
+    else if ( kvs::Pbm::CheckFileExtension( filename ) )
+    {
+        kvs::Pbm* file_format = new kvs::Pbm( filename );
+        if( !file_format )
+        {
+            kvsMessageError("Cannot read '%s'.",filename.c_str());
+            return;
+        }
+
+        if( file_format->isFailure() )
+        {
+            kvsMessageError("Cannot read '%s'.",filename.c_str());
+            delete file_format;
+            return;
+        }
+
+        this->import( file_format );
+        delete file_format;
+    }
+    else if ( kvs::Dicom::CheckFileExtension( filename ) )
+    {
+        kvs::Dicom* file_format = new kvs::Dicom( filename );
+        if( !file_format )
+        {
+            kvsMessageError("Cannot read '%s'.",filename.c_str());
+            return;
+        }
+
+        if( file_format->isFailure() )
+        {
+            kvsMessageError("Cannot read '%s'.",filename.c_str());
+            delete file_format;
+            return;
+        }
+
+        this->import( file_format );
+        delete file_format;
+    }
+
+    else
+    {
+        kvsMessageError("Cannot import '%'.",filename.c_str());
+        return;
+    }
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Constructs a new ImageImporter class.

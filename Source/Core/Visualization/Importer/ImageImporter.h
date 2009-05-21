@@ -15,6 +15,7 @@
 #define KVS_CORE_IMAGE_IMPORTER_H_INCLUDE
 
 #include "ImporterBase.h"
+#include <string>
 #include <kvs/ClassName>
 #include <kvs/Module>
 #include <kvs/ImageObject>
@@ -48,6 +49,8 @@ class ImageImporter : public kvs::ImporterBase, public kvs::ImageObject
 public:
 
     ImageImporter( void );
+
+    ImageImporter( const std::string& filename );
 
     ImageImporter( const kvs::FileFormatBase* file_format );
 
