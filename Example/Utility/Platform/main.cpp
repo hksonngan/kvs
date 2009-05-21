@@ -1,0 +1,34 @@
+/*****************************************************************************/
+/**
+ *  @file   main.cpp
+ *  @brief  Example program for kvs::Platform class.
+ *  @author Naohisa Sakamoto
+ */
+/*----------------------------------------------------------------------------
+ *
+ *  Copyright 2007 Visualization Laboratory, Kyoto University.
+ *  All rights reserved.
+ *  See http://www.viz.media.kyoto-u.ac.jp/kvs/copyright/ for details.
+ *
+ *  $Id$
+ */
+/*****************************************************************************/
+#include <iostream>
+#include <kvs/Platform>
+
+
+/*===========================================================================*/
+/**
+ *  @brief  Main function.
+ */
+/*===========================================================================*/
+int main( void )
+{
+    // Output the information of the platform.
+    const char* name = kvs::Platform::Name();
+    const char* cpu_name = kvs::Platform::CPUName();
+    std::cout << "Platform name: " << name << std::endl;
+    std::cout << "CPU name: " << cpu_name << std::endl;
+
+    return 0;
+}

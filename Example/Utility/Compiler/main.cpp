@@ -1,0 +1,34 @@
+/*****************************************************************************/
+/**
+ *  @file   main.cpp
+ *  @brief  Example program for kvs::Compiler class.
+ *  @author Naohisa Sakamoto
+ */
+/*----------------------------------------------------------------------------
+ *
+ *  Copyright 2007 Visualization Laboratory, Kyoto University.
+ *  All rights reserved.
+ *  See http://www.viz.media.kyoto-u.ac.jp/kvs/copyright/ for details.
+ *
+ *  $Id$
+ */
+/*****************************************************************************/
+#include <iostream>
+#include <kvs/Compiler>
+
+
+/*===========================================================================*/
+/**
+ *  @brief  Main function.
+ */
+/*===========================================================================*/
+int main( void )
+{
+    // Output the information of compiler name and version.
+    const char* compiler_name = kvs::Compiler::Name();
+    const char* compiler_version = kvs::Compiler::Version();
+    std::cout << "Compiler name : " << compiler_name << std::endl;
+    std::cout << "Compiler version : " << compiler_version << std::endl;
+
+    return 0;
+}
