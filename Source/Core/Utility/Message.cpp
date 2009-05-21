@@ -90,9 +90,7 @@ void Message::operator ()( const char* msg, ... )
         std::cerr << "\t" << "FILE: " << std::string( m_file ) << " (" << m_line << ")" << std::endl;
         std::cerr << "\t" << "FUNC: " << std::string( m_func ) << std::endl;
 
-#if defined( KVS_ENABLE_DEBUG )
         if ( m_type == Message::Assert ) { KVS_BREAKPOINT; }
-#endif
     }
 }
 
