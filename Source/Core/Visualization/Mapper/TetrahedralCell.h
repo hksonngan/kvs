@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_TETRAHEDRAL_CELL_H_INCLUDE
-#define KVS_CORE_TETRAHEDRAL_CELL_H_INCLUDE
+#ifndef KVS__TETRAHEDRAL_CELL_H_INCLUDE
+#define KVS__TETRAHEDRAL_CELL_H_INCLUDE
 
 #include <kvs/Type>
 #include <kvs/Vector4>
@@ -24,6 +24,11 @@
 namespace kvs
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  Tetrahedral cell class.
+ */
+/*===========================================================================*/
 template <typename T>
 class TetrahedralCell : public kvs::CellBase<T>
 {
@@ -64,6 +69,12 @@ public:
     const kvs::Vector3f gradient( void );
 };
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new TetrahedralCell class.
+ *  @param  volume [in] pointer to the unstructured volume object
+ */
+/*===========================================================================*/
 template <typename T>
 inline TetrahedralCell<T>::TetrahedralCell( const kvs::UnstructuredVolumeObject* volume ):
     kvs::CellBase<T>( volume ),
@@ -72,11 +83,22 @@ inline TetrahedralCell<T>::TetrahedralCell( const kvs::UnstructuredVolumeObject*
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Destructs the unstructured volume object.
+ */
+/*===========================================================================*/
 template <typename T>
 inline TetrahedralCell<T>::~TetrahedralCell( void )
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Attach a cell.
+ *  @param  index [in] index of the cell
+ */
+/*===========================================================================*/
 template <typename T>
 inline void TetrahedralCell<T>::attachCell( const kvs::UInt32 index )
 {
@@ -134,12 +156,24 @@ inline void TetrahedralCell<T>::attachCell( const kvs::UInt32 index )
     m_constant = weight[3];
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Attach a point in the global coordinate.
+ *  @param  point [in] coordinate value in the global
+ */
+/*===========================================================================*/
 template <typename T>
 inline void TetrahedralCell<T>::attachPoint( const kvs::Vector3f& point )
 {
     BaseClass::set_global_point( point );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns a volume of the cell.
+ *  @return volume of the cell
+ */
+/*===========================================================================*/
 template <typename T>
 inline const kvs::Real32 TetrahedralCell<T>::volume( void )
 {
@@ -150,6 +184,12 @@ inline const kvs::Real32 TetrahedralCell<T>::volume( void )
     return( kvs::Math::Abs( ( v01.cross( v02 ) ).dot( v03 ) ) * 0.166666f );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns an average of the scalar values on the nodes.
+ *  @return average of the scalar values on the nodes
+ */
+/*===========================================================================*/
 template <typename T>
 inline const kvs::Real32 TetrahedralCell<T>::averagedScalar( void )
 {
@@ -162,6 +202,12 @@ inline const kvs::Real32 TetrahedralCell<T>::averagedScalar( void )
                 BaseClass::m_scalars[3] ) * w );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns a global point in the cell randomly.
+ *  @return global point
+ */
+/*===========================================================================*/
 template <typename T>
 const kvs::Vector3f TetrahedralCell<T>::randomSampling( void )
 {
@@ -224,12 +270,24 @@ const kvs::Vector3f TetrahedralCell<T>::randomSampling( void )
     return( BaseClass::m_global_point );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns an interpolated scalar value at the attached point.
+ *  @return interpolated scalar value
+ */
+/*===========================================================================*/
 template <typename T>
 inline const kvs::Real32 TetrahedralCell<T>::scalar( void )
 {
     return( BaseClass::m_global_point.dot( m_coefficients ) + m_constant );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns an interpolated gradient vector at the attached point.
+ *  @return interpolated gradient vector
+ */
+/*===========================================================================*/
 template <typename T>
 inline const kvs::Vector3f TetrahedralCell<T>::gradient( void )
 {
@@ -238,4 +296,4 @@ inline const kvs::Vector3f TetrahedralCell<T>::gradient( void )
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_TETRAHEDRAL_CELL_H_INCLUDE
+#endif // KVS__TETRAHEDRAL_CELL_H_INCLUDE
