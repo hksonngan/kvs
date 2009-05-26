@@ -15,11 +15,10 @@
 #define KVS_CORE_MATRIX_H_INCLUDE
 
 #include <iostream>
-
 #include <kvs/ClassName>
 #include <kvs/Assert>
 #include <kvs/Math>
-
+#include <kvs/IgnoreUnusedVariable>
 #include "Vector.h"
 
 
@@ -78,8 +77,8 @@ public:
     const Matrix transpose( void ) const;
     Matrix&      transpose( void );
 
-    const Matrix inverse( void ) const;
-    Matrix&      inverse( void );
+    const Matrix inverse( T* determinant = 0 ) const;
+    Matrix&      inverse( T* determinant = 0 );
 
 public:
 
@@ -654,15 +653,15 @@ inline Matrix<T>& Matrix<T>::transpose( void )
 /*==========================================================================*/
 /**
  *  Copies this and inverts it.
- *
+ *  @param  determinant [out] calculated determinant
  *  @return Inverse matrix.
  */
 /*==========================================================================*/
 template<typename T>
-inline const Matrix<T> Matrix<T>::inverse( void ) const
+inline const Matrix<T> Matrix<T>::inverse( T* determinant ) const
 {
     Matrix result( *this );
-    result.inverse();
+    result.inverse( determinant );
 
     return( result );
 }
@@ -670,16 +669,17 @@ inline const Matrix<T> Matrix<T>::inverse( void ) const
 /*==========================================================================*/
 /**
  *  Inverts this matrix.
- *
+ *  @param  determinant [out] calculated determinant
  *  @return Inverse matrix.
  *
  *  @todo   Implement an exception processing.
  */
 /*==========================================================================*/
 template<typename T>
-inline Matrix<T>& Matrix<T>::inverse( void )
+inline Matrix<T>& Matrix<T>::inverse( T* determinant )
 {
     KVS_ASSERT( this->nrows() == this->ncolumns() );
+    kvs::IgnoreUnusedVariable( determinant );
 
     // Alias.
     const size_t          size     = this->nrows();

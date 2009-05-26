@@ -100,8 +100,8 @@ public:
     const Matrix44 transpose( void ) const;
     Matrix44&      transpose( void );
 
-    const Matrix44 inverse( void ) const;
-    Matrix44&      inverse( void );
+    const Matrix44 inverse( T* determinant = 0 ) const;
+    Matrix44&      inverse( T* determinant = 0 );
 
 public:
 
@@ -609,15 +609,15 @@ inline Matrix44<T>& Matrix44<T>::transpose( void )
 /*==========================================================================*/
 /**
  *  Copies this and inverts it.
- *
+ *  @param  determinant [out] calculated determinant
  *  @return Inverse matrix.
  */
 /*==========================================================================*/
 template<typename T>
-inline const Matrix44<T> Matrix44<T>::inverse( void ) const
+inline const Matrix44<T> Matrix44<T>::inverse( T* determinant ) const
 {
     Matrix44 result( *this );
-    result.inverse();
+    result.inverse( determinant );
 
     return( result );
 }
@@ -625,14 +625,12 @@ inline const Matrix44<T> Matrix44<T>::inverse( void ) const
 /*==========================================================================*/
 /**
  *  Inverts this matrix.
- *
+ *  @param  determinat [out] calculated determinant
  *  @return Inverse matrix.
- *
- *  @todo   Implement an exception processing.
  */
 /*==========================================================================*/
 template<typename T>
-inline Matrix44<T>& Matrix44<T>::inverse( void )
+inline Matrix44<T>& Matrix44<T>::inverse( T* determinant )
 {
     const T det22upper[6] = {
         m_rows[0][2] * m_rows[1][3] - m_rows[0][3] * m_rows[1][2],
@@ -671,7 +669,7 @@ inline Matrix44<T>& Matrix44<T>::inverse( void )
     const T det44 =
         m_rows[0][0] * det33[0] - m_rows[0][1] * det33[1] + m_rows[0][2] * det33[2] - m_rows[0][3] * det33[3];
 
-    KVS_ASSERT( !( kvs::Math::IsZero( det44 ) ) );
+    if ( determinant ) *determinant = det44;
 
     this->set(
         +det33[0], -det33[4], +det33[ 8], -det33[12],
