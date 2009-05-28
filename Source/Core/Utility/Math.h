@@ -191,12 +191,12 @@ inline T Pythag( T a, T b )
 
     if ( abs_a > abs_b )
     {
-        return( abs_a * static_cast<T>( std::sqrt( 1.0 + Sqr( abs_b / abs_a ) ) ) );
+        return( abs_a * static_cast<T>( std::sqrt( 1.0 + Square( abs_b / abs_a ) ) ) );
     }
     else
     {
         return( IsZero( abs_b ) ? T( 0 ) :
-                abs_b * static_cast<T>( std::sqrt( 1.0 + Sqr( abs_a / abs_b ) ) ) );
+                abs_b * static_cast<T>( std::sqrt( 1.0 + Square( abs_a / abs_b ) ) ) );
     }
 }
 
