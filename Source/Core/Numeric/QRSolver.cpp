@@ -59,7 +59,7 @@ const kvs::Vector<T>& QRSolver<T>::solve( const kvs::Vector<T>& b )
 template <typename T>
 const kvs::Vector<T>& QRSolver<T>::solve( const kvs::Matrix<T>& A, const kvs::Vector<T>& b )
 {
-    KVS_ASSERT( A.ncolumns() == b.nsizes() );
+    KVS_ASSERT( A.ncolumns() == b.size() );
 
     // QR decomposition.
     m_decomposer.setMatrix( A );
