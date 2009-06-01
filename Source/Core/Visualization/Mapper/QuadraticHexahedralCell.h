@@ -313,9 +313,10 @@ inline const kvs::Vector3f QuadraticHexahedralCell<T>::gradient( void )
     this->calculate_differential_function();
 
     // Calculate a gradient vector in the local coordinate.
+    const kvs::UInt32 nnodes = NumberOfNodes;
     const float* dIdx = BaseClass::m_differential_functions;
-    const float* dIdy = BaseClass::m_differential_functions + NumberOfNodes;
-    const float* dIdz = BaseClass::m_differential_functions + NumberOfNodes * 2;
+    const float* dIdy = BaseClass::m_differential_functions + nnodes;
+    const float* dIdz = BaseClass::m_differential_functions + nnodes * 2;
     const T*     s    = BaseClass::m_scalars;
 
     const float dsdx =
@@ -474,9 +475,10 @@ inline void QuadraticHexahedralCell<T>::calculate_differential_function( void )
 template <typename T>
 inline const kvs::Matrix33f QuadraticHexahedralCell<T>::get_transposed_Jacobi_matrix( void ) const
 {
+    const kvs::UInt32 nnodes = NumberOfNodes;
     const float* dNdx = BaseClass::m_differential_functions;
-    const float* dNdy = BaseClass::m_differential_functions + NumberOfNodes;
-    const float* dNdz = BaseClass::m_differential_functions + NumberOfNodes * 2;
+    const float* dNdy = BaseClass::m_differential_functions + nnodes;
+    const float* dNdz = BaseClass::m_differential_functions + nnodes * 2;
     const kvs::Vector3f* V = BaseClass::m_vertices;
 
     float dXdx = 0;
