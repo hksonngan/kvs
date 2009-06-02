@@ -55,6 +55,10 @@ public:
 
 public:
 
+    void setMaxConnections( const int max_nconnections );
+
+public:
+
     kvs::TCPSocket* checkForNewConnection( const kvs::SocketTimer* blocking_time = 0 );
 
 public:

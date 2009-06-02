@@ -28,7 +28,8 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-TCPServer::TCPServer( void )
+TCPServer::TCPServer( void ):
+    m_max_nconnections( 5 )
 {
 }
 
@@ -137,6 +138,17 @@ kvs::Socket::id_type TCPServer::accept( kvs::SocketAddress* client_address )
     }
 
     return( ::accept( kvs::Socket::id(), 0, 0 ) );
+}
+
+/*===========================================================================*/
+/**
+ *  Sets a maximum number of connections.
+ *  @param  max_nconnections [in] maximum number of connections
+ */
+/*===========================================================================*/
+void TCPServer::setMaxConnections( const int max_nconnections )
+{
+    m_max_nconnections = max_nconnections;
 }
 
 /*==========================================================================*/
