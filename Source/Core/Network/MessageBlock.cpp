@@ -13,11 +13,13 @@
 /****************************************************************************/
 #include "SocketStandard.h"
 #include "MessageBlock.h"
+#include <kvs/Type>
 
 
 namespace
 {
-const size_t SizeOfHeader = sizeof( size_t );
+//const size_t SizeOfHeader = sizeof( size_t );
+const size_t SizeOfHeader = sizeof( kvs::UInt32 ); // 32 bits = 4 bytes
 }
 
 namespace kvs
@@ -171,7 +173,8 @@ void MessageBlock::copy( const void* message, size_t message_size )
     if( this->allocate( message_size ) )
     {
         // Convert host byte-order to network byte-order.
-        unsigned int size = htonl( static_cast<unsigned int>( message_size ) );
+        kvs::UInt32 size = htonl( static_cast<kvs::UInt32>( message_size ) );
+//        unsigned int size = htonl( static_cast<unsigned int>( message_size ) );
 //        u_long size = htonl( static_cast<u_long>( message_size ) );
 
         unsigned char* p = m_block.pointer();
