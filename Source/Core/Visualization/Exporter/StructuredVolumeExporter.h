@@ -17,6 +17,7 @@
 #include <kvs/ObjectBase>
 #include <kvs/StructuredVolumeObject>
 #include <kvs/KVSMLObjectStructuredVolume>
+#include <kvs/AVSField>
 #include <kvs/ExporterBase>
 
 
@@ -77,6 +78,22 @@ public:
     StructuredVolumeExporter( const kvs::StructuredVolumeObject* object );
 
     kvs::KVSMLObjectStructuredVolume* exec( const kvs::ObjectBase* object );
+};
+
+/*===========================================================================*/
+/**
+ *  Specialized structured volume exporter class for kvs::AVSField.
+ */
+/*===========================================================================*/
+template <>
+class StructuredVolumeExporter<kvs::AVSField> :
+        public kvs::ExporterBase<kvs::AVSField>
+{
+public:
+
+    StructuredVolumeExporter( const kvs::StructuredVolumeObject* object );
+
+    kvs::AVSField* exec( const kvs::ObjectBase* object );
 };
 
 } // end of namespace kvs

@@ -116,4 +116,125 @@ kvs::KVSMLObjectStructuredVolume* StructuredVolumeExporter<kvs::KVSMLObjectStruc
     return( this );
 }
 
+
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a AVSField data from given object.
+ *  @param  object [in] pointer to the structured volume object
+ */
+/*===========================================================================*/
+StructuredVolumeExporter<kvs::AVSField>::StructuredVolumeExporter(
+    const kvs::StructuredVolumeObject* object )
+{
+    this->exec( object );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Exports object to a AVSField data.
+ *  @param  object [in] pointer to the structured volume object
+ */
+/*===========================================================================*/
+kvs::AVSField* StructuredVolumeExporter<kvs::AVSField>::exec(
+    const kvs::ObjectBase* object )
+{
+    // Cast to the structured volume object.
+    const kvs::StructuredVolumeObject* volume = ::CastToStructuredVolumeObject( object );
+    if ( !volume )
+    {
+        kvsMessageError("Cannot cast to a structured volume object from the given object.");
+        return( NULL );
+    }
+
+    const std::type_info& type = volume->values().typeInfo()->type();
+    if ( type == typeid( kvs::Int8 ) )
+    {
+        this->setBits( 8 );
+        this->setSigned( true );
+        this->setDataType( kvs::AVSField::Byte );
+    }
+    else if ( type == typeid( kvs::UInt8 ) )
+    {
+        this->setBits( 8 );
+        this->setSigned( false );
+        this->setDataType( kvs::AVSField::Byte );
+    }
+    else if ( type == typeid( kvs::Int16 ) )
+    {
+        this->setBits( 16 );
+        this->setSigned( true );
+        this->setDataType( kvs::AVSField::Short );
+    }
+    else if ( type == typeid( kvs::UInt16 ) )
+    {
+        this->setBits( 16 );
+        this->setSigned( false );
+        this->setDataType( kvs::AVSField::Short );
+    }
+    else if ( type == typeid( kvs::Int32 ) )
+    {
+        this->setBits( 32 );
+        this->setSigned( true );
+        this->setDataType( kvs::AVSField::Integer );
+    }
+    else if ( type == typeid( kvs::UInt32 ) )
+    {
+        this->setBits( 32 );
+        this->setSigned( false );
+        this->setDataType( kvs::AVSField::Integer );
+    }
+    else if ( type == typeid( kvs::Real32 ) )
+    {
+        this->setBits( 32 );
+        this->setSigned( true );
+        this->setDataType( kvs::AVSField::Float );
+    }
+    else if ( type == typeid( kvs::Real64 ) )
+    {
+        this->setBits( 64 );
+        this->setSigned( true );
+        this->setDataType( kvs::AVSField::Double );
+    }
+    else
+    {
+        kvsMessageError("Unsupported data type '%s' of the volume.",
+                        volume->values().typeInfo()->typeName() );
+    }
+
+    // Check the grid type of the given structured volume object.
+    switch ( volume->gridType() )
+    {
+    case kvs::StructuredVolumeObject::Uniform:
+    {
+        this->setFieldType( kvs::AVSField::Uniform );
+        this->setValues( volume->values() );
+        break;
+    }
+/*
+    case kvs::StructuredVolumeObject::Rectilinear:
+        this->setFieldType( kvs::AVSField::Rectilinear );
+        this->setValues( volume->values() );
+        this->setCoords( volume->coords() );
+        break;
+    case kvs::StructuredVolumeObject::Curvilinear:
+        this->setFieldType( kvs::AVSField::Irregular );
+        this->setValues( volume->values() );
+        this->setCoords( volume->coords() );
+        break;
+*/
+    default:
+    {
+        kvsMessageError("Unknown grid type.");
+        break;
+    }
+    }
+
+    this->setVeclen( volume->veclen() );
+    this->setNSpace( 3 );
+    this->setNDim( 3 );
+    this->setDim( volume->resolution() );
+
+    return( this );
+}
+
 } // end of namespace kvs
