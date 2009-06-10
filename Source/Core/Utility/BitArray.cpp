@@ -168,7 +168,7 @@ void BitArray::set( void )
     const size_t byte_size = this->byteSize();
     for( size_t index = 0; index < byte_size; index++ )
     {
-        m_values[index] = ::SetBitMask[8];
+        m_values[index] = ::ResetBitMask[8]; // 1111,1111
     }
 }
 
@@ -184,7 +184,7 @@ void BitArray::reset( void )
     const size_t byte_size = this->byteSize();
     for( size_t index = 0; index < byte_size; index++ )
     {
-        m_values[index] = ::ResetBitMask[8];
+        m_values[index] = ::SetBitMask[8]; // 0000,0000
     }
 }
 
