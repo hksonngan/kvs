@@ -65,7 +65,7 @@ public:
 
     const kvs::Vector<T>& solve( const kvs::Matrix<T>& variables, const kvs::Vector<T>& responses );
 
-    const kvs::Vector<T>& refine( const T threshold = T( 2.45 ) );
+    const kvs::Vector<T>& improve( const T threshold = T( 2.45 ) );
 
 public:
 

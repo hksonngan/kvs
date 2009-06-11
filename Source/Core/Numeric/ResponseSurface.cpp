@@ -4,7 +4,7 @@
  *  @brief  Response surface method class
  *
  *  @author Yukio YASUHARA
- *  @date   2009/06/11 11:37:41
+ *  @date   2009/06/11 13:16:39
  */
 /*----------------------------------------------------------------------------
  *
@@ -126,12 +126,12 @@ const kvs::Vector<T>& ResponseSurface<T>::solve(
 
 /*===========================================================================*/
 /**
- *  @brief  Refines the response surface model.
+ *  @brief  Improves the response surface model by applying the t-test.
  *  @param  threshold [in] threshold
  */
 /*===========================================================================*/
 template <typename T>
-const kvs::Vector<T>& ResponseSurface<T>::refine( const T threshold )
+const kvs::Vector<T>& ResponseSurface<T>::improve( const T threshold )
 {
     if ( m_npoints == 0 ) return( *this );
 
