@@ -110,6 +110,7 @@ $(OUTDIR)\.\Numeric\MersenneTwister.obj \
 $(OUTDIR)\.\Numeric\QRDecomposer.obj \
 $(OUTDIR)\.\Numeric\QRSolver.obj \
 $(OUTDIR)\.\Numeric\Quaternion.obj \
+$(OUTDIR)\.\Numeric\ResponseSurface.obj \
 $(OUTDIR)\.\Numeric\SVDecomposer.obj \
 $(OUTDIR)\.\Numeric\SVSolver.obj \
 $(OUTDIR)\.\Numeric\Xorshift128.obj \

@@ -60,6 +60,7 @@ Numeric/MersenneTwister
 Numeric/QRDecomposer
 Numeric/QRSolver
 Numeric/Quaternion
+Numeric/ResponseSurface
 Numeric/SVDecomposer
 Numeric/SVSolver
 Numeric/Xorshift128

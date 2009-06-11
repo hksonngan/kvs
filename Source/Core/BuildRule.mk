@@ -110,6 +110,7 @@ $(OUTDIR)/./Numeric/MersenneTwister.o \
 $(OUTDIR)/./Numeric/QRDecomposer.o \
 $(OUTDIR)/./Numeric/QRSolver.o \
 $(OUTDIR)/./Numeric/Quaternion.o \
+$(OUTDIR)/./Numeric/ResponseSurface.o \
 $(OUTDIR)/./Numeric/SVDecomposer.o \
 $(OUTDIR)/./Numeric/SVSolver.o \
 $(OUTDIR)/./Numeric/Xorshift128.o \
