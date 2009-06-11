@@ -97,10 +97,12 @@ void VideoRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Lig
             glOrtho( m_left, m_right, m_bottom, m_top, -1, 1 );
 
             glBegin( GL_QUADS );
+/* mirror */
             glTexCoord2f( 0.0, 0.0 ); glVertex2f( 1.0, 1.0 );
             glTexCoord2f( 0.0, 1.0 ); glVertex2f( 1.0, 0.0 );
             glTexCoord2f( 1.0, 1.0 ); glVertex2f( 0.0, 0.0 );
             glTexCoord2f( 1.0, 0.0 ); glVertex2f( 0.0, 1.0 );
+/* normal */
 /*
             glTexCoord2f( 0.0, 0.0 ); glVertex2f( 0.0, 1.0 );
             glTexCoord2f( 0.0, 1.0 ); glVertex2f( 0.0, 0.0 );

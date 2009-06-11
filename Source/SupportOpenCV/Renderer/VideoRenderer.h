@@ -32,6 +32,11 @@ class Light;
 namespace opencv
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  Video renderer.
+ */
+/*===========================================================================*/
 class VideoRenderer : public kvs::RendererBase
 {
     // Class name.
