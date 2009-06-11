@@ -39,6 +39,10 @@ SUBDIRS = $(SUBDIRS) SupportQt
 SUBDIRS = $(SUBDIRS) SupportSAGE
 !ENDIF
 
+!IF "$(KVS_SUPPORT_OPENCV)" == "1"
+SUBDIRS = $(SUBDIRS) SupportOpenCV
+!ENDIF
+
 
 #=============================================================================
 #  build.
@@ -73,6 +77,10 @@ install:
 !IF "$(KVS_SUPPORT_QT)" == "1"
 	IF NOT EXIST "$(INSTALL_DIR)\include\kvs\qt" $(MKDIR) "$(INSTALL_DIR)\include\kvs\qt"
 	$(INSTALL) kvs\qt\* "$(INSTALL_DIR)\include\kvs\qt"
+!ENDIF
+!IF "$(KVS_SUPPORT_OPENCV)" == "1"
+	IF NOT EXIST "$(INSTALL_DIR)\include\kvs\opencv" $(MKDIR) "$(INSTALL_DIR)\include\kvs\opencv"
+	$(INSTALL) kvs\opencv\* "$(INSTALL_DIR)\include\kvs\opencv"
 !ENDIF
 !IF "$(KVS_SUPPORT_SAGE)" == "1"
 	IF NOT EXIST "$(INSTALL_DIR)\include\kvs\sage" $(MKDIR) "$(INSTALL_DIR)\include\kvs\sage"

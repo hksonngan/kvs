@@ -39,6 +39,10 @@ ifeq "$(KVS_SUPPORT_SAGE)" "1"
 SUBDIRS += SupportSAGE
 endif
 
+ifeq "$(KVS_SUPPORT_OPENCV)" "1"
+SUBDIRS += SupportOpenCV
+endif
+
 
 #=============================================================================
 #  build.
@@ -61,7 +65,7 @@ clean:
 #=============================================================================
 install:
 	$(MKDIR) $(INSTALL_DIR)/include/kvs
-	$(INSTALL) $(shell find kvs      -maxdepth 1 -type f) $(INSTALL_DIR)/include/kvs
+	$(INSTALL) $(shell find kvs -maxdepth 1 -type f) $(INSTALL_DIR)/include/kvs
 ifeq "$(KVS_SUPPORT_GLUT)" "1"
 	$(MKDIR) $(INSTALL_DIR)/include/kvs/glut
 	$(INSTALL) $(shell find kvs/glut -maxdepth 1 -type f) $(INSTALL_DIR)/include/kvs/glut
@@ -72,11 +76,15 @@ ifeq "$(KVS_SUPPORT_GLEW)" "1"
 endif
 ifeq "$(KVS_SUPPORT_QT)" "1"
 	$(MKDIR) $(INSTALL_DIR)/include/kvs/qt
-	$(INSTALL) $(shell find kvs/qt   -maxdepth 1 -type f) $(INSTALL_DIR)/include/kvs/qt
+	$(INSTALL) $(shell find kvs/qt -maxdepth 1 -type f) $(INSTALL_DIR)/include/kvs/qt
+endif
+ifeq "$(KVS_SUPPORT_OPENCV)" "1"
+	$(MKDIR) $(INSTALL_DIR)/include/kvs/opencv
+	$(INSTALL) $(shell find kvs/opencv -maxdepth 1 -type f) $(INSTALL_DIR)/include/kvs/opencv
 endif
 ifeq "$(KVS_SUPPORT_SAGE)" "1"
 	$(MKDIR) $(INSTALL_DIR)/include/kvs/sage
-	$(INSTALL) $(shell find kvs/sage   -maxdepth 1 -type f) $(INSTALL_DIR)/include/kvs/sage
+	$(INSTALL) $(shell find kvs/sage -maxdepth 1 -type f) $(INSTALL_DIR)/include/kvs/sage
 endif
 	for i in $(SUBDIRS); do \
 	$(MAKE) -C $$i $(MFLAGS) $(MAKEOVERRIDES) install; done
