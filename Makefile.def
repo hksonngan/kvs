@@ -64,11 +64,12 @@ MAKEFILE := Makefile
 #=============================================================================
 LIB_KVS_CORE := libkvsCore.a
 
-LIB_KVS_SUPPORT_CAVE := libkvsSupportCAVE.a
-LIB_KVS_SUPPORT_GLEW := libkvsSupportGLEW.a
-LIB_KVS_SUPPORT_GLUT := libkvsSupportGLUT.a
-LIB_KVS_SUPPORT_QT   := libkvsSupportQt.a
-LIB_KVS_SUPPORT_SAGE := libkvsSupportSAGE.a
+LIB_KVS_SUPPORT_CAVE   := libkvsSupportCAVE.a
+LIB_KVS_SUPPORT_GLEW   := libkvsSupportGLEW.a
+LIB_KVS_SUPPORT_GLUT   := libkvsSupportGLUT.a
+LIB_KVS_SUPPORT_OPENCV := libkvsSupportOpenCV.a
+LIB_KVS_SUPPORT_QT     := libkvsSupportQt.a
+LIB_KVS_SUPPORT_SAGE   := libkvsSupportSAGE.a
 
 
 #=============================================================================
@@ -195,6 +196,20 @@ endif
 
 
 #=============================================================================
+#  OPENCV_INCLUDE_PATH, OPENCV_LIBRARY_PATH, OPENCV_LINK_LIBRARY
+#=============================================================================
+ifeq "$(KVS_SUPPORT_OPENCV)" "1"
+OPENCV_INCLUDE_PATH := `pkg-config --cflags-only-I opencv`
+OPENCV_LIBRARY_PATH := `pkg-config --libs-only-L opencv`
+OPENCV_LINK_LIBRARY := `pkg-config --libs-only-l opencv`
+ifdef KVS_OPENCV_DIR
+OPENCV_INCLUDE_PATH := -I$(KVS_OPENCV_DIR)/include
+OPENCV_LIBRARY_PATH := -L$(KVS_OPENCV_DIR)/lib
+endif
+endif
+
+
+#=============================================================================
 #  Compiler option.
 #=============================================================================
 CPPFLAGS := -Wall
@@ -239,6 +254,10 @@ endif
 
 ifeq "$(KVS_SUPPORT_SAGE)" "1"
 DEFINITIONS += -DKVS_SUPPORT_SAGE
+endif
+
+ifeq "$(KVS_SUPPORT_OPENCV)" "1"
+DEFINITIONS += -DKVS_SUPPORT_OPENCV
 endif
 
 

@@ -57,11 +57,12 @@ MAKEFILE = Makefile.vc
 #=============================================================================
 LIB_KVS_CORE = kvsCore.lib
 
-LIB_KVS_SUPPORT_CAVE = kvsSupportCAVE.lib
-LIB_KVS_SUPPORT_GLEW = kvsSupportGLEW.lib
-LIB_KVS_SUPPORT_GLUT = kvsSupportGLUT.lib
-LIB_KVS_SUPPORT_QT   = kvsSupportQt.lib
-LIB_KVS_SUPPORT_SAGE = kvsSupportSAGE.lib
+LIB_KVS_SUPPORT_CAVE   = kvsSupportCAVE.lib
+LIB_KVS_SUPPORT_GLEW   = kvsSupportGLEW.lib
+LIB_KVS_SUPPORT_GLUT   = kvsSupportGLUT.lib
+LIB_KVS_SUPPORT_QT     = kvsSupportQt.lib
+LIB_KVS_SUPPORT_SAGE   = kvsSupportSAGE.lib
+LIB_KVS_SUPPORT_OPENCV = kvsSupportOpenCV.lib
 
 
 #=============================================================================
@@ -143,6 +144,25 @@ SAGE_LIBRARY_PATH = $(SAGE_LIBRARY_PATH) /LIBPATH:"$(KVS_SAGE_DIR)\lib"
 !ENDIF
 !ENDIF
 
+#=============================================================================
+#  OPENCV_INCLUDE_PATH, OPENCV_LIBRARY_PATH, OPENCV_LINK_LIBRARY
+#=============================================================================
+!IF "$(KVS_SUPPORT_OPENCV)" == "1"
+OPENCV_INCLUDE_PATH = /I"C:\Program Files\OpenCV\cv\include"
+OPENCV_INCLUDE_PATH = $(OPENCV_INCLUDE_PATH) /I"C:\Program Files\OpenCV\cvaux\include"
+OPENCV_INCLUDE_PATH = $(OPENCV_INCLUDE_PATH) /I"C:\Program Files\OpenCV\cxcore\include"
+OPENCV_INCLUDE_PATH = $(OPENCV_INCLUDE_PATH) /I"C:\Program Files\OpenCV\otherlibs\highgui"
+OPENCV_LIBRARY_PATH = /LIBPATH:"C:\Program Files\OpenCV\lib"
+OPENCV_LINK_LIBRARY = cv.lib cxcore.lib cvaux.lib highgui.lib cvcam.lib
+!IFDEF KVS_OPENCV_DIR
+OPENCV_INCLUDE_PATH = $(OPENCV_INCLUDE_PATH) /I"$(KVS_OPENCV_DIR)\cv\include"
+OPENCV_INCLUDE_PATH = $(OPENCV_INCLUDE_PATH) /I"$(KVS_OPENCV_DIR)\cvaux\include"
+OPENCV_INCLUDE_PATH = $(OPENCV_INCLUDE_PATH) /I"$(KVS_OPENCV_DIR)\cxcore\include"
+OPENCV_INCLUDE_PATH = $(OPENCV_INCLUDE_PATH) /I"$(KVS_OPENCV_DIR)\otherlibs\hightgui"
+OPENCV_LIBRARY_PATH = $(OPENCV_LIBRARY_PATH) /LIBPATH:"$(KVS_OPENCV_DIR)\lib"
+!ENDIF
+!ENDIF
+
 
 #=============================================================================
 #  Compiler option.
@@ -189,6 +209,10 @@ DEFINITIONS = $(DEFINITIONS) /DKVS_SUPPORT_QT
 
 !IF "$(KVS_SUPPORT_SAGE)" == "1"
 DEFINITIONS = $(DEFINITIONS) /DKVS_SUPPORT_SAGE
+!ENDIF
+
+!IF "$(KVS_SUPPORT_OPENCV)" == "1"
+DEFINITIONS = $(DEFINITIONS) /DKVS_SUPPORT_OPENCV
 !ENDIF
 
 
