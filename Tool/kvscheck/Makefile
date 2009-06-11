@@ -41,6 +41,10 @@ ifeq "$(KVS_SUPPORT_GLEW)" "1"
 INCLUDE_PATH += $(GLEW_INCLUDE_PATH)
 endif
 
+ifeq "$(KVS_SUPPORT_OPENCV)" "1"
+INCLUDE_PATH += $(OPENCV_INCLUDE_PATH)
+endif
+
 INCLUDE_PATH += $(GL_INCLUDE_PATH)
 
 
@@ -67,6 +71,10 @@ ifeq "$(KVS_SUPPORT_GLEW)" "1"
 LIBRARY_PATH += -L../../Source/SupportGLEW/$(OUTDIR) $(GLEW_LIBRARY_PATH)
 endif
 
+ifeq "$(KVS_SUPPORT_OPENCV)" "1"
+LIBRARY_PATH += -L../../Source/SupportOpenCV/$(OUTDIR) $(OPENCV_LIBRARY_PATH)
+endif
+
 LIBRARY_PATH += $(GL_LIBRARY_PATH)
 
 
@@ -91,6 +99,10 @@ endif
 
 ifeq "$(KVS_SUPPORT_GLEW)" "1"
 LINK_LIBRARY += -lkvsSupportGLEW $(GLEW_LINK_LIBRARY)
+endif
+
+ifeq "$(KVS_SUPPORT_OPENCV)" "1"
+LINK_LIBRARY += -lkvsSupportOpenCV $(OPENCV_LINK_LIBRARY)
 endif
 
 LINK_LIBRARY += $(GL_LINK_LIBRARY)

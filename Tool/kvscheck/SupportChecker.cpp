@@ -26,6 +26,10 @@
 #include <kvs/sage/SAGE>
 #endif
 
+#if defined( KVS_SUPPORT_OPENCV )
+#include <kvs/opencv/OpenCV>
+#endif
+
 
 namespace kvscheck
 {
@@ -68,6 +72,15 @@ SupportChecker::SupportChecker( void )
     {
         const kvs::String description( "Qt - Cross-Platform Rich Client Development Framework" );
         const kvs::String version( "please type 'qmake -v'" );
+        m_descriptions.push_back( description );
+        m_versions.push_back( version );
+    }
+#endif
+
+#if defined( KVS_SUPPORT_OPENCV )
+    {
+        const kvs::String description( kvs::opencv::Description() );
+        const kvs::String version( kvs::opencv::Version() );
         m_descriptions.push_back( description );
         m_versions.push_back( version );
     }
