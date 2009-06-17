@@ -65,6 +65,7 @@ MAKEFILE := Makefile
 LIB_KVS_CORE := libkvsCore.a
 
 LIB_KVS_SUPPORT_CAVE   := libkvsSupportCAVE.a
+LIB_KVS_SUPPORT_CUDA   := libkvsSupportCUDA.a
 LIB_KVS_SUPPORT_GLEW   := libkvsSupportGLEW.a
 LIB_KVS_SUPPORT_GLUT   := libkvsSupportGLUT.a
 LIB_KVS_SUPPORT_OPENCV := libkvsSupportOpenCV.a
@@ -151,8 +152,7 @@ endif
 ifeq "$(KVS_SUPPORT_CUDA)" "1"
 CUDA_INCLUDE_PATH :=
 CUDA_LIBRARY_PATH :=
-#CUDA_LINK_LIBRARY := -lcuda -lcudart -lcutil $(KVS_CUDA_SDK_DIR)/common/lib/libGLEW.a
-CUDA_LINK_LIBRARY := -lcuda -lcudart -lcutil
+CUDA_LINK_LIBRARY := -lcuda -lcudart
 ifdef KVS_CUDA_DIR
 CUDA_INCLUDE_PATH += -I$(KVS_CUDA_DIR)/include
 CUDA_LIBRARY_PATH += -L$(KVS_CUDA_DIR)/lib
@@ -160,6 +160,7 @@ endif
 ifdef KVS_CUDA_SDK_DIR
 CUDA_INCLUDE_PATH += -I$(KVS_CUDA_SDK_DIR)/common/inc
 CUDA_LIBRARY_PATH += -L$(KVS_CUDA_SDK_DIR)/lib
+CUDA_LINK_LIBRARY += -lcutil
 endif
 
 NVCC := nvcc
@@ -258,6 +259,10 @@ endif
 
 ifeq "$(KVS_SUPPORT_OPENCV)" "1"
 DEFINITIONS += -DKVS_SUPPORT_OPENCV
+endif
+
+ifeq "$(KVS_SUPPORT_CUDA)" "1"
+DEFINITIONS += -DKVS_SUPPORT_CUDA
 endif
 
 

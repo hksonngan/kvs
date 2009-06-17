@@ -215,6 +215,10 @@ DEFINITIONS = $(DEFINITIONS) /DKVS_SUPPORT_SAGE
 DEFINITIONS = $(DEFINITIONS) /DKVS_SUPPORT_OPENCV
 !ENDIF
 
+!IF "$(KVS_SUPPORT_CUDA)" == "1"
+DEFINITIONS = $(DEFINITIONS) /DKVS_SUPPORT_CUDA
+!ENDIF
+
 
 #=============================================================================
 #  Linker option.
