@@ -43,6 +43,10 @@ ifeq "$(KVS_SUPPORT_OPENCV)" "1"
 SUBDIRS += SupportOpenCV
 endif
 
+ifeq "$(KVS_SUPPORT_CUDA)" "1"
+SUBDIRS += SupportCUDA
+endif
+
 
 #=============================================================================
 #  build.
@@ -86,6 +90,11 @@ ifeq "$(KVS_SUPPORT_OPENCV)" "1"
 	$(MKDIR) $(INSTALL_DIR)/include/kvs/opencv
 	$(INSTALL) kvsSupportOpenCV $(INSTALL_DIR)/include
 	$(INSTALL) $(shell find kvs/opencv -maxdepth 1 -type f) $(INSTALL_DIR)/include/kvs/opencv
+endif
+ifeq "$(KVS_SUPPORT_CUDA)" "1"
+	$(MKDIR) $(INSTALL_DIR)/include/kvs/cuda
+	$(INSTALL) kvsSupportCUDA $(INSTALL_DIR)/include
+	$(INSTALL) $(shell find kvs/cuda -maxdepth 1 -type f) $(INSTALL_DIR)/include/kvs/cuda
 endif
 ifeq "$(KVS_SUPPORT_SAGE)" "1"
 	$(MKDIR) $(INSTALL_DIR)/include/kvs/sage

@@ -43,6 +43,10 @@ SUBDIRS = $(SUBDIRS) SupportSAGE
 SUBDIRS = $(SUBDIRS) SupportOpenCV
 !ENDIF
 
+!IF "$(KVS_SUPPORT_CUDA)" == "1"
+SUBDIRS = $(SUBDIRS) SupportCUDA
+!ENDIF
+
 
 #=============================================================================
 #  build.
@@ -86,6 +90,11 @@ install:
 	IF NOT EXIST "$(INSTALL_DIR)\include\kvs\opencv" $(MKDIR) "$(INSTALL_DIR)\include\kvs\opencv"
 	$(INSTALL) kvsSupportOpenCV "$(INSTALL_DIR)\include"
 	$(INSTALL) kvs\opencv\* "$(INSTALL_DIR)\include\kvs\opencv"
+!ENDIF
+!IF "$(KVS_SUPPORT_CUDA)" == "1"
+	IF NOT EXIST "$(INSTALL_DIR)\include\kvs\cuda" $(MKDIR) "$(INSTALL_DIR)\include\kvs\cuda"
+	$(INSTALL) kvsSupportCUDA "$(INSTALL_DIR)\include"
+	$(INSTALL) kvs\cuda\* "$(INSTALL_DIR)\include\kvs\cuda"
 !ENDIF
 !IF "$(KVS_SUPPORT_SAGE)" == "1"
 	IF NOT EXIST "$(INSTALL_DIR)\include\kvs\sage" $(MKDIR) "$(INSTALL_DIR)\include\kvs\sage"
