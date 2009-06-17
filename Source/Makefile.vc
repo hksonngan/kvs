@@ -65,25 +65,31 @@ clean:
 #=============================================================================
 install:
 	IF NOT EXIST "$(INSTALL_DIR)\include\kvs" $(MKDIR) "$(INSTALL_DIR)\include\kvs"
+	$(INSTALL) kvsCore "$(INSTALL_DIR)\include"
 	$(INSTALL) kvs\* "$(INSTALL_DIR)\include\kvs"
 !IF "$(KVS_SUPPORT_GLUT)" == "1"
 	IF NOT EXIST "$(INSTALL_DIR)\include\kvs\glut" $(MKDIR) "$(INSTALL_DIR)\include\kvs\glut"
+	$(INSTALL) kvsSupportGLUT "$(INSTALL_DIR)\include"
 	$(INSTALL) kvs\glut\* "$(INSTALL_DIR)\include\kvs\glut"
 !ENDIF
 !IF "$(KVS_SUPPORT_GLEW)" == "1"
 	IF NOT EXIST "$(INSTALL_DIR)\include\kvs\glew" $(MKDIR) "$(INSTALL_DIR)\include\kvs\glew"
+	$(INSTALL) kvsSupportGLEW "$(INSTALL_DIR)\include"
 	$(INSTALL) kvs\glew\* "$(INSTALL_DIR)\include\kvs\glew"
 !ENDIF
 !IF "$(KVS_SUPPORT_QT)" == "1"
 	IF NOT EXIST "$(INSTALL_DIR)\include\kvs\qt" $(MKDIR) "$(INSTALL_DIR)\include\kvs\qt"
+	$(INSTALL) kvsSupportQt "$(INSTALL_DIR)\include"
 	$(INSTALL) kvs\qt\* "$(INSTALL_DIR)\include\kvs\qt"
 !ENDIF
 !IF "$(KVS_SUPPORT_OPENCV)" == "1"
 	IF NOT EXIST "$(INSTALL_DIR)\include\kvs\opencv" $(MKDIR) "$(INSTALL_DIR)\include\kvs\opencv"
+	$(INSTALL) kvsSupportOpenCV "$(INSTALL_DIR)\include"
 	$(INSTALL) kvs\opencv\* "$(INSTALL_DIR)\include\kvs\opencv"
 !ENDIF
 !IF "$(KVS_SUPPORT_SAGE)" == "1"
 	IF NOT EXIST "$(INSTALL_DIR)\include\kvs\sage" $(MKDIR) "$(INSTALL_DIR)\include\kvs\sage"
+	$(INSTALL) kvsSupportSAGE "$(INSTALL_DIR)\include"
 	$(INSTALL) kvs\sage\* "$(INSTALL_DIR)\include\kvs\sage"
 !ENDIF
 	FOR %%i IN ( $(SUBDIRS) ) DO \
