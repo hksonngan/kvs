@@ -105,6 +105,7 @@ bool ApplicationInterface::initialize( void )
      * applied as the application ID for SAGE.
      */
     if ( 0 <= m_application_id ) config.appID = m_application_id;
+    else m_application_id = config.appID;
 
     config.resX = m_application_width;
     config.resY = m_application_height;
