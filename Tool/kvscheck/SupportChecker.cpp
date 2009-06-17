@@ -30,6 +30,10 @@
 #include <kvs/opencv/OpenCV>
 #endif
 
+#if defined( KVS_SUPPORT_CUDA )
+#include <kvs/cuda/CUDA>
+#endif
+
 
 namespace kvscheck
 {
@@ -81,6 +85,15 @@ SupportChecker::SupportChecker( void )
     {
         const kvs::String description( kvs::opencv::Description() );
         const kvs::String version( kvs::opencv::Version() );
+        m_descriptions.push_back( description );
+        m_versions.push_back( version );
+    }
+#endif
+
+#if defined( KVS_SUPPORT_CUDA )
+    {
+        const kvs::String description( kvs::cuda::Description() );
+        const kvs::String version( kvs::cuda::Version() );
         m_descriptions.push_back( description );
         m_versions.push_back( version );
     }
