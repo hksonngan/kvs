@@ -10,6 +10,7 @@ printf 'configure BuildRule... '
 ./configure_BuildRule.py SupportGLEW
 ./configure_BuildRule.py SupportOpenCV
 ./configure_BuildRule.py SupportSAGE
+./configure_BuildRule.py SupportCUDA
 
 printf 'success\n'
 
@@ -40,6 +41,7 @@ rm -f $( find ../Source/kvs -type f -not -path '*/.svn/*' )
 ./configure_header_list.py SupportSAGE   kvs/sage
 ./configure_header_list.py SupportOpenCV kvs/opencv
 ./configure_header_list.py SupportQt     kvs/qt
+./configure_header_list.py SupportCUDA   kvs/cuda
 
 printf 'success\n'
 
