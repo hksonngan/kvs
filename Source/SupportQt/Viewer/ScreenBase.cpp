@@ -927,6 +927,11 @@ void ScreenBase::replaced_key_press_event( QKeyEvent* event )
     m_pfunc_set_key_press_event( m_key_event );
 }
 
+QGLWidget* ScreenBase::device( void )
+{
+    return( m_support->device() );
+}
+
 } // end of namespace qt
 
 } // end of namespace kvs

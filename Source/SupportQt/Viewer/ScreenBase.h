@@ -183,6 +183,10 @@ protected:
 public slots:
 
     void slotTimerMouseEvent( void );
+
+public:
+
+    static QGLWidget* device( void );
 };
 
 } // end of namesapce qt
