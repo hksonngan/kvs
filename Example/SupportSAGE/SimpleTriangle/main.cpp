@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   main.cpp
- *  @brief  Example program of SupportGLUT.
+ *  @brief  Example program to display a simple triangle on TDW using SAGE.
  *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
