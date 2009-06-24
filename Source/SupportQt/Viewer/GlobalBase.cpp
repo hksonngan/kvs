@@ -14,6 +14,9 @@
 #include "GlobalBase.h"
 #include <kvs/OpenGL>
 #include <kvs/Message>
+#if defined( KVS_SUPPORT_GLUT )
+#include <kvs/glut/GLUT>
+#endif // KVS_SUPPORT_GLUT
 
 
 namespace kvs
@@ -41,6 +44,10 @@ GlobalBase::GlobalBase( int count, char** values ):
         kvsMessageError("Cannot create a Qt application.");
         return;
     }
+
+#if defined( KVS_SUPPORT_GLUT )
+    glutInit( &kvs::GlobalCore::argc, kvs::GlobalCore::argv );
+#endif// KVS_SUPPORT_GLUT
 }
 
 /*==========================================================================*/
