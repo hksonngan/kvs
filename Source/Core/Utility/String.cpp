@@ -54,20 +54,20 @@ namespace kvs
 {
 
 String::String( void ):
-    m_data( NULL ),
+    m_data( 0 ),
     m_size( 0 )
 {
 }
 
 String::String( const String& str ):
-    m_data( NULL ),
+    m_data( 0 ),
     m_size( 0 )
 {
     *this = str;
 }
 
 String::String( const std::string& str ):
-    m_data( NULL ),
+    m_data( 0 ),
     m_size( 0 )
 {
     *this = str;
@@ -102,6 +102,8 @@ String& String::operator =( const std::string& str )
     if ( str.size() > 0 )
     {
         size_t size = str.size();
+
+//        if ( m_data ) delete [] m_data;
 
         m_data = new char [ size + 1 ];
         if ( !m_data )
@@ -345,6 +347,8 @@ void String::format( const char* str, ... )
 
     if ( buffer )
     {
+        if ( m_data ) delete [] m_data;
+
         m_data = new char [ size + 1 ];
         if ( !m_data )
         {
@@ -359,6 +363,27 @@ void String::format( const char* str, ... )
 
         delete [] buffer;
     }
+}
+
+void String::replace( const std::string& pattern, const std::string& placement )
+{
+    const std::string source( m_data );
+    std::string result;
+    std::string::size_type pos_before = 0;
+    std::string::size_type pos = 0;
+    std::string::size_type len = pattern.size();
+    while ( ( pos = source.find( pattern, pos ) ) != std::string::npos )
+    {
+        result.append( source, pos_before, pos - pos_before );
+        result.append( placement );
+        pos += len;
+        pos_before = pos;
+    }
+    result.append( source, pos_before, source.size() - pos_before );
+
+    if ( m_data ) delete [] m_data;
+
+    *this = result;
 }
 
 template<>

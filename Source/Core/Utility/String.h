@@ -105,6 +105,8 @@ public:
 
     void format( const char* str, ... );
 
+    void replace( const std::string& pattern, const std::string& placement );
+
     template<typename T>
     void setNumber( T number );
 
