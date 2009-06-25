@@ -16,7 +16,6 @@
 #include <iostream>
 #include <kvs/String>
 
-
 /*===========================================================================*/
 /**
  *  @brief  Main function.
@@ -91,6 +90,11 @@ int main( void )
 
     int v3 = kvs::String::toNumber<int>("12345");
     std::cout << "kvs::String::toNumber: " << v3 << std::endl;
+
+    kvs::String s("XXX XXX YYY.");
+    s.replace( "XXX", "abc" );
+    s.replace( "YYY", "defghijklmn" );
+    std::cout << s << std::endl;
 
     return 0;
 }
