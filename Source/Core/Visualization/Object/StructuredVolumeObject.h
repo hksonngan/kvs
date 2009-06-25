@@ -71,7 +71,15 @@ public:
 
 public:
 
+    StructuredVolumeObject& operator = ( const StructuredVolumeObject& object );
+
     friend std::ostream& operator << ( std::ostream& os, const StructuredVolumeObject& object );
+
+public:
+
+    void shallowCopy( const StructuredVolumeObject& object );
+
+    void deepCopy( const StructuredVolumeObject& object );
 
 public:
 
@@ -98,10 +106,6 @@ public:
 public:
 
     void updateMinMaxCoords( void );
-
-public:
-
-    StructuredVolumeObject& operator =( const StructuredVolumeObject& rhs );
 
 private:
 

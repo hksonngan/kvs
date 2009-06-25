@@ -145,7 +145,9 @@ public:
 
 public:
 
-    VolumeObjectBase& operator =( const VolumeObjectBase& rhs );
+    void shallowCopy( const VolumeObjectBase& object );
+
+    void deepCopy( const VolumeObjectBase& object );
 
 private:
 

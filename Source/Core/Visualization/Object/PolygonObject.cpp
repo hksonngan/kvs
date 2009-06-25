@@ -190,6 +190,11 @@ PolygonObject::PolygonObject(
     this->setOpacity( opacity );
 }
 
+PolygonObject::PolygonObject( const kvs::PolygonObject& polygon )
+{
+    this->shallowCopy( polygon );
+}
+
 PolygonObject::~PolygonObject( void )
 {
     this->clear();
@@ -217,6 +222,16 @@ const kvs::PolygonObject* PolygonObject::DownCast( const kvs::ObjectBase* object
     return( PolygonObject::DownCast( const_cast<kvs::ObjectBase*>( object ) ) );
 }
 
+PolygonObject& PolygonObject::operator = ( const PolygonObject& object )
+{
+    if ( this != &object )
+    {
+        this->shallowCopy( object );
+    }
+
+    return( *this );
+}
+
 std::ostream& operator << ( std::ostream& os, const PolygonObject& object )
 {
     os << "Object type:  " << "polygon object" << std::endl;
@@ -234,6 +249,26 @@ std::ostream& operator << ( std::ostream& os, const PolygonObject& object )
     os << "Normal type:  " << ::GetNormalTypeName( object.normalType() );
 
     return( os );
+}
+
+void PolygonObject::shallowCopy( const PolygonObject& object )
+{
+    BaseClass::shallowCopy( object );
+    this->m_polygon_type = object.polygonType();
+    this->m_color_type = object.colorType();
+    this->m_normal_type = object.normalType();
+    this->m_connections.shallowCopy( object.connections() );
+    this->m_opacities.shallowCopy( object.opacities() );
+}
+
+void PolygonObject::deepCopy( const PolygonObject& object )
+{
+    BaseClass::deepCopy( object );
+    this->m_polygon_type = object.polygonType();
+    this->m_color_type = object.colorType();
+    this->m_normal_type = object.normalType();
+    this->m_connections.deepCopy( object.connections() );
+    this->m_opacities.deepCopy( object.opacities() );
 }
 
 void PolygonObject::clear( void )

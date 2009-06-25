@@ -118,57 +118,62 @@ PointObject::PointObject(
     this->setSize( 1 );
 }
 
-PointObject::PointObject( const kvs::LineObject* line )
+PointObject::PointObject( const kvs::PointObject& point )
 {
-    BaseClass::setCoords( line->coords() );
-
-    if( line->colorType() == kvs::LineObject::VertexColor )
-    {
-        BaseClass::setColors( line->colors() );
-    }
-    else
-    {
-        BaseClass::setColor( line->color() );
-    }
-
-    this->setSize( line->size() );
-
-    BaseClass::setMinMaxObjectCoords(
-        line->minObjectCoord(),
-        line->maxObjectCoord() );
-
-    BaseClass::setMinMaxExternalCoords(
-        line->minExternalCoord(),
-        line->maxExternalCoord() );
+    this->shallowCopy( point );
 }
 
-PointObject::PointObject( const kvs::PolygonObject* polygon )
+PointObject::PointObject( const kvs::LineObject& line )
 {
-    BaseClass::setCoords( polygon->coords() );
+    BaseClass::setCoords( line.coords() );
 
-    if( polygon->colorType() == kvs::PolygonObject::VertexColor )
+    if( line.colorType() == kvs::LineObject::VertexColor )
     {
-        BaseClass::setColors( polygon->colors() );
+        BaseClass::setColors( line.colors() );
     }
     else
     {
-        BaseClass::setColor( polygon->color() );
+        BaseClass::setColor( line.color() );
     }
 
-    if( polygon->normalType() == kvs::PolygonObject::VertexNormal )
+    this->setSize( line.size() );
+
+    BaseClass::setMinMaxObjectCoords(
+        line.minObjectCoord(),
+        line.maxObjectCoord() );
+
+    BaseClass::setMinMaxExternalCoords(
+        line.minExternalCoord(),
+        line.maxExternalCoord() );
+}
+
+PointObject::PointObject( const kvs::PolygonObject& polygon )
+{
+    BaseClass::setCoords( polygon.coords() );
+
+    if( polygon.colorType() == kvs::PolygonObject::VertexColor )
     {
-        BaseClass::setNormals( polygon->normals() );
+        BaseClass::setColors( polygon.colors() );
+    }
+    else
+    {
+        BaseClass::setColor( polygon.color() );
+    }
+
+    if( polygon.normalType() == kvs::PolygonObject::VertexNormal )
+    {
+        BaseClass::setNormals( polygon.normals() );
     }
 
     this->setSize( 1.0f );
 
     BaseClass::setMinMaxObjectCoords(
-        polygon->minObjectCoord(),
-        polygon->maxObjectCoord() );
+        polygon.minObjectCoord(),
+        polygon.maxObjectCoord() );
 
     BaseClass::setMinMaxExternalCoords(
-        polygon->minExternalCoord(),
-        polygon->maxExternalCoord() );
+        polygon.minExternalCoord(),
+        polygon.maxExternalCoord() );
 }
 
 PointObject::~PointObject( void )
@@ -198,7 +203,39 @@ const kvs::PointObject* PointObject::DownCast( const kvs::ObjectBase* object )
     return( PointObject::DownCast( const_cast<kvs::ObjectBase*>( object ) ) );
 }
 
+PointObject& PointObject::operator = ( const PointObject& object )
+{
+    if ( this != &object )
+    {
+        this->shallowCopy( object );
+    }
+
+    return( *this );
+}
+
 PointObject& PointObject::operator += ( const PointObject& object )
+{
+    this->add( object );
+
+    return( *this );
+}
+
+std::ostream& operator << ( std::ostream& os, const PointObject& object )
+{
+    os << "Object type:  " << "point object" << std::endl;
+#ifdef KVS_COMPILER_VC
+#if KVS_COMPILER_VERSION_LESS_OR_EQUAL( 8, 0 )
+    // @TODO Cannot instance the object that is a abstract class here (error:C2259).
+#endif
+#else
+    os << static_cast<const kvs::GeometryObjectBase&>( object ) << std::endl;
+#endif
+    os << "Number of sizes:  " << object.nsizes();
+
+    return( os );
+}
+
+void PointObject::add( const PointObject& object )
 {
     if ( this->coords().size() == 0 )
     {
@@ -289,7 +326,7 @@ PointObject& PointObject::operator += ( const PointObject& object )
                 }
             }
         }
-        this->setNormals( normals );
+        BaseClass::setNormals( normals );
 
         // Integrate the color values.
         kvs::ValueArray<kvs::UInt8> colors;
@@ -383,7 +420,7 @@ PointObject& PointObject::operator += ( const PointObject& object )
                 }
             }
         }
-        this->setColors( colors );
+        BaseClass::setColors( colors );
 
         // Integrate the size values.
         kvs::ValueArray<kvs::Real32> sizes;
@@ -469,23 +506,18 @@ PointObject& PointObject::operator += ( const PointObject& object )
         }
         this->setSizes( sizes );
     }
-
-    return( *this );
 }
 
-std::ostream& operator << ( std::ostream& os, const PointObject& object )
+void PointObject::shallowCopy( const PointObject& object )
 {
-    os << "Object type:  " << "point object" << std::endl;
-#ifdef KVS_COMPILER_VC
-#if KVS_COMPILER_VERSION_LESS_OR_EQUAL( 8, 0 )
-    // @TODO Cannot instance the object that is a abstract class here (error:C2259).
-#endif
-#else
-    os << static_cast<const kvs::GeometryObjectBase&>( object ) << std::endl;
-#endif
-    os << "Number of sizes:  " << object.nsizes();
+    BaseClass::shallowCopy( object );
+    this->m_sizes.shallowCopy( object.sizes() );
+}
 
-    return( os );
+void PointObject::deepCopy( const PointObject& object )
+{
+    BaseClass::deepCopy( object );
+    this->m_sizes.deepCopy( object.sizes() );
 }
 
 void PointObject::clear( void )

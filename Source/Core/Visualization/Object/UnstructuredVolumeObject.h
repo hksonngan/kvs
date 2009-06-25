@@ -80,6 +80,12 @@ public:
 
 public:
 
+    void shallowCopy( const UnstructuredVolumeObject& object );
+
+    void deepCopy( const UnstructuredVolumeObject& object );
+
+public:
+
     void setCellType( const CellType cell_type );
 
     void setNNodes( const size_t nnodes );

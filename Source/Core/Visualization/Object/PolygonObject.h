@@ -149,6 +149,8 @@ public:
         const PolygonType                   polygon_type,
         const NormalType                    normal_type );
 
+    PolygonObject( const PolygonObject& polygon );
+
     virtual ~PolygonObject( void );
 
 public:
@@ -159,9 +161,15 @@ public:
 
 public:
 
+    PolygonObject& operator = ( const PolygonObject& object );
+
     friend std::ostream& operator << ( std::ostream& os, const PolygonObject& object );
 
 public:
+
+    void shallowCopy( const PolygonObject& object );
+
+    void deepCopy( const PolygonObject& object );
 
     void clear( void );
 

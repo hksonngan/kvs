@@ -72,6 +72,7 @@ VolumeObjectBase::VolumeObjectBase( const VolumeObjectBase& other )
     , m_min_value( other.minValue() )
     , m_max_value( other.maxValue() )
 {
+    // this->shallowCopy( other );
 }
 
 /*==========================================================================*/
@@ -266,26 +267,38 @@ void VolumeObjectBase::updateMinMaxValues( void ) const
     else if ( type == typeid( kvs::Real64 ) ) { this->calculate_min_max_values<kvs::Real64>(); }
 }
 
-/*==========================================================================*/
-/**
- *  '=' operator.
- *
- *  @param rhs [in] Structured volume.
- */
-/*==========================================================================*/
-VolumeObjectBase& VolumeObjectBase::operator =( const VolumeObjectBase& rhs )
+void VolumeObjectBase::shallowCopy( const VolumeObjectBase& object )
 {
-    BaseClass::operator=( rhs );
+    BaseClass::operator=( object );
+    this->m_has_min_max_values = object.hasMinMaxValues();
+    this->m_min_value = object.minValue();
+    this->m_max_value = object.maxValue();
+    this->m_veclen = object.veclen();
+    this->m_coords.shallowCopy( object.coords() );
+    this->m_values.shallowCopy( object.values() );
+}
 
-    m_veclen             = rhs.m_veclen;
-    m_coords             = rhs.m_coords;
-    m_values             = rhs.m_values;
+void VolumeObjectBase::deepCopy( const VolumeObjectBase& object )
+{
+    BaseClass::operator=( object );
+    this->m_has_min_max_values = object.hasMinMaxValues();
+    this->m_min_value = object.minValue();
+    this->m_max_value = object.maxValue();
+    this->m_veclen = object.veclen();
+    this->m_coords.deepCopy( object.coords() );
 
-    m_has_min_max_values = rhs.m_has_min_max_values;
-    m_min_value          = rhs.m_min_value;
-    m_max_value          = rhs.m_max_value;
-
-    return( *this );
+    const size_t size = object.values().size();
+    const std::type_info& type = object.values().typeInfo()->type();
+    if (      type == typeid( char ) )           { this->m_values.deepCopy( object.values().pointer<char>(),           size ); }
+    else if ( type == typeid( unsigned char ) )  { this->m_values.deepCopy( object.values().pointer<unsigned char>(),  size ); }
+    else if ( type == typeid( short ) )          { this->m_values.deepCopy( object.values().pointer<short>(),          size ); }
+    else if ( type == typeid( unsigned short ) ) { this->m_values.deepCopy( object.values().pointer<unsigned short>(), size ); }
+    else if ( type == typeid( int ) )            { this->m_values.deepCopy( object.values().pointer<int>(),            size ); }
+    else if ( type == typeid( unsigned int ) )   { this->m_values.deepCopy( object.values().pointer<unsigned int>(),   size ); }
+    else if ( type == typeid( long ) )           { this->m_values.deepCopy( object.values().pointer<long>(),           size ); }
+    else if ( type == typeid( unsigned long ) )  { this->m_values.deepCopy( object.values().pointer<unsigned long>(),  size ); }
+    else if ( type == typeid( float ) )          { this->m_values.deepCopy( object.values().pointer<float>(),          size ); }
+    else if ( type == typeid( double ) )         { this->m_values.deepCopy( object.values().pointer<double>(),         size ); }
 }
 
 } // end of namespace kvs

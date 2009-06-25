@@ -1,16 +1,17 @@
-/****************************************************************************/
+/*****************************************************************************/
 /**
- *  @file ObjectBase.h
+ *  @file   ObjectBase.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
- *  Copyright 2007-2008 Visualization Laboratory, Kyoto University.
+ *  Copyright 2007 Visualization Laboratory, Kyoto University.
  *  All rights reserved.
  *  See http://www.viz.media.kyoto-u.ac.jp/kvs/copyright/ for details.
  *
  *  $Id$
  */
-/****************************************************************************/
+/*****************************************************************************/
 #ifndef KVS_CORE_OBJECT_BASE_H_INCLUDE
 #define KVS_CORE_OBJECT_BASE_H_INCLUDE
 
@@ -74,17 +75,19 @@ protected:
 
 public:
 
-    ObjectBase( bool collision = true );
+    ObjectBase( const bool collision = true );
 
     ObjectBase(
-        const kvs::Vector3f&  translation,
-        const kvs::Vector3f&  scaling,
+        const kvs::Vector3f& translation,
+        const kvs::Vector3f& scaling,
         const kvs::Matrix33f& rotation,
-        bool                  collision = true );
+        const bool collision = true );
 
     virtual ~ObjectBase( void );
 
 public:
+
+    ObjectBase& operator = ( const ObjectBase& object );
 
     friend std::ostream& operator << ( std::ostream& os, const ObjectBase& object );
 

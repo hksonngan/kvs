@@ -89,6 +89,7 @@ UnstructuredVolumeObject::UnstructuredVolumeObject( const UnstructuredVolumeObje
     , m_ncells( other.m_ncells )
     , m_connections( other.m_connections )
 {
+    // this->shallowCopy( other );
 }
 
 /*==========================================================================*/
@@ -106,14 +107,12 @@ UnstructuredVolumeObject::~UnstructuredVolumeObject( void )
  *  @param volume [in] volume data
  */
 /*==========================================================================*/
-UnstructuredVolumeObject& UnstructuredVolumeObject::operator =( const UnstructuredVolumeObject& rhs )
+UnstructuredVolumeObject& UnstructuredVolumeObject::operator =( const UnstructuredVolumeObject& object )
 {
-    BaseClass::operator =( rhs );
-
-    m_cell_type   = rhs.m_cell_type;
-    m_nnodes      = rhs.m_nnodes;
-    m_ncells      = rhs.m_ncells;
-    m_connections = rhs.m_connections;
+    if ( this != &object )
+    {
+        this->shallowCopy( object );
+    }
 
     return( *this );
 }
@@ -155,6 +154,24 @@ std::ostream& operator << ( std::ostream& os, const UnstructuredVolumeObject& ob
     os << "Number of cells:  " << object.ncells();
 
     return( os );
+}
+
+void UnstructuredVolumeObject::shallowCopy( const UnstructuredVolumeObject& object )
+{
+    BaseClass::shallowCopy( object );
+    this->m_cell_type = object.cellType();
+    this->m_nnodes = object.nnodes();
+    this->m_ncells = object.ncells();
+    this->m_connections.shallowCopy( object.connections() );
+}
+
+void UnstructuredVolumeObject::deepCopy( const UnstructuredVolumeObject& object )
+{
+    BaseClass::deepCopy( object );
+    this->m_cell_type = object.cellType();
+    this->m_nnodes = object.nnodes();
+    this->m_ncells = object.ncells();
+    this->m_connections.deepCopy( object.connections() );
 }
 
 /*==========================================================================*/

@@ -1,16 +1,17 @@
-/****************************************************************************/
+/*****************************************************************************/
 /**
- *  @file LineObject.h
+ *  @file   LineObject.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
- *  Copyright 2007-2008 Visualization Laboratory, Kyoto University.
+ *  Copyright 2007 Visualization Laboratory, Kyoto University.
  *  All rights reserved.
  *  See http://www.viz.media.kyoto-u.ac.jp/kvs/copyright/ for details.
  *
  *  $Id$
  */
-/****************************************************************************/
+/*****************************************************************************/
 #ifndef KVS_CORE_LINE_OBJECT_H_INCLUDE
 #define KVS_CORE_LINE_OBJECT_H_INCLUDE
 
@@ -29,11 +30,11 @@ namespace kvs
 
 class PolygonObject;
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Line object class.
+ *  @brief  Line object class.
  */
-/*==========================================================================*/
+/*===========================================================================*/
 class LineObject : public kvs::GeometryObjectBase
 {
     // Class name.
@@ -127,7 +128,9 @@ public:
     LineObject(
         const kvs::ValueArray<kvs::Real32>& coords );
 
-    LineObject( const kvs::PolygonObject* polygon );
+    LineObject( const kvs::LineObject& line );
+
+    LineObject( const kvs::PolygonObject& polygon );
 
     virtual ~LineObject( void );
 
@@ -139,9 +142,15 @@ public:
 
 public:
 
+    LineObject& operator = ( const LineObject& object );
+
     friend std::ostream& operator << ( std::ostream& os, const LineObject& object );
 
 public:
+
+    void shallowCopy( const LineObject& object );
+
+    void deepCopy( const LineObject& object );
 
     void clear( void );
 

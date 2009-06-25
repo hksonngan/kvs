@@ -1,16 +1,17 @@
-/****************************************************************************/
+/*****************************************************************************/
 /**
- *  @file LineObject.cpp
+ *  @file   LineObject.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
- *  Copyright 2007-2008 Visualization Laboratory, Kyoto University.
+ *  Copyright 2007 Visualization Laboratory, Kyoto University.
  *  All rights reserved.
  *  See http://www.viz.media.kyoto-u.ac.jp/kvs/copyright/ for details.
  *
  *  $Id$
  */
-/****************************************************************************/
+/*****************************************************************************/
 #include "LineObject.h"
 #include "PolygonObject.h"
 #include <kvs/Assert>
@@ -164,29 +165,34 @@ LineObject::LineObject(
     this->setSize( 1.0f );
 }
 
-LineObject::LineObject( const kvs::PolygonObject* polygon )
+LineObject::LineObject( const kvs::LineObject& line )
 {
-    BaseClass::setCoords( polygon->coords() );
+    this->shallowCopy( line );
+}
 
-    if( polygon->colorType() == kvs::PolygonObject::VertexColor )
+LineObject::LineObject( const kvs::PolygonObject& polygon )
+{
+    BaseClass::setCoords( polygon.coords() );
+
+    if( polygon.colorType() == kvs::PolygonObject::VertexColor )
     {
         this->setColorType( LineObject::VertexColor );
-        BaseClass::setColors( polygon->colors() );
+        BaseClass::setColors( polygon.colors() );
     }
     else
     {
         this->setColorType( LineObject::LineColor );
-        BaseClass::setColor( polygon->color() );
+        BaseClass::setColor( polygon.color() );
     }
 
     this->setSize( 1.0f );
 
     this->setLineType( LineObject::Segment );
 
-    const size_t nconnections = polygon->nconnections();
-    const size_t ncorners     = size_t( polygon->polygonType() );
+    const size_t nconnections = polygon.nconnections();
+    const size_t ncorners     = size_t( polygon.polygonType() );
     const size_t npolygons    = ( nconnections == 0 ) ?
-        polygon->nvertices() / ncorners : nconnections;
+        polygon.nvertices() / ncorners : nconnections;
 
     kvs::ValueArray<kvs::UInt32> connections( npolygons * ncorners * 2 );
     size_t p_index = 0;
@@ -203,12 +209,12 @@ LineObject::LineObject( const kvs::PolygonObject* polygon )
     this->setConnections( connections );
 
     BaseClass::setMinMaxObjectCoords(
-        polygon->minObjectCoord(),
-        polygon->maxObjectCoord() );
+        polygon.minObjectCoord(),
+        polygon.maxObjectCoord() );
 
     BaseClass::setMinMaxExternalCoords(
-        polygon->minExternalCoord(),
-        polygon->maxExternalCoord() );
+        polygon.minExternalCoord(),
+        polygon.maxExternalCoord() );
 }
 
 LineObject::~LineObject( void )
@@ -238,6 +244,16 @@ const kvs::LineObject* LineObject::DownCast( const kvs::ObjectBase* object )
     return( LineObject::DownCast( const_cast<kvs::ObjectBase*>( object ) ) );
 }
 
+LineObject& LineObject::operator = ( const LineObject& object )
+{
+    if ( this != &object )
+    {
+        this->shallowCopy( object );
+    }
+
+    return( *this );
+}
+
 std::ostream& operator << ( std::ostream& os, const LineObject& object )
 {
     os << "Object type:  " << "line object" << std::endl;
@@ -254,6 +270,24 @@ std::ostream& operator << ( std::ostream& os, const LineObject& object )
     os << "Color type:  " << ::GetColorTypeName( object.colorType() );
 
     return( os );
+}
+
+void LineObject::shallowCopy( const LineObject& object )
+{
+    BaseClass::shallowCopy( object );
+    this->m_line_type = object.lineType();
+    this->m_color_type = object.colorType();
+    this->m_connections.shallowCopy( object.connections() );
+    this->m_sizes.shallowCopy( object.sizes() );
+}
+
+void LineObject::deepCopy( const LineObject& object )
+{
+    BaseClass::deepCopy( object );
+    this->m_line_type = object.lineType();
+    this->m_color_type = object.colorType();
+    this->m_connections.deepCopy( object.connections() );
+    this->m_sizes.deepCopy( object.sizes() );
 }
 
 void LineObject::clear( void )

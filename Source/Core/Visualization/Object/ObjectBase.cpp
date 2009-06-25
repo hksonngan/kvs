@@ -1,16 +1,17 @@
-/****************************************************************************/
+/*****************************************************************************/
 /**
- *  @file ObjectBase.cpp
+ *  @file   ObjectBase.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
- *  Copyright 2007-2008 Visualization Laboratory, Kyoto University.
+ *  Copyright 2007 Visualization Laboratory, Kyoto University.
  *  All rights reserved.
  *  See http://www.viz.media.kyoto-u.ac.jp/kvs/copyright/ for details.
  *
  *  $Id$
  */
-/****************************************************************************/
+/*****************************************************************************/
 #include "ObjectBase.h"
 #include <kvs/Camera>
 #include <kvs/Math>
@@ -20,13 +21,13 @@
 namespace kvs
 {
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Constructor.
- *  @param collision [in] collision detection flag
+ *  @brief  Constructs a new ObjectBase class.
+ *  @param  collision [in] collision detection flag
  */
-/*==========================================================================*/
-ObjectBase::ObjectBase( bool collision ) :
+/*===========================================================================*/
+ObjectBase::ObjectBase( const bool collision ) :
     kvs::XformControl( collision ),
     m_min_object_coord( kvs::Vector3f( -3.0, -3.0, -3.0 ) ),
     m_max_object_coord( kvs::Vector3f(  3.0,  3.0,  3.0 ) ),
@@ -38,21 +39,21 @@ ObjectBase::ObjectBase( bool collision ) :
 {
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Constructor.
- *  @param translation [in] translation vector
- *  @param scaling [in] scaling vector
- *  @param rotation [in] rotation matrix
- *  @param collision [in] collision detection flag
+ *  @brief  Constructs a new ObjectBase class.
+ *  @param  translation [in] translation vector
+ *  @param  scaling [in] scaling vector
+ *  @param  rotation [in] rotation matrix
+ *  @param  collision [in] collision detection flag
  */
-/*==========================================================================*/
+/*===========================================================================*/
 ObjectBase::ObjectBase(
-    const kvs::Vector3f&  t,
-    const kvs::Vector3f&  s,
-    const kvs::Matrix33f& r,
-    bool                  collision ):
-    kvs::XformControl( t, s, r, collision ),
+    const kvs::Vector3f& translation,
+    const kvs::Vector3f& scaling,
+    const kvs::Matrix33f& rotation,
+    const bool collision ):
+    kvs::XformControl( translation, scaling, rotation, collision ),
     m_min_object_coord( kvs::Vector3f( -3.0, -3.0, -3.0 ) ),
     m_max_object_coord( kvs::Vector3f(  3.0,  3.0,  3.0 ) ),
     m_min_external_coord( kvs::Vector3f( -3.0, -3.0, -3.0 ) ),
@@ -63,15 +64,44 @@ ObjectBase::ObjectBase(
 {
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Destructor.
+ *  @brief  Destructs the ObjectBase class.
  */
-/*==========================================================================*/
+/*===========================================================================*/
 ObjectBase::~ObjectBase( void )
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  '=' operator.
+ */
+/*===========================================================================*/
+ObjectBase& ObjectBase::operator = ( const ObjectBase& object )
+{
+    kvs::XformControl::operator=( object );
+
+    m_min_object_coord = object.m_min_object_coord;
+    m_max_object_coord = object.m_max_object_coord;
+    m_min_external_coord = object.m_min_external_coord;
+    m_max_external_coord = object.m_max_external_coord;
+    m_has_min_max_object_coords = object.m_has_min_max_object_coords;
+    m_has_min_max_external_coords = object.m_has_min_max_external_coords;
+    m_object_center = object.m_object_center;
+    m_external_position = object.m_external_position;
+    m_normalize = object.m_normalize;
+    m_material = object.m_material;
+    m_show_flg = object.m_show_flg;
+
+    return( *this );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  '<<' operator.
+ */
+/*===========================================================================*/
 std::ostream& operator << ( std::ostream& os, const ObjectBase& object )
 {
     const std::ios_base::fmtflags flags( os.flags() );
@@ -91,13 +121,13 @@ std::ostream& operator << ( std::ostream& os, const ObjectBase& object )
     return( os );
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Set the min/max object coordinates.
- *  @param min_coord [in] min. object coordinate value
- *  @param max_coord [in] max. object coordinate value
+ *  @breif  Sets the min/max object coordinates.
+ *  @param  min_coord [in] min. object coordinate value
+ *  @param  max_coord [in] max. object coordinate value
  */
-/*==========================================================================*/
+/*===========================================================================*/
 void ObjectBase::setMinMaxObjectCoords(
     const kvs::Vector3f& min_coord,
     const kvs::Vector3f& max_coord )
@@ -110,13 +140,13 @@ void ObjectBase::setMinMaxObjectCoords(
     this->updateNormalizeParameters();
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Set the min/max object coordinates.
- *  @param min_coord [in] min. external coordinate value
- *  @param max_coord [in] max. external coordinate value
+ *  @breif  Sets the min/max external coordinates.
+ *  @param  min_coord [in] min. external coordinate value
+ *  @param  max_coord [in] max. external coordinate value
  */
-/*==========================================================================*/
+/*===========================================================================*/
 void ObjectBase::setMinMaxExternalCoords(
     const kvs::Vector3f& min_coord,
     const kvs::Vector3f& max_coord )
@@ -129,171 +159,178 @@ void ObjectBase::setMinMaxExternalCoords(
     this->updateNormalizeParameters();
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Set the object material.
- *  @param material [in] object material
+ *  @breif  Sets the object material.
+ *  @param  material [in] object material
  */
-/*==========================================================================*/
+/*===========================================================================*/
 void ObjectBase::setMaterial( const kvs::Material& material )
 {
     m_material = material;
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Set the face.
- *  @param face [in] face
+ *  @breif  Sets the material face.
+ *  @param  face [in] material face
  */
-/*==========================================================================*/
+/*===========================================================================*/
 void ObjectBase::setFace( const Face face )
 {
     m_material.setFace( kvs::Material::MaterialFace( face ) );
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Show the object.
+ *  @brief  Shows the object.
  */
-/*==========================================================================*/
+/*===========================================================================*/
 void ObjectBase::show( void )
 {
     m_show_flg = true;
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Hide the object.
+ *  @brief  Hides the object.
  */
-/*==========================================================================*/
+/*===========================================================================*/
 void ObjectBase::hide( void )
 {
     m_show_flg = false;
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Get the min. object coordinate value.
+ *  @brief  Returns the min object coordinate value.
+ *  @return min object coordinate value
  */
-/*==========================================================================*/
+/*===========================================================================*/
 const kvs::Vector3f& ObjectBase::minObjectCoord( void ) const
 {
     return( m_min_object_coord );
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Get the max. object coordinate value.
+ *  @brief  Returns the max object coordinate value.
+ *  @return max object coordinate value
  */
-/*==========================================================================*/
+/*===========================================================================*/
 const kvs::Vector3f& ObjectBase::maxObjectCoord( void ) const
 {
     return( m_max_object_coord );
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Get the min. external coordinate value.
+ *  @brief  Returns the min external coordinate value.
+ *  @return min external coordinate value
  */
-/*==========================================================================*/
+/*===========================================================================*/
 const kvs::Vector3f& ObjectBase::minExternalCoord( void ) const
 {
     return( m_min_external_coord );
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Get the max. external coordinate value.
+ *  @brief  Returns the max external coordinate value.
+ *  @return max external coordinate value
  */
-/*==========================================================================*/
+/*===========================================================================*/
 const kvs::Vector3f& ObjectBase::maxExternalCoord( void ) const
 {
     return( m_max_external_coord );
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Test whether the object has the min/max object coordinates or not.
+ *  @brief  Test whether the object has the min/max object coordinates or not.
  *  @return true, if the object has the min/max object coordinates.
  */
-/*==========================================================================*/
+/*===========================================================================*/
 const bool ObjectBase::hasMinMaxObjectCoords( void ) const
 {
     return( m_has_min_max_object_coords );
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Test whether the object has the min/max external coordinates or not.
+ *  @brief  Test whether the object has the min/max external coordinates or not.
  *  @return true, if the object has the min/max external coordinates.
  */
-/*==========================================================================*/
+/*===========================================================================*/
 const bool ObjectBase::hasMinMaxExternalCoords( void ) const
 {
     return( m_has_min_max_external_coords );
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Get the object center coordinate value.
+ *  @brief  Returns the coordinate value of the object center.
+ *  @return coordinate value of the object center
  */
-/*==========================================================================*/
+/*===========================================================================*/
 const kvs::Vector3f& ObjectBase::objectCenter( void ) const
 {
     return( m_object_center );
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Get the object position in the external coordinate.
+ *  @brief  Returns the object position in the external coordinate.
+ *  @return object position in the external coordinate
  */
-/*==========================================================================*/
+/*===========================================================================*/
 const kvs::Vector3f& ObjectBase::externalPosition( void ) const
 {
     return( m_external_position );
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Get the normalize vector.
+ *  @brief  Returns the normalize vector.
+ *  @return normalize vector
  */
-/*==========================================================================*/
+/*===========================================================================*/
 const kvs::Vector3f& ObjectBase::normalize( void ) const
 {
     return( m_normalize );
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Test whether the object is shown or not.
+ *  @brief  Test whether the object is shown or not.
  *  @return true, if the object is shown.
  */
-/*==========================================================================*/
+/*===========================================================================*/
 const bool ObjectBase::isShown( void ) const
 {
     return( m_show_flg );
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Get the object material.
+ *  @brief  Returns the object material.
  *  @return object material
  */
-/*==========================================================================*/
+/*===========================================================================*/
 const kvs::Material& ObjectBase::material( void ) const
 {
     return( m_material );
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Get the object position in the device coordinate.
- *  @param camera [in] camera
- *  @param global_trans [in] translation vector in the global
- *  @param global_scale [in] scaling vector in the global
+ *  @brief  Returns the object position in the device coordinate.
+ *  @param  camera [in] camera
+ *  @param  global_trans [in] translation vector in the global
+ *  @param  global_scale [in] scaling vector in the global
  *  @return object position in the device coordinate
  */
-/*==========================================================================*/
+/*===========================================================================*/
 const kvs::Vector2f ObjectBase::positionInDevice(
     kvs::Camera*         camera,
     const kvs::Vector3f& global_trans,
@@ -314,14 +351,14 @@ const kvs::Vector2f ObjectBase::positionInDevice(
     return( ret );
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Get the object position in the world coordinate.
- *  @param global_trans [in] translation vector in the global
- *  @param global_scale [in] scaling vector in the global
+ *  @brief  Returns the object position in the world coordinate.
+ *  @param  global_trans [in] translation vector in the global
+ *  @param  global_scale [in] scaling vector in the global
  *  @return object position in the world coordinate
  */
-/*==========================================================================*/
+/*===========================================================================*/
 const kvs::Vector3f ObjectBase::positionInWorld(
     const kvs::Vector3f& global_trans,
     const kvs::Vector3f& global_scale ) const
@@ -335,21 +372,22 @@ const kvs::Vector3f ObjectBase::positionInWorld(
     return( kvs::Xform::translation() + init_pos * kvs::Xform::scaledRotation() );
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Get the object position in the external coordinate.
+ *  @brief  Returns the object position in the external coordinate.
+ *  @return object position in the external coordinate
  */
-/*==========================================================================*/
+/*===========================================================================*/
 const kvs::Vector3f& ObjectBase::positionInExternal( void ) const
 {
     return( m_external_position );
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Update the normalize parameters.
+ *  @brief  Updates the normalize parameters.
  */
-/*==========================================================================*/
+/*===========================================================================*/
 void ObjectBase::updateNormalizeParameters( void )
 {
     kvs::Vector3f diff_obj = m_max_object_coord   - m_min_object_coord;
@@ -371,17 +409,17 @@ void ObjectBase::updateNormalizeParameters( void )
         diff_ext.z() / diff_obj.z();
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Transform the object.
- *  @param global_trans [in] translation vector in the global
- *  @param global_scale [in] scaling vector in the global
+ *  @brief  Transform the object.
+ *  @param  global_trans [in] translation vector in the global
+ *  @param  global_scale [in] scaling vector in the global
  *
  *  This method is called in the ScreenCore::paint_event_base() in default.
  *  By calling this method, the transformation of the object is applied to
  *  OpenGL rendering engine.
  */
-/*==========================================================================*/
+/*===========================================================================*/
 void ObjectBase::transform(
     const kvs::Vector3f& global_trans,
     const kvs::Vector3f& global_scale ) const
@@ -409,32 +447,32 @@ void ObjectBase::transform(
                   -m_object_center.z() );
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Apply the object material.
+ *  @brief  Applys the object material.
  */
-/*==========================================================================*/
+/*===========================================================================*/
 void ObjectBase::applyMaterial( void )
 {
     m_material.apply();
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Execute collision detection.
- *  @param p_win [in] point in the window coordinate system
- *  @param camera [in] pointer to the camera
- *  @param global_trans [in] translation vector in the global
- *  @param global_scale [in] scaling vector in the global
+ *  @brief  Executes collision detection.
+ *  @param  p_win [in] point in the window coordinate system
+ *  @param  camera [in] pointer to the camera
+ *  @param  global_trans [in] translation vector in the global
+ *  @param  global_scale [in] scaling vector in the global
  *  @return true, if the collision is detected.
  *
  *  This method in current version is not accurate. In this version,
  *  we don't take account of depth from camera position to the object.
  */
-/*==========================================================================*/
+/*===========================================================================*/
 bool ObjectBase::collision(
     const kvs::Vector2f& p_win,
-    kvs::Camera*         camera,
+    kvs::Camera* camera,
     const kvs::Vector3f& global_trans,
     const kvs::Vector3f& global_scale )
 {
@@ -494,15 +532,15 @@ bool ObjectBase::collision(
     return( ( pos_window - center ).length() < max_distance );
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Execute collision detection.
- *  @param p_world [in] point in the world coordinate system
- *  @param global_trans [in] translation vector in the global
- *  @param global_scale [in] scaling vector in the global
+ *  @brief  Executes collision detection.
+ *  @param  p_world [in] point in the world coordinate system
+ *  @param  global_trans [in] translation vector in the global
+ *  @param  global_scale [in] scaling vector in the global
  *  @return true, if the collision is detected.
  */
-/*==========================================================================*/
+/*===========================================================================*/
 bool ObjectBase::collision(
     const kvs::Vector3f& p_world,
     const kvs::Vector3f& global_trans,
@@ -561,13 +599,13 @@ bool ObjectBase::collision(
     return( ( p_world - center ).length() < max_distance );
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Rotate the object.
- *  @param rot [in] current rotation matrix
- *  @param center [in] center of rotation
+ *  @brief  Rotates the object.
+ *  @param  rot [in] current rotation matrix
+ *  @param  center [in] center of rotation
  */
-/*==========================================================================*/
+/*===========================================================================*/
 void ObjectBase::rotate(
     const kvs::Matrix33f& rot,
     const kvs::Vector3f&  center )
@@ -577,13 +615,13 @@ void ObjectBase::rotate(
     translate( center );
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Scaling the object.
- *  @param scale [in] current scaling value.
- *  @param center [in] center of scaling
+ *  @brief  Scaling the object.
+ *  @param  scale [in] current scaling value.
+ *  @param  center [in] center of scaling
  */
-/*==========================================================================*/
+/*===========================================================================*/
 void ObjectBase::scale(
     const kvs::Vector3f& scale,
     const kvs::Vector3f& center )
@@ -593,15 +631,15 @@ void ObjectBase::scale(
     translate( center );
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Project the point from the object coord. to world coord.
- *  @param p_obj [in] point in the object coordinate
- *  @param global_trans [in] translation vector in the global
- *  @param global_scale [in] scaling vector in the global
+ *  @brief  Projects the point from the object coord. to world coord.
+ *  @param  p_obj [in] point in the object coordinate
+ *  @param  global_trans [in] translation vector in the global
+ *  @param  global_scale [in] scaling vector in the global
  *  @return projected point in the world coodinate.
  */
-/*==========================================================================*/
+/*===========================================================================*/
 const kvs::Vector3f ObjectBase::object_to_world_coordinate(
     const kvs::Vector3f& p_obj,
     const kvs::Vector3f& global_trans,

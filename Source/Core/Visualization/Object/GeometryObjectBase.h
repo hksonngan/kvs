@@ -1,16 +1,17 @@
-/****************************************************************************/
+/*****************************************************************************/
 /**
- *  @file GeometryObjectBase.h
+ *  @file   GeometryObjectBase.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
- *  Copyright 2007-2008 Visualization Laboratory, Kyoto University.
+ *  Copyright 2007 Visualization Laboratory, Kyoto University.
  *  All rights reserved.
  *  See http://www.viz.media.kyoto-u.ac.jp/kvs/copyright/ for details.
  *
  *  $Id$
  */
-/****************************************************************************/
+/*****************************************************************************/
 #ifndef KVS_CORE_GEOMETRY_OBJECT_BASE_H_INCLUDE
 #define KVS_CORE_GEOMETRY_OBJECT_BASE_H_INCLUDE
 
@@ -25,16 +26,18 @@
 namespace kvs
 {
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Geometric object class.
+ *  @brief  Geometric object class.
  */
-/*==========================================================================*/
+/*===========================================================================*/
 class GeometryObjectBase : public kvs::ObjectBase
 {
     kvsClassName( GeometryObjectBase );
 
 public:
+
+    typedef kvs::ObjectBase BaseClass;
 
     enum GeometryType
     {
@@ -91,6 +94,10 @@ public:
     friend std::ostream& operator << ( std::ostream& os, const GeometryObjectBase& object );
 
 public:
+
+    void shallowCopy( const GeometryObjectBase& object );
+
+    void deepCopy( const GeometryObjectBase& object );
 
     void clear( void );
 

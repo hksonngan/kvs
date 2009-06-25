@@ -134,6 +134,16 @@ const kvs::StructuredVolumeObject* StructuredVolumeObject::DownCast( const kvs::
     return( StructuredVolumeObject::DownCast( const_cast<kvs::ObjectBase*>( object ) ) );
 }
 
+StructuredVolumeObject& StructuredVolumeObject::operator = ( const StructuredVolumeObject& object )
+{
+    if ( this != &object )
+    {
+        this->shallowCopy( object );
+    }
+
+    return( *this );
+}
+
 std::ostream& operator << ( std::ostream& os, const StructuredVolumeObject& object )
 {
     os << "Object type:  " << "structured volume object" << std::endl;
@@ -149,6 +159,20 @@ std::ostream& operator << ( std::ostream& os, const StructuredVolumeObject& obje
     os << "Number of nodes:  " << object.nnodes();
 
     return( os );
+}
+
+void StructuredVolumeObject::shallowCopy( const StructuredVolumeObject& object )
+{
+    BaseClass::shallowCopy( object );
+    this->m_grid_type = object.gridType();
+    this->m_resolution = object.resolution();
+}
+
+void StructuredVolumeObject::deepCopy( const StructuredVolumeObject& object )
+{
+    BaseClass::deepCopy( object );
+    this->m_grid_type = object.gridType();
+    this->m_resolution = object.resolution();
 }
 
 /*==========================================================================*/
@@ -249,23 +273,6 @@ const size_t StructuredVolumeObject::nnodes( void ) const
 void StructuredVolumeObject::updateMinMaxCoords( void )
 {
     this->calculate_min_max_coords();
-}
-
-/*==========================================================================*/
-/**
- *  '=' operator.
- *
- *  @param rhs [in] Structured volume.
- */
-/*==========================================================================*/
-StructuredVolumeObject& StructuredVolumeObject::operator =( const StructuredVolumeObject& rhs )
-{
-    BaseClass::operator =( rhs );
-
-    m_grid_type  = rhs.m_grid_type;
-    m_resolution = rhs.m_resolution;
-
-    return( *this );
 }
 
 /*==========================================================================*/

@@ -1,22 +1,30 @@
-/****************************************************************************/
+/*****************************************************************************/
 /**
- *  @file ImageObject.cpp
+ *  @file   ImageObject.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
- *  Copyright 2007-2008 Visualization Laboratory, Kyoto University.
+ *  Copyright 2007 Visualization Laboratory, Kyoto University.
  *  All rights reserved.
  *  See http://www.viz.media.kyoto-u.ac.jp/kvs/copyright/ for details.
  *
  *  $Id$
  */
-/****************************************************************************/
+/*****************************************************************************/
 #include "ImageObject.h"
 
 
 namespace
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the pixel type name.
+ *  @param  type [in] pixel type
+ *  @return pixel type name
+ */
+/*===========================================================================*/
 const std::string GetPixelTypeName( const kvs::ImageObject::PixelType type )
 {
     switch( type )
@@ -35,22 +43,22 @@ const std::string GetPixelTypeName( const kvs::ImageObject::PixelType type )
 namespace kvs
 {
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Construct a new ImageObject class.
+ *  @brief  Constructs a new ImageObject class.
  */
-/*==========================================================================*/
+/*===========================================================================*/
 ImageObject::ImageObject( void )
 {
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Construct a new ImageObject class.
- *  @param width [in] image width
- *  @param height [in] image height
- *  @param data [in] pixel data array
- *  @param type [in] color type
+ *  @brief  Constructs a new ImageObject class.
+ *  @param  width [in] image width
+ *  @param  height [in] image height
+ *  @param  data [in] pixel data array
+ *  @param  type [in] color type
  */
 /*==========================================================================*/
 ImageObject::ImageObject(
@@ -62,12 +70,23 @@ ImageObject::ImageObject(
     m_width( width ),
     m_height( height )
 {
-    m_data = data; // shallow copy
+    m_data.shallowCopy( data );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new ImageObject class.
+ *  @param  other [in] image object
+ */
+/*===========================================================================*/
+ImageObject::ImageObject( const ImageObject& other )
+{
+    this->shallowCopy( other );
 }
 
 /*==========================================================================*/
 /**
- *  Destruct a ImageObject class.
+ *  @brief  Destructs the ImageObject class.
  */
 /*==========================================================================*/
 ImageObject::~ImageObject( void )
@@ -77,20 +96,25 @@ ImageObject::~ImageObject( void )
 
 /*==========================================================================*/
 /**
- *  Substitution operator.
- *  @param image [in] image object
+ *  @brief  Substitution operator.
+ *  @param  other [in] image object
  */
 /*==========================================================================*/
-ImageObject& ImageObject::operator = ( const ImageObject& image )
+ImageObject& ImageObject::operator = ( const ImageObject& other )
 {
-    m_type   = image.m_type;
-    m_width  = image.m_width;
-    m_height = image.m_height;
-    m_data   = image.m_data; // shallow copy
+    if ( this != &other )
+    {
+        this->shallowCopy( other );
+    }
 
     return( *this );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  '<<' operator.
+ */
+/*===========================================================================*/
 std::ostream& operator << ( std::ostream& os, const ImageObject& object )
 {
     os << "Object type:  " << "image object" << std::endl;
@@ -103,9 +127,39 @@ std::ostream& operator << ( std::ostream& os, const ImageObject& object )
     return( os );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Shallow copy.
+ *  @param  other [in] image object
+ */
+/*===========================================================================*/
+void ImageObject::shallowCopy( const ImageObject& other )
+{
+    BaseClass::operator=( other );
+    this->m_type = other.type();
+    this->m_width = other.width();
+    this->m_height = other.height();
+    this->m_data.shallowCopy( other.data() );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Deep copy.
+ *  @param  other [in] image object
+ */
+/*===========================================================================*/
+void ImageObject::deepCopy( const ImageObject& other )
+{
+    BaseClass::operator=( other );
+    this->m_type = other.type();
+    this->m_width = other.width();
+    this->m_height = other.height();
+    this->m_data.deepCopy( other.data() );
+}
+
 /*==========================================================================*/
 /**
- *  Return a object type.
+ *  @brief  Returns the object type.
  *  @return object type
  */
 /*==========================================================================*/
@@ -116,40 +170,40 @@ const kvs::ObjectBase::ObjectType ImageObject::objectType( void ) const
 
 /*==========================================================================*/
 /**
- *  Return a pixel type.
+ *  @brief  Returns the pixel type.
  *  @return pixel type
  */
 /*==========================================================================*/
-ImageObject::PixelType ImageObject::type( void ) const
+const ImageObject::PixelType ImageObject::type( void ) const
 {
     return( m_type );
 }
 
 /*==========================================================================*/
 /**
- *  Return a image width.
+ *  @brief  Returns the image width.
  *  @return image width
  */
 /*==========================================================================*/
-size_t ImageObject::width( void ) const
+const size_t ImageObject::width( void ) const
 {
     return( m_width );
 }
 
 /*==========================================================================*/
 /**
- *  Return a image height.
+ *  @brief  Returns the image height.
  *  @return image height
  */
 /*==========================================================================*/
-size_t ImageObject::height( void ) const
+const size_t ImageObject::height( void ) const
 {
     return( m_height );
 }
 
 /*==========================================================================*/
 /**
- *  Return a pixel data array.
+ *  @brief  Returns the pixel data array.
  *  @return pixel data array
  */
 /*==========================================================================*/
@@ -160,33 +214,33 @@ const kvs::ValueArray<kvs::UInt8>& ImageObject::data( void ) const
 
 /*==========================================================================*/
 /**
- *  Return a number of bits per pixel.
+ *  @brief  Returns the number of bits per pixel.
  *  @return number of bits per pixel
  */
 /*==========================================================================*/
-size_t ImageObject::bitsPerPixel( void ) const
+const size_t ImageObject::bitsPerPixel( void ) const
 {
     return( m_type );
 }
 
 /*==========================================================================*/
 /**
- *  Return a number of bytes per pixel.
+ *  @brief  Returns the number of bytes per pixel.
  *  @return number of bytes per pixel
  */
 /*==========================================================================*/
-size_t ImageObject::bytesPerPixel( void ) const
+const size_t ImageObject::bytesPerPixel( void ) const
 {
     return( m_type >> 3 );
 }
 
 /*==========================================================================*/
 /**
- *  Return a number of color channels.
+ *  @brief  Returns the number of color channels.
  *  @return number of color channels
  */
 /*==========================================================================*/
-size_t ImageObject::nchannels( void ) const
+const size_t ImageObject::nchannels( void ) const
 {
     size_t ret = 0;
     switch ( m_type )
@@ -203,11 +257,11 @@ size_t ImageObject::nchannels( void ) const
 
 /*==========================================================================*/
 /**
- *  Return a number of pixels.
+ *  @brief  Returns the number of pixels.
  *  @return number of pixels
  */
 /*==========================================================================*/
-size_t ImageObject::get_npixels( void ) const
+const size_t ImageObject::get_npixels( void ) const
 {
     return( ( m_type >> 3 ) * m_width * m_height );
 }

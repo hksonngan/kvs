@@ -1,16 +1,17 @@
-/****************************************************************************/
+/*****************************************************************************/
 /**
- *  @file ImageObject.h
+ *  @file   ImageObject.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
- *  Copyright 2007-2008 Visualization Laboratory, Kyoto University.
+ *  Copyright 2007 Visualization Laboratory, Kyoto University.
  *  All rights reserved.
  *  See http://www.viz.media.kyoto-u.ac.jp/kvs/copyright/ for details.
  *
  *  $Id$
  */
-/****************************************************************************/
+/*****************************************************************************/
 #ifndef KVS_CORE_IMAGE_OBJECT_H_INCLUDE
 #define KVS_CORE_IMAGE_OBJECT_H_INCLUDE
 
@@ -24,11 +25,11 @@
 namespace kvs
 {
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Image object structure.
+ *  @brief  Image object class.
  */
-/*==========================================================================*/
+/*===========================================================================*/
 class ImageObject : public kvs::ObjectBase
 {
     // Class name.
@@ -65,6 +66,8 @@ public:
         const kvs::ValueArray<kvs::UInt8>& data,
         const ImageObject::PixelType       type = ImageObject::Color24 );
 
+    ImageObject( const ImageObject& other );
+
     virtual ~ImageObject( void );
 
 public:
@@ -75,25 +78,31 @@ public:
 
 public:
 
+    void shallowCopy( const ImageObject& object );
+
+    void deepCopy( const ImageObject& object );
+
+public:
+
     const ObjectType objectType( void ) const;
 
-    ImageObject::PixelType type( void ) const;
+    const ImageObject::PixelType type( void ) const;
 
-    size_t width( void ) const;
+    const size_t width( void ) const;
 
-    size_t height( void ) const;
+    const size_t height( void ) const;
 
     const kvs::ValueArray<kvs::UInt8>& data( void ) const;
 
-    size_t bitsPerPixel( void ) const;
+    const size_t bitsPerPixel( void ) const;
 
-    size_t bytesPerPixel( void ) const;
+    const size_t bytesPerPixel( void ) const;
 
-    size_t nchannels( void ) const;
+    const size_t nchannels( void ) const;
 
 protected:
 
-    size_t get_npixels( void ) const;
+    const size_t get_npixels( void ) const;
 };
 
 } // end of namespace kvs
