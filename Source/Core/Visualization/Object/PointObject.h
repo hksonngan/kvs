@@ -117,6 +117,8 @@ public:
 
 public:
 
+    PointObject& operator += ( const PointObject& object );
+
     friend std::ostream& operator << ( std::ostream& os, const PointObject& object );
 
 public:
