@@ -207,5 +207,59 @@ const kvs::ValueArray<kvs::Real32>& GeometryObjectBase::normals( void ) const
 {
     return( m_normals );
 }
+/*==========================================================================*/
+/**
+ *  Update the min/max node coordinates.
+ */
+/*==========================================================================*/
+void GeometryObjectBase::updateMinMaxCoords( void )
+{
+    this->calculate_min_max_coords();
+}
+
+/*==========================================================================*/
+/**
+ *  Calculate the min/max coordinate values.
+ */
+/*==========================================================================*/
+void GeometryObjectBase::calculate_min_max_coords( void )
+{
+    kvs::Vector3f min_coord( 0.0f );
+    kvs::Vector3f max_coord( 0.0f );
+
+    const kvs::Real32* coord = this->coords().pointer();
+    const kvs::Real32* const end = coord + this->coords().size();
+
+    kvs::Real32 x = *( coord++ );
+    kvs::Real32 y = *( coord++ );
+    kvs::Real32 z = *( coord++ );
+
+    min_coord.set( x, y, z );
+    max_coord.set( x, y, z );
+
+    while ( coord < end )
+    {
+        x = *( coord++ );
+        y = *( coord++ );
+        z = *( coord++ );
+
+        min_coord.x() = kvs::Math::Min( min_coord.x(), x );
+        min_coord.y() = kvs::Math::Min( min_coord.y(), y );
+        min_coord.z() = kvs::Math::Min( min_coord.z(), z );
+
+        max_coord.x() = kvs::Math::Max( max_coord.x(), x );
+        max_coord.y() = kvs::Math::Max( max_coord.y(), y );
+        max_coord.z() = kvs::Math::Max( max_coord.z(), z );
+    }
+
+    this->setMinMaxObjectCoords( min_coord, max_coord );
+
+    if ( !( this->hasMinMaxExternalCoords() ) )
+    {
+        this->setMinMaxExternalCoords(
+            this->minObjectCoord(),
+            this->maxObjectCoord() );
+    }
+}
 
 } // end of namespace kvs

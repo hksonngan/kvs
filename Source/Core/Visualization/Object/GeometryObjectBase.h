@@ -131,6 +131,14 @@ public:
     const kvs::ValueArray<kvs::UInt8>& colors( void ) const;
 
     const kvs::ValueArray<kvs::Real32>& normals( void ) const;
+
+public:
+
+    void updateMinMaxCoords( void );
+
+private:
+
+    void calculate_min_max_coords( void );
 };
 
 } // end of namespace kvs
