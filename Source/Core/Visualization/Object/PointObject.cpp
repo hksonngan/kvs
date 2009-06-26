@@ -410,13 +410,13 @@ void PointObject::add( const PointObject& other )
         kvs::Vector3f min_object_coord( BaseClass::minObjectCoord() );
         kvs::Vector3f max_object_coord( BaseClass::maxObjectCoord() );
 
-        min_object_coord.x() = kvs::Math::Min( min_object_coord.x(), object.minObjectCoord().x() );
-        min_object_coord.y() = kvs::Math::Min( min_object_coord.y(), object.minObjectCoord().y() );
-        min_object_coord.z() = kvs::Math::Min( min_object_coord.z(), object.minObjectCoord().z() );
+        min_object_coord.x() = kvs::Math::Min( min_object_coord.x(), other.minObjectCoord().x() );
+        min_object_coord.y() = kvs::Math::Min( min_object_coord.y(), other.minObjectCoord().y() );
+        min_object_coord.z() = kvs::Math::Min( min_object_coord.z(), other.minObjectCoord().z() );
 
-        max_object_coord.x() = kvs::Math::Max( max_object_coord.x(), object.maxObjectCoord().x() );
-        max_object_coord.y() = kvs::Math::Max( max_object_coord.y(), object.maxObjectCoord().y() );
-        max_object_coord.z() = kvs::Math::Max( max_object_coord.z(), object.maxObjectCoord().z() );
+        max_object_coord.x() = kvs::Math::Max( max_object_coord.x(), other.maxObjectCoord().x() );
+        max_object_coord.y() = kvs::Math::Max( max_object_coord.y(), other.maxObjectCoord().y() );
+        max_object_coord.z() = kvs::Math::Max( max_object_coord.z(), other.maxObjectCoord().z() );
 
         BaseClass::setMinMaxObjectCoords( min_object_coord, max_object_coord );
         BaseClass::setMinMaxExternalCoords( min_object_coord, max_object_coord );
