@@ -103,7 +103,7 @@ public:
     PointObject(
         const kvs::ValueArray<kvs::Real32>& coords );
 
-    PointObject( const kvs::PointObject& point );
+    PointObject( const kvs::PointObject& other );
 
     PointObject( const kvs::LineObject& line );
 
@@ -119,19 +119,19 @@ public:
 
 public:
 
-    PointObject& operator = ( const PointObject& object );
+    PointObject& operator = ( const PointObject& other );
 
-    PointObject& operator += ( const PointObject& object );
+    PointObject& operator += ( const PointObject& other );
 
     friend std::ostream& operator << ( std::ostream& os, const PointObject& object );
 
 public:
 
-    void add( const PointObject& object );
+    void add( const PointObject& other );
 
-    void shallowCopy( const PointObject& object );
+    void shallowCopy( const PointObject& other );
 
-    void deepCopy( const PointObject& object );
+    void deepCopy( const PointObject& other );
 
     void clear( void );
 

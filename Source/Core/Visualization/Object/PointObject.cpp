@@ -1,16 +1,17 @@
-/****************************************************************************/
+/*****************************************************************************/
 /**
- *  @file PointObject.cpp
+ *  @file   PointObject.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
- *  Copyright 2007-2008 Visualization Laboratory, Kyoto University.
+ *  Copyright 2007 Visualization Laboratory, Kyoto University.
  *  All rights reserved.
  *  See http://www.viz.media.kyoto-u.ac.jp/kvs/copyright/ for details.
  *
  *  $Id$
  */
-/****************************************************************************/
+/*****************************************************************************/
 #include "PointObject.h"
 #include "LineObject.h"
 #include "PolygonObject.h"
@@ -20,10 +21,24 @@
 namespace kvs
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new PointObject class.
+ */
+/*===========================================================================*/
 PointObject::PointObject( void )
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new PointObject class.
+ *  @param  coords [in] coordinate value array
+ *  @param  colors [in] color value array
+ *  @param  normals [in] normal vector array
+ *  @param  sizes [in] size value array
+ */
+/*===========================================================================*/
 PointObject::PointObject(
     const kvs::ValueArray<kvs::Real32>& coords,
     const kvs::ValueArray<kvs::UInt8>&  colors,
@@ -34,6 +49,15 @@ PointObject::PointObject(
     this->setSizes( sizes );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new PointObject class.
+ *  @param  coords [in] coordinate value array
+ *  @param  colors [in] color value array
+ *  @param  normals [in] normal vector array
+ *  @param  size [in] size value
+ */
+/*===========================================================================*/
 PointObject::PointObject(
     const kvs::ValueArray<kvs::Real32>& coords,
     const kvs::ValueArray<kvs::UInt8>&  colors,
@@ -44,6 +68,15 @@ PointObject::PointObject(
     this->setSize( size );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new PointObject class.
+ *  @param  coords [in] coordinate value array
+ *  @param  color [in] color value array
+ *  @param  normals [in] normal vector array
+ *  @param  sizes [in] size value array
+ */
+/*===========================================================================*/
 PointObject::PointObject(
     const kvs::ValueArray<kvs::Real32>& coords,
     const kvs::RGBColor&                color,
@@ -54,6 +87,14 @@ PointObject::PointObject(
     this->setSizes( sizes );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new PointObject class.
+ *  @param  coords [in] coordinate value array
+ *  @param  normals [in] normal vector array
+ *  @param  sizes [in] size value array
+ */
+/*===========================================================================*/
 PointObject::PointObject(
     const kvs::ValueArray<kvs::Real32>& coords,
     const kvs::ValueArray<kvs::Real32>& normals,
@@ -63,6 +104,15 @@ PointObject::PointObject(
     this->setSizes( sizes );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new PointObject class.
+ *  @param  coords [in] coordinate value array
+ *  @param  color [in] color value
+ *  @param  normals [in] normal vector array
+ *  @param  size [in] size value
+ */
+/*===========================================================================*/
 PointObject::PointObject(
     const kvs::ValueArray<kvs::Real32>& coords,
     const kvs::RGBColor&                color,
@@ -73,6 +123,14 @@ PointObject::PointObject(
     this->setSize( size );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new PointObject class.
+ *  @param  coords [in] coordinate value array
+ *  @param  colors [in] color value array
+ *  @param  sizes [in] size value array
+ */
+/*===========================================================================*/
 PointObject::PointObject(
     const kvs::ValueArray<kvs::Real32>& coords,
     const kvs::ValueArray<kvs::UInt8>&  colors,
@@ -82,6 +140,14 @@ PointObject::PointObject(
     this->setSizes( sizes );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new PointObject class.
+ *  @param  coords [in] coordinate value array
+ *  @param  color [in] color value
+ *  @param  sizes [in] size value array
+ */
+/*===========================================================================*/
 PointObject::PointObject(
     const kvs::ValueArray<kvs::Real32>& coords,
     const kvs::RGBColor&                color,
@@ -93,6 +159,14 @@ PointObject::PointObject(
     this->setSizes( sizes );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new PointObject class.
+ *  @param  coords [in] coordinate value array
+ *  @param  colors [in] color value array
+ *  @param  size [in] size value
+ */
+/*===========================================================================*/
 PointObject::PointObject(
     const kvs::ValueArray<kvs::Real32>& coords,
     const kvs::ValueArray<kvs::UInt8>&  colors,
@@ -102,6 +176,14 @@ PointObject::PointObject(
     this->setSize( size );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new PointObject class.
+ *  @param  coords [in] coordinate value array
+ *  @param  color [in] color value
+ *  @param  size [in] size value
+ */
+/*===========================================================================*/
 PointObject::PointObject(
     const kvs::ValueArray<kvs::Real32>& coords,
     const kvs::RGBColor&                color,
@@ -111,6 +193,12 @@ PointObject::PointObject(
     this->setSize( size );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new PointObject class.
+ *  @param  coords [in] coordinate value array
+ */
+/*===========================================================================*/
 PointObject::PointObject(
     const kvs::ValueArray<kvs::Real32>& coords ):
     kvs::GeometryObjectBase( coords )
@@ -118,11 +206,23 @@ PointObject::PointObject(
     this->setSize( 1 );
 }
 
-PointObject::PointObject( const kvs::PointObject& point )
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new PointObject class.
+ *  @param  other [in] point object
+ */
+/*===========================================================================*/
+PointObject::PointObject( const kvs::PointObject& other )
 {
-    this->shallowCopy( point );
+    this->shallowCopy( other );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new PointObject class.
+ *  @param  line [in] line object
+ */
+/*===========================================================================*/
 PointObject::PointObject( const kvs::LineObject& line )
 {
     BaseClass::setCoords( line.coords() );
@@ -147,6 +247,12 @@ PointObject::PointObject( const kvs::LineObject& line )
         line.maxExternalCoord() );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new PointObject class.
+ *  @param  polygon [in] polygon object
+ */
+/*===========================================================================*/
 PointObject::PointObject( const kvs::PolygonObject& polygon )
 {
     BaseClass::setCoords( polygon.coords() );
@@ -176,11 +282,23 @@ PointObject::PointObject( const kvs::PolygonObject& polygon )
         polygon.maxExternalCoord() );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Destructs the PointObject class.
+ */
+/*===========================================================================*/
 PointObject::~PointObject( void )
 {
     this->clear();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Downcasts to the pointer to the point object.
+ *  @param  object [in] pointer to the object
+ *  @return pointer to the point object
+ */
+/*===========================================================================*/
 kvs::PointObject* PointObject::DownCast( kvs::ObjectBase* object )
 {
     kvs::GeometryObjectBase* geometry = kvs::GeometryObjectBase::DownCast( object );
@@ -198,28 +316,52 @@ kvs::PointObject* PointObject::DownCast( kvs::ObjectBase* object )
     return( point );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Downcasts to the pointer to the point object with 'const'.
+ *  @param  object [in] pointer to the object
+ *  @return pointer to the point object
+ */
+/*===========================================================================*/
 const kvs::PointObject* PointObject::DownCast( const kvs::ObjectBase* object )
 {
     return( PointObject::DownCast( const_cast<kvs::ObjectBase*>( object ) ) );
 }
 
-PointObject& PointObject::operator = ( const PointObject& object )
+/*===========================================================================*/
+/**
+ *  @brief  '='operator.
+ *  @param  other [in] point object
+ */
+/*===========================================================================*/
+PointObject& PointObject::operator = ( const PointObject& other )
 {
-    if ( this != &object )
+    if ( this != &other )
     {
-        this->shallowCopy( object );
+        this->shallowCopy( other );
     }
 
     return( *this );
 }
 
-PointObject& PointObject::operator += ( const PointObject& object )
+/*===========================================================================*/
+/**
+ *  @brief  '+=' operator.
+ *  @param  other [in] point object
+ */
+/*===========================================================================*/
+PointObject& PointObject::operator += ( const PointObject& other )
 {
-    this->add( object );
+    this->add( other );
 
     return( *this );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  '<<' operator
+ */
+/*===========================================================================*/
 std::ostream& operator << ( std::ostream& os, const PointObject& object )
 {
     os << "Object type:  " << "point object" << std::endl;
@@ -235,22 +377,28 @@ std::ostream& operator << ( std::ostream& os, const PointObject& object )
     return( os );
 }
 
-void PointObject::add( const PointObject& object )
+/*===========================================================================*/
+/**
+ *  @brief  Add the point object.
+ *  @param  other [in] point object
+ */
+/*===========================================================================*/
+void PointObject::add( const PointObject& other )
 {
     if ( this->coords().size() == 0 )
     {
         // Copy the object.
-        BaseClass::setCoords( object.coords() );
-        BaseClass::setNormals( object.normals() );
-        BaseClass::setColors( object.colors() );
-        this->setSizes( object.sizes() );
+        BaseClass::setCoords( other.coords() );
+        BaseClass::setNormals( other.normals() );
+        BaseClass::setColors( other.colors() );
+        this->setSizes( other.sizes() );
 
         BaseClass::setMinMaxObjectCoords(
-            object.minObjectCoord(),
-            object.maxObjectCoord() );
+            other.minObjectCoord(),
+            other.maxObjectCoord() );
         BaseClass::setMinMaxExternalCoords(
-            object.minExternalCoord(),
-            object.maxExternalCoord() );
+            other.minExternalCoord(),
+            other.maxExternalCoord() );
     }
     else
     {
@@ -275,13 +423,13 @@ void PointObject::add( const PointObject& object )
 
         // Integrate the coordinate values.
         kvs::ValueArray<kvs::Real32> coords;
-        const size_t ncoords = this->coords().size() + object.coords().size();
+        const size_t ncoords = this->coords().size() + other.coords().size();
         kvs::Real32* pcoords = coords.allocate( ncoords );
         if ( pcoords != NULL )
         {
             // x,y,z, ... + x,y,z, ... = x,y,z, ... ,x,y,z, ...
             memcpy( pcoords, this->coords().pointer(), this->coords().byteSize() );
-            memcpy( pcoords + this->coords().size(), object.coords().pointer(), object.coords().byteSize() );
+            memcpy( pcoords + this->coords().size(), other.coords().pointer(), other.coords().byteSize() );
         }
         BaseClass::setCoords( coords );
 
@@ -289,40 +437,40 @@ void PointObject::add( const PointObject& object )
         kvs::ValueArray<kvs::Real32> normals;
         if ( this->normals().size() > 0 )
         {
-            if ( object.normals().size() > 0 )
+            if ( other.normals().size() > 0 )
             {
                 // nx,ny,nz, ... + nx,ny,nz, ... = nx,ny,nz, ... ,nx,ny,nz, ...
-                const size_t nnormals = this->normals().size() + object.normals().size();
+                const size_t nnormals = this->normals().size() + other.normals().size();
                 kvs::Real32* pnormals = normals.allocate( nnormals );
                 if ( pnormals != NULL )
                 {
                     memcpy( pnormals, this->normals().pointer(), this->normals().byteSize() );
-                    memcpy( pnormals + this->normals().size(), object.normals().pointer(), object.normals().byteSize() );
+                    memcpy( pnormals + this->normals().size(), other.normals().pointer(), other.normals().byteSize() );
                 }
             }
             else
             {
                 // nx,ny,nz, ... + (none) = nx,ny,nz, ... ,0,0,0, ...
-                const size_t nnormals = this->normals().size() + object.coords().size();
+                const size_t nnormals = this->normals().size() + other.coords().size();
                 kvs::Real32* pnormals = normals.allocate( nnormals );
                 if ( pnormals != NULL )
                 {
                     memcpy( pnormals, this->normals().pointer(), this->normals().byteSize() );
-                    memset( pnormals + this->normals().size(), 0, object.coords().byteSize() );
+                    memset( pnormals + this->normals().size(), 0, other.coords().byteSize() );
                 }
             }
         }
         else
         {
-            if ( object.normals().size() > 0 )
+            if ( other.normals().size() > 0 )
             {
-                const size_t nnormals = this->coords().size() + object.normals().size();
+                const size_t nnormals = this->coords().size() + other.normals().size();
                 kvs::Real32* pnormals = normals.allocate( nnormals );
                 if ( pnormals != NULL )
                 {
                     // (none) + nx,ny,nz, ... = 0,0,0, ... ,nz,ny,nz, ...
                     memset( pnormals, 0, this->coords().byteSize() );
-                    memcpy( pnormals + this->coords().size(), object.normals().pointer(), object.normals().byteSize() );
+                    memcpy( pnormals + this->coords().size(), other.normals().pointer(), other.normals().byteSize() );
                 }
             }
         }
@@ -332,28 +480,28 @@ void PointObject::add( const PointObject& object )
         kvs::ValueArray<kvs::UInt8> colors;
         if ( this->colors().size() > 1 )
         {
-            if ( object.colors().size() > 1 )
+            if ( other.colors().size() > 1 )
             {
                 // r,g,b, ... + r,g,b, ... = r,g,b, ... ,r,g,b, ...
-                const size_t ncolors = this->colors().size() + object.colors().size();
+                const size_t ncolors = this->colors().size() + other.colors().size();
                 kvs::UInt8* pcolors = colors.allocate( ncolors );
                 if ( pcolors != NULL )
                 {
                     memcpy( pcolors, this->colors().pointer(), this->colors().byteSize() );
-                    memcpy( pcolors + this->colors().size(), object.colors().pointer(), object.colors().byteSize() );
+                    memcpy( pcolors + this->colors().size(), other.colors().pointer(), other.colors().byteSize() );
                 }
             }
             else
             {
                 // r,g,b, ... + R,G,B = r,g,b, ... ,R,G,B, ... ,R,G,B
-                const size_t ncolors = this->colors().size() + object.coords().size();
+                const size_t ncolors = this->colors().size() + other.coords().size();
                 kvs::UInt8* pcolors = colors.allocate( ncolors );
                 if ( pcolors != NULL )
                 {
                     memcpy( pcolors, this->colors().pointer(), this->colors().byteSize() );
                     pcolors += this->colors().size();
-                    const kvs::RGBColor color = object.color();
-                    for ( size_t i = 0; i < object.coords().size(); i += 3 )
+                    const kvs::RGBColor color = other.color();
+                    for ( size_t i = 0; i < other.coords().size(); i += 3 )
                     {
                         *(pcolors++) = color.r();
                         *(pcolors++) = color.g();
@@ -364,10 +512,10 @@ void PointObject::add( const PointObject& object )
         }
         else
         {
-            if ( object.colors().size() > 1 )
+            if ( other.colors().size() > 1 )
             {
                 // R,G,B + r,g,b, ... = R,G,B, ... ,R,G,B, r,g,b, ...
-                const size_t ncolors = this->coords().size() + object.colors().size();
+                const size_t ncolors = this->coords().size() + other.colors().size();
                 kvs::UInt8* pcolors = colors.allocate( ncolors );
                 if ( pcolors != NULL )
                 {
@@ -378,13 +526,13 @@ void PointObject::add( const PointObject& object )
                         *(pcolors++) = color.g();
                         *(pcolors++) = color.b();
                     }
-                    memcpy( pcolors, object.colors().pointer(), object.colors().byteSize() );
+                    memcpy( pcolors, other.colors().pointer(), other.colors().byteSize() );
                 }
             }
             else
             {
                 const kvs::RGBColor color1 = this->color();
-                const kvs::RGBColor color2 = object.color();
+                const kvs::RGBColor color2 = other.color();
                 if ( color1 == color2 )
                 {
                     // R,G,B + R,G,B = R,G,B
@@ -400,7 +548,7 @@ void PointObject::add( const PointObject& object )
                 else
                 {
                     // R,G,B + R,G,B = R,G,B, ... ,R,G,B, ...
-                    const size_t ncolors = this->coords().size() + object.coords().size();
+                    const size_t ncolors = this->coords().size() + other.coords().size();
                     kvs::UInt8* pcolors = colors.allocate( ncolors );
                     if ( pcolors != NULL )
                     {
@@ -410,7 +558,7 @@ void PointObject::add( const PointObject& object )
                             *(pcolors++) = color1.g();
                             *(pcolors++) = color1.b();
                         }
-                        for ( size_t i = 0; i < object.coords().size(); i += 3 )
+                        for ( size_t i = 0; i < other.coords().size(); i += 3 )
                         {
                             *(pcolors++) = color2.r();
                             *(pcolors++) = color2.g();
@@ -426,28 +574,28 @@ void PointObject::add( const PointObject& object )
         kvs::ValueArray<kvs::Real32> sizes;
         if ( this->sizes().size() > 1 )
         {
-            if ( object.sizes().size() > 1 )
+            if ( other.sizes().size() > 1 )
             {
                 // s, ... + s, ... = s, ... ,s, ...
-                const size_t nsizes = this->sizes().size() + object.sizes().size();
+                const size_t nsizes = this->sizes().size() + other.sizes().size();
                 kvs::Real32* psizes = sizes.allocate( nsizes );
                 if ( psizes != NULL )
                 {
                     memcpy( psizes, this->sizes().pointer(), this->sizes().byteSize() );
-                    memcpy( psizes + this->sizes().size(), object.sizes().pointer(), object.sizes().byteSize() );
+                    memcpy( psizes + this->sizes().size(), other.sizes().pointer(), other.sizes().byteSize() );
                 }
             }
             else
             {
                 // s, ... + S = s, ... ,S, ... ,S
-                const size_t nsizes = this->sizes().size() + object.coords().size();
+                const size_t nsizes = this->sizes().size() + other.coords().size();
                 kvs::Real32* psizes = sizes.allocate( nsizes );
                 if ( psizes != NULL )
                 {
                     memcpy( psizes, this->sizes().pointer(), this->sizes().byteSize() );
                     psizes += this->colors().size();
-                    const kvs::Real32 size = object.size();
-                    for ( size_t i = 0; i < object.coords().size(); i++ )
+                    const kvs::Real32 size = other.size();
+                    for ( size_t i = 0; i < other.coords().size(); i++ )
                     {
                         *(psizes++) = size;
                     }
@@ -456,10 +604,10 @@ void PointObject::add( const PointObject& object )
         }
         else
         {
-            if ( object.sizes().size() > 1 )
+            if ( other.sizes().size() > 1 )
             {
                 // S + s, ... = S, ... ,S, s, ...
-                const size_t nsizes = this->coords().size() + object.sizes().size();
+                const size_t nsizes = this->coords().size() + other.sizes().size();
                 kvs::Real32* psizes = sizes.allocate( nsizes );
                 if ( psizes != NULL )
                 {
@@ -468,13 +616,13 @@ void PointObject::add( const PointObject& object )
                     {
                         *(psizes++) = size;
                     }
-                    memcpy( psizes, object.sizes().pointer(), object.sizes().byteSize() );
+                    memcpy( psizes, other.sizes().pointer(), other.sizes().byteSize() );
                 }
             }
             else
             {
                 const kvs::Real32 size1 = this->size();
-                const kvs::Real32 size2 = object.size();
+                const kvs::Real32 size2 = other.size();
                 if ( size1 == size2 )
                 {
                     // S + S = S
@@ -488,7 +636,7 @@ void PointObject::add( const PointObject& object )
                 else
                 {
                     // S + S = S, ... , S, ...
-                    const size_t nsizes = this->coords().size() + object.coords().size();
+                    const size_t nsizes = this->coords().size() + other.coords().size();
                     kvs::Real32* psizes = sizes.allocate( nsizes );
                     if ( psizes != NULL )
                     {
@@ -496,7 +644,7 @@ void PointObject::add( const PointObject& object )
                         {
                             *(psizes++) = size1;
                         }
-                        for ( size_t i = 0; i < object.coords().size(); i++ )
+                        for ( size_t i = 0; i < other.coords().size(); i++ )
                         {
                             *(psizes++) = size2;
                         }
@@ -508,50 +656,104 @@ void PointObject::add( const PointObject& object )
     }
 }
 
-void PointObject::shallowCopy( const PointObject& object )
+/*===========================================================================*/
+/**
+ *  @brief  Shallow copy the point object.
+ *  @param  other [in] point object
+ */
+/*===========================================================================*/
+void PointObject::shallowCopy( const PointObject& other )
 {
-    BaseClass::shallowCopy( object );
-    this->m_sizes.shallowCopy( object.sizes() );
+    BaseClass::shallowCopy( other );
+    m_sizes.shallowCopy( other.sizes() );
 }
 
-void PointObject::deepCopy( const PointObject& object )
+/*===========================================================================*/
+/**
+ *  @brief  Deep copy the point object.
+ *  @param  other [in] point object
+ */
+/*===========================================================================*/
+void PointObject::deepCopy( const PointObject& other )
 {
-    BaseClass::deepCopy( object );
-    this->m_sizes.deepCopy( object.sizes() );
+    BaseClass::deepCopy( other );
+    m_sizes.deepCopy( other.sizes() );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Clear the point object.
+ */
+/*===========================================================================*/
 void PointObject::clear( void )
 {
     BaseClass::clear();
     m_sizes.deallocate();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets a size value array.
+ *  @param  sizes [in] size value array
+ */
+/*===========================================================================*/
 void PointObject::setSizes( const kvs::ValueArray<kvs::Real32>& sizes )
 {
     m_sizes = sizes;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets a size value.
+ *  @param  size [in] size value
+ */
+/*===========================================================================*/
 void PointObject::setSize( const kvs::Real32 size )
 {
     m_sizes.allocate( 1 );
     m_sizes[0] = size;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the geometry type.
+ *  @return geometry type
+ */
+/*===========================================================================*/
 const PointObject::BaseClass::GeometryType PointObject::geometryType( void ) const
 {
     return( BaseClass::Point );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the number of size values.
+ *  @return number of size values
+ */
+/*===========================================================================*/
 const size_t PointObject::nsizes( void ) const
 {
     return( m_sizes.size() );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the size value which is specified by the index.
+ *  @param  index [in] index of the size value array
+ *  @return size value
+ */
+/*===========================================================================*/
 const kvs::Real32 PointObject::size( const size_t index ) const
 {
     return( m_sizes[index] );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the size value array.
+ *  @return size value array
+ */
+/*===========================================================================*/
 const kvs::ValueArray<kvs::Real32>& PointObject::sizes( void ) const
 {
     return( m_sizes );
