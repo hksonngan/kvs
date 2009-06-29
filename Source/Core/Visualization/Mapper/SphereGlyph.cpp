@@ -106,7 +106,178 @@ void SphereGlyph::setNStacks( const size_t nstacks )
 /*===========================================================================*/
 kvs::ObjectBase* SphereGlyph::exec( const kvs::ObjectBase* object )
 {
-    const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
+    if ( object->objectType() == kvs::ObjectBase::Geometry )
+    {
+        const kvs::GeometryObjectBase* geometry = kvs::GeometryObjectBase::DownCast( object );
+        if ( geometry->geometryType() == kvs::GeometryObjectBase::Point )
+        {
+            const kvs::PointObject* point = kvs::PointObject::DownCast( geometry );
+            return( this->exec_point_object( point ) );
+        }
+    }
+    else if ( object->objectType() == kvs::ObjectBase::Volume )
+    {
+        const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
+        return( this->exec_volume_object( volume ) );
+    }
+
+    kvsMessageError("Unsupported object.");
+    return( this );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Draw the sphere glyph.
+ */
+/*===========================================================================*/
+void SphereGlyph::draw( void )
+{
+    if ( !m_sphere )
+    {
+        m_sphere = gluNewQuadric();
+        gluQuadricDrawStyle( m_sphere, GLU_FILL );
+        gluQuadricNormals( m_sphere, GLU_SMOOTH );
+    }
+
+    this->initialize();
+    BaseClass::applyMaterial();
+
+    const size_t npoints = BaseClass::m_coords.size() / 3;
+
+    if ( BaseClass::m_directions.size() == 0 )
+    {
+        for ( size_t i = 0, index = 0; i < npoints; i++, index += 3 )
+        {
+            const kvs::Vector3f position( BaseClass::m_coords.pointer() + index );
+            const kvs::Real32 size = BaseClass::m_sizes[i];
+            const kvs::RGBColor color( BaseClass::m_colors.pointer() + index );
+            const kvs::UInt8 opacity = BaseClass::m_opacities[i];
+            glPushMatrix();
+            {
+                BaseClass::transform( position, size );
+                this->draw_element( color, opacity );
+            }
+            glPopMatrix();
+        }
+    }
+    else
+    {
+        for( size_t i = 0, index = 0; i < npoints; i++, index += 3 )
+        {
+            const kvs::Vector3f position( BaseClass::m_coords.pointer() + index );
+            const kvs::Vector3f direction( BaseClass::m_directions.pointer() + index );
+            const kvs::Real32 size = BaseClass::m_sizes[i];
+            const kvs::RGBColor color( BaseClass::m_colors.pointer() + index );
+            const kvs::UInt8 opacity = BaseClass::m_opacities[i];
+            glPushMatrix();
+            {
+                BaseClass::transform( position, direction, size );
+                this->draw_element( color, opacity );
+            }
+            glPopMatrix();
+        }
+    }
+}
+
+kvs::ObjectBase* SphereGlyph::exec_point_object( const kvs::PointObject* point )
+{
+    const size_t nvertices = point->nvertices();
+
+//    BaseClass::set_min_max_coords( point, this );
+    {
+        kvs::Vector3f min_coord( 0.0f );
+        kvs::Vector3f max_coord( 0.0f );
+
+        const kvs::Real32* coord = point->coords().pointer();
+        const kvs::Real32* const end = coord + point->coords().size();
+
+        kvs::Real32 x = *( coord++ );
+        kvs::Real32 y = *( coord++ );
+        kvs::Real32 z = *( coord++ );
+
+        min_coord.set( x, y, z );
+        max_coord.set( x, y, z );
+
+        while ( coord < end )
+        {
+            x = *( coord++ );
+            y = *( coord++ );
+            z = *( coord++ );
+
+            min_coord.x() = kvs::Math::Min( min_coord.x(), x );
+            min_coord.y() = kvs::Math::Min( min_coord.y(), y );
+            min_coord.z() = kvs::Math::Min( min_coord.z(), z );
+
+            max_coord.x() = kvs::Math::Max( max_coord.x(), x );
+            max_coord.y() = kvs::Math::Max( max_coord.y(), y );
+            max_coord.z() = kvs::Math::Max( max_coord.z(), z );
+        }
+
+        BaseClass::setMinMaxObjectCoords( min_coord, max_coord );
+
+        if ( !( point->hasMinMaxExternalCoords() ) )
+        {
+            BaseClass::setMinMaxExternalCoords(
+                point->minObjectCoord(),
+                point->maxObjectCoord() );
+        }
+        else
+        {
+            BaseClass::setMinMaxExternalCoords(
+                point->minExternalCoord(),
+                point->maxExternalCoord() );
+        }
+    }
+
+    BaseClass::setCoords( point->coords() );
+
+    if ( BaseClass::m_direction_mode == BaseClass::DirectionByNormal )
+    {
+        if ( point->nnormals() != 0 )
+        {
+            BaseClass::setDirections( point->normals() );
+        }
+    }
+
+    if ( point->nsizes() == 1 )
+    {
+        const kvs::Real32 size = point->size();
+        kvs::ValueArray<kvs::Real32> sizes( nvertices );
+        for ( size_t i = 0; i < nvertices; i++ ) sizes[i] = size;
+        BaseClass::setSizes( sizes );
+    }
+    else
+    {
+        BaseClass::setSizes( point->sizes() );
+    }
+
+    if ( point->ncolors() == 1 )
+    {
+        const kvs::RGBColor color = point->color();
+        kvs::ValueArray<kvs::UInt8> colors( nvertices * 3 );
+        for ( size_t i = 0, j = 0; i < nvertices; i++, j += 3 )
+        {
+            colors[j]   = color.r();
+            colors[j+1] = color.r();
+            colors[j+2] = color.r();
+        }
+        BaseClass::setColors( colors );
+    }
+    else
+    {
+        BaseClass::setColors( point->colors() );
+    }
+
+    const kvs::UInt8 opacity = static_cast<kvs::UInt8>( 255 );
+    kvs::ValueArray<kvs::UInt8> opacities( nvertices );
+    for ( size_t i = 0; i < nvertices; i++ ) opacities[i] = opacity;
+    BaseClass::setOpacities( opacities );
+
+    return( this );
+}
+
+kvs::ObjectBase* SphereGlyph::exec_volume_object( const kvs::VolumeObjectBase* volume )
+{
     BaseClass::attach_volume( volume );
     BaseClass::set_min_max_coords( volume, this );
 
@@ -175,60 +346,6 @@ kvs::ObjectBase* SphereGlyph::exec( const kvs::ObjectBase* object )
     }
 
     return( this );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Draw the sphere glyph.
- */
-/*===========================================================================*/
-void SphereGlyph::draw( void )
-{
-    if ( !m_sphere )
-    {
-        m_sphere = gluNewQuadric();
-        gluQuadricDrawStyle( m_sphere, GLU_FILL );
-        gluQuadricNormals( m_sphere, GLU_SMOOTH );
-    }
-
-    this->initialize();
-    BaseClass::applyMaterial();
-
-    const size_t npoints = BaseClass::m_coords.size() / 3;
-
-    if ( BaseClass::m_directions.size() == 0 )
-    {
-        for ( size_t i = 0, index = 0; i < npoints; i++, index += 3 )
-        {
-            const kvs::Vector3f position( BaseClass::m_coords.pointer() + index );
-            const kvs::Real32 size = BaseClass::m_sizes[i];
-            const kvs::RGBColor color( BaseClass::m_colors.pointer() + index );
-            const kvs::UInt8 opacity = BaseClass::m_opacities[i];
-            glPushMatrix();
-            {
-                BaseClass::transform( position, size );
-                this->draw_element( color, opacity );
-            }
-            glPopMatrix();
-        }
-    }
-    else
-    {
-        for( size_t i = 0, index = 0; i < npoints; i++, index += 3 )
-        {
-            const kvs::Vector3f position( BaseClass::m_coords.pointer() + index );
-            const kvs::Vector3f direction( BaseClass::m_directions.pointer() + index );
-            const kvs::Real32 size = BaseClass::m_sizes[i];
-            const kvs::RGBColor color( BaseClass::m_colors.pointer() + index );
-            const kvs::UInt8 opacity = BaseClass::m_opacities[i];
-            glPushMatrix();
-            {
-                BaseClass::transform( position, direction, size );
-                this->draw_element( color, opacity );
-            }
-            glPopMatrix();
-        }
-    }
 }
 
 /*===========================================================================*/

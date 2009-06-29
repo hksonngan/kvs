@@ -15,6 +15,7 @@
 #define KVS__SPHERE_GLYPH_H_INCLUDE
 
 #include "GlyphBase.h"
+#include <kvs/PointObject>
 #include <kvs/MapperBase>
 #include <kvs/ClassName>
 #include <kvs/Module>
@@ -48,6 +49,9 @@ public:
     SphereGlyph( void );
 
     SphereGlyph(
+        const kvs::PointObject* point );
+
+    SphereGlyph(
         const kvs::VolumeObjectBase* volume );
 
     SphereGlyph(
@@ -75,6 +79,10 @@ public:
     void draw( void );
 
 protected:
+
+    kvs::ObjectBase* exec_point_object( const kvs::PointObject* point );
+
+    kvs::ObjectBase* exec_volume_object( const kvs::VolumeObjectBase* volume );
 
     void draw_element( const kvs::RGBColor& color, const kvs::UInt8 opacity );
 
