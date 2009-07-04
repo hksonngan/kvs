@@ -24,7 +24,15 @@
 #include "ExtractEdges.h"
 #include "ExtractVertices.h"
 #include "ExternalFaces.h"
+#include "RayCastingRenderer.h"
 #include <kvs/Message>
+
+
+#define KVSVIEW_HELP( method )                                          \
+    if ( help == #method ) return( method ::Argument( m_argc, m_argv ).parse() )
+
+#define KVSVIEW_EXEC( method )                                          \
+    if ( arg.hasOption( #method ) ) return( method ::Main( m_argc, m_argv ).exec() )
 
 
 namespace kvsview
@@ -53,36 +61,42 @@ bool Main::exec( void )
     Argument arg( m_argc, m_argv );
     if( !arg.read() ) return( false );
 
+    // Output help messsage for the specified visualization method.
     if ( arg.hasOption("help") )
     {
-        const std::string c = arg.optionValue<std::string>("help");
-        if ( c == "Default" ) return( Default::Argument( m_argc, m_argv ).parse() );
-        if ( c == "PointRenderer" ) return( PointRenderer::Argument( m_argc, m_argv ).parse() );
-        if ( c == "LineRenderer" ) return( LineRenderer::Argument( m_argc, m_argv ).parse() );
-        if ( c == "PolygonRenderer" ) return( PolygonRenderer::Argument( m_argc, m_argv ).parse() );
-        if ( c == "Isosurface" ) return( Isosurface::Argument( m_argc, m_argv ).parse() );
-        if ( c == "SlicePlane" ) return( SlicePlane::Argument( m_argc, m_argv ).parse() );
-        if ( c == "OrthoSlice" ) return( OrthoSlice::Argument( m_argc, m_argv ).parse() );
-        if ( c == "TransferFunction" ) return( TransferFunction::Argument( m_argc, m_argv ).parse() );
-        if ( c == "ExtractEdges" ) return( ExtractEdges::Argument( m_argc, m_argv ).parse() );
-        if ( c == "ExtractVertices" ) return( ExtractVertices::Argument( m_argc, m_argv ).parse() );
-        if ( c == "ExternalFaces" ) return( ExternalFaces::Argument( m_argc, m_argv ).parse() );
+        const std::string help = arg.optionValue<std::string>("help");
+        KVSVIEW_HELP( Default );
+        KVSVIEW_HELP( PointRenderer );
+        KVSVIEW_HELP( LineRenderer );
+        KVSVIEW_HELP( PolygonRenderer );
+        KVSVIEW_HELP( Isosurface );
+        KVSVIEW_HELP( SlicePlane );
+        KVSVIEW_HELP( OrthoSlice );
+        KVSVIEW_HELP( TransferFunction );
+        KVSVIEW_HELP( ExtractEdges );
+        KVSVIEW_HELP( ExtractVertices );
+        KVSVIEW_HELP( ExternalFaces );
+        KVSVIEW_HELP( RayCastingRenderer );
 
-        kvsMessageError( "Unknown viewer '%s'.", c.c_str() );
+        kvsMessageError( "Unknown visualization method '%s'.", help.c_str() );
         return( false );
     }
 
-    if ( arg.hasOption("Defulat") ) return( Default::Main( m_argc, m_argv ).exec() );
-    if ( arg.hasOption("PointRenderer") ) return( PointRenderer::Main( m_argc, m_argv ).exec() );
-    if ( arg.hasOption("LineRenderer") ) return( LineRenderer::Main( m_argc, m_argv ).exec() );
-    if ( arg.hasOption("PolygonRenderer") ) return( PolygonRenderer::Main( m_argc, m_argv ).exec() );
-    if ( arg.hasOption("Isosurface") ) return( Isosurface::Main( m_argc, m_argv ).exec() );
-    if ( arg.hasOption("SlicePlane") ) return( SlicePlane::Main( m_argc, m_argv ).exec() );
-    if ( arg.hasOption("OrthoSlice") ) return( OrthoSlice::Main( m_argc, m_argv ).exec() );
-    if ( arg.hasOption("TransferFunction") ) return( TransferFunction::Main( m_argc, m_argv ).exec() );
-    if ( arg.hasOption("ExtractEdges") ) return( ExtractEdges::Main( m_argc, m_argv ).exec() );
-    if ( arg.hasOption("ExtractVertices") ) return( ExtractVertices::Main( m_argc, m_argv ).exec() );
-    if ( arg.hasOption("ExternalFaces") ) return( ExternalFaces::Main( m_argc, m_argv ).exec() );
+    // Execute the specified visualization method.
+    {
+        KVSVIEW_EXEC( Default );
+        KVSVIEW_EXEC( PointRenderer );
+        KVSVIEW_EXEC( LineRenderer );
+        KVSVIEW_EXEC( PolygonRenderer );
+        KVSVIEW_EXEC( Isosurface );
+        KVSVIEW_EXEC( SlicePlane );
+        KVSVIEW_EXEC( OrthoSlice );
+        KVSVIEW_EXEC( TransferFunction );
+        KVSVIEW_EXEC( ExtractEdges );
+        KVSVIEW_EXEC( ExtractVertices );
+        KVSVIEW_EXEC( ExternalFaces );
+        KVSVIEW_EXEC( RayCastingRenderer );
+    }
 
     return( Default::Main( m_argc, m_argv ).exec() );
 }
