@@ -89,6 +89,11 @@ void Shader::Lambert::set( const Camera* camera, const Light* light )
     L = -light->position().normalize();
 }
 
+const Shader::Type Shader::Lambert::type( void ) const
+{
+    return( Shader::LambertShading );
+}
+
 /*==========================================================================*/
 /**
  *  Get the attenuation value.
@@ -100,7 +105,7 @@ inline const float Shader::Lambert::attenuation( const float gradient[3] ) const
     // Normal vector.
     const kvs::Vector3f N( kvs::Vector3f( gradient ).normalize() );
 
-    //const float dd = kvs::Math::Max( N.dot( L ), 0.0 );
+    //const float dd = kvs::Math::Max( N.dot( L ), 0.0f );
     const float dd = kvs::Math::Abs( N.dot( L ) );
 
     /* I = Ia + Id
@@ -176,6 +181,11 @@ void Shader::Phong::set( const kvs::Camera* camera, const kvs::Light* light )
     L = -light->position().normalize();
 }
 
+const Shader::Type Shader::Phong::type( void ) const
+{
+    return( Shader::PhongShading );
+}
+
 /*==========================================================================*/
 /**
  *  Get the attenuation value.
@@ -236,14 +246,19 @@ Shader::BlinnPhong::BlinnPhong( const Shader::BlinnPhong& shader )
 
 /*==========================================================================*/
 /**
- *  Consturctor.
- *  @param camera [in] pointer to the camera
- *  @param light [in] pointer to the light
+ *  Constructor.
+ *  @param ka [in] ambient
+ *  @param kd [in] diffuse
+ *  @param ks [in] specular
+ *  @param s [in] shininess
  */
 /*==========================================================================*/
-Shader::BlinnPhong::BlinnPhong( const kvs::Camera* camera, const kvs::Light* light )
+Shader::BlinnPhong::BlinnPhong( const float ka, const float kd, const float ks, const float s )
 {
-    this->set( camera, light );
+    Ka = ka;
+    Kd = kd;
+    Ks = ks;
+    S  = s;
 }
 
 /*==========================================================================*/
@@ -258,6 +273,11 @@ void Shader::BlinnPhong::set( const kvs::Camera* camera, const kvs::Light* light
     C = -camera->position().normalize();
     L = -light->position().normalize();
     H = ( C + L ).normalize();
+}
+
+const Shader::Type Shader::BlinnPhong::type( void ) const
+{
+    return( Shader::BlinnPhongShading );
 }
 
 /*==========================================================================*/

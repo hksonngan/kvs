@@ -31,6 +31,14 @@ class Shader
 {
 public:
 
+    enum Type
+    {
+        UnknownShading = 0, ///< unknown shading type
+        LambertShading,     ///< Lambertian shading
+        PhongShading,       ///< Phong shading
+        BlinnPhongShading   ///< Blinn-Phong shading
+    };
+
     struct Base
     {
         kvs::Vector3f C; ///< direction of the camera
@@ -41,6 +49,8 @@ public:
         virtual ~Base( void );
 
         virtual void set( const kvs::Camera* camera, const kvs::Light* light ) = 0;
+
+        virtual const Shader::Type type( void ) const = 0;
 
         virtual const float attenuation( const float gradient[3] ) const = 0;
     };
@@ -64,6 +74,8 @@ public:
 
         void set( const kvs::Camera* camera, const kvs::Light* light );
 
+        const Shader::Type type( void ) const;
+
         const float attenuation( const float gradient[3] ) const;
     };
 
@@ -82,6 +94,8 @@ public:
 
         void set( const kvs::Camera* camera, const kvs::Light* light );
 
+        const Shader::Type type( void ) const;
+
         const float attenuation( const float gradient[3] ) const;
     };
 
@@ -97,9 +111,11 @@ public:
 
         BlinnPhong( const BlinnPhong& shader );
 
-        BlinnPhong( const kvs::Camera* camera, const kvs::Light* light );
+        BlinnPhong( const float ka, const float kd, const float ks, const float s );
 
         void set( const kvs::Camera* camera, const kvs::Light* light );
+
+        const Shader::Type type( void ) const;
 
         const float attenuation( const float gradient[3] ) const;
     };
