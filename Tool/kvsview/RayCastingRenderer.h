@@ -47,6 +47,8 @@ public:
 
     const bool noshading( void );
 
+    const bool nolod( void );
+
     const float ka( void );
 
     const float kd( void );

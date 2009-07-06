@@ -40,8 +40,9 @@ class RayCastingRenderer : public kvs::VolumeRendererBase
 
 private:
 
-    float m_step;   ///< sampling step
+    float m_step; ///< sampling step
     float m_opaque; ///< opaque value for early ray termination
+    size_t m_ray_width; ///< ray width
 
 public:
 
@@ -70,6 +71,16 @@ public:
     void setOpaqueValue( const float opaque )
     {
         m_opaque = opaque;
+    }
+
+    void enableCoarseRendering( const size_t ray_width = 3 )
+    {
+        m_ray_width = ray_width;
+    }
+
+    void disableCoarseRendering( void )
+    {
+        m_ray_width = 1;
     }
 
 private:

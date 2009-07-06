@@ -53,6 +53,7 @@ void RayCastingRenderer::initialize( void )
     m_opaque = 0.97f;
     m_width  = 0;
     m_height = 0;
+    m_ray_width = 1;
 }
 
 void RayCastingRenderer::exec(
@@ -140,8 +141,9 @@ void RayCastingRenderer::rasterize(
     const size_t height = BaseClass::m_height;
     const size_t width  = BaseClass::m_width;
 
-    const float  step  = m_step;
+    const float step = m_step;
     const float opaque = m_opaque;
+    const size_t ray_width = m_ray_width;
 
     const kvs::Shader::shader_type* const shader = m_shader;
     const kvs::ColorMap&   cmap = BaseClass::transferFunction().colorMap();
@@ -149,9 +151,10 @@ void RayCastingRenderer::rasterize(
 
     size_t depth_index = 0;
     size_t pixel_index = 0;
-    for ( size_t y = 0; y < height; ++y )
+    for ( size_t y = 0; y < height; y += ray_width )
     {
-        for ( size_t x = 0; x < width; ++x )
+        const size_t offset = y * width;
+        for ( size_t x = 0; x < width; x += ray_width, depth_index = offset + x, pixel_index = depth_index * 4 )
         {
             ray.setOrigin( x, y );
 
@@ -198,9 +201,46 @@ void RayCastingRenderer::rasterize(
             {
                 depth_data[ depth_index ] = 1.0;
             }
+        }
+    }
 
-            ++depth_index;
-            pixel_index += 4;
+    // Mosaicing by using ray_width x ray_width mask.
+    if ( ray_width > 1 )
+    {
+        pixel_index = 0;
+        depth_index = 0;
+        for ( size_t y = 0; y < height; y += ray_width )
+        {
+            // Shift the y position of the mask by -ray_width/2.
+            const size_t Y = kvs::Math::Max( int( y - ray_width / 2 ), 0 );
+
+            const size_t offset = y * width;
+            for ( size_t x = 0; x < width; x += ray_width, depth_index = offset + x, pixel_index = depth_index * 4 )
+            {
+                // Shift the x position of the mask by -ray_width/2.
+                const size_t X = kvs::Math::Max( int( x - ray_width / 2 ), 0 );
+
+                const kvs::UInt8  r = pixel[ pixel_index ];
+                const kvs::UInt8  g = pixel[ pixel_index + 1 ];
+                const kvs::UInt8  b = pixel[ pixel_index + 2 ];
+                const kvs::UInt8  a = pixel[ pixel_index + 3 ];
+                const kvs::Real32 d = depth_data[ depth_index ];
+                for ( size_t j = 0; j < ray_width && Y + j < height; j++ )
+                {
+                    const size_t J = Y + j;
+                    for ( size_t i = 0; i < ray_width && X + i < width; i++ )
+                    {
+                        const size_t I = X + i;
+                        const size_t index = J * width + I;
+                        const size_t index4 = index * 4;
+                        pixel[ index4 ] = r;
+                        pixel[ index4 + 1 ] = g;
+                        pixel[ index4 + 2 ] = b;
+                        pixel[ index4 + 3 ] = a;
+                        depth_data[ index ] = d;
+                    }
+                }
+            }
         }
     }
 }

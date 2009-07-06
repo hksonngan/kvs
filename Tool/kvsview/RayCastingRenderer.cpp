@@ -48,6 +48,28 @@ inline const bool CheckVolumeData( const std::string& filename )
     return( false );
 }
 
+void PaintEvent( void )
+{
+    const kvs::RendererBase* base = kvs::glut::Global::renderer_manager->renderer();
+    kvs::RayCastingRenderer* renderer = (kvs::RayCastingRenderer*)base;
+    if ( kvs::glut::Global::mouse->isAuto() ) renderer->enableCoarseRendering();
+}
+
+void MousePressEvent( kvs::MouseEvent* ev )
+{
+    const kvs::RendererBase* base = kvs::glut::Global::renderer_manager->renderer();
+    kvs::RayCastingRenderer* renderer = (kvs::RayCastingRenderer*)base;
+    renderer->enableCoarseRendering();
+}
+
+void MouseReleaseEvent( kvs::MouseEvent* ev )
+{
+    const kvs::RendererBase* base = kvs::glut::Global::renderer_manager->renderer();
+    kvs::RayCastingRenderer* renderer = (kvs::RayCastingRenderer*)base;
+    renderer->disableCoarseRendering();
+    kvs::glut::Screen::redraw();
+}
+
 } // end of namespace
 
 
@@ -71,6 +93,7 @@ Argument::Argument( int argc, char** argv ):
     add_option( kvsview::RayCastingRenderer::CommandName, kvsview::RayCastingRenderer::Description, 0 );
     add_option( "t", "Transfer function file. (optional: <filename>)", 1, false );
     add_option( "noshading", "Disable shading. (optional)", 0, false );
+    add_option( "nolod", "Disable Level-of-Detail control. (optional)", 0, false );
     add_option( "ka", "Coefficient of the ambient color. (default: 0.5)", 1, false );
     add_option( "kd", "Coefficient of the diffuse color. (default: 0.5)", 1, false );
     add_option( "ks", "Coefficient of the specular color. (default: 0.3)", 1, false );
@@ -92,6 +115,11 @@ const int Argument::shader( void )
 const bool Argument::noshading( void )
 {
     return( this->hasOption("noshading") );
+}
+
+const bool Argument::nolod( void )
+{
+    return( this->hasOption("nolod") );
 }
 
 const float Argument::ka( void )
@@ -173,6 +201,9 @@ const bool Main::exec( void )
     // Create a global and screen class.
     kvs::glut::Global global( m_argc, m_argv );
     kvs::glut::Screen screen( 512, 512 );
+    screen.addPaintEvent( ::PaintEvent );
+    screen.addMousePressEvent( ::MousePressEvent );
+    screen.addMouseReleaseEvent( ::MouseReleaseEvent );
     screen.setTitle( kvsview::CommandName + " - " + kvsview::RayCastingRenderer::CommandName );
     arg.applyTo( screen );
 
