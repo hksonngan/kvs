@@ -20,6 +20,7 @@
 #include <kvs/PipelineModule>
 #include <kvs/VisualizationPipeline>
 #include <kvs/RayCastingRenderer>
+#include <kvs/Bounds>
 #include <kvs/glut/Global>
 #include <kvs/glut/Screen>
 
@@ -48,23 +49,28 @@ inline const bool CheckVolumeData( const std::string& filename )
     return( false );
 }
 
+bool HasBounds = false;
+
 void PaintEvent( void )
 {
-    const kvs::RendererBase* base = kvs::glut::Global::renderer_manager->renderer();
+    const int id = ::HasBounds ? 2 : 1;
+    const kvs::RendererBase* base = kvs::glut::Global::renderer_manager->renderer( id );
     kvs::RayCastingRenderer* renderer = (kvs::RayCastingRenderer*)base;
     if ( kvs::glut::Global::mouse->isAuto() ) renderer->enableCoarseRendering();
 }
 
 void MousePressEvent( kvs::MouseEvent* ev )
 {
-    const kvs::RendererBase* base = kvs::glut::Global::renderer_manager->renderer();
+    const int id = ::HasBounds ? 2 : 1;
+    const kvs::RendererBase* base = kvs::glut::Global::renderer_manager->renderer( id );
     kvs::RayCastingRenderer* renderer = (kvs::RayCastingRenderer*)base;
     renderer->enableCoarseRendering();
 }
 
 void MouseReleaseEvent( kvs::MouseEvent* ev )
 {
-    const kvs::RendererBase* base = kvs::glut::Global::renderer_manager->renderer();
+    const int id = ::HasBounds ? 2 : 1;
+    const kvs::RendererBase* base = kvs::glut::Global::renderer_manager->renderer( id );
     kvs::RayCastingRenderer* renderer = (kvs::RayCastingRenderer*)base;
     renderer->disableCoarseRendering();
     kvs::glut::Screen::redraw();
@@ -205,7 +211,6 @@ const bool Main::exec( void )
     screen.addMousePressEvent( ::MousePressEvent );
     screen.addMouseReleaseEvent( ::MouseReleaseEvent );
     screen.setTitle( kvsview::CommandName + " - " + kvsview::RayCastingRenderer::CommandName );
-    arg.applyTo( screen );
 
     // Check the input point data.
     m_input_name = arg.value<std::string>();
@@ -225,6 +230,29 @@ const bool Main::exec( void )
         std::cout << "IMPORTED OBJECT" << std::endl;
         std::cout << kvsview::ObjectInformation( pipe.object() ) << std::endl;
         std::cout << std::endl;
+    }
+
+    // For bounding box.
+    if ( arg.hasOption("bounds") )
+    {
+        ::HasBounds = true;
+
+        kvs::LineObject* bounds = new kvs::Bounds( pipe.object() );
+
+        bounds->setColor( kvs::RGBColor( 0, 0, 0 ) );
+        if ( arg.hasOption("bounds_color") )
+        {
+            const kvs::UInt8 r( static_cast<kvs::UInt8>(arg.optionValue<int>("bounds_color",0)) );
+            const kvs::UInt8 g( static_cast<kvs::UInt8>(arg.optionValue<int>("bounds_color",1)) );
+            const kvs::UInt8 b( static_cast<kvs::UInt8>(arg.optionValue<int>("bounds_color",2)) );
+            bounds->setColor( kvs::RGBColor( r, g, b ) );
+        }
+
+        kvs::VisualizationPipeline p( bounds );
+        p.exec();
+        p.renderer()->disableShading();
+
+        global.insert( p );
     }
 
     // Set up a RayCastingRenderer class.
@@ -294,6 +322,7 @@ const bool Main::exec( void )
 
     // Apply the specified parameters to the global and the visualization pipeline.
     arg.applyTo( global, pipe );
+    arg.applyTo( screen );
 
     // Show the screen.
     return( screen.show() != 0 );
