@@ -105,7 +105,7 @@ ifeq "$(KVS_SUPPORT_OPENCV)" "1"
 LINK_LIBRARY += -lkvsSupportOpenCV $(OPENCV_LINK_LIBRARY)
 endif
 
-LINK_LIBRARY += $(GL_LINK_LIBRARY)
+LINK_LIBRARY += $(GL_LINK_LIBRARY) -lkvsCore
 
 
 #=============================================================================
