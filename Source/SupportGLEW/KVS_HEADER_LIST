@@ -1,4 +1,6 @@
 GLEW
+Renderer/EnsembleAverageBuffer
+Renderer/ParticleVolumeRenderer
 Viewer/BufferObject
 Viewer/FragmentShader
 Viewer/FrameBufferObject

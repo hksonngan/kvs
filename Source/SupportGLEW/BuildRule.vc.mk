@@ -3,6 +3,8 @@
 
 
 OBJECTS = \
+$(OUTDIR)\.\Renderer\EnsembleAverageBuffer.obj \
+$(OUTDIR)\.\Renderer\ParticleVolumeRenderer.obj \
 $(OUTDIR)\.\Viewer\BufferObject.obj \
 $(OUTDIR)\.\Viewer\FragmentShader.obj \
 $(OUTDIR)\.\Viewer\FrameBufferObject.obj \
@@ -25,9 +27,19 @@ $(OUTDIR)\.\Viewer\VertexShader.obj \
 $<
 <<
 
+{.\Renderer\}.cpp{$(OUTDIR)\.\Renderer\}.obj::
+	IF NOT EXIST $(OUTDIR)\.\Renderer $(MKDIR) $(OUTDIR)\.\Renderer
+	$(CPP) /c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) /Fo$(OUTDIR)\.\Renderer\ @<<
+$<
+<<
+
 
 install::
 	IF NOT EXIST $(INSTALL_DIR)\include\SupportGLEW\. $(MKDIR) $(INSTALL_DIR)\include\SupportGLEW\.
 	$(INSTALL) .\*.h $(INSTALL_DIR)\include\SupportGLEW\.
+	IF NOT EXIST $(INSTALL_DIR)\include\SupportGLEW\.\Renderer $(MKDIR) $(INSTALL_DIR)\include\SupportGLEW\.\Renderer
+	$(INSTALL) .\Renderer\*.h $(INSTALL_DIR)\include\SupportGLEW\.\Renderer
+	IF NOT EXIST $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\ParticleVolumeRenderer $(MKDIR) $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\ParticleVolumeRenderer
+	$(INSTALL) .\Renderer\ParticleVolumeRenderer\*.h $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\ParticleVolumeRenderer
 	IF NOT EXIST $(INSTALL_DIR)\include\SupportGLEW\.\Viewer $(MKDIR) $(INSTALL_DIR)\include\SupportGLEW\.\Viewer
 	$(INSTALL) .\Viewer\*.h $(INSTALL_DIR)\include\SupportGLEW\.\Viewer
