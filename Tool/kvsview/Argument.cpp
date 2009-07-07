@@ -24,6 +24,7 @@
 #include "ExtractVertices.h"
 #include "ExternalFaces.h"
 #include "RayCastingRenderer.h"
+#include "ParticleVolumeRenderer.h"
 #include <kvs/Bounds>
 #include <kvs/AxisObject>
 #include <kvs/glut/AxisRenderer>
@@ -56,6 +57,7 @@ Argument::Argument( int argc, char** argv ):
     add_option( kvsview::ExtractVertices::CommandName, kvsview::ExtractVertices::Description, 0 );
     add_option( kvsview::ExternalFaces::CommandName, kvsview::ExternalFaces::Description, 0 );
     add_option( kvsview::RayCastingRenderer::CommandName, kvsview::RayCastingRenderer::Description, 0 );
+    add_option( kvsview::ParticleVolumeRenderer::CommandName, kvsview::ParticleVolumeRenderer::Description, 0 );
 
     add_value( "input data file", false );
 }

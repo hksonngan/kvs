@@ -26,7 +26,8 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-ParticleVolumeRenderer::ParticleVolumeRenderer( void )
+ParticleVolumeRenderer::ParticleVolumeRenderer( void ):
+    m_ref_point( NULL )
 {
     BaseClass::setShader( kvs::Shader::Lambert() );
 
@@ -42,7 +43,8 @@ ParticleVolumeRenderer::ParticleVolumeRenderer( void )
 /*==========================================================================*/
 ParticleVolumeRenderer::ParticleVolumeRenderer(
     const kvs::PointObject* point,
-    const size_t            subpixel_level )
+    const size_t            subpixel_level ):
+    m_ref_point( NULL )
 {
     BaseClass::setShader( kvs::Shader::Lambert() );
 
@@ -77,9 +79,7 @@ void ParticleVolumeRenderer::exec(
     if( !m_enable_rendering ) return;
 
     kvs::PointObject* point = reinterpret_cast<kvs::PointObject*>(object);
-
-    KVS_ASSERT( m_ref_point == point );
-    KVS_ASSERT( m_ref_point );
+    if ( !m_ref_point ) this->attachPointObject( point );
 
     BaseClass::m_timer.start();
 

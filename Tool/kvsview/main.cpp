@@ -25,6 +25,7 @@
 #include "ExtractVertices.h"
 #include "ExternalFaces.h"
 #include "RayCastingRenderer.h"
+#include "ParticleVolumeRenderer.h"
 #include <kvs/Message>
 
 
@@ -77,6 +78,7 @@ bool Main::exec( void )
         KVSVIEW_HELP( ExtractVertices );
         KVSVIEW_HELP( ExternalFaces );
         KVSVIEW_HELP( RayCastingRenderer );
+        KVSVIEW_HELP( ParticleVolumeRenderer );
 
         kvsMessageError( "Unknown visualization method '%s'.", help.c_str() );
         return( false );
@@ -96,6 +98,7 @@ bool Main::exec( void )
         KVSVIEW_EXEC( ExtractVertices );
         KVSVIEW_EXEC( ExternalFaces );
         KVSVIEW_EXEC( RayCastingRenderer );
+        KVSVIEW_EXEC( ParticleVolumeRenderer );
     }
 
     return( Default::Main( m_argc, m_argv ).exec() );

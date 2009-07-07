@@ -424,9 +424,9 @@ const size_t ParticleVolumeRenderer::Renderer::byteSize( void ) const
  *  @brief  Constructs a new ParticleVolumeRenderer class.
  */
 /*===========================================================================*/
-ParticleVolumeRenderer::ParticleVolumeRenderer( void )
+ParticleVolumeRenderer::ParticleVolumeRenderer( void ):
+    m_ref_point( NULL )
 {
-    kvs::glew::Initialize();
     BaseClass::setShader( kvs::Shader::Lambert() );
     this->initialize();
 }
@@ -442,7 +442,8 @@ ParticleVolumeRenderer::ParticleVolumeRenderer( void )
 ParticleVolumeRenderer::ParticleVolumeRenderer(
     kvs::PointObject* point,
     const size_t subpixel_level,
-    const size_t repeat_level )
+    const size_t repeat_level ):
+    m_ref_point( NULL )
 {
     kvs::glew::Initialize();
     BaseClass::setShader( kvs::Shader::Lambert() );
@@ -481,10 +482,9 @@ void ParticleVolumeRenderer::exec(
     kvs::IgnoreUnusedVariable( light );
 
     kvs::PointObject* point = kvs::PointObject::DownCast( object );
-    if ( point->normals().size() == 0 ) BaseClass::disableShading();
+    if ( !m_ref_point ) this->attachPointObject( point );
 
-    KVS_ASSERT( m_ref_point == point );
-    KVS_ASSERT( m_ref_point );
+    if ( point->normals().size() == 0 ) BaseClass::disableShading();
 
     BaseClass::m_timer.start();
     this->create_image( point, camera, light );

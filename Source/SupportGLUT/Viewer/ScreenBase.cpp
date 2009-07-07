@@ -178,6 +178,14 @@ int ScreenBase::show( bool last )
     // Create the window.
     m_id = glutCreateWindow( m_title.c_str() );
 
+#if defined( KVS_SUPPORT_GLEW )
+    const GLenum result = glewInit();
+    if ( result != GLEW_OK )
+    {
+        kvsMessageError( "GLEW; %s.", glewGetErrorString( result ) );
+    }
+#endif// KVS_SUPPORT_GLUT
+
     // Set the call-back functions
     glutMouseFunc( m_pfunc_mouse_press_event );
     glutMotionFunc( m_pfunc_mouse_move_event );

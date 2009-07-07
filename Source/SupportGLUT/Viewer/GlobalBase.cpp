@@ -13,6 +13,7 @@
 /****************************************************************************/
 #include "GlobalBase.h"
 #include "../GLUT.h"
+#include <kvs/Message>
 
 
 namespace kvs
