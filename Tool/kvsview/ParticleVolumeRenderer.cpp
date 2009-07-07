@@ -117,40 +117,50 @@ const void InitializeParticleVolumeRenderer(
     }
 }
 
+bool EnableLODControl = true;
 bool EnableGPURendering = true;
 bool HasBounds = false;
 
 void PaintEvent( void )
 {
-    if ( ::EnableGPURendering )
+    if ( ::EnableLODControl )
     {
-        const int id = ::HasBounds ? 2 : 1;
-        const kvs::RendererBase* base = kvs::glut::Global::renderer_manager->renderer( id );
-        kvs::glew::ParticleVolumeRenderer* renderer = (kvs::glew::ParticleVolumeRenderer*)base;
-        if ( kvs::glut::Global::mouse->isAuto() ) renderer->enableCoarseRendering();
+        if ( ::EnableGPURendering )
+        {
+            const int id = ::HasBounds ? 2 : 1;
+            const kvs::RendererBase* base = kvs::glut::Global::renderer_manager->renderer( id );
+            kvs::glew::ParticleVolumeRenderer* renderer = (kvs::glew::ParticleVolumeRenderer*)base;
+            if ( kvs::glut::Global::mouse->isAuto() ) renderer->enableCoarseRendering();
+        }
     }
 }
 
 void MousePressEvent( kvs::MouseEvent* ev )
 {
-    if ( ::EnableGPURendering )
+    if ( ::EnableLODControl )
     {
-        const int id = ::HasBounds ? 2 : 1;
-        const kvs::RendererBase* base = kvs::glut::Global::renderer_manager->renderer( id );
-        kvs::glew::ParticleVolumeRenderer* renderer = (kvs::glew::ParticleVolumeRenderer*)base;
-        renderer->enableCoarseRendering();
+        if ( ::EnableGPURendering )
+        {
+            const int id = ::HasBounds ? 2 : 1;
+            const kvs::RendererBase* base = kvs::glut::Global::renderer_manager->renderer( id );
+            kvs::glew::ParticleVolumeRenderer* renderer = (kvs::glew::ParticleVolumeRenderer*)base;
+            renderer->enableCoarseRendering();
+        }
     }
 }
 
 void MouseReleaseEvent( kvs::MouseEvent* ev )
 {
-    if ( ::EnableGPURendering )
+    if ( ::EnableLODControl )
     {
-        const int id = ::HasBounds ? 2 : 1;
-        const kvs::RendererBase* base = kvs::glut::Global::renderer_manager->renderer( id );
-        kvs::glew::ParticleVolumeRenderer* renderer = (kvs::glew::ParticleVolumeRenderer*)base;
-        renderer->disableCoarseRendering();
-        kvs::glut::Screen::redraw();
+        if ( ::EnableGPURendering )
+        {
+            const int id = ::HasBounds ? 2 : 1;
+            const kvs::RendererBase* base = kvs::glut::Global::renderer_manager->renderer( id );
+            kvs::glew::ParticleVolumeRenderer* renderer = (kvs::glew::ParticleVolumeRenderer*)base;
+            renderer->disableCoarseRendering();
+            kvs::glut::Screen::redraw();
+        }
     }
 }
 
@@ -400,6 +410,9 @@ const bool Main::exec( void )
 
         pipe.connect( mapper ).connect( renderer );
     }
+
+    // LOD control.
+    ::EnableLODControl = !arg.noLOD();
 
     // Construct the visualization pipeline.
     if ( !pipe.exec() )

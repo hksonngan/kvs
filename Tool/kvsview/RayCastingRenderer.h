@@ -45,17 +45,17 @@ public:
 
     const int shader( void );
 
-    const bool noshading( void );
+    const bool noShading( void );
 
-    const bool nolod( void );
+    const bool noLOD( void );
 
-    const float ka( void );
+    const float ambient( void );
 
-    const float kd( void );
+    const float diffuse( void );
 
-    const float ks( void );
+    const float specular( void );
 
-    const float s( void );
+    const float shininess( void );
 
     const kvs::TransferFunction transferFunction( void );
 };

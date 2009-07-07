@@ -49,31 +49,41 @@ inline const bool CheckVolumeData( const std::string& filename )
     return( false );
 }
 
+bool EnableLODControl = true;
 bool HasBounds = false;
 
 void PaintEvent( void )
 {
-    const int id = ::HasBounds ? 2 : 1;
-    const kvs::RendererBase* base = kvs::glut::Global::renderer_manager->renderer( id );
-    kvs::RayCastingRenderer* renderer = (kvs::RayCastingRenderer*)base;
-    if ( kvs::glut::Global::mouse->isAuto() ) renderer->enableCoarseRendering();
+    if ( ::EnableLODControl )
+    {
+        const int id = ::HasBounds ? 2 : 1;
+        const kvs::RendererBase* base = kvs::glut::Global::renderer_manager->renderer( id );
+        kvs::RayCastingRenderer* renderer = (kvs::RayCastingRenderer*)base;
+        if ( kvs::glut::Global::mouse->isAuto() ) renderer->enableCoarseRendering();
+    }
 }
 
 void MousePressEvent( kvs::MouseEvent* ev )
 {
-    const int id = ::HasBounds ? 2 : 1;
-    const kvs::RendererBase* base = kvs::glut::Global::renderer_manager->renderer( id );
-    kvs::RayCastingRenderer* renderer = (kvs::RayCastingRenderer*)base;
-    renderer->enableCoarseRendering();
+    if ( ::EnableLODControl )
+    {
+        const int id = ::HasBounds ? 2 : 1;
+        const kvs::RendererBase* base = kvs::glut::Global::renderer_manager->renderer( id );
+        kvs::RayCastingRenderer* renderer = (kvs::RayCastingRenderer*)base;
+        renderer->enableCoarseRendering();
+    }
 }
 
 void MouseReleaseEvent( kvs::MouseEvent* ev )
 {
-    const int id = ::HasBounds ? 2 : 1;
-    const kvs::RendererBase* base = kvs::glut::Global::renderer_manager->renderer( id );
-    kvs::RayCastingRenderer* renderer = (kvs::RayCastingRenderer*)base;
-    renderer->disableCoarseRendering();
-    kvs::glut::Screen::redraw();
+    if ( ::EnableLODControl )
+    {
+        const int id = ::HasBounds ? 2 : 1;
+        const kvs::RendererBase* base = kvs::glut::Global::renderer_manager->renderer( id );
+        kvs::RayCastingRenderer* renderer = (kvs::RayCastingRenderer*)base;
+        renderer->disableCoarseRendering();
+        kvs::glut::Screen::redraw();
+    }
 }
 
 } // end of namespace
@@ -103,7 +113,7 @@ Argument::Argument( int argc, char** argv ):
     add_option( "ka", "Coefficient of the ambient color. (default: 0.5)", 1, false );
     add_option( "kd", "Coefficient of the diffuse color. (default: 0.5)", 1, false );
     add_option( "ks", "Coefficient of the specular color. (default: 0.3)", 1, false );
-    add_option( "s", "Shininess. (default: 20.0)", 1, false );
+    add_option( "n", "Shininess. (default: 20.0)", 1, false );
     add_option( "shader", "Shader type. (default: 0)\n"
                 "\t      0 = Lambert shading\n"
                 "\t      1 = Phong shading\n"
@@ -118,17 +128,17 @@ const int Argument::shader( void )
     else return( default_value );
 }
 
-const bool Argument::noshading( void )
+const bool Argument::noShading( void )
 {
     return( this->hasOption("noshading") );
 }
 
-const bool Argument::nolod( void )
+const bool Argument::noLOD( void )
 {
     return( this->hasOption("nolod") );
 }
 
-const float Argument::ka( void )
+const float Argument::ambient( void )
 {
     const float default_value = 0.5f;
 
@@ -136,7 +146,7 @@ const float Argument::ka( void )
     else return( default_value );
 }
 
-const float Argument::kd( void )
+const float Argument::diffuse( void )
 {
     const float default_value = 0.5f;
 
@@ -144,7 +154,7 @@ const float Argument::kd( void )
     else return( default_value );
 }
 
-const float Argument::ks( void )
+const float Argument::specular( void )
 {
     const float default_value = 0.3f;
 
@@ -152,11 +162,11 @@ const float Argument::ks( void )
     else return( default_value );
 }
 
-const float Argument::s( void )
+const float Argument::shininess( void )
 {
     const float default_value = 20.0f;
 
-    if ( this->hasOption("s") ) return( this->optionValue<float>("s") );
+    if ( this->hasOption("n") ) return( this->optionValue<float>("n") );
     else return( default_value );
 }
 
@@ -265,7 +275,7 @@ const bool Main::exec( void )
     }
 
     // Shading on/off.
-    const bool noshading = arg.noshading();
+    const bool noshading = arg.noShading();
     {
         if ( noshading ) renderer.get<kvs::RayCastingRenderer>()->disableShading();
         else renderer.get<kvs::RayCastingRenderer>()->enableShading();
@@ -274,8 +284,10 @@ const bool Main::exec( void )
     // Shader type.
     const int shader = arg.shader();
     {
-        const float ka = arg.ka();
-        const float kd = arg.kd();
+        const float ka = arg.ambient();
+        const float kd = arg.diffuse();
+        const float ks = arg.specular();
+        const float n  = arg.shininess();
         switch ( shader )
         {
         case 0:
@@ -285,21 +297,20 @@ const bool Main::exec( void )
         }
         case 1:
         {
-            const float ks = arg.ks();
-            const float s  = arg.s();
-            renderer.get<kvs::RayCastingRenderer>()->setShader( kvs::Shader::Phong( ka, kd, ks, s ) );
+            renderer.get<kvs::RayCastingRenderer>()->setShader( kvs::Shader::Phong( ka, kd, ks, n ) );
             break;
         }
         case 2:
         {
-            const float ks = arg.ks();
-            const float s  = arg.s();
-            renderer.get<kvs::RayCastingRenderer>()->setShader( kvs::Shader::BlinnPhong( ka, kd, ks, s ) );
+            renderer.get<kvs::RayCastingRenderer>()->setShader( kvs::Shader::BlinnPhong( ka, kd, ks, n ) );
             break;
         }
         default: break;
         }
     }
+
+    // LOD control.
+    ::EnableLODControl = !arg.noLOD();
 
     // Construct the visualization pipeline.
     pipe.connect( renderer );
