@@ -33,8 +33,9 @@ TARGET_LIB = $(OUTDIR)\$(LIB_KVS_SUPPORT_GLEW)
 #=============================================================================
 #  Build rule for the shader2header.
 #=============================================================================
-SHADER2HEADER_TARGET = shader2header.exe
-SHADER2HEADER_SOURCE = $(SHADER2HEADER_TARGET).c
+SHADER2HEADER_NAME   = shader2header
+SHADER2HEADER_TARGET = $(SHADER2HEADER_NAME).exe
+SHADER2HEADER_SOURCE = $(SHADER2HEADER_NAME).c
 
 $(SHADER2HEADER_TARGET): $(SHADER2HEADER_SOURCE)
 	$(LD) /OUT:$@ $**
