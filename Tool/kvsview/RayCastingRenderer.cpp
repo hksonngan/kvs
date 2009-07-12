@@ -14,6 +14,7 @@
 #include "RayCastingRenderer.h"
 #include "CommandName.h"
 #include "ObjectInformation.h"
+#include <kvs/IgnoreUnusedVariable>
 #include <kvs/File>
 #include <kvs/KVSMLObjectStructuredVolume>
 #include <kvs/AVSField>
@@ -24,6 +25,14 @@
 #include <kvs/glut/Global>
 #include <kvs/glut/Screen>
 
+
+namespace
+{
+
+bool EnableLODControl = true;
+bool HasBounds = false;
+
+} // end of namespace
 
 namespace
 {
@@ -49,9 +58,6 @@ inline const bool CheckVolumeData( const std::string& filename )
     return( false );
 }
 
-bool EnableLODControl = true;
-bool HasBounds = false;
-
 void PaintEvent( void )
 {
     if ( ::EnableLODControl )
@@ -65,6 +71,8 @@ void PaintEvent( void )
 
 void MousePressEvent( kvs::MouseEvent* ev )
 {
+    kvs::IgnoreUnusedVariable( ev );
+
     if ( ::EnableLODControl )
     {
         const int id = ::HasBounds ? 2 : 1;
@@ -76,6 +84,8 @@ void MousePressEvent( kvs::MouseEvent* ev )
 
 void MouseReleaseEvent( kvs::MouseEvent* ev )
 {
+    kvs::IgnoreUnusedVariable( ev );
+
     if ( ::EnableLODControl )
     {
         const int id = ::HasBounds ? 2 : 1;
