@@ -58,13 +58,13 @@
 /* For Microsoft Visual C/C++.
  */
 #if defined( _MSC_VER )
-enum MBCharType
+enum
 {
     MBTypeSB,
     MBTypeDB1,
     MBTypeDB2,
     MBTypeERR
-};
+}  MBCharType;
 
 /*==========================================================================*/
 /**
@@ -94,7 +94,7 @@ int IsMBCharLeadByte( const char* str, int num )
  *  @return type of multibyte character.
  */
 /*==========================================================================*/
-MBCharType GetMBCharType( const char* str, int num )
+enum MBCharType GetMBCharType( const char* str, int num )
 {
     if ( num > 0 && IsMBCharLeadByte( str, num - 1 ) )
     {
@@ -183,12 +183,14 @@ void CreateShaderFileList( const char* dirname, FileList** vert_list, FileList**
     HANDLE hFind;
 
     char bufname[256];
-    strcpy( bufname, m_directory_path.c_str() );
+    int len;
+
+    strcpy( bufname, dirname );
 
     /* If len is 0, dirname is empty. so I must get current directory
      * entry(i.e. "*.*") and must not add '\'.
      */
-    int len = strlen( bufname );
+    len = strlen( bufname );
     if ( len )
     {
         if ( bufname[len - 1] != '\\' || GetMBCharType( bufname, len - 1 ) == MBTypeDB2 )
@@ -202,12 +204,13 @@ void CreateShaderFileList( const char* dirname, FileList** vert_list, FileList**
     {
         do
         {
+            const char* filename = find_data.cFileName;
+
             /* Ignore dot file (.*) and "Shader.h" */
-            if ( find_data.cFileName[0] == '.' ||
-                 strncmp( find_data.cFileName, "Shader.h", 8 ) == 0 ) continue;
+            if ( filename[0] == '.' ||
+                 strncmp( filename, "Shader.h", 8 ) == 0 ) continue;
 
             /* Find *.vert and *.frag */
-            const char* filename = find_data.cFileName;
             if ( strcmp( ".vert", strrchr( filename, '.' ) ) == 0 )
             {
                 *vert_list = FileList_add( dirname, filename, *vert_list );
@@ -325,15 +328,16 @@ int main( int argc, char** argv )
             else
             {
                 char* modulename = dirname;
-                if ( modulename = strstr( dirname, PATH_SEPARATOR ) ) modulename += strlen( PATH_SEPARATOR );
+                if ( modulename = strstr( dirname, "/" ) ) modulename += strlen( "/" );
                 BEGIN_HEADER( fp, modulename );
                 BEGIN_NAMESPACE( fp, modulename );
                 {
+                    FileList* vert_list = NULL;
+                    FileList* frag_list = NULL;
+
                     fprintf( stdout, "%s was created.\n", filepath );
 
                     /* Get shader file lists. */
-                    FileList* vert_list = NULL;
-                    FileList* frag_list = NULL;
                     CreateShaderFileList( dirname, &vert_list, &frag_list );
 
                     /* For vertex shaders. */
