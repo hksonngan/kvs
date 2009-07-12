@@ -38,16 +38,16 @@ QApplication* GlobalBase::application;
 GlobalBase::GlobalBase( int count, char** values ):
     kvs::GlobalCore( count, values )
 {
+#if defined( KVS_SUPPORT_GLUT )
+    glutInit( &kvs::GlobalCore::argc, kvs::GlobalCore::argv );
+#endif// KVS_SUPPORT_GLUT
+
     application = new QApplication( count, values );
     if ( !application )
     {
         kvsMessageError("Cannot create a Qt application.");
         return;
     }
-
-#if defined( KVS_SUPPORT_GLUT )
-    glutInit( &kvs::GlobalCore::argc, kvs::GlobalCore::argv );
-#endif// KVS_SUPPORT_GLUT
 }
 
 /*==========================================================================*/
