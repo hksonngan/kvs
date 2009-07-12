@@ -730,6 +730,8 @@ void ParticleVolumeRenderer::create_image(
     const kvs::Camera*      camera,
     const kvs::Light*       light )
 {
+    kvs::IgnoreUnusedVariable( light );
+
     // Set shader initial parameters.
     //BaseClass::m_shader->set( camera, light );
 
@@ -771,7 +773,7 @@ void ParticleVolumeRenderer::create_image(
             m_ensemble_buffer.create( BaseClass::m_width, BaseClass::m_height );
         }
 
-        this->initialize_resize_texture( camera->windowWidth(), camera->windowHeight() );
+        this->initialize_resize_texture();
     }
 
     if ( m_coarse_level > 1 ) glClear( GL_ACCUM_BUFFER_BIT );
@@ -998,13 +1000,9 @@ void ParticleVolumeRenderer::initialize_opengl( void )
 /*==========================================================================*/
 /**
  *  @brief  Initialize subpixel rendering framebuffer.
- *  @param  screenwidth  [i] screen width 
- *  @param  screenheight [i] screen height
  */
 /*==========================================================================*/
-void ParticleVolumeRenderer::initialize_resize_texture(
-    const int screenwidth,
-    const int screenheight )
+void ParticleVolumeRenderer::initialize_resize_texture( void )
 {
     if ( m_subpixel_level <= 1 && ( m_repetition_level == 1 || m_enable_accumulation_buffer ) )
     {
@@ -1208,17 +1206,17 @@ void ParticleVolumeRenderer::align_particles( void )
         {
 #if defined( KVS_GLEW_PARTICLE_VOLUME_RENDERER__NORMAL_TYPE_IS_FLOAT )
             // In case that the normal type of the particle is 'GLfloat'.
-            *(dst_normals[rp])++ = *src_normal++;
-            *(dst_normals[rp])++ = *src_normal++;
-            *(dst_normals[rp])++ = *src_normal++;
+            *(dst_normals[rp])++ = static_cast<NormalType>(*src_normal++);
+            *(dst_normals[rp])++ = static_cast<NormalType>(*src_normal++);
+            *(dst_normals[rp])++ = static_cast<NormalType>(*src_normal++);
 #elif defined( KVS_GLEW_PARTICLE_VOLUME_RENDERER__NORMAL_TYPE_IS_BYTE )
             // In case that the normal type of the particle is 'GLbyte'.
             kvs::Vector3f v( src_normal );
             src_normal += 3;
-            kvs::Vector3f n = v.normalize() * 127.0;
-            *(dst_normals[rp])++ = n[0];
-            *(dst_normals[rp])++ = n[1];
-            *(dst_normals[rp])++ = n[2];
+            kvs::Vector3f n = v.normalize() * 127.0f;
+            *(dst_normals[rp])++ = static_cast<NormalType>(n[0]);
+            *(dst_normals[rp])++ = static_cast<NormalType>(n[1]);
+            *(dst_normals[rp])++ = static_cast<NormalType>(n[2]);
 #else
     #error "KVS_GLEW_PARTICLE_VOLUME_RENDERER__NORMAL_TYPE_IS_* is not defined."
 #endif
@@ -1230,10 +1228,10 @@ void ParticleVolumeRenderer::align_particles( void )
         {
 #if 1
             unsigned int index = i * 12347;
-            *(dst_indices[rp])++ = index % m_random_texture_size;
-            *(dst_indices[rp])++ = ( index / m_random_texture_size ) % m_random_texture_size;
+            *(dst_indices[rp])++ = static_cast<IndexType>( index % m_random_texture_size );
+            *(dst_indices[rp])++ = static_cast<IndexType>(( index / m_random_texture_size ) % m_random_texture_size);
 #else
-            *(dst_indices[rp])++ = i;
+            *(dst_indices[rp])++ = static_cast<IndexType>(i);
 #endif
         }
         if ( ++rp >= m_repetition_level ) rp = 0;
@@ -1349,7 +1347,7 @@ void ParticleVolumeRenderer::draw_vertexbuffer(
 /*===========================================================================*/
 void ParticleVolumeRenderer::calculate_zooming_factor( const kvs::PointObject* point, const kvs::Camera* camera )
 {
-    const float sqrt_repeat_level = sqrtf( m_repetition_level );
+    const float sqrt_repeat_level = sqrtf( static_cast<float>(m_repetition_level) );
     const float subpixel_level = m_subpixel_level * sqrt_repeat_level;
 
     // Calculate a transform matrix.
@@ -1378,8 +1376,8 @@ void ParticleVolumeRenderer::calculate_zooming_factor( const kvs::PointObject* p
 void ParticleVolumeRenderer::setup_zoom_shader( const float modelview_matrix[16] )
 {
     const float* mat = modelview_matrix;
-    const float width = m_render_width;
-    const float scale = sqrt( mat[0] * mat[0] + mat[1] * mat[1] + mat[2]*mat[2] );
+    const float width = static_cast<float>(m_render_width);
+    const float scale = sqrtf( mat[0] * mat[0] + mat[1] * mat[1] + mat[2]*mat[2] );
 
     const GLfloat densityFactor = m_zooming_factor * width * scale;
     const GLint   randomTexture = 0;

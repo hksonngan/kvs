@@ -157,9 +157,7 @@ private:
 
     void initialize_opengl( void );
 
-    void initialize_resize_texture(
-        const int screen_width,
-        const int screen_height );
+    void initialize_resize_texture( void );
 
     void create_shaders(
         kvs::glew::ProgramObject& program_object,
