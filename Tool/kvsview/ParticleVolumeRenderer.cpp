@@ -14,6 +14,7 @@
 #include "ParticleVolumeRenderer.h"
 #include "CommandName.h"
 #include "ObjectInformation.h"
+#include <kvs/IgnoreUnusedVariable>
 #include <kvs/File>
 #include <kvs/KVSMLObjectStructuredVolume>
 #include <kvs/KVSMLObjectUnstructuredVolume>
@@ -28,6 +29,15 @@
 #include <kvs/glut/Screen>
 #include <kvs/glew/ParticleVolumeRenderer>
 
+
+namespace
+{
+
+bool EnableLODControl = true;
+bool EnableGPURendering = true;
+bool HasBounds = false;
+
+} // end of namespace
 
 namespace
 {
@@ -73,7 +83,7 @@ inline const size_t GetRevisedSubpixelLevel(
     const size_t subpixel_level,
     const size_t repetition_level )
 {
-    return( static_cast<size_t>( subpixel_level * std::sqrt( repetition_level ) + 0.5f ) );
+    return( static_cast<size_t>( subpixel_level * std::sqrtf( static_cast<float>(repetition_level) ) + 0.5f ) );
 }
 
 template <typename Renderer>
@@ -117,10 +127,6 @@ const void InitializeParticleVolumeRenderer(
     }
 }
 
-bool EnableLODControl = true;
-bool EnableGPURendering = true;
-bool HasBounds = false;
-
 void PaintEvent( void )
 {
     if ( ::EnableLODControl )
@@ -137,6 +143,8 @@ void PaintEvent( void )
 
 void MousePressEvent( kvs::MouseEvent* ev )
 {
+    kvs::IgnoreUnusedVariable( ev );
+
     if ( ::EnableLODControl )
     {
         if ( ::EnableGPURendering )
@@ -151,6 +159,8 @@ void MousePressEvent( kvs::MouseEvent* ev )
 
 void MouseReleaseEvent( kvs::MouseEvent* ev )
 {
+    kvs::IgnoreUnusedVariable( ev );
+
     if ( ::EnableLODControl )
     {
         if ( ::EnableGPURendering )
