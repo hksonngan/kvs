@@ -63,7 +63,7 @@ $$KVS_DIR/lib/libkvsCore.a \
 
 }
 
-unix {
+x11 {
     LIBS += \
 $$KVS_DIR/lib/libkvsSupportQt.a \
 $$KVS_DIR/lib/libkvsSupportGLUT.a \
