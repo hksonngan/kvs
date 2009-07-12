@@ -83,7 +83,7 @@ inline const size_t GetRevisedSubpixelLevel(
     const size_t subpixel_level,
     const size_t repetition_level )
 {
-    return( static_cast<size_t>( subpixel_level * std::sqrtf( static_cast<float>(repetition_level) ) + 0.5f ) );
+    return( static_cast<size_t>( subpixel_level * sqrtf( static_cast<float>(repetition_level) ) + 0.5f ) );
 }
 
 template <typename Renderer>
