@@ -22,7 +22,7 @@ TEMPLATE = lib
 #  target
 #=============================================================================
 win32 {
-    TARGET = libkvsSupportQt
+    TARGET = kvsSupportQt
 } else {
     TARGET = kvsSupportQt
 }
