@@ -48,9 +48,9 @@ INCLUDEPATH += $$KVS_DIR/include
 #=============================================================================
 win32 {
     LIBS += \
-$$KVS_DIR/lib/libkvsSupportQt.lib \
-$$KVS_DIR/lib/libkvsSupportGLUT.lib \
-$$KVS_DIR/lib/libkvsCore.lib \
+$$KVS_DIR/lib/kvsSupportQt.lib \
+$$KVS_DIR/lib/kvsSupportGLUT.lib \
+$$KVS_DIR/lib/kvsCore.lib \
 
 }
 
@@ -63,7 +63,7 @@ $$KVS_DIR/lib/libkvsCore.a \
 
 }
 
-else {
+unix {
     LIBS += \
 $$KVS_DIR/lib/libkvsSupportQt.a \
 $$KVS_DIR/lib/libkvsSupportGLUT.a \
