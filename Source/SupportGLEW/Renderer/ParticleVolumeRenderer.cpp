@@ -1134,11 +1134,11 @@ void ParticleVolumeRenderer::create_random_texture( void )
 
     const size_t npixels = m_random_texture_size * m_random_texture_size;
 
-    kvs::MersenneTwister r;
+    kvs::MersenneTwister random;
     GLubyte* pixels = new GLubyte[ npixels ];
     for ( size_t i = 0; i < npixels; i++ )
     {
-        pixels[i] = static_cast<GLubyte>( r.randInteger() );
+        pixels[i] = static_cast<GLubyte>( random.randInteger() );
     }
     m_random_texture.download( m_random_texture_size, m_random_texture_size, pixels );
     delete [] pixels;
