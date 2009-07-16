@@ -27,8 +27,9 @@
 #include <kvs/Bounds>
 #include <kvs/glut/Global>
 #include <kvs/glut/Screen>
+#if defined( KVS_SUPPORT_GLEW )
 #include <kvs/glew/ParticleVolumeRenderer>
-
+#endif
 
 namespace
 {
@@ -129,6 +130,7 @@ const void InitializeParticleVolumeRenderer(
 
 void PaintEvent( void )
 {
+#if defined( KVS_SUPPORT_GLEW )
     if ( ::EnableLODControl )
     {
         if ( ::EnableGPURendering )
@@ -139,12 +141,14 @@ void PaintEvent( void )
             if ( kvs::glut::Global::mouse->isAuto() ) renderer->enableCoarseRendering();
         }
     }
+#endif
 }
 
 void MousePressEvent( kvs::MouseEvent* ev )
 {
     kvs::IgnoreUnusedVariable( ev );
 
+#if defined( KVS_SUPPORT_GLEW )
     if ( ::EnableLODControl )
     {
         if ( ::EnableGPURendering )
@@ -155,12 +159,14 @@ void MousePressEvent( kvs::MouseEvent* ev )
             renderer->enableCoarseRendering();
         }
     }
+#endif
 }
 
 void MouseReleaseEvent( kvs::MouseEvent* ev )
 {
     kvs::IgnoreUnusedVariable( ev );
 
+#if defined( KVS_SUPPORT_GLEW )
     if ( ::EnableLODControl )
     {
         if ( ::EnableGPURendering )
@@ -172,6 +178,7 @@ void MouseReleaseEvent( kvs::MouseEvent* ev )
             kvs::glut::Screen::redraw();
         }
     }
+#endif
 }
 
 } // end of namespace
@@ -231,7 +238,11 @@ const bool Argument::noLOD( void ) const
 
 const bool Argument::noGPU( void ) const
 {
+#if defined( KVS_SUPPORT_GLEW )
     return( this->hasOption("nogpu") );
+#else
+    return( true );
+#endif
 }
 
 const float Argument::ambient( void ) const
@@ -406,6 +417,7 @@ const bool Main::exec( void )
 
         pipe.connect( mapper ).connect( renderer );
     }
+#if defined( KVS_SUPPORT_GLEW )
     else
     {
         kvs::PipelineModule renderer( new kvs::glew::ParticleVolumeRenderer );
@@ -420,6 +432,7 @@ const bool Main::exec( void )
 
         pipe.connect( mapper ).connect( renderer );
     }
+#endif
 
     // LOD control.
     ::EnableLODControl = !arg.noLOD();
