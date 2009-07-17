@@ -16,6 +16,7 @@
 #include "ObjectInformation.h"
 #include <kvs/IgnoreUnusedVariable>
 #include <kvs/File>
+#include <kvs/KVSMLObjectPoint>
 #include <kvs/KVSMLObjectStructuredVolume>
 #include <kvs/KVSMLObjectUnstructuredVolume>
 #include <kvs/AVSField>
@@ -42,6 +43,19 @@ bool HasBounds = false;
 
 namespace
 {
+
+inline const bool CheckPointData( const std::string& filename )
+{
+    if ( kvs::KVSMLObjectPoint::CheckFileExtension( filename ) )
+    {
+        if ( kvs::KVSMLObjectPoint::CheckFileFormat( filename ) )
+        {
+            return( true );
+        }
+    }
+
+    return( false );
+}
 
 inline const bool CheckVolumeData( const std::string& filename )
 {
@@ -345,12 +359,18 @@ const bool Main::exec( void )
     screen.addMouseReleaseEvent( ::MouseReleaseEvent );
     screen.setTitle( kvsview::CommandName + " - " + kvsview::ParticleVolumeRenderer::CommandName );
 
-    // Check the input point data.
+    // Check the input point or volume data.
+    bool is_volume = false; // check flag whether the input data is volume data
     m_input_name = arg.value<std::string>();
-    if ( !::CheckVolumeData( m_input_name ) )
+    if ( !::CheckPointData( m_input_name ) )
     {
-        kvsMessageError("%s is not volume data.", m_input_name.c_str());
-        return( false );
+        if ( !::CheckVolumeData( m_input_name ) )
+        {
+            kvsMessageError("%s is not volume data.", m_input_name.c_str());
+            return( false );
+        }
+
+        is_volume = true;
     }
 
     // Visualization pipeline.
@@ -415,7 +435,8 @@ const bool Main::exec( void )
         const size_t level = ::GetRevisedSubpixelLevel( subpixel_level, repetition_level );
         renderer.get<kvs::ParticleVolumeRenderer>()->setSubpixelLevel( level );
 
-        pipe.connect( mapper ).connect( renderer );
+        if ( is_volume ) pipe.connect( mapper ).connect( renderer );
+        else pipe.connect( renderer );
     }
 #if defined( KVS_SUPPORT_GLEW )
     else
@@ -430,7 +451,8 @@ const bool Main::exec( void )
         renderer.get<kvs::glew::ParticleVolumeRenderer>()->setSubpixelLevel( subpixel_level );
         renderer.get<kvs::glew::ParticleVolumeRenderer>()->setRepetitionLevel( repetition_level );
 
-        pipe.connect( mapper ).connect( renderer );
+        if ( is_volume ) pipe.connect( mapper ).connect( renderer );
+        else pipe.connect( renderer );
     }
 #endif
 
