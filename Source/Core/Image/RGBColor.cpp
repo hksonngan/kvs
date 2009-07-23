@@ -111,7 +111,7 @@ RGBColor& RGBColor::operator = ( const HSVColor& hsv )
     }
     else
     {
-        float h = hsv.h() * 6.0f;
+        float h = ( hsv.h() < 1.0f ? hsv.h() : hsv.h() - 1.0f ) * 6.0f;
         int   i = int( h );
 
         float tmp1 = hsv.v() * ( 1 - hsv.s() );
@@ -165,9 +165,9 @@ RGBColor& RGBColor::operator = ( const HSVColor& hsv )
         }
         }
 
-        m_red   = static_cast<kvs::UInt8>( tmp_r * 255 );
-        m_green = static_cast<kvs::UInt8>( tmp_g * 255 );
-        m_blue  = static_cast<kvs::UInt8>( tmp_b * 255 );
+        m_red   = static_cast<kvs::UInt8>( tmp_r * 255.0f + 0.5f );
+        m_green = static_cast<kvs::UInt8>( tmp_g * 255.0f + 0.5f );
+        m_blue  = static_cast<kvs::UInt8>( tmp_b * 255.0f + 0.5f );
     }
 
     return( *this );
