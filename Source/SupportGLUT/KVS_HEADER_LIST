@@ -8,3 +8,4 @@ Viewer/OrientationAxis
 Viewer/Screen
 Viewer/ScreenBase
 Viewer/Text
+Viewer/TransferFunctionEditor

@@ -12,6 +12,7 @@ $(OUTDIR)/./Viewer/OrientationAxis.o \
 $(OUTDIR)/./Viewer/Screen.o \
 $(OUTDIR)/./Viewer/ScreenBase.o \
 $(OUTDIR)/./Viewer/Text.o \
+$(OUTDIR)/./Viewer/TransferFunctionEditor.o \
 
 
 

@@ -12,6 +12,7 @@ $(OUTDIR)\.\Viewer\OrientationAxis.obj \
 $(OUTDIR)\.\Viewer\Screen.obj \
 $(OUTDIR)\.\Viewer\ScreenBase.obj \
 $(OUTDIR)\.\Viewer\Text.obj \
+$(OUTDIR)\.\Viewer\TransferFunctionEditor.obj \
 
 
 
