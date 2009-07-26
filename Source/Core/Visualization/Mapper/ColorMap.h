@@ -73,6 +73,8 @@ public:
 
     const kvs::RGBColor operator []( const size_t index ) const;
 
+    const kvs::RGBColor at( const float index ) const;
+
 public:
 
     ColorMap& operator =( const ColorMap& rhs );

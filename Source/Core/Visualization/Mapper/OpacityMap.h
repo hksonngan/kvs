@@ -71,6 +71,8 @@ public:
 
     const kvs::Real32 operator []( const size_t index ) const;
 
+    const kvs::Real32 at( const float index ) const;
+
 public:
 
     OpacityMap& operator =( const OpacityMap& rhs );

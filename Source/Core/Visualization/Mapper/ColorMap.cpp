@@ -155,6 +155,30 @@ const kvs::RGBColor ColorMap::operator []( const size_t index ) const
     return( kvs::RGBColor( m_table.pointer() + offset ) );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns interpolated RGB color value by assuming piecewise linear map.
+ *  @param  index [in] index of the color map as a floating point number
+ *  @return interpolated RGB color value
+ */
+/*===========================================================================*/
+const kvs::RGBColor ColorMap::at( const float index ) const
+{
+    KVS_ASSERT( 0.0f <= index && index <= static_cast<float>(this->resolution()-1) );
+
+    const size_t s0 = static_cast<size_t>( index );
+    const size_t s1 = s0 + 1;
+
+    const kvs::RGBColor c0( m_table.pointer() + ::NumberOfChannels * s0 );
+    const kvs::RGBColor c1( m_table.pointer() + ::NumberOfChannels * s1 );
+
+    const kvs::UInt8 r = static_cast<kvs::UInt8>( ( c1.r() - c0.r() ) * index + c0.r() * s1 - c1.r() * s0 );
+    const kvs::UInt8 g = static_cast<kvs::UInt8>( ( c1.g() - c0.g() ) * index + c0.g() * s1 - c1.g() * s0 );
+    const kvs::UInt8 b = static_cast<kvs::UInt8>( ( c1.b() - c0.b() ) * index + c0.b() * s1 - c1.b() * s0 );
+
+    return( kvs::RGBColor( r, g, b ) );
+}
+
 /*==========================================================================*/
 /**
  *  Substitution operator =.
