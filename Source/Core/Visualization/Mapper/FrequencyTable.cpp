@@ -217,7 +217,6 @@ void FrequencyTable::calculate_range( const kvs::StructuredVolumeObject* volume 
         m_nbins = kvs::UInt64(1) << 64;
     }
 */
-/*
     else if ( type == typeid( kvs::Real32 ) || type == typeid( kvs::Real64 ) )
     {
         m_min_range = volume->minValue();
@@ -225,7 +224,6 @@ void FrequencyTable::calculate_range( const kvs::StructuredVolumeObject* volume 
         // It is neccessary to estimate the number of bins by binning process.
         m_nbins = 100;
     }
-*/
 }
 
 /*==========================================================================*/
