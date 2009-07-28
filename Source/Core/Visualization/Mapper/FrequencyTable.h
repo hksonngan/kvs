@@ -117,7 +117,7 @@ inline void FrequencyTable::binning( const kvs::StructuredVolumeObject* volume )
 
         if ( !this->is_ignore_value( value ) )
         {
-            const size_t index = static_cast<size_t>( value / width );
+            const size_t index = static_cast<size_t>( ( value - m_min_range ) / width + 0.5f );
             m_bin[index] = m_bin[index] + 1;
             m_max_count = kvs::Math::Max( m_max_count, m_bin[index] );
         }
@@ -152,7 +152,7 @@ inline void FrequencyTable::binning( const kvs::ImageObject* image, const size_t
 
         if ( !this->is_ignore_value( value ) )
         {
-            const size_t index = static_cast<size_t>( value / width );
+            const size_t index = static_cast<size_t>( ( value - m_min_range ) / width + 0.5f );
             m_bin[index] = m_bin[index] + 1;
             m_max_count = kvs::Math::Max( m_max_count, m_bin[index] );
         }
