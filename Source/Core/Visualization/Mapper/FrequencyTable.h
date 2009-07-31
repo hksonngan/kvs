@@ -139,6 +139,7 @@ inline void FrequencyTable::binning( const kvs::VolumeObjectBase* volume )
                 magnitude += static_cast<kvs::Real64>( ( *value ) * ( *value ) );
                 ++value;
             }
+            magnitude = kvs::Math::SquareRoot( magnitude );
 
             if ( !this->is_ignore_value( magnitude ) )
             {
