@@ -139,6 +139,7 @@ $(OUTDIR)/ExtractVertices.o \
 $(OUTDIR)/ExternalFaces.o \
 $(OUTDIR)/RayCastingRenderer.o \
 $(OUTDIR)/ParticleVolumeRenderer.o \
+$(OUTDIR)/Histogram.o \
 $(OUTDIR)/main.o \
 
 

@@ -25,6 +25,7 @@
 #include "ExternalFaces.h"
 #include "RayCastingRenderer.h"
 #include "ParticleVolumeRenderer.h"
+#include "Histogram.h"
 #include <kvs/Bounds>
 #include <kvs/AxisObject>
 #include <kvs/glut/AxisRenderer>
@@ -58,10 +59,18 @@ Argument::Argument( int argc, char** argv ):
     add_option( kvsview::ExternalFaces::CommandName, kvsview::ExternalFaces::Description, 0 );
     add_option( kvsview::RayCastingRenderer::CommandName, kvsview::RayCastingRenderer::Description, 0 );
     add_option( kvsview::ParticleVolumeRenderer::CommandName, kvsview::ParticleVolumeRenderer::Description, 0 );
+    add_option( kvsview::Histogram::CommandName, kvsview::Histogram::Description, 0 );
 
     add_value( "input data file", false );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new Argument::Common class.
+ *  @param  argc [in] argument count
+ *  @param  argv [in] argument values
+ */
+/*===========================================================================*/
 Argument::Common::Common( int argc, char** argv ):
     kvs::CommandLine( argc, argv, kvsview::CommandName )
 {
