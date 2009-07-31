@@ -265,6 +265,8 @@ void ImageImporter::import( const kvs::KVSMLObjectImage* kvsml )
     SuperClass::m_height = kvsml->height();
     SuperClass::m_data   = kvsml->data(); // shallow copy
     SuperClass::m_type   = pixel_type;
+
+    BaseClass::m_is_success = true;
 }
 
 /*==========================================================================*/
@@ -279,6 +281,8 @@ void ImageImporter::import( const kvs::Bmp* bmp )
     SuperClass::m_height = bmp->height();
     SuperClass::m_data   = bmp->data(); // shallow copy
     SuperClass::m_type   = static_cast<SuperClass::PixelType>( bmp->bitsPerPixel() );
+
+    BaseClass::m_is_success = true;
 }
 
 /*==========================================================================*/
@@ -305,6 +309,7 @@ void ImageImporter::import( const kvs::Tiff* tiff )
     else //  tiff->colorMode() == kvs::Tiff::UnknownColorMode
     {
         kvsMessageError("Unknown TIFF color mode.");
+        return;
     }
 
     const kvs::UInt8* raw_data = reinterpret_cast<const kvs::UInt8*>( tiff->rawData().pointer() );
@@ -315,6 +320,8 @@ void ImageImporter::import( const kvs::Tiff* tiff )
     SuperClass::m_height = tiff->height();
     SuperClass::m_data   = data; // shallow copy
     SuperClass::m_type   = pixel_type;
+
+    BaseClass::m_is_success = true;
 }
 
 /*==========================================================================*/
@@ -329,6 +336,8 @@ void ImageImporter::import( const kvs::Ppm* ppm )
     SuperClass::m_height = ppm->height();
     SuperClass::m_data   = ppm->data();
     SuperClass::m_type   = kvs::ImageObject::Color24;
+
+    BaseClass::m_is_success = true;
 }
 
 /*==========================================================================*/
@@ -343,6 +352,8 @@ void ImageImporter::import( const kvs::Pgm* pgm )
     SuperClass::m_height = pgm->height();
     SuperClass::m_data   = pgm->data();
     SuperClass::m_type   = kvs::ImageObject::Gray8;
+
+    BaseClass::m_is_success = true;
 }
 
 /*==========================================================================*/
@@ -365,6 +376,8 @@ void ImageImporter::import( const kvs::Pbm* pbm )
     SuperClass::m_height = pbm->height();
     SuperClass::m_data   = data;
     SuperClass::m_type   = kvs::ImageObject::Gray8;
+
+    BaseClass::m_is_success = true;
 }
 
 /*==========================================================================*/
@@ -379,6 +392,8 @@ void ImageImporter::import( const kvs::Dicom* dicom )
     SuperClass::m_height = dicom->row();
     SuperClass::m_data   = dicom->pixelData();
     SuperClass::m_type   = kvs::ImageObject::Gray8;
+
+    BaseClass::m_is_success = true;
 }
 
 } // end of namespace kvs

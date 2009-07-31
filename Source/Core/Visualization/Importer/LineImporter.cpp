@@ -101,7 +101,7 @@ LineImporter::LineImporter( const std::string& filename )
         return;
     }
 
-    BaseClass::m_is_success = true;
+//    BaseClass::m_is_success = true;
 }
 
 /*==========================================================================*/

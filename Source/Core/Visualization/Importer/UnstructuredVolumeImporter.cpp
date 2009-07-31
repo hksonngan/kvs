@@ -152,7 +152,7 @@ UnstructuredVolumeImporter::UnstructuredVolumeImporter( const std::string& filen
         return;
     }
 
-    BaseClass::m_is_success = true;
+//    BaseClass::m_is_success = true;
 }
 
 /*==========================================================================*/
@@ -237,7 +237,7 @@ void UnstructuredVolumeImporter::import( const kvs::KVSMLObjectUnstructuredVolum
     SuperClass::updateMinMaxCoords();
     SuperClass::updateMinMaxValues();
 
-    m_is_success = true;
+    BaseClass::m_is_success = true;
 }
 
 /*==========================================================================*/
@@ -258,7 +258,7 @@ void UnstructuredVolumeImporter::import( const kvs::AVSUcd* ucd )
     SuperClass::updateMinMaxCoords();
     SuperClass::updateMinMaxValues();
 
-    m_is_success = true;
+    BaseClass::m_is_success = true;
 }
 
 void UnstructuredVolumeImporter::import( const kvs::AVSField* field )
@@ -314,20 +314,15 @@ void UnstructuredVolumeImporter::import( const kvs::AVSField* field )
 
     SuperClass::setVeclen( field->veclen() );
     SuperClass::setNNodes( field->values().size() );
-
     SuperClass::setNCells( ncells.x() * ncells.y() * ncells.z() );
-
     SuperClass::setCellType( Hexahedra );
     SuperClass::setCoords( field->coords() );
-
     SuperClass::setConnections( connections );
-
     SuperClass::setValues( field->values() );
     SuperClass::updateMinMaxCoords();
     SuperClass::updateMinMaxValues();
 
-
-    m_is_success = true;
+    BaseClass::m_is_success = true;
 }
 
 } // end of namespace kvs

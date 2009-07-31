@@ -236,6 +236,8 @@ void PolygonImporter::import( const kvs::Stl* stl )
     m_opacities[0] = 255;
 
     this->set_min_max_coord();
+
+    BaseClass::m_is_success = true;
 }
 
 /*==========================================================================*/
