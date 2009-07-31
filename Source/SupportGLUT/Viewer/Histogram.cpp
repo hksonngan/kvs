@@ -23,11 +23,11 @@ namespace kvs
 namespace glut
 {
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Constructor.
+ *  @brief  Constructs a new Histogram class.
  */
-/*==========================================================================*/
+/*===========================================================================*/
 Histogram::Histogram( void ):
     m_x( 0 ),
     m_y( 0 ),
@@ -37,17 +37,23 @@ Histogram::Histogram( void ):
     m_axis_color( kvs::RGBColor( 0, 0, 0 ) ),
     m_text_color( kvs::RGBColor( 0, 0, 0 ) ),
     m_background_color( kvs::RGBAColor( 0, 0, 0, 0.0f ) ),
-    m_graph_color( kvs::RGBAColor( 0, 0, 0, 1.0f ) )
+    m_graph_color( kvs::RGBAColor( 0, 0, 0, 1.0f ) ),
+    m_bias_parameter( 0.5f )
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Destructs the Histogram class.
+ */
+/*===========================================================================*/
 Histogram::~Histogram( void )
 {
 }
 
 /*==========================================================================*/
 /**
- *  Returns the x value of the histogram position.
+ *  @brief  Returns the x value of the histogram position.
  *  @return x value in the window coordinate system
  */
 /*==========================================================================*/
@@ -58,7 +64,7 @@ const size_t Histogram::x( void ) const
 
 /*==========================================================================*/
 /**
- *  Returns the y value of the histogram position.
+ *  @brief  Returns the y value of the histogram position.
  *  @return y value in the window coordinate system
  */
 /*==========================================================================*/
@@ -69,7 +75,7 @@ const size_t Histogram::y( void ) const
 
 /*==========================================================================*/
 /**
- *  Returns the graph width.
+ *  @brief  Returns the graph width.
  *  @return width
  */
 /*==========================================================================*/
@@ -80,7 +86,7 @@ const size_t Histogram::width( void ) const
 
 /*==========================================================================*/
 /**
- *  Returns the graph height.
+ *  @breif  Returns the graph height.
  *  @return height
  */
 /*==========================================================================*/
@@ -91,7 +97,7 @@ const size_t Histogram::height( void ) const
 
 /*==========================================================================*/
 /**
- *  Returns the frequency distribution table.
+ *  @brief  Returns the frequency distribution table.
  *  @return frequency distribution table
  */
 /*==========================================================================*/
@@ -102,9 +108,9 @@ const kvs::FrequencyTable& Histogram::table( void ) const
 
 /*==========================================================================*/
 /**
- *  Set the graph position.
- *  @param x [in] x value of the graph position
- *  @param y [in] y value of the graph position
+ *  @breif  Sets the graph position.
+ *  @param  x [in] x value of the graph position
+ *  @param  y [in] y value of the graph position
  */
 /*==========================================================================*/
 void Histogram::setPosition( const size_t x, const size_t y )
@@ -115,9 +121,9 @@ void Histogram::setPosition( const size_t x, const size_t y )
 
 /*==========================================================================*/
 /**
- *  Set the graph size.
- *  @param width [in] graph width
- *  @param height [in] graph height
+ *  @breif  Set the graph size.
+ *  @param  width [in] graph width
+ *  @param  height [in] graph height
  */
 /*==========================================================================*/
 void Histogram::setSize( const size_t width, const size_t height )
@@ -128,11 +134,11 @@ void Histogram::setSize( const size_t width, const size_t height )
 
 /*==========================================================================*/
 /**
- *  Set the position and the size.
- *  @param x [in] x value of the graph position
- *  @param y [in] y value of the graph position
- *  @param width [in] graph width
- *  @param height [in] graph height
+ *  @brief  Sets the position and the size.
+ *  @param  x [in] x value of the graph position
+ *  @param  y [in] y value of the graph position
+ *  @param  width [in] graph width
+ *  @param  height [in] graph height
  */
 /*==========================================================================*/
 void Histogram::setGeometry( const size_t x, const size_t y, const size_t width, const size_t height )
@@ -143,8 +149,8 @@ void Histogram::setGeometry( const size_t x, const size_t y, const size_t width,
 
 /*==========================================================================*/
 /**
- *  Set the axis width.
- *  @param axis_width [in] axis width
+ *  @brief  Sets the axis width.
+ *  @param  axis_width [in] axis width
  */
 /*==========================================================================*/
 void Histogram::setAxisWidth( const float axis_width )
@@ -154,8 +160,8 @@ void Histogram::setAxisWidth( const float axis_width )
 
 /*==========================================================================*/
 /**
- *  Set the axis color.
- *  @param axis_color [in] axis color
+ *  @breif  Sets the axis color.
+ *  @param  axis_color [in] axis color
  */
 /*==========================================================================*/
 void Histogram::setAxisColor( const kvs::RGBColor& axis_color )
@@ -165,8 +171,8 @@ void Histogram::setAxisColor( const kvs::RGBColor& axis_color )
 
 /*==========================================================================*/
 /**
- *  Set the text color.
- *  @param text_color [in] text color
+ *  @brief  Sets the text color.
+ *  @param  text_color [in] text color
  */
 /*==========================================================================*/
 void Histogram::setTextColor( const kvs::RGBColor& text_color )
@@ -176,8 +182,8 @@ void Histogram::setTextColor( const kvs::RGBColor& text_color )
 
 /*==========================================================================*/
 /**
- *  Set the background color.
- *  @param background_color [in] background color
+ *  @breif  Sets the background color.
+ *  @param  background_color [in] background color
  */
 /*==========================================================================*/
 void Histogram::setBackgroundColor( const kvs::RGBAColor& background_color )
@@ -187,8 +193,8 @@ void Histogram::setBackgroundColor( const kvs::RGBAColor& background_color )
 
 /*==========================================================================*/
 /**
- *  Set the graph color.
- *  @param graph_color [in] graph color
+ *  @brief  Sets the graph color.
+ *  @param  graph_color [in] graph color
  */
 /*==========================================================================*/
 void Histogram::setGraphColor( const kvs::RGBAColor& graph_color )
@@ -196,10 +202,25 @@ void Histogram::setGraphColor( const kvs::RGBAColor& graph_color )
     m_graph_color = graph_color;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets a bias parameter.
+ *  @param  bias_parameter [in] bias parameter for the bias function
+ */
+/*===========================================================================*/
+void Histogram::setBiasParameter( const float bias_parameter )
+{
+    /* Bias function: b(f,g) = f^{ln(g)/ln(0.5)}
+     *   f: frequecny count that is normalized in [0,1]
+     *   g: bias parameter in [0,1]
+     */
+    m_bias_parameter = kvs::Math::Clamp( bias_parameter, 0.0f, 1.0f );
+}
+
 /*==========================================================================*/
 /**
- *  Set the ignore value.
- *  @param value [in] ignore value
+ *  @brief  Sets the ignore value.
+ *  @param  value [in] ignore value
  */
 /*==========================================================================*/
 void Histogram::setIgnoreValue( const kvs::Real64 value )
@@ -209,29 +230,31 @@ void Histogram::setIgnoreValue( const kvs::Real64 value )
 
 /*==========================================================================*/
 /**
- *  Set the object and create the frequency distribution table.
- *  @param volume [in] pointer to the object
+ *  @brief  Sets the object and create the frequency distribution table.
+ *  @param  volume [in] pointer to the object
  */
 /*==========================================================================*/
 void Histogram::setObject( const kvs::StructuredVolumeObject* volume )
 {
     m_table.create( volume );
+    m_histogram_texture.release();
 }
 
 /*==========================================================================*/
 /**
- *  Set the object and create the frequency distribution table.
- *  @param image [in] pointer to the object
+ *  @brief  Sets the object and create the frequency distribution table.
+ *  @param  image [in] pointer to the object
  */
 /*==========================================================================*/
 void Histogram::setObject( const kvs::ImageObject* image )
 {
     m_table.create( image );
+    m_histogram_texture.release();
 }
 
 /*==========================================================================*/
 /**
- *  Draw the histogram.
+ *  @brief  Draws the histogram.
  */
 /*==========================================================================*/
 void Histogram::draw( void )
@@ -242,10 +265,15 @@ void Histogram::draw( void )
     const int right  = vp[2];
     const int top    = vp[3];
 
+    if ( !glIsTexture( m_histogram_texture.id() ) )
+    {
+        this->create_histogram_texture();
+    }
+
     glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT );
 
     glDisable( GL_LIGHTING );
-    glDisable( GL_TEXTURE_2D );
+    glDisable( GL_DEPTH_TEST );
 
     glEnable( GL_BLEND );
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
@@ -279,7 +307,7 @@ void Histogram::draw( void )
 
 /*==========================================================================*/
 /**
- *  Draw the axis.
+ *  @breif  Draws the axis.
  */
 /*==========================================================================*/
 void Histogram::draw_axis( void )
@@ -295,12 +323,15 @@ void Histogram::draw_axis( void )
 
 /*==========================================================================*/
 /**
- *  Draw the background.
+ *  @brief  Draws the background.
  */
 /*==========================================================================*/
 void Histogram::draw_background( void )
 {
+    glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT );
+
     glEnable( GL_BLEND );
+    glDisable( GL_TEXTURE_2D );
 
     glBegin( GL_POLYGON );
     glColor4ub( m_background_color.r(),
@@ -313,49 +344,48 @@ void Histogram::draw_background( void )
     glVertex2f( static_cast<GLfloat>(m_x + m_width), static_cast<GLfloat>(m_y + m_height) );
     glEnd();
 
-    glDisable( GL_BLEND );
+    glPopAttrib();
 }
 
 /*==========================================================================*/
 /**
- *  Draw the frequency distribution graph.
+ *  @brief  Draws the frequency distribution graph.
  */
 /*==========================================================================*/
 void Histogram::draw_frequency( void )
 {
-    const size_t nbins = static_cast<size_t>(m_table.nbins());
+    glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT );
 
-    const kvs::Real32 width = kvs::Real32( m_width )  / ( nbins - 1 );
-    const kvs::Real32 ratio = kvs::Real32( m_height ) / ( m_table.maxCount() );
+    const GLfloat x = m_x;
+    const GLfloat y = m_y;
+    const GLfloat width = static_cast<GLfloat>( m_width );
+    const GLfloat height = static_cast<GLfloat>( m_height );
 
+    glEnable( GL_TEXTURE_2D );
     glEnable( GL_BLEND );
+    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
-    glBegin( GL_LINES );
-    glColor4ub( m_graph_color.r(),
-                m_graph_color.g(),
-                m_graph_color.b(),
-                kvs::UInt8( m_graph_color.a() * 255.0f ) );
-    for ( size_t i = 0; i < nbins; i++ )
+    m_histogram_texture.bind();
     {
-        const kvs::Real32 height = m_table.bin().at(i) * ratio;
-        glVertex2f( static_cast<GLfloat>(m_x + width * i), static_cast<GLfloat>(m_y) );
-        glVertex2f( static_cast<GLfloat>(m_x + width * i), static_cast<GLfloat>(m_y + height) );
+        glBegin( GL_QUADS );
+        {
+            glTexCoord2f( 0.0f, 0.0f ); glVertex2f( x,         y );
+            glTexCoord2f( 1.0f, 0.0f ); glVertex2f( x + width, y );
+            glTexCoord2f( 1.0f, 1.0f ); glVertex2f( x + width, y + height );
+            glTexCoord2f( 0.0f, 1.0f ); glVertex2f( x,         y + height );
+        }
+        glEnd();
     }
-    glEnd();
-
-    glDisable( GL_BLEND );
+    m_histogram_texture.unbind();
 }
 
 /*==========================================================================*/
 /**
- *  Draw the string.
+ *  @brief  Draws the string.
  */
 /*==========================================================================*/
 void Histogram::draw_string( void )
 {
-//    glMatrixMode( GL_MODELVIEW );
-//    glPushMatrix();
-//    glLoadIdentity();
     glColor3ub( m_text_color.r(), m_text_color.g(), m_text_color.b() );
     {
         // Min value.
@@ -373,8 +403,72 @@ void Histogram::draw_string( void )
             glutBitmapCharacter( GLUT_BITMAP_8_BY_13, *( max_value.toStdString().c_str() + i ) );
         }
     }
-//    glPopMatrix();
-//    glMatrixMode( GL_PROJECTION );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the histogram image.
+ */
+/*===========================================================================*/
+const kvs::ValueArray<kvs::UInt8> Histogram::get_histogram_image( void ) const
+{
+    const size_t nchannels = 4;
+    const size_t width = m_table.nbins();
+    const size_t height = width;
+    const size_t npixels = width * height;
+
+    kvs::ValueArray<kvs::UInt8> data( npixels * nchannels );
+    data.fill( 0x00 );
+
+    const float g = m_bias_parameter;
+    const kvs::Real32 normalized_factor = 1.0f / ( m_table.maxCount() );
+    for ( size_t i = 0; i < width; i++ )
+    {
+        const size_t n = m_table.bin().at(i); // frequency count
+        const float f = n * normalized_factor; // normalized frequency count in [0,1]
+        const float b = std::pow( f, static_cast<float>( std::log(g) / std::log(0.5) ) );
+
+        const size_t h = static_cast<size_t>( b * height + 0.5f );
+        for ( size_t j = 0; j < h; j++ )
+        {
+            const size_t index = i + j * width;
+            data[ 4 * index + 0 ] = m_graph_color.r();
+            data[ 4 * index + 1 ] = m_graph_color.g();
+            data[ 4 * index + 2 ] = m_graph_color.b();
+            data[ 4 * index + 3 ] = static_cast<kvs::UInt8>( m_graph_color.a() * 255.0f );
+        }
+    }
+
+    return( data );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Creates the histogram texture.
+ */
+/*===========================================================================*/
+void Histogram::create_histogram_texture( void )
+{
+    const size_t nchannels = 4;
+    const size_t width = m_table.nbins();
+    const size_t height = width;
+
+    m_histogram_texture.setPixelFormat( nchannels, sizeof( kvs::UInt8 ) );
+    m_histogram_texture.setMinFilter( GL_NEAREST );
+    m_histogram_texture.setMagFilter( GL_NEAREST );
+    m_histogram_texture.create( width, height );
+    m_histogram_texture.download( width, height, this->get_histogram_image().pointer() );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Updates the histogram texture.
+ */
+/*===========================================================================*/
+void Histogram::update_histogram_texture( void )
+{
+    m_histogram_texture.release();
+    this->create_histogram_texture();
 }
 
 } // end of namesapce glut
