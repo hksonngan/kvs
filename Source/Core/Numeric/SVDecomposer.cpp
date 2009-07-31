@@ -427,7 +427,7 @@ void SVDecomposer<T>::decompose( void )
             } // if l == k
 
             // Not converged.
-            KVS_ASSERT( its != m_max_iterations - 1 );
+            KVS_ASSERT( its != static_cast<int>( m_max_iterations - 1 ) );
 
             x  = m_w[l];
             nm = k - 1 ;
