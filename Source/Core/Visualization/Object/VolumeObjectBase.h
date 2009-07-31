@@ -192,7 +192,6 @@ void VolumeObjectBase::calculate_min_max_values( void ) const
                 magnitude += static_cast<kvs::Real64>( ( *value ) * ( *value ) );
                 ++value;
             }
-            magnitude = kvs::Math::SquareRoot( magnitude );
 
             min_value = kvs::Math::Min( magnitude, min_value );
             max_value = kvs::Math::Max( magnitude, max_value );
