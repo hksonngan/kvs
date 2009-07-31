@@ -21,7 +21,7 @@ namespace kvs
 
 /*==========================================================================*/
 /**
- *  Constructor.
+ *  @brief  Constructs a new FrequencyTable class.
  */
 /*==========================================================================*/
 FrequencyTable::FrequencyTable( void ):
@@ -32,13 +32,18 @@ FrequencyTable::FrequencyTable( void ):
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Destructs the FrequencyTable class.
+ */
+/*===========================================================================*/
 FrequencyTable::~FrequencyTable( void )
 {
 }
 
 /*==========================================================================*/
 /**
- *  Returns the min. range.
+ *  @brief  Returns the min. range.
  *  @return min. range
  */
 /*==========================================================================*/
@@ -49,7 +54,7 @@ const kvs::Real64 FrequencyTable::minRange( void ) const
 
 /*==========================================================================*/
 /**
- *  Returns the max. range.
+ *  @brief  Returns the max. range.
  *  @return max. range
  */
 /*==========================================================================*/
@@ -60,7 +65,7 @@ const kvs::Real64 FrequencyTable::maxRange( void ) const
 
 /*==========================================================================*/
 /**
- *  Returns the max. counts of the bins.
+ *  @brief  Returns the max. counts of the bins.
  *  @return max. counts
  */
 /*==========================================================================*/
@@ -71,7 +76,7 @@ const size_t FrequencyTable::maxCount( void ) const
 
 /*==========================================================================*/
 /**
- *  Returns the number of bins.
+ *  @brief  Returns the number of bins.
  *  @return number of bins
  */
 /*==========================================================================*/
@@ -82,8 +87,8 @@ const kvs::UInt64 FrequencyTable::nbins( void ) const
 
 /*==========================================================================*/
 /**
- *  Returns the bin.
- *  @return bin
+ *  @brief  Returns the bin array.
+ *  @return bin array
  */
 /*==========================================================================*/
 const kvs::ValueArray<size_t>& FrequencyTable::bin( void ) const
@@ -93,7 +98,7 @@ const kvs::ValueArray<size_t>& FrequencyTable::bin( void ) const
 
 /*==========================================================================*/
 /**
- *  Set the ignore value.
+ *  @brief  Sets an ignore value.
  */
 /*==========================================================================*/
 void FrequencyTable::setIgnoreValue( const kvs::Real64 value )
@@ -101,13 +106,37 @@ void FrequencyTable::setIgnoreValue( const kvs::Real64 value )
     m_ignore_values.push_back( value );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets data range.
+ *  @param  min_range [in] min value range
+ *  @param  max_range [in] max value range
+ */
+/*===========================================================================*/
+void FrequencyTable::setRange( const kvs::Real64 min_range, const kvs::Real64 max_range )
+{
+    m_min_range = min_range;
+    m_max_range = max_range;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a number of bins
+ *  @param  nbins [in] number of bins
+ */
+/*===========================================================================*/
+void FrequencyTable::setNBins( const kvs::UInt64 nbins )
+{
+    m_nbins = nbins;
+}
+
 /*==========================================================================*/
 /**
- *  Create a frequency distribution table for a structured volume object.
- *  @param volume [in] pointer to the structured volume object
+ *  @brief  Creates a frequency distribution table for a structured volume object.
+ *  @param  volume [in] pointer to the volume object
  */
 /*==========================================================================*/
-void FrequencyTable::create( const kvs::StructuredVolumeObject* volume )
+void FrequencyTable::create( const kvs::VolumeObjectBase* volume )
 {
     // Calculate the min/max range value and the number of bins.
     this->calculate_range( volume );
@@ -122,9 +151,9 @@ void FrequencyTable::create( const kvs::StructuredVolumeObject* volume )
 
 /*==========================================================================*/
 /**
- *  Create a frequency distribution table for a image object.
- *  @param image [in] pointer to the image object
- *  @param channel [in] color element channel (0, 1, 2, 3)
+ *  @brief  Creates a frequency distribution table for a image object.
+ *  @param  image [in] pointer to the image object
+ *  @param  channel [in] color element channel (0, 1, 2, 3)
  */
 /*==========================================================================*/
 void FrequencyTable::create( const kvs::ImageObject* image, const size_t channel )
@@ -142,8 +171,8 @@ void FrequencyTable::create( const kvs::ImageObject* image, const size_t channel
 
 /*==========================================================================*/
 /**
- *  Returns counts of the bin which is specified by the index.
- *  @param index [in] index
+ *  @brief  Returns counts of the bin which is specified by the index.
+ *  @param  index [in] index
  *  @return counts
  */
 /*==========================================================================*/
@@ -154,8 +183,8 @@ const kvs::UInt64 FrequencyTable::operator [] ( const size_t index ) const
 
 /*==========================================================================*/
 /**
- *  Returns counts of the bin which is specified by the index.
- *  @param index [in] index
+ *  @brief  Returns counts of the bin which is specified by the index.
+ *  @param  index [in] index
  *  @return counts
  */
 /*==========================================================================*/
@@ -166,63 +195,100 @@ const kvs::UInt64 FrequencyTable::at( const size_t index ) const
 
 /*==========================================================================*/
 /**
- *  Calculate the bin range.
- *  @param volume [in] pointer to the structured volume object
+ *  @brief  Calculates the bin range.
+ *  @param  volume [in] pointer to the volume object
  */
 /*==========================================================================*/
-void FrequencyTable::calculate_range( const kvs::StructuredVolumeObject* volume )
+void FrequencyTable::calculate_range( const kvs::VolumeObjectBase* volume )
 {
+    // Number of bins.
+    if ( m_nbins == 0 )
+    {
+        // It is neccessary to estimate the number of bins by binning process.
+        m_nbins = 256;
+    }
+
+    // Data range.
     const std::type_info& type = volume->values().typeInfo()->type();
-    if (      type == typeid( kvs::Int8   ) )
+    if ( type == typeid( kvs::Int8 ) )
     {
-        m_min_range = kvs::Value<kvs::Int8>::Min();
-        m_max_range = kvs::Value<kvs::Int8>::Max();
-        m_nbins     = kvs::UInt64(1) << 8;
+        if ( kvs::Math::IsZero( m_min_range ) && kvs::Math::IsZero( m_max_range ) )
+        {
+            m_min_range = kvs::Value<kvs::Int8>::Min();
+            m_max_range = kvs::Value<kvs::Int8>::Max();
+        }
     }
-    else if ( type == typeid( kvs::UInt8  ) )
+
+    else if ( type == typeid( kvs::UInt8 ) )
     {
-        m_min_range = kvs::Value<kvs::UInt8>::Min();
-        m_max_range = kvs::Value<kvs::UInt8>::Max();
-        m_nbins     = kvs::UInt64(1) << 8;
+        if ( kvs::Math::IsZero( m_min_range ) && kvs::Math::IsZero( m_max_range ) )
+        {
+            m_min_range = kvs::Value<kvs::UInt8>::Min();
+            m_max_range = kvs::Value<kvs::UInt8>::Max();
+        }
     }
+
     else if ( type == typeid( kvs::Int16  ) )
     {
-        m_min_range = kvs::Value<kvs::Int16>::Min();
-        m_max_range = kvs::Value<kvs::Int16>::Max();
-        m_nbins     = kvs::UInt64(1) << 16;
+        if ( kvs::Math::IsZero( m_min_range ) && kvs::Math::IsZero( m_max_range ) )
+        {
+            m_min_range = kvs::Value<kvs::Int16>::Min();
+            m_max_range = kvs::Value<kvs::Int16>::Max();
+        }
     }
+
     else if ( type == typeid( kvs::UInt16 ) )
     {
-        m_min_range = kvs::Value<kvs::UInt16>::Min();
-        m_max_range = kvs::Value<kvs::UInt16>::Max();
-        m_nbins     = kvs::UInt64(1) << 16;
+        if ( kvs::Math::IsZero( m_min_range ) && kvs::Math::IsZero( m_max_range ) )
+        {
+            m_min_range = kvs::Value<kvs::UInt16>::Min();
+            m_max_range = kvs::Value<kvs::UInt16>::Max();
+        }
     }
+
     else if ( type == typeid( kvs::Int32  ) )
     {
-        m_min_range = kvs::Value<kvs::Int32>::Min();
-        m_max_range = kvs::Value<kvs::Int32>::Max();
-        m_nbins     = kvs::UInt64(1) << 32;
+        if ( kvs::Math::IsZero( m_min_range ) && kvs::Math::IsZero( m_max_range ) )
+        {
+            m_min_range = kvs::Value<kvs::Int32>::Min();
+            m_max_range = kvs::Value<kvs::Int32>::Max();
+        }
     }
+
     else if ( type == typeid( kvs::UInt32 ) )
     {
-        m_min_range = kvs::Value<kvs::UInt32>::Min();
-        m_max_range = kvs::Value<kvs::UInt32>::Max();
-        m_nbins     = kvs::UInt64(1) << 32;
+        if ( kvs::Math::IsZero( m_min_range ) && kvs::Math::IsZero( m_max_range ) )
+        {
+            m_min_range = kvs::Value<kvs::UInt32>::Min();
+            m_max_range = kvs::Value<kvs::UInt32>::Max();
+        }
     }
-/*
-    else if ( type == typeid( kvs::Int64  ) || type == typeid( kvs::UInt64 ) )
+
+    else if ( type == typeid( kvs::Int64 ) )
     {
-        m_min_range = kvs::Value<kvs::UInt64>::Min();
-        m_max_range = kvs::Value<kvs::UInt64>::Max();
-        m_nbins = kvs::UInt64(1) << 64;
+        if ( kvs::Math::IsZero( m_min_range ) && kvs::Math::IsZero( m_max_range ) )
+        {
+            m_min_range = kvs::Value<kvs::Int64>::Min();
+            m_max_range = kvs::Value<kvs::Int64>::Max();
+        }
     }
-*/
+
+    else if ( type == typeid( kvs::UInt64 ) )
+    {
+        if ( kvs::Math::IsZero( m_min_range ) && kvs::Math::IsZero( m_max_range ) )
+        {
+            m_min_range = kvs::Value<kvs::UInt64>::Min();
+            m_max_range = kvs::Value<kvs::UInt64>::Max();
+        }
+    }
+
     else if ( type == typeid( kvs::Real32 ) || type == typeid( kvs::Real64 ) )
     {
-        m_min_range = volume->minValue();
-        m_max_range = volume->maxValue();
-        // It is neccessary to estimate the number of bins by binning process.
-        m_nbins = 100;
+        if ( kvs::Math::IsZero( m_min_range ) && kvs::Math::IsZero( m_max_range ) )
+        {
+            m_min_range = volume->minValue();
+            m_max_range = volume->maxValue();
+        }
     }
 }
 
@@ -258,11 +324,11 @@ void FrequencyTable::calculate_range( const kvs::ImageObject* image )
 
 /*==========================================================================*/
 /**
- *  Count the bin.
- *  @param volume [in] pointer to the structured volume object
+ *  @brief  Counts the bin.
+ *  @param  volume [in] pointer to the volume object
  */
 /*==========================================================================*/
-void FrequencyTable::count_bin( const kvs::StructuredVolumeObject* volume )
+void FrequencyTable::count_bin( const kvs::VolumeObjectBase* volume )
 {
     const std::type_info& type = volume->values().typeInfo()->type();
     if (      type == typeid( kvs::Int8 )   ) this->binning<kvs::Int8>( volume );
@@ -277,9 +343,9 @@ void FrequencyTable::count_bin( const kvs::StructuredVolumeObject* volume )
 
 /*==========================================================================*/
 /**
- *  Count the bin.
- *  @param image [in] pointer to the image object
- *  @param channel [in] color element channel (0, 1, 2, 3)
+ *  @brief  Counts the bin.
+ *  @param  image [in] pointer to the image object
+ *  @param  channel [in] color element channel (0, 1, 2, 3)
  */
 /*==========================================================================*/
 void FrequencyTable::count_bin( const kvs::ImageObject* image, const size_t channel )
@@ -300,8 +366,8 @@ void FrequencyTable::count_bin( const kvs::ImageObject* image, const size_t chan
 
 /*==========================================================================*/
 /**
- *  Test which a value is the ignore value or not.
- *  @param value [in] value
+ *  @brief  Tests which a value is the ignore value or not.
+ *  @param  value [in] value
  *  @return true, if the value is the ignore value.
  */
 /*==========================================================================*/

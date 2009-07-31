@@ -18,7 +18,7 @@
 #include <kvs/Type>
 #include <kvs/Math>
 #include <kvs/Message>
-#include <kvs/StructuredVolumeObject>
+#include <kvs/VolumeObjectBase>
 #include <kvs/ImageObject>
 #include <kvs/ClassName>
 #include <list>
@@ -67,9 +67,13 @@ public:
 
     void setIgnoreValue( const kvs::Real64 value );
 
+    void setRange( const kvs::Real64 min_range, const kvs::Real64 max_range );
+
+    void setNBins( const kvs::UInt64 nbins );
+
 public:
 
-    void create( const kvs::StructuredVolumeObject* volume );
+    void create( const kvs::VolumeObjectBase* volume );
 
     void create( const kvs::ImageObject* image, const size_t channel = 0 );
 
@@ -81,16 +85,16 @@ public:
 
 private:
 
-    void calculate_range( const kvs::StructuredVolumeObject* volume );
+    void calculate_range( const kvs::VolumeObjectBase* volume );
 
     void calculate_range( const kvs::ImageObject* image );
 
-    void count_bin( const kvs::StructuredVolumeObject* volume );
+    void count_bin( const kvs::VolumeObjectBase* volume );
 
     void count_bin( const kvs::ImageObject* image, const size_t channel );
 
     template <typename T>
-    void binning( const kvs::StructuredVolumeObject* volume );
+    void binning( const kvs::VolumeObjectBase* volume );
 
     template <typename T>
     void binning( const kvs::ImageObject* image, const size_t channel );
@@ -101,25 +105,47 @@ private:
 /*==========================================================================*/
 /**
  *  Create a bin array.
- *  @param volume [in] pointer to the structured volume object
+ *  @param volume [in] pointer to the volume object
  */
 /*==========================================================================*/
 template <typename T>
-inline void FrequencyTable::binning( const kvs::StructuredVolumeObject* volume )
+inline void FrequencyTable::binning( const kvs::VolumeObjectBase* volume )
 {
-    const T* values = reinterpret_cast<const T*>( volume->values().pointer() );
+    const size_t veclen = volume->veclen();
+    const T* value = reinterpret_cast<const T*>( volume->values().pointer() );
+    const T* const end = value + volume->nnodes() * veclen;
     const kvs::Real64 width = ( m_max_range - m_min_range ) / kvs::Real64( m_nbins - 1 );
 
-    const size_t nnodes = volume->nnodes();
-    for ( size_t i = 0; i < nnodes; i++ )
+    if ( veclen == 1 )
     {
-        const T value = *( values + i );
-
-        if ( !this->is_ignore_value( value ) )
+        while ( value < end )
         {
-            const size_t index = static_cast<size_t>( ( value - m_min_range ) / width + 0.5f );
-            m_bin[index] = m_bin[index] + 1;
-            m_max_count = kvs::Math::Max( m_max_count, m_bin[index] );
+            if ( !this->is_ignore_value( *value ) )
+            {
+                const size_t index = static_cast<size_t>( ( *value - m_min_range ) / width + 0.5f );
+                m_bin[index] = m_bin[index] + 1;
+                m_max_count = kvs::Math::Max( m_max_count, m_bin[index] );
+            }
+            ++value;
+        }
+    }
+    else
+    {
+        while ( value < end )
+        {
+            kvs::Real64 magnitude = 0.0;
+            for ( size_t i = 0; i < veclen; ++i )
+            {
+                magnitude += static_cast<kvs::Real64>( ( *value ) * ( *value ) );
+                ++value;
+            }
+
+            if ( !this->is_ignore_value( magnitude ) )
+            {
+                const size_t index = static_cast<size_t>( ( magnitude - m_min_range ) / width + 0.5f );
+                m_bin[index] = m_bin[index] + 1;
+                m_max_count = kvs::Math::Max( m_max_count, m_bin[index] );
+            }
         }
     }
 }
