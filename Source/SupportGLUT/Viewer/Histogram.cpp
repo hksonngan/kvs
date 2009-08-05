@@ -252,6 +252,18 @@ void Histogram::setObject( const kvs::ImageObject* image )
     m_histogram_texture.release();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets data range.
+ *  @param  min_range [in] min value range
+ *  @param  max_range [in] max value range
+ */
+/*===========================================================================*/
+void Histogram::setRange( const kvs::Real64 min_range, const kvs::Real64 max_range )
+{
+    m_table.setRange( min_range, max_range );
+}
+
 /*==========================================================================*/
 /**
  *  @brief  Draws the histogram.

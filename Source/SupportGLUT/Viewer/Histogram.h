@@ -93,6 +93,8 @@ public:
 
     void setIgnoreValue( const kvs::Real64 value );
 
+    void setRange( const kvs::Real64 min_range, const kvs::Real64 max_range );
+
     void setObject( const kvs::StructuredVolumeObject* volume );
 
     void setObject( const kvs::ImageObject* image );
