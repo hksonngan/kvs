@@ -138,6 +138,7 @@ $(OUTDIR)\.\Utility\Time.obj \
 $(OUTDIR)\.\Utility\Tokenizer.obj \
 $(OUTDIR)\.\Utility\Value.obj \
 $(OUTDIR)\.\Utility\ValueArray.obj \
+$(OUTDIR)\.\Visualization\Event\EventBase.obj \
 $(OUTDIR)\.\Visualization\Exporter\LineExporter.obj \
 $(OUTDIR)\.\Visualization\Exporter\PointExporter.obj \
 $(OUTDIR)\.\Visualization\Exporter\PolygonExporter.obj \
@@ -285,6 +286,12 @@ $<
 $<
 <<
 
+{.\Visualization\Event\}.cpp{$(OUTDIR)\.\Visualization\Event\}.obj::
+	IF NOT EXIST $(OUTDIR)\.\Visualization\Event $(MKDIR) $(OUTDIR)\.\Visualization\Event
+	$(CPP) /c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) /Fo$(OUTDIR)\.\Visualization\Event\ @<<
+$<
+<<
+
 {.\Utility\}.cpp{$(OUTDIR)\.\Utility\}.obj::
 	IF NOT EXIST $(OUTDIR)\.\Utility $(MKDIR) $(OUTDIR)\.\Utility
 	$(CPP) /c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) /Fo$(OUTDIR)\.\Utility\ @<<
@@ -417,6 +424,8 @@ install::
 	$(INSTALL) .\Utility\*.h $(INSTALL_DIR)\include\Core\.\Utility
 	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\Visualization $(MKDIR) $(INSTALL_DIR)\include\Core\.\Visualization
 	$(INSTALL) .\Visualization\*.h $(INSTALL_DIR)\include\Core\.\Visualization
+	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\Visualization\Event $(MKDIR) $(INSTALL_DIR)\include\Core\.\Visualization\Event
+	$(INSTALL) .\Visualization\Event\*.h $(INSTALL_DIR)\include\Core\.\Visualization\Event
 	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\Visualization\Exporter $(MKDIR) $(INSTALL_DIR)\include\Core\.\Visualization\Exporter
 	$(INSTALL) .\Visualization\Exporter\*.h $(INSTALL_DIR)\include\Core\.\Visualization\Exporter
 	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\Visualization\Filter $(MKDIR) $(INSTALL_DIR)\include\Core\.\Visualization\Filter

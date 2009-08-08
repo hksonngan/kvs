@@ -138,6 +138,7 @@ $(OUTDIR)/./Utility/Time.o \
 $(OUTDIR)/./Utility/Tokenizer.o \
 $(OUTDIR)/./Utility/Value.o \
 $(OUTDIR)/./Utility/ValueArray.o \
+$(OUTDIR)/./Visualization/Event/EventBase.o \
 $(OUTDIR)/./Visualization/Exporter/LineExporter.o \
 $(OUTDIR)/./Visualization/Exporter/PointExporter.o \
 $(OUTDIR)/./Visualization/Exporter/PolygonExporter.o \
@@ -269,6 +270,10 @@ $(OUTDIR)/./Visualization/Exporter/%.o: ./Visualization/Exporter/%.cpp ./Visuali
 	$(MKDIR) $(OUTDIR)/./Visualization/Exporter
 	$(CPP) -c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) -o $@ $<
 
+$(OUTDIR)/./Visualization/Event/%.o: ./Visualization/Event/%.cpp ./Visualization/Event/%.h
+	$(MKDIR) $(OUTDIR)/./Visualization/Event
+	$(CPP) -c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) -o $@ $<
+
 $(OUTDIR)/./Utility/%.o: ./Utility/%.cpp ./Utility/%.h
 	$(MKDIR) $(OUTDIR)/./Utility
 	$(CPP) -c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) -o $@ $<
@@ -369,6 +374,8 @@ install::
 	$(INSTALL) ./Utility/*.h $(INSTALL_DIR)/include/Core/./Utility
 	$(MKDIR) $(INSTALL_DIR)/include/Core/./Visualization
 	$(INSTALL) ./Visualization/*.h $(INSTALL_DIR)/include/Core/./Visualization
+	$(MKDIR) $(INSTALL_DIR)/include/Core/./Visualization/Event
+	$(INSTALL) ./Visualization/Event/*.h $(INSTALL_DIR)/include/Core/./Visualization/Event
 	$(MKDIR) $(INSTALL_DIR)/include/Core/./Visualization/Exporter
 	$(INSTALL) ./Visualization/Exporter/*.h $(INSTALL_DIR)/include/Core/./Visualization/Exporter
 	$(MKDIR) $(INSTALL_DIR)/include/Core/./Visualization/Filter
