@@ -104,6 +104,7 @@ Utility/Type
 Utility/Value
 Utility/ValueArray
 Utility/Version
+Visualization/Event/EventBase
 Visualization/Exporter/ExporterBase
 Visualization/Exporter/LineExporter
 Visualization/Exporter/PointExporter
