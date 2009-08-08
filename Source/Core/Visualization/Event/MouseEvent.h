@@ -15,6 +15,7 @@
 #define KVS_CORE_MOUSE_EVENT_H_INCLUDE
 
 #include <kvs/ClassName>
+#include <kvs/EventBase>
 
 
 namespace kvs
@@ -25,7 +26,7 @@ namespace kvs
  *  Mouse event class.
  */
 /*==========================================================================*/
-class MouseEvent
+class MouseEvent : public kvs::EventBase
 {
     kvsClassName( MouseEvent );
 
@@ -36,6 +37,7 @@ protected:
     int m_x;         ///< mouse cursol position x
     int m_y;         ///< mouse cursol position y
     int m_modifiers; ///< modifier keys
+    int m_action;    ///< mouse action
 
 public:
 
@@ -49,9 +51,19 @@ public:
 
 public:
 
-    void set( int button, int state, int x, int y, int modifiers = 0 );
+//    void set( int button, int state, int x, int y, int modifiers = 0 );
 
-    void set( int x, int y );
+//    void set( int x, int y );
+
+    void setButton( int button );
+
+    void setState( int state );
+
+    void setPosition( int x, int y );
+
+    void setModifiers( int modifiers );
+
+    void setAction( int action );
 
 public:
 
@@ -64,6 +76,10 @@ public:
     const int y( void ) const;
 
     const int modifiers( void ) const;
+
+    const int action( void ) const;
+
+    virtual const int type( void ) const;
 };
 
 } // end of namespace kvs

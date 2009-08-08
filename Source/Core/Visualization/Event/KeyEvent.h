@@ -15,6 +15,7 @@
 #define KVS_CORE_KEY_EVENT_H_INCLUDE
 
 #include <kvs/ClassName>
+#include <kvs/EventBase>
 
 
 namespace kvs
@@ -25,7 +26,7 @@ namespace kvs
  *  Key event class.
  */
 /*==========================================================================*/
-class KeyEvent
+class KeyEvent : public kvs::EventBase
 {
     kvsClassName( KeyEvent );
 
@@ -47,7 +48,11 @@ public:
 
 public:
 
-    void set( int key, int x, int y );
+//    void set( int key, int x, int y );
+
+    void setKey( int key );
+
+    void setPosition( int x, int y );
 
 public:
 
@@ -56,6 +61,8 @@ public:
     const int x( void ) const;
 
     const int y( void ) const;
+
+    virtual const int type( void ) const;
 };
 
 } // end of namespace kvs

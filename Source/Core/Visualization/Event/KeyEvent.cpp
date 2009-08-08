@@ -19,7 +19,6 @@ namespace kvs
 
 KeyEvent::KeyEvent( void )
 {
-
 }
 
 KeyEvent::KeyEvent( const KeyEvent& event ):
@@ -40,11 +39,24 @@ KeyEvent::~KeyEvent( void )
 {
 }
 
+/*
 void KeyEvent::set( int key, int x, int y )
 {
     m_key = key;
     m_x   = x;
     m_y   = y;
+}
+*/
+
+void KeyEvent::setKey( int key )
+{
+    m_key = key;
+}
+
+void KeyEvent::setPosition( int x, int y )
+{
+    m_x = x;
+    m_y = y;
 }
 
 const int KeyEvent::key( void ) const
@@ -60,6 +72,11 @@ const int KeyEvent::x( void ) const
 const int KeyEvent::y( void ) const
 {
     return( m_y );
+}
+
+const int KeyEvent::type( void ) const
+{
+    return( EventBase::KeyPressEvent );
 }
 
 } // end of namespace kvs
