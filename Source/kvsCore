@@ -106,6 +106,7 @@
 #include <Core/Utility/Version.h>
 #include <Core/Visualization/Event/EventBase.h>
 #include <Core/Visualization/Event/KeyEvent.h>
+#include <Core/Visualization/Event/MouseEvent.h>
 #include <Core/Visualization/Exporter/ExporterBase.h>
 #include <Core/Visualization/Exporter/LineExporter.h>
 #include <Core/Visualization/Exporter/PointExporter.h>
@@ -197,7 +198,6 @@
 #include <Core/Visualization/Viewer/Material.h>
 #include <Core/Visualization/Viewer/Mouse.h>
 #include <Core/Visualization/Viewer/MouseButton.h>
-#include <Core/Visualization/Viewer/MouseEvent.h>
 #include <Core/Visualization/Viewer/ObjectManager.h>
 #include <Core/Visualization/Viewer/OpenGL.h>
 #include <Core/Visualization/Viewer/RendererManager.h>

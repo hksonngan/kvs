@@ -106,6 +106,7 @@ Utility/ValueArray
 Utility/Version
 Visualization/Event/EventBase
 Visualization/Event/KeyEvent
+Visualization/Event/MouseEvent
 Visualization/Exporter/ExporterBase
 Visualization/Exporter/LineExporter
 Visualization/Exporter/PointExporter
@@ -197,7 +198,6 @@ Visualization/Viewer/Light
 Visualization/Viewer/Material
 Visualization/Viewer/Mouse
 Visualization/Viewer/MouseButton
-Visualization/Viewer/MouseEvent
 Visualization/Viewer/ObjectManager
 Visualization/Viewer/OpenGL
 Visualization/Viewer/RendererManager

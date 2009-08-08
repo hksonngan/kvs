@@ -140,6 +140,7 @@ $(OUTDIR)/./Utility/Value.o \
 $(OUTDIR)/./Utility/ValueArray.o \
 $(OUTDIR)/./Visualization/Event/EventBase.o \
 $(OUTDIR)/./Visualization/Event/KeyEvent.o \
+$(OUTDIR)/./Visualization/Event/MouseEvent.o \
 $(OUTDIR)/./Visualization/Exporter/LineExporter.o \
 $(OUTDIR)/./Visualization/Exporter/PointExporter.o \
 $(OUTDIR)/./Visualization/Exporter/PolygonExporter.o \
@@ -225,7 +226,6 @@ $(OUTDIR)/./Visualization/Viewer/IDManager.o \
 $(OUTDIR)/./Visualization/Viewer/Light.o \
 $(OUTDIR)/./Visualization/Viewer/Material.o \
 $(OUTDIR)/./Visualization/Viewer/Mouse.o \
-$(OUTDIR)/./Visualization/Viewer/MouseEvent.o \
 $(OUTDIR)/./Visualization/Viewer/ObjectManager.o \
 $(OUTDIR)/./Visualization/Viewer/RendererManager.o \
 $(OUTDIR)/./Visualization/Viewer/ScreenCore.o \
