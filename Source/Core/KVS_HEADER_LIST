@@ -105,6 +105,7 @@ Utility/Value
 Utility/ValueArray
 Utility/Version
 Visualization/Event/EventBase
+Visualization/Event/KeyEvent
 Visualization/Exporter/ExporterBase
 Visualization/Exporter/LineExporter
 Visualization/Exporter/PointExporter
@@ -192,7 +193,6 @@ Visualization/Viewer/FrameBuffer
 Visualization/Viewer/GlobalCore
 Visualization/Viewer/IDManager
 Visualization/Viewer/Key
-Visualization/Viewer/KeyEvent
 Visualization/Viewer/Light
 Visualization/Viewer/Material
 Visualization/Viewer/Mouse

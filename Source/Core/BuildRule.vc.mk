@@ -139,6 +139,7 @@ $(OUTDIR)\.\Utility\Tokenizer.obj \
 $(OUTDIR)\.\Utility\Value.obj \
 $(OUTDIR)\.\Utility\ValueArray.obj \
 $(OUTDIR)\.\Visualization\Event\EventBase.obj \
+$(OUTDIR)\.\Visualization\Event\KeyEvent.obj \
 $(OUTDIR)\.\Visualization\Exporter\LineExporter.obj \
 $(OUTDIR)\.\Visualization\Exporter\PointExporter.obj \
 $(OUTDIR)\.\Visualization\Exporter\PolygonExporter.obj \
@@ -221,7 +222,6 @@ $(OUTDIR)\.\Visualization\Viewer\DisplayList.obj \
 $(OUTDIR)\.\Visualization\Viewer\FrameBuffer.obj \
 $(OUTDIR)\.\Visualization\Viewer\GlobalCore.obj \
 $(OUTDIR)\.\Visualization\Viewer\IDManager.obj \
-$(OUTDIR)\.\Visualization\Viewer\KeyEvent.obj \
 $(OUTDIR)\.\Visualization\Viewer\Light.obj \
 $(OUTDIR)\.\Visualization\Viewer\Material.obj \
 $(OUTDIR)\.\Visualization\Viewer\Mouse.obj \

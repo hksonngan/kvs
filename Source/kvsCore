@@ -105,6 +105,7 @@
 #include <Core/Utility/ValueArray.h>
 #include <Core/Utility/Version.h>
 #include <Core/Visualization/Event/EventBase.h>
+#include <Core/Visualization/Event/KeyEvent.h>
 #include <Core/Visualization/Exporter/ExporterBase.h>
 #include <Core/Visualization/Exporter/LineExporter.h>
 #include <Core/Visualization/Exporter/PointExporter.h>
@@ -192,7 +193,6 @@
 #include <Core/Visualization/Viewer/GlobalCore.h>
 #include <Core/Visualization/Viewer/IDManager.h>
 #include <Core/Visualization/Viewer/Key.h>
-#include <Core/Visualization/Viewer/KeyEvent.h>
 #include <Core/Visualization/Viewer/Light.h>
 #include <Core/Visualization/Viewer/Material.h>
 #include <Core/Visualization/Viewer/Mouse.h>
