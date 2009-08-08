@@ -104,6 +104,7 @@
 #include <Core/Utility/Value.h>
 #include <Core/Utility/ValueArray.h>
 #include <Core/Utility/Version.h>
+#include <Core/Visualization/Event/EventBase.h>
 #include <Core/Visualization/Exporter/ExporterBase.h>
 #include <Core/Visualization/Exporter/LineExporter.h>
 #include <Core/Visualization/Exporter/PointExporter.h>
