@@ -544,9 +544,10 @@ void ScreenBase::default_mouse_press_event( QMouseEvent* event )
 #else
     const int modifier = kvs::qt::KVSKey::Modifier( event->state() );
 #endif
-    m_mouse_event->set( kvs::qt::KVSMouseButton::Button( event->button() ),
-                        kvs::MouseButton::Down,
-                        event->x(), event->y(), modifier );
+    m_mouse_event->setPosition( event->x(), event->y() );
+    m_mouse_event->setButton( kvs::qt::KVSMouseButton::Button( event->button() ) );
+    m_mouse_event->setState( kvs::MouseButton::Down );
+    m_mouse_event->setModifiers( modifier );
 
     // Left button action.
     if( event->button() == Qt::LeftButton )
@@ -554,14 +555,11 @@ void ScreenBase::default_mouse_press_event( QMouseEvent* event )
         if( !is_active_move( event->x(), event->y() ) ) return;
 
         kvs::Mouse::TransMode mode;
-//        switch( event->modifiers() )
         switch( modifier )
         {
-//        case Qt::ShiftModifier:
         case kvs::Key::ShiftModifier:
             mode = kvs::Mouse::Scaling;
             break;
-//        case Qt::ControlModifier:
         case kvs::Key::ControlModifier:
             mode = kvs::Mouse::Translation;
             break;
@@ -605,9 +603,15 @@ void ScreenBase::default_mouse_move_event( QMouseEvent* event )
 #else
     const int modifier = kvs::qt::KVSKey::Modifier( event->state() );
 #endif
+    m_mouse_event->setPosition( event->x(), event->y() );
+    m_mouse_event->setButton( kvs::qt::KVSMouseButton::Button( event->button() ) );
+    m_mouse_event->setState( kvs::MouseButton::Down );
+    m_mouse_event->setModifiers( modifier );
+/*
     m_mouse_event->set( kvs::qt::KVSMouseButton::Button( event->button() ),
                         kvs::MouseButton::Down,
                         event->x(), event->y(), modifier );
+*/
 
     // Call the additional mouse move function.
     m_pfunc_add_mouse_move_event( m_mouse_event );
@@ -643,10 +647,10 @@ void ScreenBase::default_mouse_release_event( QMouseEvent* event )
 #else
     const int modifier = kvs::qt::KVSKey::Modifier( event->state() );
 #endif
-    m_mouse_event->set( kvs::qt::KVSMouseButton::Button( event->button() ),
-                        kvs::MouseButton::Up,
-                        event->x(), event->y(), modifier );
-
+    m_mouse_event->setPosition( event->x(), event->y() );
+    m_mouse_event->setButton( kvs::qt::KVSMouseButton::Button( event->button() ) );
+    m_mouse_event->setState( kvs::MouseButton::Up );
+    m_mouse_event->setModifiers( modifier );
 
     // Left button action.
     if( event->button() == Qt::LeftButton )
@@ -683,9 +687,10 @@ void ScreenBase::default_mouse_double_click_event( QMouseEvent* event )
 #else
     const int modifier = kvs::qt::KVSKey::Modifier( event->state() );
 #endif
-    m_mouse_event->set( kvs::qt::KVSMouseButton::Button( event->button() ),
-                        kvs::MouseButton::Down,
-                        event->x(), event->y(), modifier );
+    m_mouse_event->setPosition( event->x(), event->y() );
+    m_mouse_event->setButton( kvs::qt::KVSMouseButton::Button( event->button() ) );
+    m_mouse_event->setState( kvs::MouseButton::Down );
+    m_mouse_event->setModifiers( modifier );
 
     // Call the additional double click function.
     m_pfunc_add_mouse_double_click_event( m_mouse_event );
@@ -727,7 +732,8 @@ void ScreenBase::default_wheel_event( QWheelEvent* event )
 /*==========================================================================*/
 void ScreenBase::default_key_press_event( QKeyEvent* event )
 {
-    m_key_event->set( kvs::qt::KVSKey::Code( event->key() ), 0, 0 );
+    m_key_event->setPosition( 0, 0 );
+    m_key_event->setKey( kvs::qt::KVSKey::Code( event->key() ) );
 
     switch( m_key_event->key() )
     {
@@ -818,9 +824,10 @@ void ScreenBase::replaced_mouse_press_event( QMouseEvent* event )
 #else
     const int modifier = kvs::qt::KVSKey::Modifier( event->state() );
 #endif
-    m_mouse_event->set( kvs::qt::KVSMouseButton::Button( event->button() ),
-                        kvs::MouseButton::Down,
-                        event->x(), event->y(), modifier );
+    m_mouse_event->setPosition( event->x(), event->y() );
+    m_mouse_event->setButton( kvs::qt::KVSMouseButton::Button( event->button() ) );
+    m_mouse_event->setState( kvs::MouseButton::Down );
+    m_mouse_event->setModifiers( modifier );
 
     m_pfunc_set_mouse_press_event( m_mouse_event );
 }
@@ -838,9 +845,10 @@ void ScreenBase::replaced_mouse_move_event( QMouseEvent* event )
 #else
     const int modifier = kvs::qt::KVSKey::Modifier( event->state() );
 #endif
-    m_mouse_event->set( kvs::qt::KVSMouseButton::Button( event->button() ),
-                        kvs::MouseButton::Down,
-                        event->x(), event->y(), modifier );
+    m_mouse_event->setPosition( event->x(), event->y() );
+    m_mouse_event->setButton( kvs::qt::KVSMouseButton::Button( event->button() ) );
+    m_mouse_event->setState( kvs::MouseButton::Down );
+    m_mouse_event->setModifiers( modifier );
 
     m_pfunc_set_mouse_move_event( m_mouse_event );
 }
@@ -858,9 +866,10 @@ void ScreenBase::replaced_mouse_release_event( QMouseEvent* event )
 #else
     const int modifier = kvs::qt::KVSKey::Modifier( event->state() );
 #endif
-    m_mouse_event->set( kvs::qt::KVSMouseButton::Button( event->button() ),
-                        kvs::MouseButton::Up,
-                        event->x(), event->y(), modifier );
+    m_mouse_event->setPosition( event->x(), event->y() );
+    m_mouse_event->setButton( kvs::qt::KVSMouseButton::Button( event->button() ) );
+    m_mouse_event->setState( kvs::MouseButton::Up );
+    m_mouse_event->setModifiers( modifier );
 
     m_pfunc_set_mouse_release_event( m_mouse_event );
 }
@@ -878,9 +887,10 @@ void ScreenBase::replaced_mouse_double_click_event( QMouseEvent* event )
 #else
     const int modifier = kvs::qt::KVSKey::Modifier( event->state() );
 #endif
-    m_mouse_event->set( kvs::qt::KVSMouseButton::Button( event->button() ),
-                        kvs::MouseButton::Down,
-                        event->x(), event->y(), modifier );
+    m_mouse_event->setPosition( event->x(), event->y() );
+    m_mouse_event->setButton( kvs::qt::KVSMouseButton::Button( event->button() ) );
+    m_mouse_event->setState( kvs::MouseButton::Down );
+    m_mouse_event->setModifiers( modifier );
 
     m_pfunc_set_mouse_double_click_event( m_mouse_event );
 }
@@ -901,15 +911,17 @@ void ScreenBase::replaced_wheel_event( QWheelEvent* event )
 
     if( event->delta() > 0 )
     {
-        m_mouse_event->set( kvs::MouseButton::WheelUp,
-                            kvs::MouseButton::WheelUp,
-                            event->x(), event->y(), modifier );
+        m_mouse_event->setPosition( event->x(), event->y() );
+        m_mouse_event->setButton( kvs::MouseButton::WheelUp );
+        m_mouse_event->setState( kvs::MouseButton::WheelUp );
+        m_mouse_event->setModifiers( modifier );
     }
     else
     {
-        m_mouse_event->set( kvs::MouseButton::WheelDown,
-                            kvs::MouseButton::WheelDown,
-                            event->x(), event->y(), modifier );
+        m_mouse_event->setPosition( event->x(), event->y() );
+        m_mouse_event->setButton( kvs::MouseButton::WheelDown );
+        m_mouse_event->setState( kvs::MouseButton::WheelDown );
+        m_mouse_event->setModifiers( modifier );
     }
 
     m_pfunc_set_wheel_event( m_mouse_event );
@@ -923,7 +935,9 @@ void ScreenBase::replaced_wheel_event( QWheelEvent* event )
 /*==========================================================================*/
 void ScreenBase::replaced_key_press_event( QKeyEvent* event )
 {
-    m_key_event->set( kvs::qt::KVSKey::Code( event->key() ), 0, 0 );
+    m_key_event->setPosition( 0, 0 );
+    m_key_event->setKey( kvs::qt::KVSKey::Code( event->key() ) );
+
     m_pfunc_set_key_press_event( m_key_event );
 }
 

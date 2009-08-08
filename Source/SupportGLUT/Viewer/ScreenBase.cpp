@@ -170,7 +170,6 @@ int ScreenBase::show( bool last )
     if ( displayFormat().multisampleBuffer() ) mode |= GLUT_MULTISAMPLE;
     if ( displayFormat().alphaChannel() ) mode |= GLUT_ALPHA;
     glutInitDisplayMode( mode );
-//    glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH );
 
     glutInitWindowPosition( m_x, m_y );
     glutInitWindowSize( m_width, m_height );
@@ -347,10 +346,11 @@ void ScreenBase::default_resize_event( int width, int height )
 /*==========================================================================*/
 void ScreenBase::default_mouse_press_event( int button, int state, int x, int y )
 {
-    int modifiers = kvs::glut::KVSKey::Modifier( glutGetModifiers() );
-    m_mouse_event->set( kvs::glut::KVSMouseButton::Button( button ),
-                        kvs::glut::KVSMouseButton::State( state ),
-                        x, y, modifiers );
+    const int modifiers = kvs::glut::KVSKey::Modifier( glutGetModifiers() );
+    m_mouse_event->setPosition( x, y );
+    m_mouse_event->setButton( kvs::glut::KVSMouseButton::Button( button ) );
+    m_mouse_event->setState( kvs::glut::KVSMouseButton::State( state ) );
+    m_mouse_event->setModifiers( modifiers );
 
     // Left button action.
     if( m_mouse_event->button() == kvs::MouseButton::Left )
@@ -480,7 +480,7 @@ void ScreenBase::mouse_wheel_down( int x, int y )
 /*==========================================================================*/
 void ScreenBase::default_mouse_move_event( int x, int y )
 {
-    m_mouse_event->set( x, y );
+    m_mouse_event->setPosition( x, y );
 
     // Call the additional mouse move event.
     m_pfunc_add_mouse_move_event( m_mouse_event );
@@ -513,7 +513,8 @@ void ScreenBase::default_mouse_move_event( int x, int y )
 /*==========================================================================*/
 void ScreenBase::default_key_press_event( unsigned char key, int x, int y )
 {
-    m_key_event->set( kvs::glut::KVSKey::ASCIICode( key ), x, y );
+    m_key_event->setPosition( x, y );
+    m_key_event->setKey( kvs::glut::KVSKey::ASCIICode( key ) );
 
     switch( m_key_event->key() )
     {
@@ -544,7 +545,8 @@ void ScreenBase::default_key_press_event( unsigned char key, int x, int y )
 /*==========================================================================*/
 void ScreenBase::default_spkey_press_event( int key, int x, int y )
 {
-    m_key_event->set( kvs::glut::KVSKey::SpecialCode( key ), x, y );
+    m_key_event->setPosition( x, y );
+    m_key_event->setKey( kvs::glut::KVSKey::SpecialCode( key ) );
 
     switch( m_key_event->key() )
     {
@@ -595,10 +597,11 @@ void ScreenBase::default_timer_mouse_event( int value )
 /*==========================================================================*/
 void ScreenBase::replaced_mouse_press_event( int button, int state, int x, int y )
 {
-    int modifiers = kvs::glut::KVSKey::Modifier( glutGetModifiers() );
-    m_mouse_event->set( kvs::glut::KVSMouseButton::Button( button ),
-                        kvs::glut::KVSMouseButton::State( state ),
-                        x, y, modifiers );
+    m_mouse_event->setPosition( x, y );
+    m_mouse_event->setButton( kvs::glut::KVSMouseButton::Button( button ) );
+    m_mouse_event->setState( kvs::glut::KVSMouseButton::State( state ) );
+    m_mouse_event->setModifiers( kvs::glut::KVSKey::Modifier( glutGetModifiers() ) );
+
     m_pfunc_set_mouse_press_event( m_mouse_event );
 }
 
@@ -611,7 +614,7 @@ void ScreenBase::replaced_mouse_press_event( int button, int state, int x, int y
 /*==========================================================================*/
 void ScreenBase::replaced_mouse_move_event( int x, int y )
 {
-    m_mouse_event->set( x, y );
+    m_mouse_event->setPosition( x, y );
     m_pfunc_set_mouse_move_event( m_mouse_event );
 }
 
@@ -625,7 +628,8 @@ void ScreenBase::replaced_mouse_move_event( int x, int y )
 /*==========================================================================*/
 void ScreenBase::replaced_key_press_event( unsigned char key, int x, int y )
 {
-    m_key_event->set( key, x, y );
+    m_key_event->setPosition( x, y );
+    m_key_event->setKey( key );
     m_pfunc_set_key_press_event( m_key_event );
 }
 
@@ -639,7 +643,8 @@ void ScreenBase::replaced_key_press_event( unsigned char key, int x, int y )
 /*==========================================================================*/
 void ScreenBase::replaced_spkey_press_event( int key, int x, int y )
 {
-    m_key_event->set( key, x, y );
+    m_key_event->setPosition( x, y );
+    m_key_event->setKey( key );
     m_pfunc_set_key_press_event( m_key_event );
 }
 
