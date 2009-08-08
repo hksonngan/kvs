@@ -20,9 +20,9 @@
 #include "Mouse.h"
 #include "ObjectManager.h"
 #include "RendererManager.h"
-#include "MouseEvent.h"
-#include "KeyEvent.h"
 #include "DisplayFormat.h"
+#include <kvs/MouseEvent>
+#include <kvs/KeyEvent>
 #include <kvs/ClassName>
 #include <kvs/IgnoreUnusedVariable>
 
