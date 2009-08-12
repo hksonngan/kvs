@@ -13,8 +13,9 @@
  *  $Id$
  */
 /*****************************************************************************/
+#include <kvs/Message>
 #include <kvs/VisualizationPipeline>
-#include <kvs/glut/Global>
+#include <kvs/glut/Application>
 #include <kvs/glut/Screen>
 
 
@@ -28,9 +29,11 @@
 /*===========================================================================*/
 int main( int argc, char** argv )
 {
+    kvs::glut::Application app( argc, argv );
+
     // Visualization pipeline.
     const std::string filename( argc > 1 ? argv[1] : "" );
-    kvs::VisualizationPipeline pipe( filename );
+    kvs::VisualizationPipeline pipeline( filename );
 
     /* Execute the visualization pipeline by caling the 'exec' method.
      *
@@ -53,24 +56,24 @@ int main( int argc, char** argv )
      *    mapper.get<kvs::MarchingCubes>()->setNormalType( normal );
      *    mapper.get<kvs::MarchingCubes>()->setIsolevel( isolevel );
      *    // Connect to the pipeline.
-     *    pipe.connect( mapper );
+     *    pipeline.connect( mapper );
      */
-    if ( !pipe.exec() )
+    if ( !pipeline.exec() )
     {
         kvsMessageError("Cannot execute the visulization pipeline.");
-        return( 1 );
+        return( false );
     }
 
     // Output the visualization pipeline as a string.
-    pipe.print();
+    pipeline.print();
 
-    // Global class.
-    kvs::glut::Global global( argc, argv );
-    global.insert( pipe );
-
-    // Screen class.
-    kvs::glut::Screen screen( 512, 512 );
+    kvs::glut::Screen screen;
+    screen.registerObject( &pipeline );
+    screen.setGeometry( 0, 0, 512, 512 );
+    screen.setTitle( "kvs::VisualizationPipeline" );
     screen.show();
 
-    return( 0 );
+    app.attach( &screen );
+
+    return( app.run() );
 }

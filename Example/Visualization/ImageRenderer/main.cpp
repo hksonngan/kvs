@@ -13,104 +13,13 @@
  *  $Id$
  */
 /*****************************************************************************/
-// KVS
-#include <kvs/CommandLine>
+#include <kvs/Message>
 #include <kvs/ImageObject>
 #include <kvs/ImageImporter>
 #include <kvs/ImageRenderer>
-// SupportGLUT
-#include <kvs/glut/ScreenBase>
-#include <kvs/glut/GlobalBase>
+#include <kvs/glut/Application>
+#include <kvs/glut/Screen>
 
-
-/*===========================================================================*/
-/**
- *  @brief  User-defined argument class.
- */
-/*===========================================================================*/
-class Argument : public kvs::CommandLine
-{
-public:
-
-    Argument( int argc, char** argv ):
-        kvs::CommandLine( argc, argv )
-    {
-        // Add help option (generate help message automatically).
-        add_help_option();
-
-        // Add input value.
-        add_value( "input file.", true ); // required
-    }
-};
-
-/*===========================================================================*/
-/**
- *  @brief  User-defined global parameter class.
- */
-/*===========================================================================*/
-class Global : public kvs::glut::GlobalBase
-{
-public:
-
-    static std::string filename; ///< input filename
-    static size_t width; ///< image width
-    static size_t height; ///< image height
-
-    Global( int count, char** values ):
-        kvs::glut::GlobalBase( count, values )
-    {
-        Argument arg( count, values );
-        if ( !arg.parse() ) exit( EXIT_FAILURE );
-
-        // Get the specified image filename.
-        filename = arg.value<std::string>();
-    }
-};
-
-// Instantiation.
-std::string Global::filename;
-size_t Global::width;
-size_t Global::height;
-
-/*===========================================================================*/
-/**
- *  @brief  User-defined screen class.
- */
-/*===========================================================================*/
-class Screen : public kvs::glut::ScreenBase
-{
-public:
-
-    Screen( void )
-    {
-        addInitializeFunc( initialize_func );
-    }
-
-    static void initialize_func( void )
-    {
-        kvs::ImageObject* object = new kvs::ImageImporter( Global::filename );
-        if ( !object )
-        {
-            kvsMessageError("Cannot creat a image object.");
-            return;
-        }
-
-        Global::width = object->width();
-        Global::height = object->height();
-
-        kvs::ImageRenderer* renderer = new kvs::ImageRenderer( kvs::ImageRenderer::Stretching );
-        if ( !renderer )
-        {
-            kvsMessageError("Cannot create a image renderer.");
-            delete object;
-            return;
-        }
-
-        const int object_id = Global::object_manager->insert( object );
-        const int renderer_id = Global::renderer_manager->insert( renderer );
-        Global::id_manager->insert( object_id, renderer_id );
-    }
-};
 
 /*===========================================================================*/
 /**
@@ -122,28 +31,35 @@ public:
 /*===========================================================================*/
 int main( int argc, char** argv )
 {
-    // Create the global parameters.
-    Global* global = new Global( argc, argv );
-    if( !global )
+    // GLUT viewer application.
+    kvs::glut::Application app( argc, argv );
+
+    // Create an image object.
+    const std::string filename( argc > 1 ? argv[1] : "" );
+    kvs::ImageObject* object = new kvs::ImageImporter( filename );
+    if ( !object )
     {
-        kvsMessageError("Cannot allocate memory for 'global'.");
+        kvsMessageError("Cannot creat an image object.");
         return( false );
     }
 
-    // Create and show the rendering screen.
-    Screen* screen = new Screen();
-    if( !screen )
+    // Create an image renderer.
+    const kvs::ImageRenderer::Type type = kvs::ImageRenderer::Stretching;
+    kvs::ImageRenderer* renderer = new kvs::ImageRenderer( type );
+    if ( !renderer )
     {
-        kvsMessageError("Cannot allocate memory for 'screen'.");
+        kvsMessageError("Cannot create an image renderer.");
+        delete object;
         return( false );
     }
-    screen->setGeometry( 0, 0, Global::width, Global::height );
-    screen->setTitle( "kvs::ImageRenderer" );
-    screen->show();
 
-    // Delete the global parameters and the rendering screen.
-    delete global;
-    delete screen;
+    // Screen.
+    kvs::glut::Screen screen;
+    screen.registerObject( object, renderer );
+    screen.setSize( object->width(), object->height() );
+    screen.setTitle( "kvs::ImageRenderer" );
+    screen.show();
+    app.attach( &screen );
 
-    return( true );
+    return( app.run() );
 }

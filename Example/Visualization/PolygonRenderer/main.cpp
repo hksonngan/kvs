@@ -13,93 +13,13 @@
  *  $Id$
  */
 /*****************************************************************************/
-// KVS
-#include <kvs/CommandLine>
+#include <kvs/Message>
 #include <kvs/PolygonImporter>
 #include <kvs/PolygonObject>
 #include <kvs/PolygonRenderer>
-// SupportGLUT
-#include <kvs/glut/ScreenBase>
-#include <kvs/glut/GlobalBase>
+#include <kvs/glut/Application>
+#include <kvs/glut/Screen>
 
-
-/*===========================================================================*/
-/**
- *  @brief  User-defined argument class.
- */
-/*===========================================================================*/
-class Argument : public kvs::CommandLine
-{
-public:
-
-    Argument( int argc, char** argv ):
-        kvs::CommandLine( argc, argv )
-    {
-        // Add help option (generate help message automatically).
-        add_help_option();
-
-        // Add input value.
-        add_value( "input file.", true ); // required
-    }
-};
-
-/*===========================================================================*/
-/**
- *  @brief  User-defined global parameter class.
- */
-/*===========================================================================*/
-class Global : public kvs::glut::GlobalBase
-{
-public:
-
-    static std::string filename;
-
-    Global( int count, char** values ):
-        kvs::glut::GlobalBase( count, values )
-    {
-        Argument arg( count, values );
-        if ( !arg.parse() ) exit( EXIT_FAILURE );
-
-        filename = arg.value<std::string>();
-    }
-};
-
-// Instantiation.
-std::string Global::filename;
-
-/*===========================================================================*/
-/**
- *  @brief  User-defined screen class.
- */
-/*===========================================================================*/
-class Screen : public kvs::glut::ScreenBase
-{
-public:
-
-    Screen( void )
-    {
-        addInitializeFunc( initialize_func );
-    }
-
-    static void initialize_func( void )
-    {
-        kvs::PolygonObject* object = new kvs::PolygonImporter( Global::filename );
-        if ( !object )
-        {
-            kvsMessageError( "Cannot creat a polygon object.");
-        }
-
-        kvs::PolygonRenderer* renderer = new kvs::PolygonRenderer();
-        if ( !renderer )
-        {
-            kvsMessageError( "Cannot creat a polygon renderer.");
-        }
-
-        const int object_id = Global::object_manager->insert( object );
-        const int renderer_id = Global::renderer_manager->insert( renderer );
-        Global::id_manager->insert( object_id, renderer_id );
-    }
-};
 
 /*===========================================================================*/
 /**
@@ -110,28 +30,29 @@ public:
 /*===========================================================================*/
 int main( int argc, char** argv )
 {
-    // Create the global parameters.
-    Global* global = new Global( argc, argv );
-    if( !global )
+    kvs::glut::Application app( argc, argv );
+
+    const std::string filename( argc > 1 ? argv[1] : "" );
+    kvs::PolygonObject* object = new kvs::PolygonImporter( filename );
+    if ( !object )
     {
-        kvsMessageError("Cannot allocate memory for 'global'.");
+        kvsMessageError( "Cannot creat a polygon object.");
         return( false );
     }
 
-    // Create and show the rendering screen.
-    Screen* screen = new Screen();
-    if( !screen )
+    kvs::PolygonRenderer* renderer = new kvs::PolygonRenderer();
+    if ( !renderer )
     {
-        kvsMessageError("Cannot allocate memory for 'screen'.");
-        return( false );
+        kvsMessageError( "Cannot creat a polygon renderer.");
     }
-    screen->setGeometry( 0, 0, 512, 512 );
-    screen->setTitle( "kvs::PolygonRenderer" );
-    screen->show();
 
-    // Delete the global parameters and the rendering screen.
-    delete global;
-    delete screen;
+    kvs::glut::Screen screen;
+    screen.registerObject( object, renderer );
+    screen.setGeometry( 0, 0, 512, 512 );
+    screen.setTitle( "kvs::PolygonRenderer" );
+    screen.show();
 
-    return( true );
+    app.attach( &screen );
+
+    return( app.run() );
 }
