@@ -14,38 +14,13 @@
 #include "OrthoSlice.h"
 #include "CommandName.h"
 #include "ObjectInformation.h"
+#include "FileChecker.h"
 #include <kvs/File>
-#include <kvs/KVSMLObjectStructuredVolume>
-#include <kvs/AVSField>
 #include <kvs/PipelineModule>
 #include <kvs/VisualizationPipeline>
 #include <kvs/OrthoSlice>
-#include <kvs/glut/Global>
 #include <kvs/glut/Screen>
-
-
-namespace
-{
-
-inline const bool CheckVolumeData( const std::string& filename )
-{
-    if ( kvs::KVSMLObjectStructuredVolume::CheckFileExtension( filename ) )
-    {
-        if ( kvs::KVSMLObjectStructuredVolume::CheckFileFormat( filename ) )
-        {
-            return( true );
-        }
-    }
-
-    if ( kvs::AVSField::CheckFileExtension( filename ) )
-    {
-        return( true );
-    }
-
-    return( false );
-}
-
-} // end of namespace
+#include <kvs/glut/Application>
 
 
 namespace kvsview
@@ -157,19 +132,21 @@ Main::Main( int argc, char** argv )
 /*===========================================================================*/
 const bool Main::exec( void )
 {
+    kvs::glut::Application app( m_argc, m_argv );
+
     // Parse specified arguments.
-    OrthoSlice::Argument arg( m_argc, m_argv );
+    kvsview::OrthoSlice::Argument arg( m_argc, m_argv );
     if( !arg.parse() ) return( false );
 
     // Create a global and screen class.
-    kvs::glut::Global global( m_argc, m_argv );
-    kvs::glut::Screen screen( 512, 512 );
+    kvs::glut::Screen screen;
+    screen.setSize( 512, 512 );
     screen.setTitle( kvsview::CommandName + " - " + kvsview::OrthoSlice::CommandName );
     arg.applyTo( screen );
 
     // Check the input point data.
     m_input_name = arg.value<std::string>();
-    if ( !::CheckVolumeData( m_input_name ) )
+    if ( !kvsview::FileChecker::ImportableStructuredVolume( m_input_name ) )
     {
         kvsMessageError("%s is not volume data.", m_input_name.c_str());
         return( false );
@@ -203,7 +180,7 @@ const bool Main::exec( void )
         return( false );
     }
     pipe.renderer()->disableShading();
-    global.insert( pipe );
+    screen.setPipeline( &pipe );
 
     // Verbose information.
     if ( arg.verboseMode() )
@@ -216,10 +193,14 @@ const bool Main::exec( void )
     }
 
     // Apply the specified parameters to the global and the visualization pipeline.
-    arg.applyTo( global, pipe );
+    arg.applyTo( screen, pipe );
 
     // Show the screen.
-    return( screen.show() != 0 );
+    screen.show();
+
+    app.attach( &screen );
+
+    return( app.run() );
 }
 
 } // end of namespace OrthoSlice

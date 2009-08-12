@@ -101,6 +101,8 @@ void Camera::initialize( void )
     m_right = 5.0;
     m_bottom = -5.0;
     m_top = 5.0;
+    m_window_width = 512;
+    m_window_height = 512;
 }
 
 /*===========================================================================*/

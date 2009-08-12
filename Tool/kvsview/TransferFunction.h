@@ -16,8 +16,6 @@
 
 #include <string>
 #include <kvs/TransferFunction>
-#include <kvs/glut/ScreenBase>
-#include <kvs/glut/GlobalBase>
 #include <kvs/Texture1D>
 #include <kvs/Texture2D>
 #include <kvs/CommandLine>
@@ -48,55 +46,6 @@ public:
     const bool hasColorMapOption( void );
 
     const bool hasOpacityMapOption( void );
-};
-
-/*===========================================================================*/
-/**
- *  @brief  Global class.
- */
-/*===========================================================================*/
-class Global : public kvs::glut::GlobalBase
-{
-public:
-
-    static kvs::TransferFunction transfer_function; ///< transfer function
-    static kvs::Texture1D color_map; ///< color map with opacity
-    static kvs::Texture2D checkerboard; ///< checkerboard (background)
-
-public:
-
-    Global( int argc, char** argv );
-};
-
-/*===========================================================================*/
-/**
- *  @brief  Screen class.
- */
-/*===========================================================================*/
-class Screen : public kvs::glut::ScreenBase
-{
-public:
-
-    static bool has_color_map_option;
-    static bool has_opacity_map_option;
-
-public:
-
-    Screen( const bool color_map_option, const bool opacity_map_option );
-
-    static void initialize_function( void );
-
-    static void initialize_color_map_texture( void );
-
-    static void initialize_checkerboard_texture( void );
-
-    static void paint_event( void );
-
-    static void draw_checkerboard_texture( const GLenum src_factor, const GLenum dst_factor );
-
-    static void draw_color_map_texture( const GLenum src_factor, const GLenum dst_factor );
-
-    static void draw_texture( const float texture_width, const float texture_height );
 };
 
 /*===========================================================================*/

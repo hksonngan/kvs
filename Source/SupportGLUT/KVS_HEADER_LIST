@@ -1,5 +1,6 @@
 GLUT
 Renderer/AxisRenderer
+Viewer/Application
 Viewer/Global
 Viewer/GlobalBase
 Viewer/Histogram
@@ -8,4 +9,6 @@ Viewer/OrientationAxis
 Viewer/Screen
 Viewer/ScreenBase
 Viewer/Text
+Viewer/Timer
 Viewer/TransferFunctionEditor
+Viewer/Window

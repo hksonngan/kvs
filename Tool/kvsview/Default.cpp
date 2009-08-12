@@ -16,7 +16,7 @@
 #include "TransferFunction.h"
 #include <kvs/VisualizationPipeline>
 #include <kvs/ImageObject>
-#include <kvs/glut/Global>
+#include <kvs/glut/Application>
 #include <kvs/glut/Screen>
 
 
@@ -58,19 +58,25 @@ Main::Main( int argc, char** argv )
 /*===========================================================================*/
 const bool Main::exec( void )
 {
+    // GLUT application.
+    kvs::glut::Application app( m_argc, m_argv );
+
     // Parse specified arguments.
-    Default::Argument arg( m_argc, m_argv );
+    kvsview::Default::Argument arg( m_argc, m_argv );
     if( !arg.parse() ) return( false );
 
-    // In case of transfer function data file.
+    /* Transfer function data is checked here, since default visualization
+     * method for the transfer function data hasn't yet been implemented in
+     * the visualization pipeline class.
+     */
     if ( kvsview::TransferFunction::Check( arg.value<std::string>() ) )
     {
         return( kvsview::TransferFunction::Main( m_argc, m_argv ).exec() );
     }
 
     // Create a global and screen class.
-    kvs::glut::Global global( m_argc, m_argv );
-    kvs::glut::Screen screen( 512, 512 );
+    kvs::glut::Screen screen;
+    screen.setSize( 512, 512 );
     screen.setTitle("kvsview - Default");
     arg.applyTo( screen );
 
@@ -92,7 +98,7 @@ const bool Main::exec( void )
         kvsMessageError("Cannot execute the visulization pipeline.");
         return( false );
     }
-    global.insert( pipe );
+    screen.setPipeline( &pipe );
 
     // Verbose information.
     if ( arg.verboseMode() )
@@ -105,7 +111,7 @@ const bool Main::exec( void )
     }
 
     // Apply the specified parameters to the global and the visualization pipeline.
-    arg.applyTo( global, pipe );
+    arg.applyTo( screen, pipe );
 
     // In case of the image object, the screen size is equal to the image size.
     if ( pipe.object()->objectType() == kvs::ObjectBase::Image )
@@ -117,7 +123,11 @@ const bool Main::exec( void )
     }
 
     // Show the screen.
-    return( screen.show() != 0 );
+    screen.show();
+
+    app.attach( &screen );
+
+    return( app.run() );
 }
 
 } // end of namespace Default

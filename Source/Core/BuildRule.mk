@@ -139,8 +139,23 @@ $(OUTDIR)/./Utility/Tokenizer.o \
 $(OUTDIR)/./Utility/Value.o \
 $(OUTDIR)/./Utility/ValueArray.o \
 $(OUTDIR)/./Visualization/Event/EventBase.o \
+$(OUTDIR)/./Visualization/Event/EventHandler.o \
+$(OUTDIR)/./Visualization/Event/EventListener.o \
+$(OUTDIR)/./Visualization/Event/InitializeEventListener.o \
 $(OUTDIR)/./Visualization/Event/KeyEvent.o \
+$(OUTDIR)/./Visualization/Event/KeyPressEventListener.o \
+$(OUTDIR)/./Visualization/Event/MouseDoubleClickEventListener.o \
 $(OUTDIR)/./Visualization/Event/MouseEvent.o \
+$(OUTDIR)/./Visualization/Event/MouseMoveEventListener.o \
+$(OUTDIR)/./Visualization/Event/MousePressEventListener.o \
+$(OUTDIR)/./Visualization/Event/MouseReleaseEventListener.o \
+$(OUTDIR)/./Visualization/Event/PaintEventListener.o \
+$(OUTDIR)/./Visualization/Event/ResizeEvent.o \
+$(OUTDIR)/./Visualization/Event/ResizeEventListener.o \
+$(OUTDIR)/./Visualization/Event/TimeEvent.o \
+$(OUTDIR)/./Visualization/Event/TimerEventListener.o \
+$(OUTDIR)/./Visualization/Event/WheelEvent.o \
+$(OUTDIR)/./Visualization/Event/WheelEventListener.o \
 $(OUTDIR)/./Visualization/Exporter/LineExporter.o \
 $(OUTDIR)/./Visualization/Exporter/PointExporter.o \
 $(OUTDIR)/./Visualization/Exporter/PolygonExporter.o \
@@ -216,6 +231,7 @@ $(OUTDIR)/./Visualization/Renderer/RendererBase.o \
 $(OUTDIR)/./Visualization/Renderer/Shader.o \
 $(OUTDIR)/./Visualization/Renderer/VolumeRayIntersector.o \
 $(OUTDIR)/./Visualization/Renderer/VolumeRendererBase.o \
+$(OUTDIR)/./Visualization/Viewer/ApplicationBase.o \
 $(OUTDIR)/./Visualization/Viewer/Background.o \
 $(OUTDIR)/./Visualization/Viewer/Camera.o \
 $(OUTDIR)/./Visualization/Viewer/DisplayFormat.o \
@@ -228,11 +244,13 @@ $(OUTDIR)/./Visualization/Viewer/Material.o \
 $(OUTDIR)/./Visualization/Viewer/Mouse.o \
 $(OUTDIR)/./Visualization/Viewer/ObjectManager.o \
 $(OUTDIR)/./Visualization/Viewer/RendererManager.o \
+$(OUTDIR)/./Visualization/Viewer/ScreenBase.o \
 $(OUTDIR)/./Visualization/Viewer/ScreenCore.o \
 $(OUTDIR)/./Visualization/Viewer/Texture1D.o \
 $(OUTDIR)/./Visualization/Viewer/Texture2D.o \
 $(OUTDIR)/./Visualization/Viewer/TextureBase.o \
 $(OUTDIR)/./Visualization/Viewer/Trackball.o \
+$(OUTDIR)/./Visualization/Viewer/WindowBase.o \
 $(OUTDIR)/./Visualization/Viewer/Xform.o \
 $(OUTDIR)/./Visualization/Viewer/XformControl.o \
 

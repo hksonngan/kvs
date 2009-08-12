@@ -14,6 +14,7 @@
 #include "RayCastingRenderer.h"
 #include "CommandName.h"
 #include "ObjectInformation.h"
+#include "FileChecker.h"
 #include <kvs/IgnoreUnusedVariable>
 #include <kvs/File>
 #include <kvs/KVSMLObjectStructuredVolume>
@@ -22,7 +23,10 @@
 #include <kvs/VisualizationPipeline>
 #include <kvs/RayCastingRenderer>
 #include <kvs/Bounds>
-#include <kvs/glut/Global>
+#include <kvs/PaintEventListener>
+#include <kvs/MousePressEventListener>
+#include <kvs/MouseReleaseEventListener>
+#include <kvs/glut/Application>
 #include <kvs/glut/Screen>
 
 
@@ -34,76 +38,59 @@ bool HasBounds = false;
 
 } // end of namespace
 
-namespace
-{
-
-inline const bool CheckVolumeData( const std::string& filename )
-{
-    if ( kvs::KVSMLObjectStructuredVolume::CheckFileExtension( filename ) )
-    {
-        if ( kvs::KVSMLObjectStructuredVolume::CheckFileFormat( filename ) )
-        {
-            return( true );
-        }
-    }
-
-    if ( kvs::AVSField::CheckFileExtension( filename ) )
-    {
-        if ( kvs::AVSField::CheckFileFormat( filename ) )
-        {
-            return( true );
-        }
-    }
-
-    return( false );
-}
-
-void PaintEvent( void )
-{
-    if ( ::EnableLODControl )
-    {
-        const int id = ::HasBounds ? 2 : 1;
-        const kvs::RendererBase* base = kvs::glut::Global::renderer_manager->renderer( id );
-        kvs::RayCastingRenderer* renderer = (kvs::RayCastingRenderer*)base;
-        if ( kvs::glut::Global::mouse->isAuto() ) renderer->enableCoarseRendering();
-    }
-}
-
-void MousePressEvent( kvs::MouseEvent* ev )
-{
-    kvs::IgnoreUnusedVariable( ev );
-
-    if ( ::EnableLODControl )
-    {
-        const int id = ::HasBounds ? 2 : 1;
-        const kvs::RendererBase* base = kvs::glut::Global::renderer_manager->renderer( id );
-        kvs::RayCastingRenderer* renderer = (kvs::RayCastingRenderer*)base;
-        renderer->enableCoarseRendering();
-    }
-}
-
-void MouseReleaseEvent( kvs::MouseEvent* ev )
-{
-    kvs::IgnoreUnusedVariable( ev );
-
-    if ( ::EnableLODControl )
-    {
-        const int id = ::HasBounds ? 2 : 1;
-        const kvs::RendererBase* base = kvs::glut::Global::renderer_manager->renderer( id );
-        kvs::RayCastingRenderer* renderer = (kvs::RayCastingRenderer*)base;
-        renderer->disableCoarseRendering();
-        kvs::glut::Screen::redraw();
-    }
-}
-
-} // end of namespace
-
 
 namespace kvsview
 {
 
 namespace RayCastingRenderer
 {
+
+class PaintEvent : public kvs::PaintEventListener
+{
+    void update( void )
+    {
+        if ( ::EnableLODControl )
+        {
+            const int id = ::HasBounds ? 2 : 1;
+            const kvs::RendererBase* base = screen()->rendererManager()->renderer( id );
+            kvs::RayCastingRenderer* renderer = (kvs::RayCastingRenderer*)base;
+            if ( screen()->mouse()->isAuto() ) renderer->enableCoarseRendering();
+        }
+    }
+};
+
+class MousePressEvent : public kvs::MousePressEventListener
+{
+    void update( kvs::MouseEvent* ev )
+    {
+        kvs::IgnoreUnusedVariable( ev );
+
+        if ( ::EnableLODControl )
+        {
+            const int id = ::HasBounds ? 2 : 1;
+            const kvs::RendererBase* base = screen()->rendererManager()->renderer( id );
+            kvs::RayCastingRenderer* renderer = (kvs::RayCastingRenderer*)base;
+            renderer->enableCoarseRendering();
+        }
+    }
+};
+
+class MouseReleaseEvent : public kvs::MouseReleaseEventListener
+{
+    void update( kvs::MouseEvent* ev )
+    {
+        kvs::IgnoreUnusedVariable( ev );
+
+        if ( ::EnableLODControl )
+        {
+            const int id = ::HasBounds ? 2 : 1;
+            const kvs::RendererBase* base = screen()->rendererManager()->renderer( id );
+            kvs::RayCastingRenderer* renderer = (kvs::RayCastingRenderer*)base;
+            renderer->disableCoarseRendering();
+            window()->redraw();
+        }
+    }
+};
 
 /*===========================================================================*/
 /**
@@ -220,21 +207,28 @@ Main::Main( int argc, char** argv )
 /*===========================================================================*/
 const bool Main::exec( void )
 {
+    kvs::glut::Application app( m_argc, m_argv );
+
     // Parse specified arguments.
     RayCastingRenderer::Argument arg( m_argc, m_argv );
     if( !arg.parse() ) return( false );
 
+    RayCastingRenderer::PaintEvent paint_event;
+    RayCastingRenderer::MousePressEvent mouse_press_event;
+    RayCastingRenderer::MouseReleaseEvent mouse_release_event;
+
     // Create a global and screen class.
-    kvs::glut::Global global( m_argc, m_argv );
-    kvs::glut::Screen screen( 512, 512 );
-    screen.addPaintEvent( ::PaintEvent );
-    screen.addMousePressEvent( ::MousePressEvent );
-    screen.addMouseReleaseEvent( ::MouseReleaseEvent );
+    kvs::glut::Screen screen;
+    screen.setSize( 512, 512 );
+    screen.addPaintEvent( &paint_event );
+    screen.addMousePressEvent( &mouse_press_event );
+    screen.addMouseReleaseEvent( &mouse_release_event );
     screen.setTitle( kvsview::CommandName + " - " + kvsview::RayCastingRenderer::CommandName );
 
     // Check the input point data.
     m_input_name = arg.value<std::string>();
-    if ( !::CheckVolumeData( m_input_name ) )
+    if ( !( kvsview::FileChecker::ImportableStructuredVolume( m_input_name ) ||
+            kvsview::FileChecker::ImportableUnstructuredVolume( m_input_name ) ) )
     {
         kvsMessageError("%s is not volume data.", m_input_name.c_str());
         return( false );
@@ -272,7 +266,7 @@ const bool Main::exec( void )
         p.exec();
         p.renderer()->disableShading();
 
-        global.insert( p );
+        screen.setPipeline( &p );
     }
 
     // Set up a RayCastingRenderer class.
@@ -329,7 +323,7 @@ const bool Main::exec( void )
         kvsMessageError("Cannot execute the visulization pipeline.");
         return( false );
     }
-    global.insert( pipe );
+    screen.setPipeline( &pipe );
 
     // Verbose information.
     if ( arg.verboseMode() )
@@ -342,11 +336,15 @@ const bool Main::exec( void )
     }
 
     // Apply the specified parameters to the global and the visualization pipeline.
-    arg.applyTo( global, pipe );
+    arg.applyTo( screen, pipe );
     arg.applyTo( screen );
 
     // Show the screen.
-    return( screen.show() != 0 );
+    screen.show();
+
+    app.attach( &screen );
+
+    return( app.run() );
 }
 
 } // end of namespace Default

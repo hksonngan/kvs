@@ -4,6 +4,7 @@
 
 OBJECTS := \
 $(OUTDIR)/./Renderer/AxisRenderer.o \
+$(OUTDIR)/./Viewer/Application.o \
 $(OUTDIR)/./Viewer/Global.o \
 $(OUTDIR)/./Viewer/GlobalBase.o \
 $(OUTDIR)/./Viewer/Histogram.o \
@@ -12,7 +13,9 @@ $(OUTDIR)/./Viewer/OrientationAxis.o \
 $(OUTDIR)/./Viewer/Screen.o \
 $(OUTDIR)/./Viewer/ScreenBase.o \
 $(OUTDIR)/./Viewer/Text.o \
+$(OUTDIR)/./Viewer/Timer.o \
 $(OUTDIR)/./Viewer/TransferFunctionEditor.o \
+$(OUTDIR)/./Viewer/Window.o \
 
 
 

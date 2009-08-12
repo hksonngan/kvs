@@ -16,7 +16,6 @@
 
 #include <kvs/CommandLine>
 #include <kvs/VisualizationPipeline>
-#include <kvs/glut/Global>
 #include <kvs/glut/Screen>
 #include <string>
 
@@ -57,7 +56,7 @@ public:
 
     void applyTo( kvs::glut::Screen& screen );
 
-    void applyTo( kvs::glut::Global& global, kvs::VisualizationPipeline& pipe );
+    void applyTo( kvs::glut::Screen& screen, kvs::VisualizationPipeline& pipe );
 
 private:
 

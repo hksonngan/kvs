@@ -14,43 +14,15 @@
 #include "PolygonRenderer.h"
 #include "CommandName.h"
 #include "ObjectInformation.h"
+#include "FileChecker.h"
 #include <kvs/File>
 #include <kvs/KVSMLObjectPolygon>
 #include <kvs/Stl>
 #include <kvs/PipelineModule>
 #include <kvs/VisualizationPipeline>
 #include <kvs/PolygonRenderer>
-#include <kvs/glut/Global>
 #include <kvs/glut/Screen>
-
-
-namespace
-{
-
-inline const bool CheckPolygonData( const std::string& filename )
-{
-    // KVSML format
-    if ( kvs::KVSMLObjectPolygon::CheckFileExtension( filename ) )
-    {
-        if ( kvs::KVSMLObjectPolygon::CheckFileFormat( filename ) )
-        {
-            return( true );
-        }
-    }
-
-    // STL format
-    else if ( kvs::Stl::CheckFileExtension( filename ) )
-    {
-        if ( kvs::Stl::CheckFileFormat( filename ) )
-        {
-            return( true );
-        }
-    }
-
-    return( false );
-}
-
-} // end of namespace
+#include <kvs/glut/Application>
 
 
 namespace kvsview
@@ -106,19 +78,21 @@ Main::Main( int argc, char** argv )
 /*===========================================================================*/
 const bool Main::exec( void )
 {
+    kvs::glut::Application app( m_argc, m_argv );
+
     // Parse specified arguments.
     PolygonRenderer::Argument arg( m_argc, m_argv );
     if( !arg.parse() ) return( false );
 
     // Create a global and screen class.
-    kvs::glut::Global global( m_argc, m_argv );
-    kvs::glut::Screen screen( 512, 512 );
+    kvs::glut::Screen screen;
+    screen.setSize( 512, 512 );
     screen.setTitle( kvsview::CommandName + " - " + kvsview::PolygonRenderer::CommandName );
     arg.applyTo( screen );
 
     // Check the input data.
     m_input_name = arg.value<std::string>();
-    if ( !::CheckPolygonData( m_input_name ) )
+    if ( !kvsview::FileChecker::ImportablePolygon( m_input_name ) )
     {
         kvsMessageError("%s is not polygon data.", m_input_name.c_str());
         return( false );
@@ -148,7 +122,7 @@ const bool Main::exec( void )
     {
         static_cast<const kvs::PolygonRenderer*>( pipe.renderer() )->enableTwoSideLighting();
     }
-    global.insert( pipe );
+    screen.setPipeline( &pipe );
 
     // Verbose information.
     if ( arg.verboseMode() )
@@ -161,10 +135,14 @@ const bool Main::exec( void )
     }
 
     // Apply the specified parameters to the global and the visualization pipeline.
-    arg.applyTo( global, pipe );
+    arg.applyTo( screen, pipe );
 
     // Show the screen.
-    return( screen.show() != 0 );
+    screen.show();
+
+    app.attach( &screen );
+
+    return( app.run() );
 }
 
 } // end of namespace PolygonRenderer

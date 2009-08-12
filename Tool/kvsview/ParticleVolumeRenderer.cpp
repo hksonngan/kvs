@@ -14,23 +14,23 @@
 #include "ParticleVolumeRenderer.h"
 #include "CommandName.h"
 #include "ObjectInformation.h"
+#include "FileChecker.h"
 #include <kvs/IgnoreUnusedVariable>
 #include <kvs/File>
-#include <kvs/KVSMLObjectPoint>
-#include <kvs/KVSMLObjectStructuredVolume>
-#include <kvs/KVSMLObjectUnstructuredVolume>
-#include <kvs/AVSField>
-#include <kvs/AVSUcd>
 #include <kvs/PipelineModule>
 #include <kvs/VisualizationPipeline>
 #include <kvs/CellByCellMetropolisSampling>
 #include <kvs/ParticleVolumeRenderer>
 #include <kvs/Bounds>
-#include <kvs/glut/Global>
+#include <kvs/PaintEventListener>
+#include <kvs/MousePressEventListener>
+#include <kvs/MouseReleaseEventListener>
+#include <kvs/glut/Application>
 #include <kvs/glut/Screen>
 #if defined( KVS_SUPPORT_GLEW )
 #include <kvs/glew/ParticleVolumeRenderer>
 #endif
+
 
 namespace
 {
@@ -43,56 +43,6 @@ bool HasBounds = false;
 
 namespace
 {
-
-inline const bool CheckPointData( const std::string& filename )
-{
-    if ( kvs::KVSMLObjectPoint::CheckFileExtension( filename ) )
-    {
-        if ( kvs::KVSMLObjectPoint::CheckFileFormat( filename ) )
-        {
-            return( true );
-        }
-    }
-
-    return( false );
-}
-
-inline const bool CheckVolumeData( const std::string& filename )
-{
-    if ( kvs::KVSMLObjectStructuredVolume::CheckFileExtension( filename ) )
-    {
-        if ( kvs::KVSMLObjectStructuredVolume::CheckFileFormat( filename ) )
-        {
-            return( true );
-        }
-    }
-
-    if ( kvs::KVSMLObjectUnstructuredVolume::CheckFileExtension( filename ) )
-    {
-        if ( kvs::KVSMLObjectUnstructuredVolume::CheckFileFormat( filename ) )
-        {
-            return( true );
-        }
-    }
-
-    if ( kvs::AVSField::CheckFileExtension( filename ) )
-    {
-        if ( kvs::AVSField::CheckFileFormat( filename ) )
-        {
-            return( true );
-        }
-    }
-
-    if ( kvs::AVSUcd::CheckFileExtension( filename ) )
-    {
-        if ( kvs::AVSUcd::CheckFileFormat( filename ) )
-        {
-            return( true );
-        }
-    }
-
-    return( false );
-}
 
 inline const size_t GetRevisedSubpixelLevel(
     const size_t subpixel_level,
@@ -142,59 +92,6 @@ const void InitializeParticleVolumeRenderer(
     }
 }
 
-void PaintEvent( void )
-{
-#if defined( KVS_SUPPORT_GLEW )
-    if ( ::EnableLODControl )
-    {
-        if ( ::EnableGPURendering )
-        {
-            const int id = ::HasBounds ? 2 : 1;
-            const kvs::RendererBase* base = kvs::glut::Global::renderer_manager->renderer( id );
-            kvs::glew::ParticleVolumeRenderer* renderer = (kvs::glew::ParticleVolumeRenderer*)base;
-            if ( kvs::glut::Global::mouse->isAuto() ) renderer->enableCoarseRendering();
-        }
-    }
-#endif
-}
-
-void MousePressEvent( kvs::MouseEvent* ev )
-{
-    kvs::IgnoreUnusedVariable( ev );
-
-#if defined( KVS_SUPPORT_GLEW )
-    if ( ::EnableLODControl )
-    {
-        if ( ::EnableGPURendering )
-        {
-            const int id = ::HasBounds ? 2 : 1;
-            const kvs::RendererBase* base = kvs::glut::Global::renderer_manager->renderer( id );
-            kvs::glew::ParticleVolumeRenderer* renderer = (kvs::glew::ParticleVolumeRenderer*)base;
-            renderer->enableCoarseRendering();
-        }
-    }
-#endif
-}
-
-void MouseReleaseEvent( kvs::MouseEvent* ev )
-{
-    kvs::IgnoreUnusedVariable( ev );
-
-#if defined( KVS_SUPPORT_GLEW )
-    if ( ::EnableLODControl )
-    {
-        if ( ::EnableGPURendering )
-        {
-            const int id = ::HasBounds ? 2 : 1;
-            const kvs::RendererBase* base = kvs::glut::Global::renderer_manager->renderer( id );
-            kvs::glew::ParticleVolumeRenderer* renderer = (kvs::glew::ParticleVolumeRenderer*)base;
-            renderer->disableCoarseRendering();
-            kvs::glut::Screen::redraw();
-        }
-    }
-#endif
-}
-
 } // end of namespace
 
 
@@ -203,6 +100,66 @@ namespace kvsview
 
 namespace ParticleVolumeRenderer
 {
+
+class PaintEvent : public kvs::PaintEventListener
+{
+    void update( void )
+    {
+#if defined( KVS_SUPPORT_GLEW )
+        if ( ::EnableLODControl )
+        {
+            if ( ::EnableGPURendering )
+            {
+                const int id = ::HasBounds ? 2 : 1;
+                const kvs::RendererBase* base = screen()->rendererManager()->renderer( id );
+                kvs::glew::ParticleVolumeRenderer* renderer = (kvs::glew::ParticleVolumeRenderer*)base;
+                if ( screen()->mouse()->isAuto() ) renderer->enableCoarseRendering();
+            }
+        }
+#endif
+    }
+};
+
+class MousePressEvent : public kvs::MousePressEventListener
+{
+    void update( kvs::MouseEvent* ev )
+    {
+        kvs::IgnoreUnusedVariable( ev );
+#if defined( KVS_SUPPORT_GLEW )
+        if ( ::EnableLODControl )
+        {
+            if ( ::EnableGPURendering )
+            {
+                const int id = ::HasBounds ? 2 : 1;
+                const kvs::RendererBase* base = screen()->rendererManager()->renderer( id );
+                kvs::glew::ParticleVolumeRenderer* renderer = (kvs::glew::ParticleVolumeRenderer*)base;
+                renderer->enableCoarseRendering();
+            }
+        }
+#endif
+    }
+};
+
+class MouseReleaseEvent : public kvs::MouseReleaseEventListener
+{
+    void update( kvs::MouseEvent* ev )
+    {
+        kvs::IgnoreUnusedVariable( ev );
+#if defined( KVS_SUPPORT_GLEW )
+        if ( ::EnableLODControl )
+        {
+            if ( ::EnableGPURendering )
+            {
+                const int id = ::HasBounds ? 2 : 1;
+                const kvs::RendererBase* base = screen()->rendererManager()->renderer( id );
+                kvs::glew::ParticleVolumeRenderer* renderer = (kvs::glew::ParticleVolumeRenderer*)base;
+                renderer->disableCoarseRendering();
+                window()->redraw();
+            }
+        }
+#endif
+    }
+};
 
 /*===========================================================================*/
 /**
@@ -347,24 +304,31 @@ Main::Main( int argc, char** argv )
 /*===========================================================================*/
 const bool Main::exec( void )
 {
+    kvs::glut::Application app( m_argc, m_argv );
+
     // Parse specified arguments.
-    ParticleVolumeRenderer::Argument arg( m_argc, m_argv );
+    kvsview::ParticleVolumeRenderer::Argument arg( m_argc, m_argv );
     if( !arg.parse() ) return( false );
 
+    kvsview::ParticleVolumeRenderer::PaintEvent paint_event;
+    kvsview::ParticleVolumeRenderer::MousePressEvent mouse_press_event;
+    kvsview::ParticleVolumeRenderer::MouseReleaseEvent mouse_release_event;
+
     // Create a global and screen class.
-    kvs::glut::Global global( m_argc, m_argv );
-    kvs::glut::Screen screen( 512, 512 );
-    screen.addPaintEvent( ::PaintEvent );
-    screen.addMousePressEvent( ::MousePressEvent );
-    screen.addMouseReleaseEvent( ::MouseReleaseEvent );
+    kvs::glut::Screen screen;
+    screen.addPaintEvent( &paint_event );
+    screen.addMousePressEvent( &mouse_press_event );
+    screen.addMouseReleaseEvent( &mouse_release_event );
+    screen.setSize( 512, 512 );
     screen.setTitle( kvsview::CommandName + " - " + kvsview::ParticleVolumeRenderer::CommandName );
 
     // Check the input point or volume data.
     bool is_volume = false; // check flag whether the input data is volume data
     m_input_name = arg.value<std::string>();
-    if ( !::CheckPointData( m_input_name ) )
+    if ( !kvsview::FileChecker::ImportablePoint( m_input_name ) )
     {
-        if ( !::CheckVolumeData( m_input_name ) )
+        if ( !( kvsview::FileChecker::ImportableStructuredVolume( m_input_name ) ||
+                kvsview::FileChecker::ImportableUnstructuredVolume( m_input_name ) ) )
         {
             kvsMessageError("%s is not volume data.", m_input_name.c_str());
             return( false );
@@ -405,7 +369,7 @@ const bool Main::exec( void )
         p.exec();
         p.renderer()->disableShading();
 
-        global.insert( p );
+        screen.setPipeline( &p );
     }
 
     // Set a mapper (CellByCellMetropolisSampling)
@@ -417,6 +381,8 @@ const bool Main::exec( void )
         const size_t level = ::GetRevisedSubpixelLevel( subpixel_level, repetition_level );
         const float step = 0.5f;
         const float depth = 0.0f;
+
+        mapper.get<kvs::CellByCellMetropolisSampling>()->attachCamera( screen.camera() );
         mapper.get<kvs::CellByCellMetropolisSampling>()->setTransferFunction( function );
         mapper.get<kvs::CellByCellMetropolisSampling>()->setSubpixelLevel( level );
         mapper.get<kvs::CellByCellMetropolisSampling>()->setSamplingStep( step );
@@ -465,7 +431,7 @@ const bool Main::exec( void )
         kvsMessageError("Cannot execute the visulization pipeline.");
         return( false );
     }
-    global.insert( pipe );
+    screen.setPipeline( &pipe );
 
     // Verbose information.
     if ( arg.verboseMode() )
@@ -478,11 +444,15 @@ const bool Main::exec( void )
     }
 
     // Apply the specified parameters to the global and the visualization pipeline.
-    arg.applyTo( global, pipe );
+    arg.applyTo( screen, pipe );
     arg.applyTo( screen );
 
     // Show the screen.
-    return( screen.show() != 0 );
+    screen.show();
+
+    app.attach( &screen );
+
+    return( app.run() );
 }
 
 } // end of namespace ParticleVolumeRenderer

@@ -139,8 +139,23 @@ $(OUTDIR)\.\Utility\Tokenizer.obj \
 $(OUTDIR)\.\Utility\Value.obj \
 $(OUTDIR)\.\Utility\ValueArray.obj \
 $(OUTDIR)\.\Visualization\Event\EventBase.obj \
+$(OUTDIR)\.\Visualization\Event\EventHandler.obj \
+$(OUTDIR)\.\Visualization\Event\EventListener.obj \
+$(OUTDIR)\.\Visualization\Event\InitializeEventListener.obj \
 $(OUTDIR)\.\Visualization\Event\KeyEvent.obj \
+$(OUTDIR)\.\Visualization\Event\KeyPressEventListener.obj \
+$(OUTDIR)\.\Visualization\Event\MouseDoubleClickEventListener.obj \
 $(OUTDIR)\.\Visualization\Event\MouseEvent.obj \
+$(OUTDIR)\.\Visualization\Event\MouseMoveEventListener.obj \
+$(OUTDIR)\.\Visualization\Event\MousePressEventListener.obj \
+$(OUTDIR)\.\Visualization\Event\MouseReleaseEventListener.obj \
+$(OUTDIR)\.\Visualization\Event\PaintEventListener.obj \
+$(OUTDIR)\.\Visualization\Event\ResizeEvent.obj \
+$(OUTDIR)\.\Visualization\Event\ResizeEventListener.obj \
+$(OUTDIR)\.\Visualization\Event\TimeEvent.obj \
+$(OUTDIR)\.\Visualization\Event\TimerEventListener.obj \
+$(OUTDIR)\.\Visualization\Event\WheelEvent.obj \
+$(OUTDIR)\.\Visualization\Event\WheelEventListener.obj \
 $(OUTDIR)\.\Visualization\Exporter\LineExporter.obj \
 $(OUTDIR)\.\Visualization\Exporter\PointExporter.obj \
 $(OUTDIR)\.\Visualization\Exporter\PolygonExporter.obj \
@@ -216,6 +231,7 @@ $(OUTDIR)\.\Visualization\Renderer\RendererBase.obj \
 $(OUTDIR)\.\Visualization\Renderer\Shader.obj \
 $(OUTDIR)\.\Visualization\Renderer\VolumeRayIntersector.obj \
 $(OUTDIR)\.\Visualization\Renderer\VolumeRendererBase.obj \
+$(OUTDIR)\.\Visualization\Viewer\ApplicationBase.obj \
 $(OUTDIR)\.\Visualization\Viewer\Background.obj \
 $(OUTDIR)\.\Visualization\Viewer\Camera.obj \
 $(OUTDIR)\.\Visualization\Viewer\DisplayFormat.obj \
@@ -228,11 +244,13 @@ $(OUTDIR)\.\Visualization\Viewer\Material.obj \
 $(OUTDIR)\.\Visualization\Viewer\Mouse.obj \
 $(OUTDIR)\.\Visualization\Viewer\ObjectManager.obj \
 $(OUTDIR)\.\Visualization\Viewer\RendererManager.obj \
+$(OUTDIR)\.\Visualization\Viewer\ScreenBase.obj \
 $(OUTDIR)\.\Visualization\Viewer\ScreenCore.obj \
 $(OUTDIR)\.\Visualization\Viewer\Texture1D.obj \
 $(OUTDIR)\.\Visualization\Viewer\Texture2D.obj \
 $(OUTDIR)\.\Visualization\Viewer\TextureBase.obj \
 $(OUTDIR)\.\Visualization\Viewer\Trackball.obj \
+$(OUTDIR)\.\Visualization\Viewer\WindowBase.obj \
 $(OUTDIR)\.\Visualization\Viewer\Xform.obj \
 $(OUTDIR)\.\Visualization\Viewer\XformControl.obj \
 

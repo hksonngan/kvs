@@ -162,12 +162,12 @@ void Argument::Common::applyTo( kvs::glut::Screen& screen )
 
 /*===========================================================================*/
 /**
- *  @brief  Applys the specified options to the global information.
- *  @param  global [in] global parameters
+ *  @brief  Applys the specified options to the screen information.
+ *  @param  screen [in] screen parameters
  *  @param  pipe [in] visualization pipeline
  */
 /*===========================================================================*/
-void Argument::Common::applyTo( kvs::glut::Global& global, kvs::VisualizationPipeline& pipe )
+void Argument::Common::applyTo( kvs::glut::Screen& screen, kvs::VisualizationPipeline& pipe )
 {
     // Axis.
     if ( this->hasOption("axis") )
@@ -238,14 +238,14 @@ void Argument::Common::applyTo( kvs::glut::Global& global, kvs::VisualizationPip
 
         axis->create( pipe.object() );
 
-        kvs::VisualizationPipeline p( axis );
+        kvs::VisualizationPipeline pipeline( axis );
         kvs::PipelineModule renderer( new kvs::glut::AxisRenderer() );
-        p.connect( renderer );
+        pipeline.connect( renderer );
 
-        p.exec();
-        p.renderer()->disableShading();
+        pipeline.exec();
+        pipeline.renderer()->disableShading();
 
-        global.insert( p );
+        screen.setPipeline( &pipeline );
     }
 
     // Bounding box.
@@ -262,11 +262,11 @@ void Argument::Common::applyTo( kvs::glut::Global& global, kvs::VisualizationPip
             bounds->setColor( kvs::RGBColor( r, g, b ) );
         }
 
-        kvs::VisualizationPipeline p( bounds );
-        p.exec();
-        p.renderer()->disableShading();
+        kvs::VisualizationPipeline pipeline( bounds );
+        pipeline.exec();
+        pipeline.renderer()->disableShading();
 
-        global.insert( p );
+        screen.setPipeline( &pipeline );
     }
 
     // Background color.
@@ -275,7 +275,7 @@ void Argument::Common::applyTo( kvs::glut::Global& global, kvs::VisualizationPip
         const kvs::UInt8 r( static_cast<kvs::UInt8>(this->optionValue<int>("background_color",0)) );
         const kvs::UInt8 g( static_cast<kvs::UInt8>(this->optionValue<int>("background_color",1)) );
         const kvs::UInt8 b( static_cast<kvs::UInt8>(this->optionValue<int>("background_color",2)) );
-        global.background->setColor( kvs::RGBColor( r, g, b ) );
+        screen.background()->setColor( kvs::RGBColor( r, g, b ) );
     }
     else if ( this->hasOption("background_color2") )
     {
@@ -289,7 +289,7 @@ void Argument::Common::applyTo( kvs::glut::Global& global, kvs::VisualizationPip
         const kvs::UInt8 b2( static_cast<kvs::UInt8>(this->optionValue<int>("background_color2",5)) );
         const kvs::RGBColor bottom_color( r2, g2, b2 );
 
-        global.background->setColor( bottom_color, top_color );
+        screen.background()->setColor( bottom_color, top_color );
     }
 
 /*

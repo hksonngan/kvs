@@ -23,16 +23,32 @@
 namespace kvsview
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new ObjectInformation class.
+ */
+/*===========================================================================*/
 ObjectInformation::ObjectInformation( void ):
     m_object( NULL )
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new ObjectInformation class.
+ *  @param  object [in] pointer to the object
+ */
+/*===========================================================================*/
 ObjectInformation::ObjectInformation( const kvs::ObjectBase* object ):
     m_object( object )
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Output operator.
+ */
+/*===========================================================================*/
 std::ostream& operator << ( std::ostream& os, const ObjectInformation& info )
 {
     // Image object.

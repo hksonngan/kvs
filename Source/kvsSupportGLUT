@@ -1,5 +1,6 @@
 #include <SupportGLUT/GLUT.h>
 #include <SupportGLUT/Renderer/AxisRenderer.h>
+#include <SupportGLUT/Viewer/Application.h>
 #include <SupportGLUT/Viewer/Global.h>
 #include <SupportGLUT/Viewer/GlobalBase.h>
 #include <SupportGLUT/Viewer/Histogram.h>
@@ -8,4 +9,6 @@
 #include <SupportGLUT/Viewer/Screen.h>
 #include <SupportGLUT/Viewer/ScreenBase.h>
 #include <SupportGLUT/Viewer/Text.h>
+#include <SupportGLUT/Viewer/Timer.h>
 #include <SupportGLUT/Viewer/TransferFunctionEditor.h>
+#include <SupportGLUT/Viewer/Window.h>

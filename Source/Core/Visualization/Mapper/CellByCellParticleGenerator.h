@@ -18,7 +18,7 @@
 #include <kvs/OpacityMap>
 #include <kvs/Vector3>
 #include <kvs/Math>
-#include <kvs/GlobalCore>
+//#include <kvs/GlobalCore>
 #include <kvs/Camera>
 
 
