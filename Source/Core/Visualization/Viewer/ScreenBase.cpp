@@ -53,60 +53,23 @@ ScreenBase::~ScreenBase( void )
 /*===========================================================================*/
 void ScreenBase::registerObject( kvs::ObjectBase* object, kvs::RendererBase* renderer )
 {
-    // Insert the pointer to the object to the object manager.
-    size_t object_id = m_object_manager->insert( object );
+    /* If the given pointer to the renderer is null, a renderer for the given
+     * object is automatically created by using visualization pipeline class.
+     */
+    if ( !renderer )
+    {
+        kvs::VisualizationPipeline pipeline( object );
+        if ( !pipeline.exec() )
+        {
+            kvsMessageError("Cannot create a renderer for the given object.");
+            return;
+        }
 
-    // Insert the pointer to the renderer to the renderer manger.
-    size_t renderer_id = 0;
-    if ( renderer )
-    {
-        renderer_id = m_renderer_manager->insert( renderer );
-    }
-    else
-    {
-        /* If the given pointer to the renderer is null, a renderer for the
-         * given object is automatically created in this method.
-         */
-        switch ( object->objectType() )
-        {
-        case kvs::ObjectBase::Geometry:
-        {
-            const kvs::GeometryObjectBase* geometry = kvs::GeometryObjectBase::DownCast( object );
-            switch ( geometry->geometryType() )
-            {
-            case kvs::GeometryObjectBase::Point:
-                renderer_id = m_renderer_manager->insert( new kvs::PointRenderer );
-                break;
-            case kvs::GeometryObjectBase::Line:
-                renderer_id = m_renderer_manager->insert( new kvs::LineRenderer );
-                break;
-            case kvs::GeometryObjectBase::Polygon:
-                renderer_id = m_renderer_manager->insert( new kvs::PolygonRenderer );
-                break;
-            default: break;
-            }
-        }
-        case kvs::ObjectBase::Volume:
-        {
-            const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
-            switch ( volume->volumeType() )
-            {
-            case kvs::VolumeObjectBase::Structured:
-                renderer_id = m_renderer_manager->insert( new kvs::RayCastingRenderer );
-                break;
-            case kvs::VolumeObjectBase::Unstructured:
-                //renderer_id = m_renderer_manager->insert( new kvs::RayCastingRenderer );
-                break;
-            default: break;
-            }
-        }
-        case kvs::ObjectBase::Image:
-            renderer_id = m_renderer_manager->insert( new kvs::ImageRenderer );
-            break;
-        default: break;
-        }
+        renderer = const_cast<kvs::RendererBase*>( pipeline.renderer() );
     }
 
+    const size_t renderer_id = m_renderer_manager->insert( renderer );
+    const size_t object_id = m_object_manager->insert( object );
     m_id_manager->insert( object_id, renderer_id );
 }
 
