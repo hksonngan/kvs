@@ -583,7 +583,7 @@ void Screen::default_mouse_press_event( kvs::MouseEvent* event )
             break;
         default:
             mode = kvs::Mouse::Rotation;
-            ScreenBase::setCenterOfRotation();
+            ScreenBase::updateCenterOfRotation();
             break;
         }
 

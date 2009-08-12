@@ -180,7 +180,7 @@ const bool Main::exec( void )
         return( false );
     }
     pipe.renderer()->disableShading();
-    screen.setPipeline( &pipe );
+    screen.registerObject( &pipe );
 
     // Verbose information.
     if ( arg.verboseMode() )

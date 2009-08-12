@@ -122,7 +122,7 @@ const bool Main::exec( void )
     {
         static_cast<const kvs::PolygonRenderer*>( pipe.renderer() )->enableTwoSideLighting();
     }
-    screen.setPipeline( &pipe );
+    screen.registerObject( &pipe );
 
     // Verbose information.
     if ( arg.verboseMode() )

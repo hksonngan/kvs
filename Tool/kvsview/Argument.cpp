@@ -245,7 +245,7 @@ void Argument::Common::applyTo( kvs::glut::Screen& screen, kvs::VisualizationPip
         pipeline.exec();
         pipeline.renderer()->disableShading();
 
-        screen.setPipeline( &pipeline );
+        screen.registerObject( &pipeline );
     }
 
     // Bounding box.
@@ -266,7 +266,7 @@ void Argument::Common::applyTo( kvs::glut::Screen& screen, kvs::VisualizationPip
         pipeline.exec();
         pipeline.renderer()->disableShading();
 
-        screen.setPipeline( &pipeline );
+        screen.registerObject( &pipeline );
     }
 
     // Background color.

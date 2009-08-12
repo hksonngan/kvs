@@ -369,7 +369,7 @@ const bool Main::exec( void )
         p.exec();
         p.renderer()->disableShading();
 
-        screen.setPipeline( &p );
+        screen.registerObject( &p );
     }
 
     // Set a mapper (CellByCellMetropolisSampling)
@@ -431,7 +431,7 @@ const bool Main::exec( void )
         kvsMessageError("Cannot execute the visulization pipeline.");
         return( false );
     }
-    screen.setPipeline( &pipe );
+    screen.registerObject( &pipe );
 
     // Verbose information.
     if ( arg.verboseMode() )

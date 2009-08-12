@@ -130,7 +130,7 @@ public:
 
     bool isActiveMove( int x, int y );
 
-    void setObjectManagerParameters( void );
+    void updateControllingObject( void );
 
     void updateCenterOfRotation( void );
 

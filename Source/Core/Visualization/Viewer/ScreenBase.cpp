@@ -500,7 +500,7 @@ void ScreenBase::updateControllingObject( void )
  *  @brief  Updates the center of rotation.
  */
 /*==========================================================================*/
-void ScreenBase::updatetCenterOfRotation( void )
+void ScreenBase::updateCenterOfRotation( void )
 {
     // Center of rotation in the device coordinate system.
     kvs::Vector2f center( 0.0, 0.0 );
