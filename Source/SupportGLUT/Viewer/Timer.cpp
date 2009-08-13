@@ -31,6 +31,17 @@ namespace glut
 
 /*===========================================================================*/
 /**
+ *  @brief  Timer event function (GLUT's callback function).
+ *  @param  id [in] timer ID
+ */
+/*===========================================================================*/
+void TimerEventFunction( int id )
+{
+    ::context.find( id )->second->timerEvent();
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Constructs a new Timer class.
  *  @param  listener [in] pointer to a event listener
  *  @param  msec [in] interval time in milliseconds
@@ -166,17 +177,6 @@ void Timer::timerEvent( void )
     {
         this->stop();
     }
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Timer event function (GLUT's callback function).
- *  @param  id [in] timer ID
- */
-/*===========================================================================*/
-void TimerEventFunction( int id )
-{
-    ::context.find( id )->second->timerEvent();
 }
 
 } // end of namespace glut

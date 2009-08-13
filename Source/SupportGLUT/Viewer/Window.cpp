@@ -13,6 +13,7 @@
  */
 /*****************************************************************************/
 #include "Window.h"
+#include <cstdlib>
 #include <kvs/IgnoreUnusedVariable>
 //#include <kvs/glut/KVSMouseButton>
 //#include <kvs/glut/KVSKey>
@@ -51,6 +52,137 @@ namespace kvs
 
 namespace glut
 {
+
+/*===========================================================================*/
+/**
+ *  @brief  Display function for glutDisplayFunc.
+ */
+/*===========================================================================*/
+void DisplayFunction( void )
+{
+    const int id = glutGetWindow();
+    ::context[id]->paintEvent();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Resize function for glutReshapeFunc.
+ *  @param  width [in] window width
+ *  @param  height [in] window height
+ */
+/*===========================================================================*/
+void ResizeFunction( int width, int height )
+{
+    const int id = glutGetWindow();
+    ::context[id]->resizeEvent( width, height );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Mouse function for glutMouseFunc.
+ *  @param  button [in] button ID
+ *  @param  state [in] state ID
+ *  @param  x [in] x coordinate of the mouse on the window coordinate
+ *  @param  y [in] y coordinate of the mouse on the window coordinate
+ */
+/*===========================================================================*/
+void MouseFunction( int button, int state, int x, int y )
+{
+    const int id = glutGetWindow();
+    const int modifier = kvs::glut::KVSKey::Modifier( glutGetModifiers() );
+    button = kvs::glut::KVSMouseButton::Button( button );
+    state = kvs::glut::KVSMouseButton::State( state );
+    ::context[id]->m_mouse_event->setButton( button );
+    ::context[id]->m_mouse_event->setState( state );
+    ::context[id]->m_mouse_event->setPosition( x, y );
+    ::context[id]->m_mouse_event->setModifiers( modifier );
+
+    switch ( state )
+    {
+    case kvs::MouseButton::Down:
+        ::context[id]->m_elapse_time_counter.stop();
+        if ( ::context[id]->m_elapse_time_counter.sec() < 0.2f )
+        {
+            ::context[id]->m_mouse_event->setAction( kvs::MouseButton::DoubleClicked );
+            ::context[id]->mouseDoubleClickEvent( ::context[id]->m_mouse_event );
+        }
+        else
+        {
+            ::context[id]->m_mouse_event->setAction( kvs::MouseButton::Pressed );
+            ::context[id]->mousePressEvent( ::context[id]->m_mouse_event );
+        }
+        ::context[id]->m_elapse_time_counter.start();
+        break;
+    case kvs::MouseButton::Up:
+        ::context[id]->m_mouse_event->setAction( kvs::MouseButton::Released );
+        ::context[id]->mouseReleaseEvent( ::context[id]->m_mouse_event );
+        break;
+    default: break;
+    }
+
+    ::context[id]->m_wheel_event->setPosition( x, y );
+    switch( button )
+    {
+    case kvs::MouseButton::WheelUp:
+        ::context[id]->m_wheel_event->setDirection( 1 );
+        ::context[id]->wheelEvent( ::context[id]->m_wheel_event );
+        break;
+    case kvs::MouseButton::WheelDown:
+        ::context[id]->m_wheel_event->setDirection( -1 );
+        ::context[id]->wheelEvent( ::context[id]->m_wheel_event );
+        break;
+    default: break;
+    }
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Mouse move function for glutMotionFunc.
+ *  @param  x [in] x coordinate value of the mouse cursor on the window coordinate
+ *  @param  y [in] y coordinate value of the mouse cursor on the window coordinate
+ */
+/*===========================================================================*/
+void MouseMoveFunction( int x, int y )
+{
+    const int id = glutGetWindow();
+    ::context[id]->m_mouse_event->setPosition( x, y );
+    ::context[id]->m_mouse_event->setAction( kvs::MouseButton::Moved );
+    ::context[id]->mouseMoveEvent( ::context[id]->m_mouse_event );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Key press function for glutKeyboardFunc.
+ *  @param  key [in] key code
+ *  @param  x [in] x coordinate value of the mouse cursor on the window coordinate
+ *  @param  y [in] y coordinate value of the mouse cursor on the window coordinate
+ */
+/*===========================================================================*/
+void KeyPressFunction( unsigned char key, int x, int y )
+{
+    const int id = glutGetWindow();
+    const int code = kvs::glut::KVSKey::ASCIICode( key );
+    ::context[id]->m_key_event->setKey( code );
+    ::context[id]->m_key_event->setPosition( x, y );
+    ::context[id]->keyPressEvent( ::context[id]->m_key_event );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Special key press function for glutSpecialFunc.
+ *  @param  key [in] key code
+ *  @param  x [in] x coordinate value of the mouse cursor on the window coordinate
+ *  @param  y [in] y coordinate value of the mouse cursor on the window coordinate
+ */
+/*===========================================================================*/
+void SpecialKeyPressFunction( int key, int x, int y )
+{
+    const int id = glutGetWindow();
+    const int code = kvs::glut::KVSKey::SpecialCode( key );
+    ::context[id]->m_key_event->setKey( code );
+    ::context[id]->m_key_event->setPosition( x, y );
+    ::context[id]->keyPressEvent( ::context[id]->m_key_event );
+}
 
 /*===========================================================================*/
 /**
@@ -304,137 +436,6 @@ void Window::wheelEvent( kvs::WheelEvent* event )
 void Window::keyPressEvent( kvs::KeyEvent* event )
 {
     kvs::IgnoreUnusedVariable( event );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Display function for glutDisplayFunc.
- */
-/*===========================================================================*/
-void DisplayFunction( void )
-{
-    const int id = glutGetWindow();
-    ::context[id]->paintEvent();
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Resize function for glutReshapeFunc.
- *  @param  width [in] window width
- *  @param  height [in] window height
- */
-/*===========================================================================*/
-void ResizeFunction( int width, int height )
-{
-    const int id = glutGetWindow();
-    ::context[id]->resizeEvent( width, height );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Mouse function for glutMouseFunc.
- *  @param  button [in] button ID
- *  @param  state [in] state ID
- *  @param  x [in] x coordinate of the mouse on the window coordinate
- *  @param  y [in] y coordinate of the mouse on the window coordinate
- */
-/*===========================================================================*/
-void MouseFunction( int button, int state, int x, int y )
-{
-    const int id = glutGetWindow();
-    const int modifier = kvs::glut::KVSKey::Modifier( glutGetModifiers() );
-    button = kvs::glut::KVSMouseButton::Button( button );
-    state = kvs::glut::KVSMouseButton::State( state );
-    ::context[id]->m_mouse_event->setButton( button );
-    ::context[id]->m_mouse_event->setState( state );
-    ::context[id]->m_mouse_event->setPosition( x, y );
-    ::context[id]->m_mouse_event->setModifiers( modifier );
-
-    switch ( state )
-    {
-    case kvs::MouseButton::Down:
-        ::context[id]->m_elapse_time_counter.stop();
-        if ( ::context[id]->m_elapse_time_counter.sec() < 0.2f )
-        {
-            ::context[id]->m_mouse_event->setAction( kvs::MouseButton::DoubleClicked );
-            ::context[id]->mouseDoubleClickEvent( ::context[id]->m_mouse_event );
-        }
-        else
-        {
-            ::context[id]->m_mouse_event->setAction( kvs::MouseButton::Pressed );
-            ::context[id]->mousePressEvent( ::context[id]->m_mouse_event );
-        }
-        ::context[id]->m_elapse_time_counter.start();
-        break;
-    case kvs::MouseButton::Up:
-        ::context[id]->m_mouse_event->setAction( kvs::MouseButton::Released );
-        ::context[id]->mouseReleaseEvent( ::context[id]->m_mouse_event );
-        break;
-    default: break;
-    }
-
-    ::context[id]->m_wheel_event->setPosition( x, y );
-    switch( button )
-    {
-    case kvs::MouseButton::WheelUp:
-        ::context[id]->m_wheel_event->setDirection( 1 );
-        ::context[id]->wheelEvent( ::context[id]->m_wheel_event );
-        break;
-    case kvs::MouseButton::WheelDown:
-        ::context[id]->m_wheel_event->setDirection( -1 );
-        ::context[id]->wheelEvent( ::context[id]->m_wheel_event );
-        break;
-    default: break;
-    }
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Mouse move function for glutMotionFunc.
- *  @param  x [in] x coordinate value of the mouse cursor on the window coordinate
- *  @param  y [in] y coordinate value of the mouse cursor on the window coordinate
- */
-/*===========================================================================*/
-void MouseMoveFunction( int x, int y )
-{
-    const int id = glutGetWindow();
-    ::context[id]->m_mouse_event->setPosition( x, y );
-    ::context[id]->m_mouse_event->setAction( kvs::MouseButton::Moved );
-    ::context[id]->mouseMoveEvent( ::context[id]->m_mouse_event );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Key press function for glutKeyboardFunc.
- *  @param  key [in] key code
- *  @param  x [in] x coordinate value of the mouse cursor on the window coordinate
- *  @param  y [in] y coordinate value of the mouse cursor on the window coordinate
- */
-/*===========================================================================*/
-void KeyPressFunction( unsigned char key, int x, int y )
-{
-    const int id = glutGetWindow();
-    const int code = kvs::glut::KVSKey::ASCIICode( key );
-    ::context[id]->m_key_event->setKey( code );
-    ::context[id]->m_key_event->setPosition( x, y );
-    ::context[id]->keyPressEvent( ::context[id]->m_key_event );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Special key press function for glutSpecialFunc.
- *  @param  key [in] key code
- *  @param  x [in] x coordinate value of the mouse cursor on the window coordinate
- *  @param  y [in] y coordinate value of the mouse cursor on the window coordinate
- */
-/*===========================================================================*/
-void SpecialKeyPressFunction( int key, int x, int y )
-{
-    const int id = glutGetWindow();
-    const int code = kvs::glut::KVSKey::SpecialCode( key );
-    ::context[id]->m_key_event->setKey( code );
-    ::context[id]->m_key_event->setPosition( x, y );
-    ::context[id]->keyPressEvent( ::context[id]->m_key_event );
 }
 
 } // end of namespace glut
