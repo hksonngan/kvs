@@ -8,6 +8,7 @@ $(OUTDIR)/./FileFormat/AVSUCD/AVSUcd.o \
 $(OUTDIR)/./FileFormat/BMP/Bmp.o \
 $(OUTDIR)/./FileFormat/BMP/FileHeader.o \
 $(OUTDIR)/./FileFormat/BMP/InfoHeader.o \
+$(OUTDIR)/./FileFormat/CSV/Csv.o \
 $(OUTDIR)/./FileFormat/DICOM/Attribute.o \
 $(OUTDIR)/./FileFormat/DICOM/Dicom.o \
 $(OUTDIR)/./FileFormat/DICOM/DicomList.o \
@@ -340,6 +341,10 @@ $(OUTDIR)/./FileFormat/DICOM/%.o: ./FileFormat/DICOM/%.cpp ./FileFormat/DICOM/%.
 	$(MKDIR) $(OUTDIR)/./FileFormat/DICOM
 	$(CPP) -c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) -o $@ $<
 
+$(OUTDIR)/./FileFormat/CSV/%.o: ./FileFormat/CSV/%.cpp ./FileFormat/CSV/%.h
+	$(MKDIR) $(OUTDIR)/./FileFormat/CSV
+	$(CPP) -c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) -o $@ $<
+
 $(OUTDIR)/./FileFormat/BMP/%.o: ./FileFormat/BMP/%.cpp ./FileFormat/BMP/%.h
 	$(MKDIR) $(OUTDIR)/./FileFormat/BMP
 	$(CPP) -c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) -o $@ $<
@@ -366,6 +371,8 @@ install::
 	$(INSTALL) ./FileFormat/AVSUCD/*.h $(INSTALL_DIR)/include/Core/./FileFormat/AVSUCD
 	$(MKDIR) $(INSTALL_DIR)/include/Core/./FileFormat/BMP
 	$(INSTALL) ./FileFormat/BMP/*.h $(INSTALL_DIR)/include/Core/./FileFormat/BMP
+	$(MKDIR) $(INSTALL_DIR)/include/Core/./FileFormat/CSV
+	$(INSTALL) ./FileFormat/CSV/*.h $(INSTALL_DIR)/include/Core/./FileFormat/CSV
 	$(MKDIR) $(INSTALL_DIR)/include/Core/./FileFormat/DICOM
 	$(INSTALL) ./FileFormat/DICOM/*.h $(INSTALL_DIR)/include/Core/./FileFormat/DICOM
 	$(MKDIR) $(INSTALL_DIR)/include/Core/./FileFormat/KVSML

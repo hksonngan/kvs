@@ -8,6 +8,7 @@ $(OUTDIR)\.\FileFormat\AVSUCD\AVSUcd.obj \
 $(OUTDIR)\.\FileFormat\BMP\Bmp.obj \
 $(OUTDIR)\.\FileFormat\BMP\FileHeader.obj \
 $(OUTDIR)\.\FileFormat\BMP\InfoHeader.obj \
+$(OUTDIR)\.\FileFormat\CSV\Csv.obj \
 $(OUTDIR)\.\FileFormat\DICOM\Attribute.obj \
 $(OUTDIR)\.\FileFormat\DICOM\Dicom.obj \
 $(OUTDIR)\.\FileFormat\DICOM\DicomList.obj \
@@ -382,6 +383,12 @@ $<
 $<
 <<
 
+{.\FileFormat\CSV\}.cpp{$(OUTDIR)\.\FileFormat\CSV\}.obj::
+	IF NOT EXIST $(OUTDIR)\.\FileFormat\CSV $(MKDIR) $(OUTDIR)\.\FileFormat\CSV
+	$(CPP) /c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) /Fo$(OUTDIR)\.\FileFormat\CSV\ @<<
+$<
+<<
+
 {.\FileFormat\BMP\}.cpp{$(OUTDIR)\.\FileFormat\BMP\}.obj::
 	IF NOT EXIST $(OUTDIR)\.\FileFormat\BMP $(MKDIR) $(OUTDIR)\.\FileFormat\BMP
 	$(CPP) /c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) /Fo$(OUTDIR)\.\FileFormat\BMP\ @<<
@@ -416,6 +423,8 @@ install::
 	$(INSTALL) .\FileFormat\AVSUCD\*.h $(INSTALL_DIR)\include\Core\.\FileFormat\AVSUCD
 	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\FileFormat\BMP $(MKDIR) $(INSTALL_DIR)\include\Core\.\FileFormat\BMP
 	$(INSTALL) .\FileFormat\BMP\*.h $(INSTALL_DIR)\include\Core\.\FileFormat\BMP
+	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\FileFormat\CSV $(MKDIR) $(INSTALL_DIR)\include\Core\.\FileFormat\CSV
+	$(INSTALL) .\FileFormat\CSV\*.h $(INSTALL_DIR)\include\Core\.\FileFormat\CSV
 	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\FileFormat\DICOM $(MKDIR) $(INSTALL_DIR)\include\Core\.\FileFormat\DICOM
 	$(INSTALL) .\FileFormat\DICOM\*.h $(INSTALL_DIR)\include\Core\.\FileFormat\DICOM
 	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\FileFormat\KVSML $(MKDIR) $(INSTALL_DIR)\include\Core\.\FileFormat\KVSML

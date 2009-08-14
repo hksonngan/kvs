@@ -1,6 +1,7 @@
 FileFormat/AVSField/AVSField
 FileFormat/AVSUCD/AVSUcd
 FileFormat/BMP/Bmp
+FileFormat/CSV/Csv
 FileFormat/DICOM/Dicom
 FileFormat/DICOM/DicomList
 FileFormat/FileFormatBase

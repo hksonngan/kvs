@@ -1,6 +1,7 @@
 #include <Core/FileFormat/AVSField/AVSField.h>
 #include <Core/FileFormat/AVSUCD/AVSUcd.h>
 #include <Core/FileFormat/BMP/Bmp.h>
+#include <Core/FileFormat/CSV/Csv.h>
 #include <Core/FileFormat/DICOM/Dicom.h>
 #include <Core/FileFormat/DICOM/DicomList.h>
 #include <Core/FileFormat/FileFormatBase.h>
