@@ -72,6 +72,17 @@ std::ostream& operator << ( std::ostream& os, const Csv& csv )
 
 /*===========================================================================*/
 /**
+ *  @brief  Returns the number of rows.
+ *  @return number of rows
+ */
+/*===========================================================================*/
+const size_t Csv::nrows( void ) const
+{
+    return( m_values.size() );
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Returns the row.
  *  @param  index [in] index of the row
  *  @return row

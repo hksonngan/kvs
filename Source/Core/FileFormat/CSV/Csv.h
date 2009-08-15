@@ -56,6 +56,8 @@ public:
 
 public:
 
+    const size_t nrows( void ) const;
+
     const Row& row( const size_t index ) const;
 
     const std::string& value( const size_t i, const size_t j ) const;
