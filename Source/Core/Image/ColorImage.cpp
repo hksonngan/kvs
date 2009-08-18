@@ -115,6 +115,17 @@ ColorImage::ColorImage( const kvs::BitImage& image )
     this->read_image( image );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new ColorImage class.
+ *  @param  filename [in] filename
+ */
+/*===========================================================================*/
+ColorImage::ColorImage( const std::string& filename )
+{
+    this->read( filename );
+}
+
 /*==========================================================================*/
 /**
  *  Destroys the color image.

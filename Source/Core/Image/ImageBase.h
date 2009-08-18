@@ -127,6 +127,10 @@ public:
 
     kvs::ValueArray<kvs::UInt8>& data( void );
 
+public:
+
+    void flip( void );
+
 protected:
 
     template <typename ImageDataType, typename Interpolator>

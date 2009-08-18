@@ -88,6 +88,8 @@ public:
     template <typename GrayScalingMethod>
     GrayImage( const kvs::ColorImage& image, GrayScalingMethod method );
 
+    explicit GrayImage( const std::string& filename );
+
     virtual ~GrayImage( void );
 
 public:

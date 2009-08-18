@@ -440,6 +440,12 @@ BitImage::BitImage(
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new BitImage class as copy
+ *  @param  image [in] bit image
+ */
+/*===========================================================================*/
 BitImage::BitImage( const kvs::BitImage& image )
 {
     BaseClass::copy( image );
@@ -456,6 +462,17 @@ BitImage::BitImage( const kvs::GrayImage& image ):
 {
     BitImage::PTile method;
     method( image, m_data );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new BitImage class.
+ *  @param  filename [in] filename
+ */
+/*===========================================================================*/
+BitImage::BitImage( const std::string& filename )
+{
+    this->read( filename );
 }
 
 /*==========================================================================*/

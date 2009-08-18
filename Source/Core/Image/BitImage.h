@@ -98,6 +98,8 @@ public:
     template <typename BinarizationMethod>
     BitImage( const kvs::GrayImage& image, BinarizationMethod method );
 
+    explicit BitImage( const std::string& filename );
+
     virtual ~BitImage( void );
 
 public:

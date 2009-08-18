@@ -301,6 +301,17 @@ GrayImage::GrayImage( const kvs::ColorImage& image ):
     method( image, m_data );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new GrayImage class.
+ *  @param  filename [in] filename
+ */
+/*===========================================================================*/
+GrayImage::GrayImage( const std::string& filename )
+{
+    this->read( filename );
+}
+
 /*==========================================================================*/
 /**
  *  Destroys the gray-scale image.

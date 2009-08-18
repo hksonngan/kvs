@@ -425,6 +425,32 @@ kvs::ValueArray<kvs::UInt8>& ImageBase::data( void )
     return( m_data );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Flip the image data.
+ */
+/*===========================================================================*/
+void ImageBase::flip( void )
+{
+    const size_t stride = m_width * ::BitToByte( m_bpp );
+
+    kvs::UInt8* pdata = m_data.pointer();
+    const size_t end_line = m_height / 2;
+    for ( size_t i = 0; i < end_line; i++ )
+    {
+        kvs::UInt8* src = pdata + ( i * stride );
+        kvs::UInt8* dst = pdata + ( ( m_height - i - 1 ) * stride );
+        for ( size_t j = 0; j < stride; j++ )
+        {
+            kvs::UInt8 tmp = *src;
+            *src = *dst;
+            *dst = tmp;
+            src++;
+            dst++;
+        }
+    }
+}
+
 template <typename ImageDataType, typename Interpolator>
 void ImageBase::resize( const size_t width, const size_t height, ImageDataType* image )
 {

@@ -56,6 +56,8 @@ public:
 
     explicit ColorImage( const kvs::BitImage& image );
 
+    explicit ColorImage( const std::string& filename );
+
     virtual ~ColorImage( void );
 
 public:
