@@ -657,11 +657,13 @@ void Screen::default_wheel_event( kvs::WheelEvent* event )
 
     if ( event->direction() > 0 )
     {
-        ScreenBase::wheelFunction( kvs::Mouse::WheelUpValue );
+//        ScreenBase::wheelFunction( kvs::Mouse::WheelUpValue );
+        ScreenBase::wheelFunction( 10 );
     }
     else
     {
-        ScreenBase::wheelFunction( kvs::Mouse::WheelDownValue );
+//        ScreenBase::wheelFunction( kvs::Mouse::WheelDownValue );
+        ScreenBase::wheelFunction( -10 );
     }
 
     ScreenBase::updateXform();

@@ -216,8 +216,9 @@ void ScreenBase::wheelFunction( int value )
 {
     this->updateControllingObject();
 
-    m_mouse->setScalingType( kvs::Mouse::ScalingXYZ );
-    m_mouse->wheel( value );
+    m_mouse->setMode( kvs::Mouse::Scaling );
+    m_mouse->press( 0, 0 );
+    m_mouse->move( 0, value );
 }
 
 /*===========================================================================*/

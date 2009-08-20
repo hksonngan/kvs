@@ -60,8 +60,8 @@ int Application::run( void )
     static bool flag = true;
     if ( flag )
     {
-        glutMainLoop();
         flag = false;
+        glutMainLoop();
     }
 
     return( true );
