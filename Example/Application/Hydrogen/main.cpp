@@ -120,6 +120,16 @@ int main( int argc, char** argv )
             return( false );
         }
 
+        if ( arg.hasOption("a") )
+        {
+            kvsml->setWritingDataType( kvs::KVSMLObjectStructuredVolume::ExternalAscii );
+        }
+
+        if ( arg.hasOption("b") )
+        {
+            kvsml->setWritingDataType( kvs::KVSMLObjectStructuredVolume::ExternalBinary );
+        }
+
         if ( !kvsml->write( filename ) )
         {
             kvsMessageError( "Cannot write to the file as KVSML format." );
