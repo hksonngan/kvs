@@ -16,7 +16,7 @@
 #define KVS__QT__APPLICATION_H_INCLUDE
 
 #include <kvs/ApplicationBase>
-#include <kvs/qt/QT>
+#include <kvs/qt/Qt>
 
 
 namespace kvs
