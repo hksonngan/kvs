@@ -26,6 +26,14 @@
 #include <iostream>
 #include <fstream>
 
+namespace
+{
+#ifdef PATH_MAX
+const size_t MaxPathLength = PATH_MAX;
+#else
+const size_t MaxPathLength = 4096;
+#endif
+}
 
 namespace
 {
@@ -39,10 +47,10 @@ namespace
 /*==========================================================================*/
 std::string GetAbsolutePath( const std::string& path )
 {
-    char absolute_path[256];
+    char absolute_path[::MaxPathLength];
 
 #if defined ( KVS_PLATFORM_WINDOWS )
-    _fullpath( absolute_path, const_cast<char*>( path.c_str() ), 256 );
+    _fullpath( absolute_path, const_cast<char*>( path.c_str() ), ::MaxPathLength );
 #else
     if ( !realpath( path.c_str(), absolute_path ) )
     {
