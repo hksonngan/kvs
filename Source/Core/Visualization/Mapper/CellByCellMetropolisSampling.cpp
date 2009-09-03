@@ -166,13 +166,13 @@ kvs::ObjectBase* CellByCellMetropolisSampling::exec( const kvs::ObjectBase* obje
                 if ( kvs::GlobalCore::camera->windowWidth() != 0 && kvs::GlobalCore::camera->windowHeight() )
                 {
                     const kvs::Camera* camera = kvs::GlobalCore::camera;
-                    this->mapping( camera, reinterpret_cast<const kvs::StructuredVolumeObject*>( object ) );
+                    this->mapping( camera, reinterpret_cast<const kvs::UnstructuredVolumeObject*>( object ) );
                 }
             }
             else
             {
                 kvs::Camera* camera = new kvs::Camera();
-                this->mapping( camera, reinterpret_cast<const kvs::StructuredVolumeObject*>( object ) );
+                this->mapping( camera, reinterpret_cast<const kvs::UnstructuredVolumeObject*>( object ) );
                 delete camera;
             }
         }
