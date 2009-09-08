@@ -96,7 +96,7 @@ StructuredVolumeImporter::StructuredVolumeImporter( const std::string& filename 
     }
     else
     {
-        kvsMessageError("Cannot import '%'.",filename.c_str());
+        kvsMessageError("Cannot import '%s'.",filename.c_str());
         return;
     }
 
