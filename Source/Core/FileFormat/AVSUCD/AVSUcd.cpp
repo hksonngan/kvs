@@ -746,7 +746,7 @@ void AVSUcd::read_connections( FILE* const ifs )
                 strtok( 0, ::Delimiter );
 
                 const char* const element_type = strtok( 0, ::Delimiter );
-                if ( strcmp( element_type, "tet" ) != 0 )
+                if ( strcmp( element_type, "tet2" ) != 0 )
                 {
                     throw "Multi-element type is not supported.";
                 }

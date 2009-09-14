@@ -89,7 +89,7 @@ inline CellBase<T>::CellBase(
     m_reference_volume( volume )
 {
     const size_t dimension = 3;
-    const size_t nnodes = volume->nnodes();
+    const size_t nnodes = volume->cellType();
     try
     {
         m_vertices = new kvs::Vector3f [nnodes];
