@@ -376,13 +376,13 @@ void TetrahedraToTetrahedra::remove_quadratic_nodes( const kvs::UnstructuredVolu
         // Value array.
         for ( size_t i = 0; i < tet_veclen; i++ )
         {
-            *(tet_pvalues++) = tet2_pvalues[ id->first * tet_veclen + i ];
+            tet_pvalues[ id->second * tet_veclen + i ] = tet2_pvalues[ id->first * tet_veclen + i ];
         }
 
         // Coordinate data array.
-        *(tet_pcoords++) = tet2_pcoords[ id->first * 3 + 0 ];
-        *(tet_pcoords++) = tet2_pcoords[ id->first * 3 + 1 ];
-        *(tet_pcoords++) = tet2_pcoords[ id->first * 3 + 2 ];
+        tet_pcoords[ id->second * 3 + 0 ] = tet2_pcoords[ id->first * 3 + 0 ];
+        tet_pcoords[ id->second * 3 + 1 ] = tet2_pcoords[ id->first * 3 + 1 ];
+        tet_pcoords[ id->second * 3 + 2 ] = tet2_pcoords[ id->first * 3 + 2 ];
 
         ++id;
     }

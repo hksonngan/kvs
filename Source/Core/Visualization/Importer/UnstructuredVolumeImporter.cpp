@@ -31,7 +31,9 @@ namespace
 const kvs::UnstructuredVolumeObject::CellType StringToCellType( const std::string& cell_type )
 {
     if (      cell_type == "tetrahedra" ) { return( kvs::UnstructuredVolumeObject::Tetrahedra ); }
+    else if ( cell_type == "quadratic tetrahedra" ) { return( kvs::UnstructuredVolumeObject::QuadraticTetrahedra ); }
     else if ( cell_type == "hexahedra"  ) { return( kvs::UnstructuredVolumeObject::Hexahedra );  }
+    else if ( cell_type == "quadratic hexahedra"  ) { return( kvs::UnstructuredVolumeObject::QuadraticHexahedra );  }
     else
     {
         kvsMessageError( "Unknown cell type '%s'.", cell_type.c_str() );
