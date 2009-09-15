@@ -165,6 +165,7 @@ $(OUTDIR)\.\Visualization\Exporter\UnstructuredVolumeExporter.obj \
 $(OUTDIR)\.\Visualization\Filter\Bounds.obj \
 $(OUTDIR)\.\Visualization\Filter\FilterBase.obj \
 $(OUTDIR)\.\Visualization\Filter\LineIntegralConvolution.obj \
+$(OUTDIR)\.\Visualization\Filter\TetrahedraToTetrahedra.obj \
 $(OUTDIR)\.\Visualization\Filter\TrilinearInterpolator.obj \
 $(OUTDIR)\.\Visualization\Filter\Tubeline.obj \
 $(OUTDIR)\.\Visualization\Importer\ImageImporter.obj \

@@ -132,6 +132,7 @@
 #include <Core/Visualization/Filter/Bounds.h>
 #include <Core/Visualization/Filter/FilterBase.h>
 #include <Core/Visualization/Filter/LineIntegralConvolution.h>
+#include <Core/Visualization/Filter/TetrahedraToTetrahedra.h>
 #include <Core/Visualization/Filter/TrilinearInterpolator.h>
 #include <Core/Visualization/Filter/Tubeline.h>
 #include <Core/Visualization/Importer/ImageImporter.h>

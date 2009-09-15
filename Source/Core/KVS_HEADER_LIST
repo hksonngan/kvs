@@ -132,6 +132,7 @@ Visualization/Exporter/UnstructuredVolumeExporter
 Visualization/Filter/Bounds
 Visualization/Filter/FilterBase
 Visualization/Filter/LineIntegralConvolution
+Visualization/Filter/TetrahedraToTetrahedra
 Visualization/Filter/TrilinearInterpolator
 Visualization/Filter/Tubeline
 Visualization/Importer/ImageImporter
