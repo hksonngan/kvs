@@ -16,6 +16,7 @@
 #include "fld2kvsml.h"
 #include "ucd2kvsml.h"
 #include "img2img.h"
+#include "tet2tet.h"
 
 
 namespace kvsconv
@@ -40,6 +41,7 @@ Argument::Argument( int argc, char** argv ):
     add_option( kvsconv::fld2kvsml::CommandName, kvsconv::fld2kvsml::Description, 0 );
     add_option( kvsconv::ucd2kvsml::CommandName, kvsconv::ucd2kvsml::Description, 0 );
     add_option( kvsconv::img2img::CommandName, kvsconv::img2img::Description, 0 );
+    add_option( kvsconv::tet2tet::CommandName, kvsconv::tet2tet::Description, 0 );
 
     // Input value.
     add_value("input value");

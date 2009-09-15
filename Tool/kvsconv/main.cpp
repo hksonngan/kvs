@@ -16,6 +16,7 @@
 #include "fld2kvsml.h"
 #include "ucd2kvsml.h"
 #include "img2img.h"
+#include "tet2tet.h"
 #include <kvs/Message>
 
 
@@ -53,6 +54,7 @@ bool Main::exec( void )
         if ( c == "fld2kvsml" ) return( fld2kvsml::Argument( m_argc, m_argv ).parse() );
         if ( c == "ucd2kvsml" ) return( ucd2kvsml::Argument( m_argc, m_argv ).parse() );
         if ( c == "img2img" ) return( img2img::Argument( m_argc, m_argv ).parse() );
+        if ( c == "tet2tet" ) return( tet2tet::Argument( m_argc, m_argv ).parse() );
 
         kvsMessageError( "Unknown converter %s.", c.c_str() );
         return( false );
@@ -62,6 +64,7 @@ bool Main::exec( void )
     if ( arg.hasOption("fld2kvsml") ) return( fld2kvsml::Main( m_argc, m_argv ).exec() );
     if ( arg.hasOption("ucd2kvsml") ) return( ucd2kvsml::Main( m_argc, m_argv ).exec() );
     if ( arg.hasOption("img2img") ) return( img2img::Main( m_argc, m_argv ).exec() );
+    if ( arg.hasOption("tet2tet") ) return( tet2tet::Main( m_argc, m_argv ).exec() );
 
     return( false );
 }

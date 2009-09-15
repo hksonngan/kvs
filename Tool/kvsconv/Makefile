@@ -127,6 +127,7 @@ OBJECTS := \
 $(OUTDIR)/fld2kvsml.o \
 $(OUTDIR)/ucd2kvsml.o \
 $(OUTDIR)/img2img.o \
+$(OUTDIR)/tet2tet.o \
 $(OUTDIR)/Argument.o \
 $(OUTDIR)/main.o \
 
