@@ -107,57 +107,102 @@ inline bool IsLittle( void )
     return( *( (char*)&i ) != 0 );
 }
 
-inline void Swap( char&                 ){ }
+inline void Swap( kvs::Int8& )
+{
+}
 
-inline void Swap( unsigned char&        ){ }
+inline void Swap( kvs::UInt8& )
+{
+}
 
-inline void Swap( short&          value ){ Swap2Bytes( &value ); }
+inline void Swap( kvs::Int16& value )
+{
+    Swap2Bytes( &value );
+}
 
-inline void Swap( unsigned short& value ){ Swap2Bytes( &value ); }
+inline void Swap( kvs::UInt16& value )
+{
+    Swap2Bytes( &value );
+}
 
-inline void Swap( int&            value ){ Swap4Bytes( &value ); }
+inline void Swap( kvs::Int32& value )
+{
+    Swap4Bytes( &value );
+}
 
-inline void Swap( unsigned int&   value ){ Swap4Bytes( &value ); }
+inline void Swap( kvs::UInt32& value )
+{
+    Swap4Bytes( &value );
+}
 
-#if ( KVS_TYPE_SIZEOF_LONG == 4 )
-inline void Swap( long&           value ){ Swap4Bytes( &value ); }
+inline void Swap( kvs::Int64& value )
+{
+    Swap8Bytes( &value );
+}
 
-inline void Swap( unsigned long&  value ){ Swap4Bytes( &value ); }
-#else // KVS_TYPE_SIZEOF_LONG == 8
-inline void Swap( long&           value ){ Swap8Bytes( &value ); }
+inline void Swap( kvs::UInt64& value )
+{
+    Swap8Bytes( &value );
+}
 
-inline void Swap( unsigned long&  value ){ Swap8Bytes( &value ); }
-#endif
+inline void Swap( kvs::Real32& value )
+{
+    Swap4Bytes( &value );
+}
 
-inline void Swap( float&          value ){ Swap4Bytes( &value ); }
+inline void Swap( kvs::Real64& value )
+{
+    Swap8Bytes( &value );
+}
 
-inline void Swap( double&         value ){ Swap8Bytes( &value ); }
+inline void Swap( kvs::Int8*, int )
+{
+}
 
-inline void Swap( char*,                 int   ){ }
+inline void Swap( kvs::UInt8*, int )
+{
+}
 
-inline void Swap( unsigned char*,        int   ){ }
+inline void Swap( kvs::Int16* value, int n )
+{
+    Swap2Bytes( value, n );
+}
 
-inline void Swap( short*          value, int n ){ Swap2Bytes( value, n ); }
+inline void Swap( kvs::UInt16* value, int n )
+{
+    Swap2Bytes( value, n );
+}
 
-inline void Swap( unsigned short* value, int n ){ Swap2Bytes( value, n ); }
+inline void Swap( kvs::Int32* value, int n )
+{
+    Swap4Bytes( value, n );
+}
 
-inline void Swap( int*            value, int n ){ Swap4Bytes( value, n ); }
+inline void Swap( kvs::UInt32* value, int n )
+{
+    Swap4Bytes( value, n );
+}
 
-inline void Swap( unsigned int*   value, int n ){ Swap4Bytes( value, n ); }
+inline void Swap( kvs::Int64* value, int n )
+{
+    Swap8Bytes( value, n );
+}
 
-#if ( KVS_TYPE_SIZEOF_LONG == 4 )
-inline void Swap( long*           value, int n ){ Swap4Bytes( value, n ); }
+inline void Swap( kvs::UInt64* value, int n )
+{
+    Swap8Bytes( value, n );
+}
 
-inline void Swap( unsigned long*  value, int n ){ Swap4Bytes( value, n ); }
-#else // KVS_TYPE_SIZEOF_LONG == 8
-inline void Swap( long*           value, int n ){ Swap8Bytes( value, n ); }
+inline void Swap( kvs::Real32* value, int n )
+{
+    Swap4Bytes( value, n );
+}
 
-inline void Swap( unsigned long*  value, int n ){ Swap8Bytes( value, n ); }
-#endif
+inline void Swap( kvs::Real64* value, int n )
+{
+    Swap8Bytes( value, n );
+}
 
-inline void Swap( float*          value, int n ){ Swap4Bytes( value, n ); }
-
-inline void Swap( double*         value, int n ){ Swap8Bytes( value, n ); }
 };
 
 } // end of namespace kvs
