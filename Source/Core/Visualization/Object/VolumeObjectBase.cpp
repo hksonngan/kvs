@@ -289,16 +289,16 @@ void VolumeObjectBase::deepCopy( const VolumeObjectBase& object )
 
     const size_t size = object.values().size();
     const std::type_info& type = object.values().typeInfo()->type();
-    if (      type == typeid( char ) )           { this->m_values.deepCopy( object.values().pointer<char>(),           size ); }
-    else if ( type == typeid( unsigned char ) )  { this->m_values.deepCopy( object.values().pointer<unsigned char>(),  size ); }
-    else if ( type == typeid( short ) )          { this->m_values.deepCopy( object.values().pointer<short>(),          size ); }
-    else if ( type == typeid( unsigned short ) ) { this->m_values.deepCopy( object.values().pointer<unsigned short>(), size ); }
-    else if ( type == typeid( int ) )            { this->m_values.deepCopy( object.values().pointer<int>(),            size ); }
-    else if ( type == typeid( unsigned int ) )   { this->m_values.deepCopy( object.values().pointer<unsigned int>(),   size ); }
-    else if ( type == typeid( long ) )           { this->m_values.deepCopy( object.values().pointer<long>(),           size ); }
-    else if ( type == typeid( unsigned long ) )  { this->m_values.deepCopy( object.values().pointer<unsigned long>(),  size ); }
-    else if ( type == typeid( float ) )          { this->m_values.deepCopy( object.values().pointer<float>(),          size ); }
-    else if ( type == typeid( double ) )         { this->m_values.deepCopy( object.values().pointer<double>(),         size ); }
+    if (      type == typeid( kvs::Int8 ) )   { this->m_values.deepCopy( object.values().pointer<kvs::Int8>(), size ); }
+    else if ( type == typeid( kvs::UInt8 ) )  { this->m_values.deepCopy( object.values().pointer<kvs::UInt8>(), size ); }
+    else if ( type == typeid( kvs::Int16 ) )  { this->m_values.deepCopy( object.values().pointer<kvs::Int16>(), size ); }
+    else if ( type == typeid( kvs::UInt16 ) ) { this->m_values.deepCopy( object.values().pointer<kvs::UInt16>(), size ); }
+    else if ( type == typeid( kvs::Int32 ) )  { this->m_values.deepCopy( object.values().pointer<kvs::Int32>(), size ); }
+    else if ( type == typeid( kvs::UInt32 ) ) { this->m_values.deepCopy( object.values().pointer<kvs::UInt32>(), size ); }
+    else if ( type == typeid( kvs::Int64 ) )  { this->m_values.deepCopy( object.values().pointer<kvs::Int64>(), size ); }
+    else if ( type == typeid( kvs::UInt64 ) ) { this->m_values.deepCopy( object.values().pointer<kvs::UInt64>(), size ); }
+    else if ( type == typeid( kvs::Real32 ) ) { this->m_values.deepCopy( object.values().pointer<kvs::Real32>(), size ); }
+    else if ( type == typeid( kvs::Real64 ) ) { this->m_values.deepCopy( object.values().pointer<kvs::Real64>(), size ); }
 }
 
 } // end of namespace kvs
