@@ -15,6 +15,7 @@
 #include "TetrahedraToTetrahedra.h"
 #include <algorithm>
 #include <map>
+#include <kvs/AnyValueArray>
 
 
 namespace
