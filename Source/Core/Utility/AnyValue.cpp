@@ -12,6 +12,7 @@
  */
 /****************************************************************************/
 #include "AnyValue.h"
+#include <kvs/Type>
 
 
 namespace kvs
@@ -22,61 +23,77 @@ AnyValue::TypeInfo::~TypeInfo( void )
 }
 
 template<>
-const char* AnyValue::SetTypeInfo<char>::typeName( void ) const
+const char* AnyValue::SetTypeInfo<kvs::Int8>::typeName( void ) const
 {
     return( "char" );
 }
 
 template<>
-const char* AnyValue::SetTypeInfo<unsigned char>::typeName( void ) const
+const char* AnyValue::SetTypeInfo<kvs::UInt8>::typeName( void ) const
 {
     return( "unsigned char" );
 }
 
 template<>
-const char* AnyValue::SetTypeInfo<short>::typeName( void ) const
+const char* AnyValue::SetTypeInfo<kvs::Int16>::typeName( void ) const
 {
     return( "short" );
 }
 
 template<>
-const char* AnyValue::SetTypeInfo<unsigned short>::typeName( void ) const
+const char* AnyValue::SetTypeInfo<kvs::UInt16>::typeName( void ) const
 {
     return( "unsigned short" );
 }
 
 template<>
-const char* AnyValue::SetTypeInfo<int>::typeName( void ) const
+const char* AnyValue::SetTypeInfo<kvs::Int32>::typeName( void ) const
 {
     return( "int" );
 }
 
 template<>
-const char* AnyValue::SetTypeInfo<unsigned int>::typeName( void ) const
+const char* AnyValue::SetTypeInfo<kvs::UInt32>::typeName( void ) const
 {
     return( "unsigned int" );
 }
 
 template<>
-const char* AnyValue::SetTypeInfo<long>::typeName( void ) const
+const char* AnyValue::SetTypeInfo<kvs::Int64>::typeName( void ) const
 {
+#if defined ( KVS_COMPILER_VC )
+    return( "signed __int64" );
+#else
+#if defined ( KVS_PLATFORM_CPU_64 ) // LP64
     return( "long" );
+#else
+    return( "long long" );
+#endif
+#endif
 }
 
 template<>
-const char* AnyValue::SetTypeInfo<unsigned long>::typeName( void ) const
+const char* AnyValue::SetTypeInfo<kvs::UInt64>::typeName( void ) const
 {
+#if defined ( KVS_COMPILER_VC )
+    return( "unsigned __int64" );
+#else
+#if defined ( KVS_PLATFORM_CPU_64 ) // LP64
     return( "unsigned long" );
+#else
+    return( "unsigned long long" );
+#endif
+#endif
 }
 
 template<>
-const char* AnyValue::SetTypeInfo<float>::typeName( void ) const
+const char* AnyValue::SetTypeInfo<kvs::Real32>::typeName( void ) const
 {
     return( "float" );
 }
 
 template<>
-const char* AnyValue::SetTypeInfo<double>::typeName( void ) const
+const char* AnyValue::SetTypeInfo<kvs::Real64>::typeName( void ) const
 {
     return( "double" );
 }
@@ -111,16 +128,16 @@ AnyValue& AnyValue::operator =( const AnyValue& rhs )
 std::ostream& operator << ( std::ostream& os, const AnyValue& rhs )
 {
     const std::type_info& type = rhs.m_type_info->type();
-    if (      type == typeid( char ) )           { os << rhs.m_value.c;  }
-    else if ( type == typeid( unsigned char ) )  { os << rhs.m_value.uc; }
-    else if ( type == typeid( short ) )          { os << rhs.m_value.s;  }
-    else if ( type == typeid( unsigned short ) ) { os << rhs.m_value.us; }
-    else if ( type == typeid( int ) )            { os << rhs.m_value.i;  }
-    else if ( type == typeid( unsigned int ) )   { os << rhs.m_value.ui; }
-    else if ( type == typeid( long ) )           { os << rhs.m_value.l;  }
-    else if ( type == typeid( unsigned long ) )  { os << rhs.m_value.ul; }
-    else if ( type == typeid( float ) )          { os << rhs.m_value.f;  }
-    else if ( type == typeid( double ) )         { os << rhs.m_value.d;  }
+    if (      type == typeid( kvs::Int8 ) )   { os << rhs.m_value.i8;   }
+    else if ( type == typeid( kvs::UInt8 ) )  { os << rhs.m_value.ui8;  }
+    else if ( type == typeid( kvs::Int16 ) )  { os << rhs.m_value.i16;  }
+    else if ( type == typeid( kvs::UInt16 ) ) { os << rhs.m_value.ui16; }
+    else if ( type == typeid( kvs::Int32 ) )  { os << rhs.m_value.i32;  }
+    else if ( type == typeid( kvs::UInt32 ) ) { os << rhs.m_value.ui32; }
+    else if ( type == typeid( kvs::Int64 ) )  { os << rhs.m_value.i64;  }
+    else if ( type == typeid( kvs::UInt64 ) ) { os << rhs.m_value.ui64; }
+    else if ( type == typeid( kvs::Real32 ) ) { os << rhs.m_value.r32;  }
+    else if ( type == typeid( kvs::Real64 ) ) { os << rhs.m_value.r64;  }
 
     return( os );
 }
@@ -130,37 +147,37 @@ const AnyValue::TypeInfo* AnyValue::typeInfo( void ) const
     return( m_type_info );
 }
 
-template<> AnyValue::AnyValue( const char& value );
-template<> AnyValue::AnyValue( const unsigned char& value );
-template<> AnyValue::AnyValue( const short& value );
-template<> AnyValue::AnyValue( const unsigned short& value );
-template<> AnyValue::AnyValue( const int& value );
-template<> AnyValue::AnyValue( const unsigned int& value );
-template<> AnyValue::AnyValue( const long& value );
-template<> AnyValue::AnyValue( const unsigned long& value );
-template<> AnyValue::AnyValue( const float& value );
-template<> AnyValue::AnyValue( const double& value );
+template<> AnyValue::AnyValue( const kvs::Int8& value );
+template<> AnyValue::AnyValue( const kvs::UInt8& value );
+template<> AnyValue::AnyValue( const kvs::Int16& value );
+template<> AnyValue::AnyValue( const kvs::UInt16& value );
+template<> AnyValue::AnyValue( const kvs::Int32& value );
+template<> AnyValue::AnyValue( const kvs::UInt32& value );
+template<> AnyValue::AnyValue( const kvs::Int64& value );
+template<> AnyValue::AnyValue( const kvs::UInt64& value );
+template<> AnyValue::AnyValue( const kvs::Real32& value );
+template<> AnyValue::AnyValue( const kvs::Real64& value );
 
-template<> AnyValue& AnyValue::operator =( const char& value );
-template<> AnyValue& AnyValue::operator =( const unsigned char& value );
-template<> AnyValue& AnyValue::operator =( const short& value );
-template<> AnyValue& AnyValue::operator =( const unsigned short& value );
-template<> AnyValue& AnyValue::operator =( const int& value );
-template<> AnyValue& AnyValue::operator =( const unsigned int& value );
-template<> AnyValue& AnyValue::operator =( const long& value );
-template<> AnyValue& AnyValue::operator =( const unsigned long& value );
-template<> AnyValue& AnyValue::operator =( const float& value );
-template<> AnyValue& AnyValue::operator =( const double& value );
+template<> AnyValue& AnyValue::operator =( const kvs::Int8& value );
+template<> AnyValue& AnyValue::operator =( const kvs::UInt8& value );
+template<> AnyValue& AnyValue::operator =( const kvs::Int16& value );
+template<> AnyValue& AnyValue::operator =( const kvs::UInt16& value );
+template<> AnyValue& AnyValue::operator =( const kvs::Int32& value );
+template<> AnyValue& AnyValue::operator =( const kvs::UInt32& value );
+template<> AnyValue& AnyValue::operator =( const kvs::Int64& value );
+template<> AnyValue& AnyValue::operator =( const kvs::UInt64& value );
+template<> AnyValue& AnyValue::operator =( const kvs::Real32& value );
+template<> AnyValue& AnyValue::operator =( const kvs::Real64& value );
 
-template<> AnyValue::operator char () const;
-template<> AnyValue::operator unsigned char () const;
-template<> AnyValue::operator short () const;
-template<> AnyValue::operator unsigned short () const;
-template<> AnyValue::operator int () const;
-template<> AnyValue::operator unsigned int () const;
-template<> AnyValue::operator long () const;
-template<> AnyValue::operator unsigned long () const;
-template<> AnyValue::operator float () const;
-template<> AnyValue::operator double () const;
+template<> AnyValue::operator kvs::Int8 () const;
+template<> AnyValue::operator kvs::UInt8 () const;
+template<> AnyValue::operator kvs::Int16 () const;
+template<> AnyValue::operator kvs::UInt16 () const;
+template<> AnyValue::operator kvs::Int32 () const;
+template<> AnyValue::operator kvs::UInt32 () const;
+template<> AnyValue::operator kvs::Int64 () const;
+template<> AnyValue::operator kvs::UInt64 () const;
+template<> AnyValue::operator kvs::Real32 () const;
+template<> AnyValue::operator kvs::Real64 () const;
 
 } // end of namespace kvs

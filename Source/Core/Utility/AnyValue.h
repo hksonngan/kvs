@@ -17,6 +17,7 @@
 #include <iostream>
 #include <typeinfo>
 #include <cstring>
+#include "Type.h"
 #include "ClassName.h"
 
 
@@ -66,16 +67,16 @@ private:
 
     union value_type
     {
-        char           c;  ///< char type value
-        unsigned char  uc; ///< unsigned char type value
-        short          s;  ///< short type value
-        unsigned short us; ///< unsigned short type value
-        int            i;  ///< int type value
-        unsigned int   ui; ///< unsigned int type value
-        long           l;  ///< long type value
-        unsigned long  ul; ///< unsigned long type value
-        float          f;  ///< float type value
-        double         d;  ///< double type value
+        kvs::Int8   i8;   ///< 8bit signed integer (char) type
+        kvs::UInt8  ui8;  ///< 8bit unsigned integer (unsigned char) type
+        kvs::Int16  i16;  ///< 16bit signed integer (short) type
+        kvs::UInt16 ui16; ///< 16bit unsigned integer (unsigned short) type
+        kvs::Int32  i32;  ///< 32bit signed interger (int) type
+        kvs::UInt32 ui32; ///< 32bit unsigned integer (unsigned int) type
+        kvs::Int64  i64;  ///< 64bit signed integer (long) type
+        kvs::UInt64 ui64; ///< 64bit unsigned integer (unsigned long) type
+        kvs::Real32 r32;  ///< 32bit real (single precision) type
+        kvs::Real64 r64;  ///< 64bit real (double precision) type
     };
 
     value_type m_value;     ///< value
@@ -157,32 +158,32 @@ template<typename T>
 void AnyValue::set_value( const T& value )
 {
     const std::type_info& type = typeid(T);
-    if (      type == typeid( char ) )           { m_value.c  = value; }
-    else if ( type == typeid( unsigned char ) )  { m_value.uc = value; }
-    else if ( type == typeid( short ) )          { m_value.s  = value; }
-    else if ( type == typeid( unsigned short ) ) { m_value.us = value; }
-    else if ( type == typeid( int ) )            { m_value.i  = value; }
-    else if ( type == typeid( unsigned int ) )   { m_value.ui = value; }
-    else if ( type == typeid( long ) )           { m_value.l  = value; }
-    else if ( type == typeid( unsigned long ) )  { m_value.ul = value; }
-    else if ( type == typeid( float ) )          { m_value.f  = value; }
-    else if ( type == typeid( double ) )         { m_value.d  = value; }
+    if (      type == typeid( kvs::Int8 ) )   { m_value.i8   = value; }
+    else if ( type == typeid( kvs::UInt8 ) )  { m_value.ui8  = value; }
+    else if ( type == typeid( kvs::Int16 ) )  { m_value.i16  = value; }
+    else if ( type == typeid( kvs::UInt16 ) ) { m_value.ui16 = value; }
+    else if ( type == typeid( kvs::Int32 ) )  { m_value.i32  = value; }
+    else if ( type == typeid( kvs::UInt32 ) ) { m_value.ui32 = value; }
+    else if ( type == typeid( kvs::Int64 ) )  { m_value.i64  = value; }
+    else if ( type == typeid( kvs::UInt64 ) ) { m_value.ui64 = value; }
+    else if ( type == typeid( kvs::Real32 ) ) { m_value.r32  = value; }
+    else if ( type == typeid( kvs::Real64 ) ) { m_value.r64  = value; }
 }
 
 template<typename T>
 const T AnyValue::get_value( void ) const
 {
     const std::type_info& type = m_type_info->type();
-    if (      type == typeid( char ) )           { return( static_cast<T>(m_value.c) );  }
-    else if ( type == typeid( unsigned char ) )  { return( static_cast<T>(m_value.uc) ); }
-    else if ( type == typeid( short ) )          { return( static_cast<T>(m_value.s) );  }
-    else if ( type == typeid( unsigned short ) ) { return( static_cast<T>(m_value.us) ); }
-    else if ( type == typeid( int ) )            { return( static_cast<T>(m_value.i) );  }
-    else if ( type == typeid( unsigned int ) )   { return( static_cast<T>(m_value.ui) ); }
-    else if ( type == typeid( long ) )           { return( static_cast<T>(m_value.l) );  }
-    else if ( type == typeid( unsigned long ) )  { return( static_cast<T>(m_value.ul) ); }
-    else if ( type == typeid( float ) )          { return( static_cast<T>(m_value.f) );  }
-    else if ( type == typeid( double ) )         { return( static_cast<T>(m_value.d) );  }
+    if (      type == typeid( kvs::Int8 ) )   { return( static_cast<T>(m_value.i8) );   }
+    else if ( type == typeid( kvs::UInt8 ) )  { return( static_cast<T>(m_value.ui8) );  }
+    else if ( type == typeid( kvs::Int16 ) )  { return( static_cast<T>(m_value.i16) );  }
+    else if ( type == typeid( kvs::UInt16 ) ) { return( static_cast<T>(m_value.ui16) ); }
+    else if ( type == typeid( kvs::Int32 ) )  { return( static_cast<T>(m_value.i32) );  }
+    else if ( type == typeid( kvs::UInt32 ) ) { return( static_cast<T>(m_value.ui32) ); }
+    else if ( type == typeid( kvs::Int64 ) )  { return( static_cast<T>(m_value.i64) );  }
+    else if ( type == typeid( kvs::UInt64 ) ) { return( static_cast<T>(m_value.ui64) ); }
+    else if ( type == typeid( kvs::Real32 ) ) { return( static_cast<T>(m_value.r32) );  }
+    else if ( type == typeid( kvs::Real64 ) ) { return( static_cast<T>(m_value.r64) );  }
 
     return( T( 0 ) );
 }

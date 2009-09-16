@@ -86,7 +86,7 @@ public:
 public:
 
     template<typename T>
-    T& at( unsigned int index )
+    T& at( const size_t index )
     {
         KVS_ASSERT( index < m_nvalues );
         KVS_ASSERT( this->typeInfo()->type() == typeid( T ) );
@@ -95,7 +95,7 @@ public:
     }
 
     template<typename T>
-    const T& at( unsigned int index ) const
+    const T& at( const size_t index ) const
     {
         KVS_ASSERT( index < m_nvalues );
         KVS_ASSERT( this->typeInfo()->type() == typeid( T ) );
@@ -157,16 +157,16 @@ public:
     void swapByte( void )
     {
         const std::type_info& type = m_type_info->type();
-        if (      type == typeid( char ) )           { kvs::Endian::Swap( static_cast<char*>( m_values ), m_nvalues );           }
-        else if ( type == typeid( unsigned char ) )  { kvs::Endian::Swap( static_cast<unsigned char*>( m_values ), m_nvalues );  }
-        else if ( type == typeid( short ) )          { kvs::Endian::Swap( static_cast<short*>( m_values ), m_nvalues );          }
-        else if ( type == typeid( unsigned short ) ) { kvs::Endian::Swap( static_cast<unsigned short*>( m_values ), m_nvalues ); }
-        else if ( type == typeid( int ) )            { kvs::Endian::Swap( static_cast<int*>( m_values ), m_nvalues );            }
-        else if ( type == typeid( unsigned int ) )   { kvs::Endian::Swap( static_cast<unsigned int*>( m_values ), m_nvalues );   }
-        else if ( type == typeid( long ) )           { kvs::Endian::Swap( static_cast<long*>( m_values ), m_nvalues );           }
-        else if ( type == typeid( unsigned long ) )  { kvs::Endian::Swap( static_cast<unsigned long*>( m_values ), m_nvalues );  }
-        else if ( type == typeid( float ) )          { kvs::Endian::Swap( static_cast<float*>( m_values ), m_nvalues );          }
-        else if ( type == typeid( double ) )         { kvs::Endian::Swap( static_cast<double*>( m_values ), m_nvalues );         }
+        if (      type == typeid( kvs::Int8 ) )   { kvs::Endian::Swap( static_cast<kvs::Int8*>( m_values ), m_nvalues );   }
+        else if ( type == typeid( kvs::UInt8 ) )  { kvs::Endian::Swap( static_cast<kvs::UInt8*>( m_values ), m_nvalues );  }
+        else if ( type == typeid( kvs::Int16 ) )  { kvs::Endian::Swap( static_cast<kvs::Int16*>( m_values ), m_nvalues );  }
+        else if ( type == typeid( kvs::UInt16 ) ) { kvs::Endian::Swap( static_cast<kvs::UInt16*>( m_values ), m_nvalues ); }
+        else if ( type == typeid( kvs::Int32 ) )  { kvs::Endian::Swap( static_cast<kvs::Int32*>( m_values ), m_nvalues );  }
+        else if ( type == typeid( kvs::UInt32 ) ) { kvs::Endian::Swap( static_cast<kvs::UInt32*>( m_values ), m_nvalues ); }
+        else if ( type == typeid( kvs::Int64 ) )  { kvs::Endian::Swap( static_cast<kvs::Int64*>( m_values ), m_nvalues );  }
+        else if ( type == typeid( kvs::UInt64 ) ) { kvs::Endian::Swap( static_cast<kvs::UInt64*>( m_values ), m_nvalues ); }
+        else if ( type == typeid( kvs::Real32 ) ) { kvs::Endian::Swap( static_cast<kvs::Real32*>( m_values ), m_nvalues ); }
+        else if ( type == typeid( kvs::Real64 ) ) { kvs::Endian::Swap( static_cast<kvs::Real64*>( m_values ), m_nvalues ); }
     }
 
     template<typename T>
