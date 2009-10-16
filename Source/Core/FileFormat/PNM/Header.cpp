@@ -110,6 +110,7 @@ void Header::read( std::ifstream& ifs )
 
     if( isP1() || isP4() ) m_max = 0;
     else                   ifs >> m_max;
+    this->skip_comment_line( ifs );
 
     m_offset = ifs.tellg();
     m_bpp    = this->bit_per_pixel();
