@@ -318,18 +318,17 @@ inline const bool ReadExternalData(
             return( false );
         }
 
-        const std::string delim(" \n");
-        kvs::Tokenizer tokenizer( buffer, delim );
-
-        delete buffer;
-
         T* data = static_cast<T*>( data_array->pointer() );
-        size_t index = 0;
-        while( !tokenizer.isLast() )
+
+        const char* delim = " \n";
+        char* value = strtok( buffer, delim );
+        while ( value )
         {
-            data[index] = static_cast<T>( atof( tokenizer.token().c_str() ) );
-            index++;
+            *(data++) = static_cast<T>( atof( value ) );
+            value = strtok( 0, delim );
         }
+
+        free( buffer );
 
         fclose( ifs );
     }
@@ -428,16 +427,17 @@ inline const bool ReadExternalData(
             return( false );
         }
 
-        const std::string delim(" \n");
-        kvs::Tokenizer tokenizer( buffer, delim );
+        T1* data = data_array->pointer();
 
-        size_t index = 0;
-        while( !tokenizer.isLast() )
+        const char* delim = " \n";
+        char* value = strtok( buffer, delim );
+        while ( value )
         {
-            data_array->at(index) = static_cast<T1>( atof( tokenizer.token().c_str() ) );
-
-            index++;
+            *(data++) = static_cast<T1>( atof( value ) );
+            value = strtok( 0, delim );
         }
+
+        free( buffer );
 
         fclose( ifs );
     }
