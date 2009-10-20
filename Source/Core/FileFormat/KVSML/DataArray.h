@@ -322,10 +322,13 @@ inline const bool ReadExternalData(
 
         const char* delim = " \n";
         char* value = strtok( buffer, delim );
-        while ( value )
+        for ( size_t i = 0; i < nelements; i++ )
         {
-            *(data++) = static_cast<T>( atof( value ) );
-            value = strtok( 0, delim );
+            if ( value )
+            {
+                *(data++) = static_cast<T>( atof( value ) );
+                value = strtok( 0, delim );
+            }
         }
 
         free( buffer );
@@ -431,10 +434,13 @@ inline const bool ReadExternalData(
 
         const char* delim = " \n";
         char* value = strtok( buffer, delim );
-        while ( value )
+        for ( size_t i = 0; i < nelements; i++ )
         {
-            *(data++) = static_cast<T1>( atof( value ) );
-            value = strtok( 0, delim );
+            if ( value )
+            {
+                *(data++) = static_cast<T1>( atof( value ) );
+                value = strtok( 0, delim );
+            }
         }
 
         free( buffer );
