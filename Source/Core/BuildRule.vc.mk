@@ -82,6 +82,7 @@ $(OUTDIR)\.\Image\RGBColor.obj \
 $(OUTDIR)\.\Matrix\FrustumMatrix44.obj \
 $(OUTDIR)\.\Matrix\LookAtMatrix44.obj \
 $(OUTDIR)\.\Matrix\Matrix.obj \
+$(OUTDIR)\.\Matrix\Matrix22.obj \
 $(OUTDIR)\.\Matrix\Matrix33.obj \
 $(OUTDIR)\.\Matrix\Matrix44.obj \
 $(OUTDIR)\.\Matrix\OrthogonalMatrix44.obj \

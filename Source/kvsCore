@@ -32,6 +32,7 @@
 #include <Core/Matrix/FrustumMatrix44.h>
 #include <Core/Matrix/LookAtMatrix44.h>
 #include <Core/Matrix/Matrix.h>
+#include <Core/Matrix/Matrix22.h>
 #include <Core/Matrix/Matrix33.h>
 #include <Core/Matrix/Matrix44.h>
 #include <Core/Matrix/OrthogonalMatrix44.h>

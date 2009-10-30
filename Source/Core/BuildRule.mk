@@ -82,6 +82,7 @@ $(OUTDIR)/./Image/RGBColor.o \
 $(OUTDIR)/./Matrix/FrustumMatrix44.o \
 $(OUTDIR)/./Matrix/LookAtMatrix44.o \
 $(OUTDIR)/./Matrix/Matrix.o \
+$(OUTDIR)/./Matrix/Matrix22.o \
 $(OUTDIR)/./Matrix/Matrix33.o \
 $(OUTDIR)/./Matrix/Matrix44.o \
 $(OUTDIR)/./Matrix/OrthogonalMatrix44.o \

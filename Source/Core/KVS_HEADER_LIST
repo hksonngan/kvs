@@ -32,6 +32,7 @@ Image/RGBColor
 Matrix/FrustumMatrix44
 Matrix/LookAtMatrix44
 Matrix/Matrix
+Matrix/Matrix22
 Matrix/Matrix33
 Matrix/Matrix44
 Matrix/OrthogonalMatrix44
