@@ -27,6 +27,16 @@
 #include <string>
 
 
+namespace
+{
+// Default parameters.
+const kvs::RGBColor DefaultBackgroundColor( 212, 221, 229 );
+const kvs::RGBColor DefaultHistogramColor( 100, 100, 100 );
+const float         DefaultBiasParameter( 0.5f );
+const size_t        DefaultScreenWidth( 512 );
+const size_t        DefaultScreenHeight( 150 );
+}
+
 namespace kvsview
 {
 
@@ -109,23 +119,21 @@ struct Parameters
         kvs::ValueArray<kvs::UInt8> data( npixels * nchannels );
         data.fill( 0x00 );
 
-        const kvs::RGBColor histogram_color( 100, 100, 100 );
-
         const float g = bias_parameter; // bias parameter
         const kvs::Real32 normalized_factor = 1.0f / ( frequency_table.maxCount() );
         for ( size_t i = 0; i < width; i++ )
         {
-            const size_t n = frequency_table.bin().at(i);
-            const float f = n * normalized_factor; // frequency count (normalized in [0,1])
-            const float b = std::pow( f, static_cast<float>( std::log(g) / std::log(0.5) ) );
+            const size_t n = frequency_table.bin().at(i); // frequency count
+            const float  f = n * normalized_factor; // normalized frequency count in [0,1]
+            const float  b = std::pow( f, static_cast<float>( std::log(g) / std::log(0.5) ) );
 
             const size_t h = static_cast<size_t>( b * height + 0.5f );
             for ( size_t j = 0; j < h; j++ )
             {
                 const size_t index = i + j * width;
-                data[ 4 * index + 0 ] = histogram_color.r();
-                data[ 4 * index + 1 ] = histogram_color.g();
-                data[ 4 * index + 2 ] = histogram_color.b();
+                data[ 4 * index + 0 ] = ::DefaultHistogramColor.r();
+                data[ 4 * index + 1 ] = ::DefaultHistogramColor.g();
+                data[ 4 * index + 2 ] = ::DefaultHistogramColor.b();
                 data[ 4 * index + 3 ] = kvs::UInt8( 255 );
             }
         }
@@ -174,43 +182,34 @@ public:
 
     void update( void )
     {
-        const kvs::RGBColor color( 212, 221, 229 );
-        screen()->background()->setColor( color );
+        screen()->background()->setColor( ::DefaultBackgroundColor );
 
-        int vp[4]; glGetIntegerv( GL_VIEWPORT, static_cast<GLint*>( vp ) );
-        const int left = vp[0];
-        const int bottom = vp[1];
-        const int right = vp[2];
-        const int top = vp[3];
+        GLint vp[4]; glGetIntegerv( GL_VIEWPORT, vp );
+        const GLint left = vp[0];
+        const GLint bottom = vp[1];
+        const GLint right = vp[2];
+        const GLint top = vp[3];
+        const float front = 0.0f;
+        const float back = 2000.0f;
 
         glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT );
-
-        glDisable( GL_LIGHTING );
-        glDisable( GL_DEPTH_TEST );
-        glEnable( GL_BLEND );
-        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-
-        glMatrixMode( GL_MODELVIEW );
-        glPushMatrix();
         {
-            glLoadIdentity();
+            glDisable( GL_LIGHTING );
+            glDisable( GL_DEPTH_TEST );
+            glEnable( GL_BLEND );
+            glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
-            glMatrixMode( GL_PROJECTION );
-            glPushMatrix();
+            // Set 2D view.
+            glMatrixMode( GL_MODELVIEW );  glPushMatrix(); glLoadIdentity();
+            glMatrixMode( GL_PROJECTION ); glPushMatrix(); glLoadIdentity();
+            glOrtho( left, right, bottom, top, front, back );
             {
-                glLoadIdentity();
-
-                const float front = 0.0f;
-                const float back = 2000.0f;
-                glOrtho( left, right, bottom, top, front, back );
-
                 this->draw_histogram_texture();
             }
             glPopMatrix();
             glMatrixMode( GL_MODELVIEW );
+            glPopMatrix();
         }
-        glPopMatrix();
-
         glPopAttrib();
     }
 
@@ -342,10 +341,8 @@ Argument::Argument( int argc, char** argv ):
 /*===========================================================================*/
 const float Argument::biasParameter( void )
 {
-    const float default_value = 0.5f;
-
     if ( this->hasOption("b") ) return( kvs::Math::Clamp( this->optionValue<float>("b"), 0.0f, 1.0f ) );
-    else return( default_value );
+    else return( ::DefaultBiasParameter );
 }
 
 /*===========================================================================*/
@@ -404,7 +401,7 @@ const bool Main::exec( void )
     screen.setMousePressEvent( &mouse_press_event );
     screen.setMouseMoveEvent( &mouse_move_event );
     screen.addKeyPressEvent( &key_press_event );
-    screen.setGeometry( 0, 0, 512, 150 );
+    screen.setGeometry( 0, 0, ::DefaultScreenWidth, ::DefaultScreenHeight );
     screen.setTitle( kvsview::CommandName + " - " + kvsview::Histogram::CommandName );
     screen.show();
 
