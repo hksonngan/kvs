@@ -30,6 +30,7 @@
 #include <kvs/KeyEvent>
 #include <kvs/glut/Window>
 #include <kvs/glut/Timer>
+#include <kvs/glut/Application>
 
 
 namespace kvs
@@ -71,7 +72,7 @@ protected:
 
 public:
 
-    Screen( void );
+    Screen( kvs::glut::Application* application = 0 );
 
     virtual ~Screen( void );
 

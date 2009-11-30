@@ -27,7 +27,9 @@ namespace kvs
  *  @brief  Constructs a new EventListener class.
  */
 /*===========================================================================*/
-EventListener::EventListener( void )
+EventListener::EventListener( void ):
+    m_screen( NULL ),
+    m_window( NULL )
 {
 }
 
@@ -95,6 +97,39 @@ void EventListener::onEvent( kvs::EventBase* event )
 
 /*===========================================================================*/
 /**
+ *  @brief  Returns the event type.
+ *  @return event type
+ */
+/*===========================================================================*/
+const int EventListener::eventType( void ) const
+{
+    return( m_event_type );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the pointer to the screen.
+ *  @return pointer to the screen
+ */
+/*===========================================================================*/
+kvs::ScreenBase* EventListener::screen( void )
+{
+    return( m_screen );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the pointer to the window.
+ *  @return pointer to the window
+ */
+/*===========================================================================*/
+kvs::WindowBase* EventListener::window( void )
+{
+    return( m_window );
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Sets an event type.
  *  @param  event_type [in] event type
  */
@@ -106,13 +141,24 @@ void EventListener::setEventType( int event_type )
 
 /*===========================================================================*/
 /**
- *  @brief  Returns the event type.
- *  @return event type
+ *  @brief  Sets a pointer to the screen.
+ *  @param  screen [in] pointer to the screen
  */
 /*===========================================================================*/
-const int EventListener::eventType( void ) const
+void EventListener::setScreen( kvs::ScreenBase* screen )
 {
-    return( m_event_type );
+    m_screen = screen;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a pointer to the window.
+ *  @param  window [in] pointer to the window
+ */
+/*===========================================================================*/
+void EventListener::setWindow( kvs::WindowBase* window )
+{
+    m_window = window;
 }
 
 /*===========================================================================*/

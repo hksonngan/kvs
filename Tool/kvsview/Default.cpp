@@ -75,7 +75,7 @@ const bool Main::exec( void )
     }
 
     // Create a global and screen class.
-    kvs::glut::Screen screen;
+    kvs::glut::Screen screen( &app );
     screen.setSize( 512, 512 );
     screen.setTitle("kvsview - Default");
     arg.applyTo( screen );
@@ -124,8 +124,6 @@ const bool Main::exec( void )
 
     // Show the screen.
     screen.show();
-
-    app.attach( &screen );
 
     return( app.run() );
 }

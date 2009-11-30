@@ -315,7 +315,7 @@ const bool Main::exec( void )
     kvsview::ParticleVolumeRenderer::MouseReleaseEvent mouse_release_event;
 
     // Create a global and screen class.
-    kvs::glut::Screen screen;
+    kvs::glut::Screen screen( &app );
     screen.addPaintEvent( &paint_event );
     screen.addMousePressEvent( &mouse_press_event );
     screen.addMouseReleaseEvent( &mouse_release_event );
@@ -449,8 +449,6 @@ const bool Main::exec( void )
 
     // Show the screen.
     screen.show();
-
-    app.attach( &screen );
 
     return( app.run() );
 }

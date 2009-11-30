@@ -31,6 +31,7 @@
 #include <kvs/KeyEvent>
 #include <kvs/qt/Window>
 #include <kvs/qt/Timer>
+#include <kvs/qt/Application>
 
 
 namespace kvs
@@ -73,7 +74,7 @@ protected:
 
 public:
 
-    Screen( QWidget* parent = 0 );
+    Screen( kvs::qt::Application* application = 0, QWidget* parent = 0 );
 
     virtual ~Screen( void );
 

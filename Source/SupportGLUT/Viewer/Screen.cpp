@@ -56,10 +56,12 @@ namespace glut
  *  @brief  Constructs a new Screen class.
  */
 /*===========================================================================*/
-Screen::Screen( void ):
+Screen::Screen( kvs::glut::Application* application ):
     kvs::glut::Window(),
     kvs::ScreenBase()
 {
+    if ( application ) application->attach( this );
+
     m_paint_event_func = &Screen::default_paint_event;
     m_resize_event_func = &Screen::default_resize_event;
     m_mouse_press_event_func = &Screen::default_mouse_press_event;

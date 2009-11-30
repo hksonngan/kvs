@@ -368,14 +368,12 @@ const bool Main::exec( void )
     kvsview::TransferFunction::PaintEvent paint_event( &params );
 
     // Create and show the rendering screen.
-    kvs::glut::Screen screen;
+    kvs::glut::Screen screen( &app );
     screen.addInitializeEvent( &initialize_event );
     screen.addPaintEvent( &paint_event );
     screen.setGeometry( 0, 0, 512, 150 );
     screen.setTitle( kvsview::CommandName + " - " + kvsview::TransferFunction::CommandName );
     screen.show();
-
-    app.attach( &screen );
 
     return( app.run() );
 }

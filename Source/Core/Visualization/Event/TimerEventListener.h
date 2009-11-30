@@ -16,8 +16,6 @@
 #ifndef KVS__TIMER_EVENT_LISTENER_H_INCLUDE
 #define KVS__TIMER_EVENT_LISTENER_H_INCLUDE
 
-#include <kvs/ScreenBase>
-#include <kvs/WindowBase>
 #include <kvs/EventListener>
 #include <kvs/TimeEvent>
 
@@ -32,11 +30,6 @@ namespace kvs
 /*===========================================================================*/
 class TimerEventListener : public kvs::EventListener
 {
-private:
-
-    kvs::ScreenBase* m_screen; ///< pointer to the screen
-    kvs::WindowBase* m_window; ///< pointer to the window
-
 public:
 
     TimerEventListener( void );
@@ -46,14 +39,6 @@ public:
 public:
 
     virtual void update( kvs::TimeEvent* event ) = 0;
-
-    kvs::ScreenBase* screen( void );
-
-    kvs::WindowBase* window( void );
-
-    void setScreen( kvs::ScreenBase* screen );
-
-    void setWindow( kvs::WindowBase* window );
 
 private:
 

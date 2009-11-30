@@ -395,7 +395,7 @@ const bool Main::exec( void )
     kvsview::Histogram::KeyPressEvent   key_press_event( &params );
 
     // Rendering screen.
-    kvs::glut::Screen screen;
+    kvs::glut::Screen screen( &app );
     screen.addInitializeEvent( &initialize_event );
     screen.addPaintEvent( &paint_event );
     screen.setMousePressEvent( &mouse_press_event );
@@ -404,8 +404,6 @@ const bool Main::exec( void )
     screen.setGeometry( 0, 0, ::DefaultScreenWidth, ::DefaultScreenHeight );
     screen.setTitle( kvsview::CommandName + " - " + kvsview::Histogram::CommandName );
     screen.show();
-
-    app.attach( &screen );
 
     return( app.run() );
 }

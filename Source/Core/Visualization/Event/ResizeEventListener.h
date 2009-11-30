@@ -15,8 +15,6 @@
 #ifndef KVS__RESIZE_EVENT_LISTENER_H_INCLUDE
 #define KVS__RESIZE_EVENT_LISTENER_H_INCLUDE
 
-#include <kvs/ScreenBase>
-#include <kvs/WindowBase>
 #include <kvs/EventListener>
 
 
@@ -30,11 +28,6 @@ namespace kvs
 /*===========================================================================*/
 class ResizeEventListener : public kvs::EventListener
 {
-private:
-
-    kvs::ScreenBase* m_screen; ///< pointer to the screen
-    kvs::WindowBase* m_window; ///< pointer to the window
-
 public:
 
     ResizeEventListener( void );
@@ -44,14 +37,6 @@ public:
 public:
 
     virtual void update( int width, int height ) = 0;
-
-    kvs::ScreenBase* screen( void );
-
-    kvs::WindowBase* window( void );
-
-    void setScreen( kvs::ScreenBase* screen );
-
-    void setWindow( kvs::WindowBase* window );
 
 private:
 

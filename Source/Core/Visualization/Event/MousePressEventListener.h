@@ -15,8 +15,6 @@
 #ifndef KVS__MOUSE_PRESS_EVENT_LISTENER_H_INCLUDE
 #define KVS__MOUSE_PRESS_EVENT_LISTENER_H_INCLUDE
 
-#include <kvs/ScreenBase>
-#include <kvs/WindowBase>
 #include <kvs/EventListener>
 #include <kvs/MouseEvent>
 
@@ -31,11 +29,6 @@ namespace kvs
 /*===========================================================================*/
 class MousePressEventListener : public kvs::EventListener
 {
-private:
-
-    kvs::ScreenBase* m_screen; ///< pointer to the screen
-    kvs::WindowBase* m_window; ///< pointer to the window
-
 public:
 
     MousePressEventListener( void );
@@ -45,14 +38,6 @@ public:
 public:
 
     virtual void update( kvs::MouseEvent* event ) = 0;
-
-    kvs::ScreenBase* screen( void );
-
-    kvs::WindowBase* window( void );
-
-    void setScreen( kvs::ScreenBase* screen );
-
-    void setWindow( kvs::WindowBase* window );
 
 private:
 

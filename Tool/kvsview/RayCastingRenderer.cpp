@@ -218,7 +218,7 @@ const bool Main::exec( void )
     RayCastingRenderer::MouseReleaseEvent mouse_release_event;
 
     // Create a global and screen class.
-    kvs::glut::Screen screen;
+    kvs::glut::Screen screen( &app );
     screen.setSize( 512, 512 );
     screen.addPaintEvent( &paint_event );
     screen.addMousePressEvent( &mouse_press_event );
@@ -341,8 +341,6 @@ const bool Main::exec( void )
 
     // Show the screen.
     screen.show();
-
-    app.attach( &screen );
 
     return( app.run() );
 }

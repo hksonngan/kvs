@@ -24,9 +24,7 @@ namespace kvs
  *  @brief  Constructs a new ResizeEventListener class.
  */
 /*===========================================================================*/
-ResizeEventListener::ResizeEventListener( void ):
-    m_screen( NULL ),
-    m_window( NULL )
+ResizeEventListener::ResizeEventListener( void )
 {
     kvs::EventListener::setEventType( kvs::EventBase::ResizeEvent );
 }
@@ -38,50 +36,6 @@ ResizeEventListener::ResizeEventListener( void ):
 /*===========================================================================*/
 ResizeEventListener::~ResizeEventListener( void )
 {
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the pointer to the screen.
- *  @return pointer to the screen
- */
-/*===========================================================================*/
-kvs::ScreenBase* ResizeEventListener::screen( void )
-{
-    return( m_screen );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the pointer to the window.
- *  @return pointer to the window
- */
-/*===========================================================================*/
-kvs::WindowBase* ResizeEventListener::window( void )
-{
-    return( m_window );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a pointer to the screen.
- *  @param  screen [in] pointer to the screen
- */
-/*===========================================================================*/
-void ResizeEventListener::setScreen( kvs::ScreenBase* screen )
-{
-    m_screen = screen;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a pointer to the window.
- *  @param  window [in] pointer to the window
- */
-/*===========================================================================*/
-void ResizeEventListener::setWindow( kvs::WindowBase* window )
-{
-    m_window = window;
 }
 
 /*===========================================================================*/
