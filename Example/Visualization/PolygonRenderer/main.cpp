@@ -46,13 +46,11 @@ int main( int argc, char** argv )
         kvsMessageError( "Cannot creat a polygon renderer.");
     }
 
-    kvs::glut::Screen screen;
+    kvs::glut::Screen screen( &app );
     screen.registerObject( object, renderer );
     screen.setGeometry( 0, 0, 512, 512 );
     screen.setTitle( "kvs::PolygonRenderer" );
     screen.show();
-
-    app.attach( &screen );
 
     return( app.run() );
 }

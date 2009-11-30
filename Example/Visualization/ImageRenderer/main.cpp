@@ -54,12 +54,11 @@ int main( int argc, char** argv )
     }
 
     // Screen.
-    kvs::glut::Screen screen;
+    kvs::glut::Screen screen( &app );
     screen.registerObject( object, renderer );
     screen.setSize( object->width(), object->height() );
     screen.setTitle( "kvs::ImageRenderer" );
     screen.show();
-    app.attach( &screen );
 
     return( app.run() );
 }

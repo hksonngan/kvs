@@ -59,12 +59,11 @@ int main( int argc, char** argv )
 
     delete volume;
 
-    kvs::glut::Screen screen;
+    kvs::glut::Screen screen( &app );
     screen.registerObject( object, renderer );
     screen.setGeometry( 0, 0, 512, 512 );
     screen.setTitle( "kvs::OrthoSlice" );
     screen.show();
-    app.attach( &screen );
 
     return( app.run() );
 }

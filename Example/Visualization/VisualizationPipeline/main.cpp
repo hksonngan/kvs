@@ -67,13 +67,12 @@ int main( int argc, char** argv )
     // Output the visualization pipeline as a string.
     pipeline.print();
 
-    kvs::glut::Screen screen;
+    // Screen.
+    kvs::glut::Screen screen( &app );
     screen.registerObject( &pipeline );
     screen.setGeometry( 0, 0, 512, 512 );
     screen.setTitle( "kvs::VisualizationPipeline" );
     screen.show();
-
-    app.attach( &screen );
 
     return( app.run() );
 }
