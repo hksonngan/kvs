@@ -22,9 +22,9 @@
 namespace
 {
 const kvs::RGBColor Gray( 100, 100, 100 );
-const kvs::RGBColor Red( 255, 100, 100 );
-const kvs::RGBColor Green( 100, 255, 100 );
-const kvs::RGBColor Blue( 100, 100, 255 );
+const kvs::RGBColor Red( 255, 0, 0 );
+const kvs::RGBColor Green( 0, 255, 0 );
+const kvs::RGBColor Blue( 0, 0, 255 );
 kvs::RGBColor Color = Gray;
 }
 
@@ -145,6 +145,7 @@ int main( int argc, char** argv )
 
     BlueButton blue( &screen );
     blue.setButtonColor( ::Blue );
+    blue.setTextColor( kvs::RGBColor( 255, 255, 255 ) );
     blue.setX( green.x() );
     blue.setY( green.y() + green.height() );
     blue.setWidth( 150 );
