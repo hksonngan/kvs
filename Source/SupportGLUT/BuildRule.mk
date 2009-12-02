@@ -16,8 +16,16 @@ $(OUTDIR)/./Viewer/Text.o \
 $(OUTDIR)/./Viewer/Timer.o \
 $(OUTDIR)/./Viewer/TransferFunctionEditor.o \
 $(OUTDIR)/./Viewer/Window.o \
+$(OUTDIR)/./Widget/Label.o \
+$(OUTDIR)/./Widget/PushButton.o \
+$(OUTDIR)/./Widget/Slider.o \
+$(OUTDIR)/./Widget/WidgetBase.o \
 
 
+
+$(OUTDIR)/./Widget/%.o: ./Widget/%.cpp ./Widget/%.h
+	$(MKDIR) $(OUTDIR)/./Widget
+	$(CPP) -c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) -o $@ $<
 
 $(OUTDIR)/./Viewer/%.o: ./Viewer/%.cpp ./Viewer/%.h
 	$(MKDIR) $(OUTDIR)/./Viewer
@@ -35,3 +43,5 @@ install::
 	$(INSTALL) ./Renderer/*.h $(INSTALL_DIR)/include/SupportGLUT/./Renderer
 	$(MKDIR) $(INSTALL_DIR)/include/SupportGLUT/./Viewer
 	$(INSTALL) ./Viewer/*.h $(INSTALL_DIR)/include/SupportGLUT/./Viewer
+	$(MKDIR) $(INSTALL_DIR)/include/SupportGLUT/./Widget
+	$(INSTALL) ./Widget/*.h $(INSTALL_DIR)/include/SupportGLUT/./Widget
