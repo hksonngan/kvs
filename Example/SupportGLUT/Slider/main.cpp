@@ -157,7 +157,7 @@ int main( int argc, char** argv )
     opacity.setValue( 1 );
     opacity.setRange( 0, 1 );
     opacity.setMargin( 10 );
-    opacity.setCaption("Blue");
+    opacity.setCaption("Opacity");
     opacity.show();
 
     return app.run();
