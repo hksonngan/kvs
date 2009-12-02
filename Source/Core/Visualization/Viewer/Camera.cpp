@@ -80,31 +80,6 @@ Camera::~Camera( void )
 {
 }
 
-/*==========================================================================*/
-/**
- *  Initialize the member parameters.
- */
-/*==========================================================================*/
-void Camera::initialize( void )
-{
-    m_projection_type = Camera::Perspective;
-    m_init_position.set( 0.0, 0.0, 12.0 );
-    m_init_up_vector.set( 0.0, 1.0, 0.0 );
-    m_init_look_at.set( 0.0, 0.0, 0.0 );
-    m_position.set( 0.0, 0.0, 12.0 );
-    m_up_vector.set( 0.0, 1.0, 0.0 );
-    m_look_at.set( 0.0, 0.0, 0.0 );
-    m_field_of_view = 45.0;
-    m_front = 1.0;
-    m_back = 2000.0;
-    m_left = -5.0;
-    m_right = 5.0;
-    m_bottom = -5.0;
-    m_top = 5.0;
-    m_window_width = 512;
-    m_window_height = 512;
-}
-
 /*===========================================================================*/
 /**
  *  @brief  Sets the projection type of the camera.
@@ -398,6 +373,31 @@ const size_t Camera::windowWidth( void ) const
 const size_t Camera::windowHeight( void ) const
 {
     return( m_window_height );
+}
+
+/*==========================================================================*/
+/**
+ *  Initialize the member parameters.
+ */
+/*==========================================================================*/
+void Camera::initialize( void )
+{
+    m_projection_type = Camera::Perspective;
+    m_init_position.set( 0.0, 0.0, 12.0 );
+    m_init_up_vector.set( 0.0, 1.0, 0.0 );
+    m_init_look_at.set( 0.0, 0.0, 0.0 );
+    m_position.set( 0.0, 0.0, 12.0 );
+    m_up_vector.set( 0.0, 1.0, 0.0 );
+    m_look_at.set( 0.0, 0.0, 0.0 );
+    m_field_of_view = 45.0;
+    m_front = 1.0;
+    m_back = 2000.0;
+    m_left = -5.0;
+    m_right = 5.0;
+    m_bottom = -5.0;
+    m_top = 5.0;
+    m_window_width = 512;
+    m_window_height = 512;
 }
 
 /*==========================================================================*/

@@ -69,10 +69,6 @@ public:
 
 public:
 
-    void initialize( void );
-
-public:
-
     void setProjectionType( const ProjectionType projection_type );
 
     void setPosition( const kvs::Vector3f& position );
@@ -131,9 +127,11 @@ public:
 
 public:
 
-    void update( void );
+    virtual void initialize( void );
 
-    kvs::ColorImage snapshot( void );
+    virtual void update( void );
+
+    virtual kvs::ColorImage snapshot( void );
 
 public:
 
