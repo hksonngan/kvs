@@ -12,3 +12,7 @@ Viewer/Text
 Viewer/Timer
 Viewer/TransferFunctionEditor
 Viewer/Window
+Widget/Label
+Widget/PushButton
+Widget/Slider
+Widget/WidgetBase
