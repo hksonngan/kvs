@@ -16,8 +16,18 @@ $(OUTDIR)\.\Viewer\Text.obj \
 $(OUTDIR)\.\Viewer\Timer.obj \
 $(OUTDIR)\.\Viewer\TransferFunctionEditor.obj \
 $(OUTDIR)\.\Viewer\Window.obj \
+$(OUTDIR)\.\Widget\Label.obj \
+$(OUTDIR)\.\Widget\PushButton.obj \
+$(OUTDIR)\.\Widget\Slider.obj \
+$(OUTDIR)\.\Widget\WidgetBase.obj \
 
 
+
+{.\Widget\}.cpp{$(OUTDIR)\.\Widget\}.obj::
+	IF NOT EXIST $(OUTDIR)\.\Widget $(MKDIR) $(OUTDIR)\.\Widget
+	$(CPP) /c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) /Fo$(OUTDIR)\.\Widget\ @<<
+$<
+<<
 
 {.\Viewer\}.cpp{$(OUTDIR)\.\Viewer\}.obj::
 	IF NOT EXIST $(OUTDIR)\.\Viewer $(MKDIR) $(OUTDIR)\.\Viewer
@@ -39,3 +49,5 @@ install::
 	$(INSTALL) .\Renderer\*.h $(INSTALL_DIR)\include\SupportGLUT\.\Renderer
 	IF NOT EXIST $(INSTALL_DIR)\include\SupportGLUT\.\Viewer $(MKDIR) $(INSTALL_DIR)\include\SupportGLUT\.\Viewer
 	$(INSTALL) .\Viewer\*.h $(INSTALL_DIR)\include\SupportGLUT\.\Viewer
+	IF NOT EXIST $(INSTALL_DIR)\include\SupportGLUT\.\Widget $(MKDIR) $(INSTALL_DIR)\include\SupportGLUT\.\Widget
+	$(INSTALL) .\Widget\*.h $(INSTALL_DIR)\include\SupportGLUT\.\Widget
