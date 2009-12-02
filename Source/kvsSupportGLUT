@@ -12,3 +12,7 @@
 #include <SupportGLUT/Viewer/Timer.h>
 #include <SupportGLUT/Viewer/TransferFunctionEditor.h>
 #include <SupportGLUT/Viewer/Window.h>
+#include <SupportGLUT/Widget/Label.h>
+#include <SupportGLUT/Widget/PushButton.h>
+#include <SupportGLUT/Widget/Slider.h>
+#include <SupportGLUT/Widget/WidgetBase.h>
