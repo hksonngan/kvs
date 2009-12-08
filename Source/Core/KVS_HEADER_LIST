@@ -54,6 +54,7 @@ Network/SocketTimer
 Network/TCPServer
 Network/TCPSocket
 Network/Url
+Numeric/BoxMuller
 Numeric/EigenDecomposer
 Numeric/GaussEliminationSolver
 Numeric/LUDecomposer
