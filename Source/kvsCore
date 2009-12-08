@@ -54,6 +54,7 @@
 #include <Core/Network/TCPServer.h>
 #include <Core/Network/TCPSocket.h>
 #include <Core/Network/Url.h>
+#include <Core/Numeric/BoxMuller.h>
 #include <Core/Numeric/EigenDecomposer.h>
 #include <Core/Numeric/GaussEliminationSolver.h>
 #include <Core/Numeric/LUDecomposer.h>
