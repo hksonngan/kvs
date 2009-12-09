@@ -96,6 +96,8 @@ public:
 
     void mousePressFunction( int x, int y, kvs::Mouse::TransMode mode );
 
+    void mouseMoveFunction( int x, int y );
+
     void wheelFunction( int value );
 
 public:

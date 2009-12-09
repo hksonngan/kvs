@@ -629,8 +629,11 @@ void Screen::default_mouse_move_event( kvs::MouseEvent* event )
         }
     }
 
+/*
     ScreenBase::m_mouse->move( event->x(), event->y() );
     ScreenBase::updateXform();
+*/
+    ScreenBase::mouseMoveFunction( event->x(), event->y() );
     Window::redraw();
 }
 

@@ -200,10 +200,21 @@ void ScreenBase::mouseReleaseFunction( int x, int y )
 /*==========================================================================*/
 void ScreenBase::mousePressFunction( int x, int y, kvs::Mouse::TransMode mode )
 {
-    this->updateControllingObject();
+    if ( m_can_move_all || m_object_manager->hasActiveObject() )
+    {
+        this->updateControllingObject();
+        m_mouse->setMode( mode );
+        m_mouse->press( x, y );
+    }
+}
 
-    m_mouse->setMode( mode );
-    m_mouse->press( x, y );
+void ScreenBase::mouseMoveFunction( int x, int y )
+{
+    if ( m_can_move_all || m_object_manager->hasActiveObject() )
+    {
+        m_mouse->move( x, y );
+        this->updateXform();
+    }
 }
 
 /*===========================================================================*/
@@ -214,11 +225,13 @@ void ScreenBase::mousePressFunction( int x, int y, kvs::Mouse::TransMode mode )
 /*===========================================================================*/
 void ScreenBase::wheelFunction( int value )
 {
-    this->updateControllingObject();
-
-    m_mouse->setMode( kvs::Mouse::Scaling );
-    m_mouse->press( 0, 0 );
-    m_mouse->move( 0, value );
+    if ( m_can_move_all || m_object_manager->hasActiveObject() )
+    {
+        this->updateControllingObject();
+        m_mouse->setMode( kvs::Mouse::Scaling );
+        m_mouse->press( 0, 0 );
+        m_mouse->move( 0, value );
+    }
 }
 
 /*===========================================================================*/
