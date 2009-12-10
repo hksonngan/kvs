@@ -29,7 +29,8 @@ namespace kvs
 /*===========================================================================*/
 ScreenBase::ScreenBase( void ):
     m_target( ScreenBase::TargetObject ),
-    m_can_move_all( true )
+    m_enable_move_all( true ),
+    m_enable_collision_detection( false )
 {
     this->create();
 }
@@ -94,12 +95,43 @@ void ScreenBase::registerObject( kvs::VisualizationPipeline* pipeline )
 
 /*==========================================================================*/
 /**
- *  @brief  Disable all-move mode.
+ *  @brief  Disable move-all mode.
  */
 /*==========================================================================*/
 void ScreenBase::disableAllMove( void )
 {
-    m_can_move_all = false;
+    m_enable_move_all = false;
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Enable move-all mode.
+ */
+/*==========================================================================*/
+void ScreenBase::enableAllMove( void )
+{
+    m_enable_move_all = true;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Disable collision detection mode.
+ */
+/*===========================================================================*/
+void ScreenBase::disableCollisionDetection( void )
+{
+    m_enable_collision_detection = false;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Enable collision detection mode.
+ */
+/*===========================================================================*/
+void ScreenBase::enableCollisionDetection( void )
+{
+    m_enable_move_all = false;
+    m_enable_collision_detection = true;
 }
 
 /*==========================================================================*/
@@ -181,7 +213,8 @@ void ScreenBase::resizeFunction( int width, int height )
 /*==========================================================================*/
 void ScreenBase::mouseReleaseFunction( int x, int y )
 {
-    m_can_move_all = true;
+    m_enable_move_all = true;
+    m_enable_collision_detection = false;
     m_mouse->release( x, y );
 
     if( !( m_mouse->isUseAuto() && m_mouse->isAuto() ) )
@@ -200,7 +233,7 @@ void ScreenBase::mouseReleaseFunction( int x, int y )
 /*==========================================================================*/
 void ScreenBase::mousePressFunction( int x, int y, kvs::Mouse::TransMode mode )
 {
-    if ( m_can_move_all || m_object_manager->hasActiveObject() )
+    if ( m_enable_move_all || m_object_manager->hasActiveObject() )
     {
         this->updateControllingObject();
         m_mouse->setMode( mode );
@@ -208,9 +241,16 @@ void ScreenBase::mousePressFunction( int x, int y, kvs::Mouse::TransMode mode )
     }
 }
 
+/*==========================================================================*/
+/**
+ *  @brief  Function which is called when the mouse cursor is moved.
+ *  @param  x [in] x coordinate value of the mouse cursor position
+ *  @param  y [in] y coordinate value of the mouse cursor position
+ */
+/*==========================================================================*/
 void ScreenBase::mouseMoveFunction( int x, int y )
 {
-    if ( m_can_move_all || m_object_manager->hasActiveObject() )
+    if ( m_enable_move_all || m_object_manager->hasActiveObject() )
     {
         m_mouse->move( x, y );
         this->updateXform();
@@ -225,7 +265,7 @@ void ScreenBase::mouseMoveFunction( int x, int y )
 /*===========================================================================*/
 void ScreenBase::wheelFunction( int value )
 {
-    if ( m_can_move_all || m_object_manager->hasActiveObject() )
+    if ( m_enable_move_all || m_object_manager->hasActiveObject() )
     {
         this->updateControllingObject();
         m_mouse->setMode( kvs::Mouse::Scaling );
@@ -438,9 +478,8 @@ bool ScreenBase::isActiveMove( int x, int y )
 
     if( m_target == TargetObject )
     {
-        if( !m_can_move_all )
+        if( !m_enable_move_all && m_enable_collision_detection )
         {
-            // Collision detection.
             const float px = static_cast<float>(x);
             const float py = static_cast<float>(y);
             const kvs::Vector2f p = kvs::Vector2f( px, py );
@@ -460,7 +499,7 @@ void ScreenBase::updateControllingObject( void )
 {
     if( m_target == TargetObject )
     {
-        if( m_can_move_all )
+        if( m_enable_move_all )
         {
             m_object_manager->enableAllMove();
             m_object_manager->releaseActiveObject();
@@ -492,12 +531,17 @@ void ScreenBase::updateCenterOfRotation( void )
         center = m_camera->lookAtInDevice();
         break;
     case TargetObject:
-        if( m_can_move_all || !m_object_manager->hasObject() )
+        if( m_enable_move_all || !m_object_manager->hasObject() )
         {
             center = m_object_manager->positionInDevice( m_camera );
         }
         else
         {
+            /* If the object manager has no active object, the center
+             * of rotation is not updated.
+             */
+            if ( !m_object_manager->hasActiveObject() ) return;
+
             kvs::ObjectBase* object = m_object_manager->activeObject();
             const kvs::Vector3f& t = m_object_manager->objectCenter();
             const kvs::Vector3f& s = m_object_manager->normalize();

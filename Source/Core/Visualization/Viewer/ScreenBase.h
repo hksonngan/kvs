@@ -66,7 +66,8 @@ protected:
     kvs::RendererManager* m_renderer_manager; ///< renderer manager
     kvs::IDManager*       m_id_manager;       ///< ID manager ( object_id, renderer_id )
 
-    bool m_can_move_all;  ///< flag for object movement
+    bool m_enable_move_all;  ///< flag for object movement
+    bool m_enable_collision_detection; ///< flag for collision detection
 
 public:
 
@@ -129,6 +130,12 @@ public:
 public:
 
     void disableAllMove( void );
+
+    void enableAllMove( void );
+
+    void disableCollisionDetection( void );
+
+    void enableCollisionDetection( void );
 
     bool isActiveMove( int x, int y );
 
