@@ -19,6 +19,7 @@
 #include <kvs/CommandLine>
 #include <kvs/PolygonObject>
 #include <kvs/TransferFunction>
+#include <kvs/glut/Slider>
 #include "Argument.h"
 
 

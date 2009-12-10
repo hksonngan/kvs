@@ -27,6 +27,55 @@
 #include <kvs/glut/Application>
 
 
+namespace Widget
+{
+
+/*===========================================================================*/
+/**
+ *  @brief  Isolevel slider class.
+ */
+/*===========================================================================*/
+class IsolevelSlider : public kvs::glut::Slider
+{
+    const kvs::VolumeObjectBase*   m_volume; ///< pointer to the volume object
+    kvs::TransferFunction          m_tfunc;  ///< transfer function
+    kvs::PolygonObject::NormalType m_normal; ///< normal vector type
+
+public:
+
+    IsolevelSlider( kvs::glut::Screen* screen ):
+        kvs::glut::Slider( screen ),
+        m_volume( NULL ),
+        m_tfunc( NULL ),
+        m_normal( kvs::PolygonObject::PolygonNormal ) {}
+
+    void setVolumeObject( const kvs::VolumeObjectBase* volume )
+    {
+        m_volume = volume;
+    }
+
+    void setTransferFunction( const kvs::TransferFunction& tfunc )
+    {
+        m_tfunc = tfunc;
+    }
+
+    void setNormal( const kvs::PolygonObject::NormalType normal )
+    {
+        m_normal = normal;
+    }
+
+    void valueChanged( void )
+    {
+        const double level = this->value();
+        const bool d = true;
+        kvs::PolygonObject* object = new kvs::Isosurface( m_volume, level, m_normal, d, m_tfunc );
+        if ( object ) screen()->objectManager()->change( 1, object );
+    }
+};
+
+} // end of namespace Widget
+
+
 namespace kvsview
 {
 
@@ -149,6 +198,11 @@ const bool Main::exec( void )
     screen.setTitle( kvsview::CommandName + " - " + kvsview::Isosurface::CommandName );
     arg.applyTo( screen );
 
+    // Create a isolevel slider.
+    Widget::IsolevelSlider slider( &screen );
+    slider.setMargin( 10 );
+    slider.setCaption("Isolevel");
+
     // Check the input point data.
     m_input_name = arg.value<std::string>();
     if ( !(kvsview::FileChecker::ImportableStructuredVolume( m_input_name ) ||
@@ -170,6 +224,11 @@ const bool Main::exec( void )
         std::cout << std::endl;
     }
 
+    // Get the imported object.
+    const kvs::ObjectBase* object = pipe.object();
+    const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
+    slider.setVolumeObject( volume );
+
     // Set up the isosurface class.
     kvs::PipelineModule mapper( new kvs::Isosurface );
     const kvs::Real64 level = arg.isolevel();
@@ -186,7 +245,12 @@ const bool Main::exec( void )
         kvsMessageError("Cannot execute the visulization pipeline.");
         return( false );
     }
+
     screen.registerObject( &pipe );
+    slider.setTransferFunction( function );
+    slider.setNormal( normal );
+    slider.setValue( level );
+    slider.setRange( volume->minValue(), volume->maxValue() );
 
     // Verbose information.
     if ( arg.verboseMode() )
@@ -203,6 +267,9 @@ const bool Main::exec( void )
 
     // Show the screen.
     screen.show();
+
+    // Show the widget.
+    slider.show();
 
     return( app.run() );
 }
