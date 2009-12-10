@@ -18,6 +18,7 @@
 #include <kvs/Type>
 #include <kvs/CommandLine>
 #include <kvs/PolygonObject>
+#include <kvs/VolumeObjectBase>
 #include <kvs/TransferFunction>
 #include <kvs/glut/Slider>
 #include "Argument.h"
@@ -45,7 +46,7 @@ public:
 
 public:
 
-    const kvs::Real64 isolevel( void );
+    const kvs::Real64 isolevel( const kvs::VolumeObjectBase* volume );
 
     const kvs::PolygonObject::NormalType normalType( void );
 

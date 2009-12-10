@@ -15,14 +15,10 @@
 #include "CommandName.h"
 #include "ObjectInformation.h"
 #include "FileChecker.h"
-#include <kvs/File>
-#include <kvs/KVSMLObjectStructuredVolume>
-#include <kvs/KVSMLObjectUnstructuredVolume>
-#include <kvs/AVSField>
-#include <kvs/AVSUcd>
 #include <kvs/PipelineModule>
 #include <kvs/VisualizationPipeline>
 #include <kvs/Isosurface>
+#include <kvs/Value>
 #include <kvs/glut/Screen>
 #include <kvs/glut/Application>
 
@@ -94,7 +90,7 @@ Argument::Argument( int argc, char** argv ):
 {
     // Parameters for the isosurface class.
     add_option( kvsview::Isosurface::CommandName, kvsview::Isosurface::Description, 0 );
-    add_option( "l", "Isosurface level. (default: 0)", 1, false );
+    add_option( "l", "Isosurface level. (default: mean value)", 1, false );
     add_option( "n", "Normal vector type; 'poly[gon]' 'vert[ex]'. (default: poly)", 1, false );
     add_option( "t", "Transfer function file. (optional: <filename>)", 1, false );
 }
@@ -105,9 +101,10 @@ Argument::Argument( int argc, char** argv ):
  *  @return subpixel level
  */
 /*===========================================================================*/
-const kvs::Real64 Argument::isolevel( void )
+const kvs::Real64 Argument::isolevel( const kvs::VolumeObjectBase* volume )
 {
-    const kvs::Real64 default_value = 0.0;
+    if ( !volume->hasMinMaxValues() ) volume->updateMinMaxValues();
+    const kvs::Real64 default_value = ( volume->maxValue() - volume->minValue() ) * 0.5;
 
     if ( this->hasOption("l") ) return( this->optionValue<kvs::Real64>("l") );
     else return( default_value );
@@ -231,7 +228,7 @@ const bool Main::exec( void )
 
     // Set up the isosurface class.
     kvs::PipelineModule mapper( new kvs::Isosurface );
-    const kvs::Real64 level = arg.isolevel();
+    const kvs::Real64 level = arg.isolevel( volume );
     const kvs::PolygonObject::NormalType normal = arg.normalType();
     const kvs::TransferFunction function = arg.transferFunction();
     mapper.get<kvs::Isosurface>()->setIsolevel( level );
@@ -265,10 +262,8 @@ const bool Main::exec( void )
     // Apply the specified parameters to the global and the visualization pipeline.
     arg.applyTo( screen, pipe );
 
-    // Show the screen.
+    // Show the screen and the slider widget.
     screen.show();
-
-    // Show the widget.
     slider.show();
 
     return( app.run() );
