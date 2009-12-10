@@ -202,7 +202,7 @@ void Slider::draw_slider_bar( const int x, const int y, const int width )
 /*===========================================================================*/
 void Slider::draw_cursor( const int x, const int y, const int width )
 {
-    const int p = width * m_value / ( m_max_value - m_min_value );
+    const int p = width * ( m_value - m_min_value ) / ( m_max_value - m_min_value );
     const int x0 = x + p - ::Default::CursorWidth * 0.5;
     const int x1 = x + p + ::Default::CursorWidth * 0.5;
     const int y0 = y - ::Default::CursorHeight * 0.5;
@@ -300,7 +300,7 @@ bool Slider::is_in_cursor( const int x, const int y, const bool proper )
     const int bar_y = m_y + BaseClass::margin() + BaseClass::characterHeight() + ::Default::SliderHeight / 2;
     const int bar_width = BaseClass::width() - BaseClass::margin() * 2;
 
-    const int p = static_cast<int>( bar_width * m_value / ( m_max_value - m_min_value ) + 0.5f );
+    const int p = static_cast<int>( bar_width * ( m_value - m_min_value ) / ( m_max_value - m_min_value ) + 0.5f );
     const int x0 = bar_x + p - ::Default::CursorWidth * 0.5;
     const int x1 = bar_x + p + ::Default::CursorWidth * 0.5;
     const int y0 = bar_y - ::Default::CursorHeight * 0.5;
