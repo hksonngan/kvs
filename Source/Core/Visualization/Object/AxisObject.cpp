@@ -47,8 +47,8 @@ AxisObject::AxisObject(
     const kvs::Real32 line_width,
     const kvs::Real32 subline_width )
 {
-    this->setMinValue( object->minExternalCoord() );
-    this->setMaxValue( object->maxExternalCoord() );
+    this->setMinValue( object->minObjectCoord() );
+    this->setMaxValue( object->maxObjectCoord() );
     this->setNSublines( nsublines );
     this->setXTag( x_tag );
     this->setYTag( y_tag );
@@ -70,6 +70,8 @@ void AxisObject::create( const kvs::ObjectBase* object )
 {
     if( object )
     {
+        this->setMinValue( object->minObjectCoord() );
+        this->setMaxValue( object->maxObjectCoord() );
         SuperClass::setMinMaxObjectCoords( object->minObjectCoord(), object->maxObjectCoord() );
         SuperClass::setMinMaxExternalCoords( object->minExternalCoord(), object->maxExternalCoord() );
     }
