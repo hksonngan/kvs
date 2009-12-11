@@ -21,6 +21,55 @@
 #include <kvs/OrthoSlice>
 #include <kvs/glut/Screen>
 #include <kvs/glut/Application>
+#include <kvs/glut/Slider>
+
+
+namespace Widget
+{
+
+/*===========================================================================*/
+/**
+ *  @brief  Isolevel slider class.
+ */
+/*===========================================================================*/
+class PlaneSlider : public kvs::glut::Slider
+{
+    const kvs::VolumeObjectBase* m_volume; ///< pointer to the volume object
+    kvs::TransferFunction        m_tfunc;  ///< transfer function
+    kvs::OrthoSlice::AlignedAxis m_axis;
+
+public:
+
+    PlaneSlider( kvs::glut::Screen* screen ):
+        kvs::glut::Slider( screen ),
+        m_volume( NULL ),
+        m_tfunc( NULL ),
+        m_axis( kvs::OrthoSlice::ZAxis ) {}
+
+    void setVolumeObject( const kvs::VolumeObjectBase* volume )
+    {
+        m_volume = volume;
+    }
+
+    void setTransferFunction( const kvs::TransferFunction& tfunc )
+    {
+        m_tfunc = tfunc;
+    }
+
+    void setAxis( const kvs::OrthoSlice::AlignedAxis axis )
+    {
+        m_axis = axis;
+    }
+
+    void valueChanged( void )
+    {
+        const double position = this->value();
+        kvs::PolygonObject* object = new kvs::OrthoSlice( m_volume, position, m_axis, m_tfunc );
+        if ( object ) screen()->objectManager()->change( 1, object );
+    }
+};
+
+} // end of namespace Widget
 
 
 namespace kvsview
@@ -42,7 +91,7 @@ Argument::Argument( int argc, char** argv ):
     // Parameters for the isosurface class.
     add_option( kvsview::OrthoSlice::CommandName, kvsview::OrthoSlice::Description, 0 );
     add_option( "p", "Position of the point on the spefied axis. (default: 0)", 1, false );
-    add_option( "a", "Axis (x:0, y:1, z:2). (default: 0)", 1, false );
+    add_option( "a", "Axis (x:0, y:1, z:2). (default: 2)", 1, false );
     add_option( "t", "Transfer function file. (optional: <filename>)", 1, false );
 }
 
@@ -144,6 +193,11 @@ const bool Main::exec( void )
     screen.setTitle( kvsview::CommandName + " - " + kvsview::OrthoSlice::CommandName );
     arg.applyTo( screen );
 
+    // Create a plane slider.
+    Widget::PlaneSlider slider( &screen );
+    slider.setMargin( 10 );
+    slider.setCaption("Slice");
+
     // Check the input point data.
     m_input_name = arg.value<std::string>();
     if ( !kvsview::FileChecker::ImportableStructuredVolume( m_input_name ) )
@@ -164,6 +218,11 @@ const bool Main::exec( void )
         std::cout << std::endl;
     }
 
+    // Get the imported object.
+    const kvs::ObjectBase* object = pipe.object();
+    const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
+    slider.setVolumeObject( volume );
+
     // Set up the slice plane class.
     kvs::PipelineModule mapper( new kvs::OrthoSlice );
     const float position = arg.hasOption("p") ? arg.position() : pipe.object()->objectCenter().z();
@@ -180,7 +239,12 @@ const bool Main::exec( void )
         return( false );
     }
     pipe.renderer()->disableShading();
+
     screen.registerObject( &pipe );
+    slider.setTransferFunction( function );
+    slider.setAxis( axis );
+    slider.setValue( position );
+    slider.setRange( volume->minObjectCoord()[axis], volume->maxObjectCoord()[axis] );
 
     // Verbose information.
     if ( arg.verboseMode() )
@@ -197,6 +261,7 @@ const bool Main::exec( void )
 
     // Show the screen.
     screen.show();
+    slider.show();
 
     return( app.run() );
 }
