@@ -100,6 +100,7 @@ void Argument::Common::set_options( void )
 {
     add_help_option("help");
 
+    add_option("antialiasing", "Enable anti-aliasing. (optional)", 0, false );
     add_option("axis", "Show axis. (optional)", 0, false );
     add_option("axis_color", "Set axis color. (default: 0 0 0)", 3, false );
     add_option("axis_tag_color", "Set axis tag color. (default: 0 0 0)", 3, false );
@@ -240,10 +241,15 @@ void Argument::Common::applyTo( kvs::glut::Screen& screen, kvs::VisualizationPip
 
         kvs::VisualizationPipeline pipeline( axis );
         kvs::PipelineModule renderer( new kvs::glut::AxisRenderer() );
-        pipeline.connect( renderer );
+        renderer.get<kvs::glut::AxisRenderer>()->disableShading();
 
+        if ( this->hasOption("antialiasing") )
+        {
+            renderer.get<kvs::glut::AxisRenderer>()->enableAntiAliasing();
+        }
+
+        pipeline.connect( renderer );
         pipeline.exec();
-        pipeline.renderer()->disableShading();
 
         screen.registerObject( &pipeline );
     }
@@ -263,8 +269,16 @@ void Argument::Common::applyTo( kvs::glut::Screen& screen, kvs::VisualizationPip
         }
 
         kvs::VisualizationPipeline pipeline( bounds );
+        kvs::PipelineModule renderer( new kvs::LineRenderer() );
+        renderer.get<kvs::LineRenderer>()->disableShading();
+
+        if ( this->hasOption("antialiasing") )
+        {
+            renderer.get<kvs::LineRenderer>()->enableAntiAliasing();
+        }
+
+        pipeline.connect( renderer );
         pipeline.exec();
-        pipeline.renderer()->disableShading();
 
         screen.registerObject( &pipeline );
     }
