@@ -28,6 +28,9 @@
 #include "Histogram.h"
 #include <kvs/Bounds>
 #include <kvs/AxisObject>
+#include <kvs/PointRenderer>
+#include <kvs/LineRenderer>
+#include <kvs/PolygonRenderer>
 #include <kvs/glut/AxisRenderer>
 
 
@@ -304,6 +307,42 @@ void Argument::Common::applyTo( kvs::glut::Screen& screen, kvs::VisualizationPip
         const kvs::RGBColor bottom_color( r2, g2, b2 );
 
         screen.background()->setColor( bottom_color, top_color );
+    }
+
+    // Anti-aliasing.
+    if ( this->hasOption("antialiasing") )
+    {
+        // Enable multisampling.
+        kvs::DisplayFormat format( screen.displayFormat() );
+        format.setMultisampleBuffer( true );
+        screen.setDisplayFormat( format );
+
+        // Apply to the geometry object if the antialiasing option is given.
+        if ( pipe.object()->objectType() == kvs::ObjectBase::Geometry )
+        {
+            switch ( kvs::GeometryObjectBase::DownCast( pipe.object() )->geometryType() )
+            {
+            case kvs::GeometryObjectBase::Point:
+            {
+                kvs::RendererBase* renderer = const_cast<kvs::RendererBase*>( pipe.renderer() );
+                static_cast<kvs::PointRenderer*>( renderer )->enableAntiAliasing();
+                break;
+            }
+            case kvs::GeometryObjectBase::Line:
+            {
+                kvs::RendererBase* renderer = const_cast<kvs::RendererBase*>( pipe.renderer() );
+                static_cast<kvs::LineRenderer*>( renderer )->enableAntiAliasing();
+                break;
+            }
+            case kvs::GeometryObjectBase::Polygon:
+            {
+                kvs::RendererBase* renderer = const_cast<kvs::RendererBase*>( pipe.renderer() );
+                static_cast<kvs::PolygonRenderer*>( renderer )->enableAntiAliasing();
+                break;
+            }
+            default: break;
+            }
+        }
     }
 
 /*
