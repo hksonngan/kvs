@@ -29,7 +29,8 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-PointRenderer::PointRenderer( void )
+PointRenderer::PointRenderer( void ):
+    m_enable_anti_aliasing( false )
 {
 }
 
@@ -40,6 +41,26 @@ PointRenderer::PointRenderer( void )
 /*==========================================================================*/
 PointRenderer::~PointRenderer( void )
 {
+}
+
+/*===========================================================================*/
+/**
+ *  Enables anti-aliasing.
+ */
+/*===========================================================================*/
+void PointRenderer::enableAntiAliasing( void )
+{
+    m_enable_anti_aliasing = true;
+}
+
+/*===========================================================================*/
+/**
+ *  Disables anti-aliasing.
+ */
+/*===========================================================================*/
+void PointRenderer::disableAntiAliasing( void )
+{
+    m_enable_anti_aliasing = false;
 }
 
 /*==========================================================================*/
@@ -62,6 +83,23 @@ void PointRenderer::exec( ObjectBase* object, Camera* camera, Light* light )
     if ( point->normals().size() == 0 ) { BaseClass::disableShading(); }
 
     RendererBase::initialize();
+
+    // Anti-aliasing.
+    if ( m_enable_anti_aliasing )
+    {
+        GLint buffers = 0;
+        GLint samples = 0;
+        glGetIntegerv( GL_SAMPLE_BUFFERS, &buffers );
+        glGetIntegerv( GL_SAMPLES, &samples );
+        if ( buffers > 0 && samples > 1 ) glEnable( GL_MULTISAMPLE );
+        else
+        {
+            glEnable( GL_POINT_SMOOTH );
+            glEnable( GL_BLEND );
+            glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+            glHint( GL_POINT_SMOOTH_HINT, GL_NICEST );
+        }
+    }
 
     glEnable( GL_DEPTH_TEST );
     {

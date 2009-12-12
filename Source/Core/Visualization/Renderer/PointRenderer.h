@@ -40,11 +40,21 @@ class PointRenderer : public kvs::RendererBase
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::RendererBase );
 
+protected:
+
+    bool m_enable_anti_aliasing;
+
 public:
 
     PointRenderer( void );
 
     virtual ~PointRenderer( void );
+
+public:
+
+    void enableAntiAliasing( void );
+
+    void disableAntiAliasing( void );
 
 public:
 

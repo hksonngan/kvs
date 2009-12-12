@@ -43,6 +43,26 @@ PolygonRenderer::~PolygonRenderer( void )
 {
 }
 
+/*===========================================================================*/
+/**
+ *  Enables anti-aliasing.
+ */
+/*===========================================================================*/
+void PolygonRenderer::enableAntiAliasing( void )
+{
+    m_enable_anti_aliasing = true;
+}
+
+/*===========================================================================*/
+/**
+ *  Disables anti-aliasing.
+ */
+/*===========================================================================*/
+void PolygonRenderer::disableAntiAliasing( void )
+{
+    m_enable_anti_aliasing = false;
+}
+
 /*==========================================================================*/
 /**
  *  Polygon rendering method.
@@ -72,6 +92,23 @@ void PolygonRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::L
 
     RendererBase::initialize();
     polygon->applyMaterial();
+
+    // Anti-aliasing.
+    if ( m_enable_anti_aliasing )
+    {
+        GLint buffers = 0;
+        GLint samples = 0;
+        glGetIntegerv( GL_SAMPLE_BUFFERS, &buffers );
+        glGetIntegerv( GL_SAMPLES, &samples );
+        if ( buffers > 0 && samples > 1 ) glEnable( GL_MULTISAMPLE );
+        else
+        {
+            glEnable( GL_POLYGON_SMOOTH );
+            glEnable( GL_BLEND );
+            glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+            glHint( GL_POLYGON_SMOOTH_HINT, GL_NICEST );
+        }
+    }
 
     glEnable( GL_DEPTH_TEST );
     {

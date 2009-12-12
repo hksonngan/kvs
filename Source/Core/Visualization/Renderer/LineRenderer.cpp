@@ -87,9 +87,18 @@ void LineRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Ligh
     // Anti-aliasing.
     if ( m_enable_anti_aliasing )
     {
-        glEnable( GL_LINE_SMOOTH );
-        glEnable( GL_BLEND );
-        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+        GLint buffers = 0;
+        GLint samples = 0;
+        glGetIntegerv( GL_SAMPLE_BUFFERS, &buffers );
+        glGetIntegerv( GL_SAMPLES, &samples );
+        if ( buffers > 0 && samples > 1 ) glEnable( GL_MULTISAMPLE );
+        else
+        {
+            glEnable( GL_LINE_SMOOTH );
+            glEnable( GL_BLEND );
+            glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+            glHint( GL_LINE_SMOOTH_HINT, GL_NICEST );
+        }
     }
 
     glEnable( GL_DEPTH_TEST );

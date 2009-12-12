@@ -38,6 +38,7 @@ class PolygonRenderer : public kvs::RendererBase
 
 protected:
 
+    bool m_enable_anti_aliasing;
     mutable bool m_two_side_lighting_flag; ///< two-side lighting flag
 
 public:
@@ -52,7 +53,9 @@ public:
 
 public:
 
-public:
+    void enableAntiAliasing( void );
+
+    void disableAntiAliasing( void );
 
     const bool isTwoSideLighting( void ) const;
 
