@@ -30,7 +30,8 @@ namespace kvs
  */
 /*==========================================================================*/
 LineRenderer::LineRenderer( void ):
-    m_enable_anti_aliasing( false )
+    m_enable_anti_aliasing( false ),
+    m_enable_multisample_anti_aliasing( false )
 {
     // Disable shading since the line object don't have the normal vectors.
     this->disableShading();
@@ -43,26 +44,6 @@ LineRenderer::LineRenderer( void ):
 /*==========================================================================*/
 LineRenderer::~LineRenderer( void )
 {
-}
-
-/*===========================================================================*/
-/**
- *  Enables anti-aliasing.
- */
-/*===========================================================================*/
-void LineRenderer::enableAntiAliasing( void )
-{
-    m_enable_anti_aliasing = true;
-}
-
-/*===========================================================================*/
-/**
- *  Disables anti-aliasing.
- */
-/*===========================================================================*/
-void LineRenderer::disableAntiAliasing( void )
-{
-    m_enable_anti_aliasing = false;
 }
 
 /*==========================================================================*/
@@ -87,11 +68,14 @@ void LineRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Ligh
     // Anti-aliasing.
     if ( m_enable_anti_aliasing )
     {
-        GLint buffers = 0;
-        GLint samples = 0;
-        glGetIntegerv( GL_SAMPLE_BUFFERS, &buffers );
-        glGetIntegerv( GL_SAMPLES, &samples );
-        if ( buffers > 0 && samples > 1 ) glEnable( GL_MULTISAMPLE );
+        if ( m_enable_multisample_anti_aliasing )
+        {
+            GLint buffers = 0;
+            GLint samples = 0;
+            glGetIntegerv( GL_SAMPLE_BUFFERS, &buffers );
+            glGetIntegerv( GL_SAMPLES, &samples );
+            if ( buffers > 0 && samples > 1 ) glEnable( GL_MULTISAMPLE );
+        }
         else
         {
             glEnable( GL_LINE_SMOOTH );
@@ -110,6 +94,28 @@ void LineRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Ligh
     glDisable( GL_DEPTH_TEST );
 
     glPopAttrib();
+}
+
+/*===========================================================================*/
+/**
+ *  Enables anti-aliasing.
+ */
+/*===========================================================================*/
+void LineRenderer::enableAntiAliasing( const bool multisample ) const
+{
+    m_enable_anti_aliasing = true;
+    m_enable_multisample_anti_aliasing = multisample;
+}
+
+/*===========================================================================*/
+/**
+ *  Disables anti-aliasing.
+ */
+/*===========================================================================*/
+void LineRenderer::disableAntiAliasing( void ) const
+{
+    m_enable_anti_aliasing = false;
+    m_enable_multisample_anti_aliasing = false;
 }
 
 /*==========================================================================*/

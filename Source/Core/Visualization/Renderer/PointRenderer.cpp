@@ -30,7 +30,8 @@ namespace kvs
  */
 /*==========================================================================*/
 PointRenderer::PointRenderer( void ):
-    m_enable_anti_aliasing( false )
+    m_enable_anti_aliasing( false ),
+    m_enable_multisample_anti_aliasing( false )
 {
 }
 
@@ -41,26 +42,6 @@ PointRenderer::PointRenderer( void ):
 /*==========================================================================*/
 PointRenderer::~PointRenderer( void )
 {
-}
-
-/*===========================================================================*/
-/**
- *  Enables anti-aliasing.
- */
-/*===========================================================================*/
-void PointRenderer::enableAntiAliasing( void )
-{
-    m_enable_anti_aliasing = true;
-}
-
-/*===========================================================================*/
-/**
- *  Disables anti-aliasing.
- */
-/*===========================================================================*/
-void PointRenderer::disableAntiAliasing( void )
-{
-    m_enable_anti_aliasing = false;
 }
 
 /*==========================================================================*/
@@ -87,11 +68,14 @@ void PointRenderer::exec( ObjectBase* object, Camera* camera, Light* light )
     // Anti-aliasing.
     if ( m_enable_anti_aliasing )
     {
-        GLint buffers = 0;
-        GLint samples = 0;
-        glGetIntegerv( GL_SAMPLE_BUFFERS, &buffers );
-        glGetIntegerv( GL_SAMPLES, &samples );
-        if ( buffers > 0 && samples > 1 ) glEnable( GL_MULTISAMPLE );
+        if ( m_enable_multisample_anti_aliasing )
+        {
+            GLint buffers = 0;
+            GLint samples = 0;
+            glGetIntegerv( GL_SAMPLE_BUFFERS, &buffers );
+            glGetIntegerv( GL_SAMPLES, &samples );
+            if ( buffers > 0 && samples > 1 ) glEnable( GL_MULTISAMPLE );
+        }
         else
         {
             glEnable( GL_POINT_SMOOTH );
@@ -110,6 +94,28 @@ void PointRenderer::exec( ObjectBase* object, Camera* camera, Light* light )
     glDisable( GL_DEPTH_TEST );
 
     glPopAttrib();
+}
+
+/*===========================================================================*/
+/**
+ *  Enables anti-aliasing.
+ */
+/*===========================================================================*/
+void PointRenderer::enableAntiAliasing( const bool multisample ) const
+{
+    m_enable_anti_aliasing = true;
+    m_enable_multisample_anti_aliasing = multisample;
+}
+
+/*===========================================================================*/
+/**
+ *  Disables anti-aliasing.
+ */
+/*===========================================================================*/
+void PointRenderer::disableAntiAliasing( void ) const
+{
+    m_enable_anti_aliasing = false;
+    m_enable_multisample_anti_aliasing = false;
 }
 
 /*==========================================================================*/

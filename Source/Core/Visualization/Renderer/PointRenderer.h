@@ -42,7 +42,8 @@ class PointRenderer : public kvs::RendererBase
 
 protected:
 
-    bool m_enable_anti_aliasing;
+    mutable bool m_enable_anti_aliasing; ///< flag for anti-aliasing (AA)
+    mutable bool m_enable_multisample_anti_aliasing; ///< flag for multisample anti-aliasing (MSAA)
 
 public:
 
@@ -52,9 +53,9 @@ public:
 
 public:
 
-    void enableAntiAliasing( void );
+    void enableAntiAliasing( const bool multisample = false ) const;
 
-    void disableAntiAliasing( void );
+    void disableAntiAliasing( void ) const;
 
 public:
 

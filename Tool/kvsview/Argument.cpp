@@ -313,9 +313,13 @@ void Argument::Common::applyTo( kvs::glut::Screen& screen, kvs::VisualizationPip
     if ( this->hasOption("antialiasing") )
     {
         // Enable multisampling.
-        kvs::DisplayFormat format( screen.displayFormat() );
-        format.setMultisampleBuffer( true );
-        screen.setDisplayFormat( format );
+        bool multisample = false;
+        if ( multisample )
+        {
+            kvs::DisplayFormat format( screen.displayFormat() );
+            format.setMultisampleBuffer( true );
+            screen.setDisplayFormat( format );
+        }
 
         // Apply to the geometry object if the antialiasing option is given.
         if ( pipe.object()->objectType() == kvs::ObjectBase::Geometry )
@@ -325,19 +329,19 @@ void Argument::Common::applyTo( kvs::glut::Screen& screen, kvs::VisualizationPip
             case kvs::GeometryObjectBase::Point:
             {
                 kvs::RendererBase* renderer = const_cast<kvs::RendererBase*>( pipe.renderer() );
-                static_cast<kvs::PointRenderer*>( renderer )->enableAntiAliasing();
+                static_cast<kvs::PointRenderer*>( renderer )->enableAntiAliasing( multisample );
                 break;
             }
             case kvs::GeometryObjectBase::Line:
             {
                 kvs::RendererBase* renderer = const_cast<kvs::RendererBase*>( pipe.renderer() );
-                static_cast<kvs::LineRenderer*>( renderer )->enableAntiAliasing();
+                static_cast<kvs::LineRenderer*>( renderer )->enableAntiAliasing( multisample );
                 break;
             }
             case kvs::GeometryObjectBase::Polygon:
             {
                 kvs::RendererBase* renderer = const_cast<kvs::RendererBase*>( pipe.renderer() );
-                static_cast<kvs::PolygonRenderer*>( renderer )->enableAntiAliasing();
+                static_cast<kvs::PolygonRenderer*>( renderer )->enableAntiAliasing( multisample );
                 break;
             }
             default: break;

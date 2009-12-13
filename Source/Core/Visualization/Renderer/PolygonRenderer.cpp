@@ -30,7 +30,9 @@ namespace kvs
  */
 /*==========================================================================*/
 PolygonRenderer::PolygonRenderer( void ):
-    m_two_side_lighting_flag( true )
+    m_enable_anti_aliasing( false ),
+    m_enable_multisample_anti_aliasing( false ),
+    m_enable_two_side_lighting( true )
 {
 }
 
@@ -41,26 +43,6 @@ PolygonRenderer::PolygonRenderer( void ):
 /*==========================================================================*/
 PolygonRenderer::~PolygonRenderer( void )
 {
-}
-
-/*===========================================================================*/
-/**
- *  Enables anti-aliasing.
- */
-/*===========================================================================*/
-void PolygonRenderer::enableAntiAliasing( void )
-{
-    m_enable_anti_aliasing = true;
-}
-
-/*===========================================================================*/
-/**
- *  Disables anti-aliasing.
- */
-/*===========================================================================*/
-void PolygonRenderer::disableAntiAliasing( void )
-{
-    m_enable_anti_aliasing = false;
 }
 
 /*==========================================================================*/
@@ -96,11 +78,14 @@ void PolygonRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::L
     // Anti-aliasing.
     if ( m_enable_anti_aliasing )
     {
-        GLint buffers = 0;
-        GLint samples = 0;
-        glGetIntegerv( GL_SAMPLE_BUFFERS, &buffers );
-        glGetIntegerv( GL_SAMPLES, &samples );
-        if ( buffers > 0 && samples > 1 ) glEnable( GL_MULTISAMPLE );
+        if ( m_enable_multisample_anti_aliasing )
+        {
+            GLint buffers = 0;
+            GLint samples = 0;
+            glGetIntegerv( GL_SAMPLE_BUFFERS, &buffers );
+            glGetIntegerv( GL_SAMPLES, &samples );
+            if ( buffers > 0 && samples > 1 ) glEnable( GL_MULTISAMPLE );
+        }
         else
         {
             glEnable( GL_POLYGON_SMOOTH );
@@ -121,19 +106,41 @@ void PolygonRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::L
     glPopAttrib();
 }
 
-const bool PolygonRenderer::isTwoSideLighting( void ) const
+/*===========================================================================*/
+/**
+ *  Enables anti-aliasing.
+ */
+/*===========================================================================*/
+void PolygonRenderer::enableAntiAliasing( const bool multisample ) const
 {
-    return( m_two_side_lighting_flag );
+    m_enable_anti_aliasing = true;
+    m_enable_multisample_anti_aliasing = multisample;
+}
+
+/*===========================================================================*/
+/**
+ *  Disables anti-aliasing.
+ */
+/*===========================================================================*/
+void PolygonRenderer::disableAntiAliasing( void ) const
+{
+    m_enable_anti_aliasing = false;
+    m_enable_multisample_anti_aliasing = false;
 }
 
 void PolygonRenderer::enableTwoSideLighting( void ) const
 {
-    m_two_side_lighting_flag = true;
+    m_enable_two_side_lighting = true;
 }
 
 void PolygonRenderer::disableTwoSideLighting( void ) const
 {
-    m_two_side_lighting_flag = false;
+    m_enable_two_side_lighting = false;
+}
+
+const bool PolygonRenderer::isTwoSideLighting( void ) const
+{
+    return( m_enable_two_side_lighting );
 }
 
 /*==========================================================================*/
