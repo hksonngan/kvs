@@ -16,7 +16,9 @@
 #include "FileChecker.h"
 #include "PlatformChecker.h"
 #include "VersionChecker.h"
+#include "SizeofChecker.h"
 #include "SupportChecker.h"
+#include "MinMaxChecker.h"
 #include "OpenGLChecker.h"
 
 
@@ -44,9 +46,17 @@ int main( int argc, char** argv )
     {
         std::cout << kvscheck::CompilerChecker() << std::endl;
     }
+    if( arg.hasOption("sizeof") )
+    {
+        std::cout << kvscheck::SizeofChecker() << std::endl;
+    }
     if( arg.hasOption("support") )
     {
         std::cout << kvscheck::SupportChecker() << std::endl;
+    }
+    if( arg.hasOption("minmax") )
+    {
+        std::cout << kvscheck::MinMaxChecker() << std::endl;
     }
     if( arg.hasOption("opengl") )
     {

@@ -37,7 +37,9 @@ public:
         add_option("version", "Output KVS version. (optional)", 0 );
         add_option("platform", "Output platforma information. (optional)", 0 );
         add_option("compiler", "Output compiler information. (optional)", 0 );
+        add_option("sizeof", "Output 'sizeof' information. (optional)", 0 );
         add_option("support", "Output supported library information. (optional)", 0 );
+        add_option("minmax", "Output min/max information. (optional)", 0 );
         add_option("opengl", "Output OpenGL information. (optional)", 0 );
         add_option("file", "Output file information. (optional)", 0 );
         add_value("input value");

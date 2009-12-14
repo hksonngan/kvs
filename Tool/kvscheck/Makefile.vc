@@ -117,7 +117,9 @@ $(OUTDIR)\CompilerChecker.obj \
 $(OUTDIR)\FileChecker.obj \
 $(OUTDIR)\OpenGLChecker.obj \
 $(OUTDIR)\PlatformChecker.obj \
+$(OUTDIR)\SizeofChecker.obj \
 $(OUTDIR)\SupportChecker.obj \
+$(OUTDIR)\MinMaxChecker.obj \
 $(OUTDIR)\VersionChecker.obj \
 $(OUTDIR)\main.obj \
 
