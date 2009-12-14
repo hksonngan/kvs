@@ -68,6 +68,7 @@ void LineRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Ligh
     // Anti-aliasing.
     if ( m_enable_anti_aliasing )
     {
+#if defined ( GL_MULTISAMPLE )
         if ( m_enable_multisample_anti_aliasing )
         {
             GLint buffers = 0;
@@ -77,6 +78,7 @@ void LineRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Ligh
             if ( buffers > 0 && samples > 1 ) glEnable( GL_MULTISAMPLE );
         }
         else
+#endif
         {
             glEnable( GL_LINE_SMOOTH );
             glEnable( GL_BLEND );
