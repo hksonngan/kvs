@@ -66,6 +66,7 @@
 #define KVS_PLATFORM_NAME "AIX"
 
 #else
+#pragma message("Platform.h: Unknown platform.")
 #define KVS_PLATFORM_UNKNOWN
 #define KVS_PLATFORM_NAME "Unknown"
 #endif
@@ -77,14 +78,28 @@
 #define KVS_PLATFORM_CPU_UNKNOWN
 #define KVS_PLATFORM_CPU_NAME "Unknown"
 
-// X86
-#if defined ( __x86__ ) || defined ( __x86_64__ ) || \
-    defined ( _X86_ ) || defined ( _M_IX86 ) || \
-    defined ( __i386__ ) || defined ( __i386 ) || defined ( i386 )
+// i386
+#if defined ( __i386__ ) || defined ( __i386 ) || defined ( i386 )
+#undef  KVS_PLATFORM_CPU_UNKNOWN
+#undef  KVS_PLATFORM_CPU_NAME
+#define KVS_PLATFORM_CPU_I386
+#define KVS_PLATFORM_CPU_NAME "i386"
+#endif
+
+// x86
+#if defined ( __x86__ ) || defined ( _X86_ ) || defined ( _M_IX86 )
 #undef  KVS_PLATFORM_CPU_UNKNOWN
 #undef  KVS_PLATFORM_CPU_NAME
 #define KVS_PLATFORM_CPU_X86
-#define KVS_PLATFORM_CPU_NAME "Intel x86"
+#define KVS_PLATFORM_CPU_NAME "x86"
+#endif
+
+// x86 64
+#if defined ( __x86_64__ )
+#undef  KVS_PLATFORM_CPU_UNKNOWN
+#undef  KVS_PLATFORM_CPU_NAME
+#define KVS_PLATFORM_CPU_X86_64
+#define KVS_PLATFORM_CPU_NAME "x86-64"
 #endif
 
 // AMD64
@@ -100,7 +115,7 @@
 #undef  KVS_PLATFORM_CPU_UNKNOWN
 #undef  KVS_PLATFORM_CPU_NAME
 #define KVS_PLATFORM_CPU_IA64
-#define KVS_PLATFORM_CPU_NAME "Intel IA64"
+#define KVS_PLATFORM_CPU_NAME "IA64"
 #endif
 
 // PowerPC
@@ -128,6 +143,9 @@
 #define KVS_PLATFORM_CPU_NAME "MIPS"
 #endif
 
+#if defined ( KVS_PLATFORM_CPU_UNKNOWN )
+#pragma message("Platform.h: Unknown CPU architecture.")
+#endif
 
 /*----------------------------------------------------------------------------
  * Number of bits of CPU architechture.
@@ -154,11 +172,21 @@
 #define KVS_PLATFORM_BIG_ENDIAN
 
 #else
-#if defined ( KVS_PLATFORM_CPU_X86 )
+#if defined ( KVS_PLATFORM_CPU_I386 )
+#define KVS_PLATFORM_LITTLE_ENDIAN
+
+#elif defined ( KVS_PLATFORM_CPU_X86 )
+#define KVS_PLATFORM_LITTLE_ENDIAN
+
+#elif defined ( KVS_PLATFORM_CPU_X86_64 )
+#define KVS_PLATFORM_LITTLE_ENDIAN
+
+#elif defined ( KVS_PLATFORM_CPU_AMD64 )
 #define KVS_PLATFORM_LITTLE_ENDIAN
 
 #elif defined ( KVS_PLATFORM_CPU_IA64 )
-#define KVS_PLATFORM_BIG_ENDIAN
+#define KVS_PLATFORM_LITTLE_ENDIAN
+//#define KVS_PLATFORM_BIG_ENDIAN
 
 #elif defined ( KVS_PLATFORM_CPU_POWERPC )
 #define KVS_PLATFORM_BIG_ENDIAN
@@ -170,7 +198,8 @@
 #define KVS_PLATFORM_BIG_ENDIAN
 
 #else
-#warning Unknown byte-order of the platform.
+//#warning Unknown byte-order of the platform.
+#pragma message("Platform.h: Unknown byte-order.")
 #endif
 
 #endif
