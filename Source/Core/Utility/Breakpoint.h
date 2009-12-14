@@ -19,20 +19,26 @@
 
 // Microsoft Visual C++
 #if defined ( KVS_COMPILER_VC )
+#if KVS_COMPILER_VERSION_GREATER_THAN( 8, 0 )
+#define KVS_BREAKPOINT { __debugbreak(); }
+#else
 #define KVS_BREAKPOINT { __asm { int 3 } }
+#endif
 
 // GNU GCC
 #elif defined ( KVS_COMPILER_GCC )
 
-#if defined ( KVS_PLATFORM_CPU_X86 )
+#if defined ( KVS_PLATFORM_CPU_X86 ) || defined ( KVS_PLATFORM_CPU_I386 )
+#define KVS_BREAKPOINT { __asm__( " int $3 " ); }
+
+#elif defined ( KVS_PLATFORM_CPU_X86_64 ) || defined ( KVS_PLATFORM_CPU_AMD64 )
 #define KVS_BREAKPOINT { __asm__( " int $3 " ); }
 
 #elif defined ( KVS_PLATFORM_CPU_POWERPC )
 #define KVS_BREAKPOINT { __asm__( " .long 0x7d821008 " ); }
 
 #else
-#warning Breakpoint code unknown for the CPU.
-#warning You can add it defining the KVS_BREAKPOINT macro.
+#pragma message("Breakpoint.h: Unknown breakpoint code.")
 #define KVS_BREAKPOINT { } // Insert breakpoint code for your CPU here.
 #endif
 
