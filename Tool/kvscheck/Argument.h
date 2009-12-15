@@ -41,6 +41,7 @@ public:
         add_option("support", "Output supported library information. (optional)", 0 );
         add_option("minmax", "Output min/max information. (optional)", 0 );
         add_option("opengl", "Output OpenGL information. (optional)", 0 );
+        add_option("extension", "Output OpenGL extension information. (optional)", 0 );
         add_option("file", "Output file information. (optional)", 0 );
         add_value("input value");
     };

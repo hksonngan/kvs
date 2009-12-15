@@ -20,6 +20,7 @@
 #include "SupportChecker.h"
 #include "MinMaxChecker.h"
 #include "OpenGLChecker.h"
+#include "ExtensionChecker.h"
 
 
 /*==========================================================================*/
@@ -61,6 +62,10 @@ int main( int argc, char** argv )
     if( arg.hasOption("opengl") )
     {
         std::cout << kvscheck::OpenGLChecker( argc, argv ) << std::endl;
+    }
+    if( arg.hasOption("extension") )
+    {
+        std::cout << kvscheck::ExtensionChecker( argc, argv ) << std::endl;
     }
     if( arg.hasOption("file") )
     {

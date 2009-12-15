@@ -127,6 +127,7 @@ OBJECTS := \
 $(OUTDIR)/CompilerChecker.o \
 $(OUTDIR)/FileChecker.o \
 $(OUTDIR)/OpenGLChecker.o \
+$(OUTDIR)/ExtensionChecker.o \
 $(OUTDIR)/PlatformChecker.o \
 $(OUTDIR)/SizeofChecker.o \
 $(OUTDIR)/SupportChecker.o \

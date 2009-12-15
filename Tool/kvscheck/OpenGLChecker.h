@@ -15,7 +15,6 @@
 #define KVSCHECK__OPENGL_CHECKER_H_INCLUDE
 
 #include <string>
-#include <kvs/StringList>
 
 
 namespace kvscheck
@@ -30,12 +29,10 @@ class OpenGLChecker
 {
 protected:
 
-    std::string     m_vendor;         ///< vendor name
-    std::string     m_renderer;       ///< renderer (GPU) name
-    std::string     m_gl_version;     ///< OpenGL version
-    std::string     m_glu_version;    ///< GLU version
-    kvs::StringList m_gl_extensions;  ///< OpenGL extensions
-    kvs::StringList m_glu_extensions; ///< GLU extensions
+    std::string m_vendor;         ///< vendor name
+    std::string m_renderer;       ///< renderer (GPU) name
+    std::string m_gl_version;     ///< OpenGL version
+    std::string m_glu_version;    ///< GLU version
 
 public:
 
@@ -50,10 +47,6 @@ public:
     const std::string& GLVersion( void ) const;
 
     const std::string& GLUVersion( void ) const;
-
-    const kvs::StringList& GLExtensions( void ) const;
-
-    const kvs::StringList& GLUExtensions( void ) const;
 
     friend std::ostream& operator << ( std::ostream& os, const OpenGLChecker& checker );
 };

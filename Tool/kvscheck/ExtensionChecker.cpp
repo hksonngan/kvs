@@ -1,6 +1,6 @@
 /****************************************************************************/
 /**
- *  @file OpenGLChecker.cpp
+ *  @file ExtensionChecker.cpp
  */
 /*----------------------------------------------------------------------------
  *
@@ -11,7 +11,7 @@
  *  $Id$
  */
 /****************************************************************************/
-#include "OpenGLChecker.h"
+#include "ExtensionChecker.h"
 #include <kvs/OpenGL>
 #include <kvs/Message>
 
@@ -30,7 +30,7 @@ namespace kvscheck
  *  @param  argv [in] argument values
  */
 /*===========================================================================*/
-OpenGLChecker::OpenGLChecker( int argc, char** argv )
+ExtensionChecker::ExtensionChecker( int argc, char** argv )
 {
 #if defined( KVS_SUPPORT_GLUT )
     /* Using OS-dependent Window System API, such as aglCreateContext, glXCreateContext,
@@ -39,13 +39,16 @@ OpenGLChecker::OpenGLChecker( int argc, char** argv )
     glutInit( &argc, argv );
     glutCreateWindow("");
 
-    m_vendor     = kvs::OpenGL::Vendor();
-    m_renderer   = kvs::OpenGL::Renderer();
-    m_gl_version = kvs::OpenGL::Version();
+    m_gl_extensions = kvs::OpenGL::ExtensionList();
 #if defined( GLU_VERSION_1_1 )
     /* The gluGetString function is not used in GLU version 1.0.
      */
-    m_glu_version = std::string( (const char*)gluGetString( GLU_VERSION ) );
+    std::stringstream glu_extension_list( (char*)gluGetString( GLU_EXTENSIONS ) );
+    std::string glu_extension;
+    while ( glu_extension_list >> glu_extension )
+    {
+        m_glu_extensions.push_back( kvs::String( glu_extension ) );
+    }
 #endif
 #else
     kvsMessageError(
@@ -56,61 +59,50 @@ OpenGLChecker::OpenGLChecker( int argc, char** argv )
 
 /*===========================================================================*/
 /**
- *  @brief  Returns vendor information.
- *  @return vender information
+ *  @brief  Returns OpenGL extension list.
+ *  @return GL extension list
  */
 /*===========================================================================*/
-const std::string& OpenGLChecker::vendor( void ) const
+const kvs::StringList& ExtensionChecker::GLExtensions( void ) const
 {
-    return( m_vendor );
+    return( m_gl_extensions );
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Returns renderer (GPU) information.
- *  @return render information
+ *  @brief  Returns GLU extension list.
+ *  @return GLU extension list
  */
 /*===========================================================================*/
-const std::string& OpenGLChecker::renderer( void ) const
+const kvs::StringList& ExtensionChecker::GLUExtensions( void ) const
 {
-    return( m_renderer );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns OpenGL version.
- *  @return GL version
- */
-/*===========================================================================*/
-const std::string& OpenGLChecker::GLVersion( void ) const
-{
-    return( m_gl_version );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns GLU version.
- *  @return GLU version
- */
-/*===========================================================================*/
-const std::string& OpenGLChecker::GLUVersion( void ) const
-{
-    return( m_glu_version );
+    return( m_glu_extensions );
 }
 
 /*==========================================================================*/
 /**
  *  @brief Output platform information.
  *  @param os      [in] output stream
- *  @param checker [in] OpenGL information checker
+ *  @param checker [in] OpenGL extension information checker
  */
 /*==========================================================================*/
-std::ostream& operator << ( std::ostream& os, const OpenGLChecker& checker )
+std::ostream& operator << ( std::ostream& os, const ExtensionChecker& checker )
 {
-    os << "Vendor:      " << checker.vendor()    << std::endl;
-    os << "Renderer:    " << checker.renderer()  << std::endl;
-    os << "GL Version:  " << checker.GLVersion() << std::endl;
-    os << "GLU Version: " << checker.GLUVersion();
+    os << "GL Extensions (" << checker.GLExtensions().size() << "):" << std::endl;
+    kvs::StringList::const_iterator gl_extension = checker.GLExtensions().begin();
+    while ( gl_extension != checker.GLExtensions().end() )
+    {
+        os << "\t" << *gl_extension << std::endl;
+        ++gl_extension;
+    }
+
+    os << "GLU Extensions (" << checker.GLUExtensions().size() << "):" << std::endl;
+    kvs::StringList::const_iterator glu_extension = checker.GLUExtensions().begin();
+    while ( glu_extension != checker.GLUExtensions().end() )
+    {
+        os << "\t" << *glu_extension << std::endl;
+        ++glu_extension;
+    }
 
     return( os );
 }

@@ -116,6 +116,7 @@ OBJECTS = \
 $(OUTDIR)\CompilerChecker.obj \
 $(OUTDIR)\FileChecker.obj \
 $(OUTDIR)\OpenGLChecker.obj \
+$(OUTDIR)\ExtensionChecker.obj \
 $(OUTDIR)\PlatformChecker.obj \
 $(OUTDIR)\SizeofChecker.obj \
 $(OUTDIR)\SupportChecker.obj \
