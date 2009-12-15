@@ -65,7 +65,7 @@
     }
 
 #elif defined ( KVS_COMPILER_GCC )
-#if defined ( KVS_PLATFORM_CPU_X86 )
+#if defined ( KVS_PLATFORM_CPU_X86 ) || defined ( KVS_PLATFORM_CPU_I386 )
 #define KVS_TIMER_GET_RDTSC( counter )                                \
     {                                                                 \
         __asm__ volatile (".byte 0x0f, 0x31" : "=A" (counter.value)); \
@@ -178,8 +178,17 @@ inline void GetTimeOfDay( struct timeval& tv )
      * tv.tv_usec = tb.millitm * 1000 + 500;
      */
 #if defined ( KVS_COMPILER_VC )
+#if defined ( KVS_PLATFORM_CPU_64 )
+    LARGE_INTEGER freq = {0};
+    LARGE_INTEGER time = {0};
+    QueryPerformanceFrequency( &freq );
+    QueryPerformanceCounter( &time );
+    tv.tv_sec  = 0L;
+    tv.tv_usec = time.QuadPart * 1000L / freq.QuadPart;
+#else
     tv.tv_sec  = 0L;
     tv.tv_usec = timeGetTime() * 1000L;
+#endif
 #else // KVS_COMPILER_GCC
     gettimeofday( &tv, NULL );
 #endif
