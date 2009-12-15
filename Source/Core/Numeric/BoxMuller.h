@@ -111,10 +111,10 @@ inline const double BoxMuller::rand( const double mu , const double sigma )
  *  @param  N [in] number of iterations
  *  @return random number
  *
- *  Calc an average of N Gausian random numbers,
+ *  Calc an average of N Gaussian random numbers,
  *  y0, y1, ..., y_{N-1}:
  *      y = (y0 + y1 + y2 + ... + y_{N-1} ) / sqrt(N)
- *  This y also becomes a Gaussian Random number of N(0,1) with higher
+ *  This y also becomes a Gaussian random number of N(0,1) with higher
  *  statistical property than yi.
  *  Note: This function is N times slower than rand().
  */
@@ -124,7 +124,7 @@ inline const double BoxMuller::randHQ( unsigned int N )
   // square root of N
     double N_sqrt = std::sqrt( (double)N );
 
-  // Calc an average of N Gaussian random nunbers y defined by
+  // Calc an average of N Gaussian random numbers y defined by
   //  y = (y0 + y1 + y2 + ... + y_{N-1} ) / sqrt(N)
   double y = 0.0 ;
   for ( int i = 0; i < (int)N ; i++ ) {
@@ -138,7 +138,7 @@ inline const double BoxMuller::randHQ( unsigned int N )
 
 /*===========================================================================*/
 /**
- *  @brief  Get a Gaussian random number of N(mu, sigma^2) (high-quality versin).
+ *  @brief  Get a Gaussian random number of N(mu, sigma^2) (high-quality version).
  *  @param  N [in] number of iterations
  *  @param  mu [in] mean
  *  @param  sigma [in] variance
