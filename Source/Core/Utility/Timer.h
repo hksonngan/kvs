@@ -178,6 +178,21 @@ inline void GetTimeOfDay( struct timeval& tv )
      * tv.tv_usec = tb.millitm * 1000 + 500;
      */
 #if defined ( KVS_COMPILER_VC )
+    LARGE_INTEGER time = {0};
+    if ( QueryPerformanceCounter( &time ) )
+    {
+        LARGE_INTEGER freq = {0};
+        QueryPerformanceFrequency( &freq );
+        tv.tv_sec  = time.QuadPart / freq.QuadPart;
+        tv.tv_usec = ((float)time.QuadPart / freq.Quad * 1000 * 1000 ) - ( tv.tv_sec * 1000 * 1000 );
+    }
+    else
+    {
+        DWORD t = timeGetTime();
+        tv.tv_sec  = t / 1000;
+        tv.tv_usec = t % 1000;
+    }
+/*
 #if defined ( KVS_PLATFORM_CPU_64 )
     LARGE_INTEGER freq = {0};
     LARGE_INTEGER time = {0};
@@ -189,6 +204,7 @@ inline void GetTimeOfDay( struct timeval& tv )
     tv.tv_sec  = 0L;
     tv.tv_usec = timeGetTime() * 1000L;
 #endif
+*/
 #else // KVS_COMPILER_GCC
     gettimeofday( &tv, NULL );
 #endif
