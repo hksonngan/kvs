@@ -33,7 +33,7 @@
 #include <sys/timeb.h>
 #endif
 
-/*  Hight precision CPU counter using RDTCS or QPC. It becomes possible to use
+/* Hight precision CPU counter using RDTCS or QPC. It becomes possible to use
  * the CPU counter by defining 'KVS_TIMER_USE_RDTSC' or 'KVS_TIMER_USE_QPC'.
  * In the default setting, Timer function is implemented by using gettimeofday()
  * without the CPU counter.
@@ -184,7 +184,7 @@ inline void GetTimeOfDay( struct timeval& tv )
         LARGE_INTEGER freq = {0};
         QueryPerformanceFrequency( &freq );
         tv.tv_sec  = time.QuadPart / freq.QuadPart;
-        tv.tv_usec = ((float)time.QuadPart / freq.QuadPart * 1000 * 1000 ) - ( tv.tv_sec * 1000 * 1000 );
+        tv.tv_usec = ( static_cast<float>(time.QuadPart) / freq.QuadPart - tv.tv_sec ) * 1000000;
     }
     else
     {
