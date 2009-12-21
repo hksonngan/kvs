@@ -12,6 +12,8 @@
  *  $Id$
  */
 /*****************************************************************************/
+#if 0
+
 #include "Screen.h"
 #include "Global.h"
 #include "Parameter.h"
@@ -193,3 +195,5 @@ void Screen::show_information( void )
     text3.setPosition( 10, 225 );
     text3.draw();
 }
+
+#endif

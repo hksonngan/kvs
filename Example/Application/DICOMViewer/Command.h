@@ -15,36 +15,48 @@
 #ifndef __COMMAND_H__
 #define __COMMAND_H__
 
-namespace kvs { class MouseEvent; }
+#include "Parameter.h"
+#include <kvs/MouseEvent>
+#include <kvs/ScreenBase>
+
 
 /*===========================================================================*/
 /**
  *  @brief  Command set.
  */
 /*===========================================================================*/
-struct Command
+class Command
 {
-    static void toggleInformationFlag( void );
+protected:
 
-    static void incrementIndex( const unsigned int value = 1 );
+    Parameter* m_parameter; ///< parameter set
+    kvs::ScreenBase* m_screen; ///< pointer to screen
 
-    static void decrementIndex( const unsigned int value = 1 );
+public:
 
-    static void updateDicomImage( void );
+    Command( Parameter* parameter, kvs::ScreenBase* screen );
 
-    static void updateDicomWindow( void );
+    void toggleInformationFlag( void );
 
-    static void resetDicomWindow( void );
+    void incrementIndex( const unsigned int value = 1 );
 
-    static void pressMouse( kvs::MouseEvent* event );
+    void decrementIndex( const unsigned int value = 1 );
 
-    static void moveMouse( kvs::MouseEvent* event );
+    void updateDicomImage( void );
 
-    static void writeScreenImage( void );
+    void updateDicomWindow( void );
 
-    static void writeHeader( void );
+    void resetDicomWindow( void );
 
-    static void writeData( void );
+    void pressMouse( kvs::MouseEvent* event );
+
+    void moveMouse( kvs::MouseEvent* event );
+
+    void writeScreenImage( void );
+
+    void writeHeader( void );
+
+    void writeData( void );
 };
 
 #endif // __COMMAND_H__

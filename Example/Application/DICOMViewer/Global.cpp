@@ -12,6 +12,8 @@
  *  $Id$
  */
 /*****************************************************************************/
+#if 0
+
 #include "Global.h"
 #include <kvs/File>
 #include <kvs/Directory>
@@ -125,3 +127,5 @@ const bool Global::read_from_directory( const std::string& name, const bool exte
 
     return( true );
 }
+
+#endif

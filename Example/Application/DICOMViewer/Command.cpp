@@ -14,7 +14,6 @@
 /*****************************************************************************/
 #include "Command.h"
 #include "Parameter.h"
-#include "Global.h"
 #include <string>
 #include <kvs/MouseEvent>
 #include <kvs/Dicom>
@@ -50,14 +49,25 @@ const std::string GetOutputFilename( const std::string& extension )
 
 /*===========================================================================*/
 /**
+ *  @brief  Constructs a new Command class.
+ *  @param  parameter [in] pointer to the parameters
+ *  @param  screen [in] pointer to the screen
+ */
+/*===========================================================================*/
+Command::Command( Parameter* parameter, kvs::ScreenBase* screen ):
+    m_parameter( parameter ),
+    m_screen( screen )
+{
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Toggle for the DICOM information.
  */
 /*===========================================================================*/
 void Command::toggleInformationFlag( void )
 {
-    Parameter& p = Global::parameter;
-
-    p.enable_show_information = !p.enable_show_information;
+    m_parameter->enable_show_information = !m_parameter->enable_show_information;
 }
 
 /*===========================================================================*/
@@ -68,32 +78,29 @@ void Command::toggleInformationFlag( void )
 /*===========================================================================*/
 void Command::incrementIndex( const unsigned int value )
 {
-    Parameter& p = Global::parameter;
+    const int nslices = m_parameter->dicom_list.size();
 
-    const int nslices = p.dicom_list.size();
+    m_parameter->index += value;
+    m_parameter->index = kvs::Math::Min( m_parameter->index, nslices - 1 );
 
-    p.index += value;
-    p.index = kvs::Math::Min( p.index, nslices - 1 );
-
-    Command::updateDicomWindow();
-    Command::updateDicomImage();
+    this->updateDicomWindow();
+    this->updateDicomImage();
 }
 
 /*===========================================================================*/
 /**
  *  @brief  Decrement the index of the DICOM list.
  *  @param  value [in] decremental value
+ *  @param  parameter [in] parameter
  */
 /*===========================================================================*/
 void Command::decrementIndex( const unsigned int value )
 {
-    Parameter& p = Global::parameter;
+    m_parameter->index -= value;
+    m_parameter->index = kvs::Math::Max( m_parameter->index, 0 );
 
-    p.index -= value;
-    p.index = kvs::Math::Max( p.index, 0 );
-
-    Command::updateDicomWindow();
-    Command::updateDicomImage();
+    this->updateDicomWindow();
+    this->updateDicomImage();
 }
 
 /*===========================================================================*/
@@ -103,15 +110,13 @@ void Command::decrementIndex( const unsigned int value )
 /*===========================================================================*/
 void Command::updateDicomImage( void )
 {
-    Parameter& p = Global::parameter;
+    m_screen->objectManager()->erase();
 
-    Global::object_manager->erase();
-
-    const kvs::Dicom* dicom  = p.dicom_list[ p.index ];
+    const kvs::Dicom* dicom  = m_parameter->dicom_list[ m_parameter->index ];
     kvs::ImageObject* object = new kvs::ImageImporter( dicom );
 
-    int object_id = Global::object_manager->insert( object );
-    Global::id_manager->changeObject( object_id );
+    const int object_id = m_screen->objectManager()->insert( object );
+    m_screen->IDManager()->changeObject( object_id );
 }
 
 /*===========================================================================*/
@@ -121,10 +126,8 @@ void Command::updateDicomImage( void )
 /*===========================================================================*/
 void Command::updateDicomWindow( void )
 {
-    Parameter& p = Global::parameter;
-
-    kvs::Dicom* dicom = p.dicom_list[ p.index ];
-    dicom->changeWindow( p.window_level, p.window_width );
+    kvs::Dicom* dicom = m_parameter->dicom_list[ m_parameter->index ];
+    dicom->changeWindow( m_parameter->window_level, m_parameter->window_width );
 }
 
 /*===========================================================================*/
@@ -134,16 +137,13 @@ void Command::updateDicomWindow( void )
 /*===========================================================================*/
 void Command::resetDicomWindow( void )
 {
-    Parameter& p = Global::parameter;
+    const kvs::Dicom* dicom = m_parameter->dicom_list[ m_parameter->index ];
+    m_parameter->window_width = dicom->windowWidth();
+    m_parameter->window_level = dicom->windowLevel();
 
-    const kvs::Dicom* dicom = p.dicom_list[ p.index ];
-
-    p.window_width = dicom->windowWidth();
-    p.window_level = dicom->windowLevel();
-
-    Command::updateDicomWindow();
-    Command::updateDicomImage();
-};
+    this->updateDicomWindow();
+    this->updateDicomImage();
+}
 
 /*===========================================================================*/
 /**
@@ -153,10 +153,8 @@ void Command::resetDicomWindow( void )
 /*===========================================================================*/
 void Command::pressMouse( kvs::MouseEvent* event )
 {
-    Parameter& p = Global::parameter;
-
-    p.mouse.set( event->x(), event->y() );
-};
+    m_parameter->mouse.set( event->x(), event->y() );
+}
 
 /*===========================================================================*/
 /**
@@ -166,27 +164,25 @@ void Command::pressMouse( kvs::MouseEvent* event )
 /*===========================================================================*/
 void Command::moveMouse( kvs::MouseEvent* event )
 {
-    Parameter& p = Global::parameter;
+    kvs::Vector2i diff( kvs::Vector2i( event->x(), event->y() ) - m_parameter->mouse );
 
-    kvs::Vector2i diff( kvs::Vector2i( event->x(), event->y() ) - p.mouse );
+    m_parameter->mouse.set( event->x(), event->y() );
 
-    p.mouse.set( event->x(), event->y() );
+    m_parameter->window_width += diff.x();
+    m_parameter->window_level += diff.y();
 
-    p.window_width += diff.x();
-    p.window_level += diff.y();
-
-    const kvs::Dicom* dicom = p.dicom_list[ p.index ];
+    const kvs::Dicom* dicom = m_parameter->dicom_list[ m_parameter->index ];
     int min_window_value = dicom->minWindowValue();
     int max_window_value = dicom->maxWindowValue();
     int min_window_width = 0;
     int max_window_width = max_window_value - min_window_value + 1;
-    p.window_width =
-        kvs::Math::Clamp( p.window_width, min_window_width, max_window_width );
-    p.window_level =
-        kvs::Math::Clamp( p.window_level, min_window_value, max_window_value );
+    m_parameter->window_width =
+        kvs::Math::Clamp( m_parameter->window_width, min_window_width, max_window_width );
+    m_parameter->window_level =
+        kvs::Math::Clamp( m_parameter->window_level, min_window_value, max_window_value );
 
-    Command::updateDicomWindow();
-    Command::updateDicomImage();
+    this->updateDicomWindow();
+    this->updateDicomImage();
 }
 
 /*===========================================================================*/
@@ -197,7 +193,7 @@ void Command::moveMouse( kvs::MouseEvent* event )
 void Command::writeScreenImage( void )
 {
     const std::string filename = ::GetOutputFilename("bmp");
-    Global::camera->snapshot().write( filename.c_str() );
+    m_screen->camera()->snapshot().write( filename.c_str() );
 }
 
 /*===========================================================================*/
@@ -207,10 +203,8 @@ void Command::writeScreenImage( void )
 /*===========================================================================*/
 void Command::writeHeader( void )
 {
-    Parameter& p = Global::parameter;
-
     const std::string filename = ::GetOutputFilename("csv");
-    p.dicom_list[ p.index ]->write( filename.c_str() );
+    m_parameter->dicom_list[ m_parameter->index ]->write( filename.c_str() );
 }
 
 /*===========================================================================*/
@@ -220,8 +214,6 @@ void Command::writeHeader( void )
 /*===========================================================================*/
 void Command::writeData( void )
 {
-    Parameter& p = Global::parameter;
-
     const std::string filename = ::GetOutputFilename("raw");
-    p.dicom_list[ p.index ]->write( filename.c_str() );
+    m_parameter->dicom_list[ m_parameter->index ]->write( filename.c_str() );
 }

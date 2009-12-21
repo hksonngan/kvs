@@ -24,9 +24,13 @@
  *  $Id$
  */
 /*****************************************************************************/
-#include "Global.h"
-#include "Screen.h"
+#include "Argument.h"
+#include "Parameter.h"
+#include "Event.h"
+#include "Widget.h"
 #include <kvs/Message>
+#include <kvs/glut/Application>
+#include <kvs/glut/Screen>
 
 
 /*===========================================================================*/
@@ -38,28 +42,44 @@
 /*===========================================================================*/
 int main( int argc, char** argv )
 {
-    // Create the global parameters.
-    Global* global = new Global( argc, argv );
-    if( !global )
+    kvs::glut::Application app( argc, argv );
+
+    // Parse command line arguments.
+    Argument arg( argc, argv );
+    if( !arg.parse() ) exit( EXIT_FAILURE );
+
+    // Setup a rendering screen.
+    kvs::glut::Screen screen( &app );
+
+    // Read parameters from the arguments.
+    Parameter parameter;
+    if( !parameter.read( arg ) )
     {
-        kvsMessageError("Cannot allocate memory for the global parameters.");
-        return( false );
+        kvsMessageError("Cannot read the DICOM file(s).");
+        exit( EXIT_FAILURE );
     }
 
-    // Create and show the rendering screen.
-    Screen* screen = new Screen();
-    if( !screen )
-    {
-        kvsMessageError("Cannot allocate memory for the screen.");
-        return( false );
-    }
-    screen->setGeometry( 0, 0, Global::parameter.width, Global::parameter.height );
-    screen->setTitle( "DICOM viewer" );
-    screen->show( true );
+    // Label widgets.
+    Widget::CounterLabel counter_label( &parameter, &screen );
+    Widget::ModalityLabel modality_label( &parameter, &screen );
+    Widget::ImageInfoLabel image_info_label( &parameter, &screen );
+    counter_label.show();
+    modality_label.show();
+    image_info_label.show();
 
-    // Delete the global and the rendering screen.
-    delete global;
-    delete screen;
+    // User specified events.
+    Event::Init init( &parameter );
+    Event::KeyPress key_press( &parameter );
+    Event::MousePress mouse_press( &parameter );
+    Event::MouseMove mouse_move( &parameter );
 
-    return( true );
+    screen.addInitializeEvent( &init );
+    screen.addKeyPressEvent( &key_press );
+    screen.setMousePressEvent( &mouse_press );
+    screen.setMouseMoveEvent( &mouse_move );
+    screen.setGeometry( 0, 0, parameter.width, parameter.height );
+    screen.setTitle( "DICOM viewer" );
+    screen.show();
+
+    return( app.run() );
 }

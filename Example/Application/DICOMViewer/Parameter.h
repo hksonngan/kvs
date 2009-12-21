@@ -15,8 +15,10 @@
 #ifndef __PARAPMETER_H__
 #define __PARAPMETER_H__
 
+#include "Argument.h"
 #include <kvs/DicomList>
 #include <kvs/Vector2>
+
 
 /*===========================================================================*/
 /**
@@ -35,15 +37,15 @@ struct Parameter
     bool enable_show_information; ///< enable showing information
     kvs::Vector2i mouse; ///< windowing mouse
 
-    ///< Sets default values.
-    Parameter( void ):
-        width( 0 ),
-        height( 0 ),
-        index( 0 ),
-        window_level( 0 ),
-        window_width( 0 ),
-        value( 0 ),
-        enable_show_information( true ){}
+    Parameter( void );
+
+    const bool read( const Argument& argument );
+
+private:
+
+    const bool read_from_file( const std::string& name );
+
+    const bool read_from_directory( const std::string& name, const bool extension_check );
 };
 
 #endif // __PARAPMETER_H__
