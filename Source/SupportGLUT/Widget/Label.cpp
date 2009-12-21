@@ -16,6 +16,8 @@
 #include <kvs/OpenGL>
 #include <cstdio>
 #include <cstdarg>
+#include <kvs/IgnoreUnusedVariable>
+
 
 // Default parameters.
 namespace { namespace Default
@@ -41,7 +43,9 @@ namespace glut
 Label::Label( kvs::glut::Screen* screen ):
     kvs::glut::WidgetBase( screen )
 {
-    BaseClass::setEventType( kvs::EventBase::PaintEvent );
+    BaseClass::setEventType(
+        kvs::EventBase::PaintEvent ||
+        kvs::EventBase::ResizeEvent );
 }
 
 /*==========================================================================*/
@@ -120,6 +124,8 @@ void Label::paintEvent( void )
 {
     if ( !BaseClass::isShown() ) return;
 
+    this->screenUpdated();
+
     BaseClass::begin_draw();
     BaseClass::draw_background();
 
@@ -131,6 +137,21 @@ void Label::paintEvent( void )
     }
 
     BaseClass::end_draw();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Resize event.
+ *  @param  width [in] resized screen width
+ *  @param  height [in] resized screen height
+ */
+/*===========================================================================*/
+void Label::resizeEvent( int width, int height )
+{
+    kvs::IgnoreUnusedVariable( width );
+    kvs::IgnoreUnusedVariable( height );
+
+    this->screenResized();
 }
 
 } // end of namespace glut

@@ -53,6 +53,7 @@ Slider::Slider( kvs::glut::Screen* screen ):
 {
     BaseClass::setEventType(
         kvs::EventBase::PaintEvent |
+        kvs::EventBase::ResizeEvent |
         kvs::EventBase::MousePressEvent |
         kvs::EventBase::MouseMoveEvent |
         kvs::EventBase::MouseReleaseEvent );
@@ -363,11 +364,13 @@ void Slider::paintEvent( void )
 {
     if ( !BaseClass::isShown() ) return;
 
-    const int character_width  = BaseClass::characterWidth();
-    const int character_height = BaseClass::characterHeight();
+    this->screenUpdated();
 
     BaseClass::begin_draw();
     BaseClass::draw_background();
+
+    const int character_width  = BaseClass::characterWidth();
+    const int character_height = BaseClass::characterHeight();
 
     // Draw the caption.
     {
@@ -403,6 +406,21 @@ void Slider::paintEvent( void )
     }
 
     BaseClass::end_draw();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Resize event.
+ *  @param  width [in] resized screen width
+ *  @param  height [in] resized screen height
+ */
+/*===========================================================================*/
+void Slider::resizeEvent( int width, int height )
+{
+    kvs::IgnoreUnusedVariable( width );
+    kvs::IgnoreUnusedVariable( height );
+
+    this->screenResized();
 }
 
 /*===========================================================================*/

@@ -66,6 +66,10 @@ public:
 
     virtual void valueChanged( void ){};
 
+    virtual void screenUpdated( void ){};
+
+    virtual void screenResized( void ){};
+
 public:
 
     const std::string& caption( void ) const;
@@ -103,6 +107,8 @@ private:
 private:
 
     void paintEvent( void );
+
+    void resizeEvent( int width, int height );
 
     void mousePressEvent( kvs::MouseEvent* event );
 

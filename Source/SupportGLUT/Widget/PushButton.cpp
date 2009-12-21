@@ -15,6 +15,7 @@
 #include "PushButton.h"
 #include <kvs/OpenGL>
 #include <kvs/RGBColor>
+#include <kvs/IgnoreUnusedVariable>
 
 // Default parameters.
 namespace { namespace Default
@@ -46,6 +47,7 @@ PushButton::PushButton( kvs::glut::Screen* screen ):
 {
     BaseClass::setEventType(
         kvs::EventBase::PaintEvent |
+        kvs::EventBase::ResizeEvent |
         kvs::EventBase::MousePressEvent |
         kvs::EventBase::MouseReleaseEvent );
 
@@ -216,6 +218,8 @@ void PushButton::paintEvent( void )
 {
     if ( !BaseClass::isShown() ) return;
 
+    this->screenUpdated();
+
     BaseClass::begin_draw();
     BaseClass::draw_background();
 
@@ -226,6 +230,21 @@ void PushButton::paintEvent( void )
     BaseClass::draw_text( x, y + BaseClass::characterHeight(), m_caption );
 
     BaseClass::end_draw();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Resize event.
+ *  @param  width [in] resized screen width
+ *  @param  height [in] resized screen height
+ */
+/*===========================================================================*/
+void PushButton::resizeEvent( int width, int height )
+{
+    kvs::IgnoreUnusedVariable( width );
+    kvs::IgnoreUnusedVariable( height );
+
+    this->screenResized();
 }
 
 /*===========================================================================*/

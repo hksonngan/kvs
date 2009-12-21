@@ -51,6 +51,12 @@ public:
 
 public:
 
+    virtual void screenUpdated( void ){};
+
+    virtual void screenResized( void ){};
+
+public:
+
     void setText( const char* text, ... );
 
     void addText( const char* text, ... );
@@ -64,6 +70,8 @@ private:
 public:
 
     void paintEvent( void );
+
+    void resizeEvent( int width, int height );
 };
 
 } // end of namespace glut
