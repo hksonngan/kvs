@@ -362,9 +362,9 @@ int Slider::get_fitted_height( void )
 /*===========================================================================*/
 void Slider::paintEvent( void )
 {
-    if ( !BaseClass::isShown() ) return;
-
     this->screenUpdated();
+
+    if ( !BaseClass::isShown() ) return;
 
     BaseClass::begin_draw();
     BaseClass::draw_background();

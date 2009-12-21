@@ -44,7 +44,7 @@ Label::Label( kvs::glut::Screen* screen ):
     kvs::glut::WidgetBase( screen )
 {
     BaseClass::setEventType(
-        kvs::EventBase::PaintEvent ||
+        kvs::EventBase::PaintEvent |
         kvs::EventBase::ResizeEvent );
 }
 
@@ -122,9 +122,9 @@ int Label::get_fitted_height( void )
 /*===========================================================================*/
 void Label::paintEvent( void )
 {
-    if ( !BaseClass::isShown() ) return;
-
     this->screenUpdated();
+
+    if ( !BaseClass::isShown() ) return;
 
     BaseClass::begin_draw();
     BaseClass::draw_background();

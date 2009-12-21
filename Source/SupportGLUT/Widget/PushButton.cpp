@@ -216,9 +216,9 @@ void PushButton::draw_button( void )
 /*===========================================================================*/
 void PushButton::paintEvent( void )
 {
-    if ( !BaseClass::isShown() ) return;
-
     this->screenUpdated();
+
+    if ( !BaseClass::isShown() ) return;
 
     BaseClass::begin_draw();
     BaseClass::draw_background();
