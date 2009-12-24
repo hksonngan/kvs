@@ -12,7 +12,11 @@ Viewer/Text
 Viewer/Timer
 Viewer/TransferFunctionEditor
 Viewer/Window
+Widget/CheckBox
+Widget/CheckBoxGroup
 Widget/Label
 Widget/PushButton
+Widget/RadioButton
+Widget/RadioButtonGroup
 Widget/Slider
 Widget/WidgetBase

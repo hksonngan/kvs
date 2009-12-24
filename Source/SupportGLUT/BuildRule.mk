@@ -16,8 +16,12 @@ $(OUTDIR)/./Viewer/Text.o \
 $(OUTDIR)/./Viewer/Timer.o \
 $(OUTDIR)/./Viewer/TransferFunctionEditor.o \
 $(OUTDIR)/./Viewer/Window.o \
+$(OUTDIR)/./Widget/CheckBox.o \
+$(OUTDIR)/./Widget/CheckBoxGroup.o \
 $(OUTDIR)/./Widget/Label.o \
 $(OUTDIR)/./Widget/PushButton.o \
+$(OUTDIR)/./Widget/RadioButton.o \
+$(OUTDIR)/./Widget/RadioButtonGroup.o \
 $(OUTDIR)/./Widget/Slider.o \
 $(OUTDIR)/./Widget/WidgetBase.o \
 
