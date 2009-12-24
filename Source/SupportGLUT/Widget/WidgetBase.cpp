@@ -538,6 +538,7 @@ void WidgetBase::begin_draw( void )
     glMatrixMode( GL_MODELVIEW );  glPushMatrix(); glLoadIdentity();
     glMatrixMode( GL_PROJECTION ); glPushMatrix(); glLoadIdentity();
     glOrtho( left, right, top, bottom, -1, 1 ); // The origin is upper-left.
+    glDisable( GL_DEPTH_TEST );
 }
 
 /*===========================================================================*/
