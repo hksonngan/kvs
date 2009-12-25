@@ -49,7 +49,8 @@ namespace glut
 /*===========================================================================*/
 Slider::Slider( kvs::glut::Screen* screen ):
     kvs::glut::WidgetBase( screen ),
-    m_change_value( false )
+    m_change_value( false ),
+    m_show_range_value( true )
 {
     BaseClass::setEventType(
         kvs::EventBase::PaintEvent |
@@ -160,6 +161,16 @@ void Slider::setSliderColor( const kvs::RGBColor& color )
     m_clicked_slider_color = BaseClass::get_darkened_color( color, 0.95 );
     m_upper_edge_color = ::Default::SliderEdgeColor;
     m_lower_edge_color = BaseClass::get_darkened_color( color, 0.6 );
+}
+
+void Slider::showRange( void )
+{
+    m_show_range_value = true;
+}
+
+void Slider::hideRange( void )
+{
+    m_show_range_value = false;
 }
 
 /*===========================================================================*/
@@ -389,6 +400,7 @@ void Slider::paintEvent( void )
     }
 
     // Draw the values.
+    if ( m_show_range_value )
     {
         {
             kvs::String min_value( m_min_value );

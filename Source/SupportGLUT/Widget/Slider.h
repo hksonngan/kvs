@@ -47,6 +47,7 @@ protected:
     float         m_min_value; ///< min. value
     float         m_max_value; ///< max. value
     bool          m_change_value; ///< value change flag
+    bool          m_show_range_value; ///< range value showing flag
     kvs::RGBColor m_slider_color; ///< slider (cursor) color
     kvs::RGBColor m_clicked_slider_color; ///< clicked slider (cursor) color
     kvs::RGBColor m_upper_edge_color; ///< upper edge color
@@ -87,6 +88,10 @@ public:
     void setRange( const float min_value, const float max_value );
 
     void setSliderColor( const kvs::RGBColor& color );
+
+    void showRange( void );
+
+    void hideRange( void );
 
 private:
 
