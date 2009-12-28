@@ -66,12 +66,32 @@ inline const std::string Description( void )
 /*===========================================================================*/
 /**
  *  @brief  Returns OpenGL version.
- *  @return OpenGl version
+ *  @return OpenGL version
  */
 /*===========================================================================*/
 inline const std::string Version( void )
 {
     const std::string version( (const char*)glGetString( GL_VERSION ) );
+    return( version );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns GLSL (OpenGL Shading Language) version.
+ *  @return GLSL version
+ */
+/*===========================================================================*/
+inline const std::string ShaderVersion( void )
+{
+#if defined( GL_SHADING_LANGUAGE_VERSION )
+    const std::string version( (const char*)glGetString( GL_SHADING_LANGUAGE_VERSION ) );
+#else
+#if defined( GL_SHADING_LANGUAGE_VERSION_ARB )
+    const std::string version( (const char*)glGetString( GL_SHADING_LANGUAGE_VERSION_ARB ) );
+#else
+    const std::string version( "unknown" );
+#endif
+#endif
     return( version );
 }
 
