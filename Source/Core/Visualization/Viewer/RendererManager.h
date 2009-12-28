@@ -23,22 +23,25 @@
 namespace kvs
 {
 
-typedef std::list<kvs::RendererBase*>           renderer_manager_base;
-typedef std::list<kvs::RendererBase*>::iterator renderer_ptr;
-typedef std::map<int,renderer_ptr>              renderer_ptr_map;
+typedef std::list<kvs::RendererBase*> RendererManagerBase;
 
 /*==========================================================================*/
 /**
 *  Renderer manager class.
 */
 /*==========================================================================*/
-class RendererManager : public renderer_manager_base
+class RendererManager : public RendererManagerBase
 {
     kvsClassName( RendererManager );
 
+public:
+
+    typedef RendererManagerBase::iterator  RendererIterator;
+    typedef std::map<int,RendererIterator> RendererMap;
+
 protected:
 
-    renderer_ptr_map m_renderer_ptr_map; ///< renderer pointer map
+    RendererMap m_renderer_map; ///< renderer map
 
 public:
 
@@ -53,6 +56,8 @@ public:
     void erase( bool delete_flg = true );
 
     void erase( int renderer_id, bool delete_flg = true );
+
+    void change( int renderer_id, kvs::RendererBase* renderer, bool delete_flg = true );
 
     const int nrenderers( void ) const;
 

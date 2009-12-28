@@ -23,29 +23,30 @@
 namespace kvs
 {
 
-typedef kvs::Tree<kvs::ObjectBase*>           object_manager_base;
-typedef kvs::Tree<kvs::ObjectBase*>::iterator object_ptr;
-typedef std::pair<int,object_ptr>             object_ptr_pair;
-typedef std::map<int,object_ptr>              object_ptr_map;
-
-const kvs::Vector3f CENTER_OF_OBJECT_MASTER( 0.0, 0.0, 0.0 );
+typedef kvs::Tree<kvs::ObjectBase*> ObjectManagerBase;
 
 /*==========================================================================*/
 /**
 *  Object manager class.
 */
 /*==========================================================================*/
-class ObjectManager : public object_manager_base, public kvs::ObjectBase
+class ObjectManager : public ObjectManagerBase, public kvs::ObjectBase
 {
     kvsClassName( ObjectManager );
+
+public:
+
+    typedef ObjectManagerBase::iterator   ObjectIterator;
+    typedef std::pair<int,ObjectIterator> ObjectPair;
+    typedef std::map<int,ObjectIterator>  ObjectMap;
 
 protected:
 
     bool           m_has_active_object; ///< If active object exists true.
     bool           m_enable_all_move;   ///< If All object move together true.
-    object_ptr     m_root_ptr;          ///< pointer to root of tree
-    object_ptr     m_active_object_ptr; ///< pointer to active object
-    object_ptr_map m_object_ptr_map;    ///< object pointer map
+    ObjectIterator m_root;              ///< pointer to the root of the tree
+    ObjectIterator m_active_object;     ///< pointer to the active object
+    ObjectMap      m_object_map;        ///< object map
     int            m_current_object_id; ///< current object ID
 
 public:
@@ -140,9 +141,9 @@ private:
 
     kvs::Vector3f get_rotation_center( kvs::ObjectBase* obj );
 
-    object_ptr get_control_first_pointer( void );
+    ObjectIterator get_control_first_pointer( void );
 
-    object_ptr get_control_last_pointer( void );
+    ObjectIterator get_control_last_pointer( void );
 };
 
 } // end of namespace kvs

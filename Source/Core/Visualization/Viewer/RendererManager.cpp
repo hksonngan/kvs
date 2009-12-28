@@ -24,8 +24,8 @@ namespace kvs
 /*==========================================================================*/
 RendererManager::RendererManager( void )
 {
-    renderer_manager_base::clear();
-    m_renderer_ptr_map.clear();
+    RendererManagerBase::clear();
+    m_renderer_map.clear();
 }
 
 /*==========================================================================*/
@@ -47,13 +47,13 @@ RendererManager::~RendererManager( void )
 /*==========================================================================*/
 int RendererManager::insert( kvs::RendererBase* renderer )
 {
-    static int ren_id = 0;
-    ren_id++;
+    static int renderer_id = 0;
+    renderer_id++;
 
-    m_renderer_ptr_map[ren_id] =
-        renderer_manager_base::insert( this->end(), renderer );
+    m_renderer_map[ renderer_id ] =
+        RendererManagerBase::insert( this->end(), renderer );
 
-    return( ren_id );
+    return( renderer_id );
 }
 
 /*==========================================================================*/
@@ -64,16 +64,16 @@ int RendererManager::insert( kvs::RendererBase* renderer )
 /*==========================================================================*/
 void RendererManager::erase( bool delete_flg )
 {
-    if( delete_flg )
+    if ( delete_flg )
     {
-        for( renderer_ptr p = begin(); p != end(); p++ )
+        for ( RendererIterator p = begin(); p != end(); p++ )
         {
-            if( *p ){ delete( *p ); *p = NULL; }
+            if ( *p ) { delete( *p ); *p = NULL; }
         }
     }
 
-    renderer_manager_base::clear();
-    m_renderer_ptr_map.clear();
+    RendererManagerBase::clear();
+    m_renderer_map.clear();
 }
 
 /*==========================================================================*/
@@ -85,27 +85,60 @@ void RendererManager::erase( bool delete_flg )
 /*==========================================================================*/
 void RendererManager::erase( int renderer_id, bool delete_flg )
 {
-    renderer_ptr_map::iterator map_id = m_renderer_ptr_map.find(renderer_id);
-    if( map_id == m_renderer_ptr_map.end() ) return;
+    RendererMap::iterator map_id = m_renderer_map.find( renderer_id );
+    if ( map_id == m_renderer_map.end() ) return;
 
-    renderer_ptr ren_ptr = map_id->second; // pointer to the renderer
-    kvs::RendererBase* ren = *ren_ptr;     // renderer
+    RendererIterator renderer_ptr = map_id->second; // pointer to the renderer
+    kvs::RendererBase* renderer = *renderer_ptr;     // renderer
 
-    if( delete_flg )
+    if ( delete_flg )
     {
-        if( ren )
+        if ( renderer )
         {
-            delete( ren );
-            ren = NULL;
+            delete( renderer );
+            renderer = NULL;
         }
     }
 
     // Erase the renderer in the renderer master.
-    renderer_manager_base::erase( ren_ptr );
+    RendererManagerBase::erase( renderer_ptr );
 
-    // Erase the map component, which is specified by map_id,
-    // in m_renderer_ptr_map.
-    m_renderer_ptr_map.erase( map_id );
+    // Erase the map component, which is specified by map_id.
+    m_renderer_map.erase( map_id );
+}
+
+/*==========================================================================*/
+/**
+ *  Change the renderer by the specificated renderer ID.
+ *  @param renderer_id [in] renderer ID stored in the renderer manager
+ *  @param renderer [in] pointer to the inserting renderer
+ *  @param delete_flg [in] deleting the allocated memory flag
+ */
+/*==========================================================================*/
+void RendererManager::change( int renderer_id, kvs::RendererBase* renderer, bool delete_flg )
+{
+    /* Search the object which is specified by given renderer ID in the
+     * renderer pointer map. If it isn't found, this method executes nothing.
+     */
+    RendererMap::iterator map_id = m_renderer_map.find( renderer_id );
+    if( map_id == m_renderer_map.end() ) return;
+
+    // Change the renderer.
+    RendererIterator ptr = map_id->second; // pointer to the renderer
+    kvs::RendererBase* old_renderer = *ptr;
+
+    // Erase the old renderer.
+    if ( delete_flg )
+    {
+        if ( old_renderer )
+        {
+            delete( old_renderer );
+            old_renderer = NULL;
+        }
+    }
+
+    // Insert the new object
+    *ptr = renderer;
 }
 
 /*==========================================================================*/
@@ -116,7 +149,7 @@ void RendererManager::erase( int renderer_id, bool delete_flg )
 /*==========================================================================*/
 const int RendererManager::nrenderers( void ) const
 {
-    return( size() );
+    return( RendererManagerBase::size() );
 }
 
 /*==========================================================================*/
@@ -128,10 +161,10 @@ const int RendererManager::nrenderers( void ) const
 kvs::RendererBase* RendererManager::renderer( void )
 {
     // Pointer to the renderer.
-    renderer_ptr ren_ptr = begin();
+    RendererIterator renderer_ptr = begin();
 
-    if( !*ren_ptr ) return( NULL );
-    else            return( *ren_ptr );
+    if( !*renderer_ptr ) return( NULL );
+    else                 return( *renderer_ptr );
 }
 
 /*==========================================================================*/
@@ -143,13 +176,13 @@ kvs::RendererBase* RendererManager::renderer( void )
 /*==========================================================================*/
 kvs::RendererBase* RendererManager::renderer( int renderer_id )
 {
-    renderer_ptr_map::iterator map_id = m_renderer_ptr_map.find(renderer_id);
-    if( map_id == m_renderer_ptr_map.end() )   return( NULL );
+    RendererMap::iterator map_id = m_renderer_map.find( renderer_id );
+    if( map_id == m_renderer_map.end() )   return( NULL );
 
     // Pointer to the renderer.
-    renderer_ptr ren_ptr = map_id->second;
+    RendererIterator renderer_ptr = map_id->second;
 
-    return( *ren_ptr );
+    return( *renderer_ptr );
 }
 
 /*==========================================================================*/
@@ -160,8 +193,7 @@ kvs::RendererBase* RendererManager::renderer( int renderer_id )
 /*==========================================================================*/
 const bool RendererManager::hasRenderer( void ) const
 {
-    return( renderer_manager_base::size() != 0 );
+    return( RendererManagerBase::size() != 0 );
 }
 
-}
-
+} // end of namespace kvs
