@@ -18,7 +18,6 @@
 #include <cstdarg>
 #include <kvs/IgnoreUnusedVariable>
 
-
 // Default parameters.
 namespace { namespace Default
 {
@@ -41,7 +40,8 @@ namespace glut
  */
 /*===========================================================================*/
 Label::Label( kvs::glut::Screen* screen ):
-    kvs::glut::WidgetBase( screen )
+    kvs::glut::WidgetBase( static_cast<kvs::ScreenBase*>(screen),
+                           static_cast<kvs::WindowBase*>(screen) )
 {
     BaseClass::setEventType(
         kvs::EventBase::PaintEvent |

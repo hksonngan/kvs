@@ -17,7 +17,11 @@
 
 #include "WidgetBase.h"
 #include <kvs/ClassName>
+#include <kvs/glut/Screen>
 
+#if defined( KVS_SUPPORT_QT )
+namespace kvs { namespace qt { class Screen; } }
+#endif
 
 namespace kvs
 {
@@ -51,6 +55,10 @@ protected:
 public:
 
     PushButton( kvs::glut::Screen* screen = 0 );
+
+#if defined( KVS_SUPPORT_QT )
+    PushButton( kvs::qt::Screen* screen );
+#endif
 
 public:
 

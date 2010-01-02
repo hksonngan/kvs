@@ -243,9 +243,12 @@ inline kvs::UInt32 GetCPUFrequency( void )
 }
 
 // Weight values for converting time unit.
+#if defined ( KVS_TIMER_USE_CPU_COUNTER )
 const kvs::UInt32 KVS_TIMER_CPU_HZ        = GetCPUFrequency();
 const kvs::Real64 KVS_TIMER_CLOCK_TO_SEC  = 1.0 / KVS_TIMER_CPU_HZ;
 const kvs::Real64 KVS_TIMER_CLOCK_TO_MSEC = KVS_TIMER_CLOCK_TO_SEC  * 1000.0;
+const kvs::Real64 KVS_TIMER_CLOCK_TO_USEC = KVS_TIMER_CLOCK_TO_MSEC * 1000.0;
+#endif
 const kvs::Real64 KVS_TIMER_SEC_TO_USEC   = 1000000.0;
 const kvs::Real64 KVS_TIMER_SEC_TO_MSEC   =    1000.0;
 const kvs::Real64 KVS_TIMER_USEC_TO_SEC   =  0.000001;
@@ -311,7 +314,6 @@ inline double TimeStampToMSec( const TimeStamp& ts )
 inline double TimeStampToUSec( const TimeStamp& ts )
 {
 #if defined ( KVS_TIMER_USE_CPU_COUNTER )
-    const kvs::Real64 KVS_TIMER_CLOCK_TO_USEC = KVS_TIMER_CLOCK_TO_MSEC * 1000.0;
     return( ts.value * KVS_TIMER_CLOCK_TO_USEC );
 #else
     return( ts.tv_sec * KVS_TIMER_SEC_TO_USEC + ts.tv_usec );

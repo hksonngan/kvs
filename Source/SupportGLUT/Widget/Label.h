@@ -18,6 +18,7 @@
 #include <string>
 #include <vector>
 #include <kvs/ClassName>
+#include <kvs/glut/Screen>
 #include "WidgetBase.h"
 
 

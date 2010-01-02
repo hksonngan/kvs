@@ -18,6 +18,7 @@
 #include <list>
 #include <kvs/ClassName>
 #include <kvs/glut/WidgetBase>
+#include <kvs/glut/Screen>
 #include "RadioButton.h"
 
 

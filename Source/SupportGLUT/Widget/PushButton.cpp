@@ -43,7 +43,8 @@ namespace glut
  */
 /*===========================================================================*/
 PushButton::PushButton( kvs::glut::Screen* screen ):
-    kvs::glut::WidgetBase( screen )
+    kvs::glut::WidgetBase( static_cast<kvs::ScreenBase*>(screen),
+                           static_cast<kvs::WindowBase*>(screen) )
 {
     BaseClass::setEventType(
         kvs::EventBase::PaintEvent |
@@ -259,12 +260,12 @@ void PushButton::mousePressEvent( kvs::MouseEvent* event )
 
     if ( BaseClass::contains( event->x(), event->y() ) )
     {
-        BaseClass::m_screen->disableAllMove();
+        BaseClass::screen()->disableAllMove();
         BaseClass::activate();
         this->pressed();
         BaseClass::swap_color( m_button_color, m_clicked_button_color );
         BaseClass::swap_color( m_upper_edge_color, m_lower_edge_color );
-        BaseClass::screen()->redraw();
+        BaseClass::window()->redraw();
     }
 }
 
@@ -284,7 +285,7 @@ void PushButton::mouseReleaseEvent( kvs::MouseEvent* event )
         BaseClass::swap_color( m_button_color, m_clicked_button_color );
         BaseClass::swap_color( m_upper_edge_color, m_lower_edge_color );
         BaseClass::deactivate();
-        BaseClass::screen()->redraw();
+        BaseClass::window()->redraw();
     }
 }
 

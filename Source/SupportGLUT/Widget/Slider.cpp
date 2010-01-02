@@ -48,7 +48,8 @@ namespace glut
  */
 /*===========================================================================*/
 Slider::Slider( kvs::glut::Screen* screen ):
-    kvs::glut::WidgetBase( screen ),
+    kvs::glut::WidgetBase( static_cast<kvs::ScreenBase*>(screen),
+                           static_cast<kvs::WindowBase*>(screen) ),
     m_change_value( false ),
     m_show_range_value( true )
 {
@@ -447,11 +448,11 @@ void Slider::mousePressEvent( kvs::MouseEvent* event )
 
     if ( this->is_in_cursor( event->x(), event->y() ) )
     {
-        BaseClass::m_screen->disableAllMove();
+        BaseClass::screen()->disableAllMove();
         BaseClass::activate();
         this->sliderPressed();
         BaseClass::swap_color( m_slider_color, m_clicked_slider_color );
-        BaseClass::screen()->redraw();
+        BaseClass::window()->redraw();
     }
     else
     {
@@ -468,10 +469,10 @@ void Slider::mousePressEvent( kvs::MouseEvent* event )
              * not the sliderPressed function but the sliderMoved function is
              * called here.
              */
-            BaseClass::m_screen->disableAllMove();
+            BaseClass::screen()->disableAllMove();
             BaseClass::activate();
             this->sliderMoved();
-            BaseClass::screen()->redraw();
+            BaseClass::window()->redraw();
         }
     }
 }
@@ -495,7 +496,7 @@ void Slider::mouseMoveEvent( kvs::MouseEvent* event )
 
         this->sliderMoved();
 
-        BaseClass::screen()->redraw();
+        BaseClass::window()->redraw();
     }
 }
 
@@ -521,7 +522,7 @@ void Slider::mouseReleaseEvent( kvs::MouseEvent* event )
         }
 
         BaseClass::deactivate();
-        BaseClass::screen()->redraw();
+        BaseClass::window()->redraw();
     }
 }
 

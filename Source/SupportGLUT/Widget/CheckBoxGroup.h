@@ -18,6 +18,7 @@
 #include <list>
 #include <kvs/ClassName>
 #include <kvs/glut/WidgetBase>
+#include <kvs/glut/Screen>
 #include "CheckBox.h"
 
 
@@ -48,6 +49,8 @@ protected:
     std::list<kvs::glut::CheckBox*> m_boxes; ///< check box list
 
 public:
+
+    CheckBoxGroup( kvs::ScreenBase* screen, kvs::WindowBase* window );
 
     CheckBoxGroup( kvs::glut::Screen* screen = 0 );
 

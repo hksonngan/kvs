@@ -33,6 +33,8 @@
 namespace kvs
 {
 
+class EventHandler;
+
 /*==========================================================================*/
 /**
  *  Screen base class.
@@ -68,6 +70,8 @@ protected:
 
     bool m_enable_move_all;  ///< flag for object movement
     bool m_enable_collision_detection; ///< flag for collision detection
+
+    kvs::EventHandler* m_event_handler; ///< event handler
 
 public:
 
@@ -118,6 +122,8 @@ public:
     kvs::RendererManager* rendererManager( void );
 
     kvs::IDManager* IDManager( void );
+
+    kvs::EventHandler* eventHandler( void );
 
 public:
 

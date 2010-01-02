@@ -49,6 +49,8 @@ class Screen : public kvs::qt::Window, public kvs::ScreenBase
 {
     Q_OBJECT
 
+    typedef kvs::ScreenBase BaseClass;
+
     typedef void (Screen::*PaintEventFunction)( void );
     typedef void (Screen::*ResizeEventFunction)( int, int );
     typedef void (Screen::*MousePressEventFunction)( kvs::MouseEvent* );
@@ -70,7 +72,7 @@ protected:
     QTimer*                    m_idle_mouse_timer;
     std::list<kvs::qt::Timer*> m_timer_event_handler;
     kvs::EventHandler*         m_initialize_event_handler;
-    kvs::EventHandler*         m_event_handler;
+//    kvs::EventHandler*         m_event_handler;
 
 public:
 
@@ -108,7 +110,7 @@ public:
 
 public:
 
-    kvs::EventHandler* eventHandler( void ) const;
+//    kvs::EventHandler* eventHandler( void ) const;
 
     void setPaintEvent( kvs::PaintEventListener* event );
 

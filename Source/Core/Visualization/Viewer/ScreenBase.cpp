@@ -17,6 +17,7 @@
 #include <kvs/PolygonRenderer>
 #include <kvs/RayCastingRenderer>
 #include <kvs/ImageRenderer>
+#include <kvs/EventHandler>
 
 
 namespace kvs
@@ -364,6 +365,17 @@ kvs::IDManager* ScreenBase::IDManager( void )
 
 /*===========================================================================*/
 /**
+ *  @brief  Returns the pointer to the event handler.
+ *  @return pointer to the event handler
+ */
+/*===========================================================================*/
+kvs::EventHandler* ScreenBase::eventHandler( void )
+{
+    return( m_event_handler );
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Creates basic screen components.
  */
 /*===========================================================================*/
@@ -417,6 +429,13 @@ void ScreenBase::create( void )
         kvsMessageError("Cannot allocate memory for the ID manager.");
         return;
     }
+
+    m_event_handler = new kvs::EventHandler();
+    if( !m_event_handler )
+    {
+        kvsMessageError("Cannot allocate memory for the event handler.");
+        return;
+    }
 }
 
 /*===========================================================================*/
@@ -433,6 +452,7 @@ void ScreenBase::clear( void )
     if ( m_object_manager   ) { delete m_object_manager;   m_object_manager   = NULL; }
     if ( m_renderer_manager ) { delete m_renderer_manager; m_renderer_manager = NULL; }
     if ( m_id_manager       ) { delete m_id_manager;       m_id_manager       = NULL; }
+    if ( m_event_handler    ) { delete m_event_handler;    m_event_handler    = NULL; }
 }
 
 /*===========================================================================*/

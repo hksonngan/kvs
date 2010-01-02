@@ -65,7 +65,8 @@ namespace glut
  */
 /*===========================================================================*/
 RadioButton::RadioButton( kvs::glut::Screen* screen ):
-    kvs::glut::WidgetBase( screen ),
+    kvs::glut::WidgetBase( static_cast<kvs::ScreenBase*>(screen),
+                           static_cast<kvs::WindowBase*>(screen) ),
     m_group( NULL )
 {
     BaseClass::setEventType(
@@ -341,10 +342,10 @@ void RadioButton::mousePressEvent( kvs::MouseEvent* event )
 
     if ( this->contains( event->x(), event->y() ) )
     {
-        BaseClass::m_screen->disableAllMove();
+        BaseClass::screen()->disableAllMove();
         BaseClass::activate();
         this->pressed();
-        BaseClass::screen()->redraw();
+        BaseClass::window()->redraw();
     }
 }
 
@@ -386,7 +387,7 @@ void RadioButton::mouseReleaseEvent( kvs::MouseEvent* event )
 
         this->released();
         BaseClass::deactivate();
-        BaseClass::screen()->redraw();
+        BaseClass::window()->redraw();
     }
 }
 

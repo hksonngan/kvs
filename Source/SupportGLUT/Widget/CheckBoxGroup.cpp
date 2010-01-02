@@ -29,7 +29,8 @@ namespace glut
  */
 /*===========================================================================*/
 CheckBoxGroup::CheckBoxGroup( kvs::glut::Screen* screen ):
-    kvs::glut::WidgetBase( screen )
+    kvs::glut::WidgetBase( static_cast<kvs::ScreenBase*>(screen),
+                           static_cast<kvs::WindowBase*>(screen) )
 {
     BaseClass::setEventType(
         kvs::EventBase::PaintEvent |

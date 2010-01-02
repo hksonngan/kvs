@@ -16,6 +16,7 @@
 #define KVS__GLUT__SLIDER_H_INCLUDE
 
 #include "WidgetBase.h"
+#include <kvs/glut/Screen>
 #include <kvs/ClassName>
 #include <kvs/RGBColor>
 

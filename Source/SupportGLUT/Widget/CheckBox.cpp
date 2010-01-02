@@ -17,6 +17,7 @@
 #include <kvs/RGBColor>
 #include <kvs/IgnoreUnusedVariable>
 
+
 // Default parameters.
 namespace { namespace Default
 {
@@ -44,7 +45,8 @@ namespace glut
  */
 /*===========================================================================*/
 CheckBox::CheckBox( kvs::glut::Screen* screen ):
-    kvs::glut::WidgetBase( screen ),
+    kvs::glut::WidgetBase( static_cast<kvs::ScreenBase*>(screen),
+                           static_cast<kvs::WindowBase*>(screen) ),
     m_group( NULL )
 {
     BaseClass::setEventType(
@@ -302,7 +304,7 @@ void CheckBox::mousePressEvent( kvs::MouseEvent* event )
         BaseClass::m_screen->disableAllMove();
         BaseClass::activate();
         this->pressed();
-        BaseClass::screen()->redraw();
+        BaseClass::window()->redraw();
     }
 }
 
@@ -326,7 +328,7 @@ void CheckBox::mouseReleaseEvent( kvs::MouseEvent* event )
 
         this->released();
         BaseClass::deactivate();
-        BaseClass::screen()->redraw();
+        BaseClass::window()->redraw();
     }
 }
 

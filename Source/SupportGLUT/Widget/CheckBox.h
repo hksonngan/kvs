@@ -16,6 +16,7 @@
 #define KVS__GLUT__CHECK_BOX_H_INCLUDE
 
 #include <kvs/glut/WidgetBase>
+#include <kvs/glut/Screen>
 #include <kvs/ClassName>
 #include <string>
 
