@@ -47,15 +47,15 @@ public:
 
 protected:
 
-    std::string   m_caption; ///< caption
-    kvs::RGBColor m_upper_edge_color; ///< upper edge color
-    kvs::RGBColor m_lower_edge_color; ///< lower edge color
-    bool          m_state; ///< check state
-    kvs::glut::CheckBoxGroup* m_group; ///< pointer to the check box group
+    std::string               m_caption;          ///< caption
+    kvs::RGBColor             m_upper_edge_color; ///< upper edge color
+    kvs::RGBColor             m_lower_edge_color; ///< lower edge color
+    bool                      m_state;            ///< check state
+    kvs::glut::CheckBoxGroup* m_group;            ///< pointer to the check box group
 
 public:
 
-    CheckBox( kvs::glut::Screen* screen = 0 );
+    CheckBox( kvs::ScreenBase* screen = 0 );
 
 public:
 

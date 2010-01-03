@@ -44,9 +44,8 @@ namespace glut
  *  @param  screen [in] pointer to the parent screen
  */
 /*===========================================================================*/
-CheckBox::CheckBox( kvs::glut::Screen* screen ):
-    kvs::glut::WidgetBase( static_cast<kvs::ScreenBase*>(screen),
-                           static_cast<kvs::WindowBase*>(screen) ),
+CheckBox::CheckBox( kvs::ScreenBase* screen ):
+    kvs::glut::WidgetBase( screen ),
     m_group( NULL )
 {
     BaseClass::setEventType(
@@ -304,7 +303,7 @@ void CheckBox::mousePressEvent( kvs::MouseEvent* event )
         BaseClass::m_screen->disableAllMove();
         BaseClass::activate();
         this->pressed();
-        BaseClass::window()->redraw();
+        BaseClass::screen()->redraw();
     }
 }
 
@@ -328,7 +327,7 @@ void CheckBox::mouseReleaseEvent( kvs::MouseEvent* event )
 
         this->released();
         BaseClass::deactivate();
-        BaseClass::window()->redraw();
+        BaseClass::screen()->redraw();
     }
 }
 

@@ -55,7 +55,7 @@ protected:
 
 public:
 
-    RadioButton( kvs::glut::Screen* screen = 0 );
+    RadioButton( kvs::ScreenBase* screen = 0 );
 
 public:
 

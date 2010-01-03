@@ -24,6 +24,7 @@
 #include <kvs/IDManager>
 #include <kvs/MouseEvent>
 #include <kvs/KeyEvent>
+#include <kvs/WheelEvent>
 #include <kvs/DisplayFormat>
 #include <kvs/VisualizationPipeline>
 #include <kvs/ClassName>
@@ -56,11 +57,27 @@ public:
 
 protected:
 
+    // Screeen properties.
+    std::string           m_title;            ///< window title
+    int                   m_x;                ///< window position (y position)
+    int                   m_y;                ///< window position (x position)
+    int                   m_width;            ///< window size (width)
+    int                   m_height;           ///< window size (height)
+    int                   m_id;               ///< window ID
+    bool                  m_is_fullscreen;    ///< check flag whether the window is fullscreen
+    kvs::DisplayFormat    m_display_format;   ///< display format
+
+    // Screen events.
+    kvs::MouseEvent*      m_mouse_event;      ///< mouse event
+    kvs::KeyEvent*        m_key_event;        ///< key event
+    kvs::WheelEvent*      m_wheel_event;      ///< wheel event
+    kvs::Timer            m_elapse_time_counter; ///< elapse time counter for double click event
+
     // Basic components in the viewer.
-    kvs::Camera*          m_camera;     ///< camera
-    kvs::Light*           m_light;      ///< light
-    kvs::Mouse*           m_mouse;      ///< mouse
-    kvs::Background*      m_background; ///< background
+    kvs::Camera*          m_camera;           ///< camera
+    kvs::Light*           m_light;            ///< light
+    kvs::Mouse*           m_mouse;            ///< mouse
+    kvs::Background*      m_background;       ///< background
 
     // Parameters for controlling the viewer.
     ControlTarget         m_target;           ///< control target
@@ -107,6 +124,22 @@ public:
 
 public:
 
+    const int x( void ) const;
+
+    const int y( void ) const;
+
+    const int width( void ) const;
+
+    const int height( void ) const;
+
+    const int id( void ) const;
+
+    const std::string& title( void ) const;
+
+    const kvs::DisplayFormat& displayFormat( void ) const;
+
+    const bool isFullScreen( void ) const;
+
     kvs::Camera* camera( void );
 
     kvs::Light* light( void );
@@ -124,6 +157,18 @@ public:
     kvs::IDManager* IDManager( void );
 
     kvs::EventHandler* eventHandler( void );
+
+public:
+
+    void setDisplayFormat( const kvs::DisplayFormat& display_format );
+
+    void setPosition( const int x, const int y );
+
+    void setSize( const int width, const int height );
+
+    void setGeometry( const int x, const int y, const int width, const int height );
+
+    void setTitle( const std::string& title );
 
 public:
 
@@ -156,6 +201,26 @@ public:
     void updateXform( kvs::Camera* camera );
 
     void updateXform( kvs::Light* light );
+
+public:
+
+    virtual void createWindow( void );
+
+    virtual void showFullScreen( void );
+
+    virtual void showNormal( void );
+
+    virtual void popUp( void );
+
+    virtual void pushDown( void );
+
+    virtual void hide( void );
+
+    virtual void showWindow( void );
+
+    virtual void redraw( void );
+
+    virtual void resize( int width, int height );
 };
 
 } // end of namespace kvs

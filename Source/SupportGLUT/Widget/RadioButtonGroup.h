@@ -50,7 +50,7 @@ protected:
 
 public:
 
-    RadioButtonGroup( kvs::glut::Screen* screen = 0 );
+    RadioButtonGroup( kvs::ScreenBase* screen = 0 );
 
 public:
 

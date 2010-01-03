@@ -29,6 +29,13 @@ namespace kvs
  */
 /*===========================================================================*/
 ScreenBase::ScreenBase( void ):
+    m_title("<unknown>"),
+    m_x( 0 ),
+    m_y( 0 ),
+    m_width( 512 ),
+    m_height( 512 ),
+    m_id( 0 ),
+    m_is_fullscreen( false ),
     m_target( ScreenBase::TargetObject ),
     m_enable_move_all( true ),
     m_enable_collision_detection( false )
@@ -277,6 +284,93 @@ void ScreenBase::wheelFunction( int value )
 
 /*===========================================================================*/
 /**
+ *  @brief  Returns the x coordinate value of the window position.
+ *  @return x coordinate value of the window position
+ */
+/*===========================================================================*/
+const int ScreenBase::x( void ) const
+{
+    return( m_x );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the y coordinate value of the window position.
+ *  @return y coordinate value of the window position
+ */
+/*===========================================================================*/
+const int ScreenBase::y( void ) const
+{
+    return( m_y );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the window width.
+ *  @return window width
+ */
+/*===========================================================================*/
+const int ScreenBase::width( void ) const
+{
+    return( m_width );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the window height.
+ *  @return window height
+ */
+/*===========================================================================*/
+const int ScreenBase::height( void ) const
+{
+    return( m_height );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the window ID.
+ *  @return window ID
+ */
+/*===========================================================================*/
+const int ScreenBase::id( void ) const
+{
+    return( m_id );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the window title.
+ *  @return window title
+ */
+/*===========================================================================*/
+const std::string& ScreenBase::title( void ) const
+{
+    return( m_title );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the display format.
+ */
+/*===========================================================================*/
+const kvs::DisplayFormat& ScreenBase::displayFormat( void ) const
+{
+    return( m_display_format );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Checks whether the window is full-screen or not.
+ *  @return true, if the window is full-screen
+ */
+/*===========================================================================*/
+const bool ScreenBase::isFullScreen( void ) const
+{
+    return( m_is_fullscreen );
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Returns the pointer to the camera.
  *  @return pointer to the camera
  */
@@ -376,11 +470,95 @@ kvs::EventHandler* ScreenBase::eventHandler( void )
 
 /*===========================================================================*/
 /**
+ *  @brief  Sets a display format.
+ *  @param  display_format [in] display format
+ */
+/*===========================================================================*/
+void ScreenBase::setDisplayFormat( const kvs::DisplayFormat& display_format )
+{
+    m_display_format = display_format;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a window position.
+ *  @param  x [in] x coordinate value of the window
+ *  @param  y [in] y coordinate value of the window
+ */
+/*===========================================================================*/
+void ScreenBase::setPosition( const int x, const int y )
+{
+    m_x = x;
+    m_y = y;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a window size.
+ *  @param  width [in] window width
+ *  @param  height [in] window height
+ */
+/*===========================================================================*/
+void ScreenBase::setSize( const int width, const int height )
+{
+    m_width  = width;
+    m_height = height;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a window geometry (position and size).
+ *  @param  x [in] x coordinate value of the window
+ *  @param  y [in] y coordinate value of the window
+ *  @param  width [in] window width
+ *  @param  height [in] window height
+ */
+/*===========================================================================*/
+void ScreenBase::setGeometry( const int x, const int y, const int width, const int height )
+{
+    this->setPosition( x, y );
+    this->setSize( width, height );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a window title.
+ *  @param  title [in] window title
+ */
+/*===========================================================================*/
+void ScreenBase::setTitle( const std::string& title )
+{
+    m_title = title;
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Creates basic screen components.
  */
 /*===========================================================================*/
 void ScreenBase::create( void )
 {
+    m_mouse_event = new kvs::MouseEvent();
+    if ( !m_mouse_event )
+    {
+        kvsMessageError("Cannot allocate memory for the mouse event.");
+        return;
+    }
+
+    m_key_event = new kvs::KeyEvent();
+    if ( !m_key_event )
+    {
+        kvsMessageError("Cannot allocate memory for the key event.");
+        return;
+    }
+
+    m_wheel_event = new kvs::WheelEvent();
+    if ( !m_wheel_event )
+    {
+        kvsMessageError("Cannot allocate memory for the wheel event.");
+        return;
+    }
+
     m_camera = new kvs::Camera();
     if ( !m_camera )
     {
@@ -445,6 +623,9 @@ void ScreenBase::create( void )
 /*===========================================================================*/
 void ScreenBase::clear( void )
 {
+    if ( m_mouse_event      ) { delete m_mouse_event;      m_mouse_event      = NULL; }
+    if ( m_key_event        ) { delete m_key_event;        m_key_event        = NULL; }
+    if ( m_wheel_event      ) { delete m_wheel_event;      m_wheel_event      = NULL; }
     if ( m_camera           ) { delete m_camera;           m_camera           = NULL; }
     if ( m_light            ) { delete m_light;            m_light            = NULL; }
     if ( m_mouse            ) { delete m_mouse;            m_mouse            = NULL; }
@@ -668,6 +849,91 @@ void ScreenBase::updateXform( kvs::Light* light )
     default:
         break;
     }
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Creates the window.
+ */
+/*===========================================================================*/
+void ScreenBase::createWindow( void )
+{
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Shows the window as full-screen.
+ */
+/*===========================================================================*/
+void ScreenBase::showFullScreen( void )
+{
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Shows the window as normal screen.
+ */
+/*===========================================================================*/
+void ScreenBase::showNormal( void )
+{
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Pops up the window.
+ */
+/*===========================================================================*/
+void ScreenBase::popUp( void )
+{
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Pushes down the window.
+ */
+/*===========================================================================*/
+void ScreenBase::pushDown( void )
+{
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Hides the window.
+ */
+/*===========================================================================*/
+void ScreenBase::hide( void )
+{
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Show the hiding window.
+ */
+/*===========================================================================*/
+void ScreenBase::showWindow( void )
+{
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Redraws the window.
+ */
+/*===========================================================================*/
+void ScreenBase::redraw( void )
+{
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Resizes the window.
+ *  @param  width [in] window width
+ *  @param  height [in] window height
+ */
+/*===========================================================================*/
+void ScreenBase::resize( int width, int height )
+{
+    kvs::IgnoreUnusedVariable( width );
+    kvs::IgnoreUnusedVariable( height );
 }
 
 } // end of namespace kvs

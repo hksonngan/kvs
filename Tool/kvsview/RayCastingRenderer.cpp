@@ -87,7 +87,7 @@ class MouseReleaseEvent : public kvs::MouseReleaseEventListener
             const kvs::RendererBase* base = screen()->rendererManager()->renderer( id );
             kvs::RayCastingRenderer* renderer = (kvs::RayCastingRenderer*)base;
             renderer->disableCoarseRendering();
-            window()->redraw();
+            screen()->redraw();
         }
     }
 };

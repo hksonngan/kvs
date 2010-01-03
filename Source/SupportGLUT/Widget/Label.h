@@ -48,7 +48,7 @@ protected:
 
 public:
 
-    Label( kvs::glut::Screen* screen = 0 );
+    Label( kvs::ScreenBase* screen = 0 );
 
 public:
 

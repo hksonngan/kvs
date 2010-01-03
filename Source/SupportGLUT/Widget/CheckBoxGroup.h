@@ -50,9 +50,7 @@ protected:
 
 public:
 
-    CheckBoxGroup( kvs::ScreenBase* screen, kvs::WindowBase* window );
-
-    CheckBoxGroup( kvs::glut::Screen* screen = 0 );
+    CheckBoxGroup( kvs::ScreenBase* screen = 0 );
 
 public:
 

@@ -16,7 +16,6 @@
 #define KVS__EVENT_LISTENER_H_INCLUDE
 
 #include <kvs/ScreenBase>
-#include <kvs/WindowBase>
 #include <kvs/EventBase>
 #include <kvs/MouseEvent>
 #include <kvs/KeyEvent>
@@ -37,8 +36,7 @@ class EventListener
 private:
 
     int              m_event_type; ///< event type
-    kvs::ScreenBase* m_screen; ///< pointer to the screen
-    kvs::WindowBase* m_window; ///< pointer to the window
+    kvs::ScreenBase* m_screen;     ///< pointer to the screen
 
 public:
 
@@ -56,13 +54,9 @@ public:
 
     kvs::ScreenBase* screen( void );
 
-    kvs::WindowBase* window( void );
-
     void setEventType( int event_type );
 
     void setScreen( kvs::ScreenBase* screen );
-
-    void setWindow( kvs::WindowBase* window );
 
 public:
 

@@ -29,7 +29,6 @@
 #include <kvs/EventHandler>
 #include <kvs/MouseEvent>
 #include <kvs/KeyEvent>
-#include <kvs/qt/Window>
 #include <kvs/qt/Timer>
 #include <kvs/qt/Application>
 
@@ -45,7 +44,7 @@ namespace qt
  *  @brief  Qt screen class.
  */
 /*===========================================================================*/
-class Screen : public kvs::qt::Window, public kvs::ScreenBase
+class Screen : public QGLWidget, public kvs::ScreenBase
 {
     Q_OBJECT
 
@@ -72,7 +71,6 @@ protected:
     QTimer*                    m_idle_mouse_timer;
     std::list<kvs::qt::Timer*> m_timer_event_handler;
     kvs::EventHandler*         m_initialize_event_handler;
-//    kvs::EventHandler*         m_event_handler;
 
 public:
 
@@ -82,11 +80,33 @@ public:
 
 public:
 
+    void setTitle( const std::string& title );
+
     void setPosition( const int x, const int y );
 
     void setSize( const int width, const int height );
 
     void setGeometry( const int x, const int y, const int width, const int height );
+
+public:
+
+    virtual void createWindow( void );
+
+    virtual void showFullScreen( void );
+
+    virtual void showNormal( void );
+
+    virtual void popUp( void );
+
+    virtual void pushDown( void );
+
+    virtual void hide( void );
+
+    virtual void showWindow( void );
+
+    virtual void redraw( void );
+
+    virtual void resize( int width, int height );
 
 public:
 
@@ -109,8 +129,6 @@ public:
     virtual void keyPressEvent( kvs::KeyEvent* event );
 
 public:
-
-//    kvs::EventHandler* eventHandler( void ) const;
 
     void setPaintEvent( kvs::PaintEventListener* event );
 
@@ -173,6 +191,28 @@ protected:
 public slots:
 
     void idleMouseEvent( void );
+
+public:
+
+    // Callback functions for QGLWidget.
+
+    virtual void initializeGL( void );
+
+    virtual void paintGL( void );
+
+    virtual void resizeGL( int width, int height );
+
+    virtual void mousePressEvent( QMouseEvent* event );
+
+    virtual void mouseMoveEvent( QMouseEvent* event );
+
+    virtual void mouseReleaseEvent( QMouseEvent* event );
+
+    virtual void mouseDoubleClickEvent( QMouseEvent* event );
+
+    virtual void wheelEvent( QWheelEvent* event );
+
+    virtual void keyPressEvent( QKeyEvent* event );
 };
 
 } // end of namespace qt

@@ -44,10 +44,8 @@ namespace glut
  *  @param  screen [in] pointer to the screen
  */
 /*===========================================================================*/
-//WidgetBase::WidgetBase( kvs::glut::Screen* screen ):
-WidgetBase::WidgetBase( kvs::ScreenBase* screen, kvs::WindowBase* window ):
+WidgetBase::WidgetBase( kvs::ScreenBase* screen ):
     m_screen( screen ),
-    m_window( window ),
     m_x( 0 ),
     m_y( 0 ),
     m_width( 0 ),
@@ -82,15 +80,9 @@ WidgetBase::~WidgetBase( void )
  *  @return pointer to the screen
  */
 /*===========================================================================*/
-//kvs::glut::Screen* WidgetBase::screen( void )
 kvs::ScreenBase* WidgetBase::screen( void )
 {
     return( m_screen );
-}
-
-kvs::WindowBase* WidgetBase::window( void )
-{
-    return( m_window );
 }
 
 /*===========================================================================*/

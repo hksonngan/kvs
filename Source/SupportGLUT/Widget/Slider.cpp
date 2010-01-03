@@ -47,9 +47,8 @@ namespace glut
  *  @param  screen [in] pointer to the parent screen
  */
 /*===========================================================================*/
-Slider::Slider( kvs::glut::Screen* screen ):
-    kvs::glut::WidgetBase( static_cast<kvs::ScreenBase*>(screen),
-                           static_cast<kvs::WindowBase*>(screen) ),
+Slider::Slider( kvs::ScreenBase* screen ):
+    kvs::glut::WidgetBase( screen ),
     m_change_value( false ),
     m_show_range_value( true )
 {
@@ -452,7 +451,7 @@ void Slider::mousePressEvent( kvs::MouseEvent* event )
         BaseClass::activate();
         this->sliderPressed();
         BaseClass::swap_color( m_slider_color, m_clicked_slider_color );
-        BaseClass::window()->redraw();
+        BaseClass::screen()->redraw();
     }
     else
     {
@@ -472,7 +471,7 @@ void Slider::mousePressEvent( kvs::MouseEvent* event )
             BaseClass::screen()->disableAllMove();
             BaseClass::activate();
             this->sliderMoved();
-            BaseClass::window()->redraw();
+            BaseClass::screen()->redraw();
         }
     }
 }
@@ -496,7 +495,7 @@ void Slider::mouseMoveEvent( kvs::MouseEvent* event )
 
         this->sliderMoved();
 
-        BaseClass::window()->redraw();
+        BaseClass::screen()->redraw();
     }
 }
 
@@ -522,7 +521,7 @@ void Slider::mouseReleaseEvent( kvs::MouseEvent* event )
         }
 
         BaseClass::deactivate();
-        BaseClass::window()->redraw();
+        BaseClass::screen()->redraw();
     }
 }
 

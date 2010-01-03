@@ -13,6 +13,8 @@
  */
 /*****************************************************************************/
 #include "Screen.h"
+#include "KVSKey.h"
+#include "KVSMouseButton.h"
 #include <kvs/ResizeEvent>
 #include <kvs/MouseButton>
 #include <kvs/Key>
@@ -32,6 +34,7 @@ namespace qt
  */
 /*===========================================================================*/
 Screen::Screen( kvs::qt::Application* application, QWidget* parent ):
+    QGLWidget( parent ),
     kvs::ScreenBase()
 {
     if ( application ) application->attach( this );
@@ -77,7 +80,7 @@ Screen::~Screen( void )
 /*===========================================================================*/
 void Screen::setPosition( const int x, const int y )
 {
-    Window::setPosition( x, y );
+    BaseClass::setPosition( x, y );
 
     QWidget::move( x, y );
 }
@@ -91,7 +94,7 @@ void Screen::setPosition( const int x, const int y )
 /*===========================================================================*/
 void Screen::setSize( const int width, const int height )
 {
-    Window::setSize( width, height );
+    BaseClass::setSize( width, height );
 
     if ( BaseClass::camera() ) BaseClass::camera()->setWindowSize( width, height );
     if ( BaseClass::mouse()  ) BaseClass::mouse()->setWindowSize( width, height );
@@ -112,6 +115,135 @@ void Screen::setGeometry( const int x, const int y, const int width, const int h
 {
     this->setPosition( x, y );
     this->setSize( width, height );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a window title.
+ *  @param  title [in] title
+ */
+/*===========================================================================*/
+void Screen::setTitle( const std::string& title )
+{
+    BaseClass::setTitle( title );
+#if ( KVS_QT_VERSION >= 4 )
+    QWidget::setWindowTitle( QString( title.c_str() ) );
+#else
+    QWidget::setCaption( QString( title.c_str() ) );
+#endif
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Creates the window.
+ */
+/*===========================================================================*/
+void Screen::createWindow( void )
+{
+    static int counter = 0;
+    m_id = counter++;
+
+    QWidget::show();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Shows the window as full-screen.
+ */
+/*===========================================================================*/
+void Screen::showFullScreen( void )
+{
+    if ( m_is_fullscreen ) return;
+
+    m_is_fullscreen = true;
+    m_x = QGLWidget::pos().x();
+    m_y = QGLWidget::pos().y();
+
+    showFullScreen();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Shows the window as normal screen.
+ */
+/*===========================================================================*/
+void Screen::showNormal( void )
+{
+    if ( !m_is_fullscreen ) return;
+
+    m_is_fullscreen = false;
+    QWidget::resize( m_width, m_height );
+    QWidget::move( m_x, m_y );
+    QWidget::showNormal();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Pops up the window.
+ */
+/*===========================================================================*/
+void Screen::popUp( void )
+{
+#if ( KVS_QT_VERSION >= 4 )
+    QWidget::activateWindow();
+#else
+    QWidget::setActiveWindow();
+#endif
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Pushes down the window.
+ */
+/*===========================================================================*/
+void Screen::pushDown( void )
+{
+    QWidget::clearFocus();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Hides the window.
+ */
+/*===========================================================================*/
+void Screen::hide( void )
+{
+    QWidget::hide();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Shows the hiding window.
+ */
+/*===========================================================================*/
+void Screen::showWindow( void )
+{
+    Screen::show();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Redraws the window.
+ */
+/*===========================================================================*/
+void Screen::redraw( void )
+{
+    QGLWidget::updateGL();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Resizes the window.
+ *  @param  width [in] resized window width
+ *  @param  height [in] resized window height
+ */
+/*===========================================================================*/
+void Screen::resize( int width, int height )
+{
+    m_width  = width;
+    m_height = height;
+
+    QWidget::resize( m_width, m_height );
 }
 
 /*===========================================================================*/
@@ -331,7 +463,6 @@ void Screen::setKeyPressEvent( kvs::KeyPressEventListener* event )
 void Screen::addInitializeEvent( kvs::InitializeEventListener* event )
 {
     event->setScreen( this );
-    event->setWindow( this );
     m_initialize_event_handler->attach( event );
 }
 
@@ -344,7 +475,6 @@ void Screen::addInitializeEvent( kvs::InitializeEventListener* event )
 void Screen::addPaintEvent( kvs::PaintEventListener* event )
 {
     event->setScreen( this );
-    event->setWindow( this );
     BaseClass::eventHandler()->attach( event );
 }
 
@@ -357,7 +487,6 @@ void Screen::addPaintEvent( kvs::PaintEventListener* event )
 void Screen::addResizeEvent( kvs::ResizeEventListener* event )
 {
     event->setScreen( this );
-    event->setWindow( this );
     BaseClass::eventHandler()->attach( event );
 }
 
@@ -370,7 +499,6 @@ void Screen::addResizeEvent( kvs::ResizeEventListener* event )
 void Screen::addMousePressEvent( kvs::MousePressEventListener* event )
 {
     event->setScreen( this );
-    event->setWindow( this );
     BaseClass::eventHandler()->attach( event );
 }
 
@@ -383,7 +511,6 @@ void Screen::addMousePressEvent( kvs::MousePressEventListener* event )
 void Screen::addMouseMoveEvent( kvs::MouseMoveEventListener* event )
 {
     event->setScreen( this );
-    event->setWindow( this );
     BaseClass::eventHandler()->attach( event );
 }
 
@@ -396,7 +523,6 @@ void Screen::addMouseMoveEvent( kvs::MouseMoveEventListener* event )
 void Screen::addMouseReleaseEvent( kvs::MouseReleaseEventListener* event )
 {
     event->setScreen( this );
-    event->setWindow( this );
     BaseClass::eventHandler()->attach( event );
 }
 
@@ -409,7 +535,6 @@ void Screen::addMouseReleaseEvent( kvs::MouseReleaseEventListener* event )
 void Screen::addMouseDoubleClickEvent( kvs::MouseDoubleClickEventListener* event )
 {
     event->setScreen( this );
-    event->setWindow( this );
     BaseClass::eventHandler()->attach( event );
 }
 
@@ -422,7 +547,6 @@ void Screen::addMouseDoubleClickEvent( kvs::MouseDoubleClickEventListener* event
 void Screen::addWheelEvent( kvs::WheelEventListener* event )
 {
     event->setScreen( this );
-    event->setWindow( this );
     BaseClass::eventHandler()->attach( event );
 }
 
@@ -435,7 +559,6 @@ void Screen::addWheelEvent( kvs::WheelEventListener* event )
 void Screen::addKeyPressEvent( kvs::KeyPressEventListener* event )
 {
     event->setScreen( this );
-    event->setWindow( this );
     BaseClass::eventHandler()->attach( event );
 }
 
@@ -449,7 +572,6 @@ void Screen::addKeyPressEvent( kvs::KeyPressEventListener* event )
 void Screen::addTimerEvent( kvs::TimerEventListener* event, int msec )
 {
     event->setScreen( this );
-    event->setWindow( this );
     m_timer_event_handler.push_back( new kvs::qt::Timer( event, msec ) );
 }
 
@@ -477,9 +599,9 @@ int Screen::show( void )
     setGeometry( m_x, m_y, m_width, m_height );
 
     // Create window.
-    Window::create();
+    this->createWindow();
 
-    return( Window::id() );
+    return( BaseClass::id() );
 }
 
 /*===========================================================================*/
@@ -514,7 +636,7 @@ void Screen::default_paint_event( void )
 /*===========================================================================*/
 void Screen::default_resize_event( int width, int height )
 {
-    if ( !Window::WindowBase::isFullScreen() )
+    if ( !BaseClass::isFullScreen() )
     {
         m_width = width;
         m_height = height;
@@ -525,7 +647,7 @@ void Screen::default_resize_event( int width, int height )
     BaseClass::resizeFunction( width, height );
     BaseClass::eventHandler()->notify( &event );
 
-    Window::redraw();
+    this->redraw();
 }
 
 /*===========================================================================*/
@@ -597,7 +719,7 @@ void Screen::default_mouse_move_event( kvs::MouseEvent* event )
     }
 
     BaseClass::mouseMoveFunction( event->x(), event->y() );
-    Window::redraw();
+    this->redraw();
 }
 
 /*===========================================================================*/
@@ -635,7 +757,7 @@ void Screen::default_wheel_event( kvs::WheelEvent* event )
     }
 
     BaseClass::updateXform();
-    Window::redraw();
+    this->redraw();
 }
 
 /*===========================================================================*/
@@ -665,7 +787,7 @@ void Screen::default_key_press_event( kvs::KeyEvent* event )
 
     BaseClass::eventHandler()->notify( event );
 
-    Window::redraw();
+    this->redraw();
 }
 
 /*===========================================================================*/
@@ -682,10 +804,159 @@ void Screen::idleMouseEvent( void )
                 !BaseClass::objectManager()->hasActiveObject() ) )
         {
             BaseClass::updateXform();
-            Window::redraw();
+            this->redraw();
         }
     }
 }
+
+/*===========================================================================*/
+/**
+ *  @brief  Initialize event for Qt.
+ */
+/*===========================================================================*/
+void Screen::initializeGL( void )
+{
+    this->initializeEvent();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Paint event for Qt.
+ */
+/*===========================================================================*/
+void Screen::paintGL( void )
+{
+    this->paintEvent();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Resize event for Qt.
+ *  @param  width [in] window width
+ *  @param  height [in] window height
+ */
+/*===========================================================================*/
+void Screen::resizeGL( int width, int height )
+{
+    this->resizeEvent( width, height );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Mouse press event for Qt.
+ *  @param  event [in] pointer to the mouse event
+ */
+/*===========================================================================*/
+void Screen::mousePressEvent( QMouseEvent* event )
+{
+#if ( KVS_QT_VERSION >= 4 )
+    const int modifier = kvs::qt::KVSKey::Modifier( event->modifiers() );
+#else
+    const int modifier = kvs::qt::KVSKey::Modifier( event->state() );
+#endif
+    m_mouse_event->setPosition( event->x(), event->y() );
+    m_mouse_event->setButton( kvs::qt::KVSMouseButton::Button( event->button() ) );
+    m_mouse_event->setState( kvs::MouseButton::Down );
+    m_mouse_event->setModifiers( modifier );
+    m_mouse_event->setAction( kvs::MouseButton::Pressed );
+
+    this->mousePressEvent( m_mouse_event );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Mouse move event for Qt.
+ *  @param  event [in] pointer to the mouse event
+ */
+/*===========================================================================*/
+void Screen::mouseMoveEvent( QMouseEvent* event )
+{
+#if ( KVS_QT_VERSION >= 4 )
+    const int modifier = kvs::qt::KVSKey::Modifier( event->modifiers() );
+#else
+    const int modifier = kvs::qt::KVSKey::Modifier( event->state() );
+#endif
+    m_mouse_event->setPosition( event->x(), event->y() );
+    m_mouse_event->setButton( kvs::qt::KVSMouseButton::Button( event->button() ) );
+    m_mouse_event->setState( kvs::MouseButton::Down );
+    m_mouse_event->setModifiers( modifier );
+    m_mouse_event->setAction( kvs::MouseButton::Moved );
+
+    this->mouseMoveEvent( m_mouse_event );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Mouse release event for Qt
+ *  @param  event [in] pointer to the mouse event
+ */
+/*===========================================================================*/
+void Screen::mouseReleaseEvent( QMouseEvent* event )
+{
+#if ( KVS_QT_VERSION >= 4 )
+    const int modifier = kvs::qt::KVSKey::Modifier( event->modifiers() );
+#else
+    const int modifier = kvs::qt::KVSKey::Modifier( event->state() );
+#endif
+    m_mouse_event->setPosition( event->x(), event->y() );
+    m_mouse_event->setButton( kvs::qt::KVSMouseButton::Button( event->button() ) );
+    m_mouse_event->setState( kvs::MouseButton::Up );
+    m_mouse_event->setModifiers( modifier );
+    m_mouse_event->setAction( kvs::MouseButton::Released );
+
+    this->mouseReleaseEvent( m_mouse_event );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Mouse double-click event for Qt.
+ *  @param  event [in] pointer to the mouse event
+ */
+/*===========================================================================*/
+void Screen::mouseDoubleClickEvent( QMouseEvent* event )
+{
+#if ( KVS_QT_VERSION >= 4 )
+    const int modifier = kvs::qt::KVSKey::Modifier( event->modifiers() );
+#else
+    const int modifier = kvs::qt::KVSKey::Modifier( event->state() );
+#endif
+    m_mouse_event->setPosition( event->x(), event->y() );
+    m_mouse_event->setButton( kvs::qt::KVSMouseButton::Button( event->button() ) );
+    m_mouse_event->setState( kvs::MouseButton::Down );
+    m_mouse_event->setModifiers( modifier );
+    m_mouse_event->setAction( kvs::MouseButton::DoubleClicked );
+
+    this->mouseDoubleClickEvent( m_mouse_event );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Wheel event for Qt.
+ *  @param  event [in] pointer to the wheel event
+ */
+/*===========================================================================*/
+void Screen::wheelEvent( QWheelEvent* event )
+{
+    m_wheel_event->setDirection( event->delta() > 0 ? 1 : -1 );
+    m_wheel_event->setPosition( event->x(), event->y() );
+
+    this->wheelEvent( m_wheel_event );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Key press event for Qt.
+ *  @param  event [in] pointer to the key event
+ */
+/*===========================================================================*/
+void Screen::keyPressEvent( QKeyEvent* event )
+{
+    m_key_event->setPosition( 0, 0 );
+    m_key_event->setKey( kvs::qt::KVSKey::Code( event->key() ) );
+
+    this->keyPressEvent( m_key_event );
+}
+
 } // end of namespace qt
 
 } // end of namespace kvs

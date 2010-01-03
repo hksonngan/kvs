@@ -19,7 +19,7 @@
 #include <kvs/RGBAColor>
 #include <kvs/EventListener>
 #include <kvs/ScreenBase>
-#include <kvs/WindowBase>
+//#include <kvs/WindowBase>
 
 
 namespace kvs
@@ -40,8 +40,7 @@ class WidgetBase : public kvs::EventListener
 
 protected:
 
-    kvs::ScreenBase* m_screen;
-    kvs::WindowBase* m_window;
+    kvs::ScreenBase*   m_screen; ///< pointer to the screen
     int                m_x; ///< x position of widget on the window coordinate (org: upper-left)
     int                m_y; ///< y position of widet on the window coordinate (org: upper-left)
     int                m_width; ///< widget width
@@ -58,7 +57,7 @@ protected:
 
 public:
 
-    WidgetBase( kvs::ScreenBase* screen, kvs::WindowBase* window );
+    WidgetBase( kvs::ScreenBase* screen );
 
     virtual ~WidgetBase( void );
 
@@ -69,8 +68,6 @@ private:
 protected:
 
     kvs::ScreenBase* screen( void );
-
-    kvs::WindowBase* window( void );
 
 public:
 

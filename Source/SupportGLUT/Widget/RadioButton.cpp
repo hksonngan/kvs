@@ -64,9 +64,8 @@ namespace glut
  *  @param  screen [in] pointer to the parent screen
  */
 /*===========================================================================*/
-RadioButton::RadioButton( kvs::glut::Screen* screen ):
-    kvs::glut::WidgetBase( static_cast<kvs::ScreenBase*>(screen),
-                           static_cast<kvs::WindowBase*>(screen) ),
+RadioButton::RadioButton( kvs::ScreenBase* screen ):
+    kvs::glut::WidgetBase( screen ),
     m_group( NULL )
 {
     BaseClass::setEventType(
@@ -345,7 +344,7 @@ void RadioButton::mousePressEvent( kvs::MouseEvent* event )
         BaseClass::screen()->disableAllMove();
         BaseClass::activate();
         this->pressed();
-        BaseClass::window()->redraw();
+        BaseClass::screen()->redraw();
     }
 }
 
@@ -387,7 +386,7 @@ void RadioButton::mouseReleaseEvent( kvs::MouseEvent* event )
 
         this->released();
         BaseClass::deactivate();
-        BaseClass::window()->redraw();
+        BaseClass::screen()->redraw();
     }
 }
 

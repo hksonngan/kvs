@@ -251,8 +251,8 @@ private:
         m_parameters->checkerboard_texture.bind();
         {
             const float scale = 0.6f;
-            const float texture_width = ( window()->width() / 32.0f ) * scale;
-            const float texture_height = ( window()->height() / 32.0f ) * scale;
+            const float texture_width = ( screen()->width() / 32.0f ) * scale;
+            const float texture_height = ( screen()->height() / 32.0f ) * scale;
             this->draw_texture( texture_width, texture_height );
         }
         m_parameters->checkerboard_texture.unbind();
@@ -276,8 +276,8 @@ private:
     {
         const GLfloat x = 0;
         const GLfloat y = 0;
-        const GLfloat width = static_cast<GLfloat>(window()->width());
-        const GLfloat height = static_cast<GLfloat>(window()->height());
+        const GLfloat width = static_cast<GLfloat>(screen()->width());
+        const GLfloat height = static_cast<GLfloat>(screen()->height());
 
         glBegin( GL_QUADS );
         {

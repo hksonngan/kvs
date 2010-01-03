@@ -42,9 +42,8 @@ namespace glut
  *  @param  screen [in] pointer to the parent screen
  */
 /*===========================================================================*/
-PushButton::PushButton( kvs::glut::Screen* screen ):
-    kvs::glut::WidgetBase( static_cast<kvs::ScreenBase*>(screen),
-                           static_cast<kvs::WindowBase*>(screen) )
+PushButton::PushButton( kvs::ScreenBase* screen ):
+    kvs::glut::WidgetBase( screen )
 {
     BaseClass::setEventType(
         kvs::EventBase::PaintEvent |
@@ -265,7 +264,7 @@ void PushButton::mousePressEvent( kvs::MouseEvent* event )
         this->pressed();
         BaseClass::swap_color( m_button_color, m_clicked_button_color );
         BaseClass::swap_color( m_upper_edge_color, m_lower_edge_color );
-        BaseClass::window()->redraw();
+        BaseClass::screen()->redraw();
     }
 }
 
@@ -285,7 +284,7 @@ void PushButton::mouseReleaseEvent( kvs::MouseEvent* event )
         BaseClass::swap_color( m_button_color, m_clicked_button_color );
         BaseClass::swap_color( m_upper_edge_color, m_lower_edge_color );
         BaseClass::deactivate();
-        BaseClass::window()->redraw();
+        BaseClass::screen()->redraw();
     }
 }
 

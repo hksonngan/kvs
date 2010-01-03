@@ -154,7 +154,7 @@ class MouseReleaseEvent : public kvs::MouseReleaseEventListener
                 const kvs::RendererBase* base = screen()->rendererManager()->renderer( id );
                 kvs::glew::ParticleVolumeRenderer* renderer = (kvs::glew::ParticleVolumeRenderer*)base;
                 renderer->disableCoarseRendering();
-                window()->redraw();
+                screen()->redraw();
             }
         }
 #endif

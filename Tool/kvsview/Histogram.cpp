@@ -219,8 +219,8 @@ private:
     {
         const GLfloat x = 0;
         const GLfloat y = 0;
-        const GLfloat width = static_cast<GLfloat>( window()->width() );
-        const GLfloat height = static_cast<GLfloat>( window()->height() );
+        const GLfloat width = static_cast<GLfloat>( screen()->width() );
+        const GLfloat height = static_cast<GLfloat>( screen()->height() );
 
         glEnable( GL_TEXTURE_2D );
         m_parameters->histogram_texture.bind();
@@ -287,7 +287,7 @@ public:
         m_parameters->bias_parameter = kvs::Math::Clamp( m_parameters->bias_parameter, 0.0f, 0.99999f );
         m_parameters->updateHistogramTexture();
 
-        window()->redraw();
+        screen()->redraw();
     }
 };
 
@@ -313,7 +313,7 @@ public:
         {
             m_parameters->bias_parameter = 0.5f;
             m_parameters->updateHistogramTexture();
-            window()->redraw();
+            screen()->redraw();
         }
     }
 };

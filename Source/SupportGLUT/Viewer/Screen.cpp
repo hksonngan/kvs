@@ -12,15 +12,40 @@
  */
 /****************************************************************************/
 #include "Screen.h"
+#include <cstdlib>
 #include <kvs/Key>
 #include <kvs/Mouse>
 #include <kvs/MouseButton>
 #include <kvs/ResizeEvent>
+#include <kvs/IgnoreUnusedVariable>
 #include <kvs/glut/GLUT>
+#include <SupportGLUT/Viewer/KVSMouseButton.h>
+#include <SupportGLUT/Viewer/KVSKey.h>
+#if defined( KVS_SUPPORT_GLEW )
+#include <kvs/glew/GLEW>
+#endif
 
 
+// Static parameters.
+namespace { const size_t MaxNumberOfScreens = 256; }
+namespace { kvs::glut::Screen* context[::MaxNumberOfScreens]; }
+
+// Static function and class.
 namespace
 {
+
+/*===========================================================================*/
+/**
+ *  @brief  Function that is called when the application is terminated.
+ */
+/*===========================================================================*/
+void ExitFunction( void )
+{
+    for ( size_t i = 0; i < ::MaxNumberOfScreens; i++)
+    {
+        if ( ::context[i] ) ::context[i]->~Screen();
+    }
+}
 
 /*===========================================================================*/
 /**
@@ -53,11 +78,141 @@ namespace glut
 
 /*===========================================================================*/
 /**
+ *  @brief  Display function for glutDisplayFunc.
+ */
+/*===========================================================================*/
+void DisplayFunction( void )
+{
+    const int id = glutGetWindow();
+    ::context[id]->paintEvent();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Resize function for glutReshapeFunc.
+ *  @param  width [in] window width
+ *  @param  height [in] window height
+ */
+/*===========================================================================*/
+void ResizeFunction( int width, int height )
+{
+    const int id = glutGetWindow();
+    ::context[id]->resizeEvent( width, height );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Mouse function for glutMouseFunc.
+ *  @param  button [in] button ID
+ *  @param  state [in] state ID
+ *  @param  x [in] x coordinate of the mouse on the window coordinate
+ *  @param  y [in] y coordinate of the mouse on the window coordinate
+ */
+/*===========================================================================*/
+void MouseFunction( int button, int state, int x, int y )
+{
+    const int id = glutGetWindow();
+    const int modifier = kvs::glut::KVSKey::Modifier( glutGetModifiers() );
+    button = kvs::glut::KVSMouseButton::Button( button );
+    state = kvs::glut::KVSMouseButton::State( state );
+    ::context[id]->m_mouse_event->setButton( button );
+    ::context[id]->m_mouse_event->setState( state );
+    ::context[id]->m_mouse_event->setPosition( x, y );
+    ::context[id]->m_mouse_event->setModifiers( modifier );
+
+    switch ( state )
+    {
+    case kvs::MouseButton::Down:
+        ::context[id]->m_elapse_time_counter.stop();
+        if ( ::context[id]->m_elapse_time_counter.sec() < 0.2f )
+        {
+            ::context[id]->m_mouse_event->setAction( kvs::MouseButton::DoubleClicked );
+            ::context[id]->mouseDoubleClickEvent( ::context[id]->m_mouse_event );
+        }
+        else
+        {
+            ::context[id]->m_mouse_event->setAction( kvs::MouseButton::Pressed );
+            ::context[id]->mousePressEvent( ::context[id]->m_mouse_event );
+        }
+        ::context[id]->m_elapse_time_counter.start();
+        break;
+    case kvs::MouseButton::Up:
+        ::context[id]->m_mouse_event->setAction( kvs::MouseButton::Released );
+        ::context[id]->mouseReleaseEvent( ::context[id]->m_mouse_event );
+        break;
+    default: break;
+    }
+
+    ::context[id]->m_wheel_event->setPosition( x, y );
+    switch( button )
+    {
+    case kvs::MouseButton::WheelUp:
+        ::context[id]->m_wheel_event->setDirection( 1 );
+        ::context[id]->wheelEvent( ::context[id]->m_wheel_event );
+        break;
+    case kvs::MouseButton::WheelDown:
+        ::context[id]->m_wheel_event->setDirection( -1 );
+        ::context[id]->wheelEvent( ::context[id]->m_wheel_event );
+        break;
+    default: break;
+    }
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Mouse move function for glutMotionFunc.
+ *  @param  x [in] x coordinate value of the mouse cursor on the window coordinate
+ *  @param  y [in] y coordinate value of the mouse cursor on the window coordinate
+ */
+/*===========================================================================*/
+void MouseMoveFunction( int x, int y )
+{
+    const int id = glutGetWindow();
+    ::context[id]->m_mouse_event->setPosition( x, y );
+    ::context[id]->m_mouse_event->setAction( kvs::MouseButton::Moved );
+    ::context[id]->mouseMoveEvent( ::context[id]->m_mouse_event );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Key press function for glutKeyboardFunc.
+ *  @param  key [in] key code
+ *  @param  x [in] x coordinate value of the mouse cursor on the window coordinate
+ *  @param  y [in] y coordinate value of the mouse cursor on the window coordinate
+ */
+/*===========================================================================*/
+void KeyPressFunction( unsigned char key, int x, int y )
+{
+    const int id = glutGetWindow();
+    const int code = kvs::glut::KVSKey::ASCIICode( key );
+    ::context[id]->m_key_event->setKey( code );
+    ::context[id]->m_key_event->setPosition( x, y );
+    ::context[id]->keyPressEvent( ::context[id]->m_key_event );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Special key press function for glutSpecialFunc.
+ *  @param  key [in] key code
+ *  @param  x [in] x coordinate value of the mouse cursor on the window coordinate
+ *  @param  y [in] y coordinate value of the mouse cursor on the window coordinate
+ */
+/*===========================================================================*/
+void SpecialKeyPressFunction( int key, int x, int y )
+{
+    const int id = glutGetWindow();
+    const int code = kvs::glut::KVSKey::SpecialCode( key );
+    ::context[id]->m_key_event->setKey( code );
+    ::context[id]->m_key_event->setPosition( x, y );
+    ::context[id]->keyPressEvent( ::context[id]->m_key_event );
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Constructs a new Screen class.
  */
 /*===========================================================================*/
 Screen::Screen( kvs::glut::Application* application ):
-    kvs::glut::Window(),
     kvs::ScreenBase()
 {
     if ( application ) application->attach( this );
@@ -72,8 +227,9 @@ Screen::Screen( kvs::glut::Application* application ):
 
     m_idle_mouse_event_listener = new ::IdleMouseEvent( this );
     m_idle_mouse_timer = new kvs::glut::Timer( m_idle_mouse_event_listener );
-
     m_initialize_event_handler = new kvs::EventHandler();
+
+    BaseClass::m_elapse_time_counter.start();
 }
 
 /*===========================================================================*/
@@ -95,6 +251,9 @@ Screen::~Screen( void )
         ++timer;
     }
     m_timer_event_handler.clear();
+
+    ::context[m_id] = 0;
+    glutDestroyWindow( m_id );
 }
 
 /*===========================================================================*/
@@ -106,7 +265,7 @@ Screen::~Screen( void )
 /*===========================================================================*/
 void Screen::setPosition( const int x, const int y )
 {
-    Window::setPosition( x, y );
+    BaseClass::setPosition( x, y );
 }
 
 /*===========================================================================*/
@@ -118,7 +277,7 @@ void Screen::setPosition( const int x, const int y )
 /*===========================================================================*/
 void Screen::setSize( const int width, const int height )
 {
-    Window::setSize( width, height );
+    BaseClass::setSize( width, height );
 
     if ( BaseClass::camera() ) BaseClass::camera()->setWindowSize( width, height );
     if ( BaseClass::mouse()  ) BaseClass::mouse()->setWindowSize( width, height );
@@ -137,6 +296,141 @@ void Screen::setGeometry( const int x, const int y, const int width, const int h
 {
     this->setPosition( x, y );
     this->setSize( width, height );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Creates the window.
+ */
+/*===========================================================================*/
+void Screen::createWindow( void )
+{
+    glutCreateWindow( m_title.c_str() );
+
+    BaseClass::m_id = glutGetWindow();
+    ::context[ BaseClass::m_id ] = this;
+
+#if defined( KVS_SUPPORT_GLEW )
+    if ( !kvs::glew::Initialize() )
+    {
+        kvsMessageError("GLEW initialization failed.");
+    }
+#endif// KVS_SUPPORT_GLEW
+
+    static bool flag = true;
+    if ( flag )
+    {
+        atexit( ::ExitFunction );
+        flag = false;
+    }
+
+    glutMouseFunc( MouseFunction );
+    glutMotionFunc( MouseMoveFunction );
+    glutKeyboardFunc( KeyPressFunction );
+    glutSpecialFunc( SpecialKeyPressFunction );
+    glutDisplayFunc( DisplayFunction );
+    glutReshapeFunc( ResizeFunction );
+
+    this->initializeEvent();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Shows the window as full-screen.
+ */
+/*===========================================================================*/
+void Screen::showFullScreen( void )
+{
+    if( BaseClass::m_is_fullscreen ) return;
+
+    BaseClass::m_is_fullscreen = true;
+    BaseClass::m_x = glutGet( (GLenum)GLUT_WINDOW_X );
+    BaseClass::m_y = glutGet( (GLenum)GLUT_WINDOW_Y );
+
+    glutFullScreen();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Shows the window as normal screen.
+ */
+/*===========================================================================*/
+void Screen::showNormal( void )
+{
+    if( !BaseClass::m_is_fullscreen ) return;
+
+    BaseClass::m_is_fullscreen = false;
+    glutReshapeWindow( BaseClass::m_width, BaseClass::m_height );
+    glutPositionWindow( BaseClass::m_x, BaseClass::m_y );
+    glutPopWindow();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Pops up the window.
+ */
+/*===========================================================================*/
+void Screen::popUp( void )
+{
+    glutPopWindow();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Pushes down the window.
+ */
+/*===========================================================================*/
+void Screen::pushDown( void )
+{
+    glutPushWindow();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Hides the window.
+ */
+/*===========================================================================*/
+void Screen::hide( void )
+{
+    glutSetWindow( BaseClass::m_id );
+    glutHideWindow();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Shows the hiding window.
+ */
+/*===========================================================================*/
+void Screen::showWindow( void )
+{
+    glutSetWindow( BaseClass::m_id );
+    glutShowWindow();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Redraws the window.
+ */
+/*===========================================================================*/
+void Screen::redraw( void )
+{
+    glutSetWindow( BaseClass::m_id );
+    glutPostRedisplay();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Resizes the window.
+ *  @param  width [in] resized window width
+ *  @param  height [in] resized window height
+ */
+/*===========================================================================*/
+void Screen::resize( int width, int height )
+{
+    BaseClass::m_width  = width;
+    BaseClass::m_height = height;
+
+    glutReshapeWindow( BaseClass::m_width, BaseClass::m_height );
 }
 
 /*===========================================================================*/
@@ -355,7 +649,6 @@ void Screen::setKeyPressEvent( kvs::KeyPressEventListener* event )
 void Screen::addInitializeEvent( kvs::InitializeEventListener* event )
 {
     event->setScreen( this );
-    event->setWindow( this );
     m_initialize_event_handler->attach( event );
 }
 
@@ -368,7 +661,6 @@ void Screen::addInitializeEvent( kvs::InitializeEventListener* event )
 void Screen::addPaintEvent( kvs::PaintEventListener* event )
 {
     event->setScreen( this );
-    event->setWindow( this );
     BaseClass::eventHandler()->attach( event );
 }
 
@@ -381,7 +673,6 @@ void Screen::addPaintEvent( kvs::PaintEventListener* event )
 void Screen::addResizeEvent( kvs::ResizeEventListener* event )
 {
     event->setScreen( this );
-    event->setWindow( this );
     BaseClass::eventHandler()->attach( event );
 }
 
@@ -394,7 +685,6 @@ void Screen::addResizeEvent( kvs::ResizeEventListener* event )
 void Screen::addMousePressEvent( kvs::MousePressEventListener* event )
 {
     event->setScreen( this );
-    event->setWindow( this );
     BaseClass::eventHandler()->attach( event );
 }
 
@@ -407,7 +697,6 @@ void Screen::addMousePressEvent( kvs::MousePressEventListener* event )
 void Screen::addMouseMoveEvent( kvs::MouseMoveEventListener* event )
 {
     event->setScreen( this );
-    event->setWindow( this );
     BaseClass::eventHandler()->attach( event );
 }
 
@@ -420,7 +709,6 @@ void Screen::addMouseMoveEvent( kvs::MouseMoveEventListener* event )
 void Screen::addMouseReleaseEvent( kvs::MouseReleaseEventListener* event )
 {
     event->setScreen( this );
-    event->setWindow( this );
     BaseClass::eventHandler()->attach( event );
 }
 
@@ -433,7 +721,6 @@ void Screen::addMouseReleaseEvent( kvs::MouseReleaseEventListener* event )
 void Screen::addMouseDoubleClickEvent( kvs::MouseDoubleClickEventListener* event )
 {
     event->setScreen( this );
-    event->setWindow( this );
     BaseClass::eventHandler()->attach( event );
 }
 
@@ -446,7 +733,6 @@ void Screen::addMouseDoubleClickEvent( kvs::MouseDoubleClickEventListener* event
 void Screen::addWheelEvent( kvs::WheelEventListener* event )
 {
     event->setScreen( this );
-    event->setWindow( this );
     BaseClass::eventHandler()->attach( event );
 }
 
@@ -459,7 +745,6 @@ void Screen::addWheelEvent( kvs::WheelEventListener* event )
 void Screen::addKeyPressEvent( kvs::KeyPressEventListener* event )
 {
     event->setScreen( this );
-    event->setWindow( this );
     BaseClass::eventHandler()->attach( event );
 }
 
@@ -473,7 +758,6 @@ void Screen::addKeyPressEvent( kvs::KeyPressEventListener* event )
 void Screen::addTimerEvent( kvs::TimerEventListener* event, int msec )
 {
     event->setScreen( this );
-    event->setWindow( this );
     m_timer_event_handler.push_back( new kvs::glut::Timer( event, msec ) );
 }
 
@@ -502,9 +786,9 @@ int Screen::show( void )
     glutInitWindowSize( m_width, m_height );
 
     // Create window.
-    Window::create();
+    this->createWindow();
 
-    return( Window::id() );
+    return( BaseClass::id() );
 }
 
 /*===========================================================================*/
@@ -536,10 +820,10 @@ void Screen::default_paint_event( void )
 /*===========================================================================*/
 void Screen::default_resize_event( int width, int height )
 {
-    if ( !Window::isFullScreen() )
+    if ( !BaseClass::isFullScreen() )
     {
-        m_width = width;
-        m_height = height;
+        BaseClass::m_width = width;
+        BaseClass::m_height = height;
     }
 
     kvs::ResizeEvent event( width, height );
@@ -617,7 +901,7 @@ void Screen::default_mouse_move_event( kvs::MouseEvent* event )
     }
 
     BaseClass::mouseMoveFunction( event->x(), event->y() );
-    Window::redraw();
+    this->redraw();
 }
 
 /*===========================================================================*/
@@ -655,7 +939,7 @@ void Screen::default_wheel_event( kvs::WheelEvent* event )
     }
 
     BaseClass::updateXform();
-    Window::redraw();
+    this->redraw();
 }
 
 /*===========================================================================*/
@@ -685,7 +969,7 @@ void Screen::default_key_press_event( kvs::KeyEvent* event )
 
     BaseClass::eventHandler()->notify( event );
 
-    Window::redraw();
+    this->redraw();
 }
 
 /*===========================================================================*/
@@ -702,7 +986,7 @@ void Screen::idleMouseEvent( void )
                 !BaseClass::objectManager()->hasActiveObject() ) )
         {
             BaseClass::updateXform();
-            Window::redraw();
+            this->redraw();
         }
     }
 }

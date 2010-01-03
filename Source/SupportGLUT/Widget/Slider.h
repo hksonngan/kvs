@@ -56,7 +56,7 @@ protected:
 
 public:
 
-    Slider( kvs::glut::Screen* screen = 0 );
+    Slider( kvs::ScreenBase* screen = 0 );
 
 public:
 

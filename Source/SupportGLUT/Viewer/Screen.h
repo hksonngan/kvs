@@ -28,7 +28,6 @@
 #include <kvs/EventHandler>
 #include <kvs/MouseEvent>
 #include <kvs/KeyEvent>
-#include <kvs/glut/Window>
 #include <kvs/glut/Timer>
 #include <kvs/glut/Application>
 
@@ -44,7 +43,8 @@ namespace glut
  *  @brief  GLUT screen class.
  */
 /*===========================================================================*/
-class Screen : public kvs::glut::Window, public kvs::ScreenBase
+//class Screen : public kvs::glut::Window, public kvs::ScreenBase
+class Screen : public kvs::ScreenBase
 {
     typedef kvs::ScreenBase BaseClass;
 
@@ -84,6 +84,26 @@ public:
     void setSize( const int width, const int height );
 
     void setGeometry( const int x, const int y, const int width, const int height );
+
+public:
+
+    virtual void createWindow( void );
+
+    virtual void showFullScreen( void );
+
+    virtual void showNormal( void );
+
+    virtual void popUp( void );
+
+    virtual void pushDown( void );
+
+    virtual void hide( void );
+
+    virtual void showWindow( void );
+
+    virtual void redraw( void );
+
+    virtual void resize( int width, int height );
 
 public:
 
@@ -168,6 +188,22 @@ protected:
 public:
 
     void idleMouseEvent( void );
+
+private:
+
+    // Callback functions for GLUT.
+
+    friend void DisplayFunction( void );
+
+    friend void ResizeFunction( int width, int height );
+
+    friend void MouseFunction( int button, int state, int x, int y );
+
+    friend void MouseMoveFunction( int x, int y );
+
+    friend void KeyPressFunction( unsigned char key, int x, int y );
+
+    friend void SpecialKeyPressFunction( int key, int x, int y );
 };
 
 } // end of namespace glut

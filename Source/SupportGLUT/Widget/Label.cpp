@@ -39,9 +39,8 @@ namespace glut
  *  @param  screen [in] pointer to the parent screen
  */
 /*===========================================================================*/
-Label::Label( kvs::glut::Screen* screen ):
-    kvs::glut::WidgetBase( static_cast<kvs::ScreenBase*>(screen),
-                           static_cast<kvs::WindowBase*>(screen) )
+Label::Label( kvs::ScreenBase* screen ):
+    kvs::glut::WidgetBase( screen )
 {
     BaseClass::setEventType(
         kvs::EventBase::PaintEvent |

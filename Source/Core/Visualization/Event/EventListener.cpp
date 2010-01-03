@@ -28,8 +28,7 @@ namespace kvs
  */
 /*===========================================================================*/
 EventListener::EventListener( void ):
-    m_screen( NULL ),
-    m_window( NULL )
+    m_screen( NULL )
 {
 }
 
@@ -119,17 +118,6 @@ kvs::ScreenBase* EventListener::screen( void )
 
 /*===========================================================================*/
 /**
- *  @brief  Returns the pointer to the window.
- *  @return pointer to the window
- */
-/*===========================================================================*/
-kvs::WindowBase* EventListener::window( void )
-{
-    return( m_window );
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Sets an event type.
  *  @param  event_type [in] event type
  */
@@ -148,17 +136,6 @@ void EventListener::setEventType( int event_type )
 void EventListener::setScreen( kvs::ScreenBase* screen )
 {
     m_screen = screen;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a pointer to the window.
- *  @param  window [in] pointer to the window
- */
-/*===========================================================================*/
-void EventListener::setWindow( kvs::WindowBase* window )
-{
-    m_window = window;
 }
 
 /*===========================================================================*/
