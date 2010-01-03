@@ -59,14 +59,13 @@ int main( int argc, char** argv )
     PaintEvent paint_event;
 
     // Screen.
-    kvs::qt::Screen screen;
+    kvs::qt::Screen screen( &app );
     screen.addPaintEvent( &paint_event );
     screen.setGeometry( 0, 0, 512, 512 );
     screen.setTitle( "SimpleTriangle" );
     screen.show();
 
     // Message.
-/*
     kvs::glut::Label message( &screen );
     message.setMargin( 10 );
     message.addText( "Rotation:    [Left Button]" );
@@ -74,7 +73,6 @@ int main( int argc, char** argv )
     message.addText( "Scaling:     [Shift] + [Left Button]" );
     message.addText( "Quit:        [Esc] or [q]" );
     message.show();
-*/
 
     return( app.run() );
 }
