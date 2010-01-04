@@ -44,6 +44,7 @@ protected:
 
     mutable bool m_enable_anti_aliasing; ///< flag for anti-aliasing (AA)
     mutable bool m_enable_multisample_anti_aliasing; ///< flag for multisample anti-aliasing (MSAA)
+    mutable bool m_enable_two_side_lighting; ///< flag for two-side lighting
 
 public:
 
@@ -56,6 +57,12 @@ public:
     void enableAntiAliasing( const bool multisample = false ) const;
 
     void disableAntiAliasing( void ) const;
+
+    void enableTwoSideLighting( void ) const;
+
+    void disableTwoSideLighting( void ) const;
+
+    const bool isTwoSideLighting( void ) const;
 
 public:
 

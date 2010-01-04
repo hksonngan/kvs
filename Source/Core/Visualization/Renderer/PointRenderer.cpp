@@ -31,7 +31,8 @@ namespace kvs
 /*==========================================================================*/
 PointRenderer::PointRenderer( void ):
     m_enable_anti_aliasing( false ),
-    m_enable_multisample_anti_aliasing( false )
+    m_enable_multisample_anti_aliasing( false ),
+    m_enable_two_side_lighting( true )
 {
 }
 
@@ -64,6 +65,7 @@ void PointRenderer::exec( ObjectBase* object, Camera* camera, Light* light )
     if ( point->normals().size() == 0 ) { BaseClass::disableShading(); }
 
     RendererBase::initialize();
+    point->applyMaterial();
 
     // Anti-aliasing.
     if ( m_enable_anti_aliasing )
@@ -120,6 +122,21 @@ void PointRenderer::disableAntiAliasing( void ) const
     m_enable_multisample_anti_aliasing = false;
 }
 
+void PointRenderer::enableTwoSideLighting( void ) const
+{
+    m_enable_two_side_lighting = true;
+}
+
+void PointRenderer::disableTwoSideLighting( void ) const
+{
+    m_enable_two_side_lighting = false;
+}
+
+const bool PointRenderer::isTwoSideLighting( void ) const
+{
+    return( m_enable_two_side_lighting );
+}
+
 /*==========================================================================*/
 /**
  *  Initialize about the projection matrix.
@@ -139,13 +156,23 @@ void PointRenderer::initialize_projection( void )
 /*==========================================================================*/
 void PointRenderer::initialize_modelview( void )
 {
-    glColorMaterial( GL_FRONT, GL_AMBIENT_AND_DIFFUSE );
+    glShadeModel( GL_SMOOTH );
+
+    glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
     glEnable( GL_COLOR_MATERIAL );
 
-    glDisable( GL_NORMALIZE );
+    if( !this->isShading() )
+    {
+        glDisable( GL_NORMALIZE );
+        glDisable( GL_LIGHTING );
+    }
+    else
+    {
+        glEnable( GL_NORMALIZE );
+        glEnable( GL_LIGHTING );
+    }
 
-    if( !this->isShading() ) glDisable( GL_LIGHTING );
-    else                     glEnable( GL_LIGHTING );
+    kvs::Light::setModelTwoSide( this->isTwoSideLighting() );
 }
 
 } // end of namespace kvs
