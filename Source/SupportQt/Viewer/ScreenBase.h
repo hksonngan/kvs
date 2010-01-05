@@ -38,8 +38,8 @@ typedef void (*MouseDoubleClickEventBase)( QMouseEvent* );
 typedef void (*WheelEventBase)( QWheelEvent* );
 typedef void (*KeyPressEventBase)( QKeyEvent* );
 
-typedef void (*MouseDoubleClickEvent)( MouseEvent* );
-typedef void (*WheelEvent)( MouseEvent* );
+typedef void (*MouseDoubleClickEventFunc)( MouseEvent* );
+typedef void (*WheelEventFunc)( MouseEvent* );
 
 /*==========================================================================*/
 /**
@@ -66,11 +66,11 @@ protected:
     static WheelEventBase            m_pfunc_wheel_event;
     static KeyPressEventBase         m_pfunc_key_press_event;
 
-    static MouseDoubleClickEvent     m_pfunc_add_mouse_double_click_event;
-    static WheelEvent                m_pfunc_add_wheel_event;
+    static MouseDoubleClickEventFunc m_pfunc_add_mouse_double_click_event;
+    static WheelEventFunc            m_pfunc_add_wheel_event;
 
-    static MouseDoubleClickEvent     m_pfunc_set_mouse_double_click_event;
-    static WheelEvent                m_pfunc_set_wheel_event;
+    static MouseDoubleClickEventFunc m_pfunc_set_mouse_double_click_event;
+    static WheelEventFunc            m_pfunc_set_wheel_event;
 
 protected:
 
@@ -124,25 +124,25 @@ protected:
 
 public:
 
-    void addMouseDoubleClickEvent( MouseDoubleClickEvent event );
+    void addMouseDoubleClickEvent( MouseDoubleClickEventFunc event );
 
-    void addWheelEvent( WheelEvent event );
+    void addWheelEvent( WheelEventFunc event );
 
-    void setPaintEvent( PaintEvent event );
+    void setPaintEvent( PaintEventFunc event );
 
-    void setResizeEvent( ResizeEvent event );
+    void setResizeEvent( ResizeEventFunc event );
 
-    void setMousePressEvent( MousePressEvent event );
+    void setMousePressEvent( MousePressEventFunc event );
 
-    void setMouseMoveEvent( MouseMoveEvent event );
+    void setMouseMoveEvent( MouseMoveEventFunc event );
 
-    void setMouseReleaseEvent( MouseReleaseEvent event );
+    void setMouseReleaseEvent( MouseReleaseEventFunc event );
 
-    void setMouseDoubleClickEvent( MouseDoubleClickEvent event );
+    void setMouseDoubleClickEvent( MouseDoubleClickEventFunc event );
 
-    void setWheelEvent( WheelEvent event );
+    void setWheelEvent( WheelEventFunc event );
 
-    void setKeyPressEvent( KeyPressEvent event );
+    void setKeyPressEvent( KeyPressEventFunc event );
 
 public:
 

@@ -37,8 +37,8 @@ typedef void (*SpkeyPressEventBase)( int, int, int );
 typedef void (*TimerMouseEventBase)( int );
 typedef void (*TimerEventBase)( int );
 
-typedef void (*TimerMouseEvent)( int );
-typedef void (*TimerEvent)( int );
+typedef void (*TimerMouseEventFunc)( int );
+typedef void (*TimerEventFunc)( int );
 
 /*==========================================================================*/
 /**
@@ -83,19 +83,19 @@ public:
 
 public:
 
-    void addTimerEvent( TimerEvent event, int time );
+    void addTimerEvent( TimerEventFunc event, int time );
 
-    void setPaintEvent( PaintEvent event );
+    void setPaintEvent( PaintEventFunc event );
 
-    void setResizeEvent( ResizeEvent event );
+    void setResizeEvent( ResizeEventFunc event );
 
-    void setMousePressEvent( MousePressEvent event );
+    void setMousePressEvent( MousePressEventFunc event );
 
-    void setMouseMoveEvent( MouseMoveEvent event );
+    void setMouseMoveEvent( MouseMoveEventFunc event );
 
-    void setKeyPressEvent( KeyPressEvent event );
+    void setKeyPressEvent( KeyPressEventFunc event );
 
-    void setTimerMouseEvent( TimerMouseEvent event );
+    void setTimerMouseEvent( TimerMouseEventFunc event );
 
 public:
 

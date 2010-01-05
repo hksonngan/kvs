@@ -12,9 +12,9 @@ include ../../Makefile.def
 #=============================================================================
 #  INCLUDE_PATH, LIBRARY_PATH, LINK_LIBRARY, INSTALL_DIR.
 #=============================================================================
-INCLUDE_PATH := -I..
-LIBRARY_PATH :=
-LINK_LIBRARY :=
+INCLUDE_PATH := -I.. $(GLUT_INCLUDE_PATH)
+LIBRARY_PATH := $(GLUT_LIBRARY_PATH)
+LINK_LIBRARY := $(GLUT_LINK_LIBRARY)
 INSTALL_DIR  := $(KVS_DIR)
 
 

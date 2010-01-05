@@ -31,12 +31,12 @@ namespace kvs
 {
 
 typedef void (*InitializeFunc)( void );
-typedef void (*PaintEvent)( void );
-typedef void (*ResizeEvent)( int, int );
-typedef void (*MousePressEvent)( MouseEvent* );
-typedef void (*MouseMoveEvent)( MouseEvent* );
-typedef void (*MouseReleaseEvent)( MouseEvent* );
-typedef void (*KeyPressEvent)( KeyEvent* );
+typedef void (*PaintEventFunc)( void );
+typedef void (*ResizeEventFunc)( int, int );
+typedef void (*MousePressEventFunc)( MouseEvent* );
+typedef void (*MouseMoveEventFunc)( MouseEvent* );
+typedef void (*MouseReleaseEventFunc)( MouseEvent* );
+typedef void (*KeyPressEventFunc)( KeyEvent* );
 
 /*==========================================================================*/
 /**
@@ -63,18 +63,18 @@ protected:
 
 protected:
 
-    static InitializeFunc    m_pfunc_add_initialize_func;
-    static PaintEvent        m_pfunc_add_paint_event;
-    static ResizeEvent       m_pfunc_add_resize_event;
-    static MousePressEvent   m_pfunc_add_mouse_press_event;
-    static MouseMoveEvent    m_pfunc_add_mouse_move_event;
-    static MouseReleaseEvent m_pfunc_add_mouse_release_event;
-    static KeyPressEvent     m_pfunc_add_key_press_event;
+    static InitializeFunc        m_pfunc_add_initialize_func;
+    static PaintEventFunc        m_pfunc_add_paint_event;
+    static ResizeEventFunc       m_pfunc_add_resize_event;
+    static MousePressEventFunc   m_pfunc_add_mouse_press_event;
+    static MouseMoveEventFunc    m_pfunc_add_mouse_move_event;
+    static MouseReleaseEventFunc m_pfunc_add_mouse_release_event;
+    static KeyPressEventFunc     m_pfunc_add_key_press_event;
 
-    static MousePressEvent   m_pfunc_set_mouse_press_event;
-    static MouseMoveEvent    m_pfunc_set_mouse_move_event;
-    static MouseReleaseEvent m_pfunc_set_mouse_release_event;
-    static KeyPressEvent     m_pfunc_set_key_press_event;
+    static MousePressEventFunc   m_pfunc_set_mouse_press_event;
+    static MouseMoveEventFunc    m_pfunc_set_mouse_move_event;
+    static MouseReleaseEventFunc m_pfunc_set_mouse_release_event;
+    static KeyPressEventFunc     m_pfunc_set_key_press_event;
 
 protected:
 
@@ -132,29 +132,29 @@ public:
 
     void addInitializeFunc( InitializeFunc pfunc );
 
-    void addPaintEvent( PaintEvent event );
+    void addPaintEvent( PaintEventFunc event );
 
-    void addResizeEvent( ResizeEvent event );
+    void addResizeEvent( ResizeEventFunc event );
 
-    void addMousePressEvent( MousePressEvent event );
+    void addMousePressEvent( MousePressEventFunc event );
 
-    void addMouseMoveEvent( MouseMoveEvent event );
+    void addMouseMoveEvent( MouseMoveEventFunc event );
 
-    void addMouseReleaseEvent( MouseReleaseEvent event );
+    void addMouseReleaseEvent( MouseReleaseEventFunc event );
 
-    void addKeyPressEvent( KeyPressEvent event );
+    void addKeyPressEvent( KeyPressEventFunc event );
 
 public:
 
-    virtual void setPaintEvent( PaintEvent event ) = 0;
+    virtual void setPaintEvent( PaintEventFunc event ) = 0;
 
-    virtual void setResizeEvent( ResizeEvent event ) = 0;
+    virtual void setResizeEvent( ResizeEventFunc event ) = 0;
 
-    virtual void setMousePressEvent( MousePressEvent event ) = 0;
+    virtual void setMousePressEvent( MousePressEventFunc event ) = 0;
 
-    virtual void setMouseMoveEvent( MouseMoveEvent event ) = 0;
+    virtual void setMouseMoveEvent( MouseMoveEventFunc event ) = 0;
 
-    virtual void setKeyPressEvent( KeyPressEvent event ) = 0;
+    virtual void setKeyPressEvent( KeyPressEventFunc event ) = 0;
 
 public:
 

@@ -76,7 +76,7 @@ ScreenBase::~ScreenBase( void )
  *  @param time [in] interval time [msec]
  */
 /*==========================================================================*/
-void ScreenBase::addTimerEvent( TimerEvent event, int time )
+void ScreenBase::addTimerEvent( TimerEventFunc event, int time )
 {
     m_pfunc_timer_event.push_back( event );
     m_timer_event_time.push_back( time );
@@ -88,7 +88,7 @@ void ScreenBase::addTimerEvent( TimerEvent event, int time )
  *  @param event [in] pointer to the event function
  */
 /*==========================================================================*/
-void ScreenBase::setPaintEvent( PaintEvent event )
+void ScreenBase::setPaintEvent( PaintEventFunc event )
 {
     m_pfunc_paint_event = event;
 }
@@ -99,7 +99,7 @@ void ScreenBase::setPaintEvent( PaintEvent event )
  *  @param event [in] pointer to the event function
  */
 /*==========================================================================*/
-void ScreenBase::setResizeEvent( ResizeEvent event )
+void ScreenBase::setResizeEvent( ResizeEventFunc event )
 {
     m_pfunc_resize_event = event;
 }
@@ -110,7 +110,7 @@ void ScreenBase::setResizeEvent( ResizeEvent event )
  *  @param event [in] pointer to the event function
  */
 /*==========================================================================*/
-void ScreenBase::setMousePressEvent( MousePressEvent event )
+void ScreenBase::setMousePressEvent( MousePressEventFunc event )
 {
     m_pfunc_set_mouse_press_event = event;
     m_pfunc_mouse_press_event = replaced_mouse_press_event;
@@ -122,7 +122,7 @@ void ScreenBase::setMousePressEvent( MousePressEvent event )
  *  @param event [in] pointer to the event function
  */
 /*==========================================================================*/
-void ScreenBase::setMouseMoveEvent( MouseMoveEvent event )
+void ScreenBase::setMouseMoveEvent( MouseMoveEventFunc event )
 {
     m_pfunc_set_mouse_move_event = event;
     m_pfunc_mouse_move_event = replaced_mouse_move_event;
@@ -134,7 +134,7 @@ void ScreenBase::setMouseMoveEvent( MouseMoveEvent event )
  *  @param event [in] pointer to the event function
  */
 /*==========================================================================*/
-void ScreenBase::setKeyPressEvent( KeyPressEvent event )
+void ScreenBase::setKeyPressEvent( KeyPressEventFunc event )
 {
     m_pfunc_set_key_press_event = event;
     m_pfunc_key_press_event = replaced_key_press_event;
@@ -146,7 +146,7 @@ void ScreenBase::setKeyPressEvent( KeyPressEvent event )
  *  @param event [in] pointer to the event function
  */
 /*==========================================================================*/
-void ScreenBase::setTimerMouseEvent( TimerMouseEvent event )
+void ScreenBase::setTimerMouseEvent( TimerMouseEventFunc event )
 {
     m_pfunc_timer_mouse_event = event;
 }

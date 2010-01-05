@@ -26,19 +26,19 @@ namespace kvs
 {
 
 // Instantiation of the additional functions.
-InitializeFunc     ScreenCore::m_pfunc_add_initialize_func;
-PaintEvent         ScreenCore::m_pfunc_add_paint_event;
-ResizeEvent        ScreenCore::m_pfunc_add_resize_event;
-MousePressEvent    ScreenCore::m_pfunc_add_mouse_press_event;
-MouseMoveEvent     ScreenCore::m_pfunc_add_mouse_move_event;
-MouseReleaseEvent  ScreenCore::m_pfunc_add_mouse_release_event;
-KeyPressEvent      ScreenCore::m_pfunc_add_key_press_event;
+InitializeFunc         ScreenCore::m_pfunc_add_initialize_func;
+PaintEventFunc         ScreenCore::m_pfunc_add_paint_event;
+ResizeEventFunc        ScreenCore::m_pfunc_add_resize_event;
+MousePressEventFunc    ScreenCore::m_pfunc_add_mouse_press_event;
+MouseMoveEventFunc     ScreenCore::m_pfunc_add_mouse_move_event;
+MouseReleaseEventFunc  ScreenCore::m_pfunc_add_mouse_release_event;
+KeyPressEventFunc      ScreenCore::m_pfunc_add_key_press_event;
 
 // Instantiation of the set functions.
-MousePressEvent    ScreenCore::m_pfunc_set_mouse_press_event;
-MouseMoveEvent     ScreenCore::m_pfunc_set_mouse_move_event;
-MouseReleaseEvent  ScreenCore::m_pfunc_set_mouse_release_event;
-KeyPressEvent      ScreenCore::m_pfunc_set_key_press_event;
+MousePressEventFunc    ScreenCore::m_pfunc_set_mouse_press_event;
+MouseMoveEventFunc     ScreenCore::m_pfunc_set_mouse_move_event;
+MouseReleaseEventFunc  ScreenCore::m_pfunc_set_mouse_release_event;
+KeyPressEventFunc      ScreenCore::m_pfunc_set_key_press_event;
 
 // Instantiation of the member parameters.
 kvs::DisplayFormat ScreenCore::m_display_format;
@@ -119,7 +119,7 @@ void ScreenCore::addInitializeFunc( InitializeFunc pfunc )
  *  @param event [in] pointer to the event function
  */
 /*==========================================================================*/
-void ScreenCore::addPaintEvent( PaintEvent event )
+void ScreenCore::addPaintEvent( PaintEventFunc event )
 {
     m_pfunc_add_paint_event = event;
 }
@@ -130,7 +130,7 @@ void ScreenCore::addPaintEvent( PaintEvent event )
  *  @param event [in] pointer to the event function.
  */
 /*==========================================================================*/
-void ScreenCore::addResizeEvent( ResizeEvent event )
+void ScreenCore::addResizeEvent( ResizeEventFunc event )
 {
     m_pfunc_add_resize_event = event;
 }
@@ -141,7 +141,7 @@ void ScreenCore::addResizeEvent( ResizeEvent event )
  *  @param event [in] pointer to the event function.
  */
 /*==========================================================================*/
-void ScreenCore::addMousePressEvent( MousePressEvent event )
+void ScreenCore::addMousePressEvent( MousePressEventFunc event )
 {
     m_pfunc_add_mouse_press_event = event;
 }
@@ -152,7 +152,7 @@ void ScreenCore::addMousePressEvent( MousePressEvent event )
  *  @param event [in] pointer to the event function.
  */
 /*==========================================================================*/
-void ScreenCore::addMouseMoveEvent( MouseMoveEvent event )
+void ScreenCore::addMouseMoveEvent( MouseMoveEventFunc event )
 {
     m_pfunc_add_mouse_move_event = event;
 }
@@ -163,7 +163,7 @@ void ScreenCore::addMouseMoveEvent( MouseMoveEvent event )
  *  @param event [in] pointer to the event function.
  */
 /*==========================================================================*/
-void ScreenCore::addMouseReleaseEvent( MouseReleaseEvent event )
+void ScreenCore::addMouseReleaseEvent( MouseReleaseEventFunc event )
 {
     m_pfunc_add_mouse_release_event = event;
 }
@@ -174,7 +174,7 @@ void ScreenCore::addMouseReleaseEvent( MouseReleaseEvent event )
  *  @param event [in] pointer to the event function
  */
 /*==========================================================================*/
-void ScreenCore::addKeyPressEvent( KeyPressEvent event )
+void ScreenCore::addKeyPressEvent( KeyPressEventFunc event )
 {
     m_pfunc_add_key_press_event = event;
 }

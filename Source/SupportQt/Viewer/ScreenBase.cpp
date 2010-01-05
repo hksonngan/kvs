@@ -33,10 +33,10 @@ MouseReleaseEventBase     ScreenBase::m_pfunc_mouse_release_event;
 MouseDoubleClickEventBase ScreenBase::m_pfunc_mouse_double_click_event;
 WheelEventBase            ScreenBase::m_pfunc_wheel_event;
 KeyPressEventBase         ScreenBase::m_pfunc_key_press_event;
-MouseDoubleClickEvent     ScreenBase::m_pfunc_add_mouse_double_click_event;
-WheelEvent                ScreenBase::m_pfunc_add_wheel_event;
-MouseDoubleClickEvent     ScreenBase::m_pfunc_set_mouse_double_click_event;
-WheelEvent                ScreenBase::m_pfunc_set_wheel_event;
+MouseDoubleClickEventFunc ScreenBase::m_pfunc_add_mouse_double_click_event;
+WheelEventFunc            ScreenBase::m_pfunc_add_wheel_event;
+MouseDoubleClickEventFunc ScreenBase::m_pfunc_set_mouse_double_click_event;
+WheelEventFunc            ScreenBase::m_pfunc_set_wheel_event;
 QTimer*                   ScreenBase::m_mouse_timer;
 kvs::QtScreenSupport*     ScreenBase::m_support;
 
@@ -209,7 +209,7 @@ void ScreenBase::keyPressEvent( QKeyEvent* event )
  *  @param event [in] pointer to the event function
  */
 /*==========================================================================*/
-void ScreenBase::addMouseDoubleClickEvent( MouseDoubleClickEvent event )
+void ScreenBase::addMouseDoubleClickEvent( MouseDoubleClickEventFunc event )
 {
     m_pfunc_add_mouse_double_click_event = event;
 }
@@ -220,7 +220,7 @@ void ScreenBase::addMouseDoubleClickEvent( MouseDoubleClickEvent event )
  *  @param event [in] pointer to the event function
  */
 /*==========================================================================*/
-void ScreenBase::addWheelEvent( WheelEvent event )
+void ScreenBase::addWheelEvent( WheelEventFunc event )
 {
     m_pfunc_add_wheel_event = event;
 }
@@ -231,7 +231,7 @@ void ScreenBase::addWheelEvent( WheelEvent event )
  *  @param event [in] pointer to the event function.
  */
 /*==========================================================================*/
-void ScreenBase::setPaintEvent( PaintEvent event )
+void ScreenBase::setPaintEvent( PaintEventFunc event )
 {
     m_pfunc_paint_event = event;
 }
@@ -242,7 +242,7 @@ void ScreenBase::setPaintEvent( PaintEvent event )
  *  @param event [in] pointer to the event function
  */
 /*==========================================================================*/
-void ScreenBase::setResizeEvent( ResizeEvent event )
+void ScreenBase::setResizeEvent( ResizeEventFunc event )
 {
     m_pfunc_resize_event = event;
 }
@@ -253,7 +253,7 @@ void ScreenBase::setResizeEvent( ResizeEvent event )
  *  @param event [in] pointer to the event function
  */
 /*==========================================================================*/
-void ScreenBase::setMousePressEvent( MousePressEvent event )
+void ScreenBase::setMousePressEvent( MousePressEventFunc event )
 {
     m_pfunc_set_mouse_press_event = event;
     m_pfunc_mouse_press_event = replaced_mouse_press_event;
@@ -265,7 +265,7 @@ void ScreenBase::setMousePressEvent( MousePressEvent event )
  *  @param event [in] pointer to the event function
  */
 /*==========================================================================*/
-void ScreenBase::setMouseMoveEvent( MouseMoveEvent event )
+void ScreenBase::setMouseMoveEvent( MouseMoveEventFunc event )
 {
     m_pfunc_set_mouse_move_event = event;
     m_pfunc_mouse_move_event = replaced_mouse_move_event;
@@ -277,7 +277,7 @@ void ScreenBase::setMouseMoveEvent( MouseMoveEvent event )
  *  @param event [in] pointer to the event function
  */
 /*==========================================================================*/
-void ScreenBase::setMouseReleaseEvent( MouseReleaseEvent event )
+void ScreenBase::setMouseReleaseEvent( MouseReleaseEventFunc event )
 {
     m_pfunc_set_mouse_release_event = event;
     m_pfunc_mouse_release_event = replaced_mouse_release_event;
@@ -289,7 +289,7 @@ void ScreenBase::setMouseReleaseEvent( MouseReleaseEvent event )
  *  @param event [in] pointer to the event function.
  */
 /*==========================================================================*/
-void ScreenBase::setMouseDoubleClickEvent( MouseDoubleClickEvent event )
+void ScreenBase::setMouseDoubleClickEvent( MouseDoubleClickEventFunc event )
 {
     m_pfunc_set_mouse_double_click_event = event;
     m_pfunc_mouse_double_click_event = replaced_mouse_double_click_event;
@@ -301,7 +301,7 @@ void ScreenBase::setMouseDoubleClickEvent( MouseDoubleClickEvent event )
  *  @param event [in] pointer to the event function
  */
 /*==========================================================================*/
-void ScreenBase::setWheelEvent( WheelEvent event )
+void ScreenBase::setWheelEvent( WheelEventFunc event )
 {
     m_pfunc_set_wheel_event = event;
     m_pfunc_wheel_event = replaced_wheel_event;
@@ -313,7 +313,7 @@ void ScreenBase::setWheelEvent( WheelEvent event )
  *  @param event [in] pointer to the event function
  */
 /*==========================================================================*/
-void ScreenBase::setKeyPressEvent( KeyPressEvent event )
+void ScreenBase::setKeyPressEvent( KeyPressEventFunc event )
 {
     m_pfunc_set_key_press_event = event;
     m_pfunc_key_press_event = replaced_key_press_event;
