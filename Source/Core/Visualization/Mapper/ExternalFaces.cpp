@@ -239,7 +239,7 @@ inline void FaceMap::insert( const kvs::UInt32 id0, const kvs::UInt32 id1, const
     if ( f != last )
     {
         Bucket::const_iterator upper = m_bucket.upper_bound( key );
-        while ( f != upper )
+        do
         {
             if ( f->second == value )
             {
@@ -248,7 +248,7 @@ inline void FaceMap::insert( const kvs::UInt32 id0, const kvs::UInt32 id1, const
                 return;
             }
             f++;
-        }
+        } while ( f != upper );
     }
 
     m_bucket.insert( std::make_pair( key, value ) );
