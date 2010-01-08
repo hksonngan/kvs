@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_MARCHING_TETRAHEDRA_H_INCLUDE
-#define KVS_CORE_MARCHING_TETRAHEDRA_H_INCLUDE
+#ifndef KVS__MARCHING_TETRAHEDRA_H_INCLUDE
+#define KVS__MARCHING_TETRAHEDRA_H_INCLUDE
 
 #include <kvs/PolygonObject>
 #include <kvs/UnstructuredVolumeObject>
@@ -59,13 +59,11 @@ public:
 
 public:
 
-    kvs::ObjectBase* exec( const kvs::ObjectBase* object );
+    SuperClass* exec( const kvs::ObjectBase* object );
 
 protected:
 
     void mapping( const kvs::UnstructuredVolumeObject* volume );
-
-//    void set_min_max_coords( void );
 
     template <typename T>
     void extract_surfaces(
@@ -116,4 +114,4 @@ protected:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_MARCHING_TETRAHEDRA_H_INCLUDE
+#endif // KVS__MARCHING_TETRAHEDRA_H_INCLUDE

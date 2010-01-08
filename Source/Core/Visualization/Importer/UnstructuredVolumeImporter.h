@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_UNSTRUCTURED_VOLUME_IMPORTER_H_INCLUDE
-#define KVS_CORE_UNSTRUCTURED_VOLUME_IMPORTER_H_INCLUDE
+#ifndef KVS__UNSTRUCTURED_VOLUME_IMPORTER_H_INCLUDE
+#define KVS__UNSTRUCTURED_VOLUME_IMPORTER_H_INCLUDE
 
 #include "ImporterBase.h"
 #include <kvs/ClassName>
@@ -55,7 +55,7 @@ public:
 
 public:
 
-    kvs::ObjectBase* exec( const kvs::FileFormatBase* file_format );
+    SuperClass* exec( const kvs::FileFormatBase* file_format );
 
 private:
 
@@ -69,4 +69,4 @@ private:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_UNSTRUCTURED_VOLUME_IMPORTER_H_INCLUDE
+#endif // KVS__UNSTRUCTURED_VOLUME_IMPORTER_H_INCLUDE

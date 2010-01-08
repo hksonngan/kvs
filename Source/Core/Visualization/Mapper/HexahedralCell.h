@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_HEXAHEDRAL_CELL_H_INCLUDE
-#define KVS_CORE_HEXAHEDRAL_CELL_H_INCLUDE
+#ifndef KVS__HEXAHEDRAL_CELL_H_INCLUDE
+#define KVS__HEXAHEDRAL_CELL_H_INCLUDE
 
 #include <kvs/Type>
 #include <kvs/Vector4>
@@ -24,6 +24,11 @@
 namespace kvs
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  HexahedralCell class.
+ */
+/*===========================================================================*/
 template <typename T>
 class HexahedralCell : public kvs::CellBase<T>
 {
@@ -68,6 +73,12 @@ private:
     const kvs::Vector3f convert_local_to_global( void ) const;
 };
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new HexahedralCell class.
+ *  @param  volume [in] pointer to the unstructured volume object
+ */
+/*===========================================================================*/
 template <typename T>
 inline HexahedralCell<T>::HexahedralCell(
     const kvs::UnstructuredVolumeObject* volume ):
@@ -75,11 +86,22 @@ inline HexahedralCell<T>::HexahedralCell(
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Destroys the HexahedralCell class.
+ */
+/*===========================================================================*/
 template <typename T>
 inline HexahedralCell<T>::~HexahedralCell( void )
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Attaches a cell by the index.
+ *  @param  index [in] cell index
+ */
+/*===========================================================================*/
 template <typename T>
 inline void HexahedralCell<T>::attachCell( const kvs::UInt32 index )
 {
@@ -135,12 +157,24 @@ inline void HexahedralCell<T>::attachCell( const kvs::UInt32 index )
     BaseClass::m_scalars[7] = values[ node_index[7] ];
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Attaches a point in the global coordinate.
+ *  @param  point [in] coordinate value of the point
+ */
+/*===========================================================================*/
 template <typename T>
 inline void HexahedralCell<T>::attachPoint( const kvs::Vector3f& point )
 {
     BaseClass::set_global_point( point );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the sampled point randomly.
+ *  @return coordinate value of the sampled point
+ */
+/*===========================================================================*/
 template <typename T>
 const kvs::Vector3f HexahedralCell<T>::randomSampling( void )
 {
@@ -157,6 +191,12 @@ const kvs::Vector3f HexahedralCell<T>::randomSampling( void )
     return( BaseClass::m_global_point );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the volume of the cell.
+ *  @return volume of the cell
+ */
+/*===========================================================================*/
 template <typename T>
 inline const kvs::Real32 HexahedralCell<T>::volume( void )
 {
@@ -196,6 +236,12 @@ inline const kvs::Real32 HexahedralCell<T>::volume( void )
     return( sum_metric / static_cast<float>( sampling_3D ) );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the averaged scalar value.
+ *  @return averaged scalar value
+ */
+/*===========================================================================*/
 template <typename T>
 inline const kvs::Real32 HexahedralCell<T>::averagedScalar( void )
 {
@@ -212,6 +258,11 @@ inline const kvs::Real32 HexahedralCell<T>::averagedScalar( void )
                 BaseClass::m_scalars[7] ) * w );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the interpolated scalar value at the attached point.
+ */
+/*===========================================================================*/
 template <typename T>
 inline const kvs::Real32 HexahedralCell<T>::scalar( void )
 {
@@ -229,6 +280,11 @@ inline const kvs::Real32 HexahedralCell<T>::scalar( void )
                 I[7]*s[7] ) );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the gradient vector at the attached point.
+ */
+/*===========================================================================*/
 template <typename T>
 inline const kvs::Vector3f HexahedralCell<T>::gradient( void )
 {
@@ -267,7 +323,7 @@ inline const kvs::Vector3f HexahedralCell<T>::gradient( void )
 
 /*==========================================================================*/
 /**
- *  Calculates the interpolation functions in the local coordinate.
+ *  @brief  Calculates the interpolation functions in the local coordinate.
  */
 /*==========================================================================*/
 template <typename T>
@@ -295,7 +351,7 @@ inline void HexahedralCell<T>::calculate_interpolation_function( void )
 
 /*==========================================================================*/
 /**
- *  Calculates the differential functions in the local coordinate.
+ *  @brief  Calculates the differential functions in the local coordinate.
  */
 /*==========================================================================*/
 template <typename T>
@@ -340,6 +396,11 @@ inline void HexahedralCell<T>::calculate_differential_function( void )
     BaseClass::m_differential_functions[23] =  - y + xy;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the transposed jacobi matrix.
+ */
+/*===========================================================================*/
 template <typename T>
 inline const kvs::Matrix33f HexahedralCell<T>::get_transposed_Jacobi_matrix( void ) const
 {
@@ -390,6 +451,11 @@ inline const kvs::Matrix33f HexahedralCell<T>::get_transposed_Jacobi_matrix( voi
     return( kvs::Matrix33f( dXdx, dYdx, dZdx, dXdy, dYdy, dZdy, dXdz, dYdz, dZdz ) );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Converts the local coordinate value to the global coordinate value.
+ */
+/*===========================================================================*/
 template <typename T>
 inline const kvs::Vector3f HexahedralCell<T>::convert_local_to_global( void ) const
 {
@@ -431,4 +497,4 @@ inline const kvs::Vector3f HexahedralCell<T>::convert_local_to_global( void ) co
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_HEXAHEDRAL_CELL_H_INCLUDE
+#endif // KVS__HEXAHEDRAL_CELL_H_INCLUDE

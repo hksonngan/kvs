@@ -74,15 +74,15 @@ public:
 */
 public:
 
-    kvs::ObjectBase* exec( const kvs::ObjectBase* object );
+    BaseClass::SuperClass* exec( const kvs::ObjectBase* object );
 
     void draw( void );
 
 protected:
 
-    kvs::ObjectBase* exec_point_object( const kvs::PointObject* point );
+    BaseClass::SuperClass* exec_point_object( const kvs::PointObject* point );
 
-    kvs::ObjectBase* exec_volume_object( const kvs::VolumeObjectBase* volume );
+    BaseClass::SuperClass* exec_volume_object( const kvs::VolumeObjectBase* volume );
 
     void draw_element( const kvs::RGBColor& color, const kvs::UInt8 opacity );
 

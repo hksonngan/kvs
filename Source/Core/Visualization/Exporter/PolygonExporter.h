@@ -32,19 +32,19 @@ class PolygonExporter : public kvs::ExporterBase<FileFormatType>
 {
 public:
 
-    PolygonExporter( const kvs::PolygonObject* polygon_object );
+    PolygonExporter( const kvs::PolygonObject* object );
 
-    FileFormatType* exec( const kvs::ObjectBase* object_base );
+    FileFormatType* exec( const kvs::ObjectBase* object );
 };
 
 template <typename FileFormatType>
-PolygonExporter<FileFormatType>::PolygonExporter( const kvs::PolygonObject* polygon_object )
+PolygonExporter<FileFormatType>::PolygonExporter( const kvs::PolygonObject* object )
 {
-    this->exec( polygon_object );
+    this->exec( object );
 }
 
 template <typename FileFormatType>
-FileFormatType* PolygonExporter<FileFormatType>::exec( const kvs::ObjectBase* object_base )
+FileFormatType* PolygonExporter<FileFormatType>::exec( const kvs::ObjectBase* object )
 {
     return( NULL );
 }
@@ -59,9 +59,9 @@ class PolygonExporter<kvs::KVSMLObjectPolygon> : public kvs::ExporterBase<kvs::K
 {
 public:
 
-    PolygonExporter( const kvs::PolygonObject* polygon_object );
+    PolygonExporter( const kvs::PolygonObject* object );
 
-    kvs::KVSMLObjectPolygon* exec( const kvs::ObjectBase* object_base );
+    kvs::KVSMLObjectPolygon* exec( const kvs::ObjectBase* object );
 };
 
 } // end of namespace kvs

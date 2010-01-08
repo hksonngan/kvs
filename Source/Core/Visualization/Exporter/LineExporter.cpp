@@ -15,48 +15,45 @@
 #include <kvs/Message>
 
 
-namespace
-{
-
-const kvs::LineObject* CastToLineObject( const kvs::ObjectBase* object_base )
-{
-    if ( object_base->objectType() != kvs::ObjectBase::Geometry )
-    {
-        kvsMessageError("Input object is not a geometry object.");
-        return( NULL );
-    }
-
-    const kvs::GeometryObjectBase* geometry =
-        reinterpret_cast<const kvs::GeometryObjectBase*>( object_base );
-    if ( geometry->geometryType() != kvs::GeometryObjectBase::Line )
-    {
-        kvsMessageError("Input object is not a line object.");
-        return( NULL );
-    }
-
-    return( reinterpret_cast<const kvs::LineObject*>( geometry ) );
-}
-
-} // end of namespace
-
 namespace kvs
 {
 
-LineExporter<kvs::KVSMLObjectLine>::LineExporter( const kvs::LineObject* line_object )
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new LineExporter class for KVMLObjectLine format.
+ *  @param  object [in] pointer to the input line object
+ */
+/*===========================================================================*/
+LineExporter<kvs::KVSMLObjectLine>::LineExporter( const kvs::LineObject* object )
 {
-    this->exec( line_object );
+    this->exec( object );
 }
 
-kvs::KVSMLObjectLine* LineExporter<kvs::KVSMLObjectLine>::exec( const kvs::ObjectBase* object_base )
+/*===========================================================================*/
+/**
+ *  @brief  Executes the export process.
+ *  @param  object [in] pointer to the input object
+ *  @return pointer to the KVSMLObjectLine format
+ */
+/*===========================================================================*/
+kvs::KVSMLObjectLine* LineExporter<kvs::KVSMLObjectLine>::exec( const kvs::ObjectBase* object )
 {
-    const kvs::LineObject* line_object = ::CastToLineObject( object_base );
-    if ( !line_object )
+    if ( !object )
     {
-        kvsMessageError("Cannot cast to a line object from the given object.");
+        m_is_success = false;
+        kvsMessageError("Input object is NULL.");
         return( NULL );
     }
 
-    switch ( line_object->lineType() )
+    const kvs::LineObject* line = kvs::LineObject::DownCast( object );
+    if ( !line )
+    {
+        m_is_success = false;
+        kvsMessageError("Input object is not line object.");
+        return( NULL );
+    }
+
+    switch ( line->lineType() )
     {
     case kvs::LineObject::Strip: this->setLineType( "strip" ); break;
     case kvs::LineObject::Uniline: this->setLineType( "uniline" ); break;
@@ -65,17 +62,17 @@ kvs::KVSMLObjectLine* LineExporter<kvs::KVSMLObjectLine>::exec( const kvs::Objec
     default: break;
     }
 
-    switch ( line_object->colorType() )
+    switch ( line->colorType() )
     {
     case kvs::LineObject::VertexColor: this->setColorType( "vertex" ); break;
     case kvs::LineObject::LineColor: this->setColorType( "line" ); break;
     default: break;
     }
 
-    this->setCoords( line_object->coords() );
-    this->setColors( line_object->colors() );
-    this->setConnections( line_object->connections() );
-    this->setSizes( line_object->sizes() );
+    this->setCoords( line->coords() );
+    this->setColors( line->colors() );
+    this->setConnections( line->connections() );
+    this->setSizes( line->sizes() );
 
     return( this );
 }

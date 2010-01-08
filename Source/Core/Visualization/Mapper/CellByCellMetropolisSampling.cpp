@@ -32,6 +32,11 @@ namespace Generator = kvs::CellByCellParticleGenerator;
 namespace kvs
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new CellByCellMetropolisSampling class.
+ */
+/*===========================================================================*/
 CellByCellMetropolisSampling::CellByCellMetropolisSampling( void ):
     kvs::MapperBase(),
     kvs::PointObject(),
@@ -39,6 +44,16 @@ CellByCellMetropolisSampling::CellByCellMetropolisSampling( void ):
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new CellByCellMetropolisSampling class.
+ *  @param  volume [in] pointer to the volume object
+ *  @param  subpixel_level [in] sub-pixel level
+ *  @param  sampling_step [in] sapling step
+ *  @param  transfer_function [in] transfer function
+ *  @param  object_depth [in] depth value of the input volume at the CoG
+ */
+/*===========================================================================*/
 CellByCellMetropolisSampling::CellByCellMetropolisSampling(
     const kvs::VolumeObjectBase* volume,
     const size_t                 subpixel_level,
@@ -55,6 +70,17 @@ CellByCellMetropolisSampling::CellByCellMetropolisSampling(
     this->exec( volume );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new CellByCellMetropolisSampling class.
+ *  @param  camera [in] pointer to the camera
+ *  @param  volume [in] pointer to the volume object
+ *  @param  subpixel_level [in] sub-pixel level
+ *  @param  sampling_step [in] sapling step
+ *  @param  transfer_function [in] transfer function
+ *  @param  object_depth [in] depth value of the input volume at the CoG
+ */
+/*===========================================================================*/
 CellByCellMetropolisSampling::CellByCellMetropolisSampling(
     const kvs::Camera*           camera,
     const kvs::VolumeObjectBase* volume,
@@ -72,56 +98,117 @@ CellByCellMetropolisSampling::CellByCellMetropolisSampling(
     this->exec( volume );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Destroys the CellByCellMetropolisSampling class.
+ */
+/*===========================================================================*/
 CellByCellMetropolisSampling::~CellByCellMetropolisSampling( void )
 {
     m_density_map.deallocate();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Retruns the sub-pixel level.
+ *  @return sub-pixel level
+ */
+/*===========================================================================*/
 const size_t CellByCellMetropolisSampling::subpixelLevel( void ) const
 {
     return( m_subpixel_level );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the sampling step.
+ *  @return sampling step
+ */
+/*===========================================================================*/
 const float CellByCellMetropolisSampling::samplingStep( void ) const
 {
     return( m_sampling_step );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the depth of the object at the center of the gravity.
+ *  @return depth
+ */
+/*===========================================================================*/
 const float CellByCellMetropolisSampling::objectDepth( void ) const
 {
     return( m_object_depth );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Attaches a camera.
+ *  @param  camera [in] pointer to the camera
+ */
+/*===========================================================================*/
 void CellByCellMetropolisSampling::attachCamera( const kvs::Camera* camera )
 {
     m_camera = camera;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets a sub-pixel level.
+ *  @param  subpixel_level [in] sub-pixel level
+ */
+/*===========================================================================*/
 void CellByCellMetropolisSampling::setSubpixelLevel( const size_t subpixel_level )
 {
     m_subpixel_level = subpixel_level;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets a sampling step.
+ *  @param  sampling_step [in] sampling step
+ */
+/*===========================================================================*/
 void CellByCellMetropolisSampling::setSamplingStep( const float sampling_step )
 {
     m_sampling_step = sampling_step;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets a depth of the object at the center of the gravity.
+ *  @param  object_depth [in] depth
+ */
+/*===========================================================================*/
 void CellByCellMetropolisSampling::setObjectDepth( const float object_depth )
 {
     m_object_depth = object_depth;
 }
 
-kvs::ObjectBase* CellByCellMetropolisSampling::exec( const kvs::ObjectBase* object )
+/*===========================================================================*/
+/**
+ *  @brief  Executes the mapper process.
+ *  @param  object [in] pointer to the volume object
+ *  @return pointer to the point object
+ */
+/*===========================================================================*/
+CellByCellMetropolisSampling::SuperClass* CellByCellMetropolisSampling::exec( const kvs::ObjectBase* object )
 {
-    const kvs::ObjectBase::ObjectType object_type = object->objectType();
-    if ( object_type == kvs::ObjectBase::Geometry )
+    if ( !object )
     {
-        kvsMessageError("Geometry object is not supported.");
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input object is NULL.");
         return( NULL );
     }
 
-    const kvs::VolumeObjectBase* volume = reinterpret_cast<const kvs::VolumeObjectBase*>( object );
+    const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
+    if ( !volume )
+    {
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input object is not volume dat.");
+        return( NULL );
+    }
+
     const kvs::VolumeObjectBase::VolumeType volume_type = volume->volumeType();
     if ( volume_type == kvs::VolumeObjectBase::Structured )
     {
@@ -129,7 +216,7 @@ kvs::ObjectBase* CellByCellMetropolisSampling::exec( const kvs::ObjectBase* obje
 //        this->mapping( camera, reinterpret_cast<const kvs::StructuredVolumeObject*>( object ) );
         if ( m_camera )
         {
-            this->mapping( m_camera, reinterpret_cast<const kvs::StructuredVolumeObject*>( object ) );
+            this->mapping( m_camera, static_cast<const kvs::StructuredVolumeObject*>( object ) );
         }
         else
         {
@@ -139,13 +226,13 @@ kvs::ObjectBase* CellByCellMetropolisSampling::exec( const kvs::ObjectBase* obje
                 if ( kvs::GlobalCore::camera->windowWidth() != 0 && kvs::GlobalCore::camera->windowHeight() )
                 {
                     const kvs::Camera* camera = kvs::GlobalCore::camera;
-                    this->mapping( camera, reinterpret_cast<const kvs::StructuredVolumeObject*>( object ) );
+                    this->mapping( camera, static_cast<const kvs::StructuredVolumeObject*>( object ) );
                 }
             }
             else
             {
                 kvs::Camera* camera = new kvs::Camera();
-                this->mapping( camera, reinterpret_cast<const kvs::StructuredVolumeObject*>( object ) );
+                this->mapping( camera, static_cast<const kvs::StructuredVolumeObject*>( object ) );
                 delete camera;
             }
         }
@@ -181,6 +268,13 @@ kvs::ObjectBase* CellByCellMetropolisSampling::exec( const kvs::ObjectBase* obje
     return( this );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Mapping for the structured volume object.
+ *  @param  camera [in] pointer to the camera
+ *  @param  volume [in] pointer to the input volume object
+ */
+/*===========================================================================*/
 void CellByCellMetropolisSampling::mapping(const kvs::Camera* camera, const kvs::StructuredVolumeObject* volume )
 {
     // Attach the pointer to the volume object and set the min/max coordinates.
@@ -203,11 +297,18 @@ void CellByCellMetropolisSampling::mapping(const kvs::Camera* camera, const kvs:
     else if ( type == typeid( kvs::Real64 ) ) this->generate_particles<kvs::Real64>( volume );
     else
     {
-        kvsMessageError("Unsupported data type '%s' of the structured volume.",
-                        volume->values().typeInfo()->typeName() );
+        BaseClass::m_is_success = false;
+        kvsMessageError("Unsupported data type '%s'.", volume->values().typeInfo()->typeName() );
     }
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Mapping for the unstructured volume object.
+ *  @param  camera [in] pointer to the camera
+ *  @param  volume [in] pointer to the input volume object
+ */
+/*===========================================================================*/
 void CellByCellMetropolisSampling::mapping( const kvs::Camera* camera, const kvs::UnstructuredVolumeObject* volume )
 {
     // Attach the pointer to the volume object and set the min/max coordinates.
@@ -236,11 +337,17 @@ void CellByCellMetropolisSampling::mapping( const kvs::Camera* camera, const kvs
     else if ( type == typeid( kvs::Real64 ) ) this->generate_particles<kvs::Real64>( volume );
     else
     {
-        kvsMessageError("Unsupported data type '%s' of the structured volume.",
-                        volume->values().typeInfo()->typeName() );
+        BaseClass::m_is_success = false;
+        kvsMessageError("Unsupported data type '%s'.", volume->values().typeInfo()->typeName() );
     }
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Generates particles for the structured volume object.
+ *  @param  volume [in] pointer to the input volume object
+ */
+/*===========================================================================*/
 template <typename T>
 void CellByCellMetropolisSampling::generate_particles( const kvs::StructuredVolumeObject* volume )
 {
@@ -288,7 +395,6 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::StructuredVolu
 
                 if( nparticles_in_cell == 0 ) continue;
 
-//                const kvs::Vector3f v( x, y, z );
                 const kvs::Vector3f v( static_cast<float>(x), static_cast<float>(y), static_cast<float>(z) );
 
                 // Calculate itnitial value
@@ -435,6 +541,12 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::StructuredVolu
     SuperClass::setSize( 1.0f );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Generates particles for the unstructured volume object.
+ *  @param  volume [in] pointer to the input volume object
+ */
+/*===========================================================================*/
 template <typename T>
 void CellByCellMetropolisSampling::generate_particles( const kvs::UnstructuredVolumeObject* volume )
 {
@@ -468,8 +580,11 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::UnstructuredVo
         break;
     }
     default:
+    {
+        BaseClass::m_is_success = false;
         kvsMessageError("Unsupported cell type.");
         return;
+    }
     }
 
     const float min_value = ( typeid(T) == typeid( kvs::UInt8 ) ) ? 0.0f : static_cast<float>( volume->minValue() );

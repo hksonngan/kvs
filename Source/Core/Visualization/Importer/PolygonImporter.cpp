@@ -23,8 +23,8 @@ namespace
 
 /*==========================================================================*/
 /**
- *  Get the polygon type from the given string.
- *  @param polygon_type [in] polygon type string
+ *  @breif  Returns the polygon type from the given string.
+ *  @param  polygon_type [in] polygon type string
  *  @return polygon type
  */
 /*==========================================================================*/
@@ -41,8 +41,8 @@ const kvs::PolygonObject::PolygonType StringToPolygonType( const std::string& po
 
 /*==========================================================================*/
 /**
- *  Get the polygon color type from the given string.
- *  @param color_type [in] polygon color type string
+ *  @brief  Returns the polygon color type from the given string.
+ *  @param  color_type [in] polygon color type string
  *  @return polygon color type
  */
 /*==========================================================================*/
@@ -59,8 +59,8 @@ const kvs::PolygonObject::ColorType StringToColorType( const std::string& color_
 
 /*==========================================================================*/
 /**
- *  Get the polygon normal type from the given string.
- *  @param normal_type [in] polygon normal type string
+ *  @brief  Returns the polygon normal type from the given string.
+ *  @param  normal_type [in] polygon normal type string
  *  @return polygon normal type
  */
 /*==========================================================================*/
@@ -83,13 +83,19 @@ namespace kvs
 
 /*==========================================================================*/
 /**
- *  Default constructer
+ *  @brief  Constructs a new PolygonImporter class.
  */
 /*==========================================================================*/
 PolygonImporter::PolygonImporter( void )
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new PolygonImporter class.
+ *  @param  filename [in] input filename
+ */
+/*===========================================================================*/
 PolygonImporter::PolygonImporter( const std::string& filename )
 {
     if ( kvs::KVSMLObjectPolygon::CheckFileExtension( filename ) )
@@ -97,12 +103,14 @@ PolygonImporter::PolygonImporter( const std::string& filename )
         kvs::KVSMLObjectPolygon* file_format = new kvs::KVSMLObjectPolygon( filename );
         if( !file_format )
         {
+            BaseClass::m_is_success = false;
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             return;
         }
 
         if( file_format->isFailure() )
         {
+            BaseClass::m_is_success = false;
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             delete file_format;
             return;
@@ -116,12 +124,14 @@ PolygonImporter::PolygonImporter( const std::string& filename )
         kvs::Stl* file_format = new kvs::Stl( filename );
         if( !file_format )
         {
+            BaseClass::m_is_success = false;
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             return;
         }
 
         if( file_format->isFailure() )
         {
+            BaseClass::m_is_success = false;
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             delete file_format;
             return;
@@ -132,6 +142,7 @@ PolygonImporter::PolygonImporter( const std::string& filename )
     }
     else
     {
+        BaseClass::m_is_success = false;
         kvsMessageError("Cannot import '%s'.",filename.c_str());
         return;
     }
@@ -139,8 +150,8 @@ PolygonImporter::PolygonImporter( const std::string& filename )
 
 /*==========================================================================*/
 /**
- *  Constructor for the KVSML document.
- *  @param file_format [in] pointer to the file format
+ *  @brief  Constructs a new PolygonImporter class.
+ *  @param  file_format [in] pointer to the file format
  */
 /*==========================================================================*/
 PolygonImporter::PolygonImporter( const kvs::FileFormatBase* file_format )
@@ -148,29 +159,45 @@ PolygonImporter::PolygonImporter( const kvs::FileFormatBase* file_format )
     this->exec( file_format );
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Destructor.
+ *  @brief  Destructs the PolygonImporter class.
  */
-/*==========================================================================*/
+/*===========================================================================*/
 PolygonImporter::~PolygonImporter( void )
 {
 }
 
-kvs::ObjectBase* PolygonImporter::exec( const kvs::FileFormatBase* file_format )
+/*===========================================================================*/
+/**
+ *  @brief  Executes the import process.
+ *  @param  file_format [in] pointer to the file format class
+ *  @return pointer to the imported polygon object
+ */
+/*===========================================================================*/
+PolygonImporter::SuperClass* PolygonImporter::exec( const kvs::FileFormatBase* file_format )
 {
+    if ( !file_format )
+    {
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input file format is NULL.");
+        return( NULL );
+    }
+
     const std::string class_name = file_format->className();
     if ( class_name == "KVSMLObjectPolygon" )
     {
-        this->import( reinterpret_cast<const kvs::KVSMLObjectPolygon*>( file_format ) );
+        this->import( static_cast<const kvs::KVSMLObjectPolygon*>( file_format ) );
     }
     else if ( class_name == "Stl" )
     {
-        this->import( reinterpret_cast<const kvs::Stl*>( file_format ) );
+        this->import( static_cast<const kvs::Stl*>( file_format ) );
     }
     else
     {
-        kvsMessageError( "Unsupported class '%s'.", class_name.c_str() );
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input file format is not supported.");
+        return( NULL );
     }
 
     return( this );
@@ -178,8 +205,8 @@ kvs::ObjectBase* PolygonImporter::exec( const kvs::FileFormatBase* file_format )
 
 /*==========================================================================*/
 /**
- *  Import the KVSML document.
- *  @param document [in] pointer to the KVSML document
+ *  @breif  Imports the KVSML format data.
+ *  @param  document [in] pointer to the KVSML document
  */
 /*==========================================================================*/
 void PolygonImporter::import( const kvs::KVSMLObjectPolygon* kvsml )
@@ -208,14 +235,12 @@ void PolygonImporter::import( const kvs::KVSMLObjectPolygon* kvsml )
     SuperClass::setOpacities( kvsml->opacities() );
 //    SuperClass::updateMinMaxCoords();
     this->set_min_max_coord();
-
-    BaseClass::m_is_success = true;
 }
 
 /*==========================================================================*/
 /**
- *  Import the STL format file.
- *  @param stl [in] pointer to the STL format file
+ *  @brief  Imports the STL format data.
+ *  @param  stl [in] pointer to the STL format file
  */
 /*==========================================================================*/
 void PolygonImporter::import( const kvs::Stl* stl )
@@ -236,13 +261,11 @@ void PolygonImporter::import( const kvs::Stl* stl )
     m_opacities[0] = 255;
 
     this->set_min_max_coord();
-
-    BaseClass::m_is_success = true;
 }
 
 /*==========================================================================*/
 /**
- *  Calculate min/max coordinate value.
+ *  @brief  Calculates the min/max coordinate values.
  */
 /*==========================================================================*/
 void PolygonImporter::set_min_max_coord( void )

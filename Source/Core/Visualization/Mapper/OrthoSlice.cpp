@@ -40,11 +40,11 @@ OrthoSlice::OrthoSlice( void ):
 
 /*==========================================================================*/
 /**
- *  Construct and create a slice plane as a polygon object.
- *  @param volume [in] pointer to the volume object
- *  @param position [in] position on the specified axis
- *  @param axis [in] aligned axis
- *  @param transfer_function [in] transfer function
+ *  @brief  Construct and create a slice plane as a polygon object.
+ *  @param  volume [in] pointer to the volume object
+ *  @param  position [in] position on the specified axis
+ *  @param  axis [in] aligned axis
+ *  @param  transfer_function [in] transfer function
  */
 /*==========================================================================*/
 OrthoSlice::OrthoSlice(
@@ -60,6 +60,13 @@ OrthoSlice::OrthoSlice(
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets a plane information.
+ *  @param  position [in] slice position
+ *  @param  axis [in] slice orientation
+ */
+/*===========================================================================*/
 void OrthoSlice::setPlane( const float position, const kvs::OrthoSlice::AlignedAxis axis )
 {
     SuperClass::setPlane( ::Normal[axis] * position, ::Normal[axis] );

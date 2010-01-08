@@ -4,7 +4,7 @@
  *  @brief  LIC (Line Integral Convolution) class.
  *
  *  @author Naohisa Sakamoto
- *  @date   2009/01/15 20:06:32
+ *  @date   2010/01/08 11:34:54
  */
 /*----------------------------------------------------------------------------
  *
@@ -24,7 +24,7 @@ namespace kvs
 
 /*===========================================================================*/
 /**
- *  @brief  
+ *  @brief  Constructs a new LineIntegralConvolution class.
  */
 /*===========================================================================*/
 LineIntegralConvolution::LineIntegralConvolution( void ):
@@ -36,9 +36,8 @@ LineIntegralConvolution::LineIntegralConvolution( void ):
 
 /*===========================================================================*/
 /**
- *  @brief  
- *
- *  @param  volume      
+ *  @brief  Constructs a new LineIntegralConvolution class.
+ *  @param  volume [in] pointer to the input volume data
  */
 /*===========================================================================*/
 LineIntegralConvolution::LineIntegralConvolution( const kvs::StructuredVolumeObject* volume ):
@@ -51,10 +50,9 @@ LineIntegralConvolution::LineIntegralConvolution( const kvs::StructuredVolumeObj
 
 /*===========================================================================*/
 /**
- *  @brief  
- *
- *  @param  volume      
- *  @param  length      
+ *  @brief  Constructs a new LineIntegralConvolution class.
+ *  @param  volume [in] pointer to the input volume data
+ *  @param  length [in] strem length
  */
 /*===========================================================================*/
 LineIntegralConvolution::LineIntegralConvolution( const kvs::StructuredVolumeObject* volume, const double length ):
@@ -66,19 +64,18 @@ LineIntegralConvolution::LineIntegralConvolution( const kvs::StructuredVolumeObj
 
 /*===========================================================================*/
 /**
- *  @brief  
+ *  @brief  Destructs the LineIntegralConvolution class.
  */
 /*===========================================================================*/
 LineIntegralConvolution::~LineIntegralConvolution( void )
 {
-    if( m_noise ){ delete m_noise; m_noise = NULL; }
+    if ( m_noise ){ delete m_noise; m_noise = NULL; }
 }
 
 /*===========================================================================*/
 /**
- *  @brief  
- *
- *  @param  length      
+ *  @brief  Sets the stream length.
+ *  @param  length [in] stream length
  */
 /*===========================================================================*/
 void LineIntegralConvolution::setLength( const double length )
@@ -88,42 +85,50 @@ void LineIntegralConvolution::setLength( const double length )
 
 /*===========================================================================*/
 /**
- *  @brief  LIC.
- *
+ *  @brief  Executes the filter process.
  *  @param  volume [i] pointer to a uniform volume data
- *
- *  @return LIC filtered unifrom volume data
+ *  @return pointer to the filtered structured volume object
  */
 /*===========================================================================*/
-kvs::ObjectBase* LineIntegralConvolution::exec( const kvs::ObjectBase* object )
+LineIntegralConvolution::SuperClass* LineIntegralConvolution::exec( const kvs::ObjectBase* object )
 {
-    const kvs::ObjectBase::ObjectType object_type = object->objectType();
-    if ( object_type == kvs::ObjectBase::Geometry )
+    if ( !object )
     {
-        kvsMessageError("Geometry object is not supported.");
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input object is NULL.");
         return( NULL );
     }
 
-    const kvs::VolumeObjectBase* volume = reinterpret_cast<const kvs::VolumeObjectBase*>( object );
-    const kvs::VolumeObjectBase::VolumeType volume_type = volume->volumeType();
-    if ( volume_type == kvs::VolumeObjectBase::Structured )
+    const kvs::StructuredVolumeObject* volume = kvs::StructuredVolumeObject::DownCast( object );
+    if ( !volume )
     {
-        this->create_noise_volume( reinterpret_cast<const kvs::StructuredVolumeObject*>( object ) );
-        this->filtering( reinterpret_cast<const kvs::StructuredVolumeObject*>( object ) );
-    }
-    else // volume_type == kvs::VolumeObjectBase::Unstructured
-    {
-        kvsMessageError("Unstructured volume object is not supported.");
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input object is not supported.");
         return( NULL );
     }
+
+    if ( volume->veclen() == 1 )
+    {
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input object is not vector data.");
+        return( NULL );
+    }
+
+    this->create_noise_volume( volume );
+    this->filtering( volume );
 
     return( this );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Filter the input volume.
+ *  @param  volume [in] pointer to the input structured volume object
+ */
+/*===========================================================================*/
 void LineIntegralConvolution::filtering( const kvs::StructuredVolumeObject* volume )
 {
     // Set the min/max coordinates.
-    //BaseClass::set_min_max_coords( volume, this );
     SuperClass::setMinMaxObjectCoords( volume->minObjectCoord(), volume->maxObjectCoord() );
     SuperClass::setMinMaxExternalCoords( volume->minExternalCoord(), volume->maxExternalCoord() );
 
@@ -132,6 +137,7 @@ void LineIntegralConvolution::filtering( const kvs::StructuredVolumeObject* volu
     else if( type == typeid(double) ) this->convolution<double>( volume );
     else
     {
+        BaseClass::m_is_success = false;
         kvsMessageError("Input volume data type is not float/double.");
         return;
     }
@@ -140,39 +146,29 @@ void LineIntegralConvolution::filtering( const kvs::StructuredVolumeObject* volu
 /*===========================================================================*/
 /**
  *  @brief  Create a noise volume.
- *
  *  @param  volume [i] pointer to a uniform volume data
  */
 /*===========================================================================*/
 void LineIntegralConvolution::create_noise_volume( const kvs::StructuredVolumeObject* volume )
 {
-    kvs::Vector3ui resol( volume->resolution() );
-
     //kvs::StructuredVolumeObject::Values data;
     kvs::ValueArray<kvs::UInt8> data( volume->nnodes() );
+    kvs::UInt8* pdata = data.pointer();
 
     // Random number generator. R = [0,1)
     kvs::MersenneTwister R;
 
     // Create a white noise volume.
-    unsigned int counter = 0;
-    for( size_t k = 0; k < resol.z(); k++ )
+    for ( size_t i = 0; i < volume->nnodes(); i++ )
     {
-        for( size_t j = 0; j < resol.y(); j++ )
-        {
-            for( size_t i = 0; i < resol.x(); i++ )
-            {
-                data[ counter ] = static_cast<kvs::UInt8>(  R() * 255.0 );
-                counter++;
-            }
-        }
+        *(pdata++) = static_cast<kvs::UInt8>( R() * 255.0 );
     }
 
     // Copy the white noise volume to m_noise.
     m_noise = new kvs::StructuredVolumeObject( volume->resolution(), 1, kvs::AnyValueArray( data ) );
-
-    if( !m_noise )
+    if ( !m_noise )
     {
+        BaseClass::m_is_success = false;
         kvsMessageError("Cannot create noise volume.");
         return;
     }
@@ -181,7 +177,6 @@ void LineIntegralConvolution::create_noise_volume( const kvs::StructuredVolumeOb
 /*===========================================================================*/
 /**
  *  @brief  Convolution.
- *
  *  @param  volume [i] pointer to a uniform volume data
  */
 /*===========================================================================*/

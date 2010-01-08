@@ -20,11 +20,11 @@
 namespace kvs
 {
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Constructor.
+ *  @brief  Constructs a new HitAndMissSampling class.
  */
-/*==========================================================================*/
+/*===========================================================================*/
 HitAndMissSampling::HitAndMissSampling( void ):
     kvs::MapperBase(),
     kvs::PointObject()
@@ -33,8 +33,8 @@ HitAndMissSampling::HitAndMissSampling( void ):
 
 /*==========================================================================*/
 /**
- *  Constructor.
- *  @param volume [in] pointer to the volume object
+ *  @brief  Constructs a new HitAndMissSampling class.
+ *  @param  volume [in] pointer to the volume object
  */
 /*==========================================================================*/
 HitAndMissSampling::HitAndMissSampling( const kvs::VolumeObjectBase* volume ):
@@ -46,9 +46,9 @@ HitAndMissSampling::HitAndMissSampling( const kvs::VolumeObjectBase* volume ):
 
 /*==========================================================================*/
 /**
- *  Constructor.
- *  @param volume [in] pointer to the volume object
- *  @param transfer_function [in] transfer function
+ *  @brief  Constructs a new HitAndMissSampling class.
+ *  @param  volume [in] pointer to the volume object
+ *  @param  transfer_function [in] transfer function
  */
 /*==========================================================================*/
 HitAndMissSampling::HitAndMissSampling(
@@ -62,23 +62,37 @@ HitAndMissSampling::HitAndMissSampling(
 
 /*==========================================================================*/
 /**
- *  Destructor.
+ *  @brief  Destroys the HitAndMissSampling class.
  */
 /*==========================================================================*/
 HitAndMissSampling::~HitAndMissSampling( void )
 {
 }
 
-kvs::ObjectBase* HitAndMissSampling::exec( const kvs::ObjectBase* object )
+/*===========================================================================*/
+/**
+ *  @brief  Executes the mapper process.
+ *  @param  object [in] pointer to the volume object
+ *  @return pointer to the point object
+ */
+/*===========================================================================*/
+HitAndMissSampling::SuperClass* HitAndMissSampling::exec( const kvs::ObjectBase* object )
 {
-    const kvs::ObjectBase::ObjectType object_type = object->objectType();
-    if ( object_type == kvs::ObjectBase::Geometry )
+    if ( !object )
     {
-        kvsMessageError("Geometry object is not supported.");
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input object is NULL.");
         return( NULL );
     }
 
-    const kvs::VolumeObjectBase* volume = reinterpret_cast<const kvs::VolumeObjectBase*>( object );
+    const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
+    if ( !volume )
+    {
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input object is not volume dat.");
+        return( NULL );
+    }
+
     const kvs::VolumeObjectBase::VolumeType volume_type = volume->volumeType();
     if ( volume_type == kvs::VolumeObjectBase::Structured )
     {
@@ -94,9 +108,8 @@ kvs::ObjectBase* HitAndMissSampling::exec( const kvs::ObjectBase* object )
 
 /*==========================================================================*/
 /**
- *  Generate particles as the PointObject.
- *  @param volume [in] pointer to the structured volume object
- *  @return point object
+ *  @brief  Mapping for the structured volume object.
+ *  @param  volume [in] pointer to the structured volume object
  */
 /*==========================================================================*/
 void HitAndMissSampling::mapping( const kvs::StructuredVolumeObject* volume )
@@ -113,16 +126,15 @@ void HitAndMissSampling::mapping( const kvs::StructuredVolumeObject* volume )
     else if ( type == typeid( kvs::UInt16 ) ) this->generate_particles<kvs::UInt16>( volume );
     else
     {
-        kvsMessageError("Unsupported data type '%s' of the structured volume.",
-                        volume->values().typeInfo()->typeName() );
+        BaseClass::m_is_success = false;
+        kvsMessageError("Unsupported data type '%s'.", volume->values().typeInfo()->typeName() );
     }
 }
 
 /*==========================================================================*/
 /**
- *  Generate particles as the PointObject.
- *  @param volume [in] pointer to the unstructured volume object
- *  @return point object
+ *  @brief  Mapping for the unstructured volume object.
+ *  @param  volume [in] pointer to the unstructured volume object
  */
 /*==========================================================================*/
 void HitAndMissSampling::mapping( const kvs::UnstructuredVolumeObject* volume )
@@ -147,15 +159,15 @@ void HitAndMissSampling::mapping( const kvs::UnstructuredVolumeObject* volume )
     else if ( type == typeid( kvs::Real64 ) ) this->generate_particles<kvs::Real64>( volume );
     else
     {
-        kvsMessageError("Unsupported data type '%s' of the unstructured volume.",
-                        volume->values().typeInfo()->typeName() );
+        BaseClass::m_is_success = false;
+        kvsMessageError("Unsupported data type '%s'.", volume->values().typeInfo()->typeName() );
     }
 }
 
 /*==========================================================================*/
 /**
- *  Generate particles for the structured volume object.
- *  @param volume [in] pointer to the structured volume object
+ *  @brief  Generate particles for the structured volume object.
+ *  @param  volume [in] pointer to the structured volume object
  */
 /*==========================================================================*/
 template <typename T>
@@ -242,6 +254,8 @@ template <typename T>
 void HitAndMissSampling::generate_particles( const kvs::UnstructuredVolumeObject* volume  )
 {
     kvs::IgnoreUnusedVariable( volume );
+
+    BaseClass::m_is_success = false;
     kvsMessageError("Not yet implemented the hit-and-miss method for the unstructured volume.");
 }
 

@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_MARCHING_CUBES_TABLE_H_INCLUDE
-#define KVS_CORE_MARCHING_CUBES_TABLE_H_INCLUDE
+#ifndef KVS__MARCHING_CUBES_TABLE_H_INCLUDE
+#define KVS__MARCHING_CUBES_TABLE_H_INCLUDE
 
 namespace kvs
 {
@@ -28,4 +28,4 @@ extern const int VertexID[12][2][3];
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_MARCHING_CUBES_TABLE_H_INCLUDE
+#endif // KVS__MARCHING_CUBES_TABLE_H_INCLUDE

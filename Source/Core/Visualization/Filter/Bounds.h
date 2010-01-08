@@ -11,11 +11,12 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_BOUNDS_H_INCLUDE
-#define KVS_CORE_BOUNDS_H_INCLUDE
+#ifndef KVS__BOUNDS_H_INCLUDE
+#define KVS__BOUNDS_H_INCLUDE
 
 #include <vector>
 #include <kvs/ClassName>
+#include <kvs/Module>
 #include <kvs/ObjectBase>
 #include <kvs/LineObject>
 #include <kvs/Vector2>
@@ -34,12 +35,13 @@ namespace kvs
 /*==========================================================================*/
 class Bounds : public kvs::FilterBase, public kvs::LineObject
 {
+    // Class name.
     kvsClassName( Bounds );
 
-public:
-
-    typedef kvs::FilterBase BaseClass;
-    typedef kvs::LineObject SuperClass;
+    // Module information.
+    kvsModuleCategory( Filter );
+    kvsModuleBaseClass( kvs::FilterBase );
+    kvsModuleSuperClass( kvs::LineObject );
 
 public:
 
@@ -68,7 +70,7 @@ public:
 
 public:
 
-    kvs::ObjectBase* exec( const kvs::ObjectBase* object );
+    SuperClass* exec( const kvs::ObjectBase* object );
 
 public:
 
@@ -97,4 +99,4 @@ private:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_BOUNDS_H_INCLUDE
+#endif // KVS__BOUNDS_H_INCLUDE

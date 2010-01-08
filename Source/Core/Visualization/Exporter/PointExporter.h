@@ -32,19 +32,19 @@ class PointExporter : public kvs::ExporterBase<FileFormatType>
 {
 public:
 
-    PointExporter( const kvs::PointObject* point_object );
+    PointExporter( const kvs::PointObject* object );
 
-    FileFormatType* exec( const kvs::ObjectBase* object_base );
+    FileFormatType* exec( const kvs::ObjectBase* object );
 };
 
 template <typename FileFormatType>
-PointExporter<FileFormatType>::PointExporter( const kvs::PointObject* point_object )
+PointExporter<FileFormatType>::PointExporter( const kvs::PointObject* object )
 {
-    this->exec( point_object );
+    this->exec( object );
 }
 
 template <typename FileFormatType>
-FileFormatType* PointExporter<FileFormatType>::exec( const kvs::ObjectBase* object_base )
+FileFormatType* PointExporter<FileFormatType>::exec( const kvs::ObjectBase* object )
 {
     return( NULL );
 }
@@ -59,9 +59,9 @@ class PointExporter<kvs::KVSMLObjectPoint> : public kvs::ExporterBase<kvs::KVSML
 {
 public:
 
-    PointExporter( const kvs::PointObject* point_object );
+    PointExporter( const kvs::PointObject* object );
 
-    kvs::KVSMLObjectPoint* exec( const kvs::ObjectBase* object_base );
+    kvs::KVSMLObjectPoint* exec( const kvs::ObjectBase* object );
 };
 
 } // end of namespace kvs

@@ -21,7 +21,7 @@ namespace kvs
 
 /*==========================================================================*/
 /**
- *  Constructs a new MarchingTetrahedra class.
+ *  @brief  Constructs a new MarchingTetrahedra class.
  */
 /*==========================================================================*/
 MarchingTetrahedra::MarchingTetrahedra( void ):
@@ -34,12 +34,12 @@ MarchingTetrahedra::MarchingTetrahedra( void ):
 
 /*==========================================================================*/
 /**
- *  Constructs and creates a polygon object.
- *  @param volume [in] pointer to the volume object
- *  @param isolevel [in] level of the isosurfaces
- *  @param normal_type [in] type of the normal vector
- *  @param duplication [in] duplication flag
- *  @param transfer_function [in] transfer function
+ *  @brief  Constructs and creates a polygon object.
+ *  @param  volume [in] pointer to the volume object
+ *  @param  isolevel [in] level of the isosurfaces
+ *  @param  normal_type [in] type of the normal vector
+ *  @param  duplication [in] duplication flag
+ *  @param  transfer_function [in] transfer function
  */
 /*==========================================================================*/
 MarchingTetrahedra::MarchingTetrahedra(
@@ -67,41 +67,46 @@ MarchingTetrahedra::MarchingTetrahedra(
 
 /*==========================================================================*/
 /**
- *  Destructs.
+ *  @brief  Destroys the MarchingTetrahedra class.
  */
 /*==========================================================================*/
 MarchingTetrahedra::~MarchingTetrahedra( void )
 {
 }
 
-kvs::ObjectBase* MarchingTetrahedra::exec( const kvs::ObjectBase* object )
+/*===========================================================================*/
+/**
+ *  @brief  Executes the mapper process.
+ *  @param  object [in] pointer to the input volume object
+ *  @return pointer to the polygon object
+ */
+/*===========================================================================*/
+MarchingTetrahedra::SuperClass* MarchingTetrahedra::exec( const kvs::ObjectBase* object )
 {
-    const kvs::ObjectBase::ObjectType object_type = object->objectType();
-    if ( object_type == kvs::ObjectBase::Geometry )
+    if ( !object )
     {
-        kvsMessageError("Geometry object is not supported.");
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input object is NULL.");
         return( NULL );
     }
 
-    const kvs::VolumeObjectBase* volume = reinterpret_cast<const kvs::VolumeObjectBase*>( object );
-    const kvs::VolumeObjectBase::VolumeType volume_type = volume->volumeType();
-    if ( volume_type == kvs::VolumeObjectBase::Unstructured )
+    const kvs::UnstructuredVolumeObject* volume = kvs::UnstructuredVolumeObject::DownCast( object );
+    if ( !volume )
     {
-        this->mapping( reinterpret_cast<const kvs::UnstructuredVolumeObject*>( object ) );
-    }
-    else // volume_type == kvs::VolumeObjectBase::Structured
-    {
-        kvsMessageError("Unstructured volume object is not supported.");
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input object is not volume dat.");
         return( NULL );
     }
+
+    this->mapping( volume );
 
     return( this );
 }
 
 /*==========================================================================*/
 /**
- *  Extracts the surfaces.
- *  @param volume [in] pointer to the volume object
+ *  @brief  Extracts the surfaces.
+ *  @param  volume [in] pointer to the volume object
  */
 /*==========================================================================*/
 void MarchingTetrahedra::mapping( const kvs::UnstructuredVolumeObject* volume )
@@ -109,22 +114,22 @@ void MarchingTetrahedra::mapping( const kvs::UnstructuredVolumeObject* volume )
     // Check whether the volume can be processed or not.
     if ( volume->veclen() != 1 )
     {
-        kvsMessageError("The input volume is not a sclar field data.");
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input volume is not sclar field data.");
         return;
     }
 
     if ( volume->cellType() != kvs::VolumeObjectBase::Tetrahedra )
     {
-        kvsMessageError("The input volume is not tetrahedra cell data.");
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input volume is not tetrahedra cell data.");
         return;
     }
 
     // Attach the pointer to the volume object.
-//    BaseClass::m_volume = volume;
     BaseClass::attach_volume( volume );
 
     // Set the min/max coordinates.
-//    this->set_min_max_coords();
     BaseClass::set_min_max_coords( volume, this );
 
     // Extract surfaces.
@@ -141,32 +146,15 @@ void MarchingTetrahedra::mapping( const kvs::UnstructuredVolumeObject* volume )
     else if ( type == typeid( kvs::Real64 ) ) this->extract_surfaces<kvs::Real64>( volume );
     else
     {
-        kvsMessageError("Unsupported data type '%s' of the volume.",
-                        volume->values().typeInfo()->typeName() );
+        BaseClass::m_is_success = false;
+        kvsMessageError("Unsupported data type '%s'.", volume->values().typeInfo()->typeName() );
     }
 }
 
 /*==========================================================================*/
 /**
- *  Set the min/max coordinates.
- */
-/*==========================================================================*/
-/*
-void MarchingTetrahedra::set_min_max_coords( void )
-{
-    const kvs::Vector3f min_obj_coord( BaseClass::m_volume->minObjectCoord() );
-    const kvs::Vector3f max_obj_coord( BaseClass::m_volume->maxObjectCoord() );
-    const kvs::Vector3f min_ext_coord( BaseClass::m_volume->minExternalCoord() );
-    const kvs::Vector3f max_ext_coord( BaseClass::m_volume->maxExternalCoord() );
-    SuperClass::setMinMaxObjectCoords( min_obj_coord, max_obj_coord );
-    SuperClass::setMinMaxExternalCoords( min_ext_coord, max_ext_coord );
-}
-*/
-
-/*==========================================================================*/
-/**
- *  Extracts the surfaces.
- *  @param volume [in] pointer to the structured volume object
+ *  @brief  Extracts the surfaces.
+ *  @param  volume [in] pointer to the structured volume object
  */
 /*==========================================================================*/
 template <typename T>
@@ -178,8 +166,8 @@ void MarchingTetrahedra::extract_surfaces( const kvs::UnstructuredVolumeObject* 
 
 /*==========================================================================*/
 /**
- *  Extracts the surfaces with duplication.
- *  @param volume [in] pointer to the unstructured volume object
+ *  @brief  Extracts the surfaces with duplication.
+ *  @param  volume [in] pointer to the unstructured volume object
  */
 /*==========================================================================*/
 template <typename T>
@@ -269,8 +257,8 @@ void MarchingTetrahedra::extract_surfaces_with_duplication(
 
 /*==========================================================================*/
 /**
- *  Extracts the surfaces without duplication.
- *  @param volume [in] pointer to the structured volume object
+ *  @brief  Extracts the surfaces without duplication.
+ *  @param  volume [in] pointer to the structured volume object
  */
 /*==========================================================================*/
 template <typename T>
@@ -323,8 +311,8 @@ void MarchingTetrahedra::extract_surfaces_without_duplication(
 
 /*==========================================================================*/
 /**
- *  Calculate a index of the marching tetrahedra table.
- *  @param local_index [in] indices of the cell
+ *  @brief  Calculate a index of the marching tetrahedra table.
+ *  @param  local_index [in] indices of the cell
  *  @return table index
  */
 /*==========================================================================*/
@@ -345,9 +333,9 @@ const size_t MarchingTetrahedra::calculate_table_index( const size_t* local_inde
 
 /*==========================================================================*/
 /**
- *  Interpolates a coordinate value of the intersected vertex.
- *  @param vertex0 [in] index of the vertex of the end point #0
- *  @param vertex1 [in] index of the vertex of the end point #1
+ *  @brief  Interpolates a coordinate value of the intersected vertex.
+ *  @param  vertex0 [in] index of the vertex of the end point #0
+ *  @param  vertex1 [in] index of the vertex of the end point #1
  *  @return interpolated vertex coordinate
  */
 /*==========================================================================*/
@@ -375,7 +363,7 @@ const kvs::Vector3f MarchingTetrahedra::interpolate_vertex(
 
 /*==========================================================================*/
 /**
- *  Calculates a color of the surfaces from the isolevel.
+ *  @brief  Calculates a color of the surfaces from the isolevel.
  *  @return surface color
  */
 /*==========================================================================*/
@@ -396,14 +384,14 @@ const kvs::RGBColor MarchingTetrahedra::calculate_color( void )
     return( BaseClass::transferFunction().colorMap()[ index ] );
 }
 
+#if NOT_YET_IMPLEMENTED
 /*==========================================================================*/
 /**
- *  Calculates the coordinates on the surfaces.
- *  @param  vertex_map [i/o] pointer to the vertex map
- *  @param  coords     [i/o] coordinate array
+ *  @brief  Calculates the coordinates on the surfaces.
+ *  @param  vertex_map [in/out] pointer to the vertex map
+ *  @param  coords [in/out] coordinate array
  */
 /*==========================================================================*/
-#if NOT_YET_IMPLEMENTED
 template <typename T>
 void MarchingTetrahedra::calculate_isopoints(
     kvs::UInt32*&             vertex_map,
@@ -435,14 +423,14 @@ void MarchingTetrahedra::calculate_isopoints(
 }
 #endif // NOT_YET_IMPLEMENTED
 
+#if NOT_YET_IMPLEMENTED
 /*==========================================================================*/
 /**
- *  Connects the coordinates.
- *  @param  vertex_map  [i/o] pointer to the vertex map
- *  @param  connections [i/o] connection array
+ *  @brief  Connects the coordinates.
+ *  @param  vertex_map [in/out] pointer to the vertex map
+ *  @param  connections [in/out] connection array
  */
 /*==========================================================================*/
-#if NOT_YET_IMPLEMENTED
 template <typename T>
 void MarchingTetrahedra::connect_isopoints(
     kvs::UInt32*&             vertex_map,
@@ -494,15 +482,15 @@ void MarchingTetrahedra::connect_isopoints(
 }
 #endif // NOT_YET_IMPLEMENTED
 
+#if NOT_YET_IMPLEMENTED
 /*==========================================================================*/
 /**
- *  Calculates a normal vector array on the polygon.
- *  @param coords [in] coordinate array
- *  @param connections [in] connection array
- *  @param  normals     [out] normal vector array
+ *  @brief  Calculates a normal vector array on the polygon.
+ *  @param  coords [in] coordinate array
+ *  @param  connections [in] connection array
+ *  @param  normals [out] normal vector array
  */
 /*==========================================================================*/
-#if NOT_YET_IMPLEMENTED
 void MarchingTetrahedra::calculate_normals_on_polygon(
     const std::vector<kvs::Real32>& coords,
     const std::vector<kvs::UInt32>& connections,
@@ -535,15 +523,15 @@ void MarchingTetrahedra::calculate_normals_on_polygon(
 }
 #endif // NOT_YET_IMPLEMENTED
 
+#if NOT_YET_IMPLEMENTED
 /*==========================================================================*/
 /**
- *  Calculates a normal vector array on the vertex.
- *  @param coords [in] coordinate array
- *  @param connections [in] connection array
- *  @param  normals     [out] normal vector array
+ *  @brief  Calculates a normal vector array on the vertex.
+ *  @param  coords [in] coordinate array
+ *  @param  connections [in] connection array
+ *  @param  normals [out] normal vector array
  */
 /*==========================================================================*/
-#if NOT_YET_IMPLEMENTED
 void MarchingTetrahedra::calculate_normals_on_vertex(
     const std::vector<kvs::Real32>& coords,
     const std::vector<kvs::UInt32>& connections,

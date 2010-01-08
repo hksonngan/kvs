@@ -173,6 +173,12 @@ void StreamlineBase::mapping( const kvs::VolumeObjectBase* volume )
     }
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Extracts the line segments.
+ *  @param  volume [in] pointer to the volume object
+ */
+/*===========================================================================*/
 void StreamlineBase::extract_lines(
     const kvs::StructuredVolumeObject* volume )
 {
@@ -393,6 +399,15 @@ const bool StreamlineBase::calculate_one_side(
     }
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Calculate a next vertex.
+ *  @param  current_vertex [in] current vertex
+ *  @param  current_direction [in] current direction vector
+ *  @param  next_vertex [in] next vertex
+ *  @return 
+ */
+/*===========================================================================*/
 const bool StreamlineBase::calculate_next_vertex(
     const kvs::Vector3f& current_vertex,
     const kvs::Vector3f& current_direction,
@@ -422,6 +437,15 @@ const bool StreamlineBase::calculate_next_vertex(
     return( false );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Integrate by Eular.
+ *  @param  current_vertex [in] current vertex
+ *  @param  current_direction [in] current direction vector
+ *  @param  next_vertex [in] next vertex
+ *  @return 
+ */
+/*===========================================================================*/
 const bool StreamlineBase::integrate_by_euler(
     const kvs::Vector3f& current_vertex,
     const kvs::Vector3f& current_direction,
@@ -438,6 +462,15 @@ const bool StreamlineBase::integrate_by_euler(
     return( true );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Integrate by Runge-Kutta 2nd.
+ *  @param  current_vertex [in] current vertex
+ *  @param  current_direction [in] current direction vector
+ *  @param  next_vertex [in] next vertex
+ *  @return 
+ */
+/*===========================================================================*/
 const bool StreamlineBase::integrate_by_runge_kutta_2nd(
     const kvs::Vector3f& current_vertex,
     const kvs::Vector3f& current_direction,
@@ -464,6 +497,15 @@ const bool StreamlineBase::integrate_by_runge_kutta_2nd(
     return( true );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Integrate by Runge-Kutta 4th.
+ *  @param  current_vertex [in] current vertex
+ *  @param  current_direction [in] current direction vector
+ *  @param  next_vertex [in] next vertex
+ *  @return 
+ */
+/*===========================================================================*/
 const bool StreamlineBase::integrate_by_runge_kutta_4th(
     const kvs::Vector3f& current_vertex,
     const kvs::Vector3f& current_direction,
@@ -539,11 +581,25 @@ const bool StreamlineBase::check_for_inside_volume( const kvs::Vector3f& point )
     return( true );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Check the vector length.
+ *  @param  direction [in] direction vector
+ *  @return true if the vector length is smaller than the threshold
+ */
+/*===========================================================================*/
 const bool StreamlineBase::check_for_vector_length( const kvs::Vector3f& direction )
 {
     return( direction.length() < m_vector_length_threshold );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Check the number of integrations.
+ *  @param  times [in] number of integrations
+ *  @return true if the given number is bigger than the threshold
+ */
+/*===========================================================================*/
 const bool StreamlineBase::check_for_integration_times( const size_t times )
 {
     return( times >= m_integration_times_threshold );

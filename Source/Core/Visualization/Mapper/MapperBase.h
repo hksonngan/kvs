@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_MAPPER_BASE_H_INCLUDE
-#define KVS_CORE_MAPPER_BASE_H_INCLUDE
+#ifndef KVS__MAPPER_BASE_H_INCLUDE
+#define KVS__MAPPER_BASE_H_INCLUDE
 
 #include <kvs/ClassName>
 #include <kvs/ObjectBase>
@@ -91,4 +91,4 @@ protected:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_MAPPER_BASE_H_INCLUDE
+#endif // KVS__MAPPER_BASE_H_INCLUDE

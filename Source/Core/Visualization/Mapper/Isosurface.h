@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_ISOSURFACE_H_INCLUDE
-#define KVS_CORE_ISOSURFACE_H_INCLUDE
+#ifndef KVS__ISOSURFACE_H_INCLUDE
+#define KVS__ISOSURFACE_H_INCLUDE
 
 #include <kvs/PolygonObject>
 #include <kvs/VolumeObjectBase>
@@ -68,7 +68,7 @@ public:
 
 public:
 
-    kvs::ObjectBase* exec( const kvs::ObjectBase* object );
+    SuperClass* exec( const kvs::ObjectBase* object );
 
 private:
 
@@ -77,4 +77,4 @@ private:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_ISOSURFACE_H_INCLUDE
+#endif // KVS__ISOSURFACE_H_INCLUDE

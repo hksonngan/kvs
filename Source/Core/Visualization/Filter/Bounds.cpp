@@ -17,11 +17,11 @@
 namespace kvs
 {
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Constructor.
+ *  @brief  Constructs a new Bounds class.
  */
-/*==========================================================================*/
+/*===========================================================================*/
 Bounds::Bounds( void ):
     m_type( Bounds::Box ),
     m_corner_scale( 0.2f ),
@@ -31,7 +31,7 @@ Bounds::Bounds( void ):
 
 /*==========================================================================*/
 /**
- *  Constructor.
+ *  @brief  Constructs a new Bounds class.
  *  @param object [in] pointer to the object
  */
 /*==========================================================================*/
@@ -45,7 +45,7 @@ Bounds::Bounds( const kvs::ObjectBase* object ):
 
 /*==========================================================================*/
 /**
- *  Constructor.
+ *  @brief  Constructs a new Bounds class.
  *  @param object [in] pointer to the object
  *  @param type [in] bounds type
  */
@@ -58,11 +58,11 @@ Bounds::Bounds( const kvs::ObjectBase* object, const Bounds::Type type ):
     this->exec( object );
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Destructor.
+ *  @brief  Destructs the Bounds class.
  */
-/*==========================================================================*/
+/*===========================================================================*/
 Bounds::~Bounds( void )
 {
 }
@@ -73,18 +73,30 @@ Bounds::~Bounds( void )
  *  @param object [in] pointer to the object
  */
 /*==========================================================================*/
-kvs::ObjectBase* Bounds::exec( const kvs::ObjectBase* object )
+Bounds::SuperClass* Bounds::exec( const kvs::ObjectBase* object )
 {
-    if( object )
+    if ( !object )
     {
-        SuperClass::setMinMaxObjectCoords(
-            object->minObjectCoord(),
-            object->maxObjectCoord() );
-
-        SuperClass::setMinMaxExternalCoords(
-            object->minExternalCoord(),
-            object->maxExternalCoord() );
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input object is NULL.");
+        return( NULL );
     }
+
+    if ( object->objectType() != kvs::ObjectBase::Geometry ||
+         object->objectType() != kvs::ObjectBase::Volume )
+    {
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input object is not supported.");
+        return( NULL );
+    }
+
+    SuperClass::setMinMaxObjectCoords(
+        object->minObjectCoord(),
+        object->maxObjectCoord() );
+
+    SuperClass::setMinMaxExternalCoords(
+        object->minExternalCoord(),
+        object->maxExternalCoord() );
 
     switch( m_type )
     {
@@ -101,8 +113,8 @@ kvs::ObjectBase* Bounds::exec( const kvs::ObjectBase* object )
 
 /*==========================================================================*/
 /**
- *  Set the bounds type.
- *  @param type [in] bounds type
+ *  @breif  Set the bounds type.
+ *  @param  type [in] bounds type
  */
 /*==========================================================================*/
 void Bounds::setType( const Bounds::Type type )
@@ -112,8 +124,8 @@ void Bounds::setType( const Bounds::Type type )
 
 /*==========================================================================*/
 /**
- *  Set the corner scale size.
- *  @param corner_scale [in] corner scale size
+ *  @breif  Set the corner scale size.
+ *  @param  corner_scale [in] corner scale size
  */
 /*==========================================================================*/
 void Bounds::setCornerScale( const float corner_scale )
@@ -123,8 +135,8 @@ void Bounds::setCornerScale( const float corner_scale )
 
 /*==========================================================================*/
 /**
- *  Set the division size.
- *  @param division [in] division size
+ *  @breif  Set the division size.
+ *  @param  division [in] division size
  */
 /*==========================================================================*/
 void Bounds::setCircleDivision( const float division )
@@ -134,7 +146,7 @@ void Bounds::setCircleDivision( const float division )
 
 /*==========================================================================*/
 /**
- *  Initialize parameters.
+ *  @breif  Initialize the parameters.
  */
 /*==========================================================================*/
 void Bounds::initialize( void )
@@ -146,7 +158,7 @@ void Bounds::initialize( void )
 
 /*==========================================================================*/
 /**
- *  Create a box type bounds.
+ *  @breif  Create a box type bounds.
  */
 /*==========================================================================*/
 void Bounds::create_box_bounds( void )
@@ -198,7 +210,7 @@ void Bounds::create_box_bounds( void )
 
 /*==========================================================================*/
 /**
- *  Create a corner type bounds.
+ *  @breif  Create a corner type bounds.
  */
 /*==========================================================================*/
 void Bounds::create_corner_bounds( void )
@@ -258,7 +270,7 @@ void Bounds::create_corner_bounds( void )
 
 /*==========================================================================*/
 /**
- *  Create a circel type bounds.
+ *  @breif  Create a circel type bounds.
  */
 /*==========================================================================*/
 void Bounds::create_circle_bounds( void )
@@ -369,10 +381,10 @@ void Bounds::create_circle_bounds( void )
 
 /*==========================================================================*/
 /**
- *  Set cornet lines.
- *  @param v1 [in] vertex #1
- *  @param v2 [in] vertex #2
- *  @param  coords   [out] pointer to the coordinate array
+ *  @breif  Set cornet lines.
+ *  @param  v1 [in] vertex #1
+ *  @param  v2 [in] vertex #2
+ *  @param  coords [out] pointer to the coordinate array
  *  @param  connects [out] pointer to the connection array
  */
 /*==========================================================================*/

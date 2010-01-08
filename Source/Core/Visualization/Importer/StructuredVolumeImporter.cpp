@@ -22,8 +22,8 @@ namespace
 
 /*==========================================================================*/
 /**
- *  Converts to the grid type from the given string.
- *  @param grid_type [in] grid type string
+ *  @brief  Converts to the grid type from the given string.
+ *  @param  grid_type [in] grid type string
  *  @return grid type
  */
 /*==========================================================================*/
@@ -47,13 +47,19 @@ namespace kvs
 
 /*==========================================================================*/
 /**
- *  Constructs a new kvs::StructuredVolumeImporter.
+ *  @brief  Constructs a new StructuredVolumeImporter class.
  */
 /*==========================================================================*/
 StructuredVolumeImporter::StructuredVolumeImporter( void )
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new StructuredVolumeImporter class.
+ *  @param  filename [in] input filename
+ */
+/*===========================================================================*/
 StructuredVolumeImporter::StructuredVolumeImporter( const std::string& filename )
 {
     if ( kvs::KVSMLObjectStructuredVolume::CheckFileExtension( filename ) )
@@ -61,12 +67,14 @@ StructuredVolumeImporter::StructuredVolumeImporter( const std::string& filename 
         kvs::KVSMLObjectStructuredVolume* file_format = new kvs::KVSMLObjectStructuredVolume( filename );
         if( !file_format )
         {
+            BaseClass::m_is_success = false;
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             return;
         }
 
         if( file_format->isFailure() )
         {
+            BaseClass::m_is_success = false;
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             delete file_format;
             return;
@@ -80,12 +88,14 @@ StructuredVolumeImporter::StructuredVolumeImporter( const std::string& filename 
         kvs::AVSField* file_format = new kvs::AVSField( filename );
         if( !file_format )
         {
+            BaseClass::m_is_success = false;
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             return;
         }
 
         if( file_format->isFailure() )
         {
+            BaseClass::m_is_success = false;
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             delete file_format;
             return;
@@ -96,17 +106,16 @@ StructuredVolumeImporter::StructuredVolumeImporter( const std::string& filename 
     }
     else
     {
+        BaseClass::m_is_success = false;
         kvsMessageError("Cannot import '%s'.",filename.c_str());
         return;
     }
-
-//    BaseClass::m_is_success = true;
 }
 
 /*==========================================================================*/
 /**
- *  Constructs a new kvs::StructuredVolumeImporter and import an object.
- *  @param file_format [in] pointer to the file format data
+ *  @brief  Constructs a new StructuredVolumeImporter class.
+ *  @param  file_format [in] pointer to the file format data
  */
 /*==========================================================================*/
 StructuredVolumeImporter::StructuredVolumeImporter( const kvs::FileFormatBase* file_format )
@@ -114,36 +123,44 @@ StructuredVolumeImporter::StructuredVolumeImporter( const kvs::FileFormatBase* f
     if ( !this->exec( file_format ) ) BaseClass::m_is_success = true;
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Destroys the kvs::StructuredVolumeImporter.
+ *  @brief  Destructs the StructuredVolumeImporter class.
  */
-/*==========================================================================*/
+/*===========================================================================*/
 StructuredVolumeImporter::~StructuredVolumeImporter( void )
 {
 }
 
 /*===========================================================================*/
 /**
- *  Imports a kvs::StructuredVolumeObject from the file format data.
+ *  @brief  Executes the import process.
  *  @param  file_format [in] pointer to the file format data
- *  @return Pointer to the imported object as kvs::ObjectBase
+ *  @return pointer to the imported structured volume object
  */
 /*===========================================================================*/
-kvs::ObjectBase* StructuredVolumeImporter::exec( const kvs::FileFormatBase* file_format )
+StructuredVolumeImporter::SuperClass* StructuredVolumeImporter::exec( const kvs::FileFormatBase* file_format )
 {
+    if ( !file_format )
+    {
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input file format is NULL.");
+        return( NULL );
+    }
+
     const std::string class_name( file_format->className() );
     if ( class_name == "KVSMLObjectStructuredVolume" )
     {
-        this->import( reinterpret_cast<const kvs::KVSMLObjectStructuredVolume*>( file_format ) );
+        this->import( static_cast<const kvs::KVSMLObjectStructuredVolume*>( file_format ) );
     }
     else if ( class_name == "AVSField" )
     {
-        this->import( reinterpret_cast<const kvs::AVSField*>( file_format ) );
+        this->import( static_cast<const kvs::AVSField*>( file_format ) );
     }
     else
     {
-        kvsMessageError( "Unsupported class '%s'.", class_name.c_str() );
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input file format is not supported.");
         return( NULL );
     }
 
@@ -152,8 +169,8 @@ kvs::ObjectBase* StructuredVolumeImporter::exec( const kvs::FileFormatBase* file
 
 /*==========================================================================*/
 /**
- *  Import from the KVSML format data.
- *  @param kvsml [in] pointer to the KVSML format data
+ *  @brief  Imports the KVSML format data.
+ *  @param  kvsml [in] pointer to the KVSML format data
  */
 /*==========================================================================*/
 void StructuredVolumeImporter::import(
@@ -178,14 +195,12 @@ void StructuredVolumeImporter::import(
     SuperClass::setVeclen( kvsml->veclen() );
     SuperClass::setValues( kvsml->values() );
     SuperClass::updateMinMaxCoords();
-
-    BaseClass::m_is_success = true;
 }
 
 /*==========================================================================*/
 /**
- *  Import from the AVS field format data.
- *  @param field [in] pointer to the AVS field format data
+ *  @brief  Imports the AVS field format data.
+ *  @param  field [in] pointer to the AVS field format data
  */
 /*==========================================================================*/
 void StructuredVolumeImporter::import( const kvs::AVSField* field )
@@ -222,8 +237,6 @@ void StructuredVolumeImporter::import( const kvs::AVSField* field )
     SuperClass::setVeclen( field->veclen() );
     SuperClass::setResolution( field->dim() );
     SuperClass::setValues( field->values() );
-
-    BaseClass::m_is_success = true;
 }
 
 } // end of namespace kvs

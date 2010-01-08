@@ -429,17 +429,31 @@ void Tubeline::setNDivisions( const size_t ndivisions )
     m_ndivisions = ndivisions;
 }
 
-kvs::ObjectBase* Tubeline::exec( const kvs::ObjectBase* object )
+/*===========================================================================*/
+/**
+ *  @brief  Execites the filter process.
+ *  @param  object [in] pointer to the input object
+ *  @return pointer to the filtered object
+ */
+/*===========================================================================*/
+Tubeline::SuperClass* Tubeline::exec( const kvs::ObjectBase* object )
 {
+    if ( !object )
+    {
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input object is NULL.");
+        return( NULL );
+    }
+
     const kvs::LineObject* line = kvs::LineObject::DownCast( object );
     if ( !line )
     {
-        kvsMessageError( "Cannot cast to a line object." );
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input object is not supported.");
         return( NULL );
     }
 
     // Set the min/max coordinates.
-    //BaseClass::set_min_max_coords( line, this );
     SuperClass::setMinMaxObjectCoords( line->minObjectCoord(), line->maxObjectCoord() );
     SuperClass::setMinMaxExternalCoords( line->minExternalCoord(), line->maxExternalCoord() );
 
@@ -462,6 +476,7 @@ kvs::ObjectBase* Tubeline::exec( const kvs::ObjectBase* object )
     }
     else
     {
+        BaseClass::m_is_success = false;
         kvsMessageError("Unknown line type.");
         return( NULL );
     }
@@ -880,7 +895,6 @@ void Tubeline::calculate_circles(
     float max_z = length * 0.5f - post_radius;
     if ( length - post_radius - pre_radius < 0  )
     {
-//        KVS_MACRO_ASSERT( length - post_radius - pre_radius > 0 );
         min_z = 0.0f;
         max_z = length;
     }

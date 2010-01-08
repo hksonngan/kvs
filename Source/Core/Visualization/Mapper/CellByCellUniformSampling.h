@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_CELL_BY_CELL_UNIFORM_SAMPLING_H_INCLUDE
-#define KVS_CORE_CELL_BY_CELL_UNIFORM_SAMPLING_H_INCLUDE
+#ifndef KVS__CELL_BY_CELL_UNIFORM_SAMPLING_H_INCLUDE
+#define KVS__CELL_BY_CELL_UNIFORM_SAMPLING_H_INCLUDE
 
 #include <kvs/MapperBase>
 #include <kvs/Camera>
@@ -74,7 +74,8 @@ public:
 
 public:
 
-    kvs::ObjectBase* exec( const kvs::ObjectBase* object );
+//    kvs::ObjectBase* exec( const kvs::ObjectBase* object );
+    SuperClass* exec( const kvs::ObjectBase* object );
 
 public:
 
@@ -107,4 +108,4 @@ private:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_CELL_BY_CELL_UNIFORM_SAMPLING_H_INCLUDE
+#endif // KVS__CELL_BY_CELL_UNIFORM_SAMPLING_H_INCLUDE

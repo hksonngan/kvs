@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_FREQUENCY_TABLE_H_INCLUDE
-#define KVS_CORE_FREQUENCY_TABLE_H_INCLUDE
+#ifndef KVS__FREQUENCY_TABLE_H_INCLUDE
+#define KVS__FREQUENCY_TABLE_H_INCLUDE
 
 #include <kvs/ValueArray>
 #include <kvs/Type>
@@ -188,4 +188,4 @@ inline void FrequencyTable::binning( const kvs::ImageObject* image, const size_t
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_FREQUENCY_TABLE_H_INCLUDE
+#endif // KVS__FREQUENCY_TABLE_H_INCLUDE

@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_IMAGE_IMPORTER_H_INCLUDE
-#define KVS_CORE_IMAGE_IMPORTER_H_INCLUDE
+#ifndef KVS__IMAGE_IMPORTER_H_INCLUDE
+#define KVS__IMAGE_IMPORTER_H_INCLUDE
 
 #include "ImporterBase.h"
 #include <string>
@@ -58,7 +58,7 @@ public:
 
 public:
 
-    kvs::ObjectBase* exec( const kvs::FileFormatBase* file_format );
+    SuperClass* exec( const kvs::FileFormatBase* file_format );
 
 private:
 
@@ -79,4 +79,4 @@ private:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_IMAGE_IMPORTER_H_INCLUDE
+#endif // KVS__IMAGE_IMPORTER_H_INCLUDE

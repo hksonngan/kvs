@@ -32,19 +32,19 @@ class LineExporter : public kvs::ExporterBase<FileFormatType>
 {
 public:
 
-    LineExporter( const kvs::LineObject* line_object );
+    LineExporter( const kvs::LineObject* object );
 
-    FileFormatType* exec( const kvs::ObjectBase* object_base );
+    FileFormatType* exec( const kvs::ObjectBase* object );
 };
 
 template <typename FileFormatType>
-LineExporter<FileFormatType>::LineExporter( const kvs::LineObject* line_object )
+LineExporter<FileFormatType>::LineExporter( const kvs::LineObject* object )
 {
-    this->exec( line_object );
+    this->exec( object );
 }
 
 template <typename FileFormatType>
-FileFormatType* LineExporter<FileFormatType>::exec( const kvs::ObjectBase* object_base )
+FileFormatType* LineExporter<FileFormatType>::exec( const kvs::ObjectBase* base )
 {
     return( NULL );
 }
@@ -59,9 +59,9 @@ class LineExporter<kvs::KVSMLObjectLine> : public kvs::ExporterBase<kvs::KVSMLOb
 {
 public:
 
-    LineExporter( const kvs::LineObject* line_object );
+    LineExporter( const kvs::LineObject* object );
 
-    kvs::KVSMLObjectLine* exec( const kvs::ObjectBase* object_base );
+    kvs::KVSMLObjectLine* exec( const kvs::ObjectBase* object );
 };
 
 } // end of namespace kvs

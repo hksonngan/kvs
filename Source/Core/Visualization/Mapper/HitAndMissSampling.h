@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_HIT_AND_MISS_SAMPLING_H_INCLUDE
-#define KVS_CORE_HIT_AND_MISS_SAMPLING_H_INCLUDE
+#ifndef KVS__HIT_AND_MISS_SAMPLING_H_INCLUDE
+#define KVS__HIT_AND_MISS_SAMPLING_H_INCLUDE
 
 #include <kvs/PointObject>
 #include <kvs/VolumeObjectBase>
@@ -56,15 +56,13 @@ public:
 
 public:
 
-    kvs::ObjectBase* exec( const kvs::ObjectBase* object );
+    SuperClass* exec( const kvs::ObjectBase* object );
 
 private:
 
     void mapping( const kvs::StructuredVolumeObject* volume );
 
     void mapping( const kvs::UnstructuredVolumeObject* volume );
-
-//    void set_min_max_coords( void );
 
     template <typename T>
     void generate_particles( const kvs::StructuredVolumeObject* volume );
@@ -75,4 +73,4 @@ private:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_HIT_AND_MISS_SAMPLING_H_INCLUDE
+#endif // KVS__HIT_AND_MISS_SAMPLING_H_INCLUDE

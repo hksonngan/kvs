@@ -138,70 +138,70 @@ TetrahedraToTetrahedra::~TetrahedraToTetrahedra( void )
  *  @return pointer to the converted object
  */
 /*===========================================================================*/
-kvs::ObjectBase* TetrahedraToTetrahedra::exec( const kvs::ObjectBase* object )
+TetrahedraToTetrahedra::SuperClass* TetrahedraToTetrahedra::exec( const kvs::ObjectBase* object )
 {
-    const kvs::ObjectBase::ObjectType object_type = object->objectType();
-    if ( object_type == kvs::ObjectBase::Geometry )
+    if ( !object )
     {
-        kvsMessageError("Geometry object is not supported.");
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input object is NULL.");
         return( NULL );
     }
 
-    const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
-    const kvs::VolumeObjectBase::VolumeType volume_type = volume->volumeType();
-    if ( volume_type == kvs::VolumeObjectBase::Unstructured )
+    const kvs::UnstructuredVolumeObject* volume = kvs::UnstructuredVolumeObject::DownCast( object );
+    if ( !volume )
     {
-        const kvs::UnstructuredVolumeObject* unstructured_volume = kvs::UnstructuredVolumeObject::DownCast( volume );
-        if ( unstructured_volume->cellType() == kvs::UnstructuredVolumeObject::QuadraticTetrahedra )
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input object is not supported.");
+        return( NULL );
+    }
+
+    if ( volume->cellType() == kvs::UnstructuredVolumeObject::QuadraticTetrahedra )
+    {
+        if ( m_method == TetrahedraToTetrahedra::Subdivision8 )
         {
-            if ( m_method == TetrahedraToTetrahedra::Subdivision8 )
+            const std::type_info& type = volume->values().typeInfo()->type();
+            if (      type == typeid( kvs::Int8   ) ) this->subdivide_8_tetrahedra<kvs::Int8>(   volume );
+            else if ( type == typeid( kvs::Int16  ) ) this->subdivide_8_tetrahedra<kvs::Int16>(  volume );
+            else if ( type == typeid( kvs::Int32  ) ) this->subdivide_8_tetrahedra<kvs::Int32>(  volume );
+            else if ( type == typeid( kvs::Int64  ) ) this->subdivide_8_tetrahedra<kvs::Int64>(  volume );
+            else if ( type == typeid( kvs::UInt8  ) ) this->subdivide_8_tetrahedra<kvs::UInt8>(  volume );
+            else if ( type == typeid( kvs::UInt16 ) ) this->subdivide_8_tetrahedra<kvs::UInt16>( volume );
+            else if ( type == typeid( kvs::UInt32 ) ) this->subdivide_8_tetrahedra<kvs::UInt32>( volume );
+            else if ( type == typeid( kvs::UInt64 ) ) this->subdivide_8_tetrahedra<kvs::UInt64>( volume );
+            else if ( type == typeid( kvs::Real32 ) ) this->subdivide_8_tetrahedra<kvs::Real32>( volume );
+            else if ( type == typeid( kvs::Real64 ) ) this->subdivide_8_tetrahedra<kvs::Real64>( volume );
+            else
             {
-                const std::type_info& type = unstructured_volume->values().typeInfo()->type();
-                if (      type == typeid( kvs::Int8   ) ) this->subdivide_8_tetrahedra<kvs::Int8>(   unstructured_volume );
-                else if ( type == typeid( kvs::Int16  ) ) this->subdivide_8_tetrahedra<kvs::Int16>(  unstructured_volume );
-                else if ( type == typeid( kvs::Int32  ) ) this->subdivide_8_tetrahedra<kvs::Int32>(  unstructured_volume );
-                else if ( type == typeid( kvs::Int64  ) ) this->subdivide_8_tetrahedra<kvs::Int64>(  unstructured_volume );
-                else if ( type == typeid( kvs::UInt8  ) ) this->subdivide_8_tetrahedra<kvs::UInt8>(  unstructured_volume );
-                else if ( type == typeid( kvs::UInt16 ) ) this->subdivide_8_tetrahedra<kvs::UInt16>( unstructured_volume );
-                else if ( type == typeid( kvs::UInt32 ) ) this->subdivide_8_tetrahedra<kvs::UInt32>( unstructured_volume );
-                else if ( type == typeid( kvs::UInt64 ) ) this->subdivide_8_tetrahedra<kvs::UInt64>( unstructured_volume );
-                else if ( type == typeid( kvs::Real32 ) ) this->subdivide_8_tetrahedra<kvs::Real32>( unstructured_volume );
-                else if ( type == typeid( kvs::Real64 ) ) this->subdivide_8_tetrahedra<kvs::Real64>( unstructured_volume );
-                else
-                {
-                    kvsMessageError("Unsupported data type '%s' of the structured volume.",
-                                    volume->values().typeInfo()->typeName() );
-                }
-            }
-            else if ( m_method == TetrahedraToTetrahedra::Removal )
-            {
-                const std::type_info& type = unstructured_volume->values().typeInfo()->type();
-                if (      type == typeid( kvs::Int8   ) ) this->remove_quadratic_nodes<kvs::Int8>(   unstructured_volume );
-                else if ( type == typeid( kvs::Int16  ) ) this->remove_quadratic_nodes<kvs::Int16>(  unstructured_volume );
-                else if ( type == typeid( kvs::Int32  ) ) this->remove_quadratic_nodes<kvs::Int32>(  unstructured_volume );
-                else if ( type == typeid( kvs::Int64  ) ) this->remove_quadratic_nodes<kvs::Int64>(  unstructured_volume );
-                else if ( type == typeid( kvs::UInt8  ) ) this->remove_quadratic_nodes<kvs::UInt8>(  unstructured_volume );
-                else if ( type == typeid( kvs::UInt16 ) ) this->remove_quadratic_nodes<kvs::UInt16>( unstructured_volume );
-                else if ( type == typeid( kvs::UInt32 ) ) this->remove_quadratic_nodes<kvs::UInt32>( unstructured_volume );
-                else if ( type == typeid( kvs::UInt64 ) ) this->remove_quadratic_nodes<kvs::UInt64>( unstructured_volume );
-                else if ( type == typeid( kvs::Real32 ) ) this->remove_quadratic_nodes<kvs::Real32>( unstructured_volume );
-                else if ( type == typeid( kvs::Real64 ) ) this->remove_quadratic_nodes<kvs::Real64>( unstructured_volume );
-                else
-                {
-                    kvsMessageError("Unsupported data type '%s' of the structured volume.",
-                                    volume->values().typeInfo()->typeName() );
-                }
+                BaseClass::m_is_success = false;
+                kvsMessageError("Unsupported data type '%s'.", volume->values().typeInfo()->typeName() );
+                return( NULL );
             }
         }
-        else
+        else if ( m_method == TetrahedraToTetrahedra::Removal )
         {
-            kvsMessageError("Input irregular volume data is not tetrahedral cells.");
-            return( NULL );
+            const std::type_info& type = volume->values().typeInfo()->type();
+            if (      type == typeid( kvs::Int8   ) ) this->remove_quadratic_nodes<kvs::Int8>(   volume );
+            else if ( type == typeid( kvs::Int16  ) ) this->remove_quadratic_nodes<kvs::Int16>(  volume );
+            else if ( type == typeid( kvs::Int32  ) ) this->remove_quadratic_nodes<kvs::Int32>(  volume );
+            else if ( type == typeid( kvs::Int64  ) ) this->remove_quadratic_nodes<kvs::Int64>(  volume );
+            else if ( type == typeid( kvs::UInt8  ) ) this->remove_quadratic_nodes<kvs::UInt8>(  volume );
+            else if ( type == typeid( kvs::UInt16 ) ) this->remove_quadratic_nodes<kvs::UInt16>( volume );
+            else if ( type == typeid( kvs::UInt32 ) ) this->remove_quadratic_nodes<kvs::UInt32>( volume );
+            else if ( type == typeid( kvs::UInt64 ) ) this->remove_quadratic_nodes<kvs::UInt64>( volume );
+            else if ( type == typeid( kvs::Real32 ) ) this->remove_quadratic_nodes<kvs::Real32>( volume );
+            else if ( type == typeid( kvs::Real64 ) ) this->remove_quadratic_nodes<kvs::Real64>( volume );
+            else
+            {
+                BaseClass::m_is_success = false;
+                kvsMessageError("Unsupported data type '%s'.", volume->values().typeInfo()->typeName() );
+                return( NULL );
+            }
         }
     }
-    else // volume_type == kvs::VolumeObjectBase::Structured
+    else
     {
-        kvsMessageError("Input data is not a volume data.");
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input object is not tetrahedral cells.");
         return( NULL );
     }
 

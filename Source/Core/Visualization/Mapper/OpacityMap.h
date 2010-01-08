@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_OPACITY_MAP_H_INCLUDE
-#define KVS_CORE_OPACITY_MAP_H_INCLUDE
+#ifndef KVS__OPACITY_MAP_H_INCLUDE
+#define KVS__OPACITY_MAP_H_INCLUDE
 
 #include <kvs/ClassName>
 
@@ -80,4 +80,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_OPACITY_MAP_H_INCLUDE
+#endif // KVS__OPACITY_MAP_H_INCLUDE

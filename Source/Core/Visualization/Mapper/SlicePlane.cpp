@@ -109,19 +109,32 @@ void SlicePlane::setPlane( const kvs::Vector3f& point, const kvs::Vector3f& norm
  *  @return pointer to the sliced plane (polygon object)
  */
 /*===========================================================================*/
-kvs::ObjectBase* SlicePlane::exec( const kvs::ObjectBase* object )
+SlicePlane::SuperClass* SlicePlane::exec( const kvs::ObjectBase* object )
 {
+    if ( !object )
+    {
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input object is NULL.");
+        return( NULL );
+    }
+
     const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
-    if ( volume ) this->mapping( volume );
-    else kvsMessageError("Geometry object is not supported.");
+    if ( !volume )
+    {
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input object is not volume dat.");
+        return( NULL );
+    }
+
+    this->mapping( volume );
 
     return( this );
 }
 
 /*==========================================================================*/
 /**
- *  Extracts the plane.
- *  @param volume [in] pointer to the volume object
+ *  @brief  Extracts the plane.
+ *  @param  volume [in] pointer to the volume object
  */
 /*==========================================================================*/
 void SlicePlane::mapping( const kvs::VolumeObjectBase* volume )
@@ -129,7 +142,8 @@ void SlicePlane::mapping( const kvs::VolumeObjectBase* volume )
     // Check whether the volume can be processed or not.
     if ( volume->veclen() != 1 )
     {
-        kvsMessageError("The input volume is not a sclar field data.");
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input volume is not a sclar field data.");
         return;
     }
 
@@ -142,7 +156,7 @@ void SlicePlane::mapping( const kvs::VolumeObjectBase* volume )
     if ( volume->volumeType() == kvs::VolumeObjectBase::Structured )
     {
         const kvs::StructuredVolumeObject* structured_volume =
-            reinterpret_cast<const kvs::StructuredVolumeObject*>( volume );
+            kvs::StructuredVolumeObject::DownCast( volume );
 
         const std::type_info& type = structured_volume->values().typeInfo()->type();
         if (      type == typeid( kvs::Int8   ) ) this->extract_plane<kvs::Int8>( structured_volume );
@@ -157,14 +171,14 @@ void SlicePlane::mapping( const kvs::VolumeObjectBase* volume )
         else if ( type == typeid( kvs::Real64 ) ) this->extract_plane<kvs::Real64>( structured_volume );
         else
         {
-            kvsMessageError("Unsupported data type '%s' of the volume.",
-                            structured_volume->values().typeInfo()->typeName() );
+            BaseClass::m_is_success = false;
+            kvsMessageError("Unsupported data type '%s'.", structured_volume->values().typeInfo()->typeName() );
         }
     }
     else // volume->volumeType() == kvs::VolumeObjectBase::Unstructured
     {
         const kvs::UnstructuredVolumeObject* unstructured_volume =
-            reinterpret_cast<const kvs::UnstructuredVolumeObject*>( volume );
+            kvs::UnstructuredVolumeObject::DownCast( volume );
 
         const std::type_info& type = unstructured_volume->values().typeInfo()->type();
         if (      type == typeid( kvs::Int8   ) ) this->extract_plane<kvs::Int8>( unstructured_volume );
@@ -179,16 +193,16 @@ void SlicePlane::mapping( const kvs::VolumeObjectBase* volume )
         else if ( type == typeid( kvs::Real64 ) ) this->extract_plane<kvs::Real64>( unstructured_volume );
         else
         {
-            kvsMessageError("Unsupported data type '%s' of the volume.",
-                            unstructured_volume->values().typeInfo()->typeName() );
+            BaseClass::m_is_success = false;
+            kvsMessageError("Unsupported data type '%s'.", unstructured_volume->values().typeInfo()->typeName() );
         }
     }
 }
 
 /*==========================================================================*/
 /**
- *  Extract a slice plane for a structured volume.
- *  @param volume [in] pointer to the structured volume object
+ *  @brief  Extract a slice plane for a structured volume.
+ *  @param  volume [in] pointer to the structured volume object
  */
 /*==========================================================================*/
 template <typename T>
@@ -329,8 +343,8 @@ void SlicePlane::extract_plane(
 
 /*==========================================================================*/
 /**
- *  Extract a slice plane for a unstructured volume.
- *  @param volume [in] pointer to the unstructured volume object
+ *  @brief  Extract a slice plane for a unstructured volume.
+ *  @param  volume [in] pointer to the unstructured volume object
  */
 /*==========================================================================*/
 template <typename T>
@@ -458,6 +472,15 @@ void SlicePlane::extract_plane(
     SuperClass::setNormalType( kvs::PolygonObject::PolygonNormal );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Calculate a table index.
+ *  @param  x [in] x coordinate of the grid
+ *  @param  y [in] y coordinate of the grid
+ *  @param  z [in] z coordinate of the grid
+ *  @return table index
+ */
+/*===========================================================================*/
 const size_t SlicePlane::calculate_table_index(
     const size_t x,
     const size_t y,
@@ -478,8 +501,8 @@ const size_t SlicePlane::calculate_table_index(
 
 /*==========================================================================*/
 /**
- *  Caluclate a table index.
- *  @param local_index [in] indices of a target cell
+ *  @brief  Caluclate a table index.
+ *  @param  local_index [in] indices of a target cell
  *  @return table index
  */
 /*==========================================================================*/
@@ -504,10 +527,10 @@ const size_t SlicePlane::calculate_table_index(
 
 /*==========================================================================*/
 /**
- *  Calculate a plane equation.
- *  @param x [in] x value of vertex
- *  @param y [in] y value of vertex
- *  @param z [in] z value of vertex
+ *  @brief  Calculate a plane equation.
+ *  @param  x [in] x value of vertex
+ *  @param  y [in] y value of vertex
+ *  @param  z [in] z value of vertex
  *  @return value of a plane equation
  */
 /*==========================================================================*/
@@ -524,8 +547,8 @@ const float SlicePlane::substitute_plane_equation(
 
 /*==========================================================================*/
 /**
- *  Calculate a plane equation.
- *  @param vertex [in] coordinate of vertex
+ *  @brief  Calculate a plane equation.
+ *  @param  vertex [in] coordinate of vertex
  *  @return value of a plane equation
  */
 /*==========================================================================*/
@@ -540,9 +563,9 @@ const float SlicePlane::substitute_plane_equation(
 
 /*==========================================================================*/
 /**
- *  Interpolate a coordinate value of a intersected vertex.
- *  @param vertex0 [in] vertex coordinate of the end point #0
- *  @param vertex1 [in] vertex coordinate of the end point #1
+ *  @brief  Interpolate a coordinate value of a intersected vertex.
+ *  @param  vertex0 [in] vertex coordinate of the end point #0
+ *  @param  vertex1 [in] vertex coordinate of the end point #1
  *  @return interpolated vertex coordinate
  */
 /*==========================================================================*/
@@ -559,10 +582,10 @@ const kvs::Vector3f SlicePlane::interpolate_vertex(
 
 /*==========================================================================*/
 /**
- *  Interpolate a value of a intersected vertex.
- *  @param volume [in] pointer to a structured volume
- *  @param vertex0 [in] vertex coordinate of the end point #0
- *  @param vertex1 [in] vertex coordinate of the end point #1
+ *  @brief  Interpolate a value of a intersected vertex.
+ *  @param  volume [in] pointer to a structured volume
+ *  @param  vertex0 [in] vertex coordinate of the end point #0
+ *  @param  vertex1 [in] vertex coordinate of the end point #1
  *  @return interpolated value
  */
 /*==========================================================================*/
@@ -589,10 +612,10 @@ const double SlicePlane::interpolate_value(
 
 /*==========================================================================*/
 /**
- *  Interpolate a value of a intersected vertex.
- *  @param volume [in] pointer to a unstructured volume
- *  @param index0 [in] index of the end point #0
- *  @param index1 [in] index of the end point #1
+ *  @brief  Interpolate a value of a intersected vertex.
+ *  @param  volume [in] pointer to a unstructured volume
+ *  @param  index0 [in] index of the end point #0
+ *  @param  index1 [in] index of the end point #1
  *  @return interpolated value
  */
 /*==========================================================================*/

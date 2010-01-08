@@ -73,7 +73,7 @@ public:
 */
 public:
 
-    kvs::ObjectBase* exec( const kvs::ObjectBase* object );
+    BaseClass::SuperClass* exec( const kvs::ObjectBase* object );
 
     void draw( void );
 

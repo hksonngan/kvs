@@ -20,14 +20,10 @@ namespace
 
 const kvs::Real32 LineVertices[12] =
 {
-//    0.0f,  0.5f, 0.0f,
-//    0.0f, -0.5f, 0.0f,
-//    -0.2f,  0.3f, 0.0f,
-//    0.2f,  0.3f, 0.0f
-    0.0f,  1.0f, 0.0f,
-    0.0f, 0.0f, 0.0f,
-    -0.2f,  0.8f, 0.0f,
-    0.2f,  0.8f, 0.0f
+     0.0f, 1.0f, 0.0f,
+     0.0f, 0.0f, 0.0f,
+    -0.2f, 0.8f, 0.0f,
+     0.2f, 0.8f, 0.0f
 };
 const kvs::UInt32 LineConnections[6] =
 {
@@ -36,14 +32,12 @@ const kvs::UInt32 LineConnections[6] =
     0, 3
 };
 
-//const kvs::Vector3f ConeTranslation = kvs::Vector3f( 0.0f, 0.0f, 0.2f );
 const kvs::Vector3f ConeTranslation = kvs::Vector3f( 0.0f, 0.0f, 0.7f );
 const kvs::Real32 ConeHeight = 0.3f;
 const kvs::Real32 ConeRadius = 0.15f;
 const size_t ConeSlices = 20;
 const size_t ConeStacks = 5;
 
-//const kvs::Vector3f CylinderTranslation = kvs::Vector3f( 0.0f, 0.0f, -0.5f );
 const kvs::Vector3f CylinderTranslation = kvs::Vector3f( 0.0f, 0.0f, 0.0f );
 const kvs::Real32 CylinderHeight = 0.7f;
 const kvs::Real32 CylinderRadius = 0.07f;
@@ -51,6 +45,7 @@ const size_t CylinderSlices = 20;
 const size_t CylinderStacks = 2;
 
 }; // end of namespace
+
 
 namespace kvs
 {
@@ -133,17 +128,30 @@ void ArrowGlyph::setType( const ArrowType type )
 
 /*===========================================================================*/
 /**
- *  @brief  Creates a arrow glyph object.
+ *  @brief  Creates an arrow glyph object.
  *  @param  object [in] pointer to the input object (volume object)
  *  @return pointer to the created glyph object
  */
 /*===========================================================================*/
-kvs::ObjectBase* ArrowGlyph::exec( const kvs::ObjectBase* object )
+ArrowGlyph::BaseClass::SuperClass* ArrowGlyph::exec( const kvs::ObjectBase* object )
 {
+    if ( !object )
+    {
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input object is NULL.");
+        return( NULL );
+    }
+
     const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
+    if ( !volume )
+    {
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input object is not volume dat.");
+        return( NULL );
+    }
+
     BaseClass::attach_volume( volume );
     BaseClass::set_min_max_coords( volume, this );
-
     BaseClass::calculate_coords( volume );
 
     const std::type_info& type = volume->values().typeInfo()->type();

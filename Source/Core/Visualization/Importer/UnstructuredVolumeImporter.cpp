@@ -12,7 +12,6 @@
  */
 /****************************************************************************/
 #include "UnstructuredVolumeImporter.h"
-
 #include <kvs/AVSUcd>
 #include <kvs/Message>
 #include <kvs/Vector3>
@@ -23,8 +22,8 @@ namespace
 
 /*==========================================================================*/
 /**
- *  Converts to the cell type from the given string.
- *  @param cell_type [in] grid type string
+ *  @brief  Converts to the cell type from the given string.
+ *  @param  cell_type [in] grid type string
  *  @return cell type
  */
 /*==========================================================================*/
@@ -43,8 +42,8 @@ const kvs::UnstructuredVolumeObject::CellType StringToCellType( const std::strin
 
 /*==========================================================================*/
 /**
- *  Converts to the cell type from the given element type.
- *  @param element_type [in] element type
+ *  @brief  Converts to the cell type from the given element type.
+ *  @param  element_type [in] element type
  *  @return cell type
  */
 /*==========================================================================*/
@@ -82,13 +81,19 @@ namespace kvs
 
 /*===========================================================================*/
 /**
- *  Constructs a new kvs::UnstructuredVolumeImporter.
+ *  @brief  Constructs a new UnstructuredVolumeImporter class.
  */
 /*===========================================================================*/
 UnstructuredVolumeImporter::UnstructuredVolumeImporter( void )
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new UnstructuredVolumeImporter class.
+ *  @param  filename [in] input filename
+ */
+/*===========================================================================*/
 UnstructuredVolumeImporter::UnstructuredVolumeImporter( const std::string& filename )
 {
     if ( kvs::KVSMLObjectUnstructuredVolume::CheckFileExtension( filename ) )
@@ -96,12 +101,14 @@ UnstructuredVolumeImporter::UnstructuredVolumeImporter( const std::string& filen
         kvs::KVSMLObjectUnstructuredVolume* file_format = new kvs::KVSMLObjectUnstructuredVolume( filename );
         if( !file_format )
         {
+            BaseClass::m_is_success = false;
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             return;
         }
 
         if( file_format->isFailure() )
         {
+            BaseClass::m_is_success = false;
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             delete file_format;
             return;
@@ -115,12 +122,14 @@ UnstructuredVolumeImporter::UnstructuredVolumeImporter( const std::string& filen
         kvs::AVSUcd* file_format = new kvs::AVSUcd( filename );
         if( !file_format )
         {
+            BaseClass::m_is_success = false;
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             return;
         }
 
         if( file_format->isFailure() )
         {
+            BaseClass::m_is_success = false;
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             delete file_format;
             return;
@@ -134,12 +143,14 @@ UnstructuredVolumeImporter::UnstructuredVolumeImporter( const std::string& filen
         kvs::AVSField* file_format = new kvs::AVSField( filename );
         if( !file_format )
         {
+            BaseClass::m_is_success = false;
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             return;
         }
 
         if( file_format->isFailure() )
         {
+            BaseClass::m_is_success = false;
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             delete file_format;
             return;
@@ -150,17 +161,16 @@ UnstructuredVolumeImporter::UnstructuredVolumeImporter( const std::string& filen
     }
     else
     {
+        BaseClass::m_is_success = false;
         kvsMessageError("Cannot import '%s'.",filename.c_str());
         return;
     }
-
-//    BaseClass::m_is_success = true;
 }
 
 /*==========================================================================*/
 /**
- *  Constructs a new kvs::UnstructuredVolumeImporter and import an object.
- *  @param file_format [in] pointer to the file format data
+ *  @brief  Constructs a new UnstructuredVolumeImporter class.
+ *  @param  file_format [in] pointer to the file format data
  */
 /*==========================================================================*/
 UnstructuredVolumeImporter::UnstructuredVolumeImporter( const kvs::FileFormatBase* file_format )
@@ -168,40 +178,49 @@ UnstructuredVolumeImporter::UnstructuredVolumeImporter( const kvs::FileFormatBas
     this->exec( file_format );
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Destroys the kvs::UnstructuredVolumeImporter.
+ *  @brief  Destructs the UnstructuredVolumeImporter class.
  */
-/*==========================================================================*/
+/*===========================================================================*/
 UnstructuredVolumeImporter::~UnstructuredVolumeImporter( void )
 {
 }
 
 /*===========================================================================*/
 /**
- *  Imports a kvs::UnstructuredVolumeObject from the file format data.
+ *  @brief  Executes the import process.
  *  @param  file_format [in] pointer to the file format data
- *  @return Pointer to the imported object as kvs::ObjectBase
+ *  @return pointer to the imported unstructured volume object
  */
 /*===========================================================================*/
-kvs::ObjectBase* UnstructuredVolumeImporter::exec( const kvs::FileFormatBase* file_format )
+UnstructuredVolumeImporter::SuperClass* UnstructuredVolumeImporter::exec( const kvs::FileFormatBase* file_format )
 {
+    if ( !file_format )
+    {
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input file format is NULL.");
+        return( NULL );
+    }
+
     const std::string class_name = file_format->className();
     if ( class_name == "KVSMLObjectUnstructuredVolume" )
     {
-        this->import( reinterpret_cast<const kvs::KVSMLObjectUnstructuredVolume*>( file_format ) );
+        this->import( static_cast<const kvs::KVSMLObjectUnstructuredVolume*>( file_format ) );
     }
     else if ( class_name == "AVSUcd" )
     {
-        this->import( reinterpret_cast<const kvs::AVSUcd*>( file_format ) );
+        this->import( static_cast<const kvs::AVSUcd*>( file_format ) );
     }
     else if ( class_name == "AVSField" )
     {
-        this->import( reinterpret_cast<const kvs::AVSField*>( file_format ) );
+        this->import( static_cast<const kvs::AVSField*>( file_format ) );
     }
     else
     {
-        kvsMessageError( "Unsupported class '%s'.", class_name.c_str() );
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input file format is not supported.");
+        return( NULL );
     }
 
     return( this );
@@ -209,8 +228,8 @@ kvs::ObjectBase* UnstructuredVolumeImporter::exec( const kvs::FileFormatBase* fi
 
 /*==========================================================================*/
 /**
- *  Import from the KVSML format data.
- *  @param kvsml [in] pointer to the KVSML format data
+ *  @brief  Imports a KVSML format data.
+ *  @param  kvsml [in] pointer to the KVSML format data
  */
 /*==========================================================================*/
 void UnstructuredVolumeImporter::import( const kvs::KVSMLObjectUnstructuredVolume* kvsml )
@@ -238,14 +257,12 @@ void UnstructuredVolumeImporter::import( const kvs::KVSMLObjectUnstructuredVolum
     SuperClass::setValues( kvsml->values() );
     SuperClass::updateMinMaxCoords();
     SuperClass::updateMinMaxValues();
-
-    BaseClass::m_is_success = true;
 }
 
 /*==========================================================================*/
 /**
- *  Import from the AVS UCD format data.
- *  @param ucd [in] pointer to the AVS UCD format data
+ *  @brief  Imports the AVS UCD format data.
+ *  @param  ucd [in] pointer to the AVS UCD format data
  */
 /*==========================================================================*/
 void UnstructuredVolumeImporter::import( const kvs::AVSUcd* ucd )
@@ -259,14 +276,19 @@ void UnstructuredVolumeImporter::import( const kvs::AVSUcd* ucd )
     SuperClass::setValues( kvs::AnyValueArray( ucd->values() ) );
     SuperClass::updateMinMaxCoords();
     SuperClass::updateMinMaxValues();
-
-    BaseClass::m_is_success = true;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Imports the AVS Filed format data.
+ *  @param  field [in] pointer to the AVS Filed format data
+ */
+/*===========================================================================*/
 void UnstructuredVolumeImporter::import( const kvs::AVSField* field )
 {
     if( field->fieldType() != kvs::AVSField::Irregular )
     {
+        BaseClass::m_is_success = false;
         kvsMessageError("Cannot import uniform/rectilinear type AVS field data.");
         return;
     }
@@ -323,8 +345,6 @@ void UnstructuredVolumeImporter::import( const kvs::AVSField* field )
     SuperClass::setValues( field->values() );
     SuperClass::updateMinMaxCoords();
     SuperClass::updateMinMaxValues();
-
-    BaseClass::m_is_success = true;
 }
 
 } // end of namespace kvs

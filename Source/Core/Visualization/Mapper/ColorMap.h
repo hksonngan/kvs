@@ -11,14 +11,12 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_COLOR_MAP_H_INCLUDE
-#define KVS_CORE_COLOR_MAP_H_INCLUDE
-
-#include <kvs/ClassName>
+#ifndef KVS__COLOR_MAP_H_INCLUDE
+#define KVS__COLOR_MAP_H_INCLUDE
 
 #include <list>
 #include <utility>
-
+#include <kvs/ClassName>
 #include <kvs/ValueArray>
 #include <kvs/Type>
 #include <kvs/RGBColor>
@@ -82,4 +80,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_COLOR_MAP_H_INCLUDE
+#endif // KVS__COLOR_MAP_H_INCLUDE

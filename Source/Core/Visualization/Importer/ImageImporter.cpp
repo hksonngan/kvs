@@ -30,6 +30,12 @@ ImageImporter::ImageImporter( void )
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new ImageImporter class.
+ *  @param  filename [in] input filename
+ */
+/*===========================================================================*/
 ImageImporter::ImageImporter( const std::string& filename )
 {
     if ( kvs::KVSMLObjectImage::CheckFileExtension( filename ) )
@@ -37,12 +43,14 @@ ImageImporter::ImageImporter( const std::string& filename )
         kvs::KVSMLObjectImage* file_format = new kvs::KVSMLObjectImage( filename );
         if( !file_format )
         {
+            BaseClass::m_is_success = false;
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             return;
         }
 
         if( file_format->isFailure() )
         {
+            BaseClass::m_is_success = false;
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             delete file_format;
             return;
@@ -56,12 +64,14 @@ ImageImporter::ImageImporter( const std::string& filename )
         kvs::Bmp* file_format = new kvs::Bmp( filename );
         if( !file_format )
         {
+            BaseClass::m_is_success = false;
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             return;
         }
 
         if( file_format->isFailure() )
         {
+            BaseClass::m_is_success = false;
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             delete file_format;
             return;
@@ -75,12 +85,14 @@ ImageImporter::ImageImporter( const std::string& filename )
         kvs::Tiff* file_format = new kvs::Tiff( filename );
         if( !file_format )
         {
+            BaseClass::m_is_success = false;
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             return;
         }
 
         if( file_format->isFailure() )
         {
+            BaseClass::m_is_success = false;
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             delete file_format;
             return;
@@ -94,12 +106,14 @@ ImageImporter::ImageImporter( const std::string& filename )
         kvs::Ppm* file_format = new kvs::Ppm( filename );
         if( !file_format )
         {
+            BaseClass::m_is_success = false;
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             return;
         }
 
         if( file_format->isFailure() )
         {
+            BaseClass::m_is_success = false;
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             delete file_format;
             return;
@@ -113,12 +127,14 @@ ImageImporter::ImageImporter( const std::string& filename )
         kvs::Pgm* file_format = new kvs::Pgm( filename );
         if( !file_format )
         {
+            BaseClass::m_is_success = false;
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             return;
         }
 
         if( file_format->isFailure() )
         {
+            BaseClass::m_is_success = false;
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             delete file_format;
             return;
@@ -132,12 +148,14 @@ ImageImporter::ImageImporter( const std::string& filename )
         kvs::Pbm* file_format = new kvs::Pbm( filename );
         if( !file_format )
         {
+            BaseClass::m_is_success = false;
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             return;
         }
 
         if( file_format->isFailure() )
         {
+            BaseClass::m_is_success = false;
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             delete file_format;
             return;
@@ -151,12 +169,14 @@ ImageImporter::ImageImporter( const std::string& filename )
         kvs::Dicom* file_format = new kvs::Dicom( filename );
         if( !file_format )
         {
+            BaseClass::m_is_success = false;
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             return;
         }
 
         if( file_format->isFailure() )
         {
+            BaseClass::m_is_success = false;
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             delete file_format;
             return;
@@ -168,6 +188,7 @@ ImageImporter::ImageImporter( const std::string& filename )
 
     else
     {
+        BaseClass::m_is_success = false;
         kvsMessageError("Cannot import '%s'.",filename.c_str());
         return;
     }
@@ -195,45 +216,54 @@ ImageImporter::~ImageImporter( void )
 
 /*===========================================================================*/
 /**
- *  @brief  Imports image data.
+ *  @brief  Imports the image data.
  *  @param  file_format [in] pointer to the image data
- *  @return pointer to the imported object data
+ *  @return pointer to the imported image object
  */
 /*===========================================================================*/
-kvs::ObjectBase* ImageImporter::exec( const kvs::FileFormatBase* file_format )
+ImageImporter::SuperClass* ImageImporter::exec( const kvs::FileFormatBase* file_format )
 {
+    if ( !file_format )
+    {
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input file format is NULL.");
+        return( NULL );
+    }
+
     const std::string class_name = file_format->className();
     if ( class_name == "KVSMLObjectImage" )
     {
-        this->import( reinterpret_cast<const kvs::KVSMLObjectImage*>( file_format ) );
+        this->import( static_cast<const kvs::KVSMLObjectImage*>( file_format ) );
     }
     else if ( class_name == "Bmp" )
     {
-        this->import( reinterpret_cast<const kvs::Bmp*>( file_format ) );
+        this->import( static_cast<const kvs::Bmp*>( file_format ) );
     }
     else if ( class_name == "Tiff" )
     {
-        this->import( reinterpret_cast<const kvs::Tiff*>( file_format ) );
+        this->import( static_cast<const kvs::Tiff*>( file_format ) );
     }
     else if ( class_name == "Ppm" )
     {
-        this->import( reinterpret_cast<const kvs::Ppm*>( file_format ) );
+        this->import( static_cast<const kvs::Ppm*>( file_format ) );
     }
     else if ( class_name == "Pgm" )
     {
-        this->import( reinterpret_cast<const kvs::Pgm*>( file_format ) );
+        this->import( static_cast<const kvs::Pgm*>( file_format ) );
     }
     else if ( class_name == "Pbm" )
     {
-        this->import( reinterpret_cast<const kvs::Pbm*>( file_format ) );
+        this->import( static_cast<const kvs::Pbm*>( file_format ) );
     }
     else if ( class_name == "Dicom" )
     {
-        this->import( reinterpret_cast<const kvs::Dicom*>( file_format ) );
+        this->import( static_cast<const kvs::Dicom*>( file_format ) );
     }
     else
     {
-        kvsMessageError( "Unsupported class '%s'.", class_name.c_str() );
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input file format is not supported.");
+        return( NULL );
     }
 
     return( this );
@@ -241,7 +271,7 @@ kvs::ObjectBase* ImageImporter::exec( const kvs::FileFormatBase* file_format )
 
 /*===========================================================================*/
 /**
- *  @brief  Imports KVSML image format data.
+ *  @brief  Imports the KVSML image format data.
  *  @param  kvsml [in] pointer to the KVSML image format data
  */
 /*===========================================================================*/
@@ -258,20 +288,20 @@ void ImageImporter::import( const kvs::KVSMLObjectImage* kvsml )
     }
     else
     {
+        BaseClass::m_is_success = false;
         kvsMessageError("Unknown pixel type.");
+        return;
     }
 
     SuperClass::m_width  = kvsml->width();
     SuperClass::m_height = kvsml->height();
     SuperClass::m_data   = kvsml->data(); // shallow copy
     SuperClass::m_type   = pixel_type;
-
-    BaseClass::m_is_success = true;
 }
 
 /*==========================================================================*/
 /**
- *  @brief  Imports BMP image format data.
+ *  @brief  Imports the BMP image format data.
  *  @param  bmp [in] pointer to BMP image format data
  */
 /*==========================================================================*/
@@ -281,13 +311,11 @@ void ImageImporter::import( const kvs::Bmp* bmp )
     SuperClass::m_height = bmp->height();
     SuperClass::m_data   = bmp->data(); // shallow copy
     SuperClass::m_type   = static_cast<SuperClass::PixelType>( bmp->bitsPerPixel() );
-
-    BaseClass::m_is_success = true;
 }
 
 /*==========================================================================*/
 /**
- *  @brief  Imports TIFF image format data.
+ *  @brief  Imports the TIFF image format data.
  *  @param  tiff [in] pointer to TIFF image format data
  */
 /*==========================================================================*/
@@ -308,11 +336,12 @@ void ImageImporter::import( const kvs::Tiff* tiff )
     }
     else //  tiff->colorMode() == kvs::Tiff::UnknownColorMode
     {
+        BaseClass::m_is_success = false;
         kvsMessageError("Unknown TIFF color mode.");
         return;
     }
 
-    const kvs::UInt8* raw_data = reinterpret_cast<const kvs::UInt8*>( tiff->rawData().pointer() );
+    const kvs::UInt8* raw_data = static_cast<const kvs::UInt8*>( tiff->rawData().pointer() );
     const size_t      raw_size = tiff->rawData().byteSize();
     kvs::ValueArray<kvs::UInt8> data( raw_data, raw_size ); // deep copy
 
@@ -320,13 +349,11 @@ void ImageImporter::import( const kvs::Tiff* tiff )
     SuperClass::m_height = tiff->height();
     SuperClass::m_data   = data; // shallow copy
     SuperClass::m_type   = pixel_type;
-
-    BaseClass::m_is_success = true;
 }
 
 /*==========================================================================*/
 /**
- *  @brief  Imports PPM image format data.
+ *  @brief  Imports the PPM image format data.
  *  @param  ppm [in] pointer to PPM image format data
  */
 /*==========================================================================*/
@@ -336,13 +363,11 @@ void ImageImporter::import( const kvs::Ppm* ppm )
     SuperClass::m_height = ppm->height();
     SuperClass::m_data   = ppm->data();
     SuperClass::m_type   = kvs::ImageObject::Color24;
-
-    BaseClass::m_is_success = true;
 }
 
 /*==========================================================================*/
 /**
- *  @brief  Imports PGM image format data.
+ *  @brief  Imports the PGM image format data.
  *  @param  pgm [in] pointer to PGM image format data
  */
 /*==========================================================================*/
@@ -352,13 +377,11 @@ void ImageImporter::import( const kvs::Pgm* pgm )
     SuperClass::m_height = pgm->height();
     SuperClass::m_data   = pgm->data();
     SuperClass::m_type   = kvs::ImageObject::Gray8;
-
-    BaseClass::m_is_success = true;
 }
 
 /*==========================================================================*/
 /**
- *  @brief  Imports PBM image format data.
+ *  @brief  Imports the PBM image format data.
  *  @param  pbm [in] pointer to PBM image format data
  */
 /*==========================================================================*/
@@ -376,13 +399,11 @@ void ImageImporter::import( const kvs::Pbm* pbm )
     SuperClass::m_height = pbm->height();
     SuperClass::m_data   = data;
     SuperClass::m_type   = kvs::ImageObject::Gray8;
-
-    BaseClass::m_is_success = true;
 }
 
 /*==========================================================================*/
 /**
- *  @brief  Imports DICOM image format data.
+ *  @brief  Imports the DICOM image format data.
  *  @param  dicom [in] pointer to DICOM image format data
  */
 /*==========================================================================*/
@@ -392,8 +413,6 @@ void ImageImporter::import( const kvs::Dicom* dicom )
     SuperClass::m_height = dicom->row();
     SuperClass::m_data   = dicom->pixelData();
     SuperClass::m_type   = kvs::ImageObject::Gray8;
-
-    BaseClass::m_is_success = true;
 }
 
 } // end of namespace kvs

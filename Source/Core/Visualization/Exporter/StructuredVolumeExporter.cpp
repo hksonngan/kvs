@@ -73,11 +73,19 @@ StructuredVolumeExporter<kvs::KVSMLObjectStructuredVolume>::StructuredVolumeExpo
 kvs::KVSMLObjectStructuredVolume* StructuredVolumeExporter<kvs::KVSMLObjectStructuredVolume>::exec(
     const kvs::ObjectBase* object )
 {
+    if ( !object )
+    {
+        m_is_success = false;
+        kvsMessageError("Input object is NULL.");
+        return( NULL );
+    }
+
     // Cast to the structured volume object.
-    const kvs::StructuredVolumeObject* volume = ::CastToStructuredVolumeObject( object );
+    const kvs::StructuredVolumeObject* volume = kvs::StructuredVolumeObject::DownCast( object );
     if ( !volume )
     {
-        kvsMessageError("Cannot cast to a structured volume object from the given object.");
+        m_is_success = false;
+        kvsMessageError("Input object is not structured volume object.");
         return( NULL );
     }
 
@@ -104,6 +112,7 @@ kvs::KVSMLObjectStructuredVolume* StructuredVolumeExporter<kvs::KVSMLObjectStruc
 */
     default:
     {
+        m_is_success = false;
         kvsMessageError("'uniform' grid type is only supported.");
         break;
     }
@@ -138,11 +147,19 @@ StructuredVolumeExporter<kvs::AVSField>::StructuredVolumeExporter(
 kvs::AVSField* StructuredVolumeExporter<kvs::AVSField>::exec(
     const kvs::ObjectBase* object )
 {
+    if ( !object )
+    {
+        m_is_success = false;
+        kvsMessageError("Input object is NULL.");
+        return( NULL );
+    }
+
     // Cast to the structured volume object.
-    const kvs::StructuredVolumeObject* volume = ::CastToStructuredVolumeObject( object );
+    const kvs::StructuredVolumeObject* volume = kvs::StructuredVolumeObject::DownCast( object );
     if ( !volume )
     {
-        kvsMessageError("Cannot cast to a structured volume object from the given object.");
+        m_is_success = false;
+        kvsMessageError("Input object is not structured volume object.");
         return( NULL );
     }
 
@@ -197,8 +214,7 @@ kvs::AVSField* StructuredVolumeExporter<kvs::AVSField>::exec(
     }
     else
     {
-        kvsMessageError("Unsupported data type '%s' of the volume.",
-                        volume->values().typeInfo()->typeName() );
+        kvsMessageError("Unsupported data type '%s'.", volume->values().typeInfo()->typeName() );
     }
 
     // Check the grid type of the given structured volume object.
@@ -224,6 +240,7 @@ kvs::AVSField* StructuredVolumeExporter<kvs::AVSField>::exec(
 */
     default:
     {
+        m_is_success = false;
         kvsMessageError("Unknown grid type.");
         break;
     }

@@ -20,6 +20,11 @@
 namespace kvs
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  Exporter base class.
+ */
+/*===========================================================================*/
 template <typename FileFormatType>
 class ExporterBase : public FileFormatType
 {

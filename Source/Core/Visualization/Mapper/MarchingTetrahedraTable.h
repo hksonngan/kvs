@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_MARCHING_TETRAHEDRA_TABLE_H_INCLUDE
-#define KVS_CORE_MARCHING_TETRAHEDRA_TABLE_H_INCLUDE
+#ifndef KVS__MARCHING_TETRAHEDRA_TABLE_H_INCLUDE
+#define KVS__MARCHING_TETRAHEDRA_TABLE_H_INCLUDE
 
 namespace kvs
 {
@@ -28,4 +28,4 @@ extern const int VertexID[6][2];
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_MARCHING_TETRAHEDRA_TABLE_H_INCLUDE
+#endif // KVS__MARCHING_TETRAHEDRA_TABLE_H_INCLUDE

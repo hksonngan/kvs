@@ -21,7 +21,7 @@ namespace kvs
 
 /*==========================================================================*/
 /**
- *  Constructs a new empty MapperBase.
+ *  @brief  Constructs a new empty MapperBase.
  */
 /*==========================================================================*/
 MapperBase::MapperBase( void )
@@ -33,7 +33,7 @@ MapperBase::MapperBase( void )
 
 /*==========================================================================*/
 /**
- *  Constructs a new MapperBase.
+ *  @brief  Constructs a new MapperBase.
  */
 /*==========================================================================*/
 MapperBase::MapperBase( const TransferFunction& transfer_function )
@@ -45,43 +45,82 @@ MapperBase::MapperBase( const TransferFunction& transfer_function )
 
 /*==========================================================================*/
 /**
- *  Destroys the MapperBase.
+ *  @brief  Destroys the MapperBase.
  */
 /*==========================================================================*/
 MapperBase::~MapperBase( void )
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets a transfer function.
+ *  @param  transfer_function [in] transfer function
+ */
+/*===========================================================================*/
 void MapperBase::setTransferFunction( const kvs::TransferFunction& transfer_function )
 {
     m_transfer_function = transfer_function;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets a color map.
+ *  @param  color_map [in] color map
+ */
+/*===========================================================================*/
 void MapperBase::setColorMap( const kvs::ColorMap& color_map )
 {
     m_transfer_function.setColorMap( color_map );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets a opacity map.
+ *  @param  opacity_map [in] opacity map
+ */
+/*===========================================================================*/
 void MapperBase::setOpacityMap( const kvs::OpacityMap& opacity_map )
 {
     m_transfer_function.setOpacityMap( opacity_map );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the pointer to the volume object.
+ *  @return pointer to the volume object
+ */
+/*===========================================================================*/
 const kvs::VolumeObjectBase* const MapperBase::volume( void ) const
 {
     return( m_volume );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the transfer function.
+ */
+/*===========================================================================*/
 const kvs::TransferFunction& MapperBase::transferFunction( void ) const
 {
     return( m_transfer_function );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the color map.
+ */
+/*===========================================================================*/
 const kvs::ColorMap& MapperBase::colorMap( void ) const
 {
     return( m_transfer_function.colorMap() );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the opacity map.
+ */
+/*===========================================================================*/
 const kvs::OpacityMap& MapperBase::opacityMap( void ) const
 {
     return( m_transfer_function.opacityMap() );
@@ -89,8 +128,7 @@ const kvs::OpacityMap& MapperBase::opacityMap( void ) const
 
 /*==========================================================================*/
 /**
- *  Returns true if the mapping is success; otherwise returns false.
- *
+ *  @brief  Returns true if the mapping is success; otherwise returns false.
  *  @return Whether the mapping is success or not.
  */
 /*==========================================================================*/
@@ -101,8 +139,7 @@ const bool MapperBase::isSuccess( void ) const
 
 /*==========================================================================*/
 /**
- *  Returns true if the mapping is failure; otherwise returns false.
- *
+ *  @brief  Returns true if the mapping is failure; otherwise returns false.
  *  @return Whether the mapping is failure or not.
  */
 /*==========================================================================*/
@@ -111,11 +148,24 @@ const bool MapperBase::isFailure( void ) const
     return( !m_is_success );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Attaches a voluem object.
+ *  @param  volume [in] pointer to the volume object
+ */
+/*===========================================================================*/
 void MapperBase::attach_volume( const kvs::VolumeObjectBase* volume )
 {
     m_volume = volume;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Calculates the min/max coordinate values.
+ *  @param  volume [in] pointer to the input volume object
+ *  @param  object [in] pointer to the object (The calculated coordinates are set to this object)
+ */
+/*===========================================================================*/
 void MapperBase::set_min_max_coords( const kvs::VolumeObjectBase* volume, kvs::ObjectBase* object )
 {
     if ( !volume->hasMinMaxObjectCoords() )

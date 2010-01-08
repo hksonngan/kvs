@@ -23,7 +23,7 @@ namespace kvs
 
 /*==========================================================================*/
 /**
- *  Constructor.
+ *  @brief  Constructs a new MetropolisSampling class.
  */
 /*==========================================================================*/
 MetropolisSampling::MetropolisSampling( void ):
@@ -34,7 +34,7 @@ MetropolisSampling::MetropolisSampling( void ):
 
 /*==========================================================================*/
 /**
- *  Constructor.
+ *  @brief  Constructs a new MetropolisSampling class.
  *  @param volume [in] pointer to the volume object
  *  @param nparticles [in] number of particles
  */
@@ -51,7 +51,7 @@ MetropolisSampling::MetropolisSampling(
 
 /*==========================================================================*/
 /**
- *  Constructor.
+ *  @brief  Constructs a new MetropolisSampling class.
  *  @param volume [in] pointer to the volume object
  *  @param nparticles [in] number of generated particles
  *  @param transfer_function [in] transfer function
@@ -70,7 +70,7 @@ MetropolisSampling::MetropolisSampling(
 
 /*==========================================================================*/
 /**
- *  Destructor.
+ *  @brief  Destroys the MetropolisSampling class.
  */
 /*==========================================================================*/
 MetropolisSampling::~MetropolisSampling( void )
@@ -79,7 +79,7 @@ MetropolisSampling::~MetropolisSampling( void )
 
 /*==========================================================================*/
 /**
- *  Returns the number of generated particles.
+ *  @brief  Returns the number of generated particles.
  */
 /*==========================================================================*/
 const size_t MetropolisSampling::nparticles( void ) const
@@ -89,8 +89,8 @@ const size_t MetropolisSampling::nparticles( void ) const
 
 /*==========================================================================*/
 /**
- *  Set the number of generated particles.
- *  @param npoints [in] number of points
+ *  @brief  Set the number of generated particles.
+ *  @param  npoints [in] number of points
  */
 /*==========================================================================*/
 void MetropolisSampling::setNParticles( const size_t nparticles )
@@ -98,16 +98,30 @@ void MetropolisSampling::setNParticles( const size_t nparticles )
     m_nparticles = nparticles;
 }
 
-kvs::ObjectBase* MetropolisSampling::exec( const kvs::ObjectBase* object )
+/*===========================================================================*/
+/**
+ *  @brief  Executes the mapper process.
+ *  @param  object [in] pointer to the volume object
+ *  @return pointer to the point object
+ */
+/*===========================================================================*/
+MetropolisSampling::SuperClass* MetropolisSampling::exec( const kvs::ObjectBase* object )
 {
-    const kvs::ObjectBase::ObjectType object_type = object->objectType();
-    if ( object_type == kvs::ObjectBase::Geometry )
+    if ( !object )
     {
-        kvsMessageError("Geometry object is not supported.");
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input object is NULL.");
         return( NULL );
     }
 
-    const kvs::VolumeObjectBase* volume = reinterpret_cast<const kvs::VolumeObjectBase*>( object );
+    const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
+    if ( !volume )
+    {
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input object is not volume dat.");
+        return( NULL );
+    }
+
     const kvs::VolumeObjectBase::VolumeType volume_type = volume->volumeType();
     if ( volume_type == kvs::VolumeObjectBase::Structured )
     {
@@ -123,8 +137,8 @@ kvs::ObjectBase* MetropolisSampling::exec( const kvs::ObjectBase* object )
 
 /*==========================================================================*/
 /**
- *  Generate particles as the PointObject.
- *  @param volume [in] pointer to the structured volume object
+ *  @brief  Mapping for the structure volume object.
+ *  @param  volume [in] pointer to the structured volume object
  */
 /*==========================================================================*/
 void MetropolisSampling::mapping( const kvs::StructuredVolumeObject* volume )
@@ -141,21 +155,29 @@ void MetropolisSampling::mapping( const kvs::StructuredVolumeObject* volume )
     else if ( type == typeid( kvs::UInt16 ) ) this->generate_particles<kvs::UInt16>( volume );
     else
     {
-        kvsMessageError("Unsupported data type '%s' of the structured volume.",
-                        volume->values().typeInfo()->typeName() );
+        BaseClass::m_is_success = false;
+        kvsMessageError("Unsupported data type '%s'.", volume->values().typeInfo()->typeName() );
     }
 }
 
+/*==========================================================================*/
+/**
+ *  @brief  Mapping for the unstructure volume object.
+ *  @param  volume [in] pointer to the unstructured volume object
+ */
+/*==========================================================================*/
 void MetropolisSampling::mapping( const kvs::UnstructuredVolumeObject* volume )
 {
     kvs::IgnoreUnusedVariable( volume );
+
+    BaseClass::m_is_success = false;
     kvsMessageError("Not yet supported the metropolis method for the unstructured volume");
 }
 
 /*==========================================================================*/
 /**
- *  Generate particles for the structured volume object.
- *  @param volume [in] pointer to the structured volume object
+ *  @brief  Generate particles for the structured volume object.
+ *  @param  volume [in] pointer to the structured volume object
  */
 /*==========================================================================*/
 template <typename T>
@@ -253,11 +275,11 @@ void MetropolisSampling::generate_particles<kvs::UInt16>( const kvs::StructuredV
 
 /*==========================================================================*/
 /**
- *  Adopt the particle.
- *  @param index [in] index of the particle
- *  @param coord [in] coordinate of the particle
- *  @param scalar [in] scalar value of the particle
- *  @param gradient [in] gradient vector of the particle
+ *  @brief  Adopt the particle.
+ *  @param  index [in] index of the particle
+ *  @param  coord [in] coordinate of the particle
+ *  @param  scalar [in] scalar value of the particle
+ *  @param  gradient [in] gradient vector of the particle
  */
 /*==========================================================================*/
 void MetropolisSampling::adopt_particle(

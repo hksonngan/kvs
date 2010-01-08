@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_FILTER_BASE_H_INCLUDE
-#define KVS_CORE_FILTER_BASE_H_INCLUDE
+#ifndef KVS__FILTER_BASE_H_INCLUDE
+#define KVS__FILTER_BASE_H_INCLUDE
 
 #include <kvs/ObjectBase>
 #include <kvs/ClassName>
@@ -35,7 +35,7 @@ class FilterBase
 
 protected:
 
-    bool m_good; ///< good
+    bool m_is_success; ///< check flag for the filter process
 
 public:
 
@@ -49,11 +49,11 @@ public:
 
 public:
 
-    const bool good( void ) const;
+    const bool isSuccess( void ) const;
 
-    const bool fail( void ) const;
+    const bool isFailure( void ) const;
 };
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_FILTER_BASE_H_INCLUDE
+#endif // KVS__FILTER_BASE_H_INCLUDE

@@ -15,72 +15,69 @@
 #include <kvs/Message>
 
 
-namespace
-{
-
-const kvs::PolygonObject* CastToPolygonObject( const kvs::ObjectBase* object_base )
-{
-    if ( object_base->objectType() != kvs::ObjectBase::Geometry )
-    {
-        kvsMessageError("Input object is not a geometry object.");
-        return( NULL );
-    }
-
-    const kvs::GeometryObjectBase* geometry =
-        reinterpret_cast<const kvs::GeometryObjectBase*>( object_base );
-    if ( geometry->geometryType() != kvs::GeometryObjectBase::Polygon )
-    {
-        kvsMessageError("Input object is not a polygon object.");
-        return( NULL );
-    }
-
-    return( reinterpret_cast<const kvs::PolygonObject*>( geometry ) );
-}
-
-} // end of namespace
-
 namespace kvs
 {
 
-PolygonExporter<kvs::KVSMLObjectPolygon>::PolygonExporter( const kvs::PolygonObject* polygon_object )
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new PolygonExporter class for KVSMLObjectPolygon format.
+ *  @param  object [in] pointer to the input polygon object
+ */
+/*===========================================================================*/
+PolygonExporter<kvs::KVSMLObjectPolygon>::PolygonExporter( const kvs::PolygonObject* object )
 {
-    this->exec( polygon_object );
+    this->exec( object );
 }
 
-kvs::KVSMLObjectPolygon* PolygonExporter<kvs::KVSMLObjectPolygon>::exec( const kvs::ObjectBase* object_base )
+/*===========================================================================*/
+/**
+ *  @brief  Executes the export process.
+ *  @param  object [in] pointer to the input object
+ *  @return pointer to the KVSMLObjectPolygon format
+ */
+/*===========================================================================*/
+kvs::KVSMLObjectPolygon* PolygonExporter<kvs::KVSMLObjectPolygon>::exec( const kvs::ObjectBase* object )
 {
-    const kvs::PolygonObject* polygon_object = ::CastToPolygonObject( object_base );
-    if ( !polygon_object )
+    if ( !object )
     {
-        kvsMessageError("Cannot cast to a polygon object from the given object.");
+        m_is_success = false;
+        kvsMessageError("Input object is NULL.");
         return( NULL );
     }
 
-    switch ( polygon_object->polygonType() )
+    const kvs::PolygonObject* polygon = kvs::PolygonObject::DownCast( object );
+    if ( !polygon )
+    {
+        m_is_success = false;
+        kvsMessageError("Input object is not polygon object.");
+        return( NULL );
+    }
+
+    switch ( polygon->polygonType() )
     {
     case kvs::PolygonObject::Triangle: this->setPolygonType( "triangle" ); break;
     case kvs::PolygonObject::Quadrangle: this->setPolygonType( "quadrangle" ); break;
     default: break;
     }
 
-    switch ( polygon_object->colorType() )
+    switch ( polygon->colorType() )
     {
     case kvs::PolygonObject::VertexColor: this->setColorType( "vertex" ); break;
     case kvs::PolygonObject::PolygonColor: this->setColorType( "polygon" ); break;
     default: break;
     }
 
-    switch ( polygon_object->normalType() )
+    switch ( polygon->normalType() )
     {
     case kvs::PolygonObject::VertexNormal: this->setNormalType( "vertex" ); break;
     case kvs::PolygonObject::PolygonNormal: this->setNormalType( "polygon" ); break;
     default: break;
     }
 
-    this->setCoords( polygon_object->coords() );
-    this->setColors( polygon_object->colors() );
-    this->setConnections( polygon_object->connections() );
-    this->setNormals( polygon_object->normals() );
+    this->setCoords( polygon->coords() );
+    this->setColors( polygon->colors() );
+    this->setConnections( polygon->connections() );
+    this->setNormals( polygon->normals() );
 
     return( this );
 }

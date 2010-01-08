@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_ORTHO_SLICE_H_INCLUDE
-#define KVS_CORE_ORTHO_SLICE_H_INCLUDE
+#ifndef KVS__ORTHO_SLICE_H_INCLUDE
+#define KVS__ORTHO_SLICE_H_INCLUDE
 
 #include <kvs/SlicePlane>
 #include <kvs/VolumeObjectBase>
@@ -67,4 +67,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_ORTHO_SLICE_H_INCLUDE
+#endif // KVS__ORTHO_SLICE_H_INCLUDE

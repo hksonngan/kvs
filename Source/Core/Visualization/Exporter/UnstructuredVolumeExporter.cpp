@@ -17,38 +17,6 @@
 #include <kvs/UnstructuredVolumeObject>
 
 
-namespace
-{
-
-/*===========================================================================*/
-/**
- *  @brief  Casts to a pointer to the unstructured volume object.
- *  @param  object [in] pointer to the object
- *  @return pointer to the unstructured volume object
- */
-/*===========================================================================*/
-const kvs::UnstructuredVolumeObject* CastToUnstructuredVolumeObject( const kvs::ObjectBase* object )
-{
-    if ( object->objectType() != kvs::ObjectBase::Volume )
-    {
-        kvsMessageError("Input object is not a volumetry object.");
-        return( NULL );
-    }
-
-    const kvs::VolumeObjectBase* volume =
-        reinterpret_cast<const kvs::VolumeObjectBase*>( object );
-    if ( volume->volumeType() != kvs::VolumeObjectBase::Unstructured )
-    {
-        kvsMessageError("Input object is not a structured volume object.");
-        return( NULL );
-    }
-
-    return( reinterpret_cast<const kvs::UnstructuredVolumeObject*>( volume ) );
-}
-
-} // end of namespace
-
-
 namespace kvs
 {
 
@@ -73,11 +41,19 @@ UnstructuredVolumeExporter<kvs::KVSMLObjectUnstructuredVolume>::UnstructuredVolu
 kvs::KVSMLObjectUnstructuredVolume* UnstructuredVolumeExporter<kvs::KVSMLObjectUnstructuredVolume>::exec(
     const kvs::ObjectBase* object )
 {
-    // Cast to the unstructured volume object.
-    const kvs::UnstructuredVolumeObject* volume = ::CastToUnstructuredVolumeObject( object );
+    if ( !object )
+    {
+        m_is_success = false;
+        kvsMessageError("Input object is NULL.");
+        return( NULL );
+    }
+
+    // Cast to the structured volume object.
+    const kvs::UnstructuredVolumeObject* volume = kvs::UnstructuredVolumeObject::DownCast( object );
     if ( !volume )
     {
-        kvsMessageError("Cannot cast to a unstructured volume object from the given object.");
+        m_is_success = false;
+        kvsMessageError("Input object is not structured volume object.");
         return( NULL );
     }
 
@@ -111,6 +87,7 @@ kvs::KVSMLObjectUnstructuredVolume* UnstructuredVolumeExporter<kvs::KVSMLObjectU
     }
     default:
     {
+        m_is_success = false;
         kvsMessageError("Not supported cell type.");
         break;
     }

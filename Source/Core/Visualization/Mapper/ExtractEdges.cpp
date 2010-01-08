@@ -180,13 +180,21 @@ ExtractEdges::~ExtractEdges( void )
  *  @return pointer of the line object
  */
 /*===========================================================================*/
-kvs::ObjectBase* ExtractEdges::exec( const kvs::ObjectBase* object )
+ExtractEdges::SuperClass* ExtractEdges::exec( const kvs::ObjectBase* object )
 {
+    if ( !object )
+    {
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input object is NULL.");
+        return( NULL );
+    }
+
     const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
     if ( !volume )
     {
-        kvsMessageError("Geometry object is not supported.");
-        return( this );
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input object is not volume dat.");
+        return( NULL );
     }
 
     const kvs::VolumeObjectBase::VolumeType type = volume->volumeType();
@@ -307,7 +315,9 @@ void ExtractEdges::calculate_uniform_coords( const kvs::StructuredVolumeObject* 
 void ExtractEdges::calculate_rectilinear_coords( const kvs::StructuredVolumeObject* volume )
 {
     kvs::IgnoreUnusedVariable( volume );
-    kvsMessageError("Rectilinear volume has not yet support.");
+
+    BaseClass::m_is_success = false;
+    kvsMessageError("Rectilinear volume has not yet supportted.");
 }
 
 /*===========================================================================*/
@@ -430,8 +440,11 @@ void ExtractEdges::calculate_connections( const kvs::UnstructuredVolumeObject* v
         this->calculate_quadratic_hexahedra_connections( volume );
         break;
     default:
+    {
+        BaseClass::m_is_success = false;
         kvsMessageError("Unknown cell type.");
         break;
+    }
     }
 }
 

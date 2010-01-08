@@ -112,12 +112,25 @@ DiamondGlyph::~DiamondGlyph( void )
  *  @return pointer to the created glyph object
  */
 /*===========================================================================*/
-kvs::ObjectBase* DiamondGlyph::exec( const kvs::ObjectBase* object )
+DiamondGlyph::BaseClass::SuperClass* DiamondGlyph::exec( const kvs::ObjectBase* object )
 {
+    if ( !object )
+    {
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input object is NULL.");
+        return( NULL );
+    }
+
     const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
+    if ( !volume )
+    {
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input object is not volume dat.");
+        return( NULL );
+    }
+
     BaseClass::attach_volume( volume );
     BaseClass::set_min_max_coords( volume, this );
-
     BaseClass::calculate_coords( volume );
 
     const std::type_info& type = volume->values().typeInfo()->type();
@@ -197,7 +210,7 @@ kvs::ObjectBase* DiamondGlyph::exec( const kvs::ObjectBase* object )
 
 /*===========================================================================*/
 /**
- *  @brief  Draw the sphere glyph.
+ *  @brief  Draw the diamond glyph.
  */
 /*===========================================================================*/
 void DiamondGlyph::draw( void )

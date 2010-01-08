@@ -20,7 +20,7 @@ namespace kvs
 
 /*==========================================================================*/
 /**
- *  Constructs a new MarchingCubes class.
+ *  @brief  Constructs a new MarchingCubes class.
  */
 /*==========================================================================*/
 MarchingCubes::MarchingCubes( void ):
@@ -33,12 +33,12 @@ MarchingCubes::MarchingCubes( void ):
 
 /*==========================================================================*/
 /**
- *  Constructs and creates a polygon object.
- *  @param volume [in] pointer to the volume object
- *  @param isolevel [in] level of the isosurfaces
- *  @param normal_type [in] type of the normal vector
- *  @param duplication [in] duplication flag
- *  @param transfer_function [in] transfer function
+ *  @brief  Constructs and creates a polygon object.
+ *  @param  volume [in] pointer to the volume object
+ *  @param  isolevel [in] level of the isosurfaces
+ *  @param  normal_type [in] type of the normal vector
+ *  @param  duplication [in] duplication flag
+ *  @param  transfer_function [in] transfer function
  */
 /*==========================================================================*/
 MarchingCubes::MarchingCubes(
@@ -61,24 +61,45 @@ MarchingCubes::MarchingCubes(
 
 /*==========================================================================*/
 /**
- *  Destructs.
+ *  @brief  Destroys the MarchingCubes class.
  */
 /*==========================================================================*/
 MarchingCubes::~MarchingCubes( void )
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets a isolevel.
+ *  @param  isolevel [in] isolevel
+ */
+/*===========================================================================*/
 void MarchingCubes::setIsolevel( const double isolevel )
 {
     m_isolevel = isolevel;
 }
 
-kvs::ObjectBase* MarchingCubes::exec( const kvs::ObjectBase* object )
+/*===========================================================================*/
+/**
+ *  @brief  Executes the mapper process.
+ *  @param  object [in] pointer to the input volume object
+ *  @return pointer to the polygon object
+ */
+/*===========================================================================*/
+MarchingCubes::SuperClass* MarchingCubes::exec( const kvs::ObjectBase* object )
 {
-    const kvs::ObjectBase::ObjectType object_type = object->objectType();
-    if ( object_type == kvs::ObjectBase::Geometry )
+    if ( !object )
     {
-        kvsMessageError("Geometry object is not supported.");
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input object is NULL.");
+        return( NULL );
+    }
+
+    const kvs::StructuredVolumeObject* volume = kvs::StructuredVolumeObject::DownCast( object );
+    if ( !volume )
+    {
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input object is not volume dat.");
         return( NULL );
     }
 
@@ -88,25 +109,15 @@ kvs::ObjectBase* MarchingCubes::exec( const kvs::ObjectBase* object )
         m_duplication = false;
     }
 
-    const kvs::VolumeObjectBase* volume = reinterpret_cast<const kvs::VolumeObjectBase*>( object );
-    const kvs::VolumeObjectBase::VolumeType volume_type = volume->volumeType();
-    if ( volume_type == kvs::VolumeObjectBase::Structured )
-    {
-        this->mapping( reinterpret_cast<const kvs::StructuredVolumeObject*>( object ) );
-    }
-    else // volume_type == kvs::VolumeObjectBase::Unstructured
-    {
-        kvsMessageError("Unstructured volume object is not supported.");
-        return( NULL );
-    }
+    this->mapping( volume );
 
     return( this );
 }
 
 /*==========================================================================*/
 /**
- *  Extracts the surfaces.
- *  @param volume [in] pointer to the volume object
+ *  @brief  Extracts the surfaces.
+ *  @param  volume [in] pointer to the volume object
  */
 /*==========================================================================*/
 void MarchingCubes::mapping( const kvs::StructuredVolumeObject* volume )
@@ -114,6 +125,7 @@ void MarchingCubes::mapping( const kvs::StructuredVolumeObject* volume )
     // Check whether the volume can be processed or not.
     if ( volume->veclen() != 1 )
     {
+        BaseClass::m_is_success = false;
         kvsMessageError("The input volume is not a sclar field data.");
         return;
     }
@@ -138,15 +150,15 @@ void MarchingCubes::mapping( const kvs::StructuredVolumeObject* volume )
     else if ( type == typeid( kvs::Real64 ) ) this->extract_surfaces<kvs::Real64>( volume );
     else
     {
-        kvsMessageError("Unsupported data type '%s' of the volume.",
-                        volume->values().typeInfo()->typeName() );
+        BaseClass::m_is_success = false;
+        kvsMessageError("Unsupported data type '%s'.", volume->values().typeInfo()->typeName() );
     }
 }
 
 /*==========================================================================*/
 /**
- *  Extracts the surfaces.
- *  @param volume [in] pointer to the structured volume object
+ *  @brief  Extracts the surfaces.
+ *  @param  volume [in] pointer to the structured volume object
  */
 /*==========================================================================*/
 template <typename T>
@@ -158,8 +170,8 @@ void MarchingCubes::extract_surfaces( const kvs::StructuredVolumeObject* volume 
 
 /*==========================================================================*/
 /**
- *  Extracts the surfaces with duplication.
- *  @param volume [in] pointer to the structured volume object
+ *  @brief  Extracts the surfaces with duplication.
+ *  @param  volume [in] pointer to the structured volume object
  */
 /*==========================================================================*/
 template <typename T>
@@ -281,8 +293,8 @@ void MarchingCubes::extract_surfaces_with_duplication(
 
 /*==========================================================================*/
 /**
- *  Extracts the surfaces without duplication.
- *  @param volume [in] pointer to the structured volume object
+ *  @brief  Extracts the surfaces without duplication.
+ *  @param  volume [in] pointer to the structured volume object
  */
 /*==========================================================================*/
 template <typename T>
@@ -331,8 +343,8 @@ void MarchingCubes::extract_surfaces_without_duplication(
 
 /*==========================================================================*/
 /**
- *  Calculate a index of the marching cubes table.
- *  @param local_index [in] indices of the cell
+ *  @brief  Calculate a index of the marching cubes table.
+ *  @param  local_index [in] indices of the cell
  *  @return table index
  */
 /*==========================================================================*/
@@ -357,9 +369,9 @@ const size_t MarchingCubes::calculate_table_index( const size_t* local_index ) c
 
 /*==========================================================================*/
 /**
- *  Interpolates a coordinate value of the intersected vertex.
- *  @param vertex0 [in] vertex coordinate of the end point #0
- *  @param vertex1 [in] vertex coordinate of the end point #1
+ *  @brief  Interpolates a coordinate value of the intersected vertex.
+ *  @param  vertex0 [in] vertex coordinate of the end point #0
+ *  @param  vertex1 [in] vertex coordinate of the end point #1
  *  @return interpolated vertex coordinate
  */
 /*==========================================================================*/
@@ -391,7 +403,7 @@ const kvs::Vector3f MarchingCubes::interpolate_vertex(
 
 /*==========================================================================*/
 /**
- *  Calculates a color of the surfaces from the isolevel.
+ *  @brief  Calculates a color of the surfaces from the isolevel.
  *  @return surface color
  */
 /*==========================================================================*/
@@ -414,9 +426,9 @@ const kvs::RGBColor MarchingCubes::calculate_color( void )
 
 /*==========================================================================*/
 /**
- *  Calculates the coordinates on the surfaces.
- *  @param  vertex_map [i/o] pointer to the vertex map
- *  @param  coords     [i/o] coordinate array
+ *  @brief  Calculates the coordinates on the surfaces.
+ *  @param  vertex_map [in/out] pointer to the vertex map
+ *  @param  coords [in/out] coordinate array
  */
 /*==========================================================================*/
 template <typename T>
@@ -505,9 +517,9 @@ void MarchingCubes::calculate_isopoints(
 
 /*==========================================================================*/
 /**
- *  Connects the coordinates.
- *  @param  vertex_map  [i/o] pointer to the vertex map
- *  @param  connections [i/o] connection array
+ *  @brief  Connects the coordinates.
+ *  @param  vertex_map [in/out] pointer to the vertex map
+ *  @param  connections [in/out] connection array
  */
 /*==========================================================================*/
 template <typename T>
@@ -580,10 +592,10 @@ void MarchingCubes::connect_isopoints(
 
 /*==========================================================================*/
 /**
- *  Calculates a normal vector array on the polygon.
- *  @param coords [in] coordinate array
- *  @param connections [in] connection array
- *  @param  normals     [out] normal vector array
+ *  @brief  Calculates a normal vector array on the polygon.
+ *  @param  coords [in] coordinate array
+ *  @param  connections [in] connection array
+ *  @param  normals [out] normal vector array
  */
 /*==========================================================================*/
 void MarchingCubes::calculate_normals_on_polygon(
@@ -619,10 +631,10 @@ void MarchingCubes::calculate_normals_on_polygon(
 
 /*==========================================================================*/
 /**
- *  Calculates a normal vector array on the vertex.
- *  @param coords [in] coordinate array
- *  @param connections [in] connection array
- *  @param  normals     [out] normal vector array
+ *  @brief  Calculates a normal vector array on the vertex.
+ *  @param  coords [in] coordinate array
+ *  @param  connections [in] connection array
+ *  @param  normals [out] normal vector array
  */
 /*==========================================================================*/
 void MarchingCubes::calculate_normals_on_vertex(

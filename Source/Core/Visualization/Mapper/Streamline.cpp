@@ -4,7 +4,7 @@
  *  @brief  
  *
  *  @author Yukio YASUHARA
- *  @date   2009/01/16  1:02:37
+ *  @date   2010/01/08 18:51:30
  */
 /*----------------------------------------------------------------------------
  *
@@ -87,43 +87,62 @@ Streamline::~Streamline( void )
 {
 }
 
-kvs::ObjectBase* Streamline::exec( const kvs::ObjectBase* object )
+/*===========================================================================*/
+/**
+ *  @brief  Executes the mapper process.
+ *  @param  object [in] pointer to the volume object
+ *  @return line object
+ */
+/*===========================================================================*/
+Streamline::BaseClass::SuperClass* Streamline::exec( const kvs::ObjectBase* object )
 {
-    const kvs::ObjectBase::ObjectType type = object->objectType();
-    if ( type == kvs::ObjectBase::Volume )
+    if ( !object )
     {
-        const kvs::VolumeObjectBase* volume =
-            reinterpret_cast<const kvs::VolumeObjectBase*>( object );
-
-        // Check whether the volume can be processed or not.
-        if ( volume->veclen() != 3 )
-        {
-            kvsMessageError("The input volume is not a vector field data.");
-            return( NULL );
-        }
-
-        // Attach the pointer to the volume object.
-        BaseClass::attach_volume( volume );
-
-        // Set the min/max coordinates.
-        BaseClass::set_min_max_coords( volume, this );
-
-        // set the min/max vector length.
-        if ( !volume->hasMinMaxValues() )
-        {
-            volume->updateMinMaxValues();
-        }
-
-        BaseClass::mapping( volume );
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input object is NULL.");
+        return( NULL );
     }
-    else
+
+    const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
+    if ( !volume )
     {
-        kvsMessageError("Geometry object is not supported.");
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input object is not volume dat.");
+        return( NULL );
     }
+
+    // Check whether the volume can be processed or not.
+    if ( volume->veclen() != 3 )
+    {
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input volume is not vector field data.");
+        return( NULL );
+    }
+
+    // Attach the pointer to the volume object.
+    BaseClass::attach_volume( volume );
+
+    // Set the min/max coordinates.
+    BaseClass::set_min_max_coords( volume, this );
+
+    // set the min/max vector length.
+    if ( !volume->hasMinMaxValues() )
+    {
+        volume->updateMinMaxValues();
+    }
+
+    BaseClass::mapping( volume );
 
     return( this );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Check whether the vertices are accepted or not.
+ *  @param  vertices [in] vertices
+ *  @return true if the vertices are accepted
+ */
+/*===========================================================================*/
 const bool Streamline::check_for_acceptance( const std::vector<kvs::Real32>& vertices )
 {
     kvs::IgnoreUnusedVariable( vertices );
@@ -179,6 +198,13 @@ const kvs::Vector3f Streamline::calculate_vector( const kvs::Vector3f& point )
     return( this->interpolate_vector( point, origin ) );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Calculate the color.
+ *  @param  direction [in] direction vector
+ *  @return color
+ */
+/*===========================================================================*/
 const kvs::RGBColor Streamline::calculate_color( const kvs::Vector3f& direction )
 {
     const kvs::Real64 min_length = BaseClass::volume()->minValue();
@@ -190,6 +216,14 @@ const kvs::RGBColor Streamline::calculate_color( const kvs::Vector3f& direction 
     return( BaseClass::transferFunction().colorMap()[level] );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Interpolates the vertex.
+ *  @param  vertex [in] vertex
+ *  @param  previous_vector [in] previous vector
+ *  @return interpolated vector
+ */
+/*===========================================================================*/
 const kvs::Vector3f Streamline::interpolate_vector(
     const kvs::Vector3f& vertex,
     const kvs::Vector3f& previous_vector )
@@ -200,7 +234,7 @@ const kvs::Vector3f Streamline::interpolate_vector(
     const size_t cell_y = static_cast<size_t>( vertex.y() );
     const size_t cell_z = static_cast<size_t>( vertex.z() );
 
-    const kvs::StructuredVolumeObject* volume = reinterpret_cast<const kvs::StructuredVolumeObject*>( BaseClass::volume() );
+    const kvs::StructuredVolumeObject* volume = kvs::StructuredVolumeObject::DownCast( BaseClass::volume() );
     const size_t resolution_x = static_cast<size_t>( volume->resolution().x() );
     const size_t resolution_y = static_cast<size_t>( volume->resolution().y() );
 //    const size_t resolution_z = static_cast<size_t>( volume->resolution().z() );

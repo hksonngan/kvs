@@ -104,8 +104,15 @@ void SphereGlyph::setNStacks( const size_t nstacks )
  *  @return pointer to the created glyph object
  */
 /*===========================================================================*/
-kvs::ObjectBase* SphereGlyph::exec( const kvs::ObjectBase* object )
+SphereGlyph::BaseClass::SuperClass* SphereGlyph::exec( const kvs::ObjectBase* object )
 {
+    if ( !object )
+    {
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input object is NULL.");
+        return( NULL );
+    }
+
     if ( object->objectType() == kvs::ObjectBase::Geometry )
     {
         const kvs::GeometryObjectBase* geometry = kvs::GeometryObjectBase::DownCast( object );
@@ -121,8 +128,10 @@ kvs::ObjectBase* SphereGlyph::exec( const kvs::ObjectBase* object )
         return( this->exec_volume_object( volume ) );
     }
 
+    BaseClass::m_is_success = false;
     kvsMessageError("Unsupported object.");
-    return( this );
+
+    return( NULL );
 }
 
 /*===========================================================================*/
@@ -179,7 +188,14 @@ void SphereGlyph::draw( void )
     }
 }
 
-kvs::ObjectBase* SphereGlyph::exec_point_object( const kvs::PointObject* point )
+/*===========================================================================*/
+/**
+ *  @brief  Creates the glyph for the point object.
+ *  @param  point [in] pointer to the point object
+ *  @return glyph object
+ */
+/*===========================================================================*/
+SphereGlyph::BaseClass::SuperClass* SphereGlyph::exec_point_object( const kvs::PointObject* point )
 {
     const size_t nvertices = point->nvertices();
 
@@ -276,7 +292,14 @@ kvs::ObjectBase* SphereGlyph::exec_point_object( const kvs::PointObject* point )
     return( this );
 }
 
-kvs::ObjectBase* SphereGlyph::exec_volume_object( const kvs::VolumeObjectBase* volume )
+/*===========================================================================*/
+/**
+ *  @brief  Creates the glyph for the volume object.
+ *  @param  volume [in] pointer to the volume object
+ *  @return glyph object
+ */
+/*===========================================================================*/
+SphereGlyph::BaseClass::SuperClass* SphereGlyph::exec_volume_object( const kvs::VolumeObjectBase* volume )
 {
     BaseClass::attach_volume( volume );
     BaseClass::set_min_max_coords( volume, this );

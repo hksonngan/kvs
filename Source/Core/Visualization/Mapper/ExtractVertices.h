@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_EXTRACT_VERTICES_H_INCLUDE
-#define KVS_CORE_EXTRACT_VERTICES_H_INCLUDE
+#ifndef KVS__EXTRACT_VERTICES_H_INCLUDE
+#define KVS__EXTRACT_VERTICES_H_INCLUDE
 
 #include <kvs/ClassName>
 #include <kvs/Module>
@@ -58,7 +58,8 @@ public:
 
 public:
 
-    kvs::ObjectBase* exec( const kvs::ObjectBase* object );
+//    kvs::ObjectBase* exec( const kvs::ObjectBase* object );
+    SuperClass* exec( const kvs::ObjectBase* object );
 
 private:
 
@@ -78,4 +79,4 @@ private:
 
 }
 
-#endif // KVS_CORE_EXTRACT_VERTICES_H_INCLUDE
+#endif // KVS__EXTRACT_VERTICES_H_INCLUDE

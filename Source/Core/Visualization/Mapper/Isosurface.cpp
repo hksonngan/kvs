@@ -21,7 +21,7 @@ namespace kvs
 
 /*==========================================================================*/
 /**
- *  Constructs a new Isosurface class.
+ *  @brief  Constructs a new Isosurface class.
  */
 /*==========================================================================*/
 Isosurface::Isosurface( void ):
@@ -32,6 +32,14 @@ Isosurface::Isosurface( void ):
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new Isosurface class.
+ *  @param  volume [in] pointer to the input volume object
+ *  @param  isolevel [in] isolevel
+ *  @param  normal_type [in] normal vector type
+ */
+/*===========================================================================*/
 Isosurface::Isosurface(
     const kvs::VolumeObjectBase* volume,
     const double                 isolevel,
@@ -55,12 +63,12 @@ Isosurface::Isosurface(
 
 /*==========================================================================*/
 /**
- *  Constructs and creates a polygon object.
- *  @param volume [in] pointer to the volume object
- *  @param isolevel [in] level of the isosurfaces
- *  @param normal_type [in] type of the normal vector
- *  @param duplication [in] duplication flag
- *  @param transfer_function [in] transfer function
+ *  @brief  Constructs and creates a polygon object.
+ *  @param  volume [in] pointer to the volume object
+ *  @param  isolevel [in] level of the isosurfaces
+ *  @param  normal_type [in] type of the normal vector
+ *  @param  duplication [in] duplication flag
+ *  @param  transfer_function [in] transfer function
  */
 /*==========================================================================*/
 Isosurface::Isosurface(
@@ -88,36 +96,57 @@ Isosurface::Isosurface(
 
 /*==========================================================================*/
 /**
- *  Destructs.
+ *  @brief  Destroys the Isosurface class.
  */
 /*==========================================================================*/
 Isosurface::~Isosurface( void )
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets a isolevel.
+ *  @param  isolevel [in] isolevel
+ */
+/*===========================================================================*/
 void Isosurface::setIsolevel( const double isolevel )
 {
     m_isolevel = isolevel;
 }
 
-kvs::ObjectBase* Isosurface::exec( const kvs::ObjectBase* object )
+/*===========================================================================*/
+/**
+ *  @brief  Executes the mapper process.
+ *  @param  object [in] pointer to the input volume object
+ *  @return pointer to the polygon object
+ */
+/*===========================================================================*/
+Isosurface::SuperClass* Isosurface::exec( const kvs::ObjectBase* object )
 {
-    if ( object->objectType() == kvs::ObjectBase::Volume )
+    if ( !object )
     {
-        this->mapping( reinterpret_cast<const kvs::VolumeObjectBase*>( object ) );
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input object is NULL.");
+        return( NULL );
     }
-    else
+
+    const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
+    if ( !volume )
     {
-        kvsMessageError( "Geometry object is inputed." );
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input object is not volume dat.");
+        return( NULL );
     }
+
+    this->mapping( volume );
 
     return( this );
 }
 
 /*==========================================================================*/
 /**
- *  Extracts the surfaces.
- *  @param volume [in] pointer to the volume object
+ *  @brief  Extracts the surfaces.
+ *  @param  volume [in] pointer to the volume object
  */
 /*==========================================================================*/
 void Isosurface::mapping( const kvs::VolumeObjectBase* volume )
@@ -125,14 +154,15 @@ void Isosurface::mapping( const kvs::VolumeObjectBase* volume )
     // Check whether the volume can be processed or not.
     if ( volume->veclen() != 1 )
     {
-        kvsMessageError("The input volume is not a sclar field data.");
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input object is not scalar field dat.");
         return;
     }
 
     if ( volume->volumeType() == kvs::VolumeObjectBase::Structured )
     {
         const kvs::StructuredVolumeObject* structured_volume =
-            reinterpret_cast<const kvs::StructuredVolumeObject*>( volume );
+            kvs::StructuredVolumeObject::DownCast( volume );
 
         kvs::PolygonObject* polygon = new kvs::MarchingCubes(
             structured_volume,
@@ -142,6 +172,7 @@ void Isosurface::mapping( const kvs::VolumeObjectBase* volume )
             BaseClass::transferFunction() );
         if ( !polygon )
         {
+            BaseClass::m_is_success = false;
             kvsMessageError("Cannot create isosurfaces.");
             return;
         }
@@ -168,7 +199,7 @@ void Isosurface::mapping( const kvs::VolumeObjectBase* volume )
     else // volume->volumeType() == kvs::VolumeObjectBase::Unstructured
     {
         const kvs::UnstructuredVolumeObject* unstructured_volume =
-            reinterpret_cast<const kvs::UnstructuredVolumeObject*>( volume );
+            kvs::UnstructuredVolumeObject::DownCast( volume );
 
         kvs::PolygonObject* polygon = new kvs::MarchingTetrahedra(
             unstructured_volume,
@@ -178,6 +209,7 @@ void Isosurface::mapping( const kvs::VolumeObjectBase* volume )
             BaseClass::transferFunction() );
         if ( !polygon )
         {
+            BaseClass::m_is_success = false;
             kvsMessageError("Cannot create isosurfaces.");
             return;
         }

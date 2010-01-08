@@ -23,13 +23,19 @@ namespace kvs
 
 /*==========================================================================*/
 /**
- *  Default constructor.
+ *  @brief  Constructs a new PointImporter class.
  */
 /*==========================================================================*/
 PointImporter::PointImporter( void )
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new PointImporter class.
+ *  @param  filename [in] input filename
+ */
+/*===========================================================================*/
 PointImporter::PointImporter( const std::string& filename )
 {
     if ( kvs::KVSMLObjectPoint::CheckFileExtension( filename ) )
@@ -37,12 +43,14 @@ PointImporter::PointImporter( const std::string& filename )
         kvs::KVSMLObjectPoint* file_format = new kvs::KVSMLObjectPoint( filename );
         if( !file_format )
         {
+            BaseClass::m_is_success = false;
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             return;
         }
 
         if( file_format->isFailure() )
         {
+            BaseClass::m_is_success = false;
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             delete file_format;
             return;
@@ -53,38 +61,57 @@ PointImporter::PointImporter( const std::string& filename )
     }
     else
     {
+        BaseClass::m_is_success = false;
         kvsMessageError("Cannot import '%'.",filename.c_str());
         return;
     }
-
-//    BaseClass::m_is_success = true;
 }
 
 /*==========================================================================*/
 /**
- *  Constructor for the KVSML document.
+ *  @brief  Constructs a new PointImporter class.
  *  @param file_format [in] pointer to the file format
  */
 /*==========================================================================*/
 PointImporter::PointImporter( const kvs::FileFormatBase* file_format )
 {
-    if ( this->exec( file_format ) ) BaseClass::m_is_success = true;
+    this->exec( file_format );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Destructs the PointImporter class.
+ */
+/*===========================================================================*/
 PointImporter::~PointImporter( void )
 {
 }
 
-kvs::ObjectBase* PointImporter::exec( const kvs::FileFormatBase* file_format )
+/*===========================================================================*/
+/**
+ *  @brief  Executes the import process.
+ *  @param  file_format [in] pointer to the file format class
+ *  @return pointer to the imported point object
+ */
+/*===========================================================================*/
+PointImporter::SuperClass* PointImporter::exec( const kvs::FileFormatBase* file_format )
 {
+    if ( !file_format )
+    {
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input file format is NULL.");
+        return( NULL );
+    }
+
     const std::string class_name = file_format->className();
     if ( class_name == "KVSMLObjectPoint" )
     {
-        this->import( reinterpret_cast<const kvs::KVSMLObjectPoint*>( file_format ) );
+        this->import( static_cast<const kvs::KVSMLObjectPoint*>( file_format ) );
     }
     else
     {
-        kvsMessageError( "Unsupported class '%s'.", class_name.c_str() );
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input file format is not supported.");
         return( NULL );
     }
 
@@ -93,8 +120,8 @@ kvs::ObjectBase* PointImporter::exec( const kvs::FileFormatBase* file_format )
 
 /*==========================================================================*/
 /**
- *  Import the KVSML document.
- *  @param kvsml [in] pointer to KVSML document
+ *  @brief  Imports KVSML format data.
+ *  @param  kvsml [in] pointer to the KVSML format data
  */
 /*==========================================================================*/
 void PointImporter::import( const kvs::KVSMLObjectPoint* kvsml )
@@ -125,7 +152,7 @@ void PointImporter::import( const kvs::KVSMLObjectPoint* kvsml )
 
 /*==========================================================================*/
 /**
- *  Calculate min/max coordinate values.
+ *  @brief  Calculates the min/max coordinate values.
  */
 /*==========================================================================*/
 void PointImporter::set_min_max_coord( void )

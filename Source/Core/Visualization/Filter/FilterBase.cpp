@@ -17,38 +17,45 @@
 namespace kvs
 {
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Default constructor.
+ *  @brief  Constructs a new FilterBase class.
  */
-/*==========================================================================*/
-FilterBase::FilterBase( void ):
-    m_good( true )
+/*===========================================================================*/
+FilterBase::FilterBase( void )
+    : m_is_success( true )
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Destructs the FilterBase class.
+ */
+/*===========================================================================*/
 FilterBase::~FilterBase( void )
 {
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Get the good flag.
+ *  @brief  Check whether the filter process is success or not.
+ *  @return true if the filter process is done successfully
  */
-/*==========================================================================*/
-const bool FilterBase::good( void ) const
+/*===========================================================================*/
+const bool FilterBase::isSuccess( void ) const
 {
-    return( m_good );
+    return( m_is_success );
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Get the fail flag.
+ *  @brief  Check whether the filter process is success or not.
+ *  @return true if the filter process is failed
  */
-/*==========================================================================*/
-const bool FilterBase::fail( void ) const
+/*===========================================================================*/
+const bool FilterBase::isFailure( void ) const
 {
-    return( !this->good() );
+    return( !m_is_success );
 }
 
 } // end of namespace kvs

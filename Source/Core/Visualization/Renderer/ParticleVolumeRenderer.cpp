@@ -81,6 +81,8 @@ void ParticleVolumeRenderer::exec(
     kvs::PointObject* point = reinterpret_cast<kvs::PointObject*>(object);
     if ( !m_ref_point ) this->attachPointObject( point );
 
+    if ( point->normals().size() == 0 ) BaseClass::disableShading();
+
     BaseClass::m_timer.start();
 
     this->create_image( point, camera, light );

@@ -23,8 +23,8 @@ namespace
 
 /*==========================================================================*/
 /**
- *  Get the line type from the given string.
- *  @param line_type [in] line type string
+ *  @brief  Returns the line type from the given string.
+ *  @param  line_type [in] line type string
  *  @return line type
  */
 /*==========================================================================*/
@@ -43,8 +43,8 @@ const kvs::LineObject::LineType StringToLineType( const std::string& line_type )
 
 /*==========================================================================*/
 /**
- *  Get the line color type from the given string.
- *  @param color_type [in] line color type string
+ *  @brief  Returns the line color type from the given string.
+ *  @param  color_type [in] line color type string
  *  @return line color type
  */
 /*==========================================================================*/
@@ -67,13 +67,19 @@ namespace kvs
 
 /*==========================================================================*/
 /**
- *  Default constructor.
+ *  @brief  Constructs a new LineImporter class.
  */
 /*==========================================================================*/
 LineImporter::LineImporter( void )
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new LineImporter class.
+ *  @param  filename [in] input filename
+ */
+/*===========================================================================*/
 LineImporter::LineImporter( const std::string& filename )
 {
     if ( kvs::KVSMLObjectLine::CheckFileExtension( filename ) )
@@ -81,12 +87,14 @@ LineImporter::LineImporter( const std::string& filename )
         kvs::KVSMLObjectLine* file_format = new kvs::KVSMLObjectLine( filename );
         if( !file_format )
         {
+            BaseClass::m_is_success = false;
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             return;
         }
 
         if( file_format->isFailure() )
         {
+            BaseClass::m_is_success = false;
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             delete file_format;
             return;
@@ -97,38 +105,57 @@ LineImporter::LineImporter( const std::string& filename )
     }
     else
     {
+        BaseClass::m_is_success = false;
         kvsMessageError("Cannot import '%s'.",filename.c_str());
         return;
     }
-
-//    BaseClass::m_is_success = true;
 }
 
 /*==========================================================================*/
 /**
- *  Constructor for the KVSML document.
+ *  @brief  Constructs a new LineImporter class.
  *  @param file_format [in] pointer to the file format
  */
 /*==========================================================================*/
 LineImporter::LineImporter( const kvs::FileFormatBase* file_format )
 {
-    if ( !this->exec( file_format ) ) BaseClass::m_is_success = true;
+    this->exec( file_format );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Destructs the LineImporter class.
+ */
+/*===========================================================================*/
 LineImporter::~LineImporter( void )
 {
 }
 
-kvs::ObjectBase* LineImporter::exec( const kvs::FileFormatBase* file_format )
+/*===========================================================================*/
+/**
+ *  @brief  Executes the import process.
+ *  @param  file_format [in] pointer to the file format class
+ *  @return pointer to the imported line object
+ */
+/*===========================================================================*/
+LineImporter::SuperClass* LineImporter::exec( const kvs::FileFormatBase* file_format )
 {
+    if ( !file_format )
+    {
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input file format is NULL.");
+        return( NULL );
+    }
+
     const std::string class_name = file_format->className();
     if ( class_name == "KVSMLObjectLine" )
     {
-        this->import( reinterpret_cast<const kvs::KVSMLObjectLine*>( file_format ) );
+        this->import( static_cast<const kvs::KVSMLObjectLine*>( file_format ) );
     }
     else
     {
-        kvsMessageError( "Unsupported class '%s'.", class_name.c_str() );
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input file format is not supported.");
         return( NULL );
     }
 
@@ -137,8 +164,8 @@ kvs::ObjectBase* LineImporter::exec( const kvs::FileFormatBase* file_format )
 
 /*==========================================================================*/
 /**
- *  Import the KVSML document.
- *  @param kvsml [in] pointer to the KVSML document
+ *  @brief  Imports KVSML format data.
+ *  @param  kvsml [in] pointer to the KVSML document
  */
 /*==========================================================================*/
 void LineImporter::import( const kvs::KVSMLObjectLine* kvsml )
@@ -165,13 +192,11 @@ void LineImporter::import( const kvs::KVSMLObjectLine* kvsml )
     SuperClass::setConnections( kvsml->connections() );
 //    SuperClass::updateMinMaxCoords();
     this->set_min_max_coord();
-
-    BaseClass::m_is_success = true;
 }
 
 /*==========================================================================*/
 /**
- *  Calculate min/max coordinate values.
+ *  @brief  Calculates the min/max coordinate values.
  */
 /*==========================================================================*/
 void LineImporter::set_min_max_coord( void )

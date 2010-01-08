@@ -11,14 +11,13 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_CELL_BY_CELL_PARTICLE_GENERATOR_H_INCLUDE
-#define KVS_CORE_CELL_BY_CELL_PARTICLE_GENERATOR_H_INCLUDE
+#ifndef KVS__CELL_BY_CELL_PARTICLE_GENERATOR_H_INCLUDE
+#define KVS__CELL_BY_CELL_PARTICLE_GENERATOR_H_INCLUDE
 
 #include <kvs/VolumeObjectBase>
 #include <kvs/OpacityMap>
 #include <kvs/Vector3>
 #include <kvs/Math>
-//#include <kvs/GlobalCore>
 #include <kvs/Camera>
 
 
@@ -488,4 +487,4 @@ inline const kvs::ValueArray<float> CalculateDensityMap(
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_CELL_BY_CELL_PARTICLE_GENERATOR_H_INCLUDE
+#endif // KVS__CELL_BY_CELL_PARTICLE_GENERATOR_H_INCLUDE

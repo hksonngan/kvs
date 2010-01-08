@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_METROPOLIS_SAMPLING_H_INCLUDE
-#define KVS_CORE_METROPOLIS_SAMPLING_H_INCLUDE
+#ifndef KVS__METROPOLIS_SAMPLING_H_INCLUDE
+#define KVS__METROPOLIS_SAMPLING_H_INCLUDE
 
 #include <kvs/PointObject>
 #include <kvs/VolumeObjectBase>
@@ -68,7 +68,8 @@ public:
 
 public:
 
-    kvs::ObjectBase* exec( const kvs::ObjectBase* object );
+//    kvs::ObjectBase* exec( const kvs::ObjectBase* object );
+    SuperClass* exec( const kvs::ObjectBase* object );
 
 private:
 
@@ -88,4 +89,4 @@ private:
 
 } // end of namespace viz
 
-#endif // KVS_CORE_METROPOLIS_SAMPLING_H_INCLUDE
+#endif // KVS__METROPOLIS_SAMPLING_H_INCLUDE

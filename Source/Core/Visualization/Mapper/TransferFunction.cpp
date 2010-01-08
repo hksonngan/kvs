@@ -29,9 +29,8 @@ namespace kvs
 
 /*==========================================================================*/
 /**
- *  Constructs a new TransferFunction.
- *
- *  @param resolution [in] Resolution.
+ *  @brief  Constructs a new TransferFunction.
+ *  @param  resolution [in] Resolution.
  */
 /*==========================================================================*/
 TransferFunction::TransferFunction( const size_t resolution )
@@ -40,6 +39,12 @@ TransferFunction::TransferFunction( const size_t resolution )
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new TransferFunction.
+ *  @param  filename [in] filename
+ */
+/*===========================================================================*/
 TransferFunction::TransferFunction( const std::string& filename )
 {
     this->read( filename );
@@ -47,9 +52,8 @@ TransferFunction::TransferFunction( const std::string& filename )
 
 /*==========================================================================*/
 /**
- *  Constructs a new TransferFunction.
- *
- *  @param color_map [in] Color map.
+ *  @brief  Constructs a new TransferFunction.
+ *  @param  color_map [in] Color map.
  */
 /*==========================================================================*/
 TransferFunction::TransferFunction( const kvs::ColorMap& color_map )
@@ -60,9 +64,8 @@ TransferFunction::TransferFunction( const kvs::ColorMap& color_map )
 
 /*==========================================================================*/
 /**
- *  Constructs a new TransferFunction.
- *
- *  @param opacity_map [in] Opacity map.
+ *  @brief  Constructs a new TransferFunction.
+ *  @param  opacity_map [in] Opacity map.
  */
 /*==========================================================================*/
 TransferFunction::TransferFunction( const kvs::OpacityMap& opacity_map )
@@ -73,10 +76,9 @@ TransferFunction::TransferFunction( const kvs::OpacityMap& opacity_map )
 
 /*==========================================================================*/
 /**
- *  Constructs a new TransferFunction.
- *
- *  @param color_map   [in] Color map.
- *  @param opacity_map [in] Opacity map.
+ *  @brief  Constructs a new TransferFunction.
+ *  @param  color_map [in] Color map.
+ *  @param  opacity_map [in] Opacity map.
  */
 /*==========================================================================*/
 TransferFunction::TransferFunction(
@@ -89,9 +91,8 @@ TransferFunction::TransferFunction(
 
 /*==========================================================================*/
 /**
- *  Constructs a copy of other.
- *
- *  @param other [in] Transfer function.
+ *  @brief  Constructs a copy of other.
+ *  @param  other [in] Transfer function.
  */
 /*==========================================================================*/
 TransferFunction::TransferFunction( const TransferFunction& other )
@@ -102,7 +103,7 @@ TransferFunction::TransferFunction( const TransferFunction& other )
 
 /*==========================================================================*/
 /**
- *  Destroys TransferFunction.
+ *  @brief  Destroys TransferFunction.
  */
 /*==========================================================================*/
 TransferFunction::~TransferFunction( void )
@@ -111,8 +112,8 @@ TransferFunction::~TransferFunction( void )
 
 /*==========================================================================*/
 /**
- *  Set color map.
- *  @param color_map [in] color map
+ *  @brief  Set color map.
+ *  @param  color_map [in] color map
  */
 /*==========================================================================*/
 void TransferFunction::setColorMap( const kvs::ColorMap& color_map )
@@ -122,8 +123,8 @@ void TransferFunction::setColorMap( const kvs::ColorMap& color_map )
 
 /*==========================================================================*/
 /**
- *  Set opacity map.
- *  @param opacity_map [in] opacity map
+ *  @brief  Set opacity map.
+ *  @param  opacity_map [in] opacity map
  */
 /*==========================================================================*/
 void TransferFunction::setOpacityMap( const kvs::OpacityMap& opacity_map )
@@ -133,7 +134,7 @@ void TransferFunction::setOpacityMap( const kvs::OpacityMap& opacity_map )
 
 /*==========================================================================*/
 /**
- *  Get the color map.
+ *  @brief  Returns the color map.
  */
 /*==========================================================================*/
 const kvs::ColorMap& TransferFunction::colorMap( void ) const
@@ -143,7 +144,7 @@ const kvs::ColorMap& TransferFunction::colorMap( void ) const
 
 /*==========================================================================*/
 /**
- *  Get the opacity map.
+ *  @brief  Returns the opacity map.
  */
 /*==========================================================================*/
 const kvs::OpacityMap& TransferFunction::opacityMap( void ) const
@@ -153,7 +154,7 @@ const kvs::OpacityMap& TransferFunction::opacityMap( void ) const
 
 /*==========================================================================*/
 /**
- *  Get the resolution.
+ *  @brief  Returns the resolution.
  */
 /*==========================================================================*/
 const size_t TransferFunction::resolution( void ) const
@@ -164,8 +165,8 @@ const size_t TransferFunction::resolution( void ) const
 
 /*==========================================================================*/
 /**
- *  Create the alpha map.
- *  @param resolution [in] resolution
+ *  @brief  Create the alpha map.
+ *  @param  resolution [in] resolution
  */
 /*==========================================================================*/
 void TransferFunction::create( const size_t resolution )
@@ -176,8 +177,8 @@ void TransferFunction::create( const size_t resolution )
 
 /*==========================================================================*/
 /**
- *  Read a trasfer function data from the given file.
- *  @param filename [in] filename
+ *  @brief  Read a trasfer function data from the given file.
+ *  @param  filename [in] filename
  *  @return true, if the reading process is done successfully
  */
 /*==========================================================================*/
@@ -212,8 +213,8 @@ const bool TransferFunction::write( const std::string& filename )
 
 /*==========================================================================*/
 /**
- *  Substitution operator =.
- *  @param trunsfer_function [in] transfer function
+ *  @brief  Substitution operator =.
+ *  @param  trunsfer_function [in] transfer function
  *  @retval transfer function
  */
 /*==========================================================================*/

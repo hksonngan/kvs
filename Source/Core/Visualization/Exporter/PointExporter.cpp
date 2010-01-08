@@ -15,51 +15,48 @@
 #include <kvs/Message>
 
 
-namespace
-{
-
-const kvs::PointObject* CastToPointObject( const kvs::ObjectBase* object_base )
-{
-    if ( object_base->objectType() != kvs::ObjectBase::Geometry )
-    {
-        kvsMessageError("Input object is not a geometry object.");
-        return( NULL );
-    }
-
-    const kvs::GeometryObjectBase* geometry =
-        reinterpret_cast<const kvs::GeometryObjectBase*>( object_base );
-    if ( geometry->geometryType() != kvs::GeometryObjectBase::Point )
-    {
-        kvsMessageError("Input object is not a point object.");
-        return( NULL );
-    }
-
-    return( reinterpret_cast<const kvs::PointObject*>( geometry ) );
-}
-
-} // end of namespace
-
 namespace kvs
 {
 
-PointExporter<kvs::KVSMLObjectPoint>::PointExporter( const kvs::PointObject* point_object )
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new PointExporter class for KVMLObjectPoint format.
+ *  @param  object [in] pointer to the input point object
+ */
+/*===========================================================================*/
+PointExporter<kvs::KVSMLObjectPoint>::PointExporter( const kvs::PointObject* object )
 {
-    this->exec( point_object );
+    this->exec( object );
 }
 
-kvs::KVSMLObjectPoint* PointExporter<kvs::KVSMLObjectPoint>::exec( const kvs::ObjectBase* object_base )
+/*===========================================================================*/
+/**
+ *  @brief  Executes the export process.
+ *  @param  object [in] pointer to the input object
+ *  @return pointer to the KVSMLObjectPoint format
+ */
+/*===========================================================================*/
+kvs::KVSMLObjectPoint* PointExporter<kvs::KVSMLObjectPoint>::exec( const kvs::ObjectBase* object )
 {
-    const kvs::PointObject* point_object = ::CastToPointObject( object_base );
-    if ( !point_object )
+    if ( !object )
     {
-        kvsMessageError("Cannot cast to a point object from the given object.");
+        m_is_success = false;
+        kvsMessageError("Input object is NULL.");
         return( NULL );
     }
 
-    this->setCoords( point_object->coords() );
-    this->setColors( point_object->colors() );
-    this->setNormals( point_object->normals() );
-    this->setSizes( point_object->sizes() );
+    const kvs::PointObject* point = kvs::PointObject::DownCast( object );
+    if ( !point )
+    {
+        m_is_success = false;
+        kvsMessageError("Input object is not point object.");
+        return( NULL );
+    }
+
+    this->setCoords( point->coords() );
+    this->setColors( point->colors() );
+    this->setNormals( point->normals() );
+    this->setSizes( point->sizes() );
 
     return( this );
 }

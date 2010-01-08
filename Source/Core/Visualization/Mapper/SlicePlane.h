@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_SLICE_PLANE_H_INCLUDE
-#define KVS_CORE_SLICE_PLANE_H_INCLUDE
+#ifndef KVS__SLICE_PLANE_H_INCLUDE
+#define KVS__SLICE_PLANE_H_INCLUDE
 
 #include <kvs/PolygonObject>
 #include <kvs/VolumeObjectBase>
@@ -72,7 +72,7 @@ public:
 
 public:
 
-    kvs::ObjectBase* exec( const kvs::ObjectBase* object );
+    SuperClass* exec( const kvs::ObjectBase* object );
 
 protected:
 
@@ -121,4 +121,4 @@ protected:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_SLICE_PLANE_H_INCLUDE
+#endif // KVS__SLICE_PLANE_H_INCLUDE

@@ -26,6 +26,11 @@
 namespace kvs
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  QuadraticHexahedralCell class.
+ */
+/*===========================================================================*/
 template <typename T>
 class QuadraticHexahedralCell : public kvs::CellBase<T>
 {
@@ -70,6 +75,12 @@ private:
     const kvs::Vector3f convert_local_to_global( void ) const;
 };
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new QuadraticHexahedralCell class.
+ *  @param  volume [in] pointer to the unstructured volume object
+ */
+/*===========================================================================*/
 template <typename T>
 inline QuadraticHexahedralCell<T>::QuadraticHexahedralCell(
     const kvs::UnstructuredVolumeObject* volume ):
@@ -77,11 +88,22 @@ inline QuadraticHexahedralCell<T>::QuadraticHexahedralCell(
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Destroys the QuadraticHexahedralCell class.
+ */
+/*===========================================================================*/
 template <typename T>
 inline QuadraticHexahedralCell<T>::~QuadraticHexahedralCell( void )
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Attaches a cell by the index.
+ *  @param  index [in] cell index
+ */
+/*===========================================================================*/
 template <typename T>
 inline void QuadraticHexahedralCell<T>::attachCell( const kvs::UInt32 index )
 {
@@ -163,8 +185,6 @@ inline void QuadraticHexahedralCell<T>::attachCell( const kvs::UInt32 index )
     BaseClass::m_vertices[18].set( coords[ coord_index[18] ], coords[ coord_index[18] + 1 ], coords[ coord_index[18] + 2 ] );
     BaseClass::m_vertices[19].set( coords[ coord_index[19] ], coords[ coord_index[19] + 1 ], coords[ coord_index[19] + 2 ] );
 
-
-
     BaseClass::m_scalars[ 0] = values[ node_index[ 0] ];
     BaseClass::m_scalars[ 1] = values[ node_index[ 1] ];
     BaseClass::m_scalars[ 2] = values[ node_index[ 2] ];
@@ -187,12 +207,24 @@ inline void QuadraticHexahedralCell<T>::attachCell( const kvs::UInt32 index )
     BaseClass::m_scalars[19] = values[ node_index[19] ];
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Attaches a point in the global coordinate.
+ *  @param  point [in] coordinate value of the point
+ */
+/*===========================================================================*/
 template <typename T>
 inline void QuadraticHexahedralCell<T>::attachPoint( const kvs::Vector3f& point )
 {
     BaseClass::set_global_point( point );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the sampled point randomly.
+ *  @return coordinate value of the sampled point
+ */
+/*===========================================================================*/
 template <typename T>
 const kvs::Vector3f QuadraticHexahedralCell<T>::randomSampling( void )
 {
@@ -209,6 +241,12 @@ const kvs::Vector3f QuadraticHexahedralCell<T>::randomSampling( void )
     return( BaseClass::m_global_point );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the volume of the cell.
+ *  @return volume of the cell
+ */
+/*===========================================================================*/
 template <typename T>
 inline const kvs::Real32 QuadraticHexahedralCell<T>::volume( void )
 {
@@ -250,6 +288,12 @@ inline const kvs::Real32 QuadraticHexahedralCell<T>::volume( void )
     return( sum_metric / resolution3 );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the averaged scalar value.
+ *  @return averaged scalar value
+ */
+/*===========================================================================*/
 template <typename T>
 inline const kvs::Real32 QuadraticHexahedralCell<T>::averagedScalar( void )
 {
@@ -278,6 +322,11 @@ inline const kvs::Real32 QuadraticHexahedralCell<T>::averagedScalar( void )
                 BaseClass::m_scalars[19] ) * w );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the interpolated scalar value at the attached point.
+ */
+/*===========================================================================*/
 template <typename T>
 inline const kvs::Real32 QuadraticHexahedralCell<T>::scalar( void )
 {
@@ -307,6 +356,11 @@ inline const kvs::Real32 QuadraticHexahedralCell<T>::scalar( void )
                 I[19]*s[19] ) );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the gradient vector at the attached point.
+ */
+/*===========================================================================*/
 template <typename T>
 inline const kvs::Vector3f QuadraticHexahedralCell<T>::gradient( void )
 {
@@ -472,6 +526,11 @@ inline void QuadraticHexahedralCell<T>::calculate_differential_function( void )
     BaseClass::m_differential_functions[59] =  4*(1-x)*y*(1-z)-4*(1-x)*y*z;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the transposed jacobi matrix.
+ */
+/*===========================================================================*/
 template <typename T>
 inline const kvs::Matrix33f QuadraticHexahedralCell<T>::get_transposed_Jacobi_matrix( void ) const
 {
@@ -501,7 +560,7 @@ inline const kvs::Matrix33f QuadraticHexahedralCell<T>::get_transposed_Jacobi_ma
     for( size_t i = 0 ; i < 20 ; i++) dZdy += dNdy[i]*V[i].z();
 
 
-    float dXdz = 0;    
+    float dXdz = 0;
     for( size_t i = 0 ; i < 20 ; i++) dXdz += dNdz[i]*V[i].x();
 
     float dYdz = 0;
@@ -513,6 +572,11 @@ inline const kvs::Matrix33f QuadraticHexahedralCell<T>::get_transposed_Jacobi_ma
     return( kvs::Matrix33f( dXdx, dYdx, dZdx, dXdy, dYdy, dZdy, dXdz, dYdz, dZdz ) );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Converts the local coordinate value to the global coordinate value.
+ */
+/*===========================================================================*/
 template <typename T>
 inline const kvs::Vector3f QuadraticHexahedralCell<T>::convert_local_to_global( void ) const
 {

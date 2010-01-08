@@ -12,16 +12,16 @@
  */
 /****************************************************************************/
 #include "ExtractVertices.h"
-
 #include <kvs/VolumeObjectBase>
 #include <kvs/StructuredVolumeObject>
+
 
 namespace kvs
 {
 
 /*==========================================================================*/
 /**
- *  Constructs a new empty ExtractVertices.
+ *  @brief  Constructs a new empty ExtractVertices.
  */
 /*==========================================================================*/
 ExtractVertices::ExtractVertices( void )
@@ -32,9 +32,8 @@ ExtractVertices::ExtractVertices( void )
 
 /*==========================================================================*/
 /**
- *  Constructs a new ExtractVertices.
- *
- *  @param [in] volume     Structured Volume data.
+ *  @brief  Constructs a new ExtractVertices.
+ *  @param  volume [in] pointer to the structured volume object
  */
 /*==========================================================================*/
 ExtractVertices::ExtractVertices(
@@ -47,10 +46,9 @@ ExtractVertices::ExtractVertices(
 
 /*==========================================================================*/
 /**
- *  Constructs a new ExtractVertices.
- *
- *  @param [in] volume            Structured Volume data.
- *  @param [in] transfer_function Transfer function.
+ *  @brief  Constructs a new ExtractVertices.
+ *  @param  volume [in] pointer to the structured volume object
+ *  @param  transfer_function [in] transfer function
  */
 /*==========================================================================*/
 ExtractVertices::ExtractVertices(
@@ -71,28 +69,45 @@ ExtractVertices::~ExtractVertices( void )
 {
 }
 
-kvs::ObjectBase* ExtractVertices::exec( const kvs::ObjectBase* object )
+/*===========================================================================*/
+/**
+ *  @brief  Executes the mapper process.
+ *  @param  object [in] pointer to the volume object
+ *  @return pointer to the point object
+ */
+/*===========================================================================*/
+ExtractVertices::SuperClass* ExtractVertices::exec( const kvs::ObjectBase* object )
 {
-    const kvs::ObjectBase::ObjectType type = object->objectType();
-    if ( type == kvs::ObjectBase::Volume )
+    if ( !object )
     {
-        this->mapping( reinterpret_cast<const kvs::VolumeObjectBase*>( object ) );
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input object is NULL.");
+        return( NULL );
     }
-    else
+
+    const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
+    if ( !volume )
     {
-        kvsMessageError("Geometry object is not supported.");
+        BaseClass::m_is_success = false;
+        kvsMessageError("Input object is not volume dat.");
+        return( NULL );
     }
+
+    this->mapping( volume );
 
     return( this );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Mapping for the volume object.
+ *  @param  volume [in] pointer to the volume object
+ */
+/*===========================================================================*/
 void ExtractVertices::mapping(
     const kvs::VolumeObjectBase* volume )
 {
-//    m_volume = volume;
     BaseClass::attach_volume( volume );
-
-//    this->pre_process();
     BaseClass::set_min_max_coords( volume, this );
 
     this->calculate_coords();
@@ -110,17 +125,11 @@ void ExtractVertices::mapping(
     else if ( type == typeid( kvs::Real64 ) ) { this->calculate_colors<kvs::Real64>(); }
 }
 
-/*
-void ExtractVertices::pre_process( void )
-{
-    const Vector3f min_coord( m_volume->minExternalCoord() );
-    const Vector3f max_coord( m_volume->maxExternalCoord() );
-
-    SuperClass::setMinMaxObjectCoords  ( min_coord, max_coord );
-    SuperClass::setMinMaxExternalCoords( min_coord, max_coord );
-}
-*/
-
+/*===========================================================================*/
+/**
+ *  @brief  Calculates the coordinate values.
+ */
+/*===========================================================================*/
 void ExtractVertices::calculate_coords( void )
 {
     const VolumeObjectBase::GridType& type = m_volume->gridType();
@@ -139,6 +148,11 @@ void ExtractVertices::calculate_coords( void )
     }
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Calculates the coordinate values of the uniform grid.
+ */
+/*===========================================================================*/
 void ExtractVertices::calculate_uniform_coords( void )
 {
     const kvs::StructuredVolumeObject* volume
@@ -179,10 +193,22 @@ void ExtractVertices::calculate_uniform_coords( void )
     SuperClass::setCoords( coords );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Calculates the coordinate values of the rectilinear grid.
+ */
+/*===========================================================================*/
 void ExtractVertices::calculate_rectiliner_coords( void )
 {
+    BaseClass::m_is_success = false;
+    kvsMessageError("Rectilinear volume has not yet supportted.");
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Calculates the color values.
+ */
+/*===========================================================================*/
 template <typename T>
 void ExtractVertices::calculate_colors( void )
 {
@@ -242,4 +268,4 @@ void ExtractVertices::calculate_colors( void )
     SuperClass::setColors( colors );
 }
 
-}
+} // end of namespace kvs
