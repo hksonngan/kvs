@@ -34,7 +34,11 @@ TransferFunctionTag::TransferFunctionTag( void ):
     m_has_file( false ),
     m_file( "" ),
     m_has_resolution( false ),
-    m_resolution( 0 )
+    m_resolution( 0 ),
+    m_has_min_value( false ),
+    m_min_value( 0 ),
+    m_has_max_value( false ),
+    m_max_value( 0 )
 {
 }
 
@@ -93,6 +97,50 @@ const size_t TransferFunctionTag::resolution( void ) const
 
 /*===========================================================================*/
 /**
+ *  @brief  Tests whether the min_value is specified or not.
+ *  @return true, if the min_value is specified
+ */
+/*===========================================================================*/
+const bool TransferFunctionTag::hasMinValue( void ) const
+{
+    return( m_has_min_value );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the min. scalar value.
+ *  @return min. scalar value
+ */
+/*===========================================================================*/
+const float TransferFunctionTag::minValue( void ) const
+{
+    return( m_min_value );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Tests whether the max_value is specified or not.
+ *  @return true, if the max_value is specified
+ */
+/*===========================================================================*/
+const bool TransferFunctionTag::hasMaxValue( void ) const
+{
+    return( m_has_max_value );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the max. scalar value.
+ *  @return max. scalar value
+ */
+/*===========================================================================*/
+const float TransferFunctionTag::maxValue( void ) const
+{
+    return( m_max_value );
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Sets a name of external file for 'argb' data.
  *  @param  file [in] filename
  */
@@ -112,6 +160,30 @@ void TransferFunctionTag::setResolution( const size_t resolution )
 {
     m_has_resolution = true;
     m_resolution = resolution;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a min. scalar value.
+ *  @param  min_value [in] min. scalar value
+ */
+/*===========================================================================*/
+void TransferFunctionTag::setMinValue( const float min_value )
+{
+    m_has_min_value = true;
+    m_min_value = min_value;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a max. scalar value.
+ *  @param  max_value [in] max. scalar value
+ */
+/*===========================================================================*/
+void TransferFunctionTag::setMaxValue( const float max_value )
+{
+    m_has_max_value = true;
+    m_max_value = max_value;
 }
 
 /*===========================================================================*/
@@ -143,6 +215,22 @@ const bool TransferFunctionTag::read( const kvs::XMLNode::SuperClass* parent )
         m_resolution = static_cast<size_t>( atoi( resolution.c_str() ) );
     }
 
+    // min_value="xxx"
+    const std::string min_value = kvs::XMLElement::AttributeValue( element, "min_value" );
+    if ( min_value != "" )
+    {
+        m_has_min_value = true;
+        m_min_value = atof( min_value.c_str() );
+    }
+
+    // max_value="xxx"
+    const std::string max_value = kvs::XMLElement::AttributeValue( element, "max_value" );
+    if ( max_value != "" )
+    {
+        m_has_max_value = true;
+        m_max_value = atof( max_value.c_str() );
+    }
+
     // file="xxx"
     const std::string file = kvs::XMLElement::AttributeValue( element, "file" );
     if ( file != "" )
@@ -171,6 +259,22 @@ const bool TransferFunctionTag::write( kvs::XMLNode::SuperClass* parent )
     {
         const std::string name( "resolution" );
         const std::string value( kvs::String( m_resolution ).toStdString() );
+        element.setAttribute( name, value );
+    }
+
+    // min_value="xxx"
+    if ( m_has_min_value )
+    {
+        const std::string name( "min_value" );
+        const std::string value( kvs::String( m_min_value ).toStdString() );
+        element.setAttribute( name, value );
+    }
+
+    // max_value="xxx"
+    if ( m_has_max_value )
+    {
+        const std::string name( "max_value" );
+        const std::string value( kvs::String( m_max_value ).toStdString() );
         element.setAttribute( name, value );
     }
 

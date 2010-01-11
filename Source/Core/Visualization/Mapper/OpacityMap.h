@@ -14,11 +14,9 @@
 #ifndef KVS__OPACITY_MAP_H_INCLUDE
 #define KVS__OPACITY_MAP_H_INCLUDE
 
-#include <kvs/ClassName>
-
 #include <list>
 #include <utility>
-
+#include <kvs/ClassName>
 #include <kvs/ValueArray>
 
 
@@ -36,14 +34,17 @@ class OpacityMap
 
 public:
 
-    typedef kvs::ValueArray<float>   Table;
-    typedef std::pair<size_t, float> Point;
-    typedef std::list<Point>         Points;
+    typedef kvs::ValueArray<float> Table;
+    typedef std::pair<float,float> Point;
+    typedef std::list<Point>       Points;
 
 private:
 
-    Points m_points; ///< Control point list.
-    Table  m_table;  ///< Value table.
+    size_t m_resolution; ///< table resolution
+    float  m_min_value;  ///< min. value
+    float  m_max_value;  ///< max. value
+    Points m_points;     ///< control point list
+    Table  m_table;      ///< value table
 
 public:
 
@@ -55,23 +56,41 @@ public:
 
     OpacityMap( const OpacityMap& other );
 
+    OpacityMap( const size_t resolution, const float min_value, const float max_value );
+
+    OpacityMap( const Table& table, const float min_value, const float max_value );
+
     virtual ~OpacityMap( void );
 
 public:
 
+    const float minValue( void ) const;
+
+    const float maxValue( void ) const;
+
     const size_t resolution( void ) const;
+
+    const Points& points( void ) const;
 
     const Table& table( void ) const;
 
 public:
 
-    void create( const size_t resolution );
+    void setRange( const float min_value, const float max_value );
+
+    void setResolution( const size_t resolution );
+
+    void addPoint( const float value, const float opacity );
+
+    void removePoint( const float value );
+
+    void create( void );
 
 public:
 
     const kvs::Real32 operator []( const size_t index ) const;
 
-    const kvs::Real32 at( const float index ) const;
+    const kvs::Real32 at( const float value ) const;
 
 public:
 

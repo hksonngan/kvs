@@ -15,6 +15,7 @@
 #define KVS__KVSML__OPACITY_MAP_TAG_H_INCLUDE
 
 #include <kvs/XMLNode>
+#include <kvs/XMLElement>
 #include "TagBase.h"
 
 
@@ -44,6 +45,48 @@ public:
 public:
 
     const bool read( const kvs::XMLNode::SuperClass* parent );
+
+    const bool write( kvs::XMLNode::SuperClass* parent );
+};
+
+
+/*===========================================================================*/
+/**
+ *  @brief  <OpacityMapValue> tag class.
+ */
+/*===========================================================================*/
+class OpacityMapValueTag : public kvs::kvsml::TagBase
+{
+public:
+
+    typedef kvs::kvsml::TagBase BaseClass;
+
+protected:
+
+    float m_scalar; ///< scalr value
+    float m_opacity; ///< opacity value
+
+public:
+
+    OpacityMapValueTag( void );
+
+    virtual ~OpacityMapValueTag( void );
+
+public:
+
+    const float scalar( void ) const;
+
+    const float opacity( void ) const;
+
+    void setScalar( const float scalar );
+
+    void setOpacity( const float opacity );
+
+public:
+
+    const bool read( const kvs::XMLNode::SuperClass* parent );
+
+    const bool read( const kvs::XMLElement::SuperClass* element );
 
     const bool write( kvs::XMLNode::SuperClass* parent );
 };

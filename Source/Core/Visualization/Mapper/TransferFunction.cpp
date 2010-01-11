@@ -37,6 +37,8 @@ TransferFunction::TransferFunction( const size_t resolution )
     : m_color_map( resolution )
     , m_opacity_map( resolution )
 {
+    m_color_map.create();
+    m_opacity_map.create();
 }
 
 /*===========================================================================*/
@@ -171,8 +173,13 @@ const size_t TransferFunction::resolution( void ) const
 /*==========================================================================*/
 void TransferFunction::create( const size_t resolution )
 {
-    m_opacity_map.create( resolution );
-    m_color_map.create( resolution );
+//    m_opacity_map.create( resolution );
+    m_opacity_map.setResolution( resolution );
+    m_opacity_map.create();
+
+//    m_color_map.create( resolution );
+    m_color_map.setResolution( resolution );
+    m_color_map.create();
 }
 
 /*==========================================================================*/
@@ -187,8 +194,60 @@ const bool TransferFunction::read( const std::string& filename )
     kvs::KVSMLTransferFunction transfer_function( filename );
     if ( transfer_function.isFailure() ) return( false );
 
-    m_opacity_map = kvs::OpacityMap( transfer_function.opacities() );
-    m_color_map   = kvs::ColorMap( transfer_function.colors() );
+    const float min_value = transfer_function.minValue();
+    const float max_value = transfer_function.maxValue();
+    const bool has_range = !( kvs::Math::Equal( min_value, max_value ) );
+    if ( has_range )
+    {
+        m_color_map.setRange( min_value, max_value );
+        m_opacity_map.setRange( min_value, max_value );
+    }
+
+    if ( transfer_function.colorPointList().size() > 0 )
+    {
+        m_color_map.setResolution( transfer_function.resolution() );
+
+        kvs::KVSMLTransferFunction::ColorPointList::const_iterator point =
+            transfer_function.colorPointList().begin();
+        kvs::KVSMLTransferFunction::ColorPointList::const_iterator last =
+            transfer_function.colorPointList().end();
+        while ( point != last )
+        {
+            const float value = point->first;
+            const kvs::RGBColor color = point->second;
+            m_color_map.addPoint( value, color );
+            point++;
+        }
+
+        m_color_map.create();
+    }
+    else
+    {
+        m_color_map = kvs::ColorMap( transfer_function.colors() );
+    }
+
+    if ( transfer_function.opacityPointList().size() > 0 )
+    {
+        m_opacity_map.setResolution( transfer_function.resolution() );
+
+        kvs::KVSMLTransferFunction::OpacityPointList::const_iterator point =
+            transfer_function.opacityPointList().begin();
+        kvs::KVSMLTransferFunction::OpacityPointList::const_iterator last =
+            transfer_function.opacityPointList().end();
+        while ( point != last )
+        {
+            const float value = point->first;
+            const kvs::Real32 opacity = point->second;
+            m_opacity_map.addPoint( value, opacity );
+            point++;
+        }
+
+        m_opacity_map.create();
+    }
+    else
+    {
+        m_opacity_map = kvs::OpacityMap( transfer_function.opacities() );
+    }
 
     return( true );
 }
@@ -205,8 +264,36 @@ const bool TransferFunction::write( const std::string& filename )
     kvs::KVSMLTransferFunction transfer_function;
     transfer_function.setResolution( this->resolution() );
     transfer_function.setWritingDataType( kvs::KVSMLTransferFunction::Ascii );
-    transfer_function.setColors( m_color_map.table() );
-    transfer_function.setOpacities( m_opacity_map.table() );
+
+    if ( m_color_map.points().size() > 0 )
+    {
+        kvs::ColorMap::Points::const_iterator point = m_color_map.points().begin();
+        kvs::ColorMap::Points::const_iterator last = m_color_map.points().end();
+        while ( point != last )
+        {
+            transfer_function.addColorPoint( point->first, point->second );
+            point++;
+        }
+    }
+    else
+    {
+        transfer_function.setColors( m_color_map.table() );
+    }
+
+    if ( m_opacity_map.points().size() > 0 )
+    {
+        kvs::OpacityMap::Points::const_iterator point = m_opacity_map.points().begin();
+        kvs::OpacityMap::Points::const_iterator last = m_opacity_map.points().end();
+        while ( point != last )
+        {
+            transfer_function.addOpacityPoint( point->first, point->second );
+            point++;
+        }
+    }
+    else
+    {
+        transfer_function.setOpacities( m_opacity_map.table() );
+    }
 
     return( transfer_function.write( filename ) );
 }

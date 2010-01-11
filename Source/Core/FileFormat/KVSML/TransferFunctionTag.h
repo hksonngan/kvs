@@ -41,6 +41,10 @@ protected:
     std::string m_file; ///< name of external file for 'argb' data
     bool m_has_resolution; ///< flag to check whether 'resolution' is specified or not
     size_t m_resolution; ///< resolution
+    bool m_has_min_value; ///< flag to check whether 'min_value' is specified or not
+    float m_min_value; ///< min. scalar value
+    bool m_has_max_value; ///< flag to check whether 'max_value' is specified or not
+    float m_max_value; ///< max. scalar value
 
 public:
 
@@ -58,11 +62,23 @@ public:
 
     const size_t resolution( void ) const;
 
+    const bool hasMinValue( void ) const;
+
+    const float minValue( void ) const;
+
+    const bool hasMaxValue( void ) const;
+
+    const float maxValue( void ) const;
+
 public:
 
     void setFile( const std::string& file );
 
     void setResolution( const size_t resolution );
+
+    void setMinValue( const float min_value );
+
+    void setMaxValue( const float max_value );
 
 public:
 

@@ -35,7 +35,9 @@ namespace kvs
 /*===========================================================================*/
 KVSMLTransferFunction::KVSMLTransferFunction( void ):
     m_writing_type( kvs::KVSMLTransferFunction::Ascii ),
-    m_resolution( 0 )
+    m_resolution( 0 ),
+    m_min_value( 0.0f ),
+    m_max_value( 0.0f )
 {
 }
 
@@ -46,7 +48,9 @@ KVSMLTransferFunction::KVSMLTransferFunction( void ):
  */
 /*===========================================================================*/
 KVSMLTransferFunction::KVSMLTransferFunction( const std::string& filename ):
-    m_resolution( 0 )
+    m_resolution( 0 ),
+    m_min_value( 0.0f ),
+    m_max_value( 0.0f )
 {
     if ( this->read( filename ) ) { m_is_success = true; }
     else { m_is_success = false; }
@@ -85,6 +89,50 @@ const size_t KVSMLTransferFunction::resolution( void ) const
 
 /*===========================================================================*/
 /**
+ *  @brief  Returns the min scalar value.
+ *  @return min scalar value
+ */
+/*===========================================================================*/
+const float KVSMLTransferFunction::minValue( void ) const
+{
+    return( m_min_value );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the max scalar value.
+ *  @return max scalar value
+ */
+/*===========================================================================*/
+const float KVSMLTransferFunction::maxValue( void ) const
+{
+    return( m_max_value );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the opacity point list.
+ *  @return opacity point list
+ */
+/*===========================================================================*/
+const KVSMLTransferFunction::OpacityPointList& KVSMLTransferFunction::opacityPointList( void ) const
+{
+    return( m_opacity_point_list );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the color point list.
+ *  @return color point list
+ */
+/*===========================================================================*/
+const KVSMLTransferFunction::ColorPointList& KVSMLTransferFunction::colorPointList( void ) const
+{
+    return( m_color_point_list );
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Returns an opacity array.
  *  @return opacity array
  */
@@ -107,6 +155,30 @@ const kvs::ValueArray<kvs::UInt8>& KVSMLTransferFunction::colors( void ) const
 
 /*===========================================================================*/
 /**
+ *  @brief  Adds a opacity point.
+ *  @param  value [in] scalar value
+ *  @param  opacity [in] opacity value
+ */
+/*===========================================================================*/
+void KVSMLTransferFunction::addOpacityPoint( const float value, const float opacity )
+{
+    m_opacity_point_list.push_back( OpacityPoint( value, opacity ) );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Adds a color point.
+ *  @param  value [in] scalar value
+ *  @param  color [in] color value
+ */
+/*===========================================================================*/
+void KVSMLTransferFunction::addColorPoint( const float value, const kvs::RGBColor color )
+{
+    m_color_point_list.push_back( ColorPoint( value, color ) );
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Sets a resolution.
  *  @param  resolution [in] resolution
  */
@@ -114,6 +186,19 @@ const kvs::ValueArray<kvs::UInt8>& KVSMLTransferFunction::colors( void ) const
 void KVSMLTransferFunction::setResolution( const size_t resolution )
 {
     m_resolution = resolution;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets min/max scalar values.
+ *  @param  min_value [in] min scalar value
+ *  @param  max_value [in] max scalar value
+ */
+/*===========================================================================*/
+void KVSMLTransferFunction::setRange( const float min_value, const float max_value )
+{
+    m_min_value = min_value;
+    m_max_value = max_value;
 }
 
 /*===========================================================================*/
@@ -190,6 +275,9 @@ const bool KVSMLTransferFunction::read( const std::string& filename )
     }
     m_resolution = tfunc_tag.resolution();
 
+    if ( tfunc_tag.hasMinValue() ) m_min_value = tfunc_tag.minValue();
+    if ( tfunc_tag.hasMaxValue() ) m_max_value = tfunc_tag.maxValue();
+
     // <ColorMap> and <OpacityMap>
     kvs::kvsml::ColorMapTag color_map_tag;
     kvs::kvsml::OpacityMapTag opacity_map_tag;
@@ -204,32 +292,72 @@ const bool KVSMLTransferFunction::read( const std::string& filename )
                 return( false );
             }
 
+            // <ColorMapValue> for <ColorMap>
+            kvs::kvsml::ColorMapValueTag color_value_tag;
+            if ( color_value_tag.isExisted( color_map_tag.node() ) )
+            {
+                kvs::XMLNode::SuperClass* node =
+                    kvs::XMLNode::FindChildNode( color_map_tag.node(), color_value_tag.name() );
+                while( node )
+                {
+                    color_value_tag.read( kvs::XMLNode::ToElement( node ) );
+
+                    const float scalar = color_value_tag.scalar();
+                    const kvs::RGBColor color = color_value_tag.color();
+                    m_color_point_list.push_back( ColorPoint( scalar, color ) );
+
+                    node = color_map_tag.node()->IterateChildren( color_value_tag.name(), node );
+                }
+            }
+            // <DataArray> for <ColorMap>
+            else
+            {
+                const size_t colors_nelements = m_resolution * 3;
+                kvs::kvsml::DataArrayTag colors;
+                if ( !colors.read( color_map_tag.node(), colors_nelements, &m_colors ) )
+                {
+                    kvsMessageError( "Cannot read <%s> for <%s>.",
+                                     colors.name().c_str(),
+                                     color_map_tag.name().c_str() );
+                    return( false );
+                }
+            }
+
             if ( !opacity_map_tag.read( tfunc_tag.node() ) )
             {
                 kvsMessageError( "Cannot read <%s>.", opacity_map_tag.name().c_str() );
                 return( false );
             }
 
-            // <DataArray> for <ColorMap>
-            const size_t colors_nelements = m_resolution * 3;
-            kvs::kvsml::DataArrayTag colors;
-            if ( !colors.read( color_map_tag.node(), colors_nelements, &m_colors ) )
+            // <OpacityMapValue> for <OpacityMap>
+            kvs::kvsml::OpacityMapValueTag opacity_value_tag;
+            if ( opacity_value_tag.isExisted( opacity_map_tag.node() ) )
             {
-                kvsMessageError( "Cannot read <%s> for <%s>.",
-                                 colors.name().c_str(),
-                                 color_map_tag.name().c_str() );
-                return( false );
-            }
+                kvs::XMLNode::SuperClass* node =
+                    kvs::XMLNode::FindChildNode( opacity_map_tag.node(), opacity_value_tag.name() );
+                while( node )
+                {
+                    opacity_value_tag.read( kvs::XMLNode::ToElement( node ) );
 
-            // <DataArray> for <OpacityMap>
-            const size_t opacities_nelements = m_resolution;
-            kvs::kvsml::DataArrayTag opacities;
-            if ( !opacities.read( opacity_map_tag.node(), opacities_nelements, &m_opacities ) )
+                    const float scalar = opacity_value_tag.scalar();
+                    const kvs::Real32 opacity = opacity_value_tag.opacity();
+                    m_opacity_point_list.push_back( OpacityPoint( scalar, opacity ) );
+
+                    node = opacity_map_tag.node()->IterateChildren( opacity_value_tag.name(), node );
+                }
+            }
+            else
             {
-                kvsMessageError( "Cannot read <%s> for <%s>.",
-                                 opacities.name().c_str(),
-                                 opacity_map_tag.name().c_str() );
-                return( false );
+                // <DataArray> for <OpacityMap>
+                const size_t opacities_nelements = m_resolution;
+                kvs::kvsml::DataArrayTag opacities;
+                if ( !opacities.read( opacity_map_tag.node(), opacities_nelements, &m_opacities ) )
+                {
+                    kvsMessageError( "Cannot read <%s> for <%s>.",
+                                     opacities.name().c_str(),
+                                     opacity_map_tag.name().c_str() );
+                    return( false );
+                }
             }
         }
 
@@ -346,6 +474,13 @@ const bool KVSMLTransferFunction::write( const std::string& filename )
     // <TransferFunction>
     kvs::kvsml::TransferFunctionTag tfunc_tag;
     tfunc_tag.setResolution( m_resolution );
+
+    if ( kvs::Math::IsZero( m_min_value ) && kvs::Math::IsZero( m_max_value ) )
+    {
+        tfunc_tag.setMinValue( m_min_value );
+        tfunc_tag.setMaxValue( m_max_value );
+    }
+
     if ( !tfunc_tag.write( kvsml_tag.node() ) )
     {
         kvsMessageError( "Cannot write <%s>.", tfunc_tag.name().c_str() );
@@ -360,25 +495,47 @@ const bool KVSMLTransferFunction::write( const std::string& filename )
         return( false );
     }
 
-    // <DataArray>
-    kvs::kvsml::DataArrayTag colors;
-    if ( m_writing_type == ExternalAscii )
+    // <ColorMapValue>
+    if ( m_color_point_list.size() > 0 )
     {
-        colors.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "cmap" ) );
-        colors.setFormat( "ascii" );
-    }
-    else if ( m_writing_type == ExternalBinary )
-    {
-        colors.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "cmap" ) );
-        colors.setFormat( "binary" );
-    }
+        ColorPointList::const_iterator point = m_color_point_list.begin();
+        ColorPointList::const_iterator last = m_color_point_list.end();
+        while ( point != last )
+        {
+            kvs::kvsml::ColorMapValueTag value_tag;
+            value_tag.setScalar( point->first );
+            value_tag.setColor( point->second );
+            if ( !value_tag.write( color_map_tag.node() ) )
+            {
+                kvsMessageError( "Cannot write <%s>.", color_map_tag.name().c_str() );
+                return( false );
+            }
 
-    if ( !colors.write( color_map_tag.node(), m_colors ) )
+            point++;
+        }
+    }
+    // <DataArray>
+    else
     {
-        kvsMessageError( "Cannot write <%s> for <%s>.",
-                         colors.name().c_str(),
-                         color_map_tag.name().c_str() );
-        return( false );
+        kvs::kvsml::DataArrayTag colors;
+        if ( m_writing_type == ExternalAscii )
+        {
+            colors.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "cmap" ) );
+            colors.setFormat( "ascii" );
+        }
+        else if ( m_writing_type == ExternalBinary )
+        {
+            colors.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "cmap" ) );
+            colors.setFormat( "binary" );
+        }
+
+        if ( !colors.write( color_map_tag.node(), m_colors ) )
+        {
+            kvsMessageError( "Cannot write <%s> for <%s>.",
+                             colors.name().c_str(),
+                             color_map_tag.name().c_str() );
+            return( false );
+        }
     }
 
     // <OpacityMap>
@@ -389,25 +546,47 @@ const bool KVSMLTransferFunction::write( const std::string& filename )
         return( false );
     }
 
-    // <DataArray>
-    kvs::kvsml::DataArrayTag opacities;
-    if ( m_writing_type == ExternalAscii )
+    // <OpacityMapValue>
+    if ( m_opacity_point_list.size() > 0 )
     {
-        opacities.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "omap" ) );
-        opacities.setFormat( "ascii" );
-    }
-    else if ( m_writing_type == ExternalBinary )
-    {
-        opacities.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "omap" ) );
-        opacities.setFormat( "binary" );
-    }
+        OpacityPointList::const_iterator point = m_opacity_point_list.begin();
+        OpacityPointList::const_iterator last = m_opacity_point_list.end();
+        while ( point != last )
+        {
+            kvs::kvsml::OpacityMapValueTag value_tag;
+            value_tag.setScalar( point->first );
+            value_tag.setOpacity( point->second );
+            if ( !value_tag.write( color_map_tag.node() ) )
+            {
+                kvsMessageError( "Cannot write <%s>.", opacity_map_tag.name().c_str() );
+                return( false );
+            }
 
-    if ( !opacities.write( opacity_map_tag.node(), m_opacities ) )
+            point++;
+        }
+    }
+    // <DataArray>
+    else
     {
-        kvsMessageError( "Cannot write <%s> for <%s>.",
-                         opacities.name().c_str(),
-                         opacity_map_tag.name().c_str() );
-        return( false );
+        kvs::kvsml::DataArrayTag opacities;
+        if ( m_writing_type == ExternalAscii )
+        {
+            opacities.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "omap" ) );
+            opacities.setFormat( "ascii" );
+        }
+        else if ( m_writing_type == ExternalBinary )
+        {
+            opacities.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "omap" ) );
+            opacities.setFormat( "binary" );
+        }
+
+        if ( !opacities.write( opacity_map_tag.node(), m_opacities ) )
+        {
+            kvsMessageError( "Cannot write <%s> for <%s>.",
+                             opacities.name().c_str(),
+                             opacity_map_tag.name().c_str() );
+            return( false );
+        }
     }
 
     return( document.write( m_filename ) );

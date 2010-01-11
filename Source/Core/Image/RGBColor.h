@@ -100,6 +100,14 @@ public:
                           static_cast<kvs::UInt8>( kvs::Math::Round( a * rgb.b() ) ) ) );
     }
 
+    template <typename T>
+    friend RGBColor operator / ( const RGBColor& rgb, const T a )
+    {
+        return( RGBColor( static_cast<kvs::UInt8>( kvs::Math::Round( rgb.r() / a ) ),
+                          static_cast<kvs::UInt8>( kvs::Math::Round( rgb.g() / a ) ),
+                          static_cast<kvs::UInt8>( kvs::Math::Round( rgb.b() / a ) ) ) );
+    }
+
     friend std::ostream& operator << ( std::ostream& os, const RGBColor& rgb )
     {
         const size_t width     = 8;
