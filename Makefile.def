@@ -155,7 +155,11 @@ CUDA_LIBRARY_PATH :=
 CUDA_LINK_LIBRARY := -lcuda -lcudart
 ifdef KVS_CUDA_DIR
 CUDA_INCLUDE_PATH += -I$(KVS_CUDA_DIR)/include
+ifeq "$(shell uname -m)" "x86_64"
+CUDA_LIBRARY_PATH += -L$(KVS_CUDA_DIR)/lib64
+else
 CUDA_LIBRARY_PATH += -L$(KVS_CUDA_DIR)/lib
+endif
 endif
 ifdef KVS_CUDA_SDK_DIR
 CUDA_INCLUDE_PATH += -I$(KVS_CUDA_SDK_DIR)/common/inc

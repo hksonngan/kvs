@@ -17,6 +17,7 @@
 
 #include "CUDA.h"
 #include <string>
+#include <kvs/Vector3>
 
 
 namespace kvs
@@ -35,6 +36,7 @@ class Device
 protected:
 
     CUdevice     m_handler;      ///< device handler
+    CUdevprop    m_property;     ///< cuda device properties
     unsigned int m_free_memory;  ///< free amount of memory on the device
     unsigned int m_total_memory; ///< total amount of memory on the device
 
@@ -65,6 +67,26 @@ public:
     const unsigned int totalMemory( void ) const;
 
     const unsigned int freeMemory( void ) const;
+
+    const int maxThreadsPerBlock( void ) const;
+
+    const kvs::Vector3i maxThreadsDimension( void ) const;
+
+    const kvs::Vector3i maxGridSize( void ) const;
+
+    const int sharedMemoryPerBlock( void ) const;
+
+    const int totalConstantMemory( void ) const;
+
+    const int warpSize( void ) const;
+
+    const int memoryPitch( void ) const;
+
+    const int registersPerBlock( void ) const;
+
+    const int clockRate( void ) const;
+
+    const int textureAlignment( void ) const;
 
     static const int count( void );
 };

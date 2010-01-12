@@ -81,11 +81,24 @@ void Device::update( void )
 /*===========================================================================*/
 const bool Device::create( const int ordinal )
 {
-    CUresult result = cuDeviceGet( &m_handler, ordinal );
-    if ( result != CUDA_SUCCESS )
+    // Get a device handler.
     {
-        kvsMessageError( "CUDA; %s.", kvs::cuda::ErrorString( result ) );
-        return( false );
+        CUresult result = cuDeviceGet( &m_handler, ordinal );
+        if ( result != CUDA_SUCCESS )
+        {
+            kvsMessageError( "CUDA; %s.", kvs::cuda::ErrorString( result ) );
+            return( false );
+        }
+    }
+
+    // Get device properties.
+    {
+        CUresult result = cuDeviceGetProperties( &m_property, m_handler );
+        if ( result != CUDA_SUCCESS )
+        {
+            kvsMessageError( "CUDA; %s.", kvs::cuda::ErrorString( result ) );
+            return( false );
+        }
     }
 
     return( true );
@@ -179,6 +192,116 @@ const unsigned int Device::totalMemory( void ) const
 const unsigned int Device::freeMemory( void ) const
 {
     return( m_free_memory );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the max. number of threads per block.
+ *  @return max. number of threads per block.
+ */
+/*===========================================================================*/
+const int Device::maxThreadsPerBlock( void ) const
+{
+    return( m_property.maxThreadsPerBlock );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the max. size of each dimension of a block.
+ *  @return max. size of each dimension of a block.
+ */
+/*===========================================================================*/
+const kvs::Vector3i Device::maxThreadsDimension( void ) const
+{
+    return( kvs::Vector3i( m_property.maxThreadsDim ) );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the max. size of each dimension of a grid.
+ *  @return max. size of each dimension of a block.
+ */
+/*===========================================================================*/
+const kvs::Vector3i Device::maxGridSize( void ) const
+{
+    return( kvs::Vector3i( m_property.maxGridSize ) );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the shared memory available per block in bytes.
+ *  @return shared memory available per block
+ */
+/*===========================================================================*/
+const int Device::sharedMemoryPerBlock( void ) const
+{
+    return( m_property.sharedMemPerBlock );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the constant memory available on device in bytes.
+ *  @return constant memory available on device
+ */
+/*===========================================================================*/
+const int Device::totalConstantMemory( void ) const
+{
+    return( m_property.totalConstantMemory );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the warp size in threads.
+ *  @return warp size in threads
+ */
+/*===========================================================================*/
+const int Device::warpSize( void ) const
+{
+    return( m_property.SIMDWidth );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the max. pitch in bytes allowed by memory copies.
+ *  @return max. pitch
+ */
+/*===========================================================================*/
+const int Device::memoryPitch( void ) const
+{
+    return( m_property.memPitch );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the number of registers available per block.
+ *  @return number of registers available per block
+ */
+/*===========================================================================*/
+const int Device::registersPerBlock( void ) const
+{
+    return( m_property.regsPerBlock );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the clock frequency in KHz.
+ *  @return clock frequency
+ */
+/*===========================================================================*/
+const int Device::clockRate( void ) const
+{
+    return( m_property.clockRate );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the alignment requirement for textures.
+ *  @return alignment requirement for textures
+ */
+/*===========================================================================*/
+const int Device::textureAlignment( void ) const
+{
+    return( m_property.textureAlign );
 }
 
 /*===========================================================================*/
