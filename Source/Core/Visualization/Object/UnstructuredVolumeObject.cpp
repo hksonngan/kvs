@@ -141,6 +141,8 @@ const kvs::UnstructuredVolumeObject* UnstructuredVolumeObject::DownCast( const k
 
 std::ostream& operator << ( std::ostream& os, const UnstructuredVolumeObject& object )
 {
+    if ( !object.hasMinMaxValues() ) object.updateMinMaxValues();
+
     os << "Object type:  " << "unstructured volume object" << std::endl;
 #ifdef KVS_COMPILER_VC
 #if KVS_COMPILER_VERSION_LESS_OR_EQUAL( 8, 0 )
@@ -151,7 +153,9 @@ std::ostream& operator << ( std::ostream& os, const UnstructuredVolumeObject& ob
 #endif
     os << "Cell type:  " << ::GetCellTypeName( object.cellType() ) << std::endl;
     os << "Number of nodes:  " << object.nnodes() << std::endl;
-    os << "Number of cells:  " << object.ncells();
+    os << "Number of cells:  " << object.ncells() << std::endl;
+    os << "Min. value:  " << object.minValue() << std::endl;
+    os << "Max. value:  " << object.maxValue();
 
     return( os );
 }

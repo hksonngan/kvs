@@ -146,6 +146,8 @@ StructuredVolumeObject& StructuredVolumeObject::operator = ( const StructuredVol
 
 std::ostream& operator << ( std::ostream& os, const StructuredVolumeObject& object )
 {
+    if ( !object.hasMinMaxValues() ) object.updateMinMaxValues();
+
     os << "Object type:  " << "structured volume object" << std::endl;
 #ifdef KVS_COMPILER_VC
 #if KVS_COMPILER_VERSION_LESS_OR_EQUAL( 8, 0 )
@@ -156,7 +158,9 @@ std::ostream& operator << ( std::ostream& os, const StructuredVolumeObject& obje
 #endif
     os << "Grid type:  " << ::GetGridTypeName( object.gridType() ) << std::endl;
     os << "Resolution:  " << object.resolution() << std::endl;
-    os << "Number of nodes:  " << object.nnodes();
+    os << "Number of nodes:  " << object.nnodes() << std::endl;
+    os << "Min. value:  " << object.minValue() << std::endl;
+    os << "Max. value:  " << object.maxValue();
 
     return( os );
 }
