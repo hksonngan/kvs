@@ -177,6 +177,7 @@ $(OUTDIR)\.\Visualization\Importer\PolygonImporter.obj \
 $(OUTDIR)\.\Visualization\Importer\StructuredVolumeImporter.obj \
 $(OUTDIR)\.\Visualization\Importer\UnstructuredVolumeImporter.obj \
 $(OUTDIR)\.\Visualization\Mapper\ArrowGlyph.obj \
+$(OUTDIR)\.\Visualization\Mapper\CellAdjacencyGraph.obj \
 $(OUTDIR)\.\Visualization\Mapper\CellByCellMetropolisSampling.obj \
 $(OUTDIR)\.\Visualization\Mapper\CellByCellUniformSampling.obj \
 $(OUTDIR)\.\Visualization\Mapper\ColorMap.obj \

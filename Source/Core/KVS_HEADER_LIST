@@ -145,6 +145,7 @@ Visualization/Importer/PolygonImporter
 Visualization/Importer/StructuredVolumeImporter
 Visualization/Importer/UnstructuredVolumeImporter
 Visualization/Mapper/ArrowGlyph
+Visualization/Mapper/CellAdjacencyGraph
 Visualization/Mapper/CellBase
 Visualization/Mapper/CellByCellMetropolisSampling
 Visualization/Mapper/CellByCellParticleGenerator
