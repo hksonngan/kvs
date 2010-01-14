@@ -42,6 +42,28 @@ ApplicationBase::~ApplicationBase( void )
 
 /*===========================================================================*/
 /**
+ *  @brief  Returns the argument count.
+ *  @return argument count
+ */
+/*===========================================================================*/
+int ApplicationBase::argc( void )
+{
+    return( m_argc );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the argument values.
+ *  @return argument values
+ */
+/*===========================================================================*/
+char** ApplicationBase::argv( void )
+{
+    return( m_argv );
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Attaches a pointer to the screeen.
  *  @param  screen [in] pointer to the screen
  */

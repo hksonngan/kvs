@@ -22,13 +22,13 @@ namespace
 /*===========================================================================*/
 /**
  *  @brief  Returns a default configration filename.
+ *  @param  argv0 [in] command name
  *  @return default configration filename
  */
 /*===========================================================================*/
-const std::string GetDefaultConfigurationFile( void )
+const std::string GetDefaultConfigurationFile( const char* argv0 )
 {
     // Default filename is set as "<command-name>.conf".
-    const char* argv0 = kvs::GlobalCore::argv[0];
     const std::string commandname = kvs::File( argv0 ).baseName();
     const std::string extension = std::string(".conf");
 
@@ -47,9 +47,13 @@ namespace sage
 /*===========================================================================*/
 /**
  *  @brief  Constructs a new ApplicationInterface class.
+ *  @param  argc [in] argument count
+ *  @param  argv [in] argument values
  */
 /*===========================================================================*/
-ApplicationInterface::ApplicationInterface( void ):
+ApplicationInterface::ApplicationInterface( int argc, char** argv ):
+    m_argc( argc ),
+    m_argv( argv ),
     m_initialized( false ),
     m_application_id( -1 ),
     m_application_width( 0 ),
@@ -75,9 +79,14 @@ ApplicationInterface::~ApplicationInterface( void )
 /*===========================================================================*/
 bool ApplicationInterface::initialize( void )
 {
+    // Application name.
+    const char* argv0 = kvs::GlobalCore::argv[0];
+    const std::string appname = kvs::File( argv0 ).baseName();
+
+    // Configuration filename.
     if ( m_configuration_file.empty() )
     {
-        m_configuration_file = ::GetDefaultConfigurationFile();
+        m_configuration_file = ::GetDefaultConfigurationFile( argv0 );
     }
 
     // Configuration file.
@@ -88,10 +97,6 @@ bool ApplicationInterface::initialize( void )
         kvsMessageError("Cannot find a configuration file '%s'", s );
         return( false );
     }
-
-    // Application name.
-    const char* argv0 = kvs::GlobalCore::argv[0];
-    const std::string appname = kvs::File( argv0 ).baseName();
 
     // SAIL configration information.
     sailConfig config;

@@ -3,8 +3,10 @@
 
 
 OBJECTS = \
+$(OUTDIR)\.\Viewer\Application.obj \
 $(OUTDIR)\.\Viewer\ApplicationInterface.obj \
 $(OUTDIR)\.\Viewer\GlobalBase.obj \
+$(OUTDIR)\.\Viewer\Screen.obj \
 $(OUTDIR)\.\Viewer\ScreenBase.obj \
 
 

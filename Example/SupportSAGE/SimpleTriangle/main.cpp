@@ -15,44 +15,24 @@
 /*****************************************************************************/
 // KVS
 #include <kvs/OpenGL>
-#include <kvs/Message>
-// SupportSAGE
-#include <kvs/sage/SAGE>
-#include <kvs/sage/ScreenBase>
-#include <kvs/sage/GlobalBase>
+#include <kvs/PaintEventListener>
+// SupportGLUT
+#include <kvs/sage/Application>
+#include <kvs/sage/Screen>
 
 
 /*===========================================================================*/
 /**
- *  @brief  Global class.
+ *  @brief  User-defined paint event.
  */
 /*===========================================================================*/
-class Global : public kvs::sage::GlobalBase
+class PaintEvent : public kvs::PaintEventListener
 {
-public:
-
-    Global( int count, char** values ):
-        kvs::sage::GlobalBase( count, values )
+    void update( void )
     {
-    }
-};
-
-/*===========================================================================*/
-/**
- *  @brief  Screen class.
- */
-/*===========================================================================*/
-class Screen : public kvs::sage::ScreenBase
-{
-public:
-
-    Screen( void )
-    {
-        addPaintEvent( additional_paint_event );
-    }
-
-    static void additional_paint_event( void )
-    {
+        /* This sample method draws a rainbow colored triangle in the screen by
+         * using GL_TRIANGLES.
+         */
         glBegin( GL_TRIANGLES );
         glColor3ub( 255,   0,   0 ); glVertex3d(  0.0,  3.0, 0.0 );
         glColor3ub(   0, 255,   0 ); glVertex3d(  3.0, -3.0, 0.0 );
@@ -64,34 +44,24 @@ public:
 /*===========================================================================*/
 /**
  *  @brief  Main function.
- *  @param  argc [i] argument counter
+ *  @param  argc [i] argument count
  *  @param  argv [i] argument values
  */
 /*===========================================================================*/
 int main( int argc, char** argv )
 {
-    // Create the global parameters.
-    Global* global = new Global( argc, argv );
-    if ( !global )
-    {
-        kvsMessageError("Cannot allocate memory for 'global'.");
-        return( false );
-    }
+    // Application.
+    kvs::sage::Application app( argc, argv );
 
-    // Create and show the rendering screen.
-    Screen* screen = new Screen();
-    if( !screen )
-    {
-        kvsMessageError("Cannot allocate memory for 'screen'.");
-        return( false );
-    }
-    screen->setGeometry( 0, 0, 512, 512 );
-    screen->setTitle( "SimpleTriangle" );
-    screen->show();
+    // User specified event.
+    PaintEvent paint_event;
 
-    // Delete the global parameters and the rendering screen.
-    delete global;
-    delete screen;
+    // Screen.
+    kvs::sage::Screen screen( &app );
+    screen.addPaintEvent( &paint_event );
+    screen.setGeometry( 0, 0, 512, 512 );
+    screen.setTitle( "SimpleTriangle" );
+    screen.show();
 
-    return( true );
+    return( app.run() );
 }

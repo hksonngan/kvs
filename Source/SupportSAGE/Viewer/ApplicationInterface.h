@@ -38,15 +38,17 @@ class ApplicationInterface : public sail
 
 private:
 
+    int    m_argc;                    ///< argument count
+    char** m_argv;                    ///< argument values
     std::string m_configuration_file; ///< configuration filename
-    bool m_initialized;               ///< check flag whether the SAIL is initialized or not
-    int  m_application_id;            ///< application ID
-    int  m_application_width;         ///< application window width
-    int  m_application_height;        ///< application window height
+    bool   m_initialized;             ///< check flag whether the SAIL is initialized or not
+    int    m_application_id;          ///< application ID
+    int    m_application_width;       ///< application window width
+    int    m_application_height;      ///< application window height
 
 public:
 
-    ApplicationInterface( void );
+    ApplicationInterface( int argc, char** argv );
 
     ~ApplicationInterface( void );
 

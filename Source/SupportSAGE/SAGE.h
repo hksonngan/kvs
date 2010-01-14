@@ -23,6 +23,7 @@
 #include <GL/glut.h>
 #endif
 
+#include <sage.h>
 #include <sail.h>
 
 

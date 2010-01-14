@@ -47,7 +47,7 @@ GlobalBase::GlobalBase( int count, char** values ):
 {
     glutInit( &kvs::GlobalCore::argc, kvs::GlobalCore::argv );
 
-    sail = new kvs::sage::ApplicationInterface();
+    sail = new kvs::sage::ApplicationInterface( count, values );
     if ( !sail )
     {
         kvsMessageError("Cannot allocate memory for the SAIL.");

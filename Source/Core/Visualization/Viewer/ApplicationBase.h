@@ -44,6 +44,10 @@ public:
 
 public:
 
+    int argc( void );
+
+    char** argv( void );
+
     void attach( kvs::ScreenBase* screen );
 
     void detach( kvs::ScreenBase* screen );

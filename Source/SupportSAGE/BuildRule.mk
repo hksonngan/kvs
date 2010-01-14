@@ -3,8 +3,10 @@
 
 
 OBJECTS := \
+$(OUTDIR)/./Viewer/Application.o \
 $(OUTDIR)/./Viewer/ApplicationInterface.o \
 $(OUTDIR)/./Viewer/GlobalBase.o \
+$(OUTDIR)/./Viewer/Screen.o \
 $(OUTDIR)/./Viewer/ScreenBase.o \
 
 
