@@ -12,6 +12,7 @@
  */
 /****************************************************************************/
 #include "Bounds.h"
+#include <kvs/PointObject>
 
 
 namespace kvs
@@ -32,11 +33,12 @@ Bounds::Bounds( void ):
 /*==========================================================================*/
 /**
  *  @brief  Constructs a new Bounds class.
- *  @param object [in] pointer to the object
+ *  @param  object [in] pointer to the object
+ *  @param  type [in] bounds type
  */
 /*==========================================================================*/
-Bounds::Bounds( const kvs::ObjectBase* object ):
-    m_type( Bounds::Box ),
+Bounds::Bounds( const kvs::ObjectBase* object, const Bounds::Type type ):
+    m_type( type ),
     m_corner_scale( 0.2f ),
     m_division( 50.0f )
 {
@@ -46,16 +48,21 @@ Bounds::Bounds( const kvs::ObjectBase* object ):
 /*==========================================================================*/
 /**
  *  @brief  Constructs a new Bounds class.
- *  @param object [in] pointer to the object
- *  @param type [in] bounds type
+ *  @param  min_coord [in] min. coordinate
+ *  @param  max_coord [in] max. coordinate
+ *  @param  type [in] bounds type
  */
 /*==========================================================================*/
-Bounds::Bounds( const kvs::ObjectBase* object, const Bounds::Type type ):
+Bounds::Bounds( const kvs::Vector3f& min_coord, const kvs::Vector3f& max_coord, const Bounds::Type type ):
     m_type( type ),
     m_corner_scale( 0.2f ),
     m_division( 50.0f )
 {
-    this->exec( object );
+    kvs::PointObject object;
+    object.setMinMaxExternalCoords( min_coord, max_coord );
+    object.setMinMaxObjectCoords( min_coord, max_coord );
+
+    this->exec( &object );
 }
 
 /*===========================================================================*/
@@ -82,6 +89,7 @@ Bounds::SuperClass* Bounds::exec( const kvs::ObjectBase* object )
         return( NULL );
     }
 
+/*
     if ( object->objectType() != kvs::ObjectBase::Geometry ||
          object->objectType() != kvs::ObjectBase::Volume )
     {
@@ -89,14 +97,21 @@ Bounds::SuperClass* Bounds::exec( const kvs::ObjectBase* object )
         kvsMessageError("Input object is not supported.");
         return( NULL );
     }
+*/
 
-    SuperClass::setMinMaxObjectCoords(
-        object->minObjectCoord(),
-        object->maxObjectCoord() );
+    if ( object->hasMinMaxExternalCoords() )
+    {
+        const kvs::Vector3f min_coord( object->minExternalCoord() );
+        const kvs::Vector3f max_coord( object->maxExternalCoord() );
+        SuperClass::setMinMaxExternalCoords( min_coord, max_coord );
+    }
 
-    SuperClass::setMinMaxExternalCoords(
-        object->minExternalCoord(),
-        object->maxExternalCoord() );
+    if ( object->hasMinMaxObjectCoords() )
+    {
+        const kvs::Vector3f min_coord( object->minObjectCoord() );
+        const kvs::Vector3f max_coord( object->maxObjectCoord() );
+        SuperClass::setMinMaxObjectCoords( min_coord, max_coord );
+    }
 
     switch( m_type )
     {

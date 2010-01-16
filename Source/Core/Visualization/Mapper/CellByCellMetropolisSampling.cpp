@@ -599,8 +599,8 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::UnstructuredVo
     const size_t ncells = volume->ncells();
     for ( size_t index = 0; index < ncells; ++index )
     {
-        // Attach the cell which is specified by 'index'.
-        cell->attachCell( index );
+        // Bind the cell which is indicated by 'index'.
+        cell->bindCell( index );
 
         // Calculate a density.
         const float  average_scalar = cell->averagedScalar();

@@ -62,9 +62,9 @@ public:
 
     Bounds( void );
 
-    Bounds( const kvs::ObjectBase* object );
+    Bounds( const kvs::ObjectBase* object, const Bounds::Type type = Bounds::Box );
 
-    Bounds( const kvs::ObjectBase* object, const Bounds::Type type );
+    Bounds( const kvs::Vector3f& min_coord, const kvs::Vector3f& max_coord, const Bounds::Type type = Bounds::Box );
 
     virtual ~Bounds( void );
 
