@@ -296,7 +296,8 @@ void ParticleBuffer::create_image_with_shading(
     kvs::ValueArray<kvs::UInt8>*  color,
     kvs::ValueArray<kvs::Real32>* depth )
 {
-    const kvs::UInt8*  point_color  = m_ref_point_object->colors().pointer();
+    const kvs::Real32* point_coords = m_ref_point_object->coords().pointer();
+    const kvs::UInt8* point_color = m_ref_point_object->colors().pointer();
     const kvs::Real32* point_normal = m_ref_point_object->normals().pointer();
 
     const float inv_ssize = 1.0f / ( m_subpixel_level * m_subpixel_level );
@@ -326,7 +327,10 @@ void ParticleBuffer::create_image_with_shading(
                     {
                         const size_t point_index3 = 3 * m_index_buffer[ bindex ];
 
-                        const float attenuate = m_ref_shader->attenuation( point_normal + point_index3 );
+//                        const float attenuate = m_ref_shader->attenuation( point_normal + point_index3 );
+                        const kvs::Vector3f vertex( point_coords + point_index3 );
+                        const kvs::Vector3f gradient( point_normal + point_index3 );
+                        const float attenuate = m_ref_shader->attenuation( vertex, gradient );
                         R += point_color[ point_index3 + 0 ] * attenuate;
                         G += point_color[ point_index3 + 1 ] * attenuate;
                         B += point_color[ point_index3 + 2 ] * attenuate;

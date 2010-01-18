@@ -177,7 +177,8 @@ void RayCastingRenderer::rasterize(
                     if ( !kvs::Math::IsZero( density ) )
                     {
                         // Front-to-back accumulation.
-                        const float attenuate = shader->attenuation( &( interpolator.gradient<T>()[0] ) );
+//                        const float attenuate = shader->attenuation( &( interpolator.gradient<T>()[0] ) );
+                        const float attenuate = shader->attenuation( ray.point(), interpolator.gradient<T>() );
                         const float current_alpha = ( 1.0f - alpha ) * density;
                         color += current_alpha * attenuate * cmap[s];
                         alpha += current_alpha;

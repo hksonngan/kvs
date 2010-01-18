@@ -56,8 +56,8 @@ Shader::Lambert::Lambert( void ):
 /*==========================================================================*/
 Shader::Lambert::Lambert( const Shader::Lambert& shader )
 {
-    C  = shader.C;
-    L  = shader.L;
+    camera_position = shader.camera_position;
+    light_position = shader.light_position;
     Ka = shader.Ka;
     Kd = shader.Kd;
 }
@@ -84,9 +84,7 @@ Shader::Lambert::Lambert( const float ka, const float kd )
 /*==========================================================================*/
 void Shader::Lambert::set( const Camera* camera, const Light* light )
 {
-    kvs::IgnoreUnusedVariable( camera );
-
-    L = -light->position().normalize();
+    light_position = -camera->projectWorldToObject( light->position() );
 }
 
 const Shader::Type Shader::Lambert::type( void ) const
@@ -100,13 +98,13 @@ const Shader::Type Shader::Lambert::type( void ) const
  *  @return attenuation value
  */
 /*==========================================================================*/
-inline const float Shader::Lambert::attenuation( const float gradient[3] ) const
+inline const float Shader::Lambert::attenuation( const kvs::Vector3f& vertex, const kvs::Vector3f& gradient ) const
 {
-    // Normal vector.
-    const kvs::Vector3f N( kvs::Vector3f( gradient ).normalize() );
+    // Light vector L and normal vector N.
+    const kvs::Vector3f L = ( light_position - vertex ).normalize();
+    const kvs::Vector3f N = gradient.normalize();
 
-    //const float dd = kvs::Math::Max( N.dot( L ), 0.0f );
-    const float dd = kvs::Math::Abs( N.dot( L ) );
+    const float dd = kvs::Math::Max( N.dot( L ), 0.0f );
 
     /* I = Ia + Id
      *
@@ -127,9 +125,9 @@ inline const float Shader::Lambert::attenuation( const float gradient[3] ) const
  */
 /*==========================================================================*/
 Shader::Phong::Phong( void ):
-    Ka( 0.2f ),
+    Ka( 0.3f ),
     Kd( 0.5f ),
-    Ks( 0.3f ),
+    Ks( 0.8f ),
     S( 20.0f )
 {
 }
@@ -142,12 +140,12 @@ Shader::Phong::Phong( void ):
 /*==========================================================================*/
 Shader::Phong::Phong( const Shader::Phong& shader )
 {
-    C  = shader.C;
-    L  = shader.L;
+    camera_position = shader.camera_position;
+    light_position = shader.light_position;
     Ka = shader.Ka;
     Kd = shader.Kd;
     Ks = shader.Ks;
-    S  = shader.S;
+    S = shader.S;
 }
 
 /*==========================================================================*/
@@ -176,9 +174,7 @@ Shader::Phong::Phong( const float ka, const float kd, const float ks, const floa
 /*==========================================================================*/
 void Shader::Phong::set( const kvs::Camera* camera, const kvs::Light* light )
 {
-    kvs::IgnoreUnusedVariable( camera );
-
-    L = -light->position().normalize();
+    light_position = -camera->projectWorldToObject( light->position() );
 }
 
 const Shader::Type Shader::Phong::type( void ) const
@@ -192,16 +188,15 @@ const Shader::Type Shader::Phong::type( void ) const
  *  @return attenuation value
  */
 /*==========================================================================*/
-inline const float Shader::Phong::attenuation( const float gradient[3] ) const
+inline const float Shader::Phong::attenuation( const kvs::Vector3f& vertex, const kvs::Vector3f& gradient ) const
 {
-    // Normal vector N and reflection vector R.
-    const kvs::Vector3f N( kvs::Vector3f( gradient ).normalize() );
-    const kvs::Vector3f R( 2.0f * N.dot( L ) * N - L );
+    // Light vector L, normal vector N and reflection vector R.
+    const kvs::Vector3f L = ( light_position - vertex ).normalize();
+    const kvs::Vector3f N = gradient.normalize();
+    const kvs::Vector3f R = 2.0f * N.dot( L ) * N - L;
 
-    //const float dd = Math::Max( N.dot( L ), 0.0f );
-    //const float ds = Math::Max( N.dot( R ), 0.0f );
-    const float dd = kvs::Math::Abs( N.dot( L ) );
-    const float ds = kvs::Math::Abs( N.dot( R ) );
+    const float dd = Math::Max( N.dot( L ), 0.0f );
+    const float ds = Math::Max( N.dot( R ), 0.0f );
 
     /* I = Ia + Id + Is
      *
@@ -220,9 +215,9 @@ inline const float Shader::Phong::attenuation( const float gradient[3] ) const
  */
 /*==========================================================================*/
 Shader::BlinnPhong::BlinnPhong( void ):
-    Ka( 0.2f ),
+    Ka( 0.3f ),
     Kd( 0.5f ),
-    Ks( 0.3f ),
+    Ks( 0.8f ),
     S( 20.0f )
 {
 }
@@ -235,13 +230,12 @@ Shader::BlinnPhong::BlinnPhong( void ):
 /*==========================================================================*/
 Shader::BlinnPhong::BlinnPhong( const Shader::BlinnPhong& shader )
 {
-    C  = shader.C;
-    L  = shader.L;
-    H  = shader.H;
+    camera_position = shader.camera_position;
+    light_position = shader.light_position;
     Ka = shader.Ka;
     Kd = shader.Kd;
     Ks = shader.Ks;
-    S  = shader.S;
+    S = shader.S;
 }
 
 /*==========================================================================*/
@@ -270,9 +264,8 @@ Shader::BlinnPhong::BlinnPhong( const float ka, const float kd, const float ks, 
 /*==========================================================================*/
 void Shader::BlinnPhong::set( const kvs::Camera* camera, const kvs::Light* light )
 {
-    C = -camera->position().normalize();
-    L = -light->position().normalize();
-    H = ( C + L ).normalize();
+    camera_position = -camera->projectWorldToObject( camera->position() );
+    light_position = -camera->projectWorldToObject( light->position() );
 }
 
 const Shader::Type Shader::BlinnPhong::type( void ) const
@@ -286,15 +279,16 @@ const Shader::Type Shader::BlinnPhong::type( void ) const
  *  @return attenuation value
  */
 /*==========================================================================*/
-inline const float Shader::BlinnPhong::attenuation( const float gradient[3] ) const
+inline const float Shader::BlinnPhong::attenuation( const kvs::Vector3f& vertex, const kvs::Vector3f& gradient ) const
 {
-    // Normal vector.
-    const kvs::Vector3f N( kvs::Vector3f( gradient ).normalize() );
+    // Camera vector C, light vector L, halfway vector H and normal vector N.
+    const kvs::Vector3f C = ( camera_position - vertex ).normalize();
+    const kvs::Vector3f L = ( light_position - vertex ).normalize();
+    const kvs::Vector3f H = ( C + L ).normalize();
+    const kvs::Vector3f N = gradient.normalize();
 
-    //const float dd = kvs::Math::Max( N.dot( L ), 0.0 );
-    //const float ds = kvs::Math::Max( N.dot( H ), 0.0 );
-    const float dd = kvs::Math::Abs( N.dot( L ) );
-    const float ds = kvs::Math::Abs( N.dot( H ) );
+    const float dd = kvs::Math::Max( N.dot( L ), 0.0f );
+    const float ds = kvs::Math::Max( N.dot( H ), 0.0f );
 
     /* I = Ia + Id + Is
      *

@@ -41,8 +41,8 @@ public:
 
     struct Base
     {
-        kvs::Vector3f C; ///< direction of the camera
-        kvs::Vector3f L; ///< direction of the light
+        kvs::Vector3f camera_position; ///< camera position in the object coordinate
+        kvs::Vector3f light_position; ///< light position in the object coordinate
 
         Base( void );
 
@@ -52,7 +52,7 @@ public:
 
         virtual const Shader::Type type( void ) const = 0;
 
-        virtual const float attenuation( const float gradient[3] ) const = 0;
+        virtual const float attenuation( const kvs::Vector3f& vertex, const kvs::Vector3f& gradient ) const = 0;
     };
 
 public:
@@ -76,7 +76,7 @@ public:
 
         const Shader::Type type( void ) const;
 
-        const float attenuation( const float gradient[3] ) const;
+        const float attenuation( const kvs::Vector3f& vertex, const kvs::Vector3f& gradient ) const;
     };
 
     struct Phong : public Base
@@ -96,16 +96,15 @@ public:
 
         const Shader::Type type( void ) const;
 
-        const float attenuation( const float gradient[3] ) const;
+        const float attenuation( const kvs::Vector3f& vertex, const kvs::Vector3f& gradient ) const;
     };
 
     struct BlinnPhong : public Base
     {
-        kvs::Vector3f H;  ///< halfway vector
-        float         Ka; ///< ambient coefficient
-        float         Kd; ///< diffuse coefficient
-        float         Ks; ///< specular coefficient
-        float         S;  ///< shininess
+        float Ka; ///< ambient coefficient
+        float Kd; ///< diffuse coefficient
+        float Ks; ///< specular coefficient
+        float S;  ///< shininess
 
         BlinnPhong( void );
 
@@ -117,7 +116,7 @@ public:
 
         const Shader::Type type( void ) const;
 
-        const float attenuation( const float gradient[3] ) const;
+        const float attenuation( const kvs::Vector3f& vertex, const kvs::Vector3f& gradient ) const;
     };
 };
 

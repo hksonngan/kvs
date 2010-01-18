@@ -197,8 +197,9 @@ void ParticleBufferAccumulator::createImage(
                         if( renderer->isEnabledShading() )
                         {
                             const kvs::Shader::shader_type* shader = renderer->particleBuffer()->shader();
-                            const kvs::Real32* gradient = object->normals().pointer();
-                            attenuate = shader->attenuation( gradient + point_index3 );
+                            const kvs::Vector3f coord( object->coords().pointer() + point_index3 );
+                            const kvs::Vector3f normal( object->normals().pointer() + point_index3 );
+                            attenuate = shader->attenuation( coord, normal );
                         }
 
                         const kvs::UInt8* color = object->colors().pointer();
