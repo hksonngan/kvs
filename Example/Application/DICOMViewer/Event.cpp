@@ -69,7 +69,7 @@ void KeyPress::update( kvs::KeyEvent* event )
     default: break;
     }
 
-    window()->redraw();
+    screen()->redraw();
 }
 
 /*===========================================================================*/
@@ -107,7 +107,7 @@ void MouseMove::update( kvs::MouseEvent* event )
     Command command( m_parameter, screen() );
 
     command.moveMouse( event );
-    window()->redraw();
+    screen()->redraw();
 }
 
 } // end of namespace Event
