@@ -32,6 +32,7 @@
 #include <kvs/KVSMLObjectStructuredVolume>
 #include <kvs/KVSMLObjectUnstructuredVolume>
 #include <kvs/XMLDocument>
+#include <kvs/DicomList>
 // KVS importer classes.
 #include <kvs/PointImporter>
 #include <kvs/LineImporter>
@@ -192,6 +193,12 @@ bool ObjectImporter::estimate_file_format( void )
             m_importer_type = ObjectImporter::UnstructuredVolume;
             m_file_format = new kvs::KVSMLObjectUnstructuredVolume;
         }
+    }
+
+    else if ( kvs::DicomList::CheckDirectory( file.filePath() ) )
+    {
+        m_importer_type = ObjectImporter::StructuredVolume;
+        m_file_format = new kvs::DicomList;
     }
 
     return( m_file_format != NULL );

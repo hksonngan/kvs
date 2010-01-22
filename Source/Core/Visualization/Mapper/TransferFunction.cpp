@@ -134,6 +134,19 @@ void TransferFunction::setOpacityMap( const kvs::OpacityMap& opacity_map )
     m_opacity_map = opacity_map;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets min and max values.
+ *  @param  min_value [in] min. value
+ *  @param  max_value [in] max. value
+ */
+/*===========================================================================*/
+void TransferFunction::setRange( const float min_value, const float max_value )
+{
+    m_color_map.setRange( min_value, max_value );
+    m_opacity_map.setRange( min_value, max_value );
+}
+
 /*==========================================================================*/
 /**
  *  @brief  Returns the color map.
@@ -203,10 +216,9 @@ const bool TransferFunction::read( const std::string& filename )
         m_opacity_map.setRange( min_value, max_value );
     }
 
+    m_color_map.setResolution( transfer_function.resolution() );
     if ( transfer_function.colorPointList().size() > 0 )
     {
-        m_color_map.setResolution( transfer_function.resolution() );
-
         kvs::KVSMLTransferFunction::ColorPointList::const_iterator point =
             transfer_function.colorPointList().begin();
         kvs::KVSMLTransferFunction::ColorPointList::const_iterator last =
@@ -226,10 +238,9 @@ const bool TransferFunction::read( const std::string& filename )
         m_color_map = kvs::ColorMap( transfer_function.colors() );
     }
 
+    m_opacity_map.setResolution( transfer_function.resolution() );
     if ( transfer_function.opacityPointList().size() > 0 )
     {
-        m_opacity_map.setResolution( transfer_function.resolution() );
-
         kvs::KVSMLTransferFunction::OpacityPointList::const_iterator point =
             transfer_function.opacityPointList().begin();
         kvs::KVSMLTransferFunction::OpacityPointList::const_iterator last =

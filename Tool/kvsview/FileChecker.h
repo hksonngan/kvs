@@ -15,6 +15,7 @@
 #ifndef KVSVIEW__FILE_CHECKER_H_INCLUDE
 #define KVSVIEW__FILE_CHECKER_H_INCLUDE
 
+#include <kvs/File>
 #include <kvs/AVSField>
 #include <kvs/AVSUcd>
 #include <kvs/Stl>
@@ -23,6 +24,7 @@
 #include <kvs/KVSMLObjectPolygon>
 #include <kvs/KVSMLObjectStructuredVolume>
 #include <kvs/KVSMLObjectUnstructuredVolume>
+#include <kvs/DicomList>
 
 
 namespace kvsview
@@ -112,19 +114,31 @@ inline const bool ImportablePolygon( const std::string& filename )
 /*===========================================================================*/
 inline const bool ImportableStructuredVolume( const std::string& filename )
 {
-    // KVSML format.
-    if ( kvs::KVSMLObjectStructuredVolume::CheckFileExtension( filename ) )
+    kvs::File file( filename );
+    if ( file.isFile() )
     {
-        if ( kvs::KVSMLObjectStructuredVolume::CheckFileFormat( filename ) )
+        // KVSML format.
+        if ( kvs::KVSMLObjectStructuredVolume::CheckFileExtension( filename ) )
+        {
+            if ( kvs::KVSMLObjectStructuredVolume::CheckFileFormat( filename ) )
+            {
+                return( true );
+            }
+        }
+
+        // AVS field format.
+        if ( kvs::AVSField::CheckFileExtension( filename ) )
         {
             return( true );
         }
     }
-
-    // AVS field format.
-    if ( kvs::AVSField::CheckFileExtension( filename ) )
+    else
     {
-        return( true );
+        // DICOM list.
+        if ( kvs::DicomList::CheckDirectory( filename ) )
+        {
+            return( true );
+        }
     }
 
     return( false );

@@ -39,14 +39,11 @@ class MapperBase
 
     kvsModuleBase;
 
-private:
-
-    kvs::TransferFunction m_transfer_function; ///< Transfer function.
-
 protected:
 
-    const kvs::VolumeObjectBase* m_volume;     ///< Volume object.
-    bool                         m_is_success; ///< Check flag for mapping.
+    kvs::TransferFunction m_transfer_function; ///< Transfer function.
+    const kvs::VolumeObjectBase* m_volume; ///< Volume object.
+    bool m_is_success; ///< Check flag for mapping.
 
 public:
 

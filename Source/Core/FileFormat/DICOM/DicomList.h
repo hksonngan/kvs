@@ -18,6 +18,8 @@
 #include <vector>
 #include <string>
 #include <kvs/Vector2>
+#include <kvs/FileFormatBase>
+#include <kvs/ClassName>
 
 #include "Dicom.h"
 
@@ -30,8 +32,10 @@ namespace kvs
  *  @brief  DICOM list class.
  */
 /*===========================================================================*/
-class DicomList
+class DicomList : public kvs::FileFormatBase
 {
+    kvsClassName( DicomList );
+
 public:
 
     struct SortingByImageNumber
@@ -59,6 +63,7 @@ protected:
     kvs::Vector2f            m_pixel_spacing;   ///< pixel spacing
     int                      m_min_raw_value;   ///< min. value of the raw data
     int                      m_max_raw_value;   ///< max. value of the raw data
+    bool                     m_extension_check; ///< check the file extension
 
 public:
 
@@ -106,9 +111,15 @@ public:
 
     const int maxRawValue( void ) const;
 
+    void enableExtensionCheck( void );
+
+    void disableExtensionCheck( void );
+
 public:
 
-    const bool read( const std::string& dirname, const bool extension_check = true );
+    const bool read( const std::string& dirname );
+
+    const bool write( const std::string& dirname );
 
     void sort( void )
     {
@@ -120,6 +131,10 @@ public:
     {
         std::sort( m_list.begin(), m_list.end(), CompareMethod() );
     }
+
+public:
+
+    static const bool CheckDirectory( const std::string& dirname, const bool extension_check = true );
 };
 
 } // end of namespace kvs

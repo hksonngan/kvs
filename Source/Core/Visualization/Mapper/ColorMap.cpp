@@ -86,7 +86,7 @@ ColorMap::ColorMap( const size_t resolution ):
  */
 /*==========================================================================*/
 ColorMap::ColorMap( const ColorMap::Table& table ):
-    m_resolution( table.size() ),
+    m_resolution( table.size() / 3 ),
     m_min_value( 0.0f ),
     m_max_value( table.size() - 1.0f ),
     m_points(),
@@ -120,7 +120,7 @@ ColorMap::ColorMap( const size_t resolution, const float min_value, const float 
  */
 /*==========================================================================*/
 ColorMap::ColorMap( const ColorMap::Table& table, const float min_value, const float max_value ):
-    m_resolution( table.size() ),
+    m_resolution( table.size() / 3 ),
     m_min_value( min_value ),
     m_max_value( max_value ),
     m_points(),

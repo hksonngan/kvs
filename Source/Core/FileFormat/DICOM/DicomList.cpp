@@ -4,7 +4,7 @@
  *  @brief  DICOM list class.
  *
  *  @author Naohisa Sakamoto
- *  @date   2008/07/29 14:53:37
+ *  @date   2010/01/22 18:06:28
  */
 /*----------------------------------------------------------------------------
  *
@@ -20,6 +20,7 @@
 #include <kvs/Directory>
 #include <kvs/Message>
 #include <kvs/Math>
+#include <kvs/IgnoreUnusedVariable>
 
 
 namespace kvs
@@ -71,7 +72,8 @@ DicomList::DicomList( void ):
     m_column( 0 ),
     m_slice_thickness( 0.0 ),
     m_min_raw_value( 0 ),
-    m_max_raw_value( 0 )
+    m_max_raw_value( 0 ),
+    m_extension_check( true )
 {
 }
 
@@ -87,9 +89,10 @@ DicomList::DicomList( const std::string& dirname, const bool extension_check ):
     m_column( 0 ),
     m_slice_thickness( 0.0 ),
     m_min_raw_value( 0 ),
-    m_max_raw_value( 0 )
+    m_max_raw_value( 0 ),
+    m_extension_check( extension_check )
 {
-    this->read( dirname, extension_check );
+    this->read( dirname );
     this->sort(); // Sorting by slice location. (default sorting method)
 }
 
@@ -300,10 +303,31 @@ const int DicomList::maxRawValue( void ) const
 
 /*===========================================================================*/
 /**
- *  @brief  Read DICOM set from directory.
+ *  @brief  Enable extension check.
  */
 /*===========================================================================*/
-const bool DicomList::read( const std::string& dirname, const bool extension_check )
+void DicomList::enableExtensionCheck( void )
+{
+    m_extension_check = true;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Disable extension check.
+ */
+/*===========================================================================*/
+void DicomList::disableExtensionCheck( void )
+{
+    m_extension_check = false;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Read DICOM set from directory.
+ *  @param  dirname [in] directory name
+ */
+/*===========================================================================*/
+const bool DicomList::read( const std::string& dirname )
 {
     kvs::Directory dir( dirname );
     if( !dir.isExisted() )
@@ -331,7 +355,7 @@ const bool DicomList::read( const std::string& dirname, const bool extension_che
     kvs::FileList::const_iterator last = dir.fileList().end();
     while ( file != last )
     {
-        if( extension_check )
+        if( m_extension_check )
         {
             if( file->extension() != "dcm" ) continue;
         }
@@ -363,6 +387,70 @@ const bool DicomList::read( const std::string& dirname, const bool extension_che
         m_list.push_back( dicom );
 
         ++file;
+    }
+
+    m_is_success = true;
+
+    return( true );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Write DICOM files. (Not implemented)
+ *  @param  dirname [in] directory name
+ *  @return true, if the writting process was done successfully
+ */
+/*===========================================================================*/
+const bool DicomList::write( const std::string& dirname )
+{
+    kvs::IgnoreUnusedVariable( dirname );
+
+    kvsMessageError("Writing method has not been implemented.");
+    return( false );
+}
+
+const bool DicomList::CheckDirectory( const std::string& dirname, const bool extension_check )
+{
+    kvs::Directory dir( dirname );
+    if( !dir.isExisted() )
+    {
+        kvsMessageError( "%s is not existed.", dir.directoryPath().c_str() );
+        return( false );
+    }
+
+    if( !dir.isDirectory() )
+    {
+        kvsMessageError( "%s is not directory.", dir.directoryPath().c_str() );
+        return( false );
+    }
+
+    if( dir.fileList().size() == 0 )
+    {
+        kvsMessageError( "File not found in %s.", dir.directoryPath().c_str() );
+        return( false );
+    }
+
+    size_t counter = 0;
+    kvs::FileList::const_iterator file = dir.fileList().begin();
+    kvs::FileList::const_iterator last = dir.fileList().end();
+    while ( file != last )
+    {
+        if( extension_check )
+        {
+            if( file->extension() != "dcm" ) continue;
+            else counter++;
+        }
+
+        ++file;
+    }
+
+    if ( extension_check )
+    {
+        if ( counter == 0 )
+        {
+            kvsMessageError( "File not found in %s.", dir.directoryPath().c_str() );
+            return( false );
+        }
     }
 
     return( true );

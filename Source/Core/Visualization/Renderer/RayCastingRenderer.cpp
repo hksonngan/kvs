@@ -127,6 +127,8 @@ void RayCastingRenderer::rasterize(
     // Set shader initial parameters.
     BaseClass::m_shader->set( camera, light );
 
+    BaseClass::m_tfunc.setRange( volume->minValue(), volume->maxValue() );
+
     // Aliases.
     kvs::UInt8*  const pixel      = BaseClass::m_color_data.pointer();
     kvs::Real32* const depth_data = BaseClass::m_depth_data.pointer();
@@ -173,14 +175,16 @@ void RayCastingRenderer::rasterize(
 
                     // Empty skipping.
                     const size_t s = static_cast<size_t>( interpolator.scalar<T>() );
-                    const float density = omap[s];
+//                    const float density = omap[s];
+                    const float density = omap.at(s);
                     if ( !kvs::Math::IsZero( density ) )
                     {
                         // Front-to-back accumulation.
 //                        const float attenuate = shader->attenuation( &( interpolator.gradient<T>()[0] ) );
                         const float attenuate = shader->attenuation( ray.point(), interpolator.gradient<T>() );
                         const float current_alpha = ( 1.0f - alpha ) * density;
-                        color += current_alpha * attenuate * cmap[s];
+//                        color += current_alpha * attenuate * cmap[s];
+                        color += current_alpha * attenuate * cmap.at(s);
                         alpha += current_alpha;
                         if ( alpha > opaque )
                         {

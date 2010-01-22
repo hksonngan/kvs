@@ -20,6 +20,7 @@
 #include <kvs/StructuredVolumeObject>
 #include <kvs/KVSMLObjectStructuredVolume>
 #include <kvs/AVSField>
+#include <kvs/DicomList>
 
 
 namespace kvs
@@ -61,6 +62,13 @@ private:
     void import( const kvs::KVSMLObjectStructuredVolume* kvsml );
 
     void import( const kvs::AVSField* field );
+
+    void import( const kvs::DicomList* dicom_list );
+
+private:
+
+    template <typename T>
+    const kvs::AnyValueArray get_dicom_data( const kvs::DicomList* dicom_list, const bool shift );
 };
 
 } // end of namespace kvs

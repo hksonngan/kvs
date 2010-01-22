@@ -13,8 +13,11 @@
 /****************************************************************************/
 #include "StructuredVolumeImporter.h"
 #include <kvs/AVSField>
+#include <kvs/DicomList>
 #include <kvs/Message>
 #include <kvs/Vector3>
+#include <kvs/Directory>
+#include <kvs/Value>
 
 
 namespace
@@ -104,6 +107,27 @@ StructuredVolumeImporter::StructuredVolumeImporter( const std::string& filename 
         this->import( file_format );
         delete file_format;
     }
+    else if ( kvs::DicomList::CheckDirectory( filename ) )
+    {
+        kvs::DicomList* file_format = new kvs::DicomList( filename );
+        if( !file_format )
+        {
+            BaseClass::m_is_success = false;
+            kvsMessageError("Cannot read '%s'.",filename.c_str());
+            return;
+        }
+
+        if( file_format->isFailure() )
+        {
+            BaseClass::m_is_success = false;
+            kvsMessageError("Cannot read '%s'.",filename.c_str());
+            delete file_format;
+            return;
+        }
+
+        this->import( file_format );
+        delete file_format;
+    }
     else
     {
         BaseClass::m_is_success = false;
@@ -157,6 +181,10 @@ StructuredVolumeImporter::SuperClass* StructuredVolumeImporter::exec( const kvs:
     {
         this->import( static_cast<const kvs::AVSField*>( file_format ) );
     }
+    else if ( class_name == "DicomList" )
+    {
+        this->import( static_cast<const kvs::DicomList*>( file_format ) );
+    }
     else
     {
         BaseClass::m_is_success = false;
@@ -195,6 +223,7 @@ void StructuredVolumeImporter::import(
     SuperClass::setVeclen( kvsml->veclen() );
     SuperClass::setValues( kvsml->values() );
     SuperClass::updateMinMaxCoords();
+    SuperClass::updateMinMaxValues();
 }
 
 /*==========================================================================*/
@@ -237,6 +266,133 @@ void StructuredVolumeImporter::import( const kvs::AVSField* field )
     SuperClass::setVeclen( field->veclen() );
     SuperClass::setResolution( field->dim() );
     SuperClass::setValues( field->values() );
+    SuperClass::updateMinMaxValues();
 }
+
+void StructuredVolumeImporter::import( const kvs::DicomList* dicom_list )
+{
+    if ( dicom_list->size() == 0 )
+    {
+        BaseClass::m_is_success = false;
+        kvsMessageError("Dicom file is not included.");
+        return;
+    }
+
+    const float spacing = dicom_list->sliceSpacing();
+    const float thickness = dicom_list->sliceThickness();
+
+    const size_t x_size = dicom_list->width();
+    const size_t y_size = dicom_list->height();
+    const size_t z_size = dicom_list->nslices();
+    const float x_ratio = dicom_list->pixelSpacing()[0];
+    const float y_ratio = dicom_list->pixelSpacing()[1];
+    const float z_ratio = kvs::Math::IsZero( spacing ) ? thickness : spacing;
+
+    const kvs::Vector3f min_obj_coord( 0.0f, 0.0f, 0.0f );
+    const kvs::Vector3f max_obj_coord( x_size - 1.0f, y_size - 1.0f, z_size - 1.0f );
+    SuperClass::setMinMaxObjectCoords( min_obj_coord, max_obj_coord );
+
+    const kvs::Vector3f min_ext_coord( min_obj_coord );
+    const kvs::Vector3f max_ext_coord( max_obj_coord.x() * x_ratio,
+                                       max_obj_coord.y() * y_ratio,
+                                       max_obj_coord.z() * z_ratio );
+    SuperClass::setMinMaxExternalCoords( min_ext_coord, max_ext_coord );
+
+    const bool shift = true;
+    const kvs::Dicom* dicom = (*dicom_list)[0];
+    const kvs::UInt32 bits_allocated = dicom->bitsAllocated();
+    const bool pixel_representation = dicom->pixelRepresentation();
+    switch ( bits_allocated )
+    {
+    case 8:
+    {
+        const kvs::AnyValueArray values = this->get_dicom_data<kvs::UInt8>( dicom_list, false );
+        SuperClass::setValues( values );
+        break;
+    }
+    case 16:
+    {
+        if ( pixel_representation )
+        {
+            const kvs::AnyValueArray values = this->get_dicom_data<kvs::UInt16>( dicom_list, false );
+            SuperClass::setValues( values );
+        }
+        else
+        {
+            if ( shift )
+            {
+                const kvs::AnyValueArray values = this->get_dicom_data<kvs::UInt16>( dicom_list, true );
+                SuperClass::setValues( values );
+            }
+            else
+            {
+                const kvs::AnyValueArray values = this->get_dicom_data<kvs::Int16>( dicom_list, false );
+                SuperClass::setValues( values );
+            }
+        }
+        break;
+    }
+    default: break;
+    }
+
+    const kvs::Vector3ui resolution( x_size, y_size, z_size );
+    SuperClass::setGridType( kvs::StructuredVolumeObject::Uniform );
+    SuperClass::setResolution( resolution );
+    SuperClass::setVeclen( 1 );
+    SuperClass::updateMinMaxValues();
+}
+
+template <typename T>
+const kvs::AnyValueArray StructuredVolumeImporter::get_dicom_data(
+    const kvs::DicomList* dicom_list,
+    const bool shift )
+{
+    const size_t width = dicom_list->width();
+    const size_t height = dicom_list->height();
+    const size_t nslices = dicom_list->nslices();
+    const size_t nnodes = width * height * nslices;
+
+    const double min_range = static_cast<double>( kvs::Value<T>::Min() );
+    const double max_range = static_cast<double>( kvs::Value<T>::Max() );
+
+    kvs::AnyValueArray values;
+    values.allocate<T>( nnodes );
+
+    T* pvalues = static_cast<T*>( values.pointer() );
+    for ( size_t k = 0; k < nslices; k++ )
+    {
+        const kvs::Dicom* dicom = (*dicom_list)[k];
+        const T* const raw_data = reinterpret_cast<const T*>( dicom->rawData().pointer() );
+        const int shift_value = shift ? dicom->minRawValue() : 0;
+
+        for ( size_t j = 0; j < height; j++ )
+        {
+            for ( size_t i = 0; i < width; i++ )
+            {
+                const size_t pixel_index = ( height - j - 1 ) * width + i;
+                double value = static_cast<double>( raw_data[ pixel_index ] );
+                value = value - shift_value;
+                value = kvs::Math::Clamp( value, min_range, max_range );
+
+                *(pvalues++) = static_cast<T>( value );
+            }
+        }
+    }
+
+    return( values );
+}
+
+// Instatiation.
+template
+const kvs::AnyValueArray StructuredVolumeImporter::get_dicom_data<kvs::UInt8>(
+    const kvs::DicomList* dicom_list, const bool shift );
+
+template
+const kvs::AnyValueArray StructuredVolumeImporter::get_dicom_data<kvs::UInt16>(
+    const kvs::DicomList* dicom_list, const bool shift );
+
+template
+const kvs::AnyValueArray StructuredVolumeImporter::get_dicom_data<kvs::Int16>(
+    const kvs::DicomList* dicom_list, const bool shift );
 
 } // end of namespace kvs

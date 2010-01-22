@@ -281,6 +281,8 @@ void CellByCellUniformSampling::mapping( const kvs::Camera* camera, const kvs::S
     BaseClass::attach_volume( volume );
     BaseClass::set_min_max_coords( volume, this );
 
+    BaseClass::m_transfer_function.setRange( volume->minValue(), volume->maxValue() );
+
     // Calculate the density map.
     m_density_map = Generator::CalculateDensityMap(
         camera,
@@ -314,6 +316,8 @@ void CellByCellUniformSampling::mapping( const kvs::Camera* camera, const kvs::U
     // Attach the pointer to the volume object and set the min/max coordinates.
     BaseClass::attach_volume( volume );
     BaseClass::set_min_max_coords( volume, this );
+
+    BaseClass::m_transfer_function.setRange( volume->minValue(), volume->maxValue() );
 
     // Calculate the density map.
     m_density_map = Generator::CalculateDensityMap(
@@ -400,8 +404,9 @@ void CellByCellUniformSampling::generate_particles( const kvs::StructuredVolumeO
 
                     // Calculate a color.
                     interpolator.attachPoint( coord );
-                    const size_t degree = static_cast<size_t>( ( interpolator.scalar<T>() - min_value ) * normalize_factor );
-                    const kvs::RGBColor color( color_map[ degree ] );
+                    const float scalar = interpolator.scalar<T>();
+//                    const size_t degree = static_cast<size_t>( ( scalar - min_value ) * normalize_factor );
+                    const kvs::RGBColor color( color_map.at( scalar ) );
 
                     // Calculate a normal.
                     const Vector3f normal( interpolator.gradient<T>() );
@@ -509,8 +514,9 @@ void CellByCellUniformSampling::generate_particles( const kvs::UnstructuredVolum
             const kvs::Vector3f coord = cell->randomSampling();
 
             // Calculate a color.
-            const float degree = ( cell->scalar() - min_value ) * normalize_factor;
-            const kvs::RGBColor color ( color_map[ size_t( kvs::Math::Clamp( degree, 0.0f, max_range ) ) ] );
+            const float scalar = cell->scalar();
+//            const float degree = ( scalar - min_value ) * normalize_factor;
+            const kvs::RGBColor color ( color_map.at( scalar ) );
 
             // Calculate a normal.
             const Vector3f normal( cell->gradient() );

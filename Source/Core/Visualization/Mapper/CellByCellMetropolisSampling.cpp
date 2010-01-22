@@ -281,6 +281,8 @@ void CellByCellMetropolisSampling::mapping(const kvs::Camera* camera, const kvs:
     BaseClass::attach_volume( volume );
     BaseClass::set_min_max_coords( volume, this );
 
+    BaseClass::m_transfer_function.setRange( volume->minValue(), volume->maxValue() );
+
     // Calculate the density map.
     m_density_map = Generator::CalculateDensityMap(
         camera,
@@ -314,6 +316,8 @@ void CellByCellMetropolisSampling::mapping( const kvs::Camera* camera, const kvs
     // Attach the pointer to the volume object and set the min/max coordinates.
     BaseClass::attach_volume( volume );
     BaseClass::set_min_max_coords( volume, this );
+
+    BaseClass::m_transfer_function.setRange( volume->minValue(), volume->maxValue() );
 
     // Calculate the density map.
     m_density_map = Generator::CalculateDensityMap(
@@ -442,10 +446,12 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::StructuredVolu
                         // calculate color
                         interpolator.attachPoint( point_trial );
                         scalar_trial = interpolator.scalar<T>();
+/*
                         degree_trial = static_cast< size_t >( ( scalar_trial -min_value ) * normalize_factor );
                         degree_trial = kvs::Math::Clamp<size_t>( degree_trial, 0, max_range );
                         const kvs::RGBColor color( color_map[ degree_trial ] );
-
+*/
+                        const kvs::RGBColor color( color_map.at( scalar_trial ) );
                         // calculate normal
                         const kvs::Vector3f normal( interpolator.gradient<T>() );
 
@@ -474,9 +480,12 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::StructuredVolu
                             // calculate color
                             interpolator.attachPoint( point_trial );
                             scalar_trial = interpolator.scalar<T>();
+/*
                             degree_trial = static_cast< size_t >( ( scalar_trial -min_value ) * normalize_factor );
                             degree_trial = kvs::Math::Clamp<size_t>( degree_trial, 0, max_range );
                             const kvs::RGBColor color( color_map[ degree_trial ] );
+*/
+                            const kvs::RGBColor color( color_map.at( scalar_trial ) );
 
                             // calculate normal
                             const kvs::Vector3f normal( interpolator.gradient<T>() );
@@ -505,9 +514,12 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::StructuredVolu
                             // calculate color
                             interpolator.attachPoint( point );
                             scalar = interpolator.scalar<T>();
+/*
                             degree = static_cast< size_t >( ( scalar - min_value ) * normalize_factor );
                             degree = kvs::Math::Clamp<size_t>( degree, 0, max_range );
                             const kvs::RGBColor color( color_map[ degree ] );
+*/
+                            const kvs::RGBColor color( color_map.at( scalar ) );
 
                             //calculate normal
                             const kvs::Vector3f normal( interpolator.gradient<T>() );
@@ -617,12 +629,14 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::UnstructuredVo
 
         // Calculate itnitial value
         kvs::Vector3f point = cell->randomSampling();
-        size_t        degree = static_cast< size_t >( ( cell->scalar() - min_value ) * normalize_factor );
+        float         scalar = cell->scalar();
+        size_t        degree = static_cast< size_t >( ( scalar - min_value ) * normalize_factor );
         degree = kvs::Math::Clamp<size_t>( degree, 0, max_range );
         float         density = density_map[ degree ];
         kvs::Vector3f g = cell->gradient();
 
         kvs::Vector3f point_trial;
+        float         scalar_trial;
         size_t        degree_trial;
         float         density_trial;
         kvs::Vector3f g_trial;
@@ -642,7 +656,8 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::UnstructuredVo
         {
             //set trial position and density
             point_trial = cell->randomSampling();
-            degree_trial = static_cast< size_t >( ( cell->scalar() - min_value ) * normalize_factor );
+            scalar_trial = cell->scalar();
+            degree_trial = static_cast< size_t >( ( scalar_trial - min_value ) * normalize_factor );
             degree_trial = kvs::Math::Clamp<size_t>( degree_trial, 0, max_range );
             density_trial = density_map[ degree_trial ];
             g_trial = cell->gradient();
@@ -653,7 +668,7 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::UnstructuredVo
             if( ratio >= 1.0 ) // accept trial point
             {
                 // calculate color
-                const kvs::RGBColor color( color_map[ degree_trial ] );
+                const kvs::RGBColor color( color_map.at( scalar_trial ) );
 
                 // calculate normal
                 const kvs::Vector3f normal( g_trial );
@@ -683,7 +698,7 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::UnstructuredVo
                 if( ratio >= Generator::GetRandomNumber() ) // accept point trial
                 {
                     // calculate color
-                    const kvs::RGBColor color( color_map[ degree_trial ] );
+                    const kvs::RGBColor color( color_map.at( scalar_trial ) );
 
                     // calculate normal
                     const kvs::Vector3f normal( g_trial );
@@ -712,7 +727,7 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::UnstructuredVo
                 {
 #ifdef DUPLICATION
                     // calculate color
-                    const kvs::RGBColor color( color_map[ degree ] );
+                    const kvs::RGBColor color( color_map.scalar( degree ) );
 
                     //calculate normal
                     const kvs::Vector3f normal( g );

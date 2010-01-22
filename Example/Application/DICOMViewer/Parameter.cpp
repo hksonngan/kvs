@@ -110,7 +110,8 @@ const bool Parameter::read_from_directory( const std::string& name, const bool e
     }
 
     // Read DICOM files in the specified directory.
-    dicom_list.read( dir.directoryPath().c_str(), extension_check );
+    if ( extension_check ) dicom_list.enableExtensionCheck();
+    dicom_list.read( dir.directoryPath().c_str() );
     dicom_list.sort();
     width = dicom_list[0]->width();
     height = dicom_list[0]->height();

@@ -63,6 +63,8 @@ public:
 
     void setOpacityMap( const kvs::OpacityMap& opacity_map );
 
+    void setRange( const float min_value, const float max_value );
+
 public:
 
     const kvs::ColorMap& colorMap( void ) const;
