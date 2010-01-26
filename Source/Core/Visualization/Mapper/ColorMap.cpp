@@ -369,17 +369,29 @@ const kvs::RGBColor ColorMap::operator []( const size_t index ) const
 /*===========================================================================*/
 const kvs::RGBColor ColorMap::at( const float value ) const
 {
-    KVS_ASSERT( m_min_value <= value && value <= m_max_value );
-
-    const float r = m_resolution - 1;
-    const float v = ( value - m_min_value ) / ( m_max_value - m_min_value ) * r;
+    const float t = kvs::Math::Clamp( value, m_min_value, m_max_value );
+    const float r = static_cast<float>( m_resolution - 1 );
+    const float v = ( t - m_min_value ) / ( m_max_value - m_min_value ) * r;
     const size_t s0 = static_cast<size_t>( v );
     const size_t s1 = s0 + 1;
 
     const kvs::RGBColor c0( m_table.pointer() + ::NumberOfChannels * s0 );
     const kvs::RGBColor c1( m_table.pointer() + ::NumberOfChannels * s1 );
 
-    return( ( c1 - c0 ) * v + c0 * s1 - c1 * s0 );
+//    return( ( c1 - c0 ) * v + c0 * s1 - c1 * s0 );
+
+    const int r0 = c0.r();
+    const int g0 = c0.g();
+    const int b0 = c0.b();
+    const int r1 = c1.r();
+    const int g1 = c1.g();
+    const int b1 = c1.b();
+
+    const int R = static_cast<int>( ( r1 - r0 ) * v + r0 * s1 - r1 * s0 );
+    const int G = static_cast<int>( ( g1 - g0 ) * v + g0 * s1 - g1 * s0 );
+    const int B = static_cast<int>( ( b1 - b0 ) * v + b0 * s1 - b1 * s0 );
+
+    return( kvs::RGBColor( R, G, B ) );
 }
 
 /*==========================================================================*/

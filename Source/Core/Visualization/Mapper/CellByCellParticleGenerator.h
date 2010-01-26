@@ -366,22 +366,26 @@ namespace CellByCellParticleGenerator
 inline const float GetRandomNumber( void )
 {
     // xorshift RGNs with period at least 2^128 - 1.
-    static float t24 = 1.0/16777216.0; /* 0.5**24 */
+//    static float t24 = 1.0/16777216.0; /* 0.5**24 */
     static kvs::UInt32 x=123456789,y=362436069,z=521288629,w=88675123;
     kvs::UInt32 t;
     t=(x^(x<<11));
     x=y;y=z;z=w;
     w=(w^(w>>19))^(t^(t>>8));
 
-    return( t24 * static_cast<float>( w >> 8 ) );
+    return( w * ( 1.0f / 4294967296.0f ) ); // = w * ( 1.0f / kvs::Value<kvs::UInt32>::Max() + 1 )
+//    return( t24 * static_cast<float>( w >> 8 ) );
 }
 
 
 inline const kvs::Vector3f RandomSamplingInCube( const kvs::Vector3f& v )
 {
-    float x = GetRandomNumber(); while ( kvs::Math::Equal( x, 1.0f ) ) x = GetRandomNumber();
-    float y = GetRandomNumber(); while ( kvs::Math::Equal( y, 1.0f ) ) y = GetRandomNumber();
-    float z = GetRandomNumber(); while ( kvs::Math::Equal( z, 1.0f ) ) z = GetRandomNumber();
+//    float x = GetRandomNumber(); while ( kvs::Math::Equal( x, 1.0f ) ) x = GetRandomNumber();
+//    float y = GetRandomNumber(); while ( kvs::Math::Equal( y, 1.0f ) ) y = GetRandomNumber();
+//    float z = GetRandomNumber(); while ( kvs::Math::Equal( z, 1.0f ) ) z = GetRandomNumber();
+    const float x = GetRandomNumber();
+    const float y = GetRandomNumber();
+    const float z = GetRandomNumber();
     const kvs::Vector3f d( x, y, z );
     return( v + d );
 }

@@ -281,8 +281,6 @@ void CellByCellMetropolisSampling::mapping(const kvs::Camera* camera, const kvs:
     BaseClass::attach_volume( volume );
     BaseClass::set_min_max_coords( volume, this );
 
-    BaseClass::m_transfer_function.setRange( volume->minValue(), volume->maxValue() );
-
     // Calculate the density map.
     m_density_map = Generator::CalculateDensityMap(
         camera,
@@ -293,10 +291,31 @@ void CellByCellMetropolisSampling::mapping(const kvs::Camera* camera, const kvs:
 
     // Generate the particles.
     const std::type_info& type = volume->values().typeInfo()->type();
-    if (      type == typeid( kvs::UInt8  ) ) this->generate_particles<kvs::UInt8>( volume );
-    else if ( type == typeid( kvs::UInt16 ) ) this->generate_particles<kvs::UInt16>( volume );
-    else if ( type == typeid( kvs::Real32 ) ) this->generate_particles<kvs::Real32>( volume );
-    else if ( type == typeid( kvs::Real64 ) ) this->generate_particles<kvs::Real64>( volume );
+    if (      type == typeid( kvs::UInt8  ) )
+    {
+        BaseClass::m_transfer_function.setRange( 0, 255 );
+        this->generate_particles<kvs::UInt8>( volume );
+    }
+    else if ( type == typeid( kvs::UInt16 ) )
+    {
+        BaseClass::m_transfer_function.setRange( volume->minValue(), volume->maxValue() );
+        this->generate_particles<kvs::UInt16>( volume );
+    }
+    else if ( type == typeid( kvs::Int16 ) )
+    {
+        BaseClass::m_transfer_function.setRange( volume->minValue(), volume->maxValue() );
+        this->generate_particles<kvs::Int16>( volume );
+    }
+    else if ( type == typeid( kvs::Real32 ) )
+    {
+        BaseClass::m_transfer_function.setRange( volume->minValue(), volume->maxValue() );
+        this->generate_particles<kvs::Real32>( volume );
+    }
+    else if ( type == typeid( kvs::Real64 ) )
+    {
+        BaseClass::m_transfer_function.setRange( volume->minValue(), volume->maxValue() );
+        this->generate_particles<kvs::Real64>( volume );
+    }
     else
     {
         BaseClass::m_is_success = false;
@@ -317,8 +336,6 @@ void CellByCellMetropolisSampling::mapping( const kvs::Camera* camera, const kvs
     BaseClass::attach_volume( volume );
     BaseClass::set_min_max_coords( volume, this );
 
-    BaseClass::m_transfer_function.setRange( volume->minValue(), volume->maxValue() );
-
     // Calculate the density map.
     m_density_map = Generator::CalculateDensityMap(
         camera,
@@ -329,16 +346,56 @@ void CellByCellMetropolisSampling::mapping( const kvs::Camera* camera, const kvs
 
     // Generate the particles.
     const std::type_info& type = volume->values().typeInfo()->type();
-    if (      type == typeid( kvs::Int8   ) ) this->generate_particles<kvs::Int8>( volume );
-    else if ( type == typeid( kvs::Int16  ) ) this->generate_particles<kvs::Int16>( volume );
-    else if ( type == typeid( kvs::Int32  ) ) this->generate_particles<kvs::Int32>( volume );
-    else if ( type == typeid( kvs::Int64  ) ) this->generate_particles<kvs::Int64>( volume );
-    else if ( type == typeid( kvs::UInt8  ) ) this->generate_particles<kvs::UInt8>( volume );
-    else if ( type == typeid( kvs::UInt16 ) ) this->generate_particles<kvs::UInt16>( volume );
-    else if ( type == typeid( kvs::UInt32 ) ) this->generate_particles<kvs::UInt32>( volume );
-    else if ( type == typeid( kvs::UInt64 ) ) this->generate_particles<kvs::UInt64>( volume );
-    else if ( type == typeid( kvs::Real32 ) ) this->generate_particles<kvs::Real32>( volume );
-    else if ( type == typeid( kvs::Real64 ) ) this->generate_particles<kvs::Real64>( volume );
+    if (      type == typeid( kvs::Int8   ) )
+    {
+        BaseClass::m_transfer_function.setRange( -128, 127 );
+        this->generate_particles<kvs::Int8>( volume );
+    }
+    else if ( type == typeid( kvs::Int16  ) )
+    {
+        BaseClass::m_transfer_function.setRange( volume->minValue(), volume->maxValue() );
+        this->generate_particles<kvs::Int16>( volume );
+    }
+    else if ( type == typeid( kvs::Int32  ) )
+    {
+        BaseClass::m_transfer_function.setRange( volume->minValue(), volume->maxValue() );
+        this->generate_particles<kvs::Int32>( volume );
+    }
+    else if ( type == typeid( kvs::Int64  ) )
+    {
+        BaseClass::m_transfer_function.setRange( volume->minValue(), volume->maxValue() );
+        this->generate_particles<kvs::Int64>( volume );
+    }
+    else if ( type == typeid( kvs::UInt8  ) )
+    {
+        BaseClass::m_transfer_function.setRange( 0, 255 );
+        this->generate_particles<kvs::UInt8>( volume );
+    }
+    else if ( type == typeid( kvs::UInt16 ) )
+    {
+        BaseClass::m_transfer_function.setRange( volume->minValue(), volume->maxValue() );
+        this->generate_particles<kvs::UInt16>( volume );
+    }
+    else if ( type == typeid( kvs::UInt32 ) )
+    {
+        BaseClass::m_transfer_function.setRange( volume->minValue(), volume->maxValue() );
+        this->generate_particles<kvs::UInt32>( volume );
+    }
+    else if ( type == typeid( kvs::UInt64 ) )
+    {
+        BaseClass::m_transfer_function.setRange( volume->minValue(), volume->maxValue() );
+        this->generate_particles<kvs::UInt64>( volume );
+    }
+    else if ( type == typeid( kvs::Real32 ) )
+    {
+        BaseClass::m_transfer_function.setRange( volume->minValue(), volume->maxValue() );
+        this->generate_particles<kvs::Real32>( volume );
+    }
+    else if ( type == typeid( kvs::Real64 ) )
+    {
+        BaseClass::m_transfer_function.setRange( volume->minValue(), volume->maxValue() );
+        this->generate_particles<kvs::Real64>( volume );
+    }
     else
     {
         BaseClass::m_is_success = false;
