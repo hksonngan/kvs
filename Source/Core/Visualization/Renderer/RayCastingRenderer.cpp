@@ -100,8 +100,31 @@ void RayCastingRenderer::create_image(
     BaseClass::m_depth_data.fill( 0x00 );
 
     const std::type_info& type = volume->values().typeInfo()->type();
-    if(      type == typeid(kvs::UInt8)  ) this->rasterize<kvs::UInt8>( volume, camera, light );
-    else if( type == typeid(kvs::UInt16) ) this->rasterize<kvs::UInt16>( volume, camera, light );
+    if(      type == typeid(kvs::UInt8)  )
+    {
+        BaseClass::m_tfunc.setRange( 0, 255 );
+        this->rasterize<kvs::UInt8>( volume, camera, light );
+    }
+    else if( type == typeid(kvs::UInt16) )
+    {
+        BaseClass::m_tfunc.setRange( volume->minValue(), volume->maxValue() );
+        this->rasterize<kvs::UInt16>( volume, camera, light );
+    }
+    else if( type == typeid(kvs::Int16) )
+    {
+        BaseClass::m_tfunc.setRange( volume->minValue(), volume->maxValue() );
+        this->rasterize<kvs::Int16>( volume, camera, light );
+    }
+    else if( type == typeid(kvs::Real32) )
+    {
+        BaseClass::m_tfunc.setRange( volume->minValue(), volume->maxValue() );
+        this->rasterize<kvs::Real32>( volume, camera, light );
+    }
+    else if( type == typeid(kvs::Real64) )
+    {
+        BaseClass::m_tfunc.setRange( volume->minValue(), volume->maxValue() );
+        this->rasterize<kvs::Real64>( volume, camera, light );
+    }
     else
     {
         kvsMessageError( "Not supported data type '%s'.",
@@ -126,8 +149,6 @@ void RayCastingRenderer::rasterize(
 {
     // Set shader initial parameters.
     BaseClass::m_shader->set( camera, light );
-
-    BaseClass::m_tfunc.setRange( volume->minValue(), volume->maxValue() );
 
     // Aliases.
     kvs::UInt8*  const pixel      = BaseClass::m_color_data.pointer();
@@ -163,8 +184,11 @@ void RayCastingRenderer::rasterize(
             // Intersection the ray with the bounding box.
             if ( ray.isIntersected() )
             {
-                kvs::RGBColor color( kvs::RGBColor( 0, 0, 0 ) );
-                float alpha = 0.0;
+//                kvs::RGBColor color( kvs::RGBColor( 0, 0, 0 ) );
+                float r = 0.0f;
+                float g = 0.0f;
+                float b = 0.0f;
+                float a = 0.0;
 
                 depth_data[ depth_index ] = ray.depth();
 
@@ -174,21 +198,21 @@ void RayCastingRenderer::rasterize(
                     interpolator.attachPoint( ray.point() );
 
                     // Empty skipping.
-                    const size_t s = static_cast<size_t>( interpolator.scalar<T>() );
-//                    const float density = omap[s];
+                    const float s = interpolator.scalar<T>();
                     const float density = omap.at(s);
                     if ( !kvs::Math::IsZero( density ) )
                     {
                         // Front-to-back accumulation.
-//                        const float attenuate = shader->attenuation( &( interpolator.gradient<T>()[0] ) );
                         const float attenuate = shader->attenuation( ray.point(), interpolator.gradient<T>() );
-                        const float current_alpha = ( 1.0f - alpha ) * density;
-//                        color += current_alpha * attenuate * cmap[s];
-                        color += current_alpha * attenuate * cmap.at(s);
-                        alpha += current_alpha;
-                        if ( alpha > opaque )
+                        const float current_alpha = ( 1.0f - a ) * density;
+                        const kvs::RGBColor c = cmap.at(s);
+                        r += current_alpha * attenuate * c.r();
+                        g += current_alpha * attenuate * c.g();
+                        b += current_alpha * attenuate * c.b();
+                        a += current_alpha;
+                        if ( a > opaque )
                         {
-                            alpha = opaque;
+                            a = opaque;
                             break;
                         }
                     }
@@ -197,10 +221,10 @@ void RayCastingRenderer::rasterize(
                 } while ( ray.isInside() );
 
                 // Set pixel value.
-                pixel[ pixel_index     ] = color.r();
-                pixel[ pixel_index + 1 ] = color.g();
-                pixel[ pixel_index + 2 ] = color.b();
-                pixel[ pixel_index + 3 ] = static_cast<kvs::UInt8>( kvs::Math::Round( alpha * 255.0f ) );
+                pixel[ pixel_index     ] = static_cast<kvs::UInt8>( kvs::Math::Min( r, 255.0f ) + 0.5f );
+                pixel[ pixel_index + 1 ] = static_cast<kvs::UInt8>( kvs::Math::Min( g, 255.0f ) + 0.5f );
+                pixel[ pixel_index + 2 ] = static_cast<kvs::UInt8>( kvs::Math::Min( b, 255.0f ) + 0.5f );
+                pixel[ pixel_index + 3 ] = static_cast<kvs::UInt8>( kvs::Math::Round( a * 255.0f ) );
             }
             else
             {
@@ -258,6 +282,24 @@ void RayCastingRenderer::rasterize<kvs::UInt8>(
 
 template
 void RayCastingRenderer::rasterize<kvs::UInt16>(
+    const kvs::StructuredVolumeObject* volume,
+    const kvs::Camera*                 camera,
+    const kvs::Light*                  light );
+
+template
+void RayCastingRenderer::rasterize<kvs::Int16>(
+    const kvs::StructuredVolumeObject* volume,
+    const kvs::Camera*                 camera,
+    const kvs::Light*                  light );
+
+template
+void RayCastingRenderer::rasterize<kvs::Real32>(
+    const kvs::StructuredVolumeObject* volume,
+    const kvs::Camera*                 camera,
+    const kvs::Light*                  light );
+
+template
+void RayCastingRenderer::rasterize<kvs::Real64>(
     const kvs::StructuredVolumeObject* volume,
     const kvs::Camera*                 camera,
     const kvs::Light*                  light );

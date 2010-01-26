@@ -345,9 +345,9 @@ void ParticleBuffer::create_image_with_shading(
             G *= inv_ssize;
             B *= inv_ssize;
 
-            (*color)[ pindex4 + 0 ] = static_cast<kvs::UInt8>(R);
-            (*color)[ pindex4 + 1 ] = static_cast<kvs::UInt8>(G);
-            (*color)[ pindex4 + 2 ] = static_cast<kvs::UInt8>(B);
+            (*color)[ pindex4 + 0 ] = static_cast<kvs::UInt8>( kvs::Math::Min( R, 255.0f ) + 0.5f );
+            (*color)[ pindex4 + 1 ] = static_cast<kvs::UInt8>( kvs::Math::Min( G, 255.0f ) + 0.5f );
+            (*color)[ pindex4 + 2 ] = static_cast<kvs::UInt8>( kvs::Math::Min( B, 255.0f ) + 0.5f );
             (*color)[ pindex4 + 3 ] = static_cast<kvs::UInt8>( npoints * normalize_alpha );
             (*depth)[ pindex ]      = ( npoints == 0 ) ? 1.0f : D;
         }
