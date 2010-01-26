@@ -26,6 +26,8 @@
 #include <kvs/PaintEventListener>
 #include <kvs/MousePressEventListener>
 #include <kvs/MouseReleaseEventListener>
+#include <kvs/KeyPressEventListener>
+#include <kvs/Key>
 #include <kvs/glut/Application>
 #include <kvs/glut/Screen>
 
@@ -88,6 +90,20 @@ class MouseReleaseEvent : public kvs::MouseReleaseEventListener
             kvs::RayCastingRenderer* renderer = (kvs::RayCastingRenderer*)base;
             renderer->disableCoarseRendering();
             screen()->redraw();
+        }
+    }
+};
+
+class KeyPressEvent : public kvs::KeyPressEventListener
+{
+    void update( kvs::KeyEvent* ev )
+    {
+        switch ( ev->key() )
+        {
+        case kvs::Key::o: screen()->controlTarget() = kvs::ScreenBase::TargetObject; break;
+        case kvs::Key::l: screen()->controlTarget() = kvs::ScreenBase::TargetLight; break;
+        case kvs::Key::c: screen()->controlTarget() = kvs::ScreenBase::TargetCamera; break;
+        default: break;
         }
     }
 };
@@ -216,6 +232,7 @@ const bool Main::exec( void )
     RayCastingRenderer::PaintEvent paint_event;
     RayCastingRenderer::MousePressEvent mouse_press_event;
     RayCastingRenderer::MouseReleaseEvent mouse_release_event;
+    RayCastingRenderer::KeyPressEvent key_press_event;
 
     // Create a global and screen class.
     kvs::glut::Screen screen( &app );
@@ -223,6 +240,7 @@ const bool Main::exec( void )
     screen.addPaintEvent( &paint_event );
     screen.addMousePressEvent( &mouse_press_event );
     screen.addMouseReleaseEvent( &mouse_release_event );
+    screen.addKeyPressEvent( &key_press_event );
     screen.setTitle( kvsview::CommandName + " - " + kvsview::RayCastingRenderer::CommandName );
 
     // Check the input point data.

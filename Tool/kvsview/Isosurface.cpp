@@ -19,6 +19,8 @@
 #include <kvs/VisualizationPipeline>
 #include <kvs/Isosurface>
 #include <kvs/Value>
+#include <kvs/KeyPressEventListener>
+#include <kvs/Key>
 #include <kvs/glut/Screen>
 #include <kvs/glut/Application>
 
@@ -77,6 +79,20 @@ namespace kvsview
 
 namespace Isosurface
 {
+
+class KeyPressEvent : public kvs::KeyPressEventListener
+{
+    void update( kvs::KeyEvent* ev )
+    {
+        switch ( ev->key() )
+        {
+        case kvs::Key::o: screen()->controlTarget() = kvs::ScreenBase::TargetObject; break;
+        case kvs::Key::l: screen()->controlTarget() = kvs::ScreenBase::TargetLight; break;
+        case kvs::Key::c: screen()->controlTarget() = kvs::ScreenBase::TargetCamera; break;
+        default: break;
+        }
+    }
+};
 
 /*===========================================================================*/
 /**
@@ -189,8 +205,11 @@ const bool Main::exec( void )
     Isosurface::Argument arg( m_argc, m_argv );
     if( !arg.parse() ) return( false );
 
+    KeyPressEvent key_press_event;
+
     // Create a global and screen class.
     kvs::glut::Screen screen( &app );
+    screen.addKeyPressEvent( &key_press_event );
     screen.setSize( 512, 512 );
     screen.setTitle( kvsview::CommandName + " - " + kvsview::Isosurface::CommandName );
     arg.applyTo( screen );

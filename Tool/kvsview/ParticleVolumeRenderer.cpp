@@ -25,6 +25,8 @@
 #include <kvs/PaintEventListener>
 #include <kvs/MousePressEventListener>
 #include <kvs/MouseReleaseEventListener>
+#include <kvs/KeyPressEventListener>
+#include <kvs/Key>
 #include <kvs/glut/Application>
 #include <kvs/glut/Screen>
 #if defined( KVS_SUPPORT_GLEW )
@@ -158,6 +160,20 @@ class MouseReleaseEvent : public kvs::MouseReleaseEventListener
             }
         }
 #endif
+    }
+};
+
+class KeyPressEvent : public kvs::KeyPressEventListener
+{
+    void update( kvs::KeyEvent* ev )
+    {
+        switch ( ev->key() )
+        {
+        case kvs::Key::o: screen()->controlTarget() = kvs::ScreenBase::TargetObject; break;
+        case kvs::Key::l: screen()->controlTarget() = kvs::ScreenBase::TargetLight; break;
+        case kvs::Key::c: screen()->controlTarget() = kvs::ScreenBase::TargetCamera; break;
+        default: break;
+        }
     }
 };
 
@@ -313,12 +329,14 @@ const bool Main::exec( void )
     kvsview::ParticleVolumeRenderer::PaintEvent paint_event;
     kvsview::ParticleVolumeRenderer::MousePressEvent mouse_press_event;
     kvsview::ParticleVolumeRenderer::MouseReleaseEvent mouse_release_event;
+    kvsview::ParticleVolumeRenderer::KeyPressEvent key_press_event;
 
     // Create a global and screen class.
     kvs::glut::Screen screen( &app );
     screen.addPaintEvent( &paint_event );
     screen.addMousePressEvent( &mouse_press_event );
     screen.addMouseReleaseEvent( &mouse_release_event );
+    screen.addKeyPressEvent( &key_press_event );
     screen.setSize( 512, 512 );
     screen.setTitle( kvsview::CommandName + " - " + kvsview::ParticleVolumeRenderer::CommandName );
 
