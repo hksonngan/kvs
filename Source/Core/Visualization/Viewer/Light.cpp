@@ -294,6 +294,17 @@ const bool Light::isEnabled( void ) const
     return( glIsEnabled( m_id ) == GL_TRUE );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Resets the xform of the light.
+ */
+/*===========================================================================*/
+void Light::resetXform( void )
+{
+    XformControl::resetXform();
+    m_position = m_init_position;
+}
+
 /*==========================================================================*/
 /**
  *  Rotate the light.

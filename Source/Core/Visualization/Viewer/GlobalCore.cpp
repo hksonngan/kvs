@@ -161,11 +161,9 @@ void GlobalCore::reset_core( void )
 
     // Reset the xform of the camera.
     camera->resetXform();
-    camera->initialize();
 
     // Reset the xform of the light.
     light->resetXform();
-    light->initialize();
 }
 
 } // end of namespace kvs

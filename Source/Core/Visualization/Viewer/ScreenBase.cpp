@@ -658,11 +658,9 @@ void ScreenBase::reset( void )
 
     // Reset the xform of the camera.
     m_camera->resetXform();
-    m_camera->initialize();
 
     // Reset the xform of the light.
     m_light->resetXform();
-    m_light->initialize();
 }
 
 /*==========================================================================*/

@@ -98,6 +98,8 @@ public:
 
 public:
 
+    void resetXform( void );
+
     void rotate( const kvs::Matrix33f& rotation );
 
     void translate( const kvs::Vector3f& translation );

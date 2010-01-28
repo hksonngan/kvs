@@ -848,6 +848,19 @@ const kvs::Vector3f Camera::projectObjectToWorld( const kvs::Vector3f& p_obj ) c
     return( this->projectCameraToWorld( p_cam ) );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Resets the xform of the camera.
+ */
+/*===========================================================================*/
+void Camera::resetXform( void )
+{
+    kvs::XformControl::resetXform();
+    m_position = m_init_position;
+    m_up_vector = m_init_up_vector;
+    m_look_at = m_init_look_at;
+}
+
 /*==========================================================================*/
 /**
  *  Rotate the camera.
