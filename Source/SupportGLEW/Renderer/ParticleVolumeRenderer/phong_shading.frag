@@ -39,21 +39,20 @@ void main( void )
         if( distance( gl_FragCoord.xy, centerCoord ) > radius ) discard;
     }
 
+    // Light position.
+    vec3 light_position = -gl_LightSource[0].position.xyz;
+
     // Light vector (L), Normal vector (N) and Reflection vector (R).
-    vec3 L = normalize( gl_LightSource[0].position.xyz - position );
+    vec3 L = normalize( light_position - position );
     vec3 N = normalize( gl_NormalMatrix * normal );
     vec3 R = 2.0 * dot( N, L ) * N - L;
     float dd = max( dot( N, L ), 0.0 );
     float ds = pow( max( dot( N, R ), 0.0 ), S );
-//    float ds = pow( max( dot( N, R ), 0.0 ), gl_FrontMaterial.shininess );
 
     // I = Ia + Id + Is
-    vec3 Ia = vec3( Ka, Ka, Ka );
-    vec3 Id = vec3( Kd, Kd, Kd ) * dd;
-    vec3 Is = vec3( Ks, Ks, Ks ) * ds;
-//    vec3 Ia = vec3( Ka, Ka, Ka ) * gl_LightSource[0].ambient.rgb;
-//    vec3 Id = vec3( Kd, Kd, Kd ) * gl_LightSource[0].diffuse.rgb * dd;
-//    vec3 Is = vec3( Ks, Ks, Ks ) * gl_LightSource[0].specular.rgb * ds;
+    float Ia = Ka;
+    float Id = Kd * dd;
+    float Is = Ks * ds;
 
     gl_FragColor.xyz = gl_Color.xyz * ( Ia + Id + Is );
     gl_FragColor.w = 1.0;

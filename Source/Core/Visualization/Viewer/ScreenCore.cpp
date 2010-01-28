@@ -365,7 +365,7 @@ void ScreenCore::paint_event_core( void )
 
          // Update the camera and light.
          kvs::GlobalCore::camera->update();
-         kvs::GlobalCore::light->update();
+         kvs::GlobalCore::light->update( kvs::GlobalCore::camera );
 
          // Set the background color or image.
          kvs::GlobalCore::background->apply();

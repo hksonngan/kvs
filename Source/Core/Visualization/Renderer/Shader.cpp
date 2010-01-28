@@ -43,8 +43,8 @@ Shader::Base::~Base( void )
  */
 /*==========================================================================*/
 Shader::Lambert::Lambert( void ):
-    Ka( 0.5f ),
-    Kd( 0.5f )
+    Ka( 0.4f ),
+    Kd( 0.6f )
 {
 }
 
@@ -84,7 +84,7 @@ Shader::Lambert::Lambert( const float ka, const float kd )
 /*==========================================================================*/
 void Shader::Lambert::set( const Camera* camera, const Light* light )
 {
-    light_position = -camera->projectWorldToObject( light->position() );
+    light_position = camera->projectWorldToObject( -light->position() );
 }
 
 const Shader::Type Shader::Lambert::type( void ) const
@@ -116,7 +116,7 @@ inline const float Shader::Lambert::attenuation( const kvs::Vector3f& vertex, co
     const float Ia = Ka;
     const float Id = Kd * dd;
 
-    return( kvs::Math::Min( Ia + Id, 1.0f ) );
+    return( Ia + Id );
 }
 
 /*==========================================================================*/
@@ -128,7 +128,7 @@ Shader::Phong::Phong( void ):
     Ka( 0.3f ),
     Kd( 0.5f ),
     Ks( 0.8f ),
-    S( 20.0f )
+    S( 100.0f )
 {
 }
 
@@ -174,7 +174,7 @@ Shader::Phong::Phong( const float ka, const float kd, const float ks, const floa
 /*==========================================================================*/
 void Shader::Phong::set( const kvs::Camera* camera, const kvs::Light* light )
 {
-    light_position = -camera->projectWorldToObject( light->position() );
+    light_position = camera->projectWorldToObject( -light->position() );
 }
 
 const Shader::Type Shader::Phong::type( void ) const
@@ -206,7 +206,7 @@ inline const float Shader::Phong::attenuation( const kvs::Vector3f& vertex, cons
     const float Id = Kd * dd;
     const float Is = Ks * std::pow( ds, S );
 
-    return( kvs::Math::Min( Ia + Id + Is, 1.0f ) );
+    return( Ia + Id + Is );
 }
 
 /*==========================================================================*/
@@ -218,7 +218,7 @@ Shader::BlinnPhong::BlinnPhong( void ):
     Ka( 0.3f ),
     Kd( 0.5f ),
     Ks( 0.8f ),
-    S( 20.0f )
+    S( 100.0f )
 {
 }
 
@@ -264,8 +264,8 @@ Shader::BlinnPhong::BlinnPhong( const float ka, const float kd, const float ks, 
 /*==========================================================================*/
 void Shader::BlinnPhong::set( const kvs::Camera* camera, const kvs::Light* light )
 {
-    camera_position = -camera->projectWorldToObject( camera->position() );
-    light_position = -camera->projectWorldToObject( light->position() );
+    camera_position = camera->projectWorldToObject( -camera->position() );
+    light_position = camera->projectWorldToObject( -light->position() );
 }
 
 const Shader::Type Shader::BlinnPhong::type( void ) const
@@ -298,7 +298,7 @@ inline const float Shader::BlinnPhong::attenuation( const kvs::Vector3f& vertex,
     const float Id = Kd * dd;
     const float Is = Ks * ::pow( ds, S );
 
-    return( kvs::Math::Min( Ia + Id + Is, 1.0f ) );
+    return( Ia + Id + Is );
 }
 
 } // end of namespace kvs

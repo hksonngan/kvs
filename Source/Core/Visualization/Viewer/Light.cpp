@@ -50,8 +50,8 @@ Light::~Light( void )
 void Light::initialize( void )
 {
     m_id = 0;
-    m_init_position.set( 0.0, 0.0, 10.0 );
-    m_position.set( 0.0, 0.0, 10.0 );
+    m_init_position.set( 0.0, 0.0, 12.0 );
+    m_position.set( 0.0, 0.0, 12.0 );
     m_diffuse.set( 1.0, 1.0, 1.0 );
     m_ambient.set( 0.0, 0.0, 0.0 );
     m_specular.set( 1.0, 1.0, 1.0 );
@@ -243,17 +243,24 @@ const kvs::Vector3f& Light::specular( void ) const
  *  Update the light.
  */
 /*==========================================================================*/
-void Light::update( void )
+void Light::update( const kvs::Camera* camera )
 {
-    float position[] = { m_position.x(), m_position.y(), m_position.z(), 1.0f };
+    const kvs::Vector3f p = camera->projectWorldToObject( m_position );
+
+    float position[] = { p.x(), p.y(), p.z(), 1.0f };
     float diffuse[]  = { m_diffuse.x(), m_diffuse.y(), m_diffuse.z(), 1.0f };
     float ambient[]  = { m_ambient.x(), m_ambient.y(), m_ambient.z(), 1.0f };
     float specular[] = { m_specular.x(), m_specular.y(), m_specular.z(), 1.0f };
 
-    glLightfv( m_id, GL_POSITION, &(position[0]) );
-    glLightfv( m_id, GL_DIFFUSE,  &(diffuse[0]) );
-    glLightfv( m_id, GL_AMBIENT,  &(ambient[0]) );
-    glLightfv( m_id, GL_SPECULAR, &(specular[0]) );
+    glPushMatrix();
+    glLoadIdentity();
+    {
+        glLightfv( m_id, GL_POSITION, &(position[0]) );
+        glLightfv( m_id, GL_DIFFUSE,  &(diffuse[0]) );
+        glLightfv( m_id, GL_AMBIENT,  &(ambient[0]) );
+        glLightfv( m_id, GL_SPECULAR, &(specular[0]) );
+    }
+    glPopMatrix();
 }
 
 /*==========================================================================*/
@@ -330,7 +337,7 @@ void Light::scale( const kvs::Vector3f& scaling )
 /*==========================================================================*/
 void Light::update_position( void )
 {
-    m_position = Xform::scaledRotation() * m_init_position + Xform::translation();
+    m_position = m_init_position * Xform::scaledRotation() + Xform::translation();
 }
 
 /*==========================================================================*/

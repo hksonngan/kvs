@@ -39,9 +39,12 @@ void main( void )
         if( distance( gl_FragCoord.xy, centerCoord ) > radius ) discard;
     }
 
+    // Light position.
+    vec3 light_position = -gl_LightSource[0].position.xyz;
+
     // Light vector (L), Normal vector (N) and Halfway vector (H).
     vec3 C = normalize( position );
-    vec3 L = normalize( gl_LightSource[0].position.xyz - position );
+    vec3 L = normalize( light_position - position );
     vec3 N = normalize( gl_NormalMatrix * normal );
     vec3 H = normalize( L + C );
     float dd = max( dot( L, N ), 0.0 );

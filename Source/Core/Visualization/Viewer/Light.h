@@ -17,7 +17,7 @@
 #include "XformControl.h"
 #include <kvs/ClassName>
 #include <kvs/Vector3>
-
+#include <kvs/Camera>
 
 namespace kvs
 {
@@ -88,7 +88,7 @@ public:
 
 public:
 
-    void update( void );
+    void update( const kvs::Camera* camera );
 
     void on( void ) const;
 

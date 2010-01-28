@@ -37,16 +37,15 @@ void main( void )
         if( distance( gl_FragCoord.xy, centerCoord ) > radius ) discard;
     }
 
+    // Light position.
+    vec3 light_position = -gl_LightSource[0].position.xyz;
+
     // Light vector (L) and Normal vector (N)
-    vec3 L = normalize( gl_LightSource[0].position.xyz - position );
+    vec3 L = normalize( light_position - position );
     vec3 N = normalize( gl_NormalMatrix * normal );
     float dd = max( dot( N, L ), 0.0 );
 
     // I = Ia + Id
-//    vec3 Ia = vec3( Ka, Ka, Ka ) * gl_LightSource[0].ambient.rgb;
-//    vec3 Id = vec3( Kd, Kd, Kd ) * gl_LightSource[0].diffuse.rgb * dd;
-//    vec3 Ia = vec3( Ka, Ka, Ka );
-//    vec3 Id = vec3( Kd, Kd, Kd ) * dd;
     float Ia = Ka;
     float Id = Kd * dd;
 

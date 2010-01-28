@@ -123,10 +123,10 @@ Argument::Argument( int argc, char** argv ):
     add_option( "t", "Transfer function file. (optional: <filename>)", 1, false );
     add_option( "noshading", "Disable shading. (optional)", 0, false );
     add_option( "nolod", "Disable Level-of-Detail control. (optional)", 0, false );
-    add_option( "ka", "Coefficient of the ambient color. (default: lambert=0.5, phong=0.3)", 1, false );
-    add_option( "kd", "Coefficient of the diffuse color. (default: 0.5)", 1, false );
+    add_option( "ka", "Coefficient of the ambient color. (default: lambert=0.4, phong=0.3)", 1, false );
+    add_option( "kd", "Coefficient of the diffuse color. (default: lambert=0.6, phong=0.5)", 1, false );
     add_option( "ks", "Coefficient of the specular color. (default: 0.8)", 1, false );
-    add_option( "n", "Shininess. (default: 20.0)", 1, false );
+    add_option( "n", "Shininess. (default: 100.0)", 1, false );
     add_option( "shader", "Shader type. (default: 0)\n"
                 "\t      0 = Lambert shading\n"
                 "\t      1 = Phong shading\n"
@@ -153,7 +153,7 @@ const bool Argument::noLOD( void )
 
 const float Argument::ambient( void )
 {
-    const float default_value = this->shader() == 0 ? 0.5f : 0.3f;
+    const float default_value = this->shader() == 0 ? 0.4f : 0.3f;
 
     if ( this->hasOption("ka") ) return( this->optionValue<float>("ka") );
     else return( default_value );
@@ -161,7 +161,7 @@ const float Argument::ambient( void )
 
 const float Argument::diffuse( void )
 {
-    const float default_value = 0.5f;
+    const float default_value = this->shader() == 0 ? 0.6f : 0.5f;
 
     if ( this->hasOption("kd") ) return( this->optionValue<float>("kd") );
     else return( default_value );
@@ -177,7 +177,7 @@ const float Argument::specular( void )
 
 const float Argument::shininess( void )
 {
-    const float default_value = 20.0f;
+    const float default_value = 100.0f;
 
     if ( this->hasOption("n") ) return( this->optionValue<float>("n") );
     else return( default_value );

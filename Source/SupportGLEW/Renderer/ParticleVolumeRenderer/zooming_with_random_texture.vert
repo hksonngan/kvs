@@ -38,6 +38,7 @@ void main(void)
 {
     gl_FrontColor = gl_Color;
     gl_Position = ftransform();
+
     normal = gl_Normal.xyz;
     position = gl_Position.xyz;
 

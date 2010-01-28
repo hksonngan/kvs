@@ -42,13 +42,21 @@ inline kvs::Matrix44<T> LookAtMatrix44(
     f.normalize();
     s.normalize();
     u.normalize();
-
+/*
     const T elements[ 16 ] =
     {
          s.x(),  s.y(),  s.z(), 0,
          u.x(),  u.y(),  u.z(), 0,
         -f.x(), -f.y(), -f.z(), 0,
              0,      0,      0, 1
+    };
+*/
+    const T elements[ 16 ] =
+    {
+        s.x(), u.x(), -f.x(), 0,
+        s.y(), u.y(), -f.y(), 0,
+        s.z(), u.z(), -f.z(), 0,
+            0,      0,     0, 1
     };
 
     return( kvs::Matrix44<T>( elements ) );
@@ -434,9 +442,10 @@ void Camera::update( void )
             }
         }
     }
-    glMatrixMode( GL_MODELVIEW );
 
+    glMatrixMode( GL_MODELVIEW );
     glLoadIdentity();
+
     gluLookAt( m_position.x(),  m_position.y(),  m_position.z(),
                m_look_at.x(),   m_look_at.y(),   m_look_at.z(),
                m_up_vector.x(), m_up_vector.y(), m_up_vector.z() );
@@ -791,7 +800,7 @@ const kvs::Vector3f Camera::projectCameraToObject(
 const kvs::Vector3f Camera::projectWorldToCamera( const kvs::Vector3f& p_wld ) const
 {
     const kvs::Matrix44f M = ::LookAtMatrix44<float>( m_position, m_up_vector, m_look_at );
-    const kvs::Vector4f p_cam = kvs::Vector4f( p_wld, 1.0 ) * M;
+    const kvs::Vector4f p_cam = kvs::Vector4f( p_wld, 1.0 ) * M - kvs::Vector4f( m_position, 1.0 );
 
     return( kvs::Vector3f( p_cam.x(), p_cam.y(), p_cam.z() ) );
 }
@@ -805,10 +814,8 @@ const kvs::Vector3f Camera::projectWorldToCamera( const kvs::Vector3f& p_wld ) c
 /*==========================================================================*/
 const kvs::Vector3f Camera::projectCameraToWorld( const kvs::Vector3f& p_cam ) const
 {
-    kvs::Matrix44f M = ::LookAtMatrix44<float>( m_position, m_up_vector, m_look_at );
-    M.inverse();
-
-    const kvs::Vector4f p_wld = kvs::Vector4f( p_cam, 1.0 ) * M;
+    const kvs::Matrix44f M = ::LookAtMatrix44<float>( m_position, m_up_vector, m_look_at );
+    const kvs::Vector4f p_wld = ( kvs::Vector4f( p_cam + m_position, 1.0 ) ) * M.inverse();
 
     return( kvs::Vector3f( p_wld.x(), p_wld.y(), p_wld.z() ) );
 }

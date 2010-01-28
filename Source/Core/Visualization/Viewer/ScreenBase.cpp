@@ -168,7 +168,7 @@ void ScreenBase::paintFunction( void )
 {
     // Update the camera and light.
     m_camera->update();
-    m_light->update();
+    m_light->update( m_camera );
 
     // Set the background color or image.
     m_background->apply();
