@@ -30,16 +30,65 @@
 #include <kvs/Key>
 #include <kvs/glut/Application>
 #include <kvs/glut/Screen>
+#if defined( KVS_SUPPORT_GLEW )
+#include <kvs/glew/RayCastingRenderer>
+#endif
 
 
 namespace
 {
 
 bool EnableLODControl = true;
+bool EnableGPURendering = true;
 bool HasBounds = false;
 
 } // end of namespace
 
+namespace
+{
+
+template <typename Renderer>
+const void InitializeRayCastingRenderer(
+    const kvsview::RayCastingRenderer::Argument& arg,
+    kvs::PipelineModule& renderer )
+{
+    // Transfer function.
+    const kvs::TransferFunction& function = arg.transferFunction();
+    renderer.get<Renderer>()->setTransferFunction( function );
+
+    // Shading on/off.
+    const bool noshading = arg.noShading();
+    if ( noshading ) renderer.get<Renderer>()->disableShading();
+    else renderer.get<Renderer>()->enableShading();
+
+    // Shader type.
+    const float ka = arg.ambient();
+    const float kd = arg.diffuse();
+    const float ks = arg.specular();
+    const float n = arg.shininess();
+    const int shader = arg.shader();
+    switch ( shader )
+    {
+    case 0:
+    {
+        renderer.get<Renderer>()->setShader( kvs::Shader::Lambert( ka, kd ) );
+        break;
+    }
+    case 1:
+    {
+        renderer.get<Renderer>()->setShader( kvs::Shader::Phong( ka, kd, ks, n ) );
+        break;
+    }
+    case 2:
+    {
+        renderer.get<Renderer>()->setShader( kvs::Shader::BlinnPhong( ka, kd, ks, n ) );
+        break;
+    }
+    default: break;
+    }
+}
+
+} // end of namespace
 
 namespace kvsview
 {
@@ -69,10 +118,13 @@ class MousePressEvent : public kvs::MousePressEventListener
 
         if ( ::EnableLODControl )
         {
-            const int id = ::HasBounds ? 2 : 1;
-            const kvs::RendererBase* base = screen()->rendererManager()->renderer( id );
-            kvs::RayCastingRenderer* renderer = (kvs::RayCastingRenderer*)base;
-            renderer->enableCoarseRendering();
+            if ( !::EnableGPURendering )
+            {
+                const int id = ::HasBounds ? 2 : 1;
+                const kvs::RendererBase* base = screen()->rendererManager()->renderer( id );
+                kvs::RayCastingRenderer* renderer = (kvs::RayCastingRenderer*)base;
+                renderer->enableCoarseRendering();
+            }
         }
     }
 };
@@ -85,11 +137,14 @@ class MouseReleaseEvent : public kvs::MouseReleaseEventListener
 
         if ( ::EnableLODControl )
         {
-            const int id = ::HasBounds ? 2 : 1;
-            const kvs::RendererBase* base = screen()->rendererManager()->renderer( id );
-            kvs::RayCastingRenderer* renderer = (kvs::RayCastingRenderer*)base;
-            renderer->disableCoarseRendering();
-            screen()->redraw();
+            if ( !::EnableGPURendering )
+            {
+                const int id = ::HasBounds ? 2 : 1;
+                const kvs::RendererBase* base = screen()->rendererManager()->renderer( id );
+                kvs::RayCastingRenderer* renderer = (kvs::RayCastingRenderer*)base;
+                renderer->disableCoarseRendering();
+                screen()->redraw();
+            }
         }
     }
 };
@@ -123,6 +178,7 @@ Argument::Argument( int argc, char** argv ):
     add_option( "t", "Transfer function file. (optional: <filename>)", 1, false );
     add_option( "noshading", "Disable shading. (optional)", 0, false );
     add_option( "nolod", "Disable Level-of-Detail control. (optional)", 0, false );
+    add_option( "nogpu", "Disable GPU rendering. (optional)", 0, false );
     add_option( "ka", "Coefficient of the ambient color. (default: lambert=0.4, phong=0.3)", 1, false );
     add_option( "kd", "Coefficient of the diffuse color. (default: lambert=0.6, phong=0.5)", 1, false );
     add_option( "ks", "Coefficient of the specular color. (default: 0.8)", 1, false );
@@ -133,7 +189,7 @@ Argument::Argument( int argc, char** argv ):
                 "\t      2 = Blinn-Phong shading", 1, false );
 }
 
-const int Argument::shader( void )
+const int Argument::shader( void ) const
 {
     const int default_value = 0;
 
@@ -141,17 +197,26 @@ const int Argument::shader( void )
     else return( default_value );
 }
 
-const bool Argument::noShading( void )
+const bool Argument::noShading( void ) const
 {
     return( this->hasOption("noshading") );
 }
 
-const bool Argument::noLOD( void )
+const bool Argument::noLOD( void ) const
 {
     return( this->hasOption("nolod") );
 }
 
-const float Argument::ambient( void )
+const bool Argument::noGPU( void ) const
+{
+#if defined( KVS_SUPPORT_GLEW )
+    return( this->hasOption("nogpu") );
+#else
+    return( true );
+#endif
+}
+
+const float Argument::ambient( void ) const
 {
     const float default_value = this->shader() == 0 ? 0.4f : 0.3f;
 
@@ -159,7 +224,7 @@ const float Argument::ambient( void )
     else return( default_value );
 }
 
-const float Argument::diffuse( void )
+const float Argument::diffuse( void ) const
 {
     const float default_value = this->shader() == 0 ? 0.6f : 0.5f;
 
@@ -167,7 +232,7 @@ const float Argument::diffuse( void )
     else return( default_value );
 }
 
-const float Argument::specular( void )
+const float Argument::specular( void ) const
 {
     const float default_value = 0.8f;
 
@@ -175,7 +240,7 @@ const float Argument::specular( void )
     else return( default_value );
 }
 
-const float Argument::shininess( void )
+const float Argument::shininess( void ) const
 {
     const float default_value = 100.0f;
 
@@ -189,7 +254,7 @@ const float Argument::shininess( void )
  *  @return transfer function
  */
 /*===========================================================================*/
-const kvs::TransferFunction Argument::transferFunction( void )
+const kvs::TransferFunction Argument::transferFunction( void ) const
 {
     if ( this->hasOption("t") )
     {
@@ -288,54 +353,28 @@ const bool Main::exec( void )
     }
 
     // Set up a RayCastingRenderer class.
-    kvs::PipelineModule renderer( new kvs::RayCastingRenderer );
-
-    // Transfer function.
-    const kvs::TransferFunction function = arg.transferFunction();
+    if ( arg.noGPU() )
     {
-        renderer.get<kvs::RayCastingRenderer>()->setTransferFunction( function );
-    }
+        kvs::PipelineModule renderer( new kvs::RayCastingRenderer );
+        ::InitializeRayCastingRenderer<kvs::RayCastingRenderer>( arg, renderer );
 
-    // Shading on/off.
-    const bool noshading = arg.noShading();
-    {
-        if ( noshading ) renderer.get<kvs::RayCastingRenderer>()->disableShading();
-        else renderer.get<kvs::RayCastingRenderer>()->enableShading();
+        pipe.connect( renderer );
     }
+#if defined( KVS_SUPPORT_GLEW )
+    else
+    {
+        kvs::PipelineModule renderer( new kvs::glew::RayCastingRenderer );
+        ::InitializeRayCastingRenderer<kvs::glew::RayCastingRenderer>( arg, renderer );
+        ::EnableGPURendering = true;
 
-    // Shader type.
-    const int shader = arg.shader();
-    {
-        const float ka = arg.ambient();
-        const float kd = arg.diffuse();
-        const float ks = arg.specular();
-        const float n  = arg.shininess();
-        switch ( shader )
-        {
-        case 0:
-        {
-            renderer.get<kvs::RayCastingRenderer>()->setShader( kvs::Shader::Lambert( ka, kd ) );
-            break;
-        }
-        case 1:
-        {
-            renderer.get<kvs::RayCastingRenderer>()->setShader( kvs::Shader::Phong( ka, kd, ks, n ) );
-            break;
-        }
-        case 2:
-        {
-            renderer.get<kvs::RayCastingRenderer>()->setShader( kvs::Shader::BlinnPhong( ka, kd, ks, n ) );
-            break;
-        }
-        default: break;
-        }
+        pipe.connect( renderer );
     }
+#endif
 
     // LOD control.
     ::EnableLODControl = !arg.noLOD();
 
     // Construct the visualization pipeline.
-    pipe.connect( renderer );
     if ( !pipe.exec() )
     {
         kvsMessageError("Cannot execute the visulization pipeline.");

@@ -5,6 +5,7 @@
 OBJECTS := \
 $(OUTDIR)/./Renderer/EnsembleAverageBuffer.o \
 $(OUTDIR)/./Renderer/ParticleVolumeRenderer.o \
+$(OUTDIR)/./Renderer/RayCastingRenderer.o \
 $(OUTDIR)/./Viewer/BufferObject.o \
 $(OUTDIR)/./Viewer/FragmentShader.o \
 $(OUTDIR)/./Viewer/FrameBufferObject.o \

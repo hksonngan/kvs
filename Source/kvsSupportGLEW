@@ -1,6 +1,7 @@
 #include <SupportGLEW/GLEW.h>
 #include <SupportGLEW/Renderer/EnsembleAverageBuffer.h>
 #include <SupportGLEW/Renderer/ParticleVolumeRenderer.h>
+#include <SupportGLEW/Renderer/RayCastingRenderer.h>
 #include <SupportGLEW/Viewer/BufferObject.h>
 #include <SupportGLEW/Viewer/FragmentShader.h>
 #include <SupportGLEW/Viewer/FrameBufferObject.h>

@@ -51,6 +51,10 @@ public:
 
     void setCode( const std::string& code );
 
+    void clearCode( void );
+
+    void define( const std::string& name );
+
     const bool read( const std::string& filename );
 };
 

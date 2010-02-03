@@ -263,6 +263,57 @@ void ProgramObject::setUniformValuei(
 
 /*===========================================================================*/
 /**
+ *  @brief  Specifies the values of a uniform variable as integer.
+ *  @param  name [in] name of the uniform variable
+ *  @param  v [in] vector value (2 components)
+ */
+/*===========================================================================*/
+void ProgramObject::setUniformValuei(
+    const GLchar* name,
+    const kvs::Vector2i& v )
+{
+    const GLint v0 = static_cast<GLint>( v.x() );
+    const GLint v1 = static_cast<GLint>( v.y() );
+    glUniform2i( this->uniformLocation( name ), v0, v1 );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Specifies the values of a uniform variable as integer.
+ *  @param  name [in] name of the uniform variable
+ *  @param  v [in] vector value (3 components)
+ */
+/*===========================================================================*/
+void ProgramObject::setUniformValuei(
+    const GLchar* name,
+    const kvs::Vector3i& v )
+{
+    const GLint v0 = static_cast<GLint>( v.x() );
+    const GLint v1 = static_cast<GLint>( v.y() );
+    const GLint v2 = static_cast<GLint>( v.z() );
+    glUniform3i( this->uniformLocation( name ), v0, v1, v2 );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Specifies the values of a uniform variable as integer.
+ *  @param  name [in] name of the uniform variable
+ *  @param  v [in] vector value (4 components)
+ */
+/*===========================================================================*/
+void ProgramObject::setUniformValuei(
+    const GLchar* name,
+    const kvs::Vector4i& v )
+{
+    const GLint v0 = static_cast<GLint>( v.x() );
+    const GLint v1 = static_cast<GLint>( v.y() );
+    const GLint v2 = static_cast<GLint>( v.z() );
+    const GLint v3 = static_cast<GLint>( v.w() );
+    glUniform4i( this->uniformLocation( name ), v0, v1, v2, v3 );
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Specifies the value of a uniform variable as floating point.
  *  @param  name [in] name of the uniform variable
  *  @param  v0 [in] value for the uniform variable
@@ -326,6 +377,57 @@ void ProgramObject::setUniformValuef(
     const GLfloat v2,
     const GLfloat v3 )
 {
+    glUniform4f( this->uniformLocation( name ), v0, v1, v2, v3 );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Specifies the values of a uniform variable as floating point.
+ *  @param  name [in] name of the uniform variable
+ *  @param  v [in] vector value (2 components)
+ */
+/*===========================================================================*/
+void ProgramObject::setUniformValuef(
+    const GLchar* name,
+    const kvs::Vector2f& v )
+{
+    const GLfloat v0 = static_cast<GLfloat>( v.x() );
+    const GLfloat v1 = static_cast<GLfloat>( v.y() );
+    glUniform2f( this->uniformLocation( name ), v0, v1 );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Specifies the values of a uniform variable as floating point.
+ *  @param  name [in] name of the uniform variable
+ *  @param  v [in] vector value (3 components)
+ */
+/*===========================================================================*/
+void ProgramObject::setUniformValuef(
+    const GLchar* name,
+    const kvs::Vector3f& v )
+{
+    const GLfloat v0 = static_cast<GLfloat>( v.x() );
+    const GLfloat v1 = static_cast<GLfloat>( v.y() );
+    const GLfloat v2 = static_cast<GLfloat>( v.z() );
+    glUniform3f( this->uniformLocation( name ), v0, v1, v2 );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Specifies the values of a uniform variable as floating point.
+ *  @param  name [in] name of the uniform variable
+ *  @param  v [in] vector value (4 components)
+ */
+/*===========================================================================*/
+void ProgramObject::setUniformValuef(
+    const GLchar* name,
+    const kvs::Vector4f& v )
+{
+    const GLfloat v0 = static_cast<GLfloat>( v.x() );
+    const GLfloat v1 = static_cast<GLfloat>( v.y() );
+    const GLfloat v2 = static_cast<GLfloat>( v.z() );
+    const GLfloat v3 = static_cast<GLfloat>( v.w() );
     glUniform4f( this->uniformLocation( name ), v0, v1, v2, v3 );
 }
 

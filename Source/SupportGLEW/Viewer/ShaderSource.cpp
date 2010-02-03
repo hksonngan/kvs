@@ -57,6 +57,17 @@ void ShaderSource::setCode( const std::string& code )
     m_code = code;
 }
 
+void ShaderSource::clearCode( void )
+{
+    m_code.erase();
+}
+
+void ShaderSource::define( const std::string& name )
+{
+    const std::string define = "#define " + name + "\n";
+    m_code = define + m_code;
+}
+
 const bool ShaderSource::read( const std::string& filename )
 {
     std::ifstream ifs( filename.c_str() );

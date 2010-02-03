@@ -21,6 +21,9 @@
 #include "VertexShader.h"
 #include "FragmentShader.h"
 #include <kvs/ClassName>
+#include <kvs/Vector2>
+#include <kvs/Vector3>
+#include <kvs/Vector4>
 
 
 namespace kvs
@@ -102,6 +105,18 @@ public:
         const GLint v2,
         const GLint v3 );
 
+    void setUniformValuei(
+        const GLchar* name,
+        const kvs::Vector2i& v );
+
+    void setUniformValuei(
+        const GLchar* name,
+        const kvs::Vector3i& v );
+
+    void setUniformValuei(
+        const GLchar* name,
+        const kvs::Vector4i& v );
+
 public:
 
     void setUniformValuef(
@@ -125,6 +140,18 @@ public:
         const GLfloat v1,
         const GLfloat v2,
         const GLfloat v3 );
+
+    void setUniformValuef(
+        const GLchar* name,
+        const kvs::Vector2f& v );
+
+    void setUniformValuef(
+        const GLchar* name,
+        const kvs::Vector3f& v );
+
+    void setUniformValuef(
+        const GLchar* name,
+        const kvs::Vector4f& v );
 };
 
 } // end of namespace glew

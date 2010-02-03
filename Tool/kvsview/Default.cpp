@@ -18,6 +18,9 @@
 #include <kvs/ImageObject>
 #include <kvs/glut/Application>
 #include <kvs/glut/Screen>
+#if defined( KVS_SUPPORT_GLEW )
+#include <kvs/glew/RayCastingRenderer>
+#endif
 
 
 namespace kvsview
@@ -92,6 +95,18 @@ const bool Main::exec( void )
         std::cout << kvsview::ObjectInformation( pipe.object() ) << std::endl;
         std::cout << std::endl;
     }
+
+#if defined( KVS_SUPPORT_GLEW )
+    if ( pipe.object()->objectType() == kvs::ObjectBase::Volume )
+    {
+        const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( pipe.object() );
+        if ( volume->volumeType() == kvs::VolumeObjectBase::Structured )
+        {
+            kvs::PipelineModule renderer( new kvs::glew::RayCastingRenderer );
+            pipe.connect( renderer );
+        }
+    }
+#endif
 
     if ( !pipe.exec() )
     {

@@ -43,21 +43,23 @@ public:
 
 public:
 
-    const int shader( void );
+    const int shader( void ) const;
 
-    const bool noShading( void );
+    const bool noShading( void ) const;
 
-    const bool noLOD( void );
+    const bool noLOD( void ) const;
 
-    const float ambient( void );
+    const bool noGPU( void ) const;
 
-    const float diffuse( void );
+    const float ambient( void ) const;
 
-    const float specular( void );
+    const float diffuse( void ) const;
 
-    const float shininess( void );
+    const float specular( void ) const;
 
-    const kvs::TransferFunction transferFunction( void );
+    const float shininess( void ) const;
+
+    const kvs::TransferFunction transferFunction( void ) const;
 };
 
 /*===========================================================================*/

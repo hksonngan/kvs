@@ -5,6 +5,7 @@
 OBJECTS = \
 $(OUTDIR)\.\Renderer\EnsembleAverageBuffer.obj \
 $(OUTDIR)\.\Renderer\ParticleVolumeRenderer.obj \
+$(OUTDIR)\.\Renderer\RayCastingRenderer.obj \
 $(OUTDIR)\.\Viewer\BufferObject.obj \
 $(OUTDIR)\.\Viewer\FragmentShader.obj \
 $(OUTDIR)\.\Viewer\FrameBufferObject.obj \

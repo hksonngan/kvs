@@ -1,6 +1,7 @@
 GLEW
 Renderer/EnsembleAverageBuffer
 Renderer/ParticleVolumeRenderer
+Renderer/RayCastingRenderer
 Viewer/BufferObject
 Viewer/FragmentShader
 Viewer/FrameBufferObject

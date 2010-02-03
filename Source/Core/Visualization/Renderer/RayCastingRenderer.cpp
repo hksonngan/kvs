@@ -199,12 +199,12 @@ void RayCastingRenderer::rasterize(
 
                     // Empty skipping.
                     const float s = interpolator.scalar<T>();
-                    const float density = omap.at(s);
-                    if ( !kvs::Math::IsZero( density ) )
+                    const float opacity = omap.at(s);
+                    if ( !kvs::Math::IsZero( opacity ) )
                     {
                         // Front-to-back accumulation.
                         const float attenuate = shader->attenuation( ray.point(), interpolator.gradient<T>() );
-                        const float current_alpha = ( 1.0f - a ) * density;
+                        const float current_alpha = ( 1.0f - a ) * opacity;
                         const kvs::RGBColor c = cmap.at(s);
                         r += current_alpha * attenuate * c.r();
                         g += current_alpha * attenuate * c.g();
@@ -212,7 +212,7 @@ void RayCastingRenderer::rasterize(
                         a += current_alpha;
                         if ( a > opaque )
                         {
-                            a = opaque;
+                            a = 1.0f;
                             break;
                         }
                     }
