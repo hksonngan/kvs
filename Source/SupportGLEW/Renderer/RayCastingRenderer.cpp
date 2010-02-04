@@ -40,6 +40,23 @@ void CheckOpenGLError( const char* message )
     }
 }
 
+template <typename DstType, typename SrcType>
+kvs::AnyValueArray SignedToUnsigned( const kvs::StructuredVolumeObject* volume )
+{
+    kvs::AnyValueArray data;
+
+    const SrcType min = kvs::Value<SrcType>::Min();
+    const size_t nvalues = volume->values().size();
+    const SrcType* src = static_cast<const SrcType*>( volume->values().pointer() );
+    DstType* dst = static_cast<DstType*>( data.allocate<DstType>( nvalues ) );
+    for ( size_t i = 0; i < nvalues; i++ )
+    {
+        *(dst++) = static_cast<DstType>( *(src++) - min );
+    }
+
+    return( data );
+}
+
 } // end of namespace
 
 
@@ -609,41 +626,49 @@ void RayCastingRenderer::create_volume_data( const kvs::StructuredVolumeObject* 
 
     GLenum data_format = 0;
     GLenum data_type = 0;
+    kvs::AnyValueArray data_value;
     const std::type_info& type = volume->values().typeInfo()->type();
     if ( type == typeid( kvs::UInt8 ) )
     {
         data_format = GL_ALPHA8;
         data_type = GL_UNSIGNED_BYTE;
+        data_value = volume->values();
     }
     else if ( type == typeid( kvs::UInt16 ) )
     {
         data_format = GL_ALPHA16;
         data_type = GL_UNSIGNED_SHORT;
+        data_value = volume->values();
     }
     else if ( type == typeid( kvs::UInt32 ) )
     {
         data_format = GL_ALPHA;
         data_type = GL_UNSIGNED_INT;
+        data_value = volume->values();
     }
     else if ( type == typeid( kvs::Int8 ) )
     {
         data_format = GL_ALPHA8;
-        data_type = GL_BYTE;
+        data_type = GL_UNSIGNED_BYTE;
+        data_value = ::SignedToUnsigned<kvs::UInt8,kvs::Int8>( volume );
     }
     else if ( type == typeid( kvs::Int16 ) )
     {
         data_format = GL_ALPHA16;
-        data_type = GL_SHORT;
+        data_type = GL_UNSIGNED_SHORT;
+        data_value = ::SignedToUnsigned<kvs::UInt16,kvs::Int16>( volume );
     }
     else if ( type == typeid( kvs::Int32 ) )
     {
         data_format = GL_ALPHA;
-        data_type = GL_INT;
+        data_type = GL_UNSIGNED_INT;
+        data_value = ::SignedToUnsigned<kvs::UInt32,kvs::Int32>( volume );
     }
     else if ( type == typeid( kvs::Real32 ) )
     {
         data_format = GL_ALPHA;
         data_type = GL_FLOAT;
+        data_value = volume->values();
     }
     else
     {
@@ -653,7 +678,7 @@ void RayCastingRenderer::create_volume_data( const kvs::StructuredVolumeObject* 
 
     m_volume_data.setPixelFormat( data_format, GL_ALPHA, data_type );
     m_volume_data.create( width, height, depth );
-    m_volume_data.download( width, height, depth, volume->values().pointer() );
+    m_volume_data.download( width, height, depth, data_value.pointer() );
 
     ::CheckOpenGLError( "Cannot create volume data texture." );
 }
