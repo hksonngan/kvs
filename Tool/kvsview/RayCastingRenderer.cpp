@@ -357,6 +357,7 @@ const bool Main::exec( void )
     {
         kvs::PipelineModule renderer( new kvs::RayCastingRenderer );
         ::InitializeRayCastingRenderer<kvs::RayCastingRenderer>( arg, renderer );
+        ::EnableGPURendering = false;
 
         pipe.connect( renderer );
     }

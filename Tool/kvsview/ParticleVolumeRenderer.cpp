@@ -412,6 +412,7 @@ const bool Main::exec( void )
     {
         kvs::PipelineModule renderer( new kvs::ParticleVolumeRenderer );
         ::InitializeParticleVolumeRenderer<kvs::ParticleVolumeRenderer>( arg, renderer );
+        ::EnableGPURendering = false;
 
         // Subpixel level.
         const size_t subpixel_level = arg.subpixelLevel();
