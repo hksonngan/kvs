@@ -464,7 +464,7 @@ void RayCastingRenderer::create_entry_points( void )
     m_entry_points.setWrapT( GL_CLAMP );
     m_entry_points.setMagFilter( GL_LINEAR );
     m_entry_points.setMinFilter( GL_LINEAR );
-    m_entry_points.setPixelFormat( GL_RGB16F, GL_RGB, GL_FLOAT  );
+    m_entry_points.setPixelFormat( GL_RGB16F_ARB, GL_RGB, GL_FLOAT  );
     m_entry_points.create( width, height );
 
     ::CheckOpenGLError( "Entry point texture allocation failed." );
@@ -485,7 +485,7 @@ void RayCastingRenderer::create_exit_points( void )
     m_exit_points.setWrapT( GL_CLAMP );
     m_exit_points.setMagFilter( GL_LINEAR );
     m_exit_points.setMinFilter( GL_LINEAR );
-    m_exit_points.setPixelFormat( GL_RGB16F, GL_RGB, GL_FLOAT  );
+    m_exit_points.setPixelFormat( GL_RGB16F_ARB, GL_RGB, GL_FLOAT  );
     m_exit_points.create( width, height );
 
     ::CheckOpenGLError( "Exit point texture allocation failed." );
