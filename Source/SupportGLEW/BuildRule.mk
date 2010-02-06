@@ -5,6 +5,8 @@
 OBJECTS := \
 $(OUTDIR)/./Renderer/EnsembleAverageBuffer.o \
 $(OUTDIR)/./Renderer/ParticleVolumeRenderer.o \
+$(OUTDIR)/./Renderer/PointRenderer.o \
+$(OUTDIR)/./Renderer/PolygonRenderer.o \
 $(OUTDIR)/./Renderer/RayCastingRenderer.o \
 $(OUTDIR)/./Viewer/BufferObject.o \
 $(OUTDIR)/./Viewer/FragmentShader.o \
@@ -38,5 +40,7 @@ install::
 	$(INSTALL) ./Renderer/*.h $(INSTALL_DIR)/include/SupportGLEW/./Renderer
 	$(MKDIR) $(INSTALL_DIR)/include/SupportGLEW/./Renderer/ParticleVolumeRenderer
 	$(INSTALL) ./Renderer/ParticleVolumeRenderer/*.h $(INSTALL_DIR)/include/SupportGLEW/./Renderer/ParticleVolumeRenderer
+	$(MKDIR) $(INSTALL_DIR)/include/SupportGLEW/./Renderer/RayCastingRenderer
+	$(INSTALL) ./Renderer/RayCastingRenderer/*.h $(INSTALL_DIR)/include/SupportGLEW/./Renderer/RayCastingRenderer
 	$(MKDIR) $(INSTALL_DIR)/include/SupportGLEW/./Viewer
 	$(INSTALL) ./Viewer/*.h $(INSTALL_DIR)/include/SupportGLEW/./Viewer
