@@ -264,7 +264,8 @@ inline const kvs::Vector3f TrilinearInterpolator::gradient( void ) const
         dz[6] * m_weight[6] +
         dz[7] * m_weight[7];
 
-    return( kvs::Vector3f( x, y, z ) );
+//    return( kvs::Vector3f( x, y, z ) );
+    return( kvs::Vector3f( -x, -y, -z ) );
 }
 
 } // end of namespace kvs

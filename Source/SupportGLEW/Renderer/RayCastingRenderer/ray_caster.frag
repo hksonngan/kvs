@@ -113,7 +113,7 @@ void main( void )
         {
             vec3 offset_index = vec3( offset / volume.ratio );
             vec3 normal = estimateGradient( volume.data, volume_index, offset_index );
-            vec3 L = normalize( light_position * volume.ratio - position );
+            vec3 L = normalize( light_position - position );
             vec3 N = normalize( gl_NormalMatrix * normal );
 
 #if   defined( ENABLE_LAMBERT_SHADING )

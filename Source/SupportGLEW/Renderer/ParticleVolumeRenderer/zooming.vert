@@ -36,7 +36,7 @@ void main( void )
     gl_Position = ftransform();
 
     normal = gl_Normal.xyz;
-    position = gl_Position.xyz;
+    position = vec3( gl_ModelViewMatrix * gl_Vertex );
 
     float distance = gl_Position.z;
     if ( distance < 1.0 ) distance = 1.0; // to avoid front-clip

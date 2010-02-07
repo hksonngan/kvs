@@ -38,7 +38,7 @@ void main( void )
     }
 
     // Light position.
-    vec3 light_position = -gl_LightSource[0].position.xyz;
+    vec3 light_position = gl_LightSource[0].position.xyz;
 
     // Light vector (L) and Normal vector (N)
     vec3 L = normalize( light_position - position );

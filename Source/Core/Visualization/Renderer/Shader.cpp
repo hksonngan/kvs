@@ -84,7 +84,8 @@ Shader::Lambert::Lambert( const float ka, const float kd )
 /*==========================================================================*/
 void Shader::Lambert::set( const Camera* camera, const Light* light )
 {
-    light_position = camera->projectWorldToObject( -light->position() );
+//    light_position = camera->projectWorldToObject( -light->position() );
+    light_position = camera->projectWorldToObject( light->position() );
 }
 
 const Shader::Type Shader::Lambert::type( void ) const
@@ -174,7 +175,8 @@ Shader::Phong::Phong( const float ka, const float kd, const float ks, const floa
 /*==========================================================================*/
 void Shader::Phong::set( const kvs::Camera* camera, const kvs::Light* light )
 {
-    light_position = camera->projectWorldToObject( -light->position() );
+//    light_position = camera->projectWorldToObject( -light->position() );
+    light_position = camera->projectWorldToObject( light->position() );
 }
 
 const Shader::Type Shader::Phong::type( void ) const
@@ -264,8 +266,10 @@ Shader::BlinnPhong::BlinnPhong( const float ka, const float kd, const float ks, 
 /*==========================================================================*/
 void Shader::BlinnPhong::set( const kvs::Camera* camera, const kvs::Light* light )
 {
-    camera_position = camera->projectWorldToObject( -camera->position() );
-    light_position = camera->projectWorldToObject( -light->position() );
+//    camera_position = camera->projectWorldToObject( -camera->position() );
+    camera_position = camera->projectWorldToObject( camera->position() );
+//    light_position = camera->projectWorldToObject( -light->position() );
+    light_position = camera->projectWorldToObject( light->position() );
 }
 
 const Shader::Type Shader::BlinnPhong::type( void ) const

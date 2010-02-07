@@ -40,7 +40,7 @@ void main(void)
     gl_Position = ftransform();
 
     normal = gl_Normal.xyz;
-    position = gl_Position.xyz;
+    position = vec3( gl_ModelViewMatrix * gl_Vertex );
 
     // Get a random number.
     vec2 randomPos = identifier * randomTextureSizeInv;
