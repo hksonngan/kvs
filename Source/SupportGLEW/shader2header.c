@@ -140,10 +140,13 @@ FileList* FileList_add( const char* dirname, const char* filename, FileList* hea
     memset( f->basename, 0, MAX_FILEPATH_LENGTH );
     memset( f->filepath, 0, MAX_FILEPATH_LENGTH*2 );
 
-    strcpy(  f->dirname,  dirname );
+    strcpy(  f->dirname,  dirname ); if ( f->dirname[ strlen( dirname ) - 1 ] == '\n' ) f->dirname[ strlen( dirname ) - 1 ] = '\0';
     strcpy(  f->filename, filename );
     strcpy(  f->basename, filename ); *strrchr( f->basename, '.' ) = '\0';
-    sprintf( f->filepath, "%s%s%s", dirname, PATH_SEPARATOR, filename );
+    sprintf( f->filepath, "%s%s%s", f->dirname, PATH_SEPARATOR, filename );
+//    strcat( f->filepath, dirname );
+//    strcat( f->filepath, PATH_SEPARATOR );
+//    strcat( f->filepath, filename );
 
     f->next = head;
     head = f;
@@ -315,9 +318,14 @@ int main( int argc, char** argv )
             char  filepath[MAX_LINE_LENGTH]; /* dirname + filename */
             FILE* fp = NULL; /* file pointer to the output file */
 
+            if ( dirname[ strlen( dirname ) - 1 ] == '\n' ) dirname[ strlen( dirname ) - 1 ] = '\0';
+
             /* Get the output file name (filepath). */
             memset( filepath, 0, MAX_LINE_LENGTH );
             sprintf( filepath, "%s%s%s", dirname, PATH_SEPARATOR, filename );
+//            strcat( filepath, dirname );
+//            strcat( filepath, PATH_SEPARATOR );
+//            strcat( filepath, filename );
 
             /* Write the shader codes to the C/C++ header file ("Shader.h"). */
             if ( ( fp = fopen( filepath, "w" ) ) == NULL )
