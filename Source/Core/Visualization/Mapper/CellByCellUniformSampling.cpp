@@ -253,13 +253,13 @@ CellByCellUniformSampling::SuperClass* CellByCellUniformSampling::exec( const kv
                 if ( kvs::GlobalCore::camera->windowWidth() != 0 && kvs::GlobalCore::camera->windowHeight() )
                 {
                     const kvs::Camera* camera = kvs::GlobalCore::camera;
-                    this->mapping( camera, reinterpret_cast<const kvs::StructuredVolumeObject*>( object ) );
+                    this->mapping( camera, reinterpret_cast<const kvs::UnstructuredVolumeObject*>( object ) );
                 }
             }
             else
             {
                 kvs::Camera* camera = new kvs::Camera();
-                this->mapping( camera, reinterpret_cast<const kvs::StructuredVolumeObject*>( object ) );
+                this->mapping( camera, reinterpret_cast<const kvs::UnstructuredVolumeObject*>( object ) );
                 delete camera;
             }
         }
@@ -462,7 +462,6 @@ void CellByCellUniformSampling::generate_particles( const kvs::StructuredVolumeO
                     // Calculate a color.
                     interpolator.attachPoint( coord );
                     const float scalar = interpolator.scalar<T>();
-//                    const size_t degree = static_cast<size_t>( ( scalar - min_value ) * normalize_factor );
                     const kvs::RGBColor color( color_map.at( scalar ) );
 
                     // Calculate a normal.
@@ -572,8 +571,7 @@ void CellByCellUniformSampling::generate_particles( const kvs::UnstructuredVolum
 
             // Calculate a color.
             const float scalar = cell->scalar();
-//            const float degree = ( scalar - min_value ) * normalize_factor;
-            const kvs::RGBColor color ( color_map.at( scalar ) );
+            const kvs::RGBColor color( color_map.at( scalar ) );
 
             // Calculate a normal.
             const Vector3f normal( cell->gradient() );

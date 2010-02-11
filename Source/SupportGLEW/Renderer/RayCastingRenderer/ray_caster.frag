@@ -26,7 +26,8 @@ uniform sampler2D        exit_points;       // exit points (back face)
 uniform vec3             offset;            // offset width for the gradient
 uniform float            dt;                // sampling step
 uniform float            opaque;            // opaque value
-uniform vec3             light_position;    // light position
+uniform vec3             light_position;    // light position in the object coordinate
+uniform vec3             camera_position;   // camera position in the object coordinate
 uniform Volume           volume;            // volume data
 uniform Shader           shader;            // shading method
 uniform TransferFunction transfer_function; // 1D transfer function
@@ -44,40 +45,47 @@ vec3 estimateGradient( in sampler3D v, in vec3 p, in vec3 o )
     return( vec3( s3 - s0, s4 - s1, s5 - s2 ) );
 }
 
-float lambertShading( in vec3 L, in vec3 N )
+vec3 noShading( in vec3 color )
+{
+    return( color );
+}
+
+vec3 lambertShading( in vec3 color, in vec3 L, in vec3 N )
 {
     float dd = max( dot( N, L ), 0.0 );
 
     float Ia = shader.Ka;
     float Id = shader.Kd * dd;
 
-    return( Ia + Id );
+    return( color * ( Ia + Id ) );
 }
 
-float phongShading( in vec3 L, in vec3 N )
+vec3 phongShading( in vec3 color, in vec3 L, in vec3 N )
 {
-    vec3 R = 2.0 * dot( N, L ) * N - L;
+    vec3 R = reflect( -L, N );
     float dd = max( dot( N, L ), 0.0 );
     float ds = pow( max( dot( N, R ), 0.0 ), shader.S );
+    if ( dd <= 0.0 ) ds = 0.0;
 
     float Ia = shader.Ka;
     float Id = shader.Kd * dd;
     float Is = shader.Ks * ds;
 
-    return( Ia + Id + Is );
+    return( color * ( Ia + Id ) + Is );
 }
 
-float blinnPhongShading( in vec3 L, in vec3 N, in vec3 C )
+vec3 blinnPhongShading( in vec3 color, in vec3 L, in vec3 N, in vec3 C )
 {
     vec3 H = normalize( L + C );
     float dd = max( dot( N, L ), 0.0 );
     float ds = pow( max( dot( H, N ), 0.0 ), shader.S );
+    if ( dd <= 0.0 ) ds = 0.0;
 
     float Ia = shader.Ka;
     float Id = shader.Kd * dd;
     float Is = shader.Ks * ds;
 
-    return( Ia + Id + Is );
+    return( color * ( Ia + Id ) + Is );
 }
 
 void main( void )
@@ -117,18 +125,21 @@ void main( void )
             vec3 N = normalize( gl_NormalMatrix * normal );
 
 #if   defined( ENABLE_LAMBERT_SHADING )
-            float attenuate = lambertShading( L, N );
+            src.rgb = lambertShading( src.rgb, L, N );
+
 #elif defined( ENABLE_PHONG_SHADING )
-            float attenuate = phongShading( L, N );
+            src.rgb = phongShading( src.rgb, L, N );
+
 #elif defined( ENABLE_BLINN_PHONG_SHADING )
-            vec3 C = normalize( position );
-            float attenuate = phongShading( L, N, C );
-#else // NO SHADING
-            float attenuate = 1.0;
+            vec3 C = normalize( camera_position - position );
+            src.rgb = blinnPhongShading( src.rgb, L, N, C );
+
+#else // DISABLE SHADING
+            src.rgb = noShading( src.rgb );
 #endif
 
             // Front-to-back composition.
-            dst.rgb += ( 1.0 - dst.a ) * src.a * attenuate * src.rgb;
+            dst.rgb += ( 1.0 - dst.a ) * src.a * src.rgb;
             dst.a += ( 1.0 - dst.a ) * src.a;
 
             // Early ray termination.

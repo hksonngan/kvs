@@ -327,13 +327,13 @@ void ParticleBuffer::create_image_with_shading(
                     {
                         const size_t point_index3 = 3 * m_index_buffer[ bindex ];
 
-//                        const float attenuate = m_ref_shader->attenuation( point_normal + point_index3 );
                         const kvs::Vector3f vertex( point_coords + point_index3 );
-                        const kvs::Vector3f gradient( point_normal + point_index3 );
-                        const float attenuate = m_ref_shader->attenuation( vertex, gradient );
-                        R += point_color[ point_index3 + 0 ] * attenuate;
-                        G += point_color[ point_index3 + 1 ] * attenuate;
-                        B += point_color[ point_index3 + 2 ] * attenuate;
+                        const kvs::Vector3f normal( point_normal + point_index3 );
+                        kvs::RGBColor color( point_color + point_index3 );
+                        color = m_ref_shader->shadedColor( color, vertex, normal );
+                        R += color.r();
+                        G += color.g();
+                        B += color.b();
                         D = kvs::Math::Max( D, m_depth_buffer[ bindex ] );
 
                         npoints++;

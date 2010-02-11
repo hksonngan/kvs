@@ -1,3 +1,17 @@
+/*****************************************************************************/
+/**
+ *  @file   zooming.frag
+ *  @author Naohisa Sakamoto
+ */
+/*----------------------------------------------------------------------------
+ *
+ *  Copyright 2007 Visualization Laboratory, Kyoto University.
+ *  All rights reserved.
+ *  See http://www.viz.media.kyoto-u.ac.jp/kvs/copyright/ for details.
+ *
+ *  $Id$
+ */
+/*****************************************************************************/
 struct Shader
 {
     float Ka; // ambient
@@ -8,6 +22,9 @@ struct Shader
 
 varying vec3 position;
 varying vec3 normal;
+
+varying vec2 centerCoord;
+varying float radius;
 
 uniform Shader shader;
 
@@ -55,10 +72,25 @@ vec3 blinnPhongShading( in vec3 color, in vec3 L, in vec3 N, in vec3 C )
     return( color * ( Ia + Id ) + Is );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Calculates a shaded color of the particle with Lambert shading.
+ */
+/*===========================================================================*/
 void main( void )
 {
-    vec3 L = normalize( gl_LightSource[0].position.xyz - position );
-    vec3 N = normalize( normal );
+    // Discard a pixel outside circle.
+    if ( radius > 0.0 )
+    {
+        if( distance( gl_FragCoord.xy, centerCoord ) > radius ) discard;
+    }
+
+    // Light position.
+    vec3 light_position = gl_LightSource[0].position.xyz;
+
+    // Light vector (L) and Normal vector (N)
+    vec3 L = normalize( light_position - position );
+    vec3 N = normalize( gl_NormalMatrix * normal );
 
 #if   defined( ENABLE_LAMBERT_SHADING )
     vec3 shaded_color = lambertShading( gl_Color.xyz, L, N );

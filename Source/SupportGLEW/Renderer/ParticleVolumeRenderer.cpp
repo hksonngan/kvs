@@ -904,33 +904,26 @@ void ParticleVolumeRenderer::initialize_opengl( void )
     // Initialize the shader for zooming.
     {
 #if defined( KVS_GLEW_PARTICLE_VOLUME_RENDERER__EMBEDDED_SHADER )
-        const std::string vert_code = m_enable_random_texture ?
-            kvs::glew::glsl::ParticleVolumeRenderer::Vertex::zooming_with_random_texture :
-            kvs::glew::glsl::ParticleVolumeRenderer::Vertex::zooming;
-        const std::string frag_code = !BaseClass::isEnabledShading() ?
-            kvs::glew::glsl::ParticleVolumeRenderer::Fragment::noshading :
-            ( BaseClass::m_shader->type() == kvs::Shader::LambertShading ) ?
-            kvs::glew::glsl::ParticleVolumeRenderer::Fragment::lambert_shading :
-            ( BaseClass::m_shader->type() == kvs::Shader::PhongShading ) ?
-            kvs::glew::glsl::ParticleVolumeRenderer::Fragment::phong_shading :
-            ( BaseClass::m_shader->type() == kvs::Shader::BlinnPhongShading ) ?
-            kvs::glew::glsl::ParticleVolumeRenderer::Fragment::blinn_phong_shading : "";
+        const std::string vert_code = kvs::glew::glsl::ParticleVolumeRenderer::Vertex::zooming;
+        const std::string frag_code = kvs::glew::glsl::ParticleVolumeRenderer::Fragment::zooming;
 #else
-        const std::string vert_code = m_enable_random_texture ?
-            "ParticleVolumeRenderer/zooming_with_random_texture.vert" :
-            "ParticleVolumeRenderer/zooming.vert";
-        const std::string frag_code = !BaseClass::isEnabledShading() ?
-            "ParticleVolumeRenderer/noshading.frag" :
-            ( BaseClass::m_shader->type() == kvs::Shader::LambertShading ) ?
-            "ParticleVolumeRenderer/lambert_shading.frag" :
-            ( BaseClass::m_shader->type() == kvs::Shader::PhongShading ) ?
-            "ParticleVolumeRenderer/phong_shading.frag" :
-            ( BaseClass::m_shader->type() == kvs::Shader::BlinnPhongShading ) ?
-            "ParticleVolumeRenderer/blinn_phong_shading.frag" : "";
+        const std::string vert_code = "ParticleVolumeRenderer/zooming.vert";
+        const std::string frag_code = "ParticleVolumeRenderer/zooming.frag";
 #endif
 
         kvs::glew::ShaderSource vert( vert_code );
         kvs::glew::ShaderSource frag( frag_code );
+
+        if ( m_enable_random_texture ) vert.define("ENABLE_RANDOM_TEXTURE");
+
+        switch ( BaseClass::m_shader->type() )
+        {
+        case kvs::Shader::LambertShading: frag.define("ENABLE_LAMBERT_SHADING"); break;
+        case kvs::Shader::PhongShading: frag.define("ENABLE_PHONG_SHADING"); break;
+        case kvs::Shader::BlinnPhongShading: frag.define("ENABLE_BLINN_PHONG_SHADING"); break;
+        default: /* NO SHADING */ break;
+        }
+
         this->create_shaders( m_zoom_shader, vert, frag );
 
         m_loc_point_identifier = m_zoom_shader.attributeLocation("identifier");
@@ -938,34 +931,41 @@ void ParticleVolumeRenderer::initialize_opengl( void )
         if ( BaseClass::isEnabledShading() )
         {
             m_zoom_shader.bind();
-            if ( BaseClass::m_shader->type() == kvs::Shader::LambertShading )
+            switch ( BaseClass::m_shader->type() )
+            {
+            case kvs::Shader::LambertShading:
             {
                 const GLfloat Ka = ((kvs::Shader::Lambert*)(BaseClass::m_shader))->Ka;
                 const GLfloat Kd = ((kvs::Shader::Lambert*)(BaseClass::m_shader))->Kd;
-                m_zoom_shader.setUniformValuef( "Ka", Ka );
-                m_zoom_shader.setUniformValuef( "Kd", Kd );
+                m_zoom_shader.setUniformValuef( "shader.Ka", Ka );
+                m_zoom_shader.setUniformValuef( "shader.Kd", Kd );
+                break;
             }
-            else if ( BaseClass::m_shader->type() == kvs::Shader::PhongShading )
+            case kvs::Shader::PhongShading:
             {
                 const GLfloat Ka = ((kvs::Shader::Phong*)(BaseClass::m_shader))->Ka;
                 const GLfloat Kd = ((kvs::Shader::Phong*)(BaseClass::m_shader))->Kd;
                 const GLfloat Ks = ((kvs::Shader::Phong*)(BaseClass::m_shader))->Ks;
                 const GLfloat S  = ((kvs::Shader::Phong*)(BaseClass::m_shader))->S;
-                m_zoom_shader.setUniformValuef( "Ka", Ka );
-                m_zoom_shader.setUniformValuef( "Kd", Kd );
-                m_zoom_shader.setUniformValuef( "Ks", Ks );
-                m_zoom_shader.setUniformValuef( "S",  S );
+                m_zoom_shader.setUniformValuef( "shader.Ka", Ka );
+                m_zoom_shader.setUniformValuef( "shader.Kd", Kd );
+                m_zoom_shader.setUniformValuef( "shader.Ks", Ks );
+                m_zoom_shader.setUniformValuef( "shader.S",  S );
+                break;
             }
-            else if ( BaseClass::m_shader->type() == kvs::Shader::BlinnPhongShading )
+            case kvs::Shader::BlinnPhongShading:
             {
                 const GLfloat Ka = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->Ka;
                 const GLfloat Kd = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->Kd;
                 const GLfloat Ks = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->Ks;
                 const GLfloat S  = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->S;
-                m_zoom_shader.setUniformValuef( "Ka", Ka );
-                m_zoom_shader.setUniformValuef( "Kd", Kd );
-                m_zoom_shader.setUniformValuef( "Ks", Ks );
-                m_zoom_shader.setUniformValuef( "S",  S );
+                m_zoom_shader.setUniformValuef( "shader.Ka", Ka );
+                m_zoom_shader.setUniformValuef( "shader.Kd", Kd );
+                m_zoom_shader.setUniformValuef( "shader.Ks", Ks );
+                m_zoom_shader.setUniformValuef( "shader.S",  S );
+                break;
+            }
+            default: /* NO SHADING */ break;
             }
             m_zoom_shader.unbind();
         }
@@ -974,15 +974,11 @@ void ParticleVolumeRenderer::initialize_opengl( void )
     // Inititalize the shader for resizing.
     {
 #if defined( KVS_GLEW_PARTICLE_VOLUME_RENDERER__EMBEDDED_SHADER )
-        const std::string vert_code =
-            kvs::glew::glsl::ParticleVolumeRenderer::Vertex::resize;
-        const std::string frag_code =
-            kvs::glew::glsl::ParticleVolumeRenderer::Fragment::resize;
+        const std::string vert_code = kvs::glew::glsl::ParticleVolumeRenderer::Vertex::resize;
+        const std::string frag_code = kvs::glew::glsl::ParticleVolumeRenderer::Fragment::resize;
 #else
-        const std::string vert_code =
-            "ParticleVolumeRenderer/resize.vert";
-        const std::string frag_code =
-            "ParticleVolumeRenderer/resize.frag";
+        const std::string vert_code = "ParticleVolumeRenderer/resize.vert";
+        const std::string frag_code = "ParticleVolumeRenderer/resize.frag";
 #endif
 
         kvs::glew::ShaderSource vert( vert_code );

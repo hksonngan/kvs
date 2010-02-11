@@ -248,7 +248,9 @@ void RayCastingRenderer::create_image(
             const kvs::Vector3ui ngrids = volume->resolution() - kvs::Vector3ui(1);
             const kvs::Real32 max_ngrids = kvs::Math::Max( ngrids.x(), ngrids.y(), ngrids.z() );
             const kvs::Vector3f light_position = camera->projectWorldToObject( light->position() * max_ngrids );
+            const kvs::Vector3f camera_position = camera->projectWorldToObject( camera->position() * max_ngrids );
             m_ray_caster.setUniformValuef( "light_position", light_position );
+            m_ray_caster.setUniformValuef( "camera_position", camera_position );
             m_ray_caster.setUniformValuei( "volume.data", 1 );
             m_ray_caster.setUniformValuei( "exit_points", 2 );
             m_ray_caster.setUniformValuei( "entry_points", 3 );
@@ -274,7 +276,7 @@ void RayCastingRenderer::initialize_shaders( const kvs::StructuredVolumeObject* 
     const kvs::Vector3ui ngrids = volume->resolution();
     const kvs::Real32 max_ngrids = kvs::Math::Max( ngrids.x(), ngrids.y(), ngrids.z() );
     const kvs::Real32 n = 1.0f / max_ngrids;
-    const kvs::Vector3f offset( 0.5f * n, 0.5f * n, 0.5f * n );
+    const kvs::Vector3f offset( 1.0f * n, 1.0f * n, 1.0f * n );
     const kvs::Vector3f ratio( ngrids.x() * n, ngrids.y() * n, ngrids.z() * n );
 
     // Bounding cube shader.

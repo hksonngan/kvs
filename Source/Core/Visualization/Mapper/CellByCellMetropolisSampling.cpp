@@ -483,11 +483,11 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::StructuredVolu
                     density = density_map[ degree ];
                 }
 
-                //Generate N particles
+                // Generate N particles.
                 size_t counter = 0;
                 while( counter < nparticles_in_cell )
                 {
-                    //set trial position and density
+                    // Set a trial position and density.
                     point_trial = Generator::RandomSamplingInCube( v );
                     interpolator.attachPoint( point_trial );
                     scalar_trial = interpolator.scalar<T>();
@@ -495,21 +495,17 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::StructuredVolu
                     degree_trial = kvs::Math::Clamp<size_t>( degree_trial, 0, max_range );
                     density_trial = density_map[ degree_trial ];
 
-                    //calculate ratio
-                    double ratio = density_trial / density;
+                    // Calculate ratio.
+                    const double ratio = density_trial / density;
 
-                    if( ratio >= 1.0 ) // accept trial point
+                    if( ratio >= 1.0 )
                     {
-                        // calculate color
+                        // Accept the trial point.
                         interpolator.attachPoint( point_trial );
                         scalar_trial = interpolator.scalar<T>();
-/*
-                        degree_trial = static_cast< size_t >( ( scalar_trial -min_value ) * normalize_factor );
-                        degree_trial = kvs::Math::Clamp<size_t>( degree_trial, 0, max_range );
-                        const kvs::RGBColor color( color_map[ degree_trial ] );
-*/
+
+                        // Calculate a color and normal vector of the particle.
                         const kvs::RGBColor color( color_map.at( scalar_trial ) );
-                        // calculate normal
                         const kvs::Vector3f normal( interpolator.gradient<T>() );
 
                         vertex_coords.push_back( point_trial.x() );
@@ -524,7 +520,7 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::StructuredVolu
                         vertex_normals.push_back( normal.y() );
                         vertex_normals.push_back( normal.z() );
 
-                        // update point
+                        // Update the trial point and density.
                         point = point_trial;
                         density = density_trial;
 
@@ -532,19 +528,14 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::StructuredVolu
                     }
                     else
                     {
-                        if( ratio >= Generator::GetRandomNumber() ) // accept point trial
+                        if( ratio >= Generator::GetRandomNumber() )
                         {
-                            // calculate color
+                            // Accept the trial point.
                             interpolator.attachPoint( point_trial );
                             scalar_trial = interpolator.scalar<T>();
-/*
-                            degree_trial = static_cast< size_t >( ( scalar_trial -min_value ) * normalize_factor );
-                            degree_trial = kvs::Math::Clamp<size_t>( degree_trial, 0, max_range );
-                            const kvs::RGBColor color( color_map[ degree_trial ] );
-*/
-                            const kvs::RGBColor color( color_map.at( scalar_trial ) );
 
-                            // calculate normal
+                            // Calculate a color and normal vector of the particle.
+                            const kvs::RGBColor color( color_map.at( scalar_trial ) );
                             const kvs::Vector3f normal( interpolator.gradient<T>() );
 
                             vertex_coords.push_back( point_trial.x() );
@@ -559,26 +550,21 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::StructuredVolu
                             vertex_normals.push_back( normal.y() );
                             vertex_normals.push_back( normal.z() );
 
-                            // update point
+                            // Update the trial point and density.
                             point = point_trial;
                             density = density_trial;
 
                             counter++;
                         }
-                        else // accept current point
+                        else
                         {
 #ifdef DUPLICATION
-                            // calculate color
+                            // Accept the current point.
                             interpolator.attachPoint( point );
                             scalar = interpolator.scalar<T>();
-/*
-                            degree = static_cast< size_t >( ( scalar - min_value ) * normalize_factor );
-                            degree = kvs::Math::Clamp<size_t>( degree, 0, max_range );
-                            const kvs::RGBColor color( color_map[ degree ] );
-*/
-                            const kvs::RGBColor color( color_map.at( scalar ) );
 
-                            //calculate normal
+                            // Calculate a color and normal vector of the particle.
+                            const kvs::RGBColor color( color_map.at( scalar ) );
                             const kvs::Vector3f normal( interpolator.gradient<T>() );
 
                             vertex_coords.push_back( point_trial.x() );

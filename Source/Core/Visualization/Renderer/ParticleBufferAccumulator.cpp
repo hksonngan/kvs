@@ -193,19 +193,18 @@ void ParticleBufferAccumulator::createImage(
 
                         const size_t point_index3 = 3 * m_index_buffer[bindex];
 
-                        float attenuate = 1.0f;
+                        kvs::RGBColor color( object->colors().pointer() + point_index3 );
                         if( renderer->isEnabledShading() )
                         {
                             const kvs::Shader::shader_type* shader = renderer->particleBuffer()->shader();
-                            const kvs::Vector3f coord( object->coords().pointer() + point_index3 );
+                            const kvs::Vector3f vertex( object->coords().pointer() + point_index3 );
                             const kvs::Vector3f normal( object->normals().pointer() + point_index3 );
-                            attenuate = shader->attenuation( coord, normal );
+                            color = shader->shadedColor( color, vertex, normal );
                         }
 
-                        const kvs::UInt8* color = object->colors().pointer();
-                        R += color[ point_index3 + 0 ] * attenuate;
-                        G += color[ point_index3 + 1 ] * attenuate;
-                        B += color[ point_index3 + 2 ] * attenuate;
+                        R += color.r();
+                        G += color.g();
+                        B += color.b();
                         D = kvs::Math::Max( D, m_depth_buffer[ bindex ] );
 
                         npoints++;

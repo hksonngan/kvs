@@ -43,6 +43,10 @@ public:
     {
         kvs::Vector3f camera_position; ///< camera position in the object coordinate
         kvs::Vector3f light_position; ///< light position in the object coordinate
+        float Ka; ///< ambient coefficient
+        float Kd; ///< diffuse coefficient
+        float Ks; ///< specular coefficient
+        float S;  ///< shininess
 
         Base( void );
 
@@ -51,6 +55,11 @@ public:
         virtual void set( const kvs::Camera* camera, const kvs::Light* light ) = 0;
 
         virtual const Shader::Type type( void ) const = 0;
+
+        virtual const kvs::RGBColor shadedColor(
+            const kvs::RGBColor& color,
+            const kvs::Vector3f& vertex,
+            const kvs::Vector3f& normal ) const = 0;
 
         virtual const float attenuation( const kvs::Vector3f& vertex, const kvs::Vector3f& gradient ) const = 0;
     };
@@ -63,9 +72,6 @@ public:
 
     struct Lambert : public Base
     {
-        float Ka; ///< ambient coefficient
-        float Kd; ///< diffuse coefficient
-
         Lambert( void );
 
         Lambert( const Lambert& shader );
@@ -76,16 +82,16 @@ public:
 
         const Shader::Type type( void ) const;
 
+        const kvs::RGBColor shadedColor(
+            const kvs::RGBColor& color,
+            const kvs::Vector3f& vertex,
+            const kvs::Vector3f& normal ) const;
+
         const float attenuation( const kvs::Vector3f& vertex, const kvs::Vector3f& gradient ) const;
     };
 
     struct Phong : public Base
     {
-        float Ka; ///< ambient coefficient
-        float Kd; ///< diffuse coefficient
-        float Ks; ///< specular coefficient
-        float S;  ///< shininess
-
         Phong( void );
 
         Phong( const Phong& shader );
@@ -96,16 +102,16 @@ public:
 
         const Shader::Type type( void ) const;
 
+        const kvs::RGBColor shadedColor(
+            const kvs::RGBColor& color,
+            const kvs::Vector3f& vertex,
+            const kvs::Vector3f& normal ) const;
+
         const float attenuation( const kvs::Vector3f& vertex, const kvs::Vector3f& gradient ) const;
     };
 
     struct BlinnPhong : public Base
     {
-        float Ka; ///< ambient coefficient
-        float Kd; ///< diffuse coefficient
-        float Ks; ///< specular coefficient
-        float S;  ///< shininess
-
         BlinnPhong( void );
 
         BlinnPhong( const BlinnPhong& shader );
@@ -115,6 +121,11 @@ public:
         void set( const kvs::Camera* camera, const kvs::Light* light );
 
         const Shader::Type type( void ) const;
+
+        const kvs::RGBColor shadedColor(
+            const kvs::RGBColor& color,
+            const kvs::Vector3f& vertex,
+            const kvs::Vector3f& normal ) const;
 
         const float attenuation( const kvs::Vector3f& vertex, const kvs::Vector3f& gradient ) const;
     };

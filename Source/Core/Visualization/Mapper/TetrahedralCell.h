@@ -273,6 +273,9 @@ inline const kvs::Real32 TetrahedralCell<T>::scalar( void )
 template <typename T>
 inline const kvs::Vector3f TetrahedralCell<T>::gradient( void )
 {
+    /* NOTE: The gradient vector of the cell is reversed for shading on the
+     * rendering process.
+     */
     return( m_coefficients );
 }
 

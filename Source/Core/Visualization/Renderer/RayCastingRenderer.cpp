@@ -184,7 +184,6 @@ void RayCastingRenderer::rasterize(
             // Intersection the ray with the bounding box.
             if ( ray.isIntersected() )
             {
-//                kvs::RGBColor color( kvs::RGBColor( 0, 0, 0 ) );
                 float r = 0.0f;
                 float g = 0.0f;
                 float b = 0.0f;
@@ -197,18 +196,21 @@ void RayCastingRenderer::rasterize(
                     // Interpolation.
                     interpolator.attachPoint( ray.point() );
 
-                    // Empty skipping.
+                    // Classification.
                     const float s = interpolator.scalar<T>();
                     const float opacity = omap.at(s);
                     if ( !kvs::Math::IsZero( opacity ) )
                     {
+                        // Shading.
+                        const kvs::Vector3f vertex = ray.point();
+                        const kvs::Vector3f normal = interpolator.gradient<T>();
+                        const kvs::RGBColor color = shader->shadedColor( cmap.at(s), vertex, normal );
+
                         // Front-to-back accumulation.
-                        const float attenuate = shader->attenuation( ray.point(), interpolator.gradient<T>() );
                         const float current_alpha = ( 1.0f - a ) * opacity;
-                        const kvs::RGBColor c = cmap.at(s);
-                        r += current_alpha * attenuate * c.r();
-                        g += current_alpha * attenuate * c.g();
-                        b += current_alpha * attenuate * c.b();
+                        r += current_alpha * color.r();
+                        g += current_alpha * color.g();
+                        b += current_alpha * color.b();
                         a += current_alpha;
                         if ( a > opaque )
                         {

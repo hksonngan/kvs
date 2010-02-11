@@ -15,6 +15,11 @@
 uniform float densityFactor;
 uniform int circleThreshold;
 uniform vec2 screenScale;
+#if defined( ENABLE_RANDOM_TEXTURE )
+uniform sampler2D randomTexture;
+uniform float randomTextureSizeInv;
+attribute vec2 identifier;
+#endif
 
 const float circleScale = 0.564189583547756; // 1.0 / sqrt(PI)
 
@@ -25,20 +30,43 @@ varying vec2 centerCoord;
 varying float radius;
 
 
-/*===========================================================================*/
-/**
- *  @brief  Calculates a size of the particle.
- */
-/*===========================================================================*/
-void main( void )
+#if defined( ENABLE_RANDOM_TEXTURE )
+float zooming( in vec4 p )
 {
-    gl_FrontColor = gl_Color;
-    gl_Position = ftransform();
+    // Get a random number.
+    vec2 randomPos = identifier * randomTextureSizeInv;
+    float random = texture2D( randomTexture, randomPos ).x;
 
-    normal = gl_Normal.xyz;
-    position = vec3( gl_ModelViewMatrix * gl_Vertex );
+    float distance = p.z;
+    if ( distance < 1.0 ) distance = 1.0; // to avoid front-clip
 
-    float distance = gl_Position.z;
+    float point_size = densityFactor / distance;
+    float point_size_floor = floor( point_size );
+    float point_size_ceil = ceil ( point_size );
+    float point_size_fraction = fract( point_size );
+    float probability_ceil = point_size_fraction * (2.0 * point_size_floor + point_size_fraction) / (2.0 * point_size_floor + 1.0);
+    if ( circleThreshold <= 0 || point_size <= float( circleThreshold ) )
+    {
+        // Draw a particle as square.
+        point_size = ((random < probability_ceil) ? point_size_ceil : point_size_floor) ;
+        radius = 0.0;
+    }
+    else
+    {
+        // Draw a particle as circle.
+        // Convert position to screen coordinates.
+        centerCoord = screenScale + ( ( p.xy / p.w ) * screenScale );
+        radius = ( ( random < probability_ceil ) ? point_size_ceil : point_size_floor ) * circleScale;
+        point_size = ceil( point_size * circleScale * 2.0 ) + 1.0;
+    }
+
+    return( point_size );
+}
+
+#else
+float zooming( in vec4 p )
+{
+    float distance = p.z;
     if ( distance < 1.0 ) distance = 1.0; // to avoid front-clip
 
     // Calculate particle size.
@@ -47,7 +75,7 @@ void main( void )
     float point_size_ceil = ceil( point_size );
 
     // Generate a random floating point using the vertex position.
-    float myF = gl_Position.x + gl_Position.z * gl_Position.y;
+    float myF = p.x + p.z * p.y;
     int randi = int( myF * float( 0x0000ffff ) ); // pick 4 bits using mask
     randi = randi & 0x000000f0;
     randi >>= 4;
@@ -58,15 +86,34 @@ void main( void )
     if ( circleThreshold <= 0 || point_size <= float( circleThreshold ) )
     {
         // Draw a particle as square.
-        gl_PointSize = ( point_size < rand_size ) ? point_size_floor : point_size_ceil;
+        point_size = ( point_size < rand_size ) ? point_size_floor : point_size_ceil;
         radius = 0.0;
     }
     else
     {
         // Draw a particle as circle.
         // Convert position to screen coordinates.
-        centerCoord = screenScale + ( ( gl_Position.xy / gl_Position.w ) * screenScale );
+        centerCoord = screenScale + ( ( p.xy / p.w ) * screenScale );
         radius = ( ( point_size < rand_size ) ? point_size_floor : point_size_ceil ) * circleScale;
-        gl_PointSize = ceil( point_size * circleScale * 2.0 ) + 1.0;
+        point_size = ceil( point_size * circleScale * 2.0 ) + 1.0;
     }
+
+    return( point_size );
+}
+#endif
+
+/*===========================================================================*/
+/**
+ *  @brief  Calculates a size of the particle in pixel.
+ */
+/*===========================================================================*/
+void main( void )
+{
+    gl_FrontColor = gl_Color;
+    gl_Position = ftransform();
+
+    normal = gl_Normal.xyz;
+    position = vec3( gl_ModelViewMatrix * gl_Vertex );
+
+    gl_PointSize = zooming( gl_Position );
 }
