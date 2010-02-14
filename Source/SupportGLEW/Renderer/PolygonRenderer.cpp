@@ -78,8 +78,8 @@ void PolygonRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::L
 void PolygonRenderer::initialize_shaders( void )
 {
 #if defined( KVS_GLEW_POLYGON_RENDERER__EMBEDDED_SHADER )
-    const std::string vert_code = kvs::glew::glsl::PolygonRenderer::Vertex::phong;
-    const std::string frag_code = kvs::glew::glsl::PolygonRenderer::Fragment::phong;
+    const std::string vert_code = kvs::glew::glsl::PolygonRenderer::Vertex::shading;
+    const std::string frag_code = kvs::glew::glsl::PolygonRenderer::Fragment::shading;
 #else
     const std::string vert_code = "PolygonRenderer/shading.vert";
     const std::string frag_code = "PolygonRenderer/shading.frag";
