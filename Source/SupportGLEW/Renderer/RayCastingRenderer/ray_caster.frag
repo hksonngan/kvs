@@ -1,25 +1,20 @@
-struct Volume
-{
-    vec3      ratio;     // ratio of the volume resolution (256x256x128 => 1:1:0.5)
-    float     min_range; // min. range
-    float     max_range; // max. range
-    float     min_value; // min. scalar value
-    float     max_value; // max. scalar value
-    sampler3D data;      // volume data (scalar field)
-};
-
-struct Shader
-{
-    float Ka; // ambient
-    float Kd; // diffuse
-    float Ks; // specular
-    float S;  // shininess
-};
-
-struct TransferFunction
-{
-    sampler1D data; // transfer function data
-};
+/*****************************************************************************/
+/**
+ *  @file   ray_caster.frag
+ *  @author Naohisa Sakamoto
+ */
+/*----------------------------------------------------------------------------
+ *
+ *  Copyright 2007 Visualization Laboratory, Kyoto University.
+ *  All rights reserved.
+ *  See http://www.viz.media.kyoto-u.ac.jp/kvs/copyright/ for details.
+ *
+ *  $Id$
+ */
+/*****************************************************************************/
+#include "../Shader/shading.h"
+#include "../Shader/volume.h"
+#include "../Shader/transfer_function.h"
 
 uniform sampler2D        entry_points;      // entry points (front face)
 uniform sampler2D        exit_points;       // exit points (back face)
@@ -29,7 +24,7 @@ uniform float            opaque;            // opaque value
 uniform vec3             light_position;    // light position in the object coordinate
 uniform vec3             camera_position;   // camera position in the object coordinate
 uniform Volume           volume;            // volume data
-uniform Shader           shader;            // shading method
+uniform Shading          shading;            // shading parameter
 uniform TransferFunction transfer_function; // 1D transfer function
 
 
@@ -43,49 +38,6 @@ vec3 estimateGradient( in sampler3D v, in vec3 p, in vec3 o )
     float s5 = texture3D( v, p - vec3( 0.0, 0.0, o.z ) ).w;
 
     return( vec3( s3 - s0, s4 - s1, s5 - s2 ) );
-}
-
-vec3 noShading( in vec3 color )
-{
-    return( color );
-}
-
-vec3 lambertShading( in vec3 color, in vec3 L, in vec3 N )
-{
-    float dd = max( dot( N, L ), 0.0 );
-
-    float Ia = shader.Ka;
-    float Id = shader.Kd * dd;
-
-    return( color * ( Ia + Id ) );
-}
-
-vec3 phongShading( in vec3 color, in vec3 L, in vec3 N )
-{
-    vec3 R = reflect( -L, N );
-    float dd = max( dot( N, L ), 0.0 );
-    float ds = pow( max( dot( N, R ), 0.0 ), shader.S );
-    if ( dd <= 0.0 ) ds = 0.0;
-
-    float Ia = shader.Ka;
-    float Id = shader.Kd * dd;
-    float Is = shader.Ks * ds;
-
-    return( color * ( Ia + Id ) + Is );
-}
-
-vec3 blinnPhongShading( in vec3 color, in vec3 L, in vec3 N, in vec3 C )
-{
-    vec3 H = normalize( L + C );
-    float dd = max( dot( N, L ), 0.0 );
-    float ds = pow( max( dot( H, N ), 0.0 ), shader.S );
-    if ( dd <= 0.0 ) ds = 0.0;
-
-    float Ia = shader.Ka;
-    float Id = shader.Kd * dd;
-    float Is = shader.Ks * ds;
-
-    return( color * ( Ia + Id ) + Is );
 }
 
 void main( void )
@@ -119,23 +71,25 @@ void main( void )
         vec4 src = texture1D( transfer_function.data, tfunc_index );
         if ( src.a != 0.0 )
         {
+            // Get the normal vector.
             vec3 offset_index = vec3( offset / volume.ratio );
             vec3 normal = estimateGradient( volume.data, volume_index, offset_index );
+
             vec3 L = normalize( light_position - position );
             vec3 N = normalize( gl_NormalMatrix * normal );
 
 #if   defined( ENABLE_LAMBERT_SHADING )
-            src.rgb = lambertShading( src.rgb, L, N );
+            src.rgb = ShadingLambert( shading, src.rgb, L, N );
 
 #elif defined( ENABLE_PHONG_SHADING )
-            src.rgb = phongShading( src.rgb, L, N );
+            src.rgb = ShadingPhong( shading, src.rgb, L, N );
 
 #elif defined( ENABLE_BLINN_PHONG_SHADING )
             vec3 C = normalize( camera_position - position );
-            src.rgb = blinnPhongShading( src.rgb, L, N, C );
+            src.rgb = ShadingBlinnPhong( shading, src.rgb, L, N, C );
 
 #else // DISABLE SHADING
-            src.rgb = noShading( src.rgb );
+            src.rgb = ShadingNone( shading, src.rgb );
 #endif
 
             // Front-to-back composition.

@@ -937,8 +937,8 @@ void ParticleVolumeRenderer::initialize_opengl( void )
             {
                 const GLfloat Ka = ((kvs::Shader::Lambert*)(BaseClass::m_shader))->Ka;
                 const GLfloat Kd = ((kvs::Shader::Lambert*)(BaseClass::m_shader))->Kd;
-                m_zoom_shader.setUniformValuef( "shader.Ka", Ka );
-                m_zoom_shader.setUniformValuef( "shader.Kd", Kd );
+                m_zoom_shader.setUniformValuef( "shading.Ka", Ka );
+                m_zoom_shader.setUniformValuef( "shading.Kd", Kd );
                 break;
             }
             case kvs::Shader::PhongShading:
@@ -947,10 +947,10 @@ void ParticleVolumeRenderer::initialize_opengl( void )
                 const GLfloat Kd = ((kvs::Shader::Phong*)(BaseClass::m_shader))->Kd;
                 const GLfloat Ks = ((kvs::Shader::Phong*)(BaseClass::m_shader))->Ks;
                 const GLfloat S  = ((kvs::Shader::Phong*)(BaseClass::m_shader))->S;
-                m_zoom_shader.setUniformValuef( "shader.Ka", Ka );
-                m_zoom_shader.setUniformValuef( "shader.Kd", Kd );
-                m_zoom_shader.setUniformValuef( "shader.Ks", Ks );
-                m_zoom_shader.setUniformValuef( "shader.S",  S );
+                m_zoom_shader.setUniformValuef( "shading.Ka", Ka );
+                m_zoom_shader.setUniformValuef( "shading.Kd", Kd );
+                m_zoom_shader.setUniformValuef( "shading.Ks", Ks );
+                m_zoom_shader.setUniformValuef( "shading.S",  S );
                 break;
             }
             case kvs::Shader::BlinnPhongShading:
@@ -959,10 +959,10 @@ void ParticleVolumeRenderer::initialize_opengl( void )
                 const GLfloat Kd = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->Kd;
                 const GLfloat Ks = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->Ks;
                 const GLfloat S  = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->S;
-                m_zoom_shader.setUniformValuef( "shader.Ka", Ka );
-                m_zoom_shader.setUniformValuef( "shader.Kd", Kd );
-                m_zoom_shader.setUniformValuef( "shader.Ks", Ks );
-                m_zoom_shader.setUniformValuef( "shader.S",  S );
+                m_zoom_shader.setUniformValuef( "shading.Ka", Ka );
+                m_zoom_shader.setUniformValuef( "shading.Kd", Kd );
+                m_zoom_shader.setUniformValuef( "shading.Ks", Ks );
+                m_zoom_shader.setUniformValuef( "shading.S",  S );
                 break;
             }
             default: /* NO SHADING */ break;

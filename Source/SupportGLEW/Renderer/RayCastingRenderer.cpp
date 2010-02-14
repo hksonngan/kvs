@@ -394,8 +394,8 @@ void RayCastingRenderer::initialize_shaders( const kvs::StructuredVolumeObject* 
         {
             const GLfloat Ka = ((kvs::Shader::Lambert*)(BaseClass::m_shader))->Ka;
             const GLfloat Kd = ((kvs::Shader::Lambert*)(BaseClass::m_shader))->Kd;
-            m_ray_caster.setUniformValuef( "shader.Ka", Ka );
-            m_ray_caster.setUniformValuef( "shader.Kd", Kd );
+            m_ray_caster.setUniformValuef( "shading.Ka", Ka );
+            m_ray_caster.setUniformValuef( "shading.Kd", Kd );
             break;
         }
         case kvs::Shader::PhongShading:
@@ -404,10 +404,10 @@ void RayCastingRenderer::initialize_shaders( const kvs::StructuredVolumeObject* 
             const GLfloat Kd = ((kvs::Shader::Phong*)(BaseClass::m_shader))->Kd;
             const GLfloat Ks = ((kvs::Shader::Phong*)(BaseClass::m_shader))->Ks;
             const GLfloat S  = ((kvs::Shader::Phong*)(BaseClass::m_shader))->S;
-            m_ray_caster.setUniformValuef( "shader.Ka", Ka );
-            m_ray_caster.setUniformValuef( "shader.Kd", Kd );
-            m_ray_caster.setUniformValuef( "shader.Ks", Ks );
-            m_ray_caster.setUniformValuef( "shader.S",  S );
+            m_ray_caster.setUniformValuef( "shading.Ka", Ka );
+            m_ray_caster.setUniformValuef( "shading.Kd", Kd );
+            m_ray_caster.setUniformValuef( "shading.Ks", Ks );
+            m_ray_caster.setUniformValuef( "shading.S",  S );
             break;
         }
         case kvs::Shader::BlinnPhongShading:
@@ -416,10 +416,10 @@ void RayCastingRenderer::initialize_shaders( const kvs::StructuredVolumeObject* 
             const GLfloat Kd = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->Kd;
             const GLfloat Ks = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->Ks;
             const GLfloat S  = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->S;
-            m_ray_caster.setUniformValuef( "shader.Ka", Ka );
-            m_ray_caster.setUniformValuef( "shader.Kd", Kd );
-            m_ray_caster.setUniformValuef( "shader.Ks", Ks );
-            m_ray_caster.setUniformValuef( "shader.S",  S );
+            m_ray_caster.setUniformValuef( "shading.Ka", Ka );
+            m_ray_caster.setUniformValuef( "shading.Kd", Kd );
+            m_ray_caster.setUniformValuef( "shading.Ks", Ks );
+            m_ray_caster.setUniformValuef( "shading.S",  S );
             break;
         }
         default: /* NO SHADING */ break;

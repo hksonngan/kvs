@@ -19,7 +19,7 @@
 #include <kvs/glew/FragmentShader>
 
 #if defined( KVS_GLEW_POINT_RENDERER__EMBEDDED_SHADER )
-#include "Shader/Shader.h"
+#include "PointRenderer/Shader.h"
 #endif
 
 
@@ -63,11 +63,11 @@ void PointRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Lig
 void PointRenderer::initialize_shaders( void )
 {
 #if defined( KVS_GLEW_POINT_RENDERER__EMBEDDED_SHADER )
-    const std::string vert_code = kvs::glew::glsl::Shader::Vertex::phong;
-    const std::string frag_code = kvs::glew::glsl::Shader::Fragment::phong;
+    const std::string vert_code = kvs::glew::glsl::PointRenderer::Vertex::shading;
+    const std::string frag_code = kvs::glew::glsl::PointRenderer::Fragment::shading;
 #else
-    const std::string vert_code = "Shader/phong.vert";
-    const std::string frag_code = "Shader/phong.frag";
+    const std::string vert_code = "PointRenderer/shading.vert";
+    const std::string frag_code = "PointRenderer/shading.frag";
 #endif
 
     kvs::glew::ShaderSource vert( vert_code );
@@ -90,8 +90,8 @@ void PointRenderer::initialize_shaders( void )
     {
         const GLfloat Ka = ((kvs::Shader::Lambert*)(m_shader))->Ka;
         const GLfloat Kd = ((kvs::Shader::Lambert*)(m_shader))->Kd;
-        m_phong_shader.setUniformValuef( "shader.Ka", Ka );
-        m_phong_shader.setUniformValuef( "shader.Kd", Kd );
+        m_phong_shader.setUniformValuef( "shading.Ka", Ka );
+        m_phong_shader.setUniformValuef( "shading.Kd", Kd );
         break;
     }
     case kvs::Shader::PhongShading:
@@ -100,10 +100,10 @@ void PointRenderer::initialize_shaders( void )
         const GLfloat Kd = ((kvs::Shader::Phong*)(m_shader))->Kd;
         const GLfloat Ks = ((kvs::Shader::Phong*)(m_shader))->Ks;
         const GLfloat S  = ((kvs::Shader::Phong*)(m_shader))->S;
-        m_phong_shader.setUniformValuef( "shader.Ka", Ka );
-        m_phong_shader.setUniformValuef( "shader.Kd", Kd );
-        m_phong_shader.setUniformValuef( "shader.Ks", Ks );
-        m_phong_shader.setUniformValuef( "shader.S",  S );
+        m_phong_shader.setUniformValuef( "shading.Ka", Ka );
+        m_phong_shader.setUniformValuef( "shading.Kd", Kd );
+        m_phong_shader.setUniformValuef( "shading.Ks", Ks );
+        m_phong_shader.setUniformValuef( "shading.S",  S );
         break;
     }
     case kvs::Shader::BlinnPhongShading:
@@ -112,10 +112,10 @@ void PointRenderer::initialize_shaders( void )
         const GLfloat Kd = ((kvs::Shader::BlinnPhong*)(m_shader))->Kd;
         const GLfloat Ks = ((kvs::Shader::BlinnPhong*)(m_shader))->Ks;
         const GLfloat S  = ((kvs::Shader::BlinnPhong*)(m_shader))->S;
-        m_phong_shader.setUniformValuef( "shader.Ka", Ka );
-        m_phong_shader.setUniformValuef( "shader.Kd", Kd );
-        m_phong_shader.setUniformValuef( "shader.Ks", Ks );
-        m_phong_shader.setUniformValuef( "shader.S",  S );
+        m_phong_shader.setUniformValuef( "shading.Ka", Ka );
+        m_phong_shader.setUniformValuef( "shading.Kd", Kd );
+        m_phong_shader.setUniformValuef( "shading.Ks", Ks );
+        m_phong_shader.setUniformValuef( "shading.S",  S );
         break;
     }
     default: /* NO SHADING */ break;

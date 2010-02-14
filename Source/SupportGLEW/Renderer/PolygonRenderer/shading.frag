@@ -1,6 +1,6 @@
 /*****************************************************************************/
 /**
- *  @file   zooming.frag
+ *  @file   shading.frag
  *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
@@ -14,33 +14,15 @@
 /*****************************************************************************/
 #include "../Shader/shading.h"
 
-varying vec3 position;
-varying vec3 normal;
-
-varying vec2 centerCoord;
-varying float radius;
-
+varying vec3    position;
+varying vec3    normal;
 uniform Shading shading;
 
-/*===========================================================================*/
-/**
- *  @brief  Calculates a shaded color of the particle with Lambert shading.
- */
-/*===========================================================================*/
+
 void main( void )
 {
-    // Discard a pixel outside circle.
-    if ( radius > 0.0 )
-    {
-        if( distance( gl_FragCoord.xy, centerCoord ) > radius ) discard;
-    }
-
-    // Light position.
-    vec3 light_position = gl_LightSource[0].position.xyz;
-
-    // Light vector (L) and Normal vector (N)
-    vec3 L = normalize( light_position - position );
-    vec3 N = normalize( gl_NormalMatrix * normal );
+    vec3 L = normalize( gl_LightSource[0].position.xyz - position );
+    vec3 N = normalize( normal );
 
 #if   defined( ENABLE_LAMBERT_SHADING )
     vec3 shaded_color = ShadingLambert( shading, gl_Color.xyz, L, N );

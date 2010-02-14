@@ -33,12 +33,12 @@ TARGET_LIB := $(OUTDIR)/$(LIB_KVS_SUPPORT_GLEW)
 #=============================================================================
 #  Build rule for the shader2header.
 #=============================================================================
-SHADER2HEADER_TARGET := shader2header
-SHADER2HEADER_SOURCE := $(SHADER2HEADER_TARGET).c
+#SHADER2HEADER_TARGET := shader2header
+#SHADER2HEADER_SOURCE := $(SHADER2HEADER_TARGET).c
 
-$(SHADER2HEADER_TARGET): $(SHADER2HEADER_SOURCE)
-	$(CC) -o $@ $<
-	./$@ KVS_SHADER_DIR_LIST
+#$(SHADER2HEADER_TARGET): $(SHADER2HEADER_SOURCE)
+#	$(CC) -o $@ $<
+#	./$@ KVS_SHADER_DIR_LIST
 
 
 #=============================================================================
@@ -52,14 +52,16 @@ $(TARGET_LIB): $(OBJECTS)
 #=============================================================================
 #  build.
 #=============================================================================
-build:: $(SHADER2HEADER_TARGET) $(TARGET_LIB)
+#build:: $(SHADER2HEADER_TARGET) $(TARGET_LIB)
+build:: $(TARGET_LIB)
 
 
 #=============================================================================
 #  clean.
 #=============================================================================
 clean::
-	$(RMDIR) $(SHADER2HEADER_TARGET) $(OUTDIR)
+#	$(RMDIR) $(SHADER2HEADER_TARGET) $(OUTDIR)
+	$(RMDIR) $(OUTDIR)
 
 
 #=============================================================================
