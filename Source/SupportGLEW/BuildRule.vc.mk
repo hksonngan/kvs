@@ -44,7 +44,13 @@ install::
 	$(INSTALL) .\Renderer\*.h $(INSTALL_DIR)\include\SupportGLEW\.\Renderer
 	IF NOT EXIST $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\ParticleVolumeRenderer $(MKDIR) $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\ParticleVolumeRenderer
 	$(INSTALL) .\Renderer\ParticleVolumeRenderer\*.h $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\ParticleVolumeRenderer
+	IF NOT EXIST $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\PointRenderer $(MKDIR) $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\PointRenderer
+	$(INSTALL) .\Renderer\PointRenderer\*.h $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\PointRenderer
+	IF NOT EXIST $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\PolygonRenderer $(MKDIR) $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\PolygonRenderer
+	$(INSTALL) .\Renderer\PolygonRenderer\*.h $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\PolygonRenderer
 	IF NOT EXIST $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\RayCastingRenderer $(MKDIR) $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\RayCastingRenderer
 	$(INSTALL) .\Renderer\RayCastingRenderer\*.h $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\RayCastingRenderer
+	IF NOT EXIST $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\Shader $(MKDIR) $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\Shader
+	$(INSTALL) .\Renderer\Shader\*.h $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\Shader
 	IF NOT EXIST $(INSTALL_DIR)\include\SupportGLEW\.\Viewer $(MKDIR) $(INSTALL_DIR)\include\SupportGLEW\.\Viewer
 	$(INSTALL) .\Viewer\*.h $(INSTALL_DIR)\include\SupportGLEW\.\Viewer

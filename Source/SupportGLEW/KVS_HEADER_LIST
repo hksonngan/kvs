@@ -4,6 +4,7 @@ Renderer/ParticleVolumeRenderer
 Renderer/PointRenderer
 Renderer/PolygonRenderer
 Renderer/RayCastingRenderer
+Renderer/Shader
 Viewer/BufferObject
 Viewer/FragmentShader
 Viewer/FrameBufferObject
