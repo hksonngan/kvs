@@ -4,6 +4,7 @@
 #include <SupportGLEW/Renderer/PointRenderer.h>
 #include <SupportGLEW/Renderer/PolygonRenderer.h>
 #include <SupportGLEW/Renderer/RayCastingRenderer.h>
+#include <SupportGLEW/Renderer/Shader.h>
 #include <SupportGLEW/Viewer/BufferObject.h>
 #include <SupportGLEW/Viewer/FragmentShader.h>
 #include <SupportGLEW/Viewer/FrameBufferObject.h>
