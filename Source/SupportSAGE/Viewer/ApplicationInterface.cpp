@@ -80,7 +80,7 @@ ApplicationInterface::~ApplicationInterface( void )
 bool ApplicationInterface::initialize( void )
 {
     // Application name.
-    const char* argv0 = kvs::GlobalCore::argv[0];
+    const char* argv0 = m_argv[0];
     const std::string appname = kvs::File( argv0 ).baseName();
 
     // Configuration filename.

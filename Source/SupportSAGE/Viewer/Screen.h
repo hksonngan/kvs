@@ -38,14 +38,14 @@ class Screen : public kvs::glut::Screen
     class MessageListener;
     class PixelStreamer;
 
-    friend class pixel_streamer;
+    friend class PixelStreamer;
 
 protected:
 
     kvs::sage::ApplicationInterface* m_sail; ///< SAGE application interface (SAIL)
-    kvs::glut::Timer* m_timer;               ///< timer for the SAGE message
-    MessageListener*  m_message_listener;    ///< SAGE message listener
-    PixelStreamer*    m_pixel_streamer;      ///< Pixel streamer
+    kvs::glut::Timer* m_timer; ///< timer for the SAGE message
+    MessageListener* m_message_listener; ///< SAGE message listener
+    PixelStreamer* m_pixel_streamer; ///< Pixel streamer
 
 public:
 

@@ -16,8 +16,6 @@
 
 #include <kvs/OpenGL>
 #include <kvs/sage/SAGE>
-#include <kvs/GlobalCore>
-#include <kvs/File>
 #include <string>
 
 
