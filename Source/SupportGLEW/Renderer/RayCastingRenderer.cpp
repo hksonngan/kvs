@@ -262,6 +262,8 @@ void RayCastingRenderer::create_image(
         m_ray_caster.unbind();
     }
 
+    glActiveTexture( GL_TEXTURE0 );
+
     glPopAttrib();
     glFinish();
 }
