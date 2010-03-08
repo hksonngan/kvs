@@ -25,6 +25,7 @@ const std::string GetCellTypeName( const kvs::UnstructuredVolumeObject::CellType
     case kvs::UnstructuredVolumeObject::Hexahedra: return( "hexahedra" );
     case kvs::UnstructuredVolumeObject::QuadraticTetrahedra: return( "quadratic tetrahedra" );
     case kvs::UnstructuredVolumeObject::QuadraticHexahedra: return( "quadratic hexahedra" );
+    case kvs::UnstructuredVolumeObject::Pyramid: return( "pyramid" );
     default: return( "unknown cell type" );
     }
 }

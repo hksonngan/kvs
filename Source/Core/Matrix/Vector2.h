@@ -105,6 +105,7 @@ public:
 
     Vector2& operator +=( const Vector2& rhs );
     Vector2& operator -=( const Vector2& rhs );
+    Vector2& operator *=( const Vector2& rhs );
     Vector2& operator *=( const T rhs );
     Vector2& operator /=( const T rhs );
 
@@ -175,6 +176,24 @@ public:
     {
         Vector2 result( lhs );
         result -= rhs;
+
+        return( result );
+    }
+
+    /*======================================================================*/
+    /**
+     *  Binary operator '*'.
+     *
+     *  @param lhs [in] Vector2.
+     *  @param rhs [in] Vector2.
+     *
+     *  @return Product of lhs and rhs.
+     */
+    /*======================================================================*/
+    friend const Vector2 operator *( const Vector2& lhs, const Vector2& rhs )
+    {
+        Vector2 result( lhs );
+        result *= rhs;
 
         return( result );
     }
@@ -597,6 +616,24 @@ inline Vector2<T> &Vector2<T>::operator -=( const Vector2& rhs )
 {
     m_elements[0] = static_cast<T>( m_elements[0] - rhs[0] );
     m_elements[1] = static_cast<T>( m_elements[1] - rhs[1] );
+
+    return( *this );
+}
+
+/*==========================================================================*/
+/**
+ *  Combined assignment operator '*='.
+ *
+ *  @param rhs [in] Vector2.
+ *
+ *  @return Oneself.
+ */
+/*==========================================================================*/
+template<typename T>
+inline Vector2<T> &Vector2<T>::operator *=( const Vector2& rhs )
+{
+    m_elements[0] = static_cast<T>( m_elements[0] * rhs[0] );
+    m_elements[1] = static_cast<T>( m_elements[1] * rhs[1] );
 
     return( *this );
 }

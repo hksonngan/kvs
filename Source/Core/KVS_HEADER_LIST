@@ -163,6 +163,10 @@ Visualization/Mapper/Isosurface
 Visualization/Mapper/MapperBase
 Visualization/Mapper/MarchingCubes
 Visualization/Mapper/MarchingCubesTable
+Visualization/Mapper/MarchingHexahedra
+Visualization/Mapper/MarchingHexahedraTable
+Visualization/Mapper/MarchingPyramid
+Visualization/Mapper/MarchingPyramidTable
 Visualization/Mapper/MarchingTetrahedra
 Visualization/Mapper/MarchingTetrahedraTable
 Visualization/Mapper/MetropolisSampling

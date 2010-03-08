@@ -150,6 +150,8 @@ public:
 
 public:
 
+    virtual void updateMinMaxCoords( void ){};
+
     void updateNormalizeParameters( void );
 
     void transform(

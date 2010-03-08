@@ -67,6 +67,7 @@ public:
         Hexahedra           = 8,  ///< Hexahedral cell.
         QuadraticTetrahedra = 10, ///< Quadratic tetrahedral cell.
         QuadraticHexahedra  = 20, ///< Quadratic Hexahedral cell.
+        Pyramid             = 5   ///< Pyramidal cell.
     };
 
 private:

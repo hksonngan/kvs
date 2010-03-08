@@ -124,6 +124,7 @@ public:
 
     Vector4& operator += ( const Vector4& rhs );
     Vector4& operator -= ( const Vector4& rhs );
+    Vector4& operator *= ( const Vector4& rhs );
     Vector4& operator *= ( const T rhs );
     Vector4& operator /= ( const T rhs );
 
@@ -196,6 +197,24 @@ public:
     {
         Vector4 result( lhs );
         result -= rhs;
+
+        return( result );
+    }
+
+    /*======================================================================*/
+    /**
+     *  Binary operator '*'.
+     *
+     *  @param lhs [in] Vector4.
+     *  @param rhs [in] Vector4.
+     *
+     *  @return Product of lhs and rhs.
+     */
+    /*======================================================================*/
+    friend const Vector4 operator *( const Vector4& lhs, const Vector4& rhs )
+    {
+        Vector4 result( lhs );
+        result *= rhs;
 
         return( result );
     }
@@ -755,6 +774,26 @@ inline Vector4<T> &Vector4<T>::operator -=( const Vector4& rhs )
     m_elements[1] = static_cast<T>( m_elements[1] - rhs[1] );
     m_elements[2] = static_cast<T>( m_elements[2] - rhs[2] );
     m_elements[3] = static_cast<T>( m_elements[3] - rhs[3] );
+
+    return( *this );
+}
+
+/*==========================================================================*/
+/**
+ *  Combined assignment operator '*='.
+ *
+ *  @param rhs [in] Vector4.
+ *
+ *  @return Oneself.
+ */
+/*==========================================================================*/
+template<typename T>
+inline Vector4<T> &Vector4<T>::operator *=( const Vector4& rhs )
+{
+    m_elements[0] = static_cast<T>( m_elements[0] * rhs[0] );
+    m_elements[1] = static_cast<T>( m_elements[1] * rhs[1] );
+    m_elements[2] = static_cast<T>( m_elements[2] * rhs[2] );
+    m_elements[3] = static_cast<T>( m_elements[3] * rhs[3] );
 
     return( *this );
 }

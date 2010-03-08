@@ -56,6 +56,7 @@ namespace kvs
 
 PolygonObject::PolygonObject( void )
 {
+    this->setOpacity( 255 );
 }
 
 PolygonObject::PolygonObject(

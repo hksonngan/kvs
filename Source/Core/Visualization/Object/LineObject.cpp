@@ -50,6 +50,7 @@ namespace kvs
 
 LineObject::LineObject( void )
 {
+    this->setSize( 1 );
 }
 
 LineObject::LineObject(

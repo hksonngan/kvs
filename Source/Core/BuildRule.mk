@@ -193,6 +193,10 @@ $(OUTDIR)/./Visualization/Mapper/Isosurface.o \
 $(OUTDIR)/./Visualization/Mapper/MapperBase.o \
 $(OUTDIR)/./Visualization/Mapper/MarchingCubes.o \
 $(OUTDIR)/./Visualization/Mapper/MarchingCubesTable.o \
+$(OUTDIR)/./Visualization/Mapper/MarchingHexahedra.o \
+$(OUTDIR)/./Visualization/Mapper/MarchingHexahedraTable.o \
+$(OUTDIR)/./Visualization/Mapper/MarchingPyramid.o \
+$(OUTDIR)/./Visualization/Mapper/MarchingPyramidTable.o \
 $(OUTDIR)/./Visualization/Mapper/MarchingTetrahedra.o \
 $(OUTDIR)/./Visualization/Mapper/MarchingTetrahedraTable.o \
 $(OUTDIR)/./Visualization/Mapper/MetropolisSampling.o \

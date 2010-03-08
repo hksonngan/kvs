@@ -163,6 +163,10 @@
 #include <Core/Visualization/Mapper/MapperBase.h>
 #include <Core/Visualization/Mapper/MarchingCubes.h>
 #include <Core/Visualization/Mapper/MarchingCubesTable.h>
+#include <Core/Visualization/Mapper/MarchingHexahedra.h>
+#include <Core/Visualization/Mapper/MarchingHexahedraTable.h>
+#include <Core/Visualization/Mapper/MarchingPyramid.h>
+#include <Core/Visualization/Mapper/MarchingPyramidTable.h>
 #include <Core/Visualization/Mapper/MarchingTetrahedra.h>
 #include <Core/Visualization/Mapper/MarchingTetrahedraTable.h>
 #include <Core/Visualization/Mapper/MetropolisSampling.h>

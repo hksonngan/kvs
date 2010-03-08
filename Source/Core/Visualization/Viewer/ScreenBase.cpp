@@ -77,6 +77,11 @@ void ScreenBase::registerObject( kvs::ObjectBase* object, kvs::RendererBase* ren
         renderer = const_cast<kvs::RendererBase*>( pipeline.renderer() );
     }
 
+    if ( !object->hasMinMaxObjectCoords() )
+    {
+        object->updateMinMaxCoords();
+    }
+
     const size_t renderer_id = m_renderer_manager->insert( renderer );
     const size_t object_id = m_object_manager->insert( object );
     m_id_manager->insert( object_id, renderer_id );

@@ -29,6 +29,7 @@
 #include <kvs/Key>
 #include <kvs/glut/Application>
 #include <kvs/glut/Screen>
+#include <kvs/glut/LegendBar>
 #if defined( KVS_SUPPORT_GLEW )
 #include <kvs/glew/ParticleVolumeRenderer>
 #endif
@@ -366,6 +367,14 @@ const bool Main::exec( void )
         std::cout << kvsview::ObjectInformation( pipe.object() ) << std::endl;
         std::cout << std::endl;
     }
+
+    // Legend bar.
+    kvs::glut::LegendBar legend_bar( &screen );
+    const double min_value = kvs::VolumeObjectBase::DownCast( pipe.object() )->minValue();
+    const double max_value = kvs::VolumeObjectBase::DownCast( pipe.object() )->maxValue();
+    legend_bar.setColorMap( arg.transferFunction().colorMap() );
+    legend_bar.setRange( min_value, max_value );
+    legend_bar.show();
 
     // For bounding box.
     if ( arg.hasOption("bounds") )
