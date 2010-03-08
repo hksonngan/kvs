@@ -22,7 +22,7 @@
 #include "QuadraticTetrahedralCell.h"
 #include "HexahedralCell.h"
 #include "QuadraticHexahedralCell.h"
-
+#include "PyramidalCell.h"
 #include <kvs/GlobalCore>
 
 
@@ -632,6 +632,11 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::UnstructuredVo
     case kvs::VolumeObjectBase::QuadraticHexahedra:
     {
         cell = new kvs::QuadraticHexahedralCell<T>( volume );
+        break;
+    }
+    case kvs::VolumeObjectBase::Pyramid:
+    {
+        cell = new kvs::PyramidalCell<T>( volume );
         break;
     }
     default:

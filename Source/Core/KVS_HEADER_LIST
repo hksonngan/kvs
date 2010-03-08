@@ -172,6 +172,7 @@ Visualization/Mapper/MarchingTetrahedraTable
 Visualization/Mapper/MetropolisSampling
 Visualization/Mapper/OpacityMap
 Visualization/Mapper/OrthoSlice
+Visualization/Mapper/PyramidalCell
 Visualization/Mapper/QuadraticHexahedralCell
 Visualization/Mapper/QuadraticTetrahedralCell
 Visualization/Mapper/SlicePlane

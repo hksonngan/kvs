@@ -172,6 +172,7 @@
 #include <Core/Visualization/Mapper/MetropolisSampling.h>
 #include <Core/Visualization/Mapper/OpacityMap.h>
 #include <Core/Visualization/Mapper/OrthoSlice.h>
+#include <Core/Visualization/Mapper/PyramidalCell.h>
 #include <Core/Visualization/Mapper/QuadraticHexahedralCell.h>
 #include <Core/Visualization/Mapper/QuadraticTetrahedralCell.h>
 #include <Core/Visualization/Mapper/SlicePlane.h>

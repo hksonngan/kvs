@@ -202,6 +202,7 @@ $(OUTDIR)/./Visualization/Mapper/MarchingTetrahedraTable.o \
 $(OUTDIR)/./Visualization/Mapper/MetropolisSampling.o \
 $(OUTDIR)/./Visualization/Mapper/OpacityMap.o \
 $(OUTDIR)/./Visualization/Mapper/OrthoSlice.o \
+$(OUTDIR)/./Visualization/Mapper/PyramidalCell.o \
 $(OUTDIR)/./Visualization/Mapper/QuadraticHexahedralCell.o \
 $(OUTDIR)/./Visualization/Mapper/QuadraticTetrahedralCell.o \
 $(OUTDIR)/./Visualization/Mapper/SlicePlane.o \
