@@ -82,11 +82,12 @@ void main( void )
             src.rgb = ShadingLambert( shading, src.rgb, L, N );
 
 #elif defined( ENABLE_PHONG_SHADING )
-            src.rgb = ShadingPhong( shading, src.rgb, L, N );
+            vec3 V = normalize( camera_position - position );
+            src.rgb = ShadingPhong( shading, src.rgb, L, N, V );
 
 #elif defined( ENABLE_BLINN_PHONG_SHADING )
-            vec3 C = normalize( camera_position - position );
-            src.rgb = ShadingBlinnPhong( shading, src.rgb, L, N, C );
+            vec3 V = normalize( camera_position - position );
+            src.rgb = ShadingBlinnPhong( shading, src.rgb, L, N, V );
 
 #else // DISABLE SHADING
             src.rgb = ShadingNone( shading, src.rgb );

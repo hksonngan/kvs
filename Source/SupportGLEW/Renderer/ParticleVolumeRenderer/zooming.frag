@@ -46,11 +46,12 @@ void main( void )
     vec3 shaded_color = ShadingLambert( shading, gl_Color.xyz, L, N );
 
 #elif defined( ENABLE_PHONG_SHADING )
-    vec3 shaded_color = ShadingPhong( shading, gl_Color.xyz, L, N );
+    vec3 V = normalize( -position );
+    vec3 shaded_color = ShadingPhong( shading, gl_Color.xyz, L, N, V );
 
 #elif defined( ENABLE_BLINN_PHONG_SHADING )
-    vec3 C = normalize( -position );
-    vec3 shaded_color = ShadingBlinnPhong( shading, gl_Color.xyz, L, N, C );
+    vec3 V = normalize( -position );
+    vec3 shaded_color = ShadingBlinnPhong( shading, gl_Color.xyz, L, N, V );
 
 #else // DISABLE SHADING
     vec3 shaded_color = ShadingNone( shading, gl_Color.xyz );

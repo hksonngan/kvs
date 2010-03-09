@@ -17,6 +17,16 @@
 #include <kvs/RGBColor>
 
 
+#define kvsShaderAmbientTerm( ka ) \
+    ka
+
+#define kvsShaderDiffuseTerm( kd, N, L ) \
+    kd * kvs::Math::Max( N.dot( L ), 0.0f )
+
+#define kvsShaderSpecularTerm( ks, S, R, V ) \
+    Ks * std::pow( kvs::Math::Max( R.dot( V ), 0.0f ), S )
+
+
 namespace
 {
 
@@ -112,6 +122,15 @@ const Shader::Type Shader::Lambert::type( void ) const
     return( Shader::LambertShading );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns shaded color.
+ *  @param  color [in] source color
+ *  @param  vertex [in] vertex position
+ *  @param  normal [in] normal vector
+ *  @return shaded color
+ */
+/*===========================================================================*/
 const kvs::RGBColor Shader::Lambert::shadedColor(
     const kvs::RGBColor& color,
     const kvs::Vector3f& vertex,
@@ -121,17 +140,9 @@ const kvs::RGBColor Shader::Lambert::shadedColor(
     const kvs::Vector3f L = ( light_position - vertex ).normalize();
     const kvs::Vector3f N = normal.normalize();
 
-    const float dd = kvs::Math::Max( N.dot( L ), 0.0f );
-
-    /* I = Ia + Id
-     *
-     * Ia = Ka (constant term)
-     * Id = Ip *  Kd * cos(A) = Ip * Kd * ( L dot N )
-     *
-     * Ip : the intensity emitted from the light source.
-     */
-    const float Ia = Ka;
-    const float Id = Kd * dd;
+    // Intensity values.
+    const float Ia = kvsShaderAmbientTerm( Ka );
+    const float Id = kvsShaderDiffuseTerm( Kd, N, L );
 
     return( color * ( Ia + Id ) );
 }
@@ -218,34 +229,45 @@ Shader::Phong::Phong( const float ka, const float kd, const float ks, const floa
 /*==========================================================================*/
 void Shader::Phong::set( const kvs::Camera* camera, const kvs::Light* light )
 {
+    camera_position = camera->projectWorldToObject( camera->position() );
     light_position = camera->projectWorldToObject( light->position() );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the shader type.
+ *  @return shader type
+ */
+/*===========================================================================*/
 const Shader::Type Shader::Phong::type( void ) const
 {
     return( Shader::PhongShading );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns shaded color.
+ *  @param  color [in] source color
+ *  @param  vertex [in] vertex position
+ *  @param  normal [in] normal vector
+ *  @return shaded color
+ */
+/*===========================================================================*/
 const kvs::RGBColor Shader::Phong::shadedColor(
     const kvs::RGBColor& color,
     const kvs::Vector3f& vertex,
     const kvs::Vector3f& normal ) const
 {
     // Light vector L, normal vector N and reflection vector R.
+    const kvs::Vector3f V = ( camera_position - vertex ).normalize();
     const kvs::Vector3f L = ( light_position - vertex ).normalize();
     const kvs::Vector3f N = normal.normalize();
     const kvs::Vector3f R = 2.0f * N.dot( L ) * N - L;
 
-    const float dd = kvs::Math::Max( N.dot( L ), 0.0f );
-    const float ds = kvs::Math::Max( N.dot( R ), 0.0f );
-
-    /* I = Ia + Id + Is
-     *
-     * Is = Ip * Ks * cos^s(B) = Ip * Ks * ( R dot N )^s
-     */
-    const float Ia = Ka;
-    const float Id = Kd * dd;
-    const float Is = Ks * std::pow( ds, S );
+    // Intensity values.
+    const float Ia = kvsShaderAmbientTerm( Ka );
+    const float Id = kvsShaderDiffuseTerm( Kd, N, L );
+    const float Is = kvsShaderSpecularTerm( ks, S, R, V );
 
     return( ::Shade( color, Ia, Id, Is ) );
 }
@@ -336,32 +358,41 @@ void Shader::BlinnPhong::set( const kvs::Camera* camera, const kvs::Light* light
     light_position = camera->projectWorldToObject( light->position() );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the shader type.
+ *  @return shader type
+ */
+/*===========================================================================*/
 const Shader::Type Shader::BlinnPhong::type( void ) const
 {
     return( Shader::BlinnPhongShading );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns shaded color.
+ *  @param  color [in] source color
+ *  @param  vertex [in] vertex position
+ *  @param  normal [in] normal vector
+ *  @return shaded color
+ */
+/*===========================================================================*/
 const kvs::RGBColor Shader::BlinnPhong::shadedColor(
     const kvs::RGBColor& color,
     const kvs::Vector3f& vertex,
     const kvs::Vector3f& normal ) const
 {
-    // Camera vector C, light vector L, halfway vector H and normal vector N.
-    const kvs::Vector3f C = ( camera_position - vertex ).normalize();
+    // Camera vector V, light vector L, halfway vector H and normal vector N.
+    const kvs::Vector3f V = ( camera_position - vertex ).normalize();
     const kvs::Vector3f L = ( light_position - vertex ).normalize();
-    const kvs::Vector3f H = ( C + L ).normalize();
+    const kvs::Vector3f H = ( V + L ).normalize();
     const kvs::Vector3f N = normal.normalize();
 
-    const float dd = kvs::Math::Max( N.dot( L ), 0.0f );
-    const float ds = kvs::Math::Max( N.dot( H ), 0.0f );
-
-    /* I = Ia + Id + Is
-     *
-     * Is = Ip * Ks * cos^s(B) = Ip * Ks * ( H dot N )^s
-     */
-    const float Ia = Ka;
-    const float Id = Kd * dd;
-    const float Is = Ks * ::pow( ds, S );
+    // Intensity values.
+    const float Ia = kvsShaderAmbientTerm( Ka );
+    const float Id = kvsShaderDiffuseTerm( Kd, N, L );
+    const float Is = kvsShaderSpecularTerm( ks, S, H, N );
 
     return( ::Shade( color, Ia, Id, Is ) );
 }
