@@ -200,7 +200,8 @@ const bool Main::exec( void )
 
     // Check the input point data.
     m_input_name = arg.value<std::string>();
-    if ( !kvsview::FileChecker::ImportableStructuredVolume( m_input_name ) )
+    if ( !kvsview::FileChecker::ImportableStructuredVolume( m_input_name ) &&
+         !kvsview::FileChecker::ImportableUnstructuredVolume( m_input_name ) )
     {
         kvsMessageError("%s is not volume data.", m_input_name.c_str());
         return( false );

@@ -86,12 +86,30 @@ protected:
     void extract_plane(
         const kvs::UnstructuredVolumeObject* volume );
 
+    template <typename T>
+    void extract_tetrahedra_plane(
+        const kvs::UnstructuredVolumeObject* volume );
+
+    template <typename T>
+    void extract_hexahedra_plane(
+        const kvs::UnstructuredVolumeObject* volume );
+
+    template <typename T>
+    void extract_pyramid_plane(
+        const kvs::UnstructuredVolumeObject* volume );
+
     const size_t calculate_table_index(
         const size_t x,
         const size_t y,
         const size_t z ) const;
 
-    const size_t calculate_table_index(
+    const size_t calculate_tetrahedra_table_index(
+        const size_t* local_index ) const;
+
+    const size_t calculate_hexahedra_table_index(
+        const size_t* local_index ) const;
+
+    const size_t calculate_pyramid_table_index(
         const size_t* local_index ) const;
 
     const float substitute_plane_equation(
