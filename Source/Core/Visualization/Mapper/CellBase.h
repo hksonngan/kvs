@@ -173,54 +173,59 @@ inline void CellBase<T>::bindCell( const kvs::UInt32 index )
 /*===========================================================================*/
 /**
  *  @brief  Sets a point in the global coordinate.
- *  @param  point [in] coordinate value in the global
+ *  @param  global [in] coordinate value in the global coordinate
  */
 /*===========================================================================*/
 template <typename T>
-inline void CellBase<T>::setGlobalPoint( const kvs::Vector3f& point )
+inline void CellBase<T>::setGlobalPoint( const kvs::Vector3f& global )
 {
-    m_global_point = point;
+    m_global_point = global;
 
-    this->setLocalPoint( this->transformGlobalToLocal( point ) );
+    this->setLocalPoint( this->transformGlobalToLocal( global ) );
 }
 
 /*===========================================================================*/
 /**
  *  @brief  Sets a point in the local coordinate.
- *  @param  point [in] coordinate value in the local
+ *  @param  local [in] coordinate value in the local coordinate
  */
 /*===========================================================================*/
 template <typename T>
-inline void CellBase<T>::setLocalPoint( const kvs::Vector3f& point )
+inline void CellBase<T>::setLocalPoint( const kvs::Vector3f& local )
 {
-    m_local_point = point;
+    m_local_point = local;
 
-    this->interpolationFunctions( point );
-    this->differentialFunctions( point );
+    this->interpolationFunctions( local );
+    this->differentialFunctions( local );
 }
 
 /*===========================================================================*/
 /**
  *  @brief  Transforms the global to the local coordinate.
- *  @param  point [in] point in the global coordinate
+ *  @param  global [in] point in the global coodinate
  */
 /*===========================================================================*/
 template <typename T>
-inline const kvs::Vector3f CellBase<T>::transformGlobalToLocal( const kvs::Vector3f& point )
+inline const kvs::Vector3f CellBase<T>::transformGlobalToLocal( const kvs::Vector3f& global )
 {
-    const kvs::Vector3f X( point );
+    const kvs::Vector3f X( global );
 
-    kvs::Vector3f x0( 0.5, 0.5, 0.5 ); // initial local coord.
-    for( size_t i = 0; i < 100; i++ )
+    // Calculate the coordinate of 'global' in the local coordinate
+    // by using Newton-Raphson method.
+    const float TinyValue = 1.e-6;
+    const size_t MaxLoop = 100;
+    kvs::Vector3f x0( 0.5f, 0.5f, 0.5f ); // Initial point in local coordinate.
+    for ( size_t i = 0; i < MaxLoop; i++ )
     {
         this->setLocalPoint( x0 );
-        const kvs::Vector3f N( this->transformLocalToGlobal( x0 ) );
-        const kvs::Vector3f F( N - X );
+        const kvs::Vector3f X0( this->transformLocalToGlobal( x0 ) );
+        const kvs::Vector3f dX( X - X0 );
 
         const kvs::Matrix33f J( this->JacobiMatrix() );
-        const kvs::Vector3f x1( x0 - J.inverse() * F );
+        const kvs::Vector3f dx = J.inverse() * dX;
+        if ( dx.length() < TinyValue ) break; // Converged.
 
-        x0 = x1;
+        x0 += dx;
     }
 
     return( x0 );
@@ -233,7 +238,7 @@ inline const kvs::Vector3f CellBase<T>::transformGlobalToLocal( const kvs::Vecto
  */
 /*===========================================================================*/
 template <typename T>
-inline const kvs::Vector3f CellBase<T>::transformLocalToGlobal( const kvs::Vector3f& point )
+inline const kvs::Vector3f CellBase<T>::transformLocalToGlobal( const kvs::Vector3f& local )
 {
     const float* N = m_interpolation_functions;
     const kvs::Vector3f* V = m_vertices;

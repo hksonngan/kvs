@@ -473,7 +473,9 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::StructuredVolu
                 degree_trial = kvs::Math::Clamp<size_t>( degree_trial, 0, max_range );
                 float density_trial = density_map[ degree_trial ];
 
-                while( kvs::Math::IsZero( density ) )
+//                while( kvs::Math::IsZero( density ) )
+                const size_t max_loop = nparticles_in_cell * 10;
+                for ( size_t i = 0; i < max_loop; i++ )
                 {
                     point= Generator::RandomSamplingInCube( v );
                     interpolator.attachPoint( point );
@@ -481,9 +483,11 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::StructuredVolu
                     degree = static_cast< size_t >( ( scalar - min_value ) * normalize_factor );
                     degree = kvs::Math::Clamp<size_t>( degree, 0, max_range );
                     density = density_map[ degree ];
+                    if ( !kvs::Math::IsZero( density ) ) break;
                 }
 
                 // Generate N particles.
+                size_t nduplications = 0; // number of duplications
                 size_t counter = 0;
                 while( counter < nparticles_in_cell )
                 {
@@ -581,6 +585,8 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::StructuredVolu
 
                             counter++;
 #else
+                            nduplications++;
+                            if ( nduplications > max_loop ) break;
                             continue;
 #endif
                         }
@@ -689,16 +695,20 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::UnstructuredVo
         float         density_trial;
         kvs::Vector3f g_trial;
 
-        while( kvs::Math::IsZero( density ) )
+//        while( kvs::Math::IsZero( density ) )
+        const size_t max_loop = nparticles_in_cell * 10;
+        for ( size_t i = 0; i < max_loop; i++ )
         {
             point = cell->randomSampling();
             degree = static_cast< size_t >( ( cell->scalar() - min_value ) * normalize_factor );
             degree = kvs::Math::Clamp<size_t>( degree, 0, max_range );
             density = density_map[ degree ];
             g = cell->gradient();
+            if ( kvs::Math::IsZero( density ) ) break;
         }
 
         //Generate N particles
+        size_t nduplications = 0; // number of duplications
         size_t counter = 0;
         while( counter < nparticles_in_cell )
         {
@@ -794,6 +804,8 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::UnstructuredVo
 
                     counter++;
 #else
+                    nduplications++;
+                    if ( nduplications > max_loop ) break;
                     continue;
 #endif
                 }
