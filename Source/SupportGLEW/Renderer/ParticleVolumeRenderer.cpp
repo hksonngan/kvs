@@ -791,7 +791,7 @@ void ParticleVolumeRenderer::create_image(
     }
 
     // Enable or disable OpenGL capabilities.
-    if ( BaseClass::isEnabledShading() ) glEnable(  GL_LIGHTING );
+    if ( BaseClass::isEnabledShading() ) glEnable( GL_LIGHTING );
     else glDisable( GL_LIGHTING );
     glEnable( GL_DEPTH_TEST );
     glEnable( GL_VERTEX_PROGRAM_POINT_SIZE ); // enable zooming.
@@ -916,12 +916,15 @@ void ParticleVolumeRenderer::initialize_opengl( void )
 
         if ( m_enable_random_texture ) vert.define("ENABLE_RANDOM_TEXTURE");
 
-        switch ( BaseClass::m_shader->type() )
+        if ( BaseClass::isEnabledShading() )
         {
-        case kvs::Shader::LambertShading: frag.define("ENABLE_LAMBERT_SHADING"); break;
-        case kvs::Shader::PhongShading: frag.define("ENABLE_PHONG_SHADING"); break;
-        case kvs::Shader::BlinnPhongShading: frag.define("ENABLE_BLINN_PHONG_SHADING"); break;
-        default: /* NO SHADING */ break;
+            switch ( BaseClass::m_shader->type() )
+            {
+            case kvs::Shader::LambertShading: frag.define("ENABLE_LAMBERT_SHADING"); break;
+            case kvs::Shader::PhongShading: frag.define("ENABLE_PHONG_SHADING"); break;
+            case kvs::Shader::BlinnPhongShading: frag.define("ENABLE_BLINN_PHONG_SHADING"); break;
+            default: /* NO SHADING */ break;
+            }
         }
 
         this->create_shaders( m_zoom_shader, vert, frag );
@@ -1371,22 +1374,25 @@ void ParticleVolumeRenderer::calculate_zooming_factor( const kvs::PointObject* p
 /*==========================================================================*/
 void ParticleVolumeRenderer::setup_zoom_shader( const float modelview_matrix[16] )
 {
-    const float* mat = modelview_matrix;
-    const float width = static_cast<float>(m_render_width);
-    const float scale = sqrtf( mat[0] * mat[0] + mat[1] * mat[1] + mat[2]*mat[2] );
+    float projection_matrix[16]; glGetFloatv( GL_PROJECTION_MATRIX, projection_matrix );
+    const float tan_inv = projection_matrix[5]; // (1,1)
 
-    const GLfloat densityFactor = m_zooming_factor * width * scale;
-    const GLint   randomTexture = 0;
-    const GLfloat randomTextureSizeInv = 1.0f / m_random_texture_size;
-    const GLint   circleThreshold = static_cast<GLint>( m_circle_threshold );
-    const GLfloat screenScale_x = m_render_width * 0.5f;
-    const GLfloat screenScale_y = m_render_height * 0.5f;
+    const float* mat = modelview_matrix;
+    const float width = static_cast<float>( m_render_width );
+    const float scale = sqrtf( mat[0] * mat[0] + mat[1] * mat[1] + mat[2] * mat[2] );
+
+    const GLfloat densityFactor = m_zooming_factor * 0.5f * tan_inv * width * scale;
+    const GLint   random_texture = 0;
+    const GLfloat random_texture_size_inv = 1.0f / m_random_texture_size;
+    const GLint   circle_threshold = static_cast<GLint>( m_circle_threshold );
+    const GLfloat screen_scale_x = m_render_width * 0.5f;
+    const GLfloat screen_scale_y = m_render_height * 0.5f;
 
     m_zoom_shader.setUniformValuef( "densityFactor", densityFactor );
-    m_zoom_shader.setUniformValuei( "randomTexture", randomTexture );
-    m_zoom_shader.setUniformValuef( "randomTextureSizeInv", randomTextureSizeInv );
-    m_zoom_shader.setUniformValuei( "circleThreshold", circleThreshold );
-    m_zoom_shader.setUniformValuef( "screenScale", screenScale_x, screenScale_y );
+    m_zoom_shader.setUniformValuei( "random_texture", random_texture );
+    m_zoom_shader.setUniformValuef( "random_texture_size_inv", random_texture_size_inv );
+    m_zoom_shader.setUniformValuei( "circle_threshold", circle_threshold );
+    m_zoom_shader.setUniformValuef( "screen_scale", screen_scale_x, screen_scale_y );
 }
 
 /*==========================================================================*/

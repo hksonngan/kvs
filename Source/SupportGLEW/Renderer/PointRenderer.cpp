@@ -73,12 +73,15 @@ void PointRenderer::initialize_shaders( void )
     kvs::glew::ShaderSource vert( vert_code );
     kvs::glew::ShaderSource frag( frag_code );
 
-    switch ( m_shader->type() )
+    if ( BaseClass::isShading() )
     {
-    case kvs::Shader::LambertShading: frag.define("ENABLE_LAMBERT_SHADING"); break;
-    case kvs::Shader::PhongShading: frag.define("ENABLE_PHONG_SHADING"); break;
-    case kvs::Shader::BlinnPhongShading: frag.define("ENABLE_BLINN_PHONG_SHADING"); break;
-    default: /* NO SHADING */ break;
+        switch ( m_shader->type() )
+        {
+        case kvs::Shader::LambertShading: frag.define("ENABLE_LAMBERT_SHADING"); break;
+        case kvs::Shader::PhongShading: frag.define("ENABLE_PHONG_SHADING"); break;
+        case kvs::Shader::BlinnPhongShading: frag.define("ENABLE_BLINN_PHONG_SHADING"); break;
+        default: /* NO SHADING */ break;
+        }
     }
 
     this->create_shaders( m_phong_shader, vert, frag );

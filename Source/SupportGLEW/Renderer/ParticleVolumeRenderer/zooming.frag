@@ -14,10 +14,9 @@
 /*****************************************************************************/
 #include "../Shader/shading.h"
 
-varying vec3 position;
-varying vec3 normal;
-
-varying vec2 centerCoord;
+varying vec3  position;
+varying vec3  normal;
+varying vec2  center;
 varying float radius;
 
 uniform Shading shading;
@@ -32,7 +31,7 @@ void main( void )
     // Discard a pixel outside circle.
     if ( radius > 0.0 )
     {
-        if( distance( gl_FragCoord.xy, centerCoord ) > radius ) discard;
+        if( distance( gl_FragCoord.xy, center ) > radius ) discard;
     }
 
     // Light position.
