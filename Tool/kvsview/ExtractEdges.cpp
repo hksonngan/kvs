@@ -21,6 +21,8 @@
 #include <kvs/ExtractEdges>
 #include <kvs/glut/Application>
 #include <kvs/glut/Screen>
+#include <kvs/glut/LegendBar>
+#include <kvs/glut/OrientationAxis>
 
 
 namespace kvsview
@@ -28,6 +30,43 @@ namespace kvsview
 
 namespace ExtractEdges
 {
+
+class LegendBar : public kvs::glut::LegendBar
+{
+public:
+
+    LegendBar( kvs::ScreenBase* screen ):
+        kvs::glut::LegendBar( screen )
+    {
+        setWidth( 200 );
+        setHeight( 50 );
+    }
+
+    void screenResized( void )
+    {
+        setX( screen()->width() - width() );
+        setY( screen()->height() - height() );
+    }
+};
+
+class OrientationAxis : public kvs::glut::OrientationAxis
+{
+public:
+
+    OrientationAxis( kvs::ScreenBase* screen ):
+        kvs::glut::OrientationAxis( screen )
+    {
+        setMargin( 10 );
+        setSize( 90 );
+        setBoxType( kvs::glut::OrientationAxis::SolidBox );
+        enableAntiAliasing();
+    }
+
+    void screenResized( void )
+    {
+        setY( screen()->height() - height() );
+    }
+};
 
 /*===========================================================================*/
 /**
@@ -158,6 +197,18 @@ const bool Main::exec( void )
         std::cout << "VISUALIZATION PIPELINE" << std::endl;
         std::cout << pipe << std::endl;
     }
+
+    // Legend bar.
+    ExtractEdges::LegendBar legend_bar( &screen );
+    const double min_value = kvs::VolumeObjectBase::DownCast( pipe.object() )->minValue();
+    const double max_value = kvs::VolumeObjectBase::DownCast( pipe.object() )->maxValue();
+    legend_bar.setColorMap( arg.transferFunction().colorMap() );
+    legend_bar.setRange( min_value, max_value );
+    legend_bar.show();
+
+    // Orientation axis.
+    ExtractEdges::OrientationAxis orientation_axis( &screen );
+    orientation_axis.show();
 
     // Apply the specified parameters to the global and the visualization pipeline.
     arg.applyTo( screen, pipe );

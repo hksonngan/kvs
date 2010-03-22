@@ -32,6 +32,7 @@
 #include <kvs/glut/Screen>
 #include <kvs/glut/LegendBar>
 #include <kvs/glut/OrientationAxis>
+#include <kvs/glut/Label>
 #if defined( KVS_SUPPORT_GLEW )
 #include <kvs/glew/RayCastingRenderer>
 #endif
@@ -162,6 +163,27 @@ class KeyPressEvent : public kvs::KeyPressEventListener
         case kvs::Key::c: screen()->controlTarget() = kvs::ScreenBase::TargetCamera; break;
         default: break;
         }
+    }
+};
+
+class Label : public kvs::glut::Label
+{
+public:
+
+    Label( kvs::ScreenBase* screen ):
+        kvs::glut::Label( screen )
+    {
+        setMargin( 10 );
+    }
+
+    void screenUpdated( void )
+    {
+        const int id = ::HasBounds ? 2 : 1;
+        const kvs::RendererBase* renderer = screen()->rendererManager()->renderer( id );
+
+        std::stringstream fps;
+        fps << std::setprecision(4) << renderer->timer().fps();
+        setText( std::string( "fps: " + fps.str() ).c_str() );
     }
 };
 
@@ -367,6 +389,10 @@ const bool Main::exec( void )
         std::cout << kvsview::ObjectInformation( pipe.object() ) << std::endl;
         std::cout << std::endl;
     }
+
+    // Label (fps).
+    RayCastingRenderer::Label label( &screen );
+    label.show();
 
     // Legend bar.
     RayCastingRenderer::LegendBar legend_bar( &screen );
