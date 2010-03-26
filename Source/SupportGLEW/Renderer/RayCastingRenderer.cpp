@@ -40,6 +40,26 @@ void CheckOpenGLError( const char* message )
     }
 }
 
+template <typename T>
+kvs::AnyValueArray NormalizeValues( const kvs::StructuredVolumeObject* volume )
+{
+    kvs::AnyValueArray data;
+
+    const kvs::Real32 min = static_cast<kvs::Real32>( volume->minValue() );
+    const kvs::Real32 max = static_cast<kvs::Real32>( volume->maxValue() );
+
+    const kvs::Real32 scale = 1.0f / ( max - min );
+    const size_t nnodes = volume->nnodes();
+    const T* src = static_cast<const T*>( volume->values().pointer() );
+    kvs::Real32* dst = static_cast<kvs::Real32*>( data.allocate<kvs::Real32>( nnodes ) );
+    for ( size_t i = 0; i < nnodes; i++ )
+    {
+        *(dst++) = ( *(src++) - min ) * scale;
+    }
+
+    return( data );
+}
+
 template <typename DstType, typename SrcType>
 kvs::AnyValueArray SignedToUnsigned( const kvs::StructuredVolumeObject* volume )
 {
@@ -276,7 +296,7 @@ void RayCastingRenderer::create_image(
 void RayCastingRenderer::initialize_shaders( const kvs::StructuredVolumeObject* volume )
 {
     const kvs::Vector3ui ngrids = volume->resolution();
-    const kvs::Real32 max_ngrids = kvs::Math::Max( ngrids.x(), ngrids.y(), ngrids.z() );
+    const kvs::Real32 max_ngrids = kvs::Math::Max( ngrids.x()-1, ngrids.y()-1, ngrids.z()-1 );
     const kvs::Real32 n = 1.0f / max_ngrids;
     const kvs::Vector3f offset( 1.0f * n, 1.0f * n, 1.0f * n );
     const kvs::Vector3f ratio( ngrids.x() * n, ngrids.y() * n, ngrids.z() * n );
@@ -333,8 +353,8 @@ void RayCastingRenderer::initialize_shaders( const kvs::StructuredVolumeObject* 
         }
         else if ( type == typeid( kvs::Int8 ) )
         {
-            min_range = -128.0f;
-            max_range = 127.0f;
+            min_range = static_cast<kvs::Real32>( kvs::Value<kvs::UInt8>::Min() );
+            max_range = static_cast<kvs::Real32>( kvs::Value<kvs::UInt8>::Max() );
             min_value = -128.0f;
             max_value = 127.0f;
         }
@@ -352,26 +372,14 @@ void RayCastingRenderer::initialize_shaders( const kvs::StructuredVolumeObject* 
             min_value = static_cast<kvs::Real32>( volume->minValue() );
             max_value = static_cast<kvs::Real32>( volume->maxValue() );
         }
-        else if ( type == typeid( kvs::UInt32 ) )
+        else if ( type == typeid( kvs::UInt32 ) ||
+                  type == typeid( kvs::Int32  ) ||
+                  type == typeid( kvs::Real32 ) )
         {
-            min_range = static_cast<kvs::Real32>( kvs::Value<kvs::UInt32>::Min() );
-            max_range = static_cast<kvs::Real32>( kvs::Value<kvs::UInt32>::Max() );
-            min_value = static_cast<kvs::Real32>( volume->minValue() );
-            max_value = static_cast<kvs::Real32>( volume->maxValue() );
-        }
-        else if ( type == typeid( kvs::Int32 ) )
-        {
-            min_range = static_cast<kvs::Real32>( kvs::Value<kvs::Int32>::Min() );
-            max_range = static_cast<kvs::Real32>( kvs::Value<kvs::Int32>::Max() );
-            min_value = static_cast<kvs::Real32>( volume->minValue() );
-            max_value = static_cast<kvs::Real32>( volume->maxValue() );
-        }
-        else if ( type == typeid( kvs::Real32 ) )
-        {
-            min_range = static_cast<kvs::Real32>( kvs::Value<kvs::Real32>::Min() );
-            max_range = static_cast<kvs::Real32>( kvs::Value<kvs::Real32>::Max() );
-            min_value = static_cast<kvs::Real32>( volume->minValue() );
-            max_value = static_cast<kvs::Real32>( volume->maxValue() );
+            min_range = 0.0f;
+            max_range = 1.0f;
+            min_value = 0.0f;
+            max_value = 1.0f;
         }
         else
         {
@@ -481,11 +489,12 @@ void RayCastingRenderer::create_entry_points( void )
     const size_t height = BaseClass::m_height;
 
     m_entry_points.release();
-    m_entry_points.setWrapS( GL_CLAMP );
-    m_entry_points.setWrapT( GL_CLAMP );
+    m_entry_points.setWrapS( GL_CLAMP_TO_EDGE );
+    m_entry_points.setWrapT( GL_CLAMP_TO_EDGE );
     m_entry_points.setMagFilter( GL_LINEAR );
     m_entry_points.setMinFilter( GL_LINEAR );
-    m_entry_points.setPixelFormat( GL_RGB16F_ARB, GL_RGB, GL_FLOAT  );
+//    m_entry_points.setPixelFormat( GL_RGB16F_ARB, GL_RGB, GL_FLOAT  );
+    m_entry_points.setPixelFormat( GL_RGB, GL_RGB, GL_FLOAT  );
     m_entry_points.create( width, height );
 
     ::CheckOpenGLError( "Entry point texture allocation failed." );
@@ -502,11 +511,12 @@ void RayCastingRenderer::create_exit_points( void )
     const size_t height = BaseClass::m_height;
 
     m_exit_points.release();
-    m_exit_points.setWrapS( GL_CLAMP );
-    m_exit_points.setWrapT( GL_CLAMP );
+    m_exit_points.setWrapS( GL_CLAMP_TO_EDGE );
+    m_exit_points.setWrapT( GL_CLAMP_TO_EDGE );
     m_exit_points.setMagFilter( GL_LINEAR );
     m_exit_points.setMinFilter( GL_LINEAR );
-    m_exit_points.setPixelFormat( GL_RGB16F_ARB, GL_RGB, GL_FLOAT  );
+//    m_exit_points.setPixelFormat( GL_RGB16F_ARB, GL_RGB, GL_FLOAT  );
+    m_exit_points.setPixelFormat( GL_RGB, GL_RGB, GL_FLOAT  );
     m_exit_points.create( width, height );
 
     ::CheckOpenGLError( "Exit point texture allocation failed." );
@@ -534,7 +544,8 @@ void RayCastingRenderer::create_bounding_cube( const kvs::StructuredVolumeObject
      *
      */
     const kvs::Vector3ui min( 0, 0, 0 );
-    const kvs::Vector3ui max( volume->resolution() - kvs::Vector3ui( 1, 1, 1 ) );
+//    const kvs::Vector3ui max( volume->resolution() - kvs::Vector3ui( 1, 1, 1 ) );
+    const kvs::Vector3ui max( volume->resolution() );
     const size_t nelements = 72; // = 4 vertices x 3 dimensions x 6 faces
 
     const float coords[ nelements ] = {
@@ -599,10 +610,10 @@ void RayCastingRenderer::create_transfer_function( const kvs::StructuredVolumeOb
     }
 
     m_transfer_function_texture.release();
-    m_transfer_function_texture.setWrapS( GL_CLAMP );
+    m_transfer_function_texture.setWrapS( GL_CLAMP_TO_EDGE );
     m_transfer_function_texture.setMagFilter( GL_LINEAR );
     m_transfer_function_texture.setMinFilter( GL_LINEAR );
-    m_transfer_function_texture.setPixelFormat( GL_RGBA8, GL_RGBA, GL_FLOAT  );
+    m_transfer_function_texture.setPixelFormat( GL_RGBA, GL_RGBA, GL_FLOAT  );
     m_transfer_function_texture.create( width );
     m_transfer_function_texture.download( width, colors.pointer() );
 
@@ -622,9 +633,9 @@ void RayCastingRenderer::create_volume_data( const kvs::StructuredVolumeObject* 
     const size_t depth = volume->resolution().z();
 
     m_volume_data.release();
-    m_volume_data.setWrapS( GL_CLAMP );
-    m_volume_data.setWrapT( GL_CLAMP );
-    m_volume_data.setWrapR( GL_CLAMP );
+    m_volume_data.setWrapS( GL_CLAMP_TO_EDGE );
+    m_volume_data.setWrapT( GL_CLAMP_TO_EDGE );
+    m_volume_data.setWrapR( GL_CLAMP_TO_EDGE );
     m_volume_data.setMagFilter( GL_LINEAR );
     m_volume_data.setMinFilter( GL_LINEAR );
 
@@ -644,12 +655,6 @@ void RayCastingRenderer::create_volume_data( const kvs::StructuredVolumeObject* 
         data_type = GL_UNSIGNED_SHORT;
         data_value = volume->values();
     }
-    else if ( type == typeid( kvs::UInt32 ) )
-    {
-        data_format = GL_ALPHA;
-        data_type = GL_UNSIGNED_INT;
-        data_value = volume->values();
-    }
     else if ( type == typeid( kvs::Int8 ) )
     {
         data_format = GL_ALPHA8;
@@ -662,17 +667,23 @@ void RayCastingRenderer::create_volume_data( const kvs::StructuredVolumeObject* 
         data_type = GL_UNSIGNED_SHORT;
         data_value = ::SignedToUnsigned<kvs::UInt16,kvs::Int16>( volume );
     }
+    else if ( type == typeid( kvs::UInt32 ) )
+    {
+        data_format = GL_ALPHA;
+        data_type = GL_FLOAT;
+        data_value = ::NormalizeValues<kvs::UInt32>( volume );
+    }
     else if ( type == typeid( kvs::Int32 ) )
     {
         data_format = GL_ALPHA;
-        data_type = GL_UNSIGNED_INT;
-        data_value = ::SignedToUnsigned<kvs::UInt32,kvs::Int32>( volume );
+        data_type = GL_FLOAT;
+        data_value = ::NormalizeValues<kvs::Int32>( volume );
     }
     else if ( type == typeid( kvs::Real32 ) )
     {
         data_format = GL_ALPHA;
         data_type = GL_FLOAT;
-        data_value = volume->values();
+        data_value = ::NormalizeValues<kvs::Real32>( volume );
     }
     else
     {
