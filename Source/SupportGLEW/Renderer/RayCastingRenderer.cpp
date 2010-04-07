@@ -489,8 +489,8 @@ void RayCastingRenderer::create_entry_points( void )
     const size_t height = BaseClass::m_height;
 
     m_entry_points.release();
-    m_entry_points.setWrapS( GL_CLAMP_TO_EDGE );
-    m_entry_points.setWrapT( GL_CLAMP_TO_EDGE );
+    m_entry_points.setWrapS( GL_CLAMP );
+    m_entry_points.setWrapT( GL_CLAMP );
     m_entry_points.setMagFilter( GL_LINEAR );
     m_entry_points.setMinFilter( GL_LINEAR );
 //    m_entry_points.setPixelFormat( GL_RGB16F_ARB, GL_RGB, GL_FLOAT  );
@@ -511,8 +511,8 @@ void RayCastingRenderer::create_exit_points( void )
     const size_t height = BaseClass::m_height;
 
     m_exit_points.release();
-    m_exit_points.setWrapS( GL_CLAMP_TO_EDGE );
-    m_exit_points.setWrapT( GL_CLAMP_TO_EDGE );
+    m_exit_points.setWrapS( GL_CLAMP );
+    m_exit_points.setWrapT( GL_CLAMP );
     m_exit_points.setMagFilter( GL_LINEAR );
     m_exit_points.setMinFilter( GL_LINEAR );
 //    m_exit_points.setPixelFormat( GL_RGB16F_ARB, GL_RGB, GL_FLOAT  );
@@ -544,8 +544,8 @@ void RayCastingRenderer::create_bounding_cube( const kvs::StructuredVolumeObject
      *
      */
     const kvs::Vector3ui min( 0, 0, 0 );
-//    const kvs::Vector3ui max( volume->resolution() - kvs::Vector3ui( 1, 1, 1 ) );
-    const kvs::Vector3ui max( volume->resolution() );
+    const kvs::Vector3ui max( volume->resolution() - kvs::Vector3ui( 1, 1, 1 ) );
+//    const kvs::Vector3ui max( volume->resolution() );
     const size_t nelements = 72; // = 4 vertices x 3 dimensions x 6 faces
 
     const float coords[ nelements ] = {
@@ -610,7 +610,8 @@ void RayCastingRenderer::create_transfer_function( const kvs::StructuredVolumeOb
     }
 
     m_transfer_function_texture.release();
-    m_transfer_function_texture.setWrapS( GL_CLAMP_TO_EDGE );
+//    m_transfer_function_texture.setWrapS( GL_CLAMP_TO_EDGE );
+    m_transfer_function_texture.setWrapS( GL_CLAMP );
     m_transfer_function_texture.setMagFilter( GL_LINEAR );
     m_transfer_function_texture.setMinFilter( GL_LINEAR );
     m_transfer_function_texture.setPixelFormat( GL_RGBA, GL_RGBA, GL_FLOAT  );
@@ -633,9 +634,12 @@ void RayCastingRenderer::create_volume_data( const kvs::StructuredVolumeObject* 
     const size_t depth = volume->resolution().z();
 
     m_volume_data.release();
-    m_volume_data.setWrapS( GL_CLAMP_TO_EDGE );
-    m_volume_data.setWrapT( GL_CLAMP_TO_EDGE );
-    m_volume_data.setWrapR( GL_CLAMP_TO_EDGE );
+//     m_volume_data.setWrapS( GL_CLAMP_TO_EDGE );
+//     m_volume_data.setWrapT( GL_CLAMP_TO_EDGE );
+//     m_volume_data.setWrapR( GL_CLAMP_TO_EDGE );
+    m_volume_data.setWrapS( GL_CLAMP );
+    m_volume_data.setWrapT( GL_CLAMP );
+    m_volume_data.setWrapR( GL_CLAMP );
     m_volume_data.setMagFilter( GL_LINEAR );
     m_volume_data.setMinFilter( GL_LINEAR );
 

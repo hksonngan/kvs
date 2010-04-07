@@ -14,6 +14,7 @@
 #include "Date.h"
 #include <ctime>
 #include <cstdlib>
+#include <cstdio>
 #include <kvs/Tokenizer>
 
 namespace

@@ -16,6 +16,7 @@
 #include <string>
 #include <ctime>
 #include <cstdlib>
+#include <cstdio>
 #include <kvs/Tokenizer>
 
 

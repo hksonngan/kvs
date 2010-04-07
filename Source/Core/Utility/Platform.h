@@ -45,7 +45,7 @@
 #define KVS_PLATFORM_NAME "FreeBSD"
 
 // Solaris
-#elif defined ( __sun__ ) || defined ( __sun ) || defined ( sun ) \
+#elif defined ( __sun__ ) || defined ( __sun ) || defined ( sun ) || \
       defined ( __solaris__ )
 #define KVS_PLATFORM_SOLARIS
 #define KVS_PLATFORM_NAME "Solaris"
