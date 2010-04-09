@@ -16,27 +16,6 @@
 #include <kvs/Message>
 #include <kvs/TimeEvent>
 
-// Static parameters.
-namespace { const size_t MaxNumberOfSAILs = 32; }
-namespace { kvs::sage::ApplicationInterface* context[::MaxNumberOfSAILs]; }
-
-namespace
-{
-
-/*===========================================================================*/
-/**
- *  @brief  Function that is called when the application is terminated.
- */
-/*===========================================================================*/
-void ExitFunction( void )
-{
-    for ( size_t i = 0; i < ::MaxNumberOfSAILs; i++)
-    {
-        if ( ::context[i] ) ::context[i]->shutdown();
-    }
-}
-
-} // end of namespace
 
 namespace kvs
 {
@@ -44,6 +23,12 @@ namespace kvs
 namespace sage
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new Screen class for SAGE.
+ *  @param  application [in] pointer to the SAGE application
+ */
+/*===========================================================================*/
 Screen::Screen( kvs::sage::Application* application )
 {
     int argc = application->argc();
@@ -55,16 +40,6 @@ Screen::Screen( kvs::sage::Application* application )
         exit( EXIT_FAILURE );
     }
 
-    // Set up paint event.
-    m_pixel_streamer = new Screen::PixelStreamer();
-    if ( !m_pixel_streamer )
-    {
-        kvsMessageError("Cannot allocate memory for the pixel stremaer.");
-        exit( EXIT_FAILURE );
-    }
-
-    BaseClass::setPaintEvent( m_pixel_streamer );
-
     // Set up timer event.
     m_message_listener = new Screen::MessageListener( m_sail );
     if ( !m_message_listener )
@@ -73,6 +48,7 @@ Screen::Screen( kvs::sage::Application* application )
         exit( EXIT_FAILURE );
     }
 
+    // Create timer.
     m_timer = new kvs::glut::Timer( m_message_listener );
     if ( !m_timer )
     {
@@ -80,45 +56,70 @@ Screen::Screen( kvs::sage::Application* application )
         exit( EXIT_FAILURE );
     }
 
+    // Start timer.
     m_timer->start( 1000 );
-
-    atexit( ::ExitFunction );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Destroys the Screen class.
+ */
+/*===========================================================================*/
 Screen::~Screen( void )
 {
     if ( m_sail ) delete m_sail;
-    if ( m_pixel_streamer ) delete m_pixel_streamer;
     if ( m_message_listener ) delete m_message_listener;
     if ( m_timer ) delete m_timer;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the pointer to the SAIL.
+ *  @return poniter to the SAIL
+ */
+/*===========================================================================*/
 kvs::sage::ApplicationInterface* Screen::sail( void )
 {
     return( m_sail );
 }
 
-void Screen::paint_event( void )
+/*===========================================================================*/
+/**
+ *  @brief  Paint event.
+ */
+/*===========================================================================*/
+void Screen::paintEvent( void )
 {
-    // Initialize the SAGE application interface (SAIL).
-    if ( !m_sail->isInitialized() )
+    if ( BaseClass::m_paint_event_func )
     {
-        this->setup_sail();
+        // Initialize the SAGE application interface (SAIL).
+        if ( !m_sail->isInitialized() ) this->setup_sail();
+
+        // Execute the paint function (same as kvs::glut::Screen::default_paint_event).
+        glMatrixMode( GL_MODELVIEW );
+        glLoadIdentity();
+        glPushMatrix();
+        BaseClass::paintFunction();
+        BaseClass::eventHandler()->notify();
+        glPopMatrix();
+        glFlush();
+
+        // Send the frame buffer to the tiled display.
+        this->send_buffer();
+        glutSwapBuffers();
     }
-
-    // Execute the paint function.
-    glMatrixMode( GL_MODELVIEW );
-    glLoadIdentity();
-    glPushMatrix();
-    BaseClass::paintFunction();
-    BaseClass::eventHandler()->notify();
-    glPopMatrix();
-
-    // Send the frame buffer to the tiled display.
-    this->send_buffer();
-    glutSwapBuffers();
+    else
+    {
+        // Execute only registered event since the setPaintEvent is called.
+        BaseClass::eventHandler()->notify();
+    }
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Setup SAIL.
+ */
+/*===========================================================================*/
 void Screen::setup_sail( void )
 {
     m_sail->setApplicationWidth( BaseClass::width() );
@@ -126,6 +127,11 @@ void Screen::setup_sail( void )
     m_sail->initialize();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sends the frame buffer to the tiled-display.
+ */
+/*===========================================================================*/
 void Screen::send_buffer( void )
 {
     GLubyte* pixels = static_cast<GLubyte*>( m_sail->getBuffer() );
@@ -134,11 +140,23 @@ void Screen::send_buffer( void )
     m_sail->swapBuffer();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new Screen::MessageListener class.
+ *  @param  sail [in] pointer to the SAIL
+ */
+/*===========================================================================*/
 Screen::MessageListener::MessageListener( kvs::sage::ApplicationInterface* sail ):
     m_sail( sail )
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Updates the message listener.
+ *  @param  event [in] pointer to the timer event
+ */
+/*===========================================================================*/
 void Screen::MessageListener::update( kvs::TimeEvent* event )
 {
     if ( m_sail->isInitialized() )
@@ -154,11 +172,6 @@ void Screen::MessageListener::update( kvs::TimeEvent* event )
             }
         }
     }
-}
-
-void Screen::PixelStreamer::update( void )
-{
-    static_cast<kvs::sage::Screen*>( screen() )->paint_event();
 }
 
 } // end of namespace sage

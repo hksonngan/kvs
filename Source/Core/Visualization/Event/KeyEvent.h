@@ -16,6 +16,7 @@
 
 #include <kvs/ClassName>
 #include <kvs/EventBase>
+#include <kvs/Key>
 
 
 namespace kvs

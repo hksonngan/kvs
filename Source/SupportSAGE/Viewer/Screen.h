@@ -36,16 +36,12 @@ class Screen : public kvs::glut::Screen
     typedef kvs::glut::Screen BaseClass;
 
     class MessageListener;
-    class PixelStreamer;
-
-    friend class PixelStreamer;
 
 protected:
 
     kvs::sage::ApplicationInterface* m_sail; ///< SAGE application interface (SAIL)
     kvs::glut::Timer* m_timer; ///< timer for the SAGE message
     MessageListener* m_message_listener; ///< SAGE message listener
-    PixelStreamer* m_pixel_streamer; ///< Pixel streamer
 
 public:
 
@@ -57,9 +53,9 @@ public:
 
     kvs::sage::ApplicationInterface* sail( void );
 
-protected:
+    void paintEvent( void );
 
-    void paint_event( void );
+protected:
 
     void setup_sail( void );
 
@@ -80,16 +76,6 @@ public:
     MessageListener( kvs::sage::ApplicationInterface* sail );
 
     void update( kvs::TimeEvent* event );
-};
-
-/*===========================================================================*/
-/**
- *  @brief  Pixel streaming class to the SAGE.
- */
-/*===========================================================================*/
-class Screen::PixelStreamer : public kvs::PaintEventListener
-{
-    void update( void );
 };
 
 } // end of namespace sage
