@@ -166,9 +166,11 @@ $(OUTDIR)/./Visualization/Exporter/UnstructuredVolumeExporter.o \
 $(OUTDIR)/./Visualization/Filter/Bounds.o \
 $(OUTDIR)/./Visualization/Filter/FilterBase.o \
 $(OUTDIR)/./Visualization/Filter/LineIntegralConvolution.o \
+$(OUTDIR)/./Visualization/Filter/StructuredVectorToScalar.o \
 $(OUTDIR)/./Visualization/Filter/TetrahedraToTetrahedra.o \
 $(OUTDIR)/./Visualization/Filter/TrilinearInterpolator.o \
 $(OUTDIR)/./Visualization/Filter/Tubeline.o \
+$(OUTDIR)/./Visualization/Filter/UnstructuredVectorToScalar.o \
 $(OUTDIR)/./Visualization/Importer/ImageImporter.o \
 $(OUTDIR)/./Visualization/Importer/ImporterBase.o \
 $(OUTDIR)/./Visualization/Importer/LineImporter.o \
