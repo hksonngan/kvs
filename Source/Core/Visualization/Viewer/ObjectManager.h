@@ -89,6 +89,14 @@ public:
 
     const kvs::Xform xform( int obj_id ) const;
 
+    const int objectID( const kvs::ObjectBase *object ) const;
+
+    const int parentObjectID( const ObjectIterator it ) const;
+
+    const int parentObjectID( const kvs::ObjectBase *object ) const;
+
+    const int parentObjectID( int object_id ) const;
+
     const int activeObjectID( void ) const;
 
     bool setActiveObjectID( int obj_id );

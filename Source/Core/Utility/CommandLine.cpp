@@ -629,16 +629,7 @@ const bool CommandLine::parse( void )
         {
             if ( value != m_values.end() )
             {
-                if ( value->isRequired() )
-                {
-                    if ( !argument->data() )
-                    {
-                        kvsMessageError("Input value is required.");
-                        return( false );
-                    }
-
-                    value->setValue( argument->data() );
-                }
+                value->setValue( argument->data() );
 
                 ++value;
             }
@@ -660,6 +651,20 @@ const bool CommandLine::parse( void )
             }
         }
         ++option;
+    }
+
+    value = m_values.begin();
+    for ( size_t i = 0; i < m_values.size(); ++i )
+    {
+        if ( value->isRequired() )
+        {
+            if ( !value->isGiven() )
+            {
+                kvsMessageError("Input value is required.");
+                return( false );
+            }
+        }
+        ++value;
     }
 
     return( true );

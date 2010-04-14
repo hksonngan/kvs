@@ -389,6 +389,75 @@ const kvs::Xform ObjectManager::xform( int obj_id ) const
     return( obj->xform() );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the object ID from the pointer to the object.
+ *  @param  object [in] pointer to the object
+ *  @return object ID
+ */
+/*===========================================================================*/
+const int ObjectManager::objectID( const kvs::ObjectBase *object ) const
+{
+    for ( ObjectMap::const_iterator i = m_object_map.begin(); i != m_object_map.end(); ++i )
+    {
+        if ( *(i->second) == object ) return i->first;
+    }
+
+    return -1;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the parent object ID from the object iterator.
+ *  @param  it [in] object iterator
+ *  @return parent object ID
+ */
+/*===========================================================================*/
+const int ObjectManager::parentObjectID( const ObjectIterator it ) const
+{
+    if (it == end()) return -1;
+    if (it.node()->parent == NULL) return -1;
+
+    return this->objectID(it.node()->parent->data);
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the parent object ID from the pointer to the object.
+ *  @param  object [in] pointer to the object
+ *  @return parent object ID
+ */
+/*===========================================================================*/
+const int ObjectManager::parentObjectID( const kvs::ObjectBase *object ) const
+{
+    for (ObjectIterator i = begin(); i != end(); ++i)
+    {
+        if (*i == object)
+        {
+            return this->parentObjectID(i);
+        }
+    }
+    return -1;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the parent object ID from the object ID.
+ *  @param  object_id [in] object ID
+ *  @return parent object ID
+ */
+/*===========================================================================*/
+const int ObjectManager::parentObjectID( int object_id ) const
+{
+    if ( object_id < 0 ) return -1;
+
+    // ObjectManager::object is not const function. peel const.
+    const kvs::ObjectBase *object_ptr = ((ObjectManager*)this)->object( object_id );
+    if ( object_ptr == NULL ) return -1;
+
+    return this->parentObjectID( object_ptr );
+}
+
 /*==========================================================================*/
 /**
  *  Get the active object ID.

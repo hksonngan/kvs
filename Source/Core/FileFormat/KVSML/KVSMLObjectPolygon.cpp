@@ -366,14 +366,27 @@ const bool KVSMLObjectPolygon::read( const std::string& filename )
         {
             const size_t ncolors = vertex_tag.nvertices();
             if ( !kvs::kvsml::ReadColorData( parent, ncolors, &m_colors ) ) return( false );
+            if ( m_colors.size() == 0 )
+            {
+                // default value (black).
+                m_colors.allocate(3);
+                m_colors.at(0) = 0;
+                m_colors.at(1) = 0;
+                m_colors.at(2) = 0;
+            }
         }
-        if ( m_colors.size() == 0 )
+
+        // <Opacity>
+        if ( m_color_type == "vertex" )
         {
-            // default value (black).
-            m_colors.allocate(3);
-            m_colors.at(0) = 0;
-            m_colors.at(1) = 0;
-            m_colors.at(2) = 0;
+            const size_t nopacities = vertex_tag.nvertices();
+            if ( !kvs::kvsml::ReadOpacityData( parent, nopacities, &m_opacities ) ) return( false );
+            if ( m_opacities.size() == 0 )
+            {
+                // default value (255).
+                m_opacities.allocate(1);
+                m_opacities.at(0) = 255;
+            }
         }
 
         // <Normal>
@@ -406,29 +419,32 @@ const bool KVSMLObjectPolygon::read( const std::string& filename )
                 ( m_polygon_type == "quadrangle" ) ? npolygons * 4 : 0;
             if ( !kvs::kvsml::ReadConnectionData( parent, nconnections, &m_connections ) ) return( false );
 
-            // <Opacity>
-            const size_t nopacities = npolygons;
-            if ( !kvs::kvsml::ReadOpacityData( parent, nopacities, &m_opacities ) ) return( false );
-            if ( m_opacities.size() == 0 )
-            {
-                // default value (255).
-                m_opacities.allocate(1);
-                m_opacities.at(0) = 255;
-            }
-
             // <Color>
             if ( m_color_type == "polygon" )
             {
-                const size_t ncolors = npolygons;
+                const size_t ncolors = vertex_tag.nvertices();
                 if ( !kvs::kvsml::ReadColorData( parent, ncolors, &m_colors ) ) return( false );
+                if ( m_colors.size() == 0 )
+                {
+                    // default value (black).
+                    m_colors.allocate(3);
+                    m_colors.at(0) = 0;
+                    m_colors.at(1) = 0;
+                    m_colors.at(2) = 0;
+                }
             }
-            if ( m_colors.size() == 0 )
+
+            // <Opacity>
+            if ( m_color_type == "polygon" )
             {
-                // default value (black).
-                m_colors.allocate(3);
-                m_colors.at(0) = 0;
-                m_colors.at(1) = 0;
-                m_colors.at(2) = 0;
+                const size_t nopacities = npolygons;
+                if ( !kvs::kvsml::ReadOpacityData( parent, nopacities, &m_opacities ) ) return( false );
+                if ( m_opacities.size() == 0 )
+                {
+                    // default value (255).
+                    m_opacities.allocate(1);
+                    m_opacities.at(0) = 255;
+                }
             }
 
             // <Normal>
@@ -516,6 +532,12 @@ const bool KVSMLObjectPolygon::write( const std::string& filename )
             if ( !kvs::kvsml::WriteColorData( parent, type, m_filename, m_colors ) ) return( false );
         }
 
+        // <Opacity>
+        if ( m_color_type == "vertex" )
+        {
+            if ( !kvs::kvsml::WriteOpacityData( parent, type, m_filename, m_opacities ) ) return( false );
+        }
+
         // <Normal>
         if ( m_normal_type == "vertex" )
         {
@@ -548,13 +570,16 @@ const bool KVSMLObjectPolygon::write( const std::string& filename )
         // <Connection>
         if ( !kvs::kvsml::WriteConnectionData( parent, type, m_filename, m_connections ) ) return( false );
 
-        // <Opacity>
-        if ( !kvs::kvsml::WriteOpacityData( parent, type, m_filename, m_opacities ) ) return( false );
-
         // <Color>
         if ( m_color_type == "polygon" )
         {
             if ( !kvs::kvsml::WriteColorData( parent, type, m_filename, m_colors ) ) return( false );
+        }
+
+        // <Opacity>
+        if ( m_color_type == "polygon" )
+        {
+            if ( !kvs::kvsml::WriteOpacityData( parent, type, m_filename, m_opacities ) ) return( false );
         }
 
         // <Normal>

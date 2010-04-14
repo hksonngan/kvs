@@ -78,6 +78,7 @@ kvs::KVSMLObjectPolygon* PolygonExporter<kvs::KVSMLObjectPolygon>::exec( const k
     this->setColors( polygon->colors() );
     this->setConnections( polygon->connections() );
     this->setNormals( polygon->normals() );
+    this->setOpacities( polygon->opacities() );
 
     return( this );
 }
