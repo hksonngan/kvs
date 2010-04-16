@@ -140,6 +140,8 @@ $(OUTDIR)/./Utility/Time.o \
 $(OUTDIR)/./Utility/Tokenizer.o \
 $(OUTDIR)/./Utility/Value.o \
 $(OUTDIR)/./Utility/ValueArray.o \
+$(OUTDIR)/./Visualization/Data/HydrogenVolumeData.o \
+$(OUTDIR)/./Visualization/Data/TornadoVolumeData.o \
 $(OUTDIR)/./Visualization/Event/EventBase.o \
 $(OUTDIR)/./Visualization/Event/EventHandler.o \
 $(OUTDIR)/./Visualization/Event/EventListener.o \
@@ -303,6 +305,10 @@ $(OUTDIR)/./Visualization/Event/%.o: ./Visualization/Event/%.cpp ./Visualization
 	$(MKDIR) $(OUTDIR)/./Visualization/Event
 	$(CPP) -c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) -o $@ $<
 
+$(OUTDIR)/./Visualization/Data/%.o: ./Visualization/Data/%.cpp ./Visualization/Data/%.h
+	$(MKDIR) $(OUTDIR)/./Visualization/Data
+	$(CPP) -c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) -o $@ $<
+
 $(OUTDIR)/./Utility/%.o: ./Utility/%.cpp ./Utility/%.h
 	$(MKDIR) $(OUTDIR)/./Utility
 	$(CPP) -c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) -o $@ $<
@@ -409,6 +415,8 @@ install::
 	$(INSTALL) ./Utility/*.h $(INSTALL_DIR)/include/Core/./Utility
 	$(MKDIR) $(INSTALL_DIR)/include/Core/./Visualization
 	$(INSTALL) ./Visualization/*.h $(INSTALL_DIR)/include/Core/./Visualization
+	$(MKDIR) $(INSTALL_DIR)/include/Core/./Visualization/Data
+	$(INSTALL) ./Visualization/Data/*.h $(INSTALL_DIR)/include/Core/./Visualization/Data
 	$(MKDIR) $(INSTALL_DIR)/include/Core/./Visualization/Event
 	$(INSTALL) ./Visualization/Event/*.h $(INSTALL_DIR)/include/Core/./Visualization/Event
 	$(MKDIR) $(INSTALL_DIR)/include/Core/./Visualization/Exporter

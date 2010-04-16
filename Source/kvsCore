@@ -107,6 +107,8 @@
 #include <Core/Utility/Value.h>
 #include <Core/Utility/ValueArray.h>
 #include <Core/Utility/Version.h>
+#include <Core/Visualization/Data/HydrogenVolumeData.h>
+#include <Core/Visualization/Data/TornadoVolumeData.h>
 #include <Core/Visualization/Event/EventBase.h>
 #include <Core/Visualization/Event/EventHandler.h>
 #include <Core/Visualization/Event/EventListener.h>

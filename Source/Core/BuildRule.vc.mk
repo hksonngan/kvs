@@ -140,6 +140,8 @@ $(OUTDIR)\.\Utility\Time.obj \
 $(OUTDIR)\.\Utility\Tokenizer.obj \
 $(OUTDIR)\.\Utility\Value.obj \
 $(OUTDIR)\.\Utility\ValueArray.obj \
+$(OUTDIR)\.\Visualization\Data\HydrogenVolumeData.obj \
+$(OUTDIR)\.\Visualization\Data\TornadoVolumeData.obj \
 $(OUTDIR)\.\Visualization\Event\EventBase.obj \
 $(OUTDIR)\.\Visualization\Event\EventHandler.obj \
 $(OUTDIR)\.\Visualization\Event\EventListener.obj \
@@ -321,6 +323,12 @@ $<
 $<
 <<
 
+{.\Visualization\Data\}.cpp{$(OUTDIR)\.\Visualization\Data\}.obj::
+	IF NOT EXIST $(OUTDIR)\.\Visualization\Data $(MKDIR) $(OUTDIR)\.\Visualization\Data
+	$(CPP) /c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) /Fo$(OUTDIR)\.\Visualization\Data\ @<<
+$<
+<<
+
 {.\Utility\}.cpp{$(OUTDIR)\.\Utility\}.obj::
 	IF NOT EXIST $(OUTDIR)\.\Utility $(MKDIR) $(OUTDIR)\.\Utility
 	$(CPP) /c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) /Fo$(OUTDIR)\.\Utility\ @<<
@@ -461,6 +469,8 @@ install::
 	$(INSTALL) .\Utility\*.h $(INSTALL_DIR)\include\Core\.\Utility
 	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\Visualization $(MKDIR) $(INSTALL_DIR)\include\Core\.\Visualization
 	$(INSTALL) .\Visualization\*.h $(INSTALL_DIR)\include\Core\.\Visualization
+	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\Visualization\Data $(MKDIR) $(INSTALL_DIR)\include\Core\.\Visualization\Data
+	$(INSTALL) .\Visualization\Data\*.h $(INSTALL_DIR)\include\Core\.\Visualization\Data
 	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\Visualization\Event $(MKDIR) $(INSTALL_DIR)\include\Core\.\Visualization\Event
 	$(INSTALL) .\Visualization\Event\*.h $(INSTALL_DIR)\include\Core\.\Visualization\Event
 	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\Visualization\Exporter $(MKDIR) $(INSTALL_DIR)\include\Core\.\Visualization\Exporter

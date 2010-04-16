@@ -107,6 +107,8 @@ Utility/Type
 Utility/Value
 Utility/ValueArray
 Utility/Version
+Visualization/Data/HydrogenVolumeData
+Visualization/Data/TornadoVolumeData
 Visualization/Event/EventBase
 Visualization/Event/EventHandler
 Visualization/Event/EventListener
