@@ -1025,7 +1025,7 @@ void Tubeline::set_connections_and_normals(
 
         const kvs::Vector3f v1 = start_circle[n_ids[i+1]] - start_circle[n_ids[i]];
         const kvs::Vector3f v2 = end_circle[n_ids[i+1]] - start_circle[n_ids[i]];
-        const kvs::Vector3f norm = v1.cross( v2 );
+        const kvs::Vector3f norm = -v1.cross( v2 );
         normals->push_back( norm.x() );
         normals->push_back( norm.y() );
         normals->push_back( norm.z() );

@@ -18,6 +18,7 @@
 #include <kvs/StructuredVolumeImporter>
 #include <kvs/PolygonObject>
 #include <kvs/OrthoSlice>
+#include <kvs/HydrogenVolumeData>
 #include <kvs/glut/Application>
 #include <kvs/glut/Screen>
 
@@ -33,12 +34,18 @@ int main( int argc, char** argv )
 {
     kvs::glut::Application app( argc, argv );
 
-    const std::string filename( argc > 1 ? argv[1] : "" );
-    kvs::StructuredVolumeObject* volume = new kvs::StructuredVolumeImporter( filename );
+    /* Read volume data from the specified data file. If the data file is not
+     * specified, scalar hydrogen volume data is created by using
+     * kvs::HydrogenVolumeData class.
+     */
+    kvs::StructuredVolumeObject* volume = NULL;
+    if ( argc > 1 ) volume = new kvs::StructuredVolumeImporter( std::string( argv[1] ) );
+    else            volume = new kvs::HydrogenVolumeData( kvs::Vector3ui( 64, 64, 64 ) );
+
     if ( !volume )
     {
         kvsMessageError( "Cannot create a structured volume object." );
-        return;
+        return( false );
     }
 
     /* Extract orthogonal planes by using OrthoSlice class.
@@ -54,13 +61,13 @@ int main( int argc, char** argv )
     {
         kvsMessageError( "Cannot create a polygon object." );
         delete volume;
-        return;
+        return( false );
     }
 
     delete volume;
 
     kvs::glut::Screen screen( &app );
-    screen.registerObject( object, renderer );
+    screen.registerObject( object );
     screen.setGeometry( 0, 0, 512, 512 );
     screen.setTitle( "kvs::OrthoSlice" );
     screen.show();

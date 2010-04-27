@@ -322,7 +322,7 @@ void SlicePlane::extract_plane(
                     colors.push_back( color_map[ color2 ].b() );
 
                     // Calculate a normal vector for the triangle polygon.
-                    const kvs::Vector3f normal( ( vertex2 - vertex0 ).cross( vertex1 - vertex0 ) );
+                    const kvs::Vector3f normal( -( vertex2 - vertex0 ).cross( vertex1 - vertex0 ) );
                     normals.push_back( normal.x() );
                     normals.push_back( normal.y() );
                     normals.push_back( normal.z() );

@@ -17,6 +17,7 @@
 #include <kvs/StructuredVolumeObject>
 #include <kvs/StructuredVolumeImporter>
 #include <kvs/RayCastingRenderer>
+#include <kvs/HydrogenVolumeData>
 #include <kvs/glut/Application>
 #include <kvs/glut/Screen>
 
@@ -32,8 +33,14 @@ int main( int argc, char** argv )
 {
     kvs::glut::Application app( argc, argv );
 
-    const std::string filename( argc > 1 ? argv[1] : "" );
-    kvs::StructuredVolumeObject* object = new kvs::StructuredVolumeImporter( filename );
+    /* Read volume data from the specified data file. If the data file is not
+     * specified, scalar hydrogen volume data is created by using
+     * kvs::HydrogenVolumeData class.
+     */
+    kvs::StructuredVolumeObject* object = NULL;
+    if ( argc > 1 ) object = new kvs::StructuredVolumeImporter( std::string( argv[1] ) );
+    else            object = new kvs::HydrogenVolumeData( kvs::Vector3ui( 32, 32, 32 ) );
+
     if ( !object )
     {
         kvsMessageError( "Cannot create a structured volume object." );

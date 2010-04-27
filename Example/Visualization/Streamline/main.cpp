@@ -19,6 +19,7 @@
 #include <kvs/LineObject>
 #include <kvs/LineRenderer>
 #include <kvs/Streamline>
+#include <kvs/TornadoVolumeData>
 #include <kvs/glut/Application>
 #include <kvs/glut/Screen>
 
@@ -34,11 +35,17 @@ int main( int argc, char** argv )
 {
     kvs::glut::Application app( argc, argv );
 
-    const std::string filename( argc > 1 ? argv[1] : "" );
-    kvs::StructuredVolumeObject* volume = new kvs::StructuredVolumeImporter( filename );
+    /* Read volume data from the specified data file. If the data file is not
+     * specified, scalar hydrogen volume data is created by using
+     * kvs::HydrogenVolumeData class.
+     */
+    kvs::StructuredVolumeObject* volume = NULL;
+    if ( argc > 1 ) volume = new kvs::StructuredVolumeImporter( std::string( argv[1] ) );
+    else            volume = new kvs::TornadoVolumeData( kvs::Vector3ui( 32, 32, 32 ) );
+
     if ( !volume )
     {
-        kvsMessageError( "Cannot creat a structured volume object.");
+        kvsMessageError( "Cannot create a structured volume object." );
         return( false );
     }
 
