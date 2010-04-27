@@ -704,7 +704,7 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::UnstructuredVo
             degree = kvs::Math::Clamp<size_t>( degree, 0, max_range );
             density = density_map[ degree ];
             g = cell->gradient();
-            if ( kvs::Math::IsZero( density ) ) break;
+            if ( !kvs::Math::IsZero( density ) ) break;
         }
 
         //Generate N particles
@@ -806,7 +806,7 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::UnstructuredVo
 #else
                     nduplications++;
                     if ( nduplications > max_loop ) break;
-                    continue;
+                    else continue;
 #endif
                 }
             }
