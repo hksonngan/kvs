@@ -43,6 +43,8 @@ Matrix/Vector
 Matrix/Vector2
 Matrix/Vector3
 Matrix/Vector4
+Network/Acceptor
+Network/Connector
 Network/HttpConnector
 Network/HttpRequestHeader
 Network/IPAddress
@@ -51,6 +53,8 @@ Network/Socket
 Network/SocketAddress
 Network/SocketSelector
 Network/SocketTimer
+Network/TCPBarrier
+Network/TCPBarrierServer
 Network/TCPServer
 Network/TCPSocket
 Network/Url

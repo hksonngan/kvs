@@ -43,6 +43,8 @@
 #include <Core/Matrix/Vector2.h>
 #include <Core/Matrix/Vector3.h>
 #include <Core/Matrix/Vector4.h>
+#include <Core/Network/Acceptor.h>
+#include <Core/Network/Connector.h>
 #include <Core/Network/HttpConnector.h>
 #include <Core/Network/HttpRequestHeader.h>
 #include <Core/Network/IPAddress.h>
@@ -51,6 +53,8 @@
 #include <Core/Network/SocketAddress.h>
 #include <Core/Network/SocketSelector.h>
 #include <Core/Network/SocketTimer.h>
+#include <Core/Network/TCPBarrier.h>
+#include <Core/Network/TCPBarrierServer.h>
 #include <Core/Network/TCPServer.h>
 #include <Core/Network/TCPSocket.h>
 #include <Core/Network/Url.h>

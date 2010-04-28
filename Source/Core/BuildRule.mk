@@ -93,6 +93,8 @@ $(OUTDIR)/./Matrix/Vector.o \
 $(OUTDIR)/./Matrix/Vector2.o \
 $(OUTDIR)/./Matrix/Vector3.o \
 $(OUTDIR)/./Matrix/Vector4.o \
+$(OUTDIR)/./Network/Acceptor.o \
+$(OUTDIR)/./Network/Connector.o \
 $(OUTDIR)/./Network/HttpConnector.o \
 $(OUTDIR)/./Network/HttpRequestHeader.o \
 $(OUTDIR)/./Network/IPAddress.o \
@@ -101,6 +103,8 @@ $(OUTDIR)/./Network/Socket.o \
 $(OUTDIR)/./Network/SocketAddress.o \
 $(OUTDIR)/./Network/SocketSelector.o \
 $(OUTDIR)/./Network/SocketTimer.o \
+$(OUTDIR)/./Network/TCPBarrier.o \
+$(OUTDIR)/./Network/TCPBarrierServer.o \
 $(OUTDIR)/./Network/TCPServer.o \
 $(OUTDIR)/./Network/TCPSocket.o \
 $(OUTDIR)/./Network/Url.o \
