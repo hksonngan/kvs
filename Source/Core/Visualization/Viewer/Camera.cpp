@@ -472,6 +472,7 @@ kvs::ColorImage Camera::snapshot( void )
     }
     memset( data, 0, size );
 
+    glPixelStorei( GL_PACK_ALIGNMENT, 1 );
     glReadPixels( 0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, data );
 
     // Flip image data.
