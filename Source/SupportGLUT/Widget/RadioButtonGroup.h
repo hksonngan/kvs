@@ -19,6 +19,7 @@
 #include <kvs/ClassName>
 #include <kvs/glut/WidgetBase>
 #include <kvs/glut/Screen>
+#include <kvs/IgnoreUnusedVariable>
 #include "RadioButton.h"
 
 
@@ -54,13 +55,13 @@ public:
 
 public:
 
-    virtual void pressed( kvs::glut::RadioButton* button ) {};
+    virtual void pressed( kvs::glut::RadioButton* button ) { kvs::IgnoreUnusedVariable( button ); };
 
-    virtual void pressed( int id ) {};
+    virtual void pressed( int id ) { kvs::IgnoreUnusedVariable( id ); };
 
-    virtual void released( kvs::glut::RadioButton* button ) {};
+    virtual void released( kvs::glut::RadioButton* button ) { kvs::IgnoreUnusedVariable( button ); };
 
-    virtual void released( int id ) {};
+    virtual void released( int id ) { kvs::IgnoreUnusedVariable( id ); };
 
     virtual void screenUpdated( void ) {};
 

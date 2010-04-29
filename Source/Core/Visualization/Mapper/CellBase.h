@@ -212,7 +212,7 @@ inline const kvs::Vector3f CellBase<T>::transformGlobalToLocal( const kvs::Vecto
 
     // Calculate the coordinate of 'global' in the local coordinate
     // by using Newton-Raphson method.
-    const float TinyValue = 1.e-6;
+    const float TinyValue = static_cast<float>( 1.e-6 );
     const size_t MaxLoop = 100;
     kvs::Vector3f x0( 0.5f, 0.5f, 0.5f ); // Initial point in local coordinate.
     for ( size_t i = 0; i < MaxLoop; i++ )
@@ -240,6 +240,8 @@ inline const kvs::Vector3f CellBase<T>::transformGlobalToLocal( const kvs::Vecto
 template <typename T>
 inline const kvs::Vector3f CellBase<T>::transformLocalToGlobal( const kvs::Vector3f& local )
 {
+    kvs::IgnoreUnusedVariable( local );
+
     const float* N = m_interpolation_functions;
     const kvs::Vector3f* V = m_vertices;
     const size_t nnodes = m_nnodes;
@@ -344,9 +346,9 @@ inline const kvs::Vector3f CellBase<T>::gradient( void )
     float dsdz = 0.0f;
     for ( size_t i = 0; i < nnodes; i++ )
     {
-        dsdx += s[i] * dNdx[i];
-        dsdy += s[i] * dNdy[i];
-        dsdz += s[i] * dNdz[i];
+        dsdx += static_cast<float>( s[i] * dNdx[i] );
+        dsdy += static_cast<float>( s[i] * dNdy[i] );
+        dsdz += static_cast<float>( s[i] * dNdz[i] );
     }
 
     const kvs::Vector3f g( dsdx, dsdy, dsdz );

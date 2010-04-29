@@ -30,22 +30,22 @@ const int           CircleHeight = 10;
 const kvs::RGBColor CircleColor = kvs::RGBColor( 255, 255, 255 );
 const kvs::RGBColor CircleEdgeColor = kvs::RGBColor( 230, 230, 230 );
 const float         CircleVertices[14] = {
-     6.00000,  0.00000,
-     3.74094,  4.69099,
-    -1.33513,  5.84957,
-    -5.40581,  2.60330,
-    -5.40581, -2.60330,
-    -1.33513, -5.84957,
-     3.74094, -4.69099
+     6.00000f,  0.00000f,
+     3.74094f,  4.69099f,
+    -1.33513f,  5.84957f,
+    -5.40581f,  2.60330f,
+    -5.40581f, -2.60330f,
+    -1.33513f, -5.84957f,
+     3.74094f, -4.69099f
 };
 const float         MarkVertices[14] = {
-     2.00000,  0.00000,
-     1.24698,  1.56366,
-    -0.44504,  1.94986,
-    -1.80194,  0.86777,
-    -1.80194, -0.86777,
-    -0.44504, -1.94986,
-     1.24698, -1.56366
+     2.00000f,  0.00000f,
+     1.24698f,  1.56366f,
+    -0.44504f,  1.94986f,
+    -1.80194f,  0.86777f,
+    -1.80194f, -0.86777f,
+    -0.44504f, -1.94986f,
+     1.24698f, -1.56366f
 };
 } }
 
@@ -78,7 +78,7 @@ RadioButton::RadioButton( kvs::ScreenBase* screen ):
     this->setCaption( "RadioButton " + kvs::String( ::InstanceCounter++ ).toStdString() );
     this->setState( false );
 
-    m_upper_edge_color = BaseClass::get_darkened_color( ::Default::CircleColor, 0.6 );
+    m_upper_edge_color = BaseClass::get_darkened_color( ::Default::CircleColor, 0.6f );
     m_lower_edge_color = ::Default::CircleEdgeColor;
 }
 

@@ -18,7 +18,7 @@
 #include <kvs/HSVColor>
 #include <kvs/RGBColor>
 #include <kvs/glut/GLUT>
-
+#include <kvs/IgnoreUnusedVariable>
 #include <SupportGLUT/Viewer/KVSKey.h>
 #include <SupportGLUT/Viewer/KVSMouseButton.h>
 
@@ -467,6 +467,9 @@ void paint_event( void )
 /*===========================================================================*/
 void resize_event( int width, int height )
 {
+    kvs::IgnoreUnusedVariable( width );
+    kvs::IgnoreUnusedVariable( height );
+
     // Fix window size.
     glutReshapeWindow( ::current->m_width, ::current->m_height );
 

@@ -63,6 +63,8 @@ public:
 
     void update( kvs::TimeEvent* event )
     {
+        kvs::IgnoreUnusedVariable( event );
+
         static_cast<kvs::glut::Screen*>(screen())->idleMouseEvent();
     }
 };

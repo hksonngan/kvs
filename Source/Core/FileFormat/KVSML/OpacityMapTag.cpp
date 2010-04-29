@@ -187,7 +187,7 @@ const bool OpacityMapValueTag::read( const kvs::XMLElement::SuperClass* element 
 
     // s ="xxx"
     const std::string s = kvs::XMLElement::AttributeValue( element, "s" );
-    if ( s != "" ) m_scalar = atof( s.c_str() );
+    if ( s != "" ) m_scalar = static_cast<float>( atof( s.c_str() ) );
     else
     {
         kvsMessageError( "'s' is not specified in <%s>.", tag_name.c_str() );
@@ -196,7 +196,7 @@ const bool OpacityMapValueTag::read( const kvs::XMLElement::SuperClass* element 
 
     // a ="xxx"
     const std::string a = kvs::XMLElement::AttributeValue( element, "a" );
-    if ( a != "" ) m_opacity = atof( a.c_str() );
+    if ( a != "" ) m_opacity = static_cast<float>( atof( a.c_str() ) );
     else
     {
         kvsMessageError( "'a' is not specified in <%s>.", tag_name.c_str() );

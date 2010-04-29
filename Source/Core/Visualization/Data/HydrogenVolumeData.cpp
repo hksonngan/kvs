@@ -68,7 +68,7 @@ HydrogenVolumeData::SuperClass* HydrogenVolumeData::exec( void )
     const kvs::Real64 kd = 6.0;
 
     kvs::AnyValueArray values;
-    if ( !values.allocate<kvs::UInt8>( dim1 * dim2 * dim3 ) )
+    if ( !values.allocate<kvs::UInt8>( static_cast<size_t>( dim1 * dim2 * dim3 ) ) )
     {
         kvsMessageError("Cannot allocate memory for the value.");
         return( this );
@@ -92,7 +92,7 @@ HydrogenVolumeData::SuperClass* HydrogenVolumeData::exec( void )
                 kvs::Real64 c = phi * phi;
                 if ( c > 255.0 ) { c = 255.0; }
 
-                pvalues[ index++ ] = static_cast<kvs::Real64>( c );
+                pvalues[ index++ ] = static_cast<kvs::UInt8>( c );
             }
         }
     }

@@ -316,8 +316,8 @@ const bool Main::exec( void )
     screen.registerObject( &pipe );
     slider.setTransferFunction( function );
     slider.setNormal( normal );
-    slider.setValue( level );
-    slider.setRange( volume->minValue(), volume->maxValue() );
+    slider.setValue( static_cast<float>( level ) );
+    slider.setRange( static_cast<float>( volume->minValue() ), static_cast<float>( volume->maxValue() ) );
 
     // Verbose information.
     if ( arg.verboseMode() )

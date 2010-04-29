@@ -158,9 +158,9 @@ void Slider::setSliderColor( const kvs::RGBColor& color )
 {
     m_slider_color = color;
 
-    m_clicked_slider_color = BaseClass::get_darkened_color( color, 0.95 );
+    m_clicked_slider_color = BaseClass::get_darkened_color( color, 0.95f );
     m_upper_edge_color = ::Default::SliderEdgeColor;
-    m_lower_edge_color = BaseClass::get_darkened_color( color, 0.6 );
+    m_lower_edge_color = BaseClass::get_darkened_color( color, 0.6f );
 }
 
 void Slider::showRange( void )
@@ -188,18 +188,18 @@ void Slider::draw_slider_bar( const int x, const int y, const int width )
     {
         // Upper line (black).
         glColor3ub( 0, 0, 0 );
-        glVertex2f( x,         y - 1 );
-        glVertex2f( x + width, y - 1 );
+        glVertex2i( x,         y - 1 );
+        glVertex2i( x + width, y - 1 );
 
         // Middle line (gray).
         glColor3ub( 100, 100, 100 );
-        glVertex2f( x,         y );
-        glVertex2f( x + width, y );
+        glVertex2i( x,         y );
+        glVertex2i( x + width, y );
 
         // Lower line (light gray).
         glColor3ub( 230, 230, 230 );
-        glVertex2f( x,         y + 1 );
-        glVertex2f( x + width, y + 1 );
+        glVertex2i( x,         y + 1 );
+        glVertex2i( x + width, y + 1 );
     }
     glEnd();
 }
@@ -214,11 +214,11 @@ void Slider::draw_slider_bar( const int x, const int y, const int width )
 /*===========================================================================*/
 void Slider::draw_cursor( const int x, const int y, const int width )
 {
-    const int p = width * ( m_value - m_min_value ) / ( m_max_value - m_min_value );
-    const int x0 = x + p - ::Default::CursorWidth * 0.5;
-    const int x1 = x + p + ::Default::CursorWidth * 0.5;
-    const int y0 = y - ::Default::CursorHeight * 0.5;
-    const int y1 = y + ::Default::CursorHeight * 0.5;
+    const int p = static_cast<int>( width * ( m_value - m_min_value ) / ( m_max_value - m_min_value ) + 0.5 );
+    const int x0 = static_cast<int>( x + p - ::Default::CursorWidth * 0.5 + 0.5 );
+    const int x1 = static_cast<int>( x + p + ::Default::CursorWidth * 0.5 + 0.5 );
+    const int y0 = static_cast<int>( y - ::Default::CursorHeight * 0.5 + 0.5 );
+    const int y1 = static_cast<int>( y + ::Default::CursorHeight * 0.5 + 0.5 );
 
     // Body.
     {
@@ -228,10 +228,10 @@ void Slider::draw_cursor( const int x, const int y, const int width )
         glColor3ub( r, g, b );
         glBegin( GL_POLYGON );
         {
-            glVertex2f( x0, y0 );
-            glVertex2f( x1, y0 );
-            glVertex2f( x1, y1 );
-            glVertex2f( x0, y1 );
+            glVertex2i( x0, y0 );
+            glVertex2i( x1, y0 );
+            glVertex2i( x1, y1 );
+            glVertex2i( x0, y1 );
         }
         glEnd();
     }
@@ -244,9 +244,9 @@ void Slider::draw_cursor( const int x, const int y, const int width )
         glColor3ub( r, g, b );
         glBegin( GL_LINE_STRIP );
         {
-            glVertex2f( x0, y1 );
-            glVertex2f( x1, y1 );
-            glVertex2f( x1, y0 );
+            glVertex2i( x0, y1 );
+            glVertex2i( x1, y1 );
+            glVertex2i( x1, y0 );
         }
         glEnd();
     }
@@ -259,9 +259,9 @@ void Slider::draw_cursor( const int x, const int y, const int width )
         glColor3ub( r, g, b );
         glBegin( GL_LINE_STRIP );
         {
-            glVertex2f( x1, y0 );
-            glVertex2f( x0, y0 );
-            glVertex2f( x0, y1 );
+            glVertex2i( x1, y0 );
+            glVertex2i( x0, y0 );
+            glVertex2i( x0, y1 );
         }
         glEnd();
     }
@@ -313,10 +313,10 @@ bool Slider::is_in_cursor( const int x, const int y, const bool proper )
     const int bar_width = BaseClass::width() - BaseClass::margin() * 2;
 
     const int p = static_cast<int>( bar_width * ( m_value - m_min_value ) / ( m_max_value - m_min_value ) + 0.5f );
-    const int x0 = bar_x + p - ::Default::CursorWidth * 0.5;
-    const int x1 = bar_x + p + ::Default::CursorWidth * 0.5;
-    const int y0 = bar_y - ::Default::CursorHeight * 0.5;
-    const int y1 = bar_y + ::Default::CursorHeight * 0.5;
+    const int x0 = static_cast<int>( bar_x + p - ::Default::CursorWidth * 0.5 + 0.5 );
+    const int x1 = static_cast<int>( bar_x + p + ::Default::CursorWidth * 0.5 + 0.5 );
+    const int y0 = static_cast<int>( bar_y - ::Default::CursorHeight * 0.5 + 0.5 );
+    const int y1 = static_cast<int>( bar_y + ::Default::CursorHeight * 0.5 + 0.5 );
 
     if ( proper )
     {
@@ -337,8 +337,8 @@ bool Slider::is_in_cursor( const int x, const int y, const bool proper )
 /*===========================================================================*/
 float Slider::get_value( const int x )
 {
-    const float bar_x = BaseClass::x() + BaseClass::margin();
-    const float bar_width = BaseClass::width() - BaseClass::margin() * 2;
+    const float bar_x = static_cast<float>( BaseClass::x() + BaseClass::margin() );
+    const float bar_width = static_cast<float>( BaseClass::width() - BaseClass::margin() * 2 );
 
     return( m_min_value + ( x - bar_x ) / bar_width * ( m_max_value - m_min_value ) );
 }
@@ -393,7 +393,7 @@ void Slider::paintEvent( void )
     // Draw the slider bar and cursor.
     {
         const int x = m_x + m_margin;
-        const int y = m_y + m_margin + character_height + ::Default::SliderHeight * 0.5;
+        const int y = m_y + m_margin + character_height + ::Default::SliderHeight / 2;
         const int width = BaseClass::width() - m_margin * 2;
         this->draw_slider_bar( x, y, width );
         this->draw_cursor( x, y, width );
@@ -507,6 +507,8 @@ void Slider::mouseMoveEvent( kvs::MouseEvent* event )
 /*===========================================================================*/
 void Slider::mouseReleaseEvent( kvs::MouseEvent* event )
 {
+    kvs::IgnoreUnusedVariable( event );
+
     if ( !BaseClass::isShown() ) return;
 
     if ( BaseClass::isActive() )

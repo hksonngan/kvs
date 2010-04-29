@@ -220,7 +220,7 @@ const bool TransferFunctionTag::read( const kvs::XMLNode::SuperClass* parent )
     if ( min_value != "" )
     {
         m_has_min_value = true;
-        m_min_value = atof( min_value.c_str() );
+        m_min_value = static_cast<float>( atof( min_value.c_str() ) );
     }
 
     // max_value="xxx"
@@ -228,7 +228,7 @@ const bool TransferFunctionTag::read( const kvs::XMLNode::SuperClass* parent )
     if ( max_value != "" )
     {
         m_has_max_value = true;
-        m_max_value = atof( max_value.c_str() );
+        m_max_value = static_cast<float>( atof( max_value.c_str() ) );
     }
 
     // file="xxx"

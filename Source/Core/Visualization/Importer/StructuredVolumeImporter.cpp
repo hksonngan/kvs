@@ -278,8 +278,8 @@ void StructuredVolumeImporter::import( const kvs::DicomList* dicom_list )
         return;
     }
 
-    const float spacing = dicom_list->sliceSpacing();
-    const float thickness = dicom_list->sliceThickness();
+    const float spacing = static_cast<float>( dicom_list->sliceSpacing() );
+    const float thickness = static_cast<float>( dicom_list->sliceThickness() );
 
     const size_t x_size = dicom_list->width();
     const size_t y_size = dicom_list->height();
@@ -298,7 +298,7 @@ void StructuredVolumeImporter::import( const kvs::DicomList* dicom_list )
                                        max_obj_coord.z() * z_ratio );
     SuperClass::setMinMaxExternalCoords( min_ext_coord, max_ext_coord );
 
-    const bool shift = true;
+    bool shift = true;
     const kvs::Dicom* dicom = (*dicom_list)[0];
     const kvs::UInt32 bits_allocated = dicom->bitsAllocated();
     const bool pixel_representation = dicom->pixelRepresentation();

@@ -16,8 +16,12 @@
 #define KVS__APPLICATION_BASE_H_INCLUDE
 
 #include <kvs/ScreenBase>
+#include <kvs/Compiler>
 #include <list>
 
+#if defined( KVS_COMPILER_VC )
+#pragma warning(disable:4800)
+#endif
 
 namespace kvs
 {

@@ -46,6 +46,8 @@ PaintEventListener::~PaintEventListener( void )
 /*===========================================================================*/
 void PaintEventListener::onEvent( kvs::EventBase* event )
 {
+    kvs::IgnoreUnusedVariable( event );
+
     this->update();
 }
 

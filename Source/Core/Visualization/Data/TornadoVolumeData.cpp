@@ -91,11 +91,11 @@ TornadoVolumeData::SuperClass* TornadoVolumeData::exec( void )
     const kvs::UInt64 dim2 = SuperClass::resolution().y();
     const kvs::UInt64 dim3 = SuperClass::resolution().z();
 
-    const float dx = 1.0 / ( dim1 - 1.0 );
-    const float dy = 1.0 / ( dim2 - 1.0 );
-    const float dz = 1.0 / ( dim3 - 1.0 );
+    const double dx = 1.0 / ( dim1 - 1.0 );
+    const double dy = 1.0 / ( dim2 - 1.0 );
+    const double dz = 1.0 / ( dim3 - 1.0 );
     kvs::AnyValueArray values;
-    if ( !values.allocate<kvs::Real32>( dim1 * dim2 * dim3 * veclen ) )
+    if ( !values.allocate<kvs::Real32>( static_cast<size_t>( dim1 * dim2 * dim3 * veclen ) ) )
     {
         kvsMessageError("Cannot allocate memory for the value.");
         return( this );
@@ -111,45 +111,45 @@ TornadoVolumeData::SuperClass* TornadoVolumeData::exec( void )
          * The radius also changes at each z-slice.
          * r is the center radius, r2 is for damping
          */
-        const float z  = k * dz;
-        const float xc = 0.5 + 0.1 * std::sin( 0.04 * m_time + 10.0 * z );
-        const float yc = 0.5 + 0.1 * std::cos( 0.03 * m_time + 3.0 * z );
-        const float r  = 0.1 + 0.4 * z * z + 0.1 * z * std::sin( 8.0 * z );
-        const float r2 = 0.2 + 0.1 * z;
+        const double z  = k * dz;
+        const double xc = 0.5 + 0.1 * std::sin( 0.04 * m_time + 10.0 * z );
+        const double yc = 0.5 + 0.1 * std::cos( 0.03 * m_time + 3.0 * z );
+        const double r  = 0.1 + 0.4 * z * z + 0.1 * z * std::sin( 8.0 * z );
+        const double r2 = 0.2 + 0.1 * z;
 
         for( kvs::UInt64 j = 0; j < dim2; j++ )
         {
-            const float y = j * dy;
+            const double y = j * dy;
             for( kvs::UInt64 i = 0; i < dim1; i++, index++ )
             {
-                const float x = i * dx;
+                const double x = i * dx;
 
-                float temp  = std::sqrt( (y-yc) * (y-yc) + (x-xc) * (x-xc) );
-                float scale = std::fabs( r - temp );
+                double temp  = std::sqrt( (y-yc) * (y-yc) + (x-xc) * (x-xc) );
+                double scale = std::fabs( r - temp );
 
                 /*  I do not like this next line. It produces a discontinuity
                  *  in the magnitude. Fi it later.
                  */
                 scale = scale > r2 ? 0.8 - scale : 1.0;
 
-                float z0 = 0.1 * ( 0.1 - temp * z );
+                double z0 = 0.1 * ( 0.1 - temp * z );
                 if ( z0 < 0.0 )  z0 = 0.0;
 
                 temp = std::sqrt( temp * temp + z0 * z0 );
 
-                const float epsiron = 0.00000000001f;
+                const double epsiron = 0.00000000001;
                 scale = ( r + r2 - temp ) * scale / ( temp + epsiron );
                 scale = scale / ( 1 + z );
 
-                const float v[3] = {
+                const double v[3] = {
                     scale *  ( y - yc ) + 0.1 * ( x - xc ),
                     scale * -( x - xc ) + 0.1 * ( y - yc ),
                     scale * z0
                 };
 
-                pvalues[ 3 * index + 0 ] = v[0];
-                pvalues[ 3 * index + 1 ] = v[1];
-                pvalues[ 3 * index + 2 ] = v[2];
+                pvalues[ 3 * index + 0 ] = static_cast<kvs::Real32>( v[0] );
+                pvalues[ 3 * index + 1 ] = static_cast<kvs::Real32>( v[1] );
+                pvalues[ 3 * index + 2 ] = static_cast<kvs::Real32>( v[2] );
             }
         }
     }

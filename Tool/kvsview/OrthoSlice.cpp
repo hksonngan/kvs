@@ -65,7 +65,7 @@ public:
 
     void valueChanged( void )
     {
-        const double position = this->value();
+        const float position = static_cast<float>( this->value() );
         kvs::PolygonObject* object = new kvs::OrthoSlice( m_volume, position, m_axis, m_tfunc );
         if ( object ) screen()->objectManager()->change( 1, object );
     }

@@ -268,8 +268,8 @@ void FrequencyTable::calculate_range( const kvs::VolumeObjectBase* volume )
     {
         if ( kvs::Math::IsZero( m_min_range ) && kvs::Math::IsZero( m_max_range ) )
         {
-            m_min_range = kvs::Value<kvs::Int64>::Min();
-            m_max_range = kvs::Value<kvs::Int64>::Max();
+            m_min_range = static_cast<kvs::Real64>( kvs::Value<kvs::Int64>::Min() );
+            m_max_range = static_cast<kvs::Real64>( kvs::Value<kvs::Int64>::Max() );
         }
     }
 
@@ -277,8 +277,8 @@ void FrequencyTable::calculate_range( const kvs::VolumeObjectBase* volume )
     {
         if ( kvs::Math::IsZero( m_min_range ) && kvs::Math::IsZero( m_max_range ) )
         {
-            m_min_range = kvs::Value<kvs::UInt64>::Min();
-            m_max_range = kvs::Value<kvs::UInt64>::Max();
+            m_min_range = static_cast<kvs::Real64>( kvs::Value<kvs::UInt64>::Min() );
+            m_max_range = static_cast<kvs::Real64>( kvs::Value<kvs::UInt64>::Max() );
         }
     }
 

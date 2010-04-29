@@ -290,30 +290,32 @@ void CellByCellUniformSampling::mapping( const kvs::Camera* camera, const kvs::S
         BaseClass::transferFunction().opacityMap() );
 
     // Generate the particles.
+    const float min_value = static_cast<float>( volume->minValue() );
+    const float max_value = static_cast<float>( volume->maxValue() );
     const std::type_info& type = volume->values().typeInfo()->type();
     if (      type == typeid( kvs::UInt8  ) )
     {
-        BaseClass::m_transfer_function.setRange( volume->minValue(), volume->maxValue() );
+        BaseClass::m_transfer_function.setRange( min_value, max_value );
         this->generate_particles<kvs::UInt8>( volume );
     }
     else if ( type == typeid( kvs::UInt16 ) )
     {
-        BaseClass::m_transfer_function.setRange( volume->minValue(), volume->maxValue() );
+        BaseClass::m_transfer_function.setRange( min_value, max_value );
         this->generate_particles<kvs::UInt16>( volume );
     }
     else if ( type == typeid( kvs::Int16 ) )
     {
-        BaseClass::m_transfer_function.setRange( volume->minValue(), volume->maxValue() );
+        BaseClass::m_transfer_function.setRange( min_value, max_value );
         this->generate_particles<kvs::Int16>( volume );
     }
     else if ( type == typeid( kvs::Real32 ) )
     {
-        BaseClass::m_transfer_function.setRange( volume->minValue(), volume->maxValue() );
+        BaseClass::m_transfer_function.setRange( min_value, max_value );
         this->generate_particles<kvs::Real32>( volume );
     }
     else if ( type == typeid( kvs::Real64 ) )
     {
-        BaseClass::m_transfer_function.setRange( volume->minValue(), volume->maxValue() );
+        BaseClass::m_transfer_function.setRange( min_value, max_value );
         this->generate_particles<kvs::Real64>( volume );
     }
     else
@@ -345,6 +347,8 @@ void CellByCellUniformSampling::mapping( const kvs::Camera* camera, const kvs::U
         BaseClass::transferFunction().opacityMap() );
 
     // Generate the particles.
+    const float min_value = static_cast<float>( volume->minValue() );
+    const float max_value = static_cast<float>( volume->maxValue() );
     const std::type_info& type = volume->values().typeInfo()->type();
     if (      type == typeid( kvs::Int8   ) )
     {
@@ -353,17 +357,17 @@ void CellByCellUniformSampling::mapping( const kvs::Camera* camera, const kvs::U
     }
     else if ( type == typeid( kvs::Int16  ) )
     {
-        BaseClass::m_transfer_function.setRange( volume->minValue(), volume->maxValue() );
+        BaseClass::m_transfer_function.setRange( min_value, max_value );
         this->generate_particles<kvs::Int16>( volume );
     }
     else if ( type == typeid( kvs::Int32  ) )
     {
-        BaseClass::m_transfer_function.setRange( volume->minValue(), volume->maxValue() );
+        BaseClass::m_transfer_function.setRange( min_value, max_value );
         this->generate_particles<kvs::Int32>( volume );
     }
     else if ( type == typeid( kvs::Int64  ) )
     {
-        BaseClass::m_transfer_function.setRange( volume->minValue(), volume->maxValue() );
+        BaseClass::m_transfer_function.setRange( min_value, max_value );
         this->generate_particles<kvs::Int64>( volume );
     }
     else if ( type == typeid( kvs::UInt8  ) )
@@ -373,27 +377,27 @@ void CellByCellUniformSampling::mapping( const kvs::Camera* camera, const kvs::U
     }
     else if ( type == typeid( kvs::UInt16 ) )
     {
-        BaseClass::m_transfer_function.setRange( volume->minValue(), volume->maxValue() );
+        BaseClass::m_transfer_function.setRange( min_value, max_value );
         this->generate_particles<kvs::UInt16>( volume );
     }
     else if ( type == typeid( kvs::UInt32 ) )
     {
-        BaseClass::m_transfer_function.setRange( volume->minValue(), volume->maxValue() );
+        BaseClass::m_transfer_function.setRange( min_value, max_value );
         this->generate_particles<kvs::UInt32>( volume );
     }
     else if ( type == typeid( kvs::UInt64 ) )
     {
-        BaseClass::m_transfer_function.setRange( volume->minValue(), volume->maxValue() );
+        BaseClass::m_transfer_function.setRange( min_value, max_value );
         this->generate_particles<kvs::UInt64>( volume );
     }
     else if ( type == typeid( kvs::Real32 ) )
     {
-        BaseClass::m_transfer_function.setRange( volume->minValue(), volume->maxValue() );
+        BaseClass::m_transfer_function.setRange( min_value, max_value );
         this->generate_particles<kvs::Real32>( volume );
     }
     else if ( type == typeid( kvs::Real64 ) )
     {
-        BaseClass::m_transfer_function.setRange( volume->minValue(), volume->maxValue() );
+        BaseClass::m_transfer_function.setRange( min_value, max_value );
         this->generate_particles<kvs::Real64>( volume );
     }
     else

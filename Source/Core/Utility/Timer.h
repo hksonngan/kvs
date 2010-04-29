@@ -183,8 +183,8 @@ inline void GetTimeOfDay( struct timeval& tv )
     {
         LARGE_INTEGER freq = {0};
         QueryPerformanceFrequency( &freq );
-        tv.tv_sec  = time.QuadPart / freq.QuadPart;
-        tv.tv_usec = ( static_cast<float>(time.QuadPart) / freq.QuadPart - tv.tv_sec ) * 1000000;
+        tv.tv_sec  = static_cast<long>( time.QuadPart / freq.QuadPart );
+        tv.tv_usec = static_cast<long>( ( static_cast<float>(time.QuadPart) / freq.QuadPart - tv.tv_sec ) * 1000000 );
     }
     else
     {

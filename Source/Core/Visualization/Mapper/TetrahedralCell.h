@@ -18,6 +18,7 @@
 #include <kvs/Vector4>
 #include <kvs/Matrix44>
 #include <kvs/UnstructuredVolumeObject>
+#include <kvs/IgnoreUnusedVariable>
 #include "CellBase.h"
 
 
@@ -110,6 +111,8 @@ inline const kvs::Real32* TetrahedralCell<T>::interpolationFunctions( const kvs:
 template <typename T>
 inline const kvs::Real32* TetrahedralCell<T>::differentialFunctions( const kvs::Vector3f& point ) const
 {
+    kvs::IgnoreUnusedVariable( point );
+
     // dNdx
     BaseClass::m_differential_functions[ 0] =   1.0f;
     BaseClass::m_differential_functions[ 1] =   0.0f;

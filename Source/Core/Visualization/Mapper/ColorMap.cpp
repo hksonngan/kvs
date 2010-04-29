@@ -321,7 +321,10 @@ void ColorMap::create( void )
                     const float r = c0.r() + ( c1.r() - c0.r() ) * ( f - s0 ) / ( s1 - s0 );
                     const float g = c0.g() + ( c1.g() - c0.g() ) * ( f - s0 ) / ( s1 - s0 );
                     const float b = c0.b() + ( c1.b() - c0.b() ) * ( f - s0 ) / ( s1 - s0 );
-                    color = kvs::RGBColor( r, g, b );
+                    const kvs::UInt8 R = static_cast<kvs::UInt8>( r );
+                    const kvs::UInt8 G = static_cast<kvs::UInt8>( g );
+                    const kvs::UInt8 B = static_cast<kvs::UInt8>( b );
+                    color = kvs::RGBColor( R, G, B );
                     break;
                 }
                 else
@@ -387,9 +390,9 @@ const kvs::RGBColor ColorMap::at( const float value ) const
     const int g1 = c1.g();
     const int b1 = c1.b();
 
-    const int R = static_cast<int>( ( r1 - r0 ) * v + r0 * s1 - r1 * s0 );
-    const int G = static_cast<int>( ( g1 - g0 ) * v + g0 * s1 - g1 * s0 );
-    const int B = static_cast<int>( ( b1 - b0 ) * v + b0 * s1 - b1 * s0 );
+    const kvs::UInt8 R = static_cast<kvs::UInt8>( ( r1 - r0 ) * v + r0 * s1 - r1 * s0 );
+    const kvs::UInt8 G = static_cast<kvs::UInt8>( ( g1 - g0 ) * v + g0 * s1 - g1 * s0 );
+    const kvs::UInt8 B = static_cast<kvs::UInt8>( ( b1 - b0 ) * v + b0 * s1 - b1 * s0 );
 
     return( kvs::RGBColor( R, G, B ) );
 }

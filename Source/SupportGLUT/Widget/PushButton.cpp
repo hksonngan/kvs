@@ -99,9 +99,9 @@ void PushButton::setTextMargin( const int margin )
 void PushButton::setButtonColor( const kvs::RGBColor& color )
 {
     m_button_color = color;
-    m_clicked_button_color = BaseClass::get_darkened_color( color, 0.95 );
+    m_clicked_button_color = BaseClass::get_darkened_color( color, 0.95f );
     m_upper_edge_color = ::Default::ButtonEdgeColor;
-    m_lower_edge_color = BaseClass::get_darkened_color( color, 0.6 );
+    m_lower_edge_color = BaseClass::get_darkened_color( color, 0.6f );
 }
 
 /*===========================================================================*/
@@ -137,7 +137,7 @@ int PushButton::get_aligned_x( void )
     // Centering the caption along the x axis.
     const GLfloat x0 = static_cast<GLfloat>( BaseClass::x0() + BaseClass::margin() );
     const GLfloat x1 = static_cast<GLfloat>( BaseClass::x1() - BaseClass::margin() );
-    return( x0 + ( x1 - x0 - m_caption.size() * BaseClass::characterWidth() ) / 2 );
+    return( static_cast<int>( x0 + ( x1 - x0 - m_caption.size() * BaseClass::characterWidth() ) * 0.5f + 0.5f ) );
 }
 
 /*===========================================================================*/
@@ -151,7 +151,7 @@ int PushButton::get_aligned_y( void )
     // Centering the caption along the y axis.
     const GLfloat y0 = static_cast<GLfloat>( BaseClass::y0() + BaseClass::margin() );
     const GLfloat y1 = static_cast<GLfloat>( BaseClass::y1() - BaseClass::margin() );
-    return( y0 + ( y1 - y0 - BaseClass::characterHeight() ) / 2 );
+    return( static_cast<int>( y0 + ( y1 - y0 - BaseClass::characterHeight() ) * 0.5f + 0.5f ) );
 }
 
 /*===========================================================================*/
@@ -276,6 +276,8 @@ void PushButton::mousePressEvent( kvs::MouseEvent* event )
 /*===========================================================================*/
 void PushButton::mouseReleaseEvent( kvs::MouseEvent* event )
 {
+    kvs::IgnoreUnusedVariable( event );
+
     if ( !BaseClass::isShown() ) return;
 
     if ( BaseClass::isActive() )

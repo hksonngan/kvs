@@ -266,7 +266,7 @@ void RayCastingRenderer::create_image(
         glActiveTexture( GL_TEXTURE1 ); m_volume_data.bind(); glEnable( GL_TEXTURE_3D );
         {
             const kvs::Vector3ui ngrids = volume->resolution() - kvs::Vector3ui(1);
-            const kvs::Real32 max_ngrids = kvs::Math::Max( ngrids.x(), ngrids.y(), ngrids.z() );
+            const kvs::Real32 max_ngrids = static_cast<kvs::Real32>( kvs::Math::Max( ngrids.x(), ngrids.y(), ngrids.z() ) );
             const kvs::Vector3f light_position = camera->projectWorldToObject( light->position() * max_ngrids );
             const kvs::Vector3f camera_position = camera->projectWorldToObject( camera->position() * max_ngrids );
             m_ray_caster.setUniformValuef( "light_position", light_position );
@@ -296,7 +296,7 @@ void RayCastingRenderer::create_image(
 void RayCastingRenderer::initialize_shaders( const kvs::StructuredVolumeObject* volume )
 {
     const kvs::Vector3ui ngrids = volume->resolution();
-    const kvs::Real32 max_ngrids = kvs::Math::Max( ngrids.x()-1, ngrids.y()-1, ngrids.z()-1 );
+    const kvs::Real32 max_ngrids = static_cast<kvs::Real32>( kvs::Math::Max( ngrids.x()-1, ngrids.y()-1, ngrids.z()-1 ) );
     const kvs::Real32 n = 1.0f / max_ngrids;
     const kvs::Vector3f offset( 1.0f * n, 1.0f * n, 1.0f * n );
     const kvs::Vector3f ratio( ngrids.x() * n, ngrids.y() * n, ngrids.z() * n );
@@ -548,36 +548,43 @@ void RayCastingRenderer::create_bounding_cube( const kvs::StructuredVolumeObject
 //    const kvs::Vector3ui max( volume->resolution() );
     const size_t nelements = 72; // = 4 vertices x 3 dimensions x 6 faces
 
+    const float minx = static_cast<float>( min.x() );
+    const float miny = static_cast<float>( min.y() );
+    const float minz = static_cast<float>( min.z() );
+    const float maxx = static_cast<float>( max.x() );
+    const float maxy = static_cast<float>( max.y() );
+    const float maxz = static_cast<float>( max.z() );
+
     const float coords[ nelements ] = {
-        min.x(), min.y(), min.z(), // 0
-        max.x(), min.y(), min.z(), // 1
-        max.x(), min.y(), max.z(), // 2
-        min.x(), min.y(), max.z(), // 3
+        minx, miny, minz, // 0
+        maxx, miny, minz, // 1
+        maxx, miny, maxz, // 2
+        minx, miny, maxz, // 3
 
-        min.x(), max.y(), max.z(), // 7
-        max.x(), max.y(), max.z(), // 6
-        max.x(), max.y(), min.z(), // 5
-        min.x(), max.y(), min.z(), // 4
+        minx, maxy, maxz, // 7
+        maxx, maxy, maxz, // 6
+        maxx, maxy, minz, // 5
+        minx, maxy, minz, // 4
 
-        min.x(), max.y(), min.z(), // 4
-        max.x(), max.y(), min.z(), // 5
-        max.x(), min.y(), min.z(), // 1
-        min.x(), min.y(), min.z(), // 0
+        minx, maxy, minz, // 4
+        maxx, maxy, minz, // 5
+        maxx, miny, minz, // 1
+        minx, miny, minz, // 0
 
-        max.x(), max.y(), min.z(), // 5
-        max.x(), max.y(), max.z(), // 6
-        max.x(), min.y(), max.z(), // 2
-        max.x(), min.y(), min.z(), // 1
+        maxx, maxy, minz, // 5
+        maxx, maxy, maxz, // 6
+        maxx, miny, maxz, // 2
+        maxx, miny, minz, // 1
 
-        max.x(), max.y(), max.z(), // 6
-        min.x(), max.y(), max.z(), // 7
-        min.x(), min.y(), max.z(), // 3
-        max.x(), min.y(), max.z(), // 2
+        maxx, maxy, maxz, // 6
+        minx, maxy, maxz, // 7
+        minx, miny, maxz, // 3
+        maxx, miny, maxz, // 2
 
-        min.x(), min.y(), min.z(), // 0
-        min.x(), min.y(), max.z(), // 3
-        min.x(), max.y(), max.z(), // 7
-        min.x(), max.y(), min.z()  // 4
+        minx, miny, minz, // 0
+        minx, miny, maxz, // 3
+        minx, maxy, maxz, // 7
+        minx, maxy, minz  // 4
     };
 
     const size_t byte_size = sizeof(float) * nelements;
@@ -595,6 +602,8 @@ void RayCastingRenderer::create_bounding_cube( const kvs::StructuredVolumeObject
 /*===========================================================================*/
 void RayCastingRenderer::create_transfer_function( const kvs::StructuredVolumeObject* volume )
 {
+    kvs::IgnoreUnusedVariable( volume );
+
     const size_t width = BaseClass::m_tfunc.resolution();
     kvs::ValueArray<float> colors( width * 4 );
     float* data = colors.pointer();

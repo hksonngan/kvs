@@ -95,7 +95,7 @@ struct Parameters
     void createHistogramTexture( void )
     {
         const size_t nchannels = 4;
-        const size_t width = this->frequency_table.nbins();
+        const size_t width = static_cast<size_t>( this->frequency_table.nbins() );
         const size_t height = width;
 
         this->histogram_texture.setPixelFormat( nchannels, sizeof( kvs::UInt8 ) );
@@ -112,7 +112,7 @@ struct Parameters
     const kvs::ValueArray<kvs::UInt8> histogramImage( void )
     {
         const size_t nchannels = 4;
-        const size_t width = frequency_table.nbins();
+        const size_t width = static_cast<size_t>( frequency_table.nbins() );
         const size_t height = width;
         const size_t npixels = width * height;
 

@@ -17,6 +17,7 @@
 
 #include <list>
 #include <kvs/ClassName>
+#include <kvs/IgnoreUnusedVariable>
 #include <kvs/glut/WidgetBase>
 #include <kvs/glut/Screen>
 #include "CheckBox.h"
@@ -54,13 +55,13 @@ public:
 
 public:
 
-    virtual void pressed( kvs::glut::CheckBox* box ) {};
+    virtual void pressed( kvs::glut::CheckBox* box ) { kvs::IgnoreUnusedVariable( box ); };
 
-    virtual void pressed( int id ) {};
+    virtual void pressed( int id ) { kvs::IgnoreUnusedVariable( id ); };
 
-    virtual void released( kvs::glut::CheckBox* box ) {};
+    virtual void released( kvs::glut::CheckBox* box ) { kvs::IgnoreUnusedVariable( box ); };
 
-    virtual void released( int id ) {};
+    virtual void released( int id ) { kvs::IgnoreUnusedVariable( id ); };
 
     virtual void screenUpdated( void ) {};
 

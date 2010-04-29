@@ -62,7 +62,8 @@ TCPBarrierServer::~TCPBarrierServer( void )
 /*===========================================================================*/
 void TCPBarrierServer::run( void )
 {
-    while( true )
+//    while( true )
+    for ( ; ; )
     {
         char recv_buffer[::BARRIER_BUFFER_SIZE];
         for( int i = 0; i < m_block_counter; i++ )
