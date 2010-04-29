@@ -190,6 +190,7 @@ const bool Bmp::read( const std::string& filename )
 
     const size_t bpp = 3;
     const size_t bpl = m_width * bpp;
+    const size_t padding = m_width % 4;
     const size_t upper_left = ( m_height - 1 ) * bpl;
     for ( size_t j = 0; j < m_height; j++ )
     {
@@ -203,6 +204,9 @@ const bool Bmp::read( const std::string& filename )
             ifs.read( reinterpret_cast<char*>( data + index + 1 ), 1 );
             ifs.read( reinterpret_cast<char*>( data + index + 0 ), 1 );
         }
+
+        // Padding.
+        ifs.seekg( padding, std::ios::cur );
     }
 
     ifs.close();
@@ -239,6 +243,7 @@ const bool Bmp::write( const std::string& filename )
 
     const size_t bpp = 3;
     const size_t bpl = m_width * bpp;
+    const size_t padding = m_width % 4;
     const size_t lower_left = ( m_height - 1 ) * bpl;
     for ( size_t j = 0; j < m_height; j++ )
     {
@@ -252,6 +257,9 @@ const bool Bmp::write( const std::string& filename )
             ofs.write( reinterpret_cast<char*>( data + index + 1 ), 1 );
             ofs.write( reinterpret_cast<char*>( data + index + 0 ), 1 );
         }
+
+        // Padding.
+        for ( size_t i = 0; i < padding; i++ ) ofs.write( "0", 1 );
     }
 
     ofs.close();
@@ -289,11 +297,12 @@ void Bmp::set_header( void )
     const char*       magic_num = "BM";
     const kvs::UInt32 offset    = 54;
     const size_t      bpp       = 3;
+    const kvs::UInt32 padding   = m_height * ( m_width % 4 );
 
     //m_fileh.type          = 0x4d42; // "BM"; '0x424d', if big endian.
     //m_fileh.type          = 0x424d; // "BM"; '0x424d', if big endian.
     memcpy( &( m_file_header.m_type ), magic_num, sizeof( kvs::UInt16 ) );
-    m_file_header.m_size          = offset + m_width * m_height * bpp;
+    m_file_header.m_size          = offset + m_width * m_height * bpp + padding;
     m_file_header.m_reserved1     = 0;
     m_file_header.m_reserved2     = 0;
     m_file_header.m_offset        = offset;
@@ -305,7 +314,7 @@ void Bmp::set_header( void )
     m_info_header.m_bpp           = 24;
     m_info_header.m_compression   = 0L; // 0L: no compress,
                                         // 1L: 8-bit run-length encoding, 2L: 4-bit
-    m_info_header.m_bitmapsize    = m_width * m_height * bpp;
+    m_info_header.m_bitmapsize    = m_width * m_height * bpp + padding;
     m_info_header.m_hresolution   = 0;
     m_info_header.m_vresolution   = 0;
     m_info_header.m_colsused      = 0;
