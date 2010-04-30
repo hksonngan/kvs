@@ -464,7 +464,8 @@ kvs::ColorImage Camera::snapshot( void )
 
     const int width  = viewport[2];
     const int height = viewport[3];
-    const int size   = height * ( ( ( ( width * 3 ) + 3 ) >> 2 ) << 2 );
+//    const int size   = height * ( ( ( ( width * 3 ) + 3 ) >> 2 ) << 2 );
+    const int size   = height * width * 3;
     unsigned char* data = new unsigned char [ size ];
     if( !data )
     {
