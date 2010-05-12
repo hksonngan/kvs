@@ -175,6 +175,12 @@ void RayCastingRenderer::setDrawingBuffer( const RayCastingRenderer::DrawingBuff
     }
 }
 
+void RayCastingRenderer::setTransferFunction( const kvs::TransferFunction& tfunc )
+{
+     BaseClass::setTransferFunction( tfunc );
+     m_transfer_function_texture.release();
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Creates a rendering image.
@@ -188,7 +194,7 @@ void RayCastingRenderer::create_image(
     const kvs::Camera* camera,
     const kvs::Light* light )
 {
-    glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT | GL_LIGHTING_BIT );
+    glPushAttrib( GL_ALL_ATTRIB_BITS );
 
     RendererBase::initialize();
 
@@ -210,13 +216,15 @@ void RayCastingRenderer::create_image(
     }
 
     // Download the transfer function data to the 1D texture on the GPU.
-    if ( !glIsTexture( m_transfer_function_texture.id() ) )
+//    if ( glIsTexture( m_transfer_function_texture.id() ) == GL_FALSE )
+    if ( !m_transfer_function_texture.isTexture() )
     {
         this->create_transfer_function( volume );
     }
 
     // Download the volume data to the 3D texture on the GPU.
-    if ( !glIsTexture( m_volume_data.id() ) )
+//    if ( glIsTexture( m_volume_data.id() ) == GL_FALSE )
+    if ( !m_volume_data.isTexture() )
     {
         this->create_volume_data( volume );
     }
@@ -590,6 +598,7 @@ void RayCastingRenderer::create_bounding_cube( const kvs::StructuredVolumeObject
     const size_t byte_size = sizeof(float) * nelements;
     m_bounding_cube.create( byte_size );
     m_bounding_cube.download( byte_size, coords );
+    m_bounding_cube.unbind();
 
     ::CheckOpenGLError( "Cannot download bounding cube (VBO)." );
 }
@@ -618,14 +627,15 @@ void RayCastingRenderer::create_transfer_function( const kvs::StructuredVolumeOb
         *(data++) = omap[i];
     }
 
-    m_transfer_function_texture.release();
-//    m_transfer_function_texture.setWrapS( GL_CLAMP_TO_EDGE );
-    m_transfer_function_texture.setWrapS( GL_CLAMP );
+//    m_transfer_function_texture.release();
+    m_transfer_function_texture.setWrapS( GL_CLAMP_TO_EDGE );
+//    m_transfer_function_texture.setWrapS( GL_CLAMP );
     m_transfer_function_texture.setMagFilter( GL_LINEAR );
     m_transfer_function_texture.setMinFilter( GL_LINEAR );
     m_transfer_function_texture.setPixelFormat( GL_RGBA, GL_RGBA, GL_FLOAT  );
     m_transfer_function_texture.create( width );
     m_transfer_function_texture.download( width, colors.pointer() );
+    m_transfer_function_texture.unbind();
 
     ::CheckOpenGLError( "Cannot create transfer function texture." );
 }
@@ -707,6 +717,7 @@ void RayCastingRenderer::create_volume_data( const kvs::StructuredVolumeObject* 
     m_volume_data.setPixelFormat( data_format, GL_ALPHA, data_type );
     m_volume_data.create( width, height, depth );
     m_volume_data.download( width, height, depth, data_value.pointer() );
+    m_volume_data.unbind();
 
     ::CheckOpenGLError( "Cannot create volume data texture." );
 }

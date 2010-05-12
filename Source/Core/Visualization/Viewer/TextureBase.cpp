@@ -119,6 +119,11 @@ const GLenum TextureBase::externalType( void ) const
     return( m_external_type );
 }
 
+const bool TextureBase::isTexture( void ) const
+{
+    return( glIsTexture( m_id ) == GL_TRUE );
+}
+
 /*==========================================================================*/
 /**
  *  Set the magnification filter.

@@ -62,6 +62,8 @@ public:
 
     const GLenum externalType( void ) const;
 
+    const bool isTexture( void ) const;
+
 public:
 
     void setMagFilter( const GLenum mag_filter );

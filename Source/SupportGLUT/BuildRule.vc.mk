@@ -22,6 +22,7 @@ $(OUTDIR)\.\Widget\Label.obj \
 $(OUTDIR)\.\Widget\PushButton.obj \
 $(OUTDIR)\.\Widget\RadioButton.obj \
 $(OUTDIR)\.\Widget\RadioButtonGroup.obj \
+$(OUTDIR)\.\Widget\Rectangle.obj \
 $(OUTDIR)\.\Widget\Slider.obj \
 $(OUTDIR)\.\Widget\WidgetBase.obj \
 

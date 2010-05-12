@@ -18,5 +18,6 @@
 #include <SupportGLUT/Widget/PushButton.h>
 #include <SupportGLUT/Widget/RadioButton.h>
 #include <SupportGLUT/Widget/RadioButtonGroup.h>
+#include <SupportGLUT/Widget/Rectangle.h>
 #include <SupportGLUT/Widget/Slider.h>
 #include <SupportGLUT/Widget/WidgetBase.h>

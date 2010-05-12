@@ -46,12 +46,7 @@ namespace glut
 /*===========================================================================*/
 WidgetBase::WidgetBase( kvs::ScreenBase* screen ):
     m_screen( screen ),
-    m_x( 0 ),
-    m_y( 0 ),
-    m_width( 0 ),
-    m_height( 0 ),
     m_margin( 0 ),
-    m_is_active( false ),
     m_is_shown( false )
 {
     if ( screen ) screen->eventHandler()->attach( this );
@@ -87,50 +82,6 @@ kvs::ScreenBase* WidgetBase::screen( void )
 
 /*===========================================================================*/
 /**
- *  @brief  Returns the x value of the widget position.
- *  @return x value of the widget position
- */
-/*===========================================================================*/
-const int WidgetBase::x( void ) const
-{
-    return( m_x );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the y value of the widget position.
- *  @return y value of the widget position
- */
-/*===========================================================================*/
-const int WidgetBase::y( void ) const
-{
-    return( m_y );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the widget width.
- *  @return widget width
- */
-/*===========================================================================*/
-const int WidgetBase::width( void ) const
-{
-    return( m_width );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the widget height.
- *  @return widget height
- */
-/*===========================================================================*/
-const int WidgetBase::height( void ) const
-{
-    return( m_height );
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Returns the margin.
  *  @return margin
  */
@@ -138,50 +89,6 @@ const int WidgetBase::height( void ) const
 const int WidgetBase::margin( void ) const
 {
     return( m_margin );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the x value of the bottom-left of the widget.
- *  @return x value of the upper-left
- */
-/*===========================================================================*/
-const int WidgetBase::x0( void ) const
-{
-    return( m_x );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the y value of the bottom-left of the widget.
- *  @return y value of the upper-left
- */
-/*===========================================================================*/
-const int WidgetBase::y0( void ) const
-{
-    return( m_y );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the x value of the top-right of the widget.
- *  @return x value of the lower-right
- */
-/*===========================================================================*/
-const int WidgetBase::x1( void ) const
-{
-    return( m_x + m_width );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the y value of the top-right of the widget.
- *  @return y value of the lower-right
- */
-/*===========================================================================*/
-const int WidgetBase::y1( void ) const
-{
-    return( m_y + m_height );
 }
 
 /*===========================================================================*/
@@ -252,17 +159,6 @@ const int WidgetBase::characterHeight( void ) const
 
 /*===========================================================================*/
 /**
- *  @brief  Checks whether the widget is active or not.
- *  @return true, if the widget is active
- */
-/*===========================================================================*/
-const bool WidgetBase::isActive( void ) const
-{
-    return( m_is_active );
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Checks whether the widget is shown or not.
  *  @return true, if the widget is shown
  */
@@ -274,50 +170,6 @@ const bool WidgetBase::isShown( void ) const
 
 /*===========================================================================*/
 /**
- *  @brief  Sets x value of the widget position on the window coordinate.
- *  @param  x [in] x value of the widget position
- */
-/*===========================================================================*/
-void WidgetBase::setX( const int x )
-{
-    m_x = x;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets y value of the widget position on the window coordinate.
- *  @param  y [in] y value of the widget position
- */
-/*===========================================================================*/
-void WidgetBase::setY( const int y )
-{
-    m_y = y;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a widget width.
- *  @param  width [in] widget width
- */
-/*===========================================================================*/
-void WidgetBase::setWidth( const int width )
-{
-    m_width = width;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a widget height.
- *  @param  height [in] widget height
- */
-/*===========================================================================*/
-void WidgetBase::setHeight( const int height )
-{
-    m_height = height;
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Sets a margin.
  *  @param  margin [in] margin
  */
@@ -325,47 +177,6 @@ void WidgetBase::setHeight( const int height )
 void WidgetBase::setMargin( const int margin )
 {
     m_margin = margin;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a widget position.
- *  @param  x [in] x coordinate of the widget position
- *  @param  y [in] y coordinate of the widget position
- */
-/*===========================================================================*/
-void WidgetBase::setPosition( const int x, const int y )
-{
-    this->setX( x );
-    this->setY( y );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a widget size.
- *  @param  width [in] widget width
- *  @param  height [in] widget height
- */
-/*===========================================================================*/
-void WidgetBase::setSize( const int width, const int height )
-{
-    this->setWidth( width );
-    this->setHeight( height );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a widget geometry.
- *  @param  x [in] x coordinate of the widget position
- *  @param  y [in] y coordinate of the widget position
- *  @param  width [in] widget width
- *  @param  height [in] widget height
- */
-/*===========================================================================*/
-void WidgetBase::setGeometry( const int x, const int y, const int width, const int height )
-{
-    this->setPosition( x, y );
-    this->setSize( width, height );
 }
 
 /*===========================================================================*/
@@ -461,65 +272,6 @@ void WidgetBase::show( void )
 void WidgetBase::hide( void )
 {
     m_is_shown = false;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Activates the widget.
- */
-/*===========================================================================*/
-void WidgetBase::activate( void )
-{
-    m_is_active = true;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Deactivates the widget.
- */
-/*===========================================================================*/
-void WidgetBase::deactivate( void )
-{
-    m_is_active = false;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Check whether the given point is inside the widget or not.
- *  @param  x [in] x position in the window coordinate
- *  @param  y [in] y position in the window coordinate
- *  @param  proper [in] whether the edges are checked or not
- *  @return true if the given point is inside the width
- */
-/*===========================================================================*/
-const bool WidgetBase::contains(
-    const int x,
-    const int y,
-    const bool proper )
-{
-    /*
-     *   p0 ------------ *
-     *    |              |  p  : ( x,  y  )
-     *    |   p          |
-     *    |              |  p0 : ( x0, y0 )
-     *    |              |  p1 : ( x1, y1 )
-     *    |              |
-     *    * ------------ p1
-     *
-     */
-    const int x0 = m_x;
-    const int x1 = m_x + m_width;
-    const int y0 = m_y;
-    const int y1 = m_y + m_height;
-
-    if ( proper )
-    {
-        return( ( x0 < x ) && ( x < x1 ) && ( y0 < y ) && ( y < y1 ) );
-    }
-    else
-    {
-        return( ( x0 <= x ) && ( x <= x1 ) && ( y0 <= y ) && ( y <= y1 ) );
-    }
 }
 
 /*===========================================================================*/
@@ -627,9 +379,10 @@ void WidgetBase::draw_background( void )
 /*===========================================================================*/
 void WidgetBase::draw_text( const int x, const int y, const std::string& text )
 {
-    glColor3ub( m_text_color.r(), m_text_color.g(), m_text_color.b() );
     glPushAttrib( GL_ALL_ATTRIB_BITS );
     {
+        glColor3ub( m_text_color.r(), m_text_color.g(), m_text_color.b() );
+
         glDisable( GL_TEXTURE_1D );
         glDisable( GL_TEXTURE_2D );
         glDisable( GL_BLEND );

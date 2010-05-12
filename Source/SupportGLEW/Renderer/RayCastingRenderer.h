@@ -91,6 +91,8 @@ public:
 
     void setDrawingBuffer( const DrawingBuffer drawing_buffer );
 
+    void setTransferFunction( const kvs::TransferFunction& tfunc );
+
 protected:
 
     void create_image(

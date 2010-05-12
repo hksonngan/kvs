@@ -195,7 +195,7 @@ void Texture1D::unbind( void )
 /*==========================================================================*/
 void Texture1D::release( void )
 {
-    if ( glIsTexture( m_id ) ) glDeleteTextures( 1, &m_id );
+    if ( glIsTexture( m_id ) == GL_TRUE ) glDeleteTextures( 1, &m_id );
 
     m_id = 0;
     m_is_downloaded = false;
