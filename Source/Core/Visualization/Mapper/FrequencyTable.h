@@ -41,6 +41,9 @@ protected:
     kvs::Real64             m_min_range;     ///< min. range value
     kvs::Real64             m_max_range;     ///< max. range value
     size_t                  m_max_count;     ///< min. count value
+    kvs::Real64             m_mean;          ///< mean value
+    kvs::Real64             m_variance;      ///< variance value
+    kvs::Real64             m_standard_deviation; ///< standard deviation
     kvs::UInt64             m_nbins;         ///< number of bins
     kvs::ValueArray<size_t> m_bin;           ///< bin array
     std::list<kvs::Real64>  m_ignore_values; ///< ignore value list
@@ -58,6 +61,12 @@ public:
     const kvs::Real64 maxRange( void ) const;
 
     const size_t maxCount( void ) const;
+
+    const kvs::Real64 mean( void ) const;
+
+    const kvs::Real64 variance( void ) const;
+
+    const kvs::Real64 standardDeviation( void ) const;
 
     const kvs::UInt64 nbins( void ) const;
 
@@ -116,6 +125,8 @@ inline void FrequencyTable::binning( const kvs::VolumeObjectBase* volume )
     const T* const end = value + volume->nnodes() * veclen;
     const kvs::Real64 width = ( m_max_range - m_min_range ) / kvs::Real64( m_nbins - 1 );
 
+    size_t total_count = 0;
+
     m_max_count = 0;
     if ( veclen == 1 )
     {
@@ -127,6 +138,8 @@ inline void FrequencyTable::binning( const kvs::VolumeObjectBase* volume )
                 const size_t index = static_cast<size_t>( ( *value - m_min_range ) / width );
                 m_bin[index] = m_bin[index] + 1;
                 m_max_count = kvs::Math::Max( m_max_count, m_bin[index] );
+
+                total_count++;
             }
             ++value;
         }
@@ -149,9 +162,19 @@ inline void FrequencyTable::binning( const kvs::VolumeObjectBase* volume )
                 const size_t index = static_cast<size_t>( ( magnitude - m_min_range ) / width );
                 m_bin[index] = m_bin[index] + 1;
                 m_max_count = kvs::Math::Max( m_max_count, m_bin[index] );
+
+                total_count++;
             }
         }
     }
+
+    m_mean = total_count / m_nbins;
+
+    kvs::Real64 sum = 0;
+    for ( size_t i = 0; i < m_nbins; i++ ) sum += kvs::Math::Square( m_bin[i] - m_mean );
+    m_variance = sum / m_nbins;
+
+    m_standard_deviation = std::sqrt( m_variance );
 }
 
 /*==========================================================================*/
@@ -175,6 +198,8 @@ inline void FrequencyTable::binning( const kvs::ImageObject* image, const size_t
     const size_t stride  = image->nchannels();
     const size_t npixels = image->width() * image->height();
 
+    size_t total_count = 0;
+
     m_max_count = 0;
     for ( size_t i = 0; i < npixels; i++ )
     {
@@ -186,8 +211,18 @@ inline void FrequencyTable::binning( const kvs::ImageObject* image, const size_t
             const size_t index = static_cast<size_t>( ( value - m_min_range ) / width );
             m_bin[index] = m_bin[index] + 1;
             m_max_count = kvs::Math::Max( m_max_count, m_bin[index] );
+
+            total_count++;
         }
     }
+
+    m_mean = total_count / m_nbins;
+
+    kvs::Real64 sum = 0;
+    for ( size_t i = 0; i < m_nbins; i++ ) sum += kvs::Math::Square( m_bin[i] - m_mean );
+    m_variance = sum / m_nbins;
+
+    m_standard_deviation = std::sqrt( m_variance );
 }
 
 } // end of namespace kvs

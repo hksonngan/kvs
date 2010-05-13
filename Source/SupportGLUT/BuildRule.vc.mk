@@ -18,7 +18,10 @@ $(OUTDIR)\.\Viewer\TransferFunctionEditor.obj \
 $(OUTDIR)\.\Viewer\Window.obj \
 $(OUTDIR)\.\Widget\CheckBox.obj \
 $(OUTDIR)\.\Widget\CheckBoxGroup.obj \
+$(OUTDIR)\.\Widget\ColorMapPalette.obj \
+$(OUTDIR)\.\Widget\ColorPalette.obj \
 $(OUTDIR)\.\Widget\Label.obj \
+$(OUTDIR)\.\Widget\OpacityMapPalette.obj \
 $(OUTDIR)\.\Widget\PushButton.obj \
 $(OUTDIR)\.\Widget\RadioButton.obj \
 $(OUTDIR)\.\Widget\RadioButtonGroup.obj \

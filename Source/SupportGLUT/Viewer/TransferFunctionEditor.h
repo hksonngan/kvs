@@ -15,6 +15,7 @@
 #ifndef KVS__TRANSFER_FUNCTION_EDITOR_H_INCLUDE
 #define KVS__TRANSFER_FUNCTION_EDITOR_H_INCLUDE
 
+#include <string>
 #include <kvs/OpenGL>
 #include <kvs/RGBColor>
 #include <kvs/RGBAColor>
@@ -22,14 +23,126 @@
 #include <kvs/TransferFunction>
 #include <kvs/Texture1D>
 #include <kvs/Texture2D>
+#include <kvs/MouseReleaseEventListener>
+#include <kvs/glut/Screen>
+#include <kvs/glut/PushButton>
 #include <kvs/glut/Text>
-#include <string>
+#include <kvs/glut/ColorPalette>
+#include <kvs/glut/ColorMapPalette>
+#include <kvs/glut/OpacityMapPalette>
+#include <kvs/glut/Histogram>
 
 
 namespace kvs
 {
 
 namespace glut
+{
+
+/*===========================================================================*/
+/**
+ *  @brief  Transfer function editor class.
+ */
+/*===========================================================================*/
+class TransferFunctionEditor : public kvs::glut::Screen
+{
+
+public:
+
+    typedef kvs::glut::Screen SuperClass;
+
+private:
+
+    class StackEvent;
+
+    std::deque<kvs::TransferFunction> m_undo_stack;     ///< undo stack
+    std::deque<kvs::TransferFunction> m_redo_stack;     ///< redo stack
+    StackEvent*                       m_stack_event;    ///< stack event
+    size_t                            m_max_stack_size; ///< max. stack size
+
+protected:
+
+    kvs::ScreenBase*              m_screen;              ///< pointer to screen
+    kvs::glut::ColorPalette*      m_color_palette;       ///< color palette
+    kvs::glut::ColorMapPalette*   m_color_map_palette;   ///< color map palette
+    kvs::glut::OpacityMapPalette* m_opacity_map_palette; ///< opacity map palette
+    kvs::glut::Histogram*         m_histogram;           ///< histogram
+    kvs::glut::PushButton*        m_reset_button;        ///< reset button
+    kvs::glut::PushButton*        m_undo_button;         ///< undo button
+    kvs::glut::PushButton*        m_redo_button;         ///< redo button
+    kvs::glut::PushButton*        m_save_button;         ///< save button
+    kvs::glut::PushButton*        m_apply_button;        ///< apply button
+    kvs::TransferFunction m_initial_transfer_function;   ///< initial transfer function
+
+public:
+
+    TransferFunctionEditor( kvs::ScreenBase* parent = 0 );
+
+    virtual ~TransferFunctionEditor( void );
+
+public:
+
+    kvs::ScreenBase* screen( void );
+
+    const kvs::glut::ColorPalette* colorPalette( void ) const;
+
+    const kvs::glut::ColorMapPalette* colorMapPalette( void ) const;
+
+    const kvs::glut::OpacityMapPalette* opacityMapPalette( void ) const;
+
+    const kvs::ColorMap colorMap( void ) const;
+
+    const kvs::OpacityMap opacityMap( void ) const;
+
+    const kvs::TransferFunction transferFunction( void ) const;
+
+    const size_t undoStackSize( void ) const;
+
+    const size_t redoStackSize( void ) const;
+
+    const size_t maxStackSize( void ) const;
+
+public:
+
+    void setTransferFunction( const kvs::TransferFunction& transfer_function );
+
+    void setVolumeObject( const kvs::StructuredVolumeObject* object );
+
+    void setMaxStackSize( const size_t stack_size );
+
+public:
+
+    virtual void reset( void );
+
+    virtual void undo( void );
+
+    virtual void redo( void );
+
+    virtual void save( void );
+
+    virtual void apply( void );
+};
+
+/*===========================================================================*/
+/**
+ *  @brief  Stack event for undo/redo.
+ */
+/*===========================================================================*/
+class TransferFunctionEditor::StackEvent : public kvs::MouseReleaseEventListener
+{
+    kvs::glut::TransferFunctionEditor* m_editor;
+
+public:
+
+    StackEvent( kvs::glut::TransferFunctionEditor* editor );
+
+    void update( kvs::MouseEvent* event );
+};
+
+
+
+
+namespace old
 {
 
 /*===========================================================================*/
@@ -251,6 +364,8 @@ public:
 
     const bool contains( const int x, const int y, const bool proper = false );
 };
+
+} // end of namespace old
 
 } // end of namespace glut
 

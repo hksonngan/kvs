@@ -28,6 +28,9 @@ FrequencyTable::FrequencyTable( void ):
     m_min_range( 0 ),
     m_max_range( 0 ),
     m_max_count( 0 ),
+    m_mean( 0 ),
+    m_variance( 0 ),
+    m_standard_deviation( 0 ),
     m_nbins( 0 )
 {
 }
@@ -72,6 +75,21 @@ const kvs::Real64 FrequencyTable::maxRange( void ) const
 const size_t FrequencyTable::maxCount( void ) const
 {
     return( m_max_count );
+}
+
+const kvs::Real64 FrequencyTable::mean( void ) const
+{
+    return( m_mean );
+}
+
+const kvs::Real64 FrequencyTable::variance( void ) const
+{
+    return( m_variance );
+}
+
+const kvs::Real64 FrequencyTable::standardDeviation( void ) const
+{
+    return( m_standard_deviation );
 }
 
 /*==========================================================================*/

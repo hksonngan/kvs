@@ -14,7 +14,10 @@ Viewer/TransferFunctionEditor
 Viewer/Window
 Widget/CheckBox
 Widget/CheckBoxGroup
+Widget/ColorMapPalette
+Widget/ColorPalette
 Widget/Label
+Widget/OpacityMapPalette
 Widget/PushButton
 Widget/RadioButton
 Widget/RadioButtonGroup
