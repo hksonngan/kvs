@@ -1,0 +1,61 @@
+/*****************************************************************************/
+/**
+ *  @file   main.cpp
+ *  @brief  Example program for transfer function editor.
+ *  @author Naohisa Sakamoto
+ */
+/*----------------------------------------------------------------------------
+ *
+ *  Copyright 2007 Visualization Laboratory, Kyoto University.
+ *  All rights reserved.
+ *  See http://www.viz.media.kyoto-u.ac.jp/kvs/copyright/ for details.
+ *
+ *  $Id$
+ */
+/*****************************************************************************/
+#include <kvs/StructuredVolumeObject>
+#include <kvs/StructuredVolumeImporter>
+#include <kvs/RayCastingRenderer>
+#include <kvs/HydrogenVolumeData>
+#include <kvs/glut/Application>
+#include <kvs/glut/Screen>
+#include <kvs/glut/TransferFunctionEditor>
+
+
+class TransferFunctionEditor : public kvs::glut::TransferFunctionEditor
+{
+public:
+
+    TransferFunctionEditor( kvs::glut::Screen* screen ):
+        kvs::glut::TransferFunctionEditor( screen ){}
+
+    void apply( void )
+    {
+        const kvs::RendererBase* base = screen()->rendererManager()->renderer();
+        kvs::RayCastingRenderer* renderer = (kvs::RayCastingRenderer*)base;
+        renderer->setTransferFunction( transferFunction() );
+        screen()->redraw();
+    }
+};
+
+int main( int argc, char** argv )
+{
+    kvs::glut::Application app( argc, argv );
+
+    kvs::StructuredVolumeObject* object = NULL;
+    if ( argc > 1 ) object = new kvs::StructuredVolumeImporter( std::string( argv[1] ) );
+    else            object = new kvs::HydrogenVolumeData( kvs::Vector3ui( 32, 32, 32 ) );
+
+    kvs::RayCastingRenderer* renderer = new kvs::RayCastingRenderer();
+    renderer->setShader( kvs::Shader::BlinnPhong() );
+
+    kvs::glut::Screen screen( &app );
+    screen.registerObject( object, renderer );
+    screen.show();
+
+    TransferFunctionEditor editor( &screen );
+    editor.setVolumeObject( object );
+    editor.show();
+
+    return( app.run() );
+}
