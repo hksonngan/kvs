@@ -54,6 +54,8 @@ void RayCastingRenderer::initialize( void )
     m_width  = 0;
     m_height = 0;
     m_ray_width = 1;
+    m_enable_lod = false;
+    memset( m_modelview_matrix, 0, sizeof( m_modelview_matrix ) );
 }
 
 void RayCastingRenderer::exec(
@@ -94,6 +96,8 @@ void RayCastingRenderer::create_image(
         const size_t npixels = BaseClass::m_width * BaseClass::m_height;
         BaseClass::m_color_data.allocate( npixels * 4 );
         BaseClass::m_depth_data.allocate( npixels );
+
+        glGetFloatv( GL_MODELVIEW_MATRIX, m_modelview_matrix );
     }
 
     BaseClass::m_color_data.fill( 0x00 );
@@ -156,6 +160,23 @@ void RayCastingRenderer::rasterize(
     kvs::UInt8*  const pixel      = BaseClass::m_color_data.pointer();
     kvs::Real32* const depth_data = BaseClass::m_depth_data.pointer();
 
+    // LOD control.
+    size_t ray_width = 1;
+    if ( m_enable_lod )
+    {
+        float modelview_matrix[16];
+        glGetFloatv( GL_MODELVIEW_MATRIX, modelview_matrix );
+        for ( size_t i = 0; i < 16; i++ )
+        {
+            if ( m_modelview_matrix[i] != modelview_matrix[i] )
+            {
+                ray_width = m_ray_width;
+                break;
+            }
+        }
+        memcpy( m_modelview_matrix, modelview_matrix, sizeof( modelview_matrix ) );
+    }
+
     // Set the trilinear interpolator.
     kvs::TrilinearInterpolator interpolator( volume );
 
@@ -168,7 +189,6 @@ void RayCastingRenderer::rasterize(
 
     const float step = m_step;
     const float opaque = m_opaque;
-    const size_t ray_width = m_ray_width;
 
     const kvs::Shader::shader_type* const shader = m_shader;
     const kvs::ColorMap&   cmap = BaseClass::transferFunction().colorMap();
@@ -276,6 +296,8 @@ void RayCastingRenderer::rasterize(
             }
         }
     }
+
+    glFinish();
 }
 
 template

@@ -95,6 +95,8 @@ private:
     kvs::glew::VertexBufferObject* m_vbo; ///< vertex buffer object (VBO) for the particles
     Particles* m_particles; ///< particles on GPU
     Renderer* m_renderer; ///< renderer for VBO
+    bool   m_enable_lod; ///< enable LOD rendering
+    float  m_modelview_matrix[16]; ///< modelview matrix
 
 public:
 
@@ -121,6 +123,10 @@ public:
     void setRandomTextureSize( const size_t random_texture_size );
 
     void setCircleThreshold( const size_t circle_threshold );
+
+    void enableLevelOfDetail( const size_t coarse_level = 1 );
+
+    void disableLevelOfDetail( void );
 
     void enableCoarseRendering( const size_t coarse_level = 1 );
 

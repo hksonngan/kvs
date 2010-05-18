@@ -518,6 +518,9 @@ void ParticleVolumeRenderer::initialize( void )
     m_vbo = NULL;
     m_particles = NULL;
     m_renderer = NULL;
+
+    m_enable_lod = false;
+    memset( m_modelview_matrix, 0, sizeof( m_modelview_matrix ) );
 }
 
 /*===========================================================================*/
@@ -588,6 +591,18 @@ void ParticleVolumeRenderer::setCircleThreshold( const size_t circle_threshold )
      * drawn as square.
      */
     m_circle_threshold = circle_threshold;
+}
+
+void ParticleVolumeRenderer::enableLevelOfDetail( const size_t coarse_level )
+{
+    m_enable_lod = true;
+    this->enableCoarseRendering( coarse_level );
+}
+
+void ParticleVolumeRenderer::disableLevelOfDetail( void )
+{
+    m_enable_lod = false;
+    this->disableLevelOfDetail();
 }
 
 /*===========================================================================*/
@@ -755,6 +770,29 @@ void ParticleVolumeRenderer::create_image(
         this->align_particles();
         this->create_vertexbuffer();
         this->calculate_zooming_factor( point, camera );
+
+        glGetFloatv( GL_MODELVIEW_MATRIX, m_modelview_matrix );
+    }
+
+    // Get the modelview matrix.
+    float modelview_matrix[16];
+    glGetFloatv( GL_MODELVIEW_MATRIX, modelview_matrix );
+
+    // LOD control.
+    size_t coarse_level = m_repetition_level;
+    if ( m_enable_lod )
+    {
+        float modelview_matrix[16];
+        glGetFloatv( GL_MODELVIEW_MATRIX, modelview_matrix );
+        for ( size_t i = 0; i < 16; i++ )
+        {
+            if ( m_modelview_matrix[i] != modelview_matrix[i] )
+            {
+                coarse_level = m_coarse_level;
+                break;
+            }
+        }
+        memcpy( m_modelview_matrix, modelview_matrix, sizeof( modelview_matrix ) );
     }
 
     // Following processes are executed when the window size is changed.
@@ -768,7 +806,7 @@ void ParticleVolumeRenderer::create_image(
         m_render_width  = BaseClass::m_width  * m_subpixel_level;
         m_render_height = BaseClass::m_height * m_subpixel_level;
 
-        if ( m_coarse_level != 1 )
+        if ( coarse_level != 1 )
         {
             m_ensemble_buffer.create( BaseClass::m_width, BaseClass::m_height );
         }
@@ -776,7 +814,7 @@ void ParticleVolumeRenderer::create_image(
         this->initialize_resize_texture();
     }
 
-    if ( m_coarse_level > 1 ) glClear( GL_ACCUM_BUFFER_BIT );
+    if ( coarse_level > 1 ) glClear( GL_ACCUM_BUFFER_BIT );
 
     if ( !m_enable_pre_downloading )
     {
@@ -796,12 +834,8 @@ void ParticleVolumeRenderer::create_image(
     glEnable( GL_DEPTH_TEST );
     glEnable( GL_VERTEX_PROGRAM_POINT_SIZE ); // enable zooming.
 
-    // Get the modelview matrix.
-    float modelview_matrix[16];
-    glGetFloatv( GL_MODELVIEW_MATRIX, modelview_matrix );
-
     // Project particles.
-    const size_t repeat_count = m_coarse_level;
+    const size_t repeat_count = coarse_level;
     const bool enable_averaging = repeat_count > 1;
     const bool enable_resizing = m_subpixel_level > 1 || ( enable_averaging && !m_enable_accumulation_buffer );
     m_ensemble_buffer.clear();

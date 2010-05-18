@@ -38,14 +38,7 @@
 #endif
 
 
-namespace
-{
-
-bool EnableLODControl = true;
-bool EnableGPURendering = true;
-bool HasBounds = false;
-
-} // end of namespace
+namespace { bool HasBounds = false; }
 
 namespace
 {
@@ -98,59 +91,6 @@ namespace kvsview
 
 namespace RayCastingRenderer
 {
-
-class PaintEvent : public kvs::PaintEventListener
-{
-    void update( void )
-    {
-        if ( ::EnableLODControl )
-        {
-            const int id = ::HasBounds ? 2 : 1;
-            const kvs::RendererBase* base = screen()->rendererManager()->renderer( id );
-            kvs::RayCastingRenderer* renderer = (kvs::RayCastingRenderer*)base;
-            if ( screen()->mouse()->isAuto() ) renderer->enableCoarseRendering();
-        }
-    }
-};
-
-class MousePressEvent : public kvs::MousePressEventListener
-{
-    void update( kvs::MouseEvent* ev )
-    {
-        kvs::IgnoreUnusedVariable( ev );
-
-        if ( ::EnableLODControl )
-        {
-            if ( !::EnableGPURendering )
-            {
-                const int id = ::HasBounds ? 2 : 1;
-                const kvs::RendererBase* base = screen()->rendererManager()->renderer( id );
-                kvs::RayCastingRenderer* renderer = (kvs::RayCastingRenderer*)base;
-                renderer->enableCoarseRendering();
-            }
-        }
-    }
-};
-
-class MouseReleaseEvent : public kvs::MouseReleaseEventListener
-{
-    void update( kvs::MouseEvent* ev )
-    {
-        kvs::IgnoreUnusedVariable( ev );
-
-        if ( ::EnableLODControl )
-        {
-            if ( !::EnableGPURendering )
-            {
-                const int id = ::HasBounds ? 2 : 1;
-                const kvs::RendererBase* base = screen()->rendererManager()->renderer( id );
-                kvs::RayCastingRenderer* renderer = (kvs::RayCastingRenderer*)base;
-                renderer->disableCoarseRendering();
-                screen()->redraw();
-            }
-        }
-    }
-};
 
 class KeyPressEvent : public kvs::KeyPressEventListener
 {
@@ -355,17 +295,11 @@ const bool Main::exec( void )
     RayCastingRenderer::Argument arg( m_argc, m_argv );
     if( !arg.parse() ) return( false );
 
-    RayCastingRenderer::PaintEvent paint_event;
-    RayCastingRenderer::MousePressEvent mouse_press_event;
-    RayCastingRenderer::MouseReleaseEvent mouse_release_event;
     RayCastingRenderer::KeyPressEvent key_press_event;
 
     // Create a global and screen class.
     kvs::glut::Screen screen( &app );
     screen.setSize( 512, 512 );
-    screen.addPaintEvent( &paint_event );
-    screen.addMousePressEvent( &mouse_press_event );
-    screen.addMouseReleaseEvent( &mouse_release_event );
     screen.addKeyPressEvent( &key_press_event );
     screen.setTitle( kvsview::CommandName + " - " + kvsview::RayCastingRenderer::CommandName );
 
@@ -434,7 +368,11 @@ const bool Main::exec( void )
     {
         kvs::PipelineModule renderer( new kvs::RayCastingRenderer );
         ::InitializeRayCastingRenderer<kvs::RayCastingRenderer>( arg, renderer );
-        ::EnableGPURendering = false;
+
+        if ( !arg.noLOD() )
+        {
+            renderer.get<kvs::RayCastingRenderer>()->enableLevelOfDetail();
+        }
 
         pipe.connect( renderer );
     }
@@ -443,14 +381,10 @@ const bool Main::exec( void )
     {
         kvs::PipelineModule renderer( new kvs::glew::RayCastingRenderer );
         ::InitializeRayCastingRenderer<kvs::glew::RayCastingRenderer>( arg, renderer );
-        ::EnableGPURendering = true;
 
         pipe.connect( renderer );
     }
 #endif
-
-    // LOD control.
-    ::EnableLODControl = !arg.noLOD();
 
     // Construct the visualization pipeline.
     if ( !pipe.exec() )

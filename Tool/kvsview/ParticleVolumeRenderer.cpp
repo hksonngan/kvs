@@ -37,14 +37,7 @@
 #endif
 
 
-namespace
-{
-
-bool EnableLODControl = true;
-bool EnableGPURendering = true;
-bool HasBounds = false;
-
-} // end of namespace
+namespace { bool HasBounds = false; }
 
 namespace
 {
@@ -105,66 +98,6 @@ namespace kvsview
 
 namespace ParticleVolumeRenderer
 {
-
-class PaintEvent : public kvs::PaintEventListener
-{
-    void update( void )
-    {
-#if defined( KVS_SUPPORT_GLEW )
-        if ( ::EnableLODControl )
-        {
-            if ( ::EnableGPURendering )
-            {
-                const int id = ::HasBounds ? 2 : 1;
-                const kvs::RendererBase* base = screen()->rendererManager()->renderer( id );
-                kvs::glew::ParticleVolumeRenderer* renderer = (kvs::glew::ParticleVolumeRenderer*)base;
-                if ( screen()->mouse()->isAuto() ) renderer->enableCoarseRendering();
-            }
-        }
-#endif
-    }
-};
-
-class MousePressEvent : public kvs::MousePressEventListener
-{
-    void update( kvs::MouseEvent* ev )
-    {
-        kvs::IgnoreUnusedVariable( ev );
-#if defined( KVS_SUPPORT_GLEW )
-        if ( ::EnableLODControl )
-        {
-            if ( ::EnableGPURendering )
-            {
-                const int id = ::HasBounds ? 2 : 1;
-                const kvs::RendererBase* base = screen()->rendererManager()->renderer( id );
-                kvs::glew::ParticleVolumeRenderer* renderer = (kvs::glew::ParticleVolumeRenderer*)base;
-                renderer->enableCoarseRendering();
-            }
-        }
-#endif
-    }
-};
-
-class MouseReleaseEvent : public kvs::MouseReleaseEventListener
-{
-    void update( kvs::MouseEvent* ev )
-    {
-        kvs::IgnoreUnusedVariable( ev );
-#if defined( KVS_SUPPORT_GLEW )
-        if ( ::EnableLODControl )
-        {
-            if ( ::EnableGPURendering )
-            {
-                const int id = ::HasBounds ? 2 : 1;
-                const kvs::RendererBase* base = screen()->rendererManager()->renderer( id );
-                kvs::glew::ParticleVolumeRenderer* renderer = (kvs::glew::ParticleVolumeRenderer*)base;
-                renderer->disableCoarseRendering();
-                screen()->redraw();
-            }
-        }
-#endif
-    }
-};
 
 class KeyPressEvent : public kvs::KeyPressEventListener
 {
@@ -387,16 +320,10 @@ const bool Main::exec( void )
     kvsview::ParticleVolumeRenderer::Argument arg( m_argc, m_argv );
     if( !arg.parse() ) return( false );
 
-    kvsview::ParticleVolumeRenderer::PaintEvent paint_event;
-    kvsview::ParticleVolumeRenderer::MousePressEvent mouse_press_event;
-    kvsview::ParticleVolumeRenderer::MouseReleaseEvent mouse_release_event;
     kvsview::ParticleVolumeRenderer::KeyPressEvent key_press_event;
 
     // Create a global and screen class.
     kvs::glut::Screen screen( &app );
-    screen.addPaintEvent( &paint_event );
-    screen.addMousePressEvent( &mouse_press_event );
-    screen.addMouseReleaseEvent( &mouse_release_event );
     screen.addKeyPressEvent( &key_press_event );
     screen.setSize( 512, 512 );
     screen.setTitle( kvsview::CommandName + " - " + kvsview::ParticleVolumeRenderer::CommandName );
@@ -489,7 +416,6 @@ const bool Main::exec( void )
     {
         kvs::PipelineModule renderer( new kvs::ParticleVolumeRenderer );
         ::InitializeParticleVolumeRenderer<kvs::ParticleVolumeRenderer>( arg, renderer );
-        ::EnableGPURendering = false;
 
         // Subpixel level.
         const size_t subpixel_level = arg.subpixelLevel();
@@ -505,7 +431,6 @@ const bool Main::exec( void )
     {
         kvs::PipelineModule renderer( new kvs::glew::ParticleVolumeRenderer );
         ::InitializeParticleVolumeRenderer<kvs::glew::ParticleVolumeRenderer>( arg, renderer );
-        ::EnableGPURendering = true;
 
         // Subpixel level and repetition level.
         const size_t subpixel_level = arg.subpixelLevel();
@@ -513,13 +438,15 @@ const bool Main::exec( void )
         renderer.get<kvs::glew::ParticleVolumeRenderer>()->setSubpixelLevel( subpixel_level );
         renderer.get<kvs::glew::ParticleVolumeRenderer>()->setRepetitionLevel( repetition_level );
 
+        if ( !arg.noLOD() )
+        {
+            renderer.get<kvs::glew::ParticleVolumeRenderer>()->enableLevelOfDetail();
+        }
+
         if ( is_volume ) pipe.connect( mapper ).connect( renderer );
         else pipe.connect( renderer );
     }
 #endif
-
-    // LOD control.
-    ::EnableLODControl = !arg.noLOD();
 
     // Construct the visualization pipeline.
     if ( !pipe.exec() )

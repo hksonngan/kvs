@@ -916,6 +916,7 @@ void Screen::default_mouse_release_event( kvs::MouseEvent* event )
 {
     BaseClass::eventHandler()->notify( event );
     BaseClass::mouseReleaseFunction( event->x(), event->y() );
+    this->redraw();
 }
 
 /*===========================================================================*/
