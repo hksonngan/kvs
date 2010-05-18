@@ -440,7 +440,7 @@ const bool Main::exec( void )
 
         if ( !arg.noLOD() )
         {
-            renderer.get<kvs::glew::ParticleVolumeRenderer>()->enableLevelOfDetail();
+            renderer.get<kvs::glew::ParticleVolumeRenderer>()->enableLODControl();
         }
 
         if ( is_volume ) pipe.connect( mapper ).connect( renderer );

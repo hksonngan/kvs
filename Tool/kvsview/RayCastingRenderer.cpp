@@ -371,7 +371,7 @@ const bool Main::exec( void )
 
         if ( !arg.noLOD() )
         {
-            renderer.get<kvs::RayCastingRenderer>()->enableLevelOfDetail();
+            renderer.get<kvs::RayCastingRenderer>()->enableLODControl();
         }
 
         pipe.connect( renderer );

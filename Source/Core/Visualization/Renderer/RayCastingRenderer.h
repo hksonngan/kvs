@@ -75,13 +75,13 @@ public:
         m_opaque = opaque;
     }
 
-    void enableLevelOfDetail( const size_t ray_width = 3 )
+    void enableLODControl( const size_t ray_width = 3 )
     {
         m_enable_lod = true;
         this->enableCoarseRendering( ray_width );
     }
 
-    void disableLevelOfDetail( void )
+    void disableLODControl( void )
     {
         m_enable_lod = false;
         this->disableCoarseRendering();

@@ -593,16 +593,16 @@ void ParticleVolumeRenderer::setCircleThreshold( const size_t circle_threshold )
     m_circle_threshold = circle_threshold;
 }
 
-void ParticleVolumeRenderer::enableLevelOfDetail( const size_t coarse_level )
+void ParticleVolumeRenderer::enableLODControl( const size_t coarse_level )
 {
     m_enable_lod = true;
     this->enableCoarseRendering( coarse_level );
 }
 
-void ParticleVolumeRenderer::disableLevelOfDetail( void )
+void ParticleVolumeRenderer::disableLODControl( void )
 {
     m_enable_lod = false;
-    this->disableLevelOfDetail();
+    this->disableCoarseRendering();
 }
 
 /*===========================================================================*/

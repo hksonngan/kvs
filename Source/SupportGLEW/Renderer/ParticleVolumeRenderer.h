@@ -124,9 +124,9 @@ public:
 
     void setCircleThreshold( const size_t circle_threshold );
 
-    void enableLevelOfDetail( const size_t coarse_level = 1 );
+    void enableLODControl( const size_t coarse_level = 1 );
 
-    void disableLevelOfDetail( void );
+    void disableLODControl( void );
 
     void enableCoarseRendering( const size_t coarse_level = 1 );
 
