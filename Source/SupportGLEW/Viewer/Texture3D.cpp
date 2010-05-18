@@ -131,6 +131,11 @@ const size_t Texture3D::depth( void ) const
     return( m_depth );
 }
 
+const bool Texture3D::isDownloaded( void ) const
+{
+    return( m_is_downloaded );
+}
+
 /*==========================================================================*/
 /**
  *  Set the wrap method for s-axis.

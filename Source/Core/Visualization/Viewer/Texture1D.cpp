@@ -76,6 +76,11 @@ const size_t Texture1D::width( void ) const
     return( m_width );
 }
 
+const bool Texture1D::isDownloaded( void ) const
+{
+    return( m_is_downloaded );
+}
+
 /*==========================================================================*/
 /**
  *  Set the wrap method for s-axis.

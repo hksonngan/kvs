@@ -61,6 +61,8 @@ public:
 
     const size_t height( void ) const;
 
+    const bool isDownloaded( void ) const;
+
 public:
 
     void setWrapS( const GLenum wrap_s );

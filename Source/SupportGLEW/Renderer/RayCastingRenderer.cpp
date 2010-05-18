@@ -178,7 +178,11 @@ void RayCastingRenderer::setDrawingBuffer( const RayCastingRenderer::DrawingBuff
 void RayCastingRenderer::setTransferFunction( const kvs::TransferFunction& tfunc )
 {
      BaseClass::setTransferFunction( tfunc );
-     m_transfer_function_texture.release();
+
+     if ( m_transfer_function_texture.isDownloaded() )
+     {
+         m_transfer_function_texture.release();
+     }
 }
 
 /*===========================================================================*/

@@ -101,6 +101,11 @@ const size_t Texture2D::height( void ) const
     return( m_height );
 }
 
+const bool Texture2D::isDownloaded( void ) const
+{
+    return( m_is_downloaded );
+}
+
 /*==========================================================================*/
 /**
  *  Set the wrap method for s-axis.
