@@ -24,8 +24,11 @@ uniform float            opaque;            // opaque value
 uniform vec3             light_position;    // light position in the object coordinate
 uniform vec3             camera_position;   // camera position in the object coordinate
 uniform Volume           volume;            // volume data
-uniform Shading          shading;            // shading parameter
+uniform Shading          shading;           // shading parameter
 uniform TransferFunction transfer_function; // 1D transfer function
+uniform sampler2D        random;            // random texture
+uniform float            width;             // screen width
+uniform float            height;            // screen height
 
 
 vec3 estimateGradient( in sampler3D v, in vec3 p, in vec3 o )
@@ -43,16 +46,18 @@ vec3 estimateGradient( in sampler3D v, in vec3 p, in vec3 o )
 void main( void )
 {
     // Entry and exit point.
-    vec3 entry_point = volume.ratio * texture2D( entry_points, gl_TexCoord[0].st ).xyz;
-    vec3 exit_point = volume.ratio * texture2D( exit_points, gl_TexCoord[0].st ).xyz;
+    vec2 index = vec2( gl_FragCoord.x / width, gl_FragCoord.y / height );
+    vec3 entry_point = volume.ratio * texture2D( entry_points, index ).xyz;
+    vec3 exit_point = volume.ratio * texture2D( exit_points, index ).xyz;
     if ( entry_point == exit_point ) { discard; } // out of cube
 
-    // Ray direction.
+    // Stochastic jittering.
     vec3 direction = dt * normalize( exit_point - entry_point );
-    float segment = distance( exit_point, entry_point );
-    int nsteps = int( floor( segment / dt ) );
+    entry_point = entry_point + direction * texture2D( random, index ).x;
 
     // Ray traversal.
+    float segment = distance( exit_point, entry_point );
+    int nsteps = int( floor( segment / dt ) );
     vec3 position = entry_point;
     vec4 dst = vec4( 0.0, 0.0, 0.0, 0.0 );
 

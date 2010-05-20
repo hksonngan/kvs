@@ -206,7 +206,13 @@ void RayCastingRenderer::create_image(
     if ( BaseClass::m_width == 0 && BaseClass::m_height == 0 )
     {
         this->initialize_shaders( volume );
+        this->create_random();
         this->create_bounding_cube( volume );
+
+        m_ray_caster.bind();
+        m_ray_caster.setUniformValuef( "width", camera->windowWidth() );
+        m_ray_caster.setUniformValuef( "height", camera->windowHeight() );
+        m_ray_caster.unbind();
     }
 
     // Following processes are executed when the window size is changed.
@@ -217,17 +223,20 @@ void RayCastingRenderer::create_image(
         BaseClass::m_height = camera->windowHeight();
         this->create_entry_points();
         this->create_exit_points();
+
+        m_ray_caster.bind();
+        m_ray_caster.setUniformValuef( "width", camera->windowWidth() );
+        m_ray_caster.setUniformValuef( "height", camera->windowHeight() );
+        m_ray_caster.unbind();
     }
 
     // Download the transfer function data to the 1D texture on the GPU.
-//    if ( glIsTexture( m_transfer_function_texture.id() ) == GL_FALSE )
     if ( !m_transfer_function_texture.isTexture() )
     {
         this->create_transfer_function( volume );
     }
 
     // Download the volume data to the 3D texture on the GPU.
-//    if ( glIsTexture( m_volume_data.id() ) == GL_FALSE )
     if ( !m_volume_data.isTexture() )
     {
         this->create_volume_data( volume );
@@ -275,6 +284,7 @@ void RayCastingRenderer::create_image(
         // Ray casting.
         m_ray_caster.bind();
         glActiveTexture( GL_TEXTURE4 ); m_transfer_function_texture.bind(); glEnable( GL_TEXTURE_1D );
+        glActiveTexture( GL_TEXTURE5 ); m_random.bind(); glEnable( GL_TEXTURE_2D );
         glActiveTexture( GL_TEXTURE1 ); m_volume_data.bind(); glEnable( GL_TEXTURE_3D );
         {
             const kvs::Vector3ui ngrids = volume->resolution() - kvs::Vector3ui(1);
@@ -287,9 +297,11 @@ void RayCastingRenderer::create_image(
             m_ray_caster.setUniformValuei( "exit_points", 2 );
             m_ray_caster.setUniformValuei( "entry_points", 3 );
             m_ray_caster.setUniformValuei( "transfer_function.data", 4 );
+            m_ray_caster.setUniformValuei( "random", 5 );
             this->draw_quad( 1.0f );
         }
         glActiveTexture( GL_TEXTURE4 ); m_transfer_function_texture.unbind(); glDisable( GL_TEXTURE_1D );
+        glActiveTexture( GL_TEXTURE5 ); m_random.unbind(); glDisable( GL_TEXTURE_2D );
         glActiveTexture( GL_TEXTURE1 ); m_volume_data.unbind(); glDisable( GL_TEXTURE_3D );
         m_ray_caster.unbind();
     }
@@ -503,10 +515,14 @@ void RayCastingRenderer::create_entry_points( void )
     m_entry_points.release();
     m_entry_points.setWrapS( GL_CLAMP );
     m_entry_points.setWrapT( GL_CLAMP );
+//     m_entry_points.setWrapS( GL_REPEAT );
+//     m_entry_points.setWrapT( GL_REPEAT );
     m_entry_points.setMagFilter( GL_LINEAR );
     m_entry_points.setMinFilter( GL_LINEAR );
-//    m_entry_points.setPixelFormat( GL_RGB16F_ARB, GL_RGB, GL_FLOAT  );
-    m_entry_points.setPixelFormat( GL_RGB, GL_RGB, GL_FLOAT  );
+//     m_entry_points.setMagFilter( GL_NEAREST );
+//     m_entry_points.setMinFilter( GL_NEAREST );
+    m_entry_points.setPixelFormat( GL_RGB16F_ARB, GL_RGB, GL_FLOAT  );
+//    m_entry_points.setPixelFormat( GL_RGB, GL_RGB, GL_FLOAT  );
     m_entry_points.create( width, height );
 
     ::CheckOpenGLError( "Entry point texture allocation failed." );
@@ -523,15 +539,42 @@ void RayCastingRenderer::create_exit_points( void )
     const size_t height = BaseClass::m_height;
 
     m_exit_points.release();
+//    m_exit_points.setWrapS( GL_CLAMP );
+//    m_exit_points.setWrapT( GL_CLAMP );
     m_exit_points.setWrapS( GL_CLAMP );
     m_exit_points.setWrapT( GL_CLAMP );
     m_exit_points.setMagFilter( GL_LINEAR );
     m_exit_points.setMinFilter( GL_LINEAR );
-//    m_exit_points.setPixelFormat( GL_RGB16F_ARB, GL_RGB, GL_FLOAT  );
-    m_exit_points.setPixelFormat( GL_RGB, GL_RGB, GL_FLOAT  );
+//     m_exit_points.setMagFilter( GL_NEAREST );
+//     m_exit_points.setMinFilter( GL_NEAREST );
+    m_exit_points.setPixelFormat( GL_RGB16F_ARB, GL_RGB, GL_FLOAT  );
+//    m_exit_points.setPixelFormat( GL_RGB, GL_RGB, GL_FLOAT  );
     m_exit_points.create( width, height );
 
     ::CheckOpenGLError( "Exit point texture allocation failed." );
+}
+
+void RayCastingRenderer::create_random( void )
+{
+    std::cout << "RayCastingRenderer::create_random" << std::endl;
+
+    const size_t size = 32;
+    unsigned char* data = new unsigned char [ size * size ];
+    srand( (unsigned)time(NULL) );
+    for ( size_t i = 0; i < size * size; i++ ) data[i] = 255.0f * rand() / float(RAND_MAX);
+
+    m_random.release();
+    m_random.setWrapS( GL_REPEAT );
+    m_random.setWrapT( GL_REPEAT );
+    m_random.setMagFilter( GL_NEAREST );
+    m_random.setMinFilter( GL_NEAREST );
+    m_random.setPixelFormat( GL_LUMINANCE8, GL_LUMINANCE, GL_UNSIGNED_BYTE  );
+    m_random.create( size, size );
+    m_random.download( size, size, data );
+
+    delete [] data;
+
+    ::CheckOpenGLError( "Random texture allocation failed." );
 }
 
 /*===========================================================================*/

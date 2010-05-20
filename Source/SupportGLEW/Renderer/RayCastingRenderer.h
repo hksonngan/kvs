@@ -38,6 +38,11 @@ namespace glew
 
 #define KVS_GLEW_RAY_CASTING_RENDERER__EMBEDDED_SHADER
 
+/*===========================================================================*/
+/**
+ *  @brief  RayCastingRenderer class.
+ */
+/*===========================================================================*/
 class RayCastingRenderer : public kvs::VolumeRendererBase
 {
     // Class name.
@@ -66,6 +71,7 @@ protected:
     kvs::Texture1D m_transfer_function_texture; ///< transfer function texture
     kvs::Texture2D m_entry_points; ///< entry point texture
     kvs::Texture2D m_exit_points; ///< exit point texture
+    kvs::Texture2D m_random; ///< random texture for stochastic jittering
     kvs::glew::VertexBufferObject m_bounding_cube; ///< bounding cube (VBO)
     kvs::glew::Texture3D m_volume_data; ///< volume data (3D texture)
     kvs::glew::ProgramObject m_ray_caster; ///< ray casting shader
@@ -110,6 +116,8 @@ protected:
     void create_entry_points( void );
 
     void create_exit_points( void );
+
+    void create_random( void );
 
     void create_bounding_cube( const kvs::StructuredVolumeObject* volume );
 
