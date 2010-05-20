@@ -556,8 +556,6 @@ void RayCastingRenderer::create_exit_points( void )
 
 void RayCastingRenderer::create_random( void )
 {
-    std::cout << "RayCastingRenderer::create_random" << std::endl;
-
     const size_t size = 32;
     unsigned char* data = new unsigned char [ size * size ];
     srand( (unsigned)time(NULL) );
