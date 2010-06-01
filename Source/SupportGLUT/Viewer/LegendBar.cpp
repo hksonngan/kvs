@@ -22,7 +22,7 @@
 namespace { namespace Default
 {
 const double MinValue = 0.0f;
-const double MaxValue = 100.0f;
+const double MaxValue = 255.0f;
 const size_t LegendBarWidth = 200;
 const size_t LegendBarHeight = 20;
 const size_t LegendBarMargin = 10;
@@ -43,7 +43,8 @@ namespace glut
 /*===========================================================================*/
 LegendBar::LegendBar( kvs::ScreenBase* screen ):
     kvs::glut::WidgetBase( screen ),
-    m_show_range_value( true )
+    m_show_range_value( true ),
+    m_texture_downloaded( false )
 {
     BaseClass::setEventType(
         kvs::EventBase::PaintEvent |
@@ -59,6 +60,9 @@ LegendBar::LegendBar( kvs::ScreenBase* screen ):
     this->setBorderWidth( 1.0f );
     this->setBorderColor( kvs::RGBColor( 0, 0, 0 ) );
     this->disableAntiAliasing();
+
+    m_colormap.setResolution( 256 );
+    m_colormap.create();
 }
 
 /*===========================================================================*/
@@ -179,10 +183,15 @@ void LegendBar::setBorderColor( const kvs::RGBColor& border_color )
 /*===========================================================================*/
 void LegendBar::setColorMap( const kvs::ColorMap& colormap )
 {
-    m_colormap = colormap;
+    // Deep copy.
+    kvs::ColorMap::Table colormap_table( colormap.table().pointer(), colormap.table().size() );
+    m_colormap = kvs::ColorMap( colormap_table );
 
-    // The texture has been already dowloaded.
-    if ( m_texture.id() != 0 ) this->release_texture();
+    m_min_value = colormap.minValue();
+    m_max_value = colormap.maxValue();
+
+    // Download the texture data onto GPU.
+    m_texture_downloaded = false;
 }
 
 /*============================================================================*/
@@ -236,7 +245,12 @@ void LegendBar::paintEvent( void )
 
     if ( !BaseClass::isShown() ) return;
 
-    if ( !glIsTexture( m_texture.id() ) ) this->create_texture();
+//    if ( !glIsTexture( m_texture.id() ) ) this->create_texture();
+    if ( !m_texture_downloaded )
+    {
+         this->create_texture();
+        m_texture_downloaded = true;
+    }
 
     BaseClass::begin_draw();
     BaseClass::draw_background();
@@ -386,14 +400,15 @@ int LegendBar::get_fitted_height( void )
 /*===========================================================================*/
 void LegendBar::create_texture( void )
 {
-    const size_t nchannels  = 3;
-    m_texture.setPixelFormat( nchannels, sizeof( kvs::UInt8 ) );
-    m_texture.setMinFilter( GL_NEAREST );
-    m_texture.setMagFilter( GL_NEAREST );
-
+    const size_t      nchannels  = 3;
     const size_t      width  = m_colormap.resolution();
     const size_t      height = 1;
     const kvs::UInt8* data   = m_colormap.table().pointer();
+
+    m_texture.release();
+    m_texture.setPixelFormat( nchannels, sizeof( kvs::UInt8 ) );
+    m_texture.setMinFilter( GL_NEAREST );
+    m_texture.setMagFilter( GL_NEAREST );
     m_texture.create( width, height );
     m_texture.download( width, height, data );
 }

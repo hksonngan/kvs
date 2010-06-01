@@ -64,7 +64,7 @@ protected:
     kvs::Texture2D  m_texture;      ///< texture data
     bool m_show_range_value;        ///< range value showing flag
     bool m_enable_anti_aliasing;    ///< check flag for anti-aliasing
-
+    bool m_texture_downloaded;      ///< check flag for texture
 public:
 
     LegendBar( kvs::ScreenBase* screen = 0 );
