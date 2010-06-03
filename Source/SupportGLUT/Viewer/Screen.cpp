@@ -245,15 +245,6 @@ Screen::~Screen( void )
     if ( m_idle_mouse_event_listener ) { delete m_idle_mouse_event_listener; }
     if ( m_initialize_event_handler ) { delete m_initialize_event_handler; }
 
-    std::list<kvs::glut::Timer*>::iterator timer = m_timer_event_handler.begin();
-    std::list<kvs::glut::Timer*>::iterator end = m_timer_event_handler.end();
-    while ( timer != end )
-    {
-        if ( *timer ) delete *timer;
-        ++timer;
-    }
-    m_timer_event_handler.clear();
-
     ::context[m_id] = 0;
     glutDestroyWindow( m_id );
 }
@@ -443,6 +434,14 @@ void Screen::resize( int width, int height )
 void Screen::initializeEvent( void )
 {
     m_idle_mouse_timer->start( kvs::Mouse::SpinTime );
+
+    std::list<kvs::glut::Timer*>::iterator timer = m_timer_event_handler.begin();
+    std::list<kvs::glut::Timer*>::iterator end = m_timer_event_handler.end();
+    while ( timer != end )
+    {
+        (*timer)->start();
+        ++timer;
+    }
 
     BaseClass::initializeFunction();
     m_initialize_event_handler->notify();
@@ -754,13 +753,15 @@ void Screen::addKeyPressEvent( kvs::KeyPressEventListener* event )
 /**
  *  @brief  Adds a timer event listener.
  *  @param  event [in] pointer to a timer event listener
- *  @param  msec [in] interval time in milliseconds
+ *  @param  timer [in] pointer to timer
  */
 /*===========================================================================*/
-void Screen::addTimerEvent( kvs::TimerEventListener* event, int msec )
+void Screen::addTimerEvent( kvs::TimerEventListener* event, kvs::glut::Timer* timer )
 {
     event->setScreen( this );
-    m_timer_event_handler.push_back( new kvs::glut::Timer( event, msec ) );
+    timer->setEventListener( event );
+
+    m_timer_event_handler.push_back( timer );
 }
 
 /*===========================================================================*/

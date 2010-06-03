@@ -166,7 +166,7 @@ public:
 
     void addKeyPressEvent( kvs::KeyPressEventListener* event );
 
-    void addTimerEvent( kvs::TimerEventListener* event, int msec );
+    void addTimerEvent( kvs::TimerEventListener* event, kvs::qt::Timer* timer );
 
 public:
 

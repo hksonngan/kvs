@@ -44,6 +44,8 @@ protected:
 
 public:
 
+    Timer( int msec = 0 );
+
     Timer( kvs::EventListener* listener, int msec = 0 );
 
     Timer( kvs::EventHandler* handler, int msec = 0 );
@@ -57,6 +59,10 @@ public:
     void stop( void );
 
     void setInterval( int msec );
+
+    void setEventListener( kvs::EventListener* listener );
+
+    void setEventHandler( kvs::EventHandler* handler );
 
     const bool isStopped( void ) const;
 

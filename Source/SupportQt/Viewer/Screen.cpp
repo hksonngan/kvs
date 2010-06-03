@@ -60,15 +60,6 @@ Screen::~Screen( void )
 {
     if ( m_idle_mouse_timer ) { delete m_idle_mouse_timer; }
     if ( m_initialize_event_handler ) { delete m_initialize_event_handler; }
-
-    std::list<kvs::qt::Timer*>::iterator timer = m_timer_event_handler.begin();
-    std::list<kvs::qt::Timer*>::iterator end = m_timer_event_handler.end();
-    while ( timer != end )
-    {
-        if ( *timer ) delete *timer;
-        ++timer;
-    }
-    m_timer_event_handler.clear();
 }
 
 /*===========================================================================*/
@@ -255,6 +246,14 @@ void Screen::initializeEvent( void )
 {
     connect( m_idle_mouse_timer, SIGNAL( timeout() ), this, SLOT( idleMouseEvent() ) );
     m_idle_mouse_timer->start( kvs::Mouse::SpinTime );
+
+    std::list<kvs::qt::Timer*>::iterator timer = m_timer_event_handler.begin();
+    std::list<kvs::qt::Timer*>::iterator end = m_timer_event_handler.end();
+    while ( timer != end )
+    {
+        (*timer)->start();
+        ++timer;
+    }
 
     BaseClass::initializeFunction();
     m_initialize_event_handler->notify();
@@ -566,13 +565,15 @@ void Screen::addKeyPressEvent( kvs::KeyPressEventListener* event )
 /**
  *  @brief  Adds a timer event listener.
  *  @param  event [in] pointer to a timer event listener
- *  @param  msec [in] interval time in milliseconds
+ *  @param  timer [in] pointer to timer
  */
 /*===========================================================================*/
-void Screen::addTimerEvent( kvs::TimerEventListener* event, int msec )
+void Screen::addTimerEvent( kvs::TimerEventListener* event, kvs::qt::Timer* timer )
 {
     event->setScreen( this );
-    m_timer_event_handler.push_back( new kvs::qt::Timer( event, msec ) );
+    timer->setEventListener( event );
+
+    m_timer_event_handler.push_back( timer );
 }
 
 /*===========================================================================*/

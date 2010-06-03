@@ -26,6 +26,22 @@ namespace qt
 /*===========================================================================*/
 /**
  *  @brief  Constructs a new Timer class.
+ *  @param  msec [in] interval time in milliseconds
+ */
+/*===========================================================================*/
+Timer::Timer( int msec ):
+    m_id( 0 ),
+    m_interval( msec ),
+    m_is_stopped( true ),
+    m_time_event( new kvs::TimeEvent ),
+    m_event_listener( 0 ),
+    m_event_handler( 0 )
+{
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new Timer class.
  *  @param  listener [in] pointer to a event listener
  *  @param  msec [in] interval time in milliseconds
  */
@@ -116,6 +132,28 @@ void Timer::stop( void )
 void Timer::setInterval( int msec )
 {
     m_interval = msec;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets an event listener.
+ *  @param  listener [in] pointer to the event listener
+ */
+/*===========================================================================*/
+void Timer::setEventListener( kvs::EventListener* listener )
+{
+    m_event_listener = listener;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets an event handler.
+ *  @param  handler [in] pointer to the event handler
+ */
+/*===========================================================================*/
+void Timer::setEventHandler( kvs::EventHandler* handler )
+{
+    m_event_handler = handler;
 }
 
 /*===========================================================================*/
