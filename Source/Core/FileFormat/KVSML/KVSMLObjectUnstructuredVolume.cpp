@@ -47,6 +47,7 @@ inline const size_t GetNumberOfNodesPerElement( const std::string& cell_type )
     else if ( cell_type == "hexahedra" ) nnodes = 8;
     else if ( cell_type == "quadratic hexahedra" ) nnodes = 20;
     else if ( cell_type == "pyramid" ) nnodes = 5;
+    else if ( cell_type == "point" ) nnodes = 1;
 
     return( nnodes );
 }

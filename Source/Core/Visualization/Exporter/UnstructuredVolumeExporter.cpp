@@ -85,6 +85,16 @@ kvs::KVSMLObjectUnstructuredVolume* UnstructuredVolumeExporter<kvs::KVSMLObjectU
         this->setCellType("quadratic hexahedra");
         break;
     }
+    case kvs::UnstructuredVolumeObject::Pyramid:
+    {
+        this->setCellType("pyramid");
+        break;
+    }
+    case kvs::UnstructuredVolumeObject::Point:
+    {
+        this->setCellType("point");
+        break;
+    }
     default:
     {
         m_is_success = false;
