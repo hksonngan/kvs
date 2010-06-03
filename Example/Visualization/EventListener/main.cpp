@@ -21,6 +21,7 @@
 #include <kvs/MouseReleaseEventListener>
 #include <kvs/MouseDoubleClickEventListener>
 #include <kvs/KeyPressEventListener>
+#include <kvs/TimerEventListener>
 #include <kvs/glut/Application>
 #include <kvs/glut/Screen>
 
@@ -137,6 +138,19 @@ class KeyPressEvent : public kvs::KeyPressEventListener
 
 /*===========================================================================*/
 /**
+ *  @brief  User specified timer event.
+ */
+/*===========================================================================*/
+class TimerEvent : public kvs::TimerEventListener
+{
+    void update( kvs::TimeEvent* event )
+    {
+        std::cout << "TimerEvent::update()" << std::endl;
+    }
+};
+
+/*===========================================================================*/
+/**
  *  @brief  Main function.
  *  @param  argc [i] argument counter
  *  @param  argv [i] argument values
@@ -155,6 +169,11 @@ int main( int argc, char** argv )
     MouseReleaseEvent     mouse_release_event;
     MouseDoubleClickEvent mouse_double_click_event;
     KeyPressEvent         key_press_event;
+    TimerEvent            timer_event;
+
+    // Timer.
+    int msec = 1000;
+    kvs::glut::Timer timer( msec );
 
     // Screen.
     kvs::glut::Screen screen( &app );
@@ -165,6 +184,7 @@ int main( int argc, char** argv )
     screen.addMouseReleaseEvent( &mouse_release_event );
     screen.addMouseDoubleClickEvent( &mouse_double_click_event );
     screen.addKeyPressEvent( &key_press_event );
+    screen.addTimerEvent( &timer_event, &timer );
     screen.setTitle( "Event listener" );
     screen.setGeometry( 0, 0, 512, 512 );
     screen.show();
