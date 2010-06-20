@@ -55,7 +55,6 @@ protected:
     kvs::RGBColor        m_upper_edge_color;  ///< upper edge color
     kvs::RGBColor        m_lower_edge_color;  ///< lower edge color
     kvs::Vector2i        m_previous_position; ///< mouse previous position
-//    kvs::ValueArray<kvs::Real32> m_density_curve;
 
 public:
 
@@ -91,7 +90,7 @@ public:
 
 public:
 
-    void create( const kvs::StructuredVolumeObject* volume );
+    void create( const kvs::VolumeObjectBase* volume );
 
     void create( const kvs::ImageObject* image );
 

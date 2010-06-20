@@ -190,7 +190,7 @@ void Histogram::setIgnoreValue( const kvs::Real64 value )
  *  @param  volume [in] pointer to volume object
  */
 /*==========================================================================*/
-void Histogram::create( const kvs::StructuredVolumeObject* volume )
+void Histogram::create( const kvs::VolumeObjectBase* volume )
 {
     volume->updateMinMaxValues();
     m_table.create( volume );
