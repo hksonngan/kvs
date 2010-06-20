@@ -24,8 +24,7 @@
 #include <kvs/RayCastingRenderer>
 #include <kvs/Bounds>
 #include <kvs/PaintEventListener>
-#include <kvs/MousePressEventListener>
-#include <kvs/MouseReleaseEventListener>
+#include <kvs/MouseDoubleClickEventListener>
 #include <kvs/KeyPressEventListener>
 #include <kvs/Key>
 #include <kvs/glut/Application>
@@ -33,18 +32,29 @@
 #include <kvs/glut/LegendBar>
 #include <kvs/glut/OrientationAxis>
 #include <kvs/glut/Label>
+#include <kvs/glut/TransferFunctionEditor>
 #if defined( KVS_SUPPORT_GLEW )
 #include <kvs/glew/RayCastingRenderer>
 #endif
 
-
 namespace { bool HasBounds = false; }
 
-namespace
+
+namespace kvsview
 {
 
+namespace RayCastingRenderer
+{
+
+/*===========================================================================*/
+/**
+ *  @brief  Set shader and transfer function to ray casting renderer.
+ *  @param  arg [in] command line argument
+ *  @param  renderer [in] renderer module
+ */
+/*===========================================================================*/
 template <typename Renderer>
-const void InitializeRayCastingRenderer(
+const void Initialize(
     const kvsview::RayCastingRenderer::Argument& arg,
     kvs::PipelineModule& renderer )
 {
@@ -65,17 +75,17 @@ const void InitializeRayCastingRenderer(
     const int shader = arg.shader();
     switch ( shader )
     {
-    case 0:
+    case 0: // Lamber shading
     {
         renderer.get<Renderer>()->setShader( kvs::Shader::Lambert( ka, kd ) );
         break;
     }
-    case 1:
+    case 1: // Phong shading
     {
         renderer.get<Renderer>()->setShader( kvs::Shader::Phong( ka, kd, ks, n ) );
         break;
     }
-    case 2:
+    case 2: // Blinn-phong shading
     {
         renderer.get<Renderer>()->setShader( kvs::Shader::BlinnPhong( ka, kd, ks, n ) );
         break;
@@ -84,19 +94,48 @@ const void InitializeRayCastingRenderer(
     }
 }
 
-} // end of namespace
-
-namespace kvsview
+/*===========================================================================*/
+/**
+ *  @brief  Transfer function editor class.
+ */
+/*===========================================================================*/
+class TransferFunctionEditor : public kvs::glut::TransferFunctionEditor
 {
+    bool m_no_gpu; ///!< flag to check if the GPU shader is enabled
 
-namespace RayCastingRenderer
-{
+public:
 
+    TransferFunctionEditor( kvs::glut::Screen* screen, const bool no_gpu ):
+        kvs::glut::TransferFunctionEditor( screen ),
+        m_no_gpu( no_gpu ) {}
+
+    void apply( void )
+    {
+        const kvs::RendererBase* base = screen()->rendererManager()->renderer();
+        if ( m_no_gpu )
+        {
+            kvs::RayCastingRenderer* renderer = (kvs::RayCastingRenderer*)base;
+            renderer->setTransferFunction( transferFunction() );
+        }
+        else
+        {
+            kvs::glew::RayCastingRenderer* renderer = (kvs::glew::RayCastingRenderer*)base;
+            renderer->setTransferFunction( transferFunction() );
+        }
+        screen()->redraw();
+    }
+};
+
+/*===========================================================================*/
+/**
+ *  @brief  Key press event.
+ */
+/*===========================================================================*/
 class KeyPressEvent : public kvs::KeyPressEventListener
 {
-    void update( kvs::KeyEvent* ev )
+    void update( kvs::KeyEvent* event )
     {
-        switch ( ev->key() )
+        switch ( event->key() )
         {
         case kvs::Key::o: screen()->controlTarget() = kvs::ScreenBase::TargetObject; break;
         case kvs::Key::l: screen()->controlTarget() = kvs::ScreenBase::TargetLight; break;
@@ -106,6 +145,38 @@ class KeyPressEvent : public kvs::KeyPressEventListener
     }
 };
 
+/*===========================================================================*/
+/**
+ *  @brief  Mouse double-click event.
+ */
+/*===========================================================================*/
+class MouseDoubleClickEvent : public kvs::MouseDoubleClickEventListener
+{
+    TransferFunctionEditor* m_editor; ///!< pointer to the transfer function
+
+public:
+
+    void update( kvs::MouseEvent* event )
+    {
+        static bool screen_is_shown = false;
+
+        if ( screen_is_shown ) m_editor->hide();
+        else m_editor->showWindow();
+
+        screen_is_shown = !screen_is_shown;
+    }
+
+    void attachTransferFunctionEditor( TransferFunctionEditor& editor )
+    {
+        m_editor = &editor;
+    }
+};
+
+/*===========================================================================*/
+/**
+ *  @brief  Label class to show the frame rate.
+ */
+/*===========================================================================*/
 class Label : public kvs::glut::Label
 {
 public:
@@ -127,6 +198,11 @@ public:
     }
 };
 
+/*===========================================================================*/
+/**
+ *  @brief  Legend bar class.
+ */
+/*===========================================================================*/
 class LegendBar : public kvs::glut::LegendBar
 {
 public:
@@ -145,6 +221,11 @@ public:
     }
 };
 
+/*===========================================================================*/
+/**
+ *  @brief  Orientation axis class.
+ */
+/*===========================================================================*/
 class OrientationAxis : public kvs::glut::OrientationAxis
 {
 public:
@@ -190,6 +271,12 @@ Argument::Argument( int argc, char** argv ):
                 "\t      2 = Blinn-Phong shading", 1, false );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the shader number.
+ *  @return shader number
+ */
+/*===========================================================================*/
 const int Argument::shader( void ) const
 {
     const int default_value = 0;
@@ -198,16 +285,34 @@ const int Argument::shader( void ) const
     else return( default_value );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Check whether the "noshading" option is specified or not.
+ *  @return true, if the "noshading" option is specified
+ */
+/*===========================================================================*/
 const bool Argument::noShading( void ) const
 {
     return( this->hasOption("noshading") );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Check whether the "nolod" option is specified or not.
+ *  @return true, if the "nolod" option is specified
+ */
+/*===========================================================================*/
 const bool Argument::noLOD( void ) const
 {
     return( this->hasOption("nolod") );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Check whether the "nogpu" option is specified or not.
+ *  @return true, if the "nogpu" option is specified
+ */
+/*===========================================================================*/
 const bool Argument::noGPU( void ) const
 {
 #if defined( KVS_SUPPORT_GLEW )
@@ -217,6 +322,12 @@ const bool Argument::noGPU( void ) const
 #endif
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the coefficient for ambient color.
+ *  @return coefficient for ambient color
+ */
+/*===========================================================================*/
 const float Argument::ambient( void ) const
 {
     const float default_value = this->shader() == 0 ? 0.4f : 0.3f;
@@ -225,6 +336,12 @@ const float Argument::ambient( void ) const
     else return( default_value );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the coefficient for diffuse color.
+ *  @return coefficient for diffuse color
+ */
+/*===========================================================================*/
 const float Argument::diffuse( void ) const
 {
     const float default_value = this->shader() == 0 ? 0.6f : 0.5f;
@@ -233,6 +350,12 @@ const float Argument::diffuse( void ) const
     else return( default_value );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the coefficient for specular color.
+ *  @return coefficient for specular color
+ */
+/*===========================================================================*/
 const float Argument::specular( void ) const
 {
     const float default_value = 0.8f;
@@ -241,6 +364,12 @@ const float Argument::specular( void ) const
     else return( default_value );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the coefficient for shininess.
+ *  @return coefficient for shininess
+ */
+/*===========================================================================*/
 const float Argument::shininess( void ) const
 {
     const float default_value = 100.0f;
@@ -295,12 +424,15 @@ const bool Main::exec( void )
     RayCastingRenderer::Argument arg( m_argc, m_argv );
     if( !arg.parse() ) return( false );
 
-    RayCastingRenderer::KeyPressEvent key_press_event;
-
-    // Create a global and screen class.
+    // Create screen.
     kvs::glut::Screen screen( &app );
+
+    RayCastingRenderer::KeyPressEvent key_press_event;
+    RayCastingRenderer::MouseDoubleClickEvent mouse_double_click_event;
+
     screen.setSize( 512, 512 );
     screen.addKeyPressEvent( &key_press_event );
+    screen.addMouseDoubleClickEvent( &mouse_double_click_event );
     screen.setTitle( kvsview::CommandName + " - " + kvsview::RayCastingRenderer::CommandName );
 
     // Check the input point data.
@@ -367,7 +499,7 @@ const bool Main::exec( void )
     if ( arg.noGPU() )
     {
         kvs::PipelineModule renderer( new kvs::RayCastingRenderer );
-        ::InitializeRayCastingRenderer<kvs::RayCastingRenderer>( arg, renderer );
+        RayCastingRenderer::Initialize<kvs::RayCastingRenderer>( arg, renderer );
 
         if ( !arg.noLOD() )
         {
@@ -380,7 +512,7 @@ const bool Main::exec( void )
     else
     {
         kvs::PipelineModule renderer( new kvs::glew::RayCastingRenderer );
-        ::InitializeRayCastingRenderer<kvs::glew::RayCastingRenderer>( arg, renderer );
+        RayCastingRenderer::Initialize<kvs::glew::RayCastingRenderer>( arg, renderer );
 
         pipe.connect( renderer );
     }
@@ -410,6 +542,15 @@ const bool Main::exec( void )
 
     // Show the screen.
     screen.show();
+
+    // Create transfer function editor.
+    RayCastingRenderer::TransferFunctionEditor editor( &screen, arg.noGPU() );
+    editor.setVolumeObject( kvs::VolumeObjectBase::DownCast( pipe.object() ) );
+    editor.show();
+    editor.hide();
+
+    // Attach the transfer function editor to the mouse double-click event.
+    mouse_double_click_event.attachTransferFunctionEditor( editor );
 
     return( app.run() );
 }
