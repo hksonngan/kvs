@@ -38,6 +38,7 @@
 #endif
 
 namespace { bool HasBounds = false; }
+namespace { bool Shown = false; }
 
 
 namespace kvsview
@@ -102,6 +103,7 @@ const void Initialize(
 class TransferFunctionEditor : public kvs::glut::TransferFunctionEditor
 {
     bool m_no_gpu; ///!< flag to check if the GPU shader is enabled
+    kvs::glut::LegendBar* m_legend_bar; ///!< pointer to the legend bar
 
 public:
 
@@ -122,7 +124,15 @@ public:
             kvs::glew::RayCastingRenderer* renderer = (kvs::glew::RayCastingRenderer*)base;
             renderer->setTransferFunction( transferFunction() );
         }
+
+        m_legend_bar->setColorMap( transferFunction().colorMap() );
+
         screen()->redraw();
+    }
+
+    void attachLegendBar( kvs::glut::LegendBar* legend_bar )
+    {
+        m_legend_bar = legend_bar;
     }
 };
 
@@ -158,17 +168,15 @@ public:
 
     void update( kvs::MouseEvent* event )
     {
-        static bool screen_is_shown = false;
-
-        if ( screen_is_shown ) m_editor->hide();
+        if ( ::Shown ) m_editor->hide();
         else m_editor->showWindow();
 
-        screen_is_shown = !screen_is_shown;
+        ::Shown = !::Shown;
     }
 
-    void attachTransferFunctionEditor( TransferFunctionEditor& editor )
+    void attachTransferFunctionEditor( TransferFunctionEditor* editor )
     {
-        m_editor = &editor;
+        m_editor = editor;
     }
 };
 
@@ -546,11 +554,14 @@ const bool Main::exec( void )
     // Create transfer function editor.
     RayCastingRenderer::TransferFunctionEditor editor( &screen, arg.noGPU() );
     editor.setVolumeObject( kvs::VolumeObjectBase::DownCast( pipe.object() ) );
+    editor.setTransferFunction( arg.transferFunction() );
+    editor.attachLegendBar( &legend_bar );
     editor.show();
     editor.hide();
+    ::Shown = false;
 
     // Attach the transfer function editor to the mouse double-click event.
-    mouse_double_click_event.attachTransferFunctionEditor( editor );
+    mouse_double_click_event.attachTransferFunctionEditor( &editor );
 
     return( app.run() );
 }
