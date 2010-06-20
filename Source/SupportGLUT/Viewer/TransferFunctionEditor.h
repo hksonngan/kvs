@@ -106,7 +106,7 @@ public:
 
     void setTransferFunction( const kvs::TransferFunction& transfer_function );
 
-    void setVolumeObject( const kvs::StructuredVolumeObject* object );
+    void setVolumeObject( const kvs::VolumeObjectBase* object );
 
     void setMaxStackSize( const size_t stack_size );
 

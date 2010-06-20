@@ -365,7 +365,7 @@ void TransferFunctionEditor::setTransferFunction( const kvs::TransferFunction& t
     m_undo_stack.push_front( m_initial_transfer_function );
 }
 
-void TransferFunctionEditor::setVolumeObject( const kvs::StructuredVolumeObject* object )
+void TransferFunctionEditor::setVolumeObject( const kvs::VolumeObjectBase* object )
 {
     m_histogram->create( object );
 }
