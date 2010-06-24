@@ -59,6 +59,8 @@ public:
 
     const float shininess( void ) const;
 
+    const float step( void ) const;
+
     const kvs::TransferFunction transferFunction( void ) const;
 };
 

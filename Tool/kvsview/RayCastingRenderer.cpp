@@ -59,6 +59,10 @@ const void Initialize(
     const kvsview::RayCastingRenderer::Argument& arg,
     kvs::PipelineModule& renderer )
 {
+    // Sampling step.
+    const float step = arg.step();
+    renderer.get<Renderer>()->setSamplingStep( step );
+
     // Transfer function.
     const kvs::TransferFunction& function = arg.transferFunction();
     renderer.get<Renderer>()->setTransferFunction( function );
@@ -269,6 +273,7 @@ Argument::Argument( int argc, char** argv ):
     add_option( "noshading", "Disable shading. (optional)", 0, false );
     add_option( "nolod", "Disable Level-of-Detail control. (optional)", 0, false );
     add_option( "nogpu", "Disable GPU rendering. (optional)", 0, false );
+    add_option( "step", "Sampling step. (default: 0.5)", 1, false );
     add_option( "ka", "Coefficient of the ambient color. (default: lambert=0.4, phong=0.3)", 1, false );
     add_option( "kd", "Coefficient of the diffuse color. (default: lambert=0.6, phong=0.5)", 1, false );
     add_option( "ks", "Coefficient of the specular color. (default: 0.8)", 1, false );
@@ -404,6 +409,14 @@ const kvs::TransferFunction Argument::transferFunction( void ) const
         const size_t resolution = 256;
         return( kvs::TransferFunction( resolution ) );
     }
+}
+
+const float Argument::step( void ) const
+{
+    const float default_value = 0.5f;
+
+    if ( this->hasOption("step") ) return( this->optionValue<float>("step") );
+    else return( default_value );
 }
 
 /*===========================================================================*/
