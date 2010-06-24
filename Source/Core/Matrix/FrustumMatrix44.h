@@ -25,7 +25,7 @@ namespace kvs
 
 /*===========================================================================*/
 /**
- *  @brief  Return view-frustum matrix.
+ *  @brief  Return view-frustum matrix (right-hand system).
  *  @param  left [in] Left position.
  *  @param  right [in] Right position.
  *  @param  bottom [in] Bottom position.
@@ -44,20 +44,16 @@ inline kvs::Matrix44<T> FrustumMatrix44(
     const T near,
     const T far )
 {
-    const T width  = right - left;
-    const T height = top - bottom;
-    const T depth  = far - near;
-
-    KVS_ASSERT( !( kvs::Math::IsZero( width  ) ) );
-    KVS_ASSERT( !( kvs::Math::IsZero( height ) ) );
-    KVS_ASSERT( !( kvs::Math::IsZero( depth  ) ) );
+    KVS_ASSERT( !( kvs::Math::IsZero( right - left ) ) );
+    KVS_ASSERT( !( kvs::Math::IsZero( top - bottom ) ) );
+    KVS_ASSERT( !( kvs::Math::IsZero( far - near ) ) );
 
     const T elements[16] =
     {
-           ( near * 2 ) / width,                         0,                           0,  0,
-                              0,     ( near * 2 ) / height,                           0,  0,
-        ( right+ left ) / width, ( top + bottom ) / height,     -( far + near ) / depth, -1,
-                              0,                         0, -( far * near * 2 ) / depth,  0
+        2 * near / ( right - left ),                           0,  ( right + left ) / ( right - left ),                                0,
+                                  0, 2 * near / ( top - bottom ),  ( top + bottom ) / ( top - bottom ),                                0,
+                                  0,                           0,     -( far + near ) / ( far - near ), -2 * far * near / ( far - near ),
+                                  0,                           0,                                   -1,                                0
     };
 
     return( kvs::Matrix44<T>( elements ) );

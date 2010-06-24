@@ -16,5 +16,6 @@ Viewer/RenderBuffer
 Viewer/ShaderObject
 Viewer/ShaderSource
 Viewer/Texture3D
+Viewer/TextureRectangle
 Viewer/VertexBufferObject
 Viewer/VertexShader

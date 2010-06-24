@@ -19,6 +19,7 @@ $(OUTDIR)/./Viewer/RenderBuffer.o \
 $(OUTDIR)/./Viewer/ShaderObject.o \
 $(OUTDIR)/./Viewer/ShaderSource.o \
 $(OUTDIR)/./Viewer/Texture3D.o \
+$(OUTDIR)/./Viewer/TextureRectangle.o \
 $(OUTDIR)/./Viewer/VertexBufferObject.o \
 $(OUTDIR)/./Viewer/VertexShader.o \
 

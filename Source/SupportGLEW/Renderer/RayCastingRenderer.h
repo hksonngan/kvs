@@ -66,12 +66,13 @@ protected:
     bool m_draw_front_face; ///< frag for drawing front face
     bool m_draw_back_face; ///< frag for drawing back face
     bool m_draw_volume; ///< frag for drawing volume
+    bool m_enable_jittering; ///< frag for stochastic jittering
     float m_step; ///< sampling step
     float m_opaque; ///< opaque value for early ray termination
     kvs::Texture1D m_transfer_function_texture; ///< transfer function texture
     kvs::Texture2D m_entry_points; ///< entry point texture
     kvs::Texture2D m_exit_points; ///< exit point texture
-    kvs::Texture2D m_random; ///< random texture for stochastic jittering
+    kvs::Texture2D m_jittering_texture; ///< texture for stochastic jittering
     kvs::glew::VertexBufferObject m_bounding_cube; ///< bounding cube (VBO)
     kvs::glew::Texture3D m_volume_data; ///< volume data (3D texture)
     kvs::glew::ProgramObject m_ray_caster; ///< ray casting shader
@@ -80,6 +81,11 @@ protected:
 public:
 
     RayCastingRenderer( void );
+
+    RayCastingRenderer( const kvs::TransferFunction& tfunc );
+
+    template <typename ShadingType>
+    RayCastingRenderer( const ShadingType shader );
 
     virtual ~RayCastingRenderer( void );
 
@@ -99,6 +105,10 @@ public:
 
     void setTransferFunction( const kvs::TransferFunction& tfunc );
 
+    void enableJittering( void );
+
+    void disableJittering( void );
+
 protected:
 
     void create_image(
@@ -117,7 +127,7 @@ protected:
 
     void create_exit_points( void );
 
-    void create_random( void );
+    void create_jittering_texture( void );
 
     void create_bounding_cube( const kvs::StructuredVolumeObject* volume );
 

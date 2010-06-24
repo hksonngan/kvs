@@ -43,6 +43,7 @@ Matrix/Vector
 Matrix/Vector2
 Matrix/Vector3
 Matrix/Vector4
+Matrix/ViewingMatrix44
 Network/Acceptor
 Network/Connector
 Network/HttpConnector

@@ -16,5 +16,6 @@
 #include <SupportGLEW/Viewer/ShaderObject.h>
 #include <SupportGLEW/Viewer/ShaderSource.h>
 #include <SupportGLEW/Viewer/Texture3D.h>
+#include <SupportGLEW/Viewer/TextureRectangle.h>
 #include <SupportGLEW/Viewer/VertexBufferObject.h>
 #include <SupportGLEW/Viewer/VertexShader.h>

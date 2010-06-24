@@ -93,6 +93,7 @@ $(OUTDIR)/./Matrix/Vector.o \
 $(OUTDIR)/./Matrix/Vector2.o \
 $(OUTDIR)/./Matrix/Vector3.o \
 $(OUTDIR)/./Matrix/Vector4.o \
+$(OUTDIR)/./Matrix/ViewingMatrix44.o \
 $(OUTDIR)/./Network/Acceptor.o \
 $(OUTDIR)/./Network/Connector.o \
 $(OUTDIR)/./Network/HttpConnector.o \

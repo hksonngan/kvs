@@ -18,13 +18,13 @@ namespace kvs
 {
 
 template kvs::Matrix44<float> PerspectiveMatrix44<float>(
-    const float fov_y,
+    const float fov,
     const float aspect,
     const float near,
     const float far );
 
 template kvs::Matrix44<double> PerspectiveMatrix44<double>(
-    const double fov_y,
+    const double fov,
     const double aspect,
     const double near,
     const double far );

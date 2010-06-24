@@ -14,10 +14,12 @@
 /*****************************************************************************/
 struct Volume
 {
-    vec3      ratio;     // ratio of the volume resolution (256x256x128 => 1:1:0.5)
-    float     min_range; // min. range
-    float     max_range; // max. range
-    float     min_value; // min. scalar value
-    float     max_value; // max. scalar value
-    sampler3D data;      // volume data (scalar field)
+    vec3 resolution; // volume resolution
+    vec3 resolution_ratio; // ratio of the resolution (256x256x128 => 1:1:0.5)
+    vec3 resolution_reciprocal; // reciprocal number of the resolution
+    float min_range; // min. range of the value
+    float max_range; // max. range of the value
+    float min_value; // min. scalar value
+    float max_value; // max. scalar value
+    sampler3D data; // volume data (scalar field)
 };

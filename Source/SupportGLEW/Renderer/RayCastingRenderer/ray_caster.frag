@@ -26,7 +26,7 @@ uniform vec3             camera_position;   // camera position in the object coo
 uniform Volume           volume;            // volume data
 uniform Shading          shading;           // shading parameter
 uniform TransferFunction transfer_function; // 1D transfer function
-uniform sampler2D        random;            // random texture
+uniform sampler2D        jittering_texture; // texture for jittering
 uniform float            width;             // screen width
 uniform float            height;            // screen height
 
@@ -43,17 +43,38 @@ vec3 estimateGradient( in sampler3D v, in vec3 p, in vec3 o )
     return( vec3( s3 - s0, s4 - s1, s5 - s2 ) );
 }
 
+vec3 estimateGradient8( in sampler3D v, in vec3 p, in vec3 o )
+{
+    vec3 g0 = estimateGradient( v, p, o );
+    vec3 g1 = estimateGradient( v, p + vec3( -o.x, -o.y, -o.z ), o );
+    vec3 g2 = estimateGradient( v, p + vec3(  o.x,  o.y,  o.z ), o );
+    vec3 g3 = estimateGradient( v, p + vec3( -o.x,  o.y, -o.z ), o );
+    vec3 g4 = estimateGradient( v, p + vec3(  o.x, -o.y,  o.z ), o );
+    vec3 g5 = estimateGradient( v, p + vec3( -o.x, -o.y,  o.z ), o );
+    vec3 g6 = estimateGradient( v, p + vec3(  o.x,  o.y, -o.z ), o );
+    vec3 g7 = estimateGradient( v, p + vec3( -o.x,  o.y,  o.z ), o );
+    vec3 g8 = estimateGradient( v, p + vec3(  o.x, -o.y, -o.z ), o );
+    vec3 mix0 = mix( mix( g1, g2, 0.5 ), mix( g3, g4, 0.5 ), 0.5 );
+    vec3 mix1 = mix( mix( g5, g6, 0.5 ), mix( g7, g8, 0.5 ), 0.5 );
+
+    return( mix( g0, mix( mix0, mix1, 0.5 ), 0.75 ) );
+}
+
 void main( void )
 {
     // Entry and exit point.
     vec2 index = vec2( gl_FragCoord.x / width, gl_FragCoord.y / height );
-    vec3 entry_point = volume.ratio * texture2D( entry_points, index ).xyz;
-    vec3 exit_point = volume.ratio * texture2D( exit_points, index ).xyz;
+    vec3 entry_point = volume.resolution * texture2D( entry_points, index ).xyz;
+    vec3 exit_point = volume.resolution * texture2D( exit_points, index ).xyz;
     if ( entry_point == exit_point ) { discard; } // out of cube
 
-    // Stochastic jittering.
+    // Ray direction.
     vec3 direction = dt * normalize( exit_point - entry_point );
-    entry_point = entry_point + direction * texture2D( random, index ).x;
+
+    // Stochastic jittering.
+#if defined( ENABLE_JITTERING )
+    entry_point = entry_point + direction * texture2D( jittering_texture, gl_FragCoord.xy / 32.0 ).x;
+#endif
 
     // Ray traversal.
     float segment = distance( exit_point, entry_point );
@@ -67,7 +88,7 @@ void main( void )
     for ( int i = 0; i < nsteps; i++ )
     {
         // Get the scalar value from the 3D texture.
-        vec3 volume_index = vec3( position / volume.ratio );
+        vec3 volume_index = vec3( position / volume.resolution );
         vec4 value = texture3D( volume.data, volume_index );
         float scalar = mix( volume.min_range, volume.max_range, value.w );
 
@@ -77,7 +98,7 @@ void main( void )
         if ( src.a != 0.0 )
         {
             // Get the normal vector.
-            vec3 offset_index = vec3( offset / volume.ratio );
+            vec3 offset_index = vec3( volume.resolution_reciprocal );
             vec3 normal = estimateGradient( volume.data, volume_index, offset_index );
 
             vec3 L = normalize( light_position - position );

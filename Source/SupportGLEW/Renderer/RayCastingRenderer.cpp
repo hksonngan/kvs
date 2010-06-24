@@ -88,12 +88,38 @@ namespace glew
 
 /*===========================================================================*/
 /**
- *  @brief  Construct a new RayCastingRenderer class.
+ *  @brief  Constructs a new RayCastingRenderer class.
  */
 /*===========================================================================*/
 RayCastingRenderer::RayCastingRenderer( void )
 {
     BaseClass::setShader( kvs::Shader::Lambert() );
+    this->initialize();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new RayCastingRenderer class.
+ *  @param  tfunc [in] transfer function
+ */
+/*===========================================================================*/
+RayCastingRenderer::RayCastingRenderer( const kvs::TransferFunction& tfunc )
+{
+    BaseClass::setTransferFunction( tfunc );
+    BaseClass::setShader( kvs::Shader::Lambert() );
+    this->initialize();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new RayCastingRenderer class.
+ *  @param  shader [in] shader
+ */
+/*===========================================================================*/
+template <typename ShadingType>
+RayCastingRenderer::RayCastingRenderer( const ShadingType shader )
+{
+    BaseClass::setShader( shader );
     this->initialize();
 }
 
@@ -140,20 +166,40 @@ void RayCastingRenderer::initialize( void )
     m_draw_back_face = true;
     m_draw_volume = true;
 
+    m_enable_jittering = false;
+
     m_step = 0.5f;
     m_opaque = 1.0f;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets sampling step.
+ *  @param  step [in] sampling step
+ */
+/*===========================================================================*/
 void RayCastingRenderer::setSamplingStep( const float step )
 {
     m_step = step;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets opaque value for the early ray termination.
+ *  @param  opaque [in] opaque value
+ */
+/*===========================================================================*/
 void RayCastingRenderer::setOpaqueValue( const float opaque )
 {
     m_opaque = opaque;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets drawing buffer.
+ *  @param  drawing_buffer [in] drawing buffer (front, back or volume)
+ */
+/*===========================================================================*/
 void RayCastingRenderer::setDrawingBuffer( const RayCastingRenderer::DrawingBuffer drawing_buffer )
 {
     m_draw_front_face = false;
@@ -175,6 +221,12 @@ void RayCastingRenderer::setDrawingBuffer( const RayCastingRenderer::DrawingBuff
     }
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets tranfer function.
+ *  @param  tfunc [in] transfer function
+ */
+/*===========================================================================*/
 void RayCastingRenderer::setTransferFunction( const kvs::TransferFunction& tfunc )
 {
      BaseClass::setTransferFunction( tfunc );
@@ -183,6 +235,16 @@ void RayCastingRenderer::setTransferFunction( const kvs::TransferFunction& tfunc
      {
          m_transfer_function_texture.release();
      }
+}
+
+void RayCastingRenderer::enableJittering( void )
+{
+    m_enable_jittering = true;
+}
+
+void RayCastingRenderer::disableJittering( void )
+{
+    m_enable_jittering = false;
 }
 
 /*===========================================================================*/
@@ -206,7 +268,7 @@ void RayCastingRenderer::create_image(
     if ( BaseClass::m_width == 0 && BaseClass::m_height == 0 )
     {
         this->initialize_shaders( volume );
-        this->create_random();
+        this->create_jittering_texture();
         this->create_bounding_cube( volume );
 
         m_ray_caster.bind();
@@ -284,24 +346,22 @@ void RayCastingRenderer::create_image(
         // Ray casting.
         m_ray_caster.bind();
         glActiveTexture( GL_TEXTURE4 ); m_transfer_function_texture.bind(); glEnable( GL_TEXTURE_1D );
-        glActiveTexture( GL_TEXTURE5 ); m_random.bind(); glEnable( GL_TEXTURE_2D );
+        glActiveTexture( GL_TEXTURE5 ); m_jittering_texture.bind(); glEnable( GL_TEXTURE_2D );
         glActiveTexture( GL_TEXTURE1 ); m_volume_data.bind(); glEnable( GL_TEXTURE_3D );
         {
-            const kvs::Vector3ui ngrids = volume->resolution() - kvs::Vector3ui(1);
-            const kvs::Real32 max_ngrids = static_cast<kvs::Real32>( kvs::Math::Max( ngrids.x(), ngrids.y(), ngrids.z() ) );
-            const kvs::Vector3f light_position = camera->projectWorldToObject( light->position() * max_ngrids );
-            const kvs::Vector3f camera_position = camera->projectWorldToObject( camera->position() * max_ngrids );
+            const kvs::Vector3f light_position = camera->projectWorldToObject( light->position() );
+            const kvs::Vector3f camera_position = camera->projectWorldToObject( camera->position() );
             m_ray_caster.setUniformValuef( "light_position", light_position );
             m_ray_caster.setUniformValuef( "camera_position", camera_position );
             m_ray_caster.setUniformValuei( "volume.data", 1 );
             m_ray_caster.setUniformValuei( "exit_points", 2 );
             m_ray_caster.setUniformValuei( "entry_points", 3 );
             m_ray_caster.setUniformValuei( "transfer_function.data", 4 );
-            m_ray_caster.setUniformValuei( "random", 5 );
+            m_ray_caster.setUniformValuei( "jittering_texture", 5 );
             this->draw_quad( 1.0f );
         }
         glActiveTexture( GL_TEXTURE4 ); m_transfer_function_texture.unbind(); glDisable( GL_TEXTURE_1D );
-        glActiveTexture( GL_TEXTURE5 ); m_random.unbind(); glDisable( GL_TEXTURE_2D );
+        glActiveTexture( GL_TEXTURE5 ); m_jittering_texture.unbind(); glDisable( GL_TEXTURE_2D );
         glActiveTexture( GL_TEXTURE1 ); m_volume_data.unbind(); glDisable( GL_TEXTURE_3D );
         m_ray_caster.unbind();
     }
@@ -320,10 +380,10 @@ void RayCastingRenderer::create_image(
 void RayCastingRenderer::initialize_shaders( const kvs::StructuredVolumeObject* volume )
 {
     const kvs::Vector3ui ngrids = volume->resolution();
-    const kvs::Real32 max_ngrids = static_cast<kvs::Real32>( kvs::Math::Max( ngrids.x()-1, ngrids.y()-1, ngrids.z()-1 ) );
-    const kvs::Real32 n = 1.0f / max_ngrids;
-    const kvs::Vector3f offset( 1.0f * n, 1.0f * n, 1.0f * n );
-    const kvs::Vector3f ratio( ngrids.x() * n, ngrids.y() * n, ngrids.z() * n );
+    const kvs::Real32 max_ngrids = static_cast<kvs::Real32>( kvs::Math::Max( ngrids.x(), ngrids.y(), ngrids.z() ) );
+    const kvs::Vector3f resolution( ngrids.x(), ngrids.y(), ngrids.z() );
+    const kvs::Vector3f ratio( ngrids.x() / max_ngrids, ngrids.y() / max_ngrids, ngrids.z() / max_ngrids );
+    const kvs::Vector3f reciprocal( 1.0f / ngrids.x(), 1.0f / ngrids.y(), 1.0f / ngrids.z() );
 
     // Bounding cube shader.
     {
@@ -355,12 +415,21 @@ void RayCastingRenderer::initialize_shaders( const kvs::StructuredVolumeObject* 
         kvs::glew::ShaderSource vert( vert_code );
         kvs::glew::ShaderSource frag( frag_code );
 
-        switch ( BaseClass::m_shader->type() )
+#if defined( _TEXTURE_RECTANGLE_ )
+        frag.define("ENABLE_TEXTURE_RECTANGLE");
+#endif
+
+        if ( m_enable_jittering ) frag.define("ENABLE_JITTERING");
+
+        if ( BaseClass::isEnabledShading() )
         {
-        case kvs::Shader::LambertShading: frag.define("ENABLE_LAMBERT_SHADING"); break;
-        case kvs::Shader::PhongShading: frag.define("ENABLE_PHONG_SHADING"); break;
-        case kvs::Shader::BlinnPhongShading: frag.define("ENABLE_BLINN_PHONG_SHADING"); break;
-        default: /* NO SHADING */ break;
+            switch ( BaseClass::m_shader->type() )
+            {
+            case kvs::Shader::LambertShading: frag.define("ENABLE_LAMBERT_SHADING"); break;
+            case kvs::Shader::PhongShading: frag.define("ENABLE_PHONG_SHADING"); break;
+            case kvs::Shader::BlinnPhongShading: frag.define("ENABLE_BLINN_PHONG_SHADING"); break;
+            default: /* NO SHADING */ break;
+            }
         }
 
         kvs::Real32 min_range = 0.0f;
@@ -414,13 +483,14 @@ void RayCastingRenderer::initialize_shaders( const kvs::StructuredVolumeObject* 
         this->create_shaders( m_ray_caster, vert, frag );
 
         m_ray_caster.bind();
-        m_ray_caster.setUniformValuef( "volume.ratio", ratio );
+        m_ray_caster.setUniformValuef( "volume.resolution", resolution );
+        m_ray_caster.setUniformValuef( "volume.resolution_ratio", ratio );
+        m_ray_caster.setUniformValuef( "volume.resolution_reciprocal", reciprocal );
         m_ray_caster.setUniformValuef( "volume.min_range", min_range );
         m_ray_caster.setUniformValuef( "volume.max_range", max_range );
         m_ray_caster.setUniformValuef( "volume.min_value", min_value );
         m_ray_caster.setUniformValuef( "volume.max_value", max_value );
-        m_ray_caster.setUniformValuef( "offset", offset );
-        m_ray_caster.setUniformValuef( "dt", m_step * n );
+        m_ray_caster.setUniformValuef( "dt", m_step );
         m_ray_caster.setUniformValuef( "opaque", m_opaque );
         switch ( BaseClass::m_shader->type() )
         {
@@ -513,16 +583,12 @@ void RayCastingRenderer::create_entry_points( void )
     const size_t height = BaseClass::m_height;
 
     m_entry_points.release();
-    m_entry_points.setWrapS( GL_CLAMP );
-    m_entry_points.setWrapT( GL_CLAMP );
-//     m_entry_points.setWrapS( GL_REPEAT );
-//     m_entry_points.setWrapT( GL_REPEAT );
+    m_entry_points.setWrapS( GL_CLAMP_TO_BORDER );
+    m_entry_points.setWrapT( GL_CLAMP_TO_BORDER );
     m_entry_points.setMagFilter( GL_LINEAR );
     m_entry_points.setMinFilter( GL_LINEAR );
-//     m_entry_points.setMagFilter( GL_NEAREST );
-//     m_entry_points.setMinFilter( GL_NEAREST );
-    m_entry_points.setPixelFormat( GL_RGB16F_ARB, GL_RGB, GL_FLOAT  );
-//    m_entry_points.setPixelFormat( GL_RGB, GL_RGB, GL_FLOAT  );
+    m_entry_points.setPixelFormat( GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT );
+//    m_entry_points.setPixelFormat( GL_RGBA16F_ARB, GL_RGBA, GL_FLOAT );
     m_entry_points.create( width, height );
 
     ::CheckOpenGLError( "Entry point texture allocation failed." );
@@ -539,40 +605,36 @@ void RayCastingRenderer::create_exit_points( void )
     const size_t height = BaseClass::m_height;
 
     m_exit_points.release();
-//    m_exit_points.setWrapS( GL_CLAMP );
-//    m_exit_points.setWrapT( GL_CLAMP );
-    m_exit_points.setWrapS( GL_CLAMP );
-    m_exit_points.setWrapT( GL_CLAMP );
+    m_exit_points.setWrapS( GL_CLAMP_TO_BORDER );
+    m_exit_points.setWrapT( GL_CLAMP_TO_BORDER );
     m_exit_points.setMagFilter( GL_LINEAR );
     m_exit_points.setMinFilter( GL_LINEAR );
-//     m_exit_points.setMagFilter( GL_NEAREST );
-//     m_exit_points.setMinFilter( GL_NEAREST );
-    m_exit_points.setPixelFormat( GL_RGB16F_ARB, GL_RGB, GL_FLOAT  );
-//    m_exit_points.setPixelFormat( GL_RGB, GL_RGB, GL_FLOAT  );
+    m_exit_points.setPixelFormat( GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT  );
+//    m_exit_points.setPixelFormat( GL_RGBA16F_ARB, GL_RGBA, GL_FLOAT  );
     m_exit_points.create( width, height );
 
     ::CheckOpenGLError( "Exit point texture allocation failed." );
 }
 
-void RayCastingRenderer::create_random( void )
+void RayCastingRenderer::create_jittering_texture( void )
 {
     const size_t size = 32;
     unsigned char* data = new unsigned char [ size * size ];
     srand( (unsigned)time(NULL) );
     for ( size_t i = 0; i < size * size; i++ ) data[i] = 255.0f * rand() / float(RAND_MAX);
 
-    m_random.release();
-    m_random.setWrapS( GL_REPEAT );
-    m_random.setWrapT( GL_REPEAT );
-    m_random.setMagFilter( GL_NEAREST );
-    m_random.setMinFilter( GL_NEAREST );
-    m_random.setPixelFormat( GL_LUMINANCE8, GL_LUMINANCE, GL_UNSIGNED_BYTE  );
-    m_random.create( size, size );
-    m_random.download( size, size, data );
+    m_jittering_texture.release();
+    m_jittering_texture.setWrapS( GL_REPEAT );
+    m_jittering_texture.setWrapT( GL_REPEAT );
+    m_jittering_texture.setMagFilter( GL_NEAREST );
+    m_jittering_texture.setMinFilter( GL_NEAREST );
+    m_jittering_texture.setPixelFormat( GL_LUMINANCE8, GL_LUMINANCE, GL_UNSIGNED_BYTE  );
+    m_jittering_texture.create( size, size );
+    m_jittering_texture.download( size, size, data );
 
     delete [] data;
 
-    ::CheckOpenGLError( "Random texture allocation failed." );
+    ::CheckOpenGLError( "Jittering texture allocation failed." );
 }
 
 /*===========================================================================*/
@@ -597,8 +659,8 @@ void RayCastingRenderer::create_bounding_cube( const kvs::StructuredVolumeObject
      *
      */
     const kvs::Vector3ui min( 0, 0, 0 );
-    const kvs::Vector3ui max( volume->resolution() - kvs::Vector3ui( 1, 1, 1 ) );
-//    const kvs::Vector3ui max( volume->resolution() );
+//    const kvs::Vector3ui max( volume->resolution() - kvs::Vector3ui( 1, 1, 1 ) );
+    const kvs::Vector3ui max( volume->resolution() );
     const size_t nelements = 72; // = 4 vertices x 3 dimensions x 6 faces
 
     const float minx = static_cast<float>( min.x() );
@@ -672,12 +734,10 @@ void RayCastingRenderer::create_transfer_function( const kvs::StructuredVolumeOb
         *(data++) = omap[i];
     }
 
-//    m_transfer_function_texture.release();
     m_transfer_function_texture.setWrapS( GL_CLAMP_TO_EDGE );
-//    m_transfer_function_texture.setWrapS( GL_CLAMP );
     m_transfer_function_texture.setMagFilter( GL_LINEAR );
     m_transfer_function_texture.setMinFilter( GL_LINEAR );
-    m_transfer_function_texture.setPixelFormat( GL_RGBA, GL_RGBA, GL_FLOAT  );
+    m_transfer_function_texture.setPixelFormat( GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT  );
     m_transfer_function_texture.create( width );
     m_transfer_function_texture.download( width, colors.pointer() );
     m_transfer_function_texture.unbind();
@@ -698,12 +758,9 @@ void RayCastingRenderer::create_volume_data( const kvs::StructuredVolumeObject* 
     const size_t depth = volume->resolution().z();
 
     m_volume_data.release();
-//     m_volume_data.setWrapS( GL_CLAMP_TO_EDGE );
-//     m_volume_data.setWrapT( GL_CLAMP_TO_EDGE );
-//     m_volume_data.setWrapR( GL_CLAMP_TO_EDGE );
-    m_volume_data.setWrapS( GL_CLAMP );
-    m_volume_data.setWrapT( GL_CLAMP );
-    m_volume_data.setWrapR( GL_CLAMP );
+     m_volume_data.setWrapS( GL_CLAMP_TO_BORDER );
+     m_volume_data.setWrapT( GL_CLAMP_TO_BORDER );
+     m_volume_data.setWrapR( GL_CLAMP_TO_BORDER );
     m_volume_data.setMagFilter( GL_LINEAR );
     m_volume_data.setMinFilter( GL_LINEAR );
 
@@ -794,8 +851,6 @@ void RayCastingRenderer::draw_bounding_cube( void )
 /*===========================================================================*/
 void RayCastingRenderer::draw_quad( const float opacity )
 {
-    glViewport( 0, 0, BaseClass::m_width, BaseClass::m_height );
-
     glMatrixMode( GL_MODELVIEW );  glPushMatrix(); glLoadIdentity();
     glMatrixMode( GL_PROJECTION ); glPushMatrix(); glLoadIdentity();
     {

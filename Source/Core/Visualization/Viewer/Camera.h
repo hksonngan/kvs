@@ -135,9 +135,22 @@ public:
 
 public:
 
+    const kvs::Matrix44f projectionMatrix( void ) const;
+
+    const kvs::Matrix44f modelViewMatrix( void ) const;
+
+    const kvs::Matrix44f projectionModelViewMatrix( void ) const;
+
     void getProjectionMatrix( float (*projection)[16] ) const;
 
-    void getModelviewMatrix( float (*modelview)[16] ) const;
+    void getModelViewMatrix( float (*modelview)[16] ) const;
+
+    void getProjectionModelViewMatrix( float (*projection_modelview)[16] ) const;
+
+    void getProjectionModelViewMatrix(
+        float projection[16],
+        float modelview[16],
+        float (*projection_modelview)[16] ) const;
 
     void getCombinedMatrix( float (*combined)[16] ) const;
 

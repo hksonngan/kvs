@@ -15,6 +15,7 @@
 #include "OpenGL.h"
 #include <kvs/ColorImage>
 #include <kvs/Matrix44>
+#include <kvs/ViewingMatrix44>
 
 
 namespace
@@ -500,6 +501,136 @@ kvs::ColorImage Camera::snapshot( void )
     return( ret );
 }
 
+const kvs::Matrix44f Camera::projectionMatrix( void ) const
+{
+    GLfloat p[16];
+    this->getProjectionMatrix( &p );
+
+    const kvs::Matrix44f projection_matrix(
+        p[0], p[4], p[8],  p[12],
+        p[1], p[5], p[9],  p[13],
+        p[2], p[6], p[10], p[14],
+        p[3], p[7], p[11], p[15] );
+
+    return( projection_matrix );
+}
+
+const kvs::Matrix44f Camera::modelViewMatrix( void ) const
+{
+    GLfloat m[16];
+    this->getModelViewMatrix( &m );
+
+    const kvs::Matrix44f modelview_matrix(
+        m[0], m[4], m[8],  m[12],
+        m[1], m[5], m[9],  m[13],
+        m[2], m[6], m[10], m[14],
+        m[3], m[7], m[11], m[15] );
+
+    return( modelview_matrix );
+}
+
+const kvs::Matrix44f Camera::projectionModelViewMatrix( void ) const
+{
+    GLfloat pm[16];
+    this->getProjectionModelViewMatrix( &pm );
+
+    const kvs::Matrix44f projection_modelview_matrix(
+        pm[0], pm[4], pm[8],  pm[12],
+        pm[1], pm[5], pm[9],  pm[13],
+        pm[2], pm[6], pm[10], pm[14],
+        pm[3], pm[7], pm[11], pm[15] );
+
+    return( projection_modelview_matrix );
+}
+
+void Camera::getProjectionModelViewMatrix( float (*projection_modelview)[16] ) const
+{
+    float p[16]; this->getProjectionMatrix( &p );
+    float m[16]; this->getModelViewMatrix( &m );
+    this->getProjectionModelViewMatrix( p, m, projection_modelview );
+}
+
+void Camera::getProjectionModelViewMatrix(
+    float projection[16],
+    float modelview[16],
+    float (*projection_modelview)[16] ) const
+{
+    /* Calculate a combined matrix PM in order to project the point in the
+     * object coordinate system onto the image plane in the window coordinate
+     * system. The matrix PM is composed of a modelview marix M and a projection
+     * matrix P. It is possible to calculate the efficiently by taking advantage
+     * of zero-elements in the M and P.
+     *
+     * Modelview matrix M:   [ m0, m4, m8,  m12 ]   [ m0, m4, m8,  m12 ]
+     *                       [ m1, m5, m9,  m13 ] = [ m1, m5, m9,  m13 ]
+     *                       [ m2, m6, m10, m14 ]   [ m2, m6, m10, m14 ]
+     *                       [ m3, m7, m11, m15 ]   [  0,  0,   0,   1 ]
+     *
+     * Projection matrix P:  [ p0, p4, p8,  p12 ]   [ p0,  0, p8,    0 ] (Pers.)
+     *                       [ p1, p5, p9,  p13 ] = [  0, p5, p9,    0 ]
+     *                       [ p2, p6, p10, p14 ]   [  0,  0, p10, p14 ]
+     *                       [ p3, p7, p11, p15 ]   [  0,  0,  -1,   0 ]
+     *
+     *                                              [ p0,  0,   0, p12 ] (Orth.)
+     *                                            = [  0, p5,   0, p13 ]
+     *                                              [  0,  0, p10, p14 ]
+     *                                              [  0,  0,   0,   1 ]
+     *
+     * if 'r == -l' in the view volume, P is denoted as follows:
+     *
+     *       [ p0,  0,   0,   0 ] (Pers.)     [ p0,  0,   0,   0 ] (Orth.)
+     *       [  0, p5,   0,   0 ]             [  0, p5,   0,   0 ]
+     *       [  0,  0, p10, p14 ]             [  0,  0, p10, p14 ]
+     *       [  0,  0,  -1,   0 ]             [  0,  0,   0,   1 ]
+     *
+     * Combined matrix PM:
+     *
+     *         [ p0  m0,   p0  m4,   p0  m8,    p0  m12       ] (Pers.)
+     *         [ p5  m1,   p5  m5,   p5  m9,    p5  m13       ]
+     *         [ p10 m2,   p10 m6,   p10 m10,   p10 m14 + p14 ]
+     *         [    -m2,      -m6,      -m10,            -m14 ]
+     *
+     *         [ p0  m0,   p0  m4,   p0  m8,    p0  m12       ] (Orth.)
+     *         [ p5  m1,   p5  m5,   p5  m9,    p5  m13       ]
+     *         [ p10 m2,   p10 m6,   p10 m10,   p10 m14 + p14 ]
+     *         [      0,        0,         0,               1 ]
+     */
+
+    // Row 1
+    (*projection_modelview)[ 0] = projection[0] * modelview[ 0];
+    (*projection_modelview)[ 4] = projection[0] * modelview[ 4];
+    (*projection_modelview)[ 8] = projection[0] * modelview[ 8];
+    (*projection_modelview)[12] = projection[0] * modelview[12];
+
+    // Row 2
+    (*projection_modelview)[ 1] = projection[5] * modelview[ 1];
+    (*projection_modelview)[ 5] = projection[5] * modelview[ 5];
+    (*projection_modelview)[ 9] = projection[5] * modelview[ 9];
+    (*projection_modelview)[13] = projection[5] * modelview[13];
+
+    // Row 3
+    (*projection_modelview)[ 2] = projection[10] * modelview[ 2];
+    (*projection_modelview)[ 6] = projection[10] * modelview[ 6];
+    (*projection_modelview)[10] = projection[10] * modelview[10];
+    (*projection_modelview)[14] = projection[10] * modelview[14] + projection[14];
+
+    // Row 4
+    if( this->isPerspective() )
+    {
+        (*projection_modelview)[ 3] = -modelview[ 2];
+        (*projection_modelview)[ 7] = -modelview[ 6];
+        (*projection_modelview)[11] = -modelview[10];
+        (*projection_modelview)[15] = -modelview[14];
+    }
+    else
+    {
+        (*projection_modelview)[ 3] = 0.0;
+        (*projection_modelview)[ 7] = 0.0;
+        (*projection_modelview)[11] = 0.0;
+        (*projection_modelview)[15] = 1.0;
+    }
+}
+
 /*==========================================================================*/
 /**
  *  Get a projection matrix.
@@ -517,7 +648,7 @@ void Camera::getProjectionMatrix( float (*projection)[16] ) const
  *  @param  modelview [out] modelview matrix
  */
 /*==========================================================================*/
-void Camera::getModelviewMatrix( float (*modelview)[16] ) const
+void Camera::getModelViewMatrix( float (*modelview)[16] ) const
 {
     glGetFloatv( GL_MODELVIEW_MATRIX, (GLfloat*)*modelview );
 }
@@ -531,7 +662,7 @@ void Camera::getModelviewMatrix( float (*modelview)[16] ) const
 void Camera::getCombinedMatrix( float (*combined)[16] ) const
 {
     float projection[16]; this->getProjectionMatrix( &projection );
-    float modelview[16];  this->getModelviewMatrix( &modelview );
+    float modelview[16];  this->getModelViewMatrix( &modelview );
 
     this->getCombinedMatrix( projection, modelview, combined );
 }
@@ -644,7 +775,7 @@ const kvs::Vector2f Camera::projectObjectToWindow(
     float* depth ) const
 {
     float p[16];  getProjectionMatrix( &p );
-    float m[16];  getModelviewMatrix( &m );
+    float m[16];  getModelViewMatrix( &m );
     float pm[16]; getCombinedMatrix( p, m, &pm );
 
     float p_tmp[4] = {
@@ -801,8 +932,12 @@ const kvs::Vector3f Camera::projectCameraToObject(
 /*==========================================================================*/
 const kvs::Vector3f Camera::projectWorldToCamera( const kvs::Vector3f& p_wld ) const
 {
+/*
     const kvs::Matrix44f M = ::LookAtMatrix44<float>( m_position, m_up_vector, m_look_at );
     const kvs::Vector4f p_cam = kvs::Vector4f( p_wld, 1.0 ) * M - kvs::Vector4f( m_position, 1.0 );
+*/
+    const kvs::Matrix44f M = kvs::ViewingMatrix44<float>( m_position, m_up_vector, m_look_at );
+    const kvs::Vector4f p_cam = M * kvs::Vector4f( p_wld, 1.0 );
 
     return( kvs::Vector3f( p_cam.x(), p_cam.y(), p_cam.z() ) );
 }
@@ -816,8 +951,12 @@ const kvs::Vector3f Camera::projectWorldToCamera( const kvs::Vector3f& p_wld ) c
 /*==========================================================================*/
 const kvs::Vector3f Camera::projectCameraToWorld( const kvs::Vector3f& p_cam ) const
 {
+/*
     const kvs::Matrix44f M = ::LookAtMatrix44<float>( m_position, m_up_vector, m_look_at );
     const kvs::Vector4f p_wld = ( kvs::Vector4f( p_cam + m_position, 1.0 ) ) * M.inverse();
+*/
+    const kvs::Matrix44f M = kvs::ViewingMatrix44<float>( m_position, m_up_vector, m_look_at );
+    const kvs::Vector4f p_wld = M.inverse() * kvs::Vector4f( p_cam, 1.0 );
 
     return( kvs::Vector3f( p_wld.x(), p_wld.y(), p_wld.z() ) );
 }

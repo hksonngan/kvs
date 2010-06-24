@@ -25,21 +25,21 @@ namespace kvs
 
 /*===========================================================================*/
 /**
- *  @brief  Return perspective matrix.
- *  @param  fov_y  [i] Field-of-view along a y-axis (degree).
- *  @param  aspect [i] Aspect ratio.
- *  @param  near   [i] Near position.
- *  @param  far    [i] Far position.
+ *  @brief  Return perspective matrix (right-hand system).
+ *  @param  fov [i] Field-of-view along a y-axis in degree.
+ *  @param  aspect [in] Aspect ratio.
+ *  @param  near [in] Near position.
+ *  @param  far [in] Far position.
  */
 /*===========================================================================*/
 template <typename T>
 inline kvs::Matrix44<T> PerspectiveMatrix44(
-    const T fov_y,
+    const T fov,
     const T aspect,
     const T near,
     const T far )
 {
-    const T rad  = kvs::Math::Deg2Rad( fov_y / 2 );
+    const T rad  = kvs::Math::Deg2Rad( fov / 2 );
     const T sinA = static_cast<T>( sin( rad ) );
     const T cosA = static_cast<T>( cos( rad ) );
 
@@ -50,10 +50,10 @@ inline kvs::Matrix44<T> PerspectiveMatrix44(
     const T cotA = cosA / sinA;
     const T elements[16] =
     {
-        cotA / aspect,    0,                                    0,  0,
-                    0, cotA,                                    0,  0,
-                    0,    0,     -( far + near ) / ( far - near ), -1,
-                    0,    0, -( far * near * 2 ) / ( far - near ),  1
+        cotA / aspect,    0,                                0,                                    0,
+                    0, cotA,                                0,                                    0,
+                    0,    0, -( far + near ) / ( far - near ), -( far * near * 2 ) / ( far - near ),
+                    0,    0,                               -1,                                    1
     };
 
     return( kvs::Matrix44<T>( elements ) );

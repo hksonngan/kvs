@@ -25,8 +25,8 @@ namespace kvs
 
 /*===========================================================================*/
 /**
- *  @brief  Returns x-axis rotation matrix.
- *  @param  deg [in] Rotation angle ( degree ).
+ *  @brief  Returns x-axis rotation matrix (right-hand system).
+ *  @param  deg [in] Rotation angle in degree.
  *  @return Rotation matrix.
  */
 /*===========================================================================*/
@@ -37,13 +37,11 @@ inline kvs::Matrix33<T> XRotationMatrix33( const T deg )
     const T sinA = static_cast<T>( sin( rad ) );
     const T cosA = static_cast<T>( cos( rad ) );
 
-    const T zero = T(0);
-    const T one = T(1);
     const T elements[ 9 ] =
     {
-        one,   zero, zero,
-        zero,  cosA, sinA,
-        zero, -sinA, cosA
+        1,    0,     0,
+        0, cosA, -sinA,
+        0, sinA,  cosA
     };
 
     return( kvs::Matrix33<T>( elements ) );
@@ -63,13 +61,11 @@ inline kvs::Matrix33<T> YRotationMatrix33( const T deg )
     const T sinA = static_cast<T>( sin( rad ) );
     const T cosA = static_cast<T>( cos( rad ) );
 
-    const T zero = T(0);
-    const T one = T(1);
     const T elements[ 9 ] =
     {
-        cosA, zero, -sinA,
-        zero, one,   zero,
-        sinA, zero,  cosA
+         cosA, 0, sinA,
+            0, 1,    0,
+        -sinA, 0, cosA
     };
 
     return( kvs::Matrix33<T>( elements ) );
@@ -89,13 +85,11 @@ inline kvs::Matrix33<T> ZRotationMatrix33( const T deg )
     const T sinA = static_cast<T>( sin( rad ) );
     const T cosA = static_cast<T>( cos( rad ) );
 
-    const T zero = T(0);
-    const T one = T(1);
     const T elements[ 9 ] =
     {
-         cosA, sinA, zero,
-        -sinA, cosA, zero,
-         zero, zero, one
+         cosA, -sinA, 0,
+         sinA,  cosA, 0,
+            0,     0, 1
     };
 
     return( kvs::Matrix33<T>( elements ) );
