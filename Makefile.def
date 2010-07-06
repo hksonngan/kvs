@@ -215,6 +215,25 @@ endif
 
 
 #=============================================================================
+#  OPENCABIN_INCLUDE_PATH, OPENCABIN_LIBRARY_PATH, OPENCABIN_LINK_LIBRARY
+#=============================================================================
+ifeq "$(KVS_SUPPORT_OPENCABIN)" "1"
+OPENCABIN_INCLUDE_PATH :=
+OPENCABIN_LIBRARY_PATH :=
+OPENCABIN_LINK_LIBRARY := -loclapi
+ifdef KVS_OPENCABIN_DIR
+OPENCABIN_INCLUDE_PATH += -I$(KVS_OPENCABIN_DIR)/include
+OPENCABIN_LIBRARY_PATH += -L$(KVS_OPENCABIN_DIR)/lib
+else
+ifdef OCLTOP
+OPENCABIN_INCLUDE_PATH += -I$(OCLTOP)/include
+OPENCABIN_LIBRARY_PATH += -L$(OCLTOP)/lib
+endif
+endif
+endif
+
+
+#=============================================================================
 #  Compiler option.
 #=============================================================================
 CPPFLAGS := -Wall
@@ -223,6 +242,10 @@ ifdef DEBUG
 CPPFLAGS += -O0 -ggdb3
 else
 CPPFLAGS += -O3
+endif
+
+ifeq "$(KVS_SUPPORT_OPENCABIN)" "1"
+CPPFLAGS += -fPIC
 endif
 
 
@@ -267,6 +290,10 @@ endif
 
 ifeq "$(KVS_SUPPORT_CUDA)" "1"
 DEFINITIONS += -DKVS_SUPPORT_CUDA
+endif
+
+ifeq "$(KVS_SUPPORT_OPENCABIN)" "1"
+DEFINITIONS += -DKVS_SUPPORT_OPENCABIN
 endif
 
 
