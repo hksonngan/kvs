@@ -45,7 +45,9 @@ endif
 
 TARGET_LIB := lib$(PROJECT_NAME).a
 
-TARGET_DYLIB := $(PROJECT_NAME).so
+TARGET_DYLIB := lib$(PROJECT_NAME).so
+
+TARGET_OCL := $(PROJECT_NAME).so
 
 
 #=============================================================================
@@ -167,9 +169,9 @@ ifeq "$(KVS_SUPPORT_OPENCV)" "1"
 LINK_LIBRARY += -lkvsSupportOpenCV $(OPENCV_LINK_LIBRARY)
 endif
 
-ifeq "$(KVS_SUPPORT_OPENCABIN)" "1"
-LINK_LIBRARY += $(OPENCABIN_LINK_LIBRARY)
-endif
+#ifeq "$(KVS_SUPPORT_OPENCABIN)" "1"
+#LINK_LIBRARY += $(OPENCABIN_LINK_LIBRARY)
+#endif
 
 LINK_LIBRARY += -lkvsCore
 LINK_LIBRARY += $(GL_LINK_LIBRARY)
@@ -187,6 +189,9 @@ $(TARGET_LIB): $(OBJECTS)
 
 $(TARGET_DYLIB): $(OBJECTS)
 	$(LD) $(LDFLAGS) -shared -rdynamic $(LIBRARY_PATH) -o $@ $^ $(LINK_LIBRARY)
+
+$(TARGET_OCL): $(OBJECTS)
+	$(LD) $(LDFLAGS) -shared -rdynamic $(LIBRARY_PATH) -o $@ $^ $(LINK_LIBRARY) $(OPENCABIN_LINK_LIBRARY)
 
 %.o: %.cpp %.h
 	$(CPP) -c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) -o $@ $<
@@ -219,6 +224,12 @@ lib: $(TARGET_LIB)
 #  dynamic lib.
 #=============================================================================
 dylib: $(TARGET_DYLIB)
+
+
+#=============================================================================
+#  dynamic lib for OpenCABIN.
+#=============================================================================
+ocl: $(TARGET_OCL)
 
 
 #=============================================================================
