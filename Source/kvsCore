@@ -117,6 +117,7 @@
 #include <Core/Visualization/Event/EventBase.h>
 #include <Core/Visualization/Event/EventHandler.h>
 #include <Core/Visualization/Event/EventListener.h>
+#include <Core/Visualization/Event/IdleEventListener.h>
 #include <Core/Visualization/Event/InitializeEventListener.h>
 #include <Core/Visualization/Event/KeyEvent.h>
 #include <Core/Visualization/Event/KeyPressEventListener.h>

@@ -117,6 +117,7 @@ Visualization/Data/TornadoVolumeData
 Visualization/Event/EventBase
 Visualization/Event/EventHandler
 Visualization/Event/EventListener
+Visualization/Event/IdleEventListener
 Visualization/Event/InitializeEventListener
 Visualization/Event/KeyEvent
 Visualization/Event/KeyPressEventListener

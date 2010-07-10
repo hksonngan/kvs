@@ -150,6 +150,7 @@ $(OUTDIR)/./Visualization/Data/TornadoVolumeData.o \
 $(OUTDIR)/./Visualization/Event/EventBase.o \
 $(OUTDIR)/./Visualization/Event/EventHandler.o \
 $(OUTDIR)/./Visualization/Event/EventListener.o \
+$(OUTDIR)/./Visualization/Event/IdleEventListener.o \
 $(OUTDIR)/./Visualization/Event/InitializeEventListener.o \
 $(OUTDIR)/./Visualization/Event/KeyEvent.o \
 $(OUTDIR)/./Visualization/Event/KeyPressEventListener.o \
