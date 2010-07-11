@@ -88,7 +88,7 @@ public:
 
 public:
 
-    void update( const kvs::Camera* camera );
+    virtual void update( const kvs::Camera* camera );
 
     void on( void ) const;
 
