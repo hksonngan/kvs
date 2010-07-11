@@ -49,7 +49,7 @@ Light::~Light( void )
 /*==========================================================================*/
 void Light::initialize( void )
 {
-    m_id = 0;
+    m_id = GL_LIGHT0;
     m_init_position.set( 0.0, 0.0, 12.0 );
     m_position.set( 0.0, 0.0, 12.0 );
     m_diffuse.set( 1.0, 1.0, 1.0 );

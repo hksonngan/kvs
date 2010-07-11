@@ -155,9 +155,6 @@ void ScreenBase::enableCollisionDetection( void )
 void ScreenBase::initializeFunction( void )
 {
     // Set the lighting parameters.
-    m_light->setID( GL_LIGHT0 );
-    m_light->setPosition( 0.0, 0.0, 12.0 );
-    m_light->setColor( 1.0, 1.0, 1.0 );
     m_light->on();
 
     // Attach the Camera to the Mouse
