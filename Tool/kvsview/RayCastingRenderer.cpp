@@ -125,7 +125,11 @@ public:
         }
         else
         {
+#if defined( KVS_SUPPORT_GLEW )
             kvs::glew::RayCastingRenderer* renderer = (kvs::glew::RayCastingRenderer*)base;
+#else
+            kvs::RayCastingRenderer* renderer = (kvs::RayCastingRenderer*)base;
+#endif
             renderer->setTransferFunction( transferFunction() );
         }
 
@@ -529,15 +533,17 @@ const bool Main::exec( void )
 
         pipe.connect( renderer );
     }
-#if defined( KVS_SUPPORT_GLEW )
     else
     {
+#if defined( KVS_SUPPORT_GLEW )
         kvs::PipelineModule renderer( new kvs::glew::RayCastingRenderer );
         RayCastingRenderer::Initialize<kvs::glew::RayCastingRenderer>( arg, renderer );
-
+#else
+        kvs::PipelineModule renderer( new kvs::RayCastingRenderer );
+        RayCastingRenderer::Initialize<kvs::RayCastingRenderer>( arg, renderer );
+#endif
         pipe.connect( renderer );
     }
-#endif
 
     // Construct the visualization pipeline.
     if ( !pipe.exec() )
