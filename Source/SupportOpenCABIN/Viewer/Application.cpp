@@ -13,7 +13,6 @@
  */
 /*****************************************************************************/
 #include "Application.h"
-
 #include <iostream>
 #include <string>
 #include <kvs/File>
@@ -27,6 +26,13 @@ namespace { std::string Name = "unknown"; }
 namespace
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  Set application name (*.so)
+ *  @param  argc [in] argument count
+ *  @param  argv [in] argument value
+ */
+/*===========================================================================*/
 void SetApplicationName( int argc, char** argv )
 {
     for ( int i = 0; i < argc; i++ )
@@ -40,12 +46,17 @@ void SetApplicationName( int argc, char** argv )
     }
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Exit function.
+ */
+/*===========================================================================*/
 void ExitFunction( void )
 {
     ::QuitFlag = true;
 }
 
-}
+} // end of namespace
 
 
 namespace kvs
@@ -111,31 +122,65 @@ void Application::quit( void )
     exit(0);
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns application name.
+ *  @return application name
+ */
+/*===========================================================================*/
 const std::string Application::Name( void )
 {
     return( ::Name );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns true when the application is done
+ *  @return true, if the application is done
+ */
+/*===========================================================================*/
 const bool Application::IsDone( void )
 {
     return( ::DoneFlag );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns true when the application is a master program.
+ *  @return true, if the application is a master program
+ */
+/*===========================================================================*/
 const bool Application::IsMaster( void )
 {
     return( ::MasterFlag );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns true when the application is a renderer program.
+ *  @return true, if the application is a renderer program
+ */
+/*===========================================================================*/
 const bool Application::IsRenderer( void )
 {
     return( !::MasterFlag );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Application is set as master program.
+ */
+/*===========================================================================*/
 void Application::SetAsMaster( void )
 {
     ::MasterFlag = true;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Application is set as renderer program.
+ */
+/*===========================================================================*/
 void Application::SetAsRenderer( void )
 {
     ::MasterFlag = false;

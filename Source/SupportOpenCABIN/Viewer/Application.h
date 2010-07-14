@@ -33,6 +33,11 @@ namespace kvs
 namespace opencabin
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  Application class for OpenCABIN.
+ */
+/*===========================================================================*/
 class Application : public kvs::ApplicationBase
 {
 public:

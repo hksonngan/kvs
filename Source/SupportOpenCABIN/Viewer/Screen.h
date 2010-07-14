@@ -20,7 +20,7 @@
 #include <kvs/InitializeEventListener>
 #include <kvs/IdleEventListener>
 #include <kvs/PaintEventListener>
-#include "Application.h"//<kvs/opencabin/Application>
+#include <kvs/opencabin/Application>
 
 
 namespace kvs
@@ -41,9 +41,9 @@ class Screen : public kvs::ScreenBase
 
 protected:
 
-    PaintEventFunction m_paint_event_func;
-    kvs::EventHandler* m_initialize_event_handler;
-    kvs::EventHandler* m_idle_event_handler;
+    PaintEventFunction m_paint_event_func; ///< paint event function
+    kvs::EventHandler* m_initialize_event_handler; ///< initialize event handler
+    kvs::EventHandler* m_idle_event_handler; ///< idle event handler
 
 public:
 

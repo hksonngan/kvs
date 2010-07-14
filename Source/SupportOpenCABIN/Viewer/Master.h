@@ -18,7 +18,7 @@
 #include <kvs/EventHandler>
 #include <kvs/InitializeEventListener>
 #include <kvs/IdleEventListener>
-#include "Application.h"//<kvs/opencabin/Application>
+#include <kvs/opencabin/Application>
 
 
 namespace kvs
@@ -27,12 +27,17 @@ namespace kvs
 namespace opencabin
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  Master class.
+ */
+/*===========================================================================*/
 class Master
 {
 protected:
 
-    kvs::EventHandler* m_initialize_event_handler;
-    kvs::EventHandler* m_idle_event_handler;
+    kvs::EventHandler* m_initialize_event_handler; ///< initialize event handler
+    kvs::EventHandler* m_idle_event_handler; ///< idle event handler
 
 public:
 

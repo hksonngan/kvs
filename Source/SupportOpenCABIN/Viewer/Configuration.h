@@ -31,6 +31,11 @@ namespace opencabin
 namespace Configuration
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  Application configuration for KVS.
+ */
+/*===========================================================================*/
 struct KVSApplication
 {
     enum Display
@@ -55,6 +60,11 @@ struct Global
 };
 */
 
+/*===========================================================================*/
+/**
+ *  @brief  Master configuration.
+ */
+/*===========================================================================*/
 struct Master
 {
 /*
@@ -69,6 +79,11 @@ struct Master
     static kvs::SocketAddress SlaveAddress( const int index );
 };
 
+/*===========================================================================*/
+/**
+ *  @brief  Renderer configuration.
+ */
+/*===========================================================================*/
 struct Renderer
 {
 /*
@@ -96,11 +111,21 @@ struct Renderer
     static kvs::Vector2i ViewSize( const std::string name, const int index );
 };
 
+/*===========================================================================*/
+/**
+ *  @brief  Sensor configuration.
+ */
+/*===========================================================================*/
 struct Sensor
 {
     static kvs::Vector3f Offset( const int index );
 };
 
+/*===========================================================================*/
+/**
+ *  @brief  Camera configuration.
+ */
+/*===========================================================================*/
 struct Camera
 {
     static kvs::Vector3f Offset( const std::string name );

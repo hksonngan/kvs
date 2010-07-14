@@ -29,13 +29,17 @@ namespace { kvs::opencabin::Master* context = 0; }
  */
 extern int kvsOpenCABINMainFunction( int argc, char** argv );
 
-
+/*===========================================================================*/
+/**
+ *  @brief  Infinite loop thread class.
+ */
+/*===========================================================================*/
 class InfiniteLoopThread : public kvs::Thread
 {
 protected:
 
-    int m_argc;
-    char** m_argv;
+    int m_argc;    ///< argument count
+    char** m_argv; ///< argument values
 
 public:
 
@@ -51,8 +55,14 @@ public:
     }
 };
 
-// OpenCABIN predefined functions.
-
+/*===========================================================================*/
+/**
+ *  @brief  Initialization function for master program (OpenCABIN predefined function).
+ *  @param  argc [in] argument count
+ *  @param  argv [in] argument values
+ *  @return pointer to the user defined data
+ */
+/*===========================================================================*/
 void* minit( int argc, char** argv )
 {
     kvs::opencabin::Application::SetAsMaster();
@@ -64,16 +74,34 @@ void* minit( int argc, char** argv )
     return( 0 );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Idle function for master program (OpenCABIN predefined function).
+ *  @param  pdata [in] pointer to the user defined data returned from minit
+ */
+/*===========================================================================*/
 void midle( void*pdata )
 {
     if ( ::context ) ::context->idleEvent();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Repeat function for master program (OpenCABIN predefined function).
+ *  @param  pdata [in] pointer to the user defined data returned from minit
+ */
+/*===========================================================================*/
 void mrepeat( void* pdata )
 {
     // This function is never called from the master program in OpenCABIN???
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Cleanup function for master program (OpenCABIN predefined function).
+ *  @param  pdata [in] pointer to the user defined data returned from minit
+ */
+/*===========================================================================*/
 void mcleanup( void* pdata )
 {
     // Do nothing.
@@ -86,6 +114,12 @@ namespace kvs
 namespace opencabin
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  Construct a new Master class.
+ *  @param  application [in] pointer to the applicataion
+ */
+/*===========================================================================*/
 Master::Master( kvs::opencabin::Application* application )
 {
     m_initialize_event_handler = new kvs::EventHandler();
@@ -94,12 +128,22 @@ Master::Master( kvs::opencabin::Application* application )
     ::context = this;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Destruct the Master class.
+ */
+/*===========================================================================*/
 Master::~Master( void )
 {
     if ( m_initialize_event_handler ) { delete m_initialize_event_handler; }
     if ( m_idle_event_handler ) { delete m_idle_event_handler; }
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Initialize event.
+ */
+/*===========================================================================*/
 void Master::initializeEvent( void )
 {
     if ( kvs::opencabin::Application::IsMaster() )
@@ -108,6 +152,11 @@ void Master::initializeEvent( void )
     }
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Idle event.
+ */
+/*===========================================================================*/
 void Master::idleEvent( void )
 {
     if ( kvs::opencabin::Application::IsMaster() )

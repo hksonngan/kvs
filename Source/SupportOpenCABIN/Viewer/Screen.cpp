@@ -213,6 +213,11 @@ void Screen::initializeEvent( void )
     }
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Idle event.
+ */
+/*===========================================================================*/
 void Screen::idleEvent( void )
 {
     if ( kvs::opencabin::Application::IsRenderer() )
@@ -221,6 +226,11 @@ void Screen::idleEvent( void )
     }
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Paint event.
+ */
+/*===========================================================================*/
 void Screen::paintEvent( void )
 {
     if ( kvs::opencabin::Application::IsRenderer() )
@@ -230,30 +240,59 @@ void Screen::paintEvent( void )
     }
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Set paint event.
+ *  @param  event [in] pointer to the paint event
+ */
+/*===========================================================================*/
 void Screen::setPaintEvent( kvs::PaintEventListener* event )
 {
     m_paint_event_func = NULL;
     this->addPaintEvent( event );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Add initialization event.
+ *  @param  event [in] pointer to the initialization event
+ */
+/*===========================================================================*/
 void Screen::addInitializeEvent( kvs::InitializeEventListener* event )
 {
     event->setScreen( this );
     m_initialize_event_handler->attach( event );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Add idle event.
+ *  @param  event [in] pointer to the idle event
+ */
+/*===========================================================================*/
 void Screen::addIdleEvent( kvs::IdleEventListener* event )
 {
     event->setScreen( this );
     m_idle_event_handler->attach( event );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Add paint event.
+ *  @param  event [in] pointer to the paint event
+ */
+/*===========================================================================*/
 void Screen::addPaintEvent( kvs::PaintEventListener* event )
 {
     event->setScreen( this );
     BaseClass::eventHandler()->attach( event );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Default paint event.
+ */
+/*===========================================================================*/
 void Screen::default_paint_event( void )
 {
     glMatrixMode( GL_MODELVIEW );
@@ -269,16 +308,39 @@ void Screen::default_paint_event( void )
     //glutSwapBuffers();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Set screen position.
+ *  @param  x [in] x coordinate
+ *  @param  y [in] y coordinate
+ */
+/*===========================================================================*/
 void Screen::setPosition( const int x, const int y )
 {
     BaseClass::setPosition( x, y );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Set screen size.
+ *  @param  width [in] screen width
+ *  @param  height [in] screen height
+ */
+/*===========================================================================*/
 void Screen::setSize( const int width, const int height )
 {
     BaseClass::setSize( width, height );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Set screen geometry.
+ *  @param  x [in] x coordinate
+ *  @param  y [in] y coordinate
+ *  @param  width [in] screen width
+ *  @param  height [in] screen height
+ */
+/*===========================================================================*/
 void Screen::setGeometry( const int x, const int y, const int width, const int height )
 {
     BaseClass::setGeometry( x, y, width, height );
