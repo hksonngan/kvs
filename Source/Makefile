@@ -47,6 +47,10 @@ ifeq "$(KVS_SUPPORT_CUDA)" "1"
 SUBDIRS += SupportCUDA
 endif
 
+ifeq "$(KVS_SUPPORT_OPENCABIN)" "1"
+SUBDIRS += SupportCABIN
+endif
+
 
 #=============================================================================
 #  build.
