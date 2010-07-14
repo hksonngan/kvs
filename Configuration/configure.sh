@@ -11,6 +11,7 @@ printf 'configure BuildRule... '
 ./configure_BuildRule.py SupportOpenCV
 ./configure_BuildRule.py SupportSAGE
 ./configure_BuildRule.py SupportCUDA
+./configure_BuildRule.py SupportOpenCABIN
 
 printf 'success\n'
 
@@ -35,13 +36,14 @@ printf 'configure header list.. '
 #rm -f $( find ../Source/kvs -type f -not -path '*/CVS/*' )
 rm -f $( find ../Source/kvs -type f -not -path '*/.svn/*' )
 
-./configure_header_list.py Core          kvs
-./configure_header_list.py SupportGLUT   kvs/glut
-./configure_header_list.py SupportGLEW   kvs/glew
-./configure_header_list.py SupportSAGE   kvs/sage
-./configure_header_list.py SupportOpenCV kvs/opencv
-./configure_header_list.py SupportQt     kvs/qt
-./configure_header_list.py SupportCUDA   kvs/cuda
+./configure_header_list.py Core             kvs
+./configure_header_list.py SupportGLUT      kvs/glut
+./configure_header_list.py SupportGLEW      kvs/glew
+./configure_header_list.py SupportSAGE      kvs/sage
+./configure_header_list.py SupportOpenCV    kvs/opencv
+./configure_header_list.py SupportQt        kvs/qt
+./configure_header_list.py SupportCUDA      kvs/cuda
+./configure_header_list.py SupportOpenCABIN kvs/opencabin
 
 printf 'success\n'
 
