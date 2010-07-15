@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- 
+   OpenCABIN Library
+
+   Copyright (C) 2006,2007,2008,2009 KGT Inc.
+
+    This file is part of the OpenCABIN Library developed
+    under CnC project sponsored by National Institute of
+    Information and Communications Technology (NICT).
+
+    The OpenCABIN Library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Lesser General Public
+    License as published by the Free Software Foundation; either
+    version 2.1 of the License, or (at your option) any later version.
+
+    The OpenCABIN Library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+    See the GNU Lesser General Public License for more details.
+-->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:element name="ocl:opencabin">
+    <xsd:complexType>
+      <xsd:all>
+        <xsd:element ref="ocl:global" />
+        <xsd:element ref="ocl:master" />
+        <xsd:element ref="ocl:renderer" />
+        <xsd:element ref="ocl:application" />
+      </xsd:all>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="ocl:global">
+    <xsd:complexType>
+      <xsd:element ref="ocl:multicast" />
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="ocl:master">
+    <xsd:complexType>
+      <xsd:element ref="ocl:multicast" />
+      <xsd:element ref="ocl:slave" />
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="ocl:slave" type="xsd:string" />
+
+  <xsd:element name="ocl:renderer">
+    <xsd:complexType>
+      <xsd:attribute ref="ocl:name" />
+
+      <xsd:element ref="ocl:multicast" />
+      <xsd:element ref="ocl:fullscreen" />
+      <xsd:element ref="ocl:window" />
+      <xsd:element ref="ocl:screen" />
+      <xsd:element ref="ocl:view" />
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="ocl:window">
+    <xsd:complexType>
+      <xsd:element ref="ocl:position" />
+      <xsd:element ref="ocl:size" />
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="ocl:screen">
+    <xsd:complexType>
+      <xsd:element ref="ocl:matrix" />
+      <xsd:element ref="ocl:size" />
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="ocl:view">
+    <xsd:complexType>
+      <xsd:element ref="ocl:position" />
+      <xsd:element ref="ocl:size" />
+      <xsd:element ref="ocl:screen" />
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="ocl:application">
+    <xsd:complexType>
+      <xsd:attribute ref="ocl:name" />
+
+      <xsd:element ref="ocl:parameter" />
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="ocl:paremeter" type="xsd:string">
+    <xsd:comprexType>
+      <xsd:attribute ref="ocl:name" />
+    </xsd:comprexType>
+  </xsd:element>
+
+  <xsd:element name="ocl:sensor">
+    <xsd:comprexType>
+      <xsd:attribute name="ocl:no" type="xsd:integer" />
+
+      <xsd:element ref="ocl:offset" />
+    </xsd:comprexType>
+  </xsd:element>
+
+  <xsd:element name="ocl:camera">
+    <xsd:comprexType>
+      <xsd:element ref="ocl:depth" />
+      <xsd:element ref="ocl:offset" />
+      <xsd:element ref="ocl:direction" />
+    </xsd:comprexType>
+  </xsd:element>
+
+  <xsd:element name="ocl:offset" type="xsd:string">
+    <xsd:comprexType>
+      <xsd:attribute name="ocl:name" type="xsd:string" />
+    </xsd:comprexType>
+  </xsd:element>
+
+  <xsd:element name="ocl:fullscreen" type="xsd:boolean" />
+  <xsd:element name="ocl:direction" type="xsd:string" />
+  <xsd:element name="ocl:multicast" type="xsd:string" />
+
+  <xsd:element name="ocl:position" type="xsd:string" />
+  <xsd:element name="ocl:size" type="xsd:string" />
+  <xsd:element name="ocl:matrix" type="xsd:string" />
+
+  <xsd:attribute name="ocl:name" type="xsd:string" />
+</xsd:schema>
