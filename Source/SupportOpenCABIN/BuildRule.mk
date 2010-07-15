@@ -6,9 +6,9 @@ OBJECTS := \
 $(OUTDIR)/./Viewer/Application.o \
 $(OUTDIR)/./Viewer/Camera.o \
 $(OUTDIR)/./Viewer/Configuration.o \
+$(OUTDIR)/./Viewer/MainLoop.o \
 $(OUTDIR)/./Viewer/Master.o \
 $(OUTDIR)/./Viewer/Screen.o \
-$(OUTDIR)/./Viewer/main.o \
 
 
 

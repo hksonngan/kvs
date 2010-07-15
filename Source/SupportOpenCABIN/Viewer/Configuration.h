@@ -15,7 +15,7 @@
 #ifndef KVS__OPENCABIN__CONFIGURATION_H_INCLUDE
 #define KVS__OPENCABIN__CONFIGURATION_H_INCLUDE
 
-#include "OpenCABIN.h"
+#include <kvs/opencabin/OpenCABIN>
 #include <kvs/SocketAddress>
 #include <kvs/Vector2>
 #include <kvs/Vector3>

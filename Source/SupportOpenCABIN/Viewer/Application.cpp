@@ -93,6 +93,17 @@ Application::~Application( void )
 {
 }
 
+kvs::opencabin::Master& Application::master( void )
+{
+    return( m_master );
+}
+
+const kvs::opencabin::Master& Application::master( void ) const
+{
+    return( m_master );
+}
+
+
 /*===========================================================================*/
 /**
  *  @brief  Runs the GLUT application.

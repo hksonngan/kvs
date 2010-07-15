@@ -48,7 +48,7 @@ SUBDIRS += SupportCUDA
 endif
 
 ifeq "$(KVS_SUPPORT_OPENCABIN)" "1"
-SUBDIRS += SupportCABIN
+SUBDIRS += SupportOpenCABIN
 endif
 
 
@@ -94,6 +94,11 @@ ifeq "$(KVS_SUPPORT_OPENCV)" "1"
 	$(MKDIR) $(INSTALL_DIR)/include/kvs/opencv
 	$(INSTALL) kvsSupportOpenCV $(INSTALL_DIR)/include
 	$(INSTALL) $(shell find kvs/opencv -maxdepth 1 -type f) $(INSTALL_DIR)/include/kvs/opencv
+endif
+ifeq "$(KVS_SUPPORT_OPENCABIN)" "1"
+	$(MKDIR) $(INSTALL_DIR)/include/kvs/opencabin
+	$(INSTALL) kvsSupportOpenCABIN $(INSTALL_DIR)/include
+	$(INSTALL) $(shell find kvs/opencabin -maxdepth 1 -type f) $(INSTALL_DIR)/include/kvs/opencabin
 endif
 ifeq "$(KVS_SUPPORT_CUDA)" "1"
 	$(MKDIR) $(INSTALL_DIR)/include/kvs/cuda

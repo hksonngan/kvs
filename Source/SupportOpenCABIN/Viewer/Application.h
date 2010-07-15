@@ -16,14 +16,14 @@
 #define KVS__OPENCABIN__APPLICATION_H_INCLUDE
 
 #include <kvs/ApplicationBase>
-
+#include <kvs/opencabin/Master>
 
 /* In order to create the execution file (shared object file) for the OpenCABIN,
  * the name of the main function in the user program coded by using KVS rename
- * to 'kvsOpenCABINMainFunction'.
+ * to 'kvsOpenCABINMainLoop'.
  */
-#if !defined( KVS_DISABLE_OPENCABIN_MAIN_FUNCTION )
-#define main kvsOpenCABINMainFunction
+#if !defined( KVS_DISABLE_OPENCABIN_MAIN_LOOP )
+#define main kvsOpenCABINMainLoop
 #endif
 
 
@@ -40,6 +40,10 @@ namespace opencabin
 /*===========================================================================*/
 class Application : public kvs::ApplicationBase
 {
+protected:
+
+    kvs::opencabin::Master m_master;
+
 public:
 
     Application( int argc, char** argv );
@@ -47,6 +51,10 @@ public:
     virtual ~Application( void );
 
 public:
+
+    kvs::opencabin::Master& master( void );
+
+    const kvs::opencabin::Master& master( void ) const;
 
     virtual int run( void );
 

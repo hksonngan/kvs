@@ -18,7 +18,6 @@
 #include <kvs/EventHandler>
 #include <kvs/InitializeEventListener>
 #include <kvs/IdleEventListener>
-#include <kvs/opencabin/Application>
 
 
 namespace kvs
@@ -41,7 +40,7 @@ protected:
 
 public:
 
-    Master( kvs::opencabin::Application* application = 0 );
+    Master( void );
 
     virtual ~Master( void );
 

@@ -6,9 +6,9 @@ OBJECTS = \
 $(OUTDIR)\.\Viewer\Application.obj \
 $(OUTDIR)\.\Viewer\Camera.obj \
 $(OUTDIR)\.\Viewer\Configuration.obj \
+$(OUTDIR)\.\Viewer\MainLoop.obj \
 $(OUTDIR)\.\Viewer\Master.obj \
 $(OUTDIR)\.\Viewer\Screen.obj \
-$(OUTDIR)\.\Viewer\main.obj \
 
 
 

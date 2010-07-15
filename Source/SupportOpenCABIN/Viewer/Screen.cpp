@@ -12,62 +12,43 @@
  *  $Id$
  */
 /*****************************************************************************/
-#include "OpenCABIN.h" // <kvs/opencabin/OpenCABIN>
 #include "Screen.h"
-#include "Camera.h"// <kvs/opencabin/Camera>
-#include "Configuration.h" // <kvs/opencabin/Configuration>
-#include <kvs/Thread>
-
+#include <kvs/opencabin/OpenCABIN>
+#include <kvs/opencabin/Camera>
+#include <kvs/opencabin/Configuration>
+#include <kvs/ViewingMatrix44>
+#include <kvs/opencabin/MainLoop>
 #if defined( KVS_SUPPORT_GLEW )
 #include <kvs/glew/GLEW>
 #endif
 
-#include <kvs/ViewingMatrix44>
 
-
-// Static parameters.
 namespace { kvs::opencabin::Screen* context = 0; }
 
-
-/* The 'kvsOpenCABINMainFunction' function is defined in the user program.
- * The main function defined in the user program is renamed to
- * 'kvsOpenCABINMainFunction' by including the '<kvs/opencabin/Application>'.
+/*===========================================================================*/
+/**
+ *  @brief  Initialization function for renderer program (OpenCABIN predefined function).
+ *  @param  argc [in] argument count
+ *  @param  argv [in] argument values
+ *  @return pointer to the user defined data
  */
-extern int kvsOpenCABINMainFunction( int argc, char** argv );
-
-class InfiniteLoopThread : public kvs::Thread
-{
-protected:
-
-    int m_argc;
-    char** m_argv;
-
-public:
-
-    InfiniteLoopThread( int argc, char** argv )
-    {
-        m_argc = argc;
-        m_argv = argv;
-    }
-
-    void run( void )
-    {
-        kvsOpenCABINMainFunction( m_argc, m_argv );
-    }
-};
-
-// OpenCABIN predefined functions.
-
-void* rinit( int ac, char** av )
+/*===========================================================================*/
+void* rinit( int argc, char** argv )
 {
     kvs::opencabin::Application::SetAsRenderer();
 
-    static ::InfiniteLoopThread thread( ac, av ); thread.start();
+    static kvs::opencabin::MainLoop main_loop( argc, argv );
     for ( ; ; ) if ( kvs::opencabin::Application::IsDone() ) break;
 
     return( 0 );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Initialization function for renderer program (OpenCABIN predefined function).
+ *  @param  pdata [in] pointer to the user defined data returned from rinit
+ */
+/*===========================================================================*/
 void ginit( void* pdata )
 {
 #if defined( KVS_SUPPORT_GLEW )
@@ -83,21 +64,38 @@ void ginit( void* pdata )
     if ( ::context ) ::context->initializeEvent();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Draw function for renderer program (OpenCABIN predefined function).
+ *  @param  pdata [in] pointer to the user defined data returned from rinit
+ */
+/*===========================================================================*/
 void gdraw( void* pdata )
 {
     if ( ::context ) ::context->paintEvent();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Idle function for renderer program (OpenCABIN predefined function).
+ *  @param  pdata [in] pointer to the user defined data returned from rinit
+ */
+/*===========================================================================*/
 void gidle( void* pdata )
 {
     if ( ::context ) ::context->idleEvent();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Cleanup function for renderer program (OpenCABIN predefined function).
+ *  @param  pdata [in] pointer to the user defined data returned from rinit
+ */
+/*===========================================================================*/
 void rcleanup( void* pdata )
 {
     // Do nothing.
 }
-
 
 namespace kvs
 {
@@ -173,6 +171,12 @@ Screen::~Screen( void )
     if ( m_idle_event_handler ) { delete m_idle_event_handler; }
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns screen name (renderer name).
+ *  @return screen name
+ */
+/*===========================================================================*/
 std::string Screen::name( void ) const
 {
     return( kvs::opencabin::Configuration::Renderer::Name() );
