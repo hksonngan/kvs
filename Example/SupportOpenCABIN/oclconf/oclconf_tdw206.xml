@@ -34,47 +34,8 @@
     <ocl:projectionMode>perspective</ocl:projectionMode>
   </ocl:renderer>
 
-  <ocl:renderer ocl:name="td03">
-    <ocl:window>
-      <ocl:position>0,0</ocl:position>
-      <ocl:size>2560,1024</ocl:size>
-    </ocl:window>
-    <ocl:view>
-      <ocl:position>0,0</ocl:position>
-      <ocl:size>2560,1024</ocl:size>
-    </ocl:view>
-    <ocl:screen>
-      <ocl:size>8.0,3.3</ocl:size>
-      <ocl:matrix>
-         1.0,  0.0,  0.0, 0.0,
-         0.0,  1.0,  0.0, 0.0,
-         0.0,  0.0, -1.0, 0.0,
-        -8.0, -5.0,  0.0, 1.0
-      </ocl:matrix>
-    </ocl:screen>
-  </ocl:renderer>
-
-  <ocl:renderer ocl:name="td02">
-    <ocl:window>
-      <ocl:position>0,0</ocl:position>
-      <ocl:size>2560,1024</ocl:size>
-    </ocl:window>
-    <ocl:view>
-      <ocl:position>0,0</ocl:position>
-      <ocl:size>2560,1024</ocl:size>
-    </ocl:view>
-    <ocl:screen>
-      <ocl:size>8.0,3.3</ocl:size>
-      <ocl:matrix>
-         1.0,  0.0,  0.0, 0.0,
-         0.0,  1.0,  0.0, 0.0,
-         0.0,  0.0, -1.0, 0.0,
-        -8.0, -1.7,  0.0, 1.0
-      </ocl:matrix>
-    </ocl:screen>
-  </ocl:renderer>
-
   <ocl:renderer ocl:name="td01">
+    <ocl:fullscreen>true</ocl:fullscreen>
     <ocl:window>
       <ocl:position>0,0</ocl:position>
       <ocl:size>2560,1024</ocl:size>
@@ -94,7 +55,8 @@
     </ocl:screen>
   </ocl:renderer>
 
-  <ocl:renderer ocl:name="td06">
+  <ocl:renderer ocl:name="td02">
+    <ocl:fullscreen>true</ocl:fullscreen>
     <ocl:window>
       <ocl:position>0,0</ocl:position>
       <ocl:size>2560,1024</ocl:size>
@@ -109,12 +71,55 @@
          1.0,  0.0,  0.0, 0.0,
          0.0,  1.0,  0.0, 0.0,
          0.0,  0.0, -1.0, 0.0,
-         0.0, -5.0,  0.0, 1.0
+        -8.0, -1.7,  0.0, 1.0
+      </ocl:matrix>
+    </ocl:screen>
+  </ocl:renderer>
+
+  <ocl:renderer ocl:name="td03">
+    <ocl:fullscreen>true</ocl:fullscreen>
+    <ocl:window>
+      <ocl:position>0,0</ocl:position>
+      <ocl:size>2560,1024</ocl:size>
+    </ocl:window>
+    <ocl:view>
+      <ocl:position>0,0</ocl:position>
+      <ocl:size>2560,1024</ocl:size>
+    </ocl:view>
+    <ocl:screen>
+      <ocl:size>8.0,3.3</ocl:size>
+      <ocl:matrix>
+         1.0,  0.0,  0.0, 0.0,
+         0.0,  1.0,  0.0, 0.0,
+         0.0,  0.0, -1.0, 0.0,
+        -8.0, -5.0,  0.0, 1.0
+      </ocl:matrix>
+    </ocl:screen>
+  </ocl:renderer>
+
+  <ocl:renderer ocl:name="td04">
+    <ocl:fullscreen>true</ocl:fullscreen>
+    <ocl:window>
+      <ocl:position>0,0</ocl:position>
+      <ocl:size>2560,1024</ocl:size>
+    </ocl:window>
+    <ocl:view>
+      <ocl:position>0,0</ocl:position>
+      <ocl:size>2560,1024</ocl:size>
+    </ocl:view>
+    <ocl:screen>
+      <ocl:size>8.0,3.3</ocl:size>
+      <ocl:matrix>
+         1.0,  0.0,  0.0, 0.0,
+         0.0,  1.0,  0.0, 0.0,
+         0.0,  0.0, -1.0, 0.0,
+         0.0,  1.7,  0.0, 1.0
       </ocl:matrix>
     </ocl:screen>
   </ocl:renderer>
 
   <ocl:renderer ocl:name="td05">
+    <ocl:fullscreen>true</ocl:fullscreen>
     <ocl:window>
       <ocl:position>0,0</ocl:position>
       <ocl:size>2560,1024</ocl:size>
@@ -134,7 +139,8 @@
     </ocl:screen>
   </ocl:renderer>
 
-  <ocl:renderer ocl:name="td04">
+  <ocl:renderer ocl:name="td06">
+    <ocl:fullscreen>true</ocl:fullscreen>
     <ocl:window>
       <ocl:position>0,0</ocl:position>
       <ocl:size>2560,1024</ocl:size>
@@ -149,7 +155,7 @@
          1.0,  0.0,  0.0, 0.0,
          0.0,  1.0,  0.0, 0.0,
          0.0,  0.0, -1.0, 0.0,
-         0.0,  1.7,  0.0, 1.0
+         0.0, -5.0,  0.0, 1.0
       </ocl:matrix>
     </ocl:screen>
   </ocl:renderer>
