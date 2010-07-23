@@ -311,7 +311,7 @@ void Texture3D::release( void )
  *  @return Used texture memory size [byte]
  */
 /*==========================================================================*/
-unsigned int Texture3D::usedTextureMemorySize( void )
+unsigned int Texture3D::UsedTextureMemorySize( void )
 {
     return( Texture3D::get_texture_memory_size_on_gpu( GL_PROXY_TEXTURE_3D ) );
 }

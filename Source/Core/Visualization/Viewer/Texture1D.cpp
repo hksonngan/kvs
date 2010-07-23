@@ -212,7 +212,7 @@ void Texture1D::release( void )
  *  @return Used texture memory size [byte]
  */
 /*==========================================================================*/
-unsigned int Texture1D::usedTextureMemorySize( void )
+unsigned int Texture1D::UsedTextureMemorySize( void )
 {
     return( Texture1D::get_texture_memory_size_on_gpu( GL_PROXY_TEXTURE_1D ) );
 }
@@ -227,7 +227,7 @@ unsigned int Texture1D::usedTextureMemorySize( void )
 unsigned int Texture1D::get_texture_memory_size_on_gpu( const GLenum proxy )
 {
     // Get the texture size.
-    GLint texture_size[2] = { 0, 0 };
+    GLint texture_size[1] = { 0 };
     glGetTexLevelParameteriv( proxy, 0, GL_TEXTURE_WIDTH,          &(texture_size[0]) );
 
     // Get the each channel size.
@@ -280,7 +280,7 @@ unsigned int Texture1D::get_texture_memory_size_on_gpu( const GLenum proxy )
     }
 
     // compute the amount of texture memory used.
-    return( texture_size[0] * texture_size[1] * (GLint)bytes );
+    return( texture_size[0] * (GLint)bytes );
 }
 
 } // end of namespace kvs

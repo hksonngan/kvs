@@ -88,7 +88,7 @@ public:
 
 public:
 
-    static unsigned int usedTextureMemorySize( void );
+    static unsigned int UsedTextureMemorySize( void );
 
 private:
 

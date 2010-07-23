@@ -200,10 +200,7 @@ const bool Main::exec( void )
 
     // Legend bar.
     ExtractEdges::LegendBar legend_bar( &screen );
-    const double min_value = kvs::VolumeObjectBase::DownCast( pipe.object() )->minValue();
-    const double max_value = kvs::VolumeObjectBase::DownCast( pipe.object() )->maxValue();
     legend_bar.setColorMap( arg.transferFunction().colorMap() );
-    legend_bar.setRange( min_value, max_value );
     legend_bar.show();
 
     // Orientation axis.

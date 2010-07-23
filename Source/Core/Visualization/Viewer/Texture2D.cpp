@@ -258,7 +258,7 @@ void Texture2D::release( void )
  *  @return Used texture memory size [byte]
  */
 /*==========================================================================*/
-unsigned int Texture2D::usedTextureMemorySize( void )
+unsigned int Texture2D::UsedTextureMemorySize( void )
 {
     return( Texture2D::get_texture_memory_size_on_gpu( GL_PROXY_TEXTURE_2D ) );
 }
