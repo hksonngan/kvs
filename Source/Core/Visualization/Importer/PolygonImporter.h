@@ -20,6 +20,7 @@
 #include <kvs/PolygonObject>
 #include <kvs/KVSMLObjectPolygon>
 #include <kvs/Stl>
+#include <kvs/Ply>
 
 
 namespace kvs
@@ -61,6 +62,8 @@ private:
     void import( const kvs::KVSMLObjectPolygon* kvsml );
 
     void import( const kvs::Stl* stl );
+
+    void import( const kvs::Ply* ply );
 
     void set_min_max_coord( void );
 };

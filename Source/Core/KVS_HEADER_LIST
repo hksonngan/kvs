@@ -12,6 +12,7 @@ FileFormat/KVSML/KVSMLObjectPolygon
 FileFormat/KVSML/KVSMLObjectStructuredVolume
 FileFormat/KVSML/KVSMLObjectUnstructuredVolume
 FileFormat/KVSML/KVSMLTransferFunction
+FileFormat/PLY/Ply
 FileFormat/PNM/Pbm
 FileFormat/PNM/Pgm
 FileFormat/PNM/Ppm

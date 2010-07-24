@@ -19,6 +19,7 @@
 #include <kvs/AVSField>
 #include <kvs/AVSUcd>
 #include <kvs/Stl>
+#include <kvs/Ply>
 #include <kvs/KVSMLObjectPoint>
 #include <kvs/KVSMLObjectLine>
 #include <kvs/KVSMLObjectPolygon>
@@ -97,6 +98,15 @@ inline const bool ImportablePolygon( const std::string& filename )
     if ( kvs::Stl::CheckFileExtension( filename ) )
     {
         if ( kvs::Stl::CheckFileFormat( filename ) )
+        {
+            return( true );
+        }
+    }
+
+    // Ply format.
+    if ( kvs::Ply::CheckFileExtension( filename ) )
+    {
+        if ( kvs::Ply::CheckFileFormat( filename ) )
         {
             return( true );
         }

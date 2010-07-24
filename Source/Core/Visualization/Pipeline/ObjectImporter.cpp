@@ -23,6 +23,7 @@
 #include <kvs/Pgm>
 #include <kvs/Pbm>
 #include <kvs/Stl>
+#include <kvs/Ply>
 #include <kvs/Tiff>
 #include <kvs/Dicom>
 #include <kvs/KVSMLObjectImage>
@@ -139,6 +140,12 @@ bool ObjectImporter::estimate_file_format( void )
     {
         m_importer_type = ObjectImporter::Polygon;
         m_file_format = new kvs::Stl;
+    }
+
+    else if ( kvs::Ply::CheckFileExtension( file.filePath() ) )
+    {
+        m_importer_type = ObjectImporter::Polygon;
+        m_file_format = new kvs::Ply;
     }
 
     else if ( kvs::Tiff::CheckFileExtension( file.filePath() ) )

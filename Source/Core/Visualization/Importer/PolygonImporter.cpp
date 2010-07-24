@@ -140,6 +140,27 @@ PolygonImporter::PolygonImporter( const std::string& filename )
         this->import( file_format );
         delete file_format;
     }
+    else if ( kvs::Ply::CheckFileExtension( filename ) )
+    {
+        kvs::Ply* file_format = new kvs::Ply( filename );
+        if( !file_format )
+        {
+            BaseClass::m_is_success = false;
+            kvsMessageError("Cannot read '%s'.",filename.c_str());
+            return;
+        }
+
+        if( file_format->isFailure() )
+        {
+            BaseClass::m_is_success = false;
+            kvsMessageError("Cannot read '%s'.",filename.c_str());
+            delete file_format;
+            return;
+        }
+
+        this->import( file_format );
+        delete file_format;
+    }
     else
     {
         BaseClass::m_is_success = false;
@@ -192,6 +213,10 @@ PolygonImporter::SuperClass* PolygonImporter::exec( const kvs::FileFormatBase* f
     else if ( class_name == "Stl" )
     {
         this->import( static_cast<const kvs::Stl*>( file_format ) );
+    }
+    else if ( class_name == "Ply" )
+    {
+        this->import( static_cast<const kvs::Ply*>( file_format ) );
     }
     else
     {
@@ -261,6 +286,37 @@ void PolygonImporter::import( const kvs::Stl* stl )
     m_opacities[0] = 255;
 
     this->set_min_max_coord();
+}
+
+void PolygonImporter::import( const kvs::Ply* ply )
+{
+    SuperClass::setPolygonType( kvs::PolygonObject::Triangle );
+    SuperClass::setNormalType( kvs::PolygonObject::VertexNormal );
+
+    SuperClass::setCoords( ply->coords() );
+    SuperClass::setNormals( ply->normals() );
+    SuperClass::setOpacity( 255 );
+
+    if ( ply->hasColors() )
+    {
+        SuperClass::setColorType( kvs::PolygonObject::VertexColor );
+        SuperClass::setColors( ply->colors() );
+    }
+    else
+    {
+        SuperClass::setColorType( kvs::PolygonObject::PolygonColor );
+        SuperClass::setColor( kvs::RGBColor( 255, 255, 255 ) );
+    }
+
+    if ( ply->hasConnections() )
+    {
+        SuperClass::setConnections( ply->connections() );
+    }
+
+    const kvs::Vector3f min_coord( ply->minCoord().x(), ply->minCoord().y(), ply->minCoord().z() );
+    const kvs::Vector3f max_coord( ply->maxCoord().x(), ply->maxCoord().y(), ply->maxCoord().z() );
+    SuperClass::setMinMaxObjectCoords( min_coord, max_coord );
+    SuperClass::setMinMaxExternalCoords( min_coord, max_coord );
 }
 
 /*==========================================================================*/

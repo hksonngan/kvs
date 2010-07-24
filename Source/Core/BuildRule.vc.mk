@@ -55,6 +55,8 @@ $(OUTDIR)\.\FileFormat\KVSML\TransferFunctionTag.obj \
 $(OUTDIR)\.\FileFormat\KVSML\UnstructuredVolumeObjectTag.obj \
 $(OUTDIR)\.\FileFormat\KVSML\ValueTag.obj \
 $(OUTDIR)\.\FileFormat\KVSML\VertexTag.obj \
+$(OUTDIR)\.\FileFormat\PLY\Ply.obj \
+$(OUTDIR)\.\FileFormat\PLY\PlyFile.obj \
 $(OUTDIR)\.\FileFormat\PNM\Header.obj \
 $(OUTDIR)\.\FileFormat\PNM\Pbm.obj \
 $(OUTDIR)\.\FileFormat\PNM\Pgm.obj \
@@ -395,6 +397,12 @@ $<
 $<
 <<
 
+{.\FileFormat\PLY\}.cpp{$(OUTDIR)\.\FileFormat\PLY\}.obj::
+	IF NOT EXIST $(OUTDIR)\.\FileFormat\PLY $(MKDIR) $(OUTDIR)\.\FileFormat\PLY
+	$(CPP) /c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) /Fo$(OUTDIR)\.\FileFormat\PLY\ @<<
+$<
+<<
+
 {.\FileFormat\KVSML\}.cpp{$(OUTDIR)\.\FileFormat\KVSML\}.obj::
 	IF NOT EXIST $(OUTDIR)\.\FileFormat\KVSML $(MKDIR) $(OUTDIR)\.\FileFormat\KVSML
 	$(CPP) /c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) /Fo$(OUTDIR)\.\FileFormat\KVSML\ @<<
@@ -453,6 +461,8 @@ install::
 	$(INSTALL) .\FileFormat\DICOM\*.h $(INSTALL_DIR)\include\Core\.\FileFormat\DICOM
 	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\FileFormat\KVSML $(MKDIR) $(INSTALL_DIR)\include\Core\.\FileFormat\KVSML
 	$(INSTALL) .\FileFormat\KVSML\*.h $(INSTALL_DIR)\include\Core\.\FileFormat\KVSML
+	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\FileFormat\PLY $(MKDIR) $(INSTALL_DIR)\include\Core\.\FileFormat\PLY
+	$(INSTALL) .\FileFormat\PLY\*.h $(INSTALL_DIR)\include\Core\.\FileFormat\PLY
 	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\FileFormat\PNM $(MKDIR) $(INSTALL_DIR)\include\Core\.\FileFormat\PNM
 	$(INSTALL) .\FileFormat\PNM\*.h $(INSTALL_DIR)\include\Core\.\FileFormat\PNM
 	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\FileFormat\STL $(MKDIR) $(INSTALL_DIR)\include\Core\.\FileFormat\STL
