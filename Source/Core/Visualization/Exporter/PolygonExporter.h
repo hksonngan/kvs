@@ -16,6 +16,8 @@
 
 #include <kvs/PolygonObject>
 #include <kvs/KVSMLObjectPolygon>
+#include <kvs/Stl>
+#include <kvs/Ply>
 #include "ExporterBase.h"
 
 
@@ -62,6 +64,36 @@ public:
     PolygonExporter( const kvs::PolygonObject* object );
 
     kvs::KVSMLObjectPolygon* exec( const kvs::ObjectBase* object );
+};
+
+/*===========================================================================*/
+/**
+ *  Polygon exporter class as STL format.
+ */
+/*===========================================================================*/
+template <>
+class PolygonExporter<kvs::Stl> : public kvs::ExporterBase<kvs::Stl>
+{
+public:
+
+    PolygonExporter( const kvs::PolygonObject* object );
+
+    kvs::Stl* exec( const kvs::ObjectBase* object );
+};
+
+/*===========================================================================*/
+/**
+ *  Polygon exporter class as PLY format.
+ */
+/*===========================================================================*/
+template <>
+class PolygonExporter<kvs::Ply> : public kvs::ExporterBase<kvs::Ply>
+{
+public:
+
+    PolygonExporter( const kvs::PolygonObject* object );
+
+    kvs::Ply* exec( const kvs::ObjectBase* object );
 };
 
 } // end of namespace kvs
