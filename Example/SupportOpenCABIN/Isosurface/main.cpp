@@ -22,6 +22,24 @@
 #include <kvs/opencabin/Application>
 #include <kvs/opencabin/Screen>
 
+#include <kvs/PaintEventListener>
+#include <kvs/RotationMatrix33>
+
+class PaintEvent : public kvs::PaintEventListener
+{
+    void update( void )
+    {
+        /* Rotate object.
+         */
+        static const kvs::Matrix33f RX( kvs::XRotationMatrix33<float>( 5.0f ) );
+        static const kvs::Matrix33f RY( kvs::YRotationMatrix33<float>( 5.0f ) );
+        static const kvs::Matrix33f RZ( kvs::ZRotationMatrix33<float>( 5.0f ) );
+        static const kvs::Matrix33f R = RX * RY * RZ;
+        static const kvs::Vector3f O( 0.0f, 0.0f, 0.0f );
+        screen()->objectManager()->object()->rotate( R, O );
+        screen()->redraw();
+    }
+};
 
 /*===========================================================================*/
 /**
@@ -33,6 +51,7 @@
 int main( int argc, char** argv )
 {
     kvs::opencabin::Application app( argc, argv );
+    kvs::opencabin::Application::EnableBarrier();
 
     /* Read volume data from the specified data file. If the data file is not
      * specified, scalar hydrogen volume data is created by using
@@ -69,8 +88,13 @@ int main( int argc, char** argv )
 
     delete volume;
 
+    object->scale( kvs::Vector3f( 2.5f ), kvs::Vector3f( 0.0f ) );
+
+    ::PaintEvent paint_event;
+
     // Screen.
     kvs::opencabin::Screen screen( &app );
+    screen.addPaintEvent( &paint_event );
     screen.registerObject( object );
     //screen.setGeometry( 0, 0, 512, 512 );
     screen.setTitle( "kvs::Isosurface" );
