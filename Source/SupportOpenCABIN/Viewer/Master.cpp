@@ -87,6 +87,7 @@ namespace opencabin
 /*===========================================================================*/
 Master::Master( void )
 {
+    m_barrier = NULL;
     m_initialize_event_handler = new kvs::EventHandler();
     m_idle_event_handler = new kvs::EventHandler();
 
@@ -100,6 +101,7 @@ Master::Master( void )
 /*===========================================================================*/
 Master::~Master( void )
 {
+    if ( m_barrier ) { delete m_barrier; }
     if ( m_initialize_event_handler ) { delete m_initialize_event_handler; }
     if ( m_idle_event_handler ) { delete m_idle_event_handler; }
 }
@@ -113,6 +115,13 @@ void Master::initializeEvent( void )
 {
     if ( kvs::opencabin::Application::IsMaster() )
     {
+        if ( !m_barrier && kvs::opencabin::Application::Barrier() )
+        {
+            const int port = kvs::opencabin::Configuration::KVSApplication::MasterAddress().port();
+            const int nrenderers = kvs::opencabin::Configuration::Master::SlaveCount();
+            m_barrier = new kvs::TCPBarrierServer( port, nrenderers );
+        }
+
         m_initialize_event_handler->notify();
     }
 }

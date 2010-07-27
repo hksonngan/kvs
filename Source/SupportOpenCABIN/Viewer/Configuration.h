@@ -45,6 +45,8 @@ struct KVSApplication
         Unknown
     };
 
+    static kvs::SocketAddress MasterAddress( void );
+
     static Display DisplayMode( void );
 
     static kvs::Vector2i DisplayResolution( void );

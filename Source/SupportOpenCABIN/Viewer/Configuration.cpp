@@ -26,6 +26,22 @@ namespace Configuration
 
 /*===========================================================================*/
 /**
+ *  @brief  Returns master's socket address (IP and port).
+ *  @return socket address
+ */
+/*===========================================================================*/
+kvs::SocketAddress KVSApplication::MasterAddress( void )
+{
+    const char* name = "kvs";
+    const char* tag_name = "master_address";
+    const char* param = oclconfGetApplicationParameter( name, tag_name );
+    if ( !param ) return( kvs::SocketAddress() );
+
+    return( kvs::SocketAddress( param ) );
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Returns display mode (TDW or CAVE).
  *  @return display mode
  */

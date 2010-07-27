@@ -70,6 +70,12 @@ public:
 
     static const bool IsRenderer( void );
 
+    static const bool Barrier( void );
+
+    static void EnableBarrier( void );
+
+    static void DisableBarrier( void );
+
     static void SetAsMaster( void );
 
     static void SetAsRenderer( void );

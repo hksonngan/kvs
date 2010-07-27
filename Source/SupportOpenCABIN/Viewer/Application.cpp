@@ -21,6 +21,7 @@
 namespace { bool QuitFlag = false; }
 namespace { bool DoneFlag = false; }
 namespace { bool MasterFlag = false; }
+namespace { bool BarrierFlag = false; }
 namespace { std::string Name = "unknown"; }
 
 namespace
@@ -93,11 +94,23 @@ Application::~Application( void )
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns reference to the master.
+ *  @return reference to the master
+ */
+/*===========================================================================*/
 kvs::opencabin::Master& Application::master( void )
 {
     return( m_master );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns reference to the master.
+ *  @return reference to the master
+ */
+/*===========================================================================*/
 const kvs::opencabin::Master& Application::master( void ) const
 {
     return( m_master );
@@ -175,6 +188,37 @@ const bool Application::IsMaster( void )
 const bool Application::IsRenderer( void )
 {
     return( !::MasterFlag );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns barrier flag status.
+ *  @return true if the barrier is enabled
+ */
+/*===========================================================================*/
+const bool Application::Barrier( void )
+{
+    return( ::BarrierFlag );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Enables marrier sychronization mechanism.
+ */
+/*===========================================================================*/
+void Application::EnableBarrier( void )
+{
+    ::BarrierFlag = true;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Disables marrier sychronization mechanism.
+ */
+/*===========================================================================*/
+void Application::DisableBarrier( void )
+{
+    ::BarrierFlag = false;
 }
 
 /*===========================================================================*/

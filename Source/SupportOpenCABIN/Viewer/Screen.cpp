@@ -22,6 +22,8 @@
 #include <kvs/glew/GLEW>
 #endif
 
+#include <kvs/TCPBarrier>
+
 
 namespace { kvs::opencabin::Screen* context = 0; }
 
@@ -241,6 +243,13 @@ void Screen::paintEvent( void )
     {
         if ( m_paint_event_func ) (this->*m_paint_event_func)();
         else BaseClass::eventHandler()->notify();
+
+        if ( kvs::opencabin::Application::Barrier() )
+        {
+            static kvs::SocketAddress master = Configuration::KVSApplication::MasterAddress();
+            kvs::TCPBarrier barrier( master.ip(), master.port() );
+            barrier.wait();
+        }
     }
 }
 

@@ -5,6 +5,7 @@
                xsi:schemaLocation="oclconf.xsd">
 
   <ocl:application ocl:name="kvs">
+    <ocl:parameter ocl:name="master_address">127.0.0.1:28990</ocl:parameter>
     <ocl:parameter ocl:name="display_mode">tdw</ocl:parameter>
     <ocl:parameter ocl:name="display_resolution">900,600</ocl:parameter>
   </ocl:application>
