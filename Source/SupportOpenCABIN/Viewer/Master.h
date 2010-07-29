@@ -18,7 +18,6 @@
 #include <kvs/EventHandler>
 #include <kvs/InitializeEventListener>
 #include <kvs/IdleEventListener>
-#include <kvs/TCPBarrierServer>
 
 
 namespace kvs
@@ -36,7 +35,6 @@ class Master
 {
 protected:
 
-    kvs::TCPBarrierServer* m_barrier; ///< barrier server
     kvs::EventHandler* m_initialize_event_handler; ///< initialize event handler
     kvs::EventHandler* m_idle_event_handler; ///< idle event handler
 

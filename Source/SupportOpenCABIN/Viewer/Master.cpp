@@ -17,9 +17,20 @@
 #include <kvs/opencabin/Application>
 #include <kvs/opencabin/Configuration>
 #include <kvs/opencabin/MainLoop>
-
+#include <kvs/TCPBarrierServer>
 
 namespace { kvs::opencabin::Master* context = 0; }
+namespace { kvs::TCPBarrierServer* barrier = 0; }
+
+namespace
+{
+
+void ExitFunction( void )
+{
+    if ( barrier ) delete barrier;
+}
+
+} // end of namespace
 
 /*===========================================================================*/
 /**
@@ -32,6 +43,11 @@ namespace { kvs::opencabin::Master* context = 0; }
 void* minit( int argc, char** argv )
 {
     kvs::opencabin::Application::SetAsMaster();
+
+    const int port = kvs::opencabin::Configuration::KVSApplication::MasterAddress().port();
+    const int nrenderers = kvs::opencabin::Configuration::Master::SlaveCount();
+    barrier = new kvs::TCPBarrierServer( port, nrenderers );
+    atexit( ::ExitFunction );
 
     static kvs::opencabin::MainLoop main_loop( argc, argv );
     if ( ::context ) ::context->initializeEvent();
@@ -115,13 +131,6 @@ void Master::initializeEvent( void )
 {
     if ( kvs::opencabin::Application::IsMaster() )
     {
-        if ( !m_barrier && kvs::opencabin::Application::Barrier() )
-        {
-            const int port = kvs::opencabin::Configuration::KVSApplication::MasterAddress().port();
-            const int nrenderers = kvs::opencabin::Configuration::Master::SlaveCount();
-            m_barrier = new kvs::TCPBarrierServer( port, nrenderers );
-        }
-
         m_initialize_event_handler->notify();
     }
 }

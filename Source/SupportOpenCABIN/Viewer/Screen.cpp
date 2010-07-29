@@ -16,13 +16,11 @@
 #include <kvs/opencabin/OpenCABIN>
 #include <kvs/opencabin/Camera>
 #include <kvs/opencabin/Configuration>
-#include <kvs/ViewingMatrix44>
 #include <kvs/opencabin/MainLoop>
+#include <kvs/TCPBarrier>
 #if defined( KVS_SUPPORT_GLEW )
 #include <kvs/glew/GLEW>
 #endif
-
-#include <kvs/TCPBarrier>
 
 
 namespace { kvs::opencabin::Screen* context = 0; }
