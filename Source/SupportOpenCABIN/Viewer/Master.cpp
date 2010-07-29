@@ -103,7 +103,6 @@ namespace opencabin
 /*===========================================================================*/
 Master::Master( void )
 {
-    m_barrier = NULL;
     m_initialize_event_handler = new kvs::EventHandler();
     m_idle_event_handler = new kvs::EventHandler();
 
@@ -117,7 +116,6 @@ Master::Master( void )
 /*===========================================================================*/
 Master::~Master( void )
 {
-    if ( m_barrier ) { delete m_barrier; }
     if ( m_initialize_event_handler ) { delete m_initialize_event_handler; }
     if ( m_idle_event_handler ) { delete m_idle_event_handler; }
 }
