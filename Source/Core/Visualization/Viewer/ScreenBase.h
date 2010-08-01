@@ -190,17 +190,17 @@ public:
 
     bool isActiveMove( int x, int y );
 
-    void updateControllingObject( void );
+    virtual void updateControllingObject( void );
 
-    void updateCenterOfRotation( void );
+    virtual void updateCenterOfRotation( void );
 
-    void updateXform( void );
+    virtual void updateXform( void );
 
-    void updateXform( kvs::ObjectManager* manager );
+    virtual void updateXform( kvs::ObjectManager* manager );
 
-    void updateXform( kvs::Camera* camera );
+    virtual void updateXform( kvs::Camera* camera );
 
-    void updateXform( kvs::Light* light );
+    virtual void updateXform( kvs::Light* light );
 
 public:
 
