@@ -20,7 +20,6 @@
 #include <kvs/InitializeEventListener>
 #include <kvs/IdleEventListener>
 #include <kvs/PaintEventListener>
-#include <kvs/opencabin/Application>
 
 
 namespace kvs
@@ -28,6 +27,8 @@ namespace kvs
 
 namespace opencabin
 {
+
+class Application;
 
 /*===========================================================================*/
 /**
@@ -44,6 +45,9 @@ protected:
     PaintEventFunction m_paint_event_func; ///< paint event function
     kvs::EventHandler* m_initialize_event_handler; ///< initialize event handler
     kvs::EventHandler* m_idle_event_handler; ///< idle event handler
+    kvs::Vector3f  m_scaling;
+    kvs::Vector3f  m_translation;
+    kvs::Matrix33f m_rotation;
 
 public:
 
@@ -94,6 +98,18 @@ private:
     void setSize( const int width, const int height );
 
     void setGeometry( const int x, const int y, const int width, const int height );
+
+public:
+
+    void initializeTrackpad( void );
+
+    void updateTrackpad( void );
+
+    void updateXform( kvs::ObjectManager* manager );
+
+    void updateXform( kvs::Camera* camera );
+
+    void updateXform( kvs::Light* light );
 
 protected:
 

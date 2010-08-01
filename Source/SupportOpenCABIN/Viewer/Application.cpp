@@ -16,12 +16,30 @@
 #include <iostream>
 #include <string>
 #include <kvs/File>
+#include <kvs/glut/GLUT>
+#include <kvs/opencabin/OpenCABIN>
+
+#define SHVARINITarrayM_float(NAME) \
+    (NAME) = (float*)SHvarVdml_newM(&(_SHVARID(NAME)), (char*)#NAME, _SHVARID(NAME).size)
+
+#define SHVARINITarrayC_float(NAME) SHVARINITbufC_float(NAME)
+
+#define SHVARINITbufC_float(NAME) \
+    (NAME) = (float*)SHvarVdml_initC(&_SHVARID(NAME), (char*)#NAME)
+
+#define SHVARREFbufC_float(NAME) \
+    (NAME) = (float*)SHvarVdml_refC(&_SHVARID(NAME))
+
+SHVARarray( float, TrackpadScaling, 3 );
+SHVARarray( float, TrackpadTranslation, 3 );
+SHVARarray( float, TrackpadRotation, 9 );
 
 // Static parameters.
 namespace { bool QuitFlag = false; }
 namespace { bool DoneFlag = false; }
 namespace { bool MasterFlag = false; }
 namespace { bool BarrierFlag = false; }
+namespace { bool TrackpadFlag = false; }
 namespace { std::string Name = "unknown"; }
 
 namespace
@@ -83,6 +101,8 @@ Application::Application( int argc, char** argv ):
         atexit( ::ExitFunction );
         flag = false;
     }
+
+    m_trackpad = NULL;
 }
 
 /*===========================================================================*/
@@ -116,7 +136,6 @@ const kvs::opencabin::Master& Application::master( void ) const
     return( m_master );
 }
 
-
 /*===========================================================================*/
 /**
  *  @brief  Runs the GLUT application.
@@ -131,7 +150,14 @@ int Application::run( void )
     ::DoneFlag = true;
 
     // Infinite loop.
-    for ( ; ; ) if ( ::QuitFlag ) break;
+    if ( kvs::opencabin::Application::IsMaster() && m_trackpad )
+    {
+        glutMainLoop();
+    }
+    else
+    {
+        for ( ; ; ) if ( ::QuitFlag ) break;
+    }
 
     return( true );
 }
@@ -144,6 +170,73 @@ int Application::run( void )
 void Application::quit( void )
 {
     exit(0);
+}
+
+void Application::attach_trackpad( kvs::opencabin::Trackpad* trackpad )
+{
+    ::TrackpadFlag = true;
+
+    if ( kvs::opencabin::Application::IsMaster() )
+    {
+        m_trackpad = trackpad;
+
+        static bool flag = true;
+        if ( flag )
+        {
+            int argc = BaseClass::argc();
+            char** argv = BaseClass::argv();
+            glutInit( &argc, argv );
+            flag = false;
+        }
+    }
+}
+
+void Application::InitializeTrackpadForMaster( void )
+{
+    SHVARINITarrayM_float( TrackpadScaling );
+    SHVARINITarrayM_float( TrackpadTranslation );
+    SHVARINITarrayM_float( TrackpadRotation );
+}
+
+void Application::InitializeTrackpadForRenderer( void )
+{
+    SHVARINITarrayC_float( TrackpadScaling );
+    SHVARINITarrayC_float( TrackpadTranslation );
+    SHVARINITarrayC_float( TrackpadRotation );
+}
+
+float* Application::GetTrackpadScaling( void )
+{
+    return( TrackpadScaling );
+}
+
+float* Application::GetTrackpadTranslation( void )
+{
+    return( TrackpadTranslation );
+}
+
+float* Application::GetTrackpadRotation( void )
+{
+    return( TrackpadRotation );
+}
+
+void Application::UpdateTrackpad( void )
+{
+    SHVARUPDATEarray( TrackpadScaling );
+    SHVARUPDATEarray( TrackpadTranslation );
+    SHVARUPDATEarray( TrackpadRotation );
+}
+
+void Application::ReferenceTrackpad( void )
+{
+    SHVARREFbufC_float( TrackpadScaling );
+    SHVARREFbufC_float( TrackpadTranslation );
+    SHVARREFbufC_float( TrackpadRotation );
+}
+
+const bool Application::HasTrackpad( void )
+{
+    return( ::TrackpadFlag );
 }
 
 /*===========================================================================*/
@@ -196,7 +289,7 @@ const bool Application::IsRenderer( void )
  *  @return true if the barrier is enabled
  */
 /*===========================================================================*/
-const bool Application::Barrier( void )
+const bool Application::IsEnabledBarrier( void )
 {
     return( ::BarrierFlag );
 }

@@ -33,6 +33,9 @@ namespace kvs
 namespace opencabin
 {
 
+class Screen;
+class Trackpad;
+
 /*===========================================================================*/
 /**
  *  @brief  Application class for OpenCABIN.
@@ -40,9 +43,16 @@ namespace opencabin
 /*===========================================================================*/
 class Application : public kvs::ApplicationBase
 {
+    friend class kvs::opencabin::Master;
+    friend class kvs::opencabin::Screen;
+    friend class kvs::opencabin::Trackpad;
+
+    typedef kvs::ApplicationBase BaseClass;
+
 protected:
 
     kvs::opencabin::Master m_master;
+    kvs::opencabin::Trackpad* m_trackpad;
 
 public:
 
@@ -56,11 +66,35 @@ public:
 
     const kvs::opencabin::Master& master( void ) const;
 
+public:
+
     virtual int run( void );
 
     virtual void quit( void );
 
+private:
+
+    void attach_trackpad( kvs::opencabin::Trackpad* trackpad );
+
+private:
+
+    static void InitializeTrackpadForMaster( void );
+
+    static void InitializeTrackpadForRenderer( void );
+
+    static float* GetTrackpadScaling( void );
+
+    static float* GetTrackpadTranslation( void );
+
+    static float* GetTrackpadRotation( void );
+
+    static void UpdateTrackpad( void );
+
+    static void ReferenceTrackpad( void );
+
 public:
+
+    static const bool HasTrackpad( void );
 
     static const std::string Name( void );
 
@@ -70,7 +104,7 @@ public:
 
     static const bool IsRenderer( void );
 
-    static const bool Barrier( void );
+    static const bool IsEnabledBarrier( void );
 
     static void EnableBarrier( void );
 

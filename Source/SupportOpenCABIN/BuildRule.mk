@@ -9,6 +9,7 @@ $(OUTDIR)/./Viewer/Configuration.o \
 $(OUTDIR)/./Viewer/MainLoop.o \
 $(OUTDIR)/./Viewer/Master.o \
 $(OUTDIR)/./Viewer/Screen.o \
+$(OUTDIR)/./Viewer/Trackpad.o \
 
 
 

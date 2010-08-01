@@ -5,3 +5,4 @@
 #include <SupportOpenCABIN/Viewer/MainLoop.h>
 #include <SupportOpenCABIN/Viewer/Master.h>
 #include <SupportOpenCABIN/Viewer/Screen.h>
+#include <SupportOpenCABIN/Viewer/Trackpad.h>

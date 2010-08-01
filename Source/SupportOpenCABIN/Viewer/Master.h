@@ -55,6 +55,12 @@ public:
     void addInitializeEvent( kvs::InitializeEventListener* event );
 
     void addIdleEvent( kvs::IdleEventListener* event );
+
+public:
+
+    void initializeTrackpad( void );
+
+    void updateTrackpad( void );
 };
 
 } // end of namespace opencabin

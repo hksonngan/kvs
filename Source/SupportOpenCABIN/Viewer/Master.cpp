@@ -50,6 +50,7 @@ void* minit( int argc, char** argv )
     atexit( ::ExitFunction );
 
     static kvs::opencabin::MainLoop main_loop( argc, argv );
+    if ( kvs::opencabin::Application::HasTrackpad() ) ::context->initializeTrackpad();
     if ( ::context ) ::context->initializeEvent();
     for ( ; ; ) if ( kvs::opencabin::Application::IsDone() ) break;
 
@@ -64,6 +65,7 @@ void* minit( int argc, char** argv )
 /*===========================================================================*/
 void midle( void*pdata )
 {
+    if ( kvs::opencabin::Application::HasTrackpad() ) ::context->updateTrackpad();
     if ( ::context ) ::context->idleEvent();
 }
 
@@ -168,6 +170,45 @@ void Master::addIdleEvent( kvs::IdleEventListener* event )
 {
     event->setScreen( 0 );
     m_idle_event_handler->attach( event );
+}
+
+void Master::initializeTrackpad( void )
+{
+    if ( kvs::opencabin::Application::HasTrackpad() )
+    {
+        kvs::opencabin::Application::InitializeTrackpadForMaster();
+
+        float* scaling = kvs::opencabin::Application::GetTrackpadScaling();
+        scaling[0] = 1.0f;
+        scaling[1] = 1.0f;
+        scaling[2] = 1.0f;
+
+        float* translation = kvs::opencabin::Application::GetTrackpadTranslation();
+        translation[0] = 0.0f;
+        translation[1] = 0.0f;
+        translation[2] = 0.0f;
+
+        float* rotation = kvs::opencabin::Application::GetTrackpadRotation();
+        rotation[0] = 1.0f;
+        rotation[1] = 0.0f;
+        rotation[2] = 0.0f;
+        rotation[3] = 0.0f;
+        rotation[4] = 1.0f;
+        rotation[5] = 0.0f;
+        rotation[6] = 0.0f;
+        rotation[7] = 0.0f;
+        rotation[8] = 1.0f;
+
+        kvs::opencabin::Application::UpdateTrackpad();
+    }
+}
+
+void Master::updateTrackpad( void )
+{
+    if ( kvs::opencabin::Application::HasTrackpad() )
+    {
+        kvs::opencabin::Application::UpdateTrackpad();
+    }
 }
 
 } // end of namespace opencabin
