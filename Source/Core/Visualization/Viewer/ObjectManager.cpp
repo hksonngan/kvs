@@ -34,7 +34,7 @@ ObjectManager::ObjectManager( void ) :
     ObjectManagerBase::clear();
     kvs::Xform::initialize();
     m_has_active_object = false;
-    m_enable_all_move   = false;
+    m_enable_all_move   = true;
     m_object_map.clear();
 
     m_current_object_id = 0;
