@@ -32,7 +32,7 @@
 
 SHVARarray( float, TrackpadScaling, 3 );
 SHVARarray( float, TrackpadTranslation, 3 );
-SHVARarray( float, TrackpadRotation, 9 );
+SHVARarray( float, TrackpadRotation, 4 );
 
 // Static parameters.
 namespace { bool QuitFlag = false; }

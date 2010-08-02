@@ -377,99 +377,13 @@ void Screen::updateTrackpad( void )
         kvs::opencabin::Application::ReferenceTrackpad();
 
         float* scaling = kvs::opencabin::Application::GetTrackpadScaling();
-        m_scaling[0] = scaling[0];
-        m_scaling[1] = scaling[1];
-        m_scaling[2] = scaling[2];
-
         float* translation = kvs::opencabin::Application::GetTrackpadTranslation();
-        m_translation[0] = translation[0];
-        m_translation[1] = translation[1];
-        m_translation[2] = translation[2];
-
         float* rotation = kvs::opencabin::Application::GetTrackpadRotation();
-        m_rotation[0][0] = rotation[0];
-        m_rotation[0][1] = rotation[1];
-        m_rotation[0][2] = rotation[2];
-        m_rotation[1][0] = rotation[3];
-        m_rotation[1][1] = rotation[4];
-        m_rotation[1][2] = rotation[5];
-        m_rotation[2][0] = rotation[6];
-        m_rotation[2][1] = rotation[7];
-        m_rotation[2][2] = rotation[8];
+        m_mouse->setScaling( kvs::Vector3f( scaling ) );
+        m_mouse->setTranslation( kvs::Vector3f( translation ) );
+        m_mouse->setRotation( kvs::Quaternion<float>( rotation ) );
 
-//        BaseClass::updateXform();
-    }
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Updates the xform of the object manager.
- *  @param  manager [in] pointer to the object manager
- */
-/*==========================================================================*/
-void Screen::updateXform( kvs::ObjectManager* manager )
-{
-    switch( m_mouse->mode() )
-    {
-    case kvs::Mouse::Rotation:
-        manager->rotate( m_rotation );
-        break;
-    case kvs::Mouse::Translation:
-        manager->translate( m_translation );
-        break;
-    case kvs::Mouse::Scaling:
-        manager->scale( m_scaling );
-        break;
-    default:
-        break;
-    }
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Updates the xform of the camera.
- *  @param  camera [in] pointer to the camera
- */
-/*==========================================================================*/
-void Screen::updateXform( kvs::Camera* camera )
-{
-    switch( m_mouse->mode() )
-    {
-    case kvs::Mouse::Rotation:
-        camera->rotate( m_rotation );
-        break;
-    case kvs::Mouse::Translation:
-        camera->translate( m_translation );
-        break;
-    case kvs::Mouse::Scaling:
-        camera->scale( m_scaling );
-        break;
-    default:
-        break;
-    }
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Updates the xform of the light.
- *  @param  light [in] pointer to the light
- */
-/*==========================================================================*/
-void Screen::updateXform( kvs::Light* light )
-{
-    switch( m_mouse->mode() )
-    {
-    case kvs::Mouse::Rotation:
-        light->rotate( m_rotation );
-        break;
-    case kvs::Mouse::Translation:
-        light->translate( m_translation );
-        break;
-    case kvs::Mouse::Scaling:
-        light->scale( m_scaling );
-        break;
-    default:
-        break;
+        BaseClass::updateXform();
     }
 }
 

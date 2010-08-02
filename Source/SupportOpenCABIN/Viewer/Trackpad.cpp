@@ -40,9 +40,18 @@ Trackpad::Trackpad( kvs::opencabin::Application* application )
         const std::string title( "Trackpad" );
         const kvs::RGBColor color( 200, 200, 200 );
 
+        const float scale_width = static_cast<float>(width) / resolution.x();
+        const float scale_height = static_cast<float>(height) / resolution.y();
+        m_screen_scale = kvs::Vector2f( scale_width, scale_height );
+
         BaseClass::setTitle( title );
         BaseClass::setSize( width, height );
+//        BaseClass::setSize( resolution.x(), resolution.y() );
         BaseClass::background()->setColor( color );
+
+        BaseClass::m_mouse_press_event_func = (void (kvs::glut::Screen::*)(kvs::MouseEvent*))(&Trackpad::default_mouse_press_event);
+        BaseClass::m_mouse_move_event_func = (void (kvs::glut::Screen::*)(kvs::MouseEvent*))(&Trackpad::default_mouse_move_event);
+        BaseClass::m_mouse_release_event_func = (void (kvs::glut::Screen::*)(kvs::MouseEvent*))(&Trackpad::default_mouse_release_event);
     }
 }
 
@@ -76,18 +85,40 @@ void Trackpad::updateXform( void )
         translation[2] = m_mouse->translation()[2];
 
         float* rotation = kvs::opencabin::Application::GetTrackpadRotation();
-        rotation[0] = m_mouse->rotation()[0][0];
-        rotation[1] = m_mouse->rotation()[0][1];
-        rotation[2] = m_mouse->rotation()[0][2];
-        rotation[3] = m_mouse->rotation()[1][0];
-        rotation[4] = m_mouse->rotation()[1][1];
-        rotation[5] = m_mouse->rotation()[1][2];
-        rotation[6] = m_mouse->rotation()[2][0];
-        rotation[7] = m_mouse->rotation()[2][1];
-        rotation[8] = m_mouse->rotation()[2][2];
+        rotation[0] = m_mouse->rotation()[0];
+        rotation[1] = m_mouse->rotation()[1];
+        rotation[2] = m_mouse->rotation()[2];
+        rotation[3] = m_mouse->rotation()[0];
 
         BaseClass::updateXform();
     }
+}
+
+void Trackpad::default_mouse_press_event( kvs::MouseEvent* event )
+{
+//    const int x = kvs::Math::Round( event->x() / m_screen_scale.x() );
+//    const int y = kvs::Math::Round( event->y() / m_screen_scale.y() );
+//    event->setPosition( x, y );
+
+    BaseClass::default_mouse_press_event( event );
+}
+
+void Trackpad::default_mouse_move_event( kvs::MouseEvent* event )
+{
+//    const int x = kvs::Math::Round( event->x() / m_screen_scale.x() );
+//    const int y = kvs::Math::Round( event->y() / m_screen_scale.y() );
+//    event->setPosition( x, y );
+
+    BaseClass::default_mouse_move_event( event );
+}
+
+void Trackpad::default_mouse_release_event( kvs::MouseEvent* event )
+{
+//    const int x = kvs::Math::Round( event->x() / m_screen_scale.x() );
+//    const int y = kvs::Math::Round( event->y() / m_screen_scale.y() );
+//    event->setPosition( x, y );
+
+    BaseClass::default_mouse_release_event( event );
 }
 
 } // end of namespace opencabin

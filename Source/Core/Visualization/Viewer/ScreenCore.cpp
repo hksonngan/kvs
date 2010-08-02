@@ -593,7 +593,7 @@ void ScreenCore::update_object_manager_xform( kvs::ObjectManager* manager )
     switch( kvs::GlobalCore::mouse->mode() )
     {
     case kvs::Mouse::Rotation:
-        manager->rotate( kvs::GlobalCore::mouse->rotation() );
+        manager->rotate( kvs::GlobalCore::mouse->rotation().toMatrix() );
         break;
     case kvs::Mouse::Translation:
         manager->translate( kvs::GlobalCore::mouse->translation() );
@@ -617,7 +617,7 @@ void ScreenCore::update_camera_xform( kvs::Camera* camera )
     switch( kvs::GlobalCore::mouse->mode() )
     {
     case kvs::Mouse::Rotation:
-        camera->rotate( kvs::GlobalCore::mouse->rotation() );
+        camera->rotate( kvs::GlobalCore::mouse->rotation().toMatrix() );
         break;
     case kvs::Mouse::Translation:
         camera->translate( kvs::GlobalCore::mouse->translation() );
@@ -641,7 +641,7 @@ void ScreenCore::update_light_xform( kvs::Light* light )
     switch( kvs::GlobalCore::mouse->mode() )
     {
     case kvs::Mouse::Rotation:
-        light->rotate( kvs::GlobalCore::mouse->rotation() );
+        light->rotate( kvs::GlobalCore::mouse->rotation().toMatrix() );
         break;
     case kvs::Mouse::Translation:
         light->translate( kvs::GlobalCore::mouse->translation() );

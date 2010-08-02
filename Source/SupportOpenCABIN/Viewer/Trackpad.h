@@ -31,6 +31,10 @@ public:
 
     typedef kvs::glut::Screen BaseClass;
 
+protected:
+
+    kvs::Vector2f m_screen_scale;
+
 public:
 
     Trackpad( kvs::opencabin::Application* application );
@@ -40,6 +44,14 @@ public:
     int show( void );
 
     void updateXform( void );
+
+protected:
+
+    void default_mouse_press_event( kvs::MouseEvent* event );
+
+    void default_mouse_move_event( kvs::MouseEvent* event );
+
+    void default_mouse_release_event( kvs::MouseEvent* event );
 };
 
 } // end of namespace opencabin

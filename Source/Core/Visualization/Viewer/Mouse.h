@@ -31,6 +31,8 @@ namespace kvs
 /*==========================================================================*/
 class Mouse : public kvs::Trackball
 {
+    typedef kvs::Trackball BaseClass;
+
     kvsClassName( Mouse );
 
 public:

@@ -138,7 +138,7 @@ void Mouse::wheel( const float value )
     default: break;
     }
 
-    kvs::Trackball::m_scale = scale;
+    BaseClass::setScaling( scale );
 
     m_old = m_new;
 }
@@ -193,21 +193,21 @@ bool Mouse::idle( void )
 
             case ScalingXYZ:
             {
-                if( m_scale.x() < 1.0f )
+                if( BaseClass::m_scaling.x() < 1.0f )
                 {
-                    m_scale *= big_scale;
-                    if( m_scale.x() > 1.0f )
+                    BaseClass::m_scaling *= big_scale;
+                    if( BaseClass::m_scaling.x() > 1.0f )
                     {
-                        m_scale = kvs::Vector3f( 1.0f );
+                        BaseClass::m_scaling = kvs::Vector3f( 1.0f );
                         m_is_slow = false;
                     }
                 }
-                else if( m_scale.x() > 1.0f )
+                else if( BaseClass::m_scaling.x() > 1.0f )
                 {
-                    m_scale *= small_scale;
-                    if( m_scale.x() < 1.0f )
+                    BaseClass::m_scaling *= small_scale;
+                    if( BaseClass::m_scaling.x() < 1.0f )
                     {
-                        m_scale = kvs::Vector3f( 1.0f );
+                        BaseClass::m_scaling = kvs::Vector3f( 1.0f );
                         m_is_slow = false;
                     }
                 }
@@ -216,21 +216,21 @@ bool Mouse::idle( void )
 
             case ScalingX:
             {
-                if( m_scale.x() < 1.0f )
+                if( BaseClass::m_scaling.x() < 1.0f )
                 {
-                    m_scale.x() *= big_scale;
-                    if( m_scale.x() > 1.0f )
+                    BaseClass::m_scaling.x() *= big_scale;
+                    if( BaseClass::m_scaling.x() > 1.0f )
                     {
-                        m_scale.x() = 1.0f;
+                        BaseClass::m_scaling.x() = 1.0f;
                         m_is_slow = false;
                     }
                 }
-                else if( m_scale.x() > 1.0f )
+                else if( BaseClass::m_scaling.x() > 1.0f )
                 {
-                    m_scale.x() *= small_scale;
-                    if( m_scale.x() < 1.0f )
+                    BaseClass::m_scaling.x() *= small_scale;
+                    if( BaseClass::m_scaling.x() < 1.0f )
                     {
-                        m_scale.x() = 1.0f;
+                        BaseClass::m_scaling.x() = 1.0f;
                         m_is_slow = false;
                     }
                 }
@@ -239,21 +239,21 @@ bool Mouse::idle( void )
 
             case ScalingY:
             {
-                if( m_scale.y() < 1.0f )
+                if( BaseClass::m_scaling.y() < 1.0f )
                 {
-                    m_scale.y() *= big_scale;
-                    if( m_scale.y() > 1.0f )
+                    BaseClass::m_scaling.y() *= big_scale;
+                    if( BaseClass::m_scaling.y() > 1.0f )
                     {
-                        m_scale.y() = 1.0f;
+                        BaseClass::m_scaling.y() = 1.0f;
                         m_is_slow = false;
                     }
                 }
-                else if( m_scale.y() > 1.0f )
+                else if( BaseClass::m_scaling.y() > 1.0f )
                 {
-                    m_scale.y() *= small_scale;
-                    if( m_scale.y() < 1.0f )
+                    BaseClass::m_scaling.y() *= small_scale;
+                    if( BaseClass::m_scaling.y() < 1.0f )
                     {
-                        m_scale.y() = 1.0f;
+                        BaseClass::m_scaling.y() = 1.0f;
                         m_is_slow = false;
                     }
                 }
@@ -262,21 +262,21 @@ bool Mouse::idle( void )
 
             case ScalingZ:
             {
-                if( m_scale.z() < 1.0f )
+                if( BaseClass::m_scaling.z() < 1.0f )
                 {
-                    m_scale.z() *= big_scale;
-                    if( m_scale.z() > 1.0f )
+                    BaseClass::m_scaling.z() *= big_scale;
+                    if( BaseClass::m_scaling.z() > 1.0f )
                     {
-                        m_scale.z() = 1.0f;
+                        BaseClass::m_scaling.z() = 1.0f;
                         m_is_slow = false;
                     }
                 }
-                else if( m_scale.z() > 1.0f )
+                else if( BaseClass::m_scaling.z() > 1.0f )
                 {
-                    m_scale.z() *= small_scale;
-                    if( m_scale.z() < 1.0f )
+                    BaseClass::m_scaling.z() *= small_scale;
+                    if( BaseClass::m_scaling.z() < 1.0f )
                     {
-                        m_scale.z() = 1.0f;
+                        BaseClass::m_scaling.z() = 1.0f;
                         m_is_slow = false;
                     }
                 }
@@ -285,25 +285,25 @@ bool Mouse::idle( void )
 
             case ScalingXY:
             {
-                if( m_scale.x() < 1.0f )
+                if( BaseClass::m_scaling.x() < 1.0f )
                 {
-                    m_scale.x() *= big_scale;
-                    m_scale.y() *= big_scale;
-                    if( m_scale.x() > 1.0f )
+                    BaseClass::m_scaling.x() *= big_scale;
+                    BaseClass::m_scaling.y() *= big_scale;
+                    if( BaseClass::m_scaling.x() > 1.0f )
                     {
-                        m_scale.x() = 1.0f;
-                        m_scale.y() = 1.0f;
+                        BaseClass::m_scaling.x() = 1.0f;
+                        BaseClass::m_scaling.y() = 1.0f;
                         m_is_slow = false;
                     }
                 }
-                else if( m_scale.x() > 1.0f )
+                else if( BaseClass::m_scaling.x() > 1.0f )
                 {
-                    m_scale.x() *= small_scale;
-                    m_scale.y() *= small_scale;
-                    if( m_scale.x() < 1.0f )
+                    BaseClass::m_scaling.x() *= small_scale;
+                    BaseClass::m_scaling.y() *= small_scale;
+                    if( BaseClass::m_scaling.x() < 1.0f )
                     {
-                        m_scale.x() = 1.0f;
-                        m_scale.y() = 1.0f;
+                        BaseClass::m_scaling.x() = 1.0f;
+                        BaseClass::m_scaling.y() = 1.0f;
                         m_is_slow = false;
                     }
                 }
@@ -312,25 +312,25 @@ bool Mouse::idle( void )
 
             case ScalingYZ:
             {
-                if( m_scale.y() < 1.0f )
+                if( BaseClass::m_scaling.y() < 1.0f )
                 {
-                    m_scale.y() *= big_scale;
-                    m_scale.z() *= big_scale;
-                    if( m_scale.y() > 1.0f )
+                    BaseClass::m_scaling.y() *= big_scale;
+                    BaseClass::m_scaling.z() *= big_scale;
+                    if( BaseClass::m_scaling.y() > 1.0f )
                     {
-                        m_scale.y() = 1.0f;
-                        m_scale.z() = 1.0f;
+                        BaseClass::m_scaling.y() = 1.0f;
+                        BaseClass::m_scaling.z() = 1.0f;
                         m_is_slow = false;
                     }
                 }
-                else if( m_scale.y() > 1.0f )
+                else if( BaseClass::m_scaling.y() > 1.0f )
                 {
-                    m_scale.y() *= small_scale;
-                    m_scale.z() *= small_scale;
-                    if( m_scale.y() < 1.0f )
+                    BaseClass::m_scaling.y() *= small_scale;
+                    BaseClass::m_scaling.z() *= small_scale;
+                    if( BaseClass::m_scaling.y() < 1.0f )
                     {
-                        m_scale.y() = 1.0f;
-                        m_scale.z() = 1.0f;
+                        BaseClass::m_scaling.y() = 1.0f;
+                        BaseClass::m_scaling.z() = 1.0f;
                         m_is_slow = false;
                     }
                 }
@@ -339,25 +339,25 @@ bool Mouse::idle( void )
 
             case ScalingZX:
             {
-                if( m_scale.z() < 1.0f )
+                if( BaseClass::m_scaling.z() < 1.0f )
                 {
-                    m_scale.z() *= big_scale;
-                    m_scale.x() *= big_scale;
-                    if( m_scale.z() > 1.0f )
+                    BaseClass::m_scaling.z() *= big_scale;
+                    BaseClass::m_scaling.x() *= big_scale;
+                    if( BaseClass::m_scaling.z() > 1.0f )
                     {
-                        m_scale.z() = 1.0f;
-                        m_scale.x() = 1.0f;
+                        BaseClass::m_scaling.z() = 1.0f;
+                        BaseClass::m_scaling.x() = 1.0f;
                         m_is_slow = false;
                     }
                 }
-                else if( m_scale.z() > 1.0f )
+                else if( BaseClass::m_scaling.z() > 1.0f )
                 {
-                    m_scale.z() *= small_scale;
-                    m_scale.x() *= small_scale;
-                    if( m_scale.z() < 1.0f )
+                    BaseClass::m_scaling.z() *= small_scale;
+                    BaseClass::m_scaling.x() *= small_scale;
+                    if( BaseClass::m_scaling.z() < 1.0f )
                     {
-                        m_scale.z() = 1.0f;
-                        m_scale.x() = 1.0f;
+                        BaseClass::m_scaling.z() = 1.0f;
+                        BaseClass::m_scaling.x() = 1.0f;
                         m_is_slow = false;
                     }
                 }
@@ -371,16 +371,18 @@ bool Mouse::idle( void )
 
         case Mouse::Rotation:
         {
-            m_rot.x() *= 0.9f; m_rot.y() *= 0.9f; m_rot.z() *= 0.9f;
+            BaseClass::m_rotation.x() *= 0.9f;
+            BaseClass::m_rotation.y() *= 0.9f;
+            BaseClass::m_rotation.z() *= 0.9f;
             break;
         }
 
         case Mouse::Translation:
         {
-            m_trans *= 0.9f;
-            if( m_trans.length() < 0.001 )
+            BaseClass::m_translation *= 0.9f;
+            if( BaseClass::m_translation.length() < 0.001 )
             {
-                m_trans   = kvs::Vector3f( 0.0f );
+                BaseClass::m_translation = kvs::Vector3f( 0.0f );
                 m_is_slow = false;
             };
             break;

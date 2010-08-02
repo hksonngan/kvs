@@ -51,15 +51,15 @@ public:
 
 protected:
 
-    float                  m_size;          ///< trackball size
-    float                  m_depth;         ///< how near from center
-    kvs::Vector2f          m_rot_center;    ///< center of rotation in the devise coordinate system
-    kvs::Vector3f          m_scale;         ///< current scaling value
-    kvs::Vector3f          m_trans;         ///< current translation vector
-    kvs::Quaternion<float> m_rot;           ///< current rotation quaternion
-    int                    m_window_width;  ///< window width
-    int                    m_window_height; ///< window height
-    kvs::Camera*           m_ref_camera;    ///< pointer to camera (reference only)
+    float                  m_size;            ///< trackball size
+    float                  m_depth;           ///< how near from center
+    kvs::Vector2f          m_rotation_center; ///< center of rotation in the devise coordinate system
+    kvs::Vector3f          m_scaling;         ///< current scaling value
+    kvs::Vector3f          m_translation;     ///< current translation vector
+    kvs::Quaternion<float> m_rotation;        ///< current rotation quaternion
+    int                    m_window_width;    ///< window width
+    int                    m_window_height;   ///< window height
+    kvs::Camera*           m_ref_camera;      ///< pointer to camera (reference only)
 
 public:
 
@@ -79,6 +79,12 @@ public:
 
     void setRotationCenter( const kvs::Vector2f& center );
 
+    void setScaling( const kvs::Vector3f& scaling );
+
+    void setTranslation( const kvs::Vector3f& translation );
+
+    void setRotation( const kvs::Quaternion<float>& rotation );
+
     void setWindowSize( const int w, const int h );
 
     const float size( void ) const;
@@ -91,7 +97,7 @@ public:
 
     const kvs::Vector3f& translation( void ) const;
 
-    const kvs::Matrix33f rotation( void ) const;
+    const kvs::Quaternion<float>& rotation( void ) const;
 
     const int windowWidth( void ) const;
 

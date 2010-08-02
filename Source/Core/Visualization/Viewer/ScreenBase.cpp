@@ -790,7 +790,7 @@ void ScreenBase::updateXform( kvs::ObjectManager* manager )
     switch( m_mouse->mode() )
     {
     case kvs::Mouse::Rotation:
-        manager->rotate( m_mouse->rotation() );
+        manager->rotate( m_mouse->rotation().toMatrix() );
         break;
     case kvs::Mouse::Translation:
         manager->translate( m_mouse->translation() );
@@ -814,7 +814,7 @@ void ScreenBase::updateXform( kvs::Camera* camera )
     switch( m_mouse->mode() )
     {
     case kvs::Mouse::Rotation:
-        camera->rotate( m_mouse->rotation() );
+        camera->rotate( m_mouse->rotation().toMatrix() );
         break;
     case kvs::Mouse::Translation:
         camera->translate( m_mouse->translation() );
@@ -838,7 +838,7 @@ void ScreenBase::updateXform( kvs::Light* light )
     switch( m_mouse->mode() )
     {
     case kvs::Mouse::Rotation:
-        light->rotate( m_mouse->rotation() );
+        light->rotate( m_mouse->rotation().toMatrix() );
         break;
     case kvs::Mouse::Translation:
         light->translate( m_mouse->translation() );

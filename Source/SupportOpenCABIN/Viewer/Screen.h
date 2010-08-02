@@ -45,9 +45,6 @@ protected:
     PaintEventFunction m_paint_event_func; ///< paint event function
     kvs::EventHandler* m_initialize_event_handler; ///< initialize event handler
     kvs::EventHandler* m_idle_event_handler; ///< idle event handler
-    kvs::Vector3f  m_scaling;
-    kvs::Vector3f  m_translation;
-    kvs::Matrix33f m_rotation;
 
 public:
 
@@ -104,12 +101,6 @@ public:
     void initializeTrackpad( void );
 
     void updateTrackpad( void );
-
-    void updateXform( kvs::ObjectManager* manager );
-
-    void updateXform( kvs::Camera* camera );
-
-    void updateXform( kvs::Light* light );
 
 protected:
 

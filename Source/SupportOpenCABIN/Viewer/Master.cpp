@@ -189,15 +189,10 @@ void Master::initializeTrackpad( void )
         translation[2] = 0.0f;
 
         float* rotation = kvs::opencabin::Application::GetTrackpadRotation();
-        rotation[0] = 1.0f;
+        rotation[0] = 0.0f;
         rotation[1] = 0.0f;
         rotation[2] = 0.0f;
-        rotation[3] = 0.0f;
-        rotation[4] = 1.0f;
-        rotation[5] = 0.0f;
-        rotation[6] = 0.0f;
-        rotation[7] = 0.0f;
-        rotation[8] = 1.0f;
+        rotation[3] = 1.0f;
 
         kvs::opencabin::Application::UpdateTrackpad();
     }
