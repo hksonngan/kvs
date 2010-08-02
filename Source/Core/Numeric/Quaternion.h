@@ -63,6 +63,8 @@ public:
 
     Quaternion<T>( const Matrix44<T>& mat );
 
+    explicit Quaternion<T>( const T elements[4] );
+
 public:
 
     void set( T x, T y, T z, T w );
@@ -411,6 +413,15 @@ Quaternion<T>::Quaternion( const kvs::Matrix44<T>& m )
             w = T( ( m[0][1] + m[1][0] ) * 0.25 / z );
         }
     }
+}
+
+template<typename T>
+Quaternion<T>::Quaternion( const T elements[4] )
+{
+    m_elements[0] = elements[0];
+    m_elements[1] = elements[1];
+    m_elements[2] = elements[2];
+    m_elements[3] = elements[3];
 }
 
 template<typename T>
