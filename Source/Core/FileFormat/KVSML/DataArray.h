@@ -320,7 +320,7 @@ inline const bool ReadExternalData(
 
         T* data = static_cast<T*>( data_array->pointer() );
 
-        const char* delim = " \n";
+        const char* delim = " ,\t\n";
         char* value = strtok( buffer, delim );
         for ( size_t i = 0; i < nelements; i++ )
         {
@@ -432,7 +432,7 @@ inline const bool ReadExternalData(
 
         T1* data = data_array->pointer();
 
-        const char* delim = " \n";
+        const char* delim = " ,\t\n";
         char* value = strtok( buffer, delim );
         for ( size_t i = 0; i < nelements; i++ )
         {
@@ -479,47 +479,48 @@ inline const bool WriteExternalData(
             return( false );
         }
 
+        const std::string delim(", ");
         const std::type_info& data_type = data_array.typeInfo()->type();
         const size_t data_size = data_array.size();
         if ( data_type == typeid(kvs::Int8) )
         {
             const kvs::Int8* values = data_array.pointer<kvs::Int8>();
-            for ( size_t i = 0; i < data_size; i++ ) ofs << kvs::Int16(values[i]) << " ";
+            for ( size_t i = 0; i < data_size; i++ ) ofs << kvs::Int16(values[i]) << delim;
         }
         else if ( data_type == typeid(kvs::UInt8) )
         {
             const kvs::UInt8* values = data_array.pointer<kvs::UInt8>();
-            for ( size_t i = 0; i < data_size; i++ ) ofs << kvs::UInt16(values[i]) << " ";
+            for ( size_t i = 0; i < data_size; i++ ) ofs << kvs::UInt16(values[i]) << delim;
         }
         else if ( data_type == typeid(kvs::Int16) )
         {
             const kvs::Int16* values = data_array.pointer<kvs::Int16>();
-            for ( size_t i = 0; i < data_size; i++ ) ofs << values[i] << " ";
+            for ( size_t i = 0; i < data_size; i++ ) ofs << values[i] << delim;
         }
         else if ( data_type == typeid(kvs::UInt16) )
         {
             const kvs::UInt16* values = data_array.pointer<kvs::UInt16>();
-            for ( size_t i = 0; i < data_size; i++ ) ofs << values[i] << " ";
+            for ( size_t i = 0; i < data_size; i++ ) ofs << values[i] << delim;
         }
         else if ( data_type == typeid(kvs::Int32) )
         {
             const kvs::Int32* values = data_array.pointer<kvs::Int32>();
-            for ( size_t i = 0; i < data_size; i++ ) ofs << values[i] << " ";
+            for ( size_t i = 0; i < data_size; i++ ) ofs << values[i] << delim;
         }
         else if ( data_type == typeid(kvs::UInt32) )
         {
             const kvs::UInt32* values = data_array.pointer<kvs::UInt32>();
-            for ( size_t i = 0; i < data_size; i++ ) ofs << values[i] << " ";
+            for ( size_t i = 0; i < data_size; i++ ) ofs << values[i] << delim;
         }
         else if ( data_type == typeid(kvs::Real32) )
         {
             const kvs::Real32* values = data_array.pointer<kvs::Real32>();
-            for ( size_t i = 0; i < data_size; i++ ) ofs << values[i] << " ";
+            for ( size_t i = 0; i < data_size; i++ ) ofs << values[i] << delim;
         }
         else if ( data_type == typeid(kvs::Real64) )
         {
             const kvs::Real64* values = data_array.pointer<kvs::Real64>();
-            for ( size_t i = 0; i < data_size; i++ ) ofs << values[i] << " ";
+            for ( size_t i = 0; i < data_size; i++ ) ofs << values[i] << delim;
         }
 
         ofs.close();
@@ -570,14 +571,15 @@ inline const bool WriteExternalData(
             return( false );
         }
 
+        const std::string delim(", ");
         const size_t data_size = data_array.size();
         if ( typeid(T) == typeid(kvs::Int8) || typeid(T) == typeid(kvs::UInt8) )
         {
-            for ( size_t i = 0; i < data_size; i++ ) ofs << int(data_array.at(i)) << " ";
+            for ( size_t i = 0; i < data_size; i++ ) ofs << int(data_array.at(i)) << delim;
         }
         else
         {
-            for ( size_t i = 0; i < data_size; i++ ) ofs << data_array.at(i) << " ";
+            for ( size_t i = 0; i < data_size; i++ ) ofs << data_array.at(i) << delim;
         }
 
         ofs.close();

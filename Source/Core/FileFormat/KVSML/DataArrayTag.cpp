@@ -335,7 +335,7 @@ const bool DataArrayTag::read_data( const size_t nelements, kvs::AnyValueArray* 
         }
 
         // <DataArray type="xxx">xxx</DataArray>
-        const std::string delim(" \n");
+        const std::string delim(" ,\t\n");
         kvs::Tokenizer t( array_text->Value(), delim );
 
         if( m_type == "char" )
