@@ -17,12 +17,7 @@
 #include <kvs/KVSMLTransferFunction>
 
 
-namespace
-{
-
-const size_t DefaultResolution = 256;
-
-}
+namespace { const size_t DefaultResolution = 256; }
 
 namespace kvs
 {
@@ -147,6 +142,23 @@ void TransferFunction::setRange( const float min_value, const float max_value )
     m_opacity_map.setRange( min_value, max_value );
 }
 
+const bool TransferFunction::hasRange( void ) const
+{
+    return( m_color_map.hasRange() && m_opacity_map.hasRange() );
+}
+
+const bool TransferFunction::minValue( void ) const
+{
+    KVS_ASSERT( m_color_map.minValue() == m_opacity_map.minValue() );
+    return( m_color_map.minValue() );
+}
+
+const bool TransferFunction::maxValue( void ) const
+{
+    KVS_ASSERT( m_color_map.maxValue() == m_opacity_map.maxValue() );
+    return( m_color_map.maxValue() );
+}
+
 /*==========================================================================*/
 /**
  *  @brief  Returns the color map.
@@ -186,11 +198,9 @@ const size_t TransferFunction::resolution( void ) const
 /*==========================================================================*/
 void TransferFunction::create( const size_t resolution )
 {
-//    m_opacity_map.create( resolution );
     m_opacity_map.setResolution( resolution );
     m_opacity_map.create();
 
-//    m_color_map.create( resolution );
     m_color_map.setResolution( resolution );
     m_color_map.create();
 }

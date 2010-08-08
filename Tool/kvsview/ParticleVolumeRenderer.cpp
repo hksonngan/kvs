@@ -362,6 +362,13 @@ const bool Main::exec( void )
     // Legend bar.
     ParticleVolumeRenderer::LegendBar legend_bar( &screen );
     legend_bar.setColorMap( arg.transferFunction().colorMap() );
+    if ( !arg.transferFunction().hasRange() )
+    {
+        const kvs::VolumeObjectBase* object = kvs::VolumeObjectBase::DownCast( pipe.object() );
+        const kvs::Real32 min_value = object->minValue();
+        const kvs::Real32 max_value = object->maxValue();
+        legend_bar.setRange( min_value, max_value );
+    }
     legend_bar.show();
 
     // Orientation axis.

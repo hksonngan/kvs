@@ -58,7 +58,8 @@ namespace kvs
 ColorMap::ColorMap( void ):
     m_resolution( ::Resolution ),
     m_min_value( 0.0f ),
-    m_max_value( ::Resolution - 1.0f ),
+//    m_max_value( ::Resolution - 1.0f ),
+    m_max_value( 0.0f ),
     m_points(),
     m_table()
 {
@@ -73,7 +74,8 @@ ColorMap::ColorMap( void ):
 ColorMap::ColorMap( const size_t resolution ):
     m_resolution( resolution ),
     m_min_value( 0.0f ),
-    m_max_value( resolution - 1.0f ),
+//    m_max_value( resolution - 1.0f ),
+    m_max_value( 0.0f ),
     m_points(),
     m_table()
 {
@@ -88,7 +90,8 @@ ColorMap::ColorMap( const size_t resolution ):
 ColorMap::ColorMap( const ColorMap::Table& table ):
     m_resolution( table.size() / 3 ),
     m_min_value( 0.0f ),
-    m_max_value( table.size() - 1.0f ),
+//    m_max_value( table.size() - 1.0f ),
+    m_max_value( 0.0f ),
     m_points(),
     m_table( table )
 {
@@ -207,6 +210,11 @@ const ColorMap::Table& ColorMap::table( void ) const
     return( m_table );
 }
 
+const bool ColorMap::hasRange( void ) const
+{
+    return( !kvs::Math::Equal( m_min_value, m_max_value ) );
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Sets a table resolution.
@@ -261,9 +269,18 @@ void ColorMap::removePoint( const float value )
 /*==========================================================================*/
 void ColorMap::create( void )
 {
+/*
     if ( kvs::Math::IsZero( m_min_value ) && kvs::Math::IsZero( m_max_value ) )
     {
         this->setRange( 0.0f, static_cast<float>( m_resolution - 1 ) );
+    }
+*/
+    kvs::Real32 min_value = 0.0f;
+    kvs::Real32 max_value = static_cast<kvs::Real32>( m_resolution - 1 );
+    if ( this->hasRange() )
+    {
+        min_value = this->minValue();
+        max_value = this->maxValue();
     }
 
     m_table.allocate( ::NumberOfChannels * m_resolution );
@@ -295,19 +312,19 @@ void ColorMap::create( void )
 
         const kvs::RGBColor black( 0, 0, 0 );
         const kvs::RGBColor white( 255, 255, 255 );
-        if ( m_points.begin()->first > m_min_value ) this->addPoint( m_min_value, black );
-        if ( m_points.end()->first < m_max_value ) this->addPoint( m_max_value, white );
+        if ( m_points.begin()->first > min_value ) this->addPoint( min_value, black );
+        if ( m_points.end()->first < max_value ) this->addPoint( max_value, white );
 
-        const float stride = ( m_max_value - m_min_value ) / static_cast<float>( m_resolution - 1 );
-        float f = m_min_value;
+        const float stride = ( max_value - min_value ) / static_cast<float>( m_resolution - 1 );
+        float f = min_value;
         for ( size_t i = 0; i < m_resolution; ++i, f += stride )
         {
             Points::iterator p = m_points.begin();
             Points::iterator last = m_points.end();
 
             kvs::RGBColor color( 0, 0, 0 );
-            Point p0( m_min_value, kvs::RGBColor(   0,   0,   0 ) );
-            Point p1( m_max_value, kvs::RGBColor( 255, 255, 255 ) );
+            Point p0( min_value, kvs::RGBColor(   0,   0,   0 ) );
+            Point p1( max_value, kvs::RGBColor( 255, 255, 255 ) );
             while ( p != last )
             {
                 const float s = p->first;
@@ -339,7 +356,7 @@ void ColorMap::create( void )
                     ++p;
                     if ( p == last )
                     {
-                        if ( kvs::Math::Equal( p0.first, m_max_value ) )
+                        if ( kvs::Math::Equal( p0.first, max_value ) )
                         {
                             color = p0.second;
                         }

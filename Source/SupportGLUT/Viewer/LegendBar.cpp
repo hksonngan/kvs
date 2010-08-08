@@ -187,8 +187,11 @@ void LegendBar::setColorMap( const kvs::ColorMap& colormap )
     kvs::ColorMap::Table colormap_table( colormap.table().pointer(), colormap.table().size() );
     m_colormap = kvs::ColorMap( colormap_table );
 
-    m_min_value = colormap.minValue();
-    m_max_value = colormap.maxValue();
+    if ( colormap.hasRange() )
+    {
+        m_min_value = colormap.minValue();
+        m_max_value = colormap.maxValue();
+    }
 
     // Download the texture data onto GPU.
     m_texture_downloaded = false;

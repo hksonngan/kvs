@@ -19,7 +19,5 @@ struct Volume
     vec3 resolution_reciprocal; // reciprocal number of the resolution
     float min_range; // min. range of the value
     float max_range; // max. range of the value
-    float min_value; // min. scalar value
-    float max_value; // max. scalar value
     sampler3D data; // volume data (scalar field)
 };

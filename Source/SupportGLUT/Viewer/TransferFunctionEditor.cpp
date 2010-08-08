@@ -190,7 +190,9 @@ TransferFunctionEditor::TransferFunctionEditor( kvs::ScreenBase* parent ):
     m_undo_button( NULL ),
     m_redo_button( NULL ),
     m_save_button( NULL ),
-    m_apply_button( NULL )
+    m_apply_button( NULL ),
+    m_min_value( 0.0f ),
+    m_max_value( 0.0f )
 {
     const std::string title = "Transfer Function Editor";
     const int x = ( parent != 0 ) ? parent->x() + parent->width() + 5 : 0;
@@ -327,10 +329,11 @@ const kvs::OpacityMap TransferFunctionEditor::opacityMap( void ) const
 
 const kvs::TransferFunction TransferFunctionEditor::transferFunction( void ) const
 {
-    const kvs::Real32 min_value = m_initial_transfer_function.colorMap().minValue();
-    const kvs::Real32 max_value = m_initial_transfer_function.colorMap().maxValue();
+//    const kvs::Real32 min_value = m_initial_transfer_function.colorMap().minValue();
+//    const kvs::Real32 max_value = m_initial_transfer_function.colorMap().maxValue();
     kvs::TransferFunction transfer_function( this->colorMap(), this->opacityMap() );
-    transfer_function.setRange( min_value, max_value );
+//    transfer_function.setRange( min_value, max_value );
+    transfer_function.setRange( m_min_value, m_max_value );
 
     return( transfer_function );
 }
@@ -358,11 +361,19 @@ void TransferFunctionEditor::setTransferFunction( const kvs::TransferFunction& t
     // Deep copy for the initial transfer function.
     kvs::ColorMap::Table color_map_table( cmap.table().pointer(), cmap.table().size() );
     kvs::OpacityMap::Table opacity_map_table( omap.table().pointer(), omap.table().size() );
-    kvs::ColorMap color_map( color_map_table, cmap.minValue(), cmap.maxValue() );
-    kvs::OpacityMap opacity_map( opacity_map_table, omap.minValue(), omap.maxValue() );
+//    kvs::ColorMap color_map( color_map_table, cmap.minValue(), cmap.maxValue() );
+//    kvs::OpacityMap opacity_map( opacity_map_table, omap.minValue(), omap.maxValue() );
+    kvs::ColorMap color_map( color_map_table );
+    kvs::OpacityMap opacity_map( opacity_map_table );
     m_initial_transfer_function.setColorMap( color_map );
     m_initial_transfer_function.setOpacityMap( opacity_map );
-    m_initial_transfer_function.setRange( color_map.minValue(), color_map.maxValue() );
+
+    if ( transfer_function.hasRange() )
+    {
+        m_min_value = transfer_function.colorMap().minValue();
+        m_max_value = transfer_function.colorMap().maxValue();
+        m_initial_transfer_function.setRange( m_min_value, m_max_value );
+    }
 
     m_color_map_palette->setColorMap( color_map );
     m_opacity_map_palette->setOpacityMap( opacity_map );
@@ -373,6 +384,12 @@ void TransferFunctionEditor::setTransferFunction( const kvs::TransferFunction& t
 
 void TransferFunctionEditor::setVolumeObject( const kvs::VolumeObjectBase* object )
 {
+    if ( !m_initial_transfer_function.hasRange() )
+    {
+        m_min_value = object->minValue();
+        m_max_value = object->maxValue();
+    }
+
     m_histogram->create( object );
 }
 

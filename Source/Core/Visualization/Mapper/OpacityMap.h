@@ -76,6 +76,8 @@ public:
 
 public:
 
+    const bool hasRange( void ) const;
+
     void setRange( const float min_value, const float max_value );
 
     void setResolution( const size_t resolution );

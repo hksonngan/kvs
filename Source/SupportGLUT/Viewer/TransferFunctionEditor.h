@@ -73,6 +73,8 @@ protected:
     kvs::glut::PushButton*        m_save_button;         ///< save button
     kvs::glut::PushButton*        m_apply_button;        ///< apply button
     kvs::TransferFunction m_initial_transfer_function;   ///< initial transfer function
+    kvs::Real32           m_min_value; ///< min value
+    kvs::Real32           m_max_value; ///< max value
 
 public:
 

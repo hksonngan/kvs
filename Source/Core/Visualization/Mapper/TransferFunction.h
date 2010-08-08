@@ -65,6 +65,12 @@ public:
 
     void setRange( const float min_value, const float max_value );
 
+    const bool hasRange( void ) const;
+
+    const bool minValue( void ) const;
+
+    const bool maxValue( void ) const;
+
 public:
 
     const kvs::ColorMap& colorMap( void ) const;

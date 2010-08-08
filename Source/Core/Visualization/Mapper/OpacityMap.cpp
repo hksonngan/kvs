@@ -55,7 +55,8 @@ namespace kvs
 OpacityMap::OpacityMap( void ):
     m_resolution( ::Resolution ),
     m_min_value( 0.0f ),
-    m_max_value( ::Resolution - 1.0f ),
+//    m_max_value( ::Resolution - 1.0f ),
+    m_max_value( 0.0f ),
     m_points(),
     m_table()
 {
@@ -70,7 +71,8 @@ OpacityMap::OpacityMap( void ):
 OpacityMap::OpacityMap( const size_t resolution ):
     m_resolution( resolution ),
     m_min_value( 0.0f ),
-    m_max_value( resolution - 1.0f ),
+//    m_max_value( resolution - 1.0f ),
+    m_max_value( 0.0f ),
     m_points(),
     m_table()
 {
@@ -85,7 +87,8 @@ OpacityMap::OpacityMap( const size_t resolution ):
 OpacityMap::OpacityMap( const Table& table ):
     m_resolution( table.size() ),
     m_min_value( 0.0f ),
-    m_max_value( table.size() - 1.0f ),
+//    m_max_value( table.size() - 1.0f ),
+    m_max_value( 0.0f ),
     m_points(),
     m_table( table )
 {
@@ -204,6 +207,11 @@ const OpacityMap::Table& OpacityMap::table( void ) const
     return( m_table );
 }
 
+const bool OpacityMap::hasRange( void ) const
+{
+    return( !kvs::Math::Equal( m_min_value, m_max_value ) );
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Sets a table resolution.
@@ -258,9 +266,18 @@ void OpacityMap::removePoint( const float value )
 /*==========================================================================*/
 void OpacityMap::create( void )
 {
+/*
     if ( kvs::Math::IsZero( m_min_value ) && kvs::Math::IsZero( m_max_value ) )
     {
         this->setRange( 0.0f, static_cast<float>( m_resolution - 1 ) );
+    }
+*/
+    kvs::Real32 min_value = 0.0f;
+    kvs::Real32 max_value = static_cast<kvs::Real32>( m_resolution - 1 );
+    if ( this->hasRange() )
+    {
+        min_value = this->minValue();
+        max_value = this->maxValue();
     }
 
     m_table.allocate( m_resolution );
@@ -276,19 +293,19 @@ void OpacityMap::create( void )
     {
         m_points.sort( ::Less() );
 
-        if ( m_points.begin()->first > m_min_value ) this->addPoint( m_min_value, 0.0f );
-        if ( m_points.end()->first < m_max_value ) this->addPoint( m_max_value, 1.0f );
+        if ( m_points.begin()->first > min_value ) this->addPoint( min_value, 0.0f );
+        if ( m_points.end()->first < max_value ) this->addPoint( max_value, 1.0f );
 
-        const float stride = ( m_max_value - m_min_value ) / static_cast<float>( m_resolution - 1 );
-        float f = m_min_value;
+        const float stride = ( max_value - min_value ) / static_cast<float>( m_resolution - 1 );
+        float f = min_value;
         for ( size_t i = 0; i < m_resolution; ++i, f += stride )
         {
             Points::iterator p = m_points.begin();
             Points::iterator last = m_points.end();
 
             float opacity = 0.0f;
-            Point p0( m_min_value, 0.0f );
-            Point p1( m_max_value, 1.0f );
+            Point p0( min_value, 0.0f );
+            Point p1( max_value, 1.0f );
             while ( p != last )
             {
                 const float s = p->first;
@@ -314,7 +331,7 @@ void OpacityMap::create( void )
                     ++p;
                     if ( p == last )
                     {
-                        if ( kvs::Math::Equal( p0.first, m_max_value ) )
+                        if ( kvs::Math::Equal( p0.first, max_value ) )
                         {
                             opacity = p0.second;
                         }

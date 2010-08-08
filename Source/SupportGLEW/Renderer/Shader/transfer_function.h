@@ -15,4 +15,6 @@
 struct TransferFunction
 {
     sampler1D data; // transfer function data
+    float min_value; // min. scalar value
+    float max_value; // max. scalar value
 };

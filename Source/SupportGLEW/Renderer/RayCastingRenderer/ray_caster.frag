@@ -83,7 +83,8 @@ void main( void )
     vec4 dst = vec4( 0.0, 0.0, 0.0, 0.0 );
 
     // Transfer function scale.
-    float tfunc_scale = 1.0 / ( volume.max_value - volume.min_value );
+//    float tfunc_scale = 1.0 / ( volume.max_value - volume.min_value );
+    float tfunc_scale = 1.0 / ( transfer_function.max_value - transfer_function.min_value );
 
     for ( int i = 0; i < nsteps; i++ )
     {
@@ -93,7 +94,8 @@ void main( void )
         float scalar = mix( volume.min_range, volume.max_range, value.w );
 
         // Get the source color from the transfer function.
-        float tfunc_index = ( scalar - volume.min_value ) * tfunc_scale;
+//        float tfunc_index = ( scalar - volume.min_value ) * tfunc_scale;
+        float tfunc_index = ( scalar - transfer_function.min_value ) * tfunc_scale;
         vec4 src = texture1D( transfer_function.data, tfunc_index );
         if ( src.a != 0.0 )
         {

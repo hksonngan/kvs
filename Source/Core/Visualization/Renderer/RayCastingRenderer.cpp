@@ -103,32 +103,33 @@ void RayCastingRenderer::create_image(
     BaseClass::m_color_data.fill( 0x00 );
     BaseClass::m_depth_data.fill( 0x00 );
 
+    if ( !volume->hasMinMaxValues() ) volume->updateMinMaxValues();
     const float min_value = static_cast<float>( volume->minValue() );
     const float max_value = static_cast<float>( volume->maxValue() );
     const std::type_info& type = volume->values().typeInfo()->type();
     if(      type == typeid(kvs::UInt8)  )
     {
-        BaseClass::m_tfunc.setRange( 0, 255 );
+        if ( !m_tfunc.hasRange() ) BaseClass::m_tfunc.setRange( 0, 255 );
         this->rasterize<kvs::UInt8>( volume, camera, light );
     }
     else if( type == typeid(kvs::UInt16) )
     {
-        BaseClass::m_tfunc.setRange( min_value, max_value );
+        if ( !m_tfunc.hasRange() ) BaseClass::m_tfunc.setRange( min_value, max_value );
         this->rasterize<kvs::UInt16>( volume, camera, light );
     }
     else if( type == typeid(kvs::Int16) )
     {
-        BaseClass::m_tfunc.setRange( min_value, max_value );
+        if ( !m_tfunc.hasRange() ) BaseClass::m_tfunc.setRange( min_value, max_value );
         this->rasterize<kvs::Int16>( volume, camera, light );
     }
     else if( type == typeid(kvs::Real32) )
     {
-        BaseClass::m_tfunc.setRange( min_value, max_value );
+        if ( !m_tfunc.hasRange() ) BaseClass::m_tfunc.setRange( min_value, max_value );
         this->rasterize<kvs::Real32>( volume, camera, light );
     }
     else if( type == typeid(kvs::Real64) )
     {
-        BaseClass::m_tfunc.setRange( min_value, max_value );
+        if ( !m_tfunc.hasRange() ) BaseClass::m_tfunc.setRange( min_value, max_value );
         this->rasterize<kvs::Real64>( volume, camera, light );
     }
     else

@@ -41,20 +41,24 @@ void CheckOpenGLError( const char* message )
 }
 
 template <typename T>
-kvs::AnyValueArray NormalizeValues( const kvs::StructuredVolumeObject* volume )
+//kvs::AnyValueArray NormalizeValues( const kvs::StructuredVolumeObject* volume )
+kvs::AnyValueArray NormalizeValues(
+    const kvs::StructuredVolumeObject* volume,
+    const kvs::Real32 min_value,
+    const kvs::Real32 max_value )
 {
     kvs::AnyValueArray data;
 
-    const kvs::Real32 min = static_cast<kvs::Real32>( volume->minValue() );
-    const kvs::Real32 max = static_cast<kvs::Real32>( volume->maxValue() );
+//    const kvs::Real32 min = static_cast<kvs::Real32>( volume->minValue() );
+//    const kvs::Real32 max = static_cast<kvs::Real32>( volume->maxValue() );
 
-    const kvs::Real32 scale = 1.0f / ( max - min );
+    const kvs::Real32 scale = 1.0f / ( max_value - min_value );
     const size_t nnodes = volume->nnodes();
     const T* src = static_cast<const T*>( volume->values().pointer() );
     kvs::Real32* dst = static_cast<kvs::Real32*>( data.allocate<kvs::Real32>( nnodes ) );
     for ( size_t i = 0; i < nnodes; i++ )
     {
-        *(dst++) = ( *(src++) - min ) * scale;
+        *(dst++) = ( *(src++) - min_value ) * scale;
     }
 
     return( data );
@@ -434,36 +438,48 @@ void RayCastingRenderer::initialize_shaders( const kvs::StructuredVolumeObject* 
 
         kvs::Real32 min_range = 0.0f;
         kvs::Real32 max_range = 0.0f;
-        kvs::Real32 min_value = 0.0f;
-        kvs::Real32 max_value = 0.0f;
+        kvs::Real32 min_value = BaseClass::m_tfunc.colorMap().minValue();
+        kvs::Real32 max_value = BaseClass::m_tfunc.colorMap().maxValue();
         const std::type_info& type = volume->values().typeInfo()->type();
         if ( type == typeid( kvs::UInt8 ) )
         {
             min_range = 0.0f;
             max_range = 255.0f;
-            min_value = 0.0f;
-            max_value = 255.0f;
+            if ( !BaseClass::m_tfunc.hasRange() )
+            {
+                min_value = 0.0f;
+                max_value = 255.0f;
+            }
         }
         else if ( type == typeid( kvs::Int8 ) )
         {
             min_range = static_cast<kvs::Real32>( kvs::Value<kvs::UInt8>::Min() );
             max_range = static_cast<kvs::Real32>( kvs::Value<kvs::UInt8>::Max() );
-            min_value = -128.0f;
-            max_value = 127.0f;
+            if ( !BaseClass::m_tfunc.hasRange() )
+            {
+                min_value = -128.0f;
+                max_value = 127.0f;
+            }
         }
         else if ( type == typeid( kvs::UInt16 ) )
         {
             min_range = static_cast<kvs::Real32>( kvs::Value<kvs::UInt16>::Min() );
             max_range = static_cast<kvs::Real32>( kvs::Value<kvs::UInt16>::Max() );
-            min_value = static_cast<kvs::Real32>( volume->minValue() );
-            max_value = static_cast<kvs::Real32>( volume->maxValue() );
+            if ( !BaseClass::m_tfunc.hasRange() )
+            {
+                min_value = static_cast<kvs::Real32>( volume->minValue() );
+                max_value = static_cast<kvs::Real32>( volume->maxValue() );
+            }
         }
         else if ( type == typeid( kvs::Int16 ) )
         {
             min_range = static_cast<kvs::Real32>( kvs::Value<kvs::Int16>::Min() );
             max_range = static_cast<kvs::Real32>( kvs::Value<kvs::Int16>::Max() );
-            min_value = static_cast<kvs::Real32>( volume->minValue() );
-            max_value = static_cast<kvs::Real32>( volume->maxValue() );
+            if ( !BaseClass::m_tfunc.hasRange() )
+            {
+                min_value = static_cast<kvs::Real32>( volume->minValue() );
+                max_value = static_cast<kvs::Real32>( volume->maxValue() );
+            }
         }
         else if ( type == typeid( kvs::UInt32 ) ||
                   type == typeid( kvs::Int32  ) ||
@@ -488,8 +504,10 @@ void RayCastingRenderer::initialize_shaders( const kvs::StructuredVolumeObject* 
         m_ray_caster.setUniformValuef( "volume.resolution_reciprocal", reciprocal );
         m_ray_caster.setUniformValuef( "volume.min_range", min_range );
         m_ray_caster.setUniformValuef( "volume.max_range", max_range );
-        m_ray_caster.setUniformValuef( "volume.min_value", min_value );
-        m_ray_caster.setUniformValuef( "volume.max_value", max_value );
+//        m_ray_caster.setUniformValuef( "volume.min_value", min_value );
+//        m_ray_caster.setUniformValuef( "volume.max_value", max_value );
+        m_ray_caster.setUniformValuef( "transfer_function.min_value", min_value );
+        m_ray_caster.setUniformValuef( "transfer_function.max_value", max_value );
         m_ray_caster.setUniformValuef( "dt", m_step );
         m_ray_caster.setUniformValuef( "opaque", m_opaque );
         switch ( BaseClass::m_shader->type() )
@@ -758,9 +776,9 @@ void RayCastingRenderer::create_volume_data( const kvs::StructuredVolumeObject* 
     const size_t depth = volume->resolution().z();
 
     m_volume_data.release();
-     m_volume_data.setWrapS( GL_CLAMP_TO_BORDER );
-     m_volume_data.setWrapT( GL_CLAMP_TO_BORDER );
-     m_volume_data.setWrapR( GL_CLAMP_TO_BORDER );
+    m_volume_data.setWrapS( GL_CLAMP_TO_BORDER );
+    m_volume_data.setWrapT( GL_CLAMP_TO_BORDER );
+    m_volume_data.setWrapR( GL_CLAMP_TO_BORDER );
     m_volume_data.setMagFilter( GL_LINEAR );
     m_volume_data.setMinFilter( GL_LINEAR );
 
@@ -796,19 +814,53 @@ void RayCastingRenderer::create_volume_data( const kvs::StructuredVolumeObject* 
     {
         data_format = GL_ALPHA;
         data_type = GL_FLOAT;
-        data_value = ::NormalizeValues<kvs::UInt32>( volume );
+        kvs::Real32 min_value = static_cast<kvs::Real32>( volume->minValue() );
+        kvs::Real32 max_value = static_cast<kvs::Real32>( volume->maxValue() );
+        if ( BaseClass::m_tfunc.hasRange() )
+        {
+            min_value = BaseClass::m_tfunc.colorMap().minValue();
+            max_value = BaseClass::m_tfunc.colorMap().maxValue();
+        }
+        data_value = ::NormalizeValues<kvs::UInt32>( volume, min_value, max_value );
     }
     else if ( type == typeid( kvs::Int32 ) )
     {
         data_format = GL_ALPHA;
         data_type = GL_FLOAT;
-        data_value = ::NormalizeValues<kvs::Int32>( volume );
+        kvs::Real32 min_value = static_cast<kvs::Real32>( volume->minValue() );
+        kvs::Real32 max_value = static_cast<kvs::Real32>( volume->maxValue() );
+        if ( BaseClass::m_tfunc.hasRange() )
+        {
+            min_value = BaseClass::m_tfunc.colorMap().minValue();
+            max_value = BaseClass::m_tfunc.colorMap().maxValue();
+        }
+        data_value = ::NormalizeValues<kvs::Int32>( volume, min_value, max_value );
     }
     else if ( type == typeid( kvs::Real32 ) )
     {
         data_format = GL_ALPHA;
         data_type = GL_FLOAT;
-        data_value = ::NormalizeValues<kvs::Real32>( volume );
+        kvs::Real32 min_value = static_cast<kvs::Real32>( volume->minValue() );
+        kvs::Real32 max_value = static_cast<kvs::Real32>( volume->maxValue() );
+        if ( BaseClass::m_tfunc.hasRange() )
+        {
+            min_value = BaseClass::m_tfunc.colorMap().minValue();
+            max_value = BaseClass::m_tfunc.colorMap().maxValue();
+        }
+        data_value = ::NormalizeValues<kvs::Real32>( volume, min_value, max_value );
+    }
+    else if ( type == typeid( kvs::Real64 ) )
+    {
+        data_format = GL_ALPHA;
+        data_type = GL_FLOAT;
+        kvs::Real32 min_value = static_cast<kvs::Real32>( volume->minValue() );
+        kvs::Real32 max_value = static_cast<kvs::Real32>( volume->maxValue() );
+        if ( BaseClass::m_tfunc.hasRange() )
+        {
+            min_value = BaseClass::m_tfunc.colorMap().minValue();
+            max_value = BaseClass::m_tfunc.colorMap().maxValue();
+        }
+        data_value = ::NormalizeValues<kvs::Real64>( volume, min_value, max_value );
     }
     else
     {
