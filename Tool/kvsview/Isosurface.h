@@ -46,7 +46,7 @@ public:
 
 public:
 
-    const kvs::Real64 isolevel( const kvs::VolumeObjectBase* volume );
+    const kvs::Real64 isolevel( const kvs::VolumeObjectBase* volume, const kvs::TransferFunction& transfer_function );
 
     const kvs::PolygonObject::NormalType normalType( void );
 

@@ -81,6 +81,10 @@ public:
 
     const std::string& caption( void ) const;
 
+    const double minValue( void ) const;
+
+    const double maxValue( void ) const;
+
 public:
 
     void setCaption( const std::string& caption );

@@ -159,6 +159,26 @@ void MapperBase::attach_volume( const kvs::VolumeObjectBase* volume )
     m_volume = volume;
 }
 
+void MapperBase::set_range( const kvs::VolumeObjectBase* volume )
+{
+    if ( !volume->hasMinMaxValues() ) volume->updateMinMaxValues();
+    const std::type_info& type = volume->values().typeInfo()->type();
+    if ( type == typeid( kvs::Int8 ) )
+    {
+        if ( !m_transfer_function.hasRange() ) m_transfer_function.setRange( -128, 127 );
+    }
+    else if ( type == typeid( kvs::UInt8  ) )
+    {
+        if ( !m_transfer_function.hasRange() ) m_transfer_function.setRange( 0, 255 );
+    }
+    else
+    {
+        const float min_value = static_cast<float>( volume->minValue() );
+        const float max_value = static_cast<float>( volume->maxValue() );
+        if ( !m_transfer_function.hasRange() ) m_transfer_function.setRange( min_value, max_value );
+    }
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Calculates the min/max coordinate values.

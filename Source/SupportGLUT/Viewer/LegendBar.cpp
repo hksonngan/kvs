@@ -85,6 +85,16 @@ const std::string& LegendBar::caption( void ) const
     return( m_caption );
 }
 
+const double LegendBar::minValue( void ) const
+{
+    return( m_min_value );
+}
+
+const double LegendBar::maxValue( void ) const
+{
+    return( m_max_value );
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Sets a legend bar caption.

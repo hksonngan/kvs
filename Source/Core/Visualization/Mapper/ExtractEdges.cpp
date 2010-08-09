@@ -219,6 +219,7 @@ ExtractEdges::SuperClass* ExtractEdges::exec( const kvs::ObjectBase* object )
 void ExtractEdges::mapping( const kvs::StructuredVolumeObject* volume )
 {
     BaseClass::attach_volume( volume );
+    BaseClass::set_range( volume );
     BaseClass::set_min_max_coords( volume, this );
 
     this->calculate_coords( volume );
@@ -384,6 +385,7 @@ void ExtractEdges::calculate_connections( const kvs::StructuredVolumeObject* vol
 void ExtractEdges::mapping( const kvs::UnstructuredVolumeObject* volume )
 {
     BaseClass::attach_volume( volume );
+    BaseClass::set_range( volume );
     BaseClass::set_min_max_coords( volume, this );
 
     this->calculate_coords( volume );

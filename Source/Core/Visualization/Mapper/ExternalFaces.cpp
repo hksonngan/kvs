@@ -667,6 +667,7 @@ ExternalFaces::SuperClass* ExternalFaces::exec( const kvs::ObjectBase* object )
 void ExternalFaces::mapping( const kvs::StructuredVolumeObject* volume )
 {
     BaseClass::attach_volume( volume );
+    BaseClass::set_range( volume );
     BaseClass::set_min_max_coords( volume, this );
 
     this->calculate_coords( volume );

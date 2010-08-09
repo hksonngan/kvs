@@ -302,8 +302,8 @@ SphereGlyph::BaseClass::SuperClass* SphereGlyph::exec_point_object( const kvs::P
 SphereGlyph::BaseClass::SuperClass* SphereGlyph::exec_volume_object( const kvs::VolumeObjectBase* volume )
 {
     BaseClass::attach_volume( volume );
+    BaseClass::set_range( volume );
     BaseClass::set_min_max_coords( volume, this );
-
     BaseClass::calculate_coords( volume );
 
     const std::type_info& type = volume->values().typeInfo()->type();

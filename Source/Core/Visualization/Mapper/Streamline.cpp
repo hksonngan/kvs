@@ -4,7 +4,7 @@
  *  @brief  
  *
  *  @author Yukio YASUHARA
- *  @date   2010/01/08 18:51:30
+ *  @date   2010/08/09 23:22:15
  */
 /*----------------------------------------------------------------------------
  *
@@ -121,8 +121,7 @@ Streamline::BaseClass::SuperClass* Streamline::exec( const kvs::ObjectBase* obje
 
     // Attach the pointer to the volume object.
     BaseClass::attach_volume( volume );
-
-    // Set the min/max coordinates.
+    BaseClass::set_range( volume );
     BaseClass::set_min_max_coords( volume, this );
 
     // set the min/max vector length.

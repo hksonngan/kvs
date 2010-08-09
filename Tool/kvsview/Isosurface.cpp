@@ -156,10 +156,19 @@ Argument::Argument( int argc, char** argv ):
  *  @return subpixel level
  */
 /*===========================================================================*/
-const kvs::Real64 Argument::isolevel( const kvs::VolumeObjectBase* volume )
+const kvs::Real64 Argument::isolevel(
+    const kvs::VolumeObjectBase* volume,
+    const kvs::TransferFunction& transfer_function )
 {
     if ( !volume->hasMinMaxValues() ) volume->updateMinMaxValues();
-    const kvs::Real64 default_value = ( volume->maxValue() - volume->minValue() ) * 0.5;
+    float min_value = volume->minValue();
+    float max_value = volume->maxValue();
+    if ( transfer_function.hasRange() )
+    {
+        min_value = transfer_function.minValue();
+        max_value = transfer_function.maxValue();
+    }
+    const kvs::Real64 default_value = ( max_value + min_value ) * 0.5;
 
     if ( this->hasOption("l") ) return( this->optionValue<kvs::Real64>("l") );
     else return( default_value );
@@ -302,9 +311,9 @@ const bool Main::exec( void )
 
     // Set up the isosurface class.
     kvs::PipelineModule mapper( new kvs::Isosurface );
-    const kvs::Real64 level = arg.isolevel( volume );
-    const kvs::PolygonObject::NormalType normal = arg.normalType();
     const kvs::TransferFunction function = arg.transferFunction();
+    const kvs::Real64 level = arg.isolevel( volume, function );
+    const kvs::PolygonObject::NormalType normal = arg.normalType();
     mapper.get<kvs::Isosurface>()->setIsolevel( level );
     mapper.get<kvs::Isosurface>()->setNormalType( normal );
     mapper.get<kvs::Isosurface>()->setTransferFunction( function );
@@ -321,7 +330,7 @@ const bool Main::exec( void )
     slider.setTransferFunction( function );
     slider.setNormal( normal );
     slider.setValue( static_cast<float>( level ) );
-    slider.setRange( static_cast<float>( volume->minValue() ), static_cast<float>( volume->maxValue() ) );
+    slider.setRange( legend_bar.minValue(), legend_bar.maxValue() );
 
     // Verbose information.
     if ( arg.verboseMode() )

@@ -83,6 +83,8 @@ protected:
 
     void attach_volume( const kvs::VolumeObjectBase* volume );
 
+    void set_range( const kvs::VolumeObjectBase* volume );
+
     void set_min_max_coords( const kvs::VolumeObjectBase* volume, kvs::ObjectBase* object );
 };
 

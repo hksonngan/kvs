@@ -150,8 +150,7 @@ void SlicePlane::mapping( const kvs::VolumeObjectBase* volume )
 
     // Attach the pointer to the volume object.
     BaseClass::attach_volume( volume );
-
-    // Set the min/max coordinates.
+    BaseClass::set_range( volume );
     BaseClass::set_min_max_coords( volume, this );
 
     if ( volume->volumeType() == kvs::VolumeObjectBase::Structured )
