@@ -114,7 +114,7 @@ inline const bool ReadInternalData(
     const size_t nelements,
     kvs::Tokenizer& tokenizer )
 {
-    T* data = static_cast<T*>( data_array->allocate<T>( nelements ) );
+    T* data = static_cast<T*>( data_array->template allocate<T>( nelements ) );
     if ( !data )
     {
         kvsMessageError( "Cannot allocate memory for the internal data." );
@@ -266,7 +266,7 @@ inline const bool ReadExternalData(
     const std::string& filename,
     const std::string& format )
 {
-    if ( !data_array->allocate<T>( nelements ) )
+    if ( !data_array->template allocate<T>( nelements ) )
     {
         kvsMessageError( "Cannot allocate memory for the external data." );
         return( false );

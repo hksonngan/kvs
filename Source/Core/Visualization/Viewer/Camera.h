@@ -39,7 +39,8 @@ public:
     enum ProjectionType
     {
         Perspective = 0,
-        Orthogonal
+        Orthogonal = 1,
+        Frustum
     };
 
 protected:

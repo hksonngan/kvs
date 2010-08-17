@@ -421,12 +421,12 @@ void Camera::update( void )
     glMatrixMode( GL_PROJECTION );
     {
         glLoadIdentity();
-        if( m_projection_type == Camera::Perspective )
+        if ( m_projection_type == Camera::Perspective )
         {
             // Perspective camera mode
             gluPerspective( m_field_of_view, aspect, m_front, m_back );
         }
-        else
+        else if ( m_projection_type == Camera::Orthogonal )
         {
             // Orthogonal camera mode
             if( aspect >= 1.0f )
@@ -440,6 +440,22 @@ void Camera::update( void )
                 glOrtho( m_left, m_right,
                          m_bottom / aspect, m_top / aspect,
                          m_front, m_back );
+            }
+        }
+        else
+        {
+            // Frustum camera mode
+            if( aspect >= 1.0f )
+            {
+                glFrustum( m_left * aspect, m_right * aspect,
+                           m_bottom, m_top,
+                           m_front, m_back );
+            }
+            else
+            {
+                glFrustum( m_left, m_right,
+                           m_bottom / aspect, m_top / aspect,
+                           m_front, m_back );
             }
         }
     }

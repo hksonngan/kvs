@@ -55,7 +55,7 @@ kvs::AnyValueArray NormalizeValues(
     const kvs::Real32 scale = 1.0f / ( max_value - min_value );
     const size_t nnodes = volume->nnodes();
     const T* src = static_cast<const T*>( volume->values().pointer() );
-    kvs::Real32* dst = static_cast<kvs::Real32*>( data.allocate<kvs::Real32>( nnodes ) );
+    kvs::Real32* dst = static_cast<kvs::Real32*>( data.template allocate<kvs::Real32>( nnodes ) );
     for ( size_t i = 0; i < nnodes; i++ )
     {
         *(dst++) = ( *(src++) - min_value ) * scale;
@@ -72,7 +72,7 @@ kvs::AnyValueArray SignedToUnsigned( const kvs::StructuredVolumeObject* volume )
     const SrcType min = kvs::Value<SrcType>::Min();
     const size_t nvalues = volume->values().size();
     const SrcType* src = static_cast<const SrcType*>( volume->values().pointer() );
-    DstType* dst = static_cast<DstType*>( data.allocate<DstType>( nvalues ) );
+    DstType* dst = static_cast<DstType*>( data.template allocate<DstType>( nvalues ) );
     for ( size_t i = 0; i < nvalues; i++ )
     {
         *(dst++) = static_cast<DstType>( *(src++) - min );
