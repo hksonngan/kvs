@@ -230,15 +230,14 @@ void CellAdjacencyGraph::create( const kvs::UnstructuredVolumeObject* volume )
     switch ( cell_type )
     {
     case kvs::UnstructuredVolumeObject::Tetrahedra:
+    case kvs::UnstructuredVolumeObject::QuadraticTetrahedra:
         this->create_for_tetrahedral_cell( volume );
         this->set_external_face_number();
         break;
     case kvs::UnstructuredVolumeObject::Hexahedra:
+    case kvs::UnstructuredVolumeObject::QuadraticHexahedra:
         this->create_for_hexahedral_cell( volume );
         this->set_external_face_number();
-        break;
-    case kvs::UnstructuredVolumeObject::QuadraticTetrahedra:
-    case kvs::UnstructuredVolumeObject::QuadraticHexahedra:
         break;
     default:
         break;
@@ -278,6 +277,7 @@ void CellAdjacencyGraph::create_for_tetrahedral_cell( const kvs::UnstructuredVol
     const kvs::UInt32* const connections = volume->connections().pointer();
     const size_t nnodes = volume->nnodes();
     const size_t ncells = volume->ncells();
+    const size_t nnodes_per_cell = static_cast<size_t>( volume->cellType() );
 
     if ( !m_graph.allocate( ncells * 4 ) )
     {
@@ -295,11 +295,12 @@ void CellAdjacencyGraph::create_for_tetrahedral_cell( const kvs::UnstructuredVol
     ::FaceMap face_map;
     for ( size_t cell_id = 0, index = 0; cell_id < ncells; cell_id++ )
     {
+        // IDs of the first-order nodes.
         const kvs::UInt32 node[4] = {
-            connections[ cell_id * 4 ],
-            connections[ cell_id * 4 + 1 ],
-            connections[ cell_id * 4 + 2 ],
-            connections[ cell_id * 4 + 3 ]
+            connections[ cell_id * nnodes_per_cell ],
+            connections[ cell_id * nnodes_per_cell + 1 ],
+            connections[ cell_id * nnodes_per_cell + 2 ],
+            connections[ cell_id * nnodes_per_cell + 3 ]
         };
 
         for ( size_t face_id = 0; face_id < 4; face_id++, index++ )
@@ -351,6 +352,7 @@ void CellAdjacencyGraph::create_for_hexahedral_cell( const kvs::UnstructuredVolu
     const kvs::UInt32* const connections = volume->connections().pointer();
     const size_t nnodes = volume->nnodes();
     const size_t ncells = volume->ncells();
+    const size_t nnodes_per_cell = static_cast<size_t>( volume->cellType() );
 
     if ( !m_graph.allocate( ncells * 6 ) )
     {
@@ -368,15 +370,16 @@ void CellAdjacencyGraph::create_for_hexahedral_cell( const kvs::UnstructuredVolu
     ::FaceMap face_map;
     for ( size_t cell_id = 0, index = 0; cell_id < ncells; cell_id++ )
     {
+        // IDs of the first-order nodes.
         const kvs::UInt32 node[8] = {
-            connections[ cell_id * 8 ],
-            connections[ cell_id * 8 + 1 ],
-            connections[ cell_id * 8 + 2 ],
-            connections[ cell_id * 8 + 3 ],
-            connections[ cell_id * 8 + 4 ],
-            connections[ cell_id * 8 + 5 ],
-            connections[ cell_id * 8 + 6 ],
-            connections[ cell_id * 8 + 7 ]
+            connections[ cell_id * nnodes_per_cell ],
+            connections[ cell_id * nnodes_per_cell + 1 ],
+            connections[ cell_id * nnodes_per_cell + 2 ],
+            connections[ cell_id * nnodes_per_cell + 3 ],
+            connections[ cell_id * nnodes_per_cell + 4 ],
+            connections[ cell_id * nnodes_per_cell + 5 ],
+            connections[ cell_id * nnodes_per_cell + 6 ],
+            connections[ cell_id * nnodes_per_cell + 7 ]
         };
 
         for ( size_t face_id = 0; face_id < 6; face_id++, index++ )
