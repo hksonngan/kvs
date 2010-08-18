@@ -48,6 +48,7 @@ int main( int argc, char** argv )
 
     kvs::RayCastingRenderer* renderer = new kvs::RayCastingRenderer();
     renderer->setShader( kvs::Shader::BlinnPhong() );
+    renderer->enableLODControl();
 
     kvs::glut::Screen screen( &app );
     screen.registerObject( object, renderer );
