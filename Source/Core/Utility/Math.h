@@ -52,6 +52,12 @@ inline T Max( T a, T b, T c )
 }
 
 template <typename T>
+inline T Max( T a, T b, T c, T d )
+{
+    return( Max( Max( Max( a, b ), c ), d ) );
+}
+
+template <typename T>
 inline T Min( T a, T b )
 {
     return( ( a < b ) ? a : b );
@@ -61,6 +67,12 @@ template <typename T>
 inline T Min( T a, T b, T c )
 {
     return( Min( Min( a, b ), c ) );
+}
+
+template <typename T>
+inline T Min( T a, T b, T c, T d )
+{
+    return( Min( Min( Min( a, b ), c ), d ) );
 }
 
 template <typename T>
