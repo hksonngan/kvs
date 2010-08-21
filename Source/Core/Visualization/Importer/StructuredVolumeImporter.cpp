@@ -356,7 +356,7 @@ const kvs::AnyValueArray StructuredVolumeImporter::get_dicom_data(
     const double max_range = static_cast<double>( kvs::Value<T>::Max() );
 
     kvs::AnyValueArray values;
-    values.allocate<T>( nnodes );
+    values.template allocate<T>( nnodes );
 
     T* pvalues = static_cast<T*>( values.pointer() );
     for ( size_t k = 0; k < nslices; k++ )

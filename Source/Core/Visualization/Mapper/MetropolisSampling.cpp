@@ -204,7 +204,7 @@ void MetropolisSampling::generate_particles( const kvs::StructuredVolumeObject* 
 
     // Attach the initial particle to the interpolator and get a rho value.
     interpolator.attachPoint( particle );
-    size_t scalar = static_cast<size_t>( interpolator.scalar<T>() );
+    size_t scalar = static_cast<size_t>( interpolator.template scalar<T>() );
     float  rho    = BaseClass::opacityMap()[ scalar ];
     float  trial_rho( 0.0f );
 
@@ -217,14 +217,14 @@ void MetropolisSampling::generate_particles( const kvs::StructuredVolumeObject* 
                             static_cast<float>(R() * r.z()) );
         interpolator.attachPoint( trial_particle );
 
-        scalar    = static_cast<size_t>( interpolator.scalar<T>() );
+        scalar    = static_cast<size_t>( interpolator.template scalar<T>() );
         trial_rho = BaseClass::opacityMap()[ scalar ];
 
         const float ratio = trial_rho / rho;
         if( ratio >= 1.0f )
         {
             // Adopt the particle.
-            const kvs::Vector3f gradient = interpolator.gradient<T>();
+            const kvs::Vector3f gradient = interpolator.template gradient<T>();
             this->adopt_particle( counter, trial_particle, scalar, gradient );
 
             // Update the particle.
@@ -238,7 +238,7 @@ void MetropolisSampling::generate_particles( const kvs::StructuredVolumeObject* 
             if( ratio >= R() )
             {
                 // Adopt the particle.
-                const kvs::Vector3f gradient = interpolator.gradient<T>();
+                const kvs::Vector3f gradient = interpolator.template gradient<T>();
                 this->adopt_particle( counter, trial_particle, scalar, gradient );
 
                 // Update the particle.
@@ -251,8 +251,8 @@ void MetropolisSampling::generate_particles( const kvs::StructuredVolumeObject* 
             {
 #ifdef DUPLICATION
                 interpolator.attachPoint( particle );
-                scalar = interpolator.scalar<T>();
-                const kvs::Vector3f gradient = interpolator.gradient<T>();
+                scalar = interpolator.template scalar<T>();
+                const kvs::Vector3f gradient = interpolator.template gradient<T>();
                 this->adopt_particle( counter, particle, scalar, gradient );
 
                 counter++;

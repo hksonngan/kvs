@@ -56,12 +56,12 @@ const void InitializeParticleVolumeRenderer(
 {
     // Transfer function.
     const kvs::TransferFunction& function = arg.transferFunction();
-    renderer.get<Renderer>()->setTransferFunction( function );
+    renderer.template get<Renderer>()->setTransferFunction( function );
 
     // Shading on/off.
     const bool noshading = arg.noShading();
-    if ( noshading ) renderer.get<Renderer>()->disableShading();
-    else renderer.get<Renderer>()->enableShading();
+    if ( noshading ) renderer.template get<Renderer>()->disableShading();
+    else renderer.template get<Renderer>()->enableShading();
 
     // Shader type.
     const float ka = arg.ambient();
@@ -73,17 +73,17 @@ const void InitializeParticleVolumeRenderer(
     {
     case 0:
     {
-        renderer.get<Renderer>()->setShader( kvs::Shader::Lambert( ka, kd ) );
+        renderer.template get<Renderer>()->setShader( kvs::Shader::Lambert( ka, kd ) );
         break;
     }
     case 1:
     {
-        renderer.get<Renderer>()->setShader( kvs::Shader::Phong( ka, kd, ks, n ) );
+        renderer.template get<Renderer>()->setShader( kvs::Shader::Phong( ka, kd, ks, n ) );
         break;
     }
     case 2:
     {
-        renderer.get<Renderer>()->setShader( kvs::Shader::BlinnPhong( ka, kd, ks, n ) );
+        renderer.template get<Renderer>()->setShader( kvs::Shader::BlinnPhong( ka, kd, ks, n ) );
         break;
     }
     default: break;

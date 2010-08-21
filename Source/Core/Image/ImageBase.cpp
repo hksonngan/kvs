@@ -578,7 +578,7 @@ ImageBase::BilinearInterpolator<ImageDataType>::operator () ( void ) const
     typename ImageDataType::PixelType p3 = m_reference_image->pixel( pmax_x, pmin_y );
     typename ImageDataType::PixelType p4 = m_reference_image->pixel( pmax_x, pmax_y );
 
-    return( ::BilinearInterpolate( p1, p2, p3, p4, m_rate.x(), m_rate.y() ) );
+    return( BilinearInterpolate( p1, p2, p3, p4, m_rate.x(), m_rate.y() ) );
 }
 
 // Instantiation.

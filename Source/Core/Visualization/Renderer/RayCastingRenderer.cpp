@@ -220,13 +220,13 @@ void RayCastingRenderer::rasterize(
                     interpolator.attachPoint( ray.point() );
 
                     // Classification.
-                    const float s = interpolator.scalar<T>();
+                    const float s = interpolator.template scalar<T>();
                     const float opacity = omap.at(s);
                     if ( !kvs::Math::IsZero( opacity ) )
                     {
                         // Shading.
                         const kvs::Vector3f vertex = ray.point();
-                        const kvs::Vector3f normal = interpolator.gradient<T>();
+                        const kvs::Vector3f normal = interpolator.template gradient<T>();
                         const kvs::RGBColor color = shader->shadedColor( cmap.at(s), vertex, normal );
 
                         // Front-to-back accumulation.

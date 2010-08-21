@@ -34,6 +34,8 @@
   distribution.
 */
 #include "TinyXML.h"
+#include <cctype>
+
 
 namespace { template <typename T> void Ignore( T ){} }
 

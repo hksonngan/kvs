@@ -1332,7 +1332,7 @@ template <typename T>
 void ExternalFaces::calculate_tetrahedral_faces( const kvs::UnstructuredVolumeObject* volume )
 {
     ::FaceMap face_map( volume->nnodes() );
-    ::CreateTetrahedraFaceMap( volume, &face_map );
+    CreateTetrahedraFaceMap( volume, &face_map );
 
     kvs::ValueArray<kvs::Real32> coords;
     kvs::ValueArray<kvs::UInt8> colors;
@@ -1354,7 +1354,7 @@ template <typename T>
 void ExternalFaces::calculate_quadratic_tetrahedral_faces( const kvs::UnstructuredVolumeObject* volume )
 {
     ::FaceMap face_map( volume->nnodes() );
-    ::CreateQuadraticTetrahedraFaceMap( volume, &face_map );
+    CreateQuadraticTetrahedraFaceMap( volume, &face_map );
 
     kvs::ValueArray<kvs::Real32> coords;
     kvs::ValueArray<kvs::UInt8> colors;
@@ -1376,7 +1376,7 @@ template <typename T>
 void ExternalFaces::calculate_hexahedral_faces( const kvs::UnstructuredVolumeObject* volume )
 {
     ::FaceMap face_map( volume->nnodes() );
-    ::CreateHexahedraFaceMap( volume, &face_map );
+    CreateHexahedraFaceMap( volume, &face_map );
 
     kvs::ValueArray<kvs::Real32> coords;
     kvs::ValueArray<kvs::UInt8> colors;
@@ -1398,7 +1398,7 @@ template <typename T>
 void ExternalFaces::calculate_quadratic_hexahedral_faces( const kvs::UnstructuredVolumeObject* volume )
 {
     ::FaceMap face_map( volume->nnodes() );
-    ::CreateQuadraticHexahedraFaceMap( volume, &face_map );
+    CreateQuadraticHexahedraFaceMap( volume, &face_map );
 
     kvs::ValueArray<kvs::Real32> coords;
     kvs::ValueArray<kvs::UInt8> colors;

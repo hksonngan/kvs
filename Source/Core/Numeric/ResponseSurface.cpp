@@ -4,7 +4,7 @@
  *  @brief  Response surface method class
  *
  *  @author Yukio YASUHARA
- *  @date   2009/06/11 13:16:39
+ *  @date   2010/08/21 13:40:19
  */
 /*----------------------------------------------------------------------------
  *
@@ -110,7 +110,7 @@ const kvs::Vector<T>& ResponseSurface<T>::solve(
 {
     m_npoints = variables.nrows();
     m_nvariables = variables.ncolumns();
-    m_nterms = ::GetNumberOfTerms( m_nvariables );
+    m_nterms = GetNumberOfTerms( m_nvariables );
     m_responses = responses;
 
     kvs::Vector<T>::setSize( m_nterms );
@@ -238,7 +238,7 @@ void ResponseSurface<T>::solve_regression_coefficients( void )
      *     sigma2 : error covariance
      */
     const T SSE = y.dot( y ) - btXty;
-    const T SSR = btXty - kvs::Math::Square( ::GetSumOfElements( y ) ) / n;
+    const T SSR = btXty - kvs::Math::Square( GetSumOfElements( y ) ) / n;
     const T Syy = SSR + SSE;
     const T sigma2 = SSE / ( n - m_nterms );
 
