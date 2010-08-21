@@ -40,8 +40,8 @@ protected:
     T*             m_scalars; ///< scalar values of the nodes
     kvs::Real32*   m_interpolation_functions; ///< interpolation functions
     kvs::Real32*   m_differential_functions; ///< differential functions
-    kvs::Vector3f  m_global_point; ///< sampling point in the global coordinate
-    kvs::Vector3f  m_local_point;  ///< sampling point in the local coordinate
+    mutable kvs::Vector3f  m_global_point; ///< sampling point in the global coordinate
+    mutable kvs::Vector3f  m_local_point;  ///< sampling point in the local coordinate
 
     const kvs::UnstructuredVolumeObject* m_reference_volume; ///< reference unstructured volume
 
@@ -59,27 +59,31 @@ public:
 
     virtual void bindCell( const kvs::UInt32 index );
 
-    virtual void setGlobalPoint( const kvs::Vector3f& point );
+    virtual void setGlobalPoint( const kvs::Vector3f& point ) const;
 
-    virtual void setLocalPoint( const kvs::Vector3f& point );
+    virtual void setLocalPoint( const kvs::Vector3f& point ) const;
 
-    virtual const kvs::Vector3f transformGlobalToLocal( const kvs::Vector3f& point );
+    virtual const kvs::Vector3f transformGlobalToLocal( const kvs::Vector3f& point ) const;
 
-    virtual const kvs::Vector3f transformLocalToGlobal( const kvs::Vector3f& point );
+    virtual const kvs::Vector3f transformLocalToGlobal( const kvs::Vector3f& point ) const;
+
+public:
+
+    virtual const kvs::Vector3f randomSampling( void ) const;
+
+    virtual const kvs::Real32 volume( void ) const;
+
+    virtual const kvs::Real32 averagedScalar( void ) const;
+
+    virtual const kvs::Real32 scalar( void ) const;
+
+    virtual const kvs::Vector3f gradient( void ) const;
 
 public:
 
-    virtual const kvs::Vector3f randomSampling( void );
+    const kvs::Vector3f* vertices( void ) const;
 
-    virtual const kvs::Real32 volume( void );
-
-    virtual const kvs::Real32 averagedScalar( void );
-
-    virtual const kvs::Real32 scalar( void );
-
-    virtual const kvs::Vector3f gradient( void );
-
-public:
+    const T* scalars( void ) const;
 
     const kvs::Vector3f globalPoint( void ) const;
 
@@ -177,7 +181,7 @@ inline void CellBase<T>::bindCell( const kvs::UInt32 index )
  */
 /*===========================================================================*/
 template <typename T>
-inline void CellBase<T>::setGlobalPoint( const kvs::Vector3f& global )
+inline void CellBase<T>::setGlobalPoint( const kvs::Vector3f& global ) const
 {
     m_global_point = global;
 
@@ -191,7 +195,7 @@ inline void CellBase<T>::setGlobalPoint( const kvs::Vector3f& global )
  */
 /*===========================================================================*/
 template <typename T>
-inline void CellBase<T>::setLocalPoint( const kvs::Vector3f& local )
+inline void CellBase<T>::setLocalPoint( const kvs::Vector3f& local ) const
 {
     m_local_point = local;
 
@@ -206,7 +210,7 @@ inline void CellBase<T>::setLocalPoint( const kvs::Vector3f& local )
  */
 /*===========================================================================*/
 template <typename T>
-inline const kvs::Vector3f CellBase<T>::transformGlobalToLocal( const kvs::Vector3f& global )
+inline const kvs::Vector3f CellBase<T>::transformGlobalToLocal( const kvs::Vector3f& global ) const
 {
     const kvs::Vector3f X( global );
 
@@ -238,7 +242,7 @@ inline const kvs::Vector3f CellBase<T>::transformGlobalToLocal( const kvs::Vecto
  */
 /*===========================================================================*/
 template <typename T>
-inline const kvs::Vector3f CellBase<T>::transformLocalToGlobal( const kvs::Vector3f& local )
+inline const kvs::Vector3f CellBase<T>::transformLocalToGlobal( const kvs::Vector3f& local ) const
 {
     kvs::IgnoreUnusedVariable( local );
 
@@ -265,7 +269,7 @@ inline const kvs::Vector3f CellBase<T>::transformLocalToGlobal( const kvs::Vecto
  */
 /*===========================================================================*/
 template <typename T>
-inline const kvs::Vector3f CellBase<T>::randomSampling( void )
+inline const kvs::Vector3f CellBase<T>::randomSampling( void ) const
 {
     kvsMessageError("'randomSampling' is not implemented.");
     return( kvs::Vector3f( 0.0f, 0.0f, 0.0f ) );
@@ -278,7 +282,7 @@ inline const kvs::Vector3f CellBase<T>::randomSampling( void )
  */
 /*===========================================================================*/
 template <typename T>
-inline const kvs::Real32 CellBase<T>::volume( void )
+inline const kvs::Real32 CellBase<T>::volume( void ) const
 {
     kvsMessageError("'volume' is not implemented.");
     return( kvs::Real32( 0.0f ) );
@@ -291,7 +295,7 @@ inline const kvs::Real32 CellBase<T>::volume( void )
  */
 /*===========================================================================*/
 template <typename T>
-inline const kvs::Real32 CellBase<T>::averagedScalar( void )
+inline const kvs::Real32 CellBase<T>::averagedScalar( void ) const
 {
     const size_t nnodes = m_nnodes;
     const kvs::Real32 w = 1.0f / nnodes;
@@ -311,7 +315,7 @@ inline const kvs::Real32 CellBase<T>::averagedScalar( void )
  */
 /*===========================================================================*/
 template <typename T>
-inline const kvs::Real32 CellBase<T>::scalar( void )
+inline const kvs::Real32 CellBase<T>::scalar( void ) const
 {
     const size_t nnodes = m_nnodes;
     const float* N = m_interpolation_functions;
@@ -332,7 +336,7 @@ inline const kvs::Real32 CellBase<T>::scalar( void )
  */
 /*===========================================================================*/
 template <typename T>
-inline const kvs::Vector3f CellBase<T>::gradient( void )
+inline const kvs::Vector3f CellBase<T>::gradient( void ) const
 {
     // Calculate a gradient vector in the local coordinate.
     const kvs::UInt32 nnodes = m_nnodes;
@@ -361,6 +365,18 @@ inline const kvs::Vector3f CellBase<T>::gradient( void )
      * rendering process.
      */
     return( -G );
+}
+
+template <typename T>
+inline const kvs::Vector3f* CellBase<T>::vertices( void ) const
+{
+    return( m_vertices );
+}
+
+template <typename T>
+inline const T* CellBase<T>::scalars( void ) const
+{
+    return( m_scalars );
 }
 
 /*===========================================================================*/

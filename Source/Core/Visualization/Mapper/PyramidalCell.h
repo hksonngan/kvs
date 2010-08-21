@@ -58,9 +58,9 @@ public:
 
     void bindCell( const kvs::UInt32 cell );
 
-    const kvs::Vector3f randomSampling( void );
+    const kvs::Vector3f randomSampling( void ) const;
 
-    const kvs::Real32 volume( void );
+    const kvs::Real32 volume( void ) const;
 
 };
 
@@ -195,7 +195,7 @@ inline void PyramidalCell<T>::bindCell( const kvs::UInt32 index )
  */
 /*===========================================================================*/
 template <typename T>
-inline const kvs::Real32 PyramidalCell<T>::volume( void )
+inline const kvs::Real32 PyramidalCell<T>::volume( void ) const
 {
     return( float( m_pyramid.x() * m_pyramid.y() * m_pyramid.z() / 3 ));
 }
@@ -207,7 +207,7 @@ inline const kvs::Real32 PyramidalCell<T>::volume( void )
  */
 /*===========================================================================*/
 template <typename T>
-const kvs::Vector3f PyramidalCell<T>::randomSampling( void )
+const kvs::Vector3f PyramidalCell<T>::randomSampling( void ) const
 {
     // Generate a point in the local coordinate.
     const float s = BaseClass::randomNumber();

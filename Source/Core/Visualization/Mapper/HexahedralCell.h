@@ -52,9 +52,9 @@ public:
 
     const kvs::Real32* differentialFunctions( const kvs::Vector3f& point ) const;
 
-    const kvs::Vector3f randomSampling( void );
+    const kvs::Vector3f randomSampling( void ) const;
 
-    const kvs::Real32 volume( void );
+    const kvs::Real32 volume( void ) const;
 };
 
 /*===========================================================================*/
@@ -168,7 +168,7 @@ inline const kvs::Real32* HexahedralCell<T>::differentialFunctions( const kvs::V
  */
 /*===========================================================================*/
 template <typename T>
-const kvs::Vector3f HexahedralCell<T>::randomSampling( void )
+const kvs::Vector3f HexahedralCell<T>::randomSampling( void ) const
 {
     // Generate a point in the local coordinate.
     const float s = BaseClass::randomNumber();
@@ -189,7 +189,7 @@ const kvs::Vector3f HexahedralCell<T>::randomSampling( void )
  */
 /*===========================================================================*/
 template <typename T>
-inline const kvs::Real32 HexahedralCell<T>::volume( void )
+inline const kvs::Real32 HexahedralCell<T>::volume( void ) const
 {
     const size_t resolution = 3;
     const float sampling_length = 1.0f / (float)resolution;

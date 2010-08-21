@@ -147,13 +147,13 @@ const bool TransferFunction::hasRange( void ) const
     return( m_color_map.hasRange() && m_opacity_map.hasRange() );
 }
 
-const bool TransferFunction::minValue( void ) const
+const float TransferFunction::minValue( void ) const
 {
     KVS_ASSERT( m_color_map.minValue() == m_opacity_map.minValue() );
     return( m_color_map.minValue() );
 }
 
-const bool TransferFunction::maxValue( void ) const
+const float TransferFunction::maxValue( void ) const
 {
     KVS_ASSERT( m_color_map.maxValue() == m_opacity_map.maxValue() );
     return( m_color_map.maxValue() );

@@ -67,9 +67,9 @@ public:
 
     const bool hasRange( void ) const;
 
-    const bool minValue( void ) const;
+    const float minValue( void ) const;
 
-    const bool maxValue( void ) const;
+    const float maxValue( void ) const;
 
 public:
 

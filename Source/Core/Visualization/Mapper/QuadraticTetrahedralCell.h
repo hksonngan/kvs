@@ -52,9 +52,9 @@ public:
 
     const kvs::Real32* differentialFunctions( const kvs::Vector3f& point ) const;
 
-    const kvs::Vector3f randomSampling( void );
+    const kvs::Vector3f randomSampling( void ) const;
 
-    const kvs::Real32 volume( void );
+    const kvs::Real32 volume( void ) const;
 };
 
 /*===========================================================================*/
@@ -170,7 +170,7 @@ inline const kvs::Real32* QuadraticTetrahedralCell<T>::differentialFunctions( co
  */
 /*===========================================================================*/
 template <typename T>
-const kvs::Vector3f QuadraticTetrahedralCell<T>::randomSampling( void )
+const kvs::Vector3f QuadraticTetrahedralCell<T>::randomSampling( void ) const
 {
     // Generate a point in the local coordinate.
     const float s = BaseClass::randomNumber();
@@ -226,7 +226,7 @@ const kvs::Vector3f QuadraticTetrahedralCell<T>::randomSampling( void )
  */
 /*===========================================================================*/
 template <typename T>
-inline const kvs::Real32 QuadraticTetrahedralCell<T>::volume( void )
+inline const kvs::Real32 QuadraticTetrahedralCell<T>::volume( void ) const
 {
     const kvs::Vector3f v0(   0,  0,  0 );
     const kvs::Vector3f v1(   1,  0,  0 );
