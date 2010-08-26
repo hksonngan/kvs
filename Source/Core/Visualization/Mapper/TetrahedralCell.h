@@ -214,16 +214,16 @@ inline const kvs::Real32 TetrahedralCell<T>::volume( void ) const
 template <typename T>
 inline const kvs::Vector3f TetrahedralCell<T>::transformGlobalToLocal( const kvs::Vector3f& point ) const
 {
-    const kvs::Vector3f v0( BaseClass::m_vertices[0] );
-    const kvs::Vector3f v01( BaseClass::m_vertices[1] - v0 );
-    const kvs::Vector3f v02( BaseClass::m_vertices[2] - v0 );
-    const kvs::Vector3f v03( BaseClass::m_vertices[3] - v0 );
+    const kvs::Vector3f v3( BaseClass::m_vertices[3] );
+    const kvs::Vector3f v03( BaseClass::m_vertices[0] - v3 );
+    const kvs::Vector3f v13( BaseClass::m_vertices[1] - v3 );
+    const kvs::Vector3f v23( BaseClass::m_vertices[2] - v3 );
 
-    const kvs::Matrix33f M( v01.x(), v02.x(), v03.x(),
-                            v01.y(), v02.y(), v03.y(),
-                            v01.z(), v02.z(), v03.z() );
+    const kvs::Matrix33f M( v03.x(), v13.x(), v23.x(),
+                            v03.y(), v13.y(), v23.y(),
+                            v03.z(), v13.z(), v23.z() );
 
-    return( M.inverse() * ( point - v0 ) );
+    return( M.inverse() * ( point - v3 ) );
 }
 
 /*===========================================================================*/
@@ -235,16 +235,16 @@ inline const kvs::Vector3f TetrahedralCell<T>::transformGlobalToLocal( const kvs
 template <typename T>
 inline const kvs::Vector3f TetrahedralCell<T>::transformLocalToGlobal( const kvs::Vector3f& point ) const
 {
-    const kvs::Vector3f v0( BaseClass::m_vertices[0] );
-    const kvs::Vector3f v01( BaseClass::m_vertices[1] - v0 );
-    const kvs::Vector3f v02( BaseClass::m_vertices[2] - v0 );
-    const kvs::Vector3f v03( BaseClass::m_vertices[3] - v0 );
+    const kvs::Vector3f v3( BaseClass::m_vertices[3] );
+    const kvs::Vector3f v03( BaseClass::m_vertices[0] - v3 );
+    const kvs::Vector3f v13( BaseClass::m_vertices[1] - v3 );
+    const kvs::Vector3f v23( BaseClass::m_vertices[2] - v3 );
 
-    const kvs::Matrix33f M( v01.x(), v02.x(), v03.x(),
-                            v01.y(), v02.y(), v03.y(),
-                            v01.z(), v02.z(), v03.z() );
+    const kvs::Matrix33f M( v03.x(), v13.x(), v23.x(),
+                            v03.y(), v13.y(), v23.y(),
+                            v03.z(), v13.z(), v23.z() );
 
-    return( M * point + v0 );
+    return( M * point + v3 );
 }
 
 

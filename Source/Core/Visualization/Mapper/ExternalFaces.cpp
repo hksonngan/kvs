@@ -1244,6 +1244,7 @@ void ExternalFaces::calculate_colors( const kvs::StructuredVolumeObject* volume 
 void ExternalFaces::mapping( const kvs::UnstructuredVolumeObject* volume )
 {
     BaseClass::attach_volume( volume );
+    BaseClass::set_range( volume );
     BaseClass::set_min_max_coords( volume, this );
 
     switch ( volume->cellType() )
