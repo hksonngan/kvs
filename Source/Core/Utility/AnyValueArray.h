@@ -197,9 +197,8 @@ public:
     template<typename T>
     void deepCopy( const T* values, const size_t nvalues )
     {
-        memcpy( this->allocate<T>( nvalues ),
-                values,
-                sizeof( T ) * nvalues );
+        void* pvalues = this->template allocate<T>( nvalues );
+        memcpy( pvalues, values, sizeof( T ) * nvalues );
     }
 
 public:

@@ -300,16 +300,14 @@ public:
 
     void deepCopy( const this_type& other )
     {
-        memcpy( this->allocate( other.m_nvalues ),
-                other.m_values,
-                sizeof( value_type ) * m_nvalues );
+        value_type* pvalues = this->allocate( other.m_nvalues );
+        memcpy( pvalues, other.m_values, sizeof( value_type ) * m_nvalues );
     }
 
     void deepCopy( const value_type* values, const size_t nvalues )
     {
-        memcpy( this->allocate( nvalues ),
-                values,
-                sizeof( value_type ) * nvalues );
+        value_type* pvalues = this->allocate( nvalues );
+        memcpy( pvalues, values, sizeof( value_type ) * nvalues );
     }
 
     void fill( const int bit )
