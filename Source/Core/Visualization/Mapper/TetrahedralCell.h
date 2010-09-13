@@ -287,21 +287,21 @@ public:
 
     void bindCell( const kvs::UInt32 cell );
 
-    void setGlobalPoint( const kvs::Vector3f& point );
+    void setGlobalPoint( const kvs::Vector3f& point ) const;
 
-    void setLocalPoint( const kvs::Vector3f& point );
+    void setLocalPoint( const kvs::Vector3f& point ) const;
 
-    const kvs::Vector3f randomSampling( void );
+    const kvs::Vector3f randomSampling( void ) const;
 
-    const kvs::Real32 volume( void );
+    const kvs::Real32 volume( void ) const;
 
-    const kvs::Real32 scalar( void );
+    const kvs::Real32 scalar( void ) const;
 
-    const kvs::Vector3f gradient( void );
+    const kvs::Vector3f gradient( void ) const;
 
-    const kvs::Vector3f transformGlobalToLocal( const kvs::Vector3f& point );
+    const kvs::Vector3f transformGlobalToLocal( const kvs::Vector3f& point ) const;
 
-    const kvs::Vector3f transformLocalToGlobal( const kvs::Vector3f& point );
+    const kvs::Vector3f transformLocalToGlobal( const kvs::Vector3f& point ) const;
 };
 
 /*===========================================================================*/
@@ -390,7 +390,7 @@ inline void TetrahedralCell<T>::bindCell( const kvs::UInt32 index )
  */
 /*===========================================================================*/
 template <typename T>
-inline void TetrahedralCell<T>::setGlobalPoint( const kvs::Vector3f& point )
+inline void TetrahedralCell<T>::setGlobalPoint( const kvs::Vector3f& point ) const
 {
     BaseClass::m_global_point = point;
 }
@@ -402,7 +402,7 @@ inline void TetrahedralCell<T>::setGlobalPoint( const kvs::Vector3f& point )
  */
 /*===========================================================================*/
 template <typename T>
-inline void TetrahedralCell<T>::setLocalPoint( const kvs::Vector3f& point )
+inline void TetrahedralCell<T>::setLocalPoint( const kvs::Vector3f& point ) const
 {
     BaseClass::m_local_point = point;
 }
@@ -414,7 +414,7 @@ inline void TetrahedralCell<T>::setLocalPoint( const kvs::Vector3f& point )
  */
 /*===========================================================================*/
 template <typename T>
-inline const kvs::Real32 TetrahedralCell<T>::volume( void )
+inline const kvs::Real32 TetrahedralCell<T>::volume( void ) const
 {
     const kvs::Vector3f v01( BaseClass::m_vertices[1] - BaseClass::m_vertices[0] );
     const kvs::Vector3f v02( BaseClass::m_vertices[2] - BaseClass::m_vertices[0] );
@@ -430,7 +430,7 @@ inline const kvs::Real32 TetrahedralCell<T>::volume( void )
  */
 /*===========================================================================*/
 template <typename T>
-const kvs::Vector3f TetrahedralCell<T>::randomSampling( void )
+const kvs::Vector3f TetrahedralCell<T>::randomSampling( void ) const
 {
     // Generate a point in the local coordinate.
     const float s = BaseClass::randomNumber();
@@ -486,7 +486,7 @@ const kvs::Vector3f TetrahedralCell<T>::randomSampling( void )
  */
 /*===========================================================================*/
 template <typename T>
-inline const kvs::Real32 TetrahedralCell<T>::scalar( void )
+inline const kvs::Real32 TetrahedralCell<T>::scalar( void ) const
 {
     return( BaseClass::m_global_point.dot( m_coefficients ) + m_constant );
 }
@@ -498,7 +498,7 @@ inline const kvs::Real32 TetrahedralCell<T>::scalar( void )
  */
 /*===========================================================================*/
 template <typename T>
-inline const kvs::Vector3f TetrahedralCell<T>::gradient( void )
+inline const kvs::Vector3f TetrahedralCell<T>::gradient( void ) const
 {
     /* NOTE: The gradient vector of the cell is reversed for shading on the
      * rendering process.
@@ -513,7 +513,7 @@ inline const kvs::Vector3f TetrahedralCell<T>::gradient( void )
  */
 /*===========================================================================*/
 template <typename T>
-inline const kvs::Vector3f TetrahedralCell<T>::transformGlobalToLocal( const kvs::Vector3f& point )
+inline const kvs::Vector3f TetrahedralCell<T>::transformGlobalToLocal( const kvs::Vector3f& point ) const
 {
     const kvs::Vector3f v0( BaseClass::m_vertices[0] );
     const kvs::Vector3f v01( BaseClass::m_vertices[1] - v0 );
@@ -534,7 +534,7 @@ inline const kvs::Vector3f TetrahedralCell<T>::transformGlobalToLocal( const kvs
  */
 /*===========================================================================*/
 template <typename T>
-inline const kvs::Vector3f TetrahedralCell<T>::transformLocalToGlobal( const kvs::Vector3f& point )
+inline const kvs::Vector3f TetrahedralCell<T>::transformLocalToGlobal( const kvs::Vector3f& point ) const
 {
     const kvs::Vector3f v0( BaseClass::m_vertices[0] );
     const kvs::Vector3f v01( BaseClass::m_vertices[1] - v0 );

@@ -361,10 +361,7 @@ inline const kvs::Vector3f CellBase<T>::gradient( void ) const
     const kvs::Matrix33f J = this->JacobiMatrix();
     const kvs::Vector3f G = J.inverse() * g;
 
-    /* NOTE: The gradient vector of the cell is reversed for shading on the
-     * rendering process.
-     */
-    return( -G );
+    return( G );
 }
 
 template <typename T>

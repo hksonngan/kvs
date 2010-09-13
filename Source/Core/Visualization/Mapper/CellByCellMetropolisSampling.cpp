@@ -692,12 +692,14 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::UnstructuredVo
         if( nparticles_in_cell == 0 ) continue;
 
         // Calculate itnitial value
+        /* NOTE: The gradient vector of the cell is reversed for shading on the rendering process.
+         */
         kvs::Vector3f point = cell->randomSampling();
         float         scalar = cell->scalar();
         size_t        degree = static_cast< size_t >( ( scalar - min_value ) * normalize_factor );
         degree = kvs::Math::Clamp<size_t>( degree, 0, max_range );
         float         density = density_map[ degree ];
-        kvs::Vector3f g = cell->gradient();
+        kvs::Vector3f g = -cell->gradient();
 
         kvs::Vector3f point_trial;
         float         scalar_trial;
@@ -713,7 +715,7 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::UnstructuredVo
             degree = static_cast< size_t >( ( cell->scalar() - min_value ) * normalize_factor );
             degree = kvs::Math::Clamp<size_t>( degree, 0, max_range );
             density = density_map[ degree ];
-            g = cell->gradient();
+            g = -cell->gradient();
             if ( !kvs::Math::IsZero( density ) ) break;
         }
 
@@ -728,7 +730,7 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::UnstructuredVo
             degree_trial = static_cast< size_t >( ( scalar_trial - min_value ) * normalize_factor );
             degree_trial = kvs::Math::Clamp<size_t>( degree_trial, 0, max_range );
             density_trial = density_map[ degree_trial ];
-            g_trial = cell->gradient();
+            g_trial = -cell->gradient();
 
             //calculate ratio
             double ratio = density_trial / density;
