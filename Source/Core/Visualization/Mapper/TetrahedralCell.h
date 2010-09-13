@@ -248,7 +248,8 @@ inline const kvs::Vector3f TetrahedralCell<T>::transformLocalToGlobal( const kvs
 }
 
 
-#if 0
+namespace old
+{
 
 /*===========================================================================*/
 /**
@@ -547,7 +548,7 @@ inline const kvs::Vector3f TetrahedralCell<T>::transformLocalToGlobal( const kvs
     return( M * point + v0 );
 }
 
-#endif
+} // end of namespace old
 
 } // end of namespace kvs
 
