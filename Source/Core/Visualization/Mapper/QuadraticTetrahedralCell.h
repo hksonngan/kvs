@@ -68,6 +68,9 @@ inline QuadraticTetrahedralCell<T>::QuadraticTetrahedralCell(
     const kvs::UnstructuredVolumeObject* volume ):
     kvs::CellBase<T>( volume )
 {
+    // Set the initial interpolation functions and differential functions.
+    this->interpolationFunctions( BaseClass::localPoint() );
+    this->differentialFunctions( BaseClass::localPoint() );
 }
 
 /*===========================================================================*/

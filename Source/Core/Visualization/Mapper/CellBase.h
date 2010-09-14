@@ -114,15 +114,19 @@ inline CellBase<T>::CellBase(
     {
         m_vertices = new kvs::Vector3f [nnodes];
         if ( !m_vertices ) throw "Cannot allocate memory for 'm_vertices'";
+        memset( m_vertices, 0, sizeof( kvs::Vector3f ) * nnodes );
 
-        m_scalars  = new T [nnodes];
+        m_scalars = new T [nnodes];
         if ( !m_scalars ) throw "Cannot allocate memory for 'm_scalars'";
+        memset( m_scalars, 0, sizeof( T ) * nnodes );
 
         m_interpolation_functions = new kvs::Real32 [nnodes];
         if ( !m_interpolation_functions ) throw "Cannot allocate memory for 'm_interpolation_functions'";
+        memset( m_interpolation_functions, 0, sizeof( kvs::Real32 ) * nnodes );
 
         m_differential_functions  = new kvs::Real32 [nnodes*dimension];
         if ( !m_differential_functions ) throw "Cannot allocate memory for 'm_differential_functions'";
+        memset( m_differential_functions, 0, sizeof( kvs::Real32 ) * nnodes * dimension );
     }
     catch( char* error_message )
     {
@@ -359,9 +363,11 @@ inline const kvs::Vector3f CellBase<T>::gradient( void ) const
 
     // Calculate a gradient vector in the global coordinate.
     const kvs::Matrix33f J = this->JacobiMatrix();
-    const kvs::Vector3f G = J.inverse() * g;
 
-    return( G );
+    float determinant = 0.0f;
+    const kvs::Vector3f G = J.inverse( &determinant ) * g;
+
+    return( kvs::Math::IsZero( determinant ) ? kvs::Vector3f( 0.0f, 0.0f, 0.0f ) : G );
 }
 
 template <typename T>

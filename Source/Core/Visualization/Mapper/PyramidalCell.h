@@ -75,6 +75,9 @@ inline PyramidalCell<T>::PyramidalCell( const kvs::UnstructuredVolumeObject* vol
     kvs::CellBase<T>( volume ),
     m_pyramid( 0, 0, 0 )
 {
+    // Set the initial interpolation functions and differential functions.
+    this->interpolationFunctions( BaseClass::localPoint() );
+    this->differentialFunctions( BaseClass::localPoint() );
 }
 
 /*===========================================================================*/
