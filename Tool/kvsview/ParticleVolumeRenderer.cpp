@@ -20,6 +20,8 @@
 #include <kvs/PipelineModule>
 #include <kvs/VisualizationPipeline>
 #include <kvs/CellByCellMetropolisSampling>
+#include <kvs/CellByCellUniformSampling>
+#include <kvs/CellByCellLayeredSampling>
 #include <kvs/ParticleVolumeRenderer>
 #include <kvs/Bounds>
 #include <kvs/PaintEventListener>
@@ -52,11 +54,12 @@ inline const size_t GetRevisedSubpixelLevel(
 template <typename Renderer>
 const void InitializeParticleVolumeRenderer(
     const kvsview::ParticleVolumeRenderer::Argument& arg,
+    const kvs::TransferFunction& tfunc,
     kvs::PipelineModule& renderer )
 {
     // Transfer function.
-    const kvs::TransferFunction& function = arg.transferFunction();
-    renderer.template get<Renderer>()->setTransferFunction( function );
+//    const kvs::TransferFunction& function = arg.transferFunction();
+    renderer.template get<Renderer>()->setTransferFunction( tfunc );
 
     // Shading on/off.
     const bool noshading = arg.noShading();
@@ -186,9 +189,14 @@ Argument::Argument( int argc, char** argv ):
     add_option( "s", "Subpixel level. (default: 1)", 1, false );
     add_option( "r", "Repetition level. (default: 1)", 1, false );
     add_option( "t", "Transfer function file. (optional: <filename>)", 1, false );
+    add_option( "T", "Transfer function file with range adjustment. (optional: <filename>)", 1, false );
     add_option( "noshading", "Disable shading. (optional)", 0, false );
     add_option( "nolod", "Disable Level-of-Detail control. (optional)", 0, false );
     add_option( "nogpu", "Disable GPU rendering. (optional)", 0, false );
+    add_option( "sampling", "Sampling type. (default: 0)\n"
+                "\t      0 = Cell-by-cell uniform sampling\n"
+                "\t      1 = Cell-by-cell metropolis sampling\n"
+                "\t      2 = Cell-by-cell layered sampling", 1, false );
     add_option( "ka", "Coefficient of the ambient color. (default: lambert=0.4, phong=0.3)", 1, false );
     add_option( "kd", "Coefficient of the diffuse color. (default: lambert=0.6, phong=0.5)", 1, false );
     add_option( "ks", "Coefficient of the specular color. (default: 0.8)", 1, false );
@@ -197,6 +205,14 @@ Argument::Argument( int argc, char** argv ):
                 "\t      0 = Lambert shading\n"
                 "\t      1 = Phong shading\n"
                 "\t      2 = Blinn-Phong shading", 1, false );
+}
+
+const int Argument::sampling( void ) const
+{
+    const int default_value = 0;
+
+    if ( this->hasOption("sampling") ) return( this->optionValue<int>("sampling") );
+    else return( default_value );
 }
 
 const int Argument::shader( void ) const
@@ -280,12 +296,19 @@ const size_t Argument::repetitionLevel( void ) const
  *  @return transfer function
  */
 /*===========================================================================*/
-const kvs::TransferFunction Argument::transferFunction( void ) const
+const kvs::TransferFunction Argument::transferFunction( const kvs::VolumeObjectBase* volume ) const
 {
     if ( this->hasOption("t") )
     {
         const std::string filename = this->optionValue<std::string>("t");
         return( kvs::TransferFunction( filename ) );
+    }
+    else if ( this->hasOption("T") )
+    {
+        const std::string filename = this->optionValue<std::string>("T");
+        kvs::TransferFunction tfunc( filename );
+        tfunc.adjustRange( volume );
+        return( tfunc );
     }
     else
     {
@@ -355,18 +378,23 @@ const bool Main::exec( void )
         std::cout << std::endl;
     }
 
+    // Pointer to the volume object data.
+    const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( pipe.object() );
+
+    // Transfer function.
+    const kvs::TransferFunction tfunc = arg.transferFunction( volume );
+
     // Label (fps).
     ParticleVolumeRenderer::Label label( &screen );
     label.show();
 
     // Legend bar.
     ParticleVolumeRenderer::LegendBar legend_bar( &screen );
-    legend_bar.setColorMap( arg.transferFunction().colorMap() );
-    if ( !arg.transferFunction().hasRange() )
+    legend_bar.setColorMap( tfunc.colorMap() );
+    if ( !tfunc.hasRange() )
     {
-        const kvs::VolumeObjectBase* object = kvs::VolumeObjectBase::DownCast( pipe.object() );
-        const kvs::Real32 min_value = object->minValue();
-        const kvs::Real32 max_value = object->maxValue();
+        const kvs::Real32 min_value = volume->minValue();
+        const kvs::Real32 max_value = volume->maxValue();
         legend_bar.setRange( min_value, max_value );
     }
     legend_bar.show();
@@ -398,28 +426,64 @@ const bool Main::exec( void )
         screen.registerObject( &p );
     }
 
-    // Set a mapper (CellByCellMetropolisSampling)
-    kvs::PipelineModule mapper( new kvs::CellByCellMetropolisSampling );
+    // Set a mapper (CellByCellxxxSampling)
+    switch ( arg.sampling() )
     {
-        const kvs::TransferFunction& function = arg.transferFunction();
+    case 1:
+    {
         const size_t subpixel_level = arg.subpixelLevel();
         const size_t repetition_level = arg.repetitionLevel();
         const size_t level = ::GetRevisedSubpixelLevel( subpixel_level, repetition_level );
         const float step = 0.5f;
         const float depth = 0.0f;
-
+        kvs::PipelineModule mapper( new kvs::CellByCellMetropolisSampling );
         mapper.get<kvs::CellByCellMetropolisSampling>()->attachCamera( screen.camera() );
-        mapper.get<kvs::CellByCellMetropolisSampling>()->setTransferFunction( function );
+        mapper.get<kvs::CellByCellMetropolisSampling>()->setTransferFunction( tfunc );
         mapper.get<kvs::CellByCellMetropolisSampling>()->setSubpixelLevel( level );
         mapper.get<kvs::CellByCellMetropolisSampling>()->setSamplingStep( step );
         mapper.get<kvs::CellByCellMetropolisSampling>()->setObjectDepth( depth );
+        pipe.connect( mapper );
+        break;
+    }
+    case 2:
+    {
+        const size_t subpixel_level = arg.subpixelLevel();
+        const size_t repetition_level = arg.repetitionLevel();
+        const size_t level = ::GetRevisedSubpixelLevel( subpixel_level, repetition_level );
+        const float step = 0.5f;
+        const float depth = 0.0f;
+        kvs::PipelineModule mapper( new kvs::CellByCellLayeredSampling );
+        mapper.get<kvs::CellByCellLayeredSampling>()->attachCamera( screen.camera() );
+        mapper.get<kvs::CellByCellLayeredSampling>()->setTransferFunction( tfunc );
+        mapper.get<kvs::CellByCellLayeredSampling>()->setSubpixelLevel( level );
+        mapper.get<kvs::CellByCellLayeredSampling>()->setSamplingStep( step );
+        mapper.get<kvs::CellByCellLayeredSampling>()->setObjectDepth( depth );
+        pipe.connect( mapper );
+        break;
+    }
+    default:
+    {
+        const size_t subpixel_level = arg.subpixelLevel();
+        const size_t repetition_level = arg.repetitionLevel();
+        const size_t level = ::GetRevisedSubpixelLevel( subpixel_level, repetition_level );
+        const float step = 0.5f;
+        const float depth = 0.0f;
+        kvs::PipelineModule mapper( new kvs::CellByCellUniformSampling );
+        mapper.get<kvs::CellByCellUniformSampling>()->attachCamera( screen.camera() );
+        mapper.get<kvs::CellByCellUniformSampling>()->setTransferFunction( tfunc );
+        mapper.get<kvs::CellByCellUniformSampling>()->setSubpixelLevel( level );
+        mapper.get<kvs::CellByCellUniformSampling>()->setSamplingStep( step );
+        mapper.get<kvs::CellByCellUniformSampling>()->setObjectDepth( depth );
+        pipe.connect( mapper );
+        break;
+    }
     }
 
     // Set a renderer (ParticleVolumeRenderer).
     if ( arg.noGPU() )
     {
         kvs::PipelineModule renderer( new kvs::ParticleVolumeRenderer );
-        ::InitializeParticleVolumeRenderer<kvs::ParticleVolumeRenderer>( arg, renderer );
+        ::InitializeParticleVolumeRenderer<kvs::ParticleVolumeRenderer>( arg, tfunc, renderer );
 
         // Subpixel level.
         const size_t subpixel_level = arg.subpixelLevel();
@@ -427,14 +491,15 @@ const bool Main::exec( void )
         const size_t level = ::GetRevisedSubpixelLevel( subpixel_level, repetition_level );
         renderer.get<kvs::ParticleVolumeRenderer>()->setSubpixelLevel( level );
 
-        if ( is_volume ) pipe.connect( mapper ).connect( renderer );
-        else pipe.connect( renderer );
+//        if ( is_volume ) pipe.connect( mapper ).connect( renderer );
+//        else pipe.connect( renderer );
+        pipe.connect( renderer );
     }
 #if defined( KVS_SUPPORT_GLEW )
     else
     {
         kvs::PipelineModule renderer( new kvs::glew::ParticleVolumeRenderer );
-        ::InitializeParticleVolumeRenderer<kvs::glew::ParticleVolumeRenderer>( arg, renderer );
+        ::InitializeParticleVolumeRenderer<kvs::glew::ParticleVolumeRenderer>( arg, tfunc, renderer );
 
         // Subpixel level and repetition level.
         const size_t subpixel_level = arg.subpixelLevel();
@@ -447,8 +512,9 @@ const bool Main::exec( void )
             renderer.get<kvs::glew::ParticleVolumeRenderer>()->enableLODControl();
         }
 
-        if ( is_volume ) pipe.connect( mapper ).connect( renderer );
-        else pipe.connect( renderer );
+//        if ( is_volume ) pipe.connect( mapper ).connect( renderer );
+//        else pipe.connect( renderer );
+        pipe.connect( renderer );
     }
 #endif
 

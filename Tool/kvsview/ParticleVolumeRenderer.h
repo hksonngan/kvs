@@ -43,6 +43,8 @@ public:
 
 public:
 
+    const int sampling( void ) const;
+
     const int shader( void ) const;
 
     const bool noShading( void ) const;
@@ -63,7 +65,7 @@ public:
 
     const size_t repetitionLevel( void ) const;
 
-    const kvs::TransferFunction transferFunction( void ) const;
+    const kvs::TransferFunction transferFunction( const kvs::VolumeObjectBase* volume ) const;
 };
 
 /*===========================================================================*/

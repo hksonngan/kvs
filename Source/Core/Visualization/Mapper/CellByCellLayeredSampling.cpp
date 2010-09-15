@@ -107,6 +107,7 @@ CellByCellLayeredSampling::CellByCellLayeredSampling(
 CellByCellLayeredSampling::~CellByCellLayeredSampling( void )
 {
     m_density_map.deallocate();
+    if ( m_pregenerated_particles ) delete m_pregenerated_particles;
 }
 
 /*===========================================================================*/
@@ -468,6 +469,7 @@ void CellByCellLayeredSampling::pregenerate_particles( const size_t nparticles )
         }
     }
 
+    if ( m_pregenerated_particles ) delete m_pregenerated_particles;
     m_pregenerated_particles = new kvs::PointObject( coords );
 }
 
