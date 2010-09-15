@@ -15,9 +15,9 @@
 #define KVS__TRANSFER_FUNCTION_H_INCLUDE
 
 #include <kvs/ClassName>
-
 #include <kvs/ColorMap>
 #include <kvs/OpacityMap>
+#include <kvs/VolumeObjectBase>
 
 
 namespace kvs
@@ -64,6 +64,12 @@ public:
     void setOpacityMap( const kvs::OpacityMap& opacity_map );
 
     void setRange( const float min_value, const float max_value );
+
+    void setRange( const kvs::VolumeObjectBase* volume );
+
+    void adjustRange( const float min_value, const float max_value );
+
+    void adjustRange( const kvs::VolumeObjectBase* volume );
 
     const bool hasRange( void ) const;
 

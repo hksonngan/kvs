@@ -142,6 +142,69 @@ void TransferFunction::setRange( const float min_value, const float max_value )
     m_opacity_map.setRange( min_value, max_value );
 }
 
+void TransferFunction::setRange( const kvs::VolumeObjectBase* volume )
+{
+    const float min_value = static_cast<float>( volume->minValue() );
+    const float max_value = static_cast<float>( volume->maxValue() );
+    this->setRange( min_value, max_value );
+}
+
+void TransferFunction::adjustRange( const float min_value, const float max_value )
+{
+    if ( this->hasRange() )
+    {
+        const float src_min_value = this->minValue();
+        const float src_max_value = this->maxValue();
+
+        // Adjust color map.
+        {
+            kvs::ColorMap::Points::const_iterator point = m_color_map.points().begin();
+            kvs::ColorMap::Points::const_iterator last = m_color_map.points().end();
+            while ( point != last )
+            {
+                const float value = point->first;
+                const kvs::RGBColor color = point->second;
+
+                const float normalized_value = ( value - src_min_value ) / ( src_max_value - src_min_value );
+                const float adjusted_value = normalized_value * ( max_value - min_value ) + min_value;
+
+                m_color_map.removePoint( value );
+                m_color_map.addPoint( adjusted_value, color );
+
+                point++;
+            }
+        }
+
+        // Adjust opacity map.
+        {
+            kvs::OpacityMap::Points::const_iterator point = m_opacity_map.points().begin();
+            kvs::OpacityMap::Points::const_iterator last = m_opacity_map.points().end();
+            while ( point != last )
+            {
+                const float value = point->first;
+                const float opacity = point->second;
+
+                const float normalized_value = ( value - src_min_value ) / ( src_max_value - src_min_value );
+                const float adjusted_value = normalized_value * ( max_value - min_value ) + min_value;
+
+                m_opacity_map.removePoint( value );
+                m_opacity_map.addPoint( adjusted_value, opacity );
+
+                point++;
+            }
+        }
+    }
+
+    this->setRange( min_value, max_value );
+}
+
+void TransferFunction::adjustRange( const kvs::VolumeObjectBase* volume )
+{
+    const float min_value = static_cast<float>( volume->minValue() );
+    const float max_value = static_cast<float>( volume->maxValue() );
+    this->adjustRange( min_value, max_value );
+}
+
 const bool TransferFunction::hasRange( void ) const
 {
     return( m_color_map.hasRange() && m_opacity_map.hasRange() );
