@@ -158,6 +158,7 @@ Visualization/Importer/UnstructuredVolumeImporter
 Visualization/Mapper/ArrowGlyph
 Visualization/Mapper/CellAdjacencyGraph
 Visualization/Mapper/CellBase
+Visualization/Mapper/CellByCellLayeredSampling
 Visualization/Mapper/CellByCellMetropolisSampling
 Visualization/Mapper/CellByCellParticleGenerator
 Visualization/Mapper/CellByCellUniformSampling

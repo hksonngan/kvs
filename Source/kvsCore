@@ -158,6 +158,7 @@
 #include <Core/Visualization/Mapper/ArrowGlyph.h>
 #include <Core/Visualization/Mapper/CellAdjacencyGraph.h>
 #include <Core/Visualization/Mapper/CellBase.h>
+#include <Core/Visualization/Mapper/CellByCellLayeredSampling.h>
 #include <Core/Visualization/Mapper/CellByCellMetropolisSampling.h>
 #include <Core/Visualization/Mapper/CellByCellParticleGenerator.h>
 #include <Core/Visualization/Mapper/CellByCellUniformSampling.h>
