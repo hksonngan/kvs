@@ -192,6 +192,7 @@ $(OUTDIR)/./Visualization/Mapper/ArrowGlyph.o \
 $(OUTDIR)/./Visualization/Mapper/CellAdjacencyGraph.o \
 $(OUTDIR)/./Visualization/Mapper/CellByCellLayeredSampling.o \
 $(OUTDIR)/./Visualization/Mapper/CellByCellMetropolisSampling.o \
+$(OUTDIR)/./Visualization/Mapper/CellByCellRejectionSampling.o \
 $(OUTDIR)/./Visualization/Mapper/CellByCellUniformSampling.o \
 $(OUTDIR)/./Visualization/Mapper/ColorMap.o \
 $(OUTDIR)/./Visualization/Mapper/DiamondGlyph.o \

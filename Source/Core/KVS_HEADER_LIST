@@ -161,6 +161,7 @@ Visualization/Mapper/CellBase
 Visualization/Mapper/CellByCellLayeredSampling
 Visualization/Mapper/CellByCellMetropolisSampling
 Visualization/Mapper/CellByCellParticleGenerator
+Visualization/Mapper/CellByCellRejectionSampling
 Visualization/Mapper/CellByCellUniformSampling
 Visualization/Mapper/ColorMap
 Visualization/Mapper/DiamondGlyph

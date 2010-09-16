@@ -44,6 +44,8 @@ public:
 
     void attachPoint( const kvs::Vector3f& point );
 
+    const kvs::UInt32* indices( void ) const;
+
     template <typename T>
     const kvs::Real32 scalar( void ) const;
 
@@ -97,6 +99,11 @@ inline void TrilinearInterpolator::attachPoint( const kvs::Vector3f& point )
     m_weight[5] = zx - xyz;
     m_weight[6] = xyz;
     m_weight[7] = yz - xyz;
+}
+
+inline const kvs::UInt32* TrilinearInterpolator::indices( void ) const
+{
+    return( m_index );
 }
 
 template <typename T>

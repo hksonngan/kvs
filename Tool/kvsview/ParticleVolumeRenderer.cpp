@@ -21,6 +21,7 @@
 #include <kvs/VisualizationPipeline>
 #include <kvs/CellByCellMetropolisSampling>
 #include <kvs/CellByCellUniformSampling>
+#include <kvs/CellByCellRejectionSampling>
 #include <kvs/CellByCellLayeredSampling>
 #include <kvs/ParticleVolumeRenderer>
 #include <kvs/Bounds>
@@ -196,7 +197,8 @@ Argument::Argument( int argc, char** argv ):
     add_option( "sampling", "Sampling type. (default: 0)\n"
                 "\t      0 = Cell-by-cell uniform sampling\n"
                 "\t      1 = Cell-by-cell metropolis sampling\n"
-                "\t      2 = Cell-by-cell layered sampling", 1, false );
+                "\t      2 = Cell-by-cell rejection sampling\n"
+                "\t      3 = Cell-by-cell layered sampling", 1, false );
     add_option( "ka", "Coefficient of the ambient color. (default: lambert=0.4, phong=0.3)", 1, false );
     add_option( "kd", "Coefficient of the diffuse color. (default: lambert=0.6, phong=0.5)", 1, false );
     add_option( "ks", "Coefficient of the specular color. (default: 0.8)", 1, false );
@@ -446,6 +448,22 @@ const bool Main::exec( void )
         break;
     }
     case 2:
+    {
+        const size_t subpixel_level = arg.subpixelLevel();
+        const size_t repetition_level = arg.repetitionLevel();
+        const size_t level = ::GetRevisedSubpixelLevel( subpixel_level, repetition_level );
+        const float step = 0.5f;
+        const float depth = 0.0f;
+        kvs::PipelineModule mapper( new kvs::CellByCellRejectionSampling );
+        mapper.get<kvs::CellByCellRejectionSampling>()->attachCamera( screen.camera() );
+        mapper.get<kvs::CellByCellRejectionSampling>()->setTransferFunction( tfunc );
+        mapper.get<kvs::CellByCellRejectionSampling>()->setSubpixelLevel( level );
+        mapper.get<kvs::CellByCellRejectionSampling>()->setSamplingStep( step );
+        mapper.get<kvs::CellByCellRejectionSampling>()->setObjectDepth( depth );
+        pipe.connect( mapper );
+        break;
+    }
+    case 3:
     {
         const size_t subpixel_level = arg.subpixelLevel();
         const size_t repetition_level = arg.repetitionLevel();

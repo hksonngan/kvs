@@ -503,7 +503,7 @@ void CellByCellLayeredSampling::uniform_sampling(
         const kvs::RGBColor color( tfunc.colorMap().at( scalar ) );
 
         // Calculate a normal.
-        const Vector3f normal( cell->gradient() );
+        const Vector3f normal( -cell->gradient() );
 
         // set coord, color, and normal to point object( this ).
         coords->push_back( coord.x() );
@@ -560,7 +560,7 @@ void CellByCellLayeredSampling::rejection_sampling(
             const kvs::RGBColor color( tfunc.colorMap().at( scalar ) );
 
             // Calculate a normal.
-            const Vector3f normal( cell->gradient() );
+            const Vector3f normal( -cell->gradient() );
 
             // set coord, color, and normal to point object( this ).
             coords->push_back( coord.x() );
@@ -644,9 +644,9 @@ void CellByCellLayeredSampling::roulette_selection(
         colors->push_back( color.g() );
         colors->push_back( color.b() );
 
-        normals->push_back( g.x() );
-        normals->push_back( g.y() );
-        normals->push_back( g.z() );
+        normals->push_back( -g.x() );
+        normals->push_back( -g.y() );
+        normals->push_back( -g.z() );
     }
 }
 
