@@ -108,6 +108,18 @@
 #define KVS_COMPILER_VERSION_GREATER_OR_EQUAL( major, minor ) \
     ( 9 > ( major ) || ( 9 == ( major ) && 0 >= ( minor ) ) )
 
+#elif ( _MSC_VER == 1600 )
+#define KVS_COMPILER_VERSION "10.00"
+#define KVS_COMPILER_VERSION_IS( major, minor ) ( 10 == ( major ) && 0 == ( minor ) )
+#define KVS_COMPILER_VERSION_LESS_THAN( major, minor ) \
+    ( 10 < ( major ) || ( 10 == ( major ) && 0 < ( minor ) ) )
+#define KVS_COMPILER_VERSION_LESS_OR_EQUAL( major, minor ) \
+    ( 10 < ( major ) || ( 10 == ( major ) && 0 <= ( minor ) ) )
+#define KVS_COMPILER_VERSION_GREATER_THAN( major, minor ) \
+    ( 10 > ( major ) || ( 10 == ( major ) && 0 > ( minor ) ) )
+#define KVS_COMPILER_VERSION_GREATER_OR_EQUAL( major, minor ) \
+    ( 10 > ( major ) || ( 10 == ( major ) && 0 >= ( minor ) ) )
+
 #else
 #define KVS_COMPILER_VERSION "unknown"
 #define KVS_COMPILER_VERSION_IS( major, minor )
