@@ -223,8 +223,8 @@ DEFINITIONS = $(DEFINITIONS) /DKVS_SUPPORT_CUDA
 #=============================================================================
 #  Linker option.
 #=============================================================================
-LDFLAGS =
+LDFLAGS = /MANIFEST
 
 !IFDEF NOCONSOLE
-LDFLAGS = /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup
+LDFLAGS = /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup /MANIFEST
 !ENDIF
