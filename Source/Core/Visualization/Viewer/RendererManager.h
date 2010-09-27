@@ -14,6 +14,7 @@
 #ifndef KVS_CORE_RENDERER_MANAGER_H_INCLUDE
 #define KVS_CORE_RENDERER_MANAGER_H_INCLUDE
 
+#include <string>
 #include <list>
 #include <map>
 #include <kvs/ClassName>
@@ -57,13 +58,19 @@ public:
 
     void erase( int renderer_id, bool delete_flg = true );
 
+    void erase( std::string renderer_name, bool delete_flg = true );
+
     void change( int renderer_id, kvs::RendererBase* renderer, bool delete_flg = true );
+
+    void change( std::string renderer_name, kvs::RendererBase* renderer, bool delete_flg = true );
 
     const int nrenderers( void ) const;
 
     kvs::RendererBase* renderer( void );
 
     kvs::RendererBase* renderer( int renderer_id );
+
+    kvs::RendererBase* renderer( std::string renderer_name );
 
     const bool hasRenderer( void ) const;
 };

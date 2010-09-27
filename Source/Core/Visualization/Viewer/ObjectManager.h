@@ -14,6 +14,7 @@
 #ifndef KVS_CORE_OBJECT_MANAGER_H_INCLUDE
 #define KVS_CORE_OBJECT_MANAGER_H_INCLUDE
 
+#include <string>
 #include <map>
 #include <kvs/ClassName>
 #include <kvs/ObjectBase>
@@ -71,13 +72,19 @@ public:
 
     void erase( int obj_id, bool delete_flg = true );
 
+    void erase( std::string obj_name, bool delete_flg = true );
+
     void change( int obj_id, kvs::ObjectBase* obj, bool delete_flg = true );
+
+    void change( std::string obj_name, kvs::ObjectBase* obj, bool delete_flg = true );
 
     const int nobjects( void ) const;
 
     kvs::ObjectBase* object( void );
 
     kvs::ObjectBase* object( int obj_id );
+
+    kvs::ObjectBase* object( std::string obj_name );
 
     const bool hasObject( void ) const;
 

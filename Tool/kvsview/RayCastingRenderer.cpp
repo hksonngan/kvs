@@ -59,6 +59,10 @@ const void Initialize(
     const kvsview::RayCastingRenderer::Argument& arg,
     kvs::PipelineModule& renderer )
 {
+    // Renderer name.
+    const std::string renderer_name("RayCastingRenderer");
+    renderer.template get<Renderer>()->setName( renderer_name );
+
     // Sampling step.
     const float step = arg.step();
     renderer.template get<Renderer>()->setSamplingStep( step );
@@ -117,7 +121,8 @@ public:
 
     void apply( void )
     {
-        const kvs::RendererBase* base = screen()->rendererManager()->renderer();
+        const std::string renderer_name("RayCastingRenderer");
+        const kvs::RendererBase* base = screen()->rendererManager()->renderer( renderer_name );
         if ( m_no_gpu )
         {
             kvs::RayCastingRenderer* renderer = (kvs::RayCastingRenderer*)base;

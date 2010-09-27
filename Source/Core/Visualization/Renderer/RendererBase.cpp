@@ -23,6 +23,7 @@ namespace kvs
  */
 /*==========================================================================*/
 RendererBase::RendererBase( void ) :
+    m_name("unknown"),
     m_shading_flag( true )
 {
 }
@@ -34,6 +35,28 @@ RendererBase::RendererBase( void ) :
 /*==========================================================================*/
 RendererBase::~RendererBase( void )
 {
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Set renderer name.
+ *  @param  name [in] renderer name
+ */
+/*===========================================================================*/
+void RendererBase::setName( const std::string& name )
+{
+    m_name = name;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns renderer name.
+ *  @return renderer name
+ */
+/*===========================================================================*/
+const std::string& RendererBase::name( void ) const
+{
+    return( m_name );
 }
 
 /*==========================================================================*/

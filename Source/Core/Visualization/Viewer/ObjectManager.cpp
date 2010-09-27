@@ -207,6 +207,41 @@ void ObjectManager::erase( int obj_id, bool delete_flg )
 
 /*==========================================================================*/
 /**
+ *  Erase the object by a specificated object name.
+ *  @param obj_name [in] object name
+ *  @param delete_flg [in] deleting the allocated memory flag
+ */
+/*==========================================================================*/
+void ObjectManager::erase( std::string obj_name, bool delete_flg )
+{
+    ObjectMap::iterator map_id = m_object_map.begin();
+    ObjectMap::iterator map_end = m_object_map.end();
+
+    while( map_id != map_end )
+    {
+        ObjectIterator ptr = map_id->second; // pointer to the object
+        kvs::ObjectBase* obj = *ptr; // object
+        if ( obj->name() == obj_name )
+        {
+            if ( delete_flg ) { if ( obj ) delete obj; }
+
+            // Erase the object in the object master base.
+            ObjectManagerBase::erase( ptr );
+
+            // Erase the map component, which is specified by map_id.
+            m_object_map.erase( map_id );
+
+            this->update_normalize_parameters();
+
+            break;
+        }
+
+        ++map_id;
+    }
+}
+
+/*==========================================================================*/
+/**
  *  Change the object by a specificated object ID.
  *  @param obj_id [in] object ID stored in the object manager
  *  @param obj [in] pointer to the inserting object
@@ -245,6 +280,46 @@ void ObjectManager::change( int obj_id, ObjectBase* obj, bool delete_flg )
     *ptr = obj;
 
     this->update_normalize_parameters();
+}
+
+/*==========================================================================*/
+/**
+ *  Change the object by a specificated object name.
+ *  @param obj_name [in] object name stored in the object manager
+ *  @param obj [in] pointer to the inserting object
+ *  @param delete_flg [in] deleting the allocated memory flag
+ */
+/*==========================================================================*/
+void ObjectManager::change( std::string obj_name, ObjectBase* obj, bool delete_flg )
+{
+    ObjectMap::iterator map_id = m_object_map.begin();
+    ObjectMap::iterator map_end = m_object_map.end();
+
+    while ( map_id != map_end )
+    {
+        ObjectIterator ptr = map_id->second; // pointer to the object
+        kvs::ObjectBase* old_obj = *ptr; // object
+        if ( old_obj->name() == obj_name )
+        {
+            // Save the Xform.
+            kvs::Xform xform = old_obj->xform();
+
+            // Erase the old object
+            if ( delete_flg ) { if ( old_obj ) delete old_obj; }
+
+            // Insert the new object
+            obj->updateNormalizeParameters();
+            obj->setXform( xform );
+
+            *ptr = obj;
+
+            this->update_normalize_parameters();
+
+            break;
+        }
+
+        ++map_id;
+    }
 }
 
 /*==========================================================================*/
@@ -295,6 +370,33 @@ kvs::ObjectBase* ObjectManager::object( int obj_id )
     ObjectIterator obj_ptr = map_id->second;
 
     return( *obj_ptr );
+}
+
+/*==========================================================================*/
+/**
+ *  Get the object by a specificated object name.
+ *  @param obj_name [in] object name
+ *  @return pointer to the object
+ */
+/*==========================================================================*/
+kvs::ObjectBase* ObjectManager::object( std::string obj_name )
+{
+    ObjectMap::iterator map_id = m_object_map.begin();
+    ObjectMap::iterator map_end = m_object_map.end();
+
+    while ( map_id != map_end )
+    {
+        ObjectIterator ptr = map_id->second; // pointer to the object
+        kvs::ObjectBase* obj = *ptr; // object
+        if ( obj->name() == obj_name )
+        {
+            return( obj );
+        }
+
+        ++map_id;
+    }
+
+    return( NULL );
 }
 
 /*==========================================================================*/

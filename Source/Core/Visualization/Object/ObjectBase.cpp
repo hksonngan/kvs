@@ -29,6 +29,7 @@ namespace kvs
 /*===========================================================================*/
 ObjectBase::ObjectBase( const bool collision ) :
     kvs::XformControl( collision ),
+    m_name("unknown"),
     m_min_object_coord( kvs::Vector3f( -3.0, -3.0, -3.0 ) ),
     m_max_object_coord( kvs::Vector3f(  3.0,  3.0,  3.0 ) ),
     m_min_external_coord( kvs::Vector3f( -3.0, -3.0, -3.0 ) ),
@@ -54,6 +55,7 @@ ObjectBase::ObjectBase(
     const kvs::Matrix33f& rotation,
     const bool collision ):
     kvs::XformControl( translation, scaling, rotation, collision ),
+    m_name("unknown"),
     m_min_object_coord( kvs::Vector3f( -3.0, -3.0, -3.0 ) ),
     m_max_object_coord( kvs::Vector3f(  3.0,  3.0,  3.0 ) ),
     m_min_external_coord( kvs::Vector3f( -3.0, -3.0, -3.0 ) ),
@@ -82,6 +84,7 @@ ObjectBase& ObjectBase::operator = ( const ObjectBase& object )
 {
     kvs::XformControl::operator=( object );
 
+    m_name = object.m_name;
     m_min_object_coord = object.m_min_object_coord;
     m_max_object_coord = object.m_max_object_coord;
     m_min_external_coord = object.m_min_external_coord;
@@ -105,6 +108,7 @@ ObjectBase& ObjectBase::operator = ( const ObjectBase& object )
 std::ostream& operator << ( std::ostream& os, const ObjectBase& object )
 {
     const std::ios_base::fmtflags flags( os.flags() );
+    os << "Name: " << object.name() << std::endl;
     os.setf( std::ios::boolalpha );
     os << "Set of min/max object coord:  " << object.hasMinMaxObjectCoords() << std::endl;
     os << "Set of min/max external coord:  " << object.hasMinMaxObjectCoords() << std::endl;
@@ -119,6 +123,17 @@ std::ostream& operator << ( std::ostream& os, const ObjectBase& object )
     os.flags( flags );
 
     return( os );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Set object name.
+ *  @param  name [in] object name
+ */
+/*===========================================================================*/
+void ObjectBase::setName( const std::string& name )
+{
+    m_name = name;
 }
 
 /*===========================================================================*/
@@ -199,6 +214,17 @@ void ObjectBase::show( void )
 void ObjectBase::hide( void )
 {
     m_show_flg = false;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns object name.
+ *  @return  object name
+ */
+/*===========================================================================*/
+const std::string& ObjectBase::name( void ) const
+{
+    return( m_name );
 }
 
 /*===========================================================================*/

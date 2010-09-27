@@ -14,6 +14,7 @@
 #ifndef KVS_CORE_RENDERER_BASE_H_INCLUDE
 #define KVS_CORE_RENDERER_BASE_H_INCLUDE
 
+#include <string>
 #include <kvs/ClassName>
 #include <kvs/Timer>
 #include <kvs/Module>
@@ -39,6 +40,7 @@ class RendererBase
 
 protected:
 
+    std::string  m_name;         ///< renderer name
     kvs::Timer   m_timer;        ///< timer
     mutable bool m_shading_flag; ///< shading flag
 
@@ -49,6 +51,10 @@ public:
     virtual ~RendererBase( void );
 
 public:
+
+    void setName( const std::string& name );
+
+    const std::string& name( void ) const;
 
     const kvs::Timer& timer( void ) const;
 

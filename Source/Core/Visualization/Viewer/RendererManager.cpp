@@ -109,6 +109,39 @@ void RendererManager::erase( int renderer_id, bool delete_flg )
 
 /*==========================================================================*/
 /**
+ *  Erase the renderer which is specified by the given name.
+ *  @param renderer_name [in] renderer name
+ *  @param delete_flg [in] deleting the allocated memory flag
+ */
+/*==========================================================================*/
+void RendererManager::erase( std::string renderer_name, bool delete_flg )
+{
+    RendererMap::iterator map_id = m_renderer_map.begin();
+    RendererMap::iterator map_end = m_renderer_map.end();
+
+    while ( map_id != map_end )
+    {
+        RendererIterator renderer_ptr = map_id->second;
+        kvs::RendererBase* renderer = *renderer_ptr;
+        if ( renderer->name() == renderer_name )
+        {
+            if ( delete_flg ) { if ( renderer ) delete renderer; }
+
+            // Erase the renderer in the renderer master.
+            RendererManagerBase::erase( renderer_ptr );
+
+            // Erase the map component, which is specified by map_id.
+            m_renderer_map.erase( map_id );
+
+            break;
+        }
+
+        ++map_id;
+    }
+}
+
+/*==========================================================================*/
+/**
  *  Change the renderer by the specificated renderer ID.
  *  @param renderer_id [in] renderer ID stored in the renderer manager
  *  @param renderer [in] pointer to the inserting renderer
@@ -139,6 +172,37 @@ void RendererManager::change( int renderer_id, kvs::RendererBase* renderer, bool
 
     // Insert the new object
     *ptr = renderer;
+}
+
+/*==========================================================================*/
+/**
+ *  Change the renderer by the specificated renderer name.
+ *  @param renderer_name [in] renderer name stored in the renderer manager
+ *  @param renderer [in] pointer to the inserting renderer
+ *  @param delete_flg [in] deleting the allocated memory flag
+ */
+/*==========================================================================*/
+void RendererManager::change( std::string renderer_name, kvs::RendererBase* renderer, bool delete_flg )
+{
+    RendererMap::iterator map_id = m_renderer_map.begin();
+    RendererMap::iterator map_end = m_renderer_map.end();
+
+    while ( map_id != map_end )
+    {
+        RendererIterator old_renderer_ptr = map_id->second;
+        kvs::RendererBase* old_renderer = *old_renderer_ptr;
+        if ( old_renderer->name() == renderer_name )
+        {
+            if ( delete_flg ) { if ( old_renderer ) delete old_renderer; }
+
+            // Insert the new renderer
+            *old_renderer_ptr = renderer;
+
+            break;
+        }
+
+        ++map_id;
+    }
 }
 
 /*==========================================================================*/
@@ -183,6 +247,33 @@ kvs::RendererBase* RendererManager::renderer( int renderer_id )
     RendererIterator renderer_ptr = map_id->second;
 
     return( *renderer_ptr );
+}
+
+/*==========================================================================*/
+/**
+ *  Get the renderer which is specified by the given name.
+ *  @param renderer_name [in] renderer name
+ *  @return pointer to the renderer
+ */
+/*==========================================================================*/
+kvs::RendererBase* RendererManager::renderer( std::string renderer_name )
+{
+    RendererMap::iterator map_id = m_renderer_map.begin();
+    RendererMap::iterator map_end = m_renderer_map.end();
+
+    while ( map_id != map_end )
+    {
+        RendererIterator renderer_ptr = map_id->second;
+        kvs::RendererBase* renderer = *renderer_ptr;
+        if ( renderer->name() == renderer_name )
+        {
+            return( renderer );
+        }
+
+        ++map_id;
+    }
+
+    return( NULL );
 }
 
 /*==========================================================================*/

@@ -61,6 +61,7 @@ public:
 
 protected:
 
+    std::string   m_name;               ///< object name
     kvs::Vector3f m_min_object_coord;   ///< min coord in the object coordinate system
     kvs::Vector3f m_max_object_coord;   ///< max coord in the object coordinate system
     kvs::Vector3f m_min_external_coord; ///< min coord in the external coordinate system
@@ -93,6 +94,8 @@ public:
 
 public:
 
+    void setName( const std::string& name );
+
     void setMinMaxObjectCoords(
         const kvs::Vector3f& min_coord,
         const kvs::Vector3f& max_coord );
@@ -110,6 +113,8 @@ public:
     void hide( void );
 
 public:
+
+    const std::string& name( void ) const;
 
     virtual const ObjectType objectType( void ) const = 0;
 
