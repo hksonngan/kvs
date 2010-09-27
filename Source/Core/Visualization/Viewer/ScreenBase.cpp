@@ -58,9 +58,10 @@ ScreenBase::~ScreenBase( void )
  *  @brief  Registers an object with a renderer.
  *  @param  object [in] pointer to the object
  *  @param  renderer [in] pointer to the renderer
+ *  @return Pair of IDs (object ID and renderer ID)
  */
 /*===========================================================================*/
-void ScreenBase::registerObject( kvs::ObjectBase* object, kvs::RendererBase* renderer )
+const std::pair<int,int> ScreenBase::registerObject( kvs::ObjectBase* object, kvs::RendererBase* renderer )
 {
     /* If the given pointer to the renderer is null, a renderer for the given
      * object is automatically created by using visualization pipeline class.
@@ -71,7 +72,7 @@ void ScreenBase::registerObject( kvs::ObjectBase* object, kvs::RendererBase* ren
         if ( !pipeline.exec() )
         {
             kvsMessageError("Cannot create a renderer for the given object.");
-            return;
+            return( std::pair<int,int>( -1, -1 ) );
         }
 
         renderer = const_cast<kvs::RendererBase*>( pipeline.renderer() );
@@ -82,18 +83,21 @@ void ScreenBase::registerObject( kvs::ObjectBase* object, kvs::RendererBase* ren
         object->updateMinMaxCoords();
     }
 
-    const size_t renderer_id = m_renderer_manager->insert( renderer );
-    const size_t object_id = m_object_manager->insert( object );
+    const int object_id = m_object_manager->insert( object );
+    const int renderer_id = m_renderer_manager->insert( renderer );
     m_id_manager->insert( object_id, renderer_id );
+
+    return( std::pair<int,int>( object_id, renderer_id ) );
 }
 
 /*===========================================================================*/
 /**
  *  @brief  Registers an object that is processed through the visualization pipeline.
  *  @param  pipeline [in] pointer to the visualization pipeline
+ *  @return Pair of IDs (object ID and renderer ID)
  */
 /*===========================================================================*/
-void ScreenBase::registerObject( kvs::VisualizationPipeline* pipeline )
+const std::pair<int,int> ScreenBase::registerObject( kvs::VisualizationPipeline* pipeline )
 {
     /* WARNING: It is necessary to increment the reference counter of the
      * pipeline.object() and the pipeline.renderer().
@@ -101,9 +105,11 @@ void ScreenBase::registerObject( kvs::VisualizationPipeline* pipeline )
     kvs::ObjectBase* object = const_cast<kvs::ObjectBase*>( pipeline->object() );
     kvs::RendererBase* renderer = const_cast<kvs::RendererBase*>( pipeline->renderer() );
 
-    const size_t object_id = m_object_manager->insert( object );
-    const size_t renderer_id = m_renderer_manager->insert( renderer );
+    const int object_id = m_object_manager->insert( object );
+    const int renderer_id = m_renderer_manager->insert( renderer );
     m_id_manager->insert( object_id, renderer_id );
+
+    return( std::pair<int,int>( object_id, renderer_id ) );
 }
 
 /*==========================================================================*/

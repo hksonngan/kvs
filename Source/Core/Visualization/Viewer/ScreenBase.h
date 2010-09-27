@@ -15,6 +15,7 @@
 #define KVS__SCREEN_BASE_H_INCLUDE
 
 #include <string>
+#include <map>
 #include <kvs/Camera>
 #include <kvs/Light>
 #include <kvs/Mouse>
@@ -102,9 +103,9 @@ public:
 
 public:
 
-    void registerObject( kvs::ObjectBase* object, kvs::RendererBase* renderer = 0 );
+    const std::pair<int,int> registerObject( kvs::ObjectBase* object, kvs::RendererBase* renderer = 0 );
 
-    void registerObject( kvs::VisualizationPipeline* pipeline );
+    const std::pair<int,int> registerObject( kvs::VisualizationPipeline* pipeline );
 
 public:
 
