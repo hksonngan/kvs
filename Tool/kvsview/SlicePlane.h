@@ -33,7 +33,7 @@ const std::string Description("Extract a slice plane. (optional)");
 
 /*===========================================================================*/
 /**
- *  Argument class for a fld2kvsml.
+ *  Argument class for SlicePlane.
  */
 /*===========================================================================*/
 class Argument : public kvsview::Argument::Common
@@ -50,12 +50,12 @@ public:
 
     const kvs::Vector3f normal( void );
 
-    const kvs::TransferFunction transferFunction( void );
+    const kvs::TransferFunction transferFunction( const kvs::VolumeObjectBase* volume );
 };
 
 /*===========================================================================*/
 /**
- *  Main class for a fld2kvsml.
+ *  Main class for SlicePlane.
  */
 /*===========================================================================*/
 class Main

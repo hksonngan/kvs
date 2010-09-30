@@ -15,6 +15,7 @@
 #include "CommandName.h"
 #include "ObjectInformation.h"
 #include "FileChecker.h"
+#include "Widget.h"
 #include <kvs/IgnoreUnusedVariable>
 #include <kvs/File>
 #include <kvs/PipelineModule>
@@ -26,72 +27,38 @@
 #include <kvs/ParticleVolumeRenderer>
 #include <kvs/Bounds>
 #include <kvs/PaintEventListener>
-#include <kvs/MousePressEventListener>
-#include <kvs/MouseReleaseEventListener>
+#include <kvs/MouseDoubleClickEventListener>
+#include <kvs/KeyPressEventListener>
 #include <kvs/KeyPressEventListener>
 #include <kvs/Key>
 #include <kvs/glut/Application>
 #include <kvs/glut/Screen>
-#include <kvs/glut/LegendBar>
-#include <kvs/glut/OrientationAxis>
-#include <kvs/glut/Label>
+#include <kvs/glut/TransferFunctionEditor>
 #if defined( KVS_SUPPORT_GLEW )
 #include <kvs/glew/ParticleVolumeRenderer>
 #endif
 
+namespace { bool Shown = false; }
+namespace { const std::string ObjectName( "ParticleObject" ); }
+namespace { const std::string RendererName( "ParticleRenderer" ); }
 
-namespace { bool HasBounds = false; }
 
 namespace
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns revised subpixel level.
+ *  @param  subpixel_level [in] subpixel level
+ *  @param  repetition_level [in] repetition level
+ *  @return revised subpixel level
+ */
+/*===========================================================================*/
 inline const size_t GetRevisedSubpixelLevel(
     const size_t subpixel_level,
     const size_t repetition_level )
 {
     return( static_cast<size_t>( subpixel_level * sqrtf( static_cast<float>(repetition_level) ) + 0.5f ) );
-}
-
-template <typename Renderer>
-const void InitializeParticleVolumeRenderer(
-    const kvsview::ParticleVolumeRenderer::Argument& arg,
-    const kvs::TransferFunction& tfunc,
-    kvs::PipelineModule& renderer )
-{
-    // Transfer function.
-//    const kvs::TransferFunction& function = arg.transferFunction();
-    renderer.template get<Renderer>()->setTransferFunction( tfunc );
-
-    // Shading on/off.
-    const bool noshading = arg.noShading();
-    if ( noshading ) renderer.template get<Renderer>()->disableShading();
-    else renderer.template get<Renderer>()->enableShading();
-
-    // Shader type.
-    const float ka = arg.ambient();
-    const float kd = arg.diffuse();
-    const float ks = arg.specular();
-    const float n = arg.shininess();
-    const int shader = arg.shader();
-    switch ( shader )
-    {
-    case 0:
-    {
-        renderer.template get<Renderer>()->setShader( kvs::Shader::Lambert( ka, kd ) );
-        break;
-    }
-    case 1:
-    {
-        renderer.template get<Renderer>()->setShader( kvs::Shader::Phong( ka, kd, ks, n ) );
-        break;
-    }
-    case 2:
-    {
-        renderer.template get<Renderer>()->setShader( kvs::Shader::BlinnPhong( ka, kd, ks, n ) );
-        break;
-    }
-    default: break;
-    }
 }
 
 } // end of namespace
@@ -103,81 +70,272 @@ namespace kvsview
 namespace ParticleVolumeRenderer
 {
 
-class KeyPressEvent : public kvs::KeyPressEventListener
+/*===========================================================================*/
+/**
+ *  @brief  Set up particle volume renderer.
+ *  @param  arg [in] command line argument
+ *  @param  tfunc [in] transfer function
+ *  @param  renderer [in] renderer module
+ */
+/*===========================================================================*/
+template <typename Renderer>
+const void SetupRenderer(
+    const kvsview::ParticleVolumeRenderer::Argument& arg,
+    const kvs::TransferFunction& tfunc,
+    Renderer* renderer )
 {
-    void update( kvs::KeyEvent* ev )
+    // Renderer name.
+    renderer->setName( ::RendererName );
+
+    // Transfer function.
+    renderer->setTransferFunction( tfunc );
+
+    // Shading on/off.
+    const bool noshading = arg.noShading();
+    if ( noshading ) renderer->disableShading();
+    else renderer->enableShading();
+
+    // Shader type.
+    const float ka = arg.ambient();
+    const float kd = arg.diffuse();
+    const float ks = arg.specular();
+    const float n = arg.shininess();
+    const int shader = arg.shader();
+    switch ( shader )
     {
-        switch ( ev->key() )
+    case 0: // Lambert shading
+    {
+        renderer->setShader( kvs::Shader::Lambert( ka, kd ) );
+        break;
+    }
+    case 1: // Phong shading
+    {
+        renderer->setShader( kvs::Shader::Phong( ka, kd, ks, n ) );
+        break;
+    }
+    case 2: // Blinn-phong shading
+    {
+        renderer->setShader( kvs::Shader::BlinnPhong( ka, kd, ks, n ) );
+        break;
+    }
+    default: break;
+    }
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Set up cell-by-cell particle sampler.
+ *  @param  arg [in] command line argument
+ *  @param  tfunc [in] transfer function
+ *  @param  screen [in] screen
+ *  @param  mapper [in] mapper module
+ */
+/*===========================================================================*/
+template <typename Mapper>
+const void SetupMapper(
+    const kvsview::ParticleVolumeRenderer::Argument& arg,
+    const kvs::TransferFunction& tfunc,
+    /* const */ kvs::ScreenBase& screen,
+    Mapper* mapper )
+{
+    const size_t subpixel_level = arg.subpixelLevel();
+    const size_t repetition_level = arg.repetitionLevel();
+    const size_t level = ::GetRevisedSubpixelLevel( subpixel_level, repetition_level );
+    const float step = 0.5f;
+    const float depth = 0.0f;
+    mapper->attachCamera( screen.camera() );
+    mapper->setTransferFunction( tfunc );
+    mapper->setSubpixelLevel( level );
+    mapper->setSamplingStep( step );
+    mapper->setObjectDepth( depth );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Transfer function editor class.
+ */
+/*===========================================================================*/
+class TransferFunctionEditor : public kvs::glut::TransferFunctionEditor
+{
+    kvsview::ParticleVolumeRenderer::Argument* m_arg; ///< pointer to the argument
+    kvs::glut::LegendBar* m_legend_bar; ///< pointer to the legend bar
+    const kvs::VolumeObjectBase* m_volume; ///< pointer to the volume object
+
+public:
+
+    TransferFunctionEditor( kvs::glut::Screen* screen, kvsview::ParticleVolumeRenderer::Argument* arg ):
+        kvs::glut::TransferFunctionEditor( screen ),
+        m_arg( arg ),
+        m_legend_bar( NULL ),
+        m_volume( NULL ) {}
+
+    void apply( void )
+    {
+        // Erase the object and renderer.
+        const kvs::ObjectBase* obj = screen()->objectManager()->object( ::ObjectName );
+        const kvs::Xform xform = obj->xform();
+        const int obj_id = screen()->objectManager()->objectID( obj );
+        screen()->IDManager()->eraseByObjectID( obj_id );
+        screen()->objectManager()->erase( ::ObjectName );
+        screen()->rendererManager()->erase( ::RendererName );
+
+        // Current transfer function.
+        kvs::TransferFunction tfunc( transferFunction() );
+
+        // Set mapper (CellByCellXXXSampling).
+        kvs::PointObject* object = NULL;
+        switch ( m_arg->sampling() )
         {
-        case kvs::Key::o: screen()->controlTarget() = kvs::ScreenBase::TargetObject; break;
-        case kvs::Key::l: screen()->controlTarget() = kvs::ScreenBase::TargetLight; break;
-        case kvs::Key::c: screen()->controlTarget() = kvs::ScreenBase::TargetCamera; break;
-        default: break;
+        case 1: // Metropolis sampling
+        {
+            kvs::CellByCellMetropolisSampling* mapper = new kvs::CellByCellMetropolisSampling();
+            kvsview::ParticleVolumeRenderer::SetupMapper( *m_arg, tfunc, *screen(), mapper );
+            object = mapper->exec( m_volume );
+            object->setName( ::ObjectName );
+            object->setXform( xform );
+            break;
         }
+        case 2: // Rejection sampling
+        {
+            kvs::CellByCellRejectionSampling* mapper = new kvs::CellByCellRejectionSampling();
+            kvsview::ParticleVolumeRenderer::SetupMapper( *m_arg, tfunc, *screen(), mapper );
+            object = mapper->exec( m_volume );
+            object->setName( ::ObjectName );
+            object->setXform( xform );
+            break;
+        }
+        case 3: // Layered sampling
+        {
+            kvs::CellByCellLayeredSampling* mapper = new kvs::CellByCellLayeredSampling();
+            kvsview::ParticleVolumeRenderer::SetupMapper( *m_arg, tfunc, *screen(), mapper );
+            object = mapper->exec( m_volume );
+            object->setName( ::ObjectName );
+            object->setXform( xform );
+            break;
+        }
+        default: // Uniform sampling
+        {
+            kvs::CellByCellUniformSampling* mapper = new kvs::CellByCellUniformSampling();
+            kvsview::ParticleVolumeRenderer::SetupMapper( *m_arg, tfunc, *screen(), mapper );
+            object = mapper->exec( m_volume );
+            object->setName( ::ObjectName );
+            object->setXform( xform );
+            break;
+        }
+        }
+
+        // Create new particle volume renderer.
+        if ( m_arg->noGPU() )
+        {
+            kvs::ParticleVolumeRenderer* renderer = new kvs::ParticleVolumeRenderer();
+            kvsview::ParticleVolumeRenderer::SetupRenderer( *m_arg, tfunc, renderer );
+
+            // Subpixel level.
+            const size_t subpixel_level = m_arg->subpixelLevel();
+            const size_t repetition_level = m_arg->repetitionLevel();
+            const size_t level = ::GetRevisedSubpixelLevel( subpixel_level, repetition_level );
+            renderer->setSubpixelLevel( level );
+
+            screen()->registerObject( object, renderer );
+        }
+#if defined( KVS_SUPPORT_GLEW )
+        else
+        {
+            kvs::glew::ParticleVolumeRenderer* renderer = new kvs::glew::ParticleVolumeRenderer();
+            kvsview::ParticleVolumeRenderer::SetupRenderer( *m_arg, tfunc, renderer );
+
+            // Subpixel level and repetition level.
+            const size_t subpixel_level = m_arg->subpixelLevel();
+            const size_t repetition_level = m_arg->repetitionLevel();
+            renderer->setSubpixelLevel( subpixel_level );
+            renderer->setRepetitionLevel( repetition_level );
+
+            if ( !m_arg->noLOD() ) renderer->enableLODControl();
+
+            screen()->registerObject( object, renderer );
+        }
+#endif
+
+        m_legend_bar->setColorMap( transferFunction().colorMap() );
+
+        screen()->redraw();
     }
-};
 
-class Label : public kvs::glut::Label
-{
-public:
-
-    Label( kvs::ScreenBase* screen ):
-        kvs::glut::Label( screen )
+    void attachVolume( const kvs::VolumeObjectBase* volume )
     {
-        setMargin( 10 );
+        m_volume = volume;
     }
 
-    void screenUpdated( void )
+    void attachLegendBar( kvs::glut::LegendBar* legend_bar )
     {
-        const int id = ::HasBounds ? 2 : 1;
-        const kvs::RendererBase* renderer = screen()->rendererManager()->renderer( id );
-
-        std::stringstream fps;
-        fps << std::setprecision(4) << renderer->timer().fps();
-        setText( std::string( "fps: " + fps.str() ).c_str() );
-    }
-};
-
-class LegendBar : public kvs::glut::LegendBar
-{
-public:
-
-    LegendBar( kvs::ScreenBase* screen ):
-        kvs::glut::LegendBar( screen )
-    {
-        setWidth( 200 );
-        setHeight( 50 );
-    }
-
-    void screenResized( void )
-    {
-        setX( screen()->width() - width() );
-        setY( screen()->height() - height() );
-    }
-};
-
-class OrientationAxis : public kvs::glut::OrientationAxis
-{
-public:
-
-    OrientationAxis( kvs::ScreenBase* screen ):
-        kvs::glut::OrientationAxis( screen )
-    {
-        setMargin( 10 );
-        setSize( 90 );
-        setBoxType( kvs::glut::OrientationAxis::SolidBox );
-        enableAntiAliasing();
-    }
-
-    void screenResized( void )
-    {
-        setY( screen()->height() - height() );
+        m_legend_bar = legend_bar;
     }
 };
 
 /*===========================================================================*/
 /**
- *  @brief  Constructs a new Argument class for a point renderer.
+ *  @brief  Key press event.
+ */
+/*===========================================================================*/
+class KeyPressEvent : public kvs::KeyPressEventListener
+{
+    TransferFunctionEditor* m_editor; ///!< pointer to the transfer function
+
+public:
+
+    void update( kvs::KeyEvent* event )
+    {
+        switch ( event->key() )
+        {
+        case kvs::Key::o: screen()->controlTarget() = kvs::ScreenBase::TargetObject; break;
+        case kvs::Key::l: screen()->controlTarget() = kvs::ScreenBase::TargetLight; break;
+        case kvs::Key::c: screen()->controlTarget() = kvs::ScreenBase::TargetCamera; break;
+        case kvs::Key::t:
+        {
+            if ( ::Shown ) m_editor->hide();
+            else m_editor->showWindow();
+
+            ::Shown = !::Shown;
+            break;
+        }
+        default: break;
+        }
+    }
+
+    void attachTransferFunctionEditor( TransferFunctionEditor* editor )
+    {
+        m_editor = editor;
+    }
+};
+
+/*===========================================================================*/
+/**
+ *  @brief  Mouse double-click event.
+ */
+/*===========================================================================*/
+class MouseDoubleClickEvent : public kvs::MouseDoubleClickEventListener
+{
+    TransferFunctionEditor* m_editor; ///!< pointer to the transfer function
+
+public:
+
+    void update( kvs::MouseEvent* event )
+    {
+        if ( ::Shown ) m_editor->hide();
+        else m_editor->showWindow();
+
+        ::Shown = !::Shown;
+    }
+
+    void attachTransferFunctionEditor( TransferFunctionEditor* editor )
+    {
+        m_editor = editor;
+    }
+};
+
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new Argument.
  *  @param  argc [in] argument count
  *  @param  argv [in] argument values
  */
@@ -209,6 +367,12 @@ Argument::Argument( int argc, char** argv ):
                 "\t      2 = Blinn-Phong shading", 1, false );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the sampling method number.
+ *  @return sampling method number
+ */
+/*===========================================================================*/
 const int Argument::sampling( void ) const
 {
     const int default_value = 0;
@@ -217,6 +381,12 @@ const int Argument::sampling( void ) const
     else return( default_value );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the shader number.
+ *  @return shader number
+ */
+/*===========================================================================*/
 const int Argument::shader( void ) const
 {
     const int default_value = 0;
@@ -225,16 +395,34 @@ const int Argument::shader( void ) const
     else return( default_value );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Check whether the "noshading" option is specified or not.
+ *  @return true, if the "noshading" option is specified
+ */
+/*===========================================================================*/
 const bool Argument::noShading( void ) const
 {
     return( this->hasOption("noshading") );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Check whether the "nolod" option is specified or not.
+ *  @return true, if the "nolod" option is specified
+ */
+/*===========================================================================*/
 const bool Argument::noLOD( void ) const
 {
     return( this->hasOption("nolod") );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Check whether the "nogpu" option is specified or not.
+ *  @return true, if the "nogpu" option is specified
+ */
+/*===========================================================================*/
 const bool Argument::noGPU( void ) const
 {
 #if defined( KVS_SUPPORT_GLEW )
@@ -244,6 +432,12 @@ const bool Argument::noGPU( void ) const
 #endif
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the coefficient for ambient color.
+ *  @return coefficient for ambient color
+ */
+/*===========================================================================*/
 const float Argument::ambient( void ) const
 {
     const float default_value = this->shader() == 0 ? 0.4f : 0.3f;
@@ -252,6 +446,12 @@ const float Argument::ambient( void ) const
     else return( default_value );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the coefficient for diffuse color.
+ *  @return coefficient for diffuse color
+ */
+/*===========================================================================*/
 const float Argument::diffuse( void ) const
 {
     const float default_value = this->shader() == 0 ? 0.6f : 0.5f;
@@ -260,6 +460,12 @@ const float Argument::diffuse( void ) const
     else return( default_value );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the coefficient for specular color.
+ *  @return coefficient for specular color
+ */
+/*===========================================================================*/
 const float Argument::specular( void ) const
 {
     const float default_value = 0.8f;
@@ -268,6 +474,12 @@ const float Argument::specular( void ) const
     else return( default_value );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the coefficient for shininess.
+ *  @return coefficient for shininess
+ */
+/*===========================================================================*/
 const float Argument::shininess( void ) const
 {
     const float default_value = 100.0f;
@@ -276,6 +488,12 @@ const float Argument::shininess( void ) const
     else return( default_value );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the subpixle level.
+ *  @return subpixel level
+ */
+/*===========================================================================*/
 const size_t Argument::subpixelLevel( void ) const
 {
     const size_t default_value = 1;
@@ -284,6 +502,12 @@ const size_t Argument::subpixelLevel( void ) const
     else return( default_value );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the repetition level.
+ *  @return repetition level
+ */
+/*===========================================================================*/
 const size_t Argument::repetitionLevel( void ) const
 {
     const size_t default_value = 1;
@@ -295,6 +519,7 @@ const size_t Argument::repetitionLevel( void ) const
 /*===========================================================================*/
 /**
  *  @brief  Returns a transfer function.
+ *  @param  volume [in] pointer to the volume object
  *  @return transfer function
  */
 /*===========================================================================*/
@@ -321,7 +546,7 @@ const kvs::TransferFunction Argument::transferFunction( const kvs::VolumeObjectB
 
 /*===========================================================================*/
 /**
- *  @brief  Constructs a new Main class for a point renderer.
+ *  @brief  Constructs a new Main class.
  *  @param  argc [in] argument count
  *  @param  argv [in] argument values
  */
@@ -339,18 +564,22 @@ Main::Main( int argc, char** argv )
 /*===========================================================================*/
 const bool Main::exec( void )
 {
+    // GLUT viewer application.
     kvs::glut::Application app( m_argc, m_argv );
 
     // Parse specified arguments.
     kvsview::ParticleVolumeRenderer::Argument arg( m_argc, m_argv );
     if( !arg.parse() ) return( false );
 
+    // Events.
     kvsview::ParticleVolumeRenderer::KeyPressEvent key_press_event;
+    kvsview::ParticleVolumeRenderer::MouseDoubleClickEvent mouse_double_click_event;
 
-    // Create a global and screen class.
+    // Create screen.
     kvs::glut::Screen screen( &app );
-    screen.addKeyPressEvent( &key_press_event );
     screen.setSize( 512, 512 );
+    screen.addKeyPressEvent( &key_press_event );
+    screen.addMouseDoubleClickEvent( &mouse_double_click_event );
     screen.setTitle( kvsview::CommandName + " - " + kvsview::ParticleVolumeRenderer::CommandName );
 
     // Check the input point or volume data.
@@ -387,11 +616,11 @@ const bool Main::exec( void )
     const kvs::TransferFunction tfunc = arg.transferFunction( volume );
 
     // Label (fps).
-    ParticleVolumeRenderer::Label label( &screen );
+    kvsview::Widget::FPSLabel label( &screen, ::RendererName );
     label.show();
 
     // Legend bar.
-    ParticleVolumeRenderer::LegendBar legend_bar( &screen );
+    kvsview::Widget::LegendBar legend_bar( &screen );
     legend_bar.setColorMap( tfunc.colorMap() );
     if ( !tfunc.hasRange() )
     {
@@ -402,16 +631,13 @@ const bool Main::exec( void )
     legend_bar.show();
 
     // Orientation axis.
-    ParticleVolumeRenderer::OrientationAxis orientation_axis( &screen );
+    kvsview::Widget::OrientationAxis orientation_axis( &screen );
     orientation_axis.show();
 
     // For bounding box.
     if ( arg.hasOption("bounds") )
     {
-        ::HasBounds = true;
-
         kvs::LineObject* bounds = new kvs::Bounds( pipe.object() );
-
         bounds->setColor( kvs::RGBColor( 0, 0, 0 ) );
         if ( arg.hasOption("bounds_color") )
         {
@@ -428,70 +654,38 @@ const bool Main::exec( void )
         screen.registerObject( &p );
     }
 
-    // Set a mapper (CellByCellxxxSampling)
+    // Set a mapper (cell-by-cell sampling)
     switch ( arg.sampling() )
     {
-    case 1:
+    case 1: // Metropolis sampling
     {
-        const size_t subpixel_level = arg.subpixelLevel();
-        const size_t repetition_level = arg.repetitionLevel();
-        const size_t level = ::GetRevisedSubpixelLevel( subpixel_level, repetition_level );
-        const float step = 0.5f;
-        const float depth = 0.0f;
         kvs::PipelineModule mapper( new kvs::CellByCellMetropolisSampling );
-        mapper.get<kvs::CellByCellMetropolisSampling>()->attachCamera( screen.camera() );
-        mapper.get<kvs::CellByCellMetropolisSampling>()->setTransferFunction( tfunc );
-        mapper.get<kvs::CellByCellMetropolisSampling>()->setSubpixelLevel( level );
-        mapper.get<kvs::CellByCellMetropolisSampling>()->setSamplingStep( step );
-        mapper.get<kvs::CellByCellMetropolisSampling>()->setObjectDepth( depth );
+        kvs::CellByCellMetropolisSampling* pmapper = mapper.get<kvs::CellByCellMetropolisSampling>();
+        kvsview::ParticleVolumeRenderer::SetupMapper( arg, tfunc, screen, pmapper );
         pipe.connect( mapper );
         break;
     }
-    case 2:
+    case 2: // Rejection sampling
     {
-        const size_t subpixel_level = arg.subpixelLevel();
-        const size_t repetition_level = arg.repetitionLevel();
-        const size_t level = ::GetRevisedSubpixelLevel( subpixel_level, repetition_level );
-        const float step = 0.5f;
-        const float depth = 0.0f;
         kvs::PipelineModule mapper( new kvs::CellByCellRejectionSampling );
-        mapper.get<kvs::CellByCellRejectionSampling>()->attachCamera( screen.camera() );
-        mapper.get<kvs::CellByCellRejectionSampling>()->setTransferFunction( tfunc );
-        mapper.get<kvs::CellByCellRejectionSampling>()->setSubpixelLevel( level );
-        mapper.get<kvs::CellByCellRejectionSampling>()->setSamplingStep( step );
-        mapper.get<kvs::CellByCellRejectionSampling>()->setObjectDepth( depth );
+        kvs::CellByCellRejectionSampling* pmapper = mapper.get<kvs::CellByCellRejectionSampling>();
+        kvsview::ParticleVolumeRenderer::SetupMapper( arg, tfunc, screen, pmapper );
         pipe.connect( mapper );
         break;
     }
-    case 3:
+    case 3: // Layered sampling
     {
-        const size_t subpixel_level = arg.subpixelLevel();
-        const size_t repetition_level = arg.repetitionLevel();
-        const size_t level = ::GetRevisedSubpixelLevel( subpixel_level, repetition_level );
-        const float step = 0.5f;
-        const float depth = 0.0f;
         kvs::PipelineModule mapper( new kvs::CellByCellLayeredSampling );
-        mapper.get<kvs::CellByCellLayeredSampling>()->attachCamera( screen.camera() );
-        mapper.get<kvs::CellByCellLayeredSampling>()->setTransferFunction( tfunc );
-        mapper.get<kvs::CellByCellLayeredSampling>()->setSubpixelLevel( level );
-        mapper.get<kvs::CellByCellLayeredSampling>()->setSamplingStep( step );
-        mapper.get<kvs::CellByCellLayeredSampling>()->setObjectDepth( depth );
+        kvs::CellByCellLayeredSampling* pmapper = mapper.get<kvs::CellByCellLayeredSampling>();
+        kvsview::ParticleVolumeRenderer::SetupMapper( arg, tfunc, screen, pmapper );
         pipe.connect( mapper );
         break;
     }
-    default:
+    default: // Uniform sampling
     {
-        const size_t subpixel_level = arg.subpixelLevel();
-        const size_t repetition_level = arg.repetitionLevel();
-        const size_t level = ::GetRevisedSubpixelLevel( subpixel_level, repetition_level );
-        const float step = 0.5f;
-        const float depth = 0.0f;
         kvs::PipelineModule mapper( new kvs::CellByCellUniformSampling );
-        mapper.get<kvs::CellByCellUniformSampling>()->attachCamera( screen.camera() );
-        mapper.get<kvs::CellByCellUniformSampling>()->setTransferFunction( tfunc );
-        mapper.get<kvs::CellByCellUniformSampling>()->setSubpixelLevel( level );
-        mapper.get<kvs::CellByCellUniformSampling>()->setSamplingStep( step );
-        mapper.get<kvs::CellByCellUniformSampling>()->setObjectDepth( depth );
+        kvs::CellByCellUniformSampling* pmapper = mapper.get<kvs::CellByCellUniformSampling>();
+        kvsview::ParticleVolumeRenderer::SetupMapper( arg, tfunc, screen, pmapper );
         pipe.connect( mapper );
         break;
     }
@@ -501,37 +695,32 @@ const bool Main::exec( void )
     if ( arg.noGPU() )
     {
         kvs::PipelineModule renderer( new kvs::ParticleVolumeRenderer );
-        ::InitializeParticleVolumeRenderer<kvs::ParticleVolumeRenderer>( arg, tfunc, renderer );
+        kvs::ParticleVolumeRenderer* prenderer = renderer.get<kvs::ParticleVolumeRenderer>();
+        kvsview::ParticleVolumeRenderer::SetupRenderer( arg, tfunc, prenderer );
 
         // Subpixel level.
         const size_t subpixel_level = arg.subpixelLevel();
         const size_t repetition_level = arg.repetitionLevel();
         const size_t level = ::GetRevisedSubpixelLevel( subpixel_level, repetition_level );
-        renderer.get<kvs::ParticleVolumeRenderer>()->setSubpixelLevel( level );
+        prenderer->setSubpixelLevel( level );
 
-//        if ( is_volume ) pipe.connect( mapper ).connect( renderer );
-//        else pipe.connect( renderer );
         pipe.connect( renderer );
     }
 #if defined( KVS_SUPPORT_GLEW )
     else
     {
         kvs::PipelineModule renderer( new kvs::glew::ParticleVolumeRenderer );
-        ::InitializeParticleVolumeRenderer<kvs::glew::ParticleVolumeRenderer>( arg, tfunc, renderer );
+        kvs::glew::ParticleVolumeRenderer* prenderer = renderer.get<kvs::glew::ParticleVolumeRenderer>();
+        kvsview::ParticleVolumeRenderer::SetupRenderer( arg, tfunc, prenderer );
 
         // Subpixel level and repetition level.
         const size_t subpixel_level = arg.subpixelLevel();
         const size_t repetition_level = arg.repetitionLevel();
-        renderer.get<kvs::glew::ParticleVolumeRenderer>()->setSubpixelLevel( subpixel_level );
-        renderer.get<kvs::glew::ParticleVolumeRenderer>()->setRepetitionLevel( repetition_level );
+        prenderer->setSubpixelLevel( subpixel_level );
+        prenderer->setRepetitionLevel( repetition_level );
 
-        if ( !arg.noLOD() )
-        {
-            renderer.get<kvs::glew::ParticleVolumeRenderer>()->enableLODControl();
-        }
+        if ( !arg.noLOD() ) prenderer->enableLODControl();
 
-//        if ( is_volume ) pipe.connect( mapper ).connect( renderer );
-//        else pipe.connect( renderer );
         pipe.connect( renderer );
     }
 #endif
@@ -542,6 +731,9 @@ const bool Main::exec( void )
         kvsMessageError("Cannot execute the visulization pipeline.");
         return( false );
     }
+
+    // Register object.
+    const_cast<kvs::ObjectBase*>( pipe.object() )->setName( ::ObjectName );
     screen.registerObject( &pipe );
 
     // Verbose information.
@@ -560,6 +752,20 @@ const bool Main::exec( void )
 
     // Show the screen.
     screen.show();
+
+    // Create transfer function editor.
+    kvsview::ParticleVolumeRenderer::TransferFunctionEditor editor( &screen, &arg );
+    editor.setVolumeObject( volume );
+    editor.setTransferFunction( arg.transferFunction( volume ) );
+    editor.attachVolume( volume );
+    editor.attachLegendBar( &legend_bar );
+    editor.show();
+    editor.hide();
+    ::Shown = false;
+
+    // Attach the transfer function editor to the key press event and the mouse double-click event.
+    mouse_double_click_event.attachTransferFunctionEditor( &editor );
+    key_press_event.attachTransferFunctionEditor( &editor );
 
     return( app.run() );
 }

@@ -140,6 +140,7 @@ $(OUTDIR)/ExternalFaces.o \
 $(OUTDIR)/RayCastingRenderer.o \
 $(OUTDIR)/ParticleVolumeRenderer.o \
 $(OUTDIR)/Histogram.o \
+$(OUTDIR)/Widget.o \
 $(OUTDIR)/main.o \
 
 

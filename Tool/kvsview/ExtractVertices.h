@@ -32,7 +32,7 @@ const std::string Description("Extract vertices of the volume data. (optional)")
 
 /*===========================================================================*/
 /**
- *  Argument class.
+ *  Argument class for ExtractVertices.
  */
 /*===========================================================================*/
 class Argument : public kvsview::Argument::Common
@@ -45,12 +45,12 @@ public:
 
     const kvs::Real32 size( void );
 
-    const kvs::TransferFunction transferFunction( void );
+    const kvs::TransferFunction transferFunction( const kvs::VolumeObjectBase* volume );
 };
 
 /*===========================================================================*/
 /**
- *  Main class for a fld2kvsml.
+ *  Main class for ExtractVertices.
  */
 /*===========================================================================*/
 class Main

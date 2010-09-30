@@ -110,6 +110,9 @@ kvs::TransferFunction& VolumeRendererBase::transferFunction( void )
 /*==========================================================================*/
 void VolumeRendererBase::initialize( void )
 {
+    m_width = 0;
+    m_height = 0;
+
     m_enable_shading = true;
     m_shader = NULL;
 

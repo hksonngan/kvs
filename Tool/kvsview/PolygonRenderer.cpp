@@ -33,7 +33,7 @@ namespace PolygonRenderer
 
 /*===========================================================================*/
 /**
- *  @brief  Constructs a new Argument class for a polygon renderer.
+ *  @brief  Constructs a new Argument class.
  *  @param  argc [in] argument count
  *  @param  argv [in] argument values
  */
@@ -46,6 +46,12 @@ Argument::Argument( int argc, char** argv ):
     add_option( "t", "two-side lighting flag (disable:0, enable:1). (default: 0)", 1, false );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Two-side lighting flag.
+ *  @return 1, if two-side lighting is enable
+ */
+/*===========================================================================*/
 const int Argument::twoSideLighting( void ) const
 {
     int default_value = 0;
@@ -60,7 +66,7 @@ const int Argument::twoSideLighting( void ) const
 
 /*===========================================================================*/
 /**
- *  @brief  Constructs a new Main class for a polygon renderer.
+ *  @brief  Constructs a new Main class.
  *  @param  argc [in] argument count
  *  @param  argv [in] argument values
  */
@@ -78,17 +84,17 @@ Main::Main( int argc, char** argv )
 /*===========================================================================*/
 const bool Main::exec( void )
 {
+    // GLUT viewer application.
     kvs::glut::Application app( m_argc, m_argv );
 
     // Parse specified arguments.
-    PolygonRenderer::Argument arg( m_argc, m_argv );
+    kvsview::PolygonRenderer::Argument arg( m_argc, m_argv );
     if( !arg.parse() ) return( false );
 
     // Create a global and screen class.
     kvs::glut::Screen screen( &app );
     screen.setSize( 512, 512 );
     screen.setTitle( kvsview::CommandName + " - " + kvsview::PolygonRenderer::CommandName );
-    arg.applyTo( screen );
 
     // Check the input data.
     m_input_name = arg.value<std::string>();
@@ -136,6 +142,7 @@ const bool Main::exec( void )
 
     // Apply the specified parameters to the global and the visualization pipeline.
     arg.applyTo( screen, pipe );
+    arg.applyTo( screen );
 
     // Show the screen.
     screen.show();

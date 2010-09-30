@@ -30,7 +30,7 @@ const std::string Description("Rendering a line object. (optional)");
 
 /*===========================================================================*/
 /**
- *  Argument class for a fld2kvsml.
+ *  Argument class for LineRenderer.
  */
 /*===========================================================================*/
 class Argument : public kvsview::Argument::Common
@@ -42,7 +42,7 @@ public:
 
 /*===========================================================================*/
 /**
- *  Main class for a fld2kvsml.
+ *  Main class for LineRenderer.
  */
 /*===========================================================================*/
 class Main

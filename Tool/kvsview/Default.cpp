@@ -14,6 +14,9 @@
 #include "Default.h"
 #include "ObjectInformation.h"
 #include "TransferFunction.h"
+#include <kvs/XMLDocument>
+#include <kvs/XMLNode>
+#include <kvs/KVSMLTransferFunction>
 #include <kvs/VisualizationPipeline>
 #include <kvs/ImageObject>
 #include <kvs/glut/Application>
@@ -28,6 +31,37 @@ namespace kvsview
 
 namespace Default
 {
+
+/*===========================================================================*/
+/**
+ *  @brief  Checks whether the given file is KVSML transfer function format or not.
+ *  @param  filename [in] filename
+ *  @return true, if the given file is KVSML transfer function format
+ */
+/*===========================================================================*/
+const bool CheckTransferFunctionFormat( const std::string& filename )
+{
+    if ( kvs::KVSMLTransferFunction::CheckFileExtension( filename ) )
+    {
+        // Find a TransferFunction tag without error messages.
+        kvs::XMLDocument document;
+        if ( !document.read( filename ) ) return( false );
+
+        // <KVSML>
+        const std::string kvsml_tag("KVSML");
+        const kvs::XMLNode::SuperClass* kvsml_node = kvs::XMLDocument::FindNode( &document, kvsml_tag );
+        if ( !kvsml_node ) return( false );
+
+        // <TransferFunction>
+        const std::string tfunc_tag("TransferFunction");
+        const kvs::XMLNode::SuperClass* tfunc_node = kvs::XMLNode::FindChildNode( kvsml_node, tfunc_tag );
+        if ( !tfunc_node ) return( false );
+
+        return( true );
+    }
+
+    return( false );
+}
 
 /*===========================================================================*/
 /**
@@ -72,7 +106,7 @@ const bool Main::exec( void )
      * method for the transfer function data hasn't yet been implemented in
      * the visualization pipeline class.
      */
-    if ( kvsview::TransferFunction::Check( arg.value<std::string>() ) )
+    if ( kvsview::Default::CheckTransferFunctionFormat( arg.value<std::string>() ) )
     {
         return( kvsview::TransferFunction::Main( m_argc, m_argv ).exec() );
     }
@@ -81,7 +115,6 @@ const bool Main::exec( void )
     kvs::glut::Screen screen( &app );
     screen.setSize( 512, 512 );
     screen.setTitle("kvsview - Default");
-    arg.applyTo( screen );
 
     // Visualization pipeline.
     m_input_name = arg.value<std::string>();
@@ -127,6 +160,7 @@ const bool Main::exec( void )
 
     // Apply the specified parameters to the global and the visualization pipeline.
     arg.applyTo( screen, pipe );
+    arg.applyTo( screen );
 
     // In case of the image object, the screen size is equal to the image size.
     if ( pipe.object()->objectType() == kvs::ObjectBase::Image )

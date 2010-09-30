@@ -125,7 +125,7 @@ void RendererManager::erase( std::string renderer_name, bool delete_flg )
         kvs::RendererBase* renderer = *renderer_ptr;
         if ( renderer->name() == renderer_name )
         {
-            if ( delete_flg ) { if ( renderer ) delete renderer; }
+            if ( delete_flg ) { if ( renderer ) delete( renderer ); }
 
             // Erase the renderer in the renderer master.
             RendererManagerBase::erase( renderer_ptr );
@@ -193,7 +193,7 @@ void RendererManager::change( std::string renderer_name, kvs::RendererBase* rend
         kvs::RendererBase* old_renderer = *old_renderer_ptr;
         if ( old_renderer->name() == renderer_name )
         {
-            if ( delete_flg ) { if ( old_renderer ) delete old_renderer; }
+            if ( delete_flg ) { if ( old_renderer ) delete( old_renderer ); }
 
             // Insert the new renderer
             *old_renderer_ptr = renderer;

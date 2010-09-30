@@ -31,7 +31,7 @@ namespace PointRenderer
 
 /*===========================================================================*/
 /**
- *  @brief  Constructs a new Argument class for a point renderer.
+ *  @brief  Constructs a new Argument class.
  *  @param  argc [in] argument count
  *  @param  argv [in] argument values
  */
@@ -45,7 +45,7 @@ Argument::Argument( int argc, char** argv ):
 
 /*===========================================================================*/
 /**
- *  @brief  Constructs a new Main class for a point renderer.
+ *  @brief  Constructs a new Main class.
  *  @param  argc [in] argument count
  *  @param  argv [in] argument values
  */
@@ -63,17 +63,17 @@ Main::Main( int argc, char** argv )
 /*===========================================================================*/
 const bool Main::exec( void )
 {
+    // GLUT viewer application.
     kvs::glut::Application app( m_argc, m_argv );
 
     // Parse specified arguments.
-    PointRenderer::Argument arg( m_argc, m_argv );
+    kvsview::PointRenderer::Argument arg( m_argc, m_argv );
     if( !arg.parse() ) return( false );
 
-    // Create a global and screen class.
+    // Create screen.
     kvs::glut::Screen screen( &app );
     screen.setSize( 512, 512 );
     screen.setTitle( kvsview::CommandName + " - " + kvsview::PointRenderer::CommandName );
-    arg.applyTo( screen );
 
     // Check the input data.
     m_input_name = arg.value<std::string>();
@@ -117,6 +117,7 @@ const bool Main::exec( void )
 
     // Apply the specified parameters to the global and the visualization pipeline.
     arg.applyTo( screen, pipe );
+    arg.applyTo( screen );
 
     // Show the screen.
     screen.show();

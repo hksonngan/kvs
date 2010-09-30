@@ -30,7 +30,7 @@ const std::string Description("Rendering a polygon object. (optional)");
 
 /*===========================================================================*/
 /**
- *  Argument class for a fld2kvsml.
+ *  Argument class for PolygonRenderer.
  */
 /*===========================================================================*/
 class Argument : public kvsview::Argument::Common
@@ -46,7 +46,7 @@ public:
 
 /*===========================================================================*/
 /**
- *  Main class for a fld2kvsml.
+ *  Main class for PolygonRenderer.
  */
 /*===========================================================================*/
 class Main

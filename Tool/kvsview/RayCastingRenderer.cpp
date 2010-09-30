@@ -15,6 +15,7 @@
 #include "CommandName.h"
 #include "ObjectInformation.h"
 #include "FileChecker.h"
+#include "Widget.h"
 #include <kvs/IgnoreUnusedVariable>
 #include <kvs/File>
 #include <kvs/KVSMLObjectStructuredVolume>
@@ -29,16 +30,13 @@
 #include <kvs/Key>
 #include <kvs/glut/Application>
 #include <kvs/glut/Screen>
-#include <kvs/glut/LegendBar>
-#include <kvs/glut/OrientationAxis>
-#include <kvs/glut/Label>
 #include <kvs/glut/TransferFunctionEditor>
 #if defined( KVS_SUPPORT_GLEW )
 #include <kvs/glew/RayCastingRenderer>
 #endif
 
-namespace { bool HasBounds = false; }
 namespace { bool Shown = false; }
+namespace { const std::string RendererName( "RayCastingRenderer" ); }
 
 
 namespace kvsview
@@ -51,25 +49,25 @@ namespace RayCastingRenderer
 /**
  *  @brief  Set shader and transfer function to ray casting renderer.
  *  @param  arg [in] command line argument
+ *  @param  tfunc [in] transfer function
  *  @param  renderer [in] renderer module
  */
 /*===========================================================================*/
 template <typename Renderer>
-const void Initialize(
+const void SetupRenderer(
     const kvsview::RayCastingRenderer::Argument& arg,
+    const kvs::TransferFunction& tfunc,
     kvs::PipelineModule& renderer )
 {
     // Renderer name.
-    const std::string renderer_name("RayCastingRenderer");
-    renderer.template get<Renderer>()->setName( renderer_name );
+    renderer.template get<Renderer>()->setName( ::RendererName );
 
     // Sampling step.
     const float step = arg.step();
     renderer.template get<Renderer>()->setSamplingStep( step );
 
     // Transfer function.
-    const kvs::TransferFunction& function = arg.transferFunction();
-    renderer.template get<Renderer>()->setTransferFunction( function );
+    renderer.template get<Renderer>()->setTransferFunction( tfunc );
 
     // Shading on/off.
     const bool noshading = arg.noShading();
@@ -121,8 +119,7 @@ public:
 
     void apply( void )
     {
-        const std::string renderer_name("RayCastingRenderer");
-        const kvs::RendererBase* base = screen()->rendererManager()->renderer( renderer_name );
+        const kvs::RendererBase* base = screen()->rendererManager()->renderer( ::RendererName );
         if ( m_no_gpu )
         {
             kvs::RayCastingRenderer* renderer = (kvs::RayCastingRenderer*)base;
@@ -156,6 +153,10 @@ public:
 /*===========================================================================*/
 class KeyPressEvent : public kvs::KeyPressEventListener
 {
+    TransferFunctionEditor* m_editor; ///!< pointer to the transfer function
+
+public:
+
     void update( kvs::KeyEvent* event )
     {
         switch ( event->key() )
@@ -163,8 +164,21 @@ class KeyPressEvent : public kvs::KeyPressEventListener
         case kvs::Key::o: screen()->controlTarget() = kvs::ScreenBase::TargetObject; break;
         case kvs::Key::l: screen()->controlTarget() = kvs::ScreenBase::TargetLight; break;
         case kvs::Key::c: screen()->controlTarget() = kvs::ScreenBase::TargetCamera; break;
+        case kvs::Key::t:
+        {
+            if ( ::Shown ) m_editor->hide();
+            else m_editor->showWindow();
+
+            ::Shown = !::Shown;
+            break;
+        }
         default: break;
         }
+    }
+
+    void attachTransferFunctionEditor( TransferFunctionEditor* editor )
+    {
+        m_editor = editor;
     }
 };
 
@@ -195,79 +209,6 @@ public:
 
 /*===========================================================================*/
 /**
- *  @brief  Label class to show the frame rate.
- */
-/*===========================================================================*/
-class Label : public kvs::glut::Label
-{
-public:
-
-    Label( kvs::ScreenBase* screen ):
-        kvs::glut::Label( screen )
-    {
-        setMargin( 10 );
-    }
-
-    void screenUpdated( void )
-    {
-        const int id = ::HasBounds ? 2 : 1;
-        const kvs::RendererBase* renderer = screen()->rendererManager()->renderer( id );
-
-        std::stringstream fps;
-        fps << std::setprecision(4) << renderer->timer().fps();
-        setText( std::string( "fps: " + fps.str() ).c_str() );
-    }
-};
-
-/*===========================================================================*/
-/**
- *  @brief  Legend bar class.
- */
-/*===========================================================================*/
-class LegendBar : public kvs::glut::LegendBar
-{
-public:
-
-    LegendBar( kvs::ScreenBase* screen ):
-        kvs::glut::LegendBar( screen )
-    {
-        setWidth( 200 );
-        setHeight( 50 );
-    }
-
-    void screenResized( void )
-    {
-        setX( screen()->width() - width() );
-        setY( screen()->height() - height() );
-    }
-};
-
-/*===========================================================================*/
-/**
- *  @brief  Orientation axis class.
- */
-/*===========================================================================*/
-class OrientationAxis : public kvs::glut::OrientationAxis
-{
-public:
-
-    OrientationAxis( kvs::ScreenBase* screen ):
-        kvs::glut::OrientationAxis( screen )
-    {
-        setMargin( 10 );
-        setSize( 90 );
-        setBoxType( kvs::glut::OrientationAxis::SolidBox );
-        enableAntiAliasing();
-    }
-
-    void screenResized( void )
-    {
-        setY( screen()->height() - height() );
-    }
-};
-
-/*===========================================================================*/
-/**
  *  @brief  Constructs a new Argument class for a point renderer.
  *  @param  argc [in] argument count
  *  @param  argv [in] argument values
@@ -279,6 +220,7 @@ Argument::Argument( int argc, char** argv ):
     // Parameters for the RayCastingRenderer class.
     add_option( kvsview::RayCastingRenderer::CommandName, kvsview::RayCastingRenderer::Description, 0 );
     add_option( "t", "Transfer function file. (optional: <filename>)", 1, false );
+    add_option( "T", "Transfer function file with range adjustment. (optional: <filename>)", 1, false );
     add_option( "noshading", "Disable shading. (optional)", 0, false );
     add_option( "nolod", "Disable Level-of-Detail control. (optional)", 0, false );
     add_option( "nogpu", "Disable GPU rendering. (optional)", 0, false );
@@ -403,15 +345,23 @@ const float Argument::shininess( void ) const
 /*===========================================================================*/
 /**
  *  @brief  Returns a transfer function.
+ *  @param  volume [in] pointer to the volume object
  *  @return transfer function
  */
 /*===========================================================================*/
-const kvs::TransferFunction Argument::transferFunction( void ) const
+const kvs::TransferFunction Argument::transferFunction( const kvs::VolumeObjectBase* volume ) const
 {
     if ( this->hasOption("t") )
     {
         const std::string filename = this->optionValue<std::string>("t");
         return( kvs::TransferFunction( filename ) );
+    }
+    else if ( this->hasOption("T") )
+    {
+        const std::string filename = this->optionValue<std::string>("T");
+        kvs::TransferFunction tfunc( filename );
+        tfunc.adjustRange( volume );
+        return( tfunc );
     }
     else
     {
@@ -420,6 +370,12 @@ const kvs::TransferFunction Argument::transferFunction( void ) const
     }
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns sampling step.
+ *  @return sampling step
+ */
+/*===========================================================================*/
 const float Argument::step( void ) const
 {
     const float default_value = 0.5f;
@@ -448,18 +404,19 @@ Main::Main( int argc, char** argv )
 /*===========================================================================*/
 const bool Main::exec( void )
 {
+    // GLUT viewer application.
     kvs::glut::Application app( m_argc, m_argv );
 
     // Parse specified arguments.
-    RayCastingRenderer::Argument arg( m_argc, m_argv );
+    kvsview::RayCastingRenderer::Argument arg( m_argc, m_argv );
     if( !arg.parse() ) return( false );
+
+    // Events.
+    kvsview::RayCastingRenderer::KeyPressEvent key_press_event;
+    kvsview::RayCastingRenderer::MouseDoubleClickEvent mouse_double_click_event;
 
     // Create screen.
     kvs::glut::Screen screen( &app );
-
-    RayCastingRenderer::KeyPressEvent key_press_event;
-    RayCastingRenderer::MouseDoubleClickEvent mouse_double_click_event;
-
     screen.setSize( 512, 512 );
     screen.addKeyPressEvent( &key_press_event );
     screen.addMouseDoubleClickEvent( &mouse_double_click_event );
@@ -486,33 +443,35 @@ const bool Main::exec( void )
         std::cout << std::endl;
     }
 
+    // Pointer to the volume object data.
+    const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( pipe.object() );
+
+    // Transfer function.
+    const kvs::TransferFunction tfunc = arg.transferFunction( volume );
+
     // Label (fps).
-    RayCastingRenderer::Label label( &screen );
+    kvsview::Widget::FPSLabel label( &screen, ::RendererName );
     label.show();
 
     // Legend bar.
-    RayCastingRenderer::LegendBar legend_bar( &screen );
-    legend_bar.setColorMap( arg.transferFunction().colorMap() );
-    if ( !arg.transferFunction().hasRange() )
+    kvsview::Widget::LegendBar legend_bar( &screen );
+    legend_bar.setColorMap( tfunc.colorMap() );
+    if ( !tfunc.hasRange() )
     {
-        const kvs::VolumeObjectBase* object = kvs::VolumeObjectBase::DownCast( pipe.object() );
-        const kvs::Real32 min_value = object->minValue();
-        const kvs::Real32 max_value = object->maxValue();
+        const kvs::Real32 min_value = volume->minValue();
+        const kvs::Real32 max_value = volume->maxValue();
         legend_bar.setRange( min_value, max_value );
     }
     legend_bar.show();
 
     // Orientation axis.
-    RayCastingRenderer::OrientationAxis orientation_axis( &screen );
+    kvsview::Widget::OrientationAxis orientation_axis( &screen );
     orientation_axis.show();
 
-    // For bounding box.
+    // Bounding box.
     if ( arg.hasOption("bounds") )
     {
-        ::HasBounds = true;
-
         kvs::LineObject* bounds = new kvs::Bounds( pipe.object() );
-
         bounds->setColor( kvs::RGBColor( 0, 0, 0 ) );
         if ( arg.hasOption("bounds_color") )
         {
@@ -533,7 +492,7 @@ const bool Main::exec( void )
     if ( arg.noGPU() )
     {
         kvs::PipelineModule renderer( new kvs::RayCastingRenderer );
-        RayCastingRenderer::Initialize<kvs::RayCastingRenderer>( arg, renderer );
+        kvsview::RayCastingRenderer::SetupRenderer<kvs::RayCastingRenderer>( arg, tfunc, renderer );
 
         if ( !arg.noLOD() )
         {
@@ -546,10 +505,10 @@ const bool Main::exec( void )
     {
 #if defined( KVS_SUPPORT_GLEW )
         kvs::PipelineModule renderer( new kvs::glew::RayCastingRenderer );
-        RayCastingRenderer::Initialize<kvs::glew::RayCastingRenderer>( arg, renderer );
+        kvsview::RayCastingRenderer::SetupRenderer<kvs::glew::RayCastingRenderer>( arg, tfunc, renderer );
 #else
         kvs::PipelineModule renderer( new kvs::RayCastingRenderer );
-        RayCastingRenderer::Initialize<kvs::RayCastingRenderer>( arg, renderer );
+        kvsview::RayCastingRenderer::SetupRenderer<kvs::RayCastingRenderer>( arg, tfunc, renderer );
 #endif
         pipe.connect( renderer );
     }
@@ -580,20 +539,21 @@ const bool Main::exec( void )
     screen.show();
 
     // Create transfer function editor.
-    RayCastingRenderer::TransferFunctionEditor editor( &screen, arg.noGPU() );
+    kvsview::RayCastingRenderer::TransferFunctionEditor editor( &screen, arg.noGPU() );
     editor.setVolumeObject( kvs::VolumeObjectBase::DownCast( pipe.object() ) );
-    editor.setTransferFunction( arg.transferFunction() );
+    editor.setTransferFunction( tfunc );
     editor.attachLegendBar( &legend_bar );
     editor.show();
     editor.hide();
     ::Shown = false;
 
-    // Attach the transfer function editor to the mouse double-click event.
+    // Attach the transfer function editor to the key press event and the mouse double-click event.
     mouse_double_click_event.attachTransferFunctionEditor( &editor );
+    key_press_event.attachTransferFunctionEditor( &editor );
 
     return( app.run() );
 }
 
-} // end of namespace Default
+} // end of namespace RayCastingRenderer
 
 } // end of namespace kvsview

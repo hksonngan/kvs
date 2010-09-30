@@ -13,9 +13,9 @@
 /*****************************************************************************/
 #include "TransferFunction.h"
 #include "CommandName.h"
-#include <kvs/XMLDocument>
-#include <kvs/XMLNode>
-#include <kvs/KVSMLTransferFunction>
+//#include <kvs/XMLDocument>
+//#include <kvs/XMLNode>
+//#include <kvs/KVSMLTransferFunction>
 #include <kvs/TransferFunction>
 #include <kvs/Texture1D>
 #include <kvs/Texture2D>
@@ -33,43 +33,16 @@ namespace TransferFunction
 
 /*===========================================================================*/
 /**
- *  @brief  Checks whether the given file is KVSML transfer function format or not.
- *  @param  filename [in] filename
- *  @return true, if the given file is KVSML transfer function format
+ *  @brief  Parameter set.
  */
 /*===========================================================================*/
-const bool Check( const std::string& filename )
-{
-    if ( kvs::KVSMLTransferFunction::CheckFileExtension( filename ) )
-    {
-        // Find a TransferFunction tag without error messages.
-        kvs::XMLDocument document;
-        if ( !document.read( filename ) ) return( false );
-
-        // <KVSML>
-        const std::string kvsml_tag("KVSML");
-        const kvs::XMLNode::SuperClass* kvsml_node = kvs::XMLDocument::FindNode( &document, kvsml_tag );
-        if ( !kvsml_node ) return( false );
-
-        // <TransferFunction>
-        const std::string tfunc_tag("TransferFunction");
-        const kvs::XMLNode::SuperClass* tfunc_node = kvs::XMLNode::FindChildNode( kvsml_node, tfunc_tag );
-        if ( !tfunc_node ) return( false );
-
-        return( true );
-    }
-
-    return( false );
-}
-
-
 struct Parameters
 {
-    kvs::TransferFunction transfer_function;
-    kvs::Texture1D        color_map_texture;
-    kvs::Texture2D        checkerboard_texture;
-    bool                  has_color_map_option;
-    bool                  has_opacity_map_option;
+    kvs::TransferFunction transfer_function; ///< transfer function
+    kvs::Texture1D        color_map_texture; ///< color map texture
+    kvs::Texture2D        checkerboard_texture; ///< checkerboard texture
+    bool                  has_color_map_option; ///< check flag for color map
+    bool                  has_opacity_map_option; ///< check flag for opacity map
 
     Parameters( Argument& arg )
     {
@@ -149,7 +122,11 @@ struct Parameters
     }
 };
 
-
+/*===========================================================================*/
+/**
+ *  @brief  Initialize event.
+ */
+/*===========================================================================*/
 class InitializeEvent : public kvs::InitializeEventListener
 {
 private:
@@ -168,6 +145,11 @@ public:
     }
 };
 
+/*===========================================================================*/
+/**
+ *  @brief  Paint event.
+ */
+/*===========================================================================*/
 class PaintEvent : public kvs::PaintEventListener
 {
 private:
@@ -348,12 +330,15 @@ Main::Main( int argc, char** argv )
 /*===========================================================================*/
 const bool Main::exec( void )
 {
+    // Setup GLUT viewer application.
     kvs::glut::Application app( m_argc, m_argv );
 
+    // Commandline arguments.
     kvsview::TransferFunction::Argument arg( m_argc, m_argv );
     if ( !arg.parse() ) exit( EXIT_FAILURE );
     m_input_name = arg.value<std::string>();
 
+    // Parameters.
     kvsview::TransferFunction::Parameters params( arg );
     if ( !params.transfer_function.read( m_input_name ) ) exit( EXIT_FAILURE );
 
@@ -364,6 +349,7 @@ const bool Main::exec( void )
         std::cout << "resolution: " << params.transfer_function.resolution() << std::endl;
     }
 
+    // Events.
     kvsview::TransferFunction::InitializeEvent initialize_event( &params );
     kvsview::TransferFunction::PaintEvent paint_event( &params );
 

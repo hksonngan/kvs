@@ -15,6 +15,7 @@
 #include "CommandName.h"
 #include "ObjectInformation.h"
 #include "FileChecker.h"
+#include "Widget.h"
 #include <kvs/PipelineModule>
 #include <kvs/VisualizationPipeline>
 #include <kvs/Isosurface>
@@ -27,7 +28,10 @@
 #include <kvs/glut/OrientationAxis>
 
 
-namespace Widget
+namespace kvsview
+{
+
+namespace Isosurface
 {
 
 /*===========================================================================*/
@@ -73,20 +77,16 @@ public:
     }
 };
 
-} // end of namespace Widget
-
-
-namespace kvsview
-{
-
-namespace Isosurface
-{
-
+/*===========================================================================*/
+/**
+ *  @brief  Key press event.
+ */
+/*===========================================================================*/
 class KeyPressEvent : public kvs::KeyPressEventListener
 {
-    void update( kvs::KeyEvent* ev )
+    void update( kvs::KeyEvent* event )
     {
-        switch ( ev->key() )
+        switch ( event->key() )
         {
         case kvs::Key::o: screen()->controlTarget() = kvs::ScreenBase::TargetObject; break;
         case kvs::Key::l: screen()->controlTarget() = kvs::ScreenBase::TargetLight; break;
@@ -96,46 +96,9 @@ class KeyPressEvent : public kvs::KeyPressEventListener
     }
 };
 
-class LegendBar : public kvs::glut::LegendBar
-{
-public:
-
-    LegendBar( kvs::ScreenBase* screen ):
-        kvs::glut::LegendBar( screen )
-    {
-        setWidth( 200 );
-        setHeight( 50 );
-    }
-
-    void screenResized( void )
-    {
-        setX( screen()->width() - width() );
-        setY( screen()->height() - height() );
-    }
-};
-
-class OrientationAxis : public kvs::glut::OrientationAxis
-{
-public:
-
-    OrientationAxis( kvs::ScreenBase* screen ):
-        kvs::glut::OrientationAxis( screen )
-    {
-        setMargin( 10 );
-        setSize( 90 );
-        setBoxType( kvs::glut::OrientationAxis::SolidBox );
-        enableAntiAliasing();
-    }
-
-    void screenResized( void )
-    {
-        setY( screen()->height() - height() );
-    }
-};
-
 /*===========================================================================*/
 /**
- *  @brief  Constructs a new Argument class for a point renderer.
+ *  @brief  Constructs a new Argument class.
  *  @param  argc [in] argument count
  *  @param  argv [in] argument values
  */
@@ -148,12 +111,15 @@ Argument::Argument( int argc, char** argv ):
     add_option( "l", "Isosurface level. (default: mean value)", 1, false );
     add_option( "n", "Normal vector type; 'poly[gon]' 'vert[ex]'. (default: poly)", 1, false );
     add_option( "t", "Transfer function file. (optional: <filename>)", 1, false );
+    add_option( "T", "Transfer function file with range adjustment. (optional: <filename>)", 1, false );
 }
 
 /*===========================================================================*/
 /**
  *  @brief  Returns a isolevel.
- *  @return subpixel level
+ *  @param  volume [in] pointer to the volume object
+ *  @param  transfer_function [in] transfer function
+ *  @return isolevel level
  */
 /*===========================================================================*/
 const kvs::Real64 Argument::isolevel(
@@ -210,15 +176,23 @@ const kvs::PolygonObject::NormalType Argument::normalType( void )
 /*===========================================================================*/
 /**
  *  @brief  Returns a transfer function.
+ *  @param  volume [in] pointer to the volume object
  *  @return transfer function
  */
 /*===========================================================================*/
-const kvs::TransferFunction Argument::transferFunction( void )
+const kvs::TransferFunction Argument::transferFunction( const kvs::VolumeObjectBase* volume )
 {
     if ( this->hasOption("t") )
     {
         const std::string filename = this->optionValue<std::string>("t");
         return( kvs::TransferFunction( filename ) );
+    }
+    else if ( this->hasOption("T") )
+    {
+        const std::string filename = this->optionValue<std::string>("T");
+        kvs::TransferFunction tfunc( filename );
+        tfunc.adjustRange( volume );
+        return( tfunc );
     }
     else
     {
@@ -229,7 +203,7 @@ const kvs::TransferFunction Argument::transferFunction( void )
 
 /*===========================================================================*/
 /**
- *  @brief  Constructs a new Main class for a point renderer.
+ *  @brief  Constructs a new Main class.
  *  @param  argc [in] argument count
  *  @param  argv [in] argument values
  */
@@ -247,25 +221,21 @@ Main::Main( int argc, char** argv )
 /*===========================================================================*/
 const bool Main::exec( void )
 {
+    // GLUT viewer application.
     kvs::glut::Application app( m_argc, m_argv );
 
     // Parse specified arguments.
     Isosurface::Argument arg( m_argc, m_argv );
     if( !arg.parse() ) return( false );
 
-    KeyPressEvent key_press_event;
+    // Event.
+    kvsview::Isosurface::KeyPressEvent key_press_event;
 
-    // Create a global and screen class.
+    // Create screen.
     kvs::glut::Screen screen( &app );
     screen.addKeyPressEvent( &key_press_event );
     screen.setSize( 512, 512 );
     screen.setTitle( kvsview::CommandName + " - " + kvsview::Isosurface::CommandName );
-    arg.applyTo( screen );
-
-    // Create a isolevel slider.
-    Widget::IsolevelSlider slider( &screen );
-    slider.setMargin( 10 );
-    slider.setCaption("Isolevel");
 
     // Check the input point data.
     m_input_name = arg.value<std::string>();
@@ -288,10 +258,16 @@ const bool Main::exec( void )
         std::cout << std::endl;
     }
 
+    // Pointer to the volume object data.
+    const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( pipe.object() );
+
+    // Transfer function.
+    const kvs::TransferFunction tfunc = arg.transferFunction( volume );
+
     // Legend bar.
-    Isosurface::LegendBar legend_bar( &screen );
-    legend_bar.setColorMap( arg.transferFunction().colorMap() );
-    if ( !arg.transferFunction().hasRange() )
+    kvsview::Widget::LegendBar legend_bar( &screen );
+    legend_bar.setColorMap( tfunc.colorMap() );
+    if ( !tfunc.hasRange() )
     {
         const kvs::VolumeObjectBase* object = kvs::VolumeObjectBase::DownCast( pipe.object() );
         const kvs::Real32 min_value = object->minValue();
@@ -301,25 +277,19 @@ const bool Main::exec( void )
     legend_bar.show();
 
     // Orientation axis.
-    Isosurface::OrientationAxis orientation_axis( &screen );
+    kvsview::Widget::OrientationAxis orientation_axis( &screen );
     orientation_axis.show();
-
-    // Get the imported object.
-    const kvs::ObjectBase* object = pipe.object();
-    const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
-    slider.setVolumeObject( volume );
 
     // Set up the isosurface class.
     kvs::PipelineModule mapper( new kvs::Isosurface );
-    const kvs::TransferFunction function = arg.transferFunction();
-    const kvs::Real64 level = arg.isolevel( volume, function );
+    const kvs::Real64 level = arg.isolevel( volume, tfunc );
     const kvs::PolygonObject::NormalType normal = arg.normalType();
     mapper.get<kvs::Isosurface>()->setIsolevel( level );
     mapper.get<kvs::Isosurface>()->setNormalType( normal );
-    mapper.get<kvs::Isosurface>()->setTransferFunction( function );
+    mapper.get<kvs::Isosurface>()->setTransferFunction( tfunc );
+    pipe.connect( mapper );
 
     // Construct the visualization pipeline.
-    pipe.connect( mapper );
     if ( !pipe.exec() )
     {
         kvsMessageError("Cannot execute the visulization pipeline.");
@@ -327,10 +297,6 @@ const bool Main::exec( void )
     }
 
     screen.registerObject( &pipe );
-    slider.setTransferFunction( function );
-    slider.setNormal( normal );
-    slider.setValue( static_cast<float>( level ) );
-    slider.setRange( legend_bar.minValue(), legend_bar.maxValue() );
 
     // Verbose information.
     if ( arg.verboseMode() )
@@ -344,14 +310,25 @@ const bool Main::exec( void )
 
     // Apply the specified parameters to the global and the visualization pipeline.
     arg.applyTo( screen, pipe );
+    arg.applyTo( screen );
 
     // Show the screen and the slider widget.
     screen.show();
+
+    // Slider.
+    kvsview::Isosurface::IsolevelSlider slider( &screen );
+    slider.setMargin( 10 );
+    slider.setCaption("Isolevel");
+    slider.setVolumeObject( volume );
+    slider.setTransferFunction( tfunc );
+    slider.setNormal( normal );
+    slider.setValue( static_cast<float>( level ) );
+    slider.setRange( legend_bar.minValue(), legend_bar.maxValue() );
     slider.show();
 
     return( app.run() );
 }
 
-} // end of namespace Default
+} // end of namespace Isosurface
 
 } // end of namespace kvsview

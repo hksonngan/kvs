@@ -32,7 +32,7 @@ const std::string Description("Extract external faces of the volume data. (optio
 
 /*===========================================================================*/
 /**
- *  Argument class.
+ *  Argument class for ExternalFaces.
  */
 /*===========================================================================*/
 class Argument : public kvsview::Argument::Common
@@ -45,12 +45,12 @@ public:
 
     const kvs::UInt8 opacity( void );
 
-    const kvs::TransferFunction transferFunction( void );
+    const kvs::TransferFunction transferFunction( const kvs::VolumeObjectBase* volume );
 };
 
 /*===========================================================================*/
 /**
- *  Main class for a fld2kvsml.
+ *  Main class for ExternalFaces.
  */
 /*===========================================================================*/
 class Main

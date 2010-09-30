@@ -34,7 +34,7 @@ const std::string Description("Extract a orthogonal slice plane. (optional)");
 
 /*===========================================================================*/
 /**
- *  Argument class for the OrthoSlice.
+ *  Argument class for OrthoSlice.
  */
 /*===========================================================================*/
 class Argument : public kvsview::Argument::Common
@@ -49,12 +49,12 @@ public:
 
     const float position( void );
 
-    const kvs::TransferFunction transferFunction( void );
+    const kvs::TransferFunction transferFunction( const kvs::VolumeObjectBase* volume );
 };
 
 /*===========================================================================*/
 /**
- *  Main class for a fld2kvsml.
+ *  Main class for OrthoSlice.
  */
 /*===========================================================================*/
 class Main

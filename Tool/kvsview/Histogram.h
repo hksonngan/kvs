@@ -29,11 +29,10 @@ namespace Histogram
 
 const std::string CommandName("Histogram");
 const std::string Description("Rendering histogram. (optional)");
-const bool Check( const std::string& filename );
 
 /*===========================================================================*/
 /**
- *  @brief  Argument class.
+ *  Argument class for Histogram.
  */
 /*===========================================================================*/
 class Argument : public kvsview::Argument::Common
@@ -49,7 +48,7 @@ public:
 
 /*===========================================================================*/
 /**
- *  @brief  Main class.
+ *  Main class for Histogram.
  */
 /*===========================================================================*/
 class Main

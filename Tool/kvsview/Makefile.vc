@@ -129,6 +129,7 @@ $(OUTDIR)/ExternalFaces.obj \
 $(OUTDIR)/RayCastingRenderer.obj \
 $(OUTDIR)/ParticleVolumeRenderer.obj \
 $(OUTDIR)/Histogram.obj \
+$(OUTDIR)/Widget.obj \
 $(OUTDIR)/main.obj \
 
 

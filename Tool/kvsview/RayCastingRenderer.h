@@ -18,6 +18,7 @@
 #include <kvs/Type>
 #include <kvs/CommandLine>
 #include <kvs/TransferFunction>
+#include <kvs/VolumeObjectBase>
 #include "Argument.h"
 
 
@@ -32,7 +33,7 @@ const std::string Description("Rendering a volume object. (optional)");
 
 /*===========================================================================*/
 /**
- *  Argument class for the RayCastingRenderer.
+ *  Argument class for RayCastingRenderer.
  */
 /*===========================================================================*/
 class Argument : public kvsview::Argument::Common
@@ -61,12 +62,12 @@ public:
 
     const float step( void ) const;
 
-    const kvs::TransferFunction transferFunction( void ) const;
+    const kvs::TransferFunction transferFunction( const kvs::VolumeObjectBase* volume ) const;
 };
 
 /*===========================================================================*/
 /**
- *  Main class for the RayCastingRenderer.
+ *  Main class for RayCastingRenderer.
  */
 /*===========================================================================*/
 class Main

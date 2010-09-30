@@ -30,7 +30,7 @@ const std::string Description("Rendering a point object. (optional)");
 
 /*===========================================================================*/
 /**
- *  Argument class for a fld2kvsml.
+ *  Argument class for PointRenderer.
  */
 /*===========================================================================*/
 class Argument : public kvsview::Argument::Common
@@ -42,7 +42,7 @@ public:
 
 /*===========================================================================*/
 /**
- *  Main class for a fld2kvsml.
+ *  Main class for PointRenderer.
  */
 /*===========================================================================*/
 class Main

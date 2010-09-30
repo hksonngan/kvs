@@ -223,7 +223,7 @@ void ObjectManager::erase( std::string obj_name, bool delete_flg )
         kvs::ObjectBase* obj = *ptr; // object
         if ( obj->name() == obj_name )
         {
-            if ( delete_flg ) { if ( obj ) delete obj; }
+            if ( delete_flg ) { if ( obj ) delete( obj ); }
 
             // Erase the object in the object master base.
             ObjectManagerBase::erase( ptr );
@@ -305,7 +305,7 @@ void ObjectManager::change( std::string obj_name, ObjectBase* obj, bool delete_f
             kvs::Xform xform = old_obj->xform();
 
             // Erase the old object
-            if ( delete_flg ) { if ( old_obj ) delete old_obj; }
+            if ( delete_flg ) { if ( old_obj ) delete( old_obj ); }
 
             // Insert the new object
             obj->updateNormalizeParameters();

@@ -35,7 +35,7 @@ const std::string Description("Extract surfaces using Isosurface. (optional)");
 
 /*===========================================================================*/
 /**
- *  Argument class for a fld2kvsml.
+ *  Argument class for Isosurface.
  */
 /*===========================================================================*/
 class Argument : public kvsview::Argument::Common
@@ -50,12 +50,12 @@ public:
 
     const kvs::PolygonObject::NormalType normalType( void );
 
-    const kvs::TransferFunction transferFunction( void );
+    const kvs::TransferFunction transferFunction( const kvs::VolumeObjectBase* volume );
 };
 
 /*===========================================================================*/
 /**
- *  Main class for a fld2kvsml.
+ *  Main class for Isosurface.
  */
 /*===========================================================================*/
 class Main
