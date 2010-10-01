@@ -1,6 +1,6 @@
 /****************************************************************************/
 /**
- *  @file kvscheckMacro.h
+ *  @file CommandName.h
  */
 /*----------------------------------------------------------------------------
  *
@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVSCHECK__KVSCHECK_MACRO_H_INCLUDE
-#define KVSCHECK__KVSCHECK_MACRO_H_INCLUDE
+#ifndef KVSCHECK__COMMAND_NAME_H_INCLUDE
+#define KVSCHECK__COMMAND_NAME_H_INCLUDE
 
 #include <string>
 
@@ -20,8 +20,8 @@
 namespace kvscheck
 {
 
-const std::string KVSCHECK_COMMAND_NAME = "kvscheck";
+const std::string CommandName = "kvscheck";
 
 }
 
-#endif // KVSCHECK__KVSCHECK_MACRO_H_INCLUDE
+#endif // KVSCHECK__COMMAND_NAME_H_INCLUDE

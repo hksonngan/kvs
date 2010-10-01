@@ -124,6 +124,7 @@ endif
 #  Object.
 #=============================================================================
 OBJECTS := \
+$(OUTDIR)/Argument.o \
 $(OUTDIR)/CompilerChecker.o \
 $(OUTDIR)/FileChecker.o \
 $(OUTDIR)/OpenGLChecker.o \

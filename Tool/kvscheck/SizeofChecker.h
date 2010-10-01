@@ -40,6 +40,12 @@ public:
     friend std::ostream& operator << ( std::ostream& os, const SizeofChecker& checker );
 };
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns size of specified type.
+ *  @return size in byte
+ */
+/*===========================================================================*/
 template <typename T>
 inline const size_t SizeofChecker::sizeOf( void ) const
 {

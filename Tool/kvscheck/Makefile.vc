@@ -113,6 +113,7 @@ TARGET_EXE = $(OUTDIR)\$(PROJECT_NAME).exe
 #  Object.
 #=============================================================================
 OBJECTS = \
+$(OUTDIR)\Argument.obj \
 $(OUTDIR)\CompilerChecker.obj \
 $(OUTDIR)\FileChecker.obj \
 $(OUTDIR)\OpenGLChecker.obj \

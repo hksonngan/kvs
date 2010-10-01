@@ -36,22 +36,34 @@ public:
 public:
 
     template <typename T>
-    const T minValue( void ) const;
+    const T minValueOf( void ) const;
 
     template <typename T>
-    const T maxValue( void ) const;
+    const T maxValueOf( void ) const;
 
     friend std::ostream& operator << ( std::ostream& os, const MinMaxChecker& checker );
 };
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns minimum value of specified type.
+ *  @return minimum value
+ */
+/*===========================================================================*/
 template <typename T>
-inline const T MinMaxChecker::minValue( void ) const
+inline const T MinMaxChecker::minValueOf( void ) const
 {
     return( kvs::Value<T>::Min() );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns maximum value of specified type.
+ *  @return maximum value
+ */
+/*===========================================================================*/
 template <typename T>
-inline const T MinMaxChecker::maxValue( void ) const
+inline const T MinMaxChecker::maxValueOf( void ) const
 {
     return( kvs::Value<T>::Max() );
 }
