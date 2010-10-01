@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_KVSMAKE_WRITE_MAKEFILE_H_INCLUDE
-#define KVS_KVSMAKE_WRITE_MAKEFILE_H_INCLUDE
+#ifndef KVSMAKE__WRITE_MAKEFILE_H_INCLUDE
+#define KVSMAKE__WRITE_MAKEFILE_H_INCLUDE
 
 #include <string>  // For std::string.
 #include <fstream> // For std::ifstream, std::ofstream.
@@ -30,4 +30,4 @@ void WriteMakefileBody(
 
 } // end of namespace kvsmake
 
-#endif // KVS_KVSMAKE_WRITE_MAKEFILE_H_INCLUDE
+#endif // KVSMAKE__WRITE_MAKEFILE_H_INCLUDE

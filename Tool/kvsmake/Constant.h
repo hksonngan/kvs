@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_KVSMAKE_CONSTANT_H_INCLUDE
-#define KVS_KVSMAKE_CONSTANT_H_INCLUDE
+#ifndef KVSMAKE__CONSTANT_H_INCLUDE
+#define KVSMAKE__CONSTANT_H_INCLUDE
 
 #include <cstdlib> // For std::getenv.
 #include <string>  // For std::string.
@@ -44,4 +44,4 @@ const std::string QtProjectTemplate( KVS_DIR + "/bin/QtProject.template" );
 
 } // end of namespace kvsmake
 
-#endif // KVS_KVSMAKE_CONSTANT_H_INCLUDE
+#endif // KVSMAKE__CONSTANT_H_INCLUDE

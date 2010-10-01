@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_KVSMAKE_WRITE_VC_PROJECT_CUDA_H_INCLUDE
-#define KVS_KVSMAKE_WRITE_VC_PROJECT_CUDA_H_INCLUDE
+#ifndef KVSMAKE__WRITE_VC_PROJECT_CUDA_H_INCLUDE
+#define KVSMAKE__WRITE_VC_PROJECT_CUDA_H_INCLUDE
 
 #include <string>  // For std::string.
 #include <fstream> // For std::ifstream, std::ofstream.

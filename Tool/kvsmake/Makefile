@@ -34,6 +34,7 @@ endif
 #  Object.
 #=============================================================================
 OBJECTS := \
+$(OUTDIR)/Argument.o \
 $(OUTDIR)/WriteMakefile.o \
 $(OUTDIR)/WriteQtProject.o \
 $(OUTDIR)/main.o \

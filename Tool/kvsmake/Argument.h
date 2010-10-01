@@ -11,11 +11,10 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_KVSMAKE_ARGUMENT_H_INCLUDE
-#define KVS_KVSMAKE_ARGUMENT_H_INCLUDE
+#ifndef KVSMAKE__ARGUMENT_H_INCLUDE
+#define KVSMAKE__ARGUMENT_H_INCLUDE
 
 #include <kvs/CommandLine>
-#include <kvs/Compiler>
 
 
 namespace kvsmake
@@ -26,35 +25,13 @@ namespace kvsmake
  *  Argument class.
  */
 /*==========================================================================*/
-class Argument
-    : public kvs::CommandLine
+class Argument : public kvs::CommandLine
 {
 public:
 
-    Argument( int argc, char** argv )
-        : kvs::CommandLine( argc, argv, "kvsmake" )
-    {
-        add_help_option();
-
-        add_value( "project_name/make_options", false );
-
-        add_option( "g",      "Generate a makefile.", 1 );
-        add_option( "G",      "Generate a makefile and set it's target name to the current directory name", 0 );
-
-#if defined ( KVS_COMPILER_VC )
-        add_option( "v",      "generate a project file for VC.", 1 );
-        add_option( "vc",     "generate a project file for VC.", 1 );
-        add_option( "vcproj", "generate a project file for VC.", 1 );
-
-        add_option( "cuda", "generate a project file for VC and CUDA.", 1 );
-#endif
-
-        add_option( "q",      "Generate a project file for Qt.", 1 );
-        add_option( "qt",     "Generate a project file for Qt.", 1 );
-        add_option( "qtproj", "Generate a project file for Qt.", 1 );
-    }
+    Argument( int argc, char** argv );
 };
 
-}
+} // end of namespace kvsmake
 
-#endif // KVS_KVSMAKE_ARGUMENT_H_INCLUDE
+#endif // KVSMAKE__ARGUMENT_H_INCLUDE

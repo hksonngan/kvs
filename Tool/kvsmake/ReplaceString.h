@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_KVSMAKE_REPLACE_STRING_H_INCLUDE
-#define KVS_KVSMAKE_REPLACE_STRING_H_INCLUDE
+#ifndef KVSMAKE__REPLACE_STRING_H_INCLUDE
+#define KVSMAKE__REPLACE_STRING_H_INCLUDE
 
 #include <string>
 
@@ -52,6 +52,6 @@ inline const std::string ReplaceString(
     return( result );
 }
 
-}
+} // end of namespace kvsmake
 
-#endif // KVS_KVSMAKE_REPLACE_STRING_H_INCLUDE
+#endif // KVSMAKE__REPLACE_STRING_H_INCLUDE
