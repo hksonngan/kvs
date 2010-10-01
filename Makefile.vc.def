@@ -167,7 +167,7 @@ OPENCV_LIBRARY_PATH = $(OPENCV_LIBRARY_PATH) /LIBPATH:"$(KVS_OPENCV_DIR)\lib"
 #=============================================================================
 #  Compiler option.
 #=============================================================================
-CPPFLAGS = /W4 /EHsc /GR
+CPPFLAGS = /W3 /EHsc /GR
 
 !IFDEF DEBUG
 CPPFLAGS = $(CPPFLAGS) /Od /MDd
