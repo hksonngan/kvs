@@ -352,6 +352,7 @@ Argument::Argument( int argc, char** argv ):
     add_option( "noshading", "Disable shading. (optional)", 0, false );
     add_option( "nolod", "Disable Level-of-Detail control. (optional)", 0, false );
     add_option( "nogpu", "Disable GPU rendering. (optional)", 0, false );
+    add_option( "nozooming", "Disable particle resizing. (optional)", 0, false );
     add_option( "sampling", "Sampling type. (default: 0)\n"
                 "\t      0 = Cell-by-cell uniform sampling\n"
                 "\t      1 = Cell-by-cell metropolis sampling\n"
@@ -430,6 +431,11 @@ const bool Argument::noGPU( void ) const
 #else
     return( true );
 #endif
+}
+
+const bool Argument::noZooming( void ) const
+{
+    return( this->hasOption("nozooming") );
 }
 
 /*===========================================================================*/
@@ -720,6 +726,10 @@ const bool Main::exec( void )
         prenderer->setRepetitionLevel( repetition_level );
 
         if ( !arg.noLOD() ) prenderer->enableLODControl();
+        else prenderer->disableLODControl();
+
+        if ( !arg.noZooming() ) prenderer->enableZooming();
+        else prenderer->disableZooming();
 
         pipe.connect( renderer );
     }

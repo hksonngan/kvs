@@ -137,5 +137,10 @@ void main( void )
     normal = gl_Normal.xyz;
     position = vec3( gl_ModelViewMatrix * gl_Vertex );
 
+#if defined( ENABLE_ZOOMING )
     gl_PointSize = zooming( gl_Position );
+#else
+    radius = 0.0;
+    gl_PointSize = 1.0;
+#endif
 }

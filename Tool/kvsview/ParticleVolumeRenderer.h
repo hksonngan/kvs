@@ -53,6 +53,8 @@ public:
 
     const bool noGPU( void ) const;
 
+    const bool noZooming( void ) const;
+
     const float ambient( void ) const;
 
     const float diffuse( void ) const;

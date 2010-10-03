@@ -129,7 +129,12 @@ const char* zooming =
     "    normal = gl_Normal.xyz;\n"
     "    position = vec3( gl_ModelViewMatrix * gl_Vertex );\n"
     "\n"
+    "#if defined( ENABLE_ZOOMING )\n"
     "    gl_PointSize = zooming( gl_Position );\n"
+    "#else\n"
+    "    radius = 0.0;\n"
+    "    gl_PointSize = 1.0;\n"
+    "#endif\n"
     "}\n"
 ;
 

@@ -96,6 +96,7 @@ private:
     Particles* m_particles; ///< particles on GPU
     Renderer* m_renderer; ///< renderer for VBO
     bool   m_enable_lod; ///< enable LOD rendering
+    bool   m_enable_zooming; ///< enable zooming
     float  m_modelview_matrix[16]; ///< modelview matrix
 
 public:
@@ -127,6 +128,10 @@ public:
     void enableLODControl( const size_t coarse_level = 1 );
 
     void disableLODControl( void );
+
+    void enableZooming( void );
+
+    void disableZooming( void );
 
     void enableCoarseRendering( const size_t coarse_level = 1 );
 

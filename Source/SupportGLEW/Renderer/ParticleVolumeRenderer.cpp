@@ -520,6 +520,8 @@ void ParticleVolumeRenderer::initialize( void )
     m_renderer = NULL;
 
     m_enable_lod = false;
+    m_enable_zooming = true;
+
     memset( m_modelview_matrix, 0, sizeof( m_modelview_matrix ) );
 }
 
@@ -604,6 +606,17 @@ void ParticleVolumeRenderer::disableLODControl( void )
     m_enable_lod = false;
     this->disableCoarseRendering();
 }
+
+void ParticleVolumeRenderer::enableZooming( void )
+{
+    m_enable_zooming = true;
+}
+
+void ParticleVolumeRenderer::disableZooming( void )
+{
+    m_enable_zooming = false;
+}
+
 
 /*===========================================================================*/
 /**
@@ -949,6 +962,7 @@ void ParticleVolumeRenderer::initialize_opengl( void )
         kvs::glew::ShaderSource frag( frag_code );
 
         if ( m_enable_random_texture ) vert.define("ENABLE_RANDOM_TEXTURE");
+        if ( m_enable_zooming ) vert.define("ENABLE_ZOOMING");
 
         if ( BaseClass::isEnabledShading() )
         {
