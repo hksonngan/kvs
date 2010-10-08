@@ -300,8 +300,8 @@ void ColorPalette::draw_SV_palette( void )
         const int cursor_x1 = kvs::Math::Min( m_S_indicator + margin, m_SV_palette.x1() );
         const int cursor_y1 = kvs::Math::Min( m_V_indicator + margin, m_SV_palette.y1() );
 
-        glBegin( GL_LINES );
         glLineWidth( 1 );
+        glBegin( GL_LINES );
         glColor3f( color, color, color );
         glVertex2i( cursor_x0, cursor_y0 ); glVertex2i( cursor_x1, cursor_y0 );     // top
         glVertex2i( cursor_x0, cursor_y1 ); glVertex2i( cursor_x1, cursor_y1 );     // bottom
@@ -309,8 +309,8 @@ void ColorPalette::draw_SV_palette( void )
         glVertex2i( cursor_x1, cursor_y0 ); glVertex2i( cursor_x1, cursor_y1 + 1 ); // right
         glEnd();
 
-        glBegin( GL_LINES );
         glLineWidth( 1 );
+        glBegin( GL_LINES );
         glColor3f( color, color, color );
         // Horizontal lines.
         glVertex2i( x0, m_V_indicator ); glVertex2i( cursor_x0, m_V_indicator );

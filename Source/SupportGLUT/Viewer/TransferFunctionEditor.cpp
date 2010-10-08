@@ -1207,8 +1207,8 @@ void TransferFunctionEditor::draw_SV_palette( void )
     // Draw the cross lines.
     const int margin = 4;
     const float color = 1.0f;
-    glBegin( GL_LINE_LOOP );
     glLineWidth( 1 );
+    glBegin( GL_LINE_LOOP );
     glColor3f( color, color, color );
     glVertex2i( m_S_cursor + margin, m_V_cursor + margin );
     glVertex2i( m_S_cursor - margin, m_V_cursor + margin );
@@ -1216,8 +1216,8 @@ void TransferFunctionEditor::draw_SV_palette( void )
     glVertex2i( m_S_cursor + margin, m_V_cursor - margin );
     glEnd();
 
-    glBegin( GL_LINES );
     glLineWidth( 1 );
+    glBegin( GL_LINES );
     glColor3f( color, color, color );
     // Horizontal lines.
     glVertex2i( x0, m_V_cursor );
