@@ -12,6 +12,7 @@
  */
 /****************************************************************************/
 #include "File.h"
+#include <kvs/Platform>
 #if defined ( KVS_PLATFORM_WINDOWS )
 #include <windows.h>
 #else
@@ -21,7 +22,6 @@
 #endif
 #include <iostream>
 #include <fstream>
-#include <kvs/Platform>
 #include <kvs/Message>
 
 
