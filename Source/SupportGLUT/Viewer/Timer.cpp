@@ -14,6 +14,7 @@
 /*****************************************************************************/
 #include "Timer.h"
 #include <map>
+#include <kvs/DebugNew>
 #include <kvs/glut/GLUT>
 
 

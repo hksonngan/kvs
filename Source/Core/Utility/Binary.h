@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_BINARY_H_INCLUDE
-#define KVS_CORE_BINARY_H_INCLUDE
+#ifndef KVS__BINARY_H_INCLUDE
+#define KVS__BINARY_H_INCLUDE
 
 #define KVS_BINARY_0000_TO_HEX 0
 #define KVS_BINARY_0001_TO_HEX 1
@@ -74,4 +74,4 @@
                   KVS_HEX_DIGIT(g), \
                   KVS_HEX_DIGIT(h) )
 
-#endif // KVS_CORE_BINARY_H_INCLUDE
+#endif // KVS__BINARY_H_INCLUDE

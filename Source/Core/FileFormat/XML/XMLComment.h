@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_XML_COMMENT_H_INCLUDE
-#define KVS_CORE_XML_COMMENT_H_INCLUDE
+#ifndef KVS__XML_COMMENT_H_INCLUDE
+#define KVS__XML_COMMENT_H_INCLUDE
 
 #include "TinyXML.h"
 
@@ -42,4 +42,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_XML_COMMENT_H_INCLUDE
+#endif // KVS__XML_COMMENT_H_INCLUDE

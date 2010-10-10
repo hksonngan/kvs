@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_SUPPORT_SAGE_SCREEN_BASE_H_INCLUDE
-#define KVS_SUPPORT_SAGE_SCREEN_BASE_H_INCLUDE
+#ifndef KVS__SAGE__SCREEN_BASE_H_INCLUDE
+#define KVS__SAGE__SCREEN_BASE_H_INCLUDE
 
 #include <kvs/glut/ScreenBase>
 
@@ -46,4 +46,4 @@ protected:
 
 } // end of namespace kvs
 
-#endif // KVS_SUPPORT_GLUT_SCREEN_BASE_H_INCLUDE
+#endif // KVS__SAGE__SCREEN_BASE_H_INCLUDE

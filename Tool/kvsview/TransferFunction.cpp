@@ -12,10 +12,7 @@
  */
 /*****************************************************************************/
 #include "TransferFunction.h"
-#include "CommandName.h"
-//#include <kvs/XMLDocument>
-//#include <kvs/XMLNode>
-//#include <kvs/KVSMLTransferFunction>
+#include <kvs/DebugNew>
 #include <kvs/TransferFunction>
 #include <kvs/Texture1D>
 #include <kvs/Texture2D>
@@ -23,6 +20,7 @@
 #include <kvs/PaintEventListener>
 #include <kvs/glut/Application>
 #include <kvs/glut/Screen>
+#include "CommandName.h"
 
 
 namespace kvsview
@@ -361,7 +359,7 @@ const bool Main::exec( void )
     screen.setTitle( kvsview::CommandName + " - " + kvsview::TransferFunction::CommandName );
     screen.show();
 
-    return( app.run() );
+    return( arg.clear(), app.run() );
 }
 
 } // end of namespace TransferFunction

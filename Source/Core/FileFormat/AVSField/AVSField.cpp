@@ -12,12 +12,10 @@
  */
 /****************************************************************************/
 #include "AVSField.h"
-
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
-
 #include <kvs/File>
 #include <kvs/Macro>
 #include <kvs/Platform>

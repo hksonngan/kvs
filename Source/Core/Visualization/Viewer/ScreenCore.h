@@ -11,16 +11,16 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_SCREEN_CORE_H_INCLUDE
-#define KVS_CORE_SCREEN_CORE_H_INCLUDE
+#ifndef KVS__SCREEN_CORE_H_INCLUDE
+#define KVS__SCREEN_CORE_H_INCLUDE
 
 #include <string>
-#include "Camera.h"
-#include "Light.h"
-#include "Mouse.h"
-#include "ObjectManager.h"
-#include "RendererManager.h"
-#include "DisplayFormat.h"
+#include <kvs/Camera>
+#include <kvs/Light>
+#include <kvs/Mouse>
+#include <kvs/ObjectManager>
+#include <kvs/RendererManager>
+#include <kvs/DisplayFormat>
 #include <kvs/MouseEvent>
 #include <kvs/KeyEvent>
 #include <kvs/ClassName>

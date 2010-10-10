@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_SUPPORT_GLUT_HISTOGRAM_H_INCLUDE
-#define KVS_SUPPORT_GLUT_HISTOGRAM_H_INCLUDE
+#ifndef KVS__GLUT__HISTOGRAM_H_INCLUDE
+#define KVS__GLUT__HISTOGRAM_H_INCLUDE
 
 #include <kvs/StructuredVolumeObject>
 #include <kvs/ImageObject>
@@ -224,4 +224,4 @@ private:
 
 } // end of namespace kvs
 
-#endif // KVS_SUPPORT_GLUT_HISTOGRAM_H_INCLUDE
+#endif // KVS__GLUT__HISTOGRAM_H_INCLUDE

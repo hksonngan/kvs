@@ -91,6 +91,7 @@
 #include <Core/Utility/CommandLine.h>
 #include <Core/Utility/Compiler.h>
 #include <Core/Utility/Date.h>
+#include <Core/Utility/DebugNew.h>
 #include <Core/Utility/Directory.h>
 #include <Core/Utility/Endian.h>
 #include <Core/Utility/FastTokenizer.h>
@@ -99,6 +100,8 @@
 #include <Core/Utility/IgnoreUnusedVariable.h>
 #include <Core/Utility/Macro.h>
 #include <Core/Utility/Math.h>
+#include <Core/Utility/MemoryDebugger.h>
+#include <Core/Utility/MemoryTracer.h>
 #include <Core/Utility/Message.h>
 #include <Core/Utility/Platform.h>
 #include <Core/Utility/ReferenceCounter.h>

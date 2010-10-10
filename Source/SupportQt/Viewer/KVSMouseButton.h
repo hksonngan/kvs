@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_SUPPORT_QT_KVS_MOUSE_BUTTON_H_INCLUDE
-#define KVS_SUPPORT_QT_KVS_MOUSE_BUTTON_H_INCLUDE
+#ifndef KVS__QT__KVS_MOUSE_BUTTON_H_INCLUDE
+#define KVS__QT__KVS_MOUSE_BUTTON_H_INCLUDE
 
 #include "../Qt.h"
 #include <kvs/MouseButton>
@@ -68,4 +68,4 @@ inline int KVSMouseButton::Button( Qt::ButtonState button )
 
 } // end of namespace kvs
 
-#endif // KVS_SUPPORT_QT_KVS_MOUSE_BUTTON_H_INCLUDE
+#endif // KVS__QT__KVS_MOUSE_BUTTON_H_INCLUDE

@@ -11,16 +11,15 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_STRING_H_INCLUDE
-#define KVS_CORE_STRING_H_INCLUDE
+#ifndef KVS__STRING_H_INCLUDE
+#define KVS__STRING_H_INCLUDE
 
 #include <cstdio>
 #include <iostream>
 #include <string>
 #include <cstdarg>
 #include <sstream>
-
-#include "ClassName.h"
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -142,4 +141,4 @@ const T String::toNumber( const std::string& str, int base )
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_STRING_H_INCLUDE
+#endif // KVS__STRING_H_INCLUDE

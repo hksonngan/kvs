@@ -964,8 +964,14 @@ const double SlicePlane::interpolate_value(
     const float value1 = this->substitute_plane_equation( vertex1 );
     const float ratio = kvs::Math::Abs( value0 / ( value1 - value0 ) );
 
-    const size_t index0 = static_cast<size_t>( vertex0.x() + vertex0.y() * line_size + vertex0.z() * slice_size );
-    const size_t index1 = static_cast<size_t>( vertex1.x() + vertex1.y() * line_size + vertex1.z() * slice_size );
+    const double x0 = vertex0.x();
+    const double y0 = vertex0.y();
+    const double z0 = vertex0.z();
+    const double x1 = vertex1.x();
+    const double y1 = vertex1.y();
+    const double z1 = vertex1.z();
+    const size_t index0 = static_cast<size_t>( x0 + y0 * line_size + z0 * slice_size );
+    const size_t index1 = static_cast<size_t>( x1 + y1 * line_size + z1 * slice_size );
 
     return( values[ index0 ] + ratio * ( values[ index1 ] - values[ index0 ] ) );
 }

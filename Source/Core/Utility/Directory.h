@@ -11,16 +11,15 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_DIRECTORY_H_INCLUDE
-#define KVS_CORE_DIRECTORY_H_INCLUDE
+#ifndef KVS__DIRECTORY_H_INCLUDE
+#define KVS__DIRECTORY_H_INCLUDE
 
 #include <string>
 #include <iostream>
 #include <algorithm>
 #include <functional>
-
-#include "FileList.h"
-#include "ClassName.h"
+#include <kvs/FileList>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -86,4 +85,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_DIRECTORY_H_INCLUDE
+#endif // KVS__DIRECTORY_H_INCLUDE

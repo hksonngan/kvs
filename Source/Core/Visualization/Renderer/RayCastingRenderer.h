@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_RAY_CASTING_RENDERER_H_INCLUDE
-#define KVS_CORE_RAY_CASTING_RENDERER_H_INCLUDE
+#ifndef KVS__RAY_CASTING_RENDERER_H_INCLUDE
+#define KVS__RAY_CASTING_RENDERER_H_INCLUDE
 
 #include <kvs/VolumeRendererBase>
 #include <kvs/TransferFunction>
@@ -113,4 +113,4 @@ private:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_RAY_CASTING_RENDERER_H_INCLUDE
+#endif // KVS__RAY_CASTING_RENDERER_H_INCLUDE

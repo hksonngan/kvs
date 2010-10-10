@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_COMPILER_H_INCLUDE
-#define KVS_CORE_COMPILER_H_INCLUDE
+#ifndef KVS__COMPILER_H_INCLUDE
+#define KVS__COMPILER_H_INCLUDE
 
 #define KVS_COMPILER_NUMBER( x )           # x
 #define KVS_COMPILER_NUMBER_TO_STRING( x ) KVS_COMPILER_NUMBER( x )
@@ -170,4 +170,4 @@ inline const char* Version( void )
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_COMPILER_H_INCLUDE
+#endif // KVS__COMPILER_H_INCLUDE

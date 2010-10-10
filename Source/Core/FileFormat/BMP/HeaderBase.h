@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_HEADER_BASE_H_INCLUDE
-#define KVS_CORE_HEADER_BASE_H_INCLUDE
+#ifndef KVS__BMP__HEADER_BASE_H_INCLUDE
+#define KVS__BMP__HEADER_BASE_H_INCLUDE
 
 #include <fstream>
 #include <kvs/Platform>

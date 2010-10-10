@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS__DCM_ITEM_H_INCLUDE
-#define KVS__DCM_ITEM_H_INCLUDE
+#ifndef KVS__DCM__ITEM_H_INCLUDE
+#define KVS__DCM__ITEM_H_INCLUDE
 
 #include <iostream>
 #include <fstream>

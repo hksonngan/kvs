@@ -12,7 +12,6 @@
  */
 /****************************************************************************/
 #include "ColorMap.h"
-
 #include <kvs/Assert>
 #include <kvs/RGBColor>
 #include <kvs/HSVColor>

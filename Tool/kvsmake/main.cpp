@@ -13,24 +13,21 @@
 /****************************************************************************/
 #include <cstdlib>
 #include <string>
-
+#include <kvs/MemoryDebugger>
 #include <kvs/Compiler>
 #include <kvs/Message>
 #include <kvs/Directory>
 #include <kvs/File>
-
 #include "Argument.h"
 #include "Constant.h"
-
 #include "WriteMakefile.h"
-
 #if defined ( KVS_COMPILER_VC )
 #include "WriteVCProject.h"
 #include "WriteVCProjectCUDA.h"
 #endif
-
 #include "WriteQtProject.h"
 
+KVS_MEMORY_DEBUGGER;
 
 /*==========================================================================*/
 /**
@@ -41,6 +38,8 @@
 /*==========================================================================*/
 int main( int argc, char** argv )
 {
+    KVS_MEMORY_DEBUGGER__SET_ARGUMENT( argc, argv );
+
     kvsmake::Argument argument( argc, argv );
     if ( !argument.parse() )
     {

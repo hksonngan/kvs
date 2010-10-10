@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_MERSENNE_TWISTER_H_INCLUDE
-#define KVS_CORE_MERSENNE_TWISTER_H_INCLUDE
+#ifndef KVS__MERSENNE_TWISTER_H_INCLUDE
+#define KVS__MERSENNE_TWISTER_H_INCLUDE
 
 #include <ctime>
 #include <climits>
@@ -315,4 +315,4 @@ inline const unsigned long MersenneTwister::twist(
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_MERSENNE_TWISTER_H_INCLUDE
+#endif // KVS__MERSENNE_TWISTER_H_INCLUDE

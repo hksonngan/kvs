@@ -12,6 +12,9 @@
  *  $Id$
  */
 /*****************************************************************************/
+#ifndef KVS__SAGE__SCREEN_H_INCLUDE
+#define KVS__SAGE__SCREEN_H_INCLUDE
+
 #include <kvs/TimerEventListener>
 #include <kvs/PaintEventListener>
 #include <kvs/glut/Screen>
@@ -81,3 +84,5 @@ public:
 } // end of namespace sage
 
 } // end of namespace kvs
+
+#endif // KVS__SAGE__SCREEN_H_INCLUDE

@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_TIFF_IMAGE_FILE_DIRECTORY_H_INCLUDE
-#define KVS_CORE_TIFF_IMAGE_FILE_DIRECTORY_H_INCLUDE
+#ifndef KVS__TIFF__IMAGE_FILE_DIRECTORY_H_INCLUDE
+#define KVS__TIFF__IMAGE_FILE_DIRECTORY_H_INCLUDE
 
 #include "Entry.h"
 #include <kvs/Type>
@@ -57,4 +57,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_TIFF_IMAGE_FILE_DIRECTORY_H_INCLUDE
+#endif // KVS__TIFF__IMAGE_FILE_DIRECTORY_H_INCLUDE

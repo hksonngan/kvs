@@ -11,6 +11,7 @@
  *  $Id$
  */
 /*****************************************************************************/
+#include <kvs/MemoryDebugger>
 #include "main.h"
 #include "Argument.h"
 #include "Default.h"
@@ -29,13 +30,14 @@
 #include "Histogram.h"
 #include <kvs/Message>
 
+KVS_MEMORY_DEBUGGER;
+
 
 #define KVSVIEW_HELP( method )                                          \
     if ( help == #method ) return( method ::Argument( m_argc, m_argv ).parse() )
 
 #define KVSVIEW_EXEC( method )                                          \
-    if ( arg.hasOption( #method ) ) return( method ::Main( m_argc, m_argv ).exec() )
-
+    if ( arg.hasOption( #method ) ) { return( arg.clear(), method ::Main( m_argc, m_argv ).exec() ); }
 
 namespace kvsview
 {
@@ -104,7 +106,7 @@ bool Main::exec( void )
         KVSVIEW_EXEC( Histogram );
     }
 
-    return( Default::Main( m_argc, m_argv ).exec() );
+    return( arg.clear(), Default::Main( m_argc, m_argv ).exec() );
 }
 
 } // end of namespace kvsview
@@ -119,6 +121,8 @@ bool Main::exec( void )
 /*===========================================================================*/
 int main( int argc, char** argv )
 {
+    KVS_MEMORY_DEBUGGER__SET_ARGUMENT( argc, argv );
+
     kvsview::Main m( argc, argv );
     return( m.exec() );
 }

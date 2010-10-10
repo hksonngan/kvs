@@ -14,7 +14,7 @@
 #ifndef KVS__KVSML_OBJECT_POINT_H_INCLUDE
 #define KVS__KVSML_OBJECT_POINT_H_INCLUDE
 
-#include "../FileFormatBase.h"
+#include <kvs/FileFormatBase>
 #include <kvs/ValueArray>
 #include <kvs/Type>
 #include <kvs/Vector3>

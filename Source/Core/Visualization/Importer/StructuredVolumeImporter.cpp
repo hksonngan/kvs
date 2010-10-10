@@ -12,6 +12,7 @@
  */
 /****************************************************************************/
 #include "StructuredVolumeImporter.h"
+#include <kvs/DebugNew>
 #include <kvs/AVSField>
 #include <kvs/DicomList>
 #include <kvs/Message>

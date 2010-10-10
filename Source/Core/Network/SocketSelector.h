@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_SOCKET_SELECTOR_H_INCLUDE
-#define KVS_CORE_SOCKET_SELECTOR_H_INCLUDE
+#ifndef KVS__SOCKET_SELECTOR_H_INCLUDE
+#define KVS__SOCKET_SELECTOR_H_INCLUDE
 
 #include "Socket.h"
 #include "SocketTimer.h"
@@ -62,4 +62,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_SOCKET_SELECTOR_H_INCLUDE
+#endif // KVS__SOCKET_SELECTOR_H_INCLUDE

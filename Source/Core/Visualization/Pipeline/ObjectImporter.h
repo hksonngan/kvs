@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_OBJECT_IMPORTER_H_INCLUDE
-#define KVS_CORE_OBJECT_IMPORTER_H_INCLUDE
+#ifndef KVS__OBJECT_IMPORTER_H_INCLUDE
+#define KVS__OBJECT_IMPORTER_H_INCLUDE
 
 #include <string>
 #include <kvs/FileFormatBase>
@@ -69,4 +69,4 @@ private:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_OBJECT_IMPORTER_H_INCLUDE
+#endif // KVS__OBJECT_IMPORTER_H_INCLUDE

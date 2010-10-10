@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS__DCM_ATTRIBUTE_H_INCLUDE
-#define KVS__DCM_ATTRIBUTE_H_INCLUDE
+#ifndef KVS__DCM__ATTRIBUTE_H_INCLUDE
+#define KVS__DCM__ATTRIBUTE_H_INCLUDE
 
 #include <fstream>
 #include <string>
@@ -61,4 +61,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS__DCM_ATTRIBUTE_H_INCLUDE
+#endif // KVS__DCM__ATTRIBUTE_H_INCLUDE

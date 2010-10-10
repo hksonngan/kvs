@@ -11,12 +11,11 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS__DCM_TAG_DICTIONARY_H_INCLUDE
-#define KVS__DCM_TAG_DICTIONARY_H_INCLUDE
+#ifndef KVS__DCM__TAG_DICTIONARY_H_INCLUDE
+#define KVS__DCM__TAG_DICTIONARY_H_INCLUDE
 
 #include <vector>
 #include <algorithm>
-
 #include "Tag.h"
 #include "TagTable.h"
 
@@ -186,4 +185,4 @@ inline void TagDictionary::clear( void )
 
 } // end of namespace kvs
 
-#endif // KVS__DCM_TAG_DICTIONARY_H_INCLUDE
+#endif // KVS__DCM__TAG_DICTIONARY_H_INCLUDE

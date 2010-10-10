@@ -11,6 +11,7 @@
  *  $Id$
  */
 /****************************************************************************/
+#include "Tag.h"
 #include <cstdio>
 #include <cstdlib>
 #include <cstdarg>
@@ -18,8 +19,6 @@
 #include <iostream>
 #include <fstream>
 #include <iomanip>
-
-#include "Tag.h"
 #include "TagDictionary.h"
 #include "StreamReader.h"
 

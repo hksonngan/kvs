@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_MESSAGE_BLOCK_H_INCLUDE
-#define KVS_CORE_MESSAGE_BLOCK_H_INCLUDE
+#ifndef KVS__MESSAGE_BLOCK_H_INCLUDE
+#define KVS__MESSAGE_BLOCK_H_INCLUDE
 
 #include <kvs/ValueArray>
 
@@ -90,4 +90,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_MESSAGE_BLOCK_H_INCLUDE
+#endif // KVS__MESSAGE_BLOCK_H_INCLUDE

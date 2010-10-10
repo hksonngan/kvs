@@ -13,6 +13,7 @@
  */
 /*****************************************************************************/
 #include "Master.h"
+#include <kvs/DebugNew>
 #include <kvs/opencabin/OpenCABIN>
 #include <kvs/opencabin/Application>
 #include <kvs/opencabin/Configuration>

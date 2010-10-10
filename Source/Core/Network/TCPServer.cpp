@@ -12,6 +12,7 @@
  */
 /****************************************************************************/
 #include "TCPServer.h"
+#include <kvs/DebugNew>
 #include "TCPSocket.h"
 #include "SocketAddress.h"
 #include "SocketTimer.h"

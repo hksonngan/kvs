@@ -11,9 +11,9 @@
  *  $Id$
  */
 /****************************************************************************/
-#include <iostream>
 #include "ObjectManager.h"
-#include "Camera.h"
+#include <iostream>
+#include <kvs/Camera>
 #include <kvs/Math>
 #include <kvs/Vector2>
 #include <kvs/Vector3>
@@ -53,7 +53,18 @@ ObjectManager::ObjectManager( void ) :
 /*==========================================================================*/
 ObjectManager::~ObjectManager( void )
 {
-    this->erase();
+//    this->erase();
+    ObjectIterator pobject = ObjectManagerBase::begin();
+    ObjectIterator last = ObjectManagerBase::end();
+    ++pobject;
+    while ( pobject != last )
+    {
+        kvs::ObjectBase* object = *pobject;
+        if ( object ) delete object;
+        ++pobject;
+    }
+
+    ObjectManagerBase::clear();
     kvs::Xform::clear();
     m_object_map.clear();
 }
@@ -137,7 +148,7 @@ int ObjectManager::insert( int parent_id, kvs::ObjectBase* obj )
  *  Erase the all objects.
  *  @param delete_flg [in] deleting the allocated memory flag
  *
- *  Erase the all objects, which is registrated in the object master base.
+ *  Erase the all objects, which is registrated in the object manager base.
  *  Simultaniously, the allocated memory region for the all objects is deleted.
  */
 /*==========================================================================*/
@@ -155,7 +166,7 @@ void ObjectManager::erase( bool delete_flg )
         {
             if( *first )
             {
-                delete( *first );
+                delete *first;
                 *first = NULL;
             }
         }
@@ -191,7 +202,7 @@ void ObjectManager::erase( int obj_id, bool delete_flg )
     {
         if( obj )
         {
-            delete( obj );
+            delete obj;
             obj = NULL;
         }
     }
@@ -223,7 +234,7 @@ void ObjectManager::erase( std::string obj_name, bool delete_flg )
         kvs::ObjectBase* obj = *ptr; // object
         if ( obj->name() == obj_name )
         {
-            if ( delete_flg ) { if ( obj ) delete( obj ); }
+            if ( delete_flg ) { if ( obj ) delete obj; }
 
             // Erase the object in the object master base.
             ObjectManagerBase::erase( ptr );
@@ -268,7 +279,7 @@ void ObjectManager::change( int obj_id, ObjectBase* obj, bool delete_flg )
     {
         if( old_obj )
         {
-            delete( old_obj );
+            delete old_obj;
             old_obj = NULL;
         }
     }
@@ -305,7 +316,7 @@ void ObjectManager::change( std::string obj_name, ObjectBase* obj, bool delete_f
             kvs::Xform xform = old_obj->xform();
 
             // Erase the old object
-            if ( delete_flg ) { if ( old_obj ) delete( old_obj ); }
+            if ( delete_flg ) { if ( old_obj ) delete old_obj; }
 
             // Insert the new object
             obj->updateNormalizeParameters();
@@ -638,7 +649,7 @@ void ObjectManager::eraseActiveObject( void )
     {
         if( *m_active_object )
         {
-            delete( *m_active_object );
+            delete *m_active_object;
             *m_active_object = NULL;
         }
         ObjectManagerBase::erase( m_active_object );

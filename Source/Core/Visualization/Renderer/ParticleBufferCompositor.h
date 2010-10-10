@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_PARTICLE_BUFFER_COMPOSITOR_H_INCLUDE
-#define KVS_CORE_PARTICLE_BUFFER_COMPOSITOR_H_INCLUDE
+#ifndef KVS__PARTICLE_BUFFER_COMPOSITOR_H_INCLUDE
+#define KVS__PARTICLE_BUFFER_COMPOSITOR_H_INCLUDE
 
 #include <kvs/ObjectBase>
 #include <kvs/Camera>
@@ -22,9 +22,9 @@
 #include <kvs/IDManager>
 #include <kvs/VolumeRendererBase>
 #include <kvs/ClassName>
-#include "ParticleBufferAccumulator.h"
+#include <kvs/ParticleBufferAccumulator>
 
-// Macroes for test.
+// Macros for test.
 #define TEST__MESUREMENT_ACCUMLATION_TIME  0
 #define TEST__RENDERING_ACTIVE_OBJECT_ONLY 0
 
@@ -114,4 +114,4 @@ protected:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_PARTICLE_BUFFER_COMPOSITOR_H_INCLUDE
+#endif // KVS__PARTICLE_BUFFER_COMPOSITOR_H_INCLUDE

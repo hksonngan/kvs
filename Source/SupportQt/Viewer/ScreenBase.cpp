@@ -12,6 +12,7 @@
  */
 /****************************************************************************/
 #include "ScreenBase.h"
+#include <kvs/DebugNew>
 #include "GlobalBase.h"
 #include "KVSKey.h"
 #include "KVSMouseButton.h"

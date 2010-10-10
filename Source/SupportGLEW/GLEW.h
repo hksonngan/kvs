@@ -11,12 +11,11 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_SUPPORT_GLEW_GLEW_H_INCLUDE
-#define KVS_SUPPORT_GLEW_GLEW_H_INCLUDE
+#ifndef KVS__GLEW__GLEW_H_INCLUDE
+#define KVS__GLEW__GLEW_H_INCLUDE
 
 #include <kvs/Message>
 #include <kvs/String>
-
 #include <GL/glew.h>
 
 
@@ -72,4 +71,4 @@ inline const kvs::String Version( void )
 
 } // end of namespace kvs
 
-#endif // KVS_SUPPORT_GLEW_GLEW_H_INCLUDE
+#endif // KVS__GLEW__GLEW_H_INCLUDE

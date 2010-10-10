@@ -12,8 +12,7 @@
  */
 /*****************************************************************************/
 #include "Default.h"
-#include "ObjectInformation.h"
-#include "TransferFunction.h"
+#include <kvs/DebugNew>
 #include <kvs/XMLDocument>
 #include <kvs/XMLNode>
 #include <kvs/KVSMLTransferFunction>
@@ -24,6 +23,8 @@
 #if defined( KVS_SUPPORT_GLEW )
 #include <kvs/glew/RayCastingRenderer>
 #endif
+#include "ObjectInformation.h"
+#include "TransferFunction.h"
 
 
 namespace kvsview
@@ -174,7 +175,7 @@ const bool Main::exec( void )
     // Show the screen.
     screen.show();
 
-    return( app.run() );
+    return( arg.clear(), app.run() );
 }
 
 } // end of namespace Default

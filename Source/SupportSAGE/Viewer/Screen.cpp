@@ -13,6 +13,7 @@
  */
 /*****************************************************************************/
 #include "Screen.h"
+#include <kvs/DebugNew>
 #include <kvs/Message>
 #include <kvs/TimeEvent>
 

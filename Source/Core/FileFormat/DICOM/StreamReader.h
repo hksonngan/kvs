@@ -11,14 +11,15 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS__DCM_STREAM_READER_H_INCLUDE
-#define KVS__DCM_STREAM_READER_H_INCLUDE
+#ifndef KVS__DCM__STREAM_READER_H_INCLUDE
+#define KVS__DCM__STREAM_READER_H_INCLUDE
 
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <typeinfo>
 #include <cstring>
+#include <kvs/DebugNew>
 #include <kvs/Endian>
 #include <kvs/Message>
 #include <kvs/IgnoreUnusedVariable>
@@ -84,4 +85,4 @@ inline std::string Get( std::ifstream& ifs, const int size, const bool swap = fa
 
 } // end of namespace kvs
 
-#endif // KVS__DCM_STREAM_READER_H_INCLUDE
+#endif // KVS__DCM__STREAM_READER_H_INCLUDE

@@ -11,10 +11,10 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_TEXTURE_2D_H_INCLUDE
-#define KVS_CORE_TEXTURE_2D_H_INCLUDE
+#ifndef KVS__TEXTURE_2D_H_INCLUDE
+#define KVS__TEXTURE_2D_H_INCLUDE
 
-#include "TextureBase.h"
+#include <kvs/TextureBase>
 #include <kvs/ClassName>
 
 

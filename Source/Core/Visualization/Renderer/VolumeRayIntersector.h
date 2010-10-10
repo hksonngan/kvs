@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_VOLUME_RAY_INTERSECTOR_H_INCLUDE
-#define KVS_CORE_VOLUME_RAY_INTERSECTOR_H_INCLUDE
+#ifndef KVS__VOLUME_RAY_INTERSECTOR_H_INCLUDE
+#define KVS__VOLUME_RAY_INTERSECTOR_H_INCLUDE
 
 #include <kvs/Ray>
 #include <kvs/Vector3>
@@ -80,4 +80,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_VOLUME_RAY_INTERSECTOR_H_INCLUDE
+#endif // KVS__VOLUME_RAY_INTERSECTOR_H_INCLUDE

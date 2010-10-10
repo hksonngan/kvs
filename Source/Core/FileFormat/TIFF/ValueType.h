@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_TIFF_VALUE_TYPE_H_INCLUDE
-#define KVS_CORE_TIFF_VALUE_TYPE_H_INCLUDE
+#ifndef KVS__TIFF__VALUE_TYPE_H_INCLUDE
+#define KVS__TIFF__VALUE_TYPE_H_INCLUDE
 
 #include <string>
 
@@ -79,4 +79,4 @@ const size_t ValueTypeSize[ kvs::tiff::NumberOfValueTypes ] =
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_TIFF_VALUE_TYPE_H_INCLUDE
+#endif // KVS__TIFF__VALUE_TYPE_H_INCLUDE

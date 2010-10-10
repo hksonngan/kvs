@@ -12,7 +12,8 @@
  */
 /****************************************************************************/
 #include "Camera.h"
-#include "OpenGL.h"
+#include <kvs/DebugNew>
+#include <kvs/OpenGL>
 #include <kvs/ColorImage>
 #include <kvs/Matrix44>
 #include <kvs/ViewingMatrix44>

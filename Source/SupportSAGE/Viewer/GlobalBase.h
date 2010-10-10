@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_SUPPORT_SAGE_GLOBAL_BASE_H_INCLUDE
-#define KVS_SUPPORT_SAGE_GLOBAL_BASE_H_INCLUDE
+#ifndef KVS__SAGE__GLOBAL_BASE_H_INCLUDE
+#define KVS__SAGE__GLOBAL_BASE_H_INCLUDE
 
 #include <kvs/GlobalCore>
 #include "ApplicationInterface.h"
@@ -48,4 +48,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_SUPPORT_SAGE_GLOBAL_BASE_H_INCLUDE
+#endif // KVS__SAGE__GLOBAL_BASE_H_INCLUDE

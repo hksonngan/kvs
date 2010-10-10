@@ -11,16 +11,14 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_REFERENCE_COUNTER_H_INCLUDE
-#define KVS_CORE_REFERENCE_COUNTER_H_INCLUDE
+#ifndef KVS__REFERENCE_COUNTER_H_INCLUDE
+#define KVS__REFERENCE_COUNTER_H_INCLUDE
 
 #include <cstddef>
-
+#include <kvs/ClassName>
 #if defined ( KVS_ENABLE_THREAD_SAFE )
 #include <kvs/Mutex>
 #endif
-
-#include "ClassName.h"
 
 
 namespace kvs
@@ -67,4 +65,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_REFERENCE_COUNTER_H_INCLUDE
+#endif // KVS__REFERENCE_COUNTER_H_INCLUDE

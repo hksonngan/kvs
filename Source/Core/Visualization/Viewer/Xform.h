@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_XFORM_H_INCLUDE
-#define KVS_CORE_XFORM_H_INCLUDE
+#ifndef KVS__XFORM_H_INCLUDE
+#define KVS__XFORM_H_INCLUDE
 
 #include <kvs/ClassName>
 #include <kvs/Vector3>
@@ -138,4 +138,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_XFORM_H_INCLUDE
+#endif // KVS__XFORM_H_INCLUDE

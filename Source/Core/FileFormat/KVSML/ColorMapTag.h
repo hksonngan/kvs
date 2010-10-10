@@ -16,9 +16,8 @@
 
 #include <kvs/XMLNode>
 #include <kvs/XMLElement>
-#include "TagBase.h"
-
 #include <kvs/RGBColor>
+#include "TagBase.h"
 
 
 namespace kvs

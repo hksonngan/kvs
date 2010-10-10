@@ -13,6 +13,7 @@
  */
 /*****************************************************************************/
 #include "Acceptor.h"
+#include <kvs/DebugNew>
 #include <kvs/Message>
 
 

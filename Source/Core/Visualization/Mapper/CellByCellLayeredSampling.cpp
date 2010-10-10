@@ -14,6 +14,7 @@
 /*****************************************************************************/
 #include "CellByCellLayeredSampling.h"
 #include <vector>
+#include <kvs/DebugNew>
 #include <kvs/GlobalCore>
 #include <kvs/ObjectManager>
 #include <kvs/Camera>

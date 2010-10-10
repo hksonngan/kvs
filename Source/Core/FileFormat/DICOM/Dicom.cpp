@@ -17,7 +17,6 @@
 #include <fstream>
 #include <sstream>
 #include <algorithm>
-
 #include <kvs/File>
 #include <kvs/Math>
 #include <kvs/Message>
@@ -27,7 +26,6 @@
 #include <kvs/Value>
 #include <kvs/ValueArray>
 #include <kvs/IgnoreUnusedVariable>
-
 #include "Dicom.h"
 #include "VRType.h"
 #include "Element.h"

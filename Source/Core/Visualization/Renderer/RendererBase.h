@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_RENDERER_BASE_H_INCLUDE
-#define KVS_CORE_RENDERER_BASE_H_INCLUDE
+#ifndef KVS__RENDERER_BASE_H_INCLUDE
+#define KVS__RENDERER_BASE_H_INCLUDE
 
 #include <string>
 #include <kvs/ClassName>
@@ -89,4 +89,4 @@ protected:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_RENDERER_BASE_H_INCLUDE
+#endif // KVS__RENDERER_BASE_H_INCLUDE

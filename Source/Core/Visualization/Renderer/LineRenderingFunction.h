@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_LINE_RENDERING_FUNCTION_H_INCLUDE
-#define KVS_CORE_LINE_RENDERING_FUNCTION_H_INCLUDE
+#ifndef KVS__LINE_RENDERING_FUNCTION_H_INCLUDE
+#define KVS__LINE_RENDERING_FUNCTION_H_INCLUDE
 
 #include <kvs/LineObject>
 #include <kvs/RGBColor>
@@ -866,4 +866,4 @@ void LineRenderingFunction( const kvs::LineObject* line )
 
 } // end of namespace
 
-#endif // KVS_CORE_LINE_RENDERING_FUNCTION_H_INCLUDE
+#endif // KVS__LINE_RENDERING_FUNCTION_H_INCLUDE

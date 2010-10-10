@@ -12,13 +12,14 @@
  */
 /****************************************************************************/
 #include "GlobalCore.h"
-#include "Camera.h"
-#include "Background.h"
-#include "Light.h"
-#include "Mouse.h"
-#include "ObjectManager.h"
-#include "RendererManager.h"
-#include "IDManager.h"
+#include <kvs/DebugNew>
+#include <kvs/Camera>
+#include <kvs/Background>
+#include <kvs/Light>
+#include <kvs/Mouse>
+#include <kvs/ObjectManager>
+#include <kvs/RendererManager>
+#include <kvs/IDManager>
 #include <kvs/Message>
 #include <kvs/RGBColor>
 

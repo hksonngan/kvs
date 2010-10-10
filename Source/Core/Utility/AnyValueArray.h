@@ -11,20 +11,20 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_ANY_VALUE_ARRAY_H_INCLUDE
-#define KVS_CORE_ANY_VALUE_ARRAY_H_INCLUDE
+#ifndef KVS__ANY_VALUE_ARRAY_H_INCLUDE
+#define KVS__ANY_VALUE_ARRAY_H_INCLUDE
 
 #include <cstdio>
 #include <cstdlib>
 #include <cstddef>
 #include <typeinfo>
-
-#include "Endian.h"
-#include "AnyValue.h"
-#include "ReferenceCounter.h"
-#include "ValueArray.h"
-#include "Macro.h"
-#include "ClassName.h"
+#include <kvs/DebugNew>
+#include <kvs/Endian>
+#include <kvs/AnyValue>
+#include <kvs/ReferenceCounter>
+#include <kvs/ValueArray>
+#include <kvs/Macro>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -294,4 +294,4 @@ AnyValueArray::AnyValueArray( const kvs::ValueArray<T>& values )
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_ANY_VALUE_ARRAY_H_INCLUDE
+#endif // KVS__ANY_VALUE_ARRAY_H_INCLUDE

@@ -11,12 +11,11 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_MUTEX_H_INCLUDE
-#define KVS_CORE_MUTEX_H_INCLUDE
+#ifndef KVS__MUTEX_H_INCLUDE
+#define KVS__MUTEX_H_INCLUDE
 
 #include <kvs/Platform>
 #include <kvs/ClassName>
-
 #if defined ( KVS_PLATFORM_WINDOWS )
 #include <windows.h>
 #include <errno.h>

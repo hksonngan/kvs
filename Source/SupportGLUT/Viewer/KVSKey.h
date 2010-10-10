@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_SUPPORT_GLUT_KVS_KEY_H_INCLUDE
-#define KVS_SUPPORT_GLUT_KVS_KEY_H_INCLUDE
+#ifndef KVS__GLUT_KVS_KEY_H_INCLUDE
+#define KVS__GLUT_KVS_KEY_H_INCLUDE
 
 #include <kvs/Key>
 #include "../GLUT.h"
@@ -88,4 +88,4 @@ inline int KVSKey::Modifier( const int key )
 
 } // end of namespace kvs
 
-#endif // KVS_SUPPORT_GLUT_KVS_KEY_H_INCLUDE
+#endif // KVS__GLUT__KVS_KEY_H_INCLUDE

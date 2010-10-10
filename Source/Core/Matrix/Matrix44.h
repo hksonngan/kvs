@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_MATRIX_44_H_INCLUDE
-#define KVS_CORE_MATRIX_44_H_INCLUDE
+#ifndef KVS__MATRIX_44_H_INCLUDE
+#define KVS__MATRIX_44_H_INCLUDE
 
 #include <iostream>
 
@@ -902,4 +902,4 @@ inline const Matrix44<T> Matrix44<T>::operator -( void ) const
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_MATRIX_44_H_INCLUDE
+#endif // KVS__MATRIX_44_H_INCLUDE

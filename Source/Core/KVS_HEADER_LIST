@@ -91,6 +91,7 @@ Utility/ClassName
 Utility/CommandLine
 Utility/Compiler
 Utility/Date
+Utility/DebugNew
 Utility/Directory
 Utility/Endian
 Utility/FastTokenizer
@@ -99,6 +100,8 @@ Utility/FileList
 Utility/IgnoreUnusedVariable
 Utility/Macro
 Utility/Math
+Utility/MemoryDebugger
+Utility/MemoryTracer
 Utility/Message
 Utility/Platform
 Utility/ReferenceCounter

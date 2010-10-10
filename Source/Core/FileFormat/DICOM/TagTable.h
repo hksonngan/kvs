@@ -15,11 +15,10 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS__TAG_TABLE_H_INCLUDE
-#define KVS__TAG_TABLE_H_INCLUDE
+#ifndef KVS__DCM__TAG_TABLE_H_INCLUDE
+#define KVS__DCM__TAG_TABLE_H_INCLUDE
 
 #include <string>
-
 #include "VRType.h"
 
 
@@ -2179,4 +2178,4 @@ TAG_TABLE_0004_SIZE;
 
 } // end of namespace kvs
 
-#endif // KVS__TAG_TABLE_H_INCLUDE
+#endif // KVS__DCM__TAG_TABLE_H_INCLUDE

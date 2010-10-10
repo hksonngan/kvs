@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_SUPPORT_GLUT_GLOBAL_H_INCLUDE
-#define KVS_SUPPORT_GLUT_GLOBAL_H_INCLUDE
+#ifndef KVS__GLUT__GLOBAL_H_INCLUDE
+#define KVS__GLUT__GLOBAL_H_INCLUDE
 
 #include <kvs/glut/GlobalBase>
 #include <kvs/ObjectManager>
@@ -49,4 +49,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_SUPPORT_GLUT_GLOBAL_H_INCLUDE
+#endif // KVS__GLUT__GLOBAL_H_INCLUDE

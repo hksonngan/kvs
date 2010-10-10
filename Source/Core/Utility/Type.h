@@ -14,8 +14,8 @@
 #ifndef KVS_CORE_TYPE_H_INCLUDE
 #define KVS_CORE_TYPE_H_INCLUDE
 
-#include "Compiler.h"
-#include "Platform.h"
+#include <kvs/Compiler>
+#include <kvs/Platform>
 
 
 #if defined ( KVS_PLATFORM_CPU_32 )      // ILP32

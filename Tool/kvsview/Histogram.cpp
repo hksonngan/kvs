@@ -12,8 +12,8 @@
  */
 /*****************************************************************************/
 #include "Histogram.h"
-#include "CommandName.h"
-#include "FileChecker.h"
+#include <string>
+#include <kvs/DebugNew>
 #include <kvs/StructuredVolumeObject>
 #include <kvs/UnstructuredVolumeObject>
 #include <kvs/StructuredVolumeImporter>
@@ -24,7 +24,8 @@
 #include <kvs/InitializeEventListener>
 #include <kvs/glut/Application>
 #include <kvs/glut/ScreenBase>
-#include <string>
+#include "CommandName.h"
+#include "FileChecker.h"
 
 
 namespace
@@ -405,7 +406,7 @@ const bool Main::exec( void )
     screen.setTitle( kvsview::CommandName + " - " + kvsview::Histogram::CommandName );
     screen.show();
 
-    return( app.run() );
+    return( arg.clear(), app.run() );
 }
 
 } // end of namespace Histogram

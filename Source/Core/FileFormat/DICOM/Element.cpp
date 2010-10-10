@@ -17,7 +17,6 @@
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
-
 #include "Element.h"
 #include "VR.h"
 #include "Value.h"

@@ -13,9 +13,9 @@
  */
 /*****************************************************************************/
 #include "ObjectBase.h"
+#include <iomanip>
 #include <kvs/Camera>
 #include <kvs/Math>
-#include <iomanip>
 
 
 namespace kvs

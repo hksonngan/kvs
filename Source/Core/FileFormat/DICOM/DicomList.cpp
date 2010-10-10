@@ -4,7 +4,7 @@
  *  @brief  DICOM list class.
  *
  *  @author Naohisa Sakamoto
- *  @date   2010/01/22 18:06:28
+ *  @date   2010/10/08 15:06:54
  */
 /*----------------------------------------------------------------------------
  *
@@ -15,7 +15,8 @@
  */
 /*****************************************************************************/
 #include "DicomList.h"
-#include "Dicom.h"
+#include <kvs/DebugNew>
+#include <kvs/Dicom>
 #include <kvs/File>
 #include <kvs/Directory>
 #include <kvs/Message>

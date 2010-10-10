@@ -277,7 +277,7 @@ void ExtractEdges::calculate_uniform_coords( const kvs::StructuredVolumeObject* 
     kvs::Real32* coord = coords.pointer();
 
     const kvs::Vector3ui resolution( volume->resolution() );
-    const kvs::Vector3f  volume_size( volume->maxExternalCoord() - volume->minExternalCoord() );
+    const kvs::Vector3f  volume_size( volume->maxObjectCoord() - volume->minObjectCoord() );
     const kvs::Vector3ui ngrids( resolution - kvs::Vector3ui( 1, 1, 1 ) );
     const kvs::Vector3f  grid_size(
         volume_size.x() / static_cast<float>( ngrids.x() ),

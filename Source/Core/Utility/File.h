@@ -11,15 +11,14 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_FILE_H_INCLUDE
-#define KVS_CORE_FILE_H_INCLUDE
+#ifndef KVS__FILE_H_INCLUDE
+#define KVS__FILE_H_INCLUDE
 
 #include <cstdio>
 #include <cstdlib>
 #include <climits>
 #include <string>
-
-#include "ClassName.h"
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -85,4 +84,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_FILE_H_INCLUDE
+#endif // KVS__FILE_H_INCLUDE

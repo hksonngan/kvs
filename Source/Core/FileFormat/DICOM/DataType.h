@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS__DCM_DATA_TYPE_H_INCLUDE
-#define KVS__DCM_DATA_TYPE_H_INCLUDE
+#ifndef KVS__DCM__DATA_TYPE_H_INCLUDE
+#define KVS__DCM__DATA_TYPE_H_INCLUDE
 
 #include <string>
 

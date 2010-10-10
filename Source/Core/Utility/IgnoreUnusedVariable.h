@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_IGNORE_UNUSED_VARIABLE_H_INCLUDE
-#define KVS_CORE_IGNORE_UNUSED_VARIABLE_H_INCLUDE
+#ifndef KVS__IGNORE_UNUSED_VARIABLE_H_INCLUDE
+#define KVS__IGNORE_UNUSED_VARIABLE_H_INCLUDE
 
 namespace kvs
 {
@@ -24,4 +24,4 @@ inline void IgnoreUnusedVariable( T )
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_IGNORE_UNUSED_VARIABLE_H_INCLUDE
+#endif // KVS__IGNORE_UNUSED_VARIABLE_H_INCLUDE

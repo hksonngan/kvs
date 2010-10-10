@@ -383,11 +383,16 @@ const kvs::Vector3f MarchingCubes::interpolate_vertex(
     const kvs::StructuredVolumeObject* volume =
         reinterpret_cast<const kvs::StructuredVolumeObject*>( BaseClass::m_volume );
 
+    const double x0 = vertex0.x();
+    const double y0 = vertex0.y();
+    const double z0 = vertex0.z();
+    const double x1 = vertex1.x();
+    const double y1 = vertex1.y();
+    const double z1 = vertex1.z();
     const kvs::UInt32 line_size  = volume->nnodesPerLine();
     const kvs::UInt32 slice_size = volume->nnodesPerSlice();
-
-    const size_t v0_index = static_cast<size_t>( vertex0.x() + vertex0.y() * line_size + vertex0.z() * slice_size );
-    const size_t v1_index = static_cast<size_t>( vertex1.x() + vertex1.y() * line_size + vertex1.z() * slice_size );
+    const size_t v0_index = static_cast<size_t>( x0 + y0 * line_size + z0 * slice_size );
+    const size_t v1_index = static_cast<size_t>( x1 + y1 * line_size + z1 * slice_size );
 
     const double v0 = static_cast<double>( values[ v0_index ] );
     const double v1 = static_cast<double>( values[ v1_index ] );

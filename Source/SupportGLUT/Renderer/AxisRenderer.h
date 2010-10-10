@@ -11,8 +11,8 @@
  *  $Id$
  */
 /*****************************************************************************/
-#ifndef KVS__AXIS_RENDERER_H_INCLUDE
-#define KVS__AXIS_RENDERER_H_INCLUDE
+#ifndef KVS__GLUT__AXIS_RENDERER_H_INCLUDE
+#define KVS__GLUT__AXIS_RENDERER_H_INCLUDE
 
 #include <kvs/LineRenderer>
 
@@ -68,4 +68,4 @@ private:
 
 } // end of namespace kvs
 
-#endif // KVS__AXIS_RENDERER_H_INCLUDE
+#endif // KVS__GLUT__AXIS_RENDERER_H_INCLUDE

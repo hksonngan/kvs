@@ -11,15 +11,15 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS__KVSML__KVSML_TRANSFER_FUNCTION_H_INCLUDE
-#define KVS__KVSML__KVSML_TRANSFER_FUNCTION_H_INCLUDE
+#ifndef KVS__KVSML_TRANSFER_FUNCTION_H_INCLUDE
+#define KVS__KVSML_TRANSFER_FUNCTION_H_INCLUDE
 
-#include "../FileFormatBase.h"
-#include "KVSMLTag.h"
 #include <list>
+#include <kvs/FileFormatBase>
 #include <kvs/RGBColor>
 #include <kvs/ValueArray>
 #include <kvs/Type>
+#include "KVSMLTag.h"
 
 
 namespace kvs

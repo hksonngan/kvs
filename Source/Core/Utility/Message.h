@@ -11,17 +11,16 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_MESSAGE_H_INCLUDE
-#define KVS_CORE_MESSAGE_H_INCLUDE
+#ifndef KVS__MESSAGE_H_INCLUDE
+#define KVS__MESSAGE_H_INCLUDE
 
 #include <iostream>
 #include <string>
 #include <cstdio>
 #include <cstdarg>
-
-#include "ClassName.h"
-#include "Macro.h"
-#include "Platform.h"
+#include <kvs/ClassName>
+#include <kvs/Macro>
+#include <kvs/Platform>
 
 // Error message
 #define kvsMessageError \
@@ -112,4 +111,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_MESSAGE_H_INCLUDE
+#endif // KVS__MESSAGE_H_INCLUDE

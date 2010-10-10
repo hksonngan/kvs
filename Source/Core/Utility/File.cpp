@@ -12,9 +12,6 @@
  */
 /****************************************************************************/
 #include "File.h"
-#include "Platform.h"
-#include "Message.h"
-
 #if defined ( KVS_PLATFORM_WINDOWS )
 #include <windows.h>
 #else
@@ -22,9 +19,11 @@
 #include <cstring>
 #include <cerrno>
 #endif
-
 #include <iostream>
 #include <fstream>
+#include <kvs/Platform>
+#include <kvs/Message>
+
 
 namespace
 {

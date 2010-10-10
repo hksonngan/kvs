@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_OPEN_GL_H_INCLUDE
-#define KVS_CORE_OPEN_GL_H_INCLUDE
+#ifndef KVS__OPEN_GL_H_INCLUDE
+#define KVS__OPEN_GL_H_INCLUDE
 
 #include <kvs/Platform>
 #include <kvs/StringList>
@@ -179,4 +179,4 @@ inline std::string ErrorString( const GLenum error_code )
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_OPEN_GL_H_INCLUDE
+#endif // KVS__OPEN_GL_H_INCLUDE

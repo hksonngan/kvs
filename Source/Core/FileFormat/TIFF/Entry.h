@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_TIFF_ENTRY_H_INCLUDE
-#define KVS_CORE_TIFF_ENTRY_H_INCLUDE
+#ifndef KVS__TIFF__ENTRY_H_INCLUDE
+#define KVS__TIFF__ENTRY_H_INCLUDE
 
 #include <kvs/Type>
 #include <kvs/AnyValueArray>
@@ -73,4 +73,4 @@ private:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_TIFF_ENTRY_H_INCLUDE
+#endif // KVS__TIFF__ENTRY_H_INCLUDE

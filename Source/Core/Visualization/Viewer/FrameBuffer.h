@@ -11,10 +11,10 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_FRAME_BUFFER_H_INCLUDE
-#define KVS_CORE_FRAME_BUFFER_H_INCLUDE
+#ifndef KVS__FRAME_BUFFER_H_INCLUDE
+#define KVS__FRAME_BUFFER_H_INCLUDE
 
-#include "OpenGL.h"
+#include <kvs/OpenGL>
 #include <kvs/ClassName>
 
 
@@ -119,4 +119,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_FRAME_BUFFER_H_INCLUDE
+#endif // KVS__FRAME_BUFFER_H_INCLUDE

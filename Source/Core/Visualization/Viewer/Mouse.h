@@ -11,11 +11,11 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_MOUSE_H_INCLUDE
-#define KVS_CORE_MOUSE_H_INCLUDE
+#ifndef KVS__MOUSE_H_INCLUDE
+#define KVS__MOUSE_H_INCLUDE
 
-#include "Trackball.h"
-#include "OpenGL.h"
+#include <kvs/Trackball>
+#include <kvs/OpenGL>
 #include <kvs/ClassName>
 #include <kvs/Timer>
 #include <kvs/Vector2>
@@ -112,4 +112,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_MOUSE_H_INCLUDE
+#endif // KVS__MOUSE_H_INCLUDE

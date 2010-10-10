@@ -14,6 +14,7 @@
 #ifndef KVS__CELL_BASE_H_INCLUDE
 #define KVS__CELL_BASE_H_INCLUDE
 
+#include <kvs/DebugNew>
 #include <kvs/Type>
 #include <kvs/Vector4>
 #include <kvs/Matrix44>

@@ -11,18 +11,16 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_AVS_FIELD_H_INCLUDE
-#define KVS_CORE_AVS_FIELD_H_INCLUDE
+#ifndef KVS__AVS_FIELD_H_INCLUDE
+#define KVS__AVS_FIELD_H_INCLUDE
 
 #include <iostream>
 #include <vector>
 #include <fstream>
 #include <string>
-
 #include <kvs/Vector3>
 #include <kvs/AnyValueArray>
-
-#include "../FileFormatBase.h"
+#include <kvs/FileFormatBase>
 
 
 namespace kvs
@@ -190,4 +188,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_AVS_FIELD_H_INCLUDE
+#endif // KVS__AVS_FIELD_H_INCLUDE

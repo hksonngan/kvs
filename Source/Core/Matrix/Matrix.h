@@ -11,10 +11,11 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_MATRIX_H_INCLUDE
-#define KVS_CORE_MATRIX_H_INCLUDE
+#ifndef KVS__MATRIX_H_INCLUDE
+#define KVS__MATRIX_H_INCLUDE
 
 #include <iostream>
+#include <kvs/DebugNew>
 #include <kvs/ClassName>
 #include <kvs/Assert>
 #include <kvs/Math>
@@ -1010,4 +1011,4 @@ inline const Matrix<T> Matrix<T>::operator -( void ) const
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_MATRIX_H_INCLUDE
+#endif // KVS__MATRIX_H_INCLUDE

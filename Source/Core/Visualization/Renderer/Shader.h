@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_SHADER_H_INCLUDE
-#define KVS_CORE_SHADER_H_INCLUDE
+#ifndef KVS__SHADER_H_INCLUDE
+#define KVS__SHADER_H_INCLUDE
 
 #include <kvs/Vector3>
 #include <kvs/Camera>
@@ -133,4 +133,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_SHADER_H_INCLUDE
+#endif // KVS__SHADER_H_INCLUDE

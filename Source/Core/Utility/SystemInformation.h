@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_SYSTEM_INFORMATION_H_INCLUDE
-#define KVS_CORE_SYSTEM_INFORMATION_H_INCLUDE
+#ifndef KVS__SYSTEM_INFORMATION_H_INCLUDE
+#define KVS__SYSTEM_INFORMATION_H_INCLUDE
 
 #include <cstdio>
 
@@ -38,4 +38,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_SYSTEM_INFORMATION_H_INCLUDE
+#endif // KVS__SYSTEM_INFORMATION_H_INCLUDE

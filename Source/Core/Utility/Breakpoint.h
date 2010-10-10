@@ -11,11 +11,11 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_BREAKPOINT_H_INCLUDE
-#define KVS_CORE_BREAKPOINT_H_INCLUDE
+#ifndef KVS__BREAKPOINT_H_INCLUDE
+#define KVS__BREAKPOINT_H_INCLUDE
 
-#include "Compiler.h"
-#include "Platform.h"
+#include <kvs/Compiler>
+#include <kvs/Platform>
 
 // Microsoft Visual C++
 #if defined ( KVS_COMPILER_VC )
@@ -48,4 +48,4 @@
 #error Microsoft Visual C++ compiler only.
 #endif
 
-#endif // KVS_CORE_BREAKPOINT_H_INCLUDE
+#endif // KVS__BREAKPOINT_H_INCLUDE

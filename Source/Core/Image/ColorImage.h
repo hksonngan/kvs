@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_COLOR_IMAGE_H_INCLUDE
-#define KVS_CORE_COLOR_IMAGE_H_INCLUDE
+#ifndef KVS__COLOR_IMAGE_H_INCLUDE
+#define KVS__COLOR_IMAGE_H_INCLUDE
 
 #include <limits>
 #include "ImageBase.h"
@@ -115,4 +115,4 @@ private:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_COLOR_IMAGE_H_INCLUDE
+#endif // KVS__COLOR_IMAGE_H_INCLUDE

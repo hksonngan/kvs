@@ -12,6 +12,7 @@
  */
 /****************************************************************************/
 #include "PolygonImporter.h"
+#include <kvs/DebugNew>
 #include <kvs/KVSMLObjectPolygon>
 #include <kvs/Math>
 #include <kvs/Vector3>

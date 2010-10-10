@@ -15,6 +15,7 @@
 #ifndef KVS__GLEW__POLYGON_RENDERER_H_INCLUDE
 #define KVS__GLEW__POLYGON_RENDERER_H_INCLUDE
 
+#include <kvs/DebugNew>
 #include <kvs/ClassName>
 #include <kvs/Module>
 #include <kvs/PolygonObject>

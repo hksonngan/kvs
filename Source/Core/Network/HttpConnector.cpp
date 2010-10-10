@@ -15,7 +15,6 @@
 #include "Url.h"
 #include "SocketTimer.h"
 #include "HttpRequestHeader.h"
-
 #include <kvs/IgnoreUnusedVariable>
 
 

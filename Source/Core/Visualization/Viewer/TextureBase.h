@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_TEXTURE_BASE_H_INCLUDE
-#define KVS_CORE_TEXTURE_BASE_H_INCLUDE
+#ifndef KVS__TEXTURE_BASE_H_INCLUDE
+#define KVS__TEXTURE_BASE_H_INCLUDE
 
 #include <cctype>
 #include <kvs/OpenGL>
@@ -96,4 +96,4 @@ protected:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_TEXTURE_BASE_H_INCLUDE
+#endif // KVS__TEXTURE_BASE_H_INCLUDE

@@ -60,8 +60,6 @@ PipelineModule& PipelineModule::operator = ( const PipelineModule& module )
 {
     if ( this != &module )
     {
-        this->unref();
-
         if ( m_category == module.m_category )
         {
             this->shallow_copy( module );
@@ -156,6 +154,7 @@ void PipelineModule::delete_module( void )
 
 void PipelineModule::shallow_copy( const PipelineModule& module )
 {
+    this->unref();
     m_counter  = module.m_counter;
     m_category = module.m_category;
     m_module   = module.m_module;
@@ -170,9 +169,9 @@ void PipelineModule::deep_copy( const PipelineModule& module )
     m_module   = module.m_module;
 }
 
-void PipelineModule::create_counter( void )
+void PipelineModule::create_counter( const size_t counter )
 {
-    m_counter = new kvs::ReferenceCounter( 1 );
+    m_counter = new kvs::ReferenceCounter( counter );
     KVS_ASSERT( m_counter );
 }
 

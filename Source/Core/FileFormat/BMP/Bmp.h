@@ -11,10 +11,10 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_BMP_H_INCLUDE
-#define KVS_CORE_BMP_H_INCLUDE
+#ifndef KVS__BMP_H_INCLUDE
+#define KVS__BMP_H_INCLUDE
 
-#include "../FileFormatBase.h"
+#include <kvs/FileFormatBase>
 #include <kvs/ClassName>
 #include <kvs/Type>
 #include <kvs/ValueArray>
@@ -104,4 +104,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_BMP_H_INCLUDE
+#endif // KVS__BMP_H_INCLUDE

@@ -11,12 +11,13 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_VECTOR_H_INCLUDE
-#define KVS_CORE_VECTOR_H_INCLUDE
+#ifndef KVS__VECTOR_H_INCLUDE
+#define KVS__VECTOR_H_INCLUDE
 
 #include <iostream>
 #include <vector>
 #include <cstring>
+#include <kvs/DebugNew>
 #include <kvs/ClassName>
 #include <kvs/Assert>
 #include <kvs/Math>
@@ -734,4 +735,4 @@ inline const Vector<T> Vector<T>::operator -( void ) const
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_VECTOR_H_INCLUDE
+#endif // KVS__VECTOR_H_INCLUDE

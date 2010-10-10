@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_MODULE_H_INCLUDE
-#define KVS_CORE_MODULE_H_INCLUDE
+#ifndef KVS__MODULE_H_INCLUDE
+#define KVS__MODULE_H_INCLUDE
 
 #define KVS_MODULE_IMPORTER kvs::ImporterBase::ModuleTag
 #define KVS_MODULE_FILTER   kvs::FilterBase::ModuleTag
@@ -46,4 +46,4 @@ struct ModuleTraits
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_MODULE_H_INCLUDE
+#endif // KVS__MODULE_H_INCLUDE

@@ -13,6 +13,7 @@
  */
 /*****************************************************************************/
 #include "Timer.h"
+#include <kvs/DebugNew>
 #include <kvs/IgnoreUnusedVariable>
 #include <kvs/qt/Qt>
 

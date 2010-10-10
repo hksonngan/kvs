@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_SUPPORT_GLUT_GLOBAL_BASE_H_INCLUDE
-#define KVS_SUPPORT_GLUT_GLOBAL_BASE_H_INCLUDE
+#ifndef KVS__GLUT__GLOBAL_BASE_H_INCLUDE
+#define KVS__GLUT__GLOBAL_BASE_H_INCLUDE
 
 #include <kvs/GlobalCore>
 

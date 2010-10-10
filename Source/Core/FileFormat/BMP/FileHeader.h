@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_FILE_HEADER_H_INCLUDE
-#define KVS_CORE_FILE_HEADER_H_INCLUDE
+#ifndef KVS__BMP__FILE_HEADER_H_INCLUDE
+#define KVS__BMP__FILE_HEADER_H_INCLUDE
 
 #include "HeaderBase.h"
 #include <kvs/Type>
@@ -86,4 +86,4 @@ private:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_FILE_HEADER_H_INCLUDE
+#endif // KVS__BMP__FILE_HEADER_H_INCLUDE

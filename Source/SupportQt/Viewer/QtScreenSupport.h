@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_SUPPORT_QT_QT_SCREEN_SUPPORT_H_INCLUDE
-#define KVS_SUPPORT_QT_QT_SCREEN_SUPPORT_H_INCLUDE
+#ifndef KVS__QT_SCREEN_SUPPORT_H_INCLUDE
+#define KVS__QT_SCREEN_SUPPORT_H_INCLUDE
 
 #include "../Qt.h"
 
@@ -132,4 +132,4 @@ inline void QtScreenSupport::move( int x, int y )
 
 } // end of namespace kvs
 
-#endif // KVS_SUPPORT_QT_QT_SCREEN_SUPPORT_H_INCLUDE
+#endif // KVS__QT_SCREEN_SUPPORT_H_INCLUDE

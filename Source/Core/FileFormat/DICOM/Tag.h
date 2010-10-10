@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS__DCM_TAG_H_INCLUDE
-#define KVS__DCM_TAG_H_INCLUDE
+#ifndef KVS__DCM__TAG_H_INCLUDE
+#define KVS__DCM__TAG_H_INCLUDE
 
 #include "VRType.h"
 

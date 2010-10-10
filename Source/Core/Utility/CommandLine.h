@@ -11,16 +11,16 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_COMMAND_LINE_H_INCLUDE
-#define KVS_CORE_COMMAND_LINE_H_INCLUDE
+#ifndef KVS__COMMAND_LINE_H_INCLUDE
+#define KVS__COMMAND_LINE_H_INCLUDE
 
 #include <string>
 #include <sstream>
 #include <vector>
 #include <typeinfo>
 #include <algorithm>
-#include "ClassName.h"
-#include "Message.h"
+#include <kvs/ClassName>
+#include <kvs/Message>
 
 
 namespace kvs
@@ -84,6 +84,8 @@ public:
     const bool parse( void );
 
     const bool read( void );
+
+    void clear( void );
 
 public:
 
@@ -154,7 +156,7 @@ public:
 
     Argument( const Argument& other );
 
-    ~Argument( void );
+    virtual ~Argument( void );
 
 public:
 
@@ -197,7 +199,7 @@ public:
 
     Option( const Option& other );
 
-    ~Option( void );
+    virtual ~Option( void );
 
 public:
 
@@ -255,7 +257,7 @@ public:
 
     Value( const Value& other );
 
-    ~Value( void );
+    virtual ~Value( void );
 
 public:
 
@@ -397,4 +399,4 @@ inline const std::string CommandLine::Value::value<std::string>( void ) const
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_COMMAND_LINE_H_INCLUDE
+#endif // KVS__COMMAND_LINE_H_INCLUDE

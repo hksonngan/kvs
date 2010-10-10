@@ -12,7 +12,7 @@
  */
 /****************************************************************************/
 #include "Message.h"
-#include "Breakpoint.h"
+#include <kvs/Breakpoint>
 
 
 namespace

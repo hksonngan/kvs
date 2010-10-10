@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_SOCKET_ADDRESS_H_INCLUDE
-#define KVS_CORE_SOCKET_ADDRESS_H_INCLUDE
+#ifndef KVS__SOCKET_ADDRESS_H_INCLUDE
+#define KVS__SOCKET_ADDRESS_H_INCLUDE
 
 #include "IPAddress.h"
 #include <iostream>
@@ -98,4 +98,4 @@ protected:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_SOCKET_ADDRESS_H_INCLUDE
+#endif // KVS__SOCKET_ADDRESS_H_INCLUDE

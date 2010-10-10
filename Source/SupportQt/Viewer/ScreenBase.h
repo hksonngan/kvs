@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_SUPPORT_QT_SCREEN_BASE_H_INCLUDE
-#define KVS_SUPPORT_QT_SCREEN_BASE_H_INCLUDE
+#ifndef KVS__QT__SCREEN_BASE_H_INCLUDE
+#define KVS__QT__SCREEN_BASE_H_INCLUDE
 
 #include "../Qt.h"
 #include "QtScreenSupport.h"
@@ -193,4 +193,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_SUPPORT_QT_SCREEN_BASE_H_INCLUDE
+#endif // KVS__QT__SCREEN_BASE_H_INCLUDE

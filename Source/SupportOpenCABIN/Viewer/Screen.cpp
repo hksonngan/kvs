@@ -13,6 +13,7 @@
  */
 /*****************************************************************************/
 #include "Screen.h"
+#include <kvs/DebugNew>
 #include <kvs/opencabin/OpenCABIN>
 #include <kvs/opencabin/Camera>
 #include <kvs/opencabin/Application>

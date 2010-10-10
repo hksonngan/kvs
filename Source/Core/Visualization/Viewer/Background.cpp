@@ -12,7 +12,7 @@
  */
 /****************************************************************************/
 #include "Background.h"
-#include "OpenGL.h"
+#include <kvs/OpenGL>
 
 
 namespace kvs

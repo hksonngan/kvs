@@ -16,13 +16,12 @@
 #include <cstdlib>
 #include <new>
 #include <limits>
-
+#include <kvs/DebugNew>
 #include <kvs/Math>
 #include <kvs/Message>
 #include <kvs/IgnoreUnusedVariable>
 #include <kvs/File>
 #include <kvs/Assert>
-
 #include "Ply.h"
 #include "PlyFile.h"
 

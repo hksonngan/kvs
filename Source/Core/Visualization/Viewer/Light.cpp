@@ -12,7 +12,7 @@
  */
 /****************************************************************************/
 #include "Light.h"
-#include "OpenGL.h"
+#include <kvs/OpenGL>
 #include <kvs/RGBAColor>
 #include <kvs/Vector3>
 #include <kvs/Matrix33>

@@ -11,11 +11,10 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_FILE_FORMAT_BASE_H_INCLUDE
-#define KVS_CORE_FILE_FORMAT_BASE_H_INCLUDE
+#ifndef KVS__FILE_FORMAT_BASE_H_INCLUDE
+#define KVS__FILE_FORMAT_BASE_H_INCLUDE
 
 #include <kvs/ClassName>
-
 #include <string>
 
 
@@ -59,4 +58,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_FILE_FORMAT_BASE_H_INCLUDE
+#endif // KVS__FILE_FORMAT_BASE_H_INCLUDE

@@ -12,7 +12,6 @@
  */
 /****************************************************************************/
 #include "AVSUcd.h"
-
 #include <kvs/File>
 #include <kvs/Message>
 #include <kvs/ValueArray>

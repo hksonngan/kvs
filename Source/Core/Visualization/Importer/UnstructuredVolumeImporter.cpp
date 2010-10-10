@@ -12,6 +12,7 @@
  */
 /****************************************************************************/
 #include "UnstructuredVolumeImporter.h"
+#include <kvs/DebugNew>
 #include <kvs/AVSUcd>
 #include <kvs/Message>
 #include <kvs/Vector3>

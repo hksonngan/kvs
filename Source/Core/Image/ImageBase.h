@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_IMAGE_BASE_H_INCLUDE
-#define KVS_CORE_IMAGE_BASE_H_INCLUDE
+#ifndef KVS__IMAGE_BASE_H_INCLUDE
+#define KVS__IMAGE_BASE_H_INCLUDE
 
 #include <kvs/ValueArray>
 #include <kvs/Type>
@@ -179,4 +179,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_IMAGE_BASE_H_INCLUDE
+#endif // KVS__IMAGE_BASE_H_INCLUDE

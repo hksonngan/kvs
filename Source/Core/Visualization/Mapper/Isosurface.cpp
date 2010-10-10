@@ -12,6 +12,7 @@
  */
 /****************************************************************************/
 #include "Isosurface.h"
+#include <kvs/DebugNew>
 #include <kvs/MarchingCubes>
 #include <kvs/MarchingTetrahedra>
 #include <kvs/MarchingHexahedra>

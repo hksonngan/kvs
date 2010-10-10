@@ -11,10 +11,10 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_LINE_RENDERER_H_INCLUDE
-#define KVS_CORE_LINE_RENDERER_H_INCLUDE
+#ifndef KVS__LINE_RENDERER_H_INCLUDE
+#define KVS__LINE_RENDERER_H_INCLUDE
 
-#include "RendererBase.h"
+#include <kvs/RendererBase>
 #include <kvs/ClassName>
 #include <kvs/Module>
 

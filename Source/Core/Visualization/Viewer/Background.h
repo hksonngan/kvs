@@ -11,12 +11,11 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_BACKGROUND_H_INCLUDE
-#define KVS_CORE_BACKGROUND_H_INCLUDE
+#ifndef KVS__BACKGROUND_H_INCLUDE
+#define KVS__BACKGROUND_H_INCLUDE
 
 #include <kvs/ClassName>
 #include <kvs/RGBAColor>
-//#include "mipmap_texture2d.h"
 
 
 namespace kvs
@@ -92,4 +91,4 @@ private:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_BACKGROUND_H_INCLUDE
+#endif // KVS__BACKGROUND_H_INCLUDE

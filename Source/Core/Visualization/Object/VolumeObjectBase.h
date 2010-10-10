@@ -11,13 +11,11 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_VOLUME_OBJECT_BASE_H_INCLUDE
-#define KVS_CORE_VOLUME_OBJECT_BASE_H_INCLUDE
+#ifndef KVS__VOLUME_OBJECT_BASE_H_INCLUDE
+#define KVS__VOLUME_OBJECT_BASE_H_INCLUDE
 
 #include <kvs/ClassName>
-
-#include "ObjectBase.h"
-
+#include <kvs/ObjectBase>
 #include <kvs/Value>
 #include <kvs/ValueArray>
 #include <kvs/AnyValueArray>
@@ -205,4 +203,4 @@ void VolumeObjectBase::calculate_min_max_values( void ) const
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_VOLUME_OBJECT_BASE_H_INCLUDE
+#endif // KVS__VOLUME_OBJECT_BASE_H_INCLUDE

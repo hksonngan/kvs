@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_RGB_COLOR_H_INCLUDE
-#define KVS_CORE_RGB_COLOR_H_INCLUDE
+#ifndef KVS__RGB_COLOR_H_INCLUDE
+#define KVS__RGB_COLOR_H_INCLUDE
 
 #include <iostream>
 #include <iomanip>
@@ -148,4 +148,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_RGB_COLOR_H_INCLUDE
+#endif // KVS__RGB_COLOR_H_INCLUDE

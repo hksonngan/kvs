@@ -11,10 +11,10 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_TIFF_TIFF_H_INCLUDE
-#define KVS_CORE_TIFF_TIFF_H_INCLUDE
+#ifndef KVS__TIFF_H_INCLUDE
+#define KVS__TIFF_H_INCLUDE
 
-#include "../FileFormatBase.h"
+#include <kvs/FileFormatBase>
 #include <kvs/ClassName>
 #include <kvs/Type>
 #include <kvs/Message>

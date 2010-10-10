@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_PARTICLE_BUFFER_H_INCLUDE
-#define KVS_CORE_PARTICLE_BUFFER_H_INCLUDE
+#ifndef KVS__PARTICLE_BUFFER_H_INCLUDE
+#define KVS__PARTICLE_BUFFER_H_INCLUDE
 
 #include <kvs/ValueArray>
 #include <kvs/Type>
@@ -162,4 +162,4 @@ inline void ParticleBuffer::add(
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_PARTICLE_BUFFER_H_INCLUDE
+#endif // KVS__PARTICLE_BUFFER_H_INCLUDE

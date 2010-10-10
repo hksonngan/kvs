@@ -12,13 +12,14 @@
  */
 /****************************************************************************/
 #include "BitArray.h"
-#include "Type.h"
-#include "ReferenceCounter.h"
-#include "Assert.h"
-#include "Binary.h"
 #include <vector>
 #include <cstring>
 #include <cstdlib>
+#include <kvs/DebugNew>
+#include <kvs/Type>
+#include <kvs/ReferenceCounter>
+#include <kvs/Assert>
+#include <kvs/Binary>
 
 
 namespace

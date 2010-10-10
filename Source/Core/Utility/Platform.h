@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_PLATFORM_H_INCLUDE
-#define KVS_CORE_PLATFORM_H_INCLUDE
+#ifndef KVS__PLATFORM_H_INCLUDE
+#define KVS__PLATFORM_H_INCLUDE
 
 /*----------------------------------------------------------------------------
  * Platform name.
@@ -237,4 +237,4 @@ inline const char* CPUName( void )
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_PLATFORM_H_INCLUDE
+#endif // KVS__PLATFORM_H_INCLUDE

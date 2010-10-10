@@ -11,13 +11,12 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_CONDITION_H_INCLUDE
-#define KVS_CORE_CONDITION_H_INCLUDE
+#ifndef KVS__CONDITION_H_INCLUDE
+#define KVS__CONDITION_H_INCLUDE
 
 #include <kvs/Platform>
 #include <kvs/ClassName>
 #include "Mutex.h"
-
 
 #if defined ( KVS_PLATFORM_WINDOWS )
 #include <windows.h>
@@ -85,4 +84,4 @@ protected:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_CONDITION_H_INCLUDE
+#endif // KVS__CONDITION_H_INCLUDE

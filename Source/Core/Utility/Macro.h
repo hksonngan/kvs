@@ -11,10 +11,10 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_MACRO_H_INCLUDE
-#define KVS_CORE_MACRO_H_INCLUDE
+#ifndef KVS__MACRO_H_INCLUDE
+#define KVS__MACRO_H_INCLUDE
 
-#include "Compiler.h"
+#include <kvs/Compiler>
 
 #define KVS_MACRO_FILE __FILE__
 
@@ -36,4 +36,4 @@
 #define KVS_MACRO_FUNC __func__
 #endif
 
-#endif // KVS_CORE_MACRO_H_INCLUDE
+#endif // KVS__MACRO_H_INCLUDE

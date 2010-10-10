@@ -11,9 +11,9 @@
  *  $Id$
  */
 /****************************************************************************/
+#include "IDManager.h"
 #include <algorithm>
 #include <functional>
-#include "IDManager.h"
 
 
 namespace kvs

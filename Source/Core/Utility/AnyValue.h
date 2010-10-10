@@ -11,14 +11,15 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_ANY_VALUE_H_INCLUDE
-#define KVS_CORE_ANY_VALUE_H_INCLUDE
+#ifndef KVS__ANY_VALUE_H_INCLUDE
+#define KVS__ANY_VALUE_H_INCLUDE
 
 #include <iostream>
 #include <typeinfo>
 #include <cstring>
-#include "Type.h"
-#include "ClassName.h"
+#include <kvs/DebugNew>
+#include <kvs/Type>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -190,4 +191,4 @@ const T AnyValue::get_value( void ) const
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_ANY_VALUE_H_INCLUDE
+#endif // KVS__ANY_VALUE_H_INCLUDE

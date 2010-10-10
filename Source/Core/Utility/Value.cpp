@@ -29,16 +29,5 @@ template class Value<kvs::Int64>;
 template class Value<kvs::UInt64>;
 template class Value<kvs::Real32>;
 template class Value<kvs::Real64>;
-/*
-template class Value<char>;
-template class Value<unsigned char>;
-template class Value<short>;
-template class Value<unsigned short>;
-template class Value<int>;
-template class Value<unsigned int>;
-template class Value<long>;
-template class Value<unsigned long>;
-template class Value<float>;
-template class Value<double>;
-*/
+
 } // end of namespace kvs

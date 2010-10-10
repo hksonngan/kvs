@@ -11,10 +11,10 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_PNM_PGM_H_INCLUDE
-#define KVS_CORE_PNM_PGM_H_INCLUDE
+#ifndef KVS__PGM_H_INCLUDE
+#define KVS__PGM_H_INCLUDE
 
-#include "../FileFormatBase.h"
+#include <kvs/FileFormatBase>
 #include <kvs/ClassName>
 #include <kvs/ValueArray>
 #include <kvs/Type>
@@ -87,4 +87,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_PNM_PGM_H_INCLUDE
+#endif // KVS__PGM_H_INCLUDE

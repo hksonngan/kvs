@@ -13,9 +13,9 @@
  */
 /*****************************************************************************/
 #include "RayCastingRenderer.h"
+#include <kvs/DebugNew>
 #include <kvs/Shader>
 #include <kvs/Vector3>
-
 #if defined ( KVS_GLEW_RAY_CASTING_RENDERER__EMBEDDED_SHADER )
 #include "RayCastingRenderer/Shader.h"
 #endif

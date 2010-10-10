@@ -12,6 +12,7 @@
  */
 /****************************************************************************/
 #include "PointImporter.h"
+#include <kvs/DebugNew>
 #include <kvs/KVSMLObjectPoint>
 #include <kvs/Math>
 #include <kvs/Vector3>

@@ -11,12 +11,12 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_VALUE_H_INCLUDE
-#define KVS_CORE_VALUE_H_INCLUDE
+#ifndef KVS__VALUE_H_INCLUDE
+#define KVS__VALUE_H_INCLUDE
 
 #include <limits>
-#include "ClassName.h"
-#include "Endian.h"
+#include <kvs/ClassName>
+#include <kvs/Endian>
 
 
 namespace kvs
@@ -235,4 +235,4 @@ Value<T> operator / ( const Value<T>& other1, const Value<T>& other2 )
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_VALUE_H_INCLUDE
+#endif // KVS__VALUE_H_INCLUDE

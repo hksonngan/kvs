@@ -12,6 +12,7 @@
  */
 /****************************************************************************/
 #include "LineImporter.h"
+#include <kvs/DebugNew>
 #include <kvs/KVSMLObjectLine>
 #include <kvs/Math>
 #include <kvs/Vector3>

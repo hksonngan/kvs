@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_RENDERER_MANAGER_H_INCLUDE
-#define KVS_CORE_RENDERER_MANAGER_H_INCLUDE
+#ifndef KVS__RENDERER_MANAGER_H_INCLUDE
+#define KVS__RENDERER_MANAGER_H_INCLUDE
 
 #include <string>
 #include <list>
@@ -77,4 +77,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_RENDERER_MANAGER_H_INCLUDE
+#endif // KVS__RENDERER_MANAGER_H_INCLUDE

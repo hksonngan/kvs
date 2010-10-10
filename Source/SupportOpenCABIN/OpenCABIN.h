@@ -12,8 +12,8 @@
  *  $Id$
  */
 /*****************************************************************************/
-#ifndef KVS_SUPPORT_OPENCABIN_OPENCABIN_H_INCLUDE
-#define KVS_SUPPORT_OPENCABIN_OPENCABIN_H_INCLUDE
+#ifndef KVS__OPENCABIN__OPENCABIN_H_INCLUDE
+#define KVS__OPENCABIN__OPENCABIN_H_INCLUDE
 
 #include <kvs/glut/GLUT>
 #include <ocl.h>
@@ -57,4 +57,4 @@ inline const std::string Version( void )
 
 } // end of namespace kvs
 
-#endif // KVS_SUPPORT_OPENCABIN_OPENCABIN_H_INCLUDE
+#endif // KVS__OPENCABIN__OPENCABIN_H_INCLUDE

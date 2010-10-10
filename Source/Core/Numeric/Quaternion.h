@@ -11,12 +11,11 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_QUATERNION_H_INCLUDE
-#define KVS_CORE_QUATERNION_H_INCLUDE
+#ifndef KVS__QUATERNION_H_INCLUDE
+#define KVS__QUATERNION_H_INCLUDE
 
 #include <iostream>
 #include <iomanip>
-
 #include <kvs/ClassName>
 #include <kvs/Math>
 #include <kvs/Assert>
@@ -1063,4 +1062,4 @@ Quaternion<T> Quaternion<T>::spline(
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_QUATERNION_H_INCLUDE
+#endif // KVS__QUATERNION_H_INCLUDE

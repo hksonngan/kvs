@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_TRACKBALL_H_INCLUDE
-#define KVS_CORE_TRACKBALL_H_INCLUDE
+#ifndef KVS__TRACKBALL_H_INCLUDE
+#define KVS__TRACKBALL_H_INCLUDE
 
 #include <kvs/ClassName>
 #include <kvs/Vector2>
@@ -130,4 +130,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_TRACKBALL_H_INCLUDE
+#endif // KVS__TRACKBALL_H_INCLUDE

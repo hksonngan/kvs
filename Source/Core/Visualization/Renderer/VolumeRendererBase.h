@@ -11,9 +11,10 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_VOLUME_RENDERER_BASE_H_INCLUDE
-#define KVS_CORE_VOLUME_RENDERER_BASE_H_INCLUDE
+#ifndef KVS__VOLUME_RENDERER_BASE_H_INCLUDE
+#define KVS__VOLUME_RENDERER_BASE_H_INCLUDE
 
+#include <kvs/DebugNew>
 #include <kvs/RendererBase>
 #include <kvs/TransferFunction>
 #include <kvs/FrameBuffer>
@@ -112,4 +113,4 @@ inline void VolumeRendererBase::setShader( const ShadingType shader )
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_VOLUME_RENDERER_BASE_H_INCLUDE
+#endif // KVS__VOLUME_RENDERER_BASE_H_INCLUDE

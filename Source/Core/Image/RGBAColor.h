@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_RGBA_COLOR_H_INCLUDE
-#define KVS_CORE_RGBA_COLOR_H_INCLUDE
+#ifndef KVS__RGBA_COLOR_H_INCLUDE
+#define KVS__RGBA_COLOR_H_INCLUDE
 
 #include <kvs/Type>
 #include "RGBColor.h"
@@ -59,4 +59,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_RGBA_COLOR_H_INCLUDE
+#endif // KVS__RGBA_COLOR_H_INCLUDE

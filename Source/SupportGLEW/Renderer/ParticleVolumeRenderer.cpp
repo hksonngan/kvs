@@ -13,6 +13,7 @@
  */
 /*****************************************************************************/
 #include "ParticleVolumeRenderer.h"
+#include <kvs/DebugNew>
 #include <kvs/PointObject>
 #include <kvs/Camera>
 #include <kvs/Assert>
@@ -20,7 +21,6 @@
 #include <kvs/MersenneTwister>
 #include <kvs/glew/GLEW>
 #include <kvs/CellByCellParticleGenerator>
-
 #if defined ( KVS_GLEW_PARTICLE_VOLUME_RENDERER__EMBEDDED_SHADER )
 #include "ParticleVolumeRenderer/Shader.h"
 #endif

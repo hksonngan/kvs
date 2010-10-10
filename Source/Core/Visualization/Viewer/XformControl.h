@@ -11,10 +11,10 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_XFORM_CONTROL_H_INCLUDE
-#define KVS_CORE_XFORM_CONTROL_H_INCLUDE
+#ifndef KVS__XFORM_CONTROL_H_INCLUDE
+#define KVS__XFORM_CONTROL_H_INCLUDE
 
-#include "Xform.h"
+#include <kvs/Xform>
 #include <kvs/ClassName>
 
 
@@ -87,4 +87,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_XFORM_CONTROL_H_INCLUDE
+#endif // KVS__XFORM_CONTROL_H_INCLUDE

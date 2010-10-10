@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_CLASS_NAME_H_INCLUDE
-#define KVS_CORE_CLASS_NAME_H_INCLUDE
+#ifndef KVS__CLASS_NAME_H_INCLUDE
+#define KVS__CLASS_NAME_H_INCLUDE
 
 #define kvsClassName( this_class )                \
     public:                                       \
@@ -26,4 +26,4 @@
         return ( # this_class );                   \
     }
 
-#endif // KVS_CORE_CLASS_NAME_H_INCLUDE
+#endif // KVS__CLASS_NAME_H_INCLUDE

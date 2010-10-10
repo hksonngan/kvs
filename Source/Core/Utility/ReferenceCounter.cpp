@@ -12,7 +12,6 @@
  */
 /****************************************************************************/
 #include "ReferenceCounter.h"
-
 #if defined ( KVS_ENABLE_THREAD_SAFE )
 #include <kvs/Mutex>
 #include <kvs/MutexLocker>

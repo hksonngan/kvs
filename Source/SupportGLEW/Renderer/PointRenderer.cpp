@@ -13,11 +13,11 @@
  */
 /*****************************************************************************/
 #include "PointRenderer.h"
+#include <kvs/DebugNew>
 #include <kvs/glew/ProgramObject>
 #include <kvs/glew/ShaderSource>
 #include <kvs/glew/VertexShader>
 #include <kvs/glew/FragmentShader>
-
 #if defined( KVS_GLEW_POINT_RENDERER__EMBEDDED_SHADER )
 #include "PointRenderer/Shader.h"
 #endif

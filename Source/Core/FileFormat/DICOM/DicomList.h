@@ -20,8 +20,7 @@
 #include <kvs/Vector2>
 #include <kvs/FileFormatBase>
 #include <kvs/ClassName>
-
-#include "Dicom.h"
+#include <kvs/Dicom>
 
 
 namespace kvs

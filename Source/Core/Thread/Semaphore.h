@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_SEMAPHORE_H_INCLUDE
-#define KVS_CORE_SEMAPHORE_H_INCLUDE
+#ifndef KVS__SEMAPHORE_H_INCLUDE
+#define KVS__SEMAPHORE_H_INCLUDE
 
 #include <kvs/ClassName>
 #include "Mutex.h"
@@ -56,4 +56,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_SEMAPHORE_H_INCLUDE
+#endif // KVS__SEMAPHORE_H_INCLUDE

@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_GLOBAL_CORE_H_INCLUDE
-#define KVS_CORE_GLOBAL_CORE_H_INCLUDE
+#ifndef KVS__GLOBAL_CORE_H_INCLUDE
+#define KVS__GLOBAL_CORE_H_INCLUDE
 
 #include <kvs/ClassName>
 #include <kvs/Camera>
@@ -80,4 +80,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_GLOBAL_CORE_H_INCLUDE
+#endif // KVS__GLOBAL_CORE_H_INCLUDE

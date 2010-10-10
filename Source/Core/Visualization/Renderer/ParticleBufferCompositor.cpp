@@ -12,6 +12,7 @@
  */
 /****************************************************************************/
 #include "ParticleBufferCompositor.h"
+#include <kvs/DebugNew>
 #include <kvs/Vector3>
 #include <kvs/Matrix33>
 #include <kvs/IgnoreUnusedVariable>

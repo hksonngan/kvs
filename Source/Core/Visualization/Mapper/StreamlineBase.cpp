@@ -12,6 +12,7 @@
  */
 /*****************************************************************************/
 #include "Streamline.h"
+#include <kvs/DebugNew>
 #include <kvs/Type>
 #include <kvs/IgnoreUnusedVariable>
 

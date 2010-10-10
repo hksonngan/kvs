@@ -11,11 +11,10 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_FAST_TOKENIZER_H_INCLUDE
-#define KVS_CORE_FAST_TOKENIZER_H_INCLUDE
+#ifndef KVS__FAST_TOKENIZER_H_INCLUDE
+#define KVS__FAST_TOKENIZER_H_INCLUDE
 
 #include <cstring>
-
 #include <kvs/ClassName>
 #include <kvs/Assert>
 
@@ -92,4 +91,4 @@ inline const size_t FastTokenizer::ntokens( void ) const
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_FAST_TOKENIZER_H_INCLUDE
+#endif // KVS__FAST_TOKENIZER_H_INCLUDE

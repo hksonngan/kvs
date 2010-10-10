@@ -14,6 +14,7 @@
  */
 /*****************************************************************************/
 #include "ProgramObject.h"
+#include <kvs/DebugNew>
 
 
 namespace kvs

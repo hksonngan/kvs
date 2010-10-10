@@ -12,13 +12,12 @@
  *  $Id$
  */
 /*****************************************************************************/
-#ifndef KVS_SUPPORT_OPENCV_OPENCV_H_INCLUDE
-#define KVS_SUPPORT_OPENCV_OPENCV_H_INCLUDE
-
-#include <kvs/String>
+#ifndef KVS__OPENCV__OPENCV_H_INCLUDE
+#define KVS__OPENCV__OPENCV_H_INCLUDE
 
 #include <cv.h>
 #include <highgui.h>
+#include <kvs/String>
 
 
 namespace kvs
@@ -55,4 +54,4 @@ inline const std::string Version( void )
 
 } // end of namespace kvs
 
-#endif // KVS_SUPPORT_OPENCV_OPENCV_H_INCLUDE
+#endif // KVS__OPENCV__OPENCV_H_INCLUDE

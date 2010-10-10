@@ -12,10 +12,7 @@
  */
 /*****************************************************************************/
 #include "RayCastingRenderer.h"
-#include "CommandName.h"
-#include "ObjectInformation.h"
-#include "FileChecker.h"
-#include "Widget.h"
+#include <kvs/DebugNew>
 #include <kvs/IgnoreUnusedVariable>
 #include <kvs/File>
 #include <kvs/KVSMLObjectStructuredVolume>
@@ -34,6 +31,10 @@
 #if defined( KVS_SUPPORT_GLEW )
 #include <kvs/glew/RayCastingRenderer>
 #endif
+#include "CommandName.h"
+#include "ObjectInformation.h"
+#include "FileChecker.h"
+#include "Widget.h"
 
 namespace { bool Shown = false; }
 namespace { const std::string RendererName( "RayCastingRenderer" ); }
@@ -551,7 +552,7 @@ const bool Main::exec( void )
     mouse_double_click_event.attachTransferFunctionEditor( &editor );
     key_press_event.attachTransferFunctionEditor( &editor );
 
-    return( app.run() );
+    return( arg.clear(), app.run() );
 }
 
 } // end of namespace RayCastingRenderer

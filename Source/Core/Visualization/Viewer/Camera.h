@@ -11,10 +11,10 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_CAMERA_H_INCLUDE
-#define KVS_CORE_CAMERA_H_INCLUDE
+#ifndef KVS__CAMERA_H_INCLUDE
+#define KVS__CAMERA_H_INCLUDE
 
-#include "XformControl.h"
+#include <kvs/XformControl>
 #include <kvs/ClassName>
 #include <kvs/Vector2>
 #include <kvs/Vector3>
@@ -213,4 +213,4 @@ private:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_CAMERA_H_INCLUDE
+#endif // KVS__CAMERA_H_INCLUDE

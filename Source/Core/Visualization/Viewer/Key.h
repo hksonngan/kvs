@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_KEY_H_INCLUDE
-#define KVS_CORE_KEY_H_INCLUDE
+#ifndef KVS__KEY_H_INCLUDE
+#define KVS__KEY_H_INCLUDE
 
 
 namespace kvs
@@ -167,4 +167,4 @@ struct Key
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_KEY_H_INCLUDE
+#endif // KVS__KEY_H_INCLUDE

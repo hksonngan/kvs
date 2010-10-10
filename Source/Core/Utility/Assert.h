@@ -11,10 +11,10 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_ASSERT_H_INCLUDE
-#define KVS_CORE_ASSERT_H_INCLUDE
+#ifndef KVS__ASSERT_H_INCLUDE
+#define KVS__ASSERT_H_INCLUDE
 
-#include "Message.h"
+#include <kvs/Message>
 
 #if defined ( KVS_ENABLE_DEBUG )
 #define KVS_ASSERT( exp ) \
@@ -23,4 +23,4 @@
 #define KVS_ASSERT( exp )
 #endif
 
-#endif // KVS_CORE_ASSERT_H_INCLUDE
+#endif // KVS__ASSERT_H_INCLUDE

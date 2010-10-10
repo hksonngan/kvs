@@ -13,6 +13,7 @@
  */
 /*****************************************************************************/
 #include "Application.h"
+#include <kvs/DebugNew>
 #if defined( KVS_SUPPORT_GLUT )
 #include <kvs/glut/GLUT>
 #endif

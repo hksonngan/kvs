@@ -12,10 +12,7 @@
  */
 /*****************************************************************************/
 #include "ExtractVertices.h"
-#include "CommandName.h"
-#include "ObjectInformation.h"
-#include "FileChecker.h"
-#include "Widget.h"
+#include <kvs/DebugNew>
 #include <kvs/File>
 #include <kvs/PipelineModule>
 #include <kvs/VisualizationPipeline>
@@ -24,6 +21,10 @@
 #include <kvs/glut/Screen>
 #include <kvs/glut/LegendBar>
 #include <kvs/glut/OrientationAxis>
+#include "CommandName.h"
+#include "ObjectInformation.h"
+#include "FileChecker.h"
+#include "Widget.h"
 
 
 namespace kvsview
@@ -197,7 +198,7 @@ const bool Main::exec( void )
     // Show the screen.
     screen.show();
 
-    return( app.run() );
+    return( arg.clear(), app.run() );
 }
 
 } // end of namespace ExtractVertices

@@ -310,6 +310,8 @@ void OpacityMapPalette::initialize_checkerboard( void )
     m_checkerboard.create( width, height );
     m_checkerboard.download( width, height, data );
     m_checkerboard.unbind();
+
+    delete [] data;
 }
 
 void OpacityMapPalette::draw_palette( void )

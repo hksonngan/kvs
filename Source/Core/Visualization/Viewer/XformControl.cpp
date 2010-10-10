@@ -12,7 +12,7 @@
  */
 /****************************************************************************/
 #include "XformControl.h"
-#include "OpenGL.h"
+#include <kvs/OpenGL>
 
 
 namespace kvs

@@ -13,6 +13,7 @@
  */
 /*****************************************************************************/
 #include "TransferFunctionEditor.h"
+#include <kvs/DebugNew>
 #include <kvs/MouseEvent>
 #include <kvs/Math>
 #include <kvs/HSVColor>
@@ -290,6 +291,7 @@ TransferFunctionEditor::~TransferFunctionEditor( void )
     if ( m_color_palette ) delete m_color_palette;
     if ( m_color_map_palette ) delete m_color_map_palette;
     if ( m_opacity_map_palette ) delete m_opacity_map_palette;
+    if ( m_histogram ) delete m_histogram;
     if ( m_reset_button ) delete m_reset_button;
     if ( m_undo_button ) delete m_undo_button;
     if ( m_redo_button ) delete m_redo_button;

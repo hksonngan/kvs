@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_POINT_RENDERING_FUNCTION_H_INCLUDE
-#define KVS_CORE_POINT_RENDERING_FUNCTION_H_INCLUDE
+#ifndef KVS__POINT_RENDERING_FUNCTION_H_INCLUDE
+#define KVS__POINT_RENDERING_FUNCTION_H_INCLUDE
 
 #include <kvs/PointObject>
 #include <kvs/RGBColor>
@@ -367,4 +367,4 @@ void PointRenderingFunction( const kvs::PointObject* point )
 
 } // end of namespace
 
-#endif // KVS_CORE_POINT_RENDERING_FUNCTION_H_INCLUDE
+#endif // KVS__POINT_RENDERING_FUNCTION_H_INCLUDE

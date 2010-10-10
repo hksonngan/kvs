@@ -12,6 +12,13 @@
  */
 /*****************************************************************************/
 #include "Argument.h"
+#include <kvs/DebugNew>
+#include <kvs/Bounds>
+#include <kvs/AxisObject>
+#include <kvs/PointRenderer>
+#include <kvs/LineRenderer>
+#include <kvs/PolygonRenderer>
+#include <kvs/glut/AxisRenderer>
 #include "CommandName.h"
 #include "PointRenderer.h"
 #include "LineRenderer.h"
@@ -26,12 +33,6 @@
 #include "RayCastingRenderer.h"
 #include "ParticleVolumeRenderer.h"
 #include "Histogram.h"
-#include <kvs/Bounds>
-#include <kvs/AxisObject>
-#include <kvs/PointRenderer>
-#include <kvs/LineRenderer>
-#include <kvs/PolygonRenderer>
-#include <kvs/glut/AxisRenderer>
 
 
 namespace kvsview

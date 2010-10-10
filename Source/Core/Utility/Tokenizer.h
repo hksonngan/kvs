@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_TOKENIZER_H_INCLUDE
-#define KVS_CORE_TOKENIZER_H_INCLUDE
+#ifndef KVS__TOKENIZER_H_INCLUDE
+#define KVS__TOKENIZER_H_INCLUDE
 
 #include <string>
 
@@ -62,4 +62,4 @@ protected:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_TOKENIZER_H_INCLUDE
+#endif // KVS__TOKENIZER_H_INCLUDE

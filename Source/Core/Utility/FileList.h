@@ -11,11 +11,11 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_FILE_LIST_H_INCLUDE
-#define KVS_CORE_FILE_LIST_H_INCLUDE
+#ifndef KVS__FILE_LIST_H_INCLUDE
+#define KVS__FILE_LIST_H_INCLUDE
 
 #include <vector>
-#include "File.h"
+#include <kvs/File>
 
 
 namespace kvs
@@ -25,4 +25,4 @@ typedef std::vector<kvs::File> FileList;
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_FILE_LIST_H_INCLUDE
+#endif // KVS__FILE_LIST_H_INCLUDE

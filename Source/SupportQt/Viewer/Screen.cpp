@@ -13,6 +13,7 @@
  */
 /*****************************************************************************/
 #include "Screen.h"
+#include <kvs/DebugNew>
 #include "KVSKey.h"
 #include "KVSMouseButton.h"
 #include <kvs/ResizeEvent>

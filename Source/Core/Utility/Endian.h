@@ -11,10 +11,10 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_ENDIAN_H_INCLUDE
-#define KVS_CORE_ENDIAN_H_INCLUDE
+#ifndef KVS__ENDIAN_H_INCLUDE
+#define KVS__ENDIAN_H_INCLUDE
 
-#include "Type.h"
+#include <kvs/Type>
 
 
 namespace kvs
@@ -207,4 +207,4 @@ inline void Swap( kvs::Real64* value, int n )
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_ENDIAN_H_INCLUDE
+#endif // KVS__ENDIAN_H_INCLUDE

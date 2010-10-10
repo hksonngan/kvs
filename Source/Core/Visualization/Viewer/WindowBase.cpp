@@ -13,6 +13,7 @@
  */
 /*****************************************************************************/
 #include "WindowBase.h"
+#include <kvs/DebugNew>
 #include <kvs/IgnoreUnusedVariable>
 
 

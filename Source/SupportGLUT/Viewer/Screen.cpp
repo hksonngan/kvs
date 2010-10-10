@@ -13,6 +13,7 @@
 /****************************************************************************/
 #include "Screen.h"
 #include <cstdlib>
+#include <kvs/DebugNew>
 #include <kvs/Key>
 #include <kvs/Mouse>
 #include <kvs/MouseButton>

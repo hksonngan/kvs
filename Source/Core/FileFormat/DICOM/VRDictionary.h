@@ -11,12 +11,11 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS__DCM_VR_DICTIONARY_H_INCLUDE
-#define KVS__DCM_VR_DICTIONARY_H_INCLUDE
+#ifndef KVS__DCM__VR_DICTIONARY_H_INCLUDE
+#define KVS__DCM__VR_DICTIONARY_H_INCLUDE
 
 #include <string>
 #include <map>
-
 #include "VR.h"
 #include "VRTable.h"
 
@@ -102,4 +101,4 @@ inline void VRDictionary::clear( void )
 
 } // end of namespace kvs
 
-#endif // KVS__DCM_VR_DICTIONARY_H_INCLUDE
+#endif // KVS__DCM__VR_DICTIONARY_H_INCLUDE

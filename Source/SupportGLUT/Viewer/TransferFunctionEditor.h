@@ -12,8 +12,8 @@
  *  $Id$
  */
 /*****************************************************************************/
-#ifndef KVS__TRANSFER_FUNCTION_EDITOR_H_INCLUDE
-#define KVS__TRANSFER_FUNCTION_EDITOR_H_INCLUDE
+#ifndef KVS__GLUT__TRANSFER_FUNCTION_EDITOR_H_INCLUDE
+#define KVS__GLUT__TRANSFER_FUNCTION_EDITOR_H_INCLUDE
 
 #include <string>
 #include <kvs/OpenGL>
@@ -373,4 +373,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS__TRANSFER_FUNCTION_EDITOR_H_INCLUDE
+#endif // KVS__GLUT__TRANSFER_FUNCTION_EDITOR_H_INCLUDE

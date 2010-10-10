@@ -11,13 +11,12 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_STRUCTURED_VOLUME_OBJECT_H_INCLUDE
-#define KVS_CORE_STRUCTURED_VOLUME_OBJECT_H_INCLUDE
+#ifndef KVS__STRUCTURED_VOLUME_OBJECT_H_INCLUDE
+#define KVS__STRUCTURED_VOLUME_OBJECT_H_INCLUDE
 
 #include <kvs/ClassName>
 #include <kvs/Module>
-
-#include "VolumeObjectBase.h"
+#include <kvs/VolumeObjectBase>
 
 
 namespace kvs
@@ -114,4 +113,4 @@ private:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_STRUCTURED_VOLUME_OBJECT_H_INCLUDE
+#endif // KVS__STRUCTURED_VOLUME_OBJECT_H_INCLUDE

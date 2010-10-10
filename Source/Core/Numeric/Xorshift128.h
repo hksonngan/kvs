@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_XORSHIFT_128_H_INCLUDE
-#define KVS_CORE_XORSHIFT_128_H_INCLUDE
+#ifndef KVS__XORSHIFT_128_H_INCLUDE
+#define KVS__XORSHIFT_128_H_INCLUDE
 
 #include <kvs/ClassName>
 #include <kvs/Type>
@@ -89,4 +89,4 @@ inline const float Xorshift128::operator ()( void )
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_XORSHIFT_128_H_INCLUDE
+#endif // KVS__XORSHIFT_128_H_INCLUDE

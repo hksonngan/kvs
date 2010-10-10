@@ -12,13 +12,10 @@
  */
 /****************************************************************************/
 #include "SystemInformation.h"
-#include "Platform.h"
-#include "Message.h"
-
 #include <cstdio>
 #include <cerrno>
 #include <cstring>
-
+#include <kvs/Platform>
 #if   defined ( KVS_PLATFORM_WINDOWS )
 #include <windows.h>
 #elif defined ( KVS_PLATFORM_LINUX ) || defined ( KVS_PLATFORM_CYGWIN )
@@ -31,6 +28,7 @@
 #include <sys/sysctl.h>
 #include <sys/utsname.h>
 #endif
+#include <kvs/Message>
 
 
 namespace

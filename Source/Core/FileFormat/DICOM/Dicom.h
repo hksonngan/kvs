@@ -19,13 +19,11 @@
 #include <string>
 #include <list>
 #include <algorithm>
-
 #include <kvs/FileFormatBase>
 #include <kvs/ValueArray>
 #include <kvs/Type>
 #include <kvs/Vector2>
 #include <kvs/ClassName>
-
 #include "Attribute.h"
 #include "Window.h"
 #include "Element.h"

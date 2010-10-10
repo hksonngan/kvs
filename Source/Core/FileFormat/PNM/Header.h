@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_PNM_HEADER_H_INCLUDE
-#define KVS_CORE_PNM_HEADER_H_INCLUDE
+#ifndef KVS__PNM_HEADER_H_INCLUDE
+#define KVS__PNM_HEADER_H_INCLUDE
 
 #include <iostream>
 #include <fstream>
@@ -114,4 +114,4 @@ private:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_PNM_HEADER_H_INCLUDE
+#endif // KVS__PNM_HEADER_H_INCLUDE

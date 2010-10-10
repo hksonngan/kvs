@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_MUTEX_LOCKER_H_INCLUDE
-#define KVS_CORE_MUTEX_LOCKER_H_INCLUDE
+#ifndef KVS__MUTEX_LOCKER_H_INCLUDE
+#define KVS__MUTEX_LOCKER_H_INCLUDE
 
 #include <kvs/ClassName>
 
@@ -52,4 +52,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_MUTEX_LOCKER_H_INCLUDE
+#endif // KVS__MUTEX_LOCKER_H_INCLUDE

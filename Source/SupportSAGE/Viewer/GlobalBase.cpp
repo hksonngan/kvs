@@ -12,6 +12,7 @@
  */
 /****************************************************************************/
 #include "GlobalBase.h"
+#include <kvs/DebugNew>
 #include "../SAGE.h"
 
 

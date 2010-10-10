@@ -12,7 +12,6 @@
  */
 /****************************************************************************/
 #include "Semaphore.h"
-
 #include "MutexLocker.h"
 #include "Condition.h"
 

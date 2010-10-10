@@ -45,12 +45,13 @@ WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
 
 */
 
+#include "PlyFile.h"
 #include <cstdio>
 #include <cstdlib>
 #include <cmath>
 #include <cstring>
 #include <kvs/Endian>
-#include "PlyFile.h"
+#include <kvs/DebugNew>
 
 
 namespace kvs

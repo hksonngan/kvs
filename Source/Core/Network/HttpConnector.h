@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_HTTP_CONNECTOR_H_INCLUDE
-#define KVS_CORE_HTTP_CONNECTOR_H_INCLUDE
+#ifndef KVS__HTTP_CONNECTOR_H_INCLUDE
+#define KVS__HTTP_CONNECTOR_H_INCLUDE
 
 #include "TCPSocket.h"
 #include "Url.h"
@@ -58,4 +58,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_HTTP_CONNECTOR_H_INCLUDE
+#endif // KVS__HTTP_CONNECTOR_H_INCLUDE

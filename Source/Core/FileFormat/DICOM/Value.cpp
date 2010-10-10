@@ -11,11 +11,10 @@
  *  $Id$
  */
 /****************************************************************************/
+#include "Value.h"
 #include <iostream>
 #include <fstream>
 #include <string>
-
-#include "Value.h"
 #include "Item.h"
 #include "DataType.h"
 #include "StreamReader.h"

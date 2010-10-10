@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_SUPPORT_QT_QT_H_INCLUDE
-#define KVS_SUPPORT_QT_QT_H_INCLUDE
+#ifndef KVS__QT__QT_H_INCLUDE
+#define KVS__QT__QT_H_INCLUDE
 
 #include <string>
 
@@ -81,4 +81,4 @@ inline const std::string Version( void )
 
 } // end of namespace kvs
 
-#endif // KVS_SUPPORT_QT_QT_H_INCLUDE
+#endif // KVS__QT__QT_H_INCLUDE

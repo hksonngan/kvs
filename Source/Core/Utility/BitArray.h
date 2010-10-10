@@ -11,14 +11,14 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_BIT_ARRAY_H_INCLUDE
-#define KVS_CORE_BIT_ARRAY_H_INCLUDE
+#ifndef KVS__BIT_ARRAY_H_INCLUDE
+#define KVS__BIT_ARRAY_H_INCLUDE
 
 #include <iostream>
 #include <vector>
 
-#include "Type.h"
-#include "ClassName.h"
+#include <kvs/Type>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -124,4 +124,4 @@ protected:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_BIT_ARRAY_H_INCLUDE
+#endif // KVS__BIT_ARRAY_H_INCLUDE

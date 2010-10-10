@@ -12,9 +12,7 @@
  */
 /****************************************************************************/
 #include "Mutex.h"
-
 #include <kvs/Message>
-
 #if defined ( KVS_PLATFORM_WINDOWS )
 #include <windows.h>
 #include <errno.h>

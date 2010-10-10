@@ -12,8 +12,8 @@
  *  $Id$
  */
 /*****************************************************************************/
-#ifndef KVS_CORE_OBJECT_BASE_H_INCLUDE
-#define KVS_CORE_OBJECT_BASE_H_INCLUDE
+#ifndef KVS__OBJECT_BASE_H_INCLUDE
+#define KVS__OBJECT_BASE_H_INCLUDE
 
 #include <iostream>
 #include <kvs/ClassName>
@@ -194,4 +194,4 @@ private:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_OBJECT_BASE_H_INCLUDE
+#endif // KVS__OBJECT_BASE_H_INCLUDE

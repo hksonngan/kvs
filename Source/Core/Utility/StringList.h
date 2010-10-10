@@ -11,11 +11,11 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_STRING_LIST_H_INCLUDE
-#define KVS_CORE_STRING_LIST_H_INCLUDE
+#ifndef KVS__STRING_LIST_H_INCLUDE
+#define KVS__STRING_LIST_H_INCLUDE
 
 #include <vector>
-#include "String.h"
+#include <kvs/String>
 
 
 namespace kvs
@@ -25,4 +25,4 @@ typedef std::vector<kvs::String> StringList;
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_STRING_LIST_H_INCLUDE
+#endif // KVS__STRING_LIST_H_INCLUDE

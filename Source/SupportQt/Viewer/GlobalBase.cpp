@@ -12,6 +12,7 @@
  */
 /****************************************************************************/
 #include "GlobalBase.h"
+#include <kvs/DebugNew>
 #include <kvs/OpenGL>
 #include <kvs/Message>
 #if defined( KVS_SUPPORT_GLUT )

@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_PARTICLE_BUFFER_ACCUMULATOR_H_INCLUDE
-#define KVS_CORE_PARTICLE_BUFFER_ACCUMULATOR_H_INCLUDE
+#ifndef KVS__PARTICLE_BUFFER_ACCUMULATOR_H_INCLUDE
+#define KVS__PARTICLE_BUFFER_ACCUMULATOR_H_INCLUDE
 
 #include <kvs/PointObject>
 #include <kvs/ParticleBuffer>
@@ -80,4 +80,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_PARTICLE_BUFFER_ACCUMULATOR_H_INCLUDE
+#endif // KVS__PARTICLE_BUFFER_ACCUMULATOR_H_INCLUDE

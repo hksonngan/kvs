@@ -13,6 +13,7 @@
  */
 /*****************************************************************************/
 #include "Connector.h"
+#include <kvs/DebugNew>
 #include <kvs/Message>
 
 namespace kvs

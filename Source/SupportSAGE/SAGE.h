@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_SUPPORT_SAGE_SAGE_H_INCLUDE
-#define KVS_SUPPORT_SAGE_SAGE_H_INCLUDE
+#ifndef KVS__SAGE__SAGE_H_INCLUDE
+#define KVS__SAGE__SAGE_H_INCLUDE
 
 #include <kvs/Platform>
 #include <kvs/String>
@@ -61,4 +61,4 @@ inline const std::string Version( void )
 
 } // end of namespace kvs
 
-#endif // KVS_SUPPORT_SAGE_SAGE_H_INCLUDE
+#endif // KVS__SAGE__SAGE_H_INCLUDE

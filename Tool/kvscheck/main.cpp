@@ -11,6 +11,7 @@
  *  $Id$
  */
 /****************************************************************************/
+#include <kvs/MemoryDebugger>
 #include "Argument.h"
 #include "CompilerChecker.h"
 #include "FileChecker.h"
@@ -22,6 +23,8 @@
 #include "OpenGLChecker.h"
 #include "ExtensionChecker.h"
 
+KVS_MEMORY_DEBUGGER;
+
 
 /*==========================================================================*/
 /**
@@ -32,6 +35,8 @@
 /*==========================================================================*/
 int main( int argc, char** argv )
 {
+    KVS_MEMORY_DEBUGGER__SET_ARGUMENT( argc, argv );
+
     kvscheck::Argument arg( argc, argv );
     if( !arg.parse() ) return( false );
 

@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_SUPPORT_GLUT_KVS_MOUSE_BUTTON_H_INCLUDE
-#define KVS_SUPPORT_GLUT_KVS_MOUSE_BUTTON_H_INCLUDE
+#ifndef KVS__GLUT__KVS_MOUSE_BUTTON_H_INCLUDE
+#define KVS__GLUT__KVS_MOUSE_BUTTON_H_INCLUDE
 
 #include <kvs/MouseButton>
 #include "../GLUT.h"
@@ -71,4 +71,4 @@ inline int KVSMouseButton::State( int state )
 
 } // end of namespace kvs
 
-#endif // KVS_SUPPORT_GLUT_KVS_MOUSE_BUTTON_H_INCLUDE
+#endif // KVS__GLUT__KVS_MOUSE_BUTTON_H_INCLUDE

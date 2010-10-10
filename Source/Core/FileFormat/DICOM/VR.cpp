@@ -11,10 +11,9 @@
  *  $Id$
  */
 /****************************************************************************/
+#include "VR.h"
 #include <iostream>
 #include <fstream>
-
-#include "VR.h"
 #include "VRType.h"
 #include "ElementType.h"
 #include "DataType.h"

@@ -11,12 +11,11 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS__DCM_VR_TABLE_H_INCLUDE
-#define KVS__DCM_VR_TABLE_H_INCLUDE
-
-#include <string>
+#ifndef KVS__DCM__VR_TABLE_H_INCLUDE
+#define KVS__DCM__VR_TABLE_H_INCLUDE
 
 #include "VRType.h"
+#include <string>
 #include "ElementType.h"
 #include "DataType.h"
 

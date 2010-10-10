@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_TIFF_HEADER_H_INCLUDE
-#define KVS_CORE_TIFF_HEADER_H_INCLUDE
+#ifndef KVS__TIFF__HEADER_H_INCLUDE
+#define KVS__TIFF__HEADER_H_INCLUDE
 
 #include <kvs/Type>
 #include <iostream>
@@ -58,4 +58,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_TIFF_HEADER_H_INCLUDE
+#endif // KVS__TIFF__HEADER_H_INCLUDE

@@ -12,13 +12,39 @@
  */
 /****************************************************************************/
 #include "VisualizationPipeline.h"
-#include "ObjectImporter.h"
+#include <kvs/DebugNew>
+#include <kvs/ObjectImporter>
 #include <kvs/File>
 #include <kvs/ImageRenderer>
 #include <kvs/PointRenderer>
 #include <kvs/LineRenderer>
 #include <kvs/PolygonRenderer>
 #include <kvs/RayCastingRenderer>
+
+
+// Static parameters.
+namespace { size_t Counter = 0; }
+namespace { bool Flag = true; }
+namespace { const size_t MaxNumberOfPipelines = 256; }
+namespace { kvs::VisualizationPipeline* context[::MaxNumberOfPipelines]; }
+
+namespace
+{
+
+/*===========================================================================*/
+/**
+ *  @brief  Function that is called when the application is terminated.
+ */
+/*===========================================================================*/
+void ExitFunction( void )
+{
+    for ( size_t i = 0; i < ::MaxNumberOfPipelines; i++)
+    {
+        if ( ::context[i] ) ::context[i]->~VisualizationPipeline();
+    }
+}
+
+} // end of namespace
 
 
 namespace kvs
@@ -30,11 +56,14 @@ namespace kvs
  */
 /*===========================================================================*/
 VisualizationPipeline::VisualizationPipeline( void ):
+    m_id( ::Counter++ ),
     m_filename(""),
     m_cache( true ),
     m_object( NULL ),
     m_renderer( NULL )
 {
+    ::context[ m_id ] = this;
+    if ( ::Flag ) { atexit( ::ExitFunction ); ::Flag = false; }
 }
 
 /*===========================================================================*/
@@ -44,11 +73,14 @@ VisualizationPipeline::VisualizationPipeline( void ):
  */
 /*===========================================================================*/
 VisualizationPipeline::VisualizationPipeline( const std::string& filename ):
+    m_id( ::Counter++ ),
     m_filename( filename ),
     m_cache( true ),
     m_object( NULL ),
     m_renderer( NULL )
 {
+    ::context[ m_id ] = this;
+    if ( ::Flag ) { atexit( ::ExitFunction ); ::Flag = false; }
 }
 
 /*===========================================================================*/
@@ -58,11 +90,15 @@ VisualizationPipeline::VisualizationPipeline( const std::string& filename ):
  */
 /*===========================================================================*/
 VisualizationPipeline::VisualizationPipeline( kvs::ObjectBase* object ):
+    m_id( ::Counter++ ),
     m_filename(""),
     m_cache( true ),
     m_object( NULL ),
     m_renderer( NULL )
 {
+    ::context[ m_id ] = this;
+    if ( ::Flag ) { atexit( ::ExitFunction ); ::Flag = false; }
+
     kvs::PipelineModule module( object );
     m_module_list.push_front( module );
 }
@@ -74,6 +110,8 @@ VisualizationPipeline::VisualizationPipeline( kvs::ObjectBase* object ):
 /*===========================================================================*/
 VisualizationPipeline::~VisualizationPipeline( void )
 {
+    m_module_list.clear();
+    ::context[ m_id ] = 0;
 }
 
 /*===========================================================================*/

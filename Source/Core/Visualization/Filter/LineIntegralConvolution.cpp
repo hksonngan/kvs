@@ -4,7 +4,7 @@
  *  @brief  LIC (Line Integral Convolution) class.
  *
  *  @author Naohisa Sakamoto
- *  @date   2010/01/08 11:34:54
+ *  @date   2010/10/08 16:15:48
  */
 /*----------------------------------------------------------------------------
  *
@@ -15,8 +15,9 @@
  */
 /*****************************************************************************/
 #include "LineIntegralConvolution.h"
-#include<kvs/MersenneTwister>
-#include<kvs/Vector3>
+#include <kvs/DebugNew>
+#include <kvs/MersenneTwister>
+#include <kvs/Vector3>
 
 
 namespace kvs

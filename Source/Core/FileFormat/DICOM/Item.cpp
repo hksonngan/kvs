@@ -11,11 +11,10 @@
  *  $Id$
  */
 /****************************************************************************/
+#include "Item.h"
 #include <iostream>
 #include <fstream>
 #include <iomanip>
-
-#include "Item.h"
 #include "StreamReader.h"
 
 

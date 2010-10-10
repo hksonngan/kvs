@@ -17,7 +17,6 @@
 #include <kvs/glew/ShaderSource>
 #include <kvs/glew/VertexShader>
 #include <kvs/glew/FragmentShader>
-
 #if defined ( KVS_GLEW_POLYGON_RENDERER__EMBEDDED_SHADER )
 #include "PolygonRenderer/Shader.h"
 #endif

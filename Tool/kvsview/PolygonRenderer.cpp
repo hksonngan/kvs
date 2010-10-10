@@ -12,9 +12,7 @@
  */
 /*****************************************************************************/
 #include "PolygonRenderer.h"
-#include "CommandName.h"
-#include "ObjectInformation.h"
-#include "FileChecker.h"
+#include <kvs/DebugNew>
 #include <kvs/File>
 #include <kvs/KVSMLObjectPolygon>
 #include <kvs/Stl>
@@ -23,6 +21,9 @@
 #include <kvs/PolygonRenderer>
 #include <kvs/glut/Screen>
 #include <kvs/glut/Application>
+#include "CommandName.h"
+#include "ObjectInformation.h"
+#include "FileChecker.h"
 
 
 namespace kvsview
@@ -147,7 +148,7 @@ const bool Main::exec( void )
     // Show the screen.
     screen.show();
 
-    return( app.run() );
+    return( arg.clear(), app.run() );
 }
 
 } // end of namespace PolygonRenderer

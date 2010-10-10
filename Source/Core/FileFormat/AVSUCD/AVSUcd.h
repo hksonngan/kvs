@@ -11,13 +11,12 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_AVS_UCD_H_INCLUDE
-#define KVS_CORE_AVS_UCD_H_INCLUDE
+#ifndef KVS__AVS_UCD_H_INCLUDE
+#define KVS__AVS_UCD_H_INCLUDE
 
 #include <vector>
 #include <string>
-
-#include "../FileFormatBase.h"
+#include <kvs/FileFormatBase>
 #include <kvs/ValueArray>
 #include <kvs/Type>
 
@@ -30,8 +29,7 @@ namespace kvs
  *  AVS UCD ( Unstructured Cell Data ) class.
  */
 /*==========================================================================*/
-class AVSUcd
-    : public FileFormatBase
+class AVSUcd : public FileFormatBase
 {
     kvsClassName( AVSUcd );
 
@@ -228,4 +226,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_AVS_UCD_H_INCLUDE
+#endif // KVS__AVS_UCD_H_INCLUDE

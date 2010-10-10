@@ -11,15 +11,14 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_VERSION_H_INCLUDE
-#define KVS_CORE_VERSION_H_INCLUDE
+#ifndef KVS__VERSION_H_INCLUDE
+#define KVS__VERSION_H_INCLUDE
 
 // KVS version: <major_version>.<minor_version>.<patch_version> (<status>)
 #define KVS_VERSION_MAJOR  1
 #define KVS_VERSION_MINOR  0
 #define KVS_VERSION_PATCH  0
 #define KVS_VERSION_STATUS "beta 3"
-
 
 #define KVS_VERSION_NUMBER( x )           # x
 #define KVS_VERSION_NUMBER_TO_STRING( x ) KVS_VERSION_NUMBER( x )
@@ -113,4 +112,4 @@ inline const char* Name( void )
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_VERSION_H_INCLUDE
+#endif // KVS__VERSION_H_INCLUDE

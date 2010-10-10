@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_TCP_SERVER_H_INCLUDE
-#define KVS_CORE_TCP_SERVER_H_INCLUDE
+#ifndef KVS__TCP_SERVER_H_INCLUDE
+#define KVS__TCP_SERVER_H_INCLUDE
 
 #include "Socket.h"
 #include "SocketTimer.h"
@@ -74,4 +74,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_TCP_SERVER_H_INCLUDE
+#endif // KVS__TCP_SERVER_H_INCLUDE

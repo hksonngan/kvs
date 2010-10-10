@@ -11,13 +11,12 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS__DCM_ELEMENT_H_INCLUDE
-#define KVS__DCM_ELEMENT_H_INCLUDE
+#ifndef KVS__DCM__ELEMENT_H_INCLUDE
+#define KVS__DCM__ELEMENT_H_INCLUDE
 
 #include <iostream>
 #include <fstream>
 #include <string>
-
 #include "Tag.h"
 #include "VR.h"
 #include "Value.h"
@@ -91,4 +90,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS__DCM_ELEMENT_H_INCLUDE
+#endif // KVS__DCM__ELEMENT_H_INCLUDE

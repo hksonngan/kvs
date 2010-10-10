@@ -13,6 +13,7 @@
  */
 /*****************************************************************************/
 #include "TCPBarrierServer.h"
+#include <kvs/DebugNew>
 #include <kvs/Message>
 #include <kvs/SocketTimer>
 

@@ -12,8 +12,8 @@
  */
 /****************************************************************************/
 #include "Trackball.h"
-#include "GlobalCore.h"
-#include "Camera.h"
+#include <kvs/GlobalCore>
+#include <kvs/Camera>
 #include <kvs/Matrix33>
 #include <kvs/Quaternion>
 #include <kvs/IgnoreUnusedVariable>

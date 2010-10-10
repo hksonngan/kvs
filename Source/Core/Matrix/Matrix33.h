@@ -11,15 +11,13 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_MATRIX_33_H_INCLUDE
-#define KVS_CORE_MATRIX_33_H_INCLUDE
+#ifndef KVS__MATRIX_33_H_INCLUDE
+#define KVS__MATRIX_33_H_INCLUDE
 
 #include <iostream>
-
 #include <kvs/ClassName>
 #include <kvs/Assert>
 #include <kvs/Math>
-
 #include "Vector3.h"
 
 
@@ -820,4 +818,4 @@ inline const Matrix33<T> Matrix33<T>::operator -( void ) const
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_MATRIX_33_H_INCLUDE
+#endif // KVS__MATRIX_33_H_INCLUDE

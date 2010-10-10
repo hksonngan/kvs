@@ -12,8 +12,8 @@
  */
 /****************************************************************************/
 #include "Texture2D.h"
-#include <kvs/Math>
 #include <iostream>
+#include <kvs/Math>
 
 
 namespace kvs

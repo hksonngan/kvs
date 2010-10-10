@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_PIPELINE_MODULE_H_INCLUDE
-#define KVS_CORE_PIPELINE_MODULE_H_INCLUDE
+#ifndef KVS__PIPELINE_MODULE_H_INCLUDE
+#define KVS__PIPELINE_MODULE_H_INCLUDE
 
 #include <kvs/FilterBase>
 #include <kvs/MapperBase>
@@ -74,7 +74,7 @@ public:
         m_category( Empty )
     {
         memset( &m_module, 0, sizeof( Module ) );
-        this->create_counter();
+        this->create_counter( 1 );
         this->read_module( module, typename kvs::ModuleTraits<T>::ModuleCategory() );
     }
 
@@ -184,7 +184,7 @@ private:
 
     void deep_copy( const PipelineModule& module );
 
-    void create_counter( void );
+    void create_counter( const size_t counter = 1 );
 
     void ref( void );
 
@@ -193,4 +193,4 @@ private:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_PIPELINE_MODULE_H_INCLUDE
+#endif // KVS__PIPELINE_MODULE_H_INCLUDE

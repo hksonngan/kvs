@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_WRITE_LOCKER_H_INCLUDE
-#define KVS_CORE_WRITE_LOCKER_H_INCLUDE
+#ifndef KVS__WRITE_LOCKER_H_INCLUDE
+#define KVS__WRITE_LOCKER_H_INCLUDE
 
 #include <kvs/ClassName>
 
@@ -52,4 +52,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_WRITE_LOCKER_H_INCLUDE
+#endif // KVS__WRITE_LOCKER_H_INCLUDE

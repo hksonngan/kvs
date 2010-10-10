@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_MOUSE_EVENT_H_INCLUDE
-#define KVS_CORE_MOUSE_EVENT_H_INCLUDE
+#ifndef KVS__MOUSE_EVENT_H_INCLUDE
+#define KVS__MOUSE_EVENT_H_INCLUDE
 
 #include <kvs/ClassName>
 #include <kvs/EventBase>
@@ -84,4 +84,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_MOUSE_EVENT_H_INCLUDE
+#endif // KVS__MOUSE_EVENT_H_INCLUDE

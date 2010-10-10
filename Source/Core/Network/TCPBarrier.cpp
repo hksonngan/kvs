@@ -13,6 +13,7 @@
  */
 /*****************************************************************************/
 #include "TCPBarrier.h"
+#include <kvs/DebugNew>
 #include <kvs/TCPSocket>
 
 namespace { const int BARRIER_BUFFER_SIZE = 12; }

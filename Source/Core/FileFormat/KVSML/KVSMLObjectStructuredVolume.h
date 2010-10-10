@@ -11,10 +11,10 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_KVSML_KVSML_OBJECT_STRUCTURED_VOLUME_H_INCLUDE
-#define KVS_CORE_KVSML_KVSML_OBJECT_STRUCTURED_VOLUME_H_INCLUDE
+#ifndef KVS__KVSML_OBJECT_STRUCTURED_VOLUME_H_INCLUDE
+#define KVS__KVSML_OBJECT_STRUCTURED_VOLUME_H_INCLUDE
 
-#include "../FileFormatBase.h"
+#include <kvs/FileFormatBase>
 #include <kvs/AnyValueArray>
 #include <kvs/Type>
 #include <kvs/Vector3>
@@ -108,4 +108,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_KVSML_KVSML_OBJECT_STRUCTURED_VOLUME_H_INCLUDE
+#endif // KVS__KVSML_OBJECT_STRUCTURED_VOLUME_H_INCLUDE

@@ -18,9 +18,10 @@
 #include <vector>
 #include <cstring>
 #include <cstdlib>
-#include "CommandLine.h"
-#include "Message.h"
-#include "Math.h"
+#include <kvs/DebugNew>
+#include <kvs/CommandLine>
+#include <kvs/Message>
+#include <kvs/Math>
 
 
 namespace kvs
@@ -33,7 +34,7 @@ namespace kvs
 /*==========================================================================*/
 CommandLine::Argument::Argument( void )
     : m_length( 0 )
-    , m_data( NULL )
+    , m_data( 0 )
 {
 }
 
@@ -45,7 +46,7 @@ CommandLine::Argument::Argument( void )
 /*==========================================================================*/
 CommandLine::Argument::Argument( const char* data )
     : m_length( strlen( data ) )
-    , m_data( NULL )
+    , m_data( 0 )
 {
     m_data = new char[ m_length + 1 ];
     if ( !m_data )
@@ -67,7 +68,7 @@ CommandLine::Argument::Argument( const char* data )
 /*==========================================================================*/
 CommandLine::Argument::Argument( const CommandLine::Argument& other )
     : m_length( other.m_length )
-    , m_data( NULL )
+    , m_data( 0 )
 {
     m_data = new char[ m_length + 1 ];
     if ( !m_data )
@@ -124,7 +125,7 @@ CommandLine::Argument& CommandLine::Argument::operator =( const char* rhs )
     if ( m_data ) { delete[] m_data; }
 
     m_length = strlen( rhs );
-    m_data   = new char[ m_length + 1 ];
+    m_data = new char[ m_length + 1 ];
     if ( !m_data )
     {
         kvsMessageError( "Cannot allocate memory." );
@@ -149,7 +150,7 @@ CommandLine::Argument& CommandLine::Argument::operator =( const CommandLine::Arg
     if ( m_data ) { delete[] m_data; }
 
     m_length = rhs.m_length;
-    m_data   = new char[ m_length + 1 ];
+    m_data = new char[ m_length + 1 ];
     if ( !m_data )
     {
         kvsMessageError( "Cannot allocate memory." );
@@ -227,6 +228,7 @@ CommandLine::Option::Option( const CommandLine::Option& other )
 /*==========================================================================*/
 CommandLine::Option::~Option( void )
 {
+    m_values.clear();
 }
 
 /*==========================================================================*/
@@ -521,6 +523,7 @@ CommandLine::CommandLine( int argc, char** argv, const std::string& command_name
 /*==========================================================================*/
 CommandLine::~CommandLine( void )
 {
+    this->clear();
 }
 
 /*==========================================================================*/
@@ -581,6 +584,7 @@ const bool CommandLine::parse( void )
     if ( m_argc == 1 && !allow_no_value )
     {
         this->print_help_message( UsageOnly );
+        this->clear();
         return( false );
     }
 
@@ -592,11 +596,13 @@ const bool CommandLine::parse( void )
         if ( !m_no_help && is_help_option( p_value ) )
         {
             this->print_help_message( UsageAndOption );
+            this->clear();
             return( false );
         }
         else
         {
-            m_arguments.push_back( CommandLine::Argument( p_value ) );
+            CommandLine::Argument arg( p_value );
+            m_arguments.push_back( arg );
         }
     }
 
@@ -613,6 +619,7 @@ const bool CommandLine::parse( void )
             if ( option == m_options.end() )
             {
                 kvsMessageError( "Unknown option '%s'", argument->data() );
+                this->clear();
                 return( false );
             }
 
@@ -622,6 +629,7 @@ const bool CommandLine::parse( void )
                 kvsMessageError( "%d values is required for the option '-%s'",
                                  option->nvalues(),
                                  option->name().c_str() );
+                this->clear();
                 return( false );
             }
         }
@@ -647,6 +655,7 @@ const bool CommandLine::parse( void )
             if ( !option->isGiven() )
             {
                 kvsMessageError( "Option '-%s' is required.", option->name().c_str() );
+                this->clear();
                 return( false );
             }
         }
@@ -661,6 +670,7 @@ const bool CommandLine::parse( void )
             if ( !value->isGiven() )
             {
                 kvsMessageError("Input value is required.");
+                this->clear();
                 return( false );
             }
         }
@@ -695,6 +705,7 @@ const bool CommandLine::read( void )
     if ( m_argc == 1 && !allow_no_value )
     {
         this->print_help_message( UsageOnly );
+        this->clear();
         return( false );
     }
 
@@ -706,11 +717,13 @@ const bool CommandLine::read( void )
         if ( !m_no_help && is_help_option( p_value ) )
         {
             this->print_help_message( UsageAndOption );
+            this->clear();
             return( false );
         }
         else
         {
-            m_arguments.push_back( CommandLine::Argument( p_value ) );
+            CommandLine::Argument arg( p_value );
+            m_arguments.push_back( arg );
         }
     }
 
@@ -748,6 +761,18 @@ const bool CommandLine::read( void )
     }
 
     return( true );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Clear argument lists.
+ */
+/*===========================================================================*/
+void CommandLine::clear( void )
+{
+    m_arguments.clear();
+    m_options.clear();
+    m_values.clear();
 }
 
 /*==========================================================================*/

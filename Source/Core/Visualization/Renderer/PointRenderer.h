@@ -11,10 +11,10 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_POINT_RENDERER_H_INCLUDE
-#define KVS_CORE_POINT_RENDERER_H_INCLUDE
+#ifndef KVS__POINT_RENDERER_H_INCLUDE
+#define KVS__POINT_RENDERER_H_INCLUDE
 
-#include "RendererBase.h"
+#include <kvs/RendererBase>
 #include <kvs/ClassName>
 #include <kvs/Module>
 
@@ -77,4 +77,4 @@ protected:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_POINT_RENDERER_H_INCLUDE
+#endif // KVS__POINT_RENDERER_H_INCLUDE

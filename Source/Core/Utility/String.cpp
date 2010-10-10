@@ -12,14 +12,15 @@
  */
 /****************************************************************************/
 #include "String.h"
-#include "Message.h"
-#include "Assert.h"
-#include "IgnoreUnusedVariable.h"
 #include <iostream>
 #include <string>
 #include <cstdlib>
 #include <cctype>
 #include <cstring>
+#include <kvs/DebugNew>
+#include <kvs/Message>
+#include <kvs/Assert>
+#include <kvs/IgnoreUnusedVariable>
 
 
 namespace

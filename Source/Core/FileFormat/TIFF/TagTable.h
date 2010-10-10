@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_TIFF_TAG_TABLE_H_INCLUDE
-#define KVS_CORE_TIFF_TAG_TABLE_H_INCLUDE
+#ifndef KVS__TIFF__TAG_TABLE_H_INCLUDE
+#define KVS__TIFF__TAG_TABLE_H_INCLUDE
 
 #include "Tag.h"
 
@@ -98,4 +98,4 @@ const size_t TagTableSize = sizeof( TagTable ) / sizeof( kvs::tiff::Tag );
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_TIFF_TAG_TABLE_H_INCLUDE
+#endif // KVS__TIFF__TAG_TABLE_H_INCLUDE

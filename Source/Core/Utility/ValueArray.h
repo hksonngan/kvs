@@ -21,12 +21,13 @@
 #include <vector>
 #include <cstring>
 #include <typeinfo>
-#include "Assert.h"
-#include "Endian.h"
-#include "Message.h"
-#include "ReferenceCounter.h"
-#include "Macro.h"
-#include "ClassName.h"
+#include <kvs/DebugNew>
+#include <kvs/Assert>
+#include <kvs/Endian>
+#include <kvs/Message>
+#include <kvs/ReferenceCounter>
+#include <kvs/Macro>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -338,7 +339,6 @@ private:
     void create_counter( void )
     {
         m_counter = new ReferenceCounter( 1 );
-
         KVS_ASSERT( m_counter );
     }
 

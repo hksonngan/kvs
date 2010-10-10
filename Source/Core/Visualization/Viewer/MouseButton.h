@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_MOUSE_BUTTON_H_INCLUDE
-#define KVS_CORE_MOUSE_BUTTON_H_INCLUDE
+#ifndef KVS__MOUSE_BUTTON_H_INCLUDE
+#define KVS__MOUSE_BUTTON_H_INCLUDE
 
 
 namespace kvs
@@ -49,4 +49,4 @@ struct MouseButton
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_MOUSE_BUTTON_H_INCLUDE
+#endif // KVS__MOUSE_BUTTON_H_INCLUDE

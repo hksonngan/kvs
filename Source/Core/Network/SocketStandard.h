@@ -11,11 +11,10 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_SOCKET_STANDARD_H_INCLUDE
-#define KVS_CORE_SOCKET_STANDARD_H_INCLUDE
+#ifndef KVS__SOCKET_STANDARD_H_INCLUDE
+#define KVS__SOCKET_STANDARD_H_INCLUDE
 
 #include <kvs/Platform>
-
 #if defined( KVS_PLATFORM_WINDOWS )
 #include <winsock.h>
 #pragma comment(lib,"wsock32.lib")
@@ -32,4 +31,4 @@
 #include <unistd.h>
 #endif
 
-#endif // KVS_CORE_SOCKET_STANDARD_H_INCLUDE
+#endif // KVS__SOCKET_STANDARD_H_INCLUDE

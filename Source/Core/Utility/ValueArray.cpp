@@ -28,16 +28,5 @@ template class ValueArray<kvs::Int64>;
 template class ValueArray<kvs::UInt64>;
 template class ValueArray<kvs::Real32>;
 template class ValueArray<kvs::Real64>;
-/*
-template class ValueArray<char>;
-template class ValueArray<unsigned char>;
-template class ValueArray<short>;
-template class ValueArray<unsigned short>;
-template class ValueArray<int>;
-template class ValueArray<unsigned int>;
-template class ValueArray<long>;
-template class ValueArray<unsigned long>;
-template class ValueArray<float>;
-template class ValueArray<double>;
-*/
+
 } // end of namespace kvs

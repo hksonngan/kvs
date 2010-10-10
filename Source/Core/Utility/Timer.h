@@ -17,13 +17,6 @@
 #include <ctime>
 #include <iostream>
 #include <vector>
-#include "Type.h"
-#include "Compiler.h"
-#include "Platform.h"
-#include "Message.h"
-#include "ClassName.h"
-#include "IgnoreUnusedVariable.h"
-
 #if defined ( KVS_COMPILER_VC )
 #include <windows.h>
 #include <mmsystem.h>
@@ -32,6 +25,12 @@
 #include <sys/time.h>
 #include <sys/timeb.h>
 #endif
+#include <kvs/Type>
+#include <kvs/Compiler>
+#include <kvs/Platform>
+#include <kvs/Message>
+#include <kvs/ClassName>
+#include <kvs/IgnoreUnusedVariable>
 
 /* Hight precision CPU counter using RDTCS or QPC. It becomes possible to use
  * the CPU counter by defining 'KVS_TIMER_USE_RDTSC' or 'KVS_TIMER_USE_QPC'.

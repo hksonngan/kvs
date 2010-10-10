@@ -12,6 +12,7 @@
  */
 /*****************************************************************************/
 #include "ShaderObject.h"
+#include <kvs/DebugNew>
 
 
 namespace kvs

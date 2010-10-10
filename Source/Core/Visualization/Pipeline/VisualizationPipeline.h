@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_VISUALIZATION_PIPELINE_H_INCLUDE
-#define KVS_CORE_VISUALIZATION_PIPELINE_H_INCLUDE
+#ifndef KVS__VISUALIZATION_PIPELINE_H_INCLUDE
+#define KVS__VISUALIZATION_PIPELINE_H_INCLUDE
 
 #include <iostream>
 #include <string>
@@ -22,7 +22,7 @@
 #include <kvs/VolumeObjectBase>
 #include <kvs/RendererBase>
 #include <kvs/Module>
-#include "PipelineModule.h"
+#include <kvs/PipelineModule>
 
 
 namespace kvs
@@ -41,6 +41,7 @@ public:
 
 private:
 
+    size_t      m_id;          ///< pipeline ID
     std::string m_filename;    ///< filename
     bool        m_cache;       ///< cache mode (DISABLE NOW)
     ModuleList  m_module_list; ///< pipeline module list
@@ -111,4 +112,4 @@ private:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_VISUALIZATION_PIPELINE_H_INCLUDE
+#endif // KVS__VISUALIZATION_PIPELINE_H_INCLUDE

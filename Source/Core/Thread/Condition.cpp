@@ -12,9 +12,7 @@
  */
 /****************************************************************************/
 #include "Condition.h"
-
 #include "MutexLocker.h"
-
 #if defined ( KVS_PLATFORM_WINDOWS )
 #include <windows.h>
 #include <errno.h>

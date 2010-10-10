@@ -12,10 +12,10 @@
  *  $Id$
  */
 /*****************************************************************************/
-#ifndef KVS_CORE_LINE_OBJECT_H_INCLUDE
-#define KVS_CORE_LINE_OBJECT_H_INCLUDE
+#ifndef KVS__LINE_OBJECT_H_INCLUDE
+#define KVS__LINE_OBJECT_H_INCLUDE
 
-#include "GeometryObjectBase.h"
+#include <kvs/GeometryObjectBase>
 #include <kvs/ClassName>
 #include <kvs/ValueArray>
 #include <kvs/Type>
@@ -195,4 +195,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_LINE_OBJECT_H_INCLUDE
+#endif // KVS__LINE_OBJECT_H_INCLUDE

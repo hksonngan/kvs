@@ -123,7 +123,8 @@ inline void FrequencyTable::binning( const kvs::VolumeObjectBase* volume )
     const size_t veclen = volume->veclen();
     const T* value = reinterpret_cast<const T*>( volume->values().pointer() );
     const T* const end = value + volume->nnodes() * veclen;
-    const kvs::Real64 width = ( m_max_range - m_min_range ) / kvs::Real64( m_nbins - 1 );
+//    const kvs::Real64 width = ( m_max_range - m_min_range ) / kvs::Real64( m_nbins - 1 );
+    const kvs::Real64 width = ( m_max_range - m_min_range + 1 ) / kvs::Real64( m_nbins );
 
     size_t total_count = 0;
 
@@ -134,8 +135,8 @@ inline void FrequencyTable::binning( const kvs::VolumeObjectBase* volume )
         {
             if ( !this->is_ignore_value( *value ) )
             {
-//                const size_t index = static_cast<size_t>( ( *value - m_min_range ) / width + 0.5f );
-                const size_t index = static_cast<size_t>( ( *value - m_min_range ) / width );
+                const size_t index = static_cast<size_t>( ( *value - m_min_range ) / width + 0.5f );
+//                const size_t index = static_cast<size_t>( ( *value - m_min_range ) / width );
                 m_bin[index] = m_bin[index] + 1;
                 m_max_count = kvs::Math::Max( m_max_count, m_bin[index] );
 
@@ -158,8 +159,8 @@ inline void FrequencyTable::binning( const kvs::VolumeObjectBase* volume )
 
             if ( !this->is_ignore_value( magnitude ) )
             {
-//                const size_t index = static_cast<size_t>( ( magnitude - m_min_range ) / width + 0.5f );
-                const size_t index = static_cast<size_t>( ( magnitude - m_min_range ) / width );
+                const size_t index = static_cast<size_t>( ( magnitude - m_min_range ) / width + 0.5f );
+//                const size_t index = static_cast<size_t>( ( magnitude - m_min_range ) / width );
                 m_bin[index] = m_bin[index] + 1;
                 m_max_count = kvs::Math::Max( m_max_count, m_bin[index] );
 
@@ -194,7 +195,8 @@ inline void FrequencyTable::binning( const kvs::ImageObject* image, const size_t
     }
 
     const T* values = reinterpret_cast<const T*>( image->data().pointer() );
-    const kvs::Real64 width = ( m_max_range - m_min_range ) / kvs::Real64( m_nbins - 1 );
+//    const kvs::Real64 width = ( m_max_range - m_min_range ) / kvs::Real64( m_nbins - 1 );
+    const kvs::Real64 width = ( m_max_range - m_min_range + 1 ) / kvs::Real64( m_nbins );
     const size_t stride  = image->nchannels();
     const size_t npixels = image->width() * image->height();
 

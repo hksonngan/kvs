@@ -11,6 +11,7 @@
  *  $Id$
  */
 /*****************************************************************************/
+#include <kvs/MemoryDebugger>
 #include "main.h"
 #include "Argument.h"
 #include "fld2kvsml.h"
@@ -18,6 +19,8 @@
 #include "img2img.h"
 #include "tet2tet.h"
 #include <kvs/Message>
+
+KVS_MEMORY_DEBUGGER;
 
 
 namespace kvsconv
@@ -81,6 +84,8 @@ bool Main::exec( void )
 /*===========================================================================*/
 int main( int argc, char** argv )
 {
+    KVS_MEMORY_DEBUGGER__SET_ARGUMENT( argc, argv );
+
     kvsconv::Main m( argc, argv );
     return( m.exec() );
 }

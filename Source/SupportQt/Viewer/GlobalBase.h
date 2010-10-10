@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_SUPPORT_QT_GLOBAL_BASE_H_INCLUDE
-#define KVS_SUPPORT_QT_GLOBAL_BASE_H_INCLUDE
+#ifndef KVS__QT__GLOBAL_BASE_H_INCLUDE
+#define KVS__QT__GLOBAL_BASE_H_INCLUDE
 
 #include "../Qt.h"
 #include <kvs/GlobalCore>
@@ -48,4 +48,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_SUPPORT_QT_GLOBAL_BASE_H_INCLUDE
+#endif // KVS__QT__GLOBAL_BASE_H_INCLUDE

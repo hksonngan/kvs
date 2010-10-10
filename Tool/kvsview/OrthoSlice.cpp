@@ -12,10 +12,7 @@
  */
 /*****************************************************************************/
 #include "OrthoSlice.h"
-#include "CommandName.h"
-#include "ObjectInformation.h"
-#include "FileChecker.h"
-#include "Widget.h"
+#include <kvs/DebugNew>
 #include <kvs/File>
 #include <kvs/PipelineModule>
 #include <kvs/VisualizationPipeline>
@@ -25,6 +22,10 @@
 #include <kvs/glut/Slider>
 #include <kvs/glut/LegendBar>
 #include <kvs/glut/OrientationAxis>
+#include "CommandName.h"
+#include "ObjectInformation.h"
+#include "FileChecker.h"
+#include "Widget.h"
 
 
 namespace kvsview
@@ -290,7 +291,7 @@ const bool Main::exec( void )
     slider.setRange( volume->minObjectCoord()[axis], volume->maxObjectCoord()[axis] );
     slider.show();
 
-    return( app.run() );
+    return( arg.clear(), app.run() );
 }
 
 } // end of namespace OrthoSlice

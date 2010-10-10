@@ -12,10 +12,7 @@
  */
 /*****************************************************************************/
 #include "Isosurface.h"
-#include "CommandName.h"
-#include "ObjectInformation.h"
-#include "FileChecker.h"
-#include "Widget.h"
+#include <kvs/DebugNew>
 #include <kvs/PipelineModule>
 #include <kvs/VisualizationPipeline>
 #include <kvs/Isosurface>
@@ -26,6 +23,10 @@
 #include <kvs/glut/Application>
 #include <kvs/glut/LegendBar>
 #include <kvs/glut/OrientationAxis>
+#include "CommandName.h"
+#include "ObjectInformation.h"
+#include "FileChecker.h"
+#include "Widget.h"
 
 
 namespace kvsview
@@ -280,7 +281,7 @@ const bool Main::exec( void )
     kvsview::Widget::OrientationAxis orientation_axis( &screen );
     orientation_axis.show();
 
-    // Set up the isosurface class.
+    // Set up isosurface class.
     kvs::PipelineModule mapper( new kvs::Isosurface );
     const kvs::Real64 level = arg.isolevel( volume, tfunc );
     const kvs::PolygonObject::NormalType normal = arg.normalType();
@@ -326,7 +327,7 @@ const bool Main::exec( void )
     slider.setRange( legend_bar.minValue(), legend_bar.maxValue() );
     slider.show();
 
-    return( app.run() );
+    return( arg.clear(), app.run() );
 }
 
 } // end of namespace Isosurface

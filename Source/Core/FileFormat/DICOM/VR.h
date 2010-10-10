@@ -11,14 +11,13 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS__DCM_VR_H_INCLUDE
-#define KVS__DCM_VR_H_INCLUDE
+#ifndef KVS__DCM__VR_H_INCLUDE
+#define KVS__DCM__VR_H_INCLUDE
 
 #include <iostream>
 #include <fstream>
 #include <iomanip>
 #include <map>
-
 #include "VRType.h"
 #include "ElementType.h"
 #include "DataType.h"
@@ -97,4 +96,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS__DCM_VR_H_INCLUDE
+#endif // KVS__DCM__VR_H_INCLUDE

@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_THREAD_H_INCLUDE
-#define KVS_CORE_THREAD_H_INCLUDE
+#ifndef KVS__THREAD_H_INCLUDE
+#define KVS__THREAD_H_INCLUDE
 
 #include <kvs/Platform>
 #include <kvs/ClassName>
@@ -99,4 +99,4 @@ protected:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_THREAD_H_INCLUDE
+#endif // KVS__THREAD_H_INCLUDE

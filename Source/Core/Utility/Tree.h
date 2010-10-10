@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_TREE_H_INCLUDE
-#define KVS_CORE_TREE_H_INCLUDE
+#ifndef KVS__TREE_H_INCLUDE
+#define KVS__TREE_H_INCLUDE
 
 #include <cassert>
 #include <memory>
@@ -20,10 +20,10 @@
 #include <iterator>
 #include <set>
 #include <queue>
-#include "ClassName.h"
-#include "Assert.h"
-#include "Message.h"
-#include "Compiler.h"
+#include <kvs/ClassName>
+#include <kvs/Assert>
+#include <kvs/Message>
+#include <kvs/Compiler>
 
 
 namespace kvs
@@ -249,7 +249,9 @@ public:
             return( 0 );
         }
 
+#if !defined( KVS_ENABLE_MEM_DEBUG )
         this->constructor( &tmp->data );
+#endif
         tmp->first_child = 0;
         tmp->last_child  = 0;
 
@@ -281,7 +283,12 @@ public:
             return ( 0 );
         }
 
+#if defined( KVS_ENABLE_MEM_DEBUG )
+        tmp->data = x;
+#else
         this->constructor( &tmp->data, x );
+#endif
+
         tmp->first_child = 0;
         tmp->last_child  = 0;
 
@@ -315,7 +322,11 @@ public:
             return ( 0 );
         }
 
+#if defined( KVS_ENABLE_MEM_DEBUG )
+        tmp->data = x;
+#else
         this->constructor( &tmp->data, x );
+#endif
         tmp->first_child = 0;
         tmp->last_child  = 0;
 
@@ -346,7 +357,11 @@ public:
             return ( 0 );
         }
 
+#if defined( KVS_ENABLE_MEM_DEBUG )
+        tmp->data = x;
+#else
         this->constructor( &tmp->data, x );
+#endif
         tmp->first_child = 0;
         tmp->last_child  = 0;
 
@@ -455,17 +470,19 @@ protected:
 
 private:
 
+#if !defined( KVS_ENABLE_MEM_DEBUG )
     template <typename T1, typename T2>
     inline void constructor( T1* p, T2& val )
     {
-        new ((void *) p) T1(val);
+        new( (void*)p ) T1(val);
     }
 
     template <typename T1>
     inline void constructor( T1* p )
     {
-        new ((void *) p) T1;
+        new( (void*)p ) T1;
     }
+#endif
 
     template <typename T1>
     inline void destructor( T1* p )
@@ -1192,4 +1209,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_TREE_H_INCLUDE
+#endif // KVS__TREE_H_INCLUDE

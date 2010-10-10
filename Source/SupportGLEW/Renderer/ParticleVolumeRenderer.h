@@ -25,7 +25,6 @@
 #include <kvs/glew/FragmentShader>
 #include <kvs/glew/VertexShader>
 #include <kvs/glew/ProgramObject>
-
 #include "EnsembleAverageBuffer.h"
 
 

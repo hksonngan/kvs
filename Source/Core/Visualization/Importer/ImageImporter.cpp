@@ -12,6 +12,7 @@
  */
 /****************************************************************************/
 #include "ImageImporter.h"
+#include <kvs/DebugNew>
 #include <kvs/Message>
 #include <kvs/ValueArray>
 #include <kvs/Type>

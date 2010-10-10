@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS__DCM_WINDOW_H_INCLUDE
-#define KVS__DCM_WINDOW_H_INCLUDE
+#ifndef KVS__DCM__WINDOW_H_INCLUDE
+#define KVS__DCM__WINDOW_H_INCLUDE
 
 
 namespace kvs
@@ -87,4 +87,4 @@ protected:
 
 } // end of namespace kvs
 
-#endif // KVS__DCM_WINDOW_H_INCLUDE
+#endif // KVS__DCM__WINDOW_H_INCLUDE

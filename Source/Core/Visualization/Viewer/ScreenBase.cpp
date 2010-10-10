@@ -12,6 +12,7 @@
  */
 /****************************************************************************/
 #include "ScreenBase.h"
+#include <kvs/DebugNew>
 #include <kvs/PointRenderer>
 #include <kvs/LineRenderer>
 #include <kvs/PolygonRenderer>

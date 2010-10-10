@@ -12,8 +12,8 @@
  */
 /****************************************************************************/
 #include "ObjectImporter.h"
-
 #include <string>
+#include <kvs/DebugNew>
 #include <kvs/File>
 // KVS file format classes.
 #include <kvs/AVSField>

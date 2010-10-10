@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_RAY_H_INCLUDE
-#define KVS_CORE_RAY_H_INCLUDE
+#ifndef KVS__RAY_H_INCLUDE
+#define KVS__RAY_H_INCLUDE
 
 #include <kvs/Vector3>
 #include <kvs/Matrix44>
@@ -147,4 +147,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_RAY_H_INCLUDE
+#endif // KVS__RAY_H_INCLUDE

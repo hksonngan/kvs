@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_SUPPORT_GLUT_GLUT_H_INCLUDE
-#define KVS_SUPPORT_GLUT_GLUT_H_INCLUDE
+#ifndef KVS__GLUT__GLUT_H_INCLUDE
+#define KVS__GLUT__GLUT_H_INCLUDE
 
 #include <kvs/Platform>
 #include <kvs/String>
