@@ -226,11 +226,11 @@ const size_t File::byteSize( void ) const
             return( 0 );
         }
 
-        size_t         byte_size = 0;
-        std::streamoff p         = file.tellg();
+        size_t byte_size = 0;
+        std::streamoff p = file.tellg();
         {
             file.seekg( 0, std::ios::end );
-            byte_size = file.tellg();
+            byte_size = static_cast<size_t>( file.tellg() );
         }
         file.seekg( p );
 

@@ -48,16 +48,21 @@ void DrawRectangle(
     const kvs::RGBColor& upper_edge_color,
     const kvs::RGBColor& lower_edge_color )
 {
+    GLfloat x0 = static_cast<GLfloat>( rect.x0() );
+    GLfloat y0 = static_cast<GLfloat>( rect.y0() );
+    GLfloat x1 = static_cast<GLfloat>( rect.x1() );
+    GLfloat y1 = static_cast<GLfloat>( rect.y1() );
+
     glLineWidth( width );
     glBegin( GL_LINES );
     {
         glColor3ub( upper_edge_color.r(), upper_edge_color.g(), upper_edge_color.b() );
-        glVertex2f( rect.x0(), rect.y0() ); glVertex2f( rect.x1(), rect.y0() ); // top
-        glVertex2f( rect.x0(), rect.y0() ); glVertex2f( rect.x0(), rect.y1() ); // left
+        glVertex2f( x0, y0 ); glVertex2f( x1, y0 ); // top
+        glVertex2f( x0, y0 ); glVertex2f( x0, y1 ); // left
 
         glColor3ub( lower_edge_color.r(), lower_edge_color.g(), lower_edge_color.b() );
-        glVertex2f( rect.x1(), rect.y1() ); glVertex2f( rect.x0(), rect.y1() ); // bottom
-        glVertex2f( rect.x1(), rect.y0() ); glVertex2f( rect.x1(), rect.y1() ); // right
+        glVertex2f( x1, y1 ); glVertex2f( x0, y1 ); // bottom
+        glVertex2f( x1, y0 ); glVertex2f( x1, y1 ); // right
     }
     glEnd();
 }

@@ -332,11 +332,9 @@ void CellByCellRejectionSampling::mapping( const kvs::Camera* camera, const kvs:
     if (      type == typeid( kvs::Int8   ) ) this->generate_particles<kvs::Int8>( volume );
     else if ( type == typeid( kvs::Int16  ) ) this->generate_particles<kvs::Int16>( volume );
     else if ( type == typeid( kvs::Int32  ) ) this->generate_particles<kvs::Int32>( volume );
-    else if ( type == typeid( kvs::Int64  ) ) this->generate_particles<kvs::Int64>( volume );
     else if ( type == typeid( kvs::UInt8  ) ) this->generate_particles<kvs::UInt8>( volume );
     else if ( type == typeid( kvs::UInt16 ) ) this->generate_particles<kvs::UInt16>( volume );
     else if ( type == typeid( kvs::UInt32 ) ) this->generate_particles<kvs::UInt32>( volume );
-    else if ( type == typeid( kvs::UInt64 ) ) this->generate_particles<kvs::UInt64>( volume );
     else if ( type == typeid( kvs::Real32 ) ) this->generate_particles<kvs::Real32>( volume );
     else if ( type == typeid( kvs::Real64 ) ) this->generate_particles<kvs::Real64>( volume );
     else
@@ -396,7 +394,9 @@ void CellByCellRejectionSampling::generate_particles( const kvs::StructuredVolum
                     S_min = kvs::Math::Min( S_min, S[i] );
                     S_max = kvs::Math::Max( S_max, S[i] );
                 }
-                const float p_max = this->calculate_maximum_density( S_min, S_max ) / nparticles;
+                const float s_min = static_cast<float>( S_min );
+                const float s_max = static_cast<float>( S_max );
+                const float p_max = this->calculate_maximum_density( s_min, s_max ) / nparticles;
 
                 // Generate a set of particles in this cell.
                 const kvs::Vector3f v( static_cast<float>(x), static_cast<float>(y), static_cast<float>(z) );
@@ -519,7 +519,9 @@ void CellByCellRejectionSampling::generate_particles( const kvs::UnstructuredVol
             S_min = kvs::Math::Min( S_min, S[i] );
             S_max = kvs::Math::Max( S_max, S[i] );
         }
-        const float p_max = this->calculate_maximum_density( S_min, S_max ) / nparticles;
+        const float s_min = static_cast<float>( S_min );
+        const float s_max = static_cast<float>( S_max );
+        const float p_max = this->calculate_maximum_density( s_min, s_max ) / nparticles;
 
         // Generate a set of particles in this cell represented by v0,...,v3 and s0,...,s3.
         size_t count = 0;

@@ -142,6 +142,8 @@ kvs::Stl* PolygonExporter<kvs::Stl>::exec( const kvs::ObjectBase* object )
     {
         this->setNormals( polygon->normals() );
     }
+
+    return( this );
 }
 
 PolygonExporter<kvs::Ply>::PolygonExporter( const kvs::PolygonObject* object )
@@ -331,6 +333,8 @@ kvs::Ply* PolygonExporter<kvs::Ply>::exec( const kvs::ObjectBase* object )
     {
         this->setConnections( polygon->connections() );
     }
+
+    return( this );
 }
 
 } // end of namespace kvs

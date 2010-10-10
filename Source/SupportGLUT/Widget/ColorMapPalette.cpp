@@ -46,16 +46,21 @@ void DrawRectangle(
     const kvs::RGBColor& upper_edge_color,
     const kvs::RGBColor& lower_edge_color )
 {
+    GLfloat x0 = static_cast<GLfloat>( rect.x0() );
+    GLfloat y0 = static_cast<GLfloat>( rect.y0() );
+    GLfloat x1 = static_cast<GLfloat>( rect.x1() );
+    GLfloat y1 = static_cast<GLfloat>( rect.y1() );
+
     glLineWidth( width );
     glBegin( GL_LINES );
     {
         glColor3ub( upper_edge_color.r(), upper_edge_color.g(), upper_edge_color.b() );
-        glVertex2f( rect.x0(), rect.y0() ); glVertex2f( rect.x1(), rect.y0() ); // top
-        glVertex2f( rect.x0(), rect.y0() ); glVertex2f( rect.x0(), rect.y1() ); // left
+        glVertex2f( x0, y0 ); glVertex2f( x1, y0 ); // top
+        glVertex2f( x0, y0 ); glVertex2f( x0, y1 ); // left
 
         glColor3ub( lower_edge_color.r(), lower_edge_color.g(), lower_edge_color.b() );
-        glVertex2f( rect.x1(), rect.y1() ); glVertex2f( rect.x0(), rect.y1() ); // bottom
-        glVertex2f( rect.x1(), rect.y0() ); glVertex2f( rect.x1(), rect.y1() ); // right
+        glVertex2f( x1, y1 ); glVertex2f( x0, y1 ); // bottom
+        glVertex2f( x1, y0 ); glVertex2f( x1, y1 ); // right
     }
     glEnd();
 }
@@ -287,9 +292,9 @@ void ColorMapPalette::mousePressEvent( kvs::MouseEvent* event )
             kvs::UInt8* data = const_cast<kvs::UInt8*>( m_color_map.table().pointer() );
             kvs::UInt8* pdata = data;
             pdata = data + index * 3;
-            pdata[0] = drawing_color.r() * ratio + pdata[0] * ( 1 - ratio );
-            pdata[1] = drawing_color.g() * ratio + pdata[1] * ( 1 - ratio );
-            pdata[2] = drawing_color.b() * ratio + pdata[2] * ( 1 - ratio );
+            pdata[0] = static_cast<kvs::UInt8>( drawing_color.r() * ratio + pdata[0] * ( 1 - ratio ) );
+            pdata[1] = static_cast<kvs::UInt8>( drawing_color.g() * ratio + pdata[1] * ( 1 - ratio ) );
+            pdata[2] = static_cast<kvs::UInt8>( drawing_color.b() * ratio + pdata[2] * ( 1 - ratio ) );
 
             const size_t width = m_color_map.resolution();
             m_texture.bind();
@@ -348,9 +353,9 @@ void ColorMapPalette::mouseMoveEvent( kvs::MouseEvent* event )
             for ( int i = begin_index; i < end_index; i++, pdata += 3 )
             {
                 const float ratio = ( i - old_index ) * diff_ratio / diff_index + old_ratio;
-                pdata[0] = drawing_color.r() * ratio + pdata[0] * ( 1 - ratio );
-                pdata[1] = drawing_color.g() * ratio + pdata[1] * ( 1 - ratio );
-                pdata[2] = drawing_color.b() * ratio + pdata[2] * ( 1 - ratio );
+                pdata[0] = static_cast<kvs::UInt8>( drawing_color.r() * ratio + pdata[0] * ( 1 - ratio ) );
+                pdata[1] = static_cast<kvs::UInt8>( drawing_color.g() * ratio + pdata[1] * ( 1 - ratio ) );
+                pdata[2] = static_cast<kvs::UInt8>( drawing_color.b() * ratio + pdata[2] * ( 1 - ratio ) );
             }
 
             const size_t width = m_color_map.resolution();

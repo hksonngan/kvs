@@ -58,7 +58,7 @@ kvs::AnyValueArray NormalizeValues(
     kvs::Real32* dst = static_cast<kvs::Real32*>( data.template allocate<kvs::Real32>( nnodes ) );
     for ( size_t i = 0; i < nnodes; i++ )
     {
-        *(dst++) = ( *(src++) - min_value ) * scale;
+        *(dst++) = static_cast<kvs::Real32>(( *(src++) - min_value ) * scale);
     }
 
     return( data );
@@ -276,8 +276,8 @@ void RayCastingRenderer::create_image(
         this->create_bounding_cube( volume );
 
         m_ray_caster.bind();
-        m_ray_caster.setUniformValuef( "width", camera->windowWidth() );
-        m_ray_caster.setUniformValuef( "height", camera->windowHeight() );
+        m_ray_caster.setUniformValuef( "width", static_cast<GLfloat>( camera->windowWidth() ) );
+        m_ray_caster.setUniformValuef( "height", static_cast<GLfloat>( camera->windowHeight() ) );
         m_ray_caster.unbind();
     }
 
@@ -291,8 +291,8 @@ void RayCastingRenderer::create_image(
         this->create_exit_points();
 
         m_ray_caster.bind();
-        m_ray_caster.setUniformValuef( "width", camera->windowWidth() );
-        m_ray_caster.setUniformValuef( "height", camera->windowHeight() );
+        m_ray_caster.setUniformValuef( "width", static_cast<GLfloat>( camera->windowWidth() ) );
+        m_ray_caster.setUniformValuef( "height", static_cast<GLfloat>( camera->windowHeight() ) );
         m_ray_caster.unbind();
     }
 
@@ -383,11 +383,11 @@ void RayCastingRenderer::create_image(
 /*==========================================================================*/
 void RayCastingRenderer::initialize_shaders( const kvs::StructuredVolumeObject* volume )
 {
-    const kvs::Vector3ui ngrids = volume->resolution();
-    const kvs::Real32 max_ngrids = static_cast<kvs::Real32>( kvs::Math::Max( ngrids.x(), ngrids.y(), ngrids.z() ) );
-    const kvs::Vector3f resolution( ngrids.x(), ngrids.y(), ngrids.z() );
-    const kvs::Vector3f ratio( ngrids.x() / max_ngrids, ngrids.y() / max_ngrids, ngrids.z() / max_ngrids );
-    const kvs::Vector3f reciprocal( 1.0f / ngrids.x(), 1.0f / ngrids.y(), 1.0f / ngrids.z() );
+    const kvs::Vector3ui r = volume->resolution();
+    const kvs::Real32 max_ngrids = static_cast<kvs::Real32>( kvs::Math::Max( r.x(), r.y(), r.z() ) );
+    const kvs::Vector3f resolution( static_cast<float>(r.x()), static_cast<float>(r.y()), static_cast<float>(r.z()) );
+    const kvs::Vector3f ratio( r.x() / max_ngrids, r.y() / max_ngrids, r.z() / max_ngrids );
+    const kvs::Vector3f reciprocal( 1.0f / r.x(), 1.0f / r.y(), 1.0f / r.z() );
 
     // Bounding cube shader.
     {
@@ -637,9 +637,9 @@ void RayCastingRenderer::create_exit_points( void )
 void RayCastingRenderer::create_jittering_texture( void )
 {
     const size_t size = 32;
-    unsigned char* data = new unsigned char [ size * size ];
+    kvs::UInt8* data = new kvs::UInt8 [ size * size ];
     srand( (unsigned)time(NULL) );
-    for ( size_t i = 0; i < size * size; i++ ) data[i] = 255.0f * rand() / float(RAND_MAX);
+    for ( size_t i = 0; i < size * size; i++ ) data[i] = static_cast<kvs::UInt8>(255.0f * rand() / float(RAND_MAX));
 
     m_jittering_texture.release();
     m_jittering_texture.setWrapS( GL_REPEAT );

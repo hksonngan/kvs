@@ -128,8 +128,8 @@ const kvs::Real64 Argument::isolevel(
     const kvs::TransferFunction& transfer_function )
 {
     if ( !volume->hasMinMaxValues() ) volume->updateMinMaxValues();
-    float min_value = volume->minValue();
-    float max_value = volume->maxValue();
+    double min_value = volume->minValue();
+    double max_value = volume->maxValue();
     if ( transfer_function.hasRange() )
     {
         min_value = transfer_function.minValue();
@@ -271,8 +271,8 @@ const bool Main::exec( void )
     if ( !tfunc.hasRange() )
     {
         const kvs::VolumeObjectBase* object = kvs::VolumeObjectBase::DownCast( pipe.object() );
-        const kvs::Real32 min_value = object->minValue();
-        const kvs::Real32 max_value = object->maxValue();
+        const kvs::Real32 min_value = static_cast<kvs::Real32>( object->minValue() );
+        const kvs::Real32 max_value = static_cast<kvs::Real32>( object->maxValue() );
         legend_bar.setRange( min_value, max_value );
     }
     legend_bar.show();
@@ -324,7 +324,7 @@ const bool Main::exec( void )
     slider.setTransferFunction( tfunc );
     slider.setNormal( normal );
     slider.setValue( static_cast<float>( level ) );
-    slider.setRange( legend_bar.minValue(), legend_bar.maxValue() );
+    slider.setRange( static_cast<float>( legend_bar.minValue() ), static_cast<float>( legend_bar.maxValue() ) );
     slider.show();
 
     return( arg.clear(), app.run() );

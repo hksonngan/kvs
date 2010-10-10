@@ -24,7 +24,6 @@
 #include <kvs/CellByCellParticleGenerator>
 #include <kvs/MersenneTwister>
 
-
 namespace Generator = kvs::CellByCellParticleGenerator;
 
 namespace kvs
@@ -276,11 +275,9 @@ void CellByCellLayeredSampling::mapping( const kvs::Camera* camera, const kvs::U
     if (      type == typeid( kvs::Int8   ) ) this->generate_particles<kvs::Int8>( volume );
     else if ( type == typeid( kvs::Int16  ) ) this->generate_particles<kvs::Int16>( volume );
     else if ( type == typeid( kvs::Int32  ) ) this->generate_particles<kvs::Int32>( volume );
-    else if ( type == typeid( kvs::Int64  ) ) this->generate_particles<kvs::Int64>( volume );
     else if ( type == typeid( kvs::UInt8  ) ) this->generate_particles<kvs::UInt8>( volume );
     else if ( type == typeid( kvs::UInt16 ) ) this->generate_particles<kvs::UInt16>( volume );
     else if ( type == typeid( kvs::UInt32 ) ) this->generate_particles<kvs::UInt32>( volume );
-    else if ( type == typeid( kvs::UInt64 ) ) this->generate_particles<kvs::UInt64>( volume );
     else if ( type == typeid( kvs::Real32 ) ) this->generate_particles<kvs::Real32>( volume );
     else if ( type == typeid( kvs::Real64 ) ) this->generate_particles<kvs::Real64>( volume );
     else
@@ -449,7 +446,7 @@ void CellByCellLayeredSampling::pregenerate_particles( const size_t nparticles )
         size_t count = 0;
         while ( count < n[i] )
         {
-            const float s = R() * ( s1 - s0 ) + s0;
+            const float s = static_cast<float>( R() ) * ( s1 - s0 ) + s0;
             const float g = a * s + b;
             if ( R() > 1.0F / c * g )
             {
@@ -459,8 +456,8 @@ void CellByCellLayeredSampling::pregenerate_particles( const size_t nparticles )
             else
             {
                 // accept.
-                const float t1 = R();
-                const float t2 = R();
+                const float t1 = static_cast<float>( R() );
+                const float t2 = static_cast<float>( R() );
                 *(pcoords++) = t1;
                 *(pcoords++) = t2;
                 *(pcoords++) = s;
@@ -542,8 +539,8 @@ void CellByCellLayeredSampling::rejection_sampling(
     std::vector<kvs::Real32>* normals )
 {
     const T* S = cell->scalars();
-    const float S_min = kvs::Math::Min( S[0], S[1], S[2], S[3] );
-    const float S_max = kvs::Math::Max( S[0], S[1], S[2], S[3] );
+    const float S_min = static_cast<float>( kvs::Math::Min( S[0], S[1], S[2], S[3] ) );
+    const float S_max = static_cast<float>( kvs::Math::Max( S[0], S[1], S[2], S[3] ) );
     const float p_max = this->calculate_maximum_density( S_min, S_max ) / nparticles;
 
     size_t count = 0;
@@ -791,8 +788,8 @@ void CellByCellLayeredSampling::calculate_particles_in_cell(
 
     const float min_value = BaseClass::transferFunction().colorMap().minValue();
     const float max_value = BaseClass::transferFunction().colorMap().maxValue();
-    const float min_cell_scalar = ( S_min - min_value ) / ( max_value - min_value );
-    const float max_cell_scalar = ( S_max - min_value ) / ( max_value - min_value );
+    const float min_cell_scalar = static_cast<float>( S_min - min_value ) / ( max_value - min_value );
+    const float max_cell_scalar = static_cast<float>( S_max - min_value ) / ( max_value - min_value );
 
     // Gradient vector.
     kvs::Vector3f g = cell->gradient(); g.normalize();

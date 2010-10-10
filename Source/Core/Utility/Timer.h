@@ -17,6 +17,8 @@
 #include <ctime>
 #include <iostream>
 #include <vector>
+#include <kvs/Compiler>
+#include <kvs/Platform>
 #if defined ( KVS_COMPILER_VC )
 #include <windows.h>
 #include <mmsystem.h>
@@ -26,8 +28,6 @@
 #include <sys/timeb.h>
 #endif
 #include <kvs/Type>
-#include <kvs/Compiler>
-#include <kvs/Platform>
 #include <kvs/Message>
 #include <kvs/ClassName>
 #include <kvs/IgnoreUnusedVariable>

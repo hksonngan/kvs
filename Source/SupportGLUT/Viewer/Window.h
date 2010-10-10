@@ -32,6 +32,9 @@ namespace kvs
 namespace glut
 {
 
+namespace old
+{
+
 /*===========================================================================*/
 /**
  *  @brief  GLUT window class.
@@ -101,6 +104,8 @@ private:
 
     friend void SpecialKeyPressFunction( int key, int x, int y );
 };
+
+} // end of namespace old
 
 } // end of namespace glut
 

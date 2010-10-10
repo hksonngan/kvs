@@ -292,35 +292,15 @@ void CellByCellUniformSampling::mapping( const kvs::Camera* camera, const kvs::S
         BaseClass::transferFunction().opacityMap() );
 
     // Generate the particles.
-//    if ( !volume->hasMinMaxValues() ) volume->updateMinMaxValues();
-//    const float min_value = static_cast<float>( volume->minValue() );
-//    const float max_value = static_cast<float>( volume->maxValue() );
     const std::type_info& type = volume->values().typeInfo()->type();
-    if (      type == typeid( kvs::UInt8  ) )
-    {
-//        if ( !m_transfer_function.hasRange() ) BaseClass::m_transfer_function.setRange( min_value, max_value );
-        this->generate_particles<kvs::UInt8>( volume );
-    }
-    else if ( type == typeid( kvs::UInt16 ) )
-    {
-//        if ( !m_transfer_function.hasRange() ) BaseClass::m_transfer_function.setRange( min_value, max_value );
-        this->generate_particles<kvs::UInt16>( volume );
-    }
-    else if ( type == typeid( kvs::Int16 ) )
-    {
-//        if ( !m_transfer_function.hasRange() ) BaseClass::m_transfer_function.setRange( min_value, max_value );
-        this->generate_particles<kvs::Int16>( volume );
-    }
-    else if ( type == typeid( kvs::Real32 ) )
-    {
-//        if ( !m_transfer_function.hasRange() ) BaseClass::m_transfer_function.setRange( min_value, max_value );
-        this->generate_particles<kvs::Real32>( volume );
-    }
-    else if ( type == typeid( kvs::Real64 ) )
-    {
-//        if ( !m_transfer_function.hasRange() ) BaseClass::m_transfer_function.setRange( min_value, max_value );
-        this->generate_particles<kvs::Real64>( volume );
-    }
+    if (      type == typeid( kvs::Int8   ) ) this->generate_particles<kvs::Int8>( volume );
+    else if ( type == typeid( kvs::Int16  ) ) this->generate_particles<kvs::Int16>( volume );
+    else if ( type == typeid( kvs::Int32  ) ) this->generate_particles<kvs::Int32>( volume );
+    else if ( type == typeid( kvs::UInt8  ) ) this->generate_particles<kvs::UInt8>( volume );
+    else if ( type == typeid( kvs::UInt16 ) ) this->generate_particles<kvs::UInt16>( volume );
+    else if ( type == typeid( kvs::UInt32 ) ) this->generate_particles<kvs::UInt32>( volume );
+    else if ( type == typeid( kvs::Real32 ) ) this->generate_particles<kvs::Real32>( volume );
+    else if ( type == typeid( kvs::Real64 ) ) this->generate_particles<kvs::Real64>( volume );
     else
     {
         BaseClass::m_is_success = false;

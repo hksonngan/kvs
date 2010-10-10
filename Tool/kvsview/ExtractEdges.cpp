@@ -156,8 +156,8 @@ const bool Main::exec( void )
     legend_bar.setColorMap( tfunc.colorMap() );
     if ( !tfunc.hasRange() )
     {
-        const kvs::Real32 min_value = volume->minValue();
-        const kvs::Real32 max_value = volume->maxValue();
+        const kvs::Real32 min_value = static_cast<kvs::Real32>( volume->minValue() );
+        const kvs::Real32 max_value = static_cast<kvs::Real32>( volume->maxValue() );
         legend_bar.setRange( min_value, max_value );
     }
     legend_bar.show();

@@ -233,8 +233,8 @@ const bool Main::exec( void )
     if ( !tfunc.hasRange() )
     {
         const kvs::VolumeObjectBase* object = kvs::VolumeObjectBase::DownCast( pipe.object() );
-        const kvs::Real32 min_value = object->minValue();
-        const kvs::Real32 max_value = object->maxValue();
+        const kvs::Real32 min_value = static_cast<kvs::Real32>( object->minValue() );
+        const kvs::Real32 max_value = static_cast<kvs::Real32>( object->maxValue() );
         legend_bar.setRange( min_value, max_value );
     }
     legend_bar.show();

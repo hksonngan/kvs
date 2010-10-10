@@ -26,7 +26,8 @@
 
 // Static parameters.
 namespace { const size_t MaxNumberOfWindows = 256; }
-namespace { kvs::glut::Window* context[::MaxNumberOfWindows]; }
+//namespace { kvs::glut::Window* context[::MaxNumberOfWindows]; }
+namespace { kvs::glut::old::Window* context[::MaxNumberOfWindows]; }
 
 namespace
 {
@@ -51,6 +52,9 @@ namespace kvs
 {
 
 namespace glut
+{
+
+namespace old
 {
 
 /*===========================================================================*/
@@ -437,6 +441,8 @@ void Window::keyPressEvent( kvs::KeyEvent* event )
 {
     kvs::IgnoreUnusedVariable( event );
 }
+
+} // end of namespace old
 
 } // end of namespace glut
 

@@ -169,7 +169,7 @@ inline void FrequencyTable::binning( const kvs::VolumeObjectBase* volume )
         }
     }
 
-    m_mean = total_count / m_nbins;
+    m_mean = static_cast<kvs::Real64>( total_count ) / m_nbins;
 
     kvs::Real64 sum = 0;
     for ( size_t i = 0; i < m_nbins; i++ ) sum += kvs::Math::Square( m_bin[i] - m_mean );
@@ -218,7 +218,7 @@ inline void FrequencyTable::binning( const kvs::ImageObject* image, const size_t
         }
     }
 
-    m_mean = total_count / m_nbins;
+    m_mean = static_cast<kvs::Real64>( total_count ) / m_nbins;
 
     kvs::Real64 sum = 0;
     for ( size_t i = 0; i < m_nbins; i++ ) sum += kvs::Math::Square( m_bin[i] - m_mean );
