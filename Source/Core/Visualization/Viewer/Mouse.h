@@ -33,7 +33,7 @@ class Mouse : public kvs::Trackball
 {
     typedef kvs::Trackball BaseClass;
 
-    kvsClassName( Mouse );
+    kvsClassName( kvs::Mouse );
 
 public:
 

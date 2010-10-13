@@ -19,6 +19,7 @@
 #include "SocketTimer.h"
 #include <iostream>
 #include <fstream>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -31,6 +32,8 @@ namespace kvs
 /*==========================================================================*/
 class HttpConnector
 {
+    kvsClassName( kvs::HttpConnector );
+
 protected:
 
     kvs::TCPSocket m_connector; ///< TCP socket connector

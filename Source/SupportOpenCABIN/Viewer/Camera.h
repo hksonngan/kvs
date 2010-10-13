@@ -15,6 +15,7 @@
 #ifndef KVS__OPENCABIN__CAMERA_H_INCLUDE
 #define KVS__OPENCABIN__CAMERA_H_INCLUDE
 
+#include <kvs/ClassName>
 #include <kvs/Camera>
 
 
@@ -31,6 +32,8 @@ namespace opencabin
 /*===========================================================================*/
 class Camera : public kvs::Camera
 {
+    kvsClassName( kvs::opencabin::Camera );
+
 public:
 
     virtual void update( void );

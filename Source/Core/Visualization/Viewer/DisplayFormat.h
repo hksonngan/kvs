@@ -28,7 +28,7 @@ namespace kvs
 /*===========================================================================*/
 class DisplayFormat
 {
-    kvsClassName( DisplayFormat );
+    kvsClassName( kvs::DisplayFormat );
 
 protected:
 

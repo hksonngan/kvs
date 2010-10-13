@@ -34,7 +34,7 @@ namespace kvs
 /*===========================================================================*/
 class KVSMLObjectUnstructuredVolume : public kvs::FileFormatBase
 {
-    kvsClassName( KVSMLObjectUnstructuredVolume );
+    kvsClassName( kvs::KVSMLObjectUnstructuredVolume );
 
 public:
 

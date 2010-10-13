@@ -32,7 +32,7 @@ namespace kvs
 /*==========================================================================*/
 class ParticleBufferAccumulator : public kvs::ParticleBuffer
 {
-    kvsClassName( ParticleBufferAccumulator );
+    kvsClassName( kvs::ParticleBufferAccumulator );
 
 public:
 

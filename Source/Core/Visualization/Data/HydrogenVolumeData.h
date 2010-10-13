@@ -30,7 +30,7 @@ namespace kvs
 /*===========================================================================*/
 class HydrogenVolumeData : public kvs::StructuredVolumeObject
 {
-    kvsClassName( HydrogenVolumeData );
+    kvsClassName( kvs::HydrogenVolumeData );
 
 public:
 

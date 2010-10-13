@@ -386,7 +386,7 @@ inline double TimeStampDiffInUSec( const TimeStamp& ts1, const TimeStamp& ts2 )
 /*==========================================================================*/
 class Timer
 {
-    kvsClassName_without_virtual( Timer );
+    kvsClassName_without_virtual( kvs::Timer );
 
 public:
 

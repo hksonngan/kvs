@@ -16,6 +16,7 @@
 #define KVS__GLUT__OPACITY_MAP_PALETTE_H_INCLUDE
 
 #include <string>
+#include <kvs/ClassName>
 #include <kvs/Texture1D>
 #include <kvs/Texture2D>
 #include <kvs/OpacityMap>
@@ -38,6 +39,8 @@ namespace glut
 /*===========================================================================*/
 class OpacityMapPalette : public kvs::glut::WidgetBase
 {
+    kvsClassName( kvs::glut::OpacityMapPalette );
+
 public:
 
     typedef kvs::glut::WidgetBase BaseClass;

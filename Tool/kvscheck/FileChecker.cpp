@@ -49,7 +49,7 @@ inline void PrintInformation( std::ostream& os, const kvscheck::FileChecker& che
     kvs::Timer timer( kvs::Timer::Start );
     FileFormatClass file( checker.filename() );
     timer.stop();
-    os << "File format class: " << "kvs::" << file.className() << std::endl;
+    os << "File format class: " << file.className() << std::endl;
     os << "Reading time: " << timer.sec() << " [sec]" << std::endl;
     os << "Information: " << std::endl << file;
 }

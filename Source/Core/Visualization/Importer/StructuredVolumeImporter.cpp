@@ -174,15 +174,15 @@ StructuredVolumeImporter::SuperClass* StructuredVolumeImporter::exec( const kvs:
     }
 
     const std::string class_name( file_format->className() );
-    if ( class_name == "KVSMLObjectStructuredVolume" )
+    if ( class_name == "kvs::KVSMLObjectStructuredVolume" )
     {
         this->import( static_cast<const kvs::KVSMLObjectStructuredVolume*>( file_format ) );
     }
-    else if ( class_name == "AVSField" )
+    else if ( class_name == "kvs::AVSField" )
     {
         this->import( static_cast<const kvs::AVSField*>( file_format ) );
     }
-    else if ( class_name == "DicomList" )
+    else if ( class_name == "kvs::DicomList" )
     {
         this->import( static_cast<const kvs::DicomList*>( file_format ) );
     }

@@ -31,7 +31,7 @@ namespace kvs
 class OrthoSlice : public kvs::SlicePlane
 {
     // Class name.
-    kvsClassName( OrthoSlice );
+    kvsClassName( kvs::OrthoSlice );
 
     // Module information.
     kvsModuleCategory( Mapper );

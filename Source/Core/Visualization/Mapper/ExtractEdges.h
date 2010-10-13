@@ -36,7 +36,7 @@ class TransferFunction;
 class ExtractEdges : public kvs::MapperBase, public kvs::LineObject
 {
     // Class name.
-    kvsClassName( ExtractEdges );
+    kvsClassName( kvs::ExtractEdges );
 
     // Module information.
     kvsModuleCategory( Mapper );

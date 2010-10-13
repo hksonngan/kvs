@@ -41,7 +41,7 @@ namespace kvs
 template<typename T>
 class ValueArray
 {
-    kvsClassName_without_virtual( ValueArray );
+    kvsClassName_without_virtual( kvs::ValueArray );
 
 public:
 

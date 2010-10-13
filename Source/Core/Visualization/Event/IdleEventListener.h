@@ -17,6 +17,7 @@
 
 #include <kvs/EventListener>
 #include <kvs/EventBase>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -29,6 +30,8 @@ namespace kvs
 /*===========================================================================*/
 class IdleEventListener : public kvs::EventListener
 {
+    kvsClassName( kvs::IdleEventListener );
+
 public:
 
     IdleEventListener( void );

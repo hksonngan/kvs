@@ -14,8 +14,9 @@
 #ifndef KVS__RGBA_COLOR_H_INCLUDE
 #define KVS__RGBA_COLOR_H_INCLUDE
 
-#include <kvs/Type>
 #include "RGBColor.h"
+#include <kvs/Type>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -28,6 +29,8 @@ namespace kvs
 /*==========================================================================*/
 class RGBAColor : public kvs::RGBColor
 {
+    kvsClassName( kvs::RGBAColor );
+
 protected:
 
     float m_opacity; ///< opacity [0-1]

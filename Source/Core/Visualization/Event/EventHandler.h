@@ -17,6 +17,7 @@
 
 #include <vector>
 #include "EventListener.h"
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -29,6 +30,8 @@ namespace kvs
 /*===========================================================================*/
 class EventHandler
 {
+    kvsClassName( kvs::EventHandler );
+
 protected:
 
     std::vector<kvs::EventListener*> m_listeners; ///< list of the event listener

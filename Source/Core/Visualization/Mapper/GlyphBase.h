@@ -35,7 +35,7 @@ namespace kvs
 class GlyphBase : public kvs::MapperBase, public kvs::GlyphObject
 {
     // Class name.
-    kvsClassName( GlyphBase );
+    kvsClassName( kvs::GlyphBase );
 
     // Module information.
     kvsModuleCategory( Mapper );

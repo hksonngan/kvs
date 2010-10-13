@@ -38,7 +38,7 @@ class PolygonObject;
 class LineObject : public kvs::GeometryObjectBase
 {
     // Class name.
-    kvsClassName( LineObject );
+    kvsClassName( kvs::LineObject );
 
     // Module information.
     kvsModuleCategory( Object );

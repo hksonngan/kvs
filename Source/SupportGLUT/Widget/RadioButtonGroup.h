@@ -39,7 +39,7 @@ class RadioButton;
 class RadioButtonGroup : public kvs::glut::WidgetBase
 {
     // Class name.
-    kvsClassName( RadioButtonGroup );
+    kvsClassName( kvs::glut::RadioButtonGroup );
 
 public:
 

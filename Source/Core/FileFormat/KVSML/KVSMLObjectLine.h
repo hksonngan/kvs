@@ -32,7 +32,7 @@ namespace kvs
 /*===========================================================================*/
 class KVSMLObjectLine : public kvs::FileFormatBase
 {
-    kvsClassName( KVSMLObjectLine );
+    kvsClassName( kvs::KVSMLObjectLine );
 
 public:
 

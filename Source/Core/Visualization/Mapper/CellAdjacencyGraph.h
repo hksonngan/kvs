@@ -14,6 +14,7 @@
 #ifndef KVS__CELL_ADJACENCY_GRAPH_H_INCLUDE
 #define KVS__CELL_ADJACENCY_GRAPH_H_INCLUDE
 
+#include <kvs/ClassName>
 #include <kvs/UnstructuredVolumeObject>
 #include <kvs/BitArray>
 #include <kvs/ValueArray>
@@ -29,6 +30,8 @@ namespace kvs
 /*===========================================================================*/
 class CellAdjacencyGraph
 {
+    kvsClassName_without_virtual( kvs::CellAdjacencyGraph );
+
 protected:
 
     kvs::ValueArray<kvs::UInt32> m_graph; ///< cell adjacency table

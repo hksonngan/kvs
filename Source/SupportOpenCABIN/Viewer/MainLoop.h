@@ -15,6 +15,7 @@
 #ifndef KVS__OPENCABIN__MAIN_LOOP_H_INCLUDE
 #define KVS__OPENCABIN__MAIN_LOOP_H_INCLUDE
 
+#include <kvs/ClassName>
 #include <kvs/Thread>
 
 
@@ -32,6 +33,8 @@ namespace opencabin
 class MainLoop : public kvs::Thread
 {
     typedef kvs::Thread BaseClass;
+
+    kvsClassName_without_virtual( kvs::opencabin::MainLoop );
 
 protected:
 

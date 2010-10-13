@@ -16,6 +16,7 @@
 
 #include "TinyXML.h"
 #include <string>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -28,6 +29,8 @@ namespace kvs
 /*==========================================================================*/
 class XMLElement : public TiXmlElement
 {
+    kvsClassName( kvs::XMLElement );
+
 public:
 
     typedef TiXmlElement SuperClass;

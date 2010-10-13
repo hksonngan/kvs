@@ -28,7 +28,7 @@ namespace kvs
 /*==========================================================================*/
 class FileFormatBase
 {
-    kvsClassName( FileFormatBase );
+    kvsClassName( kvs::FileFormatBase );
 
 protected:
 

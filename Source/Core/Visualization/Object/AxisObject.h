@@ -33,7 +33,7 @@ namespace kvs
 class AxisObject : public kvs::LineObject
 {
     // Class name.
-    kvsClassName( AxisObject );
+    kvsClassName( kvs::AxisObject );
 
     // Module information.
     kvsModuleCategory( Object );

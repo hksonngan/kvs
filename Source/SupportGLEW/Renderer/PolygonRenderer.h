@@ -36,7 +36,7 @@ namespace glew
 class PolygonRenderer : public kvs::PolygonRenderer
 {
     // Class name.
-    kvsClassName( PolygonRenderer );
+    kvsClassName( kvs::glew::PolygonRenderer );
 
     // Module information.
     kvsModuleCategory( Renderer );

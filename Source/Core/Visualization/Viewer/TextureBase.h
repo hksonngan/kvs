@@ -29,7 +29,7 @@ namespace kvs
 /*==========================================================================*/
 class TextureBase
 {
-    kvsClassName( TextureBase );
+    kvsClassName( kvs::TextureBase );
 
 protected:
 

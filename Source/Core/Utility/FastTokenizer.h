@@ -29,7 +29,7 @@ namespace kvs
 /*==========================================================================*/
 class FastTokenizer
 {
-    kvsClassName_without_virtual( FastTokenizer );
+    kvsClassName_without_virtual( kvs::FastTokenizer );
 
 private:
 

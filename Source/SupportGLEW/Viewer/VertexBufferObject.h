@@ -31,7 +31,7 @@ namespace glew
 /*===========================================================================*/
 class VertexBufferObject : public kvs::glew::BufferObject
 {
-    kvsClassName( VertexBufferObject );
+    kvsClassName( kvs::glew::VertexBufferObject );
 
 public:
 

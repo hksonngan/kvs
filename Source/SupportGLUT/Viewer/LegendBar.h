@@ -37,7 +37,7 @@ namespace glut
 class LegendBar : public kvs::glut::WidgetBase
 {
     // Class name.
-    kvsClassName( LegendBar );
+    kvsClassName( kvs::glut::LegendBar );
 
 public:
 

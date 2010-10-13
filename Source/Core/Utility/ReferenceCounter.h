@@ -31,7 +31,7 @@ namespace kvs
 /*==========================================================================*/
 class ReferenceCounter
 {
-    kvsClassName_without_virtual( ReferenceCounter );
+    kvsClassName_without_virtual( kvs::ReferenceCounter );
 
 private:
 

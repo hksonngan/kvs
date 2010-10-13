@@ -34,7 +34,7 @@ class LineImporter
     , public kvs::LineObject
 {
     // Class name.
-    kvsClassName( LineImporter );
+    kvsClassName( kvs::LineImporter );
 
     // Module information.
     kvsModuleCategory( Importer );

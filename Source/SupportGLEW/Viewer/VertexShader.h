@@ -32,6 +32,8 @@ namespace glew
 /*===========================================================================*/
 class VertexShader : public kvs::glew::ShaderObject
 {
+    kvsClassName( kvs::glew::VertexShader );
+
 public:
 
     typedef kvs::glew::ShaderObject SuperClass;

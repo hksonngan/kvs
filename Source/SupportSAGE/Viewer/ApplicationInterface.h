@@ -14,6 +14,7 @@
 #ifndef KVS__SAGE__APPLICATION_INTERFACE_H_INCLUDE
 #define KVS__SAGE__APPLICATION_TNTERFACE_H_INCLUDE
 
+#include <kvs/ClassName>
 #include <kvs/OpenGL>
 #include <kvs/sage/SAGE>
 #include <string>
@@ -32,6 +33,10 @@ namespace sage
 /*===========================================================================*/
 class ApplicationInterface : public sail
 {
+    kvsClassName_without_virtual( kvs::sage::ApplicationInterface );
+
+private:
+
     typedef sail SuperClass;
 
 private:

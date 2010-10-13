@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_KEY_EVENT_H_INCLUDE
-#define KVS_CORE_KEY_EVENT_H_INCLUDE
+#ifndef KVS__KEY_EVENT_H_INCLUDE
+#define KVS__KEY_EVENT_H_INCLUDE
 
 #include <kvs/ClassName>
 #include <kvs/EventBase>
@@ -29,7 +29,7 @@ namespace kvs
 /*==========================================================================*/
 class KeyEvent : public kvs::EventBase
 {
-    kvsClassName( KeyEvent );
+    kvsClassName( kvs::KeyEvent );
 
 protected:
 

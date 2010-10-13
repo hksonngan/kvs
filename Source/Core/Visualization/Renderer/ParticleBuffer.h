@@ -14,6 +14,7 @@
 #ifndef KVS__PARTICLE_BUFFER_H_INCLUDE
 #define KVS__PARTICLE_BUFFER_H_INCLUDE
 
+#include <kvs/ClassName>
 #include <kvs/ValueArray>
 #include <kvs/Type>
 #include <kvs/Shader>
@@ -31,6 +32,8 @@ class PointObject;
 /*==========================================================================*/
 class ParticleBuffer
 {
+    kvsClassName( kvs::ParticleBuffer );
+
 protected:
 
     size_t  m_width;                      ///< width
@@ -55,7 +58,7 @@ public:
 
     ParticleBuffer( const size_t width, const size_t height, const size_t subpixel_level );
 
-    ~ParticleBuffer( void );
+    virtual ~ParticleBuffer( void );
 
 public:
 

@@ -16,6 +16,7 @@
 
 #include <vector>
 #include <string>
+#include <kvs/ClassName>
 #include <kvs/ScreenCore>
 #include <kvs/RGBColor>
 
@@ -47,6 +48,8 @@ typedef void (*TimerEventFunc)( int );
 /*==========================================================================*/
 class ScreenBase : public kvs::ScreenCore
 {
+    kvsClassName( kvs::glut::ScreenBase );
+
 protected:
 
     static PaintEventBase         m_pfunc_paint_event;

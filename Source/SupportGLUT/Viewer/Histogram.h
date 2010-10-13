@@ -38,7 +38,7 @@ namespace glut
 /*===========================================================================*/
 class Histogram : public kvs::glut::WidgetBase
 {
-    kvsClassName( Histogram );
+    kvsClassName( kvs::glut::Histogram );
 
 public:
 

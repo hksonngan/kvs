@@ -16,6 +16,7 @@
 #define KVS__GLUT__COLOR_PALETTE_H_INCLUDE
 
 #include <string>
+#include <kvs/ClassName>
 #include <kvs/glut/ScreenBase>
 #include <kvs/glut/WidgetBase>
 #include <kvs/glut/Rectangle>
@@ -34,6 +35,8 @@ namespace glut
 /*===========================================================================*/
 class ColorPalette : public kvs::glut::WidgetBase
 {
+    kvsClassName( kvs::glut::ColorPalette );
+
 public:
 
     typedef kvs::glut::WidgetBase BaseClass;

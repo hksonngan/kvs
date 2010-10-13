@@ -72,7 +72,7 @@ namespace kvs
 /*==========================================================================*/
 class Xform : public kvs::Matrix44f
 {
-    kvsClassName( Xform );
+    kvsClassName( kvs::Xform );
 
 protected:
 

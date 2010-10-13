@@ -14,6 +14,7 @@
 #ifndef KVS__GLUT__GLOBAL_BASE_H_INCLUDE
 #define KVS__GLUT__GLOBAL_BASE_H_INCLUDE
 
+#include <kvs/ClassName>
 #include <kvs/GlobalCore>
 
 
@@ -31,6 +32,8 @@ namespace glut
 class GlobalBase : public kvs::GlobalCore
 {
     friend class ScreenBase;
+
+    kvsClassName( kvs::glut::GlobalBase );
 
 public:
 

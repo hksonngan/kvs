@@ -45,7 +45,7 @@ typedef void (*KeyPressEventFunc)( KeyEvent* );
 /*==========================================================================*/
 class ScreenCore
 {
-    kvsClassName( ScreenCore );
+    kvsClassName( kvs::ScreenCore );
 
 protected:
 

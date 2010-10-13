@@ -17,6 +17,7 @@
 
 #include "CUDA.h"
 #include "Device.h"
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -32,6 +33,8 @@ namespace cuda
 /*===========================================================================*/
 class Context
 {
+    kvsClassName_without_virtual( kvs::cuda::Context );
+
 protected:
 
     CUcontext m_handler; ///< context handler

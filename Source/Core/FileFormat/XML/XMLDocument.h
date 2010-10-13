@@ -16,6 +16,7 @@
 
 #include "TinyXML.h"
 #include <string>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -28,6 +29,8 @@ namespace kvs
 /*==========================================================================*/
 class XMLDocument : public TiXmlDocument
 {
+    kvsClassName( kvs::XMLDocument );
+
 public:
 
     typedef TiXmlDocument SuperClass;

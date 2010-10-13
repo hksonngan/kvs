@@ -17,6 +17,7 @@
 #include <kvs/ValueArray>
 #include <kvs/Type>
 #include <kvs/Vector2>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -32,6 +33,8 @@ class GrayImage;
 /*==========================================================================*/
 class ImageBase
 {
+    kvsClassName( kvs::ImageBase );
+
 public:
 
     // Image type (number of components)

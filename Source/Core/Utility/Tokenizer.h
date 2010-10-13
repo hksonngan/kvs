@@ -15,6 +15,7 @@
 #define KVS__TOKENIZER_H_INCLUDE
 
 #include <string>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -27,6 +28,8 @@ namespace kvs
 /*==========================================================================*/
 class Tokenizer
 {
+    kvsClassName_without_virtual( kvs::Tokenizer );
+
 protected:
 
     std::string            m_source;    ///< source std::string

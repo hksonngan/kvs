@@ -31,7 +31,7 @@ namespace kvs
 /*==========================================================================*/
 class AVSUcd : public FileFormatBase
 {
-    kvsClassName( AVSUcd );
+    kvsClassName( kvs::AVSUcd );
 
 public:
 

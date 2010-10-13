@@ -30,7 +30,7 @@ namespace kvs
 /*==========================================================================*/
 class ImporterBase
 {
-    kvsClassName( ImporterBase );
+    kvsClassName( kvs::ImporterBase );
 
     kvsModuleBase;
 

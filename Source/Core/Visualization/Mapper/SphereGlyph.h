@@ -32,7 +32,7 @@ namespace kvs
 class SphereGlyph : public kvs::GlyphBase
 {
     // Class name.
-    kvsClassName( SphereGlyph );
+    kvsClassName( kvs::SphereGlyph );
 
     // Module information.
     kvsModuleCategory( Mapper );

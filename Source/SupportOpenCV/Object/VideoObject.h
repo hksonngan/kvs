@@ -35,7 +35,7 @@ namespace opencv
 class VideoObject : public kvs::ObjectBase
 {
     // Class name.
-    kvsClassName( VideoObject );
+    kvsClassName( kvs::opencv::VideoObject );
 
     // Module information.
     kvsModuleCategory( Object );

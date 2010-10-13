@@ -20,6 +20,7 @@
 #include <string>
 #include <kvs/ScreenCore>
 #include <kvs/RGBColor>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -49,6 +50,8 @@ typedef void (*WheelEventFunc)( MouseEvent* );
 class ScreenBase : public QGLWidget, public kvs::ScreenCore
 {
     Q_OBJECT
+
+    kvsClassName( kvs::qt::ScreenBase );
 
 protected:
 

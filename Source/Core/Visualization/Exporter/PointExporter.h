@@ -14,6 +14,7 @@
 #ifndef KVS__POINT_EXPORTER_H_INCLUDE
 #define KVS__POINT_EXPORTER_H_INCLUDE
 
+#include <kvs/ClassName>
 #include <kvs/PointObject>
 #include <kvs/KVSMLObjectPoint>
 #include "ExporterBase.h"
@@ -30,6 +31,8 @@ namespace kvs
 template <typename FileFormatType>
 class PointExporter : public kvs::ExporterBase<FileFormatType>
 {
+    kvsClassName( kvs::PointExporter );
+
 public:
 
     PointExporter( const kvs::PointObject* object );

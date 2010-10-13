@@ -32,7 +32,7 @@ namespace glew
 /*==========================================================================*/
 class TextureRectangle : public kvs::TextureBase
 {
-    kvsClassName( TextureRectangle );
+    kvsClassName( kvs::glew::TextureRectangle );
 
 public:
 

@@ -34,7 +34,7 @@ namespace kvs
 class PolygonObject : public kvs::GeometryObjectBase
 {
     // Class name.
-    kvsClassName( PolygonObject );
+    kvsClassName( kvs::PolygonObject );
 
     // Module information.
     kvsModuleCategory( Object );

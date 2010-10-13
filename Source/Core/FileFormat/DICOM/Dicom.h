@@ -39,7 +39,7 @@ namespace kvs
 /*===========================================================================*/
 class Dicom : public kvs::FileFormatBase
 {
-    kvsClassName( Dicom );
+    kvsClassName( kvs::Dicom );
 
 public:
 

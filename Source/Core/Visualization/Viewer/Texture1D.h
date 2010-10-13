@@ -28,7 +28,7 @@ namespace kvs
 /*==========================================================================*/
 class Texture1D : public kvs::TextureBase
 {
-    kvsClassName( Texture1D );
+    kvsClassName( kvs::Texture1D );
 
 public:
 

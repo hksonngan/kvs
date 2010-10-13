@@ -37,7 +37,7 @@ namespace kvs
 template <typename T>
 class Tree
 {
-    kvsClassName( Tree );
+    kvsClassName( kvs::Tree );
 
 public:
 

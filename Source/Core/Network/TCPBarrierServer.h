@@ -19,6 +19,7 @@
 #include <kvs/Thread>
 #include <kvs/TCPSocket>
 #include <kvs/TCPServer>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -31,6 +32,8 @@ namespace kvs
 /*===========================================================================*/
 class TCPBarrierServer : public kvs::Thread
 {
+    kvsClassName( kvs::TCPBarrierServer );
+
 protected:
 
     int                        m_block_counter; //< block counter (# of nodes)

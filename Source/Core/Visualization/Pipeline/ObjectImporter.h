@@ -15,6 +15,7 @@
 #define KVS__OBJECT_IMPORTER_H_INCLUDE
 
 #include <string>
+#include <kvs/ClassName>
 #include <kvs/FileFormatBase>
 #include <kvs/ImporterBase>
 #include <kvs/ObjectBase>
@@ -30,6 +31,8 @@ namespace kvs
 /*==========================================================================*/
 class ObjectImporter
 {
+    kvsClassName_without_virtual( kvs::ObjectImporter );
+
 public:
 
     enum ImporterType

@@ -32,7 +32,7 @@ namespace glew
 /*===========================================================================*/
 class GeometryShader : public kvs::glew::ShaderObject
 {
-    kvsClassName( GeometryShader );
+    kvsClassName( kvs::glew::GeometryShader );
 
 public:
 

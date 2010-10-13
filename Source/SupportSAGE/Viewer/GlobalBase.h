@@ -14,6 +14,7 @@
 #ifndef KVS__SAGE__GLOBAL_BASE_H_INCLUDE
 #define KVS__SAGE__GLOBAL_BASE_H_INCLUDE
 
+#include <kvs/ClassName>
 #include <kvs/GlobalCore>
 #include "ApplicationInterface.h"
 
@@ -31,6 +32,10 @@ namespace sage
 /*==========================================================================*/
 class GlobalBase : public kvs::GlobalCore
 {
+    kvsClassName( kvs::sage::GlobalBase );
+
+private:
+
     friend class ScreenBase;
 
 public:

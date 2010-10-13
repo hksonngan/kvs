@@ -38,7 +38,7 @@ namespace kvs
 /*==========================================================================*/
 class BoxMuller
 {
-    kvsClassName_without_virtual( BoxMuller );
+    kvsClassName_without_virtual( kvs::BoxMuller );
 
 public:
 

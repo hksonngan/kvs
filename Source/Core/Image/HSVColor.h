@@ -15,6 +15,7 @@
 #define KVS__HSV_COLOR_H_INCLUDE
 
 #include <kvs/Math>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -29,6 +30,8 @@ class RGBColor;
 /*==========================================================================*/
 class HSVColor
 {
+    kvsClassName( kvs::HSVColor );
+
 protected:
 
     float m_hue;        ///< hue angle         [0-1]

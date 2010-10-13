@@ -16,6 +16,7 @@
 
 #include <iostream>
 #include <string>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -28,6 +29,8 @@ namespace kvs
 /*===========================================================================*/
 class Date
 {
+    kvsClassName( kvs::Date );
+
 public:
 
     enum DayOfWeek

@@ -30,7 +30,7 @@ namespace kvs
 /*==========================================================================*/
 class TransferFunction
 {
-    kvsClassName( TransferFunction );
+    kvsClassName( kvs::TransferFunction );
 
 private:
 

@@ -34,7 +34,7 @@ namespace glut
 class PushButton : public kvs::glut::WidgetBase
 {
     // Class name.
-    kvsClassName( PushButton );
+    kvsClassName( kvs::glut::PushButton );
 
 public:
 

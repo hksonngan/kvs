@@ -19,6 +19,7 @@
 #include "SocketAddress.h"
 #include "MessageBlock.h"
 #include "TCPSocket.h"
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -31,6 +32,8 @@ namespace kvs
 /*==========================================================================*/
 class TCPServer : public kvs::Socket
 {
+    kvsClassName( kvs::TCPServer );
+
 protected:
 
     int m_max_nconnections; ///< max. number of connection client

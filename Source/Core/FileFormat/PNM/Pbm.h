@@ -32,7 +32,7 @@ namespace kvs
 /*==========================================================================*/
 class Pbm : public kvs::FileFormatBase
 {
-    kvsClassName( Pbm );
+    kvsClassName( kvs::Pbm );
 
 public:
 

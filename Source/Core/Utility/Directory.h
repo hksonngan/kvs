@@ -32,7 +32,7 @@ namespace kvs
 /*==========================================================================*/
 class Directory
 {
-    kvsClassName( Direcotry );
+    kvsClassName( kvs::Direcotry );
 
 private:
 

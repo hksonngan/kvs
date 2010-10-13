@@ -29,7 +29,7 @@ class ReadWriteLock;
 /*==========================================================================*/
 class WriteLocker
 {
-    kvsClassName( WriteLocker );
+    kvsClassName( kvs::WriteLocker );
 
 protected:
 

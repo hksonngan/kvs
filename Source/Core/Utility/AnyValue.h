@@ -32,7 +32,7 @@ namespace kvs
 /*==========================================================================*/
 class AnyValue
 {
-    kvsClassName_without_virtual( AnyValue );
+    kvsClassName_without_virtual( kvs::AnyValue );
 
 public:
 

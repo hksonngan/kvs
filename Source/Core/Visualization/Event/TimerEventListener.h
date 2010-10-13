@@ -16,6 +16,7 @@
 #ifndef KVS__TIMER_EVENT_LISTENER_H_INCLUDE
 #define KVS__TIMER_EVENT_LISTENER_H_INCLUDE
 
+#include <kvs/ClassName>
 #include <kvs/EventListener>
 #include <kvs/TimeEvent>
 
@@ -30,6 +31,8 @@ namespace kvs
 /*===========================================================================*/
 class TimerEventListener : public kvs::EventListener
 {
+    kvsClassName( kvs::TimerEventListener );
+
 public:
 
     TimerEventListener( void );

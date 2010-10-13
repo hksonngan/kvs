@@ -17,6 +17,7 @@
 
 #include <kvs/WindowBase>
 #include <kvs/qt/Qt>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -32,6 +33,8 @@ namespace qt
 /*===========================================================================*/
 class Window : public QGLWidget , public kvs::WindowBase
 {
+    kvsClassName( kvs::qt::Window );
+
 public:
 
     Window( QWidget* parent = 0 );

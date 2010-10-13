@@ -28,7 +28,7 @@ namespace kvs
 /*==========================================================================*/
 class MouseEvent : public kvs::EventBase
 {
-    kvsClassName( MouseEvent );
+    kvsClassName( kvs::MouseEvent );
 
 protected:
 

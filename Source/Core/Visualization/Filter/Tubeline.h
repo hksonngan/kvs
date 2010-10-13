@@ -32,7 +32,7 @@ namespace kvs
 class Tubeline : public kvs::FilterBase, public kvs::PolygonObject
 {
     // Class name.
-    kvsClassName( Tubeline );
+    kvsClassName( kvs::Tubeline );
 
     // Module information.
     kvsModuleCategory( Filter );

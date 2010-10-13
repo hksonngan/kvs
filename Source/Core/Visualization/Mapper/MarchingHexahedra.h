@@ -32,7 +32,7 @@ namespace kvs
 class MarchingHexahedra : public kvs::MapperBase, public kvs::PolygonObject
 {
     // Class name.
-    kvsClassName( MarchingHexahedra );
+    kvsClassName( kvs::MarchingHexahedra );
 
     // Module information.
     kvsModuleCategory( Mapper );

@@ -35,7 +35,7 @@ namespace glut
 /*===========================================================================*/
 class OrientationAxis : public kvs::glut::WidgetBase
 {
-    kvsClassName( OrientationAxis );
+    kvsClassName( kvs::glut::OrientationAxis );
 
 public:
 

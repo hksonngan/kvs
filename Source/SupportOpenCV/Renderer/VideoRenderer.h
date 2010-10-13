@@ -40,7 +40,7 @@ namespace opencv
 class VideoRenderer : public kvs::RendererBase
 {
     // Class name.
-    kvsClassName( VideoRenderer );
+    kvsClassName( kvs::opencv::VideoRenderer );
 
     // Module information.
     kvsModuleCategory( Renderer );

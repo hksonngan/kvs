@@ -14,6 +14,7 @@
 #ifndef KVS__GLUT__GLOBAL_H_INCLUDE
 #define KVS__GLUT__GLOBAL_H_INCLUDE
 
+#include <kvs/ClassName>
 #include <kvs/glut/GlobalBase>
 #include <kvs/ObjectManager>
 #include <kvs/RendererManager>
@@ -34,6 +35,8 @@ namespace glut
 /*==========================================================================*/
 class Global : public kvs::glut::GlobalBase
 {
+    kvsClassName( kvs::glut::Global );
+
 public:
 
     Global( int count, char** values );

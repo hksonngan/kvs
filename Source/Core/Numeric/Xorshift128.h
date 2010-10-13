@@ -28,7 +28,7 @@ namespace kvs
 /*==========================================================================*/
 class Xorshift128
 {
-    kvsClassName_without_virtual( Xorshift128 );
+    kvsClassName_without_virtual( kvs::Xorshift128 );
 
 private:
 

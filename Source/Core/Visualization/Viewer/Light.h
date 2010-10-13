@@ -32,7 +32,7 @@ class RGBAColor;
 /*==========================================================================*/
 class Light : public kvs::XformControl
 {
-    kvsClassName( Light );
+    kvsClassName( kvs::Light );
 
 protected:
 

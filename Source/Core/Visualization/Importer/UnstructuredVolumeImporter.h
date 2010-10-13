@@ -36,7 +36,7 @@ class UnstructuredVolumeImporter
     , public kvs::UnstructuredVolumeObject
 {
     // Class name.
-    kvsClassName( UnstructuredVolumeImporter );
+    kvsClassName( kvs::UnstructuredVolumeImporter );
 
     // Module information.
     kvsModuleCategory( Importer );

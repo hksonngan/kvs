@@ -16,6 +16,7 @@
 #define KVS__GLUT__COLOR_MAP_PALETTE_H_INCLUDE
 
 #include <string>
+#include <kvs/ClassName>
 #include <kvs/Texture1D>
 #include <kvs/ColorMap>
 #include <kvs/glut/ScreenBase>
@@ -37,6 +38,8 @@ namespace glut
 /*===========================================================================*/
 class ColorMapPalette : public kvs::glut::WidgetBase
 {
+    kvsClassName( kvs::glut::ColorMapPalette );
+
 public:
 
     typedef kvs::glut::WidgetBase BaseClass;

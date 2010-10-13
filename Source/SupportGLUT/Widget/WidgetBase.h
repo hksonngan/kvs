@@ -36,7 +36,7 @@ namespace glut
 class WidgetBase : public kvs::glut::Rectangle, public kvs::EventListener
 {
     // Class name.
-    kvsClassName( WidgetBase );
+    kvsClassName( kvs::glut::WidgetBase );
 
 protected:
 

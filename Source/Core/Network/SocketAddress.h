@@ -15,6 +15,7 @@
 #define KVS__SOCKET_ADDRESS_H_INCLUDE
 
 #include "IPAddress.h"
+#include <kvs/ClassName>
 #include <iostream>
 #include <cstring>
 
@@ -29,6 +30,8 @@ namespace kvs
 /*==========================================================================*/
 class SocketAddress
 {
+    kvsClassName_without_virtual( kvs::SocketAddress );
+
 public:
 
     typedef struct sockaddr_in address_type;

@@ -15,6 +15,7 @@
 #ifndef KVS__RESIZE_EVENT_H_INCLUDE
 #define KVS__RESIZE_EVENT_H_INCLUDE
 
+#include <kvs/ClassName>
 #include <kvs/EventBase>
 
 
@@ -28,6 +29,8 @@ namespace kvs
 /*===========================================================================*/
 class ResizeEvent : public kvs::EventBase
 {
+    kvsClassName( kvs::ResizeEvent );
+
 protected:
 
     int m_width;  ///< window width

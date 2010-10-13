@@ -15,6 +15,7 @@
 #ifndef KVS__PAINT_EVENT_LISTENER_H_INCLUDE
 #define KVS__PAINT_EVENT_LISTENER_H_INCLUDE
 
+#include <kvs/ClassName>
 #include <kvs/EventListener>
 #include <kvs/EventBase>
 
@@ -29,6 +30,8 @@ namespace kvs
 /*===========================================================================*/
 class PaintEventListener : public kvs::EventListener
 {
+    kvsClassName( kvs::PaintEventListener );
+
 public:
 
     PaintEventListener( void );

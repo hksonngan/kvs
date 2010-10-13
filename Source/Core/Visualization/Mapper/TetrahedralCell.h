@@ -14,6 +14,7 @@
 #ifndef KVS__TETRAHEDRAL_CELL_H_INCLUDE
 #define KVS__TETRAHEDRAL_CELL_H_INCLUDE
 
+#include <kvs/ClassName>
 #include <kvs/Type>
 #include <kvs/Vector4>
 #include <kvs/Matrix44>
@@ -28,6 +29,8 @@ namespace kvs
 template <typename T>
 class TetrahedralCell : public kvs::CellBase<T>
 {
+    kvsClassName( kvs::TetrahedralCell );
+
 public:
 
     enum { NumberOfNodes = kvs::UnstructuredVolumeObject::Tetrahedra };

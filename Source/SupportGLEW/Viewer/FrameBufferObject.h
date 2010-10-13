@@ -34,7 +34,7 @@ namespace glew
 /*===========================================================================*/
 class FrameBufferObject
 {
-    kvsClassName( FrameBufferObject );
+    kvsClassName( kvs::glew::FrameBufferObject );
 
 protected:
 

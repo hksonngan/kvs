@@ -16,6 +16,7 @@
 #ifndef KVS__QUADRATIC_HEXAHEDRAL_CELL_H_INCLUDE
 #define KVS__QUADRATIC_HEXAHEDRAL_CELL_H_INCLUDE
 
+#include <kvs/ClassName>
 #include <kvs/Type>
 #include <kvs/Vector4>
 #include <kvs/Matrix44>
@@ -34,6 +35,8 @@ namespace kvs
 template <typename T>
 class QuadraticHexahedralCell : public kvs::CellBase<T>
 {
+    kvsClassName( kvs::QuadraticHexahedralCell );
+
 public:
 
     enum { NumberOfNodes = kvs::UnstructuredVolumeObject::QuadraticHexahedra };

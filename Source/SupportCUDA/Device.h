@@ -18,6 +18,7 @@
 #include "CUDA.h"
 #include <string>
 #include <kvs/Vector3>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -33,6 +34,8 @@ namespace cuda
 /*===========================================================================*/
 class Device
 {
+    kvsClassName_without_virtual( kvs::cuda::Device );
+
 protected:
 
     CUdevice     m_handler;      ///< device handler

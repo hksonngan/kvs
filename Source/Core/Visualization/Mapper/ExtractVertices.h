@@ -36,7 +36,7 @@ class ExtractVertices
     , public kvs::PointObject
 {
     // Class name.
-    kvsClassName( ExtractVertices );
+    kvsClassName( kvs::ExtractVertices );
 
     // Module information.
     kvsModuleCategory( Mapper );

@@ -36,7 +36,7 @@ namespace kvs
 class CellByCellUniformSampling : public kvs::MapperBase, public kvs::PointObject
 {
     // Class name.
-    kvsClassName( CellByCellUniformSampling );
+    kvsClassName( kvs::CellByCellUniformSampling );
 
     // Module information.
     kvsModuleCategory( Mapper );

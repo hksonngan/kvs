@@ -34,7 +34,7 @@ namespace kvs
 template <typename T>
 class Vector
 {
-    kvsClassName_without_virtual( Vector );
+    kvsClassName_without_virtual( kvs::Vector );
 
 private:
 

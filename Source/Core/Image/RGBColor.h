@@ -18,6 +18,7 @@
 #include <iomanip>
 #include <kvs/Math>
 #include <kvs/Type>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -33,6 +34,8 @@ class RGBAColor;
 /*==========================================================================*/
 class RGBColor
 {
+    kvsClassName( kvs::RGBColor );
+
 protected:
 
     kvs::UInt8 m_red;   ///< red   [0-255]

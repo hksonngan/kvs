@@ -37,7 +37,7 @@ class CheckBoxGroup;
 class CheckBox : public kvs::glut::WidgetBase
 {
     // Class name.
-    kvsClassName( CheckBox );
+    kvsClassName( kvs::glut::CheckBox );
 
 public:
 

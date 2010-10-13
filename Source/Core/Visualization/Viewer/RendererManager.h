@@ -33,7 +33,7 @@ typedef std::list<kvs::RendererBase*> RendererManagerBase;
 /*==========================================================================*/
 class RendererManager : public RendererManagerBase
 {
-    kvsClassName( RendererManager );
+    kvsClassName( kvs::RendererManager );
 
 public:
 

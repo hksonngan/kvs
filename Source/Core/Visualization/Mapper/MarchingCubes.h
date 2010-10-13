@@ -32,7 +32,7 @@ namespace kvs
 class MarchingCubes : public kvs::MapperBase, public kvs::PolygonObject
 {
     // Class name.
-    kvsClassName( MarchingCubes );
+    kvsClassName( kvs::MarchingCubes );
 
     // Module information.
     kvsModuleCategory( Mapper );

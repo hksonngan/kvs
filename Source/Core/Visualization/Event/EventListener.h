@@ -21,6 +21,7 @@
 #include <kvs/KeyEvent>
 #include <kvs/WheelEvent>
 #include <kvs/TimeEvent>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -33,6 +34,8 @@ namespace kvs
 /*===========================================================================*/
 class EventListener
 {
+    kvsClassName( kvs::EventListener );
+
 private:
 
     int              m_event_type; ///< event type

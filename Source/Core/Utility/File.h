@@ -31,7 +31,7 @@ namespace kvs
 /*==========================================================================*/
 class File
 {
-    kvsClassName( File );
+    kvsClassName( kvs::File );
 
 protected:
 

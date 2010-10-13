@@ -17,6 +17,7 @@
 
 #include <kvs/Vector>
 #include <kvs/Matrix>
+#include <kvs/ClassName>
 #include "QRDecomposer.h"
 
 
@@ -31,6 +32,8 @@ namespace kvs
 template <typename T>
 class QRSolver : public kvs::Vector<T>
 {
+    kvsClassName( kvs::QRSolver );
+
 protected:
 
     QRDecomposer<T> m_decomposer;

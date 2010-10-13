@@ -32,7 +32,7 @@ namespace kvs
 /*===========================================================================*/
 class KVSMLTransferFunction : public kvs::FileFormatBase
 {
-    kvsClassName( KVSMLTransferFunction );
+    kvsClassName( kvs::KVSMLTransferFunction );
 
     typedef std::pair<float,kvs::Real32>   OpacityPoint;
     typedef std::list<OpacityPoint>        OpacityPointList;

@@ -33,7 +33,7 @@ namespace glut
 class Rectangle
 {
     // Class name.
-    kvsClassName( Rectangle );
+    kvsClassName( kvs::glut::Rectangle );
 
 protected:
 

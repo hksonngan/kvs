@@ -15,6 +15,7 @@
 #ifndef KVS__OPENCABIN__TRACKPAD_H_INCLUDE
 #define KVS__OPENCABIN__TRACKPAD_H_INCLUDE
 
+#include <kvs/ClassName>
 #include <kvs/glut/Screen>
 #include <kvs/opencabin/Application>
 
@@ -27,6 +28,8 @@ namespace opencabin
 
 class Trackpad : public kvs::glut::Screen
 {
+    kvsClassName_without_virtual( kvs::opencabin::Trackpad );
+
 public:
 
     typedef kvs::glut::Screen BaseClass;

@@ -15,6 +15,7 @@
 #ifndef KVS__QT__SCREEN_H_INCLUDE
 #define KVS__QT__SCREEN_H_INCLUDE
 
+#include <kvs/ClassName>
 #include <kvs/ScreenBase>
 #include <kvs/InitializeEventListener>
 #include <kvs/PaintEventListener>
@@ -57,6 +58,8 @@ class Screen : public QGLWidget, public kvs::ScreenBase
     typedef void (Screen::*MouseReleaseEventFunction)( kvs::MouseEvent* );
     typedef void (Screen::*WheelEventFunction)( kvs::WheelEvent* );
     typedef void (Screen::*KeyPressEventFunction)( kvs::KeyEvent* );
+
+    kvsClassName( kvs::qt::Screen );
 
 protected:
 

@@ -32,7 +32,7 @@ namespace kvs
 class MarchingPyramid : public kvs::MapperBase, public kvs::PolygonObject
 {
     // Class name.
-    kvsClassName( MarchingPyramid );
+    kvsClassName( kvs::MarchingPyramid );
 
     // Module information.
     kvsModuleCategory( Mapper );

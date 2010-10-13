@@ -33,7 +33,7 @@ class ReferenceCounter;
 /*==========================================================================*/
 class BitArray
 {
-    kvsClassName( BitArray );
+    kvsClassName( kvs::BitArray );
 
 protected:
 

@@ -33,7 +33,7 @@ typedef kvs::Tree<kvs::ObjectBase*> ObjectManagerBase;
 /*==========================================================================*/
 class ObjectManager : public ObjectManagerBase, public kvs::ObjectBase
 {
-    kvsClassName( ObjectManager );
+    kvsClassName( kvs::ObjectManager );
 
 public:
 

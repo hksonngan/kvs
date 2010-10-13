@@ -44,7 +44,7 @@ class EventHandler;
 /*==========================================================================*/
 class ScreenBase
 {
-    kvsClassName( ScreenBase );
+    kvsClassName( kvs::ScreenBase );
 
 public:
 

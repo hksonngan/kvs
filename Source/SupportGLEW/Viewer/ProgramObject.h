@@ -39,7 +39,7 @@ namespace glew
 /*===========================================================================*/
 class ProgramObject
 {
-    kvsClassName( ProgramObject );
+    kvsClassName( kvs::glew::ProgramObject );
 
 protected:
 

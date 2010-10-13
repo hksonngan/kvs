@@ -31,7 +31,7 @@ namespace kvs
 class DiamondGlyph : public kvs::GlyphBase
 {
     // Class name.
-    kvsClassName( DiamondGlyph );
+    kvsClassName( kvs::DiamondGlyph );
 
     // Module information.
     kvsModuleCategory( Mapper );

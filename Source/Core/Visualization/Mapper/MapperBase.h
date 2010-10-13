@@ -35,7 +35,7 @@ class VolumeObjectBase;
 /*==========================================================================*/
 class MapperBase
 {
-    kvsClassName( MapperBase );
+    kvsClassName( kvs::MapperBase );
 
     kvsModuleBase;
 

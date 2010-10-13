@@ -15,6 +15,7 @@
 #define KVS__QT_SCREEN_SUPPORT_H_INCLUDE
 
 #include "../Qt.h"
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -27,6 +28,8 @@ namespace kvs
 /*==========================================================================*/
 class QtScreenSupport
 {
+    kvsClassName( kvs::QtScreenSupport );
+
 protected:
 
     QGLWidget* m_device; ///< reference to the screen device (not allocated)

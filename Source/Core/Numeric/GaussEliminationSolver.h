@@ -15,6 +15,8 @@
 #ifndef KVS__GAUSS_ELIMINATION_SOLVER_H_INCLUDE
 #define KVS__GAUSS_ELIMINATION_SOLVER_H_INCLUDE
 
+#include <kvs/ClassName>
+
 
 namespace kvs
 {
@@ -30,6 +32,8 @@ template <typename T> class Matrix;
 template <typename T>
 class GaussEliminationSolver : public kvs::Vector<T>
 {
+    kvsClassName( kvs::GaussEliminationSolver );
+
 public:
 
     GaussEliminationSolver( void );

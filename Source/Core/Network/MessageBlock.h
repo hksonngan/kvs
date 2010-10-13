@@ -15,6 +15,7 @@
 #define KVS__MESSAGE_BLOCK_H_INCLUDE
 
 #include <kvs/ValueArray>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -27,6 +28,8 @@ namespace kvs
 /*==========================================================================*/
 class MessageBlock
 {
+    kvsClassName( kvs::MessageBlock );
+
 protected:
 
     /*     MessageBlock

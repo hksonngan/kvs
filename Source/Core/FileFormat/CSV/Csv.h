@@ -32,7 +32,7 @@ namespace kvs
 /*===========================================================================*/
 class Csv : public kvs::FileFormatBase
 {
-    kvsClassName( Csv );
+    kvsClassName( kvs::Csv );
 
 public:
 

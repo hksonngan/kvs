@@ -37,7 +37,7 @@ namespace kvs
 /*==========================================================================*/
 class AnyValueArray
 {
-    kvsClassName_without_virtual( AnyValueArray );
+    kvsClassName_without_virtual( kvs::AnyValueArray );
 
 public:
 

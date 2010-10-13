@@ -32,7 +32,7 @@ namespace kvs
 /*==========================================================================*/
 class String
 {
-    kvsClassName_without_virtual( String );
+    kvsClassName_without_virtual( kvs::String );
 
 private:
 

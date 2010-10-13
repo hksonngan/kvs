@@ -29,7 +29,7 @@ class Mutex;
 /*==========================================================================*/
 class MutexLocker
 {
-    kvsClassName( MutexLocker );
+    kvsClassName( kvs::MutexLocker );
 
 protected:
 

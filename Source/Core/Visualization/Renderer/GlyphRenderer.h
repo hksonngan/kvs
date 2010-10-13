@@ -35,7 +35,7 @@ class GlyphObject;
 class GlyphRenderer : public kvs::RendererBase
 {
     // Class name.
-    kvsClassName( GlyphRenderer );
+    kvsClassName( kvs::GlyphRenderer );
 
     // Module information.
     kvsModuleCategory( Renderer );

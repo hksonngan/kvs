@@ -15,6 +15,7 @@
 #ifndef KVS__WHEEL_EVENT_H_INCLUDE
 #define KVS__WHEEL_EVENT_H_INCLUDE
 
+#include <kvs/ClassName>
 #include <kvs/EventBase>
 
 
@@ -28,6 +29,8 @@ namespace kvs
 /*===========================================================================*/
 class WheelEvent : public kvs::EventBase
 {
+    kvsClassName( kvs::WheelEvent );
+
 protected:
 
     int m_x;         ///< x coordinate value of mouse cursor position

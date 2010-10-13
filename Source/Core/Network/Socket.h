@@ -19,6 +19,7 @@
 #include "SocketTimer.h"
 #include "IPAddress.h"
 #include <kvs/Platform>
+#include <kvs/ClassName>
 #include <string>
 
 
@@ -32,6 +33,8 @@ namespace kvs
 /*==========================================================================*/
 class Socket
 {
+    kvsClassName( kvs::Socket );
+
 public:
 
 #if defined( KVS_PLATFORM_WINDOWS )

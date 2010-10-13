@@ -105,7 +105,7 @@ PointImporter::SuperClass* PointImporter::exec( const kvs::FileFormatBase* file_
     }
 
     const std::string class_name = file_format->className();
-    if ( class_name == "KVSMLObjectPoint" )
+    if ( class_name == "kvs::KVSMLObjectPoint" )
     {
         this->import( static_cast<const kvs::KVSMLObjectPoint*>( file_format ) );
     }

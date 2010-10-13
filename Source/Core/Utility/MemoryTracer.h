@@ -44,7 +44,7 @@ namespace kvs
 /*===========================================================================*/
 class MemoryTracer
 {
-    kvsClassName( MemoryTracer );
+    kvsClassName( kvs::MemoryTracer );
 
 public:
 

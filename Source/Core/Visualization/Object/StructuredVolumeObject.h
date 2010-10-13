@@ -31,7 +31,7 @@ class StructuredVolumeObject
     : public kvs::VolumeObjectBase
 {
     // Class name.
-    kvsClassName( StructuredVolumeObject );
+    kvsClassName( kvs::StructuredVolumeObject );
 
     // Module information.
     kvsModuleCategory( Object );

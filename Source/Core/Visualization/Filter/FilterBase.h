@@ -29,7 +29,7 @@ namespace kvs
 /*==========================================================================*/
 class FilterBase
 {
-    kvsClassName( FilterBase );
+    kvsClassName( kvs::FilterBase );
 
     kvsModuleBase;
 

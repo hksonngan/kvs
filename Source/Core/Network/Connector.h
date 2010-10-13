@@ -17,6 +17,7 @@
 
 #include <kvs/TCPSocket>
 #include <kvs/IPAddress>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -29,6 +30,8 @@ namespace kvs
 /*===========================================================================*/
 class Connector
 {
+    kvsClassName_without_virtual( kvs::Connector );
+
 private:
 
     kvs::TCPSocket*  m_handler; //< handler

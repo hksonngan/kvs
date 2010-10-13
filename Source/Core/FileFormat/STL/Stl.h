@@ -31,7 +31,7 @@ namespace kvs
 /*===========================================================================*/
 class Stl : public kvs::FileFormatBase
 {
-    kvsClassName( Stl );
+    kvsClassName( kvs::Stl );
 
 public:
 

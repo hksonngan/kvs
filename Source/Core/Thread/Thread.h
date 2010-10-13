@@ -35,7 +35,7 @@ namespace kvs
 /*==========================================================================*/
 class Thread
 {
-    kvsClassName( Thread );
+    kvsClassName( kvs::Thread );
 
 public:
 

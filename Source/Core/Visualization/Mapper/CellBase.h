@@ -15,6 +15,7 @@
 #define KVS__CELL_BASE_H_INCLUDE
 
 #include <kvs/DebugNew>
+#include <kvs/ClassName>
 #include <kvs/Type>
 #include <kvs/Vector4>
 #include <kvs/Matrix44>
@@ -34,6 +35,8 @@ namespace kvs
 template <typename T>
 class CellBase
 {
+    kvsClassName( kvs::CellBase );
+
 protected:
 
     size_t         m_nnodes; ///< number of nodes

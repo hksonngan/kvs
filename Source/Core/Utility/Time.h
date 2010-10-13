@@ -16,6 +16,7 @@
 
 #include <iostream>
 #include <string>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -28,6 +29,8 @@ namespace kvs
 /*===========================================================================*/
 class Time
 {
+    kvsClassName( kvs::Time );
+
 protected:
 
     int  m_hour;          ///< hour

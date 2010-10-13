@@ -30,7 +30,7 @@ namespace kvs
 /*==========================================================================*/
 class OpacityMap
 {
-    kvsClassName( OpacityMap );
+    kvsClassName( kvs::OpacityMap );
 
 public:
 

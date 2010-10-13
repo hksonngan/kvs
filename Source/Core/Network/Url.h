@@ -16,6 +16,7 @@
 
 #include <iostream>
 #include <string>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -28,6 +29,8 @@ namespace kvs
 /*==========================================================================*/
 class Url
 {
+    kvsClassName_without_virtual( kvs::Url );
+
 protected:
 
     std::string m_protocol; ///< protocol (e.g. "http", "ftp")

@@ -18,6 +18,7 @@
 #include <kvs/Mutex>
 #include <kvs/IPAddress>
 #include <kvs/TCPSocket>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -30,6 +31,8 @@ namespace kvs
 /*===========================================================================*/
 class TCPBarrier
 {
+    kvsClassName( kvs::TCPBarrier );
+
 protected:
 
     kvs::TCPSocket* m_client; //< barrier client node

@@ -15,6 +15,7 @@
 #define KVS__SOCKET_TIMER_H_INCLUDE
 
 #include "SocketStandard.h"
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -27,6 +28,8 @@ namespace kvs
 /*==========================================================================*/
 class SocketTimer
 {
+    kvsClassName_without_virtual( kvs::SocketTimer );
+
 public:
 
     static const SocketTimer Zero;

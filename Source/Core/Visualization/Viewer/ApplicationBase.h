@@ -15,6 +15,7 @@
 #ifndef KVS__APPLICATION_BASE_H_INCLUDE
 #define KVS__APPLICATION_BASE_H_INCLUDE
 
+#include <kvs/ClassName>
 #include <kvs/ScreenBase>
 #include <kvs/Compiler>
 #include <list>
@@ -33,6 +34,8 @@ namespace kvs
 /*===========================================================================*/
 class ApplicationBase
 {
+    kvsClassName( kvs::ApplicationBase );
+
 protected:
 
     int m_argc;    ///< argument count

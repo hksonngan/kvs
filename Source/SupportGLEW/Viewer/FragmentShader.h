@@ -32,7 +32,7 @@ namespace glew
 /*===========================================================================*/
 class FragmentShader : public kvs::glew::ShaderObject
 {
-    kvsClassName( FragmentShader );
+    kvsClassName( kvs::glew::FragmentShader );
 
 public:
 

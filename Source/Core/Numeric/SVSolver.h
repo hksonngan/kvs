@@ -17,6 +17,7 @@
 
 #include "SVDecomposer.h"
 #include <kvs/Vector>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -30,6 +31,8 @@ namespace kvs
 template <typename T>
 class SVSolver : public kvs::Vector<T>
 {
+    kvsClassName( kvs::SVSolver );
+
 protected:
 
     kvs::SVDecomposer<T> m_decomposer;

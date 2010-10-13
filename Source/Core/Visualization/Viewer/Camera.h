@@ -32,7 +32,7 @@ namespace kvs
 /*==========================================================================*/
 class Camera : public XformControl
 {
-    kvsClassName( Camera );
+    kvsClassName( kvs::Camera );
 
 public:
 

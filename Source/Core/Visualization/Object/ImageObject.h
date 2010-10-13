@@ -33,7 +33,7 @@ namespace kvs
 class ImageObject : public kvs::ObjectBase
 {
     // Class name.
-    kvsClassName( ImageObject );
+    kvsClassName( kvs::ImageObject );
 
     // Module information.
     kvsModuleCategory( Object );

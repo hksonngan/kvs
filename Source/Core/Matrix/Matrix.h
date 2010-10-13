@@ -34,7 +34,7 @@ namespace kvs
 template<typename T>
 class Matrix
 {
-    kvsClassName_without_virtual( Matrix );
+    kvsClassName_without_virtual( kvs::Matrix );
 
 private:
 

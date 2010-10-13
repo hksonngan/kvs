@@ -30,7 +30,7 @@ namespace kvs
 /*==========================================================================*/
 class VolumeRayIntersector : public kvs::Ray
 {
-    kvsClassName_without_virtual( VolumeRayIntersector );
+    kvsClassName_without_virtual( kvs::VolumeRayIntersector );
 
 private:
 

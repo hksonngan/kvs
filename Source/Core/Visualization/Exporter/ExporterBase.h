@@ -28,7 +28,7 @@ namespace kvs
 template <typename FileFormatType>
 class ExporterBase : public FileFormatType
 {
-    kvsClassName( ExporterBase );
+    kvsClassName( kvs::ExporterBase );
 
 protected:
 

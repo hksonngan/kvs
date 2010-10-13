@@ -32,7 +32,7 @@ namespace glew
 /*==========================================================================*/
 class Texture3D : public kvs::TextureBase
 {
-    kvsClassName( Texture3D );
+    kvsClassName( kvs::glew::Texture3D );
 
 public:
 

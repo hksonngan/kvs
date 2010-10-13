@@ -41,7 +41,7 @@ namespace kvs
 class GlyphObject : public kvs::ObjectBase
 {
     // Class name.
-    kvsClassName( GlyphObject );
+    kvsClassName( kvs::GlyphObject );
 
     // Module information.
     kvsModuleCategory( Object );

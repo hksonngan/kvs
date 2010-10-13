@@ -16,6 +16,7 @@
 #define KVS__SAGE__APPLICATION_H_INCLUDE
 
 #include <kvs/glut/Screen>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -31,6 +32,8 @@ namespace sage
 /*===========================================================================*/
 class Application : public kvs::glut::Application
 {
+    kvsClassName( kvs::sage::Application );
+
 public:
 
     Application( int argc, char** argv );

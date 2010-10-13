@@ -17,6 +17,7 @@
 #include <limits>
 #include "ImageBase.h"
 #include "GrayImage.h"
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -27,11 +28,13 @@ class ColorImage;
 
 /*==========================================================================*/
 /**
- *  Gray image class.
+ *  Bit image class.
  */
 /*==========================================================================*/
 class BitImage : public kvs::ImageBase
 {
+    kvsClassName( kvs::BitImage );
+
 public:
 
     typedef kvs::ImageBase BaseClass;

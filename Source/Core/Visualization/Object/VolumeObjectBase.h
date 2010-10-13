@@ -32,7 +32,7 @@ namespace kvs
 class VolumeObjectBase
     : public kvs::ObjectBase
 {
-    kvsClassName( VolumeObjectBase );
+    kvsClassName( kvs::VolumeObjectBase );
 
 public:
 

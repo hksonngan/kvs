@@ -16,6 +16,7 @@
 
 #include "SocketStandard.h"
 #include <kvs/Platform>
+#include <kvs/ClassName>
 #include <iostream>
 #include <string>
 #include <cstring>
@@ -31,6 +32,8 @@ namespace kvs
 /*==========================================================================*/
 class IPAddress
 {
+    kvsClassName( kvs::IPAddress );
+
 public:
 
 #if defined( KVS_PLATFORM_WINDOWS )

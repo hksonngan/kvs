@@ -19,6 +19,7 @@
 #include <kvs/EventListener>
 #include <kvs/EventHandler>
 #include <kvs/TimeEvent>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -34,6 +35,8 @@ namespace qt
 /*===========================================================================*/
 class Timer : public QObject
 {
+    kvsClassName( kvs::qt::Timer );
+
 protected:
 
     int                 m_id;             ///< timer ID

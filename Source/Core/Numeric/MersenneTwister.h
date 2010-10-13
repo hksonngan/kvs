@@ -34,7 +34,7 @@ namespace kvs
 /*==========================================================================*/
 class MersenneTwister
 {
-    kvsClassName_without_virtual( MersenneTwister );
+    kvsClassName_without_virtual( kvs::MersenneTwister );
 
 private:
 

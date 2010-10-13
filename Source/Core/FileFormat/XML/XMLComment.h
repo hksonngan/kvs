@@ -15,6 +15,7 @@
 #define KVS__XML_COMMENT_H_INCLUDE
 
 #include "TinyXML.h"
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -27,6 +28,8 @@ namespace kvs
 /*==========================================================================*/
 class XMLComment : public TiXmlComment
 {
+    kvsClassName( kvs::XMLComment );
+
 public:
 
     typedef TiXmlComment SuperClass;

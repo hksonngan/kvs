@@ -232,31 +232,31 @@ ImageImporter::SuperClass* ImageImporter::exec( const kvs::FileFormatBase* file_
     }
 
     const std::string class_name = file_format->className();
-    if ( class_name == "KVSMLObjectImage" )
+    if ( class_name == "kvs::KVSMLObjectImage" )
     {
         this->import( static_cast<const kvs::KVSMLObjectImage*>( file_format ) );
     }
-    else if ( class_name == "Bmp" )
+    else if ( class_name == "kvs::Bmp" )
     {
         this->import( static_cast<const kvs::Bmp*>( file_format ) );
     }
-    else if ( class_name == "Tiff" )
+    else if ( class_name == "kvs::Tiff" )
     {
         this->import( static_cast<const kvs::Tiff*>( file_format ) );
     }
-    else if ( class_name == "Ppm" )
+    else if ( class_name == "kvs::Ppm" )
     {
         this->import( static_cast<const kvs::Ppm*>( file_format ) );
     }
-    else if ( class_name == "Pgm" )
+    else if ( class_name == "kvs::Pgm" )
     {
         this->import( static_cast<const kvs::Pgm*>( file_format ) );
     }
-    else if ( class_name == "Pbm" )
+    else if ( class_name == "kvs::Pbm" )
     {
         this->import( static_cast<const kvs::Pbm*>( file_format ) );
     }
-    else if ( class_name == "Dicom" )
+    else if ( class_name == "kvs::Dicom" )
     {
         this->import( static_cast<const kvs::Dicom*>( file_format ) );
     }

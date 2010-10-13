@@ -19,6 +19,7 @@
 #include "SocketAddress.h"
 #include "SocketTimer.h"
 #include "MessageBlock.h"
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -31,6 +32,8 @@ namespace kvs
 /*==========================================================================*/
 class TCPSocket : public kvs::Socket
 {
+    kvsClassName( kvs::TCPSocket );
+
 protected:
 
     bool m_is_connected; ///< check flag for connection

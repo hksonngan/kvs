@@ -36,7 +36,7 @@ namespace glut
 class Label : public kvs::glut::WidgetBase
 {
     // Class name.
-    kvsClassName( Label );
+    kvsClassName( kvs::glut::Label );
 
 public:
 

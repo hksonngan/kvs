@@ -36,7 +36,7 @@ namespace kvs
 class CellByCellLayeredSampling : public kvs::MapperBase, public kvs::PointObject
 {
     // Class name.
-    kvsClassName( CellByCellLayeredSampling );
+    kvsClassName( kvs::CellByCellLayeredSampling );
 
     // Module information.
     kvsModuleCategory( Mapper );

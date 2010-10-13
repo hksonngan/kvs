@@ -36,7 +36,7 @@ class TransferFunction;
 class ExternalFaces : public kvs::MapperBase, public kvs::PolygonObject
 {
     // Class name.
-    kvsClassName( ExternalFaces );
+    kvsClassName( kvs::ExternalFaces );
 
     // Module information.
     kvsModuleCategory( Mapper );

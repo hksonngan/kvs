@@ -35,7 +35,7 @@ namespace kvs
 /*==========================================================================*/
 class Mutex
 {
-    kvsClassName( Mutex );
+    kvsClassName( kvs::Mutex );
 
 public:
 

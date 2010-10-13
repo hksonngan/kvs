@@ -30,7 +30,7 @@ namespace kvs
 /*===========================================================================*/
 class TornadoVolumeData : public kvs::StructuredVolumeObject
 {
-    kvsClassName( TornadoVolumeData );
+    kvsClassName( kvs::TornadoVolumeData );
 
 public:
 

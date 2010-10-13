@@ -33,7 +33,7 @@ namespace glut
 class AxisRenderer : public kvs::LineRenderer
 {
     // Class name.
-    kvsClassName( AxisRenderer );
+    kvsClassName( kvs::glut::AxisRenderer );
 
     // Module information.
     kvsModuleCategory( Renderer );

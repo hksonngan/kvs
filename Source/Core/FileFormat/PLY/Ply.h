@@ -36,7 +36,7 @@ namespace kvs
 /*===========================================================================*/
 class Ply : public kvs::FileFormatBase
 {
-    kvsClassName( Ply );
+    kvsClassName( kvs::Ply );
 
 public:
 

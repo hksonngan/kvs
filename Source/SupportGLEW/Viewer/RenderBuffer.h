@@ -31,7 +31,7 @@ namespace glew
 /*===========================================================================*/
 class RenderBuffer
 {
-    kvsClassName( RenderBuffer );
+    kvsClassName( kvs::glew::RenderBuffer );
 
 protected:
 

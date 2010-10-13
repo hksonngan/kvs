@@ -17,6 +17,7 @@
 #include <iostream>
 #include <string>
 #include <list>
+#include <kvs/ClassName>
 #include <kvs/ObjectBase>
 #include <kvs/GeometryObjectBase>
 #include <kvs/VolumeObjectBase>
@@ -35,6 +36,8 @@ namespace kvs
 /*==========================================================================*/
 class VisualizationPipeline
 {
+    kvsClassName( kvs::VisualizationPipeline );
+
 public:
 
     typedef std::list<kvs::PipelineModule> ModuleList;

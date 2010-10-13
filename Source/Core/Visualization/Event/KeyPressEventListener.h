@@ -17,6 +17,7 @@
 
 #include <kvs/EventListener>
 #include <kvs/KeyEvent>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -29,6 +30,8 @@ namespace kvs
 /*===========================================================================*/
 class KeyPressEventListener : public kvs::EventListener
 {
+    kvsClassName( kvs::KeyPressEventListener );
+
 public:
 
     KeyPressEventListener( void );

@@ -34,7 +34,7 @@ namespace kvs
 /*==========================================================================*/
 class FrequencyTable
 {
-    kvsClassName( FrequencyTable );
+    kvsClassName( kvs::FrequencyTable );
 
 protected:
 

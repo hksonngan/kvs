@@ -29,7 +29,7 @@ namespace kvs
 /*===========================================================================*/
 class TimeEvent : public kvs::EventBase
 {
-    kvsClassName( TimeEvent );
+    kvsClassName( kvs::TimeEvent );
 
 public:
 

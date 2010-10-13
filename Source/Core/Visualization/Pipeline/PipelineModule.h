@@ -14,6 +14,7 @@
 #ifndef KVS__PIPELINE_MODULE_H_INCLUDE
 #define KVS__PIPELINE_MODULE_H_INCLUDE
 
+#include <kvs/ClassName>
 #include <kvs/FilterBase>
 #include <kvs/MapperBase>
 #include <kvs/ObjectBase>
@@ -35,6 +36,8 @@ class VisualizationPipeline;
 /*==========================================================================*/
 class PipelineModule
 {
+    kvsClassName_without_virtual( kvs::PipelineModule );
+
     friend class kvs::VisualizationPipeline;
 
 public:

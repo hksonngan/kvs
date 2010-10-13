@@ -81,7 +81,7 @@ namespace kvs
 /*==========================================================================*/
 class Message
 {
-    kvsClassName_without_virtual( Message );
+    kvsClassName_without_virtual( kvs::Message );
 
 public:
 

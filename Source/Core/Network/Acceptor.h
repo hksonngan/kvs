@@ -17,6 +17,7 @@
 
 #include <kvs/TCPServer>
 #include <kvs/IPAddress>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -29,6 +30,8 @@ namespace kvs
 /*===========================================================================*/
 class Acceptor
 {
+    kvsClassName_without_virtual( kvs::Acceptor );
+
 private:
 
     kvs::TCPServer* m_handler; //< handler

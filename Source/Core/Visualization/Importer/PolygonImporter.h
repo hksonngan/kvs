@@ -36,7 +36,7 @@ class PolygonImporter
     , public kvs::PolygonObject
 {
     // Class name.
-    kvsClassName( PolygonImporter );
+    kvsClassName( kvs::PolygonImporter );
 
     // Module information.
     kvsModuleCategory( Importer );

@@ -30,7 +30,7 @@ namespace kvs
 template<typename T>
 class Value
 {
-    kvsClassName_without_virtual( Value );
+    kvsClassName_without_virtual( kvs::Value );
 
 protected:
 

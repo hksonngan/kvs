@@ -36,7 +36,7 @@ namespace glew
 class PointRenderer : public kvs::PointRenderer
 {
     // Class name.
-    kvsClassName( PointRenderer );
+    kvsClassName( kvs::glew::PointRenderer );
 
     // Module information.
     kvsModuleCategory( Renderer );

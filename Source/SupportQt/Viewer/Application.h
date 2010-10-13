@@ -15,6 +15,7 @@
 #ifndef KVS__QT__APPLICATION_H_INCLUDE
 #define KVS__QT__APPLICATION_H_INCLUDE
 
+#include <kvs/ClassName>
 #include <kvs/ApplicationBase>
 #include <kvs/qt/Qt>
 
@@ -32,6 +33,8 @@ namespace qt
 /*===========================================================================*/
 class Application : public kvs::ApplicationBase
 {
+    kvsClassName( kvs::qt::Application );
+
 private:
 
     QApplication* m_app; ///< Qt application

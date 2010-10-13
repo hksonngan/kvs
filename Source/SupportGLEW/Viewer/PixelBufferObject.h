@@ -31,7 +31,7 @@ namespace glew
 /*===========================================================================*/
 class PixelBufferObject : public kvs::glew::BufferObject
 {
-    kvsClassName( PixelBufferObject );
+    kvsClassName( kvs::glew::PixelBufferObject );
 
 public:
 

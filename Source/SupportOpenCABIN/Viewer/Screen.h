@@ -15,6 +15,7 @@
 #ifndef KVS__OPENCABIN__SCREEN_H_INCLUDE
 #define KVS__OPENCABIN__SCREEN_H_INCLUDE
 
+#include <kvs/ClassName>
 #include <kvs/ScreenBase>
 #include <kvs/EventHandler>
 #include <kvs/InitializeEventListener>
@@ -37,6 +38,10 @@ class Application;
 /*===========================================================================*/
 class Screen : public kvs::ScreenBase
 {
+    kvsClassName( kvs::opencabin::Screen );
+
+private:
+
     typedef kvs::ScreenBase BaseClass;
     typedef void (Screen::*PaintEventFunction)( void );
 

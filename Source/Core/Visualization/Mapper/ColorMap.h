@@ -32,7 +32,7 @@ namespace kvs
 /*==========================================================================*/
 class ColorMap
 {
-    kvsClassName( ColorMap );
+    kvsClassName( kvs::ColorMap );
 
 public:
 

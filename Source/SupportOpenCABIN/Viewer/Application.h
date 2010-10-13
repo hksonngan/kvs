@@ -15,6 +15,7 @@
 #ifndef KVS__OPENCABIN__APPLICATION_H_INCLUDE
 #define KVS__OPENCABIN__APPLICATION_H_INCLUDE
 
+#include <kvs/ClassName>
 #include <kvs/ApplicationBase>
 #include <kvs/opencabin/Master>
 
@@ -48,6 +49,8 @@ class Application : public kvs::ApplicationBase
     friend class kvs::opencabin::Trackpad;
 
     typedef kvs::ApplicationBase BaseClass;
+
+    kvsClassName( kvs::opencabin::Application );
 
 protected:
 

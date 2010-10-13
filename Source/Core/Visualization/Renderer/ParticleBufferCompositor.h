@@ -39,7 +39,7 @@ namespace kvs
 /*==========================================================================*/
 class ParticleBufferCompositor : public kvs::VolumeRendererBase
 {
-    kvsClassName( ParticleBufferCompositor );
+    kvsClassName( kvs::ParticleBufferCompositor );
 
 public:
 

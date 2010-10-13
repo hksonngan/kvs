@@ -29,7 +29,7 @@ namespace kvs
 /*===========================================================================*/
 class EventBase
 {
-    kvsClassName( EventBase );
+    kvsClassName( kvs::EventBase );
 
 public:
 

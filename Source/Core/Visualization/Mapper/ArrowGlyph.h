@@ -31,7 +31,7 @@ namespace kvs
 class ArrowGlyph : public kvs::GlyphBase
 {
     // Class name.
-    kvsClassName( ArrowGlyph );
+    kvsClassName( kvs::ArrowGlyph );
 
     // Module information.
     kvsModuleCategory( Mapper );

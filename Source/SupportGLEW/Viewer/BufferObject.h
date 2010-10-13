@@ -31,7 +31,7 @@ namespace glew
 /*===========================================================================*/
 class BufferObject
 {
-    kvsClassName( BufferObject );
+    kvsClassName( kvs::glew::BufferObject );
 
 public:
 

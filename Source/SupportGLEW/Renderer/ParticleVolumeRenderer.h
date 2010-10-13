@@ -45,7 +45,7 @@ namespace glew
 class ParticleVolumeRenderer : public kvs::VolumeRendererBase
 {
     // Class name.
-    kvsClassName( ParticleVolumeRenderer );
+    kvsClassName( kvs::glew::ParticleVolumeRenderer );
 
     // Module information.
     kvsModuleCategory( Renderer );

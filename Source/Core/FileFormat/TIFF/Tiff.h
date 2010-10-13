@@ -29,7 +29,7 @@ namespace kvs
 
 class Tiff : public kvs::FileFormatBase
 {
-    kvsClassName( Tiff );
+    kvsClassName( kvs::Tiff );
 
 public:
 

@@ -15,6 +15,7 @@
 #ifndef KVS__RESIZE_EVENT_LISTENER_H_INCLUDE
 #define KVS__RESIZE_EVENT_LISTENER_H_INCLUDE
 
+#include <kvs/ClassName>
 #include <kvs/EventListener>
 
 
@@ -28,6 +29,8 @@ namespace kvs
 /*===========================================================================*/
 class ResizeEventListener : public kvs::EventListener
 {
+    kvsClassName( kvs::ResizeEventListener );
+
 public:
 
     ResizeEventListener( void );

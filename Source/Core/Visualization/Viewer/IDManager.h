@@ -35,6 +35,8 @@ typedef std::list<IDPair>::reverse_iterator ID_rptr;
 /*==========================================================================*/
 class IDManager : public IDs
 {
+    kvsClassName( kvs::IDManager );
+
 protected:
 
     std::vector<int> m_flip_table;

@@ -15,6 +15,7 @@
 #ifndef KVS__GLUT__TIMER_H_INCLUDE
 #define KVS__GLUT__TIMER_H_INCLUDE
 
+#include <kvs/ClassName>
 #include <kvs/EventListener>
 #include <kvs/EventHandler>
 #include <kvs/TimeEvent>
@@ -33,6 +34,8 @@ namespace glut
 /*===========================================================================*/
 class Timer
 {
+    kvsClassName( kvs::glut::Timer );
+
 protected:
 
     int                 m_id;             ///< timer ID

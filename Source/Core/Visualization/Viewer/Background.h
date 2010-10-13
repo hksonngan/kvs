@@ -28,7 +28,7 @@ namespace kvs
 /*==========================================================================*/
 class Background
 {
-    kvsClassName( Background );
+    kvsClassName( kvs::Background );
 
 public:
 

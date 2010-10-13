@@ -17,11 +17,7 @@
 #include <fstream>
 #include <exception>
 #include <cstdio>
-#include <string>
-//#include <kvs/Math>
-//#include <kvs/Date>
-//#include <kvs/Time>
-//#include <kvs/IgnoreUnusedVariable>
+#include <cstring>
 
 
 namespace

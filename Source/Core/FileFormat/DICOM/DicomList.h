@@ -33,7 +33,7 @@ namespace kvs
 /*===========================================================================*/
 class DicomList : public kvs::FileFormatBase
 {
-    kvsClassName( DicomList );
+    kvsClassName( kvs::DicomList );
 
 public:
 

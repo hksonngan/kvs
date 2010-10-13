@@ -33,7 +33,7 @@ namespace kvs
 class UnstructuredVectorToScalar : public kvs::FilterBase, public kvs::UnstructuredVolumeObject
 {
     // Class name.
-    kvsClassName( UnstructuredVectorToScalar );
+    kvsClassName( kvs::UnstructuredVectorToScalar );
 
     // Module information.
     kvsModuleCategory( Filter );

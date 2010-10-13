@@ -32,7 +32,7 @@ namespace glew
 /*===========================================================================*/
 class ShaderObject
 {
-    kvsClassName( ShaderObject );
+    kvsClassName( kvs::glew::ShaderObject );
 
 protected:
 

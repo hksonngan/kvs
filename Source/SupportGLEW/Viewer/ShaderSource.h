@@ -31,7 +31,7 @@ namespace glew
 /*===========================================================================*/
 class ShaderSource
 {
-    kvsClassName( ShaderSource );
+    kvsClassName( kvs::glew::ShaderSource );
 
 protected:
 

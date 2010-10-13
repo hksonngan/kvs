@@ -14,8 +14,9 @@
 #ifndef KVS__XML_DECLARATION_H_INCLUDE
 #define KVS__XML_DECLARATION_H_INCLUDE
 
-#include <string>
 #include "TinyXML.h"
+#include <string>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -28,6 +29,8 @@ namespace kvs
 /*==========================================================================*/
 class XMLDeclaration : public TiXmlDeclaration
 {
+    kvsClassName( kvs::XMLDeclaration );
+
 public:
 
     typedef TiXmlDeclaration SuperClass;

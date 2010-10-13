@@ -15,6 +15,7 @@
 #ifndef KVS__OPENCABIN__MASTER_H_INCLUDE
 #define KVS__OPENCABIN__MASTER_H_INCLUDE
 
+#include <kvs/ClassName>
 #include <kvs/EventHandler>
 #include <kvs/InitializeEventListener>
 #include <kvs/IdleEventListener>
@@ -33,6 +34,8 @@ namespace opencabin
 /*===========================================================================*/
 class Master
 {
+    kvsClassName( kvs::opencabin::Master );
+
 protected:
 
     kvs::EventHandler* m_initialize_event_handler; ///< initialize event handler

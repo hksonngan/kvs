@@ -16,6 +16,7 @@
 
 #include <string>
 #include <vector>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -28,6 +29,8 @@ namespace kvs
 /*==========================================================================*/
 class HttpRequestHeader
 {
+    kvsClassName( kvs::HttpRequestHeader );
+
 public:
 
     typedef std::vector<std::string> FieldList;

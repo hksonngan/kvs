@@ -17,6 +17,7 @@
 #include <kvs/Vector3>
 #include <kvs/Matrix44>
 #include <kvs/OpenGL>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -37,6 +38,8 @@ namespace kvs
 /*==========================================================================*/
 class Ray
 {
+    kvsClassName( kvs::Ray );
+
 private:
 
     float          m_t;         ///< Parameter.

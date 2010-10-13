@@ -35,7 +35,7 @@ namespace kvs
 template <typename T>
 class Quaternion
 {
-    kvsClassName_without_virtual( Quaternion );
+    kvsClassName_without_virtual( kvs::Quaternion );
 
 protected:
 

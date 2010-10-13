@@ -39,7 +39,7 @@ namespace kvs
 class ImageImporter : public kvs::ImporterBase, public kvs::ImageObject
 {
     // Class name.
-    kvsClassName( ImageImporter );
+    kvsClassName( kvs::ImageImporter );
 
     // Module information.
     kvsModuleCategory( Importer );

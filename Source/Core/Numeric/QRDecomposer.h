@@ -19,6 +19,7 @@
 #include <kvs/Matrix44>
 #include <kvs/Matrix>
 #include <kvs/Vector>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -32,6 +33,8 @@ namespace kvs
 template <typename T>
 class QRDecomposer
 {
+    kvsClassName_without_virtual( kvs::QRDecomposer );
+
 protected:
 
     kvs::Matrix<T> m_m;  ///< original matrix

@@ -36,7 +36,7 @@ namespace kvs
 class CellByCellRejectionSampling : public kvs::MapperBase, public kvs::PointObject
 {
     // Class name.
-    kvsClassName( CellByCellRejectionSampling );
+    kvsClassName( kvs::CellByCellRejectionSampling );
 
     // Module information.
     kvsModuleCategory( Mapper );

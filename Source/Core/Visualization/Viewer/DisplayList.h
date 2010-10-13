@@ -23,7 +23,7 @@ namespace kvs
 
 class DisplayList
 {
-    kvsClassName( DisplayList );
+    kvsClassName( kvs::DisplayList );
 
 protected:
 

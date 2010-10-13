@@ -207,15 +207,15 @@ UnstructuredVolumeImporter::SuperClass* UnstructuredVolumeImporter::exec( const 
     }
 
     const std::string class_name = file_format->className();
-    if ( class_name == "KVSMLObjectUnstructuredVolume" )
+    if ( class_name == "kvs::KVSMLObjectUnstructuredVolume" )
     {
         this->import( static_cast<const kvs::KVSMLObjectUnstructuredVolume*>( file_format ) );
     }
-    else if ( class_name == "AVSUcd" )
+    else if ( class_name == "kvs::AVSUcd" )
     {
         this->import( static_cast<const kvs::AVSUcd*>( file_format ) );
     }
-    else if ( class_name == "AVSField" )
+    else if ( class_name == "kvs::AVSField" )
     {
         this->import( static_cast<const kvs::AVSField*>( file_format ) );
     }

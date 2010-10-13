@@ -18,6 +18,7 @@
 #include <kvs/Matrix44>
 #include <kvs/Matrix>
 #include <kvs/Vector>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -31,6 +32,8 @@ namespace kvs
 template <typename T>
 class EigenDecomposer
 {
+    kvsClassName_without_virtual( kvs::EigenDecomposer );
+
 public:
 
     enum MatrixType

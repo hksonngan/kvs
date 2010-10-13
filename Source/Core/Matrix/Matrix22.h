@@ -32,7 +32,7 @@ namespace kvs
 template<typename T>
 class Matrix22
 {
-    kvsClassName_without_virtual( Matrix22 );
+    kvsClassName_without_virtual( kvs::Matrix22 );
 
 private:
 

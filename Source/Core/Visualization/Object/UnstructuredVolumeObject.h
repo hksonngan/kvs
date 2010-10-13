@@ -31,7 +31,7 @@ class UnstructuredVolumeObject
     : public kvs::VolumeObjectBase
 {
     // Class name.
-    kvsClassName( UnstructuredVolumeObject );
+    kvsClassName( kvs::UnstructuredVolumeObject );
 
     // Module information.
     kvsModuleCategory( Object );

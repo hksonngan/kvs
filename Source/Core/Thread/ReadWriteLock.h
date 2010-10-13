@@ -29,7 +29,7 @@ namespace kvs
 /*==========================================================================*/
 class ReadWriteLock
 {
-    kvsClassName( ReadWriteLock );
+    kvsClassName( kvs::ReadWriteLock );
 
 protected:
 

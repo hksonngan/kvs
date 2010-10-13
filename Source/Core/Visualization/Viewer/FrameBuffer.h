@@ -28,7 +28,7 @@ namespace kvs
 /*==========================================================================*/
 class FrameBuffer
 {
-    kvsClassName( FrameBuffer );
+    kvsClassName( kvs::FrameBuffer );
 
 protected:
 

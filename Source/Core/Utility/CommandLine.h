@@ -33,7 +33,7 @@ namespace kvs
 /*==========================================================================*/
 class CommandLine
 {
-    kvsClassName( CommandLine );
+    kvsClassName( kvs::CommandLine );
 
 public:
 

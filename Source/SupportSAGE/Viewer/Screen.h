@@ -15,6 +15,7 @@
 #ifndef KVS__SAGE__SCREEN_H_INCLUDE
 #define KVS__SAGE__SCREEN_H_INCLUDE
 
+#include <kvs/ClassName>
 #include <kvs/TimerEventListener>
 #include <kvs/PaintEventListener>
 #include <kvs/glut/Screen>
@@ -36,6 +37,10 @@ namespace sage
 /*===========================================================================*/
 class Screen : public kvs::glut::Screen
 {
+    kvsClassName( kvs::sage::Screen );
+
+private:
+
     typedef kvs::glut::Screen BaseClass;
 
     class MessageListener;

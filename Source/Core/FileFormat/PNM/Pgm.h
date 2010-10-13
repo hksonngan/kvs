@@ -32,7 +32,7 @@ namespace kvs
 /*==========================================================================*/
 class Pgm : public kvs::FileFormatBase
 {
-    kvsClassName( Pgm );
+    kvsClassName( kvs::Pgm );
 
 public:
 

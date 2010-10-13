@@ -17,6 +17,7 @@
 
 #include "LUDecomposer.h"
 #include <kvs/Vector>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -30,6 +31,8 @@ namespace kvs
 template <typename T>
 class LUSolver : public kvs::Vector<T>
 {
+    kvsClassName( kvs::LUSolver );
+
 protected:
 
     kvs::LUDecomposer<T> m_decomposer;

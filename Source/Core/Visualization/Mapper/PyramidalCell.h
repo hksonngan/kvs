@@ -14,6 +14,7 @@
 #ifndef KVS__PYRAMIDAL_CELL_H_INCLUDE
 #define KVS__PYRAMIDAL_CELL_H_INCLUDE
 
+#include <kvs/ClassName>
 #include <kvs/Type>
 #include <kvs/Vector4>
 #include <kvs/Matrix44>
@@ -32,6 +33,8 @@ namespace kvs
 template <typename T>
 class PyramidalCell : public kvs::CellBase<T>
 {
+    kvsClassName( kvs::PyramidalCell );
+
 public:
 
     enum { NumberOfNodes = 5 };

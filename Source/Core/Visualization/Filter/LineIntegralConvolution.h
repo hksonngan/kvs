@@ -5,7 +5,7 @@
  *  @brief  LIC (Line Integral Convolution) filtering class.
  *
  *  @author Naohisa Sakamoto
- *  @date   2010/01/08 11:09:49
+ *  @date   2010/10/12 21:07:36
  */
 /*----------------------------------------------------------------------------
  *
@@ -35,7 +35,7 @@ namespace kvs
 class LineIntegralConvolution : public kvs::FilterBase, public kvs::StructuredVolumeObject
 {
     // Class name.
-    kvsClassName( LineIntegralConvolution );
+    kvsClassName( kvs::LineIntegralConvolution );
 
     // Module information.
     kvsModuleCategory( Filter );

@@ -29,7 +29,7 @@ namespace kvs
 /*==========================================================================*/
 class Semaphore
 {
-    kvsClassName( Semaphore );
+    kvsClassName( kvs::Semaphore );
 
 protected:
 

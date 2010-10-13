@@ -36,7 +36,7 @@ namespace kvs
 class Bounds : public kvs::FilterBase, public kvs::LineObject
 {
     // Class name.
-    kvsClassName( Bounds );
+    kvsClassName( kvs::Bounds );
 
     // Module information.
     kvsModuleCategory( Filter );

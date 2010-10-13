@@ -28,7 +28,7 @@ namespace kvs
 /*==========================================================================*/
 class XformControl : public kvs::Xform
 {
-    kvsClassName( XformControl );
+    kvsClassName( kvs::XformControl );
 
 public:
 

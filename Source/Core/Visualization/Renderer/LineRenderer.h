@@ -34,7 +34,7 @@ class Light;
 class LineRenderer : public kvs::RendererBase
 {
     // Class name.
-    kvsClassName( LineRenderer );
+    kvsClassName( kvs::LineRenderer );
 
     // Module information.
     kvsModuleCategory( Renderer );

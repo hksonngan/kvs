@@ -15,6 +15,7 @@
 #ifndef KVS__WINDOW_BASE_H_INCLUDE
 #define KVS__WINDOW_BASE_H_INCLUDE
 
+#include <kvs/ClassName>
 #include <kvs/DisplayFormat>
 #include <kvs/MouseEvent>
 #include <kvs/KeyEvent>
@@ -33,6 +34,8 @@ namespace kvs
 /*===========================================================================*/
 class WindowBase
 {
+    kvsClassName( kvs::WindowBase );
+
 protected:
 
     std::string        m_title;          ///< window title

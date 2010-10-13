@@ -32,7 +32,7 @@ namespace kvs
 class MarchingTetrahedra : public kvs::MapperBase, public kvs::PolygonObject
 {
     // Class name.
-    kvsClassName( MarchingTetrahedra );
+    kvsClassName( kvs::MarchingTetrahedra );
 
     // Module information.
     kvsModuleCategory( Mapper );

@@ -31,7 +31,7 @@ class RGBAColor;
 /*==========================================================================*/
 class Material
 {
-    kvsClassName( Material );
+    kvsClassName( kvs::Material );
 
 public:
 

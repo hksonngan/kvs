@@ -33,7 +33,7 @@ namespace glew
 /*===========================================================================*/
 class EnsembleAverageBuffer
 {
-    kvsClassName( EnsembleAverageBuffer );
+    kvsClassName( kvs::glew::EnsembleAverageBuffer );
 
 protected:
 

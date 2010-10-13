@@ -33,7 +33,7 @@ namespace kvs
 /*==========================================================================*/
 class AVSField : public kvs::FileFormatBase
 {
-    kvsClassName( AVSField );
+    kvsClassName( kvs::AVSField );
 
 public:
 

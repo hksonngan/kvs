@@ -30,7 +30,7 @@ namespace kvs
 class Streamline : public kvs::StreamlineBase
 {
     // Class name.
-    kvsClassName( Streamline );
+    kvsClassName( kvs::Streamline );
 
     // Module information.
     kvsModuleCategory( Mapper );

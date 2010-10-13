@@ -15,6 +15,7 @@
 #ifndef KVS__GLUT__WINDOW_H_INCLUDE
 #define KVS__GLUT__WINDOW_H_INCLUDE
 
+#include <kvs/ClassName>
 #include <kvs/WindowBase>
 #include <kvs/Timer>
 #include <kvs/MouseEvent>
@@ -42,6 +43,8 @@ namespace old
 /*===========================================================================*/
 class Window : public kvs::WindowBase
 {
+    kvsClassName( kvs::glut::old::Window );
+
 public:
 
     Window( void );

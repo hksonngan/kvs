@@ -14,6 +14,7 @@
 #ifndef KVS__LINE_EXPORTER_H_INCLUDE
 #define KVS__LINE_EXPORTER_H_INCLUDE
 
+#include <kvs/ClassName>
 #include <kvs/LineObject>
 #include <kvs/KVSMLObjectLine>
 #include "ExporterBase.h"
@@ -30,6 +31,8 @@ namespace kvs
 template <typename FileFormatType>
 class LineExporter : public kvs::ExporterBase<FileFormatType>
 {
+    kvsClassName( kvs::LineExporter );
+
 public:
 
     LineExporter( const kvs::LineObject* object );

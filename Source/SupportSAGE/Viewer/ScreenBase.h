@@ -15,6 +15,7 @@
 #define KVS__SAGE__SCREEN_BASE_H_INCLUDE
 
 #include <kvs/glut/ScreenBase>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -25,6 +26,8 @@ namespace sage
 
 class ScreenBase : public kvs::glut::ScreenBase
 {
+    kvsClassName( kvs::sage::ScreenBase );
+
 public:
 
     ScreenBase( void );

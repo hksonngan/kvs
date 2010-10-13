@@ -39,7 +39,7 @@ namespace kvs
 template <typename T>
 class ResponseSurface : public kvs::Vector<T>
 {
-    kvsClassName( ResponseSurface );
+    kvsClassName( kvs::ResponseSurface );
 
 protected:
 

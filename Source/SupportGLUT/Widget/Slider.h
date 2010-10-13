@@ -35,7 +35,7 @@ namespace glut
 class Slider : public kvs::glut::WidgetBase
 {
     // Class name.
-    kvsClassName( Slider );
+    kvsClassName( kvs::glut::Slider );
 
 public:
 

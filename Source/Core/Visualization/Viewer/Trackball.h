@@ -32,7 +32,7 @@ class Camera;
 /*==========================================================================*/
 class Trackball
 {
-    kvsClassName( Trackball );
+    kvsClassName( kvs::Trackball );
 
 public:
 

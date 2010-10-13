@@ -34,7 +34,7 @@ class Light;
 /*==========================================================================*/
 class RendererBase
 {
-    kvsClassName( RendererBase );
+    kvsClassName( kvs::RendererBase );
 
     kvsModuleBase;
 

@@ -34,7 +34,7 @@ class PointImporter
     , public kvs::PointObject
 {
     // Class name.
-    kvsClassName( PointImporter );
+    kvsClassName( kvs::PointImporter );
 
     // Module information.
     kvsModuleCategory( Importer );

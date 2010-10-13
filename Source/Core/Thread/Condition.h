@@ -33,7 +33,7 @@ namespace kvs
 /*==========================================================================*/
 class Condition
 {
-    kvsClassName( Condition );
+    kvsClassName( kvs::Condition );
 
 public:
 

@@ -34,7 +34,7 @@ namespace kvs
 /*==========================================================================*/
 class GlobalCore
 {
-    kvsClassName( GlobalCore );
+    kvsClassName( kvs::GlobalCore );
 
 public:
 

@@ -37,7 +37,7 @@ class PolygonObject;
 class PointObject : public kvs::GeometryObjectBase
 {
     // Class name.
-    kvsClassName( PointObject );
+    kvsClassName( kvs::PointObject );
 
     // Module information.
     kvsModuleCategory( Object );

@@ -31,7 +31,7 @@ namespace kvs
 class ParticleVolumeRenderer : public kvs::VolumeRendererBase
 {
     // Class name.
-    kvsClassName( ParticleVolumeRenderer );
+    kvsClassName( kvs::ParticleVolumeRenderer );
 
     // Module information.
     kvsModuleCategory( Renderer );

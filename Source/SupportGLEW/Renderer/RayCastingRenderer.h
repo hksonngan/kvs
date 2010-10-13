@@ -46,7 +46,7 @@ namespace glew
 class RayCastingRenderer : public kvs::VolumeRendererBase
 {
     // Class name.
-    kvsClassName( RayCastingRenderer );
+    kvsClassName( kvs::glew::RayCastingRenderer );
 
     // Module information.
     kvsModuleCategory( Renderer );

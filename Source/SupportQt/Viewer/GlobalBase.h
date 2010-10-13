@@ -16,6 +16,7 @@
 
 #include "../Qt.h"
 #include <kvs/GlobalCore>
+#include <kvs/ClassName>
 
 
 namespace kvs
@@ -31,6 +32,10 @@ namespace qt
 /*==========================================================================*/
 class GlobalBase : public kvs::GlobalCore
 {
+    kvsClassName( kvs::qt::GlobalBase );
+
+private:
+
     friend class ScreenBase;
 
 public:

@@ -33,7 +33,7 @@ namespace kvs
 /*==========================================================================*/
 class Ppm : public kvs::FileFormatBase
 {
-    kvsClassName( Ppm );
+    kvsClassName( kvs::Ppm );
 
 public:
 

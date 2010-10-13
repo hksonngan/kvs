@@ -36,7 +36,7 @@ class StructuredVolumeImporter
     , public kvs::StructuredVolumeObject
 {
     // Class name.
-    kvsClassName( StructuredVolumeImporter );
+    kvsClassName( kvs::StructuredVolumeImporter );
 
     // Module information.
     kvsModuleCategory( Importer );
