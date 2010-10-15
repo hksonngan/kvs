@@ -4,7 +4,7 @@
  *  @brief  DICOM list class.
  *
  *  @author Naohisa Sakamoto
- *  @date   2010/10/08 15:06:54
+ *  @date   2010/10/15 12:49:34
  */
 /*----------------------------------------------------------------------------
  *
@@ -361,7 +361,7 @@ const bool DicomList::read( const std::string& dirname )
             if( file->extension() != "dcm" ) continue;
         }
 
-        kvs::Dicom* dicom = new kvs::Dicom( file->filePath() );
+        kvs::Dicom* dicom = new kvs::Dicom( file->filePath( true ) );
         if( !flag )
         {
             m_row             = dicom->row();
