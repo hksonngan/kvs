@@ -314,7 +314,7 @@ const bool Directory::parse( const std::string& directory_path )
 
         if ( file.isFile() )
         {
-            m_file_list.push_back( filename );
+            m_file_list.push_back( file );
         }
     }
     while ( FindNextFileA( hFind, &find_data ) );
