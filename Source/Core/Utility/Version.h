@@ -14,19 +14,17 @@
 #ifndef KVS__VERSION_H_INCLUDE
 #define KVS__VERSION_H_INCLUDE
 
-// KVS version: <major_version>.<minor_version>.<patch_version> (<status>)
+// KVS version: <major_version>.<minor_version>.<patch_version>
 #define KVS_VERSION_MAJOR  1
 #define KVS_VERSION_MINOR  0
 #define KVS_VERSION_PATCH  0
-#define KVS_VERSION_STATUS "beta 3"
 
 #define KVS_VERSION_NUMBER( x )           # x
 #define KVS_VERSION_NUMBER_TO_STRING( x ) KVS_VERSION_NUMBER( x )
 #define KVS_VERSION                                       \
     KVS_VERSION_NUMBER_TO_STRING( KVS_VERSION_MAJOR ) "." \
     KVS_VERSION_NUMBER_TO_STRING( KVS_VERSION_MINOR ) "." \
-    KVS_VERSION_NUMBER_TO_STRING( KVS_VERSION_PATCH )     \
-    " (" KVS_VERSION_STATUS ")"
+    KVS_VERSION_NUMBER_TO_STRING( KVS_VERSION_PATCH )
 
 #include <cstdio>
 
@@ -84,17 +82,6 @@ inline const size_t MinorNumber( void )
 inline const size_t PatchNumber( void )
 {
     return( KVS_VERSION_PATCH );
-}
-
-/*==========================================================================*/
-/**
- *  Get version status.
- *  @return version status
- */
-/*==========================================================================*/
-inline const char* Status( void )
-{
-    return( KVS_VERSION_STATUS );
 }
 
 /*==========================================================================*/
