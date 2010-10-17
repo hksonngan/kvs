@@ -724,6 +724,8 @@ std::list<dcm::Element>::iterator Dicom::findElement( const dcm::Tag tag )
 /*===========================================================================*/
 const bool Dicom::read( const std::string& filename )
 {
+    m_filename = filename;
+
     // Open the file.
     std::ifstream ifs( filename.c_str(), std::ios_base::binary );
     if( ifs.fail() )

@@ -21,6 +21,7 @@
 #include <kvs/ImageImporter>
 #include <kvs/Date>
 #include <kvs/Time>
+#include <kvs/File>
 #include <kvs/Vector2>
 
 
@@ -30,15 +31,19 @@ namespace
 /*===========================================================================*/
 /**
  *  @brief  Returns an output filename.
+ *  @param  parameter [in] pointer to the parameters
  *  @param  extension [in] file extension
  *  @return output filename
  */
 /*===========================================================================*/
-const std::string GetOutputFilename( const std::string& extension )
+const std::string GetOutputFilename( Parameter* parameter, const std::string& extension )
 {
+    const kvs::Dicom* dicom  = parameter->dicom_list[ parameter->index ];
+    const kvs::File file( dicom->filename() );
+
     const kvs::Date today;
     const kvs::Time now;
-    const std::string basename = "test";
+    const std::string basename = file.baseName();
     const std::string today_str = today.toString();
     const std::string now_str = now.toString("-");
 
@@ -192,7 +197,7 @@ void Command::moveMouse( kvs::MouseEvent* event )
 /*===========================================================================*/
 void Command::writeScreenImage( void )
 {
-    const std::string filename = ::GetOutputFilename("bmp");
+    const std::string filename = ::GetOutputFilename( m_parameter, "bmp" );
     m_screen->camera()->snapshot().write( filename.c_str() );
 }
 
@@ -203,7 +208,7 @@ void Command::writeScreenImage( void )
 /*===========================================================================*/
 void Command::writeHeader( void )
 {
-    const std::string filename = ::GetOutputFilename("csv");
+    const std::string filename = ::GetOutputFilename( m_parameter, "csv" );
     m_parameter->dicom_list[ m_parameter->index ]->write( filename.c_str() );
 }
 
@@ -214,6 +219,6 @@ void Command::writeHeader( void )
 /*===========================================================================*/
 void Command::writeData( void )
 {
-    const std::string filename = ::GetOutputFilename("raw");
+    const std::string filename = ::GetOutputFilename( m_parameter, "raw" );
     m_parameter->dicom_list[ m_parameter->index ]->write( filename.c_str() );
 }

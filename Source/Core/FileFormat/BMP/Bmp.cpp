@@ -57,7 +57,8 @@ Bmp::Bmp( const size_t width, const size_t height, const kvs::ValueArray<kvs::UI
 /*==========================================================================*/
 Bmp::Bmp( const std::string& filename )
 {
-    this->read( filename );
+    if( this->read( filename ) ) { m_is_success = true; }
+    else { m_is_success = false; }
 }
 
 /*==========================================================================*/

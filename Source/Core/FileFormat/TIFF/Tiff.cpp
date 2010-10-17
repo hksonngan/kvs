@@ -31,7 +31,8 @@ Tiff::Tiff( const std::string& filename ):
     m_bits_per_sample( 0 ),
     m_color_mode( Tiff::UnknownColorMode )
 {
-    this->read( filename );
+    if( this->read( filename ) ) { m_is_success = true; }
+    else { m_is_success = false; }
 }
 
 Tiff::~Tiff( void )

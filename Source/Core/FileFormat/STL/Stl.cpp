@@ -75,7 +75,8 @@ Stl::Stl( void ):
 Stl::Stl( const std::string& filename ):
     m_file_type( Stl::Ascii )
 {
-    m_is_success = this->read( filename );
+    if( this->read( filename ) ) { m_is_success = true; }
+    else { m_is_success = false; }
 }
 
 /*===========================================================================*/

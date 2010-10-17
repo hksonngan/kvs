@@ -320,6 +320,8 @@ void Ply::setConnections( const kvs::ValueArray<kvs::UInt32>& connections )
 
 const bool Ply::read( const std::string& filename )
 {
+    m_filename = filename;
+
     // Read PLY file.
     kvs::ply::PlyFile* ply;
     int nelems;

@@ -145,7 +145,8 @@ AVSUcd::AVSUcd(
     , m_ncomponents_per_node( 0 )
     , m_component_id( component_id )
 {
-    this->read( filename );
+    if( this->read( filename ) ) { m_is_success = true; }
+    else { m_is_success = false; }
 }
 
 /*==========================================================================*/
