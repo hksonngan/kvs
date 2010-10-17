@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   main.cpp
- *  @brief  Example program for kvs::Streamline class.
+ *  @brief  Example program for kvs::ArrowGlyph class.
  *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------

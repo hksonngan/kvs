@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   main.cpp
- *  @brief  Example program for kvs::LineRenderer.
+ *  @brief  Example program for kvs::LineRenderer class.
  *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   main.cpp
- *  @brief  Example program for kvs::ImageRenderer.
+ *  @brief  Example program for kvs::ImageRenderer class.
  *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------

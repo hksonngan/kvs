@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   main.cpp
- *  @brief  Example program for OrientationAxis widget.
+ *  @brief  Example program for kvs::TimerEventListener.
  *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
