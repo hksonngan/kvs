@@ -311,8 +311,8 @@ void ColorMap::create( void )
 
         const kvs::RGBColor black( 0, 0, 0 );
         const kvs::RGBColor white( 255, 255, 255 );
-        if ( m_points.begin()->first > min_value ) this->addPoint( min_value, black );
-        if ( m_points.end()->first < max_value ) this->addPoint( max_value, white );
+        if ( m_points.front()->first > min_value ) this->addPoint( min_value, black );
+        if ( m_points.back()->first < max_value ) this->addPoint( max_value, white );
 
         const float stride = ( max_value - min_value ) / static_cast<float>( m_resolution - 1 );
         float f = min_value;
