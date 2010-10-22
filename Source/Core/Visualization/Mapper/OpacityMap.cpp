@@ -293,8 +293,8 @@ void OpacityMap::create( void )
     {
         m_points.sort( ::Less() );
 
-        if ( m_points.front()->first > min_value ) this->addPoint( min_value, 0.0f );
-        if ( m_points.back()->first < max_value ) this->addPoint( max_value, 1.0f );
+        if ( m_points.front().first > min_value ) this->addPoint( min_value, 0.0f );
+        if ( m_points.back().first < max_value ) this->addPoint( max_value, 1.0f );
 
         const float stride = ( max_value - min_value ) / static_cast<float>( m_resolution - 1 );
         float f = min_value;
