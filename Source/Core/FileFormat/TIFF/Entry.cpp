@@ -122,7 +122,7 @@ bool Entry::read( std::ifstream& ifs )
     const size_t byte_size = kvs::tiff::ValueTypeSize[m_type] * m_count;
     if ( byte_size > 4 )
     {
-        const size_t end_of_entry = ifs.tellg();
+        const std::ifstream::pos_type end_of_entry = ifs.tellg();
         {
             // Separate a value as offset.
             kvs::UInt32 offset;

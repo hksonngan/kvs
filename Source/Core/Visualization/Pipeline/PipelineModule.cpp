@@ -172,7 +172,7 @@ void PipelineModule::deep_copy( const PipelineModule& module )
 void PipelineModule::create_counter( const size_t counter )
 {
     m_counter = new kvs::ReferenceCounter( counter );
-    KVS_ASSERT( m_counter );
+    KVS_ASSERT( m_counter != NULL );
 }
 
 void PipelineModule::ref( void )

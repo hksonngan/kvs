@@ -325,6 +325,7 @@ public:
 
         m_nvalues = nvalues;
         m_values  = static_cast<value_type*>( malloc( sizeof( value_type ) * nvalues ) );
+        KVS_ASSERT( m_values != NULL );
 
         return( m_values );
     }
@@ -339,7 +340,7 @@ private:
     void create_counter( void )
     {
         m_counter = new ReferenceCounter( 1 );
-        KVS_ASSERT( m_counter );
+        KVS_ASSERT( m_counter != NULL );
     }
 
     void ref( void )
