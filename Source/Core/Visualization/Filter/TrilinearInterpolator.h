@@ -64,9 +64,16 @@ inline TrilinearInterpolator::TrilinearInterpolator( const kvs::StructuredVolume
 
 inline void TrilinearInterpolator::attachPoint( const kvs::Vector3f& point )
 {
-    const size_t i = static_cast<size_t>( point.x() );
-    const size_t j = static_cast<size_t>( point.y() );
-    const size_t k = static_cast<size_t>( point.z() );
+    // Temporary index.
+    const size_t ti = static_cast<size_t>( point.x() );
+    const size_t tj = static_cast<size_t>( point.y() );
+    const size_t tk = static_cast<size_t>( point.z() );
+
+    // Addjustment index for boundary.
+    const kvs::Vector3ui resolution = m_reference_volume->resolution();
+    const size_t i = ( ti == resolution.x() - 1 ) ? ti - 1 : ti;
+    const size_t j = ( tj == resolution.y() - 1 ) ? tj - 1 : tj;
+    const size_t k = ( tk == resolution.z() - 1 ) ? tk - 1 : tk;
 
     const size_t line_size  = m_reference_volume->nnodesPerLine();
     const size_t slice_size = m_reference_volume->nnodesPerSlice();
