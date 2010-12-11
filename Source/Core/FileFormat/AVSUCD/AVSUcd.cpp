@@ -524,23 +524,32 @@ void AVSUcd::read_multi_step_format( FILE* const ifs )
                 !strcmp( cycle_type, "geom" )      ? Geom     :
                 !strcmp( cycle_type, "data_geom" ) ? DataGeom : CycleTypeUnknown;
 
-                if ( m_cycle_type == Data )
+                if ( m_nsteps == 1 )
                 {
-                    throw "Cycle type \"data\" is not supported.";
-                    this->read_multi_step_format_data( ifs );
-                }
-                else if ( m_cycle_type == Geom )
-                {
-                    throw "Cycle type \"geom\" is not supported.";
-                    this->read_multi_step_format_geom( ifs );
-                }
-                else if ( m_cycle_type == DataGeom )
-                {
+                    // In case of 'm_nsteps == 1', the data is read as 'data_geom'
+                    // despite the specified cycle type.
                     this->read_multi_step_format_data_geom( ifs );
                 }
                 else
                 {
-                    throw "Unknown cycle type.";
+                    if ( m_cycle_type == Data )
+                    {
+                        throw "Cycle type \"data\" is not supported.";
+                        this->read_multi_step_format_data( ifs );
+                    }
+                    else if ( m_cycle_type == Geom )
+                    {
+                        throw "Cycle type \"geom\" is not supported.";
+                        this->read_multi_step_format_geom( ifs );
+                    }
+                    else if ( m_cycle_type == DataGeom )
+                    {
+                        this->read_multi_step_format_data_geom( ifs );
+                    }
+                    else
+                    {
+                        throw "Unknown cycle type.";
+                    }
                 }
             }
 
