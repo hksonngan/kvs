@@ -51,12 +51,12 @@ class ParticleVolumeRenderer : public kvs::VolumeRendererBase
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::VolumeRendererBase );
 
-private:
+protected:
 
     class Particles;
     class Renderer;
 
-private:
+protected:
 
     typedef GLushort IndexType;
     typedef GLubyte ColorType;
@@ -158,7 +158,7 @@ public:
 
     const bool isEnabledRandomTexture( void ) const;
 
-private:
+protected:
 
     void create_image(
         const kvs::PointObject* point,
