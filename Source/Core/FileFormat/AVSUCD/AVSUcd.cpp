@@ -637,19 +637,18 @@ void AVSUcd::read_coords( FILE* const ifs )
 
     m_coords.allocate( 3 * m_nnodes );
 
-    kvs::Real32*       coord = m_coords.pointer();
-    kvs::Real32* const end   = coord + m_coords.size();
+    kvs::Real32* coord = m_coords.pointer();
 
-    while ( coord < end )
+    for ( size_t i = 0; i < m_nnodes; i++ )
     {
         if ( fgets( buffer, ::MaxLineLength, ifs ) )
         {
-            // Skip node index.
-            strtok( buffer, ::Delimiter );
+            // Node index.
+            const int index = atoi( strtok( buffer, ::Delimiter ) ) - 1;
 
-            *( coord++ ) = static_cast<float>( atof( strtok( 0, ::Delimiter ) ) );
-            *( coord++ ) = static_cast<float>( atof( strtok( 0, ::Delimiter ) ) );
-            *( coord++ ) = static_cast<float>( atof( strtok( 0, ::Delimiter ) ) );
+            coord[ index * 3 + 0 ] = static_cast<float>( atof( strtok( 0, ::Delimiter ) ) );
+            coord[ index * 3 + 1 ] = static_cast<float>( atof( strtok( 0, ::Delimiter ) ) );
+            coord[ index * 3 + 2 ] = static_cast<float>( atof( strtok( 0, ::Delimiter ) ) );
         }
     }
 }
@@ -662,7 +661,7 @@ void AVSUcd::read_connections( FILE* const ifs )
     if ( fgets( buffer, ::MaxLineLength, ifs ) != 0 )
     {
         strtok( buffer, ::Delimiter ); // Skip element index.
-        strtok( 0,      ::Delimiter ); // Skip material index.
+        strtok( 0, ::Delimiter ); // Skip material index.
 
         const char* const element_type = strtok( 0, ::Delimiter );
 
@@ -935,8 +934,7 @@ void AVSUcd::read_values( FILE* const ifs )
     const size_t veclen = m_veclens[ m_component_id ];
     m_values.allocate( veclen * m_nnodes );
 
-    kvs::Real32*       value = m_values.pointer();
-    kvs::Real32* const end   = value + m_values.size();
+    kvs::Real32* value = m_values.pointer();
 
     size_t nskips = 0;
     for ( size_t i = 0; i < m_component_id; ++i )
@@ -944,22 +942,22 @@ void AVSUcd::read_values( FILE* const ifs )
         nskips += m_veclens[ i ];
     }
 
-    while ( value < end )
+    for ( size_t i = 0; i < m_nnodes; i++ )
     {
         if ( fgets( buffer, ::MaxLineLength, ifs ) )
         {
-            // Skip node index
-            strtok( buffer, ::Delimiter );
+            // Node index
+            const int index = atoi( strtok( buffer, ::Delimiter ) ) - 1;
 
             // Skip other components
-            for ( size_t i = 0; i < nskips; ++i )
+            for ( size_t j = 0; j < nskips; ++j )
             {
                 strtok( 0, ::Delimiter );
             }
 
-            for ( size_t i = 0; i < veclen; ++i )
+            for ( size_t j = 0; j < veclen; ++j )
             {
-                *( value++ ) = static_cast<kvs::Real32>( atof( strtok( 0, ::Delimiter ) ) );
+                value[ index * veclen + j ] = static_cast<kvs::Real32>( atof( strtok( 0, ::Delimiter ) ) );
             }
         }
     }
