@@ -289,7 +289,6 @@ kvs::Ply* PolygonExporter<kvs::Ply>::exec( const kvs::ObjectBase* object )
 
             const size_t npolygons = polygon->connections().size() / 3;
             const kvs::UInt32* pconnections = m_connections.pointer();
-            const kvs::Real32* pcoords = m_coords.pointer();
             for ( size_t i = 0; i < npolygons; i++ )
             {
                 const kvs::UInt32 index0 = *(pconnections++);
