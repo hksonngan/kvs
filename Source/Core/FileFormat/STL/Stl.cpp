@@ -45,7 +45,19 @@ const bool IsAsciiType( FILE* ifs )
         if ( buffer[0] == '\n' ) continue;
 
         const char* head = strtok( buffer, ::Delimiter );
-        return ( !strcmp( head, "solid" ) || !strcmp( head, "facet" ) );
+        if ( !strcmp( head, "solid" ) ) break;
+        else if ( !strcmp( head, "facet" ) ) return( true );
+        else return( false );
+    }
+
+    size_t counter = 0;
+    while ( fgets( buffer, ::MaxLineLength, ifs ) != 0 )
+    {
+        if ( counter > 5 ) return( false );
+        if ( buffer[0] == '\n' ) continue;
+        if ( strstr( buffer, "endsolid" ) ) return( true );
+        if ( strstr( buffer, "facet" ) ) return( true );
+        counter++;
     }
 
     return( false );
@@ -255,7 +267,19 @@ const bool Stl::is_ascii_type( FILE* ifs )
         if ( buffer[0] == '\n' ) continue;
 
         const char* head = strtok( buffer, ::Delimiter );
-        return ( !strcmp( head, "solid" ) || !strcmp( head, "facet" ) );
+        if ( !strcmp( head, "solid" ) ) break;
+        else if ( !strcmp( head, "facet" ) ) return( true );
+        else return( false );
+    }
+
+    size_t counter = 0;
+    while ( fgets( buffer, ::MaxLineLength, ifs ) != 0 )
+    {
+        if ( counter > 5 ) return( false );
+        if ( buffer[0] == '\n' ) continue;
+        if ( strstr( buffer, "endsolid" ) ) return( true );
+        if ( strstr( buffer, "facet" ) ) return( true );
+        counter++;
     }
 
     return( false );
@@ -426,7 +450,7 @@ const bool Stl::read_binary( FILE* ifs )
         kvsMessageError("Cannot allocate memory for the normal vector array.");
         return( false );
     }
-    if ( !m_coords.allocate( ntriangles * 3 ) )
+    if ( !m_coords.allocate( ntriangles * 9 ) )
     {
         kvsMessageError("Cannot allocate memory for the coordinate value array.");
         return( false );
@@ -584,11 +608,11 @@ std::ostream& operator << ( std::ostream& os, const Stl& stl )
 const bool Stl::CheckFileExtension( const std::string& filename )
 {
     const kvs::File file( filename );
-    if ( file.extension() == "stl" ||
-         file.extension() == "stla" ||
-         file.extension() == "stlb" ||
-         file.extension() == "sla" ||
-         file.extension() == "slb" )
+    if ( file.extension() == "stl" || file.extension() == "STL" ||
+         file.extension() == "stla" || file.extension() == "STLA" ||
+         file.extension() == "stlb" || file.extension() == "STLB" ||
+         file.extension() == "sla" || file.extension() == "SLA" ||
+         file.extension() == "slb" || file.extension() == "SLB" )
     {
         return( true );
     }
@@ -607,6 +631,9 @@ const bool Stl::CheckFileFormat( const std::string& filename )
 
     if ( !::IsAsciiType( ifs ) )
     {
+        // Go back file-pointer to head.
+        fseek( ifs, 0, SEEK_SET );
+
         // Check binary STL
         kvs::File file( filename );
         const size_t byte_size = file.byteSize();
