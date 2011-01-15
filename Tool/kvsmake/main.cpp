@@ -24,6 +24,7 @@
 #if defined ( KVS_COMPILER_VC )
 #include "WriteVCProject.h"
 #include "WriteVCProjectCUDA.h"
+#include "WriteVCXProject.h"
 #endif
 #include "WriteQtProject.h"
 
@@ -94,15 +95,22 @@ int main( int argc, char** argv )
     {
         const std::string project_name( argument.optionValue<std::string>( "v" ) );
 
+#if KVS_COMPILER_VERSION_GREATER_OR_EQUAL( 10, 0 )
+        kvsmake::WriteVCXProject( project_name );
+#else
         kvsmake::WriteVCProject( project_name );
-
+#endif
         return( 0 );
     }
     if ( argument.hasOption( "vc" ) )
     {
         const std::string project_name( argument.optionValue<std::string>( "vc" ) );
 
+#if KVS_COMPILER_VERSION_GREATER_OR_EQUAL( 10, 0 )
+        kvsmake::WriteVCXProject( project_name );
+#else
         kvsmake::WriteVCProject( project_name );
+#endif
 
         return( 0 );
     }
@@ -110,7 +118,11 @@ int main( int argc, char** argv )
     {
         const std::string project_name( argument.optionValue<std::string>( "vcproj" ) );
 
+#if KVS_COMPILER_VERSION_GREATER_OR_EQUAL( 10, 0 )
+        kvsmake::WriteVCXProject( project_name );
+#else
         kvsmake::WriteVCProject( project_name );
+#endif
 
         return( 0 );
     }
