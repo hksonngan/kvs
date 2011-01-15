@@ -31,6 +31,7 @@ const std::string Makefile   ( "Makefile.vc.kvs" );
 
 const std::string MakefileTemplate ( KVS_DIR + "\\bin\\Makefile.vc.kvs.template" );
 const std::string VCProjectTemplate( KVS_DIR + "\\bin\\VCProject.template" );
+const std::string VCXProjectTemplate( KVS_DIR + "\\bin\\VCXProject.template" );
 const std::string QtProjectTemplate( KVS_DIR + "\\bin\\QtProject.template" );
 
 const std::string VCProjectCUDATemplate( KVS_DIR + "\\bin\\VCProjectCUDA.template" );
