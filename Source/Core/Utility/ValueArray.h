@@ -11,8 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS_CORE_VALUE_ARRAY_H_INCLUDE
-#define KVS_CORE_VALUE_ARRAY_H_INCLUDE
+#ifndef KVS__VALUE_ARRAY_H_INCLUDE
+#define KVS__VALUE_ARRAY_H_INCLUDE
 
 #include <cstdio>
 #include <cstdlib>
@@ -369,4 +369,4 @@ private:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_VALUE_ARRAY_H_INCLUDE
+#endif // KVS__VALUE_ARRAY_H_INCLUDE
