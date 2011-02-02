@@ -84,8 +84,25 @@ const std::pair<int,int> ScreenBase::registerObject( kvs::ObjectBase* object, kv
         object->updateMinMaxCoords();
     }
 
-    const int object_id = m_object_manager->insert( object );
-    const int renderer_id = m_renderer_manager->insert( renderer );
+    /* If the object has not been registered in the object managet,
+     * the object is registered and then its ID is returned.
+     */
+    int object_id = m_object_manager->objectID( object );
+    if ( object_id == -1 ) object_id = m_object_manager->insert( object );
+
+    /* If the renderer has not been registered in the renderer managet,
+     * the renderer is registered and then its ID is returned.
+     */
+//    int renderer_id = m_renderer_manager->rendererID( renderer );
+//    if ( renderer_id == -1 ) renderer_id = m_renderer_manager->insert( renderer );
+    int renderer_id = -1;
+    for ( int i = 0; i < m_renderer_manager->nrenderers(); i++ )
+    {
+        if ( m_renderer_manager->renderer(i) == renderer ) renderer_id = i;
+    }
+    if ( renderer_id == -1 ) renderer_id = m_renderer_manager->insert( renderer );
+
+    // Insert the IDs into the ID manager.
     m_id_manager->insert( object_id, renderer_id );
 
     return( std::pair<int,int>( object_id, renderer_id ) );
