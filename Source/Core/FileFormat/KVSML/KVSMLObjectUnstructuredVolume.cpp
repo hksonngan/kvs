@@ -496,7 +496,8 @@ const bool KVSMLObjectUnstructuredVolume::write( const std::string& filename )
         values.setFormat( "binary" );
     }
 
-    if ( !values.write( value_tag.node(), m_values ) )
+    const std::string pathname = kvs::File( m_filename ).pathName();
+    if ( !values.write( value_tag.node(), m_values, pathname ) )
     {
         kvsMessageError( "Cannot write <%s> for <%s>.",
                          values.name().c_str(),
@@ -525,7 +526,7 @@ const bool KVSMLObjectUnstructuredVolume::write( const std::string& filename )
         coords.setFormat( "binary" );
     }
 
-    if ( !coords.write( coord_tag.node(), m_coords ) )
+    if ( !coords.write( coord_tag.node(), m_coords, pathname ) )
     {
         kvsMessageError( "Cannot write <%s> for <%s>.",
                          coords.name().c_str(),
@@ -563,7 +564,7 @@ const bool KVSMLObjectUnstructuredVolume::write( const std::string& filename )
         connections.setFormat( "binary" );
     }
 
-    if ( !connections.write( connection_tag.node(), m_connections ) )
+    if ( !connections.write( connection_tag.node(), m_connections, pathname ) )
     {
         kvsMessageError( "Cannot write <%s> for <%s>.",
                          connections.name().c_str(),

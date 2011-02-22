@@ -36,7 +36,7 @@ namespace DataArray
 /*===========================================================================*/
 /**
  *  @brief  Returns the data file name
- *  @param  filename [in] bae filename
+ *  @param  filename [in] filename
  *  @param  type [in] data type (ex. 'value' or 'coord')
  *  @return data file name
  */
@@ -44,11 +44,12 @@ namespace DataArray
 inline const std::string GetDataFilename( const std::string& filename, const std::string& type )
 {
     const std::string basename( kvs::File( filename ).baseName() );
-    const std::string pathname( kvs::File( filename ).pathName() );
-    const std::string sep( kvs::File::Separator() );
+//    const std::string pathname( kvs::File( filename ).pathName() );
+//    const std::string sep( kvs::File::Separator() );
     const std::string ext( "dat" );
 
-    return( pathname + sep + basename + "_" + type + "." + ext );
+//    return( pathname + sep + basename + "_" + type + "." + ext );
+    return( basename + "_" + type + "." + ext );
 }
 
 /*===========================================================================*/
@@ -527,7 +528,7 @@ inline const bool WriteExternalData(
     }
     else if ( format == "binary" )
     {
-        std::ofstream ofs( filename.c_str() );
+        std::ofstream ofs( filename.c_str(), std::ios::out | std::ios::binary );
         if ( ofs.fail() )
         {
             kvsMessageError("Cannot open file '%s'.", filename.c_str() );
@@ -586,7 +587,7 @@ inline const bool WriteExternalData(
     }
     else if ( format == "binary" )
     {
-        std::ofstream ofs( filename.c_str() );
+        std::ofstream ofs( filename.c_str(), std::ios::out | std::ios::binary );
         if ( ofs.fail() )
         {
             kvsMessageError("Cannot open file '%s'.", filename.c_str() );

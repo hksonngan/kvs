@@ -351,7 +351,8 @@ const bool KVSMLObjectStructuredVolume::write( const std::string& filename )
         values.setFormat( "binary" );
     }
 
-    if ( !values.write( value_tag.node(), m_values ) )
+    const std::string pathname = kvs::File( m_filename ).pathName();
+    if ( !values.write( value_tag.node(), m_values, pathname ) )
     {
         kvsMessageError( "Cannot write <%s> for <%s>.",
                          values.name().c_str(),

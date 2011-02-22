@@ -84,10 +84,10 @@ public:
     template <typename T>
     const bool read( const kvs::XMLNode::SuperClass* parent, const size_t nelements, kvs::ValueArray<T>* data );
 
-    const bool write( kvs::XMLNode::SuperClass* parent, const kvs::AnyValueArray& data );
+    const bool write( kvs::XMLNode::SuperClass* parent, const kvs::AnyValueArray& data, const std::string pathname );
 
     template <typename T>
-    const bool write( kvs::XMLNode::SuperClass* parent, const kvs::ValueArray<T>& data );
+    const bool write( kvs::XMLNode::SuperClass* parent, const kvs::ValueArray<T>& data, const std::string pathname );
 
 private:
 
@@ -139,13 +139,15 @@ inline const bool DataArrayTag::read(
  *  @brief  Writes the data array.
  *  @param  parent [in] pointer to the paranet node for writing
  *  @param  data [in] data array
+ *  @param  pathname [in] pathname
  *  @return true, if the writing process is done successfully
  */
 /*===========================================================================*/
 template <typename T>
 inline const bool DataArrayTag::write(
     kvs::XMLNode::SuperClass* parent,
-    const kvs::ValueArray<T>& data )
+    const kvs::ValueArray<T>& data,
+    const std::string pathname )
 {
     if ( data.size() == 0 ) return( true );
 
@@ -190,7 +192,8 @@ inline const bool DataArrayTag::write(
         parent->InsertEndChild( element );
 
         // Set text.
-        return( kvs::kvsml::DataArray::WriteExternalData( data, m_file, m_format ) );
+        const std::string filename = pathname + kvs::File::Separator() + m_file;
+        return( kvs::kvsml::DataArray::WriteExternalData( data, filename, m_format ) );
     }
 
     return( true );

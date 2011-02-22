@@ -348,7 +348,8 @@ const bool KVSMLObjectImage::write( const std::string& filename )
                 data_tag.setFormat( "binary" );
             }
 
-            if ( !data_tag.write( pixel_tag.node(), m_data ) )
+            const std::string pathname = kvs::File( m_filename ).pathName();
+            if ( !data_tag.write( pixel_tag.node(), m_data, pathname ) )
             {
                 kvsMessageError( "Cannot write <%s> for <%s>.",
                                  data_tag.name().c_str(),

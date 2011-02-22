@@ -71,7 +71,8 @@ const bool WriteCoordData(
             data_tag.setFormat( "binary" );
         }
 
-        if ( !data_tag.write( coord_tag.node(), coords ) )
+        const std::string pathname = kvs::File( filename ).pathName();
+        if ( !data_tag.write( coord_tag.node(), coords, pathname ) )
         {
             kvsMessageError( "Cannot write <%s> for <%s>.",
                              data_tag.name().c_str(),
@@ -136,7 +137,8 @@ const bool WriteColorData(
                 data_tag.setFormat( "binary" );
             }
 
-            if ( !data_tag.write( color_tag.node(), colors ) )
+            const std::string pathname = kvs::File( filename ).pathName();
+            if ( !data_tag.write( color_tag.node(), colors, pathname ) )
             {
                 kvsMessageError( "Cannot write <%s> for <%s>.",
                                  data_tag.name().c_str(),
@@ -202,7 +204,8 @@ const bool WriteNormalData(
                 data_tag.setFormat( "binary" );
             }
 
-            if ( !data_tag.write( normal_tag.node(), normals ) )
+            const std::string pathname = kvs::File( filename ).pathName();
+            if ( !data_tag.write( normal_tag.node(), normals, pathname ) )
             {
                 kvsMessageError( "Cannot write <%s> for <%s>.",
                                  data_tag.name().c_str(),
@@ -268,7 +271,8 @@ const bool WriteSizeData(
                 data_tag.setFormat( "binary" );
             }
 
-            if ( !data_tag.write( size_tag.node(), sizes ) )
+            const std::string pathname = kvs::File( filename ).pathName();
+            if ( !data_tag.write( size_tag.node(), sizes, pathname ) )
             {
                 kvsMessageError( "Cannot write <%s> for <%s>.",
                                  data_tag.name().c_str(),
@@ -320,7 +324,8 @@ const bool WriteConnectionData(
             data_tag.setFormat( "binary" );
         }
 
-        if ( !data_tag.write( connection_tag.node(), connections ) )
+        const std::string pathname = kvs::File( filename ).pathName();
+        if ( !data_tag.write( connection_tag.node(), connections, pathname ) )
         {
             kvsMessageError( "Cannot write <%s> for <%s>.",
                              data_tag.name().c_str(),
@@ -385,7 +390,8 @@ const bool WriteOpacityData(
                 data_tag.setFormat( "binary" );
             }
 
-            if ( !data_tag.write( opacity_tag.node(), opacities ) )
+            const std::string pathname = kvs::File( filename ).pathName();
+            if ( !data_tag.write( opacity_tag.node(), opacities, pathname ) )
             {
                 kvsMessageError( "Cannot write <%s> for <%s>.",
                                  data_tag.name().c_str(),

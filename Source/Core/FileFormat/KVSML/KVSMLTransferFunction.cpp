@@ -529,7 +529,8 @@ const bool KVSMLTransferFunction::write( const std::string& filename )
             colors.setFormat( "binary" );
         }
 
-        if ( !colors.write( color_map_tag.node(), m_colors ) )
+        const std::string pathname = kvs::File( m_filename ).pathName();
+        if ( !colors.write( color_map_tag.node(), m_colors, pathname ) )
         {
             kvsMessageError( "Cannot write <%s> for <%s>.",
                              colors.name().c_str(),
@@ -580,7 +581,8 @@ const bool KVSMLTransferFunction::write( const std::string& filename )
             opacities.setFormat( "binary" );
         }
 
-        if ( !opacities.write( opacity_map_tag.node(), m_opacities ) )
+        const std::string pathname = kvs::File( m_filename ).pathName();
+        if ( !opacities.write( opacity_map_tag.node(), m_opacities, pathname ) )
         {
             kvsMessageError( "Cannot write <%s> for <%s>.",
                              opacities.name().c_str(),
