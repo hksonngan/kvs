@@ -65,9 +65,19 @@ void Device::update( void )
 {
     kvs::cuda::Context context( *this );
 
-#ifdef __CUDA_API_VERSION >= 3020
+#if defined( cuMemGetInfo )
+    /* In this case, the function 'cuMemGetInfo' is defined to 'cuMemGetInfo_v2'
+     * as "#define cuMemGetInfo cuMemGetInfo_v2". And then, the function
+     * 'cuMemGetInfo_v2' is defined as follows:
+     * CUresult cuMemGetInfo_v2( size_t * free, size_t * total )
+     */
     CUresult result = cuMemGetInfo( &m_free_memory, &m_total_memory );
 #else
+    /* The function 'cuMemGetInfo' is defined as follows:
+     * CUresult cuMemGetInfo( unsigned int * free, unsigned int * total )
+     * Therefore, the temporary parameters defined as unsigned int are used
+     * to obtain the memory information.
+     */
     unsigned int free_memory = 0;
     unsigned int total_memory = 0;
     CUresult result = cuMemGetInfo( &free_memory, &total_memory );
