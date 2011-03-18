@@ -38,10 +38,10 @@ class Device
 
 protected:
 
-    CUdevice     m_handler;      ///< device handler
-    CUdevprop    m_property;     ///< cuda device properties
-    unsigned int m_free_memory;  ///< free amount of memory on the device
-    unsigned int m_total_memory; ///< total amount of memory on the device
+    CUdevice  m_handler;      ///< device handler
+    CUdevprop m_property;     ///< cuda device properties
+    size_t    m_free_memory;  ///< free amount of memory on the device
+    size_t    m_total_memory; ///< total amount of memory on the device
 
 public:
 
@@ -67,9 +67,9 @@ public:
 
     const std::string name( void ) const;
 
-    const unsigned int totalMemory( void ) const;
+    const size_t totalMemory( void ) const;
 
-    const unsigned int freeMemory( void ) const;
+    const size_t freeMemory( void ) const;
 
     const int maxThreadsPerBlock( void ) const;
 

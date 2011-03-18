@@ -65,7 +65,15 @@ void Device::update( void )
 {
     kvs::cuda::Context context( *this );
 
+#ifdef __CUDA_API_VERSION >= 3020
     CUresult result = cuMemGetInfo( &m_free_memory, &m_total_memory );
+#else
+    unsigned int free_memory = 0;
+    unsigned int total_memory = 0;
+    CUresult result = cuMemGetInfo( &free_memory, &total_memory );
+    m_free_memory = static_cast<size_t>( free_memory );
+    m_total_memory = static_cast<size_t>( total_memory );
+#endif
     if ( result != CUDA_SUCCESS )
     {
         kvsMessageError( "CUDA; %s.", kvs::cuda::ErrorString( result ) );
@@ -178,7 +186,7 @@ const std::string Device::name( void ) const
  *  @return total memory size in byte
  */
 /*===========================================================================*/
-const unsigned int Device::totalMemory( void ) const
+const size_t Device::totalMemory( void ) const
 {
     return( m_total_memory );
 }
@@ -189,7 +197,7 @@ const unsigned int Device::totalMemory( void ) const
  *  @return free memory size in byte
  */
 /*===========================================================================*/
-const unsigned int Device::freeMemory( void ) const
+const size_t Device::freeMemory( void ) const
 {
     return( m_free_memory );
 }
