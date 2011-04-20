@@ -19,14 +19,14 @@
       <Tool
         Name="VCCLCompilerTool"
         AdditionalIncludeDirectories="$(KVS_DIR)\include"
-        PreprocessorDefinitions="_DEBUG;KVS_ENABLE_DEBUG;KVS_SUPPORT_GLUT;WIN32;_MBCS;NOMINMAX;_SCL_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE"
+        PreprocessorDefinitions="DEFINITIONS_DEBUG_REPLACED_BY_KVSMAKE"
         Optimization="0"
         RuntimeLibrary="3"
         WarningLevel="4"
         />
       <Tool
         Name="VCLinkerTool"
-        AdditionalDependencies="kvsSupportGLUT.lib glut32.lib kvsCore.lib glu32.lib opengl32.lib"
+        AdditionalDependencies="LIBRARIES_REPLACED_BY_KVSMAKE"
         AdditionalLibraryDirectories="$(KVS_DIR)\lib"
         />
     </Configuration>
@@ -41,14 +41,14 @@
       <Tool
         Name="VCCLCompilerTool"
         AdditionalIncludeDirectories="$(KVS_DIR)\include"
-        PreprocessorDefinitions="NDEBUG;KVS_SUPPORT_GLUT;WIN32;_MBCS;NOMINMAX;_SCL_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE"
+        PreprocessorDefinitions="DEFINITIONS_RELEASE_REPLACED_BY_KVSMAKE"
         Optimization="3"
         RuntimeLibrary="2"
         WarningLevel="4"
         />
       <Tool
         Name="VCLinkerTool"
-        AdditionalDependencies="kvsSupportGLUT.lib glut32.lib kvsCore.lib glu32.lib opengl32.lib"
+        AdditionalDependencies="LIBRARIES_REPLACED_BY_KVSMAKE"
         AdditionalLibraryDirectories="$(KVS_DIR)\lib"
         OptimizeReferences="2"
         EnableCOMDATFolding="2"

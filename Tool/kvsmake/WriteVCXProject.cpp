@@ -77,6 +77,39 @@ void WriteVCXProjectBody(
         ++iter;
     }
 
+    // Additional dependencies (static libraries).
+    std::string libraries("");
+#if defined( KVS_SUPPORT_GLEW )
+    libraries.append("kvsSupportGLEW.lib;glew32.lib;");
+#elif defined( KVS_SUPPORT_GLUT )
+    libraries.append("kvsSupportGUT.lib;glut32.lib;");
+#endif
+    libraries.append("kvsCore.lib;");
+    libraries.append("glu32.lib;");
+    libraries.append("opengl32.lib;");
+
+    // Preprocessor definitions.
+    std::string definitions("");
+    definitions.append("WIN32;");
+    definitions.append("_MBCS;");
+    definitions.append("NOMINMAX;");
+    definitions.append("_SCL_SECURE_NO_DEPRECATE;");
+    definitions.append("_CRT_SECURE_NO_DEPRECATE;");
+    definitions.append("_CRT_NONSTDC_NO_DEPRECATE");
+
+#if defined( KVS_SUPPORT_GLUT )
+    definitions.append("KVS_SUPPORT_GLUT;");
+#elif defined( KVS_SUPPORT_GLEW )
+    definitions.append("KVS_SUPPORT_GLEW;");
+#endif
+
+    std::string definitions_debug( definitions );
+    definitions_debug.append("_DEBUG;");
+    definitions_debug.append("KVS_ENABLE_DEBUG;");
+
+    std::string definitions_release( definitions );
+    definitions_release.append("NDEBUG;");
+
     // Write a project file.
     while ( !in.eof() )
     {
@@ -86,6 +119,9 @@ void WriteVCXProjectBody(
 
         line = kvsmake::ReplaceString( line, "PROJECT_NAME_REPLACED_BY_KVSMAKE", project_name );
         line = kvsmake::ReplaceString( line, "INCLUDES_REPLACED_BY_KVSMAKE", includes );
+        line = kvsmake::ReplaceString( line, "DEFINITIONS_DEBUG_REPLACED_BY_KVSMAKE", definitions_debug );
+        line = kvsmake::ReplaceString( line, "DEFINITIONS_RELEASE_REPLACED_BY_KVSMAKE", definitions_release );
+        line = kvsmake::ReplaceString( line, "LIBRARIES_REPLACED_BY_KVSMAKE", libraries );
 
         out << line << std::endl;
     }
