@@ -88,7 +88,8 @@ void WriteVCProjectBody(
     std::string libraries("");
 #if defined( KVS_SUPPORT_GLEW )
     libraries.append("kvsSupportGLEW.lib glew32.lib ");
-#elif defined( KVS_SUPPORT_GLUT )
+#endif
+#if defined( KVS_SUPPORT_GLUT )
     libraries.append("kvsSupportGUT.lib glut32.lib");
 #endif
     libraries.append("kvsCore.lib ");
@@ -99,7 +100,8 @@ void WriteVCProjectBody(
     std::string definitions("");
 #if defined( KVS_SUPPORT_GLEW )
     definitions.append("KVS_SUPPORT_GLEW;");
-#elif defined( KVS_SUPPORT_GLUT )
+#endif
+#if defined( KVS_SUPPORT_GLUT )
     definitions.append("KVS_SUPPORT_GLUT;");
 #endif
     definitions.append("WIN32;");

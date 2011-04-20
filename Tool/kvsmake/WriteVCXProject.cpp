@@ -81,7 +81,8 @@ void WriteVCXProjectBody(
     std::string libraries("");
 #if defined( KVS_SUPPORT_GLEW )
     libraries.append("kvsSupportGLEW.lib;glew32.lib;");
-#elif defined( KVS_SUPPORT_GLUT )
+#endif
+#if defined( KVS_SUPPORT_GLUT )
     libraries.append("kvsSupportGUT.lib;glut32.lib;");
 #endif
     libraries.append("kvsCore.lib;");
@@ -90,18 +91,18 @@ void WriteVCXProjectBody(
 
     // Preprocessor definitions.
     std::string definitions("");
+#if defined( KVS_SUPPORT_GLEW )
+    definitions.append("KVS_SUPPORT_GLEW;");
+#endif
+#if defined( KVS_SUPPORT_GLUT )
+    definitions.append("KVS_SUPPORT_GLUT;");
+#endif
     definitions.append("WIN32;");
     definitions.append("_MBCS;");
     definitions.append("NOMINMAX;");
     definitions.append("_SCL_SECURE_NO_DEPRECATE;");
     definitions.append("_CRT_SECURE_NO_DEPRECATE;");
     definitions.append("_CRT_NONSTDC_NO_DEPRECATE;");
-
-#if defined( KVS_SUPPORT_GLUT )
-    definitions.append("KVS_SUPPORT_GLUT;");
-#elif defined( KVS_SUPPORT_GLEW )
-    definitions.append("KVS_SUPPORT_GLEW;");
-#endif
 
     std::string definitions_debug( definitions );
     definitions_debug.append("_DEBUG;");
