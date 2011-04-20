@@ -107,7 +107,7 @@ void WriteVCProjectBody(
     definitions.append("NOMINMAX;");
     definitions.append("_SCL_SECURE_NO_DEPRECATE;");
     definitions.append("_CRT_SECURE_NO_DEPRECATE;");
-    definitions.append("_CRT_NONSTDC_NO_DEPRECATE");
+    definitions.append("_CRT_NONSTDC_NO_DEPRECATE;");
 
     std::string definitions_debug( definitions );
     definitions_debug.append("_DEBUG;");

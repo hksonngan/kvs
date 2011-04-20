@@ -95,7 +95,7 @@ void WriteVCXProjectBody(
     definitions.append("NOMINMAX;");
     definitions.append("_SCL_SECURE_NO_DEPRECATE;");
     definitions.append("_CRT_SECURE_NO_DEPRECATE;");
-    definitions.append("_CRT_NONSTDC_NO_DEPRECATE");
+    definitions.append("_CRT_NONSTDC_NO_DEPRECATE;");
 
 #if defined( KVS_SUPPORT_GLUT )
     definitions.append("KVS_SUPPORT_GLUT;");
