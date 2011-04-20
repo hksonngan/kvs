@@ -90,7 +90,7 @@ void WriteVCProjectBody(
     libraries.append("kvsSupportGLEW.lib glew32.lib ");
 #endif
 #if defined( KVS_SUPPORT_GLUT )
-    libraries.append("kvsSupportGUT.lib glut32.lib");
+    libraries.append("kvsSupportGLUT.lib glut32.lib");
 #endif
     libraries.append("kvsCore.lib ");
     libraries.append("glu32.lib ");
