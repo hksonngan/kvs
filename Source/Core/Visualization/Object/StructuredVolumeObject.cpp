@@ -313,7 +313,7 @@ void StructuredVolumeObject::calculate_min_max_coords( void )
         max_coord.set(
             *( coord + m_resolution.x() - 1 ),
             *( coord + m_resolution.x() + m_resolution.y() - 1 ),
-            *( coord + m_resolution.x() + m_resolution.y() + m_resolution.y() - 1 ) );
+            *( coord + m_resolution.x() + m_resolution.y() + m_resolution.z() - 1 ) );
 
         break;
     }
