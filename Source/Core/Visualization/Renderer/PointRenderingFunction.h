@@ -182,18 +182,19 @@ void Rendering_Ss_C_Ns( const kvs::PointObject* point )
     const float* size   = point->sizes().pointer();
     const float* vertex = point->coords().pointer();
     const float* normal = point->normals().pointer();
-    glBegin( GL_POINTS );
+
+    const size_t nvertices = point->nvertices();
+    for( size_t i = 0; i < nvertices; i++ )
     {
-        const size_t nvertices = point->nvertices();
-        for( size_t i = 0; i < nvertices; i++ )
+        const size_t i3 = i * 3;
+        glPointSize( size[i] );
+        glBegin( GL_POINTS );
         {
-            const size_t i3 = i * 3;
-            glPointSize( size[i] );
             glNormal3f( normal[i3], normal[i3+1], normal[i3+2] );
             glVertex3f( vertex[i3], vertex[i3+1], vertex[i3+2] );
         }
+        glEnd();
     }
-    glEnd();
 };
 
 /*==========================================================================*/
@@ -209,17 +210,18 @@ void Rendering_Ss_C( const kvs::PointObject* point )
 
     const float* size   = point->sizes().pointer();
     const float* vertex = point->coords().pointer();
-    glBegin( GL_POINTS );
+
+    const size_t nvertices = point->nvertices();
+    for( size_t i = 0; i < nvertices; i++ )
     {
-        const size_t nvertices = point->nvertices();
-        for( size_t i = 0; i < nvertices; i++ )
+        const size_t i3 = i * 3;
+        glPointSize( size[i] );
+        glBegin( GL_POINTS );
         {
-            const size_t i3 = i * 3;
-            glPointSize( size[i] );
             glVertex3f( vertex[i3], vertex[i3+1], vertex[i3+2] );
         }
+        glEnd();
     }
-    glEnd();
 };
 
 /*==========================================================================*/
@@ -236,19 +238,20 @@ void Rendering_Ss_Cs_Ns( const kvs::PointObject* point )
     const float*         vertex = point->coords().pointer();
     const float*         normal = point->normals().pointer();
     const unsigned char* color  = point->colors().pointer();
-    glBegin( GL_POINTS );
+
+    const size_t nvertices = point->nvertices();
+    for( size_t i = 0; i < nvertices; i++ )
     {
-        const size_t nvertices = point->nvertices();
-        for( size_t i = 0; i < nvertices; i++ )
+        const size_t i3 = i * 3;
+        glPointSize( size[i] );
+        glBegin( GL_POINTS );
         {
-            const size_t i3 = i * 3;
-            glPointSize( size[i] );
             glNormal3f( normal[i3], normal[i3+1], normal[i3+2] );
             glColor3ub( color[i3],  color[i3+1],  color[i3+2]  );
             glVertex3f( vertex[i3], vertex[i3+1], vertex[i3+2] );
         }
+        glEnd();
     }
-    glEnd();
 };
 
 /*==========================================================================*/
@@ -262,18 +265,19 @@ void Rendering_Ss_Cs( const kvs::PointObject* point )
     const float*         size   = point->sizes().pointer();
     const float*         vertex = point->coords().pointer();
     const unsigned char* color  = point->colors().pointer();
-    glBegin( GL_POINTS );
+
+    const size_t nvertices = point->nvertices();
+    for( size_t i = 0; i < nvertices; i++ )
     {
-        const size_t nvertices = point->nvertices();
-        for( size_t i = 0; i < nvertices; i++ )
+        const size_t i3 = i * 3;
+        glPointSize( size[i] );
+        glBegin( GL_POINTS );
         {
-            const size_t i3 = i * 3;
-            glPointSize( size[i] );
             glColor3ub( color[i3],  color[i3+1],  color[i3+2]  );
             glVertex3f( vertex[i3], vertex[i3+1], vertex[i3+2] );
         }
+        glEnd();
     }
-    glEnd();
 };
 
 /*==========================================================================*/
@@ -286,17 +290,18 @@ void Rendering_Ss( const kvs::PointObject* point )
 {
     const float* size   = point->sizes().pointer();
     const float* vertex = point->coords().pointer();
-    glBegin( GL_POINTS );
+
+    const size_t nvertices = point->nvertices();
+    for( size_t i = 0; i < nvertices; i++ )
     {
-        const size_t nvertices = point->nvertices();
-        for( size_t i = 0; i < nvertices; i++ )
+        size_t i3 = i * 3;
+        glPointSize( size[i] );
+        glBegin( GL_POINTS );
         {
-            size_t i3 = i * 3;
-            glPointSize( size[i] );
             glVertex3f( vertex[i3], vertex[i3+1], vertex[i3+2] );
         }
+        glEnd();
     }
-    glEnd();
 };
 
 typedef void (*PointRenderingFunctionType)( const kvs::PointObject* point );
