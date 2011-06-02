@@ -12,6 +12,7 @@
  */
 /****************************************************************************/
 #include "AnyValue.h"
+#include <string>
 
 
 namespace kvs
@@ -95,6 +96,12 @@ template<>
 const char* AnyValue::SetTypeInfo<kvs::Real64>::typeName( void ) const
 {
     return( "double" );
+}
+
+template<>
+const char* AnyValue::SetTypeInfo<std::string>::typeName( void ) const
+{
+    return( "string" );
 }
 
 AnyValue::AnyValue( void )

@@ -277,17 +277,7 @@ public:
 
     void swapByte( void )
     {
-        const std::type_info& type = typeid( value_type );
-        if (      type == typeid( char ) )           { kvs::Endian::Swap( m_values, m_nvalues ); }
-        else if ( type == typeid( unsigned char ) )  { kvs::Endian::Swap( m_values, m_nvalues ); }
-        else if ( type == typeid( short ) )          { kvs::Endian::Swap( m_values, m_nvalues ); }
-        else if ( type == typeid( unsigned short ) ) { kvs::Endian::Swap( m_values, m_nvalues ); }
-        else if ( type == typeid( int ) )            { kvs::Endian::Swap( m_values, m_nvalues ); }
-        else if ( type == typeid( unsigned int ) )   { kvs::Endian::Swap( m_values, m_nvalues ); }
-        else if ( type == typeid( long ) )           { kvs::Endian::Swap( m_values, m_nvalues ); }
-        else if ( type == typeid( unsigned long ) )  { kvs::Endian::Swap( m_values, m_nvalues ); }
-        else if ( type == typeid( float ) )          { kvs::Endian::Swap( m_values, m_nvalues ); }
-        else if ( type == typeid( double ) )         { kvs::Endian::Swap( m_values, m_nvalues ); }
+        kvs::Endian::Swap( m_values, m_nvalues );
     }
 
     void shallowCopy( const this_type& other )
@@ -324,7 +314,7 @@ public:
         this->create_counter();
 
         m_nvalues = nvalues;
-        m_values  = static_cast<value_type*>( malloc( sizeof( value_type ) * nvalues ) );
+        m_values = new value_type [ nvalues ];
         KVS_ASSERT( m_values != NULL );
 
         return( m_values );
@@ -356,7 +346,7 @@ private:
 
             if ( m_counter->value() == 0 )
             {
-                if ( m_values  ) { free( m_values ); }
+                if ( m_values  ) { delete [] m_values; }
                 if ( m_counter ) { delete m_counter; }
             }
         }
@@ -366,6 +356,20 @@ private:
         m_values  = 0;
     }
 };
+
+template <>
+inline void ValueArray<std::string>::deepCopy( const ValueArray<std::string>& other )
+{
+    std::string* pvalues = this->allocate( other.m_nvalues );
+    std::copy( other.m_values, other.m_values + other.m_nvalues, pvalues );
+}
+
+template <>
+inline void ValueArray<std::string>::deepCopy( const std::string* values, const size_t nvalues )
+{
+    std::string* pvalues = this->allocate( nvalues );
+    std::copy( values, values + nvalues, pvalues );
+}
 
 } // end of namespace kvs
 

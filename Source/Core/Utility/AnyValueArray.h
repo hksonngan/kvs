@@ -18,6 +18,8 @@
 #include <cstdlib>
 #include <cstddef>
 #include <typeinfo>
+#include <string>
+#include <sstream>
 #include <kvs/DebugNew>
 #include <kvs/Endian>
 #include <kvs/AnyValue>
@@ -101,6 +103,33 @@ public:
         KVS_ASSERT( this->typeInfo()->type() == typeid( T ) );
 
         return( reinterpret_cast<T&>( *( static_cast<char*>( m_values ) + m_size_of_value * index ) ) );
+    }
+
+    template<typename T>
+    const T to( const size_t index ) const
+    {
+        // Value to Value.
+        const std::type_info& type = this->typeInfo()->type();
+        if ( type == typeid( kvs::Int8   ) ) return( static_cast<T>( this->at<kvs::Int8>(index) ) );
+        if ( type == typeid( kvs::Int16  ) ) return( static_cast<T>( this->at<kvs::Int16>(index) ) );
+        if ( type == typeid( kvs::Int32  ) ) return( static_cast<T>( this->at<kvs::Int32>(index) ) );
+        if ( type == typeid( kvs::Int64  ) ) return( static_cast<T>( this->at<kvs::Int64>(index) ) );
+        if ( type == typeid( kvs::UInt8  ) ) return( static_cast<T>( this->at<kvs::UInt8>(index) ) );
+        if ( type == typeid( kvs::UInt16 ) ) return( static_cast<T>( this->at<kvs::UInt16>(index) ) );
+        if ( type == typeid( kvs::UInt32 ) ) return( static_cast<T>( this->at<kvs::UInt32>(index) ) );
+        if ( type == typeid( kvs::UInt64 ) ) return( static_cast<T>( this->at<kvs::UInt64>(index) ) );
+        if ( type == typeid( kvs::Real32 ) ) return( static_cast<T>( this->at<kvs::Real32>(index) ) );
+        if ( type == typeid( kvs::Real64 ) ) return( static_cast<T>( this->at<kvs::Real64>(index) ) );
+
+        // String to Value.
+        if ( type == typeid( std::string ) )
+        {
+            T v; std::stringstream s( this->at<std::string>(index) ); s >> v;
+            return( v );
+        }
+
+        kvsMessageError("Unsupported data type.");
+        return( T(0) );
     }
 
     const size_t size( void ) const
@@ -243,7 +272,9 @@ private:
 
             if ( m_counter->value() == 0 )
             {
-                if ( m_values  ) { free( m_values ); }
+                const std::type_info& type = m_type_info->type();
+                if ( type == typeid(std::string) ) { if ( m_values ) delete [] static_cast<std::string*>(m_values); }
+                else { if ( m_values ) free( m_values ); }
                 if ( m_counter ) { delete m_counter; }
             }
         }
@@ -260,7 +291,7 @@ private:
 };
 
 template<typename T>
-AnyValueArray::AnyValueArray( const T* values, const size_t nvalues )
+inline AnyValueArray::AnyValueArray( const T* values, const size_t nvalues )
     : m_counter( 0 )
     , m_type_info( 0 )
     , m_size_of_value( 0 )
@@ -271,7 +302,7 @@ AnyValueArray::AnyValueArray( const T* values, const size_t nvalues )
 }
 
 template<typename T>
-AnyValueArray::AnyValueArray( const std::vector<T>& values )
+inline AnyValueArray::AnyValueArray( const std::vector<T>& values )
     : m_counter( 0 )
     , m_type_info( 0 )
     , m_size_of_value( 0 )
@@ -282,7 +313,7 @@ AnyValueArray::AnyValueArray( const std::vector<T>& values )
 }
 
 template<typename T>
-AnyValueArray::AnyValueArray( const kvs::ValueArray<T>& values )
+inline AnyValueArray::AnyValueArray( const kvs::ValueArray<T>& values )
     : m_counter( 0 )
     , m_type_info( 0 )
     , m_size_of_value( 0 )
@@ -290,6 +321,69 @@ AnyValueArray::AnyValueArray( const kvs::ValueArray<T>& values )
     , m_values( 0 )
 {
     this->shallowCopy<T>( values );
+}
+
+template<>
+inline std::string& AnyValueArray::at<std::string>( const size_t index )
+{
+    KVS_ASSERT( index < m_nvalues );
+    KVS_ASSERT( this->typeInfo()->type() == typeid( std::string ) );
+
+    return( reinterpret_cast<std::string&>( *( static_cast<std::string*>( m_values ) + index ) ) );
+}
+
+template<>
+inline const std::string& AnyValueArray::at<std::string>( const size_t index ) const
+{
+    KVS_ASSERT( index < m_nvalues );
+    KVS_ASSERT( this->typeInfo()->type() == typeid( std::string ) );
+
+    return( reinterpret_cast<std::string&>( *( static_cast<std::string*>( m_values ) + index ) ) );
+}
+
+template<>
+inline const std::string AnyValueArray::to<std::string>( const size_t index ) const
+{
+    // Value to String.
+    const std::type_info& type = this->typeInfo()->type();
+    if ( type == typeid( kvs::Int8   ) ) { std::stringstream v; v << *((kvs::Int8*)m_values+index);   return( v.str() ); }
+    if ( type == typeid( kvs::Int16  ) ) { std::stringstream v; v << *((kvs::Int16*)m_values+index);  return( v.str() ); }
+    if ( type == typeid( kvs::Int32  ) ) { std::stringstream v; v << *((kvs::Int32*)m_values+index);  return( v.str() ); }
+    if ( type == typeid( kvs::Int64  ) ) { std::stringstream v; v << *((kvs::Int64*)m_values+index);  return( v.str() ); }
+    if ( type == typeid( kvs::UInt8  ) ) { std::stringstream v; v << *((kvs::UInt8*)m_values+index);  return( v.str() ); }
+    if ( type == typeid( kvs::UInt16 ) ) { std::stringstream v; v << *((kvs::UInt16*)m_values+index); return( v.str() ); }
+    if ( type == typeid( kvs::UInt32 ) ) { std::stringstream v; v << *((kvs::UInt32*)m_values+index); return( v.str() ); }
+    if ( type == typeid( kvs::UInt64 ) ) { std::stringstream v; v << *((kvs::UInt64*)m_values+index); return( v.str() ); }
+    if ( type == typeid( kvs::Real32 ) ) { std::stringstream v; v << *((kvs::Real32*)m_values+index); return( v.str() ); }
+    if ( type == typeid( kvs::Real64 ) ) { std::stringstream v; v << *((kvs::Real64*)m_values+index); return( v.str() ); }
+
+    // String to String.
+    if ( type == typeid(std::string) ) return( *( static_cast<std::string*>( m_values ) + index ) );
+
+    kvsMessageError("Unsupported data type.");
+    return( "" );
+}
+
+template <>
+inline void* AnyValueArray::allocate<std::string>( const size_t nvalues )
+{
+    this->unref();
+    this->create_counter();
+
+    m_type_info = new kvs::AnyValue::SetTypeInfo<std::string>;
+    m_size_of_value = sizeof( std::string );
+
+    m_nvalues = nvalues;
+    m_values = new std::string [ m_nvalues ];
+
+    return( m_values );
+}
+
+template <>
+inline void AnyValueArray::deepCopy<std::string>( const std::string* values, const size_t nvalues )
+{
+    std::string* pvalues = static_cast<std::string*>( this->allocate<std::string>( nvalues ) );
+    std::copy( values, values + nvalues, pvalues );
 }
 
 } // end of namespace kvs
