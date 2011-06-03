@@ -272,9 +272,12 @@ private:
 
             if ( m_counter->value() == 0 )
             {
-                const std::type_info& type = m_type_info->type();
-                if ( type == typeid(std::string) ) { if ( m_values ) delete [] static_cast<std::string*>(m_values); }
-                else { if ( m_values ) free( m_values ); }
+                if ( m_values )
+                {
+                    const std::type_info& type = m_type_info->type();
+                    if ( type == typeid(std::string) ) { delete [] static_cast<std::string*>(m_values); }
+                    else { free( m_values ); }
+                }
                 if ( m_counter ) { delete m_counter; }
             }
         }
