@@ -234,7 +234,7 @@ inline const kvs::Vector3f CellBase<T>::transformGlobalToLocal( const kvs::Vecto
         const kvs::Vector3f dX( X - X0 );
 
         const kvs::Matrix33f J( this->JacobiMatrix() );
-        const kvs::Vector3f dx = J.inverse() * dX;
+        const kvs::Vector3f dx = J.transpose().inverse() * dX;
         if ( dx.length() < TinyValue ) break; // Converged.
 
         x0 += dx;
