@@ -226,7 +226,7 @@ inline const kvs::Vector3f CellBase<T>::transformGlobalToLocal( const kvs::Vecto
     // by using Newton-Raphson method.
     const float TinyValue = static_cast<float>( 1.e-6 );
     const size_t MaxLoop = 100;
-    kvs::Vector3f x0( 0.5f, 0.5f, 0.5f ); // Initial point in local coordinate.
+    kvs::Vector3f x0( 0.25f, 0.25f, 0.25f ); // Initial point in local coordinate.
     for ( size_t i = 0; i < MaxLoop; i++ )
     {
         this->setLocalPoint( x0 );
