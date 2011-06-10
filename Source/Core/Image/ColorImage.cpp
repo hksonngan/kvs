@@ -231,7 +231,7 @@ const kvs::UInt8 ColorImage::b( const size_t i, const size_t j ) const
 /*==========================================================================*/
 const kvs::RGBColor ColorImage::pixel( const size_t index ) const
 {
-    const int index3 = index * 3;
+    const size_t index3 = index * 3;
     return( kvs::RGBColor( m_data[index3], m_data[index3+1], m_data[index3+2] ) );
 }
 

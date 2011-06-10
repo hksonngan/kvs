@@ -958,7 +958,7 @@ void Dicom::set_windowing_parameter( void )
             }
         }
 
-        m_window_level = static_cast<size_t>( ( max_value + min_value ) / 2.0 );
+        m_window_level = static_cast<int>( ( max_value + min_value ) / 2.0 );
         m_window_width = max_value - min_value + 1;
     }
 

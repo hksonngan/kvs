@@ -51,7 +51,7 @@ protected:
 
     WritingDataType    m_writing_type; ///< writing data type
     std::string        m_grid_type;    ///< grid type
-    kvs::UInt32        m_veclen;       ///< vector length
+    size_t             m_veclen;       ///< vector length
     kvs::Vector3ui     m_resolution;   ///< grid resolution
     kvs::AnyValueArray m_values;       ///< field value array
 
@@ -73,7 +73,7 @@ public:
 
     const std::string& gridType( void ) const;
 
-    const kvs::UInt32 veclen( void ) const;
+    const size_t veclen( void ) const;
 
     const kvs::Vector3ui& resolution( void ) const;
 
@@ -85,7 +85,7 @@ public:
 
     void setGridType( const std::string& grid_type );
 
-    void setVeclen( const kvs::UInt32 veclen );
+    void setVeclen( const size_t veclen );
 
     void setResolution( const kvs::Vector3ui& resolution );
 

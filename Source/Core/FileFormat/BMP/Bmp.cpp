@@ -295,27 +295,27 @@ void Bmp::skip_header_and_pallete( std::ifstream& ifs )
 /*==========================================================================*/
 void Bmp::set_header( void )
 {
-    const char*       magic_num = "BM";
+    const char*  magic_num = "BM";
     const kvs::UInt32 offset    = 54;
-    const size_t      bpp       = 3;
-    const kvs::UInt32 padding   = m_height * ( m_width % 4 );
+    const kvs::UInt32 bpp       = 3;
+    const kvs::UInt32 padding   = kvs::UInt32( m_height * ( m_width % 4 ) );
 
     //m_fileh.type          = 0x4d42; // "BM"; '0x424d', if big endian.
     //m_fileh.type          = 0x424d; // "BM"; '0x424d', if big endian.
     memcpy( &( m_file_header.m_type ), magic_num, sizeof( kvs::UInt16 ) );
-    m_file_header.m_size          = offset + m_width * m_height * bpp + padding;
+    m_file_header.m_size          = kvs::UInt32( offset + m_width * m_height * bpp + padding );
     m_file_header.m_reserved1     = 0;
     m_file_header.m_reserved2     = 0;
     m_file_header.m_offset        = offset;
 
     m_info_header.m_size          = 40;
-    m_info_header.m_width         = m_width;
-    m_info_header.m_height        = m_height;
+    m_info_header.m_width         = kvs::UInt32( m_width );
+    m_info_header.m_height        = kvs::UInt32( m_height );
     m_info_header.m_nplanes       = 1;
     m_info_header.m_bpp           = 24;
     m_info_header.m_compression   = 0L; // 0L: no compress,
                                         // 1L: 8-bit run-length encoding, 2L: 4-bit
-    m_info_header.m_bitmapsize    = m_width * m_height * bpp + padding;
+    m_info_header.m_bitmapsize    = kvs::UInt32( m_width * m_height * bpp + padding );
     m_info_header.m_hresolution   = 0;
     m_info_header.m_vresolution   = 0;
     m_info_header.m_colsused      = 0;

@@ -507,7 +507,7 @@ const bool Ply::write( const std::string& filename )
     }
 
     const size_t nverts = m_nverts;
-    kvs::ply::ply_element_count( ply, "vertex", nverts );
+    kvs::ply::ply_element_count( ply, "vertex", int( nverts ) );
     kvs::ply::ply_describe_property( ply, "vertex", &::VertProps[0] );
     kvs::ply::ply_describe_property( ply, "vertex", &::VertProps[1] );
     kvs::ply::ply_describe_property( ply, "vertex", &::VertProps[2] );
@@ -529,7 +529,7 @@ const bool Ply::write( const std::string& filename )
     if ( m_nfaces > 0 )
     {
         const size_t nfaces = m_nfaces;
-        kvs::ply::ply_element_count( ply, "face", nfaces );
+        kvs::ply::ply_element_count( ply, "face", int( nfaces ) );
         kvs::ply::ply_describe_property( ply, "face", &::FaceProps[0] );
     }
 

@@ -101,7 +101,7 @@ const std::string& KVSMLObjectStructuredVolume::gridType( void ) const
  *  @return vector length
  */
 /*===========================================================================*/
-const kvs::UInt32 KVSMLObjectStructuredVolume::veclen( void ) const
+const size_t KVSMLObjectStructuredVolume::veclen( void ) const
 {
     return( m_veclen );
 }
@@ -156,7 +156,7 @@ void KVSMLObjectStructuredVolume::setGridType( const std::string& grid_type )
  *  @param  veclen [in] vector length
  */
 /*===========================================================================*/
-void KVSMLObjectStructuredVolume::setVeclen( const kvs::UInt32 veclen )
+void KVSMLObjectStructuredVolume::setVeclen( const size_t veclen )
 {
     m_veclen = veclen;
 }

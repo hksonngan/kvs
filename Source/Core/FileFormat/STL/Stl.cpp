@@ -557,7 +557,7 @@ const bool Stl::write_binary( FILE* ofs )
     }
 
     // Number of triangles (4bytes).
-    const kvs::UInt32 ntriangles = m_normals.size() / 3;
+    const kvs::UInt32 ntriangles = static_cast<kvs::UInt32>( m_normals.size() / 3 );
     if ( fwrite( &ntriangles, sizeof( kvs::UInt32 ), 1, ofs ) != 1 )
     {
         kvsMessageError("Cannot write a number of triangles.");
