@@ -74,10 +74,10 @@ inline void Swap8Bytes( volatile void* value )
  *  @param  n [in] number of elements
  */
 /*===========================================================================*/
-inline void Swap2Bytes( volatile void* value, int n )
+inline void Swap2Bytes( volatile void* value, size_t n )
 {
     volatile unsigned char* v = static_cast<volatile unsigned char*>( value );
-    for ( int i = 0; i < n; i++ ) { Swap2Bytes( v ); v += 2; }
+    for ( size_t i = 0; i < n; i++ ) { Swap2Bytes( v ); v += 2; }
 }
 
 /*===========================================================================*/
@@ -87,10 +87,10 @@ inline void Swap2Bytes( volatile void* value, int n )
  *  @param  n [in] number of elements
  */
 /*===========================================================================*/
-inline void Swap4Bytes( volatile void* value, int n )
+inline void Swap4Bytes( volatile void* value, size_t n )
 {
     volatile unsigned char* v = static_cast<volatile unsigned char*>( value );
-    for ( int i = 0; i < n; i++ ) { Swap4Bytes( v ); v += 4; }
+    for ( size_t i = 0; i < n; i++ ) { Swap4Bytes( v ); v += 4; }
 }
 
 /*===========================================================================*/
@@ -100,10 +100,10 @@ inline void Swap4Bytes( volatile void* value, int n )
  *  @param  n [in] number of elements
  */
 /*===========================================================================*/
-inline void Swap8Bytes( volatile void* value, int n )
+inline void Swap8Bytes( volatile void* value, size_t n )
 {
     volatile unsigned char* v = static_cast<volatile unsigned char*>( value );
-    for ( int i = 0; i < n; i++ ) { Swap8Bytes( v ); v += 8; }
+    for ( size_t i = 0; i < n; i++ ) { Swap8Bytes( v ); v += 8; }
 }
 
 } // end of namespace
@@ -276,7 +276,7 @@ inline void Swap( std::string& )
  *  @brief  Swaps the array of 8-bit integer value. (inaction)
  */
 /*===========================================================================*/
-inline void Swap( kvs::Int8*, int )
+inline void Swap( kvs::Int8*, size_t )
 {
 }
 
@@ -285,7 +285,7 @@ inline void Swap( kvs::Int8*, int )
  *  @brief  Swaps the array of 8-bit integer value. (inaction)
  */
 /*===========================================================================*/
-inline void Swap( kvs::UInt8*, int )
+inline void Swap( kvs::UInt8*, size_t )
 {
 }
 
@@ -296,7 +296,7 @@ inline void Swap( kvs::UInt8*, int )
  *  @param  n [in] number of elements
  */
 /*===========================================================================*/
-inline void Swap( kvs::Int16* value, int n )
+inline void Swap( kvs::Int16* value, size_t n )
 {
     Swap2Bytes( value, n );
 }
@@ -308,7 +308,7 @@ inline void Swap( kvs::Int16* value, int n )
  *  @param  n [in] number of elements
  */
 /*===========================================================================*/
-inline void Swap( kvs::UInt16* value, int n )
+inline void Swap( kvs::UInt16* value, size_t n )
 {
     Swap2Bytes( value, n );
 }
@@ -320,7 +320,7 @@ inline void Swap( kvs::UInt16* value, int n )
  *  @param  n [in] number of elements
  */
 /*===========================================================================*/
-inline void Swap( kvs::Int32* value, int n )
+inline void Swap( kvs::Int32* value, size_t n )
 {
     Swap4Bytes( value, n );
 }
@@ -332,7 +332,7 @@ inline void Swap( kvs::Int32* value, int n )
  *  @param  n [in] number of elements
  */
 /*===========================================================================*/
-inline void Swap( kvs::UInt32* value, int n )
+inline void Swap( kvs::UInt32* value, size_t n )
 {
     Swap4Bytes( value, n );
 }
@@ -344,7 +344,7 @@ inline void Swap( kvs::UInt32* value, int n )
  *  @param  n [in] number of elements
  */
 /*===========================================================================*/
-inline void Swap( kvs::Int64* value, int n )
+inline void Swap( kvs::Int64* value, size_t n )
 {
     Swap8Bytes( value, n );
 }
@@ -356,7 +356,7 @@ inline void Swap( kvs::Int64* value, int n )
  *  @param  n [in] number of elements
  */
 /*===========================================================================*/
-inline void Swap( kvs::UInt64* value, int n )
+inline void Swap( kvs::UInt64* value, size_t n )
 {
     Swap8Bytes( value, n );
 }
@@ -368,7 +368,7 @@ inline void Swap( kvs::UInt64* value, int n )
  *  @param  n [in] number of elements
  */
 /*===========================================================================*/
-inline void Swap( kvs::Real32* value, int n )
+inline void Swap( kvs::Real32* value, size_t n )
 {
     Swap4Bytes( value, n );
 }
@@ -380,7 +380,7 @@ inline void Swap( kvs::Real32* value, int n )
  *  @param  n [in] number of elements
  */
 /*===========================================================================*/
-inline void Swap( kvs::Real64* value, int n )
+inline void Swap( kvs::Real64* value, size_t n )
 {
     Swap8Bytes( value, n );
 }
@@ -390,7 +390,7 @@ inline void Swap( kvs::Real64* value, int n )
  *  @brief  Swaps the array of string value. (inaction)
  */
 /*===========================================================================*/
-inline void Swap( std::string*, int )
+inline void Swap( std::string*, size_t )
 {
 }
 
