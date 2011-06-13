@@ -498,7 +498,7 @@ const bool EigenDecomposer<T>::calculate_by_qr( void )
         while ( std::fabs( (double)(e[j]) ) >
                 m_max_tolerance * ( std::fabs( (double)(m_eigen_values[j-1]) ) +
                                     std::fabs( (double)(m_eigen_values[j]  ) ) ) )
-            j--;
+        { j--; if ( j == 0 ) break; }
         if ( j == h ) continue;
 
         size_t iter = 0;
