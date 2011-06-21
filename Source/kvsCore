@@ -10,6 +10,7 @@
 #include <Core/FileFormat/KVSML/KVSMLObjectPoint.h>
 #include <Core/FileFormat/KVSML/KVSMLObjectPolygon.h>
 #include <Core/FileFormat/KVSML/KVSMLObjectStructuredVolume.h>
+#include <Core/FileFormat/KVSML/KVSMLObjectTable.h>
 #include <Core/FileFormat/KVSML/KVSMLObjectUnstructuredVolume.h>
 #include <Core/FileFormat/KVSML/KVSMLTransferFunction.h>
 #include <Core/FileFormat/PLY/Ply.h>
@@ -157,6 +158,7 @@
 #include <Core/Visualization/Importer/PointImporter.h>
 #include <Core/Visualization/Importer/PolygonImporter.h>
 #include <Core/Visualization/Importer/StructuredVolumeImporter.h>
+#include <Core/Visualization/Importer/TableImporter.h>
 #include <Core/Visualization/Importer/UnstructuredVolumeImporter.h>
 #include <Core/Visualization/Mapper/ArrowGlyph.h>
 #include <Core/Visualization/Mapper/CellAdjacencyGraph.h>
@@ -207,6 +209,7 @@
 #include <Core/Visualization/Object/PointObject.h>
 #include <Core/Visualization/Object/PolygonObject.h>
 #include <Core/Visualization/Object/StructuredVolumeObject.h>
+#include <Core/Visualization/Object/TableObject.h>
 #include <Core/Visualization/Object/UnstructuredVolumeObject.h>
 #include <Core/Visualization/Object/VolumeObjectBase.h>
 #include <Core/Visualization/Pipeline/ObjectImporter.h>

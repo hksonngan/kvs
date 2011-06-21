@@ -22,6 +22,7 @@ $(OUTDIR)/./FileFormat/FileFormatBase.o \
 $(OUTDIR)/./FileFormat/KVSML/CellTag.o \
 $(OUTDIR)/./FileFormat/KVSML/ColorMapTag.o \
 $(OUTDIR)/./FileFormat/KVSML/ColorTag.o \
+$(OUTDIR)/./FileFormat/KVSML/ColumnTag.o \
 $(OUTDIR)/./FileFormat/KVSML/ConnectionTag.o \
 $(OUTDIR)/./FileFormat/KVSML/CoordTag.o \
 $(OUTDIR)/./FileFormat/KVSML/DataArrayTag.o \
@@ -34,6 +35,7 @@ $(OUTDIR)/./FileFormat/KVSML/KVSMLObjectLine.o \
 $(OUTDIR)/./FileFormat/KVSML/KVSMLObjectPoint.o \
 $(OUTDIR)/./FileFormat/KVSML/KVSMLObjectPolygon.o \
 $(OUTDIR)/./FileFormat/KVSML/KVSMLObjectStructuredVolume.o \
+$(OUTDIR)/./FileFormat/KVSML/KVSMLObjectTable.o \
 $(OUTDIR)/./FileFormat/KVSML/KVSMLObjectUnstructuredVolume.o \
 $(OUTDIR)/./FileFormat/KVSML/KVSMLTag.o \
 $(OUTDIR)/./FileFormat/KVSML/KVSMLTransferFunction.o \
@@ -50,6 +52,7 @@ $(OUTDIR)/./FileFormat/KVSML/PolygonObjectTag.o \
 $(OUTDIR)/./FileFormat/KVSML/PolygonTag.o \
 $(OUTDIR)/./FileFormat/KVSML/SizeTag.o \
 $(OUTDIR)/./FileFormat/KVSML/StructuredVolumeObjectTag.o \
+$(OUTDIR)/./FileFormat/KVSML/TableObjectTag.o \
 $(OUTDIR)/./FileFormat/KVSML/TagBase.o \
 $(OUTDIR)/./FileFormat/KVSML/TransferFunctionTag.o \
 $(OUTDIR)/./FileFormat/KVSML/UnstructuredVolumeObjectTag.o \
@@ -188,6 +191,7 @@ $(OUTDIR)/./Visualization/Importer/LineImporter.o \
 $(OUTDIR)/./Visualization/Importer/PointImporter.o \
 $(OUTDIR)/./Visualization/Importer/PolygonImporter.o \
 $(OUTDIR)/./Visualization/Importer/StructuredVolumeImporter.o \
+$(OUTDIR)/./Visualization/Importer/TableImporter.o \
 $(OUTDIR)/./Visualization/Importer/UnstructuredVolumeImporter.o \
 $(OUTDIR)/./Visualization/Mapper/ArrowGlyph.o \
 $(OUTDIR)/./Visualization/Mapper/CellAdjacencyGraph.o \
@@ -235,6 +239,7 @@ $(OUTDIR)/./Visualization/Object/ObjectBase.o \
 $(OUTDIR)/./Visualization/Object/PointObject.o \
 $(OUTDIR)/./Visualization/Object/PolygonObject.o \
 $(OUTDIR)/./Visualization/Object/StructuredVolumeObject.o \
+$(OUTDIR)/./Visualization/Object/TableObject.o \
 $(OUTDIR)/./Visualization/Object/UnstructuredVolumeObject.o \
 $(OUTDIR)/./Visualization/Object/VolumeObjectBase.o \
 $(OUTDIR)/./Visualization/Pipeline/ObjectImporter.o \

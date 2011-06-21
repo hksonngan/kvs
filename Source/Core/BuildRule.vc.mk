@@ -22,6 +22,7 @@ $(OUTDIR)\.\FileFormat\FileFormatBase.obj \
 $(OUTDIR)\.\FileFormat\KVSML\CellTag.obj \
 $(OUTDIR)\.\FileFormat\KVSML\ColorMapTag.obj \
 $(OUTDIR)\.\FileFormat\KVSML\ColorTag.obj \
+$(OUTDIR)\.\FileFormat\KVSML\ColumnTag.obj \
 $(OUTDIR)\.\FileFormat\KVSML\ConnectionTag.obj \
 $(OUTDIR)\.\FileFormat\KVSML\CoordTag.obj \
 $(OUTDIR)\.\FileFormat\KVSML\DataArrayTag.obj \
@@ -34,6 +35,7 @@ $(OUTDIR)\.\FileFormat\KVSML\KVSMLObjectLine.obj \
 $(OUTDIR)\.\FileFormat\KVSML\KVSMLObjectPoint.obj \
 $(OUTDIR)\.\FileFormat\KVSML\KVSMLObjectPolygon.obj \
 $(OUTDIR)\.\FileFormat\KVSML\KVSMLObjectStructuredVolume.obj \
+$(OUTDIR)\.\FileFormat\KVSML\KVSMLObjectTable.obj \
 $(OUTDIR)\.\FileFormat\KVSML\KVSMLObjectUnstructuredVolume.obj \
 $(OUTDIR)\.\FileFormat\KVSML\KVSMLTag.obj \
 $(OUTDIR)\.\FileFormat\KVSML\KVSMLTransferFunction.obj \
@@ -50,6 +52,7 @@ $(OUTDIR)\.\FileFormat\KVSML\PolygonObjectTag.obj \
 $(OUTDIR)\.\FileFormat\KVSML\PolygonTag.obj \
 $(OUTDIR)\.\FileFormat\KVSML\SizeTag.obj \
 $(OUTDIR)\.\FileFormat\KVSML\StructuredVolumeObjectTag.obj \
+$(OUTDIR)\.\FileFormat\KVSML\TableObjectTag.obj \
 $(OUTDIR)\.\FileFormat\KVSML\TagBase.obj \
 $(OUTDIR)\.\FileFormat\KVSML\TransferFunctionTag.obj \
 $(OUTDIR)\.\FileFormat\KVSML\UnstructuredVolumeObjectTag.obj \
@@ -188,6 +191,7 @@ $(OUTDIR)\.\Visualization\Importer\LineImporter.obj \
 $(OUTDIR)\.\Visualization\Importer\PointImporter.obj \
 $(OUTDIR)\.\Visualization\Importer\PolygonImporter.obj \
 $(OUTDIR)\.\Visualization\Importer\StructuredVolumeImporter.obj \
+$(OUTDIR)\.\Visualization\Importer\TableImporter.obj \
 $(OUTDIR)\.\Visualization\Importer\UnstructuredVolumeImporter.obj \
 $(OUTDIR)\.\Visualization\Mapper\ArrowGlyph.obj \
 $(OUTDIR)\.\Visualization\Mapper\CellAdjacencyGraph.obj \
@@ -235,6 +239,7 @@ $(OUTDIR)\.\Visualization\Object\ObjectBase.obj \
 $(OUTDIR)\.\Visualization\Object\PointObject.obj \
 $(OUTDIR)\.\Visualization\Object\PolygonObject.obj \
 $(OUTDIR)\.\Visualization\Object\StructuredVolumeObject.obj \
+$(OUTDIR)\.\Visualization\Object\TableObject.obj \
 $(OUTDIR)\.\Visualization\Object\UnstructuredVolumeObject.obj \
 $(OUTDIR)\.\Visualization\Object\VolumeObjectBase.obj \
 $(OUTDIR)\.\Visualization\Pipeline\ObjectImporter.obj \

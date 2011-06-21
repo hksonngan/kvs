@@ -48,6 +48,7 @@ public:
         Volume,        ///< Volumetric object.
         Image,         ///< Image object
         Glyph,         ///< glyph object
+        Table,         ///< table object
         ObjectManager, ///< Object manager
         UnknownObject  ///< unknown object (for user defined object data)
     };

@@ -43,7 +43,7 @@ GlyphObject::~GlyphObject( void )
 
 const kvs::ObjectBase::ObjectType GlyphObject::objectType( void ) const
 {
-    return( kvs::ObjectBase::Image );
+    return( kvs::ObjectBase::Glyph );
 }
 
 /*===========================================================================*/

@@ -10,6 +10,7 @@ FileFormat/KVSML/KVSMLObjectLine
 FileFormat/KVSML/KVSMLObjectPoint
 FileFormat/KVSML/KVSMLObjectPolygon
 FileFormat/KVSML/KVSMLObjectStructuredVolume
+FileFormat/KVSML/KVSMLObjectTable
 FileFormat/KVSML/KVSMLObjectUnstructuredVolume
 FileFormat/KVSML/KVSMLTransferFunction
 FileFormat/PLY/Ply
@@ -157,6 +158,7 @@ Visualization/Importer/LineImporter
 Visualization/Importer/PointImporter
 Visualization/Importer/PolygonImporter
 Visualization/Importer/StructuredVolumeImporter
+Visualization/Importer/TableImporter
 Visualization/Importer/UnstructuredVolumeImporter
 Visualization/Mapper/ArrowGlyph
 Visualization/Mapper/CellAdjacencyGraph
@@ -207,6 +209,7 @@ Visualization/Object/ObjectBase
 Visualization/Object/PointObject
 Visualization/Object/PolygonObject
 Visualization/Object/StructuredVolumeObject
+Visualization/Object/TableObject
 Visualization/Object/UnstructuredVolumeObject
 Visualization/Object/VolumeObjectBase
 Visualization/Pipeline/ObjectImporter
