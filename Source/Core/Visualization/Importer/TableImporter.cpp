@@ -123,6 +123,11 @@ void TableImporter::import( const kvs::KVSMLObjectTable* kvsml )
         const std::string label = kvsml->labelList().at(i);
         const kvs::AnyValueArray& column = kvsml->columnList().at(i);
         SuperClass::addColumn( column, label );
+
+        if ( kvsml->hasMinValueList().at(i) ) SuperClass::setMinValue( i, kvsml->minValueList().at(i) );
+        if ( kvsml->hasMaxValueList().at(i) ) SuperClass::setMaxValue( i, kvsml->maxValueList().at(i) );
+        if ( kvsml->hasMinRangeList().at(i) ) SuperClass::setMinRange( i, kvsml->minRangeList().at(i) );
+        if ( kvsml->hasMaxRangeList().at(i) ) SuperClass::setMaxRange( i, kvsml->maxRangeList().at(i) );
     }
 }
 

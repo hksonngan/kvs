@@ -14,12 +14,14 @@
 #ifndef KVS__VOLUME_OBJECT_BASE_H_INCLUDE
 #define KVS__VOLUME_OBJECT_BASE_H_INCLUDE
 
+#include <string>
 #include <kvs/ClassName>
 #include <kvs/ObjectBase>
 #include <kvs/Value>
 #include <kvs/ValueArray>
 #include <kvs/AnyValueArray>
 #include <kvs/Math>
+
 
 namespace kvs
 {
@@ -71,6 +73,7 @@ public:
 
 private:
 
+    std::string m_label; ///< data label
     size_t m_veclen; ///< Vector length.
 
     Coords m_coords; ///< Coordinate array.
@@ -105,6 +108,8 @@ public:
 
 public:
 
+    void setLabel( const std::string& label );
+
     void setVeclen( const size_t veclen );
 
     void setCoords( const Coords& values );
@@ -116,6 +121,8 @@ public:
         const kvs::Real64 max_value ) const;
 
 public:
+
+    const std::string& label( void ) const;
 
     const size_t veclen( void ) const;
 

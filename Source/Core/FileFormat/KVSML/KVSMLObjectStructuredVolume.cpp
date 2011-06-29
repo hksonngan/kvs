@@ -95,6 +95,16 @@ const std::string& KVSMLObjectStructuredVolume::gridType( void ) const
     return( m_grid_type );
 }
 
+const bool KVSMLObjectStructuredVolume::hasLabel( void ) const
+{
+    return( m_has_label );
+}
+
+const std::string& KVSMLObjectStructuredVolume::label( void ) const
+{
+    return( m_label );
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Returns the vector length.
@@ -115,6 +125,26 @@ const size_t KVSMLObjectStructuredVolume::veclen( void ) const
 const kvs::Vector3ui& KVSMLObjectStructuredVolume::resolution( void ) const
 {
     return( m_resolution );
+}
+
+const bool KVSMLObjectStructuredVolume::hasMinValue( void ) const
+{
+    return( m_has_min_value );
+}
+
+const bool KVSMLObjectStructuredVolume::hasMaxValue( void ) const
+{
+    return( m_has_max_value );
+}
+
+const double KVSMLObjectStructuredVolume::minValue( void ) const
+{
+    return( m_min_value );
+}
+
+const double KVSMLObjectStructuredVolume::maxValue( void ) const
+{
+    return( m_max_value );
 }
 
 /*===========================================================================*/
@@ -150,6 +180,12 @@ void KVSMLObjectStructuredVolume::setGridType( const std::string& grid_type )
     m_grid_type = grid_type;
 }
 
+void KVSMLObjectStructuredVolume::setLabel( const std::string& label )
+{
+    m_has_label = true;
+    m_label = label;
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Sets a vector length.
@@ -170,6 +206,18 @@ void KVSMLObjectStructuredVolume::setVeclen( const size_t veclen )
 void KVSMLObjectStructuredVolume::setResolution( const kvs::Vector3ui& resolution )
 {
     m_resolution = resolution;
+}
+
+void KVSMLObjectStructuredVolume::setMinValue( const double min_value )
+{
+    m_has_min_value = true;
+    m_min_value = min_value;
+}
+
+void KVSMLObjectStructuredVolume::setMaxValue( const double max_value )
+{
+    m_has_max_value = true;
+    m_max_value = max_value;
 }
 
 /*===========================================================================*/
@@ -254,12 +302,21 @@ const bool KVSMLObjectStructuredVolume::read( const std::string& filename )
         return( false );
     }
 
+    m_has_label = value_tag.hasLabel();
+    if ( m_has_label ) { m_label = value_tag.label(); }
+
     if ( !value_tag.hasVeclen() )
     {
         kvsMessageError( "'veclen' is not specified in <%s>.", value_tag.name().c_str() );
         return( false );
     }
     m_veclen = value_tag.veclen();
+
+    m_has_min_value = value_tag.hasMinValue();
+    if ( m_has_min_value ) { m_min_value = value_tag.minValue(); }
+
+    m_has_max_value = value_tag.hasMaxValue();
+    if ( m_has_max_value ) { m_max_value = value_tag.maxValue(); }
 
     // <DataArray>
     const kvs::Vector3ui resolution = volume_tag.resolution();
@@ -329,9 +386,14 @@ const bool KVSMLObjectStructuredVolume::write( const std::string& filename )
         return( false );
     }
 
-    // <Value>
+    // <Value label="xxx" veclen="xxx" min_value="xxx" max_value="xxx">
     kvs::kvsml::ValueTag value_tag;
     value_tag.setVeclen( m_veclen );
+
+    if ( m_has_label ) { value_tag.setLabel( m_label ); }
+    if ( m_has_min_value ) { value_tag.setMinValue( m_min_value ); }
+    if ( m_has_max_value ) { value_tag.setMaxValue( m_max_value ); }
+
     if ( !value_tag.write( node_tag.node() ) )
     {
         kvsMessageError( "Cannot write <%s>.", value_tag.name().c_str() );

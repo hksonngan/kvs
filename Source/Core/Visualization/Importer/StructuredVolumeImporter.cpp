@@ -224,7 +224,20 @@ void StructuredVolumeImporter::import(
     SuperClass::setVeclen( kvsml->veclen() );
     SuperClass::setValues( kvsml->values() );
     SuperClass::updateMinMaxCoords();
-    SuperClass::updateMinMaxValues();
+
+    if ( kvsml->hasMinValue() && kvsml->hasMaxValue() )
+    {
+        const double min_value = kvsml->minValue();
+        const double max_value = kvsml->maxValue();
+        SuperClass::setMinMaxValues( min_value, max_value );
+    }
+    else
+    {
+        SuperClass::updateMinMaxValues();
+        const double min_value = kvsml->hasMinValue() ? kvsml->minValue() : SuperClass::minValue();
+        const double max_value = kvsml->hasMaxValue() ? kvsml->maxValue() : SuperClass::maxValue();
+        SuperClass::setMinMaxValues( min_value, max_value );
+    }
 }
 
 /*==========================================================================*/

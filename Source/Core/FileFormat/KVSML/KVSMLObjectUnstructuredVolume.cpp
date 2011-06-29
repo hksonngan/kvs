@@ -123,6 +123,16 @@ const std::string& KVSMLObjectUnstructuredVolume::cellType( void ) const
     return( m_cell_type );
 }
 
+const bool KVSMLObjectUnstructuredVolume::hasLabel( void ) const
+{
+    return( m_has_label );
+}
+
+const std::string& KVSMLObjectUnstructuredVolume::label( void ) const
+{
+    return( m_label );
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Returns the vector length.
@@ -154,6 +164,26 @@ const size_t KVSMLObjectUnstructuredVolume::nnodes( void ) const
 const size_t KVSMLObjectUnstructuredVolume::ncells( void ) const
 {
     return( m_ncells );
+}
+
+const bool KVSMLObjectUnstructuredVolume::hasMinValue( void ) const
+{
+    return( m_has_min_value );
+}
+
+const bool KVSMLObjectUnstructuredVolume::hasMaxValue( void ) const
+{
+    return( m_has_max_value );
+}
+
+const double KVSMLObjectUnstructuredVolume::minValue( void ) const
+{
+    return( m_min_value );
+}
+
+const double KVSMLObjectUnstructuredVolume::maxValue( void ) const
+{
+    return( m_max_value );
 }
 
 /*===========================================================================*/
@@ -211,6 +241,12 @@ void KVSMLObjectUnstructuredVolume::setCellType( const std::string& cell_type )
     m_cell_type = cell_type;
 }
 
+void KVSMLObjectUnstructuredVolume::setLabel( const std::string& label )
+{
+    m_has_label = true;
+    m_label = label;
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Sets a vector length.
@@ -242,6 +278,18 @@ void KVSMLObjectUnstructuredVolume::setNNodes( const size_t nnodes )
 void KVSMLObjectUnstructuredVolume::setNCells( const size_t ncells )
 {
     m_ncells = ncells;
+}
+
+void KVSMLObjectUnstructuredVolume::setMinValue( const double min_value )
+{
+    m_has_min_value = true;
+    m_min_value = min_value;
+}
+
+void KVSMLObjectUnstructuredVolume::setMaxValue( const double max_value )
+{
+    m_has_max_value = true;
+    m_max_value = max_value;
 }
 
 /*===========================================================================*/
@@ -348,12 +396,21 @@ const bool KVSMLObjectUnstructuredVolume::read( const std::string& filename )
         return( false );
     }
 
+    m_has_label = value_tag.hasLabel();
+    if ( m_has_label ) { m_label = value_tag.label(); }
+
     if ( !value_tag.hasVeclen() )
     {
         kvsMessageError( "'veclen' is not specified in <%s>.", value_tag.name().c_str() );
         return( false );
     }
     m_veclen = value_tag.veclen();
+
+    m_has_min_value = value_tag.hasMinValue();
+    if ( m_has_min_value ) { m_min_value = value_tag.minValue(); }
+
+    m_has_max_value = value_tag.hasMaxValue();
+    if ( m_has_max_value ) { m_max_value = value_tag.maxValue(); }
 
     // <DataArray>
     const size_t value_nelements = m_nnodes * m_veclen;
@@ -474,9 +531,14 @@ const bool KVSMLObjectUnstructuredVolume::write( const std::string& filename )
         return( false );
     }
 
-    // <Value veclen="xxx">
+    // <Value label="xxx" veclen="xxx" min_value="xxx" max_value="xxx">
     kvs::kvsml::ValueTag value_tag;
     value_tag.setVeclen( m_veclen );
+
+    if ( m_has_label ) { value_tag.setLabel( m_label ); }
+    if ( m_has_min_value ) { value_tag.setMinValue( m_min_value ); }
+    if ( m_has_max_value ) { value_tag.setMaxValue( m_max_value ); }
+
     if ( !value_tag.write( node_tag.node() ) )
     {
         kvsMessageError( "Cannot write <%s>.", value_tag.name().c_str() );

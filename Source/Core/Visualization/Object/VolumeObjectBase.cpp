@@ -24,6 +24,7 @@ namespace kvs
 /*==========================================================================*/
 VolumeObjectBase::VolumeObjectBase( void )
     : kvs::ObjectBase()
+    , m_label( "" )
     , m_veclen( 0 )
     , m_coords()
     , m_values()
@@ -47,6 +48,7 @@ VolumeObjectBase::VolumeObjectBase(
     const Coords&    coords,
     const Values&    values )
     : kvs::ObjectBase()
+    , m_label( "" )
     , m_veclen( veclen )
     , m_coords( coords )
     , m_values( values )
@@ -65,6 +67,7 @@ VolumeObjectBase::VolumeObjectBase(
 /*==========================================================================*/
 VolumeObjectBase::VolumeObjectBase( const VolumeObjectBase& other )
     : kvs::ObjectBase( other )
+    , m_label( other.label() )
     , m_veclen( other.veclen() )
     , m_coords( other.coords() )
     , m_values( other.values() )
@@ -127,6 +130,16 @@ std::ostream& operator << ( std::ostream& os, const kvs::VolumeObjectBase& objec
 
 /*==========================================================================*/
 /**
+ *  Sets data label.
+ */
+/*==========================================================================*/
+void VolumeObjectBase::setLabel( const std::string& label )
+{
+    m_label = label;
+}
+
+/*==========================================================================*/
+/**
  *  Sets the vector length.
  */
 /*==========================================================================*/
@@ -179,6 +192,11 @@ void VolumeObjectBase::setMinMaxValues(
 const kvs::ObjectBase::ObjectType VolumeObjectBase::objectType( void ) const
 {
     return( kvs::ObjectBase::Volume );
+}
+
+const std::string& VolumeObjectBase::label( void ) const
+{
+    return( m_label );
 }
 
 /*==========================================================================*/
@@ -273,6 +291,7 @@ void VolumeObjectBase::shallowCopy( const VolumeObjectBase& object )
     this->m_has_min_max_values = object.hasMinMaxValues();
     this->m_min_value = object.minValue();
     this->m_max_value = object.maxValue();
+    this->m_label = object.label();
     this->m_veclen = object.veclen();
     this->m_coords.shallowCopy( object.coords() );
     this->m_values.shallowCopy( object.values() );
@@ -284,6 +303,7 @@ void VolumeObjectBase::deepCopy( const VolumeObjectBase& object )
     this->m_has_min_max_values = object.hasMinMaxValues();
     this->m_min_value = object.minValue();
     this->m_max_value = object.maxValue();
+    this->m_label = object.label();
     this->m_veclen = object.veclen();
     this->m_coords.deepCopy( object.coords() );
 

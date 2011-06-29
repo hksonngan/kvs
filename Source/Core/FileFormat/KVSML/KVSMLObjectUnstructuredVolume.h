@@ -50,14 +50,20 @@ protected:
     kvs::kvsml::KVSMLTag m_kvsml_tag;   ///< KVSML tag information
     kvs::kvsml::ObjectTag m_object_tag; ///< Object tag information
 
-    WritingDataType              m_writing_type; ///< writing data type
-    std::string                  m_cell_type;    ///< cell type
-    size_t                       m_veclen;       ///< vector length
-    size_t                       m_nnodes;       ///< number of nodes
-    size_t                       m_ncells;       ///< number of cells
-    kvs::AnyValueArray           m_values;       ///< field value array
-    kvs::ValueArray<kvs::Real32> m_coords;       ///< coordinate value array
-    kvs::ValueArray<kvs::UInt32> m_connections;  ///< connection id array
+    WritingDataType              m_writing_type;  ///< writing data type
+    std::string                  m_cell_type;     ///< cell type
+    bool                         m_has_label;     ///< data label is specified or not
+    std::string                  m_label;         ///< data label
+    size_t                       m_veclen;        ///< vector length
+    size_t                       m_nnodes;        ///< number of nodes
+    size_t                       m_ncells;        ///< number of cells
+    bool                         m_has_min_value; ///< min. value is specified or not
+    bool                         m_has_max_value; ///< max. value is specified or not
+    double                       m_min_value;     ///< min. value
+    double                       m_max_value;     ///< max. value
+    kvs::AnyValueArray           m_values;        ///< field value array
+    kvs::ValueArray<kvs::Real32> m_coords;        ///< coordinate value array
+    kvs::ValueArray<kvs::UInt32> m_connections;   ///< connection id array
 
 public:
 
@@ -77,11 +83,23 @@ public:
 
     const std::string& cellType( void ) const;
 
+    const bool hasLabel( void ) const;
+
+    const std::string& label( void ) const;
+
     const size_t veclen( void ) const;
 
     const size_t nnodes( void ) const;
 
     const size_t ncells( void ) const;
+
+    const bool hasMinValue( void ) const;
+
+    const bool hasMaxValue( void ) const;
+
+    const double minValue( void ) const;
+
+    const double maxValue( void ) const;
 
     const kvs::AnyValueArray& values( void ) const;
 
@@ -95,11 +113,17 @@ public:
 
     void setCellType( const std::string& cell_type );
 
+    void setLabel( const std::string& label );
+
     void setVeclen( const size_t veclen );
 
     void setNNodes( const size_t nnodes );
 
     void setNCells( const size_t ncells );
+
+    void setMinValue( const double min_value );
+
+    void setMaxValue( const double max_value );
 
     void setValues( const kvs::AnyValueArray& values );
 
