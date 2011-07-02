@@ -128,6 +128,46 @@ const std::vector<kvs::AnyValueArray>& KVSMLObjectTable::columnList( void ) cons
     return( m_columns );
 }
 
+const std::vector<bool>& KVSMLObjectTable::hasMinValueList( void ) const
+{
+    return( m_has_min_values );
+}
+
+const std::vector<bool>& KVSMLObjectTable::hasMaxValueList( void ) const
+{
+    return( m_has_max_values );
+}
+
+const std::vector<bool>& KVSMLObjectTable::hasMinRangeList( void ) const
+{
+    return( m_has_min_ranges );
+}
+
+const std::vector<bool>& KVSMLObjectTable::hasMaxRangeList( void ) const
+{
+    return( m_has_max_ranges );
+}
+
+const std::vector<double>& KVSMLObjectTable::minValueList( void ) const
+{
+    return( m_min_values );
+}
+
+const std::vector<double>& KVSMLObjectTable::maxValueList( void ) const
+{
+    return( m_max_values );
+}
+
+const std::vector<double>& KVSMLObjectTable::minRangeList( void ) const
+{
+    return( m_min_ranges );
+}
+
+const std::vector<double>& KVSMLObjectTable::maxRangeList( void ) const
+{
+    return( m_max_ranges );
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Sets a writing data type.
