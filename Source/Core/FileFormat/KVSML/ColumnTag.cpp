@@ -248,6 +248,17 @@ const bool ColumnTag::read( const kvs::XMLNode::SuperClass* parent )
 /*===========================================================================*/
 const bool ColumnTag::read( const kvs::XMLElement::SuperClass* element )
 {
+    m_has_label = false;
+    m_has_min_value = false;
+    m_has_max_value = false;
+    m_has_min_range = false;
+    m_has_max_range = false;
+    m_label = "";
+    m_min_value = 0.0;
+    m_max_value = 0.0;
+    m_min_range = 0.0;
+    m_max_range = 0.0;
+
     // label="xxx"
     const std::string label = kvs::XMLElement::AttributeValue( element, "label" );
     if ( label != "" ) { this->setLabel( label ); }
