@@ -493,12 +493,23 @@ void TableObject::moveRange( const size_t column_index, const kvs::Real64 drange
     const kvs::Real64 max_range = this->maxRange( column_index );
     const kvs::Real64 min_value = this->minValue( column_index );
     const kvs::Real64 max_value = this->maxValue( column_index );
+    const kvs::Real64 range_width = max_range - min_range;
 
-    if ( max_range + drange > max_value ) return;
-    if ( min_range + drange < min_value ) return;
-
-    this->setMinRange( column_index, min_range + drange );
-    this->setMaxRange( column_index, max_range + drange );
+    if ( max_range + drange > max_value )
+    {
+        this->setMinRange( column_index, max_value - range_width );
+        this->setMaxRange( column_index, max_value );
+    }
+    else if ( min_range + drange < min_value )
+    {
+        this->setMinRange( column_index, min_value );
+        this->setMaxRange( column_index, min_value + range_width );
+    }
+    else
+    {
+        this->setMinRange( column_index, min_range + drange );
+        this->setMaxRange( column_index, max_range + drange );
+    }
 }
 
 /*===========================================================================*/
