@@ -113,6 +113,8 @@ public:
 
     void moveRange( const size_t column_index, const kvs::Real64 drange );
 
+    void resetRange( const size_t column_index );
+
     void resetRange( void );
 
 public:

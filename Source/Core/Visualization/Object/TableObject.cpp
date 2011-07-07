@@ -514,6 +514,18 @@ void TableObject::moveRange( const size_t column_index, const kvs::Real64 drange
 
 /*===========================================================================*/
 /**
+ *  @brief  Resets range specified by column_index.
+ *  @param  column_index [in] column index
+ */
+/*===========================================================================*/
+void TableObject::resetRange( const size_t column_index )
+{
+    this->setMinRange( column_index, this->minValue(column_index) );
+    this->setMaxRange( column_index, this->maxValue(column_index) );
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Resets ranges.
  */
 /*===========================================================================*/
