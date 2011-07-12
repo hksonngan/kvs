@@ -218,6 +218,7 @@ Visualization/Pipeline/VisualizationPipeline
 Visualization/Renderer/GlyphRenderer
 Visualization/Renderer/ImageRenderer
 Visualization/Renderer/LineRenderer
+Visualization/Renderer/ParallelCoordinatesRenderer
 Visualization/Renderer/ParticleBuffer
 Visualization/Renderer/ParticleBufferAccumulator
 Visualization/Renderer/ParticleBufferCompositor

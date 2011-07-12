@@ -4,6 +4,7 @@
 
 OBJECTS = \
 $(OUTDIR)\.\Renderer\AxisRenderer.obj \
+$(OUTDIR)\.\Renderer\ParallelAxisRenderer.obj \
 $(OUTDIR)\.\Viewer\Application.obj \
 $(OUTDIR)\.\Viewer\Global.obj \
 $(OUTDIR)\.\Viewer\GlobalBase.obj \

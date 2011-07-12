@@ -1,5 +1,6 @@
 GLUT
 Renderer/AxisRenderer
+Renderer/ParallelAxisRenderer
 Viewer/Application
 Viewer/Global
 Viewer/GlobalBase

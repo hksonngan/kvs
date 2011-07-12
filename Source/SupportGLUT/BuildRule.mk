@@ -4,6 +4,7 @@
 
 OBJECTS := \
 $(OUTDIR)/./Renderer/AxisRenderer.o \
+$(OUTDIR)/./Renderer/ParallelAxisRenderer.o \
 $(OUTDIR)/./Viewer/Application.o \
 $(OUTDIR)/./Viewer/Global.o \
 $(OUTDIR)/./Viewer/GlobalBase.o \
