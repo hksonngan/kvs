@@ -54,6 +54,25 @@ TableObject::TableObject( const kvs::TableObject& table )
     m_inside_range_list = table.insideRangeList();
 }
 
+kvs::TableObject* TableObject::DownCast( kvs::ObjectBase* object )
+{
+    const kvs::ObjectBase::ObjectType type = object->objectType();
+    if ( type != kvs::ObjectBase::Table )
+    {
+        kvsMessageError("Input object is not table object.");
+        return( NULL );
+    }
+
+    kvs::TableObject* table = static_cast<kvs::TableObject*>( object );
+
+    return( table );
+}
+
+const kvs::TableObject* TableObject::DownCast( const kvs::ObjectBase* object )
+{
+    return( TableObject::DownCast( const_cast<kvs::ObjectBase*>( object ) ) );
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Adds a column.

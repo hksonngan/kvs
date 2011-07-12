@@ -66,6 +66,12 @@ public:
 
 public:
 
+    static kvs::TableObject* DownCast( kvs::ObjectBase* object );
+
+    static const kvs::TableObject* DownCast( const kvs::ObjectBase* object );
+
+public:
+
     void addColumn( const kvs::AnyValueArray& array, const std::string& label = "" );
 
     template <typename T>
