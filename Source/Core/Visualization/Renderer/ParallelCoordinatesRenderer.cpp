@@ -67,10 +67,6 @@ ParallelCoordinatesRenderer::ParallelCoordinatesRenderer( void ):
     m_bottom_margin( 20 ),
     m_left_margin( 30 ),
     m_right_margin( 30 ),
-    m_xmin( 0 ),
-    m_xmax( 0 ),
-    m_ymin( 0 ),
-    m_ymax( 0 ),
     m_enable_anti_aliasing( false ),
     m_enable_multisample_anti_aliasing( false ),
     m_active_axis( 0 ),
@@ -238,50 +234,6 @@ int ParallelCoordinatesRenderer::rightMargin( void ) const
 
 /*===========================================================================*/
 /**
- *  @brief  Returns minimum x-coordinate of rendering area.
- *  @return minimum x-coordinate [pixel]
- */
-/*===========================================================================*/
-int ParallelCoordinatesRenderer::xmin( void ) const
-{
-    return( m_xmin );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns maximum x-coordinate of rendering area.
- *  @return maximum x-coordinate [pixel]
- */
-/*===========================================================================*/
-int ParallelCoordinatesRenderer::xmax( void ) const
-{
-    return( m_xmax );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns minimum y-coordinate of rendering area.
- *  @return minimum y-coordinate [pixel]
- */
-/*===========================================================================*/
-int ParallelCoordinatesRenderer::ymin( void ) const
-{
-    return( m_ymin );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns maximum y-coordinate of rendering area.
- *  @return maximum y-coordinate [pixel]
- */
-/*===========================================================================*/
-int ParallelCoordinatesRenderer::ymax( void ) const
-{
-    return( m_ymax );
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Returns index of active axis.
  *  @return index of active axis
  */
@@ -361,24 +313,14 @@ void ParallelCoordinatesRenderer::exec( kvs::ObjectBase* object, kvs::Camera* ca
     const kvs::AnyValueArray& color_axis_values = table->column( m_active_axis );
     m_color_map.setRange( color_axis_min_value, color_axis_max_value );
 
-    bool has_label = false;
-    for ( size_t i = 0; i < table->labelList().size(); i++ )
-    {
-        if ( table->labelList().at(i).size() > 0 ) { has_label = true; break; }
-    }
-
-    const int label_height = has_label ? ::CharacterHeight : 0;
-    const int y0 = m_top_margin + ::CharacterHeight;
-    const int y1 = camera->windowHeight() - m_bottom_margin - ::CharacterHeight - label_height;
-
-    m_xmin = m_left_margin;
-    m_xmax = camera->windowWidth() - m_right_margin;
-    m_ymin = y0;
-    m_ymax = y1;
+    const int x0 = m_left_margin;
+    const int x1 = camera->windowWidth() - m_right_margin;
+    const int y0 = m_top_margin;
+    const int y1 = camera->windowHeight() - m_bottom_margin;
 
     const size_t nrows = table->column(0).size();
     const size_t naxes = table->ncolumns();
-    const float stride = float( m_xmax - m_xmin ) / ( naxes - 1 );
+    const float stride = float( x1 - x0 ) / ( naxes - 1 );
     for ( size_t i = 0; i < nrows; i++ )
     {
         if ( !table->insideRange( i ) ) continue;

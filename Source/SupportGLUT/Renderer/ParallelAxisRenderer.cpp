@@ -297,15 +297,16 @@ void ParallelAxisRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, k
         if ( table->labelList().at(i).size() > 0 ) { has_label = true; break; }
     }
 
-    const size_t label_height = has_label ? ::CharacterHeight : 0;
-    const size_t naxes = table->ncolumns();
-    const size_t y0 = m_top_margin + ::CharacterHeight;
-    const size_t y1 = camera->windowHeight() - m_bottom_margin - ::CharacterHeight - label_height;
+    const int x0 = m_left_margin;
+    const int x1 = camera->windowWidth() - m_right_margin;
+    const int y0 = m_top_margin;
+    const int y1 = camera->windowHeight() - m_bottom_margin;
 
     // Draw axes.
     glLineWidth( m_axis_width );
     glBegin( GL_LINES );
-    const float stride = float( camera->windowWidth() - m_left_margin - m_right_margin ) / ( naxes - 1 );
+    const size_t naxes = table->ncolumns();
+    const float stride = float( x1 - x0 ) / ( naxes - 1 );
     for ( size_t i = 0; i < naxes; i++ )
     {
         const float x = m_left_margin + stride * i;

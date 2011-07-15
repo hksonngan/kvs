@@ -49,11 +49,6 @@ protected:
     int m_left_margin; ///< left margin
     int m_right_margin; ///< right margin
 
-    int m_xmin; ///< minimum x-coordinate of rendering area (origin: upper-left)
-    int m_xmax; ///< maximum x-coordinate of rendering area (origin: upper-left)
-    int m_ymin; ///< minimum y-coordinate of rendering area (origin: upper-left)
-    int m_ymax; ///< maximum y-coordinate of rendering area (origin: upper-left)
-
     mutable bool m_enable_anti_aliasing; ///< flag for anti-aliasing (AA)
     mutable bool m_enable_multisample_anti_aliasing; ///< flag for multisample anti-aliasing (MSAA)
 
@@ -95,14 +90,6 @@ public:
     int leftMargin( void ) const;
 
     int rightMargin( void ) const;
-
-    int xmin( void ) const;
-
-    int xmax( void ) const;
-
-    int ymin( void ) const;
-
-    int ymax( void ) const;
 
     size_t activeAxis( void ) const;
 
