@@ -57,7 +57,7 @@ RGBAColor& RGBAColor::operator = ( const RGBColor& rgb )
     m_red     = rgb.r();
     m_green   = rgb.g();
     m_blue    = rgb.b();
-    m_opacity = 0.0;
+    m_opacity = 1.0f;
 
     return( *this );
 }

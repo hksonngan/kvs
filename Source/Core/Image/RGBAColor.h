@@ -37,13 +37,13 @@ protected:
 
 public:
 
-    RGBAColor( float opacity = 0.0 );
+    RGBAColor( float opacity = 1.0f );
 
-    RGBAColor( kvs::UInt8 red, kvs::UInt8 greeb, kvs::UInt8 blue, float opacity = 0.0 );
+    RGBAColor( kvs::UInt8 red, kvs::UInt8 greeb, kvs::UInt8 blue, float opacity = 1.0f );
 
-    RGBAColor( const kvs::UInt8 rgb[3], float opacity = 0.0 );
+    RGBAColor( const kvs::UInt8 rgb[3], float opacity = 1.0f );
 
-    RGBAColor( const kvs::RGBColor& rgb, float opacity = 0.0 );
+    RGBAColor( const kvs::RGBColor& rgb, float opacity = 1.0f );
 
 public:
 
