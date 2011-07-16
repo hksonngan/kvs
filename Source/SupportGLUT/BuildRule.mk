@@ -3,6 +3,8 @@
 
 
 OBJECTS := \
+$(OUTDIR)/./Renderer/Axis2DMatrixRenderer.o \
+$(OUTDIR)/./Renderer/Axis2DRenderer.o \
 $(OUTDIR)/./Renderer/AxisRenderer.o \
 $(OUTDIR)/./Renderer/ParallelAxisRenderer.o \
 $(OUTDIR)/./Viewer/Application.o \

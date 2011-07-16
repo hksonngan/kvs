@@ -228,6 +228,8 @@ Visualization/Renderer/PolygonRenderer
 Visualization/Renderer/Ray
 Visualization/Renderer/RayCastingRenderer
 Visualization/Renderer/RendererBase
+Visualization/Renderer/ScatterPlotMatrixRenderer
+Visualization/Renderer/ScatterPlotRenderer
 Visualization/Renderer/Shader
 Visualization/Renderer/VolumeRayIntersector
 Visualization/Renderer/VolumeRendererBase

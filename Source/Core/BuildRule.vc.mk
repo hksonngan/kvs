@@ -258,6 +258,8 @@ $(OUTDIR)\.\Visualization\Renderer\PolygonRenderer.obj \
 $(OUTDIR)\.\Visualization\Renderer\Ray.obj \
 $(OUTDIR)\.\Visualization\Renderer\RayCastingRenderer.obj \
 $(OUTDIR)\.\Visualization\Renderer\RendererBase.obj \
+$(OUTDIR)\.\Visualization\Renderer\ScatterPlotMatrixRenderer.obj \
+$(OUTDIR)\.\Visualization\Renderer\ScatterPlotRenderer.obj \
 $(OUTDIR)\.\Visualization\Renderer\Shader.obj \
 $(OUTDIR)\.\Visualization\Renderer\VolumeRayIntersector.obj \
 $(OUTDIR)\.\Visualization\Renderer\VolumeRendererBase.obj \

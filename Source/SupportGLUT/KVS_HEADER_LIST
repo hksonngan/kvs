@@ -1,4 +1,6 @@
 GLUT
+Renderer/Axis2DMatrixRenderer
+Renderer/Axis2DRenderer
 Renderer/AxisRenderer
 Renderer/ParallelAxisRenderer
 Viewer/Application

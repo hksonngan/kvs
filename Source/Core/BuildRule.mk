@@ -258,6 +258,8 @@ $(OUTDIR)/./Visualization/Renderer/PolygonRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/Ray.o \
 $(OUTDIR)/./Visualization/Renderer/RayCastingRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/RendererBase.o \
+$(OUTDIR)/./Visualization/Renderer/ScatterPlotMatrixRenderer.o \
+$(OUTDIR)/./Visualization/Renderer/ScatterPlotRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/Shader.o \
 $(OUTDIR)/./Visualization/Renderer/VolumeRayIntersector.o \
 $(OUTDIR)/./Visualization/Renderer/VolumeRendererBase.o \

@@ -228,6 +228,8 @@
 #include <Core/Visualization/Renderer/Ray.h>
 #include <Core/Visualization/Renderer/RayCastingRenderer.h>
 #include <Core/Visualization/Renderer/RendererBase.h>
+#include <Core/Visualization/Renderer/ScatterPlotMatrixRenderer.h>
+#include <Core/Visualization/Renderer/ScatterPlotRenderer.h>
 #include <Core/Visualization/Renderer/Shader.h>
 #include <Core/Visualization/Renderer/VolumeRayIntersector.h>
 #include <Core/Visualization/Renderer/VolumeRendererBase.h>
