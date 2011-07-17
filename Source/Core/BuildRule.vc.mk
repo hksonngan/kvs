@@ -224,6 +224,7 @@ $(OUTDIR)\.\Visualization\Mapper\OrthoSlice.obj \
 $(OUTDIR)\.\Visualization\Mapper\PyramidalCell.obj \
 $(OUTDIR)\.\Visualization\Mapper\QuadraticHexahedralCell.obj \
 $(OUTDIR)\.\Visualization\Mapper\QuadraticTetrahedralCell.obj \
+$(OUTDIR)\.\Visualization\Mapper\RGBFormulae.obj \
 $(OUTDIR)\.\Visualization\Mapper\SlicePlane.obj \
 $(OUTDIR)\.\Visualization\Mapper\SphereGlyph.obj \
 $(OUTDIR)\.\Visualization\Mapper\Streamline.obj \

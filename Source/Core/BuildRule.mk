@@ -224,6 +224,7 @@ $(OUTDIR)/./Visualization/Mapper/OrthoSlice.o \
 $(OUTDIR)/./Visualization/Mapper/PyramidalCell.o \
 $(OUTDIR)/./Visualization/Mapper/QuadraticHexahedralCell.o \
 $(OUTDIR)/./Visualization/Mapper/QuadraticTetrahedralCell.o \
+$(OUTDIR)/./Visualization/Mapper/RGBFormulae.o \
 $(OUTDIR)/./Visualization/Mapper/SlicePlane.o \
 $(OUTDIR)/./Visualization/Mapper/SphereGlyph.o \
 $(OUTDIR)/./Visualization/Mapper/Streamline.o \
