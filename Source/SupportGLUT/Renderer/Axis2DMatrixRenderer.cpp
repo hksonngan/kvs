@@ -56,7 +56,7 @@ void EndDraw( void )
     glPopAttrib();
 }
 
-void DrawText( const std::string& text, const float x, const float y, const kvs::RGBColor& color )
+void DrawString( const std::string& text, const float x, const float y, const kvs::RGBColor& color )
 {
     glPushAttrib( GL_ALL_ATTRIB_BITS );
     glColor3ub( color.r(), color.g(), color.b() );
@@ -343,11 +343,11 @@ void Axis2DMatrixRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, k
 
                 const float x_min_position_x = x0;
                 const float x_min_position_y = y1 + ::CharacterHeight + 5;
-                ::DrawText( x_min_value.toStdString(), x_min_position_x, x_min_position_y, m_value_color );
+                ::DrawString( x_min_value.toStdString(), x_min_position_x, x_min_position_y, m_value_color );
 
                 const float x_max_position_x = x1 - x_max_value.size() * ::CharacterWidth;
                 const float x_max_position_y = y1 + ::CharacterHeight + 5;
-                ::DrawText( x_max_value.toStdString(), x_max_position_x, x_max_position_y, m_value_color );
+                ::DrawString( x_max_value.toStdString(), x_max_position_x, x_max_position_y, m_value_color );
             }
 
             if ( x_index == 0 )
@@ -357,11 +357,11 @@ void Axis2DMatrixRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, k
 
                 const float y_min_position_x = x0 - y_min_value.size() * ::CharacterWidth - 5;
                 const float y_min_position_y = y1;
-                ::DrawText( y_min_value.toStdString(), y_min_position_x, y_min_position_y, m_value_color );
+                ::DrawString( y_min_value.toStdString(), y_min_position_x, y_min_position_y, m_value_color );
 
                 const float y_max_position_x = x0 - y_max_value.size() * ::CharacterWidth - 5;
                 const float y_max_position_y = y0 + ::CharacterHeight;
-                ::DrawText( y_max_value.toStdString(), y_max_position_x, y_max_position_y, m_value_color );
+                ::DrawString( y_max_value.toStdString(), y_max_position_x, y_max_position_y, m_value_color );
             }
 
             // Draw labels.
@@ -373,11 +373,11 @@ void Axis2DMatrixRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, k
 
                 const float x_label_position_x = x1 - x_label_width - 5;
                 const float x_label_position_y = y1 - 5;
-                ::DrawText( x_label, x_label_position_x, x_label_position_y, m_label_color );
+                ::DrawString( x_label, x_label_position_x, x_label_position_y, m_label_color );
 
                 const float y_label_position_x = x0 + 5;
                 const float y_label_position_y = y0 + ::CharacterWidth + 5;
-                ::DrawText( y_label, y_label_position_x, y_label_position_y, m_label_color );
+                ::DrawString( y_label, y_label_position_x, y_label_position_y, m_label_color );
             }
             else
             {
@@ -386,7 +386,7 @@ void Axis2DMatrixRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, k
 
                 const float label_position_x = ( x1 + x0 ) * 0.5f - label_width * 0.5f;
                 const float label_position_y = ( y1 + y0 ) * 0.5f + ::CharacterHeight * 0.5f;
-                ::DrawText( label, label_position_x, label_position_y, m_label_color );
+                ::DrawString( label, label_position_x, label_position_y, m_label_color );
             }
         }
     }

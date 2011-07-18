@@ -57,7 +57,7 @@ void EndDraw( void )
     glPopAttrib();
 }
 
-void DrawText( const std::string& text, const float x, const float y, const kvs::RGBColor& color )
+void DrawString( const std::string& text, const float x, const float y, const kvs::RGBColor& color )
 {
     glPushAttrib( GL_ALL_ATTRIB_BITS );
     glColor3ub( color.r(), color.g(), color.b() );
@@ -341,8 +341,8 @@ void ParallelAxisRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, k
         const float min_x = ( m_left_margin + stride * i ) - min_width * 0.5f;
         const float min_y = y1 + height;
 
-        ::DrawText( max_value.toStdString(), kvs::Math::Max( 0.0f, max_x ), max_y, m_value_color );
-        ::DrawText( min_value.toStdString(), kvs::Math::Max( 0.0f, min_x ), min_y, m_value_color );
+        ::DrawString( max_value.toStdString(), kvs::Math::Max( 0.0f, max_x ), max_y, m_value_color );
+        ::DrawString( min_value.toStdString(), kvs::Math::Max( 0.0f, min_x ), min_y, m_value_color );
 
         if ( has_label )
         {
@@ -350,7 +350,7 @@ void ParallelAxisRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, k
             const size_t label_width = label.size() * ::CharacterWidth;
             const float label_x = ( m_left_margin + stride * i ) - label_width * 0.5f;
             const float label_y = min_y + height;
-            ::DrawText( label, kvs::Math::Max( 0.0f, label_x ), label_y, m_label_color );
+            ::DrawString( label, kvs::Math::Max( 0.0f, label_x ), label_y, m_label_color );
         }
     }
 
