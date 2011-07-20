@@ -5,6 +5,7 @@ FileFormat/CSV/Csv
 FileFormat/DICOM/Dicom
 FileFormat/DICOM/DicomList
 FileFormat/FileFormatBase
+FileFormat/GrADS/GrADS
 FileFormat/KVSML/KVSMLObjectImage
 FileFormat/KVSML/KVSMLObjectLine
 FileFormat/KVSML/KVSMLObjectPoint

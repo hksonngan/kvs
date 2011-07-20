@@ -19,6 +19,16 @@ $(OUTDIR)/./FileFormat/DICOM/VR.o \
 $(OUTDIR)/./FileFormat/DICOM/Value.o \
 $(OUTDIR)/./FileFormat/DICOM/Window.o \
 $(OUTDIR)/./FileFormat/FileFormatBase.o \
+$(OUTDIR)/./FileFormat/GrADS/DSet.o \
+$(OUTDIR)/./FileFormat/GrADS/DataDescriptorFile.o \
+$(OUTDIR)/./FileFormat/GrADS/GrADS.o \
+$(OUTDIR)/./FileFormat/GrADS/GriddedBinaryDataFile.o \
+$(OUTDIR)/./FileFormat/GrADS/Options.o \
+$(OUTDIR)/./FileFormat/GrADS/TDef.o \
+$(OUTDIR)/./FileFormat/GrADS/Title.o \
+$(OUTDIR)/./FileFormat/GrADS/Undef.o \
+$(OUTDIR)/./FileFormat/GrADS/Vars.o \
+$(OUTDIR)/./FileFormat/GrADS/XYZDef.o \
 $(OUTDIR)/./FileFormat/KVSML/CellTag.o \
 $(OUTDIR)/./FileFormat/KVSML/ColorMapTag.o \
 $(OUTDIR)/./FileFormat/KVSML/ColorTag.o \
@@ -377,6 +387,10 @@ $(OUTDIR)/./FileFormat/KVSML/%.o: ./FileFormat/KVSML/%.cpp ./FileFormat/KVSML/%.
 	$(MKDIR) $(OUTDIR)/./FileFormat/KVSML
 	$(CPP) -c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) -o $@ $<
 
+$(OUTDIR)/./FileFormat/GrADS/%.o: ./FileFormat/GrADS/%.cpp ./FileFormat/GrADS/%.h
+	$(MKDIR) $(OUTDIR)/./FileFormat/GrADS
+	$(CPP) -c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) -o $@ $<
+
 $(OUTDIR)/./FileFormat/DICOM/%.o: ./FileFormat/DICOM/%.cpp ./FileFormat/DICOM/%.h
 	$(MKDIR) $(OUTDIR)/./FileFormat/DICOM
 	$(CPP) -c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) -o $@ $<
@@ -415,6 +429,8 @@ install::
 	$(INSTALL) ./FileFormat/CSV/*.h $(INSTALL_DIR)/include/Core/./FileFormat/CSV
 	$(MKDIR) $(INSTALL_DIR)/include/Core/./FileFormat/DICOM
 	$(INSTALL) ./FileFormat/DICOM/*.h $(INSTALL_DIR)/include/Core/./FileFormat/DICOM
+	$(MKDIR) $(INSTALL_DIR)/include/Core/./FileFormat/GrADS
+	$(INSTALL) ./FileFormat/GrADS/*.h $(INSTALL_DIR)/include/Core/./FileFormat/GrADS
 	$(MKDIR) $(INSTALL_DIR)/include/Core/./FileFormat/KVSML
 	$(INSTALL) ./FileFormat/KVSML/*.h $(INSTALL_DIR)/include/Core/./FileFormat/KVSML
 	$(MKDIR) $(INSTALL_DIR)/include/Core/./FileFormat/PLY

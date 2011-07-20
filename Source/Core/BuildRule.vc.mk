@@ -19,6 +19,16 @@ $(OUTDIR)\.\FileFormat\DICOM\VR.obj \
 $(OUTDIR)\.\FileFormat\DICOM\Value.obj \
 $(OUTDIR)\.\FileFormat\DICOM\Window.obj \
 $(OUTDIR)\.\FileFormat\FileFormatBase.obj \
+$(OUTDIR)\.\FileFormat\GrADS\DSet.obj \
+$(OUTDIR)\.\FileFormat\GrADS\DataDescriptorFile.obj \
+$(OUTDIR)\.\FileFormat\GrADS\GrADS.obj \
+$(OUTDIR)\.\FileFormat\GrADS\GriddedBinaryDataFile.obj \
+$(OUTDIR)\.\FileFormat\GrADS\Options.obj \
+$(OUTDIR)\.\FileFormat\GrADS\TDef.obj \
+$(OUTDIR)\.\FileFormat\GrADS\Title.obj \
+$(OUTDIR)\.\FileFormat\GrADS\Undef.obj \
+$(OUTDIR)\.\FileFormat\GrADS\Vars.obj \
+$(OUTDIR)\.\FileFormat\GrADS\XYZDef.obj \
 $(OUTDIR)\.\FileFormat\KVSML\CellTag.obj \
 $(OUTDIR)\.\FileFormat\KVSML\ColorMapTag.obj \
 $(OUTDIR)\.\FileFormat\KVSML\ColorTag.obj \
@@ -421,6 +431,12 @@ $<
 $<
 <<
 
+{.\FileFormat\GrADS\}.cpp{$(OUTDIR)\.\FileFormat\GrADS\}.obj::
+	IF NOT EXIST $(OUTDIR)\.\FileFormat\GrADS $(MKDIR) $(OUTDIR)\.\FileFormat\GrADS
+	$(CPP) /c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) /Fo$(OUTDIR)\.\FileFormat\GrADS\ @<<
+$<
+<<
+
 {.\FileFormat\DICOM\}.cpp{$(OUTDIR)\.\FileFormat\DICOM\}.obj::
 	IF NOT EXIST $(OUTDIR)\.\FileFormat\DICOM $(MKDIR) $(OUTDIR)\.\FileFormat\DICOM
 	$(CPP) /c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) /Fo$(OUTDIR)\.\FileFormat\DICOM\ @<<
@@ -471,6 +487,8 @@ install::
 	$(INSTALL) .\FileFormat\CSV\*.h $(INSTALL_DIR)\include\Core\.\FileFormat\CSV
 	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\FileFormat\DICOM $(MKDIR) $(INSTALL_DIR)\include\Core\.\FileFormat\DICOM
 	$(INSTALL) .\FileFormat\DICOM\*.h $(INSTALL_DIR)\include\Core\.\FileFormat\DICOM
+	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\FileFormat\GrADS $(MKDIR) $(INSTALL_DIR)\include\Core\.\FileFormat\GrADS
+	$(INSTALL) .\FileFormat\GrADS\*.h $(INSTALL_DIR)\include\Core\.\FileFormat\GrADS
 	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\FileFormat\KVSML $(MKDIR) $(INSTALL_DIR)\include\Core\.\FileFormat\KVSML
 	$(INSTALL) .\FileFormat\KVSML\*.h $(INSTALL_DIR)\include\Core\.\FileFormat\KVSML
 	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\FileFormat\PLY $(MKDIR) $(INSTALL_DIR)\include\Core\.\FileFormat\PLY
