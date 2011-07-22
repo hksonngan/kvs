@@ -19,6 +19,13 @@ $(OUTDIR)/./FileFormat/DICOM/VR.o \
 $(OUTDIR)/./FileFormat/DICOM/Value.o \
 $(OUTDIR)/./FileFormat/DICOM/Window.o \
 $(OUTDIR)/./FileFormat/FileFormatBase.o \
+$(OUTDIR)/./FileFormat/FrontFlow/BoundaryData.o \
+$(OUTDIR)/./FileFormat/FrontFlow/Data.o \
+$(OUTDIR)/./FileFormat/FrontFlow/DataSet.o \
+$(OUTDIR)/./FileFormat/FrontFlow/File.o \
+$(OUTDIR)/./FileFormat/FrontFlow/FlowData.o \
+$(OUTDIR)/./FileFormat/FrontFlow/GFData.o \
+$(OUTDIR)/./FileFormat/FrontFlow/MeshData.o \
 $(OUTDIR)/./FileFormat/GrADS/DSet.o \
 $(OUTDIR)/./FileFormat/GrADS/DataDescriptorFile.o \
 $(OUTDIR)/./FileFormat/GrADS/GrADS.o \
@@ -391,6 +398,10 @@ $(OUTDIR)/./FileFormat/GrADS/%.o: ./FileFormat/GrADS/%.cpp ./FileFormat/GrADS/%.
 	$(MKDIR) $(OUTDIR)/./FileFormat/GrADS
 	$(CPP) -c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) -o $@ $<
 
+$(OUTDIR)/./FileFormat/FrontFlow/%.o: ./FileFormat/FrontFlow/%.cpp ./FileFormat/FrontFlow/%.h
+	$(MKDIR) $(OUTDIR)/./FileFormat/FrontFlow
+	$(CPP) -c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) -o $@ $<
+
 $(OUTDIR)/./FileFormat/DICOM/%.o: ./FileFormat/DICOM/%.cpp ./FileFormat/DICOM/%.h
 	$(MKDIR) $(OUTDIR)/./FileFormat/DICOM
 	$(CPP) -c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) -o $@ $<
@@ -429,6 +440,8 @@ install::
 	$(INSTALL) ./FileFormat/CSV/*.h $(INSTALL_DIR)/include/Core/./FileFormat/CSV
 	$(MKDIR) $(INSTALL_DIR)/include/Core/./FileFormat/DICOM
 	$(INSTALL) ./FileFormat/DICOM/*.h $(INSTALL_DIR)/include/Core/./FileFormat/DICOM
+	$(MKDIR) $(INSTALL_DIR)/include/Core/./FileFormat/FrontFlow
+	$(INSTALL) ./FileFormat/FrontFlow/*.h $(INSTALL_DIR)/include/Core/./FileFormat/FrontFlow
 	$(MKDIR) $(INSTALL_DIR)/include/Core/./FileFormat/GrADS
 	$(INSTALL) ./FileFormat/GrADS/*.h $(INSTALL_DIR)/include/Core/./FileFormat/GrADS
 	$(MKDIR) $(INSTALL_DIR)/include/Core/./FileFormat/KVSML

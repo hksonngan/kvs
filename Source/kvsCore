@@ -5,6 +5,7 @@
 #include <Core/FileFormat/DICOM/Dicom.h>
 #include <Core/FileFormat/DICOM/DicomList.h>
 #include <Core/FileFormat/FileFormatBase.h>
+#include <Core/FileFormat/FrontFlow/FrontFlow.h>
 #include <Core/FileFormat/GrADS/GrADS.h>
 #include <Core/FileFormat/KVSML/KVSMLObjectImage.h>
 #include <Core/FileFormat/KVSML/KVSMLObjectLine.h>

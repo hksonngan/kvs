@@ -19,6 +19,13 @@ $(OUTDIR)\.\FileFormat\DICOM\VR.obj \
 $(OUTDIR)\.\FileFormat\DICOM\Value.obj \
 $(OUTDIR)\.\FileFormat\DICOM\Window.obj \
 $(OUTDIR)\.\FileFormat\FileFormatBase.obj \
+$(OUTDIR)\.\FileFormat\FrontFlow\BoundaryData.obj \
+$(OUTDIR)\.\FileFormat\FrontFlow\Data.obj \
+$(OUTDIR)\.\FileFormat\FrontFlow\DataSet.obj \
+$(OUTDIR)\.\FileFormat\FrontFlow\File.obj \
+$(OUTDIR)\.\FileFormat\FrontFlow\FlowData.obj \
+$(OUTDIR)\.\FileFormat\FrontFlow\GFData.obj \
+$(OUTDIR)\.\FileFormat\FrontFlow\MeshData.obj \
 $(OUTDIR)\.\FileFormat\GrADS\DSet.obj \
 $(OUTDIR)\.\FileFormat\GrADS\DataDescriptorFile.obj \
 $(OUTDIR)\.\FileFormat\GrADS\GrADS.obj \
@@ -437,6 +444,12 @@ $<
 $<
 <<
 
+{.\FileFormat\FrontFlow\}.cpp{$(OUTDIR)\.\FileFormat\FrontFlow\}.obj::
+	IF NOT EXIST $(OUTDIR)\.\FileFormat\FrontFlow $(MKDIR) $(OUTDIR)\.\FileFormat\FrontFlow
+	$(CPP) /c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) /Fo$(OUTDIR)\.\FileFormat\FrontFlow\ @<<
+$<
+<<
+
 {.\FileFormat\DICOM\}.cpp{$(OUTDIR)\.\FileFormat\DICOM\}.obj::
 	IF NOT EXIST $(OUTDIR)\.\FileFormat\DICOM $(MKDIR) $(OUTDIR)\.\FileFormat\DICOM
 	$(CPP) /c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) /Fo$(OUTDIR)\.\FileFormat\DICOM\ @<<
@@ -487,6 +500,8 @@ install::
 	$(INSTALL) .\FileFormat\CSV\*.h $(INSTALL_DIR)\include\Core\.\FileFormat\CSV
 	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\FileFormat\DICOM $(MKDIR) $(INSTALL_DIR)\include\Core\.\FileFormat\DICOM
 	$(INSTALL) .\FileFormat\DICOM\*.h $(INSTALL_DIR)\include\Core\.\FileFormat\DICOM
+	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\FileFormat\FrontFlow $(MKDIR) $(INSTALL_DIR)\include\Core\.\FileFormat\FrontFlow
+	$(INSTALL) .\FileFormat\FrontFlow\*.h $(INSTALL_DIR)\include\Core\.\FileFormat\FrontFlow
 	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\FileFormat\GrADS $(MKDIR) $(INSTALL_DIR)\include\Core\.\FileFormat\GrADS
 	$(INSTALL) .\FileFormat\GrADS\*.h $(INSTALL_DIR)\include\Core\.\FileFormat\GrADS
 	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\FileFormat\KVSML $(MKDIR) $(INSTALL_DIR)\include\Core\.\FileFormat\KVSML
