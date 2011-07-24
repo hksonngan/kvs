@@ -16,6 +16,7 @@
 #include "NodeTag.h"
 #include "ValueTag.h"
 #include "DataArrayTag.h"
+#include "CoordTag.h"
 #include <kvs/File>
 #include <kvs/XMLDocument>
 #include <kvs/XMLDeclaration>
@@ -158,6 +159,11 @@ const kvs::AnyValueArray& KVSMLObjectStructuredVolume::values( void ) const
     return( m_values );
 }
 
+const kvs::ValueArray<float>& KVSMLObjectStructuredVolume::coords( void ) const
+{
+    return( m_coords );
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Sets a writing data type.
@@ -229,6 +235,11 @@ void KVSMLObjectStructuredVolume::setMaxValue( const double max_value )
 void KVSMLObjectStructuredVolume::setValues( const kvs::AnyValueArray& values )
 {
     m_values = values;
+}
+
+void KVSMLObjectStructuredVolume::setCoords( const kvs::ValueArray<float>& coords )
+{
+    m_coords = coords;
 }
 
 /*===========================================================================*/
@@ -332,6 +343,51 @@ const bool KVSMLObjectStructuredVolume::read( const std::string& filename )
         return( false );
     }
 
+    // <Coord>
+    if ( m_grid_type == "rectilinear" )
+    {
+        kvs::kvsml::CoordTag coord_tag;
+        if ( !coord_tag.read( node_tag.node() ) )
+        {
+            kvsMessageError( "Cannot read <%s>.", coord_tag.name().c_str() );
+            return( false );
+        }
+
+        // <DataArray>
+        kvs::kvsml::DataArrayTag coords;
+        const size_t dimension = 3;
+        size_t coord_nelements = 0;
+        for ( size_t i = 0; i < dimension; i++ ) coord_nelements += resolution[i];
+        if ( !coords.read( coord_tag.node(), coord_nelements, &m_coords ) )
+        {
+            kvsMessageError( "Cannot read <%s> for <%s>.",
+                             coords.name().c_str(),
+                             coord_tag.name().c_str() );
+            return( false );
+        }
+    }
+    else if ( m_grid_type == "curvilinear" )
+    {
+        kvs::kvsml::CoordTag coord_tag;
+        if ( !coord_tag.read( node_tag.node() ) )
+        {
+            kvsMessageError( "Cannot read <%s>.", coord_tag.name().c_str() );
+            return( false );
+        }
+
+        // <DataArray>
+        kvs::kvsml::DataArrayTag coords;
+        const size_t dimension = 3;
+        const size_t coord_nelements = nnodes * dimension;
+        if ( !coords.read( coord_tag.node(), coord_nelements, &m_coords ) )
+        {
+            kvsMessageError( "Cannot read <%s> for <%s>.",
+                             coords.name().c_str(),
+                             coord_tag.name().c_str() );
+            return( false );
+        }
+    }
+
     return( true );
 }
 
@@ -420,6 +476,38 @@ const bool KVSMLObjectStructuredVolume::write( const std::string& filename )
                          values.name().c_str(),
                          value_tag.name().c_str() );
         return( false );
+    }
+
+    if ( m_grid_type == "rectilinear" || m_grid_type == "curvilinear" )
+    {
+        // <Coord>
+        kvs::kvsml::CoordTag coord_tag;
+        if ( !coord_tag.write( node_tag.node() ) )
+        {
+            kvsMessageError( "Cannot write <%s>.", coord_tag.name().c_str() );
+            return( false );
+        }
+
+        // <DataArray>
+        kvs::kvsml::DataArrayTag coords;
+        if ( m_writing_type == ExternalAscii )
+        {
+            coords.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "coord" ) );
+            coords.setFormat( "ascii" );
+        }
+        else if ( m_writing_type == ExternalBinary )
+        {
+            coords.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "coord" ) );
+            coords.setFormat( "binary" );
+        }
+
+        if ( !coords.write( coord_tag.node(), m_coords, pathname ) )
+        {
+            kvsMessageError( "Cannot write <%s> for <%s>.",
+                             coords.name().c_str(),
+                             coord_tag.name().c_str() );
+            return( false );
+        }
     }
 
     return( document.write( m_filename ) );

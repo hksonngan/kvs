@@ -223,6 +223,12 @@ void StructuredVolumeImporter::import(
     SuperClass::setResolution( kvsml->resolution() );
     SuperClass::setVeclen( kvsml->veclen() );
     SuperClass::setValues( kvsml->values() );
+
+    if ( SuperClass::gridType() == SuperClass::Rectilinear ||
+         SuperClass::gridType() == SuperClass::Curvilinear )
+    {
+        SuperClass::setCoords( kvsml->coords() );
+    }
     SuperClass::updateMinMaxCoords();
 
     if ( kvsml->hasMinValue() && kvsml->hasMaxValue() )

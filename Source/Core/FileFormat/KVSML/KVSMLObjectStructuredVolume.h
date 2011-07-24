@@ -16,6 +16,7 @@
 
 #include <kvs/FileFormatBase>
 #include <kvs/AnyValueArray>
+#include <kvs/ValueArray>
 #include <kvs/Type>
 #include <kvs/Vector3>
 #include <string>
@@ -60,6 +61,7 @@ protected:
     double             m_min_value;     ///< min. value
     double             m_max_value;     ///< max. value
     kvs::AnyValueArray m_values;        ///< field value array
+    kvs::ValueArray<float> m_coords;    ///< coordinate array
 
 public:
 
@@ -97,6 +99,8 @@ public:
 
     const kvs::AnyValueArray& values( void ) const;
 
+    const kvs::ValueArray<float>& coords( void ) const;
+
 public:
 
     void setWritingDataType( const WritingDataType writing_type );
@@ -114,6 +118,8 @@ public:
     void setMaxValue( const double max_value );
 
     void setValues( const kvs::AnyValueArray& values );
+
+    void setCoords( const kvs::ValueArray<float>& coords );
 
 public:
 
