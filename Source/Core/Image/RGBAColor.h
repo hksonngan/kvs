@@ -29,7 +29,7 @@ namespace kvs
 /*==========================================================================*/
 class RGBAColor : public kvs::RGBColor
 {
-    kvsClassName( kvs::RGBAColor );
+    kvsClassName_without_virtual( kvs::RGBAColor );
 
 protected:
 

@@ -16,6 +16,7 @@
 #include <kvs/Tokenizer>
 #include <string>
 #include <iostream>
+#include <cstdlib>
 
 
 namespace

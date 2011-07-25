@@ -14,6 +14,7 @@
 /*****************************************************************************/
 #include "Undef.h"
 #include <kvs/Tokenizer>
+#include <cstdlib>
 
 
 namespace kvs

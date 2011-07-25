@@ -34,7 +34,7 @@ class RGBAColor;
 /*==========================================================================*/
 class RGBColor
 {
-    kvsClassName( kvs::RGBColor );
+    kvsClassName_without_virtual( kvs::RGBColor );
 
 protected:
 
