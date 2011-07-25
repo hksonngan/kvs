@@ -14,6 +14,7 @@
 /*****************************************************************************/
 #include "Options.h"
 #include <kvs/Tokenizer>
+#include <algorithm>
 
 
 namespace kvs
