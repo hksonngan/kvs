@@ -6,6 +6,7 @@ FileFormat/DICOM/Dicom
 FileFormat/DICOM/DicomList
 FileFormat/FileFormatBase
 FileFormat/FrontFlow/FrontFlow
+FileFormat/FrontSTR/FrontSTR
 FileFormat/GrADS/GrADS
 FileFormat/KVSML/KVSMLObjectImage
 FileFormat/KVSML/KVSMLObjectLine

@@ -26,6 +26,9 @@ $(OUTDIR)\.\FileFormat\FrontFlow\File.obj \
 $(OUTDIR)\.\FileFormat\FrontFlow\FlowData.obj \
 $(OUTDIR)\.\FileFormat\FrontFlow\GFData.obj \
 $(OUTDIR)\.\FileFormat\FrontFlow\MeshData.obj \
+$(OUTDIR)\.\FileFormat\FrontSTR\FrontSTR.obj \
+$(OUTDIR)\.\FileFormat\FrontSTR\MeshData.obj \
+$(OUTDIR)\.\FileFormat\FrontSTR\ResultData.obj \
 $(OUTDIR)\.\FileFormat\GrADS\DSet.obj \
 $(OUTDIR)\.\FileFormat\GrADS\DataDescriptorFile.obj \
 $(OUTDIR)\.\FileFormat\GrADS\GrADS.obj \
@@ -444,6 +447,12 @@ $<
 $<
 <<
 
+{.\FileFormat\FrontSTR\}.cpp{$(OUTDIR)\.\FileFormat\FrontSTR\}.obj::
+	IF NOT EXIST $(OUTDIR)\.\FileFormat\FrontSTR $(MKDIR) $(OUTDIR)\.\FileFormat\FrontSTR
+	$(CPP) /c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) /Fo$(OUTDIR)\.\FileFormat\FrontSTR\ @<<
+$<
+<<
+
 {.\FileFormat\FrontFlow\}.cpp{$(OUTDIR)\.\FileFormat\FrontFlow\}.obj::
 	IF NOT EXIST $(OUTDIR)\.\FileFormat\FrontFlow $(MKDIR) $(OUTDIR)\.\FileFormat\FrontFlow
 	$(CPP) /c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) /Fo$(OUTDIR)\.\FileFormat\FrontFlow\ @<<
@@ -502,6 +511,8 @@ install::
 	$(INSTALL) .\FileFormat\DICOM\*.h $(INSTALL_DIR)\include\Core\.\FileFormat\DICOM
 	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\FileFormat\FrontFlow $(MKDIR) $(INSTALL_DIR)\include\Core\.\FileFormat\FrontFlow
 	$(INSTALL) .\FileFormat\FrontFlow\*.h $(INSTALL_DIR)\include\Core\.\FileFormat\FrontFlow
+	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\FileFormat\FrontSTR $(MKDIR) $(INSTALL_DIR)\include\Core\.\FileFormat\FrontSTR
+	$(INSTALL) .\FileFormat\FrontSTR\*.h $(INSTALL_DIR)\include\Core\.\FileFormat\FrontSTR
 	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\FileFormat\GrADS $(MKDIR) $(INSTALL_DIR)\include\Core\.\FileFormat\GrADS
 	$(INSTALL) .\FileFormat\GrADS\*.h $(INSTALL_DIR)\include\Core\.\FileFormat\GrADS
 	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\FileFormat\KVSML $(MKDIR) $(INSTALL_DIR)\include\Core\.\FileFormat\KVSML

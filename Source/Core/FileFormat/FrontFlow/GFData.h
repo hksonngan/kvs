@@ -32,7 +32,7 @@ namespace kvs
 /*===========================================================================*/
 class GFData : public kvs::FileFormatBase
 {
-    kvsClassName( kvs::GFData );
+    kvsClassName_without_virtual( kvs::GFData );
 
 public:
 
