@@ -190,7 +190,7 @@ const bool DataSet::readBinary( FILE* fp, const bool swap )
     {
         memcpy( comment, initialize, 60 );
         fseek( fp, 4, SEEK_CUR );
-        fread( &comment, 1, 60, fp );
+        fread( comment, 1, 60, fp );
         fseek( fp, 4, SEEK_CUR );
 
         m_comment_list.push_back( std::string( comment, 60 ) );

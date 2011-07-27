@@ -255,7 +255,7 @@ const bool Data::readBinary( FILE* fp, const bool swap )
     char comment[30];
     for ( size_t i = 0; i < 30; i++ ) comment[i] = '\0';
     fseek( fp, 4, SEEK_CUR );
-    fread( &comment, 1, 30, fp );
+    fread( comment, 1, 30, fp );
     fseek( fp, 4, SEEK_CUR );
     m_comment = std::string( comment );
 

@@ -159,7 +159,7 @@ void File::deallocate( void )
 /*===========================================================================*/
 const bool File::read( const std::string filename )
 {
-    FILE* fp = fopen( filename.c_str(), "r" );
+    FILE* fp = fopen( filename.c_str(), "rb" );
     if ( !fp )
     {
         kvsMessageError("Cannot open %s.", filename.c_str());
@@ -168,6 +168,8 @@ const bool File::read( const std::string filename )
 
     if ( this->is_ascii( fp ) )
     {
+        fclose( fp );
+        fp = fopen( filename.c_str(), "r" );
         this->read_ascii( fp );
     }
     else if ( this->is_binary( fp ) )
@@ -298,7 +300,7 @@ const bool File::read_binary( FILE* fp, const bool swap )
     {
         memcpy( comment, initialize, 60 );
         fseek( fp, 4, SEEK_CUR );
-        fread( &comment, 1, 60, fp );
+        fread( comment, 1, 60, fp );
         fseek( fp, 4, SEEK_CUR );
 
         m_comment_list.push_back( std::string( comment, 60 ) );
