@@ -69,9 +69,9 @@ public:
 
 protected:
 
-    const bool is_ascii( FILE* fp );
+    const bool is_ascii( const std::string filename );
 
-    const bool is_binary( FILE* fp );
+    const bool is_binary( const std::string filename );
 
     const bool read_ascii( FILE* fp );
 

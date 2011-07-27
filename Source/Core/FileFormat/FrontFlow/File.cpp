@@ -159,31 +159,47 @@ void File::deallocate( void )
 /*===========================================================================*/
 const bool File::read( const std::string filename )
 {
-    FILE* fp = fopen( filename.c_str(), "rb" );
-    if ( !fp )
+    if ( this->is_ascii( filename ) )
     {
-        kvsMessageError("Cannot open %s.", filename.c_str());
-        return( false );
-    }
+        FILE* fp = fopen( filename.c_str(), "r" );
+        if ( !fp )
+        {
+            kvsMessageError("Cannot open %s.", filename.c_str());
+            return( false );
+        }
 
-    if ( this->is_ascii( fp ) )
-    {
+        if ( !this->read_ascii( fp ) )
+        {
+            kvsMessageError("Cannot read %s.", filename.c_str());
+            fclose( fp );
+            return( false );
+        }
+
         fclose( fp );
-        fp = fopen( filename.c_str(), "r" );
-        this->read_ascii( fp );
     }
-    else if ( this->is_binary( fp ) )
+    else if ( this->is_binary( filename ) )
     {
-        this->read_binary( fp );
+        FILE* fp = fopen( filename.c_str(), "rb" );
+        if ( !fp )
+        {
+            kvsMessageError("Cannot open %s.", filename.c_str());
+            return( false );
+        }
+
+        if ( !this->read_binary( fp ) )
+        {
+            kvsMessageError("Cannot read %s.", filename.c_str());
+            fclose( fp );
+            return( false );
+        }
+
+        fclose( fp );
     }
     else
     {
         kvsMessageError( "%s is not GF format data." );
-        fclose( fp );
         return( false );
     }
-
-    fclose( fp );
 
     return( true );
 }
@@ -191,16 +207,25 @@ const bool File::read( const std::string filename )
 /*===========================================================================*/
 /**
  *  @brief  Check file type whether the ascii or not
- *  @param  fp [in] file pointer
+ *  @param  filename [in] filename
  *  @return true, if the file type is ascii
  */
 /*===========================================================================*/
-const bool File::is_ascii( FILE* fp )
+const bool File::is_ascii( const std::string filename )
 {
+    FILE* fp = fopen( filename.c_str(), "rb" );
+    if ( !fp )
+    {
+        kvsMessageError("Cannot open %s.", filename.c_str());
+        return( false );
+    }
+
     char buffer[8];
     fseek( fp, 0, SEEK_SET );
     fread( buffer, 1, 8, fp );
     fseek( fp, 0, SEEK_SET );
+
+    fclose( fp );
 
     return( strncmp( buffer, "#A_GF_V1", 8 ) == 0 );
 }
@@ -208,16 +233,25 @@ const bool File::is_ascii( FILE* fp )
 /*===========================================================================*/
 /**
  *  @brief  Check file type whether the binary (Fortran unformated) or not
- *  @param  fp [in] file pointer
+ *  @param  filename [in] filename
  *  @return true, if the file type is binary
  */
 /*===========================================================================*/
-const bool File::is_binary( FILE* fp )
+const bool File::is_binary( const std::string filename )
 {
+    FILE* fp = fopen( filename.c_str(), "rb" );
+    if ( !fp )
+    {
+        kvsMessageError("Cannot open %s.", filename.c_str());
+        return( false );
+    }
+
     char buffer[8];
     fseek( fp, 4, SEEK_SET );
     fread( buffer, 1, 8, fp );
     fseek( fp, 0, SEEK_SET );
+
+    fclose( fp );
 
     return( strncmp( buffer, "#U_GF_V1", 8 ) == 0 );
 }
