@@ -37,6 +37,21 @@ SphereGlyph::SphereGlyph( void ):
  *  @param  volume [in] pointer to the volume object
  */
 /*===========================================================================*/
+SphereGlyph::SphereGlyph( const kvs::PointObject* point ):
+    kvs::GlyphBase(),
+    m_sphere(NULL),
+    m_nslices(10),
+    m_nstacks(10)
+{
+    this->exec( point );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new SphereGlyph class.
+ *  @param  volume [in] pointer to the volume object
+ */
+/*===========================================================================*/
 SphereGlyph::SphereGlyph( const kvs::VolumeObjectBase* volume ):
     kvs::GlyphBase(),
     m_sphere(NULL),
