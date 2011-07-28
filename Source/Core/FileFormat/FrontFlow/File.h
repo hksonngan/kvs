@@ -73,9 +73,9 @@ protected:
 
     const bool is_binary( const std::string filename );
 
-    const bool read_ascii( FILE* fp );
+    const bool read_ascii( const std::string filename );
 
-    const bool read_binary( FILE* fp, const bool swap = false );
+    const bool read_binary( const std::string filename, const bool swap = false );
 };
 
 } // end of namespace gf

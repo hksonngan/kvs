@@ -161,39 +161,19 @@ const bool File::read( const std::string filename )
 {
     if ( this->is_ascii( filename ) )
     {
-        FILE* fp = fopen( filename.c_str(), "r" );
-        if ( !fp )
-        {
-            kvsMessageError("Cannot open %s.", filename.c_str());
-            return( false );
-        }
-
-        if ( !this->read_ascii( fp ) )
+        if ( !this->read_ascii( filename ) )
         {
             kvsMessageError("Cannot read %s.", filename.c_str());
-            fclose( fp );
             return( false );
         }
-
-        fclose( fp );
     }
     else if ( this->is_binary( filename ) )
     {
-        FILE* fp = fopen( filename.c_str(), "rb" );
-        if ( !fp )
-        {
-            kvsMessageError("Cannot open %s.", filename.c_str());
-            return( false );
-        }
-
-        if ( !this->read_binary( fp ) )
+        if ( !this->read_binary( filename ) )
         {
             kvsMessageError("Cannot read %s.", filename.c_str());
-            fclose( fp );
             return( false );
         }
-
-        fclose( fp );
     }
     else
     {
@@ -220,10 +200,9 @@ const bool File::is_ascii( const std::string filename )
         return( false );
     }
 
+    // Read 8 characters (8 bytes).
     char buffer[8];
-    fseek( fp, 0, SEEK_SET );
     fread( buffer, 1, 8, fp );
-    fseek( fp, 0, SEEK_SET );
 
     fclose( fp );
 
@@ -246,10 +225,10 @@ const bool File::is_binary( const std::string filename )
         return( false );
     }
 
+    // Read 8 characters (8 bytes).
     char buffer[8];
     fseek( fp, 4, SEEK_SET );
     fread( buffer, 1, 8, fp );
-    fseek( fp, 0, SEEK_SET );
 
     fclose( fp );
 
@@ -259,40 +238,48 @@ const bool File::is_binary( const std::string filename )
 /*===========================================================================*/
 /**
  *  @brief  Read ascii type file.
- *  @param  fp [in] file pointer
+ *  @param  filename [in] filename
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool File::read_ascii( FILE* fp )
+const bool File::read_ascii( const std::string filename )
 {
+    FILE* fp = fopen( filename.c_str(), "r" );
+    if ( !fp )
+    {
+        kvsMessageError("Cannot open %s.", filename.c_str());
+        return( false );
+    }
+
+    const size_t line_size = 256;
+    char line[line_size];
+    memset( line, 0, line_size );
+
     // Read a file-type-header (#A_GF_V1).
-    char file_type_header[8];
-    fseek( fp, 0, SEEK_SET );
-    fread( file_type_header, 1, 8, fp );
-    m_file_type_header = std::string( file_type_header, 8 );
+    fgets( line, line_size, fp );
+    m_file_type_header = std::string( line, 8 );
 
     // Read a number of comments.
     kvs::Int32 ncomments = 0;
-    fscanf( fp, "%d\n", &ncomments );
+    fgets( line, line_size, fp );
+    sscanf( line, "%d", &ncomments );
 
     // Read commnets.
-    char comment[256];
     for ( size_t i = 0; i < size_t( ncomments ); i++ )
     {
-        memset( comment, 0, 256 );
-        fgets( comment, 256, fp );
+        fgets( line, line_size, fp );
+        if ( line[ strlen(line) - 1 ] == '\n' ) line[ strlen(line) - 1 ] = '\0';
 
-        comment[strlen(comment)-1] = '\0';
-        m_comment_list.push_back( std::string( comment ) );
+        const std::string comment( line );
+        m_comment_list.push_back( comment );
     }
 
     // Read data set.
-    char buffer[256];
-    while ( fgets( buffer, 256, fp ) != 0 )
+    while ( fgets( line, line_size, fp ) != 0 )
     {
-        if ( strncmp( buffer, "#ENDFILE", 8 ) == 0 ) break;
-
-        if ( strncmp( buffer, "#NEW_SET", 8 ) == 0 )
+        const std::string tag( line, 8 );
+        if ( tag == "#ENDFILE" ) break;
+        if ( tag == "#NEW_SET" )
         {
             kvs::gf::DataSet data_set;
             data_set.readAscii( fp );
@@ -301,18 +288,28 @@ const bool File::read_ascii( FILE* fp )
         }
     }
 
+    fclose( fp );
+
     return( true );
 }
 
 /*===========================================================================*/
 /**
  *  @brief  Read binary type file (Fortran unformated).
- *  @param  fp [in] file pointer
+ *  @param  filename [in] filename
+ *  @param  swap [in] flag for byte-swap
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool File::read_binary( FILE* fp, const bool swap )
+const bool File::read_binary( const std::string filename, const bool swap )
 {
+    FILE* fp = fopen( filename.c_str(), "rb" );
+    if ( !fp )
+    {
+        kvsMessageError("Cannot open %s.", filename.c_str());
+        return( false );
+    }
+
     // Read a file-type-header (#U_GF_V1).
     char file_type_header[8];
     fseek( fp, 4, SEEK_SET );
@@ -353,11 +350,13 @@ const bool File::read_binary( FILE* fp, const bool swap )
         if ( strncmp( buffer, "#NEW_SET", 8 ) == 0 )
         {
             kvs::gf::DataSet data_set;
-            if ( !data_set.readBinary( fp ) ) return( false );
+            if ( !data_set.readBinary( fp ) ) { fclose( fp ); return( false ); }
 
             m_data_set_list.push_back( data_set );
         }
     }
+
+    fclose( fp );
 
     return( true );
 }

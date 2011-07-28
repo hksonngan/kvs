@@ -72,7 +72,7 @@ public:
 
 public:
 
-    const bool readAscii( FILE* fp );
+    const bool readAscii( FILE* fp, const std::string tag );
 
     const bool readBinary( FILE* fp, const bool swap = false );
 };

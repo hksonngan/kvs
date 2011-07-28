@@ -130,36 +130,34 @@ void DataSet::deallocate( void )
 /*===========================================================================*/
 const bool DataSet::readAscii( FILE* fp )
 {
+    const size_t line_size = 256;
+    char line[line_size];
+    memset( line, 0, line_size );
+
     // Read a number of comments.
     kvs::Int32 ncomments = 0;
-    fscanf( fp, "%d\n", &ncomments );
+    fgets( line, line_size, fp );
+    sscanf( line, "%d", &ncomments );
 
     // Read commnets.
-    char comment[256];
     for ( size_t i = 0; i < size_t( ncomments ); i++ )
     {
-        memset( comment, 0, 256 );
-        fgets( comment, 256, fp );
+        fgets( line, line_size, fp );
+        if ( line[ strlen(line) - 1 ] == '\n' ) line[ strlen(line) - 1 ] = '\0';
 
-        comment[strlen(comment)-1] = '\0';
-        m_comment_list.push_back( std::string( comment ) );
+        const std::string comment( line );
+        m_comment_list.push_back( comment );
     }
 
     // Read data set.
     for ( ; ; )
     {
-        // Peek a tag (8 btyes).
-        char buffer[256];
-        fpos_t fpos;
-        fgetpos( fp, &fpos );
-        fgets( buffer, 256, fp );
-        fsetpos( fp, &fpos );
-
-        if ( strncmp( buffer, "#ENDFILE", 8 ) == 0 ||
-             strncmp( buffer, "#NEW_SET", 8 ) == 0 ) { break; }
+        fgets( line, line_size, fp );
+        const std::string tag( line, 8 );
+        if ( tag == "#ENDFILE" || tag == "#NEW_SET" ) { break; }
 
         kvs::gf::Data data;
-        if ( !data.readAscii( fp ) ) return( false );
+        if ( !data.readAscii( fp, tag ) ) return( false );
 
         m_data_list.push_back( data );
     }
