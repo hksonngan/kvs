@@ -62,7 +62,7 @@ TableImporter::TableImporter( const std::string& filename )
     else
     {
         BaseClass::m_is_success = false;
-        kvsMessageError("Cannot import '%'.",filename.c_str());
+        kvsMessageError("Cannot import '%s'.",filename.c_str());
         return;
     }
 }
