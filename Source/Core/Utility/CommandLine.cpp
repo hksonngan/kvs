@@ -500,6 +500,26 @@ const bool operator ==( const CommandLine::Value& lhs, const CommandLine::Value&
  *  Constructor.
  *  @param argc [in] argument count
  *  @param argv [in] argument value
+ */
+/*==========================================================================*/
+CommandLine::CommandLine( int argc, char** argv )
+    : m_argc( argc )
+    , m_argv( argv )
+    , m_command_name( std::string( argv[0] ) )
+    , m_max_length( 0 )
+    , m_no_help( true )
+    , m_help_option( "h" )
+    , m_arguments( 0 )
+    , m_options( 0 )
+    , m_values( 0 )
+{
+}
+
+/*==========================================================================*/
+/**
+ *  Constructor.
+ *  @param argc [in] argument count
+ *  @param argv [in] argument value
  *  @param command_name [in] command name
  */
 /*==========================================================================*/
@@ -848,6 +868,58 @@ const bool CommandLine::hasOptionValue( const std::string& option_name ) const
 const size_t CommandLine::noptions( void ) const
 {
     return( m_options.size() );
+}
+
+/*==========================================================================*/
+/**
+ *  Add help option.
+ *  @param help_option [in] character for help option
+ */
+/*==========================================================================*/
+void CommandLine::addHelpOption( const std::string& help_option )
+{
+    this->add_help_option( help_option );
+}
+
+/*==========================================================================*/
+/**
+ *  Add option.
+ *  @param name [in] option name
+ *  @param description [in] option description
+ *  @param nvalues [in] number of option values
+ *  @param is_required [in] whether option is required ?
+ */
+/*==========================================================================*/
+void CommandLine::addOption(
+    const std::string& name,
+    const std::string& description,
+    size_t             nvalues,
+    bool               is_required )
+{
+    this->add_option( name, description, nvalues, is_required );
+}
+
+/*==========================================================================*/
+/**
+ *  Add input value.
+ *  @param description [in] description of input value
+ *  @param is_required [in] whether input value is required ?
+ */
+/*==========================================================================*/
+void CommandLine::addValue( const std::string& description, bool is_required )
+{
+    this->add_value( description, is_required );
+}
+
+/*==========================================================================*/
+/**
+ *  Show help message.
+ *  @param mode [in] help message mode
+ */
+/*==========================================================================*/
+void CommandLine::showHelpMessage( HelpMessageMode mode ) const
+{
+    this->print_help_message( mode );
 }
 
 /*==========================================================================*/

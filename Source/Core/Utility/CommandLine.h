@@ -69,7 +69,9 @@ protected:
 
 public:
 
-    CommandLine( int argc, char** argv, const std::string& command_name = "command" );
+    CommandLine( int argc, char** argv );
+
+    CommandLine( int argc, char** argv, const std::string& command_name );
 
     virtual ~CommandLine( void );
 
@@ -106,6 +108,20 @@ public:
     const bool hasOptionValue( const std::string& option_name ) const;
 
     const size_t noptions( void ) const;
+
+public:
+
+    void addHelpOption( const std::string& help_option = "h" );
+
+    void addOption(
+        const std::string& name,
+        const std::string& description,
+        size_t             nvalues     = 0,
+        bool               is_required = false );
+
+    void addValue( const std::string& description, bool is_required = true );
+
+    void showHelpMessage( HelpMessageMode mode = UsageOnly ) const;
 
 protected:
 
