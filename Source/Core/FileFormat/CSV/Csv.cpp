@@ -19,6 +19,30 @@
 #include <kvs/File>
 
 
+namespace
+{
+
+bool GetLine( std::istream & in, std::string & str )
+{
+    if ( !in ) return( false );
+
+    char ch;
+    str = "";
+
+    // Windows:CRLF(\r\n), Unix:LF(\n), Mac:CR(\r)
+    while ( in.get( ch ) )
+    {
+        if ( ch == '\0' ) { break; }
+        if ( ch == '\n' ) { break; }
+        if ( ch == '\r' ) { ch = in.peek(); if ( ch == '\n' ) in.get( ch ); break; }
+        str += ch;
+    }
+
+    return( true );
+}
+
+}
+
 namespace kvs
 {
 
@@ -161,7 +185,7 @@ const bool Csv::read( const std::string& filename )
     }
 
     std::string line;
-    while ( std::getline( ifs, line ) )
+    while ( ::GetLine( ifs, line ) )
     {
         std::istringstream line_stream( line );
 
@@ -171,7 +195,7 @@ const bool Csv::read( const std::string& filename )
         {
             row.push_back( value );
         }
-        m_values.push_back( row );
+        if ( row.size() > 0 ) m_values.push_back( row );
     }
 
     ifs.close();
