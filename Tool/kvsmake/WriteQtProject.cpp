@@ -59,6 +59,7 @@ void WriteQtProjectBody(
     //  Search the project's condition.
     std::string headers( "" );
     std::string sources( "" );
+    std::string qresrcs( "" );
 
     // Search cpp files and h files.
     const kvs::Directory current_dir( "." );
@@ -77,6 +78,10 @@ void WriteQtProjectBody(
         {
             sources += ( iter->fileName() + " \\\n" );
         }
+        else if ( iter->extension() == "qrc" )
+        {
+            qresrcs += ( iter->fileName() + " \\\n" );
+        }
 
         ++iter;
     }
@@ -91,6 +96,7 @@ void WriteQtProjectBody(
         line = kvsmake::ReplaceString( line, "PROJECT_NAME_REPLACED_BY_KVSMAKE", project_name );
         line = kvsmake::ReplaceString( line, "HEADERS_REPLACED_BY_KVSMAKE", headers );
         line = kvsmake::ReplaceString( line, "SOURCES_REPLACED_BY_KVSMAKE", sources );
+        line = kvsmake::ReplaceString( line, "QRESRCS_REPLACED_BY_KVSMAKE", qresrcs );
 
         out << line << std::endl;
     }
