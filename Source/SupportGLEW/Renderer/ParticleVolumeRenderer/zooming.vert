@@ -141,6 +141,7 @@ void main( void )
     gl_PointSize = zooming( gl_Position );
 #else
     radius = 0.0;
+    center = vec2(0.0);
     gl_PointSize = 1.0;
 #endif
 }

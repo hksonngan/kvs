@@ -133,6 +133,7 @@ const char* zooming =
     "    gl_PointSize = zooming( gl_Position );\n"
     "#else\n"
     "    radius = 0.0;\n"
+    "    center = vec2(0.0);\n"
     "    gl_PointSize = 1.0;\n"
     "#endif\n"
     "}\n"
