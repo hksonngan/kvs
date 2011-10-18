@@ -17,6 +17,7 @@
 #include <list>
 #include <vector>
 #include <utility>
+#include <cstdlib>
 #include <kvs/ClassName>
 
 
