@@ -24,18 +24,18 @@ namespace
 
 int Month( const std::string month )
 {
-    if ( month == "jan" || month == "JAN" ) return( 1 );
-    if ( month == "feb" || month == "FEB" ) return( 2 );
-    if ( month == "mar" || month == "MAR" ) return( 3 );
-    if ( month == "apr" || month == "APR" ) return( 4 );
-    if ( month == "may" || month == "MAY" ) return( 5 );
-    if ( month == "jun" || month == "JUN" ) return( 6 );
-    if ( month == "jul" || month == "JUL" ) return( 7 );
-    if ( month == "aug" || month == "AUG" ) return( 8 );
-    if ( month == "sep" || month == "SEP" ) return( 9 );
-    if ( month == "oct" || month == "OCT" ) return( 10 );
-    if ( month == "nov" || month == "NOV" ) return( 11 );
-    if ( month == "dec" || month == "DEC" ) return( 12 );
+    if ( month == "jan" || month == "Jan" || month == "JAN" ) return( 1 );
+    if ( month == "feb" || month == "Feb" || month == "FEB" ) return( 2 );
+    if ( month == "mar" || month == "Mar" || month == "MAR" ) return( 3 );
+    if ( month == "apr" || month == "Apr" || month == "APR" ) return( 4 );
+    if ( month == "may" || month == "May" || month == "MAY" ) return( 5 );
+    if ( month == "jun" || month == "Jun" || month == "JUN" ) return( 6 );
+    if ( month == "jul" || month == "Jul" || month == "JUL" ) return( 7 );
+    if ( month == "aug" || month == "Aug" || month == "AUG" ) return( 8 );
+    if ( month == "sep" || month == "Sep" || month == "SEP" ) return( 9 );
+    if ( month == "oct" || month == "Oct" || month == "OCT" ) return( 10 );
+    if ( month == "nov" || month == "Nov" || month == "NOV" ) return( 11 );
+    if ( month == "dec" || month == "Dec" || month == "DEC" ) return( 12 );
     return( -1 );
 }
 

@@ -78,7 +78,7 @@ std::string ReplaceMonth( const std::string& filename, const int month )
     if ( filename.find("%mc",0) != std::string::npos )
     {
         kvs::String file( filename );
-        file.replace( "%mc", MonthName[month] );
+        file.replace( "%mc", MonthName[month - 1] );
         return( file.toStdString() );
     }
 
@@ -287,13 +287,12 @@ const bool GrADS::read( const std::string& filename )
             data.setSequential( sequential );
             data.setBigEndian( big_endian );
             m_data_list.push_back( data );
-
-            ++tdef;
             ++counter;
         }
-
         if ( counter == m_data_descriptor.tdef().num ) break;
-        file++;
+
+        ++file;
+        ++tdef;
     }
 
     return( true );
