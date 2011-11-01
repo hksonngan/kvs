@@ -39,12 +39,21 @@ const bool XYZDef::read( std::string line, std::ifstream& ifs )
     t.token(); // XDEF, YDEF or ZDEF
 
     // xnum
-    if ( t.isLast() ) return( false );
+    if ( t.isLast() )
+    {
+        kvsMessageError("Cannot read num.");
+        return( false );
+    }
     this->num = static_cast<size_t>( atoi( t.token().c_str() ) );
 
     // mapping
-    if ( t.isLast() ) return( false );
+    if ( t.isLast() )
+    {
+        kvsMessageError("Cannot read mapping.");
+        return( false );
+    }
     const std::string mapping = t.token();
+
     if ( mapping == "LINEAR" || mapping == "linear" )
     {
         this->mapping = Linear;
@@ -59,10 +68,15 @@ const bool XYZDef::read( std::string line, std::ifstream& ifs )
 
         if ( !t.isLast() )
         {
-            for ( size_t i = 0; i < this->num; i++ )
+            size_t counter = 0;
+            while ( !t.isLast() )
             {
-                if ( t.isLast() ) return( false );
-                this->values[i] = static_cast<kvs::Real32>( atof( t.token().c_str() ) );
+                const std::string value = t.token();
+                if ( !value.empty() )
+                {
+                    this->values[counter++] = static_cast<kvs::Real32>( atof( value.c_str() ) );
+                }
+                if ( counter >= this->num ) break;
             }
         }
         else
@@ -73,7 +87,11 @@ const bool XYZDef::read( std::string line, std::ifstream& ifs )
                 t = kvs::Tokenizer( line, " \t" );
                 while ( !t.isLast() )
                 {
-                    this->values[counter++] = static_cast<kvs::Real32>( atof( t.token().c_str() ) );
+                    const std::string value = t.token();
+                    if ( !value.empty() )
+                    {
+                        this->values[counter++] = static_cast<kvs::Real32>( atof( value.c_str() ) );
+                    }
                     if ( counter >= this->num ) break;
                 }
                 if ( counter >= this->num ) break;
