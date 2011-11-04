@@ -288,11 +288,11 @@ const bool GrADS::read( const std::string& filename )
             data.setBigEndian( big_endian );
             m_data_list.push_back( data );
             ++counter;
+            ++tdef;
         }
         if ( counter == m_data_descriptor.tdef().num ) break;
 
         ++file;
-        ++tdef;
     }
 
     return( true );
