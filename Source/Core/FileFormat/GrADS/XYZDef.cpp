@@ -66,9 +66,9 @@ const bool XYZDef::read( std::string line, std::ifstream& ifs )
         this->mapping = Levels;
         this->values.allocate( this->num );
 
+        size_t counter = 0;
         if ( !t.isLast() )
         {
-            size_t counter = 0;
             while ( !t.isLast() )
             {
                 const std::string value = t.token();
@@ -79,16 +79,16 @@ const bool XYZDef::read( std::string line, std::ifstream& ifs )
                 if ( counter >= this->num ) break;
             }
         }
-        else
+
+        if ( counter < this->num )
         {
-            size_t counter = 0;
             while ( std::getline( ifs, line ) )
             {
                 t = kvs::Tokenizer( line, " \t" );
                 while ( !t.isLast() )
                 {
                     const std::string value = t.token();
-                    if ( !value.empty() )
+                    if ( !value.empty() || value != " " )
                     {
                         this->values[counter++] = static_cast<kvs::Real32>( atof( value.c_str() ) );
                     }
