@@ -20,6 +20,31 @@
 #include <kvs/Tokenizer>
 
 
+namespace
+{
+
+bool GetLine( std::istream & in, std::string & str )
+{
+    if ( !in ) return( false );
+
+    char ch;
+    str = "";
+
+    // Windows:CRLF(\r\n), Unix:LF(\n), Mac:CR(\r)
+    while ( in.get( ch ) )
+    {
+        if ( ch == '\0' ) { break; }
+        if ( ch == '\n' ) { break; }
+        if ( ch == '\r' ) { ch = in.peek(); if ( ch == '\n' ) in.get( ch ); break; }
+        str += ch;
+    }
+
+    return( true );
+}
+
+}
+
+
 namespace kvs
 {
 
@@ -144,7 +169,8 @@ const kvs::grads::Vars& DataDescriptorFile::vars( void ) const
 const bool DataDescriptorFile::read( std::ifstream& ifs )
 {
     std::string line;
-    while ( std::getline( ifs, line ) )
+//    while ( std::getline( ifs, line ) )
+    while ( ::GetLine( ifs, line ) )
     {
         // Trim white space.
         std::string blank(" ");
