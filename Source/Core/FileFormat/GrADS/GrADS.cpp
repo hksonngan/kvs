@@ -69,7 +69,7 @@ std::string ReplaceMonth( const std::string& filename, const int month )
 
     if ( filename.find("%m2",0) != std::string::npos )
     {
-        char replace[2]; sprintf( replace, "%02d", month );
+        char replace[3]; sprintf( replace, "%02d", month );
         kvs::String file( filename );
         file.replace( "%m2", std::string( replace ) );
         return( file.toStdString() );
@@ -97,7 +97,7 @@ std::string ReplaceDay( const std::string& filename, const int day )
 
     if ( filename.find("%d2",0) != std::string::npos )
     {
-        char replace[2]; sprintf( replace, "%02d", day );
+        char replace[3]; sprintf( replace, "%02d", day );
         kvs::String file( filename );
         file.replace( "%d2", std::string( replace ) );
         return( file.toStdString() );
@@ -118,7 +118,7 @@ std::string ReplaceHour( const std::string& filename, const int hour )
 
     if ( filename.find("%h2",0) != std::string::npos )
     {
-        char replace[2]; sprintf( replace, "%02d", hour );
+        char replace[3]; sprintf( replace, "%02d", hour );
         kvs::String file( filename );
         file.replace( "%h2", std::string( replace ) );
         return( file.toStdString() );
@@ -126,7 +126,7 @@ std::string ReplaceHour( const std::string& filename, const int hour )
 
     if ( filename.find("%h3",0) != std::string::npos )
     {
-        char replace[3]; sprintf( replace, "%03d", hour );
+        char replace[4]; sprintf( replace, "%03d", hour );
         kvs::String file( filename );
         file.replace( "%h3", std::string( replace ) );
         return( file.toStdString() );
@@ -139,7 +139,7 @@ std::string ReplaceMinute( const std::string& filename, const int minute )
 {
     if ( filename.find("%n2",0) != std::string::npos )
     {
-        char replace[2]; sprintf( replace, "%02d", minute );
+        char replace[3]; sprintf( replace, "%02d", minute );
         kvs::String file( filename );
         file.replace( "%n2", std::string( replace ) );
         return( file.toStdString() );
