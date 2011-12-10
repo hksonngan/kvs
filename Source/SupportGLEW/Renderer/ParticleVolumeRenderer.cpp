@@ -445,7 +445,7 @@ ParticleVolumeRenderer::ParticleVolumeRenderer(
     const size_t repeat_level ):
     m_ref_point( NULL )
 {
-    kvs::glew::Initialize();
+//    kvs::glew::Initialize();
     BaseClass::setShader( kvs::Shader::Lambert() );
 
     this->initialize();
