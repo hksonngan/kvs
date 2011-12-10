@@ -4,6 +4,7 @@
 
 OBJECTS = \
 $(OUTDIR)\.\Renderer\EnsembleAverageBuffer.obj \
+$(OUTDIR)\.\Renderer\ParticleBasedRenderer.obj \
 $(OUTDIR)\.\Renderer\ParticleVolumeRenderer.obj \
 $(OUTDIR)\.\Renderer\PointRenderer.obj \
 $(OUTDIR)\.\Renderer\PolygonRenderer.obj \

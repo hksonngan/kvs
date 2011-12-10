@@ -1,5 +1,6 @@
 #include <SupportGLEW/GLEW.h>
 #include <SupportGLEW/Renderer/EnsembleAverageBuffer.h>
+#include <SupportGLEW/Renderer/ParticleBasedRenderer.h>
 #include <SupportGLEW/Renderer/ParticleVolumeRenderer.h>
 #include <SupportGLEW/Renderer/PointRenderer.h>
 #include <SupportGLEW/Renderer/PolygonRenderer.h>

@@ -1,5 +1,6 @@
 GLEW
 Renderer/EnsembleAverageBuffer
+Renderer/ParticleBasedRenderer
 Renderer/ParticleVolumeRenderer
 Renderer/PointRenderer
 Renderer/PolygonRenderer

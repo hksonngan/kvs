@@ -4,6 +4,7 @@
 
 OBJECTS := \
 $(OUTDIR)/./Renderer/EnsembleAverageBuffer.o \
+$(OUTDIR)/./Renderer/ParticleBasedRenderer.o \
 $(OUTDIR)/./Renderer/ParticleVolumeRenderer.o \
 $(OUTDIR)/./Renderer/PointRenderer.o \
 $(OUTDIR)/./Renderer/PolygonRenderer.o \
