@@ -22,7 +22,7 @@ def Write( filename ):
     file = open( filename, "r" )
     path = os.path.split( filename )[0]
     param = os.path.splitext( os.path.split( filename )[1] )[0]
-    print "const char* " + param + " ="
+    print "const std::string " + param + " ="
     for line in file:
         if line.startswith("/**") or line.startswith("/*-") or line.startswith("/*=") or line.startswith(" *") or line.startswith(" */"):
             continue
@@ -70,6 +70,8 @@ for shader_dir in shader_dir_list:
     print " */"
     print "#ifndef KVS__GLEW__GLSL__" + dirname + "_H_INCLUDE"
     print "#define KVS__GLEW__GLSL__" + dirname + "_H_INCLUDE"
+    print ""
+    print "#include <string>"
     print ""
     print "namespace kvs { namespace glew { namespace glsl {"
     print ""

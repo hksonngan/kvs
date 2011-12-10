@@ -4,6 +4,8 @@
 #ifndef KVS__GLEW__GLSL__RayCastingRenderer_H_INCLUDE
 #define KVS__GLEW__GLSL__RayCastingRenderer_H_INCLUDE
 
+#include <string>
+
 namespace kvs { namespace glew { namespace glsl {
 
 namespace RayCastingRenderer
@@ -12,7 +14,7 @@ namespace RayCastingRenderer
 namespace Vertex
 {
 
-const char* bounding_cube =
+const std::string bounding_cube =
     "void main( void )\n"
     "{\n"
     "    gl_FrontColor = gl_Vertex;\n"
@@ -20,7 +22,7 @@ const char* bounding_cube =
     "}\n"
 ;
 
-const char* ray_caster =
+const std::string ray_caster =
     "void main( void )\n"
     "{\n"
     "    gl_FrontColor = gl_Color;\n"
@@ -33,14 +35,14 @@ const char* ray_caster =
 namespace Fragment
 {
 
-const char* bounding_cube =
+const std::string bounding_cube =
     "void main( void )\n"
     "{\n"
     "    gl_FragColor = gl_Color;\n"
     "}\n"
 ;
 
-const char* ray_caster =
+const std::string ray_caster =
     "struct Shading\n"
     "{\n"
     "    float Ka; // ambient\n"

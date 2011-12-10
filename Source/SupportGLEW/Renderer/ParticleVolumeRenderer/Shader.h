@@ -4,6 +4,8 @@
 #ifndef KVS__GLEW__GLSL__ParticleVolumeRenderer_H_INCLUDE
 #define KVS__GLEW__GLSL__ParticleVolumeRenderer_H_INCLUDE
 
+#include <string>
+
 namespace kvs { namespace glew { namespace glsl {
 
 namespace ParticleVolumeRenderer
@@ -12,7 +14,7 @@ namespace ParticleVolumeRenderer
 namespace Vertex
 {
 
-const char* resize =
+const std::string resize =
     "\n"
     "void main( void )\n"
     "{\n"
@@ -22,7 +24,7 @@ const char* resize =
     "}\n"
 ;
 
-const char* zooming =
+const std::string zooming =
     "uniform float densityFactor;\n"
     "uniform int circle_threshold;\n"
     "uniform vec2 screen_scale;\n"
@@ -144,7 +146,7 @@ const char* zooming =
 namespace Fragment
 {
 
-const char* resize =
+const std::string resize =
     "uniform sampler2D texture;\n"
     "uniform vec2 start;\n"
     "uniform vec2 step;\n"
@@ -214,7 +216,7 @@ const char* resize =
     "}\n"
 ;
 
-const char* zooming =
+const std::string zooming =
     "struct Shading\n"
     "{\n"
     "    float Ka; // ambient\n"

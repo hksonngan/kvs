@@ -4,6 +4,8 @@
 #ifndef KVS__GLEW__GLSL__PointRenderer_H_INCLUDE
 #define KVS__GLEW__GLSL__PointRenderer_H_INCLUDE
 
+#include <string>
+
 namespace kvs { namespace glew { namespace glsl {
 
 namespace PointRenderer
@@ -12,7 +14,7 @@ namespace PointRenderer
 namespace Vertex
 {
 
-const char* shading =
+const std::string shading =
     "varying vec3 position;\n"
     "varying vec3 normal;\n"
     "\n"
@@ -31,7 +33,7 @@ const char* shading =
 namespace Fragment
 {
 
-const char* shading =
+const std::string shading =
     "struct Shading\n"
     "{\n"
     "    float Ka; // ambient\n"
