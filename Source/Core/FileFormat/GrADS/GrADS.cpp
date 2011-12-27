@@ -264,12 +264,10 @@ const bool GrADS::read( const std::string& filename )
         if ( template_data_filename[0] == '^' ) { template_data_filename.erase( 0, 1 ); }
     }
 
-    size_t counter = 0;
     kvs::Directory directory( data_pathname );
     kvs::grads::TDef tdef = m_data_descriptor.tdef();
-    kvs::FileList::const_iterator file = directory.fileList().begin();
-    kvs::FileList::const_iterator last = directory.fileList().end();
-    while ( file != last )
+    const size_t tnum = m_data_descriptor.tdef().num;
+    for ( size_t i = 0; i < tnum; ++i, ++tdef )
     {
         std::string data_filename = template_data_filename;
         data_filename = ::ReplaceYear( data_filename, tdef.start.year );
@@ -278,21 +276,25 @@ const bool GrADS::read( const std::string& filename )
         data_filename = ::ReplaceHour( data_filename, tdef.start.hour );
         data_filename = ::ReplaceMinute( data_filename, tdef.start.minute );
 
-        if ( file->fileName() == data_filename )
+        size_t counter = 0;
+        kvs::FileList::const_iterator file = directory.fileList().begin();
+        kvs::FileList::const_iterator last = directory.fileList().end();
+        while ( file != last )
         {
-            const std::string sep = kvs::File::Separator();
-            const std::string path = directory.directoryPath( true );
-            GriddedBinaryDataFile data;
-            data.setFilename( path + sep + data_filename );
-            data.setSequential( sequential );
-            data.setBigEndian( big_endian );
-            m_data_list.push_back( data );
-            ++counter;
-            ++tdef;
-        }
-        if ( counter == m_data_descriptor.tdef().num ) break;
+            if ( file->fileName() == data_filename )
+            {
+                const std::string sep = kvs::File::Separator();
+                const std::string path = directory.directoryPath( true );
+                GriddedBinaryDataFile data;
+                data.setFilename( path + sep + data_filename );
+                data.setSequential( sequential );
+                data.setBigEndian( big_endian );
+                m_data_list.push_back( data );
+                break;
+            }
 
-        ++file;
+            ++file;
+        }
     }
 
     return( true );
