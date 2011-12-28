@@ -110,6 +110,12 @@ kvs::KVSMLObjectUnstructuredVolume* UnstructuredVolumeExporter<kvs::KVSMLObjectU
     this->setCoords( volume->coords() );
     this->setConnections( volume->connections() );
 
+    if ( volume->hasMinMaxValues() )
+    {
+        this->setMinValue( volume->minValue() );
+        this->setMaxValue( volume->maxValue() );
+    }
+
     return( this );
 }
 

@@ -64,7 +64,17 @@ namespace kvs
  */
 /*===========================================================================*/
 KVSMLObjectUnstructuredVolume::KVSMLObjectUnstructuredVolume( void ):
-    m_writing_type( kvs::KVSMLObjectUnstructuredVolume::Ascii )
+    m_writing_type( kvs::KVSMLObjectUnstructuredVolume::Ascii ),
+    m_cell_type( "" ),
+    m_has_label( false ),
+    m_label( "" ),
+    m_veclen( 0 ),
+    m_nnodes( 0 ),
+    m_ncells( 0 ),
+    m_has_min_value( false ),
+    m_has_max_value( false ),
+    m_min_value( 0.0 ),
+    m_max_value( 0.0 )
 {
 }
 
@@ -75,7 +85,17 @@ KVSMLObjectUnstructuredVolume::KVSMLObjectUnstructuredVolume( void ):
  */
 /*===========================================================================*/
 KVSMLObjectUnstructuredVolume::KVSMLObjectUnstructuredVolume( const std::string& filename ):
-    m_writing_type( kvs::KVSMLObjectUnstructuredVolume::Ascii )
+    m_writing_type( kvs::KVSMLObjectUnstructuredVolume::Ascii ),
+    m_cell_type( "" ),
+    m_has_label( false ),
+    m_label( "" ),
+    m_veclen( 0 ),
+    m_nnodes( 0 ),
+    m_ncells( 0 ),
+    m_has_min_value( false ),
+    m_has_max_value( false ),
+    m_min_value( 0.0 ),
+    m_max_value( 0.0 )
 {
     if( this->read( filename ) ) { m_is_success = true; }
     else { m_is_success = false; }

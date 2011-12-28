@@ -122,6 +122,12 @@ kvs::KVSMLObjectStructuredVolume* StructuredVolumeExporter<kvs::KVSMLObjectStruc
     this->setResolution( volume->resolution() );
     this->setValues( volume->values() );
 
+    if ( volume->hasMinMaxValues() )
+    {
+        this->setMinValue( volume->minValue() );
+        this->setMaxValue( volume->maxValue() );
+    }
+
     return( this );
 }
 
