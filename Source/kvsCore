@@ -98,6 +98,7 @@
 #include <Core/Utility/DebugNew.h>
 #include <Core/Utility/Directory.h>
 #include <Core/Utility/Endian.h>
+#include <Core/Utility/Exception.h>
 #include <Core/Utility/FastTokenizer.h>
 #include <Core/Utility/File.h>
 #include <Core/Utility/FileList.h>
@@ -109,6 +110,8 @@
 #include <Core/Utility/Message.h>
 #include <Core/Utility/Platform.h>
 #include <Core/Utility/ReferenceCounter.h>
+#include <Core/Utility/SharedPointer.h>
+#include <Core/Utility/SmartPointer.h>
 #include <Core/Utility/String.h>
 #include <Core/Utility/StringList.h>
 #include <Core/Utility/SystemInformation.h>
@@ -120,6 +123,7 @@
 #include <Core/Utility/Value.h>
 #include <Core/Utility/ValueArray.h>
 #include <Core/Utility/Version.h>
+#include <Core/Utility/WeakPointer.h>
 #include <Core/Visualization/Data/HydrogenVolumeData.h>
 #include <Core/Visualization/Data/TornadoVolumeData.h>
 #include <Core/Visualization/Event/EventBase.h>

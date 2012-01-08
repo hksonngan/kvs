@@ -98,6 +98,7 @@ Utility/Date
 Utility/DebugNew
 Utility/Directory
 Utility/Endian
+Utility/Exception
 Utility/FastTokenizer
 Utility/File
 Utility/FileList
@@ -109,6 +110,8 @@ Utility/MemoryTracer
 Utility/Message
 Utility/Platform
 Utility/ReferenceCounter
+Utility/SharedPointer
+Utility/SmartPointer
 Utility/String
 Utility/StringList
 Utility/SystemInformation
@@ -120,6 +123,7 @@ Utility/Type
 Utility/Value
 Utility/ValueArray
 Utility/Version
+Utility/WeakPointer
 Visualization/Data/HydrogenVolumeData
 Visualization/Data/TornadoVolumeData
 Visualization/Event/EventBase
