@@ -4,7 +4,7 @@
  *  @brief  
  *
  *  @author Yukio YASUHARA
- *  @date   2010/08/09 23:22:15
+ *  @date   2012/01/09 15:43:45
  */
 /*----------------------------------------------------------------------------
  *
@@ -173,12 +173,14 @@ const bool Streamline::check_for_termination(
 
     if ( m_enable_vector_length_condition )
     {
-        return( BaseClass::check_for_vector_length( direction ) );
+//        return( BaseClass::check_for_vector_length( direction ) );
+        if ( BaseClass::check_for_vector_length( direction ) ) return( true );
     }
 
     if ( m_enable_integration_times_condition )
     {
-        return( BaseClass::check_for_integration_times( integration_times ) );
+//        return( BaseClass::check_for_integration_times( integration_times ) );
+        if ( BaseClass::check_for_integration_times( integration_times ) ) return( true );
     }
 
     return( false );

@@ -50,9 +50,9 @@ public:
 
     enum IntegrationDirection
     {
-        ForwardDirection = 0,
-        BackwardDirection = 1,
-        BothDirections = 2
+        BackwardDirection = -1,
+        BothDirections = 0,
+        ForwardDirection = 1
     };
 
 protected:

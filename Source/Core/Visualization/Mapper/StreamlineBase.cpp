@@ -246,34 +246,13 @@ const bool StreamlineBase::calculate_line(
     if ( !this->check_for_inside_volume( seed_point ) ) return( false );
 
     const kvs::Vector3f seed_vector = this->calculate_vector( seed_point );
-    if ( m_integration_direction == StreamlineBase::ForwardDirection )
-    {
-        // Forward direction.
-        return( this->calculate_one_side(
-                    &(*coords),
-                    &(*colors),
-                    seed_point,
-                    seed_vector ) );
-    }
-    else if ( m_integration_direction == StreamlineBase::BackwardDirection )
-    {
-        // backward direction.
-        return( this->calculate_one_side(
-                    &(*coords),
-                    &(*colors),
-                    seed_point,
-                    -seed_vector ) );
-    }
-    else // m_direction == Streamline::BothDirections
+    if ( m_integration_direction == StreamlineBase::BothDirections )
     {
         // Forward direction.
         std::vector<kvs::Real32> tmp_coords1;
         std::vector<kvs::UInt8> tmp_colors1;
-        if ( !this->calculate_one_side(
-                 &tmp_coords1,
-                 &tmp_colors1,
-                 seed_point,
-                 seed_vector ) )
+        m_integration_direction = StreamlineBase::ForwardDirection;
+        if ( !this->calculate_one_side( &tmp_coords1, &tmp_colors1, seed_point, seed_vector ) )
         {
             return( false );
         }
@@ -281,14 +260,13 @@ const bool StreamlineBase::calculate_line(
         // backward direction.
         std::vector<kvs::Real32> tmp_coords2;
         std::vector<kvs::UInt8> tmp_colors2;
-        if( !this->calculate_one_side(
-                &tmp_coords2,
-                &tmp_colors2,
-                seed_point,
-                -seed_vector ) )
+        m_integration_direction = StreamlineBase::BackwardDirection;
+        if ( !this->calculate_one_side( &tmp_coords2, &tmp_colors2, seed_point, seed_vector ) )
         {
             return( false );
         }
+
+        m_integration_direction = StreamlineBase::BothDirections;
 
         const size_t nvertices1 = tmp_coords1.size() / 3;
         for( size_t i = 0; i < nvertices1; i++ )
@@ -317,6 +295,12 @@ const bool StreamlineBase::calculate_line(
             colors->push_back( tmp_colors2[id3+2] );
         }
     }
+    else
+    {
+        // Forward or backword direction.
+        return( this->calculate_one_side( &(*coords), &(*colors), seed_point, seed_vector ) );
+    }
+
 
     return( true );
 }
@@ -457,8 +441,8 @@ const bool StreamlineBase::integrate_by_euler(
         if ( !this->check_for_inside_volume( current_vertex ) ) return( false );
     }
 
-    const kvs::Vector3f k1 = m_integration_interval * current_direction;
-    *next_vertex = current_vertex + k1;
+    const kvs::Vector3f k1 = current_direction.normalize() * m_integration_direction;
+    *next_vertex = current_vertex + m_integration_interval * k1;
 
     return( true );
 }
@@ -482,9 +466,9 @@ const bool StreamlineBase::integrate_by_runge_kutta_2nd(
         if ( !this->check_for_inside_volume( current_vertex ) ) return( false );
     }
 
-    const kvs::Vector3f k1 = m_integration_interval * current_direction;
+    const kvs::Vector3f k1 = current_direction.normalize() * m_integration_direction;
     // Interpolate vector from vertex of cell.
-    const kvs::Vector3f vertex = current_vertex + 0.5f * k1;
+    const kvs::Vector3f vertex = current_vertex + 0.5f * m_integration_interval * k1;
 
     if ( m_enable_boundary_condition )
     {
@@ -492,8 +476,8 @@ const bool StreamlineBase::integrate_by_runge_kutta_2nd(
     }
 
     const kvs::Vector3f direction = this->interpolate_vector( vertex, current_direction );
-    const kvs::Vector3f k2 = m_integration_interval * direction;
-    *next_vertex = vertex + k2;
+    const kvs::Vector3f k2 = direction.normalize() * m_integration_direction;
+    *next_vertex = vertex + m_integration_interval * k2;
 
     return( true );
 }
@@ -518,12 +502,13 @@ const bool StreamlineBase::integrate_by_runge_kutta_4th(
     }
 
     // Calculate integration interval.
-    const float interval = m_integration_interval / static_cast<float>(current_direction.length());
+//    const float interval = m_integration_interval / static_cast<float>(current_direction.length());
 
-    const kvs::Vector3f k1 = interval * current_direction;
+//    const kvs::Vector3f k1 = interval * current_direction;
+    const kvs::Vector3f k1 = current_direction.normalize() * m_integration_direction;
 
     // Interpolate vector from vertex of cell.
-    const kvs::Vector3f vertex2 = current_vertex + 0.5f * k1;
+    const kvs::Vector3f vertex2 = current_vertex + 0.5f * m_integration_interval * k1;
 
     if ( m_enable_boundary_condition )
     {
@@ -531,10 +516,11 @@ const bool StreamlineBase::integrate_by_runge_kutta_4th(
     }
 
     const kvs::Vector3f direction2 = this->interpolate_vector( vertex2, current_direction );
-    const kvs::Vector3f k2 = interval * direction2;
+//    const kvs::Vector3f k2 = interval * direction2;
+    const kvs::Vector3f k2 = direction2.normalize() * m_integration_direction;
 
     // Interpolate vector from vertex of cell.
-    const kvs::Vector3f vertex3 = current_vertex + 0.5f * k2;
+    const kvs::Vector3f vertex3 = current_vertex + 0.5f * m_integration_interval * k2;
 
     if ( m_enable_boundary_condition )
     {
@@ -542,10 +528,11 @@ const bool StreamlineBase::integrate_by_runge_kutta_4th(
     }
 
     const kvs::Vector3f direction3 = this->interpolate_vector( vertex3, current_direction );
-    const kvs::Vector3f k3 = interval * direction3;
+//    const kvs::Vector3f k3 = interval * direction3;
+    const kvs::Vector3f k3 = direction3.normalize() * m_integration_direction;
 
     // Interpolate vector from vertex of cell.
-    const kvs::Vector3f vertex4 = current_vertex + k3;
+    const kvs::Vector3f vertex4 = current_vertex + m_integration_interval * k3;
 
     if ( m_enable_boundary_condition )
     {
@@ -553,9 +540,10 @@ const bool StreamlineBase::integrate_by_runge_kutta_4th(
     }
 
     const kvs::Vector3f direction4 = this->interpolate_vector( vertex4, current_direction );
-    const kvs::Vector3f k4 = interval * direction4;
+//    const kvs::Vector3f k4 = interval * direction4;
+    const kvs::Vector3f k4 = direction4.normalize() * m_integration_direction;
 
-    *next_vertex = current_vertex + ( k1 + 2.0f * ( k2 + k3 ) + k4 ) / 6.0f;
+    *next_vertex = current_vertex + m_integration_direction * ( k1 + 2.0f * ( k2 + k3 ) + k4 ) / 6.0f;
 
     return( true );
 }
