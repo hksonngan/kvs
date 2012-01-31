@@ -1,3 +1,4 @@
+Renderer/HAVSVolumeRenderer
 Renderer/ParticleVolumeRenderer
 Renderer/PointRenderer
 Renderer/PolygonRenderer

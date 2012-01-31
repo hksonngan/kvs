@@ -4,10 +4,12 @@
 
 OBJECTS = \
 $(OUTDIR)\.\Renderer\EnsembleAverageBuffer.obj \
+$(OUTDIR)\.\Renderer\HAVSVolumeRenderer.obj \
 $(OUTDIR)\.\Renderer\ParticleBasedRenderer.obj \
 $(OUTDIR)\.\Renderer\ParticleVolumeRenderer.obj \
 $(OUTDIR)\.\Renderer\PointRenderer.obj \
 $(OUTDIR)\.\Renderer\PolygonRenderer.obj \
+$(OUTDIR)\.\Renderer\PreIntegrationTable.obj \
 $(OUTDIR)\.\Renderer\RayCastingRenderer.obj \
 $(OUTDIR)\.\Viewer\BufferObject.obj \
 $(OUTDIR)\.\Viewer\FragmentShader.obj \
@@ -44,6 +46,8 @@ install::
 	$(INSTALL) .\*.h $(INSTALL_DIR)\include\SupportGLEW\.
 	IF NOT EXIST $(INSTALL_DIR)\include\SupportGLEW\.\Renderer $(MKDIR) $(INSTALL_DIR)\include\SupportGLEW\.\Renderer
 	$(INSTALL) .\Renderer\*.h $(INSTALL_DIR)\include\SupportGLEW\.\Renderer
+	IF NOT EXIST $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\HAVSVolumeRenderer $(MKDIR) $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\HAVSVolumeRenderer
+	$(INSTALL) .\Renderer\HAVSVolumeRenderer\*.h $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\HAVSVolumeRenderer
 	IF NOT EXIST $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\ParticleVolumeRenderer $(MKDIR) $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\ParticleVolumeRenderer
 	$(INSTALL) .\Renderer\ParticleVolumeRenderer\*.h $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\ParticleVolumeRenderer
 	IF NOT EXIST $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\PointRenderer $(MKDIR) $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\PointRenderer

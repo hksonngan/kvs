@@ -1,9 +1,11 @@
 GLEW
 Renderer/EnsembleAverageBuffer
+Renderer/HAVSVolumeRenderer
 Renderer/ParticleBasedRenderer
 Renderer/ParticleVolumeRenderer
 Renderer/PointRenderer
 Renderer/PolygonRenderer
+Renderer/PreIntegrationTable
 Renderer/RayCastingRenderer
 Renderer/Shader
 Viewer/BufferObject

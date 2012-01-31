@@ -4,10 +4,12 @@
 
 OBJECTS := \
 $(OUTDIR)/./Renderer/EnsembleAverageBuffer.o \
+$(OUTDIR)/./Renderer/HAVSVolumeRenderer.o \
 $(OUTDIR)/./Renderer/ParticleBasedRenderer.o \
 $(OUTDIR)/./Renderer/ParticleVolumeRenderer.o \
 $(OUTDIR)/./Renderer/PointRenderer.o \
 $(OUTDIR)/./Renderer/PolygonRenderer.o \
+$(OUTDIR)/./Renderer/PreIntegrationTable.o \
 $(OUTDIR)/./Renderer/RayCastingRenderer.o \
 $(OUTDIR)/./Viewer/BufferObject.o \
 $(OUTDIR)/./Viewer/FragmentShader.o \
@@ -40,6 +42,8 @@ install::
 	$(INSTALL) ./*.h $(INSTALL_DIR)/include/SupportGLEW/.
 	$(MKDIR) $(INSTALL_DIR)/include/SupportGLEW/./Renderer
 	$(INSTALL) ./Renderer/*.h $(INSTALL_DIR)/include/SupportGLEW/./Renderer
+	$(MKDIR) $(INSTALL_DIR)/include/SupportGLEW/./Renderer/HAVSVolumeRenderer
+	$(INSTALL) ./Renderer/HAVSVolumeRenderer/*.h $(INSTALL_DIR)/include/SupportGLEW/./Renderer/HAVSVolumeRenderer
 	$(MKDIR) $(INSTALL_DIR)/include/SupportGLEW/./Renderer/ParticleVolumeRenderer
 	$(INSTALL) ./Renderer/ParticleVolumeRenderer/*.h $(INSTALL_DIR)/include/SupportGLEW/./Renderer/ParticleVolumeRenderer
 	$(MKDIR) $(INSTALL_DIR)/include/SupportGLEW/./Renderer/PointRenderer
