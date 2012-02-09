@@ -145,6 +145,10 @@ void StochasticRenderingCompositor::registerObject(
             return;
         }
     }
+    else
+    {
+        if ( !engine->object() ) engine->attachObject( object );
+    }
 
     m_registered_objects.push_back( object );
 
