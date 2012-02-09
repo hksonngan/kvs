@@ -11,7 +11,7 @@ def Include( filename ):
     file = open( filename, "r" )
     path = os.path.split( filename )[0]
     for line in file:
-        if line.startswith("/**") or line.startswith("/*-") or line.startswith("/*=") or line.startswith(" *") or line.startswith(" */"):
+        if line.startswith("//") or line.startswith("/**") or line.startswith("/*-") or line.startswith("/*=") or line.startswith(" *") or line.startswith(" */"):
             continue
         if line.find("#include") != -1:
             return Include( path + "/" + line.split("\"")[1] )
@@ -24,7 +24,7 @@ def Write( filename ):
     param = os.path.splitext( os.path.split( filename )[1] )[0]
     print "const std::string " + param + " ="
     for line in file:
-        if line.startswith("/**") or line.startswith("/*-") or line.startswith("/*=") or line.startswith(" *") or line.startswith(" */"):
+        if line.startswith("//") or line.startswith("/**") or line.startswith("/*-") or line.startswith("/*=") or line.startswith(" *") or line.startswith(" */"):
             continue
         if line.startswith("#include"):
             Include( path + "/" + line.split("\"")[1] )

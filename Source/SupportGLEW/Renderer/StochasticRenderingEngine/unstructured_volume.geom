@@ -233,19 +233,17 @@ void calculate_across_line_to_line_2D( out float r1, out float r3, in int p0, in
     r3 = delta_inv * ( -v01.y * v02.x + v01.x * v02.y );
 }
 
-/*
- *   type 1
- *
- *   p3-------------p2
- *     \ ~-_   _-~ /
- *      \   ~p0   /
- *       \   |   /
- *        \  |  /
- *         \ | /
- *          \|/
- *           p1
- *
- */
+//   type 1
+//
+//   p3-------------p2
+//     \ ~-_   _-~ /
+//      \   ~p0   /
+//       \   |   /
+//        \  |  /
+//         \ | /
+//          \|/
+//           p1
+//
 void create_type_1( in int p0, in int p1, in int p2, in int p3 )
 {
    float r2, r3;
@@ -294,19 +292,17 @@ void create_type_1( in int p0, in int p1, in int p2, in int p3 )
     EndPrimitive();
 }
 
-/*
- *    type 2
- *           p0
- *        _-~ | ~-_
- *     _-~    |    ~-_ 
- *   p3 -  -  | -  -  p2
- *     \      |      /
- *       \    |    /
- *         \  |  /
- *           \|/
- *            p1
- *
- */
+//    type 2
+//           p0
+//        _-~ | ~-_
+//     _-~    |    ~-_ 
+//   p3 -  -  | -  -  p2
+//     \      |      /
+//       \    |    /
+//         \  |  /
+//           \|/
+//            p1
+//
 void create_type_2( in int p0, in int p1, in int p2, in int p3 )
 {
 
@@ -367,40 +363,36 @@ void create_type_2( in int p0, in int p1, in int p2, in int p3 )
     EndPrimitive();
 }
 
-/*
- *    type 3
- *           p2
- *        _-~ |
- *     _-~    |
- *   p0-------p1
- *     \      |
- *       \    |
- *         \  |
- *           \|
- *            p3
- *
- *    in type 2, two arealess triangle are generated.
- *    but this pattern is very rare case.
- */
+//    type 3
+//           p2
+//        _-~ |
+//     _-~    |
+//   p0-------p1
+//     \      |
+//       \    |
+//         \  |
+//           \|
+//            p3
+//
+//    in type 2, two arealess triangle are generated.
+//    but this pattern is very rare case.
+//
 void create_type_3( in int p0, in int p1, in int p2, in int p3 )
 {
     create_type_2( p0, p1, p2, p3 );
 }
 
-/*
- *
- *    type 4
- *           p0
- *            | ~-_
- *            |    ~-_ 
- *            |       p2,p3
- *            |      /
- *            |    /
- *            |  /
- *            |/
- *            p1
- *
- */
+//    type 4
+//           p0
+//            | ~-_
+//            |    ~-_ 
+//            |       p2,p3
+//            |      /
+//            |    /
+//            |  /
+//            |/
+//            p1
+//
 void create_type_4( in int p0, in int p1, in int p2, in int p3 )
 {
 
