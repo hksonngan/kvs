@@ -118,6 +118,11 @@ const std::string kbuffer =
 
 } // end of namespace Vertex
 
+namespace Geometry
+{
+
+} // end of namespace Geometry
+
 namespace Fragment
 {
 

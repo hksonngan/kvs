@@ -10,7 +10,19 @@ $(OUTDIR)/./Renderer/ParticleVolumeRenderer.o \
 $(OUTDIR)/./Renderer/PointRenderer.o \
 $(OUTDIR)/./Renderer/PolygonRenderer.o \
 $(OUTDIR)/./Renderer/PreIntegrationTable.o \
+$(OUTDIR)/./Renderer/ProjectedTetrahedraTable.o \
 $(OUTDIR)/./Renderer/RayCastingRenderer.o \
+$(OUTDIR)/./Renderer/StochasticLineEngine.o \
+$(OUTDIR)/./Renderer/StochasticLineRenderer.o \
+$(OUTDIR)/./Renderer/StochasticPointEngine.o \
+$(OUTDIR)/./Renderer/StochasticPointRenderer.o \
+$(OUTDIR)/./Renderer/StochasticPolygonEngine.o \
+$(OUTDIR)/./Renderer/StochasticPolygonRenderer.o \
+$(OUTDIR)/./Renderer/StochasticRendererBase.o \
+$(OUTDIR)/./Renderer/StochasticRenderingCompositor.o \
+$(OUTDIR)/./Renderer/StochasticRenderingEngine.o \
+$(OUTDIR)/./Renderer/StochasticUnstructuredVolumeEngine.o \
+$(OUTDIR)/./Renderer/StochasticUnstructuredVolumeRenderer.o \
 $(OUTDIR)/./Viewer/BufferObject.o \
 $(OUTDIR)/./Viewer/FragmentShader.o \
 $(OUTDIR)/./Viewer/FrameBufferObject.o \
@@ -54,5 +66,7 @@ install::
 	$(INSTALL) ./Renderer/RayCastingRenderer/*.h $(INSTALL_DIR)/include/SupportGLEW/./Renderer/RayCastingRenderer
 	$(MKDIR) $(INSTALL_DIR)/include/SupportGLEW/./Renderer/Shader
 	$(INSTALL) ./Renderer/Shader/*.h $(INSTALL_DIR)/include/SupportGLEW/./Renderer/Shader
+	$(MKDIR) $(INSTALL_DIR)/include/SupportGLEW/./Renderer/StochasticRenderingEngine
+	$(INSTALL) ./Renderer/StochasticRenderingEngine/*.h $(INSTALL_DIR)/include/SupportGLEW/./Renderer/StochasticRenderingEngine
 	$(MKDIR) $(INSTALL_DIR)/include/SupportGLEW/./Viewer
 	$(INSTALL) ./Viewer/*.h $(INSTALL_DIR)/include/SupportGLEW/./Viewer

@@ -143,6 +143,11 @@ const std::string zooming =
 
 } // end of namespace Vertex
 
+namespace Geometry
+{
+
+} // end of namespace Geometry
+
 namespace Fragment
 {
 
@@ -232,7 +237,11 @@ const std::string zooming =
     "\n"
     "vec3 ShadingLambert( in Shading shading, in vec3 color, in vec3 L, in vec3 N )\n"
     "{\n"
+    "#if defined( ENABLE_TWO_SIDE_LIGHTING )\n"
+    "    float dd = abs( dot( N, L ) );\n"
+    "#else\n"
     "    float dd = max( dot( N, L ), 0.0 );\n"
+    "#endif\n"
     "\n"
     "    float Ia = shading.Ka;\n"
     "    float Id = shading.Kd * dd;\n"
@@ -243,8 +252,13 @@ const std::string zooming =
     "vec3 ShadingPhong( in Shading shading, in vec3 color, in vec3 L, in vec3 N, in vec3 V )\n"
     "{\n"
     "    vec3 R = reflect( -L, N );\n"
+    "#if defined( ENABLE_TWO_SIDE_LIGHTING )\n"
+    "    float dd = abs( dot( N, L ) );\n"
+    "    float ds = pow( abs( dot( R, V ) ), shading.S );\n"
+    "#else\n"
     "    float dd = max( dot( N, L ), 0.0 );\n"
     "    float ds = pow( max( dot( R, V ), 0.0 ), shading.S );\n"
+    "#endif\n"
     "    if ( dd <= 0.0 ) ds = 0.0;\n"
     "\n"
     "    float Ia = shading.Ka;\n"
@@ -257,8 +271,13 @@ const std::string zooming =
     "vec3 ShadingBlinnPhong( in Shading shading, in vec3 color, in vec3 L, in vec3 N, in vec3 V )\n"
     "{\n"
     "    vec3 H = normalize( L + V );\n"
+    "#if defined( ENABLE_TWO_SIDE_LIGHTING )\n"
+    "    float dd = abs( dot( N, L ) );\n"
+    "    float ds = pow( abs( dot( H, N ) ), shading.S );\n"
+    "#else\n"
     "    float dd = max( dot( N, L ), 0.0 );\n"
     "    float ds = pow( max( dot( H, N ), 0.0 ), shading.S );\n"
+    "#endif\n"
     "    if ( dd <= 0.0 ) ds = 0.0;\n"
     "\n"
     "    float Ia = shading.Ka;\n"

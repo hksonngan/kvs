@@ -10,7 +10,19 @@ $(OUTDIR)\.\Renderer\ParticleVolumeRenderer.obj \
 $(OUTDIR)\.\Renderer\PointRenderer.obj \
 $(OUTDIR)\.\Renderer\PolygonRenderer.obj \
 $(OUTDIR)\.\Renderer\PreIntegrationTable.obj \
+$(OUTDIR)\.\Renderer\ProjectedTetrahedraTable.obj \
 $(OUTDIR)\.\Renderer\RayCastingRenderer.obj \
+$(OUTDIR)\.\Renderer\StochasticLineEngine.obj \
+$(OUTDIR)\.\Renderer\StochasticLineRenderer.obj \
+$(OUTDIR)\.\Renderer\StochasticPointEngine.obj \
+$(OUTDIR)\.\Renderer\StochasticPointRenderer.obj \
+$(OUTDIR)\.\Renderer\StochasticPolygonEngine.obj \
+$(OUTDIR)\.\Renderer\StochasticPolygonRenderer.obj \
+$(OUTDIR)\.\Renderer\StochasticRendererBase.obj \
+$(OUTDIR)\.\Renderer\StochasticRenderingCompositor.obj \
+$(OUTDIR)\.\Renderer\StochasticRenderingEngine.obj \
+$(OUTDIR)\.\Renderer\StochasticUnstructuredVolumeEngine.obj \
+$(OUTDIR)\.\Renderer\StochasticUnstructuredVolumeRenderer.obj \
 $(OUTDIR)\.\Viewer\BufferObject.obj \
 $(OUTDIR)\.\Viewer\FragmentShader.obj \
 $(OUTDIR)\.\Viewer\FrameBufferObject.obj \
@@ -58,5 +70,7 @@ install::
 	$(INSTALL) .\Renderer\RayCastingRenderer\*.h $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\RayCastingRenderer
 	IF NOT EXIST $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\Shader $(MKDIR) $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\Shader
 	$(INSTALL) .\Renderer\Shader\*.h $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\Shader
+	IF NOT EXIST $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\StochasticRenderingEngine $(MKDIR) $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\StochasticRenderingEngine
+	$(INSTALL) .\Renderer\StochasticRenderingEngine\*.h $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\StochasticRenderingEngine
 	IF NOT EXIST $(INSTALL_DIR)\include\SupportGLEW\.\Viewer $(MKDIR) $(INSTALL_DIR)\include\SupportGLEW\.\Viewer
 	$(INSTALL) .\Viewer\*.h $(INSTALL_DIR)\include\SupportGLEW\.\Viewer

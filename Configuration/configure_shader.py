@@ -60,8 +60,9 @@ for line in file:
 
 for shader_dir in shader_dir_list:
 
-    fragment_shader_list = ShaderList( shader_dir, ".frag" )
     vertex_shader_list = ShaderList( shader_dir, ".vert" )
+    geometry_shader_list = ShaderList( shader_dir, ".geom" )
+    fragment_shader_list = ShaderList( shader_dir, ".frag" )
     dirname = os.path.split( shader_dir )[1]
 
     sys.stdout = open( shader_dir + "/Shader.h", "w" )
@@ -86,6 +87,13 @@ for shader_dir in shader_dir_list:
     for filename in vertex_shader_list:
         Write( filename )
     print "} // end of namespace Vertex"
+    print ""
+    print "namespace Geometry"
+    print "{"
+    print ""
+    for filename in geometry_shader_list:
+        Write( filename )
+    print "} // end of namespace Geometry"
     print ""
     print "namespace Fragment"
     print "{"

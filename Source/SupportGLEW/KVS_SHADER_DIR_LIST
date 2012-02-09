@@ -1,3 +1,4 @@
+Renderer/StochasticRenderingEngine
 Renderer/HAVSVolumeRenderer
 Renderer/ParticleVolumeRenderer
 Renderer/PointRenderer
