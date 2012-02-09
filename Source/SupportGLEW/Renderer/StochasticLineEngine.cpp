@@ -160,7 +160,7 @@ void StochasticLineEngine::setup_shader( const float modelview_matrix[16] )
 /*===========================================================================*/
 void StochasticLineEngine::initialize_shader( void )
 {
-#if defined( KVS_GLEW_LINE_ENGINE__EMBEDDED_SHADER )
+#if defined( KVS_GLEW_STOCHASTIC_LINE_ENGINE__EMBEDDED_SHADER )
     const std::string vert_code = kvs::glew::glsl::StochasticRenderingEngine::Vertex::line;
     const std::string frag_code = kvs::glew::glsl::StochasticRenderingEngine::Fragment::line;
 #else

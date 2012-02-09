@@ -638,7 +638,7 @@ void StochasticPointEngine::setup_shader( const float modelview_matrix[16] )
 /*===========================================================================*/
 void StochasticPointEngine::initialize_shader( void )
 {
-#if defined( KVS_GLEW_POINT_ENGINE__EMBEDDED_SHADER )
+#if defined( KVS_GLEW_STOCHASTIC_POINT_ENGINE__EMBEDDED_SHADER )
     const std::string vert_code = kvs::glew::glsl::StochasticRenderingEngine::Vertex::point;
     const std::string frag_code = kvs::glew::glsl::StochasticRenderingEngine::Fragment::point;
 #else

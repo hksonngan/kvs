@@ -829,9 +829,9 @@ void StochasticUnstructuredVolumeEngine::setup_shader( const float modelview_mat
 /*===========================================================================*/
 void StochasticUnstructuredVolumeEngine::initialize_shader( void )
 {
-#if defined( KVS_GLEW_UNSTRUCTURED_VOLUME_ENGINE__EMBEDDED_SHADER )
+#if defined( KVS_GLEW_STOCHASTIC_UNSTRUCTURED_VOLUME_ENGINE__EMBEDDED_SHADER )
     const std::string vert_code = kvs::glew::glsl::StochasticRenderingEngine::Vertex::unstructured_volume;
-    const std::string geom_code = kvs::glew::glsl::StochasticRenderingEngine::Fragment::unstructured_volume;
+    const std::string geom_code = kvs::glew::glsl::StochasticRenderingEngine::Geometry::unstructured_volume;
     const std::string frag_code = kvs::glew::glsl::StochasticRenderingEngine::Fragment::unstructured_volume;
 #else
     const std::string vert_code = "StochasticRenderingEngine/unstructured_volume.vert";
