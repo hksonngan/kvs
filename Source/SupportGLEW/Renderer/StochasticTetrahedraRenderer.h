@@ -1,6 +1,6 @@
 /*****************************************************************************/
 /**
- *  @file   StochasticUnstructuredVolumeRenderer.h
+ *  @file   StochasticTetrahedraRenderer.h
  *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
@@ -12,11 +12,11 @@
  *  $Id$
  */
 /*****************************************************************************/
-#ifndef KVS__GLEW__STOCHASTIC_UNSTRUCTURED_VOLUME_RENDERER_H_INCLUDE
-#define KVS__GLEW__STOCHASTIC_UNSTRUCTURED_VOLUME_RENDERER_H_INCLUDE
+#ifndef KVS__GLEW__STOCHASTIC_TETRAHEDRA_RENDERER_H_INCLUDE
+#define KVS__GLEW__STOCHASTIC_TETRAHEDRA_RENDERER_H_INCLUDE
 
 #include "StochasticRendererBase.h"
-#include "StochasticUnstructuredVolumeEngine.h"
+#include "StochasticTetrahedraEngine.h"
 #include <kvs/UnstructuredVolumeObject>
 
 
@@ -31,10 +31,10 @@ namespace glew
  *  @brief  Stochastic renderer class for unstructured volume object.
  */
 /*===========================================================================*/
-class StochasticUnstructuredVolumeRenderer : public kvs::glew::StochasticRendererBase
+class StochasticTetrahedraRenderer : public kvs::glew::StochasticRendererBase
 {
     // Class name.
-    kvsClassName( kvs::glew::StochasticUnstructuredVolumeRenderer );
+    kvsClassName( kvs::glew::StochasticTetrahedraRenderer );
 
     // Module information.
     kvsModuleCategory( Renderer );
@@ -42,9 +42,9 @@ class StochasticUnstructuredVolumeRenderer : public kvs::glew::StochasticRendere
 
 public:
 
-    StochasticUnstructuredVolumeRenderer( void );
+    StochasticTetrahedraRenderer( void );
 
-    StochasticUnstructuredVolumeRenderer( kvs::UnstructuredVolumeObject* object );
+    StochasticTetrahedraRenderer( kvs::UnstructuredVolumeObject* object );
 
 public:
 
@@ -59,4 +59,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS__GLEW__STOCHASTIC_UNSTRUCTURED_VOLUME_RENDERER_H_INCLUDE
+#endif // KVS__GLEW__STOCHASTIC_TETRAHEDRA_RENDERER_H_INCLUDE

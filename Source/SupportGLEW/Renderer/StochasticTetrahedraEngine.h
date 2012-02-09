@@ -1,6 +1,6 @@
 /*****************************************************************************/
 /**
- *  @file   StochasticUnstructuredVolumeEngine.h
+ *  @file   StochasticTetrahedraEngine.h
  *  @author Jun Nishimura
  */
 /*----------------------------------------------------------------------------
@@ -12,8 +12,8 @@
  *  $Id$
  */
 /*****************************************************************************/
-#ifndef KVS__GLEW__STOCHASTIC_UNSTRUCTURED_VOLUME_ENGINE_H_INCLUDE
-#define KVS__GLEW__STOCHASTIC_UNSTRUCTURED_VOLUME_ENGINE_H_INCLUDE
+#ifndef KVS__GLEW__STOCHASTIC_TETRAHEDRA_ENGINE_H_INCLUDE
+#define KVS__GLEW__STOCHASTIC_TETRAHEDRA_ENGINE_H_INCLUDE
 
 #include "StochasticRenderingEngine.h"
 #include <kvs/UnstructuredVolumeObject>
@@ -30,17 +30,17 @@ namespace kvs
 namespace glew
 {
 
-#define KVS_GLEW_STOCHASTIC_UNSTRUCTURED_VOLUME_ENGINE__EMBEDDED_SHADER
+#define KVS_GLEW_STOCHASTIC_TETRAHEDRA_ENGINE__EMBEDDED_SHADER
 
 /*===========================================================================*/
 /**
  *  @brief  Stochastic rendering engine class for unstructured volume object.
  */
 /*===========================================================================*/
-class StochasticUnstructuredVolumeEngine : public kvs::glew::StochasticRenderingEngine
+class StochasticTetrahedraEngine : public kvs::glew::StochasticRenderingEngine
 {
     // Class name.
-    kvsClassName( kvs::glew::StochasticUnstructuredVolumeEngine );
+    kvsClassName( kvs::glew::StochasticTetrahedraEngine );
 
 protected:
 
@@ -49,7 +49,7 @@ protected:
 
 protected:
 
-    typedef kvs::glew::StochasticUnstructuredVolumeEngine BaseClass;
+    typedef kvs::glew::StochasticTetrahedraEngine BaseClass;
     typedef GLushort IndexType;
     typedef GLfloat CoordType;
     typedef GLfloat ValueType;
@@ -74,9 +74,9 @@ protected:
 
 public:
 
-    StochasticUnstructuredVolumeEngine( void );
+    StochasticTetrahedraEngine( void );
 
-    StochasticUnstructuredVolumeEngine( const kvs::UnstructuredVolumeObject* volume, const size_t nsteps = 1 );
+    StochasticTetrahedraEngine( const kvs::UnstructuredVolumeObject* volume, const size_t nsteps = 1 );
 
 public:
 
@@ -137,18 +137,18 @@ private:
  *  @brief  Volume data class for the stochastic renderer.
  */
 /*===========================================================================*/
-class StochasticUnstructuredVolumeEngine::Volume
+class StochasticTetrahedraEngine::Volume
 {
 private:
 
     size_t m_nsteps; ///< number of time steps
     size_t m_nvertices; ///< number of vertices
     size_t m_ncells; ///< number of cells
-    StochasticUnstructuredVolumeEngine::IndexType* m_indices; ///< index array
-    StochasticUnstructuredVolumeEngine::CoordType* m_coords; ///< coordinate value array
-    StochasticUnstructuredVolumeEngine::ValueType* m_values; ///< color value array
-    StochasticUnstructuredVolumeEngine::NormalType* m_normals; ///< normal array
-    StochasticUnstructuredVolumeEngine::ConnectType* m_connections; ///< connection array
+    StochasticTetrahedraEngine::IndexType* m_indices; ///< index array
+    StochasticTetrahedraEngine::CoordType* m_coords; ///< coordinate value array
+    StochasticTetrahedraEngine::ValueType* m_values; ///< color value array
+    StochasticTetrahedraEngine::NormalType* m_normals; ///< normal array
+    StochasticTetrahedraEngine::ConnectType* m_connections; ///< connection array
 
 public:
 
@@ -176,25 +176,25 @@ public:
 
     const size_t byteSizeOfCell( void ) const;
 
-    const StochasticUnstructuredVolumeEngine::IndexType* indices( void ) const;
+    const StochasticTetrahedraEngine::IndexType* indices( void ) const;
 
-    StochasticUnstructuredVolumeEngine::IndexType* indices( void );
+    StochasticTetrahedraEngine::IndexType* indices( void );
 
-    const StochasticUnstructuredVolumeEngine::CoordType* coords( void ) const;
+    const StochasticTetrahedraEngine::CoordType* coords( void ) const;
 
-    StochasticUnstructuredVolumeEngine::CoordType* coords( void );
+    StochasticTetrahedraEngine::CoordType* coords( void );
 
-    const StochasticUnstructuredVolumeEngine::ValueType* values( void ) const;
+    const StochasticTetrahedraEngine::ValueType* values( void ) const;
 
-    StochasticUnstructuredVolumeEngine::ValueType* values( void );
+    StochasticTetrahedraEngine::ValueType* values( void );
 
-    const StochasticUnstructuredVolumeEngine::NormalType* normals( void ) const;
+    const StochasticTetrahedraEngine::NormalType* normals( void ) const;
 
-    StochasticUnstructuredVolumeEngine::NormalType* normals( void );
+    StochasticTetrahedraEngine::NormalType* normals( void );
 
-    const StochasticUnstructuredVolumeEngine::ConnectType* connections( void ) const;
+    const StochasticTetrahedraEngine::ConnectType* connections( void ) const;
 
-    StochasticUnstructuredVolumeEngine::ConnectType* connections( void );
+    StochasticTetrahedraEngine::ConnectType* connections( void );
 
 };
 
@@ -203,11 +203,11 @@ public:
  *  @brief  Renderer class for the stochastic renderer.
  */
 /*===========================================================================*/
-class StochasticUnstructuredVolumeEngine::Renderer
+class StochasticTetrahedraEngine::Renderer
 {
 private:
 
-    const StochasticUnstructuredVolumeEngine::Volume* m_volume; ///< pointer to the volume
+    const StochasticTetrahedraEngine::Volume* m_volume; ///< pointer to the volume
     size_t m_nsteps; ///< number of time steps
     size_t m_nvertices; ///< number of vertices
     size_t m_ncells; ///< number of cells
@@ -223,7 +223,7 @@ public:
     Renderer( void );
 
     void set(
-        const StochasticUnstructuredVolumeEngine::Volume* volume,
+        const StochasticTetrahedraEngine::Volume* volume,
         const size_t nsteps,
         const size_t nvertices,
         const size_t ncells,
@@ -242,4 +242,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS__GLEW__STOCHASTIC_UNSTRUCTURED_VOLUME_ENGINE_H_INCLUDE
+#endif // KVS__GLEW__STOCHASTIC_TETRAHEDRA_ENGINE_H_INCLUDE

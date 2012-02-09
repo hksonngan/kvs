@@ -16,7 +16,7 @@
 #include "StochasticPointEngine.h"
 #include "StochasticLineEngine.h"
 #include "StochasticPolygonEngine.h"
-#include "StochasticUnstructuredVolumeEngine.h"
+#include "StochasticTetrahedraEngine.h"
 #include <kvs/PointObject>
 
 
@@ -128,7 +128,7 @@ void StochasticRenderingCompositor::registerObject(
             }
             case kvs::VolumeObjectBase::Unstructured:
             {
-                engine = new kvs::glew::StochasticUnstructuredVolumeEngine();
+                engine = new kvs::glew::StochasticTetrahedraEngine();
                 engine->attachObject( object );
                 break;
             }

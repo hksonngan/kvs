@@ -1,6 +1,6 @@
 /*****************************************************************************/
 /**
- *  @file   StochasticUnstructuredVolumeRenderer.cpp
+ *  @file   StochasticTetrahedraRenderer.cpp
  *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
@@ -12,8 +12,8 @@
  *  $Id$
  */
 /*****************************************************************************/
-#include "StochasticUnstructuredVolumeRenderer.h"
-#include "StochasticUnstructuredVolumeEngine.h"
+#include "StochasticTetrahedraRenderer.h"
+#include "StochasticTetrahedraEngine.h"
 
 
 namespace kvs
@@ -24,23 +24,23 @@ namespace glew
 
 /*===========================================================================*/
 /**
- *  @brief  Constructs a new StochasticUnstructuredVolumeRenderer class.
+ *  @brief  Constructs a new StochasticTetrahedraRenderer class.
  */
 /*===========================================================================*/
-StochasticUnstructuredVolumeRenderer::StochasticUnstructuredVolumeRenderer( void )
+StochasticTetrahedraRenderer::StochasticTetrahedraRenderer( void )
 {
-    BaseClass::setRenderingEngine( new kvs::glew::StochasticUnstructuredVolumeEngine() );
+    BaseClass::setRenderingEngine( new kvs::glew::StochasticTetrahedraEngine() );
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Constructs a new StochasticUnstructuredVolumeRenderer class.
+ *  @brief  Constructs a new StochasticTetrahedraRenderer class.
  *  @param  object [in] pointer to the unstructured volume object
  */
 /*===========================================================================*/
-StochasticUnstructuredVolumeRenderer::StochasticUnstructuredVolumeRenderer( kvs::UnstructuredVolumeObject* object )
+StochasticTetrahedraRenderer::StochasticTetrahedraRenderer( kvs::UnstructuredVolumeObject* object )
 {
-    BaseClass::setRenderingEngine( new kvs::glew::StochasticUnstructuredVolumeEngine( object ) );
+    BaseClass::setRenderingEngine( new kvs::glew::StochasticTetrahedraEngine( object ) );
 }
 
 /*===========================================================================*/
@@ -51,7 +51,7 @@ StochasticUnstructuredVolumeRenderer::StochasticUnstructuredVolumeRenderer( kvs:
  *  @param  light [in] pointer to the light
  */
 /*===========================================================================*/
-void StochasticUnstructuredVolumeRenderer::exec(
+void StochasticTetrahedraRenderer::exec(
     kvs::ObjectBase* object,
     kvs::Camera*     camera,
     kvs::Light*      light )
@@ -70,7 +70,7 @@ void StochasticUnstructuredVolumeRenderer::exec(
  *  @param  object [in] pointer to the unstructured volume object
  */
 /*===========================================================================*/
-void StochasticUnstructuredVolumeRenderer::attachObject( const kvs::UnstructuredVolumeObject* object )
+void StochasticTetrahedraRenderer::attachObject( const kvs::UnstructuredVolumeObject* object )
 {
     kvs::glew::StochasticRenderingEngine* engine = BaseClass::m_rendering_engines[0];
     engine->attachObject( object );

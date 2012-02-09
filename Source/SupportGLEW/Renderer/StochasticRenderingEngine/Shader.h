@@ -117,7 +117,7 @@ const std::string polygon =
     "}\n"
 ;
 
-const std::string unstructured_volume =
+const std::string tetrahedra =
     "varying vec4 position_in;\n"
     "varying vec2 id_in;\n"
     "varying float value_in;\n"
@@ -142,7 +142,7 @@ const std::string unstructured_volume =
 namespace Geometry
 {
 
-const std::string unstructured_volume =
+const std::string tetrahedra =
     "#version 120\n"
     "#extension GL_EXT_geometry_shader4 : enable\n"
     "#extension GL_EXT_gpu_shader4 : enable\n"
@@ -816,7 +816,7 @@ const std::string polygon =
     "}\n"
 ;
 
-const std::string unstructured_volume =
+const std::string tetrahedra =
     "struct Shading\n"
     "{\n"
     "    float Ka; // ambient\n"

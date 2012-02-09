@@ -16,8 +16,8 @@ Renderer/StochasticPointRenderer
 Renderer/StochasticPolygonEngine
 Renderer/StochasticPolygonRenderer
 Renderer/StochasticRenderingCompositor
-Renderer/StochasticUnstructuredVolumeEngine
-Renderer/StochasticUnstructuredVolumeRenderer
+Renderer/StochasticTetrahedraEngine
+Renderer/StochasticTetrahedraRenderer
 Viewer/BufferObject
 Viewer/FragmentShader
 Viewer/FrameBufferObject

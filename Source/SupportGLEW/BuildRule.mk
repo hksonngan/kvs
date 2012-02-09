@@ -21,8 +21,8 @@ $(OUTDIR)/./Renderer/StochasticPolygonRenderer.o \
 $(OUTDIR)/./Renderer/StochasticRendererBase.o \
 $(OUTDIR)/./Renderer/StochasticRenderingCompositor.o \
 $(OUTDIR)/./Renderer/StochasticRenderingEngine.o \
-$(OUTDIR)/./Renderer/StochasticUnstructuredVolumeEngine.o \
-$(OUTDIR)/./Renderer/StochasticUnstructuredVolumeRenderer.o \
+$(OUTDIR)/./Renderer/StochasticTetrahedraEngine.o \
+$(OUTDIR)/./Renderer/StochasticTetrahedraRenderer.o \
 $(OUTDIR)/./Viewer/BufferObject.o \
 $(OUTDIR)/./Viewer/FragmentShader.o \
 $(OUTDIR)/./Viewer/FrameBufferObject.o \

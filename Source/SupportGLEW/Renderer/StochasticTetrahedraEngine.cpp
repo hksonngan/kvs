@@ -1,6 +1,6 @@
 /*****************************************************************************/
 /**
- *  @file   StochasticUnstructuredVolumeEngine.cpp
+ *  @file   StochasticTetrahedraEngine.cpp
  *  @author Jun Nishimura
  */
 /*----------------------------------------------------------------------------
@@ -12,11 +12,11 @@
  *  $Id$
  */
 /*****************************************************************************/
-#include "StochasticUnstructuredVolumeEngine.h"
+#include "StochasticTetrahedraEngine.h"
 #include "ProjectedTetrahedraTable.h"
 #include <kvs/TetrahedralCell>
 #include <kvs/Math>
-#if defined ( KVS_GLEW_STOCHASTIC_UNSTRUCTURED_VOLUME_ENGINE__EMBEDDED_SHADER )
+#if defined ( KVS_GLEW_STOCHASTIC_TETRAHEDRA_ENGINE__EMBEDDED_SHADER )
 #include "StochasticRenderingEngine/Shader.h"
 #endif
 
@@ -29,10 +29,10 @@ namespace glew
 
 /*===========================================================================*/
 /**
- *  @brief  Constructs a new StochasticUnstructuredVolumeEngine::Volume class.
+ *  @brief  Constructs a new StochasticTetrahedraEngine::Volume class.
  */
 /*===========================================================================*/
-StochasticUnstructuredVolumeEngine::Volume::Volume( void ) :
+StochasticTetrahedraEngine::Volume::Volume( void ) :
     m_nsteps( 1 ),
     m_nvertices( 0 ),
     m_ncells( 0 ),
@@ -46,10 +46,10 @@ StochasticUnstructuredVolumeEngine::Volume::Volume( void ) :
 
 /*===========================================================================*/
 /**
- *  @brief  Destroys the StochasticUnstructuredVolumeEngine::Volume class.
+ *  @brief  Destroys the StochasticTetrahedraEngine::Volume class.
  */
 /*===========================================================================*/
-StochasticUnstructuredVolumeEngine::Volume::~Volume( void )
+StochasticTetrahedraEngine::Volume::~Volume( void )
 {
     this->release();
 }
@@ -59,7 +59,7 @@ StochasticUnstructuredVolumeEngine::Volume::~Volume( void )
  *  @brief  Releases the volume data.
  */
 /*===========================================================================*/
-void StochasticUnstructuredVolumeEngine::Volume::release( void )
+void StochasticTetrahedraEngine::Volume::release( void )
 {
     if ( m_indices ) { delete[] m_indices; m_indices = NULL; }
     if ( m_coords )  { delete[] m_coords;  m_coords  = NULL; }
@@ -76,7 +76,7 @@ void StochasticUnstructuredVolumeEngine::Volume::release( void )
  *  @param  ncells [in] number of cells
  */
 /*===========================================================================*/
-void StochasticUnstructuredVolumeEngine::Volume::create(
+void StochasticTetrahedraEngine::Volume::create(
     const size_t nsteps,
     const size_t nvertices,
     const size_t ncells )
@@ -86,11 +86,11 @@ void StochasticUnstructuredVolumeEngine::Volume::create(
     m_nsteps = nsteps;
     m_nvertices = nvertices;
     m_ncells = ncells;
-    m_coords = new StochasticUnstructuredVolumeEngine::CoordType [ nvertices * 3 ];
-    m_values = new StochasticUnstructuredVolumeEngine::ValueType [ nvertices * m_nsteps ];
-    m_normals = new StochasticUnstructuredVolumeEngine::NormalType [ nvertices * 3 ];
-    m_indices = new StochasticUnstructuredVolumeEngine::IndexType [ nvertices * 2 ];
-    m_connections = new StochasticUnstructuredVolumeEngine::ConnectType [ ncells * 4 ];
+    m_coords = new StochasticTetrahedraEngine::CoordType [ nvertices * 3 ];
+    m_values = new StochasticTetrahedraEngine::ValueType [ nvertices * m_nsteps ];
+    m_normals = new StochasticTetrahedraEngine::NormalType [ nvertices * 3 ];
+    m_indices = new StochasticTetrahedraEngine::IndexType [ nvertices * 2 ];
+    m_connections = new StochasticTetrahedraEngine::ConnectType [ ncells * 4 ];
 }
 
 /*===========================================================================*/
@@ -99,7 +99,7 @@ void StochasticUnstructuredVolumeEngine::Volume::create(
  *  @return number of vertices
  */
 /*===========================================================================*/
-const size_t StochasticUnstructuredVolumeEngine::Volume::nvertices( void ) const
+const size_t StochasticTetrahedraEngine::Volume::nvertices( void ) const
 {
     return( m_nvertices );
 }
@@ -110,7 +110,7 @@ const size_t StochasticUnstructuredVolumeEngine::Volume::nvertices( void ) const
  *  @return number of cells
  */
 /*===========================================================================*/
-const size_t StochasticUnstructuredVolumeEngine::Volume::ncells( void ) const
+const size_t StochasticTetrahedraEngine::Volume::ncells( void ) const
 {
     return( m_ncells );
 }
@@ -121,12 +121,12 @@ const size_t StochasticUnstructuredVolumeEngine::Volume::ncells( void ) const
  *  @return data size per a vertex in bytes
  */
 /*===========================================================================*/
-const size_t StochasticUnstructuredVolumeEngine::Volume::byteSizePerVertex( void ) const
+const size_t StochasticTetrahedraEngine::Volume::byteSizePerVertex( void ) const
 {
-    const size_t index_size  = sizeof( StochasticUnstructuredVolumeEngine::IndexType ) * 2;
-    const size_t coord_size  = sizeof( StochasticUnstructuredVolumeEngine::CoordType ) * 3;
-    const size_t value_size  = sizeof( StochasticUnstructuredVolumeEngine::ValueType ) * m_nsteps;
-    const size_t normal_size = sizeof( StochasticUnstructuredVolumeEngine::NormalType ) * 3;
+    const size_t index_size  = sizeof( StochasticTetrahedraEngine::IndexType ) * 2;
+    const size_t coord_size  = sizeof( StochasticTetrahedraEngine::CoordType ) * 3;
+    const size_t value_size  = sizeof( StochasticTetrahedraEngine::ValueType ) * m_nsteps;
+    const size_t normal_size = sizeof( StochasticTetrahedraEngine::NormalType ) * 3;
 
     return( index_size + coord_size + value_size + normal_size );
 }
@@ -137,7 +137,7 @@ const size_t StochasticUnstructuredVolumeEngine::Volume::byteSizePerVertex( void
  *  @return data size of all vertices in bytes
  */
 /*===========================================================================*/
-const size_t StochasticUnstructuredVolumeEngine::Volume::byteSizeOfVertex( void ) const
+const size_t StochasticTetrahedraEngine::Volume::byteSizeOfVertex( void ) const
 {
     return( this->byteSizePerVertex() * m_nvertices );
 }
@@ -148,9 +148,9 @@ const size_t StochasticUnstructuredVolumeEngine::Volume::byteSizeOfVertex( void 
  *  @return data size per a cell in bytes
  */
 /*===========================================================================*/
-const size_t StochasticUnstructuredVolumeEngine::Volume::byteSizePerCell( void ) const
+const size_t StochasticTetrahedraEngine::Volume::byteSizePerCell( void ) const
 {
-    return( sizeof( StochasticUnstructuredVolumeEngine::ConnectType ) * 4 );
+    return( sizeof( StochasticTetrahedraEngine::ConnectType ) * 4 );
 }
 
 /*===========================================================================*/
@@ -159,7 +159,7 @@ const size_t StochasticUnstructuredVolumeEngine::Volume::byteSizePerCell( void )
  *  @return data size of all cells in bytes
  */
 /*===========================================================================*/
-const size_t StochasticUnstructuredVolumeEngine::Volume::byteSizeOfCell( void ) const
+const size_t StochasticTetrahedraEngine::Volume::byteSizeOfCell( void ) const
 {
     return( this->byteSizePerCell() * m_ncells );
 }
@@ -170,7 +170,7 @@ const size_t StochasticUnstructuredVolumeEngine::Volume::byteSizeOfCell( void ) 
  *  @return pointer to the index array
  */
 /*===========================================================================*/
-const StochasticUnstructuredVolumeEngine::IndexType* StochasticUnstructuredVolumeEngine::Volume::indices( void ) const
+const StochasticTetrahedraEngine::IndexType* StochasticTetrahedraEngine::Volume::indices( void ) const
 {
     return( m_indices );
 }
@@ -181,7 +181,7 @@ const StochasticUnstructuredVolumeEngine::IndexType* StochasticUnstructuredVolum
  *  @return pointer to the index array
  */
 /*===========================================================================*/
-StochasticUnstructuredVolumeEngine::IndexType* StochasticUnstructuredVolumeEngine::Volume::indices( void )
+StochasticTetrahedraEngine::IndexType* StochasticTetrahedraEngine::Volume::indices( void )
 {
     return( m_indices );
 }
@@ -192,7 +192,7 @@ StochasticUnstructuredVolumeEngine::IndexType* StochasticUnstructuredVolumeEngin
  *  @return pointer to the coordinate array
  */
 /*===========================================================================*/
-const StochasticUnstructuredVolumeEngine::CoordType* StochasticUnstructuredVolumeEngine::Volume::coords( void ) const
+const StochasticTetrahedraEngine::CoordType* StochasticTetrahedraEngine::Volume::coords( void ) const
 {
     return( m_coords );
 }
@@ -203,7 +203,7 @@ const StochasticUnstructuredVolumeEngine::CoordType* StochasticUnstructuredVolum
  *  @return pointer to the coordinate array
  */
 /*===========================================================================*/
-StochasticUnstructuredVolumeEngine::CoordType* StochasticUnstructuredVolumeEngine::Volume::coords( void )
+StochasticTetrahedraEngine::CoordType* StochasticTetrahedraEngine::Volume::coords( void )
 {
     return( m_coords );
 }
@@ -214,7 +214,7 @@ StochasticUnstructuredVolumeEngine::CoordType* StochasticUnstructuredVolumeEngin
  *  @return pointer to the value array
  */
 /*===========================================================================*/
-const StochasticUnstructuredVolumeEngine::ValueType* StochasticUnstructuredVolumeEngine::Volume::values( void ) const
+const StochasticTetrahedraEngine::ValueType* StochasticTetrahedraEngine::Volume::values( void ) const
 {
     return( m_values );
 }
@@ -225,7 +225,7 @@ const StochasticUnstructuredVolumeEngine::ValueType* StochasticUnstructuredVolum
  *  @return pointer to the value array
  */
 /*===========================================================================*/
-StochasticUnstructuredVolumeEngine::ValueType* StochasticUnstructuredVolumeEngine::Volume::values( void )
+StochasticTetrahedraEngine::ValueType* StochasticTetrahedraEngine::Volume::values( void )
 {
     return( m_values );
 }
@@ -236,7 +236,7 @@ StochasticUnstructuredVolumeEngine::ValueType* StochasticUnstructuredVolumeEngin
  *  @return pointer to the normal vector array
  */
 /*===========================================================================*/
-const StochasticUnstructuredVolumeEngine::NormalType* StochasticUnstructuredVolumeEngine::Volume::normals( void ) const
+const StochasticTetrahedraEngine::NormalType* StochasticTetrahedraEngine::Volume::normals( void ) const
 {
     return( m_normals );
 }
@@ -247,7 +247,7 @@ const StochasticUnstructuredVolumeEngine::NormalType* StochasticUnstructuredVolu
  *  @return pointer to the normal vector array
  */
 /*===========================================================================*/
-StochasticUnstructuredVolumeEngine::NormalType* StochasticUnstructuredVolumeEngine::Volume::normals( void )
+StochasticTetrahedraEngine::NormalType* StochasticTetrahedraEngine::Volume::normals( void )
 {
     return( m_normals );
 }
@@ -258,7 +258,7 @@ StochasticUnstructuredVolumeEngine::NormalType* StochasticUnstructuredVolumeEngi
  *  @return pointer to the connection array
  */
 /*===========================================================================*/
-const StochasticUnstructuredVolumeEngine::ConnectType* StochasticUnstructuredVolumeEngine::Volume::connections( void ) const
+const StochasticTetrahedraEngine::ConnectType* StochasticTetrahedraEngine::Volume::connections( void ) const
 {
     return( m_connections );
 }
@@ -269,17 +269,17 @@ const StochasticUnstructuredVolumeEngine::ConnectType* StochasticUnstructuredVol
  *  @return pointer to the connection array
  */
 /*===========================================================================*/
-StochasticUnstructuredVolumeEngine::ConnectType* StochasticUnstructuredVolumeEngine::Volume::connections( void )
+StochasticTetrahedraEngine::ConnectType* StochasticTetrahedraEngine::Volume::connections( void )
 {
     return( m_connections );
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Constructs a new StochasticUnstructuredVolumeEngine::Renderer class.
+ *  @brief  Constructs a new StochasticTetrahedraEngine::Renderer class.
  */
 /*===========================================================================*/
-StochasticUnstructuredVolumeEngine::Renderer::Renderer( void ):
+StochasticTetrahedraEngine::Renderer::Renderer( void ):
     m_volume( NULL ),
     m_nsteps(1),
     m_nvertices(0),
@@ -304,8 +304,8 @@ StochasticUnstructuredVolumeEngine::Renderer::Renderer( void ):
  *  @param  loc_values [in] location identifier for the value array
  */
 /*===========================================================================*/
-void StochasticUnstructuredVolumeEngine::Renderer::set(
-    const StochasticUnstructuredVolumeEngine::Volume* volume,
+void StochasticTetrahedraEngine::Renderer::set(
+    const StochasticTetrahedraEngine::Volume* volume,
     const size_t nsteps,
     const size_t nvertices,
     const size_t ncells,
@@ -328,33 +328,33 @@ void StochasticUnstructuredVolumeEngine::Renderer::set(
  *  @return true if the downloading is done successfully
  */
 /*===========================================================================*/
-const bool StochasticUnstructuredVolumeEngine::Renderer::download(
+const bool StochasticTetrahedraEngine::Renderer::download(
     kvs::glew::VertexBufferObject& vbo,
     kvs::glew::IndexBufferObject& ibo )
 {
     if ( m_volume == NULL ) return( false );
 
     const size_t size = m_nvertices;  // number of vertices
-    const size_t size_i = sizeof(StochasticUnstructuredVolumeEngine::IndexType) * 2 * size;
-    const size_t size_c = sizeof(StochasticUnstructuredVolumeEngine::CoordType) * 3 * size;
-    const size_t size_v = sizeof(StochasticUnstructuredVolumeEngine::ValueType) * m_nsteps * size;
-    const size_t size_n = sizeof(StochasticUnstructuredVolumeEngine::NormalType) * 3 * size;
+    const size_t size_i = sizeof(StochasticTetrahedraEngine::IndexType) * 2 * size;
+    const size_t size_c = sizeof(StochasticTetrahedraEngine::CoordType) * 3 * size;
+    const size_t size_v = sizeof(StochasticTetrahedraEngine::ValueType) * m_nsteps * size;
+    const size_t size_n = sizeof(StochasticTetrahedraEngine::NormalType) * 3 * size;
     const size_t off_i = 0;
     const size_t off_c = off_i + size_i;
     const size_t off_v = off_c + size_c;
     const size_t off_n = off_v + size_v;
 
-    const StochasticUnstructuredVolumeEngine::IndexType* ptr_i = m_volume->indices();
-    const StochasticUnstructuredVolumeEngine::CoordType* ptr_c = m_volume->coords();
-    const StochasticUnstructuredVolumeEngine::ValueType* ptr_v = m_volume->values();
-    const StochasticUnstructuredVolumeEngine::NormalType* ptr_n = m_volume->normals();
+    const StochasticTetrahedraEngine::IndexType* ptr_i = m_volume->indices();
+    const StochasticTetrahedraEngine::CoordType* ptr_c = m_volume->coords();
+    const StochasticTetrahedraEngine::ValueType* ptr_v = m_volume->values();
+    const StochasticTetrahedraEngine::NormalType* ptr_n = m_volume->normals();
 
     vbo.download( size_i, ptr_i, off_i );
     vbo.download( size_c, ptr_c, off_c );
     vbo.download( size_v, ptr_v, off_v );
     vbo.download( size_n, ptr_n, off_n );
 
-    const StochasticUnstructuredVolumeEngine::ConnectType* ptr_conn = m_volume->connections();
+    const StochasticTetrahedraEngine::ConnectType* ptr_conn = m_volume->connections();
     ibo.download( m_volume->byteSizeOfCell(), ptr_conn, 0 );
 
     GLenum error = glGetError();
@@ -376,14 +376,14 @@ const bool StochasticUnstructuredVolumeEngine::Renderer::download(
  *  @brief  Draws the volume data.
  */
 /*===========================================================================*/
-void StochasticUnstructuredVolumeEngine::Renderer::draw( const size_t step ) const
+void StochasticTetrahedraEngine::Renderer::draw( const size_t step ) const
 {
     glEnableClientState( GL_VERTEX_ARRAY );
     glEnableClientState( GL_NORMAL_ARRAY );
     glVertexPointer( 3, GL_FLOAT, 0, (char*)(m_off_coord) );
     glNormalPointer( GL_BYTE, 0, (char*)(m_off_normal) );
 
-    const size_t data_size = sizeof(StochasticUnstructuredVolumeEngine::ValueType) * m_nvertices;
+    const size_t data_size = sizeof(StochasticTetrahedraEngine::ValueType) * m_nvertices;
     glEnableVertexAttribArray( m_loc_values );
     glVertexAttribPointer( m_loc_values, 1, GL_FLOAT, GL_FALSE, 0, (char*)( m_off_value + step * data_size ) );
 
@@ -401,10 +401,10 @@ void StochasticUnstructuredVolumeEngine::Renderer::draw( const size_t step ) con
 
 /*===========================================================================*/
 /**
- *  @brief  Constructs a new StochasticUnstructuredVolumeEngine class.
+ *  @brief  Constructs a new StochasticTetrahedraEngine class.
  */
 /*===========================================================================*/
-StochasticUnstructuredVolumeEngine::StochasticUnstructuredVolumeEngine( void )
+StochasticTetrahedraEngine::StochasticTetrahedraEngine( void )
 {
     this->initialize();
     BaseClass::setShader( kvs::Shader::Lambert() );
@@ -412,12 +412,12 @@ StochasticUnstructuredVolumeEngine::StochasticUnstructuredVolumeEngine( void )
 
 /*===========================================================================*/
 /**
- *  @brief  Constructs a new StochasticUnstructuredVolumeEngine class.
+ *  @brief  Constructs a new StochasticTetrahedraEngine class.
  *  @param  volume [in] pointer to volume data
  *  @param  nsteps [in] number of time steps
  */
 /*===========================================================================*/
-StochasticUnstructuredVolumeEngine::StochasticUnstructuredVolumeEngine(
+StochasticTetrahedraEngine::StochasticTetrahedraEngine(
     const kvs::UnstructuredVolumeObject* volume,
     const size_t nsteps )
 {
@@ -432,7 +432,7 @@ StochasticUnstructuredVolumeEngine::StochasticUnstructuredVolumeEngine(
  *  @brief  Initializes the member parameters.
  */
 /*===========================================================================*/
-void StochasticUnstructuredVolumeEngine::initialize( void )
+void StochasticTetrahedraEngine::initialize( void )
 {
     m_ref_volume = NULL;
 
@@ -452,7 +452,7 @@ void StochasticUnstructuredVolumeEngine::initialize( void )
  *  @param  nsteps [in] number of time steps
  */
 /*===========================================================================*/
-void StochasticUnstructuredVolumeEngine::setNSteps( const size_t nsteps )
+void StochasticTetrahedraEngine::setNSteps( const size_t nsteps )
 {
     m_nsteps = nsteps;
 }
@@ -463,7 +463,7 @@ void StochasticUnstructuredVolumeEngine::setNSteps( const size_t nsteps )
  *  @param  step [in] time step
  */
 /*===========================================================================*/
-void StochasticUnstructuredVolumeEngine::setStep( const size_t step )
+void StochasticTetrahedraEngine::setStep( const size_t step )
 {
     if ( step < m_nsteps ) m_step = step;
 }
@@ -474,7 +474,7 @@ void StochasticUnstructuredVolumeEngine::setStep( const size_t step )
  *  @param  edge_size [in] edge size
  */
 /*===========================================================================*/
-void StochasticUnstructuredVolumeEngine::setEdgeSize( const float edge_size )
+void StochasticTetrahedraEngine::setEdgeSize( const float edge_size )
 {
     m_edge_size = edge_size;
 }
@@ -485,7 +485,7 @@ void StochasticUnstructuredVolumeEngine::setEdgeSize( const float edge_size )
  *  @param  tfunc [in] transfer function
  */
 /*===========================================================================*/
-void StochasticUnstructuredVolumeEngine::setTransferFunction( const kvs::TransferFunction& tfunc )
+void StochasticTetrahedraEngine::setTransferFunction( const kvs::TransferFunction& tfunc )
 {
     m_tfunc = tfunc;
 
@@ -500,7 +500,7 @@ void StochasticUnstructuredVolumeEngine::setTransferFunction( const kvs::Transfe
  *  @brief  Returns the transfer function.
  */
 /*===========================================================================*/
-const kvs::TransferFunction& StochasticUnstructuredVolumeEngine::transferFunction( void ) const
+const kvs::TransferFunction& StochasticTetrahedraEngine::transferFunction( void ) const
 {
     return( m_tfunc );
 }
@@ -510,7 +510,7 @@ const kvs::TransferFunction& StochasticUnstructuredVolumeEngine::transferFunctio
  *  @brief  Returns the transfer function withtout 'const'.
  */
 /*===========================================================================*/
-kvs::TransferFunction& StochasticUnstructuredVolumeEngine::transferFunction( void )
+kvs::TransferFunction& StochasticTetrahedraEngine::transferFunction( void )
 {
     return( m_tfunc );
 }
@@ -521,7 +521,7 @@ kvs::TransferFunction& StochasticUnstructuredVolumeEngine::transferFunction( voi
  *  @return pointer to the volume object
  */
 /*===========================================================================*/
-const kvs::ObjectBase* StochasticUnstructuredVolumeEngine::object( void ) const
+const kvs::ObjectBase* StochasticTetrahedraEngine::object( void ) const
 {
     return( m_ref_volume );
 }
@@ -532,7 +532,7 @@ const kvs::ObjectBase* StochasticUnstructuredVolumeEngine::object( void ) const
  *  @return rendering engine type
  */
 /*===========================================================================*/
-const StochasticRenderingEngine::EngineType StochasticUnstructuredVolumeEngine::engineType( void ) const
+const StochasticRenderingEngine::EngineType StochasticTetrahedraEngine::engineType( void ) const
 {
     return( BaseClass::UnstructuredVolume );
 }
@@ -543,7 +543,7 @@ const StochasticRenderingEngine::EngineType StochasticUnstructuredVolumeEngine::
  *  @param  object [in] pointer to volume object
  */
 /*===========================================================================*/
-void StochasticUnstructuredVolumeEngine::attachObject( const kvs::ObjectBase* object )
+void StochasticTetrahedraEngine::attachObject( const kvs::ObjectBase* object )
 {
     const kvs::UnstructuredVolumeObject* volume = kvs::UnstructuredVolumeObject::DownCast( object );
 
@@ -563,7 +563,7 @@ void StochasticUnstructuredVolumeEngine::attachObject( const kvs::ObjectBase* ob
  *  @brief  Clears ensemble buffer.
  */
 /*===========================================================================*/
-void StochasticUnstructuredVolumeEngine::clearEnsembleBuffer( void )
+void StochasticTetrahedraEngine::clearEnsembleBuffer( void )
 {
     m_repetition_count = 0;
 }
@@ -577,7 +577,7 @@ void StochasticUnstructuredVolumeEngine::clearEnsembleBuffer( void )
  *  @param  fragment_source [in] fragment shader source
  */
 /*===========================================================================*/
-void StochasticUnstructuredVolumeEngine::create_shaders(
+void StochasticTetrahedraEngine::create_shaders(
     kvs::glew::ProgramObject& program_object,
     const kvs::glew::ShaderSource& vertex_source,
     const kvs::glew::ShaderSource& geometry_source,
@@ -645,7 +645,7 @@ void StochasticUnstructuredVolumeEngine::create_shaders(
  *  @brief  Initializes the decoposition patterns texture for PT.
  */
 /*===========================================================================*/
-void StochasticUnstructuredVolumeEngine::initialize_decomposition_texture( void )
+void StochasticTetrahedraEngine::initialize_decomposition_texture( void )
 {
     m_decomposition_texture.release();
     m_decomposition_texture.setWrapS( GL_CLAMP_TO_EDGE );
@@ -673,7 +673,7 @@ void StochasticUnstructuredVolumeEngine::initialize_decomposition_texture( void 
  *  @brief  Creates the pre-integration table.
  */
 /*===========================================================================*/
-void StochasticUnstructuredVolumeEngine::create_preintegration_table( void )
+void StochasticTetrahedraEngine::create_preintegration_table( void )
 {
     m_table.setTransferFunction( m_tfunc, 0.0f, 1.0f );
     m_table.create( m_edge_size );
@@ -686,7 +686,7 @@ void StochasticUnstructuredVolumeEngine::create_preintegration_table( void )
  */
 /*===========================================================================*/
 template <typename T>
-void StochasticUnstructuredVolumeEngine::create_vertexbuffer_from_volume( void )
+void StochasticTetrahedraEngine::create_vertexbuffer_from_volume( void )
 {
     if ( m_volume ) delete m_volume;
     m_volume = new Volume();
@@ -795,7 +795,7 @@ void StochasticUnstructuredVolumeEngine::create_vertexbuffer_from_volume( void )
  *  @param  modelview_matrix [in] modelview matrix
  */
 /*===========================================================================*/
-void StochasticUnstructuredVolumeEngine::setup_shader( const float modelview_matrix[16] )
+void StochasticTetrahedraEngine::setup_shader( const float modelview_matrix[16] )
 {
     int scramble_count = m_repetition_count * 12347;
     size_t random_texture_size = m_random_texture.width();
@@ -827,16 +827,16 @@ void StochasticUnstructuredVolumeEngine::setup_shader( const float modelview_mat
  *  @brief  Initializes the shaders.
  */
 /*===========================================================================*/
-void StochasticUnstructuredVolumeEngine::initialize_shader( void )
+void StochasticTetrahedraEngine::initialize_shader( void )
 {
-#if defined( KVS_GLEW_STOCHASTIC_UNSTRUCTURED_VOLUME_ENGINE__EMBEDDED_SHADER )
-    const std::string vert_code = kvs::glew::glsl::StochasticRenderingEngine::Vertex::unstructured_volume;
-    const std::string geom_code = kvs::glew::glsl::StochasticRenderingEngine::Geometry::unstructured_volume;
-    const std::string frag_code = kvs::glew::glsl::StochasticRenderingEngine::Fragment::unstructured_volume;
+#if defined( KVS_GLEW_STOCHASTIC_TETRAHEDRA_ENGINE__EMBEDDED_SHADER )
+    const std::string vert_code = kvs::glew::glsl::StochasticRenderingEngine::Vertex::tetrahedra;
+    const std::string geom_code = kvs::glew::glsl::StochasticRenderingEngine::Geometry::tetrahedra;
+    const std::string frag_code = kvs::glew::glsl::StochasticRenderingEngine::Fragment::tetrahedra;
 #else
-    const std::string vert_code = "StochasticRenderingEngine/unstructured_volume.vert";
-    const std::string geom_code = "StochasticRenderingEngine/unstructured_volume.geom";
-    const std::string frag_code = "StochasticRenderingEngine/unstructured_volume.frag";
+    const std::string vert_code = "StochasticRenderingEngine/tetrahedra.vert";
+    const std::string geom_code = "StochasticRenderingEngine/tetrahedra.geom";
+    const std::string frag_code = "StochasticRenderingEngine/tetrahedra.frag";
 #endif
 
     kvs::glew::ShaderSource vert( vert_code );
@@ -913,7 +913,7 @@ void StochasticUnstructuredVolumeEngine::initialize_shader( void )
  *  @brief  Creates the vertex and index buffer objects.
  */
 /*===========================================================================*/
-void StochasticUnstructuredVolumeEngine::create_vertex_buffer( void )
+void StochasticTetrahedraEngine::create_vertex_buffer( void )
 {
     // Extract surfaces.
     const std::type_info& type = m_ref_volume->values().typeInfo()->type();
@@ -949,7 +949,7 @@ void StochasticUnstructuredVolumeEngine::create_vertex_buffer( void )
  *  @brief  Downloads the volume dataset into the vertex and index buffer objects.
  */
 /*===========================================================================*/
-void StochasticUnstructuredVolumeEngine::download_vertex_buffer( void )
+void StochasticTetrahedraEngine::download_vertex_buffer( void )
 {
     m_vbo.bind();
     m_ibo.bind();
@@ -962,7 +962,7 @@ void StochasticUnstructuredVolumeEngine::download_vertex_buffer( void )
  *  @param  modelview_matrix [in] modelview matrix
  */
 /*===========================================================================*/
-void StochasticUnstructuredVolumeEngine::draw_vertex_buffer( const float modelview_matrix[16] )
+void StochasticTetrahedraEngine::draw_vertex_buffer( const float modelview_matrix[16] )
 {
     if ( !m_table.isTexture() )
     {
