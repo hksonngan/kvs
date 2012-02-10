@@ -1,7 +1,38 @@
-// implemented by Naoya Maeda 2011/10/25 //
+/*****************************************************************************/
+/**
+ *  @file   SharedCount.h
+ *  @author Naoya Maeda
+ */
+/*----------------------------------------------------------------------------
+ *
+ *  Copyright (c) Visualization Laboratory, Kyoto University.
+ *  All rights reserved.
+ *  See http://www.viz.media.kyoto-u.ac.jp/kvs/copyright/ for details.
+ *
+ *  $Id$
+ */
+/*****************************************************************************/
 #ifndef KVS_SHARED_COUNT_H_INCLUDE
 #define KVS_SHARED_COUNT_H_INCLUDE
 
+#if defined KVS_ENABLE_THREAD_SAFE
+  #if defined KVS_COMPILER_GCC
+    #define KVS_ATOMIC_INCREMENT(a) __sync_add_and_fetch(&a, 1)
+    #define KVS_ATOMIC_DECREMENT(a) __sync_sub_and_fetch(&a, 1)
+    #define KVS_ATOMIC_COMPARE_SWAP(a, b, c) __sync_val_compare_and_swap(&a, b, c)
+  #elif defined KVS_COMPILER_VC
+    #include <intrin.h>
+    #define KVS_ATOMIC_INCREMENT(a) _InterlockedIncrement(&a)
+    #define KVS_ATOMIC_DECREMENT(a) _InterlockedDecrement(&a)
+    #define KVS_ATOMIC_COMPARE_SWAP(a, b, c) _InterlockedCompareExchange(&a, c, b)
+  #else
+    #error "Not Supported Compiler"
+  #endif
+#else
+  #define KVS_ATOMIC_INCREMENT(a) (++a)
+  #define KVS_ATOMIC_DECREMENT(a) (--a)
+  #define KVS_ATOMIC_COMPARE_SWAP(a, b, c) _kvs_non_atomic_compare_swap(&a, b, c)
+#endif
 
 namespace kvs
 {
@@ -12,16 +43,23 @@ namespace detail
 namespace shared_pointer_impl
 {
 
+inline long _kvs_non_atomic_compare_swap(long* ptr, long oldval, long newval)
+{
+    long old = *ptr;
+    if (old == oldval) { *ptr = newval; }
+    return old;
+}
+
 // Implementation of shared count.
 // A instance of this class contain a pointer to an instance and 
 // manage the shared count and weak count of it.
 class Counter
 {
 protected:
-// Constructs a instance which contain 'ptr' and manages the life-time of the instance which 'ptr' is indicating.
-// The instance which 'ptr' is indicating automatically be deleted when the shared count becomes 0.
-// And the instance of this class is automatcally be deleted when the weak count becomes 0. 
-// The weak count is 1 in the beginning, which is decremented when the shared count becomes 0.
+// Constructs a instance which contain 'ptr' and manages the life-time of the instance to which 'ptr' is indicating.
+// The instance to which 'ptr' is indicating is automatically deleted when the shared count becomes 0.
+// And the instance of this class is automatcally deleted when the weak count becomes 0.
+// In the beginning, the weak count is 1, which is decremented when the shared count becomes 0.
     explicit Counter(void* ptr) throw()
         : m_pointer(ptr)
         , m_count(1)
@@ -37,32 +75,6 @@ public:
     {
         return m_count;
     }
-
-#if defined KVS_ENABLE_THREAD_SAFE
-  #if defined KVS_COMPILER_GCC
-    #define KVS_ATOMIC_INCREMENT(a) __sync_add_and_fetch(&a, 1)
-    #define KVS_ATOMIC_DECREMENT(a) __sync_sub_and_fetch(&a, 1)
-    #define KVS_ATOMIC_COMPARE_SWAP(a, b, c) __sync_val_compare_and_swap(&a, b, c)
-  #elif defined KVS_COMPILER_VC
-//#include <intrin.h>
-    #define KVS_ATOMIC_INCREMENT(a) _InterlockedIncrement(&a)
-    #define KVS_ATOMIC_DECREMENT(a) _InterlockedDecrement(&a)
-    #define KVS_ATOMIC_COMPARE_SWAP(a, b, c) _InterlockedCompareExchange(&a, c, b)
-  #else
-    #error "Not Supported Compiler"
-  #endif
-#else
-  #define KVS_ATOMIC_INCREMENT(a) (++a)
-  #define KVS_ATOMIC_DECREMENT(a) (--a)
-  #define KVS_ATOMIC_COMPARE_SWAP(a, b, c) _kvs_non_atomic_compare_swap(&a, b, c)
-
-inline long _kvs_non_atomic_compare_swap(long* ptr, long oldval, long newval)
-{
-    long old = *ptr;
-    if (old == oldval) { *ptr = newval; }
-    return old;
-}
-#endif
 
 public:
 // Inclements the shared count.
@@ -114,10 +126,6 @@ public:
         }
     }
 
-#undef KVS_ATOMIC_INCREMENT
-#undef KVS_ATOMIC_DECREMENT
-#undef KVS_ATOMIC_COMPARE_SWAP
-
 private:
     virtual void dispose() throw() = 0;
 
@@ -133,6 +141,9 @@ private:
     Counter& operator =(const Counter&);
 }; // Counter
 
+#undef KVS_ATOMIC_INCREMENT
+#undef KVS_ATOMIC_DECREMENT
+#undef KVS_ATOMIC_COMPARE_SWAP
 
 
 template <typename T>
@@ -300,6 +311,11 @@ public:
     void swap(WeakCount& other) throw()
     {
         std::swap(m_counter, other.m_counter);
+    }
+
+    long use_count() const throw()
+    {
+        return m_counter ? m_counter->use_count() : 0;
     }
 
     bool expired() const throw()

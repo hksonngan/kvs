@@ -1,9 +1,17 @@
-// implemented by Naoya Maeda 2011/10/25 //
-/****************************************************************************/
+/*****************************************************************************/
 /**
- *  @file SharedPointer.h
+ *  @file   SharedPointer.h
+ *  @author Naoya Maeda
+ */
+/*----------------------------------------------------------------------------
  *
-/****************************************************************************/
+ *  Copyright (c) Visualization Laboratory, Kyoto University.
+ *  All rights reserved.
+ *  See http://www.viz.media.kyoto-u.ac.jp/kvs/copyright/ for details.
+ *
+ *  $Id$
+ */
+/*****************************************************************************/
 #ifndef KVS_SHARED_POINTER_H_INCLUDE
 #define KVS_SHARED_POINTER_H_INCLUDE
 
@@ -46,7 +54,8 @@ public:
  */
 /*==========================================================================*/
     SharedPointer() throw()
-        : m_pointer(NULL), m_shared_count() {}
+        : m_pointer(NULL), m_shared_count()
+    {}
 
 /*==========================================================================*/
 /**
@@ -64,8 +73,8 @@ public:
 /*==========================================================================*/
 /**
  *  Constructs a SharedPointer object that owns the pointer \p p and deleter \p d.
- *  @param ptr [in] raw pointer
- *  @param deleter [in] deleter object against \p p
+ *  @param p [in] raw pointer
+ *  @param d [in] deleter object against \p p
  */
 /*==========================================================================*/
     template <typename Y, typename D>
@@ -77,16 +86,18 @@ public:
 
 /*==========================================================================*/
 /**
- *  Constructs a copy of \p other.
+ *  Constructs a copy of \p r.
  *  @param other [in] shared pointer
  */
 /*==========================================================================*/
     SharedPointer(const SharedPointer& r) throw()
-        : m_pointer(r.m_pointer), m_shared_count(r.m_shared_count) {}
+        : m_pointer(r.m_pointer), m_shared_count(r.m_shared_count)
+    {}
 
     template <typename Y>
     SharedPointer(const SharedPointer<Y>& r) throw()
-        : m_pointer(r.m_pointer), m_shared_count(r.m_shared_count) {}
+        : m_pointer(r.m_pointer), m_shared_count(r.m_shared_count)
+    {}
 
 /*==========================================================================*/
 /**
@@ -95,7 +106,8 @@ public:
 /*==========================================================================*/
     template <typename Y>
     SharedPointer(const SharedPointer<Y>& r, T* p) throw()
-        : m_pointer(p), m_shared_count(r.m_shared_count) {}
+        : m_pointer(p), m_shared_count(r.m_shared_count)
+    {}
 
 public:
     // assingment

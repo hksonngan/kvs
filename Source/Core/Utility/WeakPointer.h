@@ -1,9 +1,17 @@
-// implemented by Naoya Maeda 2011/10/26 //
-/****************************************************************************/
+/*****************************************************************************/
 /**
- *  @file WeakPointer.h
+ *  @file   WeakPointer.h
+ *  @author Naoya Maeda
+ */
+/*----------------------------------------------------------------------------
  *
-/****************************************************************************/
+ *  Copyright (c) Visualization Laboratory, Kyoto University.
+ *  All rights reserved.
+ *  See http://www.viz.media.kyoto-u.ac.jp/kvs/copyright/ for details.
+ *
+ *  $Id$
+ */
+/*****************************************************************************/
 #ifndef KVS_WEAK_POINTER
 #define KVS_WEAK_POINTER
 #include "SharedPointer.h"
@@ -50,21 +58,21 @@ public:
 public:
     // assingment
 
-    WeakPointer& operator =(const WeakPointer& rhs) throw()
+    this_type& operator =(const this_type& rhs) throw()
     {
         this_type(rhs).swap(*this);
         return *this;
     }
 
     template <typename U>
-    WeakPointer& operator =(const WeakPointer<U>& rhs) throw()
+    this_type& operator =(const WeakPointer<U>& rhs) throw()
     {
         this_type(rhs).swap(*this);
         return *this;
     }
 
     template <typename U>
-    WeakPointer& operator =(const SharedPointer<U>& rhs) throw()
+    this_type& operator =(const SharedPointer<U>& rhs) throw()
     {
         this_type(rhs).swap(*this);
         return *this;
@@ -78,7 +86,7 @@ public:
         this_type().swap(*this);
     }
 
-    void swap(WeakPointer& other) throw()
+    void swap(this_type& other) throw()
     {
         std::swap(m_pointer, other.m_pointer);
         m_weak_count.swap(other.m_weak_count);
