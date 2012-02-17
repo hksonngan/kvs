@@ -289,6 +289,26 @@ void StochasticRenderingCompositor::disableLODControl( void )
     m_renderer->disableLODControl();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Enables exact depth testing.
+ */
+/*===========================================================================*/
+void StochasticRenderingCompositor::enableExactDepthTesting( void )
+{
+    m_renderer->enable_exact_depth_testing();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Disables exact depth testing.
+ */
+/*===========================================================================*/
+void StochasticRenderingCompositor::disableExactDepthTesting( void )
+{
+    m_renderer->disable_exact_depth_testing();
+}
+
 } // end of namespace glew
 
 } // end of namespace kvs

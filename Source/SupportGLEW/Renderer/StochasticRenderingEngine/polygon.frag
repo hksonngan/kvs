@@ -18,6 +18,10 @@ varying vec3 position;
 varying vec3 normal;
 varying vec2 id;
 
+#if defined( ENABLE_EXACT_DEPTH_TESTING )
+varying float depth;
+#endif
+
 uniform sampler2D random_texture;
 
 uniform vec2 screen_scale;
@@ -66,4 +70,8 @@ void main( void )
 #endif
 
     gl_FragColor = vec4( shaded_color, 1.0 );
+
+#if defined( ENABLE_EXACT_DEPTH_TESTING )
+    gl_FragDepth = depth;
+#endif
 }

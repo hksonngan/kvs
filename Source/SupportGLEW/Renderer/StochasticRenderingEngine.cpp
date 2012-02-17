@@ -54,6 +54,7 @@ void StochasticRenderingEngine::initialize( void )
     m_enable_shading = true;
     m_shader = NULL;
     m_enable_updating_vbo = false;
+    m_enable_exact_depth_testing = false;
 }
 
 /*===========================================================================*/
@@ -198,6 +199,37 @@ void StochasticRenderingEngine::disable_updating_vbo( void )
 const bool StochasticRenderingEngine::is_enabled_updating_vbo( void ) const
 {
     return( m_enable_updating_vbo );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Enables exact depth testing.
+ */
+/*===========================================================================*/
+void StochasticRenderingEngine::enable_exact_depth_testing( void )
+{
+    m_enable_exact_depth_testing = true;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Disables exact depth testing.
+ */
+/*===========================================================================*/
+void StochasticRenderingEngine::disable_exact_depth_testing( void )
+{
+    m_enable_exact_depth_testing = false;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns whether or not the exact depth testing is enabled.
+ *  @return true, if the exact depth testing is enabled
+ */
+/*===========================================================================*/
+const bool StochasticRenderingEngine::is_enabled_exact_depth_testing( void ) const
+{
+    return m_enable_exact_depth_testing;
 }
 
 } // end of namespace glew

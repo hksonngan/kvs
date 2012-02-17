@@ -27,6 +27,10 @@ varying vec3  normal;
 varying vec2  center;
 varying float radius;
 
+#if defined( ENABLE_EXACT_DEPTH_TESTING )
+varying float depth;
+#endif
+
 
 float zooming( in vec4 p )
 {
@@ -74,4 +78,8 @@ void main( void )
     normal = ( gl_NormalMatrix * gl_Normal ).xyz;
 
     gl_PointSize = zooming( gl_Position );
+
+#if defined( ENABLE_EXACT_DEPTH_TESTING )
+    depth = gl_Position.z / gl_Position.w;
+#endif
 }

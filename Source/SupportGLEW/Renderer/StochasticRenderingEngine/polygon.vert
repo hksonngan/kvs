@@ -16,6 +16,10 @@ varying vec3 position;
 varying vec3 normal;
 varying vec2 id;
 
+#if defined( ENABLE_EXACT_DEPTH_TESTING )
+varying float depth;
+#endif
+
 attribute vec2 identifier;
 
 uniform float polygon_offset;
@@ -29,4 +33,8 @@ void main( void )
     position = ( gl_ModelViewMatrix * gl_Vertex ).xyz;
     normal = ( gl_NormalMatrix * gl_Normal ).xyz;
     id = identifier;
+
+#if defined( ENABLE_EXACT_DEPTH_TESTING )
+    depth = gl_Position.z / gl_Position.w;
+#endif
 }

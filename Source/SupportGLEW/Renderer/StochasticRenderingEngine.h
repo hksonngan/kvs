@@ -50,7 +50,7 @@ public:
         Line,
         Polygon,
         StructuredVolume,
-        UnstructuredVolume,
+        Tetrahedra,
         Unknown
     };
 
@@ -64,6 +64,7 @@ protected:
     kvs::Texture2D m_random_texture; ///< random number texture for the stochastic color assignment in GPU.
     kvs::glew::ProgramObject m_shader_program; ///< GLSL shader program.
     bool m_enable_updating_vbo; ///< flag to enable updating vertex buffer
+    bool m_enable_exact_depth_testing; ///< flag to enable exact depth testing
 
 public:
 
@@ -112,6 +113,12 @@ protected:
     void disable_updating_vbo( void );
 
     const bool is_enabled_updating_vbo( void ) const;
+
+    void enable_exact_depth_testing( void );
+
+    void disable_exact_depth_testing( void );
+
+    const bool is_enabled_exact_depth_testing( void ) const;
 
 protected:
 

@@ -25,6 +25,11 @@ varying out vec3 position;
 varying out vec3 normal;
 varying out vec2 id;
 
+#if defined( ENABLE_EXACT_DEPTH_TESTING )
+varying out float depth_front;
+varying out float depth_back;
+#endif
+
 varying out float scalar_front;
 varying out float scalar_back;
 varying out float distance;
@@ -47,6 +52,11 @@ void emitExistPoint( const in int index, const in float dist )
     gl_Position = gl_PositionIn[index]; 
     position    = position_in[index].xyz;
 
+#if defined( ENABLE_EXACT_DEPTH_TESTING )
+    depth_front = gl_PositionIn[index].z / gl_PositionIn[index].w;
+    depth_back  = depth_front;
+#endif
+
     normal = normal_in[index].xyz;
 
     scalar_front = value_in[index];
@@ -58,6 +68,9 @@ void emitExistPoint( const in int index, const in float dist )
 void emitNewPoint(
     const in vec4 center_position,
     const in vec3 center_position_3D,
+#if defined( ENABLE_EXACT_DEPTH_TESTING )
+    const in float center_another_depth,
+#endif
     const in vec3 center_normal_3D,
     const in float center_scalar_front,
     const in float center_scalar_back,
@@ -65,6 +78,11 @@ void emitNewPoint(
 {
     gl_Position = center_position;
     position    = center_position_3D;
+
+#if defined( ENABLE_EXACT_DEPTH_TESTING )
+    depth_front = center_position.z / center_position.w;
+    depth_back  = center_another_depth;
+#endif
 
     normal = center_normal_3D;
 
@@ -181,8 +199,17 @@ void create_type_1( in int p0, in int p1, in int p2, in int p3 )
    vec3 n123 = normal_in[p1] + ( normal_in[p2] - normal_in[p1] ) * r2 + ( normal_in[p3] - normal_in[p1] ) * p3;
    vec3 center_normal_3D;
 
+#if defined( ENABLE_EXACT_DEPTH_TESTING )
+    float a_depth;
+#endif
+
    if ( length( p123.z ) < length( position_in[p0].z ) )
    {
+#if defined( ENABLE_EXACT_DEPTH_TESTING )
+        vec4 tmp = gl_PositionIn[p0];
+        a_depth = tmp.z / tmp.w;
+#endif
+
        center_position = gl_ProjectionMatrix * p123;
        center_position_3D = p123.xyz;
 
@@ -193,6 +220,11 @@ void create_type_1( in int p0, in int p1, in int p2, in int p3 )
    }
    else
    {
+#if defined( ENABLE_EXACT_DEPTH_TESTING )
+        vec4 tmp = gl_ProjectionMatrix * p123;
+        a_depth = tmp.z / tmp.w;
+#endif
+
        center_position = gl_PositionIn[p0];
        center_position_3D = position_in[p0].xyz;
 
@@ -207,7 +239,11 @@ void create_type_1( in int p0, in int p1, in int p2, in int p3 )
     // p1-p2-C p2-C-p3 C-p3-p1
     emitExistPoint( p1, 0.0 );
     emitExistPoint( p2, 0.0 );
+#if defined( ENABLE_EXACT_DEPTH_TESTING )
+    emitNewPoint( center_position, center_position_3D, a_depth, center_normal_3D, center_scalar_front, center_scalar_back, center_distance );
+#else
     emitNewPoint( center_position, center_position_3D, center_normal_3D, center_scalar_front, center_scalar_back, center_distance );
+#endif
     emitExistPoint( p3, 0.0 );
     emitExistPoint( p1, 0.0 );
     EndPrimitive();
@@ -246,8 +282,17 @@ void create_type_2( in int p0, in int p1, in int p2, in int p3 )
    vec3 n23 = normal_in[p2] + ( normal_in[p3] - normal_in[p2] ) * r3;
    vec3 center_normal_3D;
 
+#if defined( ENABLE_EXACT_DEPTH_TESTING )
+    float a_depth;
+#endif
+
    if ( length( p01.xyz ) < length( p23.xyz ) )
    {
+#if defined( ENABLE_EXACT_DEPTH_TESTING )
+        vec4 tmp = gl_ProjectionMatrix * p23;
+        a_depth = tmp.z / tmp.w;
+#endif
+
        center_position = gl_ProjectionMatrix * p01;
        center_position_3D = p01.xyz;
 
@@ -258,6 +303,11 @@ void create_type_2( in int p0, in int p1, in int p2, in int p3 )
    }
    else
    {
+#if defined( ENABLE_EXACT_DEPTH_TESTING )
+        vec4 tmp = gl_ProjectionMatrix * p01;
+        a_depth = tmp.z / tmp.w;
+#endif
+
        center_position = gl_ProjectionMatrix * p23;
        center_position_3D = p23.xyz;
 
@@ -272,14 +322,22 @@ void create_type_2( in int p0, in int p1, in int p2, in int p3 )
     // right half: p0-p2-C, p2-C-p1
     emitExistPoint( p0, 0.0 );
     emitExistPoint( p2, 0.0 );
+#if defined( ENABLE_EXACT_DEPTH_TESTING )
+    emitNewPoint( center_position, center_position_3D, a_depth, center_normal_3D, center_scalar_front, center_scalar_back, center_distance );
+#else
     emitNewPoint( center_position, center_position_3D, center_normal_3D, center_scalar_front, center_scalar_back, center_distance );
+#endif
     emitExistPoint( p1, 0.0 );
     EndPrimitive();
 
     // left half: p0-p3-C, p3-C-p1
     emitExistPoint( p0, 0.0 );
     emitExistPoint( p3, 0.0 );
+#if defined( ENABLE_EXACT_DEPTH_TESTING )
+    emitNewPoint( center_position, center_position_3D, a_depth, center_normal_3D, center_scalar_front, center_scalar_back, center_distance );
+#else
     emitNewPoint( center_position, center_position_3D, center_normal_3D, center_scalar_front, center_scalar_back, center_distance );
+#endif
     emitExistPoint( p1, 0.0 );
     EndPrimitive();
 }
@@ -316,7 +374,6 @@ void create_type_3( in int p0, in int p1, in int p2, in int p3 )
 //
 void create_type_4( in int p0, in int p1, in int p2, in int p3 )
 {
-
     int pFront, pBack;
     if ( position_in[p2].z < position_in[p3].z )
     {
@@ -328,10 +385,19 @@ void create_type_4( in int p0, in int p1, in int p2, in int p3 )
         pFront = p3;
         pBack = p2;
     }
+
+#if defined( ENABLE_EXACT_DEPTH_TESTING )
+    float a_depth = gl_PositionIn[pBack].z / gl_PositionIn[pBack].w;
+#endif
+
     float center_distance = distance_to_texture_coord( length( position_in[pBack] - position_in[pFront] ) );
     emitExistPoint( p0, 0.0 );
     emitExistPoint( p1, 0.0 );
+#if defined( ENABLE_EXACT_DEPTH_TESTING )
+    emitNewPoint( gl_PositionIn[pFront], position_in[pFront].xyz, a_depth, normal_in[pFront].xyz, value_in[pBack], value_in[pFront], center_distance );
+#else
     emitExistPoint( pFront, center_distance );
+#endif
     EndPrimitive();
 }
 

@@ -13,7 +13,7 @@
  */
 /*****************************************************************************/
 #include "StochasticRendererBase.h"
-
+#include "StochasticTetrahedraEngine.h"
 #include <algorithm>
 #include <kvs/MersenneTwister>
 
@@ -102,6 +102,8 @@ void StochasticRendererBase::initialize( void )
     m_clear_ensemble_buffer = false;
 
     m_rendering_engines.clear();
+
+    m_enable_exact_depth_testing = false;
 }
 
 /*===========================================================================*/
@@ -210,6 +212,11 @@ void StochasticRendererBase::create_image( const kvs::Camera* camera, const kvs:
 
         for ( size_t i = 0; i < m_rendering_engines.size(); i++ )
         {
+            if ( m_enable_exact_depth_testing )
+            {
+                m_rendering_engines[i]->enable_exact_depth_testing();
+            }
+
             m_rendering_engines[i]->set_random_texture( m_random_texture );
             m_rendering_engines[i]->initialize_shader();
             m_rendering_engines[i]->create_vertex_buffer();
@@ -297,6 +304,16 @@ void StochasticRendererBase::create_image( const kvs::Camera* camera, const kvs:
         // draw vertex buffer.
         for ( size_t i = 0; i < m_rendering_engines.size(); i++ )
         {
+            if ( m_enable_exact_depth_testing )
+            {
+                if ( m_rendering_engines[i]->engineType() == kvs::glew::StochasticRenderingEngine::Tetrahedra )
+                {
+                    kvs::glew::StochasticTetrahedraEngine* engine
+                        = static_cast<kvs::glew::StochasticTetrahedraEngine*>( m_rendering_engines[i] );
+                    engine->set_depth_texture( m_depth_texture );
+                }
+            }
+
             m_rendering_engines[i]->draw_vertex_buffer( modelview_matrix );
         }
 
@@ -387,6 +404,26 @@ kvs::glew::StochasticRenderingEngine* StochasticRendererBase::find_engine( const
     }
 
     return NULL;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Enables exact depth testing.
+ */
+/*===========================================================================*/
+void StochasticRendererBase::enable_exact_depth_testing( void )
+{
+    m_enable_exact_depth_testing = true;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Disables exact depth testing.
+ */
+/*===========================================================================*/
+void StochasticRendererBase::disable_exact_depth_testing( void )
+{
+    m_enable_exact_depth_testing = false;
 }
 
 /*===========================================================================*/

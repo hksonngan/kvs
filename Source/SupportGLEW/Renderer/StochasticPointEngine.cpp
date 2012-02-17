@@ -663,6 +663,12 @@ void StochasticPointEngine::initialize_shader( void )
         if ( status == GL_TRUE ) { frag.define("ENABLE_TWO_SIDE_LIGHTING"); }
     }
 
+    if ( BaseClass::is_enabled_exact_depth_testing() )
+    {
+        vert.define("ENABLE_EXACT_DEPTH_TESTING");
+        frag.define("ENABLE_EXACT_DEPTH_TESTING");
+    }
+
     this->create_shaders( m_shader_program, vert, frag );
     m_loc_identifier = m_shader_program.attributeLocation( "identifier" );
 

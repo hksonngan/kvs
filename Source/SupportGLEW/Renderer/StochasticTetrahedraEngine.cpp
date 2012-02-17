@@ -534,7 +534,7 @@ const kvs::ObjectBase* StochasticTetrahedraEngine::object( void ) const
 /*===========================================================================*/
 const StochasticRenderingEngine::EngineType StochasticTetrahedraEngine::engineType( void ) const
 {
-    return( BaseClass::UnstructuredVolume );
+    return( BaseClass::Tetrahedra );
 }
 
 /*===========================================================================*/
@@ -820,6 +820,7 @@ void StochasticTetrahedraEngine::setup_shader( const float modelview_matrix[16] 
     m_shader_program.setUniformValuei( "preintegration_texture", 0 );
     m_shader_program.setUniformValuei( "random_texture", 1 );
     m_shader_program.setUniformValuei( "decomposion_texture", 2 );
+    m_shader_program.setUniformValuei( "depth_texture", 3 );
 }
 
 /*===========================================================================*/
@@ -855,6 +856,13 @@ void StochasticTetrahedraEngine::initialize_shader( void )
 
         GLboolean status = 0; glGetBooleanv( GL_LIGHT_MODEL_TWO_SIDE, &status );
         if ( status == GL_TRUE ) { frag.define("ENABLE_TWO_SIDE_LIGHTING"); }
+    }
+
+    if ( BaseClass::is_enabled_exact_depth_testing() )
+    {
+        vert.define("ENABLE_EXACT_DEPTH_TESTING");
+        geom.define("ENABLE_EXACT_DEPTH_TESTING");
+        frag.define("ENABLE_EXACT_DEPTH_TESTING");
     }
 
     this->create_shaders( m_shader_program, vert, geom, frag );
@@ -978,6 +986,7 @@ void StochasticTetrahedraEngine::draw_vertex_buffer( const float modelview_matri
     glActiveTexture(GL_TEXTURE0);     m_table.bind();                   glEnable(GL_TEXTURE_3D);
     glActiveTexture(GL_TEXTURE1);     m_random_texture.bind();          glEnable(GL_TEXTURE_2D);
     glActiveTexture(GL_TEXTURE2);     m_decomposition_texture.bind();   glEnable(GL_TEXTURE_2D);
+    glActiveTexture(GL_TEXTURE3);     m_depth_texture.bind();
     glActiveTexture(GL_TEXTURE0);
 
     m_shader_program.bind();
@@ -987,11 +996,23 @@ void StochasticTetrahedraEngine::draw_vertex_buffer( const float modelview_matri
 
     m_shader_program.unbind();
 
+    glActiveTexture(GL_TEXTURE3);    m_depth_texture.unbind();
     glActiveTexture(GL_TEXTURE2);    m_decomposition_texture.unbind();  glDisable(GL_TEXTURE_2D);
     glActiveTexture(GL_TEXTURE1);    m_random_texture.unbind();         glDisable(GL_TEXTURE_2D);
     glActiveTexture(GL_TEXTURE0);    m_table.unbind();                  glDisable(GL_TEXTURE_3D);
 
     m_repetition_count++;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a depth texture.
+ *  @param  depth_texture [in] depth texture
+ */
+/*===========================================================================*/
+void StochasticTetrahedraEngine::set_depth_texture( const kvs::Texture2D& depth_texture )
+{
+    m_depth_texture = depth_texture;
 }
 
 } // end of namespace glew

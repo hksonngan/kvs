@@ -39,6 +39,8 @@ namespace glew
 /*===========================================================================*/
 class StochasticTetrahedraEngine : public kvs::glew::StochasticRenderingEngine
 {
+    friend class StochasticRendererBase;
+
     // Class name.
     kvsClassName( kvs::glew::StochasticTetrahedraEngine );
 
@@ -68,6 +70,7 @@ protected:
     Renderer* m_renderer; ///< renderer for the volume on GPU
     kvs::glew::PreIntegrationTable m_table; ///< pre-integration table
     kvs::Texture2D m_decomposition_texture; ///< texture for the tetrahedral decomposition
+    kvs::Texture2D m_depth_texture; ///< depth texture
     float m_edge_size; ///< edge size
     size_t m_nsteps; ///< number of time steps for time-varying volume datasets
     size_t m_step; ///< time step for time-varying volume datasets
@@ -130,6 +133,8 @@ private:
     void download_vertex_buffer( void );
 
     void draw_vertex_buffer( const float modelview_matrix[16] );
+
+    void set_depth_texture( const kvs::Texture2D& depth_texture );
 };
 
 /*===========================================================================*/

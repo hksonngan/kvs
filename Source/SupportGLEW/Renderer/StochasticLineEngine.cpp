@@ -171,6 +171,12 @@ void StochasticLineEngine::initialize_shader( void )
     kvs::glew::ShaderSource vert( vert_code );
     kvs::glew::ShaderSource frag( frag_code );
 
+    if ( BaseClass::is_enabled_exact_depth_testing() )
+    {
+        vert.define("ENABLE_EXACT_DEPTH_TESTING");
+        frag.define("ENABLE_EXACT_DEPTH_TESTING");
+    }
+
     this->create_shaders( m_shader_program, vert, frag );
     m_loc_identifier = m_shader_program.attributeLocation( "identifier" );
 }

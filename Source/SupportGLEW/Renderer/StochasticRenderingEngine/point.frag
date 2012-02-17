@@ -19,6 +19,10 @@ varying vec3  normal;
 varying vec2  center;
 varying float radius;
 
+#if defined( ENABLE_EXACT_DEPTH_TESTING )
+varying float depth;
+#endif
+
 uniform Shading shading;
 
 void main( void )
@@ -53,4 +57,8 @@ void main( void )
 
     gl_FragColor.xyz = shaded_color;
     gl_FragColor.w = 1.0;
+
+#if defined( ENABLE_EXACT_DEPTH_TESTING )
+    gl_FragDepth = depth;
+#endif
 }

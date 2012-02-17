@@ -72,6 +72,10 @@ public:
     void enableLODControl( const size_t coarse_level = 1 );
 
     void disableLODControl( void );
+
+    void enableExactDepthTesting( void );
+
+    void disableExactDepthTesting( void );
 };
 
 } // end of namespace glew

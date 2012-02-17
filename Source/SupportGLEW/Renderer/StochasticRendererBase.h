@@ -68,8 +68,9 @@ protected:
     kvs::Texture2D m_random_texture; ///< random number texture
     bool m_enable_lod; ///< flag to enable LOD controlling
     float m_modelview_matrix[16]; ///< modelview matrix
-    bool m_clear_ensemble_buffer; ///< frag to clear ensemble buffer
+    bool m_clear_ensemble_buffer; ///< flag to clear ensemble buffer
     RenderingEngineList m_rendering_engines; ///< rendering engine list
+    bool m_enable_exact_depth_testing; ///< flag to enable exact depth testing
 
 public:
 
@@ -106,6 +107,10 @@ protected:
     kvs::glew::StochasticRenderingEngine* find_engine( const kvs::ObjectBase* object );
 
     kvs::glew::StochasticRenderingEngine* find_engine( const std::string object_name );
+
+    void enable_exact_depth_testing( void );
+
+    void disable_exact_depth_testing( void );
 
 private:
 
