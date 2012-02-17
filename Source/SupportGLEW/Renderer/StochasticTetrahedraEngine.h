@@ -44,7 +44,7 @@ class StochasticTetrahedraEngine : public kvs::glew::StochasticRenderingEngine
     // Class name.
     kvsClassName( kvs::glew::StochasticTetrahedraEngine );
 
-protected:
+public:
 
     class Volume;
     class Renderer;
@@ -109,7 +109,7 @@ public:
 
     void clearEnsembleBuffer( void );
 
-private:
+protected:
 
     void initialize_decomposition_texture( void );
 
@@ -149,6 +149,7 @@ private:
     size_t m_nsteps; ///< number of time steps
     size_t m_nvertices; ///< number of vertices
     size_t m_ncells; ///< number of cells
+    size_t m_veclen; ///< vector length of the values
     StochasticTetrahedraEngine::IndexType* m_indices; ///< index array
     StochasticTetrahedraEngine::CoordType* m_coords; ///< coordinate value array
     StochasticTetrahedraEngine::ValueType* m_values; ///< color value array
@@ -165,13 +166,15 @@ public:
 
     void release( void );
 
-    void create( const size_t nsteps, const size_t nvertices, const size_t ncells );
+    void create( const size_t nsteps, const size_t nvertices, const size_t ncells, const size_t veclen );
 
 public:
 
     const size_t nvertices( void ) const;
 
     const size_t ncells( void ) const;
+
+    const size_t veclen( void ) const;
 
     const size_t byteSizePerVertex( void ) const;
 

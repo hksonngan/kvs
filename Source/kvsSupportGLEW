@@ -11,13 +11,15 @@
 #include <SupportGLEW/Renderer/Shader.h>
 #include <SupportGLEW/Renderer/StochasticLineEngine.h>
 #include <SupportGLEW/Renderer/StochasticLineRenderer.h>
+#include <SupportGLEW/Renderer/StochasticMultivariateTetrahedraEngine.h>
+#include <SupportGLEW/Renderer/StochasticMultivariateTetrahedraRenderer.h>
 #include <SupportGLEW/Renderer/StochasticPointEngine.h>
 #include <SupportGLEW/Renderer/StochasticPointRenderer.h>
 #include <SupportGLEW/Renderer/StochasticPolygonEngine.h>
 #include <SupportGLEW/Renderer/StochasticPolygonRenderer.h>
 #include <SupportGLEW/Renderer/StochasticRenderingCompositor.h>
-#include <SupportGLEW/Renderer/StochasticUnstructuredVolumeEngine.h>
-#include <SupportGLEW/Renderer/StochasticUnstructuredVolumeRenderer.h>
+#include <SupportGLEW/Renderer/StochasticTetrahedraEngine.h>
+#include <SupportGLEW/Renderer/StochasticTetrahedraRenderer.h>
 #include <SupportGLEW/Viewer/BufferObject.h>
 #include <SupportGLEW/Viewer/FragmentShader.h>
 #include <SupportGLEW/Viewer/FrameBufferObject.h>

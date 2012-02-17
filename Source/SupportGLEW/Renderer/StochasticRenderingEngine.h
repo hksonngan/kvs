@@ -51,6 +51,7 @@ public:
         Polygon,
         StructuredVolume,
         Tetrahedra,
+        MultivariateTetrahedra,
         Unknown
     };
 

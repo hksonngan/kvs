@@ -36,6 +36,7 @@ StochasticTetrahedraEngine::Volume::Volume( void ) :
     m_nsteps( 1 ),
     m_nvertices( 0 ),
     m_ncells( 0 ),
+    m_veclen( 0 ),
     m_indices( NULL ),
     m_coords( NULL ),
     m_values( NULL ),
@@ -79,15 +80,17 @@ void StochasticTetrahedraEngine::Volume::release( void )
 void StochasticTetrahedraEngine::Volume::create(
     const size_t nsteps,
     const size_t nvertices,
-    const size_t ncells )
+    const size_t ncells,
+    const size_t veclen )
 {
     this->release();
 
     m_nsteps = nsteps;
     m_nvertices = nvertices;
     m_ncells = ncells;
+    m_veclen = veclen;
     m_coords = new StochasticTetrahedraEngine::CoordType [ nvertices * 3 ];
-    m_values = new StochasticTetrahedraEngine::ValueType [ nvertices * m_nsteps ];
+    m_values = new StochasticTetrahedraEngine::ValueType [ nvertices * veclen * m_nsteps ];
     m_normals = new StochasticTetrahedraEngine::NormalType [ nvertices * 3 ];
     m_indices = new StochasticTetrahedraEngine::IndexType [ nvertices * 2 ];
     m_connections = new StochasticTetrahedraEngine::ConnectType [ ncells * 4 ];
@@ -115,6 +118,11 @@ const size_t StochasticTetrahedraEngine::Volume::ncells( void ) const
     return( m_ncells );
 }
 
+const size_t StochasticTetrahedraEngine::Volume::veclen( void ) const
+{
+    return m_veclen;
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Returns data size per a vertex (node).
@@ -125,7 +133,7 @@ const size_t StochasticTetrahedraEngine::Volume::byteSizePerVertex( void ) const
 {
     const size_t index_size  = sizeof( StochasticTetrahedraEngine::IndexType ) * 2;
     const size_t coord_size  = sizeof( StochasticTetrahedraEngine::CoordType ) * 3;
-    const size_t value_size  = sizeof( StochasticTetrahedraEngine::ValueType ) * m_nsteps;
+    const size_t value_size  = sizeof( StochasticTetrahedraEngine::ValueType ) * m_veclen * m_nsteps;
     const size_t normal_size = sizeof( StochasticTetrahedraEngine::NormalType ) * 3;
 
     return( index_size + coord_size + value_size + normal_size );
@@ -335,9 +343,10 @@ const bool StochasticTetrahedraEngine::Renderer::download(
     if ( m_volume == NULL ) return( false );
 
     const size_t size = m_nvertices;  // number of vertices
+    const size_t veclen = m_volume->veclen();
     const size_t size_i = sizeof(StochasticTetrahedraEngine::IndexType) * 2 * size;
     const size_t size_c = sizeof(StochasticTetrahedraEngine::CoordType) * 3 * size;
-    const size_t size_v = sizeof(StochasticTetrahedraEngine::ValueType) * m_nsteps * size;
+    const size_t size_v = sizeof(StochasticTetrahedraEngine::ValueType) * veclen * m_nsteps * size;
     const size_t size_n = sizeof(StochasticTetrahedraEngine::NormalType) * 3 * size;
     const size_t off_i = 0;
     const size_t off_c = off_i + size_i;
@@ -384,8 +393,9 @@ void StochasticTetrahedraEngine::Renderer::draw( const size_t step ) const
     glNormalPointer( GL_BYTE, 0, (char*)(m_off_normal) );
 
     const size_t data_size = sizeof(StochasticTetrahedraEngine::ValueType) * m_nvertices;
+    const size_t veclen = m_volume->veclen();
     glEnableVertexAttribArray( m_loc_values );
-    glVertexAttribPointer( m_loc_values, 1, GL_FLOAT, GL_FALSE, 0, (char*)( m_off_value + step * data_size ) );
+    glVertexAttribPointer( m_loc_values, veclen, GL_FLOAT, GL_FALSE, 0, (char*)( m_off_value + veclen * step * data_size ) );
 
     glEnableVertexAttribArray( m_loc_identifier );
     glVertexAttribPointer( m_loc_identifier, 2, GL_UNSIGNED_SHORT, GL_FALSE, 0, (char*)(m_off_index) );
@@ -693,8 +703,9 @@ void StochasticTetrahedraEngine::create_vertexbuffer_from_volume( void )
 
     const size_t nvertices = m_ref_volume->nnodes();
     const size_t ncells = m_ref_volume->ncells();
+    const size_t veclen = m_ref_volume->veclen();
 
-    m_volume->create( m_nsteps, nvertices, ncells );
+    m_volume->create( m_nsteps, nvertices, ncells, veclen );
 
     const kvs::Real32* src_coord   = m_ref_volume->coords().pointer();
     const kvs::UInt32* src_connect = m_ref_volume->connections().pointer();

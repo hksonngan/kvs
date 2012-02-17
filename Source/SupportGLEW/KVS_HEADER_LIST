@@ -11,6 +11,8 @@ Renderer/RayCastingRenderer
 Renderer/Shader
 Renderer/StochasticLineEngine
 Renderer/StochasticLineRenderer
+Renderer/StochasticMultivariateTetrahedraEngine
+Renderer/StochasticMultivariateTetrahedraRenderer
 Renderer/StochasticPointEngine
 Renderer/StochasticPointRenderer
 Renderer/StochasticPolygonEngine

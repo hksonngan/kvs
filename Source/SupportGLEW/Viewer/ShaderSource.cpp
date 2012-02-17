@@ -65,7 +65,16 @@ void ShaderSource::clearCode( void )
 void ShaderSource::define( const std::string& name )
 {
     const std::string define = "#define " + name + "\n";
-    m_code = define + m_code;
+
+    std::string::size_type version = m_code.find("#version");
+    if ( version != std::string::npos )
+    {
+        m_code.insert( m_code.find( "\n", version ) + 1, define );
+    }
+    else
+    {
+        m_code = define + m_code;
+    }
 }
 
 const bool ShaderSource::read( const std::string& filename )
