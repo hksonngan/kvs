@@ -31,4 +31,5 @@ void main( void )
 
 #if defined( ENABLE_EXACT_DEPTH_TESTING )
     depth = gl_Position.z / gl_Position.w;
-#endif}
+#endif
+}

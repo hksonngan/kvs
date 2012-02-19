@@ -34,7 +34,8 @@ const std::string line =
     "\n"
     "#if defined( ENABLE_EXACT_DEPTH_TESTING )\n"
     "    depth = gl_Position.z / gl_Position.w;\n"
-    "#endif}\n"
+    "#endif\n"
+    "}\n"
 ;
 
 const std::string multiple_tetrahedra1 =
