@@ -11,6 +11,9 @@
 #include <SupportGLEW/Renderer/Shader.h>
 #include <SupportGLEW/Renderer/StochasticLineEngine.h>
 #include <SupportGLEW/Renderer/StochasticLineRenderer.h>
+#include <SupportGLEW/Renderer/StochasticMultipleTetrahedraCompositor.h>
+#include <SupportGLEW/Renderer/StochasticMultipleTetrahedraEngine.h>
+#include <SupportGLEW/Renderer/StochasticMultipleTetrahedraRenderer.h>
 #include <SupportGLEW/Renderer/StochasticMultivariateTetrahedraEngine.h>
 #include <SupportGLEW/Renderer/StochasticMultivariateTetrahedraRenderer.h>
 #include <SupportGLEW/Renderer/StochasticPointEngine.h>

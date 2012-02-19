@@ -14,6 +14,9 @@ $(OUTDIR)\.\Renderer\ProjectedTetrahedraTable.obj \
 $(OUTDIR)\.\Renderer\RayCastingRenderer.obj \
 $(OUTDIR)\.\Renderer\StochasticLineEngine.obj \
 $(OUTDIR)\.\Renderer\StochasticLineRenderer.obj \
+$(OUTDIR)\.\Renderer\StochasticMultipleTetrahedraCompositor.obj \
+$(OUTDIR)\.\Renderer\StochasticMultipleTetrahedraEngine.obj \
+$(OUTDIR)\.\Renderer\StochasticMultipleTetrahedraRenderer.obj \
 $(OUTDIR)\.\Renderer\StochasticMultivariateTetrahedraEngine.obj \
 $(OUTDIR)\.\Renderer\StochasticMultivariateTetrahedraRenderer.obj \
 $(OUTDIR)\.\Renderer\StochasticPointEngine.obj \

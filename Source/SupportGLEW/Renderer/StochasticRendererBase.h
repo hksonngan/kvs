@@ -112,7 +112,7 @@ protected:
 
     void disable_exact_depth_testing( void );
 
-private:
+protected:
 
     void initialize_opengl( void );
 
