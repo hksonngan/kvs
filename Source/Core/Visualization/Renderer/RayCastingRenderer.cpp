@@ -20,6 +20,8 @@
 #include <kvs/VolumeRayIntersector>
 
 
+#define KVS_RAY_CASTING_RENDERER__ENABLE_COMPOSITION 1
+
 namespace kvs
 {
 
@@ -161,6 +163,12 @@ void RayCastingRenderer::rasterize(
     kvs::UInt8*  const pixel      = BaseClass::m_color_data.pointer();
     kvs::Real32* const depth_data = BaseClass::m_depth_data.pointer();
 
+#if KVS_RAY_CASTING_RENDERER__ENABLE_COMPOSITION
+    // Readback pixels.
+    glReadPixels( 0, 0, BaseClass::m_width, BaseClass::m_height, GL_RGBA, GL_UNSIGNED_BYTE, pixel );
+    glReadPixels( 0, 0, BaseClass::m_width, BaseClass::m_height, GL_DEPTH_COMPONENT, GL_FLOAT, depth_data );
+#endif
+
     // LOD control.
     size_t ray_width = 1;
     if ( m_enable_lod )
@@ -212,6 +220,9 @@ void RayCastingRenderer::rasterize(
                 float b = 0.0f;
                 float a = 0.0;
 
+#if KVS_RAY_CASTING_RENDERER__ENABLE_COMPOSITION
+                const float depth0 = depth_data[ depth_index ];
+#endif
                 depth_data[ depth_index ] = ray.depth();
 
                 do
@@ -241,6 +252,19 @@ void RayCastingRenderer::rasterize(
                             break;
                         }
                     }
+
+#if KVS_RAY_CASTING_RENDERER__ENABLE_COMPOSITION
+                    const float depth = ray.depth();
+                    if ( depth > depth0 )
+                    {
+                        const float current_alpha = 1.0f - a;
+                        r += current_alpha * pixel[ pixel_index ];
+                        g += current_alpha * pixel[ pixel_index + 1 ];
+                        b += current_alpha * pixel[ pixel_index + 2 ];
+                        a = 1.0f;
+                        break;
+                    }
+#endif
 
                     ray.step( step );
                 } while ( ray.isInside() );
