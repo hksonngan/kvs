@@ -185,7 +185,7 @@ const std::string ray_caster =
     "\n"
     "    // Stochastic jittering.\n"
     "#if defined( ENABLE_JITTERING )\n"
-    "    entry_point = entry_point + direction * texture2D( jittering_texture, gl_FragCoord.xy / 32.0 ).x;\n"
+    "    entry_point = entry_point + 0.1 * direction * texture2D( jittering_texture, gl_FragCoord.xy / 32.0 ).x;\n"
     "#endif\n"
     "\n"
     "    // Ray traversal.\n"

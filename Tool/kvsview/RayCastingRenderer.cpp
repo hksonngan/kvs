@@ -75,6 +75,8 @@ const void SetupRenderer(
     if ( noshading ) renderer.template get<Renderer>()->disableShading();
     else renderer.template get<Renderer>()->enableShading();
 
+
+
     // Shader type.
     const float ka = arg.ambient();
     const float kd = arg.diffuse();
@@ -225,6 +227,7 @@ Argument::Argument( int argc, char** argv ):
     add_option( "noshading", "Disable shading. (optional)", 0, false );
     add_option( "nolod", "Disable Level-of-Detail control. (optional)", 0, false );
     add_option( "nogpu", "Disable GPU rendering. (optional)", 0, false );
+    add_option( "jittering", "Enable jittering. (optional)", 0, false );
     add_option( "step", "Sampling step. (default: 0.5)", 1, false );
     add_option( "ka", "Coefficient of the ambient color. (default: lambert=0.4, phong=0.3)", 1, false );
     add_option( "kd", "Coefficient of the diffuse color. (default: lambert=0.6, phong=0.5)", 1, false );
@@ -285,6 +288,11 @@ const bool Argument::noGPU( void ) const
 #else
     return( true );
 #endif
+}
+
+const bool Argument::jittering( void ) const
+{
+    return( this->hasOption("jittering") );
 }
 
 /*===========================================================================*/
@@ -507,6 +515,11 @@ const bool Main::exec( void )
 #if defined( KVS_SUPPORT_GLEW )
         kvs::PipelineModule renderer( new kvs::glew::RayCastingRenderer );
         kvsview::RayCastingRenderer::SetupRenderer<kvs::glew::RayCastingRenderer>( arg, tfunc, renderer );
+
+        if ( arg.jittering() )
+        {
+            renderer.get<kvs::glew::RayCastingRenderer>()->enableJittering();
+        }
 #else
         kvs::PipelineModule renderer( new kvs::RayCastingRenderer );
         kvsview::RayCastingRenderer::SetupRenderer<kvs::RayCastingRenderer>( arg, tfunc, renderer );

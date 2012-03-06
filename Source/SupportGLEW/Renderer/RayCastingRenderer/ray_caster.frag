@@ -73,7 +73,7 @@ void main( void )
 
     // Stochastic jittering.
 #if defined( ENABLE_JITTERING )
-    entry_point = entry_point + direction * texture2D( jittering_texture, gl_FragCoord.xy / 32.0 ).x;
+    entry_point = entry_point + 0.1 * direction * texture2D( jittering_texture, gl_FragCoord.xy / 32.0 ).x;
 #endif
 
     // Ray traversal.

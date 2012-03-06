@@ -52,6 +52,8 @@ public:
 
     const bool noGPU( void ) const;
 
+    const bool jittering( void ) const;
+
     const float ambient( void ) const;
 
     const float diffuse( void ) const;
