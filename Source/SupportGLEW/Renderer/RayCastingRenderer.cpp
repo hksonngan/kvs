@@ -275,6 +275,8 @@ void RayCastingRenderer::create_image(
         this->create_jittering_texture();
         this->create_bounding_cube( volume );
 
+        m_entry_exit_framebuffer.create();
+
         m_ray_caster.bind();
         m_ray_caster.setUniformValuef( "width", static_cast<GLfloat>( camera->windowWidth() ) );
         m_ray_caster.setUniformValuef( "height", static_cast<GLfloat>( camera->windowHeight() ) );
@@ -287,8 +289,15 @@ void RayCastingRenderer::create_image(
     {
         BaseClass::m_width = camera->windowWidth();
         BaseClass::m_height = camera->windowHeight();
+
+        m_entry_exit_framebuffer.bind();
+
         this->create_entry_points();
         this->create_exit_points();
+
+        m_entry_exit_framebuffer.attachColorTexture( m_exit_points, 0 );
+        m_entry_exit_framebuffer.attachColorTexture( m_entry_points, 1 );
+        m_entry_exit_framebuffer.disable();
 
         m_ray_caster.bind();
         m_ray_caster.setUniformValuef( "width", static_cast<GLfloat>( camera->windowWidth() ) );
@@ -314,31 +323,32 @@ void RayCastingRenderer::create_image(
 
     m_bounding_cube_shader.bind();
     {
+        m_entry_exit_framebuffer.bind();
+
         // Draw the back face of the bounding cube for the entry points.
         if ( m_draw_back_face )
         {
+            glDrawBuffer( GL_COLOR_ATTACHMENT0_EXT );
             glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
             glCullFace( GL_FRONT );
             this->draw_bounding_cube();
-            glActiveTexture( GL_TEXTURE2 ); m_exit_points.bind(); glEnable( GL_TEXTURE_2D );
-            glCopyTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, 0, 0, BaseClass::m_width, BaseClass::m_height );
         }
 
         // Draw the front face of the bounding cube for the entry points.
         if ( m_draw_front_face )
         {
+            glDrawBuffer( GL_COLOR_ATTACHMENT1_EXT );
             glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
             glCullFace( GL_BACK );
             this->draw_bounding_cube();
-            glActiveTexture( GL_TEXTURE3 ); m_entry_points.bind(); glEnable( GL_TEXTURE_2D );
-            glCopyTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, 0, 0, BaseClass::m_width, BaseClass::m_height );
         }
+
+        m_entry_exit_framebuffer.disable();
     }
     m_bounding_cube_shader.unbind();
 
     if ( m_draw_volume )
     {
-        glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
         glDisable( GL_CULL_FACE );
         glEnable( GL_BLEND );
         glBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_ALPHA );
@@ -351,6 +361,8 @@ void RayCastingRenderer::create_image(
         m_ray_caster.bind();
         glActiveTexture( GL_TEXTURE4 ); m_transfer_function_texture.bind(); glEnable( GL_TEXTURE_1D );
         glActiveTexture( GL_TEXTURE5 ); m_jittering_texture.bind(); glEnable( GL_TEXTURE_2D );
+        glActiveTexture( GL_TEXTURE3 ); m_entry_points.bind(); glEnable( GL_TEXTURE_2D );
+        glActiveTexture( GL_TEXTURE2 ); m_exit_points.bind(); glEnable( GL_TEXTURE_2D );
         glActiveTexture( GL_TEXTURE1 ); m_volume_data.bind(); glEnable( GL_TEXTURE_3D );
         {
             const kvs::Vector3f light_position = camera->projectWorldToObject( light->position() );
@@ -365,6 +377,8 @@ void RayCastingRenderer::create_image(
             this->draw_quad( 1.0f );
         }
         glActiveTexture( GL_TEXTURE4 ); m_transfer_function_texture.unbind(); glDisable( GL_TEXTURE_1D );
+        glActiveTexture( GL_TEXTURE3 ); m_entry_points.unbind(); glDisable( GL_TEXTURE_2D );
+        glActiveTexture( GL_TEXTURE2 ); m_exit_points.unbind(); glDisable( GL_TEXTURE_2D );
         glActiveTexture( GL_TEXTURE5 ); m_jittering_texture.unbind(); glDisable( GL_TEXTURE_2D );
         glActiveTexture( GL_TEXTURE1 ); m_volume_data.unbind(); glDisable( GL_TEXTURE_3D );
         m_ray_caster.unbind();

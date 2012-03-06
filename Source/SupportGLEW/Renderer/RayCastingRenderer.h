@@ -28,6 +28,7 @@
 #include <kvs/glew/VertexBufferObject>
 #include <kvs/glew/ProgramObject>
 #include <kvs/glew/ShaderSource>
+#include <kvs/glew/FrameBufferObject>
 
 
 namespace kvs
@@ -70,9 +71,10 @@ protected:
     float m_step; ///< sampling step
     float m_opaque; ///< opaque value for early ray termination
     kvs::Texture1D m_transfer_function_texture; ///< transfer function texture
+    kvs::Texture2D m_jittering_texture; ///< texture for stochastic jittering
     kvs::Texture2D m_entry_points; ///< entry point texture
     kvs::Texture2D m_exit_points; ///< exit point texture
-    kvs::Texture2D m_jittering_texture; ///< texture for stochastic jittering
+    kvs::glew::FrameBufferObject m_entry_exit_framebuffer; ///< framebuffer object for entry/exit point texture
     kvs::glew::VertexBufferObject m_bounding_cube; ///< bounding cube (VBO)
     kvs::glew::Texture3D m_volume_data; ///< volume data (3D texture)
     kvs::glew::ProgramObject m_ray_caster; ///< ray casting shader
