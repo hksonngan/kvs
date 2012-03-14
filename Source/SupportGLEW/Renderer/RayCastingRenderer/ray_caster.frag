@@ -29,6 +29,12 @@ uniform TransferFunction transfer_function; // 1D transfer function
 uniform sampler2D        jittering_texture; // texture for jittering
 uniform float            width;             // screen width
 uniform float            height;            // screen height
+uniform sampler2D        depth_texture;     // depth texture for depth buffer
+uniform sampler2D        color_texture;     // color texture for color buffer
+uniform float            to_zw1;            // scaling parameter: (f*n)/(f-n)
+uniform float            to_zw2;            // scaling parameter: 0.5*((f+n)/(f-n))+0.5
+uniform float            to_ze1;            // scaling parameter: 0.5 + 0.5*((f+n)/(f-n))
+uniform float            to_ze2;            // scaling parameter: (f-n)/(f*n)
 
 
 vec3 estimateGradient( in sampler3D v, in vec3 p, in vec3 o )
@@ -60,12 +66,26 @@ vec3 estimateGradient8( in sampler3D v, in vec3 p, in vec3 o )
     return( mix( g0, mix( mix0, mix1, 0.5 ), 0.75 ) );
 }
 
+float ray_depth( in float t, in float entry_depth, in float exit_depth )
+{
+    float zw_front = entry_depth;
+    float ze_front = 1.0 / ((zw_front - to_ze1)*to_ze2);
+
+    float zw_back = exit_depth;
+    float ze_back = 1.0 / ((zw_back - to_ze1)*to_ze2);
+
+    float ze_current = ze_front + t * (ze_back - ze_front);
+    float zw_current = (1.0/ze_current)*to_zw1 + to_zw2;
+
+    return zw_current;
+}
+
 void main( void )
 {
     // Entry and exit point.
     vec2 index = vec2( gl_FragCoord.x / width, gl_FragCoord.y / height );
-    vec3 entry_point = volume.resolution * texture2D( entry_points, index ).xyz;
-    vec3 exit_point = volume.resolution * texture2D( exit_points, index ).xyz;
+    vec3 entry_point = ( volume.resolution - vec3(1.0) ) * texture2D( entry_points, index ).xyz;
+    vec3 exit_point = ( volume.resolution - vec3(1.0) ) * texture2D( exit_points, index ).xyz;
     if ( entry_point == exit_point ) { discard; } // out of cube
 
     // Ray direction.
@@ -86,10 +106,14 @@ void main( void )
 //    float tfunc_scale = 1.0 / ( volume.max_value - volume.min_value );
     float tfunc_scale = 1.0 / ( transfer_function.max_value - transfer_function.min_value );
 
+    float entry_depth = texture2D( entry_points, index ).w;
+    float exit_depth = texture2D( exit_points, index ).w;
+    float depth0 = texture2D( depth_texture, index ).x;
+    vec3 color0 = texture2D( color_texture, index ).rgb;
     for ( int i = 0; i < nsteps; i++ )
     {
         // Get the scalar value from the 3D texture.
-        vec3 volume_index = vec3( position / volume.resolution );
+        vec3 volume_index = vec3( position / ( volume.resolution - vec3(1.0) ) );
         vec4 value = texture3D( volume.data, volume_index );
         float scalar = mix( volume.min_range, volume.max_range, value.w );
 
@@ -129,8 +153,17 @@ void main( void )
             if ( dst.a > opaque )
             {
                 dst.a = 1.0;
-                i = nsteps; // break
+                break; // break
             }
+        }
+
+        float t = float(i) / float( nsteps - 1 );
+        float depth = ray_depth( t, entry_depth, exit_depth );
+        if ( depth > depth0 )
+        {
+            dst.rgb += ( 1.0 - dst.a ) * color0.rgb;
+            dst.a = 1.0;
+            break;
         }
 
         position += direction;

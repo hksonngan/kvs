@@ -79,6 +79,8 @@ protected:
     kvs::glew::Texture3D m_volume_data; ///< volume data (3D texture)
     kvs::glew::ProgramObject m_ray_caster; ///< ray casting shader
     kvs::glew::ProgramObject m_bounding_cube_shader; ///< bounding cube shader
+    kvs::Texture2D m_color_texture;
+    kvs::Texture2D m_depth_texture;
 
 public:
 

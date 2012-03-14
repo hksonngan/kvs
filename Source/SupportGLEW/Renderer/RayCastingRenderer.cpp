@@ -299,6 +299,22 @@ void RayCastingRenderer::create_image(
         m_entry_exit_framebuffer.attachColorTexture( m_entry_points, 1 );
         m_entry_exit_framebuffer.disable();
 
+        m_depth_texture.release();
+        m_depth_texture.setWrapS( GL_CLAMP_TO_BORDER );
+        m_depth_texture.setWrapT( GL_CLAMP_TO_BORDER );
+        m_depth_texture.setMagFilter( GL_LINEAR );
+        m_depth_texture.setMinFilter( GL_LINEAR );
+        m_depth_texture.setPixelFormat( GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_FLOAT  );
+        m_depth_texture.create( BaseClass::m_width, BaseClass::m_height );
+
+        m_color_texture.release();
+        m_color_texture.setWrapS( GL_CLAMP_TO_BORDER );
+        m_color_texture.setWrapT( GL_CLAMP_TO_BORDER );
+        m_color_texture.setMagFilter( GL_LINEAR );
+        m_color_texture.setMinFilter( GL_LINEAR );
+        m_color_texture.setPixelFormat( GL_RGBA32F, GL_RGB, GL_FLOAT  );
+        m_color_texture.create( BaseClass::m_width, BaseClass::m_height );
+
         m_ray_caster.bind();
         m_ray_caster.setUniformValuef( "width", static_cast<GLfloat>( camera->windowWidth() ) );
         m_ray_caster.setUniformValuef( "height", static_cast<GLfloat>( camera->windowHeight() ) );
@@ -320,6 +336,14 @@ void RayCastingRenderer::create_image(
     glEnable( GL_DEPTH_TEST );
     glEnable( GL_CULL_FACE );
     glDisable( GL_LIGHTING );
+
+    glActiveTexture( GL_TEXTURE6 ); m_depth_texture.bind(); glEnable( GL_TEXTURE_2D );
+    glCopyTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, 0, 0, BaseClass::m_width, BaseClass::m_height );
+    glActiveTexture( GL_TEXTURE6 ); m_depth_texture.unbind(); glDisable( GL_TEXTURE_2D );
+
+    glActiveTexture( GL_TEXTURE7 ); m_color_texture.bind(); glEnable( GL_TEXTURE_2D );
+    glCopyTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, 0, 0, BaseClass::m_width, BaseClass::m_height );
+    glActiveTexture( GL_TEXTURE7 ); m_color_texture.unbind(); glDisable( GL_TEXTURE_2D );
 
     m_bounding_cube_shader.bind();
     {
@@ -361,12 +385,24 @@ void RayCastingRenderer::create_image(
         m_ray_caster.bind();
         glActiveTexture( GL_TEXTURE4 ); m_transfer_function_texture.bind(); glEnable( GL_TEXTURE_1D );
         glActiveTexture( GL_TEXTURE5 ); m_jittering_texture.bind(); glEnable( GL_TEXTURE_2D );
+        glActiveTexture( GL_TEXTURE6 ); m_depth_texture.bind(); glEnable( GL_TEXTURE_2D );
+        glActiveTexture( GL_TEXTURE7 ); m_color_texture.bind(); glEnable( GL_TEXTURE_2D );
         glActiveTexture( GL_TEXTURE3 ); m_entry_points.bind(); glEnable( GL_TEXTURE_2D );
         glActiveTexture( GL_TEXTURE2 ); m_exit_points.bind(); glEnable( GL_TEXTURE_2D );
         glActiveTexture( GL_TEXTURE1 ); m_volume_data.bind(); glEnable( GL_TEXTURE_3D );
         {
+            const float f = camera->back();
+            const float n = camera->front();
+            const float to_zw1 = ( f * n ) / ( f - n );
+            const float to_zw2 = 0.5f * ( ( f + n ) / ( f - n ) ) + 0.5f;
+            const float to_ze1 = 0.5f + 0.5f * ( ( f + n ) / ( f - n ) );
+            const float to_ze2 = ( f - n ) / ( f * n );
             const kvs::Vector3f light_position = camera->projectWorldToObject( light->position() );
             const kvs::Vector3f camera_position = camera->projectWorldToObject( camera->position() );
+            m_ray_caster.setUniformValuef( "to_zw1", to_zw1 );
+            m_ray_caster.setUniformValuef( "to_zw2", to_zw2 );
+            m_ray_caster.setUniformValuef( "to_ze1", to_ze1 );
+            m_ray_caster.setUniformValuef( "to_ze2", to_ze2 );
             m_ray_caster.setUniformValuef( "light_position", light_position );
             m_ray_caster.setUniformValuef( "camera_position", camera_position );
             m_ray_caster.setUniformValuei( "volume.data", 1 );
@@ -374,12 +410,16 @@ void RayCastingRenderer::create_image(
             m_ray_caster.setUniformValuei( "entry_points", 3 );
             m_ray_caster.setUniformValuei( "transfer_function.data", 4 );
             m_ray_caster.setUniformValuei( "jittering_texture", 5 );
+            m_ray_caster.setUniformValuei( "depth_texture", 6 );
+            m_ray_caster.setUniformValuei( "color_texture", 7 );
             this->draw_quad( 1.0f );
         }
         glActiveTexture( GL_TEXTURE4 ); m_transfer_function_texture.unbind(); glDisable( GL_TEXTURE_1D );
         glActiveTexture( GL_TEXTURE3 ); m_entry_points.unbind(); glDisable( GL_TEXTURE_2D );
         glActiveTexture( GL_TEXTURE2 ); m_exit_points.unbind(); glDisable( GL_TEXTURE_2D );
         glActiveTexture( GL_TEXTURE5 ); m_jittering_texture.unbind(); glDisable( GL_TEXTURE_2D );
+        glActiveTexture( GL_TEXTURE6 ); m_depth_texture.unbind(); glDisable( GL_TEXTURE_2D );
+        glActiveTexture( GL_TEXTURE7 ); m_color_texture.unbind(); glDisable( GL_TEXTURE_2D );
         glActiveTexture( GL_TEXTURE1 ); m_volume_data.unbind(); glDisable( GL_TEXTURE_3D );
         m_ray_caster.unbind();
     }
@@ -691,8 +731,8 @@ void RayCastingRenderer::create_bounding_cube( const kvs::StructuredVolumeObject
      *
      */
     const kvs::Vector3ui min( 0, 0, 0 );
-//    const kvs::Vector3ui max( volume->resolution() - kvs::Vector3ui( 1, 1, 1 ) );
-    const kvs::Vector3ui max( volume->resolution() );
+    const kvs::Vector3ui max( volume->resolution() - kvs::Vector3ui( 1, 1, 1 ) );
+//    const kvs::Vector3ui max( volume->resolution() );
     const size_t nelements = 72; // = 4 vertices x 3 dimensions x 6 faces
 
     const float minx = static_cast<float>( min.x() );
