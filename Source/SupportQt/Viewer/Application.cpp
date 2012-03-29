@@ -32,7 +32,7 @@ namespace qt
  *  @param  argv [in] argument values
  */
 /*===========================================================================*/
-Application::Application( int argc, char** argv ):
+Application::Application( int& argc, char** argv ):
     kvs::ApplicationBase( argc, argv )
 {
 #if defined( KVS_SUPPORT_GLUT )
