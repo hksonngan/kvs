@@ -95,13 +95,12 @@ protected:
     float m_zooming_factor; ///< zooming factor
     size_t m_random_texture_size; ///< size of the random number texture
     size_t m_circle_threshold; ///< threshold for the shape of the particle
-    size_t m_lower_limit_level; ///< lower limit of repeat level for repeat level zooming
+    size_t m_lower_limit_level; ///< lower limit of repeat level for repeat level zooming ADD_UEMURA
     size_t m_render_width; ///< extended window width for subpixel processing
     size_t m_render_height; ///< extended window height for subpixel processing
     bool m_enable_pre_downloading; ///< flag whether to donwonload the particles first
     bool m_enable_accumulation_buffer; ///< flag whether to use the accumulation buffer
     bool m_enable_random_texture; ///< flag whether to use the random number texture
-    bool m_enable_repetition_level_zooming; //flag wether to use repetition level zooming
     kvs::glew::EnsembleAverageBuffer m_ensemble_buffer; ///< ensemble average buffer
     kvs::Texture2D m_random_texture; ///< random number texture
     kvs::glew::ProgramObject m_zoom_shader; ///< shader (program object) for zooming
@@ -115,7 +114,9 @@ protected:
     Renderer* m_renderer; ///< renderer for VBO
     bool   m_enable_lod; ///< enable LOD rendering
     bool   m_enable_zooming; ///< enable zooming
-    bool   m_enable_shuffle; ///< enable shuffle
+    bool   m_enable_repetition_level_zooming; //flag whether to use repetition level zooming ADD_UEMURA
+    bool   m_enable_hyblid_zooming;//ADD_UEMURA
+    bool   m_enable_shuffle; ///< enable shuffle ADD_UEMURA
     float  m_modelview_matrix[16]; ///< modelview matrix
 
 public:
@@ -144,7 +145,7 @@ public:
 
     void setCircleThreshold( const size_t circle_threshold );
 
-    void setMinRepetitionLevelInZooming(const size_t lower_limit_level );
+    void setMinRepetitionLevelInZooming(const size_t lower_limit_level );//ADD_UEMURA
 
     void enableLODControl( const size_t coarse_level = 1 );
 
@@ -152,15 +153,19 @@ public:
 
     void enableZooming( void );
 
-    void enableRepetitionLevelZooming( void );
+    void enableParticleZooming( void ){enableZooming();}; //same as enableZooming() ADD_UEMURA
 
-    void enableShuffle( void );
+    void enableRepetitionLevelZooming( void );//ADD_UEMURA
+
+    void enableShuffle( void );//ADD_UEMURA
 
     void disableZooming( void );
 
-    void disableRepetitionLevelZooming( void );
+    void disableParticleZooming( void ){disableZooming();}; //same as disableZooming() ADD_UEMURA
 
-    void disableShuffle( void );
+    void disableRepetitionLevelZooming( void );//ADD_UEMURA
+
+    void disableShuffle( void );//ADD_UEMURA
 
     void enableCoarseRendering( const size_t coarse_level = 1 );
 
@@ -187,6 +192,8 @@ public:
     const bool isEnabledAccumulationBuffer( void ) const;
 
     const bool isEnabledRandomTexture( void ) const;
+
+    const bool isHyblidZooming( void ){ return m_enable_zooming && m_enable_repetition_level_zooming; };//ADD_UEMURA
 
 protected:
 
@@ -310,7 +317,6 @@ public:
         const size_t start,
         const size_t count,
         const size_t loc_identifier );
-
 
     const size_t download( kvs::glew::VertexBufferObject& vbo );
 

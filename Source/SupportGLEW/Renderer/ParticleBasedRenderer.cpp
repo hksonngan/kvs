@@ -31,6 +31,7 @@
 
 namespace
 {
+    //ADD_UEMURA
 template<typename T>
 static void Swap(T* a, size_t ai, size_t bi) {
     T t[3];
@@ -40,16 +41,21 @@ static void Swap(T* a, size_t ai, size_t bi) {
 }
 
 const size_t VBOInterleave = 2;
-}
 
+}
+    /*ADD_UEMURA(begin)*/
 namespace rendering_process{
 double default_camera_distance = 12.0;
 double used_point_ratio = 1.0;
 size_t used_points = 0;
 size_t start_pos = 0;
 bool division_mode = 0;
-
+bool enable_hyblid_zooming;
+kvs::Vector3f object_center;
+float object_magnification;
+float screen_magnification;
 }
+    /*ADD_UEMURA(end)*/
 
 namespace kvs
 {
@@ -379,9 +385,11 @@ void ParticleBasedRenderer::Renderer::draw( void ) const
 #else
 #error "KVS_GLEW_PARTICLE_BASED_RENDERER__NORMAL_TYPE_IS_* is not defined."
 #endif
-
     glEnableClientState(GL_VERTEX_ARRAY);
     glVertexPointer(3, GL_FLOAT, 0, (char*)(m_off_coord));
+
+    glEnableClientState(GL_COLOR_ARRAY);
+    glColorPointer(3, GL_UNSIGNED_BYTE, 0, (char*)(m_off_color));
 
     if ( m_particles->hasNormal() )
     {
@@ -389,13 +397,10 @@ void ParticleBasedRenderer::Renderer::draw( void ) const
         glNormalPointer( normal_type, 0, (char*)(m_off_normal));
     }
 
-    glEnableClientState(GL_COLOR_ARRAY);
-    glColorPointer(3, GL_UNSIGNED_BYTE, 0, (char*)(m_off_color));
-
     if ( m_particles->hasIndex() )
     {
         glEnableVertexAttribArray( m_loc_identifier );
-        glVertexAttribPointer( m_loc_identifier, 2, GL_UNSIGNED_SHORT, GL_FALSE, 0, (char*)(m_off_index));
+        glVertexAttribPointer( m_loc_identifier, 2, GL_UNSIGNED_SHORT, GL_FALSE, 0, (void*)(m_off_index));
     }
 
     if(rendering_process::division_mode){
@@ -404,9 +409,12 @@ void ParticleBasedRenderer::Renderer::draw( void ) const
     else {
         glDrawArrays(GL_POINTS, 0, static_cast<size_t>(static_cast<double>(m_count)*rendering_process::used_point_ratio));
     }
+
     glDisableClientState(GL_VERTEX_ARRAY);
     glDisableClientState(GL_NORMAL_ARRAY);
     glDisableClientState(GL_COLOR_ARRAY);
+
+
     if ( m_particles->hasIndex() )
     {
         glDisableVertexAttribArray( m_loc_identifier );
@@ -534,7 +542,7 @@ void ParticleBasedRenderer::initialize( void )
     m_zooming_factor = 1.0f;
     m_random_texture_size = 1024;
     m_circle_threshold = 3;
-    m_lower_limit_level = 10;
+    m_lower_limit_level = 10;//ADD_UEMURA
 
     m_render_width = 0;
     m_render_height = 0;
@@ -542,15 +550,15 @@ void ParticleBasedRenderer::initialize( void )
     m_enable_pre_downloading = true;
     m_enable_accumulation_buffer = false;
     m_enable_random_texture = true;
-    m_enable_repetition_level_zooming = true;
+    m_enable_repetition_level_zooming = true;//ADD_UEMURA
 
     m_vbo = NULL;
     m_particles = NULL;
     m_renderer = NULL;
 
     m_enable_lod = true;
-    m_enable_zooming = false;
-    m_enable_shuffle = true;
+    m_enable_zooming = false;//ADD_UEMURA
+    m_enable_shuffle = true;//ADD_UEMURA
 
     memset( m_modelview_matrix, 0, sizeof( m_modelview_matrix ) );
 }
@@ -632,7 +640,7 @@ void ParticleBasedRenderer::setCircleThreshold( const size_t circle_threshold )
  *  @param  lower_limit_level [in] lower limit of repetition level for repeat level zooming
  */
 /*===========================================================================*/
-
+//ADD_UEMURA
 void ParticleBasedRenderer::setMinRepetitionLevelInZooming(const size_t lower_limit_level )
 {
     // Set a minimum value of the decreasing lepeat level in zooming up
@@ -656,26 +664,27 @@ void ParticleBasedRenderer::enableZooming( void )
 {
     m_enable_zooming = true;
 }
-
+//ADD_UEMURA
 void ParticleBasedRenderer::enableRepetitionLevelZooming( void )
 {
     m_enable_repetition_level_zooming = true;
 }
-
+//ADD_UEMURA
 void ParticleBasedRenderer::enableShuffle( void )
 {
     m_enable_shuffle = true;
 }
+
 void ParticleBasedRenderer::disableZooming( void )
 {
     m_enable_zooming = false;
 }
-
+//ADD_UEMURA
 void ParticleBasedRenderer::disableRepetitionLevelZooming( void )
 {
     m_enable_repetition_level_zooming = false;
 }
-
+//ADD_UEMURA
 void ParticleBasedRenderer::disableShuffle( void )
 {
     m_enable_shuffle = false;
@@ -823,7 +832,7 @@ void ParticleBasedRenderer::create_image(
 {
     kvs::IgnoreUnusedVariable( light );
 
-    //m_enable_repetition_level_zooming = 0;
+    rendering_process::enable_hyblid_zooming = m_enable_repetition_level_zooming && m_enable_zooming;
 
     // Set shader initial parameters.
     //BaseClass::m_shader->set( camera, light );
@@ -832,32 +841,10 @@ void ParticleBasedRenderer::create_image(
 
     RendererBase::initialize();
 
-    // Distance parameter: (d_0/d)^2
-    //   d_0: Initial camera distance, d: current camera distance
-    double distance_param = point->scaling().x() * point->scaling().x() /
-        (camera->position().length()/rendering_process::default_camera_distance)/(camera->position().length()/rendering_process::default_camera_distance);
-
-#ifdef CAMERA_MODE
-    // Mode to directly use camera distance
-    double used_point_ratio = (rendering_process::default_camera_distance / camera->position().length()) * (rendering_process::default_camera_distance / camera->position().length());
-    size_t Lr =  (camera->position().length()/rendering_process::default_camera_distance)* (camera->position().length()/rendering_process::default_camera_distance) * m_repetition_level;
-#else 
-    // Mode to use scaling instead of camera-distance tuning (default)
-    double used_point_ratio = distance_param;
-    size_t Lr = 1.0/distance_param*m_repetition_level;
-#endif
-
-    if(used_point_ratio > 1 || !m_enable_repetition_level_zooming) used_point_ratio = 1.0;
-
-    rendering_process::used_point_ratio = used_point_ratio;
-
-    if(Lr <= m_lower_limit_level) Lr = m_lower_limit_level;
-
-    if(Lr > m_repetition_level || !m_enable_repetition_level_zooming) Lr = m_repetition_level;
-
-#if defined DEBUG_RL_BASED_ZOOMING // TANAKA
-    std::cout << "** L_R = " << Lr << std::endl;
-#endif
+    /*ADD_UEMURA(begin)*/
+    static const float default_window_size = static_cast<float>(camera->windowHeight());
+    static float scaled_window_size = static_cast<float>(camera->windowHeight());
+    /*ADD_UEMURA(end)*/
 
     // Following processes are executed once.
     if ( BaseClass::m_width == 0 && BaseClass::m_height == 0 )
@@ -884,7 +871,7 @@ void ParticleBasedRenderer::create_image(
     glGetFloatv( GL_MODELVIEW_MATRIX, modelview_matrix );
 
     // LOD control.
-    size_t coarse_level = Lr;
+    size_t coarse_level=0;
     if ( m_enable_lod )
     {
         float modelview_matrix[16];
@@ -906,6 +893,7 @@ void ParticleBasedRenderer::create_image(
          ( BaseClass::m_height != camera->windowHeight() ) )
 
     {
+        scaled_window_size =camera->windowHeight();//ADD_UEMURA
         BaseClass::m_width  = camera->windowWidth();
         BaseClass::m_height = camera->windowHeight();
 
@@ -920,6 +908,25 @@ void ParticleBasedRenderer::create_image(
         this->initialize_resize_texture();
     }
 
+    /*ADD_UEMURA(begin)*/
+    // Distance parameter: (d_0/d)^2
+    //   d_0: Initial camera distance, d: current camera distance
+    rendering_process::object_center        = point->objectCenter();
+    rendering_process::object_magnification = point->scaling().x() * rendering_process::default_camera_distance /camera->position().length();
+    rendering_process::screen_magnification =  scaled_window_size / default_window_size;
+    double distance_param                   = (rendering_process::enable_hyblid_zooming)?  rendering_process::object_magnification * rendering_process::screen_magnification: 
+                                              rendering_process::object_magnification * rendering_process::object_magnification *
+                                              rendering_process::screen_magnification * rendering_process::screen_magnification;
+    double used_point_ratio                 = distance_param;
+    size_t Lr                               = 1.0/distance_param*m_repetition_level;
+
+    if(used_point_ratio > 1 || !m_enable_repetition_level_zooming) used_point_ratio = 1.0;
+    rendering_process::used_point_ratio = used_point_ratio;
+
+    if(Lr <= m_lower_limit_level) Lr = m_lower_limit_level;
+    if(Lr > m_repetition_level || !m_enable_repetition_level_zooming) Lr = m_repetition_level;
+    /*ADD_UEMURA(end)*/
+    
     if ( coarse_level > 1 ) glClear( GL_ACCUM_BUFFER_BIT );
 
     if ( !m_enable_pre_downloading )
@@ -941,32 +948,26 @@ void ParticleBasedRenderer::create_image(
     glEnable( GL_VERTEX_PROGRAM_POINT_SIZE ); // enable zooming.
 
     // Project particles.
-    const size_t repeat_count = coarse_level;
+    const size_t repeat_count = (m_coarse_level == coarse_level)? coarse_level : Lr;//ADD_UEMURA
     const bool enable_averaging = repeat_count > 1;
     const bool enable_resizing = m_subpixel_level > 1 || ( enable_averaging && !m_enable_accumulation_buffer );
     m_ensemble_buffer.clear();
 
+    /*ADD_UEMURA(begin)*/
     // Size of a remainder array
-    //   (L_R (org) - L_R (cur))/L_R(cur)  
-    const float r_count = static_cast<float>(m_repetition_level - Lr)/static_cast<float>(Lr);
-
-    // Current position in the (set of) remainder arrays during their projection
-    float current_r_pos = 0;
-
-    // Initialize starting position of remainder arrays during their projection
-    rendering_process::start_pos= 0;
-
-    // Initialize number of projected particles in remainder arrays
-    rendering_process::used_points = 0;
-
-    // Flag that becomes true if the next remainder array is also used for rendering
+    // r_count                     : (L_R (org) - L_R (cur))/L_R(cur)
+    // current_r_pos               : Current position in the (set of) remainder arrays during their projection
+    // flag_enable_next_buffer_use : Flag that becomes true if the next remainder array is also used for rendering
+    // flag_not_move_and_zoom_on   : Flag that becomes true if the repetition-zomm is on and in non-moving state
+    // num_remainder_points        : Number of particles used in the remainder-array projection
+    const float r_count              = static_cast<float>(m_repetition_level - Lr)/static_cast<float>(Lr);
+    float current_r_pos              = 0;
+    rendering_process::start_pos     = 0;
+    rendering_process::used_points   = 0;
     bool flag_enable_next_buffer_use = 0;
-
-    // Flag that becomes true if the repetition-zomm is on and in non-moving state
-    bool flag_not_move_and_zoom_on = repeat_count > 1 && r_count > 0; 
-
-    // Number of particles used in the remainder-array projection
-    size_t num_remainder_points = static_cast<size_t>(static_cast<float>(m_ref_point->nvertices() / m_repetition_level) * r_count);
+    bool flag_not_move_and_zoom_on   = repeat_count > 1 && r_count > 0; 
+    size_t num_remainder_points      = static_cast<size_t>(static_cast<float>(m_ref_point->nvertices() / m_repetition_level) * r_count);
+    /*ADD_UEMURA(end)*/
 
     // Create image ensembles
     for ( size_t rp = 0; rp < repeat_count; rp++ )
@@ -986,6 +987,7 @@ void ParticleBasedRenderer::create_image(
             rendering_process::division_mode = 0;
             this->draw_vertexbuffer( m_renderer[rp], m_vbo[rp], modelview_matrix );
 
+            /*ADD_UEMURA(begin)*/
             // Start the remainder-array projection
             if( flag_not_move_and_zoom_on && r_count < 1.0 )
             {// Case that the number of remainder arrays are less than half 
@@ -1022,7 +1024,7 @@ void ParticleBasedRenderer::create_image(
                                                  modelview_matrix );
                     }
 
-                } // else if
+                } 
 
                 rendering_process::start_pos += rendering_process::used_points;
 
@@ -1041,7 +1043,7 @@ void ParticleBasedRenderer::create_image(
                     rendering_process::start_pos = 0;
                     current_r_pos += r_count;
                 }
-            }// if(is_not_move_and_zoom_on && r_count < 1.0)
+            }
             else
             {// Case that the number of remainder arrays are more than half 
              //  of the total number of arrays
@@ -1066,14 +1068,13 @@ void ParticleBasedRenderer::create_image(
                         this->draw_vertexbuffer( m_renderer[repeat_count + static_cast<size_t>(current_r_pos)], 
                                                  m_vbo[repeat_count + static_cast<size_t>(current_r_pos)], 
                                                  modelview_matrix );
-                    }// if (rp + 1 == ...)
+                    }
 
-                } // if(is_not_move_and_zoom_on)
+                } 
 
-            } // else
-            //end of remainder-array projection
-
-        } // if ( m_enable_pre_downloading )
+            }
+            /*ADD_UEMURA(end)*/
+        }
         else
         {
             const size_t no_vbo = rp % ::VBOInterleave;
@@ -1133,19 +1134,16 @@ void ParticleBasedRenderer::create_image(
             glMatrixMode( GL_MODELVIEW );
             glPopMatrix(); // Pop MODELVIEW matrix
 
-        }// if ( enable_resizing )
-
+        }
         if ( enable_averaging ) m_ensemble_buffer.add();
 
-    }// for ( size_t rp = 0; rp < repeat_count; rp++ )
-
+    }
 
     if ( enable_averaging ) m_ensemble_buffer.draw();
 
     glPopAttrib();
     glFinish();
-
-} // create_image()
+} 
 
 /*==========================================================================*/
 /**
@@ -1166,12 +1164,12 @@ void ParticleBasedRenderer::initialize_opengl( void )
     // Initialize the shader for zooming.
     {
 #if defined( KVS_GLEW_PARTICLE_BASED_RENDERER__EMBEDDED_SHADER )
-        const std::string vert_code = kvs::glew::glsl::ParticleVolumeRenderer::Vertex::zooming;
+        const std::string vert_code = kvs::glew::glsl::ParticleVolumeRenderer::Vertex::zooming_rits;
         const std::string frag_code = kvs::glew::glsl::ParticleVolumeRenderer::Fragment::zooming;
 //        const std::string vert_code = kvs::glew::glsl::ParticleBasedRenderer::Vertex::zooming;
 //        const std::string frag_code = kvs::glew::glsl::ParticleBasedRenderer::Fragment::zooming;
 #else
-        const std::string vert_code = "ParticleVolumeRenderer/zooming.vert";
+        const std::string vert_code = "ParticleVolumeRenderer/zooming_rits.vert";
         const std::string frag_code = "ParticleVolumeRenderer/zooming.frag";
 //        const std::string vert_code = "ParticleBasedRenderer/zooming.vert";
 //        const std::string frag_code = "ParticleBasedRenderer/zooming.frag";
@@ -1240,6 +1238,7 @@ void ParticleBasedRenderer::initialize_opengl( void )
             m_zoom_shader.unbind();
         }
     }
+
 
     // Inititalize the shader for resizing.
     {
@@ -1428,9 +1427,13 @@ void ParticleBasedRenderer::align_particles( void )
     const int total_vertices = m_ref_point->nvertices();
 
     // Source pointers.
+    /*ADD_UEMURA(begin)*/
     kvs::Real32* src_coord  = const_cast<kvs::Real32*>(m_ref_point->coords().pointer());
     kvs::Real32* src_normal = const_cast<kvs::Real32*>(m_ref_point->normals().pointer());
     kvs::UInt8*  src_color  = const_cast<kvs::UInt8*>(m_ref_point->colors().pointer());
+
+    const bool has_color_array = m_ref_point->ncolors() == m_ref_point->nvertices();
+    const bool has_normal_array = m_ref_point->nnormals() == m_ref_point->nvertices();
 
     //Shuffle source coord array
     if(m_enable_shuffle){
@@ -1442,12 +1445,13 @@ void ParticleBasedRenderer::align_particles( void )
 
         for(int i = 0; i< total_vertices; i++){
             ::Swap(src_coord, i, index_f[i]);
-            ::Swap(src_normal, i, index_f[i]);
-            ::Swap(src_color, i, index_f[i]);
+            if(has_normal_array) ::Swap(src_normal, i, index_f[i]);
+            if(has_color_array) ::Swap(src_color, i, index_f[i]);
         }
 
         delete[] index_f;
     }
+    /*ADD_UEMURA(end)*/
 
     // Distination pointers.
     static const size_t max_repeat = 1024;
@@ -1496,9 +1500,9 @@ void ParticleBasedRenderer::align_particles( void )
         {
 #if defined( KVS_GLEW_PARTICLE_BASED_RENDERER__NORMAL_TYPE_IS_FLOAT )
             // In case that the normal type of the particle is 'GLfloat'.
-            *(dst_normals[rp])++ = static_cast<NormalType>(*src_normal++);
-            *(dst_normals[rp])++ = static_cast<NormalType>(*src_normal++);
-            *(dst_normals[rp])++ = static_cast<NormalType>(*src_normal++);
+            *(dst_normals[rp])++ = (has_normal_array)? static_cast<NormalType>(*src_normal++) : static_cast<NormalType>(*src_normal);//ADD_UEMURA
+            *(dst_normals[rp])++ = (has_normal_array)? static_cast<NormalType>(*src_normal++) : static_cast<NormalType>(*src_normal);//ADD_UEMURA
+            *(dst_normals[rp])++ = (has_normal_array)? static_cast<NormalType>(*src_normal++) : static_cast<NormalType>(*src_normal);//ADD_UEMURA
 #elif defined( KVS_GLEW_PARTICLE_BASED_RENDERER__NORMAL_TYPE_IS_BYTE )
             // In case that the normal type of the particle is 'GLbyte'.
             kvs::Vector3f v( src_normal );
@@ -1511,9 +1515,9 @@ void ParticleBasedRenderer::align_particles( void )
 #error "KVS_GLEW_PARTICLE_BASED_RENDERER__NORMAL_TYPE_IS_* is not defined."
 #endif
         }
-        *(dst_colors [rp])++ = *src_color++;
-        *(dst_colors [rp])++ = *src_color++;
-        *(dst_colors [rp])++ = *src_color++;
+        *(dst_colors [rp])++ = (has_color_array)? static_cast<ColorType>(*src_color++) : static_cast<ColorType>(*src_color);//ADD_UEMURA
+        *(dst_colors [rp])++ = (has_color_array)? static_cast<ColorType>(*src_color++) : static_cast<ColorType>(*src_color);//ADD_UEMURA
+        *(dst_colors [rp])++ = (has_color_array)? static_cast<ColorType>(*src_color++) : static_cast<ColorType>(*src_color);//ADD_UEMURA
         if ( dst_indices[rp] )
         {
 #if 1
@@ -1526,7 +1530,6 @@ void ParticleBasedRenderer::align_particles( void )
         }
         if ( ++rp >= m_repetition_level ) rp = 0;
     }
-
 }
 
 /*==========================================================================*/
@@ -1621,10 +1624,8 @@ void ParticleBasedRenderer::draw_vertexbuffer(
     vbo.bind();
     m_random_texture.bind();
     m_zoom_shader.bind();
-
     this->setup_zoom_shader( modelview_matrix );
     renderer.draw();
-
     m_zoom_shader.unbind();
     m_random_texture.unbind();
 }
@@ -1673,20 +1674,27 @@ void ParticleBasedRenderer::setup_zoom_shader( const float modelview_matrix[16] 
     const float* mat = modelview_matrix;
     const float width = static_cast<float>( m_render_width );
     const float scale = sqrtf( mat[0] * mat[0] + mat[1] * mat[1] + mat[2] * mat[2] );
-
     const GLfloat densityFactor = m_zooming_factor * 0.5f * tan_inv * width * scale;
     const GLint   random_texture = 0;
     const GLfloat random_texture_size_inv = 1.0f / m_random_texture_size;
     const GLint   circle_threshold = static_cast<GLint>( m_circle_threshold );
     const GLfloat screen_scale_x = m_render_width * 0.5f;
     const GLfloat screen_scale_y = m_render_height * 0.5f;
+    const int zoom_mode = static_cast<int>(m_enable_zooming) + static_cast<int>(m_enable_repetition_level_zooming)*2;//ADD_UEMURA
 
     m_zoom_shader.setUniformValuef( "densityFactor", densityFactor );
     m_zoom_shader.setUniformValuei( "random_texture", random_texture );
     m_zoom_shader.setUniformValuef( "random_texture_size_inv", random_texture_size_inv );
     m_zoom_shader.setUniformValuei( "circle_threshold", circle_threshold );
+    /*ADD_UEMURA(begin)*/
+    m_zoom_shader.setUniformValuei( "zoom_mode", zoom_mode );
     m_zoom_shader.setUniformValuef( "screen_scale", screen_scale_x, screen_scale_y );
+    m_zoom_shader.setUniformValuef("object_magnification", rendering_process::object_magnification);
+    m_zoom_shader.setUniformValuef("object_center", rendering_process::object_center);
+    m_zoom_shader.setUniformValuef("screen_magnification", rendering_process::screen_magnification);
+    /*ADD_UEMURA(end)*/
 }
+
 
 /*==========================================================================*/
 /**
