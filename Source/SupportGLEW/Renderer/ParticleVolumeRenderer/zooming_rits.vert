@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /**
- *  @file   zooming.vert
- *  @author Naohisa Sakamoto
+ *  @file   zooming_rits.vert
+ *  @author Makoto Uemura, Satoshi Tanaka
  */
 /*----------------------------------------------------------------------------
  *
