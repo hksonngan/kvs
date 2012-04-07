@@ -17,6 +17,7 @@
 #include <kvs/glut/Screen>
 #include <kvs/UnstructuredVolumeObject>
 #include <kvs/UnstructuredVolumeImporter>
+#include <kvs/TransferFunction>
 #include <kvs/glew/StochasticTetrahedraRenderer>
 
 
@@ -33,7 +34,9 @@ int main( int argc, char** argv )
 
     kvs::UnstructuredVolumeObject* object = new kvs::UnstructuredVolumeImporter( argv[1] );
 
+    kvs::TransferFunction tfunc( 256 );
     kvs::glew::StochasticTetrahedraRenderer* renderer = new kvs::glew::StochasticTetrahedraRenderer();
+    renderer->setTransferFunction( tfunc );
     renderer->setRepetitionLevel( 50 );
     renderer->enableLODControl();
 
