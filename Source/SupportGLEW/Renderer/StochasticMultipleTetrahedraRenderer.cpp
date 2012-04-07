@@ -58,6 +58,13 @@ void StochasticMultipleTetrahedraRenderer::attachObjects(
     BaseClass::clearEnsembleBuffer();
 }
 
+void StochasticMultipleTetrahedraRenderer::setTransferFunction( const kvs::TransferFunction& transfer_function, const size_t index )
+{
+    typedef kvs::glew::StochasticMultipleTetrahedraEngine Engine;
+    Engine* engine = static_cast<Engine*>( BaseClass::m_rendering_engines[0] );
+    engine->setTransferFunction( transfer_function, index );
+}
+
 void StochasticMultipleTetrahedraRenderer::set_rendering_engine( kvs::glew::StochasticMultipleTetrahedraEngine* rendering_engine )
 {
     if ( m_engine ) delete m_engine;

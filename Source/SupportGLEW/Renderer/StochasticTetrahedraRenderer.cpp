@@ -66,6 +66,19 @@ void StochasticTetrahedraRenderer::exec(
 
 /*===========================================================================*/
 /**
+ *  @brief  Set a transfer function.
+ *  @param  transfer_function [in] transfer function
+ */
+/*===========================================================================*/
+void StochasticTetrahedraRenderer::setTransferFunction( const kvs::TransferFunction& transfer_function )
+{
+    typedef kvs::glew::StochasticTetrahedraEngine Engine;
+    Engine* engine = static_cast<Engine*>( BaseClass::m_rendering_engines[0] );
+    engine->setTransferFunction( transfer_function );
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Attaches an unstructured volume object.
  *  @param  object [in] pointer to the unstructured volume object
  */

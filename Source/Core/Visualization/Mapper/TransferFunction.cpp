@@ -57,6 +57,7 @@ TransferFunction::TransferFunction( const kvs::ColorMap& color_map )
     : m_color_map( color_map )
     , m_opacity_map( color_map.resolution() )
 {
+    m_opacity_map.create();
 }
 
 /*==========================================================================*/
@@ -69,6 +70,7 @@ TransferFunction::TransferFunction( const kvs::OpacityMap& opacity_map )
     : m_color_map( opacity_map.resolution() )
     , m_opacity_map( opacity_map )
 {
+    m_color_map.create();
 }
 
 /*==========================================================================*/

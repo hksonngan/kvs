@@ -53,6 +53,8 @@ public:
         const kvs::UnstructuredVolumeObject* object1,
         const kvs::UnstructuredVolumeObject* object2 );
 
+    void setTransferFunction( const kvs::TransferFunction& transfer_function, const size_t index );
+
 protected:
 
     void set_rendering_engine( kvs::glew::StochasticMultipleTetrahedraEngine* rendering_engine );

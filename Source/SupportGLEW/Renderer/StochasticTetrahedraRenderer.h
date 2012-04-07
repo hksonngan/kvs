@@ -52,6 +52,8 @@ public:
 
 public:
 
+    void setTransferFunction( const kvs::TransferFunction& transfer_function );
+
     void attachObject( const kvs::UnstructuredVolumeObject* object );
 };
 
