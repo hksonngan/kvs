@@ -29,6 +29,13 @@ $(OUTDIR)/./FileFormat/FrontFlow/MeshData.o \
 $(OUTDIR)/./FileFormat/FrontSTR/FrontSTR.o \
 $(OUTDIR)/./FileFormat/FrontSTR/MeshData.o \
 $(OUTDIR)/./FileFormat/FrontSTR/ResultData.o \
+$(OUTDIR)/./FileFormat/GIS/Area.o \
+$(OUTDIR)/./FileFormat/GIS/Degree.o \
+$(OUTDIR)/./FileFormat/GIS/GSIMesh.o \
+$(OUTDIR)/./FileFormat/GIS/Gis.o \
+$(OUTDIR)/./FileFormat/GIS/Mesh.o \
+$(OUTDIR)/./FileFormat/GIS/Point.o \
+$(OUTDIR)/./FileFormat/GIS/USGSMesh.o \
 $(OUTDIR)/./FileFormat/GrADS/DSet.o \
 $(OUTDIR)/./FileFormat/GrADS/DataDescriptorFile.o \
 $(OUTDIR)/./FileFormat/GrADS/GrADS.o \
@@ -401,6 +408,10 @@ $(OUTDIR)/./FileFormat/GrADS/%.o: ./FileFormat/GrADS/%.cpp ./FileFormat/GrADS/%.
 	$(MKDIR) $(OUTDIR)/./FileFormat/GrADS
 	$(CPP) -c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) -o $@ $<
 
+$(OUTDIR)/./FileFormat/GIS/%.o: ./FileFormat/GIS/%.cpp ./FileFormat/GIS/%.h
+	$(MKDIR) $(OUTDIR)/./FileFormat/GIS
+	$(CPP) -c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) -o $@ $<
+
 $(OUTDIR)/./FileFormat/FrontSTR/%.o: ./FileFormat/FrontSTR/%.cpp ./FileFormat/FrontSTR/%.h
 	$(MKDIR) $(OUTDIR)/./FileFormat/FrontSTR
 	$(CPP) -c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) -o $@ $<
@@ -451,6 +462,8 @@ install::
 	$(INSTALL) ./FileFormat/FrontFlow/*.h $(INSTALL_DIR)/include/Core/./FileFormat/FrontFlow
 	$(MKDIR) $(INSTALL_DIR)/include/Core/./FileFormat/FrontSTR
 	$(INSTALL) ./FileFormat/FrontSTR/*.h $(INSTALL_DIR)/include/Core/./FileFormat/FrontSTR
+	$(MKDIR) $(INSTALL_DIR)/include/Core/./FileFormat/GIS
+	$(INSTALL) ./FileFormat/GIS/*.h $(INSTALL_DIR)/include/Core/./FileFormat/GIS
 	$(MKDIR) $(INSTALL_DIR)/include/Core/./FileFormat/GrADS
 	$(INSTALL) ./FileFormat/GrADS/*.h $(INSTALL_DIR)/include/Core/./FileFormat/GrADS
 	$(MKDIR) $(INSTALL_DIR)/include/Core/./FileFormat/KVSML

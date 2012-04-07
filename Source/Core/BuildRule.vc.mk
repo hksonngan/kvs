@@ -29,6 +29,13 @@ $(OUTDIR)\.\FileFormat\FrontFlow\MeshData.obj \
 $(OUTDIR)\.\FileFormat\FrontSTR\FrontSTR.obj \
 $(OUTDIR)\.\FileFormat\FrontSTR\MeshData.obj \
 $(OUTDIR)\.\FileFormat\FrontSTR\ResultData.obj \
+$(OUTDIR)\.\FileFormat\GIS\Area.obj \
+$(OUTDIR)\.\FileFormat\GIS\Degree.obj \
+$(OUTDIR)\.\FileFormat\GIS\GSIMesh.obj \
+$(OUTDIR)\.\FileFormat\GIS\Gis.obj \
+$(OUTDIR)\.\FileFormat\GIS\Mesh.obj \
+$(OUTDIR)\.\FileFormat\GIS\Point.obj \
+$(OUTDIR)\.\FileFormat\GIS\USGSMesh.obj \
 $(OUTDIR)\.\FileFormat\GrADS\DSet.obj \
 $(OUTDIR)\.\FileFormat\GrADS\DataDescriptorFile.obj \
 $(OUTDIR)\.\FileFormat\GrADS\GrADS.obj \
@@ -447,6 +454,12 @@ $<
 $<
 <<
 
+{.\FileFormat\GIS\}.cpp{$(OUTDIR)\.\FileFormat\GIS\}.obj::
+	IF NOT EXIST $(OUTDIR)\.\FileFormat\GIS $(MKDIR) $(OUTDIR)\.\FileFormat\GIS
+	$(CPP) /c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) /Fo$(OUTDIR)\.\FileFormat\GIS\ @<<
+$<
+<<
+
 {.\FileFormat\FrontSTR\}.cpp{$(OUTDIR)\.\FileFormat\FrontSTR\}.obj::
 	IF NOT EXIST $(OUTDIR)\.\FileFormat\FrontSTR $(MKDIR) $(OUTDIR)\.\FileFormat\FrontSTR
 	$(CPP) /c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) /Fo$(OUTDIR)\.\FileFormat\FrontSTR\ @<<
@@ -513,6 +526,8 @@ install::
 	$(INSTALL) .\FileFormat\FrontFlow\*.h $(INSTALL_DIR)\include\Core\.\FileFormat\FrontFlow
 	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\FileFormat\FrontSTR $(MKDIR) $(INSTALL_DIR)\include\Core\.\FileFormat\FrontSTR
 	$(INSTALL) .\FileFormat\FrontSTR\*.h $(INSTALL_DIR)\include\Core\.\FileFormat\FrontSTR
+	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\FileFormat\GIS $(MKDIR) $(INSTALL_DIR)\include\Core\.\FileFormat\GIS
+	$(INSTALL) .\FileFormat\GIS\*.h $(INSTALL_DIR)\include\Core\.\FileFormat\GIS
 	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\FileFormat\GrADS $(MKDIR) $(INSTALL_DIR)\include\Core\.\FileFormat\GrADS
 	$(INSTALL) .\FileFormat\GrADS\*.h $(INSTALL_DIR)\include\Core\.\FileFormat\GrADS
 	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\FileFormat\KVSML $(MKDIR) $(INSTALL_DIR)\include\Core\.\FileFormat\KVSML
