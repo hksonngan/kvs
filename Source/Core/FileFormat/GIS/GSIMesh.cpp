@@ -20,6 +20,7 @@
 #include <kvs/Math>
 #include <kvs/Endian>
 #include <vector>
+#include <cstring>
 
 
 namespace kvs

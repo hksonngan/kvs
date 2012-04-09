@@ -22,7 +22,7 @@
 #include <kvs/RGBColor>
 #include "Mesh.h"
 #include "Area.h"
-#include "oceanValue.h"
+#include "OceanValue.h"
 
 
 namespace kvs

@@ -16,6 +16,8 @@
 #include "OceanValue.h"
 #include <kvs/Math>
 #include <kvs/Endian>
+#include <cstring>
+#include <cstdlib>
 
 
 namespace kvs
