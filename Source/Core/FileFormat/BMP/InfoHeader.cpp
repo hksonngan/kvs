@@ -138,17 +138,17 @@ void InfoHeader::write( std::ofstream& ofs )
 
 void InfoHeader::swap_bytes( void )
 {
-    kvs::Endian::Swap( m_size );
-    kvs::Endian::Swap( m_width );
-    kvs::Endian::Swap( m_height );
-    kvs::Endian::Swap( m_nplanes );
-    kvs::Endian::Swap( m_bpp );
-    kvs::Endian::Swap( m_compression );
-    kvs::Endian::Swap( m_bitmapsize );
-    kvs::Endian::Swap( m_hresolution );
-    kvs::Endian::Swap( m_vresolution );
-    kvs::Endian::Swap( m_colsused );
-    kvs::Endian::Swap( m_colsimportant );
+    kvs::Endian::Swap( &m_size );
+    kvs::Endian::Swap( &m_width );
+    kvs::Endian::Swap( &m_height );
+    kvs::Endian::Swap( &m_nplanes );
+    kvs::Endian::Swap( &m_bpp );
+    kvs::Endian::Swap( &m_compression );
+    kvs::Endian::Swap( &m_bitmapsize );
+    kvs::Endian::Swap( &m_hresolution );
+    kvs::Endian::Swap( &m_vresolution );
+    kvs::Endian::Swap( &m_colsused );
+    kvs::Endian::Swap( &m_colsimportant );
 }
 
 } // end of namesapce bmp

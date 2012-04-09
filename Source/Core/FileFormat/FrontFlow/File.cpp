@@ -322,7 +322,7 @@ const bool File::read_binary( const std::string filename, const bool swap )
     fseek( fp, 4, SEEK_CUR );
     fread( &ncomments, 4, 1, fp );
     fseek( fp, 4, SEEK_CUR );
-    if ( swap ) kvs::Endian::Swap( ncomments );
+    if ( swap ) kvs::Endian::Swap( &ncomments );
 
     // Read commnets.
     char comment[60];

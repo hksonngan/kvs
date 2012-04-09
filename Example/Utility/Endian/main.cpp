@@ -24,44 +24,37 @@
 /*===========================================================================*/
 int main( void )
 {
-    kvs::Endian::ByteOrder order = kvs::Endian::Check();
-    switch( order )
+    if ( kvs::Endian::IsBig() )
     {
-    case kvs::Endian::Big:
         std::cout << "Byte-order is big-endian." << std::endl;
-        break;
-    case kvs::Endian::Little:
+    }
+    else
+    {
         std::cout << "Byte-order is little-endian." << std::endl;
-        break;
-    case kvs::Endian::Unknown:
-        std::cout << "Byte-order is unknown." << std::endl;
-        break;
-    default:
-        break;
     }
 
-    unsigned char a = 0x12;
-    std::cout << "sizeof( unsigned char ): " << sizeof( unsigned char ) << std::endl;
+    kvs::UInt8 a = 0x12;
+    std::cout << "sizeof( kvs::UInt8 ): " << sizeof( kvs::UInt8 ) << std::endl;
     std::cout << "a: 0x" << std::hex << static_cast<unsigned>(a) << std::dec << std::endl;
-    kvs::Endian::Swap( a );
+    kvs::Endian::Swap( &a );
     std::cout << "a: 0x" << std::hex << static_cast<unsigned>(a) << std::dec << std::endl;
 
-    unsigned short b = 0x1234;
-    std::cout << "sizeof( unsigned short ): " << sizeof( unsigned short ) << std::endl;
+    kvs::UInt16 b = 0x1234;
+    std::cout << "sizeof( kvs::UInt16 ): " << sizeof( kvs::UInt16 ) << std::endl;
     std::cout << "b: 0x" << std::hex << b << std::dec << std::endl;
-    kvs::Endian::Swap( b );
+    kvs::Endian::Swap( &b );
     std::cout << "b: 0x" << std::hex << b << std::dec << std::endl;
 
-    unsigned int c = 0x12345678;
-    std::cout << "sizeof( unsigned int ): " << sizeof( unsigned int ) << std::endl;
+    kvs::UInt32 c = 0x12345678;
+    std::cout << "sizeof( kvs::UInt32 ): " << sizeof( kvs::UInt32 ) << std::endl;
     std::cout << "c: 0x" << std::hex << c << std::dec << std::endl;
-    kvs::Endian::Swap( c );
+    kvs::Endian::Swap( &c );
     std::cout << "c: 0x" << std::hex << c << std::dec << std::endl;
 
-    unsigned long d = 0x12345678;
-    std::cout << "sizeof( unsigned long ): " << sizeof( unsigned long ) << std::endl;
+    kvs::UInt64 d = 0x123456789abcdef0;
+    std::cout << "sizeof( kvs::UInt64 ): " << sizeof( kvs::UInt64 ) << std::endl;
     std::cout << "d: 0x" << std::hex << d << std::dec << std::endl;
-    kvs::Endian::Swap( d );
+    kvs::Endian::Swap( &d );
     std::cout << "d: 0x" << std::hex << d << std::dec << std::endl;
 
     return 0;

@@ -265,7 +265,7 @@ bool USGSMesh::read_data( FILE* fp, const kvs::gis::Area& area )
             {
                 const size_t index = longitude_dimension * i + j;
                 short h = data[index];
-                kvs::Endian::Swap( h );
+                kvs::Endian::Swap( &h );
 
                 kvs::gis::Point data = BaseClass::data( row, col );
                 kvs::gis::Area area = BaseClass::area();

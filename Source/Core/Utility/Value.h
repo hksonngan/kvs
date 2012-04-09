@@ -142,7 +142,7 @@ Value<T>& Value<T>::operator /= ( const Value<T>& other )
 template<typename T>
 void Value<T>::swapByte( void )
 {
-    kvs::Endian::Swap( m_value );
+    kvs::Endian::Swap( &m_value );
 }
 
 template<typename T>

@@ -1912,11 +1912,11 @@ void write_binary_item(PlyFile *plyfile,
         break;
     case PLY_SHORT:
         short_val = int_val;
-        if( swap_byte ) kvs::Endian::Swap( short_val );
+        if( swap_byte ) kvs::Endian::Swap( &short_val );
         fwrite (&short_val, 2, 1, fp);
         break;
     case PLY_INT:
-        if( swap_byte ) kvs::Endian::Swap( int_val );
+        if( swap_byte ) kvs::Endian::Swap( &int_val );
         fwrite (&int_val, 4, 1, fp);
         break;
     case PLY_UCHAR:
@@ -1924,21 +1924,21 @@ void write_binary_item(PlyFile *plyfile,
         fwrite (&uchar_val, 1, 1, fp);
         break;
     case PLY_USHORT:
-        if( swap_byte ) kvs::Endian::Swap( ushort_val );
+        if( swap_byte ) kvs::Endian::Swap( &ushort_val );
         ushort_val = uint_val;
         fwrite (&ushort_val, 2, 1, fp);
         break;
     case PLY_UINT:
-        if( swap_byte ) kvs::Endian::Swap( uint_val );
+        if( swap_byte ) kvs::Endian::Swap( &uint_val );
         fwrite (&uint_val, 4, 1, fp);
         break;
     case PLY_FLOAT:
         float_val = (float)double_val;
-        if( swap_byte ) kvs::Endian::Swap( float_val );
+        if( swap_byte ) kvs::Endian::Swap( &float_val );
         fwrite (&float_val, 4, 1, fp);
         break;
     case PLY_DOUBLE:
-        if( swap_byte ) kvs::Endian::Swap( double_val );
+        if( swap_byte ) kvs::Endian::Swap( &double_val );
         fwrite (&double_val, 8, 1, fp);
         break;
     default:

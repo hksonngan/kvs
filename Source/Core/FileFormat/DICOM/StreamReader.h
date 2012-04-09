@@ -45,7 +45,7 @@ inline T Get( std::ifstream& ifs, const bool swap = false )
         return( T(0) );
     }
 
-    if( swap ) kvs::Endian::Swap( value );
+    if( swap ) kvs::Endian::Swap( &value );
 
     return( value );
 }

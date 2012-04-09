@@ -266,8 +266,8 @@ const bool Data::readBinary( FILE* fp, const bool swap )
     fread( &m_num, 4, 1, fp );
     fread( &m_num2, 4, 1, fp );
     fseek( fp, 4, SEEK_CUR );
-    if ( swap ) kvs::Endian::Swap( m_num );
-    if ( swap ) kvs::Endian::Swap( m_num2 );
+    if ( swap ) kvs::Endian::Swap( &m_num );
+    if ( swap ) kvs::Endian::Swap( &m_num2 );
 
     // Read 2D array.
     if ( m_array_type_header == "#FLT_ARY" )

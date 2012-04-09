@@ -99,10 +99,10 @@ bool FileHeader::isBM( void )
 
 void FileHeader::swap_bytes( void )
 {
-    kvs::Endian::Swap( m_size );
-    kvs::Endian::Swap( m_reserved1 );
-    kvs::Endian::Swap( m_reserved2 );
-    kvs::Endian::Swap( m_offset );
+    kvs::Endian::Swap( &m_size );
+    kvs::Endian::Swap( &m_reserved1 );
+    kvs::Endian::Swap( &m_reserved2 );
+    kvs::Endian::Swap( &m_offset );
 }
 
 } // end of namespace bmp
