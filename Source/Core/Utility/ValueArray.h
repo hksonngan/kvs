@@ -105,7 +105,7 @@ public:
         , m_nvalues( 0 )
         , m_values( 0 )
     {
-        this->allocate( std::distance( last, first ) );
+        this->allocate( std::distance( first, last ) );
         std::copy( first, last, this->begin() );
     }
 
