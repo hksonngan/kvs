@@ -230,6 +230,56 @@ public:
         memcpy( pvalues, values, sizeof( T ) * nvalues );
     }
 
+    const void* data() const
+    {
+        return m_values;
+    }
+
+    void* data()
+    {
+        return m_values;
+    }
+
+    void swap( AnyValueArray& other )
+    {
+        std::swap( m_values, other.m_values );
+        std::swap( m_nvalues, other.m_nvalues );
+        std::swap( m_counter, other.m_counter );
+        std::swap( m_size_of_value, other.m_size_of_value );
+        std::swap( m_type_info, other.m_type_info );
+    }
+
+    AnyValueArray clone() const
+    {
+        const std::type_info& type = m_type_info->type();
+        if (      type == typeid( kvs::Int8 ) )   { return this->clone_helper<kvs::Int8  >(); }
+        else if ( type == typeid( kvs::UInt8 ) )  { return this->clone_helper<kvs::UInt8 >(); }
+        else if ( type == typeid( kvs::Int16 ) )  { return this->clone_helper<kvs::Int16 >(); }
+        else if ( type == typeid( kvs::UInt16 ) ) { return this->clone_helper<kvs::UInt16>(); }
+        else if ( type == typeid( kvs::Int32 ) )  { return this->clone_helper<kvs::Int32 >(); }
+        else if ( type == typeid( kvs::UInt32 ) ) { return this->clone_helper<kvs::UInt32>(); }
+        else if ( type == typeid( kvs::Int64 ) )  { return this->clone_helper<kvs::Int64 >(); }
+        else if ( type == typeid( kvs::UInt64 ) ) { return this->clone_helper<kvs::UInt64>(); }
+        else if ( type == typeid( kvs::Real32 ) ) { return this->clone_helper<kvs::Real32>(); }
+        else if ( type == typeid( kvs::Real64 ) ) { return this->clone_helper<kvs::Real64>(); }
+        KVS_ASSERT( false );
+        return AnyValueArray();
+    }
+
+    bool empty() const
+    {
+        return this->size() == 0;
+    }
+
+private:
+
+    template <typename T>
+    AnyValueArray clone_helper() const
+    {
+        ValueArray<T> ret( static_cast<const T*>( this->data() ), this->size() );
+        return AnyValueArray( ret );
+    }
+
 public:
 
     template<typename T>

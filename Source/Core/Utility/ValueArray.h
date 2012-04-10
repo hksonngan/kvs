@@ -21,6 +21,9 @@
 #include <vector>
 #include <cstring>
 #include <typeinfo>
+#include <algorithm>
+#include <iterator>
+#include <utility>
 #include <kvs/DebugNew>
 #include <kvs/Assert>
 #include <kvs/Endian>
@@ -94,6 +97,13 @@ public:
         , m_values( 0 )
     {
         this->deepCopy( &( values[0] ), values.size() );
+    }
+
+    template <typename InIter>
+    ValueArray( InIter first, InIter last )
+    {
+        this->allocate( std::distance( last, first ) );
+        std::copy( first, last, this->begin() );
     }
 
     ValueArray( const this_type& other )
@@ -304,6 +314,33 @@ public:
     void fill( const int bit )
     {
         memset( m_values, bit, sizeof( value_type ) * m_nvalues );
+    }
+
+    value_type* data()
+    {
+        return m_values;
+    }
+
+    const value_type* data() const
+    {
+        return m_values;
+    }
+
+    bool empty() const
+    {
+        return this->size() == 0;
+    }
+
+    void swap( ValueArray& other )
+    {
+        std::swap( m_values, other.m_values );
+        std::swap( m_nvalues, other.m_nvalues );
+        std::swap( m_counter, other.m_counter );
+    }
+
+    this_type clone() const
+    {
+        return this_type( this->begin(), this->end() );
     }
 
 public:
