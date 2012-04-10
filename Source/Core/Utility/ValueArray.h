@@ -101,6 +101,9 @@ public:
 
     template <typename InIter>
     ValueArray( InIter first, InIter last )
+        : m_counter( 0 )
+        , m_nvalues( 0 )
+        , m_values( 0 )
     {
         this->allocate( std::distance( last, first ) );
         std::copy( first, last, this->begin() );
@@ -190,6 +193,9 @@ public:
 
     friend bool operator ==( const this_type& lhs, const this_type& rhs )
     {
+        if ( lhs.size() != rhs.size() )
+            return false;
+
         return( std::equal( lhs.begin(), lhs.end(), rhs.begin() ) );
     }
 
