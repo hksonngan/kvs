@@ -39,7 +39,7 @@ private:
 
 public:
 
-    Xorshift128( void );
+    Xorshift128();
 
 public:
 
@@ -47,11 +47,13 @@ public:
 
 public:
 
-    const float rand( void );
+    float rand();
+
+    kvs::UInt32 randInteger();
 
 public:
 
-    const float operator ()( void );
+    float operator ()();
 };
 
 /*==========================================================================*/
@@ -61,10 +63,14 @@ public:
  *  @return TODO
  */
 /*==========================================================================*/
-inline const float Xorshift128::rand( void )
+inline float Xorshift128::rand()
 {
     const float t24 = 1.0 / 16777216.0; /* 0.5**24 */
+    return t24 * ( this->randInteger() >> 8 );
+}
 
+inline kvs::UInt32 Xorshift128::randInteger()
+{
     kvs::UInt32 t = ( m_x ^ ( m_x << 11 ) );
 
     m_x = m_y;
@@ -72,7 +78,7 @@ inline const float Xorshift128::rand( void )
     m_z = m_w;
     m_w = ( m_w ^ ( m_w >> 19 ) ) ^ ( t ^ ( t >> 8 ) );
 
-    return( t24 * static_cast<float>( m_w >> 8 ) );
+    return m_w;
 }
 
 /*==========================================================================*/
@@ -82,9 +88,9 @@ inline const float Xorshift128::rand( void )
  *  @return TODO
  */
 /*==========================================================================*/
-inline const float Xorshift128::operator ()( void )
+inline float Xorshift128::operator ()()
 {
-    return( this->rand() );
+    return this->rand();
 }
 
 } // end of namespace kvs
