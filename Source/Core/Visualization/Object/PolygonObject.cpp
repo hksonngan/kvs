@@ -255,21 +255,21 @@ std::ostream& operator << ( std::ostream& os, const PolygonObject& object )
 void PolygonObject::shallowCopy( const PolygonObject& object )
 {
     BaseClass::shallowCopy( object );
-    this->m_polygon_type = object.polygonType();
-    this->m_color_type = object.colorType();
-    this->m_normal_type = object.normalType();
-    this->m_connections.shallowCopy( object.connections() );
-    this->m_opacities.shallowCopy( object.opacities() );
+    m_polygon_type = object.polygonType();
+    m_color_type = object.colorType();
+    m_normal_type = object.normalType();
+    m_connections = object.connections();
+    m_opacities = object.opacities();
 }
 
 void PolygonObject::deepCopy( const PolygonObject& object )
 {
     BaseClass::deepCopy( object );
-    this->m_polygon_type = object.polygonType();
-    this->m_color_type = object.colorType();
-    this->m_normal_type = object.normalType();
-    this->m_connections.deepCopy( object.connections() );
-    this->m_opacities.deepCopy( object.opacities() );
+    m_polygon_type = object.polygonType();
+    m_color_type = object.colorType();
+    m_normal_type = object.normalType();
+    m_connections = object.connections().clone();
+    m_opacities = object.opacities().clone();
 }
 
 void PolygonObject::clear( void )

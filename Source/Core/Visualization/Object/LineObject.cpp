@@ -276,19 +276,19 @@ std::ostream& operator << ( std::ostream& os, const LineObject& object )
 void LineObject::shallowCopy( const LineObject& object )
 {
     BaseClass::shallowCopy( object );
-    this->m_line_type = object.lineType();
-    this->m_color_type = object.colorType();
-    this->m_connections.shallowCopy( object.connections() );
-    this->m_sizes.shallowCopy( object.sizes() );
+    m_line_type = object.lineType();
+    m_color_type = object.colorType();
+    m_connections = object.connections();
+    m_sizes = object.sizes();
 }
 
 void LineObject::deepCopy( const LineObject& object )
 {
     BaseClass::deepCopy( object );
-    this->m_line_type = object.lineType();
-    this->m_color_type = object.colorType();
-    this->m_connections.deepCopy( object.connections() );
-    this->m_sizes.deepCopy( object.sizes() );
+    m_line_type = object.lineType();
+    m_color_type = object.colorType();
+    m_connections = object.connections().clone();
+    m_sizes = object.sizes().clone();
 }
 
 void LineObject::clear( void )

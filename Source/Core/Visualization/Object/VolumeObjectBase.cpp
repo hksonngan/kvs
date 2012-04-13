@@ -288,37 +288,25 @@ void VolumeObjectBase::updateMinMaxValues( void ) const
 void VolumeObjectBase::shallowCopy( const VolumeObjectBase& object )
 {
     BaseClass::operator=( object );
-    this->m_has_min_max_values = object.hasMinMaxValues();
-    this->m_min_value = object.minValue();
-    this->m_max_value = object.maxValue();
-    this->m_label = object.label();
-    this->m_veclen = object.veclen();
-    this->m_coords.shallowCopy( object.coords() );
-    this->m_values.shallowCopy( object.values() );
+    m_has_min_max_values = object.hasMinMaxValues();
+    m_min_value = object.minValue();
+    m_max_value = object.maxValue();
+    m_label = object.label();
+    m_veclen = object.veclen();
+    m_coords = object.coords();
+    m_values = object.values();
 }
 
 void VolumeObjectBase::deepCopy( const VolumeObjectBase& object )
 {
     BaseClass::operator=( object );
-    this->m_has_min_max_values = object.hasMinMaxValues();
-    this->m_min_value = object.minValue();
-    this->m_max_value = object.maxValue();
-    this->m_label = object.label();
-    this->m_veclen = object.veclen();
-    this->m_coords.deepCopy( object.coords() );
-
-    const size_t size = object.values().size();
-    const std::type_info& type = object.values().typeInfo()->type();
-    if (      type == typeid( kvs::Int8 ) )   { this->m_values.deepCopy( object.values().pointer<kvs::Int8>(), size ); }
-    else if ( type == typeid( kvs::UInt8 ) )  { this->m_values.deepCopy( object.values().pointer<kvs::UInt8>(), size ); }
-    else if ( type == typeid( kvs::Int16 ) )  { this->m_values.deepCopy( object.values().pointer<kvs::Int16>(), size ); }
-    else if ( type == typeid( kvs::UInt16 ) ) { this->m_values.deepCopy( object.values().pointer<kvs::UInt16>(), size ); }
-    else if ( type == typeid( kvs::Int32 ) )  { this->m_values.deepCopy( object.values().pointer<kvs::Int32>(), size ); }
-    else if ( type == typeid( kvs::UInt32 ) ) { this->m_values.deepCopy( object.values().pointer<kvs::UInt32>(), size ); }
-    else if ( type == typeid( kvs::Int64 ) )  { this->m_values.deepCopy( object.values().pointer<kvs::Int64>(), size ); }
-    else if ( type == typeid( kvs::UInt64 ) ) { this->m_values.deepCopy( object.values().pointer<kvs::UInt64>(), size ); }
-    else if ( type == typeid( kvs::Real32 ) ) { this->m_values.deepCopy( object.values().pointer<kvs::Real32>(), size ); }
-    else if ( type == typeid( kvs::Real64 ) ) { this->m_values.deepCopy( object.values().pointer<kvs::Real64>(), size ); }
+    m_has_min_max_values = object.hasMinMaxValues();
+    m_min_value = object.minValue();
+    m_max_value = object.maxValue();
+    m_label = object.label();
+    m_veclen = object.veclen();
+    m_coords = object.coords().clone();
+    m_values = object.values().clone();
 }
 
 } // end of namespace kvs

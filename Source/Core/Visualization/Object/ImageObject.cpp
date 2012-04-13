@@ -68,9 +68,9 @@ ImageObject::ImageObject(
     const ImageObject::PixelType       type ):
     m_type( type ),
     m_width( width ),
-    m_height( height )
+    m_height( height ),
+    m_data( data )
 {
-    m_data.shallowCopy( data );
 }
 
 /*===========================================================================*/
@@ -139,7 +139,7 @@ void ImageObject::shallowCopy( const ImageObject& other )
     this->m_type = other.type();
     this->m_width = other.width();
     this->m_height = other.height();
-    this->m_data.shallowCopy( other.data() );
+    this->m_data = other.data();
 }
 
 /*===========================================================================*/
@@ -154,7 +154,7 @@ void ImageObject::deepCopy( const ImageObject& other )
     this->m_type = other.type();
     this->m_width = other.width();
     this->m_height = other.height();
-    this->m_data.deepCopy( other.data() );
+    this->m_data = other.data().clone();
 }
 
 /*==========================================================================*/

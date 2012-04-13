@@ -639,7 +639,7 @@ void PointObject::add( const PointObject& other )
 void PointObject::shallowCopy( const PointObject& other )
 {
     BaseClass::shallowCopy( other );
-    m_sizes.shallowCopy( other.sizes() );
+    m_sizes = other.sizes();
 }
 
 /*===========================================================================*/
@@ -651,7 +651,7 @@ void PointObject::shallowCopy( const PointObject& other )
 void PointObject::deepCopy( const PointObject& other )
 {
     BaseClass::deepCopy( other );
-    m_sizes.deepCopy( other.sizes() );
+    m_sizes = other.sizes().clone();
 }
 
 /*===========================================================================*/

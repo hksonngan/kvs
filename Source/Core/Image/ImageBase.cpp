@@ -246,7 +246,6 @@ const bool ImageBase::create( const size_t width, const size_t height, const Ima
 
     m_size = height * m_bpl;
     m_data.allocate( m_size );
-
     m_data.fill( 0 );
     return( true );
 }
@@ -286,10 +285,7 @@ const bool ImageBase::create(
     }
 
     m_size = height * m_bpl;
-    m_data.deepCopy( data, m_size );
-
-    if ( !m_data.pointer() ) return( false );
-
+    m_data = ValueArray<kvs::UInt8>( data, m_size );
     return( true );
 }
 

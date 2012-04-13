@@ -204,9 +204,9 @@ std::ostream& operator << ( std::ostream& os, const kvs::GeometryObjectBase& obj
 void GeometryObjectBase::shallowCopy( const GeometryObjectBase& object )
 {
     BaseClass::operator=( object );
-    m_coords.shallowCopy( object.coords() );
-    m_colors.shallowCopy( object.colors() );
-    m_normals.shallowCopy( object.normals() );
+    m_coords = object.coords();
+    m_colors = object.colors();
+    m_normals = object.normals();
 }
 
 /*===========================================================================*/
@@ -218,9 +218,9 @@ void GeometryObjectBase::shallowCopy( const GeometryObjectBase& object )
 void GeometryObjectBase::deepCopy( const GeometryObjectBase& object )
 {
     BaseClass::operator=( object );
-    m_coords.deepCopy( object.coords() );
-    m_colors.deepCopy( object.colors() );
-    m_normals.deepCopy( object.normals() );
+    m_coords = object.coords().clone();
+    m_colors = object.colors().clone();
+    m_normals = object.normals().clone();
 }
 
 /*===========================================================================*/

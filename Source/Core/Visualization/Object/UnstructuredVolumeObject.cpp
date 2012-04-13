@@ -164,19 +164,19 @@ std::ostream& operator << ( std::ostream& os, const UnstructuredVolumeObject& ob
 void UnstructuredVolumeObject::shallowCopy( const UnstructuredVolumeObject& object )
 {
     BaseClass::shallowCopy( object );
-    this->m_cell_type = object.cellType();
-    this->m_nnodes = object.nnodes();
-    this->m_ncells = object.ncells();
-    this->m_connections.shallowCopy( object.connections() );
+    m_cell_type = object.cellType();
+    m_nnodes = object.nnodes();
+    m_ncells = object.ncells();
+    m_connections = object.connections();
 }
 
 void UnstructuredVolumeObject::deepCopy( const UnstructuredVolumeObject& object )
 {
     BaseClass::deepCopy( object );
-    this->m_cell_type = object.cellType();
-    this->m_nnodes = object.nnodes();
-    this->m_ncells = object.ncells();
-    this->m_connections.deepCopy( object.connections() );
+    m_cell_type = object.cellType();
+    m_nnodes = object.nnodes();
+    m_ncells = object.ncells();
+    m_connections = object.connections().clone();
 }
 
 /*==========================================================================*/

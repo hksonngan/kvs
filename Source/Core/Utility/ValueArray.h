@@ -88,7 +88,8 @@ public:
         , m_nvalues( 0 )
         , m_values( 0 )
     {
-        this->deepCopy( values, nvalues );
+        this->allocate( nvalues );
+        std::copy( values, values + nvalues, this->begin() );
     }
 
     explicit ValueArray( const std::vector<T>& values )
@@ -96,7 +97,8 @@ public:
         , m_nvalues( 0 )
         , m_values( 0 )
     {
-        this->deepCopy( &( values[0] ), values.size() );
+        this->allocate( values.size() );
+        std::copy( values.begin(), values.end(), this->begin() );
     }
 
     template <typename InIter>
@@ -114,7 +116,10 @@ public:
         , m_nvalues( 0 )
         , m_values( 0 )
     {
-        this->shallowCopy( other );
+        m_counter = other.m_counter;
+        m_nvalues = other.m_nvalues;
+        m_values  = other.m_values;
+        this->ref();
     }
 
     ~ValueArray( void )
@@ -185,7 +190,10 @@ public:
         if ( this != &other )
         {
             this->unref();
-            this->shallowCopy( other );
+            m_counter = other.m_counter;
+            m_nvalues = other.m_nvalues;
+            m_values  = other.m_values;
+            this->ref();
         }
 
         return( *this );
@@ -296,27 +304,6 @@ public:
         kvs::Endian::Swap( m_values, m_nvalues );
     }
 
-    void shallowCopy( const this_type& other )
-    {
-        m_counter = other.m_counter;
-        m_nvalues = other.m_nvalues;
-        m_values  = other.m_values;
-
-        this->ref();
-    }
-
-    void deepCopy( const this_type& other )
-    {
-        this->allocate( other.size() );
-        std::copy( other.begin(), other.end(), this->begin() );
-    }
-
-    void deepCopy( const value_type* values, const size_t nvalues )
-    {
-        this->allocate( nvalues );
-        std::copy( values, values + nvalues, this->begin() );
-    }
-
     value_type* data()
     {
         return m_values;
@@ -363,6 +350,27 @@ public:
     void fill( const int bit )
     {
         memset( m_values, bit, sizeof( value_type ) * m_nvalues );
+    }
+
+    void shallowCopy( const this_type& other )
+    {
+        m_counter = other.m_counter;
+        m_nvalues = other.m_nvalues;
+        m_values  = other.m_values;
+
+        this->ref();
+    }
+
+    void deepCopy( const this_type& other )
+    {
+        this->allocate( other.size() );
+        std::copy( other.begin(), other.end(), this->begin() );
+    }
+
+    void deepCopy( const value_type* values, const size_t nvalues )
+    {
+        this->allocate( nvalues );
+        std::copy( values, values + nvalues, this->begin() );
     }
 
 #else
@@ -419,20 +427,6 @@ private:
         m_values  = 0;
     }
 };
-
-template <>
-inline void ValueArray<std::string>::deepCopy( const ValueArray<std::string>& other )
-{
-    this->allocate( other.m_nvalues );
-    std::copy( other.m_values, other.m_values + other.m_nvalues, this->begin() );
-}
-
-template <>
-inline void ValueArray<std::string>::deepCopy( const std::string* values, const size_t nvalues )
-{
-    this->allocate( nvalues );
-    std::copy( values, values + nvalues, this->begin() );
-}
 
 } // end of namespace kvs
 
