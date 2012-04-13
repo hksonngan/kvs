@@ -271,8 +271,8 @@ void ParticleBufferCompositor::create_image( Camera* camera, Light* light )
         this->create_accumulator();
     }
 
-    BaseClass::m_color_data.fill( 0x00 );
-    BaseClass::m_depth_data.fill( 0x00 );
+    BaseClass::m_color_data.fill( 0 );
+    BaseClass::m_depth_data.fill( 0 );
 
     this->accumulate( camera, light );
 }

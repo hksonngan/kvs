@@ -215,7 +215,8 @@ void MessageBlock::copy( const std::vector<T>& message )
 /*==========================================================================*/
 void* MessageBlock::allocate( size_t data_size )
 {
-    return( m_block.allocate( data_size + SizeOfHeader ) );
+    m_block.allocate( data_size + SizeOfHeader );
+    return( m_block.data() );
 }
 
 /*==========================================================================*/

@@ -233,8 +233,8 @@ void ParticleVolumeRenderer::create_image(
     }
 
     // Initialize the frame buffers.
-    BaseClass::m_color_data.fill( 0x00 );
-    BaseClass::m_depth_data.fill( 0x00 );
+    BaseClass::m_color_data.fill( 0 );
+    BaseClass::m_depth_data.fill( 0 );
 
     this->project_particle( point, camera, light );
 }

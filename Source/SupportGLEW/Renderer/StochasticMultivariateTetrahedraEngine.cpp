@@ -268,8 +268,8 @@ void StochasticMultivariateTetrahedraEngine::create_vertexbuffer_from_volume( vo
     kvs::TetrahedralCell<T> cell( m_ref_volume );
     kvs::ValueArray<int> counter( nvertices );
     kvs::ValueArray<float> normals( 3 * nvertices );
-    counter.fill( 0x00 );
-    normals.fill( 0x00 );
+    counter.fill( 0 );
+    normals.fill( 0 );
     for ( size_t i = 0; i < ncells; i++ )
     {
         cell.bindCell( i );

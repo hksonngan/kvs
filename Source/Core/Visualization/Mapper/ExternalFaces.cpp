@@ -511,9 +511,12 @@ void CalculateFaces(
     const size_t nvertices = nfaces * 3;
     const kvs::Real32* volume_coord = volume->coords().pointer();
 
-    kvs::Real32* coord = coords->allocate( nvertices * 3 );
-    kvs::UInt8* color = colors->allocate( nvertices * 3 );
-    kvs::Real32* normal = normals->allocate( nfaces * 3 );
+    coords->allocate( nvertices * 3 );
+    colors->allocate( nvertices * 3 );
+    normals->allocate( nfaces * 3 );
+    kvs::Real32* coord = coords->data();
+    kvs::UInt8* color = colors->data();
+    kvs::Real32* normal = normals->data();
 
     kvs::UInt32 node_index[3] = { 0, 0, 0 };
     kvs::UInt32 color_level[3] = { 0, 0, 0 };

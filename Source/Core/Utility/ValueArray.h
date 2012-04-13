@@ -307,19 +307,14 @@ public:
 
     void deepCopy( const this_type& other )
     {
-        value_type* pvalues = this->allocate( other.m_nvalues );
-        memcpy( pvalues, other.m_values, sizeof( value_type ) * m_nvalues );
+        this->allocate( other.size() );
+        std::copy( other.begin(), other.end(), this->begin() );
     }
 
     void deepCopy( const value_type* values, const size_t nvalues )
     {
-        value_type* pvalues = this->allocate( nvalues );
-        memcpy( pvalues, values, sizeof( value_type ) * nvalues );
-    }
-
-    void fill( const int bit )
-    {
-        memset( m_values, bit, sizeof( value_type ) * m_nvalues );
+        this->allocate( nvalues );
+        std::copy( values, values + nvalues, this->begin() );
     }
 
     value_type* data()
@@ -351,6 +346,8 @@ public:
 
 public:
 
+#if KVS_ENABLE_DEPRECATED
+
     value_type* allocate( const size_t nvalues )
     {
         this->unref();
@@ -362,6 +359,29 @@ public:
 
         return( m_values );
     }
+
+    void fill( const int bit )
+    {
+        memset( m_values, bit, sizeof( value_type ) * m_nvalues );
+    }
+
+#else
+
+    void allocate( const size_t nvalues )
+    {
+        this->unref();
+        this->create_counter();
+
+        m_nvalues = nvalues;
+        m_values = new value_type [ nvalues ];
+    }
+
+    void fill( const T& value )
+    {
+        std::fill( this->begin(), this->end(), value );
+    }
+
+#endif
 
     void deallocate( void )
     {
@@ -403,15 +423,15 @@ private:
 template <>
 inline void ValueArray<std::string>::deepCopy( const ValueArray<std::string>& other )
 {
-    std::string* pvalues = this->allocate( other.m_nvalues );
-    std::copy( other.m_values, other.m_values + other.m_nvalues, pvalues );
+    this->allocate( other.m_nvalues );
+    std::copy( other.m_values, other.m_values + other.m_nvalues, this->begin() );
 }
 
 template <>
 inline void ValueArray<std::string>::deepCopy( const std::string* values, const size_t nvalues )
 {
-    std::string* pvalues = this->allocate( nvalues );
-    std::copy( values, values + nvalues, pvalues );
+    this->allocate( nvalues );
+    std::copy( values, values + nvalues, this->begin() );
 }
 
 } // end of namespace kvs

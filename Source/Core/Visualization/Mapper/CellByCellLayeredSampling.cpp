@@ -396,7 +396,7 @@ void CellByCellLayeredSampling::pregenerate_particles( const size_t nparticles )
     const size_t nintervals = resolution - 1;
 
     // Integrate the density distribution function as piecewise linear function.
-    kvs::ValueArray<float> m( nintervals ); m.fill( 0x00 );
+    kvs::ValueArray<float> m( nintervals ); m.fill( 0 );
     float M = 0.0f;
     for ( size_t i = 0; i < nintervals; i++ )
     {
@@ -414,7 +414,7 @@ void CellByCellLayeredSampling::pregenerate_particles( const size_t nparticles )
 
     // Calculate the number of particles in each interval.
     kvs::MersenneTwister R; R.setSeed();
-    kvs::ValueArray<kvs::UInt32> n( nintervals ); n.fill( 0x00 );
+    kvs::ValueArray<kvs::UInt32> n( nintervals ); n.fill( 0 );
     kvs::UInt32 N = 0; // total number of particles
     for ( size_t i = 0; i < nintervals; i++ )
     {

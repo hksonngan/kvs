@@ -102,8 +102,8 @@ void RayCastingRenderer::create_image(
         glGetFloatv( GL_MODELVIEW_MATRIX, m_modelview_matrix );
     }
 
-    BaseClass::m_color_data.fill( 0x00 );
-    BaseClass::m_depth_data.fill( 0x00 );
+    BaseClass::m_color_data.fill( 0 );
+    BaseClass::m_depth_data.fill( 0 );
 
     if ( !volume->hasMinMaxValues() ) volume->updateMinMaxValues();
     const float min_value = static_cast<float>( volume->minValue() );

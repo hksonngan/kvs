@@ -425,13 +425,12 @@ void PointObject::add( const PointObject& other )
         // Integrate the coordinate values.
         kvs::ValueArray<kvs::Real32> coords;
         const size_t ncoords = this->coords().size() + other.coords().size();
-        kvs::Real32* pcoords = coords.allocate( ncoords );
-        if ( pcoords != NULL )
-        {
-            // x,y,z, ... + x,y,z, ... = x,y,z, ... ,x,y,z, ...
-            memcpy( pcoords, this->coords().pointer(), this->coords().byteSize() );
-            memcpy( pcoords + this->coords().size(), other.coords().pointer(), other.coords().byteSize() );
-        }
+        coords.allocate( ncoords );
+        kvs::Real32* pcoords = coords.data();
+
+        // x,y,z, ... + x,y,z, ... = x,y,z, ... ,x,y,z, ...
+        memcpy( pcoords, this->coords().pointer(), this->coords().byteSize() );
+        memcpy( pcoords + this->coords().size(), other.coords().pointer(), other.coords().byteSize() );
         BaseClass::setCoords( coords );
 
         // Integrate the normal vectors.
@@ -442,23 +441,19 @@ void PointObject::add( const PointObject& other )
             {
                 // nx,ny,nz, ... + nx,ny,nz, ... = nx,ny,nz, ... ,nx,ny,nz, ...
                 const size_t nnormals = this->normals().size() + other.normals().size();
-                kvs::Real32* pnormals = normals.allocate( nnormals );
-                if ( pnormals != NULL )
-                {
-                    memcpy( pnormals, this->normals().pointer(), this->normals().byteSize() );
-                    memcpy( pnormals + this->normals().size(), other.normals().pointer(), other.normals().byteSize() );
-                }
+                normals.allocate( nnormals );
+                kvs::Real32* pnormals = normals.data();
+                memcpy( pnormals, this->normals().pointer(), this->normals().byteSize() );
+                memcpy( pnormals + this->normals().size(), other.normals().pointer(), other.normals().byteSize() );
             }
             else
             {
                 // nx,ny,nz, ... + (none) = nx,ny,nz, ... ,0,0,0, ...
                 const size_t nnormals = this->normals().size() + other.coords().size();
-                kvs::Real32* pnormals = normals.allocate( nnormals );
-                if ( pnormals != NULL )
-                {
-                    memcpy( pnormals, this->normals().pointer(), this->normals().byteSize() );
-                    memset( pnormals + this->normals().size(), 0, other.coords().byteSize() );
-                }
+                normals.allocate( nnormals );
+                kvs::Real32* pnormals = normals.data();
+                memcpy( pnormals, this->normals().pointer(), this->normals().byteSize() );
+                memset( pnormals + this->normals().size(), 0, other.coords().byteSize() );
             }
         }
         else
@@ -466,13 +461,11 @@ void PointObject::add( const PointObject& other )
             if ( other.normals().size() > 0 )
             {
                 const size_t nnormals = this->coords().size() + other.normals().size();
-                kvs::Real32* pnormals = normals.allocate( nnormals );
-                if ( pnormals != NULL )
-                {
-                    // (none) + nx,ny,nz, ... = 0,0,0, ... ,nz,ny,nz, ...
-                    memset( pnormals, 0, this->coords().byteSize() );
-                    memcpy( pnormals + this->coords().size(), other.normals().pointer(), other.normals().byteSize() );
-                }
+                normals.allocate( nnormals );
+                kvs::Real32* pnormals = normals.data();
+                // (none) + nx,ny,nz, ... = 0,0,0, ... ,nz,ny,nz, ...
+                memset( pnormals, 0, this->coords().byteSize() );
+                memcpy( pnormals + this->coords().size(), other.normals().pointer(), other.normals().byteSize() );
             }
         }
         BaseClass::setNormals( normals );
@@ -485,29 +478,25 @@ void PointObject::add( const PointObject& other )
             {
                 // r,g,b, ... + r,g,b, ... = r,g,b, ... ,r,g,b, ...
                 const size_t ncolors = this->colors().size() + other.colors().size();
-                kvs::UInt8* pcolors = colors.allocate( ncolors );
-                if ( pcolors != NULL )
-                {
-                    memcpy( pcolors, this->colors().pointer(), this->colors().byteSize() );
-                    memcpy( pcolors + this->colors().size(), other.colors().pointer(), other.colors().byteSize() );
-                }
+                colors.allocate( ncolors );
+                kvs::UInt8* pcolors = colors.data();
+                memcpy( pcolors, this->colors().pointer(), this->colors().byteSize() );
+                memcpy( pcolors + this->colors().size(), other.colors().pointer(), other.colors().byteSize() );
             }
             else
             {
                 // r,g,b, ... + R,G,B = r,g,b, ... ,R,G,B, ... ,R,G,B
                 const size_t ncolors = this->colors().size() + other.coords().size();
-                kvs::UInt8* pcolors = colors.allocate( ncolors );
-                if ( pcolors != NULL )
+                colors.allocate( ncolors );
+                kvs::UInt8* pcolors = colors.data();
+                memcpy( pcolors, this->colors().pointer(), this->colors().byteSize() );
+                pcolors += this->colors().size();
+                const kvs::RGBColor color = other.color();
+                for ( size_t i = 0; i < other.coords().size(); i += 3 )
                 {
-                    memcpy( pcolors, this->colors().pointer(), this->colors().byteSize() );
-                    pcolors += this->colors().size();
-                    const kvs::RGBColor color = other.color();
-                    for ( size_t i = 0; i < other.coords().size(); i += 3 )
-                    {
-                        *(pcolors++) = color.r();
-                        *(pcolors++) = color.g();
-                        *(pcolors++) = color.b();
-                    }
+                    *(pcolors++) = color.r();
+                    *(pcolors++) = color.g();
+                    *(pcolors++) = color.b();
                 }
             }
         }
@@ -517,18 +506,16 @@ void PointObject::add( const PointObject& other )
             {
                 // R,G,B + r,g,b, ... = R,G,B, ... ,R,G,B, r,g,b, ...
                 const size_t ncolors = this->coords().size() + other.colors().size();
-                kvs::UInt8* pcolors = colors.allocate( ncolors );
-                if ( pcolors != NULL )
+                colors.allocate( ncolors );
+                kvs::UInt8* pcolors = colors.data();
+                const kvs::RGBColor color = this->color();
+                for ( size_t i = 0; i < this->coords().size(); i += 3 )
                 {
-                    const kvs::RGBColor color = this->color();
-                    for ( size_t i = 0; i < this->coords().size(); i += 3 )
-                    {
-                        *(pcolors++) = color.r();
-                        *(pcolors++) = color.g();
-                        *(pcolors++) = color.b();
-                    }
-                    memcpy( pcolors, other.colors().pointer(), other.colors().byteSize() );
+                    *(pcolors++) = color.r();
+                    *(pcolors++) = color.g();
+                    *(pcolors++) = color.b();
                 }
+                memcpy( pcolors, other.colors().pointer(), other.colors().byteSize() );
             }
             else
             {
@@ -538,33 +525,29 @@ void PointObject::add( const PointObject& other )
                 {
                     // R,G,B + R,G,B = R,G,B
                     const size_t ncolors = 3;
-                    kvs::UInt8* pcolors = colors.allocate( ncolors );
-                    if ( pcolors != NULL )
-                    {
-                        *(pcolors++) = color1.r();
-                        *(pcolors++) = color1.g();
-                        *(pcolors++) = color1.b();
-                    }
+                    colors.allocate( ncolors );
+                    kvs::UInt8* pcolors = colors.data();
+                    *(pcolors++) = color1.r();
+                    *(pcolors++) = color1.g();
+                    *(pcolors++) = color1.b();
                 }
                 else
                 {
                     // R,G,B + R,G,B = R,G,B, ... ,R,G,B, ...
                     const size_t ncolors = this->coords().size() + other.coords().size();
-                    kvs::UInt8* pcolors = colors.allocate( ncolors );
-                    if ( pcolors != NULL )
+                    colors.allocate( ncolors );
+                    kvs::UInt8* pcolors = colors.data();
+                    for ( size_t i = 0; i < this->coords().size(); i += 3 )
                     {
-                        for ( size_t i = 0; i < this->coords().size(); i += 3 )
-                        {
-                            *(pcolors++) = color1.r();
-                            *(pcolors++) = color1.g();
-                            *(pcolors++) = color1.b();
-                        }
-                        for ( size_t i = 0; i < other.coords().size(); i += 3 )
-                        {
-                            *(pcolors++) = color2.r();
-                            *(pcolors++) = color2.g();
-                            *(pcolors++) = color2.b();
-                        }
+                        *(pcolors++) = color1.r();
+                        *(pcolors++) = color1.g();
+                        *(pcolors++) = color1.b();
+                    }
+                    for ( size_t i = 0; i < other.coords().size(); i += 3 )
+                    {
+                        *(pcolors++) = color2.r();
+                        *(pcolors++) = color2.g();
+                        *(pcolors++) = color2.b();
                     }
                 }
             }
@@ -579,27 +562,23 @@ void PointObject::add( const PointObject& other )
             {
                 // s, ... + s, ... = s, ... ,s, ...
                 const size_t nsizes = this->sizes().size() + other.sizes().size();
-                kvs::Real32* psizes = sizes.allocate( nsizes );
-                if ( psizes != NULL )
-                {
-                    memcpy( psizes, this->sizes().pointer(), this->sizes().byteSize() );
-                    memcpy( psizes + this->sizes().size(), other.sizes().pointer(), other.sizes().byteSize() );
-                }
+                sizes.allocate( nsizes );
+                kvs::Real32* psizes = sizes.data();
+                memcpy( psizes, this->sizes().pointer(), this->sizes().byteSize() );
+                memcpy( psizes + this->sizes().size(), other.sizes().pointer(), other.sizes().byteSize() );
             }
             else
             {
                 // s, ... + S = s, ... ,S, ... ,S
                 const size_t nsizes = this->sizes().size() + other.coords().size();
-                kvs::Real32* psizes = sizes.allocate( nsizes );
-                if ( psizes != NULL )
+                sizes.allocate( nsizes );
+                kvs::Real32* psizes = sizes.data();
+                memcpy( psizes, this->sizes().pointer(), this->sizes().byteSize() );
+                psizes += this->colors().size();
+                const kvs::Real32 size = other.size();
+                for ( size_t i = 0; i < other.coords().size(); i++ )
                 {
-                    memcpy( psizes, this->sizes().pointer(), this->sizes().byteSize() );
-                    psizes += this->colors().size();
-                    const kvs::Real32 size = other.size();
-                    for ( size_t i = 0; i < other.coords().size(); i++ )
-                    {
-                        *(psizes++) = size;
-                    }
+                    *(psizes++) = size;
                 }
             }
         }
@@ -609,16 +588,14 @@ void PointObject::add( const PointObject& other )
             {
                 // S + s, ... = S, ... ,S, s, ...
                 const size_t nsizes = this->coords().size() + other.sizes().size();
-                kvs::Real32* psizes = sizes.allocate( nsizes );
-                if ( psizes != NULL )
+                sizes.allocate( nsizes );
+                kvs::Real32* psizes = sizes.data();
+                const kvs::Real32 size = this->size();
+                for ( size_t i = 0; i < this->coords().size(); i++ )
                 {
-                    const kvs::Real32 size = this->size();
-                    for ( size_t i = 0; i < this->coords().size(); i++ )
-                    {
-                        *(psizes++) = size;
-                    }
-                    memcpy( psizes, other.sizes().pointer(), other.sizes().byteSize() );
+                    *(psizes++) = size;
                 }
+                memcpy( psizes, other.sizes().pointer(), other.sizes().byteSize() );
             }
             else
             {
@@ -628,27 +605,23 @@ void PointObject::add( const PointObject& other )
                 {
                     // S + S = S
                     const size_t nsizes = 1;
-                    kvs::Real32* psizes = sizes.allocate( nsizes );
-                    if ( psizes != NULL )
-                    {
-                        *(psizes++) = size1;
-                    }
+                    sizes.allocate( nsizes );
+                    kvs::Real32* psizes = sizes.data();
+                    *(psizes++) = size1;
                 }
                 else
                 {
                     // S + S = S, ... , S, ...
                     const size_t nsizes = this->coords().size() + other.coords().size();
-                    kvs::Real32* psizes = sizes.allocate( nsizes );
-                    if ( psizes != NULL )
+                    sizes.allocate( nsizes );
+                    kvs::Real32* psizes = sizes.data();
+                    for ( size_t i = 0; i < this->coords().size(); i++ )
                     {
-                        for ( size_t i = 0; i < this->coords().size(); i++ )
-                        {
-                            *(psizes++) = size1;
-                        }
-                        for ( size_t i = 0; i < other.coords().size(); i++ )
-                        {
-                            *(psizes++) = size2;
-                        }
+                        *(psizes++) = size1;
+                    }
+                    for ( size_t i = 0; i < other.coords().size(); i++ )
+                    {
+                        *(psizes++) = size2;
                     }
                 }
             }

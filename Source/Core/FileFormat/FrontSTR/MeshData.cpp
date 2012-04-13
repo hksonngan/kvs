@@ -266,7 +266,8 @@ const bool MeshData::readDividedData( const std::string& filename )
     std::getline( ifs, line );
 
     // Reading global coordinates data.
-    kvs::Real32* coords = m_coords.allocate( nnodes * 3 );
+    m_coords.allocate( nnodes * 3 );
+    kvs::Real32* coords = m_coords.data();
     for ( size_t i = 0; i < nnodes; i++ )
     {
         std::getline( ifs, line );
@@ -338,7 +339,8 @@ const bool MeshData::readDividedData( const std::string& filename )
 
     // Reading local connections.
     const size_t nnodes_per_cell = ::NumberOfNodes[m_element_type];
-    kvs::UInt32* connections = m_connections.allocate( nnodes_per_cell * ncells );
+    m_connections.allocate( nnodes_per_cell * ncells );
+    kvs::UInt32* connections = m_connections.data();
     for ( size_t i = 0; i < ncells; i++ )
     {
         kvs::UInt32* c = connections;

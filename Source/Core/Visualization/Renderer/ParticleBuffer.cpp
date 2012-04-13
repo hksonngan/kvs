@@ -246,8 +246,8 @@ bool ParticleBuffer::create(
     m_index_buffer.allocate( subpixeled_npixels );
     m_depth_buffer.allocate( subpixeled_npixels );
 
-    m_index_buffer.fill( 0x00 );
-    m_depth_buffer.fill( 0x00 );
+    m_index_buffer.fill( 0 );
+    m_depth_buffer.fill( 0 );
 
     return( true );
 }
@@ -259,8 +259,8 @@ bool ParticleBuffer::create(
 /*==========================================================================*/
 void ParticleBuffer::clean( void )
 {
-    m_index_buffer.fill( 0x00 );
-    m_depth_buffer.fill( 0x00 );
+    m_index_buffer.fill( 0 );
+    m_depth_buffer.fill( 0 );
 
     m_num_of_projected_particles = 0;
     m_num_of_stored_particles    = 0;

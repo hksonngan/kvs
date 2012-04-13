@@ -161,7 +161,7 @@ void FrequencyTable::create( const kvs::VolumeObjectBase* volume )
 
     // Allocate and initialize the bin array.
     m_bin.allocate( static_cast<size_t>( m_nbins ) );
-    m_bin.fill( 0x00 );
+    m_bin.fill( 0 );
 
     // Count the bin.
     this->count_bin( volume );
@@ -181,7 +181,7 @@ void FrequencyTable::create( const kvs::ImageObject* image, const size_t channel
 
     // Allocate and initialize the bin array.
     m_bin.allocate( static_cast<size_t>( m_nbins ) );
-    m_bin.fill( 0x00 );
+    m_bin.fill( 0 );
 
     // Count the bin.
     this->count_bin( image, channel );

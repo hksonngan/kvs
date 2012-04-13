@@ -598,7 +598,7 @@ void StochasticTetrahedraEngine::create_shaders(
     if ( !vertex_shader.create( vertex_source ) )
     {
         GLenum error = glGetError();
-        kvsMessageError( "VertexShader compile failed: %s(%d)¥n", gluErrorString(error), error );
+        kvsMessageError( "VertexShader compile failed: %s(%d)\n", gluErrorString(error), error );
         std::cout << "error log:" << std::endl;
         std::cout << vertex_shader.log() << std::endl;
     }
@@ -608,7 +608,7 @@ void StochasticTetrahedraEngine::create_shaders(
     if ( !geometry_shader.create( geometry_source ) )
     {
         GLenum error = glGetError();
-        kvsMessageError( "GeometryShader compile failed: %s(%d)¥n", gluErrorString(error), error );
+        kvsMessageError( "GeometryShader compile failed: %s(%d)\n", gluErrorString(error), error );
         std::cout << "error log:" << std::endl;
         std::cout << geometry_shader.log() << std::endl;
     }
@@ -618,7 +618,7 @@ void StochasticTetrahedraEngine::create_shaders(
     if ( !fragment_shader.create( fragment_source ) )
     {
         GLenum error = glGetError();
-        kvsMessageError( "FragmentShader compile failed: %s(%d)¥n", gluErrorString(error), error );
+        kvsMessageError( "FragmentShader compile failed: %s(%d)\n", gluErrorString(error), error );
         std::cout << "error log:" << std::endl;
         std::cout << fragment_shader.log() << std::endl;
     }
@@ -756,8 +756,8 @@ void StochasticTetrahedraEngine::create_vertexbuffer_from_volume( void )
     kvs::TetrahedralCell<T> cell( m_ref_volume );
     kvs::ValueArray<int> counter( nvertices );
     kvs::ValueArray<float> normals( 3 * nvertices );
-    counter.fill( 0x00 );
-    normals.fill( 0x00 );
+    counter.fill( 0 );
+    normals.fill( 0 );
     for ( size_t i = 0; i < ncells; i++ )
     {
         cell.bindCell( i );

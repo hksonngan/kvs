@@ -129,7 +129,7 @@ void Ply::calculateMinMaxCoord( void )
 void Ply::calculateNormals( void )
 {
     kvs::ValueArray<kvs::UInt32> counter( m_nverts );
-    counter.fill( 0x00 );
+    counter.fill( 0 );
 
     m_normals.allocate( m_nverts * 3 );
     const kvs::UInt32* pconnections = m_connections.pointer();

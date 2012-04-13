@@ -133,7 +133,7 @@ inline kvs::ValueArray<kvs::UInt32> Histogram( const kvs::GrayImage& image )
     const kvs::UInt8* data = image.data().pointer();
 
     kvs::ValueArray<kvs::UInt32> count( 256 );
-    count.fill( 0x00 );
+    count.fill( 0 );
     for ( size_t index = 0; index < npixels; index++ )
     {
         const size_t value = data[index];
@@ -209,16 +209,16 @@ void BitImage::Distinction::operator () (
     for ( size_t i = 0; i < 256; i++ ) p[i] = static_cast<double>(histogram[i]) * ratio;
 
     // Calculate the sum of the probability distribution for each class.
-    kvs::ValueArray<double> w1( 256 ); w1.fill( 0x00 );
-    kvs::ValueArray<double> w2( 256 ); w2.fill( 0x00 );
+    kvs::ValueArray<double> w1( 256 ); w1.fill( 0 );
+    kvs::ValueArray<double> w2( 256 ); w2.fill( 0 );
     for ( size_t i = 0; i < 256; i++ )
     {
         for ( size_t j = 0; j <   i; j++ ) w1[i] += p[j];
         for ( size_t k = i; k < 256; k++ ) w2[i] += p[k];
     }
     // Calculate the mean for each class.
-    kvs::ValueArray<double> m1( 256 ); m1.fill( 0x00 );
-    kvs::ValueArray<double> m2( 256 ); m2.fill( 0x00 );
+    kvs::ValueArray<double> m1( 256 ); m1.fill( 0 );
+    kvs::ValueArray<double> m2( 256 ); m2.fill( 0 );
     for ( size_t i = 0; i < 256; i++ )
     {
         for ( size_t j = 0; j <   i; j++ ) m1[i] += static_cast<double>(j) * p[j] / w1[i];
@@ -226,8 +226,8 @@ void BitImage::Distinction::operator () (
     }
 
     // Calculate the variance for each class.
-    kvs::ValueArray<double> s2_1( 256 ); s2_1.fill( 0x00 );
-    kvs::ValueArray<double> s2_2( 256 ); s2_2.fill( 0x00 );
+    kvs::ValueArray<double> s2_1( 256 ); s2_1.fill( 0 );
+    kvs::ValueArray<double> s2_2( 256 ); s2_2.fill( 0 );
     for ( size_t i = 0; i < 256; i++ )
     {
         const double v = static_cast<double>(i);
@@ -243,8 +243,8 @@ void BitImage::Distinction::operator () (
 
     // Calculate the variance between the classes and the variance within
     // the classes. And then, calculate the threshold value.
-    kvs::ValueArray<double> s2_b( 256 ); s2_b.fill( 0x00 );
-    kvs::ValueArray<double> s2_w( 256 ); s2_w.fill( 0x00 );
+    kvs::ValueArray<double> s2_b( 256 ); s2_b.fill( 0 );
+    kvs::ValueArray<double> s2_w( 256 ); s2_w.fill( 0 );
     double max_ratio = 0.0;
     size_t threshold = 0;
     for ( size_t i = 0; i < 256; i++ )

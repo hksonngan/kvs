@@ -22,11 +22,15 @@
 
 
 #if KVS_ENABLE_DEBUG
-#define KVS_THROW(EXCEPTION, message) \
-    ((kvsMessageError(message)), \
-     (kvs::detail::Throw<EXCEPTION>(message, KVS_MACRO_FILE, KVS_MACRO_LINE, KVS_MACRO_FUNC)))
+//#define KVS_THROW( EXCEPTION, message ) \
+//    ( ( kvsMessageError( message ) ), \
+//     ( kvs::detail::Throw<EXCEPTION>( message, KVS_MACRO_FILE, KVS_MACRO_LINE, KVS_MACRO_FUNC ) ) )
+// Temporal workaround
+#define KVS_THROW( EXCEPTION, message ) \
+    ( ( kvsMessageError( std::string( message ).c_str() ) ), \
+     ( kvs::detail::Throw<EXCEPTION>( message, KVS_MACRO_FILE, KVS_MACRO_LINE, KVS_MACRO_FUNC ) ) )
 #else
-#define KVS_THROW(EXCEPTION, message) throw EXCEPTION(message)
+#define KVS_THROW( EXCEPTION, message ) throw EXCEPTION( message )
 #endif
 
 
@@ -35,7 +39,7 @@ namespace kvs
 
 namespace detail
 {
-    inline std::string MakeSourceInfo(const char* file, int line, const char* func)
+    inline std::string MakeSourceInfo( const char* file, int line, const char* func )
     {
         std::stringstream ss;
         ss << "FILE: " << file << " (" << line << ")" << "\n";
@@ -44,17 +48,17 @@ namespace detail
     }
 
     template <typename ExceptionType>
-    inline void Throw(const std::string& message, const char* file, int line, const char* func)
+    inline void Throw( const std::string& message, const char* file, int line, const char* func )
     {
-        throw ExceptionType(message + "\n" + MakeSourceInfo(file, line, func));
+        throw ExceptionType( message + "\n" + MakeSourceInfo( file, line, func ) );
     }
 }
 
 class Exception : public std::exception
 {
 protected:
-    explicit Exception(const std::string& message)
-        : m_message(message)
+    explicit Exception( const std::string& message )
+        : m_message( message )
     {}
 
 public:
@@ -63,7 +67,7 @@ public:
         return m_message.c_str();
     }
 
-    void addMessage(const std::string& str)
+    void addMessage( const std::string& str )
     {
         m_message += str;
     }
@@ -76,43 +80,43 @@ private:
 class NullPointingException : public kvs::Exception
 {
 public:
-    explicit NullPointingException(const std::string& message)
-        : kvs::Exception(message) {}
+    explicit NullPointingException( const std::string& message )
+        : kvs::Exception( message ) {}
 };
 
 class NotSupportedException : public kvs::Exception
 {
 public:
-    explicit NotSupportedException(const std::string& message)
-        : kvs::Exception(message) {}
+    explicit NotSupportedException( const std::string& message )
+        : kvs::Exception( message ) {}
 };
 
 class FileReadFaultException : public kvs::Exception
 {
 public:
-    explicit FileReadFaultException(const std::string& message)
-        : kvs::Exception(message) {}
+    explicit FileReadFaultException( const std::string& message )
+        : kvs::Exception( message ) {}
 };
 
 class FileWriteFaultException : public kvs::Exception
 {
 public:
-    explicit FileWriteFaultException(const std::string& message)
-        : kvs::Exception(message) {}
+    explicit FileWriteFaultException( const std::string& message )
+        : kvs::Exception( message ) {}
 };
 
 class InvalidDataException : public kvs::Exception
 {
 public:
-    explicit InvalidDataException(const std::string& message)
-        : kvs::Exception(message) {}
+    explicit InvalidDataException( const std::string& message )
+        : kvs::Exception( message ) {}
 };
 
 class OpenGLException : public kvs::Exception
 {
 public:
-    explicit OpenGLException(const std::string& message)
-        : kvs::Exception(message) {}
+    explicit OpenGLException( const std::string& message )
+        : kvs::Exception( message ) {}
 };
 
 } // kvs

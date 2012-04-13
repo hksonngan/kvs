@@ -279,12 +279,8 @@ void CellAdjacencyGraph::create_for_tetrahedral_cell( const kvs::UnstructuredVol
     const size_t ncells = volume->ncells();
     const size_t nnodes_per_cell = static_cast<size_t>( volume->cellType() );
 
-    if ( !m_graph.allocate( ncells * 4 ) )
-    {
-        kvsMessageError("Cannot allocate memory for the adjacency.");
-        return;
-    }
-    m_graph.fill(0x00);
+    m_graph.allocate( ncells * 4 );
+    m_graph.fill( 0 );
 
     if ( !m_mask.allocate( ncells * 4 ) )
     {
@@ -354,12 +350,8 @@ void CellAdjacencyGraph::create_for_hexahedral_cell( const kvs::UnstructuredVolu
     const size_t ncells = volume->ncells();
     const size_t nnodes_per_cell = static_cast<size_t>( volume->cellType() );
 
-    if ( !m_graph.allocate( ncells * 6 ) )
-    {
-        kvsMessageError("Cannot allocate memory for the adjacency.");
-        return;
-    }
-    m_graph.fill(0x00);
+    m_graph.allocate( ncells * 6 );
+    m_graph.fill( 0 );
 
     if ( !m_mask.allocate( ncells * 6 ) )
     {

@@ -429,7 +429,7 @@ const kvs::ValueArray<kvs::UInt8> Histogram::get_histogram_image( void ) const
 
     // Histogram image data.
     kvs::ValueArray<kvs::UInt8> data( npixels * nchannels );
-    data.fill( 0x00 );
+    data.fill( 0 );
 
     const float g = m_bias_parameter;
     const kvs::Real32 normalized_factor = 1.0f / m_table.maxCount();
@@ -460,7 +460,7 @@ void Histogram::calculate_density_curve( void )
     // Temporary array (biased histogram).
     const size_t width = m_table.nbins();
     kvs::ValueArray<kvs::Real32> temp( width );
-    temp.fill( 0x00 );
+    temp.fill( 0 );
 
     const kvs::Real32 normalized_factor = 1.0f / m_table.maxCount();
     for ( size_t index = 0; index < width; index++ )
@@ -474,7 +474,7 @@ void Histogram::calculate_density_curve( void )
 
     // Density curve.
     m_density_curve.allocate( width );
-    m_density_curve.fill( 0x00 );
+    m_density_curve.fill( 0 );
 
     const float h = 0.9 / std::pow( width, 0.2 ); // band width
 
@@ -941,7 +941,7 @@ const kvs::ValueArray<kvs::UInt8> Histogram::get_histogram_image( void ) const
     const size_t npixels = width * height;
 
     kvs::ValueArray<kvs::UInt8> data( npixels * nchannels );
-    data.fill( 0x00 );
+    data.fill( 0 );
 
     const float g = m_bias_parameter;
     const kvs::Real32 normalized_factor = 1.0f / ( m_table.maxCount() );

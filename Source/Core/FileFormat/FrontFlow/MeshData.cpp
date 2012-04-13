@@ -165,8 +165,10 @@ const bool MeshData::read( const std::string filename )
                 m_nelements = data.num2();
                 const kvs::Int32* src = data.intArray().pointer();
                 const size_t size = data.intArray().size();
-                kvs::UInt32* dst = m_connections.allocate( size );
-                for ( size_t i = 0; i < size; i++ ) dst[i] = static_cast<kvs::UInt32>( src[i] - 1 );
+                m_connections.allocate( size );
+                kvs::UInt32* dst = m_connections.data();
+                for ( size_t i = 0; i < size; i++ )
+                    dst[i] = static_cast<kvs::UInt32>( src[i] - 1 );
             }
         }
     }

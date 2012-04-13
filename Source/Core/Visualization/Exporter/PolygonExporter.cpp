@@ -196,8 +196,8 @@ kvs::Ply* PolygonExporter<kvs::Ply>::exec( const kvs::ObjectBase* object )
     {
         if ( polygon->colorType() == kvs::PolygonObject::PolygonColor )
         {
-            kvs::ValueArray<kvs::UInt32> temp( nvertices * 3 ); temp.fill( 0x00 );
-            kvs::ValueArray<kvs::UInt32> counter( nvertices ); counter.fill( 0x00 );
+            kvs::ValueArray<kvs::UInt32> temp( nvertices * 3 ); temp.fill( 0 );
+            kvs::ValueArray<kvs::UInt32> counter( nvertices ); counter.fill( 0 );
             if ( polygon->nconnections() == 0 )
             {
                 const size_t npolygons = polygon->coords().size() / 3;
@@ -284,8 +284,8 @@ kvs::Ply* PolygonExporter<kvs::Ply>::exec( const kvs::ObjectBase* object )
     {
         if ( polygon->normalType() == kvs::PolygonObject::PolygonNormal )
         {
-            kvs::ValueArray<kvs::Real32> normals( nvertices * 3 ); normals.fill( 0x00 );
-            kvs::ValueArray<kvs::UInt32> counter( nvertices ); counter.fill( 0x00 );
+            kvs::ValueArray<kvs::Real32> normals( nvertices * 3 ); normals.fill( 0 );
+            kvs::ValueArray<kvs::UInt32> counter( nvertices ); counter.fill( 0 );
 
             const size_t npolygons = polygon->connections().size() / 3;
             const kvs::UInt32* pconnections = m_connections.pointer();

@@ -445,16 +445,8 @@ const bool Stl::read_binary( FILE* ifs )
     }
 
     // Memory allocation.
-    if ( !m_normals.allocate( ntriangles * 3 ) )
-    {
-        kvsMessageError("Cannot allocate memory for the normal vector array.");
-        return( false );
-    }
-    if ( !m_coords.allocate( ntriangles * 9 ) )
-    {
-        kvsMessageError("Cannot allocate memory for the coordinate value array.");
-        return( false );
-    }
+    m_normals.allocate( ntriangles * 3 );
+    m_coords.allocate( ntriangles * 9 );
 
     // Read trianbles.
     kvs::Real32* normals = m_normals.pointer();

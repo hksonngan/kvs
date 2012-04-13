@@ -179,7 +179,8 @@ const bool Data::readAscii( FILE* fp, const std::string tag )
     if ( m_array_type_header == "#FLT_ARY" )
     {
         const size_t size = m_num * m_num2;
-        kvs::Real32* data = m_flt_array.allocate( size );
+        m_flt_array.allocate( size );
+        kvs::Real32* data = m_flt_array.data();
 
         const char* delim = " ,\t\n\r";
         size_t counter = 0;
@@ -200,7 +201,8 @@ const bool Data::readAscii( FILE* fp, const std::string tag )
     else if ( m_array_type_header == "#INT_ARY" )
     {
         const size_t size = m_num * m_num2;
-        kvs::Int32* data = m_int_array.allocate( size );
+        m_int_array.allocate( size );
+        kvs::Int32* data = m_int_array.data();
 
         const char* delim = " ,\t\n\r";
         size_t counter = 0;
@@ -273,7 +275,8 @@ const bool Data::readBinary( FILE* fp, const bool swap )
     if ( m_array_type_header == "#FLT_ARY" )
     {
         const size_t size = m_num * m_num2;
-        kvs::Real32* pointer = m_flt_array.allocate( size );
+        m_flt_array.allocate( size );
+        kvs::Real32* pointer = m_flt_array.data();
         fseek( fp, 4, SEEK_CUR );
         fread( pointer, sizeof(kvs::Real32), size, fp );
         fseek( fp, 4, SEEK_CUR );
@@ -282,7 +285,8 @@ const bool Data::readBinary( FILE* fp, const bool swap )
     else if ( m_array_type_header == "#INT_ARY" )
     {
         const size_t size = m_num * m_num2;
-        kvs::Int32* pointer = m_int_array.allocate( size );
+        m_int_array.allocate( size );
+        kvs::Int32* pointer = m_int_array.data();
         fseek( fp, 4, SEEK_CUR );
         fread( pointer, sizeof(kvs::Int32), size, fp );
         fseek( fp, 4, SEEK_CUR );

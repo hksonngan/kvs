@@ -118,7 +118,7 @@ struct Parameters
         const size_t npixels = width * height;
 
         kvs::ValueArray<kvs::UInt8> data( npixels * nchannels );
-        data.fill( 0x00 );
+        data.fill( 0 );
 
         const float g = bias_parameter; // bias parameter
         const kvs::Real32 normalized_factor = 1.0f / ( frequency_table.maxCount() );

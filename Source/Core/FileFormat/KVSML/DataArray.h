@@ -190,12 +190,8 @@ inline const bool ReadInternalData(
     const size_t nelements,
     kvs::Tokenizer& tokenizer )
 {
-    T* data = static_cast<T*>( data_array->allocate( nelements ) );
-    if ( !data )
-    {
-        kvsMessageError( "Cannot allocate memory for the internal data." );
-        return( false );
-    }
+    data_array->allocate( nelements );
+    T* data = data_array->data();
 
     const size_t nloops = data_array->size();
     for( size_t i = 0; i < nloops; i++ )
@@ -212,12 +208,8 @@ inline const bool ReadInternalData<kvs::Int8>(
     const size_t nelements,
     kvs::Tokenizer& tokenizer )
 {
-    kvs::Int8* data = static_cast<kvs::Int8*>( data_array->allocate( nelements ) );
-    if ( !data )
-    {
-        kvsMessageError( "Cannot allocate memory for the internal data." );
-        return( false );
-    }
+    data_array->allocate( nelements );
+    kvs::Int8* data = data_array->data();
 
     const size_t nloops = data_array->size();
     for( size_t i = 0; i < nloops; i++ )
@@ -234,12 +226,8 @@ inline const bool ReadInternalData<kvs::UInt8>(
     const size_t nelements,
     kvs::Tokenizer& tokenizer )
 {
-    kvs::UInt8* data = static_cast<kvs::UInt8*>( data_array->allocate( nelements ) );
-    if ( !data )
-    {
-        kvsMessageError( "Cannot allocate memory for the internal data." );
-        return( false );
-    }
+    data_array->allocate( nelements );
+    kvs::UInt8* data = data_array->data();
 
     const size_t nloops = data_array->size();
     for( size_t i = 0; i < nloops; i++ )
@@ -362,11 +350,7 @@ inline const bool ReadExternalData(
     const std::string& filename,
     const std::string& format )
 {
-    if ( !data_array->allocate( nelements ) )
-    {
-        kvsMessageError( "Cannot allocate memory for the external data." );
-        return( false );
-    }
+    data_array->allocate( nelements );
 
     if( format == "binary" )
     {

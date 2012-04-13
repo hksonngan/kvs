@@ -62,7 +62,7 @@ bool ParticleBufferAccumulator::create(
     const size_t subpixeled_npixels = npixels * subpixel_level * subpixel_level;
 
     m_id_buffer.allocate( subpixeled_npixels );
-    m_id_buffer.fill( 0x00 );
+    m_id_buffer.fill( 0 );
 
     return( true );
 }
@@ -75,7 +75,7 @@ bool ParticleBufferAccumulator::create(
 void ParticleBufferAccumulator::clean( void )
 {
     SuperClass::clean();
-    m_id_buffer.fill( 0x00 );
+    m_id_buffer.fill( 0 );
 }
 
 /*==========================================================================*/

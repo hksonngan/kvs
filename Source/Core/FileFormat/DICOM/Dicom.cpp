@@ -1054,7 +1054,7 @@ template <typename T>
 const kvs::ValueArray<kvs::UInt8> Dicom::rescale_pixel_data( const int level, const int width ) const
 {
     kvs::ValueArray<kvs::UInt8> pixel_data( m_row * m_column );
-    pixel_data.fill( 0x00 );
+    pixel_data.fill( 0 );
 
     const T* raw_data = reinterpret_cast<const T*>( m_raw_data.pointer() );
 
@@ -1078,7 +1078,7 @@ const kvs::ValueArray<kvs::UInt8> Dicom::rescale_pixel_data<kvs::Int8>( const in
     kvs::IgnoreUnusedVariable( width );
 
     kvs::ValueArray<kvs::UInt8> pixel_data( m_row * m_column );
-    pixel_data.fill( 0x00 );
+    pixel_data.fill( 0 );
 
     const kvs::Int8* raw_data = reinterpret_cast<const kvs::Int8*>( m_raw_data.pointer() );
 
@@ -1099,7 +1099,7 @@ const kvs::ValueArray<kvs::UInt8> Dicom::rescale_pixel_data<kvs::UInt8>( const i
     kvs::IgnoreUnusedVariable( width );
 
     kvs::ValueArray<kvs::UInt8> pixel_data( m_row * m_column );
-    pixel_data.fill( 0x00 );
+    pixel_data.fill( 0 );
 
     const kvs::UInt8* raw_data = reinterpret_cast<const kvs::UInt8*>( m_raw_data.pointer() );
 
@@ -1153,7 +1153,7 @@ const kvs::ValueArray<kvs::UInt8> Dicom::get_pixel_data( const int level, const 
     kvsMessageError("Cannot read the pixel data from the raw data.");
 
     kvs::ValueArray<kvs::UInt8> pixel_data( m_row * m_column );
-    pixel_data.fill( 0x00 );
+    pixel_data.fill( 0 );
 
     return( pixel_data );
 }

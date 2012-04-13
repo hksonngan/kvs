@@ -463,12 +463,7 @@ inline const kvs::ValueArray<float> CalculateDensityMap(
     const size_t resolution = opacity_map.resolution();
 
     // Create the density map.
-    kvs::ValueArray<float> density_map;
-    if ( !density_map.allocate( resolution ) )
-    {
-        kvsMessageError("Cannot allocate memory for a density map.");
-        return( density_map );
-    }
+    kvs::ValueArray<float> density_map( resolution );
 
     for ( size_t i = 0; i < resolution; ++i )
     {
