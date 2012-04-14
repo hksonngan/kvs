@@ -17,6 +17,7 @@
 #include <kvs/Compiler>
 #include <kvs/Platform>
 
+#if KVS_ENABLE_DEPRECATED
 
 #if defined ( KVS_PLATFORM_CPU_32 )      // ILP32
 #define KVS_TYPE_SIZEOF_CHAR        1
@@ -52,6 +53,7 @@
 #endif
 #endif
 
+#endif
 
 namespace kvs
 {
@@ -78,8 +80,9 @@ typedef unsigned long long UInt64;
 
 typedef float       Real32;
 typedef double      Real64;
+#if KVS_ENABLE_DEPRECATED
 typedef long double Real128;
-
+#endif
 } // end of namespace kvs
 
 #endif // KVS_CORE_TYPE_H_INCLUDE
