@@ -38,43 +38,43 @@ public:
     // constructors
 
     WeakPointer() throw()
-        : m_pointer(NULL), m_weak_count()
+        : m_pointer( NULL ), m_weak_count()
     {}
 
-    WeakPointer(const WeakPointer& other) throw()
-        : m_pointer(other.m_pointer), m_weak_count(other.m_weak_count)
-    {}
-
-    template <typename U>
-    WeakPointer(const WeakPointer<U>& other) throw()
-        : m_pointer(other.m_pointer), m_weak_count(other.m_weak_count)
+    WeakPointer( const WeakPointer& other ) throw()
+        : m_pointer( other.m_pointer ), m_weak_count( other.m_weak_count )
     {}
 
     template <typename U>
-    WeakPointer(const SharedPointer<U>& other) throw()
-        : m_pointer(other.m_pointer), m_weak_count(other.m_shared_count)
+    WeakPointer( const WeakPointer<U>& other ) throw()
+        : m_pointer( other.m_pointer ), m_weak_count( other.m_weak_count )
+    {}
+
+    template <typename U>
+    WeakPointer( const SharedPointer<U>& other ) throw()
+        : m_pointer( other.m_pointer ), m_weak_count( other.m_shared_count )
     {}
 
 public:
     // assingment
 
-    this_type& operator =(const this_type& rhs) throw()
+    this_type& operator =( const this_type& rhs ) throw()
     {
-        this_type(rhs).swap(*this);
+        this_type( rhs ).swap( *this );
         return *this;
     }
 
     template <typename U>
-    this_type& operator =(const WeakPointer<U>& rhs) throw()
+    this_type& operator =( const WeakPointer<U>& rhs ) throw()
     {
-        this_type(rhs).swap(*this);
+        this_type( rhs ).swap( *this );
         return *this;
     }
 
     template <typename U>
-    this_type& operator =(const SharedPointer<U>& rhs) throw()
+    this_type& operator =( const SharedPointer<U>& rhs ) throw()
     {
-        this_type(rhs).swap(*this);
+        this_type( rhs ).swap( *this );
         return *this;
     }
 
@@ -83,13 +83,13 @@ public:
 
     void reset() throw()
     {
-        this_type().swap(*this);
+        this_type().swap( *this );
     }
 
-    void swap(this_type& other) throw()
+    void swap( this_type& other ) throw()
     {
-        std::swap(m_pointer, other.m_pointer);
-        m_weak_count.swap(other.m_weak_count);
+        std::swap( m_pointer, other.m_pointer );
+        m_weak_count.swap( other.m_weak_count );
     }
 
 public:
@@ -108,8 +108,9 @@ public:
     // Makes SharedPointer instance from this. If this WeakPointer already have been expired, returns empty SharedPointer.
     SharedPointer<T> lock() const throw()
     {
-        detail::shared_pointer_impl::SharedCount shared_count(m_weak_count);
-        return shared_count.is_valid() ? SharedPointer<T>(m_pointer, shared_count) : SharedPointer<T>();
+        detail::shared_pointer_impl::SharedCount shared_count( m_weak_count );
+        return shared_count.is_valid() ? SharedPointer<T>( m_pointer, shared_count )
+                                       : SharedPointer<T>();
     }
 
 private:
@@ -128,9 +129,9 @@ namespace std
 {
 
 template <typename T>
-inline void swap(kvs::WeakPointer<T>& w1, kvs::WeakPointer<T>& w2) throw()
+inline void swap( kvs::WeakPointer<T>& w1, kvs::WeakPointer<T>& w2 ) throw()
 {
-    w1.swap(w2);
+    w1.swap( w2 );
 }
 
 } // std
