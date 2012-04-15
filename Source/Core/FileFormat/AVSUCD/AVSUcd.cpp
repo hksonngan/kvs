@@ -1008,10 +1008,10 @@ void AVSUcd::write_connections( FILE* const ofs ) const
     {
         while ( connection < end )
         {
-            const kvs::UInt32 node_id0 = *( connection++ );
-            const kvs::UInt32 node_id1 = *( connection++ );
-            const kvs::UInt32 node_id2 = *( connection++ );
-            const kvs::UInt32 node_id3 = *( connection++ );
+            const kvs::UInt32 node_id0 = *( connection++ ) + 1;
+            const kvs::UInt32 node_id1 = *( connection++ ) + 1;
+            const kvs::UInt32 node_id2 = *( connection++ ) + 1;
+            const kvs::UInt32 node_id3 = *( connection++ ) + 1;
 
             fprintf( ofs, "%u 0 tet %u %u %u %u\n",
                      static_cast<unsigned int>( element_id++ ),
@@ -1025,16 +1025,16 @@ void AVSUcd::write_connections( FILE* const ofs ) const
     {
         while ( connection < end )
         {
-            const kvs::UInt32 node_id0  = *( connection++ );
-            const kvs::UInt32 node_id1  = *( connection++ );
-            const kvs::UInt32 node_id2  = *( connection++ );
-            const kvs::UInt32 node_id3  = *( connection++ );
-            const kvs::UInt32 node_id4  = *( connection++ );
-            const kvs::UInt32 node_id5  = *( connection++ );
-            const kvs::UInt32 node_id6  = *( connection++ );
-            const kvs::UInt32 node_id7  = *( connection++ );
-            const kvs::UInt32 node_id8  = *( connection++ );
-            const kvs::UInt32 node_id9  = *( connection++ );
+            const kvs::UInt32 node_id0  = *( connection++ ) + 1;
+            const kvs::UInt32 node_id1  = *( connection++ ) + 1;
+            const kvs::UInt32 node_id2  = *( connection++ ) + 1;
+            const kvs::UInt32 node_id3  = *( connection++ ) + 1;
+            const kvs::UInt32 node_id4  = *( connection++ ) + 1;
+            const kvs::UInt32 node_id5  = *( connection++ ) + 1;
+            const kvs::UInt32 node_id6  = *( connection++ ) + 1;
+            const kvs::UInt32 node_id7  = *( connection++ ) + 1;
+            const kvs::UInt32 node_id8  = *( connection++ ) + 1;
+            const kvs::UInt32 node_id9  = *( connection++ ) + 1;
 
             fprintf( ofs, "%u 0 tet %u %u %u %u %u %u %u %u %u %u\n",
                      static_cast<unsigned int>( element_id++ ),
@@ -1054,14 +1054,14 @@ void AVSUcd::write_connections( FILE* const ofs ) const
     {
         while ( connection < end )
         {
-            const kvs::UInt32 node_id0 = *( connection++ );
-            const kvs::UInt32 node_id1 = *( connection++ );
-            const kvs::UInt32 node_id2 = *( connection++ );
-            const kvs::UInt32 node_id3 = *( connection++ );
-            const kvs::UInt32 node_id4 = *( connection++ );
-            const kvs::UInt32 node_id5 = *( connection++ );
-            const kvs::UInt32 node_id6 = *( connection++ );
-            const kvs::UInt32 node_id7 = *( connection++ );
+            const kvs::UInt32 node_id0 = *( connection++ ) + 1;
+            const kvs::UInt32 node_id1 = *( connection++ ) + 1;
+            const kvs::UInt32 node_id2 = *( connection++ ) + 1;
+            const kvs::UInt32 node_id3 = *( connection++ ) + 1;
+            const kvs::UInt32 node_id4 = *( connection++ ) + 1;
+            const kvs::UInt32 node_id5 = *( connection++ ) + 1;
+            const kvs::UInt32 node_id6 = *( connection++ ) + 1;
+            const kvs::UInt32 node_id7 = *( connection++ ) + 1;
 
             fprintf( ofs, "%u 0 hex %u %u %u %u %u %u %u %u\n",
                      static_cast<unsigned int>( element_id++ ),
@@ -1084,7 +1084,7 @@ void AVSUcd::write_connections( FILE* const ofs ) const
             const size_t nnodes = 20;
             for ( size_t i = 0; i < nnodes; i++ )
             {
-                const kvs::UInt32 node_id = *( connection++ );
+                const kvs::UInt32 node_id = *( connection++ ) + 1;
                 fprintf( ofs, " %u", node_id );
             }
 

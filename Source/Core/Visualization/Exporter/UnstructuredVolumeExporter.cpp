@@ -119,4 +119,98 @@ kvs::KVSMLObjectUnstructuredVolume* UnstructuredVolumeExporter<kvs::KVSMLObjectU
     return( this );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a AVS UCD data from given object.
+ *  @param  object [in] pointer to the unstructured volume object
+ */
+/*===========================================================================*/
+UnstructuredVolumeExporter<kvs::AVSUcd>::UnstructuredVolumeExporter(
+    const kvs::UnstructuredVolumeObject* object )
+{
+    this->exec( object );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Exports to a AVS UCD data.
+ *  @param  object [in] pointer to the unstructured volume object
+ */
+/*===========================================================================*/
+kvs::AVSUcd* UnstructuredVolumeExporter<kvs::AVSUcd>::exec(
+    const kvs::ObjectBase* object )
+{
+    if ( !object )
+    {
+        m_is_success = false;
+        kvsMessageError("Input object is NULL.");
+        return( NULL );
+    }
+
+    // Cast to the structured volume object.
+    const kvs::UnstructuredVolumeObject* volume = kvs::UnstructuredVolumeObject::DownCast( object );
+    if ( !volume )
+    {
+        m_is_success = false;
+        kvsMessageError("Input object is not structured volume object.");
+        return( NULL );
+    }
+
+    // Check the cell type of the given unstructured volume object.
+    switch ( volume->cellType() )
+    {
+    case kvs::UnstructuredVolumeObject::UnknownCellType:
+    {
+        kvsMessageError("Unknown cell type.");
+        break;
+    }
+    case kvs::UnstructuredVolumeObject::Tetrahedra:
+    {
+        this->setElementType( kvs::AVSUcd::Tetrahedra );
+        break;
+    }
+    case kvs::UnstructuredVolumeObject::QuadraticTetrahedra:
+    {
+        this->setElementType( kvs::AVSUcd::Tetrahedra2 );
+        break;
+    }
+    case kvs::UnstructuredVolumeObject::Hexahedra:
+    {
+        this->setElementType( kvs::AVSUcd::Hexahedra );
+        break;
+    }
+    case kvs::UnstructuredVolumeObject::QuadraticHexahedra:
+    {
+        this->setElementType( kvs::AVSUcd::Hexahedra2 );
+        break;
+    }
+    default:
+    {
+        m_is_success = false;
+        kvsMessageError("Not supported cell type.");
+        break;
+    }
+    }
+
+    std::vector<size_t> veclens; veclens.push_back( volume->veclen() );
+    std::vector<std::string> component_names; component_names.push_back( "value" );
+    std::vector<std::string> component_units; component_units.push_back( "unit" );
+    kvs::ValueArray<kvs::Real32> values( volume->values().size() );
+    for ( size_t i = 0; i < values.size(); i++ ) values[i] = volume->values().to<kvs::Real32>(i);
+
+    this->setNSteps( 1 );
+    this->setNComponentsPerNode( 1 );
+    this->setNValuesPerNode( 1 );
+    this->setNNodes( volume->nnodes() );
+    this->setNElements( volume->ncells() );
+    this->setVeclens( veclens );
+    this->setComponentNames( component_names );
+    this->setComponentUnits( component_units );
+    this->setCoords( volume->coords() );
+    this->setConnections( volume->connections() );
+    this->setValues( values );
+
+    return( this );
+}
+
 } // end of namespace kvs

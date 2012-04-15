@@ -18,6 +18,7 @@
 #include <kvs/ObjectBase>
 #include <kvs/UnstructuredVolumeObject>
 #include <kvs/KVSMLObjectUnstructuredVolume>
+#include <kvs/AVSUcd>
 #include <kvs/ExporterBase>
 
 
@@ -80,6 +81,22 @@ public:
     UnstructuredVolumeExporter( const kvs::UnstructuredVolumeObject* object );
 
     kvs::KVSMLObjectUnstructuredVolume* exec( const kvs::ObjectBase* object );
+};
+
+/*===========================================================================*/
+/**
+ *  Specialized structured volume exporter class for kvs::AVSUcd.
+ */
+/*===========================================================================*/
+template <>
+class UnstructuredVolumeExporter<kvs::AVSUcd> :
+        public kvs::ExporterBase<kvs::AVSUcd>
+{
+public:
+
+    UnstructuredVolumeExporter( const kvs::UnstructuredVolumeObject* object );
+
+    kvs::AVSUcd* exec( const kvs::ObjectBase* object );
 };
 
 } // end of namespace kvs
