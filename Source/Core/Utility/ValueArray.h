@@ -62,39 +62,39 @@ public:
 private:
 
     kvs::ReferenceCounter* m_counter; ///< Reference counter.
-    size_t                 m_nvalues; ///< Number of values.
+    size_t                 m_size; ///< Number of values.
     value_type*            m_values;  ///< Value array.
 
 public:
 
-    ValueArray( void )
+    ValueArray()
         : m_counter( 0 )
-        , m_nvalues( 0 )
+        , m_size( 0 )
         , m_values( 0 )
     {
         this->create_counter();
     }
 
-    explicit ValueArray( const size_t nvalues )
+    explicit ValueArray( const size_t size )
         : m_counter( 0 )
-        , m_nvalues( 0 )
+        , m_size( 0 )
         , m_values( 0 )
     {
-        this->allocate( nvalues );
+        this->allocate( size );
     }
 
-    ValueArray( const value_type* const values, const size_t nvalues )
+    ValueArray( const value_type* const values, const size_t size )
         : m_counter( 0 )
-        , m_nvalues( 0 )
+        , m_size( 0 )
         , m_values( 0 )
     {
-        this->allocate( nvalues );
-        std::copy( values, values + nvalues, this->begin() );
+        this->allocate( size );
+        std::copy( values, values + size, this->begin() );
     }
 
     explicit ValueArray( const std::vector<T>& values )
         : m_counter( 0 )
-        , m_nvalues( 0 )
+        , m_size( 0 )
         , m_values( 0 )
     {
         this->allocate( values.size() );
@@ -104,7 +104,7 @@ public:
     template <typename InIter>
     ValueArray( InIter first, InIter last )
         : m_counter( 0 )
-        , m_nvalues( 0 )
+        , m_size( 0 )
         , m_values( 0 )
     {
         this->allocate( std::distance( first, last ) );
@@ -113,195 +113,180 @@ public:
 
     ValueArray( const this_type& other )
         : m_counter( 0 )
-        , m_nvalues( 0 )
+        , m_size( 0 )
         , m_values( 0 )
     {
         m_counter = other.m_counter;
-        m_nvalues = other.m_nvalues;
+        m_size = other.m_size;
         m_values  = other.m_values;
         this->ref();
     }
 
-    ~ValueArray( void )
+    ~ValueArray()
     {
-        this->deallocate();
+        this->unref();
     }
 
 public:
 
-    iterator begin( void )
+    iterator begin()
     {
-        return( m_values );
+        return this->data();
     }
 
-    const_iterator begin( void ) const
+    const_iterator begin() const
     {
-        return( m_values );
+        return this->data();
     }
 
-    iterator end( void )
+    iterator end()
     {
-        return( m_values + m_nvalues );
+        return this->begin() + this->size();
     }
 
-    const_iterator end( void ) const
+    const_iterator end() const
     {
-        return( m_values + m_nvalues );
+        return this->begin() + this->size();
     }
 
-    reverse_iterator rbegin( void )
+    reverse_iterator rbegin()
     {
-        return( reverse_iterator( this->end() ) );
+        return reverse_iterator( this->end() );
     }
 
-    const_reverse_iterator rbegin( void ) const
+    const_reverse_iterator rbegin() const
     {
-        return( const_reverse_iterator( this->end() ) );
+        return const_reverse_iterator( this->end() );
     }
 
-    reverse_iterator rend( void )
+    reverse_iterator rend()
     {
-        return( reverse_iterator( this->begin() ) );
+        return reverse_iterator( this->begin() );
     }
 
-    const_reverse_iterator rend( void ) const
+    const_reverse_iterator rend() const
     {
-        return( const_reverse_iterator( this->begin() ) );
+        return const_reverse_iterator( this->begin() );
     }
 
 public:
 
     reference operator []( const size_t index )
     {
-        KVS_ASSERT( index < m_nvalues );
-
-        return( m_values[index] );
+        KVS_ASSERT( index < this->size() );
+        return this->data()[ index ];
     }
 
     const_reference operator []( const size_t index ) const
     {
-        KVS_ASSERT( index < m_nvalues );
-
-        return( m_values[index] );
+        KVS_ASSERT( index < this->size() );
+        return this->data()[ index ];
     }
 
-    this_type& operator =( const this_type& other )
+    this_type& operator =( const this_type& rhs )
     {
-        if ( this != &other )
-        {
-            this->unref();
-            m_counter = other.m_counter;
-            m_nvalues = other.m_nvalues;
-            m_values  = other.m_values;
-            this->ref();
-        }
-
-        return( *this );
+        this_type temp( rhs );
+        temp.swap( *this );
+        return *this;
     }
 
     friend bool operator ==( const this_type& lhs, const this_type& rhs )
     {
-        if ( lhs.size() != rhs.size() )
-            return false;
-
-        return( std::equal( lhs.begin(), lhs.end(), rhs.begin() ) );
+        return lhs.size() == rhs.size() &&
+               std::equal( lhs.begin(), lhs.end(), rhs.begin() );
     }
 
     friend bool operator <( const this_type& lhs, const this_type& rhs )
     {
-        return( std::lexicographical_compare( lhs.begin(), lhs.end(),
-                                              rhs.begin(), rhs.end() ) );
+        return std::lexicographical_compare( lhs.begin(), lhs.end(),
+                                             rhs.begin(), rhs.end() );
     }
 
     friend bool operator !=( const this_type& lhs, const this_type& rhs )
     {
-        return( !( lhs == rhs ) );
+        return !( lhs == rhs );
     }
 
     friend bool operator >( const this_type& lhs, const this_type& rhs )
     {
-        return( rhs < lhs );
+        return rhs < lhs;
     }
 
     friend bool operator <=( const this_type& lhs, const this_type& rhs )
     {
-        return( !( rhs < lhs ) );
+        return !( rhs < lhs );
     }
 
     friend bool operator >=( const this_type& lhs, const this_type& rhs )
     {
-        return( !( lhs < rhs ) );
+        return !( lhs < rhs );
     }
 
 public:
 
     reference at( const size_t index )
     {
-        KVS_ASSERT( index < m_nvalues );
-
-        return( m_values[index] );
+        return (*this)[ index ];
     }
 
     const_reference at( const size_t index ) const
     {
-        KVS_ASSERT( index < m_nvalues );
-
-        return( m_values[index] );
+        return (*this)[ index ];
     }
 
-    reference front( void )
+    reference front()
     {
-        return( m_values[0] );
+        return (*this)[0];
     }
 
-    const_reference front( void ) const
+    const_reference front() const
     {
-        return( m_values[0] );
+        return (*this)[0];
     }
 
-    reference back( void )
+    reference back()
     {
-        return( m_values[m_nvalues - 1] );
+        return (*this)[ this->size() - 1 ];
     }
 
-    const_reference back( void ) const
+    const_reference back() const
     {
-        return( m_values[m_nvalues - 1] );
+        return (*this)[ this->size() - 1 ];
     }
 
-    const size_type size( void ) const
+    size_type size() const
     {
-        return( m_nvalues );
+        return m_size;
     }
 
-    const size_type byteSize( void ) const
+    size_type byteSize() const
     {
-        return( sizeof( value_type ) * m_nvalues );
+        return this->size() * sizeof( value_type );
     }
 
-    const bool isEmpty( void ) const
+    bool isEmpty() const
     {
-        return( m_nvalues == 0 );
+        return this->empty();
     }
 
-    value_type* pointer( void )
+    value_type* pointer()
     {
-        return( m_values );
+        return this->data();
     }
 
-    const value_type* pointer( void ) const
+    const value_type* pointer() const
     {
-        return( m_values );
+        return this->data();
     }
 
-    kvs::ReferenceCounter* counter( void ) const
+    kvs::ReferenceCounter* counter() const
     {
-        return( m_counter );
+        return m_counter;
     }
 
-    void swapByte( void )
+    void swapByte()
     {
-        kvs::Endian::Swap( m_values, m_nvalues );
+        kvs::Endian::Swap( m_values, m_size );
     }
 
     value_type* data()
@@ -322,7 +307,7 @@ public:
     void swap( ValueArray& other )
     {
         std::swap( m_values, other.m_values );
-        std::swap( m_nvalues, other.m_nvalues );
+        std::swap( m_size, other.m_size );
         std::swap( m_counter, other.m_counter );
     }
 
@@ -335,53 +320,47 @@ public:
 
 #if KVS_ENABLE_DEPRECATED
 
-    value_type* allocate( const size_t nvalues )
+    value_type* allocate( const size_t size )
     {
         this->unref();
         this->create_counter();
 
-        m_nvalues = nvalues;
-        m_values = new value_type [ nvalues ];
+        m_size = size;
+        m_values = new value_type [ size ];
         KVS_ASSERT( m_values != NULL );
 
-        return( m_values );
+        return m_values;
     }
 
     void fill( const int bit )
     {
-        memset( m_values, bit, sizeof( value_type ) * m_nvalues );
+        memset( m_values, bit, sizeof( value_type ) * m_size );
     }
 
     void shallowCopy( const this_type& other )
     {
-        m_counter = other.m_counter;
-        m_nvalues = other.m_nvalues;
-        m_values  = other.m_values;
-
-        this->ref();
+        *this = other;
     }
 
     void deepCopy( const this_type& other )
     {
-        this->allocate( other.size() );
-        std::copy( other.begin(), other.end(), this->begin() );
+        *this = other.clone();
     }
 
     void deepCopy( const value_type* values, const size_t nvalues )
     {
-        this->allocate( nvalues );
-        std::copy( values, values + nvalues, this->begin() );
+        *this = this_type( values, nvalues );
     }
 
 #else
 
-    void allocate( const size_t nvalues )
+    void allocate( const size_t size )
     {
         this->unref();
         this->create_counter();
 
-        m_nvalues = nvalues;
-        m_values = new value_type [ nvalues ];
+        m_size = size;
+        m_values = new value_type [ size ];
     }
 
     void fill( const T& value )
@@ -391,25 +370,25 @@ public:
 
 #endif
 
-    void deallocate( void )
+    void deallocate()
     {
         this->unref();
     }
 
 private:
 
-    void create_counter( void )
+    void create_counter()
     {
         m_counter = new ReferenceCounter( 1 );
         KVS_ASSERT( m_counter != NULL );
     }
 
-    void ref( void )
+    void ref()
     {
         if ( m_counter ) { m_counter->increment(); }
     }
 
-    void unref( void )
+    void unref()
     {
         if ( m_counter )
         {
@@ -423,7 +402,7 @@ private:
         }
 
         m_counter = 0;
-        m_nvalues = 0;
+        m_size = 0;
         m_values  = 0;
     }
 };

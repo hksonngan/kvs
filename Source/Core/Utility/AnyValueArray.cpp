@@ -17,11 +17,11 @@
 namespace kvs
 {
 
-AnyValueArray::AnyValueArray( void )
+AnyValueArray::AnyValueArray()
     : m_counter( 0 )
     , m_type_info( 0 )
     , m_size_of_value( 0 )
-    , m_nvalues( 0 )
+    , m_size( 0 )
     , m_values( 0 )
 {
     this->create_counter();
@@ -31,13 +31,13 @@ AnyValueArray::AnyValueArray( const AnyValueArray& other )
     : m_counter( 0 )
     , m_type_info( 0 )
     , m_size_of_value( 0 )
-    , m_nvalues( 0 )
+    , m_size( 0 )
     , m_values( 0 )
 {
     this->shallowCopy( other );
 }
 
-AnyValueArray::~AnyValueArray( void )
+AnyValueArray::~AnyValueArray()
 {
     this->deallocate();
 }
@@ -103,41 +103,41 @@ template<> const kvs::Real32& AnyValueArray::at<kvs::Real32>( const size_t index
 template<> const kvs::Real64& AnyValueArray::at<kvs::Real64>( const size_t index ) const;
 template<> const std::string& AnyValueArray::at<std::string>( const size_t index ) const;
 
-template<> const kvs::Int8   AnyValueArray::to<kvs::Int8>( const size_t index ) const;
-template<> const kvs::UInt8  AnyValueArray::to<kvs::UInt8>( const size_t index ) const;
-template<> const kvs::Int16  AnyValueArray::to<kvs::Int16>( const size_t index ) const;
-template<> const kvs::UInt16 AnyValueArray::to<kvs::UInt16>( const size_t index ) const;
-template<> const kvs::Int32  AnyValueArray::to<kvs::Int32>( const size_t index ) const;
-template<> const kvs::UInt32 AnyValueArray::to<kvs::UInt32>( const size_t index ) const;
-template<> const kvs::Int64  AnyValueArray::to<kvs::Int64>( const size_t index ) const;
-template<> const kvs::UInt64 AnyValueArray::to<kvs::UInt64>( const size_t index ) const;
-template<> const kvs::Real32 AnyValueArray::to<kvs::Real32>( const size_t index ) const;
-template<> const kvs::Real64 AnyValueArray::to<kvs::Real64>( const size_t index ) const;
-template<> const std::string AnyValueArray::to<std::string>( const size_t index ) const;
+template<> kvs::Int8   AnyValueArray::to<kvs::Int8>( const size_t index ) const;
+template<> kvs::UInt8  AnyValueArray::to<kvs::UInt8>( const size_t index ) const;
+template<> kvs::Int16  AnyValueArray::to<kvs::Int16>( const size_t index ) const;
+template<> kvs::UInt16 AnyValueArray::to<kvs::UInt16>( const size_t index ) const;
+template<> kvs::Int32  AnyValueArray::to<kvs::Int32>( const size_t index ) const;
+template<> kvs::UInt32 AnyValueArray::to<kvs::UInt32>( const size_t index ) const;
+template<> kvs::Int64  AnyValueArray::to<kvs::Int64>( const size_t index ) const;
+template<> kvs::UInt64 AnyValueArray::to<kvs::UInt64>( const size_t index ) const;
+template<> kvs::Real32 AnyValueArray::to<kvs::Real32>( const size_t index ) const;
+template<> kvs::Real64 AnyValueArray::to<kvs::Real64>( const size_t index ) const;
+template<> std::string AnyValueArray::to<std::string>( const size_t index ) const;
 
-template<> const kvs::Int8*   AnyValueArray::pointer<kvs::Int8>( void ) const;
-template<> const kvs::UInt8*  AnyValueArray::pointer<kvs::UInt8>( void ) const;
-template<> const kvs::Int16*  AnyValueArray::pointer<kvs::Int16>( void ) const;
-template<> const kvs::UInt16* AnyValueArray::pointer<kvs::UInt16>( void ) const;
-template<> const kvs::Int32*  AnyValueArray::pointer<kvs::Int32>( void ) const;
-template<> const kvs::UInt32* AnyValueArray::pointer<kvs::UInt32>( void ) const;
-template<> const kvs::Int64*  AnyValueArray::pointer<kvs::Int64>( void ) const;
-template<> const kvs::UInt64* AnyValueArray::pointer<kvs::UInt64>( void ) const;
-template<> const kvs::Real32* AnyValueArray::pointer<kvs::Real32>( void ) const;
-template<> const kvs::Real64* AnyValueArray::pointer<kvs::Real64>( void ) const;
-template<> const std::string* AnyValueArray::pointer<std::string>( void ) const;
+template<> const kvs::Int8*   AnyValueArray::pointer<kvs::Int8>() const;
+template<> const kvs::UInt8*  AnyValueArray::pointer<kvs::UInt8>() const;
+template<> const kvs::Int16*  AnyValueArray::pointer<kvs::Int16>() const;
+template<> const kvs::UInt16* AnyValueArray::pointer<kvs::UInt16>() const;
+template<> const kvs::Int32*  AnyValueArray::pointer<kvs::Int32>() const;
+template<> const kvs::UInt32* AnyValueArray::pointer<kvs::UInt32>() const;
+template<> const kvs::Int64*  AnyValueArray::pointer<kvs::Int64>() const;
+template<> const kvs::UInt64* AnyValueArray::pointer<kvs::UInt64>() const;
+template<> const kvs::Real32* AnyValueArray::pointer<kvs::Real32>() const;
+template<> const kvs::Real64* AnyValueArray::pointer<kvs::Real64>() const;
+template<> const std::string* AnyValueArray::pointer<std::string>() const;
 
-template<> kvs::Int8*   AnyValueArray::pointer<kvs::Int8>( void );
-template<> kvs::UInt8*  AnyValueArray::pointer<kvs::UInt8>( void );
-template<> kvs::Int16*  AnyValueArray::pointer<kvs::Int16>( void );
-template<> kvs::UInt16* AnyValueArray::pointer<kvs::UInt16>( void );
-template<> kvs::Int32*  AnyValueArray::pointer<kvs::Int32>( void );
-template<> kvs::UInt32* AnyValueArray::pointer<kvs::UInt32>( void );
-template<> kvs::Int64*  AnyValueArray::pointer<kvs::Int64>( void );
-template<> kvs::UInt64* AnyValueArray::pointer<kvs::UInt64>( void );
-template<> kvs::Real32* AnyValueArray::pointer<kvs::Real32>( void );
-template<> kvs::Real64* AnyValueArray::pointer<kvs::Real64>( void );
-template<> std::string* AnyValueArray::pointer<std::string>( void );
+template<> kvs::Int8*   AnyValueArray::pointer<kvs::Int8>();
+template<> kvs::UInt8*  AnyValueArray::pointer<kvs::UInt8>();
+template<> kvs::Int16*  AnyValueArray::pointer<kvs::Int16>();
+template<> kvs::UInt16* AnyValueArray::pointer<kvs::UInt16>();
+template<> kvs::Int32*  AnyValueArray::pointer<kvs::Int32>();
+template<> kvs::UInt32* AnyValueArray::pointer<kvs::UInt32>();
+template<> kvs::Int64*  AnyValueArray::pointer<kvs::Int64>();
+template<> kvs::UInt64* AnyValueArray::pointer<kvs::UInt64>();
+template<> kvs::Real32* AnyValueArray::pointer<kvs::Real32>();
+template<> kvs::Real64* AnyValueArray::pointer<kvs::Real64>();
+template<> std::string* AnyValueArray::pointer<std::string>();
 
 template<> void* AnyValueArray::allocate<kvs::Int8>( const size_t nvalues );
 template<> void* AnyValueArray::allocate<kvs::UInt8>( const size_t nvalues );
