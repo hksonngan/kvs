@@ -67,14 +67,8 @@ HydrogenVolumeData::SuperClass* HydrogenVolumeData::exec( void )
     const kvs::Real64 kr3 = 32.0 / dim3;
     const kvs::Real64 kd = 6.0;
 
-    kvs::AnyValueArray values;
-    if ( !values.allocate<kvs::UInt8>( static_cast<size_t>( dim1 * dim2 * dim3 ) ) )
-    {
-        kvsMessageError("Cannot allocate memory for the value.");
-        return( this );
-    }
-
-    kvs::UInt8* pvalues = values.pointer<kvs::UInt8>();
+    kvs::ValueArray<kvs::UInt8> values( static_cast<size_t>( dim1 * dim2 * dim3 ) );
+    kvs::UInt8* pvalues = values.data();
     kvs::UInt64 index = 0;
     for ( kvs::UInt64 z = 0; z < dim3; ++z )
     {
@@ -99,7 +93,7 @@ HydrogenVolumeData::SuperClass* HydrogenVolumeData::exec( void )
 
     SuperClass::setGridType( kvs::StructuredVolumeObject::Uniform );
     SuperClass::setVeclen( 1 );
-    SuperClass::setValues( values );
+    SuperClass::setValues( kvs::AnyValueArray( values ) );
     SuperClass::updateMinMaxCoords();
     SuperClass::updateMinMaxValues();
 

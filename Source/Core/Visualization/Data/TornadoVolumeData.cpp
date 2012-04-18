@@ -94,14 +94,9 @@ TornadoVolumeData::SuperClass* TornadoVolumeData::exec( void )
     const double dx = 1.0 / ( dim1 - 1.0 );
     const double dy = 1.0 / ( dim2 - 1.0 );
     const double dz = 1.0 / ( dim3 - 1.0 );
-    kvs::AnyValueArray values;
-    if ( !values.allocate<kvs::Real32>( static_cast<size_t>( dim1 * dim2 * dim3 * veclen ) ) )
-    {
-        kvsMessageError("Cannot allocate memory for the value.");
-        return( this );
-    }
 
-    kvs::Real32* pvalues = values.pointer<kvs::Real32>();
+    kvs::ValueArray<kvs::Real32> values( static_cast<size_t>( dim1 * dim2 * dim3 * veclen ) );
+    kvs::Real32* pvalues = values.data();
     kvs::UInt64 index = 0;
     for( kvs::UInt64 k = 0; k < dim3; k++ )
     {
@@ -156,7 +151,7 @@ TornadoVolumeData::SuperClass* TornadoVolumeData::exec( void )
 
     SuperClass::setGridType( kvs::StructuredVolumeObject::Uniform );
     SuperClass::setVeclen( veclen );
-    SuperClass::setValues( values );
+    SuperClass::setValues( kvs::AnyValueArray( values ) );
     SuperClass::updateMinMaxCoords();
     SuperClass::updateMinMaxValues();
 

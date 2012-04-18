@@ -109,14 +109,7 @@ bool Entry::read( std::ifstream& ifs )
     if ( !memcpy( &m_count,  buffer + 4, 4 ) ) return( false ); // offset 4, byte 4
 
     // Allocate memory for the value array.
-    if ( !this->allocate_values( m_count, m_type ) )
-    {
-        kvsMessageError( "Cannot read entry; tag:%d, type:%d, count:%d.",
-                         m_tag,
-                         m_type,
-                         m_count );
-        return( false );
-    }
+    this->allocate_values( m_count, m_type );
 
     // Read values.
     const size_t byte_size = kvs::tiff::ValueTypeSize[m_type] * m_count;
@@ -148,20 +141,21 @@ void* Entry::allocate_values( const size_t nvalues, const size_t value_type )
 {
     switch( value_type )
     {
-    case kvs::tiff::Byte:      return( m_values.allocate<kvs::UInt8>( nvalues ) );
-    case kvs::tiff::Ascii:     return( m_values.allocate<char>( nvalues ) );
-    case kvs::tiff::Short:     return( m_values.allocate<kvs::UInt16>( nvalues ) );
-    case kvs::tiff::Long:      return( m_values.allocate<kvs::UInt32>( nvalues ) );
-    case kvs::tiff::Rational:  return( m_values.allocate<kvs::Real64>( nvalues ) );
-    case kvs::tiff::SByte:     return( m_values.allocate<kvs::Int8>( nvalues ) );
-    case kvs::tiff::Undefined: return( m_values.allocate<char>( nvalues ) );
-    case kvs::tiff::SShort:    return( m_values.allocate<kvs::Int16>( nvalues ) );
-    case kvs::tiff::SLong:     return( m_values.allocate<kvs::Int32>( nvalues ) );
-    case kvs::tiff::SRational: return( m_values.allocate<kvs::Real64>( nvalues ) );
-    case kvs::tiff::Float:     return( m_values.allocate<kvs::Real32>( nvalues ) );
-    case kvs::tiff::Double:    return( m_values.allocate<kvs::Real64>( nvalues ) );
-    default: kvsMessageError("Unknown entry value type."); return( NULL );
+    case kvs::tiff::Byte:      m_values.allocate<kvs::UInt8>( nvalues );
+    case kvs::tiff::Ascii:     m_values.allocate<char>( nvalues );
+    case kvs::tiff::Short:     m_values.allocate<kvs::UInt16>( nvalues );
+    case kvs::tiff::Long:      m_values.allocate<kvs::UInt32>( nvalues );
+    case kvs::tiff::Rational:  m_values.allocate<kvs::Real64>( nvalues );
+    case kvs::tiff::SByte:     m_values.allocate<kvs::Int8>( nvalues );
+    case kvs::tiff::Undefined: m_values.allocate<char>( nvalues );
+    case kvs::tiff::SShort:    m_values.allocate<kvs::Int16>( nvalues );
+    case kvs::tiff::SLong:     m_values.allocate<kvs::Int32>( nvalues );
+    case kvs::tiff::SRational: m_values.allocate<kvs::Real64>( nvalues );
+    case kvs::tiff::Float:     m_values.allocate<kvs::Real32>( nvalues );
+    case kvs::tiff::Double:    m_values.allocate<kvs::Real64>( nvalues );
+    default: kvsMessageError("Unknown entry value type.");
     }
+    return m_values.data();
 }
 
 } // end of namespace tiff

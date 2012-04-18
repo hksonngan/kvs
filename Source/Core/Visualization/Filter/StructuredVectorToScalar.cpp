@@ -105,8 +105,8 @@ void StructuredVectorToScalar::calculate_magnitude( const kvs::StructuredVolumeO
     const size_t veclen = volume->veclen();
     const size_t nnodes = volume->nnodes();
 
-    kvs::AnyValueArray values;
-    kvs::Real32* dst = static_cast<kvs::Real32*>( values.template allocate<kvs::Real32>( nnodes ) );
+    kvs::ValueArray<kvs::Real32> values( nnodes );
+    kvs::Real32* dst = values.data();
     const T* src = static_cast<const T*>( volume->values().pointer() );
 
     for ( size_t i = 0; i < nnodes; i++ )
@@ -123,7 +123,7 @@ void StructuredVectorToScalar::calculate_magnitude( const kvs::StructuredVolumeO
     SuperClass::setGridType( volume->gridType() );
     SuperClass::setVeclen( 1 );
     SuperClass::setResolution( volume->resolution() );
-    SuperClass::setValues( values );
+    SuperClass::setValues( kvs::AnyValueArray( values ) );
     SuperClass::updateMinMaxValues();
     SuperClass::updateMinMaxCoords();
 }

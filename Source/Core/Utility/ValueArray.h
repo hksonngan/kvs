@@ -286,7 +286,7 @@ public:
 
     void swapByte()
     {
-        kvs::Endian::Swap( m_values, m_size );
+        kvs::Endian::Swap( this->data(), this->size() );
     }
 
     value_type* data()
@@ -408,5 +408,16 @@ private:
 };
 
 } // end of namespace kvs
+
+namespace std
+{
+
+template <typename T>
+inline void swap( kvs::ValueArray<T>& lhs, kvs::ValueArray<T>& rhs )
+{
+    lhs.swap( rhs );
+}
+
+} // std
 
 #endif // KVS__VALUE_ARRAY_H_INCLUDE

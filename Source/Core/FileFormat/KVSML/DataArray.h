@@ -30,6 +30,65 @@ namespace kvs
 namespace kvsml
 {
 
+namespace temporal
+{
+
+template <typename T>
+inline T To( const std::string& value )
+{
+    return static_cast<T>( atof( value.c_str() ) );
+}
+
+template <>
+inline kvs::Int8 To( const std::string& value )
+{
+    return static_cast<kvs::Int8>( atoi( value.c_str() ) );
+}
+
+template <>
+inline kvs::UInt8 To( const std::string& value )
+{
+    return static_cast<kvs::UInt8>( atoi( value.c_str() ) );
+}
+
+inline std::string TypeName( const std::type_info& type )
+{
+    if (      type == typeid( kvs::Int8   ) ) return "char";
+    else if ( type == typeid( kvs::UInt8  ) ) return "uchar";
+    else if ( type == typeid( kvs::Int16  ) ) return "short";
+    else if ( type == typeid( kvs::UInt16 ) ) return "ushort";
+    else if ( type == typeid( kvs::Int32  ) ) return "int";
+    else if ( type == typeid( kvs::UInt32 ) ) return "uint";
+    else if ( type == typeid( kvs::Int64  ) ) return "long";
+    else if ( type == typeid( kvs::UInt64 ) ) return "ulong";
+    else if ( type == typeid( kvs::Real32 ) ) return "float";
+    else if ( type == typeid( kvs::Real64 ) ) return "double";
+    else return "unknown";
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Reads the internal data as value array.
+ *  @param  nelements  [in] number of elements
+ *  @param  tokenizer  [in] tokenizer
+ *  @return read data
+ */
+/*===========================================================================*/
+template <typename T>
+inline kvs::ValueArray<T> ReadInternalData(
+    const size_t nelements,
+    kvs::Tokenizer& tokenizer )
+{
+    kvs::ValueArray<T> result( nelements );
+    for ( size_t i = 0; i < nelements; i++ )
+    {
+        result[i] = kvs::kvsml::temporal::To<T>( tokenizer.token() );
+    }
+    return result;
+}
+
+}
+
 namespace DataArray
 {
 
@@ -41,7 +100,7 @@ namespace DataArray
  *  @return data file name
  */
 /*===========================================================================*/
-inline const std::string GetDataFilename( const std::string& filename, const std::string& type )
+inline std::string GetDataFilename( const std::string& filename, const std::string& type )
 {
     const std::string basename( kvs::File( filename ).baseName() );
 //    const std::string pathname( kvs::File( filename ).pathName() );
@@ -49,7 +108,7 @@ inline const std::string GetDataFilename( const std::string& filename, const std
     const std::string ext( "dat" );
 
 //    return( pathname + sep + basename + "_" + type + "." + ext );
-    return( basename + "_" + type + "." + ext );
+    return basename + "_" + type + "." + ext;
 }
 
 /*===========================================================================*/
@@ -60,21 +119,10 @@ inline const std::string GetDataFilename( const std::string& filename, const std
  */
 /*===========================================================================*/
 template <typename T>
-inline const std::string GetDataType( const kvs::ValueArray<T>& data_array )
+inline std::string GetDataType( const kvs::ValueArray<T>& /*data_array*/ )
 {
-    kvs::IgnoreUnusedVariable( data_array );
-
-    if (      typeid(T) == typeid(kvs::Int8)   ) return("char");
-    else if ( typeid(T) == typeid(kvs::UInt8)  ) return("uchar");
-    else if ( typeid(T) == typeid(kvs::Int16)  ) return("short");
-    else if ( typeid(T) == typeid(kvs::UInt16) ) return("ushort");
-    else if ( typeid(T) == typeid(kvs::Int32)  ) return("int");
-    else if ( typeid(T) == typeid(kvs::UInt32) ) return("uint");
-    else if ( typeid(T) == typeid(kvs::Int64)  ) return("long");
-    else if ( typeid(T) == typeid(kvs::UInt64) ) return("ulong");
-    else if ( typeid(T) == typeid(kvs::Real32) ) return("float");
-    else if ( typeid(T) == typeid(kvs::Real64) ) return("double");
-    else return("unknown");
+    const std::type_info& type = typeid( T );
+    return kvs::kvsml::temporal::TypeName( type );
 }
 
 /*===========================================================================*/
@@ -84,20 +132,10 @@ inline const std::string GetDataType( const kvs::ValueArray<T>& data_array )
  *  @return data type as string
  */
 /*===========================================================================*/
-inline const std::string GetDataType( const kvs::AnyValueArray& data_array )
+inline std::string GetDataType( const kvs::AnyValueArray& data_array )
 {
     const std::type_info& type = data_array.typeInfo()->type();
-    if (      type == typeid(kvs::Int8)   ) return("char");
-    else if ( type == typeid(kvs::UInt8)  ) return("uchar");
-    else if ( type == typeid(kvs::Int16)  ) return("short");
-    else if ( type == typeid(kvs::UInt16) ) return("ushort");
-    else if ( type == typeid(kvs::Int32)  ) return("int");
-    else if ( type == typeid(kvs::UInt32) ) return("uint");
-    else if ( type == typeid(kvs::Int64)  ) return("long");
-    else if ( type == typeid(kvs::UInt64) ) return("ulong");
-    else if ( type == typeid(kvs::Real32) ) return("float");
-    else if ( type == typeid(kvs::Real64) ) return("double");
-    else return("unknown");
+    return kvs::kvsml::temporal::TypeName( type );
 }
 
 /*===========================================================================*/
@@ -110,69 +148,13 @@ inline const std::string GetDataType( const kvs::AnyValueArray& data_array )
  */
 /*===========================================================================*/
 template <typename T>
-inline const bool ReadInternalData(
+inline bool ReadInternalData(
     kvs::AnyValueArray* data_array,
     const size_t nelements,
     kvs::Tokenizer& tokenizer )
 {
-    T* data = static_cast<T*>( data_array->template allocate<T>( nelements ) );
-    if ( !data )
-    {
-        kvsMessageError( "Cannot allocate memory for the internal data." );
-        return( false );
-    }
-
-    const size_t nloops = data_array->size();
-    for( size_t i = 0; i < nloops; i++ )
-    {
-        data[i] = static_cast<T>( atof( tokenizer.token().c_str() ) );
-    }
-
-    return( true );
-}
-
-template <>
-inline const bool ReadInternalData<kvs::Int8>(
-    kvs::AnyValueArray* data_array,
-    const size_t nelements,
-    kvs::Tokenizer& tokenizer )
-{
-    kvs::Int8* data = static_cast<kvs::Int8*>( data_array->allocate<kvs::Int8>( nelements ) );
-    if ( !data )
-    {
-        kvsMessageError( "Cannot allocate memory for the internal data." );
-        return( false );
-    }
-
-    const size_t nloops = data_array->size();
-    for( size_t i = 0; i < nloops; i++ )
-    {
-        data[i] = static_cast<kvs::Int8>( atoi( tokenizer.token().c_str() ) );
-    }
-
-    return( true );
-}
-
-template <>
-inline const bool ReadInternalData<kvs::UInt8>(
-    kvs::AnyValueArray* data_array,
-    const size_t nelements,
-    kvs::Tokenizer& tokenizer )
-{
-    kvs::UInt8* data = static_cast<kvs::UInt8*>( data_array->allocate<kvs::UInt8>( nelements ) );
-    if ( !data )
-    {
-        kvsMessageError( "Cannot allocate memory for the internal data." );
-        return( false );
-    }
-
-    const size_t nloops = data_array->size();
-    for( size_t i = 0; i < nloops; i++ )
-    {
-        data[i] = static_cast<kvs::UInt8>( atoi( tokenizer.token().c_str() ) );
-    }
-
-    return( true );
+    *data_array = kvs::AnyValueArray( kvs::kvsml::temporal::ReadInternalData<T>( nelements, tokenizer ) );
+    return true;
 }
 
 /*===========================================================================*/
@@ -185,57 +167,13 @@ inline const bool ReadInternalData<kvs::UInt8>(
  */
 /*===========================================================================*/
 template <typename T>
-inline const bool ReadInternalData(
+inline bool ReadInternalData(
     kvs::ValueArray<T>* data_array,
     const size_t nelements,
     kvs::Tokenizer& tokenizer )
 {
-    data_array->allocate( nelements );
-    T* data = data_array->data();
-
-    const size_t nloops = data_array->size();
-    for( size_t i = 0; i < nloops; i++ )
-    {
-        data[i] = static_cast<T>( atof( tokenizer.token().c_str() ) );
-    }
-
-    return( true );
-}
-
-template <>
-inline const bool ReadInternalData<kvs::Int8>(
-    kvs::ValueArray<kvs::Int8>* data_array,
-    const size_t nelements,
-    kvs::Tokenizer& tokenizer )
-{
-    data_array->allocate( nelements );
-    kvs::Int8* data = data_array->data();
-
-    const size_t nloops = data_array->size();
-    for( size_t i = 0; i < nloops; i++ )
-    {
-        data[i] = static_cast<kvs::Int8>( atoi( tokenizer.token().c_str() ) );
-    }
-
-    return( true );
-}
-
-template <>
-inline const bool ReadInternalData<kvs::UInt8>(
-    kvs::ValueArray<kvs::UInt8>* data_array,
-    const size_t nelements,
-    kvs::Tokenizer& tokenizer )
-{
-    data_array->allocate( nelements );
-    kvs::UInt8* data = data_array->data();
-
-    const size_t nloops = data_array->size();
-    for( size_t i = 0; i < nloops; i++ )
-    {
-        data[i] = static_cast<kvs::UInt8>( atoi( tokenizer.token().c_str() ) );
-    }
-
-    return( true );
+    *data_array = kvs::kvsml::temporal::ReadInternalData<T>( nelements, tokenizer );
+    return true;
 }
 
 /*===========================================================================*/
@@ -249,17 +187,13 @@ inline const bool ReadInternalData<kvs::UInt8>(
  */
 /*===========================================================================*/
 template <typename T>
-inline const bool ReadExternalData(
+inline bool ReadExternalData(
     kvs::AnyValueArray* data_array,
     const size_t nelements,
     const std::string& filename,
     const std::string& format )
 {
-    if ( !data_array->template allocate<T>( nelements ) )
-    {
-        kvsMessageError( "Cannot allocate memory for the external data." );
-        return( false );
-    }
+    data_array->template allocate<T>( nelements );
 
     if ( format == "binary" )
     {
@@ -344,7 +278,7 @@ inline const bool ReadExternalData(
  */
 /*===========================================================================*/
 template <typename T1, typename T2>
-inline const bool ReadExternalData(
+inline bool ReadExternalData(
     kvs::ValueArray<T1>* data_array,
     const size_t nelements,
     const std::string& filename,
@@ -450,7 +384,7 @@ inline const bool ReadExternalData(
  *  @return true, if the writting process is done successfully
  */
 /*===========================================================================*/
-inline const bool WriteExternalData(
+inline bool WriteExternalData(
     const kvs::AnyValueArray& data_array,
     const std::string& filename,
     const std::string& format )
@@ -542,7 +476,7 @@ inline const bool WriteExternalData(
  */
 /*===========================================================================*/
 template <typename T>
-inline const bool WriteExternalData(
+inline bool WriteExternalData(
     const kvs::ValueArray<T>& data_array,
     const std::string& filename,
     const std::string& format )

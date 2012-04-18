@@ -105,8 +105,8 @@ void UnstructuredVectorToScalar::calculate_magnitude( const kvs::UnstructuredVol
     const size_t veclen = volume->veclen();
     const size_t nnodes = volume->nnodes();
 
-    kvs::AnyValueArray values;
-    kvs::Real32* dst = static_cast<kvs::Real32*>( values.allocate<kvs::Real32>( nnodes ) );
+    kvs::ValueArray<kvs::Real32> values( nnodes );
+    kvs::Real32* dst = values.data();
     const T* src = static_cast<const T*>( volume->values().pointer() );
 
     for ( size_t i = 0; i < nnodes; i++ )
@@ -124,7 +124,7 @@ void UnstructuredVectorToScalar::calculate_magnitude( const kvs::UnstructuredVol
     SuperClass::setNNodes( volume->nnodes() );
     SuperClass::setNCells( volume->ncells() );
     SuperClass::setCellType( volume->cellType() );
-    SuperClass::setValues( values );
+    SuperClass::setValues( kvs::AnyValueArray( values ) );
     SuperClass::setCoords( volume->coords() );
     SuperClass::setConnections( volume->connections() );
     SuperClass::updateMinMaxValues();
