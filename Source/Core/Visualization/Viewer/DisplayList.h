@@ -14,6 +14,8 @@
 #ifndef KVS__DISPLAY_LIST_H_INCLUDE
 #define KVS__DISPLAY_LIST_H_INCLUDE
 
+#if KVS_ENABLE_DEPRECATED
+
 #include <kvs/OpenGL>
 #include <kvs/ClassName>
 
@@ -58,5 +60,7 @@ public:
 };
 
 } // end of namespace kvs
+
+#endif
 
 #endif // KVS__DISPLAY_LIST_H_INCLUDE

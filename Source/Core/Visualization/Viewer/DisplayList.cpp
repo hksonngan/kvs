@@ -11,6 +11,8 @@
  *  $Id$
  */
 /*****************************************************************************/
+#if KVS_ENABLE_DEPRECATED
+
 #include "DisplayList.h"
 #include <kvs/OpenGL>
 #include <kvs/Message>
@@ -149,3 +151,5 @@ void DisplayList::render( const GLuint index )
 }
 
 } // end of namespace kvs
+
+#endif
