@@ -12,6 +12,9 @@
  */
 /****************************************************************************/
 #include "Material.h"
+
+#if KVS_ENABLE_DEPRECATED
+
 #include <cstring>
 #include <kvs/Vector4>
 #include <kvs/RGBAColor>
@@ -392,3 +395,5 @@ void Material::apply( void )
 }
 
 } // end of namespace kvs
+
+#endif

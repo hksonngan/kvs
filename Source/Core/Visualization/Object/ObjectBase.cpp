@@ -16,6 +16,7 @@
 #include <iomanip>
 #include <kvs/Camera>
 #include <kvs/Math>
+#include <kvs/OpenGL>
 
 
 namespace kvs
@@ -94,7 +95,9 @@ ObjectBase& ObjectBase::operator = ( const ObjectBase& object )
     m_object_center = object.m_object_center;
     m_external_position = object.m_external_position;
     m_normalize = object.m_normalize;
+#if KVS_ENABLE_DEPRECATED
     m_material = object.m_material;
+#endif
     m_show_flg = object.m_show_flg;
 
     return( *this );
@@ -173,7 +176,7 @@ void ObjectBase::setMinMaxExternalCoords(
 
     this->updateNormalizeParameters();
 }
-
+#if KVS_ENABLE_DEPRECATED
 /*===========================================================================*/
 /**
  *  @breif  Sets the object material.
@@ -195,7 +198,7 @@ void ObjectBase::setFace( const Face face )
 {
     m_material.setFace( kvs::Material::MaterialFace( face ) );
 }
-
+#endif
 /*===========================================================================*/
 /**
  *  @brief  Shows the object.
@@ -336,7 +339,7 @@ const bool ObjectBase::isShown( void ) const
 {
     return( m_show_flg );
 }
-
+#if KVS_ENABLE_DEPRECATED
 /*===========================================================================*/
 /**
  *  @brief  Returns the object material.
@@ -347,7 +350,7 @@ const kvs::Material& ObjectBase::material( void ) const
 {
     return( m_material );
 }
-
+#endif
 /*===========================================================================*/
 /**
  *  @brief  Returns the object position in the device coordinate.
@@ -473,6 +476,7 @@ void ObjectBase::transform(
                   -m_object_center.z() );
 }
 
+#if KVS_ENABLE_DEPRECATED
 /*===========================================================================*/
 /**
  *  @brief  Applys the object material.
@@ -482,6 +486,7 @@ void ObjectBase::applyMaterial( void )
 {
     m_material.apply();
 }
+#endif
 
 /*===========================================================================*/
 /**

@@ -16,6 +16,7 @@
 
 #include <kvs/PointObject>
 #include <kvs/RGBColor>
+#include <kvs/OpenGL>
 
 
 namespace

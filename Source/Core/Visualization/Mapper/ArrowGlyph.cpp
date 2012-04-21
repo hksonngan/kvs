@@ -244,8 +244,9 @@ void ArrowGlyph::draw( void )
     }
 
     this->initialize();
+#if KVS_ENABLE_DEPRECATED
     BaseClass::applyMaterial();
-
+#endif
     switch ( m_type )
     {
     case LineArrow: this->draw_lines(); break;

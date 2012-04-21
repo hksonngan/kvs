@@ -53,12 +53,16 @@ public:
         UnknownObject  ///< unknown object (for user defined object data)
     };
 
+#if KVS_ENABLE_DEPRECATED
+
     enum Face
     {
         Front        = kvs::Material::Front,
         Back         = kvs::Material::Back,
         FrontAndBack = kvs::Material::FrontAndBack
     };
+
+#endif
 
 protected:
 
@@ -72,7 +76,9 @@ protected:
     kvs::Vector3f m_object_center;      ///< center of gravity in object coordinate system
     kvs::Vector3f m_external_position;  ///< position in external coordinate system
     kvs::Vector3f m_normalize;          ///< normalize parameter
+#if KVS_ENABLE_DEPRECATED
     kvs::Material m_material;           ///< material
+#endif
     bool          m_show_flg;
 
 public:
@@ -105,10 +111,11 @@ public:
         const kvs::Vector3f& min_coord,
         const kvs::Vector3f& max_coord );
 
+#if KVS_ENABLE_DEPRECATED
     void setMaterial( const kvs::Material& material );
 
     void setFace( const Face face );
-
+#endif
     void show( void );
 
     void hide( void );
@@ -138,9 +145,9 @@ public:
     const kvs::Vector3f& normalize( void ) const;
 
     const bool isShown( void ) const;
-
+#if KVS_ENABLE_DEPRECATED
     const kvs::Material& material( void ) const;
-
+#endif
 public:
 
     const kvs::Vector2f positionInDevice(
@@ -163,9 +170,9 @@ public:
     void transform(
         const kvs::Vector3f& global_trans,
         const kvs::Vector3f& global_scale ) const;
-
+#if KVS_ENABLE_DEPRECATED
     void applyMaterial( void );
-
+#endif
     bool collision(
         const kvs::Vector2f& p_win,
         kvs::Camera*         camera,

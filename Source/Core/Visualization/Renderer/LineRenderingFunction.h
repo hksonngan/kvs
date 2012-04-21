@@ -17,6 +17,7 @@
 #include <kvs/LineObject>
 #include <kvs/RGBColor>
 #include <kvs/Vector3>
+#include <kvs/OpenGL>
 
 
 namespace

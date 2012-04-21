@@ -14,6 +14,8 @@
 #ifndef KVS__MATERIAL_H_INCLUDE
 #define KVS__MATERIAL_H_INCLUDE
 
+#if KVS_ENABLE_DEPRECATED
+
 #include <kvs/OpenGL>
 #include <kvs/ClassName>
 #include <kvs/Vector4>
@@ -323,5 +325,7 @@ const Material MATERIAL_YELLOW_RUBBER
 */
 
 } // end of namespace kvs
+
+#endif
 
 #endif // KVS__MATERIAL_H_INCLUDE

@@ -14,6 +14,7 @@
 #ifndef KVS__CELL_BY_CELL_PARTICLE_GENERATOR_H_INCLUDE
 #define KVS__CELL_BY_CELL_PARTICLE_GENERATOR_H_INCLUDE
 
+#include <kvs/OpenGL>
 #include <kvs/VolumeObjectBase>
 #include <kvs/OpacityMap>
 #include <kvs/Vector3>

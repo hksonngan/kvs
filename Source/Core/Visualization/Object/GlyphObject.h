@@ -18,6 +18,7 @@
 
 #include <vector>
 #include <string>
+#include <kvs/OpenGL>
 #include <kvs/ValueArray>
 #include <kvs/Vector3>
 #include <kvs/RGBColor>

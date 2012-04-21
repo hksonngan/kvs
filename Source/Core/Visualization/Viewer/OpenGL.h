@@ -57,10 +57,10 @@ namespace OpenGL
  *  @return OpenGL description
  */
 /*===========================================================================*/
-inline const std::string Description( void )
+inline std::string Description()
 {
     const std::string description( "OpenGL - The Industry's Foundation for High Performance Graphics" );
-    return( description );
+    return description;
 }
 
 /*===========================================================================*/
@@ -69,10 +69,10 @@ inline const std::string Description( void )
  *  @return OpenGL version
  */
 /*===========================================================================*/
-inline const std::string Version( void )
+inline std::string Version()
 {
     const std::string version( (const char*)glGetString( GL_VERSION ) );
-    return( version );
+    return version;
 }
 
 /*===========================================================================*/
@@ -81,7 +81,7 @@ inline const std::string Version( void )
  *  @return GLSL version
  */
 /*===========================================================================*/
-inline const std::string ShaderVersion( void )
+inline std::string ShaderVersion()
 {
 #if defined( GL_SHADING_LANGUAGE_VERSION )
     const std::string version( (const char*)glGetString( GL_SHADING_LANGUAGE_VERSION ) );
@@ -92,7 +92,7 @@ inline const std::string ShaderVersion( void )
     const std::string version( "unknown" );
 #endif
 #endif
-    return( version );
+    return version;
 }
 
 /*===========================================================================*/
@@ -101,10 +101,10 @@ inline const std::string ShaderVersion( void )
  *  @return vender information
  */
 /*===========================================================================*/
-inline const std::string Vendor( void )
+inline std::string Vendor()
 {
     const std::string vender( (const char*)glGetString( GL_VENDOR ) );
-    return( vender );
+    return vender;
 }
 
 /*===========================================================================*/
@@ -113,10 +113,10 @@ inline const std::string Vendor( void )
  *  @return rendere information
  */
 /*===========================================================================*/
-inline const std::string Renderer( void )
+inline std::string Renderer()
 {
     const std::string renderer( (const char*)glGetString( GL_RENDERER ) );
-    return( renderer );
+    return renderer;
 }
 
 /*===========================================================================*/
@@ -125,7 +125,7 @@ inline const std::string Renderer( void )
  *  @return extension name list
  */
 /*===========================================================================*/
-inline const kvs::StringList ExtensionList( void )
+inline kvs::StringList ExtensionList()
 {
     kvs::StringList extension_list;
 
@@ -136,7 +136,7 @@ inline const kvs::StringList ExtensionList( void )
         extension_list.push_back( kvs::String( name ) );
     }
 
-    return( extension_list );
+    return extension_list;
 }
 
 /*===========================================================================*/
@@ -145,9 +145,9 @@ inline const kvs::StringList ExtensionList( void )
  *  @return error code
  */
 /*===========================================================================*/
-inline const GLenum ErrorCode( void )
+inline GLenum ErrorCode()
 {
-    return( glGetError() );
+    return glGetError();
 }
 
 /*===========================================================================*/
@@ -156,10 +156,10 @@ inline const GLenum ErrorCode( void )
  *  @return true, if no error
  */
 /*===========================================================================*/
-inline const bool CheckError( void )
+inline bool CheckError()
 {
     const GLenum error_code = kvs::OpenGL::ErrorCode();
-    return( error_code == GL_NO_ERROR );
+    return error_code == GL_NO_ERROR;
 }
 
 /*===========================================================================*/
@@ -172,7 +172,7 @@ inline const bool CheckError( void )
 inline std::string ErrorString( const GLenum error_code )
 {
     const std::string error_string( (const char*)gluErrorString( error_code ) );
-    return( error_string );
+    return error_string;
 }
 
 } // end of namespace OpenGL

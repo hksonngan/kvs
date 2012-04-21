@@ -217,8 +217,9 @@ DiamondGlyph::BaseClass::SuperClass* DiamondGlyph::exec( const kvs::ObjectBase* 
 void DiamondGlyph::draw( void )
 {
     this->initialize();
+#if KVS_ENABLE_DEPRECATED
     BaseClass::applyMaterial();
-
+#endif
     const size_t npoints = BaseClass::m_coords.size() / 3;
 
     if ( BaseClass::m_directions.size() == 0 )

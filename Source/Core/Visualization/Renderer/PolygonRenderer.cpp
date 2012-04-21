@@ -73,7 +73,9 @@ void PolygonRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::L
 */
 
     RendererBase::initialize();
+#if KVS_ENABLE_DEPRECATED
     polygon->applyMaterial();
+#endif
 
     // Anti-aliasing.
     if ( m_enable_anti_aliasing )

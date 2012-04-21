@@ -65,7 +65,9 @@ void PointRenderer::exec( ObjectBase* object, Camera* camera, Light* light )
     if ( point->normals().size() == 0 ) { BaseClass::disableShading(); }
 
     RendererBase::initialize();
+#if KVS_ENABLE_DEPRECATED
     point->applyMaterial();
+#endif
 
     // Anti-aliasing.
     if ( m_enable_anti_aliasing )

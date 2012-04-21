@@ -17,6 +17,7 @@
 #include <kvs/PolygonObject>
 #include <kvs/RGBColor>
 #include <kvs/Type>
+#include <kvs/OpenGL>
 
 /* Function name: Rendering_xxx
  *
