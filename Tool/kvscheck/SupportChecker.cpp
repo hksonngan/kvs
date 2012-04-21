@@ -47,55 +47,43 @@ SupportChecker::SupportChecker( void )
 {
 #if defined( KVS_SUPPORT_GLUT )
     {
-        const kvs::String description( kvs::glut::Description() );
-        const kvs::String version( kvs::glut::Version() );
-        m_descriptions.push_back( description );
-        m_versions.push_back( version );
+        m_descriptions.push_back( kvs::glut::Description() );
+        m_versions.push_back( kvs::glut::Version() );
     }
 #endif
 
 #if defined( KVS_SUPPORT_GLEW )
     {
-        const kvs::String description( kvs::glew::Description() );
-        const kvs::String version( kvs::glew::Version() );
-        m_descriptions.push_back( description );
-        m_versions.push_back( version );
+        m_descriptions.push_back( kvs::glew::Description() );
+        m_versions.push_back( kvs::glew::Version() );
     }
 #endif
 
 #if defined( KVS_SUPPORT_SAGE )
     {
-        const kvs::String description( kvs::sage::Description() );
-        const kvs::String version( kvs::sage::Version() );
-        m_descriptions.push_back( description );
-        m_versions.push_back( version );
+        m_descriptions.push_back( kvs::sage::Description() );
+        m_versions.push_back( kvs::sage::Version() );
     }
 #endif
 
 #if defined( KVS_SUPPORT_QT )
     {
-        const kvs::String description( "Qt - Cross-Platform Rich Client Development Framework" );
-        const kvs::String version( "please type 'qmake -v'" );
-        m_descriptions.push_back( description );
-        m_versions.push_back( version );
+        m_descriptions.push_back( "Qt - Cross-Platform Rich Client Development Framework" );
+        m_versions.push_back( "please type 'qmake -v'" );
     }
 #endif
 
 #if defined( KVS_SUPPORT_OPENCV )
     {
-        const kvs::String description( kvs::opencv::Description() );
-        const kvs::String version( kvs::opencv::Version() );
-        m_descriptions.push_back( description );
-        m_versions.push_back( version );
+        m_descriptions.push_back( kvs::opencv::Description() );
+        m_versions.push_back( kvs::opencv::Version() );
     }
 #endif
 
 #if defined( KVS_SUPPORT_CUDA )
     {
-        const kvs::String description( kvs::cuda::Description() );
-        const kvs::String version( kvs::cuda::Version() );
-        m_descriptions.push_back( description );
-        m_versions.push_back( version );
+        m_descriptions.push_back( kvs::cuda::Description() );
+        m_versions.push_back( kvs::cuda::Version() );
     }
 #endif
 }

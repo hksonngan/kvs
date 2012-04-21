@@ -47,7 +47,7 @@ ExtensionChecker::ExtensionChecker( int argc, char** argv )
     std::string glu_extension;
     while ( glu_extension_list >> glu_extension )
     {
-        m_glu_extensions.push_back( kvs::String( glu_extension ) );
+        m_glu_extensions.push_back( glu_extension );
     }
 #endif
 #else
