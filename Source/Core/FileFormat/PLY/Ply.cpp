@@ -109,7 +109,7 @@ void Ply::calculateMinMaxCoord( void )
 {
     m_min_coord = kvs::Vector3f( std::numeric_limits<float>::max() );
     m_max_coord = kvs::Vector3f( std::numeric_limits<float>::min() );
-    const kvs::Real32* pcoords = m_coords.pointer();
+    const kvs::Real32* pcoords = m_coords.data();
     for ( size_t i = 0; i < m_nverts; i++ )
     {
         const kvs::Real32 x= *(pcoords++);
@@ -132,8 +132,8 @@ void Ply::calculateNormals( void )
     counter.fill( 0 );
 
     m_normals.allocate( m_nverts * 3 );
-    const kvs::UInt32* pconnections = m_connections.pointer();
-    const kvs::Real32* pcoords = m_coords.pointer();
+    const kvs::UInt32* pconnections = m_connections.data();
+    const kvs::Real32* pcoords = m_coords.data();
     for ( size_t i = 0; i < m_nfaces; i++ )
     {
         // Calculate normal vector for each triangles.
@@ -417,9 +417,9 @@ const bool Ply::read( const std::string& filename )
                 m_normals.allocate( m_nverts * 3 );
             }
 
-            kvs::Real32* pcoords = m_coords.pointer();
-            kvs::UInt8* pcolors = m_colors.pointer();
-            kvs::Real32* pnormals = m_normals.pointer();
+            kvs::Real32* pcoords = m_coords.data();
+            kvs::UInt8* pcolors = m_colors.data();
+            kvs::Real32* pnormals = m_normals.data();
             for ( int j = 0; j < elem_count; j++ )
             {
                 ::Vertex* vertex = (::Vertex*)malloc( sizeof(::Vertex) );
@@ -460,7 +460,7 @@ const bool Ply::read( const std::string& filename )
                 m_connections.allocate( m_nfaces * 3 );
 
                 // Grab all the face elements.
-                kvs::UInt32* pconnections = m_connections.pointer();
+                kvs::UInt32* pconnections = m_connections.data();
                 for ( int j = 0; j < elem_count; j++ )
                 {
                     ::Face* face = (::Face*)malloc( sizeof(::Face) );
@@ -535,9 +535,9 @@ const bool Ply::write( const std::string& filename )
 
     kvs::ply::ply_header_complete( ply );
 
-    const kvs::Real32* pcoords = m_coords.pointer();
-    const kvs::UInt8* pcolors = m_colors.pointer();
-    const kvs::Real32* pnormals = m_normals.pointer();
+    const kvs::Real32* pcoords = m_coords.data();
+    const kvs::UInt8* pcolors = m_colors.data();
+    const kvs::Real32* pnormals = m_normals.data();
     kvs::ply::ply_put_element_setup( ply, "vertex" );
     for ( size_t i = 0; i < nverts; i++ )
     {
@@ -570,7 +570,7 @@ const bool Ply::write( const std::string& filename )
     if ( m_has_connections )
     {
         const size_t nfaces = m_nfaces;
-        const kvs::UInt32* pconnections = m_connections.pointer();
+        const kvs::UInt32* pconnections = m_connections.data();
         kvs::ply::ply_put_element_setup( ply, "face" );
         for ( size_t i = 0; i < nfaces; i++ )
         {

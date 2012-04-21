@@ -123,7 +123,7 @@ bool Entry::read( std::ifstream& ifs )
 
             // Read values of the entry to m_values.
             ifs.seekg( offset, std::ios::beg );
-            ifs.read( reinterpret_cast<char*>( m_values.pointer() ), byte_size );
+            ifs.read( reinterpret_cast<char*>( m_values.data() ), byte_size );
             if ( size_t( ifs.gcount() ) != byte_size ) return( false );
         }
         ifs.seekg( end_of_entry, std::ios::beg );
@@ -131,7 +131,7 @@ bool Entry::read( std::ifstream& ifs )
     else
     {
         // Read values of the entry from the buffer to m_values.
-        if ( !memcpy( m_values.pointer(), buffer + 8, 4 ) ) return( false ); // offset 8, byte 4
+        if ( !memcpy( m_values.data(), buffer + 8, 4 ) ) return( false ); // offset 8, byte 4
     }
 
     return( true );

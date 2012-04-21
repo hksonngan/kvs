@@ -15,8 +15,9 @@
 #ifndef KVS__GF__MESH_DATA_H_INCLUDE
 #define KVS__GF__MESH_DATA_H_INCLUDE
 
-#include <kvs/ValueArray>
 #include <string>
+#include <kvs/ValueArray>
+#include <kvs/Type>
 
 
 namespace kvs

@@ -163,7 +163,7 @@ const bool MeshData::read( const std::string filename )
             {
                 m_nnodes_per_element = data.num();
                 m_nelements = data.num2();
-                const kvs::Int32* src = data.intArray().pointer();
+                const kvs::Int32* src = data.intArray().data();
                 const size_t size = data.intArray().size();
                 m_connections.allocate( size );
                 kvs::UInt32* dst = m_connections.data();

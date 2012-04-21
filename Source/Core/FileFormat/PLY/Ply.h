@@ -23,6 +23,7 @@
 #include <kvs/ValueArray>
 #include <kvs/ClassName>
 #include <kvs/Platform>
+#include <kvs/Type>
 #include "PlyFile.h"
 
 

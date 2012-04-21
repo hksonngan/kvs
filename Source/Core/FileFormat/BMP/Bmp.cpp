@@ -187,7 +187,7 @@ const bool Bmp::read( const std::string& filename )
     const size_t nchannels = 3; // NOTE: color mode only supported now.
     m_data.allocate( m_width * m_height * nchannels );
 
-    kvs::UInt8* data = m_data.pointer();
+    kvs::UInt8* data = m_data.data();
 
     const size_t bpp = 3;
     const size_t bpl = m_width * bpp;
@@ -240,7 +240,7 @@ const bool Bmp::write( const std::string& filename )
     m_file_header.write( ofs );
     m_info_header.write( ofs );
 
-    kvs::UInt8* data = m_data.pointer();
+    kvs::UInt8* data = m_data.data();
 
     const size_t bpp = 3;
     const size_t bpl = m_width * bpp;

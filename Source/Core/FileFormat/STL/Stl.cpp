@@ -449,8 +449,8 @@ const bool Stl::read_binary( FILE* ifs )
     m_coords.allocate( ntriangles * 9 );
 
     // Read trianbles.
-    kvs::Real32* normals = m_normals.pointer();
-    kvs::Real32* coords = m_coords.pointer();
+    kvs::Real32* normals = m_normals.data();
+    kvs::Real32* coords = m_coords.data();
     kvs::UInt32 index3 = 0;
     kvs::UInt32 index9 = 0;
     for ( kvs::UInt32 i = 0; i < ntriangles; i++, index3 += 3, index9 += 9 )
@@ -557,8 +557,8 @@ const bool Stl::write_binary( FILE* ofs )
     }
 
     // Triangles (50*ntriangles bytes)
-    const kvs::Real32* normals = m_normals.pointer();
-    const kvs::Real32* coords = m_coords.pointer();
+    const kvs::Real32* normals = m_normals.data();
+    const kvs::Real32* coords = m_coords.data();
     size_t index3 = 0;
     size_t index9 = 0;
     for ( size_t i = 0; i < ntriangles; i++, index3 += 3, index9 += 9 )

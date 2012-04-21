@@ -448,7 +448,7 @@ kvs::AnyValueArray Tiff::get_raw_data( std::ifstream& ifs ) const
     if ( m_color_mode == Tiff::Gray8 )
     {
         raw_data.allocate<kvs::UInt8>( m_width * m_height );
-        kvs::UInt8* data = reinterpret_cast<kvs::UInt8*>( raw_data.pointer() );
+        kvs::UInt8* data = reinterpret_cast<kvs::UInt8*>( raw_data.data() );
         for ( size_t i = 0; i < count; i++ )
         {
             const size_t offset = offsets.at<kvs::UInt32>(i);
@@ -462,7 +462,7 @@ kvs::AnyValueArray Tiff::get_raw_data( std::ifstream& ifs ) const
     else if ( m_color_mode == Tiff::Gray16 )
     {
         raw_data.allocate<kvs::UInt16>( m_width * m_height );
-        kvs::UInt16* data = reinterpret_cast<kvs::UInt16*>( raw_data.pointer() );
+        kvs::UInt16* data = reinterpret_cast<kvs::UInt16*>( raw_data.data() );
         for ( size_t i = 0; i < count; i++ )
         {
             const size_t offset = offsets.at<kvs::UInt32>(i);
@@ -476,7 +476,7 @@ kvs::AnyValueArray Tiff::get_raw_data( std::ifstream& ifs ) const
     else if ( m_color_mode == Tiff::Color24 )
     {
         raw_data.allocate<kvs::UInt8>( m_width * m_height * 3 );
-        kvs::UInt8* data = reinterpret_cast<kvs::UInt8*>( raw_data.pointer() );
+        kvs::UInt8* data = reinterpret_cast<kvs::UInt8*>( raw_data.data() );
         for ( size_t i = 0; i < count; i++ )
         {
             const size_t offset = offsets.at<kvs::UInt32>(i);

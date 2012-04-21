@@ -147,7 +147,7 @@ const bool Pgm::read( const std::string& filename )
     // Binary data.
     else if ( m_header.isP5() )
     {
-        ifs.read( reinterpret_cast<char*>( m_data.pointer() ), m_header.size() );
+        ifs.read( reinterpret_cast<char*>( m_data.data() ), m_header.size() );
     }
     else
     {
@@ -188,7 +188,7 @@ const bool Pgm::write( const std::string& filename )
     this->set_header();
     m_header.write( ofs );
 
-    ofs.write( reinterpret_cast<char*>( m_data.pointer() ), m_header.size() );
+    ofs.write( reinterpret_cast<char*>( m_data.data() ), m_header.size() );
     ofs.close();
 
     BaseClass::m_is_success = true;

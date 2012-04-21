@@ -17,6 +17,7 @@
 
 #include <string>
 #include <kvs/ValueArray>
+#include <kvs/Type>
 
 
 namespace kvs

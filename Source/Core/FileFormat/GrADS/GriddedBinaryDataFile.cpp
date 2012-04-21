@@ -137,16 +137,12 @@ const bool GriddedBinaryDataFile::load( void ) const
     }
     else
     {
-        ifs.read( (char*)( m_values.pointer() ), file_size );
+        ifs.read( (char*)( m_values.data() ), file_size );
     }
 
-    if ( m_big_endian )
+    if ( m_big_endian != kvs::Endian::IsBig() )
     {
-        if ( kvs::Endian::IsLittle() ) m_values.swapByte();
-    }
-    else
-    {
-        if ( kvs::Endian::IsBig() ) m_values.swapByte();
+        kvs::Endian::Swap( m_values.data(), m_values.size() );
     }
 
     ifs.close();

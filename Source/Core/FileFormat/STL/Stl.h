@@ -19,6 +19,7 @@
 #include <string>
 #include <kvs/ValueArray>
 #include <kvs/FileFormatBase>
+#include <kvs/Type>
 
 
 namespace kvs

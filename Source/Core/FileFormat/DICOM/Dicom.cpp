@@ -599,12 +599,12 @@ const int Dicom::rawValue( const size_t index ) const
     {
         if( m_pixel_representation )
         {
-            const kvs::UInt8* raw_data = reinterpret_cast<const kvs::UInt8*>( m_raw_data.pointer() );
+            const kvs::UInt8* raw_data = reinterpret_cast<const kvs::UInt8*>( m_raw_data.data() );
             ret = raw_data[index];
         }
         else
         {
-            const kvs::Int8* raw_data = reinterpret_cast<const kvs::Int8*>( m_raw_data.pointer() );
+            const kvs::Int8* raw_data = reinterpret_cast<const kvs::Int8*>( m_raw_data.data() );
             ret = raw_data[index];
         }
     }
@@ -612,12 +612,12 @@ const int Dicom::rawValue( const size_t index ) const
     {
         if( m_pixel_representation )
         {
-            const kvs::UInt16* raw_data = reinterpret_cast<const kvs::UInt16*>( m_raw_data.pointer() );
+            const kvs::UInt16* raw_data = reinterpret_cast<const kvs::UInt16*>( m_raw_data.data() );
             ret = raw_data[index];
         }
         else
         {
-            const kvs::Int16* raw_data = reinterpret_cast<const kvs::Int16*>( m_raw_data.pointer() );
+            const kvs::Int16* raw_data = reinterpret_cast<const kvs::Int16*>( m_raw_data.data() );
             ret = raw_data[index];
         }
     }
@@ -856,7 +856,7 @@ const bool Dicom::read_data( std::ifstream& ifs )
     const size_t raw_data_size = m_row * m_column * ( m_bits_allocated >> 3 );
     m_raw_data.allocate( raw_data_size );
 
-    ifs.read( m_raw_data.pointer(), raw_data_size );
+    ifs.read( m_raw_data.data(), raw_data_size );
     if( ifs.bad() )
     {
         kvsMessageError("Cannot read the raw data.");
@@ -933,7 +933,7 @@ const bool Dicom::write_header_csv( std::ofstream& ofs )
 /*===========================================================================*/
 const bool Dicom::write_raw_data( std::ofstream& ofs )
 {
-    ofs.write( m_raw_data.pointer(), m_raw_data.size() );
+    ofs.write( m_raw_data.data(), m_raw_data.size() );
 
     return( true );
 }
@@ -985,7 +985,7 @@ void Dicom::set_min_max_window_value( void )
 template <typename T>
 void Dicom::calculate_min_max_raw_value( void )
 {
-    const T* raw_data = reinterpret_cast<const T*>( m_raw_data.pointer() );
+    const T* raw_data = reinterpret_cast<const T*>( m_raw_data.data() );
 
     double min_raw_value = raw_data[0];
     double max_raw_value = raw_data[0];
@@ -1056,7 +1056,7 @@ const kvs::ValueArray<kvs::UInt8> Dicom::rescale_pixel_data( const int level, co
     kvs::ValueArray<kvs::UInt8> pixel_data( m_row * m_column );
     pixel_data.fill( 0 );
 
-    const T* raw_data = reinterpret_cast<const T*>( m_raw_data.pointer() );
+    const T* raw_data = reinterpret_cast<const T*>( m_raw_data.data() );
 
     const size_t npixels = m_row * m_column;
     for( size_t index = 0; index < npixels; index++ )
@@ -1080,7 +1080,7 @@ const kvs::ValueArray<kvs::UInt8> Dicom::rescale_pixel_data<kvs::Int8>( const in
     kvs::ValueArray<kvs::UInt8> pixel_data( m_row * m_column );
     pixel_data.fill( 0 );
 
-    const kvs::Int8* raw_data = reinterpret_cast<const kvs::Int8*>( m_raw_data.pointer() );
+    const kvs::Int8* raw_data = reinterpret_cast<const kvs::Int8*>( m_raw_data.data() );
 
     const size_t npixels = m_row * m_column;
     for( size_t index = 0; index < npixels; index++ )
@@ -1101,7 +1101,7 @@ const kvs::ValueArray<kvs::UInt8> Dicom::rescale_pixel_data<kvs::UInt8>( const i
     kvs::ValueArray<kvs::UInt8> pixel_data( m_row * m_column );
     pixel_data.fill( 0 );
 
-    const kvs::UInt8* raw_data = reinterpret_cast<const kvs::UInt8*>( m_raw_data.pointer() );
+    const kvs::UInt8* raw_data = reinterpret_cast<const kvs::UInt8*>( m_raw_data.data() );
 
     const size_t npixels = m_row * m_column;
     for( size_t index = 0; index < npixels; index++ )

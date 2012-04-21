@@ -637,7 +637,7 @@ void AVSUcd::read_coords( FILE* const ifs )
 
     m_coords.allocate( 3 * m_nnodes );
 
-    kvs::Real32* coord = m_coords.pointer();
+    kvs::Real32* coord = m_coords.data();
 
     for ( size_t i = 0; i < m_nnodes; i++ )
     {
@@ -697,7 +697,7 @@ void AVSUcd::read_connections( FILE* const ifs )
         throw "Unexpected EOF in reading first line of connections.";
     }
 
-    kvs::UInt32*       connection = m_connections.pointer();
+    kvs::UInt32*       connection = m_connections.data();
     kvs::UInt32* const end        = connection + m_connections.size();
 
     if ( m_element_type == Tetrahedra )
@@ -934,7 +934,7 @@ void AVSUcd::read_values( FILE* const ifs )
     const size_t veclen = m_veclens[ m_component_id ];
     m_values.allocate( veclen * m_nnodes );
 
-    kvs::Real32* value = m_values.pointer();
+    kvs::Real32* value = m_values.data();
 
     size_t nskips = 0;
     for ( size_t i = 0; i < m_component_id; ++i )
@@ -980,7 +980,7 @@ void AVSUcd::write_coords( FILE* const ofs ) const
 {
     size_t node_id = 1;
 
-    const kvs::Real32*       coord = m_coords.pointer();
+    const kvs::Real32*       coord = m_coords.data();
     const kvs::Real32* const end   = coord + m_coords.size();
 
     while ( coord < end )
@@ -1001,7 +1001,7 @@ void AVSUcd::write_connections( FILE* const ofs ) const
 {
     size_t element_id = 1;
 
-    const kvs::UInt32*       connection = m_connections.pointer();
+    const kvs::UInt32*       connection = m_connections.data();
     const kvs::UInt32* const end        = connection + m_connections.size();
 
     if ( m_element_type == Tetrahedra )
@@ -1116,7 +1116,7 @@ void AVSUcd::write_values( FILE* ofs ) const
 {
     size_t node_id = 1;
 
-    const kvs::Real32*       value = m_values.pointer();
+    const kvs::Real32*       value = m_values.data();
     const kvs::Real32* const end   = value + m_values.size();
 
     while ( value < end )

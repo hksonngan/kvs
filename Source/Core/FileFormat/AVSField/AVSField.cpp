@@ -747,7 +747,7 @@ bool AVSField::read_node( FILE* ifs )
     }
 
     const size_t byte_size = m_values.byteSize();
-    if ( fread( m_values.pointer(), 1, byte_size, ifs ) != byte_size )
+    if ( fread( m_values.data(), 1, byte_size, ifs ) != byte_size )
     {
         return( false );
     }
@@ -917,7 +917,7 @@ bool AVSField::write_header( std::ofstream& ofs ) const
 bool AVSField::write_node( std::ofstream& ofs ) const
 {
     ofs << "\f\f";
-    ofs.write( (char*)m_values.pointer(), m_values.byteSize() );
+    ofs.write( (char*)m_values.data(), m_values.byteSize() );
 
     return( true );
 }

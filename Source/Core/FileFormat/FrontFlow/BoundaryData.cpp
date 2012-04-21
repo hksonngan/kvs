@@ -361,7 +361,7 @@ const bool BoundaryData::read( const std::string filename )
             if ( type == "#INT_ARY" )
             {
                 m_nnodes_inlet = data.num2();
-                const kvs::Int32* src = data.intArray().pointer();
+                const kvs::Int32* src = data.intArray().data();
                 const size_t size = data.intArray().size();
                 m_connections_inlet.allocate( size );
                 kvs::UInt32* dst = m_connections_inlet.data();
@@ -376,7 +376,7 @@ const bool BoundaryData::read( const std::string filename )
             if ( type == "#INT_ARY" )
             {
                 m_nnodes_wall = data.num2();
-                const kvs::Int32* src = data.intArray().pointer();
+                const kvs::Int32* src = data.intArray().data();
                 const size_t size = data.intArray().size();
                 m_connections_wall.allocate( size );
                 kvs::UInt32* dst = m_connections_wall.data();
@@ -391,7 +391,7 @@ const bool BoundaryData::read( const std::string filename )
             if ( type == "#INT_ARY" )
             {
                 m_nnodes_symetric = data.num2();
-                const kvs::Int32* src = data.intArray().pointer();
+                const kvs::Int32* src = data.intArray().data();
                 const size_t size = data.intArray().size();
                 m_connections_symetric.allocate( size );
                 kvs::UInt32* dst = m_connections_symetric.data();
@@ -406,7 +406,7 @@ const bool BoundaryData::read( const std::string filename )
             if ( type == "#INT_ARY" )
             {
                 m_nnodes_cyclic = data.num2();
-                const kvs::Int32* src = data.intArray().pointer();
+                const kvs::Int32* src = data.intArray().data();
                 const size_t size = data.intArray().size();
                 m_connections_cyclic.allocate( size );
                 kvs::UInt32* dst = m_connections_cyclic.data();
@@ -421,7 +421,7 @@ const bool BoundaryData::read( const std::string filename )
             if ( type == "#INT_ARY" )
             {
                 m_nnodes_body = data.num2();
-                const kvs::Int32* src = data.intArray().pointer();
+                const kvs::Int32* src = data.intArray().data();
                 const size_t size = data.intArray().size();
                 m_connections_body.allocate( size );
                 kvs::UInt32* dst = m_connections_body.data();
@@ -436,7 +436,7 @@ const bool BoundaryData::read( const std::string filename )
             if ( type == "#INT_ARY" )
             {
                 m_nnodes_free = data.num2();
-                const kvs::Int32* src = data.intArray().pointer();
+                const kvs::Int32* src = data.intArray().data();
                 const size_t size = data.intArray().size();
                 m_connections_free.allocate( size );
                 kvs::UInt32* dst = m_connections_free.data();
@@ -451,7 +451,7 @@ const bool BoundaryData::read( const std::string filename )
             if ( type == "#INT_ARY" )
             {
                 m_nnodes_moving_wall = data.num2();
-                const kvs::Int32* src = data.intArray().pointer();
+                const kvs::Int32* src = data.intArray().data();
                 const size_t size = data.intArray().size();
                 m_connections_moving_wall.allocate( size );
                 kvs::UInt32* dst = m_connections_moving_wall.data();
@@ -466,7 +466,7 @@ const bool BoundaryData::read( const std::string filename )
             if ( type == "#INT_ARY" )
             {
                 m_nnodes_temp = data.num2();
-                const kvs::Int32* src = data.intArray().pointer();
+                const kvs::Int32* src = data.intArray().data();
                 const size_t size = data.intArray().size();
                 m_connections_temp.allocate( size );
                 kvs::UInt32* dst = m_connections_temp.data();
@@ -481,7 +481,7 @@ const bool BoundaryData::read( const std::string filename )
             if ( type == "#INT_ARY" )
             {
                 m_nnodes_temp = data.num2();
-                const kvs::Int32* src = data.intArray().pointer();
+                const kvs::Int32* src = data.intArray().data();
                 const size_t size = data.intArray().size();
                 m_connections_heat.allocate( size );
                 kvs::UInt32* dst = m_connections_heat.data();

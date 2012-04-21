@@ -205,7 +205,7 @@ inline bool ReadExternalData(
         }
 
         const size_t data_size = data_array->size();
-        if ( fread( data_array->pointer(), sizeof(T), data_size, ifs ) != data_size )
+        if ( fread( data_array->data(), sizeof(T), data_size, ifs ) != data_size )
         {
             kvsMessageError("Cannot read '%s'.", filename.c_str());
             fclose( ifs );
@@ -241,7 +241,7 @@ inline bool ReadExternalData(
             return( false );
         }
 
-        T* data = static_cast<T*>( data_array->pointer() );
+        T* data = static_cast<T*>( data_array->data() );
 
         const char* delim = " ,\t\n";
         char* value = strtok( buffer, delim );
@@ -298,7 +298,7 @@ inline bool ReadExternalData(
         if( typeid(T1) == typeid(T2) )
         {
             const size_t data_size = data_array->size();
-            if ( fread( data_array->pointer(), sizeof(T1), data_size, ifs ) != data_size )
+            if ( fread( data_array->data(), sizeof(T1), data_size, ifs ) != data_size )
             {
                 kvsMessageError("Cannot read '%s'.",filename.c_str());
                 fclose( ifs );
@@ -349,7 +349,7 @@ inline bool ReadExternalData(
             return( false );
         }
 
-        T1* data = data_array->pointer();
+        T1* data = data_array->data();
 
         const char* delim = " ,\t\n";
         char* value = strtok( buffer, delim );
@@ -452,7 +452,7 @@ inline bool WriteExternalData(
             kvsMessageError("Cannot open file '%s'.", filename.c_str() );
             return( false );
         }
-        const void* data_pointer = data_array.pointer();
+        const void* data_pointer = data_array.data();
         const size_t data_byte_size = data_array.byteSize();
         ofs.write( static_cast<const char*>(data_pointer), data_byte_size );
         ofs.close();
@@ -511,7 +511,7 @@ inline bool WriteExternalData(
             kvsMessageError("Cannot open file '%s'.", filename.c_str() );
             return( false );
         }
-        const char* data_pointer = reinterpret_cast<const char*>( data_array.pointer() );
+        const char* data_pointer = reinterpret_cast<const char*>( data_array.data() );
         const size_t data_byte_size = data_array.byteSize();
         ofs.write( data_pointer, data_byte_size );
         ofs.close();

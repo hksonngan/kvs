@@ -16,6 +16,7 @@
 
 #include <kvs/ValueArray>
 #include <kvs/XMLNode>
+#include <kvs/Type>
 
 
 namespace kvs

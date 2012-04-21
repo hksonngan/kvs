@@ -18,6 +18,7 @@
 #include <string>
 #include <fstream>
 #include <kvs/ValueArray>
+#include <kvs/Type>
 
 
 namespace kvs
