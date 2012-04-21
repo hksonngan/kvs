@@ -141,19 +141,19 @@
 namespace kvs
 {
 
-namespace Compiler
+class Compiler
 {
-
+public:
 /*==========================================================================*/
 /**
  *  Get compiler name.
  *  @return compiler name
  */
 /*==========================================================================*/
-inline const char* Name( void )
-{
-    return( KVS_COMPILER_NAME );
-}
+    static const char* Name()
+    {
+        return KVS_COMPILER_NAME;
+    }
 
 /*==========================================================================*/
 /**
@@ -161,12 +161,14 @@ inline const char* Name( void )
  *  @return compiler version
  */
 /*==========================================================================*/
-inline const char* Version( void )
-{
-    return( KVS_COMPILER_VERSION );
-}
+    static const char* Version()
+    {
+        return KVS_COMPILER_VERSION;
+    }
 
-} // end of namespace Compiler
+private:
+    Compiler();
+};
 
 } // end of namespace kvs
 

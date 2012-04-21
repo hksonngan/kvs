@@ -208,19 +208,19 @@
 namespace kvs
 {
 
-namespace Platform
+class Platform
 {
-
+public:
 /*==========================================================================*/
 /**
  *  Get platform name.
  *  @return platform name
  */
 /*==========================================================================*/
-inline const char* Name()
-{
-    return KVS_PLATFORM_NAME;
-}
+    static const char* Name()
+    {
+        return KVS_PLATFORM_NAME;
+    }
 
 /*==========================================================================*/
 /**
@@ -228,12 +228,14 @@ inline const char* Name()
  *  @return CPU name
  */
 /*==========================================================================*/
-inline const char* CPUName()
-{
-    return KVS_PLATFORM_CPU_NAME;
-}
+    static const char* CPUName()
+    {
+        return KVS_PLATFORM_CPU_NAME;
+    }
 
-} // end of namespace Platform
+private:
+    Platform();
+};
 
 } // end of namespace kvs
 

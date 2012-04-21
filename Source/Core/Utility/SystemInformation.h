@@ -35,6 +35,9 @@ public:
     static size_t nprocessors()
     { return numberOfProcessors(); }
 #endif
+
+private:
+    SystemInformation();
 };
 
 } // end of namespace kvs

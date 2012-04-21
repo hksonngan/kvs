@@ -18,11 +18,12 @@
 #include <iostream>
 #include <kvs/ClassName>
 #include <kvs/XformControl>
-#include <kvs/Material>
 #include <kvs/Vector2>
 #include <kvs/Vector3>
 #include <kvs/Module>
-
+#if KVS_ENABLE_DEPRECATED
+#include <kvs/Material>
+#endif
 
 namespace kvs
 {

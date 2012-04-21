@@ -32,24 +32,24 @@
 namespace kvs
 {
 
-namespace Version
+class Version
 {
-
+public:
 /*==========================================================================*/
 /**
  *  Get version number.
  *  @return version number
  */
 /*==========================================================================*/
-inline size_t Number()
-{
-    const size_t version_number =
-        100 * KVS_VERSION_MAJOR +
-        10  * KVS_VERSION_MINOR +
-        1   * KVS_VERSION_PATCH;
+    static size_t Number()
+    {
+        const size_t version_number =
+            100 * KVS_VERSION_MAJOR +
+            10  * KVS_VERSION_MINOR +
+            1   * KVS_VERSION_PATCH;
 
-    return version_number;
-}
+        return version_number;
+    }
 
 /*==========================================================================*/
 /**
@@ -57,10 +57,10 @@ inline size_t Number()
  *  @return major version number
  */
 /*==========================================================================*/
-inline size_t MajorNumber()
-{
-    return KVS_VERSION_MAJOR;
-}
+    static size_t MajorNumber()
+    {
+        return KVS_VERSION_MAJOR;
+    }
 
 /*==========================================================================*/
 /**
@@ -68,10 +68,10 @@ inline size_t MajorNumber()
  *  @return minor version number
  */
 /*==========================================================================*/
-inline size_t MinorNumber()
-{
-    return KVS_VERSION_MINOR;
-}
+    static size_t MinorNumber()
+    {
+        return KVS_VERSION_MINOR;
+    }
 
 /*==========================================================================*/
 /**
@@ -79,10 +79,10 @@ inline size_t MinorNumber()
  *  @return patch version number
  */
 /*==========================================================================*/
-inline size_t PatchNumber()
-{
-    return KVS_VERSION_PATCH;
-}
+    static size_t PatchNumber()
+    {
+        return KVS_VERSION_PATCH;
+    }
 
 /*==========================================================================*/
 /**
@@ -90,12 +90,14 @@ inline size_t PatchNumber()
  *  @return version name
  */
 /*==========================================================================*/
-inline const char* Name()
-{
-    return KVS_VERSION;
-}
+    static const char* Name()
+    {
+        return KVS_VERSION;
+    }
 
-} // end of namespace Version
+private:
+    Version();
+};
 
 } // end of namespace kvs
 
