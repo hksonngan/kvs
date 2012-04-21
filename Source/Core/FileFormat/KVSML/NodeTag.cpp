@@ -126,7 +126,7 @@ const bool NodeTag::write( kvs::XMLNode::SuperClass* parent )
     if ( m_has_nnodes )
     {
         const std::string name( "nnodes" );
-        const std::string value( kvs::String( m_nnodes ).toStdString() );
+        const std::string value = kvs::String::ToString( m_nnodes );
         element.setAttribute( name, value );
     }
 

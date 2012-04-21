@@ -12,6 +12,11 @@
  */
 /****************************************************************************/
 #include "String.h"
+#include <cctype>
+#include <cstdarg>
+#include <string>
+#include <vector>
+#if KVS_ENABLE_DEPRECATED
 #include <iostream>
 #include <string>
 #include <cstdlib>
@@ -21,8 +26,9 @@
 #include <kvs/Message>
 #include <kvs/Assert>
 #include <kvs/IgnoreUnusedVariable>
+#endif
 
-
+#if KVS_ENABLE_DEPRECATED
 namespace
 {
 
@@ -50,10 +56,76 @@ inline int Compare( register const char* str1, register const char* str2 )
 }
 
 }
-
+#endif
 namespace kvs
 {
 
+std::string String::ToUpper( const std::string& str )
+{
+    std::string ret = str;
+    std::string::iterator first = ret.begin();
+    std::string::iterator last = ret.end();
+    while ( first != last )
+    {
+        *first = static_cast<char>( std::toupper( *first ) );
+    }
+    return ret;
+}
+
+std::string String::ToLower( const std::string& str )
+{
+    std::string ret = str;
+    std::string::iterator first = ret.begin();
+    std::string::iterator last = ret.end();
+    while ( first != last )
+    {
+        *first = static_cast<char>( std::tolower( *first ) );
+    }
+    return ret;
+}
+
+//std::string String::Format( const char* str, ... )
+//{
+//    const int buffer_size = 256;
+//
+//    std::vector<char> buffer( buffer_size );
+//
+//    va_list args;
+//    for (;;)
+//    {
+//        va_start( args, str );
+//        size = vsnprintf( &( buffer[0] ), buffer.size() - 1, str, args );
+//        va_end( args );
+//
+//        if ( size < 0 ) throw "error";
+//        if ( size < (int)buffer.size() ) break;
+//        buffer_size *= 2;
+//        buffer.resize( buffer_size );
+//    }
+//    return std::string( &( buffer[0] ) );
+//}
+
+std::string String::Replace(
+    const std::string& source,
+    const std::string& pattern,
+    const std::string& placement )
+{
+    std::string result;
+    std::string::size_type pos_before = 0;
+    std::string::size_type pos = 0;
+    std::string::size_type len = pattern.size();
+    while ( ( pos = source.find( pattern, pos ) ) != std::string::npos )
+    {
+        result.append( source, pos_before, pos - pos_before );
+        result.append( placement );
+        pos += len;
+        pos_before = pos;
+    }
+    result.append( source, pos_before, source.size() - pos_before );
+    return result;
+}
+
+#if KVS_ENABLE_DEPRECATED
 String::String( void ):
     m_data( 0 ),
     m_size( 0 )
@@ -468,5 +540,7 @@ template<> const long String::toNumber( const std::string& str, int base );
 template<> const unsigned long String::toNumber( const std::string& str, int base );
 template<> const float String::toNumber( const std::string& str, int base );
 template<> const double String::toNumber( const std::string& str, int base );
+
+#endif
 
 } // end of namespace kvs

@@ -304,28 +304,28 @@ const bool ColumnTag::write( kvs::XMLNode::SuperClass* parent )
     if ( m_has_min_value )
     {
         const std::string name( "min_value" );
-        const std::string value( kvs::String( m_min_value ).toStdString() );
+        const std::string value = kvs::String::ToString( m_min_value );
         element.setAttribute( name, value );
     }
 
     if ( m_has_max_value )
     {
         const std::string name( "max_value" );
-        const std::string value( kvs::String( m_max_value ).toStdString() );
+        const std::string value = kvs::String::ToString( m_max_value );
         element.setAttribute( name, value );
     }
 
     if ( m_has_min_range )
     {
         const std::string name( "min_range" );
-        const std::string value( kvs::String( m_min_range ).toStdString() );
+        const std::string value = kvs::String::ToString( m_min_range );
         element.setAttribute( name, value );
     }
 
     if ( m_has_max_range )
     {
         const std::string name( "max_range" );
-        const std::string value( kvs::String( m_max_range ).toStdString() );
+        const std::string value = kvs::String::ToString( m_max_range );
         element.setAttribute( name, value );
     }
 

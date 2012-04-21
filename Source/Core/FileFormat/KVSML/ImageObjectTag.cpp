@@ -170,14 +170,14 @@ const bool ImageObjectTag::write( kvs::XMLNode::SuperClass* parent )
     if ( m_has_width )
     {
         const std::string name( "width" );
-        const std::string value( kvs::String( m_width ).toStdString() );
+        const std::string value = kvs::String::ToString( m_width );
         element.setAttribute( name, value );
     }
 
     if ( m_has_height )
     {
         const std::string name( "height" );
-        const std::string value( kvs::String( m_height ).toStdString() );
+        const std::string value = kvs::String::ToString( m_height );
         element.setAttribute( name, value );
     }
 

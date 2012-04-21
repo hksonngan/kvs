@@ -220,13 +220,13 @@ const bool OpacityMapValueTag::write( kvs::XMLNode::SuperClass* parent )
 
     {
         const std::string name( "s" );
-        const std::string value( kvs::String( m_scalar ).toStdString() );
+        const std::string value = kvs::String::ToString( m_scalar );
         element.setAttribute( name, value );
     }
 
     {
         const std::string name( "a" );
-        const std::string value( kvs::String( m_opacity ).toStdString() );
+        const std::string value = kvs::String::ToString( m_opacity );
         element.setAttribute( name, value );
     }
 

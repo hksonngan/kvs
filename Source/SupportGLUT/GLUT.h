@@ -38,10 +38,10 @@ namespace glut
  *  @return description
  */
 /*===========================================================================*/
-inline const std::string Description( void )
+inline std::string Description()
 {
     const std::string description( "GLUT - The OpenGL Utility Toolkit" );
-    return( description );
+    return description;
 }
 
 /*===========================================================================*/
@@ -50,10 +50,10 @@ inline const std::string Description( void )
  *  @return GLUT version
  */
 /*===========================================================================*/
-inline const std::string Version( void )
+inline std::string Version()
 {
-    const std::string version( kvs::String( GLUT_API_VERSION ).toStdString() );
-    return( version );
+    const std::string version = kvs::String::ToString( GLUT_API_VERSION );
+    return version;
 }
 
 } // end of namespace glut

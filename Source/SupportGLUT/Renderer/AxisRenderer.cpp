@@ -148,12 +148,12 @@ void AxisRenderer::draw_tag( const kvs::AxisObject* axis )
     const size_t nline_x = static_cast<size_t>( nline.x() + 2 );
     for( size_t i = 0; i < nline_x; i++ )
     {
-        kvs::String number( val_del.x() * i + min_value.x() );
+        std::string number = kvs::String::ToString( val_del.x() * i + min_value.x() );
         const float x = min_coord.x() + interval.x() * i;
         const float y = min_coord.y() - val_space;
         const float z = min_coord.z() - val_space;
         glRasterPos3f( x, y, z );
-        char* line_head = const_cast<char*>( number.toStdString().c_str() );
+        char* line_head = const_cast<char*>( number.c_str() );
         for( char* p = line_head; *p; p++ )
         {
             glutBitmapCharacter( GLUT_BITMAP_8_BY_13, *p );
@@ -170,12 +170,12 @@ void AxisRenderer::draw_tag( const kvs::AxisObject* axis )
     const size_t nline_y = static_cast<size_t>( nline.y() + 2 );
     for( size_t i = 0; i < nline_y; i++ )
     {
-        kvs::String number( val_del.y() * i + min_value.y() );
+        std::string number = kvs::String::ToString( val_del.y() * i + min_value.y() );
         const float x = min_coord.x() - val_space;
         const float y = min_coord.y() + interval.y() * i;
         const float z = min_coord.z() - val_space;
         glRasterPos3f( x, y, z );
-        char* line_head = const_cast<char*>( number.toStdString().c_str() );
+        char* line_head = const_cast<char*>( number.c_str() );
         for( char* p = line_head; *p; p++ )
         {
             glutBitmapCharacter( GLUT_BITMAP_8_BY_13, *p );
@@ -192,12 +192,12 @@ void AxisRenderer::draw_tag( const kvs::AxisObject* axis )
     const size_t nline_z = static_cast<size_t>( nline.z() + 2 );
     for( size_t i = 0; i < nline_z; i++ )
     {
-        kvs::String number( val_del.z() * i + min_value.z() );
+        std::string number = kvs::String::ToString( val_del.z() * i + min_value.z() );
         const float x = min_coord.x() - val_space;
         const float y = min_coord.y() - val_space;
         const float z = min_coord.z() + interval.z() * i;
         glRasterPos3f( x, y, z );
-        char* line_head = const_cast<char*>( number.toStdString().c_str() );
+        char* line_head = const_cast<char*>( number.c_str() );
         for( char* p = line_head; *p; p++ )
         {
             glutBitmapCharacter( GLUT_BITMAP_8_BY_13, *p );

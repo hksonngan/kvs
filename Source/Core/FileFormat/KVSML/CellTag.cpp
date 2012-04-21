@@ -126,7 +126,7 @@ const bool CellTag::write( kvs::XMLNode::SuperClass* parent )
     if ( m_has_ncells )
     {
         const std::string name( "ncells" );
-        const std::string value( kvs::String( m_ncells ).toStdString() );
+        const std::string value = kvs::String::ToString( m_ncells );
         element.setAttribute( name, value );
     }
 

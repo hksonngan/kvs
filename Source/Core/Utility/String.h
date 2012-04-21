@@ -14,13 +14,15 @@
 #ifndef KVS__STRING_H_INCLUDE
 #define KVS__STRING_H_INCLUDE
 
-#include <cstdio>
-#include <iostream>
 #include <string>
-#include <cstdarg>
 #include <sstream>
 #include <kvs/ClassName>
-
+#include <kvs/Type>
+#if KVS_ENABLE_DEPRECATED
+#include <cstdarg>
+#include <cstdio>
+#include <iostream>
+#endif
 
 namespace kvs
 {
@@ -34,6 +36,68 @@ class String
 {
     kvsClassName_without_virtual( kvs::String );
 
+public:
+
+    //template <typename T>
+    //static T To( const std::string& str )
+    //{
+    //    T ret;
+    //    std::istringstream ss( str );
+    //    ss >> ret;
+    //    return ret;
+    //}
+
+    //template <>
+    //static kvs::Int8 To( const std::string& str )
+    //{
+    //    int ret;
+    //    std::istringstream ss( str );
+    //    ss >> ret;
+    //    return static_cast<kvs::Int8>( ret );
+    //}
+
+    //template <>
+    //static kvs::UInt8 To( const std::string& str )
+    //{
+    //    int ret;
+    //    std::istringstream ss( str );
+    //    ss >> ret;
+    //    return static_cast<kvs::UInt8>( ret );
+    //}
+
+    template <typename T>
+    static std::string ToString( const T& src )
+    {
+        std::ostringstream ss;
+        ss << src;
+        return ss.str();
+    }
+
+    template <>
+    static std::string ToString( const kvs::Int8& src )
+    {
+        std::ostringstream ss;
+        ss << (int)src;
+        return ss.str();
+    }
+
+    template <>
+    static std::string ToString( const kvs::UInt8& src )
+    {
+        std::ostringstream ss;
+        ss << (int)src;
+        return ss.str();
+    }
+
+    static std::string ToUpper( const std::string& str );
+
+    static std::string ToLower( const std::string& str );
+
+    //static std::string Format( const char* str, ... );
+
+    static std::string Replace( const std::string& source, const std::string& pattern, const std::string& placement );
+
+#if KVS_ENABLE_DEPRECATED
 private:
 
     char*  m_data; ///< string data
@@ -116,8 +180,12 @@ public:
     static const T toNumber( const std::string& str, int base = 10 );
 
     const std::string toStdString( void ) const;
+#else
+private:
+    String();
+#endif
 };
-
+#if KVS_ENABLE_DEPRECATED
 template<typename T>
 String::String( T number )
 {
@@ -138,7 +206,7 @@ const T String::toNumber( const std::string& str, int base )
 {
     return( String( str ).toNumber<T>( base ) );
 }
-
+#endif
 } // end of namespace kvs
 
 #endif // KVS__STRING_H_INCLUDE

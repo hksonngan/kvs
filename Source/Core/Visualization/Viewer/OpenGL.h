@@ -133,7 +133,7 @@ inline kvs::StringList ExtensionList()
     std::string name;
     while ( list >> name )
     {
-        extension_list.push_back( kvs::String( name ) );
+        extension_list.push_back( name );
     }
 
     return extension_list;

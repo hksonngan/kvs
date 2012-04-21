@@ -37,7 +37,7 @@ kvs::tiff::Tag TagDictionary::find( const kvs::UInt16 tag_id ) const
     if ( tag == m_container.end() )
     {
         id   = tag_id;
-        name = "Unknown tag (" + kvs::String( tag_id ).toStdString() + ")";
+        name = "Unknown tag (" + kvs::String::ToString( tag_id ) + ")";
     }
     else
     {

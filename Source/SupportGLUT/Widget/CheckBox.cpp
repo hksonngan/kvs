@@ -55,7 +55,7 @@ CheckBox::CheckBox( kvs::ScreenBase* screen ):
         kvs::EventBase::MouseReleaseEvent );
 
     BaseClass::setMargin( ::Default::BoxMargin );
-    this->setCaption( "CheckBox " + kvs::String( ::InstanceCounter++ ).toStdString() );
+    this->setCaption( "CheckBox " + kvs::String::ToString( ::InstanceCounter++ ) );
     this->setState( false );
 
     m_upper_edge_color = BaseClass::get_darkened_color( ::Default::BoxColor, 0.6f );

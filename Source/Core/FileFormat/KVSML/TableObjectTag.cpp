@@ -161,7 +161,7 @@ const bool TableObjectTag::write( kvs::XMLNode::SuperClass* parent )
     if ( m_has_nrows )
     {
         const std::string name( "nrows" );
-        const std::string value( kvs::String( m_nrows ).toStdString() );
+        const std::string value = kvs::String::ToString( m_nrows );
         element.setAttribute( name, value );
     }
     else
@@ -173,7 +173,7 @@ const bool TableObjectTag::write( kvs::XMLNode::SuperClass* parent )
     if ( m_has_ncolumns )
     {
         const std::string name( "ncolumns" );
-        const std::string value( kvs::String( m_ncolumns ).toStdString() );
+        const std::string value = kvs::String::ToString( m_ncolumns );
         element.setAttribute( name, value );
     }
     else

@@ -338,30 +338,30 @@ void Axis2DMatrixRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, k
 
             if ( y_index == 0 )
             {
-                const kvs::String x_min_value( table->minValue(x_index) );
-                const kvs::String x_max_value( table->maxValue(x_index) );
+                const std::string x_min_value = kvs::String::ToString( table->minValue( x_index ) );
+                const std::string x_max_value = kvs::String::ToString( table->maxValue( x_index ) );
 
                 const float x_min_position_x = x0;
                 const float x_min_position_y = y1 + ::CharacterHeight + 5;
-                ::DrawString( x_min_value.toStdString(), x_min_position_x, x_min_position_y, m_value_color );
+                ::DrawString( x_min_value, x_min_position_x, x_min_position_y, m_value_color );
 
                 const float x_max_position_x = x1 - x_max_value.size() * ::CharacterWidth;
                 const float x_max_position_y = y1 + ::CharacterHeight + 5;
-                ::DrawString( x_max_value.toStdString(), x_max_position_x, x_max_position_y, m_value_color );
+                ::DrawString( x_max_value, x_max_position_x, x_max_position_y, m_value_color );
             }
 
             if ( x_index == 0 )
             {
-                const kvs::String y_min_value( table->minValue(y_index) );
-                const kvs::String y_max_value( table->maxValue(y_index) );
+                const std::string y_min_value = kvs::String::ToString( table->minValue( y_index ) );
+                const std::string y_max_value = kvs::String::ToString( table->maxValue( y_index ) );
 
                 const float y_min_position_x = x0 - y_min_value.size() * ::CharacterWidth - 5;
                 const float y_min_position_y = y1;
-                ::DrawString( y_min_value.toStdString(), y_min_position_x, y_min_position_y, m_value_color );
+                ::DrawString( y_min_value, y_min_position_x, y_min_position_y, m_value_color );
 
                 const float y_max_position_x = x0 - y_max_value.size() * ::CharacterWidth - 5;
                 const float y_max_position_y = y0 + ::CharacterHeight;
-                ::DrawString( y_max_value.toStdString(), y_max_position_x, y_max_position_y, m_value_color );
+                ::DrawString( y_max_value, y_max_position_x, y_max_position_y, m_value_color );
             }
 
             // Draw labels.

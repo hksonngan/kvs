@@ -31,16 +31,16 @@ namespace glew
  *  @return whether the initialization process is successfully or not
  */
 /*===========================================================================*/
-inline const bool Initialize( void )
+inline bool Initialize()
 {
     GLenum result = glewInit();
     if ( result != GLEW_OK )
     {
         kvsMessageError( "GLEW; %s.", glewGetErrorString( result ) );
-        return( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -49,10 +49,10 @@ inline const bool Initialize( void )
  *  @return description
  */
 /*===========================================================================*/
-inline const kvs::String Description( void )
+inline std::string Description()
 {
-    const kvs::String description( "GLEW - The OpenGL Extension Wrangler Library" );
-    return( description );
+    const std::string description( "GLEW - The OpenGL Extension Wrangler Library" );
+    return description;
 }
 
 /*===========================================================================*/
@@ -61,10 +61,10 @@ inline const kvs::String Description( void )
  *  @return version
  */
 /*===========================================================================*/
-inline const kvs::String Version( void )
+inline std::string Version()
 {
-    const kvs::String version( glewGetString( GLEW_VERSION ) );
-    return( version );
+    const std::string version( (const char*)( glewGetString( GLEW_VERSION ) ) );
+    return version;
 }
 
 } // end of namespace glew

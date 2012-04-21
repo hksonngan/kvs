@@ -99,7 +99,7 @@ Histogram::Histogram( kvs::ScreenBase* screen ):
         kvs::EventBase::MouseReleaseEvent );
 
     BaseClass::setMargin( ::Default::Margin );
-    this->setCaption( "Histogram " + kvs::String( ::InstanceCounter++ ).toStdString() );
+    this->setCaption( "Histogram " + kvs::String::ToString( ::InstanceCounter++ ) );
     this->setNumberOfBins( 256 );
 
     m_upper_edge_color = BaseClass::get_darkened_color( ::Default::RectColor, 0.6f );
@@ -912,18 +912,18 @@ void Histogram::draw_string( void )
     glColor3ub( m_text_color.r(), m_text_color.g(), m_text_color.b() );
     {
         // Min value.
-        kvs::String min_value( m_table.minRange() );
+        std::string min_value = kvs::String::ToString( m_table.minRange() );
         glRasterPos2i( m_x - 4 * min_value.size(), m_y - 13 );
         for ( size_t i = 0; i < min_value.size(); i++ )
         {
-            glutBitmapCharacter( GLUT_BITMAP_8_BY_13, *( min_value.toStdString().c_str() + i ) );
+            glutBitmapCharacter( GLUT_BITMAP_8_BY_13, *( min_value.c_str() + i ) );
         }
         // Max value.
-        kvs::String max_value( m_table.maxRange() );
+        std::string max_value = kvs::String::ToString( m_table.maxRange() );
         glRasterPos2i( m_x + m_width - 4 * max_value.size(), m_y - 13 );
         for ( size_t i = 0; i < max_value.size(); i++ )
         {
-            glutBitmapCharacter( GLUT_BITMAP_8_BY_13, *( max_value.toStdString().c_str() + i ) );
+            glutBitmapCharacter( GLUT_BITMAP_8_BY_13, *( max_value.c_str() + i ) );
         }
     }
 }

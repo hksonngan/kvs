@@ -38,20 +38,16 @@ std::string ReplaceYear( const std::string& filename, const int year )
     if ( filename.find("%y2",0) != std::string::npos )
     {
         int y = year % 100;
-        kvs::String replace( y );
-        kvs::String file( filename );
-        file.replace( "%y2", replace.toStdString() );
-        return( file.toStdString() );
+        std::string replace = kvs::String::ToString( y );
+        return kvs::String::Replace( filename, "%y2", replace );
     }
 
     if ( filename.find("%y4",0) != std::string::npos )
     {
         int y = year;
         if ( y < 100 ) y = ( 50 <= y ) ? year + 1900 : year + 2000;
-        kvs::String replace( y );
-        kvs::String file( filename );
-        file.replace( "%y4", replace.toStdString() );
-        return( file.toStdString() );
+        std::string replace = kvs::String::ToString( y );
+        return kvs::String::Replace( filename, "%y4", replace );
     }
 
     return( filename );
@@ -61,25 +57,19 @@ std::string ReplaceMonth( const std::string& filename, const int month )
 {
     if ( filename.find("%m1",0) != std::string::npos )
     {
-        kvs::String replace( month );
-        kvs::String file( filename );
-        file.replace( "%m1", replace.toStdString() );
-        return( file.toStdString() );
+        std::string replace = kvs::String::ToString( month );
+        return kvs::String::Replace( filename, "%m1", replace );
     }
 
     if ( filename.find("%m2",0) != std::string::npos )
     {
         char replace[3]; sprintf( replace, "%02d", month );
-        kvs::String file( filename );
-        file.replace( "%m2", std::string( replace ) );
-        return( file.toStdString() );
+        return kvs::String::Replace( filename, "%m2", std::string( replace ) );
     }
 
     if ( filename.find("%mc",0) != std::string::npos )
     {
-        kvs::String file( filename );
-        file.replace( "%mc", MonthName[month - 1] );
-        return( file.toStdString() );
+        return kvs::String::Replace( filename, "%mc", MonthName[ month - 1 ] );
     }
 
     return( filename );
@@ -89,18 +79,14 @@ std::string ReplaceDay( const std::string& filename, const int day )
 {
     if ( filename.find("%d1",0) != std::string::npos )
     {
-        kvs::String replace( day );
-        kvs::String file( filename );
-        file.replace( "%d1", replace.toStdString() );
-        return( file.toStdString() );
+        std::string replace = kvs::String::ToString( day );
+        return kvs::String::Replace( filename, "%d1", replace );
     }
 
     if ( filename.find("%d2",0) != std::string::npos )
     {
         char replace[3]; sprintf( replace, "%02d", day );
-        kvs::String file( filename );
-        file.replace( "%d2", std::string( replace ) );
-        return( file.toStdString() );
+        return kvs::String::Replace( filename, "%d2", std::string( replace ) );
     }
 
     return( filename );
@@ -110,26 +96,20 @@ std::string ReplaceHour( const std::string& filename, const int hour )
 {
     if ( filename.find("%h1",0) != std::string::npos )
     {
-        kvs::String replace( hour );
-        kvs::String file( filename );
-        file.replace( "%h1", replace.toStdString() );
-        return( file.toStdString() );
+        std::string replace = kvs::String::ToString( hour );
+        return kvs::String::Replace( filename, "%h1", replace );
     }
 
     if ( filename.find("%h2",0) != std::string::npos )
     {
         char replace[3]; sprintf( replace, "%02d", hour );
-        kvs::String file( filename );
-        file.replace( "%h2", std::string( replace ) );
-        return( file.toStdString() );
+        return kvs::String::Replace( filename, "%h2", std::string( replace ) );
     }
 
     if ( filename.find("%h3",0) != std::string::npos )
     {
         char replace[4]; sprintf( replace, "%03d", hour );
-        kvs::String file( filename );
-        file.replace( "%h3", std::string( replace ) );
-        return( file.toStdString() );
+        return kvs::String::Replace( filename, "%h3", std::string( replace ) );
     }
 
     return( filename );
@@ -140,9 +120,7 @@ std::string ReplaceMinute( const std::string& filename, const int minute )
     if ( filename.find("%n2",0) != std::string::npos )
     {
         char replace[3]; sprintf( replace, "%02d", minute );
-        kvs::String file( filename );
-        file.replace( "%n2", std::string( replace ) );
-        return( file.toStdString() );
+        return kvs::String::Replace( filename, "%n2", std::string( replace ) );
     }
 
     return( filename );

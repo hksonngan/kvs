@@ -243,25 +243,25 @@ const bool ColorMapValueTag::write( kvs::XMLNode::SuperClass* parent )
 
     {
         const std::string name( "s" );
-        const std::string value( kvs::String( m_scalar ).toStdString() );
+        const std::string value = kvs::String::ToString( m_scalar );
         element.setAttribute( name, value );
     }
 
     {
         const std::string name( "r" );
-        const std::string value( kvs::String( m_color.r() ).toStdString() );
+        const std::string value = kvs::String::ToString( m_color.r() );
         element.setAttribute( name, value );
     }
 
     {
         const std::string name( "g" );
-        const std::string value( kvs::String( m_color.g() ).toStdString() );
+        const std::string value = kvs::String::ToString( m_color.g() );
         element.setAttribute( name, value );
     }
 
     {
         const std::string name( "b" );
-        const std::string value( kvs::String( m_color.b() ).toStdString() );
+        const std::string value = kvs::String::ToString( m_color.b() );
         element.setAttribute( name, value );
     }
 

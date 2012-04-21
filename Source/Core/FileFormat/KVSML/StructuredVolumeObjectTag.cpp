@@ -197,9 +197,9 @@ const bool StructuredVolumeObjectTag::write( kvs::XMLNode::SuperClass* parent )
     if ( m_has_resolution )
     {
         const std::string name( "resolution" );
-        const std::string x( kvs::String( m_resolution.x() ).toStdString() );
-        const std::string y( kvs::String( m_resolution.y() ).toStdString() );
-        const std::string z( kvs::String( m_resolution.z() ).toStdString() );
+        const std::string x = kvs::String::ToString( m_resolution.x() );
+        const std::string y = kvs::String::ToString( m_resolution.y() );
+        const std::string z = kvs::String::ToString( m_resolution.z() );
         const std::string value( x + " " + y + " " + z );
         element.setAttribute( name, value );
     }

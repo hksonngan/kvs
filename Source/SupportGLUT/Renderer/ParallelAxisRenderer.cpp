@@ -319,17 +319,17 @@ void ParallelAxisRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, k
     // Draw min/max values and label.
     for ( size_t i = 0; i < naxes; i++ )
     {
-        kvs::String max_value;
-        kvs::String min_value;
+        std::string max_value;
+        std::string min_value;
         if ( std::ceil( table->maxValue(i) ) == std::floor( table->maxValue(i) ) )
         {
-            max_value.setNumber( int(table->maxValue(i)) );
-            min_value.setNumber( int(table->minValue(i)) );
+            max_value = kvs::String::ToString( int(table->maxValue(i)) );
+            min_value = kvs::String::ToString( int(table->minValue(i)) );
         }
         else
         {
-            max_value.setNumber( table->maxValue(i) );
-            min_value.setNumber( table->minValue(i) );
+            max_value = kvs::String::ToString( table->maxValue(i) );
+            min_value = kvs::String::ToString( table->minValue(i) );
         }
 
         const size_t max_width = max_value.size() * ::CharacterWidth;
@@ -341,8 +341,8 @@ void ParallelAxisRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, k
         const float min_x = ( m_left_margin + stride * i ) - min_width * 0.5f;
         const float min_y = y1 + height;
 
-        ::DrawString( max_value.toStdString(), kvs::Math::Max( 0.0f, max_x ), max_y, m_value_color );
-        ::DrawString( min_value.toStdString(), kvs::Math::Max( 0.0f, min_x ), min_y, m_value_color );
+        ::DrawString( max_value, kvs::Math::Max( 0.0f, max_x ), max_y, m_value_color );
+        ::DrawString( min_value, kvs::Math::Max( 0.0f, min_x ), min_y, m_value_color );
 
         if ( has_label )
         {

@@ -21,7 +21,7 @@
 namespace kvs
 {
 
-typedef std::vector<kvs::String> StringList;
+typedef std::vector<std::string> StringList;
 
 } // end of namespace kvs
 

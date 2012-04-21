@@ -110,7 +110,7 @@ ColorPalette::ColorPalette( kvs::ScreenBase* screen ):
         kvs::EventBase::MouseReleaseEvent );
 
     BaseClass::setMargin( ::Default::Margin );
-    this->setCaption( "Color palette " + kvs::String( ::InstanceCounter++ ).toStdString() );
+    this->setCaption( "Color palette " + kvs::String::ToString( ::InstanceCounter++ ) );
 
     m_upper_edge_color = BaseClass::get_darkened_color( ::Default::RectColor, 0.6f );
     m_lower_edge_color = ::Default::RectEdgeColor;

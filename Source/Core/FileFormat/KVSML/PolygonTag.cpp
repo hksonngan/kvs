@@ -126,7 +126,7 @@ const bool PolygonTag::write( kvs::XMLNode::SuperClass* parent )
     if ( m_has_npolygons )
     {
         const std::string name( "npolygons" );
-        const std::string value( kvs::String( m_npolygons ).toStdString() );
+        const std::string value = kvs::String::ToString( m_npolygons );
         element.setAttribute( name, value );
     }
 

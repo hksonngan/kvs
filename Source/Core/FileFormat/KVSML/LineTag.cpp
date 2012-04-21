@@ -126,7 +126,7 @@ const bool LineTag::write( kvs::XMLNode::SuperClass* parent )
     if ( m_has_nlines )
     {
         const std::string name( "nlines" );
-        const std::string value( kvs::String( m_nlines ).toStdString() );
+        const std::string value = kvs::String::ToString( m_nlines );
         element.setAttribute( name, value );
     }
 

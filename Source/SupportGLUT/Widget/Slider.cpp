@@ -60,7 +60,7 @@ Slider::Slider( kvs::ScreenBase* screen ):
         kvs::EventBase::MouseReleaseEvent );
 
     BaseClass::setMargin( ::Default::SliderMargin );
-    this->setCaption( "Slider " + kvs::String( ::InstanceCounter++ ).toStdString() );
+    this->setCaption( "Slider " + kvs::String::ToString( ::InstanceCounter++ ) );
     this->setValue( ::Default::Value );
     this->setRange( ::Default::MinValue, ::Default::MaxValue );
     this->setSliderColor( ::Default::SliderColor );
@@ -403,17 +403,17 @@ void Slider::paintEvent( void )
     if ( m_show_range_value )
     {
         {
-            kvs::String min_value( m_min_value );
+            std::string min_value = kvs::String::ToString( m_min_value );
             const int x = m_x + m_margin;
             const int y = m_y + m_margin + character_height + ::Default::SliderHeight;
-            BaseClass::draw_text( x, y + character_height, min_value.toStdString() );
+            BaseClass::draw_text( x, y + character_height, min_value );
         }
 
         {
-            kvs::String max_value( m_max_value );
+            std::string max_value = kvs::String::ToString( m_max_value );
             const int x = BaseClass::x1() - m_margin - max_value.size() * character_width;
             const int y = m_y + m_margin + character_height + ::Default::SliderHeight;
-            BaseClass::draw_text( x, y + character_height, max_value.toStdString() );
+            BaseClass::draw_text( x, y + character_height, max_value );
         }
     }
 

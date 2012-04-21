@@ -127,7 +127,7 @@ const bool VertexTag::write( kvs::XMLNode::SuperClass* parent )
     if ( m_has_nvertices )
     {
         const std::string name( "nvertices" );
-        const std::string value( kvs::String( m_nvertices ).toStdString() );
+        const std::string value = kvs::String::ToString( m_nvertices );
         element.setAttribute( name, value );
     }
 

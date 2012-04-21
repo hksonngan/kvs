@@ -274,12 +274,12 @@ const bool ObjectTag::write( kvs::XMLNode::SuperClass* parent )
     if ( m_has_external_coord )
     {
         const std::string name( "external_coord" );
-        const std::string min_x( kvs::String( m_min_external_coord.x() ).toStdString() );
-        const std::string min_y( kvs::String( m_min_external_coord.y() ).toStdString() );
-        const std::string min_z( kvs::String( m_min_external_coord.z() ).toStdString() );
-        const std::string max_x( kvs::String( m_max_external_coord.x() ).toStdString() );
-        const std::string max_y( kvs::String( m_max_external_coord.y() ).toStdString() );
-        const std::string max_z( kvs::String( m_max_external_coord.z() ).toStdString() );
+        const std::string min_x = kvs::String::ToString( m_min_external_coord.x() );
+        const std::string min_y = kvs::String::ToString( m_min_external_coord.y() );
+        const std::string min_z = kvs::String::ToString( m_min_external_coord.z() );
+        const std::string max_x = kvs::String::ToString( m_max_external_coord.x() );
+        const std::string max_y = kvs::String::ToString( m_max_external_coord.y() );
+        const std::string max_z = kvs::String::ToString( m_max_external_coord.z() );
         const std::string min_coord( min_x + " " + min_y + " " + min_z );
         const std::string max_coord( max_x + " " + max_y + " " + max_z );
         const std::string value( min_coord + max_coord );
@@ -289,12 +289,12 @@ const bool ObjectTag::write( kvs::XMLNode::SuperClass* parent )
     if ( m_has_object_coord )
     {
         const std::string name( "object_coord" );
-        const std::string min_x( kvs::String( m_min_object_coord.x() ).toStdString() );
-        const std::string min_y( kvs::String( m_min_object_coord.y() ).toStdString() );
-        const std::string min_z( kvs::String( m_min_object_coord.z() ).toStdString() );
-        const std::string max_x( kvs::String( m_max_object_coord.x() ).toStdString() );
-        const std::string max_y( kvs::String( m_max_object_coord.y() ).toStdString() );
-        const std::string max_z( kvs::String( m_max_object_coord.z() ).toStdString() );
+        const std::string min_x = kvs::String::ToString( m_min_object_coord.x() );
+        const std::string min_y = kvs::String::ToString( m_min_object_coord.y() );
+        const std::string min_z = kvs::String::ToString( m_min_object_coord.z() );
+        const std::string max_x = kvs::String::ToString( m_max_object_coord.x() );
+        const std::string max_y = kvs::String::ToString( m_max_object_coord.y() );
+        const std::string max_z = kvs::String::ToString( m_max_object_coord.z() );
         const std::string min_coord( min_x + " " + min_y + " " + min_z );
         const std::string max_coord( max_x + " " + max_y + " " + max_z );
         const std::string value( min_coord + max_coord );

@@ -308,27 +308,27 @@ void Axis2DRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Li
     glEnd();
 
     // Draw min/max values.
-    const kvs::String x_min_value( table->minValue(0) );
-    const kvs::String x_max_value( table->maxValue(0) );
+    const std::string x_min_value = kvs::String::ToString( table->minValue(0) );
+    const std::string x_max_value = kvs::String::ToString( table->maxValue(0) );
 
     const float x_min_position_x = x0;
     const float x_min_position_y = y1 + ::CharacterHeight + 5;
-    ::DrawString( x_min_value.toStdString(), x_min_position_x, x_min_position_y, m_value_color );
+    ::DrawString( x_min_value, x_min_position_x, x_min_position_y, m_value_color );
 
     const float x_max_position_x = x1 - x_max_value.size() * ::CharacterWidth;
     const float x_max_position_y = y1 + ::CharacterHeight + 5;
-    ::DrawString( x_max_value.toStdString(), x_max_position_x, x_max_position_y, m_value_color );
+    ::DrawString( x_max_value, x_max_position_x, x_max_position_y, m_value_color );
 
-    const kvs::String y_min_value( table->minValue(1) );
-    const kvs::String y_max_value( table->maxValue(1) );
+    const std::string y_min_value = kvs::String::ToString( table->minValue(1) );
+    const std::string y_max_value = kvs::String::ToString( table->maxValue(1) );
 
     const float y_min_position_x = x0 - y_min_value.size() * ::CharacterWidth - 5;
     const float y_min_position_y = y1;
-    ::DrawString( y_min_value.toStdString(), y_min_position_x, y_min_position_y, m_value_color );
+    ::DrawString( y_min_value, y_min_position_x, y_min_position_y, m_value_color );
 
     const float y_max_position_x = x0 - y_max_value.size() * ::CharacterWidth - 5;
     const float y_max_position_y = y0 + ::CharacterHeight;
-    ::DrawString( y_max_value.toStdString(), y_max_position_x, y_max_position_y, m_value_color );
+    ::DrawString( y_max_value, y_max_position_x, y_max_position_y, m_value_color );
 
     // Draw labels.
     const std::string x_label( table->label(0) );

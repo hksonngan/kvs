@@ -268,8 +268,8 @@ void LegendBar::paintEvent( void )
     BaseClass::begin_draw();
     BaseClass::draw_background();
 
-    const kvs::String min_value( m_min_value );
-    const kvs::String max_value( m_max_value );
+    const std::string min_value = kvs::String::ToString( m_min_value );
+    const std::string max_value = kvs::String::ToString( m_max_value );
     const int character_width  = BaseClass::characterWidth();
     const int character_height = BaseClass::characterHeight();
     const int caption_height = ( m_caption.size() == 0 ) ? 0 : character_height + 5;
@@ -306,12 +306,12 @@ void LegendBar::paintEvent( void )
             {
                 const int x = m_x + m_margin;
                 const int y = BaseClass::y1() - m_margin - character_height;
-                BaseClass::draw_text( x, y + character_height, min_value.toStdString() );
+                BaseClass::draw_text( x, y + character_height, min_value );
             }
             {
                 const int x = BaseClass::x1() - m_margin - max_value.size() * character_width;
                 const int y = BaseClass::y1() - m_margin - character_height;
-                BaseClass::draw_text( x, y + character_height, max_value.toStdString() );
+                BaseClass::draw_text( x, y + character_height, max_value );
             }
             break;
         }
@@ -320,12 +320,12 @@ void LegendBar::paintEvent( void )
             {
                 const int x = BaseClass::x1() - m_margin - value_width;
                 const int y = m_y + m_margin + caption_height;
-                BaseClass::draw_text( x, y + character_height, min_value.toStdString() );
+                BaseClass::draw_text( x, y + character_height, min_value );
             }
             {
                 const int x = BaseClass::x1() - m_margin - value_width;
                 const int y = BaseClass::y1() - m_margin - character_height;
-                BaseClass::draw_text( x, y + character_height, max_value.toStdString() );
+                BaseClass::draw_text( x, y + character_height, max_value );
             }
             break;
         }
@@ -370,8 +370,8 @@ int LegendBar::get_fitted_width( void )
     }
     case LegendBar::Vertical:
     {
-        kvs::String min_value( m_min_value );
-        kvs::String max_value( m_max_value );
+        std::string min_value = kvs::String::ToString( m_min_value );
+        std::string max_value = kvs::String::ToString( m_max_value );
         width = BaseClass::characterWidth() * kvs::Math::Max( m_caption.size(), min_value.size(), max_value.size() );
         width += BaseClass::margin() * 2;
         width = kvs::Math::Max( width, ::Default::LegendBarHeight );
@@ -1040,18 +1040,18 @@ void LegendBar::draw_string( void )
             glutBitmapCharacter( GLUT_BITMAP_8_BY_13, *p );
         }
         // Min value.
-        kvs::String min_value( m_min_value );
+        std::string min_value = kvs::String::ToString( m_min_value );
         glRasterPos2i( m_x - 4 * min_value.size(), m_y - 13 );
         for ( size_t i = 0; i < min_value.size(); i++ )
         {
-            glutBitmapCharacter( GLUT_BITMAP_8_BY_13, *( min_value.toStdString().c_str() + i ) );
+            glutBitmapCharacter( GLUT_BITMAP_8_BY_13, *( min_value.c_str() + i ) );
         }
         // Max value.
-        kvs::String max_value( m_max_value );
+        std::string max_value = kvs::String::ToString( m_max_value );
         glRasterPos2i( m_x + m_width - 4 * max_value.size(), m_y - 13 );
         for ( size_t i = 0; i < max_value.size(); i++ )
         {
-            glutBitmapCharacter( GLUT_BITMAP_8_BY_13, *( max_value.toStdString().c_str() + i ) );
+            glutBitmapCharacter( GLUT_BITMAP_8_BY_13, *( max_value.c_str() + i ) );
         }
         break;
     }
@@ -1064,18 +1064,18 @@ void LegendBar::draw_string( void )
             glutBitmapCharacter( GLUT_BITMAP_8_BY_13, *p );
         }
         // Min value.
-        kvs::String min_value( m_min_value );
+        std::string min_value = kvs::String::ToString( m_min_value );
         glRasterPos2i( m_x + m_width + 5, m_y - 6 );
         for ( size_t i = 0; i < min_value.size(); i++ )
         {
-            glutBitmapCharacter( GLUT_BITMAP_8_BY_13, *( min_value.toStdString().c_str() + i ) );
+            glutBitmapCharacter( GLUT_BITMAP_8_BY_13, *( min_value.c_str() + i ) );
         }
         // Max value.
-        kvs::String max_value( m_max_value );
+        std::string max_value = kvs::String::ToString( m_max_value );
         glRasterPos2i( m_x + m_width + 5, m_y + m_height - 6 );
         for ( size_t i = 0; i < max_value.size(); i++ )
         {
-            glutBitmapCharacter( GLUT_BITMAP_8_BY_13, *( max_value.toStdString().c_str() + i ) );
+            glutBitmapCharacter( GLUT_BITMAP_8_BY_13, *( max_value.c_str() + i ) );
         }
         break;
     }
