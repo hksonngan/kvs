@@ -63,7 +63,7 @@ std::ostream& operator << ( std::ostream& os, const PlatformChecker& checker )
 {
     const std::string byte_order( kvs::Endian::IsBig() ? "Big endian" : "Little endian" );
 
-    const size_t ncores = kvs::SystemInformation::nprocessors();
+    const size_t ncores = kvs::SystemInformation::numberOfProcessors();
 
 #if defined( KVS_PLATFORM_CPU_64 )
     const size_t nbits = 64;
