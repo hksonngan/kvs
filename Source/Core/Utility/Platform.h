@@ -217,9 +217,9 @@ namespace Platform
  *  @return platform name
  */
 /*==========================================================================*/
-inline const char* Name( void )
+inline const char* Name()
 {
-    return( KVS_PLATFORM_NAME );
+    return KVS_PLATFORM_NAME;
 }
 
 /*==========================================================================*/
@@ -228,9 +228,9 @@ inline const char* Name( void )
  *  @return CPU name
  */
 /*==========================================================================*/
-inline const char* CPUName( void )
+inline const char* CPUName()
 {
-    return( KVS_PLATFORM_CPU_NAME );
+    return KVS_PLATFORM_CPU_NAME;
 }
 
 } // end of namespace Platform

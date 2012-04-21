@@ -28,12 +28,13 @@ namespace kvs
 class SystemInformation
 {
 public:
-
-    static const size_t nprocessors( void );
-
-    static const size_t totalMemorySize( void );
-
-    static const size_t freeMemorySize( void );
+#if KVS_DEPRECATED
+    static size_t nprocessors()
+    { return numberOfProcessors(); }
+#endif
+    static size_t numberOfProcessors();
+    static size_t totalMemorySize();
+    static size_t freeMemorySize();
 };
 
 } // end of namespace kvs

@@ -24,51 +24,30 @@ namespace kvs
 
 class Endian
 {
-
 public:
-
     static bool IsBig();
-
     static bool IsLittle();
 
     static void Swap( kvs::Int8* value );
-
     static void Swap( kvs::Int16* value );
-
     static void Swap( kvs::Int32* value );
-
     static void Swap( kvs::Int64* value );
-
     static void Swap( kvs::UInt8* value );
-
     static void Swap( kvs::UInt16* value );
-
     static void Swap( kvs::UInt32* value );
-
     static void Swap( kvs::UInt64* value );
-
     static void Swap( kvs::Real32* value );
-
     static void Swap( kvs::Real64* value );
 
     static void Swap( kvs::Int8* values, size_t n );
-
     static void Swap( kvs::Int16* values, size_t n );
-
     static void Swap( kvs::Int32* values, size_t n );
-
     static void Swap( kvs::Int64* values, size_t n );
-
     static void Swap( kvs::UInt8* values, size_t n );
-
     static void Swap( kvs::UInt16* values, size_t n );
-
     static void Swap( kvs::UInt32* values, size_t n );
-
     static void Swap( kvs::UInt64* values, size_t n );
-
     static void Swap( kvs::Real32* values, size_t n );
-
     static void Swap( kvs::Real64* values, size_t n );
 
 #if KVS_ENABLE_DEPRECATED
@@ -111,23 +90,15 @@ public:
     static void Swap( std::string* values, size_t n );
 
 private:
-
     static void Swap2Bytes( void* value );
-
     static void Swap4Bytes( void* value );
-
     static void Swap8Bytes( void* value );
-
     static void Swap2Bytes( void* values, size_t n );
-
     static void Swap4Bytes( void* values, size_t n );
-
     static void Swap8Bytes( void* values, size_t n );
 
 private:
-
     Endian();
-
 };
 
 /*===========================================================================*/

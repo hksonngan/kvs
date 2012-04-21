@@ -41,14 +41,14 @@ namespace Version
  *  @return version number
  */
 /*==========================================================================*/
-inline const size_t Number( void )
+inline size_t Number()
 {
     const size_t version_number =
         100 * KVS_VERSION_MAJOR +
         10  * KVS_VERSION_MINOR +
         1   * KVS_VERSION_PATCH;
 
-    return( version_number );
+    return version_number;
 }
 
 /*==========================================================================*/
@@ -57,9 +57,9 @@ inline const size_t Number( void )
  *  @return major version number
  */
 /*==========================================================================*/
-inline const size_t MajorNumber( void )
+inline size_t MajorNumber()
 {
-    return( KVS_VERSION_MAJOR );
+    return KVS_VERSION_MAJOR;
 }
 
 /*==========================================================================*/
@@ -68,9 +68,9 @@ inline const size_t MajorNumber( void )
  *  @return minor version number
  */
 /*==========================================================================*/
-inline const size_t MinorNumber( void )
+inline size_t MinorNumber()
 {
-    return( KVS_VERSION_MINOR );
+    return KVS_VERSION_MINOR;
 }
 
 /*==========================================================================*/
@@ -79,9 +79,9 @@ inline const size_t MinorNumber( void )
  *  @return patch version number
  */
 /*==========================================================================*/
-inline const size_t PatchNumber( void )
+inline size_t PatchNumber()
 {
-    return( KVS_VERSION_PATCH );
+    return KVS_VERSION_PATCH;
 }
 
 /*==========================================================================*/
@@ -90,9 +90,9 @@ inline const size_t PatchNumber( void )
  *  @return version name
  */
 /*==========================================================================*/
-inline const char* Name( void )
+inline const char* Name()
 {
-    return( KVS_VERSION );
+    return KVS_VERSION;
 }
 
 } // end of namespace Version

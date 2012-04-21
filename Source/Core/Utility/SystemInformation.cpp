@@ -44,7 +44,7 @@ namespace
 /*==========================================================================*/
 const char* GetWarningMessage( int number, const char* message )
 {
-    return( number == EINVAL ? strerror( number ) : message );
+    return number == EINVAL ? strerror( number ) : message;
 }
 
 }
@@ -59,19 +59,19 @@ namespace kvs
  *  @return number of processors
  */
 /*==========================================================================*/
-const size_t SystemInformation::nprocessors( void )
+size_t SystemInformation::numberOfProcessors()
 {
 #if defined ( KVS_PLATFORM_WINDOWS )
     SYSTEM_INFO sysinfo;
     GetSystemInfo( &sysinfo );
-    return( sysinfo.dwNumberOfProcessors );
+    return sysinfo.dwNumberOfProcessors;
 
 #elif defined ( KVS_PLATFORM_LINUX ) || defined ( KVS_PLATFORM_CYGWIN )
     int nprocessors = sysconf( _SC_NPROCESSORS_ONLN );
     kvsMessageWarning( nprocessors != -1,
                        ::GetWarningMessage( errno, "_SC_NPROCESSORS_ONLN is not supported." ) );
 
-    return( nprocessors );
+    return nprocessors;
 
 #elif defined ( KVS_PLATFORM_MACOSX )
     int nprocessors = 0;
@@ -82,7 +82,7 @@ const size_t SystemInformation::nprocessors( void )
     ret = sysctl( mib, 2, &nprocessors, &length, NULL, 0 );
     kvsMessageWarning( ret != -1, ::GetWarningMessage( errno, strerror( errno ) ) );
 
-    return( nprocessors );
+    return nprocessors;
 #endif
 }
 
@@ -92,18 +92,18 @@ const size_t SystemInformation::nprocessors( void )
  *  @return total memory size
  */
 /*==========================================================================*/
-const size_t SystemInformation::totalMemorySize( void )
+size_t SystemInformation::totalMemorySize()
 {
 // Windows
 #if defined ( KVS_PLATFORM_WINDOWS )
 #if defined ( KVS_PLATFORM_CPU_64 )
     MEMORYSTATUSEX memstat;
     GlobalMemoryStatusEx( &memstat );
-    return( memstat.ullTotalPhys );
+    return memstat.ullTotalPhys;
 #else
     MEMORYSTATUS memstat;
     GlobalMemoryStatus( &memstat );
-    return( memstat.dwTotalPhys );
+    return memstat.dwTotalPhys;
 #endif
 
 // Linux
@@ -116,7 +116,7 @@ const size_t SystemInformation::totalMemorySize( void )
     kvsMessageWarning( page_size != -1,
                        ::GetWarningMessage( errno, "_SC_PAGESIZE is not supported." ) );
 
-    return( phys_page_size * page_size );
+    return phys_page_size * page_size;
 
 // Mac OS X
 #elif defined ( KVS_PLATFORM_MACOSX )
@@ -126,14 +126,14 @@ const size_t SystemInformation::totalMemorySize( void )
     int      ret         = 0;
     ret = sysctlbyname( "hw.memsize", &memory_size, &length, NULL, 0 );
     kvsMessageWarning( ret != -1, strerror( errno ) );
-    return( memory_size );
+    return memory_size;
 #else
     uint32_t memory_size = 0;
     size_t   length      = sizeof( memory_size );
     int      ret         = 0;
     ret = sysctlbyname( "hw.physmem", &memory_size, &length, NULL, 0 );
     kvsMessageWarning( ret != -1, strerror( errno ) );
-    return( memory_size );
+    return memory_size;
 #endif
 #endif
 }
@@ -144,18 +144,18 @@ const size_t SystemInformation::totalMemorySize( void )
  *  @return free memory size
  */
 /*==========================================================================*/
-const size_t SystemInformation::freeMemorySize( void )
+size_t SystemInformation::freeMemorySize()
 {
 // Windows
 #if defined ( KVS_PLATFORM_WINDOWS )
 #if defined ( KVS_PLATFORM_CPU_64 )
     MEMORYSTATUSEX memstat;
     GlobalMemoryStatusEx( &memstat );
-    return( memstat.ullAvailPhys );
+    return memstat.ullAvailPhys;
 #else
     MEMORYSTATUS memstat;
     GlobalMemoryStatus( &memstat );
-    return( memstat.dwAvailPhys );
+    return memstat.dwAvailPhys;
 #endif
 
 // Linux
@@ -168,7 +168,7 @@ const size_t SystemInformation::freeMemorySize( void )
     kvsMessageWarning( page_size != -1,
                        ::GetWarningMessage( errno, "_SC_PAGESIZE is not supported." ) );
 
-    return( avphys_page_size * page_size );
+    return avphys_page_size * page_size;
 
 // Mac OS X
 #elif defined ( KVS_PLATFORM_MACOSX )
@@ -183,7 +183,7 @@ const size_t SystemInformation::freeMemorySize( void )
     kr = host_statistics( mach_host_self(), HOST_VM_INFO, (host_info_t)&page_info, &count );
     kvsMessageWarning( kr != KERN_SUCCESS, "Failure to get page info." );
 
-    return( page_info.free_count * page_size );
+    return page_info.free_count * page_size;
 #endif
 
 
