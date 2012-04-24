@@ -73,22 +73,6 @@ public:
         return ss.str();
     }
 
-    template <>
-    static std::string ToString( const kvs::Int8& src )
-    {
-        std::ostringstream ss;
-        ss << (int)src;
-        return ss.str();
-    }
-
-    template <>
-    static std::string ToString( const kvs::UInt8& src )
-    {
-        std::ostringstream ss;
-        ss << (int)src;
-        return ss.str();
-    }
-
     static std::string ToUpper( const std::string& str );
 
     static std::string ToLower( const std::string& str );
@@ -185,6 +169,23 @@ private:
     String();
 #endif
 };
+
+template <>
+inline std::string String::ToString( const kvs::Int8& src )
+{
+    std::ostringstream ss;
+    ss << (int)src;
+    return ss.str();
+}
+
+template <>
+inline std::string String::ToString( const kvs::UInt8& src )
+{
+    std::ostringstream ss;
+    ss << (int)src;
+    return ss.str();
+}
+
 #if KVS_ENABLE_DEPRECATED
 template<typename T>
 String::String( T number )
