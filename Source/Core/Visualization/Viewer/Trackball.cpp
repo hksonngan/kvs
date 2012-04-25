@@ -409,8 +409,8 @@ void Trackball::translate( const kvs::Vector2i& start, const kvs::Vector2i& end 
     kvs::Vector3f vec1  = m_ref_camera->upVector();
     kvs::Vector3f vec2  = vec1.cross( m_ref_camera->position() - m_ref_camera->lookAt() );
 
-    vec1.normalize();
-    vec2.normalize();
+    vec1 = vec1.normalizedVector();
+    vec2 = vec2.normalizedVector();
 
     m_translation = vec1 * trans.y() + vec2 * trans.x();
 }

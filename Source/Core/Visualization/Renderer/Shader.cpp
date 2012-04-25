@@ -137,8 +137,8 @@ const kvs::RGBColor Shader::Lambert::shadedColor(
     const kvs::Vector3f& normal ) const
 {
     // Light vector L and normal vector N.
-    const kvs::Vector3f L = ( light_position - vertex ).normalize();
-    const kvs::Vector3f N = normal.normalize();
+    const kvs::Vector3f L = ( light_position - vertex ).normalizedVector();
+    const kvs::Vector3f N = normal.normalizedVector();
 
     // Intensity values.
     const float Ia = kvsShaderAmbientTerm( Ka );
@@ -156,8 +156,8 @@ const kvs::RGBColor Shader::Lambert::shadedColor(
 inline const float Shader::Lambert::attenuation( const kvs::Vector3f& vertex, const kvs::Vector3f& gradient ) const
 {
     // Light vector L and normal vector N.
-    const kvs::Vector3f L = ( light_position - vertex ).normalize();
-    const kvs::Vector3f N = gradient.normalize();
+    const kvs::Vector3f L = ( light_position - vertex ).normalizedVector();
+    const kvs::Vector3f N = gradient.normalizedVector();
 
     const float dd = kvs::Math::Max( N.dot( L ), 0.0f );
 
@@ -259,9 +259,9 @@ const kvs::RGBColor Shader::Phong::shadedColor(
     const kvs::Vector3f& normal ) const
 {
     // Light vector L, normal vector N and reflection vector R.
-    const kvs::Vector3f V = ( camera_position - vertex ).normalize();
-    const kvs::Vector3f L = ( light_position - vertex ).normalize();
-    const kvs::Vector3f N = normal.normalize();
+    const kvs::Vector3f V = ( camera_position - vertex ).normalizedVector();
+    const kvs::Vector3f L = ( light_position - vertex ).normalizedVector();
+    const kvs::Vector3f N = normal.normalizedVector();
     const kvs::Vector3f R = 2.0f * N.dot( L ) * N - L;
 
     // Intensity values.
@@ -281,8 +281,8 @@ const kvs::RGBColor Shader::Phong::shadedColor(
 inline const float Shader::Phong::attenuation( const kvs::Vector3f& vertex, const kvs::Vector3f& gradient ) const
 {
     // Light vector L, normal vector N and reflection vector R.
-    const kvs::Vector3f L = ( light_position - vertex ).normalize();
-    const kvs::Vector3f N = gradient.normalize();
+    const kvs::Vector3f L = ( light_position - vertex ).normalizedVector();
+    const kvs::Vector3f N = gradient.normalizedVector();
     const kvs::Vector3f R = 2.0f * N.dot( L ) * N - L;
 
     const float dd = Math::Max( N.dot( L ), 0.0f );
@@ -384,10 +384,10 @@ const kvs::RGBColor Shader::BlinnPhong::shadedColor(
     const kvs::Vector3f& normal ) const
 {
     // Camera vector V, light vector L, halfway vector H and normal vector N.
-    const kvs::Vector3f V = ( camera_position - vertex ).normalize();
-    const kvs::Vector3f L = ( light_position - vertex ).normalize();
-    const kvs::Vector3f H = ( V + L ).normalize();
-    const kvs::Vector3f N = normal.normalize();
+    const kvs::Vector3f V = ( camera_position - vertex ).normalizedVector();
+    const kvs::Vector3f L = ( light_position - vertex ).normalizedVector();
+    const kvs::Vector3f H = ( V + L ).normalizedVector();
+    const kvs::Vector3f N = normal.normalizedVector();
 
     // Intensity values.
     const float Ia = kvsShaderAmbientTerm( Ka );
@@ -406,10 +406,10 @@ const kvs::RGBColor Shader::BlinnPhong::shadedColor(
 inline const float Shader::BlinnPhong::attenuation( const kvs::Vector3f& vertex, const kvs::Vector3f& gradient ) const
 {
     // Camera vector C, light vector L, halfway vector H and normal vector N.
-    const kvs::Vector3f C = ( camera_position - vertex ).normalize();
-    const kvs::Vector3f L = ( light_position - vertex ).normalize();
-    const kvs::Vector3f H = ( C + L ).normalize();
-    const kvs::Vector3f N = gradient.normalize();
+    const kvs::Vector3f C = ( camera_position - vertex ).normalizedVector();
+    const kvs::Vector3f L = ( light_position - vertex ).normalizedVector();
+    const kvs::Vector3f H = ( C + L ).normalizedVector();
+    const kvs::Vector3f N = gradient.normalizedVector();
 
     const float dd = kvs::Math::Max( N.dot( L ), 0.0f );
     const float ds = kvs::Math::Max( N.dot( H ), 0.0f );

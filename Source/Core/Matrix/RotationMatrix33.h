@@ -177,7 +177,7 @@ inline kvs::Matrix33<T> RotationMatrix33( const kvs::Vector3<T>& axis, const T d
     const T cosA     = static_cast<T>( cos( rad ) );
     const T inv_cosA = 1 - cosA;
 
-    const kvs::Vector3<T> v( axis.normalize() );
+    const kvs::Vector3<T> v = axis.normalizedVector();
 
     const T x = v.x();
     const T y = v.y();

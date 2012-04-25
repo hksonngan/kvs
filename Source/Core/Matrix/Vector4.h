@@ -99,10 +99,13 @@ public:
     const T& w( void ) const;
 
 public:
+    Vector4 normalizedVector() const;
 
+#if KVS_ENABLE_DEPRECATED
     const Vector4 normalize( void ) const;
-    Vector4&      normalize( void );
 
+    Vector4&      normalize( void );
+#endif
 public:
 
     void print( void ) const;
@@ -602,6 +605,14 @@ inline const T& Vector4<T>::w( void ) const
     return( m_elements[3] );
 }
 
+template<typename T>
+inline Vector4<T> Vector4<T>::normalizedVector() const
+{
+    const double length = this->length();
+    const T normalize_factor = length > 0.0 ? static_cast<T>( 1.0 / length ) : T(0);
+    return *this * normalize_factor;
+}
+#if KVS_ENABLE_DEPRECATED
 /*==========================================================================*/
 /**
  *  Copies this and normalizes it.
@@ -635,7 +646,7 @@ inline Vector4<T>& Vector4<T>::normalize( void )
 
     return( *this );
 }
-
+#endif
 /*==========================================================================*/
 /**
  *  Prints the elements of this.

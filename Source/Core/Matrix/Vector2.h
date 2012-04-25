@@ -81,10 +81,13 @@ public:
     const T& y( void ) const;
 
 public:
+    Vector2 normalizedVector() const;
 
+#if KVS_ENABLE_DEPRECATED
     const Vector2 normalize( void ) const;
-    Vector2&      normalize( void );
 
+    Vector2&      normalize( void );
+#endif
 public:
 
     void print( void ) const;
@@ -453,6 +456,15 @@ inline const T& Vector2<T>::y( void ) const
     return( m_elements[1] );
 }
 
+template<typename T>
+inline Vector2<T> Vector2<T>::normalizedVector() const
+{
+    const double length = this->length();
+    const T normalize_factor = length > 0.0 ? static_cast<T>( 1.0 / length ) : T(0);
+    return *this * normalize_factor;
+}
+
+#if KVS_ENABLE_DEPRECATED
 /*==========================================================================*/
 /**
  *  Copies this and normalizes it.
@@ -486,7 +498,7 @@ inline Vector2<T>& Vector2<T>::normalize( void )
 
     return( *this );
 }
-
+#endif
 /*==========================================================================*/
 /**
  *  Prints the elements of this.

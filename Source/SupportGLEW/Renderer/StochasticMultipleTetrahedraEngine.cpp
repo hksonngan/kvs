@@ -252,7 +252,7 @@ void StochasticMultipleTetrahedraEngine::create_vertexbuffer_from_volume_of( con
     for ( size_t i = 0; i < nvertices; i++ )
     {
         const kvs::Vector3f v( normals.pointer() + i * 3 );
-        const kvs::Vector3f n( ( v / (float)counter[i] ).normalize() * 127.0f );
+        const kvs::Vector3f n = ( v / (float)counter[i] ).normalizedVector() * 127.0f;
         *(dst_normals)++ = static_cast<NormalType>(n[0]);
         *(dst_normals)++ = static_cast<NormalType>(n[1]);
         *(dst_normals)++ = static_cast<NormalType>(n[2]);

@@ -144,7 +144,7 @@ void Ply::calculateNormals( void )
         const kvs::Vector3f v0( pcoords + 3 * index0 );
         const kvs::Vector3f v1( pcoords + 3 * index1 );
         const kvs::Vector3f v2( pcoords + 3 * index2 );
-        const kvs::Vector3f normal = ( ( v1 - v0 ).cross( v2 - v1 ) ).normalize();
+        const kvs::Vector3f normal = ( ( v1 - v0 ).cross( v2 - v1 ) ).normalizedVector();
 
         // Sum of the normal vectors of the adjacent triangles for the vertex.
         m_normals[ 3 * index0 + 0 ] = normal.x();

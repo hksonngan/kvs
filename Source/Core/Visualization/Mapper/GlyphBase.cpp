@@ -123,7 +123,7 @@ void GlyphBase::transform(
     const kvs::Vector3f& direction,
     const kvs::Real32 size )
 {
-    const kvs::Vector3f v = direction.normalize();
+    const kvs::Vector3f v = direction.normalizedVector();
     const kvs::Vector3f c = ::DefaultDirection.cross( v );
     const float d = ::DefaultDirection.dot( v );
     const float s = static_cast<float>( std::sqrt( ( 1.0 + d ) * 2.0 ) );

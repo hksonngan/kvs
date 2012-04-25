@@ -38,13 +38,13 @@ inline kvs::Matrix44<T> LookAtMatrix44(
     const kvs::Vector3<T>& up,
     const kvs::Vector3<T>& target )
 {
-    kvs::Vector3<T> f( target - eye );
-    kvs::Vector3<T> s( f.cross( up.normalize() ) );
-    kvs::Vector3<T> u( s.cross( f ) );
+    kvs::Vector3<T> f = target - eye;
+    kvs::Vector3<T> s = f.cross( up.normalizedVector() );
+    kvs::Vector3<T> u = s.cross( f );
 
-    f.normalize();
-    s.normalize();
-    u.normalize();
+    f = f.normalizedVector();
+    s = s.normalizedVector();
+    u = u.normalizedVector();
 
     const T zero = T(0);
     const T one = T(1);

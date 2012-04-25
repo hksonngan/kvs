@@ -91,7 +91,7 @@ void Ray::setOrigin( const int win_x, const int win_y )
     m_from.set( front[0], front[1], front[2] );
 
     m_direction.set( back[0] - front[0], back[1] - front[1], back[2] - front[2] );
-    m_direction.normalize();
+    m_direction = m_direction.normalizedVector();
 }
 
 const bool Ray::isIntersected(

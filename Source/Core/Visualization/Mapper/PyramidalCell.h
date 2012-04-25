@@ -187,7 +187,7 @@ inline void PyramidalCell<T>::bindCell( const kvs::UInt32 index )
 
     m_pyramid.x() = (float)v12.length();
     m_pyramid.y() = (float)v14.length();
-    kvs::Vector3f height( ( v12.cross(v14) ).normalize() );
+    kvs::Vector3f height = ( v12.cross( v14 ) ).normalizedVector();
     height.x() = height.x() * v10.x();
     height.y() = height.y() * v10.y();
     height.z() = height.z() * v10.z();

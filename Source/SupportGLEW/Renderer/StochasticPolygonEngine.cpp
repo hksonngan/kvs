@@ -331,7 +331,7 @@ void StochasticPolygonEngine::create_vertex_buffer( void )
         for ( size_t i = 0; i < nvertices; i++ )
         {
             const kvs::Vector3f v( p_normals + i * 3 );
-            const kvs::Vector3f n = v.normalize() * 127.0f;
+            const kvs::Vector3f n = v.normalizedVector() * 127.0f;
             normals[ i * 3     ] = static_cast<NormalType>(n[0]);
             normals[ i * 3 + 1 ] = static_cast<NormalType>(n[1]);
             normals[ i * 3 + 2 ] = static_cast<NormalType>(n[2]);
