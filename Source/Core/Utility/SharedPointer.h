@@ -23,9 +23,19 @@
 namespace kvs
 {
 
+namespace temporal
+{
+
+template <typename T> struct ref { typedef T& reference; };
+template <> struct ref<void> { typedef void reference; };
+template <> struct ref<const void> { typedef void reference; };
+template <> struct ref<volatile void> { typedef void reference; };
+template <> struct ref<const volatile void> { typedef void reference; };
+
+}
+
 template <typename T>
 class WeakPointer;
-
 
 template <typename T>
 class SharedPointer
@@ -37,13 +47,7 @@ private:
     typedef SharedPointer<T> this_type;
 
     // to avoid void&
-    template <typename T> struct ref { typedef T& reference; };
-    template <> struct ref<void> { typedef void reference; };
-    template <> struct ref<const void> { typedef void reference; };
-    template <> struct ref<volatile void> { typedef void reference; };
-    template <> struct ref<const volatile void> { typedef void reference; };
-
-    typedef typename ref<T>::reference reference;
+    typedef typename kvs::temporal::ref<T>::reference reference;
 
 public:
     // constructors
