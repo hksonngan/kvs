@@ -68,6 +68,7 @@ std::string String::ToUpper( const std::string& str )
     while ( first != last )
     {
         *first = static_cast<char>( std::toupper( *first ) );
+        ++first;
     }
     return ret;
 }
@@ -80,6 +81,7 @@ std::string String::ToLower( const std::string& str )
     while ( first != last )
     {
         *first = static_cast<char>( std::tolower( *first ) );
+        ++first;
     }
     return ret;
 }
