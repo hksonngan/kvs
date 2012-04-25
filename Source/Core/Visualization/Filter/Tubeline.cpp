@@ -34,8 +34,8 @@ const kvs::ValueArray<kvs::Real32> GetVertexArray( const kvs::LineObject* line )
     }
     else if ( line->lineType() == kvs::LineObject::Uniline )
     {
-        const kvs::Real32* v = line->coords().pointer();
-        const kvs::UInt32* c = line->connections().pointer();
+        const kvs::Real32* v = line->coords().data();
+        const kvs::UInt32* c = line->connections().data();
 
         const size_t dimension = 3;
         const size_t nvertices = line->nconnections();
@@ -73,7 +73,7 @@ const kvs::ValueArray<kvs::Real32> GetVertexArray(
 {
     if ( line->lineType() == kvs::LineObject::Polyline )
     {
-        const kvs::Real32* v = line->coords().pointer();
+        const kvs::Real32* v = line->coords().data();
 
         const size_t dimension = 3;
         const size_t nvertices = id2 - id1 + 1;
@@ -90,7 +90,7 @@ const kvs::ValueArray<kvs::Real32> GetVertexArray(
     }
     else if ( line->lineType() == kvs::LineObject::Segment )
     {
-        const kvs::Real32* v = line->coords().pointer();
+        const kvs::Real32* v = line->coords().data();
 
         const size_t dimension = 3;
         const size_t nvertices = 2;
@@ -124,7 +124,7 @@ const kvs::ValueArray<kvs::UInt8> GetColorArray( const kvs::LineObject* line )
 {
     if ( line->ncolors() == 1 )
     {
-        const kvs::UInt8* c = line->colors().pointer();
+        const kvs::UInt8* c = line->colors().data();
 
         const size_t ncomponents = 3;
         const size_t ncolors = line->nvertices();
@@ -166,7 +166,7 @@ const kvs::ValueArray<kvs::UInt8> GetColorArray(
     const size_t con_id )
 {
     // Ponter to the color array of the line object.
-    const kvs::UInt8* c = line->colors().pointer();
+    const kvs::UInt8* c = line->colors().data();
 
     // Number of components and number of colors.
     const size_t ncomponents = 3;
@@ -190,7 +190,7 @@ const kvs::ValueArray<kvs::UInt8> GetColorArray(
         {
             kvs::ValueArray<kvs::UInt8> colors( ncomponents * ncolors );
 
-            const kvs::UInt32* n = line->connections().pointer();
+            const kvs::UInt32* n = line->connections().data();
 
             size_t counter = 0;
             for ( size_t i = 0, index = 0; i < con_id; i++, index += 2 )
@@ -246,7 +246,7 @@ const kvs::ValueArray<kvs::Real32> GetSizeArray( const kvs::LineObject* line )
 {
     if ( line->nsizes() == 1 )
     {
-        const kvs::Real32* s = line->sizes().pointer();
+        const kvs::Real32* s = line->sizes().data();
 
         const size_t nsizes = line->nvertices() - 1;
         kvs::ValueArray<kvs::Real32> sizes( nsizes );
@@ -285,7 +285,7 @@ const kvs::ValueArray<kvs::Real32> GetSizeArray(
     const size_t con_id )
 {
     // Ponter to the size array of the line object.
-    const kvs::Real32* s = line->sizes().pointer();
+    const kvs::Real32* s = line->sizes().data();
 
     // Number of components of the size array.
     const size_t nsizes = id2 - id1;
@@ -304,7 +304,7 @@ const kvs::ValueArray<kvs::Real32> GetSizeArray(
     {
         kvs::ValueArray<kvs::Real32> sizes( nsizes );
 
-        const kvs::UInt32* n = line->connections().pointer();
+        const kvs::UInt32* n = line->connections().data();
 
         size_t counter = 0;
         for ( size_t i = 0, index = 0; i < con_id; i++, index += 2 )
@@ -577,7 +577,7 @@ void Tubeline::filtering_polyline( const kvs::LineObject* line )
 
     const kvs::PolygonObject::ColorType color_type = ::GetColorType( line );
 
-    const kvs::UInt32* line_connections = line->connections().pointer();
+    const kvs::UInt32* line_connections = line->connections().data();
     const size_t line_nconnections = line->nconnections();
     for( size_t i = 0, index = 0; i < line_nconnections; i++, index += 2 )
     {
@@ -660,7 +660,7 @@ void Tubeline::filtering_segment( const kvs::LineObject* line )
 
     const kvs::PolygonObject::ColorType color_type = ::GetColorType( line );
 
-    const kvs::UInt32* line_connections = line->connections().pointer();
+    const kvs::UInt32* line_connections = line->connections().data();
     const size_t line_nconnections = line->nconnections();
     for( size_t i = 0, index = 0; i < line_nconnections; i++, index += 2 )
     {

@@ -130,7 +130,7 @@ inline void Dithering(
 inline kvs::ValueArray<kvs::UInt32> Histogram( const kvs::GrayImage& image )
 {
     const size_t npixels = image.npixels();
-    const kvs::UInt8* data = image.data().pointer();
+    const kvs::UInt8* data = image.data().data();
 
     kvs::ValueArray<kvs::UInt32> count( 256 );
     count.fill( 0 );
@@ -722,7 +722,7 @@ const bool BitImage::write( const std::string& filename )
     if ( kvs::Pbm::CheckFileExtension( filename ) )
     {
         const size_t nvalues = m_width * m_height;
-        const kvs::UInt8* values = m_data.pointer();
+        const kvs::UInt8* values = m_data.data();
         kvs::Pbm pbm( m_width, m_height, kvs::BitArray( values, nvalues) );
         return( pbm.write( filename ) );
     }

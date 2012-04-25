@@ -339,7 +339,7 @@ const size_t GeometryObjectBase::nnormals( void ) const
 const kvs::Vector3f GeometryObjectBase::coord( const size_t index ) const
 {
     const size_t dimension = 3;
-    return( kvs::Vector3f( m_coords.pointer() + dimension * index ) );
+    return( kvs::Vector3f( m_coords.data() + dimension * index ) );
 }
 
 /*===========================================================================*/
@@ -352,7 +352,7 @@ const kvs::Vector3f GeometryObjectBase::coord( const size_t index ) const
 const kvs::RGBColor GeometryObjectBase::color( const size_t index ) const
 {
     const size_t nchannels = 3;
-    return( kvs::RGBColor( m_colors.pointer() + nchannels * index ) );
+    return( kvs::RGBColor( m_colors.data() + nchannels * index ) );
 }
 
 /*===========================================================================*/
@@ -365,7 +365,7 @@ const kvs::RGBColor GeometryObjectBase::color( const size_t index ) const
 const kvs::Vector3f GeometryObjectBase::normal( const size_t index ) const
 {
     const size_t dimension = 3;
-    return( kvs::Vector3f( m_normals.pointer() + dimension * index ) );
+    return( kvs::Vector3f( m_normals.data() + dimension * index ) );
 }
 
 /*===========================================================================*/
@@ -420,7 +420,7 @@ void GeometryObjectBase::calculate_min_max_coords( void )
     kvs::Vector3f min_coord( 0.0f );
     kvs::Vector3f max_coord( 0.0f );
 
-    const kvs::Real32* coord = this->coords().pointer();
+    const kvs::Real32* coord = this->coords().data();
     const kvs::Real32* const end = coord + this->coords().size();
 
     kvs::Real32 x = *( coord++ );

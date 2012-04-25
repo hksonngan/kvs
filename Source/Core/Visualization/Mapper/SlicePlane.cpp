@@ -398,8 +398,8 @@ void SlicePlane::extract_tetrahedra_plane(
     const kvs::Real64 normalize_factor( 255.0 / ( max_value - min_value ) );
 
     // Refer the parameters of the unstructured volume object.
-    const kvs::Real32* volume_coords      = volume->coords().pointer();
-    const kvs::UInt32* volume_connections = volume->connections().pointer();
+    const kvs::Real32* volume_coords      = volume->coords().data();
+    const kvs::UInt32* volume_connections = volume->connections().data();
     const size_t       ncells             = volume->ncells();
 
     const kvs::ColorMap& color_map( BaseClass::transferFunction().colorMap() );
@@ -529,8 +529,8 @@ void SlicePlane::extract_hexahedra_plane(
     const kvs::Real64 normalize_factor( 255.0 / ( max_value - min_value ) );
 
     // Refer the parameters of the unstructured volume object.
-    const kvs::Real32* volume_coords      = volume->coords().pointer();
-    const kvs::UInt32* volume_connections = volume->connections().pointer();
+    const kvs::Real32* volume_coords      = volume->coords().data();
+    const kvs::UInt32* volume_connections = volume->connections().data();
     const size_t       ncells             = volume->ncells();
 
     const kvs::ColorMap& color_map( BaseClass::transferFunction().colorMap() );
@@ -664,8 +664,8 @@ void SlicePlane::extract_pyramid_plane(
     const kvs::Real64 normalize_factor( 255.0 / ( max_value - min_value ) );
 
     // Refer the parameters of the unstructured volume object.
-    const kvs::Real32* volume_coords      = volume->coords().pointer();
-    const kvs::UInt32* volume_connections = volume->connections().pointer();
+    const kvs::Real32* volume_coords      = volume->coords().data();
+    const kvs::UInt32* volume_connections = volume->connections().data();
     const size_t       ncells             = volume->ncells();
 
     const kvs::ColorMap& color_map( BaseClass::transferFunction().colorMap() );
@@ -807,7 +807,7 @@ const size_t SlicePlane::calculate_table_index(
 const size_t SlicePlane::calculate_tetrahedra_table_index(
     const size_t* local_index ) const
 {
-    const kvs::Real32* const coords = BaseClass::m_volume->coords().pointer();
+    const kvs::Real32* const coords = BaseClass::m_volume->coords().data();
 
     const kvs::Vector3f vertex0( coords + 3 * local_index[0] );
     const kvs::Vector3f vertex1( coords + 3 * local_index[1] );
@@ -833,7 +833,7 @@ const size_t SlicePlane::calculate_tetrahedra_table_index(
 const size_t SlicePlane::calculate_hexahedra_table_index(
     const size_t* local_index ) const
 {
-    const kvs::Real32* const coords = BaseClass::m_volume->coords().pointer();
+    const kvs::Real32* const coords = BaseClass::m_volume->coords().data();
 
     const kvs::Vector3f vertex0( coords + 3 * local_index[0] );
     const kvs::Vector3f vertex1( coords + 3 * local_index[1] );
@@ -867,7 +867,7 @@ const size_t SlicePlane::calculate_hexahedra_table_index(
 const size_t SlicePlane::calculate_pyramid_table_index(
     const size_t* local_index ) const
 {
-    const kvs::Real32* const coords = BaseClass::m_volume->coords().pointer();
+    const kvs::Real32* const coords = BaseClass::m_volume->coords().data();
 
     const kvs::Vector3f vertex0( coords + 3 * local_index[0] );
     const kvs::Vector3f vertex1( coords + 3 * local_index[1] );
@@ -992,7 +992,7 @@ const double SlicePlane::interpolate_value(
     const size_t                         index1 ) const
 {
     const T* const values = static_cast<const T*>( volume->values().pointer() );
-    const kvs::Real32* const coords = volume->coords().pointer();
+    const kvs::Real32* const coords = volume->coords().data();
 
     const float value0 = this->substitute_plane_equation( kvs::Vector3f( coords + 3 * index0 ) );
     const float value1 = this->substitute_plane_equation( kvs::Vector3f( coords + 3 * index1 ) );

@@ -154,7 +154,7 @@ void LineIntegralConvolution::create_noise_volume( const kvs::StructuredVolumeOb
 {
     //kvs::StructuredVolumeObject::Values data;
     kvs::ValueArray<kvs::UInt8> data( volume->nnodes() );
-    kvs::UInt8* pdata = data.pointer();
+    kvs::UInt8* pdata = data.data();
 
     // Random number generator. R = [0,1)
     kvs::MersenneTwister R;

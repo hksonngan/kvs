@@ -187,7 +187,7 @@ void GlyphBase::calculate_coords( const kvs::StructuredVolumeObject* volume )
 void GlyphBase::calculate_uniform_coords( const kvs::StructuredVolumeObject* volume )
 {
     kvs::ValueArray<kvs::Real32> coords( 3 * volume->nnodes() );
-    kvs::Real32* coord = coords.pointer();
+    kvs::Real32* coord = coords.data();
 
     const kvs::Vector3ui resolution( volume->resolution() );
     const kvs::Vector3f  volume_size( volume->maxExternalCoord() - volume->minExternalCoord() );
@@ -251,7 +251,7 @@ void GlyphBase::calculate_sizes( const kvs::VolumeObjectBase* volume )
     const kvs::Real32 normalize = 1.0f / ( max_value - min_value );
 
     kvs::ValueArray<kvs::Real32> sizes( nnodes );
-    kvs::Real32* size = sizes.pointer();
+    kvs::Real32* size = sizes.data();
 
     switch( m_size_mode )
     {
@@ -311,7 +311,7 @@ void GlyphBase::calculate_directions( const kvs::VolumeObjectBase* volume )
     if ( veclen == 3 )
     {
         kvs::ValueArray<kvs::Real32> directions( nnodes * veclen );
-        kvs::Real32* direction = directions.pointer();
+        kvs::Real32* direction = directions.data();
 
         for ( size_t i = 0; i < directions.size(); i++ )
         {
@@ -352,7 +352,7 @@ void GlyphBase::calculate_colors( const kvs::VolumeObjectBase* volume )
     const kvs::Real32 normalize = 1.0f / ( max_value - min_value );
 
     kvs::ValueArray<kvs::UInt8> colors( 3 * nnodes );
-    kvs::UInt8* color = colors.pointer();
+    kvs::UInt8* color = colors.data();
 
     switch( m_color_mode )
     {
@@ -434,7 +434,7 @@ void GlyphBase::calculate_opacities( const kvs::VolumeObjectBase* volume )
     const kvs::Real32 normalize = 255.0f / ( max_value - min_value );
 
     kvs::ValueArray<kvs::UInt8> opacities( nnodes );
-    kvs::UInt8* opacity = opacities.pointer();
+    kvs::UInt8* opacity = opacities.data();
 
     switch( m_opacity_mode )
     {

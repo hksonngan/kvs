@@ -18,6 +18,7 @@
 #include <utility>
 #include <kvs/ClassName>
 #include <kvs/ValueArray>
+#include <kvs/Type>
 
 
 namespace kvs

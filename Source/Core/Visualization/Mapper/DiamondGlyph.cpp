@@ -226,9 +226,9 @@ void DiamondGlyph::draw( void )
     {
         for ( size_t i = 0, index = 0; i < npoints; i++, index += 3 )
         {
-            const kvs::Vector3f position( BaseClass::m_coords.pointer() + index );
+            const kvs::Vector3f position( BaseClass::m_coords.data() + index );
             const kvs::Real32 size = BaseClass::m_sizes[i];
-            const kvs::RGBColor color( BaseClass::m_colors.pointer() + index );
+            const kvs::RGBColor color( BaseClass::m_colors.data() + index );
             const kvs::UInt8 opacity = BaseClass::m_opacities[i];
             glPushMatrix();
             {
@@ -242,10 +242,10 @@ void DiamondGlyph::draw( void )
     {
         for( size_t i = 0, index = 0; i < npoints; i++, index += 3 )
         {
-            const kvs::Vector3f position( BaseClass::m_coords.pointer() + index );
-            const kvs::Vector3f direction( BaseClass::m_directions.pointer() + index );
+            const kvs::Vector3f position( BaseClass::m_coords.data() + index );
+            const kvs::Vector3f direction( BaseClass::m_directions.data() + index );
             const kvs::Real32 size = BaseClass::m_sizes[i];
-            const kvs::RGBColor color( BaseClass::m_colors.pointer() + index );
+            const kvs::RGBColor color( BaseClass::m_colors.data() + index );
             const kvs::UInt8 opacity = BaseClass::m_opacities[i];
             glPushMatrix();
             {

@@ -72,7 +72,7 @@ void ImageRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Lig
     default: break;
     }
 
-    m_texture.download( image->width(), image->height(), image->data().pointer() );
+    m_texture.download( image->width(), image->height(), image->data().data() );
     m_texture.bind();
 
     glMatrixMode( GL_MODELVIEW );
@@ -152,7 +152,7 @@ void ImageRenderer::create_texture( const kvs::ImageObject* image )
 
     m_texture.create( image->width(), image->height() );
     glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE );
-    m_texture.download( image->width(), image->height(), image->data().pointer() );
+    m_texture.download( image->width(), image->height(), image->data().data() );
 }
 
 /*==========================================================================*/

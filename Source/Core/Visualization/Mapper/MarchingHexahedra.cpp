@@ -183,7 +183,7 @@ void MarchingHexahedra::extract_surfaces_with_duplication(
 
     const kvs::UInt32 ncells( volume->ncells() );
     const kvs::UInt32* connections =
-        static_cast<const kvs::UInt32*>( volume->connections().pointer() );
+        static_cast<const kvs::UInt32*>( volume->connections().data() );
 
     // Extract surfaces.
     size_t index = 0;
@@ -302,7 +302,7 @@ const kvs::Vector3f MarchingHexahedra::interpolate_vertex(
     const int vertex1 ) const
 {
     const T* const values = static_cast<const T*>( BaseClass::m_volume->values().pointer() );
-    const kvs::Real32* const coords = BaseClass::m_volume->coords().pointer();
+    const kvs::Real32* const coords = BaseClass::m_volume->coords().data();
 
     const size_t coord0_index = 3 * vertex0;
     const size_t coord1_index = 3 * vertex1;

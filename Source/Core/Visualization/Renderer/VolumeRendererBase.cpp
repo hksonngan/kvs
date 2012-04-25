@@ -169,7 +169,7 @@ void VolumeRendererBase::draw_depth_buffer( const int* viewport )
     glEnable( GL_DEPTH_TEST );
 
     // Send depth data to the frame buffer (depth buffer).
-    m_depth_buffer.draw( m_width, m_height, viewport, m_depth_data.pointer() );
+    m_depth_buffer.draw( m_width, m_height, viewport, m_depth_data.data() );
 
     // Recover OpenGL parameters.
     glDisable( GL_DEPTH_TEST );
@@ -187,7 +187,7 @@ void VolumeRendererBase::draw_color_buffer( const int* viewport )
     glDisable( GL_DEPTH_TEST );
 
     // Send color data to the frame buffer (color buffer).
-    m_color_buffer.draw( m_width, m_height, viewport, m_color_data.pointer() );
+    m_color_buffer.draw( m_width, m_height, viewport, m_color_data.data() );
 
     // Recover OpenGL parameters.
     glDisable( GL_BLEND );

@@ -208,7 +208,7 @@ const kvs::UInt64 FrequencyTable::operator [] ( const size_t index ) const
 /*==========================================================================*/
 const kvs::UInt64 FrequencyTable::at( const size_t index ) const
 {
-    return( m_bin.at( index ) );
+    return( m_bin[ index ] );
 }
 
 /*==========================================================================*/

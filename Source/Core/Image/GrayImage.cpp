@@ -43,7 +43,7 @@ void GrayImage::MeanValue::operator () (
 {
     const size_t width = image.width();
     const size_t height = image.height();
-    const kvs::UInt8* image_data = image.data().pointer();
+    const kvs::UInt8* image_data = image.data().data();
     for( size_t j = 0; j < height; j++ )
     {
         const size_t col_line_index = j * image.bytesPerLine();
@@ -76,7 +76,7 @@ void GrayImage::MiddleValue::operator () (
 {
     const size_t width = image.width();
     const size_t height = image.height();
-    const kvs::UInt8* image_data = image.data().pointer();
+    const kvs::UInt8* image_data = image.data().data();
     for( size_t j = 0; j < height; j++ )
     {
         const size_t col_line_index = j * image.bytesPerLine();
@@ -111,7 +111,7 @@ void GrayImage::MedianValue::operator () (
 {
     const size_t width = image.width();
     const size_t height = image.height();
-    const kvs::UInt8* image_data = image.data().pointer();
+    const kvs::UInt8* image_data = image.data().data();
     for( size_t j = 0; j < height; j++ )
     {
         const size_t col_line_index = j * image.bytesPerLine();
@@ -145,7 +145,7 @@ void GrayImage::NTSCWeightedMeanValue::operator () (
 {
     const size_t width = image.width();
     const size_t height = image.height();
-    const kvs::UInt8* image_data = image.data().pointer();
+    const kvs::UInt8* image_data = image.data().data();
     for( size_t j = 0; j < height; j++ )
     {
         const size_t col_line_index = j * image.bytesPerLine();
@@ -183,7 +183,7 @@ void GrayImage::HDTVWeightedMeanValue::operator () (
     const double gamma_value = 2.2;
     const size_t width = image.width();
     const size_t height = image.height();
-    const kvs::UInt8* image_data = image.data().pointer();
+    const kvs::UInt8* image_data = image.data().data();
     for( size_t j = 0; j < height; j++ )
     {
         const size_t col_line_index = j * image.bytesPerLine();

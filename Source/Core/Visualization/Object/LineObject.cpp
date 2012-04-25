@@ -202,9 +202,9 @@ LineObject::LineObject( const kvs::PolygonObject& polygon )
     {
         for( size_t j = 0; j < ncorners; j++ )
         {
-            connections.at( l_index++ ) = p_index++;
+            connections[ l_index++ ] = p_index++;
         }
-        connections.at( l_index++ ) = p_index - ncorners;
+        connections[ l_index++ ] = p_index - ncorners;
     }
 
     this->setConnections( connections );
@@ -360,7 +360,7 @@ const size_t LineObject::nsizes( void ) const
 
 const kvs::Vector2ui LineObject::connection( const size_t index ) const
 {
-    return( kvs::Vector2ui( (unsigned int*)m_connections.pointer() + 2 * index ) );
+    return( kvs::Vector2ui( (unsigned int*)m_connections.data() + 2 * index ) );
 }
 
 const kvs::Real32 LineObject::size( const size_t index ) const

@@ -280,7 +280,7 @@ inline void CreateTetrahedraFaceMap(
     const kvs::UnstructuredVolumeObject* volume,
     FaceMap* face_map )
 {
-    const kvs::UInt32* connections = volume->connections().pointer();
+    const kvs::UInt32* connections = volume->connections().data();
     const size_t ncells = volume->ncells();
     for ( size_t cell_index = 0, connection_index = 0; cell_index < ncells; cell_index++ )
     {
@@ -310,7 +310,7 @@ inline void CreateQuadraticTetrahedraFaceMap(
     const kvs::UnstructuredVolumeObject* volume,
     FaceMap* face_map )
 {
-    const kvs::UInt32* connections = volume->connections().pointer();
+    const kvs::UInt32* connections = volume->connections().data();
     const size_t ncells = volume->ncells();
     for ( size_t cell_index = 0, connection_index = 0; cell_index < ncells; cell_index++ )
     {
@@ -361,7 +361,7 @@ inline void CreateHexahedraFaceMap(
     const kvs::UnstructuredVolumeObject* volume,
     FaceMap* face_map )
 {
-    const kvs::UInt32* connections = volume->connections().pointer();
+    const kvs::UInt32* connections = volume->connections().data();
     const size_t ncells = volume->ncells();
     for ( size_t cell_index = 0, connection_index = 0; cell_index < ncells; cell_index++ )
     {
@@ -408,7 +408,7 @@ inline void CreateQuadraticHexahedraFaceMap(
     const kvs::UnstructuredVolumeObject* volume,
     FaceMap* face_map )
 {
-    const kvs::UInt32* connections = volume->connections().pointer();
+    const kvs::UInt32* connections = volume->connections().data();
     const size_t ncells = volume->ncells();
     for ( size_t cell_index = 0, connection_index = 0; cell_index < ncells; cell_index++ )
     {
@@ -509,7 +509,7 @@ void CalculateFaces(
 
     const size_t nfaces = face_map.bucket().size();
     const size_t nvertices = nfaces * 3;
-    const kvs::Real32* volume_coord = volume->coords().pointer();
+    const kvs::Real32* volume_coord = volume->coords().data();
 
     coords->allocate( nvertices * 3 );
     colors->allocate( nvertices * 3 );
@@ -748,10 +748,10 @@ void ExternalFaces::calculate_uniform_coords( const kvs::StructuredVolumeObject*
     const size_t nexternal_vertices = nexternal_faces * 4;
 
     kvs::ValueArray<kvs::Real32> coords( 3 * nexternal_vertices );
-    kvs::Real32* coord = coords.pointer();
+    kvs::Real32* coord = coords.data();
 
     kvs::ValueArray<kvs::Real32> normals( 3 * nexternal_faces );
-    kvs::Real32* normal = normals.pointer();
+    kvs::Real32* normal = normals.data();
 
     // XY (Z=0) plane.
     {
@@ -1032,7 +1032,7 @@ void ExternalFaces::calculate_colors( const kvs::StructuredVolumeObject* volume 
     const kvs::ColorMap cmap( BaseClass::colorMap() );
 
     kvs::ValueArray<kvs::UInt8> colors( 3 * nexternal_vertices );
-    kvs::UInt8* color = colors.pointer();
+    kvs::UInt8* color = colors.data();
 
     kvs::UInt32 node_index[4];
     kvs::UInt32 color_level[4];

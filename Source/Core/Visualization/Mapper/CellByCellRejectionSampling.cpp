@@ -585,7 +585,7 @@ const float CellByCellRejectionSampling::calculate_density( const float scalar )
     const size_t index1 = index0 + 1;
     const float scalar_offset = normalized_scalar - index0;
 
-    const float* const density_map = m_density_map.pointer();
+    const float* const density_map = m_density_map.data();
 
     if ( index0 == ( BaseClass::transferFunction().resolution() - 1 ) )
     {
@@ -645,7 +645,7 @@ const float CellByCellRejectionSampling::calculate_maximum_density( const float 
     const size_t index0 = static_cast<size_t>( ( scalar0 - min_value ) * normalize_factor ) + 1;
     const size_t index1 = static_cast<size_t>( ( scalar1 - min_value ) * normalize_factor );
 
-    const float* const density_map = m_density_map.pointer();
+    const float* const density_map = m_density_map.data();
 
     float maximum_density = density_map[ index0 ];
 

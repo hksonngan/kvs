@@ -370,9 +370,9 @@ const bool KVSMLObjectPolygon::read( const std::string& filename )
             {
                 // default value (black).
                 m_colors.allocate(3);
-                m_colors.at(0) = 0;
-                m_colors.at(1) = 0;
-                m_colors.at(2) = 0;
+                m_colors[0] = 0;
+                m_colors[1] = 0;
+                m_colors[2] = 0;
             }
         }
 
@@ -385,7 +385,7 @@ const bool KVSMLObjectPolygon::read( const std::string& filename )
             {
                 // default value (255).
                 m_opacities.allocate(1);
-                m_opacities.at(0) = 255;
+                m_opacities[0] = 255;
             }
         }
 
@@ -428,9 +428,9 @@ const bool KVSMLObjectPolygon::read( const std::string& filename )
                 {
                     // default value (black).
                     m_colors.allocate(3);
-                    m_colors.at(0) = 0;
-                    m_colors.at(1) = 0;
-                    m_colors.at(2) = 0;
+                    m_colors[0] = 0;
+                    m_colors[1] = 0;
+                    m_colors[2] = 0;
                 }
             }
 
@@ -443,7 +443,7 @@ const bool KVSMLObjectPolygon::read( const std::string& filename )
                 {
                     // default value (255).
                     m_opacities.allocate(1);
-                    m_opacities.at(0) = 255;
+                    m_opacities[0] = 255;
                 }
             }
 

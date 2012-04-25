@@ -289,7 +289,7 @@ void ColorMap::create( void )
         const float max_hue = 240.0f; // red
         const float increment = ( max_hue - min_hue ) / static_cast<float>( m_resolution - 1 );
 
-        kvs::UInt8* color = m_table.pointer();
+        kvs::UInt8* color = m_table.data();
         for ( size_t i = 0; i < m_resolution; ++i )
         {
             // HSV to RGB
@@ -382,7 +382,7 @@ const kvs::RGBColor ColorMap::operator []( const size_t index ) const
     KVS_ASSERT( index < this->resolution() );
 
     const size_t offset = ::NumberOfChannels * index;
-    return( kvs::RGBColor( m_table.pointer() + offset ) );
+    return( kvs::RGBColor( m_table.data() + offset ) );
 }
 
 /*===========================================================================*/
@@ -396,12 +396,12 @@ const kvs::RGBColor ColorMap::at( const float value ) const
 {
     if ( value <= m_min_value )
     {
-        const kvs::RGBColor color( m_table.pointer() );
+        const kvs::RGBColor color( m_table.data() );
         return( color );
     }
     else if ( value >= m_max_value )
     {
-        const kvs::RGBColor color( m_table.pointer() + ::NumberOfChannels * ( m_resolution - 1 ) );
+        const kvs::RGBColor color( m_table.data() + ::NumberOfChannels * ( m_resolution - 1 ) );
         return( color );
     }
 
@@ -410,8 +410,8 @@ const kvs::RGBColor ColorMap::at( const float value ) const
     const size_t s0 = static_cast<size_t>( v );
     const size_t s1 = s0 + 1;
 
-    const kvs::RGBColor c0( m_table.pointer() + ::NumberOfChannels * s0 );
-    const kvs::RGBColor c1( m_table.pointer() + ::NumberOfChannels * s1 );
+    const kvs::RGBColor c0( m_table.data() + ::NumberOfChannels * s0 );
+    const kvs::RGBColor c1( m_table.data() + ::NumberOfChannels * s1 );
 
     const int r0 = c0.r();
     const int g0 = c0.g();

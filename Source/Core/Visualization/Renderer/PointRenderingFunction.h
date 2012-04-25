@@ -44,8 +44,8 @@ void Rendering_S_C_Ns( const kvs::PointObject* point )
     glPointSize( size );
     glColor3ub( color.r(), color.g(), color.b() );
 
-    const float* vertex = point->coords().pointer();
-    const float* normal = point->normals().pointer();
+    const float* vertex = point->coords().data();
+    const float* normal = point->normals().data();
 
     glBegin( GL_POINTS );
     {
@@ -74,7 +74,7 @@ void Rendering_S_C( const kvs::PointObject* point )
     glPointSize( size );
     glColor3ub( color.r(), color.g(), color.b() );
 
-    const float* vertex = point->coords().pointer();
+    const float* vertex = point->coords().data();
     glBegin( GL_POINTS );
     {
         const size_t nvertices = point->nvertices();
@@ -100,9 +100,9 @@ void Rendering_S_Cs_Ns( const kvs::PointObject* point )
     const float size = point->size();
     glPointSize( size );
 
-    const float*         vertex = point->coords().pointer();
-    const float*         normal = point->normals().pointer();
-    const unsigned char* color  = point->colors().pointer();
+    const float*         vertex = point->coords().data();
+    const float*         normal = point->normals().data();
+    const unsigned char* color  = point->colors().data();
     glBegin( GL_POINTS );
     {
         const size_t nvertices = point->nvertices();
@@ -128,8 +128,8 @@ void Rendering_S_Cs( const kvs::PointObject* point )
     const float size = point->size();
     glPointSize( size );
 
-    const float*         vertex = point->coords().pointer();
-    const unsigned char* color = point->colors().pointer();
+    const float*         vertex = point->coords().data();
+    const unsigned char* color = point->colors().data();
     glBegin( GL_POINTS );
     {
         const size_t nvertices = point->nvertices();
@@ -154,7 +154,7 @@ void Rendering_S( const kvs::PointObject* point )
     const float size = point->size();
     glPointSize( size );
 
-    const float* vertex = point->coords().pointer();
+    const float* vertex = point->coords().data();
     glBegin( GL_POINTS );
     {
         const size_t nvertices = point->nvertices();
@@ -180,9 +180,9 @@ void Rendering_Ss_C_Ns( const kvs::PointObject* point )
     const kvs::RGBColor color = point->color();
     glColor3ub( color.r(), color.g(), color.b() );
 
-    const float* size   = point->sizes().pointer();
-    const float* vertex = point->coords().pointer();
-    const float* normal = point->normals().pointer();
+    const float* size   = point->sizes().data();
+    const float* vertex = point->coords().data();
+    const float* normal = point->normals().data();
 
     const size_t nvertices = point->nvertices();
     for( size_t i = 0; i < nvertices; i++ )
@@ -209,8 +209,8 @@ void Rendering_Ss_C( const kvs::PointObject* point )
     const kvs::RGBColor color = point->color();
     glColor3ub( color.r(), color.g(), color.b() );
 
-    const float* size   = point->sizes().pointer();
-    const float* vertex = point->coords().pointer();
+    const float* size   = point->sizes().data();
+    const float* vertex = point->coords().data();
 
     const size_t nvertices = point->nvertices();
     for( size_t i = 0; i < nvertices; i++ )
@@ -235,10 +235,10 @@ void Rendering_Ss_Cs_Ns( const kvs::PointObject* point )
 {
     glEnable( GL_NORMALIZE );
 
-    const float*         size   = point->sizes().pointer();
-    const float*         vertex = point->coords().pointer();
-    const float*         normal = point->normals().pointer();
-    const unsigned char* color  = point->colors().pointer();
+    const float*         size   = point->sizes().data();
+    const float*         vertex = point->coords().data();
+    const float*         normal = point->normals().data();
+    const unsigned char* color  = point->colors().data();
 
     const size_t nvertices = point->nvertices();
     for( size_t i = 0; i < nvertices; i++ )
@@ -263,9 +263,9 @@ void Rendering_Ss_Cs_Ns( const kvs::PointObject* point )
 /*==========================================================================*/
 void Rendering_Ss_Cs( const kvs::PointObject* point )
 {
-    const float*         size   = point->sizes().pointer();
-    const float*         vertex = point->coords().pointer();
-    const unsigned char* color  = point->colors().pointer();
+    const float*         size   = point->sizes().data();
+    const float*         vertex = point->coords().data();
+    const unsigned char* color  = point->colors().data();
 
     const size_t nvertices = point->nvertices();
     for( size_t i = 0; i < nvertices; i++ )
@@ -289,8 +289,8 @@ void Rendering_Ss_Cs( const kvs::PointObject* point )
 /*==========================================================================*/
 void Rendering_Ss( const kvs::PointObject* point )
 {
-    const float* size   = point->sizes().pointer();
-    const float* vertex = point->coords().pointer();
+    const float* size   = point->sizes().data();
+    const float* vertex = point->coords().data();
 
     const size_t nvertices = point->nvertices();
     for( size_t i = 0; i < nvertices; i++ )

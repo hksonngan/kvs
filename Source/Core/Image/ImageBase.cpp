@@ -430,7 +430,7 @@ void ImageBase::flip( void )
 {
     const size_t stride = m_width * ::BitToByte( m_bpp );
 
-    kvs::UInt8* pdata = m_data.pointer();
+    kvs::UInt8* pdata = m_data.data();
     const size_t end_line = m_height / 2;
     for ( size_t i = 0; i < end_line; i++ )
     {

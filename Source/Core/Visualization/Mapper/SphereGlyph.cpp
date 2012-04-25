@@ -173,9 +173,9 @@ void SphereGlyph::draw( void )
     {
         for ( size_t i = 0, index = 0; i < npoints; i++, index += 3 )
         {
-            const kvs::Vector3f position( BaseClass::m_coords.pointer() + index );
+            const kvs::Vector3f position( BaseClass::m_coords.data() + index );
             const kvs::Real32 size = BaseClass::m_sizes[i];
-            const kvs::RGBColor color( BaseClass::m_colors.pointer() + index );
+            const kvs::RGBColor color( BaseClass::m_colors.data() + index );
             const kvs::UInt8 opacity = BaseClass::m_opacities[i];
             glPushMatrix();
             {
@@ -189,10 +189,10 @@ void SphereGlyph::draw( void )
     {
         for( size_t i = 0, index = 0; i < npoints; i++, index += 3 )
         {
-            const kvs::Vector3f position( BaseClass::m_coords.pointer() + index );
-            const kvs::Vector3f direction( BaseClass::m_directions.pointer() + index );
+            const kvs::Vector3f position( BaseClass::m_coords.data() + index );
+            const kvs::Vector3f direction( BaseClass::m_directions.data() + index );
             const kvs::Real32 size = BaseClass::m_sizes[i];
-            const kvs::RGBColor color( BaseClass::m_colors.pointer() + index );
+            const kvs::RGBColor color( BaseClass::m_colors.data() + index );
             const kvs::UInt8 opacity = BaseClass::m_opacities[i];
             glPushMatrix();
             {
@@ -220,7 +220,7 @@ SphereGlyph::BaseClass::SuperClass* SphereGlyph::exec_point_object( const kvs::P
         kvs::Vector3f min_coord( 0.0f );
         kvs::Vector3f max_coord( 0.0f );
 
-        const kvs::Real32* coord = point->coords().pointer();
+        const kvs::Real32* coord = point->coords().data();
         const kvs::Real32* const end = coord + point->coords().size();
 
         kvs::Real32 x = *( coord++ );

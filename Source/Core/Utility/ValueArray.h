@@ -14,27 +14,37 @@
 #ifndef KVS__VALUE_ARRAY_H_INCLUDE
 #define KVS__VALUE_ARRAY_H_INCLUDE
 
-#include <cstdio>
-#include <cstdlib>
-#include <cstddef>
-#include <limits>
-#include <vector>
-#include <cstring>
-#include <typeinfo>
 #include <algorithm>
 #include <iterator>
 #include <utility>
+#include <vector>
+#if KVS_ENABLE_DEPRECATED
+#include <cstring>
+#endif
 #include <kvs/DebugNew>
 #include <kvs/Assert>
-#include <kvs/Endian>
-#include <kvs/Message>
-#include <kvs/ReferenceCounter>
-#include <kvs/Macro>
+#include <kvs/SharedPointer>
 #include <kvs/ClassName>
-
+#if KVS_ENABLE_DEPRECATED
+#include <kvs/Endian>
+#endif
 
 namespace kvs
 {
+
+namespace temporal
+{
+
+template <typename T>
+struct ArrayDeleter
+{
+    void operator ()( T* ptr )
+    {
+        delete [] ptr;
+    }
+};
+
+}
 
 /*==========================================================================*/
 /**
@@ -47,7 +57,6 @@ class ValueArray
     kvsClassName_without_virtual( kvs::ValueArray );
 
 public:
-
     typedef ValueArray<T>                         this_type;
     typedef T                                     value_type;
     typedef T*                                    iterator;
@@ -60,42 +69,27 @@ public:
     typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
 
 private:
-
-    kvs::ReferenceCounter* m_counter; ///< Reference counter.
-    size_t                 m_size; ///< Number of values.
-    value_type*            m_values;  ///< Value array.
+    kvs::SharedPointer<value_type>  m_values;
+    size_t                          m_size; ///< Number of values.
 
 public:
-
     ValueArray()
-        : m_counter( 0 )
-        , m_size( 0 )
-        , m_values( 0 )
     {
-        this->create_counter();
+        m_size = 0;
     }
 
     explicit ValueArray( const size_t size )
-        : m_counter( 0 )
-        , m_size( 0 )
-        , m_values( 0 )
     {
         this->allocate( size );
     }
 
     ValueArray( const value_type* const values, const size_t size )
-        : m_counter( 0 )
-        , m_size( 0 )
-        , m_values( 0 )
     {
         this->allocate( size );
         std::copy( values, values + size, this->begin() );
     }
 
     explicit ValueArray( const std::vector<T>& values )
-        : m_counter( 0 )
-        , m_size( 0 )
-        , m_values( 0 )
     {
         this->allocate( values.size() );
         std::copy( values.begin(), values.end(), this->begin() );
@@ -103,32 +97,18 @@ public:
 
     template <typename InIter>
     ValueArray( InIter first, InIter last )
-        : m_counter( 0 )
-        , m_size( 0 )
-        , m_values( 0 )
     {
         this->allocate( std::distance( first, last ) );
         std::copy( first, last, this->begin() );
     }
 
-    ValueArray( const this_type& other )
-        : m_counter( 0 )
-        , m_size( 0 )
-        , m_values( 0 )
+    ValueArray( const kvs::SharedPointer<T>& sp, size_t size ):
+        m_values( sp )
     {
-        m_counter = other.m_counter;
-        m_size = other.m_size;
-        m_values  = other.m_values;
-        this->ref();
-    }
-
-    ~ValueArray()
-    {
-        this->unref();
+        m_size = size;
     }
 
 public:
-
     iterator begin()
     {
         return this->data();
@@ -170,7 +150,6 @@ public:
     }
 
 public:
-
     reference operator []( const size_t index )
     {
         KVS_ASSERT( index < this->size() );
@@ -183,9 +162,9 @@ public:
         return this->data()[ index ];
     }
 
-    this_type& operator =( const this_type& rhs )
+    ValueArray& operator =( const ValueArray& rhs )
     {
-        this_type temp( rhs );
+        ValueArray temp( rhs );
         temp.swap( *this );
         return *this;
     }
@@ -223,17 +202,6 @@ public:
     }
 
 public:
-
-    reference at( const size_t index )
-    {
-        return (*this)[ index ];
-    }
-
-    const_reference at( const size_t index ) const
-    {
-        return (*this)[ index ];
-    }
-
     reference front()
     {
         return (*this)[0];
@@ -264,9 +232,45 @@ public:
         return this->size() * sizeof( value_type );
     }
 
-    bool isEmpty() const
+    const kvs::SharedPointer<value_type>& getSharedPointer() const
     {
-        return this->empty();
+        return m_values;
+    }
+
+    value_type* data()
+    {
+        return m_values.get();
+    }
+
+    const value_type* data() const
+    {
+        return m_values.get();
+    }
+
+    bool empty() const
+    {
+        return this->size() == 0;
+    }
+
+    void swap( ValueArray& other )
+    {
+        std::swap( m_values, other.m_values );
+        std::swap( m_size, other.m_size );
+    }
+
+    ValueArray clone() const
+    {
+        return ValueArray( this->begin(), this->end() );
+    }
+
+    reference at( const size_t index )
+    {
+        return (*this)[ index ];
+    }
+
+    const_reference at( const size_t index ) const
+    {
+        return (*this)[ index ];
     }
 
     value_type* pointer()
@@ -279,62 +283,21 @@ public:
         return this->data();
     }
 
-    kvs::ReferenceCounter* counter() const
-    {
-        return m_counter;
-    }
-
-    void swapByte()
-    {
-        kvs::Endian::Swap( this->data(), this->size() );
-    }
-
-    value_type* data()
-    {
-        return m_values;
-    }
-
-    const value_type* data() const
-    {
-        return m_values;
-    }
-
-    bool empty() const
-    {
-        return this->size() == 0;
-    }
-
-    void swap( ValueArray& other )
-    {
-        std::swap( m_values, other.m_values );
-        std::swap( m_size, other.m_size );
-        std::swap( m_counter, other.m_counter );
-    }
-
-    this_type clone() const
-    {
-        return this_type( this->begin(), this->end() );
-    }
-
 public:
 
 #if KVS_ENABLE_DEPRECATED
 
     value_type* allocate( const size_t size )
     {
-        this->unref();
-        this->create_counter();
-
+        this->deallocate();
+        m_values.reset( new value_type[ size ], kvs::temporal::ArrayDeleter<T>() );
         m_size = size;
-        m_values = new value_type [ size ];
-        KVS_ASSERT( m_values != NULL );
-
-        return m_values;
+        return this->data();
     }
 
     void fill( const int bit )
     {
-        memset( m_values, bit, sizeof( value_type ) * m_size );
+        std::memset( this->data(), bit, this->byteSize() );
     }
 
     void shallowCopy( const this_type& other )
@@ -349,18 +312,25 @@ public:
 
     void deepCopy( const value_type* values, const size_t nvalues )
     {
-        *this = this_type( values, nvalues );
+        *this = ValueArray( values, nvalues );
+    }
+
+    bool isEmpty() const
+    {
+        return this->empty();
+    }
+
+    void swapByte()
+    {
+        kvs::Endian::Swap( this->data(), this->size() );
     }
 
 #else
 
     void allocate( const size_t size )
     {
-        this->unref();
-        this->create_counter();
-
+        m_values.reset( new value_type[ size ], kvs::temporal::ArrayDeleter<T>() );
         m_size = size;
-        m_values = new value_type [ size ];
     }
 
     void fill( const T& value )
@@ -372,38 +342,8 @@ public:
 
     void deallocate()
     {
-        this->unref();
-    }
-
-private:
-
-    void create_counter()
-    {
-        m_counter = new ReferenceCounter( 1 );
-        KVS_ASSERT( m_counter != NULL );
-    }
-
-    void ref()
-    {
-        if ( m_counter ) { m_counter->increment(); }
-    }
-
-    void unref()
-    {
-        if ( m_counter )
-        {
-            m_counter->decrement();
-
-            if ( m_counter->value() == 0 )
-            {
-                if ( m_values  ) { delete [] m_values; }
-                if ( m_counter ) { delete m_counter; }
-            }
-        }
-
-        m_counter = 0;
+        m_values.reset();
         m_size = 0;
-        m_values  = 0;
     }
 };
 

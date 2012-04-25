@@ -109,11 +109,11 @@ inline const bool DataValueTag::write(
     const size_t data_size = data.size();
     if ( typeid(T) == typeid(kvs::Int8) || typeid(T) == typeid(kvs::UInt8) )
     {
-        for ( size_t i = 0; i < data_size; i++ ) oss << int(data.at(i)) << " ";
+        for ( size_t i = 0; i < data_size; i++ ) oss << int( data[i] ) << " ";
     }
     else
     {
-        for ( size_t i = 0; i < data_size; i++ ) oss << data.at(i) << " ";
+        for ( size_t i = 0; i < data_size; i++ ) oss << data[i] << " ";
     }
 
     // Insert the data array as string-stream to the parent node.

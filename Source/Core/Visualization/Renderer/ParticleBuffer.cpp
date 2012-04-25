@@ -296,9 +296,9 @@ void ParticleBuffer::create_image_with_shading(
     kvs::ValueArray<kvs::UInt8>*  color,
     kvs::ValueArray<kvs::Real32>* depth )
 {
-    const kvs::Real32* point_coords = m_ref_point_object->coords().pointer();
-    const kvs::UInt8* point_color = m_ref_point_object->colors().pointer();
-    const kvs::Real32* point_normal = m_ref_point_object->normals().pointer();
+    const kvs::Real32* point_coords = m_ref_point_object->coords().data();
+    const kvs::UInt8* point_color = m_ref_point_object->colors().data();
+    const kvs::Real32* point_normal = m_ref_point_object->normals().data();
 
     const float inv_ssize = 1.0f / ( m_subpixel_level * m_subpixel_level );
     const float normalize_alpha = 255.0f * inv_ssize;
@@ -358,7 +358,7 @@ void ParticleBuffer::create_image_without_shading(
     kvs::ValueArray<kvs::UInt8>*  color,
     kvs::ValueArray<kvs::Real32>* depth )
 {
-    const kvs::UInt8* point_color = m_ref_point_object->colors().pointer();
+    const kvs::UInt8* point_color = m_ref_point_object->colors().data();
 
     const float inv_ssize = 1.0f / ( m_subpixel_level * m_subpixel_level );
     const float normalize_alpha = 255.0f * inv_ssize;

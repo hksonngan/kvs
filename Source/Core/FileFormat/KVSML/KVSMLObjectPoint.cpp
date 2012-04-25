@@ -257,9 +257,9 @@ const bool KVSMLObjectPoint::read( const std::string& filename )
         {
             // default value (black).
             m_colors.allocate(3);
-            m_colors.at(0) = 0;
-            m_colors.at(1) = 0;
-            m_colors.at(2) = 0;
+            m_colors[0] = 0;
+            m_colors[1] = 0;
+            m_colors[2] = 0;
         }
 
         // <Normal>

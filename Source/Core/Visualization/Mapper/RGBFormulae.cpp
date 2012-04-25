@@ -109,7 +109,7 @@ kvs::ColorMap Create( const int index0, const int index1, const int index2, cons
     bindex = kvs::Math::Clamp( bindex, 0, 42 );
 
     kvs::ColorMap::Table table( 3 * resolution );
-    kvs::UInt8* color = table.pointer();
+    kvs::UInt8* color = table.data();
     for ( size_t i = 0; i < resolution; ++i )
     {
         const double x = static_cast<double>(i) / ( resolution - 1 );

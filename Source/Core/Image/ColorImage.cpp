@@ -513,7 +513,7 @@ const bool ColorImage::read_image( const kvs::GrayImage& image )
         return( false );
     }
 
-    const kvs::UInt8* data = image.data().pointer();
+    const kvs::UInt8* data = image.data().data();
     for ( size_t index = 0, index3 = 0; index < m_npixels; index++, index3 += 3 )
     {
         const kvs::UInt8 pixel = data[ index ];

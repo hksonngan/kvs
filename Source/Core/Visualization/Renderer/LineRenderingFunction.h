@@ -207,7 +207,7 @@ void Rendering_Uniline_VCs_S( const kvs::LineObject* line )
         const size_t nconnections = line->nconnections();
         for( size_t i = 0; i < nconnections; i++ )
         {
-            size_t id = *( line->connections().pointer() + i );
+            size_t id = *( line->connections().data() + i );
 
             const kvs::RGBColor& color    = line->color(id);
             const kvs::Vector3f& position = line->coord(id);
@@ -230,8 +230,8 @@ void Rendering_Uniline_VCs_Ss( const kvs::LineObject* line )
     const size_t num = line->nconnections() - 1;
     for( size_t i = 0; i < num; i++ )
     {
-        size_t id1 = *( line->connections().pointer() + i   );
-        size_t id2 = *( line->connections().pointer() + i+1 );
+        size_t id1 = *( line->connections().data() + i   );
+        size_t id2 = *( line->connections().data() + i+1 );
 
         const kvs::RGBColor& color1    = line->color(id1);
         const kvs::RGBColor& color2    = line->color(id2);
@@ -371,8 +371,8 @@ void Rendering_Polyline_VCs_S( const kvs::LineObject* line )
     for( size_t i = 0; i < nconnections; i++ )
     {
         const size_t index = 2 * i;
-        const size_t id1   = *( line->connections().pointer() + index );
-        const size_t id2   = *( line->connections().pointer() + index + 1 );
+        const size_t id1   = *( line->connections().data() + index );
+        const size_t id2   = *( line->connections().data() + index + 1 );
 
         glBegin( GL_LINE_STRIP );
         {
@@ -402,8 +402,8 @@ void Rendering_Polyline_VCs_Ss( const kvs::LineObject* line )
     for( size_t i = 0; i < nconnections; i++ )
     {
         const size_t index = 2*i;
-        const size_t id1   = *( line->connections().pointer() + index   );
-        const size_t id2   = *( line->connections().pointer() + index+1 );
+        const size_t id1   = *( line->connections().data() + index   );
+        const size_t id2   = *( line->connections().data() + index+1 );
 
         for( size_t j = id1; j < id2; j++ )
         {
@@ -441,8 +441,8 @@ void Rendering_Polyline_LC_S( const kvs::LineObject* line )
     for( size_t i = 0; i < nconnections; i++ )
     {
         const size_t index = 2 * i;
-        const size_t id1   = *( line->connections().pointer() + index );
-        const size_t id2   = *( line->connections().pointer() + index + 1 );
+        const size_t id1   = *( line->connections().data() + index );
+        const size_t id2   = *( line->connections().data() + index + 1 );
 
         glBegin( GL_LINE_STRIP );
         {
@@ -477,8 +477,8 @@ void Rendering_Polyline_LCs_S( const kvs::LineObject* line )
     for( size_t i = 0; i < nconnections; i++ )
     {
         const size_t index = 2 * i;
-        const size_t id1   = *( line->connections().pointer() + index );
-        const size_t id2   = *( line->connections().pointer() + index + 1 );
+        const size_t id1   = *( line->connections().data() + index );
+        const size_t id2   = *( line->connections().data() + index + 1 );
 
         glBegin( GL_LINE_STRIP );
         {
@@ -511,8 +511,8 @@ void Rendering_Polyline_LC_Ss( const kvs::LineObject* line )
     for( size_t i = 0; i < nconnections; i++ )
     {
         const size_t index = 2*i;
-        const size_t id1   = *( line->connections().pointer() + index   );
-        const size_t id2   = *( line->connections().pointer() + index+1 );
+        const size_t id1   = *( line->connections().data() + index   );
+        const size_t id2   = *( line->connections().data() + index+1 );
 
         const kvs::RGBColor& color = line->color(0);
         glColor3ub( color.r(), color.g(), color.b() );
@@ -548,8 +548,8 @@ void Rendering_Polyline_LCs_Ss( const kvs::LineObject* line )
     for( size_t i = 0; i < nconnections; i++ )
     {
         const size_t index = 2*i;
-        const size_t id1   = *( line->connections().pointer() + index   );
-        const size_t id2   = *( line->connections().pointer() + index+1 );
+        const size_t id1   = *( line->connections().data() + index   );
+        const size_t id2   = *( line->connections().data() + index+1 );
 
         for( size_t j = id1; j < id2; j++ )
         {
@@ -586,7 +586,7 @@ void Rendering_Segment_VCs_S( const kvs::LineObject* line )
         const size_t num = line->nconnections() * 2;
         for( size_t i = 0; i < num; i++ )
         {
-            const size_t id = *( line->connections().pointer() + i );
+            const size_t id = *( line->connections().data() + i );
 
             const kvs::RGBColor& color    = line->color(id);
             const kvs::Vector3f& position = line->coord(id);
@@ -610,8 +610,8 @@ void Rendering_Segment_VCs_Ss( const kvs::LineObject* line )
     for( size_t i = 0; i < nconnections; i++ )
     {
         const size_t index = 2*i;
-        const size_t id1   = *( line->connections().pointer() + index   );
-        const size_t id2   = *( line->connections().pointer() + index+1 );
+        const size_t id1   = *( line->connections().data() + index   );
+        const size_t id2   = *( line->connections().data() + index+1 );
 
         const kvs::RGBColor& color1    = line->color(id1);
         const kvs::RGBColor& color2    = line->color(id2);
@@ -648,7 +648,7 @@ void Rendering_Segment_LC_S( const kvs::LineObject* line )
         const size_t num = line->nconnections() * 2;
         for( size_t i = 0; i < num; i++ )
         {
-            const size_t id = *( line->connections().pointer() + i );
+            const size_t id = *( line->connections().data() + i );
             const kvs::Vector3f& position = line->coord(id);
 
             glVertex3f( position.x(), position.y(), position.z() );
@@ -675,8 +675,8 @@ void Rendering_Segment_LCs_S( const kvs::LineObject* line )
             const kvs::RGBColor& color = line->color(i);
 
             const size_t index = 2 * i;
-            const size_t id1 = *( line->connections().pointer() + index   );
-            const size_t id2 = *( line->connections().pointer() + index+1 );
+            const size_t id1 = *( line->connections().data() + index   );
+            const size_t id2 = *( line->connections().data() + index+1 );
 
             const kvs::Vector3f& position1 = line->coord(id1);
             const kvs::Vector3f& position2 = line->coord(id2);
@@ -704,8 +704,8 @@ void Rendering_Segment_LC_Ss( const kvs::LineObject* line )
     for( size_t i = 0; i < nconnections; i++ )
     {
         const size_t index = 2*i;
-        const size_t id1   = *( line->connections().pointer() + index );
-        const size_t id2   = *( line->connections().pointer() + index+1 );
+        const size_t id1   = *( line->connections().data() + index );
+        const size_t id2   = *( line->connections().data() + index+1 );
 
         const kvs::Vector3f& position1 = line->coord(id1);
         const kvs::Vector3f& position2 = line->coord(id2);
@@ -734,8 +734,8 @@ void Rendering_Segment_LCs_Ss( const kvs::LineObject* line )
         const kvs::RGBColor& color = line->color(i);
 
         const size_t index = 2 * i;
-        const size_t id1 = *( line->connections().pointer() + index   );
-        const size_t id2 = *( line->connections().pointer() + index+1 );
+        const size_t id1 = *( line->connections().data() + index   );
+        const size_t id2 = *( line->connections().data() + index+1 );
         const kvs::Vector3f& position1 = line->coord(id1);
         const kvs::Vector3f& position2 = line->coord(id2);
 

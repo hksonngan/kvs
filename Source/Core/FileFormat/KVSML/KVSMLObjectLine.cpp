@@ -317,9 +317,9 @@ const bool KVSMLObjectLine::read( const std::string& filename )
         {
             // default value (black).
             m_colors.allocate(3);
-            m_colors.at(0) = 0;
-            m_colors.at(1) = 0;
-            m_colors.at(2) = 0;
+            m_colors[0] = 0;
+            m_colors[1] = 0;
+            m_colors[2] = 0;
         }
 
         // <Size>
@@ -334,7 +334,7 @@ const bool KVSMLObjectLine::read( const std::string& filename )
         {
             // default value (1).
             m_sizes.allocate(1);
-            m_sizes.at(0) = 1;
+            m_sizes[0] = 1;
         }
     }
 
@@ -361,7 +361,7 @@ const bool KVSMLObjectLine::read( const std::string& filename )
             {
                 // default value (1).
                 m_sizes.allocate(1);
-                m_sizes.at(0) = 1;
+                m_sizes[0] = 1;
             }
 
             // <Color>
@@ -378,9 +378,9 @@ const bool KVSMLObjectLine::read( const std::string& filename )
             {
                 // default value (black).
                 m_colors.allocate(3);
-                m_colors.at(0) = 0;
-                m_colors.at(1) = 0;
-                m_colors.at(2) = 0;
+                m_colors[0] = 0;
+                m_colors[1] = 0;
+                m_colors[2] = 0;
             }
 
             // <Connection>

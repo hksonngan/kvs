@@ -274,7 +274,7 @@ void ExtractEdges::calculate_coords( const kvs::StructuredVolumeObject* volume )
 void ExtractEdges::calculate_uniform_coords( const kvs::StructuredVolumeObject* volume )
 {
     kvs::ValueArray<kvs::Real32> coords( 3 * volume->nnodes() );
-    kvs::Real32* coord = coords.pointer();
+    kvs::Real32* coord = coords.data();
 
     const kvs::Vector3ui resolution( volume->resolution() );
     const kvs::Vector3f  volume_size( volume->maxObjectCoord() - volume->minObjectCoord() );
@@ -340,7 +340,7 @@ void ExtractEdges::calculate_connections( const kvs::StructuredVolumeObject* vol
         resolution.x() - 1 + resolution.y() - 1 + resolution.z() - 1;
 
     kvs::ValueArray<kvs::UInt32> connections( 2 * nedges );
-    kvs::UInt32* connection = connections.pointer();
+    kvs::UInt32* connection = connections.data();
 
     kvs::UInt32 volume_vertex = 0;
     kvs::UInt32 connection_index = 0;
@@ -459,7 +459,7 @@ void ExtractEdges::calculate_connections( const kvs::UnstructuredVolumeObject* v
 void ExtractEdges::calculate_tetrahedra_connections(
     const kvs::UnstructuredVolumeObject* volume )
 {
-    const kvs::UInt32* connections = volume->connections().pointer();
+    const kvs::UInt32* connections = volume->connections().data();
     const size_t ncells = volume->ncells();
     const size_t nnodes = volume->nnodes();
 
@@ -492,7 +492,7 @@ void ExtractEdges::calculate_tetrahedra_connections(
 void ExtractEdges::calculate_hexahedra_connections(
     const kvs::UnstructuredVolumeObject* volume )
 {
-    const kvs::UInt32* connections = volume->connections().pointer();
+    const kvs::UInt32* connections = volume->connections().data();
     const size_t ncells = volume->ncells();
     const size_t nnodes = volume->nnodes();
 
@@ -535,7 +535,7 @@ void ExtractEdges::calculate_hexahedra_connections(
 void ExtractEdges::calculate_quadratic_tetrahedra_connections(
     const kvs::UnstructuredVolumeObject* volume )
 {
-    const kvs::UInt32* connections = volume->connections().pointer();
+    const kvs::UInt32* connections = volume->connections().data();
     const size_t ncells = volume->ncells();
     const size_t nnodes = volume->nnodes();
 
@@ -580,7 +580,7 @@ void ExtractEdges::calculate_quadratic_tetrahedra_connections(
 void ExtractEdges::calculate_quadratic_hexahedra_connections(
     const kvs::UnstructuredVolumeObject* volume )
 {
-    const kvs::UInt32* connections = volume->connections().pointer();
+    const kvs::UInt32* connections = volume->connections().data();
     const size_t ncells = volume->ncells();
     const size_t nnodes = volume->nnodes();
 
@@ -651,7 +651,7 @@ void ExtractEdges::calculate_colors( const kvs::VolumeObjectBase* volume )
     const T* const end = value + volume->values().size();
 
     kvs::ValueArray<kvs::UInt8> colors( 3 * volume->nnodes() );
-    kvs::UInt8* color = colors.pointer();
+    kvs::UInt8* color = colors.data();
 
     kvs::ColorMap cmap( BaseClass::colorMap() );
 

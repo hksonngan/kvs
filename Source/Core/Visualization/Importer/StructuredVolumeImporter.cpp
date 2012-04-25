@@ -382,7 +382,7 @@ const kvs::AnyValueArray StructuredVolumeImporter::get_dicom_data(
     for ( size_t k = 0; k < nslices; k++ )
     {
         const kvs::Dicom* dicom = (*dicom_list)[k];
-        const T* const raw_data = reinterpret_cast<const T*>( dicom->rawData().pointer() );
+        const T* const raw_data = reinterpret_cast<const T*>( dicom->rawData().data() );
         const int shift_value = shift ? dicom->minRawValue() : 0;
 
         for ( size_t j = 0; j < height; j++ )

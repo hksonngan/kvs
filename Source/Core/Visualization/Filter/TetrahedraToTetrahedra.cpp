@@ -230,13 +230,13 @@ void TetrahedraToTetrahedra::subdivide_8_tetrahedra( const kvs::UnstructuredVolu
 {
     // Quadratic tetrahedral cells.
     const size_t tet2_ncells = volume->ncells();
-    const kvs::UInt32* tet2_pconnections = volume->connections().pointer();
+    const kvs::UInt32* tet2_pconnections = volume->connections().data();
 
     // Tetrahedral cells.
     const size_t ndivisions = 8;
     const size_t tet_ncells = tet2_ncells * ndivisions;
     kvs::ValueArray<kvs::UInt32> tet_connections( tet_ncells * 4 );
-    kvs::UInt32* tet_pconnections = tet_connections.pointer();
+    kvs::UInt32* tet_pconnections = tet_connections.data();
     for ( size_t i = 0; i < tet2_ncells; i++ )
     {
         const kvs::UInt32 id0 = *(tet2_pconnections++);
@@ -331,9 +331,9 @@ template <typename T>
 void TetrahedraToTetrahedra::remove_quadratic_nodes( const kvs::UnstructuredVolumeObject* volume )
 {
     const size_t tet2_ncells = volume->ncells();
-    const kvs::UInt32* tet2_pconnections = volume->connections().pointer();
+    const kvs::UInt32* tet2_pconnections = volume->connections().data();
     const T* tet2_pvalues = static_cast<const T*>( volume->values().pointer() );
-    const kvs::Real32* tet2_pcoords = volume->coords().pointer();
+    const kvs::Real32* tet2_pcoords = volume->coords().data();
 
     ::IDMap id_map;
     for ( size_t i = 0; i < tet2_ncells; i++ )
@@ -351,7 +351,7 @@ void TetrahedraToTetrahedra::remove_quadratic_nodes( const kvs::UnstructuredVolu
 
     const size_t tet_ncells = tet2_ncells;
     kvs::ValueArray<kvs::UInt32> tet_connections( tet_ncells * 4 );
-    kvs::UInt32* tet_pconnections = tet_connections.pointer();
+    kvs::UInt32* tet_pconnections = tet_connections.data();
     for ( size_t i = 0; i < tet2_ncells; i++ )
     {
         const kvs::UInt32 id0 = tet2_pconnections[ 10 * i + 0 ];
@@ -369,8 +369,8 @@ void TetrahedraToTetrahedra::remove_quadratic_nodes( const kvs::UnstructuredVolu
     const size_t tet_nnodes = id_map.bucket().size();
     kvs::ValueArray<T> tet_values( tet_nnodes * tet_veclen );
     kvs::ValueArray<kvs::Real32> tet_coords( tet_nnodes * 3 );
-    T* tet_pvalues = tet_values.pointer();
-    kvs::Real32* tet_pcoords = tet_coords.pointer();
+    T* tet_pvalues = tet_values.data();
+    kvs::Real32* tet_pcoords = tet_coords.data();
     ::IDMap::Bucket::const_iterator id = id_map.bucket().begin();
     while ( id != id_map.bucket().end() )
     {

@@ -265,7 +265,7 @@ void ParticleVolumeRenderer::project_particle(
 
     // Aliases.
     const size_t       nv = point->nvertices();
-    const kvs::Real32* v  = point->coords().pointer();
+    const kvs::Real32* v  = point->coords().data();
 
     size_t index3 = 0;
     const size_t bounds_width  = m_width  - 1;

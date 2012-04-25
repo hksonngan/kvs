@@ -100,7 +100,7 @@ size_t MessageBlock::size( void ) const
 /*==========================================================================*/
 void* MessageBlock::pointer( void )
 {
-    return( m_block.pointer() + SizeOfHeader );
+    return( m_block.data() + SizeOfHeader );
 }
 
 /*==========================================================================*/
@@ -111,7 +111,7 @@ void* MessageBlock::pointer( void )
 /*==========================================================================*/
 const void* MessageBlock::pointer( void ) const
 {
-    return( m_block.pointer() + SizeOfHeader );
+    return( m_block.data() + SizeOfHeader );
 }
 
 /*==========================================================================*/
@@ -133,7 +133,7 @@ size_t MessageBlock::blockSize( void ) const
 /*==========================================================================*/
 void* MessageBlock::blockPointer( void )
 {
-    return( m_block.pointer() );
+    return( m_block.data() );
 }
 
 /*==========================================================================*/
@@ -144,7 +144,7 @@ void* MessageBlock::blockPointer( void )
 /*==========================================================================*/
 const void* MessageBlock::blockPointer( void ) const
 {
-    return( m_block.pointer() );
+    return( m_block.data() );
 }
 
 /*==========================================================================*/
@@ -177,7 +177,7 @@ void MessageBlock::copy( const void* message, size_t message_size )
 //        unsigned int size = htonl( static_cast<unsigned int>( message_size ) );
 //        u_long size = htonl( static_cast<u_long>( message_size ) );
 
-        unsigned char* p = m_block.pointer();
+        unsigned char* p = m_block.data();
         memcpy( p,                &size,   SizeOfHeader );
         memcpy( p + SizeOfHeader, message, message_size );
     }

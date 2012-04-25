@@ -274,7 +274,7 @@ const kvs::BitArray& CellAdjacencyGraph::mask( void ) const
 /*===========================================================================*/
 void CellAdjacencyGraph::create_for_tetrahedral_cell( const kvs::UnstructuredVolumeObject* volume )
 {
-    const kvs::UInt32* const connections = volume->connections().pointer();
+    const kvs::UInt32* const connections = volume->connections().data();
     const size_t nnodes = volume->nnodes();
     const size_t ncells = volume->ncells();
     const size_t nnodes_per_cell = static_cast<size_t>( volume->cellType() );
@@ -322,8 +322,8 @@ void CellAdjacencyGraph::create_for_tetrahedral_cell( const kvs::UnstructuredVol
                     if ( f->second == value )
                     {
                         // The edge has been already inserted in the bucket.
-                        m_graph.at( index ) = f->second.cellID();
-                        m_graph.at( f->second.cellID() * 4 + f->second.faceID() ) = cell_id;
+                        m_graph[ index ] = f->second.cellID();
+                        m_graph[ f->second.cellID() * 4 + f->second.faceID() ] = cell_id;
                         m_mask.set( index );
                         m_mask.set( f->second.cellID() * 4 + f->second.faceID() );
                         face_map.erase( f );
@@ -345,7 +345,7 @@ void CellAdjacencyGraph::create_for_tetrahedral_cell( const kvs::UnstructuredVol
 /*===========================================================================*/
 void CellAdjacencyGraph::create_for_hexahedral_cell( const kvs::UnstructuredVolumeObject* volume )
 {
-    const kvs::UInt32* const connections = volume->connections().pointer();
+    const kvs::UInt32* const connections = volume->connections().data();
     const size_t nnodes = volume->nnodes();
     const size_t ncells = volume->ncells();
     const size_t nnodes_per_cell = static_cast<size_t>( volume->cellType() );
@@ -398,8 +398,8 @@ void CellAdjacencyGraph::create_for_hexahedral_cell( const kvs::UnstructuredVolu
                     if ( f->second == value )
                     {
                         // The edge has been already inserted in the bucket.
-                        m_graph.at( index ) = f->second.cellID();
-                        m_graph.at( f->second.cellID() * 6 + f->second.faceID() ) = cell_id;
+                        m_graph[ index ] = f->second.cellID();
+                        m_graph[ f->second.cellID() * 6 + f->second.faceID() ] = cell_id;
                         m_mask.set( index );
                         m_mask.set( f->second.cellID() * 6 + f->second.faceID() );
                         face_map.erase( f );
@@ -423,7 +423,7 @@ void CellAdjacencyGraph::set_external_face_number( void )
     const size_t nfaces = m_graph.size();
     for ( size_t i = 0, counter = 0; i < nfaces; i++ )
     {
-        if ( !m_mask.test(i) ) m_graph.at(i) = counter++;
+        if ( !m_mask.test(i) ) m_graph[i] = counter++;
     }
 }
 

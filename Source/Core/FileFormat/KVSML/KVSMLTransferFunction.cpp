@@ -402,10 +402,10 @@ const bool KVSMLTransferFunction::read( const std::string& filename )
                 const size_t nloops = m_resolution;
                 for ( size_t i = 0, i3 = 0; i < nloops; i++, i3 += 3 )
                 {
-                    m_opacities.at( i ) = static_cast<kvs::Real32>( atof( t.token().c_str() ) );
-                    m_colors.at( i3 ) = static_cast<kvs::UInt8>( atoi( t.token().c_str() ) );
-                    m_colors.at( i3 + 1 ) = static_cast<kvs::UInt8>( atoi( t.token().c_str() ) );
-                    m_colors.at( i3 + 2 ) = static_cast<kvs::UInt8>( atoi( t.token().c_str() ) );
+                    m_opacities[ i ] = static_cast<kvs::Real32>( atof( t.token().c_str() ) );
+                    m_colors[ i3 ] = static_cast<kvs::UInt8>( atoi( t.token().c_str() ) );
+                    m_colors[ i3 + 1 ] = static_cast<kvs::UInt8>( atoi( t.token().c_str() ) );
+                    m_colors[ i3 + 2 ] = static_cast<kvs::UInt8>( atoi( t.token().c_str() ) );
                 }
             }
             else
@@ -434,10 +434,10 @@ const bool KVSMLTransferFunction::read( const std::string& filename )
                 for ( size_t i = 0, i3 = 0; i < m_resolution; i++, i3 += 3 )
                 {
                     ifs >> a >> r >> g >> b;
-                    m_opacities.at( i ) = a;
-                    m_colors.at( i3 ) = r;
-                    m_colors.at( i3 + 1 ) = g;
-                    m_colors.at( i3 + 2 ) = b;
+                    m_opacities[ i ] = a;
+                    m_colors[ i3 + 0 ] = r;
+                    m_colors[ i3 + 1 ] = g;
+                    m_colors[ i3 + 2 ] = b;
                 }
 
                 ifs.close();

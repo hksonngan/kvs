@@ -14,23 +14,39 @@
 #ifndef KVS__ANY_VALUE_ARRAY_H_INCLUDE
 #define KVS__ANY_VALUE_ARRAY_H_INCLUDE
 
-#include <cstdio>
-#include <cstdlib>
-#include <cstddef>
 #include <typeinfo>
 #include <string>
 #include <sstream>
-#include <kvs/DebugNew>
-#include <kvs/Endian>
+#include <utility>
+#include <kvs/Type>
 #include <kvs/AnyValue>
-#include <kvs/ReferenceCounter>
+#include <kvs/SharedPointer>
 #include <kvs/ValueArray>
-#include <kvs/Macro>
 #include <kvs/ClassName>
+#if KVS_ENABLE_DEPRECATED
+#include <kvs/Endian>
+#endif
 
 
 namespace kvs
 {
+
+namespace temporal
+{
+
+template <typename T, T Value>
+struct integral_constant
+{
+    static const T value = Value;
+    typedef T value_type;
+};
+
+typedef integral_constant<bool, true> true_type;
+typedef integral_constant<bool, false> false_type;
+
+} // temporal
+
+#define KVS_STATIC_ASSERT( expr, mes ) { char dummy[ ( expr ) ? 1 : -1 ]; (void)dummy; }
 
 /*==========================================================================*/
 /**
@@ -42,28 +58,16 @@ class AnyValueArray
     kvsClassName_without_virtual( kvs::AnyValueArray );
 
 public:
-
     typedef kvs::AnyValue::TypeInfo TypeInfo;
 
 private:
-
-    kvs::ReferenceCounter* m_counter;       ///< reference counter
-
-    TypeInfo* m_type_info;     ///< type information
+    kvs::SharedPointer<void>     m_values;       ///< value array
+    kvs::SharedPointer<TypeInfo> m_type_info;     ///< type information
     size_t    m_size_of_value; ///< byte size of a value
-
     size_t    m_size;       ///< number of values
-    void*     m_values;        ///< value array
 
 public:
-
     AnyValueArray();
-
-    template<typename T>
-    AnyValueArray( const T* values, const size_t size );
-
-    template<typename T>
-    explicit AnyValueArray( const std::vector<T>& values );
 
     template<typename T>
     explicit AnyValueArray( const kvs::ValueArray<T>& values );
@@ -73,7 +77,6 @@ public:
     ~AnyValueArray();
 
 public:
-
     AnyValueArray& operator =( const AnyValueArray& rhs )
     {
         AnyValueArray temp( rhs );
@@ -81,11 +84,19 @@ public:
         return *this;
     }
 
-public:
+    template <typename T>
+    kvs::ValueArray<T> asValueArray() const
+    {
+        KVS_STATIC_ASSERT( is_supported<T>::value, "not supported" );
+        KVS_ASSERT( this->check_type<T>() );
+        return kvs::ValueArray<T>( kvs::static_pointer_cast<T>( m_values ), m_size );
+    }
 
+public:
     template<typename T>
     T& at( const size_t index )
     {
+        KVS_STATIC_ASSERT( is_supported<T>::value, "not supported" );
         KVS_ASSERT( index < this->size() );
         KVS_ASSERT( this->check_type<T>() );
         return static_cast<T*>( this->data() )[ index ];
@@ -94,6 +105,7 @@ public:
     template<typename T>
     const T& at( const size_t index ) const
     {
+        KVS_STATIC_ASSERT( is_supported<T>::value, "not supported" );
         KVS_ASSERT( index < this->size() );
         KVS_ASSERT( this->check_type<T>() );
         return static_cast<const T*>( this->data() )[ index ];
@@ -102,6 +114,8 @@ public:
     template<typename T>
     T to( const size_t index ) const
     {
+        KVS_STATIC_ASSERT( is_supported<T>::value, "not supported" );
+
         // Value to Value.
         const std::type_info& type = this->typeInfo()->type();
         if ( type == typeid( kvs::Int8   ) ) return static_cast<T>( this->at<kvs::Int8  >( index ) );
@@ -118,7 +132,7 @@ public:
         // String to Value.
         if ( type == typeid( std::string ) )
         {
-            T v; std::stringstream s( this->at<std::string>( index ) ); s >> v;
+            T v; std::istringstream s( this->at<std::string>( index ) ); s >> v;
             return v;
         }
 
@@ -136,9 +150,70 @@ public:
         return this->size() * m_size_of_value;
     }
 
-    bool isEmpty() const
+    template<typename T>
+    const T* pointer() const
     {
-        return this->empty();
+        KVS_STATIC_ASSERT( is_supported<T>::value, "not supported" );
+        KVS_ASSERT( this->check_type<T>() );
+        return static_cast<const T*>( this->data() );
+    }
+
+    template<typename T>
+    T* pointer()
+    {
+        KVS_STATIC_ASSERT( is_supported<T>::value, "not supported" );
+        KVS_ASSERT( this->check_type<T>() );
+        return static_cast<T*>( this->data() );
+    }
+
+    const TypeInfo* typeInfo() const
+    {
+        return m_type_info.get();
+    }
+
+    const kvs::SharedPointer<void>& getSharedPointer() const
+    {
+        return m_values;
+    }
+
+    const void* data() const
+    {
+        return m_values.get();
+    }
+
+    void* data()
+    {
+        return m_values.get();
+    }
+
+    void swap( AnyValueArray& other )
+    {
+        std::swap( m_values, other.m_values );
+        std::swap( m_size, other.m_size );
+        std::swap( m_size_of_value, other.m_size_of_value );
+        std::swap( m_type_info, other.m_type_info );
+    }
+
+    AnyValueArray clone() const
+    {
+        const std::type_info& type = this->typeInfo()->type();
+        if (      type == typeid( kvs::Int8   ) ) { return this->clone_helper<kvs::Int8  >(); }
+        else if ( type == typeid( kvs::UInt8  ) ) { return this->clone_helper<kvs::UInt8 >(); }
+        else if ( type == typeid( kvs::Int16  ) ) { return this->clone_helper<kvs::Int16 >(); }
+        else if ( type == typeid( kvs::UInt16 ) ) { return this->clone_helper<kvs::UInt16>(); }
+        else if ( type == typeid( kvs::Int32  ) ) { return this->clone_helper<kvs::Int32 >(); }
+        else if ( type == typeid( kvs::UInt32 ) ) { return this->clone_helper<kvs::UInt32>(); }
+        else if ( type == typeid( kvs::Int64  ) ) { return this->clone_helper<kvs::Int64 >(); }
+        else if ( type == typeid( kvs::UInt64 ) ) { return this->clone_helper<kvs::UInt64>(); }
+        else if ( type == typeid( kvs::Real32 ) ) { return this->clone_helper<kvs::Real32>(); }
+        else if ( type == typeid( kvs::Real64 ) ) { return this->clone_helper<kvs::Real64>(); }
+        KVS_ASSERT( false );
+        return AnyValueArray();
+    }
+
+    bool empty() const
+    {
+        return this->size() == 0;
     }
 
     const void* pointer() const
@@ -151,28 +226,40 @@ public:
         return this->data();
     }
 
-    template<typename T>
-    const T* pointer() const
+private:
+    template <typename T>
+    AnyValueArray clone_helper() const
     {
-        KVS_ASSERT( this->check_type<T>() );
-        return static_cast<const T*>( this->data() );
+        ValueArray<T> ret( static_cast<const T*>( this->data() ), this->size() );
+        return AnyValueArray( ret );
     }
+
+public:
+#if KVS_ENABLE_DEPRECATED
 
     template<typename T>
-    T* pointer()
+    AnyValueArray( const T* values, const size_t size )
     {
-        KVS_ASSERT( this->check_type<T>() );
-        return static_cast<T*>( this->data() );
+        *this = AnyValueArray( kvs::ValueArray<T>( values, size ) );
     }
 
-    const TypeInfo* typeInfo() const
+    template<typename T>
+    AnyValueArray( const std::vector<T>& values )
     {
-        return m_type_info;
+        *this = AnyValueArray( kvs::ValueArray<T>( values ) );
     }
 
-    ReferenceCounter* counter() const
+    template<typename T>
+    void* allocate( const size_t size )
     {
-        return m_counter;
+        this->deallocate();
+        *this = AnyValueArray( kvs::ValueArray<T>( size ) );
+        return this->data();
+    }
+
+    bool isEmpty() const
+    {
+        return this->empty();
     }
 
     void swapByte()
@@ -207,68 +294,6 @@ public:
         *this = AnyValueArray( kvs::ValueArray<T>( values, size ) );
     }
 
-    const void* data() const
-    {
-        return m_values;
-    }
-
-    void* data()
-    {
-        return m_values;
-    }
-
-    void swap( AnyValueArray& other )
-    {
-        std::swap( m_values, other.m_values );
-        std::swap( m_size, other.m_size );
-        std::swap( m_counter, other.m_counter );
-        std::swap( m_size_of_value, other.m_size_of_value );
-        std::swap( m_type_info, other.m_type_info );
-    }
-
-    AnyValueArray clone() const
-    {
-        const std::type_info& type = this->typeInfo()->type();
-        if (      type == typeid( kvs::Int8   ) ) { return this->clone_helper<kvs::Int8  >(); }
-        else if ( type == typeid( kvs::UInt8  ) ) { return this->clone_helper<kvs::UInt8 >(); }
-        else if ( type == typeid( kvs::Int16  ) ) { return this->clone_helper<kvs::Int16 >(); }
-        else if ( type == typeid( kvs::UInt16 ) ) { return this->clone_helper<kvs::UInt16>(); }
-        else if ( type == typeid( kvs::Int32  ) ) { return this->clone_helper<kvs::Int32 >(); }
-        else if ( type == typeid( kvs::UInt32 ) ) { return this->clone_helper<kvs::UInt32>(); }
-        else if ( type == typeid( kvs::Int64  ) ) { return this->clone_helper<kvs::Int64 >(); }
-        else if ( type == typeid( kvs::UInt64 ) ) { return this->clone_helper<kvs::UInt64>(); }
-        else if ( type == typeid( kvs::Real32 ) ) { return this->clone_helper<kvs::Real32>(); }
-        else if ( type == typeid( kvs::Real64 ) ) { return this->clone_helper<kvs::Real64>(); }
-        KVS_ASSERT( false );
-        return AnyValueArray();
-    }
-
-    bool empty() const
-    {
-        return this->size() == 0;
-    }
-
-private:
-
-    template <typename T>
-    AnyValueArray clone_helper() const
-    {
-        ValueArray<T> ret( static_cast<const T*>( this->data() ), this->size() );
-        return AnyValueArray( ret );
-    }
-
-public:
-
-#if KVS_ENABLE_DEPRECATED
-
-    template<typename T>
-    void* allocate( const size_t size )
-    {
-        this->deallocate();
-        *this = AnyValueArray( kvs::ValueArray<T>( size ) );
-        return this->data();
-    }
-
 #else
 
     template<typename T>
@@ -281,102 +306,32 @@ public:
 
     void deallocate()
     {
-        this->unref();
+        m_values.reset();
+        m_type_info.reset();
+        m_size = 0;
+        m_size_of_value = 0;
     }
 
 private:
-
-    void create_counter()
-    {
-        m_counter = new ReferenceCounter( 1 );
-    }
-
-    void ref()
-    {
-        if ( m_counter ) { m_counter->increment(); }
-    }
-
-    void unref()
-    {
-        if ( m_counter )
-        {
-            m_counter->decrement();
-
-            if ( m_counter->value() == 0 )
-            {
-                if ( m_values )
-                {
-                    const std::type_info& type = this->typeInfo()->type();
-                    if (      type == typeid( kvs::Int8   ) ) { this->delete_array<kvs::Int8  >(); }
-                    else if ( type == typeid( kvs::UInt8  ) ) { this->delete_array<kvs::UInt8 >(); }
-                    else if ( type == typeid( kvs::Int16  ) ) { this->delete_array<kvs::Int16 >(); }
-                    else if ( type == typeid( kvs::UInt16 ) ) { this->delete_array<kvs::UInt16>(); }
-                    else if ( type == typeid( kvs::Int32  ) ) { this->delete_array<kvs::Int32 >(); }
-                    else if ( type == typeid( kvs::UInt32 ) ) { this->delete_array<kvs::UInt32>(); }
-                    else if ( type == typeid( kvs::Int64  ) ) { this->delete_array<kvs::Int64 >(); }
-                    else if ( type == typeid( kvs::UInt64 ) ) { this->delete_array<kvs::UInt64>(); }
-                    else if ( type == typeid( kvs::Real32 ) ) { this->delete_array<kvs::Real32>(); }
-                    else if ( type == typeid( kvs::Real64 ) ) { this->delete_array<kvs::Real64>(); }
-                    else if ( type == typeid( std::string ) ) { this->delete_array<std::string>(); }
-                }
-                delete m_counter;
-            }
-        }
-        delete m_type_info;
-
-        m_type_info = 0;
-        m_counter       = 0;
-        m_size_of_value = 0;
-        m_size       = 0;
-        m_values        = 0;
-    }
-
-    template <typename T>
-    void delete_array()
-    {
-        delete [] static_cast<T*>( m_values );
-    }
 
     template <typename T>
     bool check_type() const
     {
         return this->typeInfo()->type() == typeid( T );
     }
+
+    template <typename T>
+    struct is_supported : kvs::temporal::false_type {};
 };
-
-template<typename T>
-inline AnyValueArray::AnyValueArray( const T* values, const size_t size )
-    : m_counter( 0 )
-    , m_type_info( 0 )
-    , m_size_of_value( 0 )
-    , m_size( 0 )
-    , m_values( 0 )
-{
-    *this = AnyValueArray( kvs::ValueArray<T>( values, size ) );
-}
-
-template<typename T>
-inline AnyValueArray::AnyValueArray( const std::vector<T>& values )
-    : m_counter( 0 )
-    , m_type_info( 0 )
-    , m_size_of_value( 0 )
-    , m_size( 0 )
-    , m_values( 0 )
-{
-    *this = AnyValueArray( kvs::ValueArray<T>( values ) );
-}
 
 template<typename T>
 inline AnyValueArray::AnyValueArray( const kvs::ValueArray<T>& values )
 {
-    m_counter       = values.counter();
+    KVS_STATIC_ASSERT( is_supported<T>::value, "not supported" );
+    m_values        = kvs::static_pointer_cast<T>( values.getSharedPointer() );
     m_size          = values.size();
-    m_values        = const_cast<T*>( values.data() );
-
-    m_type_info     = new kvs::AnyValue::SetTypeInfo<T>();
     m_size_of_value = sizeof( T );
-
-    this->ref();
+    m_type_info.reset( new kvs::AnyValue::SetTypeInfo<T>() );
 }
 
 template<>
@@ -389,11 +344,11 @@ inline std::string AnyValueArray::to<std::string>( const size_t index ) const
 
     std::ostringstream v;
     // Value to String.
-    if      ( type == typeid( kvs::Int8   ) ) { v << this->at<kvs::Int8  >( index ); }
+    if      ( type == typeid( kvs::Int8   ) ) { v << (int)this->at<kvs::Int8  >( index ); }
     else if ( type == typeid( kvs::Int16  ) ) { v << this->at<kvs::Int16 >( index ); }
     else if ( type == typeid( kvs::Int32  ) ) { v << this->at<kvs::Int32 >( index ); }
     else if ( type == typeid( kvs::Int64  ) ) { v << this->at<kvs::Int64 >( index ); }
-    else if ( type == typeid( kvs::UInt8  ) ) { v << this->at<kvs::UInt8 >( index ); }
+    else if ( type == typeid( kvs::UInt8  ) ) { v << (int)this->at<kvs::UInt8 >( index ); }
     else if ( type == typeid( kvs::UInt16 ) ) { v << this->at<kvs::UInt16>( index ); }
     else if ( type == typeid( kvs::UInt32 ) ) { v << this->at<kvs::UInt32>( index ); }
     else if ( type == typeid( kvs::UInt64 ) ) { v << this->at<kvs::UInt64>( index ); }
@@ -404,7 +359,21 @@ inline std::string AnyValueArray::to<std::string>( const size_t index ) const
     return v.str();
 }
 
+template <> struct AnyValueArray::is_supported<kvs::Int8  > : kvs::temporal::true_type {};
+template <> struct AnyValueArray::is_supported<kvs::UInt8 > : kvs::temporal::true_type {};
+template <> struct AnyValueArray::is_supported<kvs::Int16 > : kvs::temporal::true_type {};
+template <> struct AnyValueArray::is_supported<kvs::UInt16> : kvs::temporal::true_type {};
+template <> struct AnyValueArray::is_supported<kvs::Int32 > : kvs::temporal::true_type {};
+template <> struct AnyValueArray::is_supported<kvs::UInt32> : kvs::temporal::true_type {};
+template <> struct AnyValueArray::is_supported<kvs::Int64 > : kvs::temporal::true_type {};
+template <> struct AnyValueArray::is_supported<kvs::UInt64> : kvs::temporal::true_type {};
+template <> struct AnyValueArray::is_supported<kvs::Real32> : kvs::temporal::true_type {};
+template <> struct AnyValueArray::is_supported<kvs::Real64> : kvs::temporal::true_type {};
+template <> struct AnyValueArray::is_supported<std::string> : kvs::temporal::true_type {};
+
 } // end of namespace kvs
+
+#undef KVS_STATIC_ASSERT
 
 namespace std
 {

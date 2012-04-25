@@ -118,8 +118,8 @@ kvs::Stl* PolygonExporter<kvs::Stl>::exec( const kvs::ObjectBase* object )
     {
         // Convert to kvs::PolygonObject::PolygonNormal type.
         const size_t npolygons = polygon->connections().size() / 3;
-        const kvs::UInt32* pconnections = polygon->connections().pointer();
-        const kvs::Real32* pnormals = polygon->normals().pointer();
+        const kvs::UInt32* pconnections = polygon->connections().data();
+        const kvs::Real32* pnormals = polygon->normals().data();
         kvs::ValueArray<kvs::Real32> normals( npolygons * 3 );
         for ( size_t i = 0; i < npolygons; i++ )
         {
@@ -238,7 +238,7 @@ kvs::Ply* PolygonExporter<kvs::Ply>::exec( const kvs::ObjectBase* object )
             else // polygon->nconnections() > 0
             {
                 const size_t npolygons = polygon->connections().size() / 3;
-                const kvs::UInt32* pconnections = polygon->connections().pointer();
+                const kvs::UInt32* pconnections = polygon->connections().data();
                 for ( size_t i = 0; i < npolygons; i++ )
                 {
                     const kvs::UInt32 index0 = *(pconnections++);
@@ -288,7 +288,7 @@ kvs::Ply* PolygonExporter<kvs::Ply>::exec( const kvs::ObjectBase* object )
             kvs::ValueArray<kvs::UInt32> counter( nvertices ); counter.fill( 0 );
 
             const size_t npolygons = polygon->connections().size() / 3;
-            const kvs::UInt32* pconnections = m_connections.pointer();
+            const kvs::UInt32* pconnections = m_connections.data();
             for ( size_t i = 0; i < npolygons; i++ )
             {
                 const kvs::UInt32 index0 = *(pconnections++);

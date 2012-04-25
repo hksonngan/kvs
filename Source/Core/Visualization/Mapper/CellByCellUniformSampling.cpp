@@ -414,7 +414,7 @@ void CellByCellUniformSampling::generate_particles( const kvs::StructuredVolumeO
     const float max_value = BaseClass::transferFunction().colorMap().maxValue();
     const float normalize_factor = BaseClass::transferFunction().resolution() / ( max_value - min_value );
 
-    const float* const  density_map = m_density_map.pointer();
+    const float* const  density_map = m_density_map.data();
     const kvs::ColorMap color_map( BaseClass::transferFunction().colorMap() );
 
     // Generate particles for each cell.
@@ -537,7 +537,7 @@ void CellByCellUniformSampling::generate_particles( const kvs::UnstructuredVolum
     const float max_range = static_cast<float>( BaseClass::transferFunction().resolution() - 1 );
     const float normalize_factor = max_range / ( max_value - min_value );
 
-    const float* const  density_map = m_density_map.pointer();
+    const float* const  density_map = m_density_map.data();
     const kvs::ColorMap color_map( BaseClass::transferFunction().colorMap() );
 
     // Generate particles for each cell.

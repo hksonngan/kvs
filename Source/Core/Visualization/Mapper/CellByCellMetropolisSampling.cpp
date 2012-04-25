@@ -417,7 +417,7 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::StructuredVolu
     const size_t max_range = BaseClass::transferFunction().resolution() - 1;
     const float normalize_factor = max_range / ( max_value - min_value );
 
-    const float* const  density_map = m_density_map.pointer();
+    const float* const  density_map = m_density_map.data();
     const kvs::ColorMap color_map( BaseClass::transferFunction().colorMap() );
 
     // Generate particles for each cell.
@@ -649,7 +649,7 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::UnstructuredVo
     const size_t max_range = BaseClass::transferFunction().resolution() - 1;
     const float normalize_factor = max_range / ( max_value - min_value );
 
-    const float* const  density_map = m_density_map.pointer();
+    const float* const  density_map = m_density_map.data();
     const kvs::ColorMap color_map( BaseClass::transferFunction().colorMap() );
 
     // Generate particles for each cell.

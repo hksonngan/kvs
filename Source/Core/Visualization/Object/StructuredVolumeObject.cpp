@@ -303,7 +303,7 @@ void StructuredVolumeObject::calculate_min_max_coords( void )
     }
     case Rectilinear:
     {
-        const float* const coord = this->coords().pointer();
+        const float* const coord = this->coords().data();
 
         min_coord.set(
             *( coord ),
@@ -319,7 +319,7 @@ void StructuredVolumeObject::calculate_min_max_coords( void )
     }
     case Curvilinear:
     {
-        const float*       coord = this->coords().pointer();
+        const float*       coord = this->coords().data();
         const float* const end   = coord + this->coords().size();
 
         float x = *( coord++ );

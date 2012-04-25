@@ -160,8 +160,8 @@ void RayCastingRenderer::rasterize(
     BaseClass::m_shader->set( camera, light );
 
     // Aliases.
-    kvs::UInt8*  const pixel      = BaseClass::m_color_data.pointer();
-    kvs::Real32* const depth_data = BaseClass::m_depth_data.pointer();
+    kvs::UInt8*  const pixel      = BaseClass::m_color_data.data();
+    kvs::Real32* const depth_data = BaseClass::m_depth_data.data();
 
 #if KVS_RAY_CASTING_RENDERER__ENABLE_COMPOSITION
     // Readback pixels.

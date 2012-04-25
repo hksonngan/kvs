@@ -209,7 +209,7 @@ const bool FlowData::read( const std::string filename )
             {
                 if ( type == "#FLT_ARY" )
                 {
-                    m_times[i] = data.fltArray().at(0);
+                    m_times[i] = data.fltArray().front();
                 }
             }
 
@@ -218,7 +218,7 @@ const bool FlowData::read( const std::string filename )
             {
                 if ( type == "#INT_ARY" )
                 {
-                    m_steps[i] = data.intArray().at(0);
+                    m_steps[i] = data.intArray().front();
                 }
             }
 

@@ -429,8 +429,8 @@ void PointObject::add( const PointObject& other )
         kvs::Real32* pcoords = coords.data();
 
         // x,y,z, ... + x,y,z, ... = x,y,z, ... ,x,y,z, ...
-        memcpy( pcoords, this->coords().pointer(), this->coords().byteSize() );
-        memcpy( pcoords + this->coords().size(), other.coords().pointer(), other.coords().byteSize() );
+        memcpy( pcoords, this->coords().data(), this->coords().byteSize() );
+        memcpy( pcoords + this->coords().size(), other.coords().data(), other.coords().byteSize() );
         BaseClass::setCoords( coords );
 
         // Integrate the normal vectors.
@@ -443,8 +443,8 @@ void PointObject::add( const PointObject& other )
                 const size_t nnormals = this->normals().size() + other.normals().size();
                 normals.allocate( nnormals );
                 kvs::Real32* pnormals = normals.data();
-                memcpy( pnormals, this->normals().pointer(), this->normals().byteSize() );
-                memcpy( pnormals + this->normals().size(), other.normals().pointer(), other.normals().byteSize() );
+                memcpy( pnormals, this->normals().data(), this->normals().byteSize() );
+                memcpy( pnormals + this->normals().size(), other.normals().data(), other.normals().byteSize() );
             }
             else
             {
@@ -452,7 +452,7 @@ void PointObject::add( const PointObject& other )
                 const size_t nnormals = this->normals().size() + other.coords().size();
                 normals.allocate( nnormals );
                 kvs::Real32* pnormals = normals.data();
-                memcpy( pnormals, this->normals().pointer(), this->normals().byteSize() );
+                memcpy( pnormals, this->normals().data(), this->normals().byteSize() );
                 memset( pnormals + this->normals().size(), 0, other.coords().byteSize() );
             }
         }
@@ -465,7 +465,7 @@ void PointObject::add( const PointObject& other )
                 kvs::Real32* pnormals = normals.data();
                 // (none) + nx,ny,nz, ... = 0,0,0, ... ,nz,ny,nz, ...
                 memset( pnormals, 0, this->coords().byteSize() );
-                memcpy( pnormals + this->coords().size(), other.normals().pointer(), other.normals().byteSize() );
+                memcpy( pnormals + this->coords().size(), other.normals().data(), other.normals().byteSize() );
             }
         }
         BaseClass::setNormals( normals );
@@ -480,8 +480,8 @@ void PointObject::add( const PointObject& other )
                 const size_t ncolors = this->colors().size() + other.colors().size();
                 colors.allocate( ncolors );
                 kvs::UInt8* pcolors = colors.data();
-                memcpy( pcolors, this->colors().pointer(), this->colors().byteSize() );
-                memcpy( pcolors + this->colors().size(), other.colors().pointer(), other.colors().byteSize() );
+                memcpy( pcolors, this->colors().data(), this->colors().byteSize() );
+                memcpy( pcolors + this->colors().size(), other.colors().data(), other.colors().byteSize() );
             }
             else
             {
@@ -489,7 +489,7 @@ void PointObject::add( const PointObject& other )
                 const size_t ncolors = this->colors().size() + other.coords().size();
                 colors.allocate( ncolors );
                 kvs::UInt8* pcolors = colors.data();
-                memcpy( pcolors, this->colors().pointer(), this->colors().byteSize() );
+                memcpy( pcolors, this->colors().data(), this->colors().byteSize() );
                 pcolors += this->colors().size();
                 const kvs::RGBColor color = other.color();
                 for ( size_t i = 0; i < other.coords().size(); i += 3 )
@@ -515,7 +515,7 @@ void PointObject::add( const PointObject& other )
                     *(pcolors++) = color.g();
                     *(pcolors++) = color.b();
                 }
-                memcpy( pcolors, other.colors().pointer(), other.colors().byteSize() );
+                memcpy( pcolors, other.colors().data(), other.colors().byteSize() );
             }
             else
             {
@@ -564,8 +564,8 @@ void PointObject::add( const PointObject& other )
                 const size_t nsizes = this->sizes().size() + other.sizes().size();
                 sizes.allocate( nsizes );
                 kvs::Real32* psizes = sizes.data();
-                memcpy( psizes, this->sizes().pointer(), this->sizes().byteSize() );
-                memcpy( psizes + this->sizes().size(), other.sizes().pointer(), other.sizes().byteSize() );
+                memcpy( psizes, this->sizes().data(), this->sizes().byteSize() );
+                memcpy( psizes + this->sizes().size(), other.sizes().data(), other.sizes().byteSize() );
             }
             else
             {
@@ -573,7 +573,7 @@ void PointObject::add( const PointObject& other )
                 const size_t nsizes = this->sizes().size() + other.coords().size();
                 sizes.allocate( nsizes );
                 kvs::Real32* psizes = sizes.data();
-                memcpy( psizes, this->sizes().pointer(), this->sizes().byteSize() );
+                memcpy( psizes, this->sizes().data(), this->sizes().byteSize() );
                 psizes += this->colors().size();
                 const kvs::Real32 size = other.size();
                 for ( size_t i = 0; i < other.coords().size(); i++ )
@@ -595,7 +595,7 @@ void PointObject::add( const PointObject& other )
                 {
                     *(psizes++) = size;
                 }
-                memcpy( psizes, other.sizes().pointer(), other.sizes().byteSize() );
+                memcpy( psizes, other.sizes().data(), other.sizes().byteSize() );
             }
             else
             {

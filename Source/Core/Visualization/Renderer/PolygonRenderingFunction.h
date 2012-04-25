@@ -55,8 +55,8 @@ void Rendering_Tri_VCs_O( const kvs::PolygonObject* polygon )
 {
     glBegin( GL_TRIANGLES );
     {
-        const kvs::UInt8*  colors  = polygon->colors().pointer();
-        const kvs::Real32* coords  = polygon->coords().pointer();
+        const kvs::UInt8*  colors  = polygon->colors().data();
+        const kvs::Real32* coords  = polygon->coords().data();
         const kvs::UInt8   opacity = polygon->opacity();
 
         const size_t nvertices = polygon->nvertices();
@@ -79,9 +79,9 @@ void Rendering_Tri_VCs_O_Cs( const kvs::PolygonObject* polygon )
 {
     glBegin( GL_TRIANGLES );
     {
-        const kvs::UInt8*  colors      = polygon->colors().pointer();
-        const kvs::Real32* coords      = polygon->coords().pointer();
-        const kvs::UInt32* connections = polygon->connections().pointer();
+        const kvs::UInt8*  colors      = polygon->colors().data();
+        const kvs::Real32* coords      = polygon->coords().data();
+        const kvs::UInt32* connections = polygon->connections().data();
         const kvs::UInt8   opacity     = polygon->opacity();
 
         const size_t nconnections = polygon->nconnections();
@@ -114,9 +114,9 @@ void Rendering_Tri_VCs_Os( const kvs::PolygonObject* polygon )
 {
     glBegin( GL_TRIANGLES );
     {
-        const kvs::UInt8*  colors    = polygon->colors().pointer();
-        const kvs::Real32* coords    = polygon->coords().pointer();
-        const kvs::UInt8*  opacities = polygon->opacities().pointer();
+        const kvs::UInt8*  colors    = polygon->colors().data();
+        const kvs::Real32* coords    = polygon->coords().data();
+        const kvs::UInt8*  opacities = polygon->opacities().data();
 
         const size_t nvertices = polygon->nvertices();
         for ( size_t i = 0, index = 0; i < nvertices; i++, index += 3 )
@@ -138,10 +138,10 @@ void Rendering_Tri_VCs_Os_Cs( const kvs::PolygonObject* polygon )
 {
     glBegin( GL_TRIANGLES );
     {
-        const kvs::UInt8*  colors      = polygon->colors().pointer();
-        const kvs::Real32* coords      = polygon->coords().pointer();
-        const kvs::UInt32* connections = polygon->connections().pointer();
-        const kvs::UInt8*  opacities   = polygon->opacities().pointer();
+        const kvs::UInt8*  colors      = polygon->colors().data();
+        const kvs::Real32* coords      = polygon->coords().data();
+        const kvs::UInt32* connections = polygon->connections().data();
+        const kvs::UInt8*  opacities   = polygon->opacities().data();
 
         const size_t nconnections = polygon->nconnections();
         for ( size_t i = 0, index = 0; i < nconnections; i++, index += 3 )
@@ -173,7 +173,7 @@ void Rendering_Tri_SC_O( const kvs::PolygonObject* polygon )
 {
     glBegin( GL_TRIANGLES );
     {
-        const kvs::Real32*  coords  = polygon->coords().pointer();
+        const kvs::Real32*  coords  = polygon->coords().data();
         const kvs::RGBColor color   = polygon->color(0);
         const kvs::UInt8    opacity = polygon->opacity(0);
 
@@ -199,8 +199,8 @@ void Rendering_Tri_SC_O_Cs( const kvs::PolygonObject* polygon )
 {
     glBegin( GL_TRIANGLES );
     {
-        const kvs::Real32*  coords      = polygon->coords().pointer();
-        const kvs::UInt32*  connections = polygon->connections().pointer();
+        const kvs::Real32*  coords      = polygon->coords().data();
+        const kvs::UInt32*  connections = polygon->connections().data();
         const kvs::RGBColor color       = polygon->color(0);
         const kvs::UInt8    opacity     = polygon->opacity(0);
 
@@ -232,8 +232,8 @@ void Rendering_Tri_SC_Os( const kvs::PolygonObject* polygon )
     glBegin( GL_TRIANGLES );
     {
         const kvs::RGBColor color     = polygon->color(0);
-        const kvs::UInt8*   opacities = polygon->opacities().pointer();
-        const kvs::Real32*  coords    = polygon->coords().pointer();
+        const kvs::UInt8*   opacities = polygon->opacities().data();
+        const kvs::Real32*  coords    = polygon->coords().data();
 
         const size_t nopacities = polygon->nopacities();
         for ( size_t i = 0, index = 0; i < nopacities; i++, index += 9 )
@@ -259,9 +259,9 @@ void Rendering_Tri_SC_Os_Cs( const kvs::PolygonObject* polygon )
     glBegin( GL_TRIANGLES );
     {
         const kvs::RGBColor color       = polygon->color(0);
-        const kvs::UInt32*  connections = polygon->connections().pointer();
-        const kvs::Real32*  coords      = polygon->coords().pointer();
-        const kvs::UInt8*   opacities   = polygon->opacities().pointer();
+        const kvs::UInt32*  connections = polygon->connections().data();
+        const kvs::Real32*  coords      = polygon->coords().data();
+        const kvs::UInt8*   opacities   = polygon->opacities().data();
 
         const size_t nconnections = polygon->nconnections();
         for ( size_t i = 0, index = 0; i < nconnections; i++, index += 3 )
@@ -290,8 +290,8 @@ void Rendering_Tri_PCs_O( const kvs::PolygonObject* polygon )
     glBegin( GL_TRIANGLES );
     {
         const kvs::UInt8   opacity = polygon->opacity(0);
-        const kvs::UInt8*  colors  = polygon->colors().pointer();
-        const kvs::Real32* coords  = polygon->coords().pointer();
+        const kvs::UInt8*  colors  = polygon->colors().data();
+        const kvs::Real32* coords  = polygon->coords().data();
 
         const size_t ncolors = polygon->ncolors();
         for ( size_t i = 0, index3 = 0, index9 = 0; i < ncolors; i++, index3 += 3, index9 += 9 )
@@ -316,10 +316,10 @@ void Rendering_Tri_PCs_O_Cs( const kvs::PolygonObject* polygon )
 {
     glBegin( GL_TRIANGLES );
     {
-        const kvs::UInt32* connections = polygon->connections().pointer();
-        const kvs::UInt8*  colors      = polygon->colors().pointer();
+        const kvs::UInt32* connections = polygon->connections().data();
+        const kvs::UInt8*  colors      = polygon->colors().data();
         const kvs::UInt8   opacity     = polygon->opacity(0);
-        const kvs::Real32* coords      = polygon->coords().pointer();
+        const kvs::Real32* coords      = polygon->coords().data();
 
         const size_t nconnections = polygon->nconnections();
         for ( size_t i = 0, index = 0; i < nconnections; i++, index += 3 )
@@ -347,9 +347,9 @@ void Rendering_Tri_PCs_Os( const kvs::PolygonObject* polygon )
 {
     glBegin( GL_TRIANGLES );
     {
-        const kvs::UInt8*  colors    = polygon->colors().pointer();
-        const kvs::UInt8*  opacities = polygon->opacities().pointer();
-        const kvs::Real32* coords    = polygon->coords().pointer();
+        const kvs::UInt8*  colors    = polygon->colors().data();
+        const kvs::UInt8*  opacities = polygon->opacities().data();
+        const kvs::Real32* coords    = polygon->coords().data();
 
         const size_t ncolors = polygon->ncolors();
         for ( size_t i = 0, index3 = 0, index9 = 0; i < ncolors; i++, index3 += 3, index9 += 9 )
@@ -374,10 +374,10 @@ void Rendering_Tri_PCs_Os_Cs( const kvs::PolygonObject* polygon )
 {
     glBegin( GL_TRIANGLES );
     {
-        const kvs::UInt32* connections = polygon->connections().pointer();
-        const kvs::UInt8*  colors      = polygon->colors().pointer();
-        const kvs::UInt8*  opacities   = polygon->opacities().pointer();
-        const kvs::Real32* coords      = polygon->coords().pointer();
+        const kvs::UInt32* connections = polygon->connections().data();
+        const kvs::UInt8*  colors      = polygon->colors().data();
+        const kvs::UInt8*  opacities   = polygon->opacities().data();
+        const kvs::Real32* coords      = polygon->coords().data();
 
         const size_t nconnections = polygon->nconnections();
         for ( size_t i = 0, index = 0; i < nconnections; i++, index += 3 )
@@ -405,9 +405,9 @@ void Rendering_Quad_VCs_O( const kvs::PolygonObject* polygon )
 {
     glBegin( GL_QUADS );
     {
-        const kvs::UInt8*  colors  = polygon->colors().pointer();
+        const kvs::UInt8*  colors  = polygon->colors().data();
         const kvs::UInt8   opacity = polygon->opacity(0);
-        const kvs::Real32* coords  = polygon->coords().pointer();
+        const kvs::Real32* coords  = polygon->coords().data();
 
         const size_t nvertices = polygon->nvertices();
         for ( size_t i = 0, index = 0; i < nvertices; i++, index += 3 )
@@ -432,39 +432,39 @@ void Rendering_Quad_VCs_O_Cs( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nconnections(); i++ )
         {
             size_t index = 4 * i;
-            size_t con0 = *(polygon->connections().pointer() + index)   * 3;
-            size_t con1 = *(polygon->connections().pointer() + index+1) * 3;
-            size_t con2 = *(polygon->connections().pointer() + index+2) * 3;
-            size_t con3 = *(polygon->connections().pointer() + index+3) * 3;
+            size_t con0 = *(polygon->connections().data() + index)   * 3;
+            size_t con1 = *(polygon->connections().data() + index+1) * 3;
+            size_t con2 = *(polygon->connections().data() + index+2) * 3;
+            size_t con3 = *(polygon->connections().data() + index+3) * 3;
 
-            glColor4ub( *(polygon->colors().pointer()   + con0),
-                        *(polygon->colors().pointer()   + con0+1),
-                        *(polygon->colors().pointer()   + con0+2),
+            glColor4ub( *(polygon->colors().data()   + con0),
+                        *(polygon->colors().data()   + con0+1),
+                        *(polygon->colors().data()   + con0+2),
                         polygon->opacity( 0 ) );
-            glVertex3f( *(polygon->coords().pointer() + con0),
-                        *(polygon->coords().pointer() + con0+1),
-                        *(polygon->coords().pointer() + con0+2) );
-            glColor4ub( *(polygon->colors().pointer()   + con1),
-                        *(polygon->colors().pointer()   + con1+1),
-                        *(polygon->colors().pointer()   + con1+2),
+            glVertex3f( *(polygon->coords().data() + con0),
+                        *(polygon->coords().data() + con0+1),
+                        *(polygon->coords().data() + con0+2) );
+            glColor4ub( *(polygon->colors().data()   + con1),
+                        *(polygon->colors().data()   + con1+1),
+                        *(polygon->colors().data()   + con1+2),
                         polygon->opacity( 0 ) );
-            glVertex3f( *(polygon->coords().pointer() + con1),
-                        *(polygon->coords().pointer() + con1+1),
-                        *(polygon->coords().pointer() + con1+2) );
-            glColor4ub( *(polygon->colors().pointer()   + con2),
-                        *(polygon->colors().pointer()   + con2+1),
-                        *(polygon->colors().pointer()   + con2+2),
+            glVertex3f( *(polygon->coords().data() + con1),
+                        *(polygon->coords().data() + con1+1),
+                        *(polygon->coords().data() + con1+2) );
+            glColor4ub( *(polygon->colors().data()   + con2),
+                        *(polygon->colors().data()   + con2+1),
+                        *(polygon->colors().data()   + con2+2),
                         polygon->opacity( 0 ) );
-            glVertex3f( *(polygon->coords().pointer() + con2),
-                        *(polygon->coords().pointer() + con2+1),
-                        *(polygon->coords().pointer() + con2+2) );
-            glColor4ub( *(polygon->colors().pointer()   + con3),
-                        *(polygon->colors().pointer()   + con3+1),
-                        *(polygon->colors().pointer()   + con3+2),
+            glVertex3f( *(polygon->coords().data() + con2),
+                        *(polygon->coords().data() + con2+1),
+                        *(polygon->coords().data() + con2+2) );
+            glColor4ub( *(polygon->colors().data()   + con3),
+                        *(polygon->colors().data()   + con3+1),
+                        *(polygon->colors().data()   + con3+2),
                         polygon->opacity( 0 ) );
-            glVertex3f( *(polygon->coords().pointer() + con3),
-                        *(polygon->coords().pointer() + con3+1),
-                        *(polygon->coords().pointer() + con3+2) );
+            glVertex3f( *(polygon->coords().data() + con3),
+                        *(polygon->coords().data() + con3+1),
+                        *(polygon->coords().data() + con3+2) );
         }
     }
     glEnd();
@@ -483,13 +483,13 @@ void Rendering_Quad_VCs_Os( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nvertices(); i++ )
         {
             size_t index = 3 * i;
-            glColor4ub( *(polygon->colors().pointer()   + index),
-                        *(polygon->colors().pointer()   + index+1),
-                        *(polygon->colors().pointer()   + index+2),
+            glColor4ub( *(polygon->colors().data()   + index),
+                        *(polygon->colors().data()   + index+1),
+                        *(polygon->colors().data()   + index+2),
                         polygon->opacity( i ) );
-            glVertex3f( *(polygon->coords().pointer() + index),
-                        *(polygon->coords().pointer() + index+1),
-                        *(polygon->coords().pointer() + index+2) );
+            glVertex3f( *(polygon->coords().data() + index),
+                        *(polygon->coords().data() + index+1),
+                        *(polygon->coords().data() + index+2) );
         }
     }
     glEnd();
@@ -508,39 +508,39 @@ void Rendering_Quad_VCs_Os_Cs( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nconnections(); i++ )
         {
             size_t index = 4 * i;
-            size_t con0 = *(polygon->connections().pointer() + index)   * 3;
-            size_t con1 = *(polygon->connections().pointer() + index+1) * 3;
-            size_t con2 = *(polygon->connections().pointer() + index+2) * 3;
-            size_t con3 = *(polygon->connections().pointer() + index+3) * 3;
+            size_t con0 = *(polygon->connections().data() + index)   * 3;
+            size_t con1 = *(polygon->connections().data() + index+1) * 3;
+            size_t con2 = *(polygon->connections().data() + index+2) * 3;
+            size_t con3 = *(polygon->connections().data() + index+3) * 3;
 
-            glColor4ub( *(polygon->colors().pointer()   + con0),
-                        *(polygon->colors().pointer()   + con0+1),
-                        *(polygon->colors().pointer()   + con0+2),
+            glColor4ub( *(polygon->colors().data()   + con0),
+                        *(polygon->colors().data()   + con0+1),
+                        *(polygon->colors().data()   + con0+2),
                         polygon->opacity(con0/3) );
-            glVertex3f( *(polygon->coords().pointer() + con0),
-                        *(polygon->coords().pointer() + con0+1),
-                        *(polygon->coords().pointer() + con0+2) );
-            glColor4ub( *(polygon->colors().pointer()   + con1),
-                        *(polygon->colors().pointer()   + con1+1),
-                        *(polygon->colors().pointer()   + con1+2),
+            glVertex3f( *(polygon->coords().data() + con0),
+                        *(polygon->coords().data() + con0+1),
+                        *(polygon->coords().data() + con0+2) );
+            glColor4ub( *(polygon->colors().data()   + con1),
+                        *(polygon->colors().data()   + con1+1),
+                        *(polygon->colors().data()   + con1+2),
                         polygon->opacity(con1/3) );
-            glVertex3f( *(polygon->coords().pointer() + con1),
-                        *(polygon->coords().pointer() + con1+1),
-                        *(polygon->coords().pointer() + con1+2) );
-            glColor4ub( *(polygon->colors().pointer()   + con2),
-                        *(polygon->colors().pointer()   + con2+1),
-                        *(polygon->colors().pointer()   + con2+2),
+            glVertex3f( *(polygon->coords().data() + con1),
+                        *(polygon->coords().data() + con1+1),
+                        *(polygon->coords().data() + con1+2) );
+            glColor4ub( *(polygon->colors().data()   + con2),
+                        *(polygon->colors().data()   + con2+1),
+                        *(polygon->colors().data()   + con2+2),
                         polygon->opacity(con2/3) );
-            glVertex3f( *(polygon->coords().pointer() + con2),
-                        *(polygon->coords().pointer() + con2+1),
-                        *(polygon->coords().pointer() + con2+2) );
-            glColor4ub( *(polygon->colors().pointer()   + con3),
-                        *(polygon->colors().pointer()   + con3+1),
-                        *(polygon->colors().pointer()   + con3+2),
+            glVertex3f( *(polygon->coords().data() + con2),
+                        *(polygon->coords().data() + con2+1),
+                        *(polygon->coords().data() + con2+2) );
+            glColor4ub( *(polygon->colors().data()   + con3),
+                        *(polygon->colors().data()   + con3+1),
+                        *(polygon->colors().data()   + con3+2),
                         polygon->opacity(con3/3) );
-            glVertex3f( *(polygon->coords().pointer() + con3),
-                        *(polygon->coords().pointer() + con3+1),
-                        *(polygon->coords().pointer() + con3+2) );
+            glVertex3f( *(polygon->coords().data() + con3),
+                        *(polygon->coords().data() + con3+1),
+                        *(polygon->coords().data() + con3+2) );
         }
     }
     glEnd();
@@ -563,9 +563,9 @@ void Rendering_Quad_SC_O( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nvertices(); i++ )
         {
             size_t index = 3 * i;
-            glVertex3f( *(polygon->coords().pointer() + index),
-                        *(polygon->coords().pointer() + index+1),
-                        *(polygon->coords().pointer() + index+2) );
+            glVertex3f( *(polygon->coords().data() + index),
+                        *(polygon->coords().data() + index+1),
+                        *(polygon->coords().data() + index+2) );
         }
     }
     glEnd();
@@ -588,23 +588,23 @@ void Rendering_Quad_SC_O_Cs( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nconnections(); i++ )
         {
             size_t index = 4 * i;
-            size_t con0 = *(polygon->connections().pointer() + index)   * 3;
-            size_t con1 = *(polygon->connections().pointer() + index+1) * 3;
-            size_t con2 = *(polygon->connections().pointer() + index+2) * 3;
-            size_t con3 = *(polygon->connections().pointer() + index+3) * 3;
+            size_t con0 = *(polygon->connections().data() + index)   * 3;
+            size_t con1 = *(polygon->connections().data() + index+1) * 3;
+            size_t con2 = *(polygon->connections().data() + index+2) * 3;
+            size_t con3 = *(polygon->connections().data() + index+3) * 3;
 
-            glVertex3f( *(polygon->coords().pointer() + con0),
-                        *(polygon->coords().pointer() + con0+1),
-                        *(polygon->coords().pointer() + con0+2) );
-            glVertex3f( *(polygon->coords().pointer() + con1),
-                        *(polygon->coords().pointer() + con1+1),
-                        *(polygon->coords().pointer() + con1+2) );
-            glVertex3f( *(polygon->coords().pointer() + con2),
-                        *(polygon->coords().pointer() + con2+1),
-                        *(polygon->coords().pointer() + con2+2) );
-            glVertex3f( *(polygon->coords().pointer() + con3),
-                        *(polygon->coords().pointer() + con3+1),
-                        *(polygon->coords().pointer() + con3+2) );
+            glVertex3f( *(polygon->coords().data() + con0),
+                        *(polygon->coords().data() + con0+1),
+                        *(polygon->coords().data() + con0+2) );
+            glVertex3f( *(polygon->coords().data() + con1),
+                        *(polygon->coords().data() + con1+1),
+                        *(polygon->coords().data() + con1+2) );
+            glVertex3f( *(polygon->coords().data() + con2),
+                        *(polygon->coords().data() + con2+1),
+                        *(polygon->coords().data() + con2+2) );
+            glVertex3f( *(polygon->coords().data() + con3),
+                        *(polygon->coords().data() + con3+1),
+                        *(polygon->coords().data() + con3+2) );
         }
     }
     glEnd();
@@ -627,18 +627,18 @@ void Rendering_Quad_SC_Os( const kvs::PolygonObject* polygon )
             glColor4ub( col.r(), col.g(), col.b(), polygon->opacity( i ) );
             size_t index = 12 * i;
 
-            glVertex3f( *(polygon->coords().pointer() + index),
-                        *(polygon->coords().pointer() + index+1),
-                        *(polygon->coords().pointer() + index+2) );
-            glVertex3f( *(polygon->coords().pointer() + index+3),
-                        *(polygon->coords().pointer() + index+4),
-                        *(polygon->coords().pointer() + index+5) );
-            glVertex3f( *(polygon->coords().pointer() + index+6),
-                        *(polygon->coords().pointer() + index+7),
-                        *(polygon->coords().pointer() + index+8) );
-            glVertex3f( *(polygon->coords().pointer() + index+9),
-                        *(polygon->coords().pointer() + index+10),
-                        *(polygon->coords().pointer() + index+11) );
+            glVertex3f( *(polygon->coords().data() + index),
+                        *(polygon->coords().data() + index+1),
+                        *(polygon->coords().data() + index+2) );
+            glVertex3f( *(polygon->coords().data() + index+3),
+                        *(polygon->coords().data() + index+4),
+                        *(polygon->coords().data() + index+5) );
+            glVertex3f( *(polygon->coords().data() + index+6),
+                        *(polygon->coords().data() + index+7),
+                        *(polygon->coords().data() + index+8) );
+            glVertex3f( *(polygon->coords().data() + index+9),
+                        *(polygon->coords().data() + index+10),
+                        *(polygon->coords().data() + index+11) );
         }
     }
     glEnd();
@@ -659,24 +659,24 @@ void Rendering_Quad_SC_Os_Cs( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nconnections(); i++ )
         {
             size_t index = 4 * i;
-            size_t con0 = *(polygon->connections().pointer() + index)   * 3;
-            size_t con1 = *(polygon->connections().pointer() + index+1) * 3;
-            size_t con2 = *(polygon->connections().pointer() + index+2) * 3;
-            size_t con3 = *(polygon->connections().pointer() + index+3) * 3;
+            size_t con0 = *(polygon->connections().data() + index)   * 3;
+            size_t con1 = *(polygon->connections().data() + index+1) * 3;
+            size_t con2 = *(polygon->connections().data() + index+2) * 3;
+            size_t con3 = *(polygon->connections().data() + index+3) * 3;
 
             glColor4ub( col.r(), col.g(), col.b(), polygon->opacity(i) );
-            glVertex3f( *(polygon->coords().pointer() + con0),
-                        *(polygon->coords().pointer() + con0+1),
-                        *(polygon->coords().pointer() + con0+2) );
-            glVertex3f( *(polygon->coords().pointer() + con1),
-                        *(polygon->coords().pointer() + con1+1),
-                        *(polygon->coords().pointer() + con1+2) );
-            glVertex3f( *(polygon->coords().pointer() + con2),
-                        *(polygon->coords().pointer() + con2+1),
-                        *(polygon->coords().pointer() + con2+2) );
-            glVertex3f( *(polygon->coords().pointer() + con3),
-                        *(polygon->coords().pointer() + con3+1),
-                        *(polygon->coords().pointer() + con3+2) );
+            glVertex3f( *(polygon->coords().data() + con0),
+                        *(polygon->coords().data() + con0+1),
+                        *(polygon->coords().data() + con0+2) );
+            glVertex3f( *(polygon->coords().data() + con1),
+                        *(polygon->coords().data() + con1+1),
+                        *(polygon->coords().data() + con1+2) );
+            glVertex3f( *(polygon->coords().data() + con2),
+                        *(polygon->coords().data() + con2+1),
+                        *(polygon->coords().data() + con2+2) );
+            glVertex3f( *(polygon->coords().data() + con3),
+                        *(polygon->coords().data() + con3+1),
+                        *(polygon->coords().data() + con3+2) );
         }
     }
     glEnd();
@@ -695,24 +695,24 @@ void Rendering_Quad_PCs_O( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->ncolors(); i++ )
         {
             size_t index = 3 * i;
-            glColor4ub( *(polygon->colors().pointer() + index),
-                        *(polygon->colors().pointer() + index+1),
-                        *(polygon->colors().pointer() + index+2),
+            glColor4ub( *(polygon->colors().data() + index),
+                        *(polygon->colors().data() + index+1),
+                        *(polygon->colors().data() + index+2),
                         polygon->opacity( 0 ) );
 
             index = 12 * i;
-            glVertex3f( *(polygon->coords().pointer() + index),
-                        *(polygon->coords().pointer() + index+1),
-                        *(polygon->coords().pointer() + index+2) );
-            glVertex3f( *(polygon->coords().pointer() + index+3),
-                        *(polygon->coords().pointer() + index+4),
-                        *(polygon->coords().pointer() + index+5) );
-            glVertex3f( *(polygon->coords().pointer() + index+6),
-                        *(polygon->coords().pointer() + index+7),
-                        *(polygon->coords().pointer() + index+8) );
-            glVertex3f( *(polygon->coords().pointer() + index+9),
-                        *(polygon->coords().pointer() + index+10),
-                        *(polygon->coords().pointer() + index+11) );
+            glVertex3f( *(polygon->coords().data() + index),
+                        *(polygon->coords().data() + index+1),
+                        *(polygon->coords().data() + index+2) );
+            glVertex3f( *(polygon->coords().data() + index+3),
+                        *(polygon->coords().data() + index+4),
+                        *(polygon->coords().data() + index+5) );
+            glVertex3f( *(polygon->coords().data() + index+6),
+                        *(polygon->coords().data() + index+7),
+                        *(polygon->coords().data() + index+8) );
+            glVertex3f( *(polygon->coords().data() + index+9),
+                        *(polygon->coords().data() + index+10),
+                        *(polygon->coords().data() + index+11) );
         }
     }
     glEnd();
@@ -731,29 +731,29 @@ void Rendering_Quad_PCs_O_Cs( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nconnections(); i++ )
         {
             size_t index = 3 * i;
-            glColor4ub( *(polygon->colors().pointer() + index),
-                        *(polygon->colors().pointer() + index+1),
-                        *(polygon->colors().pointer() + index+2),
+            glColor4ub( *(polygon->colors().data() + index),
+                        *(polygon->colors().data() + index+1),
+                        *(polygon->colors().data() + index+2),
                         polygon->opacity( 0 ) );
 
             index = 4 * i;
-            size_t con0 = *(polygon->connections().pointer() + index)   * 3;
-            size_t con1 = *(polygon->connections().pointer() + index+1) * 3;
-            size_t con2 = *(polygon->connections().pointer() + index+2) * 3;
-            size_t con3 = *(polygon->connections().pointer() + index+3) * 3;
+            size_t con0 = *(polygon->connections().data() + index)   * 3;
+            size_t con1 = *(polygon->connections().data() + index+1) * 3;
+            size_t con2 = *(polygon->connections().data() + index+2) * 3;
+            size_t con3 = *(polygon->connections().data() + index+3) * 3;
 
-            glVertex3f( *(polygon->coords().pointer() + con0),
-                        *(polygon->coords().pointer() + con0+1),
-                        *(polygon->coords().pointer() + con0+2) );
-            glVertex3f( *(polygon->coords().pointer() + con1),
-                        *(polygon->coords().pointer() + con1+1),
-                        *(polygon->coords().pointer() + con1+2) );
-            glVertex3f( *(polygon->coords().pointer() + con2),
-                        *(polygon->coords().pointer() + con2+1),
-                        *(polygon->coords().pointer() + con2+2) );
-            glVertex3f( *(polygon->coords().pointer() + con3),
-                        *(polygon->coords().pointer() + con3+1),
-                        *(polygon->coords().pointer() + con3+2) );
+            glVertex3f( *(polygon->coords().data() + con0),
+                        *(polygon->coords().data() + con0+1),
+                        *(polygon->coords().data() + con0+2) );
+            glVertex3f( *(polygon->coords().data() + con1),
+                        *(polygon->coords().data() + con1+1),
+                        *(polygon->coords().data() + con1+2) );
+            glVertex3f( *(polygon->coords().data() + con2),
+                        *(polygon->coords().data() + con2+1),
+                        *(polygon->coords().data() + con2+2) );
+            glVertex3f( *(polygon->coords().data() + con3),
+                        *(polygon->coords().data() + con3+1),
+                        *(polygon->coords().data() + con3+2) );
         }
     }
     glEnd();
@@ -772,24 +772,24 @@ void Rendering_Quad_PCs_Os( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->ncolors(); i++ )
         {
             size_t index = 3 * i;
-            glColor4ub( *(polygon->colors().pointer() + index),
-                        *(polygon->colors().pointer() + index+1),
-                        *(polygon->colors().pointer() + index+2),
+            glColor4ub( *(polygon->colors().data() + index),
+                        *(polygon->colors().data() + index+1),
+                        *(polygon->colors().data() + index+2),
                         polygon->opacity( i ) );
 
             index = 12 * i;
-            glVertex3f( *(polygon->coords().pointer() + index),
-                        *(polygon->coords().pointer() + index+1),
-                        *(polygon->coords().pointer() + index+2) );
-            glVertex3f( *(polygon->coords().pointer() + index+3),
-                        *(polygon->coords().pointer() + index+4),
-                        *(polygon->coords().pointer() + index+5) );
-            glVertex3f( *(polygon->coords().pointer() + index+6),
-                        *(polygon->coords().pointer() + index+7),
-                        *(polygon->coords().pointer() + index+8) );
-            glVertex3f( *(polygon->coords().pointer() + index+9),
-                        *(polygon->coords().pointer() + index+10),
-                        *(polygon->coords().pointer() + index+11) );
+            glVertex3f( *(polygon->coords().data() + index),
+                        *(polygon->coords().data() + index+1),
+                        *(polygon->coords().data() + index+2) );
+            glVertex3f( *(polygon->coords().data() + index+3),
+                        *(polygon->coords().data() + index+4),
+                        *(polygon->coords().data() + index+5) );
+            glVertex3f( *(polygon->coords().data() + index+6),
+                        *(polygon->coords().data() + index+7),
+                        *(polygon->coords().data() + index+8) );
+            glVertex3f( *(polygon->coords().data() + index+9),
+                        *(polygon->coords().data() + index+10),
+                        *(polygon->coords().data() + index+11) );
         }
     }
     glEnd();
@@ -808,29 +808,29 @@ void Rendering_Quad_PCs_Os_Cs( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nconnections(); i++ )
         {
             size_t index = 3 * i;
-            glColor4ub( *(polygon->colors().pointer() + index),
-                        *(polygon->colors().pointer() + index+1),
-                        *(polygon->colors().pointer() + index+2),
+            glColor4ub( *(polygon->colors().data() + index),
+                        *(polygon->colors().data() + index+1),
+                        *(polygon->colors().data() + index+2),
                         polygon->opacity( i ) );
 
             index = 4 * i;
-            size_t con0 = *(polygon->connections().pointer() + index)   * 3;
-            size_t con1 = *(polygon->connections().pointer() + index+1) * 3;
-            size_t con2 = *(polygon->connections().pointer() + index+2) * 3;
-            size_t con3 = *(polygon->connections().pointer() + index+3) * 3;
+            size_t con0 = *(polygon->connections().data() + index)   * 3;
+            size_t con1 = *(polygon->connections().data() + index+1) * 3;
+            size_t con2 = *(polygon->connections().data() + index+2) * 3;
+            size_t con3 = *(polygon->connections().data() + index+3) * 3;
 
-            glVertex3f( *(polygon->coords().pointer() + con0),
-                        *(polygon->coords().pointer() + con0+1),
-                        *(polygon->coords().pointer() + con0+2) );
-            glVertex3f( *(polygon->coords().pointer() + con1),
-                        *(polygon->coords().pointer() + con1+1),
-                        *(polygon->coords().pointer() + con1+2) );
-            glVertex3f( *(polygon->coords().pointer() + con2),
-                        *(polygon->coords().pointer() + con2+1),
-                        *(polygon->coords().pointer() + con2+2) );
-            glVertex3f( *(polygon->coords().pointer() + con3),
-                        *(polygon->coords().pointer() + con3+1),
-                        *(polygon->coords().pointer() + con3+2) );
+            glVertex3f( *(polygon->coords().data() + con0),
+                        *(polygon->coords().data() + con0+1),
+                        *(polygon->coords().data() + con0+2) );
+            glVertex3f( *(polygon->coords().data() + con1),
+                        *(polygon->coords().data() + con1+1),
+                        *(polygon->coords().data() + con1+2) );
+            glVertex3f( *(polygon->coords().data() + con2),
+                        *(polygon->coords().data() + con2+1),
+                        *(polygon->coords().data() + con2+2) );
+            glVertex3f( *(polygon->coords().data() + con3),
+                        *(polygon->coords().data() + con3+1),
+                        *(polygon->coords().data() + con3+2) );
         }
     }
     glEnd();
@@ -849,16 +849,16 @@ void Rendering_Tri_VN_VCs_O( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nvertices(); i++ )
         {
             size_t index = 3 * i;
-            glColor4ub( *(polygon->colors().pointer() + index),
-                        *(polygon->colors().pointer() + index+1),
-                        *(polygon->colors().pointer() + index+2),
+            glColor4ub( *(polygon->colors().data() + index),
+                        *(polygon->colors().data() + index+1),
+                        *(polygon->colors().data() + index+2),
                         polygon->opacity( 0 ) );
-            glNormal3f( *(polygon->normals().pointer() + index),
-                        *(polygon->normals().pointer() + index+1),
-                        *(polygon->normals().pointer() + index+2) );
-            glVertex3f( *(polygon->coords().pointer() + index),
-                        *(polygon->coords().pointer() + index+1),
-                        *(polygon->coords().pointer() + index+2) );
+            glNormal3f( *(polygon->normals().data() + index),
+                        *(polygon->normals().data() + index+1),
+                        *(polygon->normals().data() + index+2) );
+            glVertex3f( *(polygon->coords().data() + index),
+                        *(polygon->coords().data() + index+1),
+                        *(polygon->coords().data() + index+2) );
         }
     }
     glEnd();
@@ -877,40 +877,40 @@ void Rendering_Tri_VN_VCs_O_Cs( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nconnections(); i++ )
         {
             size_t index = 3 * i;
-            size_t con0 = *(polygon->connections().pointer() + index)   * 3;
-            size_t con1 = *(polygon->connections().pointer() + index+1) * 3;
-            size_t con2 = *(polygon->connections().pointer() + index+2) * 3;
+            size_t con0 = *(polygon->connections().data() + index)   * 3;
+            size_t con1 = *(polygon->connections().data() + index+1) * 3;
+            size_t con2 = *(polygon->connections().data() + index+2) * 3;
 
-            glColor4ub( *(polygon->colors().pointer() + con0),
-                        *(polygon->colors().pointer() + con0+1),
-                        *(polygon->colors().pointer() + con0+2),
+            glColor4ub( *(polygon->colors().data() + con0),
+                        *(polygon->colors().data() + con0+1),
+                        *(polygon->colors().data() + con0+2),
                         polygon->opacity( 0 ) );
-            glNormal3f( *(polygon->normals().pointer()    + con0),
-                        *(polygon->normals().pointer()    + con0+1),
-                        *(polygon->normals().pointer()    + con0+2) );
-            glVertex3f( *(polygon->coords().pointer() + con0),
-                        *(polygon->coords().pointer() + con0+1),
-                        *(polygon->coords().pointer() + con0+2) );
-            glColor4ub( *(polygon->colors().pointer()   + con1),
-                        *(polygon->colors().pointer()   + con1+1),
-                        *(polygon->colors().pointer()   + con1+2),
+            glNormal3f( *(polygon->normals().data()    + con0),
+                        *(polygon->normals().data()    + con0+1),
+                        *(polygon->normals().data()    + con0+2) );
+            glVertex3f( *(polygon->coords().data() + con0),
+                        *(polygon->coords().data() + con0+1),
+                        *(polygon->coords().data() + con0+2) );
+            glColor4ub( *(polygon->colors().data()   + con1),
+                        *(polygon->colors().data()   + con1+1),
+                        *(polygon->colors().data()   + con1+2),
                         polygon->opacity( 0 ) );
-            glNormal3f( *(polygon->normals().pointer()    + con1),
-                        *(polygon->normals().pointer()    + con1+1),
-                        *(polygon->normals().pointer()    + con1+2) );
-            glVertex3f( *(polygon->coords().pointer() + con1),
-                        *(polygon->coords().pointer() + con1+1),
-                        *(polygon->coords().pointer() + con1+2) );
-            glColor4ub( *(polygon->colors().pointer()   + con2),
-                        *(polygon->colors().pointer()   + con2+1),
-                        *(polygon->colors().pointer()   + con2+2),
+            glNormal3f( *(polygon->normals().data()    + con1),
+                        *(polygon->normals().data()    + con1+1),
+                        *(polygon->normals().data()    + con1+2) );
+            glVertex3f( *(polygon->coords().data() + con1),
+                        *(polygon->coords().data() + con1+1),
+                        *(polygon->coords().data() + con1+2) );
+            glColor4ub( *(polygon->colors().data()   + con2),
+                        *(polygon->colors().data()   + con2+1),
+                        *(polygon->colors().data()   + con2+2),
                         polygon->opacity( 0 ) );
-            glNormal3f( *(polygon->normals().pointer()    + con2),
-                        *(polygon->normals().pointer()    + con2+1),
-                        *(polygon->normals().pointer()    + con2+2) );
-            glVertex3f( *(polygon->coords().pointer() + con2),
-                        *(polygon->coords().pointer() + con2+1),
-                        *(polygon->coords().pointer() + con2+2) );
+            glNormal3f( *(polygon->normals().data()    + con2),
+                        *(polygon->normals().data()    + con2+1),
+                        *(polygon->normals().data()    + con2+2) );
+            glVertex3f( *(polygon->coords().data() + con2),
+                        *(polygon->coords().data() + con2+1),
+                        *(polygon->coords().data() + con2+2) );
         }
     }
     glEnd();
@@ -929,16 +929,16 @@ void Rendering_Tri_VN_VCs_Os( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nvertices(); i++ )
         {
             size_t index = 3 * i;
-            glColor4ub( *(polygon->colors().pointer()   + index),
-                        *(polygon->colors().pointer()   + index+1),
-                        *(polygon->colors().pointer()   + index+2),
+            glColor4ub( *(polygon->colors().data()   + index),
+                        *(polygon->colors().data()   + index+1),
+                        *(polygon->colors().data()   + index+2),
                         polygon->opacity( i ) );
-            glNormal3f( *(polygon->normals().pointer()    + index),
-                        *(polygon->normals().pointer()    + index+1),
-                        *(polygon->normals().pointer()    + index+2) );
-            glVertex3f( *(polygon->coords().pointer() + index),
-                        *(polygon->coords().pointer() + index+1),
-                        *(polygon->coords().pointer() + index+2) );
+            glNormal3f( *(polygon->normals().data()    + index),
+                        *(polygon->normals().data()    + index+1),
+                        *(polygon->normals().data()    + index+2) );
+            glVertex3f( *(polygon->coords().data() + index),
+                        *(polygon->coords().data() + index+1),
+                        *(polygon->coords().data() + index+2) );
         }
     }
     glEnd();
@@ -957,40 +957,40 @@ void Rendering_Tri_VN_VCs_Os_Cs( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nconnections(); i++ )
         {
             size_t index = 3 * i;
-            size_t con0 = *(polygon->connections().pointer() + index)   * 3;
-            size_t con1 = *(polygon->connections().pointer() + index+1) * 3;
-            size_t con2 = *(polygon->connections().pointer() + index+2) * 3;
+            size_t con0 = *(polygon->connections().data() + index)   * 3;
+            size_t con1 = *(polygon->connections().data() + index+1) * 3;
+            size_t con2 = *(polygon->connections().data() + index+2) * 3;
 
-            glColor4ub( *(polygon->colors().pointer()   + con0),
-                        *(polygon->colors().pointer()   + con0+1),
-                        *(polygon->colors().pointer()   + con0+2),
+            glColor4ub( *(polygon->colors().data()   + con0),
+                        *(polygon->colors().data()   + con0+1),
+                        *(polygon->colors().data()   + con0+2),
                         polygon->opacity(con0/3) );
-            glNormal3f( *(polygon->normals().pointer()    + con0),
-                        *(polygon->normals().pointer()    + con0+1),
-                        *(polygon->normals().pointer()    + con0+2) );
-            glVertex3f( *(polygon->coords().pointer() + con0),
-                        *(polygon->coords().pointer() + con0+1),
-                        *(polygon->coords().pointer() + con0+2) );
-            glColor4ub( *(polygon->colors().pointer()   + con1),
-                        *(polygon->colors().pointer()   + con1+1),
-                        *(polygon->colors().pointer()   + con1+2),
+            glNormal3f( *(polygon->normals().data()    + con0),
+                        *(polygon->normals().data()    + con0+1),
+                        *(polygon->normals().data()    + con0+2) );
+            glVertex3f( *(polygon->coords().data() + con0),
+                        *(polygon->coords().data() + con0+1),
+                        *(polygon->coords().data() + con0+2) );
+            glColor4ub( *(polygon->colors().data()   + con1),
+                        *(polygon->colors().data()   + con1+1),
+                        *(polygon->colors().data()   + con1+2),
                         polygon->opacity(con1/3) );
-            glNormal3f( *(polygon->normals().pointer()    + con1),
-                        *(polygon->normals().pointer()    + con1+1),
-                        *(polygon->normals().pointer()    + con1+2) );
-            glVertex3f( *(polygon->coords().pointer() + con1),
-                        *(polygon->coords().pointer() + con1+1),
-                        *(polygon->coords().pointer() + con1+2) );
-            glColor4ub( *(polygon->colors().pointer()   + con2),
-                        *(polygon->colors().pointer()   + con2+1),
-                        *(polygon->colors().pointer()   + con2+2),
+            glNormal3f( *(polygon->normals().data()    + con1),
+                        *(polygon->normals().data()    + con1+1),
+                        *(polygon->normals().data()    + con1+2) );
+            glVertex3f( *(polygon->coords().data() + con1),
+                        *(polygon->coords().data() + con1+1),
+                        *(polygon->coords().data() + con1+2) );
+            glColor4ub( *(polygon->colors().data()   + con2),
+                        *(polygon->colors().data()   + con2+1),
+                        *(polygon->colors().data()   + con2+2),
                         polygon->opacity(con2/3) );
-            glNormal3f( *(polygon->normals().pointer()    + con2),
-                        *(polygon->normals().pointer()    + con2+1),
-                        *(polygon->normals().pointer()    + con2+2) );
-            glVertex3f( *(polygon->coords().pointer() + con2),
-                        *(polygon->coords().pointer() + con2+1),
-                        *(polygon->coords().pointer() + con2+2) );
+            glNormal3f( *(polygon->normals().data()    + con2),
+                        *(polygon->normals().data()    + con2+1),
+                        *(polygon->normals().data()    + con2+2) );
+            glVertex3f( *(polygon->coords().data() + con2),
+                        *(polygon->coords().data() + con2+1),
+                        *(polygon->coords().data() + con2+2) );
         }
     }
     glEnd();
@@ -1013,12 +1013,12 @@ void Rendering_Tri_VN_SC_O( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nvertices(); i++ )
         {
             size_t index = 3 * i;
-            glNormal3f( *(polygon->normals().pointer()    + index),
-                        *(polygon->normals().pointer()    + index+1),
-                        *(polygon->normals().pointer()    + index+2) );
-            glVertex3f( *(polygon->coords().pointer() + index),
-                        *(polygon->coords().pointer() + index+1),
-                        *(polygon->coords().pointer() + index+2) );
+            glNormal3f( *(polygon->normals().data()    + index),
+                        *(polygon->normals().data()    + index+1),
+                        *(polygon->normals().data()    + index+2) );
+            glVertex3f( *(polygon->coords().data() + index),
+                        *(polygon->coords().data() + index+1),
+                        *(polygon->coords().data() + index+2) );
         }
     }
     glEnd();
@@ -1041,28 +1041,28 @@ void Rendering_Tri_VN_SC_O_Cs( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nconnections(); i++ )
         {
             size_t index = 3 * i;
-            size_t con0 = *(polygon->connections().pointer() + index)   * 3;
-            size_t con1 = *(polygon->connections().pointer() + index+1) * 3;
-            size_t con2 = *(polygon->connections().pointer() + index+2) * 3;
+            size_t con0 = *(polygon->connections().data() + index)   * 3;
+            size_t con1 = *(polygon->connections().data() + index+1) * 3;
+            size_t con2 = *(polygon->connections().data() + index+2) * 3;
 
-            glNormal3f( *(polygon->normals().pointer()    + con0),
-                        *(polygon->normals().pointer()    + con0+1),
-                        *(polygon->normals().pointer()    + con0+2) );
-            glVertex3f( *(polygon->coords().pointer() + con0),
-                        *(polygon->coords().pointer() + con0+1),
-                        *(polygon->coords().pointer() + con0+2) );
-            glNormal3f( *(polygon->normals().pointer()    + con1),
-                        *(polygon->normals().pointer()    + con1+1),
-                        *(polygon->normals().pointer()    + con1+2) );
-            glVertex3f( *(polygon->coords().pointer() + con1),
-                        *(polygon->coords().pointer() + con1+1),
-                        *(polygon->coords().pointer() + con1+2) );
-            glNormal3f( *(polygon->normals().pointer()    + con2),
-                        *(polygon->normals().pointer()    + con2+1),
-                        *(polygon->normals().pointer()    + con2+2) );
-            glVertex3f( *(polygon->coords().pointer() + con2),
-                        *(polygon->coords().pointer() + con2+1),
-                        *(polygon->coords().pointer() + con2+2) );
+            glNormal3f( *(polygon->normals().data()    + con0),
+                        *(polygon->normals().data()    + con0+1),
+                        *(polygon->normals().data()    + con0+2) );
+            glVertex3f( *(polygon->coords().data() + con0),
+                        *(polygon->coords().data() + con0+1),
+                        *(polygon->coords().data() + con0+2) );
+            glNormal3f( *(polygon->normals().data()    + con1),
+                        *(polygon->normals().data()    + con1+1),
+                        *(polygon->normals().data()    + con1+2) );
+            glVertex3f( *(polygon->coords().data() + con1),
+                        *(polygon->coords().data() + con1+1),
+                        *(polygon->coords().data() + con1+2) );
+            glNormal3f( *(polygon->normals().data()    + con2),
+                        *(polygon->normals().data()    + con2+1),
+                        *(polygon->normals().data()    + con2+2) );
+            glVertex3f( *(polygon->coords().data() + con2),
+                        *(polygon->coords().data() + con2+1),
+                        *(polygon->coords().data() + con2+2) );
         }
     }
     glEnd();
@@ -1085,24 +1085,24 @@ void Rendering_Tri_VN_SC_Os( const kvs::PolygonObject* polygon )
             glColor4ub( col.r(), col.g(), col.b(), polygon->opacity( i ) );
             size_t index = 9 * i;
 
-            glNormal3f( *(polygon->normals().pointer()    + index),
-                        *(polygon->normals().pointer()    + index+1),
-                        *(polygon->normals().pointer()    + index+2) );
-            glVertex3f( *(polygon->coords().pointer() + index),
-                        *(polygon->coords().pointer() + index+1),
-                        *(polygon->coords().pointer() + index+2) );
-            glNormal3f( *(polygon->normals().pointer()    + index+3),
-                        *(polygon->normals().pointer()    + index+4),
-                        *(polygon->normals().pointer()    + index+5) );
-            glVertex3f( *(polygon->coords().pointer() + index+3),
-                        *(polygon->coords().pointer() + index+4),
-                        *(polygon->coords().pointer() + index+5) );
-            glNormal3f( *(polygon->normals().pointer()    + index+6),
-                        *(polygon->normals().pointer()    + index+7),
-                        *(polygon->normals().pointer()    + index+8) );
-            glVertex3f( *(polygon->coords().pointer() + index+6),
-                        *(polygon->coords().pointer() + index+7),
-                        *(polygon->coords().pointer() + index+8) );
+            glNormal3f( *(polygon->normals().data()    + index),
+                        *(polygon->normals().data()    + index+1),
+                        *(polygon->normals().data()    + index+2) );
+            glVertex3f( *(polygon->coords().data() + index),
+                        *(polygon->coords().data() + index+1),
+                        *(polygon->coords().data() + index+2) );
+            glNormal3f( *(polygon->normals().data()    + index+3),
+                        *(polygon->normals().data()    + index+4),
+                        *(polygon->normals().data()    + index+5) );
+            glVertex3f( *(polygon->coords().data() + index+3),
+                        *(polygon->coords().data() + index+4),
+                        *(polygon->coords().data() + index+5) );
+            glNormal3f( *(polygon->normals().data()    + index+6),
+                        *(polygon->normals().data()    + index+7),
+                        *(polygon->normals().data()    + index+8) );
+            glVertex3f( *(polygon->coords().data() + index+6),
+                        *(polygon->coords().data() + index+7),
+                        *(polygon->coords().data() + index+8) );
         }
     }
     glEnd();
@@ -1123,29 +1123,29 @@ void Rendering_Tri_VN_SC_Os_Cs( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nconnections(); i++ )
         {
             size_t index = 3 * i;
-            size_t con0 = *(polygon->connections().pointer() + index)   * 3;
-            size_t con1 = *(polygon->connections().pointer() + index+1) * 3;
-            size_t con2 = *(polygon->connections().pointer() + index+2) * 3;
+            size_t con0 = *(polygon->connections().data() + index)   * 3;
+            size_t con1 = *(polygon->connections().data() + index+1) * 3;
+            size_t con2 = *(polygon->connections().data() + index+2) * 3;
 
             glColor4ub( col.r(), col.g(), col.b(), polygon->opacity(i) );
-            glNormal3f( *(polygon->normals().pointer()    + con0),
-                        *(polygon->normals().pointer()    + con0+1),
-                        *(polygon->normals().pointer()    + con0+2) );
-            glVertex3f( *(polygon->coords().pointer() + con0),
-                        *(polygon->coords().pointer() + con0+1),
-                        *(polygon->coords().pointer() + con0+2) );
-            glNormal3f( *(polygon->normals().pointer()    + con1),
-                        *(polygon->normals().pointer()    + con1+1),
-                        *(polygon->normals().pointer()    + con1+2) );
-            glVertex3f( *(polygon->coords().pointer() + con1),
-                        *(polygon->coords().pointer() + con1+1),
-                        *(polygon->coords().pointer() + con1+2) );
-            glNormal3f( *(polygon->normals().pointer()    + con2),
-                        *(polygon->normals().pointer()    + con2+1),
-                        *(polygon->normals().pointer()    + con2+2) );
-            glVertex3f( *(polygon->coords().pointer() + con2),
-                        *(polygon->coords().pointer() + con2+1),
-                        *(polygon->coords().pointer() + con2+2) );
+            glNormal3f( *(polygon->normals().data()    + con0),
+                        *(polygon->normals().data()    + con0+1),
+                        *(polygon->normals().data()    + con0+2) );
+            glVertex3f( *(polygon->coords().data() + con0),
+                        *(polygon->coords().data() + con0+1),
+                        *(polygon->coords().data() + con0+2) );
+            glNormal3f( *(polygon->normals().data()    + con1),
+                        *(polygon->normals().data()    + con1+1),
+                        *(polygon->normals().data()    + con1+2) );
+            glVertex3f( *(polygon->coords().data() + con1),
+                        *(polygon->coords().data() + con1+1),
+                        *(polygon->coords().data() + con1+2) );
+            glNormal3f( *(polygon->normals().data()    + con2),
+                        *(polygon->normals().data()    + con2+1),
+                        *(polygon->normals().data()    + con2+2) );
+            glVertex3f( *(polygon->coords().data() + con2),
+                        *(polygon->coords().data() + con2+1),
+                        *(polygon->coords().data() + con2+2) );
         }
     }
     glEnd();
@@ -1164,30 +1164,30 @@ void Rendering_Tri_VN_PCs_O( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->ncolors(); i++ )
         {
             size_t index = 3 * i;
-            glColor4ub( *(polygon->colors().pointer() + index),
-                        *(polygon->colors().pointer() + index+1),
-                        *(polygon->colors().pointer() + index+2),
+            glColor4ub( *(polygon->colors().data() + index),
+                        *(polygon->colors().data() + index+1),
+                        *(polygon->colors().data() + index+2),
                         polygon->opacity( 0 ) );
 
             index = 9 * i;
-            glNormal3f( *(polygon->normals().pointer()    + index),
-                        *(polygon->normals().pointer()    + index+1),
-                        *(polygon->normals().pointer()    + index+2) );
-            glVertex3f( *(polygon->coords().pointer() + index),
-                        *(polygon->coords().pointer() + index+1),
-                        *(polygon->coords().pointer() + index+2) );
-            glNormal3f( *(polygon->normals().pointer()    + index+3),
-                        *(polygon->normals().pointer()    + index+4),
-                        *(polygon->normals().pointer()    + index+5) );
-            glVertex3f( *(polygon->coords().pointer() + index+3),
-                        *(polygon->coords().pointer() + index+4),
-                        *(polygon->coords().pointer() + index+5) );
-            glNormal3f( *(polygon->normals().pointer()    + index+6),
-                        *(polygon->normals().pointer()    + index+7),
-                        *(polygon->normals().pointer()    + index+8) );
-            glVertex3f( *(polygon->coords().pointer() + index+6),
-                        *(polygon->coords().pointer() + index+7),
-                        *(polygon->coords().pointer() + index+8) );
+            glNormal3f( *(polygon->normals().data()    + index),
+                        *(polygon->normals().data()    + index+1),
+                        *(polygon->normals().data()    + index+2) );
+            glVertex3f( *(polygon->coords().data() + index),
+                        *(polygon->coords().data() + index+1),
+                        *(polygon->coords().data() + index+2) );
+            glNormal3f( *(polygon->normals().data()    + index+3),
+                        *(polygon->normals().data()    + index+4),
+                        *(polygon->normals().data()    + index+5) );
+            glVertex3f( *(polygon->coords().data() + index+3),
+                        *(polygon->coords().data() + index+4),
+                        *(polygon->coords().data() + index+5) );
+            glNormal3f( *(polygon->normals().data()    + index+6),
+                        *(polygon->normals().data()    + index+7),
+                        *(polygon->normals().data()    + index+8) );
+            glVertex3f( *(polygon->coords().data() + index+6),
+                        *(polygon->coords().data() + index+7),
+                        *(polygon->coords().data() + index+8) );
         }
     }
     glEnd();
@@ -1206,32 +1206,32 @@ void Rendering_Tri_VN_PCs_O_Cs( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nconnections(); i++ )
         {
             size_t index = 3 * i;
-            size_t con0 = *(polygon->connections().pointer() + index)   * 3;
-            size_t con1 = *(polygon->connections().pointer() + index+1) * 3;
-            size_t con2 = *(polygon->connections().pointer() + index+2) * 3;
+            size_t con0 = *(polygon->connections().data() + index)   * 3;
+            size_t con1 = *(polygon->connections().data() + index+1) * 3;
+            size_t con2 = *(polygon->connections().data() + index+2) * 3;
 
-            glColor4ub( *(polygon->colors().pointer() + index),
-                        *(polygon->colors().pointer() + index+1),
-                        *(polygon->colors().pointer() + index+2),
+            glColor4ub( *(polygon->colors().data() + index),
+                        *(polygon->colors().data() + index+1),
+                        *(polygon->colors().data() + index+2),
                         polygon->opacity( 0 ) );
-            glNormal3f( *(polygon->normals().pointer()    + con0),
-                        *(polygon->normals().pointer()    + con0+1),
-                        *(polygon->normals().pointer()    + con0+2) );
-            glVertex3f( *(polygon->coords().pointer() + con0),
-                        *(polygon->coords().pointer() + con0+1),
-                        *(polygon->coords().pointer() + con0+2) );
-            glNormal3f( *(polygon->normals().pointer()    + con1),
-                        *(polygon->normals().pointer()    + con1+1),
-                        *(polygon->normals().pointer()    + con1+2) );
-            glVertex3f( *(polygon->coords().pointer() + con1),
-                        *(polygon->coords().pointer() + con1+1),
-                        *(polygon->coords().pointer() + con1+2) );
-            glNormal3f( *(polygon->normals().pointer()    + con2),
-                        *(polygon->normals().pointer()    + con2+1),
-                        *(polygon->normals().pointer()    + con2+2) );
-            glVertex3f( *(polygon->coords().pointer() + con2),
-                        *(polygon->coords().pointer() + con2+1),
-                        *(polygon->coords().pointer() + con2+2) );
+            glNormal3f( *(polygon->normals().data()    + con0),
+                        *(polygon->normals().data()    + con0+1),
+                        *(polygon->normals().data()    + con0+2) );
+            glVertex3f( *(polygon->coords().data() + con0),
+                        *(polygon->coords().data() + con0+1),
+                        *(polygon->coords().data() + con0+2) );
+            glNormal3f( *(polygon->normals().data()    + con1),
+                        *(polygon->normals().data()    + con1+1),
+                        *(polygon->normals().data()    + con1+2) );
+            glVertex3f( *(polygon->coords().data() + con1),
+                        *(polygon->coords().data() + con1+1),
+                        *(polygon->coords().data() + con1+2) );
+            glNormal3f( *(polygon->normals().data()    + con2),
+                        *(polygon->normals().data()    + con2+1),
+                        *(polygon->normals().data()    + con2+2) );
+            glVertex3f( *(polygon->coords().data() + con2),
+                        *(polygon->coords().data() + con2+1),
+                        *(polygon->coords().data() + con2+2) );
         }
     }
     glEnd();
@@ -1250,30 +1250,30 @@ void Rendering_Tri_VN_PCs_Os( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->ncolors(); i++ )
         {
             size_t index = 3 * i;
-            glColor4ub( *(polygon->colors().pointer() + index),
-                        *(polygon->colors().pointer() + index+1),
-                        *(polygon->colors().pointer() + index+2),
+            glColor4ub( *(polygon->colors().data() + index),
+                        *(polygon->colors().data() + index+1),
+                        *(polygon->colors().data() + index+2),
                         polygon->opacity( i ) );
 
             index = 9 * i;
-            glNormal3f( *(polygon->normals().pointer()  + index),
-                        *(polygon->normals().pointer()  + index+1),
-                        *(polygon->normals().pointer()  + index+2) );
-            glVertex3f( *(polygon->coords().pointer() + index),
-                        *(polygon->coords().pointer() + index+1),
-                        *(polygon->coords().pointer() + index+2) );
-            glNormal3f( *(polygon->normals().pointer()  + index+3),
-                        *(polygon->normals().pointer()  + index+4),
-                        *(polygon->normals().pointer()  + index+5) );
-            glVertex3f( *(polygon->coords().pointer() + index+3),
-                        *(polygon->coords().pointer() + index+4),
-                        *(polygon->coords().pointer() + index+5) );
-            glNormal3f( *(polygon->normals().pointer()  + index+6),
-                        *(polygon->normals().pointer()  + index+7),
-                        *(polygon->normals().pointer()  + index+8) );
-            glVertex3f( *(polygon->coords().pointer() + index+6),
-                        *(polygon->coords().pointer() + index+7),
-                        *(polygon->coords().pointer() + index+8) );
+            glNormal3f( *(polygon->normals().data()  + index),
+                        *(polygon->normals().data()  + index+1),
+                        *(polygon->normals().data()  + index+2) );
+            glVertex3f( *(polygon->coords().data() + index),
+                        *(polygon->coords().data() + index+1),
+                        *(polygon->coords().data() + index+2) );
+            glNormal3f( *(polygon->normals().data()  + index+3),
+                        *(polygon->normals().data()  + index+4),
+                        *(polygon->normals().data()  + index+5) );
+            glVertex3f( *(polygon->coords().data() + index+3),
+                        *(polygon->coords().data() + index+4),
+                        *(polygon->coords().data() + index+5) );
+            glNormal3f( *(polygon->normals().data()  + index+6),
+                        *(polygon->normals().data()  + index+7),
+                        *(polygon->normals().data()  + index+8) );
+            glVertex3f( *(polygon->coords().data() + index+6),
+                        *(polygon->coords().data() + index+7),
+                        *(polygon->coords().data() + index+8) );
         }
     }
     glEnd();
@@ -1292,32 +1292,32 @@ void Rendering_Tri_VN_PCs_Os_Cs( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nconnections(); i++ )
         {
             size_t index = 3 * i;
-            size_t con0 = *(polygon->connections().pointer() + index)   * 3;
-            size_t con1 = *(polygon->connections().pointer() + index+1) * 3;
-            size_t con2 = *(polygon->connections().pointer() + index+2) * 3;
+            size_t con0 = *(polygon->connections().data() + index)   * 3;
+            size_t con1 = *(polygon->connections().data() + index+1) * 3;
+            size_t con2 = *(polygon->connections().data() + index+2) * 3;
 
-            glColor4ub( *(polygon->colors().pointer() + index),
-                        *(polygon->colors().pointer() + index+1),
-                        *(polygon->colors().pointer() + index+2),
+            glColor4ub( *(polygon->colors().data() + index),
+                        *(polygon->colors().data() + index+1),
+                        *(polygon->colors().data() + index+2),
                         polygon->opacity( i ) );
-            glNormal3f( *(polygon->normals().pointer()  + con0),
-                        *(polygon->normals().pointer()  + con0+1),
-                        *(polygon->normals().pointer()  + con0+2) );
-            glVertex3f( *(polygon->coords().pointer() + con0),
-                        *(polygon->coords().pointer() + con0+1),
-                        *(polygon->coords().pointer() + con0+2) );
-            glNormal3f( *(polygon->normals().pointer()  + con1),
-                        *(polygon->normals().pointer()  + con1+1),
-                        *(polygon->normals().pointer()  + con1+2) );
-            glVertex3f( *(polygon->coords().pointer() + con1),
-                        *(polygon->coords().pointer() + con1+1),
-                        *(polygon->coords().pointer() + con1+2) );
-            glNormal3f( *(polygon->normals().pointer()  + con2),
-                        *(polygon->normals().pointer()  + con2+1),
-                        *(polygon->normals().pointer()  + con2+2) );
-            glVertex3f( *(polygon->coords().pointer() + con2),
-                        *(polygon->coords().pointer() + con2+1),
-                        *(polygon->coords().pointer() + con2+2) );
+            glNormal3f( *(polygon->normals().data()  + con0),
+                        *(polygon->normals().data()  + con0+1),
+                        *(polygon->normals().data()  + con0+2) );
+            glVertex3f( *(polygon->coords().data() + con0),
+                        *(polygon->coords().data() + con0+1),
+                        *(polygon->coords().data() + con0+2) );
+            glNormal3f( *(polygon->normals().data()  + con1),
+                        *(polygon->normals().data()  + con1+1),
+                        *(polygon->normals().data()  + con1+2) );
+            glVertex3f( *(polygon->coords().data() + con1),
+                        *(polygon->coords().data() + con1+1),
+                        *(polygon->coords().data() + con1+2) );
+            glNormal3f( *(polygon->normals().data()  + con2),
+                        *(polygon->normals().data()  + con2+1),
+                        *(polygon->normals().data()  + con2+2) );
+            glVertex3f( *(polygon->coords().data() + con2),
+                        *(polygon->coords().data() + con2+1),
+                        *(polygon->coords().data() + con2+2) );
         }
     }
     glEnd();
@@ -1336,16 +1336,16 @@ void Rendering_Quad_VN_VCs_O( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nvertices(); i++ )
         {
             size_t index = 3 * i;
-            glColor4ub( *(polygon->colors().pointer() + index),
-                        *(polygon->colors().pointer() + index+1),
-                        *(polygon->colors().pointer() + index+2),
+            glColor4ub( *(polygon->colors().data() + index),
+                        *(polygon->colors().data() + index+1),
+                        *(polygon->colors().data() + index+2),
                         polygon->opacity( 0 ) );
-            glNormal3f( *(polygon->normals().pointer()  + index),
-                        *(polygon->normals().pointer()  + index+1),
-                        *(polygon->normals().pointer()  + index+2) );
-            glVertex3f( *(polygon->coords().pointer() + index),
-                        *(polygon->coords().pointer() + index+1),
-                        *(polygon->coords().pointer() + index+2) );
+            glNormal3f( *(polygon->normals().data()  + index),
+                        *(polygon->normals().data()  + index+1),
+                        *(polygon->normals().data()  + index+2) );
+            glVertex3f( *(polygon->coords().data() + index),
+                        *(polygon->coords().data() + index+1),
+                        *(polygon->coords().data() + index+2) );
         }
     }
     glEnd();
@@ -1364,51 +1364,51 @@ void Rendering_Quad_VN_VCs_O_Cs( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nconnections(); i++ )
         {
             size_t index = 4 * i;
-            size_t con0 = *(polygon->connections().pointer() + index)   * 3;
-            size_t con1 = *(polygon->connections().pointer() + index+1) * 3;
-            size_t con2 = *(polygon->connections().pointer() + index+2) * 3;
-            size_t con3 = *(polygon->connections().pointer() + index+3) * 3;
+            size_t con0 = *(polygon->connections().data() + index)   * 3;
+            size_t con1 = *(polygon->connections().data() + index+1) * 3;
+            size_t con2 = *(polygon->connections().data() + index+2) * 3;
+            size_t con3 = *(polygon->connections().data() + index+3) * 3;
 
-            glColor4ub( *(polygon->colors().pointer() + con0),
-                        *(polygon->colors().pointer() + con0+1),
-                        *(polygon->colors().pointer() + con0+2),
+            glColor4ub( *(polygon->colors().data() + con0),
+                        *(polygon->colors().data() + con0+1),
+                        *(polygon->colors().data() + con0+2),
                         polygon->opacity( 0 ) );
-            glNormal3f( *(polygon->normals().pointer()  + con0),
-                        *(polygon->normals().pointer()  + con0+1),
-                        *(polygon->normals().pointer()  + con0+2) );
-            glVertex3f( *(polygon->coords().pointer() + con0),
-                        *(polygon->coords().pointer() + con0+1),
-                        *(polygon->coords().pointer() + con0+2) );
-            glColor4ub( *(polygon->colors().pointer()   + con1),
-                        *(polygon->colors().pointer()   + con1+1),
-                        *(polygon->colors().pointer()   + con1+2),
+            glNormal3f( *(polygon->normals().data()  + con0),
+                        *(polygon->normals().data()  + con0+1),
+                        *(polygon->normals().data()  + con0+2) );
+            glVertex3f( *(polygon->coords().data() + con0),
+                        *(polygon->coords().data() + con0+1),
+                        *(polygon->coords().data() + con0+2) );
+            glColor4ub( *(polygon->colors().data()   + con1),
+                        *(polygon->colors().data()   + con1+1),
+                        *(polygon->colors().data()   + con1+2),
                         polygon->opacity( 0 ) );
-            glNormal3f( *(polygon->normals().pointer()  + con1),
-                        *(polygon->normals().pointer()  + con1+1),
-                        *(polygon->normals().pointer()  + con1+2) );
-            glVertex3f( *(polygon->coords().pointer() + con1),
-                        *(polygon->coords().pointer() + con1+1),
-                        *(polygon->coords().pointer() + con1+2) );
-            glColor4ub( *(polygon->colors().pointer()   + con2),
-                        *(polygon->colors().pointer()   + con2+1),
-                        *(polygon->colors().pointer()   + con2+2),
+            glNormal3f( *(polygon->normals().data()  + con1),
+                        *(polygon->normals().data()  + con1+1),
+                        *(polygon->normals().data()  + con1+2) );
+            glVertex3f( *(polygon->coords().data() + con1),
+                        *(polygon->coords().data() + con1+1),
+                        *(polygon->coords().data() + con1+2) );
+            glColor4ub( *(polygon->colors().data()   + con2),
+                        *(polygon->colors().data()   + con2+1),
+                        *(polygon->colors().data()   + con2+2),
                         polygon->opacity( 0 ) );
-            glNormal3f( *(polygon->normals().pointer()  + con2),
-                        *(polygon->normals().pointer()  + con2+1),
-                        *(polygon->normals().pointer()  + con2+2) );
-            glVertex3f( *(polygon->coords().pointer() + con2),
-                        *(polygon->coords().pointer() + con2+1),
-                        *(polygon->coords().pointer() + con2+2) );
-            glColor4ub( *(polygon->colors().pointer()   + con3),
-                        *(polygon->colors().pointer()   + con3+1),
-                        *(polygon->colors().pointer()   + con3+2),
+            glNormal3f( *(polygon->normals().data()  + con2),
+                        *(polygon->normals().data()  + con2+1),
+                        *(polygon->normals().data()  + con2+2) );
+            glVertex3f( *(polygon->coords().data() + con2),
+                        *(polygon->coords().data() + con2+1),
+                        *(polygon->coords().data() + con2+2) );
+            glColor4ub( *(polygon->colors().data()   + con3),
+                        *(polygon->colors().data()   + con3+1),
+                        *(polygon->colors().data()   + con3+2),
                         polygon->opacity( 0 ) );
-            glNormal3f( *(polygon->normals().pointer()  + con3),
-                        *(polygon->normals().pointer()  + con3+1),
-                        *(polygon->normals().pointer()  + con3+2) );
-            glVertex3f( *(polygon->coords().pointer() + con3),
-                        *(polygon->coords().pointer() + con3+1),
-                        *(polygon->coords().pointer() + con3+2) );
+            glNormal3f( *(polygon->normals().data()  + con3),
+                        *(polygon->normals().data()  + con3+1),
+                        *(polygon->normals().data()  + con3+2) );
+            glVertex3f( *(polygon->coords().data() + con3),
+                        *(polygon->coords().data() + con3+1),
+                        *(polygon->coords().data() + con3+2) );
         }
     }
     glEnd();
@@ -1427,16 +1427,16 @@ void Rendering_Quad_VN_VCs_Os( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nvertices(); i++ )
         {
             size_t index = 3 * i;
-            glColor4ub( *(polygon->colors().pointer()   + index),
-                        *(polygon->colors().pointer()   + index+1),
-                        *(polygon->colors().pointer()   + index+2),
+            glColor4ub( *(polygon->colors().data()   + index),
+                        *(polygon->colors().data()   + index+1),
+                        *(polygon->colors().data()   + index+2),
                         polygon->opacity( i ) );
-            glNormal3f( *(polygon->normals().pointer()  + index),
-                        *(polygon->normals().pointer()  + index+1),
-                        *(polygon->normals().pointer()  + index+2) );
-            glVertex3f( *(polygon->coords().pointer() + index),
-                        *(polygon->coords().pointer() + index+1),
-                        *(polygon->coords().pointer() + index+2) );
+            glNormal3f( *(polygon->normals().data()  + index),
+                        *(polygon->normals().data()  + index+1),
+                        *(polygon->normals().data()  + index+2) );
+            glVertex3f( *(polygon->coords().data() + index),
+                        *(polygon->coords().data() + index+1),
+                        *(polygon->coords().data() + index+2) );
         }
     }
     glEnd();
@@ -1455,51 +1455,51 @@ void Rendering_Quad_VN_VCs_Os_Cs( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nconnections(); i++ )
         {
             size_t index = 4 * i;
-            size_t con0 = *(polygon->connections().pointer() + index)   * 3;
-            size_t con1 = *(polygon->connections().pointer() + index+1) * 3;
-            size_t con2 = *(polygon->connections().pointer() + index+2) * 3;
-            size_t con3 = *(polygon->connections().pointer() + index+3) * 3;
+            size_t con0 = *(polygon->connections().data() + index)   * 3;
+            size_t con1 = *(polygon->connections().data() + index+1) * 3;
+            size_t con2 = *(polygon->connections().data() + index+2) * 3;
+            size_t con3 = *(polygon->connections().data() + index+3) * 3;
 
-            glColor4ub( *(polygon->colors().pointer()   + con0),
-                        *(polygon->colors().pointer()   + con0+1),
-                        *(polygon->colors().pointer()   + con0+2),
+            glColor4ub( *(polygon->colors().data()   + con0),
+                        *(polygon->colors().data()   + con0+1),
+                        *(polygon->colors().data()   + con0+2),
                         polygon->opacity(con0/3) );
-            glNormal3f( *(polygon->normals().pointer()    + con0),
-                        *(polygon->normals().pointer()    + con0+1),
-                        *(polygon->normals().pointer()    + con0+2) );
-            glVertex3f( *(polygon->coords().pointer() + con0),
-                        *(polygon->coords().pointer() + con0+1),
-                        *(polygon->coords().pointer() + con0+2) );
-            glColor4ub( *(polygon->colors().pointer()   + con1),
-                        *(polygon->colors().pointer()   + con1+1),
-                        *(polygon->colors().pointer()   + con1+2),
+            glNormal3f( *(polygon->normals().data()    + con0),
+                        *(polygon->normals().data()    + con0+1),
+                        *(polygon->normals().data()    + con0+2) );
+            glVertex3f( *(polygon->coords().data() + con0),
+                        *(polygon->coords().data() + con0+1),
+                        *(polygon->coords().data() + con0+2) );
+            glColor4ub( *(polygon->colors().data()   + con1),
+                        *(polygon->colors().data()   + con1+1),
+                        *(polygon->colors().data()   + con1+2),
                         polygon->opacity(con1/3) );
-            glNormal3f( *(polygon->normals().pointer()    + con1),
-                        *(polygon->normals().pointer()    + con1+1),
-                        *(polygon->normals().pointer()    + con1+2) );
-            glVertex3f( *(polygon->coords().pointer() + con1),
-                        *(polygon->coords().pointer() + con1+1),
-                        *(polygon->coords().pointer() + con1+2) );
-            glColor4ub( *(polygon->colors().pointer()   + con2),
-                        *(polygon->colors().pointer()   + con2+1),
-                        *(polygon->colors().pointer()   + con2+2),
+            glNormal3f( *(polygon->normals().data()    + con1),
+                        *(polygon->normals().data()    + con1+1),
+                        *(polygon->normals().data()    + con1+2) );
+            glVertex3f( *(polygon->coords().data() + con1),
+                        *(polygon->coords().data() + con1+1),
+                        *(polygon->coords().data() + con1+2) );
+            glColor4ub( *(polygon->colors().data()   + con2),
+                        *(polygon->colors().data()   + con2+1),
+                        *(polygon->colors().data()   + con2+2),
                         polygon->opacity(con2/3) );
-            glNormal3f( *(polygon->normals().pointer()    + con2),
-                        *(polygon->normals().pointer()    + con2+1),
-                        *(polygon->normals().pointer()    + con2+2) );
-            glVertex3f( *(polygon->coords().pointer() + con2),
-                        *(polygon->coords().pointer() + con2+1),
-                        *(polygon->coords().pointer() + con2+2) );
-            glColor4ub( *(polygon->colors().pointer()   + con3),
-                        *(polygon->colors().pointer()   + con3+1),
-                        *(polygon->colors().pointer()   + con3+2),
+            glNormal3f( *(polygon->normals().data()    + con2),
+                        *(polygon->normals().data()    + con2+1),
+                        *(polygon->normals().data()    + con2+2) );
+            glVertex3f( *(polygon->coords().data() + con2),
+                        *(polygon->coords().data() + con2+1),
+                        *(polygon->coords().data() + con2+2) );
+            glColor4ub( *(polygon->colors().data()   + con3),
+                        *(polygon->colors().data()   + con3+1),
+                        *(polygon->colors().data()   + con3+2),
                         polygon->opacity(con3/3) );
-            glNormal3f( *(polygon->normals().pointer()    + con3),
-                        *(polygon->normals().pointer()    + con3+1),
-                        *(polygon->normals().pointer()    + con3+2) );
-            glVertex3f( *(polygon->coords().pointer() + con3),
-                        *(polygon->coords().pointer() + con3+1),
-                        *(polygon->coords().pointer() + con3+2) );
+            glNormal3f( *(polygon->normals().data()    + con3),
+                        *(polygon->normals().data()    + con3+1),
+                        *(polygon->normals().data()    + con3+2) );
+            glVertex3f( *(polygon->coords().data() + con3),
+                        *(polygon->coords().data() + con3+1),
+                        *(polygon->coords().data() + con3+2) );
         }
     }
     glEnd();
@@ -1522,12 +1522,12 @@ void Rendering_Quad_VN_SC_O( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nvertices(); i++ )
         {
             size_t index = 3 * i;
-            glNormal3f( *(polygon->normals().pointer()    + index),
-                        *(polygon->normals().pointer()    + index+1),
-                        *(polygon->normals().pointer()    + index+2) );
-            glVertex3f( *(polygon->coords().pointer() + index),
-                        *(polygon->coords().pointer() + index+1),
-                        *(polygon->coords().pointer() + index+2) );
+            glNormal3f( *(polygon->normals().data()    + index),
+                        *(polygon->normals().data()    + index+1),
+                        *(polygon->normals().data()    + index+2) );
+            glVertex3f( *(polygon->coords().data() + index),
+                        *(polygon->coords().data() + index+1),
+                        *(polygon->coords().data() + index+2) );
         }
     }
     glEnd();
@@ -1550,35 +1550,35 @@ void Rendering_Quad_VN_SC_O_Cs( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nconnections(); i++ )
         {
             size_t index = 4 * i;
-            size_t con0 = *(polygon->connections().pointer() + index)   * 3;
-            size_t con1 = *(polygon->connections().pointer() + index+1) * 3;
-            size_t con2 = *(polygon->connections().pointer() + index+2) * 3;
-            size_t con3 = *(polygon->connections().pointer() + index+3) * 3;
+            size_t con0 = *(polygon->connections().data() + index)   * 3;
+            size_t con1 = *(polygon->connections().data() + index+1) * 3;
+            size_t con2 = *(polygon->connections().data() + index+2) * 3;
+            size_t con3 = *(polygon->connections().data() + index+3) * 3;
 
-            glNormal3f( *(polygon->normals().pointer()    + con0),
-                        *(polygon->normals().pointer()    + con0+1),
-                        *(polygon->normals().pointer()    + con0+2) );
-            glVertex3f( *(polygon->coords().pointer() + con0),
-                        *(polygon->coords().pointer() + con0+1),
-                        *(polygon->coords().pointer() + con0+2) );
-            glNormal3f( *(polygon->normals().pointer()    + con1),
-                        *(polygon->normals().pointer()    + con1+1),
-                        *(polygon->normals().pointer()    + con1+2) );
-            glVertex3f( *(polygon->coords().pointer() + con1),
-                        *(polygon->coords().pointer() + con1+1),
-                        *(polygon->coords().pointer() + con1+2) );
-            glNormal3f( *(polygon->normals().pointer()    + con2),
-                        *(polygon->normals().pointer()    + con2+1),
-                        *(polygon->normals().pointer()    + con2+2) );
-            glVertex3f( *(polygon->coords().pointer() + con2),
-                        *(polygon->coords().pointer() + con2+1),
-                        *(polygon->coords().pointer() + con2+2) );
-            glNormal3f( *(polygon->normals().pointer()    + con3),
-                        *(polygon->normals().pointer()    + con3+1),
-                        *(polygon->normals().pointer()    + con3+2) );
-            glVertex3f( *(polygon->coords().pointer() + con3),
-                        *(polygon->coords().pointer() + con3+1),
-                        *(polygon->coords().pointer() + con3+2) );
+            glNormal3f( *(polygon->normals().data()    + con0),
+                        *(polygon->normals().data()    + con0+1),
+                        *(polygon->normals().data()    + con0+2) );
+            glVertex3f( *(polygon->coords().data() + con0),
+                        *(polygon->coords().data() + con0+1),
+                        *(polygon->coords().data() + con0+2) );
+            glNormal3f( *(polygon->normals().data()    + con1),
+                        *(polygon->normals().data()    + con1+1),
+                        *(polygon->normals().data()    + con1+2) );
+            glVertex3f( *(polygon->coords().data() + con1),
+                        *(polygon->coords().data() + con1+1),
+                        *(polygon->coords().data() + con1+2) );
+            glNormal3f( *(polygon->normals().data()    + con2),
+                        *(polygon->normals().data()    + con2+1),
+                        *(polygon->normals().data()    + con2+2) );
+            glVertex3f( *(polygon->coords().data() + con2),
+                        *(polygon->coords().data() + con2+1),
+                        *(polygon->coords().data() + con2+2) );
+            glNormal3f( *(polygon->normals().data()    + con3),
+                        *(polygon->normals().data()    + con3+1),
+                        *(polygon->normals().data()    + con3+2) );
+            glVertex3f( *(polygon->coords().data() + con3),
+                        *(polygon->coords().data() + con3+1),
+                        *(polygon->coords().data() + con3+2) );
         }
     }
     glEnd();
@@ -1601,30 +1601,30 @@ void Rendering_Quad_VN_SC_Os( const kvs::PolygonObject* polygon )
             glColor4ub( col.r(), col.g(), col.b(), polygon->opacity( i ) );
             size_t index = 12 * i;
 
-            glNormal3f( *(polygon->normals().pointer()    + index),
-                        *(polygon->normals().pointer()    + index+1),
-                        *(polygon->normals().pointer()    + index+2) );
-            glVertex3f( *(polygon->coords().pointer() + index),
-                        *(polygon->coords().pointer() + index+1),
-                        *(polygon->coords().pointer() + index+2) );
-            glNormal3f( *(polygon->normals().pointer()    + index+3),
-                        *(polygon->normals().pointer()    + index+4),
-                        *(polygon->normals().pointer()    + index+5) );
-            glVertex3f( *(polygon->coords().pointer() + index+3),
-                        *(polygon->coords().pointer() + index+4),
-                        *(polygon->coords().pointer() + index+5) );
-            glNormal3f( *(polygon->normals().pointer()    + index+6),
-                        *(polygon->normals().pointer()    + index+7),
-                        *(polygon->normals().pointer()    + index+8) );
-            glVertex3f( *(polygon->coords().pointer() + index+6),
-                        *(polygon->coords().pointer() + index+7),
-                        *(polygon->coords().pointer() + index+8) );
-            glNormal3f( *(polygon->normals().pointer()    + index+9),
-                        *(polygon->normals().pointer()    + index+10),
-                        *(polygon->normals().pointer()    + index+11) );
-            glVertex3f( *(polygon->coords().pointer() + index+9),
-                        *(polygon->coords().pointer() + index+10),
-                        *(polygon->coords().pointer() + index+11) );
+            glNormal3f( *(polygon->normals().data()    + index),
+                        *(polygon->normals().data()    + index+1),
+                        *(polygon->normals().data()    + index+2) );
+            glVertex3f( *(polygon->coords().data() + index),
+                        *(polygon->coords().data() + index+1),
+                        *(polygon->coords().data() + index+2) );
+            glNormal3f( *(polygon->normals().data()    + index+3),
+                        *(polygon->normals().data()    + index+4),
+                        *(polygon->normals().data()    + index+5) );
+            glVertex3f( *(polygon->coords().data() + index+3),
+                        *(polygon->coords().data() + index+4),
+                        *(polygon->coords().data() + index+5) );
+            glNormal3f( *(polygon->normals().data()    + index+6),
+                        *(polygon->normals().data()    + index+7),
+                        *(polygon->normals().data()    + index+8) );
+            glVertex3f( *(polygon->coords().data() + index+6),
+                        *(polygon->coords().data() + index+7),
+                        *(polygon->coords().data() + index+8) );
+            glNormal3f( *(polygon->normals().data()    + index+9),
+                        *(polygon->normals().data()    + index+10),
+                        *(polygon->normals().data()    + index+11) );
+            glVertex3f( *(polygon->coords().data() + index+9),
+                        *(polygon->coords().data() + index+10),
+                        *(polygon->coords().data() + index+11) );
         }
     }
     glEnd();
@@ -1645,36 +1645,36 @@ void Rendering_Quad_VN_SC_Os_Cs( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nconnections(); i++ )
         {
             size_t index = 4 * i;
-            size_t con0 = *(polygon->connections().pointer() + index)   * 3;
-            size_t con1 = *(polygon->connections().pointer() + index+1) * 3;
-            size_t con2 = *(polygon->connections().pointer() + index+2) * 3;
-            size_t con3 = *(polygon->connections().pointer() + index+3) * 3;
+            size_t con0 = *(polygon->connections().data() + index)   * 3;
+            size_t con1 = *(polygon->connections().data() + index+1) * 3;
+            size_t con2 = *(polygon->connections().data() + index+2) * 3;
+            size_t con3 = *(polygon->connections().data() + index+3) * 3;
 
             glColor4ub( col.r(), col.g(), col.b(), polygon->opacity(i) );
-            glNormal3f( *(polygon->normals().pointer()    + con0),
-                        *(polygon->normals().pointer()    + con0+1),
-                        *(polygon->normals().pointer()    + con0+2) );
-            glVertex3f( *(polygon->coords().pointer() + con0),
-                        *(polygon->coords().pointer() + con0+1),
-                        *(polygon->coords().pointer() + con0+2) );
-            glNormal3f( *(polygon->normals().pointer()    + con1),
-                        *(polygon->normals().pointer()    + con1+1),
-                        *(polygon->normals().pointer()    + con1+2) );
-            glVertex3f( *(polygon->coords().pointer() + con1),
-                        *(polygon->coords().pointer() + con1+1),
-                        *(polygon->coords().pointer() + con1+2) );
-            glNormal3f( *(polygon->normals().pointer()    + con2),
-                        *(polygon->normals().pointer()    + con2+1),
-                        *(polygon->normals().pointer()    + con2+2) );
-            glVertex3f( *(polygon->coords().pointer() + con2),
-                        *(polygon->coords().pointer() + con2+1),
-                        *(polygon->coords().pointer() + con2+2) );
-            glNormal3f( *(polygon->normals().pointer()    + con3),
-                        *(polygon->normals().pointer()    + con3+1),
-                        *(polygon->normals().pointer()    + con3+2) );
-            glVertex3f( *(polygon->coords().pointer() + con3),
-                        *(polygon->coords().pointer() + con3+1),
-                        *(polygon->coords().pointer() + con3+2) );
+            glNormal3f( *(polygon->normals().data()    + con0),
+                        *(polygon->normals().data()    + con0+1),
+                        *(polygon->normals().data()    + con0+2) );
+            glVertex3f( *(polygon->coords().data() + con0),
+                        *(polygon->coords().data() + con0+1),
+                        *(polygon->coords().data() + con0+2) );
+            glNormal3f( *(polygon->normals().data()    + con1),
+                        *(polygon->normals().data()    + con1+1),
+                        *(polygon->normals().data()    + con1+2) );
+            glVertex3f( *(polygon->coords().data() + con1),
+                        *(polygon->coords().data() + con1+1),
+                        *(polygon->coords().data() + con1+2) );
+            glNormal3f( *(polygon->normals().data()    + con2),
+                        *(polygon->normals().data()    + con2+1),
+                        *(polygon->normals().data()    + con2+2) );
+            glVertex3f( *(polygon->coords().data() + con2),
+                        *(polygon->coords().data() + con2+1),
+                        *(polygon->coords().data() + con2+2) );
+            glNormal3f( *(polygon->normals().data()    + con3),
+                        *(polygon->normals().data()    + con3+1),
+                        *(polygon->normals().data()    + con3+2) );
+            glVertex3f( *(polygon->coords().data() + con3),
+                        *(polygon->coords().data() + con3+1),
+                        *(polygon->coords().data() + con3+2) );
         }
     }
     glEnd();
@@ -1693,36 +1693,36 @@ void Rendering_Quad_VN_PCs_O( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->ncolors(); i++ )
         {
             size_t index = 3 * i;
-            glColor4ub( *(polygon->colors().pointer() + index),
-                        *(polygon->colors().pointer() + index+1),
-                        *(polygon->colors().pointer() + index+2),
+            glColor4ub( *(polygon->colors().data() + index),
+                        *(polygon->colors().data() + index+1),
+                        *(polygon->colors().data() + index+2),
                         polygon->opacity( 0 ) );
 
             index = 12 * i;
-            glNormal3f( *(polygon->normals().pointer()    + index),
-                        *(polygon->normals().pointer()    + index+1),
-                        *(polygon->normals().pointer()    + index+2) );
-            glVertex3f( *(polygon->coords().pointer() + index),
-                        *(polygon->coords().pointer() + index+1),
-                        *(polygon->coords().pointer() + index+2) );
-            glNormal3f( *(polygon->normals().pointer()    + index+3),
-                        *(polygon->normals().pointer()    + index+4),
-                        *(polygon->normals().pointer()    + index+5) );
-            glVertex3f( *(polygon->coords().pointer() + index+3),
-                        *(polygon->coords().pointer() + index+4),
-                        *(polygon->coords().pointer() + index+5) );
-            glNormal3f( *(polygon->normals().pointer()    + index+6),
-                        *(polygon->normals().pointer()    + index+7),
-                        *(polygon->normals().pointer()    + index+8) );
-            glVertex3f( *(polygon->coords().pointer() + index+6),
-                        *(polygon->coords().pointer() + index+7),
-                        *(polygon->coords().pointer() + index+8) );
-            glNormal3f( *(polygon->normals().pointer()    + index+9),
-                        *(polygon->normals().pointer()    + index+10),
-                        *(polygon->normals().pointer()    + index+11) );
-            glVertex3f( *(polygon->coords().pointer() + index+9),
-                        *(polygon->coords().pointer() + index+10),
-                        *(polygon->coords().pointer() + index+11) );
+            glNormal3f( *(polygon->normals().data()    + index),
+                        *(polygon->normals().data()    + index+1),
+                        *(polygon->normals().data()    + index+2) );
+            glVertex3f( *(polygon->coords().data() + index),
+                        *(polygon->coords().data() + index+1),
+                        *(polygon->coords().data() + index+2) );
+            glNormal3f( *(polygon->normals().data()    + index+3),
+                        *(polygon->normals().data()    + index+4),
+                        *(polygon->normals().data()    + index+5) );
+            glVertex3f( *(polygon->coords().data() + index+3),
+                        *(polygon->coords().data() + index+4),
+                        *(polygon->coords().data() + index+5) );
+            glNormal3f( *(polygon->normals().data()    + index+6),
+                        *(polygon->normals().data()    + index+7),
+                        *(polygon->normals().data()    + index+8) );
+            glVertex3f( *(polygon->coords().data() + index+6),
+                        *(polygon->coords().data() + index+7),
+                        *(polygon->coords().data() + index+8) );
+            glNormal3f( *(polygon->normals().data()    + index+9),
+                        *(polygon->normals().data()    + index+10),
+                        *(polygon->normals().data()    + index+11) );
+            glVertex3f( *(polygon->coords().data() + index+9),
+                        *(polygon->coords().data() + index+10),
+                        *(polygon->coords().data() + index+11) );
         }
     }
     glEnd();
@@ -1741,41 +1741,41 @@ void Rendering_Quad_VN_PCs_O_Cs( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nconnections(); i++ )
         {
             size_t index = 3 * i;
-            glColor4ub( *(polygon->colors().pointer() + index),
-                        *(polygon->colors().pointer() + index+1),
-                        *(polygon->colors().pointer() + index+2),
+            glColor4ub( *(polygon->colors().data() + index),
+                        *(polygon->colors().data() + index+1),
+                        *(polygon->colors().data() + index+2),
                         polygon->opacity( 0 ) );
 
             index = 4 * i;
-            size_t con0 = *(polygon->connections().pointer() + index)   * 3;
-            size_t con1 = *(polygon->connections().pointer() + index+1) * 3;
-            size_t con2 = *(polygon->connections().pointer() + index+2) * 3;
-            size_t con3 = *(polygon->connections().pointer() + index+3) * 3;
+            size_t con0 = *(polygon->connections().data() + index)   * 3;
+            size_t con1 = *(polygon->connections().data() + index+1) * 3;
+            size_t con2 = *(polygon->connections().data() + index+2) * 3;
+            size_t con3 = *(polygon->connections().data() + index+3) * 3;
 
-            glNormal3f( *(polygon->normals().pointer()    + con0),
-                        *(polygon->normals().pointer()    + con0+1),
-                        *(polygon->normals().pointer()    + con0+2) );
-            glVertex3f( *(polygon->coords().pointer() + con0),
-                        *(polygon->coords().pointer() + con0+1),
-                        *(polygon->coords().pointer() + con0+2) );
-            glNormal3f( *(polygon->normals().pointer()    + con1),
-                        *(polygon->normals().pointer()    + con1+1),
-                        *(polygon->normals().pointer()    + con1+2) );
-            glVertex3f( *(polygon->coords().pointer() + con1),
-                        *(polygon->coords().pointer() + con1+1),
-                        *(polygon->coords().pointer() + con1+2) );
-            glNormal3f( *(polygon->normals().pointer()    + con2),
-                        *(polygon->normals().pointer()    + con2+1),
-                        *(polygon->normals().pointer()    + con2+2) );
-            glVertex3f( *(polygon->coords().pointer() + con2),
-                        *(polygon->coords().pointer() + con2+1),
-                        *(polygon->coords().pointer() + con2+2) );
-            glNormal3f( *(polygon->normals().pointer()    + con3),
-                        *(polygon->normals().pointer()    + con3+1),
-                        *(polygon->normals().pointer()    + con3+2) );
-            glVertex3f( *(polygon->coords().pointer() + con3),
-                        *(polygon->coords().pointer() + con3+1),
-                        *(polygon->coords().pointer() + con3+2) );
+            glNormal3f( *(polygon->normals().data()    + con0),
+                        *(polygon->normals().data()    + con0+1),
+                        *(polygon->normals().data()    + con0+2) );
+            glVertex3f( *(polygon->coords().data() + con0),
+                        *(polygon->coords().data() + con0+1),
+                        *(polygon->coords().data() + con0+2) );
+            glNormal3f( *(polygon->normals().data()    + con1),
+                        *(polygon->normals().data()    + con1+1),
+                        *(polygon->normals().data()    + con1+2) );
+            glVertex3f( *(polygon->coords().data() + con1),
+                        *(polygon->coords().data() + con1+1),
+                        *(polygon->coords().data() + con1+2) );
+            glNormal3f( *(polygon->normals().data()    + con2),
+                        *(polygon->normals().data()    + con2+1),
+                        *(polygon->normals().data()    + con2+2) );
+            glVertex3f( *(polygon->coords().data() + con2),
+                        *(polygon->coords().data() + con2+1),
+                        *(polygon->coords().data() + con2+2) );
+            glNormal3f( *(polygon->normals().data()    + con3),
+                        *(polygon->normals().data()    + con3+1),
+                        *(polygon->normals().data()    + con3+2) );
+            glVertex3f( *(polygon->coords().data() + con3),
+                        *(polygon->coords().data() + con3+1),
+                        *(polygon->coords().data() + con3+2) );
         }
     }
     glEnd();
@@ -1794,36 +1794,36 @@ void Rendering_Quad_VN_PCs_Os( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->ncolors(); i++ )
         {
             size_t index = 3 * i;
-            glColor4ub( *(polygon->colors().pointer() + index),
-                        *(polygon->colors().pointer() + index+1),
-                        *(polygon->colors().pointer() + index+2),
+            glColor4ub( *(polygon->colors().data() + index),
+                        *(polygon->colors().data() + index+1),
+                        *(polygon->colors().data() + index+2),
                         polygon->opacity( i ) );
 
             index = 12 * i;
-            glNormal3f( *(polygon->normals().pointer()    + index),
-                        *(polygon->normals().pointer()    + index+1),
-                        *(polygon->normals().pointer()    + index+2) );
-            glVertex3f( *(polygon->coords().pointer() + index),
-                        *(polygon->coords().pointer() + index+1),
-                        *(polygon->coords().pointer() + index+2) );
-            glNormal3f( *(polygon->normals().pointer()    + index+3),
-                        *(polygon->normals().pointer()    + index+4),
-                        *(polygon->normals().pointer()    + index+5) );
-            glVertex3f( *(polygon->coords().pointer() + index+3),
-                        *(polygon->coords().pointer() + index+4),
-                        *(polygon->coords().pointer() + index+5) );
-            glNormal3f( *(polygon->normals().pointer()    + index+6),
-                        *(polygon->normals().pointer()    + index+7),
-                        *(polygon->normals().pointer()    + index+8) );
-            glVertex3f( *(polygon->coords().pointer() + index+6),
-                        *(polygon->coords().pointer() + index+7),
-                        *(polygon->coords().pointer() + index+8) );
-            glNormal3f( *(polygon->normals().pointer()    + index+9),
-                        *(polygon->normals().pointer()    + index+10),
-                        *(polygon->normals().pointer()    + index+11) );
-            glVertex3f( *(polygon->coords().pointer() + index+9),
-                        *(polygon->coords().pointer() + index+10),
-                        *(polygon->coords().pointer() + index+11) );
+            glNormal3f( *(polygon->normals().data()    + index),
+                        *(polygon->normals().data()    + index+1),
+                        *(polygon->normals().data()    + index+2) );
+            glVertex3f( *(polygon->coords().data() + index),
+                        *(polygon->coords().data() + index+1),
+                        *(polygon->coords().data() + index+2) );
+            glNormal3f( *(polygon->normals().data()    + index+3),
+                        *(polygon->normals().data()    + index+4),
+                        *(polygon->normals().data()    + index+5) );
+            glVertex3f( *(polygon->coords().data() + index+3),
+                        *(polygon->coords().data() + index+4),
+                        *(polygon->coords().data() + index+5) );
+            glNormal3f( *(polygon->normals().data()    + index+6),
+                        *(polygon->normals().data()    + index+7),
+                        *(polygon->normals().data()    + index+8) );
+            glVertex3f( *(polygon->coords().data() + index+6),
+                        *(polygon->coords().data() + index+7),
+                        *(polygon->coords().data() + index+8) );
+            glNormal3f( *(polygon->normals().data()    + index+9),
+                        *(polygon->normals().data()    + index+10),
+                        *(polygon->normals().data()    + index+11) );
+            glVertex3f( *(polygon->coords().data() + index+9),
+                        *(polygon->coords().data() + index+10),
+                        *(polygon->coords().data() + index+11) );
         }
     }
     glEnd();
@@ -1842,41 +1842,41 @@ void Rendering_Quad_VN_PCs_Os_Cs( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nconnections(); i++ )
         {
             size_t index = 3 * i;
-            glColor4ub( *(polygon->colors().pointer() + index),
-                        *(polygon->colors().pointer() + index+1),
-                        *(polygon->colors().pointer() + index+2),
+            glColor4ub( *(polygon->colors().data() + index),
+                        *(polygon->colors().data() + index+1),
+                        *(polygon->colors().data() + index+2),
                         polygon->opacity( i ) );
 
             index = 4 * i;
-            size_t con0 = *(polygon->connections().pointer() + index)   * 3;
-            size_t con1 = *(polygon->connections().pointer() + index+1) * 3;
-            size_t con2 = *(polygon->connections().pointer() + index+2) * 3;
-            size_t con3 = *(polygon->connections().pointer() + index+3) * 3;
+            size_t con0 = *(polygon->connections().data() + index)   * 3;
+            size_t con1 = *(polygon->connections().data() + index+1) * 3;
+            size_t con2 = *(polygon->connections().data() + index+2) * 3;
+            size_t con3 = *(polygon->connections().data() + index+3) * 3;
 
-            glNormal3f( *(polygon->normals().pointer()    + con0),
-                        *(polygon->normals().pointer()    + con0+1),
-                        *(polygon->normals().pointer()    + con0+2) );
-            glVertex3f( *(polygon->coords().pointer() + con0),
-                        *(polygon->coords().pointer() + con0+1),
-                        *(polygon->coords().pointer() + con0+2) );
-            glNormal3f( *(polygon->normals().pointer()    + con1),
-                        *(polygon->normals().pointer()    + con1+1),
-                        *(polygon->normals().pointer()    + con1+2) );
-            glVertex3f( *(polygon->coords().pointer() + con1),
-                        *(polygon->coords().pointer() + con1+1),
-                        *(polygon->coords().pointer() + con1+2) );
-            glNormal3f( *(polygon->normals().pointer()    + con2),
-                        *(polygon->normals().pointer()    + con2+1),
-                        *(polygon->normals().pointer()    + con2+2) );
-            glVertex3f( *(polygon->coords().pointer() + con2),
-                        *(polygon->coords().pointer() + con2+1),
-                        *(polygon->coords().pointer() + con2+2) );
-            glNormal3f( *(polygon->normals().pointer()    + con3),
-                        *(polygon->normals().pointer()    + con3+1),
-                        *(polygon->normals().pointer()    + con3+2) );
-            glVertex3f( *(polygon->coords().pointer() + con3),
-                        *(polygon->coords().pointer() + con3+1),
-                        *(polygon->coords().pointer() + con3+2) );
+            glNormal3f( *(polygon->normals().data()    + con0),
+                        *(polygon->normals().data()    + con0+1),
+                        *(polygon->normals().data()    + con0+2) );
+            glVertex3f( *(polygon->coords().data() + con0),
+                        *(polygon->coords().data() + con0+1),
+                        *(polygon->coords().data() + con0+2) );
+            glNormal3f( *(polygon->normals().data()    + con1),
+                        *(polygon->normals().data()    + con1+1),
+                        *(polygon->normals().data()    + con1+2) );
+            glVertex3f( *(polygon->coords().data() + con1),
+                        *(polygon->coords().data() + con1+1),
+                        *(polygon->coords().data() + con1+2) );
+            glNormal3f( *(polygon->normals().data()    + con2),
+                        *(polygon->normals().data()    + con2+1),
+                        *(polygon->normals().data()    + con2+2) );
+            glVertex3f( *(polygon->coords().data() + con2),
+                        *(polygon->coords().data() + con2+1),
+                        *(polygon->coords().data() + con2+2) );
+            glNormal3f( *(polygon->normals().data()    + con3),
+                        *(polygon->normals().data()    + con3+1),
+                        *(polygon->normals().data()    + con3+2) );
+            glVertex3f( *(polygon->coords().data() + con3),
+                        *(polygon->coords().data() + con3+1),
+                        *(polygon->coords().data() + con3+2) );
         }
     }
     glEnd();
@@ -1895,32 +1895,32 @@ void Rendering_Tri_PN_VCs_O( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nnormals(); i++ )
         {
             size_t index = 3 * i;
-            glNormal3f( *(polygon->normals().pointer()    + index),
-                        *(polygon->normals().pointer()    + index+1),
-                        *(polygon->normals().pointer()    + index+2) );
+            glNormal3f( *(polygon->normals().data()    + index),
+                        *(polygon->normals().data()    + index+1),
+                        *(polygon->normals().data()    + index+2) );
 
             index = 9 * i;
-            glColor4ub( *(polygon->colors().pointer()   + index),
-                        *(polygon->colors().pointer()   + index+1),
-                        *(polygon->colors().pointer()   + index+2),
+            glColor4ub( *(polygon->colors().data()   + index),
+                        *(polygon->colors().data()   + index+1),
+                        *(polygon->colors().data()   + index+2),
                         polygon->opacity( 0 ) );
-            glVertex3f( *(polygon->coords().pointer() + index),
-                        *(polygon->coords().pointer() + index+1),
-                        *(polygon->coords().pointer() + index+2) );
-            glColor4ub( *(polygon->colors().pointer()   + index+3),
-                        *(polygon->colors().pointer()   + index+4),
-                        *(polygon->colors().pointer()   + index+5),
+            glVertex3f( *(polygon->coords().data() + index),
+                        *(polygon->coords().data() + index+1),
+                        *(polygon->coords().data() + index+2) );
+            glColor4ub( *(polygon->colors().data()   + index+3),
+                        *(polygon->colors().data()   + index+4),
+                        *(polygon->colors().data()   + index+5),
                         polygon->opacity( 0 ) );
-            glVertex3f( *(polygon->coords().pointer() + index+3),
-                        *(polygon->coords().pointer() + index+4),
-                        *(polygon->coords().pointer() + index+5) );
-            glColor4ub( *(polygon->colors().pointer()   + index+6),
-                        *(polygon->colors().pointer()   + index+7),
-                        *(polygon->colors().pointer()   + index+8),
+            glVertex3f( *(polygon->coords().data() + index+3),
+                        *(polygon->coords().data() + index+4),
+                        *(polygon->coords().data() + index+5) );
+            glColor4ub( *(polygon->colors().data()   + index+6),
+                        *(polygon->colors().data()   + index+7),
+                        *(polygon->colors().data()   + index+8),
                         polygon->opacity( 0 ) );
-            glVertex3f( *(polygon->coords().pointer() + index+6),
-                        *(polygon->coords().pointer() + index+7),
-                        *(polygon->coords().pointer() + index+8) );
+            glVertex3f( *(polygon->coords().data() + index+6),
+                        *(polygon->coords().data() + index+7),
+                        *(polygon->coords().data() + index+8) );
         }
     }
     glEnd();
@@ -1939,34 +1939,34 @@ void Rendering_Tri_PN_VCs_O_Cs( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nconnections(); i++ )
         {
             size_t index = 3 * i;
-            size_t con0 = *(polygon->connections().pointer() + index)   * 3;
-            size_t con1 = *(polygon->connections().pointer() + index+1) * 3;
-            size_t con2 = *(polygon->connections().pointer() + index+2) * 3;
+            size_t con0 = *(polygon->connections().data() + index)   * 3;
+            size_t con1 = *(polygon->connections().data() + index+1) * 3;
+            size_t con2 = *(polygon->connections().data() + index+2) * 3;
 
-            glNormal3f( *(polygon->normals().pointer()    + index),
-                        *(polygon->normals().pointer()    + index+1),
-                        *(polygon->normals().pointer()    + index+2) );
-            glColor4ub( *(polygon->colors().pointer()   + con0),
-                        *(polygon->colors().pointer()   + con0+1),
-                        *(polygon->colors().pointer()   + con0+2),
+            glNormal3f( *(polygon->normals().data()    + index),
+                        *(polygon->normals().data()    + index+1),
+                        *(polygon->normals().data()    + index+2) );
+            glColor4ub( *(polygon->colors().data()   + con0),
+                        *(polygon->colors().data()   + con0+1),
+                        *(polygon->colors().data()   + con0+2),
                         polygon->opacity( 0 ) );
-            glVertex3f( *(polygon->coords().pointer() + con0),
-                        *(polygon->coords().pointer() + con0+1),
-                        *(polygon->coords().pointer() + con0+2) );
-            glColor4ub( *(polygon->colors().pointer()   + con1),
-                        *(polygon->colors().pointer()   + con1+1),
-                        *(polygon->colors().pointer()   + con1+2),
+            glVertex3f( *(polygon->coords().data() + con0),
+                        *(polygon->coords().data() + con0+1),
+                        *(polygon->coords().data() + con0+2) );
+            glColor4ub( *(polygon->colors().data()   + con1),
+                        *(polygon->colors().data()   + con1+1),
+                        *(polygon->colors().data()   + con1+2),
                         polygon->opacity( 0 ) );
-            glVertex3f( *(polygon->coords().pointer() + con1),
-                        *(polygon->coords().pointer() + con1+1),
-                        *(polygon->coords().pointer() + con1+2) );
-            glColor4ub( *(polygon->colors().pointer()   + con2),
-                        *(polygon->colors().pointer()   + con2+1),
-                        *(polygon->colors().pointer()   + con2+2),
+            glVertex3f( *(polygon->coords().data() + con1),
+                        *(polygon->coords().data() + con1+1),
+                        *(polygon->coords().data() + con1+2) );
+            glColor4ub( *(polygon->colors().data()   + con2),
+                        *(polygon->colors().data()   + con2+1),
+                        *(polygon->colors().data()   + con2+2),
                         polygon->opacity( 0 ) );
-            glVertex3f( *(polygon->coords().pointer() + con2),
-                        *(polygon->coords().pointer() + con2+1),
-                        *(polygon->coords().pointer() + con2+2) );
+            glVertex3f( *(polygon->coords().data() + con2),
+                        *(polygon->coords().data() + con2+1),
+                        *(polygon->coords().data() + con2+2) );
         }
     }
     glEnd();
@@ -1985,32 +1985,32 @@ void Rendering_Tri_PN_VCs_Os( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nnormals(); i++ )
         {
             size_t nindex = 3 * i;
-            glNormal3f( *(polygon->normals().pointer()    + nindex),
-                        *(polygon->normals().pointer()    + nindex+1),
-                        *(polygon->normals().pointer()    + nindex+2) );
+            glNormal3f( *(polygon->normals().data()    + nindex),
+                        *(polygon->normals().data()    + nindex+1),
+                        *(polygon->normals().data()    + nindex+2) );
 
             size_t vindex = 9 * i;
-            glColor4ub( *(polygon->colors().pointer()   + vindex),
-                        *(polygon->colors().pointer()   + vindex+1),
-                        *(polygon->colors().pointer()   + vindex+2),
+            glColor4ub( *(polygon->colors().data()   + vindex),
+                        *(polygon->colors().data()   + vindex+1),
+                        *(polygon->colors().data()   + vindex+2),
                         polygon->opacity( nindex ) );
-            glVertex3f( *(polygon->coords().pointer() + vindex),
-                        *(polygon->coords().pointer() + vindex+1),
-                        *(polygon->coords().pointer() + vindex+2) );
-            glColor4ub( *(polygon->colors().pointer()   + vindex+3),
-                        *(polygon->colors().pointer()   + vindex+4),
-                        *(polygon->colors().pointer()   + vindex+5),
+            glVertex3f( *(polygon->coords().data() + vindex),
+                        *(polygon->coords().data() + vindex+1),
+                        *(polygon->coords().data() + vindex+2) );
+            glColor4ub( *(polygon->colors().data()   + vindex+3),
+                        *(polygon->colors().data()   + vindex+4),
+                        *(polygon->colors().data()   + vindex+5),
                         polygon->opacity( nindex+1 ) );
-            glVertex3f( *(polygon->coords().pointer() + vindex+3),
-                        *(polygon->coords().pointer() + vindex+4),
-                        *(polygon->coords().pointer() + vindex+5) );
-            glColor4ub( *(polygon->colors().pointer()   + vindex+6),
-                        *(polygon->colors().pointer()   + vindex+7),
-                        *(polygon->colors().pointer()   + vindex+8),
+            glVertex3f( *(polygon->coords().data() + vindex+3),
+                        *(polygon->coords().data() + vindex+4),
+                        *(polygon->coords().data() + vindex+5) );
+            glColor4ub( *(polygon->colors().data()   + vindex+6),
+                        *(polygon->colors().data()   + vindex+7),
+                        *(polygon->colors().data()   + vindex+8),
                         polygon->opacity( nindex+2 ) );
-            glVertex3f( *(polygon->coords().pointer() + vindex+6),
-                        *(polygon->coords().pointer() + vindex+7),
-                        *(polygon->coords().pointer() + vindex+8) );
+            glVertex3f( *(polygon->coords().data() + vindex+6),
+                        *(polygon->coords().data() + vindex+7),
+                        *(polygon->coords().data() + vindex+8) );
         }
     }
     glEnd();
@@ -2029,34 +2029,34 @@ void Rendering_Tri_PN_VCs_Os_Cs( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nconnections(); i++ )
         {
             size_t index = 3 * i;
-            size_t con0 = *(polygon->connections().pointer() + index)   * 3;
-            size_t con1 = *(polygon->connections().pointer() + index+1) * 3;
-            size_t con2 = *(polygon->connections().pointer() + index+2) * 3;
+            size_t con0 = *(polygon->connections().data() + index)   * 3;
+            size_t con1 = *(polygon->connections().data() + index+1) * 3;
+            size_t con2 = *(polygon->connections().data() + index+2) * 3;
 
-            glNormal3f( *(polygon->normals().pointer()    + index),
-                        *(polygon->normals().pointer()    + index+1),
-                        *(polygon->normals().pointer()    + index+2) );
-            glColor4ub( *(polygon->colors().pointer()   + con0),
-                        *(polygon->colors().pointer()   + con0+1),
-                        *(polygon->colors().pointer()   + con0+2),
+            glNormal3f( *(polygon->normals().data()    + index),
+                        *(polygon->normals().data()    + index+1),
+                        *(polygon->normals().data()    + index+2) );
+            glColor4ub( *(polygon->colors().data()   + con0),
+                        *(polygon->colors().data()   + con0+1),
+                        *(polygon->colors().data()   + con0+2),
                         polygon->opacity(con0/3) );
-            glVertex3f( *(polygon->coords().pointer() + con0),
-                        *(polygon->coords().pointer() + con0+1),
-                        *(polygon->coords().pointer() + con0+2) );
-            glColor4ub( *(polygon->colors().pointer()   + con1),
-                        *(polygon->colors().pointer()   + con1+1),
-                        *(polygon->colors().pointer()   + con1+2),
+            glVertex3f( *(polygon->coords().data() + con0),
+                        *(polygon->coords().data() + con0+1),
+                        *(polygon->coords().data() + con0+2) );
+            glColor4ub( *(polygon->colors().data()   + con1),
+                        *(polygon->colors().data()   + con1+1),
+                        *(polygon->colors().data()   + con1+2),
                         polygon->opacity(con1/3) );
-            glVertex3f( *(polygon->coords().pointer() + con1),
-                        *(polygon->coords().pointer() + con1+1),
-                        *(polygon->coords().pointer() + con1+2) );
-            glColor4ub( *(polygon->colors().pointer()   + con2),
-                        *(polygon->colors().pointer()   + con2+1),
-                        *(polygon->colors().pointer()   + con2+2),
+            glVertex3f( *(polygon->coords().data() + con1),
+                        *(polygon->coords().data() + con1+1),
+                        *(polygon->coords().data() + con1+2) );
+            glColor4ub( *(polygon->colors().data()   + con2),
+                        *(polygon->colors().data()   + con2+1),
+                        *(polygon->colors().data()   + con2+2),
                         polygon->opacity(con2/3) );
-            glVertex3f( *(polygon->coords().pointer() + con2),
-                        *(polygon->coords().pointer() + con2+1),
-                        *(polygon->coords().pointer() + con2+2) );
+            glVertex3f( *(polygon->coords().data() + con2),
+                        *(polygon->coords().data() + con2+1),
+                        *(polygon->coords().data() + con2+2) );
         }
     }
     glEnd();
@@ -2079,20 +2079,20 @@ void Rendering_Tri_PN_SC_O( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nnormals(); i++ )
         {
             size_t index = 3 * i;
-            glNormal3f( *(polygon->normals().pointer() + index),
-                        *(polygon->normals().pointer() + index+1),
-                        *(polygon->normals().pointer() + index+2) );
+            glNormal3f( *(polygon->normals().data() + index),
+                        *(polygon->normals().data() + index+1),
+                        *(polygon->normals().data() + index+2) );
 
             index = 9 * i;
-            glVertex3f( *(polygon->coords().pointer() + index),
-                        *(polygon->coords().pointer() + index+1),
-                        *(polygon->coords().pointer() + index+2) );
-            glVertex3f( *(polygon->coords().pointer() + index+3),
-                        *(polygon->coords().pointer() + index+4),
-                        *(polygon->coords().pointer() + index+5) );
-            glVertex3f( *(polygon->coords().pointer() + index+6),
-                        *(polygon->coords().pointer() + index+7),
-                        *(polygon->coords().pointer() + index+8) );
+            glVertex3f( *(polygon->coords().data() + index),
+                        *(polygon->coords().data() + index+1),
+                        *(polygon->coords().data() + index+2) );
+            glVertex3f( *(polygon->coords().data() + index+3),
+                        *(polygon->coords().data() + index+4),
+                        *(polygon->coords().data() + index+5) );
+            glVertex3f( *(polygon->coords().data() + index+6),
+                        *(polygon->coords().data() + index+7),
+                        *(polygon->coords().data() + index+8) );
         }
     }
     glEnd();
@@ -2115,22 +2115,22 @@ void Rendering_Tri_PN_SC_O_Cs( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nconnections(); i++ )
         {
             size_t index = 3 * i;
-            size_t con0 = *(polygon->connections().pointer() + index)   * 3;
-            size_t con1 = *(polygon->connections().pointer() + index+1) * 3;
-            size_t con2 = *(polygon->connections().pointer() + index+2) * 3;
+            size_t con0 = *(polygon->connections().data() + index)   * 3;
+            size_t con1 = *(polygon->connections().data() + index+1) * 3;
+            size_t con2 = *(polygon->connections().data() + index+2) * 3;
 
-            glNormal3f( *(polygon->normals().pointer()    + index),
-                        *(polygon->normals().pointer()    + index+1),
-                        *(polygon->normals().pointer()    + index+2) );
-            glVertex3f( *(polygon->coords().pointer() + con0),
-                        *(polygon->coords().pointer() + con0+1),
-                        *(polygon->coords().pointer() + con0+2) );
-            glVertex3f( *(polygon->coords().pointer() + con1),
-                        *(polygon->coords().pointer() + con1+1),
-                        *(polygon->coords().pointer() + con1+2) );
-            glVertex3f( *(polygon->coords().pointer() + con2),
-                        *(polygon->coords().pointer() + con2+1),
-                        *(polygon->coords().pointer() + con2+2) );
+            glNormal3f( *(polygon->normals().data()    + index),
+                        *(polygon->normals().data()    + index+1),
+                        *(polygon->normals().data()    + index+2) );
+            glVertex3f( *(polygon->coords().data() + con0),
+                        *(polygon->coords().data() + con0+1),
+                        *(polygon->coords().data() + con0+2) );
+            glVertex3f( *(polygon->coords().data() + con1),
+                        *(polygon->coords().data() + con1+1),
+                        *(polygon->coords().data() + con1+2) );
+            glVertex3f( *(polygon->coords().data() + con2),
+                        *(polygon->coords().data() + con2+1),
+                        *(polygon->coords().data() + con2+2) );
         }
     }
     glEnd();
@@ -2154,20 +2154,20 @@ void Rendering_Tri_PN_SC_Os( const kvs::PolygonObject* polygon )
 
             size_t index = 3 * i;
 
-            glNormal3f( *(polygon->normals().pointer()    + index),
-                        *(polygon->normals().pointer()    + index+1),
-                        *(polygon->normals().pointer()    + index+2) );
+            glNormal3f( *(polygon->normals().data()    + index),
+                        *(polygon->normals().data()    + index+1),
+                        *(polygon->normals().data()    + index+2) );
 
             index = 9 * i;
-            glVertex3f( *(polygon->coords().pointer() + index),
-                        *(polygon->coords().pointer() + index+1),
-                        *(polygon->coords().pointer() + index+2) );
-            glVertex3f( *(polygon->coords().pointer() + index+3),
-                        *(polygon->coords().pointer() + index+4),
-                        *(polygon->coords().pointer() + index+5) );
-            glVertex3f( *(polygon->coords().pointer() + index+6),
-                        *(polygon->coords().pointer() + index+7),
-                        *(polygon->coords().pointer() + index+8) );
+            glVertex3f( *(polygon->coords().data() + index),
+                        *(polygon->coords().data() + index+1),
+                        *(polygon->coords().data() + index+2) );
+            glVertex3f( *(polygon->coords().data() + index+3),
+                        *(polygon->coords().data() + index+4),
+                        *(polygon->coords().data() + index+5) );
+            glVertex3f( *(polygon->coords().data() + index+6),
+                        *(polygon->coords().data() + index+7),
+                        *(polygon->coords().data() + index+8) );
         }
     }
     glEnd();
@@ -2188,23 +2188,23 @@ void Rendering_Tri_PN_SC_Os_Cs( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nconnections(); i++ )
         {
             size_t index = 3 * i;
-            size_t con0 = *(polygon->connections().pointer() + index)   * 3;
-            size_t con1 = *(polygon->connections().pointer() + index+1) * 3;
-            size_t con2 = *(polygon->connections().pointer() + index+2) * 3;
+            size_t con0 = *(polygon->connections().data() + index)   * 3;
+            size_t con1 = *(polygon->connections().data() + index+1) * 3;
+            size_t con2 = *(polygon->connections().data() + index+2) * 3;
 
             glColor4ub( col.r(), col.g(), col.b(), polygon->opacity(i) );
-            glNormal3f( *(polygon->normals().pointer()    + index),
-                        *(polygon->normals().pointer()    + index+1),
-                        *(polygon->normals().pointer()    + index+2) );
-            glVertex3f( *(polygon->coords().pointer() + con0),
-                        *(polygon->coords().pointer() + con0+1),
-                        *(polygon->coords().pointer() + con0+2) );
-            glVertex3f( *(polygon->coords().pointer() + con1),
-                        *(polygon->coords().pointer() + con1+1),
-                        *(polygon->coords().pointer() + con1+2) );
-            glVertex3f( *(polygon->coords().pointer() + con2),
-                        *(polygon->coords().pointer() + con2+1),
-                        *(polygon->coords().pointer() + con2+2) );
+            glNormal3f( *(polygon->normals().data()    + index),
+                        *(polygon->normals().data()    + index+1),
+                        *(polygon->normals().data()    + index+2) );
+            glVertex3f( *(polygon->coords().data() + con0),
+                        *(polygon->coords().data() + con0+1),
+                        *(polygon->coords().data() + con0+2) );
+            glVertex3f( *(polygon->coords().data() + con1),
+                        *(polygon->coords().data() + con1+1),
+                        *(polygon->coords().data() + con1+2) );
+            glVertex3f( *(polygon->coords().data() + con2),
+                        *(polygon->coords().data() + con2+1),
+                        *(polygon->coords().data() + con2+2) );
         }
     }
     glEnd();
@@ -2223,24 +2223,24 @@ void Rendering_Tri_PN_PCs_O( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->ncolors(); i++ )
         {
             size_t index = 3 * i;
-            glColor4ub( *(polygon->colors().pointer() + index),
-                        *(polygon->colors().pointer() + index+1),
-                        *(polygon->colors().pointer() + index+2),
+            glColor4ub( *(polygon->colors().data() + index),
+                        *(polygon->colors().data() + index+1),
+                        *(polygon->colors().data() + index+2),
                         polygon->opacity( 0 ) );
-            glNormal3f( *(polygon->normals().pointer()  + index),
-                        *(polygon->normals().pointer()  + index+1),
-                        *(polygon->normals().pointer()  + index+2) );
+            glNormal3f( *(polygon->normals().data()  + index),
+                        *(polygon->normals().data()  + index+1),
+                        *(polygon->normals().data()  + index+2) );
 
             index = 9 * i;
-            glVertex3f( *(polygon->coords().pointer() + index),
-                        *(polygon->coords().pointer() + index+1),
-                        *(polygon->coords().pointer() + index+2) );
-            glVertex3f( *(polygon->coords().pointer() + index+3),
-                        *(polygon->coords().pointer() + index+4),
-                        *(polygon->coords().pointer() + index+5) );
-            glVertex3f( *(polygon->coords().pointer() + index+6),
-                        *(polygon->coords().pointer() + index+7),
-                        *(polygon->coords().pointer() + index+8) );
+            glVertex3f( *(polygon->coords().data() + index),
+                        *(polygon->coords().data() + index+1),
+                        *(polygon->coords().data() + index+2) );
+            glVertex3f( *(polygon->coords().data() + index+3),
+                        *(polygon->coords().data() + index+4),
+                        *(polygon->coords().data() + index+5) );
+            glVertex3f( *(polygon->coords().data() + index+6),
+                        *(polygon->coords().data() + index+7),
+                        *(polygon->coords().data() + index+8) );
         }
     }
     glEnd();
@@ -2259,27 +2259,27 @@ void Rendering_Tri_PN_PCs_O_Cs( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nconnections(); i++ )
         {
             size_t index = 3 * i;
-            size_t con0 = *(polygon->connections().pointer() + index)   * 3;
-            size_t con1 = *(polygon->connections().pointer() + index+1) * 3;
-            size_t con2 = *(polygon->connections().pointer() + index+2) * 3;
+            size_t con0 = *(polygon->connections().data() + index)   * 3;
+            size_t con1 = *(polygon->connections().data() + index+1) * 3;
+            size_t con2 = *(polygon->connections().data() + index+2) * 3;
 
-            glColor4ub( *(polygon->colors().pointer() + index),
-                        *(polygon->colors().pointer() + index+1),
-                        *(polygon->colors().pointer() + index+2),
+            glColor4ub( *(polygon->colors().data() + index),
+                        *(polygon->colors().data() + index+1),
+                        *(polygon->colors().data() + index+2),
                         polygon->opacity( 0 ) );
-            glNormal3f( *(polygon->normals().pointer()  + index),
-                        *(polygon->normals().pointer()  + index+1),
-                        *(polygon->normals().pointer()  + index+2) );
+            glNormal3f( *(polygon->normals().data()  + index),
+                        *(polygon->normals().data()  + index+1),
+                        *(polygon->normals().data()  + index+2) );
 
-            glVertex3f( *(polygon->coords().pointer() + con0),
-                        *(polygon->coords().pointer() + con0+1),
-                        *(polygon->coords().pointer() + con0+2) );
-            glVertex3f( *(polygon->coords().pointer() + con1),
-                        *(polygon->coords().pointer() + con1+1),
-                        *(polygon->coords().pointer() + con1+2) );
-            glVertex3f( *(polygon->coords().pointer() + con2),
-                        *(polygon->coords().pointer() + con2+1),
-                        *(polygon->coords().pointer() + con2+2) );
+            glVertex3f( *(polygon->coords().data() + con0),
+                        *(polygon->coords().data() + con0+1),
+                        *(polygon->coords().data() + con0+2) );
+            glVertex3f( *(polygon->coords().data() + con1),
+                        *(polygon->coords().data() + con1+1),
+                        *(polygon->coords().data() + con1+2) );
+            glVertex3f( *(polygon->coords().data() + con2),
+                        *(polygon->coords().data() + con2+1),
+                        *(polygon->coords().data() + con2+2) );
         }
     }
     glEnd();
@@ -2298,24 +2298,24 @@ void Rendering_Tri_PN_PCs_Os( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->ncolors(); i++ )
         {
             size_t index = 3 * i;
-            glColor4ub( *(polygon->colors().pointer() + index),
-                        *(polygon->colors().pointer() + index+1),
-                        *(polygon->colors().pointer() + index+2),
+            glColor4ub( *(polygon->colors().data() + index),
+                        *(polygon->colors().data() + index+1),
+                        *(polygon->colors().data() + index+2),
                         polygon->opacity( i ) );
-            glNormal3f( *(polygon->normals().pointer()  + index),
-                        *(polygon->normals().pointer()  + index+1),
-                        *(polygon->normals().pointer()  + index+2) );
+            glNormal3f( *(polygon->normals().data()  + index),
+                        *(polygon->normals().data()  + index+1),
+                        *(polygon->normals().data()  + index+2) );
 
             index = 9 * i;
-            glVertex3f( *(polygon->coords().pointer() + index),
-                        *(polygon->coords().pointer() + index+1),
-                        *(polygon->coords().pointer() + index+2) );
-            glVertex3f( *(polygon->coords().pointer() + index+3),
-                        *(polygon->coords().pointer() + index+4),
-                        *(polygon->coords().pointer() + index+5) );
-            glVertex3f( *(polygon->coords().pointer() + index+6),
-                        *(polygon->coords().pointer() + index+7),
-                        *(polygon->coords().pointer() + index+8) );
+            glVertex3f( *(polygon->coords().data() + index),
+                        *(polygon->coords().data() + index+1),
+                        *(polygon->coords().data() + index+2) );
+            glVertex3f( *(polygon->coords().data() + index+3),
+                        *(polygon->coords().data() + index+4),
+                        *(polygon->coords().data() + index+5) );
+            glVertex3f( *(polygon->coords().data() + index+6),
+                        *(polygon->coords().data() + index+7),
+                        *(polygon->coords().data() + index+8) );
         }
     }
     glEnd();
@@ -2334,27 +2334,27 @@ void Rendering_Tri_PN_PCs_Os_Cs( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nconnections(); i++ )
         {
             size_t index = 3 * i;
-            size_t con0 = *(polygon->connections().pointer() + index)   * 3;
-            size_t con1 = *(polygon->connections().pointer() + index+1) * 3;
-            size_t con2 = *(polygon->connections().pointer() + index+2) * 3;
+            size_t con0 = *(polygon->connections().data() + index)   * 3;
+            size_t con1 = *(polygon->connections().data() + index+1) * 3;
+            size_t con2 = *(polygon->connections().data() + index+2) * 3;
 
-            glColor4ub( *(polygon->colors().pointer() + index),
-                        *(polygon->colors().pointer() + index+1),
-                        *(polygon->colors().pointer() + index+2),
+            glColor4ub( *(polygon->colors().data() + index),
+                        *(polygon->colors().data() + index+1),
+                        *(polygon->colors().data() + index+2),
                         polygon->opacity( i ) );
-            glNormal3f( *(polygon->normals().pointer()  + index),
-                        *(polygon->normals().pointer()  + index+1),
-                        *(polygon->normals().pointer()  + index+2) );
+            glNormal3f( *(polygon->normals().data()  + index),
+                        *(polygon->normals().data()  + index+1),
+                        *(polygon->normals().data()  + index+2) );
 
-            glVertex3f( *(polygon->coords().pointer() + con0),
-                        *(polygon->coords().pointer() + con0+1),
-                        *(polygon->coords().pointer() + con0+2) );
-            glVertex3f( *(polygon->coords().pointer() + con1),
-                        *(polygon->coords().pointer() + con1+1),
-                        *(polygon->coords().pointer() + con1+2) );
-            glVertex3f( *(polygon->coords().pointer() + con2),
-                        *(polygon->coords().pointer() + con2+1),
-                        *(polygon->coords().pointer() + con2+2) );
+            glVertex3f( *(polygon->coords().data() + con0),
+                        *(polygon->coords().data() + con0+1),
+                        *(polygon->coords().data() + con0+2) );
+            glVertex3f( *(polygon->coords().data() + con1),
+                        *(polygon->coords().data() + con1+1),
+                        *(polygon->coords().data() + con1+2) );
+            glVertex3f( *(polygon->coords().data() + con2),
+                        *(polygon->coords().data() + con2+1),
+                        *(polygon->coords().data() + con2+2) );
         }
     }
     glEnd();
@@ -2374,39 +2374,39 @@ void Rendering_Quad_PN_VCs_O( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < nnormals; i++ )
         {
             size_t index = 3 * i;
-            glNormal3f( *(polygon->normals().pointer()    + index),
-                        *(polygon->normals().pointer()    + index+1),
-                        *(polygon->normals().pointer()    + index+2) );
+            glNormal3f( *(polygon->normals().data()    + index),
+                        *(polygon->normals().data()    + index+1),
+                        *(polygon->normals().data()    + index+2) );
 
             index = 12 * i;
-            glColor4ub( *(polygon->colors().pointer()   + index),
-                        *(polygon->colors().pointer()   + index+1),
-                        *(polygon->colors().pointer()   + index+2),
+            glColor4ub( *(polygon->colors().data()   + index),
+                        *(polygon->colors().data()   + index+1),
+                        *(polygon->colors().data()   + index+2),
                         polygon->opacity( 0 ) );
-            glVertex3f( *(polygon->coords().pointer() + index),
-                        *(polygon->coords().pointer() + index+1),
-                        *(polygon->coords().pointer() + index+2) );
-            glColor4ub( *(polygon->colors().pointer()   + index+3),
-                        *(polygon->colors().pointer()   + index+4),
-                        *(polygon->colors().pointer()   + index+5),
+            glVertex3f( *(polygon->coords().data() + index),
+                        *(polygon->coords().data() + index+1),
+                        *(polygon->coords().data() + index+2) );
+            glColor4ub( *(polygon->colors().data()   + index+3),
+                        *(polygon->colors().data()   + index+4),
+                        *(polygon->colors().data()   + index+5),
                         polygon->opacity( 0 ) );
-            glVertex3f( *(polygon->coords().pointer() + index+3),
-                        *(polygon->coords().pointer() + index+4),
-                        *(polygon->coords().pointer() + index+5) );
-            glColor4ub( *(polygon->colors().pointer()   + index+6),
-                        *(polygon->colors().pointer()   + index+7),
-                        *(polygon->colors().pointer()   + index+8),
+            glVertex3f( *(polygon->coords().data() + index+3),
+                        *(polygon->coords().data() + index+4),
+                        *(polygon->coords().data() + index+5) );
+            glColor4ub( *(polygon->colors().data()   + index+6),
+                        *(polygon->colors().data()   + index+7),
+                        *(polygon->colors().data()   + index+8),
                         polygon->opacity( 0 ) );
-            glVertex3f( *(polygon->coords().pointer() + index+6),
-                        *(polygon->coords().pointer() + index+7),
-                        *(polygon->coords().pointer() + index+8) );
-            glColor4ub( *(polygon->colors().pointer()   + index+9),
-                        *(polygon->colors().pointer()   + index+10),
-                        *(polygon->colors().pointer()   + index+11),
+            glVertex3f( *(polygon->coords().data() + index+6),
+                        *(polygon->coords().data() + index+7),
+                        *(polygon->coords().data() + index+8) );
+            glColor4ub( *(polygon->colors().data()   + index+9),
+                        *(polygon->colors().data()   + index+10),
+                        *(polygon->colors().data()   + index+11),
                         polygon->opacity( 0 ) );
-            glVertex3f( *(polygon->coords().pointer() + index+9),
-                        *(polygon->coords().pointer() + index+10),
-                        *(polygon->coords().pointer() + index+11) );
+            glVertex3f( *(polygon->coords().data() + index+9),
+                        *(polygon->coords().data() + index+10),
+                        *(polygon->coords().data() + index+11) );
         }
     }
     glEnd();
@@ -2425,44 +2425,44 @@ void Rendering_Quad_PN_VCs_O_Cs( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nconnections(); i++ )
         {
             size_t index = 3 * i;
-            glNormal3f( *(polygon->normals().pointer()    + index),
-                        *(polygon->normals().pointer()    + index+1),
-                        *(polygon->normals().pointer()    + index+2) );
+            glNormal3f( *(polygon->normals().data()    + index),
+                        *(polygon->normals().data()    + index+1),
+                        *(polygon->normals().data()    + index+2) );
 
             index = 4 * i;
-            size_t con0 = *(polygon->connections().pointer() + index)   * 3;
-            size_t con1 = *(polygon->connections().pointer() + index+1) * 3;
-            size_t con2 = *(polygon->connections().pointer() + index+2) * 3;
-            size_t con3 = *(polygon->connections().pointer() + index+3) * 3;
+            size_t con0 = *(polygon->connections().data() + index)   * 3;
+            size_t con1 = *(polygon->connections().data() + index+1) * 3;
+            size_t con2 = *(polygon->connections().data() + index+2) * 3;
+            size_t con3 = *(polygon->connections().data() + index+3) * 3;
 
-            glColor4ub( *(polygon->colors().pointer()   + con0),
-                        *(polygon->colors().pointer()   + con0+1),
-                        *(polygon->colors().pointer()   + con0+2),
+            glColor4ub( *(polygon->colors().data()   + con0),
+                        *(polygon->colors().data()   + con0+1),
+                        *(polygon->colors().data()   + con0+2),
                         polygon->opacity( 0 ) );
-            glVertex3f( *(polygon->coords().pointer() + con0),
-                        *(polygon->coords().pointer() + con0+1),
-                        *(polygon->coords().pointer() + con0+2) );
-            glColor4ub( *(polygon->colors().pointer()   + con1),
-                        *(polygon->colors().pointer()   + con1+1),
-                        *(polygon->colors().pointer()   + con1+2),
+            glVertex3f( *(polygon->coords().data() + con0),
+                        *(polygon->coords().data() + con0+1),
+                        *(polygon->coords().data() + con0+2) );
+            glColor4ub( *(polygon->colors().data()   + con1),
+                        *(polygon->colors().data()   + con1+1),
+                        *(polygon->colors().data()   + con1+2),
                         polygon->opacity( 0 ) );
-            glVertex3f( *(polygon->coords().pointer() + con1),
-                        *(polygon->coords().pointer() + con1+1),
-                        *(polygon->coords().pointer() + con1+2) );
-            glColor4ub( *(polygon->colors().pointer()   + con2),
-                        *(polygon->colors().pointer()   + con2+1),
-                        *(polygon->colors().pointer()   + con2+2),
+            glVertex3f( *(polygon->coords().data() + con1),
+                        *(polygon->coords().data() + con1+1),
+                        *(polygon->coords().data() + con1+2) );
+            glColor4ub( *(polygon->colors().data()   + con2),
+                        *(polygon->colors().data()   + con2+1),
+                        *(polygon->colors().data()   + con2+2),
                         polygon->opacity( 0 ) );
-            glVertex3f( *(polygon->coords().pointer() + con2),
-                        *(polygon->coords().pointer() + con2+1),
-                        *(polygon->coords().pointer() + con2+2) );
-            glColor4ub( *(polygon->colors().pointer()   + con3),
-                        *(polygon->colors().pointer()   + con3+1),
-                        *(polygon->colors().pointer()   + con3+2),
+            glVertex3f( *(polygon->coords().data() + con2),
+                        *(polygon->coords().data() + con2+1),
+                        *(polygon->coords().data() + con2+2) );
+            glColor4ub( *(polygon->colors().data()   + con3),
+                        *(polygon->colors().data()   + con3+1),
+                        *(polygon->colors().data()   + con3+2),
                         polygon->opacity( 0 ) );
-            glVertex3f( *(polygon->coords().pointer() + con3),
-                        *(polygon->coords().pointer() + con3+1),
-                        *(polygon->coords().pointer() + con3+2) );
+            glVertex3f( *(polygon->coords().data() + con3),
+                        *(polygon->coords().data() + con3+1),
+                        *(polygon->coords().data() + con3+2) );
         }
     }
     glEnd();
@@ -2481,39 +2481,39 @@ void Rendering_Quad_PN_VCs_Os( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nnormals(); i++ )
         {
             size_t nindex = 3 * i;
-            glNormal3f( *(polygon->normals().pointer()    + nindex),
-                        *(polygon->normals().pointer()    + nindex+1),
-                        *(polygon->normals().pointer()    + nindex+2) );
+            glNormal3f( *(polygon->normals().data()    + nindex),
+                        *(polygon->normals().data()    + nindex+1),
+                        *(polygon->normals().data()    + nindex+2) );
 
             size_t vindex = 12 * i;
-            glColor4ub( *(polygon->colors().pointer()   + vindex),
-                        *(polygon->colors().pointer()   + vindex+1),
-                        *(polygon->colors().pointer()   + vindex+2),
+            glColor4ub( *(polygon->colors().data()   + vindex),
+                        *(polygon->colors().data()   + vindex+1),
+                        *(polygon->colors().data()   + vindex+2),
                         polygon->opacity( nindex ) );
-            glVertex3f( *(polygon->coords().pointer() + vindex),
-                        *(polygon->coords().pointer() + vindex+1),
-                        *(polygon->coords().pointer() + vindex+2) );
-            glColor4ub( *(polygon->colors().pointer()   + vindex+3),
-                        *(polygon->colors().pointer()   + vindex+4),
-                        *(polygon->colors().pointer()   + vindex+5),
+            glVertex3f( *(polygon->coords().data() + vindex),
+                        *(polygon->coords().data() + vindex+1),
+                        *(polygon->coords().data() + vindex+2) );
+            glColor4ub( *(polygon->colors().data()   + vindex+3),
+                        *(polygon->colors().data()   + vindex+4),
+                        *(polygon->colors().data()   + vindex+5),
                         polygon->opacity( nindex+1 ) );
-            glVertex3f( *(polygon->coords().pointer() + vindex+3),
-                        *(polygon->coords().pointer() + vindex+4),
-                        *(polygon->coords().pointer() + vindex+5) );
-            glColor4ub( *(polygon->colors().pointer()   + vindex+6),
-                        *(polygon->colors().pointer()   + vindex+7),
-                        *(polygon->colors().pointer()   + vindex+8),
+            glVertex3f( *(polygon->coords().data() + vindex+3),
+                        *(polygon->coords().data() + vindex+4),
+                        *(polygon->coords().data() + vindex+5) );
+            glColor4ub( *(polygon->colors().data()   + vindex+6),
+                        *(polygon->colors().data()   + vindex+7),
+                        *(polygon->colors().data()   + vindex+8),
                         polygon->opacity( nindex+2 ) );
-            glVertex3f( *(polygon->coords().pointer() + vindex+6),
-                        *(polygon->coords().pointer() + vindex+7),
-                        *(polygon->coords().pointer() + vindex+8) );
-            glColor4ub( *(polygon->colors().pointer()   + vindex+9),
-                        *(polygon->colors().pointer()   + vindex+10),
-                        *(polygon->colors().pointer()   + vindex+11),
+            glVertex3f( *(polygon->coords().data() + vindex+6),
+                        *(polygon->coords().data() + vindex+7),
+                        *(polygon->coords().data() + vindex+8) );
+            glColor4ub( *(polygon->colors().data()   + vindex+9),
+                        *(polygon->colors().data()   + vindex+10),
+                        *(polygon->colors().data()   + vindex+11),
                         polygon->opacity( nindex+3 ) );
-            glVertex3f( *(polygon->coords().pointer() + vindex+9),
-                        *(polygon->coords().pointer() + vindex+10),
-                        *(polygon->coords().pointer() + vindex+11) );
+            glVertex3f( *(polygon->coords().data() + vindex+9),
+                        *(polygon->coords().data() + vindex+10),
+                        *(polygon->coords().data() + vindex+11) );
         }
     }
     glEnd();
@@ -2532,44 +2532,44 @@ void Rendering_Quad_PN_VCs_Os_Cs( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nconnections(); i++ )
         {
             size_t index = 3 * i;
-            glNormal3f( *(polygon->normals().pointer()    + index),
-                        *(polygon->normals().pointer()    + index+1),
-                        *(polygon->normals().pointer()    + index+2) );
+            glNormal3f( *(polygon->normals().data()    + index),
+                        *(polygon->normals().data()    + index+1),
+                        *(polygon->normals().data()    + index+2) );
 
             index = 4 * i;
-            size_t con0 = *(polygon->connections().pointer() + index)   * 3;
-            size_t con1 = *(polygon->connections().pointer() + index+1) * 3;
-            size_t con2 = *(polygon->connections().pointer() + index+2) * 3;
-            size_t con3 = *(polygon->connections().pointer() + index+3) * 3;
+            size_t con0 = *(polygon->connections().data() + index)   * 3;
+            size_t con1 = *(polygon->connections().data() + index+1) * 3;
+            size_t con2 = *(polygon->connections().data() + index+2) * 3;
+            size_t con3 = *(polygon->connections().data() + index+3) * 3;
 
-            glColor4ub( *(polygon->colors().pointer()   + con0),
-                        *(polygon->colors().pointer()   + con0+1),
-                        *(polygon->colors().pointer()   + con0+2),
+            glColor4ub( *(polygon->colors().data()   + con0),
+                        *(polygon->colors().data()   + con0+1),
+                        *(polygon->colors().data()   + con0+2),
                         polygon->opacity(con0/3) );
-            glVertex3f( *(polygon->coords().pointer() + con0),
-                        *(polygon->coords().pointer() + con0+1),
-                        *(polygon->coords().pointer() + con0+2) );
-            glColor4ub( *(polygon->colors().pointer()   + con1),
-                        *(polygon->colors().pointer()   + con1+1),
-                        *(polygon->colors().pointer()   + con1+2),
+            glVertex3f( *(polygon->coords().data() + con0),
+                        *(polygon->coords().data() + con0+1),
+                        *(polygon->coords().data() + con0+2) );
+            glColor4ub( *(polygon->colors().data()   + con1),
+                        *(polygon->colors().data()   + con1+1),
+                        *(polygon->colors().data()   + con1+2),
                         polygon->opacity(con1/3) );
-            glVertex3f( *(polygon->coords().pointer() + con1),
-                        *(polygon->coords().pointer() + con1+1),
-                        *(polygon->coords().pointer() + con1+2) );
-            glColor4ub( *(polygon->colors().pointer()   + con2),
-                        *(polygon->colors().pointer()   + con2+1),
-                        *(polygon->colors().pointer()   + con2+2),
+            glVertex3f( *(polygon->coords().data() + con1),
+                        *(polygon->coords().data() + con1+1),
+                        *(polygon->coords().data() + con1+2) );
+            glColor4ub( *(polygon->colors().data()   + con2),
+                        *(polygon->colors().data()   + con2+1),
+                        *(polygon->colors().data()   + con2+2),
                         polygon->opacity(con2/3) );
-            glVertex3f( *(polygon->coords().pointer() + con2),
-                        *(polygon->coords().pointer() + con2+1),
-                        *(polygon->coords().pointer() + con2+2) );
-            glColor4ub( *(polygon->colors().pointer()   + con3),
-                        *(polygon->colors().pointer()   + con3+1),
-                        *(polygon->colors().pointer()   + con3+2),
+            glVertex3f( *(polygon->coords().data() + con2),
+                        *(polygon->coords().data() + con2+1),
+                        *(polygon->coords().data() + con2+2) );
+            glColor4ub( *(polygon->colors().data()   + con3),
+                        *(polygon->colors().data()   + con3+1),
+                        *(polygon->colors().data()   + con3+2),
                         polygon->opacity(con3/3) );
-            glVertex3f( *(polygon->coords().pointer() + con3),
-                        *(polygon->coords().pointer() + con3+1),
-                        *(polygon->coords().pointer() + con3+2) );
+            glVertex3f( *(polygon->coords().data() + con3),
+                        *(polygon->coords().data() + con3+1),
+                        *(polygon->coords().data() + con3+2) );
         }
     }
     glEnd();
@@ -2592,23 +2592,23 @@ void Rendering_Quad_PN_SC_O( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nnormals(); i++ )
         {
             size_t index = 3 * i;
-            glNormal3f( *(polygon->normals().pointer()    + index),
-                        *(polygon->normals().pointer()    + index+1),
-                        *(polygon->normals().pointer()    + index+2) );
+            glNormal3f( *(polygon->normals().data()    + index),
+                        *(polygon->normals().data()    + index+1),
+                        *(polygon->normals().data()    + index+2) );
 
             index = 12 * i;
-            glVertex3f( *(polygon->coords().pointer() + index),
-                        *(polygon->coords().pointer() + index+1),
-                        *(polygon->coords().pointer() + index+2) );
-            glVertex3f( *(polygon->coords().pointer() + index+3),
-                        *(polygon->coords().pointer() + index+4),
-                        *(polygon->coords().pointer() + index+5) );
-            glVertex3f( *(polygon->coords().pointer() + index+6),
-                        *(polygon->coords().pointer() + index+7),
-                        *(polygon->coords().pointer() + index+8) );
-            glVertex3f( *(polygon->coords().pointer() + index+9),
-                        *(polygon->coords().pointer() + index+10),
-                        *(polygon->coords().pointer() + index+11) );
+            glVertex3f( *(polygon->coords().data() + index),
+                        *(polygon->coords().data() + index+1),
+                        *(polygon->coords().data() + index+2) );
+            glVertex3f( *(polygon->coords().data() + index+3),
+                        *(polygon->coords().data() + index+4),
+                        *(polygon->coords().data() + index+5) );
+            glVertex3f( *(polygon->coords().data() + index+6),
+                        *(polygon->coords().data() + index+7),
+                        *(polygon->coords().data() + index+8) );
+            glVertex3f( *(polygon->coords().data() + index+9),
+                        *(polygon->coords().data() + index+10),
+                        *(polygon->coords().data() + index+11) );
         }
     }
     glEnd();
@@ -2631,28 +2631,28 @@ void Rendering_Quad_PN_SC_O_Cs( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nconnections(); i++ )
         {
             size_t index = 3 * i;
-            glNormal3f( *(polygon->normals().pointer()    + index),
-                        *(polygon->normals().pointer()    + index+1),
-                        *(polygon->normals().pointer()    + index+2) );
+            glNormal3f( *(polygon->normals().data()    + index),
+                        *(polygon->normals().data()    + index+1),
+                        *(polygon->normals().data()    + index+2) );
 
             index = 4 * i;
-            size_t con0 = *(polygon->connections().pointer() + index)   * 3;
-            size_t con1 = *(polygon->connections().pointer() + index+1) * 3;
-            size_t con2 = *(polygon->connections().pointer() + index+2) * 3;
-            size_t con3 = *(polygon->connections().pointer() + index+3) * 3;
+            size_t con0 = *(polygon->connections().data() + index)   * 3;
+            size_t con1 = *(polygon->connections().data() + index+1) * 3;
+            size_t con2 = *(polygon->connections().data() + index+2) * 3;
+            size_t con3 = *(polygon->connections().data() + index+3) * 3;
 
-            glVertex3f( *(polygon->coords().pointer() + con0),
-                        *(polygon->coords().pointer() + con0+1),
-                        *(polygon->coords().pointer() + con0+2) );
-            glVertex3f( *(polygon->coords().pointer() + con1),
-                        *(polygon->coords().pointer() + con1+1),
-                        *(polygon->coords().pointer() + con1+2) );
-            glVertex3f( *(polygon->coords().pointer() + con2),
-                        *(polygon->coords().pointer() + con2+1),
-                        *(polygon->coords().pointer() + con2+2) );
-            glVertex3f( *(polygon->coords().pointer() + con3),
-                        *(polygon->coords().pointer() + con3+1),
-                        *(polygon->coords().pointer() + con3+2) );
+            glVertex3f( *(polygon->coords().data() + con0),
+                        *(polygon->coords().data() + con0+1),
+                        *(polygon->coords().data() + con0+2) );
+            glVertex3f( *(polygon->coords().data() + con1),
+                        *(polygon->coords().data() + con1+1),
+                        *(polygon->coords().data() + con1+2) );
+            glVertex3f( *(polygon->coords().data() + con2),
+                        *(polygon->coords().data() + con2+1),
+                        *(polygon->coords().data() + con2+2) );
+            glVertex3f( *(polygon->coords().data() + con3),
+                        *(polygon->coords().data() + con3+1),
+                        *(polygon->coords().data() + con3+2) );
         }
     }
     glEnd();
@@ -2676,23 +2676,23 @@ void Rendering_Quad_PN_SC_Os( const kvs::PolygonObject* polygon )
 
             size_t index = 3 * i;
 
-            glNormal3f( *(polygon->normals().pointer()    + index),
-                        *(polygon->normals().pointer()    + index+1),
-                        *(polygon->normals().pointer()    + index+2) );
+            glNormal3f( *(polygon->normals().data()    + index),
+                        *(polygon->normals().data()    + index+1),
+                        *(polygon->normals().data()    + index+2) );
 
             index = 12 * i;
-            glVertex3f( *(polygon->coords().pointer() + index),
-                        *(polygon->coords().pointer() + index+1),
-                        *(polygon->coords().pointer() + index+2) );
-            glVertex3f( *(polygon->coords().pointer() + index+3),
-                        *(polygon->coords().pointer() + index+4),
-                        *(polygon->coords().pointer() + index+5) );
-            glVertex3f( *(polygon->coords().pointer() + index+6),
-                        *(polygon->coords().pointer() + index+7),
-                        *(polygon->coords().pointer() + index+8) );
-            glVertex3f( *(polygon->coords().pointer() + index+9),
-                        *(polygon->coords().pointer() + index+10),
-                        *(polygon->coords().pointer() + index+11) );
+            glVertex3f( *(polygon->coords().data() + index),
+                        *(polygon->coords().data() + index+1),
+                        *(polygon->coords().data() + index+2) );
+            glVertex3f( *(polygon->coords().data() + index+3),
+                        *(polygon->coords().data() + index+4),
+                        *(polygon->coords().data() + index+5) );
+            glVertex3f( *(polygon->coords().data() + index+6),
+                        *(polygon->coords().data() + index+7),
+                        *(polygon->coords().data() + index+8) );
+            glVertex3f( *(polygon->coords().data() + index+9),
+                        *(polygon->coords().data() + index+10),
+                        *(polygon->coords().data() + index+11) );
         }
     }
     glEnd();
@@ -2715,28 +2715,28 @@ void Rendering_Quad_PN_SC_Os_Cs( const kvs::PolygonObject* polygon )
             glColor4ub( col.r(), col.g(), col.b(), polygon->opacity(i) );
 
             size_t index = 3 * i;
-            glNormal3f( *(polygon->normals().pointer()    + index),
-                        *(polygon->normals().pointer()    + index+1),
-                        *(polygon->normals().pointer()    + index+2) );
+            glNormal3f( *(polygon->normals().data()    + index),
+                        *(polygon->normals().data()    + index+1),
+                        *(polygon->normals().data()    + index+2) );
 
             index = 4 * i;
-            size_t con0 = *(polygon->connections().pointer() + index)   * 3;
-            size_t con1 = *(polygon->connections().pointer() + index+1) * 3;
-            size_t con2 = *(polygon->connections().pointer() + index+2) * 3;
-            size_t con3 = *(polygon->connections().pointer() + index+3) * 3;
+            size_t con0 = *(polygon->connections().data() + index)   * 3;
+            size_t con1 = *(polygon->connections().data() + index+1) * 3;
+            size_t con2 = *(polygon->connections().data() + index+2) * 3;
+            size_t con3 = *(polygon->connections().data() + index+3) * 3;
 
-            glVertex3f( *(polygon->coords().pointer() + con0),
-                        *(polygon->coords().pointer() + con0+1),
-                        *(polygon->coords().pointer() + con0+2) );
-            glVertex3f( *(polygon->coords().pointer() + con1),
-                        *(polygon->coords().pointer() + con1+1),
-                        *(polygon->coords().pointer() + con1+2) );
-            glVertex3f( *(polygon->coords().pointer() + con2),
-                        *(polygon->coords().pointer() + con2+1),
-                        *(polygon->coords().pointer() + con2+2) );
-            glVertex3f( *(polygon->coords().pointer() + con3),
-                        *(polygon->coords().pointer() + con3+1),
-                        *(polygon->coords().pointer() + con3+2) );
+            glVertex3f( *(polygon->coords().data() + con0),
+                        *(polygon->coords().data() + con0+1),
+                        *(polygon->coords().data() + con0+2) );
+            glVertex3f( *(polygon->coords().data() + con1),
+                        *(polygon->coords().data() + con1+1),
+                        *(polygon->coords().data() + con1+2) );
+            glVertex3f( *(polygon->coords().data() + con2),
+                        *(polygon->coords().data() + con2+1),
+                        *(polygon->coords().data() + con2+2) );
+            glVertex3f( *(polygon->coords().data() + con3),
+                        *(polygon->coords().data() + con3+1),
+                        *(polygon->coords().data() + con3+2) );
         }
     }
     glEnd();
@@ -2755,27 +2755,27 @@ void Rendering_Quad_PN_PCs_O( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->ncolors(); i++ )
         {
             size_t index = 3 * i;
-            glColor4ub( *(polygon->colors().pointer() + index),
-                        *(polygon->colors().pointer() + index+1),
-                        *(polygon->colors().pointer() + index+2),
+            glColor4ub( *(polygon->colors().data() + index),
+                        *(polygon->colors().data() + index+1),
+                        *(polygon->colors().data() + index+2),
                         polygon->opacity( 0 ) );
-            glNormal3f( *(polygon->normals().pointer()  + index),
-                        *(polygon->normals().pointer()  + index+1),
-                        *(polygon->normals().pointer()  + index+2) );
+            glNormal3f( *(polygon->normals().data()  + index),
+                        *(polygon->normals().data()  + index+1),
+                        *(polygon->normals().data()  + index+2) );
 
             index = 12 * i;
-            glVertex3f( *(polygon->coords().pointer() + index),
-                        *(polygon->coords().pointer() + index+1),
-                        *(polygon->coords().pointer() + index+2) );
-            glVertex3f( *(polygon->coords().pointer() + index+3),
-                        *(polygon->coords().pointer() + index+4),
-                        *(polygon->coords().pointer() + index+5) );
-            glVertex3f( *(polygon->coords().pointer() + index+6),
-                        *(polygon->coords().pointer() + index+7),
-                        *(polygon->coords().pointer() + index+8) );
-            glVertex3f( *(polygon->coords().pointer() + index+9),
-                        *(polygon->coords().pointer() + index+10),
-                        *(polygon->coords().pointer() + index+11) );
+            glVertex3f( *(polygon->coords().data() + index),
+                        *(polygon->coords().data() + index+1),
+                        *(polygon->coords().data() + index+2) );
+            glVertex3f( *(polygon->coords().data() + index+3),
+                        *(polygon->coords().data() + index+4),
+                        *(polygon->coords().data() + index+5) );
+            glVertex3f( *(polygon->coords().data() + index+6),
+                        *(polygon->coords().data() + index+7),
+                        *(polygon->coords().data() + index+8) );
+            glVertex3f( *(polygon->coords().data() + index+9),
+                        *(polygon->coords().data() + index+10),
+                        *(polygon->coords().data() + index+11) );
         }
     }
     glEnd();
@@ -2794,32 +2794,32 @@ void Rendering_Quad_PN_PCs_O_Cs( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nconnections(); i++ )
         {
             size_t index = 3 * i;
-            glColor4ub( *(polygon->colors().pointer() + index),
-                        *(polygon->colors().pointer() + index+1),
-                        *(polygon->colors().pointer() + index+2),
+            glColor4ub( *(polygon->colors().data() + index),
+                        *(polygon->colors().data() + index+1),
+                        *(polygon->colors().data() + index+2),
                         polygon->opacity( 0 ) );
-            glNormal3f( *(polygon->normals().pointer() + index),
-                        *(polygon->normals().pointer() + index+1),
-                        *(polygon->normals().pointer() + index+2) );
+            glNormal3f( *(polygon->normals().data() + index),
+                        *(polygon->normals().data() + index+1),
+                        *(polygon->normals().data() + index+2) );
 
             index = 4 * i;
-            size_t con0 = *(polygon->connections().pointer() + index)   * 3;
-            size_t con1 = *(polygon->connections().pointer() + index+1) * 3;
-            size_t con2 = *(polygon->connections().pointer() + index+2) * 3;
-            size_t con3 = *(polygon->connections().pointer() + index+3) * 3;
+            size_t con0 = *(polygon->connections().data() + index)   * 3;
+            size_t con1 = *(polygon->connections().data() + index+1) * 3;
+            size_t con2 = *(polygon->connections().data() + index+2) * 3;
+            size_t con3 = *(polygon->connections().data() + index+3) * 3;
 
-            glVertex3f( *(polygon->coords().pointer() + con0),
-                        *(polygon->coords().pointer() + con0+1),
-                        *(polygon->coords().pointer() + con0+2) );
-            glVertex3f( *(polygon->coords().pointer() + con1),
-                        *(polygon->coords().pointer() + con1+1),
-                        *(polygon->coords().pointer() + con1+2) );
-            glVertex3f( *(polygon->coords().pointer() + con2),
-                        *(polygon->coords().pointer() + con2+1),
-                        *(polygon->coords().pointer() + con2+2) );
-            glVertex3f( *(polygon->coords().pointer() + con3),
-                        *(polygon->coords().pointer() + con3+1),
-                        *(polygon->coords().pointer() + con3+2) );
+            glVertex3f( *(polygon->coords().data() + con0),
+                        *(polygon->coords().data() + con0+1),
+                        *(polygon->coords().data() + con0+2) );
+            glVertex3f( *(polygon->coords().data() + con1),
+                        *(polygon->coords().data() + con1+1),
+                        *(polygon->coords().data() + con1+2) );
+            glVertex3f( *(polygon->coords().data() + con2),
+                        *(polygon->coords().data() + con2+1),
+                        *(polygon->coords().data() + con2+2) );
+            glVertex3f( *(polygon->coords().data() + con3),
+                        *(polygon->coords().data() + con3+1),
+                        *(polygon->coords().data() + con3+2) );
         }
     }
     glEnd();
@@ -2838,27 +2838,27 @@ void Rendering_Quad_PN_PCs_Os( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->ncolors(); i++ )
         {
             size_t index = 3 * i;
-            glColor4ub( *(polygon->colors().pointer() + index),
-                        *(polygon->colors().pointer() + index+1),
-                        *(polygon->colors().pointer() + index+2),
+            glColor4ub( *(polygon->colors().data() + index),
+                        *(polygon->colors().data() + index+1),
+                        *(polygon->colors().data() + index+2),
                         polygon->opacity( i ) );
-            glNormal3f( *(polygon->normals().pointer() + index),
-                        *(polygon->normals().pointer() + index+1),
-                        *(polygon->normals().pointer() + index+2) );
+            glNormal3f( *(polygon->normals().data() + index),
+                        *(polygon->normals().data() + index+1),
+                        *(polygon->normals().data() + index+2) );
 
             index = 12 * i;
-            glVertex3f( *(polygon->coords().pointer() + index),
-                        *(polygon->coords().pointer() + index+1),
-                        *(polygon->coords().pointer() + index+2) );
-            glVertex3f( *(polygon->coords().pointer() + index+3),
-                        *(polygon->coords().pointer() + index+4),
-                        *(polygon->coords().pointer() + index+5) );
-            glVertex3f( *(polygon->coords().pointer() + index+6),
-                        *(polygon->coords().pointer() + index+7),
-                        *(polygon->coords().pointer() + index+8) );
-            glVertex3f( *(polygon->coords().pointer() + index+9),
-                        *(polygon->coords().pointer() + index+10),
-                        *(polygon->coords().pointer() + index+11) );
+            glVertex3f( *(polygon->coords().data() + index),
+                        *(polygon->coords().data() + index+1),
+                        *(polygon->coords().data() + index+2) );
+            glVertex3f( *(polygon->coords().data() + index+3),
+                        *(polygon->coords().data() + index+4),
+                        *(polygon->coords().data() + index+5) );
+            glVertex3f( *(polygon->coords().data() + index+6),
+                        *(polygon->coords().data() + index+7),
+                        *(polygon->coords().data() + index+8) );
+            glVertex3f( *(polygon->coords().data() + index+9),
+                        *(polygon->coords().data() + index+10),
+                        *(polygon->coords().data() + index+11) );
         }
     }
     glEnd();
@@ -2877,32 +2877,32 @@ void Rendering_Quad_PN_PCs_Os_Cs( const kvs::PolygonObject* polygon )
         for( size_t i = 0; i < polygon->nconnections(); i++ )
         {
             size_t index = 3 * i;
-            glColor4ub( *(polygon->colors().pointer() + index),
-                        *(polygon->colors().pointer() + index+1),
-                        *(polygon->colors().pointer() + index+2),
+            glColor4ub( *(polygon->colors().data() + index),
+                        *(polygon->colors().data() + index+1),
+                        *(polygon->colors().data() + index+2),
                         polygon->opacity( i ) );
-            glNormal3f( *(polygon->normals().pointer() + index),
-                        *(polygon->normals().pointer() + index+1),
-                        *(polygon->normals().pointer() + index+2) );
+            glNormal3f( *(polygon->normals().data() + index),
+                        *(polygon->normals().data() + index+1),
+                        *(polygon->normals().data() + index+2) );
 
             index = 4 * i;
-            size_t con0 = *(polygon->connections().pointer() + index)   * 3;
-            size_t con1 = *(polygon->connections().pointer() + index+1) * 3;
-            size_t con2 = *(polygon->connections().pointer() + index+2) * 3;
-            size_t con3 = *(polygon->connections().pointer() + index+3) * 3;
+            size_t con0 = *(polygon->connections().data() + index)   * 3;
+            size_t con1 = *(polygon->connections().data() + index+1) * 3;
+            size_t con2 = *(polygon->connections().data() + index+2) * 3;
+            size_t con3 = *(polygon->connections().data() + index+3) * 3;
 
-            glVertex3f( *(polygon->coords().pointer() + con0),
-                        *(polygon->coords().pointer() + con0+1),
-                        *(polygon->coords().pointer() + con0+2) );
-            glVertex3f( *(polygon->coords().pointer() + con1),
-                        *(polygon->coords().pointer() + con1+1),
-                        *(polygon->coords().pointer() + con1+2) );
-            glVertex3f( *(polygon->coords().pointer() + con2),
-                        *(polygon->coords().pointer() + con2+1),
-                        *(polygon->coords().pointer() + con2+2) );
-            glVertex3f( *(polygon->coords().pointer() + con3),
-                        *(polygon->coords().pointer() + con3+1),
-                        *(polygon->coords().pointer() + con3+2) );
+            glVertex3f( *(polygon->coords().data() + con0),
+                        *(polygon->coords().data() + con0+1),
+                        *(polygon->coords().data() + con0+2) );
+            glVertex3f( *(polygon->coords().data() + con1),
+                        *(polygon->coords().data() + con1+1),
+                        *(polygon->coords().data() + con1+2) );
+            glVertex3f( *(polygon->coords().data() + con2),
+                        *(polygon->coords().data() + con2+1),
+                        *(polygon->coords().data() + con2+2) );
+            glVertex3f( *(polygon->coords().data() + con3),
+                        *(polygon->coords().data() + con3+1),
+                        *(polygon->coords().data() + con3+2) );
         }
     }
     glEnd();

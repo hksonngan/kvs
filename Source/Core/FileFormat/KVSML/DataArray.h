@@ -279,100 +279,93 @@ inline bool ReadExternalData(
 /*===========================================================================*/
 template <typename T1, typename T2>
 inline bool ReadExternalData(
-    kvs::ValueArray<T1>* data_array,
+    kvs::ValueArray<T1>* out_array,
     const size_t nelements,
     const std::string& filename,
     const std::string& format )
 {
-    data_array->allocate( nelements );
+    kvs::ValueArray<T1> data_array( nelements );
 
-    if( format == "binary" )
+    if ( format == "binary" )
     {
         FILE* ifs = fopen( filename.c_str(), "rb" );
         if( !ifs )
         {
-            kvsMessageError("Cannot open '%s'.", filename.c_str());
-            return( false );
+            kvsMessageError( "Cannot open '%s'.", filename.c_str() );
+            return false;
         }
 
-        if( typeid(T1) == typeid(T2) )
+        if ( typeid( T1 ) == typeid( T2 ) )
         {
-            const size_t data_size = data_array->size();
-            if ( fread( data_array->data(), sizeof(T1), data_size, ifs ) != data_size )
+            const size_t data_size = data_array.size();
+            if ( fread( data_array.data(), sizeof( T1 ), data_size, ifs ) != data_size )
             {
-                kvsMessageError("Cannot read '%s'.",filename.c_str());
+                kvsMessageError( "Cannot read '%s'.",filename.c_str() );
                 fclose( ifs );
-                return( false );
+                return false;
             }
         }
         else
         {
-            const size_t nloops = data_array->size();
-            for( size_t i = 0; i < nloops; i++ )
+            const size_t nloops = data_array.size();
+            for ( size_t i = 0; i < nloops; i++ )
             {
                 T2 data = T2(0);
                 if ( fread( &data, sizeof(T2), 1, ifs ) != 1 )
                 {
-                    kvsMessageError("Cannot read '%s'.",filename.c_str());
+                    kvsMessageError( "Cannot read '%s'.",filename.c_str() );
                     fclose( ifs );
-                    return( false );
+                    return false;
                 }
-                data_array->at(i) = static_cast<T1>( data );
+                data_array[i] = static_cast<T1>( data );
             }
         }
         fclose( ifs );
     }
-    else if( format == "ascii" )
+    else if ( format == "ascii" )
     {
         FILE* ifs = fopen( filename.c_str(), "r" );
-        if( !ifs )
+        if ( !ifs )
         {
-            kvsMessageError("Cannot open '%s'.", filename.c_str());
-            return( false );
+            kvsMessageError( "Cannot open '%s'.", filename.c_str() );
+            return false;
         }
 
         fseek( ifs, 0, SEEK_END );
         const size_t size = ftell( ifs );
 
-        char* buffer = static_cast<char*>( malloc( sizeof(char) * size ) );
-        if ( !buffer )
-        {
-            kvsMessageError("Cannot allocate memory.");
-            fclose( ifs );
-            return( false );
-        }
+        std::vector<char> buffer( size );
 
         fseek( ifs, 0, SEEK_SET );
-        if ( size != fread( buffer, 1, size, ifs ) )
+        if ( size != fread( &( buffer[0] ), 1, size, ifs ) )
         {
             kvsMessageError( "Cannot read '%s'.", filename.c_str() );
-            return( false );
+            return false;
         }
 
-        T1* data = data_array->data();
+        T1* data = data_array.data();
 
         const char* delim = " ,\t\n";
-        char* value = strtok( buffer, delim );
+        char* value = strtok( &( buffer[0] ), delim );
         for ( size_t i = 0; i < nelements; i++ )
         {
             if ( value )
             {
-                *(data++) = static_cast<T1>( atof( value ) );
+                *( data++ ) = static_cast<T1>( atof( value ) );
                 value = strtok( 0, delim );
             }
         }
-
-        free( buffer );
 
         fclose( ifs );
     }
     else
     {
-        kvsMessageError("Unknown format '%s'.",format.c_str());
-        return( false );
+        kvsMessageError( "Unknown format '%s'.",format.c_str() );
+        return false;
     }
 
-    return( true );
+    *out_array = data_array;
+    return true;
 }
 
 /*===========================================================================*/
@@ -494,11 +487,11 @@ inline bool WriteExternalData(
         const size_t data_size = data_array.size();
         if ( typeid(T) == typeid(kvs::Int8) || typeid(T) == typeid(kvs::UInt8) )
         {
-            for ( size_t i = 0; i < data_size; i++ ) ofs << int(data_array.at(i)) << delim;
+            for ( size_t i = 0; i < data_size; i++ ) ofs << int( data_array[i] ) << delim;
         }
         else
         {
-            for ( size_t i = 0; i < data_size; i++ ) ofs << data_array.at(i) << delim;
+            for ( size_t i = 0; i < data_size; i++ ) ofs << data_array[i] << delim;
         }
 
         ofs.close();

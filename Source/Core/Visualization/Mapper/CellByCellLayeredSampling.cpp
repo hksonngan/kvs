@@ -431,7 +431,7 @@ void CellByCellLayeredSampling::pregenerate_particles( const size_t nparticles )
 
     // Generate particles by using rejection method.
     kvs::ValueArray<kvs::Real32> coords( N * 3 );
-    kvs::Real32* pcoords = coords.pointer();
+    kvs::Real32* pcoords = coords.data();
     for ( size_t i = 0; i < nintervals; i++ )
     {
         const float p0 = m_density_map[i];
@@ -666,7 +666,7 @@ const float CellByCellLayeredSampling::calculate_density( const float scalar )
     const size_t index1 = index0 + 1;
     const float scalar_offset = normalized_scalar - index0;
 
-    const float* const density_map = m_density_map.pointer();
+    const float* const density_map = m_density_map.data();
 
     if ( index0 == ( BaseClass::transferFunction().resolution() - 1 ) )
     {
@@ -705,7 +705,7 @@ const float CellByCellLayeredSampling::calculate_maximum_density( const float sc
     const size_t index0 = static_cast<size_t>( ( scalar0 - min_value ) * normalize_factor ) + 1;
     const size_t index1 = static_cast<size_t>( ( scalar1 - min_value ) * normalize_factor );
 
-    const float* const density_map = m_density_map.pointer();
+    const float* const density_map = m_density_map.data();
 
     float maximum_density = density_map[ index0 ];
 
