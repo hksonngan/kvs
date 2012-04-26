@@ -165,7 +165,7 @@ private:
 template<typename T>
 void VolumeObjectBase::calculate_min_max_values( void ) const
 {
-    const T*       value = reinterpret_cast<const T*>( m_values.pointer() );
+    const T*       value = reinterpret_cast<const T*>( m_values.data() );
     const T* const end   = value + this->nnodes() * m_veclen;
 
     if ( m_veclen == 1 )

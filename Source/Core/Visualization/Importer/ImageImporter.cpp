@@ -342,7 +342,7 @@ void ImageImporter::import( const kvs::Tiff* tiff )
         return;
     }
 
-    const kvs::UInt8* raw_data = static_cast<const kvs::UInt8*>( tiff->rawData().pointer() );
+    const kvs::UInt8* raw_data = static_cast<const kvs::UInt8*>( tiff->rawData().data() );
     const size_t      raw_size = tiff->rawData().byteSize();
     kvs::ValueArray<kvs::UInt8> data( raw_data, raw_size ); // deep copy
 

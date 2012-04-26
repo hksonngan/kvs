@@ -93,7 +93,7 @@ void TableObject::addColumn( const kvs::AnyValueArray& array, const std::string&
     const std::type_info& type = array.typeInfo()->type();
     if ( type == typeid( kvs::Int8 ) )
     {
-        const kvs::Int8* value = static_cast<const kvs::Int8*>( array.pointer() );
+        const kvs::Int8* value = static_cast<const kvs::Int8*>( array.data() );
         for( size_t i = 0; i < array.size(); i++ )
         {
             min_value = kvs::Math::Min( min_value, kvs::Real64( value[i] ) );
@@ -102,7 +102,7 @@ void TableObject::addColumn( const kvs::AnyValueArray& array, const std::string&
     }
     else if ( type == typeid( kvs::UInt8 ) )
     {
-        const kvs::UInt8* value = static_cast<const kvs::UInt8*>( array.pointer() );
+        const kvs::UInt8* value = static_cast<const kvs::UInt8*>( array.data() );
         for( size_t i = 0; i < array.size(); i++ )
         {
             min_value = kvs::Math::Min( min_value, kvs::Real64( value[i] ) );
@@ -111,7 +111,7 @@ void TableObject::addColumn( const kvs::AnyValueArray& array, const std::string&
     }
     else if ( type == typeid( kvs::Int16 ) )
     {
-        const kvs::Int16* value = static_cast<const kvs::Int16*>( array.pointer() );
+        const kvs::Int16* value = static_cast<const kvs::Int16*>( array.data() );
         for( size_t i = 0; i < array.size(); i++ )
         {
             min_value = kvs::Math::Min( min_value, kvs::Real64( value[i] ) );
@@ -120,7 +120,7 @@ void TableObject::addColumn( const kvs::AnyValueArray& array, const std::string&
     }
     else if ( type == typeid( kvs::UInt16 ) )
     {
-        const kvs::UInt16* value = static_cast<const kvs::UInt16*>( array.pointer() );
+        const kvs::UInt16* value = static_cast<const kvs::UInt16*>( array.data() );
         for( size_t i = 0; i < array.size(); i++ )
         {
             min_value = kvs::Math::Min( min_value, kvs::Real64( value[i] ) );
@@ -129,7 +129,7 @@ void TableObject::addColumn( const kvs::AnyValueArray& array, const std::string&
     }
     else if ( type == typeid( kvs::Int32 ) )
     {
-        const kvs::Int32* value = static_cast<const kvs::Int32*>( array.pointer() );
+        const kvs::Int32* value = static_cast<const kvs::Int32*>( array.data() );
         for( size_t i = 0; i < array.size(); i++ )
         {
             min_value = kvs::Math::Min( min_value, kvs::Real64( value[i] ) );
@@ -138,7 +138,7 @@ void TableObject::addColumn( const kvs::AnyValueArray& array, const std::string&
     }
     else if ( type == typeid( kvs::UInt32 ) )
     {
-        const kvs::UInt32* value = static_cast<const kvs::UInt32*>( array.pointer() );
+        const kvs::UInt32* value = static_cast<const kvs::UInt32*>( array.data() );
         for( size_t i = 0; i < array.size(); i++ )
         {
             min_value = kvs::Math::Min( min_value, kvs::Real64( value[i] ) );
@@ -147,7 +147,7 @@ void TableObject::addColumn( const kvs::AnyValueArray& array, const std::string&
     }
     else if ( type == typeid( kvs::Int64 ) )
     {
-        const kvs::Int64* value = static_cast<const kvs::Int64*>( array.pointer() );
+        const kvs::Int64* value = static_cast<const kvs::Int64*>( array.data() );
         for( size_t i = 0; i < array.size(); i++ )
         {
             min_value = kvs::Math::Min( min_value, kvs::Real64( value[i] ) );
@@ -156,7 +156,7 @@ void TableObject::addColumn( const kvs::AnyValueArray& array, const std::string&
     }
     else if ( type == typeid( kvs::UInt64 ) )
     {
-        const kvs::UInt64* value = static_cast<const kvs::UInt64*>( array.pointer() );
+        const kvs::UInt64* value = static_cast<const kvs::UInt64*>( array.data() );
         for( size_t i = 0; i < array.size(); i++ )
         {
             min_value = kvs::Math::Min( min_value, kvs::Real64( value[i] ) );
@@ -165,7 +165,7 @@ void TableObject::addColumn( const kvs::AnyValueArray& array, const std::string&
     }
     else if ( type == typeid( kvs::Real32 ) )
     {
-        const kvs::Real32* value = static_cast<const kvs::Real32*>( array.pointer() );
+        const kvs::Real32* value = static_cast<const kvs::Real32*>( array.data() );
         for( size_t i = 0; i < array.size(); i++ )
         {
             min_value = kvs::Math::Min( min_value, kvs::Real64( value[i] ) );
@@ -174,7 +174,7 @@ void TableObject::addColumn( const kvs::AnyValueArray& array, const std::string&
     }
     else if ( type == typeid( kvs::Real64 ) )
     {
-        const kvs::Real64* value = static_cast<const kvs::Real64*>( array.pointer() );
+        const kvs::Real64* value = static_cast<const kvs::Real64*>( array.data() );
         for( size_t i = 0; i < array.size(); i++ )
         {
             min_value = kvs::Math::Min( min_value, kvs::Real64( value[i] ) );

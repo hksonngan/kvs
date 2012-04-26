@@ -111,7 +111,7 @@ const kvs::glut::Rectangle& OpacityMapPalette::palette( void ) const
 
 const kvs::OpacityMap OpacityMapPalette::opacityMap( void ) const
 {
-    kvs::OpacityMap::Table opacity_map_table( m_opacity_map.table().pointer(), m_opacity_map.table().size() );
+    kvs::OpacityMap::Table opacity_map_table( m_opacity_map.table().data(), m_opacity_map.table().size() );
     return( kvs::OpacityMap( opacity_map_table ) );
 }
 
@@ -123,7 +123,7 @@ void OpacityMapPalette::setCaption( const std::string& caption )
 void OpacityMapPalette::setOpacityMap( const kvs::OpacityMap& opacity_map )
 {
     // Deep copy.
-    kvs::OpacityMap::Table opacity_map_table( opacity_map.table().pointer(), opacity_map.table().size() );
+    kvs::OpacityMap::Table opacity_map_table( opacity_map.table().data(), opacity_map.table().size() );
     m_opacity_map = kvs::OpacityMap( opacity_map_table );
     this->initialize_texture( m_opacity_map );
 }
@@ -200,7 +200,7 @@ void OpacityMapPalette::mousePressEvent( kvs::MouseEvent* event )
             const float opacity = static_cast<float>( y1 - y ) / ( y1 - y0 );
 
             // Update the opacity map.
-            kvs::Real32* data = const_cast<kvs::Real32*>( m_opacity_map.table().pointer() );
+            kvs::Real32* data = const_cast<kvs::Real32*>( m_opacity_map.table().data() );
             kvs::Real32* pdata = data;
             pdata = data + index;
             pdata[0] = opacity;
@@ -267,7 +267,7 @@ int OpacityMapPalette::get_fitted_height( void )
 void OpacityMapPalette::initialize_texture( const kvs::OpacityMap& opacity_map )
 {
     const size_t width = opacity_map.resolution();
-    const kvs::Real32* data = opacity_map.table().pointer();
+    const kvs::Real32* data = opacity_map.table().data();
 
     m_texture.release();
     m_texture.setMinFilter( GL_LINEAR );
@@ -366,7 +366,7 @@ void OpacityMapPalette::draw_palette( void )
     const int height = m_palette.height();
     const int resolution = m_opacity_map.resolution();
     const float stride_x = static_cast<float>( width ) / ( resolution - 1 );
-    const kvs::Real32* data = m_opacity_map.table().pointer();
+    const kvs::Real32* data = m_opacity_map.table().data();
     const kvs::Vector2f range_min( static_cast<float>(x0), static_cast<float>(y0+1) );
     const kvs::Vector2f range_max( static_cast<float>(x1-1), static_cast<float>(y1) );
 
@@ -419,7 +419,7 @@ void OpacityMapPalette::draw_free_hand_line( kvs::MouseEvent* event )
     // Update the opacity map.
     const int begin_index = kvs::Math::Min( old_index, new_index );
     const int end_index = kvs::Math::Max( old_index, new_index );
-    kvs::Real32* data = const_cast<kvs::Real32*>( m_opacity_map.table().pointer() );
+    kvs::Real32* data = const_cast<kvs::Real32*>( m_opacity_map.table().data() );
     kvs::Real32* pdata = data + begin_index;
     for ( int i = begin_index; i < end_index; i++ )
     {
@@ -466,7 +466,7 @@ void OpacityMapPalette::draw_straight_line( kvs::MouseEvent* event )
     const int fix_index = static_cast<int>( ( fix_x - x0 ) * resolution / ( x1 - x0 ) + 0.5f );
 
     // Update the opacity map.
-    kvs::Real32* data = const_cast<kvs::Real32*>( m_opacity_map.table().pointer() );
+    kvs::Real32* data = const_cast<kvs::Real32*>( m_opacity_map.table().data() );
     if ( ( new_x - old_x ) * ( fix_x - old_x ) < 0 )
     {
         // Straight line.
@@ -505,7 +505,7 @@ void OpacityMapPalette::draw_straight_line( kvs::MouseEvent* event )
 
             const int begin_index = kvs::Math::Min( old_index, new_index );
             const int end_index = kvs::Math::Max( old_index, new_index );
-            kvs::Real32* data = const_cast<kvs::Real32*>( m_opacity_map.table().pointer() );
+            kvs::Real32* data = const_cast<kvs::Real32*>( m_opacity_map.table().data() );
             kvs::Real32* pdata = data + begin_index;
             for ( int i = begin_index; i < end_index; i++ )
             {

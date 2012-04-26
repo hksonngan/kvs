@@ -332,7 +332,7 @@ void TetrahedraToTetrahedra::remove_quadratic_nodes( const kvs::UnstructuredVolu
 {
     const size_t tet2_ncells = volume->ncells();
     const kvs::UInt32* tet2_pconnections = volume->connections().data();
-    const T* tet2_pvalues = static_cast<const T*>( volume->values().pointer() );
+    const T* tet2_pvalues = static_cast<const T*>( volume->values().data() );
     const kvs::Real32* tet2_pcoords = volume->coords().data();
 
     ::IDMap id_map;

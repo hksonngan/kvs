@@ -124,7 +124,7 @@ inline const kvs::UInt32* TrilinearInterpolator::indices( void ) const
 template <typename T>
 inline const float TrilinearInterpolator::scalar( void ) const
 {
-    const T* const data = reinterpret_cast<const T*>( m_reference_volume->values().pointer() );
+    const T* const data = reinterpret_cast<const T*>( m_reference_volume->values().data() );
 
     return(
         static_cast<float>(
@@ -144,7 +144,7 @@ inline const kvs::Vector3f TrilinearInterpolator::gradient( void ) const
     // Calculate the point's gradient.
     float dx[8], dy[8], dz[8];
 
-    const T* const data = reinterpret_cast<const T*>( m_reference_volume->values().pointer() );
+    const T* const data = reinterpret_cast<const T*>( m_reference_volume->values().data() );
 
     const kvs::Vector3ui resolution = m_reference_volume->resolution();
     const size_t line_size  = m_reference_volume->nnodesPerLine();

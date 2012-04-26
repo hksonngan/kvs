@@ -378,7 +378,7 @@ const kvs::AnyValueArray StructuredVolumeImporter::get_dicom_data(
     kvs::AnyValueArray values;
     values.template allocate<T>( nnodes );
 
-    T* pvalues = static_cast<T*>( values.pointer() );
+    T* pvalues = static_cast<T*>( values.data() );
     for ( size_t k = 0; k < nslices; k++ )
     {
         const kvs::Dicom* dicom = (*dicom_list)[k];

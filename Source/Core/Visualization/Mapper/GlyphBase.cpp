@@ -241,7 +241,7 @@ void GlyphBase::calculate_rectilinear_coords( const kvs::StructuredVolumeObject*
 template <typename T>
 void GlyphBase::calculate_sizes( const kvs::VolumeObjectBase* volume )
 {
-    const T* value = reinterpret_cast<const T*>( volume->values().pointer() );
+    const T* value = reinterpret_cast<const T*>( volume->values().data() );
     const size_t veclen = volume->veclen();
     const size_t nnodes = volume->nnodes();
 
@@ -305,7 +305,7 @@ template void GlyphBase::calculate_sizes<kvs::Real64>( const kvs::VolumeObjectBa
 template <typename T>
 void GlyphBase::calculate_directions( const kvs::VolumeObjectBase* volume )
 {
-    const T* value = reinterpret_cast<const T*>( volume->values().pointer() );
+    const T* value = reinterpret_cast<const T*>( volume->values().data() );
     const size_t veclen = volume->veclen();
     const size_t nnodes = volume->nnodes();
     if ( veclen == 3 )
@@ -342,7 +342,7 @@ template void GlyphBase::calculate_directions<kvs::Real64>( const kvs::VolumeObj
 template <typename T>
 void GlyphBase::calculate_colors( const kvs::VolumeObjectBase* volume )
 {
-    const T* value = reinterpret_cast<const T*>( volume->values().pointer() );
+    const T* value = reinterpret_cast<const T*>( volume->values().data() );
     const size_t veclen = volume->veclen();
     const size_t nnodes = volume->nnodes();
 
@@ -424,7 +424,7 @@ template void GlyphBase::calculate_colors<kvs::Real64>( const kvs::VolumeObjectB
 template <typename T>
 void GlyphBase::calculate_opacities( const kvs::VolumeObjectBase* volume )
 {
-    const T* value = reinterpret_cast<const T*>( volume->values().pointer() );
+    const T* value = reinterpret_cast<const T*>( volume->values().data() );
     const size_t veclen = volume->veclen();
     const size_t nnodes = volume->nnodes();
 

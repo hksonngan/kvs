@@ -509,13 +509,13 @@ const bool GrayImage::read( const std::string& filename )
         const kvs::Tiff tiff( filename );
         if ( tiff.colorMode() == kvs::Tiff::Color24 )
         {
-            const kvs::UInt8* data = static_cast<kvs::UInt8*>(tiff.rawData().pointer());
+            const kvs::UInt8* data = static_cast<kvs::UInt8*>(tiff.rawData().data());
             kvs::ColorImage image( tiff.width(), tiff.height(), data );
             return( this->read_image( image ) );
         }
         if ( tiff.colorMode() == kvs::Tiff::Gray8 )
         {
-            const kvs::UInt8* data = static_cast<kvs::UInt8*>(tiff.rawData().pointer());
+            const kvs::UInt8* data = static_cast<kvs::UInt8*>(tiff.rawData().data());
             const BaseClass::ImageType type = BaseClass::Gray;
             return( BaseClass::create( tiff.width(), tiff.height(), type, data ) );
         }

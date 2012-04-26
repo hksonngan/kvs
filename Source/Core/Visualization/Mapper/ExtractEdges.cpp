@@ -647,7 +647,7 @@ void ExtractEdges::calculate_quadratic_hexahedra_connections(
 template <typename T>
 void ExtractEdges::calculate_colors( const kvs::VolumeObjectBase* volume )
 {
-    const T* value = reinterpret_cast<const T*>( volume->values().pointer() );
+    const T* value = reinterpret_cast<const T*>( volume->values().data() );
     const T* const end = value + volume->values().size();
 
     kvs::ValueArray<kvs::UInt8> colors( 3 * volume->nnodes() );

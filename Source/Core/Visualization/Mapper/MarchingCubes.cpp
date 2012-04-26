@@ -350,7 +350,7 @@ void MarchingCubes::extract_surfaces_without_duplication(
 template <typename T>
 const size_t MarchingCubes::calculate_table_index( const size_t* local_index ) const
 {
-    const T* const values = static_cast<const T*>( BaseClass::m_volume->values().pointer() );
+    const T* const values = static_cast<const T*>( BaseClass::m_volume->values().data() );
     const double isolevel = m_isolevel;
 
     size_t table_index = 0;
@@ -379,7 +379,7 @@ const kvs::Vector3f MarchingCubes::interpolate_vertex(
     const kvs::Vector3f& vertex0,
     const kvs::Vector3f& vertex1 ) const
 {
-    const T* const values = static_cast<const T*>( BaseClass::m_volume->values().pointer() );
+    const T* const values = static_cast<const T*>( BaseClass::m_volume->values().data() );
     const kvs::StructuredVolumeObject* volume =
         reinterpret_cast<const kvs::StructuredVolumeObject*>( BaseClass::m_volume );
 
@@ -440,7 +440,7 @@ void MarchingCubes::calculate_isopoints(
     kvs::UInt32*&             vertex_map,
     std::vector<kvs::Real32>& coords )
 {
-    const T* const values = static_cast<const T*>( BaseClass::m_volume->values().pointer() );
+    const T* const values = static_cast<const T*>( BaseClass::m_volume->values().data() );
     const kvs::StructuredVolumeObject* volume =
         reinterpret_cast<const kvs::StructuredVolumeObject*>( BaseClass::m_volume );
 

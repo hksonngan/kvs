@@ -139,7 +139,7 @@ const kvs::glut::Rectangle& ColorMapPalette::palette( void ) const
 /*===========================================================================*/
 const kvs::ColorMap ColorMapPalette::colorMap( void ) const
 {
-    kvs::ColorMap::Table color_map_table( m_color_map.table().pointer(), m_color_map.table().size() );
+    kvs::ColorMap::Table color_map_table( m_color_map.table().data(), m_color_map.table().size() );
     return( kvs::ColorMap( color_map_table ) );
 }
 
@@ -163,7 +163,7 @@ void ColorMapPalette::setCaption( const std::string& caption )
 void ColorMapPalette::setColorMap( const kvs::ColorMap& color_map )
 {
     // Deep copy.
-    kvs::ColorMap::Table color_map_table( color_map.table().pointer(), color_map.table().size() );
+    kvs::ColorMap::Table color_map_table( color_map.table().data(), color_map.table().size() );
     m_color_map = kvs::ColorMap( color_map_table );
     this->initialize_texture( m_color_map );
 }
@@ -289,7 +289,7 @@ void ColorMapPalette::mousePressEvent( kvs::MouseEvent* event )
             // Update the color data.
             if ( m_color_palette ) m_drawing_color = m_color_palette->color();
             const kvs::RGBColor drawing_color = m_drawing_color;
-            kvs::UInt8* data = const_cast<kvs::UInt8*>( m_color_map.table().pointer() );
+            kvs::UInt8* data = const_cast<kvs::UInt8*>( m_color_map.table().data() );
             kvs::UInt8* pdata = data;
             pdata = data + index * 3;
             pdata[0] = static_cast<kvs::UInt8>( drawing_color.r() * ratio + pdata[0] * ( 1 - ratio ) );
@@ -348,7 +348,7 @@ void ColorMapPalette::mouseMoveEvent( kvs::MouseEvent* event )
             const kvs::RGBColor drawing_color = m_drawing_color;
             const int begin_index = kvs::Math::Min( old_index, new_index );
             const int end_index = kvs::Math::Max( old_index, new_index );
-            kvs::UInt8* data = const_cast<kvs::UInt8*>( m_color_map.table().pointer() );
+            kvs::UInt8* data = const_cast<kvs::UInt8*>( m_color_map.table().data() );
             kvs::UInt8* pdata = data + begin_index * 3;
             for ( int i = begin_index; i < end_index; i++, pdata += 3 )
             {
@@ -404,7 +404,7 @@ void ColorMapPalette::initialize_texture( const kvs::ColorMap& color_map )
 {
     const size_t nchannels  = 3; // rgb
     const size_t width = color_map.resolution();
-    const kvs::UInt8* data = color_map.table().pointer();
+    const kvs::UInt8* data = color_map.table().data();
 
     m_texture.release();
     m_texture.setPixelFormat( nchannels, sizeof( kvs::UInt8 ) );

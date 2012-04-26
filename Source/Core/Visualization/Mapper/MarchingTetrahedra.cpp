@@ -318,7 +318,7 @@ void MarchingTetrahedra::extract_surfaces_without_duplication(
 template <typename T>
 const size_t MarchingTetrahedra::calculate_table_index( const size_t* local_index ) const
 {
-    const T* const values = static_cast<const T*>( BaseClass::m_volume->values().pointer() );
+    const T* const values = static_cast<const T*>( BaseClass::m_volume->values().data() );
     const double isolevel = m_isolevel;
 
     size_t table_index = 0;
@@ -343,7 +343,7 @@ const kvs::Vector3f MarchingTetrahedra::interpolate_vertex(
     const int vertex0,
     const int vertex1 ) const
 {
-    const T* const values = static_cast<const T*>( BaseClass::m_volume->values().pointer() );
+    const T* const values = static_cast<const T*>( BaseClass::m_volume->values().data() );
     const kvs::Real32* const coords = BaseClass::m_volume->coords().data();
 
     const size_t coord0_index = 3 * vertex0;
@@ -399,7 +399,7 @@ void MarchingTetrahedra::calculate_isopoints(
     const kvs::UnstructuredVolumeObject* volume =
         reinterpret_cast<const kvs::UnstructuredVolumeObject*>( BaseClass::m_volume );
 
-    const T* const values = static_cast<const T*>( volume->values().pointer() );
+    const T* const values = static_cast<const T*>( volume->values().data() );
     const kvs::EdgeConnections* const edge_connections = volume->adjacency()->edgeConnections();
     const size_t nedges = volume->adjacency()->nedges();
     const double isolevel = m_isolevel;
@@ -439,7 +439,7 @@ void MarchingTetrahedra::connect_isopoints(
         reinterpret_cast<const kvs::UnstructuredVolumeObject*>( BaseClass::m_volume );
 
     const kvs::VertexGraph* const vertex_graph = volume->adjacency()->vertexGraph();
-    const kvs::UInt32* const volume_connections = volum->connections()->pointer();
+    const kvs::UInt32* const volume_connections = volum->connections()->data();
     const size_t ncells = volume->ncells();
 
     size_t index = 0;

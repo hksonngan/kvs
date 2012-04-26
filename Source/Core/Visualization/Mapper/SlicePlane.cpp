@@ -955,7 +955,7 @@ const double SlicePlane::interpolate_value(
     const kvs::Vector3f&               vertex0,
     const kvs::Vector3f&               vertex1 ) const
 {
-    const T* const values = static_cast<const T*>( volume->values().pointer() );
+    const T* const values = static_cast<const T*>( volume->values().data() );
 
     const size_t line_size  = volume->nnodesPerLine();
     const size_t slice_size = volume->nnodesPerSlice();
@@ -991,7 +991,7 @@ const double SlicePlane::interpolate_value(
     const size_t                         index0,
     const size_t                         index1 ) const
 {
-    const T* const values = static_cast<const T*>( volume->values().pointer() );
+    const T* const values = static_cast<const T*>( volume->values().data() );
     const kvs::Real32* const coords = volume->coords().data();
 
     const float value0 = this->substitute_plane_equation( kvs::Vector3f( coords + 3 * index0 ) );

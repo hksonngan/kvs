@@ -181,7 +181,7 @@ void HitAndMissSampling::generate_particles( const kvs::StructuredVolumeObject* 
     const kvs::Vector3ui resolution = volume->resolution();
     const size_t line_size  = volume->nnodesPerLine();
     const size_t slice_size = volume->nnodesPerSlice();
-    const T* values = reinterpret_cast<const T*>( volume->values().pointer() );
+    const T* values = reinterpret_cast<const T*>( volume->values().data() );
 
     kvs::MersenneTwister R; // Random number generator
     size_t index = 0;     // index of voxel

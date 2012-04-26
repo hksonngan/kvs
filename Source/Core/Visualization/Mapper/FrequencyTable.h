@@ -121,7 +121,7 @@ template <typename T>
 inline void FrequencyTable::binning( const kvs::VolumeObjectBase* volume )
 {
     const size_t veclen = volume->veclen();
-    const T* value = reinterpret_cast<const T*>( volume->values().pointer() );
+    const T* value = reinterpret_cast<const T*>( volume->values().data() );
     const T* const end = value + volume->nnodes() * veclen;
 //    const kvs::Real64 width = ( m_max_range - m_min_range ) / kvs::Real64( m_nbins - 1 );
     const kvs::Real64 width = ( m_max_range - m_min_range + 1 ) / kvs::Real64( m_nbins );

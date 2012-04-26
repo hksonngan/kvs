@@ -217,9 +217,9 @@ void StochasticLineEngine::create_vertex_buffer( void )
         indices[ i * 2 + 1 ] = static_cast<IndexType>( ( index / random_texture_size ) % random_texture_size );
     }
 
-    const IndexType*  ptr_i = indices.pointer();
-    const CoordType*  ptr_v = m_ref_line->coords().pointer();
-    const ColorType*  ptr_c = m_ref_line->colors().pointer();
+    const IndexType*  ptr_i = indices.data();
+    const CoordType*  ptr_v = m_ref_line->coords().data();
+    const ColorType*  ptr_c = m_ref_line->colors().data();
 
     m_vbo.create( size_of_vertex );
     m_vbo.bind();
@@ -230,7 +230,7 @@ void StochasticLineEngine::create_vertex_buffer( void )
     if ( has_connect )
     {
         const size_t size_of_line = sizeof(ConnectType) * 2 * nlines;
-        const ConnectType* ptr_conn = m_ref_line->connections().pointer();
+        const ConnectType* ptr_conn = m_ref_line->connections().data();
 
         m_ibo.create( size_of_line );
         m_ibo.bind();
@@ -328,7 +328,7 @@ void StochasticLineEngine::draw_vertex_buffer( const float modelview_matrix[16] 
             case kvs::LineObject::Polyline:
             {
                 size_t count = 0;
-                const unsigned int* p_connect = m_ref_line->connections().pointer();
+                const unsigned int* p_connect = m_ref_line->connections().data();
                 for ( size_t i = 0; i < nlines; i++ )
                 {
                     const size_t nvertices = p_connect[ i * 2 + 1 ] - p_connect[ i * 2 ] + 1;

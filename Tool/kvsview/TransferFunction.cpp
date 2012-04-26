@@ -52,8 +52,8 @@ struct Parameters
     {
         const size_t nchannels  = 4; // rgba
         const size_t width = transfer_function.colorMap().resolution();
-        const kvs::UInt8* color_map = transfer_function.colorMap().table().pointer();
-        const kvs::Real32* opacity_map = transfer_function.opacityMap().table().pointer();
+        const kvs::UInt8* color_map = transfer_function.colorMap().table().data();
+        const kvs::Real32* opacity_map = transfer_function.opacityMap().table().data();
 
         GLubyte* data = new GLubyte [ width * nchannels ];
         if ( !data )

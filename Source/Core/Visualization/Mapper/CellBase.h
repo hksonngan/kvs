@@ -166,7 +166,7 @@ inline void CellBase<T>::bindCell( const kvs::UInt32 index )
     const kvs::UnstructuredVolumeObject* volume = m_reference_volume;
     const kvs::UInt32* const connections = volume->connections().data();
     const kvs::Real32* const coords = volume->coords().data();
-    const T* const values = static_cast<const T*>( volume->values().pointer() );
+    const T* const values = static_cast<const T*>( volume->values().data() );
 
     const size_t nnodes = m_nnodes;
     const kvs::UInt32 connection_index = nnodes * index;

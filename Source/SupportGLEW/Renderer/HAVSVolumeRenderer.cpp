@@ -270,13 +270,13 @@ void HAVSVolumeRenderer::initialize_geometry( void )
     if ( this->isEnabledVBO() )
     {
         const size_t coords_size = m_meshes->coords().byteSize();
-        const kvs::Real32* coords_pointer = m_meshes->coords().pointer();
+        const kvs::Real32* coords_pointer = m_meshes->coords().data();
         m_vertex_coords.setUsage( GL_STATIC_DRAW_ARB );
         m_vertex_coords.create( coords_size );
         m_vertex_coords.download( coords_size, coords_pointer );
 
         const size_t values_size = m_meshes->values().byteSize();
-        const kvs::Real32* values_pointer = m_meshes->values().pointer();
+        const kvs::Real32* values_pointer = m_meshes->values().data();
         m_vertex_values.setUsage( GL_STATIC_DRAW_ARB );
         m_vertex_values.create( values_size );
         m_vertex_values.download( values_size, values_pointer );
@@ -588,10 +588,10 @@ void HAVSVolumeRenderer::draw_geometry_pass( void )
     else
     {
         glEnableClientState( GL_VERTEX_ARRAY );
-        glVertexPointer( 3, GL_FLOAT, 0, m_meshes->coords().pointer() );
+        glVertexPointer( 3, GL_FLOAT, 0, m_meshes->coords().data() );
 
         glEnableClientState( GL_TEXTURE_COORD_ARRAY );
-        glTexCoordPointer( 1, GL_FLOAT, 0, m_meshes->values().pointer() );
+        glTexCoordPointer( 1, GL_FLOAT, 0, m_meshes->values().data() );
 
         glDrawElements( GL_TRIANGLES, m_meshes->nrenderfaces() * 3, GL_UNSIGNED_INT, m_pindices );
 
@@ -751,7 +751,7 @@ void HAVSVolumeRenderer::Meshes::setVolume( const kvs::UnstructuredVolumeObject*
     // Normalize scalars
     if ( !volume->hasMinMaxValues() ) const_cast<kvs::UnstructuredVolumeObject*>(volume)->updateMinMaxValues();
     const size_t nvalues = volume->values().size();
-    const float* values = static_cast<const float*>(volume->values().pointer());
+    const float* values = static_cast<const float*>(volume->values().data());
     const float  min_value = volume->minValue();
     const float  max_value = volume->maxValue();
     const float  range = max_value - min_value;
@@ -835,7 +835,7 @@ void HAVSVolumeRenderer::Meshes::build( void )
     std::pair<FaceSet::iterator,bool> result3;
     std::pair<FaceSet::iterator,bool> result4;
 
-    const kvs::UInt32* pconnections = m_connections.pointer();
+    const kvs::UInt32* pconnections = m_connections.data();
     for ( size_t i = 0; i < m_ntetrahedra; i++ )
     {
 /*

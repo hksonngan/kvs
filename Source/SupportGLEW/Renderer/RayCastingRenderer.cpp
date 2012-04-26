@@ -52,7 +52,7 @@ kvs::AnyValueArray NormalizeValues(
 
     const kvs::Real32 scale = 1.0f / ( max_value - min_value );
     const size_t nnodes = volume->nnodes();
-    const T* src = static_cast<const T*>( volume->values().pointer() );
+    const T* src = static_cast<const T*>( volume->values().data() );
 
     kvs::ValueArray<kvs::Real32> data( nnodes );
     kvs::Real32* dst = data.data();
@@ -69,7 +69,7 @@ kvs::AnyValueArray SignedToUnsigned( const kvs::StructuredVolumeObject* volume )
 {
     const SrcType min = kvs::Value<SrcType>::Min();
     const size_t nvalues = volume->values().size();
-    const SrcType* src = static_cast<const SrcType*>( volume->values().pointer() );
+    const SrcType* src = static_cast<const SrcType*>( volume->values().data() );
 
     kvs::ValueArray<DstType> data( nvalues );
     DstType* dst = data.data();
@@ -794,7 +794,7 @@ void RayCastingRenderer::create_transfer_function( const kvs::StructuredVolumeOb
 
     const size_t width = BaseClass::m_tfunc.resolution();
     kvs::ValueArray<float> colors( width * 4 );
-    float* data = colors.pointer();
+    float* data = colors.data();
 
     const kvs::ColorMap& cmap = BaseClass::m_tfunc.colorMap();
     const kvs::OpacityMap& omap = BaseClass::m_tfunc.opacityMap();
@@ -811,7 +811,7 @@ void RayCastingRenderer::create_transfer_function( const kvs::StructuredVolumeOb
     m_transfer_function_texture.setMinFilter( GL_LINEAR );
     m_transfer_function_texture.setPixelFormat( GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT  );
     m_transfer_function_texture.create( width );
-    m_transfer_function_texture.download( width, colors.pointer() );
+    m_transfer_function_texture.download( width, colors.data() );
     m_transfer_function_texture.unbind();
 
     ::CheckOpenGLError( "Cannot create transfer function texture." );
@@ -924,7 +924,7 @@ void RayCastingRenderer::create_volume_data( const kvs::StructuredVolumeObject* 
 
     m_volume_data.setPixelFormat( data_format, GL_ALPHA, data_type );
     m_volume_data.create( width, height, depth );
-    m_volume_data.download( width, height, depth, data_value.pointer() );
+    m_volume_data.download( width, height, depth, data_value.data() );
     m_volume_data.unbind();
 
     ::CheckOpenGLError( "Cannot create volume data texture." );

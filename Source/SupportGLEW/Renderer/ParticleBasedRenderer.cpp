@@ -573,7 +573,7 @@ void ParticleBasedRenderer::attachPointObject( const kvs::PointObject* point )
 {
     m_ref_point = point;
 
-    if ( m_ref_point->normals().pointer() == NULL ||
+    if ( m_ref_point->normals().data() == NULL ||
          m_ref_point->nnormals() == 0 )
     {
         BaseClass::disableShading();
@@ -1428,9 +1428,9 @@ void ParticleBasedRenderer::align_particles( void )
 
     // Source pointers.
     /*ADD_UEMURA(begin)*/
-    kvs::Real32* src_coord  = const_cast<kvs::Real32*>(m_ref_point->coords().pointer());
-    kvs::Real32* src_normal = const_cast<kvs::Real32*>(m_ref_point->normals().pointer());
-    kvs::UInt8*  src_color  = const_cast<kvs::UInt8*>(m_ref_point->colors().pointer());
+    kvs::Real32* src_coord  = const_cast<kvs::Real32*>(m_ref_point->coords().data());
+    kvs::Real32* src_normal = const_cast<kvs::Real32*>(m_ref_point->normals().data());
+    kvs::UInt8*  src_color  = const_cast<kvs::UInt8*>(m_ref_point->colors().data());
 
     const bool has_color_array = m_ref_point->ncolors() == m_ref_point->nvertices();
     const bool has_normal_array = m_ref_point->nnormals() == m_ref_point->nvertices();

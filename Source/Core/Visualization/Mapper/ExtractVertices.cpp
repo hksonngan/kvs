@@ -214,7 +214,7 @@ void ExtractVertices::calculate_colors( void )
 {
     const kvs::VolumeObjectBase* volume = m_volume;
 
-    const T*       value = reinterpret_cast<const T*>( volume->values().pointer() );
+    const T*       value = reinterpret_cast<const T*>( volume->values().data() );
     const T* const end   = value + volume->values().size();
 
     kvs::ValueArray<kvs::UInt8> colors( 3 * volume->nnodes() );

@@ -189,8 +189,8 @@ void LineIntegralConvolution::convolution( const kvs::StructuredVolumeObject* vo
     kvs::Vector3<T> travel_t;  //
     kvs::Vector3<T> entry_pos; //
 
-    const kvs::UInt8*           noise_data = static_cast<const kvs::UInt8*>( m_noise->values().pointer() );
-    const T*                    src_data = static_cast<const T*>( volume->values().pointer() );
+    const kvs::UInt8*           noise_data = static_cast<const kvs::UInt8*>( m_noise->values().data() );
+    const T*                    src_data = static_cast<const T*>( volume->values().data() );
 
     kvs::ValueArray<kvs::UInt8> dst_data( volume->nnodes() );
 

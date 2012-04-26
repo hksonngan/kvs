@@ -101,7 +101,7 @@ struct Parameters
 
         this->histogram_texture.setPixelFormat( nchannels, sizeof( kvs::UInt8 ) );
         this->histogram_texture.create( width, height );
-        this->histogram_texture.download( width, height, this->histogramImage().pointer() );
+        this->histogram_texture.download( width, height, this->histogramImage().data() );
     }
 
     void updateHistogramTexture( void )

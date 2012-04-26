@@ -107,7 +107,7 @@ void StructuredVectorToScalar::calculate_magnitude( const kvs::StructuredVolumeO
 
     kvs::ValueArray<kvs::Real32> values( nnodes );
     kvs::Real32* dst = values.data();
-    const T* src = static_cast<const T*>( volume->values().pointer() );
+    const T* src = static_cast<const T*>( volume->values().data() );
 
     for ( size_t i = 0; i < nnodes; i++ )
     {

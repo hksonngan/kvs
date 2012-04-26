@@ -29,7 +29,7 @@ namespace
 template <typename T>
 inline const kvs::Vector3f GetInterpolatedVector( const size_t vertex_id[8], const float weight[8], const kvs::VolumeObjectBase* volume )
 {
-    const T* values = reinterpret_cast<const T*>( volume->values().pointer() );
+    const T* values = reinterpret_cast<const T*>( volume->values().data() );
 
     kvs::Vector3f ret( 0.0f );
     for ( size_t i = 0; i < 8; i++ )

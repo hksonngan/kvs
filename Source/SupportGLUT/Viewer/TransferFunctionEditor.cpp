@@ -361,8 +361,8 @@ void TransferFunctionEditor::setTransferFunction( const kvs::TransferFunction& t
     const kvs::OpacityMap& omap = transfer_function.opacityMap();
 
     // Deep copy for the initial transfer function.
-    kvs::ColorMap::Table color_map_table( cmap.table().pointer(), cmap.table().size() );
-    kvs::OpacityMap::Table opacity_map_table( omap.table().pointer(), omap.table().size() );
+    kvs::ColorMap::Table color_map_table( cmap.table().data(), cmap.table().size() );
+    kvs::OpacityMap::Table opacity_map_table( omap.table().data(), omap.table().size() );
 //    kvs::ColorMap color_map( color_map_table, cmap.minValue(), cmap.maxValue() );
 //    kvs::OpacityMap opacity_map( opacity_map_table, omap.minValue(), omap.maxValue() );
     kvs::ColorMap color_map( color_map_table );
@@ -1410,7 +1410,7 @@ void TransferFunctionEditor::draw_opacity_map_box( void )
     const int height = m_opacity_map_box->height();
     const int resolution = BaseClass::resolution();
     const float stride_x = static_cast<float>( width ) / ( resolution - 1 );
-    const kvs::Real32* data = BaseClass::opacityMap().table().pointer();
+    const kvs::Real32* data = BaseClass::opacityMap().table().data();
     const kvs::Vector2f range_min( static_cast<float>(x0), static_cast<float>(y0) );
     const kvs::Vector2f range_max( static_cast<float>(x1), static_cast<float>(y1) );
     glLineWidth( 1 );
@@ -1588,7 +1588,7 @@ void TransferFunctionEditor::press_color_map_box( void )
 
     // Update the color data.
     const kvs::RGBColor selected_color = this->get_selected_color();
-    kvs::UInt8* data = const_cast<kvs::UInt8*>( BaseClass::colorMap().table().pointer() );
+    kvs::UInt8* data = const_cast<kvs::UInt8*>( BaseClass::colorMap().table().data() );
     kvs::UInt8* pdata = data;
     pdata = data + index * 3;
     pdata[0] = selected_color.r() * ratio + pdata[0] * ( 1 - ratio );
@@ -1626,7 +1626,7 @@ void TransferFunctionEditor::press_opacity_map_box( void )
     const float opacity = static_cast<float>( y - y0 ) / ( y1 - y0 );
 
     // Update the color data.
-    kvs::Real32* data = const_cast<kvs::Real32*>( BaseClass::opacityMap().table().pointer() );
+    kvs::Real32* data = const_cast<kvs::Real32*>( BaseClass::opacityMap().table().data() );
     kvs::Real32* pdata = data;
     pdata = data + index;
     pdata[0] = opacity;
@@ -1699,7 +1699,7 @@ void TransferFunctionEditor::move_color_map_box( void )
     const kvs::RGBColor selected_color = this->get_selected_color();
     const int begin_index = kvs::Math::Min( old_index, new_index );
     const int end_index = kvs::Math::Max( old_index, new_index );
-    kvs::UInt8* data = const_cast<kvs::UInt8*>( BaseClass::colorMap().table().pointer() );
+    kvs::UInt8* data = const_cast<kvs::UInt8*>( BaseClass::colorMap().table().data() );
     kvs::UInt8* pdata = data + begin_index * 3;
     for ( int i = begin_index; i < end_index; i++, pdata += 3 )
     {
@@ -1748,7 +1748,7 @@ void TransferFunctionEditor::move_opacity_map_box( void )
 
     const int begin_index = kvs::Math::Min( old_index, new_index );
     const int end_index = kvs::Math::Max( old_index, new_index );
-    kvs::Real32* data = const_cast<kvs::Real32*>( BaseClass::opacityMap().table().pointer() );
+    kvs::Real32* data = const_cast<kvs::Real32*>( BaseClass::opacityMap().table().data() );
     kvs::Real32* pdata = data + begin_index;
     for ( int i = begin_index; i < end_index; i++ )
     {
@@ -1771,7 +1771,7 @@ void TransferFunctionEditor::initialize_color_map_texture( void )
 {
     const size_t nchannels  = 3; // rgb
     const size_t width = BaseClass::colorMap().resolution();
-    const kvs::UInt8* data = BaseClass::colorMap().table().pointer();
+    const kvs::UInt8* data = BaseClass::colorMap().table().data();
 
     m_color_map_texture.setPixelFormat( nchannels, sizeof( kvs::UInt8 ) );
     m_color_map_texture.setMinFilter( GL_LINEAR );
@@ -1789,7 +1789,7 @@ void TransferFunctionEditor::initialize_opacity_map_texture( void )
 {
     const size_t nchannels  = 1; // opacity
     const size_t width = BaseClass::opacityMap().resolution();
-    const kvs::Real32* data = BaseClass::opacityMap().table().pointer();
+    const kvs::Real32* data = BaseClass::opacityMap().table().data();
 
     m_opacity_map_texture.setPixelFormat( nchannels, sizeof( kvs::Real32 ) );
     m_opacity_map_texture.setMinFilter( GL_LINEAR );

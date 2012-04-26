@@ -465,7 +465,7 @@ void StochasticPointEngine::attachObject( const kvs::ObjectBase* object )
 
     m_ref_particle = point;
 
-    if ( m_ref_particle->normals().pointer() == NULL ||
+    if ( m_ref_particle->normals().data() == NULL ||
          m_ref_particle->nnormals() == 0 )
     {
         BaseClass::disableShading();
@@ -488,9 +488,9 @@ void StochasticPointEngine::create_vertexbuffer_from_point( void )
 
     const bool has_normal = BaseClass::isEnabledShading();
 
-    const kvs::Real32* src_coord   = m_ref_particle->coords().pointer();
-    const kvs::UInt8*  src_color   = m_ref_particle->colors().pointer();
-    const kvs::Real32* src_normal  = m_ref_particle->normals().pointer();
+    const kvs::Real32* src_coord   = m_ref_particle->coords().data();
+    const kvs::UInt8*  src_color   = m_ref_particle->colors().data();
+    const kvs::Real32* src_normal  = m_ref_particle->normals().data();
 
     // Distination pointers.
     static const size_t max_repetition = 1024;

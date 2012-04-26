@@ -535,7 +535,7 @@ void ParticleVolumeRenderer::attachPointObject( const kvs::PointObject* point )
 {
     m_ref_point = point;
 
-    if ( m_ref_point->normals().pointer() == NULL ||
+    if ( m_ref_point->normals().data() == NULL ||
          m_ref_point->nnormals() == 0 )
     {
         BaseClass::disableShading();
@@ -1204,9 +1204,9 @@ void ParticleVolumeRenderer::align_particles( void )
     const size_t total_vertices = m_ref_point->nvertices();
 
     // Source pointers.
-    const kvs::Real32* src_coord  = m_ref_point->coords().pointer();
-    const kvs::Real32* src_normal = m_ref_point->normals().pointer();
-    const kvs::UInt8*  src_color  = m_ref_point->colors().pointer();
+    const kvs::Real32* src_coord  = m_ref_point->coords().data();
+    const kvs::Real32* src_normal = m_ref_point->normals().data();
+    const kvs::UInt8*  src_color  = m_ref_point->colors().data();
 
     // Distination pointers.
     static const size_t max_repeat = 1024;

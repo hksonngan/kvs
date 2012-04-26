@@ -505,7 +505,7 @@ void CalculateFaces(
     const kvs::Real64 min_value = volume->minValue();
     const kvs::Real64 max_value = volume->maxValue();
     const size_t veclen = volume->veclen();
-    const T* value = reinterpret_cast<const T*>( volume->values().pointer() );
+    const T* value = reinterpret_cast<const T*>( volume->values().data() );
 
     const size_t nfaces = face_map.bucket().size();
     const size_t nvertices = nfaces * 3;
@@ -1021,7 +1021,7 @@ void ExternalFaces::calculate_colors( const kvs::StructuredVolumeObject* volume 
     const size_t nnodes_per_slice = volume->nnodesPerSlice();
     const kvs::Vector3ui resolution( volume->resolution() );
     const kvs::Vector3ui ngrids( resolution - kvs::Vector3ui( 1, 1, 1 ) );
-    const T* value = reinterpret_cast<const T*>( volume->values().pointer() );
+    const T* value = reinterpret_cast<const T*>( volume->values().data() );
 
     const size_t nexternal_faces =
         2 * ngrids.x() * ngrids.y() +

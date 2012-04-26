@@ -194,7 +194,7 @@ void LegendBar::setBorderColor( const kvs::RGBColor& border_color )
 void LegendBar::setColorMap( const kvs::ColorMap& colormap )
 {
     // Deep copy.
-    kvs::ColorMap::Table colormap_table( colormap.table().pointer(), colormap.table().size() );
+    kvs::ColorMap::Table colormap_table( colormap.table().data(), colormap.table().size() );
     m_colormap = kvs::ColorMap( colormap_table );
 
     if ( colormap.hasRange() )
@@ -416,7 +416,7 @@ void LegendBar::create_texture( void )
     const size_t      nchannels  = 3;
     const size_t      width  = m_colormap.resolution();
     const size_t      height = 1;
-    const kvs::UInt8* data   = m_colormap.table().pointer();
+    const kvs::UInt8* data   = m_colormap.table().data();
 
     m_texture.release();
     m_texture.setPixelFormat( nchannels, sizeof( kvs::UInt8 ) );
@@ -892,7 +892,7 @@ void LegendBar::create_texture( void )
 
     const size_t      width  = m_colormap.resolution();
     const size_t      height = 1;
-    const kvs::UInt8* data   = m_colormap.table().pointer();
+    const kvs::UInt8* data   = m_colormap.table().data();
     m_texture.create( width, height );
     m_texture.download( width, height, data );
 }

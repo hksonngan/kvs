@@ -361,7 +361,7 @@ void CellByCellRejectionSampling::generate_particles( const kvs::StructuredVolum
     // Set a trilinear interpolator.
     kvs::TrilinearInterpolator interpolator( volume );
 
-    const T* const pvalues = reinterpret_cast<const T*>( volume->values().pointer() );
+    const T* const pvalues = reinterpret_cast<const T*>( volume->values().data() );
     const kvs::ColorMap color_map( BaseClass::transferFunction().colorMap() );
 
     // Generate particles for each cell.

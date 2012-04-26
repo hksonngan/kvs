@@ -173,9 +173,9 @@ void StochasticMultipleTetrahedraEngine::create_vertexbuffer_from_volume_of( con
 //    m_volume->create( m_nsteps, nvertices, ncells );
     m_volume[index].create( m_nsteps, nvertices, ncells, veclen );
 
-    const kvs::Real32* src_coord   = ref_volume[index]->coords().pointer();
-    const kvs::UInt32* src_connect = ref_volume[index]->connections().pointer();
-    const T* src_value = static_cast<const T*>( ref_volume[index]->values().pointer() );
+    const kvs::Real32* src_coord   = ref_volume[index]->coords().data();
+    const kvs::UInt32* src_connect = ref_volume[index]->connections().data();
+    const T* src_value = static_cast<const T*>( ref_volume[index]->values().data() );
 
     if ( !ref_volume[index]->hasMinMaxValues() ) ref_volume[index]->updateMinMaxValues();
     const kvs::Real64 min_value = ref_volume[index]->minValue();
@@ -251,7 +251,7 @@ void StochasticMultipleTetrahedraEngine::create_vertexbuffer_from_volume_of( con
 
     for ( size_t i = 0; i < nvertices; i++ )
     {
-        const kvs::Vector3f v( normals.pointer() + i * 3 );
+        const kvs::Vector3f v( normals.data() + i * 3 );
         const kvs::Vector3f n = ( v / (float)counter[i] ).normalizedVector() * 127.0f;
         *(dst_normals)++ = static_cast<NormalType>(n[0]);
         *(dst_normals)++ = static_cast<NormalType>(n[1]);

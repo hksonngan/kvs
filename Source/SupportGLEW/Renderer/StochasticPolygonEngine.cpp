@@ -125,7 +125,7 @@ void StochasticPolygonEngine::attachObject( const kvs::ObjectBase* object )
 
     m_ref_polygon = polygon;
 
-    if ( m_ref_polygon->normals().pointer() == NULL ||
+    if ( m_ref_polygon->normals().data() == NULL ||
          m_ref_polygon->nnormals() == 0 )
     {
         BaseClass::disableShading();
@@ -304,8 +304,8 @@ void StochasticPolygonEngine::create_vertex_buffer( void )
     kvs::ValueArray<ColorType> colors;
     if ( has_color )
     {
-        const unsigned char* p_colors = m_ref_polygon->colors().pointer();
-        const unsigned char* p_opacities = m_ref_polygon->opacities().pointer();
+        const unsigned char* p_colors = m_ref_polygon->colors().data();
+        const unsigned char* p_opacities = m_ref_polygon->opacities().data();
         colors.allocate( 4 * nvertices );
         for ( size_t i = 0; i < nvertices; i++ )
         {
@@ -326,7 +326,7 @@ void StochasticPolygonEngine::create_vertex_buffer( void )
     kvs::ValueArray<NormalType> normals;
     if ( has_normal )
     {
-        const float* p_normals = m_ref_polygon->normals().pointer();
+        const float* p_normals = m_ref_polygon->normals().data();
         normals.allocate( 3 * nvertices );
         for ( size_t i = 0; i < nvertices; i++ )
         {
@@ -338,10 +338,10 @@ void StochasticPolygonEngine::create_vertex_buffer( void )
         }
     }
 
-    const IndexType*  ptr_i = indices.pointer();
-    const CoordType*  ptr_v = m_ref_polygon->coords().pointer();
-    const ColorType*  ptr_c = colors.pointer();
-    const NormalType* ptr_n = normals.pointer();
+    const IndexType*  ptr_i = indices.data();
+    const CoordType*  ptr_v = m_ref_polygon->coords().data();
+    const ColorType*  ptr_c = colors.data();
+    const NormalType* ptr_n = normals.data();
 
     m_vbo.create( size_of_vertex );
     m_vbo.bind();
@@ -353,7 +353,7 @@ void StochasticPolygonEngine::create_vertex_buffer( void )
     if ( has_connect )
     {
         const size_t size_of_polygon = sizeof(ConnectType) * 3 * npolygons;
-        const ConnectType* ptr_conn = m_ref_polygon->connections().pointer();
+        const ConnectType* ptr_conn = m_ref_polygon->connections().data();
 
         m_ibo.create( size_of_polygon );
         m_ibo.bind();

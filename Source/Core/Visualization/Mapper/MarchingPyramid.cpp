@@ -272,7 +272,7 @@ void MarchingPyramid::extract_surfaces_with_duplication(
 template <typename T>
 const size_t MarchingPyramid::calculate_table_index( const size_t* local_index ) const
 {
-    const T* const values = static_cast<const T*>( BaseClass::m_volume->values().pointer() );
+    const T* const values = static_cast<const T*>( BaseClass::m_volume->values().data() );
     const double isolevel = m_isolevel;
 
     size_t table_index = 0;
@@ -298,7 +298,7 @@ const kvs::Vector3f MarchingPyramid::interpolate_vertex(
     const int vertex0,
     const int vertex1 ) const
 {
-    const T* const values = static_cast<const T*>( BaseClass::m_volume->values().pointer() );
+    const T* const values = static_cast<const T*>( BaseClass::m_volume->values().data() );
     const kvs::Real32* const coords = BaseClass::m_volume->coords().data();
 
     const size_t coord0_index = 3 * vertex0;
@@ -348,7 +348,7 @@ const kvs::RGBColor MarchingPyramid::calculate_color( void )
 template <typename T>
 const size_t MarchingPyramid::calculate_special_table_index( const size_t* local_index, const size_t index ) const
 {
-    const T* const values = static_cast<const T*>( BaseClass::m_volume->values().pointer() );
+    const T* const values = static_cast<const T*>( BaseClass::m_volume->values().data() );
     const double isolevel = m_isolevel;
     double v1 = static_cast<double>( values[ local_index[1] ] );
     double v2 = static_cast<double>( values[ local_index[2] ] );
