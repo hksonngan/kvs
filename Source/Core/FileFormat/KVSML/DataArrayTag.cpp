@@ -241,13 +241,6 @@ const bool DataArrayTag::write(
             const kvs::Real64* values = data.pointer<kvs::Real64>();
             for ( size_t i = 0; i < data_size; i++ ) oss << values[i] << " ";
         }
-#if KVS_ENABLE_DEPRECATED
-        else if ( data_type == typeid(kvs::Real128) )
-        {
-            const kvs::Real128* values = data.pointer<kvs::Real128>();
-            for ( size_t i = 0; i < data_size; i++ ) oss << values[i] << " ";
-        }
-#endif
 
         // Insert the data array as string-stream to the parent node.
         TiXmlText text;
