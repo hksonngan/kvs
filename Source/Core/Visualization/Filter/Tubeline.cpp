@@ -288,7 +288,7 @@ const kvs::ValueArray<kvs::Real32> GetSizeArray(
     const kvs::Real32* s = line->sizes().data();
 
     // Number of components of the size array.
-    const size_t nsizes = id2 - id1;
+    const size_t nsizes = id2 - id1 + 1;
 
     if ( line->nsizes() == 1 )
     {
@@ -589,16 +589,8 @@ void Tubeline::filtering_polyline( const kvs::LineObject* line )
         const kvs::ValueArray<kvs::UInt8> line_colors = ::GetColorArray( line, id1, id2, i );
         const size_t nvertices = id2 - id1 + 1;
 
-        if ( line_sizes.size() == 0 )
-        {
-            kvsMessageError("The size of the line-size array is zero.");
-            return;
-        }
-        if ( line_colors.size() == 0 )
-        {
-            kvsMessageError("The size of the line-color array is zero.");
-            return;
-        }
+        if ( line_sizes.size() < 2 ) continue;
+        if ( line_colors.size() < 2 ) continue;
 
         std::vector<kvs::Real32> tmp_vertices;
         std::vector<kvs::UInt8> tmp_colors;
