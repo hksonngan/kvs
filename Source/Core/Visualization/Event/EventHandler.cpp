@@ -14,6 +14,8 @@
 /*****************************************************************************/
 #include "EventHandler.h"
 #include <algorithm>
+#include <kvs/EventBase>
+#include <kvs/EventListener>
 
 
 namespace kvs

@@ -16,12 +16,14 @@
 #define KVS__EVENT_HANDLER_H_INCLUDE
 
 #include <vector>
-#include "EventListener.h"
 #include <kvs/ClassName>
 
 
 namespace kvs
 {
+
+class EventListener;
+class EventBase;
 
 /*===========================================================================*/
 /**

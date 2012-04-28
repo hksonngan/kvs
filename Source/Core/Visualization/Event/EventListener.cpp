@@ -16,6 +16,10 @@
 #include <kvs/ResizeEvent>
 #include <kvs/MouseButton>
 #include <kvs/IgnoreUnusedVariable>
+#include <kvs/MouseEvent>
+#include <kvs/WheelEvent>
+#include <kvs/KeyEvent>
+#include <kvs/TimeEvent>
 #include <typeinfo>
 
 

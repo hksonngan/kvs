@@ -15,17 +15,18 @@
 #ifndef KVS__EVENT_LISTENER_H_INCLUDE
 #define KVS__EVENT_LISTENER_H_INCLUDE
 
-#include <kvs/ScreenBase>
-#include <kvs/EventBase>
-#include <kvs/MouseEvent>
-#include <kvs/KeyEvent>
-#include <kvs/WheelEvent>
-#include <kvs/TimeEvent>
 #include <kvs/ClassName>
 
 
 namespace kvs
 {
+
+class ScreenBase;
+class EventBase;
+class MouseEvent;
+class KeyEvent;
+class WheelEvent;
+class TimeEvent;
 
 /*===========================================================================*/
 /**
