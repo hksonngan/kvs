@@ -264,14 +264,19 @@ void ArrowGlyph::draw_lines( void )
 {
     const size_t npoints = BaseClass::coords().size() / 3;
 
+    const kvs::ValueArray<kvs::Real32> coords = BaseClass::coords();
+    const kvs::ValueArray<kvs::UInt8> colors = BaseClass::colors();
+    const kvs::ValueArray<kvs::Real32> sizes = BaseClass::sizes();
+    const kvs::ValueArray<kvs::UInt8> opacities = BaseClass::opacities();
+
     if ( BaseClass::directions().size() == 0 )
     {
         for ( size_t i = 0, index = 0; i < npoints; i++, index += 3 )
         {
-            const kvs::Vector3f position( BaseClass::coords().data() + index );
-            const kvs::Real32 size = BaseClass::sizes().at(i);
-            const kvs::RGBColor color( BaseClass::colors().data() + index );
-            const kvs::UInt8 opacity = BaseClass::opacities().at(i);
+            const kvs::Vector3f position( coords.data() + index );
+            const kvs::Real32 size = sizes[i];
+            const kvs::RGBColor color( colors.data() + index );
+            const kvs::UInt8 opacity = opacities[i];
             glPushMatrix();
             {
                 BaseClass::transform( position, size );
@@ -284,11 +289,11 @@ void ArrowGlyph::draw_lines( void )
     {
         for( size_t i = 0, index = 0; i < npoints; i++, index += 3 )
         {
-            const kvs::Vector3f position( BaseClass::m_coords.data() + index );
+            const kvs::Vector3f position( coords.data() + index );
             const kvs::Vector3f direction( BaseClass::m_directions.data() + index );
-            const kvs::Real32 size = BaseClass::m_sizes[i];
-            const kvs::RGBColor color( BaseClass::m_colors.data() + index );
-            const kvs::UInt8 opacity = BaseClass::m_opacities[i];
+            const kvs::Real32 size = sizes[i];
+            const kvs::RGBColor color( colors.data() + index );
+            const kvs::UInt8 opacity = opacities[i];
             glPushMatrix();
             {
                 BaseClass::transform( position, direction, size );
@@ -308,14 +313,19 @@ void ArrowGlyph::draw_tubes( void )
 {
     const size_t npoints = BaseClass::coords().size() / 3;
 
+    const kvs::ValueArray<kvs::Real32> coords = BaseClass::coords();
+    const kvs::ValueArray<kvs::UInt8> colors = BaseClass::colors();
+    const kvs::ValueArray<kvs::Real32> sizes = BaseClass::sizes();
+    const kvs::ValueArray<kvs::UInt8> opacities = BaseClass::opacities();
+
     if ( BaseClass::directions().size() == 0 )
     {
         for ( size_t i = 0, index = 0; i < npoints; i++, index += 3 )
         {
-            const kvs::Vector3f position( BaseClass::coords().data() + index );
-            const kvs::Real32 size = BaseClass::sizes().at(i);
-            const kvs::RGBColor color( BaseClass::colors().data() + index );
-            const kvs::UInt8 opacity = BaseClass::opacities().at(i);
+            const kvs::Vector3f position( coords.data() + index );
+            const kvs::Real32 size = sizes[i];
+            const kvs::RGBColor color( colors.data() + index );
+            const kvs::UInt8 opacity = opacities[i];
             glPushMatrix();
             {
                 BaseClass::transform( position, size );
@@ -328,11 +338,11 @@ void ArrowGlyph::draw_tubes( void )
     {
         for( size_t i = 0, index = 0; i < npoints; i++, index += 3 )
         {
-            const kvs::Vector3f position( BaseClass::m_coords.data() + index );
+            const kvs::Vector3f position( coords.data() + index );
             const kvs::Vector3f direction( BaseClass::m_directions.data() + index );
-            const kvs::Real32 size = BaseClass::m_sizes[i];
-            const kvs::RGBColor color( BaseClass::m_colors.data() + index );
-            const kvs::UInt8 opacity = BaseClass::m_opacities[i];
+            const kvs::Real32 size = sizes[i];
+            const kvs::RGBColor color( colors.data() + index );
+            const kvs::UInt8 opacity = opacities[i];
             glPushMatrix();
             {
                 BaseClass::transform( position, direction, size );

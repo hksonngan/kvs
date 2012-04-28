@@ -396,42 +396,42 @@ inline bool WriteExternalData(
         const size_t data_size = data_array.size();
         if ( data_type == typeid(kvs::Int8) )
         {
-            const kvs::Int8* values = data_array.pointer<kvs::Int8>();
+            const kvs::Int8* values = static_cast<const kvs::Int8*>( data_array.data() );
             for ( size_t i = 0; i < data_size; i++ ) ofs << kvs::Int16(values[i]) << delim;
         }
         else if ( data_type == typeid(kvs::UInt8) )
         {
-            const kvs::UInt8* values = data_array.pointer<kvs::UInt8>();
+            const kvs::UInt8* values = static_cast<const kvs::UInt8*>( data_array.data() );
             for ( size_t i = 0; i < data_size; i++ ) ofs << kvs::UInt16(values[i]) << delim;
         }
         else if ( data_type == typeid(kvs::Int16) )
         {
-            const kvs::Int16* values = data_array.pointer<kvs::Int16>();
+            const kvs::Int16* values = static_cast<const kvs::Int16*>( data_array.data() );
             for ( size_t i = 0; i < data_size; i++ ) ofs << values[i] << delim;
         }
         else if ( data_type == typeid(kvs::UInt16) )
         {
-            const kvs::UInt16* values = data_array.pointer<kvs::UInt16>();
+            const kvs::UInt16* values = static_cast<const kvs::UInt16*>( data_array.data() );
             for ( size_t i = 0; i < data_size; i++ ) ofs << values[i] << delim;
         }
         else if ( data_type == typeid(kvs::Int32) )
         {
-            const kvs::Int32* values = data_array.pointer<kvs::Int32>();
+            const kvs::Int32* values = static_cast<const kvs::Int32*>( data_array.data() );
             for ( size_t i = 0; i < data_size; i++ ) ofs << values[i] << delim;
         }
         else if ( data_type == typeid(kvs::UInt32) )
         {
-            const kvs::UInt32* values = data_array.pointer<kvs::UInt32>();
+            const kvs::UInt32* values = static_cast<const kvs::UInt32*>( data_array.data() );
             for ( size_t i = 0; i < data_size; i++ ) ofs << values[i] << delim;
         }
         else if ( data_type == typeid(kvs::Real32) )
         {
-            const kvs::Real32* values = data_array.pointer<kvs::Real32>();
+            const kvs::Real32* values = static_cast<const kvs::Real32*>( data_array.data() );
             for ( size_t i = 0; i < data_size; i++ ) ofs << values[i] << delim;
         }
         else if ( data_type == typeid(kvs::Real64) )
         {
-            const kvs::Real64* values = data_array.pointer<kvs::Real64>();
+            const kvs::Real64* values = static_cast<const kvs::Real64*>( data_array.data() );
             for ( size_t i = 0; i < data_size; i++ ) ofs << values[i] << delim;
         }
 
