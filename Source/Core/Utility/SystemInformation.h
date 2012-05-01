@@ -34,7 +34,7 @@ public:
 
 #if KVS_ENABLE_DEPRECATED
     static size_t nprocessors()
-    { return numberOfProcessors(); }
+    { return NumberOfProcessors(); }
     static size_t totalMemorySize()
     { return TotalMemorySize(); }
     static size_t freeMemorySize()

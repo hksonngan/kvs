@@ -59,7 +59,7 @@ namespace kvs
  *  @return number of processors
  */
 /*==========================================================================*/
-size_t SystemInformation::numberOfProcessors()
+size_t SystemInformation::NumberOfProcessors()
 {
 #if defined ( KVS_PLATFORM_WINDOWS )
     SYSTEM_INFO sysinfo;
@@ -92,7 +92,7 @@ size_t SystemInformation::numberOfProcessors()
  *  @return total memory size
  */
 /*==========================================================================*/
-size_t SystemInformation::totalMemorySize()
+size_t SystemInformation::TotalMemorySize()
 {
 // Windows
 #if defined ( KVS_PLATFORM_WINDOWS )
@@ -144,7 +144,7 @@ size_t SystemInformation::totalMemorySize()
  *  @return free memory size
  */
 /*==========================================================================*/
-size_t SystemInformation::freeMemorySize()
+size_t SystemInformation::FreeMemorySize()
 {
 // Windows
 #if defined ( KVS_PLATFORM_WINDOWS )
