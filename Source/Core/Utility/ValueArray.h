@@ -284,9 +284,7 @@ public:
     }
 
 public:
-
 #if KVS_ENABLE_DEPRECATED
-
     value_type* allocate( const size_t size )
     {
         this->deallocate();
@@ -326,7 +324,6 @@ public:
     }
 
 #else
-
     void allocate( const size_t size )
     {
         m_values.reset( new value_type[ size ], kvs::temporal::ArrayDeleter<T>() );
@@ -337,13 +334,16 @@ public:
     {
         std::fill( this->begin(), this->end(), value );
     }
-
 #endif
-
     void deallocate()
     {
         m_values.reset();
         m_size = 0;
+    }
+
+    bool unique() const
+    {
+        return m_values.unique();
     }
 };
 

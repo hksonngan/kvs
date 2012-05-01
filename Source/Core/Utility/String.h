@@ -38,32 +38,14 @@ class String
 
 public:
 
-    //template <typename T>
-    //static T To( const std::string& str )
-    //{
-    //    T ret;
-    //    std::istringstream ss( str );
-    //    ss >> ret;
-    //    return ret;
-    //}
-
-    //template <>
-    //static kvs::Int8 To( const std::string& str )
-    //{
-    //    int ret;
-    //    std::istringstream ss( str );
-    //    ss >> ret;
-    //    return static_cast<kvs::Int8>( ret );
-    //}
-
-    //template <>
-    //static kvs::UInt8 To( const std::string& str )
-    //{
-    //    int ret;
-    //    std::istringstream ss( str );
-    //    ss >> ret;
-    //    return static_cast<kvs::UInt8>( ret );
-    //}
+    template <typename T>
+    static T To( const std::string& str )
+    {
+        T ret;
+        std::istringstream ss( str );
+        ss >> ret;
+        return ret;
+    }
 
     template <typename T>
     static std::string ToString( const T& src )
@@ -184,6 +166,24 @@ inline std::string String::ToString( const kvs::UInt8& src )
     std::ostringstream ss;
     ss << (int)src;
     return ss.str();
+}
+
+template <>
+inline kvs::Int8 String::To( const std::string& str )
+{
+    int ret;
+    std::istringstream ss( str );
+    ss >> ret;
+    return static_cast<kvs::Int8>( ret );
+}
+
+template <>
+inline kvs::UInt8 String::To( const std::string& str )
+{
+    int ret;
+    std::istringstream ss( str );
+    ss >> ret;
+    return static_cast<kvs::UInt8>( ret );
 }
 
 #if KVS_ENABLE_DEPRECATED

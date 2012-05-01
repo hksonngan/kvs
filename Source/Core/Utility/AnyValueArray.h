@@ -15,17 +15,20 @@
 #define KVS__ANY_VALUE_ARRAY_H_INCLUDE
 
 #include <typeinfo>
-#include <string>
-#include <sstream>
 #include <utility>
+#if KVS_ENABLE_DEPRECATED
+#include <string>
+#endif
 #include <kvs/Type>
-#include <kvs/AnyValue>
 #include <kvs/SharedPointer>
 #include <kvs/ValueArray>
 #include <kvs/ClassName>
 #if KVS_ENABLE_DEPRECATED
 #include <kvs/Endian>
+#include <kvs/String>
 #endif
+#include <kvs/Platform>
+#include <kvs/Compiler>
 
 
 namespace kvs
@@ -33,6 +36,87 @@ namespace kvs
 
 namespace temporal
 {
+
+class TypeInfo
+{
+public:
+    TypeInfo()
+    {
+        m_id = kvs::Type::UnknownType;
+    }
+
+public:
+    const std::type_info& type() const
+    {
+        switch ( m_id )
+        {
+        case kvs::Type::TypeInt8:   return typeid( kvs::Int8   );
+        case kvs::Type::TypeInt16:  return typeid( kvs::Int16  );
+        case kvs::Type::TypeInt32:  return typeid( kvs::Int32  );
+        case kvs::Type::TypeInt64:  return typeid( kvs::Int64  );
+        case kvs::Type::TypeUInt8:  return typeid( kvs::UInt8  );
+        case kvs::Type::TypeUInt16: return typeid( kvs::UInt16 );
+        case kvs::Type::TypeUInt32: return typeid( kvs::UInt32 );
+        case kvs::Type::TypeUInt64: return typeid( kvs::UInt64 );
+        case kvs::Type::TypeReal32: return typeid( kvs::Real32 );
+        case kvs::Type::TypeReal64: return typeid( kvs::Real64 );
+#if KVS_ENABLE_DEPRECATED
+        case kvs::Type::TypeString: return typeid( std::string );
+#endif
+        }
+        KVS_ASSERT( false );
+        return typeid( void );
+    }
+
+    const char* typeName() const
+    {
+        switch ( m_id )
+        {
+        case kvs::Type::TypeInt8: return "char";
+        case kvs::Type::TypeInt16: return "short";
+        case kvs::Type::TypeInt32: return "int";
+        case kvs::Type::TypeInt64:
+    #if defined ( KVS_COMPILER_VC )
+        return( "signed __int64" );
+    #else
+    #if defined ( KVS_PLATFORM_CPU_64 ) // LP64
+        return( "long" );
+    #else
+        return( "long long" );
+    #endif
+    #endif
+        case kvs::Type::TypeUInt8: return "unsigned char";
+        case kvs::Type::TypeUInt16: return "unsigned short";
+        case kvs::Type::TypeUInt32: return "unsigned int";
+        case kvs::Type::TypeUInt64:
+    #if defined ( KVS_COMPILER_VC )
+        return( "unsigned __int64" );
+    #else
+    #if defined ( KVS_PLATFORM_CPU_64 ) // LP64
+        return( "unsigned long" );
+    #else
+        return( "unsigned long long" );
+    #endif
+    #endif
+        case kvs::Type::TypeReal32: return "float";
+        case kvs::Type::TypeReal64: return "double";
+#if KVS_ENABLE_DEPRECATED
+        case kvs::Type::TypeString: return "string";
+#endif
+        }
+        KVS_ASSERT( false );
+        return NULL;
+    }
+
+    void setid( kvs::Type::TypeID id )
+    {
+        m_id = id;
+    }
+
+private:
+    kvs::Type::TypeID m_id;
+}; // TypeInfo
+
 
 template <typename T, T Value>
 struct integral_constant
@@ -46,6 +130,105 @@ typedef integral_constant<bool, false> false_type;
 
 } // temporal
 
+namespace detail
+{
+
+class ValueGetter
+{
+public:
+    template <typename ReturnT>
+    static ReturnT Get( const void* ptr, kvs::Type::TypeID id )
+    {
+        KVS_ASSERT( id != kvs::Type::UnknownType );
+        switch ( id )
+        {
+        case kvs::Type::TypeInt8:   return GetValue<ReturnT, kvs::Int8>  ( ptr );
+        case kvs::Type::TypeInt16:  return GetValue<ReturnT, kvs::Int16> ( ptr );
+        case kvs::Type::TypeInt32:  return GetValue<ReturnT, kvs::Int32> ( ptr );
+        case kvs::Type::TypeInt64:  return GetValue<ReturnT, kvs::Int64> ( ptr );
+        case kvs::Type::TypeUInt8:  return GetValue<ReturnT, kvs::UInt8> ( ptr );
+        case kvs::Type::TypeUInt16: return GetValue<ReturnT, kvs::UInt16>( ptr );
+        case kvs::Type::TypeUInt32: return GetValue<ReturnT, kvs::UInt32>( ptr );
+        case kvs::Type::TypeUInt64: return GetValue<ReturnT, kvs::UInt64>( ptr );
+        case kvs::Type::TypeReal32: return GetValue<ReturnT, kvs::Real32>( ptr );
+        case kvs::Type::TypeReal64: return GetValue<ReturnT, kvs::Real64>( ptr );
+#if KVS_DEPRECATED
+        case kvs::Type::TypeString: return GetValueFromString<ReturnT>( ptr );
+#endif
+        }
+        return ReturnT();
+    }
+
+private:
+    template <typename ReturnT, typename DataT>
+    static ReturnT GetValue( const void* ptr )
+    {
+        return static_cast<ReturnT>( *static_cast<const DataT*>( ptr ) );
+    }
+
+#if KVS_ENABLE_DEPRECATED
+    template <typename DataT>
+    static std::string GetString( const void* ptr )
+    {
+        return kvs::String::ToString( *static_cast<const DataT*>( ptr ) );
+    }
+
+    template <typename ReturnT>
+    static ReturnT GetValueFromString( const void* ptr )
+    {
+        const std::string& source = *static_cast<const std::string*>( ptr );
+        return kvs::String::To<ReturnT>( source );
+    }
+#endif
+private:
+    ValueGetter();
+}; // ValueGetter
+
+#if KVS_ENABLE_DEPRECATED
+template <>
+inline std::string ValueGetter::Get<std::string>( const void* ptr, kvs::Type::TypeID id )
+{
+    KVS_ASSERT( id != kvs::Type::UnknownType );
+    switch ( id )
+    {
+    case kvs::Type::TypeInt8:   return GetString<kvs::Int8>  ( ptr );
+    case kvs::Type::TypeInt16:  return GetString<kvs::Int16> ( ptr );
+    case kvs::Type::TypeInt32:  return GetString<kvs::Int32> ( ptr );
+    case kvs::Type::TypeInt64:  return GetString<kvs::Int64> ( ptr );
+    case kvs::Type::TypeUInt8:  return GetString<kvs::UInt8> ( ptr );
+    case kvs::Type::TypeUInt16: return GetString<kvs::UInt16>( ptr );
+    case kvs::Type::TypeUInt32: return GetString<kvs::UInt32>( ptr );
+    case kvs::Type::TypeUInt64: return GetString<kvs::UInt64>( ptr );
+    case kvs::Type::TypeReal32: return GetString<kvs::Real32>( ptr );
+    case kvs::Type::TypeReal64: return GetString<kvs::Real64>( ptr );
+    case kvs::Type::TypeString: return *static_cast<const std::string*>( ptr );
+    }
+    return std::string();
+}
+#endif
+
+class AnyValueArrayElement
+{
+public:
+    AnyValueArrayElement( const void* ptr, kvs::Type::TypeID type_id )
+    {
+        m_ptr = ptr;
+        m_type_id = type_id;
+    }
+
+    template <typename T>
+    const T to() const
+    {
+        return ValueGetter::Get<T>( m_ptr, m_type_id );
+    }
+
+private:
+    const void* m_ptr;
+    kvs::Type::TypeID m_type_id;
+}; // AnyValueArrayElement
+
+} //detail
+
 #define KVS_STATIC_ASSERT( expr, mes ) { char dummy[ ( expr ) ? 1 : -1 ]; (void)dummy; }
 
 /*==========================================================================*/
@@ -58,23 +241,34 @@ class AnyValueArray
     kvsClassName_without_virtual( kvs::AnyValueArray );
 
 public:
-    typedef kvs::AnyValue::TypeInfo TypeInfo;
+    typedef kvs::temporal::TypeInfo TypeInfo;
+    typedef kvs::detail::AnyValueArrayElement value_type;
 
 private:
-    kvs::SharedPointer<void>     m_values;       ///< value array
-    kvs::SharedPointer<TypeInfo> m_type_info;     ///< type information
+    kvs::SharedPointer<void> m_values;       ///< value array
     size_t    m_size_of_value; ///< byte size of a value
     size_t    m_size;       ///< number of values
+    kvs::Type::TypeID m_type_id;
+
+    TypeInfo m_type_info;
 
 public:
-    AnyValueArray();
+    AnyValueArray()
+    {
+        m_size = 0;
+        m_size_of_value = 0;
+        m_type_id = kvs::Type::UnknownType;
+    }
 
     template<typename T>
-    explicit AnyValueArray( const kvs::ValueArray<T>& values );
-
-    AnyValueArray( const AnyValueArray& other );
-
-    ~AnyValueArray();
+    explicit AnyValueArray( const kvs::ValueArray<T>& values )
+    {
+        KVS_STATIC_ASSERT( is_supported<T>::value, "not supported" );
+        m_values        = kvs::static_pointer_cast<T>( values.getSharedPointer() );
+        m_size          = values.size();
+        m_size_of_value = sizeof( T );
+        m_type_id       = kvs::Type::GetID<T>();
+    }
 
 public:
     AnyValueArray& operator =( const AnyValueArray& rhs )
@@ -89,57 +283,10 @@ public:
     {
         KVS_STATIC_ASSERT( is_supported<T>::value, "not supported" );
         KVS_ASSERT( this->check_type<T>() );
-        return kvs::ValueArray<T>( kvs::static_pointer_cast<T>( m_values ), m_size );
+        return kvs::ValueArray<T>( kvs::static_pointer_cast<T>( m_values ), this->size() );
     }
 
 public:
-    template<typename T>
-    T& at( const size_t index )
-    {
-        KVS_STATIC_ASSERT( is_supported<T>::value, "not supported" );
-        KVS_ASSERT( index < this->size() );
-        KVS_ASSERT( this->check_type<T>() );
-        return static_cast<T*>( this->data() )[ index ];
-    }
-
-    template<typename T>
-    const T& at( const size_t index ) const
-    {
-        KVS_STATIC_ASSERT( is_supported<T>::value, "not supported" );
-        KVS_ASSERT( index < this->size() );
-        KVS_ASSERT( this->check_type<T>() );
-        return static_cast<const T*>( this->data() )[ index ];
-    }
-
-    template<typename T>
-    T to( const size_t index ) const
-    {
-        KVS_STATIC_ASSERT( is_supported<T>::value, "not supported" );
-
-        // Value to Value.
-        const std::type_info& type = this->typeInfo()->type();
-        if ( type == typeid( kvs::Int8   ) ) return static_cast<T>( this->at<kvs::Int8  >( index ) );
-        if ( type == typeid( kvs::Int16  ) ) return static_cast<T>( this->at<kvs::Int16 >( index ) );
-        if ( type == typeid( kvs::Int32  ) ) return static_cast<T>( this->at<kvs::Int32 >( index ) );
-        if ( type == typeid( kvs::Int64  ) ) return static_cast<T>( this->at<kvs::Int64 >( index ) );
-        if ( type == typeid( kvs::UInt8  ) ) return static_cast<T>( this->at<kvs::UInt8 >( index ) );
-        if ( type == typeid( kvs::UInt16 ) ) return static_cast<T>( this->at<kvs::UInt16>( index ) );
-        if ( type == typeid( kvs::UInt32 ) ) return static_cast<T>( this->at<kvs::UInt32>( index ) );
-        if ( type == typeid( kvs::UInt64 ) ) return static_cast<T>( this->at<kvs::UInt64>( index ) );
-        if ( type == typeid( kvs::Real32 ) ) return static_cast<T>( this->at<kvs::Real32>( index ) );
-        if ( type == typeid( kvs::Real64 ) ) return static_cast<T>( this->at<kvs::Real64>( index ) );
-
-        // String to Value.
-        if ( type == typeid( std::string ) )
-        {
-            T v; std::istringstream s( this->at<std::string>( index ) ); s >> v;
-            return v;
-        }
-
-        kvsMessageError("Unsupported data type.");
-        return T( 0 );
-    }
-
     size_t size() const
     {
         return m_size;
@@ -148,27 +295,6 @@ public:
     size_t byteSize() const
     {
         return this->size() * m_size_of_value;
-    }
-
-    template<typename T>
-    const T* pointer() const
-    {
-        KVS_STATIC_ASSERT( is_supported<T>::value, "not supported" );
-        KVS_ASSERT( this->check_type<T>() );
-        return static_cast<const T*>( this->data() );
-    }
-
-    template<typename T>
-    T* pointer()
-    {
-        KVS_STATIC_ASSERT( is_supported<T>::value, "not supported" );
-        KVS_ASSERT( this->check_type<T>() );
-        return static_cast<T*>( this->data() );
-    }
-
-    const TypeInfo* typeInfo() const
-    {
-        return m_type_info.get();
     }
 
     const kvs::SharedPointer<void>& getSharedPointer() const
@@ -191,22 +317,27 @@ public:
         std::swap( m_values, other.m_values );
         std::swap( m_size, other.m_size );
         std::swap( m_size_of_value, other.m_size_of_value );
-        std::swap( m_type_info, other.m_type_info );
+        std::swap( m_type_id, other.m_type_id );
     }
 
     AnyValueArray clone() const
     {
-        const std::type_info& type = this->typeInfo()->type();
-        if (      type == typeid( kvs::Int8   ) ) { return this->clone_helper<kvs::Int8  >(); }
-        else if ( type == typeid( kvs::UInt8  ) ) { return this->clone_helper<kvs::UInt8 >(); }
-        else if ( type == typeid( kvs::Int16  ) ) { return this->clone_helper<kvs::Int16 >(); }
-        else if ( type == typeid( kvs::UInt16 ) ) { return this->clone_helper<kvs::UInt16>(); }
-        else if ( type == typeid( kvs::Int32  ) ) { return this->clone_helper<kvs::Int32 >(); }
-        else if ( type == typeid( kvs::UInt32 ) ) { return this->clone_helper<kvs::UInt32>(); }
-        else if ( type == typeid( kvs::Int64  ) ) { return this->clone_helper<kvs::Int64 >(); }
-        else if ( type == typeid( kvs::UInt64 ) ) { return this->clone_helper<kvs::UInt64>(); }
-        else if ( type == typeid( kvs::Real32 ) ) { return this->clone_helper<kvs::Real32>(); }
-        else if ( type == typeid( kvs::Real64 ) ) { return this->clone_helper<kvs::Real64>(); }
+        switch ( this->typeID() )
+        {
+        case kvs::Type::TypeInt8:   return this->clone_helper<kvs::Int8  >();
+        case kvs::Type::TypeInt16:  return this->clone_helper<kvs::Int16 >();
+        case kvs::Type::TypeInt32:  return this->clone_helper<kvs::Int32 >();
+        case kvs::Type::TypeInt64:  return this->clone_helper<kvs::Int64 >();
+        case kvs::Type::TypeUInt8:  return this->clone_helper<kvs::UInt8 >();
+        case kvs::Type::TypeUInt16: return this->clone_helper<kvs::UInt16>();
+        case kvs::Type::TypeUInt32: return this->clone_helper<kvs::UInt32>();
+        case kvs::Type::TypeUInt64: return this->clone_helper<kvs::UInt64>();
+        case kvs::Type::TypeReal32: return this->clone_helper<kvs::Real32>();
+        case kvs::Type::TypeReal64: return this->clone_helper<kvs::Real64>();
+#if KVS_ENABLE_DEPRECATED
+        case kvs::Type::TypeString: return this->clone_helper<std::string>();
+#endif
+        }
         KVS_ASSERT( false );
         return AnyValueArray();
     }
@@ -214,6 +345,24 @@ public:
     bool empty() const
     {
         return this->size() == 0;
+    }
+
+    const value_type operator []( size_t index ) const
+    {
+        return value_type( static_cast<const char*>( this->data() ) + m_size_of_value * index, this->typeID() );
+    }
+
+    kvs::Type::TypeID typeID() const
+    {
+        return m_type_id;
+    }
+
+    // for compatibility.
+
+    const TypeInfo* typeInfo() const
+    {
+        const_cast<AnyValueArray*>( this )->m_type_info.setid( this->typeID() );
+        return &m_type_info;
     }
 
     const void* pointer() const
@@ -226,17 +375,49 @@ public:
         return this->data();
     }
 
-private:
-    template <typename T>
-    AnyValueArray clone_helper() const
+    template<typename T>
+    const T* pointer() const
     {
-        ValueArray<T> ret( static_cast<const T*>( this->data() ), this->size() );
-        return AnyValueArray( ret );
+        KVS_STATIC_ASSERT( is_supported<T>::value, "not supported" );
+        KVS_ASSERT( this->check_type<T>() );
+        return static_cast<const T*>( this->data() );
+    }
+
+    template<typename T>
+    T* pointer()
+    {
+        KVS_STATIC_ASSERT( is_supported<T>::value, "not supported" );
+        KVS_ASSERT( this->check_type<T>() );
+        return static_cast<T*>( this->data() );
+    }
+
+    template<typename T>
+    T& at( const size_t index )
+    {
+        KVS_STATIC_ASSERT( is_supported<T>::value, "not supported" );
+        KVS_ASSERT( index < this->size() );
+        KVS_ASSERT( this->check_type<T>() );
+        return static_cast<T*>( this->data() )[ index ];
+    }
+
+    template<typename T>
+    const T& at( const size_t index ) const
+    {
+        KVS_STATIC_ASSERT( is_supported<T>::value, "not supported" );
+        KVS_ASSERT( index < this->size() );
+        KVS_ASSERT( this->check_type<T>() );
+        return static_cast<const T*>( this->data() )[ index ];
+    }
+
+    template<typename T>
+    T to( const size_t index ) const
+    {
+        KVS_STATIC_ASSERT( is_supported<T>::value, "not supported" );
+        return (*this)[ index ].to<T>();
     }
 
 public:
 #if KVS_ENABLE_DEPRECATED
-
     template<typename T>
     AnyValueArray( const T* values, const size_t size )
     {
@@ -295,7 +476,6 @@ public:
     }
 
 #else
-
     template<typename T>
     void allocate( const size_t size )
     {
@@ -307,70 +487,47 @@ public:
     void deallocate()
     {
         m_values.reset();
-        m_type_info.reset();
         m_size = 0;
         m_size_of_value = 0;
+        m_type_id = kvs::Type::UnknownType;
+    }
+
+    bool unique() const
+    {
+        return m_values.unique();
     }
 
 private:
+    template <typename T>
+    AnyValueArray clone_helper() const
+    {
+        ValueArray<T> ret( static_cast<const T*>( this->data() ), this->size() );
+        return AnyValueArray( ret );
+    }
 
     template <typename T>
     bool check_type() const
     {
-        return this->typeInfo()->type() == typeid( T );
+        return m_type_id == kvs::Type::GetID<T>();
     }
 
     template <typename T>
     struct is_supported : kvs::temporal::false_type {};
 };
 
-template<typename T>
-inline AnyValueArray::AnyValueArray( const kvs::ValueArray<T>& values )
-{
-    KVS_STATIC_ASSERT( is_supported<T>::value, "not supported" );
-    m_values        = kvs::static_pointer_cast<T>( values.getSharedPointer() );
-    m_size          = values.size();
-    m_size_of_value = sizeof( T );
-    m_type_info.reset( new kvs::AnyValue::SetTypeInfo<T>() );
-}
-
-template<>
-inline std::string AnyValueArray::to<std::string>( const size_t index ) const
-{
-    const std::type_info& type = this->typeInfo()->type();
-
-    // String to String.
-    if ( type == typeid( std::string ) ) return this->at<std::string>( index );
-
-    std::ostringstream v;
-    // Value to String.
-    if      ( type == typeid( kvs::Int8   ) ) { v << (int)this->at<kvs::Int8  >( index ); }
-    else if ( type == typeid( kvs::Int16  ) ) { v << this->at<kvs::Int16 >( index ); }
-    else if ( type == typeid( kvs::Int32  ) ) { v << this->at<kvs::Int32 >( index ); }
-    else if ( type == typeid( kvs::Int64  ) ) { v << this->at<kvs::Int64 >( index ); }
-    else if ( type == typeid( kvs::UInt8  ) ) { v << (int)this->at<kvs::UInt8 >( index ); }
-    else if ( type == typeid( kvs::UInt16 ) ) { v << this->at<kvs::UInt16>( index ); }
-    else if ( type == typeid( kvs::UInt32 ) ) { v << this->at<kvs::UInt32>( index ); }
-    else if ( type == typeid( kvs::UInt64 ) ) { v << this->at<kvs::UInt64>( index ); }
-    else if ( type == typeid( kvs::Real32 ) ) { v << this->at<kvs::Real32>( index ); }
-    else if ( type == typeid( kvs::Real64 ) ) { v << this->at<kvs::Real64>( index ); }
-    else { kvsMessageError("Unsupported data type."); }
-
-    return v.str();
-}
-
 template <> struct AnyValueArray::is_supported<kvs::Int8  > : kvs::temporal::true_type {};
-template <> struct AnyValueArray::is_supported<kvs::UInt8 > : kvs::temporal::true_type {};
 template <> struct AnyValueArray::is_supported<kvs::Int16 > : kvs::temporal::true_type {};
-template <> struct AnyValueArray::is_supported<kvs::UInt16> : kvs::temporal::true_type {};
 template <> struct AnyValueArray::is_supported<kvs::Int32 > : kvs::temporal::true_type {};
-template <> struct AnyValueArray::is_supported<kvs::UInt32> : kvs::temporal::true_type {};
 template <> struct AnyValueArray::is_supported<kvs::Int64 > : kvs::temporal::true_type {};
+template <> struct AnyValueArray::is_supported<kvs::UInt8 > : kvs::temporal::true_type {};
+template <> struct AnyValueArray::is_supported<kvs::UInt16> : kvs::temporal::true_type {};
+template <> struct AnyValueArray::is_supported<kvs::UInt32> : kvs::temporal::true_type {};
 template <> struct AnyValueArray::is_supported<kvs::UInt64> : kvs::temporal::true_type {};
 template <> struct AnyValueArray::is_supported<kvs::Real32> : kvs::temporal::true_type {};
 template <> struct AnyValueArray::is_supported<kvs::Real64> : kvs::temporal::true_type {};
+#if KVS_ENABLE_DEPRECATED
 template <> struct AnyValueArray::is_supported<std::string> : kvs::temporal::true_type {};
-
+#endif
 } // end of namespace kvs
 
 #undef KVS_STATIC_ASSERT
