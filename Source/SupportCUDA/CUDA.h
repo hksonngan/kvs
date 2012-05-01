@@ -73,8 +73,8 @@ inline const std::string Version( void )
     const int minor_version = ( CUDA_VERSION - major_version * 1000 ) / 10;
 
     const std::string version(
-        kvs::String( major_version ).toStdString() + "." +
-        kvs::String( minor_version ).toStdString() );
+        kvs::String::ToString( major_version ) + "." +
+        kvs::String::ToString( minor_version ) );
     return( version );
 }
 
