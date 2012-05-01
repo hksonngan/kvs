@@ -41,7 +41,7 @@ public:
  *  @return version number
  */
 /*==========================================================================*/
-    static size_t Number()
+    static int Number()
     {
         const size_t version_number =
             100 * KVS_VERSION_MAJOR +
@@ -57,7 +57,7 @@ public:
  *  @return major version number
  */
 /*==========================================================================*/
-    static size_t MajorNumber()
+    static int MajorNumber()
     {
         return KVS_VERSION_MAJOR;
     }
@@ -68,7 +68,7 @@ public:
  *  @return minor version number
  */
 /*==========================================================================*/
-    static size_t MinorNumber()
+    static int MinorNumber()
     {
         return KVS_VERSION_MINOR;
     }
@@ -79,7 +79,7 @@ public:
  *  @return patch version number
  */
 /*==========================================================================*/
-    static size_t PatchNumber()
+    static int PatchNumber()
     {
         return KVS_VERSION_PATCH;
     }

@@ -15,7 +15,6 @@
 #define KVS__STRING_LIST_H_INCLUDE
 
 #include <vector>
-#include <kvs/String>
 
 
 namespace kvs

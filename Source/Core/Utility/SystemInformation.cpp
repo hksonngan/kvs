@@ -186,9 +186,6 @@ size_t SystemInformation::freeMemorySize()
     return page_info.free_count * page_size;
 #endif
 
-
-
-
 }
 
 } // end of namespace kvs

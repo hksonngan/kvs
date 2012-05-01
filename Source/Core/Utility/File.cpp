@@ -20,7 +20,6 @@
 #include <cstring>
 #include <cerrno>
 #endif
-#include <iostream>
 #include <fstream>
 #include <kvs/Message>
 
@@ -46,7 +45,7 @@ namespace
 /*==========================================================================*/
 std::string GetAbsolutePath( const std::string& path )
 {
-    char absolute_path[::MaxPathLength];
+    char absolute_path[ ::MaxPathLength ];
 
 #if defined ( KVS_PLATFORM_WINDOWS )
     _fullpath( absolute_path, const_cast<char*>( path.c_str() ), ::MaxPathLength );
@@ -54,11 +53,11 @@ std::string GetAbsolutePath( const std::string& path )
     if ( !realpath( path.c_str(), absolute_path ) )
     {
         kvsMessageError("%s", strerror( errno ) );
-        return("");
+        return "";
     }
 #endif
 
-    return( absolute_path );
+    return absolute_path;
 }
 
 } // end of namespace
@@ -72,12 +71,7 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-File::File( void )
-    : m_file_path( "" )
-    , m_path_name( "" )
-    , m_file_name( "" )
-    , m_base_name( "" )
-    , m_extension( "" )
+File::File()
 {
 }
 
@@ -88,37 +82,19 @@ File::File( void )
  */
 /*==========================================================================*/
 File::File( const std::string& file_path )
-    : m_file_path( "" )
-    , m_path_name( "" )
-    , m_file_name( "" )
-    , m_base_name( "" )
-    , m_extension( "" )
 {
     this->parse( file_path );
 }
 
 /*==========================================================================*/
 /**
- *  Constructor.
+ *  Comparison operator.
  *  @param file [in] file
  */
 /*==========================================================================*/
-File::File( const File& file )
+bool File::operator <( const File& file ) const
 {
-    m_file_path = file.m_file_path;
-    m_path_name = file.m_path_name;
-    m_file_name = file.m_file_name;
-    m_base_name = file.m_base_name;
-    m_extension = file.m_extension;
-}
-
-/*==========================================================================*/
-/**
- *  Destructor.
- */
-/*==========================================================================*/
-File::~File( void )
-{
+    return m_file_path < file.m_file_path;
 }
 
 /*==========================================================================*/
@@ -127,20 +103,9 @@ File::~File( void )
  *  @param file [in] file
  */
 /*==========================================================================*/
-const bool File::operator <( const File& file ) const
+bool File::operator ==( const File& file ) const
 {
-    return( m_file_path < file.m_file_path );
-}
-
-/*==========================================================================*/
-/**
- *  Comparison operator.
- *  @param file [in] file
- */
-/*==========================================================================*/
-const bool File::operator ==( const File& file ) const
-{
-    return( m_file_path == file.m_file_path );
+    return m_file_path == file.m_file_path;
 }
 
 /*==========================================================================*/
@@ -150,9 +115,9 @@ const bool File::operator ==( const File& file ) const
  *  @return file path
  */
 /*==========================================================================*/
-const std::string File::filePath( bool absolute ) const
+std::string File::filePath( bool absolute ) const
 {
-    return( absolute ? ::GetAbsolutePath( m_file_path ) : m_file_path );
+    return absolute ? ::GetAbsolutePath( m_file_path ) : m_file_path;
 }
 
 /*==========================================================================*/
@@ -162,9 +127,9 @@ const std::string File::filePath( bool absolute ) const
  *  @return path name
  */
 /*==========================================================================*/
-const std::string File::pathName( bool absolute ) const
+std::string File::pathName( bool absolute ) const
 {
-    return( absolute ? ::GetAbsolutePath( m_path_name ) : m_path_name );
+    return absolute ? ::GetAbsolutePath( m_path_name ) : m_path_name;
 }
 
 /*==========================================================================*/
@@ -173,9 +138,9 @@ const std::string File::pathName( bool absolute ) const
  *  @return file name
  */
 /*==========================================================================*/
-const std::string File::fileName( void ) const
+std::string File::fileName() const
 {
-    return( m_file_name );
+    return m_file_name;
 }
 
 /*==========================================================================*/
@@ -184,9 +149,9 @@ const std::string File::fileName( void ) const
  *  @return base name
  */
 /*==========================================================================*/
-const std::string File::baseName( void ) const
+std::string File::baseName() const
 {
-    return( m_base_name );
+    return m_base_name;
 }
 
 /*==========================================================================*/
@@ -196,16 +161,16 @@ const std::string File::baseName( void ) const
  *  @return extension
  */
 /*==========================================================================*/
-const std::string File::extension( bool complete ) const
+std::string File::extension( bool complete ) const
 {
     if ( complete )
     {
-        return( m_extension );
+        return m_extension;
     }
     else
     {
         int last_dot_pos = m_extension.find_last_of( '.' );
-        return( m_extension.substr( last_dot_pos + 1 ) );
+        return m_extension.substr( last_dot_pos + 1 );
     }
 }
 
@@ -215,31 +180,22 @@ const std::string File::extension( bool complete ) const
  *  @return file size [byte]
  */
 /*==========================================================================*/
-const size_t File::byteSize( void ) const
+size_t File::byteSize() const
 {
-    if ( this->isExisted() )
+    if ( this->exists() )
     {
         std::ifstream file( m_file_path.c_str(), std::ios::in | std::ios::binary );
-        if ( file.fail() )
+        if ( !file )
         {
             kvsMessageError( "Cannot open file: %s.", m_file_path.c_str() );
-            return( 0 );
+            return 0;
         }
 
-        size_t byte_size = 0;
-        std::streamoff p = file.tellg();
-        {
-            file.seekg( 0, std::ios::end );
-            byte_size = static_cast<size_t>( file.tellg() );
-        }
-        file.seekg( p );
-
-        file.close();
-
-        return( byte_size );
+        file.seekg( 0, std::ios::end );
+        size_t byte_size = static_cast<size_t>( file.tellg() );
+        return byte_size;
     }
-
-    return( 0 );
+    return 0;
 }
 
 /*==========================================================================*/
@@ -248,28 +204,28 @@ const size_t File::byteSize( void ) const
  *  @return true, if given file is file
  */
 /*==========================================================================*/
-const bool File::isFile( void ) const
+bool File::isFile() const
 {
 #if defined ( KVS_PLATFORM_WINDOWS )
     WIN32_FIND_DATAA find_data;
-    if ( FindFirstFileA( m_file_path.c_str(), &find_data ) == INVALID_HANDLE_VALUE ) { return( false ); };
-    return( ( find_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) != FILE_ATTRIBUTE_DIRECTORY );
+    if ( FindFirstFileA( m_file_path.c_str(), &find_data ) == INVALID_HANDLE_VALUE ) { return false; };
+    return ( find_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) != FILE_ATTRIBUTE_DIRECTORY;
 #else
     struct stat filestat;
-    if ( stat( m_file_path.c_str(), &filestat ) ) { return( false ); }
-    return( filestat.st_mode & S_IFREG );
+    if ( stat( m_file_path.c_str(), &filestat ) ) { return false; }
+    return filestat.st_mode & S_IFREG;
 #endif
 }
 
 /*==========================================================================*/
 /**
- *  Test to determin whether given file is existed.
- *  @return true, if given file is existed
+ *  Test to determin whether given file exists.
+ *  @return true, if given file exists
  */
 /*==========================================================================*/
-const bool File::isExisted( void ) const
+bool File::exists() const
 {
-    return( this->isFile() );
+    return this->isFile();
 }
 
 /*==========================================================================*/
@@ -279,7 +235,7 @@ const bool File::isExisted( void ) const
  *  @return true, if the parse process is done successfully
  */
 /*==========================================================================*/
-const bool File::parse( const std::string& file_path )
+bool File::parse( const std::string& file_path )
 {
     m_file_path = file_path;
 
@@ -314,7 +270,7 @@ const bool File::parse( const std::string& file_path )
                                    m_file_name.end() );
     }
 
-    return( true );
+    return true;
 }
 
 /*==========================================================================*/
@@ -323,12 +279,12 @@ const bool File::parse( const std::string& file_path )
  *  @return file separator
  */
 /*==========================================================================*/
-const std::string File::Separator( void )
+std::string File::Separator()
 {
 #if defined ( KVS_PLATFORM_WINDOWS )
-    return( "\\" );
+    return "\\";
 #else
-    return( "/" );
+    return "/";
 #endif
 }
 

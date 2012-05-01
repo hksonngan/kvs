@@ -28,12 +28,17 @@ namespace kvs
 class SystemInformation
 {
 public:
-    static size_t numberOfProcessors();
-    static size_t totalMemorySize();
-    static size_t freeMemorySize();
+    static size_t NumberOfProcessors();
+    static size_t TotalMemorySize();
+    static size_t FreeMemorySize();
+
 #if KVS_ENABLE_DEPRECATED
     static size_t nprocessors()
     { return numberOfProcessors(); }
+    static size_t totalMemorySize()
+    { return TotalMemorySize(); }
+    static size_t freeMemorySize()
+    { return FreeMemorySize(); }
 #endif
 
 private:

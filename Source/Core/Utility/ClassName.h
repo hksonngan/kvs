@@ -14,16 +14,16 @@
 #ifndef KVS__CLASS_NAME_H_INCLUDE
 #define KVS__CLASS_NAME_H_INCLUDE
 
-#define kvsClassName( this_class )                \
-    public:                                       \
-    virtual const char* className( void ) const { \
-        return ( # this_class );                  \
+#define kvsClassName( this_class )          \
+    public:                                 \
+    virtual const char* className() const { \
+        return #this_class;                 \
     }
 
 #define kvsClassName_without_virtual( this_class ) \
     public:                                        \
-    const char* className( void ) const {          \
-        return ( # this_class );                   \
+    const char* className() const {                \
+        return #this_class;                        \
     }
 
 #endif // KVS__CLASS_NAME_H_INCLUDE

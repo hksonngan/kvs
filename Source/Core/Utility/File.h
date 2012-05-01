@@ -14,9 +14,6 @@
 #ifndef KVS__FILE_H_INCLUDE
 #define KVS__FILE_H_INCLUDE
 
-#include <cstdio>
-#include <cstdlib>
-#include <climits>
 #include <string>
 #include <kvs/ClassName>
 
@@ -33,8 +30,7 @@ class File
 {
     kvsClassName( kvs::File );
 
-protected:
-
+private:
     std::string m_file_path; ///< file path (ex. "/tmp/abc/xyz.tar.gz")
     std::string m_path_name; ///< path name (ex. "/tmp/abc")
     std::string m_file_name; ///< file name (ex. "xyz.tar.gz")
@@ -42,44 +38,35 @@ protected:
     std::string m_extension; ///< complete extension (ex. "tar.gz")
 
 public:
-
-    File( void );
-
+    File();
     File( const std::string& file_path );
-
-    File( const File& file );
-
-    virtual ~File( void );
+    virtual ~File() {}
 
 public:
-
-    const bool operator <( const File& file ) const;
-
-    const bool operator ==( const File& file ) const;
+    bool operator <( const File& file ) const;
+    bool operator ==( const File& file ) const;
 
 public:
+    std::string filePath( bool absolute = false ) const;
+    std::string pathName( bool absolute = false ) const;
+    std::string fileName() const;
+    std::string baseName() const;
+    std::string extension( bool complete = false ) const;
 
-    const std::string filePath( bool absolute = false ) const;
-
-    const std::string pathName( bool absolute = false ) const;
-
-    const std::string fileName( void ) const;
-
-    const std::string baseName( void ) const;
-
-    const std::string extension( bool complete = false ) const;
-
-    const size_t byteSize( void ) const;
-
-    const bool isFile( void ) const;
-
-    const bool isExisted( void ) const;
-
-    const bool parse( const std::string& file_path );
+    size_t byteSize() const;
+    bool isFile() const;
+    bool exists() const;
+    bool parse( const std::string& file_path );
 
 public:
+    static std::string Separator();
 
-    static const std::string Separator( void );
+#if 1
+    bool isExisted() const
+    {
+        return this->exists();
+    }
+#endif
 };
 
 } // end of namespace kvs
