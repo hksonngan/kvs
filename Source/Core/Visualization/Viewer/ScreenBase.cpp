@@ -205,7 +205,7 @@ void ScreenBase::paintFunction( void )
         const int size = m_id_manager->size();
         for ( int index = 0; index < size; index++ )
         {
-            kvs::IDPair id_pair = (*m_id_manager)[index];
+            kvs::IDManager::IDPair id_pair = (*m_id_manager)[index];
             kvs::ObjectBase* object = m_object_manager->object( id_pair.first );
             kvs::RendererBase* renderer = m_renderer_manager->renderer( id_pair.second );
 

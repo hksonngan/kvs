@@ -24,23 +24,31 @@
 namespace kvs
 {
 
+#if KVS_ENABLE_DEPRECATED
 typedef std::pair<int,int>                  IDPair;
 typedef std::list<IDPair>                   IDs;
 typedef std::list<IDPair>::iterator         ID_ptr;
 typedef std::list<IDPair>::reverse_iterator ID_rptr;
+#endif
 
 /*==========================================================================*/
 /**
  *  ID manager class.
  */
 /*==========================================================================*/
-class IDManager : public IDs
+class IDManager
 {
     kvsClassName( kvs::IDManager );
 
-protected:
+public:
+    typedef std::pair<int,int>                  IDPair;
+    typedef std::list<IDPair>                   IDs;
+    typedef std::list<IDPair>::iterator         ID_ptr;
+    typedef std::list<IDPair>::reverse_iterator ID_rptr;
 
+private:
     std::vector<int> m_flip_table;
+    IDs m_id_list;
 
 public:
 
@@ -93,6 +101,10 @@ public:
 private:
 
     void update_flip_table( void );
+
+private:
+    IDManager( const IDManager& );
+    IDManager& operator =( const IDManager& );
 };
 
 } // end of namespace kvs

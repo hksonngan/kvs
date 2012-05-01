@@ -32,7 +32,7 @@ namespace kvs
 ObjectManager::ObjectManager( void ) :
     kvs::ObjectBase( true )
 {
-    ObjectManagerBase::clear();
+    m_object_tree.clear();
     kvs::Xform::initialize();
     m_has_active_object = false;
     m_enable_all_move   = true;
@@ -55,17 +55,17 @@ ObjectManager::ObjectManager( void ) :
 ObjectManager::~ObjectManager( void )
 {
 //    this->erase();
-    ObjectIterator pobject = ObjectManagerBase::begin();
-    ObjectIterator last = ObjectManagerBase::end();
+    ObjectIterator pobject = m_object_tree.begin();
+    ObjectIterator last    = m_object_tree.end();
     ++pobject;
     while ( pobject != last )
     {
         kvs::ObjectBase* object = *pobject;
-        if ( object ) delete object;
+        delete object;
         ++pobject;
     }
 
-    ObjectManagerBase::clear();
+    m_object_tree.clear();
     kvs::Xform::clear();
     m_object_map.clear();
 }
@@ -77,7 +77,7 @@ ObjectManager::~ObjectManager( void )
 /*==========================================================================*/
 void ObjectManager::insert_root( void )
 {
-    m_root = ObjectManagerBase::insert( ObjectManagerBase::begin(), this );
+    m_root = m_object_tree.insert( m_object_tree.begin(), this );
 }
 
 const kvs::ObjectBase::ObjectType ObjectManager::objectType( void ) const
@@ -104,7 +104,7 @@ int ObjectManager::insert( kvs::ObjectBase* obj )
      */
     m_current_object_id++;
 
-    ObjectIterator obj_ptr = ObjectManagerBase::appendChild( m_root, obj );
+    ObjectIterator obj_ptr = m_object_tree.appendChild( m_root, obj );
 
     /* A pair of the object ID and a pointer to the object is inserted to
      * the object map. The pointer to the object is got by inserting the
@@ -137,7 +137,7 @@ int ObjectManager::insert( int parent_id, kvs::ObjectBase* obj )
     m_current_object_id++;
 
     ObjectIterator parent_ptr = map_id->second; // pointer to the parent
-    ObjectIterator child_ptr  = ObjectManagerBase::appendChild( parent_ptr, obj );
+    ObjectIterator child_ptr  = m_object_tree.appendChild( parent_ptr, obj );
 
     m_object_map.insert( ObjectPair( m_current_object_id, child_ptr ) );
 
@@ -155,8 +155,8 @@ int ObjectManager::insert( int parent_id, kvs::ObjectBase* obj )
 /*==========================================================================*/
 void ObjectManager::erase( bool delete_flg )
 {
-    ObjectIterator first = ObjectManagerBase::begin();
-    ObjectIterator last  = ObjectManagerBase::end();
+    ObjectIterator first = m_object_tree.begin();
+    ObjectIterator last  = m_object_tree.end();
 
     // Skip the root.
     ++first;
@@ -165,15 +165,12 @@ void ObjectManager::erase( bool delete_flg )
     {
         for( ; first != last; ++first )
         {
-            if( *first )
-            {
-                delete *first;
-                *first = NULL;
-            }
+            delete *first;
+            *first = NULL;
         }
     }
 
-    ObjectManagerBase::clear();
+    m_object_tree.clear();
     m_object_map.clear();
 
     this->insert_root();
@@ -201,15 +198,11 @@ void ObjectManager::erase( int obj_id, bool delete_flg )
 
     if( delete_flg )
     {
-        if( obj )
-        {
-            delete obj;
-            obj = NULL;
-        }
+        delete obj;
     }
 
     // Erase the object in the object master base.
-    ObjectManagerBase::erase( ptr );
+    m_object_tree.erase( ptr );
 
     // Erase the map component, which is specified by map_id.
     m_object_map.erase( map_id );
@@ -235,10 +228,10 @@ void ObjectManager::erase( std::string obj_name, bool delete_flg )
         kvs::ObjectBase* obj = *ptr; // object
         if ( obj->name() == obj_name )
         {
-            if ( delete_flg ) { if ( obj ) delete obj; }
+            if ( delete_flg ) { delete obj; }
 
             // Erase the object in the object master base.
-            ObjectManagerBase::erase( ptr );
+            m_object_tree.erase( ptr );
 
             // Erase the map component, which is specified by map_id.
             m_object_map.erase( map_id );
@@ -278,11 +271,8 @@ void ObjectManager::change( int obj_id, ObjectBase* obj, bool delete_flg )
     // Erase the old object
     if( delete_flg )
     {
-        if( old_obj )
-        {
-            delete old_obj;
-            old_obj = NULL;
-        }
+        delete old_obj;
+        old_obj = NULL;
     }
 
     // Insert the new object
@@ -317,7 +307,7 @@ void ObjectManager::change( std::string obj_name, ObjectBase* obj, bool delete_f
             kvs::Xform xform = old_obj->xform();
 
             // Erase the old object
-            if ( delete_flg ) { if ( old_obj ) delete old_obj; }
+            if ( delete_flg ) { delete old_obj; }
 
             // Insert the new object
             obj->updateNormalizeParameters();
@@ -342,7 +332,7 @@ void ObjectManager::change( std::string obj_name, ObjectBase* obj, bool delete_f
 /*==========================================================================*/
 const int ObjectManager::nobjects( void ) const
 {
-    return( ObjectManagerBase::size() );
+    return( m_object_tree.size() );
 }
 
 /*==========================================================================*/
@@ -354,13 +344,11 @@ const int ObjectManager::nobjects( void ) const
 kvs::ObjectBase* ObjectManager::object( void )
 {
     // pointer to the object
-    ObjectIterator obj_ptr = ObjectManagerBase::begin();
+    ObjectIterator obj_ptr = m_object_tree.begin();
 
     // skip the root
     ++obj_ptr;
-
-    if( !*obj_ptr ) return( NULL );
-    else            return( *obj_ptr );
+    return *obj_ptr;
 }
 
 /*==========================================================================*/
@@ -419,7 +407,7 @@ kvs::ObjectBase* ObjectManager::object( std::string obj_name )
 /*==========================================================================*/
 const bool ObjectManager::hasObject( void ) const
 {
-    return( ObjectManagerBase::size() > 1 );
+    return( m_object_tree.size() > 1 );
 }
 
 /*==========================================================================*/
@@ -429,8 +417,8 @@ const bool ObjectManager::hasObject( void ) const
 /*==========================================================================*/
 void ObjectManager::resetXform( void )
 {
-    ObjectIterator first = ObjectManagerBase::begin();
-    ObjectIterator last  = ObjectManagerBase::end();
+    ObjectIterator first = m_object_tree.begin();
+    ObjectIterator last  = m_object_tree.end();
 
     for( ; first != last; ++first )
     {
@@ -454,8 +442,8 @@ void ObjectManager::resetXform( int obj_id )
     // pointer to the object
     ObjectIterator obj_ptr = map_id->second;
 
-    ObjectIterator first = ObjectManagerBase::begin( obj_ptr );
-    ObjectIterator last  = ObjectManagerBase::end( obj_ptr );
+    ObjectIterator first = m_object_tree.begin( obj_ptr );
+    ObjectIterator last  = m_object_tree.end( obj_ptr );
 
     const kvs::Xform obj_form = (*obj_ptr)->xform();
     const kvs::Xform trans = Xform(*this) * obj_form.inverse();
@@ -529,7 +517,7 @@ const int ObjectManager::objectID( const kvs::ObjectBase *object ) const
 /*===========================================================================*/
 const int ObjectManager::parentObjectID( const ObjectIterator it ) const
 {
-    if (it == end()) return -1;
+    if (it == m_object_tree.end()) return -1;
     if (it.node()->parent == NULL) return -1;
 
     return this->objectID(it.node()->parent->data);
@@ -544,7 +532,7 @@ const int ObjectManager::parentObjectID( const ObjectIterator it ) const
 /*===========================================================================*/
 const int ObjectManager::parentObjectID( const kvs::ObjectBase *object ) const
 {
-    for (ObjectIterator i = begin(); i != end(); ++i)
+    for (ObjectIterator i = m_object_tree.begin(); i != m_object_tree.end(); ++i)
     {
         if (*i == object)
         {
@@ -566,7 +554,7 @@ const int ObjectManager::parentObjectID( int object_id ) const
     if ( object_id < 0 ) return -1;
 
     // ObjectManager::object is not const function. peel const.
-    const kvs::ObjectBase *object_ptr = ((ObjectManager*)this)->object( object_id );
+    const kvs::ObjectBase *object_ptr = const_cast<ObjectManager*>(this)->object( object_id );
     if ( object_ptr == NULL ) return -1;
 
     return this->parentObjectID( object_ptr );
@@ -648,12 +636,9 @@ void ObjectManager::eraseActiveObject( void )
 {
     if( m_has_active_object )
     {
-        if( *m_active_object )
-        {
-            delete *m_active_object;
-            *m_active_object = NULL;
-        }
-        ObjectManagerBase::erase( m_active_object );
+        delete *m_active_object;
+        *m_active_object = NULL;
+        m_object_tree.erase( m_active_object );
     }
 
     this->update_normalize_parameters();
@@ -725,8 +710,8 @@ bool ObjectManager::detectCollision(
 {
     double min_distance = 100000;
 
-    ObjectIterator first = ObjectManagerBase::begin();
-    ObjectIterator last  = ObjectManagerBase::end();
+    ObjectIterator first = m_object_tree.begin();
+    ObjectIterator last  = m_object_tree.end();
 
     // skip the root
     ++first;
@@ -764,8 +749,8 @@ bool ObjectManager::detectCollision( const kvs::Vector3f& p_world )
 {
     double min_distance = 100000;
 
-    ObjectIterator first = ObjectManagerBase::begin();
-    ObjectIterator last  = ObjectManagerBase::end();
+    ObjectIterator first = m_object_tree.begin();
+    ObjectIterator last  = m_object_tree.end();
 
     // skip the root
     ++first;
@@ -781,15 +766,15 @@ bool ObjectManager::detectCollision( const kvs::Vector3f& p_world )
 
         if( distance < min_distance )
         {
-            min_distance        = distance;
+            min_distance    = distance;
             m_active_object = first;
         }
     }
 
     return( m_has_active_object =
             (*m_active_object)->collision( p_world,
-                                               m_object_center,
-                                               m_normalize ) );
+                                           m_object_center,
+                                           m_normalize ) );
 }
 
 /*==========================================================================*/
@@ -944,10 +929,10 @@ void ObjectManager::update_normalize_parameters( void )
     m_max_external_coord = kvs::Vector3f(  3.0,  3.0,  3.0 );
 
     int ctr = 0;
-    if( ObjectManagerBase::size() > 1 )
+    if( m_object_tree.size() > 1 )
     {
-        ObjectIterator first = ObjectManagerBase::begin();
-        ObjectIterator last  = ObjectManagerBase::end();
+        ObjectIterator first = m_object_tree.begin();
+        ObjectIterator last  = m_object_tree.end();
 
         // skip the root
         ++first;
@@ -1054,12 +1039,12 @@ ObjectManager::ObjectIterator ObjectManager::get_control_first_pointer( void )
 
     if( this->isEnableAllMove() )
     {
-        first = ObjectManagerBase::begin();
+        first = m_object_tree.begin();
         ++first;
     }
     else
     {
-        first = ObjectManagerBase::begin( m_active_object );
+        first = m_object_tree.begin( m_active_object );
     }
 
     return( first );
@@ -1077,11 +1062,11 @@ ObjectManager::ObjectIterator ObjectManager::get_control_last_pointer( void )
 
     if( this->isEnableAllMove() )
     {
-        last = ObjectManagerBase::end();
+        last = m_object_tree.end();
     }
     else
     {
-        last = ObjectManagerBase::end( m_active_object );
+        last = m_object_tree.end( m_active_object );
     }
 
     return( last );

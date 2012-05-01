@@ -24,7 +24,7 @@ namespace kvs
 /*==========================================================================*/
 RendererManager::RendererManager( void )
 {
-    RendererManagerBase::clear();
+    m_renderer_list.clear();
     m_renderer_map.clear();
 }
 
@@ -51,7 +51,7 @@ int RendererManager::insert( kvs::RendererBase* renderer )
     renderer_id++;
 
     m_renderer_map[ renderer_id ] =
-        RendererManagerBase::insert( this->end(), renderer );
+        m_renderer_list.insert( m_renderer_list.end(), renderer );
 
     return( renderer_id );
 }
@@ -66,13 +66,13 @@ void RendererManager::erase( bool delete_flg )
 {
     if ( delete_flg )
     {
-        for ( RendererIterator p = begin(); p != end(); p++ )
+        for ( RendererIterator p = m_renderer_list.begin(); p != m_renderer_list.end(); p++ )
         {
             if ( *p ) { delete( *p ); *p = NULL; }
         }
     }
 
-    RendererManagerBase::clear();
+    m_renderer_list.clear();
     m_renderer_map.clear();
 }
 
@@ -93,15 +93,12 @@ void RendererManager::erase( int renderer_id, bool delete_flg )
 
     if ( delete_flg )
     {
-        if ( renderer )
-        {
-            delete( renderer );
-            renderer = NULL;
-        }
+        delete renderer;
+        renderer = NULL;
     }
 
     // Erase the renderer in the renderer master.
-    RendererManagerBase::erase( renderer_ptr );
+    m_renderer_list.erase( renderer_ptr );
 
     // Erase the map component, which is specified by map_id.
     m_renderer_map.erase( map_id );
@@ -125,10 +122,10 @@ void RendererManager::erase( std::string renderer_name, bool delete_flg )
         kvs::RendererBase* renderer = *renderer_ptr;
         if ( renderer->name() == renderer_name )
         {
-            if ( delete_flg ) { if ( renderer ) delete( renderer ); }
+            if ( delete_flg ) { delete renderer; }
 
             // Erase the renderer in the renderer master.
-            RendererManagerBase::erase( renderer_ptr );
+            m_renderer_list.erase( renderer_ptr );
 
             // Erase the map component, which is specified by map_id.
             m_renderer_map.erase( map_id );
@@ -163,11 +160,7 @@ void RendererManager::change( int renderer_id, kvs::RendererBase* renderer, bool
     // Erase the old renderer.
     if ( delete_flg )
     {
-        if ( old_renderer )
-        {
-            delete( old_renderer );
-            old_renderer = NULL;
-        }
+        delete old_renderer;
     }
 
     // Insert the new object
@@ -193,7 +186,7 @@ void RendererManager::change( std::string renderer_name, kvs::RendererBase* rend
         kvs::RendererBase* old_renderer = *old_renderer_ptr;
         if ( old_renderer->name() == renderer_name )
         {
-            if ( delete_flg ) { if ( old_renderer ) delete( old_renderer ); }
+            if ( delete_flg ) { delete old_renderer; }
 
             // Insert the new renderer
             *old_renderer_ptr = renderer;
@@ -213,7 +206,7 @@ void RendererManager::change( std::string renderer_name, kvs::RendererBase* rend
 /*==========================================================================*/
 const int RendererManager::nrenderers( void ) const
 {
-    return( RendererManagerBase::size() );
+    return( m_renderer_list.size() );
 }
 
 /*==========================================================================*/
@@ -225,10 +218,8 @@ const int RendererManager::nrenderers( void ) const
 kvs::RendererBase* RendererManager::renderer( void )
 {
     // Pointer to the renderer.
-    RendererIterator renderer_ptr = begin();
-
-    if( !*renderer_ptr ) return( NULL );
-    else                 return( *renderer_ptr );
+    RendererIterator renderer_ptr = m_renderer_list.begin();
+    return *renderer_ptr;
 }
 
 /*==========================================================================*/
@@ -284,7 +275,7 @@ kvs::RendererBase* RendererManager::renderer( std::string renderer_name )
 /*==========================================================================*/
 const bool RendererManager::hasRenderer( void ) const
 {
-    return( RendererManagerBase::size() != 0 );
+    return( m_renderer_list.size() != 0 );
 }
 
 } // end of namespace kvs

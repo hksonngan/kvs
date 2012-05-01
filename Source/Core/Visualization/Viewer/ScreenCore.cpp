@@ -385,7 +385,7 @@ void ScreenCore::paint_event_core( void )
              const int size = id->size();
              for( int index = 0; index < size; index++ )
              {
-                 kvs::IDPair id_pair = (*id)[index];
+                 kvs::IDManager::IDPair id_pair = (*id)[index];
 
                  kvs::ObjectBase*   o = om->object( id_pair.first );
                  kvs::RendererBase* r = rm->renderer( id_pair.second );

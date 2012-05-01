@@ -24,31 +24,30 @@
 namespace kvs
 {
 
-typedef kvs::Tree<kvs::ObjectBase*> ObjectManagerBase;
 
 /*==========================================================================*/
 /**
 *  Object manager class.
 */
 /*==========================================================================*/
-class ObjectManager : public ObjectManagerBase, public kvs::ObjectBase
+class ObjectManager : public kvs::ObjectBase
 {
     kvsClassName( kvs::ObjectManager );
 
 public:
-
-    typedef ObjectManagerBase::iterator   ObjectIterator;
+    typedef kvs::Tree<kvs::ObjectBase*>   ObjectTree;
+    typedef ObjectTree::iterator          ObjectIterator;
     typedef std::pair<int,ObjectIterator> ObjectPair;
     typedef std::map<int,ObjectIterator>  ObjectMap;
 
-protected:
-
+private:
     bool           m_has_active_object; ///< If active object exists true.
     bool           m_enable_all_move;   ///< If All object move together true.
     ObjectIterator m_root;              ///< pointer to the root of the tree
     ObjectIterator m_active_object;     ///< pointer to the active object
     ObjectMap      m_object_map;        ///< object map
     int            m_current_object_id; ///< current object ID
+    ObjectTree     m_object_tree;
 
 public:
 
@@ -159,6 +158,10 @@ private:
     ObjectIterator get_control_first_pointer( void );
 
     ObjectIterator get_control_last_pointer( void );
+
+private:
+    ObjectManager( const ObjectManager& );
+    ObjectManager& operator =( const ObjectManager& );
 };
 
 } // end of namespace kvs

@@ -24,25 +24,23 @@
 namespace kvs
 {
 
-typedef std::list<kvs::RendererBase*> RendererManagerBase;
-
 /*==========================================================================*/
 /**
 *  Renderer manager class.
 */
 /*==========================================================================*/
-class RendererManager : public RendererManagerBase
+class RendererManager
 {
     kvsClassName( kvs::RendererManager );
 
 public:
-
-    typedef RendererManagerBase::iterator  RendererIterator;
+    typedef std::list<kvs::RendererBase*>  RendererList;
+    typedef RendererList::iterator         RendererIterator;
     typedef std::map<int,RendererIterator> RendererMap;
 
-protected:
-
+private:
     RendererMap m_renderer_map; ///< renderer map
+    RendererList m_renderer_list;
 
 public:
 
@@ -73,6 +71,10 @@ public:
     kvs::RendererBase* renderer( std::string renderer_name );
 
     const bool hasRenderer( void ) const;
+
+private:
+    RendererManager( const RendererManager& );
+    RendererManager& operator =( const RendererManager& );
 };
 
 } // end of namespace kvs
