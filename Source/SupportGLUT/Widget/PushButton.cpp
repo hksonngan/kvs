@@ -15,6 +15,7 @@
 #include "PushButton.h"
 #include <kvs/OpenGL>
 #include <kvs/RGBColor>
+#include <kvs/String>
 #include <kvs/IgnoreUnusedVariable>
 
 // Default parameters.

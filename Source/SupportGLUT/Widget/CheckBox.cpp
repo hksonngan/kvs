@@ -14,6 +14,7 @@
 /*****************************************************************************/
 #include "CheckBox.h"
 #include <kvs/OpenGL>
+#include <kvs/String>
 #include <kvs/RGBColor>
 #include <kvs/IgnoreUnusedVariable>
 

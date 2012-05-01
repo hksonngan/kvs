@@ -15,6 +15,7 @@
 /*****************************************************************************/
 #include "ColorPalette.h"
 #include <kvs/HSVColor>
+#include <kvs/String>
 
 // Default parameters.
 namespace { namespace Default

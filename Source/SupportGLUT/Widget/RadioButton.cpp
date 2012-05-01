@@ -15,6 +15,7 @@
 #include "RadioButton.h"
 #include <kvs/OpenGL>
 #include <kvs/RGBColor>
+#include <kvs/String>
 #include <kvs/IgnoreUnusedVariable>
 #include "RadioButtonGroup.h"
 

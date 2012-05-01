@@ -13,6 +13,7 @@
  */
 /*****************************************************************************/
 #include "ColorMapPalette.h"
+#include <kvs/String>
 
 // Default parameters.
 namespace { namespace Default
