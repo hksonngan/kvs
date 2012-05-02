@@ -42,79 +42,79 @@ const double golden_ratio = 1.6180339887498948482;
 template <typename T>
 inline T Max( T a, T b )
 {
-    return( ( a > b ) ? a : b );
+    return ( a > b ) ? a : b;
 }
 
 template <typename T>
 inline T Max( T a, T b, T c )
 {
-    return( Max( Max( a, b ), c ) );
+    return Max( Max( a, b ), c );
 }
 
 template <typename T>
 inline T Max( T a, T b, T c, T d )
 {
-    return( Max( Max( Max( a, b ), c ), d ) );
+    return Max( Max( Max( a, b ), c ), d );
 }
 
 template <typename T>
 inline T Min( T a, T b )
 {
-    return( ( a < b ) ? a : b );
+    return ( a < b ) ? a : b;
 }
 
 template <typename T>
 inline T Min( T a, T b, T c )
 {
-    return( Min( Min( a, b ), c ) );
+    return Min( Min( a, b ), c );
 }
 
 template <typename T>
 inline T Min( T a, T b, T c, T d )
 {
-    return( Min( Min( Min( a, b ), c ), d ) );
+    return Min( Min( Min( a, b ), c ), d );
 }
 
 template <typename T>
 inline T Abs( T a )
 {
-    return( ( a < 0 ) ? -a : a );
+    return ( a < 0 ) ? -a : a;
 }
 
 template <>
 inline unsigned char Abs( unsigned char a )
 {
-    return( a );
+    return a;
 }
 
 template <>
 inline unsigned int Abs( unsigned int a )
 {
-    return( a );
+    return a;
 }
 
 template <>
 inline unsigned short Abs( unsigned short a )
 {
-    return( a );
+    return a;
 }
 
 template <>
 inline unsigned long Abs( unsigned long a )
 {
-    return( a );
+    return a;
 }
 
 template <typename T>
 inline int Sgn( T a )
 {
-    return( ( a < 0 ) ? -1 : 1 );
+    return ( a < 0 ) ? -1 : 1;
 }
 
 template <typename T>
 inline T Sgn( T a, T b )
 {
-    return( ( b < T( 0 ) ) ? -Abs( a ) : Abs( a ) );
+    return ( b < T( 0 ) ) ? -Abs( a ) : Abs( a );
 }
 
 template <typename T>
@@ -144,55 +144,55 @@ inline void Shift( T& a, T& b, T& c, T d )
 template <typename T>
 inline int Round( T a )
 {
-    return( a >= 0 ? (int)( a + 0.5 ) : -(int)( 0.5 - a ) );
+    return a >= 0 ? ( int )( a + 0.5 ) : -( int )( 0.5 - a );
 }
 
 template <typename T>
 inline int Floor( T a )
 {
-    return( a >= 0 ? (int)( a ) : (int)( a ) - 1 );
+    return a >= 0 ? ( int )( a ) : ( int )( a ) - 1;
 }
 
 template <typename T>
 inline int Ceil( T a )
 {
-    return( a == Floor( a ) ? Floor( a ) : Sgn( a ) + Floor( a ) );
+    return a == Floor( a ) ? Floor( a ) : Sgn( a ) + Floor( a );
 }
 
 template <typename T>
 inline T Clamp( T a, T low, T high )
 {
-    return( a <= low ? low : a <= high ? a : high );
+    return a <= low ? low : a <= high ? a : high;
 }
 
 template <typename T>
 inline bool Equal( T a, T b )
 {
-    return( Abs( a - b ) < KVS__MATH_TINY_VALUE );
+    return Abs( a - b ) < KVS__MATH_TINY_VALUE;
 }
 
 template <typename T>
 inline bool IsZero( T a )
 {
-    return( Equal( a, T( 0 ) ) );
+    return Equal( a, T( 0 ) );
 }
 
 template <typename T>
 inline T Power( T a, T b )
 {
-    return( static_cast<T>( std::pow( a, b ) ) );
+    return static_cast<T>( std::pow( a, b ) );
 }
 
 template <typename T>
 inline T Square( T a )
 {
-    return( a * a );
+    return a * a;
 }
 
 template <typename T>
 inline T SquareRoot( T a )
 {
-    return( static_cast<T>( std::sqrt( a ) ) );
+    return static_cast<T>( std::sqrt( a ) );
 }
 
 template <typename T>
@@ -203,12 +203,12 @@ inline T Pythag( T a, T b )
 
     if ( abs_a > abs_b )
     {
-        return( abs_a * static_cast<T>( std::sqrt( 1.0 + Square( abs_b / abs_a ) ) ) );
+        return abs_a * static_cast<T>( std::sqrt( 1.0 + Square( abs_b / abs_a ) ) );
     }
     else
     {
-        return( IsZero( abs_b ) ? T( 0 ) :
-                abs_b * static_cast<T>( std::sqrt( 1.0 + Square( abs_a / abs_b ) ) ) );
+        return IsZero( abs_b ) ? T( 0 ) :
+                abs_b * static_cast<T>( std::sqrt( 1.0 + Square( abs_a / abs_b ) ) );
     }
 }
 
@@ -216,7 +216,7 @@ inline unsigned int Log2Largest( unsigned int n )
 {
     /*
        MessageAssert( sizeof( unsigned int ) == 4,
-       "UTIL_LOG2_LARGEST allows to use on 32 bit CPU only.");
+       "UTIL_LOG2_LARGEST allows to use on 32 bit CPU only." );
      */
     unsigned int t;
     unsigned int log2;
@@ -235,16 +235,16 @@ inline unsigned int Log2Largest( unsigned int n )
 
     if ( n >= t ) { log2 += 1; }
 
-    return( t );
+    return t;
 }
 
 inline unsigned int Log2Smallest( unsigned int n )
 {
     /*
        MessageAssert( sizeof( unsigned int ) == 4,
-       "UTIL_LOG2_SMALLEST allows to use on 32 bit CPU only.");
+       "UTIL_LOG2_SMALLEST allows to use on 32 bit CPU only." );
      */
-    if ( n > 0x80000000 ) { return( 32 ); }
+    if ( n > 0x80000000 ) { return 32; }
 
     unsigned int t;
     unsigned int log2;
@@ -263,42 +263,42 @@ inline unsigned int Log2Smallest( unsigned int n )
 
     if ( n > t ) { log2 += 1; }
 
-    return( log2 );
+    return log2;
 }
 
 inline unsigned int Power2Largest( unsigned int n )
 {
-    return( 1 << Log2Largest( n ) );
+    return 1 << Log2Largest( n );
 }
 
 inline unsigned int Power2Smallest( unsigned int n )
 {
-    return( 1 << Log2Smallest( n ) );
+    return 1 << Log2Smallest( n );
 }
 
 inline bool IsPower2( unsigned int n )
 {
-    return( !( n & ( n - 1 ) ) );
+    return !( n & ( n - 1 ) );
 }
 
 inline float  Deg2Rad( float a )
 {
-    return( a * 0.01745329252f );
+    return a * 0.01745329252f;
 }
 
 inline double Deg2Rad( double a )
 {
-    return( a * 0.01745329252 );
+    return a * 0.01745329252;
 }
 
 inline float Rad2Deg( float a )
 {
-    return( a * 57.29577951f );
+    return a * 57.29577951f;
 }
 
 inline double Rad2Deg( double a )
 {
-    return( a * 57.29577951 );
+    return a * 57.29577951;
 }
 
 } // end of namespace Math

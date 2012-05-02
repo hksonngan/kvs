@@ -72,30 +72,30 @@ public:
     {
         switch ( m_id )
         {
-        case kvs::Type::TypeInt8: return "char";
+        case kvs::Type::TypeInt8:  return "char";
         case kvs::Type::TypeInt16: return "short";
         case kvs::Type::TypeInt32: return "int";
         case kvs::Type::TypeInt64:
     #if defined ( KVS_COMPILER_VC )
-        return( "signed __int64" );
+        return "signed __int64";
     #else
     #if defined ( KVS_PLATFORM_CPU_64 ) // LP64
-        return( "long" );
+        return "long";
     #else
-        return( "long long" );
+        return "long long";
     #endif
     #endif
-        case kvs::Type::TypeUInt8: return "unsigned char";
+        case kvs::Type::TypeUInt8:  return "unsigned char";
         case kvs::Type::TypeUInt16: return "unsigned short";
         case kvs::Type::TypeUInt32: return "unsigned int";
         case kvs::Type::TypeUInt64:
     #if defined ( KVS_COMPILER_VC )
-        return( "unsigned __int64" );
+        return "unsigned __int64";
     #else
     #if defined ( KVS_PLATFORM_CPU_64 ) // LP64
-        return( "unsigned long" );
+        return "unsigned long";
     #else
-        return( "unsigned long long" );
+        return "unsigned long long";
     #endif
     #endif
         case kvs::Type::TypeReal32: return "float";
@@ -413,7 +413,7 @@ public:
     T to( const size_t index ) const
     {
         KVS_STATIC_ASSERT( is_supported<T>::value, "not supported" );
-        return (*this)[ index ].to<T>();
+        return ( *this )[ index ].to<T>();
     }
 
 public:

@@ -23,7 +23,7 @@
 namespace kvs
 {
 
-Time::Time( void )
+Time::Time()
 {
     this->now();
 }
@@ -36,7 +36,7 @@ Time::Time( const int hour, const int minute, const int second ):
     m_total_seconds = this->convert_to_seconds( m_hour, m_minute, m_second );
 }
 
-Time::~Time( void )
+Time::~Time()
 {
 }
 
@@ -47,70 +47,70 @@ Time& Time::operator = ( const Time& time )
     m_second        = time.m_second;
     m_total_seconds = time.m_total_seconds;
 
-    return( *this );
+    return *this;
 }
 
 Time& Time::operator += ( const int seconds )
 {
     this->addSeconds( seconds );
 
-    return( *this );
+    return *this;
 }
 
 Time& Time::operator -= ( const int seconds )
 {
     this->subtractSeconds( seconds );
 
-    return( *this );
+    return *this;
 }
 
 Time operator + ( const Time& time, const int seconds )
 {
     Time ret( time ); ret += seconds;
 
-    return( ret );
+    return ret;
 }
 
 Time operator - ( const Time& time, const int seconds )
 {
     Time ret( time ); ret -= seconds;
 
-    return( ret );
+    return ret;
 }
 
 int operator - ( const Time& time1, const Time& time2 )
 {
-    return( time1.m_total_seconds - time2.m_total_seconds );
+    return time1.m_total_seconds - time2.m_total_seconds;
 }
 
 bool operator > ( const Time& time1, const Time& time2 )
 {
-    return( time1.m_total_seconds > time2.m_total_seconds );
+    return time1.m_total_seconds > time2.m_total_seconds;
 }
 
 bool operator >= ( const Time& time1, const Time& time2 )
 {
-    return( time1.m_total_seconds >= time2.m_total_seconds );
+    return time1.m_total_seconds >= time2.m_total_seconds;
 }
 
 bool operator < ( const Time& time1, const Time& time2 )
 {
-    return( time1.m_total_seconds < time2.m_total_seconds );
+    return time1.m_total_seconds < time2.m_total_seconds;
 }
 
 bool operator <= ( const Time& time1, const Time& time2 )
 {
-    return( time1.m_total_seconds <= time2.m_total_seconds );
+    return time1.m_total_seconds <= time2.m_total_seconds;
 }
 
 bool operator == ( const Time& time1, const Time& time2 )
 {
-    return( time1.m_total_seconds == time2.m_total_seconds );
+    return time1.m_total_seconds == time2.m_total_seconds;
 }
 
 bool operator != ( const Time& time1, const Time& time2 )
 {
-    return( time1.m_total_seconds != time2.m_total_seconds );
+    return time1.m_total_seconds != time2.m_total_seconds;
 }
 
 std::ostream& operator << ( std::ostream& os, const Time& time )
@@ -119,30 +119,30 @@ std::ostream& operator << ( std::ostream& os, const Time& time )
        << time.minute() << ":"
        << time.second();
 
-    return( os );
+    return os;
 }
 
-const int Time::hour( void ) const
+int Time::hour() const
 {
-    return( m_hour );
+    return m_hour;
 }
 
-const int Time::minute( void ) const
+int Time::minute() const
 {
-    return( m_minute );
+    return m_minute;
 }
 
-const int Time::second( void ) const
+int Time::second() const
 {
-    return( m_second );
+    return m_second;
 }
 
-const long Time::totalSeconds( void ) const
+long Time::totalSeconds() const
 {
-    return( m_total_seconds );
+    return m_total_seconds;
 }
 
-const Time& Time::now( void )
+const Time& Time::now()
 {
     time_t t = time( NULL );
     tm* time = localtime( &t );
@@ -152,16 +152,16 @@ const Time& Time::now( void )
     m_second = time->tm_sec;
     m_total_seconds = this->convert_to_seconds( m_hour, m_minute, m_second );
 
-    return( *this );
+    return *this;
 }
 
-const std::string Time::toString( const std::string sep ) const
+std::string Time::toString( const std::string sep ) const
 {
     char h[3]; sprintf( h, "%02d", m_hour );
     char m[3]; sprintf( m, "%02d", m_minute );
     char s[3]; sprintf( s, "%02d", m_second );
 
-    return( std::string(h) + sep + std::string(m) + sep + std::string(s) );
+    return std::string( h ) + sep + std::string( m ) + sep + std::string( s );
 }
 
 void Time::fromString( const std::string time, const std::string sep )
@@ -171,9 +171,9 @@ void Time::fromString( const std::string time, const std::string sep )
         if ( time.size() == 6 )
         {
             // time: HHMMSS
-            const std::string h = time.substr(0,2);
-            const std::string m = time.substr(2,2);
-            const std::string s = time.substr(4,2);
+            const std::string h = time.substr( 0,2 );
+            const std::string m = time.substr( 2,2 );
+            const std::string s = time.substr( 4,2 );
 
             m_hour   = atoi( h.c_str() );
             m_minute = atoi( m.c_str() );
@@ -182,7 +182,7 @@ void Time::fromString( const std::string time, const std::string sep )
     }
     else
     {
-        // time: HH?MM?SS ('?': separator)
+        // time: HH?MM?SS ( '?': separator )
         kvs::Tokenizer tokenizer( time, sep );
         const std::string h = tokenizer.token();
         const std::string m = tokenizer.token();
@@ -211,9 +211,9 @@ void Time::subtractHours( const int hour )
 void Time::addMinutes( const int minute )
 {
     m_minute += minute;
-    if( m_minute > 60 )
+    if ( m_minute > 60 )
     {
-        while( m_minute > 60 )
+        while ( m_minute > 60 )
         {
             m_minute -= 60;
             m_hour   += 1;
@@ -227,7 +227,7 @@ void Time::subtractMinutes( const int minute )
 {
     m_minute -= minute;
 
-    if( minute > 60 )
+    if ( minute > 60 )
     {
         int t = minute / 60;
         m_hour   -= t;
@@ -251,18 +251,18 @@ void Time::subtractSeconds( const int second )
     *this = this->convert_from_seconds( m_total_seconds );
 }
 
-const long Time::convert_to_seconds( const int hour, const int minute, const int second )
+long Time::convert_to_seconds( const int hour, const int minute, const int second )
 {
-    return( hour * 3600 + minute * 60 + second );
+    return hour * 3600 + minute * 60 + second;
 }
 
-const Time Time::convert_from_seconds( const int seconds )
+Time Time::convert_from_seconds( const int seconds )
 {
     const int hour   = seconds / 3600;
     const int minute = ( seconds - hour * 3600 ) / 60;
     const int second = seconds - hour * 3600 - minute * 60;
 
-    return( Time( hour, minute, second ) );
+    return Time( hour, minute, second );
 }
 
 } // end of namespace kvs

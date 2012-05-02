@@ -52,7 +52,7 @@ std::string GetAbsolutePath( const std::string& path )
 #else
     if ( !realpath( path.c_str(), absolute_path ) )
     {
-        kvsMessageError("%s", strerror( errno ) );
+        kvsMessageError( "%s", strerror( errno ) );
         return "";
     }
 #endif

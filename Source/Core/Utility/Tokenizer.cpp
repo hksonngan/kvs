@@ -24,7 +24,7 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-Tokenizer::Tokenizer( void ):
+Tokenizer::Tokenizer():
     m_first( std::string::npos ),
     m_last( std::string::npos )
 {
@@ -89,7 +89,7 @@ Tokenizer& Tokenizer::operator = ( const std::string& source )
     m_last   = 0;
     this->get_token();
 
-    return( *this );
+    return *this;
 }
 
 /*==========================================================================*/
@@ -98,7 +98,7 @@ Tokenizer& Tokenizer::operator = ( const std::string& source )
  *  @return true, if the node is last
  */
 /*==========================================================================*/
-const bool Tokenizer::isLast( void ) const
+bool Tokenizer::isLast() const
 {
     return( m_first == std::string::npos && m_last == std::string::npos );
 }
@@ -109,12 +109,12 @@ const bool Tokenizer::isLast( void ) const
  *  @return token
  */
 /*==========================================================================*/
-const std::string Tokenizer::token( void )
+std::string Tokenizer::token()
 {
     std::string ret = m_token;
     this->get_token();
 
-    return( ret );
+    return ret;
 }
 
 /*==========================================================================*/
@@ -122,16 +122,16 @@ const std::string Tokenizer::token( void )
  *  Get the delimitted current token.
  */
 /*==========================================================================*/
-void Tokenizer::get_token( void )
+void Tokenizer::get_token()
 {
-    if( m_last == std::string::npos )
+    if ( m_last == std::string::npos )
     {
         m_first = std::string::npos;
         return;
     }
 
     m_first = m_source.find_first_not_of( m_delimiter, m_last );
-    if( m_first == std::string::npos )
+    if ( m_first == std::string::npos )
     {
         m_last = std::string::npos;
         return;

@@ -53,12 +53,12 @@ const kvs::UInt8 ResetBitMask[9] =
 
 inline int BitToByte( int nbits )
 {
-    return( nbits >> 3 );
+    return nbits >> 3;
 }
 
 inline int ByteToBit( int nbytes )
 {
-    return( nbytes << 3 );
+    return nbytes << 3;
 }
 
 } // end of namespace
@@ -67,7 +67,7 @@ inline int ByteToBit( int nbytes )
 namespace kvs
 {
 
-BitArray::BitArray( void ):
+BitArray::BitArray():
     m_counter( 0 ),
     m_nvalues( 0 ),
     m_values( 0 )
@@ -107,67 +107,67 @@ BitArray::BitArray( const BitArray& other ):
     this->shallowCopy( other );
 }
 
-BitArray::~BitArray( void )
+BitArray::~BitArray()
 {
     this->deallocate();
 }
 
-const bool BitArray::operator [] ( size_t index ) const
+bool BitArray::operator [] ( size_t index ) const
 {
     KVS_ASSERT( index < m_nvalues );
 
-    return( this->test( index ) );
+    return this->test( index );
 }
 
 BitArray& BitArray::operator = ( const BitArray& other )
 {
-    if( this != &other )
+    if ( this != &other )
     {
         this->unref();
         this->shallowCopy( other );
     }
 
-    return( *this );
+    return *this;
 }
 
 BitArray& BitArray::operator &= ( const BitArray& other ) // AND
 {
     const size_t byte_size = this->byteSize();
-    for( size_t index = 0; index < byte_size; index++ )
+    for ( size_t index = 0; index < byte_size; index++ )
     {
         m_values[index] &= other.m_values[index];
     }
 
-    return( *this );
+    return *this;
 }
 
 BitArray& BitArray::operator |= ( const BitArray& other ) // OR
 {
     const size_t byte_size = this->byteSize();
-    for( size_t index = 0; index < byte_size; index++ )
+    for ( size_t index = 0; index < byte_size; index++ )
     {
         m_values[index] |= other.m_values[index];
     }
 
-    return( *this );
+    return *this;
 }
 
 BitArray& BitArray::operator ^= ( const BitArray& other ) // XOR
 {
     const size_t byte_size = this->byteSize();
-    for( size_t index = 0; index < byte_size; index++ )
+    for ( size_t index = 0; index < byte_size; index++ )
     {
         m_values[index] |= ( ~other.m_values[index] );
     }
 
-    return( *this );
+    return *this;
 }
 
 // set all 1 to table
-void BitArray::set( void )
+void BitArray::set()
 {
     const size_t byte_size = this->byteSize();
-    for( size_t index = 0; index < byte_size; index++ )
+    for ( size_t index = 0; index < byte_size; index++ )
     {
         m_values[index] = ::ResetBitMask[8]; // 1111,1111
     }
@@ -180,10 +180,10 @@ void BitArray::set( size_t index )
 }
 
 // set all 0 to table
-void BitArray::reset( void )
+void BitArray::reset()
 {
     const size_t byte_size = this->byteSize();
-    for( size_t index = 0; index < byte_size; index++ )
+    for ( size_t index = 0; index < byte_size; index++ )
     {
         m_values[index] = ::SetBitMask[8]; // 0000,0000
     }
@@ -196,10 +196,10 @@ void BitArray::reset( size_t index )
 }
 
 // reverse all value of table
-void BitArray::flip( void )
+void BitArray::flip()
 {
     const size_t byte_size = this->byteSize();
-    for( size_t index = 0; index < byte_size; index++ )
+    for ( size_t index = 0; index < byte_size; index++ )
     {
         m_values[ index ] = ~m_values[ index ];
     }
@@ -212,63 +212,63 @@ void BitArray::flip( size_t index )
 }
 
 // count the true value
-size_t BitArray::count( void ) const
+size_t BitArray::count() const
 {
     size_t ret     = 0;
     size_t counter = 0;
     const size_t byte_size = this->byteSize();
     const size_t nbits     = m_nvalues - 1;
-    for( size_t index = 0; index < byte_size; index++ )
+    for ( size_t index = 0; index < byte_size; index++ )
     {
-        for( size_t bit_index = 0; bit_index < 8; bit_index++ )
+        for ( size_t bit_index = 0; bit_index < 8; bit_index++ )
         {
-            if( ( m_values[index] & ::SetBitMask[bit_index] ) != 0 )
+            if ( ( m_values[index] & ::SetBitMask[bit_index] ) != 0 )
             {
                 ret++;
             }
 
             counter++;
-            if( counter > nbits ) return( ret );
+            if ( counter > nbits ) return ret;
         }
     }
 
-    return( ret );
+    return ret;
 };
 
 // return the "bit" position value
 bool BitArray::test( size_t index ) const
 {
-    return( ( m_values[ ::BitToByte( index ) ] & ::SetBitMask[ index & 7 ] ) != 0 );
+    return ( m_values[ ::BitToByte( index ) ] & ::SetBitMask[ index & 7 ] ) != 0;
 }
 
-const size_t BitArray::size( void ) const
+size_t BitArray::size() const
 {
-    return( m_nvalues );
+    return m_nvalues;
 }
 
-const size_t BitArray::byteSize( void ) const
+size_t BitArray::byteSize() const
 {
-    return( ::BitToByte( m_nvalues + 7 ) );
+    return ::BitToByte( m_nvalues + 7 );
 }
 
-const size_t BitArray::bitSize( void ) const
+size_t BitArray::bitSize() const
 {
-    return( ::ByteToBit( this->byteSize() ) );
+    return ::ByteToBit( this->byteSize() );
 }
 
-const size_t BitArray::paddingBit( void ) const
+size_t BitArray::paddingBit() const
 {
-    return( this->bitSize() - m_nvalues );
+    return this->bitSize() - m_nvalues;
 }
 
-const void* BitArray::pointer( void ) const
+const void* BitArray::pointer() const
 {
-    return( m_values );
+    return m_values;
 }
 
-void* BitArray::pointer( void )
+void* BitArray::pointer()
 {
-    return( m_values );
+    return m_values;
 }
 
 void BitArray::shallowCopy( const BitArray& other )
@@ -313,34 +313,34 @@ kvs::UInt8* BitArray::allocate( size_t nvalues )
     m_nvalues = nvalues;
     m_values  = static_cast<kvs::UInt8*>( malloc( this->byteSize() ) );
 
-    return( m_values );
+    return m_values;
 }
 
-void BitArray::deallocate( void )
+void BitArray::deallocate()
 {
     this->unref();
 }
 
-void BitArray::create_counter( void )
+void BitArray::create_counter()
 {
-    m_counter = new kvs::ReferenceCounter(1);
+    m_counter = new kvs::ReferenceCounter( 1 );
 }
 
-void BitArray::ref( void )
+void BitArray::ref()
 {
-    if( m_counter ) m_counter->increment();
+    if ( m_counter ) m_counter->increment();
 }
 
-void BitArray::unref( void )
+void BitArray::unref()
 {
-    if( m_counter )
+    if ( m_counter )
     {
         m_counter->decrement();
 
-        if( m_counter->value() == 0 )
+        if ( m_counter->value() == 0 )
         {
-            if( m_values  ) free( m_values );
-            if( m_counter ) delete m_counter;
+            if ( m_values ) free( m_values );
+            if ( m_counter ) delete m_counter;
         }
     }
 

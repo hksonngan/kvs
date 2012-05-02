@@ -32,7 +32,7 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-CommandLine::Argument::Argument( void )
+CommandLine::Argument::Argument()
     : m_length( 0 )
     , m_data( 0 )
 {
@@ -87,7 +87,7 @@ CommandLine::Argument::Argument( const CommandLine::Argument& other )
  *  Destructor.
  */
 /*==========================================================================*/
-CommandLine::Argument::~Argument( void )
+CommandLine::Argument::~Argument()
 {
     if ( m_data ) { delete[] m_data; }
 }
@@ -98,9 +98,9 @@ CommandLine::Argument::~Argument( void )
  *  @return length of argument value
  */
 /*==========================================================================*/
-const size_t CommandLine::Argument::length( void ) const
+size_t CommandLine::Argument::length() const
 {
-    return( m_length );
+    return m_length;
 }
 
 /*==========================================================================*/
@@ -109,9 +109,9 @@ const size_t CommandLine::Argument::length( void ) const
  *  @return argument value
  */
 /*==========================================================================*/
-const char* CommandLine::Argument::data( void ) const
+const char* CommandLine::Argument::data() const
 {
-    return( m_data );
+    return m_data;
 }
 
 /*==========================================================================*/
@@ -129,14 +129,14 @@ CommandLine::Argument& CommandLine::Argument::operator =( const char* rhs )
     if ( !m_data )
     {
         kvsMessageError( "Cannot allocate memory." );
-        return( *this );
+        return *this;
     }
 
     memset( m_data, 0, m_length + 1 );
     strncpy( m_data, rhs, m_length );
     m_data[ m_length ] = '\0';
 
-    return( *this );
+    return *this;
 }
 
 /*==========================================================================*/
@@ -154,14 +154,14 @@ CommandLine::Argument& CommandLine::Argument::operator =( const CommandLine::Arg
     if ( !m_data )
     {
         kvsMessageError( "Cannot allocate memory." );
-        return( *this );
+        return *this;
     }
 
     memset( m_data, 0, m_length + 1 );
     strncpy( m_data, rhs.m_data, m_length );
     m_data[ m_length ] = '\0';
 
-    return( *this );
+    return *this;
 }
 
 /*==========================================================================*/
@@ -169,7 +169,7 @@ CommandLine::Argument& CommandLine::Argument::operator =( const CommandLine::Arg
  *  Constructor.
  */
 /*==========================================================================*/
-CommandLine::Option::Option( void )
+CommandLine::Option::Option()
     : m_name( "" )
     , m_description( "" )
     , m_nvalues( 0 )
@@ -188,7 +188,7 @@ CommandLine::Option::Option( void )
  *  @param is_required [in] whether option is required ?
  */
 /*==========================================================================*/
-CommandLine::Option::Option(
+CommandLine::Option::Option( 
     const std::string& name,
     const std::string& description,
     size_t             nvalues,
@@ -226,7 +226,7 @@ CommandLine::Option::Option( const CommandLine::Option& other )
  *  Destructor.
  */
 /*==========================================================================*/
-CommandLine::Option::~Option( void )
+CommandLine::Option::~Option()
 {
     m_values.clear();
 }
@@ -247,7 +247,7 @@ void CommandLine::Option::setValue( const CommandLine::Argument& value )
  *  Change option status to 'given'.
  */
 /*==========================================================================*/
-void CommandLine::Option::given( void )
+void CommandLine::Option::given()
 {
     m_is_given = true;
 }
@@ -257,9 +257,9 @@ void CommandLine::Option::given( void )
  *  Get option name.
  */
 /*==========================================================================*/
-const std::string& CommandLine::Option::name( void ) const
+const std::string& CommandLine::Option::name() const
 {
-    return( m_name );
+    return m_name;
 }
 
 /*==========================================================================*/
@@ -267,9 +267,9 @@ const std::string& CommandLine::Option::name( void ) const
  *  Get option description.
  */
 /*==========================================================================*/
-const std::string& CommandLine::Option::description( void ) const
+const std::string& CommandLine::Option::description() const
 {
-    return( m_description );
+    return m_description;
 }
 
 /*==========================================================================*/
@@ -278,9 +278,9 @@ const std::string& CommandLine::Option::description( void ) const
  *  @return number of option values
  */
 /*==========================================================================*/
-const size_t CommandLine::Option::nvalues( void ) const
+size_t CommandLine::Option::nvalues() const
 {
-    return( m_nvalues );
+    return m_nvalues;
 }
 
 /*==========================================================================*/
@@ -289,9 +289,9 @@ const size_t CommandLine::Option::nvalues( void ) const
  *  @return true, if option is required
  */
 /*==========================================================================*/
-const bool CommandLine::Option::isRequired( void ) const
+bool CommandLine::Option::isRequired() const
 {
-    return( m_is_required );
+    return m_is_required;
 }
 
 /*==========================================================================*/
@@ -300,9 +300,9 @@ const bool CommandLine::Option::isRequired( void ) const
  *  @return true, if option is given
  */
 /*==========================================================================*/
-const bool CommandLine::Option::isGiven( void ) const
+bool CommandLine::Option::isGiven() const
 {
-    return( m_is_given );
+    return m_is_given;
 }
 
 /*==========================================================================*/
@@ -311,9 +311,9 @@ const bool CommandLine::Option::isGiven( void ) const
  *  @return option value list
  */
 /*==========================================================================*/
-const std::vector<CommandLine::Argument>& CommandLine::Option::values( void ) const
+const std::vector<CommandLine::Argument>& CommandLine::Option::values() const
 {
-    return( m_values );
+    return m_values;
 }
 
 /*==========================================================================*/
@@ -334,7 +334,7 @@ CommandLine::Option& CommandLine::Option::operator =( const CommandLine::Option&
                rhs.m_values.end(),
                m_values.begin() );
 
-    return( *this );
+    return *this;
 }
 
 /*==========================================================================*/
@@ -344,9 +344,9 @@ CommandLine::Option& CommandLine::Option::operator =( const CommandLine::Option&
  *  @param rhs [in] option (right hand side)
  */
 /*==========================================================================*/
-const bool operator <( const CommandLine::Option& lhs, const CommandLine::Option& rhs )
+bool operator <( const CommandLine::Option& lhs, const CommandLine::Option& rhs )
 {
-    return( lhs.m_name < rhs.m_name );
+    return lhs.m_name < rhs.m_name;
 }
 
 /*==========================================================================*/
@@ -356,9 +356,9 @@ const bool operator <( const CommandLine::Option& lhs, const CommandLine::Option
  *  @param rhs [in] option (right hand side)
  */
 /*==========================================================================*/
-const bool operator ==( const CommandLine::Option& lhs, const CommandLine::Option& rhs )
+bool operator ==( const CommandLine::Option& lhs, const CommandLine::Option& rhs )
 {
-    return( lhs.m_name == rhs.m_name );
+    return lhs.m_name == rhs.m_name;
 }
 
 /*==========================================================================*/
@@ -366,7 +366,7 @@ const bool operator ==( const CommandLine::Option& lhs, const CommandLine::Optio
  *  Constructor.
  */
 /*==========================================================================*/
-CommandLine::Value::Value( void )
+CommandLine::Value::Value()
     : m_description( "" )
     , m_is_required( true )
     , m_is_given( false )
@@ -408,7 +408,7 @@ CommandLine::Value::Value( const CommandLine::Value& other )
  *  Destructor.
  */
 /*==========================================================================*/
-CommandLine::Value::~Value( void )
+CommandLine::Value::~Value()
 {
 }
 
@@ -430,9 +430,9 @@ void CommandLine::Value::setValue( const char* value )
  *  @return description of value
  */
 /*==========================================================================*/
-const std::string& CommandLine::Value::description( void ) const
+const std::string& CommandLine::Value::description() const
 {
-    return( m_description );
+    return m_description;
 }
 
 /*==========================================================================*/
@@ -441,9 +441,9 @@ const std::string& CommandLine::Value::description( void ) const
  *  @return true, if value is required
  */
 /*==========================================================================*/
-const bool CommandLine::Value::isRequired( void ) const
+bool CommandLine::Value::isRequired() const
 {
-    return( m_is_required );
+    return m_is_required;
 }
 
 /*==========================================================================*/
@@ -452,9 +452,9 @@ const bool CommandLine::Value::isRequired( void ) const
  *  @return true, if value is given
  */
 /*==========================================================================*/
-const bool CommandLine::Value::isGiven( void ) const
+bool CommandLine::Value::isGiven() const
 {
-    return( m_is_given );
+    return m_is_given;
 }
 
 /*==========================================================================*/
@@ -468,7 +468,7 @@ CommandLine::Value& CommandLine::Value::operator =( const CommandLine::Value& rh
     m_description = rhs.m_description;
     m_value       = rhs.m_value;
 
-    return( *this );
+    return *this;
 }
 
 /*==========================================================================*/
@@ -478,9 +478,9 @@ CommandLine::Value& CommandLine::Value::operator =( const CommandLine::Value& rh
  *  @param rhs [in] value (right hand side)
  */
 /*==========================================================================*/
-const bool operator <( const CommandLine::Value& lhs, const CommandLine::Value& rhs )
+bool operator <( const CommandLine::Value& lhs, const CommandLine::Value& rhs )
 {
-    return( lhs.m_description < rhs.m_description );
+    return lhs.m_description < rhs.m_description;
 }
 
 /*==========================================================================*/
@@ -490,9 +490,9 @@ const bool operator <( const CommandLine::Value& lhs, const CommandLine::Value& 
  *  @param rhs [in] value (right hand side)
  */
 /*==========================================================================*/
-const bool operator ==( const CommandLine::Value& lhs, const CommandLine::Value& rhs )
+bool operator ==( const CommandLine::Value& lhs, const CommandLine::Value& rhs )
 {
-    return( lhs.m_description == rhs.m_description );
+    return lhs.m_description == rhs.m_description;
 }
 
 /*==========================================================================*/
@@ -541,7 +541,7 @@ CommandLine::CommandLine( int argc, char** argv, const std::string& command_name
  *  Destructor.
  */
 /*==========================================================================*/
-CommandLine::~CommandLine( void )
+CommandLine::~CommandLine()
 {
     this->clear();
 }
@@ -552,9 +552,9 @@ CommandLine::~CommandLine( void )
  *  @return argument count
  */
 /*==========================================================================*/
-const int CommandLine::argc( void ) const
+int CommandLine::argc() const
 {
-    return( m_argc );
+    return m_argc;
 }
 
 /*==========================================================================*/
@@ -563,9 +563,9 @@ const int CommandLine::argc( void ) const
  *  @return argument values
  */
 /*==========================================================================*/
-char** const CommandLine::argv( void ) const
+char** const CommandLine::argv() const
 {
-    return( m_argv );
+    return m_argv;
 }
 
 /*==========================================================================*/
@@ -574,9 +574,9 @@ char** const CommandLine::argv( void ) const
  *  @return command name
  */
 /*==========================================================================*/
-const std::string& CommandLine::commandName( void ) const
+const std::string& CommandLine::commandName() const
 {
-    return( m_command_name );
+    return m_command_name;
 }
 
 /*==========================================================================*/
@@ -585,10 +585,10 @@ const std::string& CommandLine::commandName( void ) const
  *  @return true, if parse process is done successfully
  */
 /*==========================================================================*/
-const bool CommandLine::parse( void )
+bool CommandLine::parse()
 {
     bool allow_no_value = ( m_values.size() == 0 );
-    if( !allow_no_value )
+    if ( !allow_no_value )
     {
         // Check the 'is_required' property of the input values, when the some
         // input values are added in m_values.
@@ -605,7 +605,7 @@ const bool CommandLine::parse( void )
     {
         this->print_help_message( UsageOnly );
         this->clear();
-        return( false );
+        return false;
     }
 
     // Oputput help message in detail when '-h' option is given.
@@ -617,7 +617,7 @@ const bool CommandLine::parse( void )
         {
             this->print_help_message( UsageAndOption );
             this->clear();
-            return( false );
+            return false;
         }
         else
         {
@@ -640,7 +640,7 @@ const bool CommandLine::parse( void )
             {
                 kvsMessageError( "Unknown option '%s'", argument->data() );
                 this->clear();
-                return( false );
+                return false;
             }
 
             // Read the option values.
@@ -650,7 +650,7 @@ const bool CommandLine::parse( void )
                                  option->nvalues(),
                                  option->name().c_str() );
                 this->clear();
-                return( false );
+                return false;
             }
         }
         else
@@ -676,7 +676,7 @@ const bool CommandLine::parse( void )
             {
                 kvsMessageError( "Option '-%s' is required.", option->name().c_str() );
                 this->clear();
-                return( false );
+                return false;
             }
         }
         ++option;
@@ -689,15 +689,15 @@ const bool CommandLine::parse( void )
         {
             if ( !value->isGiven() )
             {
-                kvsMessageError("Input value is required.");
+                kvsMessageError( "Input value is required." );
                 this->clear();
-                return( false );
+                return false;
             }
         }
         ++value;
     }
 
-    return( true );
+    return true;
 }
 
 /*==========================================================================*/
@@ -706,10 +706,10 @@ const bool CommandLine::parse( void )
  *  @return true, if the reading process is done successfully
  */
 /*==========================================================================*/
-const bool CommandLine::read( void )
+bool CommandLine::read()
 {
     bool allow_no_value = ( m_values.size() == 0 );
-    if( !allow_no_value )
+    if ( !allow_no_value )
     {
         // Check the 'is_required' property of the input values, when the some
         // input values are added in m_values.
@@ -726,7 +726,7 @@ const bool CommandLine::read( void )
     {
         this->print_help_message( UsageOnly );
         this->clear();
-        return( false );
+        return false;
     }
 
     // Oputput help message in detail when '-h' option is given.
@@ -738,7 +738,7 @@ const bool CommandLine::read( void )
         {
             this->print_help_message( UsageAndOption );
             this->clear();
-            return( false );
+            return false;
         }
         else
         {
@@ -757,10 +757,10 @@ const bool CommandLine::read( void )
         {
             // Serch the given option from the option set.
             option = this->find_option( argument );
-            if ( option == m_options.end() ) { return( true ); }
+            if ( option == m_options.end() ) { return true; }
 
             // Read the option values.
-            if ( !this->read_option_values( argument, option ) ) { return( true ); }
+            if ( !this->read_option_values( argument, option ) ) { return true; }
         }
         else
         {
@@ -768,7 +768,7 @@ const bool CommandLine::read( void )
             {
                 if ( value->isRequired() )
                 {
-                    if ( !argument->data() ) { return( true ); }
+                    if ( !argument->data() ) { return true; }
 
                     value->setValue( argument->data() );
                 }
@@ -780,7 +780,7 @@ const bool CommandLine::read( void )
         }
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -788,7 +788,7 @@ const bool CommandLine::read( void )
  *  @brief  Clear argument lists.
  */
 /*===========================================================================*/
-void CommandLine::clear( void )
+void CommandLine::clear()
 {
     m_arguments.clear();
     m_options.clear();
@@ -801,20 +801,20 @@ void CommandLine::clear( void )
  *  @return true, if command line has input value
  */
 /*==========================================================================*/
-const bool CommandLine::hasValues( void ) const
+bool CommandLine::hasValues() const
 {
     Values::const_iterator value      = m_values.begin();
     Values::const_iterator last_value = m_values.end();
 
-    if ( value == last_value ) { return( false ); }
+    if ( value == last_value ) { return false; }
 
     while ( value != last_value )
     {
-        if ( !value->isGiven() ) { return( false ); }
+        if ( !value->isGiven() ) { return false; }
         ++value;
     }
 
-    return( true );
+    return true;
 }
 
 /*==========================================================================*/
@@ -823,9 +823,9 @@ const bool CommandLine::hasValues( void ) const
  *  @return number of input values
  */
 /*==========================================================================*/
-const size_t CommandLine::nvalues( void ) const
+size_t CommandLine::nvalues() const
 {
-    return( m_values.size() );
+    return m_values.size();
 }
 
 /*==========================================================================*/
@@ -835,12 +835,12 @@ const size_t CommandLine::nvalues( void ) const
  *  @return true, if command line has given option
  */
 /*==========================================================================*/
-const bool CommandLine::hasOption( const std::string& option_name ) const
+bool CommandLine::hasOption( const std::string& option_name ) const
 {
     Option            key( option_name );
     Options::const_iterator p = std::find( m_options.begin(), m_options.end(), key );
 
-    return( ( p != m_options.end() ) && ( p->isGiven() ) );
+    return ( p != m_options.end() ) && ( p->isGiven() );
 }
 
 /*==========================================================================*/
@@ -850,13 +850,13 @@ const bool CommandLine::hasOption( const std::string& option_name ) const
  *  @return true, if command line has option value for given option
  */
 /*==========================================================================*/
-const bool CommandLine::hasOptionValue( const std::string& option_name ) const
+bool CommandLine::hasOptionValue( const std::string& option_name ) const
 {
     Option            key( option_name );
     Options::const_iterator p = std::find( m_options.begin(), m_options.end(), key );
-    if ( p == m_options.end() ) { return( false ); }
+    if ( p == m_options.end() ) { return false; }
 
-    return( p->nvalues() > 0 );
+    return p->nvalues() > 0;
 }
 
 /*==========================================================================*/
@@ -865,9 +865,9 @@ const bool CommandLine::hasOptionValue( const std::string& option_name ) const
  *  @return number of options
  */
 /*==========================================================================*/
-const size_t CommandLine::noptions( void ) const
+size_t CommandLine::noptions() const
 {
-    return( m_options.size() );
+    return m_options.size();
 }
 
 /*==========================================================================*/
@@ -890,7 +890,7 @@ void CommandLine::addHelpOption( const std::string& help_option )
  *  @param is_required [in] whether option is required ?
  */
 /*==========================================================================*/
-void CommandLine::addOption(
+void CommandLine::addOption( 
     const std::string& name,
     const std::string& description,
     size_t             nvalues,
@@ -945,7 +945,7 @@ void CommandLine::add_help_option( const std::string& help_option )
  *  @param is_required [in] whether option is required ?
  */
 /*==========================================================================*/
-void CommandLine::add_option(
+void CommandLine::add_option( 
     const std::string& name,
     const std::string& description,
     size_t             nvalues,
@@ -977,9 +977,9 @@ void CommandLine::add_value( const std::string& description, bool is_required )
  *  @return true, if given argument is option
  */
 /*==========================================================================*/
-const bool CommandLine::is_option( Arguments::iterator& argument ) const
+bool CommandLine::is_option( Arguments::iterator& argument ) const
 {
-    return( argument->data()[0] == '-' );
+    return argument->data()[0] == '-';
 }
 
 /*==========================================================================*/
@@ -989,9 +989,9 @@ const bool CommandLine::is_option( Arguments::iterator& argument ) const
  *  @return option name
  */
 /*==========================================================================*/
-const std::string CommandLine::get_option_name( Arguments::iterator& argument ) const
+std::string CommandLine::get_option_name( Arguments::iterator& argument ) const
 {
-    return( std::string( argument->data() ).substr( 1 ) );
+    return std::string( argument->data() ).substr( 1 );
 }
 
 
@@ -1002,9 +1002,9 @@ const std::string CommandLine::get_option_name( Arguments::iterator& argument ) 
  *  @return true, if given value is help option
  */
 /*==========================================================================*/
-const bool CommandLine::is_help_option( const char* value ) const
+bool CommandLine::is_help_option( const char* value ) const
 {
-    return( std::string( value ) == "-" + m_help_option );
+    return std::string( value ) == "-" + m_help_option;
 }
 
 /*==========================================================================*/
@@ -1014,13 +1014,13 @@ const bool CommandLine::is_help_option( const char* value ) const
  *  @return iterator of option for given argument
  */
 /*==========================================================================*/
-CommandLine::Options::iterator CommandLine::find_option(
+CommandLine::Options::iterator CommandLine::find_option( 
     Arguments::iterator& argument )
 {
     std::string         option_name( this->get_option_name( argument ) );
     CommandLine::Option key( option_name );
 
-    return( std::find( m_options.begin(), m_options.end(), key ) );
+    return std::find( m_options.begin(), m_options.end(), key );
 }
 
 /*==========================================================================*/
@@ -1031,7 +1031,7 @@ CommandLine::Options::iterator CommandLine::find_option(
  *  @return true, if read process is done successfully
  */
 /*==========================================================================*/
-const bool CommandLine::read_option_values(
+bool CommandLine::read_option_values( 
     Arguments::iterator& argument,
     Options::iterator&   option )
 {
@@ -1041,20 +1041,20 @@ const bool CommandLine::read_option_values(
     if ( option->nvalues() == 0 )
     {
         option->given();
-        return( true );
+        return true;
     }
 
     for ( size_t i = 0; i < option->nvalues(); ++i )
     {
-        if ( argument == m_arguments.end() ) { return( false ); }
-        if ( this->is_option( argument ) ) { return( false ); }
+        if ( argument == m_arguments.end() ) { return false; }
+        if ( this->is_option( argument ) ) { return false; }
 
         option->setValue( *argument );
 
         ++argument;
     }
 
-    return( true );
+    return true;
 }
 
 /*==========================================================================*/

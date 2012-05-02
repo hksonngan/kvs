@@ -42,29 +42,29 @@ private:
 
 public:
 
-    Directory( void );
+    Directory();
 
     explicit Directory( const std::string& directory_path );
 
-    virtual ~Directory( void );
+    virtual ~Directory();
 
 public:
 
-    const std::string directoryPath( bool absolute = false ) const;
+    std::string directoryPath( bool absolute = false ) const;
 
-    const std::string directoryName( void ) const;
+    std::string directoryName() const;
 
-    kvs::FileList& fileList( void );
+    kvs::FileList& fileList();
 
-    const kvs::FileList& fileList( void ) const;
+    const kvs::FileList& fileList() const;
 
-    const bool isDirectory( void ) const;
+    bool isDirectory() const;
 
-    const bool isExisted( void ) const;
+    bool isExisted() const;
 
-    const bool parse( const std::string& direcotry_path );
+    bool parse( const std::string& direcotry_path );
 
-    void sort( void );
+    void sort();
 
     kvs::FileList::iterator find( const kvs::File& file );
 
@@ -72,7 +72,7 @@ public:
 
 public:
 
-    static const std::string Separator( void );
+    static std::string Separator();
 
     static bool Make( const std::string& directory_path );
 
@@ -80,7 +80,7 @@ public:
 
     static bool Change( const std::string& directory_path );
 
-    static Directory Current( void );
+    static Directory Current();
 };
 
 } // end of namespace kvs

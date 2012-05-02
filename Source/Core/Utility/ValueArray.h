@@ -204,22 +204,22 @@ public:
 public:
     reference front()
     {
-        return (*this)[0];
+        return ( *this )[0];
     }
 
     const_reference front() const
     {
-        return (*this)[0];
+        return ( *this )[0];
     }
 
     reference back()
     {
-        return (*this)[ this->size() - 1 ];
+        return ( *this )[ this->size() - 1 ];
     }
 
     const_reference back() const
     {
-        return (*this)[ this->size() - 1 ];
+        return ( *this )[ this->size() - 1 ];
     }
 
     size_type size() const
@@ -265,12 +265,12 @@ public:
 
     reference at( const size_t index )
     {
-        return (*this)[ index ];
+        return ( *this )[ index ];
     }
 
     const_reference at( const size_t index ) const
     {
-        return (*this)[ index ];
+        return ( *this )[ index ];
     }
 
     value_type* pointer()

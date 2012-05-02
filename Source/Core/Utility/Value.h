@@ -38,17 +38,17 @@ protected:
 
 public:
 
-    Value( void );
+    Value();
 
     Value( T value );
 
     Value( const Value<T>& value );
 
-    ~Value( void );
+    ~Value();
 
 public:
 
-    const T operator () ( void ) const;
+    T operator () () const;
 
     Value<T>& operator = ( const Value<T>& other );
 
@@ -62,21 +62,21 @@ public:
 
 public:
 
-    void swapByte( void );
+    void swapByte();
 
 public:
 
-    static T Zero( void );
+    static T Zero();
 
-    static T Min( void );
+    static T Min();
 
-    static T Max( void );
+    static T Max();
 
-    static T Epsilon( void );
+    static T Epsilon();
 };
 
 template<typename T>
-inline Value<T>::Value( void )
+inline Value<T>::Value()
 {
     m_value = Value<T>::Zero();
 }
@@ -94,67 +94,67 @@ inline Value<T>::Value( const Value<T>& value ):
 }
 
 template<typename T>
-inline Value<T>::~Value( void )
+inline Value<T>::~Value()
 {
 }
 
 template<typename T>
-inline const T Value<T>::operator () ( void ) const
+inline T Value<T>::operator () () const
 {
-    return( m_value );
+    return m_value;
 }
 
 template<typename T>
 inline Value<T>& Value<T>::operator = ( const Value<T>& other )
 {
     m_value = other.m_value;
-    return( *this );
+    return *this;
 }
 
 template<typename T>
 inline Value<T>& Value<T>::operator += ( const Value<T>& other )
 {
     m_value = static_cast<T>( m_value + other.m_value );
-    return( *this );
+    return *this;
 }
 
 template<typename T>
 inline Value<T>& Value<T>::operator -= ( const Value<T>& other )
 {
     m_value = static_cast<T>( m_value - other.m_value );
-    return( *this );
+    return *this;
 }
 
 template<typename T>
 inline Value<T>& Value<T>::operator *= ( const Value<T>& other )
 {
     m_value = static_cast<T>( m_value * other.m_value );
-    return( *this );
+    return *this;
 }
 
 template<typename T>
 inline Value<T>& Value<T>::operator /= ( const Value<T>& other )
 {
     m_value = static_cast<T>( m_value / other.m_value );
-    return( *this );
+    return *this;
 }
 
 template<typename T>
-inline void Value<T>::swapByte( void )
+inline void Value<T>::swapByte()
 {
     kvs::Endian::Swap( &m_value );
 }
 
 template<typename T>
-inline T Value<T>::Zero( void )
+inline T Value<T>::Zero()
 {
-    return( T(0) );
+    return T( 0 );
 }
 
 template<typename T>
-inline T Value<T>::Min( void )
+inline T Value<T>::Min()
 {
-    return( std::numeric_limits<T>::min() );
+    return std::numeric_limits<T>::min();
 }
 
 template <>
@@ -170,79 +170,79 @@ inline double Value<double>::Min()
 }
 
 template<typename T>
-inline T Value<T>::Max( void )
+inline T Value<T>::Max()
 {
-    return( std::numeric_limits<T>::max() );
+    return std::numeric_limits<T>::max();
 }
 
 template<typename T>
-inline T Value<T>::Epsilon( void )
+inline T Value<T>::Epsilon()
 {
-    return( std::numeric_limits<T>::epsilon() );
+    return std::numeric_limits<T>::epsilon();
 }
 
 template<typename T>
 inline bool operator == ( const Value<T>& other1, const Value<T>& other2 )
 {
-    return( other1.m_value == other1.m_value );
+    return other1.m_value == other1.m_value;
 }
 
 template<typename T>
 inline bool operator < ( const Value<T>& other1, const Value<T>& other2 )
 {
-    return( other1.m_value < other1.m_value );
+    return other1.m_value < other1.m_value;
 }
 
 template<typename T>
 inline bool operator!= ( const Value<T>& other1, const Value<T>& other2 )
 {
-    return( !( other1 == other2 ) );
+    return !( other1 == other2 );
 }
 
 template<typename T>
 inline bool operator > ( const Value<T>& other1, const Value<T>& other2 )
 {
-    return( other2 < other1 );
+    return other2 < other1;
 }
 
 template<typename T>
 inline bool operator <= ( const Value<T>& other1, const Value<T>& other2 )
 {
-    return( !( other2 < other1 ) );
+    return !( other2 < other1 );
 }
 
 template<typename T>
 inline bool operator >= ( const Value<T>& other1, const Value<T>& other2 )
 {
-    return( !( other1 < other2 ) );
+    return !( other1 < other2 );
 }
 
 template<typename T>
 inline Value<T> operator + ( const Value<T>& other1, const Value<T>& other2 )
 {
     Value<T> result( other1 ); result += other2;
-    return( result );
+    return result;
 }
 
 template<typename T>
 inline Value<T> operator - ( const Value<T>& other1, const Value<T>& other2 )
 {
     Value<T> result( other1 ); result -= other2;
-    return( result );
+    return result;
 }
 
 template<typename T>
 inline Value<T> operator * ( const Value<T>& other1, const Value<T>& other2 )
 {
     Value<T> result( other1 ); result *= other2;
-    return( result );
+    return result;
 }
 
 template<typename T>
 inline Value<T> operator / ( const Value<T>& other1, const Value<T>& other2 )
 {
     Value<T> result( other1 ); result /= other2;
-    return( result );
+    return result;
 }
 
 } // end of namespace kvs

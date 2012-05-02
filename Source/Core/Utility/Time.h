@@ -40,11 +40,11 @@ protected:
 
 public:
 
-    Time( void );
+    Time();
 
     Time( const int hour, const int minute, const int second );
 
-    virtual ~Time( void );
+    virtual ~Time();
 
 public:
 
@@ -76,21 +76,21 @@ public:
 
 public:
 
-    const int hour( void ) const;
+    int hour() const;
 
-    const int minute( void ) const;
+    int minute() const;
 
-    const int second( void ) const;
+    int second() const;
 
-    const long totalSeconds( void ) const;
-
-public:
-
-    const Time& now( void );
+    long totalSeconds() const;
 
 public:
 
-    const std::string toString( const std::string sep = ":" ) const;
+    const Time& now();
+
+public:
+
+    std::string toString( const std::string sep = ":" ) const;
 
     void fromString( const std::string time, const std::string sep = ":" );
 
@@ -110,9 +110,9 @@ public:
 
 protected:
 
-    const long convert_to_seconds( const int hour, const int minute, const int second );
+    long convert_to_seconds( const int hour, const int minute, const int second );
 
-    const Time convert_from_seconds( const int seconds );
+    Time convert_from_seconds( const int seconds );
 };
 
 } // end of namespace kvs

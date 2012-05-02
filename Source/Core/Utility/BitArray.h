@@ -43,7 +43,7 @@ protected:
 
 public:
 
-    BitArray( void );
+    BitArray();
 
     BitArray( const size_t nvalues );
 
@@ -53,11 +53,11 @@ public:
 
     BitArray( const BitArray& other );
 
-    virtual ~BitArray( void );
+    virtual ~BitArray();
 
 public:
 
-    const bool operator [] ( size_t index ) const;
+    bool operator [] ( size_t index ) const;
 
     BitArray& operator = ( const BitArray& other );
 
@@ -69,35 +69,35 @@ public:
 
 public:
 
-    void set( void );
+    void set();
 
     void set( size_t index );
 
-    void reset( void );
+    void reset();
 
     void reset( size_t index );
 
-    void flip( void );
+    void flip();
 
     void flip( size_t index );
 
-    size_t count( void ) const;
+    size_t count() const;
 
     bool test( size_t index ) const;
 
 public:
 
-    const size_t size( void ) const;
+    size_t size() const;
 
-    const size_t byteSize( void ) const;
+    size_t byteSize() const;
 
-    const size_t bitSize( void ) const;
+    size_t bitSize() const;
 
-    const size_t paddingBit( void ) const;
+    size_t paddingBit() const;
 
-    const void* pointer( void ) const;
+    const void* pointer() const;
 
-    void* pointer( void );
+    void* pointer();
 
     void shallowCopy( const BitArray& other );
 
@@ -111,15 +111,15 @@ public:
 
     kvs::UInt8* allocate( size_t nvalues );
 
-    void deallocate( void );
+    void deallocate();
 
 protected:
 
-    void create_counter( void );
+    void create_counter();
 
-    void ref( void );
+    void ref();
 
-    void unref( void );
+    void unref();
 };
 
 } // end of namespace kvs

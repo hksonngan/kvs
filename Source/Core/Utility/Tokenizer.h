@@ -40,7 +40,7 @@ protected:
 
 public:
 
-    Tokenizer( void );
+    Tokenizer();
 
     Tokenizer( const std::string& source, const std::string& delimiter );
 
@@ -54,13 +54,13 @@ public:
 
 public:
 
-    const bool isLast( void ) const;
+    bool isLast() const;
 
-    const std::string token( void );
+    std::string token();
 
 protected:
 
-    void get_token( void );
+    void get_token();
 };
 
 } // end of namespace kvs

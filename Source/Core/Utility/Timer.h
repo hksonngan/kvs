@@ -105,7 +105,7 @@
 #if defined ( KVS_COMPILER_VC )
 #define KVS_TIMER_GET_QPC( counter )                                           \
     {                                                                          \
-        QueryPerformanceCounter( reinterpret_cast<LARGE_INTEGER*>(&counter) ); \
+        QueryPerformanceCounter( reinterpret_cast<LARGE_INTEGER*>( &counter ) ); \
     }
 
 // Not supported.
@@ -148,7 +148,7 @@ typedef timeval TimeStamp;
  *  @return CPU clocks
  */
 /*==========================================================================*/
-inline TimeStamp GetCPUCounter( void )
+inline TimeStamp GetCPUCounter()
 {
     TimeStamp counter;
 
@@ -158,7 +158,7 @@ inline TimeStamp GetCPUCounter( void )
     KVS_TIMER_GET_QPC( counter );
 #endif
 
-    return( counter );
+    return counter;
 }
 
 #else // KVS_TIMER_USE_GETTIMEOFDAY
@@ -183,7 +183,7 @@ inline void GetTimeOfDay( struct timeval& tv )
         LARGE_INTEGER freq = {0};
         QueryPerformanceFrequency( &freq );
         tv.tv_sec  = static_cast<long>( time.QuadPart / freq.QuadPart );
-        tv.tv_usec = static_cast<long>( ( static_cast<float>(time.QuadPart) / freq.QuadPart - tv.tv_sec ) * 1000000 );
+        tv.tv_usec = static_cast<long>( ( static_cast<float>( time.QuadPart ) / freq.QuadPart - tv.tv_sec ) * 1000000 );
     }
     else
     {
@@ -216,7 +216,7 @@ inline void GetTimeOfDay( struct timeval& tv )
  *  @return CPU frequency [Hz] = [clock/sec]
  */
 /*==========================================================================*/
-inline kvs::UInt32 GetCPUFrequency( void )
+inline kvs::UInt32 GetCPUFrequency()
 {
     kvs::UInt32 frequency = 0;
 
@@ -233,12 +233,12 @@ inline kvs::UInt32 GetCPUFrequency( void )
 #elif defined ( KVS_TIMER_ENABLE_QPC )
     SetPriorityClass( GetCurrentProcess(), REALTIME_PRIORITY_CLASS );
     SetThreadPriority( GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL );
-    QueryPerformanceFrequency( reinterpret_cast<LARGE_INTEGER*>(&frequency) );
+    QueryPerformanceFrequency( reinterpret_cast<LARGE_INTEGER*>( &frequency ) );
 #else
     frequency = CLOCKS_PER_SEC;
 #endif
 
-    return( frequency );
+    return frequency;
 }
 
 // Weight values for converting time unit.
@@ -259,14 +259,14 @@ const kvs::Real64 KVS_TIMER_USEC_TO_MSEC  =     0.001;
  *  @return time-stamp
  */
 /*==========================================================================*/
-inline TimeStamp GetStamp( void )
+inline TimeStamp GetStamp()
 {
 #if defined ( KVS_TIMER_USE_CPU_COUNTER )
-    return( GetCPUCounter() );
+    return GetCPUCounter();
 #else
     TimeStamp ts;
     GetTimeOfDay( ts );
-    return( ts );
+    return ts;
 #endif
 }
 
@@ -280,9 +280,9 @@ inline TimeStamp GetStamp( void )
 inline double TimeStampToSec( const TimeStamp& ts )
 {
 #if defined ( KVS_TIMER_USE_CPU_COUNTER )
-    return( ts.value * KVS_TIMER_CLOCK_TO_SEC );
+    return ts.value * KVS_TIMER_CLOCK_TO_SEC;
 #else
-    return( ts.tv_sec + ts.tv_usec * KVS_TIMER_USEC_TO_SEC );
+    return ts.tv_sec + ts.tv_usec * KVS_TIMER_USEC_TO_SEC;
 #endif
 }
 
@@ -296,10 +296,10 @@ inline double TimeStampToSec( const TimeStamp& ts )
 inline double TimeStampToMSec( const TimeStamp& ts )
 {
 #if defined ( KVS_TIMER_USE_CPU_COUNTER )
-    return( ts.value * KVS_TIMER_CLOCK_TO_MSEC );
+    return ts.value * KVS_TIMER_CLOCK_TO_MSEC;
 #else
-    return( ts.tv_sec  * KVS_TIMER_SEC_TO_MSEC +
-            ts.tv_usec * KVS_TIMER_USEC_TO_MSEC );
+    return ts.tv_sec  * KVS_TIMER_SEC_TO_MSEC +
+           ts.tv_usec * KVS_TIMER_USEC_TO_MSEC;
 #endif
 }
 
@@ -313,9 +313,9 @@ inline double TimeStampToMSec( const TimeStamp& ts )
 inline double TimeStampToUSec( const TimeStamp& ts )
 {
 #if defined ( KVS_TIMER_USE_CPU_COUNTER )
-    return( ts.value * KVS_TIMER_CLOCK_TO_USEC );
+    return ts.value * KVS_TIMER_CLOCK_TO_USEC;
 #else
-    return( ts.tv_sec * KVS_TIMER_SEC_TO_USEC + ts.tv_usec );
+    return ts.tv_sec * KVS_TIMER_SEC_TO_USEC + ts.tv_usec;
 #endif
 }
 
@@ -337,7 +337,7 @@ inline TimeStamp TimeStampDiff( const TimeStamp& ts1, const TimeStamp& ts2 )
     ts.tv_sec  = ts1.tv_sec  - ts2.tv_sec;
     ts.tv_usec = ts1.tv_usec - ts2.tv_usec;
 #endif
-    return( ts );
+    return ts;
 }
 
 /*==========================================================================*/
@@ -350,7 +350,7 @@ inline TimeStamp TimeStampDiff( const TimeStamp& ts1, const TimeStamp& ts2 )
 /*==========================================================================*/
 inline double TimeStampDiffInSec( const TimeStamp& ts1, const TimeStamp& ts2 )
 {
-    return( TimeStampToSec( TimeStampDiff( ts1, ts2 ) ) );
+    return TimeStampToSec( TimeStampDiff( ts1, ts2 ) );
 }
 
 /*==========================================================================*/
@@ -363,7 +363,7 @@ inline double TimeStampDiffInSec( const TimeStamp& ts1, const TimeStamp& ts2 )
 /*==========================================================================*/
 inline double TimeStampDiffInMSec( const TimeStamp& ts1, const TimeStamp& ts2 )
 {
-    return( TimeStampToMSec( TimeStampDiff( ts1, ts2 ) ) );
+    return TimeStampToMSec( TimeStampDiff( ts1, ts2 ) );
 }
 
 /*==========================================================================*/
@@ -376,7 +376,7 @@ inline double TimeStampDiffInMSec( const TimeStamp& ts1, const TimeStamp& ts2 )
 /*==========================================================================*/
 inline double TimeStampDiffInUSec( const TimeStamp& ts1, const TimeStamp& ts2 )
 {
-    return( TimeStampToUSec( TimeStampDiff( ts1, ts2 ) ) );
+    return TimeStampToUSec( TimeStampDiff( ts1, ts2 ) );
 }
 
 /*==========================================================================*/
@@ -399,25 +399,25 @@ private:
 
 public:
 
-    Timer( void );
+    Timer();
 
     Timer( const Trigger trigger );
 
-    ~Timer( void );
+    ~Timer();
 
 public:
 
-    void start( void );
+    void start();
 
-    void stop( void );
+    void stop();
 
-    double sec( void ) const;
+    double sec() const;
 
-    double msec( void ) const;
+    double msec() const;
 
-    double usec( void ) const;
+    double usec() const;
 
-    double fps( void ) const;
+    double fps() const;
 };
 
 /*==========================================================================*/
@@ -425,7 +425,7 @@ public:
  *  Constructor.
  */
 /*==========================================================================*/
-inline Timer::Timer( void )
+inline Timer::Timer()
 {
 #if defined ( KVS_TIMER_USE_CPU_COUNTER )
     m_start.value = 0;
@@ -441,7 +441,7 @@ inline Timer::Timer( void )
 /*==========================================================================*/
 /**
  *  Constructor.
- *  @param trigger [in] trigger ('kvs::Timer::Start' is given)
+ *  @param trigger [in] trigger ( 'kvs::Timer::Start' is given )
  */
 /*==========================================================================*/
 inline Timer::Timer( Trigger trigger )
@@ -457,7 +457,7 @@ inline Timer::Timer( Trigger trigger )
  *  Destructor.
  */
 /*==========================================================================*/
-inline Timer::~Timer( void )
+inline Timer::~Timer()
 {
 }
 
@@ -466,7 +466,7 @@ inline Timer::~Timer( void )
  *  Strat timer.
  */
 /*==========================================================================*/
-inline void Timer::start( void )
+inline void Timer::start()
 {
     m_start = GetStamp();
 }
@@ -476,7 +476,7 @@ inline void Timer::start( void )
  *  Stop timer.
  */
 /*==========================================================================*/
-inline void Timer::stop( void )
+inline void Timer::stop()
 {
     m_stop = GetStamp();
 }
@@ -487,9 +487,9 @@ inline void Timer::stop( void )
  *  @return elapse time [sec]
  */
 /*==========================================================================*/
-inline double Timer::sec( void ) const
+inline double Timer::sec() const
 {
-    return( TimeStampDiffInSec( m_stop, m_start ) );
+    return TimeStampDiffInSec( m_stop, m_start );
 }
 
 /*==========================================================================*/
@@ -498,9 +498,9 @@ inline double Timer::sec( void ) const
  *  @return elapse time [msec]
  */
 /*==========================================================================*/
-inline double Timer::msec( void ) const
+inline double Timer::msec() const
 {
-    return( TimeStampDiffInMSec( m_stop, m_start ) );
+    return TimeStampDiffInMSec( m_stop, m_start );
 }
 
 /*==========================================================================*/
@@ -509,9 +509,9 @@ inline double Timer::msec( void ) const
  *  @return elapse time [usec]
  */
 /*==========================================================================*/
-inline double Timer::usec( void ) const
+inline double Timer::usec() const
 {
-    return( TimeStampDiffInUSec( m_stop, m_start ) );
+    return TimeStampDiffInUSec( m_stop, m_start );
 }
 
 /*==========================================================================*/
@@ -520,9 +520,9 @@ inline double Timer::usec( void ) const
  *  @return frame rate [fps]
  */
 /*==========================================================================*/
-inline double Timer::fps( void ) const
+inline double Timer::fps() const
 {
-    return( 1.0 / TimeStampDiffInSec( m_stop, m_start ) );
+    return 1.0 / TimeStampDiffInSec( m_stop, m_start );
 }
 
 } // end of namespace kvs

@@ -40,15 +40,15 @@ public:
     {
     public:
 
-        virtual ~TypeInfo( void );
+        virtual ~TypeInfo();
 
     public:
 
-        virtual const std::type_info& type( void ) const = 0;
+        virtual const std::type_info& type() const = 0;
 
-        virtual const char* typeName( void ) const = 0;
+        virtual const char* typeName() const = 0;
 
-        virtual TypeInfo* clone( void ) const = 0;
+        virtual TypeInfo* clone() const = 0;
     };
 
     template<typename T>
@@ -57,11 +57,11 @@ public:
     {
     public:
 
-        const std::type_info& type( void ) const;
+        const std::type_info& type() const;
 
-        const char* typeName( void ) const;
+        const char* typeName() const;
 
-        TypeInfo* clone( void ) const;
+        TypeInfo* clone() const;
     };
 
 private:
@@ -74,8 +74,8 @@ private:
         kvs::UInt16 ui16; ///< 16bit unsigned integer (unsigned short) type
         kvs::Int32  i32;  ///< 32bit signed interger (int) type
         kvs::UInt32 ui32; ///< 32bit unsigned integer (unsigned int) type
-        kvs::Int64  i64;  ///< 64bit signed integer (long) type
-        kvs::UInt64 ui64; ///< 64bit unsigned integer (unsigned long) type
+        kvs::Int64  i64;  ///< 64bit signed integer (long long) type
+        kvs::UInt64 ui64; ///< 64bit unsigned integer (unsigned long long) type
         kvs::Real32 r32;  ///< 32bit real (single precision) type
         kvs::Real64 r64;  ///< 64bit real (double precision) type
     };
@@ -85,14 +85,14 @@ private:
 
 public:
 
-    AnyValue( void );
+    AnyValue();
 
     template<typename T>
     AnyValue( const T value );
 
     AnyValue( const AnyValue& other );
 
-    ~AnyValue( void );
+    ~AnyValue();
 
 public:
 
@@ -108,7 +108,7 @@ public:
 
 public:
 
-    const TypeInfo* typeInfo( void ) const;
+    const TypeInfo* typeInfo() const;
 
 private:
 
@@ -116,19 +116,19 @@ private:
     void set_value( const T& value );
 
     template<typename T>
-    const T get_value( void ) const;
+    T get_value() const;
 };
 
 template<typename T>
-inline const std::type_info& AnyValue::SetTypeInfo<T>::type( void ) const
+inline const std::type_info& AnyValue::SetTypeInfo<T>::type() const
 {
-    return( typeid( T ) );
+    return typeid( T );
 }
 
 template<typename T>
-inline AnyValue::TypeInfo* AnyValue::SetTypeInfo<T>::clone( void ) const
+inline AnyValue::TypeInfo* AnyValue::SetTypeInfo<T>::clone() const
 {
-    return( new SetTypeInfo<T>() );
+    return new SetTypeInfo<T>();
 }
 
 template<typename T>
@@ -146,47 +146,47 @@ AnyValue& AnyValue::operator =( const T& value )
 
     this->set_value<T>( value );
 
-    return( *this );
+    return *this;
 }
 
 template<typename T>
 AnyValue::operator T () const
 {
-    return( this->get_value<T>() );
+    return this->get_value<T>();
 }
 
 template<typename T>
 void AnyValue::set_value( const T& value )
 {
-    const std::type_info& type = typeid(T);
-    if (      type == typeid( kvs::Int8 ) )   { m_value.i8   = value; }
-    else if ( type == typeid( kvs::UInt8 ) )  { m_value.ui8  = value; }
-    else if ( type == typeid( kvs::Int16 ) )  { m_value.i16  = value; }
+    const std::type_info& type = typeid( T );
+    if      ( type == typeid( kvs::Int8   ) ) { m_value.i8   = value; }
+    else if ( type == typeid( kvs::UInt8  ) ) { m_value.ui8  = value; }
+    else if ( type == typeid( kvs::Int16  ) ) { m_value.i16  = value; }
     else if ( type == typeid( kvs::UInt16 ) ) { m_value.ui16 = value; }
-    else if ( type == typeid( kvs::Int32 ) )  { m_value.i32  = value; }
+    else if ( type == typeid( kvs::Int32  ) ) { m_value.i32  = value; }
     else if ( type == typeid( kvs::UInt32 ) ) { m_value.ui32 = value; }
-    else if ( type == typeid( kvs::Int64 ) )  { m_value.i64  = value; }
+    else if ( type == typeid( kvs::Int64  ) ) { m_value.i64  = value; }
     else if ( type == typeid( kvs::UInt64 ) ) { m_value.ui64 = value; }
     else if ( type == typeid( kvs::Real32 ) ) { m_value.r32  = value; }
     else if ( type == typeid( kvs::Real64 ) ) { m_value.r64  = value; }
 }
 
 template<typename T>
-const T AnyValue::get_value( void ) const
+T AnyValue::get_value() const
 {
     const std::type_info& type = m_type_info->type();
-    if (      type == typeid( kvs::Int8 ) )   { return( static_cast<T>(m_value.i8) );   }
-    else if ( type == typeid( kvs::UInt8 ) )  { return( static_cast<T>(m_value.ui8) );  }
-    else if ( type == typeid( kvs::Int16 ) )  { return( static_cast<T>(m_value.i16) );  }
-    else if ( type == typeid( kvs::UInt16 ) ) { return( static_cast<T>(m_value.ui16) ); }
-    else if ( type == typeid( kvs::Int32 ) )  { return( static_cast<T>(m_value.i32) );  }
-    else if ( type == typeid( kvs::UInt32 ) ) { return( static_cast<T>(m_value.ui32) ); }
-    else if ( type == typeid( kvs::Int64 ) )  { return( static_cast<T>(m_value.i64) );  }
-    else if ( type == typeid( kvs::UInt64 ) ) { return( static_cast<T>(m_value.ui64) ); }
-    else if ( type == typeid( kvs::Real32 ) ) { return( static_cast<T>(m_value.r32) );  }
-    else if ( type == typeid( kvs::Real64 ) ) { return( static_cast<T>(m_value.r64) );  }
+    if      ( type == typeid( kvs::Int8   ) ) { return static_cast<T>( m_value.i8   ); }
+    else if ( type == typeid( kvs::UInt8  ) ) { return static_cast<T>( m_value.ui8  ); }
+    else if ( type == typeid( kvs::Int16  ) ) { return static_cast<T>( m_value.i16  ); }
+    else if ( type == typeid( kvs::UInt16 ) ) { return static_cast<T>( m_value.ui16 ); }
+    else if ( type == typeid( kvs::Int32  ) ) { return static_cast<T>( m_value.i32  ); }
+    else if ( type == typeid( kvs::UInt32 ) ) { return static_cast<T>( m_value.ui32 ); }
+    else if ( type == typeid( kvs::Int64  ) ) { return static_cast<T>( m_value.i64  ); }
+    else if ( type == typeid( kvs::UInt64 ) ) { return static_cast<T>( m_value.ui64 ); }
+    else if ( type == typeid( kvs::Real32 ) ) { return static_cast<T>( m_value.r32  ); }
+    else if ( type == typeid( kvs::Real64 ) ) { return static_cast<T>( m_value.r64  ); }
 
-    return( T( 0 ) );
+    return T( 0 );
 }
 
 } // end of namespace kvs

@@ -38,7 +38,7 @@ namespace
  *  @return current path (absolute)
  */
 /*==========================================================================*/
-inline std::string GetCurrentPath( void )
+inline std::string GetCurrentPath()
 {
 #if defined ( KVS_PLATFORM_WINDOWS )
     char current_path[256];
@@ -47,12 +47,12 @@ inline std::string GetCurrentPath( void )
     char current_path[PATH_MAX];
     if ( !getcwd( current_path, PATH_MAX ) )
     {
-        kvsMessageError("%s", strerror( errno ) );
-        return(".");
+        kvsMessageError( "%s", strerror( errno ) );
+        return ".";
      }
 #endif
 
-    return( current_path );
+    return current_path;
 }
 
 /*==========================================================================*/
@@ -85,17 +85,17 @@ inline std::string GetAbsolutePath( const std::string& path )
 
     if ( !is_existed )
     {
-        return( GetCurrentPath() + "/" + path );
+        return GetCurrentPath() + "/" + path;
     }
 #endif
     if ( !realpath( path.c_str(), absolute_path ) )
     {
-        kvsMessageError("%s", strerror( errno ) );
-        return("");
+        kvsMessageError( "%s", strerror( errno ) );
+        return "";
     }
 #endif
 
-    return( absolute_path );
+    return absolute_path;
 }
 
 #if defined ( KVS_PLATFORM_WINDOWS )
@@ -118,13 +118,13 @@ enum MBCharType
 int IsMBCharLeadByte( const char* str, int num )
 {
     int k;
-    if ( !_ismbblead( str[num] ) ) { return( 0 ); }
+    if ( !_ismbblead( str[num] ) ) { return 0; }
     k = num;
     while ( --k >= 0 && _ismbblead( str[k] ) )
     {
         ;
     }
-    return( ( num - k ) & 1 );
+    return ( num - k ) & 1;
 }
 
 /*==========================================================================*/
@@ -139,11 +139,11 @@ MBCharType GetMBCharType( const char* str, int num )
 {
     if ( num > 0 && IsMBCharLeadByte( str, num - 1 ) )
     {
-        return( _ismbbtrail( str[num] ) ? MBTypeDB2 : MBTypeERR );
+        return _ismbbtrail( str[num] ) ? MBTypeDB2 : MBTypeERR;
     }
     else
     {
-        return( _ismbblead( str[num] ) ? MBTypeDB1 : MBTypeSB );
+        return _ismbblead( str[num] ) ? MBTypeDB1 : MBTypeSB;
     }
 }
 #endif
@@ -159,7 +159,7 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-Directory::Directory( void )
+Directory::Directory()
     : m_directory_path( "" )
     , m_directory_name( "" )
     , m_file_list()
@@ -186,7 +186,7 @@ Directory::Directory( const std::string& directory_path )
  *  Destructor.
  */
 /*==========================================================================*/
-Directory::~Directory( void )
+Directory::~Directory()
 {
     m_file_list.clear();
 }
@@ -198,9 +198,9 @@ Directory::~Directory( void )
  *  @return directory path
  */
 /*==========================================================================*/
-const std::string Directory::directoryPath( bool absolute ) const
+std::string Directory::directoryPath( bool absolute ) const
 {
-    return( absolute ? ::GetAbsolutePath( m_directory_path ) : m_directory_path );
+    return absolute ? ::GetAbsolutePath( m_directory_path ) : m_directory_path;
 }
 
 /*==========================================================================*/
@@ -209,9 +209,9 @@ const std::string Directory::directoryPath( bool absolute ) const
  *  @return directory name
  */
 /*==========================================================================*/
-const std::string Directory::directoryName( void ) const
+std::string Directory::directoryName() const
 {
-    return( m_directory_name );
+    return m_directory_name;
 }
 
 /*==========================================================================*/
@@ -220,9 +220,9 @@ const std::string Directory::directoryName( void ) const
  *  @return file list
  */
 /*==========================================================================*/
-kvs::FileList& Directory::fileList( void )
+kvs::FileList& Directory::fileList()
 {
-    return( m_file_list );
+    return m_file_list;
 }
 
 /*==========================================================================*/
@@ -231,9 +231,9 @@ kvs::FileList& Directory::fileList( void )
  *  @return file list
  */
 /*==========================================================================*/
-const kvs::FileList& Directory::fileList( void ) const
+const kvs::FileList& Directory::fileList() const
 {
-    return( m_file_list );
+    return m_file_list;
 }
 
 /*==========================================================================*/
@@ -242,16 +242,16 @@ const kvs::FileList& Directory::fileList( void ) const
  *  @return true, if given directory is directory
  */
 /*==========================================================================*/
-const bool Directory::isDirectory( void ) const
+bool Directory::isDirectory() const
 {
 #if defined ( KVS_PLATFORM_WINDOWS )
     WIN32_FIND_DATAA find_data;
     FindFirstFileA( m_directory_path.c_str(), &find_data );
-    return( ( find_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) != 0 );
+    return ( find_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) != 0;
 #else
     struct stat filestat;
-    if ( stat( m_directory_path.c_str(), &filestat ) ) { return( false ); }
-    return( filestat.st_mode & S_IFDIR );
+    if ( stat( m_directory_path.c_str(), &filestat ) ) { return false; }
+    return filestat.st_mode & S_IFDIR;
 #endif
 }
 
@@ -261,9 +261,9 @@ const bool Directory::isDirectory( void ) const
  *  @return true, if given directory is existed
  */
 /*==========================================================================*/
-const bool Directory::isExisted( void ) const
+bool Directory::isExisted() const
 {
-    return( this->isDirectory() );
+    return this->isDirectory();
 }
 
 /*==========================================================================*/
@@ -273,7 +273,7 @@ const bool Directory::isExisted( void ) const
  *  @return true, if the parse process is done successfully
  */
 /*==========================================================================*/
-const bool Directory::parse( const std::string& directory_path )
+bool Directory::parse( const std::string& directory_path )
 {
     m_directory_path = directory_path;
 
@@ -297,10 +297,10 @@ const bool Directory::parse( const std::string& directory_path )
      */
     if ( len )
     {
-        if ( bufname[len - 1] != '\\' ||
+        if ( bufname[ len - 1 ] != '\\' ||
              ::GetMBCharType( bufname, len - 1 ) == MBTypeDB2 )
         {
-            bufname[len++] = '\\';
+            bufname[ len++ ] = '\\';
         }
     }
 
@@ -328,7 +328,7 @@ const bool Directory::parse( const std::string& directory_path )
         if ( !dir )
         {
             kvsMessageError( "%s is not opened.", m_directory_path.c_str() );
-            return( false );
+            return false;
         }
 
         struct dirent* ent;
@@ -348,7 +348,7 @@ const bool Directory::parse( const std::string& directory_path )
     }
 #endif
 
-    return( true );
+    return true;
 }
 
 /*==========================================================================*/
@@ -356,7 +356,7 @@ const bool Directory::parse( const std::string& directory_path )
  *  Sorting filename list.
  */
 /*==========================================================================*/
-void Directory::sort( void )
+void Directory::sort()
 {
     std::sort( m_file_list.begin(), m_file_list.end() );
 }
@@ -373,7 +373,7 @@ kvs::FileList::iterator Directory::find( const File& file )
     kvs::FileList::iterator begin = m_file_list.begin();
     kvs::FileList::iterator end   = m_file_list.end();
 
-    return( std::find( begin, end, file ) );
+    return std::find( begin, end, file );
 }
 
 /*==========================================================================*/
@@ -388,7 +388,7 @@ kvs::FileList::const_iterator Directory::find( const File& file ) const
     kvs::FileList::const_iterator begin = m_file_list.begin();
     kvs::FileList::const_iterator end   = m_file_list.end();
 
-    return( std::find( begin, end, file ) );
+    return std::find( begin, end, file );
 }
 
 /*==========================================================================*/
@@ -397,9 +397,9 @@ kvs::FileList::const_iterator Directory::find( const File& file ) const
  *  @return separator
  */
 /*==========================================================================*/
-const std::string Directory::Separator( void )
+std::string Directory::Separator()
 {
-    return( File::Separator() );
+    return File::Separator();
 }
 
 /*==========================================================================*/
@@ -412,9 +412,9 @@ const std::string Directory::Separator( void )
 bool Directory::Make( const std::string& directory_path )
 {
 #if defined ( KVS_PLATFORM_WINDOWS )
-    return( _mkdir( ::GetAbsolutePath( directory_path ).c_str() ) == 0 );
+    return _mkdir( ::GetAbsolutePath( directory_path ).c_str() ) == 0;
 #else
-    return( mkdir( ::GetAbsolutePath( directory_path ).c_str(), 0777 ) == 0 );
+    return mkdir( ::GetAbsolutePath( directory_path ).c_str(), 0777 ) == 0;
 #endif
 }
 
@@ -428,9 +428,9 @@ bool Directory::Make( const std::string& directory_path )
 bool Directory::Remove( const std::string& directory_path )
 {
 #if defined ( KVS_PLATFORM_WINDOWS )
-    return( _rmdir( ::GetAbsolutePath( directory_path ).c_str() ) == 0 );
+    return _rmdir( ::GetAbsolutePath( directory_path ).c_str() ) == 0;
 #else
-    return( rmdir( ::GetAbsolutePath( directory_path ).c_str() ) == 0 );
+    return  rmdir( ::GetAbsolutePath( directory_path ).c_str() ) == 0;
 #endif
 }
 
@@ -444,9 +444,9 @@ bool Directory::Remove( const std::string& directory_path )
 bool Directory::Change( const std::string& directory_path )
 {
 #if defined ( KVS_PLATFORM_WINDOWS )
-    return( _chdir( ::GetAbsolutePath( directory_path ).c_str() ) == 0 );
+    return _chdir( ::GetAbsolutePath( directory_path ).c_str() ) == 0;
 #else
-    return( chdir( ::GetAbsolutePath( directory_path ).c_str() ) == 0 );
+    return chdir( ::GetAbsolutePath( directory_path ).c_str() ) == 0;
 #endif
 }
 
@@ -456,9 +456,9 @@ bool Directory::Change( const std::string& directory_path )
  *  @return current directory path
  */
 /*==========================================================================*/
-Directory Directory::Current( void )
+Directory Directory::Current()
 {
-    return( Directory( ::GetCurrentPath() ) );
+    return Directory( ::GetCurrentPath() );
 }
 
 } // end of namespace kvs

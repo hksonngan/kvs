@@ -73,47 +73,47 @@ public:
 
     CommandLine( int argc, char** argv, const std::string& command_name );
 
-    virtual ~CommandLine( void );
+    virtual ~CommandLine();
 
 public:
 
-    const int argc( void ) const;
+    int argc() const;
 
-    char** const argv( void ) const;
+    char** const argv() const;
 
-    const std::string& commandName( void ) const;
+    const std::string& commandName() const;
 
-    const bool parse( void );
+    bool parse();
 
-    const bool read( void );
+    bool read();
 
-    void clear( void );
-
-public:
-
-    template <class T>
-    const T value( size_t index = 0 ) const;
-
-    const bool hasValues( void ) const;
-
-    const size_t nvalues( void ) const;
+    void clear();
 
 public:
 
     template <class T>
-    const T optionValue( const std::string& option_name, size_t index = 0 ) const;
+    T value( size_t index = 0 ) const;
 
-    const bool hasOption( const std::string& option_name ) const;
+    bool hasValues() const;
 
-    const bool hasOptionValue( const std::string& option_name ) const;
+    size_t nvalues() const;
 
-    const size_t noptions( void ) const;
+public:
+
+    template <class T>
+    T optionValue( const std::string& option_name, size_t index = 0 ) const;
+
+    bool hasOption( const std::string& option_name ) const;
+
+    bool hasOptionValue( const std::string& option_name ) const;
+
+    size_t noptions() const;
 
 public:
 
     void addHelpOption( const std::string& help_option = "h" );
 
-    void addOption(
+    void addOption( 
         const std::string& name,
         const std::string& description,
         size_t             nvalues     = 0,
@@ -127,7 +127,7 @@ protected:
 
     void add_help_option( const std::string& help_option = "h" );
 
-    void add_option(
+    void add_option( 
         const std::string& name,
         const std::string& description,
         size_t             nvalues     = 0,
@@ -137,15 +137,15 @@ protected:
 
 private:
 
-    const bool is_option( Arguments::iterator& argument ) const;
+    bool is_option( Arguments::iterator& argument ) const;
 
-    const std::string get_option_name( Arguments::iterator& argument ) const;
+    std::string get_option_name( Arguments::iterator& argument ) const;
 
-    const bool is_help_option( const char* value ) const;
+    bool is_help_option( const char* value ) const;
 
     Options::iterator find_option( Arguments::iterator& argument );
 
-    const bool read_option_values(
+    bool read_option_values( 
         Arguments::iterator& argument,
         Options::iterator&   option );
 
@@ -166,19 +166,19 @@ private:
 
 public:
 
-    Argument( void );
+    Argument();
 
     explicit Argument( const char* data );
 
     Argument( const Argument& other );
 
-    virtual ~Argument( void );
+    virtual ~Argument();
 
 public:
 
-    const size_t length( void ) const;
+    size_t length() const;
 
-    const char* data( void ) const;
+    const char* data() const;
 
 public:
 
@@ -205,9 +205,9 @@ private:
 
 public:
 
-    Option( void );
+    Option();
 
-    explicit Option(
+    explicit Option( 
         const std::string& name,
         const std::string& description = "",
         size_t             nvalues     = 0,
@@ -215,38 +215,38 @@ public:
 
     Option( const Option& other );
 
-    virtual ~Option( void );
+    virtual ~Option();
 
 public:
 
     void setValue( const Argument& value );
 
-    void given( void );
+    void given();
 
 public:
 
-    const std::string& name( void ) const;
+    const std::string& name() const;
 
-    const std::string& description( void ) const;
+    const std::string& description() const;
 
-    const size_t nvalues( void ) const;
+    size_t nvalues() const;
 
-    const bool isRequired( void ) const;
+    bool isRequired() const;
 
-    const bool isGiven( void ) const;
+    bool isGiven() const;
 
-    const std::vector<Argument>& values( void ) const;
+    const std::vector<Argument>& values() const;
 
     template <typename T>
-    const T value( size_t index ) const;
+    T value( size_t index ) const;
 
 public:
 
     Option& operator =( const Option& rhs );
 
-    friend const bool operator <( const Option& lhs, const Option& rhs );
+    friend bool operator <( const Option& lhs, const Option& rhs );
 
-    friend const bool operator ==( const Option& lhs, const Option& rhs );
+    friend bool operator ==( const Option& lhs, const Option& rhs );
 };
 
 /*==========================================================================*/
@@ -265,36 +265,36 @@ private:
 
 public:
 
-    Value( void );
+    Value();
 
-    explicit Value(
+    explicit Value( 
         const std::string& description,
         bool               is_required = true );
 
     Value( const Value& other );
 
-    virtual ~Value( void );
+    virtual ~Value();
 
 public:
 
     void setValue( const char* value );
 
-    const std::string& description( void ) const;
+    const std::string& description() const;
 
-    const bool isRequired( void ) const;
+    bool isRequired() const;
 
-    const bool isGiven( void ) const;
+    bool isGiven() const;
 
     template <typename T>
-    const T value( void ) const;
+    T value() const;
 
 public:
 
     Value& operator =( const Value& rhs );
 
-    friend const bool operator <( const Value& lhs, const Value& rhs );
+    friend bool operator <( const Value& lhs, const Value& rhs );
 
-    friend const bool operator ==( const Value& lhs, const Value& rhs );
+    friend bool operator ==( const Value& lhs, const Value& rhs );
 };
 
 /*==========================================================================*/
@@ -305,9 +305,9 @@ public:
  */
 /*==========================================================================*/
 template <class T>
-inline const T CommandLine::value( size_t index ) const
+inline T CommandLine::value( size_t index ) const
 {
-    return( m_values[index].value<T>() );
+    return m_values[index].value<T>();
 }
 
 /*==========================================================================*/
@@ -319,7 +319,7 @@ inline const T CommandLine::value( size_t index ) const
  */
 /*==========================================================================*/
 template <class T>
-inline const T CommandLine::optionValue( const std::string& option_name, size_t index ) const
+inline T CommandLine::optionValue( const std::string& option_name, size_t index ) const
 {
     Option                  key( option_name );
     Options::const_iterator option =
@@ -328,17 +328,17 @@ inline const T CommandLine::optionValue( const std::string& option_name, size_t 
     if ( ( option == m_options.end() ) || ( !option->isGiven() ) )
     {
         kvsMessageError( "Cannot find '-%s' option.", option->name().c_str() );
-        return( T( 0 ) );
+        return T( 0 );
     }
 
-    if ( (size_t)( option->nvalues() ) < index )
+    if ( ( size_t )( option->nvalues() ) < index )
     {
         kvsMessageError( "Cannot get option value by given index." );
-        return( T( 0 ) );
+        return T( 0 );
     }
 
     T ret = option->value<T>( index );
-    return( ret );
+    return ret;
 }
 
 /*==========================================================================*/
@@ -349,20 +349,20 @@ inline const T CommandLine::optionValue( const std::string& option_name, size_t 
  */
 /*==========================================================================*/
 template <typename T>
-inline const T CommandLine::Option::value( size_t index ) const
+inline T CommandLine::Option::value( size_t index ) const
 {
     if ( m_nvalues < index )
     {
         kvsMessageError( "Option '-%s' has only %d values.",
                          m_name.c_str(), m_nvalues );
-        return( T( 0 ) );
+        return T( 0 );
     }
 
     T ret;
     std::stringstream s( m_values[index].data() );
     s >> ret;
 
-    return( ret );
+    return ret;
 }
 
 /*==========================================================================*/
@@ -373,7 +373,7 @@ inline const T CommandLine::Option::value( size_t index ) const
  */
 /*==========================================================================*/
 template<>
-inline const std::string CommandLine::Option::value<std::string>( size_t index ) const
+inline std::string CommandLine::Option::value<std::string>( size_t index ) const
 {
     if ( m_nvalues < index )
     {
@@ -382,7 +382,7 @@ inline const std::string CommandLine::Option::value<std::string>( size_t index )
         return( "" );
     }
 
-    return( m_values[index].data() );
+    return m_values[index].data();
 }
 
 /*==========================================================================*/
@@ -392,13 +392,13 @@ inline const std::string CommandLine::Option::value<std::string>( size_t index )
  */
 /*==========================================================================*/
 template <typename T>
-inline const T CommandLine::Value::value( void ) const
+inline T CommandLine::Value::value() const
 {
     T ret;
     std::stringstream s( m_value.data() );
     s >> ret;
 
-    return( ret );
+    return ret;
 }
 
 /*==========================================================================*/
@@ -408,9 +408,9 @@ inline const T CommandLine::Value::value( void ) const
  */
 /*==========================================================================*/
 template <>
-inline const std::string CommandLine::Value::value<std::string>( void ) const
+inline std::string CommandLine::Value::value<std::string>() const
 {
-    return( m_value.data() );
+    return m_value.data();
 }
 
 } // end of namespace kvs

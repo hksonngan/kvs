@@ -73,7 +73,7 @@ protected:
 
 public:
 
-    Date( void );
+    Date();
 
     Date( const long julian_day );
 
@@ -81,7 +81,7 @@ public:
 
     Date( const Date& date );
 
-    virtual ~Date( void );
+    virtual ~Date();
 
 public:
 
@@ -113,39 +113,39 @@ public:
 
 public:
 
-    const int year( void ) const;
+    int year() const;
 
-    const int month( void ) const;
+    int month() const;
 
-    const int day( void ) const;
+    int day() const;
 
-    const long julianDay( void ) const;
+    long julianDay() const;
 
-    const std::string monthString( const bool abbrevition = true ) const;
-
-public:
-
-    const Date& today( void );
-
-    const int yearsOld( void ) const;
+    std::string monthString( const bool abbrevition = true ) const;
 
 public:
 
-    const DayOfWeek dayOfWeek( void ) const;
+    const Date& today();
 
-    const std::string dayOfWeekString( const bool abbr = true ) const;
+    int yearsOld() const;
 
-    const int daysInMonth( void ) const;
+public:
 
-    const std::string toString( const std::string sep = "" ) const;
+    DayOfWeek dayOfWeek() const;
+
+    std::string dayOfWeekString( const bool abbr = true ) const;
+
+    int daysInMonth() const;
+
+    std::string toString( const std::string sep = "" ) const;
 
     void fromString( const std::string date, const std::string sep = "" );
 
 public:
 
-    const bool isLeepYear( void ) const;
+    bool isLeepYear() const;
 
-    const bool isValid( void ) const;
+    bool isValid() const;
 
 public:
 
@@ -163,11 +163,11 @@ public:
 
 protected:
 
-    void adjust_days( void );
+    void adjust_days();
 
-    const long convert_to_julian_date( const int year, const int month, const int day ) const;
+    long convert_to_julian_date( const int year, const int month, const int day ) const;
 
-    const Date convert_from_julian_date( const long julian_day ) const;
+    Date convert_from_julian_date( const long julian_day ) const;
 };
 
 } // end of namespace kvs

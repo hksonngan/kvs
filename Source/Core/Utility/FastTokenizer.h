@@ -38,25 +38,25 @@ private:
 private:
 
     size_t      m_ntokens;
-    const char* m_tokens[BufferSize];
+    const char* m_tokens[ BufferSize ];
 
 public:
 
-    FastTokenizer( void );
+    FastTokenizer();
 
     FastTokenizer( char* const source, const char* const delimiter );
 
-    ~FastTokenizer( void );
+    ~FastTokenizer();
 
 public:
 
     void set( char* const source, const char* const delimiter );
 
-    const char* const get( size_t index ) const;
+    const char* get( size_t index ) const;
 
 public:
 
-    const size_t ntokens( void ) const;
+    size_t ntokens() const;
 
 public:
 
@@ -68,7 +68,7 @@ inline void FastTokenizer::set( char* const source, const char* const delimiter 
 
     for ( const char* p = strtok( source, delimiter ); p != NULL; p = strtok( NULL, delimiter ) )
     {
-        m_tokens[ntokens] = p;
+        m_tokens[ ntokens ] = p;
         ++ntokens;
 
         KVS_ASSERT( ntokens < BufferSize );
@@ -77,16 +77,16 @@ inline void FastTokenizer::set( char* const source, const char* const delimiter 
     m_ntokens = ntokens;
 }
 
-inline const char* const FastTokenizer::get( size_t index ) const
+inline const char* FastTokenizer::get( size_t index ) const
 {
     KVS_ASSERT( index < m_ntokens );
 
-    return( m_tokens[index] );
+    return m_tokens[ index ];
 }
 
-inline const size_t FastTokenizer::ntokens( void ) const
+inline size_t FastTokenizer::ntokens() const
 {
-    return( m_ntokens );
+    return m_ntokens;
 }
 
 } // end of namespace kvs

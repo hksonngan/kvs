@@ -22,7 +22,7 @@ namespace kvs
  *  Constructs a new empty FastTokenizer.
  */
 /*==========================================================================*/
-FastTokenizer::FastTokenizer( void )
+FastTokenizer::FastTokenizer()
     : m_ntokens( 0 )
 {
 }
@@ -43,7 +43,7 @@ FastTokenizer::FastTokenizer( char* const source, const char* const delimiter )
  *  Destroys the FastTokenizer.
  */
 /*==========================================================================*/
-FastTokenizer::~FastTokenizer( void )
+FastTokenizer::~FastTokenizer()
 {
 }
 
