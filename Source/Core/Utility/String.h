@@ -169,6 +169,12 @@ inline std::string String::ToString( const kvs::UInt8& src )
 }
 
 template <>
+inline std::string String::ToString( const std::string& src )
+{
+    return src;
+}
+
+template <>
 inline kvs::Int8 String::To( const std::string& str )
 {
     int ret;
@@ -184,6 +190,12 @@ inline kvs::UInt8 String::To( const std::string& str )
     std::istringstream ss( str );
     ss >> ret;
     return static_cast<kvs::UInt8>( ret );
+}
+
+template <>
+inline std::string String::To( const std::string& src )
+{
+    return src;
 }
 
 #if KVS_ENABLE_DEPRECATED
