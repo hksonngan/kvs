@@ -301,6 +301,12 @@ inline double Rad2Deg( double a )
     return a * 57.29577951;
 }
 
+template <typename T>
+inline bool IsNaN( T a )
+{
+    return !( a == a );
+}
+
 } // end of namespace Math
 
 } // end of namespace kvs
