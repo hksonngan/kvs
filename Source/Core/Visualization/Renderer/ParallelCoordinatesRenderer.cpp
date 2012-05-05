@@ -328,7 +328,7 @@ void ParallelCoordinatesRenderer::exec( kvs::ObjectBase* object, kvs::Camera* ca
         glLineWidth( m_line_width );
         glBegin( GL_LINE_STRIP );
 
-        const kvs::Real64 color_value = color_axis_values.to<kvs::Real64>( i );
+        const kvs::Real64 color_value = color_axis_values[i].to<kvs::Real64>();
         const kvs::RGBColor color = m_color_map.at( color_value );
         glColor4ub( color.r(), color.g(), color.b(), m_line_opacity );
 
@@ -336,7 +336,7 @@ void ParallelCoordinatesRenderer::exec( kvs::ObjectBase* object, kvs::Camera* ca
         {
             const kvs::Real64 min_value = table->minValue(j);
             const kvs::Real64 max_value = table->maxValue(j);
-            const kvs::Real64 value = table->column(j).to<kvs::Real64>( i );
+            const kvs::Real64 value = table->column(j)[i].to<kvs::Real64>();
 
             const float x = m_left_margin + stride * j;
             const float y = y1 - ( y1 - y0 ) * ( value - min_value ) / ( max_value - min_value );

@@ -46,19 +46,20 @@ std::ostream& operator << ( std::ostream& os, const Entry& entry )
     os << "Count: " << entry.count() << std::endl;
     if( entry.type() == kvs::tiff::Ascii )
     {
-        std::string value;
+        os << "Value: ";
+        kvs::ValueArray<kvs::Int8> values = entry.values().asValueArray<kvs::Int8>();
         for ( size_t i = 0; i < entry.count(); i++ )
         {
-            value.push_back( entry.values().at<char>(i) );
+            os << values[i];
         }
-        os << "Value: " << value;
     }
     else
     {
         os << "Value: ";
+        kvs::ValueArray<kvs::UInt32> values = entry.values().asValueArray<kvs::UInt32>();
         for ( size_t i = 0; i < entry.count(); i++ )
         {
-            os << entry.values().at<kvs::UInt32>(i) << " ";
+            os << values[i];
         }
     }
 

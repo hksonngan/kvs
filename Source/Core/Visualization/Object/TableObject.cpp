@@ -366,7 +366,7 @@ void TableObject::setMinRange( const size_t column_index, const kvs::Real64 rang
         const kvs::AnyValueArray& column = this->column( column_index );
         for ( size_t i = 0; i < nrows; i++ )
         {
-            const kvs::Real64 value = column.to<kvs::Real64>( i );
+            const kvs::Real64 value = column[i].to<kvs::Real64>();
             if (  min_range_old <= value && value <= min_range_new )
             {
                 m_inside_range_list[i] = 0;
@@ -386,7 +386,7 @@ void TableObject::setMinRange( const size_t column_index, const kvs::Real64 rang
             for ( size_t j = 0; j < ncolumns; j++ )
             {
                 const kvs::AnyValueArray& column = this->column( j );
-                const kvs::Real64 value = column.to<kvs::Real64>( i );
+                const kvs::Real64 value = column[i].to<kvs::Real64>();
                 if (  !( m_min_ranges[j] <= value && value <= m_max_ranges[j] ) )
                 {
                     m_inside_range_list[i] = 0;
@@ -430,7 +430,7 @@ void TableObject::setMaxRange( const size_t column_index, const kvs::Real64 rang
             for ( size_t j = 0; j < ncolumns; j++ )
             {
                 const kvs::AnyValueArray& column = this->column( j );
-                const kvs::Real64 value = column.to<kvs::Real64>( i );
+                const kvs::Real64 value = column[i].to<kvs::Real64>();
                 if (  !( m_min_ranges[j] <= value && value <= m_max_ranges[j] ) )
                 {
                     m_inside_range_list[i] = 0;
@@ -450,7 +450,7 @@ void TableObject::setMaxRange( const size_t column_index, const kvs::Real64 rang
         const kvs::AnyValueArray& column = this->column( column_index );
         for ( size_t i = 0; i < nrows; i++ )
         {
-            const kvs::Real64 value = column.to<kvs::Real64>( i );
+            const kvs::Real64 value = column[i].to<kvs::Real64>();
             if (  max_range_new <= value && value <= max_range_old )
             {
                 m_inside_range_list[i] = 0;

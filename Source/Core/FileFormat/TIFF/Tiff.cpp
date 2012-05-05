@@ -168,10 +168,10 @@ size_t Tiff::get_width( void ) const
     switch( entry->type() )
     {
     case kvs::tiff::Short:
-        ret = entry->values().at<kvs::UInt16>(0); // kvs::tiff::Short
+        ret = entry->values().asValueArray<kvs::UInt16>()[0]; // kvs::tiff::Short
         break;
     case kvs::tiff::Long:
-        ret = entry->values().at<kvs::UInt32>(0); // kvs::tiff::Long
+        ret = entry->values().asValueArray<kvs::UInt32>()[0]; // kvs::tiff::Long
         break;
     default:
         break;
@@ -201,10 +201,10 @@ size_t Tiff::get_height( void ) const
     switch( entry->type() )
     {
     case kvs::tiff::Short:
-        ret = entry->values().at<kvs::UInt16>(0); // kvs::tiff::Short
+        ret = entry->values().asValueArray<kvs::UInt16>()[0]; // kvs::tiff::Short
         break;
     case kvs::tiff::Long:
-        ret = entry->values().at<kvs::UInt32>(0); // kvs::tiff::Long
+        ret = entry->values().asValueArray<kvs::UInt32>()[0]; // kvs::tiff::Long
         break;
     default:
         break;
@@ -230,10 +230,11 @@ size_t Tiff::get_bits_per_sample( void ) const
         return( default_value );
     }
 
+    kvs::ValueArray<kvs::UInt16> values = entry->values().asValueArray<kvs::UInt16>();
     size_t ret = 0;
     for ( size_t i = 0; i < entry->count(); i++ )
     {
-        ret += entry->values().at<kvs::UInt16>(i); // kvs::tiff::Short
+        ret += values[i]; // kvs::tiff::Short
     }
 
     return( ret );
@@ -256,7 +257,7 @@ size_t Tiff::get_samples_per_pixel( void ) const
         return( default_value );
     }
 
-    return( entry->values().at<kvs::UInt16>(0) ); // kvs::tiff::Short
+    return( entry->values().asValueArray<kvs::UInt16>()[0] ); // kvs::tiff::Short
 }
 
 size_t Tiff::get_photometirc_interpretation( void ) const
@@ -285,7 +286,7 @@ size_t Tiff::get_photometirc_interpretation( void ) const
         return( 0 );
     }
 
-    return( entry->values().at<kvs::UInt16>(0) ); // kvs::tiff::Short
+    return( entry->values().asValueArray<kvs::UInt16>()[0] ); // kvs::tiff::Short
 }
 
 size_t Tiff::get_rows_per_strip( void ) const
@@ -309,10 +310,10 @@ size_t Tiff::get_rows_per_strip( void ) const
     switch( entry->type() )
     {
     case kvs::tiff::Short:
-        ret = entry->values().at<kvs::UInt16>(0); // kvs::tiff::Short
+        ret = entry->values().asValueArray<kvs::UInt16>()[0]; // kvs::tiff::Short
         break;
     case kvs::tiff::Long:
-        ret = entry->values().at<kvs::UInt32>(0); // kvs::tiff::Long
+        ret = entry->values().asValueArray<kvs::UInt32>()[0]; // kvs::tiff::Long
         break;
     default:
         break;
@@ -355,7 +356,7 @@ size_t Tiff::get_compression_mode( void ) const
         return( default_value );
     }
 
-    return( entry->values().at<kvs::UInt16>(0) ); // kvs::tiff::Short
+    return( entry->values().asValueArray<kvs::UInt16>()[0] ); // kvs::tiff::Short
 }
 
 kvs::AnyValueArray Tiff::get_strip_offsets( void ) const
@@ -445,17 +446,19 @@ kvs::AnyValueArray Tiff::get_raw_data( std::ifstream& ifs ) const
     const kvs::AnyValueArray offsets = this->get_strip_offsets();
     const kvs::AnyValueArray bytes   = this->get_strip_bytes();
     const size_t             count   = offsets.size();
+
+    kvs::ValueArray<kvs::UInt32> offset = offsets.asValueArray<kvs::UInt32>();
+    kvs::ValueArray<kvs::UInt32> byte = bytes.asValueArray<kvs::UInt32>();
+
     if ( m_color_mode == Tiff::Gray8 )
     {
         raw_data.allocate<kvs::UInt8>( m_width * m_height );
         kvs::UInt8* data = reinterpret_cast<kvs::UInt8*>( raw_data.data() );
         for ( size_t i = 0; i < count; i++ )
         {
-            const size_t offset = offsets.at<kvs::UInt32>(i);
-            const size_t byte   = bytes.at<kvs::UInt32>(i);
-            ifs.seekg( offset, std::ios::beg );
-            ifs.read( reinterpret_cast<char*>( data ), byte );
-            data += byte / sizeof( kvs::UInt8 );
+            ifs.seekg( offset[i], std::ios::beg );
+            ifs.read( reinterpret_cast<char*>( data ), byte[i] );
+            data += byte[i] / sizeof( kvs::UInt8 );
         }
     }
 
@@ -465,11 +468,9 @@ kvs::AnyValueArray Tiff::get_raw_data( std::ifstream& ifs ) const
         kvs::UInt16* data = reinterpret_cast<kvs::UInt16*>( raw_data.data() );
         for ( size_t i = 0; i < count; i++ )
         {
-            const size_t offset = offsets.at<kvs::UInt32>(i);
-            const size_t byte   = bytes.at<kvs::UInt32>(i);
-            ifs.seekg( offset, std::ios::beg );
-            ifs.read( reinterpret_cast<char*>( data ), byte );
-            data += byte / sizeof( kvs::UInt16 );
+            ifs.seekg( offset[i], std::ios::beg );
+            ifs.read( reinterpret_cast<char*>( data ), byte[i] );
+            data += byte[i] / sizeof( kvs::UInt16 );
         }
     }
 
@@ -479,11 +480,9 @@ kvs::AnyValueArray Tiff::get_raw_data( std::ifstream& ifs ) const
         kvs::UInt8* data = reinterpret_cast<kvs::UInt8*>( raw_data.data() );
         for ( size_t i = 0; i < count; i++ )
         {
-            const size_t offset = offsets.at<kvs::UInt32>(i);
-            const size_t byte   = bytes.at<kvs::UInt32>(i);
-            ifs.seekg( offset, std::ios::beg );
-            ifs.read( reinterpret_cast<char*>( data ), byte );
-            data += byte / sizeof( kvs::UInt8 );
+            ifs.seekg( offset[i], std::ios::beg );
+            ifs.read( reinterpret_cast<char*>( data ), byte[i] );
+            data += byte[i] / sizeof( kvs::UInt8 );
         }
     }
 

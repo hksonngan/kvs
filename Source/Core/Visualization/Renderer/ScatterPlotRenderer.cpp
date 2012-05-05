@@ -332,8 +332,8 @@ void ScatterPlotRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kv
         {
             if ( !table->insideRange( i ) ) continue;
 
-            const kvs::Real64 x_value = x_values.to<kvs::Real64>( i );
-            const kvs::Real64 y_value = y_values.to<kvs::Real64>( i );
+            const kvs::Real64 x_value = x_values[i].to<kvs::Real64>();
+            const kvs::Real64 y_value = y_values[i].to<kvs::Real64>();
             const float x = x0 + ( x_value - x_min_value ) * x_ratio;
             const float y = y1 - ( y_value - y_min_value ) * y_ratio;
             glVertex2f( x, y );
@@ -356,12 +356,12 @@ void ScatterPlotRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kv
         {
             if ( !table->insideRange( i ) ) continue;
 
-            const kvs::Real64 color_value = color_axis_values.to<kvs::Real64>( i );
+            const kvs::Real64 color_value = color_axis_values[i].to<kvs::Real64>();
             const kvs::RGBColor color = m_color_map.at( color_value );
             glColor4ub( color.r(), color.g(), color.b(), opacity );
 
-            const kvs::Real64 x_value = x_values.to<kvs::Real64>( i );
-            const kvs::Real64 y_value = y_values.to<kvs::Real64>( i );
+            const kvs::Real64 x_value = x_values[i].to<kvs::Real64>();
+            const kvs::Real64 y_value = y_values[i].to<kvs::Real64>();
             const float x = x0 + ( x_value - x_min_value ) * x_ratio;
             const float y = y1 - ( y_value - y_min_value ) * y_ratio;
             glVertex2f( x, y );
