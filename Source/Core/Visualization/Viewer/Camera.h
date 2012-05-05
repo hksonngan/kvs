@@ -30,7 +30,7 @@ namespace kvs
  *  Camera class
  */
 /*==========================================================================*/
-class Camera : public XformControl
+class Camera
 {
     kvsClassName( kvs::Camera );
 
@@ -44,7 +44,7 @@ public:
     };
 
 protected:
-
+    kvs::XformControl m_xform_control;
     ProjectionType m_projection_type; ///< projection type
     kvs::Vector3f m_init_position; ///< initial position in the world coordinate system
     kvs::Vector3f m_init_up_vector; ///< initial up vector in the world coordinate system

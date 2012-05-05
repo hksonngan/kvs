@@ -76,7 +76,7 @@ namespace kvs
  */
 /*==========================================================================*/
 Camera::Camera( const bool collision ) :
-    kvs::XformControl( collision )
+    m_xform_control( collision )
 {
     this->initialize();
 }
@@ -485,10 +485,6 @@ kvs::ColorImage Camera::snapshot( void )
 //    const int size   = height * ( ( ( ( width * 3 ) + 3 ) >> 2 ) << 2 );
     const int size   = height * width * 3;
     unsigned char* data = new unsigned char [ size ];
-    if( !data )
-    {
-        return( kvs::ColorImage( width, height ) );
-    }
     memset( data, 0, size );
 
     glPixelStorei( GL_PACK_ALIGNMENT, 1 );
@@ -903,7 +899,7 @@ const kvs::Vector3f Camera::projectWindowToWorld(
 {
     kvs::Vector3f p_cam( this->projectWindowToCamera( p_win, depth ) );
 
-    return( kvs::Xform::scaledRotation() * ( p_cam + m_init_position ) + kvs::Xform::translation() );
+    return( m_xform_control.scaledRotation() * ( p_cam + m_init_position ) + m_xform_control.translation() );
 }
 
 /*==========================================================================*/
@@ -1013,7 +1009,7 @@ const kvs::Vector3f Camera::projectObjectToWorld( const kvs::Vector3f& p_obj ) c
 /*===========================================================================*/
 void Camera::resetXform( void )
 {
-    kvs::XformControl::resetXform();
+    m_xform_control.resetXform();
     m_position = m_init_position;
     m_up_vector = m_init_up_vector;
     m_look_at = m_init_look_at;
@@ -1027,7 +1023,7 @@ void Camera::resetXform( void )
 /*==========================================================================*/
 void Camera::rotate( const kvs::Matrix33f& rotation )
 {
-    kvs::XformControl::rotate( rotation );
+    m_xform_control.rotate( rotation );
     this->update_up_at_from();
 }
 
@@ -1039,7 +1035,7 @@ void Camera::rotate( const kvs::Matrix33f& rotation )
 /*==========================================================================*/
 void Camera::translate( const kvs::Vector3f& translation )
 {
-    kvs::XformControl::translate( translation );
+    m_xform_control.translate( translation );
     this->update_up_at_from();
 }
 
@@ -1051,7 +1047,7 @@ void Camera::translate( const kvs::Vector3f& translation )
 /*==========================================================================*/
 void Camera::scale( const kvs::Vector3f& scaling )
 {
-    kvs::XformControl::scale( scaling );
+    m_xform_control.scale( scaling );
     this->update_up_at_from();
 }
 
@@ -1064,9 +1060,9 @@ void Camera::update_up_at_from( void )
 {
     kvs::Vector3f vec( m_init_position - m_init_look_at );
 
-    m_look_at   = kvs::Xform::translation() + m_init_look_at;
-    m_position  = kvs::Xform::scaledRotation() * vec + m_look_at;
-    m_up_vector = kvs::Xform::scaledRotation() * m_init_up_vector;
+    m_look_at   = m_xform_control.translation() + m_init_look_at;
+    m_position  = m_xform_control.scaledRotation() * vec + m_look_at;
+    m_up_vector = m_xform_control.scaledRotation() * m_init_up_vector;
 }
 
 } // end of namespace kvs

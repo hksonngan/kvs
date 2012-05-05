@@ -30,12 +30,12 @@ class RGBAColor;
  *  Light class
  */
 /*==========================================================================*/
-class Light : public kvs::XformControl
+class Light
 {
     kvsClassName( kvs::Light );
 
-protected:
-
+private:
+    kvs::XformControl m_xform_control;
     unsigned int  m_id;            ///< light ID
     kvs::Vector3f m_init_position; ///< initial light position
     kvs::Vector3f m_position;      ///< light position
