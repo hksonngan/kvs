@@ -83,7 +83,7 @@ public:
         this->allocate( size );
     }
 
-    ValueArray( const value_type* const values, const size_t size )
+    ValueArray( const value_type* values, const size_t size )
     {
         this->allocate( size );
         std::copy( values, values + size, this->begin() );
@@ -106,6 +106,18 @@ public:
         m_values( sp )
     {
         m_size = size;
+    }
+
+public:
+    void assign( const value_type* values, const size_t size )
+    {
+        *this = ValueArray( values, size );
+    }
+
+    template <typename InIter>
+    void assign( InIter first, InIter last )
+    {
+        *this = ValueArray( first, last );
     }
 
 public:
@@ -293,11 +305,6 @@ public:
         return this->data();
     }
 
-    void fill( const int bit )
-    {
-        std::memset( this->data(), bit, this->byteSize() );
-    }
-
     void shallowCopy( const this_type& other )
     {
         *this = other;
@@ -329,12 +336,13 @@ public:
         m_values.reset( new value_type[ size ], kvs::temporal::ArrayDeleter<T>() );
         m_size = size;
     }
+#endif
 
     void fill( const T& value )
     {
         std::fill( this->begin(), this->end(), value );
     }
-#endif
+
     void deallocate()
     {
         m_values.reset();
