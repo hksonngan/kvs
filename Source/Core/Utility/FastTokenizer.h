@@ -11,6 +11,7 @@
  *  $Id$
  */
 /****************************************************************************/
+#if KVS_ENABLE_DEPRECATED
 #ifndef KVS__FAST_TOKENIZER_H_INCLUDE
 #define KVS__FAST_TOKENIZER_H_INCLUDE
 
@@ -92,3 +93,4 @@ inline size_t FastTokenizer::ntokens() const
 } // end of namespace kvs
 
 #endif // KVS__FAST_TOKENIZER_H_INCLUDE
+#endif

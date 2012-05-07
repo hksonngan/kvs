@@ -11,6 +11,7 @@
  *  $Id$
  */
 /****************************************************************************/
+#if KVS_ENABLE_DEPRECATED
 #include "FastTokenizer.h"
 
 
@@ -48,3 +49,4 @@ FastTokenizer::~FastTokenizer()
 }
 
 } // end of namespace test
+#endif
