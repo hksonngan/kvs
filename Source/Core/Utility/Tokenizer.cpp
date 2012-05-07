@@ -12,8 +12,6 @@
  */
 /****************************************************************************/
 #include "Tokenizer.h"
-#include <string>
-#include <algorithm>
 
 
 namespace kvs
@@ -24,10 +22,9 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-Tokenizer::Tokenizer():
-    m_first( std::string::npos ),
-    m_last( std::string::npos )
+Tokenizer::Tokenizer()
 {
+    m_next = std::string::npos;
 }
 
 /*==========================================================================*/
@@ -41,40 +38,7 @@ Tokenizer::Tokenizer( const std::string& source, const std::string& delimiter ):
     m_source( source ),
     m_delimiter( delimiter )
 {
-    m_last = 0;
-    this->get_token();
-}
-
-/*==========================================================================*/
-/**
- *  Constructor.
- *  @param t [in] tokenizer
- */
-/*==========================================================================*/
-Tokenizer::Tokenizer( const Tokenizer& t ):
-    m_source( t.m_source ),
-    m_delimiter( t.m_delimiter ),
-    m_token( t.m_token ),
-    m_first( t.m_first ),
-    m_last( t.m_last )
-{
-}
-
-/*==========================================================================*/
-/**
- *  Substitution operator
- *  @param t [in] tokenizer
- */
-/*==========================================================================*/
-Tokenizer& Tokenizer::operator = ( const Tokenizer& t )
-{
-    m_source    = t.m_source;
-    m_delimiter = t.m_delimiter;
-    m_token     = t.m_token;
-    m_first     = t.m_first;
-    m_last      = t.m_last;
-
-    return *this;
+    m_next = m_source.find_first_not_of( m_delimiter, 0 );
 }
 
 /*==========================================================================*/
@@ -86,9 +50,7 @@ Tokenizer& Tokenizer::operator = ( const Tokenizer& t )
 Tokenizer& Tokenizer::operator = ( const std::string& source )
 {
     m_source = source;
-    m_last   = 0;
-    this->get_token();
-
+    m_next = m_source.find_first_not_of( m_delimiter, 0 );
     return *this;
 }
 
@@ -100,7 +62,7 @@ Tokenizer& Tokenizer::operator = ( const std::string& source )
 /*==========================================================================*/
 bool Tokenizer::isLast() const
 {
-    return( m_first == std::string::npos && m_last == std::string::npos );
+    return m_next == std::string::npos;
 }
 
 /*==========================================================================*/
@@ -111,38 +73,24 @@ bool Tokenizer::isLast() const
 /*==========================================================================*/
 std::string Tokenizer::token()
 {
-    std::string ret = m_token;
-    this->get_token();
-
-    return ret;
-}
-
-/*==========================================================================*/
-/**
- *  Get the delimitted current token.
- */
-/*==========================================================================*/
-void Tokenizer::get_token()
-{
-    if ( m_last == std::string::npos )
+    if ( m_next == std::string::npos )
     {
-        m_first = std::string::npos;
-        return;
+        return std::string();
     }
 
-    m_first = m_source.find_first_not_of( m_delimiter, m_last );
-    if ( m_first == std::string::npos )
+    std::string::size_type first = m_next;
+    std::string::size_type last = m_source.find_first_of( m_delimiter, first );
+
+    if ( last == std::string::npos )
     {
-        m_last = std::string::npos;
-        return;
+        m_next = std::string::npos;
+        return m_source.substr( first );
     }
-
-    m_last = m_source.find_first_of( m_delimiter, m_first );
-    std::string::size_type length = ( m_last == std::string::npos ) ?
-        m_last :
-        m_last - m_first;
-
-    m_token = m_source.substr( m_first, length );
+    else
+    {
+        m_next = m_source.find_first_not_of( m_delimiter, last );
+        return m_source.substr( first, last - first );
+    }
 }
 
 } // end of namespace kvs
