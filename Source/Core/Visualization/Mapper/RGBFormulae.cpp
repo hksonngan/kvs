@@ -21,9 +21,9 @@ namespace
 
 double deg2rad( double d ) { return( d * 3.141592 / 180.0 ); }
 
-double f00( double x ) { return( 0 ); }
-double f01( double x ) { return( 0.5 ); }
-double f02( double x ) { return( 1.0 ); }
+double f00( double   ) { return( 0 ); }
+double f01( double   ) { return( 0.5 ); }
+double f02( double   ) { return( 1.0 ); }
 double f03( double x ) { return( x ); }
 double f04( double x ) { return( x * x ); }
 double f05( double x ) { return( x * x * x ); }
