@@ -21,6 +21,7 @@
 #include <kvs/KeyEvent>
 #include <kvs/TimeEvent>
 #include <typeinfo>
+#include <cstddef>
 
 
 namespace kvs

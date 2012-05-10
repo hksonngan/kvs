@@ -19,6 +19,7 @@
 #include <sys/stat.h>
 #include <cstring>
 #include <cerrno>
+#include <cstdlib>
 #endif
 #include <fstream>
 #include <kvs/Message>

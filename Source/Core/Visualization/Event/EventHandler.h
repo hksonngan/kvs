@@ -16,6 +16,7 @@
 #define KVS__EVENT_HANDLER_H_INCLUDE
 
 #include <vector>
+#include <cstddef>
 #include <kvs/ClassName>
 
 
