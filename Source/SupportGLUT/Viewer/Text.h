@@ -52,11 +52,11 @@ public:
 
     void setColor( const kvs::RGBColor& color );
 
-    void setText( char* text, ... );
+    void setText( const char* text, ... );
 
     void setText( const std::string& text );
 
-    void addText( char* text, ... );
+    void addText( const char* text, ... );
 
     void addText( const std::string& text );
 

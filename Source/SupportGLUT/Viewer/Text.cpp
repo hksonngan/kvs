@@ -73,7 +73,7 @@ void Text::setColor( const kvs::RGBColor& color )
  *  @param text [in] text string
  */
 /*==========================================================================*/
-void Text::setText( char* text, ... )
+void Text::setText( const char* text, ... )
 {
     m_text.clear();
 
@@ -105,7 +105,7 @@ void Text::setText( const std::string& text )
  *  @param text [in] text string
  */
 /*==========================================================================*/
-void Text::addText( char* text, ... )
+void Text::addText( const char* text, ... )
 {
     char buffer[ ::MaxLineLength ];
 

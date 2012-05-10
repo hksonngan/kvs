@@ -87,6 +87,7 @@ public:
 #if KVS_DEPRECATED
         case kvs::Type::TypeString: return GetValueFromString<ReturnT>( ptr );
 #endif
+        default: break;
         }
         return ReturnT();
     }
