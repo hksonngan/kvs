@@ -13,6 +13,7 @@
 /****************************************************************************/
 #include "ValueArray.h"
 #include <kvs/Type>
+#include <string>
 
 
 namespace kvs

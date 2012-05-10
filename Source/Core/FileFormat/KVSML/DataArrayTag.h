@@ -195,8 +195,6 @@ inline const bool DataArrayTag::write(
         const std::string filename = pathname + kvs::File::Separator() + m_file;
         return( kvs::kvsml::DataArray::WriteExternalData( data, filename, m_format ) );
     }
-
-    return( true );
 }
 
 /*===========================================================================*/

@@ -14,9 +14,12 @@
 #ifndef KVS_CORE_TYPE_H_INCLUDE
 #define KVS_CORE_TYPE_H_INCLUDE
 
+#include <typeinfo>
 #include <kvs/Compiler>
 #include <kvs/Platform>
 
+
+#include <string>
 
 namespace kvs
 {

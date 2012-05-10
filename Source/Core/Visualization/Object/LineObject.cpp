@@ -13,6 +13,7 @@
  */
 /*****************************************************************************/
 #include "LineObject.h"
+#include <string>
 #include <kvs/PolygonObject>
 #include <kvs/Assert>
 #include <kvs/Type>

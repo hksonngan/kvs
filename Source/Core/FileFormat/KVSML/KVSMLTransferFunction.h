@@ -34,6 +34,7 @@ class KVSMLTransferFunction : public kvs::FileFormatBase
 {
     kvsClassName( kvs::KVSMLTransferFunction );
 
+public:
     typedef std::pair<float,kvs::Real32>   OpacityPoint;
     typedef std::list<OpacityPoint>        OpacityPointList;
     typedef std::pair<float,kvs::RGBColor> ColorPoint;

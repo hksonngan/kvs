@@ -15,6 +15,7 @@
 #include "EnsembleAverageBuffer.h"
 #include <kvs/glew/GLEW>
 #include <cstdlib>
+#include <iostream>
 
 
 namespace kvs

@@ -12,6 +12,7 @@
  */
 /****************************************************************************/
 #include "PolygonObject.h"
+#include <string>
 #include <kvs/Assert>
 #include <kvs/Type>
 

@@ -256,10 +256,9 @@ void StructuredVolumeImporter::import( const kvs::AVSField* field )
 {
     if ( field->fieldType() != kvs::AVSField::Uniform )
     {
-        kvsMessageWarning( field->fieldType() == kvs::AVSField::Uniform,
-                           "'Uniform' type in kvs::AVSField format is only supported." );
-
+        kvsMessageError( "'Uniform' type in kvs::AVSField format is only supported." );
         BaseClass::m_is_success = false;
+        return;
     }
 
     const float dim_x = static_cast<float>( field->dim().x() );

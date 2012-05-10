@@ -12,6 +12,8 @@
  */
 /****************************************************************************/
 #include "AnyValueArray.h"
+#include <kvs/Platform>
+#include <kvs/Compiler>
 
 
 namespace
@@ -28,6 +30,83 @@ kvs::AnyValueArray MakeClone( const void* data, size_t size )
 
 namespace kvs
 {
+
+namespace temporal
+{
+
+TypeInfo::TypeInfo()
+{
+    m_id = kvs::Type::UnknownType;
+}
+
+const std::type_info& TypeInfo::type() const
+{
+    switch ( m_id )
+    {
+    case kvs::Type::TypeInt8:   return typeid( kvs::Int8   );
+    case kvs::Type::TypeInt16:  return typeid( kvs::Int16  );
+    case kvs::Type::TypeInt32:  return typeid( kvs::Int32  );
+    case kvs::Type::TypeInt64:  return typeid( kvs::Int64  );
+    case kvs::Type::TypeUInt8:  return typeid( kvs::UInt8  );
+    case kvs::Type::TypeUInt16: return typeid( kvs::UInt16 );
+    case kvs::Type::TypeUInt32: return typeid( kvs::UInt32 );
+    case kvs::Type::TypeUInt64: return typeid( kvs::UInt64 );
+    case kvs::Type::TypeReal32: return typeid( kvs::Real32 );
+    case kvs::Type::TypeReal64: return typeid( kvs::Real64 );
+#if KVS_ENABLE_DEPRECATED
+    case kvs::Type::TypeString: return typeid( std::string );
+#endif
+    }
+    KVS_ASSERT( false );
+    return typeid( void );
+}
+
+const char* TypeInfo::typeName() const
+{
+    switch ( m_id )
+    {
+    case kvs::Type::TypeInt8:  return "char";
+    case kvs::Type::TypeInt16: return "short";
+    case kvs::Type::TypeInt32: return "int";
+    case kvs::Type::TypeInt64:
+#if defined ( KVS_COMPILER_VC )
+    return "signed __int64";
+#else
+#if defined ( KVS_PLATFORM_CPU_64 ) // LP64
+    return "long";
+#else
+    return "long long";
+#endif
+#endif
+    case kvs::Type::TypeUInt8:  return "unsigned char";
+    case kvs::Type::TypeUInt16: return "unsigned short";
+    case kvs::Type::TypeUInt32: return "unsigned int";
+    case kvs::Type::TypeUInt64:
+#if defined ( KVS_COMPILER_VC )
+    return "unsigned __int64";
+#else
+#if defined ( KVS_PLATFORM_CPU_64 ) // LP64
+    return "unsigned long";
+#else
+    return "unsigned long long";
+#endif
+#endif
+    case kvs::Type::TypeReal32: return "float";
+    case kvs::Type::TypeReal64: return "double";
+#if KVS_ENABLE_DEPRECATED
+    case kvs::Type::TypeString: return "string";
+#endif
+    }
+    KVS_ASSERT( false );
+    return NULL;
+}
+
+void TypeInfo::setid( kvs::Type::TypeID id )
+{
+    m_id = id;
+}
+
+} // temporal
 
 AnyValueArray::AnyValueArray()
 {

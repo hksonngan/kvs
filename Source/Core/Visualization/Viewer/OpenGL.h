@@ -14,6 +14,8 @@
 #ifndef KVS__OPEN_GL_H_INCLUDE
 #define KVS__OPEN_GL_H_INCLUDE
 
+#include <sstream>
+#include <string>
 #include <kvs/Platform>
 #include <kvs/StringList>
 
