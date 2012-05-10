@@ -36,7 +36,7 @@ int main( void )
 
     std::cout << "short min: " << kvs::Value<short>::Min() << std::endl;
     std::cout << "short max: " << kvs::Value<short>::Max() << std::endl;
-    std::cout << "short epsilon: x" << kvs::Value<short>::Epsilon() << std::endl;
+    std::cout << "short epsilon: " << kvs::Value<short>::Epsilon() << std::endl;
     std::cout << std::endl;
 
     std::cout << "ushort min: " << kvs::Value<unsigned short>::Min() << std::endl;
