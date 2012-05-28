@@ -992,11 +992,11 @@ void HAVSVolumeRenderer::Meshes::sort( HAVSVolumeRenderer::Vertex eye )
 
 void HAVSVolumeRenderer::Meshes::clean( void )
 {
-    m_coords.deallocate();
-    m_connections.deallocate();
-    m_values.deallocate();
-    m_boundary_faces.deallocate();
-    m_internal_faces.deallocate();
+    m_coords.release();
+    m_connections.release();
+    m_values.release();
+    m_boundary_faces.release();
+    m_internal_faces.release();
 
     if ( m_faces ) { delete m_faces; m_faces = NULL; }
     if ( m_sorted_faces ) { delete m_sorted_faces; m_sorted_faces = NULL; }
