@@ -194,7 +194,7 @@ void ImageBase::clear( void )
     m_bpp     = 0;
     m_bpl     = 0;
     m_size    = 0;
-    m_data.deallocate();
+    m_data.release();
 }
 
 /*===========================================================================*/

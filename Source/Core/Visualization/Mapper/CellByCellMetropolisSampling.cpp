@@ -106,7 +106,7 @@ CellByCellMetropolisSampling::CellByCellMetropolisSampling(
 /*===========================================================================*/
 CellByCellMetropolisSampling::~CellByCellMetropolisSampling( void )
 {
-    m_density_map.deallocate();
+    m_density_map.release();
 }
 
 /*===========================================================================*/

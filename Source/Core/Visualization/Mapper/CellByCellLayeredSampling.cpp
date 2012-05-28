@@ -106,7 +106,7 @@ CellByCellLayeredSampling::CellByCellLayeredSampling(
 /*===========================================================================*/
 CellByCellLayeredSampling::~CellByCellLayeredSampling( void )
 {
-    m_density_map.deallocate();
+    m_density_map.release();
     if ( m_pregenerated_particles ) delete m_pregenerated_particles;
 }
 

@@ -459,7 +459,7 @@ const bool Stl::read_binary( FILE* ifs )
         if ( fread( normals + index3, sizeof( kvs::Real32 ), 3, ifs ) != 3 )
         {
             kvsMessageError("Cannot read a normal vector.");
-            m_normals.deallocate();
+            m_normals.release();
             return( false );
         }
 
@@ -467,7 +467,7 @@ const bool Stl::read_binary( FILE* ifs )
         if ( fread( coords + index9, sizeof( kvs::Real32 ), 9, ifs ) != 9 )
         {
             kvsMessageError("Cannot read a coordinate value.");
-            m_coords.deallocate();
+            m_coords.release();
             return( false );
         }
 
@@ -478,8 +478,8 @@ const bool Stl::read_binary( FILE* ifs )
         if ( fread( unused, sizeof( char ), 2, ifs ) != 2 )
         {
             kvsMessageError("Cannot read unused block (2bytes).");
-            m_normals.deallocate();
-            m_coords.deallocate();
+            m_normals.release();
+            m_coords.release();
             return( false );
         }
     }

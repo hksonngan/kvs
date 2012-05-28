@@ -156,8 +156,8 @@ void AVSField::initialize( void )
 /*==========================================================================*/
 void AVSField::clear( void )
 {
-    m_values.deallocate();
-    m_coords.deallocate();
+    m_values.release();
+    m_coords.release();
 }
 
 /*==========================================================================*/

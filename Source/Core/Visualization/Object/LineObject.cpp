@@ -295,8 +295,8 @@ void LineObject::deepCopy( const LineObject& object )
 void LineObject::clear( void )
 {
     BaseClass::clear();
-    m_connections.deallocate();
-    m_sizes.deallocate();
+    m_connections.release();
+    m_sizes.release();
 }
 
 void LineObject::setLineType( const LineType line_type )

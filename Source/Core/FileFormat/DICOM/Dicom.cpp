@@ -129,7 +129,7 @@ void Dicom::initialize( void )
 void Dicom::clear( void )
 {
     m_element_list.clear();
-    m_raw_data.deallocate();
+    m_raw_data.release();
 }
 
 /*===========================================================================*/

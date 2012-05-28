@@ -37,7 +37,7 @@ Tiff::Tiff( const std::string& filename ):
 
 Tiff::~Tiff( void )
 {
-    m_raw_data.deallocate();
+    m_raw_data.release();
 }
 
 const Tiff::Header& Tiff::header( void ) const

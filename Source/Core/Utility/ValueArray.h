@@ -299,7 +299,7 @@ public:
 #if KVS_ENABLE_DEPRECATED
     value_type* allocate( const size_t size )
     {
-        this->deallocate();
+        this->release();
         m_values.reset( new value_type[ size ], kvs::temporal::ArrayDeleter<T>() );
         m_size = size;
         return this->data();
@@ -330,6 +330,11 @@ public:
         kvs::Endian::Swap( this->data(), this->size() );
     }
 
+    void deallocate()
+    {
+        this->release();
+    }
+
 #else
     void allocate( const size_t size )
     {
@@ -343,7 +348,7 @@ public:
         std::fill( this->begin(), this->end(), value );
     }
 
-    void deallocate()
+    void release()
     {
         m_values.reset();
         m_size = 0;

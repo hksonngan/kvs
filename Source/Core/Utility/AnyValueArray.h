@@ -389,7 +389,6 @@ public:
     }
 
 
-
 public:
 #if KVS_ENABLE_DEPRECATED
 
@@ -501,6 +500,8 @@ public:
         return ( *this )[ index ].to<T>();
     }
 
+    void deallocate();
+
 #else
     template<typename T>
     void allocate( const size_t size )
@@ -510,7 +511,7 @@ public:
 
 #endif
 
-    void deallocate();
+    void release();
 
     bool unique() const;
 

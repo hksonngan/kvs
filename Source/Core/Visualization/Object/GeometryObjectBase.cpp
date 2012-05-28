@@ -230,9 +230,9 @@ void GeometryObjectBase::deepCopy( const GeometryObjectBase& object )
 /*===========================================================================*/
 void GeometryObjectBase::clear( void )
 {
-    m_coords.deallocate();
-    m_colors.deallocate();
-    m_normals.deallocate();
+    m_coords.release();
+    m_colors.release();
+    m_normals.release();
 }
 
 /*===========================================================================*/

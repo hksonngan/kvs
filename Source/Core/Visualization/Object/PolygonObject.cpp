@@ -276,8 +276,8 @@ void PolygonObject::deepCopy( const PolygonObject& object )
 void PolygonObject::clear( void )
 {
     BaseClass::clear();
-    m_connections.deallocate();
-    m_opacities.deallocate();
+    m_connections.release();
+    m_opacities.release();
 }
 
 void PolygonObject::setPolygonType( const PolygonType polygon_type )

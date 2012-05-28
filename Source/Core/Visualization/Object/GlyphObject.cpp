@@ -34,11 +34,11 @@ GlyphObject::GlyphObject( void ):
 /*===========================================================================*/
 GlyphObject::~GlyphObject( void )
 {
-    m_coords.deallocate();
-    m_sizes.deallocate();
-    m_directions.deallocate();
-    m_colors.deallocate();
-    m_opacities.deallocate();
+    m_coords.release();
+    m_sizes.release();
+    m_directions.release();
+    m_colors.release();
+    m_opacities.release();
 }
 
 const kvs::ObjectBase::ObjectType GlyphObject::objectType( void ) const

@@ -92,7 +92,7 @@ ImageObject::ImageObject( const ImageObject& other )
 /*==========================================================================*/
 ImageObject::~ImageObject( void )
 {
-    m_data.deallocate();
+    m_data.release();
 }
 
 /*==========================================================================*/

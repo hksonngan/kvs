@@ -662,7 +662,7 @@ void PointObject::deepCopy( const PointObject& other )
 void PointObject::clear( void )
 {
     BaseClass::clear();
-    m_sizes.deallocate();
+    m_sizes.release();
 }
 
 /*===========================================================================*/

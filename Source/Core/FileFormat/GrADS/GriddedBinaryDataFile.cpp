@@ -157,7 +157,7 @@ const bool GriddedBinaryDataFile::load( void ) const
 /*===========================================================================*/
 const void GriddedBinaryDataFile::free( void ) const
 {
-    m_values.deallocate();
+    m_values.release();
 }
 
 } // end of namespace grads

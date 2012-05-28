@@ -187,7 +187,7 @@ const bool ResultData::readData( const std::string& filename )
     for ( size_t i = 0; i < m_ncomponents_per_node; i++ )
     {
         m_values.push_back( values_temp[i] );
-        values_temp[i].deallocate();
+        values_temp[i].release();
     }
 
     delete [] values_temp;
@@ -272,7 +272,7 @@ const bool ResultData::readDividedData( const std::string& filename )
     for ( size_t i = 0; i < m_ncomponents_per_node; i++ )
     {
         m_values.push_back( values_temp[i] );
-        values_temp[i].deallocate();
+        values_temp[i].release();
     }
 
     delete [] values_temp;

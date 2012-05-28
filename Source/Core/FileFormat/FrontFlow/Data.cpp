@@ -136,8 +136,8 @@ void Data::deallocate( void )
     m_comment = "";
     m_num2 = 0;
     m_num = 0;
-    m_flt_array.deallocate();
-    m_int_array.deallocate();
+    m_flt_array.release();
+    m_int_array.release();
 }
 
 /*===========================================================================*/

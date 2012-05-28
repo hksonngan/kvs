@@ -157,7 +157,7 @@ AnyValueArray AnyValueArray::clone() const
     return AnyValueArray();
 }
 
-void AnyValueArray::deallocate()
+void AnyValueArray::release()
 {
     m_values.reset();
     m_size = 0;
@@ -169,6 +169,13 @@ bool AnyValueArray::unique() const
 {
     return m_values.unique();
 }
+
+#if KVS_ENABLE_DEPRECATED
+void AnyValueArray::deallocate()
+{
+    this->release();
+}
+#endif
 
 template AnyValueArray::AnyValueArray( const kvs::ValueArray<kvs::Int8>& values );
 template AnyValueArray::AnyValueArray( const kvs::ValueArray<kvs::UInt8>& values );

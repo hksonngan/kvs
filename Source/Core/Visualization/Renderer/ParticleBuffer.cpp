@@ -273,8 +273,8 @@ void ParticleBuffer::clean( void )
 /*==========================================================================*/
 void ParticleBuffer::clear( void )
 {
-    m_index_buffer.deallocate();
-    m_depth_buffer.deallocate();
+    m_index_buffer.release();
+    m_depth_buffer.release();
 }
 
 /*==========================================================================*/

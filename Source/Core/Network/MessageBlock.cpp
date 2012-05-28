@@ -226,7 +226,7 @@ void* MessageBlock::allocate( size_t data_size )
 /*==========================================================================*/
 void MessageBlock::deallocate( void )
 {
-    m_block.deallocate();
+    m_block.release();
 }
 
 } // end of namespace kvs

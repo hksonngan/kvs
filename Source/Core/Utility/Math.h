@@ -117,29 +117,29 @@ inline T Sgn( T a, T b )
     return ( b < T( 0 ) ) ? -Abs( a ) : Abs( a );
 }
 
-template <typename T>
-inline void Swap( T& a, T& b )
-{
-    T tmp;
-    tmp = a;
-    a   = b;
-    b   = tmp;
-}
+//template <typename T>
+//inline void Swap( T& a, T& b )
+//{
+//    T tmp;
+//    tmp = a;
+//    a   = b;
+//    b   = tmp;
+//}
 
-template <typename T>
-inline void Shift( T& a, T& b, T c )
-{
-    a = b;
-    b = c;
-}
-
-template <typename T>
-inline void Shift( T& a, T& b, T& c, T d )
-{
-    a = b;
-    b = c;
-    c = d;
-}
+//template <typename T>
+//inline void Shift( T& a, T& b, T c )
+//{
+//    a = b;
+//    b = c;
+//}
+//
+//template <typename T>
+//inline void Shift( T& a, T& b, T& c, T d )
+//{
+//    a = b;
+//    b = c;
+//    c = d;
+//}
 
 template <typename T>
 inline int Round( T a )

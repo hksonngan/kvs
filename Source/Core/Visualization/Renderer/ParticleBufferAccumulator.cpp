@@ -86,7 +86,7 @@ void ParticleBufferAccumulator::clean( void )
 void ParticleBufferAccumulator::clear( void )
 {
     SuperClass::clear();
-    m_id_buffer.deallocate();
+    m_id_buffer.release();
 }
 
 /*==========================================================================*/

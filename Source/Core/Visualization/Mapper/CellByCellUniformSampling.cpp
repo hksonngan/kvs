@@ -106,7 +106,7 @@ CellByCellUniformSampling::CellByCellUniformSampling(
 /*===========================================================================*/
 CellByCellUniformSampling::~CellByCellUniformSampling( void )
 {
-    m_density_map.deallocate();
+    m_density_map.release();
 }
 
 /*===========================================================================*/
