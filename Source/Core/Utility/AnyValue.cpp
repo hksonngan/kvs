@@ -11,6 +11,7 @@
  *  $Id$
  */
 /****************************************************************************/
+#if KVS_ENABLE_DEPRECATED
 #include "AnyValue.h"
 #include <string>
 
@@ -187,3 +188,4 @@ template<> AnyValue::operator kvs::Real32 () const;
 template<> AnyValue::operator kvs::Real64 () const;
 
 } // end of namespace kvs
+#endif

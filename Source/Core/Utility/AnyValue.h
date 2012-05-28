@@ -11,6 +11,7 @@
  *  $Id$
  */
 /****************************************************************************/
+#if KVS_ENABLE_DEPRECATED
 #ifndef KVS__ANY_VALUE_H_INCLUDE
 #define KVS__ANY_VALUE_H_INCLUDE
 
@@ -192,3 +193,4 @@ T AnyValue::get_value() const
 } // end of namespace kvs
 
 #endif // KVS__ANY_VALUE_H_INCLUDE
+#endif
