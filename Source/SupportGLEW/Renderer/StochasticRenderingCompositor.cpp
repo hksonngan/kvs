@@ -38,9 +38,9 @@ StochasticRenderingCompositor::StochasticRenderingCompositor( kvs::ScreenBase* s
     m_object( new kvs::PointObject() ),
     m_renderer( new kvs::glew::StochasticRendererBase() )
 {
-    const kvs::Vector3f t = screen->objectManager()->translation();
-    const kvs::Vector3f s = screen->objectManager()->scaling();
-    const kvs::Matrix33f r = screen->objectManager()->rotation();
+    const kvs::Vector3f t = screen->objectManager()->xform().translation();
+    const kvs::Vector3f s = screen->objectManager()->xform().scaling();
+    const kvs::Matrix33f r = screen->objectManager()->xform().rotation();
     const kvs::Vector3f obj_min = screen->objectManager()->minObjectCoord();
     const kvs::Vector3f obj_max = screen->objectManager()->maxObjectCoord();
     const kvs::Vector3f ext_min = screen->objectManager()->minExternalCoord();

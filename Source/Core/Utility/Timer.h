@@ -386,35 +386,24 @@ inline double TimeStampDiffInUSec( const TimeStamp& ts1, const TimeStamp& ts2 )
 /*==========================================================================*/
 class Timer
 {
-    kvsClassName_without_virtual( kvs::Timer );
-
 public:
-
     enum Trigger { Start };
 
 private:
-
     TimeStamp m_start; ///< start time
     TimeStamp m_stop;  ///< stop time
 
 public:
-
     Timer();
-
     Timer( const Trigger trigger );
-
     ~Timer();
 
 public:
-
     void start();
-
     void stop();
 
     double sec() const;
-
     double msec() const;
-
     double usec() const;
 
     double fps() const;
@@ -446,9 +435,11 @@ inline Timer::Timer()
 /*==========================================================================*/
 inline Timer::Timer( Trigger trigger )
 {
-    kvsMessageWarning( trigger == Timer::Start, "Unknown trigger." );
-    kvs::IgnoreUnusedVariable( trigger );
-
+    if ( trigger != Timer::Start )
+    {
+        kvsMessageError( "Unknown trigger." );
+        return;
+    }
     this->start();
 }
 

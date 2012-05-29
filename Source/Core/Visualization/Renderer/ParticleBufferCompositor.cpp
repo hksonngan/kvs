@@ -92,9 +92,9 @@ void ParticleBufferCompositor::initialize( void )
     m_num_stored_particles = 0;
     m_subpixel_level = 1;
 
-    const kvs::Vector3f  t = m_object_manager->translation();
-    const kvs::Vector3f  s = m_object_manager->scaling();
-    const kvs::Matrix33f r = m_object_manager->rotation();
+    const kvs::Vector3f  t = m_object_manager->xform().translation();
+    const kvs::Vector3f  s = m_object_manager->xform().scaling();
+    const kvs::Matrix33f r = m_object_manager->xform().rotation();
     const kvs::Vector3f  obj_min = m_object_manager->minObjectCoord();
     const kvs::Vector3f  obj_max = m_object_manager->maxObjectCoord();
     const kvs::Vector3f  ext_min = m_object_manager->minExternalCoord();

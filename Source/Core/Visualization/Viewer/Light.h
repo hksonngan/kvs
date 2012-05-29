@@ -118,6 +118,135 @@ public:
     static void setModelTwoSide( bool flag );
 
     static void setModelAmbient( float ambient[4] );
+
+#if KVS_ENABLE_DEPRECATED
+public:
+
+    operator kvs::XformControl() const
+    {
+        return m_xform_control;
+    }
+
+public:
+
+    void clear()
+    {
+        m_xform_control.clear();
+    }
+
+    void set(
+        const kvs::Vector3f&  translation,
+        const kvs::Vector3f&  scaling,
+        const kvs::Matrix33f& rotation )
+    {
+        m_xform_control.set( translation, scaling, rotation );
+    }
+
+    void set( const Xform& xform )
+    {
+        m_xform_control.set( xform );
+    }
+
+    void updateRotation( const kvs::Matrix33f& rotation )
+    {
+        m_xform_control.updateRotation( rotation );
+    }
+
+    void updateTranslation( const kvs::Vector3f& translation )
+    {
+        m_xform_control.updateTranslation( translation );
+    }
+
+    void updateScaling( const kvs::Vector3f& scaling )
+    {
+        m_xform_control.updateScaling( scaling );
+    }
+
+    void updateScaling( float scaling )
+    {
+        m_xform_control.updateScaling( scaling );
+    }
+
+    const kvs::Vector3f translation() const
+    {
+        return m_xform_control.translation();
+    }
+
+    const kvs::Matrix33f& rotation() const
+    {
+        return m_xform_control.rotation();
+    }
+
+    const kvs::Matrix33f scaledRotation() const
+    {
+        return m_xform_control.scaledRotation();
+    }
+
+    const kvs::Vector3f& scaling() const
+    {
+        return m_xform_control.scaling();
+    }
+
+    Xform get() const
+    {
+        return m_xform_control.get();
+    }
+
+    void get( float (*array)[16] ) const
+    {
+        m_xform_control.get( array );
+    }
+
+public:
+
+    void enableCollision()
+    {
+        m_xform_control.enableCollision();
+    }
+
+    void disableCollision()
+    {
+        m_xform_control.disableCollision();
+    }
+
+    bool canCollision()
+    {
+        return m_xform_control.canCollision();
+    }
+
+    void setInitialXform(
+        const kvs::Vector3f&  translation = kvs::Vector3f(0,0,0),
+        const kvs::Vector3f&  scaling     = kvs::Vector3f(1,1,1),
+        const kvs::Matrix33f& rotation    = kvs::Matrix33f(1,0,0,0,1,0,0,0,1) )
+    {
+        m_xform_control.setInitialXform( translation, scaling, rotation );
+    }
+
+    void saveXform()
+    {
+        m_xform_control.saveXform();
+    }
+
+    void multiplyXform( const kvs::Xform& xform )
+    {
+        m_xform_control.multiplyXform( xform );
+    }
+
+    void setXform( const kvs::Xform& xform )
+    {
+        m_xform_control.setXform( xform );
+    }
+
+    void applyXform() const
+    {
+        m_xform_control.applyXform();
+    }
+
+    const kvs::Xform xform() const
+    {
+        return m_xform_control.xform();
+    }
+#endif
 };
 
 } // end of namespace kvs
