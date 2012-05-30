@@ -83,11 +83,9 @@ public:
 
     static void Swap( std::string& value );
 
-#endif
-
-    // This function is also deprecated.
-    // However it is currently used at ValueArray and AnyValueArray.
     static void Swap( std::string* values, size_t n );
+
+#endif
 
 private:
     static void Swap2Bytes( void* value );
@@ -572,8 +570,6 @@ inline void Endian::Swap( std::string& )
 {
 }
 
-#endif
-
 /*===========================================================================*/
 /**
  *  @brief  Swaps the array of string value. (inaction)
@@ -582,6 +578,8 @@ inline void Endian::Swap( std::string& )
 inline void Endian::Swap( std::string*, size_t )
 {
 }
+
+#endif
 
 } // end of namespace kvs
 

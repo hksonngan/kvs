@@ -84,6 +84,13 @@ public:
         : kvs::Exception( message ) {}
 };
 
+class ArgumentException : public kvs::Exception
+{
+public:
+    explicit ArgumentException( const std::string& message )
+        : kvs::Exception( message ) {}
+};
+
 class NotSupportedException : public kvs::Exception
 {
 public:
