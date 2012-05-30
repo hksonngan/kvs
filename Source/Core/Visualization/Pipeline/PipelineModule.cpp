@@ -12,6 +12,7 @@
  */
 /****************************************************************************/
 #include "PipelineModule.h"
+#include <cstring>
 
 
 namespace kvs
