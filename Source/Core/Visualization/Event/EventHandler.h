@@ -17,6 +17,9 @@
 
 #include <vector>
 #include <cstddef>
+#if KVS_ENABLE_DEPRECATED
+#include "EventListener.h"
+#endif
 #include <kvs/ClassName>
 
 

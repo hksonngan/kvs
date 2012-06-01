@@ -18,6 +18,7 @@
 #include <utility>
 #if KVS_ENABLE_DEPRECATED
 #include <string>
+#include <sstream>
 #endif
 #include <kvs/Type>
 #include <kvs/SharedPointer>
@@ -26,6 +27,7 @@
 #if KVS_ENABLE_DEPRECATED
 #include <kvs/Endian>
 #include <kvs/String>
+#include <kvs/AnyValue>
 #endif
 
 

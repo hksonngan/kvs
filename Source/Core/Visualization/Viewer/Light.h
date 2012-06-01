@@ -35,6 +35,9 @@ class Light
     kvsClassName( kvs::Light );
 
 private:
+#if KVS_ENABLE_DEPRECATED
+protected:
+#endif
     kvs::XformControl m_xform_control;
     unsigned int  m_id;            ///< light ID
     kvs::Vector3f m_init_position; ///< initial light position

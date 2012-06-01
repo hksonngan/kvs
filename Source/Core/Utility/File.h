@@ -15,6 +15,11 @@
 #define KVS__FILE_H_INCLUDE
 
 #include <string>
+#if KVS_ENABLE_DEPRECATED
+#include <cstdio>
+#include <cstdlib>
+#include <climits>
+#endif
 #include <kvs/ClassName>
 
 
@@ -30,7 +35,11 @@ class File
 {
     kvsClassName( kvs::File );
 
+#if KVS_ENABLE_DEPRECATED
+protected:
+#else
 private:
+#endif
     std::string m_file_path; ///< file path (ex. "/tmp/abc/xyz.tar.gz")
     std::string m_path_name; ///< path name (ex. "/tmp/abc")
     std::string m_file_name; ///< file name (ex. "xyz.tar.gz")

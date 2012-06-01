@@ -16,6 +16,14 @@
 #define KVS__EVENT_LISTENER_H_INCLUDE
 
 #include <kvs/ClassName>
+#if KVS_ENABLE_DEPRECATED
+#include <kvs/ScreenBase>
+#include <kvs/EventBase>
+#include <kvs/MouseEvent>
+#include <kvs/KeyEvent>
+#include <kvs/WheelEvent>
+#include <kvs/TimeEvent>
+#endif
 
 
 namespace kvs
