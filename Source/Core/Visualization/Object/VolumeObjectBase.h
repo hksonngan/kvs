@@ -165,6 +165,9 @@ private:
 template<typename T>
 void VolumeObjectBase::calculate_min_max_values( void ) const
 {
+    KVS_ASSERT( m_values.size() != 0 );
+    KVS_ASSERT( m_values.size() == this->veclen() * this->nnodes() );
+
     const T*       value = reinterpret_cast<const T*>( m_values.data() );
     const T* const end   = value + this->nnodes() * m_veclen;
 

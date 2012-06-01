@@ -91,7 +91,7 @@ bool ApplicationInterface::initialize( void )
 
     // Configuration file.
     kvs::File conffile( m_configuration_file );
-    if ( !conffile.isExisted() )
+    if ( !conffile.exists() )
     {
         const char* s = conffile.filePath().c_str();
         kvsMessageError("Cannot find a configuration file '%s'", s );
