@@ -177,7 +177,7 @@ void StochasticLineEngine::initialize_shader( void )
         frag.define("ENABLE_EXACT_DEPTH_TESTING");
     }
 
-    this->create_shaders( m_shader_program, vert, frag );
+    m_shader_program.create( vert, frag );
     m_loc_identifier = m_shader_program.attributeLocation( "identifier" );
 }
 

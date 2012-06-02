@@ -15,6 +15,7 @@
 /*****************************************************************************/
 #include "ProgramObject.h"
 #include <kvs/DebugNew>
+#include <kvs/Exception>
 
 
 namespace kvs
@@ -90,6 +91,43 @@ const std::string ProgramObject::log( void )
 void ProgramObject::create( void )
 {
     if( !glIsProgram( m_id ) ) m_id = glCreateProgram();
+}
+
+void ProgramObject::create(
+    const kvs::glew::ShaderSource& vertex_source,
+    const kvs::glew::ShaderSource& fragment_source )
+{
+    // Vertex shader.
+    kvs::glew::VertexShader vertex_shader;
+    if ( !vertex_shader.create( vertex_source ) )
+    {
+        GLenum error = glGetError();
+        kvsMessageError( "VertexShader compile failed: %s(%d)\n", gluErrorString(error), error );
+        std::cout << "error log:" << std::endl;
+        std::cout << vertex_shader.log() << std::endl;
+        KVS_THROW( kvs::OpenGLException, "VertexShader compile failed" );
+    }
+
+    // Fragment shader.
+    kvs::glew::FragmentShader fragment_shader;
+    if ( !fragment_shader.create( fragment_source ) )
+    {
+        GLenum error = glGetError();
+        kvsMessageError( "FragmentShader compile failed: %s(%d)\n", gluErrorString(error), error );
+        std::cout << "error log:" << std::endl;
+        std::cout << fragment_shader.log() << std::endl;
+        KVS_THROW( kvs::OpenGLException, "FragmentShader compile failed" );
+    }
+
+    // Link the shaders.
+    if ( !this->link( vertex_shader, fragment_shader ) )
+    {
+        GLenum error = glGetError();
+        kvsMessageError( "ShaderProgram link failed: %s(%d)\n", gluErrorString(error), error );
+        std::cout << "error log:" << std::endl;
+        std::cout << this->log() << std::endl;
+        KVS_THROW( kvs::OpenGLException, "ShaderProgram link failed" );
+    }
 }
 
 /*===========================================================================*/

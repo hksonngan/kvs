@@ -63,11 +63,6 @@ public:
 private:
 
     void initialize_shaders( void );
-
-    void create_shaders(
-        kvs::glew::ProgramObject& program_object,
-        const kvs::glew::ShaderSource& vertex_source,
-        const kvs::glew::ShaderSource& fragment_source );
 };
 
 template <typename ShadingType>

@@ -136,10 +136,12 @@ protected:
 
     void initialize_framebuffer( void );
 
+#if KVS_ENABLE_DEPRECATED
     void create_shaders(
         kvs::glew::ProgramObject& program_object,
         const kvs::glew::ShaderSource& vertex_source,
         const kvs::glew::ShaderSource& fragment_source );
+#endif
 
     void enable_MRT_rendering( void );
 

@@ -20,7 +20,9 @@
 #include "ShaderObject.h"
 #include "VertexShader.h"
 #include "FragmentShader.h"
+#if KVS_ENABLE_DEPRECATED
 #include <kvs/ClassName>
+#endif
 #include <kvs/Vector2>
 #include <kvs/Vector3>
 #include <kvs/Vector4>
@@ -39,10 +41,13 @@ namespace glew
 /*===========================================================================*/
 class ProgramObject
 {
+#if KVS_ENABLE_DEPRECATED
     kvsClassName( kvs::glew::ProgramObject );
-
+#endif
+private:
+#if KVS_ENABLE_DEPRECATED
 protected:
-
+#endif
     GLuint m_id; ///< shader ID
 
 public:
@@ -60,6 +65,10 @@ public:
 public:
 
     void create( void );
+
+    void create(
+        const kvs::glew::ShaderSource& vertex_source,
+        const kvs::glew::ShaderSource& fragment_source );
 
     void clear( void );
 

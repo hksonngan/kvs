@@ -169,10 +169,12 @@ protected:
 
     void initialize_resize_texture( void );
 
+#if KVS_ENABLE_DEPRECATED
     void create_shaders(
         kvs::glew::ProgramObject& program_object,
         const kvs::glew::ShaderSource& vertex_source,
         const kvs::glew::ShaderSource& fragment_source );
+#endif
 
     void create_random_texture( void );
 

@@ -975,7 +975,7 @@ void ParticleVolumeRenderer::initialize_opengl( void )
             }
         }
 
-        this->create_shaders( m_zoom_shader, vert, frag );
+        m_zoom_shader.create( vert, frag );
 
         m_loc_point_identifier = m_zoom_shader.attributeLocation("identifier");
 
@@ -1034,7 +1034,7 @@ void ParticleVolumeRenderer::initialize_opengl( void )
 
         kvs::glew::ShaderSource vert( vert_code );
         kvs::glew::ShaderSource frag( frag_code );
-        this->create_shaders( m_resize_shader, vert, frag );
+        m_resize_shader.create( vert, frag );
     }
 
     // Inititlize the random number texture.
@@ -1115,6 +1115,7 @@ void ParticleVolumeRenderer::initialize_resize_texture( void )
     }
 }
 
+#if KVS_ENABLE_DEPRECATED
 /*==========================================================================*/
 /**
  *  @brief  Creates GLSL shader programs.
@@ -1125,36 +1126,9 @@ void ParticleVolumeRenderer::create_shaders(
     const kvs::glew::ShaderSource& vertex_source,
     const kvs::glew::ShaderSource& fragment_source )
 {
-    // Vertex shader.
-    kvs::glew::VertexShader vertex_shader;
-    if ( !vertex_shader.create( vertex_source ) )
-    {
-        GLenum error = glGetError();
-        kvsMessageError("VertexShader compile failed: %s(%d)\n", gluErrorString(error), error);
-        std::cout << "error log:" << std::endl;
-        std::cout << vertex_shader.log() << std::endl;
-    }
-
-    // Fragment shader.
-    kvs::glew::FragmentShader fragment_shader;
-    if ( !fragment_shader.create( fragment_source ) )
-    {
-        GLenum error = glGetError();
-        kvsMessageError("FragmentShader compile failed: %s(%d)\n", gluErrorString(error), error);
-        std::cout << "error log:" << std::endl;
-        std::cout << fragment_shader.log() << std::endl;
-    }
-
-    // Link the shaders.
-    if ( !program_object.link( vertex_shader, fragment_shader ) )
-    {
-        GLenum error = glGetError();
-        kvsMessageError("ShaderProgram link failed: %s(%d)\n", gluErrorString(error), error);
-        std::cout << "error log:" << std::endl;
-        std::cout << program_object.log() << std::endl;
-        exit(1);
-    }
+    program_object.create( vertex_source, fragment_source );
 }
+#endif
 
 /*===========================================================================*/
 /**

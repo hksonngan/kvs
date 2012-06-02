@@ -102,6 +102,7 @@ const bool StochasticRenderingEngine::isEnabledShading( void ) const
     return( m_enable_shading );
 }
 
+#if KVS_ENABLE_DEPRECATED
 /*===========================================================================*/
 /**
  *  @brief  Creates and links the shaders.
@@ -115,36 +116,9 @@ void StochasticRenderingEngine::create_shaders(
     const kvs::glew::ShaderSource& vertex_source,
     const kvs::glew::ShaderSource& fragment_source )
 {
-    // Vertex shader.
-    kvs::glew::VertexShader vertex_shader;
-    if ( !vertex_shader.create( vertex_source ) )
-    {
-        GLenum error = glGetError();
-        kvsMessageError( "VertexShader compile failed: %s(%d)\n", gluErrorString(error), error );
-        std::cout << "error log:" << std::endl;
-        std::cout << vertex_shader.log() << std::endl;
-    }
-
-    // Fragment shader.
-    kvs::glew::FragmentShader fragment_shader;
-    if ( !fragment_shader.create( fragment_source ) )
-    {
-        GLenum error = glGetError();
-        kvsMessageError( "FragmentShader compile failed: %s(%d)\n", gluErrorString(error), error );
-        std::cout << "error log:" << std::endl;
-        std::cout << fragment_shader.log() << std::endl;
-    }
-
-    // Link the shaders.
-    if ( !program_object.link( vertex_shader, fragment_shader ) )
-    {
-        GLenum error = glGetError();
-        kvsMessageError( "ShaderProgram link failed: %s(%d)\n", gluErrorString(error), error );
-        std::cout << "error log:" << std::endl;
-        std::cout << program_object.log() << std::endl;
-        return;
-    }
+    program_object.create( vertex_source, fragment_source );
 }
+#endif
 
 /*===========================================================================*/
 /**

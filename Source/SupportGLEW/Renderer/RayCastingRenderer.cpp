@@ -455,7 +455,7 @@ void RayCastingRenderer::initialize_shaders( const kvs::StructuredVolumeObject* 
 
         kvs::glew::ShaderSource vert( vert_code );
         kvs::glew::ShaderSource frag( frag_code );
-        this->create_shaders( m_bounding_cube_shader, vert, frag );
+        m_bounding_cube_shader.create( vert, frag );
 
         ::CheckOpenGLError( "Cannot initialize bounding cube shader." );
     }
@@ -550,7 +550,7 @@ void RayCastingRenderer::initialize_shaders( const kvs::StructuredVolumeObject* 
                              volume->values().typeInfo()->typeName() );
         }
 
-        this->create_shaders( m_ray_caster, vert, frag );
+        m_ray_caster.create( vert, frag );
 
         m_ray_caster.bind();
         m_ray_caster.setUniformValuef( "volume.resolution", resolution );
@@ -606,6 +606,7 @@ void RayCastingRenderer::initialize_shaders( const kvs::StructuredVolumeObject* 
     }
 }
 
+#if KVS_ENABLE_DEPRECATED
 /*==========================================================================*/
 /**
  *  @brief  Creates GLSL shader programs.
@@ -616,33 +617,9 @@ void RayCastingRenderer::create_shaders(
     const kvs::glew::ShaderSource& vertex_source,
     const kvs::glew::ShaderSource& fragment_source )
 {
-    // Vertex shader.
-    kvs::glew::VertexShader vertex_shader;
-    if ( !vertex_shader.create( vertex_source ) )
-    {
-        kvsMessageError( "Cannot compile vertex shader." );
-        std::cout << "error log:" << std::endl;
-        std::cout << vertex_shader.log() << std::endl;
-    }
-
-    // Fragment shader.
-    kvs::glew::FragmentShader fragment_shader;
-    if ( !fragment_shader.create( fragment_source ) )
-    {
-        kvsMessageError( "Cannot compile fragment shader." );
-        std::cout << "error log:" << std::endl;
-        std::cout << fragment_shader.log() << std::endl;
-    }
-
-    // Link the shaders.
-    if ( !program_object.link( vertex_shader, fragment_shader ) )
-    {
-        kvsMessageError( "Cannot link shaders." );
-        std::cout << "error log:" << std::endl;
-        std::cout << program_object.log() << std::endl;
-        exit(1);
-    }
+    program_object.create( vertex_source, fragment_source );
 }
+#endif
 
 /*===========================================================================*/
 /**

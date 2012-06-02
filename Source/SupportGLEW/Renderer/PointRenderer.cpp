@@ -84,7 +84,7 @@ void PointRenderer::initialize_shaders( void )
         }
     }
 
-    this->create_shaders( m_phong_shader, vert, frag );
+    m_phong_shader.create( vert, frag );
 
     m_phong_shader.bind();
     switch ( m_shader->type() )
@@ -125,48 +125,6 @@ void PointRenderer::initialize_shaders( void )
     }
     m_phong_shader.unbind();
 }
-
-/*==========================================================================*/
-/**
- *  @brief  Creates GLSL shader programs.
- */
-/*==========================================================================*/
-void PointRenderer::create_shaders(
-    kvs::glew::ProgramObject& program_object,
-    const kvs::glew::ShaderSource& vertex_source,
-    const kvs::glew::ShaderSource& fragment_source )
-{
-    // Vertex shader.
-    kvs::glew::VertexShader vertex_shader;
-    if ( !vertex_shader.create( vertex_source ) )
-    {
-        GLenum error = glGetError();
-        kvsMessageError("VertexShader compile failed: %s(%d)\n", gluErrorString(error), error);
-        std::cout << "error log:" << std::endl;
-        std::cout << vertex_shader.log() << std::endl;
-    }
-
-    // Fragment shader.
-    kvs::glew::FragmentShader fragment_shader;
-    if ( !fragment_shader.create( fragment_source ) )
-    {
-        GLenum error = glGetError();
-        kvsMessageError("FragmentShader compile failed: %s(%d)\n", gluErrorString(error), error);
-        std::cout << "error log:" << std::endl;
-        std::cout << fragment_shader.log() << std::endl;
-    }
-
-    // Link the shaders.
-    if ( !program_object.link( vertex_shader, fragment_shader ) )
-    {
-        GLenum error = glGetError();
-        kvsMessageError("ShaderProgram link failed: %s(%d)\n", gluErrorString(error), error);
-        std::cout << "error log:" << std::endl;
-        std::cout << program_object.log() << std::endl;
-        exit(1);
-    }
-}
-
 
 /*
 PointRenderer::PointRenderer( void ):

@@ -99,12 +99,12 @@ public:
     virtual void clearEnsembleBuffer( void ) = 0;
 
 protected:
-
+#if KVS_ENABLE_DEPRECATED
     void create_shaders(
         kvs::glew::ProgramObject& program_object,
         const kvs::glew::ShaderSource& vertex_source,
         const kvs::glew::ShaderSource& fragment_source );
-
+#endif
     void set_render_size( const size_t width, const size_t height );
 
     void set_random_texture( const kvs::Texture2D& random_texture );

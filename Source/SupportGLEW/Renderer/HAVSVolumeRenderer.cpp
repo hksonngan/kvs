@@ -317,9 +317,9 @@ void HAVSVolumeRenderer::initialize_shader( void )
         kvs::glew::ShaderSource frag_begin( frag_code_begin );
         kvs::glew::ShaderSource frag_end( frag_code_end );
         kvs::glew::ShaderSource frag_kbuffer( frag_code_kbuffer );
-        this->create_shaders( m_shader_begin, vert_begin, frag_begin );
-        this->create_shaders( m_shader_kbuffer, vert_kbuffer, frag_kbuffer );
-        this->create_shaders( m_shader_end, vert_kbuffer, frag_end );
+        m_shader_begin.create( vert_begin, frag_begin );
+        m_shader_kbuffer.create( vert_kbuffer, frag_kbuffer );
+        m_shader_end.create( vert_kbuffer, frag_end );
     }
     else
     {
@@ -337,9 +337,9 @@ void HAVSVolumeRenderer::initialize_shader( void )
         kvs::glew::ShaderSource frag_begin( frag_code_begin );
         kvs::glew::ShaderSource frag_end( frag_code_end );
         kvs::glew::ShaderSource frag_kbuffer( frag_code_kbuffer );
-        this->create_shaders( m_shader_begin, vert_begin, frag_begin );
-        this->create_shaders( m_shader_kbuffer, vert_kbuffer, frag_kbuffer );
-        this->create_shaders( m_shader_end, vert_kbuffer, frag_end );
+        m_shader_begin.create( vert_begin, frag_begin );
+        m_shader_kbuffer.create( vert_kbuffer, frag_kbuffer );
+        m_shader_end.create( vert_kbuffer, frag_end );
     }
 }
 
@@ -401,6 +401,7 @@ void HAVSVolumeRenderer::initialize_framebuffer( void )
     m_mrt_framebuffer.disable();
 }
 
+#if KVS_ENABLE_DEPRECATED
 /*==========================================================================*/
 /**
  *  @brief  Creates GLSL shader programs.
@@ -411,36 +412,9 @@ void HAVSVolumeRenderer::create_shaders(
     const kvs::glew::ShaderSource& vertex_source,
     const kvs::glew::ShaderSource& fragment_source )
 {
-    // Vertex shader.
-    kvs::glew::VertexShader vertex_shader;
-    if ( !vertex_shader.create( vertex_source ) )
-    {
-        GLenum error = glGetError();
-        kvsMessageError("VertexShader compile failed: %s(%d)\n", gluErrorString(error), error);
-        std::cout << "error log:" << std::endl;
-        std::cout << vertex_shader.log() << std::endl;
-    }
-
-    // Fragment shader.
-    kvs::glew::FragmentShader fragment_shader;
-    if ( !fragment_shader.create( fragment_source ) )
-    {
-        GLenum error = glGetError();
-        kvsMessageError("FragmentShader compile failed: %s(%d)\n", gluErrorString(error), error);
-        std::cout << "error log:" << std::endl;
-        std::cout << fragment_shader.log() << std::endl;
-    }
-
-    // Link the shaders.
-    if ( !program_object.link( vertex_shader, fragment_shader ) )
-    {
-        GLenum error = glGetError();
-        kvsMessageError("ShaderProgram link failed: %s(%d)\n", gluErrorString(error), error);
-        std::cout << "error log:" << std::endl;
-        std::cout << program_object.log() << std::endl;
-        exit(1);
-    }
+    program_object.create( vertex_source, fragment_source );
 }
+#endif
 
 void HAVSVolumeRenderer::enable_MRT_rendering( void )
 {
