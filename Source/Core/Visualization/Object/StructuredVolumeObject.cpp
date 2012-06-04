@@ -47,6 +47,7 @@ StructuredVolumeObject::StructuredVolumeObject( void )
 {
 }
 
+#if KVS_ENABLE_DEPRECATED
 /*==========================================================================*/
 /**
  *  Constructs a new StructuredVolumeObject with uniform grid type.
@@ -60,10 +61,12 @@ StructuredVolumeObject::StructuredVolumeObject(
     const kvs::Vector3ui& resolution,
     const size_t          veclen,
     const Values&         values )
-    : kvs::VolumeObjectBase( veclen, Coords( 0 ), values )
-    , m_grid_type( Uniform )
-    , m_resolution( resolution )
 {
+    this->setVeclen( veclen );
+    this->setCoords( Coords( 0 ) );
+    this->setValues( values );
+    this->setGridType( Uniform );
+    this->setResolution( resolution );
 }
 
 /*==========================================================================*/
@@ -83,11 +86,14 @@ StructuredVolumeObject::StructuredVolumeObject(
     const size_t          veclen,
     const Coords&         coords,
     const Values&         values )
-    : kvs::VolumeObjectBase( veclen, coords, values )
-    , m_grid_type( grid_type )
-    , m_resolution( resolution )
 {
+    this->setVeclen( veclen );
+    this->setCoords( coords );
+    this->setValues( values );
+    this->setGridType( Uniform );
+    this->setResolution( resolution );
 }
+#endif
 
 /*==========================================================================*/
 /**

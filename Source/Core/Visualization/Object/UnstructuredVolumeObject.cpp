@@ -49,6 +49,7 @@ UnstructuredVolumeObject::UnstructuredVolumeObject( void )
 {
 }
 
+#if KVS_ENABLE_DEPRECATED
 /*==========================================================================*/
 /**
  *  Constructor.
@@ -69,13 +70,16 @@ UnstructuredVolumeObject::UnstructuredVolumeObject(
     const Coords&      coords,
     const Connections& connections,
     const Values&      values )
-    : kvs::VolumeObjectBase( veclen, coords, values )
-    , m_cell_type( cell_type )
-    , m_nnodes( nnodes )
-    , m_ncells( ncells )
-    , m_connections( connections )
 {
+    this->setVeclen( veclen );
+    this->setCoords( coords );
+    this->setValues( values );
+    this->setCellType( cell_type );
+    this->setNNodes( nnodes );
+    this->setNCells( ncells );
+    this->setConnections( connections );
 }
+#endif
 
 /*==========================================================================*/
 /**

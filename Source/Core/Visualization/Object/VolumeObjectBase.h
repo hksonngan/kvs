@@ -87,10 +87,12 @@ public:
 
     VolumeObjectBase( void );
 
+#if KVS_ENABLE_DEPRECATED
     VolumeObjectBase(
         const size_t     veclen,
         const Coords&    coords,
         const Values&    values );
+#endif
 
     VolumeObjectBase( const VolumeObjectBase& other );
 

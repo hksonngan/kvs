@@ -73,6 +73,7 @@ public:
 
     LineObject( void );
 
+#if KVS_ENABLE_DEPRECATED
     LineObject(
         const kvs::ValueArray<kvs::Real32>& coords,
         const kvs::ValueArray<kvs::UInt32>& connections,
@@ -127,6 +128,7 @@ public:
 
     LineObject(
         const kvs::ValueArray<kvs::Real32>& coords );
+#endif
 
     LineObject( const kvs::LineObject& line );
 

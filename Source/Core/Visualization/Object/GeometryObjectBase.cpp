@@ -28,6 +28,7 @@ GeometryObjectBase::GeometryObjectBase( void )
 {
 }
 
+#if KVS_ENABLE_DEPRECATED
 /*===========================================================================*/
 /**
  *  @brief  Constructs a new GeometryObjectBase class.
@@ -130,6 +131,7 @@ GeometryObjectBase::GeometryObjectBase(
     this->setCoords( coords );
     this->setColor( kvs::RGBColor( 255, 255, 255 ) );
 }
+#endif
 
 /*===========================================================================*/
 /**

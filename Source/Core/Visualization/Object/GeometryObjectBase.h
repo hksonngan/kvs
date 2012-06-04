@@ -56,6 +56,7 @@ public:
 
     GeometryObjectBase( void );
 
+#if KVS_ENABLE_DEPRECATED
     GeometryObjectBase(
         const kvs::ValueArray<kvs::Real32>& coords,
         const kvs::ValueArray<kvs::UInt8>&  colors,
@@ -80,6 +81,7 @@ public:
 
     GeometryObjectBase(
         const kvs::ValueArray<kvs::Real32>& coords );
+#endif
 
     virtual ~GeometryObjectBase( void );
 

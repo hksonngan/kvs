@@ -77,6 +77,7 @@ public:
 
     PolygonObject( void );
 
+#if KVS_ENABLE_DEPRECATED
     PolygonObject(
         const kvs::ValueArray<kvs::Real32>& coords,
         const kvs::ValueArray<kvs::UInt32>& connections,
@@ -148,6 +149,7 @@ public:
         const kvs::ValueArray<kvs::Real32>& normals,
         const PolygonType                   polygon_type,
         const NormalType                    normal_type );
+#endif
 
     PolygonObject( const PolygonObject& polygon );
 

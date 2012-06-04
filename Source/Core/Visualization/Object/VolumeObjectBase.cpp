@@ -23,17 +23,14 @@ namespace kvs
  */
 /*==========================================================================*/
 VolumeObjectBase::VolumeObjectBase( void )
-    : kvs::ObjectBase()
-    , m_label( "" )
-    , m_veclen( 0 )
-    , m_coords()
-    , m_values()
+    : m_veclen( 0 )
     , m_has_min_max_values( false )
     , m_min_value( 0.0 )
     , m_max_value( 0.0 )
 {
 }
 
+#if KVS_ENABLE_DEPRECATED
 /*==========================================================================*/
 /**
  *  Constructs a new VolumeObjectBase.
@@ -47,16 +44,15 @@ VolumeObjectBase::VolumeObjectBase(
     const size_t     veclen,
     const Coords&    coords,
     const Values&    values )
-    : kvs::ObjectBase()
-    , m_label( "" )
-    , m_veclen( veclen )
-    , m_coords( coords )
-    , m_values( values )
-    , m_has_min_max_values( false )
+    : m_has_min_max_values( false )
     , m_min_value( 0.0 )
     , m_max_value( 0.0 )
 {
+    this->setVeclen( veclen );
+    this->setCoords( coords );
+    this->setValues( values );
 }
+#endif
 
 /*==========================================================================*/
 /**

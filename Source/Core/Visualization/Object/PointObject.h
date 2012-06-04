@@ -51,6 +51,7 @@ public:
 
     PointObject( void );
 
+#if KVS_ENABLE_DEPRECATED
     PointObject(
         const kvs::ValueArray<kvs::Real32>& coords,
         const kvs::ValueArray<kvs::UInt8>&  colors,
@@ -102,6 +103,7 @@ public:
 
     PointObject(
         const kvs::ValueArray<kvs::Real32>& coords );
+#endif
 
     PointObject( const kvs::PointObject& other );
 
@@ -120,9 +122,9 @@ public:
 public:
 
     PointObject& operator = ( const PointObject& other );
-
+#if KVS_ENABLE_DEPRECATED
     PointObject& operator += ( const PointObject& other );
-
+#endif
     friend std::ostream& operator << ( std::ostream& os, const PointObject& object );
 
 public:

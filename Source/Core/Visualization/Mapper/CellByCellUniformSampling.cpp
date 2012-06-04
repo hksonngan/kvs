@@ -14,7 +14,6 @@
 #include "CellByCellUniformSampling.h"
 #include <vector>
 #include <kvs/DebugNew>
-#include <kvs/ObjectManager>
 #include <kvs/Camera>
 #include <kvs/TrilinearInterpolator>
 #include <kvs/Value>

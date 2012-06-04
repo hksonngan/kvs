@@ -60,6 +60,7 @@ PolygonObject::PolygonObject( void )
     this->setOpacity( 255 );
 }
 
+#if KVS_ENABLE_DEPRECATED
 PolygonObject::PolygonObject(
     const kvs::ValueArray<kvs::Real32>& coords,
     const kvs::ValueArray<kvs::UInt32>& connections,
@@ -68,9 +69,14 @@ PolygonObject::PolygonObject(
     const kvs::ValueArray<kvs::Real32>& normals,
     const PolygonType                   polygon_type,
     const ColorType                     color_type,
-    const NormalType                    normal_type ):
-    kvs::GeometryObjectBase( coords, colors, normals )
+    const NormalType                    normal_type )
 {
+    KVS_ASSERT( coords.size() == normals.size() );
+    KVS_ASSERT( coords.size() == colors.size() );
+
+    this->setCoords( coords );
+    this->setColors( colors );
+    this->setNormals( normals );
     this->setPolygonType( polygon_type );
     this->setColorType( color_type );
     this->setNormalType( normal_type );
@@ -86,9 +92,14 @@ PolygonObject::PolygonObject(
     const kvs::ValueArray<kvs::Real32>& normals,
     const PolygonType                   polygon_type,
     const ColorType                     color_type,
-    const NormalType                    normal_type ):
-    kvs::GeometryObjectBase( coords, colors, normals )
+    const NormalType                    normal_type )
 {
+    KVS_ASSERT( coords.size() == normals.size() );
+    KVS_ASSERT( coords.size() == colors.size() );
+
+    this->setCoords( coords );
+    this->setColors( colors );
+    this->setNormals( normals );
     this->setPolygonType( polygon_type );
     this->setColorType( color_type );
     this->setNormalType( normal_type );
@@ -103,9 +114,13 @@ PolygonObject::PolygonObject(
     const kvs::ValueArray<kvs::UInt8>&  opacities,
     const kvs::ValueArray<kvs::Real32>& normals,
     const PolygonType                   polygon_type,
-    const NormalType                    normal_type ):
-    kvs::GeometryObjectBase( coords, color, normals )
+    const NormalType                    normal_type )
 {
+    KVS_ASSERT( coords.size() == normals.size() );
+
+    this->setCoords( coords );
+    this->setColor( color );
+    this->setNormals( normals );
     this->setPolygonType( polygon_type );
     this->setColorType( PolygonObject::PolygonColor );
     this->setNormalType( normal_type );
@@ -120,9 +135,13 @@ PolygonObject::PolygonObject(
     const kvs::UInt8&                   opacity,
     const kvs::ValueArray<kvs::Real32>& normals,
     const PolygonType                   polygon_type,
-    const NormalType                    normal_type ):
-    kvs::GeometryObjectBase( coords, color, normals )
+    const NormalType                    normal_type )
 {
+    KVS_ASSERT( coords.size() == normals.size() );
+
+    this->setCoords( coords );
+    this->setColor( color );
+    this->setNormals( normals );
     this->setPolygonType( polygon_type );
     this->setColorType( PolygonObject::PolygonColor );
     this->setNormalType( normal_type );
@@ -137,9 +156,14 @@ PolygonObject::PolygonObject(
     const kvs::ValueArray<kvs::Real32>& normals,
     const PolygonType                   polygon_type,
     const ColorType                     color_type,
-    const NormalType                    normal_type ):
-    kvs::GeometryObjectBase( coords, colors, normals )
+    const NormalType                    normal_type )
 {
+    KVS_ASSERT( coords.size() == normals.size() );
+    KVS_ASSERT( coords.size() == colors.size() );
+
+    this->setCoords( coords );
+    this->setColors( colors );
+    this->setNormals( normals );
     this->setPolygonType( polygon_type );
     this->setColorType( color_type );
     this->setNormalType( normal_type );
@@ -153,9 +177,14 @@ PolygonObject::PolygonObject(
     const kvs::ValueArray<kvs::Real32>& normals,
     const PolygonType                   polygon_type,
     const ColorType                     color_type,
-    const NormalType                    normal_type ):
-    kvs::GeometryObjectBase( coords, colors, normals )
+    const NormalType                    normal_type )
 {
+    KVS_ASSERT( coords.size() == normals.size() );
+    KVS_ASSERT( coords.size() == colors.size() );
+
+    this->setCoords( coords );
+    this->setColors( colors );
+    this->setNormals( normals );
     this->setPolygonType( polygon_type );
     this->setColorType( color_type );
     this->setNormalType( normal_type );
@@ -168,9 +197,13 @@ PolygonObject::PolygonObject(
     const kvs::ValueArray<kvs::UInt8>&  opacities,
     const kvs::ValueArray<kvs::Real32>& normals,
     const PolygonType                   polygon_type,
-    const NormalType                    normal_type ):
-    kvs::GeometryObjectBase( coords, color, normals )
+    const NormalType                    normal_type )
 {
+    KVS_ASSERT( coords.size() == normals.size() );
+
+    this->setCoords( coords );
+    this->setColor( color );
+    this->setNormals( normals );
     this->setPolygonType( polygon_type );
     this->setColorType( PolygonObject::PolygonColor );
     this->setNormalType( normal_type );
@@ -183,14 +216,19 @@ PolygonObject::PolygonObject(
     const kvs::UInt8&                   opacity,
     const kvs::ValueArray<kvs::Real32>& normals,
     const PolygonType                   polygon_type,
-    const NormalType                    normal_type ):
-    kvs::GeometryObjectBase( coords, color, normals )
+    const NormalType                    normal_type )
 {
+    KVS_ASSERT( coords.size() == normals.size() );
+
+    this->setCoords( coords );
+    this->setColor( color );
+    this->setNormals( normals );
     this->setPolygonType( polygon_type );
     this->setColorType( PolygonObject::PolygonColor );
     this->setNormalType( normal_type );
     this->setOpacity( opacity );
 }
+#endif
 
 PolygonObject::PolygonObject( const kvs::PolygonObject& polygon )
 {

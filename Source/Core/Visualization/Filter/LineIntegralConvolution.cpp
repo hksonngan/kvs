@@ -166,13 +166,11 @@ void LineIntegralConvolution::create_noise_volume( const kvs::StructuredVolumeOb
     }
 
     // Copy the white noise volume to m_noise.
-    m_noise = new kvs::StructuredVolumeObject( volume->resolution(), 1, kvs::AnyValueArray( data ) );
-    if ( !m_noise )
-    {
-        BaseClass::m_is_success = false;
-        kvsMessageError("Cannot create noise volume.");
-        return;
-    }
+    m_noise = new kvs::StructuredVolumeObject();
+    m_noise->setVeclen( 1 );
+    m_noise->setValues( kvs::AnyValueArray( data ) );
+    m_noise->setGridType( Uniform );
+    m_noise->setResolution( volume->resolution() );
 }
 
 /*===========================================================================*/

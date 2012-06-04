@@ -46,6 +46,7 @@ public:
 
     StructuredVolumeObject( void );
 
+#if KVS_ENABLE_DEPRECATED
     StructuredVolumeObject(
         const kvs::Vector3ui& resolution,
         const size_t          veclen,
@@ -57,6 +58,7 @@ public:
         const size_t          veclen,
         const Coords&         coords,
         const Values&         values );
+#endif
 
     StructuredVolumeObject( const StructuredVolumeObject& other );
 

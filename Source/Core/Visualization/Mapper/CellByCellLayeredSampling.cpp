@@ -16,7 +16,6 @@
 #include <vector>
 #include <kvs/DebugNew>
 #include <kvs/GlobalCore>
-#include <kvs/ObjectManager>
 #include <kvs/Camera>
 #include <kvs/ValueArray>
 #include <kvs/CellBase>
@@ -467,8 +466,14 @@ void CellByCellLayeredSampling::pregenerate_particles( const size_t nparticles )
         }
     }
 
-    if ( m_pregenerated_particles ) delete m_pregenerated_particles;
-    m_pregenerated_particles = new kvs::PointObject( coords );
+    delete m_pregenerated_particles;
+    m_pregenerated_particles = NULL;
+    m_pregenerated_particles = new kvs::PointObject();
+    m_pregenerated_particles->setCoords( coords );
+
+    // Maybe, following process is not needed.
+    m_pregenerated_particles->setColor( kvs::RGBColor( 255, 255, 255 ) );
+    m_pregenerated_particles->setSize( 1 );
 }
 
 /*===========================================================================*/

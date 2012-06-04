@@ -46,7 +46,7 @@ StreamlineBase::StreamlineBase( void ):
 /*===========================================================================*/
 StreamlineBase::~StreamlineBase( void )
 {
-    if ( m_seed_points ) delete m_seed_points;
+    delete m_seed_points;
 }
 
 /*===========================================================================*/
@@ -58,11 +58,12 @@ StreamlineBase::~StreamlineBase( void )
 void StreamlineBase::setSeedPoints( const kvs::PointObject* seed_points )
 {
     // Shallow copy.
-    m_seed_points = new kvs::PointObject( seed_points->coords() );
-    if ( !m_seed_points )
-    {
-        kvsMessageError( "Cannot allocate memory for the seed points." );
-    }
+    m_seed_points = new kvs::PointObject();
+    m_seed_points->setCoords( seed_points->coords() );
+
+    // Maybe, following process is not needed.
+    m_seed_points->setColor( kvs::RGBColor( 255, 255, 255 ) );
+    m_seed_points->setSize( 1 );
 }
 
 /*===========================================================================*/

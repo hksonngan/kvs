@@ -53,6 +53,7 @@ public:
 
     UnstructuredVolumeObject( void );
 
+#if KVS_ENABLE_DEPRECATED
     UnstructuredVolumeObject(
         const CellType     cell_type,
         const size_t       nnodes,
@@ -61,6 +62,7 @@ public:
         const Coords&      coords,
         const Connections& connections,
         const Values&      values );
+#endif
 
     UnstructuredVolumeObject( const UnstructuredVolumeObject& other );
 

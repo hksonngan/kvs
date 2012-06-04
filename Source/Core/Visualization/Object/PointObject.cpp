@@ -31,6 +31,7 @@ PointObject::PointObject( void )
     this->setSize( 1 );
 }
 
+#if KVS_ENABLE_DEPRECATED
 /*===========================================================================*/
 /**
  *  @brief  Constructs a new PointObject class.
@@ -44,9 +45,14 @@ PointObject::PointObject(
     const kvs::ValueArray<kvs::Real32>& coords,
     const kvs::ValueArray<kvs::UInt8>&  colors,
     const kvs::ValueArray<kvs::Real32>& normals,
-    const kvs::ValueArray<kvs::Real32>& sizes ):
-    kvs::GeometryObjectBase( coords, colors, normals )
+    const kvs::ValueArray<kvs::Real32>& sizes )
 {
+    KVS_ASSERT( coords.size() == normals.size() );
+    KVS_ASSERT( coords.size() == colors.size() );
+
+    this->setCoords( coords );
+    this->setColors( colors );
+    this->setNormals( normals );
     this->setSizes( sizes );
 }
 
@@ -63,9 +69,14 @@ PointObject::PointObject(
     const kvs::ValueArray<kvs::Real32>& coords,
     const kvs::ValueArray<kvs::UInt8>&  colors,
     const kvs::ValueArray<kvs::Real32>& normals,
-    const kvs::Real32                   size ):
-    kvs::GeometryObjectBase( coords, colors, normals )
+    const kvs::Real32                   size )
 {
+    KVS_ASSERT( coords.size() == normals.size() );
+    KVS_ASSERT( coords.size() == colors.size() );
+
+    this->setCoords( coords );
+    this->setColors( colors );
+    this->setNormals( normals );
     this->setSize( size );
 }
 
@@ -82,9 +93,13 @@ PointObject::PointObject(
     const kvs::ValueArray<kvs::Real32>& coords,
     const kvs::RGBColor&                color,
     const kvs::ValueArray<kvs::Real32>& normals,
-    const kvs::ValueArray<kvs::Real32>& sizes ):
-    kvs::GeometryObjectBase( coords, color, normals )
+    const kvs::ValueArray<kvs::Real32>& sizes )
 {
+    KVS_ASSERT( coords.size() == normals.size() );
+
+    this->setCoords( coords );
+    this->setColor( color );
+    this->setNormals( normals );
     this->setSizes( sizes );
 }
 
@@ -99,9 +114,12 @@ PointObject::PointObject(
 PointObject::PointObject(
     const kvs::ValueArray<kvs::Real32>& coords,
     const kvs::ValueArray<kvs::Real32>& normals,
-    const kvs::ValueArray<kvs::Real32>& sizes ):
-    kvs::GeometryObjectBase( coords, normals )
+    const kvs::ValueArray<kvs::Real32>& sizes )
 {
+    KVS_ASSERT( coords.size() == normals.size() );
+
+    this->setCoords( coords );
+    this->setNormals( normals );
     this->setSizes( sizes );
 }
 
@@ -118,9 +136,13 @@ PointObject::PointObject(
     const kvs::ValueArray<kvs::Real32>& coords,
     const kvs::RGBColor&                color,
     const kvs::ValueArray<kvs::Real32>& normals,
-    const kvs::Real32                   size ):
-    kvs::GeometryObjectBase( coords, color, normals )
+    const kvs::Real32                   size )
 {
+    KVS_ASSERT( coords.size() == normals.size() );
+
+    this->setCoords( coords );
+    this->setColor( color );
+    this->setNormals( normals );
     this->setSize( size );
 }
 
@@ -135,9 +157,12 @@ PointObject::PointObject(
 PointObject::PointObject(
     const kvs::ValueArray<kvs::Real32>& coords,
     const kvs::ValueArray<kvs::UInt8>&  colors,
-    const kvs::ValueArray<kvs::Real32>& sizes ):
-    kvs::GeometryObjectBase( coords, colors )
+    const kvs::ValueArray<kvs::Real32>& sizes )
 {
+    KVS_ASSERT( coords.size() == colors.size() );
+
+    this->setCoords( coords );
+    this->setColors( colors );
     this->setSizes( sizes );
 }
 
@@ -152,11 +177,12 @@ PointObject::PointObject(
 PointObject::PointObject(
     const kvs::ValueArray<kvs::Real32>& coords,
     const kvs::RGBColor&                color,
-    const kvs::ValueArray<kvs::Real32>& sizes ):
-    kvs::GeometryObjectBase( coords, color )
+    const kvs::ValueArray<kvs::Real32>& sizes )
 {
     KVS_ASSERT( coords.size() == sizes.size() * 3 );
 
+    this->setCoords( coords );
+    this->setColor( color );
     this->setSizes( sizes );
 }
 
@@ -171,9 +197,12 @@ PointObject::PointObject(
 PointObject::PointObject(
     const kvs::ValueArray<kvs::Real32>& coords,
     const kvs::ValueArray<kvs::UInt8>&  colors,
-    const kvs::Real32                   size ):
-    kvs::GeometryObjectBase( coords, colors )
+    const kvs::Real32                   size )
 {
+    KVS_ASSERT( coords.size() == colors.size() );
+
+    this->setCoords( coords );
+    this->setColors( colors );
     this->setSize( size );
 }
 
@@ -188,9 +217,10 @@ PointObject::PointObject(
 PointObject::PointObject(
     const kvs::ValueArray<kvs::Real32>& coords,
     const kvs::RGBColor&                color,
-    const kvs::Real32                   size ):
-    kvs::GeometryObjectBase( coords, color )
+    const kvs::Real32                   size )
 {
+    this->setCoords( coords );
+    this->setColor( color );
     this->setSize( size );
 }
 
@@ -201,11 +231,13 @@ PointObject::PointObject(
  */
 /*===========================================================================*/
 PointObject::PointObject(
-    const kvs::ValueArray<kvs::Real32>& coords ):
-    kvs::GeometryObjectBase( coords )
+    const kvs::ValueArray<kvs::Real32>& coords )
 {
+    this->setCoords( coords );
+    this->setColor( kvs::RGBColor( 255, 255, 255 ) );
     this->setSize( 1 );
 }
+#endif
 
 /*===========================================================================*/
 /**
@@ -344,7 +376,7 @@ PointObject& PointObject::operator = ( const PointObject& other )
 
     return( *this );
 }
-
+#if KVS_ENABLE_DEPRECATED
 /*===========================================================================*/
 /**
  *  @brief  '+=' operator.
@@ -357,7 +389,7 @@ PointObject& PointObject::operator += ( const PointObject& other )
 
     return( *this );
 }
-
+#endif
 /*===========================================================================*/
 /**
  *  @brief  '<<' operator
