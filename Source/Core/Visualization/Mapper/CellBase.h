@@ -22,6 +22,7 @@
 #include <kvs/UnstructuredVolumeObject>
 #include <kvs/IgnoreUnusedVariable>
 #include <kvs/Message>
+#include <cstring>
 
 
 namespace kvs

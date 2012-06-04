@@ -14,6 +14,7 @@
 /*****************************************************************************/
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include <new>
 #include <limits>
 #include <kvs/DebugNew>

@@ -14,6 +14,7 @@
 /*****************************************************************************/
 #include "File.h"
 #include <cstdio>
+#include <cstring>
 #include <kvs/Message>
 #include <kvs/Endian>
 

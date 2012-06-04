@@ -13,6 +13,7 @@
  */
 /*****************************************************************************/
 #include "PointObject.h"
+#include <cstring>
 #include <kvs/LineObject>
 #include <kvs/PolygonObject>
 #include <kvs/Assert>

@@ -13,6 +13,7 @@
  */
 /*****************************************************************************/
 #include "StochasticMultipleTetrahedraRenderer.h"
+#include <cstring>
 
 
 namespace kvs

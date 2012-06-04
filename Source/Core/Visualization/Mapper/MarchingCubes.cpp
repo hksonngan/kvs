@@ -13,6 +13,7 @@
 /****************************************************************************/
 #include "MarchingCubes.h"
 #include "MarchingCubesTable.h"
+#include <cstring>
 
 
 namespace kvs

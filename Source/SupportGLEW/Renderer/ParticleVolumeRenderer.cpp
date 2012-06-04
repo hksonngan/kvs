@@ -13,6 +13,7 @@
  */
 /*****************************************************************************/
 #include "ParticleVolumeRenderer.h"
+#include <cstring>
 #include <kvs/DebugNew>
 #include <kvs/PointObject>
 #include <kvs/Camera>

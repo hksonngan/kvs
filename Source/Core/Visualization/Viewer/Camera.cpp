@@ -12,6 +12,7 @@
  */
 /****************************************************************************/
 #include "Camera.h"
+#include <cstring>
 #include <kvs/DebugNew>
 #include <kvs/OpenGL>
 #include <kvs/ColorImage>

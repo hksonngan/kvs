@@ -22,9 +22,11 @@
 
 
 #if KVS_ENABLE_DEBUG
-//#define KVS_THROW( EXCEPTION, message ) \
-//    ( ( kvsMessageError( message ) ), \
-//     ( kvs::detail::Throw<EXCEPTION>( message, KVS_MACRO_FILE, KVS_MACRO_LINE, KVS_MACRO_FUNC ) ) )
+#if 0
+#define KVS_THROW( EXCEPTION, message ) \
+    ( ( kvsMessageError( message ) ), \
+    ( kvs::detail::Throw<EXCEPTION>( message, KVS_MACRO_FILE, KVS_MACRO_LINE, KVS_MACRO_FUNC ) ) )
+#endif
 // Temporal workaround
 #define KVS_THROW( EXCEPTION, message ) \
     ( ( kvsMessageError( std::string( message ).c_str() ) ), \
@@ -60,6 +62,8 @@ protected:
     explicit Exception( const std::string& message )
         : m_message( message )
     {}
+
+    ~Exception() throw() {}
 
 public:
     const char* what() const throw()

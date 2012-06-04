@@ -19,6 +19,7 @@
 #include <kvs/IgnoreUnusedVariable>
 #include <kvs/Timer>
 #include <map>
+#include <cstring>
 
 
 namespace

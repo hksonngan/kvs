@@ -12,6 +12,7 @@
  */
 /****************************************************************************/
 #include "RayCastingRenderer.h"
+#include <cstring>
 #include <kvs/Math>
 #include <kvs/Type>
 #include <kvs/Message>

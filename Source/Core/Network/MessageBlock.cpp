@@ -13,6 +13,7 @@
 /****************************************************************************/
 #include "SocketStandard.h"
 #include "MessageBlock.h"
+#include <cstring>
 #include <kvs/Type>
 
 

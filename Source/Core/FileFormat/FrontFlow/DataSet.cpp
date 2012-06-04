@@ -13,6 +13,7 @@
  */
 /*****************************************************************************/
 #include "DataSet.h"
+#include <cstring>
 #include <kvs/Endian>
 
 namespace kvs

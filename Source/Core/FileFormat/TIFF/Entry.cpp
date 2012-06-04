@@ -14,6 +14,7 @@
 #include "Entry.h"
 #include "ValueType.h"
 #include "TagDictionary.h"
+#include <cstring>
 
 
 namespace kvs

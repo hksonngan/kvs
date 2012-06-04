@@ -15,6 +15,7 @@
 #include "StochasticRendererBase.h"
 #include "StochasticTetrahedraEngine.h"
 #include <algorithm>
+#include <cstring>
 #include <kvs/MersenneTwister>
 
 namespace

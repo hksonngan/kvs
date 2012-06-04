@@ -14,6 +14,7 @@
 #ifndef KVS__PIPELINE_MODULE_H_INCLUDE
 #define KVS__PIPELINE_MODULE_H_INCLUDE
 
+#include <cstring>
 #include <kvs/ClassName>
 #include <kvs/FilterBase>
 #include <kvs/MapperBase>
