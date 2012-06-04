@@ -358,6 +358,12 @@ public:
     {
         return m_values.unique();
     }
+
+    void isolate()
+    {
+        if ( !this->unique() )
+            *this = this->clone();
+    }
 };
 
 } // end of namespace kvs

@@ -285,7 +285,7 @@ const bool ImageBase::create(
     }
 
     m_size = height * m_bpl;
-    m_data = ValueArray<kvs::UInt8>( data, m_size );
+    m_data.assign( data, m_size );
     return( true );
 }
 

@@ -195,6 +195,9 @@ public:
 // sp.unique()
 // is equivarent to
 // sp.use_count() == 1
+// Note: unique() maybe faster than use_count() == 1. 
+//       If you are using unique() to implement copy on write, 
+//       do not rely on a specific value when get() == 0.
     bool unique() const throw()
     {
         return this->use_count() == 1;

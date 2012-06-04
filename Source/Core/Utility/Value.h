@@ -15,9 +15,10 @@
 #define KVS__VALUE_H_INCLUDE
 
 #include <limits>
+#if KVS_ENABLE_DEPRECATED
 #include <kvs/ClassName>
 #include <kvs/Endian>
-
+#endif
 
 namespace kvs
 {
@@ -30,6 +31,7 @@ namespace kvs
 template<typename T>
 class Value
 {
+#if KVS_ENABLE_DEPRECATED
     kvsClassName_without_virtual( kvs::Value );
 
 protected:
@@ -63,7 +65,10 @@ public:
 public:
 
     void swapByte();
-
+#else
+private:
+    Value();
+#endif
 public:
 
     static T Zero();
@@ -74,7 +79,7 @@ public:
 
     static T Epsilon();
 };
-
+#if KVS_ENABLE_DEPRECATED
 template<typename T>
 inline Value<T>::Value()
 {
@@ -144,7 +149,7 @@ inline void Value<T>::swapByte()
 {
     kvs::Endian::Swap( &m_value );
 }
-
+#endif
 template<typename T>
 inline T Value<T>::Zero()
 {
@@ -169,6 +174,12 @@ inline double Value<double>::Min()
     return -std::numeric_limits<double>::max();
 }
 
+template <>
+inline long double Value<long double>::Min()
+{
+    return -std::numeric_limits<long double>::max();
+}
+
 template<typename T>
 inline T Value<T>::Max()
 {
@@ -180,7 +191,7 @@ inline T Value<T>::Epsilon()
 {
     return std::numeric_limits<T>::epsilon();
 }
-
+#if KVS_ENABLE_DEPRECATED
 template<typename T>
 inline bool operator == ( const Value<T>& other1, const Value<T>& other2 )
 {
@@ -244,7 +255,7 @@ inline Value<T> operator / ( const Value<T>& other1, const Value<T>& other2 )
     Value<T> result( other1 ); result /= other2;
     return result;
 }
-
+#endif
 } // end of namespace kvs
 
 #endif // KVS__VALUE_H_INCLUDE
