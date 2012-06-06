@@ -254,7 +254,6 @@ const bool GrADS::read( const std::string& filename )
         data_filename = ::ReplaceHour( data_filename, tdef.start.hour );
         data_filename = ::ReplaceMinute( data_filename, tdef.start.minute );
 
-        size_t counter = 0;
         kvs::FileList::const_iterator file = directory.fileList().begin();
         kvs::FileList::const_iterator last = directory.fileList().end();
         while ( file != last )
