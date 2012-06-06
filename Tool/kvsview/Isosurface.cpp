@@ -51,7 +51,6 @@ public:
     IsolevelSlider( kvs::glut::Screen* screen ):
         kvs::glut::Slider( screen ),
         m_volume( NULL ),
-        m_tfunc( NULL ),
         m_normal( kvs::PolygonObject::PolygonNormal ) {}
 
     void setVolumeObject( const kvs::VolumeObjectBase* volume )

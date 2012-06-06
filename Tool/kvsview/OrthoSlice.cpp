@@ -50,7 +50,6 @@ public:
     PlaneSlider( kvs::glut::Screen* screen ):
         kvs::glut::Slider( screen ),
         m_volume( NULL ),
-        m_tfunc( NULL ),
         m_axis( kvs::OrthoSlice::ZAxis ) {}
 
     void setVolumeObject( const kvs::VolumeObjectBase* volume )

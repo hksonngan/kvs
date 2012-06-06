@@ -200,9 +200,9 @@ void StochasticMultivariateTetrahedraEngine::create_vertexbuffer_from_volume( vo
     const kvs::UInt32* src_connect = m_ref_volume->connections().data();
     const T* src_value = static_cast<const T*>( m_ref_volume->values().data() );
 
-    kvs::Real64 min_value[2];
-    kvs::Real64 max_value[2];
-    kvs::Real64 normalize_factor[2];
+    kvs::Real64 min_value[2] = { 0.0, 0.0 };
+    kvs::Real64 max_value[2] = { 0.0, 0.0 };
+    kvs::Real64 normalize_factor[2] = { 0.0, 0.0 };
     for ( size_t i = 0; i < nvertices; i++ )
     {
         for ( size_t j = 0; j < 2; j++ )
