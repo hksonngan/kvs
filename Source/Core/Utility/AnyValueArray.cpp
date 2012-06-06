@@ -56,6 +56,7 @@ const std::type_info& TypeInfo::type() const
 #if KVS_ENABLE_DEPRECATED
     case kvs::Type::TypeString: return typeid( std::string );
 #endif
+    default: break;
     }
     KVS_ASSERT( false );
     return typeid( void );
@@ -96,6 +97,7 @@ const char* TypeInfo::typeName() const
 #if KVS_ENABLE_DEPRECATED
     case kvs::Type::TypeString: return "string";
 #endif
+    default: break;
     }
     KVS_ASSERT( false );
     return NULL;
@@ -152,6 +154,7 @@ AnyValueArray AnyValueArray::clone() const
 #if KVS_ENABLE_DEPRECATED
     case kvs::Type::TypeString: return ::MakeClone<std::string>( data, size );
 #endif
+    default: break;
     }
     KVS_ASSERT( false );
     return AnyValueArray();

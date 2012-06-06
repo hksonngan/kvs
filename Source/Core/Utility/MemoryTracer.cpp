@@ -23,10 +23,13 @@
 
 namespace
 {
+#if defined ( KVS_ENABLE_MEM_DEBUG )
 
 char const* DeleteAtFile = "unknown";
 
 int DeleteAtLine = 0;
+
+#endif
 
 const char* AllocationName[] =
 {
