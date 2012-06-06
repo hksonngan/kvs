@@ -253,6 +253,10 @@ ifeq "$(KVS_SUPPORT_OPENCABIN)" "1"
 CPPFLAGS += -fPIC
 endif
 
+ifeq "$(shell uname -s)" "Linux"
+CPPFLAGS += -Wno-unused-result
+endif
+
 
 #=============================================================================
 #  Definition.
