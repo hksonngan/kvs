@@ -51,16 +51,18 @@ def GetDirectoryList( find_path, support_list ):
 def KVSMake( dir_list, option ):
     make_option  = ('','')
     if   option == 'build':     make_option = ("make;", "kvsmake;")
+    elif option == 'debug':     make_option = ("make debug;", "kvsmake DEBUG=1;")
     elif option == 'clean':     make_option = ("make clean;", "kvsmake clean;")
     elif option == 'distclean': make_option = ("make distclean; rm *.pro;", "kvsmake distclean;")
     elif option == 'rebuild':   make_option = ("make clean; make;", "kvsmake rebuild;")
     else:
         print "Error: Unknown option '" + option + "'"
-        print "Usage: python kvsmake.py [clean|rebuild|distclean]"
+        print "Usage: python kvsmake.py [debug|clean|distclean|rebuild]"
         sys.exit()
 
     curdir = os.getcwd()
     for dir in dir_list:
+        print ">> " + dir
         command =  "cd " + dir + ";"
         if dir.count('SupportQt') > 0:
             projname = dir.replace('\\','/').rpartition('/')[2]
