@@ -49,27 +49,35 @@ def GetDirectoryList( find_path, support_list ):
 #  Executes kvsmake command for every example codes.
 #=============================================================================
 def KVSMake( dir_list, option ):
+
+    k = "kvsmake"
+    m = "make"
+    s = ";"
+    if os.name == 'nt':
+        m = "nmake"
+        s = "&"
+
     make_option  = ('','')
-    if   option == 'build':     make_option = ("make;", "kvsmake;")
-    elif option == 'debug':     make_option = ("make debug;", "kvsmake DEBUG=1;")
-    elif option == 'clean':     make_option = ("make clean;", "kvsmake clean;")
-    elif option == 'distclean': make_option = ("make distclean; rm *.pro;", "kvsmake distclean;")
-    elif option == 'rebuild':   make_option = ("make clean; make;", "kvsmake rebuild;")
+    if   option == 'build':     make_option = (m+s, k+s)
+    elif option == 'debug':     make_option = (m+" debug"+s, k+" DEBUG=1"+s)
+    elif option == 'clean':     make_option = (m+" clean"+s, k+" clean"+s)
+    elif option == 'distclean': make_option = (m+" distclean"+s+" rm *.pro"+s, k+" distclean"+s)
+    elif option == 'rebuild':   make_option = (m+" clean"+s+" "+m+s, k+" rebuild"+s)
     else:
-        print "Error: Unknown option '" + option + "'"
-        print "Usage: python kvsmake.py [debug|clean|distclean|rebuild]"
+        print( "Error: Unknown option '" + option + "'" )
+        print( "Usage: python kvsmake.py [ debug | clean | distclean | rebuild ]" )
         sys.exit()
 
     curdir = os.getcwd()
     for dir in dir_list:
-        print ">> " + dir
-        command =  "cd " + dir + ";"
+        print( ">> " + dir )
+        command =  "cd " + dir + s
         if dir.count('SupportQt') > 0:
             projname = dir.replace('\\','/').rpartition('/')[2]
-            command += "kvsmake -qt " + projname + "; qmake;"
+            command += "kvsmake -qt " + projname + s + " qmake" + s
             command += make_option[0]
         else:
-            command += "kvsmake -G;"
+            command += "kvsmake -G" + s
             command += make_option[1]
         command += "cd " + curdir
         os.system( command )
