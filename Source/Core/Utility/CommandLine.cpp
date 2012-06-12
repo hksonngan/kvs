@@ -278,7 +278,7 @@ const std::string& CommandLine::Option::description() const
  *  @return number of option values
  */
 /*==========================================================================*/
-size_t CommandLine::Option::nvalues() const
+size_t CommandLine::Option::numberOfValues() const
 {
     return m_nvalues;
 }
@@ -647,7 +647,7 @@ bool CommandLine::parse()
             if ( !this->read_option_values( argument, option ) )
             {
                 kvsMessageError( "%d values is required for the option '-%s'",
-                                 option->nvalues(),
+                                 option->numberOfValues(),
                                  option->name().c_str() );
                 this->clear();
                 return false;
@@ -823,7 +823,7 @@ bool CommandLine::hasValues() const
  *  @return number of input values
  */
 /*==========================================================================*/
-size_t CommandLine::nvalues() const
+size_t CommandLine::numberOfValues() const
 {
     return m_values.size();
 }
@@ -856,7 +856,7 @@ bool CommandLine::hasOptionValue( const std::string& option_name ) const
     Options::const_iterator p = std::find( m_options.begin(), m_options.end(), key );
     if ( p == m_options.end() ) { return false; }
 
-    return p->nvalues() > 0;
+    return p->numberOfValues() > 0;
 }
 
 /*==========================================================================*/
@@ -865,7 +865,7 @@ bool CommandLine::hasOptionValue( const std::string& option_name ) const
  *  @return number of options
  */
 /*==========================================================================*/
-size_t CommandLine::noptions() const
+size_t CommandLine::numberOfOptions() const
 {
     return m_options.size();
 }
@@ -996,13 +996,13 @@ bool CommandLine::read_option_values(
     ++argument; // skip option name.
 
     // No option value.
-    if ( option->nvalues() == 0 )
+    if ( option->numberOfValues() == 0 )
     {
         option->given();
         return true;
     }
 
-    for ( size_t i = 0; i < option->nvalues(); ++i )
+    for ( size_t i = 0; i < option->numberOfValues(); ++i )
     {
         if ( argument == m_arguments.end() ) { return false; }
         if ( this->is_option( argument ) ) { return false; }

@@ -96,7 +96,7 @@ public:
 
     bool hasValues() const;
 
-    size_t nvalues() const;
+    size_t numberOfValues() const;
 
 public:
 
@@ -107,7 +107,7 @@ public:
 
     bool hasOptionValue( const std::string& option_name ) const;
 
-    size_t noptions() const;
+    size_t numberOfOptions() const;
 
 public:
 
@@ -217,7 +217,7 @@ public:
 
     const std::string& description() const;
 
-    size_t nvalues() const;
+    size_t numberOfValues() const;
 
     bool isRequired() const;
 
@@ -319,7 +319,7 @@ inline T CommandLine::optionValue( const std::string& option_name, size_t index 
         return T( 0 );
     }
 
-    if ( ( size_t )( option->nvalues() ) < index )
+    if ( ( size_t )( option->numberOfValues() ) < index )
     {
         kvsMessageError( "Cannot get option value by given index." );
         return T( 0 );
