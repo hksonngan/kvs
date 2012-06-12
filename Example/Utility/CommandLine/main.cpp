@@ -14,6 +14,7 @@
  */
 /*****************************************************************************/
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <kvs/CommandLine>
 
@@ -28,43 +29,81 @@
 int main( int argc, char** argv )
 {
     /* Options:
-     *   -a <string> : parameter a (1 value, required)
-     *   -b <int int int> : parameter b (3 values, not required)
-     *   intput value (reuqired)
+     *   -x <float>  : floating value 1 (1 value, required)
+     *   -y <float>  : floating value 2 (1 value, required)
+     *   -o <string> : operator 'sum', 'sub', 'mul', 'div' (1 value, not required)
+     *   filename (not reuqired)
      *
      * Examples:
-     *   ./CommandLine -a message -b 1 2 3 value
-     *   ./CommandLine -a message value
+     *   ./CommandLine -x 1.5 -y 0.2 -o sum
+     *   ./CommandLine -x 2.9 -y 7.1 -o div result.txt
      *   ./CommandLine -h
      */
 
-    // Parse given command line options.
+    // Setup command line options.
     kvs::CommandLine commandline( argc, argv );
     commandline.addHelpOption();
-    commandline.addOption( "a","Parameter a (string).", 1, true );
-    commandline.addOption( "b","Parameter b (int*3).", 3, false );
-    commandline.addValue( "input value.", true );
-    if ( !commandline.parse() ) exit( EXIT_FAILURE );
+    commandline.addOption( "x","floating value 1 (required).", 1, true );
+    commandline.addOption( "y","floating value 2 (required).", 1, true );
+    commandline.addOption( "o","operator 'sum', 'sub', 'mul', 'div' (default: 'sum').", 1, false );
+    commandline.addValue( "filename.", false );
 
-    // Get the parameter which is given by the option 'a'.
-    std::string a = commandline.optionValue<std::string>("a");
+    // Parse given command line options.
+    if ( !commandline.parse() ) return 0;
 
-    // Get the parameters which are given by the option 'b'.
-    int b[3] = { 0, 0, 0 }; // initial value
-    if ( commandline.hasOption("b") )
+    // Get a floating value which is given by the option 'x'.
+    float x = commandline.optionValue<float>("x");
+
+    // Get a floating value which is given by the option 'y'.
+    float y = commandline.optionValue<float>("y");
+
+    // Get an operator string which is given by the option 'o'.
+    std::string o = "sum"; // default value
+    if ( commandline.hasOption("o") )
     {
-        b[0] = commandline.optionValue<int>("b",0);
-        b[1] = commandline.optionValue<int>("b",1);
-        b[2] = commandline.optionValue<int>("b",2);
+        o = commandline.optionValue<std::string>("o");
     }
 
-    // Get the input value as a string here.
-    std::string value = commandline.value<std::string>();
+    // Calculation.
+    float result = 0.0f;
+    if ( o == "sum" )
+    {
+        o = "+";
+        result = x + y;
+    }
+    else if ( o == "sub" )
+    {
+        o = "-";
+        result = x - y;
+    }
+    else if ( o == "mul" )
+    {
+        o = "*";
+        result = x * y;
+    }
+    else if ( o == "div" )
+    {
+        o = "/";
+        result = x / y;
+    }
+    else
+    {
+        std::cerr << "Unknown operator '" << o << "'." << std::endl;
+        return 0;
+    }
 
-    // Output the given parameters.
-    std::cout << "Option 'a': " << a << std::endl;
-    std::cout << "Option 'b': " << b[0] << " " << b[1] << " " << b[2] << std::endl;
-    std::cout << "Input value: " << value << std::endl;
+    // Output the results.
+    if ( commandline.hasValues() )
+    {
+        std::string filename = commandline.value<std::string>();
+        std::ofstream ofs( filename.c_str(), std::ios::out );
+        ofs << x << " " << o << " " << y << " = " << result << std::endl;
+        ofs.close();
+    }
+    else
+    {
+        std::cout << x << " " << o << " " << y << " = " << result << std::endl;
+    }
 
-    return 0;
+    return 1;
 }
