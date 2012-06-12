@@ -44,10 +44,10 @@ Argument::Argument( int argc, char** argv ):
     kvsview::Argument::Common( argc, argv, "ExtractEdges")
 {
     // Parameters for the ExtractEdges class.
-    add_option( kvsview::ExtractEdges::CommandName, kvsview::ExtractEdges::Description, 0 );
-    add_option( "s", "Line size. (default: 1)", 1, false );
-    add_option( "t", "Transfer function file. (optional: <filename>)", 1, false );
-    add_option( "T", "Transfer function file with range adjustment. (optional: <filename>)", 1, false );
+    addOption( kvsview::ExtractEdges::CommandName, kvsview::ExtractEdges::Description, 0 );
+    addOption( "s", "Line size. (default: 1)", 1, false );
+    addOption( "t", "Transfer function file. (optional: <filename>)", 1, false );
+    addOption( "T", "Transfer function file with range adjustment. (optional: <filename>)", 1, false );
 }
 
 /*===========================================================================*/

@@ -44,10 +44,10 @@ Argument::Argument( int argc, char** argv ):
     kvsview::Argument::Common( argc, argv, "ExternalFaces")
 {
     // Parameters for the ExternalFaces class.
-    add_option( kvsview::ExternalFaces::CommandName, kvsview::ExternalFaces::Description, 0 );
-    add_option( "a", "Opacity (alpha value). (default: 255)", 1, false );
-    add_option( "t", "Transfer function file. (optional: <filename>)", 1, false );
-    add_option( "T", "Transfer function file with range adjustment. (optional: <filename>)", 1, false );
+    addOption( kvsview::ExternalFaces::CommandName, kvsview::ExternalFaces::Description, 0 );
+    addOption( "a", "Opacity (alpha value). (default: 255)", 1, false );
+    addOption( "t", "Transfer function file. (optional: <filename>)", 1, false );
+    addOption( "T", "Transfer function file with range adjustment. (optional: <filename>)", 1, false );
 }
 
 /*===========================================================================*/

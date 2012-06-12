@@ -107,11 +107,11 @@ Argument::Argument( int argc, char** argv ):
     kvsview::Argument::Common( argc, argv, "Isosurface")
 {
     // Parameters for the isosurface class.
-    add_option( kvsview::Isosurface::CommandName, kvsview::Isosurface::Description, 0 );
-    add_option( "l", "Isosurface level. (default: mean value)", 1, false );
-    add_option( "n", "Normal vector type; 'poly[gon]' 'vert[ex]'. (default: poly)", 1, false );
-    add_option( "t", "Transfer function file. (optional: <filename>)", 1, false );
-    add_option( "T", "Transfer function file with range adjustment. (optional: <filename>)", 1, false );
+    addOption( kvsview::Isosurface::CommandName, kvsview::Isosurface::Description, 0 );
+    addOption( "l", "Isosurface level. (default: mean value)", 1, false );
+    addOption( "n", "Normal vector type; 'poly[gon]' 'vert[ex]'. (default: poly)", 1, false );
+    addOption( "t", "Transfer function file. (optional: <filename>)", 1, false );
+    addOption( "T", "Transfer function file with range adjustment. (optional: <filename>)", 1, false );
 }
 
 /*===========================================================================*/

@@ -41,7 +41,7 @@ Argument::Argument( int argc, char** argv ):
     kvsview::Argument::Common( argc, argv, kvsview::LineRenderer::CommandName )
 {
     // Parameters for the line renderer class.
-    add_option( kvsview::LineRenderer::CommandName, kvsview::LineRenderer::Description, 0 );
+    addOption( kvsview::LineRenderer::CommandName, kvsview::LineRenderer::Description, 0 );
 }
 
 /*===========================================================================*/

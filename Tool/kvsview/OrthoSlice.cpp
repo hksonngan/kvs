@@ -86,11 +86,11 @@ Argument::Argument( int argc, char** argv ):
     kvsview::Argument::Common( argc, argv, "OrthoSlice")
 {
     // Parameters for the isosurface class.
-    add_option( kvsview::OrthoSlice::CommandName, kvsview::OrthoSlice::Description, 0 );
-    add_option( "p", "Position of the point on the spefied axis. (default: 0)", 1, false );
-    add_option( "a", "Axis (x:0, y:1, z:2). (default: 2)", 1, false );
-    add_option( "t", "Transfer function file. (optional: <filename>)", 1, false );
-    add_option( "T", "Transfer function file with range adjustment. (optional: <filename>)", 1, false );
+    addOption( kvsview::OrthoSlice::CommandName, kvsview::OrthoSlice::Description, 0 );
+    addOption( "p", "Position of the point on the spefied axis. (default: 0)", 1, false );
+    addOption( "a", "Axis (x:0, y:1, z:2). (default: 2)", 1, false );
+    addOption( "t", "Transfer function file. (optional: <filename>)", 1, false );
+    addOption( "T", "Transfer function file with range adjustment. (optional: <filename>)", 1, false );
 }
 
 /*===========================================================================*/

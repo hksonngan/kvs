@@ -29,24 +29,24 @@ namespace kvsmake
 Argument::Argument( int argc, char** argv ):
     kvs::CommandLine( argc, argv, kvsmake::CommandName )
 {
-    add_help_option();
+    addHelpOption();
 
-    add_value( "project_name/make_options", false );
+    addValue( "project_name/make_options", false );
 
-    add_option( "g",      "Generate a makefile.", 1 );
-    add_option( "G",      "Generate a makefile and set it's target name to the current directory name", 0 );
+    addOption( "g",      "Generate a makefile.", 1 );
+    addOption( "G",      "Generate a makefile and set it's target name to the current directory name", 0 );
 
 #if defined ( KVS_COMPILER_VC )
-    add_option( "v",      "generate a project file for VC.", 1 );
-    add_option( "vc",     "generate a project file for VC.", 1 );
-    add_option( "vcproj", "generate a project file for VC.", 1 );
+    addOption( "v",      "generate a project file for VC.", 1 );
+    addOption( "vc",     "generate a project file for VC.", 1 );
+    addOption( "vcproj", "generate a project file for VC.", 1 );
 
-    add_option( "cuda", "generate a project file for VC and CUDA.", 1 );
+    addOption( "cuda", "generate a project file for VC and CUDA.", 1 );
 #endif
 
-    add_option( "q",      "Generate a project file for Qt.", 1 );
-    add_option( "qt",     "Generate a project file for Qt.", 1 );
-    add_option( "qtproj", "Generate a project file for Qt.", 1 );
+    addOption( "q",      "Generate a project file for Qt.", 1 );
+    addOption( "qt",     "Generate a project file for Qt.", 1 );
+    addOption( "qtproj", "Generate a project file for Qt.", 1 );
 }
 
 } // end of namespace kvsmake

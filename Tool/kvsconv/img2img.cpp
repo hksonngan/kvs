@@ -39,24 +39,24 @@ namespace img2img
 Argument::Argument( int argc, char** argv ):
     kvsconv::Argument::Common( argc, argv, kvsconv::img2img::CommandName )
 {
-    add_option( kvsconv::img2img::CommandName, kvsconv::img2img::Description, 0 );
-    add_option( "s", "Scaling image. (optional: <scale>)", 1 );
-    add_option( "r", "Resize image. (optional: <width> <height>)", 2 );
-    add_option( "g", "Gray scaling. (default: 0)\n"
-                "\t      0 = Mean value\n"
-                "\t      1 = Middle value\n"
-                "\t      2 = Median value\n"
-                "\t      3 = NTSC weighted mean value\n"
-                "\t      4 = HDTV weighted mean value", 1 );
-    add_option( "b", "Binarization. (default: 0)\n"
-                "\t      0 = P-Tile\n"
-                "\t      1 = Distinction\n"
-                "\t      2 = Byer\n"
-                "\t      3 = Halftone\n"
-                "\t      4 = Emphasized halftone\n"
-                "\t      5 = Screw\n"
-                "\t      6 = Deformed screw\n"
-                "\t      7 = Dot concentrate", 1 );
+    addOption( kvsconv::img2img::CommandName, kvsconv::img2img::Description, 0 );
+    addOption( "s", "Scaling image. (optional: <scale>)", 1 );
+    addOption( "r", "Resize image. (optional: <width> <height>)", 2 );
+    addOption( "g", "Gray scaling. (default: 0)\n"
+               "\t      0 = Mean value\n"
+               "\t      1 = Middle value\n"
+               "\t      2 = Median value\n"
+               "\t      3 = NTSC weighted mean value\n"
+               "\t      4 = HDTV weighted mean value", 1 );
+    addOption( "b", "Binarization. (default: 0)\n"
+               "\t      0 = P-Tile\n"
+               "\t      1 = Distinction\n"
+               "\t      2 = Byer\n"
+               "\t      3 = Halftone\n"
+               "\t      4 = Emphasized halftone\n"
+               "\t      5 = Screw\n"
+               "\t      6 = Deformed screw\n"
+               "\t      7 = Dot concentrate", 1 );
 }
 
 /*===========================================================================*/

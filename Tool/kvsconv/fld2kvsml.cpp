@@ -38,9 +38,9 @@ namespace fld2kvsml
 Argument::Argument( int argc, char** argv ):
     kvsconv::Argument::Common( argc, argv, kvsconv::fld2kvsml::CommandName )
 {
-    add_option( kvsconv::fld2kvsml::CommandName, kvsconv::fld2kvsml::Description, 0 );
-    add_option( "e", "External data file. (optional)", 0, false );
-    add_option( "b", "Data file as binary. (optional)", 0, false );
+    addOption( kvsconv::fld2kvsml::CommandName, kvsconv::fld2kvsml::Description, 0 );
+    addOption( "e", "External data file. (optional)", 0, false );
+    addOption( "b", "Data file as binary. (optional)", 0, false );
 }
 
 /*===========================================================================*/

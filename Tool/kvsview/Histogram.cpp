@@ -330,8 +330,8 @@ Argument::Argument( int argc, char** argv ):
     kvsview::Argument::Common( argc, argv, kvsview::Histogram::CommandName )
 {
     // Parameters for the transfer function renderer class.
-    add_option( kvsview::Histogram::CommandName, kvsview::Histogram::Description, 0 );
-    add_option( "b", "Bias parameter in [0,1]. (defalt: 0.5)", 1, false );
+    addOption( kvsview::Histogram::CommandName, kvsview::Histogram::Description, 0 );
+    addOption( "b", "Bias parameter in [0,1]. (defalt: 0.5)", 1, false );
 }
 
 /*===========================================================================*/

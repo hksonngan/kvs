@@ -32,19 +32,19 @@ namespace kvsconv
 Argument::Argument( int argc, char** argv ):
     kvs::CommandLine( argc, argv, kvsconv::CommandName )
 {
-    add_help_option();
+    addHelpOption();
 
     // Help option for each converter.
-    add_option("help", "Output help message for each converter. (ex. -help fld2kvsml)", 1 );
+    addOption("help", "Output help message for each converter. (ex. -help fld2kvsml)", 1 );
 
     // Converter commands.
-    add_option( kvsconv::fld2kvsml::CommandName, kvsconv::fld2kvsml::Description, 0 );
-    add_option( kvsconv::ucd2kvsml::CommandName, kvsconv::ucd2kvsml::Description, 0 );
-    add_option( kvsconv::img2img::CommandName, kvsconv::img2img::Description, 0 );
-    add_option( kvsconv::tet2tet::CommandName, kvsconv::tet2tet::Description, 0 );
+    addOption( kvsconv::fld2kvsml::CommandName, kvsconv::fld2kvsml::Description, 0 );
+    addOption( kvsconv::ucd2kvsml::CommandName, kvsconv::ucd2kvsml::Description, 0 );
+    addOption( kvsconv::img2img::CommandName, kvsconv::img2img::Description, 0 );
+    addOption( kvsconv::tet2tet::CommandName, kvsconv::tet2tet::Description, 0 );
 
     // Input value.
-    add_value("input value");
+    addValue("input value");
 }
 
 /*===========================================================================*/
@@ -81,11 +81,9 @@ Argument::Common::Common( int argc, char** argv, const std::string& converter ):
 /*===========================================================================*/
 void Argument::Common::set_options( void )
 {
-    add_help_option("help");
-
-    add_option("output", "Output filename. (default: <input_basename>.<output_extension>)", 1, false );
-
-    add_value("input data file");
+    addHelpOption("help");
+    addOption("output", "Output filename. (default: <input_basename>.<output_extension>)", 1, false );
+    addValue("input data file");
 }
 
 } // end of namespace kvsconv

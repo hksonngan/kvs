@@ -281,9 +281,9 @@ Argument::Argument( int argc, char** argv ):
     kvsview::Argument::Common( argc, argv, kvsview::TransferFunction::CommandName )
 {
     // Parameters for the transfer function renderer class.
-    add_option( kvsview::TransferFunction::CommandName, kvsview::TransferFunction::Description, 0 );
-    add_option("c", "Display color map. (optional)", 0, false );
-    add_option("a", "Display opacity (alpha) map. (optional)", 0, false );
+    addOption( kvsview::TransferFunction::CommandName, kvsview::TransferFunction::Description, 0 );
+    addOption("c", "Display color map. (optional)", 0, false );
+    addOption("a", "Display opacity (alpha) map. (optional)", 0, false );
 }
 
 /*===========================================================================*/

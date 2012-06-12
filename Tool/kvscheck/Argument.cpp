@@ -28,17 +28,17 @@ namespace kvscheck
 Argument::Argument( int argc, char** argv ):
     kvs::CommandLine( argc, argv, kvscheck::CommandName )
 {
-    add_help_option();
-    add_option("version", "Output KVS version. (optional)");
-    add_option("platform", "Output platforma information. (optional)");
-    add_option("compiler", "Output compiler information. (optional)");
-    add_option("sizeof", "Output 'sizeof' information. (optional)");
-    add_option("support", "Output supported library information. (optional)");
-    add_option("minmax", "Output min/max information. (optional)");
-    add_option("opengl", "Output OpenGL information. (optional)");
-    add_option("extension", "Output OpenGL extension information. (optional)");
-    add_option("file", "Output file information. (optional)");
-    add_value("input value", false);
+    addHelpOption();
+    addOption("version", "Output KVS version. (optional)");
+    addOption("platform", "Output platforma information. (optional)");
+    addOption("compiler", "Output compiler information. (optional)");
+    addOption("sizeof", "Output 'sizeof' information. (optional)");
+    addOption("support", "Output supported library information. (optional)");
+    addOption("minmax", "Output min/max information. (optional)");
+    addOption("opengl", "Output OpenGL information. (optional)");
+    addOption("extension", "Output OpenGL extension information. (optional)");
+    addOption("file", "Output file information. (optional)");
+    addValue("input value", false);
 }
 
 } // end of namespace kvscheck

@@ -48,24 +48,24 @@ namespace kvsview
 Argument::Argument( int argc, char** argv ):
     kvs::CommandLine( argc, argv, kvsview::CommandName )
 {
-    add_help_option();
+    addHelpOption();
 
-    add_option( "help", "Output help message for each process. (ex. -help Isosurface)", 1 );
-    add_option( kvsview::PointRenderer::CommandName, kvsview::PointRenderer::Description, 0 );
-    add_option( kvsview::LineRenderer::CommandName, kvsview::LineRenderer::Description, 0 );
-    add_option( kvsview::PolygonRenderer::CommandName, kvsview::PolygonRenderer::Description, 0 );
-    add_option( kvsview::Isosurface::CommandName, kvsview::Isosurface::Description, 0 );
-    add_option( kvsview::SlicePlane::CommandName, kvsview::SlicePlane::Description, 0 );
-    add_option( kvsview::OrthoSlice::CommandName, kvsview::OrthoSlice::Description, 0 );
-    add_option( kvsview::TransferFunction::CommandName, kvsview::TransferFunction::Description, 0 );
-    add_option( kvsview::ExtractEdges::CommandName, kvsview::ExtractEdges::Description, 0 );
-    add_option( kvsview::ExtractVertices::CommandName, kvsview::ExtractVertices::Description, 0 );
-    add_option( kvsview::ExternalFaces::CommandName, kvsview::ExternalFaces::Description, 0 );
-    add_option( kvsview::RayCastingRenderer::CommandName, kvsview::RayCastingRenderer::Description, 0 );
-    add_option( kvsview::ParticleVolumeRenderer::CommandName, kvsview::ParticleVolumeRenderer::Description, 0 );
-    add_option( kvsview::Histogram::CommandName, kvsview::Histogram::Description, 0 );
+    addOption( "help", "Output help message for each process. (ex. -help Isosurface)", 1 );
+    addOption( kvsview::PointRenderer::CommandName, kvsview::PointRenderer::Description, 0 );
+    addOption( kvsview::LineRenderer::CommandName, kvsview::LineRenderer::Description, 0 );
+    addOption( kvsview::PolygonRenderer::CommandName, kvsview::PolygonRenderer::Description, 0 );
+    addOption( kvsview::Isosurface::CommandName, kvsview::Isosurface::Description, 0 );
+    addOption( kvsview::SlicePlane::CommandName, kvsview::SlicePlane::Description, 0 );
+    addOption( kvsview::OrthoSlice::CommandName, kvsview::OrthoSlice::Description, 0 );
+    addOption( kvsview::TransferFunction::CommandName, kvsview::TransferFunction::Description, 0 );
+    addOption( kvsview::ExtractEdges::CommandName, kvsview::ExtractEdges::Description, 0 );
+    addOption( kvsview::ExtractVertices::CommandName, kvsview::ExtractVertices::Description, 0 );
+    addOption( kvsview::ExternalFaces::CommandName, kvsview::ExternalFaces::Description, 0 );
+    addOption( kvsview::RayCastingRenderer::CommandName, kvsview::RayCastingRenderer::Description, 0 );
+    addOption( kvsview::ParticleVolumeRenderer::CommandName, kvsview::ParticleVolumeRenderer::Description, 0 );
+    addOption( kvsview::Histogram::CommandName, kvsview::Histogram::Description, 0 );
 
-    add_value( "input data file", false );
+    addValue( "input data file", false );
 }
 
 /*===========================================================================*/
@@ -102,28 +102,28 @@ Argument::Common::Common( int argc, char** argv, const std::string& command ):
 /*===========================================================================*/
 void Argument::Common::set_options( void )
 {
-    add_help_option("help");
+    addHelpOption("help");
 
-    add_option("antialiasing", "Enable anti-aliasing. (optional)", 0, false );
-    add_option("axis", "Show axis. (optional)", 0, false );
-    add_option("axis_color", "Set axis color. (default: 0 0 0)", 3, false );
-    add_option("axis_tag_color", "Set axis tag color. (default: 0 0 0)", 3, false );
-    add_option("axis_line_width", "Set axis line width. (default: 2)", 1, false );
-    add_option("axis_subline_width", "Set axis subline width. (default: 1)", 1, false );
-    add_option("axis_x_tag", "Set tag for the x-axis. (default: X)", 1, false );
-    add_option("axis_y_tag", "Set tag for the y-axis. (default: Y)", 1, false );
-    add_option("axis_z_tag", "Set tag for the z-axis. (default: Z)", 1, false );
-    add_option("axis_sublines", "Set number of sublines for each axis. (default: 5 5 5)", 3, false );
-    add_option("background_color", "Set background color. (default: 212 221 229)", 3, false );
-    add_option("background_color2", "Set top and bottom side color on the background. (optional: <top: r g b> <bottom: r g b>)", 6, false );
-    add_option("bounds", "Show bounding box. (optional)", 0, false );
-    add_option("bounds_color", "Set bounding box color. (default: 0 0 0)", 3, false );
-    add_option("screen_position", "Set screen position. (default: 0 0)", 2, false );
-    add_option("screen_size", "Set screen size. (default: 512 512)", 2, false );
-    add_option("output", "Output filename. (optional: <filename>)", 1, false );
-    add_option("verbose", "Enable additional output message. (optional)", 0, false);
+    addOption("antialiasing", "Enable anti-aliasing. (optional)", 0, false );
+    addOption("axis", "Show axis. (optional)", 0, false );
+    addOption("axis_color", "Set axis color. (default: 0 0 0)", 3, false );
+    addOption("axis_tag_color", "Set axis tag color. (default: 0 0 0)", 3, false );
+    addOption("axis_line_width", "Set axis line width. (default: 2)", 1, false );
+    addOption("axis_subline_width", "Set axis subline width. (default: 1)", 1, false );
+    addOption("axis_x_tag", "Set tag for the x-axis. (default: X)", 1, false );
+    addOption("axis_y_tag", "Set tag for the y-axis. (default: Y)", 1, false );
+    addOption("axis_z_tag", "Set tag for the z-axis. (default: Z)", 1, false );
+    addOption("axis_sublines", "Set number of sublines for each axis. (default: 5 5 5)", 3, false );
+    addOption("background_color", "Set background color. (default: 212 221 229)", 3, false );
+    addOption("background_color2", "Set top and bottom side color on the background. (optional: <top: r g b> <bottom: r g b>)", 6, false );
+    addOption("bounds", "Show bounding box. (optional)", 0, false );
+    addOption("bounds_color", "Set bounding box color. (default: 0 0 0)", 3, false );
+    addOption("screen_position", "Set screen position. (default: 0 0)", 2, false );
+    addOption("screen_size", "Set screen size. (default: 512 512)", 2, false );
+    addOption("output", "Output filename. (optional: <filename>)", 1, false );
+    addOption("verbose", "Enable additional output message. (optional)", 0, false);
 
-    add_value("input data file");
+    addValue("input data file");
 }
 
 /*===========================================================================*/

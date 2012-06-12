@@ -221,22 +221,22 @@ Argument::Argument( int argc, char** argv ):
     kvsview::Argument::Common( argc, argv, "RayCastingRenderer")
 {
     // Parameters for the RayCastingRenderer class.
-    add_option( kvsview::RayCastingRenderer::CommandName, kvsview::RayCastingRenderer::Description, 0 );
-    add_option( "t", "Transfer function file. (optional: <filename>)", 1, false );
-    add_option( "T", "Transfer function file with range adjustment. (optional: <filename>)", 1, false );
-    add_option( "noshading", "Disable shading. (optional)", 0, false );
-    add_option( "nolod", "Disable Level-of-Detail control. (optional)", 0, false );
-    add_option( "nogpu", "Disable GPU rendering. (optional)", 0, false );
-    add_option( "jittering", "Enable jittering. (optional)", 0, false );
-    add_option( "step", "Sampling step. (default: 0.5)", 1, false );
-    add_option( "ka", "Coefficient of the ambient color. (default: lambert=0.4, phong=0.3)", 1, false );
-    add_option( "kd", "Coefficient of the diffuse color. (default: lambert=0.6, phong=0.5)", 1, false );
-    add_option( "ks", "Coefficient of the specular color. (default: 0.8)", 1, false );
-    add_option( "n", "Shininess. (default: 100.0)", 1, false );
-    add_option( "shader", "Shader type. (default: 0)\n"
-                "\t      0 = Lambert shading\n"
-                "\t      1 = Phong shading\n"
-                "\t      2 = Blinn-Phong shading", 1, false );
+    addOption( kvsview::RayCastingRenderer::CommandName, kvsview::RayCastingRenderer::Description, 0 );
+    addOption( "t", "Transfer function file. (optional: <filename>)", 1, false );
+    addOption( "T", "Transfer function file with range adjustment. (optional: <filename>)", 1, false );
+    addOption( "noshading", "Disable shading. (optional)", 0, false );
+    addOption( "nolod", "Disable Level-of-Detail control. (optional)", 0, false );
+    addOption( "nogpu", "Disable GPU rendering. (optional)", 0, false );
+    addOption( "jittering", "Enable jittering. (optional)", 0, false );
+    addOption( "step", "Sampling step. (default: 0.5)", 1, false );
+    addOption( "ka", "Coefficient of the ambient color. (default: lambert=0.4, phong=0.3)", 1, false );
+    addOption( "kd", "Coefficient of the diffuse color. (default: lambert=0.6, phong=0.5)", 1, false );
+    addOption( "ks", "Coefficient of the specular color. (default: 0.8)", 1, false );
+    addOption( "n", "Shininess. (default: 100.0)", 1, false );
+    addOption( "shader", "Shader type. (default: 0)\n"
+               "\t      0 = Lambert shading\n"
+               "\t      1 = Phong shading\n"
+               "\t      2 = Blinn-Phong shading", 1, false );
 }
 
 /*===========================================================================*/

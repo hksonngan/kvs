@@ -43,8 +43,8 @@ Argument::Argument( int argc, char** argv ):
     kvsview::Argument::Common( argc, argv, kvsview::PolygonRenderer::CommandName )
 {
     // Parameters for the polygon renderer class.
-    add_option( kvsview::PolygonRenderer::CommandName, kvsview::PolygonRenderer::Description, 0 );
-    add_option( "t", "two-side lighting flag (disable:0, enable:1). (default: 0)", 1, false );
+    addOption( kvsview::PolygonRenderer::CommandName, kvsview::PolygonRenderer::Description, 0 );
+    addOption( "t", "two-side lighting flag (disable:0, enable:1). (default: 0)", 1, false );
 }
 
 /*===========================================================================*/

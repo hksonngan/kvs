@@ -38,12 +38,12 @@ namespace tet2tet
 Argument::Argument( int argc, char** argv ):
     kvsconv::Argument::Common( argc, argv, kvsconv::tet2tet::CommandName )
 {
-    add_option( kvsconv::tet2tet::CommandName, kvsconv::tet2tet::Description, 0 );
-    add_option( "e", "External data file. (optional)", 0, false );
-    add_option( "b", "Data file as binary. (optional)", 0, false );
-    add_option( "m", "Conversion method. (default: 0)\n"
-                "\t      0 = Subdivide a quadratic tetrahedron into eight tetrahedra\n"
-                "\t      2 = Remove quadratic nodes", 1, false );
+    addOption( kvsconv::tet2tet::CommandName, kvsconv::tet2tet::Description, 0 );
+    addOption( "e", "External data file. (optional)", 0, false );
+    addOption( "b", "Data file as binary. (optional)", 0, false );
+    addOption( "m", "Conversion method. (default: 0)\n"
+               "\t      0 = Subdivide a quadratic tetrahedron into eight tetrahedra\n"
+               "\t      2 = Remove quadratic nodes", 1, false );
 }
 
 /*===========================================================================*/

@@ -38,9 +38,9 @@ namespace ucd2kvsml
 Argument::Argument( int argc, char** argv ):
     kvsconv::Argument::Common( argc, argv, kvsconv::ucd2kvsml::CommandName )
 {
-    add_option( kvsconv::ucd2kvsml::CommandName, kvsconv::ucd2kvsml::Description, 0 );
-    add_option( "e", "External data file. (optional)", 0, false );
-    add_option( "b", "Data file as binary. (optional)", 0, false );
+    addOption( kvsconv::ucd2kvsml::CommandName, kvsconv::ucd2kvsml::Description, 0 );
+    addOption( "e", "External data file. (optional)", 0, false );
+    addOption( "b", "Data file as binary. (optional)", 0, false );
 }
 
 /*===========================================================================*/

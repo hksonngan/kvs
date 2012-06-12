@@ -44,12 +44,12 @@ Argument::Argument( int argc, char** argv ):
     kvsview::Argument::Common( argc, argv, "SlicePlane")
 {
     // Parameters for the isosurface class.
-    add_option( kvsview::SlicePlane::CommandName, kvsview::SlicePlane::Description, 0 );
-    add_option( "p", "Position of any point in the plane. (optional: <x y z>)", 3, false );
-    add_option( "n", "Normal vector. (optional: <nx ny nz>)", 3, false );
-    add_option( "c", "Coefficients of the plane c1 x + c2 y + c3 z + c4 = 0. (optional: <c1 c2 c3 c4>)", 4, false );
-    add_option( "t", "Transfer function file. (optional: <filename>)", 1, false );
-    add_option( "T", "Transfer function file with range adjustment. (optional: <filename>)", 1, false );
+    addOption( kvsview::SlicePlane::CommandName, kvsview::SlicePlane::Description, 0 );
+    addOption( "p", "Position of any point in the plane. (optional: <x y z>)", 3, false );
+    addOption( "n", "Normal vector. (optional: <nx ny nz>)", 3, false );
+    addOption( "c", "Coefficients of the plane c1 x + c2 y + c3 z + c4 = 0. (optional: <c1 c2 c3 c4>)", 4, false );
+    addOption( "t", "Transfer function file. (optional: <filename>)", 1, false );
+    addOption( "T", "Transfer function file with range adjustment. (optional: <filename>)", 1, false );
 }
 
 /*===========================================================================*/

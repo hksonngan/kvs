@@ -113,7 +113,7 @@ public:
 
     void addHelpOption( const std::string& help_option = "h" );
 
-    void addOption( 
+    void addOption(
         const std::string& name,
         const std::string& description,
         size_t             nvalues     = 0,
@@ -122,18 +122,6 @@ public:
     void addValue( const std::string& description, bool is_required = true );
 
     void showHelpMessage( HelpMessageMode mode = UsageOnly ) const;
-
-protected:
-
-    void add_help_option( const std::string& help_option = "h" );
-
-    void add_option( 
-        const std::string& name,
-        const std::string& description,
-        size_t             nvalues     = 0,
-        bool               is_required = false );
-
-    void add_value( const std::string& description, bool is_required = true );
 
 private:
 

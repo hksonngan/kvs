@@ -41,7 +41,7 @@ Argument::Argument( int argc, char** argv ):
     kvsview::Argument::Common( argc, argv, kvsview::PointRenderer::CommandName )
 {
     // Parameters for the point renderer class.
-    add_option( kvsview::PointRenderer::CommandName, kvsview::PointRenderer::Description, 0 );
+    addOption( kvsview::PointRenderer::CommandName, kvsview::PointRenderer::Description, 0 );
 }
 
 /*===========================================================================*/
