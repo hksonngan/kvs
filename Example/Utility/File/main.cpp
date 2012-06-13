@@ -29,11 +29,18 @@ int main( int argc, char** argv )
     if ( argc == 1 )
     {
         std::cerr << "Usage: " << argv[0] << " <filename>" << std::endl;
-        return 1;
+        return 0;
     }
 
     const char* filename = argv[1];
     kvs::File file( filename );
+
+    // Check the existence of the given file.
+    if ( !file.exists() )
+    {
+        std::cerr << "Error: " << filename << " is not existed." << std::endl;
+        return 0;
+    }
 
     // Output filename information.
     std::cout << "file path: " << file.filePath() << std::endl;
@@ -44,15 +51,8 @@ int main( int argc, char** argv )
     std::cout << "extension: " << file.extension() << std::endl;
     std::cout << "extension (complete): " << file.extension(true) << std::endl;
 
-    // Check the existence of the given file.
-    if ( !file.isExisted() )
-    {
-        std::cerr << "Error: " << filename << " is not existed." << std::endl;
-        return 1;
-    }
-
     // Output the file size in byte.
     std::cout << "file size: " << file.byteSize() << " [bytes]" << std::endl;
 
-    return 0;
+    return 1;
 }
