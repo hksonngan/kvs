@@ -60,7 +60,7 @@ public:
 
     bool isDirectory() const;
 
-    bool isExisted() const;
+    bool exists() const;
 
     bool parse( const std::string& direcotry_path );
 
@@ -81,6 +81,13 @@ public:
     static bool Change( const std::string& directory_path );
 
     static Directory Current();
+
+#if 1
+    bool isExisted() const
+    {
+        return this->exists();
+    }
+#endif
 };
 
 } // end of namespace kvs

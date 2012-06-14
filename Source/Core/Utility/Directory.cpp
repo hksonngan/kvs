@@ -261,7 +261,7 @@ bool Directory::isDirectory() const
  *  @return true, if given directory is existed
  */
 /*==========================================================================*/
-bool Directory::isExisted() const
+bool Directory::exists() const
 {
     return this->isDirectory();
 }

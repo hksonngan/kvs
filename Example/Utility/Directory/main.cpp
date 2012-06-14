@@ -41,17 +41,17 @@ int main( int argc, char** argv )
     std::cout << "Directory name: " << directory.directoryName() << std::endl;
 
     // Check the existence of the given file.
-    if ( !directory.isExisted() )
+    if ( !directory.exists() )
     {
         std::cerr << "Error: " << directory_name << " is not existed." << std::endl;
-        return 1;
+        return 0;
     }
 
     // Check whether the given directory is a directory.
-    if( !directory.isDirectory() )
+    if ( !directory.isDirectory() )
     {
         std::cerr << "Error: " << directory_name << " is not directory." << std::endl;
-        return 1;
+        return 0;
     }
 
     // Output information of the number of files in the directory.
@@ -59,7 +59,7 @@ int main( int argc, char** argv )
 
     kvs::FileList::iterator file = directory.fileList().begin();
     kvs::FileList::iterator end = directory.fileList().end();
-    while( file != end )
+    while ( file != end )
     {
         std::cout << "\t" << file->fileName() << " [" << file->byteSize() << " bytes]" << std::endl;
         ++file;
@@ -68,7 +68,7 @@ int main( int argc, char** argv )
     // Find "test.cpp" in the directory.
     kvs::File f( "test.cpp" );
     file = directory.find( f );
-    if( file != end )
+    if ( file != end )
     {
         std::cout << f.filePath() << " is found in ";
         std::cout << directory.directoryPath(true) << std::endl;
@@ -79,5 +79,5 @@ int main( int argc, char** argv )
         std::cout << directory.directoryPath(true) << std::endl;
     }
 
-    return 0;
+    return 1;
 }
