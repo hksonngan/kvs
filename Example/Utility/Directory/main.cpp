@@ -35,11 +35,6 @@ int main( int argc, char** argv )
     const char* directory_name = argv[1];
     kvs::Directory directory( directory_name );
 
-    // Output directory information.
-    std::cout << "Directory path: " << directory.directoryPath() << std::endl;
-    std::cout << "Directory path (absolute): " << directory.directoryPath(true) << std::endl;
-    std::cout << "Directory name: " << directory.directoryName() << std::endl;
-
     // Check the existence of the given file.
     if ( !directory.exists() )
     {
@@ -53,6 +48,11 @@ int main( int argc, char** argv )
         std::cerr << "Error: " << directory_name << " is not directory." << std::endl;
         return 1;
     }
+
+    // Output directory information.
+    std::cout << "Directory path: " << directory.directoryPath() << std::endl;
+    std::cout << "Directory path (absolute): " << directory.directoryPath(true) << std::endl;
+    std::cout << "Directory name: " << directory.directoryName() << std::endl;
 
     // Output information of the number of files in the directory.
     std::cout << "Number of files in the directory: " << directory.fileList().size() << std::endl;
