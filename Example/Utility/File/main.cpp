@@ -29,7 +29,7 @@ int main( int argc, char** argv )
     if ( argc == 1 )
     {
         std::cerr << "Usage: " << argv[0] << " <filename>" << std::endl;
-        return 0;
+        return 1;
     }
 
     const char* filename = argv[1];
@@ -39,7 +39,7 @@ int main( int argc, char** argv )
     if ( !file.exists() )
     {
         std::cerr << "Error: " << filename << " is not existed." << std::endl;
-        return 0;
+        return 1;
     }
 
     // Output filename information.
@@ -54,5 +54,5 @@ int main( int argc, char** argv )
     // Output the file size in byte.
     std::cout << "file size: " << file.byteSize() << " [bytes]" << std::endl;
 
-    return 1;
+    return 0;
 }

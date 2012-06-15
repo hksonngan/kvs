@@ -49,7 +49,7 @@ int main( int argc, char** argv )
     commandline.addValue( "filename.", false );
 
     // Parse given command line options.
-    if ( !commandline.parse() ) return 0;
+    if ( !commandline.parse() ) return 1;
 
     // Get a floating value which is given by the option 'x'.
     float x = commandline.optionValue<float>("x");
@@ -89,7 +89,7 @@ int main( int argc, char** argv )
     else
     {
         std::cerr << "Unknown operator '" << o << "'." << std::endl;
-        return 0;
+        return 1;
     }
 
     // Output the results.
@@ -105,5 +105,5 @@ int main( int argc, char** argv )
         std::cout << x << " " << o << " " << y << " = " << result << std::endl;
     }
 
-    return 1;
+    return 0;
 }

@@ -44,14 +44,14 @@ int main( int argc, char** argv )
     if ( !directory.exists() )
     {
         std::cerr << "Error: " << directory_name << " is not existed." << std::endl;
-        return 0;
+        return 1;
     }
 
     // Check whether the given directory is a directory.
     if ( !directory.isDirectory() )
     {
         std::cerr << "Error: " << directory_name << " is not directory." << std::endl;
-        return 0;
+        return 1;
     }
 
     // Output information of the number of files in the directory.
@@ -79,5 +79,5 @@ int main( int argc, char** argv )
         std::cout << directory.directoryPath(true) << std::endl;
     }
 
-    return 1;
+    return 0;
 }
