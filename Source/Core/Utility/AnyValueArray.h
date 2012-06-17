@@ -382,6 +382,13 @@ public:
         return m_type_id;
     }
 
+    template<typename T>
+    T at( const size_t index ) const
+    {
+        KVS_STATIC_ASSERT( is_supported<T>::value, "not supported" );
+        return ( *this )[ index ].to<T>();
+    }
+
     // for compatibility.
 
     const TypeInfo* typeInfo() const
@@ -477,23 +484,23 @@ public:
         return static_cast<T*>( this->data() );
     }
 
-    template<typename T>
-    T& at( const size_t index )
-    {
-        KVS_STATIC_ASSERT( is_supported<T>::value, "not supported" );
-        KVS_ASSERT( index < this->size() );
-        KVS_ASSERT( this->check_type<T>() );
-        return static_cast<T*>( this->data() )[ index ];
-    }
+    //template<typename T>
+    //T& at( const size_t index )
+    //{
+    //    KVS_STATIC_ASSERT( is_supported<T>::value, "not supported" );
+    //    KVS_ASSERT( index < this->size() );
+    //    KVS_ASSERT( this->check_type<T>() );
+    //    return static_cast<T*>( this->data() )[ index ];
+    //}
 
-    template<typename T>
-    const T& at( const size_t index ) const
-    {
-        KVS_STATIC_ASSERT( is_supported<T>::value, "not supported" );
-        KVS_ASSERT( index < this->size() );
-        KVS_ASSERT( this->check_type<T>() );
-        return static_cast<const T*>( this->data() )[ index ];
-    }
+    //template<typename T>
+    //const T& at( const size_t index ) const
+    //{
+    //    KVS_STATIC_ASSERT( is_supported<T>::value, "not supported" );
+    //    KVS_ASSERT( index < this->size() );
+    //    KVS_ASSERT( this->check_type<T>() );
+    //    return static_cast<const T*>( this->data() )[ index ];
+    //}
 
     template<typename T>
     T to( const size_t index ) const
