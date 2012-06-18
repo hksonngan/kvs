@@ -17,7 +17,7 @@
 
 #include <string>
 #include <kvs/ClassName>
-#include <kvs/glut/ScreenBase>
+#include <kvs/ScreenBase>
 #include <kvs/glut/WidgetBase>
 #include <kvs/glut/Rectangle>
 

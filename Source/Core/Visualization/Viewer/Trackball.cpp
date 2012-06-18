@@ -12,7 +12,6 @@
  */
 /****************************************************************************/
 #include "Trackball.h"
-#include <kvs/GlobalCore>
 #include <kvs/Camera>
 #include <kvs/Matrix33>
 #include <kvs/Quaternion>
@@ -436,11 +435,13 @@ void Trackball::rotate( const kvs::Vector2i& start, const kvs::Vector2i& end )
     kvs::Vector3f p1( n_old.x(), n_old.y(), this->depth_on_sphere( n_old ) );
     kvs::Vector3f p2( n_new.x(), n_new.y(), this->depth_on_sphere( n_new ) );
 
+/*
     if( kvs::GlobalCore::target == kvs::GlobalCore::TargetCamera )
     {
         m_rotation = kvs::Quaternion<float>::rotationQuaternion( p1, p2 );
         return;
     }
+*/
 
     // Calculate view.
     const kvs::Vector3f init_vec( 0.0, 0.0, 1.0 );

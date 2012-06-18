@@ -248,7 +248,6 @@
 #include <Core/Visualization/Viewer/DisplayFormat.h>
 #include <Core/Visualization/Viewer/DisplayList.h>
 #include <Core/Visualization/Viewer/FrameBuffer.h>
-#include <Core/Visualization/Viewer/GlobalCore.h>
 #include <Core/Visualization/Viewer/IDManager.h>
 #include <Core/Visualization/Viewer/Key.h>
 #include <Core/Visualization/Viewer/Light.h>
@@ -259,11 +258,9 @@
 #include <Core/Visualization/Viewer/OpenGL.h>
 #include <Core/Visualization/Viewer/RendererManager.h>
 #include <Core/Visualization/Viewer/ScreenBase.h>
-#include <Core/Visualization/Viewer/ScreenCore.h>
 #include <Core/Visualization/Viewer/Texture1D.h>
 #include <Core/Visualization/Viewer/Texture2D.h>
 #include <Core/Visualization/Viewer/TextureBase.h>
 #include <Core/Visualization/Viewer/Trackball.h>
-#include <Core/Visualization/Viewer/WindowBase.h>
 #include <Core/Visualization/Viewer/Xform.h>
 #include <Core/Visualization/Viewer/XformControl.h>

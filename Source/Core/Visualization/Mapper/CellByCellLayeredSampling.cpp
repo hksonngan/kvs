@@ -15,7 +15,6 @@
 #include "CellByCellLayeredSampling.h"
 #include <vector>
 #include <kvs/DebugNew>
-#include <kvs/GlobalCore>
 #include <kvs/Camera>
 #include <kvs/ValueArray>
 #include <kvs/CellBase>
@@ -220,20 +219,9 @@ CellByCellLayeredSampling::SuperClass* CellByCellLayeredSampling::exec( const kv
         else
         {
             // Generate particles by using default camera parameters.
-            if ( kvs::GlobalCore::camera )
-            {
-                if ( kvs::GlobalCore::camera->windowWidth() != 0 && kvs::GlobalCore::camera->windowHeight() )
-                {
-                    const kvs::Camera* camera = kvs::GlobalCore::camera;
-                    this->mapping( camera, reinterpret_cast<const kvs::UnstructuredVolumeObject*>( object ) );
-                }
-            }
-            else
-            {
-                kvs::Camera* camera = new kvs::Camera();
-                this->mapping( camera, reinterpret_cast<const kvs::UnstructuredVolumeObject*>( object ) );
-                delete camera;
-            }
+            kvs::Camera* camera = new kvs::Camera();
+            this->mapping( camera, reinterpret_cast<const kvs::UnstructuredVolumeObject*>( object ) );
+            delete camera;
         }
     }
 

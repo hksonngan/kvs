@@ -23,7 +23,7 @@
 #include <kvs/Key>
 #include <kvs/InitializeEventListener>
 #include <kvs/glut/Application>
-#include <kvs/glut/ScreenBase>
+#include <kvs/glut/Screen>
 #include "CommandName.h"
 #include "FileChecker.h"
 

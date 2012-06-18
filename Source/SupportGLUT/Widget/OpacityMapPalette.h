@@ -20,7 +20,7 @@
 #include <kvs/Texture1D>
 #include <kvs/Texture2D>
 #include <kvs/OpacityMap>
-#include <kvs/glut/ScreenBase>
+#include <kvs/ScreenBase>
 #include <kvs/glut/WidgetBase>
 #include <kvs/glut/Rectangle>
 #include <kvs/glut/ColorMapPalette>

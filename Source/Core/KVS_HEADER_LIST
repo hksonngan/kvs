@@ -248,7 +248,6 @@ Visualization/Viewer/Camera
 Visualization/Viewer/DisplayFormat
 Visualization/Viewer/DisplayList
 Visualization/Viewer/FrameBuffer
-Visualization/Viewer/GlobalCore
 Visualization/Viewer/IDManager
 Visualization/Viewer/Key
 Visualization/Viewer/Light
@@ -259,11 +258,9 @@ Visualization/Viewer/ObjectManager
 Visualization/Viewer/OpenGL
 Visualization/Viewer/RendererManager
 Visualization/Viewer/ScreenBase
-Visualization/Viewer/ScreenCore
 Visualization/Viewer/Texture1D
 Visualization/Viewer/Texture2D
 Visualization/Viewer/TextureBase
 Visualization/Viewer/Trackball
-Visualization/Viewer/WindowBase
 Visualization/Viewer/Xform
 Visualization/Viewer/XformControl

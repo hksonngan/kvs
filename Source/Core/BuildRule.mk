@@ -297,7 +297,6 @@ $(OUTDIR)/./Visualization/Viewer/Camera.o \
 $(OUTDIR)/./Visualization/Viewer/DisplayFormat.o \
 $(OUTDIR)/./Visualization/Viewer/DisplayList.o \
 $(OUTDIR)/./Visualization/Viewer/FrameBuffer.o \
-$(OUTDIR)/./Visualization/Viewer/GlobalCore.o \
 $(OUTDIR)/./Visualization/Viewer/IDManager.o \
 $(OUTDIR)/./Visualization/Viewer/Light.o \
 $(OUTDIR)/./Visualization/Viewer/Material.o \
@@ -305,12 +304,10 @@ $(OUTDIR)/./Visualization/Viewer/Mouse.o \
 $(OUTDIR)/./Visualization/Viewer/ObjectManager.o \
 $(OUTDIR)/./Visualization/Viewer/RendererManager.o \
 $(OUTDIR)/./Visualization/Viewer/ScreenBase.o \
-$(OUTDIR)/./Visualization/Viewer/ScreenCore.o \
 $(OUTDIR)/./Visualization/Viewer/Texture1D.o \
 $(OUTDIR)/./Visualization/Viewer/Texture2D.o \
 $(OUTDIR)/./Visualization/Viewer/TextureBase.o \
 $(OUTDIR)/./Visualization/Viewer/Trackball.o \
-$(OUTDIR)/./Visualization/Viewer/WindowBase.o \
 $(OUTDIR)/./Visualization/Viewer/Xform.o \
 $(OUTDIR)/./Visualization/Viewer/XformControl.o \
 

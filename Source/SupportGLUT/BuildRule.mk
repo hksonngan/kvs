@@ -8,17 +8,13 @@ $(OUTDIR)/./Renderer/Axis2DRenderer.o \
 $(OUTDIR)/./Renderer/AxisRenderer.o \
 $(OUTDIR)/./Renderer/ParallelAxisRenderer.o \
 $(OUTDIR)/./Viewer/Application.o \
-$(OUTDIR)/./Viewer/Global.o \
-$(OUTDIR)/./Viewer/GlobalBase.o \
 $(OUTDIR)/./Viewer/Histogram.o \
 $(OUTDIR)/./Viewer/LegendBar.o \
 $(OUTDIR)/./Viewer/OrientationAxis.o \
 $(OUTDIR)/./Viewer/Screen.o \
-$(OUTDIR)/./Viewer/ScreenBase.o \
 $(OUTDIR)/./Viewer/Text.o \
 $(OUTDIR)/./Viewer/Timer.o \
 $(OUTDIR)/./Viewer/TransferFunctionEditor.o \
-$(OUTDIR)/./Viewer/Window.o \
 $(OUTDIR)/./Widget/CheckBox.o \
 $(OUTDIR)/./Widget/CheckBoxGroup.o \
 $(OUTDIR)/./Widget/ColorMapPalette.o \

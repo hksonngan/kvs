@@ -23,7 +23,6 @@
 #include "HexahedralCell.h"
 #include "QuadraticHexahedralCell.h"
 #include "PyramidalCell.h"
-#include <kvs/GlobalCore>
 
 
 namespace Generator = kvs::CellByCellParticleGenerator;
@@ -212,8 +211,6 @@ CellByCellMetropolisSampling::SuperClass* CellByCellMetropolisSampling::exec( co
     const kvs::VolumeObjectBase::VolumeType volume_type = volume->volumeType();
     if ( volume_type == kvs::VolumeObjectBase::Structured )
     {
-//        const kvs::Camera* camera = ( !m_camera ) ? kvs::GlobalCore::camera : m_camera;
-//        this->mapping( camera, reinterpret_cast<const kvs::StructuredVolumeObject*>( object ) );
         if ( m_camera )
         {
             this->mapping( m_camera, static_cast<const kvs::StructuredVolumeObject*>( object ) );
@@ -221,26 +218,13 @@ CellByCellMetropolisSampling::SuperClass* CellByCellMetropolisSampling::exec( co
         else
         {
             // Generate particles by using default camera parameters.
-            if ( kvs::GlobalCore::camera )
-            {
-                if ( kvs::GlobalCore::camera->windowWidth() != 0 && kvs::GlobalCore::camera->windowHeight() )
-                {
-                    const kvs::Camera* camera = kvs::GlobalCore::camera;
-                    this->mapping( camera, static_cast<const kvs::StructuredVolumeObject*>( object ) );
-                }
-            }
-            else
-            {
-                kvs::Camera* camera = new kvs::Camera();
-                this->mapping( camera, static_cast<const kvs::StructuredVolumeObject*>( object ) );
-                delete camera;
-            }
+            kvs::Camera* camera = new kvs::Camera();
+            this->mapping( camera, static_cast<const kvs::StructuredVolumeObject*>( object ) );
+            delete camera;
         }
     }
     else // volume_type == kvs::VolumeObjectBase::Unstructured
     {
-//        const kvs::Camera* camera = ( !m_camera ) ? kvs::GlobalCore::camera : m_camera;
-//        this->mapping( camera, reinterpret_cast<const kvs::UnstructuredVolumeObject*>( object ) );
         if ( m_camera )
         {
             this->mapping( m_camera, reinterpret_cast<const kvs::UnstructuredVolumeObject*>( object ) );
@@ -248,20 +232,9 @@ CellByCellMetropolisSampling::SuperClass* CellByCellMetropolisSampling::exec( co
         else
         {
             // Generate particles by using default camera parameters.
-            if ( kvs::GlobalCore::camera )
-            {
-                if ( kvs::GlobalCore::camera->windowWidth() != 0 && kvs::GlobalCore::camera->windowHeight() )
-                {
-                    const kvs::Camera* camera = kvs::GlobalCore::camera;
-                    this->mapping( camera, reinterpret_cast<const kvs::UnstructuredVolumeObject*>( object ) );
-                }
-            }
-            else
-            {
-                kvs::Camera* camera = new kvs::Camera();
-                this->mapping( camera, reinterpret_cast<const kvs::UnstructuredVolumeObject*>( object ) );
-                delete camera;
-            }
+            kvs::Camera* camera = new kvs::Camera();
+            this->mapping( camera, reinterpret_cast<const kvs::UnstructuredVolumeObject*>( object ) );
+            delete camera;
         }
     }
 

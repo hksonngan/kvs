@@ -8,17 +8,13 @@ $(OUTDIR)\.\Renderer\Axis2DRenderer.obj \
 $(OUTDIR)\.\Renderer\AxisRenderer.obj \
 $(OUTDIR)\.\Renderer\ParallelAxisRenderer.obj \
 $(OUTDIR)\.\Viewer\Application.obj \
-$(OUTDIR)\.\Viewer\Global.obj \
-$(OUTDIR)\.\Viewer\GlobalBase.obj \
 $(OUTDIR)\.\Viewer\Histogram.obj \
 $(OUTDIR)\.\Viewer\LegendBar.obj \
 $(OUTDIR)\.\Viewer\OrientationAxis.obj \
 $(OUTDIR)\.\Viewer\Screen.obj \
-$(OUTDIR)\.\Viewer\ScreenBase.obj \
 $(OUTDIR)\.\Viewer\Text.obj \
 $(OUTDIR)\.\Viewer\Timer.obj \
 $(OUTDIR)\.\Viewer\TransferFunctionEditor.obj \
-$(OUTDIR)\.\Viewer\Window.obj \
 $(OUTDIR)\.\Widget\CheckBox.obj \
 $(OUTDIR)\.\Widget\CheckBoxGroup.obj \
 $(OUTDIR)\.\Widget\ColorMapPalette.obj \

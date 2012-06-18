@@ -19,7 +19,7 @@
 #include <kvs/ClassName>
 #include <kvs/Texture1D>
 #include <kvs/ColorMap>
-#include <kvs/glut/ScreenBase>
+#include <kvs/ScreenBase>
 #include <kvs/glut/WidgetBase>
 #include <kvs/glut/Rectangle>
 #include <kvs/glut/ColorPalette>
