@@ -35,11 +35,11 @@ public:
     Argument( int argc, char** argv ):
         kvs::CommandLine( argc, argv )
     {
-        add_help_option();
-        add_option( "server", "Server program.", 0, false );
-        add_option( "client", "Client program.", 0, false );
-        add_option( "port", "Port number.", 1, false );
-        add_option( "ip", "IP address.", 1, false );
+        addHelpOption();
+        addOption( "server", "Server program.", 0, false );
+        addOption( "client", "Client program.", 0, false );
+        addOption( "port", "Port number.", 1, false );
+        addOption( "ip", "IP address.", 1, false );
     }
 };
 

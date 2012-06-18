@@ -25,7 +25,7 @@
 Argument::Argument( int argc, char** argv ):
     kvs::CommandLine( argc, argv )
 {
-    add_help_option();
-    add_option("f", "Force reading DICOM files.");
-    add_value("file or directory");
+    addHelpOption();
+    addOption("f", "Force reading DICOM files.");
+    addValue("file or directory");
 }

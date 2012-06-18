@@ -43,12 +43,6 @@ int main( int argc, char** argv )
     if ( argc > 1 ) volume = new kvs::StructuredVolumeImporter( std::string( argv[1] ) );
     else            volume = new kvs::TornadoVolumeData( kvs::Vector3ui( 32, 32, 32 ) );
 
-    if ( !volume )
-    {
-        kvsMessageError( "Cannot create a structured volume object." );
-        return( false );
-    }
-
     std::vector<kvs::Real32> v;
     kvs::Vector3i min_coord( 15, 15,  0 );
     kvs::Vector3i max_coord( 20, 20, 30 );
@@ -64,22 +58,11 @@ int main( int argc, char** argv )
             }
         }
     }
-    kvs::PointObject* point = new kvs::PointObject( kvs::ValueArray<kvs::Real32>( v ) );
-    if ( !point )
-    {
-        kvsMessageError( "Cannot creat a point object.");
-        delete volume;
-        return( false );
-    }
+    kvs::PointObject* point = new kvs::PointObject;
+    point->setCoords( kvs::ValueArray<kvs::Real32>( v ) );
 
     const kvs::TransferFunction transfer_function( 256 );
     kvs::LineObject* object = new kvs::Streamline( volume, point, transfer_function );
-    if ( !object )
-    {
-        kvsMessageError( "Cannot creat a streamline object.");
-        delete point;
-        return( false );
-    }
 
     delete volume;
     delete point;

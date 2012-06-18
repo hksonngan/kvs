@@ -36,7 +36,7 @@ class PaintEvent : public kvs::PaintEventListener
         glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
         glBegin( GL_TRIANGLES );
-        glColor4ub( ::Color.r(), ::Color.g(), ::Color.b(), ::Opacity * 255 );
+        glColor4ub( ::Color.r(), ::Color.g(), ::Color.b(), (GLubyte)( ::Opacity * 255 ) );
         glVertex3d(  0.0,  3.0, 0.0 );
         glVertex3d(  3.0, -3.0, 0.0 );
         glVertex3d( -3.0, -3.0, 0.0 );

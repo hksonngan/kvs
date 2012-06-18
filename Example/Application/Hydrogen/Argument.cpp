@@ -25,10 +25,10 @@
 Argument::Argument( int argc, char** argv ):
     kvs::CommandLine( argc, argv )
 {
-    add_help_option();
-    add_option( "r", "Volume resolution. (default: 64 64 64)", 3, false );
-    add_option( "a", "External ascii type for KVSML format. (optional)", 0, false );
-    add_option( "b", "External binary type for KVSML format. (optional)", 0, false );
-    add_option( "verbose", "Verbose mode. (optional)", 0, false );
-    add_value( "Output filename [ *.fld | *.kvsml ]. (default: hydrogen.kvsml)", false );
+    addHelpOption();
+    addOption( "r", "Volume resolution. (default: 64 64 64)", 3, false );
+    addOption( "a", "External ascii type for KVSML format. (optional)", 0, false );
+    addOption( "b", "External binary type for KVSML format. (optional)", 0, false );
+    addOption( "verbose", "Verbose mode. (optional)", 0, false );
+    addValue( "Output filename [ *.fld | *.kvsml ]. (default: hydrogen.kvsml)", false );
 }
