@@ -25,8 +25,12 @@ LIBRARY_PATH =
 LINK_LIBRARY =
 INSTALL_DIR  =
 
+!IF EXIST( kvsmake.vc.conf )
+!INCLUDE kvsmake.vc.conf
+!ELSE
 !IF EXIST( kvsmake.conf )
 !INCLUDE kvsmake.conf
+!ENDIF
 !ENDIF
 
 
