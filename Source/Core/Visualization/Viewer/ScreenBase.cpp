@@ -218,7 +218,7 @@ void ScreenBase::paintFunction( void )
             }
         }
     }
-    else m_object_manager->applyXform();
+    else m_object_manager->kvs::ObjectBase::xform_control().applyXform();
 }
 
 /*==========================================================================*/

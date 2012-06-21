@@ -33,7 +33,7 @@ ObjectManager::ObjectManager( void ) :
     kvs::ObjectBase( true )
 {
     m_object_tree.clear();
-    kvs::Xform::initialize();
+    kvs::ObjectBase::xform_control().initialize();
     m_has_active_object = false;
     m_enable_all_move   = true;
     m_object_map.clear();
@@ -66,7 +66,7 @@ ObjectManager::~ObjectManager( void )
     }
 
     m_object_tree.clear();
-    kvs::Xform::clear();
+    kvs::ObjectBase::xform_control().clear();
     m_object_map.clear();
 }
 
@@ -266,7 +266,7 @@ void ObjectManager::change( int obj_id, ObjectBase* obj, bool delete_flg )
     kvs::ObjectBase* old_obj = *ptr; // object
 
     // Save the Xform.
-    kvs::Xform xform = old_obj->xform();
+    kvs::Xform xform = old_obj->xform_control().xform();
 
     // Erase the old object
     if( delete_flg )
@@ -277,7 +277,7 @@ void ObjectManager::change( int obj_id, ObjectBase* obj, bool delete_flg )
 
     // Insert the new object
     obj->updateNormalizeParameters();
-    obj->setXform( xform );
+    obj->xform_control().setXform( xform );
 
     *ptr = obj;
 
@@ -304,14 +304,14 @@ void ObjectManager::change( std::string obj_name, ObjectBase* obj, bool delete_f
         if ( old_obj->name() == obj_name )
         {
             // Save the Xform.
-            kvs::Xform xform = old_obj->xform();
+            kvs::Xform xform = old_obj->xform_control().xform();
 
             // Erase the old object
             if ( delete_flg ) { delete old_obj; }
 
             // Insert the new object
             obj->updateNormalizeParameters();
-            obj->setXform( xform );
+            obj->xform_control().setXform( xform );
 
             *ptr = obj;
 
@@ -422,10 +422,10 @@ void ObjectManager::resetXform( void )
 
     for( ; first != last; ++first )
     {
-        (*first)->resetXform();
+        (*first)->xform_control().resetXform();
     }
 
-    kvs::XformControl::resetXform();
+    kvs::ObjectBase::xform_control().resetXform();
 }
 
 /*==========================================================================*/
@@ -445,14 +445,14 @@ void ObjectManager::resetXform( int obj_id )
     ObjectIterator first = m_object_tree.begin( obj_ptr );
     ObjectIterator last  = m_object_tree.end( obj_ptr );
 
-    const kvs::Xform obj_form = (*obj_ptr)->xform();
-    const kvs::Xform trans = Xform(*this) * obj_form.inverse();
+    const kvs::Xform obj_form = (*obj_ptr)->xform_control().xform();
+    const kvs::Xform trans = Xform( this->kvs::ObjectBase::xform_control().xform() ) * obj_form.inverse();
 
-    (*obj_ptr)->setXform( Xform(*this) );
+    (*obj_ptr)->xform_control().setXform( this->kvs::ObjectBase::xform_control().xform() );
 
     for( ; first != last; ++first )
     {
-        (*first)->setXform( trans * (*first)->xform() );
+        (*first)->xform_control().setXform( trans * (*first)->xform_control().xform() );
     }
 }
 
@@ -463,7 +463,7 @@ void ObjectManager::resetXform( int obj_id )
 /*==========================================================================*/
 const kvs::Xform ObjectManager::xform( void ) const
 {
-    return( kvs::XformControl::xform() );
+    return( kvs::ObjectBase::xform_control().xform() );
 }
 
 /*==========================================================================*/
@@ -488,7 +488,7 @@ const kvs::Xform ObjectManager::xform( int obj_id ) const
     ObjectIterator obj_ptr = map_id->second; // pointer to the object
     kvs::ObjectBase* obj = *obj_ptr;     // object
 
-    return( obj->xform() );
+    return( obj->xform_control().xform() );
 }
 
 /*===========================================================================*/
@@ -622,8 +622,8 @@ void ObjectManager::resetActiveObjectXform( void )
 {
     if( m_has_active_object )
     {
-        (*m_active_object)->resetXform();
-        (*m_active_object)->multiplyXform( kvs::Xform(*this) );
+        (*m_active_object)->xform_control().resetXform();
+        (*m_active_object)->xform_control().multiplyXform( kvs::Xform( this->kvs::ObjectBase::xform_control().xform() ) );
     }
 }
 
@@ -718,7 +718,7 @@ bool ObjectManager::detectCollision(
 
     for( ; first != last; ++first )
     {
-        if( !(*first)->canCollision() ) continue;
+        if( !(*first)->xform_control().canCollision() ) continue;
 
         const kvs::Vector2f diff =
             (*first)->positionInDevice( camera, m_object_center, m_normalize ) - p_win;
@@ -757,7 +757,7 @@ bool ObjectManager::detectCollision( const kvs::Vector3f& p_world )
 
     for( ; first != last; ++first )
     {
-        if( !(*first)->canCollision() ) continue;
+        if( !(*first)->xform_control().canCollision() ) continue;
 
         const kvs::Vector3f diff =
             (*first)->positionInWorld( m_object_center, m_normalize ) - p_world;
@@ -790,7 +790,7 @@ const kvs::Vector2f ObjectManager::positionInDevice( kvs::Camera* camera ) const
     {
         camera->update();
 
-        ret     = camera->projectObjectToWindow( kvs::Xform::translation() );
+        ret     = camera->projectObjectToWindow( kvs::ObjectBase::xform_control().xform().translation() );
         ret.y() = camera->windowHeight() - ret.y();
     }
     glPopMatrix();
@@ -830,14 +830,14 @@ void ObjectManager::translate( const kvs::Vector3f& translation )
 {
     kvs::ObjectBase* object = this->get_control_target();
 
-    object->kvs::XformControl::translate( translation );
+    object->xform_control().translate( translation );
 
     ObjectIterator first = this->get_control_first_pointer();
     ObjectIterator last  = this->get_control_last_pointer();
 
     for( ; first != last; ++first )
     {
-        (*first)->translate( translation );
+        (*first)->xform_control().translate( translation );
     }
 }
 
@@ -1019,7 +1019,7 @@ kvs::Vector3f ObjectManager::get_rotation_center( kvs::ObjectBase* obj )
 {
     if( this->isEnableAllMove() )
     {
-        return( kvs::Vector3f( (*this)[0][3], (*this)[1][3], (*this)[2][3] ) );
+        return( this->kvs::ObjectBase::xform_control().xform().translation() );
     }
     else
     {

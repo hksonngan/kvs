@@ -121,7 +121,7 @@ Bounds::SuperClass* Bounds::exec( const kvs::ObjectBase* object )
     default: break;
     }
 
-    SuperClass::disableCollision();
+    SuperClass::xform_control().disableCollision();
 
     return( this );
 }

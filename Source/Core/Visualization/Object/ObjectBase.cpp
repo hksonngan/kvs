@@ -29,7 +29,7 @@ namespace kvs
  */
 /*===========================================================================*/
 ObjectBase::ObjectBase( const bool collision ) :
-    kvs::XformControl( collision ),
+    m_xform_control( collision ),
     m_name("unknown"),
     m_min_object_coord( kvs::Vector3f( -3.0, -3.0, -3.0 ) ),
     m_max_object_coord( kvs::Vector3f(  3.0,  3.0,  3.0 ) ),
@@ -55,7 +55,7 @@ ObjectBase::ObjectBase(
     const kvs::Vector3f& scaling,
     const kvs::Matrix33f& rotation,
     const bool collision ):
-    kvs::XformControl( translation, scaling, rotation, collision ),
+    m_xform_control( translation, scaling, rotation, collision ),
     m_name("unknown"),
     m_min_object_coord( kvs::Vector3f( -3.0, -3.0, -3.0 ) ),
     m_max_object_coord( kvs::Vector3f(  3.0,  3.0,  3.0 ) ),
@@ -83,8 +83,7 @@ ObjectBase::~ObjectBase( void )
 /*===========================================================================*/
 ObjectBase& ObjectBase::operator = ( const ObjectBase& object )
 {
-    kvs::XformControl::operator=( object );
-
+    m_xform_control = object.m_xform_control;
     m_name = object.m_name;
     m_min_object_coord = object.m_min_object_coord;
     m_max_object_coord = object.m_max_object_coord;
@@ -398,7 +397,7 @@ const kvs::Vector3f ObjectBase::positionInWorld(
     init_pos.y() *= global_scale.y();
     init_pos.z() *= global_scale.z();
 
-    return( kvs::Xform::translation() + init_pos * kvs::Xform::scaledRotation() );
+    return( m_xform_control.xform().translation() + init_pos * m_xform_control.xform().scaledRotation() );
 }
 
 /*===========================================================================*/
@@ -457,7 +456,7 @@ void ObjectBase::transform(
      * the object's xform. You see also kvs::XformControl class and kvs::Xform
      * class in detail.
      */
-    ObjectBase::XformControl::applyXform();
+    m_xform_control.applyXform();
 
     glScalef( global_scale.x(), global_scale.y(), global_scale.z() );
 
@@ -641,9 +640,9 @@ void ObjectBase::rotate(
     const kvs::Matrix33f& rot,
     const kvs::Vector3f&  center )
 {
-    translate( -center );
-    kvs::Xform::updateRotation( rot );
-    translate( center );
+    m_xform_control.translate( -center );
+    m_xform_control.updateRotation( rot );
+    m_xform_control.translate( center );
 }
 
 /*===========================================================================*/
@@ -657,9 +656,9 @@ void ObjectBase::scale(
     const kvs::Vector3f& scale,
     const kvs::Vector3f& center )
 {
-    translate( -center );
-    kvs::Xform::updateScaling( scale );
-    translate( center );
+    m_xform_control.translate( -center );
+    m_xform_control.updateScaling( scale );
+    m_xform_control.translate( center );
 }
 
 /*===========================================================================*/
@@ -690,11 +689,21 @@ const kvs::Vector3f ObjectBase::object_to_world_coordinate(
     p_world.y() *= global_scale.y();
     p_world.z() *= global_scale.z();
 
-    p_world = p_world * kvs::Xform::scaledRotation();
+    p_world = p_world * m_xform_control.xform().scaledRotation();
 
-    p_world += kvs::Xform::translation();
+    p_world += m_xform_control.xform().translation();
 
     return( p_world );
+}
+
+kvs::XformControl& ObjectBase::xform_control()
+{
+    return m_xform_control;
+}
+
+const kvs::XformControl& ObjectBase::xform_control() const
+{
+    return m_xform_control;
 }
 
 } // end of namespace kvs

@@ -175,7 +175,7 @@ public:
     {
         // Erase the object and renderer.
         const kvs::ObjectBase* obj = screen()->objectManager()->object( ::ObjectName );
-        const kvs::Xform xform = obj->xform();
+        const kvs::Xform xform = obj->xform_control().xform();
         const int obj_id = screen()->objectManager()->objectID( obj );
         screen()->IDManager()->eraseByObjectID( obj_id );
         screen()->objectManager()->erase( ::ObjectName );
@@ -194,7 +194,7 @@ public:
             kvsview::ParticleVolumeRenderer::SetupMapper( *m_arg, tfunc, *screen(), mapper );
             object = mapper->exec( m_volume );
             object->setName( ::ObjectName );
-            object->setXform( xform );
+            object->xform_control().setXform( xform );
             break;
         }
         case 2: // Rejection sampling
@@ -203,7 +203,7 @@ public:
             kvsview::ParticleVolumeRenderer::SetupMapper( *m_arg, tfunc, *screen(), mapper );
             object = mapper->exec( m_volume );
             object->setName( ::ObjectName );
-            object->setXform( xform );
+            object->xform_control().setXform( xform );
             break;
         }
         case 3: // Layered sampling
@@ -212,7 +212,7 @@ public:
             kvsview::ParticleVolumeRenderer::SetupMapper( *m_arg, tfunc, *screen(), mapper );
             object = mapper->exec( m_volume );
             object->setName( ::ObjectName );
-            object->setXform( xform );
+            object->xform_control().setXform( xform );
             break;
         }
         default: // Uniform sampling
@@ -221,7 +221,7 @@ public:
             kvsview::ParticleVolumeRenderer::SetupMapper( *m_arg, tfunc, *screen(), mapper );
             object = mapper->exec( m_volume );
             object->setName( ::ObjectName );
-            object->setXform( xform );
+            object->xform_control().setXform( xform );
             break;
         }
         }

@@ -35,7 +35,7 @@ class Camera;
  *  Object base class.
  */
 /*==========================================================================*/
-class ObjectBase : public kvs::XformControl
+class ObjectBase
 {
     kvsClassName( kvs::ObjectBase );
 
@@ -67,6 +67,7 @@ public:
 
 protected:
 
+    kvs::XformControl m_xform_control;
     std::string   m_name;               ///< object name
     kvs::Vector3f m_min_object_coord;   ///< min coord in the object coordinate system
     kvs::Vector3f m_max_object_coord;   ///< max coord in the object coordinate system
@@ -192,6 +193,9 @@ public:
     void scale(
         const kvs::Vector3f& scale,
         const kvs::Vector3f& center );
+
+    kvs::XformControl& xform_control();
+    const kvs::XformControl& xform_control() const;
 
 private:
 
