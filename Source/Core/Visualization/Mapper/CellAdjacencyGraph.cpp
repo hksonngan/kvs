@@ -281,12 +281,7 @@ void CellAdjacencyGraph::create_for_tetrahedral_cell( const kvs::UnstructuredVol
 
     m_graph.allocate( ncells * 4 );
     m_graph.fill( 0 );
-
-    if ( !m_mask.allocate( ncells * 4 ) )
-    {
-        kvsMessageError("Cannot allocate memory for the mask.");
-        return;
-    }
+    m_mask.allocate( ncells * 4 );
 
     ::FaceMap face_map;
     for ( size_t cell_id = 0, index = 0; cell_id < ncells; cell_id++ )
@@ -352,12 +347,7 @@ void CellAdjacencyGraph::create_for_hexahedral_cell( const kvs::UnstructuredVolu
 
     m_graph.allocate( ncells * 6 );
     m_graph.fill( 0 );
-
-    if ( !m_mask.allocate( ncells * 6 ) )
-    {
-        kvsMessageError("Cannot allocate memory for the mask.");
-        return;
-    }
+    m_mask.allocate( ncells * 6 );
 
     ::FaceMap face_map;
     for ( size_t cell_id = 0, index = 0; cell_id < ncells; cell_id++ )
