@@ -122,7 +122,7 @@ size_t AnyValueArray::byteSize() const
     return this->size() * m_size_of_value;
 }
 
-const kvs::SharedPointer<void>& AnyValueArray::getSharedPointer() const
+const kvs::SharedPointer<void>& AnyValueArray::sharedPointer() const
 {
     return m_values;
 }

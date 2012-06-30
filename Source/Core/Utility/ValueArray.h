@@ -216,21 +216,25 @@ public:
 public:
     reference front()
     {
+        KVS_ASSERT( !this->empty() );
         return ( *this )[0];
     }
 
     const_reference front() const
     {
+        KVS_ASSERT( !this->empty() );
         return ( *this )[0];
     }
 
     reference back()
     {
+        KVS_ASSERT( !this->empty() );
         return ( *this )[ this->size() - 1 ];
     }
 
     const_reference back() const
     {
+        KVS_ASSERT( !this->empty() );
         return ( *this )[ this->size() - 1 ];
     }
 
@@ -244,7 +248,7 @@ public:
         return this->size() * sizeof( value_type );
     }
 
-    const kvs::SharedPointer<value_type>& getSharedPointer() const
+    const kvs::SharedPointer<value_type>& sharedPointer() const
     {
         return m_values;
     }
