@@ -16,6 +16,7 @@
 #define KVS_SHARED_POINTER_H_INCLUDE
 
 #include <iostream>
+#include <utility>
 #include <kvs/Assert>
 #include "SharedCount.h"
 
@@ -147,7 +148,6 @@ public:
     {
         this_type tmp;
         tmp.swap( *this );
-        return *this;
     }
 
 // sp.reset( p )
@@ -159,7 +159,6 @@ public:
         KVS_ASSERT( ptr == NULL || m_pointer != ptr );
         this_type tmp( ptr );
         tmp.swap( *this );
-        return *this;
     }
 
 // sp.reset( p, d )
@@ -171,7 +170,6 @@ public:
         KVS_ASSERT( ptr == NULL || m_pointer != ptr );
         this_type tmp( ptr, deleter );
         tmp.swap( *this );
-        return *this;
     }
 
 public:
