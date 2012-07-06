@@ -279,7 +279,7 @@ size_t BitArray::paddingBit() const
 }
 
 #if KVS_ENABLE_DEPRECATED
-kvs::UInt8* allocate( size_t nvalues )
+kvs::UInt8* BitArray::allocate( size_t size )
 {
     m_size = size;
     m_values.allocate( this->byteSize() );
