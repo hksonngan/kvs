@@ -118,14 +118,16 @@ public:
 
     this_type& operator =( const this_type& rhs ) throw()
     {
-        this_type( rhs ).swap( *this );
+        this_type tmp( rhs );
+        tmp.swap( *this );
         return *this;
     }
 
     template <typename Y>
     this_type& operator =( const SharedPointer<Y>& rhs ) throw()
     {
-        this_type( rhs ).swap( *this );
+        this_type tmp( rhs );
+        tmp.swap( *this );
         return *this;
     }
 
@@ -143,7 +145,9 @@ public:
 // SharedPointer().swap( sp )
     void reset() throw()
     {
-        this_type().swap( *this );
+        this_type tmp;
+        tmp.swap( *this );
+        return *this;
     }
 
 // sp.reset( p )
@@ -153,7 +157,9 @@ public:
     void reset( Y* ptr )
     {
         KVS_ASSERT( ptr == NULL || m_pointer != ptr );
-        this_type( ptr ).swap( *this );
+        this_type tmp( ptr );
+        tmp.swap( *this );
+        return *this;
     }
 
 // sp.reset( p, d )
@@ -163,7 +169,9 @@ public:
     void reset( Y* ptr, D deleter )
     {
         KVS_ASSERT( ptr == NULL || m_pointer != ptr );
-        this_type( ptr, deleter ).swap( *this );
+        this_type tmp( ptr, deleter );
+        tmp.swap( *this );
+        return *this;
     }
 
 public:
