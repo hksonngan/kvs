@@ -60,21 +60,24 @@ public:
 
     this_type& operator =( const this_type& rhs ) throw()
     {
-        this_type( rhs ).swap( *this );
+        this_type tmp( rhs );
+        tmp.swap( *this );
         return *this;
     }
 
     template <typename U>
     this_type& operator =( const WeakPointer<U>& rhs ) throw()
     {
-        this_type( rhs ).swap( *this );
+        this_type tmp( rhs );
+        tmp.swap( *this );
         return *this;
     }
 
     template <typename U>
     this_type& operator =( const SharedPointer<U>& rhs ) throw()
     {
-        this_type( rhs ).swap( *this );
+        this_type tmp( rhs );
+        tmp.swap( *this );
         return *this;
     }
 
@@ -83,7 +86,8 @@ public:
 
     void reset() throw()
     {
-        this_type().swap( *this );
+        this_type tmp;
+        tmp.swap( *this );
     }
 
     void swap( this_type& other ) throw()
