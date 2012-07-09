@@ -39,6 +39,11 @@ TypeInfo::TypeInfo()
     m_id = kvs::Type::UnknownType;
 }
 
+TypeInfo::TypeInfo( kvs::Type::TypeID id )
+{
+    m_id = id;
+}
+
 const std::type_info& TypeInfo::type() const
 {
     switch ( m_id )
@@ -101,11 +106,6 @@ const char* TypeInfo::typeName() const
     }
     KVS_ASSERT( false );
     return NULL;
-}
-
-void TypeInfo::setid( kvs::Type::TypeID id )
-{
-    m_id = id;
 }
 
 } // temporal

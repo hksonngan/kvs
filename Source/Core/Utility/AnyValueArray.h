@@ -44,12 +44,11 @@ private:
 
 public:
     TypeInfo();
+    TypeInfo( kvs::Type::TypeID id );
 
 public:
     const std::type_info& type() const;
     const char* typeName() const;
-
-    void setid( kvs::Type::TypeID id );
 }; // TypeInfo
 
 template <typename T, T Value>
@@ -317,7 +316,8 @@ public:
     AnyValueArray();
 
     template<typename T>
-    explicit AnyValueArray( const kvs::ValueArray<T>& values )
+    explicit AnyValueArray( const kvs::ValueArray<T>& values ):
+        m_type_info( kvs::Type::GetID<T>() )
     {
         KVS_STATIC_ASSERT( is_supported<T>::value, "not supported" );
         m_values        = kvs::static_pointer_cast<T>( values.sharedPointer() );
@@ -393,7 +393,6 @@ public:
 
     const TypeInfo* typeInfo() const
     {
-        const_cast<AnyValueArray*>( this )->m_type_info.setid( this->typeID() );
         return &m_type_info;
     }
 
