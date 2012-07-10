@@ -133,6 +133,7 @@ void AnyValueArray::swap( AnyValueArray& other )
     std::swap( m_size, other.m_size );
     std::swap( m_size_of_value, other.m_size_of_value );
     std::swap( m_type_id, other.m_type_id );
+    std::swap( m_type_info, other.m_type_info );
 }
 
 AnyValueArray AnyValueArray::clone() const
