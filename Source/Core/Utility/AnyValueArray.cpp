@@ -167,6 +167,7 @@ void AnyValueArray::release()
     m_size = 0;
     m_size_of_value = 0;
     m_type_id = kvs::Type::UnknownType;
+    m_type_info = TypeInfo();
 }
 
 bool AnyValueArray::unique() const

@@ -320,7 +320,7 @@ public:
         m_type_info( kvs::Type::GetID<T>() )
     {
         KVS_STATIC_ASSERT( is_supported<T>::value, "not supported" );
-        m_values        = kvs::static_pointer_cast<T>( values.sharedPointer() );
+        m_values        = values.sharedPointer();
         m_size          = values.size();
         m_size_of_value = sizeof( T );
         m_type_id       = kvs::Type::GetID<T>();
