@@ -282,8 +282,8 @@ void StochasticLineEngine::draw_vertex_buffer( const float modelview_matrix[16] 
         ( m_ref_line->lineType() == kvs::LineObject::Segment ||
           m_ref_line->lineType() == kvs::LineObject::Uniline );
 
-    glPolygonOffset( 1.0, 0.0 );
-    glEnable( GL_POLYGON_OFFSET_FILL );
+//    glPolygonOffset( 1.0, 0.0 );
+//    glEnable( GL_POLYGON_OFFSET_FILL );
     glEnable( GL_LINE_SMOOTH );
 
     const float width = m_ref_line->size();
@@ -350,7 +350,7 @@ void StochasticLineEngine::draw_vertex_buffer( const float modelview_matrix[16] 
     glDisableClientState( GL_VERTEX_ARRAY );
     glDisableVertexAttribArray( m_loc_identifier );
 
-    glDisable( GL_POLYGON_OFFSET_FILL );
+//    glDisable( GL_POLYGON_OFFSET_FILL );
     glDisable( GL_LINE_SMOOTH );
 
     m_shader_program.unbind();
