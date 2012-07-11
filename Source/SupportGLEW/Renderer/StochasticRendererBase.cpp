@@ -407,6 +407,34 @@ kvs::glew::StochasticRenderingEngine* StochasticRendererBase::find_engine( const
     return NULL;
 }
 
+bool StochasticRendererBase::erase_engine( const kvs::ObjectBase* object )
+{
+    kvs::glew::StochasticRenderingEngine* engine = this->find_engine( object );
+    if ( engine )
+    {
+        RenderingEngineList::iterator end = std::remove( m_rendering_engines.begin(), m_rendering_engines.end(), engine );
+        m_rendering_engines.erase( end, m_rendering_engines.end() );
+        delete engine;
+        return true;
+    }
+
+    return false;
+}
+
+bool StochasticRendererBase::erase_engine( const std::string object_name )
+{
+    kvs::glew::StochasticRenderingEngine* engine = this->find_engine( object_name );
+    if ( engine )
+    {
+        RenderingEngineList::iterator end = std::remove( m_rendering_engines.begin(), m_rendering_engines.end(), engine );
+        m_rendering_engines.erase( end, m_rendering_engines.end() );
+        delete engine;
+        return true;
+    }
+
+    return false;
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Enables exact depth testing.

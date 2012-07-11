@@ -65,6 +65,14 @@ public:
         kvs::ObjectBase* object,
         bool is_delete = true );
 
+    bool removeObject( std::string registered_object_name );
+
+    bool removeObject( kvs::ObjectBase* registered_object );
+
+    bool eraseObject( std::string registered_object_name );
+
+    bool eraseObject( kvs::ObjectBase* registered_object );
+
     void clearEnsembleBuffer( void );
 
     void setRepetitionLevel( const size_t repetition_level );

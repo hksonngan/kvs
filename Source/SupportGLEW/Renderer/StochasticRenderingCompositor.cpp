@@ -247,6 +247,72 @@ void StochasticRenderingCompositor::changeObject(
     static_cast<kvs::glew::StochasticRendererBase*>( m_renderer )->clearEnsembleBuffer();
 }
 
+bool StochasticRenderingCompositor::removeObject( std::string registered_object_name )
+{
+    // Find the object.
+    kvs::ObjectBase* registered_object = NULL;
+    std::vector<kvs::ObjectBase*>::iterator object = m_registered_objects.begin();
+    std::vector<kvs::ObjectBase*>::iterator last = m_registered_objects.end();
+    while ( object != last )
+    {
+        if ( (*object)->name() == registered_object_name )
+        {
+            registered_object = *object;
+            break;
+        }
+        ++object;
+    }
+
+    if ( registered_object ) return this->removeObject( registered_object );
+
+    return false;
+}
+
+bool StochasticRenderingCompositor::removeObject( kvs::ObjectBase* registered_object )
+{
+    std::vector<kvs::ObjectBase*>::iterator end = std::remove( m_registered_objects.begin(), m_registered_objects.end(), registered_object );
+    m_registered_objects.erase( end, m_registered_objects.end() );
+    if ( m_renderer->erase_engine( registered_object ) )
+    {
+        static_cast<kvs::glew::StochasticRendererBase*>( m_renderer )->clearEnsembleBuffer();
+        return true;
+    }
+
+    return false;
+}
+
+bool StochasticRenderingCompositor::eraseObject( std::string registered_object_name )
+{
+    // Find the object.
+    kvs::ObjectBase* registered_object = NULL;
+    std::vector<kvs::ObjectBase*>::iterator object = m_registered_objects.begin();
+    std::vector<kvs::ObjectBase*>::iterator last = m_registered_objects.end();
+    while ( object != last )
+    {
+        if ( (*object)->name() == registered_object_name )
+        {
+            registered_object = *object;
+            break;
+        }
+        ++object;
+    }
+
+    if ( registered_object ) return this->eraseObject( registered_object );
+
+    return false;
+}
+
+bool StochasticRenderingCompositor::eraseObject( kvs::ObjectBase* registered_object )
+{
+    if ( this->removeObject( registered_object ) )
+    {
+        delete registered_object;
+        return true;
+    }
+
+    return false;
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Clears the ensemble buffers.

@@ -108,6 +108,10 @@ protected:
 
     kvs::glew::StochasticRenderingEngine* find_engine( const std::string object_name );
 
+    bool erase_engine( const kvs::ObjectBase* object );
+
+    bool erase_engine( const std::string object_name );
+
     void enable_exact_depth_testing( void );
 
     void disable_exact_depth_testing( void );

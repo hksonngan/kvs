@@ -350,6 +350,9 @@ void StochasticLineEngine::draw_vertex_buffer( const float modelview_matrix[16] 
     glDisableClientState( GL_VERTEX_ARRAY );
     glDisableVertexAttribArray( m_loc_identifier );
 
+    glDisable( GL_POLYGON_OFFSET_FILL );
+    glDisable( GL_LINE_SMOOTH );
+
     m_shader_program.unbind();
 
     glActiveTexture(GL_TEXTURE0);    m_random_texture.unbind();         glDisable(GL_TEXTURE_2D);
