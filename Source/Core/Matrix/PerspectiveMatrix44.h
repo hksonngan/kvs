@@ -36,8 +36,8 @@ template <typename T>
 inline kvs::Matrix44<T> PerspectiveMatrix44(
     const T fov,
     const T aspect,
-    const T near,
-    const T far )
+    const T znear,
+    const T zfar )
 {
     const T rad  = kvs::Math::Deg2Rad( fov / 2 );
     const T sinA = static_cast<T>( sin( rad ) );
@@ -45,15 +45,15 @@ inline kvs::Matrix44<T> PerspectiveMatrix44(
 
     KVS_ASSERT( !( kvs::Math::IsZero( sinA ) ) );
     KVS_ASSERT( !( kvs::Math::IsZero( aspect ) ) );
-    KVS_ASSERT( !( kvs::Math::IsZero( far -near ) ) );
+    KVS_ASSERT( !( kvs::Math::IsZero( zfar - znear ) ) );
 
     const T cotA = cosA / sinA;
     const T elements[16] =
     {
-        cotA / aspect,    0,                                0,                                    0,
-                    0, cotA,                                0,                                    0,
-                    0,    0, -( far + near ) / ( far - near ), -( far * near * 2 ) / ( far - near ),
-                    0,    0,                               -1,                                    1
+        cotA / aspect,    0,                                    0,                                        0,
+                    0, cotA,                                    0,                                        0,
+                    0,    0, -( zfar + znear ) / ( zfar - znear ), -( zfar * znear * 2 ) / ( zfar - znear ),
+                    0,    0,                                   -1,                                        1
     };
 
     return( kvs::Matrix44<T>( elements ) );

@@ -41,19 +41,19 @@ inline kvs::Matrix44<T> FrustumMatrix44(
     const T right,
     const T bottom,
     const T top,
-    const T near,
-    const T far )
+    const T znear,
+    const T zfar )
 {
     KVS_ASSERT( !( kvs::Math::IsZero( right - left ) ) );
     KVS_ASSERT( !( kvs::Math::IsZero( top - bottom ) ) );
-    KVS_ASSERT( !( kvs::Math::IsZero( far - near ) ) );
+    KVS_ASSERT( !( kvs::Math::IsZero( zfar - znear ) ) );
 
     const T elements[16] =
     {
-        2 * near / ( right - left ),                           0,  ( right + left ) / ( right - left ),                                0,
-                                  0, 2 * near / ( top - bottom ),  ( top + bottom ) / ( top - bottom ),                                0,
-                                  0,                           0,     -( far + near ) / ( far - near ), -2 * far * near / ( far - near ),
-                                  0,                           0,                                   -1,                                0
+        2 * znear / ( right - left ),                            0,      ( right + left ) / ( right - left ),                                    0,
+                                   0, 2 * znear / ( top - bottom ),      ( top + bottom ) / ( top - bottom ),                                    0,
+                                   0,                            0,     -( zfar + znear ) / ( zfar - znear ), -2 * zfar * znear / ( zfar - znear ),
+                                   0,                            0,                                       -1,                                    0
     };
 
     return( kvs::Matrix44<T>( elements ) );
