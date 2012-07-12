@@ -18,7 +18,6 @@ namespace kvs
 {
 
 // template instantiation
-template class Quaternion<int>;
 template class Quaternion<float>;
 template class Quaternion<double>;
 

@@ -919,7 +919,7 @@ kvs::Vector3<T> Quaternion<T>::rotate( const kvs::Vector3<T>& pos, const kvs::Ve
     const Quaternion<T> p( pos.x(), pos.y(), pos.z(), T(0) );
     const Quaternion<T> rotate_quat( axis, rad );
     const Quaternion<T> rotate_conj = rotate_quat.conjunction();
-    const Quaternion<T> rotate_pos = rotate_conj * p * rotate_quat;
+    const Quaternion<T> rotate_pos = rotate_quat * p * rotate_conj;
 
     return( kvs::Vector3<T>( rotate_pos.x(), rotate_pos.y(), rotate_pos.z() ) );
 }
@@ -929,7 +929,7 @@ kvs::Vector3<T> Quaternion<T>::rotate( const kvs::Vector3<T>& pos, const kvs::Qu
 {
     const Quaternion<T> p( pos.x(), pos.y(), pos.z(), T(0) );
     const Quaternion<T> rotate_conj = q.conjunction();
-    const Quaternion<T> rotate_pos = rotate_conj * p * q;
+    const Quaternion<T> rotate_pos = q * p * rotate_conj;
 
     return( kvs::Vector3<T>( rotate_pos.x(), rotate_pos.y(), rotate_pos.z() ) );
 }
