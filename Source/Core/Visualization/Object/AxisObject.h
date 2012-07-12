@@ -67,8 +67,6 @@ public:
         const kvs::Real32 line_width = 2.0f,
         const kvs::Real32 subline_width = 1.0f );
 
-    virtual ~AxisObject( void );
-
 public:
 
 //    static AxisObject* Cast( kvs::ObjectBase* object );

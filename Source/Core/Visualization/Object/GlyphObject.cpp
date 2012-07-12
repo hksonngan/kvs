@@ -27,20 +27,6 @@ GlyphObject::GlyphObject( void ):
 {
 }
 
-/*===========================================================================*/
-/**
- *  @brief  Destructs the GlyphObject class.
- */
-/*===========================================================================*/
-GlyphObject::~GlyphObject( void )
-{
-    m_coords.release();
-    m_sizes.release();
-    m_directions.release();
-    m_colors.release();
-    m_opacities.release();
-}
-
 const kvs::ObjectBase::ObjectType GlyphObject::objectType( void ) const
 {
     return( kvs::ObjectBase::Glyph );

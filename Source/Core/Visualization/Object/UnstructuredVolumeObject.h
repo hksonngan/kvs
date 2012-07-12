@@ -61,12 +61,17 @@ public:
         const size_t       veclen,
         const Coords&      coords,
         const Connections& connections,
-        const Values&      values );
+        const Values&      values )
+    {
+        this->setVeclen( veclen );
+        this->setCoords( coords );
+        this->setValues( values );
+        this->setCellType( cell_type );
+        this->setNNodes( nnodes );
+        this->setNCells( ncells );
+        this->setConnections( connections );
+    }
 #endif
-
-    UnstructuredVolumeObject( const UnstructuredVolumeObject& other );
-
-    virtual ~UnstructuredVolumeObject( void );
 
 public:
 
@@ -75,8 +80,6 @@ public:
     static const kvs::UnstructuredVolumeObject* DownCast( const kvs::ObjectBase* object );
 
 public:
-
-    UnstructuredVolumeObject& operator =( const UnstructuredVolumeObject& rhs );
 
     friend std::ostream& operator << ( std::ostream& os, const UnstructuredVolumeObject& object );
 

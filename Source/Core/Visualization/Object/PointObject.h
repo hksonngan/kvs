@@ -56,62 +56,118 @@ public:
         const kvs::ValueArray<kvs::Real32>& coords,
         const kvs::ValueArray<kvs::UInt8>&  colors,
         const kvs::ValueArray<kvs::Real32>& normals,
-        const kvs::ValueArray<kvs::Real32>& sizes );
+        const kvs::ValueArray<kvs::Real32>& sizes )
+    {
+        this->setCoords( coords );
+        this->setColors( colors );
+        this->setNormals( normals );
+        this->setSizes( sizes );
+    }
 
     PointObject(
         const kvs::ValueArray<kvs::Real32>& coords,
         const kvs::ValueArray<kvs::UInt8>&  colors,
         const kvs::ValueArray<kvs::Real32>& normals,
-        const kvs::Real32                   size );
+        const kvs::Real32                   size )
+    {
+        this->setCoords( coords );
+        this->setColors( colors );
+        this->setNormals( normals );
+        this->setSize( size );
+    }
 
     PointObject(
         const kvs::ValueArray<kvs::Real32>& coords,
         const kvs::RGBColor&                color,
         const kvs::ValueArray<kvs::Real32>& normals,
-        const kvs::ValueArray<kvs::Real32>& sizes );
+        const kvs::ValueArray<kvs::Real32>& sizes )
+    {
+        this->setCoords( coords );
+        this->setColor( color );
+        this->setNormals( normals );
+        this->setSizes( sizes );
+    }
 
     PointObject(
         const kvs::ValueArray<kvs::Real32>& coords,
         const kvs::ValueArray<kvs::Real32>& normals,
-        const kvs::ValueArray<kvs::Real32>& sizes );
+        const kvs::ValueArray<kvs::Real32>& sizes )
+    {
+        this->setCoords( coords );
+        this->setNormals( normals );
+        this->setSizes( sizes );
+    }
 
     PointObject(
         const kvs::ValueArray<kvs::Real32>& coords,
         const kvs::RGBColor&                color,
         const kvs::ValueArray<kvs::Real32>& normals,
-        const kvs::Real32                   size );
+        const kvs::Real32                   size )
+    {
+        this->setCoords( coords );
+        this->setColor( color );
+        this->setNormals( normals );
+        this->setSize( size );
+    }
 
     PointObject(
         const kvs::ValueArray<kvs::Real32>& coords,
         const kvs::ValueArray<kvs::UInt8>&  colors,
-        const kvs::ValueArray<kvs::Real32>& sizes );
+        const kvs::ValueArray<kvs::Real32>& sizes )
+    {
+        this->setCoords( coords );
+        this->setColors( colors );
+        this->setSizes( sizes );
+    }
 
     PointObject(
         const kvs::ValueArray<kvs::Real32>& coords,
         const kvs::RGBColor&                color,
-        const kvs::ValueArray<kvs::Real32>& sizes );
+        const kvs::ValueArray<kvs::Real32>& sizes )
+    {
+        this->setCoords( coords );
+        this->setColor( color );
+        this->setSizes( sizes );
+    }
 
     PointObject(
         const kvs::ValueArray<kvs::Real32>& coords,
         const kvs::ValueArray<kvs::UInt8>&  colors,
-        const kvs::Real32                   size );
+        const kvs::Real32                   size )
+    {
+        this->setCoords( coords );
+        this->setColors( colors );
+        this->setSize( size );
+    }
 
     PointObject(
         const kvs::ValueArray<kvs::Real32>& coords,
         const kvs::RGBColor&                color,
-        const kvs::Real32                   size );
+        const kvs::Real32                   size )
+    {
+        this->setCoords( coords );
+        this->setColor( color );
+        this->setSize( size );
+    }
 
     PointObject(
-        const kvs::ValueArray<kvs::Real32>& coords );
+        const kvs::ValueArray<kvs::Real32>& coords )
+    {
+        this->setCoords( coords );
+        this->setColor( kvs::RGBColor( 255, 255, 255 ) );
+        this->setSize( 1 );
+    }
 #endif
 
-    PointObject( const kvs::PointObject& other );
-
+#if KVS_ENABLE_DEPRECATED
     PointObject( const kvs::LineObject& line );
 
     PointObject( const kvs::PolygonObject& polygon );
+#else
+    explicit PointObject( const kvs::LineObject& line );
 
-    virtual ~PointObject( void );
+    explicit PointObject( const kvs::PolygonObject& polygon );
+#endif
 
 public:
 
@@ -121,9 +177,13 @@ public:
 
 public:
 
-    PointObject& operator = ( const PointObject& other );
 #if KVS_ENABLE_DEPRECATED
-    PointObject& operator += ( const PointObject& other );
+    PointObject& operator += ( const PointObject& other )
+    {
+        this->add( other );
+
+        return( *this );
+    }
 #endif
     friend std::ostream& operator << ( std::ostream& os, const PointObject& object );
 

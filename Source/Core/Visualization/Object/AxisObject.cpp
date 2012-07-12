@@ -61,11 +61,6 @@ AxisObject::AxisObject(
     this->create( object );
 }
 
-AxisObject::~AxisObject( void )
-{
-    clear();
-}
-
 void AxisObject::create( const kvs::ObjectBase* object )
 {
     if( object )

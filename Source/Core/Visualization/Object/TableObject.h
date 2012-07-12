@@ -62,8 +62,6 @@ public:
 
     TableObject( void );
 
-    TableObject( const kvs::TableObject& table );
-
 public:
 
     static kvs::TableObject* DownCast( kvs::ObjectBase* object );

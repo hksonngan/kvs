@@ -60,30 +60,54 @@ public:
     GeometryObjectBase(
         const kvs::ValueArray<kvs::Real32>& coords,
         const kvs::ValueArray<kvs::UInt8>&  colors,
-        const kvs::ValueArray<kvs::Real32>& normals );
+        const kvs::ValueArray<kvs::Real32>& normals )
+    {
+        this->setCoords( coords );
+        this->setColors( colors );
+        this->setNormals( normals );
+    }
 
     GeometryObjectBase(
         const kvs::ValueArray<kvs::Real32>& coords,
         const kvs::RGBColor&                color,
-        const kvs::ValueArray<kvs::Real32>& normals );
+        const kvs::ValueArray<kvs::Real32>& normals )
+    {
+        this->setCoords( coords );
+        this->setColor( color );
+        this->setNormals( normals );
+    }
 
     GeometryObjectBase(
         const kvs::ValueArray<kvs::Real32>& coords,
-        const kvs::ValueArray<kvs::Real32>& normals );
+        const kvs::ValueArray<kvs::Real32>& normals )
+    {
+        this->setCoords( coords );
+        this->setNormals( normals );
+    }
 
     GeometryObjectBase(
         const kvs::ValueArray<kvs::Real32>& coords,
-        const kvs::ValueArray<kvs::UInt8>&  colors );
+        const kvs::ValueArray<kvs::UInt8>&  colors )
+    {
+        this->setCoords( coords );
+        this->setColors( colors );
+    }
 
     GeometryObjectBase(
         const kvs::ValueArray<kvs::Real32>& coords,
-        const kvs::RGBColor&                color );
+        const kvs::RGBColor&                color )
+    {
+        this->setCoords( coords );
+        this->setColor( color );
+    }
 
     GeometryObjectBase(
-        const kvs::ValueArray<kvs::Real32>& coords );
+        const kvs::ValueArray<kvs::Real32>& coords )
+    {
+        this->setCoords( coords );
+        this->setColor( kvs::RGBColor( 255, 255, 255 ) );
+    }
 #endif
-
-    virtual ~GeometryObjectBase( void );
 
 public:
 

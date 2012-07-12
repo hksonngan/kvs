@@ -80,7 +80,15 @@ public:
         const kvs::ValueArray<kvs::UInt8>&  colors,
         const kvs::ValueArray<kvs::Real32>& sizes,
         const LineType                      line_type,
-        const ColorType                     color_type );
+        const ColorType                     color_type )
+    {
+        this->setCoords( coords );
+        this->setColors( colors );
+        this->setLineType( line_type );
+        this->setColorType( color_type );
+        this->setConnections( connections );
+        this->setSizes( sizes );
+    }
 
     LineObject(
         const kvs::ValueArray<kvs::Real32>& coords,
@@ -88,53 +96,112 @@ public:
         const kvs::ValueArray<kvs::UInt8>&  colors,
         const kvs::Real32                   size,
         const LineType                      line_type,
-        const ColorType                     color_type );
+        const ColorType                     color_type )
+    {
+        this->setCoords( coords );
+        this->setColors( colors );
+        this->setLineType( line_type );
+        this->setColorType( color_type );
+        this->setConnections( connections );
+        this->setSize( size );
+    }
 
     LineObject(
         const kvs::ValueArray<kvs::Real32>& coords,
         const kvs::ValueArray<kvs::UInt32>& connections,
         const kvs::RGBColor&                color,
         const kvs::ValueArray<kvs::Real32>& sizes,
-        const LineType                      line_type );
+        const LineType                      line_type )
+    {
+        this->setCoords( coords );
+        this->setColor( color );
+        this->setLineType( line_type );
+        this->setColorType( LineObject::LineColor );
+        this->setConnections( connections );
+        this->setSizes( sizes );
+    }
 
     LineObject(
         const kvs::ValueArray<kvs::Real32>& coords,
         const kvs::ValueArray<kvs::UInt32>& connections,
         const kvs::RGBColor&                color,
         const kvs::Real32                   size,
-        const LineType                      line_type );
+        const LineType                      line_type )
+    {
+        this->setCoords( coords );
+        this->setColor( color );
+        this->setLineType( line_type );
+        this->setColorType( LineObject::LineColor );
+        this->setConnections( connections );
+        this->setSize( size );
+    }
 
     LineObject(
         const kvs::ValueArray<kvs::Real32>& coords,
         const kvs::ValueArray<kvs::UInt8>&  colors,
         const kvs::ValueArray<kvs::Real32>& sizes,
-        const ColorType                     color_type );
+        const ColorType                     color_type )
+    {
+        this->setCoords( coords );
+        this->setColors( colors );
+        this->setLineType( LineObject::Strip );
+        this->setColorType( color_type );
+        this->setSizes( sizes );
+    }
 
     LineObject(
         const kvs::ValueArray<kvs::Real32>& coords,
         const kvs::ValueArray<kvs::UInt8>&  colors,
         const kvs::Real32                   size,
-        const ColorType                     color_type );
+        const ColorType                     color_type )
+    {
+        this->setCoords( coords );
+        this->setColors( colors );
+        this->setLineType( LineObject::Strip );
+        this->setColorType( color_type );
+        this->setSize( size );
+    }
 
     LineObject(
         const kvs::ValueArray<kvs::Real32>& coords,
         const kvs::RGBColor&                color,
-        const kvs::ValueArray<kvs::Real32>& sizes );
+        const kvs::ValueArray<kvs::Real32>& sizes )
+    {
+        this->setCoords( coords );
+        this->setColor( color );
+        this->setLineType( LineObject::Strip );
+        this->setColorType( LineObject::LineColor );
+        this->setSizes( sizes );
+    }
 
     LineObject(
         const kvs::ValueArray<kvs::Real32>& coords,
         const kvs::RGBColor&                color,
-        const kvs::Real32                   size );
+        const kvs::Real32                   size )
+    {
+        this->setCoords( coords );
+        this->setColor( color );
+        this->setLineType( LineObject::Strip );
+        this->setColorType( LineObject::LineColor );
+        this->setSize( size );
+    }
 
     LineObject(
-        const kvs::ValueArray<kvs::Real32>& coords );
+        const kvs::ValueArray<kvs::Real32>& coords )
+    {
+        this->setCoords( coords );
+        this->setColor( kvs::RGBColor( 255, 255, 255 ) );
+        this->setLineType( LineObject::Strip );
+        this->setColorType( LineObject::LineColor );
+        this->setSize( 1.0f );
+    }
 #endif
 
-    LineObject( const kvs::LineObject& line );
-
+#if KVS_ENABLE_DEPRECATED
     LineObject( const kvs::PolygonObject& polygon );
-
-    virtual ~LineObject( void );
+#else
+    explicit LineObject( const kvs::PolygonObject& polygon );
+#endif
 
 public:
 
@@ -143,8 +210,6 @@ public:
     static const kvs::LineObject* DownCast( const kvs::ObjectBase* object );
 
 public:
-
-    LineObject& operator = ( const LineObject& object );
 
     friend std::ostream& operator << ( std::ostream& os, const LineObject& object );
 

@@ -30,59 +30,6 @@ VolumeObjectBase::VolumeObjectBase( void )
 {
 }
 
-#if KVS_ENABLE_DEPRECATED
-/*==========================================================================*/
-/**
- *  Constructs a new VolumeObjectBase.
- *
- *  @param veclen     [in] Vector length.
- *  @param coords     [in] Coordinate array.
- *  @param values     [in] Value array.
- */
-/*==========================================================================*/
-VolumeObjectBase::VolumeObjectBase(
-    const size_t     veclen,
-    const Coords&    coords,
-    const Values&    values )
-    : m_has_min_max_values( false )
-    , m_min_value( 0.0 )
-    , m_max_value( 0.0 )
-{
-    this->setVeclen( veclen );
-    this->setCoords( coords );
-    this->setValues( values );
-}
-#endif
-
-/*==========================================================================*/
-/**
- *  Constructs a copy of other.
- *
- *  @param other [in] Structured volume.
- */
-/*==========================================================================*/
-VolumeObjectBase::VolumeObjectBase( const VolumeObjectBase& other )
-    : kvs::ObjectBase( other )
-    , m_label( other.label() )
-    , m_veclen( other.veclen() )
-    , m_coords( other.coords() )
-    , m_values( other.values() )
-    , m_has_min_max_values( other.hasMinMaxValues() )
-    , m_min_value( other.minValue() )
-    , m_max_value( other.maxValue() )
-{
-    // this->shallowCopy( other );
-}
-
-/*==========================================================================*/
-/**
- *  Destroys the VolumeObjectBase.
- */
-/*==========================================================================*/
-VolumeObjectBase::~VolumeObjectBase( void )
-{
-}
-
 kvs::VolumeObjectBase* VolumeObjectBase::DownCast( kvs::ObjectBase* object )
 {
     const kvs::ObjectBase::ObjectType type = object->objectType();

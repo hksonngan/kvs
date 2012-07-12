@@ -91,12 +91,16 @@ public:
     VolumeObjectBase(
         const size_t     veclen,
         const Coords&    coords,
-        const Values&    values );
+        const Values&    values )
+    {
+        m_has_min_max_values = false;
+        m_min_value = 0.0;
+        m_max_value = 0.0;
+        this->setVeclen( veclen );
+        this->setCoords( coords );
+        this->setValues( values );
+    }
 #endif
-
-    VolumeObjectBase( const VolumeObjectBase& other );
-
-    virtual ~VolumeObjectBase( void );
 
 public:
 

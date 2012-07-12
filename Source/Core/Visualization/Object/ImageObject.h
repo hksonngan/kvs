@@ -66,13 +66,7 @@ public:
         const kvs::ValueArray<kvs::UInt8>& data,
         const ImageObject::PixelType       type = ImageObject::Color24 );
 
-    ImageObject( const ImageObject& other );
-
-    virtual ~ImageObject( void );
-
 public:
-
-    ImageObject& operator = ( const ImageObject& image );
 
     friend std::ostream& operator << ( std::ostream& os, const ImageObject& object );
 

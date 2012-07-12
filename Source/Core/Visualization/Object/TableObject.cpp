@@ -35,25 +35,6 @@ TableObject::TableObject( void )
     m_ncolumns = 0;
 }
 
-/*===========================================================================*/
-/**
- *  @brief  Constructs a new TableObject class.
- *  @param  table [in] table object
- */
-/*===========================================================================*/
-TableObject::TableObject( const kvs::TableObject& table )
-{
-    m_nrows = table.nrows();
-    m_ncolumns = table.ncolumns();
-    m_labels = table.labelList();
-    m_columns = table.columnList();
-    m_min_values = table.minValueList();
-    m_max_values = table.maxValueList();
-    m_min_ranges = table.minRangeList();
-    m_max_ranges = table.maxRangeList();
-    m_inside_range_list = table.insideRangeList();
-}
-
 kvs::TableObject* TableObject::DownCast( kvs::ObjectBase* object )
 {
     const kvs::ObjectBase::ObjectType type = object->objectType();

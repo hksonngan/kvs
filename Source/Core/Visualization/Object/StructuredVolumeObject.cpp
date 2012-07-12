@@ -47,77 +47,6 @@ StructuredVolumeObject::StructuredVolumeObject( void )
 {
 }
 
-#if KVS_ENABLE_DEPRECATED
-/*==========================================================================*/
-/**
- *  Constructs a new StructuredVolumeObject with uniform grid type.
- *
- *  @param resolution [in] Node resolution.
- *  @param veclen     [in] Vector length.
- *  @param values     [in] Value array.
- */
-/*==========================================================================*/
-StructuredVolumeObject::StructuredVolumeObject(
-    const kvs::Vector3ui& resolution,
-    const size_t          veclen,
-    const Values&         values )
-{
-    this->setVeclen( veclen );
-    this->setCoords( Coords( 0 ) );
-    this->setValues( values );
-    this->setGridType( Uniform );
-    this->setResolution( resolution );
-}
-
-/*==========================================================================*/
-/**
- *  Constructs a new StructuredVolumeObject.
- *
- *  @param grid_type  [in] Grid type.
- *  @param resolution [in] Node resolution.
- *  @param veclen     [in] Vector length.
- *  @param coords     [in] Coordinate array.
- *  @param values     [in] Value array.
- */
-/*==========================================================================*/
-StructuredVolumeObject::StructuredVolumeObject(
-    const GridType        grid_type,
-    const kvs::Vector3ui& resolution,
-    const size_t          veclen,
-    const Coords&         coords,
-    const Values&         values )
-{
-    this->setVeclen( veclen );
-    this->setCoords( coords );
-    this->setValues( values );
-    this->setGridType( Uniform );
-    this->setResolution( resolution );
-}
-#endif
-
-/*==========================================================================*/
-/**
- *  Constructs a copy of other.
- *
- *  @param other [in] Structured volume.
- */
-/*==========================================================================*/
-StructuredVolumeObject::StructuredVolumeObject( const StructuredVolumeObject& other )
-    : kvs::VolumeObjectBase( other )
-    , m_grid_type( other.m_grid_type )
-    , m_resolution( other.m_resolution )
-{
-}
-
-/*==========================================================================*/
-/**
- *  Destroys the StructuredVolumeObject.
- */
-/*==========================================================================*/
-StructuredVolumeObject::~StructuredVolumeObject( void )
-{
-}
-
 kvs::StructuredVolumeObject* StructuredVolumeObject::DownCast( kvs::ObjectBase* object )
 {
     kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
@@ -138,16 +67,6 @@ kvs::StructuredVolumeObject* StructuredVolumeObject::DownCast( kvs::ObjectBase* 
 const kvs::StructuredVolumeObject* StructuredVolumeObject::DownCast( const kvs::ObjectBase* object )
 {
     return( StructuredVolumeObject::DownCast( const_cast<kvs::ObjectBase*>( object ) ) );
-}
-
-StructuredVolumeObject& StructuredVolumeObject::operator = ( const StructuredVolumeObject& object )
-{
-    if ( this != &object )
-    {
-        this->shallowCopy( object );
-    }
-
-    return( *this );
 }
 
 std::ostream& operator << ( std::ostream& os, const StructuredVolumeObject& object )

@@ -28,121 +28,6 @@ GeometryObjectBase::GeometryObjectBase( void )
 {
 }
 
-#if KVS_ENABLE_DEPRECATED
-/*===========================================================================*/
-/**
- *  @brief  Constructs a new GeometryObjectBase class.
- *  @param  coords [in] coordinate value array
- *  @param  colors [in] color value array
- *  @param  normals [in] normal vector array
- */
-/*===========================================================================*/
-GeometryObjectBase::GeometryObjectBase(
-    const kvs::ValueArray<kvs::Real32>& coords,
-    const kvs::ValueArray<kvs::UInt8>&  colors,
-    const kvs::ValueArray<kvs::Real32>& normals )
-{
-    KVS_ASSERT( coords.size() == normals.size() );
-    KVS_ASSERT( coords.size() == colors.size() );
-
-    this->setCoords( coords );
-    this->setColors( colors );
-    this->setNormals( normals );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Constructs a new GeometryObjectBase class.
- *  @param  coords [in] coordinate value array
- *  @param  color [in] color value
- *  @param  normals [in] normal vector array
- */
-/*===========================================================================*/
-GeometryObjectBase::GeometryObjectBase(
-    const kvs::ValueArray<kvs::Real32>& coords,
-    const kvs::RGBColor&                color,
-    const kvs::ValueArray<kvs::Real32>& normals )
-{
-    KVS_ASSERT( coords.size() == normals.size() );
-
-    this->setCoords( coords );
-    this->setColor( color );
-    this->setNormals( normals );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Constructs a new GeometryObjectBase class.
- *  @param  coords [in] coordinate value array
- *  @param  normals [in] normal vector array
- */
-/*===========================================================================*/
-GeometryObjectBase::GeometryObjectBase(
-    const kvs::ValueArray<kvs::Real32>& coords,
-    const kvs::ValueArray<kvs::Real32>& normals )
-{
-    KVS_ASSERT( coords.size() == normals.size() );
-
-    this->setCoords( coords );
-    this->setNormals( normals );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Constructs a new GeometryObjectBase class.
- *  @param  coords [in] coordinate value array
- *  @param  colors [in] color value array
- */
-/*===========================================================================*/
-GeometryObjectBase::GeometryObjectBase(
-    const kvs::ValueArray<kvs::Real32>& coords,
-    const kvs::ValueArray<kvs::UInt8>&  colors )
-{
-    KVS_ASSERT( coords.size() == colors.size() );
-
-    this->setCoords( coords );
-    this->setColors( colors );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Constructs a new GeometryObjectBase class.
- *  @param  coords [in] coordinate value array
- *  @param  color [in] color value
- */
-/*===========================================================================*/
-GeometryObjectBase::GeometryObjectBase(
-    const kvs::ValueArray<kvs::Real32>& coords,
-    const kvs::RGBColor&                color )
-{
-    this->setCoords( coords );
-    this->setColor( color );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Constructs a new GeometryObjectBase class.
- *  @param  coords [in] coordinate value array
- */
-/*===========================================================================*/
-GeometryObjectBase::GeometryObjectBase(
-    const kvs::ValueArray<kvs::Real32>& coords )
-{
-    this->setCoords( coords );
-    this->setColor( kvs::RGBColor( 255, 255, 255 ) );
-}
-#endif
-
-/*===========================================================================*/
-/**
- *  @brief  Destructs the GeometryObjectBase class.
- */
-/*===========================================================================*/
-GeometryObjectBase::~GeometryObjectBase( void )
-{
-    this->clear();
-}
-
 /*===========================================================================*/
 /**
  *  @brief  Downcast to GeometryObjectBase.
@@ -419,8 +304,10 @@ void GeometryObjectBase::updateMinMaxCoords( void )
 /*==========================================================================*/
 void GeometryObjectBase::calculate_min_max_coords( void )
 {
-    kvs::Vector3f min_coord( 0.0f );
-    kvs::Vector3f max_coord( 0.0f );
+    if ( this->coords().empty() )
+        return;
+
+    KVS_ASSERT( this->coords().size() % 3 == 0 );
 
     const kvs::Real32* coord = this->coords().data();
     const kvs::Real32* const end = coord + this->coords().size();
@@ -429,8 +316,8 @@ void GeometryObjectBase::calculate_min_max_coords( void )
     kvs::Real32 y = *( coord++ );
     kvs::Real32 z = *( coord++ );
 
-    min_coord.set( x, y, z );
-    max_coord.set( x, y, z );
+    kvs::Vector3f min_coord( x, y, z );
+    kvs::Vector3f max_coord( x, y, z );
 
     while ( coord < end )
     {

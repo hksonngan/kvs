@@ -76,43 +76,6 @@ ImageObject::ImageObject(
 
 /*===========================================================================*/
 /**
- *  @brief  Constructs a new ImageObject class.
- *  @param  other [in] image object
- */
-/*===========================================================================*/
-ImageObject::ImageObject( const ImageObject& other )
-{
-    this->shallowCopy( other );
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Destructs the ImageObject class.
- */
-/*==========================================================================*/
-ImageObject::~ImageObject( void )
-{
-    m_data.release();
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Substitution operator.
- *  @param  other [in] image object
- */
-/*==========================================================================*/
-ImageObject& ImageObject::operator = ( const ImageObject& other )
-{
-    if ( this != &other )
-    {
-        this->shallowCopy( other );
-    }
-
-    return( *this );
-}
-
-/*===========================================================================*/
-/**
  *  @brief  '<<' operator.
  */
 /*===========================================================================*/

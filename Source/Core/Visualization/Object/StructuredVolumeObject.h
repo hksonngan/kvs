@@ -50,19 +50,28 @@ public:
     StructuredVolumeObject(
         const kvs::Vector3ui& resolution,
         const size_t          veclen,
-        const Values&         values );
+        const Values&         values )
+    {
+        this->setVeclen( veclen );
+        this->setValues( values );
+        this->setGridType( Uniform );
+        this->setResolution( resolution );
+    }
 
     StructuredVolumeObject(
         const GridType        grid_type,
         const kvs::Vector3ui& resolution,
         const size_t          veclen,
         const Coords&         coords,
-        const Values&         values );
+        const Values&         values )
+    {
+        this->setVeclen( veclen );
+        this->setCoords( coords );
+        this->setValues( values );
+        this->setGridType( grid_type );
+        this->setResolution( resolution );
+    }
 #endif
-
-    StructuredVolumeObject( const StructuredVolumeObject& other );
-
-    virtual ~StructuredVolumeObject( void );
 
 public:
 
@@ -71,8 +80,6 @@ public:
     static const kvs::StructuredVolumeObject* DownCast( const kvs::ObjectBase* object );
 
 public:
-
-    StructuredVolumeObject& operator = ( const StructuredVolumeObject& object );
 
     friend std::ostream& operator << ( std::ostream& os, const StructuredVolumeObject& object );
 

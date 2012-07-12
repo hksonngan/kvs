@@ -86,7 +86,17 @@ public:
         const kvs::ValueArray<kvs::Real32>& normals,
         const PolygonType                   polygon_type,
         const ColorType                     color_type,
-        const NormalType                    normal_type );
+        const NormalType                    normal_type )
+    {
+        this->setCoords( coords );
+        this->setColors( colors );
+        this->setNormals( normals );
+        this->setPolygonType( polygon_type );
+        this->setColorType( color_type );
+        this->setNormalType( normal_type );
+        this->setConnections( connections );
+        this->setOpacities( opacities );
+    }
 
     PolygonObject(
         const kvs::ValueArray<kvs::Real32>& coords,
@@ -96,16 +106,36 @@ public:
         const kvs::ValueArray<kvs::Real32>& normals,
         const PolygonType                   polygon_type,
         const ColorType                     color_type,
-        const NormalType                    normal_type );
+        const NormalType                    normal_type )
+    {
+        this->setCoords( coords );
+        this->setColors( colors );
+        this->setNormals( normals );
+        this->setPolygonType( polygon_type );
+        this->setColorType( color_type );
+        this->setNormalType( normal_type );
+        this->setConnections( connections );
+        this->setOpacity( opacity );
+    }
 
     PolygonObject(
         const kvs::ValueArray<kvs::Real32>& coords,
         const kvs::ValueArray<kvs::UInt32>& connections,
         const kvs::RGBColor&                color,
-        const kvs::ValueArray<kvs::UInt8>&  opacity,
+        const kvs::ValueArray<kvs::UInt8>&  opacities,
         const kvs::ValueArray<kvs::Real32>& normals,
         const PolygonType                   polygon_type,
-        const NormalType                    normal_type );
+        const NormalType                    normal_type )
+    {
+        this->setCoords( coords );
+        this->setColor( color );
+        this->setNormals( normals );
+        this->setPolygonType( polygon_type );
+        this->setColorType( PolygonObject::PolygonColor );
+        this->setNormalType( normal_type );
+        this->setConnections( connections );
+        this->setOpacities( opacities );
+    }
 
     PolygonObject(
         const kvs::ValueArray<kvs::Real32>& coords,
@@ -114,7 +144,17 @@ public:
         const kvs::UInt8&                   opacity,
         const kvs::ValueArray<kvs::Real32>& normals,
         const PolygonType                   polygon_type,
-        const NormalType                    normal_type );
+        const NormalType                    normal_type )
+    {
+        this->setCoords( coords );
+        this->setColor( color );
+        this->setNormals( normals );
+        this->setPolygonType( polygon_type );
+        this->setColorType( PolygonObject::PolygonColor );
+        this->setNormalType( normal_type );
+        this->setConnections( connections );
+        this->setOpacity( opacity );
+    }
 
     PolygonObject(
         const kvs::ValueArray<kvs::Real32>& coords,
@@ -123,7 +163,16 @@ public:
         const kvs::ValueArray<kvs::Real32>& normals,
         const PolygonType                   polygon_type,
         const ColorType                     color_type,
-        const NormalType                    normal_type );
+        const NormalType                    normal_type )
+    {
+        this->setCoords( coords );
+        this->setColors( colors );
+        this->setNormals( normals );
+        this->setPolygonType( polygon_type );
+        this->setColorType( color_type );
+        this->setNormalType( normal_type );
+        this->setOpacities( opacities );
+    }
 
     PolygonObject(
         const kvs::ValueArray<kvs::Real32>& coords,
@@ -132,7 +181,16 @@ public:
         const kvs::ValueArray<kvs::Real32>& normals,
         const PolygonType                   polygon_type,
         const ColorType                     color_type,
-        const NormalType                    normal_type );
+        const NormalType                    normal_type )
+    {
+        this->setCoords( coords );
+        this->setColors( colors );
+        this->setNormals( normals );
+        this->setPolygonType( polygon_type );
+        this->setColorType( color_type );
+        this->setNormalType( normal_type );
+        this->setOpacity( opacity );
+    }
 
     PolygonObject(
         const kvs::ValueArray<kvs::Real32>& coords,
@@ -140,7 +198,16 @@ public:
         const kvs::ValueArray<kvs::UInt8>&  opacities,
         const kvs::ValueArray<kvs::Real32>& normals,
         const PolygonType                   polygon_type,
-        const NormalType                    normal_type );
+        const NormalType                    normal_type )
+    {
+        this->setCoords( coords );
+        this->setColor( color );
+        this->setNormals( normals );
+        this->setPolygonType( polygon_type );
+        this->setColorType( PolygonObject::PolygonColor );
+        this->setNormalType( normal_type );
+        this->setOpacities( opacities );
+    }
 
     PolygonObject(
         const kvs::ValueArray<kvs::Real32>& coords,
@@ -148,12 +215,17 @@ public:
         const kvs::UInt8&                   opacity,
         const kvs::ValueArray<kvs::Real32>& normals,
         const PolygonType                   polygon_type,
-        const NormalType                    normal_type );
+        const NormalType                    normal_type )
+    {
+        this->setCoords( coords );
+        this->setColor( color );
+        this->setNormals( normals );
+        this->setPolygonType( polygon_type );
+        this->setColorType( PolygonObject::PolygonColor );
+        this->setNormalType( normal_type );
+        this->setOpacity( opacity );
+    }
 #endif
-
-    PolygonObject( const PolygonObject& polygon );
-
-    virtual ~PolygonObject( void );
 
 public:
 
@@ -162,8 +234,6 @@ public:
     static const kvs::PolygonObject* DownCast( const kvs::ObjectBase* object );
 
 public:
-
-    PolygonObject& operator = ( const PolygonObject& object );
 
     friend std::ostream& operator << ( std::ostream& os, const PolygonObject& object );
 

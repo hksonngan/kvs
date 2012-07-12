@@ -61,8 +61,6 @@ public:
 
     GlyphObject( void );
 
-    virtual ~GlyphObject( void );
-
 public:
 
     virtual void draw( void ) = 0;
