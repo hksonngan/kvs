@@ -435,6 +435,27 @@ bool StochasticRendererBase::erase_engine( const std::string object_name )
     return false;
 }
 
+void StochasticRendererBase::update_engine()
+{
+    if ( !( m_width == 0 && m_height == 0 ) )
+    {
+        for ( size_t i = 0; i < m_rendering_engines.size(); i++ )
+        {
+            if ( !m_rendering_engines[i]->has_random_texture() )
+            {
+                if ( m_enable_exact_depth_testing )
+                {
+                    m_rendering_engines[i]->enable_exact_depth_testing();
+                }
+
+                m_rendering_engines[i]->set_random_texture( m_random_texture );
+                m_rendering_engines[i]->initialize_shader();
+                m_rendering_engines[i]->create_vertex_buffer();
+            }
+        }
+    }
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Enables exact depth testing.

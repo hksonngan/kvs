@@ -75,6 +75,8 @@ public:
 
     void clearEnsembleBuffer( void );
 
+    void updateEngine();
+
     void setRepetitionLevel( const size_t repetition_level );
 
     void enableLODControl( const size_t coarse_level = 1 );

@@ -323,6 +323,11 @@ void StochasticRenderingCompositor::clearEnsembleBuffer( void )
     m_renderer->clearEnsembleBuffer();
 }
 
+void StochasticRenderingCompositor::updateEngine()
+{
+    m_renderer->update_engine();
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Sets a repetition level

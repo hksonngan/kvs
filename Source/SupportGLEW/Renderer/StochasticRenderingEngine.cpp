@@ -144,6 +144,11 @@ void StochasticRenderingEngine::set_random_texture( const kvs::Texture2D& random
     m_random_texture = random_texture;
 }
 
+bool StochasticRenderingEngine::has_random_texture()
+{
+    return !( m_random_texture.width() == 0 && m_random_texture.height() == 0 );
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Enables updating VBO.

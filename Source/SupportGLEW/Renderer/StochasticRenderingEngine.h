@@ -109,6 +109,8 @@ protected:
 
     void set_random_texture( const kvs::Texture2D& random_texture );
 
+    bool has_random_texture();
+
     void enable_updating_vbo( void );
 
     void disable_updating_vbo( void );

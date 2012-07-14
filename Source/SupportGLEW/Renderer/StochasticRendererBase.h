@@ -112,6 +112,8 @@ protected:
 
     bool erase_engine( const std::string object_name );
 
+    void update_engine();
+
     void enable_exact_depth_testing( void );
 
     void disable_exact_depth_testing( void );
