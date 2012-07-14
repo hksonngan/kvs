@@ -63,7 +63,8 @@ void StochasticPolygonEngine::initialize( void )
     m_off_color = 0;
     m_off_normal = 0;
 
-    m_polygon_offset = 0.001f;
+//    m_polygon_offset = 0.001f;
+    m_polygon_offset = 0.0f;
 }
 
 /*===========================================================================*/
