@@ -267,7 +267,7 @@ const std::string& VR::vrTypeDescription( void ) const
 const bool dcm::VR::read( std::ifstream& ifs, const bool swap )
 {
     // Read the VR string.
-    char vr[ VR_STRING_WIDTH ];
+    char vr[ VR_STRING_WIDTH + 1 ];
     ifs.read( vr, VR_STRING_WIDTH );
     if( ifs.bad() )
     {

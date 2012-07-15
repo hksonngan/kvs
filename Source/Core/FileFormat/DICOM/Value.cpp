@@ -436,7 +436,7 @@ const bool dcm::Value::read_data( std::ifstream& ifs, const bool swap )
     data_tag[1] = dcm::StreamReader::Get<unsigned short>( ifs, swap );
 
     // Read VR (2 bytes).
-    char vr[2];
+    char vr[2+1];
     ifs.read( vr, 2 );
     if( ifs.bad() )
     {
