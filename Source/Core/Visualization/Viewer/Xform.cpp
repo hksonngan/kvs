@@ -56,40 +56,11 @@ Xform::Xform( const Xform& xform )
 
 /*==========================================================================*/
 /**
- *  Constructor.
- *  @param m [in] xform matrix
- */
-/*==========================================================================*/
-Xform::Xform( const kvs::Matrix44f& m )
-{
-    *this = m;
-}
-
-/*==========================================================================*/
-/**
  *  Destructor.
  */
 /*==========================================================================*/
 Xform::~Xform( void )
 {
-    this->clear();
-}
-
-/*==========================================================================*/
-/**
- *  Substitution operator.
- *  @param m [in] xform matrix
- *  @return xform
- */
-/*==========================================================================*/
-Xform& Xform::operator = ( const kvs::Matrix44f& m )
-{
-    (*this)[0] = m[0];
-    (*this)[1] = m[1];
-    (*this)[2] = m[2];
-    (*this)[3] = m[3];
-
-    return( *this );
 }
 
 /*==========================================================================*/
@@ -101,8 +72,7 @@ Xform& Xform::operator = ( const kvs::Matrix44f& m )
 /*==========================================================================*/
 Xform& Xform::operator = ( const Xform& xform )
 {
-    *this = kvs::Matrix44f( xform );
-
+    m_translation = xform.m_translation;
     m_rotation = xform.m_rotation;
     m_scaling  = xform.m_scaling;
 
@@ -116,8 +86,7 @@ Xform& Xform::operator = ( const Xform& xform )
 /*==========================================================================*/
 void Xform::initialize( void )
 {
-    kvs::Matrix44f::identity();
-
+    m_translation.set( 0.0, 0.0, 0.0 );
     m_rotation.identity();
     m_scaling.set( 1.0, 1.0, 1.0 );
 }
@@ -129,8 +98,7 @@ void Xform::initialize( void )
 /*==========================================================================*/
 void Xform::clear( void )
 {
-    kvs::Matrix44f::zero();
-
+    m_translation.zero();
     m_rotation.zero();
     m_scaling.zero();
 }
@@ -193,14 +161,6 @@ void Xform::set( const Xform& xform )
 /*==========================================================================*/
 void Xform::updateRotation( const kvs::Matrix33f& rotation )
 {
-    const kvs::Matrix44f rotation44(
-        rotation[0][0], rotation[0][1], rotation[0][2], 0,
-        rotation[1][0], rotation[1][1], rotation[1][2], 0,
-        rotation[2][0], rotation[2][1], rotation[2][2], 0,
-        0,              0,              0,              1 );
-
-    *this = rotation44 * kvs::Matrix44f( *this );
-
     m_rotation = rotation * m_rotation;
 }
 
@@ -212,9 +172,7 @@ void Xform::updateRotation( const kvs::Matrix33f& rotation )
 /*==========================================================================*/
 void Xform::updateTranslation( const kvs::Vector3f& translation )
 {
-    (*this)[0][3] += translation.x();
-    (*this)[1][3] += translation.y();
-    (*this)[2][3] += translation.z();
+    m_translation += translation;
 }
 
 /*==========================================================================*/
@@ -225,18 +183,7 @@ void Xform::updateTranslation( const kvs::Vector3f& translation )
 /*==========================================================================*/
 void Xform::updateScaling( const kvs::Vector3f& scaling )
 {
-    (*this)[0][0] *= scaling.x(); (*this)[0][1] *= scaling.x();
-    (*this)[0][2] *= scaling.x(); (*this)[0][3] *= scaling.x();
-
-    (*this)[1][0] *= scaling.y(); (*this)[1][1] *= scaling.y();
-    (*this)[1][2] *= scaling.y(); (*this)[1][3] *= scaling.y();
-
-    (*this)[2][0] *= scaling.z(); (*this)[2][1] *= scaling.z();
-    (*this)[2][2] *= scaling.z(); (*this)[2][3] *= scaling.z();
-
-    m_scaling.x() *= scaling.x();
-    m_scaling.y() *= scaling.y();
-    m_scaling.z() *= scaling.z();
+    m_scaling *= scaling;
 }
 
 /*==========================================================================*/
@@ -247,15 +194,6 @@ void Xform::updateScaling( const kvs::Vector3f& scaling )
 /*==========================================================================*/
 void Xform::updateScaling( float scaling )
 {
-    (*this)[0][0] *= scaling; (*this)[0][1] *= scaling;
-    (*this)[0][2] *= scaling; (*this)[0][3] *= scaling;
-
-    (*this)[1][0] *= scaling; (*this)[1][1] *= scaling;
-    (*this)[1][2] *= scaling; (*this)[1][3] *= scaling;
-
-    (*this)[2][0] *= scaling; (*this)[2][1] *= scaling;
-    (*this)[2][2] *= scaling; (*this)[2][3] *= scaling;
-
     m_scaling *= scaling;
 }
 
@@ -265,9 +203,9 @@ void Xform::updateScaling( float scaling )
  *  @return translation vector
  */
 /*==========================================================================*/
-const kvs::Vector3f Xform::translation( void ) const
+const kvs::Vector3f& Xform::translation( void ) const
 {
-    return( kvs::Vector3f( (*this)[0][3], (*this)[1][3], (*this)[2][3] ) );
+    return m_translation;
 }
 
 /*==========================================================================*/
@@ -289,9 +227,11 @@ const kvs::Matrix33f& Xform::rotation( void ) const
 /*==========================================================================*/
 const kvs::Matrix33f Xform::scaledRotation( void ) const
 {
-    return( kvs::Matrix33f( (*this)[0][0], (*this)[0][1], (*this)[0][2],
-                            (*this)[1][0], (*this)[1][1], (*this)[1][2],
-                            (*this)[2][0], (*this)[2][1], (*this)[2][2] ) );
+    const kvs::Vector3f& S = m_scaling;
+    const kvs::Matrix33f& R = m_rotation;
+    return kvs::Matrix33f( S[0] * R[0][0], S[1] * R[0][1], S[2] * R[0][2],
+                           S[0] * R[1][0], S[1] * R[1][1], S[2] * R[1][2],
+                           S[0] * R[2][0], S[1] * R[2][1], S[2] * R[2][2] );
 }
 
 /*==========================================================================*/
@@ -303,6 +243,17 @@ const kvs::Matrix33f Xform::scaledRotation( void ) const
 const kvs::Vector3f& Xform::scaling( void ) const
 {
     return( m_scaling );
+}
+
+kvs::Matrix44f Xform::toMat4() const
+{
+    const kvs::Vector3f& S = m_scaling;
+    const kvs::Matrix33f& R = m_rotation;
+    const kvs::Vector3f& T = m_translation;
+    return kvs::Matrix44f( S[0] * R[0][0], S[1] * R[0][1], S[2] * R[0][2], T[0],
+                           S[0] * R[1][0], S[1] * R[1][1], S[2] * R[1][2], T[1],
+                           S[0] * R[2][0], S[1] * R[2][1], S[2] * R[2][2], T[2],
+                           0, 0, 0, 1 );
 }
 
 /*==========================================================================*/
@@ -324,25 +275,27 @@ Xform Xform::get( void ) const
 /*==========================================================================*/
 void Xform::get( float (*array)[16] ) const
 {
-    (*array)[0]  = (*this)[0][0];
-    (*array)[1]  = (*this)[1][0];
-    (*array)[2]  = (*this)[2][0];
-    (*array)[3]  = (*this)[3][0];
+    kvs::Matrix44f mat = this->toMat4();
 
-    (*array)[4]  = (*this)[0][1];
-    (*array)[5]  = (*this)[1][1];
-    (*array)[6]  = (*this)[2][1];
-    (*array)[7]  = (*this)[3][1];
+    (*array)[0]  = mat[0][0];
+    (*array)[1]  = mat[1][0];
+    (*array)[2]  = mat[2][0];
+    (*array)[3]  = mat[3][0];
 
-    (*array)[8]  = (*this)[0][2];
-    (*array)[9]  = (*this)[1][2];
-    (*array)[10] = (*this)[2][2];
-    (*array)[11] = (*this)[3][2];
+    (*array)[4]  = mat[0][1];
+    (*array)[5]  = mat[1][1];
+    (*array)[6]  = mat[2][1];
+    (*array)[7]  = mat[3][1];
 
-    (*array)[12] = (*this)[0][3];
-    (*array)[13] = (*this)[1][3];
-    (*array)[14] = (*this)[2][3];
-    (*array)[15] = (*this)[3][3];
+    (*array)[8]  = mat[0][2];
+    (*array)[9]  = mat[1][2];
+    (*array)[10] = mat[2][2];
+    (*array)[11] = mat[3][2];
+
+    (*array)[12] = mat[0][3];
+    (*array)[13] = mat[1][3];
+    (*array)[14] = mat[2][3];
+    (*array)[15] = mat[3][3];
 }
 
 } // end of namepsace kvs

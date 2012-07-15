@@ -230,11 +230,6 @@ public:
         m_xform_control.saveXform();
     }
 
-    void multiplyXform( const kvs::Xform& xform )
-    {
-        m_xform_control.multiplyXform( xform );
-    }
-
     void setXform( const kvs::Xform& xform )
     {
         m_xform_control.setXform( xform );

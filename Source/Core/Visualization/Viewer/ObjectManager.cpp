@@ -445,14 +445,15 @@ void ObjectManager::resetXform( int obj_id )
     ObjectIterator first = m_object_tree.begin( obj_ptr );
     ObjectIterator last  = m_object_tree.end( obj_ptr );
 
-    const kvs::Xform obj_form = (*obj_ptr)->xform_control().xform();
-    const kvs::Xform trans = Xform( this->kvs::ObjectBase::xform_control().xform() ) * obj_form.inverse();
+    //const kvs::Xform obj_form = (*obj_ptr)->xform_control().xform();
+    //const kvs::Xform trans = Xform( this->kvs::ObjectBase::xform_control().xform() ) * obj_form.inverse();
 
-    (*obj_ptr)->xform_control().setXform( this->kvs::ObjectBase::xform_control().xform() );
+    //(*obj_ptr)->xform_control().setXform( this->kvs::ObjectBase::xform_control().xform() );
 
     for( ; first != last; ++first )
     {
-        (*first)->xform_control().setXform( trans * (*first)->xform_control().xform() );
+        //(*first)->xform_control().setXform( trans * (*first)->xform_control().xform() );
+        (*first)->xform_control().resetXform();
     }
 }
 
@@ -623,7 +624,7 @@ void ObjectManager::resetActiveObjectXform( void )
     if( m_has_active_object )
     {
         (*m_active_object)->xform_control().resetXform();
-        (*m_active_object)->xform_control().multiplyXform( kvs::Xform( this->kvs::ObjectBase::xform_control().xform() ) );
+        //(*m_active_object)->xform_control().multiplyXform( kvs::Xform( this->kvs::ObjectBase::xform_control().xform() ) );
     }
 }
 

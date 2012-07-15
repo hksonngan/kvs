@@ -30,10 +30,6 @@ class XformControl : public kvs::Xform
 {
     kvsClassName( kvs::XformControl );
 
-public:
-
-    typedef kvs::Xform parent_class;
-
 protected:
 
     kvs::Xform m_initial_xform; ///< initial transform vector
@@ -67,8 +63,6 @@ public:
     void saveXform( void );
 
     void resetXform( void );
-
-    void multiplyXform( const kvs::Xform& xform );
 
     void setXform( const kvs::Xform& xform );
 

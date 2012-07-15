@@ -70,12 +70,13 @@ namespace kvs
  *  \f]
  */
 /*==========================================================================*/
-class Xform : public kvs::Matrix44f
+class Xform
 {
     kvsClassName( kvs::Xform );
 
-protected:
+private:
 
+    kvs::Vector3f  m_translation;
     kvs::Matrix33f m_rotation; ///< rotation matrix
     kvs::Vector3f  m_scaling;  ///< scaling vector
 
@@ -90,13 +91,9 @@ public:
 
     Xform( const Xform& xform );
 
-    Xform( const kvs::Matrix44f& m );
-
     virtual ~Xform( void );
 
 public:
-
-    Xform& operator = ( const kvs::Matrix44f& m );
 
     Xform& operator = ( const Xform& xform );
 
@@ -123,13 +120,15 @@ public:
 
     void updateScaling( float scaling );
 
-    const kvs::Vector3f translation( void ) const;
+    const kvs::Vector3f& translation( void ) const;
 
     const kvs::Matrix33f& rotation( void ) const;
 
     const kvs::Matrix33f scaledRotation( void ) const;
 
     const kvs::Vector3f& scaling( void ) const;
+
+    kvs::Matrix44f toMat4() const;
 
     Xform get( void ) const;
 
