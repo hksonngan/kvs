@@ -289,9 +289,9 @@ const kvs::Matrix33f& Xform::rotation( void ) const
 /*==========================================================================*/
 const kvs::Matrix33f Xform::scaledRotation( void ) const
 {
-    return( kvs::Matrix33f( (*this)[0][0], (*this)[1][0], (*this)[2][0],
-                            (*this)[0][1], (*this)[1][1], (*this)[2][1],
-                            (*this)[0][2], (*this)[1][2], (*this)[2][2] ) );
+    return( kvs::Matrix33f( (*this)[0][0], (*this)[0][1], (*this)[0][2],
+                            (*this)[1][0], (*this)[1][1], (*this)[1][2],
+                            (*this)[2][0], (*this)[2][1], (*this)[2][2] ) );
 }
 
 /*==========================================================================*/

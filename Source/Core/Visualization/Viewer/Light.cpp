@@ -50,8 +50,7 @@ Light::~Light( void )
 void Light::initialize( void )
 {
     m_id = GL_LIGHT0;
-    m_init_position.set( 0.0, 0.0, 12.0 );
-    m_position.set( 0.0, 0.0, 12.0 );
+    this->setPosition( 0.0, 0.0, 12.0 );
     m_diffuse.set( 1.0, 1.0, 1.0 );
     m_ambient.set( 0.0, 0.0, 0.0 );
     m_specular.set( 1.0, 1.0, 1.0 );
@@ -78,8 +77,7 @@ void Light::setID( const unsigned int id )
 /*==========================================================================*/
 void Light::setPosition( const float x, const float y, const float z )
 {
-    m_init_position.set( x, y, z );
-    m_position.set( x, y, z );
+    this->setPosition( kvs::Vector3f( x, y, z ) );
 }
 
 /*==========================================================================*/
@@ -245,12 +243,12 @@ const kvs::Vector3f& Light::specular( void ) const
 /*==========================================================================*/
 void Light::update( const kvs::Camera* camera )
 {
-    const kvs::Vector3f p = camera->projectWorldToObject( m_position );
+    const kvs::Vector3f p = camera->projectWorldToCamera( this->position() );
 
-    float position[] = { p.x(), p.y(), p.z(), 1.0f };
-    float diffuse[]  = { m_diffuse.x(), m_diffuse.y(), m_diffuse.z(), 1.0f };
-    float ambient[]  = { m_ambient.x(), m_ambient.y(), m_ambient.z(), 1.0f };
-    float specular[] = { m_specular.x(), m_specular.y(), m_specular.z(), 1.0f };
+    const kvs::Vector4f position( p, 1.0f );
+    const kvs::Vector4f diffuse( this->diffuse(), 1.0f );
+    const kvs::Vector4f ambient( this->ambient(), 1.0f );
+    const kvs::Vector4f specular( this->specular(), 1.0f );
 
     glPushMatrix();
     glLoadIdentity();

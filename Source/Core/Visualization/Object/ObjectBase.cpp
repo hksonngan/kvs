@@ -397,7 +397,7 @@ const kvs::Vector3f ObjectBase::positionInWorld(
     init_pos.y() *= global_scale.y();
     init_pos.z() *= global_scale.z();
 
-    return( m_xform_control.xform().translation() + init_pos * m_xform_control.xform().scaledRotation() );
+    return( m_xform_control.xform().translation() + m_xform_control.xform().scaledRotation() * init_pos );
 }
 
 /*===========================================================================*/
@@ -689,7 +689,7 @@ const kvs::Vector3f ObjectBase::object_to_world_coordinate(
     p_world.y() *= global_scale.y();
     p_world.z() *= global_scale.z();
 
-    p_world = p_world * m_xform_control.xform().scaledRotation();
+    p_world = m_xform_control.xform().scaledRotation() * p_world;
 
     p_world += m_xform_control.xform().translation();
 
