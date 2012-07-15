@@ -56,31 +56,39 @@ public:
     typedef Tree<T>                   tree_type;
     typedef Node                      node_type;
     typedef T                         value_type;
-    typedef std::allocator<node_type> allocator_type;
     typedef pre_order_iterator        iterator;
 
 protected:
 
     node_type*     m_head;      ///< head node
-    allocator_type m_allocator; ///< allocator
 
 public:
 
     Tree()
     {
-        this->initialize_head();
+        m_head = new node_type;
+        m_head->parent       = 0;
+        m_head->first_child  = 0;
+        m_head->last_child   = 0;
+        m_head->prev_sibling = m_head;
+        m_head->next_sibling = m_head;
     }
 
     Tree( const T& t )
     {
-        this->initialize_head();
-        this->set_head( t );
+        m_head = new node_type;
+        m_head->parent       = 0;
+        m_head->first_child  = 0;
+        m_head->last_child   = 0;
+        m_head->prev_sibling = m_head;
+        m_head->next_sibling = m_head;
+        this->insert( begin(), t );
     }
 
     virtual ~Tree()
     {
         this->clear();
-        m_allocator.deallocate( m_head, 1 );
+        delete m_head;
     }
 
 public:
@@ -137,16 +145,7 @@ public:
 
     breadth_first_iterator endBreadth() const
     {
-#if defined ( KVS_COMPILER_GCC )
-#if KVS_COMPILER_VERSION_LESS_OR_EQUAL( 3, 3 )
-        breadth_first_iterator e;
-        return e;
-#else
         return breadth_first_iterator();
-#endif
-#else
-        return breadth_first_iterator();
-#endif
     }
 
     leaf_iterator beginLeaf() const
@@ -209,8 +208,7 @@ public:
             cur->next_sibling->prev_sibling = cur->prev_sibling;
         }
 
-        this->destructor( &cur->data );
-        m_allocator.deallocate( cur, 1 );
+        delete cur;
 
         return ret;
     }
@@ -226,8 +224,7 @@ public:
             cur  = cur->next_sibling;
 
             this->eraseChildren( pre_order_iterator( prev ) );
-            this->destructor( &prev->data );
-            m_allocator.deallocate( prev, 1 );
+            delete prev;
         }
 
         it.node()->first_child = 0;
@@ -242,16 +239,7 @@ public:
     {
         KVS_ASSERT( position.node() != m_head );
 
-        node_type* tmp = m_allocator.allocate( 1, 0 );
-        if ( !tmp )
-        {
-            kvsMessageError( "Cannot allocate memory for the appending node." );
-            return 0;
-        }
-
-#if !defined( KVS_ENABLE_MEM_DEBUG )
-        this->constructor( &tmp->data );
-#endif
+        node_type* tmp = new node_type;
         tmp->first_child = 0;
         tmp->last_child  = 0;
 
@@ -276,19 +264,7 @@ public:
     {
         KVS_ASSERT( position.node() != m_head );
 
-        node_type* tmp = m_allocator.allocate( 1, 0 );
-        if ( !tmp )
-        {
-            kvsMessageError( "Cannot allocate memory for the appending node." );
-            return 0;
-        }
-
-#if defined( KVS_ENABLE_MEM_DEBUG )
-        tmp->data = x;
-#else
-        this->constructor( &tmp->data, x );
-#endif
-
+        node_type* tmp = new node_type( x );
         tmp->first_child = 0;
         tmp->last_child  = 0;
 
@@ -315,18 +291,7 @@ public:
     template <typename Iter>
     Iter insert( Iter position, const T& x )
     {
-        node_type* tmp = m_allocator.allocate( 1, 0 );
-        if ( !tmp )
-        {
-            kvsMessageError( "Cannot allocate memory for the appending node." );
-            return 0;
-        }
-
-#if defined( KVS_ENABLE_MEM_DEBUG )
-        tmp->data = x;
-#else
-        this->constructor( &tmp->data, x );
-#endif
+        node_type* tmp = new node_type( x );
         tmp->first_child = 0;
         tmp->last_child  = 0;
 
@@ -350,18 +315,7 @@ public:
     // insert node as previous sibling of node pointed to by position
     sibling_iterator insert( sibling_iterator position, const T& x )
     {
-        node_type* tmp = m_allocator.allocate( 1, 0 );
-        if ( !tmp )
-        {
-            kvsMessageError( "Cannot allocate memory for the appending node." );
-            return 0;
-        }
-
-#if defined( KVS_ENABLE_MEM_DEBUG )
-        tmp->data = x;
-#else
-        this->constructor( &tmp->data, x );
-#endif
+        node_type* tmp = new node_type( x );
         tmp->first_child = 0;
         tmp->last_child  = 0;
 
@@ -443,52 +397,6 @@ public:
 
         return ret;
     }
-
-protected:
-
-    void initialize_head()
-    {
-        m_head = m_allocator.allocate( 1, 0 );
-        if ( !m_head )
-        {
-            kvsMessageError( "Cannot allocate memory for the head node." );
-        }
-
-        m_head->parent       = 0;
-        m_head->first_child  = 0;
-        m_head->last_child   = 0;
-        m_head->prev_sibling = m_head;
-        m_head->next_sibling = m_head;
-    }
-
-    pre_order_iterator set_head( const T& x )
-    {
-        KVS_ASSERT( begin() == end() );
-
-        return insert( begin(), x );
-    }
-
-private:
-
-#if !defined( KVS_ENABLE_MEM_DEBUG )
-    template <typename T1, typename T2>
-    inline void constructor( T1* p, T2& val )
-    {
-        new( ( void* )p ) T1( val );
-    }
-
-    template <typename T1>
-    inline void constructor( T1* p )
-    {
-        new( ( void* )p ) T1;
-    }
-#endif
-
-    template <typename T1>
-    inline void destructor( T1* p )
-    {
-        p->~T1();
-    }
 };
 
 /*==========================================================================*/
@@ -500,6 +408,9 @@ private:
 template <typename T>
 struct Tree<T>::Node
 {
+    Node() {}
+    Node( const T& x ) : data( x ) {}
+
     Node* parent;       ///< pointer to the parent node
     Node* first_child;  ///< pointer to the first child node
     Node* last_child;   ///< pointer to the last child node
@@ -516,13 +427,6 @@ struct Tree<T>::Node
 template <typename T>
 class Tree<T>::iterator_base
 {
-    // Friend classes.
-    friend class pre_order_iterator;
-    friend class post_order_iterator;
-    friend class sibling_iterator;
-    friend class breadth_first_iterator;
-    friend class leaf_iterator;
-
 public:
 
     // Type definitions.
@@ -562,6 +466,16 @@ public:
     virtual iterator_base&  operator -- () = 0;
     virtual iterator_base&  operator += ( unsigned int ) = 0;
     virtual iterator_base&  operator -= ( unsigned int ) = 0;
+
+    bool operator == ( const iterator_base& other ) const
+    {
+        return m_node == other.m_node;
+    }
+
+    bool operator != ( const iterator_base& other ) const
+    {
+        return !( *this == other );
+    }
 
 public:
 
@@ -632,9 +546,6 @@ public:
 template <typename T>
 class Tree<T>::pre_order_iterator : public Tree<T>::iterator_base
 {
-    using iterator_base::m_node;
-    using iterator_base::m_skip_current_children;
-
 public:
 
     pre_order_iterator():
@@ -669,20 +580,6 @@ public:
             iterator_base::skipChildren();
             ++( *this );
         }
-    }
-
-public:
-
-    bool operator == ( const pre_order_iterator& other ) const
-    {
-        if ( other.node() == m_node ) return true;
-        else                          return false;
-    }
-
-    bool operator != ( const pre_order_iterator& other ) const
-    {
-        if ( other.node() != m_node ) return true;
-        else                          return false;
     }
 
 public:
@@ -763,9 +660,6 @@ public:
 template <typename T>
 class Tree<T>::post_order_iterator : public Tree<T>::iterator_base
 {
-    using iterator_base::m_node;
-    using iterator_base::m_skip_current_children;
-
 public:
 
     post_order_iterator():
@@ -793,20 +687,6 @@ public:
             iterator_base::skip_children();
             ++( *this );
         }
-    }
-
-public:
-
-    bool operator == ( const post_order_iterator& other ) const
-    {
-        if ( other.node() == m_node ) return true;
-        else                          return false;
-    }
-
-    bool operator != ( const post_order_iterator& other ) const
-    {
-        if ( other.node() != m_node ) return true;
-        else                          return false;
     }
 
 public:
@@ -892,9 +772,6 @@ public:
 template <typename T>
 class Tree<T>::sibling_iterator : public Tree<T>::iterator_base
 {
-    using iterator_base::m_node;
-    using iterator_base::m_skip_current_children;
-
 public:
 
     node_type* m_parent;
@@ -922,18 +799,6 @@ public:
         iterator_base( other.node() )
     {
         this->set_parent();
-    }
-
-    bool operator == ( const sibling_iterator& other ) const
-    {
-        if ( other.node() == m_node ) return true;
-        else                          return false;
-    }
-
-    bool operator != ( const sibling_iterator& other ) const
-    {
-        if ( other.node() != m_node ) return true;
-        else                          return false;
     }
 
     virtual iterator_base& operator ++ ()
@@ -1009,8 +874,6 @@ private:
 template <typename T>
 class Tree<T>::breadth_first_iterator : public Tree<T>::iterator_base
 {
-    using iterator_base::m_node;
-
 private:
 
     std::queue<node_type*> m_node_queue;
@@ -1032,18 +895,6 @@ public:
         iterator_base( other.node() )
     {
         m_node_queue.push( other.node() );
-    }
-
-    bool operator == ( const breadth_first_iterator& other ) const
-    {
-        if ( other.node() == m_node ) return true;
-        else                          return false;
-    }
-
-    bool operator != ( const breadth_first_iterator& other ) const
-    {
-        if ( other.node() != m_node ) return true;
-        else                          return false;
     }
 
     virtual iterator_base& operator ++ ()
@@ -1100,8 +951,6 @@ private:
 template <typename T>
 class Tree<T>::leaf_iterator : public Tree<T>::iterator_base
 {
-    using iterator_base::m_node;
-
 public:
 
     leaf_iterator():
@@ -1136,19 +985,6 @@ public:
         iterator_base( other.node() )
     {
     }
-
-    bool operator == ( const leaf_iterator& other ) const
-    {
-        if ( other.node() == m_node ) return true;
-        else                          return false;
-    }
-
-    bool operator != ( const leaf_iterator& other ) const
-    {
-        if ( other.node() != m_node ) return true;
-        else                          return false;
-    }
-
 
     virtual iterator_base& operator ++ ()
     {
