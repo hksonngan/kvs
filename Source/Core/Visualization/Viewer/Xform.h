@@ -76,9 +76,9 @@ class Xform
 
 private:
 
-    kvs::Vector3f  m_translation;
     kvs::Matrix33f m_rotation; ///< rotation matrix
     kvs::Vector3f  m_scaling;  ///< scaling vector
+    kvs::Vector3f m_translation;
 
 public:
 
@@ -127,6 +127,8 @@ public:
     const kvs::Matrix33f scaledRotation( void ) const;
 
     const kvs::Vector3f& scaling( void ) const;
+
+    kvs::Vector3f transform( const kvs::Vector3f& pos ) const;
 
     kvs::Matrix44f toMat4() const;
 
