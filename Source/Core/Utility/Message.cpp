@@ -79,6 +79,7 @@ void Message::operator ()( const char* msg, ... )
         va_start( args, msg );
         vsprintf( buffer, msg, args );
         va_end( args );
+        buffer[ ::MaxMessageSize - 1 ] = '\0';
 
         // Output message tag.
         std::cerr << KVS_MESSAGE_SET_COLOR( ::color[m_type] );
@@ -86,9 +87,9 @@ void Message::operator ()( const char* msg, ... )
         std::cerr << KVS_MESSAGE_RESET_COLOR;
 
         // Output message.
-        std::cerr << ": " << std::string( buffer ) << std::endl;
-        std::cerr << "\t" << "FILE: " << std::string( m_file ) << " (" << m_line << ")" << std::endl;
-        std::cerr << "\t" << "FUNC: " << std::string( m_func ) << std::endl;
+        std::cerr << ": " << buffer << std::endl;
+        std::cerr << "\t" << "FILE: " << m_file << " (" << m_line << ")" << std::endl;
+        std::cerr << "\t" << "FUNC: " << m_func << std::endl;
 
         if ( m_type == Message::Assert ) { KVS_BREAKPOINT; }
     }
