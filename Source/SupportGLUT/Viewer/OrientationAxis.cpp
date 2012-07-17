@@ -466,7 +466,7 @@ void OrientationAxis::paintEvent( void )
                    up.x(), up.y(), up.z() );
 
         // Rotate the axis and the box using the object's rotation matrix.
-        const kvs::Matrix33f r = m_object->xform_control().rotation();
+        const kvs::Matrix33f r = m_object->xform_control().xform().rotation();
         const float xform[16] = {
             r[0][0], r[1][0], r[2][0], 0.0f,
             r[0][1], r[1][1], r[2][1], 0.0f,

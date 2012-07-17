@@ -27,14 +27,12 @@ StochasticMultipleTetrahedraCompositor::StochasticMultipleTetrahedraCompositor( 
     m_object( new kvs::PointObject() ),
     m_renderer( new kvs::glew::StochasticMultipleTetrahedraRenderer() )
 {
-    const kvs::Vector3f t = screen->objectManager()->xform().translation();
-    const kvs::Vector3f s = screen->objectManager()->xform().scaling();
-    const kvs::Matrix33f r = screen->objectManager()->xform().rotation();
     const kvs::Vector3f obj_min = screen->objectManager()->minObjectCoord();
     const kvs::Vector3f obj_max = screen->objectManager()->maxObjectCoord();
     const kvs::Vector3f ext_min = screen->objectManager()->minExternalCoord();
     const kvs::Vector3f ext_max = screen->objectManager()->maxExternalCoord();
-    m_object->xform_control().setInitialXform( t, s, r );
+    m_object->xform_control().setXform( screen->objectManager()->xform() );
+    m_object->xform_control().saveXform();
     m_object->setMinMaxObjectCoords( obj_min, obj_max );
     m_object->setMinMaxExternalCoords( ext_min, ext_max );
 

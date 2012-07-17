@@ -60,7 +60,7 @@ public:
 
     Quaternion<T>( const Matrix33<T>& mat );
 
-    Quaternion<T>( const Matrix44<T>& mat );
+    //Quaternion<T>( const Matrix44<T>& mat );
 
     explicit Quaternion<T>( const T elements[4] );
 
@@ -371,46 +371,46 @@ Quaternion<T>::Quaternion( const kvs::Matrix33<T>& m )
     m_elements[3] = w;
 }
 
-template<typename T>
-Quaternion<T>::Quaternion( const kvs::Matrix44<T>& m )
-{
-    double trace = double( m.trace() );
-
-    T x, y, z, w;
-    if( trace >= 1.0 )
-    {
-        double sqrt_trace = std::sqrt( trace );
-
-        x = T( ( m[1][2] - m[2][1] ) * 0.5 / sqrt_trace );
-        y = T( ( m[2][0] - m[0][2] ) * 0.5 / sqrt_trace );
-        z = T( ( m[0][1] - m[1][0] ) * 0.5 / sqrt_trace );
-        w = T( sqrt_trace * 0.5 );
-    }
-    else
-    {
-        if( m[0][0] > m[1][1] && m[0][0] > m[2][2] )
-        {
-            x = T( std::sqrt( double( m[0][0] - m[1][1] - m[2][2] ) + 1.0 ) * 0.5 );
-            y = T( ( m[0][1] + m[1][0] ) * 0.25 / x );
-            z = T( ( m[0][2] + m[2][0] ) * 0.25 / x );
-            w = T( ( m[1][2] + m[2][1] ) * 0.25 / x );
-        }
-        else if( m[1][1] > m[2][2] )
-        {
-            y = T( std::sqrt( double( m[1][1] - m[2][2] - m[0][0] ) + 1.0 ) * 0.5 );
-            z = T( ( m[1][2] + m[2][1] ) * 0.25 / y );
-            x = T( ( m[1][0] + m[0][1] ) * 0.25 / y );
-            w = T( ( m[2][0] + m[0][2] ) * 0.25 / y );
-        }
-        else
-        {
-            z = T( std::sqrt( double( m[2][2] - m[0][0] - m[1][1] ) + 1.0 ) * 0.5 );
-            x = T( ( m[2][0] + m[0][2] ) * 0.25 / z );
-            y = T( ( m[2][1] + m[1][2] ) * 0.25 / z );
-            w = T( ( m[0][1] + m[1][0] ) * 0.25 / z );
-        }
-    }
-}
+//template<typename T>
+//Quaternion<T>::Quaternion( const kvs::Matrix44<T>& m )
+//{
+//    double trace = double( m.trace() );
+//
+//    T x, y, z, w;
+//    if( trace >= 1.0 )
+//    {
+//        double sqrt_trace = std::sqrt( trace );
+//
+//        x = T( ( m[1][2] - m[2][1] ) * 0.5 / sqrt_trace );
+//        y = T( ( m[2][0] - m[0][2] ) * 0.5 / sqrt_trace );
+//        z = T( ( m[0][1] - m[1][0] ) * 0.5 / sqrt_trace );
+//        w = T( sqrt_trace * 0.5 );
+//    }
+//    else
+//    {
+//        if( m[0][0] > m[1][1] && m[0][0] > m[2][2] )
+//        {
+//            x = T( std::sqrt( double( m[0][0] - m[1][1] - m[2][2] ) + 1.0 ) * 0.5 );
+//            y = T( ( m[0][1] + m[1][0] ) * 0.25 / x );
+//            z = T( ( m[0][2] + m[2][0] ) * 0.25 / x );
+//            w = T( ( m[1][2] + m[2][1] ) * 0.25 / x );
+//        }
+//        else if( m[1][1] > m[2][2] )
+//        {
+//            y = T( std::sqrt( double( m[1][1] - m[2][2] - m[0][0] ) + 1.0 ) * 0.5 );
+//            z = T( ( m[1][2] + m[2][1] ) * 0.25 / y );
+//            x = T( ( m[1][0] + m[0][1] ) * 0.25 / y );
+//            w = T( ( m[2][0] + m[0][2] ) * 0.25 / y );
+//        }
+//        else
+//        {
+//            z = T( std::sqrt( double( m[2][2] - m[0][0] - m[1][1] ) + 1.0 ) * 0.5 );
+//            x = T( ( m[2][0] + m[0][2] ) * 0.25 / z );
+//            y = T( ( m[2][1] + m[1][2] ) * 0.25 / z );
+//            w = T( ( m[0][1] + m[1][0] ) * 0.25 / z );
+//        }
+//    }
+//}
 
 template<typename T>
 Quaternion<T>::Quaternion( const T elements[4] )

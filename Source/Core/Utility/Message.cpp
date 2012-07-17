@@ -20,7 +20,7 @@ namespace
 
 const size_t MaxMessageSize = 512;
 
-const std::string tag[kvs::Message::NumberOfMessageTypes] =
+const char* tag[kvs::Message::NumberOfMessageTypes] =
 {
     "KVS ERROR",
     "KVS WARNING",
@@ -28,7 +28,7 @@ const std::string tag[kvs::Message::NumberOfMessageTypes] =
     "KVS ASSERT"
 };
 
-const std::string color[kvs::Message::NumberOfMessageTypes] =
+const char* color[kvs::Message::NumberOfMessageTypes] =
 {
     KVS_MESSAGE_RED,
     KVS_MESSAGE_PURPLE,

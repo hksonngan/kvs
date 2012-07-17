@@ -145,7 +145,8 @@ public:
 
     breadth_first_iterator endBreadth() const
     {
-        return breadth_first_iterator();
+        breadth_first_iterator e;
+        return e;
     }
 
     leaf_iterator beginLeaf() const
@@ -464,8 +465,26 @@ public:
 
     virtual iterator_base&  operator ++ () = 0;
     virtual iterator_base&  operator -- () = 0;
-    virtual iterator_base&  operator += ( unsigned int ) = 0;
-    virtual iterator_base&  operator -= ( unsigned int ) = 0;
+
+    iterator_base& operator += ( unsigned int num )
+    {
+        while ( num > 0 )
+        {
+            ++( *this );
+            --num;
+        }
+        return *this;
+    }
+
+    iterator_base& operator -= ( unsigned int num )
+    {
+        while ( num > 0 )
+        {
+            --( *this );
+            --num;
+        }
+        return *this;
+    }
 
     bool operator == ( const iterator_base& other ) const
     {
@@ -628,28 +647,6 @@ public:
 
         return *this;
     }
-
-    virtual iterator_base& operator += ( unsigned int num )
-    {
-        while ( num > 0 )
-        {
-            ++( *this );
-            --num;
-        }
-
-        return *this;
-    }
-
-    virtual iterator_base& operator -= ( unsigned int num )
-    {
-        while ( num > 0 )
-        {
-            --( *this );
-            --num;
-        }
-
-        return *this;
-    }
 };
 
 /*==========================================================================*/
@@ -734,28 +731,6 @@ public:
         return *this;
     }
 
-    virtual iterator_base& operator += ( unsigned int num )
-    {
-        while ( num > 0 )
-        {
-            ++( *this );
-            --num;
-        }
-
-        return *this;
-    }
-
-    virtual iterator_base& operator -= ( unsigned int num )
-    {
-        while ( num > 0 )
-        {
-            --( *this );
-            --num;
-        }
-
-        return *this;
-    }
-
     void descend_all()
     {
         KVS_ASSERT( m_node != 0 );
@@ -821,26 +796,6 @@ public:
             m_node = m_parent->last_child;
         }
 
-        return *this;
-    }
-
-    virtual iterator_base& operator += ( unsigned int num )
-    {
-        while ( num > 0 )
-        {
-            ++( *this );
-            --num;
-        }
-        return *this;
-    }
-
-    virtual iterator_base& operator -= ( unsigned int num )
-    {
-        while ( num > 0 )
-        {
-            --( *this );
-            --num;
-        }
         return *this;
     }
 
@@ -919,26 +874,11 @@ public:
         return *this;
     }
 
-    virtual iterator_base& operator += ( unsigned int num )
-    {
-        while ( num > 0 )
-        {
-            ++( *this );
-            --num;
-        }
-
-        return *this;
-    }
-
 private:
 
     virtual iterator_base&  operator -- ()
     {
-        return *this;
-    }
-
-    virtual iterator_base&  operator -= ( unsigned int )
-    {
+        KVS_ASSERT( false );
         return *this;
     }
 };
@@ -1022,25 +962,7 @@ public:
         return *this;
     }
 
-    virtual iterator_base& operator += ( unsigned int num )
-    {
-        while ( num > 0 )
-        {
-            ++( *this );
-            --num;
-        }
-        return *this;
-    }
 
-    virtual iterator_base& operator -= ( unsigned int num )
-    {
-        while ( num > 0 )
-        {
-            --( *this );
-            --num;
-        }
-        return *this;
-    }
 };
 
 } // end of namespace kvs
