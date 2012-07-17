@@ -20,6 +20,7 @@
 #include <typeinfo>
 #include <algorithm>
 #include <kvs/ClassName>
+#include <kvs/String>
 #include <kvs/Message>
 
 
@@ -45,15 +46,14 @@ public:
 
 public:
 
-    class Argument;
+    typedef std::string Argument;
     class Option;
     class Value;
 
 public:
-
-    typedef std::vector<Argument> Arguments;
-    typedef std::vector<Option>   Options;
-    typedef std::vector<Value>    Values;
+    typedef std::vector<std::string> Arguments;
+    typedef std::vector<Option>      Options;
+    typedef std::vector<Value>       Values;
 
 protected:
 
@@ -125,54 +125,19 @@ public:
 
 private:
 
-    bool is_option( Arguments::iterator& argument ) const;
+    bool is_option( const std::string& argument ) const;
 
-    std::string get_option_name( Arguments::iterator& argument ) const;
+    std::string get_option_name( const std::string& argument ) const;
 
-    bool is_help_option( const char* value ) const;
+    bool is_help_option( const std::string& value ) const;
 
-    Options::iterator find_option( Arguments::iterator& argument );
+    Options::iterator find_option( const std::string& argument );
 
     bool read_option_values( 
         Arguments::iterator& argument,
         Options::iterator&   option );
 
     void print_help_message( HelpMessageMode mode ) const;
-};
-
-/*==========================================================================*/
-/**
- *  Argument value class.
- */
-/*==========================================================================*/
-class CommandLine::Argument
-{
-private:
-
-    size_t m_length; ///< length of the argument value
-    char*  m_data;   ///< argument value
-
-public:
-
-    Argument();
-
-    explicit Argument( const char* data );
-
-    Argument( const Argument& other );
-
-    virtual ~Argument();
-
-public:
-
-    size_t length() const;
-
-    const char* data() const;
-
-public:
-
-    Argument& operator =( const char* data );
-
-    Argument& operator =( const Argument& arg );
 };
 
 /*==========================================================================*/
@@ -184,12 +149,12 @@ class CommandLine::Option
 {
 private:
 
-    std::string           m_name;        ///< option name
-    std::string           m_description; ///< option description
-    size_t                m_nvalues;     ///< number of required values
-    bool                  m_is_required; ///< true, if the option is required
-    bool                  m_is_given;    ///< true, if the option is given
-    std::vector<Argument> m_values;      ///< option values
+    std::string              m_name;        ///< option name
+    std::string              m_description; ///< option description
+    size_t                   m_nvalues;     ///< number of required values
+    bool                     m_is_required; ///< true, if the option is required
+    bool                     m_is_given;    ///< true, if the option is given
+    std::vector<std::string> m_values;      ///< option values
 
 public:
 
@@ -201,13 +166,9 @@ public:
         size_t             nvalues     = 0,
         bool               is_required = false );
 
-    Option( const Option& other );
-
-    virtual ~Option();
-
 public:
 
-    void setValue( const Argument& value );
+    void setValue( const std::string& value );
 
     void given();
 
@@ -223,14 +184,12 @@ public:
 
     bool isGiven() const;
 
-    const std::vector<Argument>& values() const;
+    const std::vector<std::string>& values() const;
 
     template <typename T>
     T value( size_t index ) const;
 
 public:
-
-    Option& operator =( const Option& rhs );
 
     friend bool operator <( const Option& lhs, const Option& rhs );
 
@@ -259,13 +218,9 @@ public:
         const std::string& description,
         bool               is_required = true );
 
-    Value( const Value& other );
-
-    virtual ~Value();
-
 public:
 
-    void setValue( const char* value );
+    void setValue( const std::string& value );
 
     const std::string& description() const;
 
@@ -277,8 +232,6 @@ public:
     T value() const;
 
 public:
-
-    Value& operator =( const Value& rhs );
 
     friend bool operator <( const Value& lhs, const Value& rhs );
 
@@ -295,7 +248,7 @@ public:
 template <class T>
 inline T CommandLine::value( size_t index ) const
 {
-    return m_values[index].value<T>();
+    return m_values[ index ].value<T>();
 }
 
 /*==========================================================================*/
@@ -309,24 +262,16 @@ inline T CommandLine::value( size_t index ) const
 template <class T>
 inline T CommandLine::optionValue( const std::string& option_name, size_t index ) const
 {
-    Option                  key( option_name );
+    Option key( option_name );
     Options::const_iterator option =
         std::find( m_options.begin(), m_options.end(), key );
 
-    if ( ( option == m_options.end() ) || ( !option->isGiven() ) )
+    if ( option == m_options.end() || !option->isGiven() )
     {
         kvsMessageError( "Cannot find '-%s' option.", option->name().c_str() );
         return T( 0 );
     }
-
-    if ( ( size_t )( option->numberOfValues() ) < index )
-    {
-        kvsMessageError( "Cannot get option value by given index." );
-        return T( 0 );
-    }
-
-    T ret = option->value<T>( index );
-    return ret;
+    return option->value<T>( index );
 }
 
 /*==========================================================================*/
@@ -339,38 +284,13 @@ inline T CommandLine::optionValue( const std::string& option_name, size_t index 
 template <typename T>
 inline T CommandLine::Option::value( size_t index ) const
 {
-    if ( m_nvalues < index )
+    if ( index >= m_nvalues )
     {
         kvsMessageError( "Option '-%s' has only %d values.",
                          m_name.c_str(), m_nvalues );
         return T( 0 );
     }
-
-    T ret;
-    std::stringstream s( m_values[index].data() );
-    s >> ret;
-
-    return ret;
-}
-
-/*==========================================================================*/
-/**
- *  Get the option value (Specialization for std::string class).
- *  @param index [in] index of option value list
- *  @return option value
- */
-/*==========================================================================*/
-template<>
-inline std::string CommandLine::Option::value<std::string>( size_t index ) const
-{
-    if ( m_nvalues < index )
-    {
-        kvsMessageError( "Option '-%s' has only %d values.",
-                         m_name.c_str(), m_nvalues );
-        return( "" );
-    }
-
-    return m_values[index].data();
+    return kvs::String::To<T>( m_values[ index ] );
 }
 
 /*==========================================================================*/
@@ -382,23 +302,7 @@ inline std::string CommandLine::Option::value<std::string>( size_t index ) const
 template <typename T>
 inline T CommandLine::Value::value() const
 {
-    T ret;
-    std::stringstream s( m_value.data() );
-    s >> ret;
-
-    return ret;
-}
-
-/*==========================================================================*/
-/**
- *  Get the value (Specialization for std::string class).
- *  @return value
- */
-/*==========================================================================*/
-template <>
-inline std::string CommandLine::Value::value<std::string>() const
-{
-    return m_value.data();
+    return kvs::String::To<T>( m_value );
 }
 
 } // end of namespace kvs

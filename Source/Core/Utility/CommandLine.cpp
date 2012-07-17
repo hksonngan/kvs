@@ -18,7 +18,6 @@
 #include <vector>
 #include <cstring>
 #include <cstdlib>
-#include <kvs/DebugNew>
 #include <kvs/CommandLine>
 #include <kvs/Message>
 #include <kvs/Math>
@@ -32,150 +31,13 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-CommandLine::Argument::Argument():
-    m_length( 0 ),
-    m_data( 0 )
-{
-}
-
-/*==========================================================================*/
-/**
- *  Constructor.
- *  @param data [in] pointer to argument value
- */
-/*==========================================================================*/
-CommandLine::Argument::Argument( const char* data ):
-    m_length( strlen( data ) ),
-    m_data( 0 )
-{
-    m_data = new char[ m_length + 1 ];
-    if ( !m_data )
-    {
-        kvsMessageError( "Cannot allocate memory." );
-        return;
-    }
-
-    memset( m_data, 0, m_length + 1 );
-    strncpy( m_data, data, m_length );
-    m_data[ m_length ] = '\0';
-}
-
-/*==========================================================================*/
-/**
- *  Constructor.
- *  @param arg [in] argument
- */
-/*==========================================================================*/
-CommandLine::Argument::Argument( const CommandLine::Argument& other ):
-    m_length( other.m_length ),
-    m_data( 0 )
-{
-    m_data = new char[ m_length + 1 ];
-    if ( !m_data )
-    {
-        kvsMessageError( "Cannot allocate memory." );
-        return;
-    }
-
-    memset( m_data, 0, m_length + 1 );
-    strncpy( m_data, other.m_data, m_length );
-    m_data[ m_length ] = '\0';
-}
-
-/*==========================================================================*/
-/**
- *  Destructor.
- */
-/*==========================================================================*/
-CommandLine::Argument::~Argument()
-{
-    if ( m_data ) { delete[] m_data; }
-}
-
-/*==========================================================================*/
-/**
- *  Get length of argument value.
- *  @return length of argument value
- */
-/*==========================================================================*/
-size_t CommandLine::Argument::length() const
-{
-    return m_length;
-}
-
-/*==========================================================================*/
-/**
- *  Get argument value.
- *  @return argument value
- */
-/*==========================================================================*/
-const char* CommandLine::Argument::data() const
-{
-    return m_data;
-}
-
-/*==========================================================================*/
-/**
- *  Substitution operator.
- *  @param data [in] pointer to argument value
- */
-/*==========================================================================*/
-CommandLine::Argument& CommandLine::Argument::operator =( const char* rhs )
-{
-    if ( m_data ) { delete[] m_data; }
-
-    m_length = strlen( rhs );
-    m_data = new char[ m_length + 1 ];
-    if ( !m_data )
-    {
-        kvsMessageError( "Cannot allocate memory." );
-        return *this;
-    }
-
-    memset( m_data, 0, m_length + 1 );
-    strncpy( m_data, rhs, m_length );
-    m_data[ m_length ] = '\0';
-
-    return *this;
-}
-
-/*==========================================================================*/
-/**
- *  Substitution operator.
- *  @param arg [in] argument value
- */
-/*==========================================================================*/
-CommandLine::Argument& CommandLine::Argument::operator =( const CommandLine::Argument& rhs )
-{
-    if ( m_data ) { delete[] m_data; }
-
-    m_length = rhs.m_length;
-    m_data = new char[ m_length + 1 ];
-    if ( !m_data )
-    {
-        kvsMessageError( "Cannot allocate memory." );
-        return *this;
-    }
-
-    memset( m_data, 0, m_length + 1 );
-    strncpy( m_data, rhs.m_data, m_length );
-    m_data[ m_length ] = '\0';
-
-    return *this;
-}
-
-/*==========================================================================*/
-/**
- *  Constructor.
- */
-/*==========================================================================*/
 CommandLine::Option::Option():
-    m_name( "" ),
-    m_description( "" ),
+    m_name(),
+    m_description(),
     m_nvalues( 0 ),
     m_is_required( false ),
     m_is_given( false ),
-    m_values( 0 )
+    m_values()
 {
 }
 
@@ -198,37 +60,8 @@ CommandLine::Option::Option(
     m_nvalues( nvalues ),
     m_is_required( is_required ),
     m_is_given( false ),
-    m_values( 0 )
+    m_values()
 {
-}
-
-/*==========================================================================*/
-/**
- *  Constructor.
- *  @param option [in] option
- */
-/*==========================================================================*/
-CommandLine::Option::Option( const CommandLine::Option& other ):
-    m_name( other.m_name ),
-    m_description( other.m_description ),
-    m_nvalues( other.m_nvalues ),
-    m_is_required( other.m_is_required ),
-    m_is_given( other.m_is_given ),
-    m_values( 0 )
-{
-    std::copy( other.m_values.begin(),
-               other.m_values.end(),
-               m_values.begin() );
-}
-
-/*==========================================================================*/
-/**
- *  Destructor.
- */
-/*==========================================================================*/
-CommandLine::Option::~Option()
-{
-    m_values.clear();
 }
 
 /*==========================================================================*/
@@ -236,7 +69,7 @@ CommandLine::Option::~Option()
  *  Set option value.
  */
 /*==========================================================================*/
-void CommandLine::Option::setValue( const CommandLine::Argument& value )
+void CommandLine::Option::setValue( const std::string& value )
 {
     m_values.push_back( value );
     m_is_given = true;
@@ -311,30 +144,9 @@ bool CommandLine::Option::isGiven() const
  *  @return option value list
  */
 /*==========================================================================*/
-const std::vector<CommandLine::Argument>& CommandLine::Option::values() const
+const std::vector<std::string>& CommandLine::Option::values() const
 {
     return m_values;
-}
-
-/*==========================================================================*/
-/**
- *  Substitution operator.
- *  @param option [in] option value
- */
-/*==========================================================================*/
-CommandLine::Option& CommandLine::Option::operator =( const CommandLine::Option& rhs )
-{
-    m_name        = rhs.m_name;
-    m_description = rhs.m_description;
-    m_nvalues     = rhs.m_nvalues;
-    m_is_required = rhs.m_is_required;
-    m_is_given    = rhs.m_is_given;
-
-    std::copy( rhs.m_values.begin(),
-               rhs.m_values.end(),
-               m_values.begin() );
-
-    return *this;
 }
 
 /*==========================================================================*/
@@ -367,7 +179,7 @@ bool operator ==( const CommandLine::Option& lhs, const CommandLine::Option& rhs
  */
 /*==========================================================================*/
 CommandLine::Value::Value():
-    m_description( "" ),
+    m_description(),
     m_is_required( true ),
     m_is_given( false ),
     m_value()
@@ -391,34 +203,11 @@ CommandLine::Value::Value( const std::string& description, bool is_required ):
 
 /*==========================================================================*/
 /**
- *  Constructor.
- *  @param value [in] value
- */
-/*==========================================================================*/
-CommandLine::Value::Value( const CommandLine::Value& other ):
-    m_description( other.m_description ),
-    m_is_required( other.m_is_required ),
-    m_is_given( other.m_is_given ),
-    m_value( other.m_value )
-{
-}
-
-/*==========================================================================*/
-/**
- *  Destructor.
- */
-/*==========================================================================*/
-CommandLine::Value::~Value()
-{
-}
-
-/*==========================================================================*/
-/**
  *  Set value.
  *  @param value [in] pinter to value
  */
 /*==========================================================================*/
-void CommandLine::Value::setValue( const char* value )
+void CommandLine::Value::setValue( const std::string& value )
 {
     m_value    = value;
     m_is_given = true;
@@ -459,20 +248,6 @@ bool CommandLine::Value::isGiven() const
 
 /*==========================================================================*/
 /**
- *  Substitution operator.
- *  @param value [in] value.
- */
-/*==========================================================================*/
-CommandLine::Value& CommandLine::Value::operator =( const CommandLine::Value& rhs )
-{
-    m_description = rhs.m_description;
-    m_value       = rhs.m_value;
-
-    return *this;
-}
-
-/*==========================================================================*/
-/**
  *  Comparison operator '<'.
  *  @param lhs [in] value (left hand side)
  *  @param rhs [in] value (right hand side)
@@ -505,13 +280,13 @@ bool operator ==( const CommandLine::Value& lhs, const CommandLine::Value& rhs )
 CommandLine::CommandLine( int argc, char** argv ):
     m_argc( argc ),
     m_argv( argv ),
-    m_command_name( std::string( argv[0] ) ),
+    m_command_name( argv[0] ),
     m_max_length( 0 ),
     m_no_help( true ),
     m_help_option( "h" ),
-    m_arguments( 0 ),
-    m_options( 0 ),
-    m_values( 0 )
+    m_arguments(),
+    m_options(),
+    m_values()
 {
 }
 
@@ -530,9 +305,9 @@ CommandLine::CommandLine( int argc, char** argv, const std::string& command_name
     m_max_length( 0 ),
     m_no_help( true ),
     m_help_option( "h" ),
-    m_arguments( 0 ),
-    m_options( 0 ),
-    m_values( 0 )
+    m_arguments(),
+    m_options(),
+    m_values()
 {
 }
 
@@ -543,7 +318,6 @@ CommandLine::CommandLine( int argc, char** argv, const std::string& command_name
 /*==========================================================================*/
 CommandLine::~CommandLine()
 {
-    this->clear();
 }
 
 /*==========================================================================*/
@@ -611,19 +385,15 @@ bool CommandLine::parse()
     // Oputput help message in detail when '-h' option is given.
     for ( int i = 1; i < m_argc; ++i )
     {
-        const char* const p_value = m_argv[i];
+        std::string arg( m_argv[i] );
 
-        if ( !m_no_help && is_help_option( p_value ) )
+        if ( !m_no_help && is_help_option( arg ) )
         {
             this->print_help_message( UsageAndOption );
             this->clear();
             return false;
         }
-        else
-        {
-            CommandLine::Argument arg( p_value );
-            m_arguments.push_back( arg );
-        }
+        m_arguments.push_back( arg );
     }
 
     // Main loops in this method.
@@ -632,13 +402,13 @@ bool CommandLine::parse()
     Values::iterator    value    = m_values.begin();
     while ( argument != m_arguments.end() )
     {
-        if ( this->is_option( argument ) )
+        if ( this->is_option( *argument ) )
         {
             // Search the given option from the option set.
-            option = this->find_option( argument );
+            option = this->find_option( *argument );
             if ( option == m_options.end() )
             {
-                kvsMessageError( "Unknown option '%s'", argument->data() );
+                kvsMessageError( "Unknown option '%s'", argument->c_str() );
                 this->clear();
                 return false;
             }
@@ -657,7 +427,7 @@ bool CommandLine::parse()
         {
             if ( value != m_values.end() )
             {
-                value->setValue( argument->data() );
+                value->setValue( *argument );
 
                 ++value;
             }
@@ -667,34 +437,24 @@ bool CommandLine::parse()
     }
 
     // Check the required argument.
-    option = m_options.begin();
     for ( size_t i = 0; i < m_options.size(); ++i )
     {
-        if ( option->isRequired() )
+        if ( m_options[i].isRequired() && !m_options[i].isGiven() )
         {
-            if ( !option->isGiven() )
-            {
-                kvsMessageError( "Option '-%s' is required.", option->name().c_str() );
-                this->clear();
-                return false;
-            }
+            kvsMessageError( "Option '-%s' is required.", m_options[i].name().c_str() );
+            this->clear();
+            return false;
         }
-        ++option;
     }
 
-    value = m_values.begin();
     for ( size_t i = 0; i < m_values.size(); ++i )
     {
-        if ( value->isRequired() )
+        if ( m_values[i].isRequired() && !m_values[i].isGiven() )
         {
-            if ( !value->isGiven() )
-            {
-                kvsMessageError( "Input value is required." );
-                this->clear();
-                return false;
-            }
+            kvsMessageError( "Input value is required." );
+            this->clear();
+            return false;
         }
-        ++value;
     }
 
     return true;
@@ -742,7 +502,7 @@ bool CommandLine::read()
         }
         else
         {
-            CommandLine::Argument arg( p_value );
+            std::string arg( p_value );
             m_arguments.push_back( arg );
         }
     }
@@ -753,10 +513,10 @@ bool CommandLine::read()
     Values::iterator    value    = m_values.begin();
     while ( argument != m_arguments.end() )
     {
-        if ( this->is_option( argument ) )
+        if ( this->is_option( *argument ) )
         {
             // Serch the given option from the option set.
-            option = this->find_option( argument );
+            option = this->find_option( *argument );
             if ( option == m_options.end() ) { return true; }
 
             // Read the option values.
@@ -768,9 +528,9 @@ bool CommandLine::read()
             {
                 if ( value->isRequired() )
                 {
-                    if ( !argument->data() ) { return true; }
+                    if ( argument->empty() ) { return true; }
 
-                    value->setValue( argument->data() );
+                    value->setValue( *argument );
                 }
 
                 ++value;
@@ -840,7 +600,7 @@ bool CommandLine::hasOption( const std::string& option_name ) const
     Option key( option_name );
     Options::const_iterator p = std::find( m_options.begin(), m_options.end(), key );
 
-    return ( p != m_options.end() ) && ( p->isGiven() );
+    return p != m_options.end() && p->isGiven();
 }
 
 /*==========================================================================*/
@@ -854,9 +614,8 @@ bool CommandLine::hasOptionValue( const std::string& option_name ) const
 {
     Option key( option_name );
     Options::const_iterator p = std::find( m_options.begin(), m_options.end(), key );
-    if ( p == m_options.end() ) { return false; }
 
-    return p->numberOfValues() > 0;
+    return p != m_options.end() && p->numberOfValues() > 0;
 }
 
 /*==========================================================================*/
@@ -936,33 +695,33 @@ void CommandLine::showHelpMessage( HelpMessageMode mode ) const
  *  @return true, if given argument is option
  */
 /*==========================================================================*/
-bool CommandLine::is_option( Arguments::iterator& argument ) const
+bool CommandLine::is_option( const std::string& argument ) const
 {
-    return argument->data()[0] == '-';
+    return argument[0] == '-';
 }
 
 /*==========================================================================*/
 /**
  *  Get option name.
- *  @param argument [in] iterator of argument
+ *  @param argument [in] argument
  *  @return option name
  */
 /*==========================================================================*/
-std::string CommandLine::get_option_name( Arguments::iterator& argument ) const
+std::string CommandLine::get_option_name( const std::string& argument ) const
 {
-    return std::string( argument->data() ).substr( 1 );
+    return argument.substr( 1 );
 }
 
 /*==========================================================================*/
 /**
  *  Test whether given value is help option.
- *  @param value [in] pointer to value
+ *  @param value [in] value
  *  @return true, if given value is help option
  */
 /*==========================================================================*/
-bool CommandLine::is_help_option( const char* value ) const
+bool CommandLine::is_help_option( const std::string& value ) const
 {
-    return std::string( value ) == "-" + m_help_option;
+    return value == "-" + m_help_option;
 }
 
 /*==========================================================================*/
@@ -973,9 +732,9 @@ bool CommandLine::is_help_option( const char* value ) const
  */
 /*==========================================================================*/
 CommandLine::Options::iterator CommandLine::find_option( 
-    Arguments::iterator& argument )
+    const std::string& argument )
 {
-    std::string option_name( this->get_option_name( argument ) );
+    std::string option_name = this->get_option_name( argument );
     CommandLine::Option key( option_name );
 
     return std::find( m_options.begin(), m_options.end(), key );
@@ -991,7 +750,7 @@ CommandLine::Options::iterator CommandLine::find_option(
 /*==========================================================================*/
 bool CommandLine::read_option_values(
     Arguments::iterator& argument,
-    Options::iterator&   option )
+    Options::iterator& option )
 {
     ++argument; // skip option name.
 
@@ -1005,10 +764,9 @@ bool CommandLine::read_option_values(
     for ( size_t i = 0; i < option->numberOfValues(); ++i )
     {
         if ( argument == m_arguments.end() ) { return false; }
-        if ( this->is_option( argument ) ) { return false; }
+        if ( this->is_option( *argument ) ) { return false; }
 
         option->setValue( *argument );
-
         ++argument;
     }
 
@@ -1027,14 +785,9 @@ void CommandLine::print_help_message( HelpMessageMode mode ) const
     {
         std::cerr << "Usage: " << m_command_name << " ";
         std::cerr << "[options] ";
-        const size_t ninputs = m_values.size();
-
-        if ( ninputs > 0 )
+        for ( size_t i = 0; i < m_values.size(); ++i )
         {
-            for ( size_t i = 0; i < ninputs; ++i )
-            {
-                std::cerr << "<" << m_values[i].description() << "> ";
-            }
+            std::cerr << "<" << m_values[i].description() << "> ";
         }
         std::cerr << std::endl;
     }
@@ -1045,7 +798,7 @@ void CommandLine::print_help_message( HelpMessageMode mode ) const
         Options::const_iterator option = m_options.begin();
         while ( option != m_options.end() )
         {
-            std::string option_name( "-" + option->name() );
+            std::string option_name = "-" + option->name();
             std::cerr << std::left << std::setw( m_max_length + 1 ) << option_name;
             std::cerr << ": " << option->description();
             if ( option->isRequired() ) { std::cerr << " [required]"; }
