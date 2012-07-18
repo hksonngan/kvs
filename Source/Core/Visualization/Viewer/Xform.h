@@ -91,6 +91,8 @@ public:
 
     Xform( const Xform& xform );
 
+    Xform( const kvs::Matrix44f& mat );
+
     virtual ~Xform( void );
 
 public:
