@@ -428,6 +428,13 @@ struct Tree<T>::Node
 template <typename T>
 class Tree<T>::iterator_base
 {
+    // Friend classes.
+    friend class pre_order_iterator;
+    friend class post_order_iterator;
+    friend class sibling_iterator;
+    friend class breadth_first_iterator;
+    friend class leaf_iterator;
+
 public:
 
     // Type definitions.
@@ -565,6 +572,9 @@ public:
 template <typename T>
 class Tree<T>::pre_order_iterator : public Tree<T>::iterator_base
 {
+    using iterator_base::m_node;
+    using iterator_base::m_skip_current_children;
+
 public:
 
     pre_order_iterator():
@@ -657,6 +667,9 @@ public:
 template <typename T>
 class Tree<T>::post_order_iterator : public Tree<T>::iterator_base
 {
+    using iterator_base::m_node;
+    using iterator_base::m_skip_current_children;
+
 public:
 
     post_order_iterator():
@@ -747,6 +760,8 @@ public:
 template <typename T>
 class Tree<T>::sibling_iterator : public Tree<T>::iterator_base
 {
+    using iterator_base::m_node;
+
 public:
 
     node_type* m_parent;
@@ -829,6 +844,8 @@ private:
 template <typename T>
 class Tree<T>::breadth_first_iterator : public Tree<T>::iterator_base
 {
+    using iterator_base::m_node;
+
 private:
 
     std::queue<node_type*> m_node_queue;
@@ -891,6 +908,8 @@ private:
 template <typename T>
 class Tree<T>::leaf_iterator : public Tree<T>::iterator_base
 {
+    using iterator_base::m_node;
+
 public:
 
     leaf_iterator():
