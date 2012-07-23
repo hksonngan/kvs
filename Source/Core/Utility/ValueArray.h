@@ -36,13 +36,10 @@ namespace temporal
 {
 
 template <typename T>
-struct ArrayDeleter
+void DeleteArray( T* ptr ) throw()
 {
-    void operator ()( T* ptr )
-    {
-        delete [] ptr;
-    }
-};
+    delete [] ptr;
+}
 
 }
 
@@ -304,7 +301,7 @@ public:
     value_type* allocate( const size_t size )
     {
         this->release();
-        m_values.reset( new value_type[ size ], kvs::temporal::ArrayDeleter<T>() );
+        m_values.reset( new value_type[ size ], kvs::temporal::DeleteArray<value_type> );
         m_size = size;
         return this->data();
     }
@@ -342,7 +339,7 @@ public:
 #else
     void allocate( const size_t size )
     {
-        m_values.reset( new value_type[ size ], kvs::temporal::ArrayDeleter<T>() );
+        m_values.reset( new value_type[ size ], kvs::temporal::DeleteArray<value_type> );
         m_size = size;
     }
 #endif

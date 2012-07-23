@@ -110,10 +110,6 @@ public:
 
     void scale( const kvs::Vector3f& scaling );
 
-private:
-
-    void update_position( void );
-
 public:
 
     static void setModelLocalViewer( bool flag );

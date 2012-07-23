@@ -15,7 +15,7 @@
 #ifndef KVS_SHARED_COUNT_H_INCLUDE
 #define KVS_SHARED_COUNT_H_INCLUDE
 
-#if defined KVS_ENABLE_THREAD_SAFE
+#if 1
   #if defined KVS_COMPILER_GCC
     #define KVS_ATOMIC_INCREMENT( a ) __sync_add_and_fetch( &a, 1 )
     #define KVS_ATOMIC_DECREMENT( a ) __sync_sub_and_fetch( &a, 1 )
@@ -204,7 +204,15 @@ public:
     template <typename T>
     explicit SharedCount( T* ptr )
     {
-        m_counter = this->make_counter( ptr );
+        try
+        {
+            m_counter = new DefaultCounter<T>( ptr );
+        }
+        catch ( ... )
+        {
+            delete ptr;
+            throw;
+        }
     }
 
     // deleter( ptr ); must be well-formed.
@@ -212,7 +220,15 @@ public:
     template <typename T, typename D>
     SharedCount( T* ptr, D deleter )
     {
-        m_counter = this->make_counter( ptr, deleter );
+        try
+        {
+            m_counter = new CounterWithDeleter<T, D>( ptr, deleter );
+        }
+        catch ( ... )
+        {
+            deleter( ptr );
+            throw;
+        }
     }
 
     SharedCount( const SharedCount& other ) throw()
@@ -242,35 +258,6 @@ public:
     bool is_valid() const throw()
     {
         return m_counter != NULL;
-    }
-
-private:
-    template <typename T>
-    static Counter* make_counter( T* ptr )
-    {
-        try
-        {
-            return new DefaultCounter<T>( ptr );
-        }
-        catch ( ... )
-        {
-            delete ptr;
-            throw;
-        }
-    }
-
-    template <typename T, typename D>
-    static Counter* make_counter( T* ptr, D deleter )
-    {
-        try
-        {
-            return new CounterWithDeleter<T, D>( ptr, deleter );
-        }
-        catch ( ... )
-        {
-            deleter( ptr );
-            throw;
-        }
     }
 
 private:
