@@ -1371,21 +1371,9 @@ void ParticleVolumeRenderer::calculate_zooming_factor( const kvs::PointObject* p
 {
     const float sqrt_repeat_level = sqrtf( static_cast<float>(m_repetition_level) );
     const float subpixel_level = m_subpixel_level * sqrt_repeat_level;
-
-    // Calculate a transform matrix.
-    GLdouble modelview[16];  ::GetModelviewMatrix( camera, point, &modelview );
-    GLdouble projection[16]; ::GetProjectionMatrix( camera, &projection );
-    GLint viewport[4];       ::GetViewport( camera, &viewport );
-
-    // Calculate a depth of the center of gravity of the object.
-    const float object_depth =
-        kvs::CellByCellParticleGenerator::CalculateObjectDepth(
-            point, modelview, projection, viewport );
-
-    // Calculate suitable subpixel length.
     const float subpixel_length =
         kvs::CellByCellParticleGenerator::CalculateSubpixelLength(
-            subpixel_level, object_depth, modelview, projection, viewport );
+            subpixel_level, *camera, *point );
 
     m_zooming_factor = subpixel_length * sqrt_repeat_level;
 }

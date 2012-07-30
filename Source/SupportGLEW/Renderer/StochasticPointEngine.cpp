@@ -576,22 +576,7 @@ void StochasticPointEngine::calculate_zooming_factor( void )
     const kvs::PointObject* point = m_ref_particle;
     kvs::Camera* camera = new kvs::Camera();
     camera->setWindowSize( m_width, m_height );
-
-    // Calculate a transform matrix.
-    GLdouble modelview[16];  ::GetModelviewMatrix( camera, point, &modelview );
-    GLdouble projection[16]; ::GetProjectionMatrix( camera, &projection );
-    GLint viewport[4];       ::GetViewport( camera, &viewport );
-
-    // Calculate a depth of the center of gravity of the object.
-    const float object_depth =
-        kvs::CellByCellParticleGenerator::CalculateObjectDepth(
-            point, modelview, projection, viewport );
-
-    // Calculate suitable subpixel length.
-    const float subpixel_length =
-        kvs::CellByCellParticleGenerator::CalculateSubpixelLength(
-            1, object_depth, modelview, projection, viewport );
-
+    const float subpixel_length = kvs::CellByCellParticleGenerator::CalculateSubpixelLength( 1, *camera, *point );
     delete camera;
 
     m_zooming_factor = m_point_size * subpixel_length;

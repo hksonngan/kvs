@@ -22,93 +22,10 @@
 #include <kvs/Camera>
 
 
-namespace
-{
-
-template <typename T>
-kvs::Matrix44<T> PerspectiveMatrix( T fov_y, T aspect, T front, T back );
-
-template <typename T>
-kvs::Matrix44<T> OrthogonalMatrix( T left, T right, T bottom, T top, T front, T back );
-
-template <typename T>
-kvs::Matrix44<T> LookAtMatrix(
-    const kvs::Vector3<T>& eye,
-    const kvs::Vector3<T>& up,
-    const kvs::Vector3<T>& target );
-
-template <typename T>
-kvs::Matrix44<T> ScalingMatrix( T x, T y, T z, T w = T( 1 ) );
-
-template <typename T>
-kvs::Matrix44<T> TranslationMatrix( T x, T y, T z, T w = T( 1 ) );
-
-void GetViewport( const kvs::Camera* camera, GLint (*viewport)[4] );
-
-void GetProjectionMatrix( const kvs::Camera* camera, GLdouble (*projection)[16] );
-
-void GetModelviewMatrix( const kvs::Camera* camera, const kvs::ObjectBase* object, GLdouble (*modelview)[16] );
-
-void Project(
-    const GLdouble obj_x,
-    const GLdouble obj_y,
-    const GLdouble obj_z,
-    const GLdouble modelview[16],
-    const GLdouble projection[16],
-    const GLint    viewport[4],
-    GLdouble*      win_x,
-    GLdouble*      win_y,
-    GLdouble*      win_z );
-
-void UnProject(
-    const GLdouble win_x,
-    const GLdouble win_y,
-    const GLdouble win_z,
-    const GLdouble modelview[16],
-    const GLdouble projection[16],
-    const GLint    viewport[4],
-    GLdouble*      obj_x,
-    GLdouble*      obj_y,
-    GLdouble*      obj_z );
-
-} // end of namespace
-
 namespace kvs
 {
 
-namespace CellByCellParticleGenerator
-{
-
-const float GetRandomNumber( void );
-
-const kvs::Vector3f RandomSamplingInCube( const kvs::Vector3f& v );
-
-const float CalculateObjectDepth(
-    const kvs::ObjectBase* object,
-    const GLdouble         modelview[16],
-    const GLdouble         projection[16],
-    const GLint            viewport[4] );
-
-const float CalculateSubpixelLength(
-    const float    subpixel_level,
-    const float    object_depth,
-    const GLdouble modelview[16],
-    const GLdouble projection[16],
-    const GLint    viewport[4] );
-
-const kvs::ValueArray<float> CalculateDensityMap(
-    const kvs::Camera*     camera,
-    const kvs::ObjectBase* object,
-    const float            subpixel_level,
-    const float            sampling_step,
-    const kvs::OpacityMap& opacity_map );
-
-} // end of namespace CellByCellParticleGenerator
-
-} // end of namespace kvs
-
-
-namespace
+namespace detail
 {
 
 template <typename T>
@@ -182,28 +99,28 @@ inline kvs::Matrix44<T> LookAtMatrix(
 }
 
 template <typename T>
-inline kvs::Matrix44<T> ScalingMatrix( T x, T y, T z, T w )
+inline kvs::Matrix44<T> ScalingMatrix( T x, T y, T z )
 {
     const T elements[ 16 ] =
     {
         x, 0, 0, 0,
         0, y, 0, 0,
         0, 0, z, 0,
-        0, 0, 0, w
+        0, 0, 0, 1
     };
 
     return( kvs::Matrix44<T>( elements ) );
 }
 
 template <typename T>
-inline kvs::Matrix44<T> TranslationMatrix( T x, T y, T z, T w )
+inline kvs::Matrix44<T> TranslationMatrix( T x, T y, T z )
 {
     const T elements[ 16 ] =
     {
         1, 0, 0, x,
         0, 1, 0, y,
         0, 0, 1, z,
-        0, 0, 0, w
+        0, 0, 0, 1
     };
 
     return( kvs::Matrix44<T>( elements ) );
@@ -229,8 +146,8 @@ inline void GetProjectionMatrix( const kvs::Camera* camera, GLdouble (*projectio
     const float bottom = camera->bottom();
     const float top = camera->top();
     const kvs::Matrix44f P = perspective ?
-        ::PerspectiveMatrix<float>( fov, aspect, front, back ) :
-        ::OrthogonalMatrix<float>( left, right, bottom, top, front, back );
+        PerspectiveMatrix<float>( fov, aspect, front, back ) :
+        OrthogonalMatrix<float>( left, right, bottom, top, front, back );
 
     (*projection)[ 0] = P[0][0];
     (*projection)[ 1] = P[0][1];
@@ -261,9 +178,9 @@ inline void GetModelviewMatrix( const kvs::Camera* camera, const kvs::ObjectBase
     const kvs::Vector3f  up           = camera->upVector();
     const kvs::Vector3f  target       = camera->lookAt();
 
-    const kvs::Matrix44f T = ::TranslationMatrix<float>( -center.x(), -center.y(), -center.z() );
-    const kvs::Matrix44f S = ::ScalingMatrix<float>( normalize, normalize, normalize );
-    const kvs::Matrix44f L = ::LookAtMatrix<float>( eye, up, target );
+    const kvs::Matrix44f T = TranslationMatrix<float>( -center.x(), -center.y(), -center.z() );
+    const kvs::Matrix44f S = ScalingMatrix<float>( normalize, normalize, normalize );
+    const kvs::Matrix44f L = LookAtMatrix<float>( eye, up, target );
     const kvs::Matrix44f M = L * S * T;
 
     (*modelview)[ 0] = M[0][0];
@@ -356,10 +273,55 @@ inline void UnProject(
     *obj_z = O.z() / w;
 }
 
+inline const float CalculateObjectDepth(
+    const kvs::ObjectBase* object,
+    const GLdouble         modelview[16],
+    const GLdouble         projection[16],
+    const GLint            viewport[4] )
+{
+    // calculate suitable depth.
+    GLdouble x, y, z;
+
+    Project(
+        object->objectCenter().x(),
+        object->objectCenter().y(),
+        object->objectCenter().z(),
+        modelview, projection, viewport,
+        &x, &y, &z );
+
+    const float object_depth = static_cast<float>( z );
+
+    return( object_depth );
+}
+
+inline const float CalculateSubpixelLength(
+    const float    subpixel_level,
+    const float    object_depth,
+    const GLdouble modelview[16],
+    const GLdouble projection[16],
+    const GLint    viewport[4] )
+{
+    GLdouble wx_min, wy_min, wz_min;
+    GLdouble wx_max, wy_max, wz_max;
+
+    UnProject(
+        0.0, 0.0, GLdouble( object_depth ),
+        modelview, projection, viewport,
+        &wx_min, &wy_min, &wz_min);
+
+    UnProject(
+        1.0, 1.0 , GLdouble( object_depth ),
+        modelview, projection, viewport,
+        &wx_max, &wy_max, &wz_max);
+
+    const float subpixel_length = static_cast<float>( ( wx_max - wx_min ) / subpixel_level );
+
+    return( subpixel_length );
+}
+
+
 } // end of namespace
 
-namespace kvs
-{
 
 namespace CellByCellParticleGenerator
 {
@@ -391,50 +353,26 @@ inline const kvs::Vector3f RandomSamplingInCube( const kvs::Vector3f& v )
     return( v + d );
 }
 
-inline const float CalculateObjectDepth(
-    const kvs::ObjectBase* object,
-    const GLdouble         modelview[16],
-    const GLdouble         projection[16],
-    const GLint            viewport[4] )
+
+inline float CalculateSubpixelLength(
+    const float subpixel_level, 
+    const kvs::Camera& camera, 
+    const kvs::ObjectBase& object )
 {
-    // calculate suitable depth.
-    GLdouble x, y, z;
+    // Calculate a transform matrix.
+    GLdouble modelview[16];  kvs::detail::GetModelviewMatrix( &camera, &object, &modelview );
+    GLdouble projection[16]; kvs::detail::GetProjectionMatrix( &camera, &projection );
+    GLint viewport[4];       kvs::detail::GetViewport( &camera, &viewport );
 
-    ::Project(
-        object->objectCenter().x(),
-        object->objectCenter().y(),
-        object->objectCenter().z(),
-        modelview, projection, viewport,
-        &x, &y, &z );
+    // Calculate a depth of the center of gravity of the object.
+    const float object_depth = kvs::detail::CalculateObjectDepth(
+            &object, modelview, projection, viewport );
 
-    const float object_depth = static_cast<float>( z );
+    // Calculate suitable subpixel length.
+    const float subpixel_length = kvs::detail::CalculateSubpixelLength(
+            subpixel_level, object_depth, modelview, projection, viewport );
 
-    return( object_depth );
-}
-
-inline const float CalculateSubpixelLength(
-    const float    subpixel_level,
-    const float    object_depth,
-    const GLdouble modelview[16],
-    const GLdouble projection[16],
-    const GLint    viewport[4] )
-{
-    GLdouble wx_min, wy_min, wz_min;
-    GLdouble wx_max, wy_max, wz_max;
-
-    ::UnProject(
-        0.0, 0.0, GLdouble( object_depth ),
-        modelview, projection, viewport,
-        &wx_min, &wy_min, &wz_min);
-
-    ::UnProject(
-        1.0, 1.0 , GLdouble( object_depth ),
-        modelview, projection, viewport,
-        &wx_max, &wy_max, &wz_max);
-
-    const float subpixel_length = static_cast<float>( ( wx_max - wx_min ) / subpixel_level );
-
-    return( subpixel_length );
+    return subpixel_length;
 }
 
 inline const kvs::ValueArray<float> CalculateDensityMap(
@@ -444,16 +382,8 @@ inline const kvs::ValueArray<float> CalculateDensityMap(
     const float            sampling_step,
     const kvs::OpacityMap& opacity_map )
 {
-    // Calculate a transform matrix.
-    GLdouble modelview[16];  ::GetModelviewMatrix( camera, object, &modelview );
-    GLdouble projection[16]; ::GetProjectionMatrix( camera, &projection );
-    GLint    viewport[4];    ::GetViewport( camera, &viewport );
-
-    // Calculate a depth of the center of gravity of the object.
-    const float object_depth = CalculateObjectDepth( object, modelview, projection, viewport );
-
     // Calculate suitable subpixel length.
-    const float subpixel_length = CalculateSubpixelLength( subpixel_level, object_depth, modelview, projection, viewport );
+    const float subpixel_length = CalculateSubpixelLength( subpixel_level, *camera, *object );
 
     // Calculate density map from the subpixel length and the opacity map.
     const float max_opacity = 1.0f - std::exp( -sampling_step / subpixel_length );
