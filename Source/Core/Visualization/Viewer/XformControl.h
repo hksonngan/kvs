@@ -33,27 +33,19 @@ class XformControl : public kvs::Xform
 protected:
 
     kvs::Xform m_initial_xform; ///< initial transform vector
-    bool       m_can_collision; ///< enable collision detection or not
 
 public:
 
-    XformControl( bool collision = true );
+    XformControl();
 
     XformControl(
         const kvs::Vector3f&  translation,
         const kvs::Vector3f&  scale,
-        const kvs::Matrix33f& rotation,
-        bool                  collision = true );
+        const kvs::Matrix33f& rotation );
 
     virtual ~XformControl( void );
 
 public:
-
-    void enableCollision( void );
-
-    void disableCollision( void );
-
-    bool canCollision( void );
 
     void setInitialXform(
         const kvs::Vector3f&  translation = kvs::Vector3f(0,0,0),

@@ -68,6 +68,7 @@ public:
 protected:
 
     kvs::XformControl m_xform_control;
+    bool          m_can_collision;
     std::string   m_name;               ///< object name
     kvs::Vector3f m_min_object_coord;   ///< min coord in the object coordinate system
     kvs::Vector3f m_max_object_coord;   ///< max coord in the object coordinate system
@@ -196,6 +197,12 @@ public:
 
     kvs::XformControl& xform_control();
     const kvs::XformControl& xform_control() const;
+
+    void enableCollision( void );
+
+    void disableCollision( void );
+
+    bool canCollision( void ) const;
 
 private:
 

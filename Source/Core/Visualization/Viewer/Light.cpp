@@ -27,8 +27,7 @@ namespace kvs
  *  @param collision [in] collision dectection flag
  */
 /*==========================================================================*/
-Light::Light( bool collision ) :
-    m_xform_control( collision )
+Light::Light()
 {
     this->initialize();
 }

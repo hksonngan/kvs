@@ -67,7 +67,7 @@ protected:
 
 public:
 
-    Camera( const bool collision = true );
+    Camera();
 
     virtual ~Camera( void );
 
@@ -292,21 +292,6 @@ public:
     }
 
 public:
-
-    void enableCollision()
-    {
-        m_xform_control.enableCollision();
-    }
-
-    void disableCollision()
-    {
-        m_xform_control.disableCollision();
-    }
-
-    bool canCollision()
-    {
-        return m_xform_control.canCollision();
-    }
 
     void setInitialXform(
         const kvs::Vector3f&  translation = kvs::Vector3f(0,0,0),

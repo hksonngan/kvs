@@ -85,7 +85,7 @@ void AxisObject::create( const kvs::ObjectBase* object )
     SuperClass::setColor( m_line_color );
     SuperClass::setSizes( kvs::ValueArray<kvs::Real32>( sizes ) );
 
-    SuperClass::xform_control().disableCollision();
+    SuperClass::disableCollision();
 }
 
 void AxisObject::clear( void )

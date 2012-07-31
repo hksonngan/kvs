@@ -14,8 +14,6 @@
 /*****************************************************************************/
 #include "ViewingMatrix44.h"
 
-#if KVS_ENABLE_DEPRECATED
-
 namespace kvs
 {
 
@@ -30,5 +28,3 @@ template kvs::Matrix44<double> ViewingMatrix44<double>(
     const kvs::Vector3<double>& g );
 
 } // end of namespace kvs
-
-#endif

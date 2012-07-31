@@ -721,7 +721,7 @@ bool ObjectManager::detectCollision(
 
     for( ; first != last; ++first )
     {
-        if( !(*first)->xform_control().canCollision() ) continue;
+        if( !(*first)->canCollision() ) continue;
 
         const kvs::Vector2f diff =
             (*first)->positionInDevice( camera, m_object_center, m_normalize ) - p_win;
@@ -760,7 +760,7 @@ bool ObjectManager::detectCollision( const kvs::Vector3f& p_world )
 
     for( ; first != last; ++first )
     {
-        if( !(*first)->xform_control().canCollision() ) continue;
+        if( !(*first)->canCollision() ) continue;
 
         const kvs::Vector3f diff =
             (*first)->positionInWorld( m_object_center, m_normalize ) - p_world;

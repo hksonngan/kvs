@@ -24,9 +24,8 @@ namespace kvs
  *  @param collision [in] conllision flag
  */
 /*==========================================================================*/
-XformControl::XformControl( bool collision ) :
-    kvs::Xform(),
-    m_can_collision( collision )
+XformControl::XformControl() :
+    kvs::Xform()
 {
     m_initial_xform.initialize();
 }
@@ -43,10 +42,8 @@ XformControl::XformControl( bool collision ) :
 XformControl::XformControl(
     const kvs::Vector3f&  translation,
     const kvs::Vector3f&  scale,
-    const kvs::Matrix33f& rotation,
-    bool                  collision ):
-    kvs::Xform( translation, scale, rotation ),
-    m_can_collision( collision )
+    const kvs::Matrix33f& rotation ):
+    kvs::Xform( translation, scale, rotation )
 {
     this->saveXform();
 }
@@ -58,36 +55,6 @@ XformControl::XformControl(
 /*==========================================================================*/
 XformControl::~XformControl( void )
 {
-}
-
-/*==========================================================================*/
-/**
- *  Enable collision detection.
- */
-/*==========================================================================*/
-void XformControl::enableCollision( void )
-{
-    m_can_collision = true;
-}
-
-/*==========================================================================*/
-/**
- *  Disable collision detection.
- */
-/*==========================================================================*/
-void XformControl::disableCollision( void )
-{
-    m_can_collision = false;
-}
-
-/*==========================================================================*/
-/**
- *  Test whether the collision is detected.
- */
-/*==========================================================================*/
-bool XformControl::canCollision( void )
-{
-    return( m_can_collision );
 }
 
 /*==========================================================================*/

@@ -29,7 +29,8 @@ namespace kvs
  */
 /*===========================================================================*/
 ObjectBase::ObjectBase( const bool collision ) :
-    m_xform_control( collision ),
+    m_xform_control(),
+    m_can_collision( collision ),
     m_name("unknown"),
     m_min_object_coord( kvs::Vector3f( -3.0, -3.0, -3.0 ) ),
     m_max_object_coord( kvs::Vector3f(  3.0,  3.0,  3.0 ) ),
@@ -55,7 +56,8 @@ ObjectBase::ObjectBase(
     const kvs::Vector3f& scaling,
     const kvs::Matrix33f& rotation,
     const bool collision ):
-    m_xform_control( translation, scaling, rotation, collision ),
+    m_xform_control( translation, scaling, rotation ),
+    m_can_collision( collision ),
     m_name("unknown"),
     m_min_object_coord( kvs::Vector3f( -3.0, -3.0, -3.0 ) ),
     m_max_object_coord( kvs::Vector3f(  3.0,  3.0,  3.0 ) ),
@@ -700,6 +702,36 @@ kvs::XformControl& ObjectBase::xform_control()
 const kvs::XformControl& ObjectBase::xform_control() const
 {
     return m_xform_control;
+}
+
+/*==========================================================================*/
+/**
+ *  Enable collision detection.
+ */
+/*==========================================================================*/
+void ObjectBase::enableCollision( void )
+{
+    m_can_collision = true;
+}
+
+/*==========================================================================*/
+/**
+ *  Disable collision detection.
+ */
+/*==========================================================================*/
+void ObjectBase::disableCollision( void )
+{
+    m_can_collision = false;
+}
+
+/*==========================================================================*/
+/**
+ *  Test whether the collision is detected.
+ */
+/*==========================================================================*/
+bool ObjectBase::canCollision( void ) const
+{
+    return( m_can_collision );
 }
 
 } // end of namespace kvs

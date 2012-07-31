@@ -15,8 +15,6 @@
 #ifndef KVS__VIEWING_MATRIX44_H_INCLUDE
 #define KVS__VIEWING_MATRIX44_H_INCLUDE
 
-#if KVS_ENABLE_DEPRECATED
-
 #include <cmath>
 #include <kvs/Matrix44>
 #include <kvs/Vector3>
@@ -59,7 +57,5 @@ inline kvs::Matrix44<T> ViewingMatrix44(
 };
 
 } // end of namespace kvs
-
-#endif
 
 #endif // KVS__VIEWING_MATRIX44_H_INCLUDE
