@@ -17,21 +17,21 @@
 
 #if 1
   #if defined KVS_COMPILER_GCC
-    #define KVS_ATOMIC_INCREMENT( a ) __sync_add_and_fetch( &a, 1 )
-    #define KVS_ATOMIC_DECREMENT( a ) __sync_sub_and_fetch( &a, 1 )
-    #define KVS_ATOMIC_COMPARE_SWAP( a, b, c ) __sync_val_compare_and_swap( &a, b, c )
+    #define KVS_ATOMIC_INCREMENT( a ) __sync_add_and_fetch( &( a ), 1 )
+    #define KVS_ATOMIC_DECREMENT( a ) __sync_sub_and_fetch( &( a ), 1 )
+    #define KVS_ATOMIC_COMPARE_SWAP( a, b, c ) __sync_val_compare_and_swap( &( a ), ( b ), ( c ) )
   #elif defined KVS_COMPILER_VC
     #include <intrin.h>
-    #define KVS_ATOMIC_INCREMENT( a ) _InterlockedIncrement( &a )
-    #define KVS_ATOMIC_DECREMENT( a ) _InterlockedDecrement( &a )
-    #define KVS_ATOMIC_COMPARE_SWAP( a, b, c ) _InterlockedCompareExchange( &a, c, b )
+    #define KVS_ATOMIC_INCREMENT( a ) _InterlockedIncrement( &( a ) )
+    #define KVS_ATOMIC_DECREMENT( a ) _InterlockedDecrement( &( a ) )
+    #define KVS_ATOMIC_COMPARE_SWAP( a, b, c ) _InterlockedCompareExchange( &( a ), ( c ), ( b ) )
   #else
     #error "Not Supported Compiler"
   #endif
 #else
-  #define KVS_ATOMIC_INCREMENT( a ) ( ++a )
-  #define KVS_ATOMIC_DECREMENT( a ) ( --a )
-  #define KVS_ATOMIC_COMPARE_SWAP( a, b, c ) _kvs_non_atomic_compare_swap( &a, b, c )
+  #define KVS_ATOMIC_INCREMENT( a ) ( ++( a ) )
+  #define KVS_ATOMIC_DECREMENT( a ) ( --( a ) )
+  #define KVS_ATOMIC_COMPARE_SWAP( a, b, c ) _kvs_non_atomic_compare_swap( &( a ), ( b ), ( c ) )
 #endif
 
 namespace kvs
@@ -78,50 +78,50 @@ public:
 
 public:
 // Inclements the shared count.
-    void increment() throw()
+    static void increment( Counter* counter ) throw()
     {
-        KVS_ATOMIC_INCREMENT( m_count );
+        KVS_ATOMIC_INCREMENT( counter->m_count );
     }
 
 // Decrements the shared count.
 // When the count become 0, the weak count is also decremented.
-    void decrement() throw()
+    static void decrement( Counter* counter ) throw()
     {
-        KVS_ATOMIC_DECREMENT( m_count );
-        if ( m_count == 0 )
+        KVS_ATOMIC_DECREMENT( counter->m_count );
+        if ( counter->m_count == 0 )
         {
-            this->dispose();
-            this->decrement_weak();
+            counter->dispose();
+            decrement_weak( counter );
         }
     }
 
 // Increments the weak count.
-    void increment_weak() throw()
+    static void increment_weak( Counter* counter ) throw()
     {
-        KVS_ATOMIC_INCREMENT( m_weak_count );
+        KVS_ATOMIC_INCREMENT( counter->m_weak_count );
     }
 
 // Decrements the weak count.
 // When the weak count becomes 0, this instance is deleted.
-    void decrement_weak() throw()
+    static void decrement_weak( Counter* counter ) throw()
     {
-        KVS_ATOMIC_DECREMENT( m_weak_count );
-        if ( m_weak_count == 0 )
+        KVS_ATOMIC_DECREMENT( counter->m_weak_count );
+        if ( counter->m_weak_count == 0 )
         {
-            delete this;
+            delete counter;
         }
     }
 
 // Increments the shared count if the instance is not expired.
 // Returns true if the count is incremented.
-    bool increment_if_not_expired() throw()
+    static bool increment_if_not_expired( Counter* counter ) throw()
     {
         for ( ;; )
         {
-            long count = ( volatile long& )m_count;
+            long count = ( volatile long& )( counter->m_count );
             if ( count == 0 )
                 return false;
-            if ( KVS_ATOMIC_COMPARE_SWAP( m_count, count, count + 1 ) == count )
+            if ( KVS_ATOMIC_COMPARE_SWAP( counter->m_count, count, count + 1 ) == count )
                 return true;
         }
     }
@@ -151,14 +151,14 @@ class DefaultCounter : public Counter
 {
 public:
     DefaultCounter( T* ptr ) throw()
-        : Counter( static_cast<void*>( ptr ) )
+        : Counter( reinterpret_cast<void*>( ptr ) )
     {}
 
 private:
 // Delete the managing instance using delete.
     void dispose() throw()
     {
-        delete static_cast<T*>( m_pointer );
+        delete reinterpret_cast<T*>( m_pointer );
     }
 }; // DefaultCounter
 
@@ -170,7 +170,7 @@ class CounterWithDeleter : public Counter
 public:
 // 'deleter' must be copy-constructable.
     CounterWithDeleter( T* ptr, D deleter ) throw()
-        : Counter( static_cast<void*>( ptr ) )
+        : Counter( reinterpret_cast<void*>( ptr ) )
         , m_deleter( deleter )
     {}
 
@@ -178,7 +178,7 @@ private:
 // Delete the managing instance using deleter specified at constructor.
     void dispose() throw()
     {
-        m_deleter( static_cast<T*>( m_pointer ) );
+        m_deleter( reinterpret_cast<T*>( m_pointer ) );
     }
 
 private:
@@ -234,14 +234,14 @@ public:
     SharedCount( const SharedCount& other ) throw()
         : m_counter( other.m_counter )
     {
-        if ( m_counter ) { m_counter->increment(); }
+        if ( m_counter ) { Counter::increment( m_counter ); }
     }
 
     explicit SharedCount( const WeakCount& other ) throw();
 
     ~SharedCount() throw()
     {
-        if ( m_counter ) { m_counter->decrement(); }
+        if ( m_counter ) { Counter::decrement( m_counter ); }
     }
 
 public:
@@ -280,18 +280,18 @@ public:
     explicit WeakCount( const SharedCount& other ) throw()
         : m_counter( other.m_counter )
     {
-        if ( m_counter ) { m_counter->increment_weak(); }
+        if ( m_counter ) { Counter::increment_weak( m_counter ); }
     }
 
     WeakCount( const WeakCount& other ) throw()
         : m_counter( other.m_counter )
     {
-        if ( m_counter ) { m_counter->increment_weak(); }
+        if ( m_counter ) { Counter::increment_weak( m_counter ); }
     }
 
     ~WeakCount() throw()
     {
-        if ( m_counter ) { m_counter->decrement_weak(); }
+        if ( m_counter ) { Counter::decrement_weak( m_counter ); }
     }
 
 public:
@@ -323,7 +323,7 @@ private:
 inline SharedCount::SharedCount( const WeakCount& other ) throw()
     : m_counter( NULL )
 {
-    if ( other.m_counter && other.m_counter->increment_if_not_expired() )
+    if ( other.m_counter && Counter::increment_if_not_expired( other.m_counter ) )
     {
         // Copy if the instance is not expired.
         m_counter = other.m_counter;
