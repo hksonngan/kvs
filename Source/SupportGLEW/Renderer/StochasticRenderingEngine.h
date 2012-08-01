@@ -49,7 +49,7 @@ public:
         Point = 0,
         Line,
         Polygon,
-        StructuredVolume,
+        UniformGrid,
         Tetrahedra,
         MultivariateTetrahedra,
         Unknown

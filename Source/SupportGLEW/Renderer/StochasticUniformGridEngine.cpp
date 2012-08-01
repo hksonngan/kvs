@@ -189,7 +189,7 @@ void StochasticUniformGridEngine::attachObject( const kvs::ObjectBase* object )
 /*===========================================================================*/
 const StochasticUniformGridEngine::EngineType StochasticUniformGridEngine::engineType() const
 {
-    return BaseClass::StructuredVolume;
+    return BaseClass::UniformGrid;
 }
 
 /*===========================================================================*/
