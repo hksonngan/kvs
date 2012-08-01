@@ -16,6 +16,7 @@
 #include "StochasticPointEngine.h"
 #include "StochasticLineEngine.h"
 #include "StochasticPolygonEngine.h"
+#include "StochasticUniformGridEngine.h"
 #include "StochasticTetrahedraEngine.h"
 #include <kvs/PointObject>
 
@@ -121,8 +122,9 @@ void StochasticRenderingCompositor::registerObject(
             {
             case kvs::VolumeObjectBase::Structured:
             {
-                kvsMessageError("Structured volume object is not supported.");
-                return;
+                engine = new kvs::glew::StochasticUniformGridEngine();
+                engine->attachObject( object );
+                break;
             }
             case kvs::VolumeObjectBase::Unstructured:
             {

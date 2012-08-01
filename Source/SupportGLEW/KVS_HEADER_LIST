@@ -23,6 +23,8 @@ Renderer/StochasticPolygonRenderer
 Renderer/StochasticRenderingCompositor
 Renderer/StochasticTetrahedraEngine
 Renderer/StochasticTetrahedraRenderer
+Renderer/StochasticUniformGridEngine
+Renderer/StochasticUniformGridRenderer
 Viewer/BufferObject
 Viewer/FragmentShader
 Viewer/FrameBufferObject

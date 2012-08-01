@@ -28,6 +28,8 @@ $(OUTDIR)\.\Renderer\StochasticRenderingCompositor.obj \
 $(OUTDIR)\.\Renderer\StochasticRenderingEngine.obj \
 $(OUTDIR)\.\Renderer\StochasticTetrahedraEngine.obj \
 $(OUTDIR)\.\Renderer\StochasticTetrahedraRenderer.obj \
+$(OUTDIR)\.\Renderer\StochasticUniformGridEngine.obj \
+$(OUTDIR)\.\Renderer\StochasticUniformGridRenderer.obj \
 $(OUTDIR)\.\Viewer\BufferObject.obj \
 $(OUTDIR)\.\Viewer\FragmentShader.obj \
 $(OUTDIR)\.\Viewer\FrameBufferObject.obj \

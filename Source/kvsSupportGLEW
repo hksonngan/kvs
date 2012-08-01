@@ -23,6 +23,8 @@
 #include <SupportGLEW/Renderer/StochasticRenderingCompositor.h>
 #include <SupportGLEW/Renderer/StochasticTetrahedraEngine.h>
 #include <SupportGLEW/Renderer/StochasticTetrahedraRenderer.h>
+#include <SupportGLEW/Renderer/StochasticUniformGridEngine.h>
+#include <SupportGLEW/Renderer/StochasticUniformGridRenderer.h>
 #include <SupportGLEW/Viewer/BufferObject.h>
 #include <SupportGLEW/Viewer/FragmentShader.h>
 #include <SupportGLEW/Viewer/FrameBufferObject.h>
