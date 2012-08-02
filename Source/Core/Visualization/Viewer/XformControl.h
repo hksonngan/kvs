@@ -38,19 +38,30 @@ public:
 
     XformControl();
 
+#if KVS_ENABLE_DEPRECATED
     XformControl(
         const kvs::Vector3f&  translation,
-        const kvs::Vector3f&  scale,
-        const kvs::Matrix33f& rotation );
+        const kvs::Vector3f&  scaling,
+        const kvs::Matrix33f& rotation )
+    {
+        this->setXform( kvs::Xform( translation, scaling, rotation ) );
+        this->saveXform();
+    }
+#endif
 
     virtual ~XformControl( void );
 
 public:
-
+#if KVS_ENABLE_DEPRECATED
     void setInitialXform(
         const kvs::Vector3f&  translation = kvs::Vector3f(0,0,0),
         const kvs::Vector3f&  scaling     = kvs::Vector3f(1,1,1),
-        const kvs::Matrix33f& rotation    = kvs::Matrix33f(1,0,0,0,1,0,0,0,1) );
+        const kvs::Matrix33f& rotation    = kvs::Matrix33f(1,0,0,0,1,0,0,0,1) )
+    {
+        this->setXform( kvs::Xform( translation, scaling, rotation ) );
+        this->saveXform();
+    }
+#endif
 
     void saveXform( void );
 

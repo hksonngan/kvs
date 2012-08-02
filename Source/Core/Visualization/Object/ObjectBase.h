@@ -88,11 +88,25 @@ public:
 
     ObjectBase( const bool collision = true );
 
+#if KVS_ENABLE_DEPRECATED
     ObjectBase(
         const kvs::Vector3f& translation,
         const kvs::Vector3f& scaling,
         const kvs::Matrix33f& rotation,
-        const bool collision = true );
+        const bool collision = true ):
+        m_can_collision( collision ),
+        m_name("unknown"),
+        m_min_object_coord( kvs::Vector3f( -3.0, -3.0, -3.0 ) ),
+        m_max_object_coord( kvs::Vector3f(  3.0,  3.0,  3.0 ) ),
+        m_min_external_coord( kvs::Vector3f( -3.0, -3.0, -3.0 ) ),
+        m_max_external_coord( kvs::Vector3f(  3.0,  3.0,  3.0 ) ),
+        m_has_min_max_object_coords( false ),
+        m_has_min_max_external_coords( false ),
+        m_show_flg( true )
+    {
+        this->setXform( kvs::Xform( translation, scaling, rotation ) );
+    }
+#endif
 
     virtual ~ObjectBase( void );
 
@@ -103,6 +117,16 @@ public:
     friend std::ostream& operator << ( std::ostream& os, const ObjectBase& object );
 
 public:
+
+    void setXform( const kvs::Xform& xform )
+    {
+        m_xform_control.setXform( xform );
+    }
+
+    void saveXform()
+    {
+        m_xform_control.saveXform();
+    }
 
     void setName( const std::string& name );
 
@@ -124,6 +148,11 @@ public:
     void hide( void );
 
 public:
+
+    kvs::Xform xform() const
+    {
+        return m_xform_control.xform();
+    }
 
     const std::string& name( void ) const;
 

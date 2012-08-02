@@ -97,8 +97,8 @@ void ParticleBufferCompositor::initialize( void )
     const kvs::Vector3f  ext_min = m_object_manager->minExternalCoord();
     const kvs::Vector3f  ext_max = m_object_manager->maxExternalCoord();
     kvs::PointObject* object = new kvs::PointObject(); // Dummy object
-    object->xform_control().setXform( m_object_manager->xform() );
-    object->xform_control().saveXform();
+    object->setXform( m_object_manager->xform() );
+    object->saveXform();
     object->setMinMaxObjectCoords( obj_min, obj_max );
     object->setMinMaxExternalCoords( ext_min, ext_max );
 

@@ -31,8 +31,8 @@ StochasticMultipleTetrahedraCompositor::StochasticMultipleTetrahedraCompositor( 
     const kvs::Vector3f obj_max = screen->objectManager()->maxObjectCoord();
     const kvs::Vector3f ext_min = screen->objectManager()->minExternalCoord();
     const kvs::Vector3f ext_max = screen->objectManager()->maxExternalCoord();
-    m_object->xform_control().setXform( screen->objectManager()->xform() );
-    m_object->xform_control().saveXform();
+    m_object->setXform( screen->objectManager()->xform() );
+    m_object->saveXform();
     m_object->setMinMaxObjectCoords( obj_min, obj_max );
     m_object->setMinMaxExternalCoords( ext_min, ext_max );
 

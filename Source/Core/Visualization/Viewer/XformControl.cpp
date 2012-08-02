@@ -32,46 +32,11 @@ XformControl::XformControl() :
 
 /*==========================================================================*/
 /**
- *  Constructor.
- *  @param translation [in] translation vector
- *  @param scale [in] scaling parameters
- *  @param rotation [in] rotation matrix
- *  @param collision [in] collision flag
- */
-/*==========================================================================*/
-XformControl::XformControl(
-    const kvs::Vector3f&  translation,
-    const kvs::Vector3f&  scale,
-    const kvs::Matrix33f& rotation ):
-    kvs::Xform( translation, scale, rotation )
-{
-    this->saveXform();
-}
-
-/*==========================================================================*/
-/**
  *  Destructor.
  */
 /*==========================================================================*/
 XformControl::~XformControl( void )
 {
-}
-
-/*==========================================================================*/
-/**
- *  Set initial xform.
- *  @param translation [in] translation vector
- *  @param scale [in] scaling parameters
- *  @param rotation [in] rotation matrix
- */
-/*==========================================================================*/
-void XformControl::setInitialXform(
-    const kvs::Vector3f&  translation,
-    const kvs::Vector3f&  scale,
-    const kvs::Matrix33f& rotation )
-{
-    kvs::Xform::set( translation, scale, rotation );
-    this->saveXform();
 }
 
 /*==========================================================================*/

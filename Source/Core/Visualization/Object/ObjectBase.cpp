@@ -44,33 +44,6 @@ ObjectBase::ObjectBase( const bool collision ) :
 
 /*===========================================================================*/
 /**
- *  @brief  Constructs a new ObjectBase class.
- *  @param  translation [in] translation vector
- *  @param  scaling [in] scaling vector
- *  @param  rotation [in] rotation matrix
- *  @param  collision [in] collision detection flag
- */
-/*===========================================================================*/
-ObjectBase::ObjectBase(
-    const kvs::Vector3f& translation,
-    const kvs::Vector3f& scaling,
-    const kvs::Matrix33f& rotation,
-    const bool collision ):
-    m_xform_control( translation, scaling, rotation ),
-    m_can_collision( collision ),
-    m_name("unknown"),
-    m_min_object_coord( kvs::Vector3f( -3.0, -3.0, -3.0 ) ),
-    m_max_object_coord( kvs::Vector3f(  3.0,  3.0,  3.0 ) ),
-    m_min_external_coord( kvs::Vector3f( -3.0, -3.0, -3.0 ) ),
-    m_max_external_coord( kvs::Vector3f(  3.0,  3.0,  3.0 ) ),
-    m_has_min_max_object_coords( false ),
-    m_has_min_max_external_coords( false ),
-    m_show_flg( true )
-{
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Destructs the ObjectBase class.
  */
 /*===========================================================================*/

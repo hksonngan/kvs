@@ -913,7 +913,7 @@ void ParticleBasedRenderer::create_image(
     // Distance parameter: (d_0/d)^2
     //   d_0: Initial camera distance, d: current camera distance
     rendering_process::object_center        = point->objectCenter();
-    rendering_process::object_magnification = point->xform_control().xform().scaling().x() * rendering_process::default_camera_distance /camera->position().length();
+    rendering_process::object_magnification = point->xform().scaling().x() * rendering_process::default_camera_distance /camera->position().length();
     rendering_process::screen_magnification =  scaled_window_size / default_window_size;
     double distance_param                   = (rendering_process::enable_hyblid_zooming)?  rendering_process::object_magnification * rendering_process::screen_magnification: 
                                               rendering_process::object_magnification * rendering_process::object_magnification *
