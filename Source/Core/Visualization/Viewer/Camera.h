@@ -201,6 +201,8 @@ public:
 
 public:
 
+    const kvs::Xform xform() const;
+
     void resetXform( void );
 
     void rotate( const kvs::Matrix33f& rotation );
@@ -314,11 +316,6 @@ public:
     void applyXform() const
     {
         m_xform_control.applyXform();
-    }
-
-    const kvs::Xform xform() const
-    {
-        return m_xform_control.xform();
     }
 #endif
 };

@@ -24,10 +24,8 @@ namespace kvs
  *  @param collision [in] conllision flag
  */
 /*==========================================================================*/
-XformControl::XformControl() :
-    kvs::Xform()
+XformControl::XformControl()
 {
-    m_initial_xform.initialize();
 }
 
 /*==========================================================================*/
@@ -46,7 +44,7 @@ XformControl::~XformControl( void )
 /*==========================================================================*/
 void XformControl::saveXform( void )
 {
-    m_initial_xform.set( *this );
+    m_initial_xform = m_current_xform;
 }
 
 /*==========================================================================*/
@@ -56,7 +54,7 @@ void XformControl::saveXform( void )
 /*==========================================================================*/
 void XformControl::resetXform( void )
 {
-    kvs::Xform::set( m_initial_xform );
+    m_current_xform = m_initial_xform;
 }
 
 /*==========================================================================*/
@@ -67,7 +65,7 @@ void XformControl::resetXform( void )
 /*==========================================================================*/
 void XformControl::setXform( const kvs::Xform& xform )
 {
-    kvs::Xform::set( xform );
+    m_current_xform = xform;
 }
 
 /*==========================================================================*/
@@ -78,7 +76,7 @@ void XformControl::setXform( const kvs::Xform& xform )
 void XformControl::applyXform( void ) const
 {
     float xform[16];
-    kvs::Xform::get( &xform );
+    m_current_xform.get( &xform );
     glMultMatrixf( xform );
 }
 
@@ -90,7 +88,7 @@ void XformControl::applyXform( void ) const
 /*==========================================================================*/
 const kvs::Xform XformControl::xform( void ) const
 {
-    return( kvs::Xform::get() );
+    return m_current_xform;
 }
 
 /*==========================================================================*/
@@ -104,7 +102,7 @@ void XformControl::rotate( const kvs::Matrix33f& rotation )
     kvs::Vector3f position = this->xform().translation();
 
     this->translate( -position );
-    kvs::Xform::updateRotation( rotation );
+    m_current_xform.updateRotation( rotation );
     this->translate( position );
 }
 
@@ -116,7 +114,7 @@ void XformControl::rotate( const kvs::Matrix33f& rotation )
 /*==========================================================================*/
 void XformControl::translate( const kvs::Vector3f& translation )
 {
-    kvs::Xform::updateTranslation( translation );
+    m_current_xform.updateTranslation( translation );
 }
 
 /*==========================================================================*/
@@ -130,7 +128,7 @@ void XformControl::scale( const kvs::Vector3f& scaling )
     kvs::Vector3f position = this->xform().translation();
 
     this->translate( -position );
-    kvs::Xform::updateScaling( scaling );
+    m_current_xform.updateScaling( scaling );
     this->translate( position );
 }
 

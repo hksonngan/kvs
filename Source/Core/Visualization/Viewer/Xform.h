@@ -103,14 +103,28 @@ public:
 
     void initialize( void );
 
-    void clear( void );
+#if KVS_ENABLE_DEPRECATED
+    void clear( void )
+    {
+        this->set( kvs::Vector3f( 0, 0, 0 ),
+                   kvs::Vector3f( 0, 0, 0 ),
+                   kvs::Matrix33f( 0, 0, 0,
+                                   0, 0, 0,
+                                   0, 0, 0 ) );
+    }
+#endif
 
     void set(
         const kvs::Vector3f&  translation,
         const kvs::Vector3f&  scaling,
         const kvs::Matrix33f& rotation );
 
-    void set( const Xform& xform );
+#if KVS_ENABLE_DEPRECATED
+    void set( const Xform& xform )
+    {
+        *this = xform;
+    }
+#endif
 
 public:
 
@@ -134,7 +148,12 @@ public:
 
     kvs::Matrix44f toMat4() const;
 
-    Xform get( void ) const;
+#if KVS_ENABLE_DEPRECATED
+    Xform get( void ) const
+    {
+        return *this;
+    }
+#endif
 
     void get( float (*array)[16] ) const;
 };

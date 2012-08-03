@@ -33,7 +33,6 @@ ObjectManager::ObjectManager( void ) :
     kvs::ObjectBase( true )
 {
     m_object_tree.clear();
-    kvs::ObjectBase::xform_control().initialize();
     m_has_active_object = false;
     m_enable_all_move   = true;
     m_object_map.clear();
@@ -66,7 +65,6 @@ ObjectManager::~ObjectManager( void )
     }
 
     m_object_tree.clear();
-    kvs::ObjectBase::xform_control().clear();
     m_object_map.clear();
 }
 

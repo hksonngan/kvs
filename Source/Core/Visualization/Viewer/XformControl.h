@@ -26,12 +26,13 @@ namespace kvs
  *  Xform control class.
  */
 /*==========================================================================*/
-class XformControl : public kvs::Xform
+class XformControl
 {
     kvsClassName( kvs::XformControl );
 
 protected:
 
+    kvs::Xform m_current_xform;
     kvs::Xform m_initial_xform; ///< initial transform vector
 
 public:
@@ -80,6 +81,112 @@ public:
     void translate( const kvs::Vector3f& translation );
 
     void scale( const kvs::Vector3f& scaling );
+
+#if KVS_ENABLE_DEPRECATED
+public:
+
+    kvs::Xform& xform( void )
+    {
+        return m_current_xform;
+    }
+
+    void initialize( void )
+    {
+        this->setXform( kvs::Xform() );
+    }
+
+    void clear( void )
+    {
+        kvs::Xform xform( kvs::Vector3f( 0, 0, 0 ),
+                          kvs::Vector3f( 0, 0, 0 ),
+                          kvs::Matrix33f( 0, 0, 0,
+                                          0, 0, 0,
+                                          0, 0, 0 ) );
+        this->setXform( xform );
+    }
+
+    void set(
+        const kvs::Vector3f&  translation,
+        const kvs::Vector3f&  scaling,
+        const kvs::Matrix33f& rotation )
+    {
+        kvs::Xform xform( translation, scaling, rotation );
+        this->setXform( xform );
+    }
+
+    void set( const Xform& xform )
+    {
+        this->setXform( xform );
+    }
+
+public:
+
+    void updateRotation( const kvs::Matrix33f& rotation )
+    {
+        kvs::Xform xform = this->xform();
+        xform.updateRotation( rotation );
+        this->setXform( xform );
+    }
+
+    void updateTranslation( const kvs::Vector3f& translation )
+    {
+        kvs::Xform xform = this->xform();
+        xform.updateTranslation( translation );
+        this->setXform( xform );
+    }
+
+    void updateScaling( const kvs::Vector3f& scaling )
+    {
+        kvs::Xform xform = this->xform();
+        xform.updateScaling( scaling );
+        this->setXform( xform );
+    }
+
+    void updateScaling( float scaling )
+    {
+        this->xform().updateScaling( scaling );
+    }
+
+    const kvs::Vector3f& translation( void ) const
+    {
+        return this->xform().translation();
+    }
+
+    const kvs::Matrix33f& rotation( void ) const
+    {
+        return this->xform().rotation();
+    }
+
+    const kvs::Matrix33f scaledRotation( void ) const
+    {
+        return this->xform().scaledRotation();
+    }
+
+    const kvs::Vector3f& scaling( void ) const
+    {
+        return this->xform().scaling();
+    }
+
+    kvs::Vector3f transform( const kvs::Vector3f& pos ) const
+    {
+        return this->xform().transform( pos );
+    }
+
+    kvs::Matrix44f toMat4() const
+    {
+        return this->xform().toMat4();
+    }
+
+    Xform get( void ) const
+    {
+        return this->xform();
+    }
+
+    void get( float (*array)[16] ) const
+    {
+        this->xform().get( array );
+    }
+#endif
 };
 
 } // end of namespace kvs

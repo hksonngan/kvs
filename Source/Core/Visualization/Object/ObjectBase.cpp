@@ -615,9 +615,13 @@ void ObjectBase::rotate(
     const kvs::Matrix33f& rot,
     const kvs::Vector3f&  center )
 {
-    m_xform_control.translate( -center );
-    m_xform_control.updateRotation( rot );
-    m_xform_control.translate( center );
+    kvs::Vector3f t = this->xform().translation();
+    kvs::Vector3f s = this->xform().scaling();
+    kvs::Matrix33f r = this->xform().rotation();
+    r = rot * r;
+    t = rot * ( t - center ) + center;
+
+    this->setXform( kvs::Xform( t, s, r ) );
 }
 
 /*===========================================================================*/
@@ -628,12 +632,16 @@ void ObjectBase::rotate(
  */
 /*===========================================================================*/
 void ObjectBase::scale(
-    const kvs::Vector3f& scale,
+    const kvs::Vector3f& scaling,
     const kvs::Vector3f& center )
 {
-    m_xform_control.translate( -center );
-    m_xform_control.updateScaling( scale );
-    m_xform_control.translate( center );
+    kvs::Vector3f t = this->xform().translation();
+    kvs::Vector3f s = this->xform().scaling();
+    kvs::Matrix33f r = this->xform().rotation();
+    s = scaling * s;
+    t = scaling * ( t - center ) + center;
+
+    this->setXform( kvs::Xform( t, s, r ) );
 }
 
 /*===========================================================================*/

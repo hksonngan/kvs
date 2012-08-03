@@ -852,7 +852,7 @@ const kvs::Vector3f Camera::projectWindowToWorld(
 {
     kvs::Vector3f p_cam( this->projectWindowToCamera( p_win, depth ) );
 
-    return( ( p_cam + m_init_position ) * m_xform_control.scaledRotation() + m_xform_control.translation() );
+    return( ( p_cam + m_init_position ) * this->xform().scaledRotation() + this->xform().translation() );
 }
 
 /*==========================================================================*/
@@ -947,6 +947,11 @@ const kvs::Vector3f Camera::projectObjectToWorld( const kvs::Vector3f& p_obj ) c
     return( this->projectCameraToWorld( p_cam ) );
 }
 
+const kvs::Xform Camera::xform() const
+{
+    return m_xform_control.xform();
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Resets the xform of the camera.
@@ -1005,9 +1010,9 @@ void Camera::update_up_at_from( void )
 {
     kvs::Vector3f vec( m_init_position - m_init_look_at );
 
-    m_look_at   = m_xform_control.translation() + m_init_look_at;
-    m_position  = vec * m_xform_control.scaledRotation() + m_look_at;
-    m_up_vector = m_init_up_vector * m_xform_control.scaledRotation();
+    m_look_at   = this->xform().translation() + m_init_look_at;
+    m_position  = vec * this->xform().scaledRotation() + m_look_at;
+    m_up_vector = m_init_up_vector * this->xform().scaledRotation();
 }
 
 } // end of namespace kvs

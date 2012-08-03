@@ -113,18 +113,6 @@ void Xform::initialize( void )
 
 /*==========================================================================*/
 /**
- *  Clear the xform matrix.
- */
-/*==========================================================================*/
-void Xform::clear( void )
-{
-    m_rotation.zero();
-    m_scaling.zero();
-    m_translation.zero();
-}
-
-/*==========================================================================*/
-/**
  *  Set the transformation parameters.
  *  @param translation [in] translation vector
  *  @param scaling [in] scaling vector
@@ -156,21 +144,9 @@ void Xform::set(
     const kvs::Vector3f&  scaling,
     const kvs::Matrix33f& rotation )
 {
-    this->initialize();
-    this->updateRotation( rotation );
-    this->updateScaling( scaling );
-    this->updateTranslation( translation );
-}
-
-/*==========================================================================*/
-/**
- *  Set the xform.
- *  @param xform [in] xform matrix
- */
-/*==========================================================================*/
-void Xform::set( const Xform& xform )
-{
-    *this = xform;
+    m_rotation = rotation;
+    m_scaling = scaling;
+    m_translation = translation;
 }
 
 /*==========================================================================*/
@@ -283,17 +259,6 @@ kvs::Matrix44f Xform::toMat4() const
                         S[0] * R[2][0], S[1] * R[2][1], S[2] * R[2][2], T[2],
                         0, 0, 0, 1 );
     return mat;
-}
-
-/*==========================================================================*/
-/**
- *  Get the xform.
- *  @return xform
- */
-/*==========================================================================*/
-Xform Xform::get( void ) const
-{
-    return( *this );
 }
 
 /*==========================================================================*/

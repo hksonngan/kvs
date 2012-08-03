@@ -149,7 +149,7 @@ public:
 
 public:
 
-    kvs::Xform xform() const
+    const kvs::Xform xform() const
     {
         return m_xform_control.xform();
     }
