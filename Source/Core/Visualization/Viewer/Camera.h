@@ -109,6 +109,8 @@ public:
 
     const kvs::Vector3f& lookAt( void ) const;
 
+    kvs::Matrix44f viewingMatrix() const;
+
     const kvs::Vector2f lookAtInDevice( void ) const;
 
     const float fieldOfView( void ) const;

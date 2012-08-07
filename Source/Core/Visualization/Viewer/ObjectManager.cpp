@@ -264,7 +264,7 @@ void ObjectManager::change( int obj_id, ObjectBase* obj, bool delete_flg )
     kvs::ObjectBase* old_obj = *ptr; // object
 
     // Save the Xform.
-    kvs::Xform xform = old_obj->xform_control().xform();
+    kvs::Xform xform = old_obj->xform();
 
     // Erase the old object
     if( delete_flg )
@@ -275,7 +275,7 @@ void ObjectManager::change( int obj_id, ObjectBase* obj, bool delete_flg )
 
     // Insert the new object
     obj->updateNormalizeParameters();
-    obj->xform_control().setXform( xform );
+    obj->setXform( xform );
 
     *ptr = obj;
 
@@ -302,14 +302,14 @@ void ObjectManager::change( std::string obj_name, ObjectBase* obj, bool delete_f
         if ( old_obj->name() == obj_name )
         {
             // Save the Xform.
-            kvs::Xform xform = old_obj->xform_control().xform();
+            kvs::Xform xform = old_obj->xform();
 
             // Erase the old object
             if ( delete_flg ) { delete old_obj; }
 
             // Insert the new object
             obj->updateNormalizeParameters();
-            obj->xform_control().setXform( xform );
+            obj->setXform( xform );
 
             *ptr = obj;
 
@@ -420,10 +420,10 @@ void ObjectManager::resetXform( void )
 
     for( ; first != last; ++first )
     {
-        (*first)->xform_control().resetXform();
+        (*first)->resetXform();
     }
 
-    kvs::ObjectBase::xform_control().resetXform();
+    kvs::ObjectBase::resetXform();
 }
 
 /*==========================================================================*/
@@ -443,18 +443,18 @@ void ObjectManager::resetXform( int obj_id )
     //ObjectIterator first = m_object_tree.begin( obj_ptr );
     //ObjectIterator last  = m_object_tree.end( obj_ptr );
 
-    //const kvs::Xform obj_form = (*obj_ptr)->xform_control().xform();
-    //const kvs::Xform trans = Xform( this->kvs::ObjectBase::xform_control().xform() ) * obj_form.inverse();
+    //const kvs::Xform obj_form = (*obj_ptr)->xform();
+    //const kvs::Xform trans = Xform( this->kvs::ObjectBase::xform() ) * obj_form.inverse();
 
-    //(*obj_ptr)->xform_control().setXform( this->kvs::ObjectBase::xform_control().xform() );
+    //(*obj_ptr)->setXform( this->kvs::ObjectBase::xform() );
 
     //for( ; first != last; ++first )
     //{
-    //    (*first)->xform_control().resetXform();
-    //    (*first)->xform_control().setXform( trans * (*first)->xform_control().xform() );
+    //    (*first)->resetXform();
+    //    (*first)->setXform( trans * (*first)->xform() );
     //}
 
-    (*obj_ptr)->xform_control().resetXform();
+    (*obj_ptr)->resetXform();
 }
 
 /*==========================================================================*/
@@ -464,7 +464,7 @@ void ObjectManager::resetXform( int obj_id )
 /*==========================================================================*/
 const kvs::Xform ObjectManager::xform( void ) const
 {
-    return( kvs::ObjectBase::xform_control().xform() );
+    return( kvs::ObjectBase::xform() );
 }
 
 /*==========================================================================*/
@@ -489,7 +489,7 @@ const kvs::Xform ObjectManager::xform( int obj_id ) const
     ObjectIterator obj_ptr = map_id->second; // pointer to the object
     kvs::ObjectBase* obj = *obj_ptr;     // object
 
-    return( obj->xform_control().xform() );
+    return( obj->xform() );
 }
 
 /*===========================================================================*/
@@ -623,8 +623,8 @@ void ObjectManager::resetActiveObjectXform( void )
 {
     if( m_has_active_object )
     {
-        (*m_active_object)->xform_control().resetXform();
-        //(*m_active_object)->xform_control().multiplyXform( kvs::Xform( this->kvs::ObjectBase::xform_control().xform() ) );
+        (*m_active_object)->resetXform();
+        //(*m_active_object)->multiplyXform( this->kvs::ObjectBase::xform() );
     }
 }
 
@@ -791,7 +791,7 @@ const kvs::Vector2f ObjectManager::positionInDevice( kvs::Camera* camera ) const
     {
         camera->update();
 
-        ret     = camera->projectObjectToWindow( kvs::ObjectBase::xform_control().xform().translation() );
+        ret     = camera->projectObjectToWindow( kvs::ObjectBase::xform().translation() );
         ret.y() = camera->windowHeight() - ret.y();
     }
     glPopMatrix();
@@ -1020,7 +1020,7 @@ kvs::Vector3f ObjectManager::get_rotation_center( kvs::ObjectBase* obj )
 {
     if( this->isEnableAllMove() )
     {
-        return( this->kvs::ObjectBase::xform_control().xform().translation() );
+        return( this->kvs::ObjectBase::xform().translation() );
     }
     else
     {

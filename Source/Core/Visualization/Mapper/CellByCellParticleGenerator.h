@@ -174,13 +174,10 @@ inline void GetModelviewMatrix( const kvs::Camera* camera, const kvs::ObjectBase
     const kvs::Vector3f  center       = ( max_external + min_external ) * 0.5f;
     const kvs::Vector3f  diff         = max_external - min_external;
     const float          normalize    = 6.0f / kvs::Math::Max( diff.x(), diff.y(), diff.z() );
-    const kvs::Vector3f  eye          = camera->position();
-    const kvs::Vector3f  up           = camera->upVector();
-    const kvs::Vector3f  target       = camera->lookAt();
 
     const kvs::Matrix44f T = TranslationMatrix<float>( -center.x(), -center.y(), -center.z() );
     const kvs::Matrix44f S = ScalingMatrix<float>( normalize, normalize, normalize );
-    const kvs::Matrix44f L = LookAtMatrix<float>( eye, up, target );
+    const kvs::Matrix44f L = camera->viewingMatrix();
     const kvs::Matrix44f M = L * S * T;
 
     (*modelview)[ 0] = M[0][0];

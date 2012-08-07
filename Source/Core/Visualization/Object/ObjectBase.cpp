@@ -431,7 +431,9 @@ void ObjectBase::transform(
      * the object's xform. You see also kvs::XformControl class and kvs::Xform
      * class in detail.
      */
-    m_xform_control.applyXform();
+    float xform[16];
+    this->xform().get( &xform );
+    glMultMatrixf( xform );
 
     glScalef( global_scale.x(), global_scale.y(), global_scale.z() );
 
@@ -673,16 +675,6 @@ const kvs::Vector3f ObjectBase::object_to_world_coordinate(
     p_world.z() *= global_scale.z();
 
     return m_xform_control.xform().transform( p_world );
-}
-
-kvs::XformControl& ObjectBase::xform_control()
-{
-    return m_xform_control;
-}
-
-const kvs::XformControl& ObjectBase::xform_control() const
-{
-    return m_xform_control;
 }
 
 /*==========================================================================*/

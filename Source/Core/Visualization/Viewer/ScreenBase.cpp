@@ -218,7 +218,12 @@ void ScreenBase::paintFunction( void )
             }
         }
     }
-    else m_object_manager->kvs::ObjectBase::xform_control().applyXform();
+    else
+    {
+        float xform[16];
+        m_object_manager->xform().get( &xform );
+        glMultMatrixf( xform );
+    }
 }
 
 /*==========================================================================*/

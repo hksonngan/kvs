@@ -68,6 +68,7 @@ void XformControl::setXform( const kvs::Xform& xform )
     m_current_xform = xform;
 }
 
+#if KVS_ENABLE_DEPRECATED
 /*==========================================================================*/
 /**
  *  Apply xform matrix.
@@ -76,9 +77,10 @@ void XformControl::setXform( const kvs::Xform& xform )
 void XformControl::applyXform( void ) const
 {
     float xform[16];
-    m_current_xform.get( &xform );
+    this->xform().get( &xform );
     glMultMatrixf( xform );
 }
+#endif
 
 /*==========================================================================*/
 /**

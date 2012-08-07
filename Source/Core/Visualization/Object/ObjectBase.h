@@ -105,6 +105,7 @@ public:
         m_show_flg( true )
     {
         this->setXform( kvs::Xform( translation, scaling, rotation ) );
+        this->saveXform();
     }
 #endif
 
@@ -126,6 +127,11 @@ public:
     void saveXform()
     {
         m_xform_control.saveXform();
+    }
+
+    void resetXform()
+    {
+        m_xform_control.resetXform();
     }
 
     void setName( const std::string& name );
@@ -224,9 +230,17 @@ public:
         const kvs::Vector3f& scale,
         const kvs::Vector3f& center );
 
-    kvs::XformControl& xform_control();
-    const kvs::XformControl& xform_control() const;
+    kvs::XformControl& xform_control()
+    {
+        return m_xform_control;
+    }
 
+    const kvs::XformControl& xform_control() const
+    {
+        return m_xform_control;
+    }
+
+public:
     void enableCollision( void );
 
     void disableCollision( void );

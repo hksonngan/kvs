@@ -70,7 +70,9 @@ public:
 
     void setXform( const kvs::Xform& xform );
 
+#if KVS_ENABLE_DEPRECATED
     void applyXform( void ) const;
+#endif
 
     const kvs::Xform xform( void ) const;
 
