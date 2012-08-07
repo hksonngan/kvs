@@ -15,6 +15,7 @@
 #ifndef KVS_SHARED_POINTER_H_INCLUDE
 #define KVS_SHARED_POINTER_H_INCLUDE
 
+
 #include <iostream>
 #include <utility>
 #include <kvs/Assert>
@@ -58,7 +59,7 @@ public:
  *  Constructs a empty SharedPointer object.
  */
 /*==========================================================================*/
-    SharedPointer() throw()
+    SharedPointer()
         : m_pointer( NULL ), m_shared_count()
     {}
 
@@ -95,12 +96,12 @@ public:
  *  @param other [in] shared pointer
  */
 /*==========================================================================*/
-    SharedPointer( const SharedPointer& r ) throw()
+    SharedPointer( const SharedPointer& r )
         : m_pointer( r.m_pointer ), m_shared_count( r.m_shared_count )
     {}
 
     template <typename Y>
-    SharedPointer( const SharedPointer<Y>& r ) throw()
+    SharedPointer( const SharedPointer<Y>& r )
         : m_pointer( r.m_pointer ), m_shared_count( r.m_shared_count )
     {}
 
@@ -110,14 +111,14 @@ public:
  */
 /*==========================================================================*/
     template <typename Y>
-    SharedPointer( const SharedPointer<Y>& r, T* p ) throw()
+    SharedPointer( const SharedPointer<Y>& r, T* p )
         : m_pointer( p ), m_shared_count( r.m_shared_count )
     {}
 
 public:
     // assingment
 
-    this_type& operator =( const this_type& rhs ) throw()
+    this_type& operator =( const this_type& rhs )
     {
         this_type tmp( rhs );
         tmp.swap( *this );
@@ -125,7 +126,7 @@ public:
     }
 
     template <typename Y>
-    this_type& operator =( const SharedPointer<Y>& rhs ) throw()
+    this_type& operator =( const SharedPointer<Y>& rhs )
     {
         this_type tmp( rhs );
         tmp.swap( *this );
@@ -135,7 +136,7 @@ public:
 public:
     // modifiers
 
-    void swap( this_type& other ) throw()
+    void swap( this_type& other )
     {
         std::swap( m_pointer, other.m_pointer );
         m_shared_count.swap( other.m_shared_count );
@@ -144,7 +145,7 @@ public:
 // sp.reset()
 // is equivarent to
 // SharedPointer().swap( sp )
-    void reset() throw()
+    void reset()
     {
         this_type tmp;
         tmp.swap( *this );
@@ -176,24 +177,24 @@ public:
     // observers
 
 // Returns raw pointer.
-    T* get() const throw()
+    T* get() const
     {
         return m_pointer;
     }
 
-    reference operator *() const throw()
+    reference operator *() const
     {
         KVS_ASSERT( m_pointer != NULL );
         return *m_pointer;
     }
 
-    T* operator ->() const throw()
+    T* operator ->() const
     {
         KVS_ASSERT( m_pointer != NULL );
         return m_pointer;
     }
 
-    long use_count() const throw()
+    long use_count() const
     {
         return m_shared_count.use_count();
     }
@@ -204,19 +205,19 @@ public:
 // Note: unique() maybe faster than use_count() == 1. 
 //       If you are using unique() to implement copy on write, 
 //       do not rely on a specific value when get() == 0.
-    bool unique() const throw()
+    bool unique() const
     {
         return this->use_count() == 1;
     }
 
-    operator bool() const throw()
+    operator bool() const
     {
         return m_pointer != NULL;
     }
 
 private:
 // for WeakPointer.lock().
-    SharedPointer( T* pointer, const detail::shared_pointer_impl::SharedCount& shared_count ) throw()
+    SharedPointer( T* pointer, const detail::shared_pointer_impl::SharedCount& shared_count )
         : m_pointer( pointer ), m_shared_count( shared_count )
     {}
 
@@ -233,32 +234,43 @@ private:
 
 // Non-member operator functions. //
 template <typename T, typename U>
-inline SharedPointer<T> const_pointer_cast( const SharedPointer<U>& other ) throw()
+inline SharedPointer<T> const_pointer_cast( const SharedPointer<U>& other )
 {
-    return SharedPointer<T>( other, const_cast<T*>( other.get() ) );
+    T* ptr = const_cast<T*>( other.get() );
+    SharedPointer<T> ret( other, ptr );
+    return ret;
 }
 
 template <typename T, typename U>
-inline SharedPointer<T> static_pointer_cast( const SharedPointer<U>& other ) throw()
+inline SharedPointer<T> static_pointer_cast( const SharedPointer<U>& other )
 {
-    return SharedPointer<T>( other, static_cast<T*>( other.get() ) );
+    T* ptr = static_cast<T*>( other.get() );
+    SharedPointer<T> ret( other, ptr );
+    return ret;
 }
 
 template <typename T, typename U>
-inline SharedPointer<T> dynamic_pointer_cast( const SharedPointer<U>& other ) throw()
+inline SharedPointer<T> dynamic_pointer_cast( const SharedPointer<U>& other )
 {
     T* ptr = dynamic_cast<T*>( other.get() );
-    return ptr != NULL ? SharedPointer<T>( other, ptr ) : SharedPointer<T>();
+    if ( ptr == NULL )
+    {
+        SharedPointer<T> ret;
+        return ret;
+    }
+
+    SharedPointer<T> ret( other, ptr );
+    return ret;
 }
 
 template <typename T, typename U>
-inline bool operator ==( const SharedPointer<T>& left, const SharedPointer<U>& right ) throw()
+inline bool operator ==( const SharedPointer<T>& left, const SharedPointer<U>& right )
 {
     return left.get() == right.get();
 }
 
 template <typename T, typename U>
-inline bool operator !=( const SharedPointer<T>& left, const SharedPointer<U>& right ) throw()
+inline bool operator !=( const SharedPointer<T>& left, const SharedPointer<U>& right )
 {
     return !( left == right );
 }
@@ -275,7 +287,7 @@ namespace std
 {
 
 template <typename T>
-inline void swap( kvs::SharedPointer<T>& s1, kvs::SharedPointer<T>& s2 ) throw()
+inline void swap( kvs::SharedPointer<T>& s1, kvs::SharedPointer<T>& s2 )
 {
     s1.swap( s2 );
 }

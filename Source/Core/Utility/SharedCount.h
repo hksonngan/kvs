@@ -60,32 +60,32 @@ protected:
 // The instance to which 'ptr' is indicating is automatically deleted when the shared count becomes 0.
 // And the instance of this class is automatcally deleted when the weak count becomes 0.
 // In the beginning, the weak count is 1, which is decremented when the shared count becomes 0.
-    explicit Counter( void* ptr ) throw()
+    explicit Counter( void* ptr )
         : m_pointer( ptr )
         , m_count( 1 )
         , m_weak_count( 1 )
     {}
 
-    virtual ~Counter() throw()
+    virtual ~Counter()
     {}
 
 public:
 // Returns the count of shared.
-    long use_count() const throw()
+    long use_count() const
     {
         return m_count;
     }
 
 public:
 // Inclements the shared count.
-    static void increment( Counter* counter ) throw()
+    static void increment( Counter* counter )
     {
         KVS_ATOMIC_INCREMENT( counter->m_count );
     }
 
 // Decrements the shared count.
 // When the count become 0, the weak count is also decremented.
-    static void decrement( Counter* counter ) throw()
+    static void decrement( Counter* counter )
     {
         KVS_ATOMIC_DECREMENT( counter->m_count );
         if ( counter->m_count == 0 )
@@ -96,14 +96,14 @@ public:
     }
 
 // Increments the weak count.
-    static void increment_weak( Counter* counter ) throw()
+    static void increment_weak( Counter* counter )
     {
         KVS_ATOMIC_INCREMENT( counter->m_weak_count );
     }
 
 // Decrements the weak count.
 // When the weak count becomes 0, this instance is deleted.
-    static void decrement_weak( Counter* counter ) throw()
+    static void decrement_weak( Counter* counter )
     {
         KVS_ATOMIC_DECREMENT( counter->m_weak_count );
         if ( counter->m_weak_count == 0 )
@@ -114,7 +114,7 @@ public:
 
 // Increments the shared count if the instance is not expired.
 // Returns true if the count is incremented.
-    static bool increment_if_not_expired( Counter* counter ) throw()
+    static bool increment_if_not_expired( Counter* counter )
     {
         for ( ;; )
         {
@@ -127,7 +127,7 @@ public:
     }
 
 private:
-    virtual void dispose() throw() = 0;
+    virtual void dispose() = 0;
 
 protected: // for dispose()
     void* m_pointer;   // pointer to a instance
@@ -150,13 +150,13 @@ template <typename T>
 class DefaultCounter : public Counter
 {
 public:
-    DefaultCounter( T* ptr ) throw()
+    DefaultCounter( T* ptr )
         : Counter( reinterpret_cast<void*>( ptr ) )
     {}
 
 private:
 // Delete the managing instance using delete.
-    void dispose() throw()
+    void dispose()
     {
         delete reinterpret_cast<T*>( m_pointer );
     }
@@ -169,14 +169,14 @@ class CounterWithDeleter : public Counter
 {
 public:
 // 'deleter' must be copy-constructable.
-    CounterWithDeleter( T* ptr, D deleter ) throw()
+    CounterWithDeleter( T* ptr, D deleter )
         : Counter( reinterpret_cast<void*>( ptr ) )
         , m_deleter( deleter )
     {}
 
 private:
 // Delete the managing instance using deleter specified at constructor.
-    void dispose() throw()
+    void dispose()
     {
         m_deleter( reinterpret_cast<T*>( m_pointer ) );
     }
@@ -196,7 +196,7 @@ class WeakCount;
 class SharedCount
 {
 public:
-    SharedCount() throw()
+    SharedCount()
         : m_counter( NULL )
     {}
 
@@ -231,31 +231,31 @@ public:
         }
     }
 
-    SharedCount( const SharedCount& other ) throw()
+    SharedCount( const SharedCount& other )
         : m_counter( other.m_counter )
     {
         if ( m_counter ) { Counter::increment( m_counter ); }
     }
 
-    explicit SharedCount( const WeakCount& other ) throw();
+    explicit SharedCount( const WeakCount& other );
 
-    ~SharedCount() throw()
+    ~SharedCount()
     {
         if ( m_counter ) { Counter::decrement( m_counter ); }
     }
 
 public:
-    void swap( SharedCount& other ) throw()
+    void swap( SharedCount& other )
     {
         std::swap( m_counter, other.m_counter );
     }
 
-    long use_count() const throw()
+    long use_count() const
     {
         return m_counter ? m_counter->use_count() : 0;
     }
 
-    bool is_valid() const throw()
+    bool is_valid() const
     {
         return m_counter != NULL;
     }
@@ -273,39 +273,39 @@ private:
 class WeakCount
 {
 public:
-    WeakCount() throw()
+    WeakCount()
         : m_counter( NULL )
     {}
 
-    explicit WeakCount( const SharedCount& other ) throw()
+    explicit WeakCount( const SharedCount& other )
         : m_counter( other.m_counter )
     {
         if ( m_counter ) { Counter::increment_weak( m_counter ); }
     }
 
-    WeakCount( const WeakCount& other ) throw()
+    WeakCount( const WeakCount& other )
         : m_counter( other.m_counter )
     {
         if ( m_counter ) { Counter::increment_weak( m_counter ); }
     }
 
-    ~WeakCount() throw()
+    ~WeakCount()
     {
         if ( m_counter ) { Counter::decrement_weak( m_counter ); }
     }
 
 public:
-    void swap( WeakCount& other ) throw()
+    void swap( WeakCount& other )
     {
         std::swap( m_counter, other.m_counter );
     }
 
-    long use_count() const throw()
+    long use_count() const
     {
         return m_counter ? m_counter->use_count() : 0;
     }
 
-    bool expired() const throw()
+    bool expired() const
     {
         return !m_counter || m_counter->use_count() == 0;
     }
@@ -320,7 +320,7 @@ private:
 
 
 
-inline SharedCount::SharedCount( const WeakCount& other ) throw()
+inline SharedCount::SharedCount( const WeakCount& other )
     : m_counter( NULL )
 {
     if ( other.m_counter && Counter::increment_if_not_expired( other.m_counter ) )

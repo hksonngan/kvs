@@ -554,6 +554,7 @@ template <> struct AnyValueArray::is_supported<std::string> : kvs::temporal::tru
 namespace std
 {
 
+template <>
 inline void swap( kvs::AnyValueArray& lhs, kvs::AnyValueArray& rhs )
 {
     lhs.swap( rhs );
