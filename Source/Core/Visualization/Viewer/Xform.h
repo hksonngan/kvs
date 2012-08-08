@@ -89,21 +89,16 @@ public:
         const kvs::Vector3f&  scaling,
         const kvs::Matrix33f& rotation );
 
-    Xform( const Xform& xform );
-
     Xform( const kvs::Matrix44f& mat );
 
-    virtual ~Xform( void );
-
 public:
-
-    Xform& operator = ( const Xform& xform );
-
-public:
-
-    void initialize( void );
 
 #if KVS_ENABLE_DEPRECATED
+    void initialize( void )
+    {
+        *this = kvs::Xform();
+    }
+
     void clear( void )
     {
         this->set( kvs::Vector3f( 0, 0, 0 ),
@@ -124,17 +119,52 @@ public:
     {
         *this = xform;
     }
+
+    void updateRotation( const kvs::Matrix33f& rotation )
+    {
+        kvs::Vector3f t = this->translation();
+        kvs::Vector3f s = this->scaling();
+        kvs::Matrix33f r = this->rotation();
+        r = rotation * r;
+        t = rotation * t;
+
+        this->set( t, s, r );
+    }
+
+    void updateTranslation( const kvs::Vector3f& translation )
+    {
+        kvs::Vector3f t = this->translation();
+        kvs::Vector3f s = this->scaling();
+        kvs::Matrix33f r = this->rotation();
+        t = translation + t;
+
+        this->set( t, s, r );
+    }
+
+    void updateScaling( const kvs::Vector3f& scaling )
+    {
+        kvs::Vector3f t = this->translation();
+        kvs::Vector3f s = this->scaling();
+        kvs::Matrix33f r = this->rotation();
+        s = scaling * s;
+        t = scaling * t;
+
+        this->set( t, s, r );
+    }
+
+    void updateScaling( float scaling )
+    {
+        kvs::Vector3f t = this->translation();
+        kvs::Vector3f s = this->scaling();
+        kvs::Matrix33f r = this->rotation();
+        s = scaling * s;
+        t = scaling * t;
+
+        this->set( t, s, r );
+    }
 #endif
 
 public:
-
-    void updateRotation( const kvs::Matrix33f& rotation );
-
-    void updateTranslation( const kvs::Vector3f& translation );
-
-    void updateScaling( const kvs::Vector3f& scaling );
-
-    void updateScaling( float scaling );
 
     const kvs::Vector3f& translation( void ) const;
 
@@ -144,8 +174,18 @@ public:
 
     const kvs::Vector3f& scaling( void ) const;
 
+public:
     kvs::Vector3f transform( const kvs::Vector3f& pos ) const;
 
+    kvs::Vector4f transform( const kvs::Vector4f& pos ) const;
+
+    kvs::Vector3f transformNormal( const kvs::Vector3f& normal ) const;
+
+    kvs::Xform bindAfter( const kvs::Xform& x ) const;
+
+    kvs::Xform bindBefore( const kvs::Xform& x ) const;
+
+private:
     kvs::Matrix44f toMat4() const;
 
 #if KVS_ENABLE_DEPRECATED
@@ -155,6 +195,7 @@ public:
     }
 #endif
 
+public:
     void get( float (*array)[16] ) const;
 };
 

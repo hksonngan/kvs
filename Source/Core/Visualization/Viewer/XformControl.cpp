@@ -101,11 +101,12 @@ const kvs::Xform XformControl::xform( void ) const
 /*==========================================================================*/
 void XformControl::rotate( const kvs::Matrix33f& rotation )
 {
-    kvs::Vector3f position = this->xform().translation();
+    kvs::Vector3f t = this->xform().translation();
+    kvs::Vector3f s = this->xform().scaling();
+    kvs::Matrix33f r = this->xform().rotation();
+    r = rotation * r;
 
-    this->translate( -position );
-    m_current_xform.updateRotation( rotation );
-    this->translate( position );
+    this->setXform( kvs::Xform( t, s, r ) );
 }
 
 /*==========================================================================*/
@@ -116,7 +117,12 @@ void XformControl::rotate( const kvs::Matrix33f& rotation )
 /*==========================================================================*/
 void XformControl::translate( const kvs::Vector3f& translation )
 {
-    m_current_xform.updateTranslation( translation );
+    kvs::Vector3f t = this->xform().translation();
+    kvs::Vector3f s = this->xform().scaling();
+    kvs::Matrix33f r = this->xform().rotation();
+    t = translation + t;
+
+    this->setXform( kvs::Xform( t, s, r ) );
 }
 
 /*==========================================================================*/
@@ -127,11 +133,12 @@ void XformControl::translate( const kvs::Vector3f& translation )
 /*==========================================================================*/
 void XformControl::scale( const kvs::Vector3f& scaling )
 {
-    kvs::Vector3f position = this->xform().translation();
+    kvs::Vector3f t = this->xform().translation();
+    kvs::Vector3f s = this->xform().scaling();
+    kvs::Matrix33f r = this->xform().rotation();
+    s = scaling * s;
 
-    this->translate( -position );
-    m_current_xform.updateScaling( scaling );
-    this->translate( position );
+    this->setXform( kvs::Xform( t, s, r ) );
 }
 
 } // end of namespace kvs

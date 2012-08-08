@@ -903,7 +903,7 @@ const kvs::Vector3f Camera::projectCameraToObject(
 /*==========================================================================*/
 const kvs::Vector3f Camera::projectWorldToCamera( const kvs::Vector3f& p_wld ) const
 {
-    const kvs::Matrix44f M = kvs::ViewingMatrix44<float>( m_position, m_up_vector, m_look_at );
+    const kvs::Matrix44f M = this->viewingMatrix();
     const kvs::Vector4f p_cam = M * kvs::Vector4f( p_wld, 1.0 );
 
     return( kvs::Vector3f( p_cam.x(), p_cam.y(), p_cam.z() ) );
@@ -918,7 +918,7 @@ const kvs::Vector3f Camera::projectWorldToCamera( const kvs::Vector3f& p_wld ) c
 /*==========================================================================*/
 const kvs::Vector3f Camera::projectCameraToWorld( const kvs::Vector3f& p_cam ) const
 {
-    const kvs::Matrix44f M = kvs::ViewingMatrix44<float>( m_position, m_up_vector, m_look_at );
+    const kvs::Matrix44f M = this->viewingMatrix();
     const kvs::Vector4f p_wld = M.inverse() * kvs::Vector4f( p_cam, 1.0 );
 
     return( kvs::Vector3f( p_wld.x(), p_wld.y(), p_wld.z() ) );
