@@ -169,16 +169,6 @@ public:
         return this->xform().scaling();
     }
 
-    kvs::Vector3f transform( const kvs::Vector3f& pos ) const
-    {
-        return this->xform().transform( pos );
-    }
-
-    kvs::Matrix44f toMat4() const
-    {
-        return this->xform().toMat4();
-    }
-
     Xform get( void ) const
     {
         return this->xform();

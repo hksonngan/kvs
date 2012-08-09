@@ -391,20 +391,11 @@ void Trackball::scale(
 /*==========================================================================*/
 void Trackball::translate( const kvs::Vector2i& start, const kvs::Vector2i& end )
 {
-    // Calculate the bias point which is the center in the window coordinate
-    // system.
-    const kvs::Vector2f bias( (float)m_window_width / 2, (float)m_window_height / 2 );
+    kvs::Vector2i diff = end - start;
+    kvs::Vector2f trans;
+    trans.x() = (float)diff.x() * 10.0f / m_window_width;
+    trans.y() = -(float)diff.y() * 10.0f / m_window_height;
 
-    // Calculate the drag start point and the end point in the world
-    // coordinate system.
-    kvs::Vector2f world_start;
-    kvs::Vector2f world_end;
-    world_start.x() =  ( (float)start.x() - bias.x() ) * 10.0f / m_window_width;
-    world_start.y() = -( (float)start.y() - bias.y() ) * 10.0f / m_window_height;
-    world_end.x()   =  ( (float)end.x()   - bias.x() ) * 10.0f / m_window_width;
-    world_end.y()   = -( (float)end.y()   - bias.y() ) * 10.0f / m_window_height;
-
-    kvs::Vector2f trans = world_end - world_start;
     kvs::Vector3f vec1  = m_ref_camera->upVector();
     kvs::Vector3f vec2  = vec1.cross( m_ref_camera->position() - m_ref_camera->lookAt() );
 
@@ -434,14 +425,6 @@ void Trackball::rotate( const kvs::Vector2i& start, const kvs::Vector2i& end )
 
     kvs::Vector3f p1( n_old.x(), n_old.y(), this->depth_on_sphere( n_old ) );
     kvs::Vector3f p2( n_new.x(), n_new.y(), this->depth_on_sphere( n_new ) );
-
-/*
-    if( kvs::GlobalCore::target == kvs::GlobalCore::TargetCamera )
-    {
-        m_rotation = kvs::Quaternion<float>::rotationQuaternion( p1, p2 );
-        return;
-    }
-*/
 
     // Calculate view.
     const kvs::Vector3f init_vec( 0.0, 0.0, 1.0 );
