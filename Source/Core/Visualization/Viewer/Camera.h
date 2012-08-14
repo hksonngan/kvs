@@ -153,15 +153,15 @@ public:
     void getProjectionModelViewMatrix( float (*projection_modelview)[16] ) const;
 
     void getProjectionModelViewMatrix(
-        float projection[16],
-        float modelview[16],
+        const float projection[16],
+        const float modelview[16],
         float (*projection_modelview)[16] ) const;
 
     void getCombinedMatrix( float (*combined)[16] ) const;
 
     void getCombinedMatrix(
-        float projection[16],
-        float modelview[16],
+        const float projection[16],
+        const float modelview[16],
         float (*combined)[16] ) const;
 
     const kvs::Vector2f projectObjectToWindow(

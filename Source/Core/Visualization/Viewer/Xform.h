@@ -142,9 +142,10 @@ public:
     const kvs::Vector3f transformNormal( const kvs::Vector3f& normal ) const;
 
     const kvs::Xform inverse() const;
-    const kvs::Matrix44f& toMatrix() const;
+    const kvs::Matrix44f toMatrix() const;
     void toArray( float array[16] ) const;
 
+    static const kvs::Xform FromArray( const float ary[16] );
     static const kvs::Xform Translation( const kvs::Vector3f& t );
     static const kvs::Xform Rotation( const kvs::Matrix33f& r );
     static const kvs::Xform Scaling( const kvs::Vector3f& s );

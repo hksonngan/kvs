@@ -22,12 +22,12 @@ namespace kvs
  *  Default constructor.
  */
 /*==========================================================================*/
-Xform::Xform( void )
+Xform::Xform( void ):
+    m_matrix( 1, 0, 0, 0,
+              0, 1, 0, 0,
+              0, 0, 1, 0,
+              0, 0, 0, 1 )
 {
-    m_matrix.set( 1, 0, 0, 0,
-                  0, 1, 0, 0,
-                  0, 0, 1, 0,
-                  0, 0, 0, 1 );
 }
 
 /*==========================================================================*/
@@ -41,12 +41,12 @@ Xform::Xform( void )
 Xform::Xform(
     const kvs::Vector3f&  t,
     const kvs::Vector3f&  s,
-    const kvs::Matrix33f& r )
+    const kvs::Matrix33f& r ):
+    m_matrix( s[0] * r[0][0], s[1] * r[0][1], s[2] * r[0][2], t[0],
+              s[0] * r[1][0], s[1] * r[1][1], s[2] * r[1][2], t[1],
+              s[0] * r[2][0], s[1] * r[2][1], s[2] * r[2][2], t[2],
+              0, 0, 0, 1 )
 {
-    m_matrix.set( s[0] * r[0][0], s[1] * r[0][1], s[2] * r[0][2], t[0],
-                  s[0] * r[1][0], s[1] * r[1][1], s[2] * r[1][2], t[1],
-                  s[0] * r[2][0], s[1] * r[2][1], s[2] * r[2][2], t[2],
-                  0, 0, 0, 1 );
 }
 
 /*==========================================================================*/
@@ -55,9 +55,9 @@ Xform::Xform(
  *  @param m [in] xform matrix
  */
 /*==========================================================================*/
-Xform::Xform( const kvs::Matrix44f& m )
+Xform::Xform( const kvs::Matrix44f& m ):
+    m_matrix( m )
 {
-    m_matrix = m;
 }
 
 /*==========================================================================*/
@@ -129,7 +129,7 @@ const kvs::Xform Xform::inverse() const
     return kvs::Xform( m_matrix.inverse() );
 }
 
-const kvs::Matrix44f& Xform::toMatrix() const
+const kvs::Matrix44f Xform::toMatrix() const
 {
     return m_matrix;
 }
@@ -152,6 +152,13 @@ void Xform::toArray( float array[16] ) const
     array[13] = m_matrix[1][3];
     array[14] = m_matrix[2][3];
     array[15] = m_matrix[3][3];
+}
+
+const kvs::Xform Xform::FromArray( const float ary[16] )
+{
+    kvs::Matrix44f m( ary );
+    m.transpose();
+    return kvs::Xform( m );
 }
 
 const kvs::Xform Xform::Translation( const kvs::Vector3f& t )
