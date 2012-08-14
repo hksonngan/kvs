@@ -113,22 +113,22 @@ public:
 
     void updateRotation( const kvs::Matrix33f& rotation )
     {
-        this->bind( kvs::Xform::Rotation( rotation ) );
+        *this = kvs::Xform::Rotation( rotation ) * *this;
     }
 
     void updateTranslation( const kvs::Vector3f& translation )
     {
-        this->bind( kvs::Xform::Translation( translation ) );
+        *this = kvs::Xform::Translation( translation ) * *this;
     }
 
     void updateScaling( const kvs::Vector3f& scaling )
     {
-        this->bind( kvs::Xform::Scaling( scaling ) );
+        *this = kvs::Xform::Scaling( scaling ) * *this;
     }
 
     void updateScaling( float scaling )
     {
-        this->bind( kvs::Xform::Scaling( scaling ) );
+        *this = kvs::Xform::Scaling( scaling ) * *this;
     }
 #endif
 public:
@@ -141,15 +141,19 @@ public:
     const kvs::Vector3f transform( const kvs::Vector3f& pos ) const;
     const kvs::Vector3f transformNormal( const kvs::Vector3f& normal ) const;
 
-    kvs::Xform& bind( const kvs::Xform& x );
-
-    const kvs::Matrix44f toMatrix() const;
+    const kvs::Xform inverse() const;
+    const kvs::Matrix44f& toMatrix() const;
     void toArray( float array[16] ) const;
 
     static const kvs::Xform Translation( const kvs::Vector3f& t );
     static const kvs::Xform Rotation( const kvs::Matrix33f& r );
     static const kvs::Xform Scaling( const kvs::Vector3f& s );
     static const kvs::Xform Scaling( float s );
+
+    friend const kvs::Xform operator*( const kvs::Xform& lhs, const kvs::Xform& rhs )
+    {
+        return kvs::Xform( lhs.toMatrix() * rhs.toMatrix() );
+    }
 
 public:
 #if KVS_ENABLE_DEPRECATED

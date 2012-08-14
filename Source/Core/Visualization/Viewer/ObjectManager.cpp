@@ -440,21 +440,18 @@ void ObjectManager::resetXform( int obj_id )
     // pointer to the object
     ObjectIterator obj_ptr = map_id->second;
 
-    //ObjectIterator first = m_object_tree.begin( obj_ptr );
-    //ObjectIterator last  = m_object_tree.end( obj_ptr );
+    ObjectIterator first = m_object_tree.begin( obj_ptr );
+    ObjectIterator last  = m_object_tree.end( obj_ptr );
 
-    //const kvs::Xform obj_form = (*obj_ptr)->xform();
-    //const kvs::Xform trans = Xform( this->kvs::ObjectBase::xform() ) * obj_form.inverse();
+    const kvs::Xform obj_form = (*obj_ptr)->xform();
+    const kvs::Xform trans = this->xform() * obj_form.inverse();
 
-    //(*obj_ptr)->setXform( this->kvs::ObjectBase::xform() );
+    (*obj_ptr)->setXform( this->xform() );
 
-    //for( ; first != last; ++first )
-    //{
-    //    (*first)->resetXform();
-    //    (*first)->setXform( trans * (*first)->xform() );
-    //}
-
-    (*obj_ptr)->resetXform();
+    for( ; first != last; ++first )
+    {
+        (*first)->setXform( trans * (*first)->xform() );
+    }
 }
 
 /*==========================================================================*/
@@ -621,10 +618,10 @@ kvs::ObjectBase* ObjectManager::activeObject( void )
 /*==========================================================================*/
 void ObjectManager::resetActiveObjectXform( void )
 {
-    if( m_has_active_object )
+    if ( m_has_active_object )
     {
         (*m_active_object)->resetXform();
-        //(*m_active_object)->multiplyXform( this->kvs::ObjectBase::xform() );
+        (*m_active_object)->multiplyXform( this->xform() );
     }
 }
 
@@ -810,22 +807,17 @@ void ObjectManager::rotate( const kvs::Matrix33f& rotation )
     kvs::ObjectBase* object = this->get_control_target();
     kvs::Vector3f center = this->get_rotation_center( object );
 
-    kvs::Xform x = object->xform();
-    x.bind( kvs::Xform::Translation( -center ) )
-     .bind( kvs::Xform::Rotation( rotation ) )
-     .bind( kvs::Xform::Translation( center ) );
-    object->setXform( x );
+    const kvs::Xform x = kvs::Xform::Translation( center )
+                       * kvs::Xform::Rotation( rotation )
+                       * kvs::Xform::Translation( -center );
+    object->multiplyXform( x );
 
     ObjectIterator first = this->get_control_first_pointer();
     ObjectIterator last  = this->get_control_last_pointer();
 
     for( ; first != last; ++first )
     {
-        kvs::Xform x = (*first)->xform();
-        x.bind( kvs::Xform::Translation( -center ) )
-         .bind( kvs::Xform::Rotation( rotation ) )
-         .bind( kvs::Xform::Translation( center ) );
-        (*first)->setXform( x );
+        (*first)->multiplyXform( x );
     }
 }
 
@@ -839,18 +831,15 @@ void ObjectManager::translate( const kvs::Vector3f& translation )
 {
     kvs::ObjectBase* object = this->get_control_target();
 
-    kvs::Xform x = object->xform();
-    x.bind( kvs::Xform::Translation( translation ) );
-    object->setXform( x );
+    const kvs::Xform x = kvs::Xform::Translation( translation );
+    object->multiplyXform( x );
 
     ObjectIterator first = this->get_control_first_pointer();
     ObjectIterator last  = this->get_control_last_pointer();
 
     for( ; first != last; ++first )
     {
-        kvs::Xform x = (*first)->xform();
-        x.bind( kvs::Xform::Translation( translation ) );
-        (*first)->setXform( x );
+        (*first)->multiplyXform( x );
     }
 }
 
@@ -866,22 +855,17 @@ void ObjectManager::scale( const kvs::Vector3f& scaling )
 
     kvs::Vector3f center = this->get_rotation_center( object );
 
-    kvs::Xform x = object->xform();
-    x.bind( kvs::Xform::Translation( -center ) )
-     .bind( kvs::Xform::Scaling( scaling ) )
-     .bind( kvs::Xform::Translation( center ) );
-    object->setXform( x );
+    const kvs::Xform x = kvs::Xform::Translation( center )
+                       * kvs::Xform::Scaling( scaling )
+                       * kvs::Xform::Translation( -center );
+    object->multiplyXform( x );
 
     ObjectIterator first = this->get_control_first_pointer();
     ObjectIterator last  = this->get_control_last_pointer();
 
     for( ; first != last; ++first )
     {
-        kvs::Xform x = (*first)->xform();
-        x.bind( kvs::Xform::Translation( -center ) )
-         .bind( kvs::Xform::Scaling( scaling ) )
-         .bind( kvs::Xform::Translation( center ) );
-        (*first)->setXform( x );
+        (*first)->multiplyXform( x );
     }
 }
 

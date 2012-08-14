@@ -70,6 +70,8 @@ public:
     void applyXform( void ) const;
 #endif
 
+    void multiplyXform( const kvs::Xform& xform );
+
     const kvs::Xform xform( void ) const;
 
 public:
@@ -116,30 +118,22 @@ public:
 
     void updateRotation( const kvs::Matrix33f& rotation )
     {
-        kvs::Xform xform = this->xform();
-        xform.bind( kvs::Xform::Rotation( rotation ) );
-        this->setXform( xform );
+        this->multiplyXform( kvs::Xform::Rotation( rotation ) );
     }
 
     void updateTranslation( const kvs::Vector3f& translation )
     {
-        kvs::Xform xform = this->xform();
-        xform.bind( kvs::Xform::Translation( translation ) );
-        this->setXform( xform );
+        this->multiplyXform( kvs::Xform::Translation( translation ) );
     }
 
     void updateScaling( const kvs::Vector3f& scaling )
     {
-        kvs::Xform xform = this->xform();
-        xform.bind( kvs::Xform::Scaling( scaling ) );
-        this->setXform( xform );
+        this->multiplyXform( kvs::Xform::Scaling( scaling ) );
     }
 
     void updateScaling( float scaling )
     {
-        kvs::Xform xform = this->xform();
-        xform.bind( kvs::Xform::Scaling( scaling ) );
-        this->setXform( xform );
+        this->multiplyXform( kvs::Xform::Scaling( scaling ) );
     }
 
     const kvs::Vector3f translation( void ) const

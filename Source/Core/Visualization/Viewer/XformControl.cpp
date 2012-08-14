@@ -77,10 +77,15 @@ void XformControl::setXform( const kvs::Xform& xform )
 void XformControl::applyXform( void ) const
 {
     float xform[16];
-    this->xform().get( &xform );
+    this->xform().toArray( xform );
     glMultMatrixf( xform );
 }
 #endif
+
+void XformControl::multiplyXform( const kvs::Xform& xform )
+{
+    this->setXform( xform * this->xform() );
+}
 
 /*==========================================================================*/
 /**
@@ -101,12 +106,11 @@ const kvs::Xform XformControl::xform( void ) const
 /*==========================================================================*/
 void XformControl::rotate( const kvs::Matrix33f& rotation )
 {
-    kvs::Xform x = this->xform();
-    const kvs::Vector3f t = x.translation();
-    x.bind( kvs::Xform::Translation( -t ) )
-     .bind( kvs::Xform::Rotation( rotation ) )
-     .bind( kvs::Xform::Translation( t ) );
-    this->setXform( x );
+    const kvs::Vector3f t = this->xform().translation();
+    const kvs::Xform x = kvs::Xform::Translation( t )
+                       * kvs::Xform::Rotation( rotation )
+                       * kvs::Xform::Translation( -t );
+    this->multiplyXform( x );
 }
 
 /*==========================================================================*/
@@ -117,9 +121,7 @@ void XformControl::rotate( const kvs::Matrix33f& rotation )
 /*==========================================================================*/
 void XformControl::translate( const kvs::Vector3f& translation )
 {
-    kvs::Xform x = this->xform();
-    x.bind( kvs::Xform::Translation( translation ) );
-    this->setXform( x );
+    this->multiplyXform( kvs::Xform::Translation( translation ) );
 }
 
 /*==========================================================================*/
@@ -130,9 +132,7 @@ void XformControl::translate( const kvs::Vector3f& translation )
 /*==========================================================================*/
 void XformControl::scale( const kvs::Vector3f& scaling )
 {
-    kvs::Xform x = kvs::Xform::Scaling( scaling );
-    x.bind( this->xform() );
-    this->setXform( x );
+    this->multiplyXform( kvs::Xform::Scaling( scaling ) );
 }
 
 } // end of namespace kvs

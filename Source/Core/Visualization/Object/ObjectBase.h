@@ -203,25 +203,23 @@ public:
 
 #if KVS_ENABLE_DEPRECATED
     void rotate(
-        const kvs::Matrix33f& rot,
+        const kvs::Matrix33f& rotation,
         const kvs::Vector3f& center )
     {
-        kvs::Xform x = this->xform();
-        x.bind( kvs::Xform::Translation( -center ) )
-         .bind( kvs::Xform::Rotation( rot ) )
-         .bind( kvs::Xform::Translation( center ) );
-        this->setXform( x );
+        const kvs::Xform x = kvs::Xform::Translation( center )
+                           * kvs::Xform::Rotation( rotation )
+                           * kvs::Xform::Translation( -center );
+        this->multiplyXform( x );
     }
 
     void scale(
-        const kvs::Vector3f& scale,
+        const kvs::Vector3f& scaling,
         const kvs::Vector3f& center )
     {
-        kvs::Xform x = this->xform();
-        x.bind( kvs::Xform::Translation( -center ) )
-         .bind( kvs::Xform::Scaling( scaling ) )
-         .bind( kvs::Xform::Translation( center ) );
-        this->setXform( x );
+        const kvs::Xform x = kvs::Xform::Translation( center )
+                           * kvs::Xform::Scaling( scaling )
+                           * kvs::Xform::Translation( -center );
+        this->multiplyXform( x );
     }
 #endif
 
