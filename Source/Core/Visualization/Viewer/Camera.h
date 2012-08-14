@@ -30,7 +30,7 @@ namespace kvs
  *  Camera class
  */
 /*==========================================================================*/
-class Camera
+class Camera : public kvs::XformControl
 {
     kvsClassName( kvs::Camera );
 
@@ -47,7 +47,6 @@ private:
 #if KVS_ENABLE_DEPRECATED
 protected:
 #endif
-    kvs::XformControl m_xform_control;
     ProjectionType m_projection_type; ///< projection type
     kvs::Vector3f m_init_position; ///< initial position in the world coordinate system
     kvs::Vector3f m_init_up_vector; ///< initial up vector in the world coordinate system
@@ -203,8 +202,6 @@ public:
 
 public:
 
-    const kvs::Xform xform() const;
-
     void resetXform( void );
 
     void rotate( const kvs::Matrix33f& rotation );
@@ -217,109 +214,6 @@ private:
 
     void update_up_at_from( void );
 
-#if KVS_ENABLE_DEPRECATED
-public:
-
-    operator kvs::XformControl() const
-    {
-        return m_xform_control;
-    }
-
-public:
-
-    void clear()
-    {
-        m_xform_control.clear();
-    }
-
-    void set(
-        const kvs::Vector3f&  translation,
-        const kvs::Vector3f&  scaling,
-        const kvs::Matrix33f& rotation )
-    {
-        m_xform_control.set( translation, scaling, rotation );
-    }
-
-    void set( const Xform& xform )
-    {
-        m_xform_control.set( xform );
-    }
-
-    void updateRotation( const kvs::Matrix33f& rotation )
-    {
-        m_xform_control.updateRotation( rotation );
-    }
-
-    void updateTranslation( const kvs::Vector3f& translation )
-    {
-        m_xform_control.updateTranslation( translation );
-    }
-
-    void updateScaling( const kvs::Vector3f& scaling )
-    {
-        m_xform_control.updateScaling( scaling );
-    }
-
-    void updateScaling( float scaling )
-    {
-        m_xform_control.updateScaling( scaling );
-    }
-
-    const kvs::Vector3f translation() const
-    {
-        return m_xform_control.translation();
-    }
-
-    const kvs::Matrix33f& rotation() const
-    {
-        return m_xform_control.rotation();
-    }
-
-    const kvs::Matrix33f scaledRotation() const
-    {
-        return m_xform_control.scaledRotation();
-    }
-
-    const kvs::Vector3f& scaling() const
-    {
-        return m_xform_control.scaling();
-    }
-
-    Xform get() const
-    {
-        return m_xform_control.get();
-    }
-
-    void get( float (*array)[16] ) const
-    {
-        m_xform_control.get( array );
-    }
-
-public:
-
-    void setInitialXform(
-        const kvs::Vector3f&  translation = kvs::Vector3f(0,0,0),
-        const kvs::Vector3f&  scaling     = kvs::Vector3f(1,1,1),
-        const kvs::Matrix33f& rotation    = kvs::Matrix33f(1,0,0,0,1,0,0,0,1) )
-    {
-        m_xform_control.setInitialXform( translation, scaling, rotation );
-    }
-
-    void saveXform()
-    {
-        m_xform_control.saveXform();
-    }
-
-    void setXform( const kvs::Xform& xform )
-    {
-        m_xform_control.setXform( xform );
-    }
-
-    void applyXform() const
-    {
-        m_xform_control.applyXform();
-    }
-#endif
 };
 
 } // end of namespace kvs

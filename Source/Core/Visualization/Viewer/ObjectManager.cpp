@@ -831,14 +831,14 @@ void ObjectManager::translate( const kvs::Vector3f& translation )
 {
     kvs::ObjectBase* object = this->get_control_target();
 
-    object->xform_control().translate( translation );
+    object->translate( translation );
 
     ObjectIterator first = this->get_control_first_pointer();
     ObjectIterator last  = this->get_control_last_pointer();
 
     for( ; first != last; ++first )
     {
-        (*first)->xform_control().translate( translation );
+        (*first)->translate( translation );
     }
 }
 

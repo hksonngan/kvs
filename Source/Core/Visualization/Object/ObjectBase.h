@@ -35,7 +35,7 @@ class Camera;
  *  Object base class.
  */
 /*==========================================================================*/
-class ObjectBase
+class ObjectBase : public kvs::XformControl
 {
     kvsClassName( kvs::ObjectBase );
 
@@ -67,7 +67,6 @@ public:
 
 protected:
 
-    kvs::XformControl m_xform_control;
     bool          m_can_collision;
     std::string   m_name;               ///< object name
     kvs::Vector3f m_min_object_coord;   ///< min coord in the object coordinate system
@@ -119,21 +118,6 @@ public:
 
 public:
 
-    void setXform( const kvs::Xform& xform )
-    {
-        m_xform_control.setXform( xform );
-    }
-
-    void saveXform()
-    {
-        m_xform_control.saveXform();
-    }
-
-    void resetXform()
-    {
-        m_xform_control.resetXform();
-    }
-
     void setName( const std::string& name );
 
     void setMinMaxObjectCoords(
@@ -154,11 +138,6 @@ public:
     void hide( void );
 
 public:
-
-    const kvs::Xform xform() const
-    {
-        return m_xform_control.xform();
-    }
 
     const std::string& name( void ) const;
 
@@ -229,16 +208,6 @@ public:
     void scale(
         const kvs::Vector3f& scale,
         const kvs::Vector3f& center );
-
-    kvs::XformControl& xform_control()
-    {
-        return m_xform_control;
-    }
-
-    const kvs::XformControl& xform_control() const
-    {
-        return m_xform_control;
-    }
 
 public:
     void enableCollision( void );

@@ -952,11 +952,6 @@ const kvs::Vector3f Camera::projectObjectToWorld( const kvs::Vector3f& p_obj ) c
     return( this->projectCameraToWorld( p_cam ) );
 }
 
-const kvs::Xform Camera::xform() const
-{
-    return m_xform_control.xform();
-}
-
 /*===========================================================================*/
 /**
  *  @brief  Resets the xform of the camera.
@@ -964,7 +959,7 @@ const kvs::Xform Camera::xform() const
 /*===========================================================================*/
 void Camera::resetXform( void )
 {
-    m_xform_control.resetXform();
+    kvs::XformControl::resetXform();
     m_position = m_init_position;
     m_up_vector = m_init_up_vector;
     m_look_at = m_init_look_at;
@@ -978,7 +973,7 @@ void Camera::resetXform( void )
 /*==========================================================================*/
 void Camera::rotate( const kvs::Matrix33f& rotation )
 {
-    m_xform_control.rotate( rotation );
+    kvs::XformControl::rotate( rotation );
     this->update_up_at_from();
 }
 
@@ -990,7 +985,7 @@ void Camera::rotate( const kvs::Matrix33f& rotation )
 /*==========================================================================*/
 void Camera::translate( const kvs::Vector3f& translation )
 {
-    m_xform_control.translate( translation );
+    kvs::XformControl::translate( translation );
     this->update_up_at_from();
 }
 
@@ -1002,7 +997,7 @@ void Camera::translate( const kvs::Vector3f& translation )
 /*==========================================================================*/
 void Camera::scale( const kvs::Vector3f& scaling )
 {
-    m_xform_control.scale( scaling );
+    kvs::XformControl::scale( scaling );
     this->update_up_at_from();
 }
 

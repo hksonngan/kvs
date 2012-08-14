@@ -15,7 +15,6 @@
 #define KVS__XFORM_CONTROL_H_INCLUDE
 
 #include <kvs/Xform>
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -28,9 +27,7 @@ namespace kvs
 /*==========================================================================*/
 class XformControl
 {
-    kvsClassName( kvs::XformControl );
-
-protected:
+private:
 
     kvs::Xform m_current_xform;
     kvs::Xform m_initial_xform; ///< initial transform vector
@@ -50,6 +47,7 @@ public:
     }
 #endif
 
+protected:
     virtual ~XformControl( void );
 
 public:
@@ -87,11 +85,6 @@ public:
 #if KVS_ENABLE_DEPRECATED
 public:
 
-    kvs::Xform& xform( void )
-    {
-        return m_current_xform;
-    }
-
     void initialize( void )
     {
         this->setXform( kvs::Xform() );
@@ -126,35 +119,37 @@ public:
     void updateRotation( const kvs::Matrix33f& rotation )
     {
         kvs::Xform xform = this->xform();
-        xform.updateRotation( rotation );
+        xform.bind( kvs::Xform::Rotation( rotation ) );
         this->setXform( xform );
     }
 
     void updateTranslation( const kvs::Vector3f& translation )
     {
         kvs::Xform xform = this->xform();
-        xform.updateTranslation( translation );
+        xform.bind( kvs::Xform::Translation( translation ) );
         this->setXform( xform );
     }
 
     void updateScaling( const kvs::Vector3f& scaling )
     {
         kvs::Xform xform = this->xform();
-        xform.updateScaling( scaling );
+        xform.bind( kvs::Xform::Scaling( scaling ) );
         this->setXform( xform );
     }
 
     void updateScaling( float scaling )
     {
-        this->xform().updateScaling( scaling );
+        kvs::Xform xform = this->xform();
+        xform.bind( kvs::Xform::Scaling( scaling ) );
+        this->setXform( xform );
     }
 
-    const kvs::Vector3f& translation( void ) const
+    const kvs::Vector3f translation( void ) const
     {
         return this->xform().translation();
     }
 
-    const kvs::Matrix33f& rotation( void ) const
+    const kvs::Matrix33f rotation( void ) const
     {
         return this->xform().rotation();
     }
@@ -164,7 +159,7 @@ public:
         return this->xform().scaledRotation();
     }
 
-    const kvs::Vector3f& scaling( void ) const
+    const kvs::Vector3f scaling( void ) const
     {
         return this->xform().scaling();
     }
@@ -176,7 +171,7 @@ public:
 
     void get( float (*array)[16] ) const
     {
-        this->xform().get( array );
+        this->xform().toArray( *array );
     }
 #endif
 };

@@ -29,7 +29,7 @@ namespace kvs
  */
 /*===========================================================================*/
 ObjectBase::ObjectBase( const bool collision ) :
-    m_xform_control(),
+    kvs::XformControl(),
     m_can_collision( collision ),
     m_name("unknown"),
     m_min_object_coord( kvs::Vector3f( -3.0, -3.0, -3.0 ) ),
@@ -58,7 +58,7 @@ ObjectBase::~ObjectBase( void )
 /*===========================================================================*/
 ObjectBase& ObjectBase::operator = ( const ObjectBase& object )
 {
-    m_xform_control = object.m_xform_control;
+    kvs::XformControl::operator =( object );
     m_name = object.m_name;
     m_min_object_coord = object.m_min_object_coord;
     m_max_object_coord = object.m_max_object_coord;
@@ -372,7 +372,7 @@ const kvs::Vector3f ObjectBase::positionInWorld(
     init_pos.y() *= global_scale.y();
     init_pos.z() *= global_scale.z();
 
-    return m_xform_control.xform().transform( init_pos );
+    return this->xform().transform( init_pos );
 }
 
 /*===========================================================================*/
@@ -672,7 +672,7 @@ const kvs::Vector3f ObjectBase::object_to_world_coordinate(
     p_world.y() *= global_scale.y();
     p_world.z() *= global_scale.z();
 
-    return m_xform_control.xform().transform( p_world );
+    return this->xform().transform( p_world );
 }
 
 /*==========================================================================*/
