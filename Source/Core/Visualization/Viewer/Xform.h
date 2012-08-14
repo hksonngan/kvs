@@ -71,11 +71,6 @@ namespace kvs
 /*==========================================================================*/
 class Xform
 {
-    //friend class XformControl;
-    friend class ObjectBase;
-    //friend class Camera;
-    //friend class ObjectManager;
-
 private:
     kvs::Matrix44f m_matrix;
 
@@ -85,7 +80,7 @@ public:
         const kvs::Vector3f&  translation,
         const kvs::Vector3f&  scaling,
         const kvs::Matrix33f& rotation );
-    Xform( const kvs::Matrix44f& mat );
+    explicit Xform( const kvs::Matrix44f& mat );
 
 public:
 #if KVS_ENABLE_DEPRECATED
@@ -138,15 +133,9 @@ public:
 #endif
 public:
     const kvs::Vector3f translation( void ) const;
-//private:
-    const kvs::Matrix33f scaledRotation( void ) const;
-
-    const kvs::Matrix44f toMatrix() const;
-
-private:
     const kvs::Matrix33f rotation( void ) const;
-public:
     const kvs::Vector3f scaling( void ) const;
+    const kvs::Matrix33f scaledRotation( void ) const;
 
 public:
     const kvs::Vector3f transform( const kvs::Vector3f& pos ) const;
@@ -154,6 +143,7 @@ public:
 
     kvs::Xform& bind( const kvs::Xform& x );
 
+    const kvs::Matrix44f toMatrix() const;
     void toArray( float array[16] ) const;
 
     static const kvs::Xform Translation( const kvs::Vector3f& t );

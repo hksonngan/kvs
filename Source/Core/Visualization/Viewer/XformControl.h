@@ -28,12 +28,10 @@ namespace kvs
 class XformControl
 {
 private:
-
     kvs::Xform m_current_xform;
     kvs::Xform m_initial_xform; ///< initial transform vector
 
 public:
-
     XformControl();
 
 #if KVS_ENABLE_DEPRECATED
@@ -48,7 +46,7 @@ public:
 #endif
 
 protected:
-    virtual ~XformControl( void );
+    ~XformControl( void );
 
 public:
 #if KVS_ENABLE_DEPRECATED

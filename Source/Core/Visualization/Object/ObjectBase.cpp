@@ -608,44 +608,6 @@ bool ObjectBase::collision(
 
 /*===========================================================================*/
 /**
- *  @brief  Rotates the object.
- *  @param  rot [in] current rotation matrix
- *  @param  center [in] center of rotation
- */
-/*===========================================================================*/
-void ObjectBase::rotate(
-    const kvs::Matrix33f& rot,
-    const kvs::Vector3f&  center )
-{
-    kvs::Xform x = this->xform();
-    x.bind( kvs::Xform::Translation( -center ) )
-     .bind( kvs::Xform::Rotation( rot ) )
-     .bind( kvs::Xform::Translation( center ) );
-    this->setXform( x );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Scaling the object.
- *  @param  scale [in] current scaling value.
- *  @param  center [in] center of scaling
- */
-/*===========================================================================*/
-void ObjectBase::scale(
-    const kvs::Vector3f& scaling,
-    const kvs::Vector3f& center )
-{
-    kvs::Vector3f t = this->xform().translation();
-    kvs::Vector3f s = this->xform().scaling();
-    kvs::Matrix33f r = this->xform().rotation();
-    s = scaling * s;
-    t = scaling * ( t - center ) + center;
-
-    this->setXform( kvs::Xform( t, s, r ) );
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Projects the point from the object coord. to world coord.
  *  @param  p_obj [in] point in the object coordinate
  *  @param  global_trans [in] translation vector in the global

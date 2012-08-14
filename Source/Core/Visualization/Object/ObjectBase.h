@@ -201,13 +201,29 @@ public:
         const kvs::Vector3f& global_trans,
         const kvs::Vector3f& global_scale );
 
+#if KVS_ENABLE_DEPRECATED
     void rotate(
         const kvs::Matrix33f& rot,
-        const kvs::Vector3f& center );
+        const kvs::Vector3f& center )
+    {
+        kvs::Xform x = this->xform();
+        x.bind( kvs::Xform::Translation( -center ) )
+         .bind( kvs::Xform::Rotation( rot ) )
+         .bind( kvs::Xform::Translation( center ) );
+        this->setXform( x );
+    }
 
     void scale(
         const kvs::Vector3f& scale,
-        const kvs::Vector3f& center );
+        const kvs::Vector3f& center )
+    {
+        kvs::Xform x = this->xform();
+        x.bind( kvs::Xform::Translation( -center ) )
+         .bind( kvs::Xform::Scaling( scaling ) )
+         .bind( kvs::Xform::Translation( center ) );
+        this->setXform( x );
+    }
+#endif
 
 public:
     void enableCollision( void );
