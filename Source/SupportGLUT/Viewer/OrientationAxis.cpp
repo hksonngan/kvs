@@ -466,14 +466,16 @@ void OrientationAxis::paintEvent( void )
                    up.x(), up.y(), up.z() );
 
         // Rotate the axis and the box using the object's rotation matrix.
-        const kvs::Matrix33f r = m_object->xform().rotation();
-        const float xform[16] = {
-            r[0][0], r[1][0], r[2][0], 0.0f,
-            r[0][1], r[1][1], r[2][1], 0.0f,
-            r[0][2], r[1][2], r[2][2], 0.0f,
-            0.0f,    0.0f,    0.0f,    1.0f
-        };
-        glMultMatrixf( xform );
+        kvs::Xform xform = m_object->xform();
+        const kvs::Vector3f trans = xform.translation();
+        const kvs::Vector3f scale = xform.scaling();
+        const float max_scale = kvs::Math::Max( scale.x(), scale.y(), scale.z() );
+        xform.bind( kvs::Xform::Translation( -trans ) ); // Remove translation.
+        xform.bind( kvs::Xform::Scaling( 1.0f / max_scale ) ); // Normalize by maximum scale.
+
+        float mat[16];
+        xform.toArray( mat );
+        glMultMatrixf( mat );
 
         // Fixed length of the axis
         const float length = 4.0f;
@@ -619,9 +621,9 @@ void OrientationAxis::draw_centered_axis( const float length )
 /*===========================================================================*/
 void OrientationAxis::draw_cornered_axis( const float length )
 {
-    const float x = -length/2.0;
-    const float y = -length/2.0;
-    const float z = -length/2.0;
+    const float x = -length/2.0f;
+    const float y = -length/2.0f;
+    const float z = -length/2.0f;
     const kvs::Vector3f v0( x, y, z );
     const kvs::Vector3f v1( x + length, y, z );
     //const kvs::Vector3f v2( x + length, y, z + length );
@@ -686,9 +688,9 @@ void OrientationAxis::draw_cornered_axis( const float length )
 /*===========================================================================*/
 void OrientationAxis::draw_wired_box( const float length )
 {
-    const float x = -length/2.0;
-    const float y = -length/2.0;
-    const float z = -length/2.0;
+    const float x = -length/2.0f;
+    const float y = -length/2.0f;
+    const float z = -length/2.0f;
     const kvs::Vector3f v0( x, y, z );
     const kvs::Vector3f v1( x + length, y, z );
     const kvs::Vector3f v2( x + length, y, z + length );
@@ -754,9 +756,9 @@ void OrientationAxis::draw_wired_box( const float length )
 /*===========================================================================*/
 void OrientationAxis::draw_solid_box( const float length )
 {
-    const float x = -length/2.0;
-    const float y = -length/2.0;
-    const float z = -length/2.0;
+    const float x = -length/2.0f;
+    const float y = -length/2.0f;
+    const float z = -length/2.0f;
     const kvs::Vector3f v0( x, y, z );
     const kvs::Vector3f v1( x + length, y, z );
     const kvs::Vector3f v2( x + length, y, z + length );
@@ -1323,14 +1325,16 @@ void OrientationAxis::draw( const kvs::ObjectBase* object )
                    up.x(), up.y(), up.z() );
 
         // Rotate the axis and the box using the object's rotation matrix.
-        const kvs::Matrix33f r = object->xform().rotation();
-        const float xform[16] = {
-            r[0][0], r[1][0], r[2][0], 0.0f,
-            r[0][1], r[1][1], r[2][1], 0.0f,
-            r[0][2], r[1][2], r[2][2], 0.0f,
-            0.0f,    0.0f,    0.0f,    1.0f
-        };
-        glMultMatrixf( xform );
+        kvs::Xform xform = object->xform();
+        const kvs::Vector3f trans = xform.translation();
+        const kvs::Vector3f scale = xform.scaling();
+        const float max_scale = kvs::Math::Max( scale.x(), scale.y(), scale.z() );
+        xform.bind( kvs::Xform::Translation( -trans ) ); // Remove translation.
+        xform.bind( kvs::Xform::Scaling( 1.0f / max_scale ) ); // Normalize by maximum scale.
+
+        float mat[16];
+        xform.toArray( mat );
+        glMultMatrixf( mat );
 
         // Fixed length of the axis
         const float length = 4.0f;
@@ -1439,9 +1443,9 @@ void OrientationAxis::draw_centered_axis( const float length )
 /*==========================================================================*/
 void OrientationAxis::draw_cornered_axis( const float length )
 {
-    const float x = -length/2.0;
-    const float y = -length/2.0;
-    const float z = -length/2.0;
+    const float x = -length/2.0f;
+    const float y = -length/2.0f;
+    const float z = -length/2.0f;
     const kvs::Vector3f v0( x, y, z );
     const kvs::Vector3f v1( x + length, y, z );
     //const kvs::Vector3f v2( x + length, y, z + length );
@@ -1506,9 +1510,9 @@ void OrientationAxis::draw_cornered_axis( const float length )
 /*===========================================================================*/
 void OrientationAxis::draw_wired_box( const float length )
 {
-    const float x = -length/2.0;
-    const float y = -length/2.0;
-    const float z = -length/2.0;
+    const float x = -length/2.0f;
+    const float y = -length/2.0f;
+    const float z = -length/2.0f;
     const kvs::Vector3f v0( x, y, z );
     const kvs::Vector3f v1( x + length, y, z );
     const kvs::Vector3f v2( x + length, y, z + length );
@@ -1574,9 +1578,9 @@ void OrientationAxis::draw_wired_box( const float length )
 /*===========================================================================*/
 void OrientationAxis::draw_solid_box( const float length )
 {
-    const float x = -length/2.0;
-    const float y = -length/2.0;
-    const float z = -length/2.0;
+    const float x = -length/2.0f;
+    const float y = -length/2.0f;
+    const float z = -length/2.0f;
     const kvs::Vector3f v0( x, y, z );
     const kvs::Vector3f v1( x + length, y, z );
     const kvs::Vector3f v2( x + length, y, z + length );

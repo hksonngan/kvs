@@ -132,7 +132,7 @@ void GlyphBase::transform(
     const kvs::Xform xform( position, m_scale * size, rot );
 
     float array[16];
-    xform.get( &array );
+    xform.toArray( array );
     glMultMatrixf( array );
 }
 

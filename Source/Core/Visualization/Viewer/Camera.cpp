@@ -230,7 +230,7 @@ const kvs::Vector3f& Camera::lookAt( void ) const
     return( m_look_at );
 }
 
-kvs::Matrix44f Camera::viewingMatrix() const
+const kvs::Matrix44f Camera::viewingMatrix() const
 {
     return kvs::ViewingMatrix44<float>( m_position, m_up_vector, m_look_at );
 }

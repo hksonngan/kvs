@@ -220,9 +220,9 @@ void ScreenBase::paintFunction( void )
     }
     else
     {
-        float xform[16];
-        m_object_manager->xform().get( &xform );
-        glMultMatrixf( xform );
+        float array[16];
+        m_object_manager->xform().toArray( array );
+        glMultMatrixf( array );
     }
 }
 
