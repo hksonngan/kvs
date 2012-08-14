@@ -124,6 +124,12 @@ const kvs::Vector3f Xform::transformNormal( const kvs::Vector3f& normal ) const
     return kvs::Vector3f( n.x(), n.y(), n.z() );
 }
 
+const kvs::Vector3f Xform::project( const kvs::Vector3f& pos ) const
+{
+    kvs::Vector4f p = m_matrix * kvs::Vector4f( pos, 1 );
+    return kvs::Vector3f( p.x(), p.y(), p.z() ) / p.w();
+}
+
 const kvs::Xform Xform::inverse() const
 {
     return kvs::Xform( m_matrix.inverse() );

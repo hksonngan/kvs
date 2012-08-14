@@ -470,8 +470,8 @@ void OrientationAxis::paintEvent( void )
         const kvs::Vector3f trans = xform.translation();
         const kvs::Vector3f scale = xform.scaling();
         const float max_scale = kvs::Math::Max( scale.x(), scale.y(), scale.z() );
-        xform.bind( kvs::Xform::Translation( -trans ) ); // Remove translation.
-        xform.bind( kvs::Xform::Scaling( 1.0f / max_scale ) ); // Normalize by maximum scale.
+        xform = kvs::Xform::Translation( -trans ) * xform; // Remove translation.
+        xform = kvs::Xform::Scaling( 1.0f / max_scale ) * xform; // Normalize by maximum scale.
 
         float mat[16];
         xform.toArray( mat );
@@ -1329,8 +1329,8 @@ void OrientationAxis::draw( const kvs::ObjectBase* object )
         const kvs::Vector3f trans = xform.translation();
         const kvs::Vector3f scale = xform.scaling();
         const float max_scale = kvs::Math::Max( scale.x(), scale.y(), scale.z() );
-        xform.bind( kvs::Xform::Translation( -trans ) ); // Remove translation.
-        xform.bind( kvs::Xform::Scaling( 1.0f / max_scale ) ); // Normalize by maximum scale.
+        xform = kvs::Xform::Translation( -trans ) * xform; // Remove translation.
+        xform = kvs::Xform::Scaling( 1.0f / max_scale ) * xform; // Normalize by maximum scale.
 
         float mat[16];
         xform.toArray( mat );

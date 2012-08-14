@@ -140,6 +140,7 @@ public:
 public:
     const kvs::Vector3f transform( const kvs::Vector3f& pos ) const;
     const kvs::Vector3f transformNormal( const kvs::Vector3f& normal ) const;
+    const kvs::Vector3f project( const kvs::Vector3f& pos ) const;
 
     const kvs::Xform inverse() const;
     const kvs::Matrix44f toMatrix() const;
