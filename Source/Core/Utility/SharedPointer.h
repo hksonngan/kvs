@@ -221,6 +221,14 @@ private:
         : m_pointer( pointer ), m_shared_count( shared_count )
     {}
 
+public:
+// for get_deleter()
+    template<typename D>
+    D* _get_deleter_impl() const
+    {
+        return reinterpret_cast<D*>( m_shared_count.deleter( typeid( D ) ) );
+    }
+
 private:
     T* m_pointer;
     detail::shared_pointer_impl::SharedCount m_shared_count;
@@ -261,6 +269,12 @@ inline SharedPointer<T> dynamic_pointer_cast( const SharedPointer<U>& other )
 
     SharedPointer<T> ret( other, ptr );
     return ret;
+}
+
+template <typename D, typename T>
+inline D* get_deleter( const SharedPointer<T>& sp )
+{
+    return sp._get_deleter_impl<D>();
 }
 
 template <typename T, typename U>

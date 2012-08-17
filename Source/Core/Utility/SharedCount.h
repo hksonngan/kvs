@@ -34,6 +34,8 @@
   #define KVS_ATOMIC_COMPARE_SWAP( a, b, c ) _kvs_non_atomic_compare_swap( &( a ), ( b ), ( c ) )
 #endif
 
+#include <typeinfo>
+
 namespace kvs
 {
 
@@ -74,6 +76,12 @@ public:
     long use_count() const
     {
         return m_count;
+    }
+
+// Returns the pointer to the deleter if given type is correct.
+    virtual void* deleter( const std::type_info& )
+    {
+        return NULL;
     }
 
 public:
@@ -175,6 +183,11 @@ public:
     {}
 
 private:
+    void* deleter( const std::type_info& type )
+    {
+        return type == typeid( D ) ? reinterpret_cast<void*>( &m_deleter ) : NULL;
+    }
+
 // Delete the managing instance using deleter specified at constructor.
     void dispose()
     {
@@ -258,6 +271,11 @@ public:
     bool is_valid() const
     {
         return m_counter != NULL;
+    }
+
+    void* deleter( const std::type_info& type ) const
+    {
+        return m_counter ? m_counter->deleter( type ) : NULL;
     }
 
 private:
