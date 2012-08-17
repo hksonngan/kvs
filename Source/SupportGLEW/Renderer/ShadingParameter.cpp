@@ -24,6 +24,30 @@ namespace glew
 
 ShadingParameter::ShadingParameter()
 {
+    m_Ka = 0;
+    m_Kd = 0;
+    m_Ks = 0;
+    m_S = 0;
+    m_type = UnknownShading;
+}
+
+ShadingParameter::ShadingParameter( const kvs::Shader::Base& shader )
+{
+    switch ( shader.type() )
+    {
+    case kvs::Shader::LambertShading:
+        *this = Lambert( shader.Ka, shader.Kd );
+        break;
+    case kvs::Shader::PhongShading:
+        *this = Phong( shader.Ka, shader.Kd, shader.Ks, shader.S );
+        break;
+    case kvs::Shader::BlinnPhongShading:
+        *this = BlinnPhong( shader.Ka, shader.Kd, shader.Ks, shader.S );
+        break;
+    default:
+        /* NO SHADING */
+        break;
+    }
 }
 
 ShadingParameter ShadingParameter::Lambert( float ka, float kd )

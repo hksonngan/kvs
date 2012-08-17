@@ -13,6 +13,7 @@
  */
 /****************************************************************************/
 #include <string>
+#include <kvs/Shader>
 
 
 namespace kvs
@@ -49,11 +50,12 @@ public:
     static ShadingParameter BlinnPhong( float ka, float kd, float ks, float s );
 
 public:
+    ShadingParameter();
+    explicit ShadingParameter( const kvs::Shader::Base& shader );
+
+public:
     void apply( ProgramObject& program, const std::string& var_name ) const;
     void defineMacro( ShaderSource& frag ) const;
-
-private:
-    ShadingParameter();
 };
 
 } // end of namespace glew

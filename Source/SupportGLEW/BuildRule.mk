@@ -12,6 +12,7 @@ $(OUTDIR)/./Renderer/PolygonRenderer.o \
 $(OUTDIR)/./Renderer/PreIntegrationTable.o \
 $(OUTDIR)/./Renderer/ProjectedTetrahedraTable.o \
 $(OUTDIR)/./Renderer/RayCastingRenderer.o \
+$(OUTDIR)/./Renderer/ShadingParameter.o \
 $(OUTDIR)/./Renderer/StochasticLineEngine.o \
 $(OUTDIR)/./Renderer/StochasticLineRenderer.o \
 $(OUTDIR)/./Renderer/StochasticMultipleTetrahedraCompositor.o \
