@@ -25,155 +25,6 @@ const float ScalingFactor = 100.0f;
 const float Sqrt2 = 1.4142135623730950488f;
 const float HalfOfSqrt2 = 0.7071067811865475244f;
 
-/*==========================================================================*/
-/**
- *  Scaling.
- *  @param start [in] start draging point
- *  @param end [in] end draging point
- *  @param this_class [in] pointer to the trackball
- */
-/*==========================================================================*/
-void XYZScaling(
-    const kvs::Vector2f& start,
-    const kvs::Vector2f& end,
-    kvs::Trackball*      this_class )
-{
-    kvs::Trackball::x_scaling( start, end, this_class );
-    kvs::Trackball::y_scaling( start, end, this_class );
-    kvs::Trackball::z_scaling( start, end, this_class );
-}
-
-/*==========================================================================*/
-/**
- *  Scaling along the x axis.
- *  @param start [in] start draging point
- *  @param end [in] end draging point
- *  @param this_class [in] pointer to the trackball
- */
-/*==========================================================================*/
-void XScaling(
-    const kvs::Vector2f& start,
-    const kvs::Vector2f& end,
-    kvs::Trackball*      this_class )
-{
-    kvs::Trackball::x_scaling( start, end, this_class );
-}
-
-/*==========================================================================*/
-/**
- *  Scaling along the y axis.
- *  @param start [in] start draging point
- *  @param end [in] end draging point
- *  @param this_class [in] pointer to the trackball
- */
-/*==========================================================================*/
-void YScaling(
-    const kvs::Vector2f& start,
-    const kvs::Vector2f& end,
-    kvs::Trackball*      this_class )
-{
-    kvs::Trackball::y_scaling( start, end, this_class );
-}
-
-/*==========================================================================*/
-/**
- *  Scaling along the z axis.
- *  @param start [in] start draging point
- *  @param end [in] end draging point
- *  @param this_class [in] pointer to the trackball
- */
-/*==========================================================================*/
-void ZScaling(
-    const kvs::Vector2f& start,
-    const kvs::Vector2f& end,
-    kvs::Trackball*      this_class )
-{
-    kvs::Trackball::z_scaling( start, end, this_class );
-}
-
-/*==========================================================================*/
-/**
- *  Scaling along the xy plane.
- *  @param start [in] start draging point
- *  @param end [in] end draging point
- *  @param this_class [in] pointer to the trackball
- */
-/*==========================================================================*/
-void XYScaling(
-    const kvs::Vector2f& start,
-    const kvs::Vector2f& end,
-    kvs::Trackball*      this_class )
-{
-    kvs::Trackball::x_scaling( start, end, this_class );
-    kvs::Trackball::y_scaling( start, end, this_class );
-}
-
-/*==========================================================================*/
-/**
- *  Scaling along the yz plane.
- *  @param start [in] start draging point
- *  @param end [in] end draging point
- *  @param this_class [in] pointer to the trackball
- */
-/*==========================================================================*/
-void YZScaling(
-    const kvs::Vector2f& start,
-    const kvs::Vector2f& end,
-    kvs::Trackball*      this_class )
-{
-    kvs::Trackball::y_scaling( start, end, this_class );
-    kvs::Trackball::z_scaling( start, end, this_class );
-}
-
-/*==========================================================================*/
-/**
- *  Scaling along the zx plane.
- *  @param start [in] start draging point
- *  @param end [in] end draging point
- *  @param this_class [in] pointer to the trackball
- */
-/*==========================================================================*/
-void ZXScaling(
-    const kvs::Vector2f& start,
-    const kvs::Vector2f& end,
-    kvs::Trackball*      this_class )
-{
-    kvs::Trackball::x_scaling( start, end, this_class );
-    kvs::Trackball::z_scaling( start, end, this_class );
-}
-
-/*==========================================================================*/
-/**
- *  Not scaling.
- *  @param start [in] start draging point
- *  @param end [in] end draging point
- *  @param this_class [in] pointer to the trackball
- */
-/*==========================================================================*/
-void NotScaling(
-    const kvs::Vector2f& start,
-    const kvs::Vector2f& end,
-    kvs::Trackball*      this_class )
-{
-    kvs::IgnoreUnusedVariable( start );
-    kvs::IgnoreUnusedVariable( end );
-    kvs::IgnoreUnusedVariable( this_class );
-}
-
-typedef void (*ScalingFunc)( const kvs::Vector2f&, const kvs::Vector2f&, kvs::Trackball* );
-
-ScalingFunc ScalingFunction[kvs::Trackball::ScalingTypeSize] =
-{
-    &XYZScaling,
-    &XScaling,
-    &YScaling,
-    &ZScaling,
-    &XYScaling,
-    &YZScaling,
-    &ZXScaling,
-    &NotScaling
-};
-
 } // end of namespace
 
 
@@ -379,7 +230,34 @@ void Trackball::scale(
     const kvs::Vector2f n_old = this->get_norm_position( start );
     const kvs::Vector2f n_new = this->get_norm_position( end );
 
-    ::ScalingFunction[type]( n_old, n_new, this );
+    const float s = 1.0f + ::ScalingFactor * ( n_old.y() - n_new.y() ) / m_window_height;
+    switch ( type )
+    {
+    case ScalingXYZ:
+        m_scaling.set( s, s, s );
+        break;
+    case ScalingX:
+        m_scaling.set( s, 1, 1 );
+        break;
+    case ScalingY:
+        m_scaling.set( 1, s, 1 );
+        break;
+    case ScalingZ:
+        m_scaling.set( 1, 1, s );
+        break;
+    case ScalingXY:
+        m_scaling.set( s, s, 1 );
+        break;
+    case ScalingYZ:
+        m_scaling.set( 1, s, s );
+        break;
+    case ScalingZX:
+        m_scaling.set( s, 1, s );
+        break;
+    default:
+        m_scaling.set( 1, 1, 1 );
+        break;
+    }
 }
 
 /*==========================================================================*/
@@ -498,60 +376,6 @@ const kvs::Vector2f Trackball::get_norm_position( const kvs::Vector2i& pos ) con
     const float y = -2.0f * ( pos.y() - m_rotation_center.y() ) / m_window_height;
 
     return( kvs::Vector2f( x, y ) );
-}
-
-/*==========================================================================*/
-/**
- *  Scaling along the x axis.
- *  @param start [in] start dragging point
- *  @param end [in] end dragging point
- *  @param trackball [in] pointer to the trackball
- */
-/*==========================================================================*/
-void Trackball::x_scaling(
-    const kvs::Vector2f& start,
-    const kvs::Vector2f& end,
-    Trackball*           trackball )
-{
-    const int   h = trackball->m_window_height;
-    const float x = 1.0f + ::ScalingFactor * ( start.y() - end.y() ) / h;
-    trackball->m_scaling.x() = x;
-}
-
-/*==========================================================================*/
-/**
- *  Scaling along the y axis.
- *  @param start [in] start dragging point
- *  @param end [in] end dragging point
- *  @param trackball [in] pointer to the trackball
- */
-/*==========================================================================*/
-void Trackball::y_scaling(
-    const kvs::Vector2f& start,
-    const kvs::Vector2f& end,
-    Trackball*           trackball )
-{
-    const int   h = trackball->m_window_height;
-    const float y = 1.0f + ::ScalingFactor * ( start.y() - end.y() ) / h;
-    trackball->m_scaling.y() = y;
-}
-
-/*==========================================================================*/
-/**
- *  Scaling along the z axis.
- *  @param start [in] start dragging point
- *  @param end [in] end dragging point
- *  @param trackball [in] pointer to the trackball
- */
-/*==========================================================================*/
-void Trackball::z_scaling(
-    const kvs::Vector2f& start,
-    const kvs::Vector2f& end,
-    Trackball*           trackball )
-{
-    const int   h = trackball->m_window_height;
-    const float z = 1.0f + ::ScalingFactor * ( start.y() - end.y() ) / h;
-    trackball->m_scaling.z() = z;
 }
 
 } // end of namespace kvs

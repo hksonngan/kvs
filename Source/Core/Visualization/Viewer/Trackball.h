@@ -120,12 +120,6 @@ protected:
     const float depth_on_sphere( const kvs::Vector2f& dir ) const;
 
     const kvs::Vector2f get_norm_position( const kvs::Vector2i& pos ) const;
-
-public:
-
-    static void x_scaling( const kvs::Vector2f& start, const kvs::Vector2f& end, Trackball* track );
-    static void y_scaling( const kvs::Vector2f& start, const kvs::Vector2f& end, Trackball* track );
-    static void z_scaling( const kvs::Vector2f& start, const kvs::Vector2f& end, Trackball* track );
 };
 
 } // end of namespace kvs
