@@ -230,7 +230,8 @@ void Trackball::scale(
     const kvs::Vector2f n_old = this->get_norm_position( start );
     const kvs::Vector2f n_new = this->get_norm_position( end );
 
-    const float s = 1.0f + ::ScalingFactor * ( n_old.y() - n_new.y() ) / m_window_height;
+    const float h = static_cast<float>( m_window_height );
+    const float s = 1.0f + ::ScalingFactor * ( n_old.y() - n_new.y() ) / h;
     switch ( type )
     {
     case ScalingXYZ:
