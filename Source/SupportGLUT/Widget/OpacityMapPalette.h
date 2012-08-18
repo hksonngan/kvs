@@ -20,7 +20,9 @@
 #include <kvs/Texture1D>
 #include <kvs/Texture2D>
 #include <kvs/OpacityMap>
+#if KVS_ENABLE_DEPRECATED
 #include <kvs/ScreenBase>
+#endif
 #include <kvs/glut/WidgetBase>
 #include <kvs/glut/Rectangle>
 #include <kvs/glut/ColorMapPalette>
@@ -28,6 +30,9 @@
 
 namespace kvs
 {
+
+class ScreenBase;
+class MouseEvent;
 
 namespace glut
 {

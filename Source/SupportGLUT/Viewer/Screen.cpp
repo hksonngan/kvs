@@ -19,7 +19,10 @@
 #include <kvs/MouseButton>
 #include <kvs/ResizeEvent>
 #include <kvs/IgnoreUnusedVariable>
+#include <kvs/Camera>
+#include <kvs/ObjectManager>
 #include <kvs/glut/GLUT>
+#include <kvs/glut/Application>
 #include <SupportGLUT/Viewer/KVSMouseButton.h>
 #include <SupportGLUT/Viewer/KVSKey.h>
 #if defined( KVS_SUPPORT_GLEW )

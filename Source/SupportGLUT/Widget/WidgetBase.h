@@ -18,12 +18,16 @@
 #include <kvs/ClassName>
 #include <kvs/RGBAColor>
 #include <kvs/EventListener>
+#if KVS_ENABLE_DEPRECATED
 #include <kvs/ScreenBase>
+#endif
 #include <kvs/glut/Rectangle>
 
 
 namespace kvs
 {
+
+class ScreenBase;
 
 namespace glut
 {

@@ -19,7 +19,10 @@
 #include <kvs/ClassName>
 #include <kvs/Texture1D>
 #include <kvs/ColorMap>
+#include <kvs/Vector2>
+#if KVS_ENABLE_DEPRECATED
 #include <kvs/ScreenBase>
+#endif
 #include <kvs/glut/WidgetBase>
 #include <kvs/glut/Rectangle>
 #include <kvs/glut/ColorPalette>
@@ -27,6 +30,8 @@
 
 namespace kvs
 {
+
+class ScreenBase;
 
 namespace glut
 {

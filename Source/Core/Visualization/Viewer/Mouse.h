@@ -15,7 +15,9 @@
 #define KVS__MOUSE_H_INCLUDE
 
 #include <kvs/Trackball>
+#if KVS_ENABLE_DEPRECATED
 #include <kvs/OpenGL>
+#endif
 #include <kvs/ClassName>
 #include <kvs/Timer>
 #include <kvs/Vector2>

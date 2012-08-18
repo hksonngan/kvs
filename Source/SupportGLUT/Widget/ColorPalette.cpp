@@ -16,6 +16,11 @@
 #include "ColorPalette.h"
 #include <kvs/HSVColor>
 #include <kvs/String>
+#include <kvs/EventBase>
+#include <kvs/MouseEvent>
+#include <kvs/IgnoreUnusedVariable>
+#include <kvs/ScreenBase>
+#include <kvs/OpenGL>
 
 // Default parameters.
 namespace { namespace Default

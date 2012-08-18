@@ -19,6 +19,8 @@
 #include "StochasticUniformGridEngine.h"
 #include "StochasticTetrahedraEngine.h"
 #include <kvs/PointObject>
+#include <kvs/ScreenBase>
+#include <kvs/ObjectManager>
 
 
 namespace kvs

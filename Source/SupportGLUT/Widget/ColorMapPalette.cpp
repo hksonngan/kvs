@@ -14,6 +14,10 @@
 /*****************************************************************************/
 #include "ColorMapPalette.h"
 #include <kvs/String>
+#include <kvs/EventBase>
+#include <kvs/MouseEvent>
+#include <kvs/IgnoreUnusedVariable>
+#include <kvs/ScreenBase>
 
 // Default parameters.
 namespace { namespace Default

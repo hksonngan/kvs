@@ -15,15 +15,22 @@
 #ifndef KVS__GLEW__STOCHASTIC_RENDERING_COMPOSITOR_H_INCLUDE
 #define KVS__GLEW__STOCHASTIC_RENDERING_COMPOSITOR_H_INCLUDE
 
+#include <string>
 #include <vector>
 #include <kvs/ClassName>
+#if KVS_ENABLE_DEPRECATED
 #include <kvs/ScreenBase>
 #include <kvs/PointObject>
+#endif
 #include "StochasticRendererBase.h"
 
 
 namespace kvs
 {
+
+class ScreenBase;
+class PointObject;
+class ObjectBase;
 
 namespace glew
 {

@@ -16,14 +16,19 @@
 #define KVS__GLEW__STOCHASTIC_MULTIPLE_TETRAHEDRA_COMPOSITOR_H_INCLUDE
 
 #include <kvs/ClassName>
+#if KVS_ENABLE_DEPRECATED
 #include <kvs/ScreenBase>
 #include <kvs/PointObject>
+#endif
 #include "StochasticMultipleTetrahedraRenderer.h"
 #include "StochasticMultipleTetrahedraEngine.h"
 
 
 namespace kvs
 {
+
+class ScreenBase;
+class PointObject;
 
 namespace glew
 {

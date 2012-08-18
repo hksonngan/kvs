@@ -14,19 +14,28 @@
 #ifndef KVS__GLUT__HISTOGRAM_H_INCLUDE
 #define KVS__GLUT__HISTOGRAM_H_INCLUDE
 
+#include <string>
+#if KVS_ENABLE_DEPRECATED
 #include <kvs/StructuredVolumeObject>
 #include <kvs/ImageObject>
+#include <kvs/ScreenBase>
+#endif
 #include <kvs/RGBColor>
 #include <kvs/RGBAColor>
 #include <kvs/FrequencyTable>
 #include <kvs/Texture2D>
 #include <kvs/ClassName>
-#include <kvs/ScreenBase>
+#include <kvs/Vector2>
 #include <kvs/glut/WidgetBase>
 
 
 namespace kvs
 {
+
+class StructuredVolumeObject;
+class ImageObject;
+class ScreenBase;
+class MouseEvent;
 
 namespace glut
 {

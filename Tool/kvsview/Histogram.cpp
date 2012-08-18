@@ -22,6 +22,7 @@
 #include <kvs/MouseButton>
 #include <kvs/Key>
 #include <kvs/InitializeEventListener>
+#include <kvs/Background>
 #include <kvs/glut/Application>
 #include <kvs/glut/Screen>
 #include "CommandName.h"

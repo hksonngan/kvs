@@ -25,6 +25,7 @@
 #include <kvs/MouseDoubleClickEventListener>
 #include <kvs/KeyPressEventListener>
 #include <kvs/Key>
+#include <kvs/RendererManager>
 #include <kvs/glut/Application>
 #include <kvs/glut/Screen>
 #include <kvs/glut/TransferFunctionEditor>

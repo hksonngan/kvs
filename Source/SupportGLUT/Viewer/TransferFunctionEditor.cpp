@@ -22,6 +22,7 @@
 #include <kvs/Time>
 #include <kvs/glut/GLUT>
 #include <kvs/IgnoreUnusedVariable>
+#include <kvs/Background>
 #include <SupportGLUT/Viewer/KVSKey.h>
 #include <SupportGLUT/Viewer/KVSMouseButton.h>
 

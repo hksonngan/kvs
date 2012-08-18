@@ -12,7 +12,11 @@
  */
 /****************************************************************************/
 #include "OrientationAxis.h"
+#include <kvs/ObjectManager>
+#include <kvs/EventBase>
+#include <kvs/ScreenBase>
 #include <kvs/glut/GLUT>
+
 
 // Default parameters.
 namespace { namespace Default

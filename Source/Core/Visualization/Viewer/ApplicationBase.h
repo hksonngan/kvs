@@ -16,7 +16,9 @@
 #define KVS__APPLICATION_BASE_H_INCLUDE
 
 #include <kvs/ClassName>
+#if KVS_ENABLE_DEPRECATED
 #include <kvs/ScreenBase>
+#endif
 #include <kvs/Compiler>
 #include <list>
 
@@ -26,6 +28,8 @@
 
 namespace kvs
 {
+
+class ScreenBase;
 
 /*===========================================================================*/
 /**

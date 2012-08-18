@@ -14,7 +14,9 @@
 #ifndef KVS__DISPLAY_FORMAT_H_INCLUDE
 #define KVS__DISPLAY_FORMAT_H_INCLUDE
 
+#if KVS_ENABLE_DEPRECATED
 #include <kvs/OpenGL>
+#endif
 #include <kvs/ClassName>
 
 

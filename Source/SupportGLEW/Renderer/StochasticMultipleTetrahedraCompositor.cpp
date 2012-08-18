@@ -13,6 +13,9 @@
  */
 /*****************************************************************************/
 #include "StochasticMultipleTetrahedraCompositor.h"
+#include <kvs/ScreenBase>
+#include <kvs/PointObject>
+#include <kvs/ObjectManager>
 
 
 namespace kvs

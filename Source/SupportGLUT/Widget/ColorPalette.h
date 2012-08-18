@@ -17,13 +17,18 @@
 
 #include <string>
 #include <kvs/ClassName>
+#if KVS_ENABLE_DEPRECATED
 #include <kvs/ScreenBase>
+#endif
 #include <kvs/glut/WidgetBase>
 #include <kvs/glut/Rectangle>
 
 
 namespace kvs
 {
+
+class ScreenBase;
+class MouseEvent;
 
 namespace glut
 {

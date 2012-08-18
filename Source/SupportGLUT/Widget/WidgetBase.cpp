@@ -18,6 +18,7 @@
 #include <kvs/HSVColor>
 #include <kvs/RGBColor>
 #include <kvs/EventHandler>
+#include <kvs/ScreenBase>
 
 // Default parameters.
 namespace { namespace Default

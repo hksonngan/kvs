@@ -13,12 +13,19 @@
 /****************************************************************************/
 #include "ScreenBase.h"
 #include <kvs/DebugNew>
-#include <kvs/PointRenderer>
-#include <kvs/LineRenderer>
-#include <kvs/PolygonRenderer>
-#include <kvs/RayCastingRenderer>
-#include <kvs/ImageRenderer>
 #include <kvs/EventHandler>
+#include <kvs/Camera>
+#include <kvs/Light>
+#include <kvs/Mouse>
+#include <kvs/Background>
+#include <kvs/ObjectManager>
+#include <kvs/RendererManager>
+#include <kvs/IDManager>
+#include <kvs/MouseEvent>
+#include <kvs/KeyEvent>
+#include <kvs/WheelEvent>
+#include <kvs/VisualizationPipeline>
+#include <kvs/OpenGL>
 
 
 namespace kvs

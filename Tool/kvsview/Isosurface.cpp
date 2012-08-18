@@ -19,6 +19,7 @@
 #include <kvs/Value>
 #include <kvs/KeyPressEventListener>
 #include <kvs/Key>
+#include <kvs/ObjectManager>
 #include <kvs/glut/Screen>
 #include <kvs/glut/Application>
 #include <kvs/glut/LegendBar>

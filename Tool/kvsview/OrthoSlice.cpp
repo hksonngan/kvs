@@ -17,6 +17,7 @@
 #include <kvs/PipelineModule>
 #include <kvs/VisualizationPipeline>
 #include <kvs/OrthoSlice>
+#include <kvs/ObjectManager>
 #include <kvs/glut/Screen>
 #include <kvs/glut/Application>
 #include <kvs/glut/Slider>

@@ -30,7 +30,9 @@
 #include <kvs/MouseEvent>
 #include <kvs/KeyEvent>
 #include <kvs/glut/Timer>
+#if KVS_ENABLE_DEPRECATED
 #include <kvs/glut/Application>
+#endif
 
 
 namespace kvs
@@ -38,6 +40,8 @@ namespace kvs
 
 namespace glut
 {
+
+class Application;
 
 /*===========================================================================*/
 /**

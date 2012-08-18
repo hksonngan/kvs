@@ -14,7 +14,10 @@
 /*****************************************************************************/
 #include "OpacityMapPalette.h"
 #include <kvs/MouseButton>
+#include <kvs/MouseEvent>
 #include <kvs/String>
+#include <kvs/IgnoreUnusedVariable>
+#include <kvs/ScreenBase>
 
 
 // Default parameters.

@@ -18,6 +18,7 @@
 #include <kvs/PointRenderer>
 #include <kvs/LineRenderer>
 #include <kvs/PolygonRenderer>
+#include <kvs/Background>
 #include <kvs/glut/AxisRenderer>
 #include "CommandName.h"
 #include "PointRenderer.h"

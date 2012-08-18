@@ -20,6 +20,7 @@
 #include <kvs/PaintEventListener>
 #include <kvs/glut/Application>
 #include <kvs/glut/Screen>
+#include <kvs/Background>
 #include "CommandName.h"
 
 

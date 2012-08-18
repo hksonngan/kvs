@@ -15,10 +15,10 @@
 #define KVS__SCREEN_BASE_H_INCLUDE
 
 #include <string>
+#if KVS_ENABLE_DEPRECATED
 #include <map>
 #include <kvs/Camera>
 #include <kvs/Light>
-#include <kvs/Mouse>
 #include <kvs/Background>
 #include <kvs/ObjectManager>
 #include <kvs/RendererManager>
@@ -26,16 +26,31 @@
 #include <kvs/MouseEvent>
 #include <kvs/KeyEvent>
 #include <kvs/WheelEvent>
-#include <kvs/DisplayFormat>
 #include <kvs/VisualizationPipeline>
 #include <kvs/ClassName>
 #include <kvs/IgnoreUnusedVariable>
+#endif
+#include <kvs/Mouse>
+#include <kvs/DisplayFormat>
 
 
 namespace kvs
 {
 
 class EventHandler;
+class Camera;
+class Light;
+class Mouse;
+class Background;
+class ObjectManager;
+class RendererManager;
+class IDManager;
+class MouseEvent;
+class KeyEvent;
+class WheelEvent;
+class VisualizationPipeline;
+class ObjectBase;
+class RendererBase;
 
 /*==========================================================================*/
 /**

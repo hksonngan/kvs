@@ -17,13 +17,18 @@
 #include <kvs/Camera>
 #include <kvs/RGBColor>
 #include <kvs/ClassName>
+#if KVS_ENABLE_DEPRECATED
 #include <kvs/ObjectBase>
 #include <kvs/glut/Screen>
+#endif
 #include <kvs/glut/WidgetBase>
 
 
 namespace kvs
 {
+
+class ScreenBase;
+class ObjectBase;
 
 namespace glut
 {
