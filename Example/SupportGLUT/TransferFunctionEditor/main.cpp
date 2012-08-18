@@ -17,6 +17,7 @@
 #include <kvs/StructuredVolumeImporter>
 #include <kvs/RayCastingRenderer>
 #include <kvs/HydrogenVolumeData>
+#include <kvs/RendererManager>
 #include <kvs/glut/Application>
 #include <kvs/glut/Screen>
 #include <kvs/glut/TransferFunctionEditor>

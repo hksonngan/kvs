@@ -22,6 +22,7 @@
 #include <kvs/TimerEventListener>
 #include <kvs/KeyPressEventListener>
 #include <kvs/RotationMatrix33>
+#include <kvs/ObjectManager>
 
 
 class KeyPressEvent : public kvs::KeyPressEventListener
@@ -55,7 +56,8 @@ class TimerEvent : public kvs::TimerEventListener
         kvs::Matrix33f rotation = kvs::XRotationMatrix33<float>( deg );
         rotation *= kvs::YRotationMatrix33<float>( deg );
         rotation *= kvs::ZRotationMatrix33<float>( deg );
-        screen()->objectManager()->object()->rotate( rotation, center );
+        //screen()->objectManager()->object()->rotate( rotation, center );
+        screen()->objectManager()->object()->multiplyXform( kvs::Xform::Rotation( rotation ) );
         screen()->redraw();
 
         deg += 0.1f;

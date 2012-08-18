@@ -16,6 +16,7 @@
 #include "Widget.h"
 #include <kvs/RGBColor>
 #include <kvs/Dicom>
+#include <kvs/Camera>
 
 
 namespace Widget

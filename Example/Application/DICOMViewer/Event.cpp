@@ -19,6 +19,7 @@
 #include <kvs/RGBColor>
 #include <kvs/Key>
 #include <kvs/MouseButton>
+#include <kvs/Background>
 #include <kvs/glut/Label>
 
 

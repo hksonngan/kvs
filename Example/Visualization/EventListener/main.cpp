@@ -22,6 +22,7 @@
 #include <kvs/MouseDoubleClickEventListener>
 #include <kvs/KeyPressEventListener>
 #include <kvs/TimerEventListener>
+#include <kvs/OpenGL>
 #include <kvs/glut/Application>
 #include <kvs/glut/Screen>
 

@@ -23,6 +23,9 @@
 #include <kvs/Time>
 #include <kvs/File>
 #include <kvs/Vector2>
+#include <kvs/ObjectManager>
+#include <kvs/IDManager>
+#include <kvs/Camera>
 
 
 namespace
