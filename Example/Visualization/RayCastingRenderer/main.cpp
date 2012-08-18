@@ -16,7 +16,7 @@
 #include <kvs/Message>
 #include <kvs/StructuredVolumeObject>
 #include <kvs/StructuredVolumeImporter>
-#include <kvs/glew/RayCastingRenderer>
+#include <kvs/RayCastingRenderer>
 #include <kvs/HydrogenVolumeData>
 #include <kvs/glut/Application>
 #include <kvs/glut/Screen>
@@ -47,7 +47,7 @@ int main( int argc, char** argv )
         return( false );
     }
 
-    kvs::glew::RayCastingRenderer* renderer = new kvs::glew::RayCastingRenderer();
+    kvs::RayCastingRenderer* renderer = new kvs::RayCastingRenderer();
     if ( !renderer )
     {
         kvsMessageError( "Cannot create a ray casting renderer." );
