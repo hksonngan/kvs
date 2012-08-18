@@ -16,6 +16,7 @@
 #define KVS__GLUT__TRANSFER_FUNCTION_EDITOR_H_INCLUDE
 
 #include <string>
+#include <deque>
 #include <kvs/ClassName>
 #include <kvs/OpenGL>
 #include <kvs/RGBColor>

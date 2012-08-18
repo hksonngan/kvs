@@ -14,6 +14,7 @@
 #ifndef KVS__GLUT__SCREEN_H_INCLUDE
 #define KVS__GLUT__SCREEN_H_INCLUDE
 
+#include <list>
 #include <kvs/ClassName>
 #include <kvs/ScreenBase>
 #include <kvs/InitializeEventListener>
