@@ -28,7 +28,7 @@ namespace kvs
  *  @param  collision [in] collision detection flag
  */
 /*===========================================================================*/
-ObjectBase::ObjectBase( const bool collision ) :
+ObjectBase::ObjectBase( const bool collision ):
     kvs::XformControl(),
     m_can_collision( collision ),
     m_name("unknown"),
@@ -556,10 +556,6 @@ bool ObjectBase::collision(
     float max_distance = -1.0f;
     kvs::Vector3f center;
 
-    glPushMatrix();
-    {
-        ObjectBase::transform( global_trans, global_scale );
-
         center = object_to_world_coordinate( m_object_center,
                                              global_trans,
                                              global_scale );
@@ -600,8 +596,6 @@ bool ObjectBase::collision(
             const float distance = static_cast<float>( ( corner - center ).length() );
             max_distance = kvs::Math::Max( max_distance, distance );
         }
-    }
-    glPopMatrix();
 
     return( ( p_world - center ).length() < max_distance );
 }

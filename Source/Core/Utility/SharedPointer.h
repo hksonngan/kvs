@@ -274,7 +274,7 @@ inline SharedPointer<T> dynamic_pointer_cast( const SharedPointer<U>& other )
 template <typename D, typename T>
 inline D* get_deleter( const SharedPointer<T>& sp )
 {
-    return sp._get_deleter_impl<D>();
+    return sp.template _get_deleter_impl<D>();
 }
 
 template <typename T, typename U>
