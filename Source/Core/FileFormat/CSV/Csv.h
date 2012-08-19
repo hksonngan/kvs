@@ -36,19 +36,19 @@ class Csv : public kvs::FileFormatBase
 
 public:
 
-    typedef std::vector<std::string> Row;
+    typedef std::string Item;
+    typedef std::vector<Item> Row;
+    typedef std::vector<Row> Table;
 
 protected:
 
-    std::vector<Row> m_values; ///< value array
+    Table m_table; ///< row array
 
 public:
 
-    Csv( void );
+    Csv();
 
     Csv( const std::string& filename );
-
-    virtual ~Csv( void );
 
 public:
 
@@ -56,7 +56,7 @@ public:
 
 public:
 
-    const size_t nrows( void ) const;
+    size_t nrows() const;
 
     const Row& row( const size_t index ) const;
 

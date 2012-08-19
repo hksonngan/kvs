@@ -51,7 +51,7 @@ namespace kvs
  *  @brief  Constructs a new Csv calss.
  */
 /*===========================================================================*/
-Csv::Csv( void )
+Csv::Csv()
 {
 }
 
@@ -69,15 +69,6 @@ Csv::Csv( const std::string& filename )
 
 /*===========================================================================*/
 /**
- *  @brief  Destructs the Csv class.
- */
-/*===========================================================================*/
-Csv::~Csv( void )
-{
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Output stream for Csv class.
  *  @param  os [in] output stream
  *  @param  csv [in] CSV data
@@ -85,13 +76,13 @@ Csv::~Csv( void )
 /*===========================================================================*/
 std::ostream& operator << ( std::ostream& os, const Csv& csv )
 {
-    os << "number of rows: " << csv.m_values.size() << std::endl;
+    os << "number of rows: " << csv.m_table.size() << std::endl;
     os << "first line:     ";
-    const Csv::Row& row = csv.m_values.at(0);
+    const Csv::Row& row = csv.m_table.at(0);
     Csv::Row::const_iterator v = row.begin();
     os << *(v++); while ( v != row.end() ) os << ", " << *(v++);
 
-    return( os );
+    return os;
 }
 
 /*===========================================================================*/
@@ -100,9 +91,9 @@ std::ostream& operator << ( std::ostream& os, const Csv& csv )
  *  @return number of rows
  */
 /*===========================================================================*/
-const size_t Csv::nrows( void ) const
+size_t Csv::nrows() const
 {
-    return( m_values.size() );
+    return m_table.size();
 }
 
 /*===========================================================================*/
@@ -114,7 +105,7 @@ const size_t Csv::nrows( void ) const
 /*===========================================================================*/
 const Csv::Row& Csv::row( const size_t index ) const
 {
-    return( m_values.at(index) );
+    return m_table.at(index);
 }
 
 /*===========================================================================*/
@@ -127,7 +118,7 @@ const Csv::Row& Csv::row( const size_t index ) const
 /*===========================================================================*/
 const std::string& Csv::value( const size_t i, const size_t j ) const
 {
-    return( m_values.at(i).at(j) );
+    return m_table.at(i).at(j);
 }
 
 /*===========================================================================*/
@@ -138,7 +129,7 @@ const std::string& Csv::value( const size_t i, const size_t j ) const
 /*===========================================================================*/
 void Csv::addRow( const Row& row )
 {
-    m_values.push_back( row );
+    m_table.push_back( row );
 }
 
 /*===========================================================================*/
@@ -150,7 +141,7 @@ void Csv::addRow( const Row& row )
 /*===========================================================================*/
 void Csv::setRow( const size_t index, const Row& row )
 {
-    m_values.at(index) = row;
+    m_table.at(index) = row;
 }
 
 /*===========================================================================*/
@@ -163,7 +154,7 @@ void Csv::setRow( const size_t index, const Row& row )
 /*===========================================================================*/
 void Csv::setValue( const size_t i, const size_t j, const std::string& value )
 {
-    m_values.at(i).at(j) = value;
+    m_table.at(i).at(j) = value;
 }
 
 /*===========================================================================*/
@@ -181,9 +172,10 @@ const bool Csv::read( const std::string& filename )
     if ( !ifs.is_open() )
     {
         kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return( false );
+        return false;
     }
 
+/*
     std::string line;
     while ( ::GetLine( ifs, line ) )
     {
@@ -195,12 +187,47 @@ const bool Csv::read( const std::string& filename )
         {
             row.push_back( value );
         }
-        if ( row.size() > 0 ) m_values.push_back( row );
+        if ( row.size() > 0 ) m_table.push_back( row );
+    }
+*/
+    Row row;
+    Item item;
+    bool reading = false;
+
+    while ( !ifs.eof() )
+    {
+        int c = ifs.get();
+        if ( c == ',' )
+        {
+            if ( reading );
+            else { row.push_back( item ); item.erase(); }
+        }
+        else if ( c == '"' )
+        {
+            if ( reading ) { reading = false; }
+            else { reading = true; }
+        }
+        // Linefeed code: Windows CRLF(\r\n), Unix LF(\n), Mac CR(\r)
+        else if ( c == '\n' || c == '\r' || c == '\0' )
+        {
+            if ( c == '\r' ) { c = ifs.peek(); if ( c == '\n' ) c = ifs.get(); }
+
+            if ( reading ) { item.push_back( '\n' ); }
+            else
+            {
+                row.push_back( item ); item.erase();
+                m_table.push_back( row ); row.clear();
+            }
+        }
+        else
+        {
+            item.push_back( c );
+        }
     }
 
     ifs.close();
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -218,11 +245,11 @@ const bool Csv::write( const std::string& filename )
     if ( !ofs.is_open() )
     {
         kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return( false );
+        return false;
     }
 
-    std::vector<Csv::Row>::iterator row = m_values.begin();
-    while ( row != m_values.end() )
+    std::vector<Csv::Row>::iterator row = m_table.begin();
+    while ( row != m_table.end() )
     {
         Csv::Row::iterator c = row->begin();
         ofs << *(c++); while ( c != row->end() ) ofs << ", " << *(c++);
@@ -231,7 +258,7 @@ const bool Csv::write( const std::string& filename )
 
     ofs.close();
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -246,10 +273,10 @@ const bool Csv::CheckFileExtension( const std::string& filename )
     const kvs::File file( filename );
     if ( file.extension() == "csv" )
     {
-        return( true );
+        return true;
     }
 
-    return( false );
+    return false;
 }
 
 /*===========================================================================*/
@@ -265,12 +292,12 @@ const bool Csv::CheckFileFormat( const std::string& filename )
     if ( !ifs.is_open() )
     {
         kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return( false );
+        return false;
     }
 
     ifs.close();
 
-    return( true );
+    return true;
 }
 
 } // end of namespace kvs
