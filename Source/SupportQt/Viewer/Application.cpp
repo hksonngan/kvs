@@ -45,11 +45,6 @@ Application::Application( int& argc, char** argv ):
 #endif
 
     m_app = new QApplication( argc, argv );
-    if ( !m_app )
-    {
-        kvsMessageError("Cannot create a Qt application.");
-        return;
-    }
 }
 
 /*===========================================================================*/

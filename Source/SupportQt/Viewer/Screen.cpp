@@ -19,6 +19,8 @@
 #include <kvs/ResizeEvent>
 #include <kvs/MouseButton>
 #include <kvs/Key>
+#include <kvs/Camera>
+#include <kvs/ObjectManager>
 #include <kvs/qt/Qt>
 
 
