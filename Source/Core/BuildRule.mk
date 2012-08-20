@@ -176,6 +176,7 @@ $(OUTDIR)/./Utility/String.o \
 $(OUTDIR)/./Utility/SystemInformation.o \
 $(OUTDIR)/./Utility/Time.o \
 $(OUTDIR)/./Utility/Tokenizer.o \
+$(OUTDIR)/./Utility/Type.o \
 $(OUTDIR)/./Utility/Value.o \
 $(OUTDIR)/./Utility/ValueArray.o \
 $(OUTDIR)/./Visualization/Data/HydrogenVolumeData.o \

@@ -15,6 +15,8 @@
 #include "StochasticUniformGridEngine.h"
 #include <kvs/TransferFunction>
 #include <kvs/CellByCellParticleGenerator>
+#include <kvs/Type>
+#include <kvs/Exception>
 #include <cfloat>
 #if defined ( KVS_GLEW_STOCHASTIC_TETRAHEDRA_ENGINE__EMBEDDED_SHADER )
 #include "StochasticRenderingEngine/Shader.h"
@@ -111,6 +113,17 @@ kvs::ValueArray<float> Make( const kvs::TransferFunction& tf )
     // a( sf, sb, d ) = 1 - exp( - d / ( sb - sf ) * ( A( sf ) - A( sb ) ) )
     // c( sf, sb, d ) = d / ( sb - sf ) * ( C( sb ) - C( sf ) )
     return table2d;
+}
+
+GLenum ToGLType( kvs::Type::TypeID type )
+{
+    switch ( type )
+    {
+    case kvs::Type::TypeUInt8:  return GL_UNSIGNED_BYTE;
+    case kvs::Type::TypeReal32: return GL_FLOAT;
+    default: break;
+    }
+    KVS_THROW( kvs::NotSupportedException, "Not supported type" );
 }
 
 }
@@ -325,7 +338,7 @@ void StochasticUniformGridEngine::initialize_shader()
         ( int )res.z(), 
         0, 
         GL_RED, 
-        GL_UNSIGNED_BYTE, 
+        ::ToGLType( m_ref_volume->values().typeID() ), 
         m_ref_volume->values().data() );
     glBindTexture( GL_TEXTURE_3D, 0 );
 

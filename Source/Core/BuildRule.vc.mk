@@ -176,6 +176,7 @@ $(OUTDIR)\.\Utility\String.obj \
 $(OUTDIR)\.\Utility\SystemInformation.obj \
 $(OUTDIR)\.\Utility\Time.obj \
 $(OUTDIR)\.\Utility\Tokenizer.obj \
+$(OUTDIR)\.\Utility\Type.obj \
 $(OUTDIR)\.\Utility\Value.obj \
 $(OUTDIR)\.\Utility\ValueArray.obj \
 $(OUTDIR)\.\Visualization\Data\HydrogenVolumeData.obj \

@@ -26,8 +26,9 @@
     KVS_VERSION_NUMBER_TO_STRING( KVS_VERSION_MINOR ) "." \
     KVS_VERSION_NUMBER_TO_STRING( KVS_VERSION_PATCH )
 
+#if KVS_ENABLE_DEPRECATED
 #include <cstdio>
-
+#endif
 
 namespace kvs
 {
@@ -41,9 +42,9 @@ public:
  *  @return version number
  */
 /*==========================================================================*/
-    static int Number()
+    static unsigned int Number()
     {
-        const size_t version_number =
+        const unsigned int version_number =
             100 * KVS_VERSION_MAJOR +
             10  * KVS_VERSION_MINOR +
             1   * KVS_VERSION_PATCH;
@@ -57,7 +58,7 @@ public:
  *  @return major version number
  */
 /*==========================================================================*/
-    static int MajorNumber()
+    static unsigned int MajorNumber()
     {
         return KVS_VERSION_MAJOR;
     }
@@ -68,7 +69,7 @@ public:
  *  @return minor version number
  */
 /*==========================================================================*/
-    static int MinorNumber()
+    static unsigned int MinorNumber()
     {
         return KVS_VERSION_MINOR;
     }
@@ -79,7 +80,7 @@ public:
  *  @return patch version number
  */
 /*==========================================================================*/
-    static int PatchNumber()
+    static unsigned int PatchNumber()
     {
         return KVS_VERSION_PATCH;
     }
