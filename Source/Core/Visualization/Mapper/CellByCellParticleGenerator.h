@@ -29,76 +29,6 @@ namespace detail
 {
 
 template <typename T>
-inline kvs::Matrix44<T> PerspectiveMatrix( T fov_y, T aspect, T front, T back )
-{
-    const T rad  = kvs::Math::Deg2Rad( fov_y / 2 );
-    const T sinA = static_cast<T>( std::sin( rad ) );
-    const T cosA = static_cast<T>( std::cos( rad ) );
-
-    KVS_ASSERT( !( kvs::Math::IsZero( sinA ) ) );
-    KVS_ASSERT( !( kvs::Math::IsZero( aspect ) ) );
-    KVS_ASSERT( !( kvs::Math::IsZero( back -front ) ) );
-
-    const T cotA = cosA / sinA;
-    const T elements[16] =
-    {
-        cotA / aspect,    0,                                    0,  0,
-                    0, cotA,                                    0,  0,
-                    0,    0,     -( back + front ) / ( back - front ), -1,
-                    0,    0, -( back * front * 2 ) / ( back - front ),  0
-    };
-
-    return( kvs::Matrix44<T>( elements ) );
-}
-
-template <typename T>
-inline kvs::Matrix44<T> OrthogonalMatrix( T left, T right, T bottom, T top, T front, T back )
-{
-    const T width  = right - left;
-    const T height = top - bottom;
-    const T depth  = back - front;
-
-    KVS_ASSERT( !( kvs::Math::IsZero( width  ) ) );
-    KVS_ASSERT( !( kvs::Math::IsZero( height ) ) );
-    KVS_ASSERT( !( kvs::Math::IsZero( depth  ) ) );
-
-    const T elements[ 16 ] =
-    {
-                        2 / width,                          0,                       0, 0,
-                                0,                 2 / height,                       0, 0,
-                                0,                          0,              -2 / depth, 0,
-        -( right + left ) / width, -( top + bottom ) / height, -( back + front ) / depth, 0
-    };
-
-    return( kvs::Matrix44<T>( elements ) );
-}
-
-template <typename T>
-inline kvs::Matrix44<T> LookAtMatrix(
-    const kvs::Vector3<T>& eye,
-    const kvs::Vector3<T>& up,
-    const kvs::Vector3<T>& target )
-{
-    kvs::Vector3<T> f = target - eye;
-    kvs::Vector3<T> s = f.cross( up.normalizedVector() );
-    kvs::Vector3<T> u = s.cross( f );
-
-    f = f.normalizedVector();
-    s = s.normalizedVector();
-    u = u.normalizedVector();
-
-    const T elements[ 16 ] =
-    {
-         s.x(),  s.y(),  s.z(), -eye.x(),
-         u.x(),  u.y(),  u.z(), -eye.y(),
-        -f.x(), -f.y(), -f.z(), -eye.z(),
-             0,      0,      0,        1
-    };
-
-    return( kvs::Matrix44<T>( elements ) );
-}
-
-template <typename T>
 inline kvs::Matrix44<T> ScalingMatrix( T x, T y, T z )
 {
     const T elements[ 16 ] =
@@ -136,34 +66,22 @@ inline void GetViewport( const kvs::Camera* camera, GLint (*viewport)[4] )
 
 inline void GetProjectionMatrix( const kvs::Camera* camera, GLdouble (*projection)[16] )
 {
-    const bool  perspective = camera->isPerspective();
-    const float fov = camera->fieldOfView();
-    const float aspect = static_cast<float>( camera->windowWidth() ) / camera->windowHeight();
-    const float front = camera->front();
-    const float back = camera->back();
-    const float left = camera->left();
-    const float right = camera->right();
-    const float bottom = camera->bottom();
-    const float top = camera->top();
-    const kvs::Matrix44f P = perspective ?
-        PerspectiveMatrix<float>( fov, aspect, front, back ) :
-        OrthogonalMatrix<float>( left, right, bottom, top, front, back );
-
+    const kvs::Matrix44f P = camera->projectionMatrix();
     (*projection)[ 0] = P[0][0];
-    (*projection)[ 1] = P[0][1];
-    (*projection)[ 2] = P[0][2];
-    (*projection)[ 3] = P[0][3];
-    (*projection)[ 4] = P[1][0];
+    (*projection)[ 1] = P[1][0];
+    (*projection)[ 2] = P[2][0];
+    (*projection)[ 3] = P[3][0];
+    (*projection)[ 4] = P[0][1];
     (*projection)[ 5] = P[1][1];
-    (*projection)[ 6] = P[1][2];
-    (*projection)[ 7] = P[1][3];
-    (*projection)[ 8] = P[2][0];
-    (*projection)[ 9] = P[2][1];
+    (*projection)[ 6] = P[2][1];
+    (*projection)[ 7] = P[3][1];
+    (*projection)[ 8] = P[0][2];
+    (*projection)[ 9] = P[1][2];
     (*projection)[10] = P[2][2];
-    (*projection)[11] = P[2][3];
-    (*projection)[12] = P[3][0];
-    (*projection)[13] = P[3][1];
-    (*projection)[14] = P[3][2];
+    (*projection)[11] = P[3][2];
+    (*projection)[12] = P[0][3];
+    (*projection)[13] = P[1][3];
+    (*projection)[14] = P[2][3];
     (*projection)[15] = P[3][3];
 }
 
@@ -316,7 +234,6 @@ inline const float CalculateSubpixelLength(
     return( subpixel_length );
 }
 
-
 } // end of namespace
 
 
@@ -337,7 +254,6 @@ inline const float GetRandomNumber( void )
 //    return( t24 * static_cast<float>( w >> 8 ) );
 }
 
-
 inline const kvs::Vector3f RandomSamplingInCube( const kvs::Vector3f& v )
 {
 //    float x = GetRandomNumber(); while ( kvs::Math::Equal( x, 1.0f ) ) x = GetRandomNumber();
@@ -350,6 +266,21 @@ inline const kvs::Vector3f RandomSamplingInCube( const kvs::Vector3f& v )
     return( v + d );
 }
 
+inline float CalculateObjectDepth( 
+    const kvs::Camera& camera, 
+    const kvs::ObjectBase& object )
+{
+    // Calculate a transform matrix.
+    GLdouble modelview[16];  kvs::detail::GetModelviewMatrix( &camera, &object, &modelview );
+    GLdouble projection[16]; kvs::detail::GetProjectionMatrix( &camera, &projection );
+    GLint viewport[4];       kvs::detail::GetViewport( &camera, &viewport );
+
+    // Calculate a depth of the center of gravity of the object.
+    const float object_depth = kvs::detail::CalculateObjectDepth(
+            &object, modelview, projection, viewport );
+
+    return object_depth;
+}
 
 inline float CalculateSubpixelLength(
     const float subpixel_level, 

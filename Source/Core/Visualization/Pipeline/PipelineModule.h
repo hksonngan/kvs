@@ -176,8 +176,6 @@ private:
 
 private:
 
-    void enable_auto_delete( void );
-
     void disable_auto_delete( void );
 
     void delete_module( void );

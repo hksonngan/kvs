@@ -79,6 +79,7 @@ void Camera::setProjectionType( const Camera::ProjectionType projection_type )
 
 void Camera::setView( const kvs::Vector3f& position, const kvs::Vector3f& look_at, const kvs::Vector3f& up )
 {
+    m_transform_center = look_at;
     this->setXform( ::MakeCameraXform( position, look_at, up ) );
 }
 

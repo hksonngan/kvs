@@ -310,7 +310,12 @@ void Light::resetXform( void )
 /*==========================================================================*/
 void Light::rotate( const kvs::Matrix33f& rotation )
 {
-    kvs::XformControl::rotate( rotation );
+    //kvs::XformControl::rotate( rotation );
+    const kvs::Vector3f t = this->xform().translation();
+    const kvs::Xform x = kvs::Xform::Translation( t )
+                       * kvs::Xform::Rotation( rotation )
+                       * kvs::Xform::Translation( -t );
+    this->multiplyXform( x );
      m_position = this->xform().transform( m_init_position );
 }
 
@@ -322,7 +327,8 @@ void Light::rotate( const kvs::Matrix33f& rotation )
 /*==========================================================================*/
 void Light::translate( const kvs::Vector3f& translation )
 {
-    kvs::XformControl::translate( translation );
+    //kvs::XformControl::translate( translation );
+    this->multiplyXform( kvs::Xform::Translation( translation ) );
     m_position = this->xform().transform( m_init_position );
 }
 
@@ -334,7 +340,8 @@ void Light::translate( const kvs::Vector3f& translation )
 /*==========================================================================*/
 void Light::scale( const kvs::Vector3f& scaling )
 {
-    kvs::XformControl::scale( scaling );
+    //kvs::XformControl::scale( scaling );
+    this->multiplyXform( kvs::Xform::Scaling( scaling ) );
     m_position = this->xform().transform( m_init_position );
 }
 

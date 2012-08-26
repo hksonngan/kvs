@@ -123,11 +123,6 @@ const bool PipelineModule::unique( void ) const
     return( m_counter ? m_counter->value() == 1 : true );
 }
 
-void PipelineModule::enable_auto_delete( void )
-{
-    m_auto_delete = true;
-}
-
 void PipelineModule::disable_auto_delete( void )
 {
     m_auto_delete = false;

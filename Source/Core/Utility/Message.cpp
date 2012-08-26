@@ -20,7 +20,7 @@ namespace
 
 const size_t MaxMessageSize = 512;
 
-const char* tag[kvs::Message::NumberOfMessageTypes] =
+const char* tag[ kvs::Message::NumberOfMessageTypes ] =
 {
     "KVS ERROR",
     "KVS WARNING",
@@ -28,7 +28,7 @@ const char* tag[kvs::Message::NumberOfMessageTypes] =
     "KVS ASSERT"
 };
 
-const char* color[kvs::Message::NumberOfMessageTypes] =
+const char* color[ kvs::Message::NumberOfMessageTypes ] =
 {
     KVS_MESSAGE_RED,
     KVS_MESSAGE_PURPLE,
@@ -77,13 +77,13 @@ void Message::operator ()( const char* msg, ... )
 
         va_list args;
         va_start( args, msg );
-        vsprintf( buffer, msg, args );
+        vsnprintf( buffer, sizeof( buffer ), msg, args );
         va_end( args );
         buffer[ ::MaxMessageSize - 1 ] = '\0';
 
         // Output message tag.
-        std::cerr << KVS_MESSAGE_SET_COLOR( ::color[m_type] );
-        std::cerr << ::tag[m_type];
+        std::cerr << KVS_MESSAGE_SET_COLOR( ::color[ m_type ] );
+        std::cerr << ::tag[ m_type ];
         std::cerr << KVS_MESSAGE_RESET_COLOR;
 
         // Output message.
