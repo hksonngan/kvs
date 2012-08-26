@@ -98,6 +98,7 @@ public:
     const bool isPerspective( void ) const;
 
     const ProjectionType projectionType( void ) const;
+
 //deprecated
     const kvs::Vector3f position( void ) const;
 //deprecated

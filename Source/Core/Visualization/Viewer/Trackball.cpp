@@ -271,17 +271,13 @@ void Trackball::scale(
 void Trackball::translate( const kvs::Vector2i& start, const kvs::Vector2i& end )
 {
     kvs::Vector2i diff = end - start;
-    kvs::Vector2f trans;
+    kvs::Vector3f trans;
     trans.x() = (float)diff.x() * 10.0f / m_window_width;
     trans.y() = -(float)diff.y() * 10.0f / m_window_height;
+    trans.z() = 0;
 
-    kvs::Vector3f vec1  = m_ref_camera->upVector();
-    kvs::Vector3f vec2  = vec1.cross( m_ref_camera->position() - m_ref_camera->lookAt() );
-
-    vec1 = vec1.normalizedVector();
-    vec2 = vec2.normalizedVector();
-
-    m_translation = vec1 * trans.y() + vec2 * trans.x();
+    // Transform camera to world.
+    m_translation = m_ref_camera->xform().transformNormal( trans );
 }
 
 /*==========================================================================*/
@@ -302,19 +298,14 @@ void Trackball::rotate( const kvs::Vector2i& start, const kvs::Vector2i& end )
     kvs::Vector2f n_old( this->get_norm_position( start ) );
     kvs::Vector2f n_new( this->get_norm_position( end   ) );
 
-    kvs::Vector3f p1( n_old.x(), n_old.y(), this->depth_on_sphere( n_old ) );
-    kvs::Vector3f p2( n_new.x(), n_new.y(), this->depth_on_sphere( n_new ) );
+    kvs::Vector3f p1( n_old, this->depth_on_sphere( n_old ) );
+    kvs::Vector3f p2( n_new, this->depth_on_sphere( n_new ) );
 
-    // Calculate view.
-    const kvs::Vector3f init_vec( 0.0, 0.0, 1.0 );
-    const kvs::Vector3f from_vec( m_ref_camera->position() - m_ref_camera->lookAt() );
-    const kvs::Quaternion<float> rot =
-        kvs::Quaternion<float>::rotationQuaternion( init_vec, from_vec );
+    // Transform to world coordinate.
+    kvs::Vector3f p1w = m_ref_camera->xform().transformNormal( p1 );
+    kvs::Vector3f p2w = m_ref_camera->xform().transformNormal( p2 );
 
-    p1 = kvs::Quaternion<float>::rotate( p1, rot );
-    p2 = kvs::Quaternion<float>::rotate( p2, rot );
-
-    m_rotation = kvs::Quaternion<float>::rotationQuaternion( p1, p2 );
+    m_rotation = kvs::Quaternion<float>::rotationQuaternion( p1w, p2w );
 }
 
 /*==========================================================================*/
