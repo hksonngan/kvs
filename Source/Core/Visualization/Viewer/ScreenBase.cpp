@@ -850,14 +850,17 @@ void ScreenBase::updateXform( kvs::Camera* camera )
     switch( m_mouse->mode() )
     {
     case kvs::Mouse::Rotation:
-        camera->rotate( m_mouse->rotation().toMatrix() );
+        camera->rotate( m_mouse->rotation().toMatrix().transpose() );
         break;
     case kvs::Mouse::Translation:
-        camera->translate( m_mouse->translation() );
+        camera->translate( -m_mouse->translation() );
         break;
     case kvs::Mouse::Scaling:
-        camera->scale( m_mouse->scaling() );
+    {
+        const kvs::Vector3f s = m_mouse->scaling();
+        camera->scale( kvs::Vector3f( 1 / s.x(), 1 / s.y(), 1 / s.z() ) );
         break;
+    }
     default:
         break;
     }

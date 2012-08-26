@@ -202,7 +202,7 @@ public:
 
 public:
 
-    kvs::Matrix33<T> toMatrix( void ) const;
+    const kvs::Matrix33<T> toMatrix( void ) const;
 
     void toMatrix( kvs::Matrix33<T>& m ) const;
 
@@ -762,7 +762,7 @@ Quaternion<T>& Quaternion<T>::operator *= ( const Quaternion<T>& q )
 }
 
 template<typename T>
-kvs::Matrix33<T> Quaternion<T>::toMatrix( void ) const
+const kvs::Matrix33<T> Quaternion<T>::toMatrix( void ) const
 {
     T length_2 = static_cast<T>( this->length2() );
     T s = ( length_2 > T(0) ) ? T(2) / length_2 : T(0);
