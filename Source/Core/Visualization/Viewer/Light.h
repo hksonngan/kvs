@@ -38,9 +38,8 @@ private:
 #if KVS_ENABLE_DEPRECATED
 protected:
 #endif
+    kvs::Vector3f m_transform_center;
     unsigned int  m_id;            ///< light ID
-    kvs::Vector3f m_init_position; ///< initial light position
-    kvs::Vector3f m_position;      ///< light position
     kvs::Vector3f m_diffuse;       ///< diffuse color
     kvs::Vector3f m_ambient;       ///< ambient color
     kvs::Vector3f m_specular;      ///< specular color
@@ -81,7 +80,7 @@ public:
 
 public:
 
-    const kvs::Vector3f& position( void ) const;
+    const kvs::Vector3f position( void ) const;
 
     const kvs::Vector3f& diffuse( void ) const;
 

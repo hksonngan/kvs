@@ -12,8 +12,7 @@
  */
 /****************************************************************************/
 #include "Camera.h"
-#include <cstring>
-#include <kvs/DebugNew>
+#include <utility>
 #include <kvs/OpenGL>
 #include <kvs/ColorImage>
 #include <kvs/Matrix44>
@@ -22,12 +21,13 @@
 #include <kvs/PerspectiveMatrix44>
 #include <kvs/OrthogonalMatrix44>
 
+
 namespace
 {
 
 const kvs::Xform MakeCameraXform( const kvs::Vector3f& eye, 
-                              const kvs::Vector3f& center, 
-                              const kvs::Vector3f& up )
+                                  const kvs::Vector3f& center, 
+                                  const kvs::Vector3f& up )
 {
     const kvs::Vector3f y = up.normalizedVector();
     const kvs::Vector3f z = ( eye - center ).normalizedVector();
@@ -439,34 +439,14 @@ kvs::ColorImage Camera::snapshot( void )
     const int height = viewport[3];
 //    const int size   = height * ( ( ( ( width * 3 ) + 3 ) >> 2 ) << 2 );
     const int size   = height * width * 3;
-    unsigned char* data = new unsigned char [ size ];
-    memset( data, 0, size );
+    kvs::ValueArray<kvs::UInt8> buffer( size );
 
     glPixelStorei( GL_PACK_ALIGNMENT, 1 );
-    glReadPixels( 0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, data );
+    glReadPixels( 0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, buffer.data() );
 
-    // Flip image data.
-    unsigned char* src;
-    unsigned char* dst;
-    unsigned char  tmp;
-    const size_t stride   = width * 3;
-    const size_t end_line = height / 2;
-    for( size_t i = 0; i < end_line; i++ )
-    {
-        src = data + ( i * stride );
-        dst = data + ( ( height - i - 1 ) * stride );
-        for( size_t j = 0; j < stride; j++ )
-        {
-            tmp  = *src; *src = *dst; *dst = tmp;
-            src++; dst++;
-        }
-    }
-
-    kvs::ColorImage ret( width, height, data );
-
-    delete [] data;
-
-    return( ret );
+    kvs::ColorImage ret( width, height, buffer );
+    ret.flip();
+    return ret;
 }
 
 const kvs::Matrix44f Camera::projectionMatrix( void ) const

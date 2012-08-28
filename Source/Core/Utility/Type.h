@@ -18,8 +18,9 @@
 #include <kvs/Compiler>
 #include <kvs/Platform>
 
-
+#if KVS_ENABLE_DEPRECATED
 #include <string>
+#endif
 
 namespace kvs
 {

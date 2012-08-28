@@ -250,7 +250,7 @@ size_t BitArray::count() const
     }
     ret += ::CountBits( m_values[ index ] >> this->paddingBit() );
     return ret;
-};
+}
 
 // return the "bit" position value
 bool BitArray::test( size_t index ) const

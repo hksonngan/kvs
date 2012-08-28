@@ -66,7 +66,7 @@ namespace kvs
 /*==========================================================================*/
 RendererManager::RendererManager()
 {
-    m_renderer_id = 1;
+    m_renderer_id = 0;
 }
 
 /*==========================================================================*/
@@ -208,8 +208,9 @@ void RendererManager::change( const std::string& renderer_name, kvs::RendererBas
 /*==========================================================================*/
 int RendererManager::insert( const kvs::SharedPointer<kvs::RendererBase>& renderer )
 {
+    ++m_renderer_id;
     m_renderer_list.push_back( std::make_pair( m_renderer_id, renderer ) );
-    return m_renderer_id++;
+    return m_renderer_id;
 }
 
 /*==========================================================================*/

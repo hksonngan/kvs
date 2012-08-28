@@ -49,7 +49,9 @@ Light::~Light( void )
 void Light::initialize( void )
 {
     m_id = GL_LIGHT0;
-    this->setPosition( 0.0, 0.0, 12.0 );
+    m_transform_center.set( 0, 0, 0 );
+    this->setXform( kvs::Xform::Translation( kvs::Vector3f( 0, 0, 12 ) ) );
+    this->saveXform();
     m_diffuse.set( 1.0, 1.0, 1.0 );
     m_ambient.set( 0.0, 0.0, 0.0 );
     m_specular.set( 1.0, 1.0, 1.0 );
@@ -87,8 +89,7 @@ void Light::setPosition( const float x, const float y, const float z )
 /*==========================================================================*/
 void Light::setPosition( const kvs::Vector3f& position )
 {
-    m_init_position.set( position.x(), position.y(), position.z() );
-    m_position.set( position.x(), position.y(), position.z() );
+    this->setXform( kvs::Xform::Translation( position ) );
 }
 
 /*==========================================================================*/
@@ -200,9 +201,9 @@ void Light::setSpecular( const kvs::RGBAColor& color )
  *  Get the light position.
  */
 /*==========================================================================*/
-const kvs::Vector3f& Light::position( void ) const
+const kvs::Vector3f Light::position( void ) const
 {
-    return( m_position );
+    return( this->xform().translation() );
 }
 
 /*==========================================================================*/
@@ -299,7 +300,7 @@ const bool Light::isEnabled( void ) const
 void Light::resetXform( void )
 {
     kvs::XformControl::resetXform();
-    m_position = m_init_position;
+    m_transform_center.set( 0, 0, 0 );
 }
 
 /*==========================================================================*/
@@ -310,13 +311,11 @@ void Light::resetXform( void )
 /*==========================================================================*/
 void Light::rotate( const kvs::Matrix33f& rotation )
 {
-    //kvs::XformControl::rotate( rotation );
-    const kvs::Vector3f t = this->xform().translation();
+    const kvs::Vector3f t = m_transform_center;
     const kvs::Xform x = kvs::Xform::Translation( t )
                        * kvs::Xform::Rotation( rotation )
                        * kvs::Xform::Translation( -t );
     this->multiplyXform( x );
-     m_position = this->xform().transform( m_init_position );
 }
 
 /*==========================================================================*/
@@ -327,9 +326,8 @@ void Light::rotate( const kvs::Matrix33f& rotation )
 /*==========================================================================*/
 void Light::translate( const kvs::Vector3f& translation )
 {
-    //kvs::XformControl::translate( translation );
     this->multiplyXform( kvs::Xform::Translation( translation ) );
-    m_position = this->xform().transform( m_init_position );
+    m_transform_center += translation;
 }
 
 /*==========================================================================*/
@@ -340,9 +338,7 @@ void Light::translate( const kvs::Vector3f& translation )
 /*==========================================================================*/
 void Light::scale( const kvs::Vector3f& scaling )
 {
-    //kvs::XformControl::scale( scaling );
     this->multiplyXform( kvs::Xform::Scaling( scaling ) );
-    m_position = this->xform().transform( m_init_position );
 }
 
 /*==========================================================================*/
