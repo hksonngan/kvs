@@ -29,6 +29,7 @@
 #include <kvs/String>
 #include <kvs/AnyValue>
 #endif
+#include "StaticAssert.h"
 
 
 namespace kvs
@@ -289,7 +290,6 @@ public:
 
 } // detail
 
-#define KVS_STATIC_ASSERT( expr, mes ) typedef char KVS_STATIC_ASSERTION_FAILURE[(expr) ? 1 : -1]
 
 /*==========================================================================*/
 /**
@@ -549,7 +549,6 @@ template <> struct AnyValueArray::is_supported<std::string> : kvs::temporal::tru
 #endif
 } // end of namespace kvs
 
-#undef KVS_STATIC_ASSERT
 
 namespace std
 {
