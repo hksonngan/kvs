@@ -77,7 +77,12 @@ void Camera::setProjectionType( const Camera::ProjectionType projection_type )
     m_projection_type = projection_type;
 }
 
-void Camera::setView( const kvs::Vector3f& position, const kvs::Vector3f& look_at, const kvs::Vector3f& up )
+void Camera::setPosition( const kvs::Vector3f& position, const kvs::Vector3f& look_at )
+{
+    this->setPosition( position, look_at, this->upVector() );
+}
+
+void Camera::setPosition( const kvs::Vector3f& position, const kvs::Vector3f& look_at, const kvs::Vector3f& up )
 {
     m_transform_center = look_at;
     this->setXform( ::MakeCameraXform( position, look_at, up ) );
@@ -91,7 +96,7 @@ void Camera::setView( const kvs::Vector3f& position, const kvs::Vector3f& look_a
 /*==========================================================================*/
 void Camera::setPosition( const kvs::Vector3f& position )
 {
-    this->setXform( ::MakeCameraXform( position, this->lookAt(), this->upVector() ) );
+    this->setPosition( position, this->lookAt(), this->upVector() );
 }
 
 /*==========================================================================*/
@@ -102,7 +107,7 @@ void Camera::setPosition( const kvs::Vector3f& position )
 /*==========================================================================*/
 void Camera::setUpVector( const kvs::Vector3f& up_vector )
 {
-    this->setXform( ::MakeCameraXform( this->position(), this->lookAt(), up_vector ) );
+    this->setPosition( this->position(), this->lookAt(), up_vector );
 }
 
 /*==========================================================================*/
@@ -113,8 +118,7 @@ void Camera::setUpVector( const kvs::Vector3f& up_vector )
 /*==========================================================================*/
 void Camera::setLookAt( const kvs::Vector3f& look_at )
 {
-    m_transform_center = look_at;
-    this->setXform( ::MakeCameraXform( this->position(), look_at, this->upVector() ) );
+    this->setPosition( this->position(), look_at, this->upVector() );
 }
 
 /*==========================================================================*/

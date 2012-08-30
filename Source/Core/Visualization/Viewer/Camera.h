@@ -69,7 +69,9 @@ public:
 
     void setProjectionType( const ProjectionType projection_type );
 
-    void setView( const kvs::Vector3f& position, const kvs::Vector3f& look_at, const kvs::Vector3f& up );
+    void setPosition( const kvs::Vector3f& position, const kvs::Vector3f& look_at );
+
+    void setPosition( const kvs::Vector3f& position, const kvs::Vector3f& look_at, const kvs::Vector3f& up );
 //deprecated
     void setPosition( const kvs::Vector3f& position );
 //deprecated
