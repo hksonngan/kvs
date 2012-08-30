@@ -391,7 +391,7 @@ void Camera::initialize( void )
     const kvs::Vector3f init_look_at( 0, 0, 0 );
     const kvs::Vector3f init_up( 0, 1, 0 );
 
-    this->setView( init_pos, init_look_at, init_up );
+    this->setPosition( init_pos, init_look_at, init_up );
     this->saveXform();
     m_transform_center = init_look_at;
 
