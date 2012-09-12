@@ -102,6 +102,7 @@ bool GSIMesh::read( const std::string& filename, const kvs::gis::Area& area )
 
     if ( extension == "TEM" || extension == "tem" ) m_type = Mesh1KM;
     else if ( extension == "SEM" || extension == "sem" ) m_type = Mesh250M;
+    else if ( extension == "MEM" || extension == "mem" ) m_type = Mesh50M;
 
     FILE* fp = fopen( filename.c_str(), "r" );
     if ( !fp )
@@ -226,8 +227,9 @@ bool GSIMesh::read_header( FILE* fp )
     size_t size = 0;
     switch( m_type )
     {
-    case Mesh250M: size = 320; break;
     case Mesh1KM: size = 80; break;
+    case Mesh250M: size = 320; break;
+    case Mesh50M: size = 200; break;
     default: break;
     }
 
@@ -313,6 +315,7 @@ bool GSIMesh::read_data( FILE* fp, const kvs::gis::Area& area )
         {
         case Mesh1KM: line = 412; break;
         case Mesh250M: line = 1612; break;
+        case Mesh50M: line = 1012; break;
         default: break;
         }
 

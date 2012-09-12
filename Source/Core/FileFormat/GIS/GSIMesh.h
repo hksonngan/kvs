@@ -11,6 +11,14 @@
  *
  *  $Id$
  */
+/*----------------------------------------------------------------------------
+ *
+ * Format information:
+ * Degital Elevation Model (DEM) data from Geospatial Information Authority
+ * of Japan (http://www.gsi.go.jp/index.html).
+ *     250m mesh: http://www.gsi.go.jp/geoinfo/dmap/dem250m-index.html
+ *      50m mesh: http://www.gsi.go.jp/geoinfo/dmap/dem50m-index.html
+ */
 /*****************************************************************************/
 #ifndef KVS__GIS__GSI_MESH_H_INCLUDE
 #define KVS__GIS__GSI_MESH_H_INCLUDE
@@ -43,7 +51,8 @@ public:
     enum Type
     {
         Mesh1KM,
-        Mesh250M
+        Mesh250M,
+        Mesh50M
     };
 
 private:
