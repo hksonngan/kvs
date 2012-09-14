@@ -37,7 +37,7 @@ Entry::Entry( std::ifstream& ifs )
 
 const bool operator == ( const Entry& lhs, const Entry& rhs )
 {
-    return( lhs.tag() == rhs.tag() );
+    return lhs.tag() == rhs.tag();
 }
 
 std::ostream& operator << ( std::ostream& os, const Entry& entry )
@@ -64,38 +64,38 @@ std::ostream& operator << ( std::ostream& os, const Entry& entry )
         }
     }
 
-    return( os );
+    return os;
 }
 
-kvs::UInt16 Entry::tag( void ) const
+kvs::UInt16 Entry::tag() const
 {
-    return( m_tag );
+    return m_tag;
 }
 
-kvs::UInt16 Entry::type( void ) const
+kvs::UInt16 Entry::type() const
 {
-    return( m_type );
+    return m_type;
 }
 
-kvs::UInt32 Entry::count( void ) const
+kvs::UInt32 Entry::count() const
 {
-    return( m_count );
+    return m_count;
 }
 
-std::string Entry::tagDescription( void ) const
+std::string Entry::tagDescription() const
 {
     static const kvs::tiff::TagDictionary TagDatabase;
-    return( TagDatabase.find( m_tag ).name() );
+    return TagDatabase.find( m_tag ).name();
 }
 
-std::string Entry::typeName( void ) const
+std::string Entry::typeName() const
 {
-    return( kvs::tiff::ValueTypeName[ m_type ] );
+    return kvs::tiff::ValueTypeName[ m_type ];
 }
 
-kvs::AnyValueArray Entry::values( void ) const
+const kvs::AnyValueArray& Entry::values() const
 {
-    return( m_values );
+    return m_values;
 }
 
 bool Entry::read( std::ifstream& ifs )
@@ -103,12 +103,12 @@ bool Entry::read( std::ifstream& ifs )
     // Read a entry.
     unsigned char buffer[12];
     ifs.read( reinterpret_cast<char*>(buffer), 12 );
-    if ( ifs.gcount() != 12 ) return( false );
+    if ( ifs.gcount() != 12 ) return false;
 
     // Separate tag, type and count from the buffer.
-    if ( !memcpy( &m_tag,    buffer + 0, 2 ) ) return( false ); // offset 0, byte 2
-    if ( !memcpy( &m_type,   buffer + 2, 2 ) ) return( false ); // offset 2, byte 2
-    if ( !memcpy( &m_count,  buffer + 4, 4 ) ) return( false ); // offset 4, byte 4
+    if ( !memcpy( &m_tag,    buffer + 0, 2 ) ) return false; // offset 0, byte 2
+    if ( !memcpy( &m_type,   buffer + 2, 2 ) ) return false; // offset 2, byte 2
+    if ( !memcpy( &m_count,  buffer + 4, 4 ) ) return false; // offset 4, byte 4
 
     // Allocate memory for the value array.
     this->allocate_values( m_count, m_type );
@@ -121,22 +121,22 @@ bool Entry::read( std::ifstream& ifs )
         {
             // Separate a value as offset.
             kvs::UInt32 offset;
-            if ( !memcpy( &offset, buffer + 8, 4 ) ) return( false ); // offset 8, byte 4
+            if ( !memcpy( &offset, buffer + 8, 4 ) ) return false; // offset 8, byte 4
 
             // Read values of the entry to m_values.
             ifs.seekg( offset, std::ios::beg );
             ifs.read( reinterpret_cast<char*>( m_values.data() ), byte_size );
-            if ( size_t( ifs.gcount() ) != byte_size ) return( false );
+            if ( size_t( ifs.gcount() ) != byte_size ) return false;
         }
         ifs.seekg( end_of_entry, std::ios::beg );
     }
     else
     {
         // Read values of the entry from the buffer to m_values.
-        if ( !memcpy( m_values.data(), buffer + 8, 4 ) ) return( false ); // offset 8, byte 4
+        if ( !memcpy( m_values.data(), buffer + 8, 4 ) ) return false; // offset 8, byte 4
     }
 
-    return( true );
+    return true;
 }
 
 void* Entry::allocate_values( const size_t nvalues, const size_t value_type )

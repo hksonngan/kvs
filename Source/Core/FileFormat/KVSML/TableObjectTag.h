@@ -45,29 +45,24 @@ protected:
 
 public:
 
-    TableObjectTag( void );
+    TableObjectTag();
 
 public:
 
-    const bool hasNRows( void ) const;
-
-    const size_t nrows( void ) const;
-
-    const bool hasNColumns( void ) const;
-
-    const size_t ncolumns( void ) const;
+    bool hasNRows() const;
+    size_t nrows() const;
+    bool hasNColumns() const;
+    size_t ncolumns() const;
 
 public:
 
     void setNRows( const size_t nrows );
-
     void setNColumns( const size_t ncolumns );
 
 public:
 
-    const bool read( const kvs::XMLNode::SuperClass* parent );
-
-    const bool write( kvs::XMLNode::SuperClass* parent );
+    bool read( const kvs::XMLNode::SuperClass* parent );
+    bool write( kvs::XMLNode::SuperClass* parent );
 };
 
 } // end of namesapce kvsml

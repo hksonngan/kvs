@@ -35,21 +35,18 @@ public:
 
 protected:
 
-    EntryList   m_entry_list; ///< entry list
-    kvs::UInt32 m_offset;     ///< bytes offset
+    EntryList m_entry_list; ///< entry list
+    kvs::UInt32 m_offset; ///< bytes offset
 
 public:
 
-    ImageFileDirectory( void );
-
+    ImageFileDirectory();
     ImageFileDirectory( std::ifstream& ifs );
 
 public:
 
-    const std::list<tiff::Entry>& entryList( void ) const;
-
-    kvs::UInt32 offset( void ) const;
-
+    const std::list<tiff::Entry>& entryList() const;
+    kvs::UInt32 offset() const;
     bool read( std::ifstream& ifs );
 };
 

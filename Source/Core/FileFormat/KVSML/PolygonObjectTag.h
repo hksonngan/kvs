@@ -48,37 +48,29 @@ protected:
 
 public:
 
-    PolygonObjectTag( void );
+    PolygonObjectTag();
 
-    virtual ~PolygonObjectTag( void );
+    virtual ~PolygonObjectTag();
 
 public:
 
-    const bool hasPolygonType( void ) const;
-
-    const std::string& polygonType( void ) const;
-
-    const bool hasColorType( void ) const;
-
-    const std::string& colorType( void ) const;
-
-    const bool hasNormalType( void ) const;
-
-    const std::string& normalType( void ) const;
+    bool hasPolygonType() const;
+    const std::string& polygonType() const;
+    bool hasColorType() const;
+    const std::string& colorType() const;
+    bool hasNormalType() const;
+    const std::string& normalType() const;
 
 public:
 
     void setPolygonType( const std::string& line_type );
-
     void setColorType( const std::string& color_type );
-
     void setNormalType( const std::string& normal_type );
 
 public:
 
-    const bool read( const kvs::XMLNode::SuperClass* parent );
-
-    const bool write( kvs::XMLNode::SuperClass* parent );
+    bool read( const kvs::XMLNode::SuperClass* parent );
+    bool write( kvs::XMLNode::SuperClass* parent );
 };
 
 } // end of namespace kvsml

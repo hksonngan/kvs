@@ -48,43 +48,31 @@ protected:
 
 public:
 
-    TransferFunctionTag( void );
-
-    virtual ~TransferFunctionTag( void );
+    TransferFunctionTag();
+    virtual ~TransferFunctionTag();
 
 public:
 
-    const bool hasFile( void ) const;
-
-    const std::string& file( void ) const;
-
-    const bool hasResolution( void ) const;
-
-    const size_t resolution( void ) const;
-
-    const bool hasMinValue( void ) const;
-
-    const float minValue( void ) const;
-
-    const bool hasMaxValue( void ) const;
-
-    const float maxValue( void ) const;
+    bool hasFile() const;
+    const std::string& file() const;
+    bool hasResolution() const;
+    size_t resolution() const;
+    bool hasMinValue() const;
+    float minValue() const;
+    bool hasMaxValue() const;
+    float maxValue() const;
 
 public:
 
     void setFile( const std::string& file );
-
     void setResolution( const size_t resolution );
-
     void setMinValue( const float min_value );
-
     void setMaxValue( const float max_value );
 
 public:
 
-    const bool read( const kvs::XMLNode::SuperClass* parent );
-
-    const bool write( kvs::XMLNode::SuperClass* parent );
+    bool read( const kvs::XMLNode::SuperClass* parent );
+    bool write( kvs::XMLNode::SuperClass* parent );
 };
 
 } // end of namespace kvsml

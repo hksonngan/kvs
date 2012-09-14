@@ -38,15 +38,12 @@ public:
 public:
 
     XMLElement( const std::string& value );
-
-    virtual ~XMLElement( void );
+    virtual ~XMLElement();
 
 public:
 
     TiXmlNode* insert( const TiXmlNode& node );
-
     void setAttribute( const std::string& name, const std::string& value );
-
     void setAttribute( const std::string& name, int value );
 
 public:

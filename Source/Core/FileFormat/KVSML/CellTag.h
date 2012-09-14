@@ -42,15 +42,13 @@ protected:
 
 public:
 
-    CellTag( void );
-
-    virtual ~CellTag( void );
+    CellTag();
+    virtual ~CellTag();
 
 public:
 
-    const bool hasNCells( void ) const;
-
-    const size_t ncells( void ) const;
+    bool hasNCells() const;
+    size_t ncells() const;
 
 public:
 
@@ -58,9 +56,8 @@ public:
 
 public:
 
-    const bool read( const kvs::XMLNode::SuperClass* parent );
-
-    const bool write( kvs::XMLNode::SuperClass* parent );
+    bool read( const kvs::XMLNode::SuperClass* parent );
+    bool write( kvs::XMLNode::SuperClass* parent );
 };
 
 } // end of namespace kvsml

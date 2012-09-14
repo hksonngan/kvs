@@ -44,15 +44,13 @@ protected:
 
 public:
 
-    KVSMLTag( void );
-
-    virtual ~KVSMLTag( void );
+    KVSMLTag();
+    virtual ~KVSMLTag();
 
 public:
 
-    const bool hasVersion( void ) const;
-
-    const std::string& version( void ) const;
+    bool hasVersion() const;
+    const std::string& version() const;
 
 public:
 
@@ -60,15 +58,13 @@ public:
 
 public:
 
-    const bool read( const kvs::XMLDocument* document );
-
-    const bool write( kvs::XMLDocument* document );
+    bool read( const kvs::XMLDocument* document );
+    bool write( kvs::XMLDocument* document );
 
 private:
 
-    const bool read( const kvs::XMLNode::SuperClass* parent );
-
-    const bool write( kvs::XMLNode::SuperClass* parent );
+    bool read( const kvs::XMLNode::SuperClass* parent );
+    bool write( kvs::XMLNode::SuperClass* parent );
 };
 
 } // end of namespace kvsml

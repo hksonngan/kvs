@@ -36,6 +36,8 @@ class KVSMLObjectPoint : public kvs::FileFormatBase
 
 public:
 
+    typedef kvs::FileFormatBase BaseClass;
+
     enum WritingDataType
     {
         Ascii = 0,     ///< ascii data type
@@ -45,61 +47,49 @@ public:
 
 protected:
 
-    kvs::kvsml::KVSMLTag         m_kvsml_tag;    ///< KVSML tag information
-    kvs::kvsml::ObjectTag        m_object_tag;   ///< Object tag information
-    WritingDataType              m_writing_type; ///< writing data type
-    kvs::ValueArray<kvs::Real32> m_coords;       ///< coordinate array
-    kvs::ValueArray<kvs::UInt8>  m_colors;       ///< color(r,g,b) array
-    kvs::ValueArray<kvs::Real32> m_normals;      ///< normal array
-    kvs::ValueArray<kvs::Real32> m_sizes;        ///< size array
+    kvs::kvsml::KVSMLTag m_kvsml_tag; ///< KVSML tag information
+    kvs::kvsml::ObjectTag m_object_tag; ///< Object tag information
+    WritingDataType m_writing_type; ///< writing data type
+    kvs::ValueArray<kvs::Real32> m_coords; ///< coordinate array
+    kvs::ValueArray<kvs::UInt8> m_colors; ///< color(r,g,b) array
+    kvs::ValueArray<kvs::Real32> m_normals; ///< normal array
+    kvs::ValueArray<kvs::Real32> m_sizes; ///< size array
 
 public:
 
-    KVSMLObjectPoint( void );
-
+    KVSMLObjectPoint();
     KVSMLObjectPoint( const std::string& filename );
-
-    virtual ~KVSMLObjectPoint( void );
-
-public:
-
-    const kvs::kvsml::KVSMLTag& KVSMLTag( void ) const;
-
-    const kvs::kvsml::ObjectTag& objectTag( void ) const;
+    virtual ~KVSMLObjectPoint();
 
 public:
 
-    const kvs::ValueArray<kvs::Real32>& coords( void ) const;
+    const kvs::kvsml::KVSMLTag& KVSMLTag() const;
+    const kvs::kvsml::ObjectTag& objectTag() const;
 
-    const kvs::ValueArray<kvs::UInt8>& colors( void ) const;
+public:
 
-    const kvs::ValueArray<kvs::Real32>& normals( void ) const;
-
-    const kvs::ValueArray<kvs::Real32>& sizes( void ) const;
+    const kvs::ValueArray<kvs::Real32>& coords() const;
+    const kvs::ValueArray<kvs::UInt8>& colors() const;
+    const kvs::ValueArray<kvs::Real32>& normals() const;
+    const kvs::ValueArray<kvs::Real32>& sizes() const;
 
 public:
 
     void setWritingDataType( const WritingDataType writing_type );
-
     void setCoords( const kvs::ValueArray<kvs::Real32>& coords );
-
     void setColors( const kvs::ValueArray<kvs::UInt8>& colors );
-
     void setNormals( const kvs::ValueArray<kvs::Real32>& normals );
-
     void setSizes( const kvs::ValueArray<kvs::Real32>& sizes );
 
 public:
 
-    const bool read( const std::string& filename );
-
-    const bool write( const std::string& filename );
+    bool read( const std::string& filename );
+    bool write( const std::string& filename );
 
 public:
 
-    static const bool CheckFileExtension( const std::string& filename );
-
-    static const bool CheckFileFormat( const std::string& filename );
+    static bool CheckFileExtension( const std::string& filename );
+    static bool CheckFileFormat( const std::string& filename );
 
     friend std::ostream& operator <<( std::ostream& os, const KVSMLObjectPoint& rhs );
 };

@@ -39,57 +39,43 @@ class VR
 {
 protected:
 
-    dcm::VRType      m_vr_type;      ///< VR type
-    dcm::ElementType m_elem_type;    ///< element type
-    dcm::DataType    m_data_type;    ///< data type
-    unsigned int     m_value_length; ///< value length
+    dcm::VRType m_vr_type; ///< VR type
+    dcm::ElementType m_elem_type; ///< element type
+    dcm::DataType m_data_type; ///< data type
+    unsigned int m_value_length; ///< value length
 
 public:
 
-    VR( void );
-
-    VR( const dcm::VRType      vr_type,
+    VR();
+    VR( const dcm::VRType vr_type,
         const dcm::ElementType elem_type,
-        const dcm::DataType    data_type,
-        const unsigned int     value_length = 0 );
-
+        const dcm::DataType data_type,
+        const unsigned int value_length = 0 );
     VR( const VR& vr );
-
     VR( const dcm::VRType vr_type );
-
     VR( std::ifstream& ifs );
-
-    virtual ~VR( void );
+    virtual ~VR();
 
 public:
 
     VR& operator = ( const VR& v );
-
     friend std::ostream& operator << ( std::ostream& os, const VR& vr );
-
     friend std::ofstream& operator << ( std::ofstream& ofs, const VR& vr );
 
 public:
 
-    const dcm::VRType vrType( void ) const;
-
-    const dcm::ElementType elemType( void ) const;
-
-    const dcm::DataType dataType( void ) const;
-
-    const unsigned int valueLength( void ) const;
-
-    const std::string& vrTypeString( void ) const;
-
-    const std::string& elemTypeString( void ) const;
-
-    const std::string& dataTypeString( void ) const;
-
-    const std::string& vrTypeDescription( void ) const;
+    dcm::VRType vrType() const;
+    dcm::ElementType elemType() const;
+    dcm::DataType dataType() const;
+    unsigned int valueLength() const;
+    const std::string& vrTypeString() const;
+    const std::string& elemTypeString() const;
+    const std::string& dataTypeString() const;
+    const std::string& vrTypeDescription() const;
 
 public:
 
-    const bool read( std::ifstream& ifs, const bool swap = false );
+    bool read( std::ifstream& ifs, const bool swap = false );
 };
 
 } // end of namespace dcm

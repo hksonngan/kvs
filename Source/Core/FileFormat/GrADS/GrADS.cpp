@@ -50,7 +50,7 @@ std::string ReplaceYear( const std::string& filename, const int year )
         return kvs::String::Replace( filename, "%y4", replace );
     }
 
-    return( filename );
+    return filename;
 }
 
 std::string ReplaceMonth( const std::string& filename, const int month )
@@ -72,7 +72,7 @@ std::string ReplaceMonth( const std::string& filename, const int month )
         return kvs::String::Replace( filename, "%mc", MonthName[ month - 1 ] );
     }
 
-    return( filename );
+    return filename;
 }
 
 std::string ReplaceDay( const std::string& filename, const int day )
@@ -89,7 +89,7 @@ std::string ReplaceDay( const std::string& filename, const int day )
         return kvs::String::Replace( filename, "%d2", std::string( replace ) );
     }
 
-    return( filename );
+    return filename;
 }
 
 std::string ReplaceHour( const std::string& filename, const int hour )
@@ -112,7 +112,7 @@ std::string ReplaceHour( const std::string& filename, const int hour )
         return kvs::String::Replace( filename, "%h3", std::string( replace ) );
     }
 
-    return( filename );
+    return filename;
 }
 
 std::string ReplaceMinute( const std::string& filename, const int minute )
@@ -123,7 +123,7 @@ std::string ReplaceMinute( const std::string& filename, const int minute )
         return kvs::String::Replace( filename, "%n2", std::string( replace ) );
     }
 
-    return( filename );
+    return filename;
 }
 
 }
@@ -137,7 +137,7 @@ namespace kvs
  *  @brief  Constructs a new GrADS class.
  */
 /*===========================================================================*/
-GrADS::GrADS( void )
+GrADS::GrADS()
 {
 }
 
@@ -149,8 +149,7 @@ GrADS::GrADS( void )
 /*===========================================================================*/
 GrADS::GrADS( const std::string& filename )
 {
-    if( this->read( filename ) ) { m_is_success = true; }
-    else { m_is_success = false; }
+    this->read( filename );
 }
 
 /*===========================================================================*/
@@ -158,7 +157,7 @@ GrADS::GrADS( const std::string& filename )
  *  @brief  Destroys the GrADS class.
  */
 /*===========================================================================*/
-GrADS::~GrADS( void )
+GrADS::~GrADS()
 {
 }
 
@@ -168,9 +167,9 @@ GrADS::~GrADS( void )
  *  @return data descriptor file
  */
 /*===========================================================================*/
-const GrADS::DataDescriptorFile& GrADS::dataDescriptor( void ) const
+const GrADS::DataDescriptorFile& GrADS::dataDescriptor() const
 {
-    return( m_data_descriptor );
+    return m_data_descriptor;
 }
 
 /*===========================================================================*/
@@ -179,9 +178,9 @@ const GrADS::DataDescriptorFile& GrADS::dataDescriptor( void ) const
  *  @return gridded binary data list
  */
 /*===========================================================================*/
-const GrADS::GriddedBinaryDataFileList& GrADS::dataList( void ) const
+const GrADS::GriddedBinaryDataFileList& GrADS::dataList() const
 {
-    return( m_data_list );
+    return m_data_list;
 }
 
 /*===========================================================================*/
@@ -192,7 +191,7 @@ const GrADS::GriddedBinaryDataFileList& GrADS::dataList( void ) const
 /*===========================================================================*/
 const GrADS::GriddedBinaryDataFile& GrADS::data( const size_t index ) const
 {
-    return( m_data_list[index] );
+    return m_data_list[index];
 }
 
 /*===========================================================================*/
@@ -202,18 +201,19 @@ const GrADS::GriddedBinaryDataFile& GrADS::data( const size_t index ) const
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool GrADS::read( const std::string& filename )
+ bool GrADS::read( const std::string& filename )
 {
-    BaseClass::m_filename = filename;
+    BaseClass::setFilename( filename );
+    BaseClass::setSuccess( true );
 
     // Open file.
-    std::ifstream ifs( m_filename.c_str(), std::ios::binary | std::ios::in );
+    std::ifstream ifs( filename.c_str(), std::ios::binary | std::ios::in );
     if( !ifs.is_open() )
     {
-        kvsMessageError( "Cannot open %s.", m_filename.c_str() );
+        kvsMessageError( "Cannot open %s.", filename.c_str() );
         ifs.close();
-        BaseClass::m_is_success = false;
-        return( BaseClass::m_is_success );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // Read control file.
@@ -221,8 +221,8 @@ const bool GrADS::read( const std::string& filename )
     {
         kvsMessageError( "Cannot read control file." );
         ifs.close();
-        BaseClass::m_is_success = false;
-        return( BaseClass::m_is_success );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     const bool sequential = m_data_descriptor.options().find( kvs::grads::Options::Sequential );
@@ -274,7 +274,7 @@ const bool GrADS::read( const std::string& filename )
         }
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -284,11 +284,11 @@ const bool GrADS::read( const std::string& filename )
  *  @return false (not yet implemented)
  */
 /*===========================================================================*/
-const bool GrADS::write( const std::string& filename )
+bool GrADS::write( const std::string& filename )
 {
     kvs::IgnoreUnusedVariable( filename );
 
-    return( false );
+    return false;
 }
 
 } // end of namespace kvs

@@ -31,7 +31,7 @@ namespace dcm
  *  @brief  Construct a new class.
  */
 /*===========================================================================*/
-Value::Value( void )
+Value::Value()
 {
 }
 
@@ -63,7 +63,7 @@ Value::Value( const dcm::DataType type, const unsigned int length )
  *  @brief  Destruct this class.
  */
 /*===========================================================================*/
-Value::~Value( void )
+Value::~Value()
 {
 }
 
@@ -77,7 +77,7 @@ Value& Value::operator = ( const char value )
 {
     m_value_char = value;
     m_type       = dcm::DATA_CHAR;
-    return( *this );
+    return *this;
 }
 
 /*===========================================================================*/
@@ -90,7 +90,7 @@ Value& Value::operator = ( const unsigned char value )
 {
     m_value_uchar = value;
     m_type        = dcm::DATA_UCHAR;
-    return( *this );
+    return *this;
 }
 
 /*===========================================================================*/
@@ -103,7 +103,7 @@ Value& Value::operator = ( const short value )
 {
     m_value_short = value;
     m_type        = dcm::DATA_SHORT;
-    return( *this );
+    return *this;
 }
 
 /*===========================================================================*/
@@ -116,7 +116,7 @@ Value& Value::operator = ( const unsigned short value )
 {
     m_value_ushort = value;
     m_type         = dcm::DATA_USHORT;
-    return( *this );
+    return *this;
 }
 
 /*===========================================================================*/
@@ -129,7 +129,7 @@ Value& Value::operator = ( const int value )
 {
     m_value_int = value;
     m_type      = dcm::DATA_INT;
-    return( *this );
+    return *this;
 }
 
 /*===========================================================================*/
@@ -142,7 +142,7 @@ Value& Value::operator = ( const unsigned int value )
 {
     m_value_uint = value;
     m_type       = dcm::DATA_UINT;
-    return( *this );
+    return *this;
 }
 
 /*===========================================================================*/
@@ -155,7 +155,7 @@ Value& Value::operator = ( const float value )
 {
     m_value_float = value;
     m_type        = dcm::DATA_FLOAT;
-    return( *this );
+    return *this;
 }
 
 /*===========================================================================*/
@@ -168,7 +168,7 @@ Value& Value::operator = ( const double value )
 {
     m_value_double = value;
     m_type         = dcm::DATA_DOUBLE;
-    return( *this );
+    return *this;
 }
 
 /*===========================================================================*/
@@ -181,7 +181,7 @@ Value& Value::operator = ( const std::string value )
 {
     m_value_string = value;
     m_type         = dcm::DATA_STRING;
-    return( *this );
+    return *this;
 }
 
 /*===========================================================================*/
@@ -194,12 +194,12 @@ Value& Value::operator = ( const std::string value )
 /*===========================================================================*/
 bool operator == ( const Value& a, const Value& b )
 {
-    return( a.m_type == b.m_type );
+    return a.m_type == b.m_type;
 }
 
 bool operator != ( const Value& a, const Value& b )
 {
-    return( a.m_type != b.m_type );
+    return a.m_type != b.m_type;
 }
 
 /*===========================================================================*/
@@ -225,7 +225,7 @@ std::ostream& operator << ( std::ostream& os, const Value& v )
     case dcm::DATA_OTHER: { std::string    value = v; os << value; break; }
     default: break;
     }
-    return( os );
+    return os;
 }
 
 /*===========================================================================*/
@@ -251,7 +251,7 @@ std::ofstream& operator << ( std::ofstream& ofs, const Value& v )
     case dcm::DATA_OTHER: { std::string    value = v; ofs << value; break; }
     default: break;
     }
-    return( ofs );
+    return ofs;
 }
 
 /*===========================================================================*/
@@ -262,7 +262,7 @@ std::ofstream& operator << ( std::ofstream& ofs, const Value& v )
 /*===========================================================================*/
 Value::operator char () const
 {
-    return( m_value_char );
+    return m_value_char;
 }
 
 /*===========================================================================*/
@@ -284,7 +284,7 @@ Value::operator unsigned char () const
 /*===========================================================================*/
 Value::operator short () const
 {
-    return( m_value_short );
+    return m_value_short;
 }
 
 /*===========================================================================*/
@@ -295,7 +295,7 @@ Value::operator short () const
 /*===========================================================================*/
 Value::operator unsigned short () const
 {
-    return( m_value_ushort );
+    return m_value_ushort;
 }
 
 /*===========================================================================*/
@@ -306,7 +306,7 @@ Value::operator unsigned short () const
 /*===========================================================================*/
 Value::operator int () const
 {
-    return( m_value_int );
+    return m_value_int;
 }
 
 /*===========================================================================*/
@@ -317,7 +317,7 @@ Value::operator int () const
 /*===========================================================================*/
 Value::operator unsigned int () const
 {
-    return( m_value_uint );
+    return m_value_uint;
 }
 
 /*===========================================================================*/
@@ -328,7 +328,7 @@ Value::operator unsigned int () const
 /*===========================================================================*/
 Value::operator float () const
 {
-    return( m_value_float );
+    return m_value_float;
 }
 
 /*===========================================================================*/
@@ -339,7 +339,7 @@ Value::operator float () const
 /*===========================================================================*/
 Value::operator double () const
 {
-    return( m_value_double );
+    return m_value_double;
 }
 
 /*===========================================================================*/
@@ -350,7 +350,7 @@ Value::operator double () const
 /*===========================================================================*/
 Value::operator std::string () const
 {
-    return( m_value_string );
+    return m_value_string;
 }
 
 /*===========================================================================*/
@@ -385,7 +385,7 @@ void Value::setLength( const unsigned int length )
  *  @retunr true, if the reading process is done succesfully
  */
 /*===========================================================================*/
-const bool dcm::Value::read( std::ifstream& ifs, const bool swap )
+bool dcm::Value::read( std::ifstream& ifs, const bool swap )
 {
     // In the case of undefined length.
     if( m_length == 0xffffffff )
@@ -395,11 +395,11 @@ const bool dcm::Value::read( std::ifstream& ifs, const bool swap )
         if( !state )
         {
             kvsMessageError("Cannot read the item.");
-            return( false );
+            return false;
         }
 
         m_value_string = item.values();
-        return( true );
+        return true;
     }
 
     switch( m_type )
@@ -414,10 +414,10 @@ const bool dcm::Value::read( std::ifstream& ifs, const bool swap )
     case dcm::DATA_DOUBLE: *this = dcm::StreamReader::Get<double>( ifs, swap );          break;
     case dcm::DATA_STRING: *this = dcm::StreamReader::Get( ifs, m_length, swap );        break;
     case dcm::DATA_OTHER:  *this = dcm::StreamReader::Get( ifs, m_length, swap );        break;
-    default: kvsMessageError("Unknown data type"); return( false );
+    default: kvsMessageError("Unknown data type"); return false;
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -428,7 +428,7 @@ const bool dcm::Value::read( std::ifstream& ifs, const bool swap )
  *  @retunr true, if the reading process is done succesfully
  */
 /*===========================================================================*/
-const bool dcm::Value::read_data( std::ifstream& ifs, const bool swap )
+bool dcm::Value::read_data( std::ifstream& ifs, const bool swap )
 {
     // Read item tag.
     unsigned short data_tag[2];
@@ -441,7 +441,7 @@ const bool dcm::Value::read_data( std::ifstream& ifs, const bool swap )
     if( ifs.bad() )
     {
         kvsMessageError("Cannot read the VR code.");
-        return( false );
+        return false;
     }
     vr[2] = '\0';
 
@@ -465,14 +465,13 @@ const bool dcm::Value::read_data( std::ifstream& ifs, const bool swap )
     if( !state )
     {
         kvsMessageError("Cannot read the item.");
-        return( false );
+        return false;
     }
 
     m_value_string = item.values();
 
-    return( true );
+    return true;
 }
-
 
 } // end of namespace dcm
 

@@ -39,14 +39,12 @@ protected:
 public:
 
     Attribute( void );
-
     virtual ~Attribute( void );
 
 public:
 
-    const bool part10( void ) const;
-
-    const bool swap( void ) const;
+    bool part10( void ) const;
+    bool swap( void ) const;
 
 public:
 

@@ -42,15 +42,13 @@ protected:
 
 public:
 
-    VertexTag( void );
-
-    virtual ~VertexTag( void );
+    VertexTag();
+    virtual ~VertexTag();
 
 public:
 
-    const bool hasNVertices( void ) const;
-
-    const size_t nvertices( void ) const;
+    bool hasNVertices() const;
+    size_t nvertices() const;
 
 public:
 
@@ -58,9 +56,8 @@ public:
 
 public:
 
-    const bool read( const kvs::XMLNode::SuperClass* parent );
-
-    const bool write( kvs::XMLNode::SuperClass* parent );
+    bool read( const kvs::XMLNode::SuperClass* parent );
+    bool write( kvs::XMLNode::SuperClass* parent );
 };
 
 } // end of namespace kvsml

@@ -29,7 +29,7 @@ namespace kvsml
  *  @brief  Constructs a new structured volume object tag class.
  */
 /*===========================================================================*/
-PointObjectTag::PointObjectTag( void ):
+PointObjectTag::PointObjectTag():
     kvs::kvsml::TagBase( "PointObject" )
 {
 }
@@ -39,7 +39,7 @@ PointObjectTag::PointObjectTag( void ):
  *  @brief  Destructs the structured volume object class.
  */
 /*===========================================================================*/
-PointObjectTag::~PointObjectTag( void )
+PointObjectTag::~PointObjectTag()
 {
 }
 
@@ -50,7 +50,7 @@ PointObjectTag::~PointObjectTag( void )
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool PointObjectTag::read( const kvs::XMLNode::SuperClass* parent )
+bool PointObjectTag::read( const kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
 
@@ -58,10 +58,10 @@ const bool PointObjectTag::read( const kvs::XMLNode::SuperClass* parent )
     if ( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -71,7 +71,7 @@ const bool PointObjectTag::read( const kvs::XMLNode::SuperClass* parent )
  *  @return true, if the writing process is done successfully
  */
 /*===========================================================================*/
-const bool PointObjectTag::write( kvs::XMLNode::SuperClass* parent )
+bool PointObjectTag::write( kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
     kvs::XMLElement element( tag_name );
@@ -80,10 +80,10 @@ const bool PointObjectTag::write( kvs::XMLNode::SuperClass* parent )
     if( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 } // end of namespace kvsml

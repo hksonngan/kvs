@@ -25,7 +25,7 @@ namespace kvs
  *  @brief  Construct a new GFData class.
  */
 /*===========================================================================*/
-GFData::GFData( void )
+GFData::GFData()
 {
 }
 
@@ -37,8 +37,7 @@ GFData::GFData( void )
 /*===========================================================================*/
 GFData::GFData( const std::string& filename )
 {
-    if ( this->read( filename ) ) { m_is_success = true; }
-    else { m_is_success = false; }
+    this->read( filename );
 }
 
 /*===========================================================================*/
@@ -51,8 +50,7 @@ GFData::GFData( const std::string& filename )
 /*===========================================================================*/
 GFData::GFData( const std::string& mesh_file, const std::string& flow_file, const std::string& boundary_file )
 {
-    if ( this->read( mesh_file, flow_file, boundary_file ) ) { m_is_success = true; }
-    else { m_is_success = false; }
+    this->read( mesh_file, flow_file, boundary_file );
 }
 
 /*===========================================================================*/
@@ -61,9 +59,9 @@ GFData::GFData( const std::string& mesh_file, const std::string& flow_file, cons
  *  @return flow data
  */
 /*===========================================================================*/
-const kvs::gf::FlowData& GFData::flowData( void ) const
+const kvs::gf::FlowData& GFData::flowData() const
 {
-    return( m_flow_data );
+    return m_flow_data;
 }
 
 /*===========================================================================*/
@@ -72,9 +70,9 @@ const kvs::gf::FlowData& GFData::flowData( void ) const
  *  @return mesh data
  */
 /*===========================================================================*/
-const kvs::gf::MeshData& GFData::meshData( void ) const
+const kvs::gf::MeshData& GFData::meshData() const
 {
-    return( m_mesh_data );
+    return m_mesh_data;
 }
 
 /*===========================================================================*/
@@ -83,9 +81,9 @@ const kvs::gf::MeshData& GFData::meshData( void ) const
  *  @return boundary data
  */
 /*===========================================================================*/
-const kvs::gf::BoundaryData& GFData::boundaryData( void ) const
+const kvs::gf::BoundaryData& GFData::boundaryData() const
 {
-    return( m_boundary_data );
+    return m_boundary_data;
 }
 
 /*===========================================================================*/
@@ -95,14 +93,14 @@ const kvs::gf::BoundaryData& GFData::boundaryData( void ) const
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool GFData::read( const std::string& filename )
+bool GFData::read( const std::string& filename )
 {
     kvs::Tokenizer t( filename, ";" );
     const std::string mesh_file = t.isLast() ? "" : t.token();
     const std::string flow_file = t.isLast() ? "" : t.token();
     const std::string boundary_file = t.isLast() ? "" : t.token();
 
-    return( this->read( mesh_file, flow_file, boundary_file ) );
+    return this->read( mesh_file, flow_file, boundary_file );
 }
 
 /*===========================================================================*/
@@ -114,14 +112,35 @@ const bool GFData::read( const std::string& filename )
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool GFData::read( const std::string& mesh_file, const std::string& flow_file, const std::string& boundary_file )
+bool GFData::read( const std::string& mesh_file, const std::string& flow_file, const std::string& boundary_file )
 {
-    bool success = true;
-    if ( !m_mesh_data.read( mesh_file ) ) { success = false; }
-    if ( !m_flow_data.read( flow_file ) ) { success = false; }
-    if ( boundary_file != "" ) if ( !m_boundary_data.read( boundary_file ) ) { success = false; }
+    std::string filename = mesh_file + ";" + flow_file;
+    if ( boundary_file != "" ) filename += ";" + boundary_file;
+    BaseClass::setFilename( filename );
+    BaseClass::setSuccess( true );
 
-    return( success );
+    if ( !m_mesh_data.read( mesh_file ) )
+    {
+        kvsMessageError("Cannot read mesh file %s.", mesh_file.c_str() );
+        BaseClass::setSuccess( false );
+    }
+
+    if ( !m_flow_data.read( flow_file ) )
+    {
+        kvsMessageError("Cannot read flow file %s.", flow_file.c_str() );
+        BaseClass::setSuccess( false );
+    }
+
+    if ( boundary_file != "" )
+    {
+        if ( !m_boundary_data.read( boundary_file ) )
+        {
+            kvsMessageError("Cannot read bounday file %s.", boundary_file.c_str() );
+            BaseClass::setSuccess( false );
+        }
+    }
+
+    return BaseClass::isSuccess();
 }
 
 /*===========================================================================*/
@@ -131,11 +150,10 @@ const bool GFData::read( const std::string& mesh_file, const std::string& flow_f
  *  @return true, if the writing process is done successfully
  */
 /*===========================================================================*/
-const bool GFData::write( const std::string& filename )
+bool GFData::write( const std::string& filename )
 {
     kvs::IgnoreUnusedVariable( filename );
-
-    return( true );
+    return true;
 }
 
 } // end of namespace kvs

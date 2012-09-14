@@ -39,28 +39,23 @@ protected:
 public:
 
     TagBase( const std::string& name );
-
-    virtual ~TagBase( void );
-
-public:
-
-    kvs::XMLNode::SuperClass* node( void );
-
-    const kvs::XMLNode::SuperClass* node( void ) const;
-
-    const std::string& name( void ) const;
-
-    const bool isExisted( const kvs::XMLNode::SuperClass* parent ) const;
+    virtual ~TagBase();
 
 public:
 
-    virtual const bool read( const kvs::XMLNode::SuperClass* parent ) = 0;
+    kvs::XMLNode::SuperClass* node();
+    const kvs::XMLNode::SuperClass* node() const;
+    const std::string& name() const;
+    bool isExisted( const kvs::XMLNode::SuperClass* parent ) const;
 
-    virtual const bool write( kvs::XMLNode::SuperClass* parent ) = 0;
+public:
+
+    virtual bool read( const kvs::XMLNode::SuperClass* parent ) = 0;
+    virtual bool write( kvs::XMLNode::SuperClass* parent ) = 0;
 
 private:
 
-    TagBase( void ){}
+    TagBase(){}
 };
 
 } // end of namespace kvsml

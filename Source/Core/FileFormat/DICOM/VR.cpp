@@ -27,7 +27,7 @@ namespace kvs
 namespace dcm
 {
 
-const int         VR_STRING_WIDTH = 2;
+const int VR_STRING_WIDTH = 2;
 dcm::VRDictionary VR_DICTIONARY;
 
 /*===========================================================================*/
@@ -35,7 +35,7 @@ dcm::VRDictionary VR_DICTIONARY;
  *  @brief  Construct a new class.
  */
 /*===========================================================================*/
-VR::VR( void ) :
+VR::VR() :
     m_vr_type( dcm::VR_NONE ),
     m_elem_type( dcm::ELEM_IMPLICIT ),
     m_data_type( dcm::DATA_STRING ),
@@ -53,10 +53,10 @@ VR::VR( void ) :
  */
 /*===========================================================================*/
 VR::VR(
-    const dcm::VRType      vr_type,
+    const dcm::VRType vr_type,
     const dcm::ElementType elem_type,
-    const dcm::DataType    data_type,
-    const unsigned int     value_length ) :
+    const dcm::DataType data_type,
+    const unsigned int value_length ) :
     m_vr_type( vr_type ),
     m_elem_type( elem_type ),
     m_data_type( data_type ),
@@ -108,7 +108,7 @@ VR::VR( std::ifstream& ifs )
  *  @brief  Destruct this class.
  */
 /*===========================================================================*/
-VR::~VR( void )
+VR::~VR()
 {
 }
 
@@ -125,7 +125,7 @@ VR& VR::operator = ( const VR& v )
     m_data_type    = v.m_data_type;
     m_value_length = v.m_value_length;
 
-    return( *this );
+    return *this;
 }
 
 /*===========================================================================*/
@@ -145,7 +145,7 @@ std::ostream& operator << ( std::ostream& os, const VR& vr )
     os << "Value length:   " << vr.valueLength();
     os << " (" << std::hex << std::setw(8) << std::setfill('0') << vr.valueLength() << "H)";
     os << std::dec;
-    return( os );
+    return os;
 }
 
 /*===========================================================================*/
@@ -165,7 +165,7 @@ std::ofstream& operator << ( std::ofstream& os, const VR& vr )
     os << "Value length:   " << vr.valueLength();
     os << " (" << std::hex << std::setw(8) << std::setfill('0') << vr.valueLength() << "H)";
     os << std::dec;
-    return( os );
+    return os;
 }
 
 /*===========================================================================*/
@@ -174,9 +174,9 @@ std::ofstream& operator << ( std::ofstream& os, const VR& vr )
  *  @return VR type
  */
 /*===========================================================================*/
-const dcm::VRType VR::vrType( void ) const
+dcm::VRType VR::vrType() const
 {
-    return( m_vr_type );
+    return m_vr_type;
 }
 
 /*===========================================================================*/
@@ -185,9 +185,9 @@ const dcm::VRType VR::vrType( void ) const
  *  @return element type
  */
 /*===========================================================================*/
-const dcm::ElementType VR::elemType( void ) const
+dcm::ElementType VR::elemType() const
 {
-    return( m_elem_type );
+    return m_elem_type;
 }
 
 /*===========================================================================*/
@@ -196,9 +196,9 @@ const dcm::ElementType VR::elemType( void ) const
  *  @return data type
  */
 /*===========================================================================*/
-const dcm::DataType VR::dataType( void ) const
+dcm::DataType VR::dataType() const
 {
-    return( m_data_type );
+    return m_data_type;
 }
 
 /*===========================================================================*/
@@ -207,9 +207,9 @@ const dcm::DataType VR::dataType( void ) const
  *  @return value length
  */
 /*===========================================================================*/
-const unsigned int VR::valueLength( void ) const
+unsigned int VR::valueLength() const
 {
-    return( m_value_length );
+    return m_value_length;
 }
 
 /*===========================================================================*/
@@ -218,9 +218,9 @@ const unsigned int VR::valueLength( void ) const
  *  @return VR type
  */
 /*===========================================================================*/
-const std::string& VR::vrTypeString( void ) const
+const std::string& VR::vrTypeString() const
 {
-    return( dcm::VR_TABLE[ m_vr_type ].vr_string );
+    return dcm::VR_TABLE[ m_vr_type ].vr_string;
 }
 
 /*===========================================================================*/
@@ -229,9 +229,9 @@ const std::string& VR::vrTypeString( void ) const
  *  @return element type
  */
 /*===========================================================================*/
-const std::string& VR::elemTypeString( void ) const
+const std::string& VR::elemTypeString() const
 {
-    return( dcm::ELEMENT_TYPE_TO_STRING[ m_elem_type ] );
+    return dcm::ELEMENT_TYPE_TO_STRING[ m_elem_type ];
 }
 
 /*===========================================================================*/
@@ -240,9 +240,9 @@ const std::string& VR::elemTypeString( void ) const
  *  @return data type
  */
 /*===========================================================================*/
-const std::string& VR::dataTypeString( void ) const
+const std::string& VR::dataTypeString() const
 {
-    return( dcm::DATA_TYPE_TO_STRING[ m_data_type ] );
+    return dcm::DATA_TYPE_TO_STRING[ m_data_type ];
 }
 
 /*===========================================================================*/
@@ -251,9 +251,9 @@ const std::string& VR::dataTypeString( void ) const
  *  @return VR type description
  */
 /*===========================================================================*/
-const std::string& VR::vrTypeDescription( void ) const
+const std::string& VR::vrTypeDescription() const
 {
-    return( dcm::VR_TYPE_TO_DESCRIPTION[ m_vr_type ] );
+    return dcm::VR_TYPE_TO_DESCRIPTION[ m_vr_type ];
 }
 
 /*===========================================================================*/
@@ -264,7 +264,7 @@ const std::string& VR::vrTypeDescription( void ) const
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool dcm::VR::read( std::ifstream& ifs, const bool swap )
+bool dcm::VR::read( std::ifstream& ifs, const bool swap )
 {
     // Read the VR string.
     char vr[ VR_STRING_WIDTH + 1 ];
@@ -272,7 +272,7 @@ const bool dcm::VR::read( std::ifstream& ifs, const bool swap )
     if( ifs.bad() )
     {
         kvsMessageError("Cannot read the VR code.");
-        return( false );
+        return false;
     }
     vr[ VR_STRING_WIDTH ] = '\0';
 
@@ -317,11 +317,11 @@ const bool dcm::VR::read( std::ifstream& ifs, const bool swap )
     default:
     {
         kvsMessageError("Unknown element type.");
-        return( false );
+        return false;
     }
     }
 
-    return( true );
+    return true;
 }
 
 } // end of namespace dcm

@@ -44,27 +44,21 @@ protected:
 
 public:
 
-    MeshData( void );
-
+    MeshData();
     MeshData( const std::string filename );
 
 public:
 
-    const size_t dimensions( void ) const;
-
-    const size_t nnodesPerElement( void ) const;
-
-    const size_t nnodes( void ) const;
-
-    const size_t nelements( void ) const;
-
-    const kvs::ValueArray<kvs::Real32>& coords( void ) const;
-
-    const kvs::ValueArray<kvs::UInt32>& connections( void ) const;
+    size_t dimensions() const;
+    size_t nnodesPerElement() const;
+    size_t nnodes() const;
+    size_t nelements() const;
+    const kvs::ValueArray<kvs::Real32>& coords() const;
+    const kvs::ValueArray<kvs::UInt32>& connections() const;
 
 public:
 
-    const bool read( const std::string filename );
+    bool read( const std::string filename );
 };
 
 } // end of namespace gf

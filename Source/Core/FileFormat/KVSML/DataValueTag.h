@@ -43,27 +43,24 @@ public:
 
 public:
 
-    DataValueTag( void );
-
-    virtual ~DataValueTag( void );
+    DataValueTag();
+    virtual ~DataValueTag();
 
 public:
 
     template <typename T>
-    const bool read( const kvs::XMLNode::SuperClass* parent, const size_t nelements, kvs::ValueArray<T>* data );
-
+    bool read( const kvs::XMLNode::SuperClass* parent, const size_t nelements, kvs::ValueArray<T>* data );
     template <typename T>
-    const bool write( kvs::XMLNode::SuperClass* parent, const kvs::ValueArray<T>& data );
+    bool write( kvs::XMLNode::SuperClass* parent, const kvs::ValueArray<T>& data );
 
 private:
 
-    const bool read( const kvs::XMLNode::SuperClass* parent );
-
-    const bool write( kvs::XMLNode::SuperClass* parent );
+    bool read( const kvs::XMLNode::SuperClass* parent );
+    bool write( kvs::XMLNode::SuperClass* parent );
 };
 
 template <typename T>
-inline const bool DataValueTag::read(
+inline bool DataValueTag::read(
     const kvs::XMLNode::SuperClass* parent,
     const size_t nelements,
     kvs::ValueArray<T>* data )
@@ -74,14 +71,14 @@ inline const bool DataValueTag::read(
     if ( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
     const TiXmlText* array_text = kvs::XMLNode::ToText( m_node );
     if ( !array_text )
     {
         kvsMessageError( "No value in <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
     const std::string delim(" \n");
@@ -89,18 +86,18 @@ inline const bool DataValueTag::read(
     if ( !kvs::kvsml::DataArray::ReadInternalData<T>( data, nelements, tokenizer ) )
     {
         kvsMessageError( "Cannot read the data in <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 template <typename T>
-inline const bool DataValueTag::write(
+inline bool DataValueTag::write(
     kvs::XMLNode::SuperClass* parent,
     const kvs::ValueArray<T>& data )
 {
-    if ( data.size() == 0 ) return( true );
+    if ( data.size() == 0 ) return true;
 
     const std::string tag_name = BaseClass::name();
     kvs::XMLElement element( tag_name );
@@ -121,7 +118,7 @@ inline const bool DataValueTag::write(
     text.SetValue( oss.str() );
 
     kvs::XMLNode::SuperClass* node = parent->InsertEndChild( element );
-    return( node->InsertEndChild( text ) != NULL );
+    return node->InsertEndChild( text ) != NULL;
 }
 
 } // end of namespace kvsml

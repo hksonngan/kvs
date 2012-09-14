@@ -38,15 +38,13 @@ public:
 
 public:
 
-    OpacityMapTag( void );
-
-    virtual ~OpacityMapTag( void );
+    OpacityMapTag();
+    virtual ~OpacityMapTag();
 
 public:
 
-    const bool read( const kvs::XMLNode::SuperClass* parent );
-
-    const bool write( kvs::XMLNode::SuperClass* parent );
+    bool read( const kvs::XMLNode::SuperClass* parent );
+    bool write( kvs::XMLNode::SuperClass* parent );
 };
 
 
@@ -68,27 +66,23 @@ protected:
 
 public:
 
-    OpacityMapValueTag( void );
+    OpacityMapValueTag();
 
-    virtual ~OpacityMapValueTag( void );
+    virtual ~OpacityMapValueTag();
 
 public:
 
-    const float scalar( void ) const;
-
-    const float opacity( void ) const;
+    float scalar() const;
+    float opacity() const;
 
     void setScalar( const float scalar );
-
     void setOpacity( const float opacity );
 
 public:
 
-    const bool read( const kvs::XMLNode::SuperClass* parent );
-
-    const bool read( const kvs::XMLElement::SuperClass* element );
-
-    const bool write( kvs::XMLNode::SuperClass* parent );
+    bool read( const kvs::XMLNode::SuperClass* parent );
+    bool read( const kvs::XMLElement::SuperClass* element );
+    bool write( kvs::XMLNode::SuperClass* parent );
 };
 
 } // end of namespace kvsml

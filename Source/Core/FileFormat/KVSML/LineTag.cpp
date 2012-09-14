@@ -29,7 +29,7 @@ namespace kvsml
  *  @brief  Constructs a new line tag class.
  */
 /*===========================================================================*/
-LineTag::LineTag( void ):
+LineTag::LineTag():
     kvs::kvsml::TagBase( "Line" ),
     m_has_nlines( false ),
     m_nlines( 0 )
@@ -41,7 +41,7 @@ LineTag::LineTag( void ):
  *  @brief  Destructs the line tag class.
  */
 /*===========================================================================*/
-LineTag::~LineTag( void )
+LineTag::~LineTag()
 {
 }
 
@@ -51,9 +51,9 @@ LineTag::~LineTag( void )
  *  @return true, if the line tag has 'nlines'
  */
 /*===========================================================================*/
-const bool LineTag::hasNLines( void ) const
+bool LineTag::hasNLines() const
 {
-    return( m_has_nlines );
+    return m_has_nlines;
 }
 
 /*===========================================================================*/
@@ -62,9 +62,9 @@ const bool LineTag::hasNLines( void ) const
  *  @return number of lines
  */
 /*===========================================================================*/
-const size_t LineTag::nlines( void ) const
+size_t LineTag::nlines() const
 {
-    return( m_nlines );
+    return m_nlines;
 }
 
 /*===========================================================================*/
@@ -86,7 +86,7 @@ void LineTag::setNLines( const size_t nlines )
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool LineTag::read( const kvs::XMLNode::SuperClass* parent )
+bool LineTag::read( const kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
 
@@ -94,7 +94,7 @@ const bool LineTag::read( const kvs::XMLNode::SuperClass* parent )
     if ( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
     // Element
@@ -108,7 +108,7 @@ const bool LineTag::read( const kvs::XMLNode::SuperClass* parent )
         m_nlines = static_cast<size_t>( atoi( nlines.c_str() ) );
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -118,7 +118,7 @@ const bool LineTag::read( const kvs::XMLNode::SuperClass* parent )
  *  @return true, if the writing process is done successfully
  */
 /*===========================================================================*/
-const bool LineTag::write( kvs::XMLNode::SuperClass* parent )
+bool LineTag::write( kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
     kvs::XMLElement element( tag_name );
@@ -134,10 +134,10 @@ const bool LineTag::write( kvs::XMLNode::SuperClass* parent )
     if( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 } // end of namespace kvsml

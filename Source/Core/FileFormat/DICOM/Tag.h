@@ -32,53 +32,41 @@ class Tag
 {
 protected:
 
-    unsigned short m_group_id;   ///< group ID
+    unsigned short m_group_id; ///< group ID
     unsigned short m_element_id; ///< element ID
-    dcm::VRType    m_vr_type;    ///< VR type (initial value)
-    std::string    m_name;       ///< element name
+    dcm::VRType m_vr_type; ///< VR type (initial value)
+    std::string m_name; ///< element name
 
 public:
 
-    Tag( void );
-
+    Tag();
     Tag( const unsigned short group_id,
          const unsigned short element_id,
-         const dcm::VRType    vr_type     = dcm::VR_NONE,
-         const std::string    name        = "" );
-
+         const dcm::VRType vr_type = dcm::VR_NONE,
+         const std::string name = "" );
     Tag( const Tag& tag );
-
     Tag( std::ifstream& ifs, const bool swap = false );
-
-    virtual ~Tag( void );
+    virtual ~Tag();
 
 public:
 
     Tag& operator = ( const Tag& t );
-
     friend bool operator == ( const Tag& a, const Tag& b );
-
     friend bool operator != ( const Tag& a, const Tag& b );
-
     friend bool operator < ( const Tag& a, const Tag& b );
-
     friend std::ostream& operator << ( std::ostream& os, const Tag& t );
-
     friend std::ofstream& operator << ( std::ofstream& ofs, const Tag& t );
 
 public:
 
-    const unsigned short groupID( void ) const;
-
-    const unsigned short elementID( void ) const;
-
-    const dcm::VRType vrType( void ) const;
-
-    const std::string& name( void ) const;
+    unsigned short groupID() const;
+    unsigned short elementID() const;
+    dcm::VRType vrType() const;
+    const std::string& name() const;
 
 public:
 
-    const bool read( std::ifstream& ifs, bool swap );
+    bool read( std::ifstream& ifs, bool swap );
 };
 
 } // end of namespace dcm

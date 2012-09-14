@@ -34,7 +34,7 @@ const std::string FileTypeToString[2] =
 namespace
 {
 
-const bool IsAsciiType( FILE* ifs )
+bool IsAsciiType( FILE* ifs )
 {
     // Go back file-pointer to head.
     fseek( ifs, 0, SEEK_SET );
@@ -47,21 +47,21 @@ const bool IsAsciiType( FILE* ifs )
 
         const char* head = strtok( buffer, ::Delimiter );
         if ( !strcmp( head, "solid" ) ) break;
-        else if ( !strcmp( head, "facet" ) ) return( true );
-        else return( false );
+        else if ( !strcmp( head, "facet" ) ) return true;
+        else return false;
     }
 
     size_t counter = 0;
     while ( fgets( buffer, ::MaxLineLength, ifs ) != 0 )
     {
-        if ( counter > 5 ) return( false );
+        if ( counter > 5 ) return false;
         if ( buffer[0] == '\n' ) continue;
-        if ( strstr( buffer, "endsolid" ) ) return( true );
-        if ( strstr( buffer, "facet" ) ) return( true );
+        if ( strstr( buffer, "endsolid" ) ) return true;
+        if ( strstr( buffer, "facet" ) ) return true;
         counter++;
     }
 
-    return( false );
+    return false;
 }
 
 } // end of namespace
@@ -88,8 +88,7 @@ Stl::Stl( void ):
 Stl::Stl( const std::string& filename ):
     m_file_type( Stl::Ascii )
 {
-    if( this->read( filename ) ) { m_is_success = true; }
-    else { m_is_success = false; }
+    this->read( filename );
 }
 
 /*===========================================================================*/
@@ -107,9 +106,9 @@ Stl::~Stl( void )
  *  @return file type
  */
 /*===========================================================================*/
-const Stl::FileType Stl::fileType( void ) const
+Stl::FileType Stl::fileType( void ) const
 {
-    return( m_file_type );
+    return m_file_type;
 }
 
 /*===========================================================================*/
@@ -120,7 +119,7 @@ const Stl::FileType Stl::fileType( void ) const
 /*===========================================================================*/
 const kvs::ValueArray<kvs::Real32>& Stl::normals( void ) const
 {
-    return( m_normals );
+    return m_normals;
 }
 
 /*===========================================================================*/
@@ -131,7 +130,7 @@ const kvs::ValueArray<kvs::Real32>& Stl::normals( void ) const
 /*===========================================================================*/
 const kvs::ValueArray<kvs::Real32>& Stl::coords( void ) const
 {
-    return( m_coords );
+    return m_coords;
 }
 
 /*===========================================================================*/
@@ -140,9 +139,9 @@ const kvs::ValueArray<kvs::Real32>& Stl::coords( void ) const
  *  @return number of triangles
  */
 /*===========================================================================*/
-const size_t Stl::ntriangles( void ) const
+size_t Stl::ntriangles( void ) const
 {
-    return( m_normals.size() / 3 );
+    return m_normals.size() / 3;
 }
 
 /*===========================================================================*/
@@ -185,34 +184,36 @@ void Stl::setCoords( const kvs::ValueArray<kvs::Real32>& coords )
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool Stl::read( const std::string& filename )
+bool Stl::read( const std::string& filename )
 {
-    BaseClass::m_filename = filename;
+    BaseClass::setFilename( filename );
+    BaseClass::setSuccess( true );
 
-    FILE* ifs = fopen( BaseClass::m_filename.c_str(), "r" );
+    FILE* ifs = fopen( filename.c_str(), "r" );
     if ( !ifs )
     {
-        kvsMessageError( "Cannot open %s.", m_filename.c_str() );
-        BaseClass::m_is_success = false;
-        return( BaseClass::m_is_success );
+        kvsMessageError( "Cannot open %s.", filename.c_str() );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
-    bool status = false;
+    bool success = false;
 //    if ( this->is_ascii_type( ifs ) )
     if ( ::IsAsciiType( ifs ) )
     {
         m_file_type = Stl::Ascii;
-        status = this->read_ascii( ifs );
+        success = this->read_ascii( ifs );
     }
     else
     {
         m_file_type = Stl::Binary;
-        status = this->read_binary( ifs );
+        success = this->read_binary( ifs );
     }
+    BaseClass::setSuccess( success );
 
     fclose( ifs );
 
-    return( status );
+    return success;
 }
 
 /*===========================================================================*/
@@ -222,31 +223,33 @@ const bool Stl::read( const std::string& filename )
  *  @return true, if the writting process is done successfully
  */
 /*===========================================================================*/
-const bool Stl::write( const std::string& filename )
+bool Stl::write( const std::string& filename )
 {
-    BaseClass::m_filename = filename;
+    BaseClass::setFilename( filename );
+    BaseClass::setSuccess( true );
 
-    FILE* ofs = fopen( BaseClass::m_filename.c_str(), "w" );
+    FILE* ofs = fopen( filename.c_str(), "w" );
     if ( !ofs )
     {
-        kvsMessageError( "Cannot open %s.", m_filename.c_str() );
-        BaseClass::m_is_success = false;
-        return( BaseClass::m_is_success );
+        kvsMessageError( "Cannot open %s.", filename.c_str() );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
-    bool status = false;
+    bool success = false;
     if ( m_file_type == Stl::Ascii )
     {
-        status = this->write_ascii( ofs );
+        success = this->write_ascii( ofs );
     }
     else
     {
-        status = this->write_binary( ofs );
+        success = this->write_binary( ofs );
     }
+    BaseClass::setSuccess( success );
 
     fclose( ofs );
 
-    return( status );
+    return success;
 }
 
 /*===========================================================================*/
@@ -256,7 +259,7 @@ const bool Stl::write( const std::string& filename )
  *  @return true, if the file type is ascii
  */
 /*===========================================================================*/
-const bool Stl::is_ascii_type( FILE* ifs )
+bool Stl::is_ascii_type( FILE* ifs )
 {
     // Go back file-pointer to head.
     fseek( ifs, 0, SEEK_SET );
@@ -269,21 +272,21 @@ const bool Stl::is_ascii_type( FILE* ifs )
 
         const char* head = strtok( buffer, ::Delimiter );
         if ( !strcmp( head, "solid" ) ) break;
-        else if ( !strcmp( head, "facet" ) ) return( true );
-        else return( false );
+        else if ( !strcmp( head, "facet" ) ) return true;
+        else return false;
     }
 
     size_t counter = 0;
     while ( fgets( buffer, ::MaxLineLength, ifs ) != 0 )
     {
-        if ( counter > 5 ) return( false );
+        if ( counter > 5 ) return false;
         if ( buffer[0] == '\n' ) continue;
-        if ( strstr( buffer, "endsolid" ) ) return( true );
-        if ( strstr( buffer, "facet" ) ) return( true );
+        if ( strstr( buffer, "endsolid" ) ) return true;
+        if ( strstr( buffer, "facet" ) ) return true;
         counter++;
     }
 
-    return( false );
+    return false;
 }
 
 /*===========================================================================*/
@@ -293,7 +296,7 @@ const bool Stl::is_ascii_type( FILE* ifs )
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool Stl::read_ascii( FILE* ifs )
+bool Stl::read_ascii( FILE* ifs )
 {
     // Go back file-pointer to head.
     fseek( ifs, 0, SEEK_SET );
@@ -333,21 +336,21 @@ const bool Stl::read_ascii( FILE* ifs )
         else
         {
             kvsMessageError("Cannot find 'facet'.");
-            return( false );
+            return false;
         }
 
         // outer loop
-        if ( fgets( buffer, ::MaxLineLength, ifs ) == 0 ) return( false );
+        if ( fgets( buffer, ::MaxLineLength, ifs ) == 0 ) return false;
         const char* outer = strtok( buffer, ::Delimiter );
         const char* loop = strtok( 0, ::Delimiter );
         if ( strcmp( outer, "outer" ) || strcmp( loop, "loop" ) )
         {
             kvsMessageError("Cannot find 'outer loop'.");
-            return( false );
+            return false;
         }
 
         // vertex 0
-        if ( fgets( buffer, ::MaxLineLength, ifs ) == 0 ) return( false );
+        if ( fgets( buffer, ::MaxLineLength, ifs ) == 0 ) return false;
         const char* vertex0 = strtok( buffer, ::Delimiter );
         if ( !strcmp( vertex0, "vertex" ) )
         {
@@ -358,11 +361,11 @@ const bool Stl::read_ascii( FILE* ifs )
         else
         {
             kvsMessageError("Cannot find 'vertex' (0).");
-            return( false );
+            return false;
         }
 
         // vertex 1
-        if ( fgets( buffer, ::MaxLineLength, ifs ) == 0 ) return( false );
+        if ( fgets( buffer, ::MaxLineLength, ifs ) == 0 ) return false;
         const char* vertex1 = strtok( buffer, ::Delimiter );
         if ( !strcmp( vertex1, "vertex" ) )
         {
@@ -373,11 +376,11 @@ const bool Stl::read_ascii( FILE* ifs )
         else
         {
             kvsMessageError("Cannot find 'vertex' (1).");
-            return( false );
+            return false;
         }
 
         // vertex 2
-        if ( fgets( buffer, ::MaxLineLength, ifs ) == 0 ) return( false );
+        if ( fgets( buffer, ::MaxLineLength, ifs ) == 0 ) return false;
         const char* vertex2 = strtok( buffer, ::Delimiter );
         if ( !strcmp( vertex2, "vertex" ) )
         {
@@ -388,32 +391,32 @@ const bool Stl::read_ascii( FILE* ifs )
         else
         {
             kvsMessageError("Cannot find 'vertex' (2).");
-            return( false );
+            return false;
         }
 
         // endloop
-        if ( fgets( buffer, ::MaxLineLength, ifs ) == 0 ) return( false );
+        if ( fgets( buffer, ::MaxLineLength, ifs ) == 0 ) return false;
         const char* endloop = strtok( buffer, ::Delimiter );
         if ( strcmp( endloop, "endloop" ) )
         {
             kvsMessageError("Cannot find 'endloop'.");
-            return( false );
+            return false;
         }
 
         // endfacet
-        if ( fgets( buffer, ::MaxLineLength, ifs ) == 0 ) return( false );
+        if ( fgets( buffer, ::MaxLineLength, ifs ) == 0 ) return false;
         const char* endfacet = strtok( buffer, ::Delimiter );
         if ( strcmp( endfacet, "endfacet" ) )
         {
             kvsMessageError("Cannot find 'endfacet'.");
-            return( false );
+            return false;
         }
     }
 
     m_normals = kvs::ValueArray<kvs::Real32>( normals );
     m_coords = kvs::ValueArray<kvs::Real32>( coords );
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -423,7 +426,7 @@ const bool Stl::read_ascii( FILE* ifs )
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool Stl::read_binary( FILE* ifs )
+bool Stl::read_binary( FILE* ifs )
 {
     // Go back file-pointer to head.
     fseek( ifs, 0, SEEK_SET );
@@ -434,7 +437,7 @@ const bool Stl::read_binary( FILE* ifs )
     if ( fread( buffer, sizeof( char ), HeaderLength, ifs ) != HeaderLength )
     {
         kvsMessageError("Cannot read a header string (80byets).");
-        return( false );
+        return false;
     }
 
     // Read a number of triangles (4bytes).
@@ -442,7 +445,7 @@ const bool Stl::read_binary( FILE* ifs )
     if ( fread( &ntriangles, sizeof( kvs::UInt32 ), 1, ifs ) != 1 )
     {
         kvsMessageError("Cannot read a number of triangles.");
-        return( false );
+        return false;
     }
 
     // Memory allocation.
@@ -461,7 +464,7 @@ const bool Stl::read_binary( FILE* ifs )
         {
             kvsMessageError("Cannot read a normal vector.");
             m_normals.release();
-            return( false );
+            return false;
         }
 
         // Coordinate value (4x3=12bytes)
@@ -469,7 +472,7 @@ const bool Stl::read_binary( FILE* ifs )
         {
             kvsMessageError("Cannot read a coordinate value.");
             m_coords.release();
-            return( false );
+            return false;
         }
 
         // Unused (2bytes)
@@ -481,11 +484,11 @@ const bool Stl::read_binary( FILE* ifs )
             kvsMessageError("Cannot read unused block (2bytes).");
             m_normals.release();
             m_coords.release();
-            return( false );
+            return false;
         }
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -495,7 +498,7 @@ const bool Stl::read_binary( FILE* ifs )
  *  @return true, if the writting process is done successfully
  */
 /*===========================================================================*/
-const bool Stl::write_ascii( FILE* ofs )
+bool Stl::write_ascii( FILE* ofs )
 {
     const char* header = "Generated by KVS";
     fprintf( ofs, "solid %s\n", header );
@@ -528,7 +531,7 @@ const bool Stl::write_ascii( FILE* ofs )
 
     fprintf( ofs, "endsolid\n" );
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -538,7 +541,7 @@ const bool Stl::write_ascii( FILE* ofs )
  *  @return true, if the writting process is done successfully
  */
 /*===========================================================================*/
-const bool Stl::write_binary( FILE* ofs )
+bool Stl::write_binary( FILE* ofs )
 {
     // Header string (80bytes).
     char header[80]; memset( header, 0, 80 );
@@ -546,7 +549,7 @@ const bool Stl::write_binary( FILE* ofs )
     if ( fwrite( header, sizeof( char ), 80, ofs ) != 80 )
     {
         kvsMessageError("Cannot write a header string (80bytes).");
-        return( false );
+        return false;
     }
 
     // Number of triangles (4bytes).
@@ -554,7 +557,7 @@ const bool Stl::write_binary( FILE* ofs )
     if ( fwrite( &ntriangles, sizeof( kvs::UInt32 ), 1, ofs ) != 1 )
     {
         kvsMessageError("Cannot write a number of triangles.");
-        return( false );
+        return false;
     }
 
     // Triangles (50*ntriangles bytes)
@@ -568,14 +571,14 @@ const bool Stl::write_binary( FILE* ofs )
         if ( fwrite( normals + index3, sizeof( kvs::Real32 ), 3, ofs ) != 3 )
         {
             kvsMessageError("Cannot write a normal vector.");
-            return( false );
+            return false;
         }
 
         // Coordinate values
         if ( fwrite( coords + index9, sizeof( kvs::Real32 ), 9, ofs ) != 9 )
         {
             kvsMessageError("Cannot write a coordinate values (3 vertices = 9 elements).");
-            return( false );
+            return false;
         }
 
         // Unused block (2bytes)
@@ -583,11 +586,11 @@ const bool Stl::write_binary( FILE* ofs )
         if ( fwrite( unused, sizeof( char ), 2, ofs ) != 2 )
         {
             kvsMessageError("Cannot write a unused block (2byets).");
-            return( false );
+            return false;
         }
     }
 
-    return( true );
+    return true;
 }
 
 std::ostream& operator << ( std::ostream& os, const Stl& stl )
@@ -595,10 +598,10 @@ std::ostream& operator << ( std::ostream& os, const Stl& stl )
     os << "file type : " << ::FileTypeToString[ stl.fileType() ] << std::endl;
     os << "number of triangles : " << stl.normals().size() / 3;
 
-    return( os );
+    return os;
 }
 
-const bool Stl::CheckFileExtension( const std::string& filename )
+bool Stl::CheckFileExtension( const std::string& filename )
 {
     const kvs::File file( filename );
     if ( file.extension() == "stl" || file.extension() == "STL" ||
@@ -607,19 +610,19 @@ const bool Stl::CheckFileExtension( const std::string& filename )
          file.extension() == "sla" || file.extension() == "SLA" ||
          file.extension() == "slb" || file.extension() == "SLB" )
     {
-        return( true );
+        return true;
     }
 
-    return( false );
+    return false;
 }
 
-const bool Stl::CheckFileFormat( const std::string& filename )
+bool Stl::CheckFileFormat( const std::string& filename )
 {
     FILE* ifs = fopen( filename.c_str(), "rb" );
     if( !ifs )
     {
         kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return( false );
+        return false;
     }
 
     if ( !::IsAsciiType( ifs ) )
@@ -638,7 +641,7 @@ const bool Stl::CheckFileFormat( const std::string& filename )
         {
             kvsMessageError("Cannot read a header string (80byets).");
             fclose( ifs );
-            return( false );
+            return false;
         }
 
         // Read a number of triangles (4bytes).
@@ -647,20 +650,20 @@ const bool Stl::CheckFileFormat( const std::string& filename )
         {
             kvsMessageError("Cannot read a number of triangles.");
             fclose( ifs );
-            return( false );
+            return false;
         }
 
         const size_t data_size = 50 * ntriangles + 80 + 4;
         if ( byte_size != data_size )
         {
             fclose( ifs );
-            return( false );
+            return false;
         }
     }
 
     fclose( ifs );
 
-    return( true );
+    return true;
 }
 
 } // end of namespace kvs

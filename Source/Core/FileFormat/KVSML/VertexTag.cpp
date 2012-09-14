@@ -29,7 +29,7 @@ namespace kvsml
  *  @brief  Constructs a new vertex tag class.
  */
 /*===========================================================================*/
-VertexTag::VertexTag( void ):
+VertexTag::VertexTag():
     kvs::kvsml::TagBase( "Vertex" ),
     m_has_nvertices( false ),
     m_nvertices( 0 )
@@ -41,7 +41,7 @@ VertexTag::VertexTag( void ):
  *  @brief  Destructs the vertex tag class.
  */
 /*===========================================================================*/
-VertexTag::~VertexTag( void )
+VertexTag::~VertexTag()
 {
 }
 
@@ -51,9 +51,9 @@ VertexTag::~VertexTag( void )
  *  @return true, if the vertex tag has the 'nvertices' attribute value
  */
 /*===========================================================================*/
-const bool VertexTag::hasNVertices( void ) const
+bool VertexTag::hasNVertices() const
 {
-    return( m_has_nvertices );
+    return m_has_nvertices;
 }
 
 /*===========================================================================*/
@@ -62,9 +62,9 @@ const bool VertexTag::hasNVertices( void ) const
  *  @return number of vertices
  */
 /*===========================================================================*/
-const size_t VertexTag::nvertices( void ) const
+size_t VertexTag::nvertices() const
 {
-    return( m_nvertices );
+    return m_nvertices;
 }
 
 /*===========================================================================*/
@@ -86,7 +86,7 @@ void VertexTag::setNVertices( const size_t nvertices )
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool VertexTag::read( const kvs::XMLNode::SuperClass* parent )
+bool VertexTag::read( const kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
 
@@ -94,7 +94,7 @@ const bool VertexTag::read( const kvs::XMLNode::SuperClass* parent )
     if ( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
     // Element
@@ -108,7 +108,7 @@ const bool VertexTag::read( const kvs::XMLNode::SuperClass* parent )
         m_nvertices = static_cast<size_t>( atoi( nvertices.c_str() ) );
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -118,7 +118,7 @@ const bool VertexTag::read( const kvs::XMLNode::SuperClass* parent )
  *  @return true, if the writing process is done successfully
  */
 /*===========================================================================*/
-const bool VertexTag::write( kvs::XMLNode::SuperClass* parent )
+bool VertexTag::write( kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
 
@@ -135,10 +135,10 @@ const bool VertexTag::write( kvs::XMLNode::SuperClass* parent )
     if( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 } // end of namespace kvsml

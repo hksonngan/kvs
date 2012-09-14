@@ -37,6 +37,10 @@ class FrontSTR : public kvs::FileFormatBase
 {
     kvsClassName( kvs::FrontSTR );
 
+public:
+
+    typedef kvs::FileFormatBase BaseClass;
+
 protected:
 
     size_t m_nmeshes; ///< number of mesh data
@@ -46,43 +50,33 @@ protected:
 
 public:
 
-    FrontSTR( void );
-
+    FrontSTR();
     FrontSTR( const std::string& filenames );
-
     FrontSTR( const std::string& msh_filename, const std::string& res_filename );
-
     FrontSTR( const std::vector<std::string>& msh_filenames, const std::vector<std::string>& res_filenames );
-
-    virtual ~FrontSTR( void );
+    virtual ~FrontSTR();
 
 public:
 
-    const size_t numberOfMeshData( void ) const;
-
-    const size_t numberOfResultData( void ) const;
-
+    size_t numberOfMeshData() const;
+    size_t numberOfResultData() const;
     const kvs::fstr::MeshData& meshData( const size_t index = 0 ) const;
-
     const kvs::fstr::ResultData& resultData( const size_t index = 0 ) const;
 
 public:
 
-    const bool read( const std::string& filenames );
-
-    const bool read( const std::string& msh_filename, const std::string& res_filename );
-
-    const bool read( const std::vector<std::string>& msh_filenames, const std::vector<std::string>& res_filenames );
+    bool read( const std::string& filenames );
+    bool read( const std::string& msh_filename, const std::string& res_filename );
+    bool read( const std::vector<std::string>& msh_filenames, const std::vector<std::string>& res_filenames );
 
 private:
 
-    const bool allocate_data( void );
-
-    void delete_data( void );
+    bool allocate_data();
+    void delete_data();
 
 private:
 
-    const bool write( const std::string& filename );
+    bool write( const std::string& filename );
 };
 
 } // end of namespace kvs

@@ -37,15 +37,13 @@ public:
 
 public:
 
-    ColorTag( void );
-
-    virtual ~ColorTag( void );
+    ColorTag();
+    virtual ~ColorTag();
 
 public:
 
-    const bool read( const kvs::XMLNode::SuperClass* parent );
-
-    const bool write( kvs::XMLNode::SuperClass* parent );
+    bool read( const kvs::XMLNode::SuperClass* parent );
+    bool write( kvs::XMLNode::SuperClass* parent );
 };
 
 } // end of namespace kvsml

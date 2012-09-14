@@ -41,16 +41,15 @@ public:
 
 private:
 
-    kvs::UInt16 m_type;      ///< the file type
-    kvs::UInt32 m_size;      ///< the file size
+    kvs::UInt16 m_type; ///< the file type
+    kvs::UInt32 m_size; ///< the file size
     kvs::UInt16 m_reserved1; ///< reserved value 1 (always 0)
     kvs::UInt16 m_reserved2; ///< reserved value 2 (always 0)
-    kvs::UInt32 m_offset;    ///< starting position of image data, in bytes (54)
+    kvs::UInt32 m_offset; ///< starting position of image data, in bytes (54)
 
 public:
 
-    FileHeader( void );
-
+    FileHeader();
     FileHeader( std::ifstream& ifs );
 
 public:
@@ -59,27 +58,21 @@ public:
 
 public:
 
-    kvs::UInt16 type( void ) const;
-
-    kvs::UInt32 size( void ) const;
-
-    kvs::UInt16 reserved1( void ) const;
-
-    kvs::UInt16 reserved2( void ) const;
-
-    kvs::UInt32 offset( void ) const;
+    kvs::UInt16 type() const;
+    kvs::UInt32 size() const;
+    kvs::UInt16 reserved1() const;
+    kvs::UInt16 reserved2() const;
+    kvs::UInt32 offset() const;
 
 public:
 
     void read( std::ifstream& ifs );
-
     void write( std::ofstream& ofs );
-
-    bool isBM( void );
+    bool isBM();
 
 private:
 
-    void swap_bytes( void );
+    void swap_bytes();
 };
 
 } // end of namespace bmp

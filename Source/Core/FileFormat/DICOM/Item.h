@@ -34,38 +34,32 @@ class Item
 {
 protected:
 
-    unsigned int   m_data_length; ///< data length
-    unsigned int   m_item_length; ///< item length
+    unsigned int m_data_length; ///< data length
+    unsigned int m_item_length; ///< item length
     unsigned short m_item_tag[2]; ///< item tag
-    std::string    m_values;      ///< value string
+    std::string m_values; ///< value string
 
 public:
 
-    Item( void );
-
+    Item();
     Item( const unsigned int data_length );
-
-    virtual ~Item( void );
-
-public:
-
-    const unsigned int dataLength( void ) const;
-
-    const std::string& values( void ) const;
+    virtual ~Item();
 
 public:
 
-    const bool read( std::ifstream& ifs, const bool swap = false );
+    unsigned int dataLength() const;
+    const std::string& values() const;
+
+public:
+
+    bool read( std::ifstream& ifs, const bool swap = false );
 
 private:
 
-    const bool read_item_tag( std::ifstream& ifs, const bool swap = false );
-
-    const bool read_item_length( std::ifstream& ifs, const bool swap = false );
-
-    const bool seek_item_delimitation( std::ifstream& ifs, const bool swap = false );
-
-    const bool read_undefined_length_item( std::ifstream& ifs, const bool swap = false );
+    bool read_item_tag( std::ifstream& ifs, const bool swap = false );
+    bool read_item_length( std::ifstream& ifs, const bool swap = false );
+    bool seek_item_delimitation( std::ifstream& ifs, const bool swap = false );
+    bool read_undefined_length_item( std::ifstream& ifs, const bool swap = false );
 };
 
 } // end of namespace dcm

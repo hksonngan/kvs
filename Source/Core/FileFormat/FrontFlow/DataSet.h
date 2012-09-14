@@ -41,7 +41,7 @@ protected:
 
 public:
 
-    DataSet( void );
+    DataSet();
 
 public:
 
@@ -49,21 +49,16 @@ public:
 
 public:
 
-    const std::vector<std::string>& commentList( void ) const;
-
+    const std::vector<std::string>& commentList() const;
     const std::string& comment( const size_t index ) const;
-
-    const std::vector<kvs::gf::Data>& dataList( void ) const;
-
+    const std::vector<kvs::gf::Data>& dataList() const;
     const kvs::gf::Data& data( const size_t index ) const;
-
-    void deallocate( void );
+    void deallocate();
 
 public:
 
-    const bool readAscii( FILE* fp );
-
-    const bool readBinary( FILE* fp, const bool swap = false );
+    bool readAscii( FILE* fp );
+    bool readBinary( FILE* fp, const bool swap = false );
 };
 
 } // end of namespace gf

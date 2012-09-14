@@ -42,15 +42,13 @@ protected:
 
 public:
 
-    NodeTag( void );
-
-    virtual ~NodeTag( void );
+    NodeTag();
+    virtual ~NodeTag();
 
 public:
 
-    const bool hasNNodes( void ) const;
-
-    const size_t nnodes( void ) const;
+    bool hasNNodes() const;
+    size_t nnodes() const;
 
 public:
 
@@ -58,9 +56,8 @@ public:
 
 public:
 
-    const bool read( const kvs::XMLNode::SuperClass* parent );
-
-    const bool write( kvs::XMLNode::SuperClass* parent );
+    bool read( const kvs::XMLNode::SuperClass* parent );
+    bool write( kvs::XMLNode::SuperClass* parent );
 };
 
 } // end of namespace kvsml

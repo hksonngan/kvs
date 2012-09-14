@@ -17,7 +17,7 @@
 namespace kvs
 {
 
-XMLNode::XMLNode( void ):
+XMLNode::XMLNode():
     TiXmlNode( TiXmlNode::UNKNOWN )
 {
 }
@@ -27,22 +27,22 @@ TiXmlNode* XMLNode::FindChildNode( const TiXmlNode* node, const std::string& nod
     TiXmlNode* child_node = node->FirstChild();
     while ( child_node )
     {
-        if ( child_node->Value() == node_name ) return( child_node );
+        if ( child_node->Value() == node_name ) return child_node;
 
         child_node = child_node->NextSibling();
     }
 
-    return( NULL );
+    return NULL;
 }
 
 TiXmlElement* XMLNode::ToElement( const TiXmlNode* node )
 {
-    return( node->ToElement() );
+    return node->ToElement();
 }
 
 TiXmlText* XMLNode::ToText( const TiXmlNode* node )
 {
-    return( node->ToElement()->FirstChild()->ToText() );
+    return node->ToElement()->FirstChild()->ToText();
 }
 
 } // end of namespace kvs

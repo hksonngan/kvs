@@ -53,47 +53,32 @@ protected:
 
 public:
 
-    ColumnTag( void );
+    ColumnTag();
 
 public:
 
-    const bool hasLabel( void ) const;
-
-    const bool hasMinValue( void ) const;
-
-    const bool hasMaxValue( void ) const;
-
-    const bool hasMinRange( void ) const;
-
-    const bool hasMaxRange( void ) const;
-
-    const std::string& label( void ) const;
-
-    const double minValue( void ) const;
-
-    const double maxValue( void ) const;
-
-    const double minRange( void ) const;
-
-    const double maxRange( void ) const;
+    bool hasLabel() const;
+    bool hasMinValue() const;
+    bool hasMaxValue() const;
+    bool hasMinRange() const;
+    bool hasMaxRange() const;
+    const std::string& label() const;
+    double minValue() const;
+    double maxValue() const;
+    double minRange() const;
+    double maxRange() const;
 
     void setLabel( const std::string& label );
-
     void setMinValue( const double value );
-
     void setMaxValue( const double value );
-
     void setMinRange( const double range );
-
     void setMaxRange( const double range );
 
 public:
 
-    const bool read( const kvs::XMLNode::SuperClass* parent );
-
-    const bool read( const kvs::XMLElement::SuperClass* element );
-
-    const bool write( kvs::XMLNode::SuperClass* parent );
+    bool read( const kvs::XMLNode::SuperClass* parent );
+    bool read( const kvs::XMLElement::SuperClass* element );
+    bool write( kvs::XMLNode::SuperClass* parent );
 };
 
 } // end of namespace kvsml

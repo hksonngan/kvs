@@ -30,18 +30,17 @@ class Window
 {
 protected:
 
-    unsigned short m_bits;      ///< number of bits
-    bool           m_sign;      ///< true: signed, false: unsigned
-    int            m_min_value; ///< maximum value of the window's range
-    int            m_max_value; ///< minimum value of the window's range
-    int            m_range;     ///< range of the window
-    int            m_level;     ///< current window level
-    int            m_width;     ///< current window width
+    unsigned short m_bits; ///< number of bits
+    bool m_sign; ///< true: signed, false: unsigned
+    int m_min_value; ///< maximum value of the window's range
+    int m_max_value; ///< minimum value of the window's range
+    int m_range; ///< range of the window
+    int m_level; ///< current window level
+    int m_width; ///< current window width
 
 public:
 
-    Window( void );
-
+    Window();
     Window( const unsigned short bits, const bool sign );
 
 public:
@@ -51,35 +50,26 @@ public:
 public:
 
     void set( const unsigned short bits, const bool sign );
-
     void rescale( const double slope, const double intersept );
-
     void setLevel( const int level );
-
     void setWidth( const int width );
 
 public:
 
-    const int minValue( void ) const;
-
-    const int maxValue( void ) const;
-
-    const int level( void ) const;
-
-    const int width( void ) const;
+    int minValue() const;
+    int maxValue() const;
+    int level() const;
+    int width() const;
 
 public:
 
-    const int clampLevel( const int level );
-
-    const int clampWidth( const int width );
+    int clampLevel( const int level );
+    int clampWidth( const int width );
 
 protected:
 
     void set_range_8bit( const bool sign );
-
     void set_range_12bit( const bool sign );
-
     void set_range_16bit( const bool sign );
 };
 

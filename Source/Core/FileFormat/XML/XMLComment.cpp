@@ -21,7 +21,7 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-XMLComment::XMLComment( void )
+XMLComment::XMLComment()
 {
 }
 
@@ -42,7 +42,7 @@ XMLComment::XMLComment( const char* comment ):
  *  Desturctor.
  */
 /*==========================================================================*/
-XMLComment::~XMLComment( void )
+XMLComment::~XMLComment()
 {
 }
 

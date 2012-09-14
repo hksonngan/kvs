@@ -34,10 +34,6 @@ namespace bmp
 
 struct HeaderBase
 {
-    virtual ~HeaderBase( void )
-    {
-    }
-
     void get_value( std::ifstream& ifs, kvs::UInt32* value )
     {
         ifs.read( reinterpret_cast<char*>( value ), sizeof( kvs::UInt32 ) );
@@ -45,7 +41,7 @@ struct HeaderBase
 
     void get_value( std::ifstream& ifs, kvs::UInt16* value )
     {
-        ifs.read( reinterpret_cast<char*>(value), sizeof( kvs::UInt16 ) );
+        ifs.read( reinterpret_cast<char*>( value ), sizeof( kvs::UInt16 ) );
     }
 
     void put_value( std::ofstream& ofs, kvs::UInt32 value )
@@ -58,7 +54,7 @@ struct HeaderBase
         ofs.write( reinterpret_cast<char*>( &value ), sizeof( kvs::UInt16 ) );
     }
 
-    virtual void swap_bytes( void ) = 0;
+    virtual void swap_bytes() = 0;
 };
 
 } // end of namespace bmp

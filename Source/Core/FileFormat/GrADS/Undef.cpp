@@ -31,14 +31,14 @@ namespace grads
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool Undef::read( std::string line, std::ifstream& ifs )
+bool Undef::read( std::string line, std::ifstream& ifs )
 {
     kvs::Tokenizer t( line, " \t\n" );
     t.token(); // UNDEF
 
     this->value = atof( t.token().c_str() );
 
-    return( true );
+    return true;
 }
 
 } // end of namespace grads

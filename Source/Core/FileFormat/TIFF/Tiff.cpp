@@ -21,7 +21,7 @@
 namespace kvs
 {
 
-Tiff::Tiff( void )
+Tiff::Tiff()
 {
 }
 
@@ -31,51 +31,50 @@ Tiff::Tiff( const std::string& filename ):
     m_bits_per_sample( 0 ),
     m_color_mode( Tiff::UnknownColorMode )
 {
-    if( this->read( filename ) ) { m_is_success = true; }
-    else { m_is_success = false; }
+    this->read( filename );
 }
 
-Tiff::~Tiff( void )
+Tiff::~Tiff()
 {
     m_raw_data.release();
 }
 
-const Tiff::Header& Tiff::header( void ) const
+const Tiff::Header& Tiff::header() const
 {
-    return( m_header );
+    return m_header;
 }
 
-const Tiff::IFD& Tiff::ifd( void ) const
+const Tiff::IFD& Tiff::ifd() const
 {
-    return( m_ifd );
+    return m_ifd;
 }
 
-size_t Tiff::width( void ) const
+size_t Tiff::width() const
 {
-    return( m_width );
+    return m_width;
 }
 
-size_t Tiff::height( void ) const
+size_t Tiff::height() const
 {
-    return( m_height );
+    return m_height;
 }
 
-size_t Tiff::bitsPerSample( void ) const
+size_t Tiff::bitsPerSample() const
 {
-    return( m_bits_per_sample );
+    return m_bits_per_sample;
 }
 
-Tiff::ColorMode Tiff::colorMode( void ) const
+Tiff::ColorMode Tiff::colorMode() const
 {
-    return( m_color_mode );
+    return m_color_mode;
 }
 
-kvs::AnyValueArray Tiff::rawData( void ) const
+const kvs::AnyValueArray& Tiff::rawData() const
 {
-    return( m_raw_data );
+    return m_raw_data;
 }
 
-bool Tiff::isSupported( void ) const
+bool Tiff::isSupported() const
 {
     bool ret = true;
 
@@ -85,21 +84,22 @@ bool Tiff::isSupported( void ) const
         ret = false;
     }
 
-    return( ret );
+    return ret;
 }
 
-const bool Tiff::read( const std::string& filename )
+bool Tiff::read( const std::string& filename )
 {
-    BaseClass::m_filename = filename;
+    BaseClass::setFilename( filename );
+    BaseClass::setSuccess( true );
 
     // Open the file.
-    std::ifstream ifs( m_filename.c_str(), std::ios::binary | std::ios::in );
+    std::ifstream ifs( filename.c_str(), std::ios::binary | std::ios::in );
     if( !ifs.is_open() )
     {
-        kvsMessageError( "Cannot open %s.", m_filename.c_str() );
+        kvsMessageError( "Cannot open %s.", filename.c_str() );
         ifs.close();
-        BaseClass::m_is_success = false;
-        return( BaseClass::m_is_success );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // Read header information.
@@ -107,24 +107,24 @@ const bool Tiff::read( const std::string& filename )
     {
         kvsMessageError( "Cannot read header." );
         ifs.close();
-        BaseClass::m_is_success = false;
-        return( BaseClass::m_is_success );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     if ( !m_ifd.read( ifs ) )
     {
         kvsMessageError( "Cannot read IFD." );
         ifs.close();
-        BaseClass::m_is_success = false;
-        return( BaseClass::m_is_success );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // Chech whether this file is supported or not.
     if ( !this->isSupported() )
     {
         ifs.close();
-        BaseClass::m_is_success = false;
-        return( BaseClass::m_is_success );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // Get the image information.
@@ -136,18 +136,16 @@ const bool Tiff::read( const std::string& filename )
 
     ifs.close();
 
-    BaseClass::m_is_success = true;
-    return( BaseClass::m_is_success );
+    return true;
 }
 
-const bool Tiff::write( const std::string& filename )
+bool Tiff::write( const std::string& filename )
 {
     kvs::IgnoreUnusedVariable( filename );
-
-    return( true );
+    return true;
 }
 
-size_t Tiff::get_width( void ) const
+size_t Tiff::get_width() const
 {
     // Image width in pixels.
     const kvs::UInt16 TIFF_IMAGE_WIDTH = 256;
@@ -161,7 +159,7 @@ size_t Tiff::get_width( void ) const
     if ( entry == m_ifd.entryList().end() )
     {
         kvsMessageError("Cannot find the image width in 0th-IFD.");
-        return( 0 );
+        return 0;
     }
 
     size_t ret = 0;
@@ -177,10 +175,10 @@ size_t Tiff::get_width( void ) const
         break;
     }
 
-    return( ret );
+    return ret;
 }
 
-size_t Tiff::get_height( void ) const
+size_t Tiff::get_height() const
 {
     // Image height in pixels.
     const kvs::UInt16 TIFF_IMAGE_HEIGHT = 257;
@@ -194,7 +192,7 @@ size_t Tiff::get_height( void ) const
     if ( entry == m_ifd.entryList().end() )
     {
         kvsMessageError("Cannot find the image height in 0th-IFD.");
-        return( 0 );
+        return 0;
     }
 
     size_t ret = 0;
@@ -210,10 +208,10 @@ size_t Tiff::get_height( void ) const
         break;
     }
 
-    return( ret );
+    return ret;
 }
 
-size_t Tiff::get_bits_per_sample( void ) const
+size_t Tiff::get_bits_per_sample() const
 {
     // Bits per channel (sample).
     const kvs::UInt16 TIFF_BITSPERSAMPLE = 258;
@@ -227,7 +225,7 @@ size_t Tiff::get_bits_per_sample( void ) const
     if ( entry == m_ifd.entryList().end() )
     {
         const size_t default_value = 1;
-        return( default_value );
+        return default_value;
     }
 
     kvs::ValueArray<kvs::UInt16> values = entry->values().asValueArray<kvs::UInt16>();
@@ -237,10 +235,10 @@ size_t Tiff::get_bits_per_sample( void ) const
         ret += values[i]; // kvs::tiff::Short
     }
 
-    return( ret );
+    return ret;
 }
 
-size_t Tiff::get_samples_per_pixel( void ) const
+size_t Tiff::get_samples_per_pixel() const
 {
     // Samples per pixel
     const kvs::UInt16 TIFF_SAMPLESPERPIXEL = 277;
@@ -254,13 +252,13 @@ size_t Tiff::get_samples_per_pixel( void ) const
     if ( entry == m_ifd.entryList().end() )
     {
         const size_t default_value = 1;
-        return( default_value );
+        return default_value;
     }
 
-    return( entry->values().asValueArray<kvs::UInt16>()[0] ); // kvs::tiff::Short
+    return entry->values().asValueArray<kvs::UInt16>()[0]; // kvs::tiff::Short
 }
 
-size_t Tiff::get_photometirc_interpretation( void ) const
+size_t Tiff::get_photometirc_interpretation() const
 {
     // Photometric interpretation.
     /*   0: min value is white
@@ -283,13 +281,13 @@ size_t Tiff::get_photometirc_interpretation( void ) const
     if ( entry == m_ifd.entryList().end() )
     {
         kvsMessageError("Cannot find the photometric interpretation in 0th-IFD.");
-        return( 0 );
+        return 0;
     }
 
-    return( entry->values().asValueArray<kvs::UInt16>()[0] ); // kvs::tiff::Short
+    return entry->values().asValueArray<kvs::UInt16>()[0]; // kvs::tiff::Short
 }
 
-size_t Tiff::get_rows_per_strip( void ) const
+size_t Tiff::get_rows_per_strip() const
 {
     // Rows per strip of data.
     const kvs::UInt16 TIFF_ROWSPERSTRIP = 278;
@@ -303,7 +301,7 @@ size_t Tiff::get_rows_per_strip( void ) const
     if ( entry == m_ifd.entryList().end() )
     {
         const size_t default_value = ( kvs::UInt64( 1 ) << 32 ) - 1;
-        return( default_value );
+        return default_value;
     }
 
     size_t ret = 0;
@@ -319,10 +317,10 @@ size_t Tiff::get_rows_per_strip( void ) const
         break;
     }
 
-    return( ret );
+    return ret;
 }
 
-size_t Tiff::get_compression_mode( void ) const
+size_t Tiff::get_compression_mode() const
 {
     // Data compression technique.
     /*       1: none compression
@@ -353,13 +351,13 @@ size_t Tiff::get_compression_mode( void ) const
     if ( entry == m_ifd.entryList().end() )
     {
         const size_t default_value = 1;
-        return( default_value );
+        return default_value;
     }
 
-    return( entry->values().asValueArray<kvs::UInt16>()[0] ); // kvs::tiff::Short
+    return entry->values().asValueArray<kvs::UInt16>()[0]; // kvs::tiff::Short
 }
 
-kvs::AnyValueArray Tiff::get_strip_offsets( void ) const
+kvs::AnyValueArray Tiff::get_strip_offsets() const
 {
     // Offsets to the data strips.
     const kvs::UInt16 TIFF_STRIPOFFSETS = 273;
@@ -375,10 +373,10 @@ kvs::AnyValueArray Tiff::get_strip_offsets( void ) const
         kvsMessageError("Cannot find the strip offsets in 0th-IFD.");
     }
 
-    return( entry->values() );
+    return entry->values();
 }
 
-kvs::AnyValueArray Tiff::get_strip_bytes( void ) const
+kvs::AnyValueArray Tiff::get_strip_bytes() const
 {
     // Bytes counts for strips.
     const kvs::UInt16 TIFF_STRIPBYTECOUNT = 279;
@@ -394,10 +392,10 @@ kvs::AnyValueArray Tiff::get_strip_bytes( void ) const
         kvsMessageError("Cannot find the strip bytes counts in 0th-IFD.");
     }
 
-    return( entry->values() );
+    return entry->values();
 }
 
-Tiff::ColorMode Tiff::get_color_mode( void ) const
+Tiff::ColorMode Tiff::get_color_mode() const
 {
     Tiff::ColorMode color_mode = Tiff::UnknownColorMode;
 
@@ -436,7 +434,7 @@ Tiff::ColorMode Tiff::get_color_mode( void ) const
     default: color_mode = Tiff::UnknownColorMode; break;
     }
 
-    return( color_mode );
+    return color_mode;
 }
 
 kvs::AnyValueArray Tiff::get_raw_data( std::ifstream& ifs ) const
@@ -486,34 +484,34 @@ kvs::AnyValueArray Tiff::get_raw_data( std::ifstream& ifs ) const
         }
     }
 
-    return( raw_data );
+    return raw_data;
 }
 
-const bool Tiff::CheckFileExtension( const std::string& filename )
+bool Tiff::CheckFileExtension( const std::string& filename )
 {
     const kvs::File file( filename );
     if ( file.extension() == "tiff" || file.extension() == "TIFF" ||
          file.extension() == "tif"  || file.extension() == "TIF" )
     {
-        return( true );
+        return true;
     }
 
-    return( false );
+    return false;
 }
 
-const bool Tiff::CheckFileFormat( const std::string& filename )
+bool Tiff::CheckFileFormat( const std::string& filename )
 {
     // Open the file.
     std::ifstream ifs( filename.c_str(), std::ios::binary | std::ios::in );
     if( !ifs.is_open() )
     {
         kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return( false );
+        return false;
     }
 
     // Read header information.
     kvs::tiff::Header header;
-    return( header.read( ifs ) );
+    return header.read( ifs );
 }
 
 std::ostream& operator << ( std::ostream& os, const Tiff& tiff )
@@ -530,7 +528,7 @@ std::ostream& operator << ( std::ostream& os, const Tiff& tiff )
         if ( entry != last ) os << std::endl;
     }
 
-    return( os );
+    return os;
 }
 
 } // end of namespace kvs

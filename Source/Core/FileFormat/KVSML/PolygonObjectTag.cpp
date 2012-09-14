@@ -29,7 +29,7 @@ namespace kvsml
  *  @brief  Constructs a new polygon object tag class.
  */
 /*===========================================================================*/
-PolygonObjectTag::PolygonObjectTag( void ):
+PolygonObjectTag::PolygonObjectTag():
     kvs::kvsml::TagBase( "PolygonObject" ),
     m_has_polygon_type( false ),
     m_polygon_type( "" ),
@@ -45,7 +45,7 @@ PolygonObjectTag::PolygonObjectTag( void ):
  *  @brief  Destructs the polygon object class.
  */
 /*===========================================================================*/
-PolygonObjectTag::~PolygonObjectTag( void )
+PolygonObjectTag::~PolygonObjectTag()
 {
 }
 
@@ -55,9 +55,9 @@ PolygonObjectTag::~PolygonObjectTag( void )
  *  @return true, if the 'polygon_type' is specified
  */
 /*===========================================================================*/
-const bool PolygonObjectTag::hasPolygonType( void ) const
+bool PolygonObjectTag::hasPolygonType() const
 {
-    return( m_has_polygon_type );
+    return m_has_polygon_type;
 }
 
 /*===========================================================================*/
@@ -66,9 +66,9 @@ const bool PolygonObjectTag::hasPolygonType( void ) const
  *  @return polygon type
  */
 /*===========================================================================*/
-const std::string& PolygonObjectTag::polygonType( void ) const
+const std::string& PolygonObjectTag::polygonType() const
 {
-    return( m_polygon_type );
+    return m_polygon_type;
 }
 
 /*===========================================================================*/
@@ -77,9 +77,9 @@ const std::string& PolygonObjectTag::polygonType( void ) const
  *  @return true, if the 'color_type' is specified
  */
 /*===========================================================================*/
-const bool PolygonObjectTag::hasColorType( void ) const
+bool PolygonObjectTag::hasColorType() const
 {
-    return( m_has_color_type );
+    return m_has_color_type;
 }
 
 /*===========================================================================*/
@@ -88,9 +88,9 @@ const bool PolygonObjectTag::hasColorType( void ) const
  *  @return polygon type
  */
 /*===========================================================================*/
-const std::string& PolygonObjectTag::colorType( void ) const
+const std::string& PolygonObjectTag::colorType() const
 {
-    return( m_color_type );
+    return m_color_type;
 }
 
 /*===========================================================================*/
@@ -99,9 +99,9 @@ const std::string& PolygonObjectTag::colorType( void ) const
  *  @return true, if the 'normal_type' is specified
  */
 /*===========================================================================*/
-const bool PolygonObjectTag::hasNormalType( void ) const
+bool PolygonObjectTag::hasNormalType() const
 {
-    return( m_has_normal_type );
+    return m_has_normal_type;
 }
 
 /*===========================================================================*/
@@ -110,9 +110,9 @@ const bool PolygonObjectTag::hasNormalType( void ) const
  *  @return normal type
  */
 /*===========================================================================*/
-const std::string& PolygonObjectTag::normalType( void ) const
+const std::string& PolygonObjectTag::normalType() const
 {
-    return( m_normal_type );
+    return m_normal_type;
 }
 
 /*===========================================================================*/
@@ -158,7 +158,7 @@ void PolygonObjectTag::setNormalType( const std::string& normal_type )
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool PolygonObjectTag::read( const kvs::XMLNode::SuperClass* parent )
+bool PolygonObjectTag::read( const kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
 
@@ -166,7 +166,7 @@ const bool PolygonObjectTag::read( const kvs::XMLNode::SuperClass* parent )
     if ( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
     // Element
@@ -196,7 +196,7 @@ const bool PolygonObjectTag::read( const kvs::XMLNode::SuperClass* parent )
         m_normal_type = normal_type;
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -206,7 +206,7 @@ const bool PolygonObjectTag::read( const kvs::XMLNode::SuperClass* parent )
  *  @return true, if the writing process is done successfully
  */
 /*===========================================================================*/
-const bool PolygonObjectTag::write( kvs::XMLNode::SuperClass* parent )
+bool PolygonObjectTag::write( kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
     kvs::XMLElement element( tag_name );
@@ -220,7 +220,7 @@ const bool PolygonObjectTag::write( kvs::XMLNode::SuperClass* parent )
     else
     {
         kvsMessageError( "'polygon_type' is not specified in <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
     if ( m_has_color_type )
@@ -232,7 +232,7 @@ const bool PolygonObjectTag::write( kvs::XMLNode::SuperClass* parent )
     else
     {
         kvsMessageError( "'color_type' is not specified in <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
     if ( m_has_normal_type )
@@ -244,17 +244,17 @@ const bool PolygonObjectTag::write( kvs::XMLNode::SuperClass* parent )
     else
     {
         kvsMessageError( "'normal_type' is not specified in <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
     BaseClass::m_node = parent->InsertEndChild( element );
     if( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 } // end of namespace kvsml

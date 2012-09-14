@@ -35,7 +35,7 @@ XMLElement::XMLElement( const std::string& value ):
  *  Constructor.
  */
 /*==========================================================================*/
-XMLElement::~XMLElement( void )
+XMLElement::~XMLElement()
 {
 }
 
@@ -48,7 +48,7 @@ XMLElement::~XMLElement( void )
 /*==========================================================================*/
 TiXmlNode* XMLElement::insert( const TiXmlNode& node )
 {
-    return( SuperClass::InsertEndChild( node ) );
+    return SuperClass::InsertEndChild( node );
 }
 
 /*==========================================================================*/
@@ -78,9 +78,9 @@ void XMLElement::setAttribute( const std::string& name, int value )
 const std::string XMLElement::AttributeValue( const TiXmlElement* element, const std::string& name )
 {
     const std::string* value = element->Attribute( name );
-    if( !value ) return( "" );
+    if( !value ) return "";
 
-    return( *value );
+    return *value;
 }
 
 } // end of namespace kvs

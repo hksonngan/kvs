@@ -33,7 +33,7 @@ namespace grads
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool XYZDef::read( std::string line, std::ifstream& ifs )
+bool XYZDef::read( std::string line, std::ifstream& ifs )
 {
     kvs::Tokenizer t( line, " \t\n" );
     t.token(); // XDEF, YDEF or ZDEF
@@ -42,7 +42,7 @@ const bool XYZDef::read( std::string line, std::ifstream& ifs )
     if ( t.isLast() )
     {
         kvsMessageError("Cannot read num.");
-        return( false );
+        return false;
     }
     this->num = static_cast<size_t>( atoi( t.token().c_str() ) );
 
@@ -50,7 +50,7 @@ const bool XYZDef::read( std::string line, std::ifstream& ifs )
     if ( t.isLast() )
     {
         kvsMessageError("Cannot read mapping.");
-        return( false );
+        return false;
     }
     const std::string mapping = t.token();
 
@@ -99,7 +99,7 @@ const bool XYZDef::read( std::string line, std::ifstream& ifs )
         }
     }
 
-    return( true );
+    return true;
 }
 
 } // end of namespace grads

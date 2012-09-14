@@ -37,53 +37,42 @@ class Element
 {
 public:
 
-    typedef dcm::Tag   Tag;
-    typedef dcm::VR    VR;
+    typedef dcm::Tag Tag;
+    typedef dcm::VR VR;
     typedef dcm::Value Value;
 
 protected:
 
-    dcm::Tag   m_tag;   //!< tag
-    dcm::VR    m_vr;    //!< value representation
+    dcm::Tag m_tag; //!< tag
+    dcm::VR m_vr; //!< value representation
     dcm::Value m_value; //!< data value
 
 public:
 
-    Element( void );
-
+    Element();
     Element( std::ifstream& ifs, const bool swap = false );
-
-    virtual ~Element( void );
+    virtual ~Element();
 
 public:
 
-    friend const bool operator == ( const Element& e, const dcm::Tag t );
-
-    friend const bool operator == ( const dcm::Tag t, const Element& e );
-
-    friend const bool operator == ( const Element& a, const Element& b );
-
-    friend const bool operator != ( const Element& a, const Element& b );
-
-    friend const bool operator < ( const Element& a, const Element& b );
-
+    friend bool operator == ( const Element& e, const dcm::Tag t );
+    friend bool operator == ( const dcm::Tag t, const Element& e );
+    friend bool operator == ( const Element& a, const Element& b );
+    friend bool operator != ( const Element& a, const Element& b );
+    friend bool operator < ( const Element& a, const Element& b );
     friend std::ostream& operator << ( std::ostream& os, const Element& e );
-
     friend std::ofstream& operator << ( std::ofstream& ofs, const Element& e );
 
 public:
 
-    const dcm::Tag tag( void ) const;
-
-    const dcm::VR vr( void ) const;
-
-    const dcm::Value& value( void ) const;
-
-    const bool isKnown( void );
+    dcm::Tag tag() const;
+    dcm::VR vr() const;
+    const dcm::Value& value() const;
+    bool isKnown();
 
 public:
 
-    const bool read( std::ifstream& ifs, const bool swap );
+    bool read( std::ifstream& ifs, const bool swap );
 };
 
 } // end of namespace dcm

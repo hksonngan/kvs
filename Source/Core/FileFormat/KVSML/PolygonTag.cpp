@@ -29,7 +29,7 @@ namespace kvsml
  *  @brief  Constructs a new polygon tag class.
  */
 /*===========================================================================*/
-PolygonTag::PolygonTag( void ):
+PolygonTag::PolygonTag():
     kvs::kvsml::TagBase( "Polygon" ),
     m_has_npolygons( false ),
     m_npolygons( 0 )
@@ -41,7 +41,7 @@ PolygonTag::PolygonTag( void ):
  *  @brief  Destructs the polygon tag class.
  */
 /*===========================================================================*/
-PolygonTag::~PolygonTag( void )
+PolygonTag::~PolygonTag()
 {
 }
 
@@ -51,9 +51,9 @@ PolygonTag::~PolygonTag( void )
  *  @return true, if the polygon tag has the 'npolygons' attribute value
  */
 /*===========================================================================*/
-const bool PolygonTag::hasNPolygons( void ) const
+bool PolygonTag::hasNPolygons() const
 {
-    return( m_has_npolygons );
+    return m_has_npolygons;
 }
 
 /*===========================================================================*/
@@ -62,9 +62,9 @@ const bool PolygonTag::hasNPolygons( void ) const
  *  @return number of polygons
  */
 /*===========================================================================*/
-const size_t PolygonTag::npolygons( void ) const
+size_t PolygonTag::npolygons() const
 {
-    return( m_npolygons );
+    return m_npolygons;
 }
 
 /*===========================================================================*/
@@ -86,7 +86,7 @@ void PolygonTag::setNPolygons( const size_t npolygons )
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool PolygonTag::read( const kvs::XMLNode::SuperClass* parent )
+bool PolygonTag::read( const kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
 
@@ -94,7 +94,7 @@ const bool PolygonTag::read( const kvs::XMLNode::SuperClass* parent )
     if ( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
     // Element
@@ -108,7 +108,7 @@ const bool PolygonTag::read( const kvs::XMLNode::SuperClass* parent )
         m_npolygons = static_cast<size_t>( atoi( npolygons.c_str() ) );
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -118,7 +118,7 @@ const bool PolygonTag::read( const kvs::XMLNode::SuperClass* parent )
  *  @return true, if the writing process is done successfully
  */
 /*===========================================================================*/
-const bool PolygonTag::write( kvs::XMLNode::SuperClass* parent )
+bool PolygonTag::write( kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
     kvs::XMLElement element( tag_name );
@@ -134,10 +134,10 @@ const bool PolygonTag::write( kvs::XMLNode::SuperClass* parent )
     if( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 } // end of namespace kvsml

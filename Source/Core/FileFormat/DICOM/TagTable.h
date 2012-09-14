@@ -32,8 +32,8 @@ struct TagTable
 {
     unsigned short group_id;
     unsigned short element_id;
-    dcm::VRType    vr_type;
-    std::string    name;
+    dcm::VRType vr_type;
+    std::string name;
 };
 
 const TagTable TAG_TABLE_0008[] =

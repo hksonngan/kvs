@@ -29,7 +29,7 @@ namespace kvsml
  *  @brief  Constructs a new TransferFunctionTag class.
  */
 /*===========================================================================*/
-TransferFunctionTag::TransferFunctionTag( void ):
+TransferFunctionTag::TransferFunctionTag():
     kvs::kvsml::TagBase( "TransferFunction" ),
     m_has_file( false ),
     m_file( "" ),
@@ -47,7 +47,7 @@ TransferFunctionTag::TransferFunctionTag( void ):
  *  @brief  Destructs the TransferFunctionTag class.
  */
 /*===========================================================================*/
-TransferFunctionTag::~TransferFunctionTag( void )
+TransferFunctionTag::~TransferFunctionTag()
 {
 }
 
@@ -57,9 +57,9 @@ TransferFunctionTag::~TransferFunctionTag( void )
  *  @return true, if the file is specified
  */
 /*===========================================================================*/
-const bool TransferFunctionTag::hasFile( void ) const
+bool TransferFunctionTag::hasFile() const
 {
-    return( m_has_file );
+    return m_has_file;
 }
 
 /*===========================================================================*/
@@ -68,9 +68,9 @@ const bool TransferFunctionTag::hasFile( void ) const
  *  @return filename
  */
 /*===========================================================================*/
-const std::string& TransferFunctionTag::file( void ) const
+const std::string& TransferFunctionTag::file() const
 {
-    return( m_file );
+    return m_file;
 }
 
 /*===========================================================================*/
@@ -79,9 +79,9 @@ const std::string& TransferFunctionTag::file( void ) const
  *  @return true, if the resolution is specified
  */
 /*===========================================================================*/
-const bool TransferFunctionTag::hasResolution( void ) const
+bool TransferFunctionTag::hasResolution() const
 {
-    return( m_has_resolution );
+    return m_has_resolution;
 }
 
 /*===========================================================================*/
@@ -90,9 +90,9 @@ const bool TransferFunctionTag::hasResolution( void ) const
  *  @return resolution
  */
 /*===========================================================================*/
-const size_t TransferFunctionTag::resolution( void ) const
+size_t TransferFunctionTag::resolution() const
 {
-    return( m_resolution );
+    return m_resolution;
 }
 
 /*===========================================================================*/
@@ -101,9 +101,9 @@ const size_t TransferFunctionTag::resolution( void ) const
  *  @return true, if the min_value is specified
  */
 /*===========================================================================*/
-const bool TransferFunctionTag::hasMinValue( void ) const
+bool TransferFunctionTag::hasMinValue() const
 {
-    return( m_has_min_value );
+    return m_has_min_value;
 }
 
 /*===========================================================================*/
@@ -112,9 +112,9 @@ const bool TransferFunctionTag::hasMinValue( void ) const
  *  @return min. scalar value
  */
 /*===========================================================================*/
-const float TransferFunctionTag::minValue( void ) const
+float TransferFunctionTag::minValue() const
 {
-    return( m_min_value );
+    return m_min_value;
 }
 
 /*===========================================================================*/
@@ -123,9 +123,9 @@ const float TransferFunctionTag::minValue( void ) const
  *  @return true, if the max_value is specified
  */
 /*===========================================================================*/
-const bool TransferFunctionTag::hasMaxValue( void ) const
+bool TransferFunctionTag::hasMaxValue() const
 {
-    return( m_has_max_value );
+    return m_has_max_value;
 }
 
 /*===========================================================================*/
@@ -134,9 +134,9 @@ const bool TransferFunctionTag::hasMaxValue( void ) const
  *  @return max. scalar value
  */
 /*===========================================================================*/
-const float TransferFunctionTag::maxValue( void ) const
+float TransferFunctionTag::maxValue() const
 {
-    return( m_max_value );
+    return m_max_value;
 }
 
 /*===========================================================================*/
@@ -193,7 +193,7 @@ void TransferFunctionTag::setMaxValue( const float max_value )
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool TransferFunctionTag::read( const kvs::XMLNode::SuperClass* parent )
+bool TransferFunctionTag::read( const kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
 
@@ -201,7 +201,7 @@ const bool TransferFunctionTag::read( const kvs::XMLNode::SuperClass* parent )
     if ( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
     // Element
@@ -239,7 +239,7 @@ const bool TransferFunctionTag::read( const kvs::XMLNode::SuperClass* parent )
         m_file = file;
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -249,7 +249,7 @@ const bool TransferFunctionTag::read( const kvs::XMLNode::SuperClass* parent )
  *  @return true, if the writing process is done successfully
  */
 /*===========================================================================*/
-const bool TransferFunctionTag::write( kvs::XMLNode::SuperClass* parent )
+bool TransferFunctionTag::write( kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
     kvs::XMLElement element( tag_name );
@@ -290,10 +290,10 @@ const bool TransferFunctionTag::write( kvs::XMLNode::SuperClass* parent )
     if( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 } // end of namespace kvsml

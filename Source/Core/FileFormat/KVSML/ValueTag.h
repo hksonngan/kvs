@@ -49,43 +49,32 @@ protected:
 
 public:
 
-    ValueTag( void );
+    ValueTag();
 
-    virtual ~ValueTag( void );
+    virtual ~ValueTag();
 
 public:
 
-    const bool hasLabel( void ) const;
-
-    const bool hasVeclen( void ) const;
-
-    const bool hasMinValue( void ) const;
-
-    const bool hasMaxValue( void ) const;
-
-    const std::string& label( void ) const;
-
-    const size_t veclen( void ) const;
-
-    const double minValue( void ) const;
-
-    const double maxValue( void ) const;
+    bool hasLabel() const;
+    bool hasVeclen() const;
+    bool hasMinValue() const;
+    bool hasMaxValue() const;
+    const std::string& label() const;
+    size_t veclen() const;
+    double minValue() const;
+    double maxValue() const;
 
 public:
 
     void setLabel( const std::string& label );
-
     void setVeclen( const size_t veclen );
-
     void setMinValue( const double min_value );
-
     void setMaxValue( const double max_value );
 
 public:
 
-    const bool read( const kvs::XMLNode::SuperClass* parent );
-
-    const bool write( kvs::XMLNode::SuperClass* parent );
+    bool read( const kvs::XMLNode::SuperClass* parent );
+    bool write( kvs::XMLNode::SuperClass* parent );
 };
 
 } // end of namespace kvsml

@@ -23,7 +23,7 @@ namespace kvs
 namespace bmp
 {
 
-FileHeader::FileHeader( void )
+FileHeader::FileHeader()
 {
 }
 
@@ -43,32 +43,32 @@ std::ostream& operator << ( std::ostream& os, const kvs::bmp::FileHeader& fh )
     os << "\treserved 2   : " << fh.m_reserved2    << std::endl;
     os << "\toffset       : " << fh.m_offset;
 
-    return( os );
+    return os;
 }
 
-kvs::UInt16 FileHeader::type( void ) const
+kvs::UInt16 FileHeader::type() const
 {
-    return( m_type );
+    return m_type;
 }
 
-kvs::UInt32 FileHeader::size( void ) const
+kvs::UInt32 FileHeader::size() const
 {
-    return( m_size );
+    return m_size;
 }
 
-kvs::UInt16 FileHeader::reserved1( void ) const
+kvs::UInt16 FileHeader::reserved1() const
 {
-    return( m_reserved1 );
+    return m_reserved1;
 }
 
-kvs::UInt16 FileHeader::reserved2( void ) const
+kvs::UInt16 FileHeader::reserved2() const
 {
-    return( m_reserved2 );
+    return m_reserved2;
 }
 
-kvs::UInt32 FileHeader::offset( void ) const
+kvs::UInt32 FileHeader::offset() const
 {
-    return( m_offset );
+    return m_offset;
 }
 
 void FileHeader::read( std::ifstream& ifs )
@@ -92,12 +92,12 @@ void FileHeader::write( std::ofstream& ofs )
     BMP_HEADER_SWAP_BYTES;
 }
 
-bool FileHeader::isBM( void )
+bool FileHeader::isBM()
 {
-    return( !strncmp( reinterpret_cast<char*>(&m_type), "BM", 2 ) );
+    return !strncmp( reinterpret_cast<char*>(&m_type), "BM", 2 );
 }
 
-void FileHeader::swap_bytes( void )
+void FileHeader::swap_bytes()
 {
     kvs::Endian::Swap( &m_size );
     kvs::Endian::Swap( &m_reserved1 );

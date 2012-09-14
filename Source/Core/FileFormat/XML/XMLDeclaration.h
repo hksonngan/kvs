@@ -37,14 +37,12 @@ public:
 
 public:
 
-    XMLDeclaration( void );
-
+    XMLDeclaration();
     XMLDeclaration(
         const std::string& version,
         const std::string& encoding = "",
         const std::string& standalone = "" );
-
-    virtual ~XMLDeclaration( void );
+    virtual ~XMLDeclaration();
 };
 
 } // end of namespace kvs

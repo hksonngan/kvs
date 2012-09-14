@@ -33,7 +33,7 @@ namespace kvs
  *  @brief  Constructs a new KVSMLTransferFunction class.
  */
 /*===========================================================================*/
-KVSMLTransferFunction::KVSMLTransferFunction( void ):
+KVSMLTransferFunction::KVSMLTransferFunction():
     m_writing_type( kvs::KVSMLTransferFunction::Ascii ),
     m_resolution( 0 ),
     m_min_value( 0.0f ),
@@ -52,8 +52,7 @@ KVSMLTransferFunction::KVSMLTransferFunction( const std::string& filename ):
     m_min_value( 0.0f ),
     m_max_value( 0.0f )
 {
-    if ( this->read( filename ) ) { m_is_success = true; }
-    else { m_is_success = false; }
+    this->read( filename );
 }
 
 /*===========================================================================*/
@@ -61,7 +60,7 @@ KVSMLTransferFunction::KVSMLTransferFunction( const std::string& filename ):
  *  @brief  Destructs the KVSMLTransferFunction class.
  */
 /*===========================================================================*/
-KVSMLTransferFunction::~KVSMLTransferFunction( void )
+KVSMLTransferFunction::~KVSMLTransferFunction()
 {
 }
 
@@ -71,9 +70,9 @@ KVSMLTransferFunction::~KVSMLTransferFunction( void )
  *  @return KVSML tag
  */
 /*===========================================================================*/
-const kvs::kvsml::KVSMLTag& KVSMLTransferFunction::KVSMLTag( void ) const
+const kvs::kvsml::KVSMLTag& KVSMLTransferFunction::KVSMLTag() const
 {
-    return( m_kvsml_tag );
+    return m_kvsml_tag;
 }
 
 /*===========================================================================*/
@@ -82,9 +81,9 @@ const kvs::kvsml::KVSMLTag& KVSMLTransferFunction::KVSMLTag( void ) const
  *  @return resolution
  */
 /*===========================================================================*/
-const size_t KVSMLTransferFunction::resolution( void ) const
+size_t KVSMLTransferFunction::resolution() const
 {
-    return( m_resolution );
+    return m_resolution;
 }
 
 /*===========================================================================*/
@@ -93,9 +92,9 @@ const size_t KVSMLTransferFunction::resolution( void ) const
  *  @return min scalar value
  */
 /*===========================================================================*/
-const float KVSMLTransferFunction::minValue( void ) const
+float KVSMLTransferFunction::minValue() const
 {
-    return( m_min_value );
+    return m_min_value;
 }
 
 /*===========================================================================*/
@@ -104,9 +103,9 @@ const float KVSMLTransferFunction::minValue( void ) const
  *  @return max scalar value
  */
 /*===========================================================================*/
-const float KVSMLTransferFunction::maxValue( void ) const
+float KVSMLTransferFunction::maxValue() const
 {
-    return( m_max_value );
+    return m_max_value;
 }
 
 /*===========================================================================*/
@@ -115,9 +114,9 @@ const float KVSMLTransferFunction::maxValue( void ) const
  *  @return opacity point list
  */
 /*===========================================================================*/
-const KVSMLTransferFunction::OpacityPointList& KVSMLTransferFunction::opacityPointList( void ) const
+const KVSMLTransferFunction::OpacityPointList& KVSMLTransferFunction::opacityPointList() const
 {
-    return( m_opacity_point_list );
+    return m_opacity_point_list;
 }
 
 /*===========================================================================*/
@@ -126,9 +125,9 @@ const KVSMLTransferFunction::OpacityPointList& KVSMLTransferFunction::opacityPoi
  *  @return color point list
  */
 /*===========================================================================*/
-const KVSMLTransferFunction::ColorPointList& KVSMLTransferFunction::colorPointList( void ) const
+const KVSMLTransferFunction::ColorPointList& KVSMLTransferFunction::colorPointList() const
 {
-    return( m_color_point_list );
+    return m_color_point_list;
 }
 
 /*===========================================================================*/
@@ -137,9 +136,9 @@ const KVSMLTransferFunction::ColorPointList& KVSMLTransferFunction::colorPointLi
  *  @return opacity array
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::Real32>& KVSMLTransferFunction::opacities( void ) const
+const kvs::ValueArray<kvs::Real32>& KVSMLTransferFunction::opacities() const
 {
-    return( m_opacities );
+    return m_opacities;
 }
 
 /*===========================================================================*/
@@ -148,9 +147,9 @@ const kvs::ValueArray<kvs::Real32>& KVSMLTransferFunction::opacities( void ) con
  *  @return color array
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::UInt8>& KVSMLTransferFunction::colors( void ) const
+const kvs::ValueArray<kvs::UInt8>& KVSMLTransferFunction::colors() const
 {
-    return( m_colors );
+    return m_colors;
 }
 
 /*===========================================================================*/
@@ -241,23 +240,26 @@ void KVSMLTransferFunction::setColors( const kvs::ValueArray<kvs::UInt8>& colors
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool KVSMLTransferFunction::read( const std::string& filename )
+bool KVSMLTransferFunction::read( const std::string& filename )
 {
-    m_filename = filename;
+    BaseClass::setFilename( filename );
+    BaseClass::setSuccess( true );
 
     // XML document
     kvs::XMLDocument document;
     if ( !document.read( filename ) )
     {
         kvsMessageError( "%s", document.ErrorDesc().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <KVSML>
     if ( !m_kvsml_tag.read( &document ) )
     {
         kvsMessageError( "Cannot read <%s>.", m_kvsml_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <TransferFunction>
@@ -265,13 +267,15 @@ const bool KVSMLTransferFunction::read( const std::string& filename )
     if ( !tfunc_tag.read( m_kvsml_tag.node() ) )
     {
         kvsMessageError( "Cannot read <%s>.", tfunc_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     if ( !tfunc_tag.hasResolution() )
     {
         kvsMessageError( "'resolution' is not specified in <%s>.", tfunc_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
     m_resolution = tfunc_tag.resolution();
 
@@ -289,7 +293,8 @@ const bool KVSMLTransferFunction::read( const std::string& filename )
             if ( !color_map_tag.read( tfunc_tag.node() ) )
             {
                 kvsMessageError( "Cannot read <%s>.", color_map_tag.name().c_str() );
-                return( false );
+                BaseClass::setSuccess( false );
+                return false;
             }
 
             // <ColorMapValue> for <ColorMap>
@@ -319,14 +324,15 @@ const bool KVSMLTransferFunction::read( const std::string& filename )
                     kvsMessageError( "Cannot read <%s> for <%s>.",
                                      colors.name().c_str(),
                                      color_map_tag.name().c_str() );
-                    return( false );
+                    BaseClass::setSuccess( false );
+                    return false;
                 }
             }
 
             if ( !opacity_map_tag.read( tfunc_tag.node() ) )
             {
                 kvsMessageError( "Cannot read <%s>.", opacity_map_tag.name().c_str() );
-                return( false );
+                return false;
             }
 
             // <OpacityMapValue> for <OpacityMap>
@@ -356,7 +362,8 @@ const bool KVSMLTransferFunction::read( const std::string& filename )
                     kvsMessageError( "Cannot read <%s> for <%s>.",
                                      opacities.name().c_str(),
                                      opacity_map_tag.name().c_str() );
-                    return( false );
+                    BaseClass::setSuccess( false );
+                    return false;
                 }
             }
         }
@@ -365,7 +372,8 @@ const bool KVSMLTransferFunction::read( const std::string& filename )
         else
         {
             kvsMessageError( "Cannot find <%s>.", opacity_map_tag.name().c_str() );
-            return( false );
+            BaseClass::setSuccess( false );
+            return false;
         }
     }
     else
@@ -374,7 +382,8 @@ const bool KVSMLTransferFunction::read( const std::string& filename )
         if ( opacity_map_tag.isExisted( tfunc_tag.node() ) )
         {
             kvsMessageError( "Cannot find <%s>.", color_map_tag.name().c_str() );
-            return( false );
+            BaseClass::setSuccess( false );
+            return false;
         }
         else
         {
@@ -390,7 +399,8 @@ const bool KVSMLTransferFunction::read( const std::string& filename )
                 if ( !values )
                 {
                     kvsMessageError( "No values in <%s>", tfunc_tag.name().c_str() );
-                    return( false );
+                    BaseClass::setSuccess( false );
+                    return false;
                 }
 
                 const std::string delim(" \n");
@@ -421,7 +431,8 @@ const bool KVSMLTransferFunction::read( const std::string& filename )
                 if ( !ifs.is_open() )
                 {
                     kvsMessageError( "Cannot open %s.", tfunc_tag.file().c_str() );
-                    return( false );
+                    BaseClass::setSuccess( false );
+                    return false;
                 }
 
                 m_opacities.allocate( m_resolution );
@@ -445,7 +456,7 @@ const bool KVSMLTransferFunction::read( const std::string& filename )
         }
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -455,9 +466,10 @@ const bool KVSMLTransferFunction::read( const std::string& filename )
  *  @return true, if the writing process is done successfully
  */
 /*===========================================================================*/
-const bool KVSMLTransferFunction::write( const std::string& filename )
+bool KVSMLTransferFunction::write( const std::string& filename )
 {
-    m_filename = filename;
+    BaseClass::setFilename( filename );
+    BaseClass::setSuccess( true );
 
     kvs::XMLDocument document;
     document.InsertEndChild( kvs::XMLDeclaration("1.0") );
@@ -468,7 +480,8 @@ const bool KVSMLTransferFunction::write( const std::string& filename )
     if ( !kvsml_tag.write( &document ) )
     {
         kvsMessageError( "Cannot write <%s>.", kvsml_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <TransferFunction>
@@ -484,7 +497,8 @@ const bool KVSMLTransferFunction::write( const std::string& filename )
     if ( !tfunc_tag.write( kvsml_tag.node() ) )
     {
         kvsMessageError( "Cannot write <%s>.", tfunc_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <ColorMap>
@@ -492,7 +506,8 @@ const bool KVSMLTransferFunction::write( const std::string& filename )
     if ( !color_map_tag.write( tfunc_tag.node() ) )
     {
         kvsMessageError( "Cannot write <%s>.", color_map_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <ColorMapValue>
@@ -508,7 +523,8 @@ const bool KVSMLTransferFunction::write( const std::string& filename )
             if ( !value_tag.write( color_map_tag.node() ) )
             {
                 kvsMessageError( "Cannot write <%s>.", color_map_tag.name().c_str() );
-                return( false );
+                BaseClass::setSuccess( false );
+                return false;
             }
 
             point++;
@@ -520,22 +536,23 @@ const bool KVSMLTransferFunction::write( const std::string& filename )
         kvs::kvsml::DataArrayTag colors;
         if ( m_writing_type == ExternalAscii )
         {
-            colors.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "cmap" ) );
+            colors.setFile( kvs::kvsml::DataArray::GetDataFilename( filename, "cmap" ) );
             colors.setFormat( "ascii" );
         }
         else if ( m_writing_type == ExternalBinary )
         {
-            colors.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "cmap" ) );
+            colors.setFile( kvs::kvsml::DataArray::GetDataFilename( filename, "cmap" ) );
             colors.setFormat( "binary" );
         }
 
-        const std::string pathname = kvs::File( m_filename ).pathName();
+        const std::string pathname = kvs::File( filename ).pathName();
         if ( !colors.write( color_map_tag.node(), m_colors, pathname ) )
         {
             kvsMessageError( "Cannot write <%s> for <%s>.",
                              colors.name().c_str(),
                              color_map_tag.name().c_str() );
-            return( false );
+            BaseClass::setSuccess( false );
+            return false;
         }
     }
 
@@ -544,7 +561,8 @@ const bool KVSMLTransferFunction::write( const std::string& filename )
     if ( !opacity_map_tag.write( tfunc_tag.node() ) )
     {
         kvsMessageError( "Cannot write <%s>.", opacity_map_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <OpacityMapValue>
@@ -560,7 +578,8 @@ const bool KVSMLTransferFunction::write( const std::string& filename )
             if ( !value_tag.write( color_map_tag.node() ) )
             {
                 kvsMessageError( "Cannot write <%s>.", opacity_map_tag.name().c_str() );
-                return( false );
+                BaseClass::setSuccess( false );
+                return false;
             }
 
             point++;
@@ -572,26 +591,30 @@ const bool KVSMLTransferFunction::write( const std::string& filename )
         kvs::kvsml::DataArrayTag opacities;
         if ( m_writing_type == ExternalAscii )
         {
-            opacities.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "omap" ) );
+            opacities.setFile( kvs::kvsml::DataArray::GetDataFilename( filename, "omap" ) );
             opacities.setFormat( "ascii" );
         }
         else if ( m_writing_type == ExternalBinary )
         {
-            opacities.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "omap" ) );
+            opacities.setFile( kvs::kvsml::DataArray::GetDataFilename( filename, "omap" ) );
             opacities.setFormat( "binary" );
         }
 
-        const std::string pathname = kvs::File( m_filename ).pathName();
+        const std::string pathname = kvs::File( filename ).pathName();
         if ( !opacities.write( opacity_map_tag.node(), m_opacities, pathname ) )
         {
             kvsMessageError( "Cannot write <%s> for <%s>.",
                              opacities.name().c_str(),
                              opacity_map_tag.name().c_str() );
-            return( false );
+            BaseClass::setSuccess( false );
+            return false;
         }
     }
 
-    return( document.write( m_filename ) );
+    const bool success = document.write( filename );
+    BaseClass::setSuccess( success );
+
+    return success;
 }
 
 /*===========================================================================*/
@@ -601,7 +624,7 @@ const bool KVSMLTransferFunction::write( const std::string& filename )
  *  @return true, if the given filename has the supported extension
  */
 /*===========================================================================*/
-const bool KVSMLTransferFunction::CheckFileExtension( const std::string& filename )
+bool KVSMLTransferFunction::CheckFileExtension( const std::string& filename )
 {
     const kvs::File file( filename );
     if ( file.extension() == "kvsml" ||
@@ -609,10 +632,10 @@ const bool KVSMLTransferFunction::CheckFileExtension( const std::string& filenam
          file.extension() == "xml"   ||
          file.extension() == "XML" )
     {
-        return( true );
+        return true;
     }
 
-    return( false );
+    return false;
 }
 
 /*===========================================================================*/
@@ -622,20 +645,20 @@ const bool KVSMLTransferFunction::CheckFileExtension( const std::string& filenam
  *  @return true, if the KVSMLTransferFunction class can read the given file
  */
 /*===========================================================================*/
-const bool KVSMLTransferFunction::CheckFileFormat( const std::string& filename )
+bool KVSMLTransferFunction::CheckFileFormat( const std::string& filename )
 {
     kvs::XMLDocument document;
-    if ( !document.read( filename ) ) return( false );
+    if ( !document.read( filename ) ) return false;
 
     // <KVSML>
     kvs::kvsml::KVSMLTag kvsml_tag;
-    if ( !kvsml_tag.read( &document ) ) return( false );
+    if ( !kvsml_tag.read( &document ) ) return false;
 
     // <TransferFunction>
     kvs::kvsml::TransferFunctionTag tfunc_tag;
-    if ( !tfunc_tag.read( kvsml_tag.node() ) ) return( false );
+    if ( !tfunc_tag.read( kvsml_tag.node() ) ) return false;
 
-    return( true );
+    return true;
 }
 
 } // end of namespace kvs

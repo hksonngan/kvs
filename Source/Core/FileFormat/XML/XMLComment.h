@@ -36,11 +36,9 @@ public:
 
 public:
 
-    XMLComment( void );
-
+    XMLComment();
     XMLComment( const char* comment );
-
-    virtual ~XMLComment( void );
+    virtual ~XMLComment();
 };
 
 } // end of namespace kvs

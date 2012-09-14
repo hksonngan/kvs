@@ -44,15 +44,13 @@ protected:
 
 public:
 
-    UnstructuredVolumeObjectTag( void );
-
-    virtual ~UnstructuredVolumeObjectTag( void );
+    UnstructuredVolumeObjectTag();
+    virtual ~UnstructuredVolumeObjectTag();
 
 public:
 
-    const bool hasCellType( void ) const;
-
-    const std::string& cellType( void ) const;
+    bool hasCellType() const;
+    const std::string& cellType() const;
 
 public:
 
@@ -60,9 +58,8 @@ public:
 
 public:
 
-    const bool read( const kvs::XMLNode::SuperClass* parent );
-
-    const bool write( kvs::XMLNode::SuperClass* parent );
+    bool read( const kvs::XMLNode::SuperClass* parent );
+    bool write( kvs::XMLNode::SuperClass* parent );
 };
 
 } // end of namespace kvsml

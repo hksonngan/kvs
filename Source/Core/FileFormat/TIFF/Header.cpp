@@ -29,7 +29,7 @@ namespace kvs
 namespace tiff
 {
 
-Header::Header( void ):
+Header::Header():
     m_magic( 0 ),
     m_version( 0 ),
     m_offset( 0 )
@@ -52,22 +52,22 @@ std::ostream& operator << ( std::ostream& os, const Header& header )
     os << "Version:      " << header.version() << std::endl;
     os << "Offset:       " << header.offset();
 
-    return( os );
+    return os;
 }
 
-kvs::UInt16 Header::magic( void ) const
+kvs::UInt16 Header::magic() const
 {
-    return( m_magic );
+    return m_magic;
 }
 
-kvs::UInt16 Header::version( void ) const
+kvs::UInt16 Header::version() const
 {
-    return( m_version );
+    return m_version;
 }
 
-kvs::UInt32 Header::offset( void ) const
+kvs::UInt32 Header::offset() const
 {
-    return( m_offset );
+    return m_offset;
 }
 
 bool Header::read( std::ifstream& ifs )
@@ -76,17 +76,17 @@ bool Header::read( std::ifstream& ifs )
     ifs.seekg( 0, std::ios::beg );
 
     ifs.read( reinterpret_cast<char*>(&m_magic),   2 );
-    if ( ifs.gcount() != 2 ) return( false );
+    if ( ifs.gcount() != 2 ) return false;
 
     ifs.read( reinterpret_cast<char*>(&m_version), 2 );
-    if ( ifs.gcount() != 2 ) return( false );
+    if ( ifs.gcount() != 2 ) return false;
 
     ifs.read( reinterpret_cast<char*>(&m_offset),  4 );
-    if ( ifs.gcount() != 4 ) return( false );
+    if ( ifs.gcount() != 4 ) return false;
 
     ifs.seekg( m_offset, std::ios::beg );
 
-    return( true );
+    return true;
 }
 
 } // end of namespace tiff

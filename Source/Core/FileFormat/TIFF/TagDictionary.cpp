@@ -23,7 +23,7 @@ namespace kvs
 namespace tiff
 {
 
-TagDictionary::TagDictionary( void )
+TagDictionary::TagDictionary()
 {
     this->create_dictionary();
 }
@@ -45,10 +45,10 @@ kvs::tiff::Tag TagDictionary::find( const kvs::UInt16 tag_id ) const
         name = tag->second;
     }
 
-    return( kvs::tiff::Tag( id, name ) );
+    return kvs::tiff::Tag( id, name );
 }
 
-void TagDictionary::create_dictionary( void )
+void TagDictionary::create_dictionary()
 {
     for ( size_t i = 0; i < kvs::tiff::TagTableSize; i++ )
     {

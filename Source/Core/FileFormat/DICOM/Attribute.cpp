@@ -36,7 +36,7 @@ namespace dcm
  *  @brief  Constructor.
  */
 /*===========================================================================*/
-Attribute::Attribute( void )
+Attribute::Attribute()
 {
 }
 
@@ -45,7 +45,7 @@ Attribute::Attribute( void )
  *  @brief  Destructor.
  */
 /*===========================================================================*/
-Attribute::~Attribute( void )
+Attribute::~Attribute()
 {
 }
 
@@ -55,9 +55,9 @@ Attribute::~Attribute( void )
  *  @return the state of part10 flag.
  */
 /*===========================================================================*/
-const bool Attribute::part10( void ) const
+bool Attribute::part10() const
 {
-    return( m_part10 );
+    return m_part10;
 }
 
 /*===========================================================================*/
@@ -66,9 +66,9 @@ const bool Attribute::part10( void ) const
  *  @return the state of swap flag.
  */
 /*===========================================================================*/
-const bool Attribute::swap( void ) const
+bool Attribute::swap() const
 {
-    return( m_swap );
+    return m_swap;
 }
 
 /*===========================================================================*/
@@ -82,7 +82,7 @@ Attribute& Attribute::operator = ( const Attribute& a )
     m_part10 = a.m_part10;
     m_swap   = a.m_swap;
 
-    return( *this );
+    return *this;
 }
 
 /*===========================================================================*/
@@ -116,7 +116,7 @@ bool Attribute::check( std::ifstream& ifs )
     int size = sizeof(short);
     ifs.seekg( -size, std::ios::cur );
 
-    return( true );
+    return true;
 }
 
 } // end of namespace dcm

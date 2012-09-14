@@ -42,23 +42,17 @@ private:
 
 public:
 
-    GriddedBinaryDataFile( void );
+    GriddedBinaryDataFile();
 
 public:
 
     void setSequential( const bool sequential );
-
     void setBigEndian( const bool big_endian );
-
     void setFilename( const std::string& filename );
-
-    const std::string& filename( void ) const;
-
-    const kvs::ValueArray<kvs::Real32>& values( void ) const;
-
-    const bool load( void ) const;
-
-    const void free( void ) const;
+    const std::string& filename() const;
+    const kvs::ValueArray<kvs::Real32>& values() const;
+    bool load() const;
+    void free() const;
 };
 
 } // end of namespace grads

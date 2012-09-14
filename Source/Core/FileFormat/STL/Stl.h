@@ -52,55 +52,42 @@ protected:
 
 public:
 
-    Stl( void );
-
+    Stl();
     Stl( const std::string& filename );
-
-    virtual ~Stl( void );
+    virtual ~Stl();
 
 public:
 
-    const FileType fileType( void ) const;
-
-    const kvs::ValueArray<kvs::Real32>& normals( void ) const;
-
-    const kvs::ValueArray<kvs::Real32>& coords( void ) const;
-
-    const size_t ntriangles( void ) const;
+    FileType fileType() const;
+    const kvs::ValueArray<kvs::Real32>& normals() const;
+    const kvs::ValueArray<kvs::Real32>& coords() const;
+    size_t ntriangles() const;
 
 public:
 
     void setFileType( const FileType file_type );
-
     void setNormals( const kvs::ValueArray<kvs::Real32>& normals );
-
     void setCoords( const kvs::ValueArray<kvs::Real32>& coords );
 
 public:
 
-    const bool read( const std::string& filename );
-
-    const bool write( const std::string& filename );
+    bool read( const std::string& filename );
+    bool write( const std::string& filename );
 
 public:
 
     friend std::ostream& operator << ( std::ostream& os, const Stl& stl );
 
-    static const bool CheckFileExtension( const std::string& filename );
-
-    static const bool CheckFileFormat( const std::string& filename );
+    static bool CheckFileExtension( const std::string& filename );
+    static bool CheckFileFormat( const std::string& filename );
 
 private:
 
-    const bool is_ascii_type( FILE* ifs );
-
-    const bool read_ascii( FILE* ifs );
-
-    const bool read_binary( FILE* ifs );
-
-    const bool write_ascii( FILE* ifs );
-
-    const bool write_binary( FILE* ifs );
+    bool is_ascii_type( FILE* ifs );
+    bool read_ascii( FILE* ifs );
+    bool read_binary( FILE* ifs );
+    bool write_ascii( FILE* ifs );
+    bool write_binary( FILE* ifs );
 };
 
 } // end of namespace kvs

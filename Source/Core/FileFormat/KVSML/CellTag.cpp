@@ -51,9 +51,9 @@ CellTag::~CellTag( void )
  *  @return true, if the ncells is specified
  */
 /*===========================================================================*/
-const bool CellTag::hasNCells( void ) const
+bool CellTag::hasNCells( void ) const
 {
-    return( m_has_ncells );
+    return m_has_ncells;
 }
 
 /*===========================================================================*/
@@ -62,9 +62,9 @@ const bool CellTag::hasNCells( void ) const
  *  @return number of cells
  */
 /*===========================================================================*/
-const size_t CellTag::ncells( void ) const
+size_t CellTag::ncells( void ) const
 {
-    return( m_ncells );
+    return m_ncells;
 }
 
 /*===========================================================================*/
@@ -86,7 +86,7 @@ void CellTag::setNCells( const size_t ncells )
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool CellTag::read( const kvs::XMLNode::SuperClass* parent )
+bool CellTag::read( const kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
 
@@ -94,7 +94,7 @@ const bool CellTag::read( const kvs::XMLNode::SuperClass* parent )
     if ( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
     // Element
@@ -108,7 +108,7 @@ const bool CellTag::read( const kvs::XMLNode::SuperClass* parent )
         m_ncells = static_cast<size_t>( atoi( ncells.c_str() ) );
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -118,7 +118,7 @@ const bool CellTag::read( const kvs::XMLNode::SuperClass* parent )
  *  @return true, if the writing process is done successfully
  */
 /*===========================================================================*/
-const bool CellTag::write( kvs::XMLNode::SuperClass* parent )
+bool CellTag::write( kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
     kvs::XMLElement element( tag_name );
@@ -134,10 +134,10 @@ const bool CellTag::write( kvs::XMLNode::SuperClass* parent )
     if( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 } // end of namespace kvsml

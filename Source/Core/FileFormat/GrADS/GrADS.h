@@ -47,25 +47,20 @@ protected:
 
 public:
 
-    GrADS( void );
-
+    GrADS();
     GrADS( const std::string& filename );
-
-    virtual ~GrADS( void );
+    virtual ~GrADS();
 
 public:
 
-    const DataDescriptorFile& dataDescriptor( void ) const;
-
-    const GriddedBinaryDataFileList& dataList( void ) const;
-
+    const DataDescriptorFile& dataDescriptor() const;
+    const GriddedBinaryDataFileList& dataList() const;
     const GriddedBinaryDataFile& data( const size_t index ) const;
-
-    const bool read( const std::string& filename );
+    bool read( const std::string& filename );
 
 private:
 
-    const bool write( const std::string& filename );
+    bool write( const std::string& filename );
 };
 
 } // end of namespace kvs

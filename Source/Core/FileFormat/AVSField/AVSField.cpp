@@ -56,7 +56,7 @@ namespace
  *  @param ifs [in] input file stream
  */
 /*==========================================================================*/
-const bool CheckHeader( FILE* ifs )
+bool CheckHeader( FILE* ifs )
 {
     // Go back file-pointer to head.
     fseek( ifs, 0, SEEK_SET );
@@ -65,10 +65,10 @@ const bool CheckHeader( FILE* ifs )
     char buf[ ::MaxLineLength ];
 
     // Read a head line and check the AVS format.
-    if ( !fgets( buf, ::MaxLineLength, ifs ) ) return( false );
-    if ( strncmp( buf, "# AVS", 5 ) != 0 ) return( false );
+    if ( !fgets( buf, ::MaxLineLength, ifs ) ) return false;
+    if ( strncmp( buf, "# AVS", 5 ) != 0 ) return false;
 
-    return( true );
+    return true;
 }
 
 /*==========================================================================*/
@@ -84,9 +84,9 @@ void SkipHeader( FILE* ifs )
 
     // Search the data separator '\f\f'.
     int c;
-    while( ( c = fgetc( ifs ) ) != EOF )
+    while ( ( c = fgetc( ifs ) ) != EOF )
     {
-        if( c == '\f' ) if( fgetc( ifs ) == '\f' ) break;
+        if ( c == '\f' ) if ( fgetc( ifs ) == '\f' ) break;
     }
 }
 
@@ -100,7 +100,7 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-AVSField::AVSField( void )
+AVSField::AVSField()
 {
     this->initialize();
 }
@@ -114,8 +114,7 @@ AVSField::AVSField( void )
 AVSField::AVSField( const std::string& filename )
 {
     this->initialize();
-    if( this->read( filename ) ) { m_is_success = true; }
-    else { m_is_success = false; }
+    this->read( filename );
 }
 
 /*==========================================================================*/
@@ -123,7 +122,7 @@ AVSField::AVSField( const std::string& filename )
  *  Destructor.
  */
 /*==========================================================================*/
-AVSField::~AVSField( void )
+AVSField::~AVSField()
 {
     this->clear();
 }
@@ -133,19 +132,19 @@ AVSField::~AVSField( void )
  *  Initialize.
  */
 /*==========================================================================*/
-void AVSField::initialize( void )
+void AVSField::initialize()
 {
-    m_bits              = 0;
-    m_is_signed         = true;
-    m_veclen            = 1;
-    m_nspace            = 0;
-    m_ndim              = 0;
-    m_dim               = kvs::Vector3ui( 1, 1, 1 );
-    m_min_ext           = kvs::Vector3f( 0, 0, 0 );
-    m_max_ext           = kvs::Vector3f( 1, 1, 1 );
-    m_has_min_max_ext   = false;
-    m_field             = Uniform;
-    m_type              = UnknownDataType;
+    m_bits = 0;
+    m_is_signed = true;
+    m_veclen = 1;
+    m_nspace = 0;
+    m_ndim = 0;
+    m_dim = kvs::Vector3ui( 1, 1, 1 );
+    m_min_ext = kvs::Vector3f( 0, 0, 0 );
+    m_max_ext = kvs::Vector3f( 1, 1, 1 );
+    m_has_min_max_ext = false;
+    m_field = Uniform;
+    m_type = UnknownDataType;
     m_labels.clear();
 }
 
@@ -154,7 +153,7 @@ void AVSField::initialize( void )
  *  Clear.
  */
 /*==========================================================================*/
-void AVSField::clear( void )
+void AVSField::clear()
 {
     m_values.release();
     m_coords.release();
@@ -168,23 +167,20 @@ void AVSField::clear( void )
 /*==========================================================================*/
 AVSField& AVSField::operator = ( const AVSField& rhs )
 {
-    m_bits            = rhs.m_bits;
-    m_is_signed       = rhs.m_is_signed;
-    m_veclen          = rhs.m_veclen;
-    m_nspace          = rhs.m_nspace;
-    m_ndim            = rhs.m_ndim;
-    m_dim             = rhs.m_dim;
-    m_min_ext         = rhs.m_min_ext;
-    m_max_ext         = rhs.m_max_ext;
+    m_bits = rhs.m_bits;
+    m_is_signed = rhs.m_is_signed;
+    m_veclen = rhs.m_veclen;
+    m_nspace = rhs.m_nspace;
+    m_ndim = rhs.m_ndim;
+    m_dim = rhs.m_dim;
+    m_min_ext = rhs.m_min_ext;
+    m_max_ext = rhs.m_max_ext;
     m_has_min_max_ext = rhs.m_has_min_max_ext;
-    m_field           = rhs.m_field;
-    m_type            = rhs.m_type;
+    m_field = rhs.m_field;
+    m_type = rhs.m_type;
+    std::copy( rhs.m_labels.begin(), rhs.m_labels.end(), m_labels.begin() );
 
-    std::copy( rhs.m_labels.begin(),
-               rhs.m_labels.end(),
-               m_labels.begin() );
-
-    return( *this );
+    return *this;
 }
 
 /*==========================================================================*/
@@ -213,7 +209,7 @@ std::ostream& operator << ( std::ostream& os, const AVSField& fld )
     }
     os << std::endl;
 
-    return( os );
+    return os;
 }
 
 /*==========================================================================*/
@@ -222,9 +218,9 @@ std::ostream& operator << ( std::ostream& os, const AVSField& fld )
  *  @return bit depth
  */
 /*==========================================================================*/
-const int AVSField::bits( void ) const
+int AVSField::bits() const
 {
-    return( m_bits );
+    return m_bits;
 }
 
 /*==========================================================================*/
@@ -233,9 +229,9 @@ const int AVSField::bits( void ) const
  *  @return true, if the value is signed
  */
 /*==========================================================================*/
-const bool AVSField::isSigned( void ) const
+bool AVSField::isSigned() const
 {
-    return( m_is_signed );
+    return m_is_signed;
 }
 
 /*==========================================================================*/
@@ -244,9 +240,9 @@ const bool AVSField::isSigned( void ) const
  *  @return vector length
  */
 /*==========================================================================*/
-const int AVSField::veclen( void ) const
+int AVSField::veclen() const
 {
-    return( m_veclen );
+    return m_veclen;
 }
 
 /*==========================================================================*/
@@ -255,9 +251,9 @@ const int AVSField::veclen( void ) const
  *  @return number of spaces
  */
 /*==========================================================================*/
-const int AVSField::nspace( void ) const
+int AVSField::nspace() const
 {
-    return( m_nspace );
+    return m_nspace;
 }
 
 /*==========================================================================*/
@@ -266,9 +262,9 @@ const int AVSField::nspace( void ) const
  *  @return number of dimesions
  */
 /*==========================================================================*/
-const int AVSField::ndim( void ) const
+int AVSField::ndim() const
 {
-    return( m_ndim );
+    return m_ndim;
 }
 
 /*==========================================================================*/
@@ -277,9 +273,9 @@ const int AVSField::ndim( void ) const
  *  @return dimension
  */
 /*==========================================================================*/
-const kvs::Vector3ui& AVSField::dim( void ) const
+const kvs::Vector3ui& AVSField::dim() const
 {
-    return( m_dim );
+    return m_dim;
 }
 
 /*==========================================================================*/
@@ -288,9 +284,9 @@ const kvs::Vector3ui& AVSField::dim( void ) const
  *  @return extent min. coordinate value
  */
 /*==========================================================================*/
-const kvs::Vector3f& AVSField::minExt( void ) const
+const kvs::Vector3f& AVSField::minExt() const
 {
-    return( m_min_ext );
+    return m_min_ext;
 }
 
 /*==========================================================================*/
@@ -299,9 +295,9 @@ const kvs::Vector3f& AVSField::minExt( void ) const
  *  @return extent max. coordinate value
  */
 /*==========================================================================*/
-const kvs::Vector3f& AVSField::maxExt( void ) const
+const kvs::Vector3f& AVSField::maxExt() const
 {
-    return( m_max_ext );
+    return m_max_ext;
 }
 
 /*==========================================================================*/
@@ -310,9 +306,9 @@ const kvs::Vector3f& AVSField::maxExt( void ) const
  *  @return true, if extent min/max coordinate value is included
  */
 /*==========================================================================*/
-const bool AVSField::hasMinMaxExt( void ) const
+bool AVSField::hasMinMaxExt() const
 {
-    return( m_has_min_max_ext );
+    return m_has_min_max_ext;
 }
 
 /*==========================================================================*/
@@ -321,9 +317,9 @@ const bool AVSField::hasMinMaxExt( void ) const
  *  @return fiedl type name
  */
 /*==========================================================================*/
-const std::string& AVSField::field( void ) const
+const std::string& AVSField::field() const
 {
-    return( ::FieldTypeToString[m_field] );
+    return ::FieldTypeToString[m_field];
 }
 
 /*==========================================================================*/
@@ -332,9 +328,9 @@ const std::string& AVSField::field( void ) const
  *  @return data type name
  */
 /*==========================================================================*/
-const std::string& AVSField::type( void ) const
+const std::string& AVSField::type() const
 {
-    return( ::DataTypeToString[m_type] );
+    return ::DataTypeToString[m_type];
 }
 
 /*==========================================================================*/
@@ -343,9 +339,9 @@ const std::string& AVSField::type( void ) const
  *  @return field type
  */
 /*==========================================================================*/
-const AVSField::FieldType AVSField::fieldType( void ) const
+AVSField::FieldType AVSField::fieldType() const
 {
-    return( m_field );
+    return m_field;
 }
 
 /*==========================================================================*/
@@ -354,9 +350,9 @@ const AVSField::FieldType AVSField::fieldType( void ) const
  *  @return data type
  */
 /*==========================================================================*/
-const AVSField::DataType AVSField::dataType( void ) const
+AVSField::DataType AVSField::dataType() const
 {
-    return( m_type );
+    return m_type;
 }
 
 /*==========================================================================*/
@@ -365,9 +361,9 @@ const AVSField::DataType AVSField::dataType( void ) const
  *  @return label array
  */
 /*==========================================================================*/
-const std::vector<std::string>& AVSField::labels( void ) const
+const std::vector<std::string>& AVSField::labels() const
 {
-    return( m_labels );
+    return m_labels;
 }
 
 /*==========================================================================*/
@@ -376,9 +372,9 @@ const std::vector<std::string>& AVSField::labels( void ) const
  *  @return node array
  */
 /*==========================================================================*/
-const kvs::AnyValueArray& AVSField::values( void ) const
+const kvs::AnyValueArray& AVSField::values() const
 {
-    return( m_values );
+    return m_values;
 }
 
 /*==========================================================================*/
@@ -387,10 +383,9 @@ const kvs::AnyValueArray& AVSField::values( void ) const
  *  @return coordinate value array
  */
 /*==========================================================================*/
-//const kvs::AnyValueArray& AVSField::coords( void ) const
-const kvs::ValueArray<float>& AVSField::coords( void ) const
+const kvs::ValueArray<float>& AVSField::coords() const
 {
-    return( m_coords );
+    return m_coords;
 }
 
 /*==========================================================================*/
@@ -548,24 +543,40 @@ void AVSField::setCoords( const kvs::ValueArray<float>& coords )
  *  @param filename [in] filename
  */
 /*==========================================================================*/
-const bool AVSField::read( const std::string& filename )
+bool AVSField::read( const std::string& filename )
 {
-    m_filename = filename;
+    BaseClass::setFilename( filename );
+    BaseClass::setSuccess( true );
 
     FILE* ifs = fopen( filename.c_str(), "rb" );
     if( !ifs )
     {
         kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
-    if( !read_header( ifs ) ) return( false );
-    if( !read_node( ifs ) )   return( false );
-    if( !read_coord( ifs ) )   return( false );
+    if( !read_header( ifs ) )
+    {
+        BaseClass::setSuccess( false );
+        return false;
+    }
+
+    if( !read_node( ifs ) )
+    {
+        BaseClass::setSuccess( false );
+        return false;
+    }
+
+    if( !read_coord( ifs ) )
+    {
+        BaseClass::setSuccess( false );
+        return false;
+    }
 
     fclose( ifs );
 
-    return( true );
+    return true;
 }
 
 /*==========================================================================*/
@@ -576,7 +587,7 @@ const bool AVSField::read( const std::string& filename )
 /*==========================================================================*/
 bool AVSField::read_header( FILE* ifs )
 {
-    if( !::CheckHeader( ifs ) ) return( false );
+    if( !::CheckHeader( ifs ) ) return false;
 
     char buf[ ::MaxLineLength ];
 
@@ -651,7 +662,7 @@ bool AVSField::read_header( FILE* ifs )
 
     read_comment( ifs );
 
-    return( true );
+    return true;
 }
 
 /*==========================================================================*/
@@ -722,7 +733,7 @@ bool AVSField::read_comment( FILE* ifs )
         }
     }
 
-    return( true );
+    return true;
 }
 
 /*==========================================================================*/
@@ -749,14 +760,14 @@ bool AVSField::read_node( FILE* ifs )
     const size_t byte_size = m_values.byteSize();
     if ( fread( m_values.data(), 1, byte_size, ifs ) != byte_size )
     {
-        return( false );
+        return false;
     }
 
 #if defined ( KVS_PLATFORM_BIG_ENDIAN )
     m_values.swapByte();
 #endif
 
-    return( true );
+    return true;
 }
 
 /*==========================================================================*/
@@ -827,23 +838,34 @@ bool AVSField::read_coord_data(  FILE* ifs, const size_t nvertices )
  *  @param filename [in] filename
  */
 /*==========================================================================*/
-const bool AVSField::write( const std::string& filename )
+bool AVSField::write( const std::string& filename )
 {
-    m_filename = filename;
+    BaseClass::setFilename( filename );
+    BaseClass::setSuccess( true );
 
     std::ofstream ofs( filename.c_str(), std::ios::out | std::ios::binary );
     if( !ofs.is_open() )
     {
         kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
-    if( !write_header( ofs ) ) return( false );
-    if( !write_node( ofs ) )   return( false );
+    if( !write_header( ofs ) )
+    {
+        BaseClass::setSuccess( false );
+        return false;
+    }
+
+    if( !write_node( ofs ) )
+    {
+        BaseClass::setSuccess( false );
+        return false;
+    }
 
     ofs.close();
 
-    return( true );
+    return true;
 }
 
 /*==========================================================================*/
@@ -905,7 +927,7 @@ bool AVSField::write_header( std::ofstream& ofs ) const
         ofs << std::endl;
     }
 
-    return( true );
+    return true;
 }
 
 /*==========================================================================*/
@@ -919,37 +941,37 @@ bool AVSField::write_node( std::ofstream& ofs ) const
     ofs << "\f\f";
     ofs.write( (char*)m_values.data(), m_values.byteSize() );
 
-    return( true );
+    return true;
 }
 
-const bool AVSField::CheckFileExtension( const std::string& filename )
+bool AVSField::CheckFileExtension( const std::string& filename )
 {
     const kvs::File file( filename );
     if ( file.extension() == "fld" || file.extension() == "FLD" )
     {
-        return( true );
+        return true;
     }
 
-    return( false );
+    return false;
 }
 
-const bool AVSField::CheckFileFormat( const std::string& filename )
+bool AVSField::CheckFileFormat( const std::string& filename )
 {
     FILE* ifs = fopen( filename.c_str(), "rb" );
     if( !ifs )
     {
         kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return( false );
+        return false;
     }
 
     if ( !::CheckHeader( ifs ) )
     {
         fclose( ifs );
-        return( false );
+        return false;
     }
 
     fclose( ifs );
-    return( true );
+    return true;
 }
 
 } // end of namespace kvs

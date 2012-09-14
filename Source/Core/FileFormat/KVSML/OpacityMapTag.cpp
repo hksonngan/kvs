@@ -29,7 +29,7 @@ namespace kvsml
  *  @brief  Constructs a new opacity map tag class.
  */
 /*===========================================================================*/
-OpacityMapTag::OpacityMapTag( void ):
+OpacityMapTag::OpacityMapTag():
     kvs::kvsml::TagBase( "OpacityMap" )
 {
 }
@@ -39,7 +39,7 @@ OpacityMapTag::OpacityMapTag( void ):
  *  @brief  Destructs the opacity map tag class.
  */
 /*===========================================================================*/
-OpacityMapTag::~OpacityMapTag( void )
+OpacityMapTag::~OpacityMapTag()
 {
 }
 
@@ -50,7 +50,7 @@ OpacityMapTag::~OpacityMapTag( void )
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool OpacityMapTag::read( const kvs::XMLNode::SuperClass* parent )
+bool OpacityMapTag::read( const kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
 
@@ -58,10 +58,10 @@ const bool OpacityMapTag::read( const kvs::XMLNode::SuperClass* parent )
     if ( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -71,7 +71,7 @@ const bool OpacityMapTag::read( const kvs::XMLNode::SuperClass* parent )
  *  @return true, if the writing process is done successfully
  */
 /*===========================================================================*/
-const bool OpacityMapTag::write( kvs::XMLNode::SuperClass* parent )
+bool OpacityMapTag::write( kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
     kvs::XMLElement element( tag_name );
@@ -80,10 +80,10 @@ const bool OpacityMapTag::write( kvs::XMLNode::SuperClass* parent )
     if( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 
@@ -92,7 +92,7 @@ const bool OpacityMapTag::write( kvs::XMLNode::SuperClass* parent )
  *  @brief  Constructs a new OpacityMapValueTag class.
  */
 /*===========================================================================*/
-OpacityMapValueTag::OpacityMapValueTag( void ):
+OpacityMapValueTag::OpacityMapValueTag():
     kvs::kvsml::TagBase( "OpacityMapValue" )
 {
 }
@@ -102,7 +102,7 @@ OpacityMapValueTag::OpacityMapValueTag( void ):
  *  @brief  Destroys the OpacityMapValueTag class.
  */
 /*===========================================================================*/
-OpacityMapValueTag::~OpacityMapValueTag( void )
+OpacityMapValueTag::~OpacityMapValueTag()
 {
 }
 
@@ -112,9 +112,9 @@ OpacityMapValueTag::~OpacityMapValueTag( void )
  *  @return scalar value
  */
 /*===========================================================================*/
-const float OpacityMapValueTag::scalar( void ) const
+float OpacityMapValueTag::scalar() const
 {
-    return( m_scalar );
+    return m_scalar;
 }
 
 /*===========================================================================*/
@@ -123,9 +123,9 @@ const float OpacityMapValueTag::scalar( void ) const
  *  @return opacity value
  */
 /*===========================================================================*/
-const float OpacityMapValueTag::opacity( void ) const
+float OpacityMapValueTag::opacity() const
 {
-    return( m_opacity );
+    return m_opacity;
 }
 
 /*===========================================================================*/
@@ -157,7 +157,7 @@ void OpacityMapValueTag::setOpacity( const float opacity )
  *  @return true if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool OpacityMapValueTag::read( const kvs::XMLNode::SuperClass* parent )
+bool OpacityMapValueTag::read( const kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
 
@@ -165,13 +165,13 @@ const bool OpacityMapValueTag::read( const kvs::XMLNode::SuperClass* parent )
     if ( !m_node )
     {
         kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
     // Element
     const kvs::XMLElement::SuperClass* element = kvs::XMLNode::ToElement( BaseClass::m_node );
 
-    return( this->read( element ) );
+    return this->read( element );
 }
 
 /*===========================================================================*/
@@ -181,7 +181,7 @@ const bool OpacityMapValueTag::read( const kvs::XMLNode::SuperClass* parent )
  *  @return true if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool OpacityMapValueTag::read( const kvs::XMLElement::SuperClass* element )
+bool OpacityMapValueTag::read( const kvs::XMLElement::SuperClass* element )
 {
     const std::string tag_name = BaseClass::name();
 
@@ -191,7 +191,7 @@ const bool OpacityMapValueTag::read( const kvs::XMLElement::SuperClass* element 
     else
     {
         kvsMessageError( "'s' is not specified in <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
     // a ="xxx"
@@ -200,10 +200,10 @@ const bool OpacityMapValueTag::read( const kvs::XMLElement::SuperClass* element 
     else
     {
         kvsMessageError( "'a' is not specified in <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -213,7 +213,7 @@ const bool OpacityMapValueTag::read( const kvs::XMLElement::SuperClass* element 
  *  @return true if the writing process is done successfully
  */
 /*===========================================================================*/
-const bool OpacityMapValueTag::write( kvs::XMLNode::SuperClass* parent )
+bool OpacityMapValueTag::write( kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
     kvs::XMLElement element( tag_name );
@@ -234,10 +234,10 @@ const bool OpacityMapValueTag::write( kvs::XMLNode::SuperClass* parent )
     if ( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 } // end of namespace kvsml

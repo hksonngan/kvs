@@ -47,51 +47,33 @@ private:
 public:
 
     Mesh();
-
     virtual ~Mesh();
 
 public:
 
     const kvs::gis::Point& data( const size_t latitude, const size_t longitude ) const;
-
     size_t row() const;
-
     size_t column() const;
-
     size_t latitudeDimension() const;
-
     size_t longitudeDimension() const;
-
     float latitudeInterval() const;
-
     float longitudeInterval() const;
-
     const kvs::gis::Area& area() const;
-
     bool hasData() const;
 
     void setData( const size_t latitude, const size_t longitude, const kvs::gis::Point& data );
-
     void setRow( const size_t row );
-
     void setColumn( const size_t column );
-
     void setLatitudeDimension( const size_t latitude_dimension );
-
     void setLongitudeDimension( const size_t longitude_dimension );
-
     void setLatitudeInterval( const float latitude_interval );
-
     void setLongitudeInterval( const float longitude_interval );
-
     void setArea( const kvs::gis::Area& area );
 
 protected:
 
     void allocate_data( const size_t row, const size_t column );
-
     void deallocate_data();
-
     kvs::gis::Area available_area( const kvs::gis::Area& area ) const;
 };
 

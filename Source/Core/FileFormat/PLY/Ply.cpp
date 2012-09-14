@@ -90,7 +90,7 @@ kvs::ply::PlyProperty FaceProps[1] =
 namespace kvs
 {
 
-Ply::Ply( void )
+Ply::Ply()
 {
     this->initialize();
 }
@@ -98,15 +98,14 @@ Ply::Ply( void )
 Ply::Ply( const std::string& filename )
 {
     this->initialize();
-    if ( this->read( filename ) ) { m_is_success = true; }
-    else { m_is_success = false; }
+    this->read( filename );
 }
 
-Ply::~Ply( void )
+Ply::~Ply()
 {
 }
 
-void Ply::calculateMinMaxCoord( void )
+void Ply::calculateMinMaxCoord()
 {
     m_min_coord = kvs::Vector3f( std::numeric_limits<float>::max() );
     m_max_coord = kvs::Vector3f( std::numeric_limits<float>::min() );
@@ -127,7 +126,7 @@ void Ply::calculateMinMaxCoord( void )
     }
 }
 
-void Ply::calculateNormals( void )
+void Ply::calculateNormals()
 {
     kvs::ValueArray<kvs::UInt32> counter( m_nverts );
     counter.fill( 0 );
@@ -173,7 +172,7 @@ void Ply::calculateNormals( void )
     }
 }
 
-void Ply::initialize( void )
+void Ply::initialize()
 {
     m_file_type = Ply::Ascii;
     m_nverts = 0;
@@ -183,18 +182,18 @@ void Ply::initialize( void )
     m_has_normals = false;
 }
 
-const bool Ply::CheckFileExtension( const std::string& filename )
+bool Ply::CheckFileExtension( const std::string& filename )
 {
     const kvs::File file( filename );
     if ( file.extension() == "ply" || file.extension() == "PLY" )
     {
-        return( true );
+        return true;
     }
 
-    return( false );
+    return false;
 }
 
-const bool Ply::CheckFileFormat( const std::string& filename )
+bool Ply::CheckFileFormat( const std::string& filename )
 {
     ply::PlyFile* ply;
     int           nelems;
@@ -209,10 +208,10 @@ const bool Ply::CheckFileFormat( const std::string& filename )
                &version ) ) )
     {
         kvsMessageError( "Cannot read ply file." );
-        return( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 std::ostream& operator << ( std::ostream& os, const Ply& ply )
@@ -226,67 +225,67 @@ std::ostream& operator << ( std::ostream& os, const Ply& ply )
     os << "Min. coordinate:   " << ply.m_min_coord << std::endl;
     os << "Max. coordinate:   " << ply.m_max_coord;
 
-    return( os );
+    return os;
 }
 
-const Ply::FileType Ply::fileType( void ) const
+Ply::FileType Ply::fileType() const
 {
-    return( m_file_type );
+    return m_file_type;
 }
 
-const size_t Ply::numberOfVertices( void ) const
+size_t Ply::numberOfVertices() const
 {
-    return( m_nverts );
+    return m_nverts;
 }
 
-const size_t Ply::numberOfFaces( void ) const
+size_t Ply::numberOfFaces() const
 {
-    return( m_nfaces );
+    return m_nfaces;
 }
 
-const bool Ply::hasConnections( void ) const
+bool Ply::hasConnections() const
 {
-    return( m_has_connections );
+    return m_has_connections;
 }
 
-const bool Ply::hasColors( void ) const
+bool Ply::hasColors() const
 {
-    return( m_has_colors );
+    return m_has_colors;
 }
 
-const bool Ply::hasNormals( void ) const
+bool Ply::hasNormals() const
 {
-    return( m_has_normals );
+    return m_has_normals;
 }
 
-const kvs::ValueArray<kvs::Real32>& Ply::coords( void ) const
+const kvs::ValueArray<kvs::Real32>& Ply::coords() const
 {
-    return( m_coords );
+    return m_coords;
 }
 
-const kvs::ValueArray<kvs::UInt8>& Ply::colors( void ) const
+const kvs::ValueArray<kvs::UInt8>& Ply::colors() const
 {
-    return( m_colors );
+    return m_colors;
 }
 
-const kvs::ValueArray<kvs::Real32>& Ply::normals( void ) const
+const kvs::ValueArray<kvs::Real32>& Ply::normals() const
 {
-    return( m_normals );
+    return m_normals;
 }
 
-const kvs::ValueArray<kvs::UInt32>& Ply::connections( void ) const
+const kvs::ValueArray<kvs::UInt32>& Ply::connections() const
 {
-    return( m_connections );
+    return m_connections;
 }
 
-const kvs::Vector3f& Ply::minCoord( void ) const
+const kvs::Vector3f& Ply::minCoord() const
 {
-    return( m_min_coord );
+    return m_min_coord;
 }
 
-const kvs::Vector3f& Ply::maxCoord( void ) const
+const kvs::Vector3f& Ply::maxCoord() const
 {
-    return( m_max_coord );
+    return m_max_coord;
 }
 
 void Ply::setFileType( const Ply::FileType file_type )
@@ -319,9 +318,10 @@ void Ply::setConnections( const kvs::ValueArray<kvs::UInt32>& connections )
     m_connections = connections;
 }
 
-const bool Ply::read( const std::string& filename )
+bool Ply::read( const std::string& filename )
 {
-    m_filename = filename;
+    BaseClass::setFilename( filename );
+    BaseClass::setSuccess( true );
 
     // Read PLY file.
     kvs::ply::PlyFile* ply;
@@ -337,7 +337,8 @@ const bool Ply::read( const std::string& filename )
                &version ) ) )
     {
         kvsMessageError( "Cannot read ply file." );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     m_file_type = Ply::FileType( file_type );
@@ -354,7 +355,8 @@ const bool Ply::read( const std::string& filename )
     {
         kvsMessageError( "Cannot read vertex element." );
         kvs::ply::ply_close( ply );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // Check for index property.
@@ -486,11 +488,14 @@ const bool Ply::read( const std::string& filename )
 
     kvs::ply::ply_close( ply );
 
-    return( true );
+    return true;
 }
 
-const bool Ply::write( const std::string& filename )
+bool Ply::write( const std::string& filename )
 {
+    BaseClass::setFilename( filename );
+    BaseClass::setSuccess( true );
+
     // Write PLY file.
     kvs::ply::PlyFile* ply;
     const int nelems = 2;
@@ -504,7 +509,8 @@ const bool Ply::write( const std::string& filename )
                &version ) ) )
     {
         kvsMessageError( "Cannot open writing ply file." );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     const size_t nverts = m_nverts;
@@ -588,7 +594,7 @@ const bool Ply::write( const std::string& filename )
 
     kvs::ply::ply_close( ply );
 
-    return( true );
+    return true;
 }
 
 } // end of namespace kvs

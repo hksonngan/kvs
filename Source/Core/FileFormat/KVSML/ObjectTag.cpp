@@ -29,7 +29,7 @@ namespace kvsml
  *  @brief  Constructs a new object tag class.
  */
 /*===========================================================================*/
-ObjectTag::ObjectTag( void ):
+ObjectTag::ObjectTag():
     kvs::kvsml::TagBase( "Object" ),
     m_type( "" ),
     m_has_external_coord( false ),
@@ -46,7 +46,7 @@ ObjectTag::ObjectTag( void ):
  *  @brief  Destructs the object tag class.
  */
 /*===========================================================================*/
-ObjectTag::~ObjectTag( void )
+ObjectTag::~ObjectTag()
 {
 }
 
@@ -55,9 +55,9 @@ ObjectTag::~ObjectTag( void )
  *  @brief  Returns object type as string.
  */
 /*===========================================================================*/
-const std::string& ObjectTag::type( void ) const
+const std::string& ObjectTag::type() const
 {
-    return( m_type );
+    return m_type;
 }
 
 /*===========================================================================*/
@@ -66,9 +66,9 @@ const std::string& ObjectTag::type( void ) const
  *  @return true, if 'external_coord' is specified
  */
 /*===========================================================================*/
-const bool ObjectTag::hasExternalCoord( void ) const
+bool ObjectTag::hasExternalCoord() const
 {
-    return( m_has_external_coord );
+    return m_has_external_coord;
 }
 
 /*===========================================================================*/
@@ -77,9 +77,9 @@ const bool ObjectTag::hasExternalCoord( void ) const
  *  @return min. external coordinate
  */
 /*===========================================================================*/
-const kvs::Vector3f& ObjectTag::minExternalCoord( void ) const
+const kvs::Vector3f& ObjectTag::minExternalCoord() const
 {
-    return( m_min_external_coord );
+    return m_min_external_coord;
 }
 
 /*===========================================================================*/
@@ -88,9 +88,9 @@ const kvs::Vector3f& ObjectTag::minExternalCoord( void ) const
  *  @return max. external coordinate
  */
 /*===========================================================================*/
-const kvs::Vector3f& ObjectTag::maxExternalCoord( void ) const
+const kvs::Vector3f& ObjectTag::maxExternalCoord() const
 {
-    return( m_max_external_coord );
+    return m_max_external_coord;
 }
 
 /*===========================================================================*/
@@ -99,9 +99,9 @@ const kvs::Vector3f& ObjectTag::maxExternalCoord( void ) const
  *  @return true, if 'object_coord' is specified
  */
 /*===========================================================================*/
-const bool ObjectTag::hasObjectCoord( void ) const
+bool ObjectTag::hasObjectCoord() const
 {
-    return( m_has_object_coord );
+    return m_has_object_coord;
 }
 
 /*===========================================================================*/
@@ -110,9 +110,9 @@ const bool ObjectTag::hasObjectCoord( void ) const
  *  @return min. object coordinate
  */
 /*===========================================================================*/
-const kvs::Vector3f& ObjectTag::minObjectCoord( void ) const
+const kvs::Vector3f& ObjectTag::minObjectCoord() const
 {
-    return( m_min_object_coord );
+    return m_min_object_coord;
 }
 
 /*===========================================================================*/
@@ -121,9 +121,9 @@ const kvs::Vector3f& ObjectTag::minObjectCoord( void ) const
  *  @return max. object coordinate
  */
 /*===========================================================================*/
-const kvs::Vector3f& ObjectTag::maxObjectCoord( void ) const
+const kvs::Vector3f& ObjectTag::maxObjectCoord() const
 {
-    return( m_max_object_coord );
+    return m_max_object_coord;
 }
 
 /*===========================================================================*/
@@ -173,7 +173,7 @@ void ObjectTag::setMinMaxObjectCoords( const kvs::Vector3f& min_coord, const kvs
  *  @return true, if the reading process is done successfully.
  */
 /*===========================================================================*/
-const bool ObjectTag::read( const kvs::XMLNode::SuperClass* parent )
+bool ObjectTag::read( const kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
 
@@ -182,7 +182,7 @@ const bool ObjectTag::read( const kvs::XMLNode::SuperClass* parent )
     if( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
     // Element
@@ -209,7 +209,7 @@ const bool ObjectTag::read( const kvs::XMLNode::SuperClass* parent )
             if ( t.isLast() )
             {
                 kvsMessageError( "6 components are required for 'external_coord' in <%s>", tag_name.c_str() );
-                return( false );
+                return false;
             }
 
             values[i] = static_cast<float>( atof( t.token().c_str() ) );
@@ -233,7 +233,7 @@ const bool ObjectTag::read( const kvs::XMLNode::SuperClass* parent )
             if ( t.isLast() )
             {
                 kvsMessageError( "6 components are required for 'object_coord' in <%s>", tag_name.c_str() );
-                return( false );
+                return false;
             }
 
             values[i] = static_cast<float>( atof( t.token().c_str() ) );
@@ -244,7 +244,7 @@ const bool ObjectTag::read( const kvs::XMLNode::SuperClass* parent )
         m_max_object_coord = kvs::Vector3f( values[3], values[4], values[5] );
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -254,7 +254,7 @@ const bool ObjectTag::read( const kvs::XMLNode::SuperClass* parent )
  *  @return true, if the writing process is done successfully.
  */
 /*===========================================================================*/
-const bool ObjectTag::write( kvs::XMLNode::SuperClass* parent )
+bool ObjectTag::write( kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
     kvs::XMLElement element( tag_name );
@@ -268,7 +268,7 @@ const bool ObjectTag::write( kvs::XMLNode::SuperClass* parent )
     else
     {
         kvsMessageError( "'type' is not specified in <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
     if ( m_has_external_coord )
@@ -305,10 +305,10 @@ const bool ObjectTag::write( kvs::XMLNode::SuperClass* parent )
     if( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 } // end of namespace kvsml

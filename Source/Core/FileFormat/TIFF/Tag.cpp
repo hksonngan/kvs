@@ -22,7 +22,7 @@ namespace kvs
 namespace tiff
 {
 
-Tag::Tag( void ):
+Tag::Tag():
     m_id( 0 ),
     m_name( "" )
 {
@@ -45,17 +45,17 @@ Tag& Tag::operator = ( const Tag& tag )
     m_id   = tag.m_id;
     m_name = tag.m_name;
 
-    return( *this );
+    return *this;
 }
 
-kvs::UInt16 Tag::id( void ) const
+kvs::UInt16 Tag::id() const
 {
-    return( m_id );
+    return m_id;
 }
 
-const std::string& Tag::name( void ) const
+const std::string& Tag::name() const
 {
-    return( m_name );
+    return m_name;
 }
 
 } // end of namespace tiff

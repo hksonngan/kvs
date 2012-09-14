@@ -21,7 +21,7 @@ namespace kvs
 namespace bmp
 {
 
-InfoHeader::InfoHeader( void )
+InfoHeader::InfoHeader()
 {
 }
 
@@ -45,62 +45,62 @@ std::ostream& operator << ( std::ostream& os, const kvs::bmp::InfoHeader& ih )
     os << "\tnumber of colors           : " << ih.m_colsused      << std::endl;
     os << "\tnumber of important colors : " << ih.m_colsimportant;
 
-    return( os );
+    return os;
 }
 
-kvs::UInt32 InfoHeader::size( void ) const
+kvs::UInt32 InfoHeader::size() const
 {
-    return( m_size );
+    return m_size;
 }
 
-kvs::UInt32 InfoHeader::width( void ) const
+kvs::UInt32 InfoHeader::width() const
 {
-    return( m_width );
+    return m_width;
 }
 
-kvs::UInt32 InfoHeader::height( void ) const
+kvs::UInt32 InfoHeader::height() const
 {
-    return( m_height );
+    return m_height;
 }
 
-kvs::UInt16 InfoHeader::nplanes( void ) const
+kvs::UInt16 InfoHeader::nplanes() const
 {
-    return( m_nplanes );
+    return m_nplanes;
 }
 
-kvs::UInt16 InfoHeader::bpp( void ) const
+kvs::UInt16 InfoHeader::bpp() const
 {
-    return( m_bpp );
+    return m_bpp;
 }
 
-kvs::UInt32 InfoHeader::compression( void ) const
+kvs::UInt32 InfoHeader::compression() const
 {
-    return( m_compression );
+    return m_compression;
 }
 
-kvs::UInt32 InfoHeader::bitmapsize( void ) const
+kvs::UInt32 InfoHeader::bitmapsize() const
 {
-    return( m_bitmapsize );
+    return m_bitmapsize;
 }
 
-kvs::UInt32 InfoHeader::hresolution( void ) const
+kvs::UInt32 InfoHeader::hresolution() const
 {
-    return( m_hresolution );
+    return m_hresolution;
 }
 
-kvs::UInt32 InfoHeader::vresolution( void ) const
+kvs::UInt32 InfoHeader::vresolution() const
 {
-    return( m_vresolution );
+    return m_vresolution;
 }
 
-kvs::UInt32 InfoHeader::colsused( void ) const
+kvs::UInt32 InfoHeader::colsused() const
 {
-    return( m_colsused );
+    return m_colsused;
 }
 
-kvs::UInt32 InfoHeader::colsimportant( void ) const
+kvs::UInt32 InfoHeader::colsimportant() const
 {
-    return( m_colsimportant );
+    return m_colsimportant;
 }
 
 void InfoHeader::read( std::ifstream& ifs )
@@ -136,7 +136,7 @@ void InfoHeader::write( std::ofstream& ofs )
     BMP_HEADER_SWAP_BYTES;
 };
 
-void InfoHeader::swap_bytes( void )
+void InfoHeader::swap_bytes()
 {
     kvs::Endian::Swap( &m_size );
     kvs::Endian::Swap( &m_width );

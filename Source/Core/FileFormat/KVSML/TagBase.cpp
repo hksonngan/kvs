@@ -37,7 +37,7 @@ TagBase::TagBase( const std::string& name ):
  *  @brief  Destructs the TagBase class.
  */
 /*===========================================================================*/
-TagBase::~TagBase( void )
+TagBase::~TagBase()
 {
 }
 
@@ -47,9 +47,9 @@ TagBase::~TagBase( void )
  *  @return tag name
  */
 /*===========================================================================*/
-const std::string& TagBase::name( void ) const
+const std::string& TagBase::name() const
 {
-    return( m_name );
+    return m_name;
 }
 
 /*===========================================================================*/
@@ -58,9 +58,9 @@ const std::string& TagBase::name( void ) const
  *  @return pointer to the node
  */
 /*===========================================================================*/
-kvs::XMLNode::SuperClass* TagBase::node( void )
+kvs::XMLNode::SuperClass* TagBase::node()
 {
-    return( m_node );
+    return m_node;
 }
 
 /*===========================================================================*/
@@ -69,9 +69,9 @@ kvs::XMLNode::SuperClass* TagBase::node( void )
  *  @return pointer to the node
  */
 /*===========================================================================*/
-const kvs::XMLNode::SuperClass* TagBase::node( void ) const
+const kvs::XMLNode::SuperClass* TagBase::node() const
 {
-    return( m_node );
+    return m_node;
 }
 
 /*===========================================================================*/
@@ -81,10 +81,10 @@ const kvs::XMLNode::SuperClass* TagBase::node( void ) const
  *  @return true, if the node is existed
  */
 /*===========================================================================*/
-const bool TagBase::isExisted( const kvs::XMLNode::SuperClass* parent ) const
+bool TagBase::isExisted( const kvs::XMLNode::SuperClass* parent ) const
 {
     const std::string tag_name = this->name();
-    return( kvs::XMLNode::FindChildNode( parent, tag_name ) != NULL );
+    return kvs::XMLNode::FindChildNode( parent, tag_name ) != NULL;
 }
 
 } // end of namespace kvsml

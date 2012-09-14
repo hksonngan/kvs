@@ -32,37 +32,37 @@ enum WritingDataType
     ExternalBinary ///< external binary data type
 };
 
-const bool WriteCoordData(
+bool WriteCoordData(
     kvs::XMLNode::SuperClass* parent,
     const kvs::kvsml::WritingDataType writing_type,
     const std::string& filename,
     const kvs::ValueArray<kvs::Real32>& coords );
 
-const bool WriteColorData(
+bool WriteColorData(
     kvs::XMLNode::SuperClass* parent,
     const kvs::kvsml::WritingDataType writing_type,
     const std::string& filename,
     const kvs::ValueArray<kvs::UInt8>& colors );
 
-const bool WriteNormalData(
+bool WriteNormalData(
     kvs::XMLNode::SuperClass* parent,
     const kvs::kvsml::WritingDataType writing_type,
     const std::string& filename,
     const kvs::ValueArray<kvs::Real32>& normals );
 
-const bool WriteSizeData(
+bool WriteSizeData(
     kvs::XMLNode::SuperClass* parent,
     const kvs::kvsml::WritingDataType writing_type,
     const std::string& filename,
     const kvs::ValueArray<kvs::Real32>& sizes );
 
-const bool WriteConnectionData(
+bool WriteConnectionData(
     kvs::XMLNode::SuperClass* parent,
     const kvs::kvsml::WritingDataType writing_type,
     const std::string& filename,
     const kvs::ValueArray<kvs::UInt32>& connections );
 
-const bool WriteOpacityData(
+bool WriteOpacityData(
     kvs::XMLNode::SuperClass* parent,
     const kvs::kvsml::WritingDataType writing_type,
     const std::string& filename,

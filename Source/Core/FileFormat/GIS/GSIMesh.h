@@ -79,9 +79,7 @@ private:
 public:
 
     GSIMesh();
-
     GSIMesh( const std::string& filename, const kvs::gis::Area& area );
-
     virtual ~GSIMesh();
 
 public:
@@ -91,7 +89,6 @@ public:
 private:
 
     bool read_header( FILE* fp );
-
     bool read_data( FILE* fp, const kvs::gis::Area& area );
 };
 

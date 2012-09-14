@@ -28,7 +28,7 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-Bmp::Bmp( void )
+Bmp::Bmp()
 {
 }
 
@@ -57,8 +57,7 @@ Bmp::Bmp( const size_t width, const size_t height, const kvs::ValueArray<kvs::UI
 /*==========================================================================*/
 Bmp::Bmp( const std::string& filename )
 {
-    if( this->read( filename ) ) { m_is_success = true; }
-    else { m_is_success = false; }
+    this->read( filename );
 }
 
 /*==========================================================================*/
@@ -67,9 +66,9 @@ Bmp::Bmp( const std::string& filename )
  *  @return file header information
  */
 /*==========================================================================*/
-const Bmp::FileHeader& Bmp::fileHeader( void ) const
+const Bmp::FileHeader& Bmp::fileHeader() const
 {
-    return( m_file_header );
+    return m_file_header;
 }
 
 /*==========================================================================*/
@@ -78,9 +77,9 @@ const Bmp::FileHeader& Bmp::fileHeader( void ) const
  *  @return information header information
  */
 /*==========================================================================*/
-const Bmp::InfoHeader& Bmp::infoHeader( void ) const
+const Bmp::InfoHeader& Bmp::infoHeader() const
 {
-    return( m_info_header );
+    return m_info_header;
 }
 
 /*==========================================================================*/
@@ -89,9 +88,9 @@ const Bmp::InfoHeader& Bmp::infoHeader( void ) const
  *  @return image width
  */
 /*==========================================================================*/
-size_t Bmp::width( void ) const
+size_t Bmp::width() const
 {
-    return( m_width );
+    return m_width;
 }
 
 /*==========================================================================*/
@@ -100,9 +99,9 @@ size_t Bmp::width( void ) const
  *  @return image height
  */
 /*==========================================================================*/
-size_t Bmp::height( void ) const
+size_t Bmp::height() const
 {
-    return( m_height );
+    return m_height;
 }
 
 /*==========================================================================*/
@@ -111,9 +110,9 @@ size_t Bmp::height( void ) const
  *  @return bits per pixel
  */
 /*==========================================================================*/
-size_t Bmp::bitsPerPixel( void ) const
+size_t Bmp::bitsPerPixel() const
 {
-    return( m_bpp );
+    return m_bpp;
 }
 
 /*==========================================================================*/
@@ -122,9 +121,9 @@ size_t Bmp::bitsPerPixel( void ) const
  *  @return pixel data
  */
 /*==========================================================================*/
-kvs::ValueArray<kvs::UInt8> Bmp::data( void ) const
+kvs::ValueArray<kvs::UInt8> Bmp::data() const
 {
-    return( m_data );
+    return m_data;
 }
 
 /*==========================================================================*/
@@ -133,7 +132,7 @@ kvs::ValueArray<kvs::UInt8> Bmp::data( void ) const
  *  @return true, if supported
  */
 /*==========================================================================*/
-bool Bmp::isSupported( void ) const
+bool Bmp::isSupported() const
 {
     bool ret = true;
 
@@ -143,7 +142,7 @@ bool Bmp::isSupported( void ) const
         ret = false;
     }
 
-    return( ret );
+    return ret;
 }
 
 /*==========================================================================*/
@@ -153,17 +152,18 @@ bool Bmp::isSupported( void ) const
  *  @return true, if the read process is done successfully
  */
 /*==========================================================================*/
-const bool Bmp::read( const std::string& filename )
+bool Bmp::read( const std::string& filename )
 {
-    BaseClass::m_filename = filename;
+    BaseClass::setFilename( filename );
+    BaseClass::setSuccess( true );
 
     // Open the file.
-    std::ifstream ifs( m_filename.c_str(), std::ios::binary | std::ios::in );
+    std::ifstream ifs( filename.c_str(), std::ios::binary | std::ios::in );
     if( !ifs.is_open() )
     {
-        kvsMessageError( "Cannot open %s.", m_filename.c_str() );
-        BaseClass::m_is_success = false;
-        return( BaseClass::m_is_success );
+        kvsMessageError( "Cannot open %s.", filename.c_str() );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // Read header information.
@@ -174,8 +174,8 @@ const bool Bmp::read( const std::string& filename )
     if ( !this->isSupported() )
     {
         ifs.close();
-        BaseClass::m_is_success = false;
-        return( BaseClass::m_is_success );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     m_width  = m_info_header.width();
@@ -212,8 +212,7 @@ const bool Bmp::read( const std::string& filename )
 
     ifs.close();
 
-    BaseClass::m_is_success = true;
-    return( BaseClass::m_is_success );
+    return true;
 }
 
 /*==========================================================================*/
@@ -223,16 +222,17 @@ const bool Bmp::read( const std::string& filename )
  *  @return true, if the write process is done successfully
  */
 /*==========================================================================*/
-const bool Bmp::write( const std::string& filename )
+bool Bmp::write( const std::string& filename )
 {
-    BaseClass::m_filename = filename;
+    BaseClass::setFilename( filename );
+    BaseClass::setSuccess( true );
 
     std::ofstream ofs( filename.c_str(), std::ios::out | std::ios::trunc | std::ios::binary );
     if( !ofs.is_open() )
     {
-        kvsMessageError( "Cannot open %s.", m_filename.c_str() );
-        BaseClass::m_is_success = false;
-        return( BaseClass::m_is_success );
+        kvsMessageError( "Cannot open %s.", BaseClass::filename().c_str() );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     this->set_header();
@@ -265,7 +265,7 @@ const bool Bmp::write( const std::string& filename )
 
     ofs.close();
 
-    return( true );
+    return true;
 }
 
 std::ostream& operator <<( std::ostream& os, const Bmp& rhs )
@@ -273,7 +273,7 @@ std::ostream& operator <<( std::ostream& os, const Bmp& rhs )
     os << rhs.m_file_header << std::endl;
     os << rhs.m_info_header;
 
-    return( os );
+    return os;
 }
 
 /*==========================================================================*/
@@ -293,7 +293,7 @@ void Bmp::skip_header_and_pallete( std::ifstream& ifs )
  *  Set the bitmap image header information.
  */
 /*==========================================================================*/
-void Bmp::set_header( void )
+void Bmp::set_header()
 {
     const char*  magic_num = "BM";
     const kvs::UInt32 offset    = 54;
@@ -322,28 +322,28 @@ void Bmp::set_header( void )
     m_info_header.m_colsimportant = 0;
 }
 
-const bool Bmp::CheckFileExtension( const std::string& filename )
+bool Bmp::CheckFileExtension( const std::string& filename )
 {
     const kvs::File file( filename );
     if ( file.extension() == "bmp" || file.extension() == "BMP" )
     {
-        return( true );
+        return true;
     }
 
-    return( false );
+    return false;
 }
 
-const bool CheckFileFormat( const std::string& filename )
+bool CheckFileFormat( const std::string& filename )
 {
     std::ifstream ifs( filename.c_str(), std::ios::binary | std::ios::in );
     if( !ifs.is_open() )
     {
         kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return( false );
+        return false;
     }
 
     Bmp::FileHeader file_header( ifs );
-    return( file_header.isBM() );
+    return file_header.isBM();
 }
 
 } // end of namespace kvs

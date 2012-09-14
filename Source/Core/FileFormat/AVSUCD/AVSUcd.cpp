@@ -55,7 +55,7 @@ const std::string ElementTypeToString[ kvs::AVSUcd::ElementTypeSize ] =
 namespace
 {
 
-const kvs::AVSUcd::FormatType CheckFormatType( FILE* const ifs )
+kvs::AVSUcd::FormatType CheckFormatType( FILE* const ifs )
 {
     char buffer[ ::MaxLineLength ];
 
@@ -91,7 +91,7 @@ const kvs::AVSUcd::FormatType CheckFormatType( FILE* const ifs )
     // Go back file-pointer to head.
     fseek( ifs, 0, SEEK_SET );
 
-    return( format_type );
+    return format_type;
 }
 
 }
@@ -105,18 +105,18 @@ namespace kvs
  *  Constructs a new empty AVSUcd.
  */
 /*==========================================================================*/
-AVSUcd::AVSUcd( void )
-    : FileFormatBase()
-    , m_nsteps( 0 )
-    , m_cycle_type( kvs::AVSUcd::CycleTypeUnknown )
-    , m_element_type( kvs::AVSUcd::ElementTypeUnknown )
-    , m_step_id( 0 )
-    , m_step_comment( "" )
-    , m_nnodes( 0 )
-    , m_nelements( 0 )
-    , m_nvalues_per_node( 0 )
-    , m_ncomponents_per_node( 0 )
-    , m_component_id( 0 )
+AVSUcd::AVSUcd():
+    FileFormatBase(),
+    m_nsteps( 0 ),
+    m_cycle_type( kvs::AVSUcd::CycleTypeUnknown ),
+    m_element_type( kvs::AVSUcd::ElementTypeUnknown ),
+    m_step_id( 0 ),
+    m_step_comment( "" ),
+    m_nnodes( 0 ),
+    m_nelements( 0 ),
+    m_nvalues_per_node( 0 ),
+    m_ncomponents_per_node( 0 ),
+    m_component_id( 0 )
 {
 }
 
@@ -129,24 +129,20 @@ AVSUcd::AVSUcd( void )
  *  @param component_id [in] ComponentID.
  */
 /*==========================================================================*/
-AVSUcd::AVSUcd(
-    const std::string& filename,
-    const size_t       step_id,
-    const size_t       component_id )
-    : FileFormatBase()
-    , m_nsteps( 0 )
-    , m_cycle_type( kvs::AVSUcd::CycleTypeUnknown )
-    , m_element_type( kvs::AVSUcd::ElementTypeUnknown )
-    , m_step_id( step_id )
-    , m_step_comment( "" )
-    , m_nnodes( 0 )
-    , m_nelements( 0 )
-    , m_nvalues_per_node( 0 )
-    , m_ncomponents_per_node( 0 )
-    , m_component_id( component_id )
+AVSUcd::AVSUcd( const std::string& filename, const size_t step_id, const size_t component_id ):
+    FileFormatBase(),
+    m_nsteps( 0 ),
+    m_cycle_type( kvs::AVSUcd::CycleTypeUnknown ),
+    m_element_type( kvs::AVSUcd::ElementTypeUnknown ),
+    m_step_id( step_id ),
+    m_step_comment( "" ),
+    m_nnodes( 0 ),
+    m_nelements( 0 ),
+    m_nvalues_per_node( 0 ),
+    m_ncomponents_per_node( 0 ),
+    m_component_id( component_id )
 {
-    if( this->read( filename ) ) { m_is_success = true; }
-    else { m_is_success = false; }
+    this->read( filename );
 }
 
 /*==========================================================================*/
@@ -154,98 +150,98 @@ AVSUcd::AVSUcd(
  *  Destroys the AVSUcd.
  */
 /*==========================================================================*/
-AVSUcd::~AVSUcd( void )
+AVSUcd::~AVSUcd()
 {
 }
 
-const size_t AVSUcd::nsteps( void ) const
+size_t AVSUcd::nsteps() const
 {
-    return( m_nsteps );
+    return m_nsteps;
 }
 
-const AVSUcd::CycleType AVSUcd::cycleType( void ) const
+AVSUcd::CycleType AVSUcd::cycleType() const
 {
-    return( m_cycle_type );
+    return m_cycle_type;
 }
 
-const AVSUcd::ElementType AVSUcd::elementType( void ) const
+AVSUcd::ElementType AVSUcd::elementType() const
 {
-    return( m_element_type );
+    return m_element_type;
 }
 
-const size_t AVSUcd::stepID( void ) const
+size_t AVSUcd::stepID() const
 {
-    return( m_step_id );
+    return m_step_id;
 }
 
-const std::string& AVSUcd::stepComment( void ) const
+const std::string& AVSUcd::stepComment() const
 {
-    return( m_step_comment );
+    return m_step_comment;
 }
 
-const size_t AVSUcd::nnodes( void ) const
+size_t AVSUcd::nnodes() const
 {
-    return( m_nnodes );
+    return m_nnodes;
 }
 
-const size_t AVSUcd::nelements( void ) const
+size_t AVSUcd::nelements() const
 {
-    return( m_nelements );
+    return m_nelements;
 }
 
-const size_t AVSUcd::nvaluesPerNode( void ) const
+size_t AVSUcd::nvaluesPerNode() const
 {
-    return( m_nvalues_per_node );
+    return m_nvalues_per_node;
 }
 
-const size_t AVSUcd::ncomponentsPerNode( void ) const
+size_t AVSUcd::ncomponentsPerNode() const
 {
-    return( m_ncomponents_per_node );
+    return m_ncomponents_per_node;
 }
 
-const std::vector<size_t>& AVSUcd::veclens( void ) const
+const std::vector<size_t>& AVSUcd::veclens() const
 {
-    return( m_veclens );
+    return m_veclens;
 }
 
-const std::vector<std::string>& AVSUcd::componentNames( void ) const
+const std::vector<std::string>& AVSUcd::componentNames() const
 {
-    return( m_component_names );
+    return m_component_names;
 }
 
-const std::vector<std::string>& AVSUcd::componentUnits( void ) const
+const std::vector<std::string>& AVSUcd::componentUnits() const
 {
-    return( m_component_units );
+    return m_component_units;
 }
 
-const size_t AVSUcd::componentID( void ) const
+size_t AVSUcd::componentID() const
 {
-    return( m_component_id );
+    return m_component_id;
 }
 
-const std::string& AVSUcd::componentName( void ) const
+const std::string& AVSUcd::componentName() const
 {
-    return( m_component_names[ m_component_id ] );
+    return m_component_names[ m_component_id ];
 }
 
-const std::string& AVSUcd::componentUnit( void ) const
+const std::string& AVSUcd::componentUnit() const
 {
-    return( m_component_units[ m_component_id ] );
+    return m_component_units[ m_component_id ];
 }
 
-const AVSUcd::Coords& AVSUcd::coords( void ) const
+const AVSUcd::Coords& AVSUcd::coords() const
 {
-    return( m_coords );
+    return m_coords;
 }
 
-const AVSUcd::Connections& AVSUcd::connections( void ) const
+const AVSUcd::Connections& AVSUcd::connections() const
 {
-    return( m_connections );
+    return m_connections;
 }
 
-const AVSUcd::Values& AVSUcd::values( void ) const
+const AVSUcd::Values& AVSUcd::values() const
 {
-    return( m_values );
+    return m_values;
 }
 
 void AVSUcd::setNSteps( const size_t nsteps )
@@ -347,17 +343,17 @@ void AVSUcd::setValues( const Values& values )
  *  @param filename [in] Filename.
  */
 /*==========================================================================*/
-const bool AVSUcd::read( const std::string& filename )
+bool AVSUcd::read( const std::string& filename )
 {
-    m_filename = filename;
+    BaseClass::setFilename( filename );
+    BaseClass::setSuccess( true );
 
     FILE* const ifs = fopen( filename.c_str(), "rb" );
-
     if ( !ifs )
     {
         kvsMessageError( "Cannot open %s.", filename.c_str() );
-        m_is_success = false;
-        return( m_is_success );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     try
@@ -371,19 +367,17 @@ const bool AVSUcd::read( const std::string& filename )
         {
             this->read_multi_step_format( ifs );
         }
-
-        m_is_success = true;
     }
     catch ( const char* const error )
     {
         kvsMessageError( "%s: %s", filename.c_str(), error );
-
-        m_is_success = false;
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     fclose( ifs );
 
-    return( m_is_success );
+    return true;
 }
 
 /*==========================================================================*/
@@ -393,40 +387,38 @@ const bool AVSUcd::read( const std::string& filename )
  *  @param filename [in] Filename.
  */
 /*==========================================================================*/
-const bool AVSUcd::write( const std::string& filename )
+bool AVSUcd::write( const std::string& filename )
 {
-    m_filename = filename;
+    BaseClass::setFilename( filename );
+    BaseClass::setSuccess( true );
 
     FILE* const ofs = fopen( filename.c_str(), "wb" );
-
     if ( !ofs )
     {
         kvsMessageError( "Cannot open %s.", filename.c_str() );
-        m_is_success = false;
-        return( m_is_success );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     try
     {
         this->write_single_step_format( ofs );
-
-        m_is_success = true;
     }
     catch ( const char* const error )
     {
         kvsMessageError( "%s: %s", filename.c_str(), error );
-
-        m_is_success = false;
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     fclose( ofs );
 
-    return( m_is_success );
+    return true;
 }
 
 std::ostream& operator <<( std::ostream& os, const AVSUcd& rhs )
 {
-    os << "Filename                      : " << rhs.m_filename                            << std::endl;
+    os << "Filename                      : " << rhs.filename()                            << std::endl;
     os << "Number of steps               : " << rhs.m_nsteps                              << std::endl;
     os << "Cycle type                    : " << ::CycleTypeToString[rhs.m_cycle_type]     << std::endl;
     os << "Element type                  : " << ::ElementTypeToString[rhs.m_element_type] << std::endl;
@@ -462,7 +454,7 @@ std::ostream& operator <<( std::ostream& os, const AVSUcd& rhs )
 
     os << "Component ID                  : " << rhs.m_component_id << std::endl;
 
-    return( os );
+    return os;
 }
 
 void AVSUcd::read_single_step_format( FILE* const ifs )
@@ -1125,25 +1117,25 @@ void AVSUcd::write_values( FILE* ofs ) const
     }
 }
 
-const bool AVSUcd::CheckFileExtension( const std::string& filename )
+bool AVSUcd::CheckFileExtension( const std::string& filename )
 {
     const kvs::File file( filename );
     if ( file.extension() == "ucd" || file.extension() == "UCD" ||
          file.extension() == "inp" || file.extension() == "INP" )
     {
-        return( true );
+        return true;
     }
 
-    return( false );
+    return false;
 }
 
-const bool AVSUcd::CheckFileFormat( const std::string& filename )
+bool AVSUcd::CheckFileFormat( const std::string& filename )
 {
     FILE* ifs = fopen( filename.c_str(), "rb" );
     if( !ifs )
     {
         kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return( false );
+        return false;
     }
 
     const AVSUcd::FormatType format_type = ::CheckFormatType( ifs );
@@ -1160,25 +1152,25 @@ const bool AVSUcd::CheckFileFormat( const std::string& filename )
                 if ( nnodes == 0 )
                 {
                     fclose( ifs );
-                    return( false );
+                    return false;
                 }
 
                 const long nelements = strtol( strtok( 0, ::Delimiter ), NULL, 10 );
                 if ( nelements == 0 )
                 {
                     fclose( ifs );
-                    return( false );
+                    return false;
                 }
 
                 const long nvalues_per_node = strtol( strtok( 0, ::Delimiter ), NULL, 10 );
                 if ( nvalues_per_node == 0 )
                 {
                     fclose( ifs );
-                    return( false );
+                    return false;
                 }
 
                 fclose( ifs );
-                return( true );
+                return true;
             }
         }
     }
@@ -1195,7 +1187,7 @@ const bool AVSUcd::CheckFileFormat( const std::string& filename )
                 if ( nsteps == 0 )
                 {
                     fclose( ifs );
-                    return( false );
+                    return false;
                 }
 
                 if ( fgets( buffer, ::MaxLineLength, ifs ) != 0 )
@@ -1206,18 +1198,18 @@ const bool AVSUcd::CheckFileFormat( const std::string& filename )
                          !strcmp( cycle_type, "data_geom" ) )
                     {
                         fclose( ifs );
-                        return( true );
+                        return true;
                     }
                 }
 
                 fclose( ifs );
-                return( false );
+                return false;
             }
         }
     }
 
     fclose( ifs );
-    return( false );
+    return false;
 }
 
 } // end of namespace kvs

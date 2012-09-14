@@ -37,15 +37,13 @@ public:
 
 public:
 
-    ConnectionTag( void );
-
-    virtual ~ConnectionTag( void );
+    ConnectionTag();
+    virtual ~ConnectionTag();
 
 public:
 
-    const bool read( const kvs::XMLNode::SuperClass* parent );
-
-    const bool write( kvs::XMLNode::SuperClass* parent );
+    bool read( const kvs::XMLNode::SuperClass* parent );
+    bool write( kvs::XMLNode::SuperClass* parent );
 };
 
 } // end of namespace kvsml

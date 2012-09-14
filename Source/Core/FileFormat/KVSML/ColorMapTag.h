@@ -39,15 +39,13 @@ public:
 
 public:
 
-    ColorMapTag( void );
-
-    virtual ~ColorMapTag( void );
+    ColorMapTag();
+    virtual ~ColorMapTag();
 
 public:
 
-    const bool read( const kvs::XMLNode::SuperClass* parent );
-
-    const bool write( kvs::XMLNode::SuperClass* parent );
+    bool read( const kvs::XMLNode::SuperClass* parent );
+    bool write( kvs::XMLNode::SuperClass* parent );
 };
 
 
@@ -69,27 +67,21 @@ protected:
 
 public:
 
-    ColorMapValueTag( void );
-
-    virtual ~ColorMapValueTag( void );
+    ColorMapValueTag();
+    virtual ~ColorMapValueTag();
 
 public:
 
-    const float scalar( void ) const;
-
-    const kvs::RGBColor color( void ) const;
-
+    float scalar() const;
+    const kvs::RGBColor& color() const;
     void setScalar( const float scalar );
-
-    void setColor( const kvs::RGBColor color );
+    void setColor( const kvs::RGBColor& color );
 
 public:
 
-    const bool read( const kvs::XMLNode::SuperClass* parent );
-
-    const bool read( const kvs::XMLElement::SuperClass* element );
-
-    const bool write( kvs::XMLNode::SuperClass* parent );
+    bool read( const kvs::XMLNode::SuperClass* parent );
+    bool read( const kvs::XMLElement::SuperClass* element );
+    bool write( kvs::XMLNode::SuperClass* parent );
 };
 
 } // end of namespace kvsml

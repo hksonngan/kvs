@@ -49,7 +49,7 @@ struct XYZDef
     MappingMethod mapping; ///< mapping method
     kvs::ValueArray<kvs::Real32> values; ///< values
 
-    const bool read( std::string line, std::ifstream& ifs );
+    bool read( std::string line, std::ifstream& ifs );
 };
 
 } // end of namespace grads

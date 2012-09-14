@@ -41,8 +41,7 @@ protected:
 
 public:
 
-    File( void );
-
+    File();
     File( const std::string filename );
 
 public:
@@ -51,31 +50,23 @@ public:
 
 public:
 
-    const std::string& fileTypeHeader( void ) const;
-
-    const std::vector<std::string>& commentList( void ) const;
-
+    const std::string& fileTypeHeader() const;
+    const std::vector<std::string>& commentList() const;
     const std::string& comment( const size_t index ) const;
-
-    const std::vector<kvs::gf::DataSet>& dataSetList( void ) const;
-
+    const std::vector<kvs::gf::DataSet>& dataSetList() const;
     const kvs::gf::DataSet& dataSet( const size_t index ) const;
-
-    void deallocate( void );
+    void deallocate();
 
 public:
 
-    const bool read( const std::string filename );
+    bool read( const std::string filename );
 
 protected:
 
-    const bool is_ascii( const std::string filename );
-
-    const bool is_binary( const std::string filename );
-
-    const bool read_ascii( const std::string filename );
-
-    const bool read_binary( const std::string filename, const bool swap = false );
+    bool is_ascii( const std::string filename );
+    bool is_binary( const std::string filename );
+    bool read_ascii( const std::string filename );
+    bool read_binary( const std::string filename, const bool swap = false );
 };
 
 } // end of namespace gf

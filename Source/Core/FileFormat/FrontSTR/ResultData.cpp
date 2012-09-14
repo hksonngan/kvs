@@ -28,7 +28,7 @@ namespace fstr
  *  @brief  Constructs a new ResultData class.
  */
 /*===========================================================================*/
-ResultData::ResultData( void ):
+ResultData::ResultData():
     m_nnodes(0),
     m_ncells(0),
     m_ncomponents_per_node(0),
@@ -42,9 +42,9 @@ ResultData::ResultData( void ):
  *  @return number of nodes
  */
 /*===========================================================================*/
-const size_t ResultData::numberOfNodes( void ) const
+size_t ResultData::numberOfNodes() const
 {
-    return( m_nnodes );
+    return m_nnodes;
 }
 
 /*===========================================================================*/
@@ -53,9 +53,9 @@ const size_t ResultData::numberOfNodes( void ) const
  *  @return number of cells
  */
 /*===========================================================================*/
-const size_t ResultData::numberOfCells( void ) const
+size_t ResultData::numberOfCells() const
 {
-    return( m_ncells );
+    return m_ncells;
 }
 
 /*===========================================================================*/
@@ -64,9 +64,9 @@ const size_t ResultData::numberOfCells( void ) const
  *  @return number of components per node
  */
 /*===========================================================================*/
-const size_t ResultData::numberOfComponentsPerNode( void ) const
+size_t ResultData::numberOfComponentsPerNode() const
 {
-    return( m_ncomponents_per_node );
+    return m_ncomponents_per_node;
 }
 
 /*===========================================================================*/
@@ -75,9 +75,9 @@ const size_t ResultData::numberOfComponentsPerNode( void ) const
  *  @return number of components per cell
  */
 /*===========================================================================*/
-const size_t ResultData::numberOfComponentsPerCell( void ) const
+size_t ResultData::numberOfComponentsPerCell() const
 {
-    return( m_ncomponents_per_cell );
+    return m_ncomponents_per_cell;
 }
 
 /*===========================================================================*/
@@ -86,9 +86,9 @@ const size_t ResultData::numberOfComponentsPerCell( void ) const
  *  @return vector length for each components
  */
 /*===========================================================================*/
-const std::vector<size_t>& ResultData::veclens( void ) const
+const std::vector<size_t>& ResultData::veclens() const
 {
-    return( m_veclens );
+    return m_veclens;
 }
 
 /*===========================================================================*/
@@ -97,9 +97,9 @@ const std::vector<size_t>& ResultData::veclens( void ) const
  *  @return labels for each components
  */
 /*===========================================================================*/
-const std::vector<std::string>& ResultData::labels( void ) const
+const std::vector<std::string>& ResultData::labels() const
 {
-    return( m_labels );
+    return m_labels;
 }
 
 /*===========================================================================*/
@@ -108,9 +108,9 @@ const std::vector<std::string>& ResultData::labels( void ) const
  *  @return values for each components.
  */
 /*===========================================================================*/
-const std::vector<ResultData::Values>& ResultData::values( void ) const
+const std::vector<ResultData::Values>& ResultData::values() const
 {
-    return( m_values );
+    return m_values;
 }
 
 /*===========================================================================*/
@@ -120,13 +120,13 @@ const std::vector<ResultData::Values>& ResultData::values( void ) const
  *  @return true if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool ResultData::readData( const std::string& filename )
+bool ResultData::readData( const std::string& filename )
 {
     std::ifstream ifs( filename.c_str() );
     if ( !ifs.is_open() )
     {
         kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return( false );
+        return false;
     }
 
     // Skipping comment.
@@ -145,19 +145,19 @@ const bool ResultData::readData( const std::string& filename )
     if ( !this->read_nnodes_and_ncells( line, ifs ) )
     {
         kvsMessageError("Cannot read nnodes and ncells.");
-        return( false );
+        return false;
     }
 
     if ( !this->read_veclens( line, ifs ) )
     {
         kvsMessageError("Cannot read veclens.");
-        return( false );
+        return false;
     }
 
     if ( !this->read_labels( line, ifs ) )
     {
         kvsMessageError("Cannot read labels.");
-        return( false );
+        return false;
     }
 
     // Reading values for nodes.
@@ -194,7 +194,7 @@ const bool ResultData::readData( const std::string& filename )
 
     ifs.close();
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -204,13 +204,13 @@ const bool ResultData::readData( const std::string& filename )
  *  @return true if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool ResultData::readDividedData( const std::string& filename )
+bool ResultData::readDividedData( const std::string& filename )
 {
     std::ifstream ifs( filename.c_str() );
     if ( !ifs.is_open() )
     {
         kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return( false );
+        return false;
     }
 
     // Skipping comment.
@@ -229,19 +229,19 @@ const bool ResultData::readDividedData( const std::string& filename )
     if ( !this->read_nnodes_and_ncells( line, ifs ) )
     {
         kvsMessageError("Cannot read nnodes and ncells.");
-        return( false );
+        return false;
     }
 
     if ( !this->read_veclens( line, ifs ) )
     {
         kvsMessageError("Cannot read veclens.");
-        return( false );
+        return false;
     }
 
     if ( !this->read_labels( line, ifs ) )
     {
         kvsMessageError("Cannot read labels.");
-        return( false );
+        return false;
     }
 
     // Reading values for nodes.
@@ -279,7 +279,7 @@ const bool ResultData::readDividedData( const std::string& filename )
 
     ifs.close();
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -290,16 +290,16 @@ const bool ResultData::readDividedData( const std::string& filename )
  *  @return true if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool ResultData::read_nnodes_and_ncells( std::string& line, std::ifstream& ifs )
+bool ResultData::read_nnodes_and_ncells( std::string& line, std::ifstream& ifs )
 {
     // Reading number of nodes and cells.
-    if ( std::sscanf( line.c_str(), "%lu %lu", &m_nnodes, &m_ncells ) == EOF ) return( false );
+    if ( std::sscanf( line.c_str(), "%lu %lu", &m_nnodes, &m_ncells ) == EOF ) return false;
 
     // Reading number of components for nodes and cells.
-    if ( !std::getline( ifs, line ) ) return( false );
-    if ( std::sscanf( line.c_str(), "%lu %lu", &m_ncomponents_per_node, &m_ncomponents_per_cell ) == EOF ) return( false );
+    if ( !std::getline( ifs, line ) ) return false;
+    if ( std::sscanf( line.c_str(), "%lu %lu", &m_ncomponents_per_node, &m_ncomponents_per_cell ) == EOF ) return false;
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -310,10 +310,10 @@ const bool ResultData::read_nnodes_and_ncells( std::string& line, std::ifstream&
  *  @return true if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool ResultData::read_veclens( std::string& line, std::ifstream& ifs )
+bool ResultData::read_veclens( std::string& line, std::ifstream& ifs )
 {
     // Reading vector length of components.
-    if ( !std::getline( ifs, line ) ) return( false );
+    if ( !std::getline( ifs, line ) ) return false;
 
     std::stringstream buffer( line );
     for ( size_t i = 0; i < m_ncomponents_per_node; i++ )
@@ -322,7 +322,7 @@ const bool ResultData::read_veclens( std::string& line, std::ifstream& ifs )
         m_veclens.push_back( veclen );
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -333,16 +333,16 @@ const bool ResultData::read_veclens( std::string& line, std::ifstream& ifs )
  *  @return true if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool ResultData::read_labels( std::string& line, std::ifstream& ifs )
+bool ResultData::read_labels( std::string& line, std::ifstream& ifs )
 {
     // Reading labels of components.
     for ( size_t i = 0; i < m_ncomponents_per_node; i++ )
     {
-        if ( !std::getline( ifs, line ) ) return( false );
+        if ( !std::getline( ifs, line ) ) return false;
         m_labels.push_back( line );
     }
 
-    return( true );
+    return true;
 }
 
 } // end of namespace fstr

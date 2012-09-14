@@ -39,25 +39,18 @@ private:
 public:
 
     Point();
-
     Point( const float latitude, const float longitude, const float height, const bool is_ocean = false );
 
 public:
 
     float latitude() const;
-
     float longitude() const;
-
     float height() const;
-
     bool isOcean() const;
 
     void setLatitude( const float latitude );
-
     void setLongitude( const float longitude );
-
     void setHeight( const float height );
-
     void setOcean( const bool is_ocean = true );
 };
 

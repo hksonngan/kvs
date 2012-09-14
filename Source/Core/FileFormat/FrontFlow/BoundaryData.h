@@ -62,63 +62,39 @@ protected:
 
 public:
 
-    BoundaryData( void );
-
+    BoundaryData();
     BoundaryData( const std::string filename );
 
 public:
 
-    const size_t dimensions( void ) const;
-
-    const size_t nnodesInlet( void ) const;
-
-    const size_t nnodesWall( void ) const;
-
-    const size_t nnodesSymetric( void ) const;
-
-    const size_t nnodesCyclic( void ) const;
-
-    const size_t nnodesBody( void ) const;
-
-    const size_t nnodesFree( void ) const;
-
-    const size_t nnodesMovingWall( void ) const;
-
-    const size_t nnodesInterConnect( void ) const;
-
-    const size_t nnodesTemp( void ) const;
-
-    const kvs::ValueArray<kvs::UInt32>& connectionsInlet( void ) const;
-
-    const kvs::ValueArray<kvs::UInt32>& connectionsWall( void ) const;
-
-    const kvs::ValueArray<kvs::UInt32>& connectionsSymetric( void ) const;
-
-    const kvs::ValueArray<kvs::UInt32>& connectionsCyclic( void ) const;
-
-    const kvs::ValueArray<kvs::UInt32>& connectionsBody( void ) const;
-
-    const kvs::ValueArray<kvs::UInt32>& connectionsFree( void ) const;
-
-    const kvs::ValueArray<kvs::UInt32>& connectionsMovingWall( void ) const;
-
-    const kvs::ValueArray<kvs::UInt32>& connectionsTemp( void ) const;
-
-    const kvs::ValueArray<kvs::UInt32>& connectionsHeat( void ) const;
-
-    const kvs::ValueArray<kvs::Real32>& velocitiesInlet( void ) const;
-
-    const kvs::ValueArray<kvs::Real32>& velocitiesWall( void ) const;
-
-    const kvs::ValueArray<kvs::Int32>&  interConnects( void ) const;
-
-    const kvs::ValueArray<kvs::Real32>& temperatures( void ) const;
-
-    const kvs::ValueArray<kvs::Real32>& heatFluxes( void ) const;
+    size_t dimensions() const;
+    size_t nnodesInlet() const;
+    size_t nnodesWall() const;
+    size_t nnodesSymetric() const;
+    size_t nnodesCyclic() const;
+    size_t nnodesBody() const;
+    size_t nnodesFree() const;
+    size_t nnodesMovingWall() const;
+    size_t nnodesInterConnect() const;
+    size_t nnodesTemp() const;
+    const kvs::ValueArray<kvs::UInt32>& connectionsInlet() const;
+    const kvs::ValueArray<kvs::UInt32>& connectionsWall() const;
+    const kvs::ValueArray<kvs::UInt32>& connectionsSymetric() const;
+    const kvs::ValueArray<kvs::UInt32>& connectionsCyclic() const;
+    const kvs::ValueArray<kvs::UInt32>& connectionsBody() const;
+    const kvs::ValueArray<kvs::UInt32>& connectionsFree() const;
+    const kvs::ValueArray<kvs::UInt32>& connectionsMovingWall() const;
+    const kvs::ValueArray<kvs::UInt32>& connectionsTemp() const;
+    const kvs::ValueArray<kvs::UInt32>& connectionsHeat() const;
+    const kvs::ValueArray<kvs::Real32>& velocitiesInlet() const;
+    const kvs::ValueArray<kvs::Real32>& velocitiesWall() const;
+    const kvs::ValueArray<kvs::Int32>&  interConnects() const;
+    const kvs::ValueArray<kvs::Real32>& temperatures() const;
+    const kvs::ValueArray<kvs::Real32>& heatFluxes() const;
 
 public:
 
-    const bool read( const std::string filename );
+    bool read( const std::string filename );
 };
 
 } // end of namespace gf

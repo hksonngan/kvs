@@ -39,6 +39,8 @@ class KVSMLObjectTable : public kvs::FileFormatBase
 
 public:
 
+    typedef kvs::FileFormatBase BaseClass;
+
     enum WritingDataType
     {
         Ascii = 0,
@@ -48,7 +50,7 @@ public:
 
 protected:
 
-    kvs::kvsml::KVSMLTag m_kvsml_tag;   ///< KVSML tag information
+    kvs::kvsml::KVSMLTag m_kvsml_tag; ///< KVSML tag information
     kvs::kvsml::ObjectTag m_object_tag; ///< Object tag information
     WritingDataType m_writing_type; ///< writing data type
     size_t m_nrows; ///< number of rows
@@ -66,69 +68,45 @@ protected:
 
 public:
 
-    KVSMLObjectTable( void );
-
+    KVSMLObjectTable();
     KVSMLObjectTable( const std::string& filename );
-
-    virtual ~KVSMLObjectTable( void );
-
-public:
-
-    const kvs::kvsml::KVSMLTag& KVSMLTag( void ) const;
-
-    const kvs::kvsml::ObjectTag& objectTag( void ) const;
-
-    const size_t nrows( void ) const;
-
-    const size_t ncolumns( void ) const;
-
-    const std::vector<std::string>& labelList( void ) const;
-
-    const std::vector<kvs::AnyValueArray>& columnList( void ) const;
-
-    const std::vector<bool>& hasMinValueList( void ) const;
-
-    const std::vector<bool>& hasMaxValueList( void ) const;
-
-    const std::vector<bool>& hasMinRangeList( void ) const;
-
-    const std::vector<bool>& hasMaxRangeList( void ) const;
-
-    const std::vector<double>& minValueList( void ) const;
-
-    const std::vector<double>& maxValueList( void ) const;
-
-    const std::vector<double>& minRangeList( void ) const;
-
-    const std::vector<double>& maxRangeList( void ) const;
+    virtual ~KVSMLObjectTable();
 
 public:
 
-    void setFilename( const std::string& filename );
+    const kvs::kvsml::KVSMLTag& KVSMLTag() const;
+    const kvs::kvsml::ObjectTag& objectTag() const;
+    size_t nrows() const;
+    size_t ncolumns() const;
+    const std::vector<std::string>& labelList() const;
+    const std::vector<kvs::AnyValueArray>& columnList() const;
+    const std::vector<bool>& hasMinValueList() const;
+    const std::vector<bool>& hasMaxValueList() const;
+    const std::vector<bool>& hasMinRangeList() const;
+    const std::vector<bool>& hasMaxRangeList() const;
+    const std::vector<double>& minValueList() const;
+    const std::vector<double>& maxValueList() const;
+    const std::vector<double>& minRangeList() const;
+    const std::vector<double>& maxRangeList() const;
+
+public:
 
     void setWritingDataType( const WritingDataType writing_type );
-
     void setMinValue( const size_t column_index, const double value );
-
     void setMaxValue( const size_t column_index, const double value );
-
     void setMinRange( const size_t column_index, const double range );
-
     void setMaxRange( const size_t column_index, const double range );
-
     void addColumn( const kvs::AnyValueArray& column, const std::string& label );
 
 public:
 
-    const bool read( const std::string& filename );
-
-    const bool write( const std::string& filename );
+    bool read( const std::string& filename );
+    bool write( const std::string& filename );
 
 public:
 
-    static const bool CheckFileExtension( const std::string& filename );
-
-    static const bool CheckFileFormat( const std::string& filename );
+    static bool CheckFileExtension( const std::string& filename );
+    static bool CheckFileFormat( const std::string& filename );
 
     friend std::ostream& operator <<( std::ostream& os, const KVSMLObjectTable& rhs );
 };

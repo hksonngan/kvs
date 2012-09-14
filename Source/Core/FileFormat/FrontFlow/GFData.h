@@ -46,29 +46,24 @@ protected:
 
 public:
 
-    GFData( void );
-
+    GFData();
     GFData( const std::string& filename );
-
     GFData( const std::string& mesh_file, const std::string& flow_file, const std::string& boundary_file = "" );
 
 public:
 
-    const kvs::gf::FlowData& flowData( void ) const;
-
-    const kvs::gf::MeshData& meshData( void ) const;
-
-    const kvs::gf::BoundaryData& boundaryData( void ) const;
+    const kvs::gf::FlowData& flowData() const;
+    const kvs::gf::MeshData& meshData() const;
+    const kvs::gf::BoundaryData& boundaryData() const;
 
 public:
 
-    const bool read( const std::string& filename );
-
-    const bool read( const std::string& mesh_file, const std::string& flow_file, const std::string& boundary_file = "" );
+    bool read( const std::string& filename );
+    bool read( const std::string& mesh_file, const std::string& flow_file, const std::string& boundary_file = "" );
 
 private:
 
-    const bool write( const std::string& filename );
+    bool write( const std::string& filename );
 };
 
 } // end of namespace kvs

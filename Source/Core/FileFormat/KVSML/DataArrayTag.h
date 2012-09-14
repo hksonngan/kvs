@@ -53,56 +53,43 @@ protected:
 
 public:
 
-    DataArrayTag( void );
-
-    virtual ~DataArrayTag( void );
+    DataArrayTag();
+    virtual ~DataArrayTag();
 
 public:
 
-    const bool hasType( void ) const;
-
-    const std::string& type( void ) const;
-
-    const bool hasFile( void ) const;
-
-    const std::string& file( void ) const;
-
-    const bool hasFormat( void ) const;
-
-    const std::string& format( void ) const;
+    bool hasType() const;
+    const std::string& type() const;
+    bool hasFile() const;
+    const std::string& file() const;
+    bool hasFormat() const;
+    const std::string& format() const;
 
 public:
 
     void setFile( const std::string& file );
-
     void setFormat( const std::string& format );
 
 public:
 
-    const bool read( const kvs::XMLNode::SuperClass* parent, const size_t nelements, kvs::AnyValueArray* data );
-
+    bool read( const kvs::XMLNode::SuperClass* parent, const size_t nelements, kvs::AnyValueArray* data );
     template <typename T>
-    const bool read( const kvs::XMLNode::SuperClass* parent, const size_t nelements, kvs::ValueArray<T>* data );
-
-    const bool write( kvs::XMLNode::SuperClass* parent, const kvs::AnyValueArray& data, const std::string pathname );
-
+    bool read( const kvs::XMLNode::SuperClass* parent, const size_t nelements, kvs::ValueArray<T>* data );
+    bool write( kvs::XMLNode::SuperClass* parent, const kvs::AnyValueArray& data, const std::string pathname );
     template <typename T>
-    const bool write( kvs::XMLNode::SuperClass* parent, const kvs::ValueArray<T>& data, const std::string pathname );
+    bool write( kvs::XMLNode::SuperClass* parent, const kvs::ValueArray<T>& data, const std::string pathname );
 
 private:
 
-    const void read_attribute( void );
-
-    const bool read_data( const size_t nelements, kvs::AnyValueArray* data );
-
+    void read_attribute();
+    bool read_data( const size_t nelements, kvs::AnyValueArray* data );
     template <typename T>
-    const bool read_data( const size_t nelements, kvs::ValueArray<T>* data );
+    bool read_data( const size_t nelements, kvs::ValueArray<T>* data );
 
 private:
 
-    const bool read( const kvs::XMLNode::SuperClass* parent );
-
-    const bool write( kvs::XMLNode::SuperClass* parent );
+    bool read( const kvs::XMLNode::SuperClass* parent );
+    bool write( kvs::XMLNode::SuperClass* parent );
 };
 
 /*===========================================================================*/
@@ -115,7 +102,7 @@ private:
  */
 /*===========================================================================*/
 template <typename T>
-inline const bool DataArrayTag::read(
+inline bool DataArrayTag::read(
     const kvs::XMLNode::SuperClass* parent,
     const size_t nelements,
     kvs::ValueArray<T>* data )
@@ -126,12 +113,12 @@ inline const bool DataArrayTag::read(
     if( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
     this->read_attribute();
 
-    return( this->read_data<T>( nelements, data ) );
+    return this->read_data<T>( nelements, data );
 }
 
 /*===========================================================================*/
@@ -144,12 +131,12 @@ inline const bool DataArrayTag::read(
  */
 /*===========================================================================*/
 template <typename T>
-inline const bool DataArrayTag::write(
+inline bool DataArrayTag::write(
     kvs::XMLNode::SuperClass* parent,
     const kvs::ValueArray<T>& data,
     const std::string pathname )
 {
-    if ( data.size() == 0 ) return( true );
+    if ( data.size() == 0 ) return true;
 
     const std::string tag_name = BaseClass::name();
     kvs::XMLElement element( tag_name );
@@ -175,7 +162,7 @@ inline const bool DataArrayTag::write(
         text.SetValue( oss.str() );
 
         kvs::XMLNode::SuperClass* node = parent->InsertEndChild( element );
-        return( node->InsertEndChild( text ) != NULL );
+        return node->InsertEndChild( text ) != NULL;
     }
 
     // External data: <DataArray type="xxx" format="xxx" file="xxx"/>
@@ -184,7 +171,7 @@ inline const bool DataArrayTag::write(
         if ( !m_has_format )
         {
             kvsMessageError( "'format' is not spcified in <%s>.", tag_name.c_str() );
-            return( false );
+            return false;
         }
 
         element.setAttribute( "file", m_file );
@@ -193,7 +180,7 @@ inline const bool DataArrayTag::write(
 
         // Set text.
         const std::string filename = pathname + kvs::File::Separator() + m_file;
-        return( kvs::kvsml::DataArray::WriteExternalData( data, filename, m_format ) );
+        return kvs::kvsml::DataArray::WriteExternalData( data, filename, m_format );
     }
 }
 
@@ -206,7 +193,7 @@ inline const bool DataArrayTag::write(
  */
 /*===========================================================================*/
 template <typename T>
-const bool DataArrayTag::read_data( const size_t nelements, kvs::ValueArray<T>* data )
+bool DataArrayTag::read_data( const size_t nelements, kvs::ValueArray<T>* data )
 {
     const std::string tag_name = BaseClass::name();
 
@@ -217,7 +204,7 @@ const bool DataArrayTag::read_data( const size_t nelements, kvs::ValueArray<T>* 
         if ( !array_text )
         {
             kvsMessageError( "No value in <%s>.", tag_name.c_str() );
-            return( false );
+            return false;
         }
 
         // <DataArray>xxx</DataArray>
@@ -227,7 +214,7 @@ const bool DataArrayTag::read_data( const size_t nelements, kvs::ValueArray<T>* 
         if ( !kvs::kvsml::DataArray::ReadInternalData<T>( data, nelements, tokenizer ) )
         {
             kvsMessageError( "Cannot read the data array in <%s>.", tag_name.c_str() );
-            return( false );
+            return false;
         }
     }
     // External data.
@@ -237,7 +224,7 @@ const bool DataArrayTag::read_data( const size_t nelements, kvs::ValueArray<T>* 
         if( m_format == "" )
         {
             kvsMessageError( "'format' is not specified in <%s>.", tag_name.c_str() );
-            return( false );
+            return false;
         }
 
         // Filename as an absolute path.
@@ -251,7 +238,7 @@ const bool DataArrayTag::read_data( const size_t nelements, kvs::ValueArray<T>* 
             if ( !kvs::kvsml::DataArray::ReadExternalData<T,kvs::Int8>( data, nelements, filename, m_format ) )
             {
                 kvsMessageError( "Cannot read the data array in <%s>.", tag_name.c_str() );
-                return( false );
+                return false;
             }
         }
         else if( m_type == "unsigned char" || m_type == "uchar" )
@@ -259,7 +246,7 @@ const bool DataArrayTag::read_data( const size_t nelements, kvs::ValueArray<T>* 
             if ( !kvs::kvsml::DataArray::ReadExternalData<T,kvs::UInt8>( data, nelements, filename, m_format ) )
             {
                 kvsMessageError( "Cannot read the data array in <%s>.", tag_name.c_str() );
-                return( false );
+                return false;
             }
         }
         else if( m_type == "short" )
@@ -267,7 +254,7 @@ const bool DataArrayTag::read_data( const size_t nelements, kvs::ValueArray<T>* 
             if ( !kvs::kvsml::DataArray::ReadExternalData<T,kvs::Int16>( data, nelements, filename, m_format ) )
             {
                 kvsMessageError( "Cannot read the data array in <%s>.", tag_name.c_str() );
-                return( false );
+                return false;
             }
         }
         else if( m_type == "unsigned short" || m_type == "ushort" )
@@ -275,7 +262,7 @@ const bool DataArrayTag::read_data( const size_t nelements, kvs::ValueArray<T>* 
             if ( !kvs::kvsml::DataArray::ReadExternalData<T,kvs::UInt16>( data, nelements, filename, m_format ) )
             {
                 kvsMessageError( "Cannot read the data array in <%s>.", tag_name.c_str() );
-                return( false );
+                return false;
             }
         }
         else if( m_type == "int" )
@@ -283,7 +270,7 @@ const bool DataArrayTag::read_data( const size_t nelements, kvs::ValueArray<T>* 
             if ( !kvs::kvsml::DataArray::ReadExternalData<T,kvs::Int32>( data, nelements, filename, m_format ) )
             {
                 kvsMessageError( "Cannot read the data array in <%s>.", tag_name.c_str() );
-                return( false );
+                return false;
             }
         }
         else if( m_type == "unsigned int" || m_type == "uint" )
@@ -291,7 +278,7 @@ const bool DataArrayTag::read_data( const size_t nelements, kvs::ValueArray<T>* 
             if ( !kvs::kvsml::DataArray::ReadExternalData<T,kvs::UInt32>( data, nelements, filename, m_format ) )
             {
                 kvsMessageError( "Cannot read the data array in <%s>.", tag_name.c_str() );
-                return( false );
+                return false;
             }
         }
         else if( m_type == "float" )
@@ -299,7 +286,7 @@ const bool DataArrayTag::read_data( const size_t nelements, kvs::ValueArray<T>* 
             if ( !kvs::kvsml::DataArray::ReadExternalData<T,kvs::Real32>( data, nelements, filename, m_format ) )
             {
                 kvsMessageError( "Cannot read the data array in <%s>.", tag_name.c_str() );
-                return( false );
+                return false;
             }
         }
         else if( m_type == "double" )
@@ -307,17 +294,17 @@ const bool DataArrayTag::read_data( const size_t nelements, kvs::ValueArray<T>* 
             if ( !kvs::kvsml::DataArray::ReadExternalData<T,kvs::Real64>( data, nelements, filename, m_format ) )
             {
                 kvsMessageError( "Cannot read the data array in <%s>.", tag_name.c_str() );
-                return( false );
+                return false;
             }
         }
         else
         {
             kvsMessageError( "'type' is not specified or unknown data type in <%s>.", tag_name.c_str() );
-            return( false );
+            return false;
         }
     }
 
-    return( true );
+    return true;
 }
 
 } // end of namespace kvsml

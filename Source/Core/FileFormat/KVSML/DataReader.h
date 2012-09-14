@@ -25,32 +25,32 @@ namespace kvs
 namespace kvsml
 {
 
-const bool ReadCoordData(
+bool ReadCoordData(
     const kvs::XMLNode::SuperClass* parent,
     const size_t ncoords,
     kvs::ValueArray<kvs::Real32>* coords );
 
-const bool ReadColorData(
+bool ReadColorData(
     const kvs::XMLNode::SuperClass* parent,
     const size_t ncolors,
     kvs::ValueArray<kvs::UInt8>* colors );
 
-const bool ReadNormalData(
+bool ReadNormalData(
     const kvs::XMLNode::SuperClass* parent,
     const size_t nnormals,
     kvs::ValueArray<kvs::Real32>* normals );
 
-const bool ReadSizeData(
+bool ReadSizeData(
     const kvs::XMLNode::SuperClass* parent,
     const size_t nsizes,
     kvs::ValueArray<kvs::Real32>* sizes );
 
-const bool ReadConnectionData(
+bool ReadConnectionData(
     const kvs::XMLNode::SuperClass* parent,
     const size_t nconnections,
     kvs::ValueArray<kvs::UInt32>* connections );
 
-const bool ReadOpacityData(
+bool ReadOpacityData(
     const kvs::XMLNode::SuperClass* parent,
     const size_t nopacities,
     kvs::ValueArray<kvs::UInt8>* opacities );

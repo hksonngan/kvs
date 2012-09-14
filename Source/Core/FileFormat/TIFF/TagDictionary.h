@@ -37,7 +37,7 @@ protected:
 
 public:
 
-    TagDictionary( void );
+    TagDictionary();
 
 public:
 
@@ -45,7 +45,7 @@ public:
 
 private:
 
-    void create_dictionary( void );
+    void create_dictionary();
 };
 
 } // end of namespace tiff

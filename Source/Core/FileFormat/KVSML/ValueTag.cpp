@@ -29,7 +29,7 @@ namespace kvsml
  *  @brief  Constructs a new value tag class.
  */
 /*===========================================================================*/
-ValueTag::ValueTag( void ):
+ValueTag::ValueTag():
     kvs::kvsml::TagBase( "Value" ),
     m_has_label( false ),
     m_has_veclen( false ),
@@ -47,7 +47,7 @@ ValueTag::ValueTag( void ):
  *  @brief  Destructs the value tag class.
  */
 /*===========================================================================*/
-ValueTag::~ValueTag( void )
+ValueTag::~ValueTag()
 {
 }
 
@@ -57,9 +57,9 @@ ValueTag::~ValueTag( void )
  *  @return true, if the 'label' is specified
  */
 /*===========================================================================*/
-const bool ValueTag::hasLabel( void ) const
+bool ValueTag::hasLabel() const
 {
-    return( m_has_label );
+    return m_has_label;
 }
 
 /*===========================================================================*/
@@ -68,9 +68,9 @@ const bool ValueTag::hasLabel( void ) const
  *  @return true, if the 'veclen' is specified
  */
 /*===========================================================================*/
-const bool ValueTag::hasVeclen( void ) const
+bool ValueTag::hasVeclen() const
 {
-    return( m_has_veclen );
+    return m_has_veclen;
 }
 
 /*===========================================================================*/
@@ -79,9 +79,9 @@ const bool ValueTag::hasVeclen( void ) const
  *  @return true, if the 'min_value' is specified
  */
 /*===========================================================================*/
-const bool ValueTag::hasMinValue( void ) const
+bool ValueTag::hasMinValue() const
 {
-    return( m_has_min_value );
+    return m_has_min_value;
 }
 
 /*===========================================================================*/
@@ -90,9 +90,9 @@ const bool ValueTag::hasMinValue( void ) const
  *  @return true, if the 'max_value' is specified
  */
 /*===========================================================================*/
-const bool ValueTag::hasMaxValue( void ) const
+bool ValueTag::hasMaxValue() const
 {
-    return( m_has_max_value );
+    return m_has_max_value;
 }
 
 /*===========================================================================*/
@@ -101,9 +101,9 @@ const bool ValueTag::hasMaxValue( void ) const
  *  @return data label
  */
 /*===========================================================================*/
-const std::string& ValueTag::label( void ) const
+const std::string& ValueTag::label() const
 {
-    return( m_label );
+    return m_label;
 }
 
 /*===========================================================================*/
@@ -112,9 +112,9 @@ const std::string& ValueTag::label( void ) const
  *  @return vector length
  */
 /*===========================================================================*/
-const size_t ValueTag::veclen( void ) const
+size_t ValueTag::veclen() const
 {
-    return( m_veclen );
+    return m_veclen;
 }
 
 /*===========================================================================*/
@@ -123,9 +123,9 @@ const size_t ValueTag::veclen( void ) const
  *  @return minimum value
  */
 /*===========================================================================*/
-const double ValueTag::minValue( void ) const
+double ValueTag::minValue() const
 {
-    return( m_min_value );
+    return m_min_value;
 }
 
 /*===========================================================================*/
@@ -134,9 +134,9 @@ const double ValueTag::minValue( void ) const
  *  @return maximum value
  */
 /*===========================================================================*/
-const double ValueTag::maxValue( void ) const
+double ValueTag::maxValue() const
 {
-    return( m_max_value );
+    return m_max_value;
 }
 
 /*===========================================================================*/
@@ -194,7 +194,7 @@ void ValueTag::setMaxValue( const double max_value )
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool ValueTag::read( const kvs::XMLNode::SuperClass* parent )
+bool ValueTag::read( const kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
 
@@ -202,7 +202,7 @@ const bool ValueTag::read( const kvs::XMLNode::SuperClass* parent )
     if ( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
     // Element
@@ -240,7 +240,7 @@ const bool ValueTag::read( const kvs::XMLNode::SuperClass* parent )
         m_max_value = atof( max_value.c_str() );
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -250,7 +250,7 @@ const bool ValueTag::read( const kvs::XMLNode::SuperClass* parent )
  *  @return true, if the writing process is done successfully
  */
 /*===========================================================================*/
-const bool ValueTag::write( kvs::XMLNode::SuperClass* parent )
+bool ValueTag::write( kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
     kvs::XMLElement element( tag_name );
@@ -271,7 +271,7 @@ const bool ValueTag::write( kvs::XMLNode::SuperClass* parent )
     else
     {
         kvsMessageError( "'veclen' is not specified in <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
     if ( m_has_min_value )
@@ -292,10 +292,10 @@ const bool ValueTag::write( kvs::XMLNode::SuperClass* parent )
     if( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 } // end of namespace kvsml

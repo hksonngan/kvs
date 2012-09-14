@@ -28,7 +28,7 @@ namespace gf
  *  @brief  Construct a new FlowData class.
  */
 /*===========================================================================*/
-FlowData::FlowData( void ):
+FlowData::FlowData():
     m_dimensions( 0 ),
     m_nnodes( 0 ),
     m_nelements( 0 ),
@@ -64,7 +64,7 @@ FlowData::FlowData( const std::string filename ):
  *  @brief  Destroy the FlowData class.
  */
 /*===========================================================================*/
-FlowData::~FlowData( void )
+FlowData::~FlowData()
 {
     if ( m_times ) delete [] m_times;
     if ( m_steps ) delete [] m_steps;
@@ -78,9 +78,9 @@ FlowData::~FlowData( void )
  *  @return dimensions
  */
 /*===========================================================================*/
-const size_t FlowData::dimensions( void ) const
+size_t FlowData::dimensions() const
 {
-    return( m_dimensions );
+    return m_dimensions;
 }
 
 /*===========================================================================*/
@@ -89,9 +89,9 @@ const size_t FlowData::dimensions( void ) const
  *  @return number of nodes
  */
 /*===========================================================================*/
-const size_t FlowData::nnodes( void ) const
+size_t FlowData::nnodes() const
 {
-    return( m_nnodes );
+    return m_nnodes;
 }
 
 /*===========================================================================*/
@@ -100,9 +100,9 @@ const size_t FlowData::nnodes( void ) const
  *  @return number of elements
  */
 /*===========================================================================*/
-const size_t FlowData::nelements( void ) const
+size_t FlowData::nelements() const
 {
-    return( m_nelements );
+    return m_nelements;
 }
 
 /*===========================================================================*/
@@ -111,9 +111,9 @@ const size_t FlowData::nelements( void ) const
  *  @return number of time steps
  */
 /*===========================================================================*/
-const size_t FlowData::nsteps( void ) const
+size_t FlowData::nsteps() const
 {
-    return( m_nsteps );
+    return m_nsteps;
 }
 
 /*===========================================================================*/
@@ -123,10 +123,10 @@ const size_t FlowData::nsteps( void ) const
  *  @return time value
  */
 /*===========================================================================*/
-const kvs::Real32 FlowData::time( const size_t index ) const
+kvs::Real32 FlowData::time( const size_t index ) const
 {
     KVS_ASSERT( index < m_nsteps );
-    return( m_times[ index ] );
+    return m_times[ index ];
 }
 
 /*===========================================================================*/
@@ -136,10 +136,10 @@ const kvs::Real32 FlowData::time( const size_t index ) const
  *  @return step value
  */
 /*===========================================================================*/
-const kvs::Int32 FlowData::step( const size_t index ) const
+kvs::Int32 FlowData::step( const size_t index ) const
 {
     KVS_ASSERT( index < m_nsteps );
-    return( m_steps[ index ] );
+    return m_steps[ index ];
 }
 
 /*===========================================================================*/
@@ -152,7 +152,7 @@ const kvs::Int32 FlowData::step( const size_t index ) const
 const kvs::ValueArray<kvs::Real32>& FlowData::velocities( const size_t index ) const
 {
     KVS_ASSERT( index < m_nsteps );
-    return( m_velocities[ index ] );
+    return m_velocities[ index ];
 }
 
 /*===========================================================================*/
@@ -165,7 +165,7 @@ const kvs::ValueArray<kvs::Real32>& FlowData::velocities( const size_t index ) c
 const kvs::ValueArray<kvs::Real32>& FlowData::pressures( const size_t index ) const
 {
     KVS_ASSERT( index < m_nsteps );
-    return( m_pressures[ index ] );
+    return m_pressures[ index ];
 }
 
 /*===========================================================================*/
@@ -175,13 +175,13 @@ const kvs::ValueArray<kvs::Real32>& FlowData::pressures( const size_t index ) co
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool FlowData::read( const std::string filename )
+bool FlowData::read( const std::string filename )
 {
     kvs::gf::File file;
     if ( !file.read( filename ) )
     {
         kvsMessageError("Cannot read mesh data file.");
-        return( false );
+        return false;
     }
 
     if ( m_times ) delete [] m_times;
@@ -245,7 +245,7 @@ const bool FlowData::read( const std::string filename )
         }
     }
 
-    return( true );
+    return true;
 }
 
 } // end of namespace gf

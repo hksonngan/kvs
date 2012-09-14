@@ -16,6 +16,7 @@
 #include <cstring>
 #include <kvs/Endian>
 
+
 namespace kvs
 {
 
@@ -27,7 +28,7 @@ namespace gf
  *  @brief  Construct a new DataSet class.
  */
 /*===========================================================================*/
-DataSet::DataSet( void )
+DataSet::DataSet()
 {
 }
 
@@ -50,7 +51,7 @@ std::ostream& operator << ( std::ostream& os, const DataSet& d )
         if ( i != d.m_data_list.size() - 1 ) os << std::endl;
     }
 
-    return( os );
+    return os;
 }
 
 /*===========================================================================*/
@@ -59,9 +60,9 @@ std::ostream& operator << ( std::ostream& os, const DataSet& d )
  *  @return comment list
  */
 /*===========================================================================*/
-const std::vector<std::string>& DataSet::commentList( void ) const
+const std::vector<std::string>& DataSet::commentList() const
 {
-    return( m_comment_list );
+    return m_comment_list;
 }
 
 /*===========================================================================*/
@@ -73,7 +74,7 @@ const std::vector<std::string>& DataSet::commentList( void ) const
 /*===========================================================================*/
 const std::string& DataSet::comment( const size_t index ) const
 {
-    return( m_comment_list.at( index ) );
+    return m_comment_list.at( index );
 }
 
 /*===========================================================================*/
@@ -82,9 +83,9 @@ const std::string& DataSet::comment( const size_t index ) const
  *  @return data list
  */
 /*===========================================================================*/
-const std::vector<kvs::gf::Data>& DataSet::dataList( void ) const
+const std::vector<kvs::gf::Data>& DataSet::dataList() const
 {
-    return( m_data_list );
+    return m_data_list;
 }
 
 /*===========================================================================*/
@@ -96,7 +97,7 @@ const std::vector<kvs::gf::Data>& DataSet::dataList( void ) const
 /*===========================================================================*/
 const kvs::gf::Data& DataSet::data( const size_t index ) const
 {
-    return( m_data_list.at( index ) );
+    return m_data_list.at( index );
 }
 
 /*===========================================================================*/
@@ -104,7 +105,7 @@ const kvs::gf::Data& DataSet::data( const size_t index ) const
  *  @brief  Deallocate data and comments.
  */
 /*===========================================================================*/
-void DataSet::deallocate( void )
+void DataSet::deallocate()
 {
     std::vector<std::string>::iterator comment = m_comment_list.begin();
     std::vector<std::string>::const_iterator last_comment = m_comment_list.end();
@@ -130,7 +131,7 @@ void DataSet::deallocate( void )
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool DataSet::readAscii( FILE* fp )
+bool DataSet::readAscii( FILE* fp )
 {
     const size_t line_size = 256;
     char line[line_size];
@@ -159,12 +160,12 @@ const bool DataSet::readAscii( FILE* fp )
         if ( tag == "#ENDFILE" || tag == "#NEW_SET" ) { break; }
 
         kvs::gf::Data data;
-        if ( !data.readAscii( fp, tag ) ) return( false );
+        if ( !data.readAscii( fp, tag ) ) return false;
 
         m_data_list.push_back( data );
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -174,7 +175,7 @@ const bool DataSet::readAscii( FILE* fp )
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool DataSet::readBinary( FILE* fp, const bool swap )
+bool DataSet::readBinary( FILE* fp, const bool swap )
 {
     // Read a number of comments.
     kvs::Int32 ncomments = 0;
@@ -212,12 +213,12 @@ const bool DataSet::readBinary( FILE* fp, const bool swap )
              strncmp( buffer, "#NEW_SET", 8 ) == 0 ) { break; }
 
         kvs::gf::Data data;
-        if ( !data.readBinary( fp ) ) return( false );
+        if ( !data.readBinary( fp ) ) return false;
 
         m_data_list.push_back( data );
     }
 
-    return( true );
+    return true;
 }
 
 } // end of namespace gf

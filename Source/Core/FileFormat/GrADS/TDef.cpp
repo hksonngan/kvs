@@ -24,29 +24,29 @@ namespace
 
 int Month( const std::string month )
 {
-    if ( month == "jan" || month == "Jan" || month == "JAN" ) return( 1 );
-    if ( month == "feb" || month == "Feb" || month == "FEB" ) return( 2 );
-    if ( month == "mar" || month == "Mar" || month == "MAR" ) return( 3 );
-    if ( month == "apr" || month == "Apr" || month == "APR" ) return( 4 );
-    if ( month == "may" || month == "May" || month == "MAY" ) return( 5 );
-    if ( month == "jun" || month == "Jun" || month == "JUN" ) return( 6 );
-    if ( month == "jul" || month == "Jul" || month == "JUL" ) return( 7 );
-    if ( month == "aug" || month == "Aug" || month == "AUG" ) return( 8 );
-    if ( month == "sep" || month == "Sep" || month == "SEP" ) return( 9 );
-    if ( month == "oct" || month == "Oct" || month == "OCT" ) return( 10 );
-    if ( month == "nov" || month == "Nov" || month == "NOV" ) return( 11 );
-    if ( month == "dec" || month == "Dec" || month == "DEC" ) return( 12 );
-    return( -1 );
+    if ( month == "jan" || month == "Jan" || month == "JAN" ) return 1;
+    if ( month == "feb" || month == "Feb" || month == "FEB" ) return 2;
+    if ( month == "mar" || month == "Mar" || month == "MAR" ) return 3;
+    if ( month == "apr" || month == "Apr" || month == "APR" ) return 4;
+    if ( month == "may" || month == "May" || month == "MAY" ) return 5;
+    if ( month == "jun" || month == "Jun" || month == "JUN" ) return 6;
+    if ( month == "jul" || month == "Jul" || month == "JUL" ) return 7;
+    if ( month == "aug" || month == "Aug" || month == "AUG" ) return 8;
+    if ( month == "sep" || month == "Sep" || month == "SEP" ) return 9;
+    if ( month == "oct" || month == "Oct" || month == "OCT" ) return 10;
+    if ( month == "nov" || month == "Nov" || month == "NOV" ) return 11;
+    if ( month == "dec" || month == "Dec" || month == "DEC" ) return 12;
+    return -1;
 }
 
 int Unit( const std::string unit )
 {
-    if ( unit == "mn" ) return( 0 );
-    if ( unit == "hr" ) return( 1 );
-    if ( unit == "dy" ) return( 2 );
-    if ( unit == "mo" ) return( 3 );
-    if ( unit == "yr" ) return( 4 );
-    return( -1 );
+    if ( unit == "mn" ) return 0;
+    if ( unit == "hr" ) return 1;
+    if ( unit == "dy" ) return 2;
+    if ( unit == "mo" ) return 3;
+    if ( unit == "yr" ) return 4;
+    return -1;
 }
 
 const int DaysInMonth[] = {
@@ -69,21 +69,21 @@ namespace grads
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool TDef::read( std::string line, std::ifstream& ifs )
+bool TDef::read( std::string line, std::ifstream& ifs )
 {
     kvs::Tokenizer t( line, " \t\n" );
     t.token(); // TDEF
 
     // xnum
-    if ( t.isLast() ) return( false );
+    if ( t.isLast() ) return false;
     this->num = static_cast<size_t>( atoi( t.token().c_str() ) );
 
     // mapping
-    if ( t.isLast() ) return( false );
+    if ( t.isLast() ) return false;
     t.token(); // LINEAR
 
     // start
-    if ( t.isLast() ) return( false );
+    if ( t.isLast() ) return false;
     std::string start = t.token();
     {
         // hour
@@ -119,7 +119,7 @@ const bool TDef::read( std::string line, std::ifstream& ifs )
     }
 
     // Increment
-    if ( t.isLast() ) return( false );
+    if ( t.isLast() ) return false;
     std::string increment = t.token();
     {
         // unit
@@ -132,7 +132,7 @@ const bool TDef::read( std::string line, std::ifstream& ifs )
         this->increment.value = atoi( increment.c_str() );
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -140,7 +140,7 @@ const bool TDef::read( std::string line, std::ifstream& ifs )
  *  @brief  '++' operator.
  */
 /*===========================================================================*/
-TDef& TDef::operator ++ ( void )
+TDef& TDef::operator ++ ()
 {
     const int value = this->increment.value;
     switch ( this->increment.unit )
@@ -183,7 +183,7 @@ TDef& TDef::operator ++ ( void )
         this->start.year++;
     }
 
-    return( *this );
+    return *this;
 }
 
 } // end of namespace grads

@@ -31,7 +31,7 @@ namespace kvs
  *  @brief  Constructs a new FrontSTR class.
  */
 /*===========================================================================*/
-FrontSTR::FrontSTR( void ):
+FrontSTR::FrontSTR():
     m_nmeshes( 0 ),
     m_nresults( 0 )
 {
@@ -47,8 +47,7 @@ FrontSTR::FrontSTR( void ):
 /*===========================================================================*/
 FrontSTR::FrontSTR( const std::string& filenames )
 {
-    if ( this->read( filenames ) ) { m_is_success = true; }
-    else { m_is_success = false; }
+    this->read( filenames );
 }
 
 /*===========================================================================*/
@@ -60,8 +59,7 @@ FrontSTR::FrontSTR( const std::string& filenames )
 /*===========================================================================*/
 FrontSTR::FrontSTR( const std::string& msh_filename, const std::string& res_filename )
 {
-    if ( this->read( msh_filename, res_filename ) ) { m_is_success = true; }
-    else { m_is_success = false; }
+    this->read( msh_filename, res_filename );
 }
 
 /*===========================================================================*/
@@ -73,8 +71,7 @@ FrontSTR::FrontSTR( const std::string& msh_filename, const std::string& res_file
 /*===========================================================================*/
 FrontSTR::FrontSTR( const std::vector<std::string>& msh_filenames, const std::vector<std::string>& res_filenames )
 {
-    if ( this->read( msh_filenames, res_filenames ) ) { m_is_success = true; }
-    else { m_is_success = false; }
+    this->read( msh_filenames, res_filenames );
 }
 
 /*===========================================================================*/
@@ -82,7 +79,7 @@ FrontSTR::FrontSTR( const std::vector<std::string>& msh_filenames, const std::ve
  *  @brief  Destroys the FrontSTR class.
  */
 /*===========================================================================*/
-FrontSTR::~FrontSTR( void )
+FrontSTR::~FrontSTR()
 {
     this->delete_data();
 }
@@ -93,9 +90,9 @@ FrontSTR::~FrontSTR( void )
  *  @return number of mesh data
  */
 /*===========================================================================*/
-const size_t FrontSTR::numberOfMeshData( void ) const
+size_t FrontSTR::numberOfMeshData() const
 {
-    return( m_nmeshes );
+    return m_nmeshes;
 }
 
 /*===========================================================================*/
@@ -104,9 +101,9 @@ const size_t FrontSTR::numberOfMeshData( void ) const
  *  @return number of result data
  */
 /*===========================================================================*/
-const size_t FrontSTR::numberOfResultData( void ) const
+size_t FrontSTR::numberOfResultData() const
 {
-    return( m_nresults );
+    return m_nresults;
 }
 
 /*===========================================================================*/
@@ -119,7 +116,7 @@ const size_t FrontSTR::numberOfResultData( void ) const
 const kvs::fstr::MeshData& FrontSTR::meshData( const size_t index ) const
 {
     KVS_ASSERT( index < m_nmeshes );
-    return( m_mesh_data[ index ] );
+    return m_mesh_data[ index ];
 }
 
 /*===========================================================================*/
@@ -132,7 +129,7 @@ const kvs::fstr::MeshData& FrontSTR::meshData( const size_t index ) const
 const kvs::fstr::ResultData& FrontSTR::resultData( const size_t index ) const
 {
     KVS_ASSERT( index < m_nresults );
-    return( m_result_data[ index ] );
+    return m_result_data[ index ];
 }
 
 /*===========================================================================*/
@@ -142,10 +139,8 @@ const kvs::fstr::ResultData& FrontSTR::resultData( const size_t index ) const
  *  @return true if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool FrontSTR::read( const std::string& filenames )
+bool FrontSTR::read( const std::string& filenames )
 {
-    m_filename = filenames;
-
     std::vector<std::string> msh_filenames; // mesh files
     std::vector<std::string> res_filenames; // result files
 
@@ -165,11 +160,11 @@ const bool FrontSTR::read( const std::string& filenames )
 
     if ( msh_filenames.size() == 1 && res_filenames.size() == 1 )
     {
-        return( this->read( msh_filenames[0], res_filenames[0] ) );
+        return this->read( msh_filenames[0], res_filenames[0] );
     }
     else
     {
-        return( this->read( msh_filenames, res_filenames ) );
+        return this->read( msh_filenames, res_filenames );
     }
 }
 
@@ -181,8 +176,12 @@ const bool FrontSTR::read( const std::string& filenames )
  *  @return true if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool FrontSTR::read( const std::string& msh_filename, const std::string& res_filename )
+bool FrontSTR::read( const std::string& msh_filename, const std::string& res_filename )
 {
+    const std::string filename = msh_filename + ";" + res_filename;
+    BaseClass::setFilename( filename );
+    BaseClass::setSuccess( true );
+
     m_nmeshes = 1;
     m_nresults = 1;
 
@@ -190,24 +189,27 @@ const bool FrontSTR::read( const std::string& msh_filename, const std::string& r
     {
         kvsMessageError("Cannot allocate memory for member parameters.");
         this->delete_data();
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // Reading non divided mesh data.
     if ( !m_mesh_data[0].readData( msh_filename ) )
     {
         kvsMessageError("Cannot read %s.", msh_filename.c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // Reading non divided result data.
     if ( !m_result_data[0].readData( res_filename ) )
     {
         kvsMessageError("Cannot read %s.", res_filename.c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -218,8 +220,15 @@ const bool FrontSTR::read( const std::string& msh_filename, const std::string& r
  *  @return true if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool FrontSTR::read( const std::vector<std::string>& msh_filenames, const std::vector<std::string>& res_filenames )
+bool FrontSTR::read( const std::vector<std::string>& msh_filenames, const std::vector<std::string>& res_filenames )
 {
+    std::string filenames = msh_filenames[0];
+    for ( size_t i = 1; i < msh_filenames.size(); i++ ) filenames += ";" + msh_filenames[i];
+    for ( size_t i = 0; i < res_filenames.size(); i++ ) filenames += ";" + res_filenames[i];
+
+    BaseClass::setFilename( filenames );
+    BaseClass::setSuccess( true );
+
     m_nmeshes = msh_filenames.size();
     m_nresults = res_filenames.size();
 
@@ -227,7 +236,8 @@ const bool FrontSTR::read( const std::vector<std::string>& msh_filenames, const 
     {
         kvsMessageError("Cannot allocate memory for member parameters.");
         this->delete_data();
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     if ( m_nmeshes == 1 )
@@ -236,7 +246,8 @@ const bool FrontSTR::read( const std::vector<std::string>& msh_filenames, const 
         if ( !m_mesh_data[0].readData( msh_filenames[0] ) )
         {
             kvsMessageError("Cannot read %s.", msh_filenames[0].c_str() );
-            return( false );
+            BaseClass::setSuccess( false );
+            return false;
         }
     }
     else
@@ -247,7 +258,8 @@ const bool FrontSTR::read( const std::vector<std::string>& msh_filenames, const 
             if ( !m_mesh_data[i].readDividedData( msh_filenames[i] ) )
             {
                 kvsMessageError("Cannot read %s.", msh_filenames[i].c_str() );
-                return( false );
+                BaseClass::setSuccess( false );
+                return false;
             }
         }
     }
@@ -258,7 +270,8 @@ const bool FrontSTR::read( const std::vector<std::string>& msh_filenames, const 
         if ( !m_result_data[0].readData( res_filenames[0] ) )
         {
             kvsMessageError("Cannot read %s.", res_filenames[0].c_str() );
-            return( false );
+            BaseClass::setSuccess( false );
+            return false;
         }
     }
     else
@@ -269,12 +282,13 @@ const bool FrontSTR::read( const std::vector<std::string>& msh_filenames, const 
             if ( !m_result_data[i].readDividedData( res_filenames[i] ) )
             {
                 kvsMessageError("Cannot read %s.", res_filenames[i].c_str() );
-                return( false );
+                BaseClass::setSuccess( false );
+                return false;
             }
         }
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -283,15 +297,15 @@ const bool FrontSTR::read( const std::vector<std::string>& msh_filenames, const 
  *  @return true if the membery is allocated successfully
  */
 /*===========================================================================*/
-const bool FrontSTR::allocate_data( void )
+bool FrontSTR::allocate_data()
 {
     m_mesh_data = new kvs::fstr::MeshData [ m_nmeshes ];
-    if ( !m_mesh_data ) { return( false ); }
+    if ( !m_mesh_data ) { return false; }
 
     m_result_data = new kvs::fstr::ResultData [ m_nresults ];
-    if ( !m_result_data ) { if ( m_mesh_data ) delete [] m_mesh_data; return( false ); }
+    if ( !m_result_data ) { if ( m_mesh_data ) delete [] m_mesh_data; return false; }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -299,7 +313,7 @@ const bool FrontSTR::allocate_data( void )
  *  @brief  Deletes the mesh and result data.
  */
 /*===========================================================================*/
-void FrontSTR::delete_data( void )
+void FrontSTR::delete_data()
 {
     if ( m_mesh_data ) delete [] m_mesh_data;
     if ( m_result_data ) delete [] m_result_data;
@@ -312,11 +326,11 @@ void FrontSTR::delete_data( void )
  *  @return true if the writing process is done successfully
  */
 /*===========================================================================*/
-const bool FrontSTR::write( const std::string& filename )
+bool FrontSTR::write( const std::string& filename )
 {
     // This method has not been implemented yet.
     kvs::IgnoreUnusedVariable( filename );
-    return( false );
+    return false;
 }
 
 } // end of namespace kvs

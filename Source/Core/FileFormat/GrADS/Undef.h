@@ -35,7 +35,7 @@ struct Undef
 {
     kvs::Real32 value; ///< undefined value
 
-    const bool read( std::string line, std::ifstream& ifs );
+    bool read( std::string line, std::ifstream& ifs );
 };
 
 } // end of namespace grads

@@ -41,19 +41,17 @@ protected:
 
 public:
 
-    XMLDocument( void );
-
+    XMLDocument();
     XMLDocument( const std::string& filename );
 
 public:
 
-    const std::string& filename( void ) const;
+    const std::string& filename() const;
 
 public:
 
     const char* parse( const char* text );
-
-    void print( void );
+    void print();
 
 public:
 
@@ -62,7 +60,6 @@ public:
 public:
 
     bool read( const std::string& filename );
-
     bool write( const std::string& filename );
 
 public:

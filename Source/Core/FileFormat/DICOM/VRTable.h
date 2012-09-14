@@ -19,6 +19,7 @@
 #include "ElementType.h"
 #include "DataType.h"
 
+
 namespace kvs
 {
 
@@ -27,10 +28,10 @@ namespace dcm
 
 struct VRTable
 {
-    std::string      vr_string;
-    dcm::VRType      vr_type;
+    std::string vr_string;
+    dcm::VRType vr_type;
     dcm::ElementType elem_type;
-    dcm::DataType    data_type;
+    dcm::DataType data_type;
 };
 
 const VRTable VR_TABLE[] =

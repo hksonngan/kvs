@@ -46,31 +46,25 @@ protected:
 
 public:
 
-    LineObjectTag( void );
-
-    virtual ~LineObjectTag( void );
+    LineObjectTag();
+    virtual ~LineObjectTag();
 
 public:
 
-    const bool hasLineType( void ) const;
-
-    const std::string& lineType( void ) const;
-
-    const bool hasColorType( void ) const;
-
-    const std::string& colorType( void ) const;
+    bool hasLineType() const;
+    const std::string& lineType() const;
+    bool hasColorType() const;
+    const std::string& colorType() const;
 
 public:
 
     void setLineType( const std::string& line_type );
-
     void setColorType( const std::string& color_type );
 
 public:
 
-    const bool read( const kvs::XMLNode::SuperClass* parent );
-
-    const bool write( kvs::XMLNode::SuperClass* parent );
+    bool read( const kvs::XMLNode::SuperClass* parent );
+    bool write( kvs::XMLNode::SuperClass* parent );
 };
 
 } // end of namespace kvsml

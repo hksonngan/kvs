@@ -181,7 +181,7 @@ float Area::maxLongitude() const
 /*===========================================================================*/
 float Area::minHeight() const
 {
-    return( m_min_height );
+    return m_min_height;
 }
 
 /*===========================================================================*/
@@ -192,7 +192,7 @@ float Area::minHeight() const
 /*===========================================================================*/
 float Area::maxHeight() const
 {
-    return( m_max_height );
+    return m_max_height;
 }
 
 } // end of namespace gis

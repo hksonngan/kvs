@@ -31,7 +31,7 @@ namespace grads
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool Options::read( std::string line, std::ifstream& ifs )
+bool Options::read( std::string line, std::ifstream& ifs )
 {
     kvs::Tokenizer t( line, " \t\n" );
     t.token(); // OPTIONS
@@ -52,7 +52,7 @@ const bool Options::read( std::string line, std::ifstream& ifs )
         else if ( value == "cray_32bit_ieee" ) this->values.push_back( Cray32bitIEEE );
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -62,12 +62,12 @@ const bool Options::read( std::string line, std::ifstream& ifs )
  *  @return true, if the keyword is found
  */
 /*===========================================================================*/
-const bool Options::find( const Options::Keyword keyword ) const
+bool Options::find( const Options::Keyword keyword ) const
 {
     std::list<Keyword>::const_iterator begin = this->values.begin();
     std::list<Keyword>::const_iterator end = this->values.end();
 
-    return( std::find( begin, end, keyword ) != end );
+    return std::find( begin, end, keyword ) != end;
 }
 
 } // end of namespace grads

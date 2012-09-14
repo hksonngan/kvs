@@ -46,7 +46,7 @@ protected:
 
 public:
 
-    Data( void );
+    Data();
 
 public:
 
@@ -54,27 +54,19 @@ public:
 
 public:
 
-    const std::string& arrayTypeHeader( void ) const;
-
-    const std::string& keyword( void ) const;
-
-    const std::string& comment( void ) const;
-
-    const kvs::Int32 num( void ) const;
-
-    const kvs::Int32 num2( void ) const;
-
-    const kvs::ValueArray<kvs::Real32>& fltArray( void ) const;
-
-    const kvs::ValueArray<kvs::Int32>& intArray( void ) const;
-
-    void deallocate( void );
+    const std::string& arrayTypeHeader() const;
+    const std::string& keyword() const;
+    const std::string& comment() const;
+    kvs::Int32 num() const;
+    kvs::Int32 num2() const;
+    const kvs::ValueArray<kvs::Real32>& fltArray() const;
+    const kvs::ValueArray<kvs::Int32>& intArray() const;
+    void deallocate();
 
 public:
 
-    const bool readAscii( FILE* fp, const std::string tag );
-
-    const bool readBinary( FILE* fp, const bool swap = false );
+    bool readAscii( FILE* fp, const std::string tag );
+    bool readBinary( FILE* fp, const bool swap = false );
 };
 
 } // end of namespace gf

@@ -29,7 +29,7 @@ namespace kvsml
  *  @brief  Constructs a new structured volume object tag class.
  */
 /*===========================================================================*/
-StructuredVolumeObjectTag::StructuredVolumeObjectTag( void ):
+StructuredVolumeObjectTag::StructuredVolumeObjectTag():
     kvs::kvsml::TagBase( "StructuredVolumeObject" ),
     m_has_grid_type( false ),
     m_grid_type( "" ),
@@ -43,7 +43,7 @@ StructuredVolumeObjectTag::StructuredVolumeObjectTag( void ):
  *  @brief  Destructs the structured volume object class.
  */
 /*===========================================================================*/
-StructuredVolumeObjectTag::~StructuredVolumeObjectTag( void )
+StructuredVolumeObjectTag::~StructuredVolumeObjectTag()
 {
 }
 
@@ -53,9 +53,9 @@ StructuredVolumeObjectTag::~StructuredVolumeObjectTag( void )
  *  @return true, if the 'grid_type' is specified
  */
 /*===========================================================================*/
-const bool StructuredVolumeObjectTag::hasGridType( void ) const
+bool StructuredVolumeObjectTag::hasGridType() const
 {
-    return( m_has_grid_type );
+    return m_has_grid_type;
 }
 
 /*===========================================================================*/
@@ -64,9 +64,9 @@ const bool StructuredVolumeObjectTag::hasGridType( void ) const
  *  @return grid type
  */
 /*===========================================================================*/
-const std::string& StructuredVolumeObjectTag::gridType( void ) const
+const std::string& StructuredVolumeObjectTag::gridType() const
 {
-    return( m_grid_type );
+    return m_grid_type;
 }
 
 /*===========================================================================*/
@@ -75,9 +75,9 @@ const std::string& StructuredVolumeObjectTag::gridType( void ) const
  *  @return true, if the 'resolution' is specified
  */
 /*===========================================================================*/
-const bool StructuredVolumeObjectTag::hasResolution( void ) const
+bool StructuredVolumeObjectTag::hasResolution() const
 {
-    return( m_has_resolution );
+    return m_has_resolution;
 }
 
 /*===========================================================================*/
@@ -86,9 +86,9 @@ const bool StructuredVolumeObjectTag::hasResolution( void ) const
  *  @return grid resolution
  */
 /*===========================================================================*/
-const kvs::Vector3ui& StructuredVolumeObjectTag::resolution( void ) const
+const kvs::Vector3ui& StructuredVolumeObjectTag::resolution() const
 {
-    return( m_resolution );
+    return m_resolution;
 }
 
 /*===========================================================================*/
@@ -122,7 +122,7 @@ void StructuredVolumeObjectTag::setResolution( const kvs::Vector3ui& resolution 
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool StructuredVolumeObjectTag::read( const kvs::XMLNode::SuperClass* parent )
+bool StructuredVolumeObjectTag::read( const kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
 
@@ -130,7 +130,7 @@ const bool StructuredVolumeObjectTag::read( const kvs::XMLNode::SuperClass* pare
     if ( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
     // Element
@@ -157,7 +157,7 @@ const bool StructuredVolumeObjectTag::read( const kvs::XMLNode::SuperClass* pare
             if ( t.isLast() )
             {
                 kvsMessageError( "3 components are required for 'resolution' in <%s>", tag_name.c_str() );
-                return( false );
+                return false;
             }
 
             values[i] = static_cast<unsigned int>( atoi( t.token().c_str() ) );
@@ -167,7 +167,7 @@ const bool StructuredVolumeObjectTag::read( const kvs::XMLNode::SuperClass* pare
         m_resolution = kvs::Vector3ui( values[0], values[1], values[2] );
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -177,7 +177,7 @@ const bool StructuredVolumeObjectTag::read( const kvs::XMLNode::SuperClass* pare
  *  @return true, if the writing process is done successfully
  */
 /*===========================================================================*/
-const bool StructuredVolumeObjectTag::write( kvs::XMLNode::SuperClass* parent )
+bool StructuredVolumeObjectTag::write( kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
     kvs::XMLElement element( tag_name );
@@ -191,7 +191,7 @@ const bool StructuredVolumeObjectTag::write( kvs::XMLNode::SuperClass* parent )
     else
     {
         kvsMessageError( "'grid_type' is not specified in <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
     if ( m_has_resolution )
@@ -206,17 +206,17 @@ const bool StructuredVolumeObjectTag::write( kvs::XMLNode::SuperClass* parent )
     else
     {
         kvsMessageError( "'resolution' is not specified in <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
     BaseClass::m_node = parent->InsertEndChild( element );
     if( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 } // end of namespace kvsml

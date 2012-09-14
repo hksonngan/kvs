@@ -49,9 +49,8 @@ struct Options
 
     std::list<Keyword> values; ///< keyword list
 
-    const bool read( std::string line, std::ifstream& ifs );
-
-    const bool find( const Keyword keyword ) const;
+    bool read( std::string line, std::ifstream& ifs );
+    bool find( const Keyword keyword ) const;
 };
 
 } // end of namespace grads

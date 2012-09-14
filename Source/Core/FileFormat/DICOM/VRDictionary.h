@@ -35,7 +35,7 @@ class VRDictionary
 {
 public:
 
-    typedef std::map<std::string,dcm::VR>           Container;
+    typedef std::map<std::string,dcm::VR> Container;
     typedef std::map<std::string,dcm::VR>::iterator ContainerIterator;
 
 protected:
@@ -44,9 +44,8 @@ protected:
 
 public:
 
-    VRDictionary( void );
-
-    virtual ~VRDictionary( void );
+    VRDictionary();
+    virtual ~VRDictionary();
 
 public:
 
@@ -54,17 +53,16 @@ public:
 
 protected:
 
-    void create( void );
-
-    void clear( void );
+    void create();
+    void clear();
 };
 
-inline VRDictionary::VRDictionary( void )
+inline VRDictionary::VRDictionary()
 {
     this->create();
 }
 
-inline VRDictionary::~VRDictionary( void )
+inline VRDictionary::~VRDictionary()
 {
     this->clear();
 }
@@ -74,12 +72,13 @@ inline dcm::VR VRDictionary::operator [] ( const std::string& key )
     // Find the VR type from the map.
     ContainerIterator i = m_container.find( key );
 
-    return( i == m_container.end() ?
-            dcm::VR( dcm::VR_NONE, dcm::ELEM_IMPLICIT, dcm::DATA_STRING ) :
-            i->second );
+    return
+        i == m_container.end() ?
+        dcm::VR( dcm::VR_NONE, dcm::ELEM_IMPLICIT, dcm::DATA_STRING ) :
+        i->second;
 }
 
-inline void VRDictionary::create( void )
+inline void VRDictionary::create()
 {
     for( int i = 0; i < dcm::VR_TABLE_SIZE; i++ )
     {
@@ -92,7 +91,7 @@ inline void VRDictionary::create( void )
     }
 }
 
-inline void VRDictionary::clear( void )
+inline void VRDictionary::clear()
 {
     m_container.clear();
 }

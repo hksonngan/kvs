@@ -42,15 +42,13 @@ protected:
 
 public:
 
-    LineTag( void );
-
-    virtual ~LineTag( void );
+    LineTag();
+    virtual ~LineTag();
 
 public:
 
-    const bool hasNLines( void ) const;
-
-    const size_t nlines( void ) const;
+    bool hasNLines() const;
+    size_t nlines() const;
 
 public:
 
@@ -58,9 +56,8 @@ public:
 
 public:
 
-    const bool read( const kvs::XMLNode::SuperClass* parent );
-
-    const bool write( kvs::XMLNode::SuperClass* parent );
+    bool read( const kvs::XMLNode::SuperClass* parent );
+    bool write( kvs::XMLNode::SuperClass* parent );
 };
 
 } // end of namespace kvsml

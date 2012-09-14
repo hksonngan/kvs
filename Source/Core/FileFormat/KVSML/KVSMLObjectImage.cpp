@@ -37,7 +37,7 @@ namespace kvs
  *  @brief  Constructs a new KVSML image object class.
  */
 /*===========================================================================*/
-KVSMLObjectImage::KVSMLObjectImage( void ):
+KVSMLObjectImage::KVSMLObjectImage():
     m_width( 0 ),
     m_height( 0 ),
     m_pixel_type( "" ),
@@ -57,8 +57,7 @@ KVSMLObjectImage::KVSMLObjectImage( const std::string& filename ):
     m_pixel_type( "" ),
     m_writing_type( kvs::KVSMLObjectImage::Ascii )
 {
-    if ( this->read( filename ) ) { m_is_success = true; }
-    else { m_is_success = false; }
+    this->read( filename );
 }
 
 /*===========================================================================*/
@@ -66,7 +65,7 @@ KVSMLObjectImage::KVSMLObjectImage( const std::string& filename ):
  *  @brief  Destructs the KVSML image object class.
  */
 /*===========================================================================*/
-KVSMLObjectImage::~KVSMLObjectImage( void )
+KVSMLObjectImage::~KVSMLObjectImage()
 {
 }
 
@@ -76,9 +75,9 @@ KVSMLObjectImage::~KVSMLObjectImage( void )
  *  @return KVSML tag
  */
 /*===========================================================================*/
-const kvs::kvsml::KVSMLTag& KVSMLObjectImage::KVSMLTag( void ) const
+const kvs::kvsml::KVSMLTag& KVSMLObjectImage::KVSMLTag() const
 {
-    return( m_kvsml_tag );
+    return m_kvsml_tag;
 }
 
 /*===========================================================================*/
@@ -87,9 +86,9 @@ const kvs::kvsml::KVSMLTag& KVSMLObjectImage::KVSMLTag( void ) const
  *  @return object tag
  */
 /*===========================================================================*/
-const kvs::kvsml::ObjectTag& KVSMLObjectImage::objectTag( void ) const
+const kvs::kvsml::ObjectTag& KVSMLObjectImage::objectTag() const
 {
-    return( m_object_tag );
+    return m_object_tag;
 }
 
 /*===========================================================================*/
@@ -98,9 +97,9 @@ const kvs::kvsml::ObjectTag& KVSMLObjectImage::objectTag( void ) const
  *  @return image width
  */
 /*===========================================================================*/
-const size_t KVSMLObjectImage::width( void ) const
+size_t KVSMLObjectImage::width() const
 {
-    return( m_width );
+    return m_width;
 }
 
 /*===========================================================================*/
@@ -109,9 +108,9 @@ const size_t KVSMLObjectImage::width( void ) const
  *  @return image height
  */
 /*===========================================================================*/
-const size_t KVSMLObjectImage::height( void ) const
+size_t KVSMLObjectImage::height() const
 {
-    return( m_height );
+    return m_height;
 }
 
 /*===========================================================================*/
@@ -120,9 +119,9 @@ const size_t KVSMLObjectImage::height( void ) const
  *  @return pixel type
  */
 /*===========================================================================*/
-const std::string& KVSMLObjectImage::pixelType( void ) const
+const std::string& KVSMLObjectImage::pixelType() const
 {
-    return( m_pixel_type );
+    return m_pixel_type;
 }
 
 /*===========================================================================*/
@@ -131,9 +130,9 @@ const std::string& KVSMLObjectImage::pixelType( void ) const
  *  @return pixel data array
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::UInt8>& KVSMLObjectImage::data( void ) const
+const kvs::ValueArray<kvs::UInt8>& KVSMLObjectImage::data() const
 {
-    return( m_data );
+    return m_data;
 }
 
 /*===========================================================================*/
@@ -198,30 +197,34 @@ void KVSMLObjectImage::setData( const kvs::ValueArray<kvs::UInt8>& data )
  *  @return true, if the reading process is successfully
  */
 /*===========================================================================*/
-const bool KVSMLObjectImage::read( const std::string& filename )
+bool KVSMLObjectImage::read( const std::string& filename )
 {
-    m_filename = filename;
+    BaseClass::setFilename( filename );
+    BaseClass::setSuccess( true );
 
     // XML document.
     kvs::XMLDocument document;
     if ( !document.read( filename ) )
     {
         kvsMessageError( "%s", document.ErrorDesc().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <KVSML>
     if ( !m_kvsml_tag.read( &document ) )
     {
         kvsMessageError( "Cannot read <%s>.", m_kvsml_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <Object>
     if ( !m_object_tag.read( m_kvsml_tag.node() ) )
     {
         kvsMessageError( "Cannot read <%s>.", m_object_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <ImageObject>
@@ -229,20 +232,23 @@ const bool KVSMLObjectImage::read( const std::string& filename )
     if ( !image_object_tag.read( m_object_tag.node() ) )
     {
         kvsMessageError( "Cannot read <%s>.", image_object_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     if ( !image_object_tag.hasWidth() )
     {
         kvsMessageError( "'width' is not specified in <%s>.", image_object_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
     m_width = image_object_tag.width();
 
     if ( !image_object_tag.hasHeight() )
     {
         kvsMessageError( "'height' is not specified in <%s>.", image_object_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
     m_height = image_object_tag.height();
 
@@ -251,14 +257,16 @@ const bool KVSMLObjectImage::read( const std::string& filename )
     if ( !pixel_tag.read( image_object_tag.node() ) )
     {
         kvsMessageError( "Cannot read <%s>.", image_object_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
     else
     {
         if ( !pixel_tag.hasType() )
         {
             kvsMessageError( "'type' is not specified in <%s>.", pixel_tag.name().c_str() );
-            return( false );
+            BaseClass::setSuccess( false );
+            return false;
         }
         m_pixel_type = pixel_tag.type();
 
@@ -274,11 +282,12 @@ const bool KVSMLObjectImage::read( const std::string& filename )
             kvsMessageError( "Cannot read <%s> for <%s>.",
                              data_tag.name().c_str(),
                              pixel_tag.name().c_str() );
-            return( false );
+            BaseClass::setSuccess( false );
+            return false;
         }
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -288,9 +297,10 @@ const bool KVSMLObjectImage::read( const std::string& filename )
  *  @return true, if the writing process is done successfully
  */
 /*===========================================================================*/
-const bool KVSMLObjectImage::write( const std::string& filename )
+bool KVSMLObjectImage::write( const std::string& filename )
 {
-    m_filename = filename;
+    BaseClass::setFilename( filename );
+    BaseClass::setSuccess( true );
 
     kvs::XMLDocument document;
     document.InsertEndChild( kvs::XMLDeclaration("1.0") );
@@ -301,7 +311,8 @@ const bool KVSMLObjectImage::write( const std::string& filename )
     if ( !kvsml_tag.write( &document ) )
     {
         kvsMessageError( "Cannot write <%s>.", kvsml_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <Object type="ImageObject">
@@ -310,7 +321,8 @@ const bool KVSMLObjectImage::write( const std::string& filename )
     if ( !object_tag.write( kvsml_tag.node() ) )
     {
         kvsMessageError( "Cannot write <%s>.", object_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <ImageObject width="xxx" height="xxx">
@@ -320,7 +332,8 @@ const bool KVSMLObjectImage::write( const std::string& filename )
     if ( !image_object_tag.write( object_tag.node() ) )
     {
         kvsMessageError( "Cannot write <%s>.", image_object_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <Pixel>
@@ -329,7 +342,8 @@ const bool KVSMLObjectImage::write( const std::string& filename )
     if ( !pixel_tag.write( image_object_tag.node() ) )
     {
         kvsMessageError( "Cannot write <%s>.", pixel_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
     else
     {
@@ -339,27 +353,31 @@ const bool KVSMLObjectImage::write( const std::string& filename )
             kvs::kvsml::DataArrayTag data_tag;
             if ( m_writing_type == kvs::KVSMLObjectImage::ExternalAscii )
             {
-                data_tag.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "pixel" ) );
+                data_tag.setFile( kvs::kvsml::DataArray::GetDataFilename( filename, "pixel" ) );
                 data_tag.setFormat( "ascii" );
             }
             else if ( m_writing_type == kvs::KVSMLObjectImage::ExternalBinary )
             {
-                data_tag.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "pixel" ) );
+                data_tag.setFile( kvs::kvsml::DataArray::GetDataFilename( filename, "pixel" ) );
                 data_tag.setFormat( "binary" );
             }
 
-            const std::string pathname = kvs::File( m_filename ).pathName();
+            const std::string pathname = kvs::File( filename ).pathName();
             if ( !data_tag.write( pixel_tag.node(), m_data, pathname ) )
             {
                 kvsMessageError( "Cannot write <%s> for <%s>.",
                                  data_tag.name().c_str(),
                                  pixel_tag.name().c_str() );
-                return( false );
+                BaseClass::setSuccess( false );
+                return false;
             }
         }
     }
 
-    return( document.write( m_filename ) );
+    const bool success = document.write( filename );
+    BaseClass::setSuccess( success );
+
+    return success;
 }
 
 /*===========================================================================*/
@@ -369,7 +387,7 @@ const bool KVSMLObjectImage::write( const std::string& filename )
  *  @return true, if the given filename has the supported extension
  */
 /*===========================================================================*/
-const bool KVSMLObjectImage::CheckFileExtension( const std::string& filename )
+bool KVSMLObjectImage::CheckFileExtension( const std::string& filename )
 {
     const kvs::File file( filename );
     if ( file.extension() == "kvsml" ||
@@ -377,10 +395,10 @@ const bool KVSMLObjectImage::CheckFileExtension( const std::string& filename )
          file.extension() == "xml"   ||
          file.extension() == "XML" )
     {
-        return( true );
+        return true;
     }
 
-    return( false );
+    return false;
 }
 
 /*===========================================================================*/
@@ -390,25 +408,25 @@ const bool KVSMLObjectImage::CheckFileExtension( const std::string& filename )
  *  @return true, if the KVSMLObjectImage class can read the given file
  */
 /*===========================================================================*/
-const bool KVSMLObjectImage::CheckFileFormat( const std::string& filename )
+bool KVSMLObjectImage::CheckFileFormat( const std::string& filename )
 {
     kvs::XMLDocument document;
-    if ( !document.read( filename ) ) return( false );
+    if ( !document.read( filename ) ) return false;
 
     // <KVSML>
     kvs::kvsml::KVSMLTag kvsml_tag;
-    if ( !kvsml_tag.read( &document ) ) return( false );
+    if ( !kvsml_tag.read( &document ) ) return false;
 
     // <Object>
     kvs::kvsml::ObjectTag object_tag;
-    if ( !object_tag.read( kvsml_tag.node() ) ) return( false );
-    if ( object_tag.type() != "ImageObject" ) return( false );
+    if ( !object_tag.read( kvsml_tag.node() ) ) return false;
+    if ( object_tag.type() != "ImageObject" ) return false;
 
     // <ImageObject>
     kvs::kvsml::ImageObjectTag image_object_tag;
-    if ( !image_object_tag.read( object_tag.node() ) ) return( false );
+    if ( !image_object_tag.read( object_tag.node() ) ) return false;
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -424,7 +442,7 @@ std::ostream& operator <<( std::ostream& os, const KVSMLObjectImage& rhs )
     os << "Height: " << rhs.height() << std::endl;
     os << "Pixel type: " << rhs.pixelType();
 
-    return( os );
+    return os;
 }
 
 } // end of namespace kvs

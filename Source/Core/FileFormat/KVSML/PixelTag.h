@@ -44,15 +44,13 @@ protected:
 
 public:
 
-    PixelTag( void );
-
-    virtual ~PixelTag( void );
+    PixelTag();
+    virtual ~PixelTag();
 
 public:
 
-    const bool hasType( void ) const;
-
-    const std::string& type( void ) const;
+    bool hasType() const;
+    const std::string& type() const;
 
 public:
 
@@ -60,9 +58,8 @@ public:
 
 public:
 
-    const bool read( const kvs::XMLNode::SuperClass* parent );
-
-    const bool write( kvs::XMLNode::SuperClass* parent );
+    bool read( const kvs::XMLNode::SuperClass* parent );
+    bool write( kvs::XMLNode::SuperClass* parent );
 };
 
 } // end of namespace kvsml

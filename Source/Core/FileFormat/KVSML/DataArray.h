@@ -201,7 +201,7 @@ inline bool ReadExternalData(
         if( !ifs )
         {
             kvsMessageError("Cannot open '%s'.", filename.c_str());
-            return( false );
+            return false;
         }
 
         const size_t data_size = data_array->size();
@@ -209,7 +209,7 @@ inline bool ReadExternalData(
         {
             kvsMessageError("Cannot read '%s'.", filename.c_str());
             fclose( ifs );
-            return( false );
+            return false;
         }
 
         fclose( ifs );
@@ -220,7 +220,7 @@ inline bool ReadExternalData(
         if( !ifs )
         {
             kvsMessageError("Cannot open '%s'.", filename.c_str());
-            return( false );
+            return false;
         }
 
         fseek( ifs, 0, SEEK_END );
@@ -231,14 +231,14 @@ inline bool ReadExternalData(
         {
             kvsMessageError("Cannot allocate memory for reading the external data.");
             fclose( ifs );
-            return( false );
+            return false;
         }
 
         fseek( ifs, 0, SEEK_SET );
         if ( size != fread( buffer, 1, size, ifs ) )
         {
             kvsMessageError( "Cannot read '%s'.", filename.c_str() );
-            return( false );
+            return false;
         }
 
         T* data = static_cast<T*>( data_array->data() );
@@ -261,10 +261,10 @@ inline bool ReadExternalData(
     else
     {
         kvsMessageError("Unknown format '%s'.",format.c_str());
-        return( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -388,7 +388,7 @@ inline bool WriteExternalData(
         if ( ofs.fail() )
         {
             kvsMessageError("Cannot open file '%s'.", filename.c_str() );
-            return( false );
+            return false;
         }
 
         const std::string delim(", ");
@@ -443,7 +443,7 @@ inline bool WriteExternalData(
         if ( ofs.fail() )
         {
             kvsMessageError("Cannot open file '%s'.", filename.c_str() );
-            return( false );
+            return false;
         }
         const void* data_pointer = data_array.data();
         const size_t data_byte_size = data_array.byteSize();
@@ -453,10 +453,10 @@ inline bool WriteExternalData(
     else
     {
         kvsMessageError("Unknown format '%s'.",format.c_str());
-        return( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -480,7 +480,7 @@ inline bool WriteExternalData(
         if ( ofs.fail() )
         {
             kvsMessageError("Cannot open file '%s'.", filename.c_str() );
-            return( false );
+            return false;
         }
 
         const std::string delim(", ");
@@ -502,7 +502,7 @@ inline bool WriteExternalData(
         if ( ofs.fail() )
         {
             kvsMessageError("Cannot open file '%s'.", filename.c_str() );
-            return( false );
+            return false;
         }
         const char* data_pointer = reinterpret_cast<const char*>( data_array.data() );
         const size_t data_byte_size = data_array.byteSize();
@@ -510,7 +510,7 @@ inline bool WriteExternalData(
         ofs.close();
     }
 
-    return( true );
+    return true;
 }
 
 } // end of namespace DataArray

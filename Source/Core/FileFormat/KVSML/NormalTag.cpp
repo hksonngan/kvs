@@ -29,7 +29,7 @@ namespace kvsml
  *  @brief  Constructs a new normal tag class.
  */
 /*===========================================================================*/
-NormalTag::NormalTag( void ):
+NormalTag::NormalTag():
     kvs::kvsml::TagBase( "Normal" )
 {
 }
@@ -39,7 +39,7 @@ NormalTag::NormalTag( void ):
  *  @brief  Destructs the normal tag class.
  */
 /*===========================================================================*/
-NormalTag::~NormalTag( void )
+NormalTag::~NormalTag()
 {
 }
 
@@ -50,7 +50,7 @@ NormalTag::~NormalTag( void )
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool NormalTag::read( const kvs::XMLNode::SuperClass* parent )
+bool NormalTag::read( const kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
 
@@ -58,10 +58,10 @@ const bool NormalTag::read( const kvs::XMLNode::SuperClass* parent )
     if ( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -71,7 +71,7 @@ const bool NormalTag::read( const kvs::XMLNode::SuperClass* parent )
  *  @return true, if the writing process is done successfully
  */
 /*===========================================================================*/
-const bool NormalTag::write( kvs::XMLNode::SuperClass* parent )
+bool NormalTag::write( kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
     kvs::XMLElement element( tag_name );
@@ -80,10 +80,10 @@ const bool NormalTag::write( kvs::XMLNode::SuperClass* parent )
     if( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 } // end of namespace kvsml

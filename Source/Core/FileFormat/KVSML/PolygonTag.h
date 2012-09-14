@@ -42,15 +42,13 @@ protected:
 
 public:
 
-    PolygonTag( void );
-
-    virtual ~PolygonTag( void );
+    PolygonTag();
+    virtual ~PolygonTag();
 
 public:
 
-    const bool hasNPolygons( void ) const;
-
-    const size_t npolygons( void ) const;
+    bool hasNPolygons() const;
+    size_t npolygons() const;
 
 public:
 
@@ -58,9 +56,8 @@ public:
 
 public:
 
-    const bool read( const kvs::XMLNode::SuperClass* parent );
-
-    const bool write( kvs::XMLNode::SuperClass* parent );
+    bool read( const kvs::XMLNode::SuperClass* parent );
+    bool write( kvs::XMLNode::SuperClass* parent );
 };
 
 } // end of namespace kvsml

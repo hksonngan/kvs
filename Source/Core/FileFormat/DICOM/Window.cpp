@@ -51,7 +51,7 @@ namespace dcm
  *  @brief  Constructor.
  */
 /*===========================================================================*/
-Window::Window( void )
+Window::Window()
 {
 }
 
@@ -87,7 +87,7 @@ Window& Window::operator = ( const Window& w )
     m_level     = w.m_level;
     m_width     = w.m_width;
 
-    return( *this );
+    return *this;
 }
 
 /*===========================================================================*/
@@ -143,9 +143,9 @@ void Window::setWidth( const int width )
  *  @retval minimum range
  */
 /*===========================================================================*/
-const int Window::minValue( void ) const
+int Window::minValue() const
 {
-    return( m_min_value );
+    return m_min_value;
 }
 
 /*===========================================================================*/
@@ -154,19 +154,19 @@ const int Window::minValue( void ) const
  *  @retval maximum range
  */
 /*===========================================================================*/
-const int Window::maxValue( void ) const
+int Window::maxValue() const
 {
-    return( m_max_value );
+    return m_max_value;
 }
 
-const int Window::level( void ) const
+int Window::level() const
 {
-    return( m_level );
+    return m_level;
 }
 
-const int Window::width( void ) const
+int Window::width() const
 {
-    return( m_width );
+    return m_width;
 }
 
 /*===========================================================================*/
@@ -176,9 +176,9 @@ const int Window::width( void ) const
  *  @return clamped window level
  */
 /*===========================================================================*/
-const int Window::clampLevel( const int level )
+int Window::clampLevel( const int level )
 {
-    return( kvs::Math::Clamp( level, m_min_value, m_max_value ) );
+    return kvs::Math::Clamp( level, m_min_value, m_max_value );
 }
 
 /*===========================================================================*/
@@ -188,9 +188,9 @@ const int Window::clampLevel( const int level )
  *  @return clamped width
  */
 /*===========================================================================*/
-const int Window::clampWidth( const int width )
+int Window::clampWidth( const int width )
 {
-    return( kvs::Math::Clamp( width, 0, m_range ) );
+    return kvs::Math::Clamp( width, 0, m_range );
 }
 
 /*===========================================================================*/
@@ -256,5 +256,3 @@ void Window::set_range_16bit( const bool sign )
 } // end of namespace dcm
 
 } // end of namespace kvs
-
-

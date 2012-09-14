@@ -30,7 +30,7 @@ namespace kvsml
  *  @brief  Constructs a new KVSML tag class.
  */
 /*===========================================================================*/
-KVSMLTag::KVSMLTag( void ):
+KVSMLTag::KVSMLTag():
     kvs::kvsml::TagBase( "KVSML" ),
     m_has_version( false ),
     m_version( "" )
@@ -42,7 +42,7 @@ KVSMLTag::KVSMLTag( void ):
  *  @brief  Destroys the KVSML tag class.
  */
 /*===========================================================================*/
-KVSMLTag::~KVSMLTag( void )
+KVSMLTag::~KVSMLTag()
 {
 }
 
@@ -52,9 +52,9 @@ KVSMLTag::~KVSMLTag( void )
  *  @return true, if 'version' is specified as attribute
  */
 /*===========================================================================*/
-const bool KVSMLTag::hasVersion( void ) const
+bool KVSMLTag::hasVersion() const
 {
-    return( m_has_version );
+    return m_has_version;
 }
 
 /*===========================================================================*/
@@ -63,9 +63,9 @@ const bool KVSMLTag::hasVersion( void ) const
  *  @return version number as string
  */
 /*===========================================================================*/
-const std::string& KVSMLTag::version( void ) const
+const std::string& KVSMLTag::version() const
 {
-    return( m_version );
+    return m_version;
 }
 
 /*===========================================================================*/
@@ -87,7 +87,7 @@ void KVSMLTag::setVersion( const std::string& version )
  *  @return true, if the reading process is done successfully.
  */
 /*===========================================================================*/
-const bool KVSMLTag::read( const kvs::XMLDocument* document )
+bool KVSMLTag::read( const kvs::XMLDocument* document )
 {
     const std::string tag_name = BaseClass::name();
 
@@ -96,7 +96,7 @@ const bool KVSMLTag::read( const kvs::XMLDocument* document )
     if( !BaseClass::m_node )
     {
         kvsMessageError("Cannot find <%s>.", tag_name.c_str());
-        return( false );
+        return false;
     }
 
     // Element
@@ -104,13 +104,13 @@ const bool KVSMLTag::read( const kvs::XMLDocument* document )
 
     // version="xxx"
     const std::string version = kvs::XMLElement::AttributeValue( element, "version" );
-    if ( version == "" ) return( true );
+    if ( version == "" ) return true;
     {
         m_has_version = true;
         m_version = version;
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -120,7 +120,7 @@ const bool KVSMLTag::read( const kvs::XMLDocument* document )
  *  @return true, if the writing process is done successfully.
  */
 /*===========================================================================*/
-const bool KVSMLTag::write( kvs::XMLDocument* document )
+bool KVSMLTag::write( kvs::XMLDocument* document )
 {
     const std::string tag_name = BaseClass::name();
     kvs::XMLElement element( tag_name );
@@ -136,22 +136,22 @@ const bool KVSMLTag::write( kvs::XMLDocument* document )
     if ( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
-const bool KVSMLTag::read( const kvs::XMLNode::SuperClass* parent )
+bool KVSMLTag::read( const kvs::XMLNode::SuperClass* parent )
 {
     kvs::IgnoreUnusedVariable( parent );
-    return( true );
+    return true;
 }
 
-const bool KVSMLTag::write( kvs::XMLNode::SuperClass* parent )
+bool KVSMLTag::write( kvs::XMLNode::SuperClass* parent )
 {
     kvs::IgnoreUnusedVariable( parent );
-    return( true );
+    return true;
 }
 
 } // end of namespace kvsml

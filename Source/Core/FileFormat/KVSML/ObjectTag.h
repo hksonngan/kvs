@@ -51,41 +51,30 @@ protected:
 
 public:
 
-    ObjectTag( void );
-
-    virtual ~ObjectTag( void );
+    ObjectTag();
+    virtual ~ObjectTag();
 
 public:
 
-    const bool hasType( void ) const;
-
-    const std::string& type( void ) const;
-
-    const bool hasExternalCoord( void ) const;
-
-    const kvs::Vector3f& minExternalCoord( void ) const;
-
-    const kvs::Vector3f& maxExternalCoord( void ) const;
-
-    const bool hasObjectCoord( void ) const;
-
-    const kvs::Vector3f& minObjectCoord( void ) const;
-
-    const kvs::Vector3f& maxObjectCoord( void ) const;
+    bool hasType() const;
+    const std::string& type() const;
+    bool hasExternalCoord() const;
+    const kvs::Vector3f& minExternalCoord() const;
+    const kvs::Vector3f& maxExternalCoord() const;
+    bool hasObjectCoord() const;
+    const kvs::Vector3f& minObjectCoord() const;
+    const kvs::Vector3f& maxObjectCoord() const;
 
 public:
 
     void setType( const std::string& type );
-
     void setMinMaxExternalCoords( const kvs::Vector3f& min_coord, const kvs::Vector3f& max_coord );
-
     void setMinMaxObjectCoords( const kvs::Vector3f& min_coord, const kvs::Vector3f& max_coord );
 
 public:
 
-    const bool read( const kvs::XMLNode::SuperClass* parent );
-
-    const bool write( kvs::XMLNode::SuperClass* parent );
+    bool read( const kvs::XMLNode::SuperClass* parent );
+    bool write( kvs::XMLNode::SuperClass* parent );
 };
 
 } // end of namespace kvsml

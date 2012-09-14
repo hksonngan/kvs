@@ -29,7 +29,7 @@ namespace kvsml
  *  @brief  Constructs a new TagBase class.
  */
 /*===========================================================================*/
-TableObjectTag::TableObjectTag( void ):
+TableObjectTag::TableObjectTag():
     kvs::kvsml::TagBase( "TableObject" ),
     m_has_nrows( false ),
     m_nrows( 0 ),
@@ -44,9 +44,9 @@ TableObjectTag::TableObjectTag( void ):
  *  @return true if the nrows has been specified
  */
 /*===========================================================================*/
-const bool TableObjectTag::hasNRows( void ) const
+bool TableObjectTag::hasNRows() const
 {
-    return( m_has_nrows );
+    return m_has_nrows;
 }
 
 /*===========================================================================*/
@@ -55,9 +55,9 @@ const bool TableObjectTag::hasNRows( void ) const
  *  @return number of rows
  */
 /*===========================================================================*/
-const size_t TableObjectTag::nrows( void ) const
+size_t TableObjectTag::nrows() const
 {
-    return( m_nrows );
+    return m_nrows;
 }
 
 /*===========================================================================*/
@@ -66,9 +66,9 @@ const size_t TableObjectTag::nrows( void ) const
  *  @return true if the ncolumns has been specified
  */
 /*===========================================================================*/
-const bool TableObjectTag::hasNColumns( void ) const
+bool TableObjectTag::hasNColumns() const
 {
-    return( m_has_ncolumns );
+    return m_has_ncolumns;
 }
 
 /*===========================================================================*/
@@ -77,9 +77,9 @@ const bool TableObjectTag::hasNColumns( void ) const
  *  @return number of columns
  */
 /*===========================================================================*/
-const size_t TableObjectTag::ncolumns( void ) const
+size_t TableObjectTag::ncolumns() const
 {
-    return( m_ncolumns );
+    return m_ncolumns;
 }
 
 /*===========================================================================*/
@@ -113,7 +113,7 @@ void TableObjectTag::setNColumns( const size_t ncolumns )
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool TableObjectTag::read( const kvs::XMLNode::SuperClass* parent )
+bool TableObjectTag::read( const kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
 
@@ -121,7 +121,7 @@ const bool TableObjectTag::read( const kvs::XMLNode::SuperClass* parent )
     if ( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
     // Element
@@ -143,7 +143,7 @@ const bool TableObjectTag::read( const kvs::XMLNode::SuperClass* parent )
         m_ncolumns = static_cast<size_t>( atoi( ncolumns.c_str() ) );
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -153,7 +153,7 @@ const bool TableObjectTag::read( const kvs::XMLNode::SuperClass* parent )
  *  @return true, if the writting process is done successfully
  */
 /*===========================================================================*/
-const bool TableObjectTag::write( kvs::XMLNode::SuperClass* parent )
+bool TableObjectTag::write( kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
     kvs::XMLElement element( tag_name );
@@ -167,7 +167,7 @@ const bool TableObjectTag::write( kvs::XMLNode::SuperClass* parent )
     else
     {
         kvsMessageError( "'nrows' is not specified in <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
     if ( m_has_ncolumns )
@@ -179,17 +179,17 @@ const bool TableObjectTag::write( kvs::XMLNode::SuperClass* parent )
     else
     {
         kvsMessageError( "'ncolumns' is not specified in <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
     BaseClass::m_node = parent->InsertEndChild( element );
     if( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 } // end of namespace kvsml

@@ -49,7 +49,7 @@ const size_t NumberOfNodes[15] =
  *  @return element type
  */
 /*===========================================================================*/
-const kvs::fstr::MeshData::ElementType GetElementType( const int value )
+kvs::fstr::MeshData::ElementType GetElementType( const int value )
 {
     kvs::fstr::MeshData::ElementType element_type = kvs::fstr::MeshData::ElementTypeUnknown;
     switch ( value )
@@ -71,7 +71,7 @@ const kvs::fstr::MeshData::ElementType GetElementType( const int value )
     default: break;
     }
 
-    return( element_type );
+    return element_type;
 }
 
 }
@@ -88,7 +88,7 @@ namespace fstr
  *  @brief  Constructs a new MeshData class.
  */
 /*===========================================================================*/
-MeshData::MeshData( void ):
+MeshData::MeshData():
     m_element_type(MeshData::ElementTypeUnknown),
     m_nnodes(0),
     m_ncells(0)
@@ -101,9 +101,9 @@ MeshData::MeshData( void ):
  *  @return element type
  */
 /*===========================================================================*/
-const MeshData::ElementType MeshData::elementType( void ) const
+MeshData::ElementType MeshData::elementType() const
 {
-    return( m_element_type );
+    return m_element_type;
 }
 
 /*===========================================================================*/
@@ -112,9 +112,9 @@ const MeshData::ElementType MeshData::elementType( void ) const
  *  @return number of nodes
  */
 /*===========================================================================*/
-const size_t MeshData::numberOfNodes( void ) const
+size_t MeshData::numberOfNodes() const
 {
-    return( m_nnodes );
+    return m_nnodes;
 }
 
 /*===========================================================================*/
@@ -123,9 +123,9 @@ const size_t MeshData::numberOfNodes( void ) const
  *  @return number of cells
  */
 /*===========================================================================*/
-const size_t MeshData::numberOfCells( void ) const
+size_t MeshData::numberOfCells() const
 {
-    return( m_ncells );
+    return m_ncells;
 }
 
 /*===========================================================================*/
@@ -134,9 +134,9 @@ const size_t MeshData::numberOfCells( void ) const
  *  @return coordinate values
  */
 /*===========================================================================*/
-const MeshData::Coords& MeshData::coords( void ) const
+const MeshData::Coords& MeshData::coords() const
 {
-    return( m_coords );
+    return m_coords;
 }
 
 /*===========================================================================*/
@@ -145,9 +145,9 @@ const MeshData::Coords& MeshData::coords( void ) const
  *  @return connection values
  */
 /*===========================================================================*/
-const MeshData::Connections& MeshData::connections( void ) const
+const MeshData::Connections& MeshData::connections() const
 {
-    return( m_connections );
+    return m_connections;
 }
 
 /*===========================================================================*/
@@ -157,13 +157,13 @@ const MeshData::Connections& MeshData::connections( void ) const
  *  @return true if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool MeshData::readData( const std::string& filename )
+bool MeshData::readData( const std::string& filename )
 {
     std::ifstream ifs( filename.c_str() );
     if ( !ifs.is_open() )
     {
         kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return( false );
+        return false;
     }
 
     std::string line("");
@@ -186,7 +186,7 @@ const bool MeshData::readData( const std::string& filename )
             if ( !this->read_node( line, ifs ) )
             {
                 kvsMessageError("Cannot read !NODE.");
-                return( false );
+                return false;
             }
         }
 
@@ -196,7 +196,7 @@ const bool MeshData::readData( const std::string& filename )
             if ( !this->read_element( line, ifs ) )
             {
                 kvsMessageError("Cannot read !ELEMENT.");
-                return( false );
+                return false;
             }
         }
 
@@ -206,7 +206,7 @@ const bool MeshData::readData( const std::string& filename )
 
     ifs.close();
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -216,13 +216,13 @@ const bool MeshData::readData( const std::string& filename )
  *  @return true if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool MeshData::readDividedData( const std::string& filename )
+bool MeshData::readDividedData( const std::string& filename )
 {
     std::ifstream ifs( filename.c_str() );
     if ( !ifs.is_open() )
     {
         kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return( false );
+        return false;
     }
 
     m_nnodes = 0;
@@ -355,7 +355,7 @@ const bool MeshData::readDividedData( const std::string& filename )
 
     ifs.close();
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -366,7 +366,7 @@ const bool MeshData::readDividedData( const std::string& filename )
  *  @return true if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool MeshData::read_node( std::string& line, std::ifstream& ifs )
+bool MeshData::read_node( std::string& line, std::ifstream& ifs )
 {
     size_t counter = 0;
     std::vector<kvs::Real32> coords;
@@ -378,7 +378,7 @@ const bool MeshData::read_node( std::string& line, std::ifstream& ifs )
         std::string svalue;
 
         // node ID (skip)
-        if ( !std::getline( line_stream, svalue, ',' ) ) return( false );
+        if ( !std::getline( line_stream, svalue, ',' ) ) return false;
 
         // x, y, z
         while ( std::getline( line_stream, svalue, ',' ) )
@@ -393,7 +393,7 @@ const bool MeshData::read_node( std::string& line, std::ifstream& ifs )
     m_nnodes = counter;
     m_coords = kvs::ValueArray<kvs::Real32>( coords );
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -404,7 +404,7 @@ const bool MeshData::read_node( std::string& line, std::ifstream& ifs )
  *  @return true if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool MeshData::read_element( std::string& line, std::ifstream& ifs )
+bool MeshData::read_element( std::string& line, std::ifstream& ifs )
 {
     m_element_type = ElementTypeUnknown;
     {
@@ -412,7 +412,7 @@ const bool MeshData::read_element( std::string& line, std::ifstream& ifs )
         std::string svalue;
 
         // !ELEMENT
-        if ( !std::getline( line_stream, svalue, ',' ) ) return( false );
+        if ( !std::getline( line_stream, svalue, ',' ) ) return false;
 
         // Reading element type.
         while ( std::getline( line_stream, svalue, ',' ) )
@@ -441,7 +441,7 @@ const bool MeshData::read_element( std::string& line, std::ifstream& ifs )
         std::string svalue;
 
         // element ID
-        if ( !std::getline( line_stream, svalue, ',' ) ) return( false );
+        if ( !std::getline( line_stream, svalue, ',' ) ) return false;
 
         // Reading connections.
         for ( size_t i = 0; i < nnodes_per_cell; i++ )
@@ -462,7 +462,7 @@ const bool MeshData::read_element( std::string& line, std::ifstream& ifs )
     m_ncells = counter;
     m_connections = kvs::ValueArray<kvs::UInt32>( connections );
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/

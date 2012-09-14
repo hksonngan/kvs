@@ -46,7 +46,7 @@ class TagDictionary
 {
 public:
 
-    typedef std::vector<dcm::Tag>           Container;
+    typedef std::vector<dcm::Tag> Container;
     typedef std::vector<dcm::Tag>::iterator ContainerIterator;
 
 protected:
@@ -55,9 +55,8 @@ protected:
 
 public:
 
-    TagDictionary( void );
-
-    virtual ~TagDictionary( void );
+    TagDictionary();
+    virtual ~TagDictionary();
 
 public:
 
@@ -65,9 +64,8 @@ public:
 
 protected:
 
-    void create( void );
-
-    void clear( void );
+    void create();
+    void clear();
 };
 
 /*===========================================================================*/
@@ -75,7 +73,7 @@ protected:
  *  @brief  Constructor.
  */
 /*===========================================================================*/
-inline TagDictionary::TagDictionary( void )
+inline TagDictionary::TagDictionary()
 {
     this->create();
 }
@@ -85,7 +83,7 @@ inline TagDictionary::TagDictionary( void )
  *  @brief  Destructor.
  */
 /*===========================================================================*/
-inline TagDictionary::~TagDictionary( void )
+inline TagDictionary::~TagDictionary()
 {
     this->clear();
 }
@@ -100,9 +98,10 @@ inline dcm::Tag TagDictionary::operator [] ( const dcm::Tag& key )
 {
     ContainerIterator i = std::find( m_container.begin(), m_container.end(), key );
 
-    return( i == m_container.end() ?
-            dcm::Tag( key.groupID(), key.elementID() ) :
-            *i );
+    return
+        i == m_container.end() ?
+        dcm::Tag( key.groupID(), key.elementID() ) :
+        *i;
 }
 
 /*===========================================================================*/
@@ -110,7 +109,7 @@ inline dcm::Tag TagDictionary::operator [] ( const dcm::Tag& key )
  *  @brief  Create the container.
  */
 /*===========================================================================*/
-inline void TagDictionary::create( void )
+inline void TagDictionary::create()
 {
     m_container.reserve( dcm::TAG_TABLE_SIZE );
     PUSH_BACK_DICOM_TAG_TO_CONTAINER(0008);
@@ -176,7 +175,7 @@ inline void TagDictionary::create( void )
  *  @brief  Clear the container.
  */
 /*===========================================================================*/
-inline void TagDictionary::clear( void )
+inline void TagDictionary::clear()
 {
     m_container.clear();
 }

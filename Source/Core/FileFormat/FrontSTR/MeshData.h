@@ -69,34 +69,26 @@ protected:
 
 public:
 
-    MeshData( void );
+    MeshData();
 
 public:
 
-    const ElementType elementType( void ) const;
-
-    const size_t numberOfNodes( void ) const;
-
-    const size_t numberOfCells( void ) const;
-
-    const Coords& coords( void ) const;
-
-    const Connections& connections( void ) const;
+    ElementType elementType() const;
+    size_t numberOfNodes() const;
+    size_t numberOfCells() const;
+    const Coords& coords() const;
+    const Connections& connections() const;
 
 public:
 
-    const bool readData( const std::string& filename );
-
-    const bool readDividedData( const std::string& filename );
+    bool readData( const std::string& filename );
+    bool readDividedData( const std::string& filename );
 
 private:
 
-    const bool read_node( std::string& line, std::ifstream& ifs );
-
-    const bool read_element( std::string& line, std::ifstream& ifs );
-
+    bool read_node( std::string& line, std::ifstream& ifs );
+    bool read_element( std::string& line, std::ifstream& ifs );
     void adjust_connection( kvs::UInt32* connection );
-
 };
 
 } // end of namespace fstr

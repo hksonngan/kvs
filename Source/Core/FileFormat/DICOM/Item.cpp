@@ -39,7 +39,7 @@ namespace dcm
  *  @brief  Constructor.
  */
 /*===========================================================================*/
-Item::Item( void )
+Item::Item()
 {
 }
 
@@ -59,7 +59,7 @@ Item::Item( const unsigned int data_length ) :
  *  @brief  Destructor.
  */
 /*===========================================================================*/
-Item::~Item( void )
+Item::~Item()
 {
 }
 
@@ -68,9 +68,9 @@ Item::~Item( void )
  *  @brief  Return the data length.
  */
 /*===========================================================================*/
-const unsigned int Item::dataLength( void ) const
+unsigned int Item::dataLength() const
 {
-    return( m_data_length );
+    return m_data_length;
 }
 
 /*===========================================================================*/
@@ -78,9 +78,9 @@ const unsigned int Item::dataLength( void ) const
  *  @brief  Return the item value string.
  */
 /*===========================================================================*/
-const std::string& Item::values( void ) const
+const std::string& Item::values() const
 {
-    return( m_values );
+    return m_values;
 }
 
 /*===========================================================================*/
@@ -91,12 +91,12 @@ const std::string& Item::values( void ) const
  *  @return true if reading successful, false if not.
  */
 /*===========================================================================*/
-const bool dcm::Item::read( std::ifstream& ifs, const bool swap )
+bool dcm::Item::read( std::ifstream& ifs, const bool swap )
 {
     // Check the sequence delimitation item.
     if( m_data_length == 0xffffffff )
     {
-        return( this->read_undefined_length_item( ifs, swap ) );
+        return this->read_undefined_length_item( ifs, swap );
     }
 
     unsigned int length = 0;
@@ -109,7 +109,7 @@ const bool dcm::Item::read( std::ifstream& ifs, const bool swap )
         length += ::ItemTagSize + ::ItemLengthSize + m_item_length;
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -120,12 +120,12 @@ const bool dcm::Item::read( std::ifstream& ifs, const bool swap )
  *  @return true if reading the item tag successful.
  */
 /*===========================================================================*/
-const bool dcm::Item::read_item_tag( std::ifstream& ifs, const bool swap )
+bool dcm::Item::read_item_tag( std::ifstream& ifs, const bool swap )
 {
     m_item_tag[0] = dcm::StreamReader::Get<unsigned short>( ifs, swap );
     m_item_tag[1] = dcm::StreamReader::Get<unsigned short>( ifs, swap );
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -136,11 +136,11 @@ const bool dcm::Item::read_item_tag( std::ifstream& ifs, const bool swap )
  *  @return true if reading the item length successful.
  */
 /*===========================================================================*/
-const bool dcm::Item::read_item_length( std::ifstream& ifs, const bool swap )
+bool dcm::Item::read_item_length( std::ifstream& ifs, const bool swap )
 {
     m_item_length = dcm::StreamReader::Get<unsigned int>( ifs, swap );
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -151,7 +151,7 @@ const bool dcm::Item::read_item_length( std::ifstream& ifs, const bool swap )
  *  @return true if the item delimitation tag is found, false if not.
  */
 /*===========================================================================*/
-const bool dcm::Item::seek_item_delimitation( std::ifstream& ifs, const bool swap )
+bool dcm::Item::seek_item_delimitation( std::ifstream& ifs, const bool swap )
 {
     while( !ifs.eof() )
     {
@@ -161,12 +161,12 @@ const bool dcm::Item::seek_item_delimitation( std::ifstream& ifs, const bool swa
             m_item_tag[1] = dcm::StreamReader::Get<unsigned short>( ifs, swap );
             if( m_item_tag[1] == 0xe00d )
             {
-                return( true );
+                return true;
             }
         }
     }
 
-    return( false );
+    return false;
 }
 
 /*===========================================================================*/
@@ -177,7 +177,7 @@ const bool dcm::Item::seek_item_delimitation( std::ifstream& ifs, const bool swa
  *  @return true if reading the item length successful, false if not.
  */
 /*===========================================================================*/
-const bool dcm::Item::read_undefined_length_item( std::ifstream& ifs, const bool swap )
+bool dcm::Item::read_undefined_length_item( std::ifstream& ifs, const bool swap )
 {
     this->read_item_tag( ifs, swap );
     this->read_item_length( ifs, swap );
@@ -197,18 +197,18 @@ const bool dcm::Item::read_undefined_length_item( std::ifstream& ifs, const bool
          *     m_item_length == 00000000H
          */
 
-        return( this->read_undefined_length_item( ifs, swap ) );
+        return this->read_undefined_length_item( ifs, swap );
     }
 
     // Check the sequence delimitation.
-    if( m_item_tag[0] == 0xfffe && m_item_tag[1] == 0xe0dd ) return( true );
+    if( m_item_tag[0] == 0xfffe && m_item_tag[1] == 0xe0dd ) return true;
 
     if( m_item_length > 0 )
     {
         m_values += dcm::StreamReader::Get( ifs, m_item_length, swap ) + " ";
     }
 
-    return( this->read_undefined_length_item( ifs, swap ) );
+    return this->read_undefined_length_item( ifs, swap );
 }
 
 } // end of namespace dcm

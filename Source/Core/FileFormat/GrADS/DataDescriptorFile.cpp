@@ -166,7 +166,7 @@ const kvs::grads::Vars& DataDescriptorFile::vars( void ) const
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool DataDescriptorFile::read( std::ifstream& ifs )
+bool DataDescriptorFile::read( std::ifstream& ifs )
 {
     std::string line;
 //    while ( std::getline( ifs, line ) )
@@ -186,51 +186,51 @@ const bool DataDescriptorFile::read( std::ifstream& ifs )
 
         if ( entry == "DSET" || entry == "dset" )
         {
-            if ( !m_dset.read( line, ifs ) ) { kvsMessageError("Cannot read DSET."); return( false ); }
+            if ( !m_dset.read( line, ifs ) ) { kvsMessageError("Cannot read DSET."); return false; }
         }
 
         if ( entry == "UNDEF" || entry == "undef" )
         {
-            if ( !m_undef.read( line, ifs ) ) { kvsMessageError("Cannot read UNDEF."); return( false ); }
+            if ( !m_undef.read( line, ifs ) ) { kvsMessageError("Cannot read UNDEF."); return false; }
         }
 
         if ( entry == "TITLE" || entry == "title" )
         {
-            if ( !m_title.read( line, ifs ) ) { kvsMessageError("Cannot read TITLE."); return( false ); }
+            if ( !m_title.read( line, ifs ) ) { kvsMessageError("Cannot read TITLE."); return false; }
         }
 
         if ( entry == "OPTIONS" || entry == "options" )
         {
-            if ( !m_options.read( line, ifs ) ) { kvsMessageError("Cannot read OPTIONS."); return( false ); }
+            if ( !m_options.read( line, ifs ) ) { kvsMessageError("Cannot read OPTIONS."); return false; }
         }
 
         if ( entry == "XDEF" || entry == "xdef" )
         {
-            if ( !m_xdef.read( line, ifs ) ) { kvsMessageError("Cannot read XDEF."); return( false ); }
+            if ( !m_xdef.read( line, ifs ) ) { kvsMessageError("Cannot read XDEF."); return false; }
         }
 
         if ( entry == "YDEF" || entry == "ydef" )
         {
-            if ( !m_ydef.read( line, ifs ) ) { kvsMessageError("Cannot read YDEF."); return( false ); }
+            if ( !m_ydef.read( line, ifs ) ) { kvsMessageError("Cannot read YDEF."); return false; }
         }
 
         if ( entry == "ZDEF" || entry == "zdef" )
         {
-            if ( !m_zdef.read( line, ifs ) ) { kvsMessageError("Cannot read ZDEF."); return( false ); }
+            if ( !m_zdef.read( line, ifs ) ) { kvsMessageError("Cannot read ZDEF."); return false; }
         }
 
         if ( entry == "TDEF" || entry == "tdef" )
         {
-            if ( !m_tdef.read( line, ifs ) ) { kvsMessageError("Cannot read TDEF."); return( false ); }
+            if ( !m_tdef.read( line, ifs ) ) { kvsMessageError("Cannot read TDEF."); return false; }
         }
 
         if ( entry == "VARS" || entry == "vars" )
         {
-            if ( !m_vars.read( line, ifs ) ) { kvsMessageError("Cannot read VARS."); return( false ); }
+            if ( !m_vars.read( line, ifs ) ) { kvsMessageError("Cannot read VARS."); return false; }
         }
     }
 
-    return( true );
+    return true;
 }
 
 } // end of namespace grads

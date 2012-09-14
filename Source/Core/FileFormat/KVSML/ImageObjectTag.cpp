@@ -29,7 +29,7 @@ namespace kvsml
  *  @brief  Constructs a new image object tag class.
  */
 /*===========================================================================*/
-ImageObjectTag::ImageObjectTag( void ):
+ImageObjectTag::ImageObjectTag():
     kvs::kvsml::TagBase( "ImageObject" ),
     m_has_width( false ),
     m_width( 0 ),
@@ -43,7 +43,7 @@ ImageObjectTag::ImageObjectTag( void ):
  *  @brief  Destructs the image object class.
  */
 /*===========================================================================*/
-ImageObjectTag::~ImageObjectTag( void )
+ImageObjectTag::~ImageObjectTag()
 {
 }
 
@@ -53,9 +53,9 @@ ImageObjectTag::~ImageObjectTag( void )
  *  @return true, if the image object tag has 'width'
  */
 /*===========================================================================*/
-const bool ImageObjectTag::hasWidth( void ) const
+bool ImageObjectTag::hasWidth() const
 {
-    return( m_has_width );
+    return m_has_width;
 }
 
 /*===========================================================================*/
@@ -64,9 +64,9 @@ const bool ImageObjectTag::hasWidth( void ) const
  *  @return image width
  */
 /*===========================================================================*/
-const size_t ImageObjectTag::width( void ) const
+size_t ImageObjectTag::width() const
 {
-    return( m_width );
+    return m_width;
 }
 
 /*===========================================================================*/
@@ -75,9 +75,9 @@ const size_t ImageObjectTag::width( void ) const
  *  @return true, if the image object tag has 'height'
  */
 /*===========================================================================*/
-const bool ImageObjectTag::hasHeight( void ) const
+bool ImageObjectTag::hasHeight() const
 {
-    return( m_has_height );
+    return m_has_height;
 }
 
 /*===========================================================================*/
@@ -86,9 +86,9 @@ const bool ImageObjectTag::hasHeight( void ) const
  *  @return image height
  */
 /*===========================================================================*/
-const size_t ImageObjectTag::height( void ) const
+size_t ImageObjectTag::height() const
 {
-    return( m_height );
+    return m_height;
 }
 
 /*===========================================================================*/
@@ -122,7 +122,7 @@ void ImageObjectTag::setHeight( const size_t height )
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool ImageObjectTag::read( const kvs::XMLNode::SuperClass* parent )
+bool ImageObjectTag::read( const kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
 
@@ -130,7 +130,7 @@ const bool ImageObjectTag::read( const kvs::XMLNode::SuperClass* parent )
     if ( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
     // Element
@@ -152,7 +152,7 @@ const bool ImageObjectTag::read( const kvs::XMLNode::SuperClass* parent )
         m_height = static_cast<size_t>( atoi( height.c_str() ) );
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -162,7 +162,7 @@ const bool ImageObjectTag::read( const kvs::XMLNode::SuperClass* parent )
  *  @return true, if the writing process is done successfully
  */
 /*===========================================================================*/
-const bool ImageObjectTag::write( kvs::XMLNode::SuperClass* parent )
+bool ImageObjectTag::write( kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
     kvs::XMLElement element( tag_name );
@@ -185,10 +185,10 @@ const bool ImageObjectTag::write( kvs::XMLNode::SuperClass* parent )
     if( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 } // end of namespace kvsml

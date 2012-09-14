@@ -41,7 +41,7 @@ namespace kvsml
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool ReadCoordData(
+bool ReadCoordData(
     const kvs::XMLNode::SuperClass* parent,
     const size_t ncoords,
     kvs::ValueArray<kvs::Real32>* coords )
@@ -53,7 +53,7 @@ const bool ReadCoordData(
         if ( !coord_tag.read( parent ) )
         {
             kvsMessageError( "Cannot read <%s>.", coord_tag.name().c_str() );
-            return( false );
+            return false;
         }
 
         // <DataArray>
@@ -65,11 +65,11 @@ const bool ReadCoordData(
             kvsMessageError( "Cannot read <%s> for <%s>.",
                              data_tag.name().c_str(),
                              coord_tag.name().c_str() );
-            return( false );
+            return false;
         }
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -81,7 +81,7 @@ const bool ReadCoordData(
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool ReadColorData(
+bool ReadColorData(
     const kvs::XMLNode::SuperClass* parent,
     const size_t ncolors,
     kvs::ValueArray<kvs::UInt8>* colors )
@@ -93,7 +93,7 @@ const bool ReadColorData(
         if ( !color_tag.read( parent ) )
         {
             kvsMessageError( "Cannot read <%s>.", color_tag.name().c_str() );
-            return( false );
+            return false;
         }
 
         // <DataValue>
@@ -108,7 +108,7 @@ const bool ReadColorData(
                 kvsMessageError( "Cannot read <%s> for <%s>.",
                                  data_tag.name().c_str(),
                                  color_tag.name().c_str() );
-                return( false );
+                return false;
             }
         }
         // <DataArray>
@@ -122,12 +122,12 @@ const bool ReadColorData(
                 kvsMessageError( "Cannot read <%s> for <%s>.",
                                  data_tag.name().c_str(),
                                  color_tag.name().c_str() );
-                return( false );
+                return false;
             }
         }
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -139,7 +139,7 @@ const bool ReadColorData(
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool ReadNormalData(
+bool ReadNormalData(
     const kvs::XMLNode::SuperClass* parent,
     const size_t nnormals,
     kvs::ValueArray<kvs::Real32>* normals )
@@ -151,7 +151,7 @@ const bool ReadNormalData(
         if ( !normal_tag.read( parent ) )
         {
             kvsMessageError( "Cannot read <%s>.", normal_tag.name().c_str() );
-            return( false );
+            return false;
         }
 
         // <DataArray>
@@ -163,11 +163,11 @@ const bool ReadNormalData(
             kvsMessageError( "Cannot read <%s> for <%s>.",
                              data_tag.name().c_str(),
                              normal_tag.name().c_str() );
-            return( false );
+            return false;
         }
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -179,7 +179,7 @@ const bool ReadNormalData(
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool ReadSizeData(
+bool ReadSizeData(
     const kvs::XMLNode::SuperClass* parent,
     const size_t nsizes,
     kvs::ValueArray<kvs::Real32>* sizes )
@@ -191,7 +191,7 @@ const bool ReadSizeData(
         if ( !size_tag.read( parent ) )
         {
             kvsMessageError( "Cannot read <%s>.", size_tag.name().c_str() );
-            return( false );
+            return false;
         }
 
         // <DataValue>
@@ -204,7 +204,7 @@ const bool ReadSizeData(
                 kvsMessageError( "Cannot read <%s> for <%s>.",
                                  data_tag.name().c_str(),
                                  size_tag.name().c_str() );
-                return( false );
+                return false;
             }
         }
         // <DataArray>
@@ -217,12 +217,12 @@ const bool ReadSizeData(
                 kvsMessageError( "Cannot read <%s> for <%s>.",
                                  data_tag.name().c_str(),
                                  size_tag.name().c_str() );
-                return( false );
+                return false;
             }
         }
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -234,7 +234,7 @@ const bool ReadSizeData(
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool ReadConnectionData(
+bool ReadConnectionData(
     const kvs::XMLNode::SuperClass* parent,
     const size_t nconnections,
     kvs::ValueArray<kvs::UInt32>* connections )
@@ -246,7 +246,7 @@ const bool ReadConnectionData(
         if ( !connection_tag.read( parent ) )
         {
             kvsMessageError( "Cannot read <%s>.", connection_tag.name().c_str() );
-            return( false );
+            return false;
         }
 
         // <DataArray>
@@ -257,11 +257,11 @@ const bool ReadConnectionData(
             kvsMessageError( "Cannot read <%s> for <%s>.",
                              data_tag.name().c_str(),
                              connection_tag.name().c_str() );
-            return( false );
+            return false;
         }
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -273,7 +273,7 @@ const bool ReadConnectionData(
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool ReadOpacityData(
+bool ReadOpacityData(
     const kvs::XMLNode::SuperClass* parent,
     const size_t nopacities,
     kvs::ValueArray<kvs::UInt8>* opacities )
@@ -285,7 +285,7 @@ const bool ReadOpacityData(
         if ( !opacity_tag.read( parent ) )
         {
             kvsMessageError( "Cannot read <%s>.", opacity_tag.name().c_str() );
-            return( false );
+            return false;
         }
 
         // <DataValue>
@@ -298,7 +298,7 @@ const bool ReadOpacityData(
                 kvsMessageError( "Cannot read <%s> for <%s>.",
                                  data_tag.name().c_str(),
                                  opacity_tag.name().c_str() );
-                return( false );
+                return false;
             }
         }
         // <DataArray>
@@ -311,12 +311,12 @@ const bool ReadOpacityData(
                 kvsMessageError( "Cannot read <%s> for <%s>.",
                                  data_tag.name().c_str(),
                                  opacity_tag.name().c_str() );
-                return( false );
+                return false;
             }
         }
     }
 
-    return( true );
+    return true;
 }
 
 } // end of namespace kvsml

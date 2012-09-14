@@ -26,7 +26,7 @@ namespace kvs
 namespace pnm
 {
 
-Header::Header( void )
+Header::Header()
 {
 }
 
@@ -35,7 +35,7 @@ Header::Header( std::ifstream& ifs )
     this->read( ifs );
 }
 
-Header::~Header( void )
+Header::~Header()
 {
 }
 
@@ -46,47 +46,47 @@ std::ostream& operator << ( std::ostream& os, const Header& header )
     os << "\theight       : " << header.m_height << std::endl;
     os << "\tmax          : " << header.m_max;
 
-    return( os );
+    return os;
 }
 
-std::string Header::magic( void ) const
+std::string Header::magic() const
 {
-    return( m_magic );
+    return m_magic;
 }
 
-size_t Header::width( void ) const
+size_t Header::width() const
 {
-    return( m_width );
+    return m_width;
 }
 
-size_t Header::height( void ) const
+size_t Header::height() const
 {
-    return( m_height );
+    return m_height;
 }
 
-size_t Header::maxValue( void ) const
+size_t Header::maxValue() const
 {
-    return( m_max );
+    return m_max;
 }
 
-size_t Header::bpp( void ) const
+size_t Header::bpp() const
 {
-    return( m_bpp );
+    return m_bpp;
 }
 
-size_t Header::bpl( void ) const
+size_t Header::bpl() const
 {
-    return( m_bpl );
+    return m_bpl;
 }
 
-size_t Header::size( void ) const
+size_t Header::size() const
 {
-    return( m_size );
+    return m_size;
 }
 
-std::streampos Header::offset( void ) const
+std::streampos Header::offset() const
 {
-    return( m_offset );
+    return m_offset;
 }
 
 void Header::set( const std::string& magic, const size_t width, const size_t height )
@@ -127,51 +127,52 @@ void Header::write( std::ofstream& ofs ) const
     if( m_max > 0 ) ofs << m_max << std::endl;
 }
 
-bool Header::isP1( void ) const
+bool Header::isP1() const
 {
-    return( m_magic == "p1" || m_magic == "P1" );
+    return m_magic == "p1" || m_magic == "P1";
 }
 
-bool Header::isP2( void ) const
+bool Header::isP2() const
 {
-    return( m_magic == "p2" || m_magic == "P2" );
+    return m_magic == "p2" || m_magic == "P2";
 }
 
-bool Header::isP3( void ) const
+bool Header::isP3() const
 {
-    return( m_magic == "p3" || m_magic == "P3" );
+    return m_magic == "p3" || m_magic == "P3";
 }
 
-bool Header::isP4( void ) const
+bool Header::isP4() const
 {
-    return( m_magic == "p4" || m_magic == "P4" );
+    return m_magic == "p4" || m_magic == "P4";
 }
 
-bool Header::isP5( void ) const
+bool Header::isP5() const
 {
-    return( m_magic == "p5" || m_magic == "P5" );
+    return m_magic == "p5" || m_magic == "P5";
 }
 
-bool Header::isP6( void ) const
+bool Header::isP6() const
 {
-    return( m_magic == "p6" || m_magic == "P6" );
+    return m_magic == "p6" || m_magic == "P6";
 }
 
-size_t Header::bit_per_pixel( void ) const
+size_t Header::bit_per_pixel() const
 {
-    return( ( this->isP1() || this->isP4() ) ?  1 :
-            ( this->isP2() || this->isP5() ) ?  8 :
-            ( this->isP3() || this->isP6() ) ? 24 : 0 );
+    return
+        ( this->isP1() || this->isP4() ) ?  1 :
+        ( this->isP2() || this->isP5() ) ?  8 :
+        ( this->isP3() || this->isP6() ) ? 24 : 0;
 }
 
-size_t Header::byte_per_line( void ) const
+size_t Header::byte_per_line() const
 {
-    return( m_bpp == 1 ? ( m_width + 7 ) >> 3 : m_width * ( m_bpp >> 3 ) );
+    return m_bpp == 1 ? ( m_width + 7 ) >> 3 : m_width * ( m_bpp >> 3 );
 }
 
-size_t Header::data_size( void ) const
+size_t Header::data_size() const
 {
-    return( m_height * m_bpl );
+    return m_height * m_bpl;
 }
 
 void Header::skip_header( std::ifstream& ifs )

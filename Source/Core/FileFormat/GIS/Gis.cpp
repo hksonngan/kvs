@@ -44,9 +44,7 @@ Gis::Gis( const std::string& filename, const kvs::gis::Area& render_area ):
     m_ocean_color( 0, 0, 128 )
 {
     this->setRenderArea( render_area );
-
-    if ( this->read( filename ) ) { m_is_success = true; }
-    else { m_is_success = false; }
+    this->read( filename );
 }
 
 /*===========================================================================*/
@@ -147,9 +145,11 @@ kvs::RGBColor Gis::oceanColor() const
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool Gis::read( const std::string& filenames )
+bool Gis::read( const std::string& filenames )
 {
-    m_filename = filenames;
+    BaseClass::setFilename( filenames );
+    BaseClass::setSuccess( true );
+
     if ( kvs::Directory( filenames ).isDirectory() )
     {
         kvs::Directory directory( filenames );
@@ -161,6 +161,7 @@ const bool Gis::read( const std::string& filenames )
             if ( !this->read_mesh( file ) )
             {
                 kvsMessageError("Cannot read the mesh data.");
+                BaseClass::setSuccess( false );
                 return false;
             }
         }
@@ -171,6 +172,7 @@ const bool Gis::read( const std::string& filenames )
         if ( !this->read_mesh( file ) )
         {
             kvsMessageError("Cannot read the mesh data.");
+            BaseClass::setSuccess( false );
             return false;
         }
     }
@@ -247,7 +249,7 @@ bool Gis::read_mesh( const std::string& filename )
  *  @return true, if the writting process is done successfully
  */
 /*===========================================================================*/
-const bool Gis::write( const std::string& filename )
+bool Gis::write( const std::string& filename )
 {
     // This method has not been implemented yet.
     kvs::IgnoreUnusedVariable( filename );

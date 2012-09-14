@@ -31,7 +31,7 @@ namespace kvs
  *  @brief  Constructs a new KVSML table object class.
  */
 /*===========================================================================*/
-KVSMLObjectTable::KVSMLObjectTable( void ):
+KVSMLObjectTable::KVSMLObjectTable():
     m_writing_type( kvs::KVSMLObjectTable::Ascii ),
     m_nrows(0),
     m_ncolumns(0)
@@ -49,8 +49,7 @@ KVSMLObjectTable::KVSMLObjectTable( const std::string& filename ):
     m_nrows(0),
     m_ncolumns(0)
 {
-    if ( this->read( filename ) ) { m_is_success = true; }
-    else { m_is_success = false; }
+    this->read( filename );
 }
 
 /*===========================================================================*/
@@ -58,7 +57,7 @@ KVSMLObjectTable::KVSMLObjectTable( const std::string& filename ):
  *  @brief  Destructs the KVSML object unstructured volume object class.
  */
 /*===========================================================================*/
-KVSMLObjectTable::~KVSMLObjectTable( void )
+KVSMLObjectTable::~KVSMLObjectTable()
 {
 }
 
@@ -68,9 +67,9 @@ KVSMLObjectTable::~KVSMLObjectTable( void )
  *  @return KVSML tag
  */
 /*===========================================================================*/
-const kvs::kvsml::KVSMLTag& KVSMLObjectTable::KVSMLTag( void ) const
+const kvs::kvsml::KVSMLTag& KVSMLObjectTable::KVSMLTag() const
 {
-    return( m_kvsml_tag );
+    return m_kvsml_tag;
 }
 
 /*===========================================================================*/
@@ -79,9 +78,9 @@ const kvs::kvsml::KVSMLTag& KVSMLObjectTable::KVSMLTag( void ) const
  *  @return object tag
  */
 /*===========================================================================*/
-const kvs::kvsml::ObjectTag& KVSMLObjectTable::objectTag( void ) const
+const kvs::kvsml::ObjectTag& KVSMLObjectTable::objectTag() const
 {
-    return( m_object_tag );
+    return m_object_tag;
 }
 
 /*===========================================================================*/
@@ -90,9 +89,9 @@ const kvs::kvsml::ObjectTag& KVSMLObjectTable::objectTag( void ) const
  *  @return number of rows
  */
 /*===========================================================================*/
-const size_t KVSMLObjectTable::nrows( void ) const
+size_t KVSMLObjectTable::nrows() const
 {
-    return( m_nrows );
+    return m_nrows;
 }
 
 /*===========================================================================*/
@@ -101,9 +100,9 @@ const size_t KVSMLObjectTable::nrows( void ) const
  *  @return number of columns
  */
 /*===========================================================================*/
-const size_t KVSMLObjectTable::ncolumns( void ) const
+size_t KVSMLObjectTable::ncolumns() const
 {
-    return( m_ncolumns );
+    return m_ncolumns;
 }
 
 /*===========================================================================*/
@@ -112,9 +111,9 @@ const size_t KVSMLObjectTable::ncolumns( void ) const
  *  @return label list
  */
 /*===========================================================================*/
-const std::vector<std::string>& KVSMLObjectTable::labelList( void ) const
+const std::vector<std::string>& KVSMLObjectTable::labelList() const
 {
-    return( m_labels );
+    return m_labels;
 }
 
 /*===========================================================================*/
@@ -123,49 +122,49 @@ const std::vector<std::string>& KVSMLObjectTable::labelList( void ) const
  *  @return column list
  */
 /*===========================================================================*/
-const std::vector<kvs::AnyValueArray>& KVSMLObjectTable::columnList( void ) const
+const std::vector<kvs::AnyValueArray>& KVSMLObjectTable::columnList() const
 {
-    return( m_columns );
+    return m_columns;
 }
 
-const std::vector<bool>& KVSMLObjectTable::hasMinValueList( void ) const
+const std::vector<bool>& KVSMLObjectTable::hasMinValueList() const
 {
-    return( m_has_min_values );
+    return m_has_min_values;
 }
 
-const std::vector<bool>& KVSMLObjectTable::hasMaxValueList( void ) const
+const std::vector<bool>& KVSMLObjectTable::hasMaxValueList() const
 {
-    return( m_has_max_values );
+    return m_has_max_values;
 }
 
-const std::vector<bool>& KVSMLObjectTable::hasMinRangeList( void ) const
+const std::vector<bool>& KVSMLObjectTable::hasMinRangeList() const
 {
-    return( m_has_min_ranges );
+    return m_has_min_ranges;
 }
 
-const std::vector<bool>& KVSMLObjectTable::hasMaxRangeList( void ) const
+const std::vector<bool>& KVSMLObjectTable::hasMaxRangeList() const
 {
-    return( m_has_max_ranges );
+    return m_has_max_ranges;
 }
 
-const std::vector<double>& KVSMLObjectTable::minValueList( void ) const
+const std::vector<double>& KVSMLObjectTable::minValueList() const
 {
-    return( m_min_values );
+    return m_min_values;
 }
 
-const std::vector<double>& KVSMLObjectTable::maxValueList( void ) const
+const std::vector<double>& KVSMLObjectTable::maxValueList() const
 {
-    return( m_max_values );
+    return m_max_values;
 }
 
-const std::vector<double>& KVSMLObjectTable::minRangeList( void ) const
+const std::vector<double>& KVSMLObjectTable::minRangeList() const
 {
-    return( m_min_ranges );
+    return m_min_ranges;
 }
 
-const std::vector<double>& KVSMLObjectTable::maxRangeList( void ) const
+const std::vector<double>& KVSMLObjectTable::maxRangeList() const
 {
-    return( m_max_ranges );
+    return m_max_ranges;
 }
 
 /*===========================================================================*/
@@ -177,17 +176,6 @@ const std::vector<double>& KVSMLObjectTable::maxRangeList( void ) const
 void KVSMLObjectTable::setWritingDataType( const WritingDataType writing_type )
 {
     m_writing_type = writing_type;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a filename.
- *  @param  filename [in] filename
- */
-/*===========================================================================*/
-void KVSMLObjectTable::setFilename( const std::string& filename )
-{
-    m_filename = filename;
 }
 
 /*===========================================================================*/
@@ -261,30 +249,34 @@ void KVSMLObjectTable::addColumn( const kvs::AnyValueArray& column, const std::s
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool KVSMLObjectTable::read( const std::string& filename )
+bool KVSMLObjectTable::read( const std::string& filename )
 {
-    m_filename = filename;
+    BaseClass::setFilename( filename );
+    BaseClass::setSuccess( true );
 
     // XML document
     kvs::XMLDocument document;
     if ( !document.read( filename ) )
     {
         kvsMessageError( "%s", document.ErrorDesc().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <KVSML>
     if ( !m_kvsml_tag.read( &document ) )
     {
         kvsMessageError( "Cannot read <%s>.", m_kvsml_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <Object>
     if ( !m_object_tag.read( m_kvsml_tag.node() ) )
     {
         kvsMessageError( "Cannot read <%s>.", m_object_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <TableObject>
@@ -292,7 +284,8 @@ const bool KVSMLObjectTable::read( const std::string& filename )
     if ( !table_object_tag.read( m_object_tag.node() ) )
     {
         kvsMessageError( "Cannot read <%s>.", table_object_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     m_nrows = table_object_tag.nrows();
@@ -323,7 +316,8 @@ const bool KVSMLObjectTable::read( const std::string& filename )
             if ( !data_array_tag.read( node, m_nrows, &data_array ) )
             {
                 kvsMessageError( "Cannot read <%s>.", data_array_tag.name().c_str() );
-                return( false );
+                BaseClass::setSuccess( false );
+                return false;
             }
 
             m_columns.push_back( data_array );
@@ -332,7 +326,7 @@ const bool KVSMLObjectTable::read( const std::string& filename )
         node = table_object_tag.node()->IterateChildren( column_tag.name(), node );
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -342,9 +336,10 @@ const bool KVSMLObjectTable::read( const std::string& filename )
  *  @return true, if the writing process is done successfully
  */
 /*===========================================================================*/
-const bool KVSMLObjectTable::write( const std::string& filename )
+bool KVSMLObjectTable::write( const std::string& filename )
 {
-    m_filename = filename;
+    BaseClass::setFilename( filename );
+    BaseClass::setSuccess( true );
 
     kvs::XMLDocument document;
     document.InsertEndChild( kvs::XMLDeclaration("1.0") );
@@ -355,7 +350,8 @@ const bool KVSMLObjectTable::write( const std::string& filename )
     if ( !kvsml_tag.write( &document ) )
     {
         kvsMessageError( "Cannot write <%s>.", m_kvsml_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <Object type="TableObject">
@@ -364,7 +360,8 @@ const bool KVSMLObjectTable::write( const std::string& filename )
     if ( !object_tag.write( kvsml_tag.node() ) )
     {
         kvsMessageError( "Cannot write <%s>.", object_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <TableObject nrows="xxx", ncolumns="xxx">
@@ -374,7 +371,8 @@ const bool KVSMLObjectTable::write( const std::string& filename )
     if ( !table_object_tag.write( object_tag.node() ) )
     {
         kvsMessageError( "Cannot write <%s>.", table_object_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     for ( size_t i = 0; i < m_ncolumns; i++ )
@@ -392,31 +390,36 @@ const bool KVSMLObjectTable::write( const std::string& filename )
         if ( !column_tag.write( table_object_tag.node() ) )
         {
             kvsMessageError( "Cannot write <%s>.", column_tag.name().c_str() );
-            return( false );
+            BaseClass::setSuccess( false );
+            return false;
         }
 
         // <DataArray>
         kvs::kvsml::DataArrayTag data_array;
         if ( m_writing_type == ExternalAscii )
         {
-            data_array.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, label ) );
+            data_array.setFile( kvs::kvsml::DataArray::GetDataFilename( filename, label ) );
             data_array.setFormat( "ascii" );
         }
         else if ( m_writing_type == ExternalBinary )
         {
-            data_array.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, label ) );
+            data_array.setFile( kvs::kvsml::DataArray::GetDataFilename( filename, label ) );
             data_array.setFormat( "binary" );
         }
 
-        const std::string pathname = kvs::File( m_filename ).pathName();
+        const std::string pathname = kvs::File( filename ).pathName();
         if ( !data_array.write( column_tag.node(), m_columns.at(i), pathname ) )
         {
             kvsMessageError( "Cannot write <%s>.", data_array.name().c_str() );
-            return( false );
+            BaseClass::setSuccess( false );
+            return false;
         }
     }
 
-    return( document.write( m_filename ) );
+    const bool success = document.write( filename );
+    BaseClass::setSuccess( success );
+
+    return success;
 }
 
 /*===========================================================================*/
@@ -426,7 +429,7 @@ const bool KVSMLObjectTable::write( const std::string& filename )
  *  @return true, if the given filename has the supported extension
  */
 /*===========================================================================*/
-const bool KVSMLObjectTable::CheckFileExtension( const std::string& filename )
+bool KVSMLObjectTable::CheckFileExtension( const std::string& filename )
 {
     const kvs::File file( filename );
     if ( file.extension() == "kvsml" ||
@@ -434,10 +437,10 @@ const bool KVSMLObjectTable::CheckFileExtension( const std::string& filename )
          file.extension() == "xml"   ||
          file.extension() == "XML" )
     {
-        return( true );
+        return true;
     }
 
-    return( false );
+    return false;
 }
 
 /*===========================================================================*/
@@ -447,26 +450,26 @@ const bool KVSMLObjectTable::CheckFileExtension( const std::string& filename )
  *  @return true, if the KVSMLObjectTable class can read the given file
  */
 /*===========================================================================*/
-const bool KVSMLObjectTable::CheckFileFormat( const std::string& filename )
+bool KVSMLObjectTable::CheckFileFormat( const std::string& filename )
 {
     kvs::XMLDocument document;
-    if ( !document.read( filename ) ) return( false );
+    if ( !document.read( filename ) ) return false;
 
     // <KVSML>
     kvs::kvsml::KVSMLTag kvsml_tag;
-    if ( !kvsml_tag.read( &document ) ) return( false );
+    if ( !kvsml_tag.read( &document ) ) return false;
 
     // <Object>
     kvs::kvsml::ObjectTag object_tag;
-    if ( !object_tag.read( kvsml_tag.node() ) ) return( false );
+    if ( !object_tag.read( kvsml_tag.node() ) ) return false;
 
-    if ( object_tag.type() != "TableObject" ) return( false );
+    if ( object_tag.type() != "TableObject" ) return false;
 
     // <TableObject>
     kvs::kvsml::TableObjectTag table_tag;
-    if ( !table_tag.read( object_tag.node() ) ) return( false );
+    if ( !table_tag.read( object_tag.node() ) ) return false;
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -487,7 +490,7 @@ std::ostream& operator <<( std::ostream& os, const KVSMLObjectTable& rhs )
         if ( i < rhs.m_ncolumns - 1 ) os << std::endl;
     }
 
-    return( os );
+    return os;
 }
 
 } // end of namespace kvs

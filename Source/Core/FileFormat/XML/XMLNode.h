@@ -39,14 +39,12 @@ public:
 
 public:
 
-    XMLNode( void );
+    XMLNode();
 
 public:
 
     static TiXmlNode* FindChildNode( const TiXmlNode* node, const std::string& node_name );
-
     static TiXmlElement* ToElement( const TiXmlNode* node );
-
     static TiXmlText* ToText( const TiXmlNode* node );
 };
 

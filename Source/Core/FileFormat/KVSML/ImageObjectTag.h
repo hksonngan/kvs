@@ -46,31 +46,25 @@ public:
 
 public:
 
-    ImageObjectTag( void );
-
-    virtual ~ImageObjectTag( void );
+    ImageObjectTag();
+    virtual ~ImageObjectTag();
 
 public:
 
-    const bool hasWidth( void ) const;
-
-    const size_t width( void ) const;
-
-    const bool hasHeight( void ) const;
-
-    const size_t height( void ) const;
+    bool hasWidth() const;
+    size_t width() const;
+    bool hasHeight() const;
+    size_t height() const;
 
 public:
 
     void setWidth( const size_t width );
-
     void setHeight( const size_t height );
 
 public:
 
-    const bool read( const kvs::XMLNode::SuperClass* parent );
-
-    const bool write( kvs::XMLNode::SuperClass* parent );
+    bool read( const kvs::XMLNode::SuperClass* parent );
+    bool write( kvs::XMLNode::SuperClass* parent );
 };
 
 } // end of namespace kvsml

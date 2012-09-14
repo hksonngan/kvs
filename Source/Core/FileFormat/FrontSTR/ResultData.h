@@ -51,37 +51,28 @@ protected:
 
 public:
 
-    ResultData( void );
+    ResultData();
 
 public:
 
-    const size_t numberOfNodes( void ) const;
-
-    const size_t numberOfCells( void ) const;
-
-    const size_t numberOfComponentsPerNode( void ) const;
-
-    const size_t numberOfComponentsPerCell( void ) const;
-
-    const std::vector<size_t>& veclens( void ) const;
-
-    const std::vector<std::string>& labels( void ) const;
-
-    const std::vector<Values>& values( void ) const;
+    size_t numberOfNodes() const;
+    size_t numberOfCells() const;
+    size_t numberOfComponentsPerNode() const;
+    size_t numberOfComponentsPerCell() const;
+    const std::vector<size_t>& veclens() const;
+    const std::vector<std::string>& labels() const;
+    const std::vector<Values>& values() const;
 
 public:
 
-    const bool readData( const std::string& filename );
-
-    const bool readDividedData( const std::string& filename );
+    bool readData( const std::string& filename );
+    bool readDividedData( const std::string& filename );
 
 private:
 
-    const bool read_nnodes_and_ncells( std::string& line, std::ifstream& ifs );
-
-    const bool read_veclens( std::string& line, std::ifstream& ifs );
-
-    const bool read_labels( std::string& line, std::ifstream& ifs );
+    bool read_nnodes_and_ncells( std::string& line, std::ifstream& ifs );
+    bool read_veclens( std::string& line, std::ifstream& ifs );
+    bool read_labels( std::string& line, std::ifstream& ifs );
 };
 
 } // end of namespace fstr

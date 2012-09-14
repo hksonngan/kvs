@@ -42,7 +42,7 @@ namespace kvsml
  *  @return true, if the writing process is done successfully
  */
 /*===========================================================================*/
-const bool WriteCoordData(
+bool WriteCoordData(
     kvs::XMLNode::SuperClass* parent,
     const kvs::kvsml::WritingDataType writing_type,
     const std::string& filename,
@@ -55,7 +55,7 @@ const bool WriteCoordData(
         if ( !coord_tag.write( parent ) )
         {
             kvsMessageError( "Cannot write <%s>.", coord_tag.name().c_str() );
-            return( false );
+            return false;
         }
 
         // <DataArray>
@@ -77,11 +77,11 @@ const bool WriteCoordData(
             kvsMessageError( "Cannot write <%s> for <%s>.",
                              data_tag.name().c_str(),
                              coord_tag.name().c_str() );
-            return( false );
+            return false;
         }
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -94,7 +94,7 @@ const bool WriteCoordData(
  *  @return true, if the writing process is done successfully
  */
 /*===========================================================================*/
-const bool WriteColorData(
+bool WriteColorData(
     kvs::XMLNode::SuperClass* parent,
     const kvs::kvsml::WritingDataType writing_type,
     const std::string& filename,
@@ -107,7 +107,7 @@ const bool WriteColorData(
         if ( !color_tag.write( parent ) )
         {
             kvsMessageError( "Cannot write <%s>.", color_tag.name().c_str() );
-            return( false );
+            return false;
         }
 
         // <DataValue>
@@ -119,7 +119,7 @@ const bool WriteColorData(
                 kvsMessageError( "Cannot write <%s> for <%s>.",
                                  data_tag.name().c_str(),
                                  color_tag.name().c_str() );
-                return( false );
+                return false;
             }
         }
         // <DataArray>
@@ -143,12 +143,12 @@ const bool WriteColorData(
                 kvsMessageError( "Cannot write <%s> for <%s>.",
                                  data_tag.name().c_str(),
                                  color_tag.name().c_str() );
-                return( false );
+                return false;
             }
         }
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -161,7 +161,7 @@ const bool WriteColorData(
  *  @return true, if the writing process is done successfully
  */
 /*===========================================================================*/
-const bool WriteNormalData(
+bool WriteNormalData(
     kvs::XMLNode::SuperClass* parent,
     const kvs::kvsml::WritingDataType writing_type,
     const std::string& filename,
@@ -174,7 +174,7 @@ const bool WriteNormalData(
         if ( !normal_tag.write( parent ) )
         {
             kvsMessageError( "Cannot write <%s>.", normal_tag.name().c_str() );
-            return( false );
+            return false;
         }
 
         // <DataValue>
@@ -186,7 +186,7 @@ const bool WriteNormalData(
                 kvsMessageError( "Cannot write <%s> for <%s>.",
                                  data_tag.name().c_str(),
                                  normal_tag.name().c_str() );
-                return( false );
+                return false;
             }
         }
         // <DataArray>
@@ -210,12 +210,12 @@ const bool WriteNormalData(
                 kvsMessageError( "Cannot write <%s> for <%s>.",
                                  data_tag.name().c_str(),
                                  normal_tag.name().c_str() );
-                return( false );
+                return false;
             }
         }
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -228,7 +228,7 @@ const bool WriteNormalData(
  *  @return true, if the writing process is done successfully
  */
 /*===========================================================================*/
-const bool WriteSizeData(
+bool WriteSizeData(
     kvs::XMLNode::SuperClass* parent,
     const kvs::kvsml::WritingDataType writing_type,
     const std::string& filename,
@@ -241,7 +241,7 @@ const bool WriteSizeData(
         if ( !size_tag.write( parent ) )
         {
             kvsMessageError( "Cannot write <%s>.", size_tag.name().c_str() );
-            return( false );
+            return false;
         }
 
         // <DataValue>
@@ -253,7 +253,7 @@ const bool WriteSizeData(
                 kvsMessageError( "Cannot write <%s> for <%s>.",
                                  data_tag.name().c_str(),
                                  size_tag.name().c_str() );
-                return( false );
+                return false;
             }
         }
         // <DataArray>
@@ -277,12 +277,12 @@ const bool WriteSizeData(
                 kvsMessageError( "Cannot write <%s> for <%s>.",
                                  data_tag.name().c_str(),
                                  size_tag.name().c_str() );
-                return( false );
+                return false;
             }
         }
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -295,7 +295,7 @@ const bool WriteSizeData(
  *  @return true, if the writing process is done successfully
  */
 /*===========================================================================*/
-const bool WriteConnectionData(
+bool WriteConnectionData(
     kvs::XMLNode::SuperClass* parent,
     const kvs::kvsml::WritingDataType writing_type,
     const std::string& filename,
@@ -308,7 +308,7 @@ const bool WriteConnectionData(
         if ( !connection_tag.write( parent ) )
         {
             kvsMessageError( "Cannot write <%s>.", connection_tag.name().c_str() );
-            return( false );
+            return false;
         }
 
         // <DataArray>
@@ -330,11 +330,11 @@ const bool WriteConnectionData(
             kvsMessageError( "Cannot write <%s> for <%s>.",
                              data_tag.name().c_str(),
                              connection_tag.name().c_str() );
-            return( false );
+            return false;
         }
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -347,7 +347,7 @@ const bool WriteConnectionData(
  *  @return true, if the writing process is done successfully
  */
 /*===========================================================================*/
-const bool WriteOpacityData(
+bool WriteOpacityData(
     kvs::XMLNode::SuperClass* parent,
     const kvs::kvsml::WritingDataType writing_type,
     const std::string& filename,
@@ -360,7 +360,7 @@ const bool WriteOpacityData(
         if ( !opacity_tag.write( parent ) )
         {
             kvsMessageError( "Cannot write <%s>.", opacity_tag.name().c_str() );
-            return( false );
+            return false;
         }
 
         // <DataValue>
@@ -372,7 +372,7 @@ const bool WriteOpacityData(
                 kvsMessageError( "Cannot write <%s> for <%s>.",
                                  data_tag.name().c_str(),
                                  opacity_tag.name().c_str() );
-                return( false );
+                return false;
             }
         }
         // <DataArray>
@@ -396,12 +396,12 @@ const bool WriteOpacityData(
                 kvsMessageError( "Cannot write <%s> for <%s>.",
                                  data_tag.name().c_str(),
                                  opacity_tag.name().c_str() );
-                return( false );
+                return false;
             }
         }
     }
 
-    return( true );
+    return true;
 }
 
 } // end of namespace kvsml

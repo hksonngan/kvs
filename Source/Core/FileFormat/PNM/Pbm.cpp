@@ -27,7 +27,7 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-Pbm::Pbm( void )
+Pbm::Pbm()
 {
 }
 
@@ -55,8 +55,7 @@ Pbm::Pbm( const size_t width, const size_t height, const kvs::BitArray& data ):
 /*==========================================================================*/
 Pbm::Pbm( const std::string& filename )
 {
-    if( this->read( filename ) ) { m_is_success = true; }
-    else { m_is_success = false; }
+    this->read( filename );
 }
 
 /*==========================================================================*/
@@ -65,9 +64,9 @@ Pbm::Pbm( const std::string& filename )
  *  @return header information
  */
 /*==========================================================================*/
-const Pbm::Header& Pbm::header( void ) const
+const Pbm::Header& Pbm::header() const
 {
-    return( m_header );
+    return m_header;
 }
 
 /*==========================================================================*/
@@ -76,9 +75,9 @@ const Pbm::Header& Pbm::header( void ) const
  *  @return image width
  */
 /*==========================================================================*/
-const size_t Pbm::width( void ) const
+size_t Pbm::width() const
 {
-    return( m_width );
+    return m_width;
 }
 
 /*==========================================================================*/
@@ -87,9 +86,9 @@ const size_t Pbm::width( void ) const
  *  @return image height
  */
 /*==========================================================================*/
-const size_t Pbm::height( void ) const
+size_t Pbm::height() const
 {
-    return( m_height );
+    return m_height;
 }
 
 /*==========================================================================*/
@@ -98,9 +97,9 @@ const size_t Pbm::height( void ) const
  *  @param  pixel data (bit array)
  */
 /*==========================================================================*/
-const kvs::BitArray& Pbm::data( void ) const
+const kvs::BitArray& Pbm::data() const
 {
-    return( m_data );
+    return m_data;
 }
 
 /*==========================================================================*/
@@ -110,17 +109,18 @@ const kvs::BitArray& Pbm::data( void ) const
  *  @return true, if the reading process is done successfully
  */
 /*==========================================================================*/
-const bool Pbm::read( const std::string& filename )
+bool Pbm::read( const std::string& filename )
 {
-    BaseClass::m_filename = filename;
+    BaseClass::setFilename( filename );
+    BaseClass::setSuccess( true );
 
     // Open the file.
-    std::ifstream ifs( m_filename.c_str(), std::ios::binary | std::ios::in );
+    std::ifstream ifs( filename.c_str(), std::ios::binary | std::ios::in );
     if( !ifs.is_open() )
     {
-        kvsMessageError( "Cannot open %s.", BaseClass::m_filename.c_str() );
-        BaseClass::m_is_success = false;
-        return( BaseClass::m_is_success );
+        kvsMessageError( "Cannot open %s.", filename.c_str() );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // Read header information.
@@ -153,17 +153,16 @@ const bool Pbm::read( const std::string& filename )
     }
     else
     {
-        kvsMessageError( "%s is not PGM format.", m_filename.c_str() );
+        kvsMessageError( "%s is not PGM format.", filename.c_str() );
         ifs.close();
 
-        BaseClass::m_is_success = false;
-        return( BaseClass::m_is_success );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     ifs.close();
 
-    BaseClass::m_is_success = true;
-    return( BaseClass::m_is_success );
+    return true;
 }
 
 /*==========================================================================*/
@@ -173,17 +172,18 @@ const bool Pbm::read( const std::string& filename )
  *  @return true, if the writing process is done successfully
  */
 /*==========================================================================*/
-const bool Pbm::write( const std::string& filename )
+bool Pbm::write( const std::string& filename )
 {
-    BaseClass::m_filename = filename;
+    BaseClass::setFilename( filename );
+    BaseClass::setSuccess( true );
 
     // Open the file.
-    std::ofstream ofs( m_filename.c_str(), std::ios::binary | std::ios::out | std::ios::trunc );
+    std::ofstream ofs( filename.c_str(), std::ios::binary | std::ios::out | std::ios::trunc );
     if( !ofs.is_open() )
     {
-        kvsMessageError( "Cannot open %s.", m_filename.c_str() );
-        BaseClass::m_is_success = false;
-        return( BaseClass::m_is_success );
+        kvsMessageError( "Cannot open %s.", filename.c_str() );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // Write header information.
@@ -193,8 +193,7 @@ const bool Pbm::write( const std::string& filename )
     ofs.write( reinterpret_cast<char*>( m_data.data() ), m_header.size() );
     ofs.close();
 
-    BaseClass::m_is_success = true;
-    return( BaseClass::m_is_success );
+    return true;
 }
 
 /*===========================================================================*/
@@ -202,43 +201,43 @@ const bool Pbm::write( const std::string& filename )
  *  @brief  Set header information.
  */
 /*===========================================================================*/
-void Pbm::set_header( void )
+void Pbm::set_header()
 {
     const std::string format = "P4";
     m_header.set( format, m_width, m_height );
 }
 
-const bool Pbm::CheckFileExtension( const std::string& filename )
+bool Pbm::CheckFileExtension( const std::string& filename )
 {
     const kvs::File file( filename );
     if ( file.extension() == "pbm" || file.extension() == "PBM" )
     {
-        return( true );
+        return true;
     }
 
-    return( false );
+    return false;
 }
 
-const bool Pbm::CheckFileFormat( const std::string& filename )
+bool Pbm::CheckFileFormat( const std::string& filename )
 {
     // Open the file.
     std::ifstream ifs( filename.c_str(), std::ios::binary | std::ios::in );
     if( !ifs.is_open() )
     {
         kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return( false );
+        return false;
     }
 
     // Read header information.
     kvs::pnm::Header header( ifs );
-    return( header.isP1() || header.isP4() );
+    return header.isP1() || header.isP4();
 }
 
 std::ostream& operator <<( std::ostream& os, const Pbm& rhs )
 {
     os << rhs.m_header;
 
-    return( os );
+    return os;
 }
 
 } // end of namespace kvs

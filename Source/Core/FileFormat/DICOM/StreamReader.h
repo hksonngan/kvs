@@ -42,12 +42,12 @@ inline T Get( std::ifstream& ifs, const bool swap = false )
     if( ifs.bad() )
     {
         kvsMessageError("Cannot get the value. [type:%s]",typeid(T).name());
-        return( T(0) );
+        return T(0);
     }
 
     if( swap ) kvs::Endian::Swap( &value );
 
-    return( value );
+    return value;
 }
 
 inline std::string Get( std::ifstream& ifs, const int size, const bool swap = false )
@@ -60,7 +60,7 @@ inline std::string Get( std::ifstream& ifs, const int size, const bool swap = fa
     if( !value )
     {
         kvsMessageError("Cannot allocate memory.");
-        return( ret );
+        return ret;
     }
     memset( value, 0, size + 1 );
 
@@ -68,7 +68,7 @@ inline std::string Get( std::ifstream& ifs, const int size, const bool swap = fa
     if( ifs.bad() )
     {
         kvsMessageError("Cannot get the value. [type:%s, size:%d]","string",size);
-        return( ret );
+        return ret;
     }
     value[size] = '\0';
 
@@ -76,7 +76,7 @@ inline std::string Get( std::ifstream& ifs, const int size, const bool swap = fa
 
     delete [] value;
 
-    return( ret );
+    return ret;
 }
 
 };

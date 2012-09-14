@@ -46,31 +46,26 @@ protected:
 
 public:
 
-    StructuredVolumeObjectTag( void );
+    StructuredVolumeObjectTag();
 
-    virtual ~StructuredVolumeObjectTag( void );
+    virtual ~StructuredVolumeObjectTag();
 
 public:
 
-    const bool hasGridType( void ) const;
-
-    const std::string& gridType( void ) const;
-
-    const bool hasResolution( void ) const;
-
-    const kvs::Vector3ui& resolution( void ) const;
+    bool hasGridType() const;
+    const std::string& gridType() const;
+    bool hasResolution() const;
+    const kvs::Vector3ui& resolution() const;
 
 public:
 
     void setGridType( const std::string& grid_type );
-
     void setResolution( const kvs::Vector3ui& resolution );
 
 public:
 
-    const bool read( const kvs::XMLNode::SuperClass* parent );
-
-    const bool write( kvs::XMLNode::SuperClass* parent );
+    bool read( const kvs::XMLNode::SuperClass* parent );
+    bool write( kvs::XMLNode::SuperClass* parent );
 };
 
 } // end of namespace kvsml

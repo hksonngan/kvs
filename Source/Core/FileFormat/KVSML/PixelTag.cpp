@@ -29,7 +29,7 @@ namespace kvsml
  *  @brief  Constructs a new pixel tag class.
  */
 /*===========================================================================*/
-PixelTag::PixelTag( void ):
+PixelTag::PixelTag():
     kvs::kvsml::TagBase( "Pixel" ),
     m_has_type( false ),
     m_type( "" )
@@ -41,7 +41,7 @@ PixelTag::PixelTag( void ):
  *  @brief  Destructs the pixel class.
  */
 /*===========================================================================*/
-PixelTag::~PixelTag( void )
+PixelTag::~PixelTag()
 {
 }
 
@@ -51,9 +51,9 @@ PixelTag::~PixelTag( void )
  *  @return true, if the 'type' is specified
  */
 /*===========================================================================*/
-const bool PixelTag::hasType( void ) const
+bool PixelTag::hasType() const
 {
-    return( m_has_type );
+    return m_has_type;
 }
 
 /*===========================================================================*/
@@ -62,9 +62,9 @@ const bool PixelTag::hasType( void ) const
  *  @return pixel type
  */
 /*===========================================================================*/
-const std::string& PixelTag::type( void ) const
+const std::string& PixelTag::type() const
 {
-    return( m_type );
+    return m_type;
 }
 
 /*===========================================================================*/
@@ -86,7 +86,7 @@ void PixelTag::setType( const std::string& type )
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool PixelTag::read( const kvs::XMLNode::SuperClass* parent )
+bool PixelTag::read( const kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
 
@@ -94,7 +94,7 @@ const bool PixelTag::read( const kvs::XMLNode::SuperClass* parent )
     if ( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
     // Element
@@ -108,7 +108,7 @@ const bool PixelTag::read( const kvs::XMLNode::SuperClass* parent )
         m_type = type;
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -118,7 +118,7 @@ const bool PixelTag::read( const kvs::XMLNode::SuperClass* parent )
  *  @return true, if the writing process is done successfully
  */
 /*===========================================================================*/
-const bool PixelTag::write( kvs::XMLNode::SuperClass* parent )
+bool PixelTag::write( kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
     kvs::XMLElement element( tag_name );
@@ -132,17 +132,17 @@ const bool PixelTag::write( kvs::XMLNode::SuperClass* parent )
     else
     {
         kvsMessageError( "'type' is not specified in <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
     BaseClass::m_node = parent->InsertEndChild( element );
     if( !BaseClass::m_node )
     {
         kvsMessageError("Cannot insert <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 } // end of namespace kvsml

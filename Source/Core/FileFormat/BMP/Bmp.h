@@ -42,47 +42,38 @@ public:
     typedef kvs::bmp::FileHeader FileHeader;
     typedef kvs::bmp::InfoHeader InfoHeader;
 
-protected:
+private:
 
     Bmp::FileHeader m_file_header; ///< bitmap file header
     Bmp::InfoHeader m_info_header; ///< bitmap information header
-
-    size_t                      m_width;  ///< width
-    size_t                      m_height; ///< height
-    size_t                      m_bpp;    ///< bits per pixel
-    kvs::ValueArray<kvs::UInt8> m_data;   ///< pixel data
+    size_t m_width; ///< width
+    size_t m_height; ///< height
+    size_t m_bpp; ///< bits per pixel
+    kvs::ValueArray<kvs::UInt8> m_data; ///< pixel data
 
 public:
 
-    Bmp( void );
-
+    Bmp();
     Bmp( const size_t width, const size_t height, const kvs::ValueArray<kvs::UInt8>& data );
-
     Bmp( const std::string& filename );
 
 public:
 
-    const Bmp::FileHeader& fileHeader( void ) const;
-
-    const Bmp::InfoHeader& infoHeader( void ) const;
-
-public:
-
-    size_t width( void ) const;
-
-    size_t height( void ) const;
-
-    size_t bitsPerPixel( void ) const;
-
-    kvs::ValueArray<kvs::UInt8> data( void ) const;
-
-    bool isSupported( void ) const;
+    const Bmp::FileHeader& fileHeader() const;
+    const Bmp::InfoHeader& infoHeader() const;
 
 public:
 
-    const bool read( const std::string& filename );
+    size_t width() const;
+    size_t height() const;
+    size_t bitsPerPixel() const;
+    kvs::ValueArray<kvs::UInt8> data() const;
+    bool isSupported() const;
 
-    const bool write( const std::string& filename );
+public:
+
+    bool read( const std::string& filename );
+    bool write( const std::string& filename );
 
 public:
 
@@ -90,15 +81,13 @@ public:
 
 protected:
 
-    void set_header( void );
-
+    void set_header();
     void skip_header_and_pallete( std::ifstream& ifs );
 
 public:
 
-    static const bool CheckFileExtension( const std::string& filename );
-
-    static const bool CheckFileFormat( const std::string& filename );
+    static bool CheckFileExtension( const std::string& filename );
+    static bool CheckFileFormat( const std::string& filename );
 };
 
 } // end of namespace kvs

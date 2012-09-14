@@ -31,37 +31,29 @@ class Entry
 {
 protected:
 
-    kvs::UInt16        m_tag;    ///< tag
-    kvs::UInt16        m_type;   ///< value type
-    kvs::UInt32        m_count;  ///< value count
+    kvs::UInt16 m_tag; ///< tag
+    kvs::UInt16 m_type; ///< value type
+    kvs::UInt32 m_count; ///< value count
     kvs::AnyValueArray m_values; ///< value array
 
 public:
 
     Entry( const kvs::UInt16 tag );
-
     Entry( std::ifstream& ifs );
 
 public:
 
     friend const bool operator == ( const Entry& lhs, const Entry& rhs );
-
     friend std::ostream& operator << ( std::ostream& os, const Entry& entry );
 
 public:
 
-    kvs::UInt16 tag( void ) const;
-
-    kvs::UInt16 type( void ) const;
-
-    kvs::UInt32 count( void ) const;
-
-    std::string tagDescription( void ) const;
-
-    std::string typeName( void ) const;
-
-    kvs::AnyValueArray values( void ) const;
-
+    kvs::UInt16 tag() const;
+    kvs::UInt16 type() const;
+    kvs::UInt32 count() const;
+    std::string tagDescription() const;
+    std::string typeName() const;
+    const kvs::AnyValueArray& values() const;
     bool read( std::ifstream& ifs );
 
 private:

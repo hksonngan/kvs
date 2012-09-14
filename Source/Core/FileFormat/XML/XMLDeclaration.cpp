@@ -22,7 +22,7 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-XMLDeclaration::XMLDeclaration( void )
+XMLDeclaration::XMLDeclaration()
 {
 }
 
@@ -47,7 +47,7 @@ XMLDeclaration::XMLDeclaration(
  *  Destructor.
  */
 /*==========================================================================*/
-XMLDeclaration::~XMLDeclaration( void )
+XMLDeclaration::~XMLDeclaration()
 {
 }
 

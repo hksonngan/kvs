@@ -26,7 +26,7 @@ namespace kvsml
  *  @brief  Constructs a new data value class.
  */
 /*===========================================================================*/
-DataValueTag::DataValueTag( void ):
+DataValueTag::DataValueTag():
     kvs::kvsml::TagBase( "DataValue" )
 {
 }
@@ -36,20 +36,20 @@ DataValueTag::DataValueTag( void ):
  *  @brief  Destructs the data value class.
  */
 /*===========================================================================*/
-DataValueTag::~DataValueTag( void )
+DataValueTag::~DataValueTag()
 {
 }
 
-const bool DataValueTag::read( const kvs::XMLNode::SuperClass* parent )
+bool DataValueTag::read( const kvs::XMLNode::SuperClass* parent )
 {
     kvs::IgnoreUnusedVariable( parent );
-    return( true );
+    return true;
 }
 
-const bool DataValueTag::write( kvs::XMLNode::SuperClass* parent )
+bool DataValueTag::write( kvs::XMLNode::SuperClass* parent )
 {
     kvs::IgnoreUnusedVariable( parent );
-    return( true );
+    return true;
 }
 
 } // end of namespace kvsml

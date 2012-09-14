@@ -46,33 +46,24 @@ protected:
 
 public:
 
-    FlowData( void );
-
+    FlowData();
     FlowData( const std::string filename );
-
-    virtual ~FlowData( void );
+    virtual ~FlowData();
 
 public:
 
-    const size_t dimensions( void ) const;
-
-    const size_t nnodes( void ) const;
-
-    const size_t nelements( void ) const;
-
-    const size_t nsteps( void ) const;
-
-    const kvs::Real32 time( const size_t index ) const;
-
-    const kvs::Int32 step( const size_t index ) const;
-
+    size_t dimensions() const;
+    size_t nnodes() const;
+    size_t nelements() const;
+    size_t nsteps() const;
+    kvs::Real32 time( const size_t index ) const;
+    kvs::Int32 step( const size_t index ) const;
     const kvs::ValueArray<kvs::Real32>& velocities( const size_t index ) const;
-
     const kvs::ValueArray<kvs::Real32>& pressures( const size_t index ) const;
 
 public:
 
-    const bool read( const std::string filename );
+    bool read( const std::string filename );
 };
 
 } // end of namespace gf

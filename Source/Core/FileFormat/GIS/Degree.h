@@ -46,27 +46,18 @@ private:
 public:
 
     Degree();
-
     Degree( const float degree, const Type type = Decimal );
-
     Degree( const int degree, const int minute, const float second );
-
     Degree( const int degree );
 
 public:
 
     void setDecimal( const float degree );
-
     void setNexadecimal( const float degree );
-
     float decimal() const;
-
     float nexadecimal() const;
-
     int degree() const;
-
     int minute() const;
-
     float second() const;
 };
 

@@ -24,7 +24,7 @@ namespace
 
 bool GetLine( std::istream & in, std::string & str )
 {
-    if ( !in ) return( false );
+    if ( !in ) return false;
 
     char ch;
     str = "";
@@ -38,7 +38,7 @@ bool GetLine( std::istream & in, std::string & str )
         str += ch;
     }
 
-    return( true );
+    return true;
 }
 
 }
@@ -63,8 +63,7 @@ Csv::Csv()
 /*===========================================================================*/
 Csv::Csv( const std::string& filename )
 {
-    if( this->read( filename ) ) { m_is_success = true; }
-    else { m_is_success = false; }
+    this->read( filename );
 }
 
 /*===========================================================================*/
@@ -164,14 +163,16 @@ void Csv::setValue( const size_t i, const size_t j, const std::string& value )
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool Csv::read( const std::string& filename )
+bool Csv::read( const std::string& filename )
 {
-    m_filename = filename;
+    BaseClass::setFilename( filename );
+    BaseClass::setSuccess( true );
 
     std::ifstream ifs( filename.c_str() );
     if ( !ifs.is_open() )
     {
         kvsMessageError( "Cannot open %s.", filename.c_str() );
+        BaseClass::setSuccess( false );
         return false;
     }
 
@@ -237,14 +238,16 @@ const bool Csv::read( const std::string& filename )
  *  @return true, if the writing process is done successfully
  */
 /*===========================================================================*/
-const bool Csv::write( const std::string& filename )
+bool Csv::write( const std::string& filename )
 {
-    m_filename = filename;
+    BaseClass::setFilename( filename );
+    BaseClass::setSuccess( true );
 
     std::ofstream ofs( filename.c_str() );
     if ( !ofs.is_open() )
     {
         kvsMessageError( "Cannot open %s.", filename.c_str() );
+        BaseClass::setSuccess( false );
         return false;
     }
 
@@ -268,7 +271,7 @@ const bool Csv::write( const std::string& filename )
  *  @return true, if the given file is CSV format
  */
 /*===========================================================================*/
-const bool Csv::CheckFileExtension( const std::string& filename )
+bool Csv::CheckFileExtension( const std::string& filename )
 {
     const kvs::File file( filename );
     if ( file.extension() == "csv" )
@@ -286,7 +289,7 @@ const bool Csv::CheckFileExtension( const std::string& filename )
  *  @return true, if the given file is CSV data
  */
 /*===========================================================================*/
-const bool Csv::CheckFileFormat( const std::string& filename )
+bool Csv::CheckFileFormat( const std::string& filename )
 {
     std::ifstream ifs( filename.c_str() );
     if ( !ifs.is_open() )

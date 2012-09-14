@@ -28,7 +28,7 @@ namespace gf
  *  @brief  Construct a new Data class.
  */
 /*===========================================================================*/
-Data::Data( void )
+Data::Data()
 {
 }
 
@@ -45,7 +45,7 @@ std::ostream& operator << ( std::ostream& os, const Data& d )
     os << "num: " << d.m_num << std::endl;
     os << "num2: " << d.m_num2;
 
-    return( os );
+    return os;
 }
 
 /*===========================================================================*/
@@ -54,9 +54,9 @@ std::ostream& operator << ( std::ostream& os, const Data& d )
  *  @return array type header
  */
 /*===========================================================================*/
-const std::string& Data::arrayTypeHeader( void ) const
+const std::string& Data::arrayTypeHeader() const
 {
-    return( m_array_type_header );
+    return m_array_type_header;
 }
 
 /*===========================================================================*/
@@ -65,9 +65,9 @@ const std::string& Data::arrayTypeHeader( void ) const
  *  @return keyword
  */
 /*===========================================================================*/
-const std::string& Data::keyword( void ) const
+const std::string& Data::keyword() const
 {
-    return( m_keyword );
+    return m_keyword;
 }
 
 /*===========================================================================*/
@@ -76,9 +76,9 @@ const std::string& Data::keyword( void ) const
  *  @return comment
  */
 /*===========================================================================*/
-const std::string& Data::comment( void ) const
+const std::string& Data::comment() const
 {
-    return( m_comment );
+    return m_comment;
 }
 
 /*===========================================================================*/
@@ -87,9 +87,9 @@ const std::string& Data::comment( void ) const
  *  @return data size of 2D array
  */
 /*===========================================================================*/
-const kvs::Int32 Data::num( void ) const
+kvs::Int32 Data::num() const
 {
-    return( m_num );
+    return m_num;
 }
 
 /*===========================================================================*/
@@ -98,9 +98,9 @@ const kvs::Int32 Data::num( void ) const
  *  @return data size of 2D array
  */
 /*===========================================================================*/
-const kvs::Int32 Data::num2( void ) const
+kvs::Int32 Data::num2() const
 {
-    return( m_num2 );
+    return m_num2;
 }
 
 /*===========================================================================*/
@@ -109,9 +109,9 @@ const kvs::Int32 Data::num2( void ) const
  *  @return data array
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::Real32>& Data::fltArray( void ) const
+const kvs::ValueArray<kvs::Real32>& Data::fltArray() const
 {
-    return( m_flt_array );
+    return m_flt_array;
 }
 
 /*===========================================================================*/
@@ -120,9 +120,9 @@ const kvs::ValueArray<kvs::Real32>& Data::fltArray( void ) const
  *  @return data array
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::Int32>& Data::intArray( void ) const
+const kvs::ValueArray<kvs::Int32>& Data::intArray() const
 {
-    return( m_int_array );
+    return m_int_array;
 }
 
 /*===========================================================================*/
@@ -130,7 +130,7 @@ const kvs::ValueArray<kvs::Int32>& Data::intArray( void ) const
  *  @brief  Deallocate data sets and comments.
  */
 /*===========================================================================*/
-void Data::deallocate( void )
+void Data::deallocate()
 {
     m_array_type_header = "";
     m_keyword = "";
@@ -149,7 +149,7 @@ void Data::deallocate( void )
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool Data::readAscii( FILE* fp, const std::string tag )
+bool Data::readAscii( FILE* fp, const std::string tag )
 {
     const size_t line_size = 256;
     char line[line_size];
@@ -161,7 +161,7 @@ const bool Data::readAscii( FILE* fp, const std::string tag )
             m_array_type_header == "#INT_ARY" ) )
     {
         kvsMessageError("Unknown array type \"%s\".", m_array_type_header.c_str());
-        return( false );
+        return false;
     }
 
     // Read a keyword.
@@ -222,7 +222,7 @@ const bool Data::readAscii( FILE* fp, const std::string tag )
         }
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -233,8 +233,7 @@ const bool Data::readAscii( FILE* fp, const std::string tag )
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-//const bool Data::readBinary( FILE* fp, const std::string tag, const bool swap )
-const bool Data::readBinary( FILE* fp, const bool swap )
+bool Data::readBinary( FILE* fp, const bool swap )
 {
     // Read an array-type-header (#FLT_ARY or #INT_ARY).
     char array_type_header[8];
@@ -246,7 +245,7 @@ const bool Data::readBinary( FILE* fp, const bool swap )
             m_array_type_header == "#INT_ARY" ) )
     {
         kvsMessageError("Unknown array type \"%s\".", m_array_type_header.c_str());
-        return( false );
+        return false;
     }
 
     // Read a keyword.
@@ -294,7 +293,7 @@ const bool Data::readBinary( FILE* fp, const bool swap )
         if ( swap ) kvs::Endian::Swap( pointer, size );
     }
 
-    return( true );
+    return true;
 }
 
 } // end of namespace gf

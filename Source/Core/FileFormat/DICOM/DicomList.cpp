@@ -4,7 +4,7 @@
  *  @brief  DICOM list class.
  *
  *  @author Naohisa Sakamoto
- *  @date   2010/10/15 12:49:34
+ *  @date   2012/09/14 10:31:01
  */
 /*----------------------------------------------------------------------------
  *
@@ -36,7 +36,7 @@ bool DicomList::SortingByImageNumber::operator () (
     const kvs::Dicom* dicom1,
     const kvs::Dicom* dicom2 )
 {
-    return( dicom1->imageNumber() < dicom2->imageNumber() );
+    return dicom1->imageNumber() < dicom2->imageNumber();
 }
 
 /*===========================================================================*/
@@ -48,7 +48,7 @@ bool DicomList::SortingBySeriesNumber::operator () (
     const kvs::Dicom* dicom1,
     const kvs::Dicom* dicom2 )
 {
-    return( dicom1->seriesNumber() < dicom2->seriesNumber() );
+    return dicom1->seriesNumber() < dicom2->seriesNumber();
 }
 
 /*===========================================================================*/
@@ -60,7 +60,7 @@ bool DicomList::SortingBySliceLocation::operator () (
     const kvs::Dicom* dicom1,
     const kvs::Dicom* dicom2 )
 {
-    return( dicom1->sliceLocation() < dicom2->sliceLocation() );
+    return dicom1->sliceLocation() < dicom2->sliceLocation();
 }
 
 /*===========================================================================*/
@@ -68,7 +68,7 @@ bool DicomList::SortingBySliceLocation::operator () (
  *  @brief  Constructor.
  */
 /*===========================================================================*/
-DicomList::DicomList( void ):
+DicomList::DicomList():
     m_row( 0 ),
     m_column( 0 ),
     m_slice_thickness( 0.0 ),
@@ -102,7 +102,7 @@ DicomList::DicomList( const std::string& dirname, const bool extension_check ):
  *  @brief  Destructor.
  */
 /*===========================================================================*/
-DicomList::~DicomList( void )
+DicomList::~DicomList()
 {
     this->clear();
 }
@@ -115,7 +115,7 @@ DicomList::~DicomList( void )
 /*===========================================================================*/
 const kvs::Dicom* DicomList::operator [] ( const size_t index ) const
 {
-    return( m_list[index] );
+    return m_list[index];
 }
 
 /*===========================================================================*/
@@ -126,7 +126,7 @@ const kvs::Dicom* DicomList::operator [] ( const size_t index ) const
 /*===========================================================================*/
 kvs::Dicom* DicomList::operator [] ( const size_t index )
 {
-    return( m_list[index] );
+    return m_list[index];
 }
 
 /*===========================================================================*/
@@ -179,9 +179,9 @@ void DicomList::push_back( kvs::Dicom* dicom )
  *  @return size of list
  */
 /*===========================================================================*/
-const size_t DicomList::size( void ) const
+size_t DicomList::size() const
 {
-    return( m_list.size() );
+    return m_list.size();
 }
 
 /*===========================================================================*/
@@ -189,7 +189,7 @@ const size_t DicomList::size( void ) const
  *  @brief  Clear.
  */
 /*===========================================================================*/
-void DicomList::clear( void )
+void DicomList::clear()
 {
     const size_t nslices = m_list.size();
     for( size_t i = 0; i < nslices; i++ )
@@ -205,9 +205,9 @@ void DicomList::clear( void )
  *  @brief  Return the row size of the DICOM image.
  */
 /*===========================================================================*/
-const size_t DicomList::row( void ) const
+size_t DicomList::row() const
 {
-    return( m_row );
+    return m_row;
 }
 
 /*===========================================================================*/
@@ -215,9 +215,9 @@ const size_t DicomList::row( void ) const
  *  @brief  Return the column size of the DICOM image.
  */
 /*===========================================================================*/
-const size_t DicomList::column( void ) const
+size_t DicomList::column() const
 {
-    return( m_column );
+    return m_column;
 }
 
 /*===========================================================================*/
@@ -225,9 +225,9 @@ const size_t DicomList::column( void ) const
  *  @brief  Get number of slices.
  */
 /*===========================================================================*/
-const size_t DicomList::nslices( void ) const
+size_t DicomList::nslices() const
 {
-    return( m_list.size() );
+    return m_list.size();
 }
 
 /*===========================================================================*/
@@ -235,9 +235,9 @@ const size_t DicomList::nslices( void ) const
  *  @brief  Return the DICOM image width.
  */
 /*===========================================================================*/
-const size_t DicomList::width( void ) const
+size_t DicomList::width() const
 {
-    return( m_column );
+    return m_column;
 }
 
 /*===========================================================================*/
@@ -245,9 +245,9 @@ const size_t DicomList::width( void ) const
  *  @brief  Return the DICOM image height.
  */
 /*===========================================================================*/
-const size_t DicomList::height( void ) const
+size_t DicomList::height() const
 {
-    return( m_row );
+    return m_row;
 }
 
 /*===========================================================================*/
@@ -255,9 +255,9 @@ const size_t DicomList::height( void ) const
  *  @brief  Return the slice thickness.
  */
 /*===========================================================================*/
-const double DicomList::sliceThickness( void ) const
+double DicomList::sliceThickness() const
 {
-    return( m_slice_thickness );
+    return m_slice_thickness;
 }
 
 /*===========================================================================*/
@@ -265,9 +265,9 @@ const double DicomList::sliceThickness( void ) const
  *  @brief  Return the slice spacing.
  */
 /*===========================================================================*/
-const double DicomList::sliceSpacing( void ) const
+double DicomList::sliceSpacing() const
 {
-    return( m_slice_spacing );
+    return m_slice_spacing;
 }
 
 /*===========================================================================*/
@@ -275,9 +275,9 @@ const double DicomList::sliceSpacing( void ) const
  *  @brief  Return the pixel spacing.
  */
 /*===========================================================================*/
-const kvs::Vector2f& DicomList::pixelSpacing( void ) const
+const kvs::Vector2f& DicomList::pixelSpacing() const
 {
-    return( m_pixel_spacing );
+    return m_pixel_spacing;
 }
 
 /*===========================================================================*/
@@ -286,9 +286,9 @@ const kvs::Vector2f& DicomList::pixelSpacing( void ) const
  *  @return minimum raw value
  */
 /*===========================================================================*/
-const int DicomList::minRawValue( void ) const
+int DicomList::minRawValue() const
 {
-    return( m_min_raw_value );
+    return m_min_raw_value;
 }
 
 /*===========================================================================*/
@@ -297,9 +297,9 @@ const int DicomList::minRawValue( void ) const
  *  @return maximum raw value
  */
 /*===========================================================================*/
-const int DicomList::maxRawValue( void ) const
+int DicomList::maxRawValue() const
 {
-    return( m_max_raw_value );
+    return m_max_raw_value;
 }
 
 /*===========================================================================*/
@@ -307,7 +307,7 @@ const int DicomList::maxRawValue( void ) const
  *  @brief  Enable extension check.
  */
 /*===========================================================================*/
-void DicomList::enableExtensionCheck( void )
+void DicomList::enableExtensionCheck()
 {
     m_extension_check = true;
 }
@@ -317,7 +317,7 @@ void DicomList::enableExtensionCheck( void )
  *  @brief  Disable extension check.
  */
 /*===========================================================================*/
-void DicomList::disableExtensionCheck( void )
+void DicomList::disableExtensionCheck()
 {
     m_extension_check = false;
 }
@@ -328,25 +328,31 @@ void DicomList::disableExtensionCheck( void )
  *  @param  dirname [in] directory name
  */
 /*===========================================================================*/
-const bool DicomList::read( const std::string& dirname )
+bool DicomList::read( const std::string& dirname )
 {
+    BaseClass::setFilename( dirname );
+    BaseClass::setSuccess( true );
+
     kvs::Directory dir( dirname );
     if( !dir.isExisted() )
     {
         kvsMessageError( "%s is not existed.", dir.directoryPath().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     if( !dir.isDirectory() )
     {
         kvsMessageError( "%s is not directory.", dir.directoryPath().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     if( dir.fileList().size() == 0 )
     {
         kvsMessageError( "File not found in %s.", dir.directoryPath().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // Read DICOM data file. (".dcm" only, if extension_check is true)
@@ -390,9 +396,7 @@ const bool DicomList::read( const std::string& dirname )
         ++file;
     }
 
-    m_is_success = true;
-
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -402,33 +406,32 @@ const bool DicomList::read( const std::string& dirname )
  *  @return true, if the writting process was done successfully
  */
 /*===========================================================================*/
-const bool DicomList::write( const std::string& dirname )
+bool DicomList::write( const std::string& dirname )
 {
     kvs::IgnoreUnusedVariable( dirname );
-
     kvsMessageError("Writing method has not been implemented.");
-    return( false );
+    return false;
 }
 
-const bool DicomList::CheckDirectory( const std::string& dirname, const bool extension_check )
+bool DicomList::CheckDirectory( const std::string& dirname, const bool extension_check )
 {
     kvs::Directory dir( dirname );
     if( !dir.isExisted() )
     {
         kvsMessageError( "%s is not existed.", dir.directoryPath().c_str() );
-        return( false );
+        return false;
     }
 
     if( !dir.isDirectory() )
     {
         kvsMessageError( "%s is not directory.", dir.directoryPath().c_str() );
-        return( false );
+        return false;
     }
 
     if( dir.fileList().size() == 0 )
     {
         kvsMessageError( "File not found in %s.", dir.directoryPath().c_str() );
-        return( false );
+        return false;
     }
 
     size_t counter = 0;
@@ -450,11 +453,11 @@ const bool DicomList::CheckDirectory( const std::string& dirname, const bool ext
         if ( counter == 0 )
         {
             kvsMessageError( "File not found in %s.", dir.directoryPath().c_str() );
-            return( false );
+            return false;
         }
     }
 
-    return( true );
+    return true;
 }
 
 } // end of namespace kvs

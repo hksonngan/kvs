@@ -30,7 +30,7 @@ namespace gf
  *  @brief  Construct a new File class.
  */
 /*===========================================================================*/
-File::File( void )
+File::File()
 {
 }
 
@@ -65,7 +65,7 @@ std::ostream& operator << ( std::ostream& os, const File& f )
         if ( i != f.m_data_set_list.size() - 1 ) os << std::endl;
     }
 
-    return( os );
+    return os;
 }
 
 /*===========================================================================*/
@@ -74,9 +74,9 @@ std::ostream& operator << ( std::ostream& os, const File& f )
  *  @return file type header
  */
 /*===========================================================================*/
-const std::string& File::fileTypeHeader( void ) const
+const std::string& File::fileTypeHeader() const
 {
-    return( m_file_type_header );
+    return m_file_type_header;
 }
 
 /*===========================================================================*/
@@ -85,9 +85,9 @@ const std::string& File::fileTypeHeader( void ) const
  *  @return comment list
  */
 /*===========================================================================*/
-const std::vector<std::string>& File::commentList( void ) const
+const std::vector<std::string>& File::commentList() const
 {
-    return( m_comment_list );
+    return m_comment_list;
 }
 
 /*===========================================================================*/
@@ -99,7 +99,7 @@ const std::vector<std::string>& File::commentList( void ) const
 /*===========================================================================*/
 const std::string& File::comment( const size_t index ) const
 {
-    return( m_comment_list.at( index ) );
+    return m_comment_list.at( index );
 }
 
 /*===========================================================================*/
@@ -108,9 +108,9 @@ const std::string& File::comment( const size_t index ) const
  *  @return data set list
  */
 /*===========================================================================*/
-const std::vector<kvs::gf::DataSet>& File::dataSetList( void ) const
+const std::vector<kvs::gf::DataSet>& File::dataSetList() const
 {
-    return( m_data_set_list );
+    return m_data_set_list;
 }
 
 /*===========================================================================*/
@@ -122,7 +122,7 @@ const std::vector<kvs::gf::DataSet>& File::dataSetList( void ) const
 /*===========================================================================*/
 const kvs::gf::DataSet& File::dataSet( const size_t index ) const
 {
-    return( m_data_set_list.at( index ) );
+    return m_data_set_list.at( index );
 }
 
 /*===========================================================================*/
@@ -130,7 +130,7 @@ const kvs::gf::DataSet& File::dataSet( const size_t index ) const
  *  @brief  Deallocate data sets and comments.
  */
 /*===========================================================================*/
-void File::deallocate( void )
+void File::deallocate()
 {
     m_file_type_header = "";
 
@@ -158,14 +158,14 @@ void File::deallocate( void )
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool File::read( const std::string filename )
+bool File::read( const std::string filename )
 {
     if ( this->is_ascii( filename ) )
     {
         if ( !this->read_ascii( filename ) )
         {
             kvsMessageError("Cannot read %s.", filename.c_str());
-            return( false );
+            return false;
         }
     }
     else if ( this->is_binary( filename ) )
@@ -173,16 +173,16 @@ const bool File::read( const std::string filename )
         if ( !this->read_binary( filename ) )
         {
             kvsMessageError("Cannot read %s.", filename.c_str());
-            return( false );
+            return false;
         }
     }
     else
     {
         kvsMessageError( "%s is not GF format data." );
-        return( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -192,13 +192,13 @@ const bool File::read( const std::string filename )
  *  @return true, if the file type is ascii
  */
 /*===========================================================================*/
-const bool File::is_ascii( const std::string filename )
+bool File::is_ascii( const std::string filename )
 {
     FILE* fp = fopen( filename.c_str(), "rb" );
     if ( !fp )
     {
         kvsMessageError("Cannot open %s.", filename.c_str());
-        return( false );
+        return false;
     }
 
     // Read 8 characters (8 bytes).
@@ -207,7 +207,7 @@ const bool File::is_ascii( const std::string filename )
 
     fclose( fp );
 
-    return( strncmp( buffer, "#A_GF_V1", 8 ) == 0 );
+    return strncmp( buffer, "#A_GF_V1", 8 ) == 0;
 }
 
 /*===========================================================================*/
@@ -217,13 +217,13 @@ const bool File::is_ascii( const std::string filename )
  *  @return true, if the file type is binary
  */
 /*===========================================================================*/
-const bool File::is_binary( const std::string filename )
+bool File::is_binary( const std::string filename )
 {
     FILE* fp = fopen( filename.c_str(), "rb" );
     if ( !fp )
     {
         kvsMessageError("Cannot open %s.", filename.c_str());
-        return( false );
+        return false;
     }
 
     // Read 8 characters (8 bytes).
@@ -233,7 +233,7 @@ const bool File::is_binary( const std::string filename )
 
     fclose( fp );
 
-    return( strncmp( buffer, "#U_GF_V1", 8 ) == 0 );
+    return strncmp( buffer, "#U_GF_V1", 8 ) == 0;
 }
 
 /*===========================================================================*/
@@ -243,13 +243,13 @@ const bool File::is_binary( const std::string filename )
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool File::read_ascii( const std::string filename )
+bool File::read_ascii( const std::string filename )
 {
     FILE* fp = fopen( filename.c_str(), "r" );
     if ( !fp )
     {
         kvsMessageError("Cannot open %s.", filename.c_str());
-        return( false );
+        return false;
     }
 
     const size_t line_size = 256;
@@ -291,7 +291,7 @@ const bool File::read_ascii( const std::string filename )
 
     fclose( fp );
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -302,13 +302,13 @@ const bool File::read_ascii( const std::string filename )
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool File::read_binary( const std::string filename, const bool swap )
+bool File::read_binary( const std::string filename, const bool swap )
 {
     FILE* fp = fopen( filename.c_str(), "rb" );
     if ( !fp )
     {
         kvsMessageError("Cannot open %s.", filename.c_str());
-        return( false );
+        return false;
     }
 
     // Read a file-type-header (#U_GF_V1).
@@ -351,7 +351,7 @@ const bool File::read_binary( const std::string filename, const bool swap )
         if ( strncmp( buffer, "#NEW_SET", 8 ) == 0 )
         {
             kvs::gf::DataSet data_set;
-            if ( !data_set.readBinary( fp ) ) { fclose( fp ); return( false ); }
+            if ( !data_set.readBinary( fp ) ) { fclose( fp ); return false; }
 
             m_data_set_list.push_back( data_set );
         }
@@ -359,7 +359,7 @@ const bool File::read_binary( const std::string filename, const bool swap )
 
     fclose( fp );
 
-    return( true );
+    return true;
 }
 
 } // end of namespace gf

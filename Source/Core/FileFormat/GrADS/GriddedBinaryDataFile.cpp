@@ -28,7 +28,7 @@ namespace grads
  *  @brief  Constructs a new GriddedBinaryDataFile class.
  */
 /*===========================================================================*/
-GriddedBinaryDataFile::GriddedBinaryDataFile( void ):
+GriddedBinaryDataFile::GriddedBinaryDataFile():
     m_sequential( false ),
     m_big_endian( false ),
     m_filename("")
@@ -74,9 +74,9 @@ void GriddedBinaryDataFile::setFilename( const std::string& filename )
  *  @return data filename
  */
 /*===========================================================================*/
-const std::string& GriddedBinaryDataFile::filename( void ) const
+const std::string& GriddedBinaryDataFile::filename() const
 {
-    return( m_filename );
+    return m_filename;
 }
 
 /*===========================================================================*/
@@ -85,9 +85,9 @@ const std::string& GriddedBinaryDataFile::filename( void ) const
  *  @return data values
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::Real32>& GriddedBinaryDataFile::values( void ) const
+const kvs::ValueArray<kvs::Real32>& GriddedBinaryDataFile::values() const
 {
-    return( m_values );
+    return m_values;
 }
 
 /*===========================================================================*/
@@ -96,19 +96,19 @@ const kvs::ValueArray<kvs::Real32>& GriddedBinaryDataFile::values( void ) const
  *  @return true, if the loading process is done successfully
  */
 /*===========================================================================*/
-const bool GriddedBinaryDataFile::load( void ) const
+bool GriddedBinaryDataFile::load() const
 {
     if ( m_filename.length() == 0 )
     {
         kvsMessageError("Filename of binary data has not been specified.");
-        return( false );
+        return false;
     }
 
     std::ifstream ifs( m_filename.c_str(), std::ios::binary | std::ios::in );
     if( !ifs.is_open() )
     {
         kvsMessageError( "Cannot open %s.", m_filename.c_str() );
-        return( false );
+        return false;
     }
 
     ifs.seekg( 0, std::ios::end );
@@ -147,7 +147,7 @@ const bool GriddedBinaryDataFile::load( void ) const
 
     ifs.close();
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -155,7 +155,7 @@ const bool GriddedBinaryDataFile::load( void ) const
  *  @brief  Free loaded data values.
  */
 /*===========================================================================*/
-const void GriddedBinaryDataFile::free( void ) const
+void GriddedBinaryDataFile::free() const
 {
     m_values.release();
 }

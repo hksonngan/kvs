@@ -30,30 +30,31 @@ class FileFormatBase
 {
     kvsClassName( kvs::FileFormatBase );
 
-protected:
+private:
 
-    std::string m_filename;   ///< Filename.
-    bool        m_is_success; ///< Whether the reading is success or not.
+    std::string m_filename; ///< Filename.
+    bool m_is_success; ///< Whether the reading is success or not.
 
 public:
 
-    FileFormatBase( void );
-
-    virtual ~FileFormatBase( void );
+    FileFormatBase();
+    virtual ~FileFormatBase();
 
 public:
 
     const std::string& filename( void ) const;
-
-    const bool isSuccess( void ) const;
-
-    const bool isFailure( void ) const;
+    bool isSuccess( void ) const;
+    bool isFailure( void ) const;
 
 public:
 
-    virtual const bool read( const std::string& filename ) = 0;
+    virtual bool read( const std::string& filename ) = 0;
+    virtual bool write( const std::string& filename ) = 0;
 
-    virtual const bool write( const std::string& filename ) = 0;
+protected:
+
+    void setFilename( const std::string& filename );
+    void setSuccess( const bool success );
 };
 
 } // end of namespace kvs

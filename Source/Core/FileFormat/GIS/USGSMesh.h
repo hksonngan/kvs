@@ -49,9 +49,7 @@ private:
 public:
 
     USGSMesh();
-
     USGSMesh( const std::string& header_filename, const std::string& data_filename, const kvs::gis::Area& area );
-
     virtual ~USGSMesh();
 
 public:
@@ -61,7 +59,6 @@ public:
 private:
 
     bool read_header( FILE* fp );
-
     bool read_data( FILE* fp, const kvs::gis::Area& area );
 };
 

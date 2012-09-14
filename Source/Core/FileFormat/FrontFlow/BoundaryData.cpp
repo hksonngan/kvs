@@ -27,7 +27,7 @@ namespace gf
  *  @brief  Construct a new BoundaryData class.
  */
 /*===========================================================================*/
-BoundaryData::BoundaryData( void ):
+BoundaryData::BoundaryData():
     m_dimensions(0),
     m_nnodes_inlet(0),
     m_nnodes_wall(0),
@@ -68,9 +68,9 @@ BoundaryData::BoundaryData( const std::string filename ):
  *  @return dimensions
  */
 /*===========================================================================*/
-const size_t BoundaryData::dimensions( void ) const
+size_t BoundaryData::dimensions() const
 {
-    return( m_dimensions );
+    return m_dimensions;
 }
 
 /*===========================================================================*/
@@ -79,9 +79,9 @@ const size_t BoundaryData::dimensions( void ) const
  *  @return number of inlet boundary nodes
  */
 /*===========================================================================*/
-const size_t BoundaryData::nnodesInlet( void ) const
+size_t BoundaryData::nnodesInlet() const
 {
-    return( m_nnodes_inlet );
+    return m_nnodes_inlet;
 }
 
 /*===========================================================================*/
@@ -90,9 +90,9 @@ const size_t BoundaryData::nnodesInlet( void ) const
  *  @return number of wall boundary nodes
  */
 /*===========================================================================*/
-const size_t BoundaryData::nnodesWall( void ) const
+size_t BoundaryData::nnodesWall() const
 {
-    return( m_nnodes_wall );
+    return m_nnodes_wall;
 }
 
 /*===========================================================================*/
@@ -101,9 +101,9 @@ const size_t BoundaryData::nnodesWall( void ) const
  *  @return number of symetric boundary nodes
  */
 /*===========================================================================*/
-const size_t BoundaryData::nnodesSymetric( void ) const
+size_t BoundaryData::nnodesSymetric() const
 {
-    return( m_nnodes_symetric );
+    return m_nnodes_symetric;
 }
 
 /*===========================================================================*/
@@ -112,9 +112,9 @@ const size_t BoundaryData::nnodesSymetric( void ) const
  *  @return number of cyclic boundary nodes
  */
 /*===========================================================================*/
-const size_t BoundaryData::nnodesCyclic( void ) const
+size_t BoundaryData::nnodesCyclic() const
 {
-    return( m_nnodes_cyclic );
+    return m_nnodes_cyclic;
 }
 
 /*===========================================================================*/
@@ -123,9 +123,9 @@ const size_t BoundaryData::nnodesCyclic( void ) const
  *  @return number of body surface boundary nodes
  */
 /*===========================================================================*/
-const size_t BoundaryData::nnodesBody( void ) const
+size_t BoundaryData::nnodesBody() const
 {
-    return( m_nnodes_body );
+    return m_nnodes_body;
 }
 
 /*===========================================================================*/
@@ -134,9 +134,9 @@ const size_t BoundaryData::nnodesBody( void ) const
  *  @return number of free boundary nodes
  */
 /*===========================================================================*/
-const size_t BoundaryData::nnodesFree( void ) const
+size_t BoundaryData::nnodesFree() const
 {
-    return( m_nnodes_free );
+    return m_nnodes_free;
 }
 
 /*===========================================================================*/
@@ -145,9 +145,9 @@ const size_t BoundaryData::nnodesFree( void ) const
  *  @return number of moving wall boundary nodes
  */
 /*===========================================================================*/
-const size_t BoundaryData::nnodesMovingWall( void ) const
+size_t BoundaryData::nnodesMovingWall() const
 {
-    return( m_nnodes_moving_wall );
+    return m_nnodes_moving_wall;
 }
 
 /*===========================================================================*/
@@ -156,9 +156,9 @@ const size_t BoundaryData::nnodesMovingWall( void ) const
  *  @return number of inter connect boundary nodes
  */
 /*===========================================================================*/
-const size_t BoundaryData::nnodesInterConnect( void ) const
+size_t BoundaryData::nnodesInterConnect() const
 {
-    return( m_nnodes_inter_connect );
+    return m_nnodes_inter_connect;
 }
 
 /*===========================================================================*/
@@ -167,9 +167,9 @@ const size_t BoundaryData::nnodesInterConnect( void ) const
  *  @return number of temperature boundary nodes
  */
 /*===========================================================================*/
-const size_t BoundaryData::nnodesTemp( void ) const
+size_t BoundaryData::nnodesTemp() const
 {
-    return( m_nnodes_temp );
+    return m_nnodes_temp;
 }
 
 /*===========================================================================*/
@@ -178,9 +178,9 @@ const size_t BoundaryData::nnodesTemp( void ) const
  *  @return inlet boundary nodes
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::UInt32>& BoundaryData::connectionsInlet( void ) const
+const kvs::ValueArray<kvs::UInt32>& BoundaryData::connectionsInlet() const
 {
-    return( m_connections_inlet );
+    return m_connections_inlet;
 }
 
 /*===========================================================================*/
@@ -189,9 +189,9 @@ const kvs::ValueArray<kvs::UInt32>& BoundaryData::connectionsInlet( void ) const
  *  @return wall boundary nodes
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::UInt32>& BoundaryData::connectionsWall( void ) const
+const kvs::ValueArray<kvs::UInt32>& BoundaryData::connectionsWall() const
 {
-    return( m_connections_wall );
+    return m_connections_wall;
 }
 
 /*===========================================================================*/
@@ -200,9 +200,9 @@ const kvs::ValueArray<kvs::UInt32>& BoundaryData::connectionsWall( void ) const
  *  @return symetric boundary nodes
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::UInt32>& BoundaryData::connectionsSymetric( void ) const
+const kvs::ValueArray<kvs::UInt32>& BoundaryData::connectionsSymetric() const
 {
-    return( m_connections_symetric );
+    return m_connections_symetric;
 }
 
 /*===========================================================================*/
@@ -211,9 +211,9 @@ const kvs::ValueArray<kvs::UInt32>& BoundaryData::connectionsSymetric( void ) co
  *  @return cyclic boundary nodes
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::UInt32>& BoundaryData::connectionsCyclic( void ) const
+const kvs::ValueArray<kvs::UInt32>& BoundaryData::connectionsCyclic() const
 {
-    return( m_connections_cyclic );
+    return m_connections_cyclic;
 }
 
 /*===========================================================================*/
@@ -222,9 +222,9 @@ const kvs::ValueArray<kvs::UInt32>& BoundaryData::connectionsCyclic( void ) cons
  *  @return body surface boundary nodes
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::UInt32>& BoundaryData::connectionsBody( void ) const
+const kvs::ValueArray<kvs::UInt32>& BoundaryData::connectionsBody() const
 {
-    return( m_connections_body );
+    return m_connections_body;
 }
 
 /*===========================================================================*/
@@ -233,9 +233,9 @@ const kvs::ValueArray<kvs::UInt32>& BoundaryData::connectionsBody( void ) const
  *  @return free boundary nodes
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::UInt32>& BoundaryData::connectionsFree( void ) const
+const kvs::ValueArray<kvs::UInt32>& BoundaryData::connectionsFree() const
 {
-    return( m_connections_free );
+    return m_connections_free;
 }
 
 /*===========================================================================*/
@@ -244,9 +244,9 @@ const kvs::ValueArray<kvs::UInt32>& BoundaryData::connectionsFree( void ) const
  *  @return moving wall boundary nodes
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::UInt32>& BoundaryData::connectionsMovingWall( void ) const
+const kvs::ValueArray<kvs::UInt32>& BoundaryData::connectionsMovingWall() const
 {
-    return( m_connections_moving_wall );
+    return m_connections_moving_wall;
 }
 
 /*===========================================================================*/
@@ -255,9 +255,9 @@ const kvs::ValueArray<kvs::UInt32>& BoundaryData::connectionsMovingWall( void ) 
  *  @return temperature boundary nodes
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::UInt32>& BoundaryData::connectionsTemp( void ) const
+const kvs::ValueArray<kvs::UInt32>& BoundaryData::connectionsTemp() const
 {
-    return( m_connections_temp );
+    return m_connections_temp;
 }
 
 /*===========================================================================*/
@@ -266,9 +266,9 @@ const kvs::ValueArray<kvs::UInt32>& BoundaryData::connectionsTemp( void ) const
  *  @return heat flux boundary nodes
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::UInt32>& BoundaryData::connectionsHeat( void ) const
+const kvs::ValueArray<kvs::UInt32>& BoundaryData::connectionsHeat() const
 {
-    return( m_connections_heat );
+    return m_connections_heat;
 }
 
 /*===========================================================================*/
@@ -277,9 +277,9 @@ const kvs::ValueArray<kvs::UInt32>& BoundaryData::connectionsHeat( void ) const
  *  @return inlet boundary velocity values
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::Real32>& BoundaryData::velocitiesInlet( void ) const
+const kvs::ValueArray<kvs::Real32>& BoundaryData::velocitiesInlet() const
 {
-    return( m_velocities_inlet );
+    return m_velocities_inlet;
 }
 
 /*===========================================================================*/
@@ -288,9 +288,9 @@ const kvs::ValueArray<kvs::Real32>& BoundaryData::velocitiesInlet( void ) const
  *  @return wall boundary velocity values
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::Real32>& BoundaryData::velocitiesWall( void ) const
+const kvs::ValueArray<kvs::Real32>& BoundaryData::velocitiesWall() const
 {
-    return( m_velocities_wall );
+    return m_velocities_wall;
 }
 
 /*===========================================================================*/
@@ -299,9 +299,9 @@ const kvs::ValueArray<kvs::Real32>& BoundaryData::velocitiesWall( void ) const
  *  @return inter connection datasets
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::Int32>&  BoundaryData::interConnects( void ) const
+const kvs::ValueArray<kvs::Int32>&  BoundaryData::interConnects() const
 {
-    return( m_inter_connects );
+    return m_inter_connects;
 }
 
 /*===========================================================================*/
@@ -310,9 +310,9 @@ const kvs::ValueArray<kvs::Int32>&  BoundaryData::interConnects( void ) const
  *  @return boundary temperature values
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::Real32>& BoundaryData::temperatures( void ) const
+const kvs::ValueArray<kvs::Real32>& BoundaryData::temperatures() const
 {
-    return( m_temperatures );
+    return m_temperatures;
 }
 
 /*===========================================================================*/
@@ -321,9 +321,9 @@ const kvs::ValueArray<kvs::Real32>& BoundaryData::temperatures( void ) const
  *  @return boundary heat flux values
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::Real32>& BoundaryData::heatFluxes( void ) const
+const kvs::ValueArray<kvs::Real32>& BoundaryData::heatFluxes() const
 {
-    return( m_heat_fluxes );
+    return m_heat_fluxes;
 }
 
 /*===========================================================================*/
@@ -333,19 +333,19 @@ const kvs::ValueArray<kvs::Real32>& BoundaryData::heatFluxes( void ) const
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool BoundaryData::read( const std::string filename )
+bool BoundaryData::read( const std::string filename )
 {
     kvs::gf::File file;
     if ( !file.read( filename ) )
     {
         kvsMessageError("Cannot read mesh data file.");
-        return( false );
+        return false;
     }
 
     if ( file.dataSetList().size() != 1 )
     {
         kvsMessageError("Multiple data set is not supported in kvs::gf::BoundaryData.");
-        return( false );
+        return false;
     }
 
     const kvs::gf::DataSet& data_set = file.dataSet(0);
@@ -542,7 +542,7 @@ const bool BoundaryData::read( const std::string filename )
         }
     }
 
-    return( true );
+    return true;
 }
 
 } // end of namespace gf

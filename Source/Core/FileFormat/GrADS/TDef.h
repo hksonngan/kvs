@@ -51,9 +51,9 @@ struct TDef
     Start start; ///< start time/date
     Increment increment; ///< increment time
 
-    const bool read( std::string line, std::ifstream& ifs );
+    bool read( std::string line, std::ifstream& ifs );
 
-    TDef& operator ++ ( void );
+    TDef& operator ++ ();
 };
 
 } // end of namespace grads

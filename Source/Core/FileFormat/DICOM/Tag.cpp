@@ -39,7 +39,7 @@ namespace dcm
  *  @brief  Constructor.
  */
 /*===========================================================================*/
-Tag::Tag( void ):
+Tag::Tag():
     m_group_id(0),
     m_element_id(0),
     m_vr_type( dcm::VR_NONE ),
@@ -99,7 +99,7 @@ Tag::Tag( std::ifstream& ifs, bool swap )
  *  @brief  Destructor.
  */
 /*===========================================================================*/
-Tag::~Tag( void )
+Tag::~Tag()
 {
 }
 
@@ -116,7 +116,7 @@ Tag& Tag::operator = ( const Tag& t )
     m_vr_type    = t.m_vr_type;
     m_name       = t.m_name;
 
-    return( *this );
+    return *this;
 }
 
 /*===========================================================================*/
@@ -129,8 +129,9 @@ Tag& Tag::operator = ( const Tag& t )
 /*===========================================================================*/
 bool operator == ( const Tag& a, const Tag& b )
 {
-    return( ( a.m_group_id   == b.m_group_id ) &&
-            ( a.m_element_id == b.m_element_id ) );
+    return
+        ( a.m_group_id   == b.m_group_id ) &&
+        ( a.m_element_id == b.m_element_id );
 }
 
 /*===========================================================================*/
@@ -143,7 +144,7 @@ bool operator == ( const Tag& a, const Tag& b )
 /*===========================================================================*/
 bool operator != ( const Tag& a, const Tag& b )
 {
-    return( !(a == b) );
+    return !(a == b);
 }
 
 /*===========================================================================*/
@@ -156,8 +157,9 @@ bool operator != ( const Tag& a, const Tag& b )
 /*===========================================================================*/
 bool operator < ( const Tag& a, const Tag& b )
 {
-    return( ( a.m_group_id   < b.m_group_id ) &&
-            ( a.m_element_id < b.m_element_id ) );
+    return
+        ( a.m_group_id   < b.m_group_id ) &&
+        ( a.m_element_id < b.m_element_id );
 }
 
 /*===========================================================================*/
@@ -175,7 +177,7 @@ std::ostream& operator << ( std::ostream& os, const Tag& t )
        << t.m_element_id << std::endl;
     os << std::dec;
     os << "Element name:   " << t.m_name;
-    return( os );
+    return os;
 }
 
 /*===========================================================================*/
@@ -193,7 +195,7 @@ std::ofstream& operator << ( std::ofstream& os, const Tag& t )
        << t.m_element_id << std::endl;
     os << std::dec;
     os << "Element name:   " << t.m_name;
-    return( os );
+    return os;
 }
 
 /*===========================================================================*/
@@ -201,9 +203,9 @@ std::ofstream& operator << ( std::ofstream& os, const Tag& t )
  *  @brief  Return the group ID.
  */
 /*===========================================================================*/
-const unsigned short Tag::groupID( void ) const
+unsigned short Tag::groupID() const
 {
-    return( m_group_id );
+    return m_group_id;
 }
 
 /*===========================================================================*/
@@ -211,9 +213,9 @@ const unsigned short Tag::groupID( void ) const
  *  @brief  Return the element ID.
  */
 /*===========================================================================*/
-const unsigned short Tag::elementID( void ) const
+unsigned short Tag::elementID() const
 {
-    return( m_element_id );
+    return m_element_id;
 }
 
 /*===========================================================================*/
@@ -221,9 +223,9 @@ const unsigned short Tag::elementID( void ) const
  *  @brief  Get the VR type.
  */
 /*===========================================================================*/
-const dcm::VRType Tag::vrType( void ) const
+dcm::VRType Tag::vrType() const
 {
-    return( m_vr_type );
+    return m_vr_type;
 }
 
 /*===========================================================================*/
@@ -231,9 +233,9 @@ const dcm::VRType Tag::vrType( void ) const
  *  @brief  Get the element name.
  */
 /*===========================================================================*/
-const std::string& Tag::name( void ) const
+const std::string& Tag::name() const
 {
-    return( m_name );
+    return m_name;
 }
 
 /*===========================================================================*/
@@ -244,14 +246,14 @@ const std::string& Tag::name( void ) const
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool dcm::Tag::read( std::ifstream& ifs, const bool swap )
+bool dcm::Tag::read( std::ifstream& ifs, const bool swap )
 {
     const unsigned short group_id   = kvs::dcm::StreamReader::Get<unsigned short>( ifs, swap );
     const unsigned short element_id = kvs::dcm::StreamReader::Get<unsigned short>( ifs, swap );
 
     *this = ::Dictionary[ kvs::dcm::Tag( group_id, element_id ) ];
 
-    return( true );
+    return true;
 }
 
 } // end of namespace dcm

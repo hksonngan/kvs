@@ -29,7 +29,7 @@ namespace kvsml
  *  @brief  Constructs a new color tag class.
  */
 /*===========================================================================*/
-ColorMapTag::ColorMapTag( void ):
+ColorMapTag::ColorMapTag():
     kvs::kvsml::TagBase( "ColorMap" )
 {
 }
@@ -39,7 +39,7 @@ ColorMapTag::ColorMapTag( void ):
  *  @brief  Destructs the color tag class.
  */
 /*===========================================================================*/
-ColorMapTag::~ColorMapTag( void )
+ColorMapTag::~ColorMapTag()
 {
 }
 
@@ -50,7 +50,7 @@ ColorMapTag::~ColorMapTag( void )
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool ColorMapTag::read( const kvs::XMLNode::SuperClass* parent )
+bool ColorMapTag::read( const kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = this->name();
 
@@ -58,10 +58,10 @@ const bool ColorMapTag::read( const kvs::XMLNode::SuperClass* parent )
     if ( !m_node )
     {
         kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -71,7 +71,7 @@ const bool ColorMapTag::read( const kvs::XMLNode::SuperClass* parent )
  *  @return true, if the writing process is done successfully
  */
 /*===========================================================================*/
-const bool ColorMapTag::write( kvs::XMLNode::SuperClass* parent )
+bool ColorMapTag::write( kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = this->name();
     kvs::XMLElement element( tag_name );
@@ -80,10 +80,10 @@ const bool ColorMapTag::write( kvs::XMLNode::SuperClass* parent )
     if( !m_node )
     {
         kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 
@@ -92,7 +92,7 @@ const bool ColorMapTag::write( kvs::XMLNode::SuperClass* parent )
  *  @brief  Constructs a new ColorMapValueTag class.
  */
 /*===========================================================================*/
-ColorMapValueTag::ColorMapValueTag( void ):
+ColorMapValueTag::ColorMapValueTag():
     kvs::kvsml::TagBase( "ColorMapValue" )
 {
 }
@@ -102,7 +102,7 @@ ColorMapValueTag::ColorMapValueTag( void ):
  *  @brief  Destroys the ColorMapValueTag class.
  */
 /*===========================================================================*/
-ColorMapValueTag::~ColorMapValueTag( void )
+ColorMapValueTag::~ColorMapValueTag()
 {
 }
 
@@ -112,9 +112,9 @@ ColorMapValueTag::~ColorMapValueTag( void )
  *  @return scalar value
  */
 /*===========================================================================*/
-const float ColorMapValueTag::scalar( void ) const
+float ColorMapValueTag::scalar() const
 {
-    return( m_scalar );
+    return m_scalar;
 }
 
 /*===========================================================================*/
@@ -123,9 +123,9 @@ const float ColorMapValueTag::scalar( void ) const
  *  @return color value
  */
 /*===========================================================================*/
-const kvs::RGBColor ColorMapValueTag::color( void ) const
+const kvs::RGBColor& ColorMapValueTag::color() const
 {
-    return( m_color );
+    return m_color;
 }
 
 /*===========================================================================*/
@@ -145,7 +145,7 @@ void ColorMapValueTag::setScalar( const float scalar )
  *  @param  color [in] color value
  */
 /*===========================================================================*/
-void ColorMapValueTag::setColor( const kvs::RGBColor color )
+void ColorMapValueTag::setColor( const kvs::RGBColor& color )
 {
     m_color = color;
 }
@@ -157,7 +157,7 @@ void ColorMapValueTag::setColor( const kvs::RGBColor color )
  *  @return true if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool ColorMapValueTag::read( const kvs::XMLNode::SuperClass* parent )
+bool ColorMapValueTag::read( const kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
 
@@ -165,13 +165,13 @@ const bool ColorMapValueTag::read( const kvs::XMLNode::SuperClass* parent )
     if ( !m_node )
     {
         kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
     // Element
     const kvs::XMLElement::SuperClass* element = kvs::XMLNode::ToElement( BaseClass::m_node );
 
-    return( this->read( element ) );
+    return this->read( element );
 }
 
 /*===========================================================================*/
@@ -181,7 +181,7 @@ const bool ColorMapValueTag::read( const kvs::XMLNode::SuperClass* parent )
  *  @return true if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool ColorMapValueTag::read( const kvs::XMLElement::SuperClass* element )
+bool ColorMapValueTag::read( const kvs::XMLElement::SuperClass* element )
 {
     const std::string tag_name = BaseClass::name();
 
@@ -191,7 +191,7 @@ const bool ColorMapValueTag::read( const kvs::XMLElement::SuperClass* element )
     else
     {
         kvsMessageError( "'s' is not specified in <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
     // r ="xxx"
@@ -201,7 +201,7 @@ const bool ColorMapValueTag::read( const kvs::XMLElement::SuperClass* element )
     else
     {
         kvsMessageError( "'r' is not specified in <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
     // g ="xxx"
@@ -211,7 +211,7 @@ const bool ColorMapValueTag::read( const kvs::XMLElement::SuperClass* element )
     else
     {
         kvsMessageError( "'g' is not specified in <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
     // b ="xxx"
@@ -221,12 +221,12 @@ const bool ColorMapValueTag::read( const kvs::XMLElement::SuperClass* element )
     else
     {
         kvsMessageError( "'b' is not specified in <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
     m_color = kvs::RGBColor( red, green, blue );
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -236,7 +236,7 @@ const bool ColorMapValueTag::read( const kvs::XMLElement::SuperClass* element )
  *  @return true if the writing process is done successfully
  */
 /*===========================================================================*/
-const bool ColorMapValueTag::write( kvs::XMLNode::SuperClass* parent )
+bool ColorMapValueTag::write( kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
     kvs::XMLElement element( tag_name );
@@ -269,10 +269,10 @@ const bool ColorMapValueTag::write( kvs::XMLNode::SuperClass* parent )
     if ( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 } // end of namespace kvsml

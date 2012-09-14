@@ -44,7 +44,7 @@ namespace kvs
  *  @brief  Constructs a new KVSML point object class.
  */
 /*===========================================================================*/
-KVSMLObjectPoint::KVSMLObjectPoint( void ):
+KVSMLObjectPoint::KVSMLObjectPoint():
     m_writing_type( kvs::KVSMLObjectPoint::Ascii )
 {
 }
@@ -58,8 +58,7 @@ KVSMLObjectPoint::KVSMLObjectPoint( void ):
 KVSMLObjectPoint::KVSMLObjectPoint( const std::string& filename ):
     m_writing_type( kvs::KVSMLObjectPoint::Ascii )
 {
-    if ( this->read( filename ) ) { m_is_success = true; }
-    else { m_is_success = false; }
+    this->read( filename );
 }
 
 /*===========================================================================*/
@@ -67,7 +66,7 @@ KVSMLObjectPoint::KVSMLObjectPoint( const std::string& filename ):
  *  @brief  Destructs the KVSML point object class.
  */
 /*===========================================================================*/
-KVSMLObjectPoint::~KVSMLObjectPoint( void )
+KVSMLObjectPoint::~KVSMLObjectPoint()
 {
 }
 
@@ -77,9 +76,9 @@ KVSMLObjectPoint::~KVSMLObjectPoint( void )
  *  @return KVSML tag
  */
 /*===========================================================================*/
-const kvs::kvsml::KVSMLTag& KVSMLObjectPoint::KVSMLTag( void ) const
+const kvs::kvsml::KVSMLTag& KVSMLObjectPoint::KVSMLTag() const
 {
-    return( m_kvsml_tag );
+    return m_kvsml_tag;
 }
 
 /*===========================================================================*/
@@ -88,9 +87,9 @@ const kvs::kvsml::KVSMLTag& KVSMLObjectPoint::KVSMLTag( void ) const
  *  @return object tag
  */
 /*===========================================================================*/
-const kvs::kvsml::ObjectTag& KVSMLObjectPoint::objectTag( void ) const
+const kvs::kvsml::ObjectTag& KVSMLObjectPoint::objectTag() const
 {
-    return( m_object_tag );
+    return m_object_tag;
 }
 
 /*===========================================================================*/
@@ -98,9 +97,9 @@ const kvs::kvsml::ObjectTag& KVSMLObjectPoint::objectTag( void ) const
  *  @brief  Returns the coordinate value array.
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::Real32>& KVSMLObjectPoint::coords( void ) const
+const kvs::ValueArray<kvs::Real32>& KVSMLObjectPoint::coords() const
 {
-    return( m_coords );
+    return m_coords;
 }
 
 /*===========================================================================*/
@@ -108,9 +107,9 @@ const kvs::ValueArray<kvs::Real32>& KVSMLObjectPoint::coords( void ) const
  *  @brief  Returns the color value array.
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::UInt8>& KVSMLObjectPoint::colors( void ) const
+const kvs::ValueArray<kvs::UInt8>& KVSMLObjectPoint::colors() const
 {
-    return( m_colors );
+    return m_colors;
 }
 
 /*===========================================================================*/
@@ -118,9 +117,9 @@ const kvs::ValueArray<kvs::UInt8>& KVSMLObjectPoint::colors( void ) const
  *  @brief  Returns the normal vector array.
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::Real32>& KVSMLObjectPoint::normals( void ) const
+const kvs::ValueArray<kvs::Real32>& KVSMLObjectPoint::normals() const
 {
-    return( m_normals );
+    return m_normals;
 }
 
 /*===========================================================================*/
@@ -128,9 +127,9 @@ const kvs::ValueArray<kvs::Real32>& KVSMLObjectPoint::normals( void ) const
  *  @brief  Returns the size value array.
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::Real32>& KVSMLObjectPoint::sizes( void ) const
+const kvs::ValueArray<kvs::Real32>& KVSMLObjectPoint::sizes() const
 {
-    return( m_sizes );
+    return m_sizes;
 }
 
 /*===========================================================================*/
@@ -195,30 +194,34 @@ void KVSMLObjectPoint::setSizes( const kvs::ValueArray<kvs::Real32>& sizes )
  *  @return true, if the reading process is successfully
  */
 /*===========================================================================*/
-const bool KVSMLObjectPoint::read( const std::string& filename )
+bool KVSMLObjectPoint::read( const std::string& filename )
 {
-    m_filename = filename;
+    BaseClass::setFilename( filename );
+    BaseClass::setSuccess( true );
 
     // XML document.
     kvs::XMLDocument document;
     if ( !document.read( filename ) )
     {
         kvsMessageError( "%s", document.ErrorDesc().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <KVSML>
     if ( !m_kvsml_tag.read( &document ) )
     {
         kvsMessageError( "Cannot read <%s>.", m_kvsml_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <Object>
     if ( !m_object_tag.read( m_kvsml_tag.node() ) )
     {
         kvsMessageError( "Cannot read <%s>.", m_object_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <PointObject>
@@ -226,7 +229,8 @@ const bool KVSMLObjectPoint::read( const std::string& filename )
     if ( !point_tag.read( m_object_tag.node() ) )
     {
         kvsMessageError( "Cannot read <%s>.", point_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <Vertex>
@@ -234,7 +238,8 @@ const bool KVSMLObjectPoint::read( const std::string& filename )
     if ( !vertex_tag.read( point_tag.node() ) )
     {
         kvsMessageError( "Cannot read <%s>.", vertex_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
     else
     {
@@ -243,16 +248,27 @@ const bool KVSMLObjectPoint::read( const std::string& filename )
 
         // <Coord>
         const size_t ncoords = vertex_tag.nvertices();
-        if ( !kvs::kvsml::ReadCoordData( parent, ncoords, &m_coords ) ) return( false );
+        if ( !kvs::kvsml::ReadCoordData( parent, ncoords, &m_coords ) )
+        {
+            BaseClass::setSuccess( false );
+            return false;
+        }
+
         if ( m_coords.size() == 0 )
         {
             kvsMessageError( "Cannot read the coord data." );
-            return( false );
+            BaseClass::setSuccess( false );
+            return false;
         }
 
         // <Color>
         const size_t ncolors = vertex_tag.nvertices();
-        if ( !kvs::kvsml::ReadColorData( parent, ncolors, &m_colors ) ) return( false );
+        if ( !kvs::kvsml::ReadColorData( parent, ncolors, &m_colors ) )
+        {
+            BaseClass::setSuccess( false );
+            return false;
+        }
+
         if ( m_colors.size() == 0 )
         {
             // default value (black).
@@ -264,14 +280,22 @@ const bool KVSMLObjectPoint::read( const std::string& filename )
 
         // <Normal>
         const size_t nnormals = vertex_tag.nvertices();
-        if ( !kvs::kvsml::ReadNormalData( parent, nnormals, &m_normals ) ) return( false );
+        if ( !kvs::kvsml::ReadNormalData( parent, nnormals, &m_normals ) )
+        {
+            BaseClass::setSuccess( false );
+            return false;
+        }
 
         // <Size>
         const size_t nsizes = vertex_tag.nvertices();
-        if ( !kvs::kvsml::ReadSizeData( parent, nsizes, &m_sizes ) ) return( false );
+        if ( !kvs::kvsml::ReadSizeData( parent, nsizes, &m_sizes ) )
+        {
+            BaseClass::setSuccess( false );
+            return false;
+        }
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -281,9 +305,10 @@ const bool KVSMLObjectPoint::read( const std::string& filename )
  *  @return true, if the writing process is done successfully
  */
 /*===========================================================================*/
-const bool KVSMLObjectPoint::write( const std::string& filename )
+bool KVSMLObjectPoint::write( const std::string& filename )
 {
-    m_filename = filename;
+    BaseClass::setFilename( filename );
+    BaseClass::setSuccess( true );
 
     kvs::XMLDocument document;
     document.InsertEndChild( kvs::XMLDeclaration("1.0") );
@@ -294,7 +319,8 @@ const bool KVSMLObjectPoint::write( const std::string& filename )
     if ( !kvsml_tag.write( &document ) )
     {
         kvsMessageError( "Cannot write <%s>.", kvsml_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <Object type="PointObject">
@@ -303,7 +329,8 @@ const bool KVSMLObjectPoint::write( const std::string& filename )
     if ( !object_tag.write( kvsml_tag.node() ) )
     {
         kvsMessageError( "Cannot write <%s>.", object_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <PointObject>
@@ -311,7 +338,8 @@ const bool KVSMLObjectPoint::write( const std::string& filename )
     if ( !point_tag.write( object_tag.node() ) )
     {
         kvsMessageError( "Cannot write <%s>.", point_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <Vertex nvertices="xxx">
@@ -321,7 +349,8 @@ const bool KVSMLObjectPoint::write( const std::string& filename )
     if ( !vertex_tag.write( point_tag.node() ) )
     {
         kvsMessageError( "Cannot write <%s>.", vertex_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
     else
     {
@@ -330,19 +359,38 @@ const bool KVSMLObjectPoint::write( const std::string& filename )
         const kvs::kvsml::WritingDataType type = static_cast<kvs::kvsml::WritingDataType>(m_writing_type);
 
         // <Coord>
-        if ( !kvs::kvsml::WriteCoordData( parent, type, m_filename, m_coords ) ) return( false );
+        if ( !kvs::kvsml::WriteCoordData( parent, type, filename, m_coords ) )
+        {
+            BaseClass::setSuccess( false );
+            return false;
+        }
 
         // <Color>
-        if ( !kvs::kvsml::WriteColorData( parent, type, m_filename, m_colors ) ) return( false );
+        if ( !kvs::kvsml::WriteColorData( parent, type, filename, m_colors ) )
+        {
+            BaseClass::setSuccess( false );
+            return false;
+        }
 
         // <Normal>
-        if ( !kvs::kvsml::WriteNormalData( parent, type, m_filename, m_normals ) ) return( false );
+        if ( !kvs::kvsml::WriteNormalData( parent, type, filename, m_normals ) )
+        {
+            BaseClass::setSuccess( false );
+            return false;
+        }
 
         // <Size>
-        if ( !kvs::kvsml::WriteSizeData( parent, type, m_filename, m_sizes ) ) return( false );
+        if ( !kvs::kvsml::WriteSizeData( parent, type, filename, m_sizes ) )
+        {
+            BaseClass::setSuccess( false );
+            return false;
+        }
     }
 
-    return( document.write( m_filename ) );
+    const bool success = document.write( filename );
+    BaseClass::setSuccess( success );
+
+    return success;
 }
 
 /*===========================================================================*/
@@ -352,7 +400,7 @@ const bool KVSMLObjectPoint::write( const std::string& filename )
  *  @return true, if the given filename has the supported extension
  */
 /*===========================================================================*/
-const bool KVSMLObjectPoint::CheckFileExtension( const std::string& filename )
+bool KVSMLObjectPoint::CheckFileExtension( const std::string& filename )
 {
     const kvs::File file( filename );
     if ( file.extension() == "kvsml" ||
@@ -360,10 +408,10 @@ const bool KVSMLObjectPoint::CheckFileExtension( const std::string& filename )
          file.extension() == "xml"   ||
          file.extension() == "XML" )
     {
-        return( true );
+        return true;
     }
 
-    return( false );
+    return false;
 }
 
 /*===========================================================================*/
@@ -373,25 +421,25 @@ const bool KVSMLObjectPoint::CheckFileExtension( const std::string& filename )
  *  @return true, if the KVSMLObjectPoint class can read the given file
  */
 /*===========================================================================*/
-const bool KVSMLObjectPoint::CheckFileFormat( const std::string& filename )
+bool KVSMLObjectPoint::CheckFileFormat( const std::string& filename )
 {
     kvs::XMLDocument document;
-    if ( !document.read( filename ) ) return( false );
+    if ( !document.read( filename ) ) return false;
 
     // <KVSML>
     kvs::kvsml::KVSMLTag kvsml_tag;
-    if ( !kvsml_tag.read( &document ) ) return( false );
+    if ( !kvsml_tag.read( &document ) ) return false;
 
     // <Object>
     kvs::kvsml::ObjectTag object_tag;
-    if ( !object_tag.read( kvsml_tag.node() ) ) return( false );
-    if ( object_tag.type() != "PointObject" ) return( false );
+    if ( !object_tag.read( kvsml_tag.node() ) ) return false;
+    if ( object_tag.type() != "PointObject" ) return false;
 
     // <PointObject>
     kvs::kvsml::PointObjectTag point_tag;
-    if ( !point_tag.read( object_tag.node() ) ) return( false );
+    if ( !point_tag.read( object_tag.node() ) ) return false;
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -405,7 +453,7 @@ std::ostream& operator <<( std::ostream& os, const KVSMLObjectPoint& rhs )
 {
     os << "Num. of vertices: " << rhs.m_coords.size() / 3;
 
-    return( os );
+    return os;
 }
 
 } // end of namespace kvs

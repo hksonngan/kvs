@@ -29,7 +29,7 @@ namespace kvsml
  *  @brief  Constructs a new line object tag class.
  */
 /*===========================================================================*/
-LineObjectTag::LineObjectTag( void ):
+LineObjectTag::LineObjectTag():
     kvs::kvsml::TagBase( "LineObject" ),
     m_has_line_type( false ),
     m_line_type( "" ),
@@ -43,7 +43,7 @@ LineObjectTag::LineObjectTag( void ):
  *  @brief  Destructs the line object class.
  */
 /*===========================================================================*/
-LineObjectTag::~LineObjectTag( void )
+LineObjectTag::~LineObjectTag()
 {
 }
 
@@ -53,9 +53,9 @@ LineObjectTag::~LineObjectTag( void )
  *  @return true, if the 'line_type' is specified
  */
 /*===========================================================================*/
-const bool LineObjectTag::hasLineType( void ) const
+bool LineObjectTag::hasLineType() const
 {
-    return( m_has_line_type );
+    return m_has_line_type;
 }
 
 /*===========================================================================*/
@@ -64,9 +64,9 @@ const bool LineObjectTag::hasLineType( void ) const
  *  @return line type
  */
 /*===========================================================================*/
-const std::string& LineObjectTag::lineType( void ) const
+const std::string& LineObjectTag::lineType() const
 {
-    return( m_line_type );
+    return m_line_type;
 }
 
 /*===========================================================================*/
@@ -75,9 +75,9 @@ const std::string& LineObjectTag::lineType( void ) const
  *  @return true, if the 'color_type' is specified
  */
 /*===========================================================================*/
-const bool LineObjectTag::hasColorType( void ) const
+bool LineObjectTag::hasColorType() const
 {
-    return( m_has_color_type );
+    return m_has_color_type;
 }
 
 /*===========================================================================*/
@@ -86,9 +86,9 @@ const bool LineObjectTag::hasColorType( void ) const
  *  @return line type
  */
 /*===========================================================================*/
-const std::string& LineObjectTag::colorType( void ) const
+const std::string& LineObjectTag::colorType() const
 {
-    return( m_color_type );
+    return m_color_type;
 }
 
 /*===========================================================================*/
@@ -122,7 +122,7 @@ void LineObjectTag::setColorType( const std::string& color_type )
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool LineObjectTag::read( const kvs::XMLNode::SuperClass* parent )
+bool LineObjectTag::read( const kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
 
@@ -130,7 +130,7 @@ const bool LineObjectTag::read( const kvs::XMLNode::SuperClass* parent )
     if ( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
     // Element
@@ -152,7 +152,7 @@ const bool LineObjectTag::read( const kvs::XMLNode::SuperClass* parent )
         m_color_type = color_type;
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -162,7 +162,7 @@ const bool LineObjectTag::read( const kvs::XMLNode::SuperClass* parent )
  *  @return true, if the writing process is done successfully
  */
 /*===========================================================================*/
-const bool LineObjectTag::write( kvs::XMLNode::SuperClass* parent )
+bool LineObjectTag::write( kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
     kvs::XMLElement element( tag_name );
@@ -176,7 +176,7 @@ const bool LineObjectTag::write( kvs::XMLNode::SuperClass* parent )
     else
     {
         kvsMessageError( "'line_type' is not specified in <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
     if ( m_has_color_type )
@@ -188,17 +188,17 @@ const bool LineObjectTag::write( kvs::XMLNode::SuperClass* parent )
     else
     {
         kvsMessageError( "'color_type' is not specified in <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
     BaseClass::m_node = parent->InsertEndChild( element );
     if( !BaseClass::m_node )
     {
         kvsMessageError("Cannot insert <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 } // end of namespace kvsml

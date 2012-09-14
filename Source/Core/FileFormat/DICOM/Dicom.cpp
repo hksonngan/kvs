@@ -46,7 +46,7 @@ namespace kvs
  *  @brief  Default constructor.
  */
 /*===========================================================================*/
-Dicom::Dicom( void )
+Dicom::Dicom()
 {
     this->initialize();
 }
@@ -60,8 +60,7 @@ Dicom::Dicom( void )
 Dicom::Dicom( const std::string& filename )
 {
     this->initialize();
-    if( this->read( filename ) ) { m_is_success = true; }
-    else { m_is_success = false; }
+    this->read( filename );
 }
 
 /*===========================================================================*/
@@ -81,7 +80,7 @@ Dicom::Dicom( const Dicom& dicom )
  *  @brief  Destructor.
  */
 /*===========================================================================*/
-Dicom::~Dicom( void )
+Dicom::~Dicom()
 {
     this->clear();
 }
@@ -91,7 +90,7 @@ Dicom::~Dicom( void )
  *  @brief  Initialize.
  */
 /*===========================================================================*/
-void Dicom::initialize( void )
+void Dicom::initialize()
 {
     m_element_list.clear();
 
@@ -126,7 +125,7 @@ void Dicom::initialize( void )
  *  @brief  Clear.
  */
 /*===========================================================================*/
-void Dicom::clear( void )
+void Dicom::clear()
 {
     m_element_list.clear();
     m_raw_data.release();
@@ -172,7 +171,7 @@ Dicom& Dicom::operator = ( const Dicom& d )
 
     m_raw_data             = d.m_raw_data;
 
-    return( *this );
+    return *this;
 }
 
 /*===========================================================================*/
@@ -201,7 +200,7 @@ std::ostream& operator << ( std::ostream& os, const Dicom& d )
     os << "Rescale Intersept:    " <<  d.m_rescale_intersept << std::endl;
     os << "Rescale Slope:        " <<  d.m_rescale_slope;
 
-    return( os );
+    return os;
 }
 
 /*===========================================================================*/
@@ -210,9 +209,9 @@ std::ostream& operator << ( std::ostream& os, const Dicom& d )
  *  @return  
  */
 /*===========================================================================*/
-const unsigned short Dicom::width( void ) const
+unsigned short Dicom::width() const
 {
-    return( m_column );
+    return m_column;
 }
 
 /*===========================================================================*/
@@ -221,9 +220,9 @@ const unsigned short Dicom::width( void ) const
  *  @return  
  */
 /*===========================================================================*/
-const unsigned short Dicom::height( void ) const
+unsigned short Dicom::height() const
 {
-    return( m_row );
+    return m_row;
 }
 
 /*===========================================================================*/
@@ -232,9 +231,9 @@ const unsigned short Dicom::height( void ) const
  *  @return  
  */
 /*===========================================================================*/
-const int Dicom::seriesNumber( void ) const
+int Dicom::seriesNumber() const
 {
-    return( m_series_number );
+    return m_series_number;
 }
 
 /*===========================================================================*/
@@ -243,9 +242,9 @@ const int Dicom::seriesNumber( void ) const
  *  @return  
  */
 /*===========================================================================*/
-const int Dicom::imageNumber( void ) const
+int Dicom::imageNumber() const
 {
-    return( m_image_number );
+    return m_image_number;
 }
 
 /*===========================================================================*/
@@ -254,9 +253,9 @@ const int Dicom::imageNumber( void ) const
  *  @return  
  */
 /*===========================================================================*/
-const double Dicom::sliceLocation( void ) const
+double Dicom::sliceLocation() const
 {
-    return( m_slice_location );
+    return m_slice_location;
 }
 
 /*===========================================================================*/
@@ -265,9 +264,9 @@ const double Dicom::sliceLocation( void ) const
  *  @return  
  */
 /*===========================================================================*/
-const unsigned short Dicom::row( void ) const
+unsigned short Dicom::row() const
 {
-    return( m_row );
+    return m_row;
 }
 
 /*===========================================================================*/
@@ -276,9 +275,9 @@ const unsigned short Dicom::row( void ) const
  *  @return  
  */
 /*===========================================================================*/
-const unsigned short Dicom::column( void ) const
+unsigned short Dicom::column() const
 {
-    return( m_column );
+    return m_column;
 }
 
 /*===========================================================================*/
@@ -287,9 +286,9 @@ const unsigned short Dicom::column( void ) const
  *  @return  
  */
 /*===========================================================================*/
-const unsigned int Dicom::size( void ) const
+unsigned int Dicom::size() const
 {
-    return( m_row * m_column * ( m_bits_allocated >> 3 ) );
+    return m_row * m_column * ( m_bits_allocated >> 3 );
 }
 
 /*===========================================================================*/
@@ -298,9 +297,9 @@ const unsigned int Dicom::size( void ) const
  *  @return  
  */
 /*===========================================================================*/
-const unsigned short Dicom::bitsAllocated( void ) const
+unsigned short Dicom::bitsAllocated() const
 {
-    return( m_bits_allocated );
+    return m_bits_allocated;
 }
 
 /*===========================================================================*/
@@ -309,9 +308,9 @@ const unsigned short Dicom::bitsAllocated( void ) const
  *  @return  
  */
 /*===========================================================================*/
-const unsigned short Dicom::bytesAllocated( void ) const
+unsigned short Dicom::bytesAllocated() const
 {
-    return( m_bits_allocated >> 3 );
+    return m_bits_allocated >> 3;
 }
 
 /*===========================================================================*/
@@ -320,9 +319,9 @@ const unsigned short Dicom::bytesAllocated( void ) const
  *  @return  
  */
 /*===========================================================================*/
-const unsigned short Dicom::bitsStored( void ) const
+unsigned short Dicom::bitsStored() const
 {
-    return( m_bits_stored );
+    return m_bits_stored;
 }
 
 /*===========================================================================*/
@@ -331,9 +330,9 @@ const unsigned short Dicom::bitsStored( void ) const
  *  @return  
  */
 /*===========================================================================*/
-const unsigned short Dicom::bytesStored( void ) const
+unsigned short Dicom::bytesStored() const
 {
-    return( m_bits_stored >> 3 );
+    return m_bits_stored >> 3;
 }
 
 /*===========================================================================*/
@@ -342,9 +341,9 @@ const unsigned short Dicom::bytesStored( void ) const
  *  @return  
  */
 /*===========================================================================*/
-const unsigned short Dicom::highBit( void ) const
+unsigned short Dicom::highBit() const
 {
-    return( m_high_bit );
+    return m_high_bit;
 }
 
 /*===========================================================================*/
@@ -353,9 +352,9 @@ const unsigned short Dicom::highBit( void ) const
  *  @return  
  */
 /*===========================================================================*/
-const bool Dicom::pixelRepresentation( void ) const
+bool Dicom::pixelRepresentation() const
 {
-    return( m_pixel_representation );
+    return m_pixel_representation;
 }
 
 /*===========================================================================*/
@@ -364,9 +363,9 @@ const bool Dicom::pixelRepresentation( void ) const
  *  @return  
  */
 /*===========================================================================*/
-const int Dicom::windowLevel( void ) const
+int Dicom::windowLevel() const
 {
-    return( m_window_level );
+    return m_window_level;
 }
 
 /*===========================================================================*/
@@ -375,9 +374,9 @@ const int Dicom::windowLevel( void ) const
  *  @return  
  */
 /*===========================================================================*/
-const int Dicom::windowWidth( void ) const
+int Dicom::windowWidth() const
 {
-    return( m_window_width );
+    return m_window_width;
 }
 
 /*===========================================================================*/
@@ -386,9 +385,9 @@ const int Dicom::windowWidth( void ) const
  *  @return  
  */
 /*===========================================================================*/
-const int Dicom::minWindowValue( void ) const
+int Dicom::minWindowValue() const
 {
-    return( m_window.minValue() );
+    return m_window.minValue();
 }
 
 /*===========================================================================*/
@@ -397,9 +396,9 @@ const int Dicom::minWindowValue( void ) const
  *  @return  
  */
 /*===========================================================================*/
-const int Dicom::maxWindowValue( void ) const
+int Dicom::maxWindowValue() const
 {
-    return( m_window.maxValue() );
+    return m_window.maxValue();
 }
 
 /*===========================================================================*/
@@ -408,9 +407,9 @@ const int Dicom::maxWindowValue( void ) const
  *  @return  
  */
 /*===========================================================================*/
-const int Dicom::minRawValue( void ) const
+int Dicom::minRawValue() const
 {
-    return( m_min_raw_value );
+    return m_min_raw_value;
 }
 
 /*===========================================================================*/
@@ -419,9 +418,9 @@ const int Dicom::minRawValue( void ) const
  *  @return  
  */
 /*===========================================================================*/
-const int Dicom::maxRawValue( void ) const
+int Dicom::maxRawValue() const
 {
-    return( m_max_raw_value );
+    return m_max_raw_value;
 }
 
 /*===========================================================================*/
@@ -430,9 +429,9 @@ const int Dicom::maxRawValue( void ) const
  *  @return  
  */
 /*===========================================================================*/
-const int Dicom::minValue( void ) const
+int Dicom::minValue() const
 {
-    return( kvs::Math::Round( m_min_raw_value * m_rescale_slope + m_rescale_intersept ) );
+    return kvs::Math::Round( m_min_raw_value * m_rescale_slope + m_rescale_intersept );
 }
 
 /*===========================================================================*/
@@ -441,9 +440,9 @@ const int Dicom::minValue( void ) const
  *  @return  
  */
 /*===========================================================================*/
-const int Dicom::maxValue( void ) const
+int Dicom::maxValue() const
 {
-    return( kvs::Math::Round( m_max_raw_value * m_rescale_slope + m_rescale_intersept ) );
+    return kvs::Math::Round( m_max_raw_value * m_rescale_slope + m_rescale_intersept );
 }
 
 /*===========================================================================*/
@@ -452,9 +451,9 @@ const int Dicom::maxValue( void ) const
  *  @return  
  */
 /*===========================================================================*/
-const double Dicom::rescaleIntersept( void ) const
+double Dicom::rescaleIntersept() const
 {
-    return( m_rescale_intersept );
+    return m_rescale_intersept;
 }
 
 /*===========================================================================*/
@@ -463,9 +462,9 @@ const double Dicom::rescaleIntersept( void ) const
  *  @return  
  */
 /*===========================================================================*/
-const double Dicom::rescaleSlope( void ) const
+double Dicom::rescaleSlope() const
 {
-    return( m_rescale_slope );
+    return m_rescale_slope;
 }
 
 /*===========================================================================*/
@@ -473,9 +472,9 @@ const double Dicom::rescaleSlope( void ) const
  *  @brief  
  */
 /*===========================================================================*/
-const dcm::Attribute& Dicom::attribute( void ) const
+const dcm::Attribute& Dicom::attribute() const
 {
-    return( m_attribute );
+    return m_attribute;
 }
 
 /*===========================================================================*/
@@ -483,20 +482,9 @@ const dcm::Attribute& Dicom::attribute( void ) const
  *  @brief  
  */
 /*===========================================================================*/
-const std::list<dcm::Element>& Dicom::elementList( void ) const
+const std::list<dcm::Element>& Dicom::elementList() const
 {
-    return( m_element_list );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  
- *  @return  
- */
-/*===========================================================================*/
-const std::string& Dicom::modality( void ) const
-{
-    return( m_modality );
+    return m_element_list;
 }
 
 /*===========================================================================*/
@@ -505,9 +493,9 @@ const std::string& Dicom::modality( void ) const
  *  @return  
  */
 /*===========================================================================*/
-const kvs::Vector2f& Dicom::pixelSpacing( void ) const
+const std::string& Dicom::modality() const
 {
-    return( m_pixel_spacing );
+    return m_modality;
 }
 
 /*===========================================================================*/
@@ -516,9 +504,9 @@ const kvs::Vector2f& Dicom::pixelSpacing( void ) const
  *  @return  
  */
 /*===========================================================================*/
-const std::string& Dicom::manufacturer( void ) const
+const kvs::Vector2f& Dicom::pixelSpacing() const
 {
-    return( m_manufacturer );
+    return m_pixel_spacing;
 }
 
 /*===========================================================================*/
@@ -527,9 +515,9 @@ const std::string& Dicom::manufacturer( void ) const
  *  @return  
  */
 /*===========================================================================*/
-const double Dicom::sliceThickness( void ) const
+const std::string& Dicom::manufacturer() const
 {
-    return( m_slice_thickness );
+    return m_manufacturer;
 }
 
 /*===========================================================================*/
@@ -538,9 +526,20 @@ const double Dicom::sliceThickness( void ) const
  *  @return  
  */
 /*===========================================================================*/
-const double Dicom::sliceSpacing( void ) const
+double Dicom::sliceThickness() const
 {
-    return( m_slice_spacing );
+    return m_slice_thickness;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  
+ *  @return  
+ */
+/*===========================================================================*/
+double Dicom::sliceSpacing() const
+{
+    return m_slice_spacing;
 }
 
 /*===========================================================================*/
@@ -548,9 +547,9 @@ const double Dicom::sliceSpacing( void ) const
  *  @brief  
  */
 /*===========================================================================*/
-const dcm::Window& Dicom::window( void ) const
+const dcm::Window& Dicom::window() const
 {
-    return( m_window );
+    return m_window;
 }
 
 /*===========================================================================*/
@@ -558,9 +557,9 @@ const dcm::Window& Dicom::window( void ) const
  *  @brief  
  */
 /*===========================================================================*/
-const std::ios::pos_type& Dicom::position( void ) const
+const std::ios::pos_type& Dicom::position() const
 {
-    return( m_position );
+    return m_position;
 }
 
 /*===========================================================================*/
@@ -568,9 +567,9 @@ const std::ios::pos_type& Dicom::position( void ) const
  *  @brief  
  */
 /*===========================================================================*/
-const kvs::ValueArray<char>& Dicom::rawData( void ) const
+const kvs::ValueArray<char>& Dicom::rawData() const
 {
-    return( m_raw_data );
+    return m_raw_data;
 }
 
 /*===========================================================================*/
@@ -578,9 +577,9 @@ const kvs::ValueArray<char>& Dicom::rawData( void ) const
  *  @brief  
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::UInt8> Dicom::pixelData( void ) const
+kvs::ValueArray<kvs::UInt8> Dicom::pixelData() const
 {
-    return( this->get_pixel_data( m_window.level(), m_window.width() ) );
+    return this->get_pixel_data( m_window.level(), m_window.width() );
 }
 
 /*===========================================================================*/
@@ -591,7 +590,7 @@ const kvs::ValueArray<kvs::UInt8> Dicom::pixelData( void ) const
  *  @return  
  */
 /*===========================================================================*/
-const int Dicom::rawValue( const size_t index ) const
+int Dicom::rawValue( const size_t index ) const
 {
     int ret = 0;
 
@@ -622,7 +621,7 @@ const int Dicom::rawValue( const size_t index ) const
         }
     }
 
-    return( ret );
+    return ret;
 }
 
 /*===========================================================================*/
@@ -634,9 +633,9 @@ const int Dicom::rawValue( const size_t index ) const
  *  @return 
  */
 /*===========================================================================*/
-const int Dicom::rawValue( const size_t i, const size_t j ) const
+int Dicom::rawValue( const size_t i, const size_t j ) const
 {
-    return( this->rawValue( m_column * j + i ) );
+    return this->rawValue( m_column * j + i );
 }
 
 /*===========================================================================*/
@@ -646,11 +645,11 @@ const int Dicom::rawValue( const size_t i, const size_t j ) const
  *  @return rescaled pixel value
  */
 /*===========================================================================*/
-const int Dicom::value( const size_t index ) const
+int Dicom::value( const size_t index ) const
 {
     const int raw_value = this->rawValue( index );
 
-    return( kvs::Math::Round( raw_value * m_rescale_slope + m_rescale_intersept ) );
+    return kvs::Math::Round( raw_value * m_rescale_slope + m_rescale_intersept );
 }
 
 /*===========================================================================*/
@@ -661,11 +660,11 @@ const int Dicom::value( const size_t index ) const
  *  @return rescaled pixel value
  */
 /*===========================================================================*/
-const int Dicom::value( const size_t x, const size_t y ) const
+int Dicom::value( const size_t x, const size_t y ) const
 {
     const size_t raw_value = this->rawValue( x, y );
 
-    return( kvs::Math::Round( raw_value * m_rescale_slope + m_rescale_intersept ) );
+    return kvs::Math::Round( raw_value * m_rescale_slope + m_rescale_intersept );
 }
 
 /*===========================================================================*/
@@ -682,7 +681,7 @@ void Dicom::changeWindow( const int level, const int width )
     m_window.setWidth( width );
 }
 
-void Dicom::resetWindow( void )
+void Dicom::resetWindow()
 {
     // Set windowing parameters.
     m_window.setLevel( m_window_level );
@@ -712,7 +711,7 @@ void Dicom::setRawData( const kvs::ValueArray<char>& raw_data )
 /*===========================================================================*/
 std::list<dcm::Element>::iterator Dicom::findElement( const dcm::Tag tag )
 {
-    return( std::find( m_element_list.begin(), m_element_list.end(), tag ) );
+    return std::find( m_element_list.begin(), m_element_list.end(), tag );
 }
 
 /*===========================================================================*/
@@ -722,48 +721,50 @@ std::list<dcm::Element>::iterator Dicom::findElement( const dcm::Tag tag )
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool Dicom::read( const std::string& filename )
+bool Dicom::read( const std::string& filename )
 {
-    m_filename = filename;
+    BaseClass::setFilename( filename );
+    BaseClass::setSuccess( true );
 
     // Open the file.
     std::ifstream ifs( filename.c_str(), std::ios_base::binary );
     if( ifs.fail() )
     {
         kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // Check attribute.
     if( !m_attribute.check( ifs ) )
     {
         kvsMessageError("Fail the attribute check of the DICOM file.");
-
         ifs.close();
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // Read the header information.
     if( !this->read_header( ifs ) )
     {
         kvsMessageError("Cannot read the header of the DICOM file.");
-
         ifs.close();
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // Read the pixel data.
     if( !this->read_data( ifs ) )
     {
         kvsMessageError("Cannot read the pixel data of the DICOM file.");
-
         ifs.close();
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     ifs.close();
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -773,13 +774,17 @@ const bool Dicom::read( const std::string& filename )
  *  @return true if writing success, false if not.
  */
 /*===========================================================================*/
-const bool Dicom::write( const std::string& filename )
+bool Dicom::write( const std::string& filename )
 {
+    BaseClass::setFilename( filename );
+    BaseClass::setSuccess( true );
+
     std::ofstream ofs( filename.c_str(), std::ios::out | std::ios::binary );
     if( ofs.fail() )
     {
         kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     const kvs::File   file( filename );
@@ -793,12 +798,13 @@ const bool Dicom::write( const std::string& filename )
     if( !state )
     {
         kvsMessageError("Cannot write data.");
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     ofs.close();
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -808,7 +814,7 @@ const bool Dicom::write( const std::string& filename )
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool Dicom::read_header( std::ifstream& ifs )
+bool Dicom::read_header( std::ifstream& ifs )
 {
     // Read all elements.
     dcm::Element element;
@@ -818,7 +824,7 @@ const bool Dicom::read_header( std::ifstream& ifs )
         if( !element.read( ifs, m_attribute.swap() ) )
         {
             kvsMessageError("Cannot read the data element.");
-            return( false );
+            return false;
         }
 
 #if   DCM_DEBUG__STDOUT_KNOWN_ELEMENTS
@@ -837,7 +843,7 @@ const bool Dicom::read_header( std::ifstream& ifs )
         }
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -847,7 +853,7 @@ const bool Dicom::read_header( std::ifstream& ifs )
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool Dicom::read_data( std::ifstream& ifs )
+bool Dicom::read_data( std::ifstream& ifs )
 {
     // Go to the top of the pixel data region.
     ifs.seekg( m_position, std::ios::beg );
@@ -860,14 +866,14 @@ const bool Dicom::read_data( std::ifstream& ifs )
     if( ifs.bad() )
     {
         kvsMessageError("Cannot read the raw data.");
-        return( false );
+        return false;
     }
 
     this->set_windowing_parameter();
     this->set_min_max_window_value();
     this->set_min_max_raw_value();
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -877,12 +883,12 @@ const bool Dicom::read_data( std::ifstream& ifs )
  *  @return true, if the writting process is done successfully
  */
 /*===========================================================================*/
-const bool Dicom::write_header( std::ofstream& ofs )
+bool Dicom::write_header( std::ofstream& ofs )
 {
     std::list<dcm::Element>::iterator p = m_element_list.begin();
     while( p != m_element_list.end() ) ofs << *p++ << std::endl << std::endl;
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -890,9 +896,9 @@ const bool Dicom::write_header( std::ofstream& ofs )
  *  @brief  Write the DICOM header information as CSV format.
  *  @param  ofs [out] ouput file stream
  *  @return true, if the writting process is done successfully
-*/
+ */
 /*===========================================================================*/
-const bool Dicom::write_header_csv( std::ofstream& ofs )
+bool Dicom::write_header_csv( std::ofstream& ofs )
 {
     ofs << "Group ID,"
         << "Element ID,"
@@ -921,7 +927,7 @@ const bool Dicom::write_header_csv( std::ofstream& ofs )
         p++;
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -931,14 +937,14 @@ const bool Dicom::write_header_csv( std::ofstream& ofs )
  *  @return true, if the writting process is done successfully
  */
 /*===========================================================================*/
-const bool Dicom::write_raw_data( std::ofstream& ofs )
+bool Dicom::write_raw_data( std::ofstream& ofs )
 {
     ofs.write( m_raw_data.data(), m_raw_data.size() );
 
-    return( true );
+    return true;
 }
 
-void Dicom::set_windowing_parameter( void )
+void Dicom::set_windowing_parameter()
 {
     if( m_window_level == 0 && m_window_width == 0 )
     {
@@ -971,7 +977,7 @@ void Dicom::set_windowing_parameter( void )
  *  @brief  Set min/max window values.
  */
 /*===========================================================================*/
-void Dicom::set_min_max_window_value( void )
+void Dicom::set_min_max_window_value()
 {
     m_window.set( m_bits_stored, !m_pixel_representation );
     m_window.rescale( m_rescale_slope, m_rescale_intersept );
@@ -983,7 +989,7 @@ void Dicom::set_min_max_window_value( void )
  */
 /*===========================================================================*/
 template <typename T>
-void Dicom::calculate_min_max_raw_value( void )
+void Dicom::calculate_min_max_raw_value()
 {
     const T* raw_data = reinterpret_cast<const T*>( m_raw_data.data() );
 
@@ -1002,24 +1008,17 @@ void Dicom::calculate_min_max_raw_value( void )
     m_max_raw_value = kvs::Math::Round( max_raw_value );
 }
 
-template
-void Dicom::calculate_min_max_raw_value<kvs::Int8>( void );
-
-template
-void Dicom::calculate_min_max_raw_value<kvs::UInt8>( void );
-
-template
-void Dicom::calculate_min_max_raw_value<kvs::Int16>( void );
-
-template
-void Dicom::calculate_min_max_raw_value<kvs::UInt16>( void );
+template void Dicom::calculate_min_max_raw_value<kvs::Int8>();
+template void Dicom::calculate_min_max_raw_value<kvs::UInt8>();
+template void Dicom::calculate_min_max_raw_value<kvs::Int16>();
+template void Dicom::calculate_min_max_raw_value<kvs::UInt16>();
 
 /*===========================================================================*/
 /**
  *  @brief  Set min/max raw value.
  */
 /*===========================================================================*/
-void Dicom::set_min_max_raw_value( void )
+void Dicom::set_min_max_raw_value()
 {
     if( m_bits_allocated == 8 )
     {
@@ -1051,7 +1050,7 @@ void Dicom::set_min_max_raw_value( void )
  */
 /*===========================================================================*/
 template <typename T>
-const kvs::ValueArray<kvs::UInt8> Dicom::rescale_pixel_data( const int level, const int width ) const
+kvs::ValueArray<kvs::UInt8> Dicom::rescale_pixel_data( const int level, const int width ) const
 {
     kvs::ValueArray<kvs::UInt8> pixel_data( m_row * m_column );
     pixel_data.fill( 0 );
@@ -1067,12 +1066,12 @@ const kvs::ValueArray<kvs::UInt8> Dicom::rescale_pixel_data( const int level, co
         pixel_data[index] = static_cast<kvs::UInt8>( pixel_value );
     }
 
-    return( pixel_data );
+    return pixel_data;
 }
 
 // Specialization for 'kvs::Int8' type.
 template <>
-const kvs::ValueArray<kvs::UInt8> Dicom::rescale_pixel_data<kvs::Int8>( const int level, const int width ) const
+kvs::ValueArray<kvs::UInt8> Dicom::rescale_pixel_data<kvs::Int8>( const int level, const int width ) const
 {
     kvs::IgnoreUnusedVariable( level );
     kvs::IgnoreUnusedVariable( width );
@@ -1088,12 +1087,12 @@ const kvs::ValueArray<kvs::UInt8> Dicom::rescale_pixel_data<kvs::Int8>( const in
         pixel_data[index] = static_cast<kvs::UInt8>( raw_data[index] - kvs::Value<kvs::Int8>::Min() );
     }
 
-    return( pixel_data );
+    return pixel_data;
 }
 
 // Specialization for 'kvs::UInt8' type.
 template <>
-const kvs::ValueArray<kvs::UInt8> Dicom::rescale_pixel_data<kvs::UInt8>( const int level, const int width ) const
+kvs::ValueArray<kvs::UInt8> Dicom::rescale_pixel_data<kvs::UInt8>( const int level, const int width ) const
 {
     kvs::IgnoreUnusedVariable( level );
     kvs::IgnoreUnusedVariable( width );
@@ -1109,14 +1108,14 @@ const kvs::ValueArray<kvs::UInt8> Dicom::rescale_pixel_data<kvs::UInt8>( const i
         pixel_data[index] = raw_data[index];
     }
 
-    return( pixel_data );
+    return pixel_data;
 }
 
 template
-const kvs::ValueArray<kvs::UInt8> Dicom::rescale_pixel_data<kvs::Int16>( const int level, const int width ) const;
+kvs::ValueArray<kvs::UInt8> Dicom::rescale_pixel_data<kvs::Int16>( const int level, const int width ) const;
 
 template
-const kvs::ValueArray<kvs::UInt8> Dicom::rescale_pixel_data<kvs::UInt16>( const int level, const int width ) const;
+kvs::ValueArray<kvs::UInt8> Dicom::rescale_pixel_data<kvs::UInt16>( const int level, const int width ) const;
 
 /*===========================================================================*/
 /**
@@ -1124,17 +1123,17 @@ const kvs::ValueArray<kvs::UInt8> Dicom::rescale_pixel_data<kvs::UInt16>( const 
  *  @return pixel data array
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::UInt8> Dicom::get_pixel_data( const int level, const int width ) const
+kvs::ValueArray<kvs::UInt8> Dicom::get_pixel_data( const int level, const int width ) const
 {
     if( m_bits_allocated == 8 )
     {
         if( m_pixel_representation )
         {
-            return( this->rescale_pixel_data<kvs::UInt8>( level, width ) );
+            return this->rescale_pixel_data<kvs::UInt8>( level, width );
         }
         else
         {
-            return( this->rescale_pixel_data<kvs::Int8>( level, width ) );
+            return this->rescale_pixel_data<kvs::Int8>( level, width );
         }
     }
 
@@ -1142,11 +1141,11 @@ const kvs::ValueArray<kvs::UInt8> Dicom::get_pixel_data( const int level, const 
     {
         if( m_pixel_representation )
         {
-            return( this->rescale_pixel_data<kvs::UInt16>( level, width ) );
+            return this->rescale_pixel_data<kvs::UInt16>( level, width );
         }
         else
         {
-            return( this->rescale_pixel_data<kvs::Int16>( level, width ) );
+            return this->rescale_pixel_data<kvs::Int16>( level, width );
         }
     }
 
@@ -1155,7 +1154,7 @@ const kvs::ValueArray<kvs::UInt8> Dicom::get_pixel_data( const int level, const 
     kvs::ValueArray<kvs::UInt8> pixel_data( m_row * m_column );
     pixel_data.fill( 0 );
 
-    return( pixel_data );
+    return pixel_data;
 }
 
 /*===========================================================================*/
@@ -1332,26 +1331,26 @@ void Dicom::parse_element( dcm::Element& element )
     }
 }
 
-const bool Dicom::CheckFileExtension( const std::string& filename )
+bool Dicom::CheckFileExtension( const std::string& filename )
 {
     const kvs::File file( filename );
     if ( file.extension() == "dcm"   || file.extension() == "DCM" ||
          file.extension() == "dicom" || file.extension() == "DICOM" )
     {
-        return( true );
+        return true;
     }
 
-    return( false );
+    return false;
 }
 
-const bool Dicom::CheckFileFormat( const std::string& filename )
+bool Dicom::CheckFileFormat( const std::string& filename )
 {
     // Open the file.
     std::ifstream ifs( filename.c_str(), std::ios_base::binary );
     if( ifs.fail() )
     {
         kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return( false );
+        return false;
     }
 
     // Check attribute.
@@ -1359,11 +1358,11 @@ const bool Dicom::CheckFileFormat( const std::string& filename )
     if( !attribute.check( ifs ) )
     {
         ifs.close();
-        return( false );
+        return false;
     }
 
     ifs.close();
-    return( true );
+    return true;
 }
 
 } // end of namespace kvs

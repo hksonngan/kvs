@@ -27,7 +27,7 @@ namespace gf
  *  @brief  Construct a new MeshData class.
  */
 /*===========================================================================*/
-MeshData::MeshData( void ):
+MeshData::MeshData():
     m_dimensions( 0 ),
     m_nnodes_per_element( 0 ),
     m_nnodes( 0 ),
@@ -56,9 +56,9 @@ MeshData::MeshData( const std::string filename ):
  *  @return dimensions
  */
 /*===========================================================================*/
-const size_t MeshData::dimensions( void ) const
+size_t MeshData::dimensions() const
 {
-    return( m_dimensions );
+    return m_dimensions;
 }
 
 /*===========================================================================*/
@@ -67,9 +67,9 @@ const size_t MeshData::dimensions( void ) const
  *  @return number of nodes per element
  */
 /*===========================================================================*/
-const size_t MeshData::nnodesPerElement( void ) const
+size_t MeshData::nnodesPerElement() const
 {
-    return( m_nnodes_per_element );
+    return m_nnodes_per_element;
 }
 
 /*===========================================================================*/
@@ -78,9 +78,9 @@ const size_t MeshData::nnodesPerElement( void ) const
  *  @return number of nodes
  */
 /*===========================================================================*/
-const size_t MeshData::nnodes( void ) const
+size_t MeshData::nnodes() const
 {
-    return( m_nnodes );
+    return m_nnodes;
 }
 
 /*===========================================================================*/
@@ -89,9 +89,9 @@ const size_t MeshData::nnodes( void ) const
  *  @return number of elements
  */
 /*===========================================================================*/
-const size_t MeshData::nelements( void ) const
+size_t MeshData::nelements() const
 {
-    return( m_nelements );
+    return m_nelements;
 }
 
 /*===========================================================================*/
@@ -100,9 +100,9 @@ const size_t MeshData::nelements( void ) const
  *  @return coordinate values
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::Real32>& MeshData::coords( void ) const
+const kvs::ValueArray<kvs::Real32>& MeshData::coords() const
 {
-    return( m_coords );
+    return m_coords;
 }
 
 /*===========================================================================*/
@@ -111,9 +111,9 @@ const kvs::ValueArray<kvs::Real32>& MeshData::coords( void ) const
  *  @return connection values
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::UInt32>& MeshData::connections( void ) const
+const kvs::ValueArray<kvs::UInt32>& MeshData::connections() const
 {
-    return( m_connections );
+    return m_connections;
 }
 
 /*===========================================================================*/
@@ -123,19 +123,19 @@ const kvs::ValueArray<kvs::UInt32>& MeshData::connections( void ) const
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool MeshData::read( const std::string filename )
+bool MeshData::read( const std::string filename )
 {
     kvs::gf::File file;
     if ( !file.read( filename ) )
     {
         kvsMessageError("Cannot read mesh data file.");
-        return( false );
+        return false;
     }
 
     if ( file.dataSetList().size() != 1 )
     {
         kvsMessageError("Multiple data set is not supported in kvs::gf::MeshData.");
-        return( false );
+        return false;
     }
 
     const kvs::gf::DataSet& data_set = file.dataSet(0);
@@ -173,7 +173,7 @@ const bool MeshData::read( const std::string filename )
         }
     }
 
-    return( true );
+    return true;
 }
 
 } // end of namespace gf

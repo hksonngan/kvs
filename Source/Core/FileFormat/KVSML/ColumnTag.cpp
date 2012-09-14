@@ -30,7 +30,7 @@ namespace kvsml
  *  @brief  Constructs a new ColumnTag class.
  */
 /*===========================================================================*/
-ColumnTag::ColumnTag( void ):
+ColumnTag::ColumnTag():
     kvs::kvsml::TagBase( "Column" ),
     m_has_label( false ),
     m_has_min_value( false ),
@@ -51,9 +51,9 @@ ColumnTag::ColumnTag( void ):
  *  @return true, if the label has been specified
  */
 /*===========================================================================*/
-const bool ColumnTag::hasLabel( void ) const
+bool ColumnTag::hasLabel() const
 {
-    return( m_has_label );
+    return m_has_label;
 }
 
 /*===========================================================================*/
@@ -62,9 +62,9 @@ const bool ColumnTag::hasLabel( void ) const
  *  @return true, if the min_value has been specified
  */
 /*===========================================================================*/
-const bool ColumnTag::hasMinValue( void ) const
+bool ColumnTag::hasMinValue() const
 {
-    return( m_has_min_value );
+    return m_has_min_value;
 }
 
 /*===========================================================================*/
@@ -73,9 +73,9 @@ const bool ColumnTag::hasMinValue( void ) const
  *  @return true, if the max_value has been specified
  */
 /*===========================================================================*/
-const bool ColumnTag::hasMaxValue( void ) const
+bool ColumnTag::hasMaxValue() const
 {
-    return( m_has_max_value );
+    return m_has_max_value;
 }
 
 /*===========================================================================*/
@@ -84,9 +84,9 @@ const bool ColumnTag::hasMaxValue( void ) const
  *  @return true, if the min_range has been specified
  */
 /*===========================================================================*/
-const bool ColumnTag::hasMinRange( void ) const
+bool ColumnTag::hasMinRange() const
 {
-    return( m_has_min_range );
+    return m_has_min_range;
 }
 
 /*===========================================================================*/
@@ -95,9 +95,9 @@ const bool ColumnTag::hasMinRange( void ) const
  *  @return true, if the max_range has been specified
  */
 /*===========================================================================*/
-const bool ColumnTag::hasMaxRange( void ) const
+bool ColumnTag::hasMaxRange() const
 {
-    return( m_has_max_range );
+    return m_has_max_range;
 }
 
 /*===========================================================================*/
@@ -106,9 +106,9 @@ const bool ColumnTag::hasMaxRange( void ) const
  *  @return label
  */
 /*===========================================================================*/
-const std::string& ColumnTag::label( void ) const
+const std::string& ColumnTag::label() const
 {
-    return( m_label );
+    return m_label;
 }
 
 /*===========================================================================*/
@@ -117,9 +117,9 @@ const std::string& ColumnTag::label( void ) const
  *  @return min. value
  */
 /*===========================================================================*/
-const double ColumnTag::minValue( void ) const
+double ColumnTag::minValue() const
 {
-    return( m_min_value );
+    return m_min_value;
 }
 
 /*===========================================================================*/
@@ -128,9 +128,9 @@ const double ColumnTag::minValue( void ) const
  *  @return max. value
  */
 /*===========================================================================*/
-const double ColumnTag::maxValue( void ) const
+double ColumnTag::maxValue() const
 {
-    return( m_max_value );
+    return m_max_value;
 }
 
 /*===========================================================================*/
@@ -139,9 +139,9 @@ const double ColumnTag::maxValue( void ) const
  *  @return min. range
  */
 /*===========================================================================*/
-const double ColumnTag::minRange( void ) const
+double ColumnTag::minRange() const
 {
-    return( m_min_range );
+    return m_min_range;
 }
 
 /*===========================================================================*/
@@ -150,9 +150,9 @@ const double ColumnTag::minRange( void ) const
  *  @return max. range
  */
 /*===========================================================================*/
-const double ColumnTag::maxRange( void ) const
+double ColumnTag::maxRange() const
 {
-    return( m_max_range );
+    return m_max_range;
 }
 
 /*===========================================================================*/
@@ -222,7 +222,7 @@ void ColumnTag::setMaxRange( const double range )
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool ColumnTag::read( const kvs::XMLNode::SuperClass* parent )
+bool ColumnTag::read( const kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
 
@@ -230,13 +230,13 @@ const bool ColumnTag::read( const kvs::XMLNode::SuperClass* parent )
     if ( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
     // Element
     const kvs::XMLElement::SuperClass* element = kvs::XMLNode::ToElement( BaseClass::m_node );
 
-    return( this->read( element ) );
+    return this->read( element );
 }
 
 /*===========================================================================*/
@@ -246,7 +246,7 @@ const bool ColumnTag::read( const kvs::XMLNode::SuperClass* parent )
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool ColumnTag::read( const kvs::XMLElement::SuperClass* element )
+bool ColumnTag::read( const kvs::XMLElement::SuperClass* element )
 {
     m_has_label = false;
     m_has_min_value = false;
@@ -279,7 +279,7 @@ const bool ColumnTag::read( const kvs::XMLElement::SuperClass* element )
     const std::string max_range = kvs::XMLElement::AttributeValue( element, "max_range" );
     if ( max_range != "" ) { this->setMaxRange( atof( max_range.c_str() ) ); }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -289,7 +289,7 @@ const bool ColumnTag::read( const kvs::XMLElement::SuperClass* element )
  *  @return true, if the writting process is done successfully
  */
 /*===========================================================================*/
-const bool ColumnTag::write( kvs::XMLNode::SuperClass* parent )
+bool ColumnTag::write( kvs::XMLNode::SuperClass* parent )
 {
     const std::string tag_name = BaseClass::name();
     kvs::XMLElement element( tag_name );
@@ -333,10 +333,10 @@ const bool ColumnTag::write( kvs::XMLNode::SuperClass* parent )
     if( !BaseClass::m_node )
     {
         kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
-        return( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 } // end of namespace kvsml

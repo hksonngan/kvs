@@ -49,7 +49,7 @@ inline const size_t GetNumberOfNodesPerElement( const std::string& cell_type )
     else if ( cell_type == "pyramid" ) nnodes = 5;
     else if ( cell_type == "point" ) nnodes = 1;
 
-    return( nnodes );
+    return nnodes;
 }
 
 } // end of namespace
@@ -63,7 +63,7 @@ namespace kvs
  *  @brief  Constructs a new KVSML object unstructured volume object class.
  */
 /*===========================================================================*/
-KVSMLObjectUnstructuredVolume::KVSMLObjectUnstructuredVolume( void ):
+KVSMLObjectUnstructuredVolume::KVSMLObjectUnstructuredVolume():
     m_writing_type( kvs::KVSMLObjectUnstructuredVolume::Ascii ),
     m_cell_type( "" ),
     m_has_label( false ),
@@ -97,8 +97,7 @@ KVSMLObjectUnstructuredVolume::KVSMLObjectUnstructuredVolume( const std::string&
     m_min_value( 0.0 ),
     m_max_value( 0.0 )
 {
-    if( this->read( filename ) ) { m_is_success = true; }
-    else { m_is_success = false; }
+    this->read( filename );
 }
 
 /*===========================================================================*/
@@ -106,7 +105,7 @@ KVSMLObjectUnstructuredVolume::KVSMLObjectUnstructuredVolume( const std::string&
  *  @brief  Destructs the KVSML object unstructured volume object class.
  */
 /*===========================================================================*/
-KVSMLObjectUnstructuredVolume::~KVSMLObjectUnstructuredVolume( void )
+KVSMLObjectUnstructuredVolume::~KVSMLObjectUnstructuredVolume()
 {
 }
 
@@ -116,9 +115,9 @@ KVSMLObjectUnstructuredVolume::~KVSMLObjectUnstructuredVolume( void )
  *  @return KVSML tag
  */
 /*===========================================================================*/
-const kvs::kvsml::KVSMLTag& KVSMLObjectUnstructuredVolume::KVSMLTag( void ) const
+const kvs::kvsml::KVSMLTag& KVSMLObjectUnstructuredVolume::KVSMLTag() const
 {
-    return( m_kvsml_tag );
+    return m_kvsml_tag;
 }
 
 /*===========================================================================*/
@@ -127,9 +126,9 @@ const kvs::kvsml::KVSMLTag& KVSMLObjectUnstructuredVolume::KVSMLTag( void ) cons
  *  @return object tag
  */
 /*===========================================================================*/
-const kvs::kvsml::ObjectTag& KVSMLObjectUnstructuredVolume::objectTag( void ) const
+const kvs::kvsml::ObjectTag& KVSMLObjectUnstructuredVolume::objectTag() const
 {
-    return( m_object_tag );
+    return m_object_tag;
 }
 
 /*===========================================================================*/
@@ -138,19 +137,19 @@ const kvs::kvsml::ObjectTag& KVSMLObjectUnstructuredVolume::objectTag( void ) co
  *  @return cell type
  */
 /*===========================================================================*/
-const std::string& KVSMLObjectUnstructuredVolume::cellType( void ) const
+const std::string& KVSMLObjectUnstructuredVolume::cellType() const
 {
-    return( m_cell_type );
+    return m_cell_type;
 }
 
-const bool KVSMLObjectUnstructuredVolume::hasLabel( void ) const
+bool KVSMLObjectUnstructuredVolume::hasLabel() const
 {
-    return( m_has_label );
+    return m_has_label;
 }
 
-const std::string& KVSMLObjectUnstructuredVolume::label( void ) const
+const std::string& KVSMLObjectUnstructuredVolume::label() const
 {
-    return( m_label );
+    return m_label;
 }
 
 /*===========================================================================*/
@@ -159,9 +158,9 @@ const std::string& KVSMLObjectUnstructuredVolume::label( void ) const
  *  @return vector length
  */
 /*===========================================================================*/
-const size_t KVSMLObjectUnstructuredVolume::veclen( void ) const
+size_t KVSMLObjectUnstructuredVolume::veclen() const
 {
-    return( m_veclen );
+    return m_veclen;
 }
 
 /*===========================================================================*/
@@ -170,9 +169,9 @@ const size_t KVSMLObjectUnstructuredVolume::veclen( void ) const
  *  @return number of nodes
  */
 /*===========================================================================*/
-const size_t KVSMLObjectUnstructuredVolume::nnodes( void ) const
+size_t KVSMLObjectUnstructuredVolume::nnodes() const
 {
-    return( m_nnodes );
+    return m_nnodes;
 }
 
 /*===========================================================================*/
@@ -181,29 +180,29 @@ const size_t KVSMLObjectUnstructuredVolume::nnodes( void ) const
  *  @return number of cells
  */
 /*===========================================================================*/
-const size_t KVSMLObjectUnstructuredVolume::ncells( void ) const
+size_t KVSMLObjectUnstructuredVolume::ncells() const
 {
-    return( m_ncells );
+    return m_ncells;
 }
 
-const bool KVSMLObjectUnstructuredVolume::hasMinValue( void ) const
+bool KVSMLObjectUnstructuredVolume::hasMinValue() const
 {
-    return( m_has_min_value );
+    return m_has_min_value;
 }
 
-const bool KVSMLObjectUnstructuredVolume::hasMaxValue( void ) const
+bool KVSMLObjectUnstructuredVolume::hasMaxValue() const
 {
-    return( m_has_max_value );
+    return m_has_max_value;
 }
 
-const double KVSMLObjectUnstructuredVolume::minValue( void ) const
+double KVSMLObjectUnstructuredVolume::minValue() const
 {
-    return( m_min_value );
+    return m_min_value;
 }
 
-const double KVSMLObjectUnstructuredVolume::maxValue( void ) const
+double KVSMLObjectUnstructuredVolume::maxValue() const
 {
-    return( m_max_value );
+    return m_max_value;
 }
 
 /*===========================================================================*/
@@ -212,9 +211,9 @@ const double KVSMLObjectUnstructuredVolume::maxValue( void ) const
  *  @return value array
  */
 /*===========================================================================*/
-const kvs::AnyValueArray& KVSMLObjectUnstructuredVolume::values( void ) const
+const kvs::AnyValueArray& KVSMLObjectUnstructuredVolume::values() const
 {
-    return( m_values );
+    return m_values;
 }
 
 /*===========================================================================*/
@@ -223,9 +222,9 @@ const kvs::AnyValueArray& KVSMLObjectUnstructuredVolume::values( void ) const
  *  @return coordinate array
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::Real32>& KVSMLObjectUnstructuredVolume::coords( void ) const
+const kvs::ValueArray<kvs::Real32>& KVSMLObjectUnstructuredVolume::coords() const
 {
-    return( m_coords );
+    return m_coords;
 }
 
 /*===========================================================================*/
@@ -234,9 +233,9 @@ const kvs::ValueArray<kvs::Real32>& KVSMLObjectUnstructuredVolume::coords( void 
  *  @return connection array
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::UInt32>& KVSMLObjectUnstructuredVolume::connections( void ) const
+const kvs::ValueArray<kvs::UInt32>& KVSMLObjectUnstructuredVolume::connections() const
 {
-    return( m_connections );
+    return m_connections;
 }
 
 /*===========================================================================*/
@@ -352,30 +351,34 @@ void KVSMLObjectUnstructuredVolume::setConnections( const kvs::ValueArray<kvs::U
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool KVSMLObjectUnstructuredVolume::read( const std::string& filename )
+bool KVSMLObjectUnstructuredVolume::read( const std::string& filename )
 {
-    m_filename = filename;
+    BaseClass::setFilename( filename );
+    BaseClass::setSuccess( true );
 
     // XML document
     kvs::XMLDocument document;
     if ( !document.read( filename ) )
     {
         kvsMessageError( "%s", document.ErrorDesc().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <KVSML>
     if ( !m_kvsml_tag.read( &document ) )
     {
         kvsMessageError( "Cannot read <%s>.", m_kvsml_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <Object>
     if ( !m_object_tag.read( m_kvsml_tag.node() ) )
     {
         kvsMessageError( "Cannot read <%s>.", m_object_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <UnstructuredVolumeObject>
@@ -383,13 +386,15 @@ const bool KVSMLObjectUnstructuredVolume::read( const std::string& filename )
     if ( !volume_tag.read( m_object_tag.node() ) )
     {
         kvsMessageError( "Cannot read <%s>.", volume_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     if ( !volume_tag.hasCellType() )
     {
         kvsMessageError( "'cell_type' is not specified in <%s>.", volume_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
     m_cell_type = volume_tag.cellType();
 
@@ -398,13 +403,15 @@ const bool KVSMLObjectUnstructuredVolume::read( const std::string& filename )
     if ( !node_tag.read( volume_tag.node() ) )
     {
         kvsMessageError( "Cannot read <%s>.", node_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     if ( !node_tag.hasNNodes() )
     {
         kvsMessageError( "'nnodes' is not specified in <%s>.", node_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
     m_nnodes = node_tag.nnodes();
 
@@ -413,7 +420,8 @@ const bool KVSMLObjectUnstructuredVolume::read( const std::string& filename )
     if ( !value_tag.read( node_tag.node() ) )
     {
         kvsMessageError( "Cannot read <%s>.", value_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     m_has_label = value_tag.hasLabel();
@@ -422,7 +430,8 @@ const bool KVSMLObjectUnstructuredVolume::read( const std::string& filename )
     if ( !value_tag.hasVeclen() )
     {
         kvsMessageError( "'veclen' is not specified in <%s>.", value_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
     m_veclen = value_tag.veclen();
 
@@ -440,7 +449,8 @@ const bool KVSMLObjectUnstructuredVolume::read( const std::string& filename )
         kvsMessageError( "Cannot read <%s> for <%s>.",
                          values.name().c_str(),
                          value_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <Coord>
@@ -448,7 +458,8 @@ const bool KVSMLObjectUnstructuredVolume::read( const std::string& filename )
     if ( !coord_tag.read( node_tag.node() ) )
     {
         kvsMessageError( "Cannot read <%s>.", coord_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <DataArray>
@@ -460,7 +471,8 @@ const bool KVSMLObjectUnstructuredVolume::read( const std::string& filename )
         kvsMessageError( "Cannot read <%s> for <%s>.",
                          coords.name().c_str(),
                          coord_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <Cell>
@@ -468,13 +480,15 @@ const bool KVSMLObjectUnstructuredVolume::read( const std::string& filename )
     if ( !cell_tag.read( volume_tag.node() ) )
     {
         kvsMessageError( "Cannot read <%s>.", cell_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     if ( !cell_tag.hasNCells() )
     {
         kvsMessageError( "'ncells' is not specified in <%s>.", cell_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
     m_ncells = cell_tag.ncells();
 
@@ -483,7 +497,8 @@ const bool KVSMLObjectUnstructuredVolume::read( const std::string& filename )
     if ( !connection_tag.read( cell_tag.node() ) )
     {
         kvsMessageError( "Cannot read <%s>.", connection_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <DataArray>
@@ -495,10 +510,11 @@ const bool KVSMLObjectUnstructuredVolume::read( const std::string& filename )
         kvsMessageError( "Cannot read <%s> for <%s>.",
                          connections.name().c_str(),
                          connection_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -508,9 +524,10 @@ const bool KVSMLObjectUnstructuredVolume::read( const std::string& filename )
  *  @return true, if the writing process is done successfully
  */
 /*===========================================================================*/
-const bool KVSMLObjectUnstructuredVolume::write( const std::string& filename )
+bool KVSMLObjectUnstructuredVolume::write( const std::string& filename )
 {
-    m_filename = filename;
+    BaseClass::setFilename( filename );
+    BaseClass::setSuccess( true );
 
     kvs::XMLDocument document;
     document.InsertEndChild( kvs::XMLDeclaration("1.0") );
@@ -521,7 +538,8 @@ const bool KVSMLObjectUnstructuredVolume::write( const std::string& filename )
     if ( !kvsml_tag.write( &document ) )
     {
         kvsMessageError( "Cannot write <%s>.", m_kvsml_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <Object type="UnstructuredVolumeObject">
@@ -530,7 +548,8 @@ const bool KVSMLObjectUnstructuredVolume::write( const std::string& filename )
     if ( !object_tag.write( kvsml_tag.node() ) )
     {
         kvsMessageError( "Cannot write <%s>.", object_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <UnstructuredVolumeObject cell_type="xxx">
@@ -539,7 +558,8 @@ const bool KVSMLObjectUnstructuredVolume::write( const std::string& filename )
     if ( !volume_tag.write( object_tag.node() ) )
     {
         kvsMessageError( "Cannot write <%s>.", volume_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <Node nnodes="xxx">
@@ -548,7 +568,8 @@ const bool KVSMLObjectUnstructuredVolume::write( const std::string& filename )
     if ( !node_tag.write( volume_tag.node() ) )
     {
         kvsMessageError( "Cannot write <%s>.", node_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <Value label="xxx" veclen="xxx" min_value="xxx" max_value="xxx">
@@ -562,29 +583,31 @@ const bool KVSMLObjectUnstructuredVolume::write( const std::string& filename )
     if ( !value_tag.write( node_tag.node() ) )
     {
         kvsMessageError( "Cannot write <%s>.", value_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <DataArray>
     kvs::kvsml::DataArrayTag values;
     if ( m_writing_type == ExternalAscii )
     {
-        values.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "value" ) );
+        values.setFile( kvs::kvsml::DataArray::GetDataFilename( filename, "value" ) );
         values.setFormat( "ascii" );
     }
     else if ( m_writing_type == ExternalBinary )
     {
-        values.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "value" ) );
+        values.setFile( kvs::kvsml::DataArray::GetDataFilename( filename, "value" ) );
         values.setFormat( "binary" );
     }
 
-    const std::string pathname = kvs::File( m_filename ).pathName();
+    const std::string pathname = kvs::File( filename ).pathName();
     if ( !values.write( value_tag.node(), m_values, pathname ) )
     {
         kvsMessageError( "Cannot write <%s> for <%s>.",
                          values.name().c_str(),
                          value_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <Coord>
@@ -592,19 +615,20 @@ const bool KVSMLObjectUnstructuredVolume::write( const std::string& filename )
     if ( !coord_tag.write( node_tag.node() ) )
     {
         kvsMessageError( "Cannot write <%s>.", coord_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <DataArray>
     kvs::kvsml::DataArrayTag coords;
     if ( m_writing_type == ExternalAscii )
     {
-        coords.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "coord" ) );
+        coords.setFile( kvs::kvsml::DataArray::GetDataFilename( filename, "coord" ) );
         coords.setFormat( "ascii" );
     }
     else if ( m_writing_type == ExternalBinary )
     {
-        coords.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "coord" ) );
+        coords.setFile( kvs::kvsml::DataArray::GetDataFilename( filename, "coord" ) );
         coords.setFormat( "binary" );
     }
 
@@ -613,7 +637,8 @@ const bool KVSMLObjectUnstructuredVolume::write( const std::string& filename )
         kvsMessageError( "Cannot write <%s> for <%s>.",
                          coords.name().c_str(),
                          coord_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <Cell ncells="xxx">
@@ -622,7 +647,8 @@ const bool KVSMLObjectUnstructuredVolume::write( const std::string& filename )
     if ( !cell_tag.write( volume_tag.node() ) )
     {
         kvsMessageError( "Cannot write <%s>.", cell_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <Connection>
@@ -630,19 +656,20 @@ const bool KVSMLObjectUnstructuredVolume::write( const std::string& filename )
     if ( !connection_tag.write( cell_tag.node() ) )
     {
         kvsMessageError( "Cannot write <%s>.", connection_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // <DataArray>
     kvs::kvsml::DataArrayTag connections;
     if ( m_writing_type == ExternalAscii )
     {
-        connections.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "connect" ) );
+        connections.setFile( kvs::kvsml::DataArray::GetDataFilename( filename, "connect" ) );
         connections.setFormat( "ascii" );
     }
     else if ( m_writing_type == ExternalBinary )
     {
-        connections.setFile( kvs::kvsml::DataArray::GetDataFilename( m_filename, "connect" ) );
+        connections.setFile( kvs::kvsml::DataArray::GetDataFilename( filename, "connect" ) );
         connections.setFormat( "binary" );
     }
 
@@ -651,10 +678,14 @@ const bool KVSMLObjectUnstructuredVolume::write( const std::string& filename )
         kvsMessageError( "Cannot write <%s> for <%s>.",
                          connections.name().c_str(),
                          connection_tag.name().c_str() );
-        return( false );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
-    return( document.write( m_filename ) );
+    const bool success = document.write( filename );
+    BaseClass::setSuccess( success );
+
+    return success;
 }
 
 /*===========================================================================*/
@@ -664,7 +695,7 @@ const bool KVSMLObjectUnstructuredVolume::write( const std::string& filename )
  *  @return true, if the given filename has the supported extension
  */
 /*===========================================================================*/
-const bool KVSMLObjectUnstructuredVolume::CheckFileExtension( const std::string& filename )
+bool KVSMLObjectUnstructuredVolume::CheckFileExtension( const std::string& filename )
 {
     const kvs::File file( filename );
     if ( file.extension() == "kvsml" ||
@@ -672,10 +703,10 @@ const bool KVSMLObjectUnstructuredVolume::CheckFileExtension( const std::string&
          file.extension() == "xml"   ||
          file.extension() == "XML" )
     {
-        return( true );
+        return true;
     }
 
-    return( false );
+    return false;
 }
 
 /*===========================================================================*/
@@ -685,26 +716,26 @@ const bool KVSMLObjectUnstructuredVolume::CheckFileExtension( const std::string&
  *  @return true, if the KVSMLObjectUnstructuredVolume class can read the given file
  */
 /*===========================================================================*/
-const bool KVSMLObjectUnstructuredVolume::CheckFileFormat( const std::string& filename )
+bool KVSMLObjectUnstructuredVolume::CheckFileFormat( const std::string& filename )
 {
     kvs::XMLDocument document;
-    if ( !document.read( filename ) ) return( false );
+    if ( !document.read( filename ) ) return false;
 
     // <KVSML>
     kvs::kvsml::KVSMLTag kvsml_tag;
-    if ( !kvsml_tag.read( &document ) ) return( false );
+    if ( !kvsml_tag.read( &document ) ) return false;
 
     // <Object>
     kvs::kvsml::ObjectTag object_tag;
-    if ( !object_tag.read( kvsml_tag.node() ) ) return( false );
+    if ( !object_tag.read( kvsml_tag.node() ) ) return false;
 
-    if ( object_tag.type() != "UnstructuredVolumeObject" ) return( false );
+    if ( object_tag.type() != "UnstructuredVolumeObject" ) return false;
 
     // <UnstructuredVolumeObject>
     kvs::kvsml::UnstructuredVolumeObjectTag volume_tag;
-    if ( !volume_tag.read( object_tag.node() ) ) return( false );
+    if ( !volume_tag.read( object_tag.node() ) ) return false;
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -722,7 +753,7 @@ std::ostream& operator <<( std::ostream& os, const KVSMLObjectUnstructuredVolume
     os << "Num. of cells: " << rhs.m_ncells << std::endl;
     os << "Value type: " << rhs.m_values.typeInfo()->typeName();
 
-    return( os );
+    return os;
 }
 
 } // end of namespace kvs

@@ -26,7 +26,7 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-Ppm::Ppm( void )
+Ppm::Ppm()
 {
 }
 
@@ -54,8 +54,7 @@ Ppm::Ppm( const size_t width, const size_t height, const kvs::ValueArray<kvs::UI
 /*==========================================================================*/
 Ppm::Ppm( const std::string& filename )
 {
-    if( this->read( filename ) ) { m_is_success = true; }
-    else { m_is_success = false; }
+    this->read( filename );
 }
 
 /*==========================================================================*/
@@ -64,9 +63,9 @@ Ppm::Ppm( const std::string& filename )
  *  @return header information
  */
 /*==========================================================================*/
-const Ppm::Header& Ppm::header( void ) const
+const Ppm::Header& Ppm::header() const
 {
-    return( m_header );
+    return m_header;
 }
 
 /*==========================================================================*/
@@ -75,9 +74,9 @@ const Ppm::Header& Ppm::header( void ) const
  *  @return image width
  */
 /*==========================================================================*/
-const size_t Ppm::width( void ) const
+size_t Ppm::width() const
 {
-    return( m_width );
+    return m_width;
 }
 
 /*==========================================================================*/
@@ -86,9 +85,9 @@ const size_t Ppm::width( void ) const
  *  @return image height
  */
 /*==========================================================================*/
-const size_t Ppm::height( void ) const
+size_t Ppm::height() const
 {
-    return( m_height );
+    return m_height;
 }
 
 /*==========================================================================*/
@@ -97,9 +96,9 @@ const size_t Ppm::height( void ) const
  *  @return pixel data
  */
 /*==========================================================================*/
-const kvs::ValueArray<kvs::UInt8>& Ppm::data( void ) const
+const kvs::ValueArray<kvs::UInt8>& Ppm::data() const
 {
-    return( m_data );
+    return m_data;
 }
 
 /*==========================================================================*/
@@ -109,25 +108,26 @@ const kvs::ValueArray<kvs::UInt8>& Ppm::data( void ) const
  *  @return true, if the reading process is done successfully
  */
 /*==========================================================================*/
-const bool Ppm::read( const std::string& filename )
+bool Ppm::read( const std::string& filename )
 {
-    BaseClass::m_filename = filename;
+    BaseClass::setFilename( filename );
+    BaseClass::setSuccess( true );
 
     // Open the file.
-    std::ifstream ifs( m_filename.c_str(), std::ios::binary | std::ios::in );
+    std::ifstream ifs( filename.c_str(), std::ios::binary | std::ios::in );
     if( !ifs.is_open() )
     {
-        kvsMessageError( "Cannot open %s.", m_filename.c_str() );
-        BaseClass::m_is_success = false;
-        return( BaseClass::m_is_success );
+        kvsMessageError( "Cannot open %s.", filename.c_str() );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // Read header information.
     m_header.read( ifs );
 
     // Get the image information.
-    m_width   = m_header.width();
-    m_height  = m_header.height();
+    m_width  = m_header.width();
+    m_height = m_header.height();
 
     // Allocate the pixel data.
     const size_t npixels = m_width * m_height;
@@ -153,17 +153,16 @@ const bool Ppm::read( const std::string& filename )
     }
     else
     {
-        kvsMessageError( "%s is not PPM format.", m_filename.c_str() );
+        kvsMessageError( "%s is not PPM format.", filename.c_str() );
         ifs.close();
 
-        BaseClass::m_is_success = false;
-        return( BaseClass::m_is_success );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     ifs.close();
 
-    BaseClass::m_is_success = true;
-    return( BaseClass::m_is_success );
+    return true;
 }
 
 /*==========================================================================*/
@@ -173,17 +172,18 @@ const bool Ppm::read( const std::string& filename )
  *  @return true, if the writing process is done successfully
  */
 /*==========================================================================*/
-const bool Ppm::write( const std::string& filename )
+bool Ppm::write( const std::string& filename )
 {
-    BaseClass::m_filename = filename;
+    BaseClass::setFilename( filename );
+    BaseClass::setSuccess( true );
 
     // Open the file.
-    std::ofstream ofs( m_filename.c_str(), std::ios::binary | std::ios::out | std::ios::trunc );
+    std::ofstream ofs( filename.c_str(), std::ios::binary | std::ios::out | std::ios::trunc );
     if( !ofs.is_open() )
     {
-        kvsMessageError( "Cannot open %s.", m_filename.c_str() );
-        BaseClass::m_is_success = false;
-        return( BaseClass::m_is_success );
+        kvsMessageError( "Cannot open %s.", filename.c_str() );
+        BaseClass::setSuccess( false );
+        return false;
     }
 
     // Write header information.
@@ -193,8 +193,7 @@ const bool Ppm::write( const std::string& filename )
     ofs.write( reinterpret_cast<char*>( m_data.data() ), m_header.size() );
     ofs.close();
 
-    BaseClass::m_is_success = true;
-    return( BaseClass::m_is_success );
+    return true;
 }
 
 /*===========================================================================*/
@@ -202,43 +201,43 @@ const bool Ppm::write( const std::string& filename )
  *  @brief  Set header information.
  */
 /*===========================================================================*/
-void Ppm::set_header( void )
+void Ppm::set_header()
 {
     const std::string format = "P6";
     m_header.set( format, m_width, m_height );
 }
 
-const bool Ppm::CheckFileExtension( const std::string& filename )
+bool Ppm::CheckFileExtension( const std::string& filename )
 {
     const kvs::File file( filename );
     if ( file.extension() == "ppm" || file.extension() == "PPM" )
     {
-        return( true );
+        return true;
     }
 
-    return( false );
+    return false;
 }
 
-const bool Ppm::CheckFileFormat( const std::string& filename )
+bool Ppm::CheckFileFormat( const std::string& filename )
 {
     // Open the file.
     std::ifstream ifs( filename.c_str(), std::ios::binary | std::ios::in );
     if( !ifs.is_open() )
     {
         kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return( false );
+        return false;
     }
 
     // Read header information.
     kvs::pnm::Header header( ifs );
-    return( header.isP2() || header.isP5() );
+    return header.isP2() || header.isP5();
 }
 
 std::ostream& operator <<( std::ostream& os, const Ppm& rhs )
 {
     os << rhs.m_header;
 
-    return( os );
+    return os;
 }
 
 } // end of namespace kvs

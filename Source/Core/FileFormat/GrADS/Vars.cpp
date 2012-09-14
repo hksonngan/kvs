@@ -32,13 +32,13 @@ namespace grads
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool Vars::read( std::string line, std::ifstream& ifs )
+bool Vars::read( std::string line, std::ifstream& ifs )
 {
     kvs::Tokenizer t( line, " \t\n" );
     t.token(); // VARS
 
     // varnum
-    if ( t.isLast() ) return( false );
+    if ( t.isLast() ) return false;
     const size_t varnum = static_cast<size_t>( atoi( t.token().c_str() ) );
 
     this->values.clear();
@@ -50,26 +50,26 @@ const bool Vars::read( std::string line, std::ifstream& ifs )
         Var var;
 
         // varname
-        if ( t.isLast() ) return( false );
+        if ( t.isLast() ) return false;
         var.varname = t.token();
 
         // levs
-        if ( t.isLast() ) return( false );
+        if ( t.isLast() ) return false;
         var.levs = atoi( t.token().c_str() );
 
         // units
-        if ( t.isLast() ) return( false );
+        if ( t.isLast() ) return false;
         var.units = static_cast<float>( atof( t.token().c_str() ) );
 
         // description
-        if ( t.isLast() ) return( false );
+        if ( t.isLast() ) return false;
         var.description = t.token();
         while ( !t.isLast() ) { var.description += " " + t.token(); }
 
         this->values.push_back( var );
     }
 
-    return( true );
+    return true;
 }
 
 } // end of namespace grads

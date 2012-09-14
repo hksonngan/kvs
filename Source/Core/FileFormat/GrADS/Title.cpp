@@ -30,14 +30,14 @@ namespace grads
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-const bool Title::read( std::string line, std::ifstream& ifs )
+bool Title::read( std::string line, std::ifstream& ifs )
 {
     kvs::Tokenizer t( line, " \t\n" );
     t.token(); // TITLE
 
     this->name = t.token();
 
-    return( true );
+    return true;
 }
 
 } // end of namespace grads

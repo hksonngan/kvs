@@ -37,50 +37,44 @@ class Pgm : public kvs::FileFormatBase
 public:
 
     typedef kvs::FileFormatBase BaseClass;
-    typedef kvs::pnm::Header    Header;
+    typedef kvs::pnm::Header Header;
 
 private:
 
-    Pgm::Header                 m_header; ///< header information
-    size_t                      m_width;  ///< width
-    size_t                      m_height; ///< height
-    kvs::ValueArray<kvs::UInt8> m_data;   ///< pixel data
+    Pgm::Header m_header; ///< header information
+    size_t m_width; ///< width
+    size_t m_height; ///< height
+    kvs::ValueArray<kvs::UInt8> m_data; ///< pixel data
 
 public:
 
-    Pgm( void );
-
+    Pgm();
     Pgm( const size_t width, const size_t height, const kvs::ValueArray<kvs::UInt8>& data );
-
     Pgm( const std::string& filename );
 
 public:
 
-    const Pgm::Header& header( void ) const;
+    const Pgm::Header& header() const;
 
 public:
 
-    const size_t width( void ) const;
-
-    const size_t height( void ) const;
-
-    const kvs::ValueArray<kvs::UInt8>& data( void ) const;
+    size_t width() const;
+    size_t height() const;
+    const kvs::ValueArray<kvs::UInt8>& data() const;
 
 public:
 
-    const bool read( const std::string& filename );
-
-    const bool write( const std::string& filename );
+    bool read( const std::string& filename );
+    bool write( const std::string& filename );
 
 protected:
 
-    void set_header( void );
+    void set_header();
 
 public:
 
-    static const bool CheckFileExtension( const std::string& filename );
-
-    static const bool CheckFileFormat( const std::string& filename );
+    static bool CheckFileExtension( const std::string& filename );
+    static bool CheckFileFormat( const std::string& filename );
 
     friend std::ostream& operator <<( std::ostream& os, const Pgm& rhs );
 };

@@ -38,7 +38,7 @@ namespace dcm
  *  @brief  Constructor.
  */
 /*===========================================================================*/
-Element::Element( void )
+Element::Element()
 {
 }
 
@@ -59,33 +59,33 @@ Element::Element( std::ifstream& ifs, const bool swap )
  *  @brief  Destructor.
  */
 /*===========================================================================*/
-Element::~Element( void )
+Element::~Element()
 {
 }
 
-const bool operator == ( const Element& e, const dcm::Tag t )
+bool operator == ( const Element& e, const dcm::Tag t )
 {
-    return( e.m_tag == t );
+    return e.m_tag == t;
 }
 
-const bool operator == ( const dcm::Tag t, const Element& e )
+bool operator == ( const dcm::Tag t, const Element& e )
 {
-    return( t == e.m_tag );
+    return t == e.m_tag;
 }
 
-const bool operator == ( const Element& a, const Element& b )
+bool operator == ( const Element& a, const Element& b )
 {
-    return( a.m_tag == b.m_tag );
+    return a.m_tag == b.m_tag;
 }
 
-const bool operator != ( const Element& a, const Element& b )
+bool operator != ( const Element& a, const Element& b )
 {
-    return( a.m_tag != b.m_tag );
+    return a.m_tag != b.m_tag;
 }
 
-const bool operator < ( const Element& a, const Element& b )
+bool operator < ( const Element& a, const Element& b )
 {
-    return( a.m_tag < b.m_tag );
+    return a.m_tag < b.m_tag;
 }
 
 std::ostream& operator << ( std::ostream& os, const Element& e )
@@ -93,7 +93,7 @@ std::ostream& operator << ( std::ostream& os, const Element& e )
     os << e.m_tag  << std::endl;
     os << e.m_vr   << std::endl;
     os << "Value:          " << e.m_value;
-    return( os );
+    return os;
 }
 
 std::ofstream& operator << ( std::ofstream& ofs, const Element& e )
@@ -101,7 +101,7 @@ std::ofstream& operator << ( std::ofstream& ofs, const Element& e )
     ofs << e.m_tag  << std::endl;
     ofs << e.m_vr   << std::endl;
     ofs << "Value:          " << e.m_value;
-    return( ofs );
+    return ofs;
 }
 
 /*===========================================================================*/
@@ -110,9 +110,9 @@ std::ofstream& operator << ( std::ofstream& ofs, const Element& e )
  *  @return tag
  */
 /*===========================================================================*/
-const dcm::Tag Element::tag( void ) const
+dcm::Tag Element::tag() const
 {
-    return( m_tag );
+    return m_tag;
 }
 
 /*===========================================================================*/
@@ -121,9 +121,9 @@ const dcm::Tag Element::tag( void ) const
  *  @return VR
  */
 /*===========================================================================*/
-const dcm::VR Element::vr( void ) const
+dcm::VR Element::vr() const
 {
-    return( m_vr );
+    return m_vr;
 }
 
 /*===========================================================================*/
@@ -132,9 +132,9 @@ const dcm::VR Element::vr( void ) const
  *  @return value
  */
 /*===========================================================================*/
-const dcm::Value& Element::value( void ) const
+const dcm::Value& Element::value() const
 {
-    return( m_value );
+    return m_value;
 }
 
 /*===========================================================================*/
@@ -143,9 +143,9 @@ const dcm::Value& Element::value( void ) const
  *  @return true, if the element is known
  */
 /*===========================================================================*/
-const bool Element::isKnown( void )
+bool Element::isKnown()
 {
-    return( !m_tag.name().empty() );
+    return !m_tag.name().empty();
 }
 
 /*===========================================================================*/
@@ -156,24 +156,24 @@ const bool Element::isKnown( void )
  *  @return true, if the reading process is done succesfully
  */
 /*===========================================================================*/
-const bool Element::read( std::ifstream& ifs, const bool swap )
+bool Element::read( std::ifstream& ifs, const bool swap )
 {
     // Read the tag.
-    if( !m_tag.read( ifs, swap ) ) return( false );
+    if( !m_tag.read( ifs, swap ) ) return false;
 
     // Read the VR.
     m_vr = dcm::VR( m_tag.vrType() );
-    if( !m_vr.read( ifs, swap ) ) return( false );
+    if( !m_vr.read( ifs, swap ) ) return false;
 
     // Stop reading the header infomation, if you read the "pixel-data" tag.
-    if( m_tag == ::END_HEADER_TAG ) return( true );
+    if( m_tag == ::END_HEADER_TAG ) return true;
 
     // Read the value.
     m_value = dcm::Value( m_vr.dataType(), m_vr.valueLength() );
 
-    if( !m_value.read( ifs, swap ) ) return( false );
+    if( !m_value.read( ifs, swap ) ) return false;
 
-    return( true );
+    return true;
 }
 
 } // end of namespace dcm

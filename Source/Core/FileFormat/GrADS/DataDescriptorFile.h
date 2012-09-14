@@ -54,29 +54,21 @@ private:
 
 public:
 
-    DataDescriptorFile( void );
+    DataDescriptorFile();
 
 public:
 
-    const kvs::grads::DSet& dset( void ) const;
+    const kvs::grads::DSet& dset() const;
+    const kvs::grads::Undef& undef() const;
+    const kvs::grads::Title& title() const;
+    const kvs::grads::Options& options() const;
+    const kvs::grads::XDef& xdef() const;
+    const kvs::grads::YDef& ydef() const;
+    const kvs::grads::ZDef& zdef() const;
+    const kvs::grads::TDef& tdef() const;
+    const kvs::grads::Vars& vars() const;
 
-    const kvs::grads::Undef& undef( void ) const;
-
-    const kvs::grads::Title& title( void ) const;
-
-    const kvs::grads::Options& options( void ) const;
-
-    const kvs::grads::XDef& xdef( void ) const;
-
-    const kvs::grads::YDef& ydef( void ) const;
-
-    const kvs::grads::ZDef& zdef( void ) const;
-
-    const kvs::grads::TDef& tdef( void ) const;
-
-    const kvs::grads::Vars& vars( void ) const;
-
-    const bool read( std::ifstream& ifs );
+    bool read( std::ifstream& ifs );
 };
 
 } // end of namespace grads

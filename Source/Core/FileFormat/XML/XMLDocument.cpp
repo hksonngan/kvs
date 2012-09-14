@@ -23,7 +23,7 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-XMLDocument::XMLDocument( void )
+XMLDocument::XMLDocument()
 {
 }
 
@@ -43,9 +43,9 @@ XMLDocument::XMLDocument( const std::string& filename )
  *  Get the filename.
  */
 /*==========================================================================*/
-const std::string& XMLDocument::filename( void ) const
+const std::string& XMLDocument::filename() const
 {
-    return( m_filename );
+    return m_filename;
 }
 
 /*==========================================================================*/
@@ -57,7 +57,7 @@ const std::string& XMLDocument::filename( void ) const
 /*==========================================================================*/
 const char* XMLDocument::parse( const char* text )
 {
-    return( SuperClass::Parse( text ) );
+    return SuperClass::Parse( text );
 }
 
 /*==========================================================================*/
@@ -65,7 +65,7 @@ const char* XMLDocument::parse( const char* text )
  *  Print the XML document.
  */
 /*==========================================================================*/
-void XMLDocument::print( void )
+void XMLDocument::print()
 {
     SuperClass::Print();
 }
@@ -79,7 +79,7 @@ void XMLDocument::print( void )
 /*==========================================================================*/
 TiXmlNode* XMLDocument::insert( const TiXmlNode& node )
 {
-    return( SuperClass::InsertEndChild( node ) );
+    return SuperClass::InsertEndChild( node );
 }
 
 /*==========================================================================*/
@@ -93,7 +93,7 @@ bool XMLDocument::read( const std::string& filename )
 {
     m_filename = filename;
 
-    return( SuperClass::LoadFile( filename ) );
+    return SuperClass::LoadFile( filename );
 }
 
 /*==========================================================================*/
@@ -105,7 +105,7 @@ bool XMLDocument::read( const std::string& filename )
 /*==========================================================================*/
 bool XMLDocument::write( const std::string& filename )
 {
-    return( SuperClass::SaveFile( filename ) );
+    return SuperClass::SaveFile( filename );
 }
 
 TiXmlNode* XMLDocument::FindNode( const kvs::XMLDocument* document, const std::string& node_name )
@@ -113,12 +113,12 @@ TiXmlNode* XMLDocument::FindNode( const kvs::XMLDocument* document, const std::s
     TiXmlNode* node = document->FirstChild();
     while( node )
     {
-        if( node->Value() == node_name ) return( node );
+        if( node->Value() == node_name ) return node;
 
         node = node->NextSibling();
     }
 
-    return( NULL );
+    return NULL;
 }
 
 } // end of namespace kvs
