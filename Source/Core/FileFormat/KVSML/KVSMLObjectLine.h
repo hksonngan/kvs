@@ -32,8 +32,6 @@ namespace kvs
 /*===========================================================================*/
 class KVSMLObjectLine : public kvs::FileFormatBase
 {
-    kvsClassName( kvs::KVSMLObjectLine );
-
 public:
 
     typedef kvs::FileFormatBase BaseClass;

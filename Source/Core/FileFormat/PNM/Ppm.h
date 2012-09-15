@@ -15,7 +15,6 @@
 #define KVS__PPM_H_INCLUDE
 
 #include <kvs/FileFormatBase>
-#include <kvs/ClassName>
 #include <kvs/ValueArray>
 #include <kvs/Type>
 #include <string>
@@ -33,12 +32,10 @@ namespace kvs
 /*==========================================================================*/
 class Ppm : public kvs::FileFormatBase
 {
-    kvsClassName( kvs::Ppm );
-
 public:
 
     typedef kvs::FileFormatBase BaseClass;
-    typedef kvs::pnm::Header    Header;
+    typedef kvs::pnm::Header Header;
 
 private:
 

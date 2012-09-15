@@ -15,7 +15,6 @@
 #define KVS__PGM_H_INCLUDE
 
 #include <kvs/FileFormatBase>
-#include <kvs/ClassName>
 #include <kvs/ValueArray>
 #include <kvs/Type>
 #include <string>
@@ -32,8 +31,6 @@ namespace kvs
 /*==========================================================================*/
 class Pgm : public kvs::FileFormatBase
 {
-    kvsClassName( kvs::Pgm );
-
 public:
 
     typedef kvs::FileFormatBase BaseClass;

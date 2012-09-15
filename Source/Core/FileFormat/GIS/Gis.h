@@ -17,7 +17,6 @@
 
 #include <vector>
 #include <kvs/FileFormatBase>
-#include <kvs/ClassName>
 #include <kvs/Vector2>
 #include <kvs/RGBColor>
 #include "Mesh.h"
@@ -35,8 +34,6 @@ namespace kvs
 /*===========================================================================*/
 class Gis : public kvs::FileFormatBase
 {
-    kvsClassName( kvs::Gis );
-
 public:
 
     typedef kvs::FileFormatBase BaseClass;

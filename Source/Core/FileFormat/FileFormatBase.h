@@ -14,7 +14,6 @@
 #ifndef KVS__FILE_FORMAT_BASE_H_INCLUDE
 #define KVS__FILE_FORMAT_BASE_H_INCLUDE
 
-#include <kvs/ClassName>
 #include <string>
 
 
@@ -28,8 +27,6 @@ namespace kvs
 /*==========================================================================*/
 class FileFormatBase
 {
-    kvsClassName( kvs::FileFormatBase );
-
 private:
 
     std::string m_filename; ///< Filename.

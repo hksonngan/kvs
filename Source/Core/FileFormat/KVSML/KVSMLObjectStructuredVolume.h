@@ -34,8 +34,6 @@ namespace kvs
 /*===========================================================================*/
 class KVSMLObjectStructuredVolume : public kvs::FileFormatBase
 {
-    kvsClassName( kvs::KVSMLObjectStructuredVolume );
-
 public:
 
     typedef kvs::FileFormatBase BaseClass;

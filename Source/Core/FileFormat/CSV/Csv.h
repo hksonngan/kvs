@@ -19,7 +19,6 @@
 #include <string>
 #include <iostream>
 #include <kvs/FileFormatBase>
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -32,8 +31,6 @@ namespace kvs
 /*===========================================================================*/
 class Csv : public kvs::FileFormatBase
 {
-    kvsClassName( kvs::Csv );
-
 public:
 
     typedef kvs::FileFormatBase BaseClass;

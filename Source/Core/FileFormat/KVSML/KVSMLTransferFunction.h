@@ -32,8 +32,6 @@ namespace kvs
 /*===========================================================================*/
 class KVSMLTransferFunction : public kvs::FileFormatBase
 {
-    kvsClassName( kvs::KVSMLTransferFunction );
-
 public:
 
     typedef kvs::FileFormatBase BaseClass;

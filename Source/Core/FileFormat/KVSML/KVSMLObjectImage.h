@@ -32,8 +32,6 @@ namespace kvs
 /*===========================================================================*/
 class KVSMLObjectImage : public kvs::FileFormatBase
 {
-    kvsClassName( kvs::KVSMLObjectImage );
-
 public:
 
     typedef kvs::FileFormatBase BaseClass;

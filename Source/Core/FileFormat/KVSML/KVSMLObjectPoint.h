@@ -32,8 +32,6 @@ namespace kvs
 /*===========================================================================*/
 class KVSMLObjectPoint : public kvs::FileFormatBase
 {
-    kvsClassName( kvs::KVSMLObjectPoint );
-
 public:
 
     typedef kvs::FileFormatBase BaseClass;

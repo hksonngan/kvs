@@ -18,7 +18,6 @@
 #include <string>
 #include <fstream>
 #include <kvs/FileFormatBase>
-#include <kvs/ClassName>
 #include <kvs/Type>
 #include <kvs/ValueArray>
 #include "MeshData.h"
@@ -35,8 +34,6 @@ namespace kvs
 /*===========================================================================*/
 class FrontSTR : public kvs::FileFormatBase
 {
-    kvsClassName( kvs::FrontSTR );
-
 public:
 
     typedef kvs::FileFormatBase BaseClass;

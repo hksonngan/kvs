@@ -15,7 +15,6 @@
 #define KVS__TIFF_H_INCLUDE
 
 #include <kvs/FileFormatBase>
-#include <kvs/ClassName>
 #include <kvs/Type>
 #include <kvs/Message>
 #include <kvs/AnyValueArray>
@@ -29,8 +28,6 @@ namespace kvs
 
 class Tiff : public kvs::FileFormatBase
 {
-    kvsClassName( kvs::Tiff );
-
 public:
 
     typedef kvs::FileFormatBase BaseClass;

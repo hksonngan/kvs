@@ -21,7 +21,6 @@
 #include <kvs/FileFormatBase>
 #include <kvs/Vector3>
 #include <kvs/ValueArray>
-#include <kvs/ClassName>
 #include <kvs/Platform>
 #include <kvs/Type>
 #include "PlyFile.h"
@@ -37,8 +36,6 @@ namespace kvs
 /*===========================================================================*/
 class Ply : public kvs::FileFormatBase
 {
-    kvsClassName( kvs::Ply );
-
 public:
 
     typedef kvs::FileFormatBase BaseClass;

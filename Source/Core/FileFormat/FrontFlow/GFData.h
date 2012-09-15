@@ -16,7 +16,6 @@
 #define KVS__GF_DATA_H_INCLUDE
 
 #include <kvs/FileFormatBase>
-#include <kvs/ClassName>
 #include "FlowData.h"
 #include "MeshData.h"
 #include "BoundaryData.h"
@@ -32,8 +31,6 @@ namespace kvs
 /*===========================================================================*/
 class GFData : public kvs::FileFormatBase
 {
-    kvsClassName_without_virtual( kvs::GFData );
-
 public:
 
     typedef kvs::FileFormatBase BaseClass;

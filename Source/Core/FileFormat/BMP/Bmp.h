@@ -34,8 +34,6 @@ namespace kvs
 /*==========================================================================*/
 class Bmp : public kvs::FileFormatBase
 {
-    kvsClassName( kvs::Bmp );
-
 public:
 
     typedef kvs::FileFormatBase  BaseClass;

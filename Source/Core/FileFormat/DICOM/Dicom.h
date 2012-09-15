@@ -23,7 +23,6 @@
 #include <kvs/ValueArray>
 #include <kvs/Type>
 #include <kvs/Vector2>
-#include <kvs/ClassName>
 #include "Attribute.h"
 #include "Window.h"
 #include "Element.h"
@@ -39,8 +38,6 @@ namespace kvs
 /*===========================================================================*/
 class Dicom : public kvs::FileFormatBase
 {
-    kvsClassName( kvs::Dicom );
-
 public:
 
     typedef kvs::FileFormatBase BaseClass;

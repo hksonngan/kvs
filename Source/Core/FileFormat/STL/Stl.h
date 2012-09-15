@@ -32,8 +32,6 @@ namespace kvs
 /*===========================================================================*/
 class Stl : public kvs::FileFormatBase
 {
-    kvsClassName( kvs::Stl );
-
 public:
 
     typedef kvs::FileFormatBase BaseClass;

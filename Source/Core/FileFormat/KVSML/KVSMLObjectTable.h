@@ -35,8 +35,6 @@ namespace kvs
 /*===========================================================================*/
 class KVSMLObjectTable : public kvs::FileFormatBase
 {
-    kvsClassName( kvs::KVSMLObjectTable );
-
 public:
 
     typedef kvs::FileFormatBase BaseClass;

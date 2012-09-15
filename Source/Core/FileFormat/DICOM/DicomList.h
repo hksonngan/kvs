@@ -19,7 +19,6 @@
 #include <string>
 #include <kvs/Vector2>
 #include <kvs/FileFormatBase>
-#include <kvs/ClassName>
 #include <kvs/Dicom>
 
 
@@ -33,8 +32,6 @@ namespace kvs
 /*===========================================================================*/
 class DicomList : public kvs::FileFormatBase
 {
-    kvsClassName( kvs::DicomList );
-
 public:
 
     typedef kvs::FileFormatBase BaseClass;

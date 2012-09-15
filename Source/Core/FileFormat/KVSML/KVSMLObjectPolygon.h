@@ -32,8 +32,6 @@ namespace kvs
 /*===========================================================================*/
 class KVSMLObjectPolygon : public kvs::FileFormatBase
 {
-    kvsClassName( kvs::KVSMLObjectPolygon );
-
 public:
 
     typedef kvs::FileFormatBase BaseClass;

@@ -16,7 +16,6 @@
 #define KVS__GRADS_H_INCLUDE
 
 #include <kvs/FileFormatBase>
-#include <kvs/ClassName>
 #include "DataDescriptorFile.h"
 #include "GriddedBinaryDataFile.h"
 
@@ -31,8 +30,6 @@ namespace kvs
 /*===========================================================================*/
 class GrADS : public kvs::FileFormatBase
 {
-    kvsClassName( kvs::GrADS );
-
 public:
 
     typedef kvs::FileFormatBase BaseClass;

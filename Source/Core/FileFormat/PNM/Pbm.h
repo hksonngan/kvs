@@ -15,7 +15,6 @@
 #define KVS__PBM_H_INCLUDE
 
 #include <kvs/FileFormatBase>
-#include <kvs/ClassName>
 #include <kvs/BitArray>
 #include <kvs/Type>
 #include <string>
@@ -32,8 +31,6 @@ namespace kvs
 /*==========================================================================*/
 class Pbm : public kvs::FileFormatBase
 {
-    kvsClassName( kvs::Pbm );
-
 public:
 
     typedef kvs::FileFormatBase BaseClass;
