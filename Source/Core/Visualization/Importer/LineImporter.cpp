@@ -148,10 +148,9 @@ LineImporter::SuperClass* LineImporter::exec( const kvs::FileFormatBase* file_fo
         return( NULL );
     }
 
-    const std::string class_name = file_format->className();
-    if ( class_name == "kvs::KVSMLObjectLine" )
+    if ( const kvs::KVSMLObjectLine* line = dynamic_cast<const kvs::KVSMLObjectLine*>( file_format ) )
     {
-        this->import( static_cast<const kvs::KVSMLObjectLine*>( file_format ) );
+        this->import( line );
     }
     else
     {

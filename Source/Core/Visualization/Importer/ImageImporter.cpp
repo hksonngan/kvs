@@ -231,34 +231,33 @@ ImageImporter::SuperClass* ImageImporter::exec( const kvs::FileFormatBase* file_
         return( NULL );
     }
 
-    const std::string class_name = file_format->className();
-    if ( class_name == "kvs::KVSMLObjectImage" )
+    if ( const kvs::KVSMLObjectImage* image = dynamic_cast<const kvs::KVSMLObjectImage*>( file_format ) )
     {
-        this->import( static_cast<const kvs::KVSMLObjectImage*>( file_format ) );
+        this->import( image );
     }
-    else if ( class_name == "kvs::Bmp" )
+    else if ( const kvs::Bmp* image = dynamic_cast<const kvs::Bmp*>( file_format ) )
     {
-        this->import( static_cast<const kvs::Bmp*>( file_format ) );
+        this->import( image );
     }
-    else if ( class_name == "kvs::Tiff" )
+    else if ( const kvs::Tiff* image = dynamic_cast<const kvs::Tiff*>( file_format ) )
     {
-        this->import( static_cast<const kvs::Tiff*>( file_format ) );
+        this->import( image );
     }
-    else if ( class_name == "kvs::Ppm" )
+    else if ( const kvs::Ppm* image = dynamic_cast<const kvs::Ppm*>( file_format ) )
     {
-        this->import( static_cast<const kvs::Ppm*>( file_format ) );
+        this->import( image );
     }
-    else if ( class_name == "kvs::Pgm" )
+    else if ( const kvs::Pgm* image = dynamic_cast<const kvs::Pgm*>( file_format ) )
     {
-        this->import( static_cast<const kvs::Pgm*>( file_format ) );
+        this->import( image );
     }
-    else if ( class_name == "kvs::Pbm" )
+    else if ( const kvs::Pbm* image = dynamic_cast<const kvs::Pbm*>( file_format ) )
     {
-        this->import( static_cast<const kvs::Pbm*>( file_format ) );
+        this->import( image );
     }
-    else if ( class_name == "kvs::Dicom" )
+    else if ( const kvs::Dicom* image = dynamic_cast<const kvs::Dicom*>( file_format ) )
     {
-        this->import( static_cast<const kvs::Dicom*>( file_format ) );
+        this->import( image );
     }
     else
     {

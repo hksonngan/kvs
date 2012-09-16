@@ -206,18 +206,17 @@ UnstructuredVolumeImporter::SuperClass* UnstructuredVolumeImporter::exec( const 
         return( NULL );
     }
 
-    const std::string class_name = file_format->className();
-    if ( class_name == "kvs::KVSMLObjectUnstructuredVolume" )
+    if ( const kvs::KVSMLObjectUnstructuredVolume* volume = dynamic_cast<const kvs::KVSMLObjectUnstructuredVolume*>( file_format ) )
     {
-        this->import( static_cast<const kvs::KVSMLObjectUnstructuredVolume*>( file_format ) );
+        this->import( volume );
     }
-    else if ( class_name == "kvs::AVSUcd" )
+    else if ( const kvs::AVSUcd* volume = dynamic_cast<const kvs::AVSUcd*>( file_format ) )
     {
-        this->import( static_cast<const kvs::AVSUcd*>( file_format ) );
+        this->import( volume );
     }
-    else if ( class_name == "kvs::AVSField" )
+    else if ( const kvs::AVSField* volume = dynamic_cast<const kvs::AVSField*>( file_format ) )
     {
-        this->import( static_cast<const kvs::AVSField*>( file_format ) );
+        this->import( volume );
     }
     else
     {

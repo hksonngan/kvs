@@ -94,10 +94,9 @@ TableImporter::SuperClass* TableImporter::exec( const kvs::FileFormatBase* file_
         return( NULL );
     }
 
-    const std::string class_name = file_format->className();
-    if ( class_name == "kvs::KVSMLObjectTable" )
+    if ( const kvs::KVSMLObjectTable* table = dynamic_cast<const kvs::KVSMLObjectTable*>( file_format ) )
     {
-        this->import( static_cast<const kvs::KVSMLObjectTable*>( file_format ) );
+        this->import( table );
     }
     else
     {

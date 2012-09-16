@@ -33,6 +33,9 @@
 #include <iostream>
 
 
+#define PRINT_INFO( class_name, os, checker ) \
+    PrintInformation<class_name>( #class_name, os, checker )
+
 namespace
 {
 
@@ -44,12 +47,12 @@ namespace
  */
 /*===========================================================================*/
 template <typename FileFormatClass>
-inline void PrintInformation( std::ostream& os, const kvscheck::FileChecker& checker )
+inline void PrintInformation( const char* class_name, std::ostream& os, const kvscheck::FileChecker& checker )
 {
     kvs::Timer timer( kvs::Timer::Start );
     FileFormatClass file( checker.filename() );
     timer.stop();
-    os << "File format class: " << file.className() << std::endl;
+    os << "File format class: " << class_name << std::endl;
     os << "Reading time: " << timer.sec() << " [sec]" << std::endl;
     os << "Information: " << std::endl << file;
 }
@@ -65,32 +68,32 @@ inline void PrintKVSMLInformation( std::ostream& os, const kvscheck::FileChecker
 {
     if ( kvs::KVSMLObjectImage::CheckFileFormat( checker.filename() ) )
     {
-        PrintInformation<kvs::KVSMLObjectImage>( os, checker ); return;
+        PRINT_INFO( kvs::KVSMLObjectImage, os, checker ); return;
     }
 
     if ( kvs::KVSMLObjectPoint::CheckFileFormat( checker.filename() ) )
     {
-        PrintInformation<kvs::KVSMLObjectPoint>( os, checker ); return;
+        PRINT_INFO( kvs::KVSMLObjectPoint, os, checker ); return;
     }
 
     if ( kvs::KVSMLObjectLine::CheckFileFormat( checker.filename() ) )
     {
-        PrintInformation<kvs::KVSMLObjectLine>( os, checker ); return;
+        PRINT_INFO( kvs::KVSMLObjectLine, os, checker ); return;
     }
 
     if ( kvs::KVSMLObjectPolygon::CheckFileFormat( checker.filename() ) )
     {
-        PrintInformation<kvs::KVSMLObjectPolygon>( os, checker ); return;
+        PRINT_INFO( kvs::KVSMLObjectPolygon, os, checker ); return;
     }
 
     if ( kvs::KVSMLObjectStructuredVolume::CheckFileFormat( checker.filename() ) )
     {
-        PrintInformation<kvs::KVSMLObjectStructuredVolume>( os, checker ); return;
+        PRINT_INFO( kvs::KVSMLObjectStructuredVolume, os, checker ); return;
     }
 
     if ( kvs::KVSMLObjectUnstructuredVolume::CheckFileFormat( checker.filename() ) )
     {
-        PrintInformation<kvs::KVSMLObjectUnstructuredVolume>( os, checker ); return;
+        PRINT_INFO( kvs::KVSMLObjectUnstructuredVolume, os, checker ); return;
     }
 }
 
@@ -213,39 +216,39 @@ std::ostream& operator << ( std::ostream& os, const FileChecker& checker )
     switch ( checker.fileFormat() )
     {
     case FileChecker::AVSFieldFormat:
-        ::PrintInformation<kvs::AVSField>( os, checker );
+        PRINT_INFO( kvs::AVSField, os, checker );
         break;
 
     case FileChecker::AVSUcdFormat:
-        ::PrintInformation<kvs::AVSUcd>( os, checker );
+        PRINT_INFO( kvs::AVSUcd, os, checker );
         break;
 
     case FileChecker::STLFormat:
-        ::PrintInformation<kvs::Stl>( os, checker );
+        PRINT_INFO( kvs::Stl, os, checker );
         break;
 
     case FileChecker::BitmapFormat:
-        ::PrintInformation<kvs::Bmp>( os, checker );
+        PRINT_INFO( kvs::Bmp, os, checker );
         break;
 
     case FileChecker::PPMFormat:
-        ::PrintInformation<kvs::Ppm>( os, checker );
+        PRINT_INFO( kvs::Ppm, os, checker );
         break;
 
     case FileChecker::PGMFormat:
-        ::PrintInformation<kvs::Pgm>( os, checker );
+        PRINT_INFO( kvs::Pgm, os, checker );
         break;
 
     case FileChecker::PBMFormat:
-        ::PrintInformation<kvs::Pbm>( os, checker );
+        PRINT_INFO( kvs::Pbm, os, checker );
         break;
 
     case FileChecker::TIFFFormat:
-        ::PrintInformation<kvs::Tiff>( os, checker );
+        PRINT_INFO( kvs::Tiff, os, checker );
         break;
 
     case FileChecker::DICOMFormat:
-        ::PrintInformation<kvs::Dicom>( os, checker );
+        PRINT_INFO( kvs::Dicom, os, checker );
         break;
 
     default:

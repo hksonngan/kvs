@@ -104,10 +104,9 @@ PointImporter::SuperClass* PointImporter::exec( const kvs::FileFormatBase* file_
         return( NULL );
     }
 
-    const std::string class_name = file_format->className();
-    if ( class_name == "kvs::KVSMLObjectPoint" )
+    if ( const kvs::KVSMLObjectPoint* point = dynamic_cast<const kvs::KVSMLObjectPoint*>( file_format ) )
     {
-        this->import( static_cast<const kvs::KVSMLObjectPoint*>( file_format ) );
+        this->import( point );
     }
     else
     {

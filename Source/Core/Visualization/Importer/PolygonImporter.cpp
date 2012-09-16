@@ -206,18 +206,17 @@ PolygonImporter::SuperClass* PolygonImporter::exec( const kvs::FileFormatBase* f
         return( NULL );
     }
 
-    const std::string class_name = file_format->className();
-    if ( class_name == "kvs::KVSMLObjectPolygon" )
+    if ( const kvs::KVSMLObjectPolygon* polygon = dynamic_cast<const kvs::KVSMLObjectPolygon*>( file_format ) )
     {
-        this->import( static_cast<const kvs::KVSMLObjectPolygon*>( file_format ) );
+        this->import( polygon );
     }
-    else if ( class_name == "kvs::Stl" )
+    else if ( const kvs::Stl* polygon = dynamic_cast<const kvs::Stl*>( file_format ) )
     {
-        this->import( static_cast<const kvs::Stl*>( file_format ) );
+        this->import( polygon );
     }
-    else if ( class_name == "kvs::Ply" )
+    else if ( const kvs::Ply* polygon = dynamic_cast<const kvs::Ply*>( file_format ) )
     {
-        this->import( static_cast<const kvs::Ply*>( file_format ) );
+        this->import( polygon );
     }
     else
     {
