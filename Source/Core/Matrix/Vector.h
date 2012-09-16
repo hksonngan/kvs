@@ -18,7 +18,6 @@
 #include <vector>
 #include <cstring>
 #include <kvs/DebugNew>
-#include <kvs/ClassName>
 #include <kvs/Assert>
 #include <kvs/Math>
 
@@ -34,8 +33,6 @@ namespace kvs
 template <typename T>
 class Vector
 {
-    kvsClassName_without_virtual( kvs::Vector );
-
 private:
 
     size_t m_size;     ///< Vector size( dimension ).
@@ -504,7 +501,7 @@ inline void Vector<T>::print( void ) const
 template <typename T>
 inline const double Vector<T>::length( void ) const
 {
-    return( kvs::Math::SquareRoot( this->length2() ) );
+    return( std::sqrt( this->length2() ) );
 }
 
 /*==========================================================================*/

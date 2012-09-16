@@ -15,7 +15,6 @@
 #define KVS__VECTOR_3_H_INCLUDE
 
 #include <iostream> // For std::cout.
-#include <kvs/ClassName>
 #include <kvs/Assert>
 #include <kvs/Math>
 #include <kvs/Vector2>
@@ -32,11 +31,13 @@ namespace kvs
 template<typename T>
 class Vector3
 {
-    kvsClassName_without_virtual( kvs::Vector3 );
-
 private:
 
     T m_elements[3]; ///< Elements.
+
+public:
+    static const Vector3 Zero();
+    static const Vector3 All( const T x );
 
 public:
 
@@ -90,7 +91,12 @@ public:
     const T& z( void ) const;
 
 public:
-    Vector3 normalizedVector() const;
+    const Vector3 normalizedVector() const
+    {
+        return this->normalized();
+    }
+
+    const Vector3 normalized() const
 
 #if KVS_ENABLE_DEPRECATED
     const Vector3 normalize( void ) const;
@@ -297,6 +303,18 @@ typedef Vector3<unsigned int> Vector3ui;
 typedef Vector3<float>        Vector3f;
 typedef Vector3<double>       Vector3d;
 
+
+template <typename T>
+inline const Vector3<T> Vector3<T>::Zero()
+{
+    return Vector3( 0, 0, 0 );
+}
+
+template <typename T>
+inline const Vector3<T> Vector3<T>::All( const T x )
+{
+    return Vector3( x, x, x );
+}
 
 /*==========================================================================*/
 /**
@@ -534,12 +552,13 @@ inline const T& Vector3<T>::z( void ) const
 }
 
 template<typename T>
-inline Vector3<T> Vector3<T>::normalizedVector() const
+inline const Vector3<T> Vector3<T>::normalized() const
 {
     const double length = this->length();
     const T normalize_factor = length > 0.0 ? static_cast<T>( 1.0 / length ) : T(0);
     return *this * normalize_factor;
 }
+
 #if KVS_ENABLE_DEPRECATED
 /*==========================================================================*/
 /**
@@ -597,7 +616,7 @@ inline void Vector3<T>::print( void ) const
 template<typename T>
 inline const double Vector3<T>::length( void ) const
 {
-    return( kvs::Math::SquareRoot( this->length2() ) );
+    return( std::sqrt( this->length2() ) );
 }
 
 /*==========================================================================*/

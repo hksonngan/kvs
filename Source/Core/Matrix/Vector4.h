@@ -15,7 +15,6 @@
 #define KVS__VECTOR_4_H_INCLUDE
 
 #include <iostream>
-#include <kvs/ClassName>
 #include <kvs/Assert>
 #include <kvs/Math>
 #include <kvs/Vector2>
@@ -33,11 +32,13 @@ namespace kvs
 template <typename T>
 class Vector4
 {
-    kvsClassName_without_virtual( kvs::Vector4 );
-
 private:
 
     T m_elements[4]; ///< Elements.
+
+public:
+    static const Vector4 Zero();
+    static const Vector4 All( const T x );
 
 public:
 
@@ -99,7 +100,12 @@ public:
     const T& w( void ) const;
 
 public:
-    Vector4 normalizedVector() const;
+    const Vector4 normalizedVector() const
+    {
+        return this->normalized();
+    }
+
+    const Vector4 normalized() const
 
 #if KVS_ENABLE_DEPRECATED
     const Vector4 normalize( void ) const;
@@ -302,6 +308,18 @@ typedef Vector4<unsigned int>  Vector4ui;
 typedef Vector4<float>         Vector4f;
 typedef Vector4<double>        Vector4d;
 
+
+template <typename T>
+inline const Vector4<T> Vector4<T>::Zero()
+{
+    return Vector4( 0, 0, 0, 0 );
+}
+
+template <typename T>
+inline const Vector4<T> Vector4<T>::All( const T x )
+{
+    return Vector4( x, x, x, x );
+}
 
 /*==========================================================================*/
 /**
@@ -606,12 +624,13 @@ inline const T& Vector4<T>::w( void ) const
 }
 
 template<typename T>
-inline Vector4<T> Vector4<T>::normalizedVector() const
+inline const Vector4<T> Vector4<T>::normalized() const
 {
     const double length = this->length();
     const T normalize_factor = length > 0.0 ? static_cast<T>( 1.0 / length ) : T(0);
     return *this * normalize_factor;
 }
+
 #if KVS_ENABLE_DEPRECATED
 /*==========================================================================*/
 /**
@@ -668,7 +687,7 @@ inline void Vector4<T>::print( void ) const
 template<typename T>
 inline const double Vector4<T>::length( void ) const
 {
-    return( kvs::Math::SquareRoot( this->length2() ) );
+    return( std::sqrt( this->length2() ) );
 }
 
 /*==========================================================================*/

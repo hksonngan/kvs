@@ -15,7 +15,6 @@
 #define KVS__VECTOR_2_H_INCLUDE
 
 #include <iostream> // For std::cout.
-#include <kvs/ClassName>
 #include <kvs/Assert>
 #include <kvs/Math>
 
@@ -31,11 +30,13 @@ namespace kvs
 template<typename T>
 class Vector2
 {
-    kvsClassName_without_virtual( kvs::Vector2 );
-
 private:
 
     T m_elements[2]; ///< Elements.
+
+public:
+    static const Vector2 Zero();
+    static const Vector2 All( const T x );
 
 public:
 
@@ -81,7 +82,12 @@ public:
     const T& y( void ) const;
 
 public:
-    Vector2 normalizedVector() const;
+    const Vector2 normalizedVector() const
+    {
+        return this->normalized();
+    }
+
+    const Vector2 normalized() const
 
 #if KVS_ENABLE_DEPRECATED
     const Vector2 normalize( void ) const;
@@ -284,6 +290,18 @@ typedef Vector2<float>        Vector2f;
 typedef Vector2<double>       Vector2d;
 
 
+template <typename T>
+inline const Vector2<T> Vector2<T>::Zero()
+{
+    return Vector2( 0, 0 );
+}
+
+template <typename T>
+inline const Vector2<T> Vector2<T>::All( const T x )
+{
+    return Vector2( x, x );
+}
+
 /*==========================================================================*/
 /**
  *  Constructs a new Vector2.
@@ -457,7 +475,7 @@ inline const T& Vector2<T>::y( void ) const
 }
 
 template<typename T>
-inline Vector2<T> Vector2<T>::normalizedVector() const
+inline const Vector2<T> Vector2<T>::normalized() const
 {
     const double length = this->length();
     const T normalize_factor = length > 0.0 ? static_cast<T>( 1.0 / length ) : T(0);
@@ -520,7 +538,7 @@ inline void Vector2<T>::print( void ) const
 template<typename T>
 inline const double Vector2<T>::length( void ) const
 {
-    return( kvs::Math::SquareRoot( this->length2() ) );
+    return( std::sqrt( this->length2() ) );
 }
 
 /*==========================================================================*/
