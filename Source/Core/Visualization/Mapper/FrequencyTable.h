@@ -152,10 +152,10 @@ inline void FrequencyTable::binning( const kvs::VolumeObjectBase* volume )
             kvs::Real64 magnitude = 0.0;
             for ( size_t i = 0; i < veclen; ++i )
             {
-                magnitude += static_cast<kvs::Real64>( ( *value ) * ( *value ) );
+                magnitude += static_cast<kvs::Real64>( kvs::Math::Square( *value ) );
                 ++value;
             }
-            magnitude = kvs::Math::SquareRoot( magnitude );
+            magnitude = std::sqrt( magnitude );
 
             if ( !this->is_ignore_value( magnitude ) )
             {

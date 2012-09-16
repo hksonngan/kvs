@@ -117,7 +117,7 @@ void UnstructuredVectorToScalar::calculate_magnitude( const kvs::UnstructuredVol
             magnitude += kvs::Math::Square( static_cast<kvs::Real32>( *(src++) ) );
         }
 
-        *(dst++) = kvs::Math::SquareRoot( magnitude );
+        *(dst++) = std::sqrt( magnitude );
     }
 
     SuperClass::setVeclen( 1 );

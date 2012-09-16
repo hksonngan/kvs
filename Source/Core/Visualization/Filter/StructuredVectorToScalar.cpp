@@ -117,7 +117,7 @@ void StructuredVectorToScalar::calculate_magnitude( const kvs::StructuredVolumeO
             magnitude += kvs::Math::Square( static_cast<kvs::Real32>( *(src++) ) );
         }
 
-        *(dst++) = kvs::Math::SquareRoot( magnitude );
+        *(dst++) = std::sqrt( magnitude );
     }
 
     SuperClass::setGridType( volume->gridType() );

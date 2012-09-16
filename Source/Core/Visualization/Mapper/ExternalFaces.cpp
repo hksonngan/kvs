@@ -73,7 +73,7 @@ inline void GetColorIndices(
 
         for ( size_t i = 0; i < N; i++ )
         {
-            magnitude[i] = kvs::Math::SquareRoot( magnitude[i] );
+            magnitude[i] = std::sqrt( magnitude[i] );
             (*color_index)[i] = kvs::UInt32( normalize * ( magnitude[i] - min_value ) );
         }
     }

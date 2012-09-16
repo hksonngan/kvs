@@ -254,7 +254,7 @@ void ExtractVertices::calculate_colors( void )
                 magnitude += kvs::Math::Square( static_cast<kvs::Real64>( *value ) );
                 ++value;
             }
-            magnitude = kvs::Math::SquareRoot( magnitude );
+            magnitude = std::sqrt( magnitude );
 
             const kvs::UInt32 color_level =
                 static_cast<kvs::UInt32>( normalize_factor * ( magnitude - min_value ) );
