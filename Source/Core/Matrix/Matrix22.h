@@ -39,6 +39,12 @@ private:
     Vector2<T> m_rows[2]; ///< Row vectors.
 
 public:
+    static const Matrix22 Zero();
+    static const Matrix22 Identity();
+    static const Matrix22 Diagonal( const T x );
+    static const Matrix22 All( const T x );
+
+public:
 
     Matrix22( void );
 
@@ -321,7 +327,35 @@ public:
 /*==========================================================================*/
 typedef Matrix22<float>  Matrix22f;
 typedef Matrix22<double> Matrix22d;
+typedef Matrix22<float>  Mat2;
 
+
+template<typename T>
+const Matrix22<T> Matrix22<T>::Identity()
+{
+    return Matrix22( 1, 0,
+                     0, 1 );
+}
+
+template<typename T>
+const Matrix22<T> Matrix22<T>::Zero()
+{
+    return Matrix22( 0, 0,
+                     0, 0 );
+}
+
+template<typename T>
+const Matrix22<T> Matrix22<T>::All( const T x )
+{
+    return Matrix22( x, x,
+                     x, x );
+}
+
+template<typename T>
+const Matrix22<T> Matrix22<T>::Diagonal( const T x )
+{
+    return Identity() * x;
+}
 
 /*==========================================================================*/
 /**

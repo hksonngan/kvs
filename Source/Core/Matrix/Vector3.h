@@ -96,7 +96,7 @@ public:
         return this->normalized();
     }
 
-    const Vector3 normalized() const
+    const Vector3 normalized() const;
 
 #if KVS_ENABLE_DEPRECATED
     const Vector3 normalize( void ) const;
@@ -302,6 +302,9 @@ typedef Vector3<int>          Vector3i;
 typedef Vector3<unsigned int> Vector3ui;
 typedef Vector3<float>        Vector3f;
 typedef Vector3<double>       Vector3d;
+typedef Vector3<float>        Vec3;
+typedef Vector3<int>          Vec3i;
+typedef Vector3<unsigned int> Vec3ui;
 
 
 template <typename T>

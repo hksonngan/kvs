@@ -39,6 +39,12 @@ private:
     Vector3<T> m_rows[3]; ///< Row vectors.
 
 public:
+    static const Matrix33 Zero();
+    static const Matrix33 Identity();
+    static const Matrix33 Diagonal( const T x );
+    static const Matrix33 All( const T x );
+
+public:
 
     Matrix33( void );
 
@@ -329,7 +335,38 @@ public:
 /*==========================================================================*/
 typedef Matrix33<float>  Matrix33f;
 typedef Matrix33<double> Matrix33d;
+typedef Matrix33<float>  Mat3;
 
+
+template<typename T>
+const Matrix33<T> Matrix33<T>::Identity()
+{
+    return Matrix33( 1, 0, 0,
+                     0, 1, 0,
+                     0, 0, 1 );
+}
+
+template<typename T>
+const Matrix33<T> Matrix33<T>::Zero()
+{
+    return Matrix33( 0, 0, 0,
+                     0, 0, 0,
+                     0, 0, 0 );
+}
+
+template<typename T>
+const Matrix33<T> Matrix33<T>::All( const T x )
+{
+    return Matrix33( x, x, x,
+                     x, x, x,
+                     x, x, x );
+}
+
+template<typename T>
+const Matrix33<T> Matrix33<T>::Diagonal( const T x )
+{
+    return Identity() * x;
+}
 
 /*==========================================================================*/
 /**

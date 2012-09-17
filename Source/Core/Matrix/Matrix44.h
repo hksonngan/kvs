@@ -41,6 +41,12 @@ private:
     Vector4<T> m_rows[4]; ///< Row vectors.
 
 public:
+    static const Matrix44 Zero();
+    static const Matrix44 Identity();
+    static const Matrix44 Diagonal( const T x );
+    static const Matrix44 All( const T x );
+
+public:
 
     Matrix44( void );
 
@@ -339,7 +345,41 @@ public:
 /*==========================================================================*/
 typedef Matrix44<float>  Matrix44f;
 typedef Matrix44<double> Matrix44d;
+typedef Matrix44<float>  Mat4;
 
+
+template<typename T>
+const Matrix44<T> Matrix44<T>::Identity()
+{
+    return Matrix44( 1, 0, 0, 0,
+                     0, 1, 0, 0,
+                     0, 0, 1, 0,
+                     0, 0, 0, 1 );
+}
+
+template<typename T>
+const Matrix44<T> Matrix44<T>::Zero()
+{
+    return Matrix44( 0, 0, 0, 0,
+                     0, 0, 0, 0,
+                     0, 0, 0, 0,
+                     0, 0, 0, 0 );
+}
+
+template<typename T>
+const Matrix44<T> Matrix44<T>::All( const T x )
+{
+    return Matrix44( x, x, x, x,
+                     x, x, x, x,
+                     x, x, x, x,
+                     x, x, x, x );
+}
+
+template<typename T>
+const Matrix44<T> Matrix44<T>::Diagonal( const T x )
+{
+    return Identity() * x;
+}
 
 /*==========================================================================*/
 /**

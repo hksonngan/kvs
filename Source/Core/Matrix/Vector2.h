@@ -87,7 +87,7 @@ public:
         return this->normalized();
     }
 
-    const Vector2 normalized() const
+    const Vector2 normalized() const;
 
 #if KVS_ENABLE_DEPRECATED
     const Vector2 normalize( void ) const;
@@ -288,6 +288,8 @@ typedef Vector2<int>          Vector2i;
 typedef Vector2<unsigned int> Vector2ui;
 typedef Vector2<float>        Vector2f;
 typedef Vector2<double>       Vector2d;
+typedef Vector2<float>        Vec2;
+typedef Vector2<int>          Vec2i;
 
 
 template <typename T>
