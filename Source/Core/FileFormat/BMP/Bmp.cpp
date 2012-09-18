@@ -150,10 +150,9 @@ kvs::ValueArray<kvs::UInt8> Bmp::data() const
     return m_data;
 }
 
-void Bmp::print( std::ostream& os, const size_t indent ) const
+void Bmp::print( std::ostream& os, const kvs::Indent& indent ) const
 {
-    const std::string blanks( indent, ' ' );
-    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
+    os << indent << "Filename : " << BaseClass::filename() << std::endl;
     m_file_header.print( os, indent );
     m_info_header.print( os, indent );
 }

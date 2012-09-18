@@ -40,7 +40,7 @@ kvs::UInt32 ImageFileDirectory::offset() const
     return m_offset;
 }
 
-void ImageFileDirectory::print( std::ostream& os, const size_t indent ) const
+void ImageFileDirectory::print( std::ostream& os, const kvs::Indent& indent ) const
 {
     kvs::tiff::ImageFileDirectory::EntryList::const_iterator entry = m_entry_list.begin();
     kvs::tiff::ImageFileDirectory::EntryList::const_iterator last = m_entry_list.end();

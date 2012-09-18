@@ -239,13 +239,12 @@ void KVSMLObjectImage::setData( const kvs::ValueArray<kvs::UInt8>& data )
     m_data = data;
 }
 
-void KVSMLObjectImage::print( std::ostream& os, const size_t indent ) const
+void KVSMLObjectImage::print( std::ostream& os, const kvs::Indent& indent ) const
 {
-    const std::string blanks( indent, ' ' );
-    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
-    os << blanks << "Width : " << m_width << std::endl;
-    os << blanks << "Height : " << m_height << std::endl;
-    os << blanks << "Pixel type : " << m_pixel_type << std::endl;
+    os << indent << "Filename : " << BaseClass::filename() << std::endl;
+    os << indent << "Width : " << m_width << std::endl;
+    os << indent << "Height : " << m_height << std::endl;
+    os << indent << "Pixel type : " << m_pixel_type << std::endl;
 }
 
 /*===========================================================================*/

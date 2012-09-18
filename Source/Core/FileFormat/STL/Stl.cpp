@@ -242,12 +242,11 @@ void Stl::setCoords( const kvs::ValueArray<kvs::Real32>& coords )
     m_coords = coords;
 }
 
-void Stl::print( std::ostream& os, const size_t indent ) const
+void Stl::print( std::ostream& os, const kvs::Indent& indent ) const
 {
-    const std::string blanks( indent, ' ' );
-    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
-    os << blanks << "File type : " << ::FileTypeToString[ m_file_type ] << std::endl;
-    os << blanks << "Number of triangles : " << m_normals.size() / 3;
+    os << indent << "Filename : " << BaseClass::filename() << std::endl;
+    os << indent << "File type : " << ::FileTypeToString[ m_file_type ] << std::endl;
+    os << indent << "Number of triangles : " << m_normals.size() / 3;
 }
 
 /*===========================================================================*/

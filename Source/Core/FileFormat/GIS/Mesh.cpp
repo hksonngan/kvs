@@ -239,18 +239,16 @@ void Mesh::setArea( const kvs::gis::Area& area )
     m_area = area;
 }
 
-void Mesh::print( std::ostream& os, const size_t indent ) const
+void Mesh::print( std::ostream& os, const kvs::Indent& indent ) const
 {
-    const size_t next_indent = ( indent == 0 ) ? 4 : indent * 2;
-    const std::string blanks( indent, ' ' );
-    os << blanks << "Number of rows : " << m_row << std::endl;
-    os << blanks << "Number of columns : " << m_column << std::endl;
-    os << blanks << "Number of dimensions for latitude : " << m_latitude_dimension << std::endl;
-    os << blanks << "Number of dimensions for longitude : " << m_longitude_dimension << std::endl;
-    os << blanks << "Interval for latitude : " << m_latitude_interval << std::endl;
-    os << blanks << "Interval for longitude : " << m_longitude_interval << std::endl;
-    os << blanks << "Mesh area : " << std::endl;
-    m_area.print( os, next_indent );
+    os << indent << "Number of rows : " << m_row << std::endl;
+    os << indent << "Number of columns : " << m_column << std::endl;
+    os << indent << "Number of dimensions for latitude : " << m_latitude_dimension << std::endl;
+    os << indent << "Number of dimensions for longitude : " << m_longitude_dimension << std::endl;
+    os << indent << "Interval for latitude : " << m_latitude_interval << std::endl;
+    os << indent << "Interval for longitude : " << m_longitude_interval << std::endl;
+    os << indent << "Mesh area : " << std::endl;
+    m_area.print( os, indent.nextIndent() );
 }
 
 /*===========================================================================*/

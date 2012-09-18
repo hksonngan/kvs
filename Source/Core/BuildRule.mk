@@ -169,6 +169,7 @@ $(OUTDIR)/./Utility/Date.o \
 $(OUTDIR)/./Utility/Directory.o \
 $(OUTDIR)/./Utility/FastTokenizer.o \
 $(OUTDIR)/./Utility/File.o \
+$(OUTDIR)/./Utility/Indent.o \
 $(OUTDIR)/./Utility/MemoryTracer.o \
 $(OUTDIR)/./Utility/Message.o \
 $(OUTDIR)/./Utility/ReferenceCounter.o \

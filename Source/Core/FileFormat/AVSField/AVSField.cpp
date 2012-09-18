@@ -508,24 +508,23 @@ void AVSField::setCoords( const kvs::ValueArray<float>& coords )
  *  @param indent [in] indent size (number of white spaces)
  */
 /*==========================================================================*/
-void AVSField::print( std::ostream& os, const size_t indent ) const
+void AVSField::print( std::ostream& os, const kvs::Indent& indent ) const
 {
-    const std::string blanks( indent, ' ' );
-    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
-    os << blanks << "Bits : " << m_bits << std::endl;
-    os << blanks << "Signed : " << ( m_is_signed ? "signed" : "unsigned" ) << std::endl;
-    os << blanks << "Veclen : " << m_veclen << std::endl;
-    os << blanks << "Number of spaces : " << m_nspace << std::endl;
-    os << blanks << "Number of dimensions : " << m_ndim << std::endl;
-    os << blanks << "Dimension : " << m_dim << std::endl;
-    os << blanks << "Min. ext. : " << m_min_ext << std::endl;
-    os << blanks << "Max. ext. : " << m_max_ext << std::endl;
-    os << blanks << "Data type : " << ::DataTypeToString[m_type] << std::endl;
-    os << blanks << "Field type : " << ::FieldTypeToString[m_field] << std::endl;
-    os << blanks << "Label : ";
+    os << indent << "Filename : " << BaseClass::filename() << std::endl;
+    os << indent << "Bits : " << m_bits << std::endl;
+    os << indent << "Signed : " << ( m_is_signed ? "signed" : "unsigned" ) << std::endl;
+    os << indent << "Veclen : " << m_veclen << std::endl;
+    os << indent << "Number of spaces : " << m_nspace << std::endl;
+    os << indent << "Number of dimensions : " << m_ndim << std::endl;
+    os << indent << "Dimension : " << m_dim << std::endl;
+    os << indent << "Min. ext. : " << m_min_ext << std::endl;
+    os << indent << "Max. ext. : " << m_max_ext << std::endl;
+    os << indent << "Data type : " << ::DataTypeToString[m_type] << std::endl;
+    os << indent << "Field type : " << ::FieldTypeToString[m_field] << std::endl;
+    os << indent << "Label : ";
     for( size_t i = 0; i < m_labels.size(); i++ )
     {
-        os << blanks << m_labels[i] << " ";
+        os << indent << m_labels[i] << " ";
     }
     os << std::endl;
 }

@@ -127,8 +127,9 @@ const kvs::ValueArray<kvs::UInt8>& Ppm::data() const
     return m_data;
 }
 
-void Ppm::print( std::ostream& os, const size_t indent ) const
+void Ppm::print( std::ostream& os, const kvs::Indent& indent ) const
 {
+    os << indent << "Filename : " << BaseClass::filename() << std::endl;
     m_header.print( os, indent );
 }
 

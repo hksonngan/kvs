@@ -160,12 +160,11 @@ void Csv::setValue( const size_t i, const size_t j, const std::string& value )
  *  @param  indent [in] indent size (number of whitespaces)
  */
 /*===========================================================================*/
-void Csv::print( std::ostream& os, const size_t indent ) const
+void Csv::print( std::ostream& os, const kvs::Indent& indent ) const
 {
-    const std::string blanks( indent, ' ' );
-    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
-    os << blanks << "Number of rows : " << m_table.size() << std::endl;
-    os << blanks << "First line : ";
+    os << indent << "Filename : " << BaseClass::filename() << std::endl;
+    os << indent << "Number of rows : " << m_table.size() << std::endl;
+    os << indent << "First line : ";
     const Csv::Row& row = m_table.at(0);
     Csv::Row::const_iterator v = row.begin();
     os << *(v++); while ( v != row.end() ) os << ", " << *(v++);

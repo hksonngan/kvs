@@ -16,6 +16,7 @@
 
 #include <kvs/Type>
 #include <kvs/AnyValueArray>
+#include <kvs/Indent>
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -51,7 +52,7 @@ public:
     std::string typeName() const;
     const kvs::AnyValueArray& values() const;
 
-    void print( std::ostream& os, const size_t indent = 0 ) const;
+    void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
     bool read( std::ifstream& ifs );
 
 private:

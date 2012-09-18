@@ -21,6 +21,7 @@
 #include <kvs/FileFormatBase>
 #include <kvs/Type>
 #include <kvs/ValueArray>
+#include <kvs/Indent>
 #include "MeshData.h"
 #include "ResultData.h"
 
@@ -59,7 +60,7 @@ public:
     const kvs::fstr::MeshData& meshData( const size_t index = 0 ) const;
     const kvs::fstr::ResultData& resultData( const size_t index = 0 ) const;
 
-    void print( std::ostream& os, const size_t indent = 0 ) const;
+    void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
     bool read( const std::string& filenames );
     bool read( const std::string& msh_filename, const std::string& res_filename );
     bool read( const std::vector<std::string>& msh_filenames, const std::vector<std::string>& res_filenames );

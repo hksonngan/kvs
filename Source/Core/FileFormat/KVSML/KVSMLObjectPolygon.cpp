@@ -327,14 +327,13 @@ void KVSMLObjectPolygon::setNormals( const kvs::ValueArray<kvs::Real32>& normals
     m_normals = normals;
 }
 
-void KVSMLObjectPolygon::print( std::ostream& os, const size_t indent ) const
+void KVSMLObjectPolygon::print( std::ostream& os, const kvs::Indent& indent ) const
 {
-    const std::string blanks( indent, ' ' );
-    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
-    os << blanks << "Polygon type : " << m_polygon_type << std::endl;
-    os << blanks << "Color type : " << m_color_type << std::endl;
-    os << blanks << "Normal type : " << m_normal_type << std::endl;
-    os << blanks << "Number of vertices: " << m_coords.size() / 3;
+    os << indent << "Filename : " << BaseClass::filename() << std::endl;
+    os << indent << "Polygon type : " << m_polygon_type << std::endl;
+    os << indent << "Color type : " << m_color_type << std::endl;
+    os << indent << "Normal type : " << m_normal_type << std::endl;
+    os << indent << "Number of vertices: " << m_coords.size() / 3;
 }
 
 /*===========================================================================*/

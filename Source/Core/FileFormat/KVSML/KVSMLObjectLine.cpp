@@ -279,13 +279,12 @@ void KVSMLObjectLine::setSizes( const kvs::ValueArray<kvs::Real32>& sizes )
     m_sizes = sizes;
 }
 
-void KVSMLObjectLine::print( std::ostream& os, const size_t indent ) const
+void KVSMLObjectLine::print( std::ostream& os, const kvs::Indent& indent ) const
 {
-    const std::string blanks( indent, ' ' );
-    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
-    os << blanks << "Line type : " << m_line_type << std::endl;
-    os << blanks << "Color type : " << m_color_type << std::endl;
-    os << blanks << "Number of vertices : " << m_coords.size() / 3 << std::endl;
+    os << indent << "Filename : " << BaseClass::filename() << std::endl;
+    os << indent << "Line type : " << m_line_type << std::endl;
+    os << indent << "Color type : " << m_color_type << std::endl;
+    os << indent << "Number of vertices : " << m_coords.size() / 3 << std::endl;
 }
 
 /*===========================================================================*/

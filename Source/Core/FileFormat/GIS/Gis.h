@@ -20,6 +20,7 @@
 #include <kvs/FileFormatBase>
 #include <kvs/Vector2>
 #include <kvs/RGBColor>
+#include <kvs/Indent>
 #include "Mesh.h"
 #include "Area.h"
 #include "OceanValue.h"
@@ -63,7 +64,7 @@ public:
     void setRenderArea( const kvs::gis::Area& render_area );
     void setOceanColor( const kvs::RGBColor& color );
 
-    void print( std::ostream& os, const size_t indent = 0 ) const;
+    void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
     bool read( const std::string& filenames );
 
 private:

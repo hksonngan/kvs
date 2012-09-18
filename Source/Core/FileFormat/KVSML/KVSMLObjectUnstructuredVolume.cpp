@@ -394,15 +394,14 @@ void KVSMLObjectUnstructuredVolume::setConnections( const kvs::ValueArray<kvs::U
     m_connections = connections;
 }
 
-void KVSMLObjectUnstructuredVolume::print( std::ostream& os, const size_t indent ) const
+void KVSMLObjectUnstructuredVolume::print( std::ostream& os, const kvs::Indent& indent ) const
 {
-    const std::string blanks( indent, ' ' );
-    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
-    os << blanks << "Cell type : " << m_cell_type << std::endl;
-    os << blanks << "Veclen : " << m_veclen << std::endl;
-    os << blanks << "Number of nodes : " << m_nnodes << std::endl;
-    os << blanks << "Number of cells : " << m_ncells << std::endl;
-    os << blanks << "Value type : " << m_values.typeInfo()->typeName();
+    os << indent << "Filename : " << BaseClass::filename() << std::endl;
+    os << indent << "Cell type : " << m_cell_type << std::endl;
+    os << indent << "Veclen : " << m_veclen << std::endl;
+    os << indent << "Number of nodes : " << m_nnodes << std::endl;
+    os << indent << "Number of cells : " << m_ncells << std::endl;
+    os << indent << "Value type : " << m_values.typeInfo()->typeName();
 }
 
 /*===========================================================================*/

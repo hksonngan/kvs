@@ -277,13 +277,12 @@ void KVSMLTransferFunction::setColors( const kvs::ValueArray<kvs::UInt8>& colors
     m_colors = colors;
 }
 
-void KVSMLTransferFunction::print( std::ostream& os, const size_t indent ) const
+void KVSMLTransferFunction::print( std::ostream& os, const kvs::Indent& indent ) const
 {
-    const std::string blanks( indent, ' ' );
-    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
-    os << blanks << "Resolution : " <<  m_resolution << std::endl;
-    os << blanks << "Min. scalar value : " << m_min_value << std::endl;
-    os << blanks << "Max. scalar value : " << m_max_value << std::endl;
+    os << indent << "Filename : " << BaseClass::filename() << std::endl;
+    os << indent << "Resolution : " <<  m_resolution << std::endl;
+    os << indent << "Min. scalar value : " << m_min_value << std::endl;
+    os << indent << "Max. scalar value : " << m_max_value << std::endl;
 }
 
 /*===========================================================================*/

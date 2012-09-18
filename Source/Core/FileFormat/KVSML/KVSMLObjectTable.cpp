@@ -292,13 +292,12 @@ void KVSMLObjectTable::addColumn( const kvs::AnyValueArray& column, const std::s
     m_nrows = m_nrows > column.size() ? m_nrows : column.size();
 }
 
-void KVSMLObjectTable::print( std::ostream& os, const size_t indent ) const
+void KVSMLObjectTable::print( std::ostream& os, const kvs::Indent& indent ) const
 {
-    const std::string blanks( indent, ' ' );
-    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
-    os << blanks << "Number of rows : " << m_nrows << std::endl;
-    os << blanks << "Number of columns : " << m_ncolumns << std::endl;
-    os << blanks << "Labels : ";
+    os << indent << "Filename : " << BaseClass::filename() << std::endl;
+    os << indent << "Number of rows : " << m_nrows << std::endl;
+    os << indent << "Number of columns : " << m_ncolumns << std::endl;
+    os << indent << "Labels : ";
     for ( size_t i = 0; i < m_ncolumns; i++ )
     {
         os << m_labels.at(i);

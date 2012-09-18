@@ -113,13 +113,12 @@ const std::vector<ResultData::Values>& ResultData::values() const
     return m_values;
 }
 
-void ResultData::print( std::ostream& os, const size_t indent ) const
+void ResultData::print( std::ostream& os, const kvs::Indent& indent ) const
 {
-    const std::string blanks( indent, ' ' );
-    os << blanks << "Number of nodes : " << m_nnodes << std::endl;
-    os << blanks << "Number of cells : " << m_ncells << std::endl;
-    os << blanks << "Number of components per node : " << m_ncomponents_per_node << std::endl;
-    os << blanks << "Number of components per cell : " << m_ncomponents_per_cell << std::endl;
+    os << indent << "Number of nodes : " << m_nnodes << std::endl;
+    os << indent << "Number of cells : " << m_ncells << std::endl;
+    os << indent << "Number of components per node : " << m_ncomponents_per_node << std::endl;
+    os << indent << "Number of components per cell : " << m_ncomponents_per_cell << std::endl;
 }
 
 /*===========================================================================*/

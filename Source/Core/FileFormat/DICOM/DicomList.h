@@ -17,8 +17,9 @@
 #include <algorithm>
 #include <vector>
 #include <string>
-#include <kvs/Vector2>
 #include <kvs/FileFormatBase>
+#include <kvs/Vector2>
+#include <kvs/Indent>
 #include <kvs/Dicom>
 
 
@@ -107,7 +108,7 @@ public:
         std::sort( m_list.begin(), m_list.end(), CompareMethod() );
     }
 
-    void print( std::ostream& os, const size_t indent = 0 );
+    void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) );
     bool read( const std::string& dirname );
     bool write( const std::string& dirname );
 };

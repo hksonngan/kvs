@@ -655,28 +655,27 @@ std::list<dcm::Element>::iterator Dicom::findElement( const dcm::Tag tag )
     return std::find( m_element_list.begin(), m_element_list.end(), tag );
 }
 
-void Dicom::print( std::ostream& os, const size_t indent ) const
+void Dicom::print( std::ostream& os, const kvs::Indent& indent ) const
 {
-    const std::string blanks( indent, ' ' );
-    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
-    os << blanks << "Modality : " <<  m_modality << std::endl;
-    os << blanks << "Manufacturer : " <<  m_manufacturer << std::endl;
-    os << blanks << "Slice thickness : " <<  m_slice_thickness << std::endl;
-    os << blanks << "Slice spacing : " <<  m_slice_spacing << std::endl;
-    os << blanks << "Series number : " <<  m_series_number << std::endl;
-    os << blanks << "Image number : " <<  m_image_number << std::endl;
-    os << blanks << "Slice location : " <<  m_slice_location << std::endl;
-    os << blanks << "Row : " <<  m_row << std::endl;
-    os << blanks << "Column : " <<  m_column << std::endl;
-    os << blanks << "Pixel spaceing : " <<  m_pixel_spacing[0] << " " << m_pixel_spacing[1] << std::endl;
-    os << blanks << "Bits allocated : " <<  m_bits_allocated << std::endl;
-    os << blanks << "Bits stored : " <<  m_bits_stored << std::endl;
-    os << blanks << "High bit : " <<  m_high_bit << std::endl;
-    os << blanks << "Pixel representation : " <<( m_pixel_representation ? "unsigned" : "signed" ) << std::endl;
-    os << blanks << "Window center : " <<  m_window_level << std::endl;
-    os << blanks << "Window width : " <<  m_window_width << std::endl;
-    os << blanks << "Rescale intersept : " <<  m_rescale_intersept << std::endl;
-    os << blanks << "Rescale slope : " <<  m_rescale_slope << std::endl;
+    os << indent << "Filename : " << BaseClass::filename() << std::endl;
+    os << indent << "Modality : " <<  m_modality << std::endl;
+    os << indent << "Manufacturer : " <<  m_manufacturer << std::endl;
+    os << indent << "Slice thickness : " <<  m_slice_thickness << std::endl;
+    os << indent << "Slice spacing : " <<  m_slice_spacing << std::endl;
+    os << indent << "Series number : " <<  m_series_number << std::endl;
+    os << indent << "Image number : " <<  m_image_number << std::endl;
+    os << indent << "Slice location : " <<  m_slice_location << std::endl;
+    os << indent << "Row : " <<  m_row << std::endl;
+    os << indent << "Column : " <<  m_column << std::endl;
+    os << indent << "Pixel spaceing : " <<  m_pixel_spacing[0] << " " << m_pixel_spacing[1] << std::endl;
+    os << indent << "Bits allocated : " <<  m_bits_allocated << std::endl;
+    os << indent << "Bits stored : " <<  m_bits_stored << std::endl;
+    os << indent << "High bit : " <<  m_high_bit << std::endl;
+    os << indent << "Pixel representation : " <<( m_pixel_representation ? "unsigned" : "signed" ) << std::endl;
+    os << indent << "Window center : " <<  m_window_level << std::endl;
+    os << indent << "Window width : " <<  m_window_width << std::endl;
+    os << indent << "Rescale intersept : " <<  m_rescale_intersept << std::endl;
+    os << indent << "Rescale slope : " <<  m_rescale_slope << std::endl;
 }
 
 /*===========================================================================*/

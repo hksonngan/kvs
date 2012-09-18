@@ -196,15 +196,14 @@ void Area::setMaxHeight( const float max_height )
     m_max_height = max_height;
 }
 
-void Area::print( std::ostream& os, const size_t indent ) const
+void Area::print( std::ostream& os, const kvs::Indent& indent ) const
 {
-    const std::string blanks( indent, ' ' );
-    os << blanks << "Min. latitude : " << m_min_latitude << std::endl;
-    os << blanks << "Max. latitude : " << m_max_latitude << std::endl;
-    os << blanks << "Min. longitude : " << m_min_longitude << std::endl;
-    os << blanks << "Max. longitude : " << m_max_longitude << std::endl;
-    os << blanks << "Min. height : " << m_min_height << std::endl;
-    os << blanks << "Max. height : " << m_max_height << std::endl;
+    os << indent << "Min. latitude : " << m_min_latitude << std::endl;
+    os << indent << "Max. latitude : " << m_max_latitude << std::endl;
+    os << indent << "Min. longitude : " << m_min_longitude << std::endl;
+    os << indent << "Max. longitude : " << m_max_longitude << std::endl;
+    os << indent << "Min. height : " << m_min_height << std::endl;
+    os << indent << "Max. height : " << m_max_height << std::endl;
 }
 
 } // end of namespace gis

@@ -16,6 +16,7 @@
 #define KVS__GIS__AREA_H_INCLUDE
 
 #include <iostream>
+#include <kvs/Indent>
 
 
 namespace kvs
@@ -65,7 +66,7 @@ public:
     void setMinHeight( const float min_height );
     void setMaxHeight( const float max_height );
 
-    void print( std::ostream& os, const size_t indent = 0 ) const;
+    void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
 };
 
 } // end of namespace gis

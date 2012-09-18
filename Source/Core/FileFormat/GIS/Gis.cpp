@@ -138,21 +138,19 @@ void Gis::setOceanColor( const kvs::RGBColor& color )
     m_ocean_color = color;
 }
 
-void Gis::print( std::ostream& os, const size_t indent ) const
+void Gis::print( std::ostream& os, const kvs::Indent& indent ) const
 {
-    const size_t next_indent = ( indent == 0 ) ? 4 : indent * 2;
-    const std::string blanks( indent, ' ' );
-    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
-    os << blanks << "Area of all meshes : " << std::endl;
-    m_area.print( os, next_indent );
-    os << blanks << "Render area : " << std::endl;
-    m_render_area.print( os, next_indent );
-    os << blanks << "Ocean color : " << m_ocean_color << std::endl;
-    os << blanks << "Number of meshes : " << m_meshes.size() << std::endl;
+    os << indent << "Filename : " << BaseClass::filename() << std::endl;
+    os << indent << "Area of all meshes : " << std::endl;
+    m_area.print( os, indent.nextIndent() );
+    os << indent << "Render area : " << std::endl;
+    m_render_area.print( os, indent.nextIndent() );
+    os << indent << "Ocean color : " << m_ocean_color << std::endl;
+    os << indent << "Number of meshes : " << m_meshes.size() << std::endl;
     for ( size_t i = 0; i < m_meshes.size(); i++ )
     {
-        os << blanks << "Mesh [" << i << "] : " << std::endl;
-        m_meshes[i]->print( os, next_indent );
+        os << indent << "Mesh [" << i << "] : " << std::endl;
+        m_meshes[i]->print( os, indent.nextIndent() );
     }
 }
 

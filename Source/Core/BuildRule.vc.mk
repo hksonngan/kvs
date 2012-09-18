@@ -169,6 +169,7 @@ $(OUTDIR)\.\Utility\Date.obj \
 $(OUTDIR)\.\Utility\Directory.obj \
 $(OUTDIR)\.\Utility\FastTokenizer.obj \
 $(OUTDIR)\.\Utility\File.obj \
+$(OUTDIR)\.\Utility\Indent.obj \
 $(OUTDIR)\.\Utility\MemoryTracer.obj \
 $(OUTDIR)\.\Utility\Message.obj \
 $(OUTDIR)\.\Utility\ReferenceCounter.obj \

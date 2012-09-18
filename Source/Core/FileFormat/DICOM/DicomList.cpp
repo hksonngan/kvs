@@ -4,7 +4,7 @@
  *  @brief  DICOM list class.
  *
  *  @author Naohisa Sakamoto
- *  @date   2012/09/18 12:55:10
+ *  @date   2012/09/18 23:27:12
  */
 /*----------------------------------------------------------------------------
  *
@@ -369,18 +369,17 @@ void DicomList::disableExtensionCheck()
     m_extension_check = false;
 }
 
-void DicomList::print( std::ostream& os, const size_t indent )
+void DicomList::print( std::ostream& os, const kvs::Indent& indent )
 {
-    const std::string blanks( indent, ' ' );
-    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
-    os << blanks << "Row : " << m_row << std::endl;
-    os << blanks << "Column : " << m_column << std::endl;
-    os << blanks << "Number of slices : " << m_list.size() << std::endl;
-    os << blanks << "Slice spacing : " << m_slice_spacing << std::endl;
-    os << blanks << "Slice thickness : " << m_slice_thickness << std::endl;
-    os << blanks << "Pixel spacing : " << m_pixel_spacing << std::endl;
-    os << blanks << "Min. raw value : " << m_min_raw_value << std::endl;
-    os << blanks << "Max. raw value : " << m_max_raw_value << std::endl;
+    os << indent << "Filename : " << BaseClass::filename() << std::endl;
+    os << indent << "Row : " << m_row << std::endl;
+    os << indent << "Column : " << m_column << std::endl;
+    os << indent << "Number of slices : " << m_list.size() << std::endl;
+    os << indent << "Slice spacing : " << m_slice_spacing << std::endl;
+    os << indent << "Slice thickness : " << m_slice_thickness << std::endl;
+    os << indent << "Pixel spacing : " << m_pixel_spacing << std::endl;
+    os << indent << "Min. raw value : " << m_min_raw_value << std::endl;
+    os << indent << "Max. raw value : " << m_max_raw_value << std::endl;
 }
 
 /*===========================================================================*/

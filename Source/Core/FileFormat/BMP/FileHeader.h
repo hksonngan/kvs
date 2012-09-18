@@ -16,6 +16,7 @@
 
 #include "HeaderBase.h"
 #include <kvs/Type>
+#include <kvs/Indent>
 
 
 namespace kvs { class Bmp; }
@@ -59,7 +60,7 @@ public:
     kvs::UInt32 offset() const;
 
     bool isBM();
-    void print( std::ostream& os, const size_t indent = 0 ) const;
+    void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
     void read( std::ifstream& ifs );
     void write( std::ofstream& ofs );
 

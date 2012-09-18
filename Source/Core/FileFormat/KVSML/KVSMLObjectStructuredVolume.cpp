@@ -309,14 +309,13 @@ void KVSMLObjectStructuredVolume::setCoords( const kvs::ValueArray<float>& coord
     m_coords = coords;
 }
 
-void KVSMLObjectStructuredVolume::print( std::ostream& os, const size_t indent ) const
+void KVSMLObjectStructuredVolume::print( std::ostream& os, const kvs::Indent& indent ) const
 {
-    const std::string blanks( indent, ' ' );
-    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
-    os << blanks << "Grid type : " << m_grid_type << std::endl;
-    os << blanks << "Veclen : " << m_veclen << std::endl;
-    os << blanks << "Resolution : " << m_resolution << std::endl;
-    os << blanks << "Value type : " << m_values.typeInfo()->typeName();
+    os << indent << "Filename : " << BaseClass::filename() << std::endl;
+    os << indent << "Grid type : " << m_grid_type << std::endl;
+    os << indent << "Veclen : " << m_veclen << std::endl;
+    os << indent << "Resolution : " << m_resolution << std::endl;
+    os << indent << "Value type : " << m_values.typeInfo()->typeName();
 }
 
 /*===========================================================================*/

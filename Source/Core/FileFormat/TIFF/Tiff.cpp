@@ -114,13 +114,12 @@ bool Tiff::isSupported() const
     return ret;
 }
 
-void Tiff::print( std::ostream& os, const size_t indent ) const
+void Tiff::print( std::ostream& os, const kvs::Indent& indent ) const
 {
-    const std::string blanks( indent, ' ' );
-    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
-    os << blanks << "Width : " << m_width << std::endl;
-    os << blanks << "Height : " << m_height << std::endl;
-    os << blanks << "Bits per sample : " << m_bits_per_sample << std::endl;
+    os << indent << "Filename : " << BaseClass::filename() << std::endl;
+    os << indent << "Width : " << m_width << std::endl;
+    os << indent << "Height : " << m_height << std::endl;
+    os << indent << "Bits per sample : " << m_bits_per_sample << std::endl;
 
     m_header.print( os, indent );
     m_ifd.print( os, indent );

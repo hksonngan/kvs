@@ -130,13 +130,12 @@ bool Header::isP6() const
     return m_magic == "p6" || m_magic == "P6";
 }
 
-void Header::print( std::ostream& os, const size_t indent ) const
+void Header::print( std::ostream& os, const kvs::Indent& indent ) const
 {
-    const std::string blanks( indent, ' ' );
-    os << blanks << "Magic number : " << m_magic  << std::endl;
-    os << blanks << "Width : " << m_width  << std::endl;
-    os << blanks << "Height : " << m_height << std::endl;
-    os << blanks << "Max : " << m_max << std::endl;
+    os << indent << "Magic number : " << m_magic  << std::endl;
+    os << indent << "Width : " << m_width  << std::endl;
+    os << indent << "Height : " << m_height << std::endl;
+    os << indent << "Max : " << m_max << std::endl;
 }
 
 void Header::read( std::ifstream& ifs )

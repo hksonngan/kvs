@@ -17,6 +17,7 @@
 
 #include <iostream>
 #include <kvs/FileFormatBase>
+#include <kvs/Indent>
 #include "FlowData.h"
 #include "MeshData.h"
 #include "BoundaryData.h"
@@ -52,7 +53,7 @@ public:
     const kvs::gf::MeshData& meshData() const;
     const kvs::gf::BoundaryData& boundaryData() const;
 
-    void print( std::ostream& os, const size_t indent = 0 ) const;
+    void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
     bool read( const std::string& filename );
     bool read( const std::string& mesh_file, const std::string& flow_file, const std::string& boundary_file = "" );
 

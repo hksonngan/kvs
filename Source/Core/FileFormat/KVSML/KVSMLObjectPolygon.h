@@ -18,6 +18,7 @@
 #include <kvs/ValueArray>
 #include <kvs/Type>
 #include <kvs/Vector3>
+#include <kvs/Indent>
 #include "KVSMLTag.h"
 #include "ObjectTag.h"
 
@@ -89,7 +90,7 @@ public:
     void setOpacities( const kvs::ValueArray<kvs::UInt8>& opacities );
     void setNormals( const kvs::ValueArray<kvs::Real32>& normals );
 
-    void print( std::ostream& os, const size_t indent = 0 ) const;
+    void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
     bool read( const std::string& filename );
     bool write( const std::string& filename );
 };

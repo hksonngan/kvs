@@ -116,13 +116,12 @@ const kvs::ValueArray<kvs::UInt32>& MeshData::connections() const
     return m_connections;
 }
 
-void MeshData::print( std::ostream& os, const size_t indent ) const
+void MeshData::print( std::ostream& os, const kvs::Indent& indent ) const
 {
-    const std::string blanks( indent, ' ' );
-    os << blanks << "Dimensions : " << m_dimensions << std::endl;
-    os << blanks << "Number of nodes per element : " << m_nnodes_per_element << std::endl;
-    os << blanks << "Number of nodes : " << m_nnodes << std::endl;
-    os << blanks << "Number of elements : " << m_nelements << std::endl;
+    os << indent << "Dimensions : " << m_dimensions << std::endl;
+    os << indent << "Number of nodes per element : " << m_nnodes_per_element << std::endl;
+    os << indent << "Number of nodes : " << m_nnodes << std::endl;
+    os << indent << "Number of elements : " << m_nelements << std::endl;
 }
 
 /*===========================================================================*/

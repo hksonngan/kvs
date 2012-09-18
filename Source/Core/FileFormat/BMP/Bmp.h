@@ -18,6 +18,7 @@
 #include <kvs/ClassName>
 #include <kvs/Type>
 #include <kvs/ValueArray>
+#include <kvs/Indent>
 #include <iostream>
 #include <fstream>
 #include "FileHeader.h"
@@ -67,7 +68,7 @@ public:
     size_t bitsPerPixel() const;
     kvs::ValueArray<kvs::UInt8> data() const;
 
-    void print( std::ostream& os, const size_t indent = 0 ) const;
+    void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
     bool read( const std::string& filename );
     bool write( const std::string& filename );
 

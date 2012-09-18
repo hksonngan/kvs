@@ -98,15 +98,14 @@ const kvs::AnyValueArray& Entry::values() const
     return m_values;
 }
 
-void Entry::print( std::ostream& os, const size_t indent ) const
+void Entry::print( std::ostream& os, const kvs::Indent& indent ) const
 {
-    const std::string blanks( indent, ' ' );
-    os << blanks << "Tag : " << this->tagDescription() << std::endl;
-    os << blanks << "Type : " << this->typeName() << std::endl;
-    os << blanks << "Count : " << this->count() << std::endl;
+    os << indent << "Tag : " << this->tagDescription() << std::endl;
+    os << indent << "Type : " << this->typeName() << std::endl;
+    os << indent << "Count : " << this->count() << std::endl;
     if( this->type() == kvs::tiff::Ascii )
     {
-        os << blanks << "Value: ";
+        os << indent << "Value : ";
         kvs::ValueArray<kvs::Int8> values = this->values().asValueArray<kvs::Int8>();
         for ( size_t i = 0; i < this->count(); i++ )
         {
@@ -115,7 +114,7 @@ void Entry::print( std::ostream& os, const size_t indent ) const
     }
     else
     {
-        os << blanks << "Value: ";
+        os << indent << "Value : ";
         kvs::ValueArray<kvs::UInt32> values = this->values().asValueArray<kvs::UInt32>();
         for ( size_t i = 0; i < this->count(); i++ )
         {

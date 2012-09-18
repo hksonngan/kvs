@@ -104,6 +104,7 @@
 #include <Core/Utility/File.h>
 #include <Core/Utility/FileList.h>
 #include <Core/Utility/IgnoreUnusedVariable.h>
+#include <Core/Utility/Indent.h>
 #include <Core/Utility/Macro.h>
 #include <Core/Utility/Math.h>
 #include <Core/Utility/MemoryDebugger.h>

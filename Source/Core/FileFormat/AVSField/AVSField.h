@@ -18,9 +18,10 @@
 #include <vector>
 #include <fstream>
 #include <string>
+#include <kvs/FileFormatBase>
 #include <kvs/Vector3>
 #include <kvs/AnyValueArray>
-#include <kvs/FileFormatBase>
+#include <kvs/Indent>
 
 
 namespace kvs
@@ -116,7 +117,7 @@ public:
     void setValues( const kvs::AnyValueArray& values );
     void setCoords( const kvs::ValueArray<float>& coords );
 
-    void print( std::ostream& os, const size_t indent = 0 ) const;
+    void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
     bool read( const std::string& filename );
     bool write( const std::string& filename );
 
@@ -127,7 +128,7 @@ private:
     bool read_node( FILE* ifs );
     bool read_coord( FILE* ifs );
     template< typename T >
-    bool read_coord_data(  FILE* ifs, const size_t nvertices );
+    bool read_coord_data( FILE* ifs, const size_t nvertices );
     bool write_header( std::ofstream& ofs ) const;
     bool write_node( std::ofstream& ofs ) const;
 };

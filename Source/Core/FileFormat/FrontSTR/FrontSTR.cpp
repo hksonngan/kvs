@@ -212,22 +212,20 @@ bool FrontSTR::read( const std::string& msh_filename, const std::string& res_fil
     return true;
 }
 
-void FrontSTR::print( std::ostream& os, const size_t indent ) const
+void FrontSTR::print( std::ostream& os, const kvs::Indent& indent ) const
 {
-    const size_t next_indent = ( indent == 0 ) ? 4 : indent * 2;
-    const std::string blanks( indent, ' ' );
-    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
-    os << blanks << "Number of mesh data : " << m_nmeshes << std::endl;
-    os << blanks << "Number of result data : " << m_nresults << std::endl;
+    os << indent << "Filename : " << BaseClass::filename() << std::endl;
+    os << indent << "Number of mesh data : " << m_nmeshes << std::endl;
+    os << indent << "Number of result data : " << m_nresults << std::endl;
     for ( size_t i = 0; i < m_nmeshes; i++ )
     {
-        os << blanks << "Mesh data [" << i << "] : " << std::endl;
-        m_mesh_data[i].print( os, next_indent );
+        os << indent << "Mesh data [" << i << "] : " << std::endl;
+        m_mesh_data[i].print( os, indent.nextIndent() );
     }
     for ( size_t i = 0; i < m_nresults; i++ )
     {
-        os << blanks << "Result data [" << i << "] : " << std::endl;
-        m_result_data[i].print( os, next_indent );
+        os << indent << "Result data [" << i << "] : " << std::endl;
+        m_result_data[i].print( os, indent.nextIndent() );
     }
 }
 

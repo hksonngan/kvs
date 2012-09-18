@@ -17,8 +17,9 @@
 
 #include "Point.h"
 #include "Area.h"
-#include <ostream>
+#include <iostream>
 #include <kvs/Vector2>
+#include <kvs/Indent>
 
 
 namespace kvs
@@ -69,7 +70,7 @@ public:
     void setLongitudeInterval( const float longitude_interval );
     void setArea( const kvs::gis::Area& area );
 
-    void print( std::ostream& os, const size_t indent = 0 ) const;
+    void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
 
 protected:
 

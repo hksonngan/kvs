@@ -19,6 +19,7 @@
 #include <kvs/AnyValueArray>
 #include <kvs/Type>
 #include <kvs/Vector3>
+#include <kvs/Indent>
 #include <string>
 #include <vector>
 #include <Core/FileFormat/KVSML/KVSMLTag.h>
@@ -97,7 +98,7 @@ public:
     void setMaxRange( const size_t column_index, const double range );
     void addColumn( const kvs::AnyValueArray& column, const std::string& label );
 
-    void print( std::ostream& os, const size_t indent = 0 ) const;
+    void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
     bool read( const std::string& filename );
     bool write( const std::string& filename );
 };

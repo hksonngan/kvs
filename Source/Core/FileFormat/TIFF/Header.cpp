@@ -70,18 +70,16 @@ kvs::UInt32 Header::offset() const
     return m_offset;
 }
 
-void Header::print( std::ostream& os, const size_t indent ) const
+void Header::print( std::ostream& os, const kvs::Indent& indent ) const
 {
-    const std::string blanks( indent, ' ' );
-
     std::string magic( "" );
     if ( m_magic == ::BigEndian ) magic.append("Big endian");
     else if ( m_magic == ::LittleEndian ) magic.append("Little endian");
     else magic.append("Unknown");
 
-    os << "Magic number : " << m_magic << " (" << magic << ")" << std::endl;
-    os << "Version : " << m_version << std::endl;
-    os << "Offset : " << m_offset << std::endl;
+    os << indent << "Magic number : " << m_magic << " (" << magic << ")" << std::endl;
+    os << indent << "Version : " << m_version << std::endl;
+    os << indent << "Offset : " << m_offset << std::endl;
 }
 
 bool Header::read( std::ifstream& ifs )

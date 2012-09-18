@@ -128,10 +128,9 @@ const kvs::BitArray& Pbm::data() const
     return m_data;
 }
 
-void Pbm::print( std::ostream& os, const size_t indent ) const
+void Pbm::print( std::ostream& os, const kvs::Indent& indent ) const
 {
-    const std::string blanks( indent, ' ' );
-    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
+    os << indent << "Filename : " << BaseClass::filename() << std::endl;
     m_header.print( os, indent );
 }
 

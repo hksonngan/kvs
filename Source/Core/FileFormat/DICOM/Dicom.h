@@ -23,6 +23,7 @@
 #include <kvs/ValueArray>
 #include <kvs/Type>
 #include <kvs/Vector2>
+#include <kvs/Indent>
 #include "Attribute.h"
 #include "Window.h"
 #include "Element.h"
@@ -127,7 +128,7 @@ public:
     void changeWindow( const int level, const int width );
     void resetWindow();
     std::list<dcm::Element>::iterator findElement( const dcm::Tag tag );
-    void print( std::ostream& os, const size_t indent = 0 ) const;
+    void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
     bool read( const std::string& filename );
     bool write( const std::string& filename );
 

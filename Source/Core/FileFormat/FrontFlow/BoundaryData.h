@@ -19,6 +19,7 @@
 #include <string>
 #include <kvs/ValueArray>
 #include <kvs/Type>
+#include <kvs/Indent>
 
 
 namespace kvs
@@ -91,7 +92,7 @@ public:
     const kvs::ValueArray<kvs::Real32>& temperatures() const;
     const kvs::ValueArray<kvs::Real32>& heatFluxes() const;
 
-    void print( std::ostream& os, const size_t indent = 0 ) const;
+    void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
     bool read( const std::string filename );
 };
 

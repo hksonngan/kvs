@@ -431,42 +431,41 @@ void AVSUcd::setValues( const Values& values )
     m_values = values;
 }
 
-void AVSUcd::print( std::ostream& os, const size_t indent ) const
+void AVSUcd::print( std::ostream& os, const kvs::Indent& indent ) const
 {
-    const std::string blanks( indent, ' ' );
-    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
-    os << blanks << "Number of steps : " << m_nsteps << std::endl;
-    os << blanks << "Cycle type : " << ::CycleTypeToString[m_cycle_type] << std::endl;
-    os << blanks << "Element type : " << ::ElementTypeToString[m_element_type] << std::endl;
-    os << blanks << "Step ID : " << m_step_id << std::endl;
-    os << blanks << "Step comment : " << m_step_comment << std::endl;
-    os << blanks << "Number of nodes : " << m_nnodes << std::endl;
-    os << blanks << "Number of elements : " << m_nelements << std::endl;
-    os << blanks << "Number of values per node : " << m_nvalues_per_node << std::endl;
-    os << blanks << "Number of components per node : " << m_ncomponents_per_node << std::endl;
+    os << indent << "Filename : " << BaseClass::filename() << std::endl;
+    os << indent << "Number of steps : " << m_nsteps << std::endl;
+    os << indent << "Cycle type : " << ::CycleTypeToString[m_cycle_type] << std::endl;
+    os << indent << "Element type : " << ::ElementTypeToString[m_element_type] << std::endl;
+    os << indent << "Step ID : " << m_step_id << std::endl;
+    os << indent << "Step comment : " << m_step_comment << std::endl;
+    os << indent << "Number of nodes : " << m_nnodes << std::endl;
+    os << indent << "Number of elements : " << m_nelements << std::endl;
+    os << indent << "Number of values per node : " << m_nvalues_per_node << std::endl;
+    os << indent << "Number of components per node : " << m_ncomponents_per_node << std::endl;
 
-    os << blanks << "Veclens of each component : ";
+    os << indent << "Veclens of each component : ";
     for ( size_t i = 0; i < m_ncomponents_per_node; ++i )
     {
         os << m_veclens[ i ] << " ";
     }
     os << std::endl;
 
-    os << blanks << "Names of each component : ";
+    os << indent << "Names of each component : ";
     for ( size_t i = 0; i < m_ncomponents_per_node; ++i )
     {
         os << m_component_names[ i ] << " ";
     }
     os << std::endl;
 
-    os << blanks << "Units of each component : ";
+    os << indent << "Units of each component : ";
     for ( size_t i = 0; i < m_ncomponents_per_node; ++i )
     {
         os << m_component_units[ i ] << " ";
     }
     os << std::endl;
 
-    os << blanks << "Component ID : " << m_component_id << std::endl;
+    os << indent << "Component ID : " << m_component_id << std::endl;
 }
 
 /*==========================================================================*/

@@ -17,6 +17,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <kvs/Indent>
 #include "DSet.h"
 #include "Undef.h"
 #include "Title.h"
@@ -69,7 +70,7 @@ public:
     const kvs::grads::TDef& tdef() const;
     const kvs::grads::Vars& vars() const;
 
-    void print( std::ostream& os, const size_t indent = 0 ) const;
+    void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
     bool read( std::ifstream& ifs );
 };
 

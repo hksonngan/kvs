@@ -55,8 +55,7 @@ inline void PrintInformation( const char* class_name, std::ostream& os, const kv
     os << "File format class: " << class_name << std::endl;
     os << "Reading time: " << timer.sec() << " [sec]" << std::endl;
     os << "Information: " << std::endl;
-    const size_t indent = 2;
-    file.print( os, indent );
+    file.print( os, kvs::Indent(2) );
 }
 
 /*===========================================================================*/

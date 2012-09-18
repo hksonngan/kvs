@@ -237,14 +237,13 @@ void Ply::setConnections( const kvs::ValueArray<kvs::UInt32>& connections )
     m_connections = connections;
 }
 
-void Ply::print( std::ostream& os, const size_t indent ) const
+void Ply::print( std::ostream& os, const kvs::Indent& indent ) const
 {
-    const std::string blanks( indent, ' ' );
-    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
-    os << blanks << "Number of vertices : " << m_nverts << std::endl;
-    os << blanks << "Number of faces : " << m_nfaces << std::endl;
-    os << blanks << "Min. coordinate : " << m_min_coord << std::endl;
-    os << blanks << "Max. coordinate : " << m_max_coord << std::endl;
+    os << indent << "Filename : " << BaseClass::filename() << std::endl;
+    os << indent << "Number of vertices : " << m_nverts << std::endl;
+    os << indent << "Number of faces : " << m_nfaces << std::endl;
+    os << indent << "Min. coordinate : " << m_min_coord << std::endl;
+    os << indent << "Max. coordinate : " << m_max_coord << std::endl;
 }
 
 bool Ply::read( const std::string& filename )

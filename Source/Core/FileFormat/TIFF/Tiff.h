@@ -18,6 +18,7 @@
 #include <kvs/Type>
 #include <kvs/Message>
 #include <kvs/AnyValueArray>
+#include <kvs/Indent>
 #include <iostream>
 #include "Header.h"
 #include "ImageFileDirectory.h"
@@ -74,7 +75,7 @@ public:
     const kvs::AnyValueArray& rawData() const;
     bool isSupported() const;
 
-    void print( std::ostream& os, const size_t indent = 0 ) const;
+    void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
     bool read( const std::string& filename );
 
 private:

@@ -21,6 +21,7 @@
 #include <fstream>
 #include <kvs/ValueArray>
 #include <kvs/Type>
+#include <kvs/Indent>
 
 
 namespace kvs
@@ -62,7 +63,7 @@ public:
     const std::vector<std::string>& labels() const;
     const std::vector<Values>& values() const;
 
-    void print( std::ostream& os, const size_t indent = 0 ) const;
+    void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
     bool readData( const std::string& filename );
     bool readDividedData( const std::string& filename );
 

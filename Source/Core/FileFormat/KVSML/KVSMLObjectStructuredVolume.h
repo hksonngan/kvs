@@ -19,6 +19,7 @@
 #include <kvs/ValueArray>
 #include <kvs/Type>
 #include <kvs/Vector3>
+#include <kvs/Indent>
 #include <string>
 #include "KVSMLTag.h"
 #include "ObjectTag.h"
@@ -97,7 +98,7 @@ public:
     void setValues( const kvs::AnyValueArray& values );
     void setCoords( const kvs::ValueArray<float>& coords );
 
-    void print( std::ostream& os, const size_t indent = 0 ) const;
+    void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
     bool read( const std::string& filename );
     bool write( const std::string& filename );
 };

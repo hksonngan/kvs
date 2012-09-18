@@ -15,6 +15,7 @@
 #define KVS__TIFF__HEADER_H_INCLUDE
 
 #include <kvs/Type>
+#include <kvs/Indent>
 #include <iostream>
 #include <fstream>
 
@@ -48,7 +49,7 @@ public:
     kvs::UInt16 version() const;
     kvs::UInt32 offset() const;
 
-    void print( std::ostream& os, const size_t indent = 0 ) const;
+    void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
     bool read( std::ifstream& ifs );
 };
 

@@ -17,6 +17,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <kvs/Indent>
 
 
 namespace kvs
@@ -68,7 +69,7 @@ public:
     bool isP4() const;
     bool isP5() const;
     bool isP6() const;
-    void print( std::ostream& os, const size_t indent = 0 ) const;
+    void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
     void read( std::ifstream& ifs );
     void write( std::ofstream& ofs ) const;
 

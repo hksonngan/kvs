@@ -169,12 +169,11 @@ const MeshData::Connections& MeshData::connections() const
     return m_connections;
 }
 
-void MeshData::print( std::ostream& os, const size_t indent ) const
+void MeshData::print( std::ostream& os, const kvs::Indent& indent ) const
 {
-    const std::string blanks( indent, ' ' );
-    os << blanks << "Element type : " << ::ElelemtTypeToString[m_element_type] << std::endl;
-    os << blanks << "Number of nodes : " << m_nnodes << std::endl;
-    os << blanks << "Number of cells : " << m_ncells << std::endl;
+    os << indent << "Element type : " << ::ElelemtTypeToString[m_element_type] << std::endl;
+    os << indent << "Number of nodes : " << m_nnodes << std::endl;
+    os << indent << "Number of cells : " << m_ncells << std::endl;
 }
 
 /*===========================================================================*/

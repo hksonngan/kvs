@@ -17,6 +17,7 @@
 
 #include <iostream>
 #include <kvs/FileFormatBase>
+#include <kvs/Indent>
 #include "DataDescriptorFile.h"
 #include "GriddedBinaryDataFile.h"
 
@@ -53,7 +54,7 @@ public:
     const GriddedBinaryDataFileList& dataList() const;
     const GriddedBinaryDataFile& data( const size_t index ) const;
 
-    void print( std::ostream& os, const size_t indent = 0 ) const;
+    void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
     bool read( const std::string& filename );
 
 private:

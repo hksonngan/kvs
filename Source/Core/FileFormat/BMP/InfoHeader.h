@@ -16,6 +16,7 @@
 
 #include "HeaderBase.h"
 #include <kvs/Type>
+#include <kvs/Indent>
 #include <iostream>
 #include <fstream>
 
@@ -72,7 +73,7 @@ public:
     kvs::UInt32 colsused() const;
     kvs::UInt32 colsimportant() const;
 
-    void print( std::ostream& os, const size_t indent = 0 ) const;
+    void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
     void read( std::ifstream& ifs );
     void write( std::ofstream& ofs );
 

@@ -62,16 +62,15 @@ bool FileHeader::isBM()
     return !strncmp( reinterpret_cast<char*>(&m_type), "BM", 2 );
 }
 
-void FileHeader::print( std::ostream& os, const size_t indent ) const
+void FileHeader::print( std::ostream& os, const kvs::Indent& indent ) const
 {
-    const std::string blanks( indent, ' ' );
     const char* tmp = reinterpret_cast<const char*>(&m_type);
     char* num = const_cast<char*>(tmp); num[2] = '\0';
-    os << blanks << "Magic number : " << (std::string)num << std::endl;
-    os << blanks << "Size : " << m_size << std::endl;
-    os << blanks << "Reserved 1 : " << m_reserved1 << std::endl;
-    os << blanks << "Reserved 2 : " << m_reserved2 << std::endl;
-    os << blanks << "Offset : " << m_offset;
+    os << indent << "Magic number : " << (std::string)num << std::endl;
+    os << indent << "Size : " << m_size << std::endl;
+    os << indent << "Reserved 1 : " << m_reserved1 << std::endl;
+    os << indent << "Reserved 2 : " << m_reserved2 << std::endl;
+    os << indent << "Offset : " << m_offset;
 }
 
 void FileHeader::read( std::ifstream& ifs )
