@@ -15,6 +15,7 @@
 #ifndef KVS__GRADS__DATA_DESCRIPTOR_H_INCLUDE
 #define KVS__GRADS__DATA_DESCRIPTOR_H_INCLUDE
 
+#include <iostream>
 #include <fstream>
 #include "DSet.h"
 #include "Undef.h"
@@ -68,6 +69,7 @@ public:
     const kvs::grads::TDef& tdef() const;
     const kvs::grads::Vars& vars() const;
 
+    void print( std::ostream& os, const size_t indent = 0 ) const;
     bool read( std::ifstream& ifs );
 };
 

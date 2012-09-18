@@ -50,7 +50,7 @@ public:
 #endif
     };
 
-protected:
+private:
 
     FileType m_file_type; ///< file type
     size_t m_nverts; ///< number of vertices
@@ -67,24 +67,14 @@ protected:
 
 public:
 
-    Ply();
-    Ply( const std::string& filename );
-    virtual ~Ply();
-
-public:
-
-    void initialize();
-    void calculateNormals();
-    void calculateMinMaxCoord();
-
-public:
-
     static bool CheckFileExtension( const std::string& filename );
     static bool CheckFileFormat( const std::string& filename );
 
-    friend std::ostream& operator << ( std::ostream& os, const Ply& ply );
-
 public:
+
+    Ply();
+    Ply( const std::string& filename );
+    virtual ~Ply();
 
     FileType fileType() const;
     size_t numberOfVertices() const;
@@ -99,18 +89,20 @@ public:
     const kvs::Vector3f& minCoord() const;
     const kvs::Vector3f& maxCoord() const;
 
-public:
-
     void setFileType( const FileType file_type );
     void setCoords( const kvs::ValueArray<kvs::Real32>& coords );
     void setColors( const kvs::ValueArray<kvs::UInt8>& colors );
     void setNormals( const kvs::ValueArray<kvs::Real32>& normals );
     void setConnections( const kvs::ValueArray<kvs::UInt32>& connections );
 
-public:
-
+    void print( std::ostream& os, const size_t indent = 0 ) const;
     bool read( const std::string& filename );
     bool write( const std::string& filename );
+
+private:
+
+    void calculate_min_max_coord();
+    void calculate_normals();
 };
 
 } // end of namespace kvs

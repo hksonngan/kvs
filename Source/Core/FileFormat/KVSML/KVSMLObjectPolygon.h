@@ -43,7 +43,7 @@ public:
         ExternalBinary ///< external binary data type
     };
 
-protected:
+private:
 
     kvs::kvsml::KVSMLTag m_kvsml_tag; ///< KVSML tag information
     kvs::kvsml::ObjectTag m_object_tag; ///< Object tag information
@@ -59,17 +59,17 @@ protected:
 
 public:
 
+    static bool CheckFileExtension( const std::string& filename );
+    static bool CheckFileFormat( const std::string& filename );
+
+public:
+
     KVSMLObjectPolygon();
     KVSMLObjectPolygon( const std::string& filename );
     virtual ~KVSMLObjectPolygon();
 
-public:
-
     const kvs::kvsml::KVSMLTag& KVSMLTag() const;
     const kvs::kvsml::ObjectTag& objectTag() const;
-
-public:
-
     const std::string& polygonType() const;
     const std::string& colorType() const;
     const std::string& normalType() const;
@@ -78,8 +78,6 @@ public:
     const kvs::ValueArray<kvs::UInt8>& colors() const;
     const kvs::ValueArray<kvs::UInt8>& opacities() const;
     const kvs::ValueArray<kvs::Real32>& normals() const;
-
-public:
 
     void setWritingDataType( const WritingDataType writing_type );
     void setPolygonType( const std::string& polygon_type );
@@ -91,17 +89,9 @@ public:
     void setOpacities( const kvs::ValueArray<kvs::UInt8>& opacities );
     void setNormals( const kvs::ValueArray<kvs::Real32>& normals );
 
-public:
-
+    void print( std::ostream& os, const size_t indent = 0 ) const;
     bool read( const std::string& filename );
     bool write( const std::string& filename );
-
-public:
-
-    static bool CheckFileExtension( const std::string& filename );
-    static bool CheckFileFormat( const std::string& filename );
-
-    friend std::ostream& operator <<( std::ostream& os, const KVSMLObjectPolygon& rhs );
 };
 
 } // end of namesapce kvs

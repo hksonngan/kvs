@@ -76,21 +76,14 @@ private:
 
 public:
 
+    static bool CheckFileExtension( const std::string& filename );
+    static bool CheckFileFormat( const std::string& filename );
+
+public:
+
     AVSField();
     AVSField( const std::string& filename );
     virtual ~AVSField();
-
-public:
-
-    void initialize();
-    void clear();
-
-public:
-
-    AVSField& operator = ( const AVSField& fld );
-    friend std::ostream& operator << ( std::ostream& os, const AVSField& fld );
-
-public:
 
     int bits( void ) const;
     bool isSigned( void ) const;
@@ -109,8 +102,6 @@ public:
     const kvs::AnyValueArray& values( void ) const;
     const kvs::ValueArray<float>& coords( void ) const;
 
-public:
-
     void setBits( const int bits );
     void setSigned( const bool sign );
     void setVeclen( const int veclen );
@@ -125,8 +116,7 @@ public:
     void setValues( const kvs::AnyValueArray& values );
     void setCoords( const kvs::ValueArray<float>& coords );
 
-public:
-
+    void print( std::ostream& os, const size_t indent = 0 ) const;
     bool read( const std::string& filename );
     bool write( const std::string& filename );
 
@@ -140,11 +130,6 @@ private:
     bool read_coord_data(  FILE* ifs, const size_t nvertices );
     bool write_header( std::ofstream& ofs ) const;
     bool write_node( std::ofstream& ofs ) const;
-
-public:
-
-    static bool CheckFileExtension( const std::string& filename );
-    static bool CheckFileFormat( const std::string& filename );
 };
 
 } // end of namespace kvs

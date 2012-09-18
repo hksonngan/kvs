@@ -52,23 +52,16 @@ public:
     FileHeader();
     FileHeader( std::ifstream& ifs );
 
-public:
-
-    friend std::ostream& operator << ( std::ostream& os, const kvs::bmp::FileHeader& fh );
-
-public:
-
     kvs::UInt16 type() const;
     kvs::UInt32 size() const;
     kvs::UInt16 reserved1() const;
     kvs::UInt16 reserved2() const;
     kvs::UInt32 offset() const;
 
-public:
-
+    bool isBM();
+    void print( std::ostream& os, const size_t indent = 0 ) const;
     void read( std::ifstream& ifs );
     void write( std::ofstream& ofs );
-    bool isBM();
 
 private:
 

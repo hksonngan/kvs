@@ -56,17 +56,17 @@ private:
 
 public:
 
+    static bool CheckFileExtension( const std::string& filename );
+    static bool CheckFileFormat( const std::string& filename );
+
+public:
+
     Tiff();
     Tiff( const std::string& filename );
     virtual ~Tiff();
 
-public:
-
     const Tiff::Header& header() const;
     const Tiff::IFD& ifd() const;
-
-public:
-
     size_t width() const;
     size_t height() const;
     size_t bitsPerSample() const;
@@ -74,16 +74,12 @@ public:
     const kvs::AnyValueArray& rawData() const;
     bool isSupported() const;
 
-public:
-
+    void print( std::ostream& os, const size_t indent = 0 ) const;
     bool read( const std::string& filename );
 
 private:
 
     bool write( const std::string& filename );
-
-private:
-
     size_t get_width() const;
     size_t get_height() const;
     size_t get_bits_per_sample() const;
@@ -95,13 +91,6 @@ private:
     kvs::AnyValueArray get_strip_bytes() const;
     ColorMode get_color_mode() const;
     kvs::AnyValueArray get_raw_data( std::ifstream& ifs ) const;
-
-public:
-
-    static bool CheckFileExtension( const std::string& filename );
-    static bool CheckFileFormat( const std::string& filename );
-
-    friend std::ostream& operator << ( std::ostream& os, const Tiff& tiff );
 };
 
 } // end of namespace kvs

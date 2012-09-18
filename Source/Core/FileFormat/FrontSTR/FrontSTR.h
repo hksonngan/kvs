@@ -15,6 +15,7 @@
 #ifndef KVS__FRONT_STR_H_INCLUDE
 #define KVS__FRONT_STR_H_INCLUDE
 
+#include <iostream>
 #include <string>
 #include <fstream>
 #include <kvs/FileFormatBase>
@@ -38,7 +39,7 @@ public:
 
     typedef kvs::FileFormatBase BaseClass;
 
-protected:
+private:
 
     size_t m_nmeshes; ///< number of mesh data
     size_t m_nresults; ///< number of result data
@@ -53,15 +54,12 @@ public:
     FrontSTR( const std::vector<std::string>& msh_filenames, const std::vector<std::string>& res_filenames );
     virtual ~FrontSTR();
 
-public:
-
     size_t numberOfMeshData() const;
     size_t numberOfResultData() const;
     const kvs::fstr::MeshData& meshData( const size_t index = 0 ) const;
     const kvs::fstr::ResultData& resultData( const size_t index = 0 ) const;
 
-public:
-
+    void print( std::ostream& os, const size_t indent = 0 ) const;
     bool read( const std::string& filenames );
     bool read( const std::string& msh_filename, const std::string& res_filename );
     bool read( const std::vector<std::string>& msh_filenames, const std::vector<std::string>& res_filenames );
@@ -70,9 +68,6 @@ private:
 
     bool allocate_data();
     void delete_data();
-
-private:
-
     bool write( const std::string& filename );
 };
 

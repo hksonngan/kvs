@@ -60,12 +60,6 @@ public:
     InfoHeader();
     InfoHeader( std::ifstream& ifs );
 
-public:
-
-    friend std::ostream& operator << ( std::ostream& os, const InfoHeader& ih );
-
-public:
-
     kvs::UInt32 size() const;
     kvs::UInt32 width() const;
     kvs::UInt32 height() const;
@@ -78,8 +72,7 @@ public:
     kvs::UInt32 colsused() const;
     kvs::UInt32 colsimportant() const;
 
-public:
-
+    void print( std::ostream& os, const size_t indent = 0 ) const;
     void read( std::ifstream& ifs );
     void write( std::ofstream& ofs );
 

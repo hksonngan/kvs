@@ -100,6 +100,101 @@ kvs::AVSUcd::FormatType CheckFormatType( FILE* const ifs )
 namespace kvs
 {
 
+bool AVSUcd::CheckFileExtension( const std::string& filename )
+{
+    const kvs::File file( filename );
+    if ( file.extension() == "ucd" || file.extension() == "UCD" ||
+         file.extension() == "inp" || file.extension() == "INP" )
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool AVSUcd::CheckFileFormat( const std::string& filename )
+{
+    FILE* ifs = fopen( filename.c_str(), "rb" );
+    if( !ifs )
+    {
+        kvsMessageError( "Cannot open %s.", filename.c_str() );
+        return false;
+    }
+
+    const AVSUcd::FormatType format_type = ::CheckFormatType( ifs );
+    if ( format_type == AVSUcd::SingleStep )
+    {
+        char buffer[ ::MaxLineLength ];
+        while ( fgets( buffer, ::MaxLineLength, ifs ) != 0 )
+        {
+            // Skip comment line.
+            if ( buffer[0] == '#' ) { continue; }
+            else
+            {
+                const long nnodes = strtol( strtok( buffer, ::Delimiter ), NULL, 10 );
+                if ( nnodes == 0 )
+                {
+                    fclose( ifs );
+                    return false;
+                }
+
+                const long nelements = strtol( strtok( 0, ::Delimiter ), NULL, 10 );
+                if ( nelements == 0 )
+                {
+                    fclose( ifs );
+                    return false;
+                }
+
+                const long nvalues_per_node = strtol( strtok( 0, ::Delimiter ), NULL, 10 );
+                if ( nvalues_per_node == 0 )
+                {
+                    fclose( ifs );
+                    return false;
+                }
+
+                fclose( ifs );
+                return true;
+            }
+        }
+    }
+    else if ( format_type == AVSUcd::MultiStep )
+    {
+        char buffer[ ::MaxLineLength ];
+        while ( fgets( buffer, ::MaxLineLength, ifs ) != 0 )
+        {
+            // Skip comment line.
+            if ( buffer[0] == '#' ) { continue; }
+            else
+            {
+                const long nsteps = strtol( strtok( buffer, ::Delimiter ), NULL, 10 );
+                if ( nsteps == 0 )
+                {
+                    fclose( ifs );
+                    return false;
+                }
+
+                if ( fgets( buffer, ::MaxLineLength, ifs ) != 0 )
+                {
+                    const char* const cycle_type = strtok( buffer, ::Delimiter );
+                    if ( !strcmp( cycle_type, "data" ) ||
+                         !strcmp( cycle_type, "geom" ) ||
+                         !strcmp( cycle_type, "data_geom" ) )
+                    {
+                        fclose( ifs );
+                        return true;
+                    }
+                }
+
+                fclose( ifs );
+                return false;
+            }
+        }
+    }
+
+    fclose( ifs );
+    return false;
+}
+
 /*==========================================================================*/
 /**
  *  Constructs a new empty AVSUcd.
@@ -336,6 +431,44 @@ void AVSUcd::setValues( const Values& values )
     m_values = values;
 }
 
+void AVSUcd::print( std::ostream& os, const size_t indent ) const
+{
+    const std::string blanks( indent, ' ' );
+    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
+    os << blanks << "Number of steps : " << m_nsteps << std::endl;
+    os << blanks << "Cycle type : " << ::CycleTypeToString[m_cycle_type] << std::endl;
+    os << blanks << "Element type : " << ::ElementTypeToString[m_element_type] << std::endl;
+    os << blanks << "Step ID : " << m_step_id << std::endl;
+    os << blanks << "Step comment : " << m_step_comment << std::endl;
+    os << blanks << "Number of nodes : " << m_nnodes << std::endl;
+    os << blanks << "Number of elements : " << m_nelements << std::endl;
+    os << blanks << "Number of values per node : " << m_nvalues_per_node << std::endl;
+    os << blanks << "Number of components per node : " << m_ncomponents_per_node << std::endl;
+
+    os << blanks << "Veclens of each component : ";
+    for ( size_t i = 0; i < m_ncomponents_per_node; ++i )
+    {
+        os << m_veclens[ i ] << " ";
+    }
+    os << std::endl;
+
+    os << blanks << "Names of each component : ";
+    for ( size_t i = 0; i < m_ncomponents_per_node; ++i )
+    {
+        os << m_component_names[ i ] << " ";
+    }
+    os << std::endl;
+
+    os << blanks << "Units of each component : ";
+    for ( size_t i = 0; i < m_ncomponents_per_node; ++i )
+    {
+        os << m_component_units[ i ] << " ";
+    }
+    os << std::endl;
+
+    os << blanks << "Component ID : " << m_component_id << std::endl;
+}
+
 /*==========================================================================*/
 /**
  *  Reads AVS UCD data from the file.
@@ -414,47 +547,6 @@ bool AVSUcd::write( const std::string& filename )
     fclose( ofs );
 
     return true;
-}
-
-std::ostream& operator <<( std::ostream& os, const AVSUcd& rhs )
-{
-    os << "Filename                      : " << rhs.filename()                            << std::endl;
-    os << "Number of steps               : " << rhs.m_nsteps                              << std::endl;
-    os << "Cycle type                    : " << ::CycleTypeToString[rhs.m_cycle_type]     << std::endl;
-    os << "Element type                  : " << ::ElementTypeToString[rhs.m_element_type] << std::endl;
-
-    os << "Step ID                       : " << rhs.m_step_id      << std::endl;
-    os << "Step comment                  : " << rhs.m_step_comment << std::endl;
-
-    os << "Number of nodes               : " << rhs.m_nnodes               << std::endl;
-    os << "Number of elements            : " << rhs.m_nelements            << std::endl;
-    os << "Number of values per node     : " << rhs.m_nvalues_per_node     << std::endl;
-    os << "Number of components per node : " << rhs.m_ncomponents_per_node << std::endl;
-
-    os << "Veclens of each component     : ";
-    for ( size_t i = 0; i < rhs.m_ncomponents_per_node; ++i )
-    {
-        os << rhs.m_veclens[ i ] << " ";
-    }
-    os << std::endl;
-
-    os << "Names of each component       : ";
-    for ( size_t i = 0; i < rhs.m_ncomponents_per_node; ++i )
-    {
-        os << rhs.m_component_names[ i ] << " ";
-    }
-    os << std::endl;
-
-    os << "Units of each component       : ";
-    for ( size_t i = 0; i < rhs.m_ncomponents_per_node; ++i )
-    {
-        os << rhs.m_component_units[ i ] << " ";
-    }
-    os << std::endl;
-
-    os << "Component ID                  : " << rhs.m_component_id << std::endl;
-
-    return os;
 }
 
 void AVSUcd::read_single_step_format( FILE* const ifs )
@@ -1115,101 +1207,6 @@ void AVSUcd::write_values( FILE* ofs ) const
     {
         fprintf( ofs, "%u %f\n", static_cast<unsigned int>( node_id++ ), *( value++ ) );
     }
-}
-
-bool AVSUcd::CheckFileExtension( const std::string& filename )
-{
-    const kvs::File file( filename );
-    if ( file.extension() == "ucd" || file.extension() == "UCD" ||
-         file.extension() == "inp" || file.extension() == "INP" )
-    {
-        return true;
-    }
-
-    return false;
-}
-
-bool AVSUcd::CheckFileFormat( const std::string& filename )
-{
-    FILE* ifs = fopen( filename.c_str(), "rb" );
-    if( !ifs )
-    {
-        kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return false;
-    }
-
-    const AVSUcd::FormatType format_type = ::CheckFormatType( ifs );
-    if ( format_type == AVSUcd::SingleStep )
-    {
-        char buffer[ ::MaxLineLength ];
-        while ( fgets( buffer, ::MaxLineLength, ifs ) != 0 )
-        {
-            // Skip comment line.
-            if ( buffer[0] == '#' ) { continue; }
-            else
-            {
-                const long nnodes = strtol( strtok( buffer, ::Delimiter ), NULL, 10 );
-                if ( nnodes == 0 )
-                {
-                    fclose( ifs );
-                    return false;
-                }
-
-                const long nelements = strtol( strtok( 0, ::Delimiter ), NULL, 10 );
-                if ( nelements == 0 )
-                {
-                    fclose( ifs );
-                    return false;
-                }
-
-                const long nvalues_per_node = strtol( strtok( 0, ::Delimiter ), NULL, 10 );
-                if ( nvalues_per_node == 0 )
-                {
-                    fclose( ifs );
-                    return false;
-                }
-
-                fclose( ifs );
-                return true;
-            }
-        }
-    }
-    else if ( format_type == AVSUcd::MultiStep )
-    {
-        char buffer[ ::MaxLineLength ];
-        while ( fgets( buffer, ::MaxLineLength, ifs ) != 0 )
-        {
-            // Skip comment line.
-            if ( buffer[0] == '#' ) { continue; }
-            else
-            {
-                const long nsteps = strtol( strtok( buffer, ::Delimiter ), NULL, 10 );
-                if ( nsteps == 0 )
-                {
-                    fclose( ifs );
-                    return false;
-                }
-
-                if ( fgets( buffer, ::MaxLineLength, ifs ) != 0 )
-                {
-                    const char* const cycle_type = strtok( buffer, ::Delimiter );
-                    if ( !strcmp( cycle_type, "data" ) ||
-                         !strcmp( cycle_type, "geom" ) ||
-                         !strcmp( cycle_type, "data_geom" ) )
-                    {
-                        fclose( ifs );
-                        return true;
-                    }
-                }
-
-                fclose( ifs );
-                return false;
-            }
-        }
-    }
-
-    fclose( ifs );
-    return false;
 }
 
 } // end of namespace kvs

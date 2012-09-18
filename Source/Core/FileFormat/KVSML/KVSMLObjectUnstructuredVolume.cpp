@@ -60,6 +60,56 @@ namespace kvs
 
 /*===========================================================================*/
 /**
+ *  @brief  Checks the file extension.
+ *  @param  filename [in] filename
+ *  @return true, if the given filename has the supported extension
+ */
+/*===========================================================================*/
+bool KVSMLObjectUnstructuredVolume::CheckFileExtension( const std::string& filename )
+{
+    const kvs::File file( filename );
+    if ( file.extension() == "kvsml" ||
+         file.extension() == "KVSML" ||
+         file.extension() == "xml"   ||
+         file.extension() == "XML" )
+    {
+        return true;
+    }
+
+    return false;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Check the file format.
+ *  @param  filename [in] filename
+ *  @return true, if the KVSMLObjectUnstructuredVolume class can read the given file
+ */
+/*===========================================================================*/
+bool KVSMLObjectUnstructuredVolume::CheckFileFormat( const std::string& filename )
+{
+    kvs::XMLDocument document;
+    if ( !document.read( filename ) ) return false;
+
+    // <KVSML>
+    kvs::kvsml::KVSMLTag kvsml_tag;
+    if ( !kvsml_tag.read( &document ) ) return false;
+
+    // <Object>
+    kvs::kvsml::ObjectTag object_tag;
+    if ( !object_tag.read( kvsml_tag.node() ) ) return false;
+
+    if ( object_tag.type() != "UnstructuredVolumeObject" ) return false;
+
+    // <UnstructuredVolumeObject>
+    kvs::kvsml::UnstructuredVolumeObjectTag volume_tag;
+    if ( !volume_tag.read( object_tag.node() ) ) return false;
+
+    return true;
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Constructs a new KVSML object unstructured volume object class.
  */
 /*===========================================================================*/
@@ -342,6 +392,17 @@ void KVSMLObjectUnstructuredVolume::setCoords( const kvs::ValueArray<kvs::Real32
 void KVSMLObjectUnstructuredVolume::setConnections( const kvs::ValueArray<kvs::UInt32>& connections )
 {
     m_connections = connections;
+}
+
+void KVSMLObjectUnstructuredVolume::print( std::ostream& os, const size_t indent ) const
+{
+    const std::string blanks( indent, ' ' );
+    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
+    os << blanks << "Cell type : " << m_cell_type << std::endl;
+    os << blanks << "Veclen : " << m_veclen << std::endl;
+    os << blanks << "Number of nodes : " << m_nnodes << std::endl;
+    os << blanks << "Number of cells : " << m_ncells << std::endl;
+    os << blanks << "Value type : " << m_values.typeInfo()->typeName();
 }
 
 /*===========================================================================*/
@@ -686,74 +747,6 @@ bool KVSMLObjectUnstructuredVolume::write( const std::string& filename )
     BaseClass::setSuccess( success );
 
     return success;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Checks the file extension.
- *  @param  filename [in] filename
- *  @return true, if the given filename has the supported extension
- */
-/*===========================================================================*/
-bool KVSMLObjectUnstructuredVolume::CheckFileExtension( const std::string& filename )
-{
-    const kvs::File file( filename );
-    if ( file.extension() == "kvsml" ||
-         file.extension() == "KVSML" ||
-         file.extension() == "xml"   ||
-         file.extension() == "XML" )
-    {
-        return true;
-    }
-
-    return false;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Check the file format.
- *  @param  filename [in] filename
- *  @return true, if the KVSMLObjectUnstructuredVolume class can read the given file
- */
-/*===========================================================================*/
-bool KVSMLObjectUnstructuredVolume::CheckFileFormat( const std::string& filename )
-{
-    kvs::XMLDocument document;
-    if ( !document.read( filename ) ) return false;
-
-    // <KVSML>
-    kvs::kvsml::KVSMLTag kvsml_tag;
-    if ( !kvsml_tag.read( &document ) ) return false;
-
-    // <Object>
-    kvs::kvsml::ObjectTag object_tag;
-    if ( !object_tag.read( kvsml_tag.node() ) ) return false;
-
-    if ( object_tag.type() != "UnstructuredVolumeObject" ) return false;
-
-    // <UnstructuredVolumeObject>
-    kvs::kvsml::UnstructuredVolumeObjectTag volume_tag;
-    if ( !volume_tag.read( object_tag.node() ) ) return false;
-
-    return true;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Output operator.
- *  @param  os [out] output stream
- *  @param  rhs [in] KVSML unstructured volume object
- */
-/*===========================================================================*/
-std::ostream& operator <<( std::ostream& os, const KVSMLObjectUnstructuredVolume& rhs )
-{
-    os << "Cell type: " << rhs.m_cell_type << std::endl;
-    os << "Veclen: " << rhs.m_veclen << std::endl;
-    os << "Num. of nodes: " << rhs.m_nnodes << std::endl;
-    os << "Num. of cells: " << rhs.m_ncells << std::endl;
-    os << "Value type: " << rhs.m_values.typeInfo()->typeName();
-
-    return os;
 }
 
 } // end of namespace kvs

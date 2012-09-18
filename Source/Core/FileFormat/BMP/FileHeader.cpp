@@ -32,20 +32,6 @@ FileHeader::FileHeader( std::ifstream& ifs )
     this->read( ifs );
 }
 
-std::ostream& operator << ( std::ostream& os, const kvs::bmp::FileHeader& fh )
-{
-    const char* tmp = reinterpret_cast<const char*>(&fh.m_type);
-    char* num = const_cast<char*>(tmp); num[2] = '\0';
-    os << "BITMAP FILE HEADER:" << std::endl;
-    os << "\tmagic number : " << (std::string)num << std::endl;
-    os << "\tsize         : " << fh.m_size         << std::endl;
-    os << "\treserved 1   : " << fh.m_reserved1    << std::endl;
-    os << "\treserved 2   : " << fh.m_reserved2    << std::endl;
-    os << "\toffset       : " << fh.m_offset;
-
-    return os;
-}
-
 kvs::UInt16 FileHeader::type() const
 {
     return m_type;
@@ -71,6 +57,23 @@ kvs::UInt32 FileHeader::offset() const
     return m_offset;
 }
 
+bool FileHeader::isBM()
+{
+    return !strncmp( reinterpret_cast<char*>(&m_type), "BM", 2 );
+}
+
+void FileHeader::print( std::ostream& os, const size_t indent ) const
+{
+    const std::string blanks( indent, ' ' );
+    const char* tmp = reinterpret_cast<const char*>(&m_type);
+    char* num = const_cast<char*>(tmp); num[2] = '\0';
+    os << blanks << "Magic number : " << (std::string)num << std::endl;
+    os << blanks << "Size : " << m_size << std::endl;
+    os << blanks << "Reserved 1 : " << m_reserved1 << std::endl;
+    os << blanks << "Reserved 2 : " << m_reserved2 << std::endl;
+    os << blanks << "Offset : " << m_offset;
+}
+
 void FileHeader::read( std::ifstream& ifs )
 {
     BaseClass::get_value( ifs, &m_type );
@@ -90,11 +93,6 @@ void FileHeader::write( std::ofstream& ofs )
     BaseClass::put_value( ofs, m_reserved2 );
     BaseClass::put_value( ofs, m_offset );
     BMP_HEADER_SWAP_BYTES;
-}
-
-bool FileHeader::isBM()
-{
-    return !strncmp( reinterpret_cast<char*>(&m_type), "BM", 2 );
 }
 
 void FileHeader::swap_bytes()

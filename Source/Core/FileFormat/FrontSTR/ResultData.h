@@ -15,6 +15,7 @@
 #ifndef KVS__FSTR__RESULT_DATA_H_INCLUDE
 #define KVS__FSTR__RESULT_DATA_H_INCLUDE
 
+#include <iostream>
 #include <vector>
 #include <string>
 #include <fstream>
@@ -53,8 +54,6 @@ public:
 
     ResultData();
 
-public:
-
     size_t numberOfNodes() const;
     size_t numberOfCells() const;
     size_t numberOfComponentsPerNode() const;
@@ -63,8 +62,7 @@ public:
     const std::vector<std::string>& labels() const;
     const std::vector<Values>& values() const;
 
-public:
-
+    void print( std::ostream& os, const size_t indent = 0 ) const;
     bool readData( const std::string& filename );
     bool readDividedData( const std::string& filename );
 

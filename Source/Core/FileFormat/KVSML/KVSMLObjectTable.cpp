@@ -28,6 +28,56 @@ namespace kvs
 
 /*===========================================================================*/
 /**
+ *  @brief  Checks the file extension.
+ *  @param  filename [in] filename
+ *  @return true, if the given filename has the supported extension
+ */
+/*===========================================================================*/
+bool KVSMLObjectTable::CheckFileExtension( const std::string& filename )
+{
+    const kvs::File file( filename );
+    if ( file.extension() == "kvsml" ||
+         file.extension() == "KVSML" ||
+         file.extension() == "xml"   ||
+         file.extension() == "XML" )
+    {
+        return true;
+    }
+
+    return false;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Check the file format.
+ *  @param  filename [in] filename
+ *  @return true, if the KVSMLObjectTable class can read the given file
+ */
+/*===========================================================================*/
+bool KVSMLObjectTable::CheckFileFormat( const std::string& filename )
+{
+    kvs::XMLDocument document;
+    if ( !document.read( filename ) ) return false;
+
+    // <KVSML>
+    kvs::kvsml::KVSMLTag kvsml_tag;
+    if ( !kvsml_tag.read( &document ) ) return false;
+
+    // <Object>
+    kvs::kvsml::ObjectTag object_tag;
+    if ( !object_tag.read( kvsml_tag.node() ) ) return false;
+
+    if ( object_tag.type() != "TableObject" ) return false;
+
+    // <TableObject>
+    kvs::kvsml::TableObjectTag table_tag;
+    if ( !table_tag.read( object_tag.node() ) ) return false;
+
+    return true;
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Constructs a new KVSML table object class.
  */
 /*===========================================================================*/
@@ -242,6 +292,21 @@ void KVSMLObjectTable::addColumn( const kvs::AnyValueArray& column, const std::s
     m_nrows = m_nrows > column.size() ? m_nrows : column.size();
 }
 
+void KVSMLObjectTable::print( std::ostream& os, const size_t indent ) const
+{
+    const std::string blanks( indent, ' ' );
+    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
+    os << blanks << "Number of rows : " << m_nrows << std::endl;
+    os << blanks << "Number of columns : " << m_ncolumns << std::endl;
+    os << blanks << "Labels : ";
+    for ( size_t i = 0; i < m_ncolumns; i++ )
+    {
+        os << m_labels.at(i);
+        if ( i < m_ncolumns - 1 ) os << ", ";
+    }
+    os << std::endl;
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Read a KVSML table object from the given file.
@@ -420,77 +485,6 @@ bool KVSMLObjectTable::write( const std::string& filename )
     BaseClass::setSuccess( success );
 
     return success;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Checks the file extension.
- *  @param  filename [in] filename
- *  @return true, if the given filename has the supported extension
- */
-/*===========================================================================*/
-bool KVSMLObjectTable::CheckFileExtension( const std::string& filename )
-{
-    const kvs::File file( filename );
-    if ( file.extension() == "kvsml" ||
-         file.extension() == "KVSML" ||
-         file.extension() == "xml"   ||
-         file.extension() == "XML" )
-    {
-        return true;
-    }
-
-    return false;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Check the file format.
- *  @param  filename [in] filename
- *  @return true, if the KVSMLObjectTable class can read the given file
- */
-/*===========================================================================*/
-bool KVSMLObjectTable::CheckFileFormat( const std::string& filename )
-{
-    kvs::XMLDocument document;
-    if ( !document.read( filename ) ) return false;
-
-    // <KVSML>
-    kvs::kvsml::KVSMLTag kvsml_tag;
-    if ( !kvsml_tag.read( &document ) ) return false;
-
-    // <Object>
-    kvs::kvsml::ObjectTag object_tag;
-    if ( !object_tag.read( kvsml_tag.node() ) ) return false;
-
-    if ( object_tag.type() != "TableObject" ) return false;
-
-    // <TableObject>
-    kvs::kvsml::TableObjectTag table_tag;
-    if ( !table_tag.read( object_tag.node() ) ) return false;
-
-    return true;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Output operator.
- *  @param  os [out] output stream
- *  @param  rhs [in] KVSML table object
- */
-/*===========================================================================*/
-std::ostream& operator <<( std::ostream& os, const KVSMLObjectTable& rhs )
-{
-    os << "Num. of rows: " << rhs.m_nrows << std::endl;
-    os << "Num. of columns: " << rhs.m_ncolumns << std::endl;
-
-    for ( size_t i = 0; i < rhs.m_ncolumns; i++ )
-    {
-        os << "Column[" << i << "] label: " << rhs.m_labels.at(i);
-        if ( i < rhs.m_ncolumns - 1 ) os << std::endl;
-    }
-
-    return os;
 }
 
 } // end of namespace kvs

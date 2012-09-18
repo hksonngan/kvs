@@ -23,6 +23,25 @@
 namespace
 {
 
+const std::string ElelemtTypeToString[kvs::fstr::MeshData::NumberOfElementTypes] =
+{
+    "Unknown",
+    "Line",
+    "Tri",
+    "Tri2",
+    "Quad",
+    "Quad2",
+    "Tet",
+    "Tet2",
+    "Penta",
+    "Penta2",
+    "Hex",
+    "Hex2",
+    "QuadInt",
+    "TriShell",
+    "QuadShell"
+};
+
 const size_t NumberOfNodes[15] =
 {
     0,  // unknown
@@ -148,6 +167,14 @@ const MeshData::Coords& MeshData::coords() const
 const MeshData::Connections& MeshData::connections() const
 {
     return m_connections;
+}
+
+void MeshData::print( std::ostream& os, const size_t indent ) const
+{
+    const std::string blanks( indent, ' ' );
+    os << blanks << "Element type : " << ::ElelemtTypeToString[m_element_type] << std::endl;
+    os << blanks << "Number of nodes : " << m_nnodes << std::endl;
+    os << blanks << "Number of cells : " << m_ncells << std::endl;
 }
 
 /*===========================================================================*/

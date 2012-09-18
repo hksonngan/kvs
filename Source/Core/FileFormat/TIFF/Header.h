@@ -47,6 +47,8 @@ public:
     kvs::UInt16 magic() const;
     kvs::UInt16 version() const;
     kvs::UInt32 offset() const;
+
+    void print( std::ostream& os, const size_t indent = 0 ) const;
     bool read( std::ifstream& ifs );
 };
 

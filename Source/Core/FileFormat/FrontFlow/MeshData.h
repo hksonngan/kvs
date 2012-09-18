@@ -15,6 +15,7 @@
 #ifndef KVS__GF__MESH_DATA_H_INCLUDE
 #define KVS__GF__MESH_DATA_H_INCLUDE
 
+#include <iostream>
 #include <string>
 #include <kvs/ValueArray>
 #include <kvs/Type>
@@ -33,7 +34,7 @@ namespace gf
 /*===========================================================================*/
 class MeshData
 {
-protected:
+private:
 
     size_t m_dimensions; ///< dimensions (2 or 3)
     size_t m_nnodes_per_element; ///< number of nodes per a element
@@ -47,8 +48,6 @@ public:
     MeshData();
     MeshData( const std::string filename );
 
-public:
-
     size_t dimensions() const;
     size_t nnodesPerElement() const;
     size_t nnodes() const;
@@ -56,8 +55,7 @@ public:
     const kvs::ValueArray<kvs::Real32>& coords() const;
     const kvs::ValueArray<kvs::UInt32>& connections() const;
 
-public:
-
+    void print( std::ostream& os, const size_t indent = 0 ) const;
     bool read( const std::string filename );
 };
 

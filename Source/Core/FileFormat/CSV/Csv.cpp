@@ -19,32 +19,47 @@
 #include <kvs/File>
 
 
-namespace
+namespace kvs
 {
 
-bool GetLine( std::istream & in, std::string & str )
+/*===========================================================================*/
+/**
+ *  @brief  Checks the file extension.
+ *  @param  filename [in] filename
+ *  @return true, if the given file is CSV format
+ */
+/*===========================================================================*/
+bool Csv::CheckFileExtension( const std::string& filename )
 {
-    if ( !in ) return false;
-
-    char ch;
-    str = "";
-
-    // Windows:CRLF(\r\n), Unix:LF(\n), Mac:CR(\r)
-    while ( in.get( ch ) )
+    const kvs::File file( filename );
+    if ( file.extension() == "csv" )
     {
-        if ( ch == '\0' ) { break; }
-        if ( ch == '\n' ) { break; }
-        if ( ch == '\r' ) { ch = in.peek(); if ( ch == '\n' ) in.get( ch ); break; }
-        str += ch;
+        return true;
     }
+
+    return false;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Checks the file format.
+ *  @param  filename [in] filename
+ *  @return true, if the given file is CSV data
+ */
+/*===========================================================================*/
+bool Csv::CheckFileFormat( const std::string& filename )
+{
+    std::ifstream ifs( filename.c_str() );
+    if ( !ifs.is_open() )
+    {
+        kvsMessageError( "Cannot open %s.", filename.c_str() );
+        return false;
+    }
+
+    ifs.close();
 
     return true;
 }
-
-}
-
-namespace kvs
-{
 
 /*===========================================================================*/
 /**
@@ -64,24 +79,6 @@ Csv::Csv()
 Csv::Csv( const std::string& filename )
 {
     this->read( filename );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Output stream for Csv class.
- *  @param  os [in] output stream
- *  @param  csv [in] CSV data
- */
-/*===========================================================================*/
-std::ostream& operator << ( std::ostream& os, const Csv& csv )
-{
-    os << "number of rows: " << csv.m_table.size() << std::endl;
-    os << "first line:     ";
-    const Csv::Row& row = csv.m_table.at(0);
-    Csv::Row::const_iterator v = row.begin();
-    os << *(v++); while ( v != row.end() ) os << ", " << *(v++);
-
-    return os;
 }
 
 /*===========================================================================*/
@@ -158,6 +155,24 @@ void Csv::setValue( const size_t i, const size_t j, const std::string& value )
 
 /*===========================================================================*/
 /**
+ *  @brief  Output the information of CSV data.
+ *  @param  os [in] output stream
+ *  @param  indent [in] indent size (number of whitespaces)
+ */
+/*===========================================================================*/
+void Csv::print( std::ostream& os, const size_t indent ) const
+{
+    const std::string blanks( indent, ' ' );
+    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
+    os << blanks << "Number of rows : " << m_table.size() << std::endl;
+    os << blanks << "First line : ";
+    const Csv::Row& row = m_table.at(0);
+    Csv::Row::const_iterator v = row.begin();
+    os << *(v++); while ( v != row.end() ) os << ", " << *(v++);
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Read CSV data.
  *  @param  filename [in] filename
  *  @return true, if the reading process is done successfully
@@ -176,21 +191,6 @@ bool Csv::read( const std::string& filename )
         return false;
     }
 
-/*
-    std::string line;
-    while ( ::GetLine( ifs, line ) )
-    {
-        std::istringstream line_stream( line );
-
-        Csv::Row row;
-        std::string value;
-        while ( std::getline( line_stream, value, ',' ) )
-        {
-            row.push_back( value );
-        }
-        if ( row.size() > 0 ) m_table.push_back( row );
-    }
-*/
     Row row;
     Item item;
     bool reading = false;
@@ -260,45 +260,6 @@ bool Csv::write( const std::string& filename )
     }
 
     ofs.close();
-
-    return true;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Checks the file extension.
- *  @param  filename [in] filename
- *  @return true, if the given file is CSV format
- */
-/*===========================================================================*/
-bool Csv::CheckFileExtension( const std::string& filename )
-{
-    const kvs::File file( filename );
-    if ( file.extension() == "csv" )
-    {
-        return true;
-    }
-
-    return false;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Checks the file format.
- *  @param  filename [in] filename
- *  @return true, if the given file is CSV data
- */
-/*===========================================================================*/
-bool Csv::CheckFileFormat( const std::string& filename )
-{
-    std::ifstream ifs( filename.c_str() );
-    if ( !ifs.is_open() )
-    {
-        kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return false;
-    }
-
-    ifs.close();
 
     return true;
 }

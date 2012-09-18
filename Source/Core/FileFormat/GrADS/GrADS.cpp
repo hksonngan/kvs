@@ -194,6 +194,24 @@ const GrADS::GriddedBinaryDataFile& GrADS::data( const size_t index ) const
     return m_data_list[index];
 }
 
+void GrADS::print( std::ostream& os, const size_t indent ) const
+{
+    m_data_descriptor.print( os, indent );
+    const std::string blanks( indent, ' ' );
+    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
+    os << blanks << "Number of data files : " << m_data_list.size() << std::endl;
+    const size_t next_indent = ( indent == 0 ) ? 4 : indent * 2;
+    const std::string next_blanks( next_indent, ' ' );
+    GriddedBinaryDataFileList::const_iterator data = m_data_list.begin();
+    size_t i = 0;
+    while ( data != m_data_list.end() )
+    {
+        os << next_blanks << "Data file [" << i << "] : " << data->filename() << std::endl;
+        i++;
+        data++;
+    }
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Reads GrADS data.

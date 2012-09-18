@@ -22,6 +22,32 @@
 namespace kvs
 {
 
+bool Pbm::CheckFileExtension( const std::string& filename )
+{
+    const kvs::File file( filename );
+    if ( file.extension() == "pbm" || file.extension() == "PBM" )
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool Pbm::CheckFileFormat( const std::string& filename )
+{
+    // Open the file.
+    std::ifstream ifs( filename.c_str(), std::ios::binary | std::ios::in );
+    if( !ifs.is_open() )
+    {
+        kvsMessageError( "Cannot open %s.", filename.c_str() );
+        return false;
+    }
+
+    // Read header information.
+    kvs::pnm::Header header( ifs );
+    return header.isP1() || header.isP4();
+}
+
 /*==========================================================================*/
 /**
  *  Constructor.
@@ -100,6 +126,13 @@ size_t Pbm::height() const
 const kvs::BitArray& Pbm::data() const
 {
     return m_data;
+}
+
+void Pbm::print( std::ostream& os, const size_t indent ) const
+{
+    const std::string blanks( indent, ' ' );
+    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
+    m_header.print( os, indent );
 }
 
 /*==========================================================================*/
@@ -205,39 +238,6 @@ void Pbm::set_header()
 {
     const std::string format = "P4";
     m_header.set( format, m_width, m_height );
-}
-
-bool Pbm::CheckFileExtension( const std::string& filename )
-{
-    const kvs::File file( filename );
-    if ( file.extension() == "pbm" || file.extension() == "PBM" )
-    {
-        return true;
-    }
-
-    return false;
-}
-
-bool Pbm::CheckFileFormat( const std::string& filename )
-{
-    // Open the file.
-    std::ifstream ifs( filename.c_str(), std::ios::binary | std::ios::in );
-    if( !ifs.is_open() )
-    {
-        kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return false;
-    }
-
-    // Read header information.
-    kvs::pnm::Header header( ifs );
-    return header.isP1() || header.isP4();
-}
-
-std::ostream& operator <<( std::ostream& os, const Pbm& rhs )
-{
-    os << rhs.m_header;
-
-    return os;
 }
 
 } // end of namespace kvs

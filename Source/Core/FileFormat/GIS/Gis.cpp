@@ -62,28 +62,6 @@ Gis::~Gis()
 
 /*===========================================================================*/
 /**
- *  @brief  Sets render area of the mesh.
- *  @param  render_area [in] render area
- */
-/*===========================================================================*/
-void Gis::setRenderArea( const kvs::gis::Area& render_area )
-{
-    m_render_area = render_area;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets an ocean color.
- *  @param  color [in] ocean color
- */
-/*===========================================================================*/
-void Gis::setOceanColor( const kvs::RGBColor& color )
-{
-    m_ocean_color = color;
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Returns the render area of the mesh.
  *  @return area of the meshe
  */
@@ -136,6 +114,46 @@ const kvs::gis::Mesh* Gis::mesh( const size_t index ) const
 kvs::RGBColor Gis::oceanColor() const
 {
     return m_ocean_color;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets render area of the mesh.
+ *  @param  render_area [in] render area
+ */
+/*===========================================================================*/
+void Gis::setRenderArea( const kvs::gis::Area& render_area )
+{
+    m_render_area = render_area;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets an ocean color.
+ *  @param  color [in] ocean color
+ */
+/*===========================================================================*/
+void Gis::setOceanColor( const kvs::RGBColor& color )
+{
+    m_ocean_color = color;
+}
+
+void Gis::print( std::ostream& os, const size_t indent ) const
+{
+    const size_t next_indent = ( indent == 0 ) ? 4 : indent * 2;
+    const std::string blanks( indent, ' ' );
+    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
+    os << blanks << "Area of all meshes : " << std::endl;
+    m_area.print( os, next_indent );
+    os << blanks << "Render area : " << std::endl;
+    m_render_area.print( os, next_indent );
+    os << blanks << "Ocean color : " << m_ocean_color << std::endl;
+    os << blanks << "Number of meshes : " << m_meshes.size() << std::endl;
+    for ( size_t i = 0; i < m_meshes.size(); i++ )
+    {
+        os << blanks << "Mesh [" << i << "] : " << std::endl;
+        m_meshes[i]->print( os, next_indent );
+    }
 }
 
 /*===========================================================================*/

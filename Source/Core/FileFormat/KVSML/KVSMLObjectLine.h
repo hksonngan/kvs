@@ -57,25 +57,23 @@ protected:
 
 public:
 
+    static bool CheckFileExtension( const std::string& filename );
+    static bool CheckFileFormat( const std::string& filename );
+
+public:
+
     KVSMLObjectLine();
     KVSMLObjectLine( const std::string& filename );
     virtual ~KVSMLObjectLine();
 
-public:
-
     const kvs::kvsml::KVSMLTag& KVSMLTag() const;
     const kvs::kvsml::ObjectTag& objectTag() const;
-
-public:
-
     const std::string& lineType() const;
     const std::string& colorType() const;
     const kvs::ValueArray<kvs::Real32>& coords() const;
     const kvs::ValueArray<kvs::UInt8>& colors() const;
     const kvs::ValueArray<kvs::UInt32>& connections() const;
     const kvs::ValueArray<kvs::Real32>& sizes() const;
-
-public:
 
     void setWritingDataType( const WritingDataType writing_type );
     void setLineType( const std::string& line_type );
@@ -85,17 +83,9 @@ public:
     void setConnections( const kvs::ValueArray<kvs::UInt32>& connections );
     void setSizes( const kvs::ValueArray<kvs::Real32>& sizes );
 
-public:
-
+    void print( std::ostream& os, const size_t indent = 0 ) const;
     bool read( const std::string& filename );
     bool write( const std::string& filename );
-
-public:
-
-    static bool CheckFileExtension( const std::string& filename );
-    static bool CheckFileFormat( const std::string& filename );
-
-    friend std::ostream& operator <<( std::ostream& os, const KVSMLObjectLine& rhs );
 };
 
 } // end of namespace kvs

@@ -23,6 +23,30 @@
 namespace kvs
 {
 
+bool Bmp::CheckFileExtension( const std::string& filename )
+{
+    const kvs::File file( filename );
+    if ( file.extension() == "bmp" || file.extension() == "BMP" )
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool CheckFileFormat( const std::string& filename )
+{
+    std::ifstream ifs( filename.c_str(), std::ios::binary | std::ios::in );
+    if( !ifs.is_open() )
+    {
+        kvsMessageError( "Cannot open %s.", filename.c_str() );
+        return false;
+    }
+
+    Bmp::FileHeader file_header( ifs );
+    return file_header.isBM();
+}
+
 /*==========================================================================*/
 /**
  *  Constructor.
@@ -126,23 +150,11 @@ kvs::ValueArray<kvs::UInt8> Bmp::data() const
     return m_data;
 }
 
-/*==========================================================================*/
-/**
- *  Check whether the image is supported bitmap format.
- *  @return true, if supported
- */
-/*==========================================================================*/
-bool Bmp::isSupported() const
+void Bmp::print( std::ostream& os, const size_t indent ) const
 {
-    bool ret = true;
-
-    if ( m_info_header.bpp() != 24 )
-    {
-        kvsMessageError("Color bitmap is only supported.");
-        ret = false;
-    }
-
-    return ret;
+    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
+    m_file_header.print( os, indent );
+    m_info_header.print( os, indent );
 }
 
 /*==========================================================================*/
@@ -171,7 +183,7 @@ bool Bmp::read( const std::string& filename )
     m_info_header.read( ifs );
 
     // Chech whether this file is supported or not.
-    if ( !this->isSupported() )
+    if ( m_info_header.bpp() != 24 )
     {
         ifs.close();
         BaseClass::setSuccess( false );
@@ -268,14 +280,6 @@ bool Bmp::write( const std::string& filename )
     return true;
 }
 
-std::ostream& operator <<( std::ostream& os, const Bmp& rhs )
-{
-    os << rhs.m_file_header << std::endl;
-    os << rhs.m_info_header;
-
-    return os;
-}
-
 /*==========================================================================*/
 /**
  *  Skip the header and pallete region.
@@ -320,30 +324,6 @@ void Bmp::set_header()
     m_info_header.m_vresolution   = 0;
     m_info_header.m_colsused      = 0;
     m_info_header.m_colsimportant = 0;
-}
-
-bool Bmp::CheckFileExtension( const std::string& filename )
-{
-    const kvs::File file( filename );
-    if ( file.extension() == "bmp" || file.extension() == "BMP" )
-    {
-        return true;
-    }
-
-    return false;
-}
-
-bool CheckFileFormat( const std::string& filename )
-{
-    std::ifstream ifs( filename.c_str(), std::ios::binary | std::ios::in );
-    if( !ifs.is_open() )
-    {
-        kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return false;
-    }
-
-    Bmp::FileHeader file_header( ifs );
-    return file_header.isBM();
 }
 
 } // end of namespace kvs

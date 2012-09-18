@@ -44,14 +44,13 @@ protected:
 
 public:
 
+    static bool CheckFileExtension( const std::string& filename );
+    static bool CheckFileFormat( const std::string& filename );
+
+public:
+
     Csv();
     Csv( const std::string& filename );
-
-public:
-
-    friend std::ostream& operator << ( std::ostream& os, const Csv& csv );
-
-public:
 
     size_t nrows() const;
     const Row& row( const size_t index ) const;
@@ -60,15 +59,9 @@ public:
     void setRow( const size_t index, const Row& row );
     void setValue( const size_t i, const size_t j, const std::string& value );
 
-public:
-
+    void print( std::ostream& os, const size_t indent = 0 ) const;
     bool read( const std::string& filename );
     bool write( const std::string& filename );
-
-public:
-
-    static bool CheckFileExtension( const std::string& filename );
-    static bool CheckFileFormat( const std::string& filename );
 };
 
 } // end of namespace kvs

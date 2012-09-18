@@ -36,7 +36,7 @@ class Bmp : public kvs::FileFormatBase
 {
 public:
 
-    typedef kvs::FileFormatBase  BaseClass;
+    typedef kvs::FileFormatBase BaseClass;
     typedef kvs::bmp::FileHeader FileHeader;
     typedef kvs::bmp::InfoHeader InfoHeader;
 
@@ -51,41 +51,30 @@ private:
 
 public:
 
+    static bool CheckFileExtension( const std::string& filename );
+    static bool CheckFileFormat( const std::string& filename );
+
+public:
+
     Bmp();
     Bmp( const size_t width, const size_t height, const kvs::ValueArray<kvs::UInt8>& data );
     Bmp( const std::string& filename );
 
-public:
-
     const Bmp::FileHeader& fileHeader() const;
     const Bmp::InfoHeader& infoHeader() const;
-
-public:
-
     size_t width() const;
     size_t height() const;
     size_t bitsPerPixel() const;
     kvs::ValueArray<kvs::UInt8> data() const;
-    bool isSupported() const;
 
-public:
-
+    void print( std::ostream& os, const size_t indent = 0 ) const;
     bool read( const std::string& filename );
     bool write( const std::string& filename );
-
-public:
-
-    friend std::ostream& operator <<( std::ostream& os, const Bmp& rhs );
 
 protected:
 
     void set_header();
     void skip_header_and_pallete( std::ifstream& ifs );
-
-public:
-
-    static bool CheckFileExtension( const std::string& filename );
-    static bool CheckFileFormat( const std::string& filename );
 };
 
 } // end of namespace kvs

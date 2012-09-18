@@ -49,11 +49,7 @@ public:
     Header( std::ifstream& ifs );
     virtual ~Header();
 
-public:
-
     friend std::ostream& operator << ( std::ostream& os, const Header& header );
-
-public:
 
     std::string magic() const;
     size_t width() const;
@@ -64,12 +60,7 @@ public:
     size_t size() const;
     std::streampos offset() const;
 
-public:
-
     void set( const std::string& magic, const size_t width, const size_t height );
-
-    void read( std::ifstream& ifs );
-    void write( std::ofstream& ofs ) const;
 
     bool isP1() const;
     bool isP2() const;
@@ -77,15 +68,15 @@ public:
     bool isP4() const;
     bool isP5() const;
     bool isP6() const;
+    void print( std::ostream& os, const size_t indent = 0 ) const;
+    void read( std::ifstream& ifs );
+    void write( std::ofstream& ofs ) const;
 
 private:
 
     size_t bit_per_pixel() const;
     size_t byte_per_line() const;
     size_t data_size() const;
-
-private:
-
     void skip_header( std::ifstream& ifs );
     void skip_comment_line( std::ifstream& ifs );
     void next_line( std::ifstream& ifs );

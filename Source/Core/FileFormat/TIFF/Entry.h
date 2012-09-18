@@ -41,12 +41,8 @@ public:
     Entry( const kvs::UInt16 tag );
     Entry( std::ifstream& ifs );
 
-public:
-
     friend const bool operator == ( const Entry& lhs, const Entry& rhs );
     friend std::ostream& operator << ( std::ostream& os, const Entry& entry );
-
-public:
 
     kvs::UInt16 tag() const;
     kvs::UInt16 type() const;
@@ -54,6 +50,8 @@ public:
     std::string tagDescription() const;
     std::string typeName() const;
     const kvs::AnyValueArray& values() const;
+
+    void print( std::ostream& os, const size_t indent = 0 ) const;
     bool read( std::ifstream& ifs );
 
 private:

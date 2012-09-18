@@ -326,6 +326,21 @@ const kvs::ValueArray<kvs::Real32>& BoundaryData::heatFluxes() const
     return m_heat_fluxes;
 }
 
+void BoundaryData::print( std::ostream& os, const size_t indent ) const
+{
+    const std::string blanks( indent, ' ' );
+    os << blanks << "Dimensions : " << m_dimensions << std::endl;
+    os << blanks << "Number of inlet boundary nodes : " << m_nnodes_inlet << std::endl;
+    os << blanks << "Number of wall boundary nodes : " << m_nnodes_wall << std::endl;
+    os << blanks << "Number of symetric bounday nodes : " << m_nnodes_symetric << std::endl;
+    os << blanks << "Number of cyclic bounday nodes : " << m_nnodes_cyclic << std::endl;
+    os << blanks << "Number of body surface bounday nodes : " << m_nnodes_body << std::endl;
+    os << blanks << "Number of free bounday nodes : " << m_nnodes_free << std::endl;
+    os << blanks << "Number of moving wall bounday nodes : " << m_nnodes_moving_wall << std::endl;
+    os << blanks << "Number of inter connect bounday nodes : " << m_nnodes_inter_connect << std::endl;
+    os << blanks << "Number of temperature bounday nodes : " << m_nnodes_temp << std::endl;
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Read boundary data file.

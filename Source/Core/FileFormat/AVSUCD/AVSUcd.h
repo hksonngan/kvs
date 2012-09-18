@@ -38,8 +38,6 @@ public:
     typedef kvs::ValueArray<kvs::UInt32> Connections;
     typedef kvs::ValueArray<kvs::Real32> Values;
 
-public:
-
     enum FormatType
     {
         FormatTypeUnknown = 0, ///< Unknown format type.
@@ -94,11 +92,14 @@ private:
 
 public:
 
+    static bool CheckFileExtension( const std::string& filename );
+    static bool CheckFileFormat( const std::string& filename );
+
+public:
+
     AVSUcd();
     explicit AVSUcd( const std::string& filename, const size_t step_id = 0, const size_t component_id = 0 );
     virtual ~AVSUcd();
-
-public:
 
     size_t nsteps() const;
     CycleType cycleType() const;
@@ -119,8 +120,6 @@ public:
     const Connections& connections() const;
     const Values& values() const;
 
-public:
-
     void setNSteps( const size_t nsteps );
     void setCycleType( const CycleType cycle_type );
     void setElementType( const ElementType element_type );
@@ -138,14 +137,9 @@ public:
     void setConnections( const Connections& connections );
     void setValues( const Values& values );
 
-public:
-
+    void print( std::ostream& os, const size_t indent = 0 ) const;
     bool read( const std::string& filename );
     bool write( const std::string& filename );
-
-public:
-
-    friend std::ostream& operator <<( std::ostream& os, const AVSUcd& rhs );
 
 private:
 
@@ -159,17 +153,11 @@ private:
     void read_connections( FILE* const ifs );
     void read_components( FILE* const ifs );
     void read_values( FILE* const ifs );
-
     void write_single_step_format( FILE* const ofs ) const;
     void write_coords( FILE* const ofs ) const;
     void write_connections( FILE* const ofs ) const;
     void write_components( FILE* const ofs ) const;
     void write_values( FILE* const ofs ) const;
-
-public:
-
-    static bool CheckFileExtension( const std::string& filename );
-    static bool CheckFileFormat( const std::string& filename );
 };
 
 } // end of namespace kvs

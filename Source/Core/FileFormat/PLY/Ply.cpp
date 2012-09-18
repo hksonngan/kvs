@@ -90,98 +90,6 @@ kvs::ply::PlyProperty FaceProps[1] =
 namespace kvs
 {
 
-Ply::Ply()
-{
-    this->initialize();
-}
-
-Ply::Ply( const std::string& filename )
-{
-    this->initialize();
-    this->read( filename );
-}
-
-Ply::~Ply()
-{
-}
-
-void Ply::calculateMinMaxCoord()
-{
-    m_min_coord = kvs::Vector3f( std::numeric_limits<float>::max() );
-    m_max_coord = kvs::Vector3f( std::numeric_limits<float>::min() );
-    const kvs::Real32* pcoords = m_coords.data();
-    for ( size_t i = 0; i < m_nverts; i++ )
-    {
-        const kvs::Real32 x= *(pcoords++);
-        const kvs::Real32 y= *(pcoords++);
-        const kvs::Real32 z= *(pcoords++);
-
-        m_min_coord.x() = kvs::Math::Min( m_min_coord.x(), x );
-        m_min_coord.y() = kvs::Math::Min( m_min_coord.y(), y );
-        m_min_coord.z() = kvs::Math::Min( m_min_coord.z(), z );
-
-        m_max_coord.x() = kvs::Math::Max( m_max_coord.x(), x );
-        m_max_coord.y() = kvs::Math::Max( m_max_coord.y(), y );
-        m_max_coord.z() = kvs::Math::Max( m_max_coord.z(), z );
-    }
-}
-
-void Ply::calculateNormals()
-{
-    kvs::ValueArray<kvs::UInt32> counter( m_nverts );
-    counter.fill( 0 );
-
-    m_normals.allocate( m_nverts * 3 );
-    const kvs::UInt32* pconnections = m_connections.data();
-    const kvs::Real32* pcoords = m_coords.data();
-    for ( size_t i = 0; i < m_nfaces; i++ )
-    {
-        // Calculate normal vector for each triangles.
-        const kvs::UInt32 index0 = *(pconnections++);
-        const kvs::UInt32 index1 = *(pconnections++);
-        const kvs::UInt32 index2 = *(pconnections++);
-
-        const kvs::Vector3f v0( pcoords + 3 * index0 );
-        const kvs::Vector3f v1( pcoords + 3 * index1 );
-        const kvs::Vector3f v2( pcoords + 3 * index2 );
-        const kvs::Vector3f normal = ( ( v1 - v0 ).cross( v2 - v1 ) ).normalizedVector();
-
-        // Sum of the normal vectors of the adjacent triangles for the vertex.
-        m_normals[ 3 * index0 + 0 ] = normal.x();
-        m_normals[ 3 * index0 + 1 ] = normal.y();
-        m_normals[ 3 * index0 + 2 ] = normal.z();
-        counter[ index0 ] += 1;
-
-        m_normals[ 3 * index1 + 0 ] = normal.x();
-        m_normals[ 3 * index1 + 1 ] = normal.y();
-        m_normals[ 3 * index1 + 2 ] = normal.z();
-        counter[ index1 ] += 1;
-
-        m_normals[ 3 * index2 + 0 ] = normal.x();
-        m_normals[ 3 * index2 + 1 ] = normal.y();
-        m_normals[ 3 * index2 + 2 ] = normal.z();
-        counter[ index2 ] += 1;
-    }
-
-    for ( size_t i = 0; i < m_nverts; i++ )
-    {
-        if ( counter[i] == 0 ) continue;
-        m_normals[ 3 * i + 0 ] /= static_cast<kvs::Real32>( counter[i] );
-        m_normals[ 3 * i + 1 ] /= static_cast<kvs::Real32>( counter[i] );
-        m_normals[ 3 * i + 2 ] /= static_cast<kvs::Real32>( counter[i] );
-    }
-}
-
-void Ply::initialize()
-{
-    m_file_type = Ply::Ascii;
-    m_nverts = 0;
-    m_nfaces = 0;
-    m_has_connections = false;
-    m_has_colors = false;
-    m_has_normals = false;
-}
-
 bool Ply::CheckFileExtension( const std::string& filename )
 {
     const kvs::File file( filename );
@@ -214,18 +122,29 @@ bool Ply::CheckFileFormat( const std::string& filename )
     return true;
 }
 
-std::ostream& operator << ( std::ostream& os, const Ply& ply )
+Ply::Ply():
+    m_file_type( Ply::Ascii ),
+    m_nverts( 0 ),
+    m_nfaces( 0 ),
+    m_has_connections( false ),
+    m_has_colors( false ),
+    m_has_normals( false )
 {
-    os << "Num. of vertices : " << ply.m_nverts << std::endl;
-    os << "Num. of faces:     " << ply.m_nfaces << std::endl;
-    os << std::boolalpha;
-    os << "Color:             " << ply.m_has_colors << std::endl;
-    os << "Normal:            " << ply.m_has_normals << std::endl;
-    os << std::noboolalpha;
-    os << "Min. coordinate:   " << ply.m_min_coord << std::endl;
-    os << "Max. coordinate:   " << ply.m_max_coord;
+}
 
-    return os;
+Ply::Ply( const std::string& filename ):
+    m_file_type( Ply::Ascii ),
+    m_nverts( 0 ),
+    m_nfaces( 0 ),
+    m_has_connections( false ),
+    m_has_colors( false ),
+    m_has_normals( false )
+{
+    this->read( filename );
+}
+
+Ply::~Ply()
+{
 }
 
 Ply::FileType Ply::fileType() const
@@ -316,6 +235,16 @@ void Ply::setConnections( const kvs::ValueArray<kvs::UInt32>& connections )
     m_nfaces = connections.size() / 3;
     m_has_connections = true;
     m_connections = connections;
+}
+
+void Ply::print( std::ostream& os, const size_t indent ) const
+{
+    const std::string blanks( indent, ' ' );
+    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
+    os << blanks << "Number of vertices : " << m_nverts << std::endl;
+    os << blanks << "Number of faces : " << m_nfaces << std::endl;
+    os << blanks << "Min. coordinate : " << m_min_coord << std::endl;
+    os << blanks << "Max. coordinate : " << m_max_coord << std::endl;
 }
 
 bool Ply::read( const std::string& filename )
@@ -482,8 +411,8 @@ bool Ply::read( const std::string& filename )
     }
     free( elist );
 
-    this->calculateMinMaxCoord();
-    if ( !m_has_normals ) this->calculateNormals();
+    this->calculate_min_max_coord();
+    if ( !m_has_normals ) this->calculate_normals();
     if ( !m_has_connections ) m_nfaces = m_nverts / 3;
 
     kvs::ply::ply_close( ply );
@@ -595,6 +524,73 @@ bool Ply::write( const std::string& filename )
     kvs::ply::ply_close( ply );
 
     return true;
+}
+
+void Ply::calculate_min_max_coord()
+{
+    m_min_coord = kvs::Vector3f( std::numeric_limits<float>::max() );
+    m_max_coord = kvs::Vector3f( std::numeric_limits<float>::min() );
+    const kvs::Real32* pcoords = m_coords.data();
+    for ( size_t i = 0; i < m_nverts; i++ )
+    {
+        const kvs::Real32 x= *(pcoords++);
+        const kvs::Real32 y= *(pcoords++);
+        const kvs::Real32 z= *(pcoords++);
+
+        m_min_coord.x() = kvs::Math::Min( m_min_coord.x(), x );
+        m_min_coord.y() = kvs::Math::Min( m_min_coord.y(), y );
+        m_min_coord.z() = kvs::Math::Min( m_min_coord.z(), z );
+
+        m_max_coord.x() = kvs::Math::Max( m_max_coord.x(), x );
+        m_max_coord.y() = kvs::Math::Max( m_max_coord.y(), y );
+        m_max_coord.z() = kvs::Math::Max( m_max_coord.z(), z );
+    }
+}
+
+void Ply::calculate_normals()
+{
+    kvs::ValueArray<kvs::UInt32> counter( m_nverts );
+    counter.fill( 0 );
+
+    m_normals.allocate( m_nverts * 3 );
+    const kvs::UInt32* pconnections = m_connections.data();
+    const kvs::Real32* pcoords = m_coords.data();
+    for ( size_t i = 0; i < m_nfaces; i++ )
+    {
+        // Calculate normal vector for each triangles.
+        const kvs::UInt32 index0 = *(pconnections++);
+        const kvs::UInt32 index1 = *(pconnections++);
+        const kvs::UInt32 index2 = *(pconnections++);
+
+        const kvs::Vector3f v0( pcoords + 3 * index0 );
+        const kvs::Vector3f v1( pcoords + 3 * index1 );
+        const kvs::Vector3f v2( pcoords + 3 * index2 );
+        const kvs::Vector3f normal = ( ( v1 - v0 ).cross( v2 - v1 ) ).normalizedVector();
+
+        // Sum of the normal vectors of the adjacent triangles for the vertex.
+        m_normals[ 3 * index0 + 0 ] = normal.x();
+        m_normals[ 3 * index0 + 1 ] = normal.y();
+        m_normals[ 3 * index0 + 2 ] = normal.z();
+        counter[ index0 ] += 1;
+
+        m_normals[ 3 * index1 + 0 ] = normal.x();
+        m_normals[ 3 * index1 + 1 ] = normal.y();
+        m_normals[ 3 * index1 + 2 ] = normal.z();
+        counter[ index1 ] += 1;
+
+        m_normals[ 3 * index2 + 0 ] = normal.x();
+        m_normals[ 3 * index2 + 1 ] = normal.y();
+        m_normals[ 3 * index2 + 2 ] = normal.z();
+        counter[ index2 ] += 1;
+    }
+
+    for ( size_t i = 0; i < m_nverts; i++ )
+    {
+        if ( counter[i] == 0 ) continue;
+        m_normals[ 3 * i + 0 ] /= static_cast<kvs::Real32>( counter[i] );
+        m_normals[ 3 * i + 1 ] /= static_cast<kvs::Real32>( counter[i] );
+        m_normals[ 3 * i + 2 ] /= static_cast<kvs::Real32>( counter[i] );
+    }
 }
 
 } // end of namespace kvs

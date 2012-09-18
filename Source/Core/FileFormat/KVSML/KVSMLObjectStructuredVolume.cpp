@@ -33,6 +33,56 @@ namespace kvs
 
 /*===========================================================================*/
 /**
+ *  @brief  Checks the file extension.
+ *  @param  filename [in] filename
+ *  @return true, if the given filename has the supported extension
+ */
+/*===========================================================================*/
+bool KVSMLObjectStructuredVolume::CheckFileExtension( const std::string& filename )
+{
+    const kvs::File file( filename );
+    if ( file.extension() == "kvsml" ||
+         file.extension() == "KVSML" ||
+         file.extension() == "xml"   ||
+         file.extension() == "XML" )
+    {
+        return true;
+    }
+
+    return false;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Check the file format.
+ *  @param  filename [in] filename
+ *  @return true, if the KVSMLObjectStructuredVolume class can read the given file
+ */
+/*===========================================================================*/
+bool KVSMLObjectStructuredVolume::CheckFileFormat( const std::string& filename )
+{
+    kvs::XMLDocument document;
+    if ( !document.read( filename ) ) return false;
+
+    // <KVSML>
+    kvs::kvsml::KVSMLTag kvsml_tag;
+    if ( !kvsml_tag.read( &document ) ) return false;
+
+    // <Object>
+    kvs::kvsml::ObjectTag object_tag;
+    if ( !object_tag.read( kvsml_tag.node() ) ) return false;
+
+    if ( object_tag.type() != "StructuredVolumeObject" ) return false;
+
+    // <StructuredVolumeObject>
+    kvs::kvsml::StructuredVolumeObjectTag volume_tag;
+    if ( !volume_tag.read( object_tag.node() ) ) return false;
+
+    return true;
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Constructs a new KVSML object structured volume object.
  */
 /*===========================================================================*/
@@ -257,6 +307,16 @@ void KVSMLObjectStructuredVolume::setValues( const kvs::AnyValueArray& values )
 void KVSMLObjectStructuredVolume::setCoords( const kvs::ValueArray<float>& coords )
 {
     m_coords = coords;
+}
+
+void KVSMLObjectStructuredVolume::print( std::ostream& os, const size_t indent ) const
+{
+    const std::string blanks( indent, ' ' );
+    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
+    os << blanks << "Grid type : " << m_grid_type << std::endl;
+    os << blanks << "Veclen : " << m_veclen << std::endl;
+    os << blanks << "Resolution : " << m_resolution << std::endl;
+    os << blanks << "Value type : " << m_values.typeInfo()->typeName();
 }
 
 /*===========================================================================*/
@@ -555,73 +615,6 @@ bool KVSMLObjectStructuredVolume::write( const std::string& filename )
     BaseClass::setSuccess( success );
 
     return success;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Checks the file extension.
- *  @param  filename [in] filename
- *  @return true, if the given filename has the supported extension
- */
-/*===========================================================================*/
-bool KVSMLObjectStructuredVolume::CheckFileExtension( const std::string& filename )
-{
-    const kvs::File file( filename );
-    if ( file.extension() == "kvsml" ||
-         file.extension() == "KVSML" ||
-         file.extension() == "xml"   ||
-         file.extension() == "XML" )
-    {
-        return true;
-    }
-
-    return false;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Check the file format.
- *  @param  filename [in] filename
- *  @return true, if the KVSMLObjectStructuredVolume class can read the given file
- */
-/*===========================================================================*/
-bool KVSMLObjectStructuredVolume::CheckFileFormat( const std::string& filename )
-{
-    kvs::XMLDocument document;
-    if ( !document.read( filename ) ) return false;
-
-    // <KVSML>
-    kvs::kvsml::KVSMLTag kvsml_tag;
-    if ( !kvsml_tag.read( &document ) ) return false;
-
-    // <Object>
-    kvs::kvsml::ObjectTag object_tag;
-    if ( !object_tag.read( kvsml_tag.node() ) ) return false;
-
-    if ( object_tag.type() != "StructuredVolumeObject" ) return false;
-
-    // <StructuredVolumeObject>
-    kvs::kvsml::StructuredVolumeObjectTag volume_tag;
-    if ( !volume_tag.read( object_tag.node() ) ) return false;
-
-    return true;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Output operator.
- *  @param  os [out] output stream
- *  @param  rhs [in] KVSML structured volume object
- */
-/*===========================================================================*/
-std::ostream& operator <<( std::ostream& os, const KVSMLObjectStructuredVolume& rhs )
-{
-    os << "Grid type: " << rhs.m_grid_type << std::endl;
-    os << "Veclen: " << rhs.m_veclen << std::endl;
-    os << "Resolution: " << rhs.m_resolution << std::endl;
-    os << "Value type: " << rhs.m_values.typeInfo()->typeName();
-
-    return os;
 }
 
 } // end of namespace kvs

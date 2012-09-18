@@ -50,34 +50,27 @@ protected:
 
 public:
 
+    static bool CheckFileExtension( const std::string& filename );
+    static bool CheckFileFormat( const std::string& filename );
+
+public:
+
     Stl();
     Stl( const std::string& filename );
     virtual ~Stl();
-
-public:
 
     FileType fileType() const;
     const kvs::ValueArray<kvs::Real32>& normals() const;
     const kvs::ValueArray<kvs::Real32>& coords() const;
     size_t ntriangles() const;
 
-public:
-
     void setFileType( const FileType file_type );
     void setNormals( const kvs::ValueArray<kvs::Real32>& normals );
     void setCoords( const kvs::ValueArray<kvs::Real32>& coords );
 
-public:
-
+    void print( std::ostream& os, const size_t indent = 0 ) const;
     bool read( const std::string& filename );
     bool write( const std::string& filename );
-
-public:
-
-    friend std::ostream& operator << ( std::ostream& os, const Stl& stl );
-
-    static bool CheckFileExtension( const std::string& filename );
-    static bool CheckFileFormat( const std::string& filename );
 
 private:
 

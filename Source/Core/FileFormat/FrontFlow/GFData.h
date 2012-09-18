@@ -15,6 +15,7 @@
 #ifndef KVS__GF_DATA_H_INCLUDE
 #define KVS__GF_DATA_H_INCLUDE
 
+#include <iostream>
 #include <kvs/FileFormatBase>
 #include "FlowData.h"
 #include "MeshData.h"
@@ -35,7 +36,7 @@ public:
 
     typedef kvs::FileFormatBase BaseClass;
 
-protected:
+private:
 
     kvs::gf::MeshData m_mesh_data; ///< GF mesh data
     kvs::gf::FlowData m_flow_data; ///< GF flow data
@@ -47,14 +48,11 @@ public:
     GFData( const std::string& filename );
     GFData( const std::string& mesh_file, const std::string& flow_file, const std::string& boundary_file = "" );
 
-public:
-
     const kvs::gf::FlowData& flowData() const;
     const kvs::gf::MeshData& meshData() const;
     const kvs::gf::BoundaryData& boundaryData() const;
 
-public:
-
+    void print( std::ostream& os, const size_t indent = 0 ) const;
     bool read( const std::string& filename );
     bool read( const std::string& mesh_file, const std::string& flow_file, const std::string& boundary_file = "" );
 

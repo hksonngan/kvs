@@ -159,6 +159,28 @@ const kvs::grads::Vars& DataDescriptorFile::vars( void ) const
     return( m_vars );
 }
 
+void DataDescriptorFile::print( std::ostream& os, const size_t indent ) const
+{
+    const std::string blanks( indent, ' ' );
+    os << blanks << "Data filename (DSET) : " << m_dset.name << std::endl;
+    os << blanks << "Undefined value (UNDEF) : " << m_undef.value << std::endl;
+    os << blanks << "Title (TITLE) : " << m_title.name << std::endl;
+    os << blanks << "Number of grid points for the X direction (XDEF) : " << m_xdef.num << std::endl;
+    os << blanks << "Number of grid points for the Y direction (YDEF) : " << m_ydef.num << std::endl;
+    os << blanks << "Number of grid points for the Z direction (ZDEF) : " << m_zdef.num << std::endl;
+    os << blanks << "Number of time steps (TDEF) : " << m_tdef.num << std::endl;
+    os << blanks << "Number of variables (VARS) : " << m_vars.values.size() << std::endl;
+    const size_t next_indent = ( indent == 0 ) ? 4 : indent * 2;
+    const std::string next_blanks( next_indent, ' ' );
+    std::list<kvs::grads::Vars::Var>::const_iterator var = m_vars.values.begin();
+    while ( var != m_vars.values.end() )
+    {
+        os << next_blanks << var->varname << ", " << var->description << std::endl;
+        var++;
+    }
+    os << std::endl;
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Read data descriptor file.

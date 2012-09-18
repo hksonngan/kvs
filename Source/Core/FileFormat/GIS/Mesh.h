@@ -17,6 +17,7 @@
 
 #include "Point.h"
 #include "Area.h"
+#include <ostream>
 #include <kvs/Vector2>
 
 
@@ -49,8 +50,6 @@ public:
     Mesh();
     virtual ~Mesh();
 
-public:
-
     const kvs::gis::Point& data( const size_t latitude, const size_t longitude ) const;
     size_t row() const;
     size_t column() const;
@@ -69,6 +68,8 @@ public:
     void setLatitudeInterval( const float latitude_interval );
     void setLongitudeInterval( const float longitude_interval );
     void setArea( const kvs::gis::Area& area );
+
+    void print( std::ostream& os, const size_t indent = 0 ) const;
 
 protected:
 

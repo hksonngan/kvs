@@ -4,7 +4,7 @@
  *  @brief  DICOM list class.
  *
  *  @author Naohisa Sakamoto
- *  @date   2012/09/14 10:31:01
+ *  @date   2012/09/18 12:55:10
  */
 /*----------------------------------------------------------------------------
  *
@@ -61,6 +61,53 @@ bool DicomList::SortingBySliceLocation::operator () (
     const kvs::Dicom* dicom2 )
 {
     return dicom1->sliceLocation() < dicom2->sliceLocation();
+}
+
+bool DicomList::CheckDirectory( const std::string& dirname, const bool extension_check )
+{
+    kvs::Directory dir( dirname );
+    if( !dir.isExisted() )
+    {
+        kvsMessageError( "%s is not existed.", dir.directoryPath().c_str() );
+        return false;
+    }
+
+    if( !dir.isDirectory() )
+    {
+        kvsMessageError( "%s is not directory.", dir.directoryPath().c_str() );
+        return false;
+    }
+
+    if( dir.fileList().size() == 0 )
+    {
+        kvsMessageError( "File not found in %s.", dir.directoryPath().c_str() );
+        return false;
+    }
+
+    size_t counter = 0;
+    kvs::FileList::const_iterator file = dir.fileList().begin();
+    kvs::FileList::const_iterator last = dir.fileList().end();
+    while ( file != last )
+    {
+        if( extension_check )
+        {
+            if( file->extension() != "dcm" ) continue;
+            else counter++;
+        }
+
+        ++file;
+    }
+
+    if ( extension_check )
+    {
+        if ( counter == 0 )
+        {
+            kvsMessageError( "File not found in %s.", dir.directoryPath().c_str() );
+            return false;
+        }
+    }
+
+    return true;
 }
 
 /*===========================================================================*/
@@ -194,7 +241,7 @@ void DicomList::clear()
     const size_t nslices = m_list.size();
     for( size_t i = 0; i < nslices; i++ )
     {
-        if( m_list[i] ) delete m_list[i];
+        if ( m_list[i] ) delete m_list[i];
     }
 
     m_list.clear();
@@ -322,6 +369,20 @@ void DicomList::disableExtensionCheck()
     m_extension_check = false;
 }
 
+void DicomList::print( std::ostream& os, const size_t indent )
+{
+    const std::string blanks( indent, ' ' );
+    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
+    os << blanks << "Row : " << m_row << std::endl;
+    os << blanks << "Column : " << m_column << std::endl;
+    os << blanks << "Number of slices : " << m_list.size() << std::endl;
+    os << blanks << "Slice spacing : " << m_slice_spacing << std::endl;
+    os << blanks << "Slice thickness : " << m_slice_thickness << std::endl;
+    os << blanks << "Pixel spacing : " << m_pixel_spacing << std::endl;
+    os << blanks << "Min. raw value : " << m_min_raw_value << std::endl;
+    os << blanks << "Max. raw value : " << m_max_raw_value << std::endl;
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Read DICOM set from directory.
@@ -411,53 +472,6 @@ bool DicomList::write( const std::string& dirname )
     kvs::IgnoreUnusedVariable( dirname );
     kvsMessageError("Writing method has not been implemented.");
     return false;
-}
-
-bool DicomList::CheckDirectory( const std::string& dirname, const bool extension_check )
-{
-    kvs::Directory dir( dirname );
-    if( !dir.isExisted() )
-    {
-        kvsMessageError( "%s is not existed.", dir.directoryPath().c_str() );
-        return false;
-    }
-
-    if( !dir.isDirectory() )
-    {
-        kvsMessageError( "%s is not directory.", dir.directoryPath().c_str() );
-        return false;
-    }
-
-    if( dir.fileList().size() == 0 )
-    {
-        kvsMessageError( "File not found in %s.", dir.directoryPath().c_str() );
-        return false;
-    }
-
-    size_t counter = 0;
-    kvs::FileList::const_iterator file = dir.fileList().begin();
-    kvs::FileList::const_iterator last = dir.fileList().end();
-    while ( file != last )
-    {
-        if( extension_check )
-        {
-            if( file->extension() != "dcm" ) continue;
-            else counter++;
-        }
-
-        ++file;
-    }
-
-    if ( extension_check )
-    {
-        if ( counter == 0 )
-        {
-            kvsMessageError( "File not found in %s.", dir.directoryPath().c_str() );
-            return false;
-        }
-    }
-
-    return true;
 }
 
 } // end of namespace kvs

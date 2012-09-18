@@ -30,24 +30,6 @@ InfoHeader::InfoHeader( std::ifstream& ifs )
     this->read( ifs );
 }
 
-std::ostream& operator << ( std::ostream& os, const kvs::bmp::InfoHeader& ih )
-{
-    os << "BITMAP INFO HEADER:" << std::endl;
-    os << "\tstructure size             : " << ih.m_size          << std::endl;
-    os << "\timage width                : " << ih.m_width         << std::endl;
-    os << "\timage height               : " << ih.m_height        << std::endl;
-    os << "\tnumber of planes           : " << ih.m_nplanes       << std::endl;
-    os << "\tbits per pixel             : " << ih.m_bpp           << std::endl;
-    os << "\tcompression                : " << ih.m_compression   << std::endl;
-    os << "\tsize of bitmap             : " << ih.m_bitmapsize    << std::endl;
-    os << "\thorizontal resolution      : " << ih.m_hresolution   << std::endl;
-    os << "\tvertical resolution        : " << ih.m_vresolution   << std::endl;
-    os << "\tnumber of colors           : " << ih.m_colsused      << std::endl;
-    os << "\tnumber of important colors : " << ih.m_colsimportant;
-
-    return os;
-}
-
 kvs::UInt32 InfoHeader::size() const
 {
     return m_size;
@@ -101,6 +83,22 @@ kvs::UInt32 InfoHeader::colsused() const
 kvs::UInt32 InfoHeader::colsimportant() const
 {
     return m_colsimportant;
+}
+
+void InfoHeader::print( std::ostream& os, const size_t indent ) const
+{
+    const std::string blanks( indent, ' ' );
+    os << blanks << "Structure size : " << m_size << std::endl;
+    os << blanks << "Image width : " << m_width << std::endl;
+    os << blanks << "Image height : " << m_height << std::endl;
+    os << blanks << "Number of planes : " << m_nplanes << std::endl;
+    os << blanks << "Bits per pixel : " << m_bpp << std::endl;
+    os << blanks << "Compression : " << m_compression << std::endl;
+    os << blanks << "Size of bitmap : " << m_bitmapsize << std::endl;
+    os << blanks << "Horizontal resolution : " << m_hresolution << std::endl;
+    os << blanks << "Vertical resolution : " << m_vresolution << std::endl;
+    os << blanks << "Number of colors : " << m_colsused << std::endl;
+    os << blanks << "Number of important colors : " << m_colsimportant;
 }
 
 void InfoHeader::read( std::ifstream& ifs )

@@ -168,6 +168,15 @@ const kvs::ValueArray<kvs::Real32>& FlowData::pressures( const size_t index ) co
     return m_pressures[ index ];
 }
 
+void FlowData::print( std::ostream& os, const size_t indent ) const
+{
+    const std::string blanks( indent, ' ' );
+    os << blanks << "Dimensions : " << m_dimensions << std::endl;
+    os << blanks << "Number of nodes : " << m_nnodes << std::endl;
+    os << blanks << "Number of elements : " << m_nelements << std::endl;
+    os << blanks << "Number of time steps : " << m_nsteps << std::endl;
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Read flow data file.

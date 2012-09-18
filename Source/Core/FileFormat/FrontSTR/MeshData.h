@@ -57,9 +57,10 @@ public:
         QuadInt, ///< Quadrangle interface element (541)
         TriShell, ///< Triangle shell element (731)
         QuadShell, ///< Quadrangle shell element (741)
+        NumberOfElementTypes ///< Number of element types
     };
 
-protected:
+private:
 
     ElementType m_element_type; ///< element type
     size_t m_nnodes; ///< number of nodes
@@ -71,16 +72,13 @@ public:
 
     MeshData();
 
-public:
-
     ElementType elementType() const;
     size_t numberOfNodes() const;
     size_t numberOfCells() const;
     const Coords& coords() const;
     const Connections& connections() const;
 
-public:
-
+    void print( std::ostream& os, const size_t indent = 0 ) const;
     bool readData( const std::string& filename );
     bool readDividedData( const std::string& filename );
 

@@ -33,7 +33,7 @@ namespace gf
 /*===========================================================================*/
 class FlowData
 {
-protected:
+private:
 
     size_t m_dimensions; ///< dimensions (2 or 3)
     size_t m_nnodes; ///< number of nodes
@@ -50,8 +50,6 @@ public:
     FlowData( const std::string filename );
     virtual ~FlowData();
 
-public:
-
     size_t dimensions() const;
     size_t nnodes() const;
     size_t nelements() const;
@@ -61,8 +59,7 @@ public:
     const kvs::ValueArray<kvs::Real32>& velocities( const size_t index ) const;
     const kvs::ValueArray<kvs::Real32>& pressures( const size_t index ) const;
 
-public:
-
+    void print( std::ostream& os, const size_t indent = 0 ) const;
     bool read( const std::string filename );
 };
 

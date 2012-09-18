@@ -40,6 +40,17 @@ kvs::UInt32 ImageFileDirectory::offset() const
     return m_offset;
 }
 
+void ImageFileDirectory::print( std::ostream& os, const size_t indent ) const
+{
+    kvs::tiff::ImageFileDirectory::EntryList::const_iterator entry = m_entry_list.begin();
+    kvs::tiff::ImageFileDirectory::EntryList::const_iterator last = m_entry_list.end();
+    while ( entry != last )
+    {
+        entry->print( os, indent );
+        ++entry;
+    }
+}
+
 bool ImageFileDirectory::read( std::ifstream& ifs )
 {
     kvs::UInt16 nentries = 0;

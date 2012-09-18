@@ -43,7 +43,7 @@ public:
         ExternalBinary ///< external binary data type
     };
 
-protected:
+private:
 
     kvs::kvsml::KVSMLTag m_kvsml_tag; ///< KVSML tag information
     kvs::kvsml::ObjectTag m_object_tag; ///< Object tag information
@@ -55,23 +55,21 @@ protected:
 
 public:
 
+    static bool CheckFileExtension( const std::string& filename );
+    static bool CheckFileFormat( const std::string& filename );
+
+public:
+
     KVSMLObjectPoint();
     KVSMLObjectPoint( const std::string& filename );
     virtual ~KVSMLObjectPoint();
 
-public:
-
     const kvs::kvsml::KVSMLTag& KVSMLTag() const;
     const kvs::kvsml::ObjectTag& objectTag() const;
-
-public:
-
     const kvs::ValueArray<kvs::Real32>& coords() const;
     const kvs::ValueArray<kvs::UInt8>& colors() const;
     const kvs::ValueArray<kvs::Real32>& normals() const;
     const kvs::ValueArray<kvs::Real32>& sizes() const;
-
-public:
 
     void setWritingDataType( const WritingDataType writing_type );
     void setCoords( const kvs::ValueArray<kvs::Real32>& coords );
@@ -79,17 +77,9 @@ public:
     void setNormals( const kvs::ValueArray<kvs::Real32>& normals );
     void setSizes( const kvs::ValueArray<kvs::Real32>& sizes );
 
-public:
-
+    void print( std::ostream& os, const size_t indent = 0 ) const;
     bool read( const std::string& filename );
     bool write( const std::string& filename );
-
-public:
-
-    static bool CheckFileExtension( const std::string& filename );
-    static bool CheckFileFormat( const std::string& filename );
-
-    friend std::ostream& operator <<( std::ostream& os, const KVSMLObjectPoint& rhs );
 };
 
 } // end of namespace kvs

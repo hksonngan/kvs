@@ -41,14 +41,67 @@ kvs::dcm::Tag END_HEADER_TAG = kvs::dcm::Tag( 0x7FE0, 0x0010, kvs::dcm::VR_OW );
 namespace kvs
 {
 
+bool Dicom::CheckFileExtension( const std::string& filename )
+{
+    const kvs::File file( filename );
+    if ( file.extension() == "dcm"   || file.extension() == "DCM" ||
+         file.extension() == "dicom" || file.extension() == "DICOM" )
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool Dicom::CheckFileFormat( const std::string& filename )
+{
+    // Open the file.
+    std::ifstream ifs( filename.c_str(), std::ios_base::binary );
+    if( ifs.fail() )
+    {
+        kvsMessageError( "Cannot open %s.", filename.c_str() );
+        return false;
+    }
+
+    // Check attribute.
+    dcm::Attribute attribute;
+    if( !attribute.check( ifs ) )
+    {
+        ifs.close();
+        return false;
+    }
+
+    ifs.close();
+    return true;
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Default constructor.
  */
 /*===========================================================================*/
-Dicom::Dicom()
+Dicom::Dicom():
+    m_modality( "unknown" ),
+    m_manufacturer( "unknown" ),
+    m_slice_thickness( 0.0 ),
+    m_slice_spacing( 0.0 ),
+    m_series_number( 0 ),
+    m_image_number( 0 ),
+    m_slice_location( 0.0 ),
+    m_row( 0 ),
+    m_column( 0 ),
+    m_pixel_spacing( 0.0f, 0.0f ),
+    m_bits_allocated( 0 ),
+    m_bits_stored( 0 ),
+    m_high_bit( 0 ),
+    m_pixel_representation( true ),
+    m_window_level( 0 ),
+    m_window_width( 0 ),
+    m_rescale_intersept( 0.0 ),
+    m_rescale_slope( 1.0 ),
+    m_min_raw_value( 0 ),
+    m_max_raw_value( 0 )
 {
-    this->initialize();
 }
 
 /*===========================================================================*/
@@ -57,22 +110,29 @@ Dicom::Dicom()
  *  @param  filename [i] filename
  */
 /*===========================================================================*/
-Dicom::Dicom( const std::string& filename )
+Dicom::Dicom( const std::string& filename ):
+    m_modality( "unknown" ),
+    m_manufacturer( "unknown" ),
+    m_slice_thickness( 0.0 ),
+    m_slice_spacing( 0.0 ),
+    m_series_number( 0 ),
+    m_image_number( 0 ),
+    m_slice_location( 0.0 ),
+    m_row( 0 ),
+    m_column( 0 ),
+    m_pixel_spacing( 0.0f, 0.0f ),
+    m_bits_allocated( 0 ),
+    m_bits_stored( 0 ),
+    m_high_bit( 0 ),
+    m_pixel_representation( true ),
+    m_window_level( 0 ),
+    m_window_width( 0 ),
+    m_rescale_intersept( 0.0 ),
+    m_rescale_slope( 1.0 ),
+    m_min_raw_value( 0 ),
+    m_max_raw_value( 0 )
 {
-    this->initialize();
     this->read( filename );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Constructor.
- *  @param  dicom [i] DICOM data
- */
-/*===========================================================================*/
-Dicom::Dicom( const Dicom& dicom )
-{
-    this->initialize();
-    *this = dicom;
 }
 
 /*===========================================================================*/
@@ -82,125 +142,6 @@ Dicom::Dicom( const Dicom& dicom )
 /*===========================================================================*/
 Dicom::~Dicom()
 {
-    this->clear();
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Initialize.
- */
-/*===========================================================================*/
-void Dicom::initialize()
-{
-    m_element_list.clear();
-
-    m_modality             = "unknown";
-    m_manufacturer         = "unknown";
-
-    m_slice_thickness      = 0.0;
-    m_slice_spacing        = 0.0;
-
-    m_series_number        = 0;
-    m_image_number         = 0;
-    m_slice_location       = 0.0;
-
-    m_row                  = 0;
-    m_column               = 0;
-    m_pixel_spacing        = kvs::Vector2f( 0.0f, 0.0f );
-    m_bits_allocated       = 0;
-    m_bits_stored          = 0;
-    m_high_bit             = 0;
-    m_pixel_representation = true;
-    m_window_level         = 0;
-    m_window_width         = 0;
-    m_rescale_intersept    = 0.0;
-    m_rescale_slope        = 1.0;
-
-    m_min_raw_value        = 0;
-    m_max_raw_value        = 0;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Clear.
- */
-/*===========================================================================*/
-void Dicom::clear()
-{
-    m_element_list.clear();
-    m_raw_data.release();
-}
-
-/*===========================================================================*/
-/**
- *  @brief  
- *  @param  d        
- */
-/*===========================================================================*/
-Dicom& Dicom::operator = ( const Dicom& d )
-{
-    m_attribute            = d.m_attribute;
-    m_element_list         = d.m_element_list;
-
-    m_modality             = d.m_modality;
-    m_manufacturer         = d.m_manufacturer;
-
-    m_slice_thickness      = d.m_slice_thickness;
-    m_slice_spacing        = d.m_slice_spacing;
-
-    m_series_number        = d.m_series_number;
-    m_image_number         = d.m_image_number;
-    m_slice_location       = d.m_slice_location;
-
-    m_row                  = d.m_row;
-    m_column               = d.m_column;
-    m_pixel_spacing        = d.m_pixel_spacing;
-    m_bits_allocated       = d.m_bits_allocated;
-    m_bits_stored          = d.m_bits_stored;
-    m_high_bit             = d.m_high_bit;
-    m_pixel_representation = d.m_pixel_representation;
-    m_window_level         = d.m_window_level;
-    m_window_width         = d.m_window_width;
-    m_rescale_intersept    = d.m_rescale_intersept;
-    m_rescale_slope        = d.m_rescale_slope;
-
-    m_window               = d.m_window;
-    m_min_raw_value        = d.m_min_raw_value;
-    m_max_raw_value        = d.m_max_raw_value;
-    m_position             = d.m_position;
-
-    m_raw_data             = d.m_raw_data;
-
-    return *this;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  
- */
-/*===========================================================================*/
-std::ostream& operator << ( std::ostream& os, const Dicom& d )
-{
-    os << "Modality:             " <<  d.m_modality << std::endl;
-    os << "Manufacturer:         " <<  d.m_manufacturer << std::endl;
-    os << "Slice Thickness:      " <<  d.m_slice_thickness << std::endl;
-    os << "Slice Spacing:        " <<  d.m_slice_spacing << std::endl;
-    os << "Series Number:        " <<  d.m_series_number << std::endl;
-    os << "Image Number:         " <<  d.m_image_number << std::endl;
-    os << "Slice Location:       " <<  d.m_slice_location << std::endl;
-    os << "Row:                  " <<  d.m_row  << std::endl;
-    os << "Column:               " <<  d.m_column   << std::endl;
-    os << "Pixel Spaceing:       " <<  d.m_pixel_spacing[0] << " " << d.m_pixel_spacing[1] << std::endl;
-    os << "Bits Allocated:       " <<  d.m_bits_allocated << std::endl;
-    os << "Bits Stored:          " <<  d.m_bits_stored << std::endl;
-    os << "High Bit:             " <<  d.m_high_bit << std::endl;
-    os << "Pixel Representation: " <<( d.m_pixel_representation ? "unsigned" : "signed" )<< std::endl;
-    os << "Window Center:        " <<  d.m_window_level << std::endl;
-    os << "Window Width:         " <<  d.m_window_width << std::endl;
-    os << "Rescale Intersept:    " <<  d.m_rescale_intersept << std::endl;
-    os << "Rescale Slope:        " <<  d.m_rescale_slope;
-
-    return os;
 }
 
 /*===========================================================================*/
@@ -712,6 +653,30 @@ void Dicom::setRawData( const kvs::ValueArray<char>& raw_data )
 std::list<dcm::Element>::iterator Dicom::findElement( const dcm::Tag tag )
 {
     return std::find( m_element_list.begin(), m_element_list.end(), tag );
+}
+
+void Dicom::print( std::ostream& os, const size_t indent ) const
+{
+    const std::string blanks( indent, ' ' );
+    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
+    os << blanks << "Modality : " <<  m_modality << std::endl;
+    os << blanks << "Manufacturer : " <<  m_manufacturer << std::endl;
+    os << blanks << "Slice thickness : " <<  m_slice_thickness << std::endl;
+    os << blanks << "Slice spacing : " <<  m_slice_spacing << std::endl;
+    os << blanks << "Series number : " <<  m_series_number << std::endl;
+    os << blanks << "Image number : " <<  m_image_number << std::endl;
+    os << blanks << "Slice location : " <<  m_slice_location << std::endl;
+    os << blanks << "Row : " <<  m_row << std::endl;
+    os << blanks << "Column : " <<  m_column << std::endl;
+    os << blanks << "Pixel spaceing : " <<  m_pixel_spacing[0] << " " << m_pixel_spacing[1] << std::endl;
+    os << blanks << "Bits allocated : " <<  m_bits_allocated << std::endl;
+    os << blanks << "Bits stored : " <<  m_bits_stored << std::endl;
+    os << blanks << "High bit : " <<  m_high_bit << std::endl;
+    os << blanks << "Pixel representation : " <<( m_pixel_representation ? "unsigned" : "signed" ) << std::endl;
+    os << blanks << "Window center : " <<  m_window_level << std::endl;
+    os << blanks << "Window width : " <<  m_window_width << std::endl;
+    os << blanks << "Rescale intersept : " <<  m_rescale_intersept << std::endl;
+    os << blanks << "Rescale slope : " <<  m_rescale_slope << std::endl;
 }
 
 /*===========================================================================*/
@@ -1329,40 +1294,6 @@ void Dicom::parse_element( dcm::Element& element )
         t >> m_rescale_slope;
         return;
     }
-}
-
-bool Dicom::CheckFileExtension( const std::string& filename )
-{
-    const kvs::File file( filename );
-    if ( file.extension() == "dcm"   || file.extension() == "DCM" ||
-         file.extension() == "dicom" || file.extension() == "DICOM" )
-    {
-        return true;
-    }
-
-    return false;
-}
-
-bool Dicom::CheckFileFormat( const std::string& filename )
-{
-    // Open the file.
-    std::ifstream ifs( filename.c_str(), std::ios_base::binary );
-    if( ifs.fail() )
-    {
-        kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return false;
-    }
-
-    // Check attribute.
-    dcm::Attribute attribute;
-    if( !attribute.check( ifs ) )
-    {
-        ifs.close();
-        return false;
-    }
-
-    ifs.close();
-    return true;
 }
 
 } // end of namespace kvs

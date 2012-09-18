@@ -86,6 +86,19 @@ const kvs::gf::BoundaryData& GFData::boundaryData() const
     return m_boundary_data;
 }
 
+void GFData::print( std::ostream& os, const size_t indent ) const
+{
+    const size_t next_indent = ( indent == 0 ) ? 4 : indent * 2;
+    const std::string blanks( indent, ' ' );
+    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
+    os << blanks << "Mesh data : " << std::endl;
+    m_mesh_data.print( os, next_indent );
+    os << blanks << "Flow data : " << std::endl;
+    m_flow_data.print( os, next_indent );
+    os << blanks << "Boundary data : " << std::endl;
+    m_boundary_data.print( os, next_indent );
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Read GF data file (not implemented).

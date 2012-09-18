@@ -15,6 +15,8 @@
 #ifndef KVS__GIS__AREA_H_INCLUDE
 #define KVS__GIS__AREA_H_INCLUDE
 
+#include <iostream>
+
 
 namespace kvs
 {
@@ -49,7 +51,12 @@ public:
         const float min_height = 0.0f,
         const float max_height = 0.0f );
 
-public:
+    float minLatitude() const;
+    float maxLatitude() const;
+    float minLongitude() const;
+    float maxLongitude() const;
+    float minHeight() const;
+    float maxHeight() const;
 
     void setMinLatitude( const float min_latitude );
     void setMaxLatitude( const float max_latitude );
@@ -57,12 +64,8 @@ public:
     void setMaxLongitude( const float max_longitude );
     void setMinHeight( const float min_height );
     void setMaxHeight( const float max_height );
-    float minLatitude() const;
-    float maxLatitude() const;
-    float minLongitude() const;
-    float maxLongitude() const;
-    float minHeight() const;
-    float maxHeight() const;
+
+    void print( std::ostream& os, const size_t indent = 0 ) const;
 };
 
 } // end of namespace gis

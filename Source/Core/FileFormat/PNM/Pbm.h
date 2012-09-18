@@ -45,35 +45,27 @@ private:
 
 public:
 
+    static bool CheckFileExtension( const std::string& filename );
+    static bool CheckFileFormat( const std::string& filename );
+
+public:
+
     Pbm();
     Pbm( const size_t width, const size_t height, const kvs::BitArray& data );
     Pbm( const std::string& filename );
 
-public:
-
     const Pbm::Header& header() const;
-
-public:
-
     size_t width() const;
     size_t height() const;
     const kvs::BitArray& data() const;
 
-public:
-
+    void print( std::ostream& os, const size_t indent = 0 ) const;
     bool read( const std::string& filename );
     bool write( const std::string& filename );
 
-protected:
+private:
 
     void set_header();
-
-public:
-
-    static bool CheckFileExtension( const std::string& filename );
-    static bool CheckFileFormat( const std::string& filename );
-
-    friend std::ostream& operator <<( std::ostream& os, const Pbm& rhs );
 };
 
 } // end of namespace kvs

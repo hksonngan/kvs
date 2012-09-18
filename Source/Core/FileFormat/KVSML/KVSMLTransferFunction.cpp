@@ -30,6 +30,50 @@ namespace kvs
 
 /*===========================================================================*/
 /**
+ *  @brief  Checks the file extension.
+ *  @param  filename [in] filename
+ *  @return true, if the given filename has the supported extension
+ */
+/*===========================================================================*/
+bool KVSMLTransferFunction::CheckFileExtension( const std::string& filename )
+{
+    const kvs::File file( filename );
+    if ( file.extension() == "kvsml" ||
+         file.extension() == "KVSML" ||
+         file.extension() == "xml"   ||
+         file.extension() == "XML" )
+    {
+        return true;
+    }
+
+    return false;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Check the file format.
+ *  @param  filename [in] filename
+ *  @return true, if the KVSMLTransferFunction class can read the given file
+ */
+/*===========================================================================*/
+bool KVSMLTransferFunction::CheckFileFormat( const std::string& filename )
+{
+    kvs::XMLDocument document;
+    if ( !document.read( filename ) ) return false;
+
+    // <KVSML>
+    kvs::kvsml::KVSMLTag kvsml_tag;
+    if ( !kvsml_tag.read( &document ) ) return false;
+
+    // <TransferFunction>
+    kvs::kvsml::TransferFunctionTag tfunc_tag;
+    if ( !tfunc_tag.read( kvsml_tag.node() ) ) return false;
+
+    return true;
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Constructs a new KVSMLTransferFunction class.
  */
 /*===========================================================================*/
@@ -231,6 +275,15 @@ void KVSMLTransferFunction::setOpacities( const kvs::ValueArray<kvs::Real32>& op
 void KVSMLTransferFunction::setColors( const kvs::ValueArray<kvs::UInt8>& colors )
 {
     m_colors = colors;
+}
+
+void KVSMLTransferFunction::print( std::ostream& os, const size_t indent ) const
+{
+    const std::string blanks( indent, ' ' );
+    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
+    os << blanks << "Resolution : " <<  m_resolution << std::endl;
+    os << blanks << "Min. scalar value : " << m_min_value << std::endl;
+    os << blanks << "Max. scalar value : " << m_max_value << std::endl;
 }
 
 /*===========================================================================*/
@@ -615,50 +668,6 @@ bool KVSMLTransferFunction::write( const std::string& filename )
     BaseClass::setSuccess( success );
 
     return success;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Checks the file extension.
- *  @param  filename [in] filename
- *  @return true, if the given filename has the supported extension
- */
-/*===========================================================================*/
-bool KVSMLTransferFunction::CheckFileExtension( const std::string& filename )
-{
-    const kvs::File file( filename );
-    if ( file.extension() == "kvsml" ||
-         file.extension() == "KVSML" ||
-         file.extension() == "xml"   ||
-         file.extension() == "XML" )
-    {
-        return true;
-    }
-
-    return false;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Check the file format.
- *  @param  filename [in] filename
- *  @return true, if the KVSMLTransferFunction class can read the given file
- */
-/*===========================================================================*/
-bool KVSMLTransferFunction::CheckFileFormat( const std::string& filename )
-{
-    kvs::XMLDocument document;
-    if ( !document.read( filename ) ) return false;
-
-    // <KVSML>
-    kvs::kvsml::KVSMLTag kvsml_tag;
-    if ( !kvsml_tag.read( &document ) ) return false;
-
-    // <TransferFunction>
-    kvs::kvsml::TransferFunctionTag tfunc_tag;
-    if ( !tfunc_tag.read( kvsml_tag.node() ) ) return false;
-
-    return true;
 }
 
 } // end of namespace kvs

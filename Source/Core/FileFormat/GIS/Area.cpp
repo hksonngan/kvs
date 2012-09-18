@@ -13,6 +13,7 @@
  */
 /*****************************************************************************/
 #include "Area.h"
+#include <string>
 
 
 namespace kvs
@@ -61,6 +62,72 @@ Area::Area(
     m_min_height( min_height ),
     m_max_height( max_height )
 {
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the minimum latitude.
+ *  @return minimum latitude
+ */
+/*===========================================================================*/
+float Area::minLatitude() const
+{
+    return m_min_latitude;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the maximum latitude.
+ *  @return maximum latitude
+ */
+/*===========================================================================*/
+float Area::maxLatitude() const
+{
+    return m_max_latitude;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the minimum longitude.
+ *  @return minimum longitude
+ */
+/*===========================================================================*/
+float Area::minLongitude() const
+{
+    return m_min_longitude;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the maximum longitude.
+ *  @return maximum longitude
+ */
+/*===========================================================================*/
+float Area::maxLongitude() const
+{
+    return m_max_longitude;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the minimum height.
+ *  @return minimum height
+ */
+/*===========================================================================*/
+float Area::minHeight() const
+{
+    return m_min_height;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the maximum height
+ *  @return maximum height
+ */
+/*===========================================================================*/
+float Area::maxHeight() const
+{
+    return m_max_height;
 }
 
 /*===========================================================================*/
@@ -129,70 +196,15 @@ void Area::setMaxHeight( const float max_height )
     m_max_height = max_height;
 }
 
-/*===========================================================================*/
-/**
- *  @brief  Returns the minimum latitude.
- *  @return minimum latitude
- */
-/*===========================================================================*/
-float Area::minLatitude() const
+void Area::print( std::ostream& os, const size_t indent ) const
 {
-    return m_min_latitude;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the maximum latitude.
- *  @return maximum latitude
- */
-/*===========================================================================*/
-float Area::maxLatitude() const
-{
-    return m_max_latitude;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the minimum longitude.
- *  @return minimum longitude
- */
-/*===========================================================================*/
-float Area::minLongitude() const
-{
-    return m_min_longitude;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the maximum longitude.
- *  @return maximum longitude
- */
-/*===========================================================================*/
-float Area::maxLongitude() const
-{
-    return m_max_longitude;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the minimum height.
- *  @return minimum height
- */
-/*===========================================================================*/
-float Area::minHeight() const
-{
-    return m_min_height;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the maximum height
- *  @return maximum height
- */
-/*===========================================================================*/
-float Area::maxHeight() const
-{
-    return m_max_height;
+    const std::string blanks( indent, ' ' );
+    os << blanks << "Min. latitude : " << m_min_latitude << std::endl;
+    os << blanks << "Max. latitude : " << m_max_latitude << std::endl;
+    os << blanks << "Min. longitude : " << m_min_longitude << std::endl;
+    os << blanks << "Max. longitude : " << m_max_longitude << std::endl;
+    os << blanks << "Min. height : " << m_min_height << std::endl;
+    os << blanks << "Max. height : " << m_max_height << std::endl;
 }
 
 } // end of namespace gis

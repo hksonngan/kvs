@@ -95,14 +95,54 @@ void SkipHeader( FILE* ifs )
 namespace kvs
 {
 
+bool AVSField::CheckFileExtension( const std::string& filename )
+{
+    const kvs::File file( filename );
+    if ( file.extension() == "fld" || file.extension() == "FLD" )
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool AVSField::CheckFileFormat( const std::string& filename )
+{
+    FILE* ifs = fopen( filename.c_str(), "rb" );
+    if( !ifs )
+    {
+        kvsMessageError( "Cannot open %s.", filename.c_str() );
+        return false;
+    }
+
+    if ( !::CheckHeader( ifs ) )
+    {
+        fclose( ifs );
+        return false;
+    }
+
+    fclose( ifs );
+    return true;
+}
+
 /*==========================================================================*/
 /**
  *  Constructor.
  */
 /*==========================================================================*/
-AVSField::AVSField()
+AVSField::AVSField():
+    m_bits( 0 ),
+    m_is_signed( true ),
+    m_veclen( 1 ),
+    m_nspace( 0 ),
+    m_ndim( 0 ),
+    m_dim( 1, 1, 1 ),
+    m_min_ext( 0, 0, 0 ),
+    m_max_ext( 1, 1, 1 ),
+    m_has_min_max_ext( false ),
+    m_field( Uniform ),
+    m_type( UnknownDataType )
 {
-    this->initialize();
 }
 
 /*==========================================================================*/
@@ -111,9 +151,19 @@ AVSField::AVSField()
  *  @param filename [in] inpt filename
  */
 /*==========================================================================*/
-AVSField::AVSField( const std::string& filename )
+AVSField::AVSField( const std::string& filename ):
+    m_bits( 0 ),
+    m_is_signed( true ),
+    m_veclen( 1 ),
+    m_nspace( 0 ),
+    m_ndim( 0 ),
+    m_dim( 1, 1, 1 ),
+    m_min_ext( 0, 0, 0 ),
+    m_max_ext( 1, 1, 1 ),
+    m_has_min_max_ext( false ),
+    m_field( Uniform ),
+    m_type( UnknownDataType )
 {
-    this->initialize();
     this->read( filename );
 }
 
@@ -124,92 +174,6 @@ AVSField::AVSField( const std::string& filename )
 /*==========================================================================*/
 AVSField::~AVSField()
 {
-    this->clear();
-}
-
-/*==========================================================================*/
-/**
- *  Initialize.
- */
-/*==========================================================================*/
-void AVSField::initialize()
-{
-    m_bits = 0;
-    m_is_signed = true;
-    m_veclen = 1;
-    m_nspace = 0;
-    m_ndim = 0;
-    m_dim = kvs::Vector3ui( 1, 1, 1 );
-    m_min_ext = kvs::Vector3f( 0, 0, 0 );
-    m_max_ext = kvs::Vector3f( 1, 1, 1 );
-    m_has_min_max_ext = false;
-    m_field = Uniform;
-    m_type = UnknownDataType;
-    m_labels.clear();
-}
-
-/*==========================================================================*/
-/**
- *  Clear.
- */
-/*==========================================================================*/
-void AVSField::clear()
-{
-    m_values.release();
-    m_coords.release();
-}
-
-/*==========================================================================*/
-/**
- *  Substitution operator.
- *  @param fld [in] AVS field data
- */
-/*==========================================================================*/
-AVSField& AVSField::operator = ( const AVSField& rhs )
-{
-    m_bits = rhs.m_bits;
-    m_is_signed = rhs.m_is_signed;
-    m_veclen = rhs.m_veclen;
-    m_nspace = rhs.m_nspace;
-    m_ndim = rhs.m_ndim;
-    m_dim = rhs.m_dim;
-    m_min_ext = rhs.m_min_ext;
-    m_max_ext = rhs.m_max_ext;
-    m_has_min_max_ext = rhs.m_has_min_max_ext;
-    m_field = rhs.m_field;
-    m_type = rhs.m_type;
-    std::copy( rhs.m_labels.begin(), rhs.m_labels.end(), m_labels.begin() );
-
-    return *this;
-}
-
-/*==========================================================================*/
-/**
- *  Output stream for AVSField class.
- *  @param os [in] output stream
- *  @param fld [in] AVS field data
- */
-/*==========================================================================*/
-std::ostream& operator << ( std::ostream& os, const AVSField& fld )
-{
-    os << "bits    : " << fld.m_bits << std::endl;
-    os << "signed  : " << ( fld.m_is_signed ? "signed" : "unsigned" ) << std::endl;
-    os << "veclen  : " << fld.m_veclen << std::endl;
-    os << "nspace  : " << fld.m_nspace << std::endl;
-    os << "ndim    : " << fld.m_ndim << std::endl;
-    os << "dim     : " << fld.m_dim << std::endl;
-    os << "min ext : " << fld.m_min_ext << std::endl;
-    os << "max ext : " << fld.m_max_ext << std::endl;
-    os << "data    : " << ::DataTypeToString[fld.m_type] << std::endl;
-    os << "field   : " << ::FieldTypeToString[fld.m_field] << std::endl;
-    os << "label   : ";
-    for( size_t i = 0; i < fld.m_labels.size(); i++ )
-    {
-        os << fld.m_labels[i] << " ";
-    }
-    os << std::endl;
-
-    return os;
 }
 
 /*==========================================================================*/
@@ -535,6 +499,35 @@ void AVSField::setValues( const kvs::AnyValueArray& values )
 void AVSField::setCoords( const kvs::ValueArray<float>& coords )
 {
     m_coords = coords;
+}
+
+/*==========================================================================*/
+/**
+ *  Output the information of AVSField data.
+ *  @param os [in] output stream
+ *  @param indent [in] indent size (number of white spaces)
+ */
+/*==========================================================================*/
+void AVSField::print( std::ostream& os, const size_t indent ) const
+{
+    const std::string blanks( indent, ' ' );
+    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
+    os << blanks << "Bits : " << m_bits << std::endl;
+    os << blanks << "Signed : " << ( m_is_signed ? "signed" : "unsigned" ) << std::endl;
+    os << blanks << "Veclen : " << m_veclen << std::endl;
+    os << blanks << "Number of spaces : " << m_nspace << std::endl;
+    os << blanks << "Number of dimensions : " << m_ndim << std::endl;
+    os << blanks << "Dimension : " << m_dim << std::endl;
+    os << blanks << "Min. ext. : " << m_min_ext << std::endl;
+    os << blanks << "Max. ext. : " << m_max_ext << std::endl;
+    os << blanks << "Data type : " << ::DataTypeToString[m_type] << std::endl;
+    os << blanks << "Field type : " << ::FieldTypeToString[m_field] << std::endl;
+    os << blanks << "Label : ";
+    for( size_t i = 0; i < m_labels.size(); i++ )
+    {
+        os << blanks << m_labels[i] << " ";
+    }
+    os << std::endl;
 }
 
 /*==========================================================================*/
@@ -941,36 +934,6 @@ bool AVSField::write_node( std::ofstream& ofs ) const
     ofs << "\f\f";
     ofs.write( (char*)m_values.data(), m_values.byteSize() );
 
-    return true;
-}
-
-bool AVSField::CheckFileExtension( const std::string& filename )
-{
-    const kvs::File file( filename );
-    if ( file.extension() == "fld" || file.extension() == "FLD" )
-    {
-        return true;
-    }
-
-    return false;
-}
-
-bool AVSField::CheckFileFormat( const std::string& filename )
-{
-    FILE* ifs = fopen( filename.c_str(), "rb" );
-    if( !ifs )
-    {
-        kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return false;
-    }
-
-    if ( !::CheckHeader( ifs ) )
-    {
-        fclose( ifs );
-        return false;
-    }
-
-    fclose( ifs );
     return true;
 }
 

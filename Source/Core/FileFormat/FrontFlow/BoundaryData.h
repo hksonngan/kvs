@@ -15,6 +15,7 @@
 #ifndef KVS__GF__BOUNDARY_H_INCLUDE
 #define KVS__GF__BOUNDARY_H_INCLUDE
 
+#include <iostream>
 #include <string>
 #include <kvs/ValueArray>
 #include <kvs/Type>
@@ -33,7 +34,7 @@ namespace gf
 /*===========================================================================*/
 class BoundaryData
 {
-protected:
+private:
 
     size_t m_dimensions; ///< dimensions (2 or 3)
     size_t m_nnodes_inlet; ///< number of inlet boundary nodes
@@ -65,8 +66,6 @@ public:
     BoundaryData();
     BoundaryData( const std::string filename );
 
-public:
-
     size_t dimensions() const;
     size_t nnodesInlet() const;
     size_t nnodesWall() const;
@@ -92,8 +91,7 @@ public:
     const kvs::ValueArray<kvs::Real32>& temperatures() const;
     const kvs::ValueArray<kvs::Real32>& heatFluxes() const;
 
-public:
-
+    void print( std::ostream& os, const size_t indent = 0 ) const;
     bool read( const std::string filename );
 };
 

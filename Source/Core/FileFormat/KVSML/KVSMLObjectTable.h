@@ -46,7 +46,7 @@ public:
         ExternalBinary
     };
 
-protected:
+private:
 
     kvs::kvsml::KVSMLTag m_kvsml_tag; ///< KVSML tag information
     kvs::kvsml::ObjectTag m_object_tag; ///< Object tag information
@@ -66,11 +66,14 @@ protected:
 
 public:
 
+    static bool CheckFileExtension( const std::string& filename );
+    static bool CheckFileFormat( const std::string& filename );
+
+public:
+
     KVSMLObjectTable();
     KVSMLObjectTable( const std::string& filename );
     virtual ~KVSMLObjectTable();
-
-public:
 
     const kvs::kvsml::KVSMLTag& KVSMLTag() const;
     const kvs::kvsml::ObjectTag& objectTag() const;
@@ -87,8 +90,6 @@ public:
     const std::vector<double>& minRangeList() const;
     const std::vector<double>& maxRangeList() const;
 
-public:
-
     void setWritingDataType( const WritingDataType writing_type );
     void setMinValue( const size_t column_index, const double value );
     void setMaxValue( const size_t column_index, const double value );
@@ -96,17 +97,9 @@ public:
     void setMaxRange( const size_t column_index, const double range );
     void addColumn( const kvs::AnyValueArray& column, const std::string& label );
 
-public:
-
+    void print( std::ostream& os, const size_t indent = 0 ) const;
     bool read( const std::string& filename );
     bool write( const std::string& filename );
-
-public:
-
-    static bool CheckFileExtension( const std::string& filename );
-    static bool CheckFileFormat( const std::string& filename );
-
-    friend std::ostream& operator <<( std::ostream& os, const KVSMLObjectTable& rhs );
 };
 
 } // end of namespace kvs

@@ -21,6 +21,32 @@
 namespace kvs
 {
 
+bool Pgm::CheckFileExtension( const std::string& filename )
+{
+    const kvs::File file( filename );
+    if ( file.extension() == "pgm" || file.extension() == "PGM" )
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool Pgm::CheckFileFormat( const std::string& filename )
+{
+    // Open the file.
+    std::ifstream ifs( filename.c_str(), std::ios::binary | std::ios::in );
+    if( !ifs.is_open() )
+    {
+        kvsMessageError( "Cannot open %s.", filename.c_str() );
+        return false;
+    }
+
+    // Read header information.
+    kvs::pnm::Header header( ifs );
+    return header.isP2() || header.isP5();
+}
+
 /*==========================================================================*/
 /**
  *  Constructor.
@@ -99,6 +125,13 @@ size_t Pgm::height( void ) const
 const kvs::ValueArray<kvs::UInt8>& Pgm::data( void ) const
 {
     return m_data;
+}
+
+void Pgm::print( std::ostream& os, const size_t indent ) const
+{
+    const std::string blanks( indent, ' ' );
+    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
+    m_header.print( os, indent );
 }
 
 /*==========================================================================*/
@@ -203,39 +236,6 @@ void Pgm::set_header( void )
 {
     const std::string format = "P5";
     m_header.set( format, m_width, m_height );
-}
-
-bool Pgm::CheckFileExtension( const std::string& filename )
-{
-    const kvs::File file( filename );
-    if ( file.extension() == "pgm" || file.extension() == "PGM" )
-    {
-        return true;
-    }
-
-    return false;
-}
-
-bool Pgm::CheckFileFormat( const std::string& filename )
-{
-    // Open the file.
-    std::ifstream ifs( filename.c_str(), std::ios::binary | std::ios::in );
-    if( !ifs.is_open() )
-    {
-        kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return false;
-    }
-
-    // Read header information.
-    kvs::pnm::Header header( ifs );
-    return header.isP2() || header.isP5();
-}
-
-std::ostream& operator <<( std::ostream& os, const Pgm& rhs )
-{
-    os << rhs.m_header;
-
-    return os;
 }
 
 } // end of namespace kvs

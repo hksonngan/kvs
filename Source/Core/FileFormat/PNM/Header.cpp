@@ -100,33 +100,6 @@ void Header::set( const std::string& magic, const size_t width, const size_t hei
     m_size   = this->data_size();
 }
 
-void Header::read( std::ifstream& ifs )
-{
-    ifs >> m_magic;
-    this->skip_comment_line( ifs );
-
-    ifs >> m_width >> m_height;
-    this->skip_comment_line( ifs );
-
-    if( isP1() || isP4() ) m_max = 0;
-    else                   ifs >> m_max;
-    this->skip_comment_line( ifs );
-
-    m_offset = ifs.tellg();
-    m_bpp    = this->bit_per_pixel();
-    m_bpl    = this->byte_per_line();
-    m_size   = this->data_size();
-
-    this->skip_header( ifs );
-}
-
-void Header::write( std::ofstream& ofs ) const
-{
-    ofs << m_magic << std::endl;
-    ofs << m_width << " " << m_height << std::endl;
-    if( m_max > 0 ) ofs << m_max << std::endl;
-}
-
 bool Header::isP1() const
 {
     return m_magic == "p1" || m_magic == "P1";
@@ -155,6 +128,42 @@ bool Header::isP5() const
 bool Header::isP6() const
 {
     return m_magic == "p6" || m_magic == "P6";
+}
+
+void Header::print( std::ostream& os, const size_t indent ) const
+{
+    const std::string blanks( indent, ' ' );
+    os << blanks << "Magic number : " << m_magic  << std::endl;
+    os << blanks << "Width : " << m_width  << std::endl;
+    os << blanks << "Height : " << m_height << std::endl;
+    os << blanks << "Max : " << m_max << std::endl;
+}
+
+void Header::read( std::ifstream& ifs )
+{
+    ifs >> m_magic;
+    this->skip_comment_line( ifs );
+
+    ifs >> m_width >> m_height;
+    this->skip_comment_line( ifs );
+
+    if( isP1() || isP4() ) m_max = 0;
+    else                   ifs >> m_max;
+    this->skip_comment_line( ifs );
+
+    m_offset = ifs.tellg();
+    m_bpp    = this->bit_per_pixel();
+    m_bpl    = this->byte_per_line();
+    m_size   = this->data_size();
+
+    this->skip_header( ifs );
+}
+
+void Header::write( std::ofstream& ofs ) const
+{
+    ofs << m_magic << std::endl;
+    ofs << m_width << " " << m_height << std::endl;
+    if( m_max > 0 ) ofs << m_max << std::endl;
 }
 
 size_t Header::bit_per_pixel() const

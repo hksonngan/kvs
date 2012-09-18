@@ -34,7 +34,7 @@ namespace gf
 /*===========================================================================*/
 class Data
 {
-protected:
+private:
 
     std::string m_array_type_header; ///< array type header
     std::string m_keyword; ///< keyword
@@ -48,11 +48,7 @@ public:
 
     Data();
 
-public:
-
     friend std::ostream& operator << ( std::ostream& os, const Data& d );
-
-public:
 
     const std::string& arrayTypeHeader() const;
     const std::string& keyword() const;
@@ -62,8 +58,6 @@ public:
     const kvs::ValueArray<kvs::Real32>& fltArray() const;
     const kvs::ValueArray<kvs::Int32>& intArray() const;
     void deallocate();
-
-public:
 
     bool readAscii( FILE* fp, const std::string tag );
     bool readBinary( FILE* fp, const bool swap = false );

@@ -34,7 +34,7 @@ namespace gf
 /*===========================================================================*/
 class DataSet
 {
-protected:
+private:
 
     std::vector<std::string> m_comment_list; ///< comment list
     std::vector<kvs::gf::Data> m_data_list; ///< data list
@@ -43,19 +43,13 @@ public:
 
     DataSet();
 
-public:
-
     friend std::ostream& operator << ( std::ostream& os, const DataSet& d );
-
-public:
 
     const std::vector<std::string>& commentList() const;
     const std::string& comment( const size_t index ) const;
     const std::vector<kvs::gf::Data>& dataList() const;
     const kvs::gf::Data& data( const size_t index ) const;
     void deallocate();
-
-public:
 
     bool readAscii( FILE* fp );
     bool readBinary( FILE* fp, const bool swap = false );

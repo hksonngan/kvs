@@ -33,7 +33,7 @@ namespace gf
 /*===========================================================================*/
 class File
 {
-protected:
+private:
 
     std::string m_file_type_header; ///< file type header
     std::vector<std::string> m_comment_list; ///< comment list
@@ -44,11 +44,7 @@ public:
     File();
     File( const std::string filename );
 
-public:
-
     friend std::ostream& operator << ( std::ostream& os, const File& f );
-
-public:
 
     const std::string& fileTypeHeader() const;
     const std::vector<std::string>& commentList() const;
@@ -57,11 +53,9 @@ public:
     const kvs::gf::DataSet& dataSet( const size_t index ) const;
     void deallocate();
 
-public:
-
     bool read( const std::string filename );
 
-protected:
+private:
 
     bool is_ascii( const std::string filename );
     bool is_binary( const std::string filename );

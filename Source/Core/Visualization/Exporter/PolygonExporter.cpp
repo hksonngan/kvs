@@ -288,7 +288,7 @@ kvs::Ply* PolygonExporter<kvs::Ply>::exec( const kvs::ObjectBase* object )
             kvs::ValueArray<kvs::UInt32> counter( nvertices ); counter.fill( 0 );
 
             const size_t npolygons = polygon->connections().size() / 3;
-            const kvs::UInt32* pconnections = m_connections.data();
+            const kvs::UInt32* pconnections = polygon->connections().data();
             for ( size_t i = 0; i < npolygons; i++ )
             {
                 const kvs::UInt32 index0 = *(pconnections++);

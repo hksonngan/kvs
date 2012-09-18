@@ -21,6 +21,32 @@
 namespace kvs
 {
 
+bool Ppm::CheckFileExtension( const std::string& filename )
+{
+    const kvs::File file( filename );
+    if ( file.extension() == "ppm" || file.extension() == "PPM" )
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool Ppm::CheckFileFormat( const std::string& filename )
+{
+    // Open the file.
+    std::ifstream ifs( filename.c_str(), std::ios::binary | std::ios::in );
+    if( !ifs.is_open() )
+    {
+        kvsMessageError( "Cannot open %s.", filename.c_str() );
+        return false;
+    }
+
+    // Read header information.
+    kvs::pnm::Header header( ifs );
+    return header.isP2() || header.isP5();
+}
+
 /*==========================================================================*/
 /**
  *  Constructor.
@@ -99,6 +125,11 @@ size_t Ppm::height() const
 const kvs::ValueArray<kvs::UInt8>& Ppm::data() const
 {
     return m_data;
+}
+
+void Ppm::print( std::ostream& os, const size_t indent ) const
+{
+    m_header.print( os, indent );
 }
 
 /*==========================================================================*/
@@ -205,39 +236,6 @@ void Ppm::set_header()
 {
     const std::string format = "P6";
     m_header.set( format, m_width, m_height );
-}
-
-bool Ppm::CheckFileExtension( const std::string& filename )
-{
-    const kvs::File file( filename );
-    if ( file.extension() == "ppm" || file.extension() == "PPM" )
-    {
-        return true;
-    }
-
-    return false;
-}
-
-bool Ppm::CheckFileFormat( const std::string& filename )
-{
-    // Open the file.
-    std::ifstream ifs( filename.c_str(), std::ios::binary | std::ios::in );
-    if( !ifs.is_open() )
-    {
-        kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return false;
-    }
-
-    // Read header information.
-    kvs::pnm::Header header( ifs );
-    return header.isP2() || header.isP5();
-}
-
-std::ostream& operator <<( std::ostream& os, const Ppm& rhs )
-{
-    os << rhs.m_header;
-
-    return os;
 }
 
 } // end of namespace kvs

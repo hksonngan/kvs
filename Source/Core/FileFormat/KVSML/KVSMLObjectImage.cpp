@@ -34,6 +34,55 @@ namespace kvs
 
 /*===========================================================================*/
 /**
+ *  @brief  Checks the file extension.
+ *  @param  filename [in] filename
+ *  @return true, if the given filename has the supported extension
+ */
+/*===========================================================================*/
+bool KVSMLObjectImage::CheckFileExtension( const std::string& filename )
+{
+    const kvs::File file( filename );
+    if ( file.extension() == "kvsml" ||
+         file.extension() == "KVSML" ||
+         file.extension() == "xml"   ||
+         file.extension() == "XML" )
+    {
+        return true;
+    }
+
+    return false;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Check the file format.
+ *  @param  filename [in] filename
+ *  @return true, if the KVSMLObjectImage class can read the given file
+ */
+/*===========================================================================*/
+bool KVSMLObjectImage::CheckFileFormat( const std::string& filename )
+{
+    kvs::XMLDocument document;
+    if ( !document.read( filename ) ) return false;
+
+    // <KVSML>
+    kvs::kvsml::KVSMLTag kvsml_tag;
+    if ( !kvsml_tag.read( &document ) ) return false;
+
+    // <Object>
+    kvs::kvsml::ObjectTag object_tag;
+    if ( !object_tag.read( kvsml_tag.node() ) ) return false;
+    if ( object_tag.type() != "ImageObject" ) return false;
+
+    // <ImageObject>
+    kvs::kvsml::ImageObjectTag image_object_tag;
+    if ( !image_object_tag.read( object_tag.node() ) ) return false;
+
+    return true;
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Constructs a new KVSML image object class.
  */
 /*===========================================================================*/
@@ -188,6 +237,15 @@ void KVSMLObjectImage::setWritingDataType( const WritingDataType writing_type )
 void KVSMLObjectImage::setData( const kvs::ValueArray<kvs::UInt8>& data )
 {
     m_data = data;
+}
+
+void KVSMLObjectImage::print( std::ostream& os, const size_t indent ) const
+{
+    const std::string blanks( indent, ' ' );
+    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
+    os << blanks << "Width : " << m_width << std::endl;
+    os << blanks << "Height : " << m_height << std::endl;
+    os << blanks << "Pixel type : " << m_pixel_type << std::endl;
 }
 
 /*===========================================================================*/
@@ -378,71 +436,6 @@ bool KVSMLObjectImage::write( const std::string& filename )
     BaseClass::setSuccess( success );
 
     return success;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Checks the file extension.
- *  @param  filename [in] filename
- *  @return true, if the given filename has the supported extension
- */
-/*===========================================================================*/
-bool KVSMLObjectImage::CheckFileExtension( const std::string& filename )
-{
-    const kvs::File file( filename );
-    if ( file.extension() == "kvsml" ||
-         file.extension() == "KVSML" ||
-         file.extension() == "xml"   ||
-         file.extension() == "XML" )
-    {
-        return true;
-    }
-
-    return false;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Check the file format.
- *  @param  filename [in] filename
- *  @return true, if the KVSMLObjectImage class can read the given file
- */
-/*===========================================================================*/
-bool KVSMLObjectImage::CheckFileFormat( const std::string& filename )
-{
-    kvs::XMLDocument document;
-    if ( !document.read( filename ) ) return false;
-
-    // <KVSML>
-    kvs::kvsml::KVSMLTag kvsml_tag;
-    if ( !kvsml_tag.read( &document ) ) return false;
-
-    // <Object>
-    kvs::kvsml::ObjectTag object_tag;
-    if ( !object_tag.read( kvsml_tag.node() ) ) return false;
-    if ( object_tag.type() != "ImageObject" ) return false;
-
-    // <ImageObject>
-    kvs::kvsml::ImageObjectTag image_object_tag;
-    if ( !image_object_tag.read( object_tag.node() ) ) return false;
-
-    return true;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Output operator.
- *  @param  os [out] output stream
- *  @param  rhs [in] KVSML image object
- */
-/*===========================================================================*/
-std::ostream& operator <<( std::ostream& os, const KVSMLObjectImage& rhs )
-{
-    os << "Width: " << rhs.width() << std::endl;
-    os << "Height: " << rhs.height() << std::endl;
-    os << "Pixel type: " << rhs.pixelType();
-
-    return os;
 }
 
 } // end of namespace kvs

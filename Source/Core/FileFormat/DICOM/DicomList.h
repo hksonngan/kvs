@@ -67,23 +67,21 @@ protected:
 
 public:
 
+    static bool CheckDirectory( const std::string& dirname, const bool extension_check = true );
+
+public:
+
     DicomList();
     DicomList( const std::string& dirname, const bool extension_check = true );
     virtual ~DicomList();
 
-public:
-
     const kvs::Dicom* operator [] ( const size_t index ) const;
     kvs::Dicom* operator [] ( const size_t index );
-
-public:
 
     void push_back( const kvs::Dicom& dicom );
     void push_back( kvs::Dicom* dicom );
     size_t size() const;
     void clear();
-
-public:
 
     size_t row() const;
     size_t column() const;
@@ -98,11 +96,6 @@ public:
     void enableExtensionCheck();
     void disableExtensionCheck();
 
-public:
-
-    bool read( const std::string& dirname );
-    bool write( const std::string& dirname );
-
     void sort()
     {
         std::sort( m_list.begin(), m_list.end(), SortingBySliceLocation() );
@@ -114,9 +107,9 @@ public:
         std::sort( m_list.begin(), m_list.end(), CompareMethod() );
     }
 
-public:
-
-    static bool CheckDirectory( const std::string& dirname, const bool extension_check = true );
+    void print( std::ostream& os, const size_t indent = 0 );
+    bool read( const std::string& dirname );
+    bool write( const std::string& dirname );
 };
 
 } // end of namespace kvs

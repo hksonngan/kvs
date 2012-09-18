@@ -21,6 +21,33 @@
 namespace kvs
 {
 
+bool Tiff::CheckFileExtension( const std::string& filename )
+{
+    const kvs::File file( filename );
+    if ( file.extension() == "tiff" || file.extension() == "TIFF" ||
+         file.extension() == "tif"  || file.extension() == "TIF" )
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool Tiff::CheckFileFormat( const std::string& filename )
+{
+    // Open the file.
+    std::ifstream ifs( filename.c_str(), std::ios::binary | std::ios::in );
+    if( !ifs.is_open() )
+    {
+        kvsMessageError( "Cannot open %s.", filename.c_str() );
+        return false;
+    }
+
+    // Read header information.
+    kvs::tiff::Header header;
+    return header.read( ifs );
+}
+
 Tiff::Tiff()
 {
 }
@@ -85,6 +112,18 @@ bool Tiff::isSupported() const
     }
 
     return ret;
+}
+
+void Tiff::print( std::ostream& os, const size_t indent ) const
+{
+    const std::string blanks( indent, ' ' );
+    os << blanks << "Filename : " << BaseClass::filename() << std::endl;
+    os << blanks << "Width : " << m_width << std::endl;
+    os << blanks << "Height : " << m_height << std::endl;
+    os << blanks << "Bits per sample : " << m_bits_per_sample << std::endl;
+
+    m_header.print( os, indent );
+    m_ifd.print( os, indent );
 }
 
 bool Tiff::read( const std::string& filename )
@@ -485,50 +524,6 @@ kvs::AnyValueArray Tiff::get_raw_data( std::ifstream& ifs ) const
     }
 
     return raw_data;
-}
-
-bool Tiff::CheckFileExtension( const std::string& filename )
-{
-    const kvs::File file( filename );
-    if ( file.extension() == "tiff" || file.extension() == "TIFF" ||
-         file.extension() == "tif"  || file.extension() == "TIF" )
-    {
-        return true;
-    }
-
-    return false;
-}
-
-bool Tiff::CheckFileFormat( const std::string& filename )
-{
-    // Open the file.
-    std::ifstream ifs( filename.c_str(), std::ios::binary | std::ios::in );
-    if( !ifs.is_open() )
-    {
-        kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return false;
-    }
-
-    // Read header information.
-    kvs::tiff::Header header;
-    return header.read( ifs );
-}
-
-std::ostream& operator << ( std::ostream& os, const Tiff& tiff )
-{
-    os << tiff.header() << std::endl;
-
-    kvs::tiff::ImageFileDirectory::EntryList::const_iterator entry = tiff.ifd().entryList().begin();
-    kvs::tiff::ImageFileDirectory::EntryList::const_iterator last = tiff.ifd().entryList().end();
-    while ( entry != last )
-    {
-        os << *entry;
-
-        ++entry;
-        if ( entry != last ) os << std::endl;
-    }
-
-    return os;
 }
 
 } // end of namespace kvs

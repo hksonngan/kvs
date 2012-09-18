@@ -15,6 +15,7 @@
 #ifndef KVS__GIS_H_INCLUDE
 #define KVS__GIS_H_INCLUDE
 
+#include <iostream>
 #include <vector>
 #include <kvs/FileFormatBase>
 #include <kvs/Vector2>
@@ -53,21 +54,16 @@ public:
         const kvs::gis::Area& render_area = kvs::gis::Area( 0.0f, 999.0f, 0.0f, 999.0f ) );
     virtual ~Gis();
 
-public:
-
-    void setRenderArea( const kvs::gis::Area& render_area );
-    void setOceanColor( const kvs::RGBColor& color );
-
-public:
-
     const kvs::gis::Area& area() const;
     const kvs::gis::Area& renderArea() const;
     const std::vector<kvs::gis::Mesh*>& meshes() const;
     const kvs::gis::Mesh* mesh( const size_t index ) const;
     kvs::RGBColor oceanColor() const;
 
-public:
+    void setRenderArea( const kvs::gis::Area& render_area );
+    void setOceanColor( const kvs::RGBColor& color );
 
+    void print( std::ostream& os, const size_t indent = 0 ) const;
     bool read( const std::string& filenames );
 
 private:
