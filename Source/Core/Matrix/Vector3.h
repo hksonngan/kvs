@@ -90,6 +90,8 @@ public:
 
     const T& z( void ) const;
 
+    const Vector2<T> xy() const;
+
 public:
     const Vector3 normalizedVector() const
     {
@@ -127,6 +129,7 @@ public:
     Vector3& operator -=( const Vector3& rhs );
     Vector3& operator *=( const Vector3& rhs );
     Vector3& operator *=( const T rhs );
+    Vector3& operator /= ( const Vector3& rhs );
     Vector3& operator /=( const T rhs );
 
     const Vector3 operator -( void ) const;
@@ -251,6 +254,14 @@ public:
     {
         Vector3 result( rhs );
         result *= lhs;
+
+        return( result );
+    }
+
+    friend const Vector3 operator /( const Vector3& lhs, const Vector3& rhs )
+    {
+        Vector3 result( lhs );
+        result /= rhs;
 
         return( result );
     }
@@ -554,6 +565,12 @@ inline const T& Vector3<T>::z( void ) const
     return( m_elements[2] );
 }
 
+template <typename T>
+inline const Vector2<T> Vector3<T>::xy() const
+{
+    return Vector2<T>( m_elements[0], m_elements[1] );
+}
+
 template<typename T>
 inline const Vector3<T> Vector3<T>::normalized() const
 {
@@ -787,6 +804,16 @@ inline Vector3<T> &Vector3<T>::operator *=( const T rhs )
     m_elements[0] = static_cast<T>( m_elements[0] * rhs );
     m_elements[1] = static_cast<T>( m_elements[1] * rhs );
     m_elements[2] = static_cast<T>( m_elements[2] * rhs );
+
+    return( *this );
+}
+
+template<typename T>
+inline Vector3<T> &Vector3<T>::operator /=( const Vector3& rhs )
+{
+    m_elements[0] = static_cast<T>( m_elements[0] / rhs[0] );
+    m_elements[1] = static_cast<T>( m_elements[1] / rhs[1] );
+    m_elements[2] = static_cast<T>( m_elements[2] / rhs[2] );
 
     return( *this );
 }

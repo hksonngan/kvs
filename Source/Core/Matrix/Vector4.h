@@ -99,6 +99,10 @@ public:
 
     const T& w( void ) const;
 
+    const Vector2<T> xy() const;
+
+    const Vector3<T> xyz() const;
+
 public:
     const Vector4 normalizedVector() const
     {
@@ -133,6 +137,7 @@ public:
     Vector4& operator -= ( const Vector4& rhs );
     Vector4& operator *= ( const Vector4& rhs );
     Vector4& operator *= ( const T rhs );
+    Vector4& operator /= ( const Vector4& rhs );
     Vector4& operator /= ( const T rhs );
 
     const Vector4 operator -( void ) const;
@@ -258,6 +263,14 @@ public:
     {
         Vector4 result( rhs );
         result *= lhs;
+
+        return( result );
+    }
+
+    friend const Vector4 operator /( const Vector4& lhs, const Vector4& rhs )
+    {
+        Vector4 result( lhs );
+        result /= rhs;
 
         return( result );
     }
@@ -612,6 +625,18 @@ inline T& Vector4<T>::w( void )
     return( m_elements[3] );
 }
 
+template <typename T>
+inline const Vector2<T> Vector4<T>::xy() const
+{
+    return Vector2<T>( m_elements[0], m_elements[1] );
+}
+
+template <typename T>
+inline const Vector3<T> Vector4<T>::xyz() const
+{
+    return Vector3<T>( m_elements[0], m_elements[1], m_elements[2] );
+}
+
 /*==========================================================================*/
 /**
  *  Returns the forth element.
@@ -844,6 +869,17 @@ inline Vector4<T> &Vector4<T>::operator *=( const T rhs )
     m_elements[1] = static_cast<T>( m_elements[1] * rhs );
     m_elements[2] = static_cast<T>( m_elements[2] * rhs );
     m_elements[3] = static_cast<T>( m_elements[3] * rhs );
+
+    return( *this );
+}
+
+template<typename T>
+inline Vector4<T> &Vector4<T>::operator /=( const Vector4& rhs )
+{
+    m_elements[0] = static_cast<T>( m_elements[0] / rhs[0] );
+    m_elements[1] = static_cast<T>( m_elements[1] / rhs[1] );
+    m_elements[2] = static_cast<T>( m_elements[2] / rhs[2] );
+    m_elements[3] = static_cast<T>( m_elements[3] / rhs[3] );
 
     return( *this );
 }
