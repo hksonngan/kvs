@@ -18,10 +18,40 @@
 #include <kvs/Tokenizer>
 #include <kvs/IgnoreUnusedVariable>
 #include <kvs/Directory>
+#include <kvs/File>
 
 
 namespace kvs
 {
+
+bool Gis::CheckExtension( const std::string& filename )
+{
+    if ( filename.find(";") != std::string::npos )
+    {
+        std::string hdr; // header file
+        std::string bil; // data file
+        kvs::Tokenizer t( filename, ";" );
+        while ( !t.isLast() )
+        {
+            const kvs::File file( t.token() );
+            if ( file.extension() == "hdr" || file.extension() == "HDR" ) { hdr = file.filePath(); }
+            if ( file.extension() == "res" || file.extension() == "RES" ) { bil = file.filePath(); }
+        }
+        if ( !hdr.empty() && !bil.empty() ) return true;
+    }
+    else
+    {
+        const kvs::File file( filename );
+        if ( file.extension() == "tem" || file.extension() == "TEM" ||
+             file.extension() == "sem" || file.extension() == "SEM" ||
+             file.extension() == "mem" || file.extension() == "MEM" )
+        {
+            return true;
+        }
+    }
+
+    return false;
+}
 
 /*===========================================================================*/
 /**

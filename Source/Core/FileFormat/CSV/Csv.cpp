@@ -29,36 +29,15 @@ namespace kvs
  *  @return true, if the given file is CSV format
  */
 /*===========================================================================*/
-bool Csv::CheckFileExtension( const std::string& filename )
+bool Csv::CheckExtension( const std::string& filename )
 {
     const kvs::File file( filename );
-    if ( file.extension() == "csv" )
+    if ( file.extension() == "csv" || file.extension() == "CSV" )
     {
         return true;
     }
 
     return false;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Checks the file format.
- *  @param  filename [in] filename
- *  @return true, if the given file is CSV data
- */
-/*===========================================================================*/
-bool Csv::CheckFileFormat( const std::string& filename )
-{
-    std::ifstream ifs( filename.c_str() );
-    if ( !ifs.is_open() )
-    {
-        kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return false;
-    }
-
-    ifs.close();
-
-    return true;
 }
 
 /*===========================================================================*/

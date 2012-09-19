@@ -93,8 +93,7 @@ private:
 
 public:
 
-    static bool CheckFileExtension( const std::string& filename );
-    static bool CheckFileFormat( const std::string& filename );
+    static bool CheckExtension( const std::string& filename );
 
 public:
 

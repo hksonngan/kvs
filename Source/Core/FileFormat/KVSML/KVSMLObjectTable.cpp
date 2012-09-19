@@ -33,13 +33,11 @@ namespace kvs
  *  @return true, if the given filename has the supported extension
  */
 /*===========================================================================*/
-bool KVSMLObjectTable::CheckFileExtension( const std::string& filename )
+bool KVSMLObjectTable::CheckExtension( const std::string& filename )
 {
     const kvs::File file( filename );
-    if ( file.extension() == "kvsml" ||
-         file.extension() == "KVSML" ||
-         file.extension() == "xml"   ||
-         file.extension() == "XML" )
+    if ( file.extension() == "kvsml" || file.extension() == "KVSML" ||
+         file.extension() == "xml"   || file.extension() == "XML" )
     {
         return true;
     }
@@ -54,24 +52,25 @@ bool KVSMLObjectTable::CheckFileExtension( const std::string& filename )
  *  @return true, if the KVSMLObjectTable class can read the given file
  */
 /*===========================================================================*/
-bool KVSMLObjectTable::CheckFileFormat( const std::string& filename )
+bool KVSMLObjectTable::CheckFormat( const std::string& filename )
 {
     kvs::XMLDocument document;
     if ( !document.read( filename ) ) return false;
 
     // <KVSML>
-    kvs::kvsml::KVSMLTag kvsml_tag;
-    if ( !kvsml_tag.read( &document ) ) return false;
+    const std::string kvsml_tag("KVSML");
+    const kvs::XMLNode::SuperClass* kvsml_node = kvs::XMLDocument::FindNode( &document, kvsml_tag );
+    if ( !kvsml_node ) return false;
 
     // <Object>
-    kvs::kvsml::ObjectTag object_tag;
-    if ( !object_tag.read( kvsml_tag.node() ) ) return false;
-
-    if ( object_tag.type() != "TableObject" ) return false;
+    const std::string object_tag("Object");
+    const kvs::XMLNode::SuperClass* object_node = kvs::XMLNode::FindChildNode( kvsml_node, object_tag );
+    if ( !object_node ) return false;
 
     // <TableObject>
-    kvs::kvsml::TableObjectTag table_tag;
-    if ( !table_tag.read( object_tag.node() ) ) return false;
+    const std::string table_tag("TableObject");
+    const kvs::XMLNode::SuperClass* table_node = kvs::XMLNode::FindChildNode( object_node, table_tag );
+    if ( !table_node ) return false;
 
     return true;
 }

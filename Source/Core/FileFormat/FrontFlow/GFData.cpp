@@ -20,6 +20,12 @@
 namespace kvs
 {
 
+bool GFData::CheckExtension( const std::string& filename )
+{
+    kvs::IgnoreUnusedVariable( filename );
+    return false;
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Construct a new GFData class.

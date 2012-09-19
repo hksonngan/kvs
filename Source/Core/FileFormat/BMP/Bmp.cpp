@@ -23,7 +23,7 @@
 namespace kvs
 {
 
-bool Bmp::CheckFileExtension( const std::string& filename )
+bool Bmp::CheckExtension( const std::string& filename )
 {
     const kvs::File file( filename );
     if ( file.extension() == "bmp" || file.extension() == "BMP" )
@@ -32,19 +32,6 @@ bool Bmp::CheckFileExtension( const std::string& filename )
     }
 
     return false;
-}
-
-bool CheckFileFormat( const std::string& filename )
-{
-    std::ifstream ifs( filename.c_str(), std::ios::binary | std::ios::in );
-    if( !ifs.is_open() )
-    {
-        kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return false;
-    }
-
-    Bmp::FileHeader file_header( ifs );
-    return file_header.isBM();
 }
 
 /*==========================================================================*/

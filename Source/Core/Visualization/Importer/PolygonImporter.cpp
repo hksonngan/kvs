@@ -99,7 +99,7 @@ PolygonImporter::PolygonImporter( void )
 /*===========================================================================*/
 PolygonImporter::PolygonImporter( const std::string& filename )
 {
-    if ( kvs::KVSMLObjectPolygon::CheckFileExtension( filename ) )
+    if ( kvs::KVSMLObjectPolygon::CheckExtension( filename ) )
     {
         kvs::KVSMLObjectPolygon* file_format = new kvs::KVSMLObjectPolygon( filename );
         if( !file_format )
@@ -120,7 +120,7 @@ PolygonImporter::PolygonImporter( const std::string& filename )
         this->import( file_format );
         delete file_format;
     }
-    else if ( kvs::Stl::CheckFileExtension( filename ) )
+    else if ( kvs::Stl::CheckExtension( filename ) )
     {
         kvs::Stl* file_format = new kvs::Stl( filename );
         if( !file_format )
@@ -141,7 +141,7 @@ PolygonImporter::PolygonImporter( const std::string& filename )
         this->import( file_format );
         delete file_format;
     }
-    else if ( kvs::Ply::CheckFileExtension( filename ) )
+    else if ( kvs::Ply::CheckExtension( filename ) )
     {
         kvs::Ply* file_format = new kvs::Ply( filename );
         if( !file_format )

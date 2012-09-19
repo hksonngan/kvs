@@ -45,6 +45,10 @@ private:
 
 public:
 
+    static bool CheckExtension( const std::string& filename );
+
+public:
+
     GFData();
     GFData( const std::string& filename );
     GFData( const std::string& mesh_file, const std::string& flow_file, const std::string& boundary_file = "" );

@@ -26,6 +26,12 @@
 namespace kvs
 {
 
+bool FrontSTR::CheckExtension( const std::string& filename )
+{
+    kvs::IgnoreUnusedVariable( filename );
+    return false;
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Constructs a new FrontSTR class.

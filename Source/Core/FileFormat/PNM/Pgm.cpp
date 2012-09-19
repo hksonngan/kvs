@@ -21,7 +21,7 @@
 namespace kvs
 {
 
-bool Pgm::CheckFileExtension( const std::string& filename )
+bool Pgm::CheckExtension( const std::string& filename )
 {
     const kvs::File file( filename );
     if ( file.extension() == "pgm" || file.extension() == "PGM" )
@@ -30,21 +30,6 @@ bool Pgm::CheckFileExtension( const std::string& filename )
     }
 
     return false;
-}
-
-bool Pgm::CheckFileFormat( const std::string& filename )
-{
-    // Open the file.
-    std::ifstream ifs( filename.c_str(), std::ios::binary | std::ios::in );
-    if( !ifs.is_open() )
-    {
-        kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return false;
-    }
-
-    // Read header information.
-    kvs::pnm::Header header( ifs );
-    return header.isP2() || header.isP5();
 }
 
 /*==========================================================================*/

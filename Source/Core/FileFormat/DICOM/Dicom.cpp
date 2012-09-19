@@ -37,11 +37,10 @@ namespace
 kvs::dcm::Tag END_HEADER_TAG = kvs::dcm::Tag( 0x7FE0, 0x0010, kvs::dcm::VR_OW );
 }
 
-
 namespace kvs
 {
 
-bool Dicom::CheckFileExtension( const std::string& filename )
+bool Dicom::CheckExtension( const std::string& filename )
 {
     const kvs::File file( filename );
     if ( file.extension() == "dcm"   || file.extension() == "DCM" ||
@@ -51,28 +50,6 @@ bool Dicom::CheckFileExtension( const std::string& filename )
     }
 
     return false;
-}
-
-bool Dicom::CheckFileFormat( const std::string& filename )
-{
-    // Open the file.
-    std::ifstream ifs( filename.c_str(), std::ios_base::binary );
-    if( ifs.fail() )
-    {
-        kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return false;
-    }
-
-    // Check attribute.
-    dcm::Attribute attribute;
-    if( !attribute.check( ifs ) )
-    {
-        ifs.close();
-        return false;
-    }
-
-    ifs.close();
-    return true;
 }
 
 /*===========================================================================*/

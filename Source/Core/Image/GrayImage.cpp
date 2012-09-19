@@ -465,7 +465,7 @@ void GrayImage::resize( const size_t width, const size_t height, GrayImage::Bili
 const bool GrayImage::read( const std::string& filename )
 {
     // KVSML image.
-    if ( kvs::KVSMLObjectImage::CheckFileExtension( filename ) )
+    if ( kvs::KVSMLObjectImage::CheckExtension( filename ) )
     {
         const kvs::KVSMLObjectImage kvsml( filename );
         if ( kvsml.pixelType() == "color" )
@@ -481,15 +481,15 @@ const bool GrayImage::read( const std::string& filename )
     }
 
     // Bitmap and PPM image.
-    if ( kvs::Bmp::CheckFileExtension( filename ) ||
-         kvs::Ppm::CheckFileExtension( filename ) )
+    if ( kvs::Bmp::CheckExtension( filename ) ||
+         kvs::Ppm::CheckExtension( filename ) )
     {
         kvs::ColorImage image; image.read( filename );
         return( this->read_image( image ) );
     }
 
     // PGM image.
-    if ( kvs::Pgm::CheckFileExtension( filename ) )
+    if ( kvs::Pgm::CheckExtension( filename ) )
     {
         const kvs::Pgm pgm( filename );
         const BaseClass::ImageType type = BaseClass::Gray;
@@ -497,14 +497,14 @@ const bool GrayImage::read( const std::string& filename )
     }
 
     // PBM image.
-    if ( kvs::Pbm::CheckFileExtension( filename ) )
+    if ( kvs::Pbm::CheckExtension( filename ) )
     {
         kvs::BitImage image; image.read( filename );
         return( this->read_image( image ) );
     }
 
     // TIFF image.
-    if ( kvs::Tiff::CheckFileExtension( filename ) )
+    if ( kvs::Tiff::CheckExtension( filename ) )
     {
         const kvs::Tiff tiff( filename );
         if ( tiff.colorMode() == kvs::Tiff::Color24 )
@@ -527,7 +527,7 @@ const bool GrayImage::read( const std::string& filename )
     }
 
     // DICOM image.
-    if ( kvs::Dicom::CheckFileExtension( filename ) )
+    if ( kvs::Dicom::CheckExtension( filename ) )
     {
         const kvs::Dicom dcm( filename );
         const BaseClass::ImageType type = BaseClass::Gray;
@@ -550,7 +550,7 @@ const bool GrayImage::read( const std::string& filename )
 const bool GrayImage::write( const std::string& filename )
 {
     // KVSML image.
-    if ( kvs::KVSMLObjectImage::CheckFileExtension( filename ) )
+    if ( kvs::KVSMLObjectImage::CheckExtension( filename ) )
     {
         kvs::KVSMLObjectImage kvsml;
         kvsml.setWidth( m_width );
@@ -562,22 +562,22 @@ const bool GrayImage::write( const std::string& filename )
     }
 
     // Bitmap and PPM image.
-    if ( kvs::Bmp::CheckFileExtension( filename ) ||
-         kvs::Ppm::CheckFileExtension( filename ) )
+    if ( kvs::Bmp::CheckExtension( filename ) ||
+         kvs::Ppm::CheckExtension( filename ) )
     {
         kvs::ColorImage image( *this );
         return( image.write( filename ) );
     }
 
     // PGM image.
-    if ( kvs::Pgm::CheckFileExtension( filename ) )
+    if ( kvs::Pgm::CheckExtension( filename ) )
     {
         kvs::Pgm pgm( m_width, m_height, m_data );
         return( pgm.write( filename ) );
     }
 
     // PBM image.
-    if ( kvs::Pbm::CheckFileExtension( filename ) )
+    if ( kvs::Pbm::CheckExtension( filename ) )
     {
         kvs::BitImage image( *this );
         return( image.write( filename ) );

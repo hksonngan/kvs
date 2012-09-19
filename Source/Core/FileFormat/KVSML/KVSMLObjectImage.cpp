@@ -39,13 +39,11 @@ namespace kvs
  *  @return true, if the given filename has the supported extension
  */
 /*===========================================================================*/
-bool KVSMLObjectImage::CheckFileExtension( const std::string& filename )
+bool KVSMLObjectImage::CheckExtension( const std::string& filename )
 {
     const kvs::File file( filename );
-    if ( file.extension() == "kvsml" ||
-         file.extension() == "KVSML" ||
-         file.extension() == "xml"   ||
-         file.extension() == "XML" )
+    if ( file.extension() == "kvsml" || file.extension() == "KVSML" ||
+         file.extension() == "xml"   || file.extension() == "XML" )
     {
         return true;
     }
@@ -60,23 +58,25 @@ bool KVSMLObjectImage::CheckFileExtension( const std::string& filename )
  *  @return true, if the KVSMLObjectImage class can read the given file
  */
 /*===========================================================================*/
-bool KVSMLObjectImage::CheckFileFormat( const std::string& filename )
+bool KVSMLObjectImage::CheckFormat( const std::string& filename )
 {
     kvs::XMLDocument document;
     if ( !document.read( filename ) ) return false;
 
     // <KVSML>
-    kvs::kvsml::KVSMLTag kvsml_tag;
-    if ( !kvsml_tag.read( &document ) ) return false;
+    const std::string kvsml_tag("KVSML");
+    const kvs::XMLNode::SuperClass* kvsml_node = kvs::XMLDocument::FindNode( &document, kvsml_tag );
+    if ( !kvsml_node ) return false;
 
     // <Object>
-    kvs::kvsml::ObjectTag object_tag;
-    if ( !object_tag.read( kvsml_tag.node() ) ) return false;
-    if ( object_tag.type() != "ImageObject" ) return false;
+    const std::string object_tag("Object");
+    const kvs::XMLNode::SuperClass* object_node = kvs::XMLNode::FindChildNode( kvsml_node, object_tag );
+    if ( !object_node ) return false;
 
     // <ImageObject>
-    kvs::kvsml::ImageObjectTag image_object_tag;
-    if ( !image_object_tag.read( object_tag.node() ) ) return false;
+    const std::string image_tag("ImageObject");
+    const kvs::XMLNode::SuperClass* image_node = kvs::XMLNode::FindChildNode( object_node, image_tag );
+    if ( !image_node ) return false;
 
     return true;
 }

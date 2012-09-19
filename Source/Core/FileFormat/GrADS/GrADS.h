@@ -46,6 +46,10 @@ private:
 
 public:
 
+    static bool CheckExtension( const std::string& filename );
+
+public:
+
     GrADS();
     GrADS( const std::string& filename );
     virtual ~GrADS();

@@ -35,13 +35,11 @@ namespace kvs
  *  @return true, if the given filename has the supported extension
  */
 /*===========================================================================*/
-bool KVSMLTransferFunction::CheckFileExtension( const std::string& filename )
+bool KVSMLTransferFunction::CheckExtension( const std::string& filename )
 {
     const kvs::File file( filename );
-    if ( file.extension() == "kvsml" ||
-         file.extension() == "KVSML" ||
-         file.extension() == "xml"   ||
-         file.extension() == "XML" )
+    if ( file.extension() == "kvsml" || file.extension() == "KVSML" ||
+         file.extension() == "xml"   || file.extension() == "XML" )
     {
         return true;
     }
@@ -56,18 +54,20 @@ bool KVSMLTransferFunction::CheckFileExtension( const std::string& filename )
  *  @return true, if the KVSMLTransferFunction class can read the given file
  */
 /*===========================================================================*/
-bool KVSMLTransferFunction::CheckFileFormat( const std::string& filename )
+bool KVSMLTransferFunction::CheckFormat( const std::string& filename )
 {
     kvs::XMLDocument document;
     if ( !document.read( filename ) ) return false;
 
     // <KVSML>
-    kvs::kvsml::KVSMLTag kvsml_tag;
-    if ( !kvsml_tag.read( &document ) ) return false;
+    const std::string kvsml_tag("KVSML");
+    const kvs::XMLNode::SuperClass* kvsml_node = kvs::XMLDocument::FindNode( &document, kvsml_tag );
+    if ( !kvsml_node ) return false;
 
     // <TransferFunction>
-    kvs::kvsml::TransferFunctionTag tfunc_tag;
-    if ( !tfunc_tag.read( kvsml_tag.node() ) ) return false;
+    const std::string tfunc_tag("TransferFunction");
+    const kvs::XMLNode::SuperClass* tfunc_node = kvs::XMLNode::FindChildNode( kvsml_node, tfunc_tag );
+    if ( !tfunc_node ) return false;
 
     return true;
 }

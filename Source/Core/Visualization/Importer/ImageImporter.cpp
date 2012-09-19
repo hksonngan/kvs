@@ -39,7 +39,7 @@ ImageImporter::ImageImporter( void )
 /*===========================================================================*/
 ImageImporter::ImageImporter( const std::string& filename )
 {
-    if ( kvs::KVSMLObjectImage::CheckFileExtension( filename ) )
+    if ( kvs::KVSMLObjectImage::CheckExtension( filename ) )
     {
         kvs::KVSMLObjectImage* file_format = new kvs::KVSMLObjectImage( filename );
         if( !file_format )
@@ -60,7 +60,7 @@ ImageImporter::ImageImporter( const std::string& filename )
         this->import( file_format );
         delete file_format;
     }
-    else if ( kvs::Bmp::CheckFileExtension( filename ) )
+    else if ( kvs::Bmp::CheckExtension( filename ) )
     {
         kvs::Bmp* file_format = new kvs::Bmp( filename );
         if( !file_format )
@@ -81,7 +81,7 @@ ImageImporter::ImageImporter( const std::string& filename )
         this->import( file_format );
         delete file_format;
     }
-    else if ( kvs::Tiff::CheckFileExtension( filename ) )
+    else if ( kvs::Tiff::CheckExtension( filename ) )
     {
         kvs::Tiff* file_format = new kvs::Tiff( filename );
         if( !file_format )
@@ -102,7 +102,7 @@ ImageImporter::ImageImporter( const std::string& filename )
         this->import( file_format );
         delete file_format;
     }
-    else if ( kvs::Ppm::CheckFileExtension( filename ) )
+    else if ( kvs::Ppm::CheckExtension( filename ) )
     {
         kvs::Ppm* file_format = new kvs::Ppm( filename );
         if( !file_format )
@@ -123,7 +123,7 @@ ImageImporter::ImageImporter( const std::string& filename )
         this->import( file_format );
         delete file_format;
     }
-    else if ( kvs::Pgm::CheckFileExtension( filename ) )
+    else if ( kvs::Pgm::CheckExtension( filename ) )
     {
         kvs::Pgm* file_format = new kvs::Pgm( filename );
         if( !file_format )
@@ -144,7 +144,7 @@ ImageImporter::ImageImporter( const std::string& filename )
         this->import( file_format );
         delete file_format;
     }
-    else if ( kvs::Pbm::CheckFileExtension( filename ) )
+    else if ( kvs::Pbm::CheckExtension( filename ) )
     {
         kvs::Pbm* file_format = new kvs::Pbm( filename );
         if( !file_format )
@@ -165,7 +165,7 @@ ImageImporter::ImageImporter( const std::string& filename )
         this->import( file_format );
         delete file_format;
     }
-    else if ( kvs::Dicom::CheckFileExtension( filename ) )
+    else if ( kvs::Dicom::CheckExtension( filename ) )
     {
         kvs::Dicom* file_format = new kvs::Dicom( filename );
         if( !file_format )

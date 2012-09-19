@@ -39,7 +39,7 @@ PointImporter::PointImporter( void )
 /*===========================================================================*/
 PointImporter::PointImporter( const std::string& filename )
 {
-    if ( kvs::KVSMLObjectPoint::CheckFileExtension( filename ) )
+    if ( kvs::KVSMLObjectPoint::CheckExtension( filename ) )
     {
         kvs::KVSMLObjectPoint* file_format = new kvs::KVSMLObjectPoint( filename );
         if( !file_format )

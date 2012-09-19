@@ -33,16 +33,20 @@ public:
     enum FormatType
     {
         UnknownFormat = 0, ///< unknown format (not supported format)
-        KVSMLFormat,       ///< KVSML format
         AVSFieldFormat,    ///< AVS Field format
         AVSUcdFormat,      ///< AVS UCD format
-        STLFormat,         ///< STL format
         BitmapFormat,      ///< Bitmap image format
-        PPMFormat,         ///< PPM image format
-        PGMFormat,         ///< PGM image format
+        CSVFormat,         ///< CSV format
+        DICOMFormat,       ///< DICOM image format
+        GISFormat,         ///< GIS format
+        GrADSFormat,       ///< GrADS format
+        KVSMLFormat,       ///< KVSML format
+        PLYFormat,         ///< PLY format
         PBMFormat,         ///< PBM image format
-        TIFFFormat,        ///< TIFF image format
-        DICOMFormat        ///< DICOM image format
+        PGMFormat,         ///< PGM image format
+        PPMFormat,         ///< PPM image format
+        STLFormat,         ///< STL format
+        TIFFFormat         ///< TIFF image format
     };
 
 private:

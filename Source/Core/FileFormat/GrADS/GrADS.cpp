@@ -20,6 +20,7 @@
 #include <kvs/File>
 #include <kvs/Directory>
 #include <kvs/String>
+#include <kvs/File>
 
 
 namespace
@@ -131,6 +132,17 @@ std::string ReplaceMinute( const std::string& filename, const int minute )
 
 namespace kvs
 {
+
+bool GrADS::CheckExtension( const std::string& filename )
+{
+    const kvs::File file( filename );
+    if ( file.extension() == "ctl" || file.extension() == "CTL" )
+    {
+        return true;
+    }
+
+    return false;
+}
 
 /*===========================================================================*/
 /**

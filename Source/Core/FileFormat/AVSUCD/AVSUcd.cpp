@@ -100,7 +100,7 @@ kvs::AVSUcd::FormatType CheckFormatType( FILE* const ifs )
 namespace kvs
 {
 
-bool AVSUcd::CheckFileExtension( const std::string& filename )
+bool AVSUcd::CheckExtension( const std::string& filename )
 {
     const kvs::File file( filename );
     if ( file.extension() == "ucd" || file.extension() == "UCD" ||
@@ -109,89 +109,6 @@ bool AVSUcd::CheckFileExtension( const std::string& filename )
         return true;
     }
 
-    return false;
-}
-
-bool AVSUcd::CheckFileFormat( const std::string& filename )
-{
-    FILE* ifs = fopen( filename.c_str(), "rb" );
-    if( !ifs )
-    {
-        kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return false;
-    }
-
-    const AVSUcd::FormatType format_type = ::CheckFormatType( ifs );
-    if ( format_type == AVSUcd::SingleStep )
-    {
-        char buffer[ ::MaxLineLength ];
-        while ( fgets( buffer, ::MaxLineLength, ifs ) != 0 )
-        {
-            // Skip comment line.
-            if ( buffer[0] == '#' ) { continue; }
-            else
-            {
-                const long nnodes = strtol( strtok( buffer, ::Delimiter ), NULL, 10 );
-                if ( nnodes == 0 )
-                {
-                    fclose( ifs );
-                    return false;
-                }
-
-                const long nelements = strtol( strtok( 0, ::Delimiter ), NULL, 10 );
-                if ( nelements == 0 )
-                {
-                    fclose( ifs );
-                    return false;
-                }
-
-                const long nvalues_per_node = strtol( strtok( 0, ::Delimiter ), NULL, 10 );
-                if ( nvalues_per_node == 0 )
-                {
-                    fclose( ifs );
-                    return false;
-                }
-
-                fclose( ifs );
-                return true;
-            }
-        }
-    }
-    else if ( format_type == AVSUcd::MultiStep )
-    {
-        char buffer[ ::MaxLineLength ];
-        while ( fgets( buffer, ::MaxLineLength, ifs ) != 0 )
-        {
-            // Skip comment line.
-            if ( buffer[0] == '#' ) { continue; }
-            else
-            {
-                const long nsteps = strtol( strtok( buffer, ::Delimiter ), NULL, 10 );
-                if ( nsteps == 0 )
-                {
-                    fclose( ifs );
-                    return false;
-                }
-
-                if ( fgets( buffer, ::MaxLineLength, ifs ) != 0 )
-                {
-                    const char* const cycle_type = strtok( buffer, ::Delimiter );
-                    if ( !strcmp( cycle_type, "data" ) ||
-                         !strcmp( cycle_type, "geom" ) ||
-                         !strcmp( cycle_type, "data_geom" ) )
-                    {
-                        fclose( ifs );
-                        return true;
-                    }
-                }
-
-                fclose( ifs );
-                return false;
-            }
-        }
-    }
-
-    fclose( ifs );
     return false;
 }
 

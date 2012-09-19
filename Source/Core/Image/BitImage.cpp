@@ -657,12 +657,12 @@ const size_t BitImage::count( void ) const
 const bool BitImage::read( const std::string& filename )
 {
     // Color or Gray image.
-    if ( kvs::KVSMLObjectImage::CheckFileExtension( filename ) ||
-         kvs::Bmp::CheckFileExtension( filename ) ||
-         kvs::Ppm::CheckFileExtension( filename ) ||
-         kvs::Pgm::CheckFileExtension( filename ) ||
-         kvs::Tiff::CheckFileExtension( filename ) ||
-         kvs::Dicom::CheckFileExtension( filename ) )
+    if ( kvs::KVSMLObjectImage::CheckExtension( filename ) ||
+         kvs::Bmp::CheckExtension( filename ) ||
+         kvs::Ppm::CheckExtension( filename ) ||
+         kvs::Pgm::CheckExtension( filename ) ||
+         kvs::Tiff::CheckExtension( filename ) ||
+         kvs::Dicom::CheckExtension( filename ) )
     {
         kvs::GrayImage image; image.read( filename );
         if ( !BaseClass::create( image.width(), image.height(), BaseClass::Bit ) )
@@ -677,7 +677,7 @@ const bool BitImage::read( const std::string& filename )
     }
 
     // Bit image.
-    if ( kvs::Pbm::CheckFileExtension( filename ) )
+    if ( kvs::Pbm::CheckExtension( filename ) )
     {
         const kvs::Pbm pbm( filename );
         const kvs::UInt8* data = pbm.data().data();
@@ -703,23 +703,23 @@ const bool BitImage::write( const std::string& filename )
     const std::string extension = file.extension();
 
     // Color image.
-    if ( kvs::KVSMLObjectImage::CheckFileExtension( filename ) ||
-         kvs::Bmp::CheckFileExtension( filename ) ||
-         kvs::Ppm::CheckFileExtension( filename ) )
+    if ( kvs::KVSMLObjectImage::CheckExtension( filename ) ||
+         kvs::Bmp::CheckExtension( filename ) ||
+         kvs::Ppm::CheckExtension( filename ) )
     {
         kvs::ColorImage image( *this );
         return( image.write( filename ) );
     }
 
     // PGM image.
-    if ( kvs::Pgm::CheckFileExtension( filename ) )
+    if ( kvs::Pgm::CheckExtension( filename ) )
     {
         kvs::GrayImage image( *this );
         return( image.write( filename ) );
     }
 
     // PBM image.
-    if ( kvs::Pbm::CheckFileExtension( filename ) )
+    if ( kvs::Pbm::CheckExtension( filename ) )
     {
         const size_t nvalues = m_width * m_height;
         const kvs::UInt8* values = m_data.data();

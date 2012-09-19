@@ -49,6 +49,10 @@ private:
 
 public:
 
+    static bool CheckExtension( const std::string& filename );
+
+public:
+
     Gis();
     Gis(
         const std::string& filename,

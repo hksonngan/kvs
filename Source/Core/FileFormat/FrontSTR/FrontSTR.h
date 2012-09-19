@@ -49,6 +49,10 @@ private:
 
 public:
 
+    static bool CheckExtension( const std::string& filename );
+
+public:
+
     FrontSTR();
     FrontSTR( const std::string& filenames );
     FrontSTR( const std::string& msh_filename, const std::string& res_filename );

@@ -14,20 +14,25 @@
 #include "FileChecker.h"
 #include <kvs/AVSField>
 #include <kvs/AVSUcd>
-#include <kvs/Stl>
 #include <kvs/Bmp>
-#include <kvs/Ppm>
-#include <kvs/Pgm>
-#include <kvs/Pbm>
-#include <kvs/Tiff>
+#include <kvs/Csv>
 #include <kvs/Dicom>
+#include <kvs/GIS>
+#include <kvs/GrADS>
 #include <kvs/KVSMLObjectImage>
 #include <kvs/KVSMLObjectPoint>
 #include <kvs/KVSMLObjectLine>
 #include <kvs/KVSMLObjectPolygon>
 #include <kvs/KVSMLObjectStructuredVolume>
 #include <kvs/KVSMLObjectUnstructuredVolume>
+#include <kvs/KVSMLObjectTable>
 #include <kvs/KVSMLTransferFunction>
+#include <kvs/Ply>
+#include <kvs/Pbm>
+#include <kvs/Pgm>
+#include <kvs/Ppm>
+#include <kvs/Stl>
+#include <kvs/Tiff>
 #include <kvs/File>
 #include <kvs/Timer>
 #include <iostream>
@@ -67,34 +72,44 @@ inline void PrintInformation( const char* class_name, std::ostream& os, const kv
 /*===========================================================================*/
 inline void PrintKVSMLInformation( std::ostream& os, const kvscheck::FileChecker& checker )
 {
-    if ( kvs::KVSMLObjectImage::CheckFileFormat( checker.filename() ) )
+    if ( kvs::KVSMLObjectImage::CheckFormat( checker.filename() ) )
     {
         PRINT_INFO( kvs::KVSMLObjectImage, os, checker ); return;
     }
 
-    if ( kvs::KVSMLObjectPoint::CheckFileFormat( checker.filename() ) )
+    if ( kvs::KVSMLObjectPoint::CheckFormat( checker.filename() ) )
     {
         PRINT_INFO( kvs::KVSMLObjectPoint, os, checker ); return;
     }
 
-    if ( kvs::KVSMLObjectLine::CheckFileFormat( checker.filename() ) )
+    if ( kvs::KVSMLObjectLine::CheckFormat( checker.filename() ) )
     {
         PRINT_INFO( kvs::KVSMLObjectLine, os, checker ); return;
     }
 
-    if ( kvs::KVSMLObjectPolygon::CheckFileFormat( checker.filename() ) )
+    if ( kvs::KVSMLObjectPolygon::CheckFormat( checker.filename() ) )
     {
         PRINT_INFO( kvs::KVSMLObjectPolygon, os, checker ); return;
     }
 
-    if ( kvs::KVSMLObjectStructuredVolume::CheckFileFormat( checker.filename() ) )
+    if ( kvs::KVSMLObjectStructuredVolume::CheckFormat( checker.filename() ) )
     {
         PRINT_INFO( kvs::KVSMLObjectStructuredVolume, os, checker ); return;
     }
 
-    if ( kvs::KVSMLObjectUnstructuredVolume::CheckFileFormat( checker.filename() ) )
+    if ( kvs::KVSMLObjectUnstructuredVolume::CheckFormat( checker.filename() ) )
     {
         PRINT_INFO( kvs::KVSMLObjectUnstructuredVolume, os, checker ); return;
+    }
+
+    if ( kvs::KVSMLObjectTable::CheckFormat( checker.filename() ) )
+    {
+        PRINT_INFO( kvs::KVSMLObjectTable, os, checker ); return;
+    }
+
+    if ( kvs::KVSMLTransferFunction::CheckFormat( checker.filename() ) )
+    {
+        PRINT_INFO( kvs::KVSMLTransferFunction, os, checker ); return;
     }
 }
 
@@ -134,7 +149,42 @@ const std::string& FileChecker::filename( void ) const
 /*===========================================================================*/
 const FileChecker::FormatType FileChecker::fileFormat( void ) const
 {
-    if ( kvs::KVSMLObjectPoint::CheckFileExtension( m_filename ) )
+    if ( kvs::AVSField::CheckExtension( m_filename ) )
+    {
+        return( FileChecker::AVSFieldFormat );
+    }
+
+    if ( kvs::AVSUcd::CheckExtension( m_filename ) )
+    {
+        return( FileChecker::AVSUcdFormat );
+    }
+
+    if ( kvs::Bmp::CheckExtension( m_filename ) )
+    {
+        return( FileChecker::BitmapFormat );
+    }
+
+    if ( kvs::Csv::CheckExtension( m_filename ) )
+    {
+        return( FileChecker::CSVFormat );
+    }
+
+    if ( kvs::Dicom::CheckExtension( m_filename ) )
+    {
+        return( FileChecker::DICOMFormat );
+    }
+
+    if ( kvs::Gis::CheckExtension( m_filename ) )
+    {
+        return( FileChecker::GISFormat );
+    }
+
+    if ( kvs::GrADS::CheckExtension( m_filename ) )
+    {
+        return( FileChecker::GrADSFormat );
+    }
+
+    if ( kvs::KVSMLObjectPoint::CheckExtension( m_filename ) )
     {
         /* NOTE: The KVSML object file have a same extension. Therefore,
          * kvs::KVSMLObjectPoint is used in order to check the file extension
@@ -143,49 +193,34 @@ const FileChecker::FormatType FileChecker::fileFormat( void ) const
         return( FileChecker::KVSMLFormat );
     }
 
-    if ( kvs::AVSField::CheckFileExtension( m_filename ) )
+    if ( kvs::Ply::CheckExtension( m_filename ) )
     {
-        return( FileChecker::AVSFieldFormat );
+        return( FileChecker::PLYFormat );
     }
 
-    if ( kvs::AVSUcd::CheckFileExtension( m_filename ) )
-    {
-        return( FileChecker::AVSUcdFormat );
-    }
-
-    if ( kvs::Stl::CheckFileExtension( m_filename ) )
-    {
-        return( FileChecker::STLFormat );
-    }
-
-    if ( kvs::Bmp::CheckFileExtension( m_filename ) )
-    {
-        return( FileChecker::BitmapFormat );
-    }
-
-    if ( kvs::Ppm::CheckFileExtension( m_filename ) )
-    {
-        return( FileChecker::PPMFormat );
-    }
-
-    if ( kvs::Pgm::CheckFileExtension( m_filename ) )
-    {
-        return( FileChecker::PGMFormat );
-    }
-
-    if ( kvs::Pbm::CheckFileExtension( m_filename ) )
+    if ( kvs::Pbm::CheckExtension( m_filename ) )
     {
         return( FileChecker::PBMFormat );
     }
 
-    if ( kvs::Tiff::CheckFileExtension( m_filename ) )
+    if ( kvs::Pgm::CheckExtension( m_filename ) )
     {
-        return( FileChecker::TIFFFormat );
+        return( FileChecker::PGMFormat );
     }
 
-    if ( kvs::Dicom::CheckFileExtension( m_filename ) )
+    if ( kvs::Ppm::CheckExtension( m_filename ) )
     {
-        return( FileChecker::DICOMFormat );
+        return( FileChecker::PPMFormat );
+    }
+
+    if ( kvs::Stl::CheckExtension( m_filename ) )
+    {
+        return( FileChecker::STLFormat );
+    }
+
+    if ( kvs::Tiff::CheckExtension( m_filename ) )
+    {
+        return( FileChecker::TIFFFormat );
     }
 
     return( FileChecker::UnknownFormat );
@@ -224,32 +259,48 @@ std::ostream& operator << ( std::ostream& os, const FileChecker& checker )
         PRINT_INFO( kvs::AVSUcd, os, checker );
         break;
 
-    case FileChecker::STLFormat:
-        PRINT_INFO( kvs::Stl, os, checker );
-        break;
-
     case FileChecker::BitmapFormat:
         PRINT_INFO( kvs::Bmp, os, checker );
         break;
 
-    case FileChecker::PPMFormat:
-        PRINT_INFO( kvs::Ppm, os, checker );
+    case FileChecker::CSVFormat:
+        PRINT_INFO( kvs::Csv, os, checker );
         break;
 
-    case FileChecker::PGMFormat:
-        PRINT_INFO( kvs::Pgm, os, checker );
+    case FileChecker::DICOMFormat:
+        PRINT_INFO( kvs::Dicom, os, checker );
+        break;
+
+    case FileChecker::GISFormat:
+        PRINT_INFO( kvs::Gis, os, checker );
+        break;
+
+    case FileChecker::GrADSFormat:
+        PRINT_INFO( kvs::GrADS, os, checker );
+        break;
+
+    case FileChecker::PLYFormat:
+        PRINT_INFO( kvs::Ply, os, checker );
         break;
 
     case FileChecker::PBMFormat:
         PRINT_INFO( kvs::Pbm, os, checker );
         break;
 
-    case FileChecker::TIFFFormat:
-        PRINT_INFO( kvs::Tiff, os, checker );
+    case FileChecker::PGMFormat:
+        PRINT_INFO( kvs::Pgm, os, checker );
         break;
 
-    case FileChecker::DICOMFormat:
-        PRINT_INFO( kvs::Dicom, os, checker );
+    case FileChecker::PPMFormat:
+        PRINT_INFO( kvs::Ppm, os, checker );
+        break;
+
+    case FileChecker::STLFormat:
+        PRINT_INFO( kvs::Stl, os, checker );
+        break;
+
+    case FileChecker::TIFFFormat:
+        PRINT_INFO( kvs::Tiff, os, checker );
         break;
 
     default:

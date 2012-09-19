@@ -99,7 +99,7 @@ UnstructuredVolumeImporter::UnstructuredVolumeImporter( void )
 /*===========================================================================*/
 UnstructuredVolumeImporter::UnstructuredVolumeImporter( const std::string& filename )
 {
-    if ( kvs::KVSMLObjectUnstructuredVolume::CheckFileExtension( filename ) )
+    if ( kvs::KVSMLObjectUnstructuredVolume::CheckExtension( filename ) )
     {
         kvs::KVSMLObjectUnstructuredVolume* file_format = new kvs::KVSMLObjectUnstructuredVolume( filename );
         if( !file_format )
@@ -120,7 +120,7 @@ UnstructuredVolumeImporter::UnstructuredVolumeImporter( const std::string& filen
         this->import( file_format );
         delete file_format;
     }
-    else if ( kvs::AVSUcd::CheckFileExtension( filename ) )
+    else if ( kvs::AVSUcd::CheckExtension( filename ) )
     {
         kvs::AVSUcd* file_format = new kvs::AVSUcd( filename );
         if( !file_format )
@@ -141,7 +141,7 @@ UnstructuredVolumeImporter::UnstructuredVolumeImporter( const std::string& filen
         this->import( file_format );
         delete file_format;
     }
-    else if ( kvs::AVSField::CheckFileExtension( filename ) )
+    else if ( kvs::AVSField::CheckExtension( filename ) )
     {
         kvs::AVSField* file_format = new kvs::AVSField( filename );
         if( !file_format )

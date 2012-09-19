@@ -83,7 +83,7 @@ LineImporter::LineImporter( void )
 /*===========================================================================*/
 LineImporter::LineImporter( const std::string& filename )
 {
-    if ( kvs::KVSMLObjectLine::CheckFileExtension( filename ) )
+    if ( kvs::KVSMLObjectLine::CheckExtension( filename ) )
     {
         kvs::KVSMLObjectLine* file_format = new kvs::KVSMLObjectLine( filename );
         if( !file_format )

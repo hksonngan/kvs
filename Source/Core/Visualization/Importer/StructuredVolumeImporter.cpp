@@ -66,7 +66,7 @@ StructuredVolumeImporter::StructuredVolumeImporter( void )
 /*===========================================================================*/
 StructuredVolumeImporter::StructuredVolumeImporter( const std::string& filename )
 {
-    if ( kvs::KVSMLObjectStructuredVolume::CheckFileExtension( filename ) )
+    if ( kvs::KVSMLObjectStructuredVolume::CheckExtension( filename ) )
     {
         kvs::KVSMLObjectStructuredVolume* file_format = new kvs::KVSMLObjectStructuredVolume( filename );
         if( !file_format )
@@ -87,7 +87,7 @@ StructuredVolumeImporter::StructuredVolumeImporter( const std::string& filename 
         this->import( file_format );
         delete file_format;
     }
-    else if ( kvs::AVSField::CheckFileExtension( filename ) )
+    else if ( kvs::AVSField::CheckExtension( filename ) )
     {
         kvs::AVSField* file_format = new kvs::AVSField( filename );
         if( !file_format )

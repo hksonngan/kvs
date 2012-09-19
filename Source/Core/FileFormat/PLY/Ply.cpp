@@ -90,7 +90,7 @@ kvs::ply::PlyProperty FaceProps[1] =
 namespace kvs
 {
 
-bool Ply::CheckFileExtension( const std::string& filename )
+bool Ply::CheckExtension( const std::string& filename )
 {
     const kvs::File file( filename );
     if ( file.extension() == "ply" || file.extension() == "PLY" )
@@ -99,27 +99,6 @@ bool Ply::CheckFileExtension( const std::string& filename )
     }
 
     return false;
-}
-
-bool Ply::CheckFileFormat( const std::string& filename )
-{
-    ply::PlyFile* ply;
-    int           nelems;
-    char**        elist;
-    int           file_type;
-    float         version;
-    if( !( ply = ply::ply_open_for_reading(
-               filename.c_str(),
-               &nelems,
-               &elist,
-               &file_type,
-               &version ) ) )
-    {
-        kvsMessageError( "Cannot read ply file." );
-        return false;
-    }
-
-    return true;
 }
 
 Ply::Ply():

@@ -69,7 +69,7 @@ bool IsAsciiType( FILE* ifs )
 namespace kvs
 {
 
-bool Stl::CheckFileExtension( const std::string& filename )
+bool Stl::CheckExtension( const std::string& filename )
 {
     const kvs::File file( filename );
     if ( file.extension() == "stl" || file.extension() == "STL" ||
@@ -82,56 +82,6 @@ bool Stl::CheckFileExtension( const std::string& filename )
     }
 
     return false;
-}
-
-bool Stl::CheckFileFormat( const std::string& filename )
-{
-    FILE* ifs = fopen( filename.c_str(), "rb" );
-    if( !ifs )
-    {
-        kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return false;
-    }
-
-    if ( !::IsAsciiType( ifs ) )
-    {
-        // Go back file-pointer to head.
-        fseek( ifs, 0, SEEK_SET );
-
-        // Check binary STL
-        kvs::File file( filename );
-        const size_t byte_size = file.byteSize();
-
-        // Read header string (80bytes).
-        const size_t HeaderLength = 80;
-        char buffer[ HeaderLength ];
-        if ( fread( buffer, sizeof( char ), HeaderLength, ifs ) != HeaderLength )
-        {
-            kvsMessageError("Cannot read a header string (80byets).");
-            fclose( ifs );
-            return false;
-        }
-
-        // Read a number of triangles (4bytes).
-        kvs::UInt32 ntriangles = 0;
-        if ( fread( &ntriangles, sizeof( kvs::UInt32 ), 1, ifs ) != 1 )
-        {
-            kvsMessageError("Cannot read a number of triangles.");
-            fclose( ifs );
-            return false;
-        }
-
-        const size_t data_size = 50 * ntriangles + 80 + 4;
-        if ( byte_size != data_size )
-        {
-            fclose( ifs );
-            return false;
-        }
-    }
-
-    fclose( ifs );
-
-    return true;
 }
 
 /*===========================================================================*/

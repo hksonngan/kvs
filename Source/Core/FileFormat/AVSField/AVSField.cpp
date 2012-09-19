@@ -95,7 +95,7 @@ void SkipHeader( FILE* ifs )
 namespace kvs
 {
 
-bool AVSField::CheckFileExtension( const std::string& filename )
+bool AVSField::CheckExtension( const std::string& filename )
 {
     const kvs::File file( filename );
     if ( file.extension() == "fld" || file.extension() == "FLD" )
@@ -104,25 +104,6 @@ bool AVSField::CheckFileExtension( const std::string& filename )
     }
 
     return false;
-}
-
-bool AVSField::CheckFileFormat( const std::string& filename )
-{
-    FILE* ifs = fopen( filename.c_str(), "rb" );
-    if( !ifs )
-    {
-        kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return false;
-    }
-
-    if ( !::CheckHeader( ifs ) )
-    {
-        fclose( ifs );
-        return false;
-    }
-
-    fclose( ifs );
-    return true;
 }
 
 /*==========================================================================*/

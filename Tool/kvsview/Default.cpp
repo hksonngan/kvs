@@ -42,7 +42,7 @@ namespace Default
 /*===========================================================================*/
 const bool CheckTransferFunctionFormat( const std::string& filename )
 {
-    if ( kvs::KVSMLTransferFunction::CheckFileExtension( filename ) )
+    if ( kvs::KVSMLTransferFunction::CheckExtension( filename ) )
     {
         // Find a TransferFunction tag without error messages.
         kvs::XMLDocument document;

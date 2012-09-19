@@ -100,61 +100,61 @@ kvs::ObjectBase* ObjectImporter::import( void )
 bool ObjectImporter::estimate_file_format( void )
 {
     kvs::File file( m_filename );
-    if ( kvs::AVSField::CheckFileExtension( file.filePath() ) )
+    if ( kvs::AVSField::CheckExtension( file.filePath() ) )
     {
         m_importer_type = ObjectImporter::StructuredVolume;
         m_file_format = new kvs::AVSField;
     }
 
-    else if ( kvs::AVSUcd::CheckFileExtension( file.filePath() ) )
+    else if ( kvs::AVSUcd::CheckExtension( file.filePath() ) )
     {
         m_importer_type = ObjectImporter::UnstructuredVolume;
         m_file_format = new kvs::AVSUcd;
     }
 
-    else if ( kvs::Bmp::CheckFileExtension( file.filePath() ) )
+    else if ( kvs::Bmp::CheckExtension( file.filePath() ) )
     {
         m_importer_type = ObjectImporter::Image;
         m_file_format = new kvs::Bmp;
     }
 
-    else if ( kvs::Ppm::CheckFileExtension( file.filePath() ) )
+    else if ( kvs::Ppm::CheckExtension( file.filePath() ) )
     {
         m_importer_type = ObjectImporter::Image;
         m_file_format = new kvs::Ppm;
     }
 
-    else if ( kvs::Pgm::CheckFileExtension( file.filePath() ) )
+    else if ( kvs::Pgm::CheckExtension( file.filePath() ) )
     {
         m_importer_type = ObjectImporter::Image;
         m_file_format = new kvs::Pgm;
     }
 
-    else if ( kvs::Pbm::CheckFileExtension( file.filePath() ) )
+    else if ( kvs::Pbm::CheckExtension( file.filePath() ) )
     {
         m_importer_type = ObjectImporter::Image;
         m_file_format = new kvs::Pbm;
     }
 
-    else if ( kvs::Stl::CheckFileExtension( file.filePath() ) )
+    else if ( kvs::Stl::CheckExtension( file.filePath() ) )
     {
         m_importer_type = ObjectImporter::Polygon;
         m_file_format = new kvs::Stl;
     }
 
-    else if ( kvs::Ply::CheckFileExtension( file.filePath() ) )
+    else if ( kvs::Ply::CheckExtension( file.filePath() ) )
     {
         m_importer_type = ObjectImporter::Polygon;
         m_file_format = new kvs::Ply;
     }
 
-    else if ( kvs::Tiff::CheckFileExtension( file.filePath() ) )
+    else if ( kvs::Tiff::CheckExtension( file.filePath() ) )
     {
         m_importer_type = ObjectImporter::Image;
         m_file_format = new kvs::Tiff;
     }
 
-    else if ( kvs::Dicom::CheckFileExtension( file.filePath() ) )
+    else if ( kvs::Dicom::CheckExtension( file.filePath() ) )
     {
         m_importer_type = ObjectImporter::Image;
         m_file_format = new kvs::Dicom;
@@ -165,37 +165,37 @@ bool ObjectImporter::estimate_file_format( void )
               file.extension() == "xml"   ||
               file.extension() == "XML" )
     {
-        if ( kvs::KVSMLObjectImage::CheckFileFormat( file.filePath() ) )
+        if ( kvs::KVSMLObjectImage::CheckFormat( file.filePath() ) )
         {
             m_importer_type = ObjectImporter::Image;
             m_file_format = new kvs::KVSMLObjectImage;
         }
 
-        else if ( kvs::KVSMLObjectPoint::CheckFileFormat( file.filePath() ) )
+        else if ( kvs::KVSMLObjectPoint::CheckFormat( file.filePath() ) )
         {
             m_importer_type = ObjectImporter::Point;
             m_file_format = new kvs::KVSMLObjectPoint;
         }
 
-        else if ( kvs::KVSMLObjectLine::CheckFileFormat( file.filePath() ) )
+        else if ( kvs::KVSMLObjectLine::CheckFormat( file.filePath() ) )
         {
             m_importer_type = ObjectImporter::Line;
             m_file_format = new kvs::KVSMLObjectLine;
         }
 
-        else if ( kvs::KVSMLObjectPolygon::CheckFileFormat( file.filePath() ) )
+        else if ( kvs::KVSMLObjectPolygon::CheckFormat( file.filePath() ) )
         {
             m_importer_type = ObjectImporter::Polygon;
             m_file_format = new kvs::KVSMLObjectPolygon;
         }
 
-        else if ( kvs::KVSMLObjectStructuredVolume::CheckFileFormat( file.filePath() ) )
+        else if ( kvs::KVSMLObjectStructuredVolume::CheckFormat( file.filePath() ) )
         {
             m_importer_type = ObjectImporter::StructuredVolume;
             m_file_format = new kvs::KVSMLObjectStructuredVolume;
         }
 
-        else if ( kvs::KVSMLObjectUnstructuredVolume::CheckFileFormat( file.filePath() ) )
+        else if ( kvs::KVSMLObjectUnstructuredVolume::CheckFormat( file.filePath() ) )
         {
             m_importer_type = ObjectImporter::UnstructuredVolume;
             m_file_format = new kvs::KVSMLObjectUnstructuredVolume;

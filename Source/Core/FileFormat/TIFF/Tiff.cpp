@@ -21,7 +21,7 @@
 namespace kvs
 {
 
-bool Tiff::CheckFileExtension( const std::string& filename )
+bool Tiff::CheckExtension( const std::string& filename )
 {
     const kvs::File file( filename );
     if ( file.extension() == "tiff" || file.extension() == "TIFF" ||
@@ -31,21 +31,6 @@ bool Tiff::CheckFileExtension( const std::string& filename )
     }
 
     return false;
-}
-
-bool Tiff::CheckFileFormat( const std::string& filename )
-{
-    // Open the file.
-    std::ifstream ifs( filename.c_str(), std::ios::binary | std::ios::in );
-    if( !ifs.is_open() )
-    {
-        kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return false;
-    }
-
-    // Read header information.
-    kvs::tiff::Header header;
-    return header.read( ifs );
 }
 
 Tiff::Tiff()

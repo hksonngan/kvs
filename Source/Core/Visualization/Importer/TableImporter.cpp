@@ -38,7 +38,7 @@ TableImporter::TableImporter( void )
 /*===========================================================================*/
 TableImporter::TableImporter( const std::string& filename )
 {
-    if ( kvs::KVSMLObjectTable::CheckFileExtension( filename ) )
+    if ( kvs::KVSMLObjectTable::CheckExtension( filename ) )
     {
         kvs::KVSMLObjectTable* file_format = new kvs::KVSMLObjectTable( filename );
         if( !file_format )
