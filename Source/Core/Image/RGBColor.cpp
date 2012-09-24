@@ -21,7 +21,7 @@
 namespace kvs
 {
 
-RGBColor::RGBColor( void ):
+RGBColor::RGBColor():
     m_red( 0 ),
     m_green( 0 ),
     m_blue( 0 )
@@ -81,7 +81,6 @@ RGBColor& RGBColor::operator = ( const RGBColor& rgb )
 /*==========================================================================*/
 /**
  *  '=' operator.
- *
  *  @param rgba [in] RGB-a color
  */
 /*==========================================================================*/
@@ -97,8 +96,7 @@ RGBColor& RGBColor::operator = ( const RGBAColor& rgba )
 /*==========================================================================*/
 /**
  *  '=' operator. ( convert HSV to RGB )
- *
- *  @param hsv [in] HSV color        
+ *  @param hsv [in] HSV color
  */
 /*==========================================================================*/
 RGBColor& RGBColor::operator = ( const HSVColor& hsv )
@@ -175,37 +173,37 @@ RGBColor& RGBColor::operator = ( const HSVColor& hsv )
 
 void RGBColor::set( kvs::UInt8 red, kvs::UInt8 green, kvs::UInt8 blue )
 {
-    m_red   = red;
+    m_red = red;
     m_green = green;
-    m_blue  = blue;
+    m_blue = blue;
 }
 
-const kvs::UInt8 RGBColor::r( void ) const
+kvs::UInt8 RGBColor::r() const
 {
     return( m_red );
 }
 
-const kvs::UInt8 RGBColor::red( void ) const
+kvs::UInt8 RGBColor::red() const
 {
     return( m_red );
 }
 
-const kvs::UInt8 RGBColor::g( void ) const
+kvs::UInt8 RGBColor::g() const
 {
     return( m_green );
 }
 
-const kvs::UInt8 RGBColor::green( void ) const
+kvs::UInt8 RGBColor::green() const
 {
     return( m_green );
 }
 
-const kvs::UInt8 RGBColor::b( void ) const
+kvs::UInt8 RGBColor::b() const
 {
     return( m_blue );
 }
 
-const kvs::UInt8 RGBColor::blue( void ) const
+kvs::UInt8 RGBColor::blue() const
 {
     return( m_blue );
 }

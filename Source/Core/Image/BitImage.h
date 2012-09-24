@@ -17,7 +17,6 @@
 #include <limits>
 #include "ImageBase.h"
 #include "GrayImage.h"
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -33,12 +32,10 @@ class ColorImage;
 /*==========================================================================*/
 class BitImage : public kvs::ImageBase
 {
-    kvsClassName( kvs::BitImage );
-
 public:
 
     typedef kvs::ImageBase BaseClass;
-    typedef bool           PixelType;
+    typedef bool PixelType;
 
 public:
 
@@ -86,63 +83,35 @@ public:
 
 public:
 
-    BitImage( void );
-
+    BitImage();
     BitImage( const size_t width, const size_t height, const bool bit = true );
-
-    BitImage( const size_t width, const size_t height, const kvs::UInt8* data );
-
     BitImage( const size_t width, const size_t height, const kvs::ValueArray<kvs::UInt8>& data );
-
     BitImage( const kvs::BitImage& image );
-
     explicit BitImage( const kvs::GrayImage& image );
-
     template <typename BinarizationMethod>
     BitImage( const kvs::GrayImage& image, BinarizationMethod method );
-
     explicit BitImage( const std::string& filename );
-
-    virtual ~BitImage( void );
-
-public:
+    virtual ~BitImage();
 
     kvs::BitImage& operator = ( const kvs::BitImage& image );
 
-public:
+    bool pixel( const size_t index ) const;
+    bool pixel( const size_t i, const size_t j ) const;
 
-    const bool pixel( const size_t index ) const;
+    void setPixel( const size_t index, const bool pixel );
+    void setPixel( const size_t i, const size_t j, const bool pixel );
 
-    const bool pixel( const size_t i, const size_t j ) const;
+    size_t count() const;
+    void fill( const bool bit );
+    void invert( const size_t index );
+    void invert( const size_t i, const size_t j );
+    void invert();
+    bool read( const std::string& filename );
+    bool write( const std::string& filename );
 
-public:
-
-    void set( const size_t index, const bool pixel );
-
-    void set( const size_t i, const size_t j, const bool pixel );
-
-    void flip( const size_t index );
-
-    void flip( const size_t i, const size_t j );
-
-public:
-
-    void set( const bool bit );
-
-    void flip( void );
-
-    const size_t count( void ) const;
-
-public:
-
-    const bool read( const std::string& filename );
-
-    const bool write( const std::string& filename );
-
-protected:
+private:
 
     void set_bit( const size_t i, const size_t j );
-
     void reset_bit( const size_t i, const size_t j );
 };
 
@@ -154,10 +123,10 @@ protected:
  */
 /*===========================================================================*/
 template <typename BinarizationMethod>
-inline BitImage::BitImage( const kvs::GrayImage& image, BinarizationMethod method ):
-    kvs::ImageBase( image.width(), image.height(), kvs::ImageBase::Bit )
+inline BitImage::BitImage( const kvs::GrayImage& image, BinarizationMethod method )
 {
-    method( image, m_data );
+    BaseClass::create( image.width(), image.height(), kvs::ImageBase::Bit );
+    method( image, BaseClass::pixels() );
 }
 
 } // end of namespace kvs

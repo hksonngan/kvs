@@ -129,8 +129,8 @@ inline void Dithering(
 /*===========================================================================*/
 inline kvs::ValueArray<kvs::UInt32> Histogram( const kvs::GrayImage& image )
 {
-    const size_t npixels = image.npixels();
-    const kvs::UInt8* data = image.data().data();
+    const size_t npixels = image.numberOfPixels();
+    const kvs::UInt8* data = image.pixels().data();
 
     kvs::ValueArray<kvs::UInt32> count( 256 );
     count.fill( 0 );
@@ -390,7 +390,7 @@ void BitImage::DotConcentrate::operator () (
  *  Constructs a new bit image.
  */
 /*==========================================================================*/
-BitImage::BitImage( void )
+BitImage::BitImage()
 {
 }
 
@@ -402,10 +402,10 @@ BitImage::BitImage( void )
  *  @param bit [in] bit flag
  */
 /*==========================================================================*/
-BitImage::BitImage( const size_t width, const size_t height, const bool bit ):
-    kvs::ImageBase( width, height, kvs::ImageBase::Bit )
+BitImage::BitImage( const size_t width, const size_t height, const bool bit )
 {
-    this->set( bit );
+    BaseClass::create( width, height, kvs::ImageBase::Bit );
+    this->fill( bit );
 }
 
 /*==========================================================================*/
@@ -413,31 +413,15 @@ BitImage::BitImage( const size_t width, const size_t height, const bool bit ):
  *  Constructs a new bit image.
  *  @param width [in] image width
  *  @param height [in] image height
- *  @param data [in] pointer to pixel data
+ *  @param pixels [in] pixel data array
  */
 /*==========================================================================*/
 BitImage::BitImage(
     const size_t width,
     const size_t height,
-    const kvs::UInt8* data ):
-    kvs::ImageBase( width, height, kvs::ImageBase::Bit, data )
+    const kvs::ValueArray<kvs::UInt8>& pixels )
 {
-}
-
-/*==========================================================================*/
-/**
- *  Constructs a new bit image.
- *  @param width [in] image width
- *  @param height [in] image height
- *  @param data [in] pixel data array
- */
-/*==========================================================================*/
-BitImage::BitImage(
-    const size_t width,
-    const size_t height,
-    const kvs::ValueArray<kvs::UInt8>& data ):
-    kvs::ImageBase( width, height, kvs::ImageBase::Bit, data )
-{
+    BaseClass::create( width, height, kvs::ImageBase::Bit, pixels );
 }
 
 /*===========================================================================*/
@@ -457,11 +441,11 @@ BitImage::BitImage( const kvs::BitImage& image )
  *  @param  image [in] gray image
  */
 /*===========================================================================*/
-BitImage::BitImage( const kvs::GrayImage& image ):
-    kvs::ImageBase( image.width(), image.height(), kvs::ImageBase::Bit )
+BitImage::BitImage( const kvs::GrayImage& image )
 {
+    BaseClass::create( image.width(), image.height(), kvs::ImageBase::Bit );
     BitImage::PTile method;
-    method( image, m_data );
+    method( image, BaseClass::pixels() );
 }
 
 /*===========================================================================*/
@@ -480,7 +464,7 @@ BitImage::BitImage( const std::string& filename )
  *  Destroys the bit image.
  */
 /*==========================================================================*/
-BitImage::~BitImage( void )
+BitImage::~BitImage()
 {
 }
 
@@ -503,10 +487,10 @@ kvs::BitImage& BitImage::operator = ( const kvs::BitImage& image )
  *  @return pixel value
  */
 /*==========================================================================*/
-const bool BitImage::pixel( const size_t index ) const
+bool BitImage::pixel( const size_t index ) const
 {
-    const size_t i = index / m_width;
-    const size_t j = index % m_width;
+    const size_t i = index / BaseClass::width();
+    const size_t j = index % BaseClass::width();
     return( this->pixel( i, j ) );
 }
 
@@ -518,9 +502,10 @@ const bool BitImage::pixel( const size_t index ) const
  *  @return pixel value
  */
 /*==========================================================================*/
-const bool BitImage::pixel( const size_t i, const size_t j ) const
+bool BitImage::pixel( const size_t i, const size_t j ) const
 {
-    return( m_data[ j * m_bpl + ( i >> 3 ) ] & ::SetBitMask[ i & 7 ] ? true : false );
+    const kvs::UInt8* pixels = BaseClass::pixels().data();
+    return( pixels[ j * BaseClass::bytesPerLine() + ( i >> 3 ) ] & ::SetBitMask[ i & 7 ] ? true : false );
 }
 
 /*==========================================================================*/
@@ -530,10 +515,10 @@ const bool BitImage::pixel( const size_t i, const size_t j ) const
  *  @param pixel [in] pixel value
  */
 /*==========================================================================*/
-void BitImage::set( const size_t index, const bool pixel )
+void BitImage::setPixel( const size_t index, const bool pixel )
 {
-    const size_t i = index / m_width;
-    const size_t j = index % m_width;
+    const size_t i = index / BaseClass::width();
+    const size_t j = index % BaseClass::width();
     if ( pixel ) this->set_bit( i, j );
     else this->reset_bit( i, j );
 }
@@ -546,72 +531,10 @@ void BitImage::set( const size_t index, const bool pixel )
  *  @param pixel [in] pixel value
  */
 /*==========================================================================*/
-void BitImage::set( const size_t i, const size_t j, const bool pixel )
+void BitImage::setPixel( const size_t i, const size_t j, const bool pixel )
 {
     if ( pixel ) this->set_bit( i, j );
     else this->reset_bit( i, j );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Flips the pixel value that is specified by the index.
- *  @param  index [in] pixel index
- */
-/*===========================================================================*/
-void BitImage::flip( const size_t index )
-{
-    const size_t i = index / m_width;
-    const size_t j = index % m_width;
-    this->flip( i, j );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Flips the pixel value that is specified by the index i and j.
- *  @param  i [in] index along the vertical axis
- *  @param  j [in] index along the horizontal axis
- */
-/*===========================================================================*/
-void BitImage::flip( const size_t i, const size_t j )
-{
-    m_data[ j * m_bpl + ( i >> 3 ) ] ^= ::SetBitMask[ i & 7 ];
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets all pixels by the given bit (true/false).
- *  @param  bit [in] pixel bit value
- */
-/*===========================================================================*/
-void BitImage::set( const bool bit )
-{
-    const kvs::UInt8 mask = ( bit ) ? ( ::SetBitMask[8] ) : ( ::ResetBitMask[8] );
-
-    for( size_t j = 0; j < m_height; j++ )
-    {
-        const size_t line_head = j * m_bpl;
-        for( size_t i = 0; i < m_bpl; i++ )
-        {
-            m_data[ line_head + i ] = mask;
-        }
-    }
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Flips all pixels.
- */
-/*===========================================================================*/
-void BitImage::flip( void )
-{
-    for( size_t j = 0; j < m_height; j++ )
-    {
-        const size_t line_head = j * m_bpl;
-        for( size_t i = 0; i < m_bpl; i++ )
-        {
-            m_data[ line_head + i ] = ~m_data[ line_head + i ];
-        }
-    }
 }
 
 /*===========================================================================*/
@@ -620,31 +543,102 @@ void BitImage::flip( void )
  *  @return number of active pixels
  */
 /*===========================================================================*/
-const size_t BitImage::count( void ) const
+size_t BitImage::count() const
 {
     size_t counter = 0;
 
-    for( size_t j = 0; j < m_height; j++ )
+    const size_t height = BaseClass::height();
+    const size_t bpl = BaseClass::bytesPerLine();
+    const size_t padding = BaseClass::padding();
+    const kvs::UInt8* pixels = BaseClass::pixels().data();
+    for( size_t j = 0; j < height; j++ )
     {
-        const size_t line_head = j * m_bpl;
-        for( size_t i = 0; i < m_bpl - 1; i++ )
+        const size_t line_head = j * bpl;
+        for( size_t i = 0; i < bpl - 1; i++ )
         {
             const size_t data_head = line_head + i;
             for( size_t b = 0; b < 8; b++ )
             {
-                if( ( m_data[data_head] & ::SetBitMask[b] ) == 255 ) counter++;
+                if( ( pixels[data_head] & ::SetBitMask[b] ) == 255 ) counter++;
             }
         }
 
         // Decrement padding bit.
-        const size_t data_head = line_head + ( m_bpl - 1 );
-        for( size_t b = 0; b < 8 - m_padding; b++ )
+        const size_t data_head = line_head + ( bpl - 1 );
+        for( size_t b = 0; b < 8 - padding; b++ )
         {
-            if( ( m_data[data_head] & ::SetBitMask[b] ) == 255 ) counter++;
+            if( ( pixels[data_head] & ::SetBitMask[b] ) == 255 ) counter++;
         }
     }
 
     return( counter );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets all pixels by the given bit (true/false).
+ *  @param  bit [in] pixel bit value
+ */
+/*===========================================================================*/
+void BitImage::fill( const bool bit )
+{
+    const kvs::UInt8 mask = ( bit ) ? ( ::SetBitMask[8] ) : ( ::ResetBitMask[8] );
+
+    kvs::UInt8* pixels = BaseClass::pixels().data();
+    for( size_t j = 0; j < BaseClass::height(); j++ )
+    {
+        const size_t line_head = j * BaseClass::bytesPerLine();
+        for( size_t i = 0; i < BaseClass::bytesPerLine(); i++ )
+        {
+            pixels[ line_head + i ] = mask;
+        }
+    }
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Inverts the pixel value that is specified by the index.
+ *  @param  index [in] pixel index
+ */
+/*===========================================================================*/
+void BitImage::invert( const size_t index )
+{
+    const size_t i = index / BaseClass::width();
+    const size_t j = index % BaseClass::width();
+    this->invert( i, j );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Inverts the pixel value that is specified by the index i and j.
+ *  @param  i [in] index along the vertical axis
+ *  @param  j [in] index along the horizontal axis
+ */
+/*===========================================================================*/
+void BitImage::invert( const size_t i, const size_t j )
+{
+    kvs::UInt8* pixels = BaseClass::pixels().data();
+    pixels[ j * BaseClass::bytesPerLine() + ( i >> 3 ) ] ^= ::SetBitMask[ i & 7 ];
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Inverts all pixels.
+ */
+/*===========================================================================*/
+void BitImage::invert()
+{
+    const size_t height = BaseClass::height();
+    const size_t bpl = BaseClass::bytesPerLine();
+    kvs::UInt8* pixels = BaseClass::pixels().data();
+    for( size_t j = 0; j < height; j++ )
+    {
+        const size_t line_head = j * bpl;
+        for( size_t i = 0; i < bpl; i++ )
+        {
+            pixels[ line_head + i ] = ~pixels[ line_head + i ];
+        }
+    }
 }
 
 /*==========================================================================*/
@@ -654,7 +648,7 @@ const size_t BitImage::count( void ) const
  *  @return true, if the reading process is done successfully
  */
 /*==========================================================================*/
-const bool BitImage::read( const std::string& filename )
+bool BitImage::read( const std::string& filename )
 {
     // Color or Gray image.
     if ( kvs::KVSMLObjectImage::CheckExtension( filename ) ||
@@ -671,7 +665,7 @@ const bool BitImage::read( const std::string& filename )
         }
 
         BitImage::PTile method;
-        method( image, m_data );
+        method( image, BaseClass::pixels() );
 
         return( true );
     }
@@ -680,7 +674,7 @@ const bool BitImage::read( const std::string& filename )
     if ( kvs::Pbm::CheckExtension( filename ) )
     {
         const kvs::Pbm pbm( filename );
-        const kvs::UInt8* data = pbm.data().data();
+        const kvs::ValueArray<kvs::UInt8>& data = pbm.data().asValueArray();
         return( BaseClass::create( pbm.width(), pbm.height(), BaseClass::Bit, data ) );
     }
 
@@ -697,7 +691,7 @@ const bool BitImage::read( const std::string& filename )
  *  @return true, if the writing process is done successfully
  */
 /*==========================================================================*/
-const bool BitImage::write( const std::string& filename )
+bool BitImage::write( const std::string& filename )
 {
     const kvs::File file( filename );
     const std::string extension = file.extension();
@@ -721,9 +715,9 @@ const bool BitImage::write( const std::string& filename )
     // PBM image.
     if ( kvs::Pbm::CheckExtension( filename ) )
     {
-        const size_t nvalues = m_width * m_height;
-        const kvs::UInt8* values = m_data.data();
-        kvs::Pbm pbm( m_width, m_height, kvs::BitArray( values, nvalues) );
+        const size_t nvalues = BaseClass::width() * BaseClass::height();
+        const kvs::UInt8* values = BaseClass::pixels().data();
+        kvs::Pbm pbm( BaseClass::width(), BaseClass::height(), kvs::BitArray( values, nvalues ) );
         return( pbm.write( filename ) );
     }
 
@@ -742,7 +736,8 @@ const bool BitImage::write( const std::string& filename )
 /*===========================================================================*/
 void BitImage::set_bit( const size_t i, const size_t j )
 {
-    m_data[ j * m_bpl +( i >> 3 ) ] |= ::SetBitMask[ i & 7 ];
+    kvs::UInt8* pixels = BaseClass::pixels().data();
+    pixels[ j * BaseClass::bytesPerLine() +( i >> 3 ) ] |= ::SetBitMask[ i & 7 ];
 }
 
 /*===========================================================================*/
@@ -754,7 +749,8 @@ void BitImage::set_bit( const size_t i, const size_t j )
 /*===========================================================================*/
 void BitImage::reset_bit( const size_t i, const size_t j )
 {
-    m_data[ j * m_bpl + ( i >> 3 ) ] &= ::ResetBitMask[ i & 7 ];
+    kvs::UInt8* pixels = BaseClass::pixels().data();
+    pixels[ j * BaseClass::bytesPerLine() + ( i >> 3 ) ] &= ::ResetBitMask[ i & 7 ];
 }
 
 } // end of namespace kvs

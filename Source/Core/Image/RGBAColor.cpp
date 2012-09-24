@@ -62,17 +62,17 @@ RGBAColor& RGBAColor::operator = ( const RGBColor& rgb )
     return( *this );
 }
 
-const float RGBAColor::a( void ) const
+float RGBAColor::a() const
 {
     return( m_opacity );
 }
 
-const float RGBAColor::alpha( void ) const
+float RGBAColor::alpha() const
 {
     return( m_opacity );
 }
 
-const float RGBAColor::opacity( void ) const
+float RGBAColor::opacity() const
 {
     return( m_opacity );
 }

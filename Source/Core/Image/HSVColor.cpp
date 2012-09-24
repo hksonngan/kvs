@@ -40,25 +40,25 @@ HSVColor::HSVColor( const RGBColor& rgb )
 
 HSVColor& HSVColor::operator += ( const HSVColor& hsv )
 {
-    m_hue        += hsv.m_hue;
+    m_hue += hsv.m_hue;
     m_saturation += hsv.m_saturation;
-    m_value      += hsv.m_value;
+    m_value += hsv.m_value;
     return( *this );
 }
 
 HSVColor& HSVColor::operator -= ( const HSVColor& hsv )
 {
-    m_hue        -= hsv.m_hue;
+    m_hue -= hsv.m_hue;
     m_saturation -= hsv.m_saturation;
-    m_value      -= hsv.m_value;
+    m_value -= hsv.m_value;
     return( *this );
 }
 
 HSVColor& HSVColor::operator = ( const HSVColor& hsv )
 {
-    m_hue        = hsv.m_hue;
+    m_hue = hsv.m_hue;
     m_saturation = hsv.m_saturation;
-    m_value      = hsv.m_value;
+    m_value = hsv.m_value;
     return( *this );
 }
 
@@ -95,7 +95,7 @@ HSVColor& HSVColor::operator = ( const RGBColor& rgb )
         float delta_g = ( ( ( max_rgb - G ) / 6.0f ) + ( delta / 2.0f ) ) / delta;
         float delta_b = ( ( ( max_rgb - B ) / 6.0f ) + ( delta / 2.0f ) ) / delta;
 
-        if(      kvs::Math::Equal( R, max_rgb ) ) m_hue = delta_b - delta_g;
+        if( kvs::Math::Equal( R, max_rgb ) ) m_hue = delta_b - delta_g;
         else if( kvs::Math::Equal( G, max_rgb ) ) m_hue = ( 1.0f / 3.0f ) + delta_r - delta_b;
         else if( kvs::Math::Equal( B, max_rgb ) ) m_hue = ( 2.0f / 3.0f ) + delta_g - delta_r;
 
@@ -113,37 +113,37 @@ void HSVColor::set( float hue, float saturation, float value )
     m_value      = value;
 }
 
-const float HSVColor::h( void ) const
+float HSVColor::h() const
 {
     return( m_hue );
 }
 
-const float HSVColor::hue( void ) const
+float HSVColor::hue() const
 {
     return( m_hue );
 }
 
-const float HSVColor::s( void ) const
+float HSVColor::s() const
 {
     return( m_saturation );
 }
 
-const float HSVColor::saturation( void ) const
+float HSVColor::saturation() const
 {
     return( m_saturation );
 }
 
-const float HSVColor::v( void ) const
+float HSVColor::v() const
 {
     return( m_value );
 }
 
-const float HSVColor::value( void ) const
+float HSVColor::value() const
 {
     return( m_value );
 }
 
-const float HSVColor::intensity( void ) const
+float HSVColor::intensity() const
 {
     return( m_value );
 }

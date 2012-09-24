@@ -15,7 +15,6 @@
 #define KVS__HSV_COLOR_H_INCLUDE
 
 #include <kvs/Math>
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -30,30 +29,23 @@ class RGBColor;
 /*==========================================================================*/
 class HSVColor
 {
-    kvsClassName( kvs::HSVColor );
-
 protected:
 
-    float m_hue;        ///< hue angle         [0-1]
-    float m_saturation; ///< saturation        [0-1]
-    float m_value;      ///< value (intensity) [0-1]
+    float m_hue; ///< hue angle [0-1]
+    float m_saturation; ///< saturation [0-1]
+    float m_value; ///< value (intensity) [0-1]
 
 public:
 
     HSVColor( float hue = 0.0f, float saturation = 0.0f, float value = 0.0f );
-
     HSVColor( const HSVColor& hsv );
-
     HSVColor( const RGBColor& rgb );
 
 public:
 
     HSVColor& operator += ( const HSVColor& hsv );
-
     HSVColor& operator -= ( const HSVColor& hsv );
-
     HSVColor& operator = ( const HSVColor& hsv );
-
     HSVColor& operator = ( const RGBColor& rgb );
 
 public:
@@ -77,19 +69,13 @@ public:
 
 public:
 
-    const float h( void ) const;
-
-    const float hue( void ) const;
-
-    const float s( void ) const;
-
-    const float saturation( void ) const;
-
-    const float v( void ) const;
-
-    const float value( void ) const;
-
-    const float intensity( void ) const;
+    float h() const;
+    float hue() const;
+    float s() const;
+    float saturation() const;
+    float v() const;
+    float value() const;
+    float intensity() const;
 };
 
 } // end of namespace kvs

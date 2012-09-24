@@ -33,109 +33,59 @@ class GrayImage;
 /*==========================================================================*/
 class ImageBase
 {
-    kvsClassName( kvs::ImageBase );
-
 public:
 
     // Image type (number of components)
     enum ImageType
     {
-        Bit   = 0, ///< bit image
-        Gray  = 1, ///< gray image
+        Bit = 0, ///< bit image
+        Gray = 1, ///< gray image
         Color = 3  ///< color image
     };
 
 public:
 
-    template <typename ImageDataType>
-    class NearestNeighborInterpolator;
+    template <typename ImageDataType> class NearestNeighborInterpolator;
+    template <typename ImageDataType> class BilinearInterpolator;
 
-    template <typename ImageDataType>
-    class BilinearInterpolator;
-
-    typedef NearestNeighborInterpolator<kvs::GrayImage>  NearestNeighborInterpolatorGray;
+    typedef NearestNeighborInterpolator<kvs::GrayImage> NearestNeighborInterpolatorGray;
     typedef NearestNeighborInterpolator<kvs::ColorImage> NearestNeighborInterpolatorColor;
-
-    typedef BilinearInterpolator<kvs::GrayImage>  BilinearInterpolatorGray;
+    typedef BilinearInterpolator<kvs::GrayImage> BilinearInterpolatorGray;
     typedef BilinearInterpolator<kvs::ColorImage> BilinearInterpolatorColor;
 
-protected:
+private:
 
-    size_t m_width;   ///< image width [pix]
-    size_t m_height;  ///< image height [pix]
+    size_t m_width; ///< image width [pix]
+    size_t m_height; ///< image height [pix]
     size_t m_npixels; ///< number of pixels
     size_t m_padding; ///< padding bit for bit-image
-    size_t m_bpp;     ///< bits per pixel [bit]
-    size_t m_bpl;     ///< bytes per line [byte]
-    size_t m_size;    ///< data size [byte]
-    kvs::ValueArray<kvs::UInt8> m_data; ///< pixel data array
+    size_t m_bpp; ///< bits per pixel [bit]
+    size_t m_bpl; ///< bytes per line [byte]
+    size_t m_size; ///< data size [byte]
+    kvs::ValueArray<kvs::UInt8> m_pixels; ///< pixel data array
 
 public:
 
-    ImageBase( void );
+    ImageBase();
+    virtual ~ImageBase();
 
-    ImageBase( const size_t width, const size_t height, const ImageType type );
+    size_t width() const;
+    size_t height() const;
+    size_t bytesPerLine() const;
+    size_t bitsPerPixel() const;
+    size_t numberOfPixels() const;
+    size_t padding() const;
+    size_t size() const;
+    const kvs::ValueArray<kvs::UInt8>& pixels() const;
 
-    ImageBase(
-        const size_t width,
-        const size_t height,
-        const ImageType type,
-        const kvs::UInt8* data );
-
-    ImageBase(
-        const size_t width,
-        const size_t height,
-        const ImageType type,
-        const kvs::ValueArray<kvs::UInt8>& data );
-
-    virtual ~ImageBase( void );
-
-public:
-
-    void clear( void );
-
+    void flip();
     void copy( const kvs::ImageBase& image );
-
-    const bool create( const size_t width, const size_t height, const ImageType type );
-
-    const bool create(
-        const size_t width,
-        const size_t height,
-        const ImageType type,
-        const kvs::UInt8* data );
-
-    const bool create(
-        const size_t width,
-        const size_t height,
-        const ImageType type,
-        const kvs::ValueArray<kvs::UInt8>& data );
-
-public:
-
-    const size_t width( void ) const;
-
-    const size_t height( void ) const;
-
-    const size_t bytesPerLine( void ) const;
-
-    const size_t bitsPerPixel( void ) const;
-
-    const size_t npixels( void ) const;
-
-    const size_t padding( void ) const;
-
-    const size_t size( void ) const;
-
-    const kvs::ValueArray<kvs::UInt8>& data( void ) const;
-
-    kvs::ValueArray<kvs::UInt8>& data( void );
-
-public:
-
-    void flip( void );
+    bool create( const size_t width, const size_t height, const ImageType type );
+    bool create( const size_t width, const size_t height, const ImageType type, const kvs::ValueArray<kvs::UInt8>& pixels );
 
 protected:
 
+    kvs::ValueArray<kvs::UInt8>& pixels();
     template <typename ImageDataType, typename Interpolator>
     void resize( const size_t width, const size_t height, ImageDataType* image );
 };
@@ -151,12 +101,9 @@ protected:
 public:
 
     void attach( const ImageDataType* image );
-
     void setU( const double u );
-
     void setV( const double v );
-
-    const typename ImageDataType::PixelType operator () ( void ) const;
+    const typename ImageDataType::PixelType operator () () const;
 };
 
 template <typename ImageDataType>
@@ -172,12 +119,9 @@ protected:
 public:
 
     void attach( const ImageDataType* image );
-
     void setU( const double u );
-
     void setV( const double v );
-
-    const typename ImageDataType::PixelType operator () ( void ) const;
+    const typename ImageDataType::PixelType operator () () const;
 };
 
 } // end of namespace kvs

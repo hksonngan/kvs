@@ -34,7 +34,7 @@ namespace kvs
  *  Constructs a new color image.
  */
 /*==========================================================================*/
-ColorImage::ColorImage( void )
+ColorImage::ColorImage()
 {
 }
 
@@ -45,9 +45,9 @@ ColorImage::ColorImage( void )
  *  @param height [in] image height
  */
 /*==========================================================================*/
-ColorImage::ColorImage( const size_t width, const size_t height ):
-    kvs::ImageBase( width, height, kvs::ImageBase::Color )
+ColorImage::ColorImage( const size_t width, const size_t height )
 {
+    BaseClass::create( width, height, ImageBase::Color );
 }
 
 /*==========================================================================*/
@@ -55,31 +55,15 @@ ColorImage::ColorImage( const size_t width, const size_t height ):
  *  Constructs a new color image from the given pixel data.
  *  @param width [in] image width
  *  @param height [in] image height
- *  @param data [in] pointer to pixel data
+ *  @param pixels [in] pixel data array
  */
 /*==========================================================================*/
 ColorImage::ColorImage(
     const size_t width,
     const size_t height,
-    const kvs::UInt8* data ):
-    kvs::ImageBase( width, height, kvs::ImageBase::Color, data )
+    const kvs::ValueArray<kvs::UInt8>& pixels )
 {
-}
-
-/*==========================================================================*/
-/**
- *  Constructs a new color image from the given pixel data.
- *  @param width [in] image width
- *  @param height [in] image height
- *  @param data [in] pixel data array
- */
-/*==========================================================================*/
-ColorImage::ColorImage(
-    const size_t width,
-    const size_t height,
-    const kvs::ValueArray<kvs::UInt8>& data ):
-    kvs::ImageBase( width, height, kvs::ImageBase::Color, data )
-{
+    ImageBase::create( width, height, kvs::ImageBase::Color, pixels );
 }
 
 /*===========================================================================*/
@@ -131,7 +115,7 @@ ColorImage::ColorImage( const std::string& filename )
  *  Destroys the color image.
  */
 /*==========================================================================*/
-ColorImage::~ColorImage( void )
+ColorImage::~ColorImage()
 {
 }
 
@@ -149,90 +133,16 @@ kvs::ColorImage& ColorImage::operator = ( const kvs::ColorImage& image )
 
 /*==========================================================================*/
 /**
- *  Returns the red component.
- *  @param index [in] pixel index
- *  @return red component
- */
-/*==========================================================================*/
-const kvs::UInt8 ColorImage::r( const size_t index ) const
-{
-    return( m_data[ 3 * index ] );
-}
-
-/*==========================================================================*/
-/**
- *  Returns the red component.
- *  @param i [in] pixel index along the horizontal axis
- *  @param j [in] pixel index along the vertical axis
- *  @return red component
- */
-/*==========================================================================*/
-const kvs::UInt8 ColorImage::r( const size_t i, const size_t j ) const
-{
-    return( m_data[ 3 * ( m_width * j + i ) ] );
-}
-
-/*==========================================================================*/
-/**
- *  Returns the green component.
- *  @param index [in] pixel index
- *  @return green component
- */
-/*==========================================================================*/
-const kvs::UInt8 ColorImage::g( const size_t index ) const
-{
-    return( m_data[ 3 * index + 1 ] );
-}
-
-/*==========================================================================*/
-/**
- *  Returns the green component.
- *  @param i [in] pixel index along the horizontal axis
- *  @param j [in] pixel index along the vertical axis
- *  @return green component
- */
-/*==========================================================================*/
-const kvs::UInt8 ColorImage::g( const size_t i, const size_t j ) const
-{
-    return( m_data[ 3 * ( m_width * j + i ) + 1 ] );
-}
-
-/*==========================================================================*/
-/**
- *  Returns the blue component.
- *  @param index [in] pixel index
- *  @return blue component
- */
-/*==========================================================================*/
-const kvs::UInt8 ColorImage::b( const size_t index ) const
-{
-    return( m_data[ 3 * index + 2 ] );
-}
-
-/*==========================================================================*/
-/**
- *  Returns the blue component.
- *  @param i [in] pixel index along the horizontal axis
- *  @param j [in] pixel index along the vertical axis
- *  @return blue component
- */
-/*==========================================================================*/
-const kvs::UInt8 ColorImage::b( const size_t i, const size_t j ) const
-{
-    return( m_data[ 3 * ( m_width * j + i ) + 2 ] );
-}
-
-/*==========================================================================*/
-/**
  *  Returns the pixel color.
  *  @param index [in] pixel index
  *  @return pixel color
  */
 /*==========================================================================*/
-const kvs::RGBColor ColorImage::pixel( const size_t index ) const
+kvs::RGBColor ColorImage::pixel( const size_t index ) const
 {
     const size_t index3 = index * 3;
-    return( kvs::RGBColor( m_data[index3], m_data[index3+1], m_data[index3+2] ) );
+    const kvs::UInt8* pixels = BaseClass::pixels().data();
+    return( kvs::RGBColor( pixels[index3], pixels[index3+1], pixels[index3+2] ) );
 }
 
 /*==========================================================================*/
@@ -243,10 +153,11 @@ const kvs::RGBColor ColorImage::pixel( const size_t index ) const
  *  @return pixel color
  */
 /*==========================================================================*/
-const kvs::RGBColor ColorImage::pixel( const size_t i, const size_t j ) const
+kvs::RGBColor ColorImage::pixel( const size_t i, const size_t j ) const
 {
-    const size_t index3 = ( m_width * j + i ) * 3;
-    return( kvs::RGBColor( m_data[index3], m_data[index3+1], m_data[index3+2] ) );
+    const size_t index3 = ( BaseClass::width() * j + i ) * 3;
+    const kvs::UInt8* pixels = BaseClass::pixels().data();
+    return( kvs::RGBColor( pixels[index3], pixels[index3+1], pixels[index3+2] ) );
 }
 
 /*==========================================================================*/
@@ -256,12 +167,13 @@ const kvs::RGBColor ColorImage::pixel( const size_t i, const size_t j ) const
  *  @param pixel [in] pixel color
  */
 /*==========================================================================*/
-void ColorImage::set( const size_t index, const kvs::RGBColor& pixel )
+void ColorImage::setPixel( const size_t index, const kvs::RGBColor& pixel )
 {
     const size_t index3 = index * 3;
-    m_data[ index3 + 0 ] = pixel.r();
-    m_data[ index3 + 1 ] = pixel.g();
-    m_data[ index3 + 2 ] = pixel.b();
+    kvs::UInt8* pixels = BaseClass::pixels().data();
+    pixels[ index3 + 0 ] = pixel.r();
+    pixels[ index3 + 1 ] = pixel.g();
+    pixels[ index3 + 2 ] = pixel.b();
 }
 
 /*==========================================================================*/
@@ -272,12 +184,13 @@ void ColorImage::set( const size_t index, const kvs::RGBColor& pixel )
  *  @param pixel [in] pixel color
  */
 /*==========================================================================*/
-void ColorImage::set( const size_t i, const size_t j, const kvs::RGBColor& pixel )
+void ColorImage::setPixel( const size_t i, const size_t j, const kvs::RGBColor& pixel )
 {
-    const size_t index3 = ( m_width * j + i ) * 3;
-    m_data[ index3 + 0 ] = pixel.r();
-    m_data[ index3 + 1 ] = pixel.g();
-    m_data[ index3 + 2 ] = pixel.b();
+    const size_t index3 = ( BaseClass::width() * j + i ) * 3;
+    kvs::UInt8* pixels = BaseClass::pixels().data();
+    pixels[ index3 + 0 ] = pixel.r();
+    pixels[ index3 + 1 ] = pixel.g();
+    pixels[ index3 + 2 ] = pixel.b();
 }
 
 /*===========================================================================*/
@@ -288,8 +201,8 @@ void ColorImage::set( const size_t i, const size_t j, const kvs::RGBColor& pixel
 /*===========================================================================*/
 void ColorImage::scale( const double ratio )
 {
-    const size_t width = static_cast<size_t>( this->width() * ratio );
-    const size_t height = static_cast<size_t>( this->height() * ratio );
+    const size_t width = static_cast<size_t>( BaseClass::width() * ratio );
+    const size_t height = static_cast<size_t>( BaseClass::height() * ratio );
     BaseClass::resize<ColorImage,ColorImage::Bilinear>( width, height, this );
 }
 
@@ -305,8 +218,8 @@ void ColorImage::scale( const double ratio, InterpolationMethod method )
 {
     kvs::IgnoreUnusedVariable( method );
 
-    const size_t width = static_cast<size_t>( this->width() * ratio );
-    const size_t height = static_cast<size_t>( this->height() * ratio );
+    const size_t width = static_cast<size_t>( BaseClass::width() * ratio );
+    const size_t height = static_cast<size_t>( BaseClass::height() * ratio );
     BaseClass::resize<ColorImage,InterpolationMethod>( width, height, this );
 }
 
@@ -359,7 +272,7 @@ void ColorImage::resize( const size_t width, const size_t height, ColorImage::Bi
  *  @return true, if the reading process is done successfully
  */
 /*==========================================================================*/
-const bool ColorImage::read( const std::string& filename )
+bool ColorImage::read( const std::string& filename )
 {
     // KVSML image.
     if ( kvs::KVSMLObjectImage::CheckExtension( filename ) )
@@ -413,13 +326,13 @@ const bool ColorImage::read( const std::string& filename )
         const kvs::Tiff tiff( filename );
         if ( tiff.colorMode() == kvs::Tiff::Color24 )
         {
-            const kvs::UInt8* data = static_cast<const kvs::UInt8*>(tiff.rawData().data());
+            const kvs::ValueArray<kvs::UInt8>& data = tiff.rawData().asValueArray<kvs::UInt8>();
             const BaseClass::ImageType type = BaseClass::Color;
             return( BaseClass::create( tiff.width(), tiff.height(), type, data ) );
         }
         if ( tiff.colorMode() == kvs::Tiff::Gray8 )
         {
-            const kvs::UInt8* data = static_cast<const kvs::UInt8*>(tiff.rawData().data());
+            const kvs::ValueArray<kvs::UInt8>& data = tiff.rawData().asValueArray<kvs::UInt8>();
             kvs::GrayImage image( tiff.width(), tiff.height(), data );
             return( this->read_image( image ) );
         }
@@ -451,31 +364,31 @@ const bool ColorImage::read( const std::string& filename )
  *  @return true, if the writing process is done successfully
  */
 /*==========================================================================*/
-const bool ColorImage::write( const std::string& filename )
+bool ColorImage::write( const std::string& filename )
 {
     // KVSML image.
     if ( kvs::KVSMLObjectImage::CheckExtension( filename ) )
     {
         kvs::KVSMLObjectImage kvsml;
-        kvsml.setWidth( m_width );
-        kvsml.setHeight( m_height );
+        kvsml.setWidth( BaseClass::width() );
+        kvsml.setHeight( BaseClass::height() );
         kvsml.setPixelType( "color" );
         kvsml.setWritingDataType( kvs::KVSMLObjectImage::Ascii );
-        kvsml.setData( m_data );
+        kvsml.setData( BaseClass::pixels() );
         return( kvsml.write( filename ) );
     }
 
     // Bitmap image.
     if ( kvs::Bmp::CheckExtension( filename ) )
     {
-        kvs::Bmp bmp( m_width, m_height, m_data );
+        kvs::Bmp bmp( BaseClass::width(), BaseClass::height(), BaseClass::pixels() );
         return( bmp.write( filename ) );
     }
 
     // PPM image.
     if ( kvs::Ppm::CheckExtension( filename ) )
     {
-        kvs::Ppm ppm( m_width, m_height, m_data );
+        kvs::Ppm ppm( BaseClass::width(), BaseClass::height(), BaseClass::pixels() );
         return( ppm.write( filename ) );
     }
 
@@ -506,20 +419,22 @@ const bool ColorImage::write( const std::string& filename )
  *  @return true, if the reading process is done successfully.
  */
 /*===========================================================================*/
-const bool ColorImage::read_image( const kvs::GrayImage& image )
+bool ColorImage::read_image( const kvs::GrayImage& image )
 {
     if ( !BaseClass::create( image.width(), image.height(), kvs::ImageBase::Color ) )
     {
         return( false );
     }
 
-    const kvs::UInt8* data = image.data().data();
-    for ( size_t index = 0, index3 = 0; index < m_npixels; index++, index3 += 3 )
+    kvs::UInt8* pixels = BaseClass::pixels().data();
+    const kvs::UInt8* data = image.pixels().data();
+    const size_t npixels = BaseClass::numberOfPixels();
+    for ( size_t index = 0, index3 = 0; index < npixels; index++, index3 += 3 )
     {
         const kvs::UInt8 pixel = data[ index ];
-        m_data[ index3 + 0 ] = pixel;
-        m_data[ index3 + 1 ] = pixel;
-        m_data[ index3 + 2 ] = pixel;
+        pixels[ index3 + 0 ] = pixel;
+        pixels[ index3 + 1 ] = pixel;
+        pixels[ index3 + 2 ] = pixel;
     }
 
     return( true );
@@ -532,13 +447,14 @@ const bool ColorImage::read_image( const kvs::GrayImage& image )
  *  @return true, if the reading process is done successfully.
  */
 /*===========================================================================*/
-const bool ColorImage::read_image( const kvs::BitImage& image )
+bool ColorImage::read_image( const kvs::BitImage& image )
 {
     if ( !BaseClass::create( image.width(), image.height(), kvs::ImageBase::Color ) )
     {
         return( false );
     }
 
+    kvs::UInt8* pixels = BaseClass::pixels().data();
     const size_t width = image.width();
     const size_t height = image.height();
     size_t index3 = 0;
@@ -547,9 +463,9 @@ const bool ColorImage::read_image( const kvs::BitImage& image )
         for ( size_t i = 0; i < width; i++, index3 += 3 )
         {
             const kvs::UInt8 pixel = image.pixel( i, j ) ? 255 : 0;
-            m_data[ index3 + 0 ] = pixel;
-            m_data[ index3 + 1 ] = pixel;
-            m_data[ index3 + 2 ] = pixel;
+            pixels[ index3 + 0 ] = pixel;
+            pixels[ index3 + 1 ] = pixel;
+            pixels[ index3 + 2 ] = pixel;
         }
     }
 
