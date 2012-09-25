@@ -24,7 +24,7 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-Url::Url( void ):
+Url::Url():
     m_port( 0 )
 {
 }
@@ -64,7 +64,7 @@ std::ostream& operator << ( std::ostream& os, const Url& other )
  *  @return protocol
  */
 /*==========================================================================*/
-const std::string& Url::protocol( void ) const
+const std::string& Url::protocol() const
 {
     return( m_protocol );
 }
@@ -75,7 +75,7 @@ const std::string& Url::protocol( void ) const
  *  @return username
  */
 /*==========================================================================*/
-const std::string& Url::username( void ) const
+const std::string& Url::username() const
 {
     return( m_username );
 }
@@ -86,7 +86,7 @@ const std::string& Url::username( void ) const
  *  @return password
  */
 /*==========================================================================*/
-const std::string& Url::password( void ) const
+const std::string& Url::password() const
 {
     return( m_password );
 }
@@ -97,7 +97,7 @@ const std::string& Url::password( void ) const
  *  @return hostname
  */
 /*==========================================================================*/
-const std::string& Url::hostname( void ) const
+const std::string& Url::hostname() const
 {
     return( m_hostname );
 }
@@ -108,7 +108,7 @@ const std::string& Url::hostname( void ) const
  *  @return port number
  */
 /*==========================================================================*/
-int Url::port( void ) const
+int Url::port() const
 {
     return( m_port );
 }
@@ -119,7 +119,7 @@ int Url::port( void ) const
  *  @return path
  */
 /*==========================================================================*/
-const std::string& Url::path( void ) const
+const std::string& Url::path() const
 {
     return( m_path );
 }

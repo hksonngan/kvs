@@ -24,7 +24,7 @@ namespace kvs
  *  @brief  Constructs a new Connector class.
  */
 /*===========================================================================*/
-Connector::Connector( void )
+Connector::Connector()
 {
     if ( this->create_handler() ) this->open();
     else kvsMessageError("Cannot create handler.");
@@ -69,7 +69,7 @@ Connector::Connector( const kvs::IPAddress& ip, const int port, const size_t ntr
  *  @brief  Destroys the Connector class.
  */
 /*===========================================================================*/
-Connector::~Connector( void )
+Connector::~Connector()
 {
     this->close();
     this->delete_handler();
@@ -81,7 +81,7 @@ Connector::~Connector( void )
  *  @return true if the process is done successfully
  */
 /*===========================================================================*/
-const bool Connector::open( void )
+bool Connector::open()
 {
     m_handler->open();
     if ( !m_handler->isOpen() )
@@ -98,7 +98,7 @@ const bool Connector::open( void )
  *  @brief  Close the socket.
  */
 /*===========================================================================*/
-void Connector::close( void )
+void Connector::close()
 {
     m_handler->close();
 }
@@ -112,7 +112,7 @@ void Connector::close( void )
  *  @return true if the proce is done successfully
  */
 /*===========================================================================*/
-const bool Connector::connect( const kvs::IPAddress& ip, const int port, const size_t ntrials )
+bool Connector::connect( const kvs::IPAddress& ip, const int port, const size_t ntrials )
 {
     m_ip      = ip;
     m_port    = port;
@@ -136,7 +136,7 @@ const bool Connector::connect( const kvs::IPAddress& ip, const int port, const s
  *  @return true if the proce is done successfully
  */
 /*===========================================================================*/
-const bool Connector::reconnect( void )
+bool Connector::reconnect()
 {
     if ( m_handler->isConnected() )
     {
@@ -168,7 +168,7 @@ void Connector::send( const kvs::MessageBlock& block )
  *  @return true if the handler is created successfully
  */
 /*===========================================================================*/
-const bool Connector::create_handler( void )
+bool Connector::create_handler()
 {
     m_handler = new kvs::TCPSocket();
 
@@ -180,7 +180,7 @@ const bool Connector::create_handler( void )
  *  @brief  Deletes the handler.
  */
 /*===========================================================================*/
-void Connector::delete_handler( void )
+void Connector::delete_handler()
 {
     if ( m_handler ) delete m_handler;
 }

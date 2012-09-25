@@ -25,7 +25,7 @@ namespace kvs
  *  @brief  Constructs a new Acceptor class.
  */
 /*===========================================================================*/
-Acceptor::Acceptor( void )
+Acceptor::Acceptor()
 {
     if ( this->create_handler() ) this->open();
     else kvsMessageError("Cannot create handler.");
@@ -55,7 +55,7 @@ Acceptor::Acceptor( const int port, const size_t ntrials )
  *  @brief  Destroys the Acceptor class.
  */
 /*===========================================================================*/
-Acceptor::~Acceptor( void )
+Acceptor::~Acceptor()
 {
     this->close();
 }
@@ -66,7 +66,7 @@ Acceptor::~Acceptor( void )
  *  @return true if the process is done successfully
  */
 /*===========================================================================*/
-const bool Acceptor::open( void )
+bool Acceptor::open()
 {
     m_handler->open();
     if ( !m_handler->isOpen() )
@@ -83,7 +83,7 @@ const bool Acceptor::open( void )
  *  @brief  Close the port.
  */
 /*===========================================================================*/
-void Acceptor::close( void )
+void Acceptor::close()
 {
     m_handler->close();
     this->delete_handler();
@@ -97,7 +97,7 @@ void Acceptor::close( void )
  *  @return true if the process is done successfully
  */
 /*===========================================================================*/
-const bool Acceptor::bind( const int port, const size_t ntrials )
+bool Acceptor::bind( const int port, const size_t ntrials )
 {
     size_t counter = 0;
     while( counter < ntrials )
@@ -123,7 +123,7 @@ const bool Acceptor::bind( const int port, const size_t ntrials )
  *  @return pointer to the new connection (socket)
  */
 /*===========================================================================*/
-kvs::TCPSocket* Acceptor::newConnection( void )
+kvs::TCPSocket* Acceptor::newConnection()
 {
     return( m_handler->checkForNewConnection() );
 }
@@ -136,7 +136,7 @@ kvs::TCPSocket* Acceptor::newConnection( void )
  *  @return received message size
  */
 /*===========================================================================*/
-const int Acceptor::receive( kvs::MessageBlock* block, kvs::SocketAddress* client_address )
+int Acceptor::receive( kvs::MessageBlock* block, kvs::SocketAddress* client_address )
 {
     return( m_handler->receive( block, client_address ) );
 }
@@ -147,7 +147,7 @@ const int Acceptor::receive( kvs::MessageBlock* block, kvs::SocketAddress* clien
  *  @return true if the process is done successfully
  */
 /*===========================================================================*/
-const bool Acceptor::create_handler( void )
+bool Acceptor::create_handler()
 {
     m_handler = new kvs::TCPServer();
 
@@ -159,7 +159,7 @@ const bool Acceptor::create_handler( void )
  *  @brief  Deletes the handler.
  */
 /*===========================================================================*/
-void Acceptor::delete_handler( void )
+void Acceptor::delete_handler()
 {
     if ( m_handler ) delete m_handler;
 }

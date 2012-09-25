@@ -14,7 +14,6 @@
 #ifndef KVS__READ_WRITE_LOCK_H_INCLUDE
 #define KVS__READ_WRITE_LOCK_H_INCLUDE
 
-#include <kvs/ClassName>
 #include "Mutex.h"
 #include "Condition.h"
 
@@ -29,34 +28,25 @@ namespace kvs
 /*==========================================================================*/
 class ReadWriteLock
 {
-    kvsClassName( kvs::ReadWriteLock );
-
 protected:
 
-    int            m_counter;  ///< access counter
-    int            m_nreaders; ///< number of waiting readers
-    int            m_nwriters; ///< number of waiting writers
-    kvs::Mutex     m_mutex;    ///< mutex
-    kvs::Condition m_reader;   ///< condition variable for reader
-    kvs::Condition m_writer;   ///< condition variable for writer
+    int m_counter; ///< access counter
+    int m_nreaders; ///< number of waiting readers
+    int m_nwriters; ///< number of waiting writers
+    kvs::Mutex m_mutex; ///< mutex
+    kvs::Condition m_reader; ///< condition variable for reader
+    kvs::Condition m_writer; ///< condition variable for writer
 
 public:
 
-    ReadWriteLock( void );
+    ReadWriteLock();
+    virtual ~ReadWriteLock();
 
-    virtual ~ReadWriteLock( void );
-
-public:
-
-    void lockRead( void );
-
-    void lockWrite( void );
-
-    bool tryLockRead( void );
-
-    bool tryLockWrite( void );
-
-    void unlock( void );
+    void lockRead();
+    void lockWrite();
+    bool tryLockRead();
+    bool tryLockWrite();
+    void unlock();
 };
 
 } // end of namespace kvs

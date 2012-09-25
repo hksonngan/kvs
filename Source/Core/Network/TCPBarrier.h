@@ -18,7 +18,6 @@
 #include <kvs/Mutex>
 #include <kvs/IPAddress>
 #include <kvs/TCPSocket>
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -31,22 +30,17 @@ namespace kvs
 /*===========================================================================*/
 class TCPBarrier
 {
-    kvsClassName( kvs::TCPBarrier );
-
 protected:
 
     kvs::TCPSocket* m_client; //< barrier client node
-    kvs::Mutex      m_mutex;  //< mutex
+    kvs::Mutex m_mutex; //< mutex
 
 public:
 
     TCPBarrier( const kvs::IPAddress& ip, int port );
+    virtual ~TCPBarrier();
 
-    virtual ~TCPBarrier( void );
-
-public:
-
-    void wait( void );
+    void wait();
 };
 
 } // end of namespace kvs

@@ -15,7 +15,6 @@
 #define KVS__MESSAGE_BLOCK_H_INCLUDE
 
 #include <kvs/ValueArray>
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -28,8 +27,6 @@ namespace kvs
 /*==========================================================================*/
 class MessageBlock
 {
-    kvsClassName( kvs::MessageBlock );
-
 protected:
 
     /*     MessageBlock
@@ -49,46 +46,27 @@ protected:
 
 public:
 
-    MessageBlock( void );
-
+    MessageBlock();
     MessageBlock( const void* data, const size_t data_size );
-
     MessageBlock( const std::string& data );
-
     template<typename T>
     MessageBlock( const std::vector<T>& data );
+    virtual ~MessageBlock();
 
-    virtual ~MessageBlock( void );
-
-public:
-
-    size_t size( void ) const;
-
-    void* pointer( void );
-
-    const void* pointer( void ) const;
-
-    size_t blockSize( void ) const;
-
-    void* blockPointer( void );
-
-    const void* blockPointer( void ) const;
-
-    std::string toString( void ) const;
-
-public:
+    size_t size() const;
+    void* pointer();
+    const void* pointer() const;
+    size_t blockSize() const;
+    void* blockPointer();
+    const void* blockPointer() const;
+    std::string toString() const;
 
     void copy( const void* data, const size_t data_size );
-
     void copy( const std::string& data );
-
     template <typename T>
     void copy( const std::vector<T>& data );
-
     void* allocate( const size_t data_size );
-
-    void deallocate( void );
-
+    void deallocate();
 };
 
 } // end of namespace kvs

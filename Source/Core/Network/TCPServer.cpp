@@ -29,7 +29,7 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-TCPServer::TCPServer( void ):
+TCPServer::TCPServer():
     m_max_nconnections( 5 )
 {
 }
@@ -53,7 +53,7 @@ TCPServer::TCPServer( const int port, const int max_nconnections ):
  *  Destructor.
  */
 /*==========================================================================*/
-TCPServer::~TCPServer( void )
+TCPServer::~TCPServer()
 {
 }
 
@@ -62,7 +62,7 @@ TCPServer::~TCPServer( void )
  *  Open.
  */
 /*==========================================================================*/
-void TCPServer::open( void )
+void TCPServer::open()
 {
     kvs::Socket::open( kvs::Socket::TCPType );
     if( kvs::Socket::isOpen() )
@@ -103,7 +103,7 @@ int TCPServer::bind( const int port )
  *  @return true, if the success.
  */
 /*==========================================================================*/
-bool TCPServer::listen( void )
+bool TCPServer::listen()
 {
     if( ::listen( kvs::Socket::id(), m_max_nconnections ) == -1 )
     {

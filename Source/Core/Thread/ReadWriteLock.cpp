@@ -23,7 +23,7 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-ReadWriteLock::ReadWriteLock( void )
+ReadWriteLock::ReadWriteLock()
     : m_counter( 0 )
     , m_nreaders( 0 )
     , m_nwriters( 0 )
@@ -35,7 +35,7 @@ ReadWriteLock::ReadWriteLock( void )
  *  Destructor.
  */
 /*==========================================================================*/
-ReadWriteLock::~ReadWriteLock( void )
+ReadWriteLock::~ReadWriteLock()
 {
 }
 
@@ -44,7 +44,7 @@ ReadWriteLock::~ReadWriteLock( void )
  *  Lock for read access.
  */
 /*==========================================================================*/
-void ReadWriteLock::lockRead( void )
+void ReadWriteLock::lockRead()
 {
     kvs::MutexLocker locker( &m_mutex );
 
@@ -63,7 +63,7 @@ void ReadWriteLock::lockRead( void )
  *  Lock for write access.
  */
 /*==========================================================================*/
-void ReadWriteLock::lockWrite( void )
+void ReadWriteLock::lockWrite()
 {
     kvs::MutexLocker locker( &m_mutex );
 
@@ -83,7 +83,7 @@ void ReadWriteLock::lockWrite( void )
  *  @return true, if it is possible to lock
  */
 /*==========================================================================*/
-bool ReadWriteLock::tryLockRead( void )
+bool ReadWriteLock::tryLockRead()
 {
     kvs::MutexLocker locker( &m_mutex );
 
@@ -100,7 +100,7 @@ bool ReadWriteLock::tryLockRead( void )
  *  @return true, if it is possible to lock
  */
 /*==========================================================================*/
-bool ReadWriteLock::tryLockWrite( void )
+bool ReadWriteLock::tryLockWrite()
 {
     kvs::MutexLocker locker( &m_mutex );
 
@@ -116,7 +116,7 @@ bool ReadWriteLock::tryLockWrite( void )
  *  Unlock.
  */
 /*==========================================================================*/
-void ReadWriteLock::unlock( void )
+void ReadWriteLock::unlock()
 {
     kvs::MutexLocker locker( &m_mutex );
 

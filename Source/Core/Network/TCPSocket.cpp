@@ -26,7 +26,7 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-TCPSocket::TCPSocket( void ):
+TCPSocket::TCPSocket():
     m_is_connected( false )
 {
 }
@@ -78,7 +78,7 @@ TCPSocket::TCPSocket( const kvs::Socket::id_type& id, const kvs::SocketAddress& 
  *  Destructor.
  */
 /*==========================================================================*/
-TCPSocket::~TCPSocket( void )
+TCPSocket::~TCPSocket()
 {
 }
 
@@ -88,7 +88,7 @@ TCPSocket::~TCPSocket( void )
  *  @return false, if the connection is failure.
  */
 /*==========================================================================*/
-bool TCPSocket::isConnected( void )
+bool TCPSocket::isConnected()
 {
     return( m_is_connected );
 }
@@ -98,7 +98,7 @@ bool TCPSocket::isConnected( void )
  *  Opent a TUP socket.
  */
 /*==========================================================================*/
-void TCPSocket::open( void )
+void TCPSocket::open()
 {
     kvs::Socket::open( kvs::Socket::TCPType );
     if( kvs::Socket::isOpen() )

@@ -14,8 +14,6 @@
 #ifndef KVS__MUTEX_LOCKER_H_INCLUDE
 #define KVS__MUTEX_LOCKER_H_INCLUDE
 
-#include <kvs/ClassName>
-
 
 namespace kvs
 {
@@ -29,8 +27,6 @@ class Mutex;
 /*==========================================================================*/
 class MutexLocker
 {
-    kvsClassName( kvs::MutexLocker );
-
 protected:
 
     kvs::Mutex* m_mutex; ///< pointer to mutex
@@ -38,16 +34,11 @@ protected:
 public:
 
     MutexLocker( kvs::Mutex* mutex );
+    virtual ~MutexLocker();
 
-    virtual ~MutexLocker( void );
-
-public:
-
-    void relock( void );
-
-    void unlock( void );
-
-    Mutex* mutex( void );
+    void relock();
+    void unlock();
+    Mutex* mutex();
 };
 
 } // end of namespace kvs

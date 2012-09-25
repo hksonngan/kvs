@@ -72,7 +72,7 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-Thread::Thread( void )
+Thread::Thread()
     : m_is_running( false )
     , m_handler( 0 )
     , m_routine( NULL )
@@ -97,7 +97,7 @@ Thread::Thread( Routine routine )
  *  Destructor.
  */
 /*==========================================================================*/
-Thread::~Thread( void )
+Thread::~Thread()
 {
     this->delete_thread();
 }
@@ -108,7 +108,7 @@ Thread::~Thread( void )
  *  @return thread hundler
  */
 /*==========================================================================*/
-Thread::Handler& Thread::handler( void )
+Thread::Handler& Thread::handler()
 {
     return( m_handler );
 }
@@ -119,7 +119,7 @@ Thread::Handler& Thread::handler( void )
  *  @return thread hundler
  */
 /*==========================================================================*/
-const Thread::Handler& Thread::handler( void ) const
+const Thread::Handler& Thread::handler() const
 {
     return( m_handler );
 }
@@ -130,7 +130,7 @@ const Thread::Handler& Thread::handler( void ) const
  *  @return true, if the thread is running
  */
 /*==========================================================================*/
-bool Thread::isRunning( void ) const
+bool Thread::isRunning() const
 {
     return( m_is_running );
 }
@@ -141,7 +141,7 @@ bool Thread::isRunning( void ) const
  *  @return true, if the process is done succussfully
  */
 /*==========================================================================*/
-bool Thread::start( void )
+bool Thread::start()
 {
     Routine routine;
     if ( m_routine == NULL ) { routine = ( Routine ) ::EntryPoint; }
@@ -166,20 +166,15 @@ bool Thread::start( void )
  *  @return true, if the process is done successfully
  */
 /*==========================================================================*/
-bool Thread::wait( void )
+bool Thread::wait()
 {
 #if defined ( KVS_PLATFORM_WINDOWS )
     int ret = WaitForSingleObject( m_handler, INFINITE );
     return( ret == WAIT_FAILED ? false : true );
-
 #else
     int ret = pthread_join( m_handler, NULL );
     return( ret == 0 ? true : false );
 #endif
-
-
-
-
 }
 
 /*==========================================================================*/
@@ -187,7 +182,7 @@ bool Thread::wait( void )
  *  Quit the thread.
  */
 /*==========================================================================*/
-void Thread::quit( void )
+void Thread::quit()
 {
     this->delete_thread();
 }
@@ -268,15 +263,10 @@ bool Thread::create_thread( Routine routine, void* arg )
     WinRoutine rt = (WinRoutine)routine;
     m_handler = (HANDLE)_beginthreadex( NULL, 0, rt, arg, 0, NULL );
     return( m_handler == 0 ? false : true );
-
 #else
     int err = pthread_create( &m_handler, NULL, routine, arg );
     return( err == 0 ? true : false );
 #endif
-
-
-
-
 }
 
 /*==========================================================================*/
@@ -284,7 +274,7 @@ bool Thread::create_thread( Routine routine, void* arg )
  *  Delete thread.
  */
 /*==========================================================================*/
-void Thread::delete_thread( void )
+void Thread::delete_thread()
 {
 #if defined ( KVS_PLATFORM_WINDOWS )
     if ( m_handler ) { CloseHandle( m_handler ); }

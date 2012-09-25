@@ -19,7 +19,6 @@
 #include "SocketTimer.h"
 #include <iostream>
 #include <fstream>
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -32,30 +31,21 @@ namespace kvs
 /*==========================================================================*/
 class HttpConnector
 {
-    kvsClassName( kvs::HttpConnector );
-
 protected:
 
     kvs::TCPSocket m_connector; ///< TCP socket connector
-    std::string    m_hostname;  ///< hostname
-    int            m_port;      ///< port number
+    std::string m_hostname; ///< hostname
+    int m_port; ///< port number
 
 public:
 
-    HttpConnector( void );
-
+    HttpConnector();
     HttpConnector( const kvs::Url& url, const kvs::SocketTimer* timeout = 0 );
-
-    virtual ~HttpConnector( void );
-
-public:
+    virtual ~HttpConnector();
 
     bool connect( const kvs::Url& url, const kvs::SocketTimer* timeout = 0 );
-
-    void close( void );
-
+    void close();
     bool get( const std::string& path, const std::string& filename );
-
     bool get( const std::string& path, std::ostream& output_stream );
 };
 

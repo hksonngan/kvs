@@ -15,7 +15,6 @@
 #define KVS__SOCKET_TIMER_H_INCLUDE
 
 #include "SocketStandard.h"
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -28,8 +27,6 @@ namespace kvs
 /*==========================================================================*/
 class SocketTimer
 {
-    kvsClassName_without_virtual( kvs::SocketTimer );
-
 public:
 
     static const SocketTimer Zero;
@@ -42,21 +39,15 @@ public:
 
     SocketTimer( const double seconds = 0.0 );
 
-public:
-
     const SocketTimer& operator = ( const SocketTimer& other );
-
     friend bool operator == ( const SocketTimer& other1, const SocketTimer& other2 );
 
-public:
-
-    const struct timeval& value( void ) const;
-
-    struct timeval& value( void );
+    const struct timeval& value() const;
+    struct timeval& value();
 
     void setValue( const double seconds );
 
-    bool isZero( void ) const;
+    bool isZero() const;
 };
 
 } // end of namespace kvs

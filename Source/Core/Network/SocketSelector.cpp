@@ -25,7 +25,7 @@
 namespace kvs
 {
 
-SocketSelector::SocketSelector( void )
+SocketSelector::SocketSelector()
 {
     this->clear();
 }
@@ -36,7 +36,7 @@ SocketSelector::SocketSelector( const SocketSelector& other ):
 {
 }
 
-SocketSelector::~SocketSelector( void )
+SocketSelector::~SocketSelector()
 {
 }
 
@@ -70,7 +70,7 @@ void SocketSelector::clearWritable( const kvs::Socket::id_type& socket_id )
     FD_CLR( socket_id, &m_writable );
 }
 
-void SocketSelector::clear( void )
+void SocketSelector::clear()
 {
     FD_ZERO( &m_readable );
     FD_ZERO( &m_writable );

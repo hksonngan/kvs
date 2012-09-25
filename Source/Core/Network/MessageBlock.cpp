@@ -19,7 +19,6 @@
 
 namespace
 {
-//const size_t SizeOfHeader = sizeof( size_t );
 const size_t SizeOfHeader = sizeof( kvs::UInt32 ); // 32 bits = 4 bytes
 }
 
@@ -31,7 +30,7 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-MessageBlock::MessageBlock( void )
+MessageBlock::MessageBlock()
 {
 }
 
@@ -75,7 +74,7 @@ MessageBlock::MessageBlock( const std::vector<T>& message )
  *  Destructor.
  */
 /*==========================================================================*/
-MessageBlock::~MessageBlock( void )
+MessageBlock::~MessageBlock()
 {
     this->deallocate();
 }
@@ -86,7 +85,7 @@ MessageBlock::~MessageBlock( void )
  *  @return message size [byte]
  */
 /*==========================================================================*/
-size_t MessageBlock::size( void ) const
+size_t MessageBlock::size() const
 {
     if( m_block.size() == 0 ) return( 0 );
 
@@ -99,7 +98,7 @@ size_t MessageBlock::size( void ) const
  *  @return pointer to message
  */
 /*==========================================================================*/
-void* MessageBlock::pointer( void )
+void* MessageBlock::pointer()
 {
     return( m_block.data() + SizeOfHeader );
 }
@@ -110,7 +109,7 @@ void* MessageBlock::pointer( void )
  *  @return pointer to message
  */
 /*==========================================================================*/
-const void* MessageBlock::pointer( void ) const
+const void* MessageBlock::pointer() const
 {
     return( m_block.data() + SizeOfHeader );
 }
@@ -121,7 +120,7 @@ const void* MessageBlock::pointer( void ) const
  *  @return message block size [byte]
  */
 /*==========================================================================*/
-size_t MessageBlock::blockSize( void ) const
+size_t MessageBlock::blockSize() const
 {
     return( m_block.size() );
 }
@@ -132,7 +131,7 @@ size_t MessageBlock::blockSize( void ) const
  *  @return pointer to message block
  */
 /*==========================================================================*/
-void* MessageBlock::blockPointer( void )
+void* MessageBlock::blockPointer()
 {
     return( m_block.data() );
 }
@@ -143,7 +142,7 @@ void* MessageBlock::blockPointer( void )
  *  @return pointer to message block
  */
 /*==========================================================================*/
-const void* MessageBlock::blockPointer( void ) const
+const void* MessageBlock::blockPointer() const
 {
     return( m_block.data() );
 }
@@ -154,7 +153,7 @@ const void* MessageBlock::blockPointer( void ) const
  *  @return message
  */
 /*==========================================================================*/
-std::string MessageBlock::toString( void ) const
+std::string MessageBlock::toString() const
 {
     const char*  c_str = reinterpret_cast<const char*>( this->pointer() );
     const size_t size  = this->size();
@@ -225,7 +224,7 @@ void* MessageBlock::allocate( size_t data_size )
  *  Deallocate.
  */
 /*==========================================================================*/
-void MessageBlock::deallocate( void )
+void MessageBlock::deallocate()
 {
     m_block.release();
 }

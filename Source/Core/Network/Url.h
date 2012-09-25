@@ -16,7 +16,6 @@
 
 #include <iostream>
 #include <string>
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -29,51 +28,35 @@ namespace kvs
 /*==========================================================================*/
 class Url
 {
-    kvsClassName_without_virtual( kvs::Url );
-
 protected:
 
     std::string m_protocol; ///< protocol (e.g. "http", "ftp")
     std::string m_username; ///< user name
     std::string m_password; ///< password
     std::string m_hostname; ///< hostname
-    int         m_port;     ///< port number
-    std::string m_path;     ///< path
+    int m_port; ///< port number
+    std::string m_path; ///< path
 
 public:
 
-    Url( void );
-
+    Url();
     Url( const std::string& url );
-
-public:
 
     friend std::ostream& operator << ( std::ostream& os, const Url& other );
 
-public:
-
-    const std::string& protocol( void ) const;
-
-    const std::string& username( void ) const;
-
-    const std::string& password( void ) const;
-
-    const std::string& hostname( void ) const;
-
-    int port( void ) const;
-
-    const std::string& path( void ) const;
+    const std::string& protocol() const;
+    const std::string& username() const;
+    const std::string& password() const;
+    const std::string& hostname() const;
+    int port() const;
+    const std::string& path() const;
 
 private:
 
     void parse_url( const std::string& url );
-
     void split_protocol( std::string url );
-
     void split_authority( std::string sub_url );
-
     void split_user_info( std::string sub_url );
-
     void split_hostname( std::string sub_url );
 };
 

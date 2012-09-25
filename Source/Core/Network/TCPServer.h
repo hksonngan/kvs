@@ -19,7 +19,6 @@
 #include "SocketAddress.h"
 #include "MessageBlock.h"
 #include "TCPSocket.h"
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -32,46 +31,27 @@ namespace kvs
 /*==========================================================================*/
 class TCPServer : public kvs::Socket
 {
-    kvsClassName( kvs::TCPServer );
-
 protected:
 
     int m_max_nconnections; ///< max. number of connection client
 
 public:
 
-    TCPServer( void );
-
+    TCPServer();
     TCPServer( const int port, const int max_nconnections = 5 );
+    virtual ~TCPServer();
 
-    virtual ~TCPServer( void );
-
-public:
-
-    void open( void );
-
+    void open();
     int bind( const int port );
-
-    bool listen( void );
-
+    bool listen();
     kvs::Socket::id_type accept( kvs::SocketAddress* socket_address = 0 );
 
-public:
-
     void setMaxConnections( const int max_nconnections );
-
-public:
-
     kvs::TCPSocket* checkForNewConnection( const kvs::SocketTimer* blocking_time = 0 );
 
-public:
-
     int send( const void* buffer, int byte_size, kvs::SocketAddress* client_address = 0 );
-
     int send( const kvs::MessageBlock& message, kvs::SocketAddress* client_address = 0 );
-
     int receive( void* buffer, int byte_size, kvs::SocketAddress* client_address = 0 );
-
     int receive( kvs::MessageBlock* message, kvs::SocketAddress* client_address = 0 );
 };
 

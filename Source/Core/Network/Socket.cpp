@@ -41,7 +41,7 @@ const int             Socket::Timeout    = ETIME;
  *  Constructor.
  */
 /*==========================================================================*/
-Socket::Socket( void ):
+Socket::Socket():
     m_id( Socket::InvalidID ),
     m_is_open( false ),
     m_is_bound( false ),
@@ -82,7 +82,7 @@ Socket::Socket( const Socket::id_type& id, const kvs::SocketAddress& address ):
  *  Destructor.
  */
 /*==========================================================================*/
-Socket::~Socket( void )
+Socket::~Socket()
 {
     this->close();
 }
@@ -110,7 +110,7 @@ Socket& Socket::operator = ( const Socket& other )
  *  @retval socket ID
  */
 /*==========================================================================*/
-const Socket::id_type& Socket::id( void ) const
+const Socket::id_type& Socket::id() const
 {
     return( m_id );
 }
@@ -121,7 +121,7 @@ const Socket::id_type& Socket::id( void ) const
  *  @retval socket address
  */
 /*==========================================================================*/
-const SocketAddress& Socket::address( void ) const
+const SocketAddress& Socket::address() const
 {
     return( m_address );
 }
@@ -165,7 +165,7 @@ void Socket::setAddress( const kvs::SocketAddress& address )
  *  @return true, if the socket is valid.
  */
 /*==========================================================================*/
-bool Socket::isValid( void ) const
+bool Socket::isValid() const
 {
     return( m_id != Socket::InvalidID );
 }
@@ -176,7 +176,7 @@ bool Socket::isValid( void ) const
  *  @return true, if the socket is open.
  */
 /*==========================================================================*/
-bool Socket::isOpen( void ) const
+bool Socket::isOpen() const
 {
     return( m_is_open );
 }
@@ -187,7 +187,7 @@ bool Socket::isOpen( void ) const
  *  @return true, if the socket is bound.
  */
 /*==========================================================================*/
-bool Socket::isBound( void ) const
+bool Socket::isBound() const
 {
     return( m_is_bound );
 }
@@ -198,7 +198,7 @@ bool Socket::isBound( void ) const
  *  @return true, if the blocking mode.
  */
 /*==========================================================================*/
-bool Socket::isBlocking( void ) const
+bool Socket::isBlocking() const
 {
     return( m_is_blocking );
 }
@@ -235,7 +235,7 @@ void Socket::open( const int socket_type )
  *  Close the socket.
  */
 /*==========================================================================*/
-void Socket::close( void )
+void Socket::close()
 {
     m_is_open = false;
     m_is_bound = false;
@@ -286,7 +286,7 @@ int Socket::bind( const SocketAddress& socket_address )
  *  Enable blocking mode.
  */
 /*==========================================================================*/
-void Socket::enableBlocking( void )
+void Socket::enableBlocking()
 {
     blocking_socket( this->id() );
 }
@@ -296,7 +296,7 @@ void Socket::enableBlocking( void )
  *  Disable blocking mode (enable non-blocking mode).
  */
 /*==========================================================================*/
-void Socket::disableBlocking( void )
+void Socket::disableBlocking()
 {
     non_blocking_socket( this->id() );
 }
@@ -307,7 +307,7 @@ void Socket::disableBlocking( void )
  *  @return error ID
  */
 /*==========================================================================*/
-int Socket::error( void )
+int Socket::error()
 {
 #if defined(KVS_PLATFORM_WINDOWS)
     return( WSAGetLastError() );
@@ -322,7 +322,7 @@ int Socket::error( void )
  *  @return error string
  */
 /*==========================================================================*/
-std::string Socket::errorString( void )
+std::string Socket::errorString()
 {
     const char* error_string = NULL;
 

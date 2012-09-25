@@ -17,7 +17,6 @@
 
 #include <kvs/TCPSocket>
 #include <kvs/IPAddress>
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -30,42 +29,30 @@ namespace kvs
 /*===========================================================================*/
 class Connector
 {
-    kvsClassName_without_virtual( kvs::Connector );
-
 private:
 
-    kvs::TCPSocket*  m_handler; //< handler
-    kvs::IPAddress   m_ip;      //< IP address
-    int              m_port;    //< port number
-    size_t           m_ntrials; //< number of trials
+    kvs::TCPSocket* m_handler; //< handler
+    kvs::IPAddress m_ip; //< IP address
+    int m_port; //< port number
+    size_t m_ntrials; //< number of trials
 
 public:
 
-    Connector( void );
-
+    Connector();
     Connector( kvs::TCPSocket* handler );
-
     Connector( const kvs::IPAddress& ip, const int port, const size_t ntrials );
+    ~Connector();
 
-    ~Connector( void );
-
-public:
-
-    const bool open( void );
-
-    void close( void );
-
-    const bool connect( const kvs::IPAddress& ip, const int port, const size_t ntrials );
-
-    const bool reconnect();
-
+    bool open();
+    void close();
+    bool connect( const kvs::IPAddress& ip, const int port, const size_t ntrials );
+    bool reconnect();
     void send( const kvs::MessageBlock& block );
 
 private:
 
-    const bool create_handler( void );
-
-    void delete_handler( void );
+    bool create_handler();
+    void delete_handler();
 };
 
 } // end of namespace kvs

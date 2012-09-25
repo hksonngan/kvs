@@ -16,7 +16,6 @@
 
 #include "Socket.h"
 #include "SocketTimer.h"
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -29,8 +28,6 @@ namespace kvs
 /*==========================================================================*/
 class SocketSelector
 {
-    kvsClassName( kvs::SocketSelector );
-
 protected:
 
     fd_set m_readable; ///< readable descriptor
@@ -38,28 +35,19 @@ protected:
 
 public:
 
-    SocketSelector( void );
-
+    SocketSelector();
     SocketSelector( const SocketSelector& other );
-
-    virtual ~SocketSelector( void );
+    virtual ~SocketSelector();
 
 public:
 
     void setReadable( const kvs::Socket::id_type& socket_id );
-
     void setWritable( const kvs::Socket::id_type& socket_id );
-
     bool isReadable( const kvs::Socket::id_type& socket_id );
-
     bool isWritable( const kvs::Socket::id_type& socket_id );
-
     void clearReadable( const kvs::Socket::id_type& socket_id );
-
     void clearWritable( const kvs::Socket::id_type& socket_id );
-
-    void clear( void );
-
+    void clear();
     int select( const kvs::SocketTimer& timeout );
 };
 

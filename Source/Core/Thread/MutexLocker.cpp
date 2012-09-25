@@ -35,7 +35,7 @@ MutexLocker::MutexLocker( kvs::Mutex* mutex )
  *  Destructor.
  */
 /*==========================================================================*/
-MutexLocker::~MutexLocker( void )
+MutexLocker::~MutexLocker()
 {
     this->unlock();
 }
@@ -45,7 +45,7 @@ MutexLocker::~MutexLocker( void )
  *  Relock.
  */
 /*==========================================================================*/
-void MutexLocker::relock( void )
+void MutexLocker::relock()
 {
     if ( m_mutex ) { m_mutex->lock(); }
 }
@@ -55,7 +55,7 @@ void MutexLocker::relock( void )
  *  Unlock.
  */
 /*==========================================================================*/
-void MutexLocker::unlock( void )
+void MutexLocker::unlock()
 {
     if ( m_mutex ) { m_mutex->unlock(); }
 }
@@ -66,7 +66,7 @@ void MutexLocker::unlock( void )
  *  @return pointer to the mutex
  */
 /*==========================================================================*/
-Mutex* MutexLocker::mutex( void )
+Mutex* MutexLocker::mutex()
 {
     return( m_mutex );
 }

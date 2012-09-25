@@ -17,7 +17,6 @@
 
 #include <kvs/TCPServer>
 #include <kvs/IPAddress>
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -30,37 +29,26 @@ namespace kvs
 /*===========================================================================*/
 class Acceptor
 {
-    kvsClassName_without_virtual( kvs::Acceptor );
-
 private:
 
     kvs::TCPServer* m_handler; //< handler
 
 public:
 
-    Acceptor( void );
-
+    Acceptor();
     Acceptor( const int port, const size_t ntrials );
+    ~Acceptor();
 
-    ~Acceptor( void );
-
-public:
-
-    const bool open( void );
-
-    void close( void );
-
-    const bool bind( const int port, const size_t ntrials );
-
-    kvs::TCPSocket* newConnection( void );
-
-    const int receive( kvs::MessageBlock* block, kvs::SocketAddress* client_address = 0 );
+    bool open();
+    void close();
+    bool bind( const int port, const size_t ntrials );
+    kvs::TCPSocket* newConnection();
+    int receive( kvs::MessageBlock* block, kvs::SocketAddress* client_address = 0 );
 
 private:
 
-    const bool create_handler( void );
-
-    void delete_handler( void );
+    bool create_handler();
+    void delete_handler();
 };
 
 } // end of namespace kvs

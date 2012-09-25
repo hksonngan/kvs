@@ -42,7 +42,7 @@ TCPBarrier::TCPBarrier( const kvs::IPAddress& ip, int port )
  *  @brief  Destroys the TCPBarrier class.
  */
 /*===========================================================================*/
-TCPBarrier::~TCPBarrier( void )
+TCPBarrier::~TCPBarrier()
 {
     if( m_client ) delete m_client;
 }
@@ -52,7 +52,7 @@ TCPBarrier::~TCPBarrier( void )
  *  @brief  Wait for the connections.
  */
 /*===========================================================================*/
-void TCPBarrier::wait( void )
+void TCPBarrier::wait()
 {
     char send_buffer[::BARRIER_BUFFER_SIZE]; sprintf( send_buffer, "BARRIER" );
 //        m_client->disableBlocking();

@@ -15,7 +15,6 @@
 #define KVS__MUTEX_H_INCLUDE
 
 #include <kvs/Platform>
-#include <kvs/ClassName>
 #if defined ( KVS_PLATFORM_WINDOWS )
 #include <windows.h>
 #include <errno.h>
@@ -35,8 +34,6 @@ namespace kvs
 /*==========================================================================*/
 class Mutex
 {
-    kvsClassName( kvs::Mutex );
-
 public:
 
 #if defined ( KVS_PLATFORM_WINDOWS )

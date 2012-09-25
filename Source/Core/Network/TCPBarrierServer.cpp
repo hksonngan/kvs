@@ -50,7 +50,7 @@ TCPBarrierServer::TCPBarrierServer( int port, int block_counter ):
  *  @brief  Destroys the TCPBarrierServer class.
  */
 /*===========================================================================*/
-TCPBarrierServer::~TCPBarrierServer( void )
+TCPBarrierServer::~TCPBarrierServer()
 {
     this->clear_nodes();
     if( m_server ) delete m_server;
@@ -61,7 +61,7 @@ TCPBarrierServer::~TCPBarrierServer( void )
  *  @brief  Executes the barrier server as a thread.
  */
 /*===========================================================================*/
-void TCPBarrierServer::run( void )
+void TCPBarrierServer::run()
 {
 //    while( true )
     for ( ; ; )
@@ -92,7 +92,7 @@ void TCPBarrierServer::run( void )
  *  @brief  Clear the barrier nodes.
  */
 /*===========================================================================*/
-void TCPBarrierServer::clear_nodes( void )
+void TCPBarrierServer::clear_nodes()
 {
     std::list<kvs::TCPSocket*>::iterator node = m_nodes.begin();
     for( int i = 0; i < m_block_counter; i++ )

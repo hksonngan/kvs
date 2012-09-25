@@ -26,7 +26,7 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-HttpConnector::HttpConnector( void ):
+HttpConnector::HttpConnector():
     m_port(80)
 {
 }
@@ -49,7 +49,7 @@ HttpConnector::HttpConnector( const kvs::Url& url, const kvs::SocketTimer* timeo
  *  Destructor.
  */
 /*==========================================================================*/
-HttpConnector::~HttpConnector( void )
+HttpConnector::~HttpConnector()
 {
     this->close();
 }
@@ -79,7 +79,7 @@ bool HttpConnector::connect( const kvs::Url& url, const kvs::SocketTimer* timeou
  *  Close connection.
  */
 /*==========================================================================*/
-void HttpConnector::close( void )
+void HttpConnector::close()
 {
     m_connector.close();
 }

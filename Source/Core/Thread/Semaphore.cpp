@@ -35,7 +35,7 @@ Semaphore::Semaphore( int nresources )
  *  Destructor.
  */
 /*==========================================================================*/
-Semaphore::~Semaphore( void )
+Semaphore::~Semaphore()
 {
 }
 
@@ -95,7 +95,7 @@ bool Semaphore::tryAcquire( int nresources )
  *  @return number of the available resources
  */
 /*==========================================================================*/
-int Semaphore::available( void )
+int Semaphore::available()
 {
     kvs::MutexLocker locker( &m_mutex );
 

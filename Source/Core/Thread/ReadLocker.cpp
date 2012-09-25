@@ -35,7 +35,7 @@ ReadLocker::ReadLocker( kvs::ReadWriteLock* rwlock )
  *  Destructor.
  */
 /*==========================================================================*/
-ReadLocker::~ReadLocker( void )
+ReadLocker::~ReadLocker()
 {
     this->unlock();
 }
@@ -45,7 +45,7 @@ ReadLocker::~ReadLocker( void )
  *  Relock.
  */
 /*==========================================================================*/
-void ReadLocker::relock( void )
+void ReadLocker::relock()
 {
     if ( m_rwlock ) { m_rwlock->lockRead(); }
 }
@@ -55,7 +55,7 @@ void ReadLocker::relock( void )
  *  Unlock.
  */
 /*==========================================================================*/
-void ReadLocker::unlock( void )
+void ReadLocker::unlock()
 {
     if ( m_rwlock ) { m_rwlock->unlock(); }
 }
@@ -66,7 +66,7 @@ void ReadLocker::unlock( void )
  *  @return pointer to the read/write lock
  */
 /*==========================================================================*/
-kvs::ReadWriteLock* ReadLocker::readWriteLock( void )
+kvs::ReadWriteLock* ReadLocker::readWriteLock()
 {
     return( m_rwlock );
 }

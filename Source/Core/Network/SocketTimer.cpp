@@ -38,12 +38,12 @@ bool operator == ( const SocketTimer& other1, const SocketTimer& other2 )
             other1.m_value.tv_usec == other2.m_value.tv_usec );
 }
 
-const struct timeval& SocketTimer::value( void ) const
+const struct timeval& SocketTimer::value() const
 {
     return( m_value );
 }
 
-struct timeval& SocketTimer::value( void )
+struct timeval& SocketTimer::value()
 {
     return( m_value );
 }
@@ -54,7 +54,7 @@ void SocketTimer::setValue( double seconds )
     m_value.tv_usec = static_cast<long>( ( seconds - m_value.tv_sec ) * 1000000 );
 }
 
-bool SocketTimer::isZero( void ) const
+bool SocketTimer::isZero() const
 {
     return( m_value.tv_sec == 0 && m_value.tv_usec == 0 );
 }

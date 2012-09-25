@@ -15,7 +15,6 @@
 #define KVS__CONDITION_H_INCLUDE
 
 #include <kvs/Platform>
-#include <kvs/ClassName>
 #include "Mutex.h"
 
 #if defined ( KVS_PLATFORM_WINDOWS )
@@ -33,8 +32,6 @@ namespace kvs
 /*==========================================================================*/
 class Condition
 {
-    kvsClassName( kvs::Condition );
-
 public:
 
 #if defined ( KVS_PLATFORM_WINDOWS )
@@ -55,31 +52,24 @@ public:
 
 protected:
 
-    int        m_nsleepers; ///< number of sleep threads
-    kvs::Mutex m_mutex;     ///< mutex
-    Handler    m_handler;   ///< handler
+    int m_nsleepers; ///< number of sleep threads
+    kvs::Mutex m_mutex; ///< mutex
+    Handler m_handler; ///< handler
 
 public:
 
-    Condition( void );
+    Condition();
+    virtual ~Condition();
 
-    virtual ~Condition( void );
-
-public:
-
-    void wakeUpOne( void );
-
-    void wakeUpAll( void );
-
+    void wakeUpOne();
+    void wakeUpAll();
     bool wait( kvs::Mutex* mutex );
-
     bool wait( kvs::Mutex* mutex, int msec );
 
 protected:
 
-    void create_condition_variable( void );
-
-    void delete_condition_variable( void );
+    void create_condition_variable();
+    void delete_condition_variable();
 };
 
 } // end of namespace kvs

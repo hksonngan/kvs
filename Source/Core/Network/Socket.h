@@ -19,7 +19,6 @@
 #include "SocketTimer.h"
 #include "IPAddress.h"
 #include <kvs/Platform>
-#include <kvs/ClassName>
 #include <string>
 
 
@@ -33,18 +32,16 @@ namespace kvs
 /*==========================================================================*/
 class Socket
 {
-    kvsClassName( kvs::Socket );
-
 public:
 
 #if defined( KVS_PLATFORM_WINDOWS )
-    typedef SOCKET    id_type;
-    typedef int       length_type;
-    typedef char FAR  option_type;
+    typedef SOCKET id_type;
+    typedef int length_type;
+    typedef char FAR option_type;
 #else
-    typedef int       id_type;
+    typedef int id_type;
     typedef socklen_t length_type;
-    typedef void      option_type;
+    typedef void option_type;
 #endif
 
     enum
@@ -54,91 +51,56 @@ public:
     };
 
     static const id_type InvalidID;
-    static const int     ErrorValue;
-    static const int     Timeout;
+    static const int ErrorValue;
+    static const int Timeout;
 
 protected:
 
-    id_type       m_id;
+    id_type m_id;
     SocketAddress m_address;
-    bool          m_is_open;
-    bool          m_is_bound;
-    bool          m_is_blocking;
+    bool m_is_open;
+    bool m_is_bound;
+    bool m_is_blocking;
 
 public:
 
-    Socket( void );
-
+    Socket();
     Socket( const Socket& other );
-
     Socket( const id_type& id, const SocketAddress& address );
-
-    virtual ~Socket( void );
-
-public:
+    virtual ~Socket();
 
     Socket& operator = ( const Socket& other );
 
-public:
-
-    const id_type& id( void ) const;
-
-    const kvs::SocketAddress& address( void ) const;
+    const id_type& id() const;
+    const kvs::SocketAddress& address() const;
 
     void setIp( const kvs::IPAddress& ip );
-
     void setPort( const int port );
-
     void setAddress( const kvs::SocketAddress& address );
 
-public:
-
-    bool isValid( void ) const;
-
-    bool isOpen( void ) const;
-
-    bool isBound( void ) const;
-
-    bool isBlocking( void ) const;
-
+    bool isValid() const;
+    bool isOpen() const;
+    bool isBound() const;
+    bool isBlocking() const;
     void open( const int socket_type );
-
-    void close( void );
-
+    void close();
     int bind( const kvs::SocketAddress& socket_address );
-
-    void enableBlocking( void );
-
-    void disableBlocking( void );
-
-    int error( void );
-
-    std::string errorString( void );
+    void enableBlocking();
+    void disableBlocking();
+    int error();
+    std::string errorString();
 
 protected:
 
     int set_option( id_type id, int level, int name, void* value, int length );
-
     int receive_once( id_type id, char* buffer, int length );
-
     int receive_exact( id_type id, char* buffer, int length );
-
     int receive_peek( id_type id, char* buffer, int length );
-
     int receive_line( id_type id, std::string& line );
-
-    int connect_to_host(
-        const kvs::SocketAddress& socket_address,
-        const kvs::SocketTimer*   timeout = 0 );
-
+    int connect_to_host( const kvs::SocketAddress& socket_address, const kvs::SocketTimer* timeout = 0 );
     int connect_complete( const kvs::SocketTimer* timeout );
-
-protected:
-
     void blocking_socket( id_type id );
-
     void non_blocking_socket( id_type id );
-
     void close_socket( id_type id );
 };
 

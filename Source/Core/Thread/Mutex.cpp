@@ -31,7 +31,7 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-Mutex::Mutex( void )
+Mutex::Mutex()
 {
     this->create_mutex();
 }
@@ -41,7 +41,7 @@ Mutex::Mutex( void )
  *  Destructor.
  */
 /*==========================================================================*/
-Mutex::~Mutex( void )
+Mutex::~Mutex()
 {
     this->delete_mutex();
 }
@@ -52,7 +52,7 @@ Mutex::~Mutex( void )
  *  @return mutex hundler
  */
 /*==========================================================================*/
-Mutex::Handler& Mutex::handler( void )
+Mutex::Handler& Mutex::handler()
 {
     return( m_handler );
 }
@@ -63,7 +63,7 @@ Mutex::Handler& Mutex::handler( void )
  *  @return mutex hundler
  */
 /*==========================================================================*/
-const Mutex::Handler& Mutex::handler( void ) const
+const Mutex::Handler& Mutex::handler() const
 {
     return( m_handler );
 }
@@ -73,7 +73,7 @@ const Mutex::Handler& Mutex::handler( void ) const
  *  Lock.
  */
 /*==========================================================================*/
-void Mutex::lock( void )
+void Mutex::lock()
 {
 #if defined ( KVS_PLATFORM_WINDOWS )
     WaitForSingleObject( m_handler, INFINITE );
@@ -87,7 +87,7 @@ void Mutex::lock( void )
  *  Unlock.
  */
 /*==========================================================================*/
-void Mutex::unlock( void )
+void Mutex::unlock()
 {
 #if defined ( KVS_PLATFORM_WINDOWS )
     ReleaseMutex( m_handler );
@@ -102,7 +102,7 @@ void Mutex::unlock( void )
  *  @return true, if it is possible to lock
  */
 /*==========================================================================*/
-bool Mutex::tryLock( void )
+bool Mutex::tryLock()
 {
 #if defined ( KVS_PLATFORM_WINDOWS )
     if ( WaitForSingleObject( m_handler, 0 ) != WAIT_OBJECT_0 )
@@ -125,7 +125,7 @@ bool Mutex::tryLock( void )
  *  Create the mutex.
  */
 /*==========================================================================*/
-void Mutex::create_mutex( void )
+void Mutex::create_mutex()
 {
 #if defined ( KVS_PLATFORM_WINDOWS )
     m_handler = CreateMutex( NULL, FALSE, NULL );
@@ -139,7 +139,7 @@ void Mutex::create_mutex( void )
  *  Delete the mutex.
  */
 /*==========================================================================*/
-void Mutex::delete_mutex( void )
+void Mutex::delete_mutex()
 {
 #if defined ( KVS_PLATFORM_WINDOWS )
     if ( m_handler ) { CloseHandle( m_handler ); }

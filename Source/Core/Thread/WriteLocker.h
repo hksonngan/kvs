@@ -14,8 +14,6 @@
 #ifndef KVS__WRITE_LOCKER_H_INCLUDE
 #define KVS__WRITE_LOCKER_H_INCLUDE
 
-#include <kvs/ClassName>
-
 
 namespace kvs
 {
@@ -29,8 +27,6 @@ class ReadWriteLock;
 /*==========================================================================*/
 class WriteLocker
 {
-    kvsClassName( kvs::WriteLocker );
-
 protected:
 
     kvs::ReadWriteLock* m_rwlock; ///< pointer to read-write lock
@@ -38,16 +34,11 @@ protected:
 public:
 
     WriteLocker( kvs::ReadWriteLock* rwlock );
+    virtual ~WriteLocker();
 
-    virtual ~WriteLocker( void );
-
-public:
-
-    void relock( void );
-
-    void unlock( void );
-
-    kvs::ReadWriteLock* readWriteLock( void );
+    void relock();
+    void unlock();
+    kvs::ReadWriteLock* readWriteLock();
 };
 
 } // end of namespace kvs

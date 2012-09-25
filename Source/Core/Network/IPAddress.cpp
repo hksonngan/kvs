@@ -17,10 +17,10 @@
 namespace kvs
 {
 
-const IPAddress::integer_type IPAddress::Any       = INADDR_ANY;
-const IPAddress::integer_type IPAddress::Loopback  = INADDR_LOOPBACK;
+const IPAddress::integer_type IPAddress::Any = INADDR_ANY;
+const IPAddress::integer_type IPAddress::Loopback = INADDR_LOOPBACK;
 const IPAddress::integer_type IPAddress::Broadcast = INADDR_BROADCAST;
-const IPAddress::integer_type IPAddress::None      = INADDR_NONE;
+const IPAddress::integer_type IPAddress::None = INADDR_NONE;
 
 /*==========================================================================*/
 /**
@@ -204,7 +204,7 @@ std::ostream& operator << ( std::ostream& os, const IPAddress& other )
  *  @return IP address
  */
 /*==========================================================================*/
-const IPAddress::address_type& IPAddress::address( void ) const
+const IPAddress::address_type& IPAddress::address() const
 {
     return( m_address );
 }
@@ -215,7 +215,7 @@ const IPAddress::address_type& IPAddress::address( void ) const
  *  @return IP address
  */
 /*==========================================================================*/
-IPAddress::integer_type IPAddress::addressAsInteger( void ) const
+IPAddress::integer_type IPAddress::addressAsInteger() const
 {
 #if defined( KVS_PLATFORM_WINDOWS )
     return( m_address.S_un.S_addr );
@@ -230,7 +230,7 @@ IPAddress::integer_type IPAddress::addressAsInteger( void ) const
  *  @return IP address
  */
 /*==========================================================================*/
-std::string IPAddress::addressAsString( void ) const
+std::string IPAddress::addressAsString() const
 {
     return( std::string( ::inet_ntoa( m_address ) ) );
 }

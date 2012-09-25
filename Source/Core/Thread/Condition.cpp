@@ -32,7 +32,7 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-Condition::Condition( void )
+Condition::Condition()
     : m_nsleepers( 0 )
 {
     this->create_condition_variable();
@@ -43,7 +43,7 @@ Condition::Condition( void )
  *  Destructor.
  */
 /*==========================================================================*/
-Condition::~Condition( void )
+Condition::~Condition()
 {
     this->delete_condition_variable();
 }
@@ -53,7 +53,7 @@ Condition::~Condition( void )
  *  Wake up a thread.
  */
 /*==========================================================================*/
-void Condition::wakeUpOne( void )
+void Condition::wakeUpOne()
 {
     kvs::MutexLocker locker( &m_mutex );
 
@@ -69,7 +69,7 @@ void Condition::wakeUpOne( void )
  *  Wake up all threads.
  */
 /*==========================================================================*/
-void Condition::wakeUpAll( void )
+void Condition::wakeUpAll()
 {
     kvs::MutexLocker locker( &m_mutex );
 
@@ -174,7 +174,7 @@ bool Condition::wait( kvs::Mutex* mutex, int msec )
  *  Create condition variable.
  */
 /*==========================================================================*/
-void Condition::create_condition_variable( void )
+void Condition::create_condition_variable()
 {
 #if defined ( KVS_PLATFORM_WINDOWS )
     m_handler.event[Handler::WakeUpOne] = CreateEvent( NULL, FALSE, FALSE, NULL );
@@ -189,7 +189,7 @@ void Condition::create_condition_variable( void )
  *  Delete condition variable.
  */
 /*==========================================================================*/
-void Condition::delete_condition_variable( void )
+void Condition::delete_condition_variable()
 {
 #if defined ( KVS_PLATFORM_WINDOWS )
     if ( m_handler.event[Handler::WakeUpOne] )

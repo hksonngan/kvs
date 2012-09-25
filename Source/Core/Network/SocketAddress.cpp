@@ -23,7 +23,7 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-SocketAddress::SocketAddress( void ):
+SocketAddress::SocketAddress():
     m_ip( kvs::IPAddress() ),
     m_port( 0 )
 {
@@ -181,7 +181,7 @@ std::ostream& operator << ( std::ostream& os, const SocketAddress& other )
  *  @retval IP address
  */
 /*==========================================================================*/
-const kvs::IPAddress& SocketAddress::ip( void ) const
+const kvs::IPAddress& SocketAddress::ip() const
 {
     return( m_ip );
 }
@@ -192,7 +192,7 @@ const kvs::IPAddress& SocketAddress::ip( void ) const
  *  @return port number
  */
 /*==========================================================================*/
-const int SocketAddress::port( void ) const
+const int SocketAddress::port() const
 {
     return( m_port );
 }
@@ -203,7 +203,7 @@ const int SocketAddress::port( void ) const
  *  @retval socket address
  */
 /*==========================================================================*/
-const SocketAddress::address_type& SocketAddress::address( void ) const
+const SocketAddress::address_type& SocketAddress::address() const
 {
     return( m_address );
 }

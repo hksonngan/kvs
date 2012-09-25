@@ -23,7 +23,7 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-HttpRequestHeader::HttpRequestHeader( void ):
+HttpRequestHeader::HttpRequestHeader():
     m_major_version( 1 ),
     m_minor_version( 0 ),
     m_field_list( 10 )
@@ -55,7 +55,7 @@ HttpRequestHeader::HttpRequestHeader(
  *  @retval method
  */
 /*==========================================================================*/
-const std::string& HttpRequestHeader::method( void ) const
+const std::string& HttpRequestHeader::method() const
 {
     return( m_method );
 }
@@ -66,7 +66,7 @@ const std::string& HttpRequestHeader::method( void ) const
  *  @retval path
  */
 /*==========================================================================*/
-const std::string& HttpRequestHeader::path( void ) const
+const std::string& HttpRequestHeader::path() const
 {
     return( m_path );
 }
@@ -77,7 +77,7 @@ const std::string& HttpRequestHeader::path( void ) const
  *  @return major version
  */
 /*==========================================================================*/
-const int HttpRequestHeader::majorVersion( void ) const
+const int HttpRequestHeader::majorVersion() const
 {
     return( m_major_version );
 }
@@ -88,7 +88,7 @@ const int HttpRequestHeader::majorVersion( void ) const
  *  @return minor version
  */
 /*==========================================================================*/
-const int HttpRequestHeader::minorVersion( void ) const
+const int HttpRequestHeader::minorVersion() const
 {
     return( m_minor_version );
 }
@@ -132,7 +132,7 @@ void HttpRequestHeader::addField( const std::string& key, const std::string& val
  *  @return request message
  */
 /*==========================================================================*/
-std::string HttpRequestHeader::makeMessage( void ) const
+std::string HttpRequestHeader::makeMessage() const
 {
     std::string request_line;
     std::string major_version = kvs::String::ToString( m_major_version );

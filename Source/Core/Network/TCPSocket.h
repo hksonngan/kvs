@@ -19,7 +19,6 @@
 #include "SocketAddress.h"
 #include "SocketTimer.h"
 #include "MessageBlock.h"
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -32,46 +31,28 @@ namespace kvs
 /*==========================================================================*/
 class TCPSocket : public kvs::Socket
 {
-    kvsClassName( kvs::TCPSocket );
-
 protected:
 
     bool m_is_connected; ///< check flag for connection
 
 public:
 
-    TCPSocket( void );
-
+    TCPSocket();
     TCPSocket( const kvs::IPAddress& ip, const int port, const kvs::SocketTimer* timeout = 0 );
-
     TCPSocket( const kvs::SocketAddress& socket_address, const kvs::SocketTimer* timeout = 0 );
-
     TCPSocket( const kvs::Socket::id_type& id, const kvs::SocketAddress& address );
+    virtual ~TCPSocket();
 
-    virtual ~TCPSocket( void );
-
-public:
-
-    bool isConnected( void );
-
-    void open( void );
-
+    bool isConnected();
+    void open();
     bool connect( const kvs::IPAddress& ip, const int port, const kvs::SocketTimer* timeout = 0 );
-
     bool connect( const kvs::SocketAddress& socket_address, const kvs::SocketTimer* timeout = 0 );
-
     bool complete( const kvs::SocketTimer* timer = 0 );
-
     int send( const void* message, const int message_size );
-
     int send( const kvs::MessageBlock& message );
-
     int receive( void* message, const int message_size );
-
     int receive( kvs::MessageBlock* message );
-
     int receiveOnce( void* message, const int message_size );
-
     int receiveLine( std::string& line );
 };
 
