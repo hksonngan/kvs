@@ -77,7 +77,7 @@ const std::string& HttpRequestHeader::path() const
  *  @return major version
  */
 /*==========================================================================*/
-const int HttpRequestHeader::majorVersion() const
+int HttpRequestHeader::majorVersion() const
 {
     return( m_major_version );
 }
@@ -88,7 +88,7 @@ const int HttpRequestHeader::majorVersion() const
  *  @return minor version
  */
 /*==========================================================================*/
-const int HttpRequestHeader::minorVersion() const
+int HttpRequestHeader::minorVersion() const
 {
     return( m_minor_version );
 }

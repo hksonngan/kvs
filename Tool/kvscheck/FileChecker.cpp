@@ -17,7 +17,7 @@
 #include <kvs/Bmp>
 #include <kvs/Csv>
 #include <kvs/Dicom>
-#include <kvs/GIS>
+#include <kvs/Gis>
 #include <kvs/GrADS>
 #include <kvs/KVSMLObjectImage>
 #include <kvs/KVSMLObjectPoint>

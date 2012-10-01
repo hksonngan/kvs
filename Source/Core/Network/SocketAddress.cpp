@@ -192,7 +192,7 @@ const kvs::IPAddress& SocketAddress::ip() const
  *  @return port number
  */
 /*==========================================================================*/
-const int SocketAddress::port() const
+int SocketAddress::port() const
 {
     return( m_port );
 }
