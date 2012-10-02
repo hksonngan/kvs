@@ -66,7 +66,7 @@ class OrientationAxis : public kvs::glut::OrientationAxis
 {
 public:
 
-    OrientationAxis( kvs::ScreenBase* screen );
+    OrientationAxis( kvs::glut::Screen* screen );
 
     void screenResized( void );
 };

@@ -15,6 +15,11 @@
 #include "Slider.h"
 #include <kvs/OpenGL>
 #include <kvs/String>
+#include <kvs/IgnoreUnusedVariable>
+#include <kvs/ScreenBase>
+#include <kvs/EventBase>
+#include <kvs/MouseEvent>
+
 
 // Default parameters.
 namespace { namespace Default
@@ -83,7 +88,7 @@ const std::string& Slider::caption( void ) const
  *  @return specified value
  */
 /*===========================================================================*/
-const float Slider::value( void ) const
+float Slider::value( void ) const
 {
     return( m_value );
 }
@@ -94,7 +99,7 @@ const float Slider::value( void ) const
  *  @return minimum value
  */
 /*===========================================================================*/
-const float Slider::minValue( void ) const
+float Slider::minValue( void ) const
 {
     return( m_min_value );
 }
@@ -105,7 +110,7 @@ const float Slider::minValue( void ) const
  *  @return maximum value
  */
 /*===========================================================================*/
-const float Slider::maxValue( void ) const
+float Slider::maxValue( void ) const
 {
     return( m_max_value );
 }
@@ -447,7 +452,7 @@ void Slider::mousePressEvent( kvs::MouseEvent* event )
 
     if ( this->is_in_cursor( event->x(), event->y() ) )
     {
-        BaseClass::screen()->disableAllMove();
+        BaseClass::screen()->disable();
         BaseClass::activate();
         this->sliderPressed();
         BaseClass::swap_color( m_slider_color, m_clicked_slider_color );
@@ -468,7 +473,7 @@ void Slider::mousePressEvent( kvs::MouseEvent* event )
              * not the sliderPressed function but the sliderMoved function is
              * called here.
              */
-            BaseClass::screen()->disableAllMove();
+            BaseClass::screen()->disable();
             BaseClass::activate();
             this->sliderMoved();
             BaseClass::screen()->redraw();

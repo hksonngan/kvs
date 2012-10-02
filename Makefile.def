@@ -209,9 +209,9 @@ endif
 #  OPENCV_INCLUDE_PATH, OPENCV_LIBRARY_PATH, OPENCV_LINK_LIBRARY
 #=============================================================================
 ifeq "$(KVS_SUPPORT_OPENCV)" "1"
-OPENCV_INCLUDE_PATH := `pkg-config --cflags-only-I opencv`
+OPENCV_INCLUDE_PATH := `pkg-config --cflags opencv`
 OPENCV_LIBRARY_PATH := `pkg-config --libs-only-L opencv`
-OPENCV_LINK_LIBRARY := `pkg-config --libs-only-l opencv`
+OPENCV_LINK_LIBRARY := `pkg-config --libs opencv`
 ifdef KVS_OPENCV_DIR
 OPENCV_INCLUDE_PATH := -I$(KVS_OPENCV_DIR)/include
 OPENCV_LIBRARY_PATH := -L$(KVS_OPENCV_DIR)/lib

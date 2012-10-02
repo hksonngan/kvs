@@ -162,8 +162,10 @@ public:
 
     void update( void )
     {
+        kvs::glut::Screen* glut_screen = static_cast<kvs::glut::Screen*>( screen() );
+
         const kvs::RGBColor white( 255, 255, 255 );
-        screen()->background()->setColor( white );
+        glut_screen->background()->setColor( white );
 
         int vp[4]; glGetIntegerv( GL_VIEWPORT, (GLint*)vp );
         const int left = vp[0];

@@ -140,7 +140,7 @@ template <typename Mapper>
 const void SetupMapper(
     const kvsview::ParticleVolumeRenderer::Argument& arg,
     const kvs::TransferFunction& tfunc,
-    /* const */ kvs::ScreenBase& screen,
+    /* const */ kvs::glut::Screen& screen,
     Mapper* mapper )
 {
     const size_t subpixel_level = arg.subpixelLevel();
@@ -176,13 +176,15 @@ public:
 
     void apply( void )
     {
+        kvs::glut::Screen* glut_screen = static_cast<kvs::glut::Screen*>( screen() );
+
         // Erase the object and renderer.
-        const kvs::ObjectBase* obj = screen()->objectManager()->object( ::ObjectName );
+        const kvs::ObjectBase* obj = glut_screen->objectManager()->object( ::ObjectName );
         const kvs::Xform xform = obj->xform();
-        const int obj_id = screen()->objectManager()->objectID( obj );
-        screen()->IDManager()->eraseByObjectID( obj_id );
-        screen()->objectManager()->erase( ::ObjectName );
-        screen()->rendererManager()->erase( ::RendererName );
+        const int obj_id = glut_screen->objectManager()->objectID( obj );
+        glut_screen->IDManager()->eraseByObjectID( obj_id );
+        glut_screen->objectManager()->erase( ::ObjectName );
+        glut_screen->rendererManager()->erase( ::RendererName );
 
         // Current transfer function.
         kvs::TransferFunction tfunc( transferFunction() );
@@ -194,7 +196,7 @@ public:
         case 1: // Metropolis sampling
         {
             kvs::CellByCellMetropolisSampling* mapper = new kvs::CellByCellMetropolisSampling();
-            kvsview::ParticleVolumeRenderer::SetupMapper( *m_arg, tfunc, *screen(), mapper );
+            kvsview::ParticleVolumeRenderer::SetupMapper( *m_arg, tfunc, *glut_screen, mapper );
             object = mapper->exec( m_volume );
             object->setName( ::ObjectName );
             object->setXform( xform );
@@ -203,7 +205,7 @@ public:
         case 2: // Rejection sampling
         {
             kvs::CellByCellRejectionSampling* mapper = new kvs::CellByCellRejectionSampling();
-            kvsview::ParticleVolumeRenderer::SetupMapper( *m_arg, tfunc, *screen(), mapper );
+            kvsview::ParticleVolumeRenderer::SetupMapper( *m_arg, tfunc, *glut_screen, mapper );
             object = mapper->exec( m_volume );
             object->setName( ::ObjectName );
             object->setXform( xform );
@@ -212,7 +214,7 @@ public:
         case 3: // Layered sampling
         {
             kvs::CellByCellLayeredSampling* mapper = new kvs::CellByCellLayeredSampling();
-            kvsview::ParticleVolumeRenderer::SetupMapper( *m_arg, tfunc, *screen(), mapper );
+            kvsview::ParticleVolumeRenderer::SetupMapper( *m_arg, tfunc, *glut_screen, mapper );
             object = mapper->exec( m_volume );
             object->setName( ::ObjectName );
             object->setXform( xform );
@@ -221,7 +223,7 @@ public:
         default: // Uniform sampling
         {
             kvs::CellByCellUniformSampling* mapper = new kvs::CellByCellUniformSampling();
-            kvsview::ParticleVolumeRenderer::SetupMapper( *m_arg, tfunc, *screen(), mapper );
+            kvsview::ParticleVolumeRenderer::SetupMapper( *m_arg, tfunc, *glut_screen, mapper );
             object = mapper->exec( m_volume );
             object->setName( ::ObjectName );
             object->setXform( xform );
@@ -241,7 +243,7 @@ public:
             const size_t level = ::GetRevisedSubpixelLevel( subpixel_level, repetition_level );
             renderer->setSubpixelLevel( level );
 
-            screen()->registerObject( object, renderer );
+            glut_screen->registerObject( object, renderer );
         }
 #if defined( KVS_SUPPORT_GLEW )
         else
@@ -257,13 +259,13 @@ public:
 
             if ( !m_arg->noLOD() ) renderer->enableLODControl();
 
-            screen()->registerObject( object, renderer );
+            glut_screen->registerObject( object, renderer );
         }
 #endif
 
         m_legend_bar->setColorMap( transferFunction().colorMap() );
 
-        screen()->redraw();
+        glut_screen->redraw();
     }
 
     void attachVolume( const kvs::VolumeObjectBase* volume )
@@ -290,15 +292,16 @@ public:
 
     void update( kvs::KeyEvent* event )
     {
+        kvs::glut::Screen* glut_screen = static_cast<kvs::glut::Screen*>( screen() );
         switch ( event->key() )
         {
-        case kvs::Key::o: screen()->controlTarget() = kvs::ScreenBase::TargetObject; break;
-        case kvs::Key::l: screen()->controlTarget() = kvs::ScreenBase::TargetLight; break;
-        case kvs::Key::c: screen()->controlTarget() = kvs::ScreenBase::TargetCamera; break;
+        case kvs::Key::o: glut_screen->controlTarget() = kvs::Scene::TargetObject; break;
+        case kvs::Key::l: glut_screen->controlTarget() = kvs::Scene::TargetLight; break;
+        case kvs::Key::c: glut_screen->controlTarget() = kvs::Scene::TargetCamera; break;
         case kvs::Key::t:
         {
             if ( ::Shown ) m_editor->hide();
-            else m_editor->showWindow();
+            else m_editor->show();
 
             ::Shown = !::Shown;
             break;
@@ -327,7 +330,7 @@ public:
     void update( kvs::MouseEvent* event )
     {
         if ( ::Shown ) m_editor->hide();
-        else m_editor->showWindow();
+        else m_editor->show();
 
         ::Shown = !::Shown;
     }

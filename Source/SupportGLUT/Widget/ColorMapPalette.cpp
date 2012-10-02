@@ -269,7 +269,7 @@ void ColorMapPalette::mousePressEvent( kvs::MouseEvent* event )
 
     if ( BaseClass::contains( event->x(), event->y() ) )
     {
-        BaseClass::screen()->disableAllMove();
+        BaseClass::screen()->disable();
         BaseClass::activate();
 
         if ( m_palette.contains( event->x(), event->y(), true ) )

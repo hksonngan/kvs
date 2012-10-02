@@ -8,6 +8,7 @@ Viewer/Histogram
 Viewer/LegendBar
 Viewer/OrientationAxis
 Viewer/Screen
+Viewer/ScreenBase
 Viewer/Text
 Viewer/Timer
 Viewer/TransferFunctionEditor

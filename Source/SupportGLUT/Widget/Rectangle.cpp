@@ -84,7 +84,7 @@ Rectangle::~Rectangle( void )
  *  @return x value of the rectangle position
  */
 /*===========================================================================*/
-const int Rectangle::x( void ) const
+int Rectangle::x( void ) const
 {
     return( m_x );
 }
@@ -95,7 +95,7 @@ const int Rectangle::x( void ) const
  *  @return y value of the rectangle position
  */
 /*===========================================================================*/
-const int Rectangle::y( void ) const
+int Rectangle::y( void ) const
 {
     return( m_y );
 }
@@ -106,7 +106,7 @@ const int Rectangle::y( void ) const
  *  @return rectangle width
  */
 /*===========================================================================*/
-const int Rectangle::width( void ) const
+int Rectangle::width( void ) const
 {
     return( m_width );
 }
@@ -117,7 +117,7 @@ const int Rectangle::width( void ) const
  *  @return rectangle height
  */
 /*===========================================================================*/
-const int Rectangle::height( void ) const
+int Rectangle::height( void ) const
 {
     return( m_height );
 }
@@ -128,7 +128,7 @@ const int Rectangle::height( void ) const
  *  @return x value of the upper-left
  */
 /*===========================================================================*/
-const int Rectangle::x0( void ) const
+int Rectangle::x0( void ) const
 {
     return( m_x );
 }
@@ -139,7 +139,7 @@ const int Rectangle::x0( void ) const
  *  @return y value of the upper-left
  */
 /*===========================================================================*/
-const int Rectangle::y0( void ) const
+int Rectangle::y0( void ) const
 {
     return( m_y );
 }
@@ -150,7 +150,7 @@ const int Rectangle::y0( void ) const
  *  @return x value of the lower-right
  */
 /*===========================================================================*/
-const int Rectangle::x1( void ) const
+int Rectangle::x1( void ) const
 {
     return( m_x + m_width );
 }
@@ -161,7 +161,7 @@ const int Rectangle::x1( void ) const
  *  @return y value of the lower-right
  */
 /*===========================================================================*/
-const int Rectangle::y1( void ) const
+int Rectangle::y1( void ) const
 {
     return( m_y + m_height );
 }
@@ -172,7 +172,7 @@ const int Rectangle::y1( void ) const
  *  @return true, if the rectangle is active
  */
 /*===========================================================================*/
-const bool Rectangle::isActive( void ) const
+bool Rectangle::isActive( void ) const
 {
     return( m_is_active );
 }
@@ -291,7 +291,7 @@ void Rectangle::deactivate( void )
  *  @return true if the given point is inside the width
  */
 /*===========================================================================*/
-const bool Rectangle::contains(
+bool Rectangle::contains(
     const int x,
     const int y,
     const bool proper )

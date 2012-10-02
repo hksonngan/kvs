@@ -29,9 +29,7 @@ class KVSKey
 public:
 
     static int ASCIICode( const unsigned char key );
-
     static int SpecialCode( const int key );
-
     static int Modifier( const int key );
 };
 

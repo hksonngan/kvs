@@ -17,6 +17,8 @@
 #include <cstdio>
 #include <cstdarg>
 #include <kvs/IgnoreUnusedVariable>
+#include <kvs/EventBase>
+
 
 // Default parameters.
 namespace { namespace Default

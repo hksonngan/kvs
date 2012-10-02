@@ -305,6 +305,7 @@ $(OUTDIR)/./Visualization/Viewer/Material.o \
 $(OUTDIR)/./Visualization/Viewer/Mouse.o \
 $(OUTDIR)/./Visualization/Viewer/ObjectManager.o \
 $(OUTDIR)/./Visualization/Viewer/RendererManager.o \
+$(OUTDIR)/./Visualization/Viewer/Scene.o \
 $(OUTDIR)/./Visualization/Viewer/ScreenBase.o \
 $(OUTDIR)/./Visualization/Viewer/Texture1D.o \
 $(OUTDIR)/./Visualization/Viewer/Texture2D.o \

@@ -15,6 +15,7 @@
 /*****************************************************************************/
 #include <kvs/glut/Application>
 #include <kvs/glut/Screen>
+#include <kvs/glut/Timer>
 #include <kvs/HydrogenVolumeData>
 #include <kvs/StructuredVolumeObject>
 #include <kvs/PolygonObject>
@@ -52,12 +53,14 @@ class TimerEvent : public kvs::TimerEventListener
     void update( kvs::TimeEvent* event )
     {
         static float deg = 0.0f;
-        const kvs::Vector3f center( 0, 0, 0 );
+        //const kvs::Vector3f center( 0, 0, 0 );
         kvs::Matrix33f rotation = kvs::XRotationMatrix33<float>( deg );
         rotation *= kvs::YRotationMatrix33<float>( deg );
         rotation *= kvs::ZRotationMatrix33<float>( deg );
+
+        kvs::ObjectManager* object_manager = static_cast<kvs::glut::Screen*>(screen())->objectManager();
         //screen()->objectManager()->object()->rotate( rotation, center );
-        screen()->objectManager()->object()->multiplyXform( kvs::Xform::Rotation( rotation ) );
+        object_manager->object()->multiplyXform( kvs::Xform::Rotation( rotation ) );
         screen()->redraw();
 
         deg += 0.1f;

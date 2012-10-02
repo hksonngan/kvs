@@ -16,15 +16,15 @@
 #define KVS__GLUT__RADIO_BUTTON_GROUP_H_INCLUDE
 
 #include <list>
-#include <kvs/ClassName>
 #include <kvs/glut/WidgetBase>
-#include <kvs/glut/Screen>
 #include <kvs/IgnoreUnusedVariable>
 #include "RadioButton.h"
 
 
 namespace kvs
 {
+
+class ScreenBase;
 
 namespace glut
 {
@@ -38,9 +38,6 @@ class RadioButton;
 /*===========================================================================*/
 class RadioButtonGroup : public kvs::glut::WidgetBase
 {
-    // Class name.
-    kvsClassName( kvs::glut::RadioButtonGroup );
-
 public:
 
     typedef kvs::glut::WidgetBase BaseClass;
@@ -56,37 +53,24 @@ public:
 public:
 
     virtual void pressed( kvs::glut::RadioButton* button ) { kvs::IgnoreUnusedVariable( button ); };
-
     virtual void pressed( int id ) { kvs::IgnoreUnusedVariable( id ); };
-
     virtual void released( kvs::glut::RadioButton* button ) { kvs::IgnoreUnusedVariable( button ); };
-
     virtual void released( int id ) { kvs::IgnoreUnusedVariable( id ); };
-
     virtual void screenUpdated( void ) {};
-
     virtual void screenResized( void ) {};
-
-public:
 
     const std::list<kvs::glut::RadioButton*>& radioButtons( void ) const;
 
     void add( kvs::glut::RadioButton* button );
-
     void remove( kvs::glut::RadioButton* button );
-
     void show( void );
-
     void hide( void );
 
 private:
 
     void paintEvent( void );
-
     void resizeEvent( int width, int height );
-
     void mousePressEvent( kvs::MouseEvent* event );
-
     void mouseReleaseEvent( kvs::MouseEvent* event );
 };
 

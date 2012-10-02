@@ -305,6 +305,7 @@ $(OUTDIR)\.\Visualization\Viewer\Material.obj \
 $(OUTDIR)\.\Visualization\Viewer\Mouse.obj \
 $(OUTDIR)\.\Visualization\Viewer\ObjectManager.obj \
 $(OUTDIR)\.\Visualization\Viewer\RendererManager.obj \
+$(OUTDIR)\.\Visualization\Viewer\Scene.obj \
 $(OUTDIR)\.\Visualization\Viewer\ScreenBase.obj \
 $(OUTDIR)\.\Visualization\Viewer\Texture1D.obj \
 $(OUTDIR)\.\Visualization\Viewer\Texture2D.obj \

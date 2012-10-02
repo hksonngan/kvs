@@ -185,7 +185,7 @@ void Timer::setEventHandler( kvs::EventHandler* handler )
  *  @return true, if the timer is stopped
  */
 /*===========================================================================*/
-const bool Timer::isStopped( void ) const
+bool Timer::isStopped( void ) const
 {
     return( m_is_stopped );
 }
@@ -196,7 +196,7 @@ const bool Timer::isStopped( void ) const
  *  @return interval time
  */
 /*===========================================================================*/
-const int Timer::interval( void ) const
+int Timer::interval( void ) const
 {
     return( m_interval );
 }

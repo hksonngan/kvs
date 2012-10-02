@@ -14,204 +14,110 @@
 #ifndef KVS__GLUT__SCREEN_H_INCLUDE
 #define KVS__GLUT__SCREEN_H_INCLUDE
 
+#include "ScreenBase.h"
+#include <kvs/Scene>
+#include <kvs/Mouse>
 #include <list>
-#include <kvs/ClassName>
-#include <kvs/ScreenBase>
-#include <kvs/InitializeEventListener>
-#include <kvs/PaintEventListener>
-#include <kvs/ResizeEventListener>
-#include <kvs/MousePressEventListener>
-#include <kvs/MouseMoveEventListener>
-#include <kvs/MouseReleaseEventListener>
-#include <kvs/MouseDoubleClickEventListener>
-#include <kvs/WheelEventListener>
-#include <kvs/KeyPressEventListener>
-#include <kvs/TimerEventListener>
-#include <kvs/EventHandler>
-#include <kvs/MouseEvent>
-#include <kvs/KeyEvent>
-#include <kvs/glut/Timer>
-#if KVS_ENABLE_DEPRECATED
-#include <kvs/glut/Application>
-#endif
 
 
 namespace kvs
 {
 
+class Scene;
+class ObjectBase;
+class RendererBase;
+class VisualizationPipeline;
+class EventHandler;
+class TimerEventListener;
+class PaintEventListener;
+class ResizeEventListener;
+class MousePressEventListener;
+class MouseMoveEventListener;
+class MouseReleaseEventListener;
+class MouseDoubleClickEventListener;
+class WheelEventListener;
+class KeyPressEventListener;
+
 namespace glut
 {
 
 class Application;
+class Timer;
 
-/*===========================================================================*/
-/**
- *  @brief  GLUT screen class.
- */
-/*===========================================================================*/
-//class Screen : public kvs::glut::Window, public kvs::ScreenBase
-class Screen : public kvs::ScreenBase
+class Screen : public kvs::glut::ScreenBase
 {
-    typedef kvs::ScreenBase BaseClass;
+public:
 
-    typedef void (Screen::*PaintEventFunction)( void );
-    typedef void (Screen::*ResizeEventFunction)( int, int );
-    typedef void (Screen::*MousePressEventFunction)( kvs::MouseEvent* );
-    typedef void (Screen::*MouseMoveEventFunction)( kvs::MouseEvent* );
-    typedef void (Screen::*MouseReleaseEventFunction)( kvs::MouseEvent* );
-    typedef void (Screen::*WheelEventFunction)( kvs::WheelEvent* );
-    typedef void (Screen::*KeyPressEventFunction)( kvs::KeyEvent* );
+    typedef kvs::glut::ScreenBase BaseClass;
+    typedef kvs::Scene::ControlTarget ControlTarget;
 
-    kvsClassName( kvs::glut::Screen );
+private:
 
-protected:
-
-    PaintEventFunction        m_paint_event_func;
-    ResizeEventFunction       m_resize_event_func;
-    MousePressEventFunction   m_mouse_press_event_func;
-    MouseMoveEventFunction    m_mouse_move_event_func;
-    MouseReleaseEventFunction m_mouse_release_event_func;
-    WheelEventFunction        m_wheel_event_func;
-    KeyPressEventFunction     m_key_press_event_func;
-
-    kvs::glut::Timer*            m_idle_mouse_timer;
-    kvs::TimerEventListener*     m_idle_mouse_event_listener;
-    std::list<kvs::glut::Timer*> m_timer_event_handler;
-    kvs::EventHandler*           m_initialize_event_handler;
+    bool m_enable_default_paint_event;
+    bool m_enable_default_resize_event;
+    bool m_enable_default_mouse_press_event;
+    bool m_enable_default_mouse_move_event;
+    bool m_enable_default_mouse_release_event;
+    bool m_enable_default_wheel_event;
+    bool m_enable_default_key_press_event;
+    kvs::Scene* m_scene; ///< default scene
+    kvs::glut::Timer* m_idle_mouse_timer; ///< timer for idle mouse event
+    kvs::TimerEventListener* m_idle_mouse_event_listener; ///< idle mouse event listener
 
 public:
 
     Screen( kvs::glut::Application* application = 0 );
+    virtual ~Screen();
 
-    virtual ~Screen( void );
-
-public:
+    kvs::Camera* camera();
+    kvs::Light* light();
+    kvs::Mouse* mouse();
+    kvs::Background* background();
+    kvs::ObjectManager* objectManager();
+    kvs::RendererManager* rendererManager();
+    kvs::IDManager* IDManager();
+    ControlTarget& controlTarget();
 
     void setPosition( const int x, const int y );
-
     void setSize( const int width, const int height );
-
     void setGeometry( const int x, const int y, const int width, const int height );
 
-public:
-
-    virtual void createWindow( void );
-
-    virtual void showFullScreen( void );
-
-    virtual void showNormal( void );
-
-    virtual void popUp( void );
-
-    virtual void pushDown( void );
-
-    virtual void hide( void );
-
-    virtual void showWindow( void );
-
-    virtual void redraw( void );
-
-    virtual void resize( int width, int height );
-
-public:
-
-    virtual void initializeEvent( void );
-
-    virtual void paintEvent( void );
-
-    virtual void resizeEvent( int width, int height );
-
-    virtual void mousePressEvent( kvs::MouseEvent* event );
-
-    virtual void mouseMoveEvent( kvs::MouseEvent* event );
-
-    virtual void mouseReleaseEvent( kvs::MouseEvent* event );
-
-    virtual void mouseDoubleClickEvent( kvs::MouseEvent* event );
-
-    virtual void wheelEvent( kvs::WheelEvent* event );
-
-    virtual void keyPressEvent( kvs::KeyEvent* event );
-
-public:
-
     void setPaintEvent( kvs::PaintEventListener* event );
-
     void setResizeEvent( kvs::ResizeEventListener* event );
-
     void setMousePressEvent( kvs::MousePressEventListener* event );
-
     void setMouseMoveEvent( kvs::MouseMoveEventListener* event );
-
     void setMouseReleaseEvent( kvs::MouseReleaseEventListener* event );
-
     void setMouseDoubleClickEvent( kvs::MouseDoubleClickEventListener* event );
-
     void setWheelEvent( kvs::WheelEventListener* event );
-
     void setKeyPressEvent( kvs::KeyPressEventListener* event );
 
-public:
+    const std::pair<int,int> registerObject( kvs::ObjectBase* object, kvs::RendererBase* renderer = 0 );
+    const std::pair<int,int> registerObject( kvs::VisualizationPipeline* pipeline );
 
-    void addInitializeEvent( kvs::InitializeEventListener* event );
+    virtual void enable();
+    virtual void disable();
+    virtual void reset();
 
-    void addPaintEvent( kvs::PaintEventListener* event );
-
-    void addResizeEvent( kvs::ResizeEventListener* event );
-
-    void addMousePressEvent( kvs::MousePressEventListener* event );
-
-    void addMouseMoveEvent( kvs::MouseMoveEventListener* event );
-
-    void addMouseReleaseEvent( kvs::MouseReleaseEventListener* event );
-
-    void addMouseDoubleClickEvent( kvs::MouseDoubleClickEventListener* event );
-
-    void addWheelEvent( kvs::WheelEventListener* event );
-
-    void addKeyPressEvent( kvs::KeyPressEventListener* event );
-
-    void addTimerEvent( kvs::TimerEventListener* event, kvs::glut::Timer* timer );
-
-public:
-
-    int show( void );
+    virtual void initializeEvent();
+    virtual void paintEvent();
+    virtual void resizeEvent( int width, int height );
+    virtual void mousePressEvent( kvs::MouseEvent* event );
+    virtual void mouseMoveEvent( kvs::MouseEvent* event );
+    virtual void mouseReleaseEvent( kvs::MouseEvent* event );
+    virtual void mouseDoubleClickEvent( kvs::MouseEvent* event );
+    virtual void wheelEvent( kvs::WheelEvent* event );
+    virtual void keyPressEvent( kvs::KeyEvent* event );
+    virtual void idleMouseEvent();
 
 protected:
 
-    void default_paint_event( void );
-
-    void default_resize_event( int width, int height );
-
-    void default_mouse_press_event( kvs::MouseEvent* event );
-
-    void default_mouse_move_event( kvs::MouseEvent* event );
-
-    void default_mouse_release_event( kvs::MouseEvent* event );
-
-    void default_wheel_event( kvs::WheelEvent* event );
-
-    void default_key_press_event( kvs::KeyEvent* event );
-
-public:
-
-    void idleMouseEvent( void );
-
-private:
-
-    // Callback functions for GLUT.
-
-    friend void DisplayFunction( void );
-
-    friend void ResizeFunction( int width, int height );
-
-    friend void MouseFunction( int button, int state, int x, int y );
-
-    friend void MouseMoveFunction( int x, int y );
-
-    friend void KeyPressFunction( unsigned char key, int x, int y );
-
-    friend void SpecialKeyPressFunction( int key, int x, int y );
+    virtual void defaultPaintEvent();
+    virtual void defaultResizeEvent( int width, int height );
+    virtual void defaultMousePressEvent( kvs::MouseEvent* event );
+    virtual void defaultMouseMoveEvent( kvs::MouseEvent* event );
+    virtual void defaultMouseReleaseEvent( kvs::MouseEvent* event );
+    virtual void defaultWheelEvent( kvs::WheelEvent* event );
+    virtual void defaultKeyPressEvent( kvs::KeyEvent* event );
 };
 
 } // end of namespace glut

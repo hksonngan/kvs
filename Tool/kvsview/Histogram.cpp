@@ -21,7 +21,13 @@
 #include <kvs/FrequencyTable>
 #include <kvs/MouseButton>
 #include <kvs/Key>
+#include <kvs/MouseEvent>
+#include <kvs/KeyEvent>
 #include <kvs/InitializeEventListener>
+#include <kvs/PaintEventListener>
+#include <kvs/MousePressEventListener>
+#include <kvs/MouseMoveEventListener>
+#include <kvs/KeyPressEventListener>
 #include <kvs/Background>
 #include <kvs/glut/Application>
 #include <kvs/glut/Screen>
@@ -184,7 +190,8 @@ public:
 
     void update( void )
     {
-        screen()->background()->setColor( ::DefaultBackgroundColor );
+        kvs::glut::Screen* glut_screen = static_cast<kvs::glut::Screen*>( screen() );
+        glut_screen->background()->setColor( ::DefaultBackgroundColor );
 
         GLint vp[4]; glGetIntegerv( GL_VIEWPORT, vp );
         const GLint left = vp[0];

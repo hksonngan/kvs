@@ -12,20 +12,16 @@
  */
 /****************************************************************************/
 #include "ScreenBase.h"
-#include <kvs/DebugNew>
 #include <kvs/EventHandler>
-#include <kvs/Camera>
-#include <kvs/Light>
-#include <kvs/Mouse>
-#include <kvs/Background>
-#include <kvs/ObjectManager>
-#include <kvs/RendererManager>
-#include <kvs/IDManager>
-#include <kvs/MouseEvent>
-#include <kvs/KeyEvent>
-#include <kvs/WheelEvent>
-#include <kvs/VisualizationPipeline>
-#include <kvs/OpenGL>
+#include <kvs/InitializeEventListener>
+#include <kvs/PaintEventListener>
+#include <kvs/ResizeEventListener>
+#include <kvs/MousePressEventListener>
+#include <kvs/MouseMoveEventListener>
+#include <kvs/MouseReleaseEventListener>
+#include <kvs/MouseDoubleClickEventListener>
+#include <kvs/WheelEventListener>
+#include <kvs/KeyPressEventListener>
 
 
 namespace kvs
@@ -36,19 +32,15 @@ namespace kvs
  *  @brief  Constructs a new ScreenBase class.
  */
 /*===========================================================================*/
-ScreenBase::ScreenBase( void ):
-    m_title("<unknown>"),
+ScreenBase::ScreenBase():
     m_x( 0 ),
     m_y( 0 ),
     m_width( 512 ),
     m_height( 512 ),
-    m_id( 0 ),
-    m_is_fullscreen( false ),
-    m_target( ScreenBase::TargetObject ),
-    m_enable_move_all( true ),
-    m_enable_collision_detection( false )
+    m_title("")
 {
-    this->create();
+    m_initialize_event_handler = new kvs::EventHandler();
+    m_event_handler = new kvs::EventHandler();
 }
 
 /*===========================================================================*/
@@ -56,268 +48,10 @@ ScreenBase::ScreenBase( void ):
  *  @brief  Destructs the ScreenBase class.
  */
 /*===========================================================================*/
-ScreenBase::~ScreenBase( void )
+ScreenBase::~ScreenBase()
 {
-    this->clear();
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Registers an object with a renderer.
- *  @param  object [in] pointer to the object
- *  @param  renderer [in] pointer to the renderer
- *  @return Pair of IDs (object ID and renderer ID)
- */
-/*===========================================================================*/
-const std::pair<int,int> ScreenBase::registerObject( kvs::ObjectBase* object, kvs::RendererBase* renderer )
-{
-    /* If the given pointer to the renderer is null, a renderer for the given
-     * object is automatically created by using visualization pipeline class.
-     */
-    if ( !renderer )
-    {
-        kvs::VisualizationPipeline pipeline( object );
-        if ( !pipeline.exec() )
-        {
-            kvsMessageError("Cannot create a renderer for the given object.");
-            return( std::pair<int,int>( -1, -1 ) );
-        }
-
-        renderer = const_cast<kvs::RendererBase*>( pipeline.renderer() );
-    }
-
-    if ( !object->hasMinMaxObjectCoords() )
-    {
-        object->updateMinMaxCoords();
-    }
-
-    /* If the object has not been registered in the object managet,
-     * the object is registered and then its ID is returned.
-     */
-    int object_id = m_object_manager->objectID( object );
-    if ( object_id == -1 ) object_id = m_object_manager->insert( object );
-
-    /* If the renderer has not been registered in the renderer managet,
-     * the renderer is registered and then its ID is returned.
-     */
-//    int renderer_id = m_renderer_manager->rendererID( renderer );
-//    if ( renderer_id == -1 ) renderer_id = m_renderer_manager->insert( renderer );
-    int renderer_id = -1;
-    for ( int i = 0; i < m_renderer_manager->nrenderers(); i++ )
-    {
-        if ( m_renderer_manager->renderer(i) == renderer ) renderer_id = i;
-    }
-    if ( renderer_id == -1 ) renderer_id = m_renderer_manager->insert( renderer );
-
-    // Insert the IDs into the ID manager.
-    m_id_manager->insert( object_id, renderer_id );
-
-    return( std::pair<int,int>( object_id, renderer_id ) );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Registers an object that is processed through the visualization pipeline.
- *  @param  pipeline [in] pointer to the visualization pipeline
- *  @return Pair of IDs (object ID and renderer ID)
- */
-/*===========================================================================*/
-const std::pair<int,int> ScreenBase::registerObject( kvs::VisualizationPipeline* pipeline )
-{
-    /* WARNING: It is necessary to increment the reference counter of the
-     * pipeline.object() and the pipeline.renderer().
-     */
-    kvs::ObjectBase* object = const_cast<kvs::ObjectBase*>( pipeline->object() );
-    kvs::RendererBase* renderer = const_cast<kvs::RendererBase*>( pipeline->renderer() );
-
-    const int object_id = m_object_manager->insert( object );
-    const int renderer_id = m_renderer_manager->insert( renderer );
-    m_id_manager->insert( object_id, renderer_id );
-
-    return( std::pair<int,int>( object_id, renderer_id ) );
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Disable move-all mode.
- */
-/*==========================================================================*/
-void ScreenBase::disableAllMove( void )
-{
-    m_enable_move_all = false;
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Enable move-all mode.
- */
-/*==========================================================================*/
-void ScreenBase::enableAllMove( void )
-{
-    m_enable_move_all = true;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Disable collision detection mode.
- */
-/*===========================================================================*/
-void ScreenBase::disableCollisionDetection( void )
-{
-    m_enable_collision_detection = false;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Enable collision detection mode.
- */
-/*===========================================================================*/
-void ScreenBase::enableCollisionDetection( void )
-{
-    m_enable_move_all = false;
-    m_enable_collision_detection = true;
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Initalizes the screen.
- */
-/*==========================================================================*/
-void ScreenBase::initializeFunction( void )
-{
-    // Set the lighting parameters.
-    m_light->on();
-
-    // Attach the Camera to the Mouse
-    m_mouse->attachCamera( m_camera );
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Core paint event function.
- */
-/*==========================================================================*/
-void ScreenBase::paintFunction( void )
-{
-    // Update the camera and light.
-    m_camera->update();
-    m_light->update( m_camera );
-
-    // Set the background color or image.
-    m_background->apply();
-
-    // Rendering the resistered object by using the corresponding renderer.
-    if ( m_object_manager->hasObject() )
-    {
-        const int size = m_id_manager->size();
-        for ( int index = 0; index < size; index++ )
-        {
-            kvs::IDManager::IDPair id_pair = (*m_id_manager)[index];
-            kvs::ObjectBase* object = m_object_manager->object( id_pair.first );
-            kvs::RendererBase* renderer = m_renderer_manager->renderer( id_pair.second );
-
-            if ( object->isShown() )
-            {
-                glPushMatrix();
-                object->transform( m_object_manager->objectCenter(), m_object_manager->normalize() );
-                renderer->exec( object, m_camera, m_light );
-                glPopMatrix();
-            }
-        }
-    }
-    else
-    {
-        float array[16];
-        m_object_manager->xform().toArray( array );
-        glMultMatrixf( array );
-    }
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Core resize event function.
- *  @param  width [in] screen width
- *  @param  height [in] screen height
- */
-/*==========================================================================*/
-void ScreenBase::resizeFunction( int width, int height )
-{
-    // Update the viewport for OpenGL.
-    glViewport( 0 , 0 , width , height );
-
-    // Update the window size for camera and mouse.
-    m_camera->setWindowSize( width, height );
-    m_mouse->setWindowSize( width, height );
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Function which is called when the mouse button is released.
- *  @param  x [in] x coordinate value of the mouse cursor position
- *  @param  y [in] y coordinate value of the mouse cursor position
- */
-/*==========================================================================*/
-void ScreenBase::mouseReleaseFunction( int x, int y )
-{
-    m_enable_move_all = true;
-    m_enable_collision_detection = false;
-    m_mouse->release( x, y );
-
-    if( !( m_mouse->isUseAuto() && m_mouse->isAuto() ) )
-    {
-        m_object_manager->releaseActiveObject();
-    }
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Function which is called when the mouse button is released.
- *  @param  x [in] x coordinate value of the mouse cursor position
- *  @param  y [in] y coordinate value of the mouse cursor position
- *  @param  mode [in] mouse translation mode
- */
-/*==========================================================================*/
-void ScreenBase::mousePressFunction( int x, int y, kvs::Mouse::TransMode mode )
-{
-    if ( m_enable_move_all || m_object_manager->hasActiveObject() )
-    {
-        this->updateControllingObject();
-        m_mouse->setMode( mode );
-        m_mouse->press( x, y );
-    }
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Function which is called when the mouse cursor is moved.
- *  @param  x [in] x coordinate value of the mouse cursor position
- *  @param  y [in] y coordinate value of the mouse cursor position
- */
-/*==========================================================================*/
-void ScreenBase::mouseMoveFunction( int x, int y )
-{
-    if ( m_enable_move_all || m_object_manager->hasActiveObject() )
-    {
-        m_mouse->move( x, y );
-        this->updateXform();
-    }
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Function which is called when the mouse wheel is scrolled.
- *  @param  value [in] incremental value
- */
-/*===========================================================================*/
-void ScreenBase::wheelFunction( int value )
-{
-    if ( m_enable_move_all || m_object_manager->hasActiveObject() )
-    {
-        this->updateControllingObject();
-        m_mouse->setMode( kvs::Mouse::Scaling );
-        m_mouse->press( 0, 0 );
-        m_mouse->move( 0, value );
-    }
+    delete m_initialize_event_handler;
+    delete m_event_handler;
 }
 
 /*===========================================================================*/
@@ -326,7 +60,7 @@ void ScreenBase::wheelFunction( int value )
  *  @return x coordinate value of the window position
  */
 /*===========================================================================*/
-const int ScreenBase::x( void ) const
+int ScreenBase::x( void ) const
 {
     return( m_x );
 }
@@ -337,7 +71,7 @@ const int ScreenBase::x( void ) const
  *  @return y coordinate value of the window position
  */
 /*===========================================================================*/
-const int ScreenBase::y( void ) const
+int ScreenBase::y( void ) const
 {
     return( m_y );
 }
@@ -348,7 +82,7 @@ const int ScreenBase::y( void ) const
  *  @return window width
  */
 /*===========================================================================*/
-const int ScreenBase::width( void ) const
+int ScreenBase::width( void ) const
 {
     return( m_width );
 }
@@ -359,20 +93,9 @@ const int ScreenBase::width( void ) const
  *  @return window height
  */
 /*===========================================================================*/
-const int ScreenBase::height( void ) const
+int ScreenBase::height( void ) const
 {
     return( m_height );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the window ID.
- *  @return window ID
- */
-/*===========================================================================*/
-const int ScreenBase::id( void ) const
-{
-    return( m_id );
 }
 
 /*===========================================================================*/
@@ -398,101 +121,13 @@ const kvs::DisplayFormat& ScreenBase::displayFormat( void ) const
 
 /*===========================================================================*/
 /**
- *  @brief  Checks whether the window is full-screen or not.
- *  @return true, if the window is full-screen
+ *  @brief  Returns the pointer to the initialize event handler.
+ *  @return pointer to the event handler
  */
 /*===========================================================================*/
-const bool ScreenBase::isFullScreen( void ) const
+kvs::EventHandler* ScreenBase::initializeEventHandler()
 {
-    return( m_is_fullscreen );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the pointer to the camera.
- *  @return pointer to the camera
- */
-/*===========================================================================*/
-kvs::Camera* ScreenBase::camera( void )
-{
-    return( m_camera );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the pointer to the light.
- *  @return pointer to the light
- */
-/*===========================================================================*/
-kvs::Light* ScreenBase::light( void )
-{
-    return( m_light );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the pointer to the mouse.
- *  @return pointer to the mouse
- */
-/*===========================================================================*/
-kvs::Mouse* ScreenBase::mouse( void )
-{
-    return( m_mouse );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the pointer to the background class.
- *  @return pointer to the background class
- */
-/*===========================================================================*/
-kvs::Background* ScreenBase::background( void )
-{
-    return( m_background );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the control target.
- *  @return control target
- */
-/*===========================================================================*/
-kvs::ScreenBase::ControlTarget& ScreenBase::controlTarget( void )
-{
-    return( m_target );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the pointer to the object manager.
- *  @return pointer to the object manager
- */
-/*===========================================================================*/
-kvs::ObjectManager* ScreenBase::objectManager( void )
-{
-    return( m_object_manager );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the pointer to the renderer manager.
- *  @return pointer to the renderer manager
- */
-/*===========================================================================*/
-kvs::RendererManager* ScreenBase::rendererManager( void )
-{
-    return( m_renderer_manager );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the pointer to the ID manager.
- *  @return pointer to the ID manager
- */
-/*===========================================================================*/
-kvs::IDManager* ScreenBase::IDManager( void )
-{
-    return( m_id_manager );
+    return( m_initialize_event_handler );
 }
 
 /*===========================================================================*/
@@ -501,20 +136,9 @@ kvs::IDManager* ScreenBase::IDManager( void )
  *  @return pointer to the event handler
  */
 /*===========================================================================*/
-kvs::EventHandler* ScreenBase::eventHandler( void )
+kvs::EventHandler* ScreenBase::eventHandler()
 {
     return( m_event_handler );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a display format.
- *  @param  display_format [in] display format
- */
-/*===========================================================================*/
-void ScreenBase::setDisplayFormat( const kvs::DisplayFormat& display_format )
-{
-    m_display_format = display_format;
 }
 
 /*===========================================================================*/
@@ -571,408 +195,135 @@ void ScreenBase::setTitle( const std::string& title )
 
 /*===========================================================================*/
 /**
- *  @brief  Creates basic screen components.
+ *  @brief  Sets a display format.
+ *  @param  display_format [in] display format
  */
 /*===========================================================================*/
-void ScreenBase::create( void )
+void ScreenBase::setDisplayFormat( const kvs::DisplayFormat& display_format )
 {
-    m_mouse_event = new kvs::MouseEvent();
-    if ( !m_mouse_event )
-    {
-        kvsMessageError("Cannot allocate memory for the mouse event.");
-        return;
-    }
-
-    m_key_event = new kvs::KeyEvent();
-    if ( !m_key_event )
-    {
-        kvsMessageError("Cannot allocate memory for the key event.");
-        return;
-    }
-
-    m_wheel_event = new kvs::WheelEvent();
-    if ( !m_wheel_event )
-    {
-        kvsMessageError("Cannot allocate memory for the wheel event.");
-        return;
-    }
-
-    m_camera = new kvs::Camera();
-    if ( !m_camera )
-    {
-        kvsMessageError("Cannot allocate memory for the camera.");
-        return;
-    }
-
-    m_light = new kvs::Light();
-    if ( !m_light )
-    {
-        kvsMessageError("Cannot allocate memory for the light.");
-        return;
-    }
-
-    m_mouse = new kvs::Mouse();
-    if ( !m_mouse )
-    {
-        kvsMessageError("Cannot allocate memory for the mouse.");
-        return;
-    }
-
-    m_background = new kvs::Background( kvs::RGBColor( 212, 221, 229 ) );
-    if ( !m_background )
-    {
-        kvsMessageError("Cannot allocate memory for the background.");
-        return;
-    }
-
-    m_object_manager = new kvs::ObjectManager();
-    if ( !m_object_manager )
-    {
-        kvsMessageError("Cannot allocate memory for the object manager.");
-        return;
-    }
-
-    m_renderer_manager = new kvs::RendererManager();
-    if( !m_renderer_manager )
-    {
-        kvsMessageError("Cannot allocate memory for the renderer manager.");
-        return;
-    }
-
-    m_id_manager = new kvs::IDManager();
-    if( !m_id_manager )
-    {
-        kvsMessageError("Cannot allocate memory for the ID manager.");
-        return;
-    }
-
-    m_event_handler = new kvs::EventHandler();
-    if( !m_event_handler )
-    {
-        kvsMessageError("Cannot allocate memory for the event handler.");
-        return;
-    }
+    m_display_format = display_format;
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Clears the basic screen components.
+ *  @brief  Adds an intialize event listener.
+ *  @param  event [in] pointer to an initialize event listener
  */
 /*===========================================================================*/
-void ScreenBase::clear( void )
+void ScreenBase::addInitializeEvent( kvs::InitializeEventListener* event )
 {
-    if ( m_mouse_event      ) { delete m_mouse_event;      m_mouse_event      = NULL; }
-    if ( m_key_event        ) { delete m_key_event;        m_key_event        = NULL; }
-    if ( m_wheel_event      ) { delete m_wheel_event;      m_wheel_event      = NULL; }
-    if ( m_camera           ) { delete m_camera;           m_camera           = NULL; }
-    if ( m_light            ) { delete m_light;            m_light            = NULL; }
-    if ( m_mouse            ) { delete m_mouse;            m_mouse            = NULL; }
-    if ( m_background       ) { delete m_background;       m_background       = NULL; }
-    if ( m_object_manager   ) { delete m_object_manager;   m_object_manager   = NULL; }
-    if ( m_renderer_manager ) { delete m_renderer_manager; m_renderer_manager = NULL; }
-    if ( m_id_manager       ) { delete m_id_manager;       m_id_manager       = NULL; }
-    if ( m_event_handler    ) { delete m_event_handler;    m_event_handler    = NULL; }
+    event->setScreen( this );
+    m_initialize_event_handler->attach( event );
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Resets the x-form matrix of the basic screen components.
+ *  @brief  Adds a paint event listener.
+ *  @param  event [in] pointer to a paint event listener
  */
 /*===========================================================================*/
-void ScreenBase::reset( void )
+void ScreenBase::addPaintEvent( kvs::PaintEventListener* event )
 {
-    // Reset viewpoint to the initial position.
-    m_mouse->reset();
-
-    // Reset the xform of the object.
-    if( m_object_manager->hasActiveObject() )
-    {
-        m_object_manager->resetActiveObjectXform();
-    }
-    else
-    {
-        m_object_manager->resetXform();
-    }
-
-    // Reset the xform of the camera.
-    m_camera->resetXform();
-
-    // Reset the xform of the light.
-    m_light->resetXform();
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Test whether the screen is the active move mode.
- *  @param  x [in] x coordinate value of the mouse cursor position
- *  @param  y [in] y coordinate value of the mouse cursor position
- *  @return true, if the screen is the active move mode
- */
-/*==========================================================================*/
-bool ScreenBase::isActiveMove( int x, int y )
-{
-    if( !m_object_manager->hasObject() ) return( true );
-
-    if( m_target == TargetObject )
-    {
-        if( !m_enable_move_all && m_enable_collision_detection )
-        {
-            const float px = static_cast<float>(x);
-            const float py = static_cast<float>(y);
-            const kvs::Vector2f p = kvs::Vector2f( px, py );
-            return( m_object_manager->detectCollision( p, m_camera ) );
-        }
-    }
-
-    return( true );
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Updates the controlling object.
- */
-/*==========================================================================*/
-void ScreenBase::updateControllingObject( void )
-{
-    if( m_target == TargetObject )
-    {
-        if( m_enable_move_all )
-        {
-            m_object_manager->enableAllMove();
-            m_object_manager->releaseActiveObject();
-        }
-        else
-        {
-            m_object_manager->disableAllMove();
-        }
-    }
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Updates the center of rotation.
- */
-/*==========================================================================*/
-void ScreenBase::updateCenterOfRotation( void )
-{
-    // Center of rotation in the device coordinate system.
-    kvs::Vector2f center( 0.0, 0.0 );
-
-    switch( m_target )
-    {
-    case TargetCamera:
-    case TargetLight:
-        /* Get an at-point of the camera, which is the center of rotation,
-         * in the device coord.
-         */
-        center = m_camera->lookAtInDevice();
-        break;
-    case TargetObject:
-        if( m_enable_move_all || !m_object_manager->hasObject() )
-        {
-            center = m_object_manager->positionInDevice( m_camera );
-        }
-        else
-        {
-            /* If the object manager has no active object, the center
-             * of rotation is not updated.
-             */
-            if ( !m_object_manager->hasActiveObject() ) return;
-
-            kvs::ObjectBase* object = m_object_manager->activeObject();
-            const kvs::Vector3f& t = m_object_manager->objectCenter();
-            const kvs::Vector3f& s = m_object_manager->normalize();
-            center = object->positionInDevice( m_camera, t, s );
-        }
-        break;
-    default:
-        break;
-    }
-
-    m_mouse->setRotationCenter( center );
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Updates the xform of the control target.
- */
-/*==========================================================================*/
-void ScreenBase::updateXform( void )
-{
-    switch( m_target )
-    {
-    case TargetCamera:
-        this->updateXform( m_camera );
-        break;
-    case TargetLight:
-        this->updateXform( m_light );
-        break;
-    case TargetObject:
-        this->updateXform( m_object_manager );
-        break;
-    default:
-        break;
-    }
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Updates the xform of the object manager.
- *  @param  manager [in] pointer to the object manager
- */
-/*==========================================================================*/
-void ScreenBase::updateXform( kvs::ObjectManager* manager )
-{
-    switch( m_mouse->mode() )
-    {
-    case kvs::Mouse::Rotation:
-        manager->rotate( m_mouse->rotation().toMatrix() );
-        break;
-    case kvs::Mouse::Translation:
-        manager->translate( m_mouse->translation() );
-        break;
-    case kvs::Mouse::Scaling:
-        manager->scale( m_mouse->scaling() );
-        break;
-    default:
-        break;
-    }
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Updates the xform of the camera.
- *  @param  camera [in] pointer to the camera
- */
-/*==========================================================================*/
-void ScreenBase::updateXform( kvs::Camera* camera )
-{
-    switch( m_mouse->mode() )
-    {
-    case kvs::Mouse::Rotation:
-        camera->rotate( m_mouse->rotation().toMatrix().transpose() );
-        break;
-    case kvs::Mouse::Translation:
-        camera->translate( -m_mouse->translation() );
-        break;
-    case kvs::Mouse::Scaling:
-    {
-        const kvs::Vector3f s = m_mouse->scaling();
-        camera->scale( kvs::Vector3f( 1 / s.x(), 1 / s.y(), 1 / s.z() ) );
-        break;
-    }
-    default:
-        break;
-    }
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Updates the xform of the light.
- *  @param  light [in] pointer to the light
- */
-/*==========================================================================*/
-void ScreenBase::updateXform( kvs::Light* light )
-{
-    switch( m_mouse->mode() )
-    {
-    case kvs::Mouse::Rotation:
-        light->rotate( m_mouse->rotation().toMatrix() );
-        break;
-    case kvs::Mouse::Translation:
-        light->translate( m_mouse->translation() );
-        break;
-    case kvs::Mouse::Scaling:
-        light->scale( m_mouse->scaling() );
-        break;
-    default:
-        break;
-    }
+    event->setScreen( this );
+    m_event_handler->attach( event );
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Creates the window.
+ *  @brief  Adds a resize event listener.
+ *  @param  event [in] pointer to a resize event listener
  */
 /*===========================================================================*/
-void ScreenBase::createWindow( void )
+void ScreenBase::addResizeEvent( kvs::ResizeEventListener* event )
 {
+    event->setScreen( this );
+    m_event_handler->attach( event );
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Shows the window as full-screen.
+ *  @brief  Adds a mouse press event listener.
+ *  @param  event [in] pointer to a mous press event listener
  */
 /*===========================================================================*/
-void ScreenBase::showFullScreen( void )
+void ScreenBase::addMousePressEvent( kvs::MousePressEventListener* event )
 {
+    event->setScreen( this );
+    m_event_handler->attach( event );
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Shows the window as normal screen.
+ *  @brief  Adds a mouse move event listener.
+ *  @param  event [in] pointer to a mouse move event listener
  */
 /*===========================================================================*/
-void ScreenBase::showNormal( void )
+void ScreenBase::addMouseMoveEvent( kvs::MouseMoveEventListener* event )
 {
+    event->setScreen( this );
+    m_event_handler->attach( event );
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Pops up the window.
+ *  @brief  Adds a mouse release event listener.
+ *  @param  event [in] pointer to a mouse release event listener
  */
 /*===========================================================================*/
-void ScreenBase::popUp( void )
+void ScreenBase::addMouseReleaseEvent( kvs::MouseReleaseEventListener* event )
 {
+    event->setScreen( this );
+    m_event_handler->attach( event );
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Pushes down the window.
+ *  @brief  Adds a mouse double-click event listener.
+ *  @param  event [in] pointer to a mouse double-click event listener
  */
 /*===========================================================================*/
-void ScreenBase::pushDown( void )
+void ScreenBase::addMouseDoubleClickEvent( kvs::MouseDoubleClickEventListener* event )
 {
+    event->setScreen( this );
+    m_event_handler->attach( event );
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Hides the window.
+ *  @brief  Adds a wheel event listener.
+ *  @param  event [in] pointer to a wheel event listener
  */
 /*===========================================================================*/
-void ScreenBase::hide( void )
+void ScreenBase::addWheelEvent( kvs::WheelEventListener* event )
 {
+    event->setScreen( this );
+    m_event_handler->attach( event );
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Show the hiding window.
+ *  @brief  Adds a key press event listener.
+ *  @param  event [in] pointer to a key press event listener
  */
 /*===========================================================================*/
-void ScreenBase::showWindow( void )
+void ScreenBase::addKeyPressEvent( kvs::KeyPressEventListener* event )
 {
+    event->setScreen( this );
+    m_event_handler->attach( event );
 }
 
-/*===========================================================================*/
-/**
- *  @brief  Redraws the window.
- */
-/*===========================================================================*/
-void ScreenBase::redraw( void )
-{
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Resizes the window.
- *  @param  width [in] window width
- *  @param  height [in] window height
- */
-/*===========================================================================*/
-void ScreenBase::resize( int width, int height )
-{
-    kvs::IgnoreUnusedVariable( width );
-    kvs::IgnoreUnusedVariable( height );
-}
+void ScreenBase::create(){}
+void ScreenBase::show(){}
+void ScreenBase::showFullScreen(){}
+void ScreenBase::showNormal(){}
+void ScreenBase::hide(){}
+void ScreenBase::popUp(){}
+void ScreenBase::pushDown(){}
+void ScreenBase::redraw(){}
+void ScreenBase::resize( int, int ){}
+bool ScreenBase::isFullScreen() const { return false; }
+void ScreenBase::enable(){}
+void ScreenBase::disable(){}
+void ScreenBase::reset(){}
 
 } // end of namespace kvs

@@ -25,6 +25,7 @@
 #include <kvs/OpenGL>
 #include <kvs/glut/Application>
 #include <kvs/glut/Screen>
+#include <kvs/glut/Timer>
 
 
 /*===========================================================================*/

@@ -17,6 +17,9 @@
 #include <kvs/RGBColor>
 #include <kvs/String>
 #include <kvs/IgnoreUnusedVariable>
+#include <kvs/EventBase>
+#include <kvs/MouseEvent>
+
 
 // Default parameters.
 namespace { namespace Default
@@ -260,7 +263,7 @@ void PushButton::mousePressEvent( kvs::MouseEvent* event )
 
     if ( BaseClass::contains( event->x(), event->y() ) )
     {
-        BaseClass::screen()->disableAllMove();
+        BaseClass::screen()->disable();
         BaseClass::activate();
         this->pressed();
         BaseClass::swap_color( m_button_color, m_clicked_button_color );

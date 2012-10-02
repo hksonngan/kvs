@@ -62,7 +62,7 @@ const std::string GetOutputFilename( Parameter* parameter, const std::string& ex
  *  @param  screen [in] pointer to the screen
  */
 /*===========================================================================*/
-Command::Command( Parameter* parameter, kvs::ScreenBase* screen ):
+Command::Command( Parameter* parameter, kvs::glut::Screen* screen ):
     m_parameter( parameter ),
     m_screen( screen )
 {

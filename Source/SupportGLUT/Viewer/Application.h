@@ -16,7 +16,6 @@
 #define KVS__GLUT__APPLICATION_H_INCLUDE
 
 #include <kvs/ApplicationBase>
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -32,18 +31,12 @@ namespace glut
 /*===========================================================================*/
 class Application : public kvs::ApplicationBase
 {
-    kvsClassName( kvs::glut::Application );
-
 public:
 
     Application( int argc, char** argv );
-
     virtual ~Application( void );
 
-public:
-
     virtual int run( void );
-
     virtual void quit( void );
 };
 

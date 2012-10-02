@@ -71,10 +71,11 @@ public:
 
     void valueChanged( void )
     {
+        kvs::glut::Screen* glut_screen = static_cast<kvs::glut::Screen*>( screen() );
         const double level = this->value();
         const bool d = true;
         kvs::PolygonObject* object = new kvs::Isosurface( m_volume, level, m_normal, d, m_tfunc );
-        if ( object ) screen()->objectManager()->change( 1, object );
+        if ( object ) glut_screen->objectManager()->change( 1, object );
     }
 };
 
@@ -87,11 +88,12 @@ class KeyPressEvent : public kvs::KeyPressEventListener
 {
     void update( kvs::KeyEvent* event )
     {
+        kvs::glut::Screen* glut_screen = static_cast<kvs::glut::Screen*>( screen() );
         switch ( event->key() )
         {
-        case kvs::Key::o: screen()->controlTarget() = kvs::ScreenBase::TargetObject; break;
-        case kvs::Key::l: screen()->controlTarget() = kvs::ScreenBase::TargetLight; break;
-        case kvs::Key::c: screen()->controlTarget() = kvs::ScreenBase::TargetCamera; break;
+        case kvs::Key::o: glut_screen->controlTarget() = kvs::Scene::TargetObject; break;
+        case kvs::Key::l: glut_screen->controlTarget() = kvs::Scene::TargetLight; break;
+        case kvs::Key::c: glut_screen->controlTarget() = kvs::Scene::TargetCamera; break;
         default: break;
         }
     }

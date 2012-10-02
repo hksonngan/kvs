@@ -72,22 +72,11 @@ WidgetBase::~WidgetBase( void )
 
 /*===========================================================================*/
 /**
- *  @brief  Returns the pointer to the screen.
- *  @return pointer to the screen
- */
-/*===========================================================================*/
-kvs::ScreenBase* WidgetBase::screen( void )
-{
-    return( m_screen );
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Returns the margin.
  *  @return margin
  */
 /*===========================================================================*/
-const int WidgetBase::margin( void ) const
+int WidgetBase::margin( void ) const
 {
     return( m_margin );
 }
@@ -131,7 +120,7 @@ const kvs::RGBAColor& WidgetBase::backgroundBorderColor( void ) const
  *  @return background width
  */
 /*===========================================================================*/
-const float WidgetBase::backgroundBorderWidth( void ) const
+float WidgetBase::backgroundBorderWidth( void ) const
 {
     return( m_background_border_width );
 }
@@ -142,7 +131,7 @@ const float WidgetBase::backgroundBorderWidth( void ) const
  *  @return character width
  */
 /*===========================================================================*/
-const int WidgetBase::characterWidth( void ) const
+int WidgetBase::characterWidth( void ) const
 {
     return( m_character_width );
 }
@@ -153,7 +142,7 @@ const int WidgetBase::characterWidth( void ) const
  *  @return character height
  */
 /*===========================================================================*/
-const int WidgetBase::characterHeight( void ) const
+int WidgetBase::characterHeight( void ) const
 {
     return( m_character_height );
 }
@@ -164,7 +153,7 @@ const int WidgetBase::characterHeight( void ) const
  *  @return true, if the widget is shown
  */
 /*===========================================================================*/
-const bool WidgetBase::isShown( void ) const
+bool WidgetBase::isShown( void ) const
 {
     return( m_is_shown );
 }
@@ -273,6 +262,17 @@ void WidgetBase::show( void )
 void WidgetBase::hide( void )
 {
     m_is_shown = false;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the pointer to the screen.
+ *  @return pointer to the screen
+ */
+/*===========================================================================*/
+kvs::ScreenBase* WidgetBase::screen( void )
+{
+    return( m_screen );
 }
 
 /*===========================================================================*/

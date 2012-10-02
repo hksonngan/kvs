@@ -17,6 +17,9 @@
 #include <kvs/RGBColor>
 #include <kvs/String>
 #include <kvs/IgnoreUnusedVariable>
+#include <kvs/ScreenBase>
+#include <kvs/EventBase>
+#include <kvs/MouseEvent>
 #include "RadioButtonGroup.h"
 
 
@@ -99,7 +102,7 @@ const std::string& RadioButton::caption( void ) const
  *  @return true if the box is checked
  */
 /*===========================================================================*/
-const bool RadioButton::state( void ) const
+bool RadioButton::state( void ) const
 {
     return( m_state );
 }
@@ -341,7 +344,7 @@ void RadioButton::mousePressEvent( kvs::MouseEvent* event )
 
     if ( this->contains( event->x(), event->y() ) )
     {
-        BaseClass::screen()->disableAllMove();
+        BaseClass::screen()->disable();
         BaseClass::activate();
         this->pressed();
         BaseClass::screen()->redraw();

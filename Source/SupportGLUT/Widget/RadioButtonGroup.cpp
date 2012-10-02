@@ -14,6 +14,10 @@
 /*****************************************************************************/
 #include "RadioButtonGroup.h"
 #include "RadioButton.h"
+#include <kvs/ScreenBase>
+#include <kvs/EventBase>
+#include <kvs/MouseEvent>
+
 
 namespace kvs
 {

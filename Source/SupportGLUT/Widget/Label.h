@@ -17,7 +17,6 @@
 
 #include <string>
 #include <vector>
-#include <kvs/ClassName>
 #include <kvs/glut/Screen>
 #include "WidgetBase.h"
 
@@ -35,9 +34,6 @@ namespace glut
 /*===========================================================================*/
 class Label : public kvs::glut::WidgetBase
 {
-    // Class name.
-    kvsClassName( kvs::glut::Label );
-
 public:
 
     typedef kvs::glut::WidgetBase BaseClass;
@@ -50,28 +46,20 @@ public:
 
     Label( kvs::ScreenBase* screen = 0 );
 
-public:
-
     virtual void screenUpdated( void ){};
-
     virtual void screenResized( void ){};
 
-public:
-
     void setText( const char* text, ... );
-
     void addText( const char* text, ... );
 
 private:
 
     int get_fitted_width( void );
-
     int get_fitted_height( void );
 
 public:
 
     void paintEvent( void );
-
     void resizeEvent( int width, int height );
 };
 

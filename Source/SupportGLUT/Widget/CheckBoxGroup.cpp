@@ -14,6 +14,9 @@
 /*****************************************************************************/
 #include "CheckBoxGroup.h"
 #include "CheckBox.h"
+#include <kvs/ScreenBase>
+#include <kvs/EventBase>
+#include <kvs/MouseEvent>
 
 
 namespace kvs

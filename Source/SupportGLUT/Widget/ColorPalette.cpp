@@ -224,7 +224,7 @@ void ColorPalette::mousePressEvent( kvs::MouseEvent* event )
 
     if ( BaseClass::contains( event->x(), event->y() ) )
     {
-        BaseClass::screen()->disableAllMove();
+        BaseClass::screen()->disable();
         BaseClass::activate();
 
         if ( m_SV_palette.contains( event->x(), event->y(), true ) )
@@ -432,17 +432,17 @@ int ColorPalette::get_fitted_height( void )
     return( ::Default::Height + BaseClass::characterHeight() + BaseClass::margin() * 2 );
 }
 
-const float ColorPalette::get_H_value( void ) const
+float ColorPalette::get_H_value( void ) const
 {
     return( static_cast<float>( m_H_palette.y1() - m_H_indicator ) / m_H_palette.height() );
 }
 
-const float ColorPalette::get_S_value( void ) const
+float ColorPalette::get_S_value( void ) const
 {
     return( static_cast<float>( m_S_indicator - m_SV_palette.x0() ) / m_SV_palette.width() );
 }
 
-const float ColorPalette::get_V_value( void ) const
+float ColorPalette::get_V_value( void ) const
 {
     return( static_cast<float>( m_SV_palette.y1() - m_V_indicator ) / m_SV_palette.height() );
 }

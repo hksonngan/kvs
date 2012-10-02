@@ -17,7 +17,7 @@
 
 #include "Parameter.h"
 #include <kvs/MouseEvent>
-#include <kvs/ScreenBase>
+#include <kvs/glut/Screen>
 
 
 /*===========================================================================*/
@@ -30,11 +30,11 @@ class Command
 protected:
 
     Parameter* m_parameter; ///< parameter set
-    kvs::ScreenBase* m_screen; ///< pointer to screen
+    kvs::glut::Screen* m_screen; ///< pointer to screen
 
 public:
 
-    Command( Parameter* parameter, kvs::ScreenBase* screen );
+    Command( Parameter* parameter, kvs::glut::Screen* screen );
 
     void toggleInformationFlag( void );
 

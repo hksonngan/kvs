@@ -16,10 +16,6 @@
 #define KVS__GLEW__STOCHASTIC_MULTIPLE_TETRAHEDRA_COMPOSITOR_H_INCLUDE
 
 #include <kvs/ClassName>
-#if KVS_ENABLE_DEPRECATED
-#include <kvs/ScreenBase>
-#include <kvs/PointObject>
-#endif
 #include "StochasticMultipleTetrahedraRenderer.h"
 #include "StochasticMultipleTetrahedraEngine.h"
 
@@ -27,7 +23,9 @@
 namespace kvs
 {
 
-class ScreenBase;
+class ObjectManager;
+class RendererManager;
+class IDManager;
 class PointObject;
 
 namespace glew
@@ -39,7 +37,9 @@ class StochasticMultipleTetrahedraCompositor
 
 private:
 
-    kvs::ScreenBase* m_screen; ///< pointer to the screen (reference)
+    kvs::ObjectManager* m_object_manager; ///< pointer to the object manager (reference)
+    kvs::RendererManager* m_renderer_manager; ///< pointer to the renderer manager (reference)
+    kvs::IDManager* m_id_manager; ///< pointer to the ID manager (reference)
     int m_object_id; ///< object ID registered in the screen
     kvs::PointObject* m_object; ///< pointer to a dummy object
     kvs::glew::StochasticMultipleTetrahedraRenderer* m_renderer; ///< pointer to a stochastic renderer
@@ -47,7 +47,10 @@ private:
 
 public:
 
-    StochasticMultipleTetrahedraCompositor( kvs::ScreenBase* screen );
+    StochasticMultipleTetrahedraCompositor(
+        kvs::ObjectManager* object_manager,
+        kvs::RendererManager* renderer_manager,
+        kvs::IDManager* id_manager );
 
     virtual ~StochasticMultipleTetrahedraCompositor( void );
 

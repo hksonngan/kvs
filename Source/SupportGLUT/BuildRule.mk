@@ -12,6 +12,7 @@ $(OUTDIR)/./Viewer/Histogram.o \
 $(OUTDIR)/./Viewer/LegendBar.o \
 $(OUTDIR)/./Viewer/OrientationAxis.o \
 $(OUTDIR)/./Viewer/Screen.o \
+$(OUTDIR)/./Viewer/ScreenBase.o \
 $(OUTDIR)/./Viewer/Text.o \
 $(OUTDIR)/./Viewer/Timer.o \
 $(OUTDIR)/./Viewer/TransferFunctionEditor.o \

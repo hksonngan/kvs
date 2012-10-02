@@ -8,6 +8,7 @@
 VIEWER_HEADERS += \
 Viewer/Application.h \
 Viewer/Screen.h \
+Viewer/ScreenBase.h \
 Viewer/Timer.h \
 Viewer/QtScreenSupport.h \
 Viewer/KVSKey.h \
@@ -17,6 +18,7 @@ Viewer/KVSMouseButton.h \
 VIEWER_SOURCES += \
 Viewer/Application.cpp \
 Viewer/Screen.cpp \
+Viewer/ScreenBase.cpp \
 Viewer/Timer.cpp \
 
 

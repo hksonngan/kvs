@@ -16,7 +16,6 @@
 
 #include <string>
 #include <vector>
-#include <kvs/ClassName>
 #include <kvs/RGBColor>
 
 
@@ -33,34 +32,23 @@ namespace glut
 /*==========================================================================*/
 class Text
 {
-    kvsClassName_without_virtual( kvs::glut::Text );
-
 protected:
 
-    size_t                   m_x;     ///< position x
-    size_t                   m_y;     ///< position y
-    kvs::RGBColor            m_color; ///< text color
+    size_t m_x; ///< position x
+    size_t m_y; ///< position y
+    kvs::RGBColor m_color; ///< text color
     std::vector<std::string> m_text;  ///< text string
 
 public:
 
     Text( void );
 
-public:
-
     void setPosition( const size_t x, const size_t y );
-
     void setColor( const kvs::RGBColor& color );
-
     void setText( const char* text, ... );
-
     void setText( const std::string& text );
-
     void addText( const char* text, ... );
-
     void addText( const std::string& text );
-
-public:
 
     void draw( void );
 };

@@ -109,7 +109,6 @@ public:
 
     void pressed( void )
     {
-        screen()->clear();
         exit( EXIT_SUCCESS );
     }
 };

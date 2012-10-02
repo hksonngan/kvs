@@ -18,17 +18,15 @@
 #include <string>
 #include <vector>
 #include <kvs/ClassName>
-#if KVS_ENABLE_DEPRECATED
-#include <kvs/ScreenBase>
-#include <kvs/PointObject>
-#endif
 #include "StochasticRendererBase.h"
 
 
 namespace kvs
 {
 
-class ScreenBase;
+class ObjectManager;
+class RendererManager;
+class IDManager;
 class PointObject;
 class ObjectBase;
 
@@ -46,7 +44,9 @@ class StochasticRenderingCompositor
 
 private:
 
-    kvs::ScreenBase* m_screen; ///< pointer to the screen (reference)
+    kvs::ObjectManager* m_object_manager; ///< pointer to the object manager (reference)
+    kvs::RendererManager* m_renderer_manager; ///< pointer to the renderer manager (reference)
+    kvs::IDManager* m_id_manager; ///< pointer to the ID manager (reference)
     int m_object_id; ///< object ID registered in the screen
     kvs::PointObject* m_object; ///< pointer to a dummy object
     kvs::glew::StochasticRendererBase* m_renderer; ///< pointer to a stochastic renderer
@@ -54,7 +54,10 @@ private:
 
 public:
 
-    StochasticRenderingCompositor( kvs::ScreenBase* screen );
+    StochasticRenderingCompositor(
+        kvs::ObjectManager* object_manager,
+        kvs::RendererManager* renderer_manager,
+        kvs::IDManager* id_manager );
 
     virtual ~StochasticRenderingCompositor( void );
 

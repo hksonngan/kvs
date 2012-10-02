@@ -17,6 +17,9 @@
 #include <kvs/String>
 #include <kvs/RGBColor>
 #include <kvs/IgnoreUnusedVariable>
+#include <kvs/ScreenBase>
+#include <kvs/EventBase>
+#include <kvs/MouseEvent>
 
 
 // Default parameters.
@@ -80,7 +83,7 @@ const std::string& CheckBox::caption( void ) const
  *  @return true if the box is checked
  */
 /*===========================================================================*/
-const bool CheckBox::state( void ) const
+bool CheckBox::state( void ) const
 {
     return( m_state );
 }
@@ -301,7 +304,7 @@ void CheckBox::mousePressEvent( kvs::MouseEvent* event )
 
     if ( this->contains( event->x(), event->y() ) )
     {
-        BaseClass::m_screen->disableAllMove();
+        BaseClass::screen()->disable();
         BaseClass::activate();
         this->pressed();
         BaseClass::screen()->redraw();

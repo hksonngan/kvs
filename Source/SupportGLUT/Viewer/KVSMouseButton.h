@@ -36,7 +36,6 @@ class KVSMouseButton
 public:
 
     static int Button( int button );
-
     static int State( int state );
 };
 

@@ -21,6 +21,8 @@
 #include <kvs/PointObject>
 #include <kvs/ScreenBase>
 #include <kvs/ObjectManager>
+#include <kvs/RendererManager>
+#include <kvs/IDManager>
 
 
 namespace kvs
@@ -35,23 +37,30 @@ namespace glew
  *  @param  screen [in] pointer to the screen
  */
 /*===========================================================================*/
-StochasticRenderingCompositor::StochasticRenderingCompositor( kvs::ScreenBase* screen ):
-    m_screen( screen ),
+StochasticRenderingCompositor::StochasticRenderingCompositor(
+    kvs::ObjectManager* object_manager,
+    kvs::RendererManager* renderer_manager,
+    kvs::IDManager* id_manager ):
+    m_object_manager( object_manager ),
+    m_renderer_manager( renderer_manager ),
+    m_id_manager( id_manager ),
     m_object_id( 0 ),
     m_object( new kvs::PointObject() ),
     m_renderer( new kvs::glew::StochasticRendererBase() )
 {
-    const kvs::Vector3f obj_min = screen->objectManager()->minObjectCoord();
-    const kvs::Vector3f obj_max = screen->objectManager()->maxObjectCoord();
-    const kvs::Vector3f ext_min = screen->objectManager()->minExternalCoord();
-    const kvs::Vector3f ext_max = screen->objectManager()->maxExternalCoord();
-    m_object->setXform( screen->objectManager()->xform() );
+    const kvs::Vector3f obj_min = m_object_manager->minObjectCoord();
+    const kvs::Vector3f obj_max = m_object_manager->maxObjectCoord();
+    const kvs::Vector3f ext_min = m_object_manager->minExternalCoord();
+    const kvs::Vector3f ext_max = m_object_manager->maxExternalCoord();
+    m_object->setXform( m_object_manager->xform() );
     m_object->saveXform();
     m_object->setMinMaxObjectCoords( obj_min, obj_max );
     m_object->setMinMaxExternalCoords( ext_min, ext_max );
 
-    std::pair<int,int> ids = m_screen->registerObject( m_object, m_renderer );
-    m_object_id = ids.first;
+    const size_t object_id   = m_object_manager->insert( m_object );
+    const size_t renderer_id = m_renderer_manager->insert( m_renderer );
+    m_id_manager->insert( object_id, renderer_id );
+    m_object_id = object_id;
 }
 
 /*===========================================================================*/
@@ -180,7 +189,7 @@ void StochasticRenderingCompositor::registerObject(
     m_renderer->setRenderingEngine( engine );
 
     // Update xform information of the object manager.
-    m_screen->objectManager()->change( m_object_id, m_object, false );
+    m_object_manager->change( m_object_id, m_object, false );
 }
 
 /*===========================================================================*/

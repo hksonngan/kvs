@@ -32,7 +32,7 @@ public:
 
     void apply( void )
     {
-        const kvs::RendererBase* base = screen()->rendererManager()->renderer();
+        const kvs::RendererBase* base = static_cast<kvs::glut::Screen*>(screen())->rendererManager()->renderer();
         kvs::RayCastingRenderer* renderer = (kvs::RayCastingRenderer*)base;
         renderer->setTransferFunction( transferFunction() );
         screen()->redraw();

@@ -104,7 +104,7 @@ int main( int argc, char** argv )
         if ( arg.hasOption("verbose") )
         {
             std::cout << "AVS field data format" << std::endl;
-            std::cout << *field << std::endl << std::endl;
+            field->print( std::cout );
         }
 
         delete field;
@@ -140,7 +140,7 @@ int main( int argc, char** argv )
         if ( arg.hasOption("verbose") )
         {
             std::cout << "KVS XML data format" << std::endl;
-            std::cout << *kvsml << std::endl << std::endl;
+            kvsml->print( std::cout );
         }
 
         delete kvsml;

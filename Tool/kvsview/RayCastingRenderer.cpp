@@ -123,7 +123,8 @@ public:
 
     void apply( void )
     {
-        const kvs::RendererBase* base = screen()->rendererManager()->renderer( ::RendererName );
+        kvs::glut::Screen* glut_screen = static_cast<kvs::glut::Screen*>( screen() );
+        const kvs::RendererBase* base = glut_screen->rendererManager()->renderer( ::RendererName );
         if ( m_no_gpu )
         {
             kvs::RayCastingRenderer* renderer = (kvs::RayCastingRenderer*)base;
@@ -163,15 +164,16 @@ public:
 
     void update( kvs::KeyEvent* event )
     {
+        kvs::glut::Screen* glut_screen = static_cast<kvs::glut::Screen*>( screen() );
         switch ( event->key() )
         {
-        case kvs::Key::o: screen()->controlTarget() = kvs::ScreenBase::TargetObject; break;
-        case kvs::Key::l: screen()->controlTarget() = kvs::ScreenBase::TargetLight; break;
-        case kvs::Key::c: screen()->controlTarget() = kvs::ScreenBase::TargetCamera; break;
+        case kvs::Key::o: glut_screen->controlTarget() = kvs::Scene::TargetObject; break;
+        case kvs::Key::l: glut_screen->controlTarget() = kvs::Scene::TargetLight; break;
+        case kvs::Key::c: glut_screen->controlTarget() = kvs::Scene::TargetCamera; break;
         case kvs::Key::t:
         {
             if ( ::Shown ) m_editor->hide();
-            else m_editor->showWindow();
+            else m_editor->show();
 
             ::Shown = !::Shown;
             break;
@@ -200,7 +202,7 @@ public:
     void update( kvs::MouseEvent* event )
     {
         if ( ::Shown ) m_editor->hide();
-        else m_editor->showWindow();
+        else m_editor->show();
 
         ::Shown = !::Shown;
     }

@@ -21,6 +21,7 @@
 #include <kvs/MouseButton>
 #include <kvs/Background>
 #include <kvs/glut/Label>
+#include <kvs/glut/Screen>
 
 
 namespace Event
@@ -35,7 +36,7 @@ void Init::update( void )
 {
     // Set background color to black.
     const kvs::RGBColor black( 0, 0, 0 );
-    screen()->background()->setColor( black );
+    static_cast<kvs::glut::Screen*>(screen())->background()->setColor( black );
 
     // Register the DICOM image as ImageObject to the screen.
     const kvs::Dicom* dicom = m_parameter->dicom_list[0];
@@ -44,7 +45,7 @@ void Init::update( void )
     const kvs::ValueArray<kvs::UInt8> data = dicom->pixelData();
     const kvs::ImageObject::PixelType type = kvs::ImageObject::Gray8;
     kvs::ImageObject* object = new kvs::ImageObject( width, height, data, type );
-    screen()->registerObject( object );
+    static_cast<kvs::glut::Screen*>(screen())->registerObject( object );
 }
 
 /*===========================================================================*/
@@ -55,7 +56,7 @@ void Init::update( void )
 /*===========================================================================*/
 void KeyPress::update( kvs::KeyEvent* event )
 {
-    Command command( m_parameter, screen() );
+    Command command( m_parameter, static_cast<kvs::glut::Screen*>(screen()) );
 
     switch( event->key() )
     {
@@ -81,7 +82,7 @@ void KeyPress::update( kvs::KeyEvent* event )
 /*===========================================================================*/
 void MousePress::update( kvs::MouseEvent* event )
 {
-    Command command( m_parameter, screen() );
+    Command command( m_parameter, static_cast<kvs::glut::Screen*>(screen()) );
 
     switch( event->button() )
     {
@@ -105,7 +106,7 @@ void MousePress::update( kvs::MouseEvent* event )
 /*===========================================================================*/
 void MouseMove::update( kvs::MouseEvent* event )
 {
-    Command command( m_parameter, screen() );
+    Command command( m_parameter, static_cast<kvs::glut::Screen*>(screen()) );
 
     command.moveMouse( event );
     screen()->redraw();

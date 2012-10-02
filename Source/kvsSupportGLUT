@@ -8,6 +8,7 @@
 #include <SupportGLUT/Viewer/LegendBar.h>
 #include <SupportGLUT/Viewer/OrientationAxis.h>
 #include <SupportGLUT/Viewer/Screen.h>
+#include <SupportGLUT/Viewer/ScreenBase.h>
 #include <SupportGLUT/Viewer/Text.h>
 #include <SupportGLUT/Viewer/Timer.h>
 #include <SupportGLUT/Viewer/TransferFunctionEditor.h>
