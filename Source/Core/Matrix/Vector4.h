@@ -33,7 +33,6 @@ template <typename T>
 class Vector4
 {
 private:
-
     T m_elements[4]; ///< Elements.
 
 public:
@@ -41,66 +40,31 @@ public:
     static const Vector4 All( const T x );
 
 public:
-
-    Vector4( void );
-
-    // Will be removed.
-    explicit Vector4( const T x );
-
+    Vector4();
     Vector4( const T x, const T y, const T z, const T w );
-
     Vector4( const Vector2<T>& other, const T z , const T w );
-
     Vector4( const Vector3<T>& other, const T w );
-
     explicit Vector4( const T elements[4] );
 
-    // Use default.
-    // ~Vector4( void );
-
 public:
-
-    // Use default.
-    // Vector4( const Vector4& other );
-    // Vector4& operator =( const Vector4& rhs );
-
-public:
-
-    // Will be removed.
-    void set( const T x );
-
     void set( const T x, const T y, const T z, const T w );
-
     void set( const Vector2<T>& other, const T z, const T w );
-
     void set( const Vector3<T>& other, const T w );
-
     void set( const T elements[4] );
 
-    void zero( void );
-
+    void zero();
     void swap( Vector4& other );
 
 public:
-
-    T& x( void );
-
-    const T& x( void ) const;
-
-    T& y( void );
-
-    const T& y( void ) const;
-
-    T& z( void );
-
-    const T& z( void ) const;
-
-    T& w( void );
-
-    const T& w( void ) const;
-
+    T& x();
+    const T& x() const;
+    T& y();
+    const T& y() const;
+    T& z();
+    const T& z() const;
+    T& w();
+    const T& w() const;
     const Vector2<T> xy() const;
-
     const Vector3<T> xyz() const;
 
 public:
@@ -112,27 +76,20 @@ public:
     const Vector4 normalized() const;
 
 #if KVS_ENABLE_DEPRECATED
-    const Vector4 normalize( void ) const;
-
-    Vector4&      normalize( void );
+    const Vector4 normalize() const;
+    Vector4&      normalize();
 #endif
 public:
-
-    void print( void ) const;
-
-    const double length( void ) const;
-
-    const double length2( void ) const;
-
-    const T dot( const Vector4& other ) const;
+    void print() const;
+    double length() const;
+    double length2() const;
+    T dot( const Vector4& other ) const;
 
 public:
-
     const T& operator [] ( const size_t index ) const;
     T&       operator [] ( const size_t index );
 
 public:
-
     Vector4& operator += ( const Vector4& rhs );
     Vector4& operator -= ( const Vector4& rhs );
     Vector4& operator *= ( const Vector4& rhs );
@@ -140,175 +97,81 @@ public:
     Vector4& operator /= ( const Vector4& rhs );
     Vector4& operator /= ( const T rhs );
 
-    const Vector4 operator -( void ) const;
+    const Vector4 operator -() const;
 
 public:
-
-    /*======================================================================*/
-    /**
-     *  Compare operator '=='.
-     *
-     *  @param lhs [in] Vector4.
-     *  @param rhs [in] Vector4.
-     *
-     *  @return Whether lhs is equal to rhs or not.
-     */
-    /*======================================================================*/
-    friend const bool operator ==( const Vector4& lhs, const Vector4& rhs )
+    friend bool operator ==( const Vector4& lhs, const Vector4& rhs )
     {
-        return( kvs::Math::Equal( lhs[0], rhs[0] ) &&
-                kvs::Math::Equal( lhs[1], rhs[1] ) &&
-                kvs::Math::Equal( lhs[2], rhs[2] ) &&
-                kvs::Math::Equal( lhs[3], rhs[3] ) );
+        return kvs::Math::Equal( lhs[0], rhs[0] ) &&
+               kvs::Math::Equal( lhs[1], rhs[1] ) &&
+               kvs::Math::Equal( lhs[2], rhs[2] ) &&
+               kvs::Math::Equal( lhs[3], rhs[3] );
     }
 
-    /*======================================================================*/
-    /**
-     *  Compare operator '!='.
-     *
-     *  @param lhs [in] Vector4.
-     *  @param rhs [in] Vector4.
-     *
-     *  @return Whether lhs is equal to rhs or not.
-     */
-    /*======================================================================*/
-    friend const bool operator !=( const Vector4& lhs, const Vector4& rhs )
+    friend bool operator !=( const Vector4& lhs, const Vector4& rhs )
     {
-        return( !( lhs == rhs ) );
+        return !( lhs == rhs );
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '+'.
-     *
-     *  @param lhs [in] Vector4.
-     *  @param rhs [in] Vector4.
-     *
-     *  @return Sum of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Vector4 operator +( const Vector4& lhs, const Vector4& rhs )
     {
         Vector4 result( lhs );
         result += rhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '-'.
-     *
-     *  @param lhs [in] Vector4.
-     *  @param rhs [in] Vector4.
-     *
-     *  @return Difference of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Vector4 operator -( const Vector4& lhs, const Vector4& rhs )
     {
         Vector4 result( lhs );
         result -= rhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '*'.
-     *
-     *  @param lhs [in] Vector4.
-     *  @param rhs [in] Vector4.
-     *
-     *  @return Product of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Vector4 operator *( const Vector4& lhs, const Vector4& rhs )
     {
         Vector4 result( lhs );
         result *= rhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '*'.
-     *
-     *  @param lhs [in] Vector4.
-     *  @param rhs [in] T.
-     *
-     *  @return Product of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Vector4 operator *( const Vector4& lhs, const T rhs )
     {
         Vector4 result( lhs );
         result *= rhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '*'.
-     *
-     *  @param lhs [in] T.
-     *  @param rhs [in] Vector4.
-     *
-     *  @return Product of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Vector4 operator *( const T lhs, const Vector4& rhs )
     {
         Vector4 result( rhs );
         result *= lhs;
-
-        return( result );
+        return result;
     }
 
     friend const Vector4 operator /( const Vector4& lhs, const Vector4& rhs )
     {
         Vector4 result( lhs );
         result /= rhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '/'.
-     *
-     *  @param lhs [in] Vector4.
-     *  @param rhs [in] T.
-     *
-     *  @return Quotient of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Vector4 operator /( const Vector4& lhs, const T rhs )
     {
         Vector4 result( lhs );
         result /= rhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Output stream operator '<<'.
-     *
-     *  @param os  [in] Output stream.
-     *  @param rhs [in] Vector4.
-     *
-     *  @return Output stream.
-     */
-    /*======================================================================*/
     friend std::ostream& operator <<( std::ostream& os, const Vector4& rhs )
     {
         os << rhs[0] << " " << rhs[1] << " " << rhs[2] << " " << rhs[3];
-
-        return( os );
+        return os;
     }
+
+public:
+    // Will be removed.
+    explicit Vector4( const T x );
+    void set( const T x );
 };
 
 /*==========================================================================*/
@@ -342,7 +205,7 @@ inline const Vector4<T> Vector4<T>::All( const T x )
  */
 /*==========================================================================*/
 template<typename T>
-inline Vector4<T>::Vector4( void )
+inline Vector4<T>::Vector4()
 {
     this->zero();
 };
@@ -510,7 +373,7 @@ inline void Vector4<T>::set( const T elements[4] )
  */
 /*==========================================================================*/
 template<typename T>
-inline void Vector4<T>::zero( void )
+inline void Vector4<T>::zero()
 {
     m_elements[0] = T( 0 );
     m_elements[1] = T( 0 );
@@ -542,9 +405,9 @@ inline void Vector4<T>::swap( Vector4& other )
  */
 /*==========================================================================*/
 template<typename T>
-inline T& Vector4<T>::x( void )
+inline T& Vector4<T>::x()
 {
-    return( m_elements[0] );
+    return m_elements[0];
 }
 
 /*==========================================================================*/
@@ -555,9 +418,9 @@ inline T& Vector4<T>::x( void )
  */
 /*==========================================================================*/
 template<typename T>
-inline const T& Vector4<T>::x( void ) const
+inline const T& Vector4<T>::x() const
 {
-    return( m_elements[0] );
+    return m_elements[0];
 }
 
 /*==========================================================================*/
@@ -568,9 +431,9 @@ inline const T& Vector4<T>::x( void ) const
  */
 /*==========================================================================*/
 template<typename T>
-inline T& Vector4<T>::y( void )
+inline T& Vector4<T>::y()
 {
-    return( m_elements[1] );
+    return m_elements[1];
 }
 
 /*==========================================================================*/
@@ -581,9 +444,9 @@ inline T& Vector4<T>::y( void )
  */
 /*==========================================================================*/
 template<typename T>
-inline const T& Vector4<T>::y( void ) const
+inline const T& Vector4<T>::y() const
 {
-    return( m_elements[1] );
+    return m_elements[1];
 }
 
 /*==========================================================================*/
@@ -594,9 +457,9 @@ inline const T& Vector4<T>::y( void ) const
  */
 /*==========================================================================*/
 template<typename T>
-inline T& Vector4<T>::z( void )
+inline T& Vector4<T>::z()
 {
-    return( m_elements[2] );
+    return m_elements[2];
 }
 
 /*==========================================================================*/
@@ -607,9 +470,9 @@ inline T& Vector4<T>::z( void )
  */
 /*==========================================================================*/
 template<typename T>
-inline const T& Vector4<T>::z( void ) const
+inline const T& Vector4<T>::z() const
 {
-    return( m_elements[2] );
+    return m_elements[2];
 }
 
 /*==========================================================================*/
@@ -620,9 +483,22 @@ inline const T& Vector4<T>::z( void ) const
  */
 /*==========================================================================*/
 template<typename T>
-inline T& Vector4<T>::w( void )
+inline T& Vector4<T>::w()
 {
-    return( m_elements[3] );
+    return m_elements[3];
+}
+
+/*==========================================================================*/
+/**
+ *  Returns the forth element.
+ *
+ *  @return Reference of the forth element.
+ */
+/*==========================================================================*/
+template<typename T>
+inline const T& Vector4<T>::w() const
+{
+    return m_elements[3];
 }
 
 template <typename T>
@@ -635,19 +511,6 @@ template <typename T>
 inline const Vector3<T> Vector4<T>::xyz() const
 {
     return Vector3<T>( m_elements[0], m_elements[1], m_elements[2] );
-}
-
-/*==========================================================================*/
-/**
- *  Returns the forth element.
- *
- *  @return Reference of the forth element.
- */
-/*==========================================================================*/
-template<typename T>
-inline const T& Vector4<T>::w( void ) const
-{
-    return( m_elements[3] );
 }
 
 template<typename T>
@@ -667,12 +530,11 @@ inline const Vector4<T> Vector4<T>::normalized() const
  */
 /*==========================================================================*/
 template<typename T>
-inline const Vector4<T> Vector4<T>::normalize( void ) const
+inline const Vector4<T> Vector4<T>::normalize() const
 {
     Vector4 result( *this );
     result.normalize();
-
-    return( result );
+    return result;
 }
 
 /*==========================================================================*/
@@ -683,14 +545,13 @@ inline const Vector4<T> Vector4<T>::normalize( void ) const
  */
 /*==========================================================================*/
 template<typename T>
-inline Vector4<T>& Vector4<T>::normalize( void )
+inline Vector4<T>& Vector4<T>::normalize()
 {
     KVS_ASSERT( !( kvs::Math::IsZero( this->length() ) ) );
 
     const T normalize_factor = static_cast<T>( 1.0 / this->length() );
     ( *this ) *= normalize_factor;
-
-    return( *this );
+    return *this;
 }
 #endif
 /*==========================================================================*/
@@ -699,7 +560,7 @@ inline Vector4<T>& Vector4<T>::normalize( void )
  */
 /*==========================================================================*/
 template<typename T>
-inline void Vector4<T>::print( void ) const
+inline void Vector4<T>::print() const
 {
     std::cout << *this << std::endl;
 }
@@ -712,9 +573,9 @@ inline void Vector4<T>::print( void ) const
  */
 /*==========================================================================*/
 template<typename T>
-inline const double Vector4<T>::length( void ) const
+inline double Vector4<T>::length() const
 {
-    return( std::sqrt( this->length2() ) );
+    return std::sqrt( this->length2() );
 }
 
 /*==========================================================================*/
@@ -725,16 +586,14 @@ inline const double Vector4<T>::length( void ) const
  */
 /*==========================================================================*/
 template<typename T>
-inline const double Vector4<T>::length2( void ) const
+inline double Vector4<T>::length2() const
 {
     double result = 0.0;
-
     result += m_elements[0] * m_elements[0];
     result += m_elements[1] * m_elements[1];
     result += m_elements[2] * m_elements[2];
     result += m_elements[3] * m_elements[3];
-
-    return( result );
+    return result;
 }
 
 /*==========================================================================*/
@@ -742,182 +601,100 @@ inline const double Vector4<T>::length2( void ) const
  *  Calculates a dot product.
  *
  *  @param other [in] Vector4.
- *
  *  @return Dot product.
  */
 /*==========================================================================*/
 template<typename T>
-inline const T Vector4<T>::dot( const Vector4& other ) const
+inline T Vector4<T>::dot( const Vector4& other ) const
 {
     T result( 0 );
-
     result += m_elements[0] * other[0];
     result += m_elements[1] * other[1];
     result += m_elements[2] * other[2];
     result += m_elements[3] * other[3];
-
-    return( result );
+    return result;
 }
 
-/*==========================================================================*/
-/**
- *  Subscript operator '[]'.
- *
- *  @param index [in] Index.
- *
- *  @return Element.
- */
-/*==========================================================================*/
 template<typename T>
-inline const T &Vector4<T>::operator []( const size_t index ) const
+inline const T& Vector4<T>::operator []( const size_t index ) const
 {
     KVS_ASSERT( index < 4 );
-
-    return( m_elements[ index ] );
+    return m_elements[ index ];
 }
 
-/*==========================================================================*/
-/**
- *  Assignment operator '[]'.
- *
- *  @param index [in] Index.
- *
- *  @return Element.
- */
-/*==========================================================================*/
 template<typename T>
-inline T &Vector4<T>::operator []( const size_t index )
+inline T& Vector4<T>::operator []( const size_t index )
 {
     KVS_ASSERT( index < 4 );
-
-    return( m_elements[ index ] );
+    return m_elements[ index ];
 }
 
-/*==========================================================================*/
-/**
- *  Combined assignment operator '+='.
- *
- *  @param rhs [in] Vector4.
- *
- *  @return Oneself.
- */
-/*==========================================================================*/
 template<typename T>
-inline Vector4<T> &Vector4<T>::operator +=( const Vector4& rhs )
+inline Vector4<T>& Vector4<T>::operator +=( const Vector4& rhs )
 {
     m_elements[0] = static_cast<T>( m_elements[0] + rhs[0] );
     m_elements[1] = static_cast<T>( m_elements[1] + rhs[1] );
     m_elements[2] = static_cast<T>( m_elements[2] + rhs[2] );
     m_elements[3] = static_cast<T>( m_elements[3] + rhs[3] );
-
-    return( *this );
+    return *this;
 }
 
-/*==========================================================================*/
-/**
- *  Combined assignment operator '-='.
- *
- *  @param rhs [in] Vector4.
- *
- *  @return Oneself.
- */
-/*==========================================================================*/
 template<typename T>
-inline Vector4<T> &Vector4<T>::operator -=( const Vector4& rhs )
+inline Vector4<T>& Vector4<T>::operator -=( const Vector4& rhs )
 {
     m_elements[0] = static_cast<T>( m_elements[0] - rhs[0] );
     m_elements[1] = static_cast<T>( m_elements[1] - rhs[1] );
     m_elements[2] = static_cast<T>( m_elements[2] - rhs[2] );
     m_elements[3] = static_cast<T>( m_elements[3] - rhs[3] );
-
-    return( *this );
+    return *this;
 }
 
-/*==========================================================================*/
-/**
- *  Combined assignment operator '*='.
- *
- *  @param rhs [in] Vector4.
- *
- *  @return Oneself.
- */
-/*==========================================================================*/
 template<typename T>
-inline Vector4<T> &Vector4<T>::operator *=( const Vector4& rhs )
+inline Vector4<T>& Vector4<T>::operator *=( const Vector4& rhs )
 {
     m_elements[0] = static_cast<T>( m_elements[0] * rhs[0] );
     m_elements[1] = static_cast<T>( m_elements[1] * rhs[1] );
     m_elements[2] = static_cast<T>( m_elements[2] * rhs[2] );
     m_elements[3] = static_cast<T>( m_elements[3] * rhs[3] );
-
-    return( *this );
+    return *this;
 }
 
-/*==========================================================================*/
-/**
- *  Combined assignment operator '*='.
- *
- *  @param rhs [in] T.
- *
- *  @return Oneself.
- */
-/*==========================================================================*/
 template<typename T>
-inline Vector4<T> &Vector4<T>::operator *=( const T rhs )
+inline Vector4<T>& Vector4<T>::operator *=( const T rhs )
 {
     m_elements[0] = static_cast<T>( m_elements[0] * rhs );
     m_elements[1] = static_cast<T>( m_elements[1] * rhs );
     m_elements[2] = static_cast<T>( m_elements[2] * rhs );
     m_elements[3] = static_cast<T>( m_elements[3] * rhs );
-
-    return( *this );
+    return *this;
 }
 
 template<typename T>
-inline Vector4<T> &Vector4<T>::operator /=( const Vector4& rhs )
+inline Vector4<T>& Vector4<T>::operator /=( const Vector4& rhs )
 {
     m_elements[0] = static_cast<T>( m_elements[0] / rhs[0] );
     m_elements[1] = static_cast<T>( m_elements[1] / rhs[1] );
     m_elements[2] = static_cast<T>( m_elements[2] / rhs[2] );
     m_elements[3] = static_cast<T>( m_elements[3] / rhs[3] );
-
-    return( *this );
+    return *this;
 }
 
-/*==========================================================================*/
-/**
- *  Combined assignment operator '/='.
- *
- *  @param rhs [in] T.
- *
- *  @return Oneself.
- */
-/*==========================================================================*/
 template<typename T>
-inline Vector4<T> &Vector4<T>::operator /=( const T rhs )
+inline Vector4<T>& Vector4<T>::operator /=( const T rhs )
 {
     m_elements[0] = static_cast<T>( m_elements[0] / rhs );
     m_elements[1] = static_cast<T>( m_elements[1] / rhs );
     m_elements[2] = static_cast<T>( m_elements[2] / rhs );
     m_elements[3] = static_cast<T>( m_elements[3] / rhs );
-
-    return( *this );
+    return *this;
 }
 
-/*==========================================================================*/
-/**
- *  Unary operator '-'.
- *
- *  @return Minus of this.
- */
-/*==========================================================================*/
 template<typename T>
-inline const Vector4<T> Vector4<T>::operator -( void ) const
+inline const Vector4<T> Vector4<T>::operator -() const
 {
     Vector4 result( *this );
     result *= T( -1 );
-
-    return( result );
+    return result;
 }
 
 } // end of namespace kvs

@@ -15,10 +15,9 @@
 #define KVS__MATRIX_22_H_INCLUDE
 
 #include <iostream>
-#include <kvs/ClassName>
 #include <kvs/Assert>
 #include <kvs/Math>
-#include "Vector2.h"
+#include <kvs/Vector2>
 
 
 namespace kvs
@@ -32,10 +31,7 @@ namespace kvs
 template<typename T>
 class Matrix22
 {
-    kvsClassName_without_virtual( kvs::Matrix22 );
-
 private:
-
     Vector2<T> m_rows[2]; ///< Row vectors.
 
 public:
@@ -45,279 +41,134 @@ public:
     static const Matrix22 All( const T x );
 
 public:
-
-    Matrix22( void );
-
-    // Will be removed.
-    explicit Matrix22( const T a );
-
+    Matrix22();
     Matrix22(
         const T a00, const T a01,
         const T a10, const T a11 );
-
     Matrix22(
         const Vector2<T>& v0,
         const Vector2<T>& v1 );
-
     explicit Matrix22( const T elements[4] );
 
-    // Use default.
-    // ~Matrix22( void );
-
 public:
-
-    // Use default.
-    // Matrix22( const Matrix22& other );
-    // Matrix22& operator =( const Matrix22& rhs );
-
-public:
-
-    // Will be removed.
-    void set( const T a );
-
     void set(
         const T a00, const T a01,
         const T a10, const T a11 );
-
     void set(
         const Vector2<T>& v0,
         const Vector2<T>& v1 );
-
     void set( const T elements[4] );
 
-    void zero( void );
-
-    void identity( void );
-
+    void zero();
+    void identity();
     void swap( Matrix22& other );
 
 public:
-
-    const Matrix22 transpose( void ) const;
-    Matrix22&      transpose( void );
+    const Matrix22 transpose() const;
+    Matrix22&      transpose();
 
     const Matrix22 inverse( T* determinant = 0 ) const;
     Matrix22&      inverse( T* determinant = 0 );
 
 public:
-
-    void print( void ) const;
-
-    const T trace( void ) const;
-
-    const T determinant( void ) const;
+    void print() const;
+    T trace() const;
+    T determinant() const;
 
 public:
-
     const Vector2<T>& operator []( const size_t index ) const;
     Vector2<T>&       operator []( const size_t index );
 
 public:
-
     Matrix22& operator +=( const Matrix22& rhs );
     Matrix22& operator -=( const Matrix22& rhs );
     Matrix22& operator *=( const Matrix22& rhs );
     Matrix22& operator *=( const T rhs );
     Matrix22& operator /=( const T rhs );
 
-    const Matrix22 operator -( void ) const;
+    const Matrix22 operator -() const;
 
 public:
-
-    /*======================================================================*/
-    /**
-     *  Compare operator '=='.
-     *
-     *  @param lhs [in] Matrix22.
-     *  @param rhs [in] Matrix22.
-     *
-     *  @return Whether lhs is equal to rhs or not.
-     */
-    /*======================================================================*/
-    friend const bool operator ==( const Matrix22& lhs, const Matrix22& rhs )
+    friend bool operator ==( const Matrix22& lhs, const Matrix22& rhs )
     {
-        return( ( lhs[0] == rhs[0] ) &&
-                ( lhs[1] == rhs[1] ) );
+        return lhs[0] == rhs[0] &&
+               lhs[1] == rhs[1];
     }
 
-    /*======================================================================*/
-    /**
-     *  Compare operator '!='.
-     *
-     *  @param lhs [in] Matrix22.
-     *  @param rhs [in] Matrix22.
-     *
-     *  @return Whether lhs is equal to rhs or not.
-     */
-    /*======================================================================*/
-    friend const bool operator !=( const Matrix22& lhs, const Matrix22& rhs )
+    friend bool operator !=( const Matrix22& lhs, const Matrix22& rhs )
     {
-        return( !( lhs == rhs ) );
+        return !( lhs == rhs );
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '+'.
-     *
-     *  @param lhs [in] Matrix22.
-     *  @param rhs [in] Matrix22.
-     *
-     *  @return Sum of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Matrix22 operator +( const Matrix22& lhs, const Matrix22& rhs )
     {
         Matrix22 result( lhs );
         result += rhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '-'.
-     *
-     *  @param lhs [in] Matrix22.
-     *  @param rhs [in] Matrix22.
-     *
-     *  @return Difference of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Matrix22 operator -( const Matrix22& lhs, const Matrix22& rhs )
     {
         Matrix22 result( lhs );
         result -= rhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '*'.
-     *
-     *  @param lhs [in] Matrix22.
-     *  @param rhs [in] Matrix22.
-     *
-     *  @return Product of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Matrix22 operator *( const Matrix22& lhs, const Matrix22& rhs )
     {
         Matrix22 result( lhs );
         result *= rhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '*'.
-     *
-     *  @param lhs [in] Matrix22.
-     *  @param rhs [in] Vector2.
-     *
-     *  @return Product of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Vector2<T> operator *( const Matrix22& lhs, const Vector2<T>& rhs )
     {
         const Vector2<T> result(
             lhs[0].dot( rhs ),
             lhs[1].dot( rhs ) );
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '*'.
-     *
-     *  @param lhs [in] Vector2.
-     *  @param rhs [in] Matrix22.
-     *
-     *  @return Product of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Vector2<T> operator *( const Vector2<T>& lhs, const Matrix22& rhs )
     {
         const Vector2<T> result(
             lhs[0] * rhs[0][0] + lhs[1] * rhs[1][0],
             lhs[0] * rhs[0][1] + lhs[1] * rhs[1][1] );
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '*'.
-     *
-     *  @param lhs [in] Matrix22.
-     *  @param rhs [in] T.
-     *
-     *  @return Product of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Matrix22 operator *( const Matrix22& lhs, const T rhs )
     {
         Matrix22 result( lhs );
         result *= rhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '*'.
-     *
-     *  @param lhs [in] T.
-     *  @param rhs [in] Matrix22.
-     *
-     *  @return Product of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Matrix22 operator *( const T lhs, const Matrix22& rhs )
     {
         Matrix22 result( rhs );
         result *= lhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '/'.
-     *
-     *  @param lhs [in] Matrix22.
-     *  @param rhs [in] T.
-     *
-     *  @return Quotient of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Matrix22 operator /( const Matrix22& lhs, const T rhs )
     {
         Matrix22 result( lhs );
         result /= rhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Output stream operator '<<'.
-     *
-     *  @param os  [in] Output stream.
-     *  @param rhs [in] Matrix22.
-     *
-     *  @return Output stream.
-     */
-    /*======================================================================*/
     friend std::ostream& operator <<( std::ostream& os, const Matrix22& rhs )
     {
         os << rhs[0] << std::endl;
         os << rhs[1];
-
-        return( os );
+        return os;
     }
+
+public:
+    // Will be removed.
+    explicit Matrix22( const T a );
+    void set( const T a );
 };
 
 /*==========================================================================*/
@@ -363,7 +214,7 @@ const Matrix22<T> Matrix22<T>::Diagonal( const T x )
  */
 /*==========================================================================*/
 template<typename T>
-inline Matrix22<T>::Matrix22( void )
+inline Matrix22<T>::Matrix22()
 {
     this->zero();
 };
@@ -500,7 +351,7 @@ inline void Matrix22<T>::set( const T elements[4] )
  */
 /*==========================================================================*/
 template<typename T>
-inline void Matrix22<T>::zero( void )
+inline void Matrix22<T>::zero()
 {
     m_rows[0].zero();
     m_rows[1].zero();
@@ -512,7 +363,7 @@ inline void Matrix22<T>::zero( void )
  */
 /*==========================================================================*/
 template<typename T>
-inline void Matrix22<T>::identity( void )
+inline void Matrix22<T>::identity()
 {
     this->set(
         T( 1 ), T( 0 ),
@@ -541,12 +392,11 @@ inline void Matrix22<T>::swap( Matrix22& other )
  */
 /*==========================================================================*/
 template<typename T>
-inline const Matrix22<T> Matrix22<T>::transpose( void ) const
+inline const Matrix22<T> Matrix22<T>::transpose() const
 {
     Matrix22 result( *this );
     result.transpose();
-
-    return( result );
+    return result;
 }
 
 /*==========================================================================*/
@@ -557,12 +407,10 @@ inline const Matrix22<T> Matrix22<T>::transpose( void ) const
  */
 /*==========================================================================*/
 template<typename T>
-inline Matrix22<T>& Matrix22<T>::transpose( void )
+inline Matrix22<T>& Matrix22<T>::transpose()
 {
-    // Transpose.
     std::swap( m_rows[0][1], m_rows[1][0] );
-
-    return( *this );
+    return *this;
 }
 
 /*==========================================================================*/
@@ -577,8 +425,7 @@ inline const Matrix22<T> Matrix22<T>::inverse( T* determinant ) const
 {
     Matrix22 result( *this );
     result.inverse( determinant );
-
-    return( result );
+    return result;
 }
 
 /*==========================================================================*/
@@ -602,8 +449,7 @@ inline Matrix22<T>& Matrix22<T>::inverse( T* determinant )
 
     const T det_inverse = static_cast<T>( 1.0 / det22 );
     ( *this ) *= det_inverse;
-
-    return( *this );
+    return *this;
 }
 
 /*==========================================================================*/
@@ -612,7 +458,7 @@ inline Matrix22<T>& Matrix22<T>::inverse( T* determinant )
  */
 /*==========================================================================*/
 template<typename T>
-inline void Matrix22<T>::print( void ) const
+inline void Matrix22<T>::print() const
 {
     std::cout << *this << std::endl;
 }
@@ -625,9 +471,9 @@ inline void Matrix22<T>::print( void ) const
  */
 /*==========================================================================*/
 template<typename T>
-inline const T Matrix22<T>::trace( void ) const
+inline T Matrix22<T>::trace() const
 {
-    return( m_rows[0][0] + m_rows[1][1] );
+    return m_rows[0][0] + m_rows[1][1];
 }
 
 /*==========================================================================*/
@@ -638,92 +484,42 @@ inline const T Matrix22<T>::trace( void ) const
  */
 /*==========================================================================*/
 template<typename T>
-inline const T Matrix22<T>::determinant( void ) const
+inline T Matrix22<T>::determinant() const
 {
     const T det22 = m_rows[0][0] * m_rows[1][1] - m_rows[0][1] * m_rows[1][0];
-
-    return( det22 );
+    return det22;
 }
 
-/*==========================================================================*/
-/**
- *  Subscript operator '[]'.
- *
- *  @param index [in] Index.
- *
- *  @return Element.
- */
-/*==========================================================================*/
 template<typename T>
 inline const Vector2<T>& Matrix22<T>::operator []( const size_t index ) const
 {
     KVS_ASSERT( index < 2 );
-
-    return( m_rows[ index ] );
+    return m_rows[ index ];
 }
 
-/*==========================================================================*/
-/**
- *  Assignment operator '[]'.
- *
- *  @param index [in] Index.
- *
- *  @return Element.
- */
-/*==========================================================================*/
 template<typename T>
 inline Vector2<T>& Matrix22<T>::operator []( const size_t index )
 {
     KVS_ASSERT( index < 2 );
-
-    return( m_rows[ index ] );
+    return m_rows[ index ];
 }
 
-/*==========================================================================*/
-/**
- *  Combined assignment operator '+='.
- *
- *  @param rhs [in] Matrix22.
- *
- *  @return Oneself.
- */
-/*==========================================================================*/
 template<typename T>
 inline Matrix22<T>& Matrix22<T>::operator +=( const Matrix22& rhs )
 {
     m_rows[0] += rhs[0];
     m_rows[1] += rhs[1];
-
-    return( *this );
+    return *this;
 }
 
-/*==========================================================================*/
-/**
- *  Combined assignment operator '-='.
- *
- *  @param rhs [in] Matrix22.
- *
- *  @return Oneself.
- */
-/*==========================================================================*/
 template<typename T>
 inline Matrix22<T>& Matrix22<T>::operator -=( const Matrix22& rhs )
 {
     m_rows[0] -= rhs[0];
     m_rows[1] -= rhs[1];
-
-    return( *this );
+    return *this;
 }
 
-/*==========================================================================*/
-/**
- *  Combined assignment operator '*='.
- *
- *  @param rhs [in] Matrix22.
- *
- *  @return Oneself.
- */
-/*==========================================================================*/
 template<typename T>
 inline Matrix22<T>& Matrix22<T>::operator *=( const Matrix22& rhs )
 {
@@ -732,60 +528,31 @@ inline Matrix22<T>& Matrix22<T>::operator *=( const Matrix22& rhs )
         m_rows[0][0] * rhs[0][1] + m_rows[0][1] * rhs[1][1],
         m_rows[1][0] * rhs[0][0] + m_rows[1][1] * rhs[1][0],
         m_rows[1][0] * rhs[0][1] + m_rows[1][1] * rhs[1][1] );
-
-    return( *this );
+    return *this;
 }
 
-/*==========================================================================*/
-/**
- *  Combined assignment operator '*='.
- *
- *  @param rhs [in] T.
- *
- *  @return Oneself.
- */
-/*==========================================================================*/
 template<typename T>
 inline Matrix22<T>& Matrix22<T>::operator *=( const T rhs )
 {
     m_rows[0] *= rhs;
     m_rows[1] *= rhs;
-
-    return( *this );
+    return *this;
 }
 
-/*==========================================================================*/
-/**
- *  Combined assignment operator '/='.
- *
- *  @param rhs [in] T.
- *
- *  @return Oneself.
- */
-/*==========================================================================*/
 template<typename T>
 inline Matrix22<T>& Matrix22<T>::operator /=( const T rhs )
 {
     m_rows[0] /= rhs;
     m_rows[1] /= rhs;
-
-    return( *this );
+    return *this;
 }
 
-/*==========================================================================*/
-/**
- *  Unary operator '-'.
- *
- *  @return Minus of this.
- */
-/*==========================================================================*/
 template<typename T>
-inline const Matrix22<T> Matrix22<T>::operator -( void ) const
+inline const Matrix22<T> Matrix22<T>::operator -() const
 {
     Matrix22 result( *this );
     result *= T( -1 );
-
-    return( result );
+    return result;
 }
 
 } // end of namespace kvs

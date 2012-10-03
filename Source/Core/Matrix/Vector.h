@@ -17,7 +17,6 @@
 #include <iostream>
 #include <vector>
 #include <cstring>
-#include <kvs/DebugNew>
 #include <kvs/Assert>
 #include <kvs/Math>
 
@@ -34,80 +33,53 @@ template <typename T>
 class Vector
 {
 private:
-
     size_t m_size;     ///< Vector size( dimension ).
     T*     m_elements; ///< Array of elements.
 
 public:
-
     explicit Vector( const size_t size = 0 );
-
     Vector( const size_t size, const T* elements );
-
     Vector( const std::vector<T>& std_vector );
-
-    ~Vector( void );
+    ~Vector();
 
 public:
-
     Vector( const Vector& other );
     Vector& operator =( const Vector& rhs );
 
 public:
-
     void setSize( const size_t size );
 
-    void zero( void );
-
+    void zero();
     void swap( Vector& other );
 
 public:
-
-    const size_t size( void ) const;
-
-public:
-
-    const Vector normalize( void ) const;
-    Vector&      normalize( void );
+    size_t size() const;
 
 public:
-
-    void print( void ) const;
-
-    const double length( void ) const;
-
-    const double length2( void ) const;
-
-    const T dot( const Vector& other ) const;
+    const Vector normalize() const;
+    Vector&      normalize();
 
 public:
+    void print() const;
+    double length() const;
+    double length2() const;
+    T dot( const Vector& other ) const;
 
-    const T  operator []( const size_t index ) const;
+public:
+    const T& operator []( const size_t index ) const;
     T&       operator []( const size_t index );
 
 public:
-
     Vector& operator +=( const Vector& rhs );
     Vector& operator -=( const Vector& rhs );
     Vector& operator *=( const Vector& rhs );
     Vector& operator *=( const T rhs );
     Vector& operator /=( const T rhs );
 
-    const Vector operator -( void ) const;
+    const Vector operator -() const;
 
 public:
-
-    /*======================================================================*/
-    /**
-     *  Compare operator '=='.
-     *
-     *  @param lhs [in] Vector.
-     *  @param rhs [in] Vector.
-     *
-     *  @return Whether lhs is equal to rhs or not.
-     */
-    /*======================================================================*/
-    friend const bool operator ==( const Vector& lhs, const Vector& rhs )
+    friend bool operator ==( const Vector& lhs, const Vector& rhs )
     {
         // Alias.
         const size_t size = lhs.size();
@@ -118,155 +90,67 @@ public:
         {
             result = result && kvs::Math::Equal( lhs[i], rhs[i] );
         }
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Compare operator '!='.
-     *
-     *  @param lhs [in] Vector.
-     *  @param rhs [in] Vector.
-     *
-     *  @return Whether lhs is equal to rhs or not.
-     */
-    /*======================================================================*/
-    friend const bool operator !=( const Vector& lhs, const Vector& rhs )
+    friend bool operator !=( const Vector& lhs, const Vector& rhs )
     {
-        return( !( lhs == rhs ) );
+        return !( lhs == rhs );
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '+'.
-     *
-     *  @param lhs [in] Vector.
-     *  @param rhs [in] Vector.
-     *
-     *  @return Sum of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Vector operator +( const Vector& lhs, const Vector& rhs )
     {
         Vector result( lhs );
         result += rhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '-'.
-     *
-     *  @param lhs [in] Vector.
-     *  @param rhs [in] Vector.
-     *
-     *  @return Difference of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Vector operator -( const Vector& lhs, const Vector& rhs )
     {
         Vector result( lhs );
         result -= rhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '*'.
-     *
-     *  @param lhs [in] Vector.
-     *  @param rhs [in] Vector.
-     *
-     *  @return Product of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Vector operator *( const Vector& lhs, const Vector& rhs )
     {
         Vector result( lhs );
         result *= rhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '*'.
-     *
-     *  @param lhs [in] Vector.
-     *  @param rhs [in] T.
-     *
-     *  @return Product of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Vector operator *( const Vector& lhs, const T rhs )
     {
         Vector result( lhs );
         result *= rhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '*'.
-     *
-     *  @param lhs [in] T.
-     *  @param rhs [in] Vector.
-     *
-     *  @return Product of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Vector operator *( const T lhs, const Vector& rhs )
     {
         Vector result( rhs );
         result *= lhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '/'.
-     *
-     *  @param lhs [in] Vector.
-     *  @param rhs [in] T.
-     *
-     *  @return Quotient of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Vector operator /( const Vector& lhs, const T rhs )
     {
         Vector result( lhs );
         result /= rhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Output stream operator '<<'.
-     *
-     *  @param os  [in] Output stream.
-     *  @param rhs [in] Vector.
-     *
-     *  @return Output stream.
-     */
-    /*======================================================================*/
     friend std::ostream& operator << ( std::ostream& os, const Vector& rhs )
     {
         // Alias.
         const size_t size = rhs.size();
 
-        for( size_t i = 0; i < size - 1; ++i )
+        for ( size_t i = 0; i < size - 1; ++i )
         {
             os <<  rhs[i] << " ";
         }
         os << rhs[ size - 1 ];
-
-        return( os );
+        return os;
     }
 };
 
@@ -284,7 +168,6 @@ inline Vector<T>::Vector( const size_t size )
     , m_elements( 0 )
 {
     this->setSize( size );
-
     this->zero();
 }
 
@@ -302,7 +185,6 @@ inline Vector<T>::Vector( const size_t size, const T* elements )
     , m_elements( 0 )
 {
     this->setSize( size );
-
     memcpy( m_elements, elements, sizeof( T ) * this->size() );
 }
 
@@ -330,15 +212,10 @@ inline Vector<T>::Vector( const std::vector<T>& std_vector )
     }
 }
 
-/*==========================================================================*/
-/**
- *  Destroys the Vector.
- */
-/*==========================================================================*/
 template <typename T>
-inline Vector<T>::~Vector( void )
+inline Vector<T>::~Vector()
 {
-    delete[] m_elements;
+    delete [] m_elements;
 }
 
 /*==========================================================================*/
@@ -354,7 +231,6 @@ inline Vector<T>::Vector( const Vector& other )
     , m_elements( 0 )
 {
     this->setSize( other.size() );
-
     memcpy( m_elements, other.m_elements, sizeof( T ) * this->size() );
 }
 
@@ -369,10 +245,8 @@ template <typename T>
 inline Vector<T>& Vector<T>::operator =( const Vector& rhs )
 {
     this->setSize( rhs.size() );
-
     memcpy( m_elements, rhs.m_elements, sizeof( T ) * this->size() );
-
-    return( *this );
+    return *this;
 }
 
 /*==========================================================================*/
@@ -389,7 +263,7 @@ inline void Vector<T>::setSize( const size_t size )
     {
         m_size = size;
 
-        delete[] m_elements;
+        delete [] m_elements;
         m_elements = 0;
 
         if ( size != 0 )
@@ -407,7 +281,7 @@ inline void Vector<T>::setSize( const size_t size )
  */
 /*==========================================================================*/
 template <typename T>
-inline void Vector<T>::zero( void )
+inline void Vector<T>::zero()
 {
     // Alias.
     const size_t size = this->size();
@@ -441,9 +315,9 @@ inline void Vector<T>::swap( Vector& other )
  */
 /*==========================================================================*/
 template <typename T>
-inline const size_t Vector<T>::size( void ) const
+inline size_t Vector<T>::size() const
 {
-    return( m_size );
+    return m_size;
 }
 
 /*==========================================================================*/
@@ -454,12 +328,11 @@ inline const size_t Vector<T>::size( void ) const
  */
 /*==========================================================================*/
 template <typename T>
-inline const Vector<T> Vector<T>::normalize( void ) const
+inline const Vector<T> Vector<T>::normalize() const
 {
     Vector result( *this );
     result.normalize();
-
-    return( result );
+    return result;
 }
 
 /*==========================================================================*/
@@ -470,14 +343,13 @@ inline const Vector<T> Vector<T>::normalize( void ) const
  */
 /*==========================================================================*/
 template <typename T>
-inline Vector<T>& Vector<T>::normalize( void )
+inline Vector<T>& Vector<T>::normalize()
 {
     KVS_ASSERT( !( kvs::Math::IsZero( this->length() ) ) );
 
     const T normalize_factor = static_cast<T>( 1.0 / this->length() );
     ( *this ) *= normalize_factor;
-
-    return( *this );
+    return *this;
 }
 
 /*==========================================================================*/
@@ -486,7 +358,7 @@ inline Vector<T>& Vector<T>::normalize( void )
  */
 /*==========================================================================*/
 template <typename T>
-inline void Vector<T>::print( void ) const
+inline void Vector<T>::print() const
 {
     std::cout << *this << std::endl;
 }
@@ -499,9 +371,9 @@ inline void Vector<T>::print( void ) const
  */
 /*==========================================================================*/
 template <typename T>
-inline const double Vector<T>::length( void ) const
+inline double Vector<T>::length() const
 {
-    return( std::sqrt( this->length2() ) );
+    return std::sqrt( this->length2() );
 }
 
 /*==========================================================================*/
@@ -512,7 +384,7 @@ inline const double Vector<T>::length( void ) const
  */
 /*==========================================================================*/
 template <typename T>
-inline const double Vector<T>::length2( void ) const
+inline double Vector<T>::length2() const
 {
     // Alias.
     const size_t   size = this->size();
@@ -525,7 +397,7 @@ inline const double Vector<T>::length2( void ) const
         result += v[i] * v[i];
     }
 
-    return( result );
+    return result;
 }
 
 /*==========================================================================*/
@@ -538,7 +410,7 @@ inline const double Vector<T>::length2( void ) const
  */
 /*==========================================================================*/
 template <typename T>
-inline const T Vector<T>::dot( const Vector<T>& other ) const
+inline T Vector<T>::dot( const Vector<T>& other ) const
 {
     KVS_ASSERT( this->size() == other.size() );
 
@@ -553,52 +425,23 @@ inline const T Vector<T>::dot( const Vector<T>& other ) const
         result += v[i] * other[i];
     }
 
-    return( result );
+    return result;
 }
 
-/*==========================================================================*/
-/**
- *  Subscript operator '[]'.
- *
- *  @param index [in] Index.
- *
- *  @return Element.
- */
-/*==========================================================================*/
 template <typename T>
-inline const T Vector<T>::operator []( const size_t index ) const
+inline const T& Vector<T>::operator []( const size_t index ) const
 {
     KVS_ASSERT( index < this->size() );
-
-    return( *( m_elements + index ) );
+    return *( m_elements + index );
 }
 
-/*==========================================================================*/
-/**
- *  Assignment operator '[]'.
- *
- *  @param index [in] Index.
- *
- *  @return Element.
- */
-/*==========================================================================*/
 template <typename T>
 inline T& Vector<T>::operator []( const size_t index )
 {
     KVS_ASSERT( index < this->size() );
-
-    return( *( m_elements + index ) );
+    return *( m_elements + index );
 }
 
-/*==========================================================================*/
-/**
- *  Combined assignment operator '+='.
- *
- *  @param rhs [in] Vector.
- *
- *  @return Oneself.
- */
-/*==========================================================================*/
 template <typename T>
 inline Vector<T>& Vector<T>::operator +=( const Vector& rhs )
 {
@@ -613,18 +456,9 @@ inline Vector<T>& Vector<T>::operator +=( const Vector& rhs )
         v[i] = static_cast<T>( v[i] + rhs[i] );
     }
 
-    return( *this );
+    return *this;
 }
 
-/*==========================================================================*/
-/**
- *  Combined assignment operator '-='.
- *
- *  @param rhs [in] Vector.
- *
- *  @return Oneself.
- */
-/*==========================================================================*/
 template <typename T>
 inline Vector<T>& Vector<T>::operator -=( const Vector& rhs )
 {
@@ -639,20 +473,11 @@ inline Vector<T>& Vector<T>::operator -=( const Vector& rhs )
         v[i] = static_cast<T>( v[i] - rhs[i] );
     }
 
-    return( *this );
+    return *this;
 }
 
-/*==========================================================================*/
-/**
- *  Combined assignment operator '*='.
- *
- *  @param rhs [in] Vector.
- *
- *  @return Oneself.
- */
-/*==========================================================================*/
 template <typename T>
-inline Vector<T>& Vector<T>::operator *= ( const Vector& rhs )
+inline Vector<T>& Vector<T>::operator *=( const Vector& rhs )
 {
     // Alias.
     const size_t size = this->size();
@@ -663,20 +488,11 @@ inline Vector<T>& Vector<T>::operator *= ( const Vector& rhs )
         v[i] = static_cast<T>( v[i] * rhs[i] );
     }
 
-    return( *this );
+    return *this;
 }
 
-/*==========================================================================*/
-/**
- *  Combined assignment operator '*='.
- *
- *  @param rhs [in] T.
- *
- *  @return Oneself.
- */
-/*==========================================================================*/
 template <typename T>
-inline Vector<T>& Vector<T>::operator *= ( const T rhs )
+inline Vector<T>& Vector<T>::operator *=( const T rhs )
 {
     // Alias.
     const size_t size = this->size();
@@ -687,20 +503,11 @@ inline Vector<T>& Vector<T>::operator *= ( const T rhs )
         v[i] = static_cast<T>( v[i] * rhs );
     }
 
-    return( *this );
+    return *this;
 }
 
-/*==========================================================================*/
-/**
- *  Combined assignment operator '/='.
- *
- *  @param rhs [in] T.
- *
- *  @return Oneself.
- */
-/*==========================================================================*/
 template <typename T>
-inline Vector<T>& Vector<T>::operator /= ( const T rhs )
+inline Vector<T>& Vector<T>::operator /=( const T rhs )
 {
     // Alias.
     const size_t size = this->size();
@@ -711,23 +518,15 @@ inline Vector<T>& Vector<T>::operator /= ( const T rhs )
         v[i] = static_cast<T>( v[i] / rhs );
     }
 
-    return( *this );
+    return *this;
 }
 
-/*==========================================================================*/
-/**
- *  Unary operator '-'.
- *
- *  @return Minus of this.
- */
-/*==========================================================================*/
 template<typename T>
-inline const Vector<T> Vector<T>::operator -( void ) const
+inline const Vector<T> Vector<T>::operator -() const
 {
     Vector result( *this );
     result *= T( -1 );
-
-    return( result );
+    return result;
 }
 
 } // end of namespace kvs

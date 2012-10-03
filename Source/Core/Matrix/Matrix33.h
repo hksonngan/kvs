@@ -15,10 +15,9 @@
 #define KVS__MATRIX_33_H_INCLUDE
 
 #include <iostream>
-#include <kvs/ClassName>
 #include <kvs/Assert>
 #include <kvs/Math>
-#include "Vector3.h"
+#include <kvs/Vector3>
 
 
 namespace kvs
@@ -32,10 +31,7 @@ namespace kvs
 template<typename T>
 class Matrix33
 {
-    kvsClassName_without_virtual( kvs::Matrix33 );
-
 private:
-
     Vector3<T> m_rows[3]; ///< Row vectors.
 
 public:
@@ -45,287 +41,141 @@ public:
     static const Matrix33 All( const T x );
 
 public:
-
-    Matrix33( void );
-
-    // Will be removed.
-    explicit Matrix33( const T a );
-
+    Matrix33();
     Matrix33(
         const T a00, const T a01, const T a02,
         const T a10, const T a11, const T a12,
         const T a20, const T a21, const T a22 );
-
     Matrix33(
         const Vector3<T>& v0,
         const Vector3<T>& v1,
         const Vector3<T>& v2 );
-
     explicit Matrix33( const T elements[9] );
 
-    // Use default.
-    // ~Matrix33( void );
-
 public:
-
-    // Use default.
-    // Matrix33( const Matrix33& other );
-    // Matrix33& operator =( const Matrix33& rhs );
-
-public:
-
-    // Will be removed.
-    void set( const T a );
-
     void set(
         const T a00, const T a01, const T a02,
         const T a10, const T a11, const T a12,
         const T a20, const T a21, const T a22 );
-
     void set(
         const Vector3<T>& v0,
         const Vector3<T>& v1,
         const Vector3<T>& v2 );
-
     void set( const T elements[9] );
 
-    void zero( void );
-
-    void identity( void );
-
+    void zero();
+    void identity();
     void swap( Matrix33& other );
 
 public:
-
-    const Matrix33 transpose( void ) const;
-    Matrix33&      transpose( void );
-
+    const Matrix33 transpose() const;
+    Matrix33&      transpose();
     const Matrix33 inverse( T* determinant = 0 ) const;
     Matrix33&      inverse( T* determinant = 0 );
 
 public:
-
-    void print( void ) const;
-
-    const T trace( void ) const;
-
-    const T determinant( void ) const;
+    void print() const;
+    T trace() const;
+    T determinant() const;
 
 public:
-
     const Vector3<T>& operator []( const size_t index ) const;
     Vector3<T>&       operator []( const size_t index );
 
 public:
-
     Matrix33& operator +=( const Matrix33& rhs );
     Matrix33& operator -=( const Matrix33& rhs );
     Matrix33& operator *=( const Matrix33& rhs );
     Matrix33& operator *=( const T rhs );
     Matrix33& operator /=( const T rhs );
 
-    const Matrix33 operator -( void ) const;
+    const Matrix33 operator -() const;
 
 public:
-
-    /*======================================================================*/
-    /**
-     *  Compare operator '=='.
-     *
-     *  @param lhs [in] Matrix33.
-     *  @param rhs [in] Matrix33.
-     *
-     *  @return Whether lhs is equal to rhs or not.
-     */
-    /*======================================================================*/
-    friend const bool operator ==( const Matrix33& lhs, const Matrix33& rhs )
+    friend bool operator ==( const Matrix33& lhs, const Matrix33& rhs )
     {
-        return( ( lhs[0] == rhs[0] ) &&
-                ( lhs[1] == rhs[1] ) &&
-                ( lhs[2] == rhs[2] ) );
+        return lhs[0] == rhs[0] &&
+               lhs[1] == rhs[1] &&
+               lhs[2] == rhs[2];
     }
 
-    /*======================================================================*/
-    /**
-     *  Compare operator '!='.
-     *
-     *  @param lhs [in] Matrix33.
-     *  @param rhs [in] Matrix33.
-     *
-     *  @return Whether lhs is equal to rhs or not.
-     */
-    /*======================================================================*/
-    friend const bool operator !=( const Matrix33& lhs, const Matrix33& rhs )
+    friend bool operator !=( const Matrix33& lhs, const Matrix33& rhs )
     {
-        return( !( lhs == rhs ) );
+        return !( lhs == rhs );
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '+'.
-     *
-     *  @param lhs [in] Matrix33.
-     *  @param rhs [in] Matrix33.
-     *
-     *  @return Sum of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Matrix33 operator +( const Matrix33& lhs, const Matrix33& rhs )
     {
         Matrix33 result( lhs );
         result += rhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '-'.
-     *
-     *  @param lhs [in] Matrix33.
-     *  @param rhs [in] Matrix33.
-     *
-     *  @return Difference of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Matrix33 operator -( const Matrix33& lhs, const Matrix33& rhs )
     {
         Matrix33 result( lhs );
         result -= rhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '*'.
-     *
-     *  @param lhs [in] Matrix33.
-     *  @param rhs [in] Matrix33.
-     *
-     *  @return Product of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Matrix33 operator *( const Matrix33& lhs, const Matrix33& rhs )
     {
         Matrix33 result( lhs );
         result *= rhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '*'.
-     *
-     *  @param lhs [in] Matrix33.
-     *  @param rhs [in] Vector3.
-     *
-     *  @return Product of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Vector3<T> operator *( const Matrix33& lhs, const Vector3<T>& rhs )
     {
         const Vector3<T> result(
             lhs[0].dot( rhs ),
             lhs[1].dot( rhs ),
             lhs[2].dot( rhs ) );
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '*'.
-     *
-     *  @param lhs [in] Vector3.
-     *  @param rhs [in] Matrix33.
-     *
-     *  @return Product of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Vector3<T> operator *( const Vector3<T>& lhs, const Matrix33& rhs )
     {
         const Vector3<T> result(
             lhs[0] * rhs[0][0] + lhs[1] * rhs[1][0] + lhs[2] * rhs[2][0],
             lhs[0] * rhs[0][1] + lhs[1] * rhs[1][1] + lhs[2] * rhs[2][1],
             lhs[0] * rhs[0][2] + lhs[1] * rhs[1][2] + lhs[2] * rhs[2][2] );
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '*'.
-     *
-     *  @param lhs [in] Matrix33.
-     *  @param rhs [in] T.
-     *
-     *  @return Product of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Matrix33 operator *( const Matrix33& lhs, const T rhs )
     {
         Matrix33 result( lhs );
         result *= rhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '*'.
-     *
-     *  @param lhs [in] T.
-     *  @param rhs [in] Matrix33.
-     *
-     *  @return Product of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Matrix33 operator *( const T lhs, const Matrix33& rhs )
     {
         Matrix33 result( rhs );
         result *= lhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '/'.
-     *
-     *  @param lhs [in] Matrix33.
-     *  @param rhs [in] T.
-     *
-     *  @return Quotient of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Matrix33 operator /( const Matrix33& lhs, const T rhs )
     {
         Matrix33 result( lhs );
         result /= rhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Output stream operator '<<'.
-     *
-     *  @param os  [in] Output stream.
-     *  @param rhs [in] Matrix33.
-     *
-     *  @return Output stream.
-     */
-    /*======================================================================*/
     friend std::ostream& operator <<( std::ostream& os, const Matrix33& rhs )
     {
         os << rhs[0] << std::endl;
         os << rhs[1] << std::endl;
         os << rhs[2];
-
-        return( os );
+        return os;
     }
+
+public:
+    // Will be removed.
+    explicit Matrix33( const T a );
+    void set( const T a );
 };
 
 /*==========================================================================*/
@@ -374,7 +224,7 @@ const Matrix33<T> Matrix33<T>::Diagonal( const T x )
  */
 /*==========================================================================*/
 template<typename T>
-inline Matrix33<T>::Matrix33( void )
+inline Matrix33<T>::Matrix33()
 {
     this->zero();
 };
@@ -532,7 +382,7 @@ inline void Matrix33<T>::set( const T elements[9] )
  */
 /*==========================================================================*/
 template<typename T>
-inline void Matrix33<T>::zero( void )
+inline void Matrix33<T>::zero()
 {
     m_rows[0].zero();
     m_rows[1].zero();
@@ -545,7 +395,7 @@ inline void Matrix33<T>::zero( void )
  */
 /*==========================================================================*/
 template<typename T>
-inline void Matrix33<T>::identity( void )
+inline void Matrix33<T>::identity()
 {
     this->set(
         T( 1 ), T( 0 ), T( 0 ),
@@ -576,12 +426,11 @@ inline void Matrix33<T>::swap( Matrix33& other )
  */
 /*==========================================================================*/
 template<typename T>
-inline const Matrix33<T> Matrix33<T>::transpose( void ) const
+inline const Matrix33<T> Matrix33<T>::transpose() const
 {
     Matrix33 result( *this );
     result.transpose();
-
-    return( result );
+    return result;
 }
 
 /*==========================================================================*/
@@ -592,14 +441,12 @@ inline const Matrix33<T> Matrix33<T>::transpose( void ) const
  */
 /*==========================================================================*/
 template<typename T>
-inline Matrix33<T>& Matrix33<T>::transpose( void )
+inline Matrix33<T>& Matrix33<T>::transpose()
 {
-    // Transpose.
     std::swap( m_rows[0][1], m_rows[1][0] );
     std::swap( m_rows[0][2], m_rows[2][0] );
     std::swap( m_rows[1][2], m_rows[2][1] );
-
-    return( *this );
+    return *this;
 }
 
 /*==========================================================================*/
@@ -614,8 +461,7 @@ inline const Matrix33<T> Matrix33<T>::inverse( T* determinant ) const
 {
     Matrix33 result( *this );
     result.inverse( determinant );
-
-    return( result );
+    return result;
 }
 
 /*==========================================================================*/
@@ -652,8 +498,7 @@ inline Matrix33<T>& Matrix33<T>::inverse( T* determinant )
 
     const T det_inverse = static_cast<T>( 1.0 / det33 );
     ( *this ) *= det_inverse;
-
-    return( *this );
+    return *this;
 }
 
 /*==========================================================================*/
@@ -662,7 +507,7 @@ inline Matrix33<T>& Matrix33<T>::inverse( T* determinant )
  */
 /*==========================================================================*/
 template<typename T>
-inline void Matrix33<T>::print( void ) const
+inline void Matrix33<T>::print() const
 {
     std::cout << *this << std::endl;
 }
@@ -675,9 +520,9 @@ inline void Matrix33<T>::print( void ) const
  */
 /*==========================================================================*/
 template<typename T>
-inline const T Matrix33<T>::trace( void ) const
+inline T Matrix33<T>::trace() const
 {
-    return( m_rows[0][0] + m_rows[1][1] + m_rows[2][2] );
+    return m_rows[0][0] + m_rows[1][1] + m_rows[2][2];
 }
 
 /*==========================================================================*/
@@ -688,7 +533,7 @@ inline const T Matrix33<T>::trace( void ) const
  */
 /*==========================================================================*/
 template<typename T>
-inline const T Matrix33<T>::determinant( void ) const
+inline T Matrix33<T>::determinant() const
 {
     const T det22[3] = {
         m_rows[1][1] * m_rows[2][2] - m_rows[1][2] * m_rows[2][1],
@@ -698,90 +543,41 @@ inline const T Matrix33<T>::determinant( void ) const
     const T det33 =
         m_rows[0][0] * det22[0] - m_rows[0][1] * det22[1] + m_rows[0][2] * det22[2];
 
-    return( det33 );
+    return det33;
 }
 
-/*==========================================================================*/
-/**
- *  Subscript operator '[]'.
- *
- *  @param index [in] Index.
- *
- *  @return Element.
- */
-/*==========================================================================*/
 template<typename T>
 inline const Vector3<T>& Matrix33<T>::operator []( const size_t index ) const
 {
     KVS_ASSERT( index < 3 );
-
-    return( m_rows[ index ] );
+    return m_rows[ index ];
 }
 
-/*==========================================================================*/
-/**
- *  Assignment operator '[]'.
- *
- *  @param index [in] Index.
- *
- *  @return Element.
- */
-/*==========================================================================*/
 template<typename T>
 inline Vector3<T>& Matrix33<T>::operator []( const size_t index )
 {
     KVS_ASSERT( index < 3 );
-
-    return( m_rows[ index ] );
+    return m_rows[ index ];
 }
 
-/*==========================================================================*/
-/**
- *  Combined assignment operator '+='.
- *
- *  @param rhs [in] Matrix33.
- *
- *  @return Oneself.
- */
-/*==========================================================================*/
 template<typename T>
 inline Matrix33<T>& Matrix33<T>::operator +=( const Matrix33& rhs )
 {
     m_rows[0] += rhs[0];
     m_rows[1] += rhs[1];
     m_rows[2] += rhs[2];
-
-    return( *this );
+    return *this;
 }
 
-/*==========================================================================*/
-/**
- *  Combined assignment operator '-='.
- *
- *  @param rhs [in] Matrix33.
- *
- *  @return Oneself.
- */
-/*==========================================================================*/
 template<typename T>
 inline Matrix33<T>& Matrix33<T>::operator -=( const Matrix33& rhs )
 {
     m_rows[0] -= rhs[0];
     m_rows[1] -= rhs[1];
     m_rows[2] -= rhs[2];
-
-    return( *this );
+    return *this;
 }
 
-/*==========================================================================*/
-/**
- *  Combined assignment operator '*='.
- *
- *  @param rhs [in] Matrix33.
- *
- *  @return Oneself.
- */
-/*==========================================================================*/
 template<typename T>
 inline Matrix33<T>& Matrix33<T>::operator *=( const Matrix33& rhs )
 {
@@ -795,62 +591,33 @@ inline Matrix33<T>& Matrix33<T>::operator *=( const Matrix33& rhs )
         m_rows[2][0] * rhs[0][0] + m_rows[2][1] * rhs[1][0] + m_rows[2][2] * rhs[2][0],
         m_rows[2][0] * rhs[0][1] + m_rows[2][1] * rhs[1][1] + m_rows[2][2] * rhs[2][1],
         m_rows[2][0] * rhs[0][2] + m_rows[2][1] * rhs[1][2] + m_rows[2][2] * rhs[2][2] );
-
-    return( *this );
+    return *this;
 }
 
-/*==========================================================================*/
-/**
- *  Combined assignment operator '*='.
- *
- *  @param rhs [in] T.
- *
- *  @return Oneself.
- */
-/*==========================================================================*/
 template<typename T>
 inline Matrix33<T>& Matrix33<T>::operator *=( const T rhs )
 {
     m_rows[0] *= rhs;
     m_rows[1] *= rhs;
     m_rows[2] *= rhs;
-
-    return( *this );
+    return *this;
 }
 
-/*==========================================================================*/
-/**
- *  Combined assignment operator '/='.
- *
- *  @param rhs [in] T.
- *
- *  @return Oneself.
- */
-/*==========================================================================*/
 template<typename T>
 inline Matrix33<T>& Matrix33<T>::operator /=( const T rhs )
 {
     m_rows[0] /= rhs;
     m_rows[1] /= rhs;
     m_rows[2] /= rhs;
-
-    return( *this );
+    return *this;
 }
 
-/*==========================================================================*/
-/**
- *  Unary operator '-'.
- *
- *  @return Minus of this.
- */
-/*==========================================================================*/
 template<typename T>
-inline const Matrix33<T> Matrix33<T>::operator -( void ) const
+inline const Matrix33<T> Matrix33<T>::operator -() const
 {
     Matrix33 result( *this );
     result *= T( -1 );
-
-    return( result );
+    return result;
 }
 
 } // end of namespace kvs

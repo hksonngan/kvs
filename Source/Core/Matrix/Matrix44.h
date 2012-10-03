@@ -15,12 +15,9 @@
 #define KVS__MATRIX_44_H_INCLUDE
 
 #include <iostream>
-
-#include <kvs/ClassName>
 #include <kvs/Assert>
 #include <kvs/Math>
-
-#include "Vector4.h"
+#include <kvs/Vector4>
 
 
 namespace kvs
@@ -34,10 +31,7 @@ namespace kvs
 template<typename T>
 class Matrix44
 {
-    kvsClassName_without_virtual( kvs::Matrix44 );
-
 private:
-
     Vector4<T> m_rows[4]; ///< Row vectors.
 
 public:
@@ -47,190 +41,95 @@ public:
     static const Matrix44 All( const T x );
 
 public:
-
-    Matrix44( void );
-
-    // Will be romoved.
-    explicit Matrix44( const T a );
-
+    Matrix44();
     Matrix44(
         const T a00, const T a01, const T a02, const T a03,
         const T a10, const T a11, const T a12, const T a13,
         const T a20, const T a21, const T a22, const T a23,
         const T a30, const T a31, const T a32, const T a33 );
-
     Matrix44(
         const Vector4<T>& v0,
         const Vector4<T>& v1,
         const Vector4<T>& v2,
         const Vector4<T>& v3 );
-
     explicit Matrix44( const T elements[16] );
 
-    // Use default.
-    // ~Matrix44( void );
-
 public:
-
-    // Use default.
-    // Matrix44( const Matrix44& other );
-    // Matrix44& operator =( const Matrix44& rhs );
-
-public:
-
-    // Will be removed.
-    void set( const T x );
-
     void set(
         const T a00, const T a01, const T a02, const T a03,
         const T a10, const T a11, const T a12, const T a13,
         const T a20, const T a21, const T a22, const T a23,
         const T a30, const T a31, const T a32, const T a33 );
-
     void set(
         const Vector4<T>& v0,
         const Vector4<T>& v1,
         const Vector4<T>& v2,
         const Vector4<T>& v3 );
-
     void set( const T elements[16] );
 
-    void zero( void );
-
-    void identity( void );
-
+    void zero();
+    void identity();
     void swap( Matrix44& other );
 
 public:
-
-    const Matrix44 transpose( void ) const;
-    Matrix44&      transpose( void );
-
+    const Matrix44 transpose() const;
+    Matrix44&      transpose();
     const Matrix44 inverse( T* determinant = 0 ) const;
     Matrix44&      inverse( T* determinant = 0 );
 
 public:
-
-    void print( void ) const;
-
-    const T trace( void ) const;
-
-    const T determinant( void ) const;
+    void print() const;
+    T trace() const;
+    T determinant() const;
 
 public:
-
     const Vector4<T>& operator []( const size_t index ) const;
     Vector4<T>&       operator []( const size_t index );
 
 public:
-
     Matrix44& operator +=( const Matrix44& rhs );
     Matrix44& operator -=( const Matrix44& rhs );
     Matrix44& operator *=( const Matrix44& rhs );
     Matrix44& operator *=( const T rhs );
     Matrix44& operator /=( const T rhs );
 
-    const Matrix44 operator -( void ) const;
+    const Matrix44 operator -() const;
 
 public:
-
-    /*======================================================================*/
-    /**
-     *  Compare operator '=='.
-     *
-     *  @param lhs [in] Matrix44.
-     *  @param rhs [in] Matrix44.
-     *
-     *  @return Whether lhs is equal to rhs or not.
-     */
-    /*======================================================================*/
-    friend const bool operator ==( const Matrix44& lhs, const Matrix44& rhs )
+    friend bool operator ==( const Matrix44& lhs, const Matrix44& rhs )
     {
-        return( ( lhs[0] == rhs[0] ) &&
-                ( lhs[1] == rhs[1] ) &&
-                ( lhs[2] == rhs[2] ) &&
-                ( lhs[3] == rhs[3] ) );
+        return lhs[0] == rhs[0] &&
+               lhs[1] == rhs[1] &&
+               lhs[2] == rhs[2] &&
+               lhs[3] == rhs[3];
     }
 
-    /*======================================================================*/
-    /**
-     *  Compare operator '!='.
-     *
-     *  @param lhs [in] Matrix44.
-     *  @param rhs [in] Matrix44.
-     *
-     *  @return Whether lhs is equal to rhs or not.
-     */
-    /*======================================================================*/
-    friend const bool operator !=( const Matrix44& lhs, const Matrix44& rhs )
+    friend bool operator !=( const Matrix44& lhs, const Matrix44& rhs )
     {
-        return( !( lhs == rhs ) );
+        return !( lhs == rhs );
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '+'.
-     *
-     *  @param lhs [in] Matrix44.
-     *  @param rhs [in] Matrix44.
-     *
-     *  @return Sum of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Matrix44 operator +( const Matrix44& lhs, const Matrix44& rhs )
     {
         Matrix44 result( lhs );
         result += rhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '-'.
-     *
-     *  @param lhs [in] Matrix44.
-     *  @param rhs [in] Matrix44.
-     *
-     *  @return Difference of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Matrix44 operator -( const Matrix44& lhs, const Matrix44& rhs )
     {
         Matrix44 result( lhs );
         result -= rhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '*'.
-     *
-     *  @param lhs [in] Matrix44.
-     *  @param rhs [in] Matrix44.
-     *
-     *  @return Product of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Matrix44 operator *( const Matrix44& lhs, const Matrix44& rhs )
     {
         Matrix44 result( lhs );
         result *= rhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '*'.
-     *
-     *  @param lhs [in] Matrix44.
-     *  @param rhs [in] Vector4.
-     *
-     *  @return Product of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Vector4<T> operator *( const Matrix44& lhs, const Vector4<T>& rhs )
     {
         const Vector4<T> result(
@@ -238,20 +137,9 @@ public:
             lhs[1].dot( rhs ),
             lhs[2].dot( rhs ),
             lhs[3].dot( rhs ) );
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '*'.
-     *
-     *  @param lhs [in] Vector4.
-     *  @param rhs [in] Matrix44.
-     *
-     *  @return Product of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Vector4<T> operator *( const Vector4<T>& lhs, const Matrix44& rhs )
     {
         const Vector4<T> result(
@@ -259,83 +147,43 @@ public:
             lhs[0] * rhs[0][1] + lhs[1] * rhs[1][1] + lhs[2] * rhs[2][1] + lhs[3] * rhs[3][1],
             lhs[0] * rhs[0][2] + lhs[1] * rhs[1][2] + lhs[2] * rhs[2][2] + lhs[3] * rhs[3][2],
             lhs[0] * rhs[0][3] + lhs[1] * rhs[1][3] + lhs[2] * rhs[2][3] + lhs[3] * rhs[3][3] );
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '*'.
-     *
-     *  @param lhs [in] Matrix44.
-     *  @param rhs [in] T.
-     *
-     *  @return Product of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Matrix44 operator *( const Matrix44& lhs, const T rhs )
     {
         Matrix44 result( lhs );
         result *= rhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '*'.
-     *
-     *  @param lhs [in] T.
-     *  @param rhs [in] Matrix44.
-     *
-     *  @return Product of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Matrix44 operator *( const T lhs, const Matrix44& rhs )
     {
         Matrix44 result( rhs );
         result *= lhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '/'.
-     *
-     *  @param lhs [in] Matrix44.
-     *  @param rhs [in] T.
-     *
-     *  @return Quotient of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Matrix44 operator /( const Matrix44& lhs, const T rhs )
     {
         Matrix44 result( lhs );
         result /= rhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Output stream operator '<<'.
-     *
-     *  @param os  [in] Output stream.
-     *  @param rhs [in] Matrix44.
-     *
-     *  @return Output stream.
-     */
-    /*======================================================================*/
     friend std::ostream& operator <<( std::ostream& os, const Matrix44& rhs )
     {
         os << rhs[0] << std::endl;
         os << rhs[1] << std::endl;
         os << rhs[2] << std::endl;
         os << rhs[3];
-
-        return( os );
+        return os;
     }
+
+public:
+    // Will be romoved.
+    explicit Matrix44( const T a );
+    void set( const T x );
 };
 
 /*==========================================================================*/
@@ -387,7 +235,7 @@ const Matrix44<T> Matrix44<T>::Diagonal( const T x )
  */
 /*==========================================================================*/
 template<typename T>
-inline Matrix44<T>::Matrix44( void )
+inline Matrix44<T>::Matrix44()
 {
     this->zero();
 };
@@ -570,7 +418,7 @@ inline void Matrix44<T>::set( const T elements[16] )
  */
 /*==========================================================================*/
 template<typename T>
-inline void Matrix44<T>::zero( void )
+inline void Matrix44<T>::zero()
 {
     m_rows[0].zero();
     m_rows[1].zero();
@@ -584,7 +432,7 @@ inline void Matrix44<T>::zero( void )
  */
 /*==========================================================================*/
 template<typename T>
-inline void Matrix44<T>::identity( void )
+inline void Matrix44<T>::identity()
 {
     this->set(
         T( 1 ), T( 0 ), T( 0 ), T( 0 ),
@@ -617,12 +465,11 @@ inline void Matrix44<T>::swap( Matrix44& other )
  */
 /*==========================================================================*/
 template<typename T>
-inline const Matrix44<T> Matrix44<T>::transpose( void ) const
+inline const Matrix44<T> Matrix44<T>::transpose() const
 {
     Matrix44 result( *this );
     result.transpose();
-
-    return( result );
+    return result;
 }
 
 /*==========================================================================*/
@@ -633,17 +480,15 @@ inline const Matrix44<T> Matrix44<T>::transpose( void ) const
  */
 /*==========================================================================*/
 template<typename T>
-inline Matrix44<T>& Matrix44<T>::transpose( void )
+inline Matrix44<T>& Matrix44<T>::transpose()
 {
-    // Transpose.
     std::swap( m_rows[0][1], m_rows[1][0] );
     std::swap( m_rows[0][2], m_rows[2][0] );
     std::swap( m_rows[0][3], m_rows[3][0] );
     std::swap( m_rows[1][2], m_rows[2][1] );
     std::swap( m_rows[1][3], m_rows[3][1] );
     std::swap( m_rows[2][3], m_rows[3][2] );
-
-    return( *this );
+    return *this;
 }
 
 /*==========================================================================*/
@@ -658,8 +503,7 @@ inline const Matrix44<T> Matrix44<T>::inverse( T* determinant ) const
 {
     Matrix44 result( *this );
     result.inverse( determinant );
-
-    return( result );
+    return result;
 }
 
 /*==========================================================================*/
@@ -720,7 +564,7 @@ inline Matrix44<T>& Matrix44<T>::inverse( T* determinant )
     const T det_inverse = static_cast<T>( 1.0 / det44 );
     ( *this ) *= det_inverse;
 
-    return( *this );
+    return *this;
 }
 
 /*==========================================================================*/
@@ -729,7 +573,7 @@ inline Matrix44<T>& Matrix44<T>::inverse( T* determinant )
  */
 /*==========================================================================*/
 template<typename T>
-inline void Matrix44<T>::print( void ) const
+inline void Matrix44<T>::print() const
 {
     std::cout << *this << std::endl;
 }
@@ -742,9 +586,9 @@ inline void Matrix44<T>::print( void ) const
  */
 /*==========================================================================*/
 template<typename T>
-inline const T Matrix44<T>::trace( void ) const
+inline T Matrix44<T>::trace() const
 {
-    return( m_rows[0][0] + m_rows[1][1] + m_rows[2][2] + m_rows[3][3] );
+    return m_rows[0][0] + m_rows[1][1] + m_rows[2][2] + m_rows[3][3];
 }
 
 /*==========================================================================*/
@@ -755,7 +599,7 @@ inline const T Matrix44<T>::trace( void ) const
  */
 /*==========================================================================*/
 template<typename T>
-inline const T Matrix44<T>::determinant( void ) const
+inline T Matrix44<T>::determinant() const
 {
     const T det22lower[6] = {
         m_rows[2][2] * m_rows[3][3] - m_rows[2][3] * m_rows[3][2],
@@ -774,52 +618,23 @@ inline const T Matrix44<T>::determinant( void ) const
     const T det44 =
         m_rows[0][0] * det33[0] - m_rows[0][1] * det33[1] + m_rows[0][2] * det33[2] - m_rows[0][3] * det33[3];
 
-    return( det44 );
+    return det44;
 }
 
-/*==========================================================================*/
-/**
- *  Subscript operator '[]'.
- *
- *  @param index [in] Index.
- *
- *  @return Element.
- */
-/*==========================================================================*/
 template<typename T>
 inline const Vector4<T>& Matrix44<T>::operator []( const size_t index ) const
 {
     KVS_ASSERT( index < 4 );
-
-    return( m_rows[ index ] );
+    return m_rows[ index ];
 }
 
-/*==========================================================================*/
-/**
- *  Assignment operator '[]'.
- *
- *  @param index [in] Index.
- *
- *  @return Element.
- */
-/*==========================================================================*/
 template<typename T>
 inline Vector4<T>& Matrix44<T>::operator []( const size_t index )
 {
     KVS_ASSERT( index < 4 );
-
-    return( m_rows[ index ] );
+    return m_rows[ index ];
 }
 
-/*==========================================================================*/
-/**
- *  Combined assignment operator '+='.
- *
- *  @param rhs [in] Matrix44.
- *
- *  @return Oneself.
- */
-/*==========================================================================*/
 template<typename T>
 inline Matrix44<T>& Matrix44<T>::operator +=( const Matrix44& rhs )
 {
@@ -827,19 +642,9 @@ inline Matrix44<T>& Matrix44<T>::operator +=( const Matrix44& rhs )
     m_rows[1] += rhs[1];
     m_rows[2] += rhs[2];
     m_rows[3] += rhs[3];
-
-    return( *this );
+    return *this;
 }
 
-/*==========================================================================*/
-/**
- *  Combined assignment operator '-='.
- *
- *  @param rhs [in] Matrix44.
- *
- *  @return Oneself.
- */
-/*==========================================================================*/
 template<typename T>
 inline Matrix44<T>& Matrix44<T>::operator -=( const Matrix44& rhs )
 {
@@ -847,19 +652,9 @@ inline Matrix44<T>& Matrix44<T>::operator -=( const Matrix44& rhs )
     m_rows[1] -= rhs[1];
     m_rows[2] -= rhs[2];
     m_rows[3] -= rhs[3];
-
-    return( *this );
+    return *this;
 }
 
-/*==========================================================================*/
-/**
- *  Combined assignment operator '*='.
- *
- *  @param rhs [in] Matrix44.
- *
- *  @return Oneself.
- */
-/*==========================================================================*/
 template<typename T>
 inline Matrix44<T>& Matrix44<T>::operator *=( const Matrix44& rhs )
 {
@@ -880,19 +675,9 @@ inline Matrix44<T>& Matrix44<T>::operator *=( const Matrix44& rhs )
         m_rows[3][0] * rhs[0][1] + m_rows[3][1] * rhs[1][1] + m_rows[3][2] * rhs[2][1] + m_rows[3][3] * rhs[3][1],
         m_rows[3][0] * rhs[0][2] + m_rows[3][1] * rhs[1][2] + m_rows[3][2] * rhs[2][2] + m_rows[3][3] * rhs[3][2],
         m_rows[3][0] * rhs[0][3] + m_rows[3][1] * rhs[1][3] + m_rows[3][2] * rhs[2][3] + m_rows[3][3] * rhs[3][3] );
-
-    return( *this );
+    return *this;
 }
 
-/*==========================================================================*/
-/**
- *  Combined assignment operator '*='.
- *
- *  @param rhs [in] T.
- *
- *  @return Oneself.
- */
-/*==========================================================================*/
 template<typename T>
 inline Matrix44<T>& Matrix44<T>::operator *=( const T rhs )
 {
@@ -900,19 +685,9 @@ inline Matrix44<T>& Matrix44<T>::operator *=( const T rhs )
     m_rows[1] *= rhs;
     m_rows[2] *= rhs;
     m_rows[3] *= rhs;
-
-    return( *this );
+    return *this;
 }
 
-/*==========================================================================*/
-/**
- *  Combined assignment operator '/='.
- *
- *  @param rhs [in] T.
- *
- *  @return Oneself.
- */
-/*==========================================================================*/
 template<typename T>
 inline Matrix44<T>& Matrix44<T>::operator /=( const T rhs )
 {
@@ -920,24 +695,15 @@ inline Matrix44<T>& Matrix44<T>::operator /=( const T rhs )
     m_rows[1] /= rhs;
     m_rows[2] /= rhs;
     m_rows[3] /= rhs;
-
-    return( *this );
+    return *this;
 }
 
-/*==========================================================================*/
-/**
- *  Unary operator '-'.
- *
- *  @return Minus of this.
- */
-/*==========================================================================*/
 template<typename T>
-inline const Matrix44<T> Matrix44<T>::operator -( void ) const
+inline const Matrix44<T> Matrix44<T>::operator -() const
 {
     Matrix44 result( *this );
     result *= T( -1 );
-
-    return( result );
+    return result;
 }
 
 } // end of namespace kvs

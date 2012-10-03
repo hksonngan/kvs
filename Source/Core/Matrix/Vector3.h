@@ -32,7 +32,6 @@ template<typename T>
 class Vector3
 {
 private:
-
     T m_elements[3]; ///< Elements.
 
 public:
@@ -40,56 +39,26 @@ public:
     static const Vector3 All( const T x );
 
 public:
-
-    Vector3( void );
-
-    // Will be removed.
-    explicit Vector3( const T x );
-
+    Vector3();
     Vector3( const T x, const T y, const T z );
-
     explicit Vector3( const Vector2<T>& other, const T z );
-
     explicit Vector3( const T elements[3] );
 
-    // Use default.
-    // ~Vector3( void );
-
 public:
-
-    // Use default.
-    // Vector3( const Vector3& other );
-    // Vector3& operator =( const Vector3& rhs );
-
-public:
-
-    // Will be removed.
-    void set( const T x );
-
     void set( const T x, const T y, const T z );
-
     void set( const Vector2<T>& other, const T z );
-
     void set( const T elements[3] );
 
-    void zero( void );
-
+    void zero();
     void swap( Vector3& other );
 
 public:
-
-    T& x( void );
-
-    const T& x( void ) const;
-
-    T& y( void );
-
-    const T& y( void ) const;
-
-    T& z( void );
-
-    const T& z( void ) const;
-
+    T& x();
+    const T& x() const;
+    T& y();
+    const T& y() const;
+    T& z();
+    const T& z() const;
     const Vector2<T> xy() const;
 
 public:
@@ -101,30 +70,22 @@ public:
     const Vector3 normalized() const;
 
 #if KVS_ENABLE_DEPRECATED
-    const Vector3 normalize( void ) const;
-
-    Vector3&      normalize( void );
+    const Vector3 normalize() const;
+    Vector3&      normalize();
 #endif
 
 public:
-
-    void print( void ) const;
-
-    const double length( void ) const;
-
-    const double length2( void ) const;
-
-    const T dot( const Vector3& other ) const;
-
+    void print() const;
+    double length() const;
+    double length2() const;
+    T dot( const Vector3& other ) const;
     const Vector3 cross( const Vector3& other ) const;
 
 public:
-
     const T& operator []( const size_t index ) const;
     T&       operator []( const size_t index );
 
 public:
-
     Vector3& operator +=( const Vector3& rhs );
     Vector3& operator -=( const Vector3& rhs );
     Vector3& operator *=( const Vector3& rhs );
@@ -132,176 +93,82 @@ public:
     Vector3& operator /= ( const Vector3& rhs );
     Vector3& operator /=( const T rhs );
 
-    const Vector3 operator -( void ) const;
+    const Vector3 operator -() const;
 
 public:
-
-    /*======================================================================*/
-    /**
-     *  Compare operator '=='.
-     *
-     *  @param lhs [in] Vector3.
-     *  @param rhs [in] Vector3.
-     *
-     *  @return Whether lhs is equal to rhs or not.
-     */
-    /*======================================================================*/
-    friend const bool operator ==( const Vector3& lhs, const Vector3& rhs )
+    friend bool operator ==( const Vector3& lhs, const Vector3& rhs )
     {
-        return( kvs::Math::Equal( lhs[0], rhs[0] ) &&
-                kvs::Math::Equal( lhs[1], rhs[1] ) &&
-                kvs::Math::Equal( lhs[2], rhs[2] ) );
+        return kvs::Math::Equal( lhs[0], rhs[0] ) &&
+               kvs::Math::Equal( lhs[1], rhs[1] ) &&
+               kvs::Math::Equal( lhs[2], rhs[2] );
     }
 
-    /*======================================================================*/
-    /**
-     *  Compare operator '!='.
-     *
-     *  @param lhs [in] Vector3.
-     *  @param rhs [in] Vector3.
-     *
-     *  @return Whether lhs is equal to rhs or not.
-     */
-    /*======================================================================*/
-    friend const bool operator !=( const Vector3& lhs, const Vector3& rhs )
+    friend bool operator !=( const Vector3& lhs, const Vector3& rhs )
     {
-        return( !( lhs == rhs ) );
+        return !( lhs == rhs );
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '+'.
-     *
-     *  @param lhs [in] Vector3.
-     *  @param rhs [in] Vector3.
-     *
-     *  @return Sum of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Vector3 operator +( const Vector3& lhs, const Vector3& rhs )
     {
         Vector3 result( lhs );
         result += rhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '-'.
-     *
-     *  @param lhs [in] Vector3.
-     *  @param rhs [in] Vector3.
-     *
-     *  @return Difference of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Vector3 operator -( const Vector3& lhs, const Vector3& rhs )
     {
         Vector3 result( lhs );
         result -= rhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '*'.
-     *
-     *  @param lhs [in] Vector3.
-     *  @param rhs [in] Vector3.
-     *
-     *  @return Product of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Vector3 operator *( const Vector3& lhs, const Vector3& rhs )
     {
         Vector3 result( lhs );
         result *= rhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '*'.
-     *
-     *  @param lhs [in] Vector3.
-     *  @param rhs [in] T.
-     *
-     *  @return Product of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Vector3 operator *( const Vector3& lhs, const T rhs )
     {
         Vector3 result( lhs );
         result *= rhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '*'.
-     *
-     *  @param lhs [in] T.
-     *  @param rhs [in] Vector3.
-     *
-     *  @return Product of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Vector3 operator *( const T lhs, const Vector3& rhs )
     {
         Vector3 result( rhs );
         result *= lhs;
-
-        return( result );
+        return result;
     }
 
     friend const Vector3 operator /( const Vector3& lhs, const Vector3& rhs )
     {
         Vector3 result( lhs );
         result /= rhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '/'.
-     *
-     *  @param lhs [in] Vector3.
-     *  @param rhs [in] T.
-     *
-     *  @return Quotient of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Vector3 operator /( const Vector3& lhs, const T rhs )
     {
         Vector3 result( lhs );
         result /= rhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Output stream operator '<<'.
-     *
-     *  @param os  [in] Output stream.
-     *  @param rhs [in] Vector3.
-     *
-     *  @return Output stream.
-     */
-    /*======================================================================*/
     friend std::ostream& operator <<( std::ostream& os, const Vector3& rhs )
     {
         os << rhs[0] << " ";
         os << rhs[1] << " ";
         os << rhs[2];
-
-        return( os );
+        return os;
     }
+
+public:
+    // Will be removed.
+    explicit Vector3( const T x );
+    void set( const T x );
 };
 
 /*==========================================================================*/
@@ -336,7 +203,7 @@ inline const Vector3<T> Vector3<T>::All( const T x )
  */
 /*==========================================================================*/
 template<typename T>
-inline Vector3<T>::Vector3( void )
+inline Vector3<T>::Vector3()
 {
     this->zero();
 }
@@ -465,7 +332,7 @@ inline void Vector3<T>::set( const T elements[3] )
  */
 /*==========================================================================*/
 template<typename T>
-inline void Vector3<T>::zero( void )
+inline void Vector3<T>::zero()
 {
     m_elements[0] = T( 0 );
     m_elements[1] = T( 0 );
@@ -495,9 +362,9 @@ inline void Vector3<T>::swap( Vector3& other )
  */
 /*==========================================================================*/
 template<typename T>
-inline T& Vector3<T>::x( void )
+inline T& Vector3<T>::x()
 {
-    return( m_elements[0] );
+    return m_elements[0];
 }
 
 /*==========================================================================*/
@@ -508,9 +375,9 @@ inline T& Vector3<T>::x( void )
  */
 /*==========================================================================*/
 template<typename T>
-inline const T& Vector3<T>::x( void ) const
+inline const T& Vector3<T>::x() const
 {
-    return( m_elements[0] );
+    return m_elements[0];
 }
 
 /*==========================================================================*/
@@ -521,9 +388,9 @@ inline const T& Vector3<T>::x( void ) const
  */
 /*==========================================================================*/
 template<typename T>
-inline T& Vector3<T>::y( void )
+inline T& Vector3<T>::y()
 {
-    return( m_elements[1] );
+    return m_elements[1];
 }
 
 /*==========================================================================*/
@@ -534,9 +401,9 @@ inline T& Vector3<T>::y( void )
  */
 /*==========================================================================*/
 template<typename T>
-inline const T& Vector3<T>::y( void ) const
+inline const T& Vector3<T>::y() const
 {
-    return( m_elements[1] );
+    return m_elements[1];
 }
 
 /*==========================================================================*/
@@ -547,9 +414,9 @@ inline const T& Vector3<T>::y( void ) const
  */
 /*==========================================================================*/
 template<typename T>
-inline T& Vector3<T>::z( void )
+inline T& Vector3<T>::z()
 {
-    return( m_elements[2] );
+    return m_elements[2];
 }
 
 /*==========================================================================*/
@@ -560,9 +427,9 @@ inline T& Vector3<T>::z( void )
  */
 /*==========================================================================*/
 template<typename T>
-inline const T& Vector3<T>::z( void ) const
+inline const T& Vector3<T>::z() const
 {
-    return( m_elements[2] );
+    return m_elements[2];
 }
 
 template <typename T>
@@ -588,12 +455,11 @@ inline const Vector3<T> Vector3<T>::normalized() const
  */
 /*==========================================================================*/
 template<typename T>
-inline const Vector3<T> Vector3<T>::normalize( void ) const
+inline const Vector3<T> Vector3<T>::normalize() const
 {
     Vector3 result( *this );
     result.normalize();
-
-    return( result );
+    return result;
 }
 
 /*==========================================================================*/
@@ -604,15 +470,12 @@ inline const Vector3<T> Vector3<T>::normalize( void ) const
  */
 /*==========================================================================*/
 template<typename T>
-inline Vector3<T>& Vector3<T>::normalize( void )
+inline Vector3<T>& Vector3<T>::normalize()
 {
-//    KVS_ASSERT( !( kvs::Math::IsZero( this->length() ) ) );
-
     const double length = this->length();
     const T normalize_factor = length > 0.0 ? static_cast<T>( 1.0 / length ) : T(0);
     ( *this ) *= normalize_factor;
-
-    return( *this );
+    return *this;
 }
 #endif
 /*==========================================================================*/
@@ -621,7 +484,7 @@ inline Vector3<T>& Vector3<T>::normalize( void )
  */
 /*==========================================================================*/
 template<typename T>
-inline void Vector3<T>::print( void ) const
+inline void Vector3<T>::print() const
 {
     std::cout << *this << std::endl;
 }
@@ -634,9 +497,9 @@ inline void Vector3<T>::print( void ) const
  */
 /*==========================================================================*/
 template<typename T>
-inline const double Vector3<T>::length( void ) const
+inline double Vector3<T>::length() const
 {
-    return( std::sqrt( this->length2() ) );
+    return std::sqrt( this->length2() );
 }
 
 /*==========================================================================*/
@@ -647,15 +510,13 @@ inline const double Vector3<T>::length( void ) const
  */
 /*==========================================================================*/
 template<typename T>
-inline const double Vector3<T>::length2( void ) const
+inline double Vector3<T>::length2() const
 {
     double result = 0.0;
-
     result += m_elements[0] * m_elements[0];
     result += m_elements[1] * m_elements[1];
     result += m_elements[2] * m_elements[2];
-
-    return( result );
+    return result;
 }
 
 /*==========================================================================*/
@@ -663,20 +524,17 @@ inline const double Vector3<T>::length2( void ) const
  *  Calculates a dot product.
  *
  *  @param other [in] Vector3.
- *
  *  @return Dot product.
  */
 /*==========================================================================*/
 template<typename T>
-inline const T Vector3<T>::dot( const Vector3& other ) const
+inline T Vector3<T>::dot( const Vector3& other ) const
 {
     T result( 0 );
-
     result += m_elements[0] * other[0];
     result += m_elements[1] * other[1];
     result += m_elements[2] * other[2];
-
-    return( result );
+    return result;
 }
 
 /*==========================================================================*/
@@ -684,7 +542,6 @@ inline const T Vector3<T>::dot( const Vector3& other ) const
  *  Calculates a cross product.
  *
  *  @param other [in] Vector3.
- *
  *  @return Cross product.
  */
 /*==========================================================================*/
@@ -694,163 +551,83 @@ inline const Vector3<T> Vector3<T>::cross( const Vector3& other ) const
     const T x = m_elements[1] * other[2] - m_elements[2] * other[1];
     const T y = m_elements[2] * other[0] - m_elements[0] * other[2];
     const T z = m_elements[0] * other[1] - m_elements[1] * other[0];
-
-    return( Vector3<T>( x, y, z ) );
+    return Vector3<T>( x, y, z );
 }
 
-/*==========================================================================*/
-/**
- *  Subscript operator '[]'.
- *
- *  @param index [in] Index.
- *
- *  @return Element.
- */
-/*==========================================================================*/
 template<typename T>
-inline const T &Vector3<T>::operator []( const size_t index ) const
+inline const T& Vector3<T>::operator []( const size_t index ) const
 {
     KVS_ASSERT( index < 3 );
-
-    return( m_elements[ index ] );
+    return m_elements[ index ];
 }
 
-/*==========================================================================*/
-/**
- *  Assignment operator '[]'.
- *
- *  @param index [in] Index.
- *
- *  @return Element.
- */
-/*==========================================================================*/
 template<typename T>
-inline T &Vector3<T>::operator []( const size_t index )
+inline T& Vector3<T>::operator []( const size_t index )
 {
     KVS_ASSERT( index < 3 );
-
-    return( m_elements[ index ] );
+    return m_elements[ index ];
 }
 
-/*==========================================================================*/
-/**
- *  Combined assignment operator '+='.
- *
- *  @param rhs [in] Vector3.
- *
- *  @return Oneself.
- */
-/*==========================================================================*/
 template<typename T>
-inline Vector3<T> &Vector3<T>::operator +=( const Vector3& rhs )
+inline Vector3<T>& Vector3<T>::operator +=( const Vector3& rhs )
 {
     m_elements[0] = static_cast<T>( m_elements[0] + rhs[0] );
     m_elements[1] = static_cast<T>( m_elements[1] + rhs[1] );
     m_elements[2] = static_cast<T>( m_elements[2] + rhs[2] );
-
-    return( *this );
+    return *this;
 }
 
-/*==========================================================================*/
-/**
- *  Combined assignment operator '-='.
- *
- *  @param rhs [in] Vector3.
- *
- *  @return Oneself.
- */
-/*==========================================================================*/
 template<typename T>
-inline Vector3<T> &Vector3<T>::operator -=( const Vector3& rhs )
+inline Vector3<T>& Vector3<T>::operator -=( const Vector3& rhs )
 {
     m_elements[0] = static_cast<T>( m_elements[0] - rhs[0] );
     m_elements[1] = static_cast<T>( m_elements[1] - rhs[1] );
     m_elements[2] = static_cast<T>( m_elements[2] - rhs[2] );
-
-    return( *this );
+    return *this;
 }
 
-/*==========================================================================*/
-/**
- *  Combined assignment operator '*='.
- *
- *  @param rhs [in] Vector3.
- *
- *  @return Oneself.
- */
-/*==========================================================================*/
 template<typename T>
-inline Vector3<T> &Vector3<T>::operator *=( const Vector3& rhs )
+inline Vector3<T>& Vector3<T>::operator *=( const Vector3& rhs )
 {
     m_elements[0] = static_cast<T>( m_elements[0] * rhs[0] );
     m_elements[1] = static_cast<T>( m_elements[1] * rhs[1] );
     m_elements[2] = static_cast<T>( m_elements[2] * rhs[2] );
-
-    return( *this );
+    return *this;
 }
 
-/*==========================================================================*/
-/**
- *  Combined assignment operator '*='.
- *
- *  @param rhs [in] T.
- *
- *  @return Oneself.
- */
-/*==========================================================================*/
 template<typename T>
-inline Vector3<T> &Vector3<T>::operator *=( const T rhs )
+inline Vector3<T>& Vector3<T>::operator *=( const T rhs )
 {
     m_elements[0] = static_cast<T>( m_elements[0] * rhs );
     m_elements[1] = static_cast<T>( m_elements[1] * rhs );
     m_elements[2] = static_cast<T>( m_elements[2] * rhs );
-
-    return( *this );
+    return *this;
 }
 
 template<typename T>
-inline Vector3<T> &Vector3<T>::operator /=( const Vector3& rhs )
+inline Vector3<T>& Vector3<T>::operator /=( const Vector3& rhs )
 {
     m_elements[0] = static_cast<T>( m_elements[0] / rhs[0] );
     m_elements[1] = static_cast<T>( m_elements[1] / rhs[1] );
     m_elements[2] = static_cast<T>( m_elements[2] / rhs[2] );
-
-    return( *this );
+    return *this;
 }
 
-/*==========================================================================*/
-/**
- *  Combined assignment operator '/='.
- *
- *  @param rhs [in] T.
- *
- *  @return Oneself.
- */
-/*==========================================================================*/
 template<typename T>
-inline Vector3<T> &Vector3<T>::operator /=( const T rhs )
+inline Vector3<T>& Vector3<T>::operator /=( const T rhs )
 {
     m_elements[0] = static_cast<T>( m_elements[0] / rhs );
     m_elements[1] = static_cast<T>( m_elements[1] / rhs );
     m_elements[2] = static_cast<T>( m_elements[2] / rhs );
-
-    return( *this );
+    return *this;
 }
 
-/*==========================================================================*/
-/**
- *  Unary operator '-'.
- *
- *  @return Minus of this.
- */
-/*==========================================================================*/
 template<typename T>
-inline const Vector3<T> Vector3<T>::operator -( void ) const
+inline const Vector3<T> Vector3<T>::operator -() const
 {
     Vector3 result( *this );
     result *= T( -1 );
-
-    return( result );
+    return result;
 }
 
 } // end of namespace kvs

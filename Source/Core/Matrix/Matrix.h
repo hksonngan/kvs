@@ -16,7 +16,6 @@
 
 #include <iostream>
 #include <kvs/DebugNew>
-#include <kvs/ClassName>
 #include <kvs/Assert>
 #include <kvs/Math>
 #include <kvs/IgnoreUnusedVariable>
@@ -34,91 +33,60 @@ namespace kvs
 template<typename T>
 class Matrix
 {
-    kvsClassName_without_virtual( kvs::Matrix );
-
 private:
-
     size_t          m_nrows;    ///< Number of rows.
     size_t          m_ncolumns; ///< Number of columns.
     kvs::Vector<T>* m_rows;     ///< Row vectors.
 
 public:
-
-    Matrix( void );
-
+    Matrix();
     Matrix( const size_t nrows, const size_t ncolumns );
-
     Matrix( const size_t nrows, const size_t ncolumns, const T* const elements );
-
-    ~Matrix( void );
+    ~Matrix();
 
 public:
-
     Matrix( const Matrix& other );
     Matrix& operator =( const Matrix& rhs );
 
 public:
-
     void setSize( const size_t nrows, const size_t ncolumns );
 
-    void zero( void );
-
-    void identity( void );
-
+    void zero();
+    void identity();
     void swap( Matrix& other );
 
 public:
-
-    const size_t nrows( void ) const;
-
-    const size_t ncolumns( void ) const;
+    size_t nrows() const;
+    size_t ncolumns() const;
 
 public:
-
-    const Matrix transpose( void ) const;
-    Matrix&      transpose( void );
+    const Matrix transpose() const;
+    Matrix&      transpose();
 
     const Matrix inverse( T* determinant = 0 ) const;
     Matrix&      inverse( T* determinant = 0 );
 
 public:
-
-    void print( void ) const;
-
-    const T trace( void ) const;
-
-    const T determinant( void ) const;
-
-    const size_t pivot( const size_t row_index ) const;
+    void print() const;
+    T trace() const;
+    T determinant() const;
+    size_t pivot( const size_t row_index ) const;
 
 public:
-
     const kvs::Vector<T>& operator []( const size_t index ) const;
     kvs::Vector<T>&       operator []( const size_t index );
 
 public:
-
     Matrix& operator +=( const Matrix& rhs );
     Matrix& operator -=( const Matrix& rhs );
     Matrix& operator *=( const Matrix& rhs );
     Matrix& operator *=( const T rhs );
     Matrix& operator /=( const T rhs );
 
-    const Matrix operator -( void ) const;
+    const Matrix operator -() const;
 
 public:
-
-    /*======================================================================*/
-    /**
-     *  Compare operator '=='.
-     *
-     *  @param lhs [in] Matrix.
-     *  @param rhs [in] Matrix.
-     *
-     *  @return Whether lhs is equal to rhs or not.
-     */
-    /*======================================================================*/
-    friend const bool operator ==( const Matrix& lhs, const Matrix& rhs )
+    friend bool operator ==( const Matrix& lhs, const Matrix& rhs )
     {
         // Alias.
         const size_t nrows = lhs.nrows();
@@ -130,70 +98,28 @@ public:
             result = result && ( lhs[r] == rhs[r] );
         }
 
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Compare operator '!='.
-     *
-     *  @param lhs [in] Matrix.
-     *  @param rhs [in] Matrix.
-     *
-     *  @return Whether lhs is equal to rhs or not.
-     */
-    /*======================================================================*/
-    friend const bool operator !=( const Matrix& lhs, const Matrix& rhs )
+    friend bool operator !=( const Matrix& lhs, const Matrix& rhs )
     {
-        return( !( lhs == rhs ) );
+        return !( lhs == rhs );
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '+'.
-     *
-     *  @param lhs [in] Matrix.
-     *  @param rhs [in] Matrix.
-     *
-     *  @return Sum of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Matrix operator +( const Matrix& lhs, const Matrix& rhs )
     {
         Matrix result( lhs );
         result += rhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '-'.
-     *
-     *  @param lhs [in] Matrix.
-     *  @param rhs [in] Matrix.
-     *
-     *  @return Difference of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Matrix operator -( const Matrix& lhs, const Matrix& rhs )
     {
         Matrix result( lhs );
         result -= rhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '*'.
-     *
-     *  @param lhs [in] Matrix.
-     *  @param rhs [in] Matrix.
-     *
-     *  @return Product of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Matrix operator *( const Matrix& lhs, const Matrix& rhs )
     {
         KVS_ASSERT( lhs.ncolumns() == rhs.nrows() );
@@ -217,19 +143,9 @@ public:
             }
         }
 
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '*'.
-     *
-     *  @param lhs [in] Matrix.
-     *  @param rhs [in] Vector( column vector ).
-     *
-     *  @return Product of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const kvs::Vector<T> operator *( const Matrix& lhs, const kvs::Vector<T>& rhs )
     {
         KVS_ASSERT( lhs.ncolumns() == rhs.size() );
@@ -248,19 +164,9 @@ public:
             }
         }
 
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '*'.
-     *
-     *  @param lhs [in] Vector( row vector ).
-     *  @param rhs [in] Matrix.
-     *
-     *  @return Product of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const kvs::Vector<T> operator *( const kvs::Vector<T>& lhs, const Matrix& rhs )
     {
         KVS_ASSERT( lhs.size() == rhs.nrows() );
@@ -279,73 +185,30 @@ public:
             }
         }
 
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '*'.
-     *
-     *  @param lhs [in] Matrix.
-     *  @param rhs [in] T.
-     *
-     *  @return Product of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Matrix operator *( const Matrix& lhs, const T rhs )
     {
         Matrix result( lhs );
         result *= rhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '*'.
-     *
-     *  @param lhs [in] T.
-     *  @param rhs [in] Matrix.
-     *
-     *  @return Product of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Matrix operator *( const T lhs, const Matrix& rhs )
     {
         Matrix result( rhs );
         result *= lhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Binary operator '/'.
-     *
-     *  @param lhs [in] Matrix.
-     *  @param rhs [in] T.
-     *
-     *  @return Quotient of lhs and rhs.
-     */
-    /*======================================================================*/
     friend const Matrix operator /( const Matrix& lhs, const T rhs )
     {
         Matrix result( lhs );
         result /= rhs;
-
-        return( result );
+        return result;
     }
 
-    /*======================================================================*/
-    /**
-     *  Output stream operator '<<'.
-     *
-     *  @param os  [in] Output stream.
-     *  @param rhs [in] Matrix.
-     *
-     *  @return Output stream.
-     */
-    /*======================================================================*/
     friend std::ostream& operator <<( std::ostream& os, const Matrix& rhs )
     {
         // Alias.
@@ -357,15 +220,15 @@ public:
         }
         os << rhs[ nrows - 1 ];
 
-        return( os );
+        return os;
     }
 };
 
 template <typename T>
-inline Matrix<T>::Matrix( void ):
-    m_nrows(0),
-    m_ncolumns(0),
-    m_rows(0)
+inline Matrix<T>::Matrix():
+    m_nrows( 0 ),
+    m_ncolumns( 0 ),
+    m_rows( 0 )
 {
 }
 
@@ -384,7 +247,6 @@ inline Matrix<T>::Matrix( const size_t nrows, const size_t ncolumns )
     , m_rows( 0 )
 {
     this->setSize( nrows, ncolumns );
-
     this->zero();
 }
 
@@ -465,18 +327,13 @@ inline Matrix<T>& Matrix<T>::operator =( const Matrix& rhs )
         m[r] = rhs[r];
     }
 
-    return( *this );
+    return *this;
 }
 
-/*==========================================================================*/
-/**
- *  Destroys the Matrix.
- */
-/*==========================================================================*/
 template<typename T>
-inline Matrix<T>::~Matrix( void )
+inline Matrix<T>::~Matrix()
 {
-    delete[] m_rows;
+    delete [] m_rows;
 }
 
 /*==========================================================================*/
@@ -518,7 +375,7 @@ inline void Matrix<T>::setSize( const size_t nrows, const size_t ncolumns )
  */
 /*==========================================================================*/
 template<typename T>
-inline void Matrix<T>::zero( void )
+inline void Matrix<T>::zero()
 {
     const size_t          nrows = this->nrows();
     kvs::Vector<T>* const m     = m_rows;
@@ -535,7 +392,7 @@ inline void Matrix<T>::zero( void )
  */
 /*==========================================================================*/
 template<typename T>
-inline void Matrix<T>::identity( void )
+inline void Matrix<T>::identity()
 {
     KVS_ASSERT( this->nrows() == this->ncolumns() );
 
@@ -574,9 +431,9 @@ inline void Matrix<T>::swap( Matrix& other )
  */
 /*==========================================================================*/
 template<typename T>
-inline const size_t Matrix<T>::nrows( void ) const
+inline size_t Matrix<T>::nrows() const
 {
-    return( m_nrows );
+    return m_nrows;
 }
 
 /*==========================================================================*/
@@ -587,9 +444,9 @@ inline const size_t Matrix<T>::nrows( void ) const
  */
 /*==========================================================================*/
 template<typename T>
-inline const size_t Matrix<T>::ncolumns( void ) const
+inline size_t Matrix<T>::ncolumns() const
 {
-    return( m_ncolumns );
+    return m_ncolumns;
 }
 
 /*==========================================================================*/
@@ -600,12 +457,11 @@ inline const size_t Matrix<T>::ncolumns( void ) const
  */
 /*==========================================================================*/
 template<typename T>
-inline const Matrix<T> Matrix<T>::transpose( void ) const
+inline const Matrix<T> Matrix<T>::transpose() const
 {
     Matrix result( *this );
     result.transpose();
-
-    return( result );
+    return result;
 }
 
 /*==========================================================================*/
@@ -616,7 +472,7 @@ inline const Matrix<T> Matrix<T>::transpose( void ) const
  */
 /*==========================================================================*/
 template<typename T>
-inline Matrix<T>& Matrix<T>::transpose( void )
+inline Matrix<T>& Matrix<T>::transpose()
 {
     // Alias
     const size_t          nrows    = this->nrows();
@@ -648,7 +504,7 @@ inline Matrix<T>& Matrix<T>::transpose( void )
         *this = result;
     }
 
-    return( *this );
+    return *this;
 }
 
 /*==========================================================================*/
@@ -663,8 +519,7 @@ inline const Matrix<T> Matrix<T>::inverse( T* determinant ) const
 {
     Matrix result( *this );
     result.inverse( determinant );
-
-    return( result );
+    return result;
 }
 
 /*==========================================================================*/
@@ -728,8 +583,7 @@ inline Matrix<T>& Matrix<T>::inverse( T* determinant )
     }
 
     *this = result;
-
-    return( *this );
+    return *this;
 }
 
 /*==========================================================================*/
@@ -738,7 +592,7 @@ inline Matrix<T>& Matrix<T>::inverse( T* determinant )
  */
 /*==========================================================================*/
 template<typename T>
-inline void Matrix<T>::print( void ) const
+inline void Matrix<T>::print() const
 {
     std::cout << *this << std::endl;
 }
@@ -751,7 +605,7 @@ inline void Matrix<T>::print( void ) const
  */
 /*==========================================================================*/
 template<typename T>
-inline const T Matrix<T>::trace( void ) const
+inline T Matrix<T>::trace() const
 {
     KVS_ASSERT( this->nrows() == this->ncolumns() );
 
@@ -766,7 +620,7 @@ inline const T Matrix<T>::trace( void ) const
         result += m[r][r];
     }
 
-    return( result );
+    return result;
 }
 
 /*==========================================================================*/
@@ -777,7 +631,7 @@ inline const T Matrix<T>::trace( void ) const
  */
 /*==========================================================================*/
 template<typename T>
-inline const T Matrix<T>::determinant( void ) const
+inline T Matrix<T>::determinant() const
 {
     KVS_ASSERT( this->nrows() == this->ncolumns() );
 
@@ -793,7 +647,7 @@ inline const T Matrix<T>::determinant( void ) const
     {
         const size_t pivot_row = result.pivot( k );
 
-        if( k != pivot_row )
+        if ( k != pivot_row )
         {
             det *= T( -1 );
         }
@@ -811,11 +665,11 @@ inline const T Matrix<T>::determinant( void ) const
         }
     }
 
-    return( det );
+    return det;
 }
 
 template<typename T>
-inline const size_t Matrix<T>::pivot( const size_t column ) const
+inline size_t Matrix<T>::pivot( const size_t column ) const
 {
     // Alias
     const size_t          nrows = this->nrows();
@@ -835,52 +689,23 @@ inline const size_t Matrix<T>::pivot( const size_t column ) const
         }
     }
 
-    return( k );
+    return k;
 }
 
-/*==========================================================================*/
-/**
- *  Subscript operator '[]'.
- *
- *  @param index [in] Index.
- *
- *  @return Element.
- */
-/*==========================================================================*/
 template<typename T>
 inline const kvs::Vector<T>& Matrix<T>::operator []( const size_t index ) const
 {
     KVS_ASSERT( index < this->nrows() );
-
-    return( m_rows[ index ] );
+    return m_rows[ index ];
 }
 
-/*==========================================================================*/
-/**
- *  Assignment operator '[]'.
- *
- *  @param index [in] Index.
- *
- *  @return Element.
- */
-/*==========================================================================*/
 template<typename T>
 inline kvs::Vector<T>& Matrix<T>::operator []( const size_t index )
 {
     KVS_ASSERT( index < this->nrows() );
-
-    return( m_rows[ index ] );
+    return m_rows[ index ];
 }
 
-/*==========================================================================*/
-/**
- *  Combined assignment operator '+='.
- *
- *  @param rhs [in] Matrix.
- *
- *  @return Oneself.
- */
-/*==========================================================================*/
 template<typename T>
 inline Matrix<T>& Matrix<T>::operator +=( const Matrix& rhs )
 {
@@ -896,18 +721,9 @@ inline Matrix<T>& Matrix<T>::operator +=( const Matrix& rhs )
         m[r] += rhs[r];
     }
 
-    return( *this );
+    return *this;
 }
 
-/*==========================================================================*/
-/**
- *  Combined assignment operator '-='.
- *
- *  @param rhs [in] Matrix.
- *
- *  @return Oneself.
- */
-/*==========================================================================*/
 template<typename T>
 inline Matrix<T>& Matrix<T>::operator -=( const Matrix& rhs )
 {
@@ -923,37 +739,17 @@ inline Matrix<T>& Matrix<T>::operator -=( const Matrix& rhs )
         m[r] -= rhs[r];
     }
 
-    return( *this );
+    return *this;
 }
 
-/*==========================================================================*/
-/**
- *  Combined assignment operator '*='.
- *
- *  @param rhs [in] Matrix.
- *
- *  @return Oneself.
- */
-/*==========================================================================*/
 template<typename T>
 inline Matrix<T>& Matrix<T>::operator *=( const Matrix& rhs )
 {
     Matrix result( ( *this ) * rhs );
-
     *this = result;
-
-    return( *this );
+    return *this;
 }
 
-/*==========================================================================*/
-/**
- *  Combined assignment operator '*='.
- *
- *  @param rhs [in] T.
- *
- *  @return Oneself.
- */
-/*==========================================================================*/
 template<typename T>
 inline Matrix<T>& Matrix<T>::operator *=( const T rhs )
 {
@@ -966,18 +762,9 @@ inline Matrix<T>& Matrix<T>::operator *=( const T rhs )
         m[r] *= rhs;
     }
 
-    return( *this );
+    return *this;
 }
 
-/*==========================================================================*/
-/**
- *  Combined assignment operator '/='.
- *
- *  @param rhs [in] T.
- *
- *  @return Oneself.
- */
-/*==========================================================================*/
 template<typename T>
 inline Matrix<T>& Matrix<T>::operator /=( const T rhs )
 {
@@ -990,23 +777,15 @@ inline Matrix<T>& Matrix<T>::operator /=( const T rhs )
         m[r] /= rhs;
     }
 
-    return( *this );
+    return *this;
 }
 
-/*==========================================================================*/
-/**
- *  Unary operator '-'.
- *
- *  @return Minus of this.
- */
-/*==========================================================================*/
 template<typename T>
-inline const Matrix<T> Matrix<T>::operator -( void ) const
+inline const Matrix<T> Matrix<T>::operator -() const
 {
     Matrix result( *this );
     result *= T( -1 );
-
-    return( result );
+    return result;
 }
 
 } // end of namespace kvs
