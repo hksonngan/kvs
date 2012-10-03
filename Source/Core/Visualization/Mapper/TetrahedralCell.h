@@ -229,7 +229,7 @@ inline const kvs::Vector3f TetrahedralCell<T>::transformGlobalToLocal( const kvs
                             v03.y(), v13.y(), v23.y(),
                             v03.z(), v13.z(), v23.z() );
 
-    return( M.inverse() * ( point - v3 ) );
+    return( M.inverted() * ( point - v3 ) );
 }
 
 /*===========================================================================*/
@@ -383,7 +383,7 @@ inline void TetrahedralCell<T>::bindCell( const kvs::UInt32 index )
         static_cast<float>( BaseClass::m_scalars[2] ),
         static_cast<float>( BaseClass::m_scalars[3] ) );
 
-    const kvs::Vector4f weight( A.inverse() * b );
+    const kvs::Vector4f weight( A.inverted() * b );
 
     m_coefficients.set( weight[0], weight[1], weight[2] );
     m_constant = weight[3];
@@ -530,7 +530,7 @@ inline const kvs::Vector3f TetrahedralCell<T>::transformGlobalToLocal( const kvs
                             v01.y(), v02.y(), v03.y(),
                             v01.z(), v02.z(), v03.z() );
 
-    return( M.inverse() * ( point - v0 ) );
+    return( M.inverted() * ( point - v0 ) );
 }
 
 /*===========================================================================*/

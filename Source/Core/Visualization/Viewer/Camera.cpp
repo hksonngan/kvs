@@ -749,7 +749,7 @@ const kvs::Vector3f Camera::projectCameraToWorld( const kvs::Vector3f& p_cam ) c
 /*==========================================================================*/
 const kvs::Vector3f Camera::projectWorldToObject( const kvs::Vector3f& p_wld ) const
 {
-    const kvs::Xform inv_modeling( this->modelViewMatrix().inverse() * this->viewingMatrix() );
+    const kvs::Xform inv_modeling( this->modelViewMatrix().inverted() * this->viewingMatrix() );
     return inv_modeling.transform( p_wld );
 }
 

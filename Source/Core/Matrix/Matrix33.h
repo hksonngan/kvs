@@ -68,10 +68,11 @@ public:
     void swap( Matrix33& other );
 
 public:
-    const Matrix33 transpose() const;
-    Matrix33&      transpose();
-    const Matrix33 inverse( T* determinant = 0 ) const;
-    Matrix33&      inverse( T* determinant = 0 );
+    const Matrix33 transposed() const;
+    void  transpose();
+
+    const Matrix33 inverted( T* determinant = 0 ) const;
+    void invert( T* determinant = 0 );
 
 public:
     void print() const;
@@ -383,7 +384,7 @@ inline void Matrix33<T>::swap( Matrix33& other )
  */
 /*==========================================================================*/
 template<typename T>
-inline const Matrix33<T> Matrix33<T>::transpose() const
+inline const Matrix33<T> Matrix33<T>::transposed() const
 {
     Matrix33 result( *this );
     result.transpose();
@@ -398,12 +399,11 @@ inline const Matrix33<T> Matrix33<T>::transpose() const
  */
 /*==========================================================================*/
 template<typename T>
-inline Matrix33<T>& Matrix33<T>::transpose()
+inline void Matrix33<T>::transpose()
 {
     std::swap( m_rows[0][1], m_rows[1][0] );
     std::swap( m_rows[0][2], m_rows[2][0] );
     std::swap( m_rows[1][2], m_rows[2][1] );
-    return *this;
 }
 
 /*==========================================================================*/
@@ -414,10 +414,10 @@ inline Matrix33<T>& Matrix33<T>::transpose()
  */
 /*==========================================================================*/
 template<typename T>
-inline const Matrix33<T> Matrix33<T>::inverse( T* determinant ) const
+inline const Matrix33<T> Matrix33<T>::inverted( T* determinant ) const
 {
     Matrix33 result( *this );
-    result.inverse( determinant );
+    result.invert( determinant );
     return result;
 }
 
@@ -429,7 +429,7 @@ inline const Matrix33<T> Matrix33<T>::inverse( T* determinant ) const
  */
 /*==========================================================================*/
 template<typename T>
-inline Matrix33<T>& Matrix33<T>::inverse( T* determinant )
+inline void Matrix33<T>::invert( T* determinant )
 {
     const T det22[9] = {
         m_rows[1][1] * m_rows[2][2] - m_rows[1][2] * m_rows[2][1],
@@ -447,15 +447,13 @@ inline Matrix33<T>& Matrix33<T>::inverse( T* determinant )
 
     if ( determinant ) *determinant = det33;
 
-    // Inverse.
     this->set(
         +det22[0], -det22[3], +det22[6],
         -det22[1], +det22[4], -det22[7],
         +det22[2], -det22[5], +det22[8] );
 
     const T det_inverse = static_cast<T>( 1.0 / det33 );
-    ( *this ) *= det_inverse;
-    return *this;
+    *this *= det_inverse;
 }
 
 /*==========================================================================*/

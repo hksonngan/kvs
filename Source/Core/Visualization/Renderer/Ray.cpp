@@ -244,8 +244,7 @@ void Ray::combine_projection_and_modelview( GLfloat projection[16], GLfloat mode
     }
 
     // Calculate the inverse of the PM matrix.
-    m_inverse = m_combined;
-    m_inverse.inverse();
+    m_inverse = m_combined.inverted();
 }
 
 std::ostream& operator << ( std::ostream& os, const Ray& rhs )

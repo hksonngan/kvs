@@ -235,7 +235,7 @@ inline const kvs::Vector3f CellBase<T>::transformGlobalToLocal( const kvs::Vecto
         const kvs::Vector3f dX( X - X0 );
 
         const kvs::Matrix33f J( this->JacobiMatrix() );
-        const kvs::Vector3f dx = J.transpose().inverse() * dX;
+        const kvs::Vector3f dx = J.transposed().inverted() * dX;
         if ( dx.length() < TinyValue ) break; // Converged.
 
         x0 += dx;
@@ -370,7 +370,7 @@ inline const kvs::Vector3f CellBase<T>::gradient( void ) const
     const kvs::Matrix33f J = this->JacobiMatrix();
 
     float determinant = 0.0f;
-    const kvs::Vector3f G = J.inverse( &determinant ) * g;
+    const kvs::Vector3f G = J.inverted( &determinant ) * g;
 
     return( kvs::Math::IsZero( determinant ) ? kvs::Vector3f( 0.0f, 0.0f, 0.0f ) : G );
 }

@@ -500,7 +500,7 @@ void Scene::updateXform( kvs::Camera* camera )
     switch( m_mouse->mode() )
     {
     case kvs::Mouse::Rotation:
-        camera->rotate( m_mouse->rotation().toMatrix().transpose() );
+        camera->rotate( m_mouse->rotation().toMatrix().transposed() );
         break;
     case kvs::Mouse::Translation:
         camera->translate( -m_mouse->translation() );

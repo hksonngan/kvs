@@ -64,11 +64,11 @@ public:
     void swap( Matrix22& other );
 
 public:
-    const Matrix22 transpose() const;
-    Matrix22&      transpose();
+    const Matrix22 transposed() const;
+    void transpose();
 
-    const Matrix22 inverse( T* determinant = 0 ) const;
-    Matrix22&      inverse( T* determinant = 0 );
+    const Matrix22 inverted( T* determinant = 0 ) const;
+    void invert( T* determinant = 0 );
 
 public:
     void print() const;
@@ -353,7 +353,7 @@ inline void Matrix22<T>::swap( Matrix22& other )
  */
 /*==========================================================================*/
 template<typename T>
-inline const Matrix22<T> Matrix22<T>::transpose() const
+inline const Matrix22<T> Matrix22<T>::transposed() const
 {
     Matrix22 result( *this );
     result.transpose();
@@ -368,10 +368,9 @@ inline const Matrix22<T> Matrix22<T>::transpose() const
  */
 /*==========================================================================*/
 template<typename T>
-inline Matrix22<T>& Matrix22<T>::transpose()
+inline void Matrix22<T>::transpose()
 {
     std::swap( m_rows[0][1], m_rows[1][0] );
-    return *this;
 }
 
 /*==========================================================================*/
@@ -382,10 +381,10 @@ inline Matrix22<T>& Matrix22<T>::transpose()
  */
 /*==========================================================================*/
 template<typename T>
-inline const Matrix22<T> Matrix22<T>::inverse( T* determinant ) const
+inline const Matrix22<T> Matrix22<T>::inverted( T* determinant ) const
 {
     Matrix22 result( *this );
-    result.inverse( determinant );
+    result.invert( determinant );
     return result;
 }
 
@@ -397,7 +396,7 @@ inline const Matrix22<T> Matrix22<T>::inverse( T* determinant ) const
  */
 /*==========================================================================*/
 template<typename T>
-inline Matrix22<T>& Matrix22<T>::inverse( T* determinant )
+inline void Matrix22<T>::invert( T* determinant )
 {
     const T det22 = m_rows[0][0] * m_rows[1][1] - m_rows[0][1] * m_rows[1][0];
 
@@ -409,8 +408,7 @@ inline Matrix22<T>& Matrix22<T>::inverse( T* determinant )
         -m_rows[1][0], +m_rows[0][0] );
 
     const T det_inverse = static_cast<T>( 1.0 / det22 );
-    ( *this ) *= det_inverse;
-    return *this;
+    *this *= det_inverse;
 }
 
 /*==========================================================================*/

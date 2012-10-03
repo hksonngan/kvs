@@ -132,7 +132,7 @@ const kvs::Vector3f Xform::project( const kvs::Vector3f& pos ) const
 
 const kvs::Xform Xform::inverse() const
 {
-    return kvs::Xform( m_matrix.inverse() );
+    return kvs::Xform( m_matrix.inverted() );
 }
 
 const kvs::Matrix44f Xform::toMatrix() const

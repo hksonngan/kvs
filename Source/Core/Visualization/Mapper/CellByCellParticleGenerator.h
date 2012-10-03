@@ -179,7 +179,7 @@ inline void UnProject(
         modelview[2], modelview[6], modelview[10], modelview[14],
         modelview[3], modelview[7], modelview[11], modelview[15] );
 
-    const kvs::Vector4d O = ( P * M ).inverse() * I;
+    const kvs::Vector4d O = ( P * M ).inverted() * I;
 
     const double w =  ( O.w() == 0.0 ) ? 1.0 : O.w();
 

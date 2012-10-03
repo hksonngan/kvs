@@ -603,7 +603,8 @@ void CellByCellLayeredSampling::roulette_selection(
         0.0f,    0.0f,    1.0f/a3, -b3/a3,
         0.0f,    0.0f,    0.0f,    1.0f       );
 
-    const kvs::Matrix44f L_inv = m_L_matrix.transpose();
+    m_L_matrix.transpose();
+    const kvs::Matrix44f L_inv = m_L_matrix;
 
     const kvs::Vector3f g = cell->gradient().normalized();
 
@@ -847,7 +848,7 @@ void CellByCellLayeredSampling::calculate_particles_in_cell(
         d1[1], d2[1], d3[1],
         d1[2], d2[2], d3[2] );
 
-    const kvs::Matrix33f D_inv( D.inverse() );
+    const kvs::Matrix33f D_inv( D.inverted() );
 
     size_t counter = 0;
     const size_t nparticles = m_pregenerated_particles->nvertices();

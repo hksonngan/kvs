@@ -72,10 +72,11 @@ public:
     void swap( Matrix44& other );
 
 public:
-    const Matrix44 transpose() const;
-    Matrix44&      transpose();
-    const Matrix44 inverse( T* determinant = 0 ) const;
-    Matrix44&      inverse( T* determinant = 0 );
+    const Matrix44 transposed() const;
+    void transpose();
+
+    const Matrix44 inverted( T* determinant = 0 ) const;
+    void invert( T* determinant = 0 );
 
 public:
     void print() const;
@@ -418,7 +419,7 @@ inline void Matrix44<T>::swap( Matrix44& other )
  */
 /*==========================================================================*/
 template<typename T>
-inline const Matrix44<T> Matrix44<T>::transpose() const
+inline const Matrix44<T> Matrix44<T>::transposed() const
 {
     Matrix44 result( *this );
     result.transpose();
@@ -433,7 +434,7 @@ inline const Matrix44<T> Matrix44<T>::transpose() const
  */
 /*==========================================================================*/
 template<typename T>
-inline Matrix44<T>& Matrix44<T>::transpose()
+inline void Matrix44<T>::transpose()
 {
     std::swap( m_rows[0][1], m_rows[1][0] );
     std::swap( m_rows[0][2], m_rows[2][0] );
@@ -441,7 +442,6 @@ inline Matrix44<T>& Matrix44<T>::transpose()
     std::swap( m_rows[1][2], m_rows[2][1] );
     std::swap( m_rows[1][3], m_rows[3][1] );
     std::swap( m_rows[2][3], m_rows[3][2] );
-    return *this;
 }
 
 /*==========================================================================*/
@@ -452,10 +452,10 @@ inline Matrix44<T>& Matrix44<T>::transpose()
  */
 /*==========================================================================*/
 template<typename T>
-inline const Matrix44<T> Matrix44<T>::inverse( T* determinant ) const
+inline const Matrix44<T> Matrix44<T>::inverted( T* determinant ) const
 {
     Matrix44 result( *this );
-    result.inverse( determinant );
+    result.invert( determinant );
     return result;
 }
 
@@ -467,7 +467,7 @@ inline const Matrix44<T> Matrix44<T>::inverse( T* determinant ) const
  */
 /*==========================================================================*/
 template<typename T>
-inline Matrix44<T>& Matrix44<T>::inverse( T* determinant )
+inline void Matrix44<T>::invert( T* determinant )
 {
     const T det22upper[6] = {
         m_rows[0][2] * m_rows[1][3] - m_rows[0][3] * m_rows[1][2],
@@ -515,9 +515,7 @@ inline Matrix44<T>& Matrix44<T>::inverse( T* determinant )
         -det33[3], +det33[7], -det33[11], +det33[15] );
 
     const T det_inverse = static_cast<T>( 1.0 / det44 );
-    ( *this ) *= det_inverse;
-
-    return *this;
+    *this *= det_inverse;
 }
 
 /*==========================================================================*/
