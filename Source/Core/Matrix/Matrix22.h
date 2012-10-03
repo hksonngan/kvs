@@ -102,73 +102,64 @@ public:
 
     friend const Matrix22 operator +( const Matrix22& lhs, const Matrix22& rhs )
     {
-        Matrix22 result( lhs );
-        result += rhs;
-        return result;
+        return Matrix22( lhs ) += rhs;
     }
 
     friend const Matrix22 operator -( const Matrix22& lhs, const Matrix22& rhs )
     {
-        Matrix22 result( lhs );
-        result -= rhs;
-        return result;
+        return Matrix22( lhs ) -= rhs;
     }
 
     friend const Matrix22 operator *( const Matrix22& lhs, const Matrix22& rhs )
     {
-        Matrix22 result( lhs );
-        result *= rhs;
-        return result;
+        return Matrix22( lhs ) *= rhs;
     }
 
     friend const Vector2<T> operator *( const Matrix22& lhs, const Vector2<T>& rhs )
     {
-        const Vector2<T> result(
+        return Vector2<T>(
             lhs[0].dot( rhs ),
             lhs[1].dot( rhs ) );
-        return result;
     }
 
     friend const Vector2<T> operator *( const Vector2<T>& lhs, const Matrix22& rhs )
     {
-        const Vector2<T> result(
+        return Vector2<T>(
             lhs[0] * rhs[0][0] + lhs[1] * rhs[1][0],
             lhs[0] * rhs[0][1] + lhs[1] * rhs[1][1] );
-        return result;
     }
 
     friend const Matrix22 operator *( const Matrix22& lhs, const T rhs )
     {
-        Matrix22 result( lhs );
-        result *= rhs;
-        return result;
+        return Matrix22( lhs ) *= rhs;
     }
 
     friend const Matrix22 operator *( const T lhs, const Matrix22& rhs )
     {
-        Matrix22 result( rhs );
-        result *= lhs;
-        return result;
+        return rhs * lhs;
     }
 
     friend const Matrix22 operator /( const Matrix22& lhs, const T rhs )
     {
-        Matrix22 result( lhs );
-        result /= rhs;
-        return result;
+        return Matrix22( lhs ) /= rhs;
     }
 
     friend std::ostream& operator <<( std::ostream& os, const Matrix22& rhs )
     {
-        os << rhs[0] << std::endl;
-        os << rhs[1];
-        return os;
+        return os << rhs[0] << "\n" << rhs[1];
     }
 
 public:
     // Will be removed.
-    explicit Matrix22( const T a );
-    void set( const T a );
+    explicit Matrix22( const T a )
+    {
+        *this = All( a );
+    }
+
+    void set( const T a )
+    {
+        *this = All( a );
+    }
 };
 
 /*==========================================================================*/
@@ -223,19 +214,6 @@ inline Matrix22<T>::Matrix22()
 /**
  *  Constructs a new Matrix22.
  *
- *  @param a [in] Element.
- */
-/*==========================================================================*/
-template<typename T>
-inline Matrix22<T>::Matrix22( const T a )
-{
-    this->set( a );
-}
-
-/*==========================================================================*/
-/**
- *  Constructs a new Matrix22.
- *
  *  @param a00 [in] Element.
  *  @param a01 [in] Element.
  *  @param a10 [in] Element.
@@ -279,20 +257,6 @@ template<typename T>
 inline Matrix22<T>::Matrix22( const T elements[4] )
 {
     this->set( elements );
-}
-
-/*==========================================================================*/
-/**
- *  Sets the elements.
- *
- *  @param a [in] Element.
- */
-/*==========================================================================*/
-template<typename T>
-inline void Matrix22<T>::set( const T a )
-{
-    m_rows[0].set( a );
-    m_rows[1].set( a );
 }
 
 /*==========================================================================*/
@@ -353,8 +317,7 @@ inline void Matrix22<T>::set( const T elements[4] )
 template<typename T>
 inline void Matrix22<T>::zero()
 {
-    m_rows[0].zero();
-    m_rows[1].zero();
+    *this = Zero();
 }
 
 /*==========================================================================*/
@@ -365,9 +328,7 @@ inline void Matrix22<T>::zero()
 template<typename T>
 inline void Matrix22<T>::identity()
 {
-    this->set(
-        T( 1 ), T( 0 ),
-        T( 0 ), T( 1 ) );
+    *this = Identity();
 }
 
 /*==========================================================================*/
@@ -550,9 +511,7 @@ inline Matrix22<T>& Matrix22<T>::operator /=( const T rhs )
 template<typename T>
 inline const Matrix22<T> Matrix22<T>::operator -() const
 {
-    Matrix22 result( *this );
-    result *= T( -1 );
-    return result;
+    return Matrix22( *this ) *= T( -1 );
 }
 
 } // end of namespace kvs

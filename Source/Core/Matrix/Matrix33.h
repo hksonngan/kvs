@@ -106,76 +106,66 @@ public:
 
     friend const Matrix33 operator +( const Matrix33& lhs, const Matrix33& rhs )
     {
-        Matrix33 result( lhs );
-        result += rhs;
-        return result;
+        return Matrix33( lhs ) += rhs;
     }
 
     friend const Matrix33 operator -( const Matrix33& lhs, const Matrix33& rhs )
     {
-        Matrix33 result( lhs );
-        result -= rhs;
-        return result;
+        return Matrix33( lhs ) -= rhs;
     }
 
     friend const Matrix33 operator *( const Matrix33& lhs, const Matrix33& rhs )
     {
-        Matrix33 result( lhs );
-        result *= rhs;
-        return result;
+        return Matrix33( lhs ) *= rhs;
     }
 
     friend const Vector3<T> operator *( const Matrix33& lhs, const Vector3<T>& rhs )
     {
-        const Vector3<T> result(
+        return Vector3<T>(
             lhs[0].dot( rhs ),
             lhs[1].dot( rhs ),
             lhs[2].dot( rhs ) );
-        return result;
     }
 
     friend const Vector3<T> operator *( const Vector3<T>& lhs, const Matrix33& rhs )
     {
-        const Vector3<T> result(
+        return Vector3<T>(
             lhs[0] * rhs[0][0] + lhs[1] * rhs[1][0] + lhs[2] * rhs[2][0],
             lhs[0] * rhs[0][1] + lhs[1] * rhs[1][1] + lhs[2] * rhs[2][1],
             lhs[0] * rhs[0][2] + lhs[1] * rhs[1][2] + lhs[2] * rhs[2][2] );
-        return result;
     }
 
     friend const Matrix33 operator *( const Matrix33& lhs, const T rhs )
     {
-        Matrix33 result( lhs );
-        result *= rhs;
-        return result;
+        return Matrix33( lhs ) *= rhs;
     }
 
     friend const Matrix33 operator *( const T lhs, const Matrix33& rhs )
     {
-        Matrix33 result( rhs );
-        result *= lhs;
-        return result;
+        return rhs * lhs;
     }
 
     friend const Matrix33 operator /( const Matrix33& lhs, const T rhs )
     {
-        Matrix33 result( lhs );
-        result /= rhs;
-        return result;
+        return Matrix33( lhs ) /= rhs;
     }
 
     friend std::ostream& operator <<( std::ostream& os, const Matrix33& rhs )
     {
-        os << rhs[0] << std::endl;
-        os << rhs[1] << std::endl;
-        os << rhs[2];
-        return os;
+        return os << rhs[0] << "\n" << rhs[1] << "\n" << rhs[2];
     }
 
 public:
     // Will be removed.
-    explicit Matrix33( const T a );
-    void set( const T a );
+    explicit Matrix33( const T a )
+    {
+        *this = All( a );
+    }
+
+    void set( const T a )
+    {
+        *this = All( a );
+    }
 };
 
 /*==========================================================================*/
@@ -233,19 +223,6 @@ inline Matrix33<T>::Matrix33()
 /**
  *  Constructs a new Matrix33.
  *
- *  @param a [in] Element.
- */
-/*==========================================================================*/
-template<typename T>
-inline Matrix33<T>::Matrix33( const T a )
-{
-    this->set( a );
-}
-
-/*==========================================================================*/
-/**
- *  Constructs a new Matrix33.
- *
  *  @param a00 [in] Element.
  *  @param a01 [in] Element.
  *  @param a02 [in] Element.
@@ -298,21 +275,6 @@ template<typename T>
 inline Matrix33<T>::Matrix33( const T elements[9] )
 {
     this->set( elements );
-}
-
-/*==========================================================================*/
-/**
- *  Sets the elements.
- *
- *  @param a [in] Element.
- */
-/*==========================================================================*/
-template<typename T>
-inline void Matrix33<T>::set( const T a )
-{
-    m_rows[0].set( a );
-    m_rows[1].set( a );
-    m_rows[2].set( a );
 }
 
 /*==========================================================================*/
@@ -384,9 +346,7 @@ inline void Matrix33<T>::set( const T elements[9] )
 template<typename T>
 inline void Matrix33<T>::zero()
 {
-    m_rows[0].zero();
-    m_rows[1].zero();
-    m_rows[2].zero();
+    *this = Zero();
 }
 
 /*==========================================================================*/
@@ -397,10 +357,7 @@ inline void Matrix33<T>::zero()
 template<typename T>
 inline void Matrix33<T>::identity()
 {
-    this->set(
-        T( 1 ), T( 0 ), T( 0 ),
-        T( 0 ), T( 1 ), T( 0 ),
-        T( 0 ), T( 0 ), T( 1 ) );
+    *this = Identity();
 }
 
 /*==========================================================================*/
@@ -615,9 +572,7 @@ inline Matrix33<T>& Matrix33<T>::operator /=( const T rhs )
 template<typename T>
 inline const Matrix33<T> Matrix33<T>::operator -() const
 {
-    Matrix33 result( *this );
-    result *= T( -1 );
-    return result;
+    return Matrix33( *this ) *= T( -1 );
 }
 
 } // end of namespace kvs
