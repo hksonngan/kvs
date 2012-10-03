@@ -605,7 +605,7 @@ void CellByCellLayeredSampling::roulette_selection(
 
     const kvs::Matrix44f L_inv = m_L_matrix.transpose();
 
-    const kvs::Vector3f g = cell->gradient().normalizedVector();
+    const kvs::Vector3f g = cell->gradient().normalized();
 
     const kvs::Matrix44f LA_inv = L_inv * A_inv;
     for ( size_t i = 0; i < nparticles; i++ )
@@ -785,7 +785,7 @@ void CellByCellLayeredSampling::calculate_particles_in_cell(
     const float max_cell_scalar = static_cast<float>( S_max - min_value ) / ( max_value - min_value );
 
     // Gradient vector.
-    kvs::Vector3f g = cell->gradient().normalizedVector();
+    kvs::Vector3f g = cell->gradient().normalized();
 
     // Temporary vector for calculating basis vectors: t1 and t2.
     kvs::Vector3f u( 0.0f, 0.0f, 0.0f );
@@ -795,8 +795,8 @@ void CellByCellLayeredSampling::calculate_particles_in_cell(
     u[index] = 1.0f;
 
     // Basis vectors.
-    kvs::Vector3f t1 = g.cross( u ).normalizedVector();
-    kvs::Vector3f t2 = g.cross( t1 ).normalizedVector();
+    kvs::Vector3f t1 = g.cross( u ).normalized();
+    kvs::Vector3f t2 = g.cross( t1 ).normalized();
 
     // Transformation matrix L.
     m_L_matrix = kvs::Matrix44f(

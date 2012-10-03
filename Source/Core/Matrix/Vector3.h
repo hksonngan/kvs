@@ -62,17 +62,8 @@ public:
     const Vector2<T> xy() const;
 
 public:
-    const Vector3 normalizedVector() const
-    {
-        return this->normalized();
-    }
-
     const Vector3 normalized() const;
-
-#if KVS_ENABLE_DEPRECATED
-    const Vector3 normalize() const;
-    Vector3&      normalize();
-#endif
+    void          normalize();
 
 public:
     void print() const;
@@ -110,65 +101,55 @@ public:
 
     friend const Vector3 operator +( const Vector3& lhs, const Vector3& rhs )
     {
-        Vector3 result( lhs );
-        result += rhs;
-        return result;
+        return Vector3( lhs ) += rhs;
     }
 
     friend const Vector3 operator -( const Vector3& lhs, const Vector3& rhs )
     {
-        Vector3 result( lhs );
-        result -= rhs;
-        return result;
+        return Vector3( lhs ) -= rhs;
     }
 
     friend const Vector3 operator *( const Vector3& lhs, const Vector3& rhs )
     {
-        Vector3 result( lhs );
-        result *= rhs;
-        return result;
+        return Vector3( lhs ) *= rhs;
     }
 
     friend const Vector3 operator *( const Vector3& lhs, const T rhs )
     {
-        Vector3 result( lhs );
-        result *= rhs;
-        return result;
+        return Vector3( lhs ) *= rhs;
     }
 
     friend const Vector3 operator *( const T lhs, const Vector3& rhs )
     {
-        Vector3 result( rhs );
-        result *= lhs;
-        return result;
+        return rhs * lhs;
     }
 
     friend const Vector3 operator /( const Vector3& lhs, const Vector3& rhs )
     {
-        Vector3 result( lhs );
-        result /= rhs;
-        return result;
+        return Vector3( lhs ) /= rhs;
     }
 
     friend const Vector3 operator /( const Vector3& lhs, const T rhs )
     {
-        Vector3 result( lhs );
-        result /= rhs;
-        return result;
+        return Vector3( lhs ) /= rhs;
     }
 
     friend std::ostream& operator <<( std::ostream& os, const Vector3& rhs )
     {
-        os << rhs[0] << " ";
-        os << rhs[1] << " ";
-        os << rhs[2];
-        return os;
+        return os << rhs[0] << " " << rhs[1] << " " << rhs[2];
     }
 
 public:
     // Will be removed.
-    explicit Vector3( const T x );
-    void set( const T x );
+    explicit Vector3( const T x )
+    {
+        *this = All( x );
+    }
+
+    void set( const T x )
+    {
+        *this = All( x );
+    }
 };
 
 /*==========================================================================*/
@@ -213,19 +194,6 @@ inline Vector3<T>::Vector3()
  *  Constructs a new Vector3.
  *
  *  @param x [in] Element.
- */
-/*==========================================================================*/
-template<typename T>
-inline Vector3<T>::Vector3( const T x )
-{
-    this->set( x );
-}
-
-/*==========================================================================*/
-/**
- *  Constructs a new Vector3.
- *
- *  @param x [in] Element.
  *  @param y [in] Element.
  *  @param z [in] Element.
  */
@@ -261,21 +229,6 @@ template<typename T>
 inline Vector3<T>::Vector3( const T elements[3] )
 {
     this->set( elements );
-}
-
-/*==========================================================================*/
-/**
- *  Sets the elements.
- *
- *  @param x [in] Element.
- */
-/*==========================================================================*/
-template<typename T>
-inline void Vector3<T>::set( const T x )
-{
-    m_elements[0] = x;
-    m_elements[1] = x;
-    m_elements[2] = x;
 }
 
 /*==========================================================================*/
@@ -442,24 +395,8 @@ template<typename T>
 inline const Vector3<T> Vector3<T>::normalized() const
 {
     const double length = this->length();
-    const T normalize_factor = length > 0.0 ? static_cast<T>( 1.0 / length ) : T(0);
+    const T normalize_factor = length > 0.0 ? static_cast<T>( 1.0 / length ) : T( 0 );
     return *this * normalize_factor;
-}
-
-#if KVS_ENABLE_DEPRECATED
-/*==========================================================================*/
-/**
- *  Copies this and normalizes it.
- *
- *  @return Normalized Vector3.
- */
-/*==========================================================================*/
-template<typename T>
-inline const Vector3<T> Vector3<T>::normalize() const
-{
-    Vector3 result( *this );
-    result.normalize();
-    return result;
 }
 
 /*==========================================================================*/
@@ -470,14 +407,13 @@ inline const Vector3<T> Vector3<T>::normalize() const
  */
 /*==========================================================================*/
 template<typename T>
-inline Vector3<T>& Vector3<T>::normalize()
+inline void Vector3<T>::normalize()
 {
     const double length = this->length();
-    const T normalize_factor = length > 0.0 ? static_cast<T>( 1.0 / length ) : T(0);
-    ( *this ) *= normalize_factor;
-    return *this;
+    const T normalize_factor = length > 0.0 ? static_cast<T>( 1.0 / length ) : T( 0 );
+    *this *= normalize_factor;
 }
-#endif
+
 /*==========================================================================*/
 /**
  *  Prints the elements of this.
@@ -513,9 +449,9 @@ template<typename T>
 inline double Vector3<T>::length2() const
 {
     double result = 0.0;
-    result += m_elements[0] * m_elements[0];
-    result += m_elements[1] * m_elements[1];
-    result += m_elements[2] * m_elements[2];
+    result += (double)m_elements[0] * (double)m_elements[0];
+    result += (double)m_elements[1] * (double)m_elements[1];
+    result += (double)m_elements[2] * (double)m_elements[2];
     return result;
 }
 
@@ -571,63 +507,61 @@ inline T& Vector3<T>::operator []( const size_t index )
 template<typename T>
 inline Vector3<T>& Vector3<T>::operator +=( const Vector3& rhs )
 {
-    m_elements[0] = static_cast<T>( m_elements[0] + rhs[0] );
-    m_elements[1] = static_cast<T>( m_elements[1] + rhs[1] );
-    m_elements[2] = static_cast<T>( m_elements[2] + rhs[2] );
+    m_elements[0] += rhs[0];
+    m_elements[1] += rhs[1];
+    m_elements[2] += rhs[2];
     return *this;
 }
 
 template<typename T>
 inline Vector3<T>& Vector3<T>::operator -=( const Vector3& rhs )
 {
-    m_elements[0] = static_cast<T>( m_elements[0] - rhs[0] );
-    m_elements[1] = static_cast<T>( m_elements[1] - rhs[1] );
-    m_elements[2] = static_cast<T>( m_elements[2] - rhs[2] );
+    m_elements[0] -= rhs[0];
+    m_elements[1] -= rhs[1];
+    m_elements[2] -= rhs[2];
     return *this;
 }
 
 template<typename T>
 inline Vector3<T>& Vector3<T>::operator *=( const Vector3& rhs )
 {
-    m_elements[0] = static_cast<T>( m_elements[0] * rhs[0] );
-    m_elements[1] = static_cast<T>( m_elements[1] * rhs[1] );
-    m_elements[2] = static_cast<T>( m_elements[2] * rhs[2] );
+    m_elements[0] *= rhs[0];
+    m_elements[1] *= rhs[1];
+    m_elements[2] *= rhs[2];
     return *this;
 }
 
 template<typename T>
 inline Vector3<T>& Vector3<T>::operator *=( const T rhs )
 {
-    m_elements[0] = static_cast<T>( m_elements[0] * rhs );
-    m_elements[1] = static_cast<T>( m_elements[1] * rhs );
-    m_elements[2] = static_cast<T>( m_elements[2] * rhs );
+    m_elements[0] *= rhs;
+    m_elements[1] *= rhs;
+    m_elements[2] *= rhs;
     return *this;
 }
 
 template<typename T>
 inline Vector3<T>& Vector3<T>::operator /=( const Vector3& rhs )
 {
-    m_elements[0] = static_cast<T>( m_elements[0] / rhs[0] );
-    m_elements[1] = static_cast<T>( m_elements[1] / rhs[1] );
-    m_elements[2] = static_cast<T>( m_elements[2] / rhs[2] );
+    m_elements[0] /= rhs[0];
+    m_elements[1] /= rhs[1];
+    m_elements[2] /= rhs[2];
     return *this;
 }
 
 template<typename T>
 inline Vector3<T>& Vector3<T>::operator /=( const T rhs )
 {
-    m_elements[0] = static_cast<T>( m_elements[0] / rhs );
-    m_elements[1] = static_cast<T>( m_elements[1] / rhs );
-    m_elements[2] = static_cast<T>( m_elements[2] / rhs );
+    m_elements[0] /= rhs;
+    m_elements[1] /= rhs;
+    m_elements[2] /= rhs;
     return *this;
 }
 
 template<typename T>
 inline const Vector3<T> Vector3<T>::operator -() const
 {
-    Vector3 result( *this );
-    result *= T( -1 );
-    return result;
+    return Vector3( *this ) *= T( -1 );
 }
 
 } // end of namespace kvs

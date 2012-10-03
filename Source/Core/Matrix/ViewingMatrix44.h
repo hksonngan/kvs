@@ -41,9 +41,9 @@ inline kvs::Matrix44<T> ViewingMatrix44(
     kvs::Vector3<T> r = d.cross( u );
     kvs::Vector3<T> f = r.cross( d );
 
-    d = d.normalizedVector();
-    r = r.normalizedVector();
-    f = f.normalizedVector();
+    d.normalize();
+    r.normalize();
+    f.normalize();
 
     const T elements[ 16 ] =
     {

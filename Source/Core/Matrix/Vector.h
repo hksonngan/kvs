@@ -17,6 +17,7 @@
 #include <iostream>
 #include <vector>
 #include <cstring>
+#include <kvs/DebugNew>
 #include <kvs/Assert>
 #include <kvs/Math>
 
@@ -56,8 +57,8 @@ public:
     size_t size() const;
 
 public:
-    const Vector normalize() const;
-    Vector&      normalize();
+    const Vector normalized() const;
+    void         normalize();
 
 public:
     void print() const;
@@ -328,11 +329,11 @@ inline size_t Vector<T>::size() const
  */
 /*==========================================================================*/
 template <typename T>
-inline const Vector<T> Vector<T>::normalize() const
+inline const Vector<T> Vector<T>::normalized() const
 {
-    Vector result( *this );
-    result.normalize();
-    return result;
+    const double length = this->length();
+    const T normalize_factor = length > 0.0 ? static_cast<T>( 1.0 / length ) : T( 0 );
+    return *this * normalize_factor;
 }
 
 /*==========================================================================*/
@@ -343,13 +344,11 @@ inline const Vector<T> Vector<T>::normalize() const
  */
 /*==========================================================================*/
 template <typename T>
-inline Vector<T>& Vector<T>::normalize()
+inline void Vector<T>::normalize()
 {
-    KVS_ASSERT( !( kvs::Math::IsZero( this->length() ) ) );
-
-    const T normalize_factor = static_cast<T>( 1.0 / this->length() );
-    ( *this ) *= normalize_factor;
-    return *this;
+    const double length = this->length();
+    const T normalize_factor = length > 0.0 ? static_cast<T>( 1.0 / length ) : T( 0 );
+    *this *= normalize_factor;
 }
 
 /*==========================================================================*/

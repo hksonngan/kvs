@@ -56,17 +56,9 @@ public:
     const T& y() const;
 
 public:
-    const Vector2 normalizedVector() const
-    {
-        return this->normalized();
-    }
-
     const Vector2 normalized() const;
+    void normalize();
 
-#if KVS_ENABLE_DEPRECATED
-    const Vector2 normalize() const;
-    Vector2&      normalize();
-#endif
 public:
     void print() const;
     double length() const;
@@ -101,65 +93,55 @@ public:
 
     friend const Vector2 operator +( const Vector2& lhs, const Vector2& rhs )
     {
-        Vector2 result( lhs );
-        result += rhs;
-        return result;
+        return Vector2( lhs ) += rhs;
     }
 
     friend const Vector2 operator -( const Vector2& lhs, const Vector2& rhs )
     {
-        Vector2 result( lhs );
-        result -= rhs;
-        return result;
+        return Vector2( lhs ) -= rhs;
     }
 
     friend const Vector2 operator *( const Vector2& lhs, const Vector2& rhs )
     {
-        Vector2 result( lhs );
-        result *= rhs;
-        return result;
+        return Vector2( lhs ) *= rhs;
     }
 
     friend const Vector2 operator *( const Vector2& lhs, const T rhs )
     {
-        Vector2 result( lhs );
-        result *= rhs;
-        return result;
+        return Vector2( lhs ) *= rhs;
     }
 
     friend const Vector2 operator *( const T lhs, const Vector2& rhs )
     {
-        Vector2 result( rhs );
-        result *= lhs;
-        return result;
+        return rhs * lhs;
     }
 
     friend const Vector2 operator /( const Vector2& lhs, const Vector2& rhs )
     {
-        Vector2 result( lhs );
-        result /= rhs;
-        return result;
+        return Vector2( lhs ) /= rhs;
     }
 
     friend const Vector2 operator /( const Vector2& lhs, const T rhs )
     {
-        Vector2 result( lhs );
-        result /= rhs;
-
-        return result;
+        return Vector2( lhs ) /= rhs;
     }
 
     friend std::ostream& operator <<( std::ostream& os, const Vector2& rhs )
     {
-        os << rhs[0] << " ";
-        os << rhs[1];
-        return os;
+        return os << rhs[0] << " " << rhs[1];
     }
 
 public:
     // Will be romoved.
-    explicit Vector2( const T x );
-    void set( const T x );
+    explicit Vector2( const T x )
+    {
+        *this = All( x );
+    }
+
+    void set( const T x )
+    {
+        *this = All( x );
+    }
 };
 
 /*==========================================================================*/
@@ -203,19 +185,6 @@ inline Vector2<T>::Vector2()
  *  Constructs a new Vector2.
  *
  *  @param x [in] Element.
- */
-/*==========================================================================*/
-template<typename T>
-inline Vector2<T>::Vector2( const T x )
-{
-    this->set( x );
-}
-
-/*==========================================================================*/
-/**
- *  Constructs a new Vector2.
- *
- *  @param x [in] Element.
  *  @param y [in] Element.
  */
 /*==========================================================================*/
@@ -236,20 +205,6 @@ template<typename T>
 inline Vector2<T>::Vector2( const T elements[2] )
 {
     this->set( elements );
-}
-
-/*==========================================================================*/
-/**
- *  Sets the elements.
- *
- *  @param x [in] Element.
- */
-/*==========================================================================*/
-template<typename T>
-inline void Vector2<T>::set( const T x )
-{
-    m_elements[0] = x;
-    m_elements[1] = x;
 }
 
 /*==========================================================================*/
@@ -363,24 +318,8 @@ template<typename T>
 inline const Vector2<T> Vector2<T>::normalized() const
 {
     const double length = this->length();
-    const T normalize_factor = length > 0.0 ? static_cast<T>( 1.0 / length ) : T(0);
+    const T normalize_factor = length > 0.0 ? static_cast<T>( 1.0 / length ) : T( 0 );
     return *this * normalize_factor;
-}
-
-#if KVS_ENABLE_DEPRECATED
-/*==========================================================================*/
-/**
- *  Copies this and normalizes it.
- *
- *  @return Normalized Vector2.
- */
-/*==========================================================================*/
-template<typename T>
-inline const Vector2<T> Vector2<T>::normalize() const
-{
-    Vector2 result( *this );
-    result.normalize();
-    return result;
 }
 
 /*==========================================================================*/
@@ -391,16 +330,13 @@ inline const Vector2<T> Vector2<T>::normalize() const
  */
 /*==========================================================================*/
 template<typename T>
-inline Vector2<T>& Vector2<T>::normalize()
+inline void Vector2<T>::normalize()
 {
-    KVS_ASSERT( !( kvs::Math::IsZero( this->length() ) ) );
-
-    const T normalize_factor = static_cast<T>( 1.0 / this->length() );
-    ( *this ) *= normalize_factor;
-
-    return *this;
+    const double length = this->length();
+    const T normalize_factor = length > 0.0 ? static_cast<T>( 1.0 / length ) : T( 0 );
+    *this *= normalize_factor;
 }
-#endif
+
 /*==========================================================================*/
 /**
  *  Prints the elements of this.
@@ -436,8 +372,8 @@ template<typename T>
 inline double Vector2<T>::length2() const
 {
     double result = 0.0;
-    result += m_elements[0] * m_elements[0];
-    result += m_elements[1] * m_elements[1];
+    result += (double)m_elements[0] * (double)m_elements[0];
+    result += (double)m_elements[1] * (double)m_elements[1];
     return result;
 }
 
@@ -475,57 +411,55 @@ inline T& Vector2<T>::operator []( const size_t index )
 template<typename T>
 inline Vector2<T>& Vector2<T>::operator +=( const Vector2& rhs )
 {
-    m_elements[0] = static_cast<T>( m_elements[0] + rhs[0] );
-    m_elements[1] = static_cast<T>( m_elements[1] + rhs[1] );
+    m_elements[0] += rhs[0];
+    m_elements[1] += rhs[1];
     return *this;
 }
 
 template<typename T>
 inline Vector2<T>& Vector2<T>::operator -=( const Vector2& rhs )
 {
-    m_elements[0] = static_cast<T>( m_elements[0] - rhs[0] );
-    m_elements[1] = static_cast<T>( m_elements[1] - rhs[1] );
+    m_elements[0] -= rhs[0];
+    m_elements[1] -= rhs[1];
     return *this;
 }
 
 template<typename T>
 inline Vector2<T>& Vector2<T>::operator *=( const Vector2& rhs )
 {
-    m_elements[0] = static_cast<T>( m_elements[0] * rhs[0] );
-    m_elements[1] = static_cast<T>( m_elements[1] * rhs[1] );
+    m_elements[0] *= rhs[0];
+    m_elements[1] *= rhs[1];
     return *this;
 }
 
 template<typename T>
 inline Vector2<T>& Vector2<T>::operator *=( const T rhs )
 {
-    m_elements[0] = static_cast<T>( m_elements[0] * rhs );
-    m_elements[1] = static_cast<T>( m_elements[1] * rhs );
+    m_elements[0] *= rhs;
+    m_elements[1] *= rhs;
     return *this;
 }
 
 template<typename T>
 inline Vector2<T>& Vector2<T>::operator /=( const Vector2& rhs )
 {
-    m_elements[0] = static_cast<T>( m_elements[0] / rhs[0] );
-    m_elements[1] = static_cast<T>( m_elements[1] / rhs[1] );
+    m_elements[0] /= rhs[0];
+    m_elements[1] /= rhs[1];
     return *this;
 }
 
 template<typename T>
 inline Vector2<T>& Vector2<T>::operator /=( const T rhs )
 {
-    m_elements[0] = static_cast<T>( m_elements[0] / rhs );
-    m_elements[1] = static_cast<T>( m_elements[1] / rhs );
+    m_elements[0] /= rhs;
+    m_elements[1] /= rhs;
     return *this;
 }
 
 template<typename T>
 inline const Vector2<T> Vector2<T>::operator -() const
 {
-    Vector2 result( *this );
-    result *= T( -1 );
-    return result;
+    return Vector2( *this ) *= T( -1 );
 }
 
 } // end of namespace kvs

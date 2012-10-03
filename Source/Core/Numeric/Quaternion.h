@@ -316,7 +316,7 @@ Quaternion<T>::Quaternion( const kvs::Vector3<T>& axis, T angle )
     T s = static_cast<T>( std::sin( angle * 0.5 ) );
     T w = static_cast<T>( std::cos( angle * 0.5 ) );
 
-    kvs::Vector3<T> n = axis.normalizedVector();
+    kvs::Vector3<T> n = axis.normalized();
     kvs::Vector3<T> v = s * n;
 
     m_elements[0] = v.x();
@@ -939,8 +939,8 @@ Quaternion<T> Quaternion<T>::rotationQuaternion( Vector3<T> v0, Vector3<T> v1 )
 {
     Quaternion<T> q;
 
-    v0 = v0.normalizedVector();
-    v1 = v1.normalizedVector();
+    v0.normalize();
+    v1.normalize();
 
     kvs::Vector3<T> c = v0.cross( v1 );
     T               d = v0.x() * v1.x() + v0.y() * v1.y() + v0.z() * v1.z();

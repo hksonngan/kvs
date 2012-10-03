@@ -418,7 +418,8 @@ const bool EigenDecomposer<T>::calculate_by_power( void )
             if ( iter % 15 == 0 )
             {
                 temp_vec2 = temp_mat0 * temp_vec1;
-                temp_vec1 = temp_vec2.normalize();
+                temp_vec1 = temp_vec2;
+                temp_vec1.normalize();
             }
 
             temp_vec2 = m_eigen_vectors * temp_vec1;

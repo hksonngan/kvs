@@ -29,9 +29,9 @@ const kvs::Xform MakeCameraXform( const kvs::Vector3f& eye,
                                   const kvs::Vector3f& center, 
                                   const kvs::Vector3f& up )
 {
-    const kvs::Vector3f y = up.normalizedVector();
-    const kvs::Vector3f z = ( eye - center ).normalizedVector();
-    const kvs::Vector3f x = y.cross( z ).normalizedVector();
+    const kvs::Vector3f y = up.normalized();
+    const kvs::Vector3f z = ( eye - center ).normalized();
+    const kvs::Vector3f x = y.cross( z ).normalized();
     const kvs::Vector3f t = eye;
 
     const kvs::Matrix44f m( x[0], y[0], z[0], t[0], 
@@ -252,7 +252,7 @@ const kvs::Vector3f Camera::position( void ) const
 const kvs::Vector3f Camera::upVector( void ) const
 {
     kvs::Matrix44f m = this->xform().toMatrix();
-    return kvs::Vector3f( m[0][1], m[1][1], m[2][1] ).normalizedVector();
+    return kvs::Vector3f( m[0][1], m[1][1], m[2][1] ).normalized();
 }
 
 /*==========================================================================*/

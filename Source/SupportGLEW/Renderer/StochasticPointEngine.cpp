@@ -543,7 +543,7 @@ void StochasticPointEngine::create_vertexbuffer_from_point( void )
         {
             kvs::Vector3f v( src_normal );
             src_normal += 3;
-            kvs::Vector3f n = v.normalizedVector() * 127.0f;
+            kvs::Vector3f n = v.normalized() * 127.0f;
             *(dst_normals[rp])++ = static_cast<NormalType>(n[0]);
             *(dst_normals[rp])++ = static_cast<NormalType>(n[1]);
             *(dst_normals[rp])++ = static_cast<NormalType>(n[2]);
