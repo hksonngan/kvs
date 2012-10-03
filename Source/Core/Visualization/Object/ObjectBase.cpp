@@ -393,23 +393,40 @@ const kvs::Vector3f& ObjectBase::positionInExternal( void ) const
 /*===========================================================================*/
 void ObjectBase::updateNormalizeParameters( void )
 {
-    kvs::Vector3f diff_obj = m_max_object_coord   - m_min_object_coord;
+    kvs::Vector3f diff_obj = m_max_object_coord - m_min_object_coord;
     kvs::Vector3f diff_ext = m_max_external_coord - m_min_external_coord;
 
     m_object_center = ( m_max_object_coord + m_min_object_coord ) * 0.5;
     m_external_position = ( m_max_external_coord + m_min_external_coord ) * 0.5;
 
-    m_normalize.x() = ( kvs::Math::Equal( diff_obj.x(), 0.0f ) ) ?
-        kvs::Math::Max( diff_ext.y() / diff_obj.y(), diff_ext.z() / diff_obj.z() ):
-        diff_ext.x() / diff_obj.x();
+    if ( kvs::Math::Equal( diff_obj.x(), 0.0f ) &&
+         kvs::Math::Equal( diff_obj.y(), 0.0f ) &&
+         kvs::Math::Equal( diff_obj.z(), 0.0f ) )
+    {
+        // In the case of 'diff_obj == (0,0,0)', such as a point object composed of
+        // a single vertex point, the normalization parameters is set to '(1,1,1)'.
+        m_normalize = kvs::Vector3f( 1.0f, 1.0f, 1.0f );
+    }
+    else
+    {
+        m_normalize.x() =
+            ( !kvs::Math::Equal( diff_obj.x(), 0.0f ) ) ? diff_ext.x() / diff_obj.x() :
+            ( kvs::Math::Equal( diff_obj.y(), 0.0f ) ) ? diff_ext.z() / diff_obj.z() :
+            ( kvs::Math::Equal( diff_obj.z(), 0.0f ) ) ? diff_ext.y() / diff_obj.y() :
+            kvs::Math::Max( diff_ext.y() / diff_obj.y(), diff_ext.z() / diff_obj.z() );
 
-    m_normalize.y() = ( Math::Equal( diff_obj.y(), 0.0f ) ) ?
-        kvs::Math::Max( diff_ext.x() / diff_obj.x(), diff_ext.z() / diff_obj.z() ):
-        diff_ext.y() / diff_obj.y();
+        m_normalize.y() =
+            ( !kvs::Math::Equal( diff_obj.y(), 0.0f ) ) ? diff_ext.y() / diff_obj.y() :
+            ( kvs::Math::Equal( diff_obj.x(), 0.0f ) ) ? diff_ext.z() / diff_obj.z() :
+            ( kvs::Math::Equal( diff_obj.z(), 0.0f ) ) ? diff_ext.x() / diff_obj.x() :
+            kvs::Math::Max( diff_ext.x() / diff_obj.x(), diff_ext.z() / diff_obj.z() );
 
-    m_normalize.z() = ( Math::Equal( diff_obj.z(), 0.0f ) ) ?
-        kvs::Math::Max( diff_ext.x() / diff_obj.x(), diff_ext.y() / diff_obj.y() ):
-        diff_ext.z() / diff_obj.z();
+        m_normalize.z() =
+            ( !kvs::Math::Equal( diff_obj.z(), 0.0f ) ) ? diff_ext.z() / diff_obj.z() :
+            ( kvs::Math::Equal( diff_obj.x(), 0.0f ) ) ? diff_ext.y() / diff_obj.y() :
+            ( kvs::Math::Equal( diff_obj.y(), 0.0f ) ) ? diff_ext.x() / diff_obj.x() :
+            kvs::Math::Max( diff_ext.x() / diff_obj.x(), diff_ext.y() / diff_obj.y() );
+    }
 }
 
 /*===========================================================================*/
@@ -436,20 +453,10 @@ void ObjectBase::transform(
     glMultMatrixf( xform );
 
     glScalef( global_scale.x(), global_scale.y(), global_scale.z() );
-
-    glTranslatef( -global_trans.x(),
-                  -global_trans.y(),
-                  -global_trans.z() );
-
-    glTranslatef( m_external_position.x(),
-                  m_external_position.y(),
-                  m_external_position.z() );
-
+    glTranslatef( -global_trans.x(), -global_trans.y(), -global_trans.z() );
+    glTranslatef( m_external_position.x(), m_external_position.y(), m_external_position.z() );
     glScalef( m_normalize.x(), m_normalize.y(), m_normalize.z() );
-
-    glTranslatef( -m_object_center.x(),
-                  -m_object_center.y(),
-                  -m_object_center.z() );
+    glTranslatef( -m_object_center.x(), -m_object_center.y(), -m_object_center.z() );
 }
 
 #if KVS_ENABLE_DEPRECATED
@@ -556,46 +563,44 @@ bool ObjectBase::collision(
     float max_distance = -1.0f;
     kvs::Vector3f center;
 
-        center = object_to_world_coordinate( m_object_center,
-                                             global_trans,
-                                             global_scale );
+    center = object_to_world_coordinate( m_object_center, global_trans, global_scale );
 
-        // Object's corner points in the object coordinate system.
-        const kvs::Vector3f corners[8] = {
-            kvs::Vector3f( m_min_object_coord.x(),
-                           m_min_object_coord.y(),
-                           m_min_object_coord.z() ),
-            kvs::Vector3f( m_max_object_coord.x(),
-                           m_min_object_coord.y(),
-                           m_min_object_coord.z() ),
-            kvs::Vector3f( m_min_object_coord.x(),
-                           m_min_object_coord.y(),
-                           m_max_object_coord.z() ),
-            kvs::Vector3f( m_max_object_coord.x(),
-                           m_min_object_coord.y(),
-                           m_max_object_coord.z() ),
-            kvs::Vector3f( m_min_object_coord.x(),
-                           m_max_object_coord.y(),
-                           m_min_object_coord.z() ),
-            kvs::Vector3f( m_max_object_coord.x(),
-                           m_max_object_coord.y(),
-                           m_min_object_coord.z() ),
-            kvs::Vector3f( m_min_object_coord.x(),
-                           m_max_object_coord.y(),
-                           m_max_object_coord.z() ),
-            kvs::Vector3f( m_max_object_coord.x(),
-                           m_max_object_coord.y(),
-                           m_max_object_coord.z() ) };
+    // Object's corner points in the object coordinate system.
+    const kvs::Vector3f corners[8] = {
+        kvs::Vector3f( m_min_object_coord.x(),
+                       m_min_object_coord.y(),
+                       m_min_object_coord.z() ),
+        kvs::Vector3f( m_max_object_coord.x(),
+                       m_min_object_coord.y(),
+                       m_min_object_coord.z() ),
+        kvs::Vector3f( m_min_object_coord.x(),
+                       m_min_object_coord.y(),
+                       m_max_object_coord.z() ),
+        kvs::Vector3f( m_max_object_coord.x(),
+                       m_min_object_coord.y(),
+                       m_max_object_coord.z() ),
+        kvs::Vector3f( m_min_object_coord.x(),
+                       m_max_object_coord.y(),
+                       m_min_object_coord.z() ),
+        kvs::Vector3f( m_max_object_coord.x(),
+                       m_max_object_coord.y(),
+                       m_min_object_coord.z() ),
+        kvs::Vector3f( m_min_object_coord.x(),
+                       m_max_object_coord.y(),
+                       m_max_object_coord.z() ),
+        kvs::Vector3f( m_max_object_coord.x(),
+                       m_max_object_coord.y(),
+                       m_max_object_coord.z() ) };
 
-        // Calculate max distance between the center and the corner in
-        // the world coordinate system.
-        for( int i = 0; i < 8; i++ )
-        {
-            const kvs::Vector3f corner =
-                object_to_world_coordinate( corners[i], global_trans, global_scale );
-            const float distance = static_cast<float>( ( corner - center ).length() );
-            max_distance = kvs::Math::Max( max_distance, distance );
-        }
+    // Calculate max distance between the center and the corner in
+    // the world coordinate system.
+    for( int i = 0; i < 8; i++ )
+    {
+        const kvs::Vector3f corner =
+            object_to_world_coordinate( corners[i], global_trans, global_scale );
+        const float distance = static_cast<float>( ( corner - center ).length() );
+        max_distance = kvs::Math::Max( max_distance, distance );
+    }
 
     return( ( p_world - center ).length() < max_distance );
 }
