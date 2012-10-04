@@ -15,15 +15,7 @@
 #ifndef KVS__EVENT_LISTENER_H_INCLUDE
 #define KVS__EVENT_LISTENER_H_INCLUDE
 
-#include <kvs/ClassName>
-#if KVS_ENABLE_DEPRECATED
-#include <kvs/ScreenBase>
-#include <kvs/EventBase>
-#include <kvs/MouseEvent>
-#include <kvs/KeyEvent>
-#include <kvs/WheelEvent>
-#include <kvs/TimeEvent>
-#endif
+#include <string>
 
 
 namespace kvs
@@ -43,51 +35,36 @@ class TimeEvent;
 /*===========================================================================*/
 class EventListener
 {
-    kvsClassName( kvs::EventListener );
-
 private:
 
-    int              m_event_type; ///< event type
-    kvs::ScreenBase* m_screen;     ///< pointer to the screen
+    int m_event_type; ///< event type
+    std::string m_name; ///< name
+    kvs::ScreenBase* m_screen; ///< pointer to the screen
 
 public:
 
-    EventListener( void );
+    EventListener();
+    virtual ~EventListener();
 
-    virtual ~EventListener( void );
+    virtual void onEvent( kvs::EventBase* event );
 
-public:
+    int eventType() const;
+    const std::string& name() const;
+    kvs::ScreenBase* screen();
 
-    virtual void onEvent( kvs::EventBase* event = 0 );
-
-public:
-
-    const int eventType( void ) const;
-
-    kvs::ScreenBase* screen( void );
-
-    void setEventType( int event_type );
-
+    void setEventType( const int event_type );
+    void setName( const std::string& name );
     void setScreen( kvs::ScreenBase* screen );
 
-public:
-
-    virtual void paintEvent( void );
-
+    virtual void initializeEvent();
+    virtual void paintEvent();
     virtual void resizeEvent( int width, int height );
-
     virtual void mousePressEvent( kvs::MouseEvent* event );
-
     virtual void mouseMoveEvent( kvs::MouseEvent* event );
-
     virtual void mouseReleaseEvent( kvs::MouseEvent* event );
-
     virtual void mouseDoubleClickEvent( kvs::MouseEvent* event );
-
     virtual void wheelEvent( kvs::WheelEvent* event );
-
     virtual void keyPressEvent( kvs::KeyEvent* event );
-
     virtual void timerEvent( kvs::TimeEvent* event );
 };
 

@@ -17,7 +17,6 @@
 
 #include <kvs/EventListener>
 #include <kvs/MouseEvent>
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -30,15 +29,10 @@ namespace kvs
 /*===========================================================================*/
 class MouseDoubleClickEventListener : public kvs::EventListener
 {
-    kvsClassName( kvs::MouseDoubleClickEventListener );
-
 public:
 
-    MouseDoubleClickEventListener( void );
-
-    virtual ~MouseDoubleClickEventListener( void );
-
-public:
+    MouseDoubleClickEventListener();
+    virtual ~MouseDoubleClickEventListener();
 
     virtual void update( kvs::MouseEvent* event ) = 0;
 

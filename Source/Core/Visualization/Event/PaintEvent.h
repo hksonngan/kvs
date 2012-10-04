@@ -1,6 +1,6 @@
 /*****************************************************************************/
 /**
- *  @file   TimerEventListener.cpp
+ *  @file   PaintEvent.h
  *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
@@ -12,24 +12,25 @@
  *  $Id$
  */
 /*****************************************************************************/
-#include "TimerEventListener.h"
+#ifndef KVS__PAINT_EVENT_H_INCLUDE
+#define KVS__PAINT_EVENT_H_INCLUDE
+
+#include <kvs/EventBase>
 
 
 namespace kvs
 {
 
-TimerEventListener::TimerEventListener()
+class PaintEvent : public kvs::EventBase
 {
-    kvs::EventListener::setEventType( kvs::EventBase::TimerEvent );
-}
+public:
 
-TimerEventListener::~TimerEventListener()
-{
-}
+    PaintEvent();
+    virtual ~PaintEvent();
 
-void TimerEventListener::onEvent( kvs::EventBase* event )
-{
-    this->update( static_cast<kvs::TimeEvent*>(event) );
-}
+    int type() const;
+};
 
 } // end of namespace kvs
+
+#endif // KVS__PAINT_EVENT_H_INCLUDE

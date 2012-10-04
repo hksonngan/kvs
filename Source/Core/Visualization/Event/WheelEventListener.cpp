@@ -23,7 +23,7 @@ namespace kvs
  *  @brief  Constructs a new WheelEventListener class.
  */
 /*===========================================================================*/
-WheelEventListener::WheelEventListener( void )
+WheelEventListener::WheelEventListener()
 {
     kvs::EventListener::setEventType( kvs::EventBase::WheelEvent );
 }
@@ -33,7 +33,7 @@ WheelEventListener::WheelEventListener( void )
  *  @brief  Destructs the WheelEventListener class.
  */
 /*===========================================================================*/
-WheelEventListener::~WheelEventListener( void )
+WheelEventListener::~WheelEventListener()
 {
 }
 

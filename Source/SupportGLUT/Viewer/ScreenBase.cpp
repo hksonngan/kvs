@@ -218,25 +218,6 @@ int ScreenBase::id() const
     return m_id;
 }
 
-std::list<kvs::glut::Timer*>& ScreenBase::timerEventHandler()
-{
-    return m_timer_event_handler;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Adds a timer event listener.
- *  @param  event [in] pointer to a timer event listener
- *  @param  timer [in] pointer to timer
- */
-/*===========================================================================*/
-void ScreenBase::addTimerEvent( kvs::TimerEventListener* event, kvs::glut::Timer* timer )
-{
-    event->setScreen( this );
-    timer->setEventListener( event );
-    m_timer_event_handler.push_back( timer );
-}
-
 void ScreenBase::create()
 {
     KVS_ASSERT( m_id == -1 );
@@ -420,6 +401,25 @@ void ScreenBase::mouseReleaseEvent( kvs::MouseEvent* ){}
 void ScreenBase::mouseDoubleClickEvent( kvs::MouseEvent* ){}
 void ScreenBase::wheelEvent( kvs::WheelEvent* ){}
 void ScreenBase::keyPressEvent( kvs::KeyEvent* ){}
+
+std::list<kvs::glut::Timer*>& ScreenBase::timerEventHandler()
+{
+    return m_timer_event_handler;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Adds a timer event listener.
+ *  @param  event [in] pointer to a timer event listener
+ *  @param  timer [in] pointer to timer
+ */
+/*===========================================================================*/
+void ScreenBase::addTimerEvent( kvs::TimerEventListener* event, kvs::glut::Timer* timer )
+{
+    event->setScreen( this );
+    timer->setEventListener( event );
+    m_timer_event_handler.push_back( timer );
+}
 
 } // end of namespace glut
 

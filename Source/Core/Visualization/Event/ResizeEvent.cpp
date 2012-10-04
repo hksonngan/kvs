@@ -24,7 +24,7 @@ namespace kvs
  *  @brief  Constructs a new ResizeEvent class.
  */
 /*===========================================================================*/
-ResizeEvent::ResizeEvent( void )
+ResizeEvent::ResizeEvent()
 {
 }
 
@@ -58,8 +58,41 @@ ResizeEvent::ResizeEvent( int width, int height ):
  *  @brief  Destructs the ResizeEvent class.
  */
 /*===========================================================================*/
-ResizeEvent::~ResizeEvent( void )
+ResizeEvent::~ResizeEvent()
 {
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the window width.
+ *  @return window width
+ */
+/*===========================================================================*/
+int ResizeEvent::width() const
+{
+    return( m_width );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the window height.
+ *  @return window height
+ */
+/*===========================================================================*/
+int ResizeEvent::height() const
+{
+    return( m_height );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the event type.
+ *  @return event type
+ */
+/*===========================================================================*/
+int ResizeEvent::type() const
+{
+    return( kvs::EventBase::ResizeEvent );
 }
 
 /*===========================================================================*/
@@ -73,39 +106,6 @@ void ResizeEvent::setSize( int width, int height )
 {
     m_width = width;
     m_height = height;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the window width.
- *  @return window width
- */
-/*===========================================================================*/
-const int ResizeEvent::width( void ) const
-{
-    return( m_width );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the window height.
- *  @return window height
- */
-/*===========================================================================*/
-const int ResizeEvent::height( void ) const
-{
-    return( m_height );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the event type.
- *  @return event type
- */
-/*===========================================================================*/
-const int ResizeEvent::type( void ) const
-{
-    return( kvs::EventBase::ResizeEvent );
 }
 
 } // end of namespace kvs

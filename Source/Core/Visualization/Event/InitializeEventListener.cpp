@@ -25,9 +25,9 @@ namespace kvs
  *  @brief  Constructs a new InitializeEventListener class.
  */
 /*===========================================================================*/
-InitializeEventListener::InitializeEventListener( void )
+InitializeEventListener::InitializeEventListener()
 {
-    kvs::EventListener::setEventType( kvsBinary12(1111,1111,1111) );
+    kvs::EventListener::setEventType( kvs::EventBase::InitializeEvent );
 }
 
 /*===========================================================================*/
@@ -35,7 +35,7 @@ InitializeEventListener::InitializeEventListener( void )
  *  @brief  Destructs the InitializeEventListener class.
  */
 /*===========================================================================*/
-InitializeEventListener::~InitializeEventListener( void )
+InitializeEventListener::~InitializeEventListener()
 {
 }
 
@@ -48,7 +48,6 @@ InitializeEventListener::~InitializeEventListener( void )
 void InitializeEventListener::onEvent( kvs::EventBase* event )
 {
     kvs::IgnoreUnusedVariable( event );
-
     this->update();
 }
 

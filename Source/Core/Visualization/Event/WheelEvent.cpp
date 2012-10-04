@@ -23,7 +23,7 @@ namespace kvs
  *  @brief  Constructs a new WheelEvent class.
  */
 /*===========================================================================*/
-WheelEvent::WheelEvent( void )
+WheelEvent::WheelEvent()
 {
 }
 
@@ -32,8 +32,52 @@ WheelEvent::WheelEvent( void )
  *  @brief  Destructs the WheelEvent class.
  */
 /*===========================================================================*/
-WheelEvent::~WheelEvent( void )
+WheelEvent::~WheelEvent()
 {
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the x coordinate value of mouse cursor position.
+ *  @return x coordinate value
+ */
+/*===========================================================================*/
+int WheelEvent::x() const
+{
+    return( m_x );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the y coordinate value of mouse cursor position.
+ *  @return y coordinate value
+ */
+/*===========================================================================*/
+int WheelEvent::y() const
+{
+    return( m_y );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the scroll direction.
+ *  @return scroll direction
+ */
+/*===========================================================================*/
+int WheelEvent::direction() const
+{
+    return( m_direction );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the event type.
+ *  @return event type
+ */
+/*===========================================================================*/
+int WheelEvent::type() const
+{
+    return( kvs::EventBase::WheelEvent );
 }
 
 /*===========================================================================*/
@@ -58,50 +102,6 @@ void WheelEvent::setPosition( int x, int y )
 void WheelEvent::setDirection( int direction )
 {
     m_direction = direction;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the x coordinate value of mouse cursor position.
- *  @return x coordinate value
- */
-/*===========================================================================*/
-const int WheelEvent::x( void ) const
-{
-    return( m_x );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the y coordinate value of mouse cursor position.
- *  @return y coordinate value
- */
-/*===========================================================================*/
-const int WheelEvent::y( void ) const
-{
-    return( m_y );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the scroll direction.
- *  @return scroll direction
- */
-/*===========================================================================*/
-const int WheelEvent::direction( void ) const
-{
-    return( m_direction );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the event type.
- *  @return event type
- */
-/*===========================================================================*/
-const int WheelEvent::type( void ) const
-{
-    return( kvs::EventBase::WheelEvent );
 }
 
 } // end of namespace kvs

@@ -18,7 +18,7 @@
 namespace kvs
 {
 
-MouseEvent::MouseEvent( void )
+MouseEvent::MouseEvent()
 {
 }
 
@@ -47,26 +47,49 @@ MouseEvent::MouseEvent(
 {
 }
 
-MouseEvent::~MouseEvent( void )
+MouseEvent::~MouseEvent()
 {
 }
 
-/*
-void MouseEvent::set( int button, int state, int x, int y, int modifiers )
+int MouseEvent::button() const
 {
-    m_button    = button;
-    m_state     = state;
-    m_x         = x;
-    m_y         = y;
-    m_modifiers = modifiers;
+    return( m_button );
 }
 
-void MouseEvent::set( int x, int y )
+int MouseEvent::state() const
 {
-    m_x = x;
-    m_y = y;
+    return( m_state );
 }
-*/
+
+int MouseEvent::x() const
+{
+    return( m_x );
+}
+
+int MouseEvent::y() const
+{
+    return( m_y );
+}
+
+int MouseEvent::modifiers() const
+{
+    return( m_modifiers );
+}
+
+int MouseEvent::action() const
+{
+    return( m_action );
+}
+
+int MouseEvent::type() const
+{
+    return(
+        m_action == kvs::MouseButton::Pressed ? EventBase::MousePressEvent :
+        m_action == kvs::MouseButton::Moved ? EventBase::MouseMoveEvent :
+        m_action == kvs::MouseButton::Released ? EventBase::MouseReleaseEvent :
+        m_action == kvs::MouseButton::DoubleClicked ? EventBase::MouseDoubleClickEvent :
+        m_action == kvs::MouseButton::Wheeled ? EventBase::WheelEvent : 0 );
+}
 
 void MouseEvent::setButton( int button )
 {
@@ -92,46 +115,6 @@ void MouseEvent::setModifiers( int modifiers )
 void MouseEvent::setAction( int action )
 {
     m_action = action;
-}
-
-const int MouseEvent::button( void ) const
-{
-    return( m_button );
-}
-
-const int MouseEvent::state( void ) const
-{
-    return( m_state );
-}
-
-const int MouseEvent::x( void ) const
-{
-    return( m_x );
-}
-
-const int MouseEvent::y( void ) const
-{
-    return( m_y );
-}
-
-const int MouseEvent::modifiers( void ) const
-{
-    return( m_modifiers );
-}
-
-const int MouseEvent::action( void ) const
-{
-    return( m_action );
-}
-
-const int MouseEvent::type( void ) const
-{
-    return(
-        m_action == kvs::MouseButton::Pressed ? EventBase::MousePressEvent :
-        m_action == kvs::MouseButton::Moved ? EventBase::MouseMoveEvent :
-        m_action == kvs::MouseButton::Released ? EventBase::MouseReleaseEvent :
-        m_action == kvs::MouseButton::DoubleClicked ? EventBase::MouseDoubleClickEvent :
-        m_action == kvs::MouseButton::Wheeled ? EventBase::WheelEvent : 0 );
 }
 
 } // end of namespace kvs

@@ -1,6 +1,6 @@
 /*****************************************************************************/
 /**
- *  @file   TimerEventListener.cpp
+ *  @file   InitializeEvent.h
  *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
@@ -12,24 +12,25 @@
  *  $Id$
  */
 /*****************************************************************************/
-#include "TimerEventListener.h"
+#ifndef KVS__INITIALIZE_EVENT_H_INCLUDE
+#define KVS__INITIALIZE_EVENT_H_INCLUDE
+
+#include <kvs/EventBase>
 
 
 namespace kvs
 {
 
-TimerEventListener::TimerEventListener()
+class InitializeEvent : public kvs::EventBase
 {
-    kvs::EventListener::setEventType( kvs::EventBase::TimerEvent );
-}
+public:
 
-TimerEventListener::~TimerEventListener()
-{
-}
+    InitializeEvent();
+    virtual ~InitializeEvent();
 
-void TimerEventListener::onEvent( kvs::EventBase* event )
-{
-    this->update( static_cast<kvs::TimeEvent*>(event) );
-}
+    int type() const;
+};
 
 } // end of namespace kvs
+
+#endif // KVS__INITIALIZE_EVENT_H_INCLUDE

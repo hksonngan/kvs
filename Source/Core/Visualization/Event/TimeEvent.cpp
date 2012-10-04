@@ -23,7 +23,7 @@ namespace kvs
  *  @brief  Constructs a new TimeEvent class.
  */
 /*===========================================================================*/
-TimeEvent::TimeEvent( void )
+TimeEvent::TimeEvent()
 {
 }
 
@@ -32,7 +32,7 @@ TimeEvent::TimeEvent( void )
  *  @brief  Destructs the TimerEvent class.
  */
 /*===========================================================================*/
-TimeEvent::~TimeEvent( void )
+TimeEvent::~TimeEvent()
 {
 }
 
@@ -42,7 +42,7 @@ TimeEvent::~TimeEvent( void )
  *  @return event type
  */
 /*===========================================================================*/
-const int TimeEvent::type( void ) const
+int TimeEvent::type() const
 {
     return( kvs::EventBase::TimerEvent );
 }

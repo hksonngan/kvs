@@ -132,6 +132,7 @@ Visualization/Event/EventBase
 Visualization/Event/EventHandler
 Visualization/Event/EventListener
 Visualization/Event/IdleEventListener
+Visualization/Event/InitializeEvent
 Visualization/Event/InitializeEventListener
 Visualization/Event/KeyEvent
 Visualization/Event/KeyPressEventListener
@@ -140,6 +141,7 @@ Visualization/Event/MouseEvent
 Visualization/Event/MouseMoveEventListener
 Visualization/Event/MousePressEventListener
 Visualization/Event/MouseReleaseEventListener
+Visualization/Event/PaintEvent
 Visualization/Event/PaintEventListener
 Visualization/Event/ResizeEvent
 Visualization/Event/ResizeEventListener

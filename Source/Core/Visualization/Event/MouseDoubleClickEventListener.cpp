@@ -23,7 +23,7 @@ namespace kvs
  *  @brief  Constructs a new MouseDoubleClickEventListener class.
  */
 /*===========================================================================*/
-MouseDoubleClickEventListener::MouseDoubleClickEventListener( void )
+MouseDoubleClickEventListener::MouseDoubleClickEventListener()
 {
     kvs::EventListener::setEventType( kvs::EventBase::MouseDoubleClickEvent );
 }
@@ -33,7 +33,7 @@ MouseDoubleClickEventListener::MouseDoubleClickEventListener( void )
  *  @brief  Destructs the MouseDoubleClickEventListener class.
  */
 /*===========================================================================*/
-MouseDoubleClickEventListener::~MouseDoubleClickEventListener( void )
+MouseDoubleClickEventListener::~MouseDoubleClickEventListener()
 {
 }
 

@@ -24,7 +24,7 @@ namespace kvs
  *  @brief  Constructs a new PaintEventListener class.
  */
 /*===========================================================================*/
-PaintEventListener::PaintEventListener( void )
+PaintEventListener::PaintEventListener()
 {
     kvs::EventListener::setEventType( kvs::EventBase::PaintEvent );
 }
@@ -34,7 +34,7 @@ PaintEventListener::PaintEventListener( void )
  *  @brief  Destructs the PaintEventListener class.
  */
 /*===========================================================================*/
-PaintEventListener::~PaintEventListener( void )
+PaintEventListener::~PaintEventListener()
 {
 }
 

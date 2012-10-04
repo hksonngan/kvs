@@ -186,6 +186,7 @@ $(OUTDIR)\.\Visualization\Event\EventBase.obj \
 $(OUTDIR)\.\Visualization\Event\EventHandler.obj \
 $(OUTDIR)\.\Visualization\Event\EventListener.obj \
 $(OUTDIR)\.\Visualization\Event\IdleEventListener.obj \
+$(OUTDIR)\.\Visualization\Event\InitializeEvent.obj \
 $(OUTDIR)\.\Visualization\Event\InitializeEventListener.obj \
 $(OUTDIR)\.\Visualization\Event\KeyEvent.obj \
 $(OUTDIR)\.\Visualization\Event\KeyPressEventListener.obj \
@@ -194,6 +195,7 @@ $(OUTDIR)\.\Visualization\Event\MouseEvent.obj \
 $(OUTDIR)\.\Visualization\Event\MouseMoveEventListener.obj \
 $(OUTDIR)\.\Visualization\Event\MousePressEventListener.obj \
 $(OUTDIR)\.\Visualization\Event\MouseReleaseEventListener.obj \
+$(OUTDIR)\.\Visualization\Event\PaintEvent.obj \
 $(OUTDIR)\.\Visualization\Event\PaintEventListener.obj \
 $(OUTDIR)\.\Visualization\Event\ResizeEvent.obj \
 $(OUTDIR)\.\Visualization\Event\ResizeEventListener.obj \

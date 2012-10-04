@@ -24,7 +24,7 @@ namespace kvs
  *  @brief  Constructs a new ResizeEventListener class.
  */
 /*===========================================================================*/
-ResizeEventListener::ResizeEventListener( void )
+ResizeEventListener::ResizeEventListener()
 {
     kvs::EventListener::setEventType( kvs::EventBase::ResizeEvent );
 }
@@ -34,7 +34,7 @@ ResizeEventListener::ResizeEventListener( void )
  *  @brief  Destructs the ResizeEventListener class.
  */
 /*===========================================================================*/
-ResizeEventListener::~ResizeEventListener( void )
+ResizeEventListener::~ResizeEventListener()
 {
 }
 

@@ -17,7 +17,6 @@
 
 #include <kvs/EventListener>
 #include <kvs/EventBase>
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -30,21 +29,16 @@ namespace kvs
 /*===========================================================================*/
 class InitializeEventListener : public kvs::EventListener
 {
-    kvsClassName( kvs::InitializeEventListener );
-
 public:
 
-    InitializeEventListener( void );
+    InitializeEventListener();
+    virtual ~InitializeEventListener();
 
-    virtual ~InitializeEventListener( void );
-
-public:
-
-    virtual void update( void ) = 0;
+    virtual void update() = 0;
 
 private:
 
-    void onEvent( kvs::EventBase* event = 0 );
+    void onEvent( kvs::EventBase* event );
 };
 
 } // end of namespace kvs

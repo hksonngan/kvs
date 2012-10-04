@@ -15,7 +15,6 @@
 #ifndef KVS__WHEEL_EVENT_LISTENER_H_INCLUDE
 #define KVS__WHEEL_EVENT_LISTENER_H_INCLUDE
 
-#include <kvs/ClassName>
 #include <kvs/EventListener>
 #include <kvs/WheelEvent>
 
@@ -30,15 +29,10 @@ namespace kvs
 /*===========================================================================*/
 class WheelEventListener : public kvs::EventListener
 {
-    kvsClassName( kvs::WheelEventListener );
-
 public:
 
-    WheelEventListener( void );
-
-    virtual ~WheelEventListener( void );
-
-public:
+    WheelEventListener();
+    virtual ~WheelEventListener();
 
     virtual void update( kvs::WheelEvent* event ) = 0;
 

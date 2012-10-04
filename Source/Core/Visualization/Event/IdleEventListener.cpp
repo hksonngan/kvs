@@ -25,7 +25,7 @@ namespace kvs
  *  @brief  Constructs a new IdleEventListener class.
  */
 /*===========================================================================*/
-IdleEventListener::IdleEventListener( void )
+IdleEventListener::IdleEventListener()
 {
     kvs::EventListener::setEventType( kvsBinary12(1111,1111,1111) );
 }
@@ -35,7 +35,7 @@ IdleEventListener::IdleEventListener( void )
  *  @brief  Destructs the IdleEventListener class.
  */
 /*===========================================================================*/
-IdleEventListener::~IdleEventListener( void )
+IdleEventListener::~IdleEventListener()
 {
 }
 

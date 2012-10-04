@@ -59,8 +59,6 @@ public:
     virtual ~ScreenBase();
 
     int id() const;
-    std::list<kvs::qt::Timer*>& timerEventHandler();
-    void addTimerEvent( kvs::TimerEventListener* event, kvs::qt::Timer* timer );
 
     virtual void create();
     virtual void show();
@@ -98,6 +96,12 @@ private:
     void mouseDoubleClickEvent( QMouseEvent* event );
     void wheelEvent( QWheelEvent* event );
     void keyPressEvent( QKeyEvent* event );
+
+#if 1 // KVS_ENABLE_DEPRECATED
+public:
+    std::list<kvs::qt::Timer*>& timerEventHandler();
+    void addTimerEvent( kvs::TimerEventListener* event, kvs::qt::Timer* timer );
+#endif
 };
 
 } // end of namespace qt

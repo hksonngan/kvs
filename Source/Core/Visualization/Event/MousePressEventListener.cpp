@@ -23,7 +23,7 @@ namespace kvs
  *  @brief  Constructs a new MousePressEventListener class.
  */
 /*===========================================================================*/
-MousePressEventListener::MousePressEventListener( void )
+MousePressEventListener::MousePressEventListener()
 {
     kvs::EventListener::setEventType( kvs::EventBase::MousePressEvent );
 }
@@ -33,7 +33,7 @@ MousePressEventListener::MousePressEventListener( void )
  *  @brief  Destructs the MousePressEventListener class.
  */
 /*===========================================================================*/
-MousePressEventListener::~MousePressEventListener( void )
+MousePressEventListener::~MousePressEventListener()
 {
 }
 

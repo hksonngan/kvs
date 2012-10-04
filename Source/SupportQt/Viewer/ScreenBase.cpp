@@ -61,25 +61,6 @@ int ScreenBase::id() const
     return m_id;
 }
 
-std::list<kvs::qt::Timer*>& ScreenBase::timerEventHandler()
-{
-    return m_timer_event_handler;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Adds a timer event listener.
- *  @param  event [in] pointer to a timer event listener
- *  @param  timer [in] pointer to timer
- */
-/*===========================================================================*/
-void ScreenBase::addTimerEvent( kvs::TimerEventListener* event, kvs::qt::Timer* timer )
-{
-    event->setScreen( this );
-    timer->setEventListener( event );
-    m_timer_event_handler.push_back( timer );
-}
-
 void ScreenBase::create()
 {
     KVS_ASSERT( m_id == -1 );
@@ -392,6 +373,25 @@ void ScreenBase::keyPressEvent( QKeyEvent* event )
     m_key_event->setKey( kvs::qt::KVSKey::Code( event->key() ) );
 
     this->keyPressEvent( m_key_event );
+}
+
+std::list<kvs::qt::Timer*>& ScreenBase::timerEventHandler()
+{
+    return m_timer_event_handler;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Adds a timer event listener.
+ *  @param  event [in] pointer to a timer event listener
+ *  @param  timer [in] pointer to timer
+ */
+/*===========================================================================*/
+void ScreenBase::addTimerEvent( kvs::TimerEventListener* event, kvs::qt::Timer* timer )
+{
+    event->setScreen( this );
+    timer->setEventListener( event );
+    m_timer_event_handler.push_back( timer );
 }
 
 } // end of namespace qt

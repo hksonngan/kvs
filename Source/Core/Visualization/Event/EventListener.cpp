@@ -32,7 +32,9 @@ namespace kvs
  *  @brief  Constructs a new EventListener class.
  */
 /*===========================================================================*/
-EventListener::EventListener( void ):
+EventListener::EventListener():
+    m_event_type( 0 ),
+    m_name( "" ),
     m_screen( NULL )
 {
 }
@@ -42,7 +44,7 @@ EventListener::EventListener( void ):
  *  @brief  Destructs the EventListener class.
  */
 /*===========================================================================*/
-EventListener::~EventListener( void )
+EventListener::~EventListener()
 {
 }
 
@@ -54,6 +56,62 @@ EventListener::~EventListener( void )
 /*===========================================================================*/
 void EventListener::onEvent( kvs::EventBase* event )
 {
+    switch( event->type() )
+    {
+    case kvs::EventBase::InitializeEvent: this->initializeEvent(); break;
+    case kvs::EventBase::PaintEvent: this->paintEvent(); break;
+    case kvs::EventBase::MousePressEvent:
+    {
+        kvs::MouseEvent* e = static_cast<kvs::MouseEvent*>( event );
+        this->mousePressEvent( e );
+        break;
+    }
+    case kvs::EventBase::MouseMoveEvent:
+    {
+        kvs::MouseEvent* e = static_cast<kvs::MouseEvent*>( event );
+        this->mouseMoveEvent( e );
+        break;
+    }
+    case kvs::EventBase::MouseReleaseEvent:
+    {
+        kvs::MouseEvent* e = static_cast<kvs::MouseEvent*>( event );
+        this->mouseReleaseEvent( e );
+        break;
+    }
+    case kvs::EventBase::MouseDoubleClickEvent:
+    {
+        kvs::MouseEvent* e = static_cast<kvs::MouseEvent*>( event );
+        this->mouseDoubleClickEvent( e );
+        break;
+    }
+    case kvs::EventBase::ResizeEvent:
+    {
+        kvs::ResizeEvent* e = static_cast<kvs::ResizeEvent*>( event );
+        this->resizeEvent( e->width(), e->height() );
+        break;
+    }
+    case kvs::EventBase::WheelEvent:
+    {
+        kvs::KeyEvent* e = static_cast<kvs::KeyEvent*>( event );
+        this->keyPressEvent( e );
+        break;
+    }
+    case kvs::EventBase::KeyPressEvent:
+    {
+        kvs::KeyEvent* e = static_cast<kvs::KeyEvent*>( event );
+        this->keyPressEvent( e );
+        break;
+    }
+    case kvs::EventBase::TimerEvent:
+    {
+        kvs::TimeEvent* e = static_cast<kvs::TimeEvent*>( event );
+        this->timerEvent( e );
+        break;
+    }
+    default: break;
+    }
+
+/*
     if ( !event )
     {
         this->paintEvent();
@@ -65,14 +123,10 @@ void EventListener::onEvent( kvs::EventBase* event )
             kvs::MouseEvent* e = static_cast<kvs::MouseEvent*>( event );
             switch ( e->action() )
             {
-            case kvs::MouseButton::Pressed:
-                this->mousePressEvent( e ); break;
-            case kvs::MouseButton::Moved:
-                this->mouseMoveEvent( e ); break;
-            case kvs::MouseButton::Released:
-                this->mouseReleaseEvent( e ); break;
-            case kvs::MouseButton::DoubleClicked:
-                this->mouseDoubleClickEvent( e ); break;
+            case kvs::MouseButton::Pressed: this->mousePressEvent( e ); break;
+            case kvs::MouseButton::Moved: this->mouseMoveEvent( e ); break;
+            case kvs::MouseButton::Released: this->mouseReleaseEvent( e ); break;
+            case kvs::MouseButton::DoubleClicked: this->mouseDoubleClickEvent( e ); break;
             default: break;
             }
         }
@@ -97,6 +151,7 @@ void EventListener::onEvent( kvs::EventBase* event )
             this->timerEvent( e );
         }
     }
+*/
 }
 
 /*===========================================================================*/
@@ -105,9 +160,14 @@ void EventListener::onEvent( kvs::EventBase* event )
  *  @return event type
  */
 /*===========================================================================*/
-const int EventListener::eventType( void ) const
+int EventListener::eventType() const
 {
     return( m_event_type );
+}
+
+const std::string& EventListener::name() const
+{
+    return m_name;
 }
 
 /*===========================================================================*/
@@ -116,7 +176,7 @@ const int EventListener::eventType( void ) const
  *  @return pointer to the screen
  */
 /*===========================================================================*/
-kvs::ScreenBase* EventListener::screen( void )
+kvs::ScreenBase* EventListener::screen()
 {
     return( m_screen );
 }
@@ -127,9 +187,14 @@ kvs::ScreenBase* EventListener::screen( void )
  *  @param  event_type [in] event type
  */
 /*===========================================================================*/
-void EventListener::setEventType( int event_type )
+void EventListener::setEventType( const int event_type )
 {
     m_event_type = event_type;
+}
+
+void EventListener::setName( const std::string& name )
+{
+    m_name = name;
 }
 
 /*===========================================================================*/
@@ -143,12 +208,16 @@ void EventListener::setScreen( kvs::ScreenBase* screen )
     m_screen = screen;
 }
 
+void EventListener::initializeEvent()
+{
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Paint event function.
  */
 /*===========================================================================*/
-void EventListener::paintEvent( void )
+void EventListener::paintEvent()
 {
 }
 

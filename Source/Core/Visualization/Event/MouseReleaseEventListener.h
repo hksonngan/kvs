@@ -15,7 +15,6 @@
 #ifndef KVS__MOUSE_RELEASE_EVENT_LISTENER_H_INCLUDE
 #define KVS__MOUSE_RELEASE_EVENT_LISTENER_H_INCLUDE
 
-#include <kvs/ClassName>
 #include <kvs/EventListener>
 #include <kvs/MouseEvent>
 
@@ -30,15 +29,10 @@ namespace kvs
 /*===========================================================================*/
 class MouseReleaseEventListener : public kvs::EventListener
 {
-    kvsClassName( kvs::MouseReleaseEventListener );
-
 public:
 
-    MouseReleaseEventListener( void );
-
-    virtual ~MouseReleaseEventListener( void );
-
-public:
+    MouseReleaseEventListener();
+    virtual ~MouseReleaseEventListener();
 
     virtual void update( kvs::MouseEvent* event ) = 0;
 

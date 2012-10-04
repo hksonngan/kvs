@@ -186,6 +186,7 @@ $(OUTDIR)/./Visualization/Event/EventBase.o \
 $(OUTDIR)/./Visualization/Event/EventHandler.o \
 $(OUTDIR)/./Visualization/Event/EventListener.o \
 $(OUTDIR)/./Visualization/Event/IdleEventListener.o \
+$(OUTDIR)/./Visualization/Event/InitializeEvent.o \
 $(OUTDIR)/./Visualization/Event/InitializeEventListener.o \
 $(OUTDIR)/./Visualization/Event/KeyEvent.o \
 $(OUTDIR)/./Visualization/Event/KeyPressEventListener.o \
@@ -194,6 +195,7 @@ $(OUTDIR)/./Visualization/Event/MouseEvent.o \
 $(OUTDIR)/./Visualization/Event/MouseMoveEventListener.o \
 $(OUTDIR)/./Visualization/Event/MousePressEventListener.o \
 $(OUTDIR)/./Visualization/Event/MouseReleaseEventListener.o \
+$(OUTDIR)/./Visualization/Event/PaintEvent.o \
 $(OUTDIR)/./Visualization/Event/PaintEventListener.o \
 $(OUTDIR)/./Visualization/Event/ResizeEvent.o \
 $(OUTDIR)/./Visualization/Event/ResizeEventListener.o \

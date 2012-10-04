@@ -15,7 +15,6 @@
 #ifndef KVS__MOUSE_MOVE_EVENT_LISTENER_H_INCLUDE
 #define KVS__MOUSE_MOVE_EVENT_LISTENER_H_INCLUDE
 
-#include <kvs/ClassName>
 #include <kvs/EventListener>
 #include <kvs/MouseEvent>
 
@@ -30,15 +29,10 @@ namespace kvs
 /*===========================================================================*/
 class MouseMoveEventListener : public kvs::EventListener
 {
-    kvsClassName( kvs::MouseMoveEventListener );
-
 public:
 
-    MouseMoveEventListener( void );
-
-    virtual ~MouseMoveEventListener( void );
-
-public:
+    MouseMoveEventListener();
+    virtual ~MouseMoveEventListener();
 
     virtual void update( kvs::MouseEvent* event ) = 0;
 

@@ -15,7 +15,6 @@
 #ifndef KVS__TIME_EVENT_H_INCLUDE
 #define KVS__TIME_EVENT_H_INCLUDE
 
-#include <kvs/ClassName>
 #include <kvs/EventBase>
 
 
@@ -29,15 +28,12 @@ namespace kvs
 /*===========================================================================*/
 class TimeEvent : public kvs::EventBase
 {
-    kvsClassName( kvs::TimeEvent );
-
 public:
 
-    TimeEvent( void );
+    TimeEvent();
+    virtual ~TimeEvent();
 
-    virtual ~TimeEvent( void );
-
-    virtual const int type( void ) const;
+    int type() const;
 };
 
 } // end of namespace kvs

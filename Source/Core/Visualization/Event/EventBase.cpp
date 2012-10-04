@@ -23,7 +23,7 @@ namespace kvs
  *  @brief  Constructs a new EventBase class.
  */
 /*===========================================================================*/
-EventBase::EventBase( void )
+EventBase::EventBase()
 {
 }
 
@@ -32,7 +32,7 @@ EventBase::EventBase( void )
  *  @brief  Destructs the EventBase class.
  */
 /*===========================================================================*/
-EventBase::~EventBase( void )
+EventBase::~EventBase()
 {
 }
 

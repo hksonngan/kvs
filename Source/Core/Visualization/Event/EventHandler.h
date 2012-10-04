@@ -17,10 +17,7 @@
 
 #include <vector>
 #include <cstddef>
-#if KVS_ENABLE_DEPRECATED
-#include "EventListener.h"
-#endif
-#include <kvs/ClassName>
+#include <string>
 
 
 namespace kvs
@@ -36,27 +33,20 @@ class EventBase;
 /*===========================================================================*/
 class EventHandler
 {
-    kvsClassName( kvs::EventHandler );
-
 protected:
 
     std::vector<kvs::EventListener*> m_listeners; ///< list of the event listener
 
 public:
 
-    EventHandler( void );
-
-    virtual ~EventHandler( void );
-
-public:
+    EventHandler();
+    virtual ~EventHandler();
 
     void attach( kvs::EventListener* listener );
-
-    void detach( kvs::EventListener* listener );
-
-    void clear( void );
-
-    void notify( kvs::EventBase* event = NULL );
+    void detach( const kvs::EventListener* listener );
+    void detach( const std::string& name );
+    void notify( kvs::EventBase* event );
+    void clear();
 };
 
 } // end of namespace kvs

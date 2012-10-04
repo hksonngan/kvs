@@ -23,7 +23,7 @@ namespace kvs
  *  @brief  Constructs a new MouseMoveEventListener class.
  */
 /*===========================================================================*/
-MouseMoveEventListener::MouseMoveEventListener( void )
+MouseMoveEventListener::MouseMoveEventListener()
 {
     kvs::EventListener::setEventType( kvs::EventBase::MouseMoveEvent );
 }
@@ -33,7 +33,7 @@ MouseMoveEventListener::MouseMoveEventListener( void )
  *  @brief  Destructs the MouseMoveEventListener class.
  */
 /*===========================================================================*/
-MouseMoveEventListener::~MouseMoveEventListener( void )
+MouseMoveEventListener::~MouseMoveEventListener()
 {
 }
 

@@ -23,7 +23,7 @@ namespace kvs
  *  @brief  Constructs a new KeyPressEventListener class.
  */
 /*===========================================================================*/
-KeyPressEventListener::KeyPressEventListener( void )
+KeyPressEventListener::KeyPressEventListener()
 {
     kvs::EventListener::setEventType( kvs::EventBase::KeyPressEvent );
 }
@@ -33,7 +33,7 @@ KeyPressEventListener::KeyPressEventListener( void )
  *  @brief  Destructs the KeyPressEventListener class.
  */
 /*===========================================================================*/
-KeyPressEventListener::~KeyPressEventListener( void )
+KeyPressEventListener::~KeyPressEventListener()
 {
 }
 

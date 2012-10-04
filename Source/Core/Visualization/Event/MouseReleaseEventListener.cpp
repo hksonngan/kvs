@@ -23,7 +23,7 @@ namespace kvs
  *  @brief  Constructs a new MouseReleaseEventListener class.
  */
 /*===========================================================================*/
-MouseReleaseEventListener::MouseReleaseEventListener( void )
+MouseReleaseEventListener::MouseReleaseEventListener()
 {
     kvs::EventListener::setEventType( kvs::EventBase::MouseReleaseEvent );
 }
@@ -33,7 +33,7 @@ MouseReleaseEventListener::MouseReleaseEventListener( void )
  *  @brief  Destructs the MouseReleaseEventListener class.
  */
 /*===========================================================================*/
-MouseReleaseEventListener::~MouseReleaseEventListener( void )
+MouseReleaseEventListener::~MouseReleaseEventListener()
 {
 }
 

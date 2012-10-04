@@ -26,7 +26,7 @@ namespace kvs
  *  @brief  Constructs a new EventHandler class.
  */
 /*===========================================================================*/
-EventHandler::EventHandler( void )
+EventHandler::EventHandler()
 {
 }
 
@@ -35,7 +35,7 @@ EventHandler::EventHandler( void )
  *  @brief  Destructs the EventHandler class.
  */
 /*===========================================================================*/
-EventHandler::~EventHandler( void )
+EventHandler::~EventHandler()
 {
 }
 
@@ -56,25 +56,24 @@ void EventHandler::attach( kvs::EventListener* listener )
  *  @param  listener [in] pointer to the event listener
  */
 /*===========================================================================*/
-void EventHandler::detach( kvs::EventListener* listener )
+void EventHandler::detach( const kvs::EventListener* listener )
 {
     std::vector<kvs::EventListener*>::iterator p;
     p = std::find( m_listeners.begin(), m_listeners.end(), listener );
-
-    if ( p != m_listeners.end() )
-    {
-        m_listeners.erase( p );
-    }
+    if ( p != m_listeners.end() ) { m_listeners.erase( p ); }
 }
 
-/*===========================================================================*/
-/**
- *  @brief  Clears the registered event listeners.
- */
-/*===========================================================================*/
-void EventHandler::clear( void )
+void EventHandler::detach( const std::string& name )
 {
-    m_listeners.clear();
+    std::vector<kvs::EventListener*>::iterator listener = m_listeners.begin();
+    std::vector<kvs::EventListener*>::iterator end = m_listeners.end();
+    while ( listener != end )
+    {
+        if ( (*listener)->name() == name ) break;
+        ++listener;
+    }
+
+    if ( listener != end ) { m_listeners.erase( listener ); }
 }
 
 /*===========================================================================*/
@@ -87,7 +86,16 @@ void EventHandler::notify( kvs::EventBase* event )
 {
     std::vector<kvs::EventListener*>::iterator listener = m_listeners.begin();
     std::vector<kvs::EventListener*>::iterator end = m_listeners.end();
+    while ( listener != end )
+    {
+        if ( (*listener)->eventType() & event->type() )
+        {
+            (*listener)->onEvent( event );
+        }
+        ++listener;
+    }
 
+/*
     while ( listener != end )
     {
         if ( !event )
@@ -107,6 +115,17 @@ void EventHandler::notify( kvs::EventBase* event )
 
         ++listener;
     }
+*/
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Clears the registered event listeners.
+ */
+/*===========================================================================*/
+void EventHandler::clear()
+{
+    m_listeners.clear();
 }
 
 } // end of namespace kvs

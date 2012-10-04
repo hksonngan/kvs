@@ -15,15 +15,18 @@
 #include <cstdlib>
 #include <kvs/OpenGL>
 #include <kvs/glut/GLUT>
+#include <kvs/RGBColor>
 #include <kvs/Camera>
 #include <kvs/Light>
 #include <kvs/Mouse>
 #include <kvs/MouseButton>
 #include <kvs/Background>
+#include <kvs/InitializeEvent>
+#include <kvs/PaintEvent>
+#include <kvs/ResizeEvent>
 #include <kvs/MouseEvent>
 #include <kvs/KeyEvent>
 #include <kvs/WheelEvent>
-#include <kvs/ResizeEvent>
 #include <kvs/EventHandler>
 #include <kvs/TimerEventListener>
 #include <kvs/PaintEventListener>
@@ -104,94 +107,6 @@ Screen::~Screen()
 
 /*===========================================================================*/
 /**
- *  @brief  Returns the pointer to the camera.
- *  @return pointer to the camera
- */
-/*===========================================================================*/
-kvs::Camera* Screen::camera()
-{
-    return( m_scene->camera() );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the pointer to the light.
- *  @return pointer to the light
- */
-/*===========================================================================*/
-kvs::Light* Screen::light()
-{
-    return( m_scene->light() );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the pointer to the mouse.
- *  @return pointer to the mouse
- */
-/*===========================================================================*/
-kvs::Mouse* Screen::mouse()
-{
-    return( m_scene->mouse() );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the pointer to the background class.
- *  @return pointer to the background class
- */
-/*===========================================================================*/
-kvs::Background* Screen::background()
-{
-    return( m_scene->background() );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the pointer to the object manager.
- *  @return pointer to the object manager
- */
-/*===========================================================================*/
-kvs::ObjectManager* Screen::objectManager()
-{
-    return( m_scene->objectManager() );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the pointer to the renderer manager.
- *  @return pointer to the renderer manager
- */
-/*===========================================================================*/
-kvs::RendererManager* Screen::rendererManager()
-{
-    return( m_scene->rendererManager() );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the pointer to the ID manager.
- *  @return pointer to the ID manager
- */
-/*===========================================================================*/
-kvs::IDManager* Screen::IDManager()
-{
-    return( m_scene->IDManager() );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the control target.
- *  @return control target
- */
-/*===========================================================================*/
-Screen::ControlTarget& Screen::controlTarget()
-{
-    return( m_scene->controlTarget() );
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Sets a screen position.
  *  @param  x [in] x coordinate value of the screen position
  *  @param  y [in] y coordinate value of the screen position
@@ -232,100 +147,30 @@ void Screen::setGeometry( const int x, const int y, const int width, const int h
     this->setSize( width, height );
 }
 
-/*===========================================================================*/
-/**
- *  @brief  Sets a paint event listener.
- *  @param  event [in] pointer to a paint event listener
- */
-/*===========================================================================*/
-void Screen::setPaintEvent( kvs::PaintEventListener* event )
+void Screen::setBackgroundColor( const kvs::RGBColor& color )
 {
-    m_enable_default_paint_event = false;
-    BaseClass::addPaintEvent( event );
+    m_scene->background()->setColor( color );
 }
 
-/*===========================================================================*/
-/**
- *  @brief  Sets a resize event listener.
- *  @param  event [in] pointer to a resize event listener
- */
-/*===========================================================================*/
-void Screen::setResizeEvent( kvs::ResizeEventListener* event )
+void Screen::setControlTarget( const ControlTarget target )
 {
-    m_enable_default_resize_event = false;
-    BaseClass::addResizeEvent( event );
+    m_scene->controlTarget() = target;
 }
 
-/*===========================================================================*/
-/**
- *  @brief  Sets a mouse press event listener.
- *  @param  event [in] pointer to a mouse press event listener
- */
-/*===========================================================================*/
-void Screen::setMousePressEvent( kvs::MousePressEventListener* event )
+void Screen::setEvent( kvs::EventListener* event, const std::string& name )
 {
-    m_enable_default_mouse_press_event = false;
-    BaseClass::addMousePressEvent( event );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a mouse move event listener.
- *  @param  event [in] pointer to a mouse move event listener
- */
-/*===========================================================================*/
-void Screen::setMouseMoveEvent( kvs::MouseMoveEventListener* event )
-{
-    m_enable_default_mouse_move_event = false;
-    BaseClass::addMouseMoveEvent( event );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a mouse release event listener.
- *  @param  event [in] pointer to a mouse release event listener
- */
-/*===========================================================================*/
-void Screen::setMouseReleaseEvent( kvs::MouseReleaseEventListener* event )
-{
-    m_enable_default_mouse_release_event = false;
-    BaseClass::addMouseReleaseEvent( event );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a mouse double-click event listener.
- *  @param  event [in] pointer to a mouse double-click event listener
- */
-/*===========================================================================*/
-void Screen::setMouseDoubleClickEvent( kvs::MouseDoubleClickEventListener* event )
-{
-    // nothing default mouse double click event.
-    BaseClass::addMouseDoubleClickEvent( event );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a wheel event listener.
- *  @param  event [in] pointer to a wheel event listener
- */
-/*===========================================================================*/
-void Screen::setWheelEvent( kvs::WheelEventListener* event )
-{
-    m_enable_default_wheel_event = false;
-    BaseClass::addWheelEvent( event );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a key press event listener.
- *  @param  event [in] pointer to a key press event listener
- */
-/*===========================================================================*/
-void Screen::setKeyPressEvent( kvs::KeyPressEventListener* event )
-{
-    m_enable_default_key_press_event = false;
-    BaseClass::addKeyPressEvent( event );
+    switch ( event->eventType() )
+    {
+    case kvs::EventBase::PaintEvent: m_enable_default_paint_event =false; break;
+    case kvs::EventBase::ResizeEvent: m_enable_default_resize_event =false; break;
+    case kvs::EventBase::MousePressEvent: m_enable_default_mouse_press_event =false; break;
+    case kvs::EventBase::MouseMoveEvent: m_enable_default_mouse_move_event =false; break;
+    case kvs::EventBase::MouseReleaseEvent: m_enable_default_mouse_release_event =false; break;
+    case kvs::EventBase::WheelEvent: m_enable_default_wheel_event = false; break;
+    case kvs::EventBase::KeyPressEvent: m_enable_default_key_press_event = false; break;
+    default: break;
+    }
+    BaseClass::addEvent( event, name );
 }
 
 /*===========================================================================*/
@@ -440,7 +285,9 @@ void Screen::initializeEvent()
     }
 
     m_scene->initializeFunction();
-    BaseClass::initializeEventHandler()->notify();
+
+    kvs::InitializeEvent event;
+    BaseClass::eventHandler()->notify( &event );
 }
 
 /*===========================================================================*/
@@ -451,7 +298,11 @@ void Screen::initializeEvent()
 void Screen::paintEvent()
 {
     if ( m_enable_default_paint_event ) this->defaultPaintEvent();
-    else BaseClass::eventHandler()->notify();
+    else
+    {
+        kvs::PaintEvent event;
+        BaseClass::eventHandler()->notify( &event );
+    }
 }
 
 /*===========================================================================*/
@@ -573,7 +424,8 @@ void Screen::defaultPaintEvent()
     glPushMatrix();
 
     m_scene->paintFunction();
-    BaseClass::eventHandler()->notify();
+    kvs::PaintEvent event;
+    BaseClass::eventHandler()->notify( &event );
 
     glPopMatrix();
 
@@ -592,8 +444,8 @@ void Screen::defaultResizeEvent( int width, int height )
 {
     if ( !BaseClass::isFullScreen() ) { BaseClass::setSize( width, height ); }
 
-    kvs::ResizeEvent event( width, height );
     m_scene->resizeFunction( width, height );
+    kvs::ResizeEvent event( width, height );
     BaseClass::eventHandler()->notify( &event );
 }
 
@@ -726,6 +578,190 @@ void Screen::defaultKeyPressEvent( kvs::KeyEvent* event )
 
     BaseClass::eventHandler()->notify( event );
     BaseClass::redraw();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the pointer to the camera.
+ *  @return pointer to the camera
+ */
+/*===========================================================================*/
+kvs::Camera* Screen::camera()
+{
+    return( m_scene->camera() );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the pointer to the light.
+ *  @return pointer to the light
+ */
+/*===========================================================================*/
+kvs::Light* Screen::light()
+{
+    return( m_scene->light() );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the pointer to the mouse.
+ *  @return pointer to the mouse
+ */
+/*===========================================================================*/
+kvs::Mouse* Screen::mouse()
+{
+    return( m_scene->mouse() );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the pointer to the background class.
+ *  @return pointer to the background class
+ */
+/*===========================================================================*/
+kvs::Background* Screen::background()
+{
+    return( m_scene->background() );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the pointer to the object manager.
+ *  @return pointer to the object manager
+ */
+/*===========================================================================*/
+kvs::ObjectManager* Screen::objectManager()
+{
+    return( m_scene->objectManager() );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the pointer to the renderer manager.
+ *  @return pointer to the renderer manager
+ */
+/*===========================================================================*/
+kvs::RendererManager* Screen::rendererManager()
+{
+    return( m_scene->rendererManager() );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the pointer to the ID manager.
+ *  @return pointer to the ID manager
+ */
+/*===========================================================================*/
+kvs::IDManager* Screen::IDManager()
+{
+    return( m_scene->IDManager() );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the control target.
+ *  @return control target
+ */
+/*===========================================================================*/
+Screen::ControlTarget& Screen::controlTarget()
+{
+    return( m_scene->controlTarget() );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a paint event listener.
+ *  @param  event [in] pointer to a paint event listener
+ */
+/*===========================================================================*/
+void Screen::setPaintEvent( kvs::PaintEventListener* event )
+{
+    m_enable_default_paint_event = false;
+    BaseClass::addPaintEvent( event );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a resize event listener.
+ *  @param  event [in] pointer to a resize event listener
+ */
+/*===========================================================================*/
+void Screen::setResizeEvent( kvs::ResizeEventListener* event )
+{
+    m_enable_default_resize_event = false;
+    BaseClass::addResizeEvent( event );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a mouse press event listener.
+ *  @param  event [in] pointer to a mouse press event listener
+ */
+/*===========================================================================*/
+void Screen::setMousePressEvent( kvs::MousePressEventListener* event )
+{
+    m_enable_default_mouse_press_event = false;
+    BaseClass::addMousePressEvent( event );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a mouse move event listener.
+ *  @param  event [in] pointer to a mouse move event listener
+ */
+/*===========================================================================*/
+void Screen::setMouseMoveEvent( kvs::MouseMoveEventListener* event )
+{
+    m_enable_default_mouse_move_event = false;
+    BaseClass::addMouseMoveEvent( event );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a mouse release event listener.
+ *  @param  event [in] pointer to a mouse release event listener
+ */
+/*===========================================================================*/
+void Screen::setMouseReleaseEvent( kvs::MouseReleaseEventListener* event )
+{
+    m_enable_default_mouse_release_event = false;
+    BaseClass::addMouseReleaseEvent( event );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a mouse double-click event listener.
+ *  @param  event [in] pointer to a mouse double-click event listener
+ */
+/*===========================================================================*/
+void Screen::setMouseDoubleClickEvent( kvs::MouseDoubleClickEventListener* event )
+{
+    // nothing default mouse double click event.
+    BaseClass::addMouseDoubleClickEvent( event );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a wheel event listener.
+ *  @param  event [in] pointer to a wheel event listener
+ */
+/*===========================================================================*/
+void Screen::setWheelEvent( kvs::WheelEventListener* event )
+{
+    m_enable_default_wheel_event = false;
+    BaseClass::addWheelEvent( event );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a key press event listener.
+ *  @param  event [in] pointer to a key press event listener
+ */
+/*===========================================================================*/
+void Screen::setKeyPressEvent( kvs::KeyPressEventListener* event )
+{
+    m_enable_default_key_press_event = false;
+    BaseClass::addKeyPressEvent( event );
 }
 
 } // end of namespace glut

@@ -132,6 +132,7 @@
 #include <Core/Visualization/Event/EventHandler.h>
 #include <Core/Visualization/Event/EventListener.h>
 #include <Core/Visualization/Event/IdleEventListener.h>
+#include <Core/Visualization/Event/InitializeEvent.h>
 #include <Core/Visualization/Event/InitializeEventListener.h>
 #include <Core/Visualization/Event/KeyEvent.h>
 #include <Core/Visualization/Event/KeyPressEventListener.h>
@@ -140,6 +141,7 @@
 #include <Core/Visualization/Event/MouseMoveEventListener.h>
 #include <Core/Visualization/Event/MousePressEventListener.h>
 #include <Core/Visualization/Event/MouseReleaseEventListener.h>
+#include <Core/Visualization/Event/PaintEvent.h>
 #include <Core/Visualization/Event/PaintEventListener.h>
 #include <Core/Visualization/Event/ResizeEvent.h>
 #include <Core/Visualization/Event/ResizeEventListener.h>

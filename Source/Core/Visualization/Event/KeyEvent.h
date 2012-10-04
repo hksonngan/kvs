@@ -14,7 +14,6 @@
 #ifndef KVS__KEY_EVENT_H_INCLUDE
 #define KVS__KEY_EVENT_H_INCLUDE
 
-#include <kvs/ClassName>
 #include <kvs/EventBase>
 #include <kvs/Key>
 
@@ -29,41 +28,26 @@ namespace kvs
 /*==========================================================================*/
 class KeyEvent : public kvs::EventBase
 {
-    kvsClassName( kvs::KeyEvent );
-
 protected:
 
     int m_key; ///< key code
-    int m_x;   ///< mouse cursol position x
-    int m_y;   ///< mouse cursol position y
+    int m_x; ///< mouse cursol position x
+    int m_y; ///< mouse cursol position y
 
 public:
 
-    KeyEvent( void );
-
+    KeyEvent();
     KeyEvent( const KeyEvent& event );
-
     KeyEvent( int key, int x, int y );
+    virtual ~KeyEvent();
 
-    virtual ~KeyEvent( void );
-
-public:
-
-//    void set( int key, int x, int y );
+    int key() const;
+    int x() const;
+    int y() const;
+    int type() const;
 
     void setKey( int key );
-
     void setPosition( int x, int y );
-
-public:
-
-    const int key( void ) const;
-
-    const int x( void ) const;
-
-    const int y( void ) const;
-
-    virtual const int type( void ) const;
 };
 
 } // end of namespace kvs

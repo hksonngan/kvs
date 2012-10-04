@@ -59,8 +59,6 @@ public:
     virtual ~ScreenBase();
 
     int id() const;
-    std::list<kvs::glut::Timer*>& timerEventHandler();
-    void addTimerEvent( kvs::TimerEventListener* event, kvs::glut::Timer* timer );
 
     virtual void create();
     virtual void show();
@@ -95,6 +93,12 @@ private:
     friend void MouseMoveFunction( int x, int y );
     friend void KeyPressFunction( unsigned char key, int x, int y );
     friend void SpecialKeyPressFunction( int key, int x, int y );
+
+#if 1 // KVS_ENABLE_DEPRECATED
+public:
+    std::list<kvs::glut::Timer*>& timerEventHandler();
+    void addTimerEvent( kvs::TimerEventListener* event, kvs::glut::Timer* timer );
+#endif
 };
 
 } // end of namespace glut

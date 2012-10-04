@@ -15,7 +15,6 @@
 #ifndef KVS__WHEEL_EVENT_H_INCLUDE
 #define KVS__WHEEL_EVENT_H_INCLUDE
 
-#include <kvs/ClassName>
 #include <kvs/EventBase>
 
 
@@ -29,33 +28,24 @@ namespace kvs
 /*===========================================================================*/
 class WheelEvent : public kvs::EventBase
 {
-    kvsClassName( kvs::WheelEvent );
-
 protected:
 
-    int m_x;         ///< x coordinate value of mouse cursor position
-    int m_y;         ///< y coordinate value of mouse cursor position
+    int m_x; ///< x coordinate value of mouse cursor position
+    int m_y; ///< y coordinate value of mouse cursor position
     int m_direction; ///< scroll direction
 
 public:
 
-    WheelEvent( void );
+    WheelEvent();
+    virtual ~WheelEvent();
 
-    virtual ~WheelEvent( void );
-
-public:
+    int x() const;
+    int y() const;
+    int direction() const;
+    int type() const;
 
     void setPosition( int x, int y );
-
     void setDirection( int direction );
-
-    const int x( void ) const;
-
-    const int y( void ) const;
-
-    const int direction( void ) const;
-
-    virtual const int type( void ) const;
 };
 
 } // end of namespace kvs

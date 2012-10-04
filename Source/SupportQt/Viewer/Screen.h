@@ -25,10 +25,12 @@
 namespace kvs
 {
 
+class RGBColor;
 class Scene;
 class ObjectBase;
 class RendererBase;
 class VisualizationPipeline;
+#if 1 // KVS_ENABLE_DEPRECATED
 class InitializeEventListener;
 class PaintEventListener;
 class ResizeEventListener;
@@ -38,6 +40,7 @@ class MouseReleaseEventListener;
 class MouseDoubleClickEventListener;
 class WheelEventListener;
 class KeyPressEventListener;
+#endif
 
 namespace qt
 {
@@ -70,28 +73,13 @@ public:
     Screen( kvs::qt::Application* application = 0, QWidget* parent = 0 );
     virtual ~Screen();
 
-    kvs::Camera* camera();
-    kvs::Light* light();
-    kvs::Mouse* mouse();
-    kvs::Background* background();
-    kvs::ObjectManager* objectManager();
-    kvs::RendererManager* rendererManager();
-    kvs::IDManager* IDManager();
-    ControlTarget& controlTarget();
-
     void setTitle( const std::string& title );
     void setPosition( const int x, const int y );
     void setSize( const int width, const int height );
     void setGeometry( const int x, const int y, const int width, const int height );
-
-    void setPaintEvent( kvs::PaintEventListener* event );
-    void setResizeEvent( kvs::ResizeEventListener* event );
-    void setMousePressEvent( kvs::MousePressEventListener* event );
-    void setMouseMoveEvent( kvs::MouseMoveEventListener* event );
-    void setMouseReleaseEvent( kvs::MouseReleaseEventListener* event );
-    void setMouseDoubleClickEvent( kvs::MouseDoubleClickEventListener* event );
-    void setWheelEvent( kvs::WheelEventListener* event );
-    void setKeyPressEvent( kvs::KeyPressEventListener* event );
+    void setBackgroundColor( const kvs::RGBColor& color );
+    void setControlTarget( const ControlTarget target );
+    void setEvent( kvs::EventListener* event, const std::string& name = "" );
 
     const std::pair<int,int> registerObject( kvs::ObjectBase* object, kvs::RendererBase* renderer = 0 );
     const std::pair<int,int> registerObject( kvs::VisualizationPipeline* pipeline );
@@ -123,6 +111,27 @@ protected:
     virtual void defaultMouseReleaseEvent( kvs::MouseEvent* event );
     virtual void defaultWheelEvent( kvs::WheelEvent* event );
     virtual void defaultKeyPressEvent( kvs::KeyEvent* event );
+
+#if 1 // KVS_ENABLE_DEPRECATED
+public:
+    kvs::Camera* camera();
+    kvs::Light* light();
+    kvs::Mouse* mouse();
+    kvs::Background* background();
+    kvs::ObjectManager* objectManager();
+    kvs::RendererManager* rendererManager();
+    kvs::IDManager* IDManager();
+    ControlTarget& controlTarget();
+
+    void setPaintEvent( kvs::PaintEventListener* event );
+    void setResizeEvent( kvs::ResizeEventListener* event );
+    void setMousePressEvent( kvs::MousePressEventListener* event );
+    void setMouseMoveEvent( kvs::MouseMoveEventListener* event );
+    void setMouseReleaseEvent( kvs::MouseReleaseEventListener* event );
+    void setMouseDoubleClickEvent( kvs::MouseDoubleClickEventListener* event );
+    void setWheelEvent( kvs::WheelEventListener* event );
+    void setKeyPressEvent( kvs::KeyPressEventListener* event );
+#endif
 };
 
 } // end of namespace qt
