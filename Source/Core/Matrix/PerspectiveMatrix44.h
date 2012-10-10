@@ -53,7 +53,7 @@ inline kvs::Matrix44<T> PerspectiveMatrix44(
         cotA / aspect,    0,                                    0,                                        0,
                     0, cotA,                                    0,                                        0,
                     0,    0, -( zfar + znear ) / ( zfar - znear ), -( zfar * znear * 2 ) / ( zfar - znear ),
-                    0,    0,                                   -1,                                        1
+                    0,    0,                                   -1,                                        0
     };
 
     return( kvs::Matrix44<T>( elements ) );
