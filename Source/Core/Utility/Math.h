@@ -117,32 +117,6 @@ inline T Sgn( T a, T b )
     return ( b < T( 0 ) ) ? -Abs( a ) : Abs( a );
 }
 
-#if KVS_ENABLE_DEPRECATED
-template <typename T>
-inline void Swap( T& a, T& b )
-{
-    T tmp;
-    tmp = a;
-    a   = b;
-    b   = tmp;
-}
-
-template <typename T>
-inline void Shift( T& a, T& b, T c )
-{
-    a = b;
-    b = c;
-}
-
-template <typename T>
-inline void Shift( T& a, T& b, T& c, T d )
-{
-    a = b;
-    b = c;
-    c = d;
-}
-#endif
-
 template <typename T>
 inline int Round( T a )
 {
@@ -189,12 +163,6 @@ template <typename T>
 inline T Square( T a )
 {
     return a * a;
-}
-
-template <typename T>
-inline T SquareRoot( T a )
-{
-    return static_cast<T>( std::sqrt( a ) );
 }
 
 template <typename T>
@@ -303,11 +271,54 @@ inline double Rad2Deg( double a )
     return a * 57.29577951;
 }
 
-template <typename T>
-inline bool IsNaN( T a )
+inline bool IsNaN( float a )
 {
     return !( a == a );
 }
+
+inline bool IsNaN( double a )
+{
+    return !( a == a );
+}
+
+inline double PI()
+{
+    return 6 * std::asin( 0.5 );
+}
+
+#if KVS_ENABLE_DEPRECATED
+
+template <typename T>
+inline void Swap( T& a, T& b )
+{
+    T tmp;
+    tmp = a;
+    a   = b;
+    b   = tmp;
+}
+
+template <typename T>
+inline void Shift( T& a, T& b, T c )
+{
+    a = b;
+    b = c;
+}
+
+template <typename T>
+inline void Shift( T& a, T& b, T& c, T d )
+{
+    a = b;
+    b = c;
+    c = d;
+}
+
+template <typename T>
+inline T SquareRoot( T a )
+{
+    return static_cast<T>( std::sqrt( a ) );
+}
+
+#endif
 
 } // end of namespace Math
 

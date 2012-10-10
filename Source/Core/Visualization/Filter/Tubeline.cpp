@@ -882,7 +882,7 @@ void Tubeline::calculate_circles(
     const kvs::Quaternion<float> q( axis, radian );
     const kvs::Matrix33<float> mat = q.toMatrix();
 
-    float diff_rad = static_cast<float>( 2.0f * kvs::Math::pi / m_ndivisions );
+    float diff_rad = static_cast<float>( 2.0f * kvs::Math::PI() / m_ndivisions );
     float min_z = pre_radius - length * 0.5f;
     float max_z = length * 0.5f - post_radius;
     if ( length - post_radius - pre_radius < 0  )

@@ -303,14 +303,14 @@ void Bounds::create_circle_bounds( void )
     const kvs::Vector3f interval = kvs::Vector3f( max_x-min_x, max_y-min_y, max_z-min_z );
     const kvs::Vector3f center = kvs::Vector3f( max_x+min_x, max_y+min_y, max_z+min_z ) * 0.5f;
 
-    const float pi = static_cast<float>( kvs::Math::pi );
+    const float pi = static_cast<float>( kvs::Math::PI() );
     const float diff_angle = ( 2.0f * pi ) / m_division;
 
     const float x1 = interval.x() * 0.5f;
     const float y1 = interval.y() * 0.5f;
     const float z1 = interval.z() * 0.5f;
 
-    const float sqrt2 = static_cast<float>( kvs::Math::sqrt2 );
+    const float sqrt2 = std::sqrt( 2.0f );
     const float a = sqrt2 * x1;  const float a2 = a * a;
     const float b = sqrt2 * y1;  const float b2 = b * b;
     const float c = sqrt2 * z1;  const float c2 = c * c;
