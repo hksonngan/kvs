@@ -303,7 +303,6 @@ void LUDecomposer<T>::SetMaxIterations( const size_t max_iterations )
 }
 
 // template instantiation
-template class LUDecomposer<int>;
 template class LUDecomposer<float>;
 template class LUDecomposer<double>;
 

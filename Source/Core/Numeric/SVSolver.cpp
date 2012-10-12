@@ -77,7 +77,6 @@ const kvs::Vector<T>& SVSolver<T>::solve( const kvs::Matrix<T>& A, const kvs::Ve
 }
 
 // template instantiation
-template class SVSolver<int>;
 template class SVSolver<float>;
 template class SVSolver<double>;
 

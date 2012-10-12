@@ -143,7 +143,6 @@ GaussEliminationSolver<T>& GaussEliminationSolver<T>::operator = ( const kvs::Ve
 }
 
 // template instantiation
-template class GaussEliminationSolver<int>;
 template class GaussEliminationSolver<float>;
 template class GaussEliminationSolver<double>;
 

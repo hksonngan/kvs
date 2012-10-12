@@ -90,7 +90,6 @@ const kvs::Vector<T>& LUSolver<T>::solve( const kvs::Matrix<T>& A, const kvs::Ve
 }
 
 // template instantiation
-template class LUSolver<int>;
 template class LUSolver<float>;
 template class LUSolver<double>;
 

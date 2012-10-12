@@ -603,7 +603,6 @@ void EigenDecomposer<T>::SetMaxIterations( const size_t max_iterations )
 }
 
 // Template instantiation.
-template class EigenDecomposer<int>;
 template class EigenDecomposer<float>;
 template class EigenDecomposer<double>;
 

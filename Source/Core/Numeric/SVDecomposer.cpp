@@ -565,7 +565,6 @@ void SVDecomposer<T>::SetMaxIterations( const size_t max_iterations )
 }
 
 // template instantiation
-template class SVDecomposer<int>;
 template class SVDecomposer<float>;
 template class SVDecomposer<double>;
 

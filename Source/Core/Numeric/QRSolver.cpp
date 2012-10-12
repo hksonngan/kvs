@@ -69,7 +69,6 @@ const kvs::Vector<T>& QRSolver<T>::solve( const kvs::Matrix<T>& A, const kvs::Ve
 }
 
 // template instantiation
-template class QRSolver<int>;
 template class QRSolver<float>;
 template class QRSolver<double>;
 
