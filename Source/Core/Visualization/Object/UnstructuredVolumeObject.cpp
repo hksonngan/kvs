@@ -205,6 +205,11 @@ const size_t UnstructuredVolumeObject::ncells( void ) const
     return( m_ncells );
 }
 
+size_t UnstructuredVolumeObject::numberOfCells() const
+{
+    return m_ncells;
+}
+
 /*==========================================================================*/
 /**
  *  Get the connection id array.

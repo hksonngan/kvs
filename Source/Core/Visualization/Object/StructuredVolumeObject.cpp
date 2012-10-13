@@ -204,6 +204,11 @@ void StructuredVolumeObject::updateMinMaxCoords( void )
     this->calculate_min_max_coords();
 }
 
+size_t StructuredVolumeObject::numberOfCells() const
+{
+    return ( m_resolution.x() - 1 ) * ( m_resolution.y() - 1 ) * ( m_resolution.z() - 1 );
+}
+
 /*==========================================================================*/
 /**
  *  Calculate the min/max coordinate values.

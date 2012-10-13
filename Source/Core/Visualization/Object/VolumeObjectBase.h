@@ -154,6 +154,8 @@ public:
 
     virtual const size_t nnodes( void ) const = 0;
 
+    virtual size_t numberOfCells() const = 0;
+
     void updateMinMaxValues( void ) const;
 
 public:

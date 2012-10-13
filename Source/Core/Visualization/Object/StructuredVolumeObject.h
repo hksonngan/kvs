@@ -111,6 +111,8 @@ public:
 
     const size_t nnodes( void ) const;
 
+    size_t numberOfCells() const;
+
 public:
 
     void updateMinMaxCoords( void );

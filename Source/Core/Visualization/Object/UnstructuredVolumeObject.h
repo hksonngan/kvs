@@ -111,6 +111,8 @@ public:
 
     const size_t ncells( void ) const;
 
+    size_t numberOfCells() const;
+
     const Connections& connections( void ) const;
 
 public:
