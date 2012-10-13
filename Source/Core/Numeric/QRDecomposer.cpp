@@ -253,7 +253,6 @@ void QRDecomposer<T>::decompose( void )
 }
 
 // template instantiation
-template class QRDecomposer<int>;
 template class QRDecomposer<float>;
 template class QRDecomposer<double>;
 

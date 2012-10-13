@@ -14,7 +14,6 @@
 #ifndef KVS__XORSHIFT_128_H_INCLUDE
 #define KVS__XORSHIFT_128_H_INCLUDE
 
-#include <kvs/ClassName>
 #include <kvs/Type>
 
 
@@ -28,30 +27,21 @@ namespace kvs
 /*==========================================================================*/
 class Xorshift128
 {
-    kvsClassName_without_virtual( kvs::Xorshift128 );
-
 private:
-
     kvs::UInt32 m_x;
     kvs::UInt32 m_y;
     kvs::UInt32 m_z;
     kvs::UInt32 m_w;
 
 public:
-
     Xorshift128();
 
 public:
-
-    void setSeed( kvs::UInt32 );
+    void setSeed( kvs::UInt32 seed );
 
 public:
-
     float rand();
-
     kvs::UInt32 randInteger();
-
-public:
 
     float operator ()();
 };

@@ -23,14 +23,9 @@ namespace kvs
  *  Constructs a new Xorshift128.
  */
 /*==========================================================================*/
-Xorshift128::Xorshift128( void )
-    : m_x( 0 )
-    , m_y( 0 )
-    , m_z( 0 )
-    , m_w( 0 )
+Xorshift128::Xorshift128()
 {
     const kvs::UInt32 seed = static_cast<kvs::UInt32>( time( 0 ) );
-
     this->setSeed( seed );
 }
 
