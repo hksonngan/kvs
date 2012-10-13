@@ -490,15 +490,7 @@ inline T Matrix33<T>::trace() const
 template<typename T>
 inline T Matrix33<T>::determinant() const
 {
-    const T det22[3] = {
-        m_rows[1][1] * m_rows[2][2] - m_rows[1][2] * m_rows[2][1],
-        m_rows[1][0] * m_rows[2][2] - m_rows[1][2] * m_rows[2][0],
-        m_rows[1][0] * m_rows[2][1] - m_rows[1][1] * m_rows[2][0], };
-
-    const T det33 =
-        m_rows[0][0] * det22[0] - m_rows[0][1] * det22[1] + m_rows[0][2] * det22[2];
-
-    return det33;
+    return m_rows[0].cross( m_rows[1] ).dot( m_rows[2] );
 }
 
 template<typename T>

@@ -77,7 +77,7 @@ QRDecomposer<T>::QRDecomposer( const kvs::Matrix<T>& m )
 template <typename T>
 const kvs::Matrix<T> QRDecomposer<T>::Q( void ) const
 {
-    return( m_qt.transpose() );
+    return( m_qt.transposed() );
 }
 
 /*===========================================================================*/

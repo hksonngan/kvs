@@ -1,4 +1,6 @@
 #pragma once
+#include <kvs/Assert>
+#include <kvs/Math>
 #include <kvs/Value>
 
 
@@ -35,6 +37,11 @@ public:
     {
         m_lower = kvs::Math::Min( m_lower, other.m_lower );
         m_upper = kvs::Math::Max( m_upper, other.m_upper );
+    }
+
+    bool hasLength() const
+    {
+        return m_lower < m_upper;
     }
 
     double lower() const

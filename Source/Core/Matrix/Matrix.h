@@ -18,8 +18,7 @@
 #include <kvs/DebugNew>
 #include <kvs/Assert>
 #include <kvs/Math>
-#include <kvs/IgnoreUnusedVariable>
-#include "Vector.h"
+#include <kvs/Vector>
 
 
 namespace kvs
@@ -60,11 +59,11 @@ public:
     size_t ncolumns() const;
 
 public:
-    const Matrix transpose() const;
-    Matrix&      transpose();
+    const Matrix transposed() const;
+    void transpose();
 
-    const Matrix inverse( T* determinant = 0 ) const;
-    Matrix&      inverse( T* determinant = 0 );
+    const Matrix inverted() const;
+    void invert();
 
 public:
     void print() const;
@@ -88,17 +87,16 @@ public:
 public:
     friend bool operator ==( const Matrix& lhs, const Matrix& rhs )
     {
-        // Alias.
         const size_t nrows = lhs.nrows();
-
-        bool result = ( lhs.nrows() == rhs.nrows() );
+        if ( nrows != lhs.nrows() )
+            return false;
 
         for ( size_t r = 0; r < nrows; ++r )
         {
-            result = result && ( lhs[r] == rhs[r] );
+            if ( lhs[r] != rhs[r] )
+                return false;
         }
-
-        return result;
+        return true;
     }
 
     friend bool operator !=( const Matrix& lhs, const Matrix& rhs )
@@ -108,23 +106,18 @@ public:
 
     friend const Matrix operator +( const Matrix& lhs, const Matrix& rhs )
     {
-        Matrix result( lhs );
-        result += rhs;
-        return result;
+        return Matrix( lhs ) += rhs;
     }
 
     friend const Matrix operator -( const Matrix& lhs, const Matrix& rhs )
     {
-        Matrix result( lhs );
-        result -= rhs;
-        return result;
+        return Matrix( lhs ) -= rhs;
     }
 
     friend const Matrix operator *( const Matrix& lhs, const Matrix& rhs )
     {
         KVS_ASSERT( lhs.ncolumns() == rhs.nrows() );
 
-        // Alias.
         const size_t L = lhs.nrows();
         const size_t M = lhs.ncolumns();
         const size_t N = rhs.ncolumns();
@@ -150,7 +143,6 @@ public:
     {
         KVS_ASSERT( lhs.ncolumns() == rhs.size() );
 
-        // Alias.
         const size_t nrows    = lhs.nrows();
         const size_t ncolumns = lhs.ncolumns();
 
@@ -158,6 +150,7 @@ public:
 
         for ( size_t r = 0; r < nrows; ++r )
         {
+            result[r] = T( 0 );
             for ( size_t c = 0; c < ncolumns; ++c )
             {
                 result[r] += lhs[r][c] * rhs[c];
@@ -171,7 +164,6 @@ public:
     {
         KVS_ASSERT( lhs.size() == rhs.nrows() );
 
-        // Alias.
         const size_t nrows    = rhs.nrows();
         const size_t ncolumns = rhs.ncolumns();
 
@@ -179,6 +171,7 @@ public:
 
         for ( size_t c = 0; c < ncolumns; ++c )
         {
+            result[c] = T( 0 );
             for ( size_t r = 0; r < nrows; ++r )
             {
                 result[c] += lhs[r] * rhs[r][c];
@@ -190,36 +183,30 @@ public:
 
     friend const Matrix operator *( const Matrix& lhs, const T rhs )
     {
-        Matrix result( lhs );
-        result *= rhs;
-        return result;
+        return Matrix( lhs ) *= rhs;
     }
 
     friend const Matrix operator *( const T lhs, const Matrix& rhs )
     {
-        Matrix result( rhs );
-        result *= lhs;
-        return result;
+        return rhs * lhs;
     }
 
     friend const Matrix operator /( const Matrix& lhs, const T rhs )
     {
-        Matrix result( lhs );
-        result /= rhs;
-        return result;
+        return Matrix( lhs ) /= rhs;
     }
 
     friend std::ostream& operator <<( std::ostream& os, const Matrix& rhs )
     {
-        // Alias.
         const size_t nrows = rhs.nrows();
-
-        for( size_t r = 0; r < nrows - 1; ++r )
+        if ( nrows != 0 )
         {
-            os <<  rhs[r] << std::endl;
+            for ( size_t r = 0; r < nrows - 1; ++r )
+            {
+                os <<  rhs[r] << std::endl;
+            }
+            os << rhs[ nrows - 1 ];
         }
-        os << rhs[ nrows - 1 ];
-
         return os;
     }
 };
@@ -267,7 +254,6 @@ inline Matrix<T>::Matrix( const size_t nrows, const size_t ncolumns, const T* co
 {
     this->setSize( nrows, ncolumns );
 
-    // Alias.
     Vector<T>* const m = m_rows;
 
     size_t index = 0;
@@ -296,10 +282,8 @@ inline Matrix<T>::Matrix( const Matrix& other )
 {
     this->setSize( other.nrows(), other.ncolumns() );
 
-    // Alias.
     const size_t          nrows = this->nrows();
     kvs::Vector<T>* const m     = m_rows;
-
     for ( size_t r = 0; r < nrows; ++r )
     {
         m[r] = other[r];
@@ -318,15 +302,12 @@ inline Matrix<T>& Matrix<T>::operator =( const Matrix& rhs )
 {
     this->setSize( rhs.nrows(), rhs.ncolumns() );
 
-    // Alias.
     const size_t          nrows = this->nrows();
     kvs::Vector<T>* const m     = m_rows;
-
     for ( size_t r = 0; r < nrows; ++r )
     {
         m[r] = rhs[r];
     }
-
     return *this;
 }
 
@@ -352,8 +333,8 @@ inline void Matrix<T>::setSize( const size_t nrows, const size_t ncolumns )
         m_nrows    = nrows;
         m_ncolumns = ncolumns;
 
-        delete[] m_rows;
-        m_rows = 0;
+        delete [] m_rows;
+        m_rows = NULL;
 
         if ( nrows != 0 && ncolumns != 0 )
         {
@@ -379,7 +360,6 @@ inline void Matrix<T>::zero()
 {
     const size_t          nrows = this->nrows();
     kvs::Vector<T>* const m     = m_rows;
-
     for ( size_t r = 0; r < nrows; ++r )
     {
         m[r].zero();
@@ -396,7 +376,6 @@ inline void Matrix<T>::identity()
 {
     KVS_ASSERT( this->nrows() == this->ncolumns() );
 
-    // Alias.
     const size_t          nrows = this->nrows();
     kvs::Vector<T>* const m     = m_rows;
 
@@ -457,7 +436,7 @@ inline size_t Matrix<T>::ncolumns() const
  */
 /*==========================================================================*/
 template<typename T>
-inline const Matrix<T> Matrix<T>::transpose() const
+inline const Matrix<T> Matrix<T>::transposed() const
 {
     Matrix result( *this );
     result.transpose();
@@ -472,9 +451,8 @@ inline const Matrix<T> Matrix<T>::transpose() const
  */
 /*==========================================================================*/
 template<typename T>
-inline Matrix<T>& Matrix<T>::transpose()
+inline void Matrix<T>::transpose()
 {
-    // Alias
     const size_t          nrows    = this->nrows();
     const size_t          ncolumns = this->ncolumns();
     kvs::Vector<T>* const m        = m_rows;
@@ -503,8 +481,6 @@ inline Matrix<T>& Matrix<T>::transpose()
 
         *this = result;
     }
-
-    return *this;
 }
 
 /*==========================================================================*/
@@ -515,10 +491,10 @@ inline Matrix<T>& Matrix<T>::transpose()
  */
 /*==========================================================================*/
 template<typename T>
-inline const Matrix<T> Matrix<T>::inverse( T* determinant ) const
+inline const Matrix<T> Matrix<T>::inverted() const
 {
     Matrix result( *this );
-    result.inverse( determinant );
+    result.invert();
     return result;
 }
 
@@ -532,12 +508,10 @@ inline const Matrix<T> Matrix<T>::inverse( T* determinant ) const
  */
 /*==========================================================================*/
 template<typename T>
-inline Matrix<T>& Matrix<T>::inverse( T* determinant )
+inline void Matrix<T>::invert()
 {
     KVS_ASSERT( this->nrows() == this->ncolumns() );
-    kvs::IgnoreUnusedVariable( determinant );
 
-    // Alias.
     const size_t          size     = this->nrows();
     const size_t          nrows    = this->nrows();
     const size_t          ncolumns = this->ncolumns();
@@ -581,9 +555,6 @@ inline Matrix<T>& Matrix<T>::inverse( T* determinant )
             }
         }
     }
-
-    *this = result;
-    return *this;
 }
 
 /*==========================================================================*/
@@ -609,17 +580,14 @@ inline T Matrix<T>::trace() const
 {
     KVS_ASSERT( this->nrows() == this->ncolumns() );
 
-    // Alias.
     const size_t          nrows = this->nrows();
     kvs::Vector<T>* const m     = m_rows;
 
     T result = T( 0 );
-
     for ( size_t r = 0; r < nrows; ++r )
     {
         result += m[r][r];
     }
-
     return result;
 }
 
@@ -635,7 +603,6 @@ inline T Matrix<T>::determinant() const
 {
     KVS_ASSERT( this->nrows() == this->ncolumns() );
 
-    // Alias
     const size_t size     = this->nrows();
     const size_t nrows    = this->nrows();
     const size_t ncolumns = this->ncolumns();
@@ -671,7 +638,6 @@ inline T Matrix<T>::determinant() const
 template<typename T>
 inline size_t Matrix<T>::pivot( const size_t column ) const
 {
-    // Alias
     const size_t          nrows = this->nrows();
     kvs::Vector<T>* const m     = m_rows;
 
@@ -712,15 +678,12 @@ inline Matrix<T>& Matrix<T>::operator +=( const Matrix& rhs )
     KVS_ASSERT( this->nrows() == rhs.nrows() );
     KVS_ASSERT( this->ncolumns() == rhs.ncolumns() );
 
-    // Alias.
     const size_t          nrows = this->nrows();
     kvs::Vector<T>* const m     = m_rows;
-
     for ( size_t r = 0; r < nrows; ++r )
     {
         m[r] += rhs[r];
     }
-
     return *this;
 }
 
@@ -730,15 +693,12 @@ inline Matrix<T>& Matrix<T>::operator -=( const Matrix& rhs )
     KVS_ASSERT( this->nrows() == rhs.nrows() );
     KVS_ASSERT( this->ncolumns() == rhs.ncolumns() );
 
-    // Alias.
     const size_t          nrows = this->nrows();
     kvs::Vector<T>* const m     = m_rows;
-
     for ( size_t r = 0; r < nrows; ++r )
     {
         m[r] -= rhs[r];
     }
-
     return *this;
 }
 
@@ -746,46 +706,37 @@ template<typename T>
 inline Matrix<T>& Matrix<T>::operator *=( const Matrix& rhs )
 {
     Matrix result( ( *this ) * rhs );
-    *this = result;
-    return *this;
+    return *this = result;
 }
 
 template<typename T>
 inline Matrix<T>& Matrix<T>::operator *=( const T rhs )
 {
-    // Alias.
     const size_t          nrows = this->nrows();
     kvs::Vector<T>* const m     = m_rows;
-
     for ( size_t r = 0; r < nrows; ++r )
     {
         m[r] *= rhs;
     }
-
     return *this;
 }
 
 template<typename T>
 inline Matrix<T>& Matrix<T>::operator /=( const T rhs )
 {
-    // Alias.
     const size_t          nrows = this->nrows();
     kvs::Vector<T>* const m     = m_rows;
-
     for ( size_t r = 0; r < nrows; ++r )
     {
         m[r] /= rhs;
     }
-
     return *this;
 }
 
 template<typename T>
 inline const Matrix<T> Matrix<T>::operator -() const
 {
-    Matrix result( *this );
-    result *= T( -1 );
-    return result;
+    return Matrix( *this ) *= T( -1 );
 }
 
 } // end of namespace kvs

@@ -82,16 +82,17 @@ public:
 public:
     friend bool operator ==( const Vector& lhs, const Vector& rhs )
     {
-        // Alias.
         const size_t size = lhs.size();
 
-        bool result = ( lhs.size() == rhs.size() );
+        if ( size != rhs.size() )
+           return false;
 
         for ( size_t i = 0; i < size; ++i )
         {
-            result = result && kvs::Math::Equal( lhs[i], rhs[i] );
+            if ( !kvs::Math::Equal( lhs[i], rhs[i] ) )
+                return false;
         }
-        return result;
+        return true;
     }
 
     friend bool operator !=( const Vector& lhs, const Vector& rhs )
@@ -101,56 +102,45 @@ public:
 
     friend const Vector operator +( const Vector& lhs, const Vector& rhs )
     {
-        Vector result( lhs );
-        result += rhs;
-        return result;
+        return Vector( lhs ) += rhs;
     }
 
     friend const Vector operator -( const Vector& lhs, const Vector& rhs )
     {
-        Vector result( lhs );
-        result -= rhs;
-        return result;
+        return Vector( lhs ) -= rhs;
     }
 
     friend const Vector operator *( const Vector& lhs, const Vector& rhs )
     {
-        Vector result( lhs );
-        result *= rhs;
-        return result;
+        return Vector( lhs ) *= rhs;
     }
 
     friend const Vector operator *( const Vector& lhs, const T rhs )
     {
-        Vector result( lhs );
-        result *= rhs;
-        return result;
+        return Vector( lhs ) *= rhs;
     }
 
     friend const Vector operator *( const T lhs, const Vector& rhs )
     {
-        Vector result( rhs );
-        result *= lhs;
-        return result;
+        return rhs * lhs;
     }
 
     friend const Vector operator /( const Vector& lhs, const T rhs )
     {
-        Vector result( lhs );
-        result /= rhs;
-        return result;
+        return Vector( lhs ) /= rhs;
     }
 
     friend std::ostream& operator << ( std::ostream& os, const Vector& rhs )
     {
-        // Alias.
         const size_t size = rhs.size();
-
-        for ( size_t i = 0; i < size - 1; ++i )
+        if ( size != 0 )
         {
-            os <<  rhs[i] << " ";
+            for ( size_t i = 0; i < size - 1; ++i )
+            {
+                os <<  rhs[i] << " ";
+            }
+            os << rhs[ size - 1 ];
         }
-        os << rhs[ size - 1 ];
         return os;
     }
 };
@@ -202,15 +192,7 @@ inline Vector<T>::Vector( const std::vector<T>& std_vector )
     , m_elements( 0 )
 {
     this->setSize( std_vector.size() );
-
-    // Alias.
-    const size_t size = this->size();
-    T* const     v    = m_elements;
-
-    for ( size_t i = 0; i < size; ++i )
-    {
-        v[i] = std_vector[i];
-    }
+    memcpy( m_elements, &std_vector[0], sizeof( T ) * this->size() );
 }
 
 template <typename T>
@@ -284,10 +266,8 @@ inline void Vector<T>::setSize( const size_t size )
 template <typename T>
 inline void Vector<T>::zero()
 {
-    // Alias.
     const size_t size = this->size();
     T* const     v    = m_elements;
-
     for ( size_t i = 0; i < size; ++i )
     {
         v[i] = T( 0 );
@@ -385,17 +365,14 @@ inline double Vector<T>::length() const
 template <typename T>
 inline double Vector<T>::length2() const
 {
-    // Alias.
     const size_t   size = this->size();
     const T* const v    = m_elements;
 
     double result = 0.0;
-
     for ( size_t i = 0; i < size; ++i )
     {
-        result += v[i] * v[i];
+        result += (double)v[i] * (double)v[i];
     }
-
     return result;
 }
 
@@ -404,7 +381,6 @@ inline double Vector<T>::length2() const
  *  Calculates a dot product.
  *
  *  @param other [in] Vector.
- *
  *  @return Dot product.
  */
 /*==========================================================================*/
@@ -413,17 +389,14 @@ inline T Vector<T>::dot( const Vector<T>& other ) const
 {
     KVS_ASSERT( this->size() == other.size() );
 
-    // Alias.
-    const size_t   size     = this->size();
-    const T* const v = m_elements;
+    const size_t   size = this->size();
+    const T* const v    = m_elements;
 
     T result( 0 );
-
     for ( size_t i = 0; i < size; ++i )
     {
         result += v[i] * other[i];
     }
-
     return result;
 }
 
@@ -431,14 +404,14 @@ template <typename T>
 inline const T& Vector<T>::operator []( const size_t index ) const
 {
     KVS_ASSERT( index < this->size() );
-    return *( m_elements + index );
+    return m_elements[ index ];
 }
 
 template <typename T>
 inline T& Vector<T>::operator []( const size_t index )
 {
     KVS_ASSERT( index < this->size() );
-    return *( m_elements + index );
+    return m_elements[ index ];
 }
 
 template <typename T>
@@ -446,15 +419,12 @@ inline Vector<T>& Vector<T>::operator +=( const Vector& rhs )
 {
     KVS_ASSERT( this->size() == rhs.size() );
 
-    // Alias.
     const size_t size = this->size();
     T* const     v    = m_elements;
-
-    for( size_t i = 0; i < size; ++i )
+    for ( size_t i = 0; i < size; ++i )
     {
-        v[i] = static_cast<T>( v[i] + rhs[i] );
+        v[i] += rhs[i];
     }
-
     return *this;
 }
 
@@ -463,69 +433,57 @@ inline Vector<T>& Vector<T>::operator -=( const Vector& rhs )
 {
     KVS_ASSERT( this->size() == rhs.size() );
 
-    // Alias.
     const size_t size = this->size();
     T* const     v    = m_elements;
-
-    for( size_t i = 0; i < size; ++i )
+    for ( size_t i = 0; i < size; ++i )
     {
-        v[i] = static_cast<T>( v[i] - rhs[i] );
+        v[i] -= rhs[i];
     }
-
     return *this;
 }
 
 template <typename T>
 inline Vector<T>& Vector<T>::operator *=( const Vector& rhs )
 {
-    // Alias.
+    KVS_ASSERT( this->size() == rhs.size() );
+
     const size_t size = this->size();
     T* const     v    = m_elements;
-
-    for( size_t i = 0; i < size; ++i )
+    for ( size_t i = 0; i < size; ++i )
     {
-        v[i] = static_cast<T>( v[i] * rhs[i] );
+        v[i] *= rhs[i];
     }
-
     return *this;
 }
 
 template <typename T>
 inline Vector<T>& Vector<T>::operator *=( const T rhs )
 {
-    // Alias.
     const size_t size = this->size();
     T* const     v    = m_elements;
-
-    for( size_t i = 0; i < size; ++i )
+    for ( size_t i = 0; i < size; ++i )
     {
-        v[i] = static_cast<T>( v[i] * rhs );
+        v[i] *= rhs;
     }
-
     return *this;
 }
 
 template <typename T>
 inline Vector<T>& Vector<T>::operator /=( const T rhs )
 {
-    // Alias.
     const size_t size = this->size();
     T* const     v    = m_elements;
-
-    for( size_t i = 0; i < size; ++i )
+    for ( size_t i = 0; i < size; ++i )
     {
-        v[i] = static_cast<T>( v[i] / rhs );
+        v[i] /= rhs;
     }
-
     return *this;
 }
 
 template<typename T>
 inline const Vector<T> Vector<T>::operator -() const
 {
-    Vector result( *this );
-    result *= T( -1 );
-    return result;
+    return Vector( *this ) *= T( -1 );
 }
 
 } // end of namespace kvs

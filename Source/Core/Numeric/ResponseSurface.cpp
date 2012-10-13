@@ -224,11 +224,11 @@ void ResponseSurface<T>::solve_regression_coefficients( void )
     const kvs::Vector<T> y = m_responses;          // response vector
     const size_t n = m_responses.size();           // num. of responses
 
-    const kvs::Matrix<T> Xt = X.transpose();       // X^{t}
+    const kvs::Matrix<T> Xt = X.transposed();      // X^{t}
     const kvs::Matrix<T> XtX = Xt * X;             // X^{t} X
     const kvs::Vector<T> Xty = Xt * y;             // X^{t} y
-    const kvs::Matrix<T> invXtX = XtX.inverse();  // ( X^{t} X )^{-1}
-    const kvs::Vector<T> b = invXtX * Xty;        // ( X^{t} X )^{-1} X^{t} y
+    const kvs::Matrix<T> invXtX = XtX.inverted();  // ( X^{t} X )^{-1}
+    const kvs::Vector<T> b = invXtX * Xty;         // ( X^{t} X )^{-1} X^{t} y
     const T btXty = b.dot( Xty );                  // b^{t} X^{t} y
 
     /* Calculate adjusted coefficient of multiple determination
@@ -328,7 +328,6 @@ void ResponseSurface<T>::update_coefficient_matrix( void )
 }
 
 // template instantiation
-template class ResponseSurface<int>;
 template class ResponseSurface<float>;
 template class ResponseSurface<double>;
 
