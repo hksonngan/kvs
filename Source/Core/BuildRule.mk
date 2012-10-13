@@ -225,6 +225,7 @@ $(OUTDIR)/./Visualization/Importer/StructuredVolumeImporter.o \
 $(OUTDIR)/./Visualization/Importer/TableImporter.o \
 $(OUTDIR)/./Visualization/Importer/UnstructuredVolumeImporter.o \
 $(OUTDIR)/./Visualization/Mapper/ArrowGlyph.o \
+$(OUTDIR)/./Visualization/Mapper/Cell.o \
 $(OUTDIR)/./Visualization/Mapper/CellAdjacencyGraph.o \
 $(OUTDIR)/./Visualization/Mapper/CellByCellLayeredSampling.o \
 $(OUTDIR)/./Visualization/Mapper/CellByCellMetropolisSampling.o \

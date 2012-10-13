@@ -124,6 +124,7 @@
 #include <Core/Utility/Type.h>
 #include <Core/Utility/Value.h>
 #include <Core/Utility/ValueArray.h>
+#include <Core/Utility/ValueRange.h>
 #include <Core/Utility/Version.h>
 #include <Core/Utility/WeakPointer.h>
 #include <Core/Visualization/Data/HydrogenVolumeData.h>
@@ -172,6 +173,7 @@
 #include <Core/Visualization/Importer/TableImporter.h>
 #include <Core/Visualization/Importer/UnstructuredVolumeImporter.h>
 #include <Core/Visualization/Mapper/ArrowGlyph.h>
+#include <Core/Visualization/Mapper/Cell.h>
 #include <Core/Visualization/Mapper/CellAdjacencyGraph.h>
 #include <Core/Visualization/Mapper/CellBase.h>
 #include <Core/Visualization/Mapper/CellByCellLayeredSampling.h>

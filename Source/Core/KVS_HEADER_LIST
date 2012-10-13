@@ -124,6 +124,7 @@ Utility/Tree
 Utility/Type
 Utility/Value
 Utility/ValueArray
+Utility/ValueRange
 Utility/Version
 Utility/WeakPointer
 Visualization/Data/HydrogenVolumeData
@@ -172,6 +173,7 @@ Visualization/Importer/StructuredVolumeImporter
 Visualization/Importer/TableImporter
 Visualization/Importer/UnstructuredVolumeImporter
 Visualization/Mapper/ArrowGlyph
+Visualization/Mapper/Cell
 Visualization/Mapper/CellAdjacencyGraph
 Visualization/Mapper/CellBase
 Visualization/Mapper/CellByCellLayeredSampling
