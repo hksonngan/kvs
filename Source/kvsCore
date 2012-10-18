@@ -111,6 +111,7 @@
 #include <Core/Utility/MemoryTracer.h>
 #include <Core/Utility/Message.h>
 #include <Core/Utility/Platform.h>
+#include <Core/Utility/Range.h>
 #include <Core/Utility/ReferenceCounter.h>
 #include <Core/Utility/SharedPointer.h>
 #include <Core/Utility/SmartPointer.h>
@@ -124,7 +125,6 @@
 #include <Core/Utility/Type.h>
 #include <Core/Utility/Value.h>
 #include <Core/Utility/ValueArray.h>
-#include <Core/Utility/ValueRange.h>
 #include <Core/Utility/Version.h>
 #include <Core/Utility/WeakPointer.h>
 #include <Core/Visualization/Data/HydrogenVolumeData.h>

@@ -111,6 +111,7 @@ Utility/MemoryDebugger
 Utility/MemoryTracer
 Utility/Message
 Utility/Platform
+Utility/Range
 Utility/ReferenceCounter
 Utility/SharedPointer
 Utility/SmartPointer
@@ -124,7 +125,6 @@ Utility/Tree
 Utility/Type
 Utility/Value
 Utility/ValueArray
-Utility/ValueRange
 Utility/Version
 Utility/WeakPointer
 Visualization/Data/HydrogenVolumeData

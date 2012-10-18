@@ -2,25 +2,27 @@
 #include <kvs/Assert>
 #include <kvs/Math>
 #include <kvs/Value>
+#include <kvs/ValueArray>
+#include <kvs/AnyValueArray>
 
 
 namespace kvs
 {
 
-class ValueRange
+class Range
 {
 private:
     double m_lower;
     double m_upper;
 
 public:
-    ValueRange()
+    Range()
     {
         m_lower = kvs::Value<double>::Max();
         m_upper = kvs::Value<double>::Min();
     }
 
-    ValueRange( double lower, double upper )
+    Range( double lower, double upper )
     {
         KVS_ASSERT( lower <= upper );
         m_lower = lower;
@@ -33,7 +35,7 @@ public:
         m_upper = kvs::Math::Max( m_upper, x );
     }
 
-    void extend( const ValueRange& other )
+    void extend( const Range& other )
     {
         m_lower = kvs::Math::Min( m_lower, other.m_lower );
         m_upper = kvs::Math::Max( m_upper, other.m_upper );
@@ -54,5 +56,10 @@ public:
         return m_upper;
     }
 };
+
+template <typename T>
+kvs::Range CalculateValueRange( const kvs::ValueArray<T>& ary, int dim );
+
+kvs::Range CalculateValueRange( const kvs::AnyValueArray& ary, int dim );
 
 } // end of namespace kvs
