@@ -1116,21 +1116,6 @@ void ParticleVolumeRenderer::initialize_resize_texture( void )
     }
 }
 
-#if KVS_ENABLE_DEPRECATED
-/*==========================================================================*/
-/**
- *  @brief  Creates GLSL shader programs.
- */
-/*==========================================================================*/
-void ParticleVolumeRenderer::create_shaders(
-    kvs::glew::ProgramObject& program_object,
-    const kvs::glew::ShaderSource& vertex_source,
-    const kvs::glew::ShaderSource& fragment_source )
-{
-    program_object.create( vertex_source, fragment_source );
-}
-#endif
-
 /*===========================================================================*/
 /**
  *  @brief  Creates a random number texture.

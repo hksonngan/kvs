@@ -122,13 +122,6 @@ protected:
 
     void initialize_shaders( const kvs::StructuredVolumeObject* volume );
 
-#if KVS_ENABLE_DEPRECATED
-    void create_shaders(
-        kvs::glew::ProgramObject& program_object,
-        const kvs::glew::ShaderSource& vertex_source,
-        const kvs::glew::ShaderSource& fragment_source );
-#endif
-
     void create_entry_points( void );
 
     void create_exit_points( void );

@@ -606,21 +606,6 @@ void RayCastingRenderer::initialize_shaders( const kvs::StructuredVolumeObject* 
     }
 }
 
-#if KVS_ENABLE_DEPRECATED
-/*==========================================================================*/
-/**
- *  @brief  Creates GLSL shader programs.
- */
-/*==========================================================================*/
-void RayCastingRenderer::create_shaders(
-    kvs::glew::ProgramObject& program_object,
-    const kvs::glew::ShaderSource& vertex_source,
-    const kvs::glew::ShaderSource& fragment_source )
-{
-    program_object.create( vertex_source, fragment_source );
-}
-#endif
-
 /*===========================================================================*/
 /**
  *  @brief  Create the entry points texture.

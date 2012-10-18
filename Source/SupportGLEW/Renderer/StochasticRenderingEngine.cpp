@@ -102,24 +102,6 @@ const bool StochasticRenderingEngine::isEnabledShading( void ) const
     return( m_enable_shading );
 }
 
-#if KVS_ENABLE_DEPRECATED
-/*===========================================================================*/
-/**
- *  @brief  Creates and links the shaders.
- *  @param  program_object [in] program object
- *  @param  vertex_source [in] vertex shader source
- *  @param  fragment_source [in] fragment shader source
- */
-/*===========================================================================*/
-void StochasticRenderingEngine::create_shaders(
-    kvs::glew::ProgramObject& program_object,
-    const kvs::glew::ShaderSource& vertex_source,
-    const kvs::glew::ShaderSource& fragment_source )
-{
-    program_object.create( vertex_source, fragment_source );
-}
-#endif
-
 /*===========================================================================*/
 /**
  *  @brief  Sets the rendering screen size.

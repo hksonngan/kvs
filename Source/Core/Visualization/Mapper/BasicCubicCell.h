@@ -63,6 +63,8 @@ private:
             case kvs::Type::TypeUInt16: set_binder( bind_cubic_scalar_cell<kvs::UInt16> ); break;
             case kvs::Type::TypeUInt32: set_binder( bind_cubic_scalar_cell<kvs::UInt32> ); break;
             case kvs::Type::TypeUInt64: set_binder( bind_cubic_scalar_cell<kvs::UInt64> ); break;
+            case kvs::Type::TypeReal32: set_binder( bind_cubic_scalar_cell<kvs::Real32> ); break;
+            case kvs::Type::TypeReal64: set_binder( bind_cubic_scalar_cell<kvs::Real64> ); break;
             default:
                 KVS_ASSERT( false );
                 break;
@@ -80,6 +82,8 @@ private:
             case kvs::Type::TypeUInt16: set_binder( bind_cubic_cell<kvs::UInt16> ); break;
             case kvs::Type::TypeUInt32: set_binder( bind_cubic_cell<kvs::UInt32> ); break;
             case kvs::Type::TypeUInt64: set_binder( bind_cubic_cell<kvs::UInt64> ); break;
+            case kvs::Type::TypeReal32: set_binder( bind_cubic_cell<kvs::Real32> ); break;
+            case kvs::Type::TypeReal64: set_binder( bind_cubic_cell<kvs::Real64> ); break;
             default:
                 KVS_ASSERT( false );
                 break;

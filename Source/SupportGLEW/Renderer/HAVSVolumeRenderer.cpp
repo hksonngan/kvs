@@ -401,21 +401,6 @@ void HAVSVolumeRenderer::initialize_framebuffer( void )
     m_mrt_framebuffer.disable();
 }
 
-#if KVS_ENABLE_DEPRECATED
-/*==========================================================================*/
-/**
- *  @brief  Creates GLSL shader programs.
- */
-/*==========================================================================*/
-void HAVSVolumeRenderer::create_shaders(
-    kvs::glew::ProgramObject& program_object,
-    const kvs::glew::ShaderSource& vertex_source,
-    const kvs::glew::ShaderSource& fragment_source )
-{
-    program_object.create( vertex_source, fragment_source );
-}
-#endif
-
 void HAVSVolumeRenderer::enable_MRT_rendering( void )
 {
     // Enable FBO.
