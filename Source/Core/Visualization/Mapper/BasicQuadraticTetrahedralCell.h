@@ -131,7 +131,7 @@ public:
         for ( int i = 0 ; i < 4; ++i )
         {
             this->updateDifferentialFactors( v[i] );
-            sum_metric += jacobianMatrix().determinant();
+            sum_metric += this->jacobianMatrix().determinant();
         }
 
         return Math::Abs( sum_metric ) / ( 6 * 4 );

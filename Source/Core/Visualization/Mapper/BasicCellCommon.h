@@ -128,7 +128,7 @@ public:
         const double TinyValue = 1.0e-6;
         const int MaxLoop = 100;
         kvs::Vector3<T> x = cell->centerOfLocal();
-        for ( size_t i = 0; i < MaxLoop; i++ )
+        for ( int i = 0; i < MaxLoop; i++ )
         {
             cell->setLocalPoint( x );
             const kvs::Vector3<T> X = cell->globalPoint();
@@ -168,13 +168,8 @@ class BasicCellImplementBase
     friend struct CellGenerator<BasicCubicCell<T> >;
 
 private:
-    typedef void (*BinderFunction)( BasicCellImplementBase<T>*, kvs::UInt32 index );
-
     int m_nnodes;
     int m_value_dimension;
-
-    // initialized by derived class using set_binder()
-    BinderFunction m_binder;
 
     // initialized by CellGenerator
     T* m_coords;
@@ -190,35 +185,30 @@ protected:
     }
 
 public:
-    void bindCell( kvs::UInt32 index )
-    {
-        m_binder( this, index );
-    }
-
-    int numberOfNodes()
+    int numberOfNodes() const
     {
         return m_nnodes;
     }
 
-    int valueDimension()
+    int valueDimension() const
     {
         return m_value_dimension;
     }
 
-    T value( int index )
+    T value( int index ) const
     {
         KVS_ASSERT( index >= 0 );
         KVS_ASSERT( index < m_value_dimension );
         return this->interpolate_value( m_values + m_nnodes * index, m_interpolation_factors, m_nnodes );
     }
 
-    T scalarValue()
+    T scalarValue() const
     {
         KVS_ASSERT( m_value_dimension == 1 );
         return this->value( 0 );
     }
 
-    void vectorValue( T* output )
+    void vectorValue( T* output ) const
     {
         for ( int i = 0; i < m_value_dimension; ++i )
         {
@@ -245,11 +235,6 @@ protected:
     T* differential_factors()
     {
         return m_differential_factors;
-    }
-
-    void set_binder( BinderFunction binder )
-    {
-        m_binder = binder;
     }
 
     static T interpolate_value( const T* values, const T* weights, const int nnodes )
@@ -279,6 +264,9 @@ template <typename T>
 class BasicUnstructuredCellImplementBase : public BasicCellImplementBase<T>
 {
 private:
+    typedef void (*BinderFunction)( BasicUnstructuredCellImplementBase<T>*, kvs::UInt32 );
+    BinderFunction m_binder;
+
     const float* m_volume_coords;
     const void* m_volume_values;
     const kvs::UInt32* m_volume_connections;
@@ -292,21 +280,22 @@ protected:
         m_volume_coords = uns_volume->coords().data();
         m_volume_values = uns_volume->values().data();
         m_volume_connections = uns_volume->connections().data();
+        m_binder = NULL;
 
         if ( uns_volume->veclen() == 1 )
         {
             switch ( volume->values().typeID() )
             {
-            case kvs::Type::TypeInt8:   set_binder( bind_unstructured_scalar_cell<kvs::Int8  > ); break;
-            case kvs::Type::TypeInt16:  set_binder( bind_unstructured_scalar_cell<kvs::Int16 > ); break;
-            case kvs::Type::TypeInt32:  set_binder( bind_unstructured_scalar_cell<kvs::Int32 > ); break;
-            case kvs::Type::TypeInt64:  set_binder( bind_unstructured_scalar_cell<kvs::Int64 > ); break;
-            case kvs::Type::TypeUInt8:  set_binder( bind_unstructured_scalar_cell<kvs::UInt8 > ); break;
-            case kvs::Type::TypeUInt16: set_binder( bind_unstructured_scalar_cell<kvs::UInt16> ); break;
-            case kvs::Type::TypeUInt32: set_binder( bind_unstructured_scalar_cell<kvs::UInt32> ); break;
-            case kvs::Type::TypeUInt64: set_binder( bind_unstructured_scalar_cell<kvs::UInt64> ); break;
-            case kvs::Type::TypeReal32: set_binder( bind_unstructured_scalar_cell<kvs::Real32> ); break;
-            case kvs::Type::TypeReal64: set_binder( bind_unstructured_scalar_cell<kvs::Real64> ); break;
+            case kvs::Type::TypeInt8:   m_binder = bind_unstructured_scalar_cell<kvs::Int8  >; break;
+            case kvs::Type::TypeInt16:  m_binder = bind_unstructured_scalar_cell<kvs::Int16 >; break;
+            case kvs::Type::TypeInt32:  m_binder = bind_unstructured_scalar_cell<kvs::Int32 >; break;
+            case kvs::Type::TypeInt64:  m_binder = bind_unstructured_scalar_cell<kvs::Int64 >; break;
+            case kvs::Type::TypeUInt8:  m_binder = bind_unstructured_scalar_cell<kvs::UInt8 >; break;
+            case kvs::Type::TypeUInt16: m_binder = bind_unstructured_scalar_cell<kvs::UInt16>; break;
+            case kvs::Type::TypeUInt32: m_binder = bind_unstructured_scalar_cell<kvs::UInt32>; break;
+            case kvs::Type::TypeUInt64: m_binder = bind_unstructured_scalar_cell<kvs::UInt64>; break;
+            case kvs::Type::TypeReal32: m_binder = bind_unstructured_scalar_cell<kvs::Real32>; break;
+            case kvs::Type::TypeReal64: m_binder = bind_unstructured_scalar_cell<kvs::Real64>; break;
             default:
                 KVS_ASSERT( false );
                 break;
@@ -316,16 +305,16 @@ protected:
         {
             switch ( uns_volume->values().typeID() )
             {
-            case kvs::Type::TypeInt8:   set_binder( bind_unstructured_cell<kvs::Int8  > ); break;
-            case kvs::Type::TypeInt16:  set_binder( bind_unstructured_cell<kvs::Int16 > ); break;
-            case kvs::Type::TypeInt32:  set_binder( bind_unstructured_cell<kvs::Int32 > ); break;
-            case kvs::Type::TypeInt64:  set_binder( bind_unstructured_cell<kvs::Int64 > ); break;
-            case kvs::Type::TypeUInt8:  set_binder( bind_unstructured_cell<kvs::UInt8 > ); break;
-            case kvs::Type::TypeUInt16: set_binder( bind_unstructured_cell<kvs::UInt16> ); break;
-            case kvs::Type::TypeUInt32: set_binder( bind_unstructured_cell<kvs::UInt32> ); break;
-            case kvs::Type::TypeUInt64: set_binder( bind_unstructured_cell<kvs::UInt64> ); break;
-            case kvs::Type::TypeReal32: set_binder( bind_unstructured_cell<kvs::Real32> ); break;
-            case kvs::Type::TypeReal64: set_binder( bind_unstructured_cell<kvs::Real64> ); break;
+            case kvs::Type::TypeInt8:   m_binder = bind_unstructured_cell<kvs::Int8  >; break;
+            case kvs::Type::TypeInt16:  m_binder = bind_unstructured_cell<kvs::Int16 >; break;
+            case kvs::Type::TypeInt32:  m_binder = bind_unstructured_cell<kvs::Int32 >; break;
+            case kvs::Type::TypeInt64:  m_binder = bind_unstructured_cell<kvs::Int64 >; break;
+            case kvs::Type::TypeUInt8:  m_binder = bind_unstructured_cell<kvs::UInt8 >; break;
+            case kvs::Type::TypeUInt16: m_binder = bind_unstructured_cell<kvs::UInt16>; break;
+            case kvs::Type::TypeUInt32: m_binder = bind_unstructured_cell<kvs::UInt32>; break;
+            case kvs::Type::TypeUInt64: m_binder = bind_unstructured_cell<kvs::UInt64>; break;
+            case kvs::Type::TypeReal32: m_binder = bind_unstructured_cell<kvs::Real32>; break;
+            case kvs::Type::TypeReal64: m_binder = bind_unstructured_cell<kvs::Real64>; break;
             default:
                 KVS_ASSERT( false );
                 break;
@@ -334,6 +323,11 @@ protected:
     }
 
 public:
+    void bindCell( kvs::UInt32 index )
+    {
+        m_binder( this, index );
+    }
+
     const kvs::Vector3<T> globalPoint()
     {
         const int nnodes = this->numberOfNodes();
@@ -380,9 +374,8 @@ public:
 
 private:
     template <typename U>
-    static void bind_unstructured_cell( BasicCellImplementBase* c, kvs::UInt32 index )
+    static void bind_unstructured_cell( BasicUnstructuredCellImplementBase<T>* cell, kvs::UInt32 index )
     {
-        BasicUnstructuredCellImplementBase<T>* cell = static_cast<BasicUnstructuredCellImplementBase<T>*>( c );
         const int nnodes = cell->numberOfNodes();
         const int dim = cell->valueDimension();
         const kvs::UInt32* connections = cell->m_volume_connections + index * nnodes;
@@ -410,9 +403,8 @@ private:
     }
 
     template <typename U>
-    static void bind_unstructured_scalar_cell( BasicCellImplementBase* c, kvs::UInt32 index )
+    static void bind_unstructured_scalar_cell( BasicUnstructuredCellImplementBase<T>* cell, kvs::UInt32 index )
     {
-        BasicUnstructuredCellImplementBase<T>* cell = static_cast<BasicUnstructuredCellImplementBase<T>*>( c );
         KVS_ASSERT( cell->valueDimension() == 1 );
 
         const int nnodes = cell->numberOfNodes();

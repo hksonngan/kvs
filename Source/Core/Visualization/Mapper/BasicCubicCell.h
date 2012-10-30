@@ -35,6 +35,9 @@ public:
     typedef T ValueType;
 
 private:
+    typedef void (*BinderFunction)( BasicCubicCell<T>*, const kvs::Vec3i& );
+    BinderFunction m_binder;
+
     const void* m_volume_values;
     kvs::Vector3ui m_volume_resolution;
     kvs::Vector3<T> m_local_point;
@@ -45,26 +48,27 @@ private:
         detail::BasicCellImplementBase<T>( volume )
     {
         KVS_ASSERT( volume->volumeType() == kvs::VolumeObjectBase::Unstructured );
-        KVS_ASSERT( volume->cellType() == kvs::StructuredVolumeObject::Uniform );
+        KVS_ASSERT( volume->gridType() == kvs::StructuredVolumeObject::Uniform );
         const kvs::StructuredVolumeObject* str_volume = static_cast<const kvs::StructuredVolumeObject*>( volume );
 
         m_volume_values = str_volume->values().data();
         m_volume_resolution = str_volume->resolution();
+        m_binder = NULL;
 
         if ( str_volume->veclen() == 1 )
         {
             switch ( str_volume->values().typeID() )
             {
-            case kvs::Type::TypeInt8:   set_binder( bind_cubic_scalar_cell<kvs::Int8  > ); break;
-            case kvs::Type::TypeInt16:  set_binder( bind_cubic_scalar_cell<kvs::Int16 > ); break;
-            case kvs::Type::TypeInt32:  set_binder( bind_cubic_scalar_cell<kvs::Int32 > ); break;
-            case kvs::Type::TypeInt64:  set_binder( bind_cubic_scalar_cell<kvs::Int64 > ); break;
-            case kvs::Type::TypeUInt8:  set_binder( bind_cubic_scalar_cell<kvs::UInt8 > ); break;
-            case kvs::Type::TypeUInt16: set_binder( bind_cubic_scalar_cell<kvs::UInt16> ); break;
-            case kvs::Type::TypeUInt32: set_binder( bind_cubic_scalar_cell<kvs::UInt32> ); break;
-            case kvs::Type::TypeUInt64: set_binder( bind_cubic_scalar_cell<kvs::UInt64> ); break;
-            case kvs::Type::TypeReal32: set_binder( bind_cubic_scalar_cell<kvs::Real32> ); break;
-            case kvs::Type::TypeReal64: set_binder( bind_cubic_scalar_cell<kvs::Real64> ); break;
+            case kvs::Type::TypeInt8:   m_binder = bind_cubic_scalar_cell<kvs::Int8  >; break;
+            case kvs::Type::TypeInt16:  m_binder = bind_cubic_scalar_cell<kvs::Int16 >; break;
+            case kvs::Type::TypeInt32:  m_binder = bind_cubic_scalar_cell<kvs::Int32 >; break;
+            case kvs::Type::TypeInt64:  m_binder = bind_cubic_scalar_cell<kvs::Int64 >; break;
+            case kvs::Type::TypeUInt8:  m_binder = bind_cubic_scalar_cell<kvs::UInt8 >; break;
+            case kvs::Type::TypeUInt16: m_binder = bind_cubic_scalar_cell<kvs::UInt16>; break;
+            case kvs::Type::TypeUInt32: m_binder = bind_cubic_scalar_cell<kvs::UInt32>; break;
+            case kvs::Type::TypeUInt64: m_binder = bind_cubic_scalar_cell<kvs::UInt64>; break;
+            case kvs::Type::TypeReal32: m_binder = bind_cubic_scalar_cell<kvs::Real32>; break;
+            case kvs::Type::TypeReal64: m_binder = bind_cubic_scalar_cell<kvs::Real64>; break;
             default:
                 KVS_ASSERT( false );
                 break;
@@ -74,21 +78,38 @@ private:
         {
             switch ( str_volume->values().typeID() )
             {
-            case kvs::Type::TypeInt8:   set_binder( bind_cubic_cell<kvs::Int8  > ); break;
-            case kvs::Type::TypeInt16:  set_binder( bind_cubic_cell<kvs::Int16 > ); break;
-            case kvs::Type::TypeInt32:  set_binder( bind_cubic_cell<kvs::Int32 > ); break;
-            case kvs::Type::TypeInt64:  set_binder( bind_cubic_cell<kvs::Int64 > ); break;
-            case kvs::Type::TypeUInt8:  set_binder( bind_cubic_cell<kvs::UInt8 > ); break;
-            case kvs::Type::TypeUInt16: set_binder( bind_cubic_cell<kvs::UInt16> ); break;
-            case kvs::Type::TypeUInt32: set_binder( bind_cubic_cell<kvs::UInt32> ); break;
-            case kvs::Type::TypeUInt64: set_binder( bind_cubic_cell<kvs::UInt64> ); break;
-            case kvs::Type::TypeReal32: set_binder( bind_cubic_cell<kvs::Real32> ); break;
-            case kvs::Type::TypeReal64: set_binder( bind_cubic_cell<kvs::Real64> ); break;
+            case kvs::Type::TypeInt8:   m_binder = bind_cubic_cell<kvs::Int8  >; break;
+            case kvs::Type::TypeInt16:  m_binder = bind_cubic_cell<kvs::Int16 >; break;
+            case kvs::Type::TypeInt32:  m_binder = bind_cubic_cell<kvs::Int32 >; break;
+            case kvs::Type::TypeInt64:  m_binder = bind_cubic_cell<kvs::Int64 >; break;
+            case kvs::Type::TypeUInt8:  m_binder = bind_cubic_cell<kvs::UInt8 >; break;
+            case kvs::Type::TypeUInt16: m_binder = bind_cubic_cell<kvs::UInt16>; break;
+            case kvs::Type::TypeUInt32: m_binder = bind_cubic_cell<kvs::UInt32>; break;
+            case kvs::Type::TypeUInt64: m_binder = bind_cubic_cell<kvs::UInt64>; break;
+            case kvs::Type::TypeReal32: m_binder = bind_cubic_cell<kvs::Real32>; break;
+            case kvs::Type::TypeReal64: m_binder = bind_cubic_cell<kvs::Real64>; break;
             default:
                 KVS_ASSERT( false );
                 break;
             }
         }
+    }
+
+public:
+    void bindCell( kvs::UInt32 index )
+    {
+        m_binder( this, this->index_to_index3( index ) );
+    }
+
+    void bindCellByGlobalPoint( const kvs::Vector3<T>& global )
+    {
+        KVS_ASSERT( global.x() >= 0 );
+        KVS_ASSERT( global.y() >= 0 );
+        KVS_ASSERT( global.z() >= 0 );
+        KVS_ASSERT( global.x() < m_volume_resolution.x() - 1 );
+        KVS_ASSERT( global.y() < m_volume_resolution.y() - 1 );
+        KVS_ASSERT( global.z() < m_volume_resolution.z() - 1 );
+        m_binder( this, to_vec<int>( global ) );
     }
 
 public:
@@ -201,33 +222,38 @@ public:
     }
 
 private:
-    template <typename U>
-    static void bind_cubic_cell( BasicCellImplementBase* c, kvs::UInt32 index )
+    template <typename U, typename T>
+    static kvs::Vector3<U> to_vec( const kvs::Vector3<T>& v )
     {
-        BasicCubicCell<T>* cell = static_cast<BasicCubicCell<T>*>( c );
+        return kvs::Vector3<U>( static_cast<U>( v.x() ), static_cast<U>( v.y() ), static_cast<U>( v.z() ) );
+    }
 
-        const int nnodes = NumberOfNodes;
-        const int dim = cell->valueDimension();
-        const void* values = cell->m_volume_values;
-        T* cell_coords = cell->coords();
-        T* cell_values = cell->values();
-
-        const int nx = cell->m_volume_resolution.x();
-        const int ny = cell->m_volume_resolution.y();
+    kvs::Vec3i index_to_index3( kvs::UInt32 index )
+    {
+        const int nx = this->m_volume_resolution.x();
+        const int ny = this->m_volume_resolution.y();
         const int nx1 = nx - 1;
         const int nx1_ny1 = nx1 * ( ny - 1 );
-        const int bx = index % nx1_ny1 % nx1;
-        const int by = index % nx1_ny1 / nx1;
-        const int bz = index / nx1_ny1;
-        const int nx_ny = nx * ny;
-        const int base_index = bx + by * nx + bz * nx_ny;
+        const int ix = index % nx1_ny1 % nx1;
+        const int iy = index % nx1_ny1 / nx1;
+        const int iz = index / nx1_ny1;
+        return kvs::Vec3i( ix, iy, iz );
+    }
+
+    void setup_bind( const kvs::Vec3i& index, kvs::UInt32* data_index )
+    {
+        T* cell_coords = this->coords();
 
         // stores global point of (0, 0, 0) (local)
-        cell_coords[0] = static_cast<T>( bx );
-        cell_coords[1] = static_cast<T>( by );
-        cell_coords[2] = static_cast<T>( bz );
+        cell_coords[0] = static_cast<T>( index.x() );
+        cell_coords[1] = static_cast<T>( index.y() );
+        cell_coords[2] = static_cast<T>( index.z() );
 
-        kvs::UInt32 data_index[ 8 ];
+        const int nx = m_volume_resolution.x();
+        const int ny = m_volume_resolution.y();
+        const int nx_ny = nx * ny;
+        const int base_index = index.x() + index.y() * nx + index.z() * nx_ny;
+
         data_index[0] = base_index          + nx_ny;
         data_index[1] = base_index + 1      + nx_ny;
         data_index[2] = base_index + 1 + nx + nx_ny;
@@ -236,6 +262,37 @@ private:
         data_index[5] = base_index + 1;
         data_index[6] = base_index + 1 + nx;
         data_index[7] = base_index     + nx;
+    }
+
+    template <typename U>
+    static void bind_cubic_scalar_cell( BasicCubicCell<T>* cell, const kvs::Vec3i& index )
+    {
+        KVS_ASSERT( cell->valueDimension() == 1 );
+
+        kvs::UInt32 data_index[ 8 ];
+        cell->setup_bind( index, data_index );
+
+        const int nnodes = NumberOfNodes;
+        const void* values = cell->m_volume_values;
+        T* cell_values = cell->values();
+
+        for ( int i = 0; i < nnodes; ++i )
+        {
+            const U* in_values = static_cast<const U*>( values ) + data_index[i];
+            cell_values[ i ] = static_cast<T>( *in_values );
+        }
+    }
+
+    template <typename U>
+    static void bind_cubic_cell( BasicCubicCell<T>* cell, const kvs::Vec3i& index )
+    {
+        kvs::UInt32 data_index[ 8 ];
+        cell->setup_bind( index, data_index );
+
+        const int dim = cell->valueDimension();
+        const int nnodes = NumberOfNodes;
+        const void* values = cell->m_volume_values;
+        T* cell_values = cell->values();
 
         for ( int i = 0; i < nnodes; ++i )
         {
@@ -244,49 +301,6 @@ private:
             {
                 cell_values[ i + nnodes * d ] = static_cast<T>( *(in_values++) );
             }
-        }
-    }
-
-    template <typename U>
-    static void bind_cubic_scalar_cell( BasicCellImplementBase* c, kvs::UInt32 index )
-    {
-        BasicCubicCell<T>* cell = static_cast<BasicCubicCell<T>*>( c );
-        KVS_ASSERT( cell->valueDimension() == 1 );
-
-        const int nnodes = NumberOfNodes;
-        const void* values = cell->m_volume_values;
-        T* cell_coords = cell->coords();
-        T* cell_values = cell->values();
-
-        const int nx = cell->m_volume_resolution.x();
-        const int ny = cell->m_volume_resolution.y();
-        const int nx1 = nx - 1;
-        const int nx1_ny1 = nx1 * ( ny - 1 );
-        const int bx = index % nx1_ny1 % nx1;
-        const int by = index % nx1_ny1 / nx1;
-        const int bz = index / nx1_ny1;
-        const int nx_ny = nx * ny;
-        const int base_index = bx + by * nx + bz * nx_ny;
-
-        // stores global point of (0, 0, 0) (local)
-        cell_coords[0] = static_cast<T>( bx );
-        cell_coords[1] = static_cast<T>( by );
-        cell_coords[2] = static_cast<T>( bz );
-
-        kvs::UInt32 data_index[ 8 ];
-        data_index[0] = base_index          + nx_ny;
-        data_index[1] = base_index + 1      + nx_ny;
-        data_index[2] = base_index + 1 + nx + nx_ny;
-        data_index[3] = base_index     + nx + nx_ny;
-        data_index[4] = base_index;
-        data_index[5] = base_index + 1;
-        data_index[6] = base_index + 1 + nx;
-        data_index[7] = base_index     + nx;
-
-        for ( int i = 0; i < nnodes; ++i )
-        {
-            const U* in_values = static_cast<const U*>( values ) + data_index[i];
-            cell_values[ i ] = static_cast<T>( *in_values );
         }
     }
 };
