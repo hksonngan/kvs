@@ -20,7 +20,11 @@
 #include <kvs/Compiler>
 #include <kvs/Platform>
 #if defined ( KVS_COMPILER_VC )
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
 #include <windows.h>
+#include <winsock2.h>
 #include <mmsystem.h>
 #pragma comment(lib, "winmm.lib")
 #else // KVS_COMPILER_GCC

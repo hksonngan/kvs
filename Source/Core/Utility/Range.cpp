@@ -40,7 +40,6 @@ kvs::Range CalculateValueRange( const kvs::ValueArray<T>& ary, int dim )
     }
     else if ( dim == 3 )
     {
-        kvs::Range range;
         while ( value < end )
         {
             double magnitude
@@ -53,7 +52,6 @@ kvs::Range CalculateValueRange( const kvs::ValueArray<T>& ary, int dim )
     }
     else
     {
-        kvs::Range range;
         while ( value < end )
         {
             double magnitude = 0;
@@ -85,7 +83,7 @@ kvs::Range CalculateValueRange( const kvs::AnyValueArray& ary, int dim )
     switch ( ary.typeID() )
     {
     case kvs::Type::TypeInt8:
-        return Range( -128, 127 );
+        return CalculateValueRange( ary.asValueArray<kvs::Int8>(), dim );
     case kvs::Type::TypeInt16:
         return CalculateValueRange( ary.asValueArray<kvs::Int16>(), dim );
     case kvs::Type::TypeInt32:
@@ -93,7 +91,7 @@ kvs::Range CalculateValueRange( const kvs::AnyValueArray& ary, int dim )
     case kvs::Type::TypeInt64:
         return CalculateValueRange( ary.asValueArray<kvs::Int64>(), dim );
     case kvs::Type::TypeUInt8:
-        return Range( 0, 255 );
+        return CalculateValueRange( ary.asValueArray<kvs::UInt8>(), dim );
     case kvs::Type::TypeUInt16:
         return CalculateValueRange( ary.asValueArray<kvs::UInt16>(), dim );
     case kvs::Type::TypeUInt32:

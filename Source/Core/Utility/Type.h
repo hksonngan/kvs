@@ -98,42 +98,4 @@ template <> inline Type::TypeID Type::GetID<std::string>() { return TypeString; 
 
 } // end of namespace kvs
 
-#if KVS_ENABLE_DEPRECATED
-
-#if defined ( KVS_PLATFORM_CPU_32 )      // ILP32
-#define KVS_TYPE_SIZEOF_CHAR        1
-#define KVS_TYPE_SIZEOF_SHORT       2
-#define KVS_TYPE_SIZEOF_INT         4
-#define KVS_TYPE_SIZEOF_LONG        4
-#define KVS_TYPE_SIZEOF_LONG_LONG   8
-#define KVS_TYPE_SIZEOF_FLOAT       4
-#define KVS_TYPE_SIZEOF_DOUBLE      8
-#define KVS_TYPE_SIZEOF_LONG_DOUBLE 16
-#define KVS_TYPE_SIZEOF_POINTER     4
-#else // KVS_PLATFORM_CPU_64
-#if defined ( KVS_COMPILER_VC ) // LLP64
-#define KVS_TYPE_SIZEOF_CHAR        1
-#define KVS_TYPE_SIZEOF_SHORT       2
-#define KVS_TYPE_SIZEOF_INT         4
-#define KVS_TYPE_SIZEOF_LONG        4
-#define KVS_TYPE_SIZEOF_LONG_LONG   8
-#define KVS_TYPE_SIZEOF_FLOAT       4
-#define KVS_TYPE_SIZEOF_DOUBLE      8
-#define KVS_TYPE_SIZEOF_LONG_DOUBLE 16
-#define KVS_TYPE_SIZEOF_POINTER     8
-#else // KVS_COMPILER_GCC      // LP64
-#define KVS_TYPE_SIZEOF_CHAR        1
-#define KVS_TYPE_SIZEOF_SHORT       2
-#define KVS_TYPE_SIZEOF_INT         4
-#define KVS_TYPE_SIZEOF_LONG        8
-#define KVS_TYPE_SIZEOF_LONG_LONG   8
-#define KVS_TYPE_SIZEOF_FLOAT       4
-#define KVS_TYPE_SIZEOF_DOUBLE      8
-#define KVS_TYPE_SIZEOF_LONG_DOUBLE 16
-#define KVS_TYPE_SIZEOF_POINTER     8
-#endif
-#endif
-
-#endif
-
 #endif // KVS_CORE_TYPE_H_INCLUDE

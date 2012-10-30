@@ -24,6 +24,10 @@
 #endif
 
 #if defined( KVS_PLATFORM_WINDOWS )
+#include <cstdlib>
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
 #include <windows.h>
 #define GLUT_DISABLE_ATEXIT_HACK
 #endif

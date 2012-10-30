@@ -13,6 +13,7 @@
  */
 /*****************************************************************************/
 #include "ColorMapPalette.h"
+#include <cstdio>
 #include <kvs/String>
 #include <kvs/EventBase>
 #include <kvs/MouseEvent>
