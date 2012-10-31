@@ -222,7 +222,7 @@ public:
     }
 
 private:
-    template <typename U, typename T>
+    template <typename U>
     static kvs::Vector3<U> to_vec( const kvs::Vector3<T>& v )
     {
         return kvs::Vector3<U>( static_cast<U>( v.x() ), static_cast<U>( v.y() ), static_cast<U>( v.z() ) );
