@@ -17,7 +17,6 @@
 #include <kvs/ValueArray>
 #include <kvs/Type>
 #include <kvs/Vector2>
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -77,6 +76,18 @@ public:
     size_t padding() const;
     size_t size() const;
     const kvs::ValueArray<kvs::UInt8>& pixels() const;
+
+#if KVS_ENABLE_DEPRECATED
+    const kvs::ValueArray<kvs::UInt8>& data() const
+    {
+        return this->pixels();
+    }
+
+    kvs::ValueArray<kvs::UInt8>& data()
+    {
+        return this->pixels();
+    }
+#endif
 
     void flip();
     void copy( const kvs::ImageBase& image );

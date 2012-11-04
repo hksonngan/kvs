@@ -29,7 +29,16 @@
 #include <kvs/WheelEventListener>
 #include <kvs/KeyPressEventListener>
 #endif
-
+#if KVS_ENABLE_DEPRECATED
+#include <kvs/Scene>
+#include <kvs/ObjectManager>
+#include <kvs/RendererManager>
+#include <kvs/IDManager>
+#include <kvs/Mouse>
+#include <kvs/Camera>
+#include <kvs/Light>
+#include <kvs/Background>
+#endif
 
 namespace kvs
 {
@@ -38,6 +47,15 @@ class EventHandler;
 
 class ScreenBase
 {
+#if KVS_ENABLE_DEPRECATED
+public:
+    typedef kvs::Scene::ControlTarget ControlTarget;
+    static const ControlTarget TargetObject = kvs::Scene::TargetObject;
+    static const ControlTarget TargetCamera = kvs::Scene::TargetCamera;
+    static const ControlTarget TargetLight = kvs::Scene::TargetLight;
+    static const ControlTarget NumberOfTargets = kvs::Scene::NumberOfTargets;
+#endif
+
 private:
 
     int m_x; ///< window position (y position)

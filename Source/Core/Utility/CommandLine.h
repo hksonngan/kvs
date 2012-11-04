@@ -19,7 +19,6 @@
 #include <vector>
 #include <typeinfo>
 #include <algorithm>
-#include <kvs/ClassName>
 #include <kvs/String>
 #include <kvs/Message>
 
@@ -34,8 +33,6 @@ namespace kvs
 /*==========================================================================*/
 class CommandLine
 {
-    kvsClassName( kvs::CommandLine );
-
 public:
 
     enum HelpMessageMode
@@ -122,6 +119,28 @@ public:
     void addValue( const std::string& description, bool is_required = true );
 
     void showHelpMessage( HelpMessageMode mode = UsageOnly ) const;
+
+#if KVS_ENABLE_DEPRECATED
+protected:
+    void add_help_option( const std::string& help_option = "h" )
+    {
+        this->addHelpOption( help_option );
+    }
+
+    void add_option(
+        const std::string& name,
+        const std::string& description,
+        size_t             nvalues     = 0,
+        bool               is_required = false )
+    {
+        this->addOption( name, description, nvalues, is_required );
+    }
+
+    void add_value( const std::string& description, bool is_required = true )
+    {
+        this->addValue( description, is_required );
+    }
+#endif
 
 private:
 

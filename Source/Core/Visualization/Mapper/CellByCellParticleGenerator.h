@@ -240,6 +240,11 @@ inline const float CalculateSubpixelLength(
 namespace CellByCellParticleGenerator
 {
 
+#if KVS_ENABLE_DEPRECATED
+using kvs::detail::CalculateObjectDepth;
+using kvs::detail::CalculateSubpixelLength;
+#endif
+
 inline const float GetRandomNumber( void )
 {
     // xorshift RGNs with period at least 2^128 - 1.
@@ -344,5 +349,18 @@ inline const kvs::ValueArray<float> CalculateDensityMap(
 } // end of namespace CellByCellParticleGenerator
 
 } // end of namespace kvs
+
+#if KVS_ENABLE_DEPRECATED
+namespace
+{
+using kvs::detail::ScalingMatrix;
+using kvs::detail::TranslationMatrix;
+using kvs::detail::GetViewport;
+using kvs::detail::GetProjectionMatrix;
+using kvs::detail::GetModelviewMatrix;
+using kvs::detail::Project;
+using kvs::detail::UnProject;
+}
+#endif
 
 #endif // KVS__CELL_BY_CELL_PARTICLE_GENERATOR_H_INCLUDE
