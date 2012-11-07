@@ -35,7 +35,7 @@ public:
 
     typedef kvs::kvsml::TagBase BaseClass;
 
-protected:
+private:
 
     bool m_has_nvertices; ///< flag to check whether 'nvertices' is specified or not
     size_t m_nvertices; ///< number of vertices
@@ -43,7 +43,6 @@ protected:
 public:
 
     VertexTag();
-    virtual ~VertexTag();
 
 public:
 

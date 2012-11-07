@@ -37,7 +37,7 @@ public:
 
     typedef kvs::kvsml::TagBase BaseClass;
 
-public:
+private:
 
     bool m_has_width; ///< flag to check whether 'width' is specified or not
     size_t m_width; ///< image width
@@ -47,7 +47,6 @@ public:
 public:
 
     ImageObjectTag();
-    virtual ~ImageObjectTag();
 
 public:
 

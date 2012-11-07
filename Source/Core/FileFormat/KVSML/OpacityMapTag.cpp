@@ -153,29 +153,17 @@ bool OpacityMapValueTag::read( const kvs::XMLElement::SuperClass* element )
 /*===========================================================================*/
 bool OpacityMapValueTag::write( kvs::XMLNode::SuperClass* parent )
 {
-    const std::string tag_name = BaseClass::name();
-    kvs::XMLElement element( tag_name );
+    kvs::XMLElement element( BaseClass::name() );
 
     {
-        const std::string name( "s" );
-        const std::string value = kvs::String::ToString( m_scalar );
-        element.setAttribute( name, value );
+        element.setAttribute( "s", m_scalar );
     }
 
     {
-        const std::string name( "a" );
-        const std::string value = kvs::String::ToString( m_opacity );
-        element.setAttribute( name, value );
+        element.setAttribute( "a", m_opacity );
     }
 
-    BaseClass::m_node = parent->InsertEndChild( element );
-    if ( !BaseClass::m_node )
-    {
-        kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
-        return false;
-    }
-
-    return true;
+    return BaseClass::write_with_element( parent, element );
 }
 
 } // end of namespace kvsml

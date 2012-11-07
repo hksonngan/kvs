@@ -44,15 +44,6 @@ TransferFunctionTag::TransferFunctionTag():
 
 /*===========================================================================*/
 /**
- *  @brief  Destructs the TransferFunctionTag class.
- */
-/*===========================================================================*/
-TransferFunctionTag::~TransferFunctionTag()
-{
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Tests whether the file is specified or not.
  *  @return true, if the file is specified
  */
@@ -251,49 +242,33 @@ bool TransferFunctionTag::read( const kvs::XMLNode::SuperClass* parent )
 /*===========================================================================*/
 bool TransferFunctionTag::write( kvs::XMLNode::SuperClass* parent )
 {
-    const std::string tag_name = BaseClass::name();
-    kvs::XMLElement element( tag_name );
+    kvs::XMLElement element( BaseClass::name() );
 
     // resolution="xxx"
     if ( m_has_resolution )
     {
-        const std::string name( "resolution" );
-        const std::string value = kvs::String::ToString( m_resolution );
-        element.setAttribute( name, value );
+        element.setAttribute( "resolution", m_resolution );
     }
 
     // min_value="xxx"
     if ( m_has_min_value )
     {
-        const std::string name( "min_value" );
-        const std::string value = kvs::String::ToString( m_min_value );
-        element.setAttribute( name, value );
+        element.setAttribute( "min_value", m_min_value );
     }
 
     // max_value="xxx"
     if ( m_has_max_value )
     {
-        const std::string name( "max_value" );
-        const std::string value = kvs::String::ToString( m_max_value );
-        element.setAttribute( name, value );
+        element.setAttribute( "max_value", m_max_value );
     }
 
     // file="xxx"
     if ( m_has_file )
     {
-        const std::string name( "file" );
-        const std::string value( m_file );
-        element.setAttribute( name, value );
+        element.setAttribute( "file", m_file );
     }
 
-    BaseClass::m_node = parent->InsertEndChild( element );
-    if( !BaseClass::m_node )
-    {
-        kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
-        return false;
-    }
-
-    return true;
+    return BaseClass::write_with_element( parent, element );
 }
 
 } // end of namespace kvsml

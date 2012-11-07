@@ -35,7 +35,7 @@ public:
 
     typedef kvs::kvsml::TagBase BaseClass;
 
-protected:
+private:
 
     bool m_has_file; ///< flag to check whether 'file' is specified or not
     std::string m_file; ///< name of external file for 'argb' data
@@ -49,7 +49,6 @@ protected:
 public:
 
     TransferFunctionTag();
-    virtual ~TransferFunctionTag();
 
 public:
 

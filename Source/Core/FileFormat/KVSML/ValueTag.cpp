@@ -44,15 +44,6 @@ ValueTag::ValueTag():
 
 /*===========================================================================*/
 /**
- *  @brief  Destructs the value tag class.
- */
-/*===========================================================================*/
-ValueTag::~ValueTag()
-{
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Tests whether the 'label' is specified or not.
  *  @return true, if the 'label' is specified
  */
@@ -252,50 +243,34 @@ bool ValueTag::read( const kvs::XMLNode::SuperClass* parent )
 /*===========================================================================*/
 bool ValueTag::write( kvs::XMLNode::SuperClass* parent )
 {
-    const std::string tag_name = BaseClass::name();
-    kvs::XMLElement element( tag_name );
+    kvs::XMLElement element( BaseClass::name() );
 
     if ( m_has_label )
     {
-        const std::string name( "label" );
-        const std::string value( m_label );
-        element.setAttribute( name, value );
+        element.setAttribute( "label", m_label );
     }
 
     if ( m_has_veclen )
     {
-        const std::string name( "veclen" );
-        const std::string value = kvs::String::ToString( m_veclen );
-        element.setAttribute( name, value );
+        element.setAttribute( "veclen", m_veclen );
     }
     else
     {
-        kvsMessageError( "'veclen' is not specified in <%s>.", tag_name.c_str() );
+        kvsMessageError( "'veclen' is not specified in <%s>.", BaseClass::name().c_str() );
         return false;
     }
 
     if ( m_has_min_value )
     {
-        const std::string name( "min_value" );
-        const std::string value = kvs::String::ToString( m_min_value );
-        element.setAttribute( name, value );
+        element.setAttribute( "min_value", m_min_value );
     }
 
     if ( m_has_max_value )
     {
-        const std::string name( "max_value" );
-        const std::string value = kvs::String::ToString( m_max_value );
-        element.setAttribute( name, value );
+        element.setAttribute( "max_value", m_max_value );
     }
 
-    BaseClass::m_node = parent->InsertEndChild( element );
-    if( !BaseClass::m_node )
-    {
-        kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
-        return false;
-    }
-
-    return true;
+    return BaseClass::write_with_element( parent, element );
 }
 
 } // end of namespace kvsml

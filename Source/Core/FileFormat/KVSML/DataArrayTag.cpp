@@ -49,15 +49,6 @@ DataArrayTag::DataArrayTag():
 
 /*===========================================================================*/
 /**
- *  @brief  Destructs the data array tag class.
- */
-/*===========================================================================*/
-DataArrayTag::~DataArrayTag()
-{
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Tests whether the tag has 'type' or not.
  *  @return true, if the tag has 'type'
  */
@@ -494,18 +485,6 @@ bool DataArrayTag::read_data( const size_t nelements, kvs::AnyValueArray* data )
         }
     }
 
-    return true;
-}
-
-bool DataArrayTag::read( const kvs::XMLNode::SuperClass* parent )
-{
-    kvs::IgnoreUnusedVariable( parent );
-    return true;
-}
-
-bool DataArrayTag::write( kvs::XMLNode::SuperClass* parent )
-{
-    kvs::IgnoreUnusedVariable( parent );
     return true;
 }
 

@@ -38,15 +38,6 @@ LineTag::LineTag():
 
 /*===========================================================================*/
 /**
- *  @brief  Destructs the line tag class.
- */
-/*===========================================================================*/
-LineTag::~LineTag()
-{
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Tests whether the line tag has 'nlines' or not.
  *  @return true, if the line tag has 'nlines'
  */
@@ -125,19 +116,10 @@ bool LineTag::write( kvs::XMLNode::SuperClass* parent )
 
     if ( m_has_nlines )
     {
-        const std::string name( "nlines" );
-        const std::string value = kvs::String::ToString( m_nlines );
-        element.setAttribute( name, value );
+        element.setAttribute( "nlines", m_nlines );
     }
 
-    BaseClass::m_node = parent->InsertEndChild( element );
-    if( !BaseClass::m_node )
-    {
-        kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
-        return false;
-    }
-
-    return true;
+    return BaseClass::write_with_element( parent, element );
 }
 
 } // end of namespace kvsml

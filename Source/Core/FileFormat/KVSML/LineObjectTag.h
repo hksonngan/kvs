@@ -37,7 +37,7 @@ public:
 
     typedef kvs::kvsml::TagBase BaseClass;
 
-protected:
+private:
 
     bool m_has_line_type; ///< flag to check whether 'line_type' is specified or not
     std::string m_line_type; ///< line type
@@ -47,7 +47,6 @@ protected:
 public:
 
     LineObjectTag();
-    virtual ~LineObjectTag();
 
 public:
 

@@ -176,41 +176,25 @@ bool ColorMapValueTag::read( const kvs::XMLElement::SuperClass* element )
 /*===========================================================================*/
 bool ColorMapValueTag::write( kvs::XMLNode::SuperClass* parent )
 {
-    const std::string tag_name = BaseClass::name();
-    kvs::XMLElement element( tag_name );
+    kvs::XMLElement element( BaseClass::name() );
 
     {
-        const std::string name( "s" );
-        const std::string value = kvs::String::ToString( m_scalar );
-        element.setAttribute( name, value );
+        element.setAttribute( "s", m_scalar );
     }
 
     {
-        const std::string name( "r" );
-        const std::string value = kvs::String::ToString( m_color.r() );
-        element.setAttribute( name, value );
+        element.setAttribute( "r", m_color.r() );
     }
 
     {
-        const std::string name( "g" );
-        const std::string value = kvs::String::ToString( m_color.g() );
-        element.setAttribute( name, value );
+        element.setAttribute( "g", m_color.g() );
     }
 
     {
-        const std::string name( "b" );
-        const std::string value = kvs::String::ToString( m_color.b() );
-        element.setAttribute( name, value );
+        element.setAttribute( "b", m_color.b() );
     }
 
-    BaseClass::m_node = parent->InsertEndChild( element );
-    if ( !BaseClass::m_node )
-    {
-        kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
-        return false;
-    }
-
-    return true;
+    return BaseClass::write_with_element( parent, element );
 }
 
 } // end of namespace kvsml

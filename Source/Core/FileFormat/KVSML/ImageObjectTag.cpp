@@ -40,15 +40,6 @@ ImageObjectTag::ImageObjectTag():
 
 /*===========================================================================*/
 /**
- *  @brief  Destructs the image object class.
- */
-/*===========================================================================*/
-ImageObjectTag::~ImageObjectTag()
-{
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Tests whether the image object tag has 'width' or not.
  *  @return true, if the image object tag has 'width'
  */
@@ -164,31 +155,19 @@ bool ImageObjectTag::read( const kvs::XMLNode::SuperClass* parent )
 /*===========================================================================*/
 bool ImageObjectTag::write( kvs::XMLNode::SuperClass* parent )
 {
-    const std::string tag_name = BaseClass::name();
-    kvs::XMLElement element( tag_name );
+    kvs::XMLElement element( BaseClass::name() );
 
     if ( m_has_width )
     {
-        const std::string name( "width" );
-        const std::string value = kvs::String::ToString( m_width );
-        element.setAttribute( name, value );
+        element.setAttribute( "width", m_width );
     }
 
     if ( m_has_height )
     {
-        const std::string name( "height" );
-        const std::string value = kvs::String::ToString( m_height );
-        element.setAttribute( name, value );
+        element.setAttribute( "height", m_height );
     }
 
-    BaseClass::m_node = parent->InsertEndChild( element );
-    if( !BaseClass::m_node )
-    {
-        kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
-        return false;
-    }
-
-    return true;
+    return BaseClass::write_with_element( parent, element );
 }
 
 } // end of namespace kvsml

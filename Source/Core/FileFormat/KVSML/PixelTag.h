@@ -37,7 +37,7 @@ public:
 
     typedef kvs::kvsml::TagBase BaseClass;
 
-protected:
+private:
 
     bool m_has_type; ///< flag to check whether 'type' is specified or not
     std::string m_type; ///< pixel type
@@ -45,7 +45,6 @@ protected:
 public:
 
     PixelTag();
-    virtual ~PixelTag();
 
 public:
 

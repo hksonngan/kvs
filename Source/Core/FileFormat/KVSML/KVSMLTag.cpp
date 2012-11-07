@@ -39,15 +39,6 @@ KVSMLTag::KVSMLTag():
 
 /*===========================================================================*/
 /**
- *  @brief  Destroys the KVSML tag class.
- */
-/*===========================================================================*/
-KVSMLTag::~KVSMLTag()
-{
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Returns a flag to check whether 'version' is specified or not.
  *  @return true, if 'version' is specified as attribute
  */
@@ -139,18 +130,6 @@ bool KVSMLTag::write( kvs::XMLDocument* document )
         return false;
     }
 
-    return true;
-}
-
-bool KVSMLTag::read( const kvs::XMLNode::SuperClass* parent )
-{
-    kvs::IgnoreUnusedVariable( parent );
-    return true;
-}
-
-bool KVSMLTag::write( kvs::XMLNode::SuperClass* parent )
-{
-    kvs::IgnoreUnusedVariable( parent );
     return true;
 }
 

@@ -43,15 +43,6 @@ ObjectTag::ObjectTag():
 
 /*===========================================================================*/
 /**
- *  @brief  Destructs the object tag class.
- */
-/*===========================================================================*/
-ObjectTag::~ObjectTag()
-{
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Returns object type as string.
  */
 /*===========================================================================*/
@@ -256,59 +247,35 @@ bool ObjectTag::read( const kvs::XMLNode::SuperClass* parent )
 /*===========================================================================*/
 bool ObjectTag::write( kvs::XMLNode::SuperClass* parent )
 {
-    const std::string tag_name = BaseClass::name();
-    kvs::XMLElement element( tag_name );
+    kvs::XMLElement element( BaseClass::name() );
 
     if ( m_has_type )
     {
-        const std::string name( "type" );
-        const std::string value( m_type );
-        element.setAttribute( name, value );
+        element.setAttribute( "type", m_type );
     }
     else
     {
-        kvsMessageError( "'type' is not specified in <%s>.", tag_name.c_str() );
+        kvsMessageError( "'type' is not specified in <%s>.", BaseClass::name().c_str() );
         return false;
     }
 
     if ( m_has_external_coord )
     {
-        const std::string name( "external_coord" );
-        const std::string min_x = kvs::String::ToString( m_min_external_coord.x() );
-        const std::string min_y = kvs::String::ToString( m_min_external_coord.y() );
-        const std::string min_z = kvs::String::ToString( m_min_external_coord.z() );
-        const std::string max_x = kvs::String::ToString( m_max_external_coord.x() );
-        const std::string max_y = kvs::String::ToString( m_max_external_coord.y() );
-        const std::string max_z = kvs::String::ToString( m_max_external_coord.z() );
-        const std::string min_coord( min_x + " " + min_y + " " + min_z );
-        const std::string max_coord( max_x + " " + max_y + " " + max_z );
-        const std::string value( min_coord + max_coord );
-        element.setAttribute( name, value );
+        const std::string min_coord = kvs::String::ToString( m_min_external_coord );
+        const std::string max_coord = kvs::String::ToString( m_min_external_coord );
+        const std::string value = min_coord + max_coord; // is this bug? ( min_coord + " " + max_coord )
+        element.setAttribute( "external_coord", value );
     }
 
     if ( m_has_object_coord )
     {
-        const std::string name( "object_coord" );
-        const std::string min_x = kvs::String::ToString( m_min_object_coord.x() );
-        const std::string min_y = kvs::String::ToString( m_min_object_coord.y() );
-        const std::string min_z = kvs::String::ToString( m_min_object_coord.z() );
-        const std::string max_x = kvs::String::ToString( m_max_object_coord.x() );
-        const std::string max_y = kvs::String::ToString( m_max_object_coord.y() );
-        const std::string max_z = kvs::String::ToString( m_max_object_coord.z() );
-        const std::string min_coord( min_x + " " + min_y + " " + min_z );
-        const std::string max_coord( max_x + " " + max_y + " " + max_z );
-        const std::string value( min_coord + max_coord );
-        element.setAttribute( name, value );
+        const std::string min_coord = kvs::String::ToString( m_min_object_coord );
+        const std::string max_coord = kvs::String::ToString( m_max_object_coord );
+        const std::string value = min_coord + max_coord; // is this bug? ( min_coord + " " + max_coord )
+        element.setAttribute( "object_coord", value );
     }
 
-    BaseClass::m_node = parent->InsertEndChild( element );
-    if( !BaseClass::m_node )
-    {
-        kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
-        return false;
-    }
-
-    return true;
+    return BaseClass::write_with_element( parent, element );
 }
 
 } // end of namespace kvsml

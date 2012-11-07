@@ -37,7 +37,7 @@ public:
 
     typedef kvs::kvsml::TagBase BaseClass;
 
-protected:
+private:
 
     bool m_has_cell_type; ///< flag to check whether 'cell_type' is specified or not
     std::string m_cell_type; ///< cell type
@@ -45,7 +45,6 @@ protected:
 public:
 
     UnstructuredVolumeObjectTag();
-    virtual ~UnstructuredVolumeObjectTag();
 
 public:
 

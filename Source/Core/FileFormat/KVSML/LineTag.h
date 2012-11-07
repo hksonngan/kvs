@@ -35,7 +35,7 @@ public:
 
     typedef kvs::kvsml::TagBase BaseClass;
 
-protected:
+private:
 
     bool m_has_nlines; ///< flag to check whether 'nlines' is specified or not
     size_t m_nlines; ///< number of lines
@@ -43,7 +43,6 @@ protected:
 public:
 
     LineTag();
-    virtual ~LineTag();
 
 public:
 

@@ -35,7 +35,7 @@ public:
 
     typedef kvs::kvsml::TagBase BaseClass;
 
-protected:
+private:
 
     bool m_has_nnodes; ///< flag to check whether 'nnodes' is specified or not
     size_t m_nnodes; ///< number of nodes
@@ -43,7 +43,6 @@ protected:
 public:
 
     NodeTag();
-    virtual ~NodeTag();
 
 public:
 

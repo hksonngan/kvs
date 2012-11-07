@@ -31,27 +31,6 @@ DataValueTag::DataValueTag():
 {
 }
 
-/*===========================================================================*/
-/**
- *  @brief  Destructs the data value class.
- */
-/*===========================================================================*/
-DataValueTag::~DataValueTag()
-{
-}
-
-bool DataValueTag::read( const kvs::XMLNode::SuperClass* parent )
-{
-    kvs::IgnoreUnusedVariable( parent );
-    return true;
-}
-
-bool DataValueTag::write( kvs::XMLNode::SuperClass* parent )
-{
-    kvs::IgnoreUnusedVariable( parent );
-    return true;
-}
-
 } // end of namespace kvsml
 
 } // end of namespace kvs

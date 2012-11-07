@@ -38,15 +38,6 @@ NodeTag::NodeTag():
 
 /*===========================================================================*/
 /**
- *  @brief  Destructs the node tag class.
- */
-/*===========================================================================*/
-NodeTag::~NodeTag()
-{
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Tests whether the node tag has the 'nnodes' atribute value.
  *  @return true, if the node tag has the 'nnodes' attribute value
  */
@@ -120,24 +111,14 @@ bool NodeTag::read( const kvs::XMLNode::SuperClass* parent )
 /*===========================================================================*/
 bool NodeTag::write( kvs::XMLNode::SuperClass* parent )
 {
-    const std::string tag_name = BaseClass::name();
-    kvs::XMLElement element( tag_name );
+    kvs::XMLElement element( BaseClass::name() );
 
     if ( m_has_nnodes )
     {
-        const std::string name( "nnodes" );
-        const std::string value = kvs::String::ToString( m_nnodes );
-        element.setAttribute( name, value );
+        element.setAttribute( "nnodes", m_nnodes );
     }
 
-    BaseClass::m_node = parent->InsertEndChild( element );
-    if( !BaseClass::m_node )
-    {
-        kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
-        return false;
-    }
-
-    return true;
+    return BaseClass::write_with_element( parent, element );
 }
 
 } // end of namespace kvsml

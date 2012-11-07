@@ -113,10 +113,15 @@ bool TagBase::write( kvs::XMLNode::SuperClass* parent )
     const std::string tag_name = this->name();
     kvs::XMLElement element( tag_name );
 
+    return this->write_with_element( parent, element );
+}
+
+bool TagBase::write_with_element( kvs::XMLNode::SuperClass* parent, const kvs::XMLElement& element )
+{
     m_node = parent->InsertEndChild( element );
-    if ( !m_node )
+    if( !m_node )
     {
-        kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
+        kvsMessageError( "Cannot insert <%s>.", m_name.c_str() );
         return false;
     }
 

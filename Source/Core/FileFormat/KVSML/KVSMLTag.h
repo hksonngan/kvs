@@ -37,7 +37,7 @@ public:
 
     typedef kvs::kvsml::TagBase BaseClass;
 
-protected:
+private:
 
     bool m_has_version; ///< flag to check whether 'version' is specified or not
     std::string m_version; ///< KVSML version
@@ -45,7 +45,6 @@ protected:
 public:
 
     KVSMLTag();
-    virtual ~KVSMLTag();
 
 public:
 

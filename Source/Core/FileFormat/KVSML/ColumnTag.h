@@ -38,7 +38,7 @@ public:
 
     typedef kvs::kvsml::TagBase BaseClass;
 
-protected:
+private:
 
     bool m_has_label; ///< flag to check whether the label is spcified or not
     bool m_has_min_value; ///< flag to check whether the min_value is spcified or not

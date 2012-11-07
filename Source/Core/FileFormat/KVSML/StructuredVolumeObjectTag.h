@@ -37,7 +37,7 @@ public:
 
     typedef kvs::kvsml::TagBase BaseClass;
 
-protected:
+private:
 
     bool m_has_grid_type; ///< flag to check whether 'grid_type' is specified or not
     std::string m_grid_type; ///< grid type
@@ -47,8 +47,6 @@ protected:
 public:
 
     StructuredVolumeObjectTag();
-
-    virtual ~StructuredVolumeObjectTag();
 
 public:
 

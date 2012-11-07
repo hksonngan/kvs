@@ -15,6 +15,7 @@
 #define KVS__KVSML__TAG_BASE_H_INCLUDE
 
 #include <kvs/XMLNode>
+#include <kvs/XMLElement>
 #include <string>
 
 
@@ -52,6 +53,10 @@ public:
 
     bool read( const kvs::XMLNode::SuperClass* parent );
     bool write( kvs::XMLNode::SuperClass* parent );
+
+protected:
+
+    bool write_with_element( kvs::XMLNode::SuperClass* parent, const kvs::XMLElement& element );
 
 private:
 

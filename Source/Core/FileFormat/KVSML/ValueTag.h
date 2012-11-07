@@ -36,7 +36,7 @@ public:
 
     typedef kvs::kvsml::TagBase BaseClass;
 
-protected:
+private:
 
     bool m_has_label; ///< flag to check whether 'label' is specified or not
     bool m_has_veclen; ///< flag to check whether 'veclen' is specified or not
@@ -50,8 +50,6 @@ protected:
 public:
 
     ValueTag();
-
-    virtual ~ValueTag();
 
 public:
 

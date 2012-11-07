@@ -44,7 +44,6 @@ public:
 public:
 
     DataValueTag();
-    virtual ~DataValueTag();
 
 public:
 

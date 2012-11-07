@@ -35,7 +35,7 @@ public:
 
     typedef kvs::kvsml::TagBase BaseClass;
 
-protected:
+private:
 
     bool m_has_npolygons; ///< flag to check whether 'npolygons' is specified or not
     size_t m_npolygons; ///< number of polygons
@@ -43,7 +43,6 @@ protected:
 public:
 
     PolygonTag();
-    virtual ~PolygonTag();
 
 public:
 

@@ -38,15 +38,6 @@ UnstructuredVolumeObjectTag::UnstructuredVolumeObjectTag():
 
 /*===========================================================================*/
 /**
- *  @brief  Destructs the unstructured volume object class.
- */
-/*===========================================================================*/
-UnstructuredVolumeObjectTag::~UnstructuredVolumeObjectTag()
-{
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Tests whether the 'cell_type' is specified or not.
  *  @return true, if the 'cell_type' is specified
  */
@@ -120,29 +111,19 @@ bool UnstructuredVolumeObjectTag::read( const kvs::XMLNode::SuperClass* parent )
 /*===========================================================================*/
 bool UnstructuredVolumeObjectTag::write( kvs::XMLNode::SuperClass* parent )
 {
-    const std::string tag_name = BaseClass::name();
-    kvs::XMLElement element( tag_name );
+    kvs::XMLElement element( BaseClass::name() );
 
     if ( m_has_cell_type )
     {
-        const std::string name( "cell_type" );
-        const std::string value( m_cell_type );
-        element.setAttribute( name, value );
+        element.setAttribute( "cell_type", m_cell_type );
     }
     else
     {
-        kvsMessageError( "'cell_type' is not specified in <%s>.", tag_name.c_str() );
+        kvsMessageError( "'cell_type' is not specified in <%s>.", BaseClass::name().c_str() );
         return false;
     }
 
-    BaseClass::m_node = parent->InsertEndChild( element );
-    if( !BaseClass::m_node )
-    {
-        kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
-        return false;
-    }
-
-    return true;
+    return BaseClass::write_with_element( parent, element );
 }
 
 } // end of namespace kvsml

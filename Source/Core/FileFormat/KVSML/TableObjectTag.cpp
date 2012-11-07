@@ -155,41 +155,29 @@ bool TableObjectTag::read( const kvs::XMLNode::SuperClass* parent )
 /*===========================================================================*/
 bool TableObjectTag::write( kvs::XMLNode::SuperClass* parent )
 {
-    const std::string tag_name = BaseClass::name();
-    kvs::XMLElement element( tag_name );
+    kvs::XMLElement element( BaseClass::name() );
 
     if ( m_has_nrows )
     {
-        const std::string name( "nrows" );
-        const std::string value = kvs::String::ToString( m_nrows );
-        element.setAttribute( name, value );
+        element.setAttribute( "nrows", m_nrows );
     }
     else
     {
-        kvsMessageError( "'nrows' is not specified in <%s>.", tag_name.c_str() );
+        kvsMessageError( "'nrows' is not specified in <%s>.", BaseClass::name().c_str() );
         return false;
     }
 
     if ( m_has_ncolumns )
     {
-        const std::string name( "ncolumns" );
-        const std::string value = kvs::String::ToString( m_ncolumns );
-        element.setAttribute( name, value );
+        element.setAttribute( "ncolumns", m_ncolumns );
     }
     else
     {
-        kvsMessageError( "'ncolumns' is not specified in <%s>.", tag_name.c_str() );
+        kvsMessageError( "'ncolumns' is not specified in <%s>.", BaseClass::name().c_str() );
         return false;
     }
 
-    BaseClass::m_node = parent->InsertEndChild( element );
-    if( !BaseClass::m_node )
-    {
-        kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
-        return false;
-    }
-
-    return true;
+    return BaseClass::write_with_element( parent, element );
 }
 
 } // end of namespace kvsml

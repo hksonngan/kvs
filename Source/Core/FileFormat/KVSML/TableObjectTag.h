@@ -36,7 +36,7 @@ public:
 
     typedef kvs::kvsml::TagBase BaseClass;
 
-protected:
+private:
 
     bool m_has_nrows; ///< flag to check whether 'nrows' is specified or not
     size_t m_nrows; ///< number of rows

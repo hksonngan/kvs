@@ -38,15 +38,6 @@ VertexTag::VertexTag():
 
 /*===========================================================================*/
 /**
- *  @brief  Destructs the vertex tag class.
- */
-/*===========================================================================*/
-VertexTag::~VertexTag()
-{
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Tests whether the vertex tag has the 'nvertices' attribute value.
  *  @return true, if the vertex tag has the 'nvertices' attribute value
  */
@@ -120,25 +111,14 @@ bool VertexTag::read( const kvs::XMLNode::SuperClass* parent )
 /*===========================================================================*/
 bool VertexTag::write( kvs::XMLNode::SuperClass* parent )
 {
-    const std::string tag_name = BaseClass::name();
-
-    kvs::XMLElement element( tag_name );
+    kvs::XMLElement element( BaseClass::name() );
 
     if ( m_has_nvertices )
     {
-        const std::string name( "nvertices" );
-        const std::string value = kvs::String::ToString( m_nvertices );
-        element.setAttribute( name, value );
+        element.setAttribute( "nvertices", m_nvertices );
     }
 
-    BaseClass::m_node = parent->InsertEndChild( element );
-    if( !BaseClass::m_node )
-    {
-        kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
-        return false;
-    }
-
-    return true;
+    return BaseClass::write_with_element( parent, element );
 }
 
 } // end of namespace kvsml

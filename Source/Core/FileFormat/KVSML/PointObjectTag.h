@@ -14,9 +14,6 @@
 #ifndef KVS__KVSML__POINT_OBJECT_H_INCLUDE
 #define KVS__KVSML__POINT_OBJECT_H_INCLUDE
 
-#include <string>
-#include <kvs/XMLNode>
-#include <kvs/Vector3>
 #include "TagBase.h"
 
 
@@ -40,12 +37,7 @@ public:
 public:
 
     PointObjectTag();
-    virtual ~PointObjectTag();
 
-public:
-
-    bool read( const kvs::XMLNode::SuperClass* parent );
-    bool write( kvs::XMLNode::SuperClass* parent );
 };
 
 } // end of namespace kvsml

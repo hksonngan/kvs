@@ -42,15 +42,6 @@ PolygonObjectTag::PolygonObjectTag():
 
 /*===========================================================================*/
 /**
- *  @brief  Destructs the polygon object class.
- */
-/*===========================================================================*/
-PolygonObjectTag::~PolygonObjectTag()
-{
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Tests whether the 'polygon_type' is specified or not.
  *  @return true, if the 'polygon_type' is specified
  */
@@ -208,53 +199,39 @@ bool PolygonObjectTag::read( const kvs::XMLNode::SuperClass* parent )
 /*===========================================================================*/
 bool PolygonObjectTag::write( kvs::XMLNode::SuperClass* parent )
 {
-    const std::string tag_name = BaseClass::name();
-    kvs::XMLElement element( tag_name );
+    kvs::XMLElement element( BaseClass::name() );
 
     if ( m_has_polygon_type )
     {
-        const std::string name( "polygon_type" );
-        const std::string value( m_polygon_type );
-        element.setAttribute( name, value );
+        element.setAttribute( "polygon_type", m_polygon_type );
     }
     else
     {
-        kvsMessageError( "'polygon_type' is not specified in <%s>.", tag_name.c_str() );
+        kvsMessageError( "'polygon_type' is not specified in <%s>.", BaseClass::name().c_str() );
         return false;
     }
 
     if ( m_has_color_type )
     {
-        const std::string name( "color_type" );
-        const std::string value( m_color_type );
-        element.setAttribute( name, value );
+        element.setAttribute( "color_type", m_color_type );
     }
     else
     {
-        kvsMessageError( "'color_type' is not specified in <%s>.", tag_name.c_str() );
+        kvsMessageError( "'color_type' is not specified in <%s>.", BaseClass::name().c_str() );
         return false;
     }
 
     if ( m_has_normal_type )
     {
-        const std::string name( "normal_type" );
-        const std::string value( m_normal_type );
-        element.setAttribute( name, value );
+        element.setAttribute( "normal_type", m_normal_type );
     }
     else
     {
-        kvsMessageError( "'normal_type' is not specified in <%s>.", tag_name.c_str() );
+        kvsMessageError( "'normal_type' is not specified in <%s>.", BaseClass::name().c_str() );
         return false;
     }
 
-    BaseClass::m_node = parent->InsertEndChild( element );
-    if( !BaseClass::m_node )
-    {
-        kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
-        return false;
-    }
-
-    return true;
+    return BaseClass::write_with_element( parent, element );
 }
 
 } // end of namespace kvsml

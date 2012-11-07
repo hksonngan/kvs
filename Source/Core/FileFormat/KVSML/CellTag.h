@@ -35,7 +35,7 @@ public:
 
     typedef kvs::kvsml::TagBase BaseClass;
 
-protected:
+private:
 
     bool m_has_ncells; ///< flag to check whether 'ncells' is specified or not
     size_t m_ncells; ///< number of cells
@@ -43,7 +43,6 @@ protected:
 public:
 
     CellTag();
-    virtual ~CellTag();
 
 public:
 
