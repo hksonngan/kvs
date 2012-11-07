@@ -12,21 +12,22 @@
  */
 /****************************************************************************/
 #include "Vector2.h"
+#include <kvs/Type>
 
 
 namespace kvs
 {
 
 // Template instantiation.
-template class Vector2<char>;
-template class Vector2<unsigned char>;
-template class Vector2<short>;
-template class Vector2<unsigned short>;
-template class Vector2<int>;
-template class Vector2<unsigned int>;
-template class Vector2<long>;
-template class Vector2<unsigned long>;
-template class Vector2<float>;
-template class Vector2<double>;
+template class Vector2<kvs::Int8>;
+template class Vector2<kvs::UInt8>;
+template class Vector2<kvs::Int16>;
+template class Vector2<kvs::UInt16>;
+template class Vector2<kvs::Int32>;
+template class Vector2<kvs::UInt32>;
+template class Vector2<kvs::Int64>;
+template class Vector2<kvs::UInt64>;
+template class Vector2<kvs::Real32>;
+template class Vector2<kvs::Real64>;
 
 } // end of namespace kvs

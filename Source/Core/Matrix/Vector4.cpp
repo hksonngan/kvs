@@ -18,15 +18,15 @@ namespace kvs
 {
 
 // Template instantiation.
-template class Vector4<char>;
-template class Vector4<unsigned char>;
-template class Vector4<short>;
-template class Vector4<unsigned short>;
-template class Vector4<int>;
-template class Vector4<unsigned int>;
-template class Vector4<long>;
-template class Vector4<unsigned long>;
-template class Vector4<float>;
-template class Vector4<double>;
+template class Vector4<kvs::Int8>;
+template class Vector4<kvs::UInt8>;
+template class Vector4<kvs::Int16>;
+template class Vector4<kvs::UInt16>;
+template class Vector4<kvs::Int32>;
+template class Vector4<kvs::UInt32>;
+template class Vector4<kvs::Int64>;
+template class Vector4<kvs::UInt64>;
+template class Vector4<kvs::Real32>;
+template class Vector4<kvs::Real64>;
 
 } // end of namespace kvs
