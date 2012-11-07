@@ -16,6 +16,7 @@
 
 #include "TinyXML.h"
 #include <string>
+#include <kvs/String>
 
 
 namespace kvs
@@ -40,8 +41,12 @@ public:
 public:
 
     TiXmlNode* insert( const TiXmlNode& node );
-    void setAttribute( const std::string& name, const std::string& value );
-    void setAttribute( const std::string& name, int value );
+
+    template <typename T>
+    void setAttribute( const std::string& name, const T& value )
+    {
+        SuperClass::SetAttribute( name, kvs::String::ToString( value ) );
+    }
 
 public:
 

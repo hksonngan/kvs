@@ -115,14 +115,7 @@ void StructuredVolumeObjectTag::setResolution( const kvs::Vector3ui& resolution 
 /*===========================================================================*/
 bool StructuredVolumeObjectTag::read( const kvs::XMLNode::SuperClass* parent )
 {
-    const std::string tag_name = BaseClass::name();
-
-    BaseClass::m_node = kvs::XMLNode::FindChildNode( parent, tag_name );
-    if ( !BaseClass::m_node )
-    {
-        kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
-        return false;
-    }
+    BaseClass::read( parent );
 
     // Element
     const kvs::XMLElement::SuperClass* element = kvs::XMLNode::ToElement( BaseClass::m_node );
@@ -147,7 +140,7 @@ bool StructuredVolumeObjectTag::read( const kvs::XMLNode::SuperClass* parent )
         {
             if ( t.isLast() )
             {
-                kvsMessageError( "3 components are required for 'resolution' in <%s>", tag_name.c_str() );
+                kvsMessageError( "3 components are required for 'resolution' in <%s>", this->name().c_str() );
                 return false;
             }
 

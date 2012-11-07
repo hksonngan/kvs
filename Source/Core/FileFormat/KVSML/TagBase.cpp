@@ -13,7 +13,7 @@
 /*****************************************************************************/
 #include "TagBase.h"
 #include <kvs/XMLElement>
-#include <kvs/Message>
+#include <kvs/Exception>
 
 
 namespace kvs
@@ -89,13 +89,10 @@ bool TagBase::isExisted( const kvs::XMLNode::SuperClass* parent ) const
 /*===========================================================================*/
 bool TagBase::read( const kvs::XMLNode::SuperClass* parent )
 {
-    const std::string tag_name = this->name();
-
-    m_node = kvs::XMLNode::FindChildNode( parent, tag_name );
+    m_node = kvs::XMLNode::FindChildNode( parent, m_name );
     if ( !m_node )
     {
-        kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
-        return false;
+        KVS_THROW( kvs::FileReadFaultException, "Cannot find <" + m_name + ">." );
     }
 
     return true;
@@ -110,19 +107,16 @@ bool TagBase::read( const kvs::XMLNode::SuperClass* parent )
 /*===========================================================================*/
 bool TagBase::write( kvs::XMLNode::SuperClass* parent )
 {
-    const std::string tag_name = this->name();
-    kvs::XMLElement element( tag_name );
-
+    kvs::XMLElement element( m_name );
     return this->write_with_element( parent, element );
 }
 
 bool TagBase::write_with_element( kvs::XMLNode::SuperClass* parent, const kvs::XMLElement& element )
 {
     m_node = parent->InsertEndChild( element );
-    if( !m_node )
+    if ( !m_node )
     {
-        kvsMessageError( "Cannot insert <%s>.", m_name.c_str() );
-        return false;
+        KVS_THROW( kvs::FileWriteFaultException, "Cannot insert <" + m_name + ">." );
     }
 
     return true;

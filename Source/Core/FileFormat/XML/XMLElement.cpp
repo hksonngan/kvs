@@ -51,30 +51,6 @@ TiXmlNode* XMLElement::insert( const TiXmlNode& node )
     return SuperClass::InsertEndChild( node );
 }
 
-/*==========================================================================*/
-/**
- *  Set attribute.
- *  @param name [in] name
- *  @param value [in] value
- */
-/*==========================================================================*/
-void XMLElement::setAttribute( const std::string& name, const std::string& value )
-{
-    SuperClass::SetAttribute( name, value );
-}
-
-/*==========================================================================*/
-/**
- *  Set attribute.
- *  @param name [in] name
- *  @param value [in] value
- */
-/*==========================================================================*/
-void XMLElement::setAttribute( const std::string& name, int value )
-{
-    SuperClass::SetAttribute( name, value );
-}
-
 const std::string XMLElement::AttributeValue( const TiXmlElement* element, const std::string& name )
 {
     const std::string* value = element->Attribute( name );

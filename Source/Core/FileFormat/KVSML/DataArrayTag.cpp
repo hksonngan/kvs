@@ -151,14 +151,7 @@ bool DataArrayTag::read(
     const size_t nelements,
     kvs::AnyValueArray* data )
 {
-    const std::string tag_name = BaseClass::name();
-
-    BaseClass::m_node = kvs::XMLNode::FindChildNode( parent, tag_name );
-    if( !BaseClass::m_node )
-    {
-        kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
-        return false;
-    }
+    BaseClass::read( parent );
 
     this->read_attribute();
 
