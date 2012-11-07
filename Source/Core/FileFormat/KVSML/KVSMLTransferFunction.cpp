@@ -627,7 +627,7 @@ bool KVSMLTransferFunction::write( const std::string& filename )
             kvs::kvsml::OpacityMapValueTag value_tag;
             value_tag.setScalar( point->first );
             value_tag.setOpacity( point->second );
-            if ( !value_tag.write( color_map_tag.node() ) )
+            if ( !value_tag.write( opacity_map_tag.node() ) )
             {
                 kvsMessageError( "Cannot write <%s>.", opacity_map_tag.name().c_str() );
                 BaseClass::setSuccess( false );
