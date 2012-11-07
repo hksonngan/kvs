@@ -68,17 +68,6 @@ ColorImage::ColorImage(
 
 /*===========================================================================*/
 /**
- *  @brief  Constructs a copy of other color image.
- *  @param  image [in] color image
- */
-/*===========================================================================*/
-ColorImage::ColorImage( const kvs::ColorImage& image )
-{
-    BaseClass::copy( image );
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Constructs a copy of other gray image.
  *  @param  image [in] gray image
  */
@@ -108,27 +97,6 @@ ColorImage::ColorImage( const kvs::BitImage& image )
 ColorImage::ColorImage( const std::string& filename )
 {
     this->read( filename );
-}
-
-/*==========================================================================*/
-/**
- *  Destroys the color image.
- */
-/*==========================================================================*/
-ColorImage::~ColorImage()
-{
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Copys other color image.
- *  @param  image [in] color image
- */
-/*===========================================================================*/
-kvs::ColorImage& ColorImage::operator = ( const kvs::ColorImage& image )
-{
-    BaseClass::copy( image );
-    return( *this );
 }
 
 /*==========================================================================*/

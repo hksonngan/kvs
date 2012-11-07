@@ -252,17 +252,6 @@ GrayImage::GrayImage(
 
 /*===========================================================================*/
 /**
- *  @brief  Constructs a copy of other gray image.
- *  @param  image [in] gray image
- */
-/*===========================================================================*/
-GrayImage::GrayImage( const kvs::GrayImage& image )
-{
-    BaseClass::copy( image );
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Constructs a copy of other bit image.
  *  @param  image [in] bit image
  */
@@ -294,27 +283,6 @@ GrayImage::GrayImage( const kvs::ColorImage& image )
 GrayImage::GrayImage( const std::string& filename )
 {
     this->read( filename );
-}
-
-/*==========================================================================*/
-/**
- *  Destroys the gray-scale image.
- */
-/*==========================================================================*/
-GrayImage::~GrayImage()
-{
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Copys other gray image.
- *  @param  image [in] gray image
- */
-/*===========================================================================*/
-kvs::GrayImage& GrayImage::operator = ( const kvs::GrayImage& image )
-{
-    BaseClass::copy( image );
-    return( *this );
 }
 
 /*==========================================================================*/

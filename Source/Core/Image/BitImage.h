@@ -86,14 +86,10 @@ public:
     BitImage();
     BitImage( const size_t width, const size_t height, const bool bit = true );
     BitImage( const size_t width, const size_t height, const kvs::ValueArray<kvs::UInt8>& data );
-    BitImage( const kvs::BitImage& image );
     explicit BitImage( const kvs::GrayImage& image );
     template <typename BinarizationMethod>
     BitImage( const kvs::GrayImage& image, BinarizationMethod method );
     explicit BitImage( const std::string& filename );
-    virtual ~BitImage();
-
-    kvs::BitImage& operator = ( const kvs::BitImage& image );
 
     bool pixel( const size_t index ) const;
     bool pixel( const size_t i, const size_t j ) const;

@@ -74,15 +74,11 @@ public:
     GrayImage();
     GrayImage( const size_t width, const size_t height );
     GrayImage( const size_t width, const size_t height, const kvs::ValueArray<kvs::UInt8>& data );
-    GrayImage( const kvs::GrayImage& image );
     explicit GrayImage( const kvs::BitImage& image );
     explicit GrayImage( const kvs::ColorImage& image );
     template <typename GrayScalingMethod>
     GrayImage( const kvs::ColorImage& image, GrayScalingMethod method );
     explicit GrayImage( const std::string& filename );
-    virtual ~GrayImage();
-
-    kvs::GrayImage& operator = ( const kvs::GrayImage& image );
 
     kvs::UInt8 pixel( const size_t index ) const;
     kvs::UInt8 pixel( const size_t i, const size_t j ) const;

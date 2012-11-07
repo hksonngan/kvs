@@ -16,6 +16,7 @@
 #include "GrayImage.h"
 #include "RGBColor.h"
 #include <kvs/Type>
+#include <utility>
 
 
 namespace
@@ -227,11 +228,8 @@ void ImageBase::flip()
         kvs::UInt8* dst = pdata + ( ( m_height - i - 1 ) * stride );
         for ( size_t j = 0; j < stride; j++ )
         {
-            kvs::UInt8 tmp = *src;
-            *src = *dst;
-            *dst = tmp;
-            src++;
-            dst++;
+            std::swap( *src, *dst );
+            src++; dst++;
         }
     }
 }
@@ -244,14 +242,7 @@ void ImageBase::flip()
 /*===========================================================================*/
 void ImageBase::copy( const ImageBase& image )
 {
-    m_width = image.m_width;
-    m_height = image.m_height;
-    m_npixels = image.m_npixels;
-    m_padding = image.m_padding;
-    m_bpp = image.m_bpp;
-    m_bpl = image.m_bpl;
-    m_size = image.m_size;
-    m_pixels = image.m_pixels;
+    *this = image;
 }
 
 /*==========================================================================*/
@@ -319,7 +310,7 @@ bool ImageBase::create(
     m_height = height;
     m_npixels = width * height;
 
-    if( type == Bit )
+    if ( type == Bit )
     {
         m_padding = ::ByteToBit( ::BitToByte( width + 7 ) ) - width;
         m_bpp = 1;
@@ -329,12 +320,12 @@ bool ImageBase::create(
     {
         const size_t ncomponents = static_cast<size_t>( type );
         m_padding = 0;
-        m_bpp = ::ByteToBit( sizeof(kvs::UInt8) ) * ncomponents;
+        m_bpp = ::ByteToBit( sizeof( kvs::UInt8 ) ) * ncomponents;
         m_bpl = width * ::BitToByte( m_bpp );
     }
 
     m_size = height * m_bpl;
-    if( m_size != pixels.size() ) return( false );
+    if ( m_size != pixels.size() ) return( false );
 
     m_pixels = pixels;
 

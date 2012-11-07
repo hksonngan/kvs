@@ -44,13 +44,9 @@ public:
     ColorImage();
     ColorImage( const size_t width, const size_t height );
     ColorImage( const size_t width, const size_t height, const kvs::ValueArray<kvs::UInt8>& pixels );
-    ColorImage( const kvs::ColorImage& image );
     explicit ColorImage( const kvs::GrayImage& image );
     explicit ColorImage( const kvs::BitImage& image );
     explicit ColorImage( const std::string& filename );
-    virtual ~ColorImage();
-
-    kvs::ColorImage& operator = ( const kvs::ColorImage& image );
 
     kvs::RGBColor pixel( const size_t index ) const;
     kvs::RGBColor pixel( const size_t i, const size_t j ) const;

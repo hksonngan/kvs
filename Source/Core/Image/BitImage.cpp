@@ -426,17 +426,6 @@ BitImage::BitImage(
 
 /*===========================================================================*/
 /**
- *  @brief  Constructs a new BitImage class as copy
- *  @param  image [in] bit image
- */
-/*===========================================================================*/
-BitImage::BitImage( const kvs::BitImage& image )
-{
-    BaseClass::copy( image );
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Constructs a new bit image from the color image.
  *  @param  image [in] gray image
  */
@@ -457,27 +446,6 @@ BitImage::BitImage( const kvs::GrayImage& image )
 BitImage::BitImage( const std::string& filename )
 {
     this->read( filename );
-}
-
-/*==========================================================================*/
-/**
- *  Destroys the bit image.
- */
-/*==========================================================================*/
-BitImage::~BitImage()
-{
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Copys other bit image.
- *  @param  image [in] bit image
- */
-/*===========================================================================*/
-kvs::BitImage& BitImage::operator = ( const kvs::BitImage& image )
-{
-    BaseClass::copy( image );
-    return( *this );
 }
 
 /*==========================================================================*/
