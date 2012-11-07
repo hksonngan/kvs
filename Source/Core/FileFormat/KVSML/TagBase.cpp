@@ -13,6 +13,7 @@
 /*****************************************************************************/
 #include "TagBase.h"
 #include <kvs/XMLElement>
+#include <kvs/Message>
 
 
 namespace kvs
