@@ -36,73 +36,11 @@ OpacityMapTag::OpacityMapTag():
 
 /*===========================================================================*/
 /**
- *  @brief  Destructs the opacity map tag class.
- */
-/*===========================================================================*/
-OpacityMapTag::~OpacityMapTag()
-{
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Reads the coord tag.
- *  @param  parent [in] pointer to the parent node
- *  @return true, if the reading process is done successfully
- */
-/*===========================================================================*/
-bool OpacityMapTag::read( const kvs::XMLNode::SuperClass* parent )
-{
-    const std::string tag_name = BaseClass::name();
-
-    BaseClass::m_node = kvs::XMLNode::FindChildNode( parent, tag_name );
-    if ( !BaseClass::m_node )
-    {
-        kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
-        return false;
-    }
-
-    return true;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Writes the coord tag.
- *  @param  parent [in] pointer to the parent node
- *  @return true, if the writing process is done successfully
- */
-/*===========================================================================*/
-bool OpacityMapTag::write( kvs::XMLNode::SuperClass* parent )
-{
-    const std::string tag_name = BaseClass::name();
-    kvs::XMLElement element( tag_name );
-
-    BaseClass::m_node = parent->InsertEndChild( element );
-    if( !BaseClass::m_node )
-    {
-        kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
-        return false;
-    }
-
-    return true;
-}
-
-
-/*===========================================================================*/
-/**
  *  @brief  Constructs a new OpacityMapValueTag class.
  */
 /*===========================================================================*/
 OpacityMapValueTag::OpacityMapValueTag():
     kvs::kvsml::TagBase( "OpacityMapValue" )
-{
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Destroys the OpacityMapValueTag class.
- */
-/*===========================================================================*/
-OpacityMapValueTag::~OpacityMapValueTag()
 {
 }
 

@@ -14,7 +14,6 @@
 #ifndef KVS__KVSML__COLOR_TAG_H_INCLUDE
 #define KVS__KVSML__COLOR_TAG_H_INCLUDE
 
-#include <kvs/XMLNode>
 #include "TagBase.h"
 
 
@@ -38,12 +37,7 @@ public:
 public:
 
     ColorTag();
-    virtual ~ColorTag();
 
-public:
-
-    bool read( const kvs::XMLNode::SuperClass* parent );
-    bool write( kvs::XMLNode::SuperClass* parent );
 };
 
 } // end of namespace kvsml

@@ -12,6 +12,7 @@
  */
 /*****************************************************************************/
 #include "TagBase.h"
+#include <kvs/XMLElement>
 
 
 namespace kvs
@@ -29,15 +30,6 @@ namespace kvsml
 TagBase::TagBase( const std::string& name ):
     m_name( name ),
     m_node( NULL )
-{
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Destructs the TagBase class.
- */
-/*===========================================================================*/
-TagBase::~TagBase()
 {
 }
 
@@ -85,6 +77,49 @@ bool TagBase::isExisted( const kvs::XMLNode::SuperClass* parent ) const
 {
     const std::string tag_name = this->name();
     return kvs::XMLNode::FindChildNode( parent, tag_name ) != NULL;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Reads the coord tag.
+ *  @param  parent [in] pointer to the parent node
+ *  @return true, if the reading process is done successfully
+ */
+/*===========================================================================*/
+bool TagBase::read( const kvs::XMLNode::SuperClass* parent )
+{
+    const std::string tag_name = this->name();
+
+    m_node = kvs::XMLNode::FindChildNode( parent, tag_name );
+    if ( !m_node )
+    {
+        kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
+        return false;
+    }
+
+    return true;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Writes the coord tag.
+ *  @param  parent [in] pointer to the parent node
+ *  @return true, if the writing process is done successfully
+ */
+/*===========================================================================*/
+bool TagBase::write( kvs::XMLNode::SuperClass* parent )
+{
+    const std::string tag_name = this->name();
+    kvs::XMLElement element( tag_name );
+
+    m_node = parent->InsertEndChild( element );
+    if ( !m_node )
+    {
+        kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
+        return false;
+    }
+
+    return true;
 }
 
 } // end of namespace kvsml

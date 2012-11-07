@@ -40,12 +40,7 @@ public:
 public:
 
     ColorMapTag();
-    virtual ~ColorMapTag();
 
-public:
-
-    bool read( const kvs::XMLNode::SuperClass* parent );
-    bool write( kvs::XMLNode::SuperClass* parent );
 };
 
 
@@ -60,7 +55,7 @@ public:
 
     typedef kvs::kvsml::TagBase BaseClass;
 
-protected:
+private:
 
     float m_scalar; ///< scalr value
     kvs::RGBColor m_color; ///< color value
@@ -68,7 +63,6 @@ protected:
 public:
 
     ColorMapValueTag();
-    virtual ~ColorMapValueTag();
 
 public:
 

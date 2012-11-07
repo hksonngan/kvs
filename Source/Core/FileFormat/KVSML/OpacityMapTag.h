@@ -39,12 +39,7 @@ public:
 public:
 
     OpacityMapTag();
-    virtual ~OpacityMapTag();
 
-public:
-
-    bool read( const kvs::XMLNode::SuperClass* parent );
-    bool write( kvs::XMLNode::SuperClass* parent );
 };
 
 
@@ -59,7 +54,7 @@ public:
 
     typedef kvs::kvsml::TagBase BaseClass;
 
-protected:
+private:
 
     float m_scalar; ///< scalr value
     float m_opacity; ///< opacity value
@@ -67,8 +62,6 @@ protected:
 public:
 
     OpacityMapValueTag();
-
-    virtual ~OpacityMapValueTag();
 
 public:
 

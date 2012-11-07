@@ -36,73 +36,11 @@ ColorMapTag::ColorMapTag():
 
 /*===========================================================================*/
 /**
- *  @brief  Destructs the color tag class.
- */
-/*===========================================================================*/
-ColorMapTag::~ColorMapTag()
-{
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Reads the coord tag.
- *  @param  parent [in] pointer to the parent node
- *  @return true, if the reading process is done successfully
- */
-/*===========================================================================*/
-bool ColorMapTag::read( const kvs::XMLNode::SuperClass* parent )
-{
-    const std::string tag_name = this->name();
-
-    m_node = kvs::XMLNode::FindChildNode( parent, tag_name );
-    if ( !m_node )
-    {
-        kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
-        return false;
-    }
-
-    return true;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Writes the coord tag.
- *  @param  parent [in] pointer to the parent node
- *  @return true, if the writing process is done successfully
- */
-/*===========================================================================*/
-bool ColorMapTag::write( kvs::XMLNode::SuperClass* parent )
-{
-    const std::string tag_name = this->name();
-    kvs::XMLElement element( tag_name );
-
-    m_node = parent->InsertEndChild( element );
-    if( !m_node )
-    {
-        kvsMessageError( "Cannot insert <%s>.", tag_name.c_str() );
-        return false;
-    }
-
-    return true;
-}
-
-
-/*===========================================================================*/
-/**
  *  @brief  Constructs a new ColorMapValueTag class.
  */
 /*===========================================================================*/
 ColorMapValueTag::ColorMapValueTag():
     kvs::kvsml::TagBase( "ColorMapValue" )
-{
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Destroys the ColorMapValueTag class.
- */
-/*===========================================================================*/
-ColorMapValueTag::~ColorMapValueTag()
 {
 }
 

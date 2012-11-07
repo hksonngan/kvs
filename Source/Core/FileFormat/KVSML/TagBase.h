@@ -36,10 +36,10 @@ protected:
     std::string m_name; ///< tag name
     kvs::XMLNode::SuperClass* m_node; ///< pointer to the node of the XML tree
 
-public:
+protected:
 
     TagBase( const std::string& name );
-    virtual ~TagBase();
+    ~TagBase(){}
 
 public:
 
@@ -50,12 +50,12 @@ public:
 
 public:
 
-    virtual bool read( const kvs::XMLNode::SuperClass* parent ) = 0;
-    virtual bool write( kvs::XMLNode::SuperClass* parent ) = 0;
+    bool read( const kvs::XMLNode::SuperClass* parent );
+    bool write( kvs::XMLNode::SuperClass* parent );
 
 private:
 
-    TagBase(){}
+    TagBase();
 };
 
 } // end of namespace kvsml
