@@ -535,12 +535,12 @@ void AVSUcd::read_multi_step_format( FILE* const ifs )
                     if ( m_cycle_type == Data )
                     {
                         throw "Cycle type \"data\" is not supported.";
-                        this->read_multi_step_format_data( ifs );
+                        //this->read_multi_step_format_data( ifs );
                     }
                     else if ( m_cycle_type == Geom )
                     {
                         throw "Cycle type \"geom\" is not supported.";
-                        this->read_multi_step_format_geom( ifs );
+                        //this->read_multi_step_format_geom( ifs );
                     }
                     else if ( m_cycle_type == DataGeom )
                     {
@@ -560,14 +560,12 @@ void AVSUcd::read_multi_step_format( FILE* const ifs )
     throw "Unexpected EOF in skipping header comments.";
 }
 
-void AVSUcd::read_multi_step_format_data( FILE* const ifs )
+void AVSUcd::read_multi_step_format_data( FILE* const )
 {
-    kvs::IgnoreUnusedVariable( ifs );
 }
 
-void AVSUcd::read_multi_step_format_geom( FILE* const ifs )
+void AVSUcd::read_multi_step_format_geom( FILE* const )
 {
-    kvs::IgnoreUnusedVariable( ifs );
 }
 
 void AVSUcd::read_multi_step_format_data_geom( FILE* const ifs )

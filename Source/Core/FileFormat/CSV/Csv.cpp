@@ -200,7 +200,7 @@ bool Csv::read( const std::string& filename )
         }
         else
         {
-            item.push_back( c );
+            item.push_back( static_cast<char>( c ) );
         }
     }
 

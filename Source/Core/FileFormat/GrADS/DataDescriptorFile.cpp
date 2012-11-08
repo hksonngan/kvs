@@ -35,7 +35,7 @@ bool GetLine( std::istream & in, std::string & str )
     {
         if ( ch == '\0' ) { break; }
         if ( ch == '\n' ) { break; }
-        if ( ch == '\r' ) { ch = in.peek(); if ( ch == '\n' ) in.get( ch ); break; }
+        if ( ch == '\r' ) { ch = static_cast<char>( in.peek() ); if ( ch == '\n' ) in.get( ch ); break; }
         str += ch;
     }
 

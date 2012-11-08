@@ -30,7 +30,7 @@ namespace grads
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-bool DSet::read( std::string line, std::ifstream& ifs )
+bool DSet::read( std::string line, std::ifstream& )
 {
     kvs::Tokenizer t( line, " \t\n" );
     t.token(); // DSET

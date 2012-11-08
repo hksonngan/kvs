@@ -31,7 +31,7 @@ namespace grads
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-bool Options::read( std::string line, std::ifstream& ifs )
+bool Options::read( std::string line, std::ifstream& )
 {
     kvs::Tokenizer t( line, " \t\n" );
     t.token(); // OPTIONS

@@ -181,21 +181,21 @@ bool USGSMesh::read_header( FILE* fp )
         kvs::gis::Area area = BaseClass::area();
         if ( !strncmp( buf, "ulxmap", 6 ) )
         {
-            area.setMinLongitude( atof( p ) ); continue;
+            area.setMinLongitude( static_cast<float>( atof( p ) ) ); continue;
         }
         if ( !strncmp( buf, "ulymap", 6 ) )
         {
-            area.setMaxLatitude( atof( p ) ); continue;
+            area.setMaxLatitude( static_cast<float>( atof( p ) ) ); continue;
         }
         BaseClass::setArea( area );
 
         if ( !strncmp( buf, "xdim", 4 ) )
         {
-            BaseClass::setLongitudeInterval( atof( p ) ); continue;
+            BaseClass::setLongitudeInterval( static_cast<float>( atof( p ) ) ); continue;
         }
         if ( !strncmp( buf, "ydim", 4 ) )
         {
-            BaseClass::setLatitudeInterval( atof( p ) ); continue;
+            BaseClass::setLatitudeInterval( static_cast<float>( atof( p ) ) ); continue;
         }
     }
 

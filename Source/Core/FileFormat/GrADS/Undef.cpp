@@ -31,12 +31,12 @@ namespace grads
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-bool Undef::read( std::string line, std::ifstream& ifs )
+bool Undef::read( std::string line, std::ifstream& )
 {
     kvs::Tokenizer t( line, " \t\n" );
     t.token(); // UNDEF
 
-    this->value = atof( t.token().c_str() );
+    this->value = static_cast<float>( atof( t.token().c_str() ) );
 
     return true;
 }

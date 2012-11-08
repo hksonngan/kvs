@@ -69,7 +69,7 @@ namespace grads
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-bool TDef::read( std::string line, std::ifstream& ifs )
+bool TDef::read( std::string line, std::ifstream& )
 {
     kvs::Tokenizer t( line, " \t\n" );
     t.token(); // TDEF

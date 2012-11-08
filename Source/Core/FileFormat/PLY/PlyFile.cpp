@@ -1907,11 +1907,11 @@ void write_binary_item(PlyFile *plyfile,
 
     switch (type) {
     case PLY_CHAR:
-        char_val = int_val;
+        char_val = static_cast<char>( int_val );
         fwrite (&char_val, 1, 1, fp);
         break;
     case PLY_SHORT:
-        short_val = int_val;
+        short_val = static_cast<short>( int_val );
         if( swap_byte ) kvs::Endian::Swap( &short_val );
         fwrite (&short_val, 2, 1, fp);
         break;
@@ -1920,12 +1920,12 @@ void write_binary_item(PlyFile *plyfile,
         fwrite (&int_val, 4, 1, fp);
         break;
     case PLY_UCHAR:
-        uchar_val = uint_val;
+        uchar_val = static_cast<unsigned char>( uint_val );
         fwrite (&uchar_val, 1, 1, fp);
         break;
     case PLY_USHORT:
         if( swap_byte ) kvs::Endian::Swap( &ushort_val );
-        ushort_val = uint_val;
+        ushort_val = static_cast<unsigned short>( uint_val );
         fwrite (&ushort_val, 2, 1, fp);
         break;
     case PLY_UINT:
@@ -1933,7 +1933,7 @@ void write_binary_item(PlyFile *plyfile,
         fwrite (&uint_val, 4, 1, fp);
         break;
     case PLY_FLOAT:
-        float_val = (float)double_val;
+        float_val = static_cast<float>( double_val );
         if( swap_byte ) kvs::Endian::Swap( &float_val );
         fwrite (&float_val, 4, 1, fp);
         break;
@@ -2309,19 +2309,19 @@ void store_item (
 
     switch (type) {
     case PLY_CHAR:
-        *item = int_val;
+        *item = static_cast<char>( int_val );
         break;
     case PLY_UCHAR:
-        puchar = (unsigned char *) item;
-        *puchar = uint_val;
+        puchar = reinterpret_cast<unsigned char*>( item );
+        *puchar = static_cast<unsigned char>( uint_val );
         break;
     case PLY_SHORT:
-        pshort = (short *) item;
-        *pshort = int_val;
+        pshort = reinterpret_cast<short*>( item );
+        *pshort = static_cast<short>( int_val );
         break;
     case PLY_USHORT:
-        pushort = (unsigned short *) item;
-        *pushort = uint_val;
+        pushort = reinterpret_cast<unsigned short*>( item );
+        *pushort = static_cast<unsigned short>( uint_val );
         break;
     case PLY_INT:
         pint = (int *) item;

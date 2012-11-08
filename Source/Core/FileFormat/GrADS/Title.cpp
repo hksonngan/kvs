@@ -30,7 +30,7 @@ namespace grads
  *  @return true, if the reading process is done successfully
  */
 /*===========================================================================*/
-bool Title::read( std::string line, std::ifstream& ifs )
+bool Title::read( std::string line, std::ifstream& )
 {
     kvs::Tokenizer t( line, " \t\n" );
     t.token(); // TITLE

@@ -236,12 +236,8 @@ bool Ply::read( const std::string& filename )
     char** elist;
     int file_type;
     float version;
-    if( !( ply = kvs::ply::ply_open_for_reading(
-               filename.c_str(),
-               &nelems,
-               &elist,
-               &file_type,
-               &version ) ) )
+    ply = kvs::ply::ply_open_for_reading( filename.c_str(), &nelems, &elist, &file_type, &version );
+    if( !ply )
     {
         kvsMessageError( "Cannot read ply file." );
         BaseClass::setSuccess( false );
@@ -408,12 +404,8 @@ bool Ply::write( const std::string& filename )
     const int nelems = 2;
     const int file_type = m_file_type;
     float version;
-    if( !( ply = kvs::ply::ply_open_for_writing(
-               filename.c_str(),
-               nelems,
-               ::ElemNames,
-               file_type,
-               &version ) ) )
+    ply = kvs::ply::ply_open_for_writing( filename.c_str(), nelems, ::ElemNames, file_type, &version );
+    if( !ply )
     {
         kvsMessageError( "Cannot open writing ply file." );
         BaseClass::setSuccess( false );

@@ -112,13 +112,13 @@ bool GriddedBinaryDataFile::load() const
     }
 
     ifs.seekg( 0, std::ios::end );
-    const size_t end = ifs.tellg();
+    const std::streamoff end = ifs.tellg();
 
     ifs.seekg( 0, std::ios::beg );
-    const size_t begin = ifs.tellg();
+    const std::streamoff begin = ifs.tellg();
 
-    const size_t file_size = end - begin; // [byte]
-    const size_t nelements = file_size / sizeof( kvs::Real32 );
+    const std::streamoff file_size = end - begin; // [byte]
+    const size_t nelements = static_cast<size_t>( file_size / sizeof( kvs::Real32 ) );
     m_values.allocate( nelements );
 
     if ( m_sequential )
