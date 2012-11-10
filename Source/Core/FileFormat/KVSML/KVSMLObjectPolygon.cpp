@@ -110,15 +110,6 @@ KVSMLObjectPolygon::KVSMLObjectPolygon( const std::string& filename ):
 
 /*===========================================================================*/
 /**
- *  @brief  Destructs the KVSML polygon object class.
- */
-/*===========================================================================*/
-KVSMLObjectPolygon::~KVSMLObjectPolygon()
-{
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Returns the KVSML tag.
  *  @return KVSML tag
  */
@@ -345,30 +336,23 @@ void KVSMLObjectPolygon::print( std::ostream& os, const kvs::Indent& indent ) co
 bool KVSMLObjectPolygon::read( const std::string& filename )
 {
     BaseClass::setFilename( filename );
-    BaseClass::setSuccess( true );
+    BaseClass::setSuccess( false );
 
     // XML document.
     kvs::XMLDocument document;
     if ( !document.read( filename ) )
     {
         kvsMessageError( "%s", document.ErrorDesc().c_str() );
-        BaseClass::setSuccess( false );
         return false;
     }
 
     // <KVSML>
-    if ( !m_kvsml_tag.read( &document ) )
-    {
-        kvsMessageError( "Cannot read <%s>.", m_kvsml_tag.name().c_str() );
-        BaseClass::setSuccess( false );
-        return false;
-    }
+    m_kvsml_tag.read( &document );
 
     // <Object>
     if ( !m_object_tag.read( m_kvsml_tag.node() ) )
     {
         kvsMessageError( "Cannot read <%s>.", m_object_tag.name().c_str() );
-        BaseClass::setSuccess( false );
         return false;
     }
 
@@ -377,7 +361,6 @@ bool KVSMLObjectPolygon::read( const std::string& filename )
     if ( !polygon_object_tag.read( m_object_tag.node() ) )
     {
         kvsMessageError( "Cannot read <%s>.", polygon_object_tag.name().c_str() );
-        BaseClass::setSuccess( false );
         return false;
     }
 
@@ -407,7 +390,6 @@ bool KVSMLObjectPolygon::read( const std::string& filename )
     if ( !vertex_tag.read( polygon_object_tag.node() ) )
     {
         kvsMessageError( "Cannot read <%s>.", vertex_tag.name().c_str() );
-        BaseClass::setSuccess( false );
         return false;
     }
     else
@@ -419,14 +401,12 @@ bool KVSMLObjectPolygon::read( const std::string& filename )
         const size_t ncoords = vertex_tag.nvertices();
         if ( !kvs::kvsml::ReadCoordData( parent, ncoords, &m_coords ) )
         {
-            BaseClass::setSuccess( false );
             return false;
         }
 
         if ( m_coords.size() == 0 )
         {
             kvsMessageError( "Cannot read the coord data." );
-            BaseClass::setSuccess( false );
             return false;
         }
 
@@ -436,7 +416,6 @@ bool KVSMLObjectPolygon::read( const std::string& filename )
             const size_t ncolors = vertex_tag.nvertices();
             if ( !kvs::kvsml::ReadColorData( parent, ncolors, &m_colors ) )
             {
-                BaseClass::setSuccess( false );
                 return false;
             }
 
@@ -456,7 +435,6 @@ bool KVSMLObjectPolygon::read( const std::string& filename )
             const size_t nopacities = vertex_tag.nvertices();
             if ( !kvs::kvsml::ReadOpacityData( parent, nopacities, &m_opacities ) )
             {
-                BaseClass::setSuccess( false );
                 return false;
             }
 
@@ -474,7 +452,6 @@ bool KVSMLObjectPolygon::read( const std::string& filename )
             const size_t nnormals = vertex_tag.nvertices();
             if ( !kvs::kvsml::ReadNormalData( parent, nnormals, &m_normals ) )
             {
-                BaseClass::setSuccess( false );
                 return false;
             }
         }
@@ -487,7 +464,6 @@ bool KVSMLObjectPolygon::read( const std::string& filename )
         if ( !polygon_tag.read( polygon_object_tag.node() ) )
         {
             kvsMessageError( "Cannot read <%s>.", polygon_object_tag.name().c_str() );
-            BaseClass::setSuccess( false );
             return false;
         }
         else
@@ -503,7 +479,6 @@ bool KVSMLObjectPolygon::read( const std::string& filename )
                 ( m_polygon_type == "quadrangle" ) ? npolygons * 4 : 0;
             if ( !kvs::kvsml::ReadConnectionData( parent, nconnections, &m_connections ) )
             {
-                BaseClass::setSuccess( false );
                 return false;
             }
 
@@ -513,7 +488,6 @@ bool KVSMLObjectPolygon::read( const std::string& filename )
                 const size_t ncolors = vertex_tag.nvertices();
                 if ( !kvs::kvsml::ReadColorData( parent, ncolors, &m_colors ) )
                 {
-                    BaseClass::setSuccess( false );
                     return false;
                 }
 
@@ -533,7 +507,6 @@ bool KVSMLObjectPolygon::read( const std::string& filename )
                 const size_t nopacities = npolygons;
                 if ( !kvs::kvsml::ReadOpacityData( parent, nopacities, &m_opacities ) )
                 {
-                    BaseClass::setSuccess( false );
                     return false;
                 }
 
@@ -555,13 +528,13 @@ bool KVSMLObjectPolygon::read( const std::string& filename )
                     nvertices / nvertices_per_polygon;
                 if ( !kvs::kvsml::ReadNormalData( parent, nnormals, &m_normals ) )
                 {
-                    BaseClass::setSuccess( false );
                     return false;
                 }
             }
         }
     }
 
+    BaseClass::setSuccess( true );
     return true;
 }
 
@@ -575,7 +548,7 @@ bool KVSMLObjectPolygon::read( const std::string& filename )
 bool KVSMLObjectPolygon::write( const std::string& filename )
 {
     BaseClass::setFilename( filename );
-    BaseClass::setSuccess( true );
+    BaseClass::setSuccess( false );
 
     kvs::XMLDocument document;
     document.InsertEndChild( kvs::XMLDeclaration("1.0") );
@@ -583,12 +556,7 @@ bool KVSMLObjectPolygon::write( const std::string& filename )
 
     // <KVSML>
     kvs::kvsml::KVSMLTag kvsml_tag;
-    if ( !kvsml_tag.write( &document ) )
-    {
-        kvsMessageError( "Cannot write <%s>.", kvsml_tag.name().c_str() );
-        BaseClass::setSuccess( false );
-        return false;
-    }
+    kvsml_tag.write( &document );
 
     // <Object type="PolygonObject">
     kvs::kvsml::ObjectTag object_tag;
@@ -596,7 +564,6 @@ bool KVSMLObjectPolygon::write( const std::string& filename )
     if ( !object_tag.write( kvsml_tag.node() ) )
     {
         kvsMessageError( "Cannot write <%s>.", object_tag.name().c_str() );
-        BaseClass::setSuccess( false );
         return false;
     }
 
@@ -608,7 +575,6 @@ bool KVSMLObjectPolygon::write( const std::string& filename )
     if ( !polygon_object_tag.write( object_tag.node() ) )
     {
         kvsMessageError( "Cannot write <%s>.", polygon_object_tag.name().c_str() );
-        BaseClass::setSuccess( false );
         return false;
     }
 
@@ -621,7 +587,6 @@ bool KVSMLObjectPolygon::write( const std::string& filename )
     if ( !vertex_tag.write( polygon_object_tag.node() ) )
     {
         kvsMessageError( "Cannot write <%s>.", vertex_tag.name().c_str() );
-        BaseClass::setSuccess( false );
         return false;
     }
     else
@@ -633,7 +598,6 @@ bool KVSMLObjectPolygon::write( const std::string& filename )
         // <Coord>
         if ( !kvs::kvsml::WriteCoordData( parent, type, filename, m_coords ) )
         {
-            BaseClass::setSuccess( false );
             return false;
         }
 
@@ -642,7 +606,6 @@ bool KVSMLObjectPolygon::write( const std::string& filename )
         {
             if ( !kvs::kvsml::WriteColorData( parent, type, filename, m_colors ) )
             {
-                BaseClass::setSuccess( false );
                 return false;
             }
         }
@@ -652,7 +615,6 @@ bool KVSMLObjectPolygon::write( const std::string& filename )
         {
             if ( !kvs::kvsml::WriteOpacityData( parent, type, filename, m_opacities ) )
             {
-                BaseClass::setSuccess( false );
                 return false;
             }
         }
@@ -662,7 +624,6 @@ bool KVSMLObjectPolygon::write( const std::string& filename )
         {
             if ( !kvs::kvsml::WriteNormalData( parent, type, filename, m_normals ) )
             {
-                BaseClass::setSuccess( false );
                 return false;
             }
         }
@@ -683,7 +644,6 @@ bool KVSMLObjectPolygon::write( const std::string& filename )
         if ( !polygon_tag.write( polygon_object_tag.node() ) )
         {
             kvsMessageError( "Cannot write <%s>.", polygon_tag.name().c_str() );
-            BaseClass::setSuccess( false );
             return false;
         }
 
@@ -694,7 +654,6 @@ bool KVSMLObjectPolygon::write( const std::string& filename )
         // <Connection>
         if ( !kvs::kvsml::WriteConnectionData( parent, type, filename, m_connections ) )
         {
-            BaseClass::setSuccess( false );
             return false;
         }
 
@@ -703,7 +662,6 @@ bool KVSMLObjectPolygon::write( const std::string& filename )
         {
             if ( !kvs::kvsml::WriteColorData( parent, type, filename, m_colors ) )
             {
-                BaseClass::setSuccess( false );
                 return false;
             }
         }
@@ -713,7 +671,6 @@ bool KVSMLObjectPolygon::write( const std::string& filename )
         {
             if ( !kvs::kvsml::WriteOpacityData( parent, type, filename, m_opacities ) )
             {
-                BaseClass::setSuccess( false );
                 return false;
             }
         }
@@ -723,7 +680,6 @@ bool KVSMLObjectPolygon::write( const std::string& filename )
         {
             if ( !kvs::kvsml::WriteNormalData( parent, type, filename, m_normals ) )
             {
-                BaseClass::setSuccess( false );
                 return false;
             }
         }

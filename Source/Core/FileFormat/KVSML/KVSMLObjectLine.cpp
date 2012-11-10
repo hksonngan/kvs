@@ -107,15 +107,6 @@ KVSMLObjectLine::KVSMLObjectLine( const std::string& filename ):
 
 /*===========================================================================*/
 /**
- *  @brief  Destructs the KVSML line object class.
- */
-/*===========================================================================*/
-KVSMLObjectLine::~KVSMLObjectLine()
-{
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Returns the KVSML tag.
  *  @return KVSML tag
  */
@@ -297,30 +288,23 @@ void KVSMLObjectLine::print( std::ostream& os, const kvs::Indent& indent ) const
 bool KVSMLObjectLine::read( const std::string& filename )
 {
     BaseClass::setFilename( filename );
-    BaseClass::setSuccess( true );
+    BaseClass::setSuccess( false );
 
     // XML document.
     kvs::XMLDocument document;
     if ( !document.read( filename ) )
     {
         kvsMessageError( "%s", document.ErrorDesc().c_str() );
-        BaseClass::setSuccess( false );
         return false;
     }
 
     // <KVSML>
-    if ( !m_kvsml_tag.read( &document ) )
-    {
-        kvsMessageError( "Cannot read <%s>.", m_kvsml_tag.name().c_str() );
-        BaseClass::setSuccess( false );
-        return false;
-    }
+    m_kvsml_tag.read( &document );
 
     // <Object>
     if ( !m_object_tag.read( m_kvsml_tag.node() ) )
     {
         kvsMessageError( "Cannot read <%s>.", m_object_tag.name().c_str() );
-        BaseClass::setSuccess( false );
         return false;
     }
 
@@ -329,7 +313,6 @@ bool KVSMLObjectLine::read( const std::string& filename )
     if ( !line_object_tag.read( m_object_tag.node() ) )
     {
         kvsMessageError( "Cannot read <%s>.", line_object_tag.name().c_str() );
-        BaseClass::setSuccess( false );
         return false;
     }
 
@@ -352,7 +335,6 @@ bool KVSMLObjectLine::read( const std::string& filename )
     if ( !vertex_tag.read( line_object_tag.node() ) )
     {
         kvsMessageError( "Cannot read <%s>.", vertex_tag.name().c_str() );
-        BaseClass::setSuccess( false );
         return false;
     }
     else
@@ -364,7 +346,6 @@ bool KVSMLObjectLine::read( const std::string& filename )
         const size_t ncoords = vertex_tag.nvertices();
         if ( !kvs::kvsml::ReadCoordData( parent, ncoords, &m_coords ) ) 
         {
-            BaseClass::setSuccess( false );
             return false;
         }
 
@@ -380,7 +361,6 @@ bool KVSMLObjectLine::read( const std::string& filename )
             const size_t ncolors = vertex_tag.nvertices();
             if ( !kvs::kvsml::ReadColorData( parent, ncolors, &m_colors ) )
             {
-                BaseClass::setSuccess( false );
                 return false;
             }
         }
@@ -402,7 +382,6 @@ bool KVSMLObjectLine::read( const std::string& filename )
         const size_t nsizes = vertex_tag.nvertices();
         if ( !kvs::kvsml::ReadSizeData( parent, nsizes, &m_sizes ) )
         {
-            BaseClass::setSuccess( false );
             return false;
         }
 
@@ -421,7 +400,6 @@ bool KVSMLObjectLine::read( const std::string& filename )
         if ( !line_tag.read( line_object_tag.node() ) )
         {
             kvsMessageError( "Cannot read <%s>.", line_tag.name().c_str() );
-            BaseClass::setSuccess( false );
             return false;
         }
         else
@@ -435,7 +413,6 @@ bool KVSMLObjectLine::read( const std::string& filename )
             const size_t nsizes = nlines;
             if ( !kvs::kvsml::ReadSizeData( parent, nsizes, &m_sizes ) )
             {
-                BaseClass::setSuccess( false );
                 return false;
             }
 
@@ -456,7 +433,6 @@ bool KVSMLObjectLine::read( const std::string& filename )
                     ( m_line_type == "segment"  ) ? nlines : 0;
                 if ( !kvs::kvsml::ReadColorData( parent, ncolors, &m_colors ) )
                 {
-                    BaseClass::setSuccess( false );
                     return false;
                 }
             }
@@ -479,7 +455,6 @@ bool KVSMLObjectLine::read( const std::string& filename )
                     ( m_line_type == "segment"  ) ? nlines * 2 : 0;
                 if ( !kvs::kvsml::ReadConnectionData( parent, nconnections, &m_connections ) )
                 {
-                    BaseClass::setSuccess( false );
                     return false;
                 }
             }
@@ -491,11 +466,11 @@ bool KVSMLObjectLine::read( const std::string& filename )
         if ( m_line_type != "strip" || m_color_type == "line" )
         {
             kvsMessageError( "Cannot find <%s>.", line_tag.name().c_str() );
-            BaseClass::setSuccess( false );
             return false;
         }
     }
 
+    BaseClass::setSuccess( true );
     return true;
 }
 
@@ -509,7 +484,7 @@ bool KVSMLObjectLine::read( const std::string& filename )
 bool KVSMLObjectLine::write( const std::string& filename )
 {
     BaseClass::setFilename( filename );
-    BaseClass::setSuccess( true );
+    BaseClass::setSuccess( false );
 
     kvs::XMLDocument document;
     document.InsertEndChild( kvs::XMLDeclaration("1.0") );
@@ -517,12 +492,7 @@ bool KVSMLObjectLine::write( const std::string& filename )
 
     // <KVSML>
     kvs::kvsml::KVSMLTag kvsml_tag;
-    if ( !kvsml_tag.write( &document ) )
-    {
-        kvsMessageError( "Cannot write <%s>.", kvsml_tag.name().c_str() );
-        BaseClass::setSuccess( false );
-        return false;
-    }
+    kvsml_tag.write( &document );
 
     // <Object type="LineObject">
     kvs::kvsml::ObjectTag object_tag;
@@ -530,7 +500,6 @@ bool KVSMLObjectLine::write( const std::string& filename )
     if ( !object_tag.write( kvsml_tag.node() ) )
     {
         kvsMessageError( "Cannot write <%s>.", object_tag.name().c_str() );
-        BaseClass::setSuccess( false );
         return false;
     }
 
@@ -541,7 +510,6 @@ bool KVSMLObjectLine::write( const std::string& filename )
     if ( !line_object_tag.write( object_tag.node() ) )
     {
         kvsMessageError( "Cannot write <%s>.", line_object_tag.name().c_str() );
-        BaseClass::setSuccess( false );
         return false;
     }
 
@@ -554,7 +522,6 @@ bool KVSMLObjectLine::write( const std::string& filename )
     if ( !vertex_tag.write( line_object_tag.node() ) )
     {
         kvsMessageError( "Cannot write <%s>.", vertex_tag.name().c_str() );
-        BaseClass::setSuccess( false );
         return false;
     }
     else
@@ -566,7 +533,6 @@ bool KVSMLObjectLine::write( const std::string& filename )
         // <Coord>
         if ( !kvs::kvsml::WriteCoordData( parent, type, filename, m_coords ) )
         {
-            BaseClass::setSuccess( false );
             return false;
         }
 
@@ -575,7 +541,6 @@ bool KVSMLObjectLine::write( const std::string& filename )
         {
             if ( !kvs::kvsml::WriteColorData( parent, type, filename, m_colors ) )
             {
-                BaseClass::setSuccess( false );
                 return false;
             }
         }
@@ -594,7 +559,6 @@ bool KVSMLObjectLine::write( const std::string& filename )
         if ( !line_tag.write( line_object_tag.node() ) )
         {
             kvsMessageError( "Cannot write <%s>.", line_tag.name().c_str() );
-            BaseClass::setSuccess( false );
             return false;
         }
 
@@ -605,14 +569,12 @@ bool KVSMLObjectLine::write( const std::string& filename )
         // <Connection>
         if ( !kvs::kvsml::WriteConnectionData( parent, type, filename, m_connections ) )
         {
-            BaseClass::setSuccess( false );
             return false;
         }
 
         // <Size>
         if ( !kvs::kvsml::WriteSizeData( parent, type, filename, m_sizes ) )
         {
-            BaseClass::setSuccess( false );
             return false;
         }
 
@@ -621,7 +583,6 @@ bool KVSMLObjectLine::write( const std::string& filename )
         {
             if ( !kvs::kvsml::WriteColorData( parent, type, filename, m_colors ) )
             {
-                BaseClass::setSuccess( false );
                 return false;
             }
         }

@@ -65,7 +65,6 @@ public:
 
     KVSMLObjectLine();
     KVSMLObjectLine( const std::string& filename );
-    virtual ~KVSMLObjectLine();
 
     const kvs::kvsml::KVSMLTag& KVSMLTag() const;
     const kvs::kvsml::ObjectTag& objectTag() const;

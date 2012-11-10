@@ -63,7 +63,6 @@ public:
 
     KVSMLObjectImage();
     KVSMLObjectImage( const std::string& filename );
-    virtual ~KVSMLObjectImage();
 
     const kvs::kvsml::KVSMLTag& KVSMLTag() const;
     const kvs::kvsml::ObjectTag& objectTag() const;

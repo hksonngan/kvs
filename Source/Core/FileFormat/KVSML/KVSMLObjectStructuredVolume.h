@@ -72,7 +72,6 @@ public:
 
     KVSMLObjectStructuredVolume();
     KVSMLObjectStructuredVolume( const std::string& filename );
-    virtual ~KVSMLObjectStructuredVolume();
 
     const kvs::kvsml::KVSMLTag& KVSMLTag() const;
     const kvs::kvsml::ObjectTag& objectTag() const;

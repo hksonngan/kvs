@@ -103,15 +103,6 @@ KVSMLObjectTable::KVSMLObjectTable( const std::string& filename ):
 
 /*===========================================================================*/
 /**
- *  @brief  Destructs the KVSML object unstructured volume object class.
- */
-/*===========================================================================*/
-KVSMLObjectTable::~KVSMLObjectTable()
-{
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Returns the KVSML tag.
  *  @return KVSML tag
  */
@@ -315,30 +306,23 @@ void KVSMLObjectTable::print( std::ostream& os, const kvs::Indent& indent ) cons
 bool KVSMLObjectTable::read( const std::string& filename )
 {
     BaseClass::setFilename( filename );
-    BaseClass::setSuccess( true );
+    BaseClass::setSuccess( false );
 
     // XML document
     kvs::XMLDocument document;
     if ( !document.read( filename ) )
     {
         kvsMessageError( "%s", document.ErrorDesc().c_str() );
-        BaseClass::setSuccess( false );
         return false;
     }
 
     // <KVSML>
-    if ( !m_kvsml_tag.read( &document ) )
-    {
-        kvsMessageError( "Cannot read <%s>.", m_kvsml_tag.name().c_str() );
-        BaseClass::setSuccess( false );
-        return false;
-    }
+    m_kvsml_tag.read( &document );
 
     // <Object>
     if ( !m_object_tag.read( m_kvsml_tag.node() ) )
     {
         kvsMessageError( "Cannot read <%s>.", m_object_tag.name().c_str() );
-        BaseClass::setSuccess( false );
         return false;
     }
 
@@ -347,7 +331,6 @@ bool KVSMLObjectTable::read( const std::string& filename )
     if ( !table_object_tag.read( m_object_tag.node() ) )
     {
         kvsMessageError( "Cannot read <%s>.", table_object_tag.name().c_str() );
-        BaseClass::setSuccess( false );
         return false;
     }
 
@@ -379,7 +362,6 @@ bool KVSMLObjectTable::read( const std::string& filename )
             if ( !data_array_tag.read( node, m_nrows, &data_array ) )
             {
                 kvsMessageError( "Cannot read <%s>.", data_array_tag.name().c_str() );
-                BaseClass::setSuccess( false );
                 return false;
             }
 
@@ -389,6 +371,7 @@ bool KVSMLObjectTable::read( const std::string& filename )
         node = table_object_tag.node()->IterateChildren( column_tag.name(), node );
     }
 
+    BaseClass::setSuccess( true );
     return true;
 }
 
@@ -402,7 +385,7 @@ bool KVSMLObjectTable::read( const std::string& filename )
 bool KVSMLObjectTable::write( const std::string& filename )
 {
     BaseClass::setFilename( filename );
-    BaseClass::setSuccess( true );
+    BaseClass::setSuccess( false );
 
     kvs::XMLDocument document;
     document.InsertEndChild( kvs::XMLDeclaration("1.0") );
@@ -410,12 +393,7 @@ bool KVSMLObjectTable::write( const std::string& filename )
 
     // <KVSML>
     kvs::kvsml::KVSMLTag kvsml_tag;
-    if ( !kvsml_tag.write( &document ) )
-    {
-        kvsMessageError( "Cannot write <%s>.", m_kvsml_tag.name().c_str() );
-        BaseClass::setSuccess( false );
-        return false;
-    }
+    kvsml_tag.write( &document );
 
     // <Object type="TableObject">
     kvs::kvsml::ObjectTag object_tag;
@@ -423,7 +401,6 @@ bool KVSMLObjectTable::write( const std::string& filename )
     if ( !object_tag.write( kvsml_tag.node() ) )
     {
         kvsMessageError( "Cannot write <%s>.", object_tag.name().c_str() );
-        BaseClass::setSuccess( false );
         return false;
     }
 
@@ -434,7 +411,6 @@ bool KVSMLObjectTable::write( const std::string& filename )
     if ( !table_object_tag.write( object_tag.node() ) )
     {
         kvsMessageError( "Cannot write <%s>.", table_object_tag.name().c_str() );
-        BaseClass::setSuccess( false );
         return false;
     }
 
@@ -453,7 +429,6 @@ bool KVSMLObjectTable::write( const std::string& filename )
         if ( !column_tag.write( table_object_tag.node() ) )
         {
             kvsMessageError( "Cannot write <%s>.", column_tag.name().c_str() );
-            BaseClass::setSuccess( false );
             return false;
         }
 
@@ -474,7 +449,6 @@ bool KVSMLObjectTable::write( const std::string& filename )
         if ( !data_array.write( column_tag.node(), m_columns.at(i), pathname ) )
         {
             kvsMessageError( "Cannot write <%s>.", data_array.name().c_str() );
-            BaseClass::setSuccess( false );
             return false;
         }
     }

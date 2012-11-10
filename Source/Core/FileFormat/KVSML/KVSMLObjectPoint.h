@@ -63,7 +63,6 @@ public:
 
     KVSMLObjectPoint();
     KVSMLObjectPoint( const std::string& filename );
-    virtual ~KVSMLObjectPoint();
 
     const kvs::kvsml::KVSMLTag& KVSMLTag() const;
     const kvs::kvsml::ObjectTag& objectTag() const;

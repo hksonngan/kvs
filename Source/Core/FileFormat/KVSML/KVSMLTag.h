@@ -39,8 +39,7 @@ public:
 
 private:
 
-    bool m_has_version; ///< flag to check whether 'version' is specified or not
-    std::string m_version; ///< KVSML version
+    TagAttribute<std::string> m_version; ///< KVSML version
 
 public:
 
@@ -49,7 +48,7 @@ public:
 public:
 
     bool hasVersion() const;
-    const std::string& version() const;
+    const TagAttribute<std::string>& version() const;
 
 public:
 

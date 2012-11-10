@@ -74,7 +74,6 @@ public:
 
     KVSMLObjectTable();
     KVSMLObjectTable( const std::string& filename );
-    virtual ~KVSMLObjectTable();
 
     const kvs::kvsml::KVSMLTag& KVSMLTag() const;
     const kvs::kvsml::ObjectTag& objectTag() const;
