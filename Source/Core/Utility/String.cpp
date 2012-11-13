@@ -16,6 +16,9 @@
 #include <cstdarg>
 #include <string>
 #include <vector>
+#include <fstream>
+#include <sstream>
+#include <kvs/Exception>
 #if KVS_ENABLE_DEPRECATED
 #include <iostream>
 #include <string>
@@ -86,27 +89,6 @@ std::string String::ToLower( const std::string& str )
     return ret;
 }
 
-//std::string String::Format( const char* str, ... )
-//{
-//    const int buffer_size = 256;
-//
-//    std::vector<char> buffer( buffer_size );
-//
-//    va_list args;
-//    for (;;)
-//    {
-//        va_start( args, str );
-//        size = vsnprintf( &( buffer[0] ), buffer.size() - 1, str, args );
-//        va_end( args );
-//
-//        if ( size < 0 ) throw "error";
-//        if ( size < (int)buffer.size() ) break;
-//        buffer_size *= 2;
-//        buffer.resize( buffer_size );
-//    }
-//    return std::string( &( buffer[0] ) );
-//}
-
 std::string String::Replace(
     const std::string& source,
     const std::string& pattern,
@@ -126,6 +108,45 @@ std::string String::Replace(
     result.append( source, pos_before, source.size() - pos_before );
     return result;
 }
+//
+//std::string String::Format( const char* str, ... )
+//{
+//    const int max_buffer_size = 65536;
+//    int buffer_size = 256;
+//    std::vector<char> buffer;
+//    int size = 0;
+//
+//    va_list args;
+//    for (;;)
+//    {
+//        buffer.resize( buffer_size );
+//
+//        va_start( args, str );
+//        size = vsnprintf( &buffer[0], buffer.size() - 1, str, args );
+//        va_end( args );
+//
+//        if ( size >= 0 && size < (int)buffer.size() )
+//            break;
+//
+//        buffer_size *= 2;
+//        if ( buffer_size > max_buffer_size )
+//            KVS_THROW( kvs::ArgumentException, "Too long string." );
+//    }
+//    return std::string( &buffer[0], size );
+//}
+
+std::string String::FromFile( const std::string& filename )
+{
+    std::ifstream ifs( filename.c_str() );
+    if ( !ifs )
+        KVS_THROW( kvs::FileReadFaultException, "Cannot open '" + filename + "'." );
+
+    std::ostringstream buffer;
+    buffer << ifs.rdbuf();
+
+    return buffer.str();
+}
+
 
 #if KVS_ENABLE_DEPRECATED
 String::String( void ):

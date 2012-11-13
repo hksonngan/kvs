@@ -16,7 +16,6 @@
 
 #include <string>
 #include <sstream>
-#include <kvs/ClassName>
 #include <kvs/Type>
 #if KVS_ENABLE_DEPRECATED
 #include <cstdarg>
@@ -34,8 +33,6 @@ namespace kvs
 /*==========================================================================*/
 class String
 {
-    kvsClassName_without_virtual( kvs::String );
-
 public:
 
     template <typename T>
@@ -59,9 +56,12 @@ public:
 
     static std::string ToLower( const std::string& str );
 
+    static std::string Replace( const std::string& source, const std::string& pattern, const std::string& placement );
+
     //static std::string Format( const char* str, ... );
 
-    static std::string Replace( const std::string& source, const std::string& pattern, const std::string& placement );
+    static std::string FromFile( const std::string& filename );
+
 
 #if KVS_ENABLE_DEPRECATED
 private:
