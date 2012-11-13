@@ -44,8 +44,8 @@ protected:
 
 protected:
     explicit TagAttributeBase( const char* name ) : 
-        m_has_value( false ),
-        m_name( name )
+        m_name( name ), 
+        m_has_value( false )
     {
     }
 
