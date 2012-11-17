@@ -111,6 +111,7 @@ public:
 
     T volume()
     {
+        KVS_ASSERT( false );
         return 0; // not implemented.
     }
 };

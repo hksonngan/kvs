@@ -105,6 +105,12 @@ inline unsigned long Abs( unsigned long a )
     return a;
 }
 
+template <>
+inline unsigned long long Abs( unsigned long long a )
+{
+    return a;
+}
+
 template <typename T>
 inline int Sgn( T a )
 {
@@ -151,12 +157,6 @@ template <typename T>
 inline bool IsZero( T a )
 {
     return Equal( a, T( 0 ) );
-}
-
-template <typename T>
-inline T Power( T a, T b )
-{
-    return static_cast<T>( std::pow( a, b ) );
 }
 
 template <typename T>
@@ -287,6 +287,12 @@ inline double PI()
 }
 
 #if KVS_ENABLE_DEPRECATED
+template <typename T>
+inline T Power( T a, T b )
+{
+    return std::pow( a, b );
+}
+
 
 template <typename T>
 inline void Swap( T& a, T& b )

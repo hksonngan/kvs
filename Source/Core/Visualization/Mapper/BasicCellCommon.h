@@ -105,7 +105,6 @@ struct HexahedricCellFunction
     static void adjustPoint( kvs::Vector3<T>& point )
     {
         KVS_ASSERT( InUnitCube( point ) );
-        (void)point;// do nothing.
     }
 
     static bool includesLocal( const kvs::Vector3<T>& local )
@@ -213,6 +212,28 @@ public:
         for ( int i = 0; i < m_value_dimension; ++i )
         {
             *(output++) = this->value( i );
+        }
+    }
+
+    T nodeValue( int node_index, int value_index ) const
+    {
+        KVS_ASSERT( value_index >= 0 );
+        KVS_ASSERT( value_index < m_value_dimension );
+        KVS_ASSERT( node_index >= 0 );
+        KVS_ASSERT( node_index < m_nnodes );
+        return m_values[ node_index * m_value_dimension + value_index ];
+    }
+
+    T nodeScalarValue( int node_index ) const
+    {
+        return this->nodeValue( node_index, 0 );
+    }
+
+    void nodeVectorValue( int node_index, T* output ) const
+    {
+        for ( int i = 0; i < m_value_dimension; ++i )
+        {
+            *(output++) = this->nodeValue( node_index, i );
         }
     }
 

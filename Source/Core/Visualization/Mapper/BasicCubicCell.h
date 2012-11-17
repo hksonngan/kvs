@@ -47,7 +47,7 @@ private:
     explicit BasicCubicCell( const kvs::VolumeObjectBase* volume ) :
         detail::BasicCellImplementBase<T>( volume )
     {
-        KVS_ASSERT( volume->volumeType() == kvs::VolumeObjectBase::Unstructured );
+        KVS_ASSERT( volume->volumeType() == kvs::VolumeObjectBase::Structured );
         KVS_ASSERT( volume->gridType() == kvs::StructuredVolumeObject::Uniform );
         const kvs::StructuredVolumeObject* str_volume = static_cast<const kvs::StructuredVolumeObject*>( volume );
 

@@ -47,6 +47,9 @@ private:
         virtual T value( int index ) = 0;
         virtual T scalarValue() = 0;
         virtual void vectorValue( T* output ) = 0;
+        virtual T nodeValue( int node_index, int value_index ) = 0;
+        virtual T nodeScalarValue( int node_index ) = 0;
+        virtual void nodeVectorValue( int node_index, T* output ) = 0;
         virtual void setLocalPoint( const kvs::Vector3<T>& local ) = 0;
         virtual void updateInterpolationFactors( const kvs::Vector3<T>& local ) = 0;
         virtual void updateDifferentialFactors( const kvs::Vector3<T>& local ) = 0;
@@ -140,6 +143,21 @@ private:
         void vectorValue( T* output )
         {
             m_cell->vectorValue( output );
+        }
+
+        T nodeValue( int node_index, int value_index )
+        {
+            return m_cell->nodeValue( node_index, value_index );
+        }
+
+        T nodeScalarValue( int node_index )
+        {
+            return m_cell->nodeScalarValue( node_index );
+        }
+
+        void nodeVectorValue( int node_index, T* output )
+        {
+            m_cell->nodeVectorValue( node_index, output );
         }
 
         void setLocalPoint( const kvs::Vector3<T>& local )
@@ -283,6 +301,21 @@ public:
     void vectorValue( T* output )
     {
         m_cell->vectorValue( output );
+    }
+
+    T nodeValue( int node_index, int value_index )
+    {
+        return m_cell->nodeValue( node_index, value_index );
+    }
+
+    T nodeScalarValue( int node_index )
+    {
+        return m_cell->nodeScalarValue( node_index );
+    }
+
+    void nodeVectorValue( int node_index, T* output )
+    {
+        m_cell->nodeVectorValue( node_index, output );
     }
 
     void setLocalPoint( const kvs::Vector3<T>& local )
