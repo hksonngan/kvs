@@ -43,28 +43,22 @@ public:
     Vector( const std::vector<T>& std_vector );
     ~Vector();
 
-public:
     Vector( const Vector& other );
     Vector& operator =( const Vector& rhs );
 
-public:
     void setSize( const size_t size );
+
+    size_t size() const;
 
     void zero();
     void swap( Vector& other );
-
-public:
-    size_t size() const;
-
-public:
-    const Vector normalized() const;
-    void         normalize();
-
-public:
+    void normalize();
     void print() const;
+
     double length() const;
     double length2() const;
     T dot( const Vector& other ) const;
+    const Vector normalized() const;
 
 public:
     const T& operator []( const size_t index ) const;
@@ -148,15 +142,14 @@ public:
 
 /*==========================================================================*/
 /**
- *  Constructs a new Vector.
- *
- *  @param size [in] Vector size.
+ *  @brief  Constructs a new Vector.
+ *  @param  size [in] Vector size.
  */
 /*==========================================================================*/
 template <typename T>
-inline Vector<T>::Vector( const size_t size )
-    : m_size( 0 )
-    , m_elements( 0 )
+inline Vector<T>::Vector( const size_t size ):
+    m_size( 0 ),
+    m_elements( 0 )
 {
     this->setSize( size );
     this->zero();
@@ -164,16 +157,15 @@ inline Vector<T>::Vector( const size_t size )
 
 /*==========================================================================*/
 /**
- *  Constructs a new Vector.
- *
- *  @param size     [in] Size of array.
- *  @param elements [in] Array of elements.
+ *  @brief  Constructs a new Vector.
+ *  @param  size     [in] Size of array.
+ *  @param  elements [in] Array of elements.
  */
 /*==========================================================================*/
 template <typename T>
-inline Vector<T>::Vector( const size_t size, const T* elements )
-    : m_size( 0 )
-    , m_elements( 0 )
+inline Vector<T>::Vector( const size_t size, const T* elements ):
+    m_size( 0 ),
+    m_elements( 0 )
 {
     this->setSize( size );
     memcpy( m_elements, elements, sizeof( T ) * this->size() );
@@ -181,20 +173,24 @@ inline Vector<T>::Vector( const size_t size, const T* elements )
 
 /*==========================================================================*/
 /**
- *  Constructs a new Vector.
- *
- *  @param std_vector [in] std::vector.
+ *  @brief  Constructs a new Vector.
+ *  @param  std_vector [in] std::vector.
  */
 /*==========================================================================*/
 template <typename T>
-inline Vector<T>::Vector( const std::vector<T>& std_vector )
-    : m_size( 0 )
-    , m_elements( 0 )
+inline Vector<T>::Vector( const std::vector<T>& std_vector ):
+    m_size( 0 ),
+    m_elements( 0 )
 {
     this->setSize( std_vector.size() );
     memcpy( m_elements, &std_vector[0], sizeof( T ) * this->size() );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Destroys the Vector.
+ */
+/*===========================================================================*/
 template <typename T>
 inline Vector<T>::~Vector()
 {
@@ -203,15 +199,14 @@ inline Vector<T>::~Vector()
 
 /*==========================================================================*/
 /**
- *  Constructs a copy of other.
- *
- *  @param other [in] Vector.
+ *  @brief  Constructs a copy of other.
+ *  @param  other [in] Vector.
  */
 /*==========================================================================*/
 template <typename T>
-inline Vector<T>::Vector( const Vector& other )
-    : m_size( 0 )
-    , m_elements( 0 )
+inline Vector<T>::Vector( const Vector& other ):
+    m_size( 0 ),
+    m_elements( 0 )
 {
     this->setSize( other.size() );
     memcpy( m_elements, other.m_elements, sizeof( T ) * this->size() );
@@ -219,9 +214,8 @@ inline Vector<T>::Vector( const Vector& other )
 
 /*==========================================================================*/
 /**
- *  Substitution operator '='.
- *
- *  @param other [in] Vector.
+ *  @brief  Substitution operator '='.
+ *  @param  other [in] Vector.
  */
 /*==========================================================================*/
 template <typename T>
@@ -234,9 +228,8 @@ inline Vector<T>& Vector<T>::operator =( const Vector& rhs )
 
 /*==========================================================================*/
 /**
- *  Sets the size of vector.
- *
- *  @param size [in] Size of vector.
+ *  @brief  Sets the size of vector.
+ *  @param  size [in] Size of vector.
  */
 /*==========================================================================*/
 template <typename T>
@@ -260,7 +253,19 @@ inline void Vector<T>::setSize( const size_t size )
 
 /*==========================================================================*/
 /**
- *  Sets the elements to zero.
+ *  @brief  Returns the size of vector.
+ *  @return Size of vector.
+ */
+/*==========================================================================*/
+template <typename T>
+inline size_t Vector<T>::size() const
+{
+    return m_size;
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Sets the elements to zero.
  */
 /*==========================================================================*/
 template <typename T>
@@ -276,9 +281,8 @@ inline void Vector<T>::zero()
 
 /*==========================================================================*/
 /**
- *  Swaps this and other.
- *
- *  @param other [in,out] Vector.
+ *  @brief  Swaps this and other.
+ *  @param  other [in,out] Vector.
  */
 /*==========================================================================*/
 template<typename T>
@@ -290,36 +294,7 @@ inline void Vector<T>::swap( Vector& other )
 
 /*==========================================================================*/
 /**
- *  Returns the size of vector.
- *
- *  @return Size of vector.
- */
-/*==========================================================================*/
-template <typename T>
-inline size_t Vector<T>::size() const
-{
-    return m_size;
-}
-
-/*==========================================================================*/
-/**
- *  Copies this and normalizes it.
- *
- *  @return Normalized Vector.
- */
-/*==========================================================================*/
-template <typename T>
-inline const Vector<T> Vector<T>::normalized() const
-{
-    const double length = this->length();
-    const T normalize_factor = length > 0.0 ? static_cast<T>( 1.0 / length ) : T( 0 );
-    return *this * normalize_factor;
-}
-
-/*==========================================================================*/
-/**
- *  Normalizes this.
- *
+ *  @brief  Normalizes this.
  *  @return Normalized Vector.
  */
 /*==========================================================================*/
@@ -333,7 +308,7 @@ inline void Vector<T>::normalize()
 
 /*==========================================================================*/
 /**
- *  Prints the elements.
+ *  @brief  Prints the elements.
  */
 /*==========================================================================*/
 template <typename T>
@@ -344,8 +319,7 @@ inline void Vector<T>::print() const
 
 /*==========================================================================*/
 /**
- *  Calculates a length of this.
- *
+ *  @brief  Calculates a length of this.
  *  @return Length of this.
  */
 /*==========================================================================*/
@@ -357,8 +331,7 @@ inline double Vector<T>::length() const
 
 /*==========================================================================*/
 /**
- *  Calculates a square of a length of this.
- *
+ *  @brief  Calculates a square of a length of this.
  *  @return Square of a length of this.
  */
 /*==========================================================================*/
@@ -378,9 +351,8 @@ inline double Vector<T>::length2() const
 
 /*==========================================================================*/
 /**
- *  Calculates a dot product.
- *
- *  @param other [in] Vector.
+ *  @brief  Calculates a dot product.
+ *  @param  other [in] Vector.
  *  @return Dot product.
  */
 /*==========================================================================*/
@@ -398,6 +370,20 @@ inline T Vector<T>::dot( const Vector<T>& other ) const
         result += v[i] * other[i];
     }
     return result;
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Copies this and normalizes it.
+ *  @return Normalized Vector.
+ */
+/*==========================================================================*/
+template <typename T>
+inline const Vector<T> Vector<T>::normalized() const
+{
+    const double length = this->length();
+    const T normalize_factor = length > 0.0 ? static_cast<T>( 1.0 / length ) : T( 0 );
+    return *this * normalize_factor;
 }
 
 template <typename T>

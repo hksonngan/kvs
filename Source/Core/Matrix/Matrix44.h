@@ -70,24 +70,19 @@ public:
     void zero();
     void identity();
     void swap( Matrix44& other );
-
-public:
-    const Matrix44 transposed() const;
     void transpose();
-
-    const Matrix44 inverted( T* determinant = 0 ) const;
     void invert( T* determinant = 0 );
-
-public:
     void print() const;
+
     T trace() const;
     T determinant() const;
+    const Matrix44 transposed() const;
+    const Matrix44 inverted( T* determinant = 0 ) const;
 
 public:
     const Vector4<T>& operator []( const size_t index ) const;
     Vector4<T>&       operator []( const size_t index );
 
-public:
     Matrix44& operator +=( const Matrix44& rhs );
     Matrix44& operator -=( const Matrix44& rhs );
     Matrix44& operator *=( const Matrix44& rhs );
@@ -96,7 +91,6 @@ public:
 
     const Matrix44 operator -() const;
 
-public:
     friend bool operator ==( const Matrix44& lhs, const Matrix44& rhs )
     {
         return lhs[0] == rhs[0] &&
@@ -186,6 +180,11 @@ typedef Matrix44<double> Matrix44d;
 typedef Matrix44<float>  Mat4;
 
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns an identity matrix.
+ */
+/*===========================================================================*/
 template<typename T>
 const Matrix44<T> Matrix44<T>::Identity()
 {
@@ -195,6 +194,11 @@ const Matrix44<T> Matrix44<T>::Identity()
                      0, 0, 0, 1 );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns a zero matrix.
+ */
+/*===========================================================================*/
 template<typename T>
 const Matrix44<T> Matrix44<T>::Zero()
 {
@@ -204,6 +208,12 @@ const Matrix44<T> Matrix44<T>::Zero()
                      0, 0, 0, 0 );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns a matrix which all elements are same as x.
+ *  @param  x [in] element value
+ */
+/*===========================================================================*/
 template<typename T>
 const Matrix44<T> Matrix44<T>::All( const T x )
 {
@@ -213,6 +223,12 @@ const Matrix44<T> Matrix44<T>::All( const T x )
                      x, x, x, x );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns a diagonal matrix which all diagonal elements are same as x.
+ *  @param  x [in] element value
+ */
+/*===========================================================================*/
 template<typename T>
 const Matrix44<T> Matrix44<T>::Diagonal( const T x )
 {
@@ -221,7 +237,7 @@ const Matrix44<T> Matrix44<T>::Diagonal( const T x )
 
 /*==========================================================================*/
 /**
- *  Constructs a new Matrix44.
+ *  @brief  Constructs a new Matrix44.
  */
 /*==========================================================================*/
 template<typename T>
@@ -232,24 +248,23 @@ inline Matrix44<T>::Matrix44()
 
 /*==========================================================================*/
 /**
- *  Constructs a new Matrix44.
- *
- *  @param a00 [in] Element.
- *  @param a01 [in] Element.
- *  @param a02 [in] Element.
- *  @param a03 [in] Element.
- *  @param a10 [in] Element.
- *  @param a11 [in] Element.
- *  @param a12 [in] Element.
- *  @param a13 [in] Element.
- *  @param a20 [in] Element.
- *  @param a21 [in] Element.
- *  @param a22 [in] Element.
- *  @param a23 [in] Element.
- *  @param a30 [in] Element.
- *  @param a31 [in] Element.
- *  @param a32 [in] Element.
- *  @param a33 [in] Element.
+ *  @brief  Constructs a new Matrix44.
+ *  @param  a00 [in] Element.
+ *  @param  a01 [in] Element.
+ *  @param  a02 [in] Element.
+ *  @param  a03 [in] Element.
+ *  @param  a10 [in] Element.
+ *  @param  a11 [in] Element.
+ *  @param  a12 [in] Element.
+ *  @param  a13 [in] Element.
+ *  @param  a20 [in] Element.
+ *  @param  a21 [in] Element.
+ *  @param  a22 [in] Element.
+ *  @param  a23 [in] Element.
+ *  @param  a30 [in] Element.
+ *  @param  a31 [in] Element.
+ *  @param  a32 [in] Element.
+ *  @param  a33 [in] Element.
  */
 /*==========================================================================*/
 template<typename T>
@@ -268,12 +283,11 @@ inline Matrix44<T>::Matrix44(
 
 /*==========================================================================*/
 /**
- *  Constructs a new Matrix44.
- *
- *  @param v0 [in] Vector4.
- *  @param v1 [in] Vector4.
- *  @param v2 [in] Vector4.
- *  @param v3 [in] Vector4.
+ *  @brief  Constructs a new Matrix44.
+ *  @param  v0 [in] Vector4.
+ *  @param  v1 [in] Vector4.
+ *  @param  v2 [in] Vector4.
+ *  @param  v3 [in] Vector4.
  */
 /*==========================================================================*/
 template<typename T>
@@ -288,9 +302,8 @@ inline Matrix44<T>::Matrix44(
 
 /*==========================================================================*/
 /**
- *  Constructs a new Matrix44.
- *
- *  @param elements [in] Array of elements.
+ *  @brief  Constructs a new Matrix44.
+ *  @param  elements [in] Array of elements.
  */
 /*==========================================================================*/
 template<typename T>
@@ -301,24 +314,23 @@ inline Matrix44<T>::Matrix44( const T elements[16] )
 
 /*==========================================================================*/
 /**
- *  Sets the elements.
- *
- *  @param a00 [in] Element.
- *  @param a01 [in] Element.
- *  @param a02 [in] Element.
- *  @param a03 [in] Element.
- *  @param a10 [in] Element.
- *  @param a11 [in] Element.
- *  @param a12 [in] Element.
- *  @param a13 [in] Element.
- *  @param a20 [in] Element.
- *  @param a21 [in] Element.
- *  @param a22 [in] Element.
- *  @param a23 [in] Element.
- *  @param a30 [in] Element.
- *  @param a31 [in] Element.
- *  @param a32 [in] Element.
- *  @param a33 [in] Element.
+ *  @brief  Sets the elements.
+ *  @param  a00 [in] Element.
+ *  @param  a01 [in] Element.
+ *  @param  a02 [in] Element.
+ *  @param  a03 [in] Element.
+ *  @param  a10 [in] Element.
+ *  @param  a11 [in] Element.
+ *  @param  a12 [in] Element.
+ *  @param  a13 [in] Element.
+ *  @param  a20 [in] Element.
+ *  @param  a21 [in] Element.
+ *  @param  a22 [in] Element.
+ *  @param  a23 [in] Element.
+ *  @param  a30 [in] Element.
+ *  @param  a31 [in] Element.
+ *  @param  a32 [in] Element.
+ *  @param  a33 [in] Element.
  */
 /*==========================================================================*/
 template<typename T>
@@ -336,12 +348,11 @@ inline void Matrix44<T>::set(
 
 /*==========================================================================*/
 /**
- *  Sets the elements.
- *
- *  @param v0 [in] Vector4.
- *  @param v1 [in] Vector4.
- *  @param v2 [in] Vector4.
- *  @param v3 [in] Vector4.
+ *  @brief  Sets the elements.
+ *  @param  v0 [in] Vector4.
+ *  @param  v1 [in] Vector4.
+ *  @param  v2 [in] Vector4.
+ *  @param  v3 [in] Vector4.
  */
 /*==========================================================================*/
 template<typename T>
@@ -359,9 +370,8 @@ inline void Matrix44<T>::set(
 
 /*==========================================================================*/
 /**
- *  Sets the elements.
- *
- *  @param elements [in] Array of elements.
+ *  @brief  Sets the elements.
+ *  @param  elements [in] Array of elements.
  */
 /*==========================================================================*/
 template<typename T>
@@ -375,7 +385,7 @@ inline void Matrix44<T>::set( const T elements[16] )
 
 /*==========================================================================*/
 /**
- *  Sets the elements to zero.
+ *  @brief  Sets the elements to zero.
  */
 /*==========================================================================*/
 template<typename T>
@@ -386,7 +396,7 @@ inline void Matrix44<T>::zero()
 
 /*==========================================================================*/
 /**
- *  Sets this matrix to an identity matrix.
+ *  @brief  Sets this matrix to an identity matrix.
  */
 /*==========================================================================*/
 template<typename T>
@@ -397,9 +407,8 @@ inline void Matrix44<T>::identity()
 
 /*==========================================================================*/
 /**
- *  Swaps this and other.
- *
- *  @param other [in,out] Matrix44.
+ *  @brief  Swaps this and other.
+ *  @param  other [in,out] Matrix44.
  */
 /*==========================================================================*/
 template<typename T>
@@ -413,23 +422,7 @@ inline void Matrix44<T>::swap( Matrix44& other )
 
 /*==========================================================================*/
 /**
- *  Copies this and transposes it.
- *
- *  @return Transposed matrix.
- */
-/*==========================================================================*/
-template<typename T>
-inline const Matrix44<T> Matrix44<T>::transposed() const
-{
-    Matrix44 result( *this );
-    result.transpose();
-    return result;
-}
-
-/*==========================================================================*/
-/**
- *  Transposes this matrix.
- *
+ *  @brief  Transposes this matrix.
  *  @return Transposed matrix.
  */
 /*==========================================================================*/
@@ -446,22 +439,7 @@ inline void Matrix44<T>::transpose()
 
 /*==========================================================================*/
 /**
- *  Copies this and inverts it.
- *  @param  determinant [out] calculated determinant
- *  @return Inverse matrix.
- */
-/*==========================================================================*/
-template<typename T>
-inline const Matrix44<T> Matrix44<T>::inverted( T* determinant ) const
-{
-    Matrix44 result( *this );
-    result.invert( determinant );
-    return result;
-}
-
-/*==========================================================================*/
-/**
- *  Inverts this matrix.
+ *  @brief  Inverts this matrix.
  *  @param  determinat [out] calculated determinant
  *  @return Inverse matrix.
  */
@@ -520,7 +498,7 @@ inline void Matrix44<T>::invert( T* determinant )
 
 /*==========================================================================*/
 /**
- *  Prints the elements of this.
+ *  @brief  Prints the elements of this.
  */
 /*==========================================================================*/
 template<typename T>
@@ -531,8 +509,7 @@ inline void Matrix44<T>::print() const
 
 /*==========================================================================*/
 /**
- *  Calculates the trace of this matrix.
- *
+ *  @brief  Calculates the trace of this matrix.
  *  @return Trace of this matrix.
  */
 /*==========================================================================*/
@@ -544,8 +521,7 @@ inline T Matrix44<T>::trace() const
 
 /*==========================================================================*/
 /**
- *  Calculates the determinant of this matrix.
- *
+ *  @brief  Calculates the determinant of this matrix.
  *  @return Determinant of this matrix.
  */
 /*==========================================================================*/
@@ -570,6 +546,35 @@ inline T Matrix44<T>::determinant() const
         m_rows[0][0] * det33[0] - m_rows[0][1] * det33[1] + m_rows[0][2] * det33[2] - m_rows[0][3] * det33[3];
 
     return det44;
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Copies this and transposes it.
+ *  @return Transposed matrix.
+ */
+/*==========================================================================*/
+template<typename T>
+inline const Matrix44<T> Matrix44<T>::transposed() const
+{
+    Matrix44 result( *this );
+    result.transpose();
+    return result;
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Copies this and inverts it.
+ *  @param  determinant [out] calculated determinant
+ *  @return Inverse matrix.
+ */
+/*==========================================================================*/
+template<typename T>
+inline const Matrix44<T> Matrix44<T>::inverted( T* determinant ) const
+{
+    Matrix44 result( *this );
+    result.invert( determinant );
+    return result;
 }
 
 template<typename T>

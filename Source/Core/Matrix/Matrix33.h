@@ -25,7 +25,7 @@ namespace kvs
 
 /*==========================================================================*/
 /**
- *  3x3 matrix class.
+ *  @brief  3x3 matrix class.
  */
 /*==========================================================================*/
 template<typename T>
@@ -66,24 +66,19 @@ public:
     void zero();
     void identity();
     void swap( Matrix33& other );
-
-public:
-    const Matrix33 transposed() const;
-    void  transpose();
-
-    const Matrix33 inverted( T* determinant = 0 ) const;
+    void transpose();
     void invert( T* determinant = 0 );
-
-public:
     void print() const;
+
     T trace() const;
     T determinant() const;
+    const Matrix33 transposed() const;
+    const Matrix33 inverted( T* determinant = 0 ) const;
 
 public:
     const Vector3<T>& operator []( const size_t index ) const;
     Vector3<T>&       operator []( const size_t index );
 
-public:
     Matrix33& operator +=( const Matrix33& rhs );
     Matrix33& operator -=( const Matrix33& rhs );
     Matrix33& operator *=( const Matrix33& rhs );
@@ -92,7 +87,6 @@ public:
 
     const Matrix33 operator -() const;
 
-public:
     friend bool operator ==( const Matrix33& lhs, const Matrix33& rhs )
     {
         return lhs[0] == rhs[0] &&
@@ -178,7 +172,11 @@ typedef Matrix33<float>  Matrix33f;
 typedef Matrix33<double> Matrix33d;
 typedef Matrix33<float>  Mat3;
 
-
+/*===========================================================================*/
+/**
+ *  @brief  Returns an identity matrix.
+ */
+/*===========================================================================*/
 template<typename T>
 const Matrix33<T> Matrix33<T>::Identity()
 {
@@ -187,6 +185,11 @@ const Matrix33<T> Matrix33<T>::Identity()
                      0, 0, 1 );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns a zero matrix.
+ */
+/*===========================================================================*/
 template<typename T>
 const Matrix33<T> Matrix33<T>::Zero()
 {
@@ -195,6 +198,12 @@ const Matrix33<T> Matrix33<T>::Zero()
                      0, 0, 0 );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns a matrix which all elements are same as x.
+ *  @param  x [in] element value
+ */
+/*===========================================================================*/
 template<typename T>
 const Matrix33<T> Matrix33<T>::All( const T x )
 {
@@ -203,6 +212,12 @@ const Matrix33<T> Matrix33<T>::All( const T x )
                      x, x, x );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns a diagonal matrix which all diagonal elements are same as x.
+ *  @param  x [in] element value
+ */
+/*===========================================================================*/
 template<typename T>
 const Matrix33<T> Matrix33<T>::Diagonal( const T x )
 {
@@ -211,7 +226,7 @@ const Matrix33<T> Matrix33<T>::Diagonal( const T x )
 
 /*==========================================================================*/
 /**
- *  Constructs a new Matrix33.
+ *  @brief  Constructs a new Matrix33.
  */
 /*==========================================================================*/
 template<typename T>
@@ -222,17 +237,16 @@ inline Matrix33<T>::Matrix33()
 
 /*==========================================================================*/
 /**
- *  Constructs a new Matrix33.
- *
- *  @param a00 [in] Element.
- *  @param a01 [in] Element.
- *  @param a02 [in] Element.
- *  @param a10 [in] Element.
- *  @param a11 [in] Element.
- *  @param a12 [in] Element.
- *  @param a20 [in] Element.
- *  @param a21 [in] Element.
- *  @param a22 [in] Element.
+ *  @brief  Constructs a new Matrix33.
+ *  @param  a00 [in] Element.
+ *  @param  a01 [in] Element.
+ *  @param  a02 [in] Element.
+ *  @param  a10 [in] Element.
+ *  @param  a11 [in] Element.
+ *  @param  a12 [in] Element.
+ *  @param  a20 [in] Element.
+ *  @param  a21 [in] Element.
+ *  @param  a22 [in] Element.
  */
 /*==========================================================================*/
 template<typename T>
@@ -249,11 +263,10 @@ inline Matrix33<T>::Matrix33(
 
 /*==========================================================================*/
 /**
- *  Constructs a new Matrix33.
- *
- *  @param v0 [in] Vector3.
- *  @param v1 [in] Vector3.
- *  @param v2 [in] Vector3.
+ *  @brief  Constructs a new Matrix33.
+ *  @param  v0 [in] Vector3.
+ *  @param  v1 [in] Vector3.
+ *  @param  v2 [in] Vector3.
  */
 /*==========================================================================*/
 template<typename T>
@@ -267,9 +280,8 @@ inline Matrix33<T>::Matrix33(
 
 /*==========================================================================*/
 /**
- *  Constructs a new Matrix33.
- *
- *  @param elements [in] Array of elements.
+ *  @brief  Constructs a new Matrix33.
+ *  @param  elements [in] Array of elements.
  */
 /*==========================================================================*/
 template<typename T>
@@ -280,17 +292,16 @@ inline Matrix33<T>::Matrix33( const T elements[9] )
 
 /*==========================================================================*/
 /**
- *  Sets the elements.
- *
- *  @param a00 [in] Element.
- *  @param a01 [in] Element.
- *  @param a02 [in] Element.
- *  @param a10 [in] Element.
- *  @param a11 [in] Element.
- *  @param a12 [in] Element.
- *  @param a20 [in] Element.
- *  @param a21 [in] Element.
- *  @param a22 [in] Element.
+ *  @brief  Sets the elements.
+ *  @param  a00 [in] Element.
+ *  @param  a01 [in] Element.
+ *  @param  a02 [in] Element.
+ *  @param  a10 [in] Element.
+ *  @param  a11 [in] Element.
+ *  @param  a12 [in] Element.
+ *  @param  a20 [in] Element.
+ *  @param  a21 [in] Element.
+ *  @param  a22 [in] Element.
  */
 /*==========================================================================*/
 template<typename T>
@@ -306,11 +317,10 @@ inline void Matrix33<T>::set(
 
 /*==========================================================================*/
 /**
- *  Sets the elements.
- *
- *  @param v0 [in] Vector3.
- *  @param v1 [in] Vector3.
- *  @param v2 [in] Vector3.
+ *  @brief  Sets the elements.
+ *  @param  v0 [in] Vector3.
+ *  @param  v1 [in] Vector3.
+ *  @param  v2 [in] Vector3.
  */
 /*==========================================================================*/
 template<typename T>
@@ -326,9 +336,8 @@ inline void Matrix33<T>::set(
 
 /*==========================================================================*/
 /**
- *  Sets the elements.
- *
- *  @param elements [in] Array of elements.
+ *  @brief  Sets the elements.
+ *  @param  elements [in] Array of elements.
  */
 /*==========================================================================*/
 template<typename T>
@@ -341,7 +350,7 @@ inline void Matrix33<T>::set( const T elements[9] )
 
 /*==========================================================================*/
 /**
- *  Sets the elements to zero.
+ *  @brief  Sets the elements to zero.
  */
 /*==========================================================================*/
 template<typename T>
@@ -352,7 +361,7 @@ inline void Matrix33<T>::zero()
 
 /*==========================================================================*/
 /**
- *  Sets this matrix to an identity matrix.
+ *  @brief  Sets this matrix to an identity matrix.
  */
 /*==========================================================================*/
 template<typename T>
@@ -363,9 +372,8 @@ inline void Matrix33<T>::identity()
 
 /*==========================================================================*/
 /**
- *  Swaps this and other.
- *
- *  @param other [in,out] Matrix33.
+ *  @brief  Swaps this and other.
+ *  @param  other [in,out] Matrix33.
  */
 /*==========================================================================*/
 template<typename T>
@@ -378,23 +386,7 @@ inline void Matrix33<T>::swap( Matrix33& other )
 
 /*==========================================================================*/
 /**
- *  Copies this and transposes it.
- *
- *  @return Transposed matrix.
- */
-/*==========================================================================*/
-template<typename T>
-inline const Matrix33<T> Matrix33<T>::transposed() const
-{
-    Matrix33 result( *this );
-    result.transpose();
-    return result;
-}
-
-/*==========================================================================*/
-/**
- *  Transposes this matrix.
- *
+ *  @brief  Transposes this matrix.
  *  @return Transposed matrix.
  */
 /*==========================================================================*/
@@ -408,22 +400,7 @@ inline void Matrix33<T>::transpose()
 
 /*==========================================================================*/
 /**
- *  Copies this and inverts it.
- *  @param  determinant [out] calculated determinant
- *  @return Inverse matrix.
- */
-/*==========================================================================*/
-template<typename T>
-inline const Matrix33<T> Matrix33<T>::inverted( T* determinant ) const
-{
-    Matrix33 result( *this );
-    result.invert( determinant );
-    return result;
-}
-
-/*==========================================================================*/
-/**
- *  Inverts this matrix.
+ *  @brief  Inverts this matrix.
  *  @param  determinant [out] calculated determinant
  *  @return Inverse matrix.
  */
@@ -458,7 +435,7 @@ inline void Matrix33<T>::invert( T* determinant )
 
 /*==========================================================================*/
 /**
- *  Prints the elements of this.
+ *  @brief  Prints the elements of this.
  */
 /*==========================================================================*/
 template<typename T>
@@ -469,8 +446,7 @@ inline void Matrix33<T>::print() const
 
 /*==========================================================================*/
 /**
- *  Calculates the trace of this matrix.
- *
+ *  @brief  Calculates the trace of this matrix.
  *  @return Trace of this matrix.
  */
 /*==========================================================================*/
@@ -482,8 +458,7 @@ inline T Matrix33<T>::trace() const
 
 /*==========================================================================*/
 /**
- *  Calculates the determinant of this matrix.
- *
+ *  @brief  Calculates the determinant of this matrix.
  *  @return Determinant of this matrix.
  */
 /*==========================================================================*/
@@ -491,6 +466,35 @@ template<typename T>
 inline T Matrix33<T>::determinant() const
 {
     return m_rows[0].cross( m_rows[1] ).dot( m_rows[2] );
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Copies this and transposes it.
+ *  @return Transposed matrix.
+ */
+/*==========================================================================*/
+template<typename T>
+inline const Matrix33<T> Matrix33<T>::transposed() const
+{
+    Matrix33 result( *this );
+    result.transpose();
+    return result;
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Copies this and inverts it.
+ *  @param  determinant [out] calculated determinant
+ *  @return Inverse matrix.
+ */
+/*==========================================================================*/
+template<typename T>
+inline const Matrix33<T> Matrix33<T>::inverted( T* determinant ) const
+{
+    Matrix33 result( *this );
+    result.invert( determinant );
+    return result;
 }
 
 template<typename T>

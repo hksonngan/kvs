@@ -50,26 +50,21 @@ public:
 public:
     void setSize( const size_t nrows, const size_t ncolumns );
 
-    void zero();
-    void identity();
-    void swap( Matrix& other );
-
-public:
     size_t nrows() const;
     size_t ncolumns() const;
 
-public:
-    const Matrix transposed() const;
+    void zero();
+    void identity();
+    void swap( Matrix& other );
     void transpose();
-
-    const Matrix inverted() const;
     void invert();
-
-public:
     void print() const;
+
     T trace() const;
     T determinant() const;
     size_t pivot( const size_t row_index ) const;
+    const Matrix transposed() const;
+    const Matrix inverted() const;
 
 public:
     const kvs::Vector<T>& operator []( const size_t index ) const;
@@ -211,6 +206,11 @@ public:
     }
 };
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new Matrix.
+ */
+/*===========================================================================*/
 template <typename T>
 inline Matrix<T>::Matrix():
     m_nrows( 0 ),
@@ -221,17 +221,16 @@ inline Matrix<T>::Matrix():
 
 /*==========================================================================*/
 /**
- *  Constructs a new Matrix.
- *
- *  @param nrows    [in] Number of rows of matrix.
- *  @param ncolumns [in] Number of columns of matrix.
+ *  @brief  Constructs a new Matrix.
+ *  @param  nrows    [in] Number of rows of matrix.
+ *  @param  ncolumns [in] Number of columns of matrix.
  */
 /*==========================================================================*/
 template<typename T>
-inline Matrix<T>::Matrix( const size_t nrows, const size_t ncolumns )
-    : m_nrows( 0 )
-    , m_ncolumns( 0 )
-    , m_rows( 0 )
+inline Matrix<T>::Matrix( const size_t nrows, const size_t ncolumns ):
+    m_nrows( 0 ),
+    m_ncolumns( 0 ),
+    m_rows( 0 )
 {
     this->setSize( nrows, ncolumns );
     this->zero();
@@ -239,18 +238,17 @@ inline Matrix<T>::Matrix( const size_t nrows, const size_t ncolumns )
 
 /*==========================================================================*/
 /**
- *  Constructs a new Matrix.
- *
- *  @param nrows    [in] Number of rows of matrix.
- *  @param ncolumns [in] Number of columns of matrix.
- *  @param elements [in] Array of elements.
+ *  @brief  Constructs a new Matrix.
+ *  @param  nrows    [in] Number of rows of matrix.
+ *  @param  ncolumns [in] Number of columns of matrix.
+ *  @param  elements [in] Array of elements.
  */
 /*==========================================================================*/
 template<typename T>
-inline Matrix<T>::Matrix( const size_t nrows, const size_t ncolumns, const T* const elements )
-    : m_nrows( 0 )
-    , m_ncolumns( 0 )
-    , m_rows( 0 )
+inline Matrix<T>::Matrix( const size_t nrows, const size_t ncolumns, const T* const elements ):
+    m_nrows( 0 ),
+    m_ncolumns( 0 ),
+    m_rows( 0 )
 {
     this->setSize( nrows, ncolumns );
 
@@ -269,16 +267,15 @@ inline Matrix<T>::Matrix( const size_t nrows, const size_t ncolumns, const T* co
 
 /*==========================================================================*/
 /**
- *  Constructs a copy of other.
- *
- *  @param other [in] Matrix.
+ *  @brief  Constructs a copy of other.
+ *  @param  other [in] Matrix.
  */
 /*==========================================================================*/
 template <typename T>
-inline Matrix<T>::Matrix( const Matrix& other )
-    : m_nrows( 0 )
-    , m_ncolumns( 0 )
-    , m_rows( 0 )
+inline Matrix<T>::Matrix( const Matrix& other ):
+    m_nrows( 0 ),
+    m_ncolumns( 0 ),
+    m_rows( 0 )
 {
     this->setSize( other.nrows(), other.ncolumns() );
 
@@ -292,9 +289,8 @@ inline Matrix<T>::Matrix( const Matrix& other )
 
 /*==========================================================================*/
 /**
- *  Substitution operator '='.
- *
- *  @param other [in] Matrix.
+ *  @brief  Substitution operator '='.
+ *  @param  other [in] Matrix.
  */
 /*==========================================================================*/
 template <typename T>
@@ -311,6 +307,11 @@ inline Matrix<T>& Matrix<T>::operator =( const Matrix& rhs )
     return *this;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Destroys the Matrix.
+ */
+/*===========================================================================*/
 template<typename T>
 inline Matrix<T>::~Matrix()
 {
@@ -319,10 +320,9 @@ inline Matrix<T>::~Matrix()
 
 /*==========================================================================*/
 /**
- *  Sets the size of matrix.
- *
- *  @param nrows    [in] Number of rows of matrix.
- *  @param ncolumns [in] Number of columns of matrix.
+ *  @brief  Sets the size of matrix.
+ *  @param  nrows    [in] Number of rows of matrix.
+ *  @param  ncolumns [in] Number of columns of matrix.
  */
 /*==========================================================================*/
 template<typename T>
@@ -352,7 +352,31 @@ inline void Matrix<T>::setSize( const size_t nrows, const size_t ncolumns )
 
 /*==========================================================================*/
 /**
- *  Sets the elements to zero.
+ *  @brief  Returns the number of rows of matrix.
+ *  @return Number of rows of matrix.
+ */
+/*==========================================================================*/
+template<typename T>
+inline size_t Matrix<T>::nrows() const
+{
+    return m_nrows;
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Returns the number of columns of matrix.
+ *  @return Number of columns of matrix.
+ */
+/*==========================================================================*/
+template<typename T>
+inline size_t Matrix<T>::ncolumns() const
+{
+    return m_ncolumns;
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Sets the elements to zero.
  */
 /*==========================================================================*/
 template<typename T>
@@ -368,7 +392,7 @@ inline void Matrix<T>::zero()
 
 /*==========================================================================*/
 /**
- *  Sets this matrix to an identity matrix.
+ *  @brief  Sets this matrix to an identity matrix.
  */
 /*==========================================================================*/
 template<typename T>
@@ -389,9 +413,8 @@ inline void Matrix<T>::identity()
 
 /*==========================================================================*/
 /**
- *  Swaps this and other.
- *
- *  @param other [in,out] Matrix.
+ *  @brief  Swaps this and other.
+ *  @param  other [in,out] Matrix.
  */
 /*==========================================================================*/
 template<typename T>
@@ -404,49 +427,7 @@ inline void Matrix<T>::swap( Matrix& other )
 
 /*==========================================================================*/
 /**
- *  Returns the number of rows of matrix.
- *
- *  @return Number of rows of matrix.
- */
-/*==========================================================================*/
-template<typename T>
-inline size_t Matrix<T>::nrows() const
-{
-    return m_nrows;
-}
-
-/*==========================================================================*/
-/**
- *  Returns the number of columns of matrix.
- *
- *  @return Number of columns of matrix.
- */
-/*==========================================================================*/
-template<typename T>
-inline size_t Matrix<T>::ncolumns() const
-{
-    return m_ncolumns;
-}
-
-/*==========================================================================*/
-/**
- *  Copies this and transposes it.
- *
- *  @return Transposed matrix.
- */
-/*==========================================================================*/
-template<typename T>
-inline const Matrix<T> Matrix<T>::transposed() const
-{
-    Matrix result( *this );
-    result.transpose();
-    return result;
-}
-
-/*==========================================================================*/
-/**
- *  Transposes this matrix.
- *
+ *  @brief  Transposes this matrix.
  *  @return Transposed matrix.
  */
 /*==========================================================================*/
@@ -485,25 +466,9 @@ inline void Matrix<T>::transpose()
 
 /*==========================================================================*/
 /**
- *  Copies this and inverts it.
+ *  @brief  Inverts this matrix.
  *  @param  determinant [out] calculated determinant
  *  @return Inverse matrix.
- */
-/*==========================================================================*/
-template<typename T>
-inline const Matrix<T> Matrix<T>::inverted() const
-{
-    Matrix result( *this );
-    result.invert();
-    return result;
-}
-
-/*==========================================================================*/
-/**
- *  Inverts this matrix.
- *  @param  determinant [out] calculated determinant
- *  @return Inverse matrix.
- *
  *  @todo   Implement an exception processing.
  */
 /*==========================================================================*/
@@ -559,7 +524,7 @@ inline void Matrix<T>::invert()
 
 /*==========================================================================*/
 /**
- *  Prints the elements of this.
+ *  @bri  Prints the elements of this.
  */
 /*==========================================================================*/
 template<typename T>
@@ -570,8 +535,7 @@ inline void Matrix<T>::print() const
 
 /*==========================================================================*/
 /**
- *  Calculates the trace of this matrix.
- *
+ *  @brief  Calculates the trace of this matrix.
  *  @return Trace of this matrix.
  */
 /*==========================================================================*/
@@ -593,8 +557,7 @@ inline T Matrix<T>::trace() const
 
 /*==========================================================================*/
 /**
- *  Calculates the determinant of this matrix.
- *
+ *  @brief  Calculates the determinant of this matrix.
  *  @return Determinant of this matrix.
  */
 /*==========================================================================*/
@@ -635,6 +598,12 @@ inline T Matrix<T>::determinant() const
     return det;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the row index of pivot.
+ *  @param  column [in] column index
+ */
+/*===========================================================================*/
 template<typename T>
 inline size_t Matrix<T>::pivot( const size_t column ) const
 {
@@ -656,6 +625,35 @@ inline size_t Matrix<T>::pivot( const size_t column ) const
     }
 
     return k;
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Copies this and transposes it.
+ *  @return Transposed matrix.
+ */
+/*==========================================================================*/
+template<typename T>
+inline const Matrix<T> Matrix<T>::transposed() const
+{
+    Matrix result( *this );
+    result.transpose();
+    return result;
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Copies this and inverts it.
+ *  @param  determinant [out] calculated determinant
+ *  @return Inverse matrix.
+ */
+/*==========================================================================*/
+template<typename T>
+inline const Matrix<T> Matrix<T>::inverted() const
+{
+    Matrix result( *this );
+    result.invert();
+    return result;
 }
 
 template<typename T>

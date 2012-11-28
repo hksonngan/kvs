@@ -22,11 +22,11 @@
 namespace kvs
 {
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  2D vector class.
+ *  @brief  2D vector class.
  */
-/*==========================================================================*/
+/*===========================================================================*/
 template<typename T>
 class Vector2
 {
@@ -42,39 +42,33 @@ public:
     Vector2( const T x, const T y );
     explicit Vector2( const T elements[2] );
 
-public:
     void set( const T x, const T y );
     void set( const T elements[2] );
 
-    void zero();
-    void swap( Vector2& other );
-
-public:
     T& x();
-    const T& x() const;
     T& y();
+    const T& x() const;
     const T& y() const;
 
-public:
-    const Vector2 normalized() const;
+    void zero();
+    void swap( Vector2& other );
     void normalize();
-
-public:
     void print() const;
+
     double length() const;
     double length2() const;
     T dot( const Vector2& other ) const;
+    const Vector2 normalized() const;
 
 public:
     const T& operator []( const size_t index ) const;
     T&       operator []( const size_t index );
 
-public:
     Vector2& operator +=( const Vector2& rhs );
     Vector2& operator -=( const Vector2& rhs );
     Vector2& operator *=( const Vector2& rhs );
     Vector2& operator *=( const T rhs );
-    Vector2& operator /= ( const Vector2& rhs );
+    Vector2& operator /=( const Vector2& rhs );
     Vector2& operator /=( const T rhs );
 
     const Vector2 operator -() const;
@@ -157,12 +151,23 @@ typedef Vector2<float>        Vec2;
 typedef Vector2<int>          Vec2i;
 
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns a zero vector.
+ */
+/*===========================================================================*/
 template <typename T>
 inline const Vector2<T> Vector2<T>::Zero()
 {
     return Vector2( 0, 0 );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns a vector which all elements are same as x.
+ *  @param  x [in] element value
+ */
+/*===========================================================================*/
 template <typename T>
 inline const Vector2<T> Vector2<T>::All( const T x )
 {
@@ -171,7 +176,7 @@ inline const Vector2<T> Vector2<T>::All( const T x )
 
 /*==========================================================================*/
 /**
- *  Constructs a new Vector2.
+ *  @brief  Constructs a new Vector2.
  */
 /*==========================================================================*/
 template<typename T>
@@ -182,10 +187,9 @@ inline Vector2<T>::Vector2()
 
 /*==========================================================================*/
 /**
- *  Constructs a new Vector2.
- *
- *  @param x [in] Element.
- *  @param y [in] Element.
+ *  @brief  Constructs a new Vector2.
+ *  @param  x [in] Element.
+ *  @param  y [in] Element.
  */
 /*==========================================================================*/
 template<typename T>
@@ -196,9 +200,8 @@ inline Vector2<T>::Vector2( const T x, const T y )
 
 /*==========================================================================*/
 /**
- *  Constructs a new Vector2.
- *
- *  @param elements [in] Array of elements.
+ *  @brief  Constructs a new Vector2.
+ *  @param  elements [in] Array of elements.
  */
 /*==========================================================================*/
 template<typename T>
@@ -209,10 +212,9 @@ inline Vector2<T>::Vector2( const T elements[2] )
 
 /*==========================================================================*/
 /**
- *  Sets the elements.
- *
- *  @param x [in] Element.
- *  @param y [in] Element.
+ *  @brief  Sets the elements.
+ *  @param  x [in] Element.
+ *  @param  y [in] Element.
  */
 /*==========================================================================*/
 template<typename T>
@@ -224,9 +226,8 @@ inline void Vector2<T>::set( const T x, const T y )
 
 /*==========================================================================*/
 /**
- *  Sets the elements.
- *
- *  @param elements [in] Array of elements.
+ *  @brief  Sets the elements.
+ *  @param  elements [in] Array of elements.
  */
 /*==========================================================================*/
 template<typename T>
@@ -238,34 +239,7 @@ inline void Vector2<T>::set( const T elements[2] )
 
 /*==========================================================================*/
 /**
- *  Sets the elements to zero.
- */
-/*==========================================================================*/
-template<typename T>
-inline void Vector2<T>::zero()
-{
-    m_elements[0] = T( 0 );
-    m_elements[1] = T( 0 );
-}
-
-/*==========================================================================*/
-/**
- *  Swaps this and other.
- *
- *  @param other [in,out] Vector2.
- */
-/*==========================================================================*/
-template<typename T>
-inline void Vector2<T>::swap( Vector2& other )
-{
-    std::swap( m_elements[0], other[0] );
-    std::swap( m_elements[1], other[1] );
-}
-
-/*==========================================================================*/
-/**
- *  Returns the first element.
- *
+ *  @brief  Returns the first element.
  *  @return Reference of the first element.
  */
 /*==========================================================================*/
@@ -277,21 +251,7 @@ inline T& Vector2<T>::x()
 
 /*==========================================================================*/
 /**
- *  Returns the first element.
- *
- *  @return Reference of the first element.
- */
-/*==========================================================================*/
-template<typename T>
-inline const T& Vector2<T>::x() const
-{
-    return m_elements[0];
-}
-
-/*==========================================================================*/
-/**
- *  Returns the second element.
- *
+ *  @brief  Returns the second element.
  *  @return Reference of the second element.
  */
 /*==========================================================================*/
@@ -303,8 +263,19 @@ inline T& Vector2<T>::y()
 
 /*==========================================================================*/
 /**
- *  Returns the second element.
- *
+ *  @brief  Returns the first element.
+ *  @return Reference of the first element.
+ */
+/*==========================================================================*/
+template<typename T>
+inline const T& Vector2<T>::x() const
+{
+    return m_elements[0];
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Returns the second element.
  *  @return Reference of the second element.
  */
 /*==========================================================================*/
@@ -314,19 +285,34 @@ inline const T& Vector2<T>::y() const
     return m_elements[1];
 }
 
+/*==========================================================================*/
+/**
+ *  @brief  Sets zero to the elements.
+ */
+/*==========================================================================*/
 template<typename T>
-inline const Vector2<T> Vector2<T>::normalized() const
+inline void Vector2<T>::zero()
 {
-    const double length = this->length();
-    const T normalize_factor = length > 0.0 ? static_cast<T>( 1.0 / length ) : T( 0 );
-    return *this * normalize_factor;
+    m_elements[0] = T( 0 );
+    m_elements[1] = T( 0 );
 }
 
 /*==========================================================================*/
 /**
- *  Normalizes this.
- *
- *  @return Normalized Vector2.
+ *  @brief  Swaps this and other.
+ *  @param  other [in,out] Vector2.
+ */
+/*==========================================================================*/
+template<typename T>
+inline void Vector2<T>::swap( Vector2& other )
+{
+    std::swap( m_elements[0], other[0] );
+    std::swap( m_elements[1], other[1] );
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Normalizes this.
  */
 /*==========================================================================*/
 template<typename T>
@@ -339,7 +325,7 @@ inline void Vector2<T>::normalize()
 
 /*==========================================================================*/
 /**
- *  Prints the elements of this.
+ *  @brief  Prints the elements of this.
  */
 /*==========================================================================*/
 template<typename T>
@@ -350,8 +336,7 @@ inline void Vector2<T>::print() const
 
 /*==========================================================================*/
 /**
- *  Calculates a length of this.
- *
+ *  @brief  Calculates a length of this.
  *  @return Length of this.
  */
 /*==========================================================================*/
@@ -363,8 +348,7 @@ inline double Vector2<T>::length() const
 
 /*==========================================================================*/
 /**
- *  Calculates a square of a length of this.
- *
+ *  @brief  Calculates a square of a length of this.
  *  @return Square of a length of this.
  */
 /*==========================================================================*/
@@ -379,9 +363,8 @@ inline double Vector2<T>::length2() const
 
 /*==========================================================================*/
 /**
- *  Calculates a dot product.
- *
- *  @param other [in] Vector2.
+ *  @brief  Calculates a dot product.
+ *  @param  other [in] Vector2.
  *  @return Dot product.
  */
 /*==========================================================================*/
@@ -392,6 +375,20 @@ inline T Vector2<T>::dot( const Vector2& other ) const
     result += m_elements[0] * other[0];
     result += m_elements[1] * other[1];
     return result;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the normalized vector.
+ *  @return normalized vector
+ */
+/*===========================================================================*/
+template<typename T>
+inline const Vector2<T> Vector2<T>::normalized() const
+{
+    const double length = this->length();
+    const T normalize_factor = length > 0.0 ? static_cast<T>( 1.0 / length ) : T( 0 );
+    return *this * normalize_factor;
 }
 
 template<typename T>

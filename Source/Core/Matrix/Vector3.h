@@ -25,7 +25,7 @@ namespace kvs
 
 /*==========================================================================*/
 /**
- *  3D vector class.
+ *  @brief  3D vector class.
  */
 /*==========================================================================*/
 template<typename T>
@@ -44,39 +44,33 @@ public:
     explicit Vector3( const Vector2<T>& other, const T z );
     explicit Vector3( const T elements[3] );
 
-public:
     void set( const T x, const T y, const T z );
     void set( const Vector2<T>& other, const T z );
     void set( const T elements[3] );
 
-    void zero();
-    void swap( Vector3& other );
-
-public:
     T& x();
-    const T& x() const;
     T& y();
-    const T& y() const;
     T& z();
+    const T& x() const;
+    const T& y() const;
     const T& z() const;
     const Vector2<T> xy() const;
 
-public:
-    const Vector3 normalized() const;
-    void          normalize();
-
-public:
+    void zero();
+    void swap( Vector3& other );
+    void normalize();
     void print() const;
+
     double length() const;
     double length2() const;
     T dot( const Vector3& other ) const;
     const Vector3 cross( const Vector3& other ) const;
+    const Vector3 normalized() const;
 
 public:
     const T& operator []( const size_t index ) const;
     T&       operator []( const size_t index );
 
-public:
     Vector3& operator +=( const Vector3& rhs );
     Vector3& operator -=( const Vector3& rhs );
     Vector3& operator *=( const Vector3& rhs );
@@ -86,7 +80,6 @@ public:
 
     const Vector3 operator -() const;
 
-public:
     friend bool operator ==( const Vector3& lhs, const Vector3& rhs )
     {
         return kvs::Math::Equal( lhs[0], rhs[0] ) &&
@@ -166,12 +159,23 @@ typedef Vector3<int>          Vec3i;
 typedef Vector3<unsigned int> Vec3ui;
 
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns a zero vector.
+ */
+/*===========================================================================*/
 template <typename T>
 inline const Vector3<T> Vector3<T>::Zero()
 {
     return Vector3( 0, 0, 0 );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns a vector which all elements are same as x.
+ *  @param  x [in] element value
+ */
+/*===========================================================================*/
 template <typename T>
 inline const Vector3<T> Vector3<T>::All( const T x )
 {
@@ -180,7 +184,7 @@ inline const Vector3<T> Vector3<T>::All( const T x )
 
 /*==========================================================================*/
 /**
- *  Constructs a new Vector3.
+ *  @brief  Constructs a new Vector3.
  */
 /*==========================================================================*/
 template<typename T>
@@ -191,11 +195,10 @@ inline Vector3<T>::Vector3()
 
 /*==========================================================================*/
 /**
- *  Constructs a new Vector3.
- *
- *  @param x [in] Element.
- *  @param y [in] Element.
- *  @param z [in] Element.
+ *  @brief  Constructs a new Vector3.
+ *  @param  x [in] Element.
+ *  @param  y [in] Element.
+ *  @param  z [in] Element.
  */
 /*==========================================================================*/
 template<typename T>
@@ -206,10 +209,9 @@ inline Vector3<T>::Vector3( const T x, const T y, const T z )
 
 /*==========================================================================*/
 /**
- *  Constructs a new Vector3.
- *
- *  @param other [in] Vector2.
- *  @param z     [in] Element.
+ *  @brief  Constructs a new Vector3.
+ *  @param  other [in] Vector2.
+ *  @param  z     [in] Element.
  */
 /*==========================================================================*/
 template<typename T>
@@ -220,9 +222,8 @@ inline Vector3<T>::Vector3( const Vector2<T>& other, const T z )
 
 /*==========================================================================*/
 /**
- *  Constructs a new Vector3.
- *
- *  @param elements [in] Array of elements.
+ *  @brief  Constructs a new Vector3.
+ *  @param  elements [in] Array of elements.
  */
 /*==========================================================================*/
 template<typename T>
@@ -233,11 +234,10 @@ inline Vector3<T>::Vector3( const T elements[3] )
 
 /*==========================================================================*/
 /**
- *  Sets the elements.
- *
- *  @param x [in] Element.
- *  @param y [in] Element.
- *  @param z [in] Element.
+ *  @brief  Sets the elements.
+ *  @param  x [in] Element.
+ *  @param  y [in] Element.
+ *  @param  z [in] Element.
  */
 /*==========================================================================*/
 template<typename T>
@@ -250,10 +250,9 @@ inline void Vector3<T>::set( const T x, const T y, const T z )
 
 /*==========================================================================*/
 /**
- *  Sets the elements.
- *
- *  @param other [in] Vector2.
- *  @param z     [in] Element.
+ *  @brief  Sets the elements.
+ *  @param  other [in] Vector2.
+ *  @param  z     [in] Element.
  */
 /*==========================================================================*/
 template<typename T>
@@ -266,9 +265,8 @@ inline void Vector3<T>::set( const Vector2<T>& other, const T z )
 
 /*==========================================================================*/
 /**
- *  Sets the elements.
- *
- *  @param elements [in] Array of elements.
+ *  @brief  Sets the elements.
+ *  @param  elements [in] Array of elements.
  */
 /*==========================================================================*/
 template<typename T>
@@ -281,7 +279,91 @@ inline void Vector3<T>::set( const T elements[3] )
 
 /*==========================================================================*/
 /**
- *  Sets the elements to zero.
+ *  @brief  Returns the first element.
+ *  @return Reference of the first element.
+ */
+/*==========================================================================*/
+template<typename T>
+inline T& Vector3<T>::x()
+{
+    return m_elements[0];
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Returns the second element.
+ *  @return Reference of the second element.
+ */
+/*==========================================================================*/
+template<typename T>
+inline T& Vector3<T>::y()
+{
+    return m_elements[1];
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Returns the third element.
+ *  @return Reference of the third element.
+ */
+/*==========================================================================*/
+template<typename T>
+inline T& Vector3<T>::z()
+{
+    return m_elements[2];
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Returns the first element.
+ *  @return Reference of the first element.
+ */
+/*==========================================================================*/
+template<typename T>
+inline const T& Vector3<T>::x() const
+{
+    return m_elements[0];
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Returns the second element.
+ *  @return Reference of the second element.
+ */
+/*==========================================================================*/
+template<typename T>
+inline const T& Vector3<T>::y() const
+{
+    return m_elements[1];
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Returns the third element.
+ *  @return Reference of the third element.
+ */
+/*==========================================================================*/
+template<typename T>
+inline const T& Vector3<T>::z() const
+{
+    return m_elements[2];
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns a vector which has the x and y elements of this vector.
+ *  @param  vector which has the x and y elements
+ */
+/*===========================================================================*/
+template <typename T>
+inline const Vector2<T> Vector3<T>::xy() const
+{
+    return Vector2<T>( m_elements[0], m_elements[1] );
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Sets the elements to zero.
  */
 /*==========================================================================*/
 template<typename T>
@@ -294,9 +376,8 @@ inline void Vector3<T>::zero()
 
 /*==========================================================================*/
 /**
- *  Swaps this and other.
- *
- *  @param other [in,out] Vector3.
+ *  @brief  Swaps this and other.
+ *  @param  other [in,out] Vector3.
  */
 /*==========================================================================*/
 template<typename T>
@@ -309,100 +390,7 @@ inline void Vector3<T>::swap( Vector3& other )
 
 /*==========================================================================*/
 /**
- *  Returns the first element.
- *
- *  @return Reference of the first element.
- */
-/*==========================================================================*/
-template<typename T>
-inline T& Vector3<T>::x()
-{
-    return m_elements[0];
-}
-
-/*==========================================================================*/
-/**
- *  Returns the first element.
- *
- *  @return Reference of the first element.
- */
-/*==========================================================================*/
-template<typename T>
-inline const T& Vector3<T>::x() const
-{
-    return m_elements[0];
-}
-
-/*==========================================================================*/
-/**
- *  Returns the second element.
- *
- *  @return Reference of the second element.
- */
-/*==========================================================================*/
-template<typename T>
-inline T& Vector3<T>::y()
-{
-    return m_elements[1];
-}
-
-/*==========================================================================*/
-/**
- *  Returns the second element.
- *
- *  @return Reference of the second element.
- */
-/*==========================================================================*/
-template<typename T>
-inline const T& Vector3<T>::y() const
-{
-    return m_elements[1];
-}
-
-/*==========================================================================*/
-/**
- *  Returns the third element.
- *
- *  @return Reference of the third element.
- */
-/*==========================================================================*/
-template<typename T>
-inline T& Vector3<T>::z()
-{
-    return m_elements[2];
-}
-
-/*==========================================================================*/
-/**
- *  Returns the third element.
- *
- *  @return Reference of the third element.
- */
-/*==========================================================================*/
-template<typename T>
-inline const T& Vector3<T>::z() const
-{
-    return m_elements[2];
-}
-
-template <typename T>
-inline const Vector2<T> Vector3<T>::xy() const
-{
-    return Vector2<T>( m_elements[0], m_elements[1] );
-}
-
-template<typename T>
-inline const Vector3<T> Vector3<T>::normalized() const
-{
-    const double length = this->length();
-    const T normalize_factor = length > 0.0 ? static_cast<T>( 1.0 / length ) : T( 0 );
-    return *this * normalize_factor;
-}
-
-/*==========================================================================*/
-/**
- *  Normalizes this.
- *
+ *  @brief  Normalizes this.
  *  @return Normalized Vector3.
  */
 /*==========================================================================*/
@@ -416,7 +404,7 @@ inline void Vector3<T>::normalize()
 
 /*==========================================================================*/
 /**
- *  Prints the elements of this.
+ *  @brief  Prints the elements of this.
  */
 /*==========================================================================*/
 template<typename T>
@@ -427,8 +415,7 @@ inline void Vector3<T>::print() const
 
 /*==========================================================================*/
 /**
- *  Calculates a length of this.
- *
+ *  @brief  Calculates a length of this.
  *  @return Length of this.
  */
 /*==========================================================================*/
@@ -440,8 +427,7 @@ inline double Vector3<T>::length() const
 
 /*==========================================================================*/
 /**
- *  Calculates a square of a length of this.
- *
+ *  @brief  Calculates a square of a length of this.
  *  @return Square of a length of this.
  */
 /*==========================================================================*/
@@ -457,9 +443,8 @@ inline double Vector3<T>::length2() const
 
 /*==========================================================================*/
 /**
- *  Calculates a dot product.
- *
- *  @param other [in] Vector3.
+ *  @brief  Calculates a dot product.
+ *  @param  other [in] Vector3.
  *  @return Dot product.
  */
 /*==========================================================================*/
@@ -475,9 +460,8 @@ inline T Vector3<T>::dot( const Vector3& other ) const
 
 /*==========================================================================*/
 /**
- *  Calculates a cross product.
- *
- *  @param other [in] Vector3.
+ *  @brief  Calculates a cross product.
+ *  @param  other [in] Vector3.
  *  @return Cross product.
  */
 /*==========================================================================*/
@@ -488,6 +472,20 @@ inline const Vector3<T> Vector3<T>::cross( const Vector3& other ) const
     const T y = m_elements[2] * other[0] - m_elements[0] * other[2];
     const T z = m_elements[0] * other[1] - m_elements[1] * other[0];
     return Vector3<T>( x, y, z );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the normalized vector.
+ *  @return normalized vector
+ */
+/*===========================================================================*/
+template<typename T>
+inline const Vector3<T> Vector3<T>::normalized() const
+{
+    const double length = this->length();
+    const T normalize_factor = length > 0.0 ? static_cast<T>( 1.0 / length ) : T( 0 );
+    return *this * normalize_factor;
 }
 
 template<typename T>

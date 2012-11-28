@@ -25,7 +25,7 @@ namespace kvs
 
 /*==========================================================================*/
 /**
- *  2x2 matrix class.
+ *  @brief  2x2 matrix class.
  */
 /*==========================================================================*/
 template<typename T>
@@ -50,7 +50,6 @@ public:
         const Vector2<T>& v1 );
     explicit Matrix22( const T elements[4] );
 
-public:
     void set(
         const T a00, const T a01,
         const T a10, const T a11 );
@@ -62,24 +61,19 @@ public:
     void zero();
     void identity();
     void swap( Matrix22& other );
-
-public:
-    const Matrix22 transposed() const;
     void transpose();
-
-    const Matrix22 inverted( T* determinant = 0 ) const;
     void invert( T* determinant = 0 );
-
-public:
     void print() const;
+
     T trace() const;
     T determinant() const;
+    const Matrix22 transposed() const;
+    const Matrix22 inverted( T* determinant = 0 ) const;
 
 public:
     const Vector2<T>& operator []( const size_t index ) const;
     Vector2<T>&       operator []( const size_t index );
 
-public:
     Matrix22& operator +=( const Matrix22& rhs );
     Matrix22& operator -=( const Matrix22& rhs );
     Matrix22& operator *=( const Matrix22& rhs );
@@ -88,7 +82,6 @@ public:
 
     const Matrix22 operator -() const;
 
-public:
     friend bool operator ==( const Matrix22& lhs, const Matrix22& rhs )
     {
         return lhs[0] == rhs[0] &&
@@ -172,6 +165,11 @@ typedef Matrix22<double> Matrix22d;
 typedef Matrix22<float>  Mat2;
 
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns an identity matrix.
+ */
+/*===========================================================================*/
 template<typename T>
 const Matrix22<T> Matrix22<T>::Identity()
 {
@@ -179,6 +177,11 @@ const Matrix22<T> Matrix22<T>::Identity()
                      0, 1 );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns a zero matrix.
+ */
+/*===========================================================================*/
 template<typename T>
 const Matrix22<T> Matrix22<T>::Zero()
 {
@@ -186,6 +189,12 @@ const Matrix22<T> Matrix22<T>::Zero()
                      0, 0 );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns a matrix which all elements are same as x.
+ *  @param  x [in] element value
+ */
+/*===========================================================================*/
 template<typename T>
 const Matrix22<T> Matrix22<T>::All( const T x )
 {
@@ -193,6 +202,12 @@ const Matrix22<T> Matrix22<T>::All( const T x )
                      x, x );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns a diagonal matrix which all diagonal elements are same as x.
+ *  @param  x [in] element value
+ */
+/*===========================================================================*/
 template<typename T>
 const Matrix22<T> Matrix22<T>::Diagonal( const T x )
 {
@@ -201,7 +216,7 @@ const Matrix22<T> Matrix22<T>::Diagonal( const T x )
 
 /*==========================================================================*/
 /**
- *  Constructs a new Matrix22.
+ *  @brief  Constructs a new Matrix22.
  */
 /*==========================================================================*/
 template<typename T>
@@ -212,12 +227,11 @@ inline Matrix22<T>::Matrix22()
 
 /*==========================================================================*/
 /**
- *  Constructs a new Matrix22.
- *
- *  @param a00 [in] Element.
- *  @param a01 [in] Element.
- *  @param a10 [in] Element.
- *  @param a11 [in] Element.
+ *  @brief  Constructs a new Matrix22.
+ *  @param  a00 [in] Element.
+ *  @param  a01 [in] Element.
+ *  @param  a10 [in] Element.
+ *  @param  a11 [in] Element.
  */
 /*==========================================================================*/
 template<typename T>
@@ -232,10 +246,9 @@ inline Matrix22<T>::Matrix22(
 
 /*==========================================================================*/
 /**
- *  Constructs a new Matrix22.
- *
- *  @param v0 [in] Vector2.
- *  @param v1 [in] Vector2.
+ *  @brief  Constructs a new Matrix22.
+ *  @param  v0 [in] Vector2.
+ *  @param  v1 [in] Vector2.
  */
 /*==========================================================================*/
 template<typename T>
@@ -248,9 +261,8 @@ inline Matrix22<T>::Matrix22(
 
 /*==========================================================================*/
 /**
- *  Constructs a new Matrix22.
- *
- *  @param elements [in] Array of elements.
+ *  @brief  Constructs a new Matrix22.
+ *  @param  elements [in] Array of elements.
  */
 /*==========================================================================*/
 template<typename T>
@@ -261,12 +273,11 @@ inline Matrix22<T>::Matrix22( const T elements[4] )
 
 /*==========================================================================*/
 /**
- *  Sets the elements.
- *
- *  @param a00 [in] Element.
- *  @param a01 [in] Element.
- *  @param a10 [in] Element.
- *  @param a11 [in] Element.
+ *  @brief  Sets the elements.
+ *  @param  a00 [in] Element.
+ *  @param  a01 [in] Element.
+ *  @param  a10 [in] Element.
+ *  @param  a11 [in] Element.
  */
 /*==========================================================================*/
 template<typename T>
@@ -280,10 +291,9 @@ inline void Matrix22<T>::set(
 
 /*==========================================================================*/
 /**
- *  Sets the elements.
- *
- *  @param v0 [in] Vector2.
- *  @param v1 [in] Vector2.
+ *  @brief  Sets the elements.
+ *  @param  v0 [in] Vector2.
+ *  @param  v1 [in] Vector2.
  */
 /*==========================================================================*/
 template<typename T>
@@ -297,9 +307,8 @@ inline void Matrix22<T>::set(
 
 /*==========================================================================*/
 /**
- *  Sets the elements.
- *
- *  @param elements [in] Array of elements.
+ *  @brief  Sets the elements.
+ *  @param  elements [in] Array of elements.
  */
 /*==========================================================================*/
 template<typename T>
@@ -311,7 +320,7 @@ inline void Matrix22<T>::set( const T elements[4] )
 
 /*==========================================================================*/
 /**
- *  Sets the elements to zero.
+ *  @brief  Sets the elements to zero.
  */
 /*==========================================================================*/
 template<typename T>
@@ -322,7 +331,7 @@ inline void Matrix22<T>::zero()
 
 /*==========================================================================*/
 /**
- *  Sets this matrix to an identity matrix.
+ *  @brief  Sets this matrix to an identity matrix.
  */
 /*==========================================================================*/
 template<typename T>
@@ -333,9 +342,8 @@ inline void Matrix22<T>::identity()
 
 /*==========================================================================*/
 /**
- *  Swaps this and other.
- *
- *  @param other [in,out] Matrix22.
+ *  @brief  Swaps this and other.
+ *  @param  other [in,out] Matrix22.
  */
 /*==========================================================================*/
 template<typename T>
@@ -347,23 +355,7 @@ inline void Matrix22<T>::swap( Matrix22& other )
 
 /*==========================================================================*/
 /**
- *  Copies this and transposes it.
- *
- *  @return Transposed matrix.
- */
-/*==========================================================================*/
-template<typename T>
-inline const Matrix22<T> Matrix22<T>::transposed() const
-{
-    Matrix22 result( *this );
-    result.transpose();
-    return result;
-}
-
-/*==========================================================================*/
-/**
- *  Transposes this matrix.
- *
+ *  @brief  Transposes this matrix.
  *  @return Transposed matrix.
  */
 /*==========================================================================*/
@@ -375,22 +367,7 @@ inline void Matrix22<T>::transpose()
 
 /*==========================================================================*/
 /**
- *  Copies this and inverts it.
- *  @param  determinant [out] calculated determinant
- *  @return Inverse matrix.
- */
-/*==========================================================================*/
-template<typename T>
-inline const Matrix22<T> Matrix22<T>::inverted( T* determinant ) const
-{
-    Matrix22 result( *this );
-    result.invert( determinant );
-    return result;
-}
-
-/*==========================================================================*/
-/**
- *  Inverts this matrix.
+ *  @brief  Inverts this matrix.
  *  @param  determinant [out] calculated determinant
  *  @return Inverse matrix.
  */
@@ -413,7 +390,7 @@ inline void Matrix22<T>::invert( T* determinant )
 
 /*==========================================================================*/
 /**
- *  Prints the elements of this.
+ *  @brief  Prints the elements of this.
  */
 /*==========================================================================*/
 template<typename T>
@@ -424,8 +401,7 @@ inline void Matrix22<T>::print() const
 
 /*==========================================================================*/
 /**
- *  Calculates the trace of this matrix.
- *
+ *  @brief  Calculates the trace of this matrix.
  *  @return Trace of this matrix.
  */
 /*==========================================================================*/
@@ -437,8 +413,7 @@ inline T Matrix22<T>::trace() const
 
 /*==========================================================================*/
 /**
- *  Calculates the determinant of this matrix.
- *
+ *  @brief  Calculates the determinant of this matrix.
  *  @return Determinant of this matrix.
  */
 /*==========================================================================*/
@@ -447,6 +422,35 @@ inline T Matrix22<T>::determinant() const
 {
     const T det22 = m_rows[0][0] * m_rows[1][1] - m_rows[0][1] * m_rows[1][0];
     return det22;
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Copies this and transposes it.
+ *  @return Transposed matrix.
+ */
+/*==========================================================================*/
+template<typename T>
+inline const Matrix22<T> Matrix22<T>::transposed() const
+{
+    Matrix22 result( *this );
+    result.transpose();
+    return result;
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Copies this and inverts it.
+ *  @param  determinant [out] calculated determinant
+ *  @return Inverse matrix.
+ */
+/*==========================================================================*/
+template<typename T>
+inline const Matrix22<T> Matrix22<T>::inverted( T* determinant ) const
+{
+    Matrix22 result( *this );
+    result.invert( determinant );
+    return result;
 }
 
 template<typename T>
