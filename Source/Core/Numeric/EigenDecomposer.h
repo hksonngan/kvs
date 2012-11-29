@@ -18,7 +18,6 @@
 #include <kvs/Matrix44>
 #include <kvs/Matrix>
 #include <kvs/Vector>
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -32,69 +31,49 @@ namespace kvs
 template <typename T>
 class EigenDecomposer
 {
-    kvsClassName_without_virtual( kvs::EigenDecomposer );
-
 public:
 
     enum MatrixType
     {
-        Unknown     = 0, ///< unknown (auto-estimation)
+        Unknown = 0, ///< unknown (auto-estimation)
         Unsymmetric = 1, ///< unsymmetric matrix (using the power method)
-        Symmetric   = 2  ///< symmetric matrix (using the QR method)
+        Symmetric = 2 ///< symmetric matrix (using the QR method)
     };
 
-protected:
+private:
 
-    MatrixType     m_matrix_type;   ///< matrix type (symmetric or unsymmetric)
+    MatrixType m_matrix_type; ///< matrix type (symmetric or unsymmetric)
     kvs::Matrix<T> m_eigen_vectors; ///< eigen vectors as row vectors
-    kvs::Vector<T> m_eigen_values;  ///< eigen values as vector
-
-protected:
-
-    static double m_max_tolerance;  ///< tolerance
+    kvs::Vector<T> m_eigen_values; ///< eigen values as vector
+    static double m_max_tolerance; ///< tolerance
     static size_t m_max_iterations; ///< maximum number of iterations
 
 public:
 
-    EigenDecomposer( void );
+    static void SetMaxTolerance( const double max_tolerance );
+    static void SetMaxIterations( const size_t max_iterations );
 
+public:
+
+    EigenDecomposer();
     EigenDecomposer( const kvs::Matrix33<T>& m, MatrixType type = EigenDecomposer::Unknown );
-
     EigenDecomposer( const kvs::Matrix44<T>& m, MatrixType type = EigenDecomposer::Unknown );
-
     EigenDecomposer( const kvs::Matrix<T>& m, MatrixType type = EigenDecomposer::Unknown );
 
-public:
-
-    const kvs::Matrix<T>& eigenVectors( void ) const;
-
+    const kvs::Matrix<T>& eigenVectors() const;
     const kvs::Vector<T>& eigenVector( const size_t index ) const;
-
-    const kvs::Vector<T>& eigenValues( void ) const;
-
-    const T eigenValue( const size_t index ) const;
-
-public:
+    const kvs::Vector<T>& eigenValues() const;
+    T eigenValue( const size_t index ) const;
 
     void setMatrix( const kvs::Matrix33<T>& m, MatrixType type = EigenDecomposer::Unknown );
-
     void setMatrix( const kvs::Matrix44<T>& m, MatrixType type = EigenDecomposer::Unknown );
-
     void setMatrix( const kvs::Matrix<T>& m, MatrixType type = EigenDecomposer::Unknown );
-
-    void decompose( void );
-
-public:
-
-    static void SetMaxTolerance( const double max_tolerance );
-
-    static void SetMaxIterations( const size_t max_iterations );
+    void decompose();
 
 private:
 
-    const bool calculate_by_qr( void );
-
-    const bool calculate_by_power( void );
+    bool calculate_by_qr();
+    bool calculate_by_power();
 };
 
 } // end of namespace kvs

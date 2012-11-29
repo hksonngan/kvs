@@ -20,7 +20,7 @@ namespace kvs
 
 /*==========================================================================*/
 /**
- *  Constructs a new Xorshift128.
+ *  @brief  Constructs a new Xorshift128.
  */
 /*==========================================================================*/
 Xorshift128::Xorshift128()
@@ -31,10 +31,8 @@ Xorshift128::Xorshift128()
 
 /*==========================================================================*/
 /**
- *  .
- *
- *  @param seed TODO
- *  @return TODO
+ *  @brief  Sets a seed value.
+ *  @param  seed [in] seed value
  */
 /*==========================================================================*/
 void Xorshift128::setSeed( kvs::UInt32 seed )

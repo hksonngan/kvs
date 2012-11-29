@@ -19,7 +19,6 @@
 #include <kvs/Matrix44>
 #include <kvs/Matrix>
 #include <kvs/Vector>
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -33,56 +32,36 @@ namespace kvs
 template <typename T>
 class LUDecomposer
 {
-    kvsClassName_without_virtual( kvs::LUDecomposer );
-
-protected:
+private:
 
     kvs::Matrix<T> m_l; ///< L matrix
     kvs::Matrix<T> m_u; ///< U matrix
     kvs::Matrix<T> m_lu; ///< LU matrix (marged L and U matrix by Crout's method)
     kvs::Vector<int> m_pivots; ///< pivot vector
-
-protected:
-
     static size_t m_max_iterations; ///< maximum number of iterations
 
 public:
 
-    LUDecomposer( void );
-
-    LUDecomposer( const kvs::Matrix33<T>& m );
-
-    LUDecomposer( const kvs::Matrix44<T>& m );
-
-    LUDecomposer( const kvs::Matrix<T>& m );
+    static void SetMaxIterations( const size_t max_iterations );
 
 public:
+
+    LUDecomposer();
+    LUDecomposer( const kvs::Matrix33<T>& m );
+    LUDecomposer( const kvs::Matrix44<T>& m );
+    LUDecomposer( const kvs::Matrix<T>& m );
 
     LUDecomposer& operator = ( const LUDecomposer& l );
 
-public:
-
-    const kvs::Matrix<T>& L( void ) const;
-
-    const kvs::Matrix<T>& U( void ) const;
-
-    const kvs::Matrix<T>& LU( void ) const;
-
-    const kvs::Vector<int>& pivots( void ) const;
-
-public:
+    const kvs::Matrix<T>& L() const;
+    const kvs::Matrix<T>& U() const;
+    const kvs::Matrix<T>& LU() const;
+    const kvs::Vector<int>& pivots() const;
 
     void setMatrix( const kvs::Matrix33<T>& m );
-
     void setMatrix( const kvs::Matrix44<T>& m );
-
     void setMatrix( const kvs::Matrix<T>& m );
-
-    void decompose( void );
-
-public:
-
-    static void SetMaxIterations( const size_t max_iterations );
+    void decompose();
 };
 
 } // end of namespace kvs

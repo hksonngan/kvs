@@ -19,21 +19,21 @@ namespace
 {
 
 template <typename T>
-inline const bool IsSymmetricMatrix( const kvs::Matrix<T>& m )
+inline bool IsSymmetricMatrix( const kvs::Matrix<T>& m )
 {
-    const size_t nrows = m.nrows();
-    const size_t ncolumns = m.ncolumns();
-    if ( nrows != ncolumns ) return( false );
+    const size_t nrows = m.rowSize();
+    const size_t ncolumns = m.columnSize();
+    if ( nrows != ncolumns ) return false;
 
     for ( size_t i = 0; i < nrows; i++ )
     {
         for( size_t j = 0; j < ncolumns; j++ )
         {
-            if ( !kvs::Math::Equal( m[i][j], m[j][i] ) ) return( false );
+            if ( !kvs::Math::Equal( m[i][j], m[j][i] ) ) return false;
         }
     }
 
-    return( true );
+    return true;
 }
 
 template <typename T>
@@ -42,11 +42,11 @@ inline const kvs::Vector<T> Normalize( const kvs::Vector<T>& vec )
     kvs::Vector<T> result( vec );
     result.normalize();
 
-    return( result );
+    return result;
 }
 
 template <typename T>
-inline const T HouseholderTransform( kvs::Vector<T>& vec )
+inline T HouseholderTransform( kvs::Vector<T>& vec )
 {
     T ret = static_cast<T>( vec.length() );
 
@@ -62,18 +62,18 @@ inline const T HouseholderTransform( kvs::Vector<T>& vec )
         }
     }
 
-    return( -ret );
+    return -ret;
 }
 
 template <typename T>
 inline void Tridiagonalize( kvs::Matrix<T>& m, kvs::Vector<T>* d, kvs::Vector<T>* e )
 {
     KVS_ASSERT( ::IsSymmetricMatrix<T>( m ) );
-    KVS_ASSERT( m.nrows() >= 3 );
-    KVS_ASSERT( d->size() == m.nrows() );
-    KVS_ASSERT( e->size() == m.nrows() );
+    KVS_ASSERT( m.rowSize() >= 3 );
+    KVS_ASSERT( d->size() == m.rowSize() );
+    KVS_ASSERT( e->size() == m.rowSize() );
 
-    const int dim = static_cast<int>(m.nrows());
+    const int dim = static_cast<int>(m.rowSize());
     for ( int k = 0; k < dim - 2; k++ )
     {
         // Copy the k-th row vector of the matrix to 'row_vec' vector.
@@ -179,13 +179,37 @@ namespace kvs
 template <typename T> double EigenDecomposer<T>::m_max_tolerance = 1.0e-10; ///< tolerance
 template <typename T> size_t EigenDecomposer<T>::m_max_iterations = 1000; ///< maximum number of iterations
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets a maximum tolerance value
+ *  @param  max_tolerance [in] maximum tolerance value
+ */
+/*===========================================================================*/
+template <typename T>
+void EigenDecomposer<T>::SetMaxTolerance( const double max_tolerance )
+{
+    m_max_tolerance = max_tolerance;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a maximum number of iterations.
+ *  @param  max_iterations [in] maximum number of iterations
+ */
+/*===========================================================================*/
+template <typename T>
+void EigenDecomposer<T>::SetMaxIterations( const size_t max_iterations )
+{
+    m_max_iterations = max_iterations;
+}
+
  /*===========================================================================*/
  /**
   *  @brief  Constructs a new eigen-value deompositor class.
   */
  /*===========================================================================*/
 template <typename T>
-EigenDecomposer<T>::EigenDecomposer( void )
+EigenDecomposer<T>::EigenDecomposer()
 {
 }
 
@@ -238,9 +262,9 @@ EigenDecomposer<T>::EigenDecomposer( const kvs::Matrix<T>& m, MatrixType type )
  */
 /*===========================================================================*/
 template <typename T>
-const kvs::Matrix<T>& EigenDecomposer<T>::eigenVectors( void ) const
+const kvs::Matrix<T>& EigenDecomposer<T>::eigenVectors() const
 {
-    return( m_eigen_vectors );
+    return m_eigen_vectors;
 }
 
 /*===========================================================================*/
@@ -253,7 +277,7 @@ const kvs::Matrix<T>& EigenDecomposer<T>::eigenVectors( void ) const
 template <typename T>
 const kvs::Vector<T>& EigenDecomposer<T>::eigenVector( const size_t index ) const
 {
-    return( m_eigen_vectors[index] );
+    return m_eigen_vectors[index];
 }
 
 /*===========================================================================*/
@@ -263,9 +287,9 @@ const kvs::Vector<T>& EigenDecomposer<T>::eigenVector( const size_t index ) cons
  */
 /*===========================================================================*/
 template <typename T>
-const kvs::Vector<T>& EigenDecomposer<T>::eigenValues( void ) const
+const kvs::Vector<T>& EigenDecomposer<T>::eigenValues() const
 {
-    return( m_eigen_values );
+    return m_eigen_values;
 }
 
 /*===========================================================================*/
@@ -276,9 +300,9 @@ const kvs::Vector<T>& EigenDecomposer<T>::eigenValues( void ) const
  */
 /*===========================================================================*/
 template <typename T>
-const T EigenDecomposer<T>::eigenValue( const size_t index ) const
+T EigenDecomposer<T>::eigenValue( const size_t index ) const
 {
-    return( m_eigen_values[index] );
+    return m_eigen_values[index];
 }
 
 /*===========================================================================*/
@@ -336,7 +360,7 @@ template <typename T>
 void EigenDecomposer<T>::setMatrix( const kvs::Matrix<T>& m, MatrixType type )
 {
     m_matrix_type = type;
-    m_eigen_values.setSize( m.nrows() );
+    m_eigen_values.setSize( m.rowSize() );
     m_eigen_vectors = m;
 }
 
@@ -346,7 +370,7 @@ void EigenDecomposer<T>::setMatrix( const kvs::Matrix<T>& m, MatrixType type )
  */
 /*===========================================================================*/
 template <typename T>
-void EigenDecomposer<T>::decompose( void )
+void EigenDecomposer<T>::decompose()
 {
     switch( m_matrix_type )
     {
@@ -375,11 +399,11 @@ void EigenDecomposer<T>::decompose( void )
  */
 /*===========================================================================*/
 template <typename T>
-const bool EigenDecomposer<T>::calculate_by_power( void )
+bool EigenDecomposer<T>::calculate_by_power()
 {
-    KVS_ASSERT( m_eigen_vectors.nrows() == m_eigen_vectors.ncolumns() );
+    KVS_ASSERT( m_eigen_vectors.rowSize() == m_eigen_vectors.columnSize() );
 
-    const size_t dim = m_eigen_vectors.nrows();
+    const size_t dim = m_eigen_vectors.rowSize();
     kvs::Matrix<T> eigen_vectors( dim, dim );
     kvs::Matrix<T> m( m_eigen_vectors );
 
@@ -477,16 +501,21 @@ const bool EigenDecomposer<T>::calculate_by_power( void )
 
     m_eigen_vectors = eigen_vectors;
 
-    return( true );
+    return true;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Calculate eigen values and vectors by using QR method.
+ */
+/*===========================================================================*/
 template <typename T>
-const bool EigenDecomposer<T>::calculate_by_qr( void )
+bool EigenDecomposer<T>::calculate_by_qr()
 {
     KVS_ASSERT( ::IsSymmetricMatrix<T>( m_eigen_vectors ) );
-    KVS_ASSERT( m_eigen_vectors.nrows() >= 3 );
+    KVS_ASSERT( m_eigen_vectors.rowSize() >= 3 );
 
-    const size_t dim = m_eigen_vectors.nrows();
+    const size_t dim = m_eigen_vectors.rowSize();
 
     // Tridiagonalize the matrix.
     kvs::Vector<T> e( dim );
@@ -505,7 +534,7 @@ const bool EigenDecomposer<T>::calculate_by_qr( void )
         size_t iter = 0;
         do
         {
-            if( ++iter > m_max_iterations ) return( false );
+            if( ++iter > m_max_iterations ) return false;
 
             T w = ( m_eigen_values[h-1] - m_eigen_values[h] ) / T(2);
             T t = e[h] * e[h];
@@ -587,19 +616,7 @@ const bool EigenDecomposer<T>::calculate_by_qr( void )
         }
     }
 
-    return( true );
-}
-
-template <typename T>
-void EigenDecomposer<T>::SetMaxTolerance( const double max_tolerance )
-{
-    m_max_tolerance = max_tolerance;
-}
-
-template <typename T>
-void EigenDecomposer<T>::SetMaxIterations( const size_t max_iterations )
-{
-    m_max_iterations = max_iterations;
+    return true;
 }
 
 // Template instantiation.

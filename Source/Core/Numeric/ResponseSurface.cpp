@@ -4,7 +4,7 @@
  *  @brief  Response surface method class
  *
  *  @author Yukio YASUHARA
- *  @date   2010/08/21 13:40:19
+ *  @date   2012/11/29 10:56:30
  */
 /*----------------------------------------------------------------------------
  *
@@ -28,7 +28,7 @@ namespace
  *  @return number of terms
  */
 /*===========================================================================*/
-const size_t GetNumberOfTerms( const size_t nvariables )
+size_t GetNumberOfTerms( const size_t nvariables )
 {
     return( 1 + 2 * nvariables + ( nvariables - 1 ) * nvariables / 2 );
 }
@@ -41,7 +41,7 @@ const size_t GetNumberOfTerms( const size_t nvariables )
  */
 /*===========================================================================*/
 template <typename T>
-const T GetSumOfElements( const kvs::Vector<T>& v )
+T GetSumOfElements( const kvs::Vector<T>& v )
 {
     T sum = 0;
     const size_t nelements = v.size();
@@ -62,7 +62,7 @@ namespace kvs
  */
 /*===========================================================================*/
 template <typename T>
-ResponseSurface<T>::ResponseSurface( void ):
+ResponseSurface<T>::ResponseSurface():
     m_npoints( 0 ),
     m_nvariables( 0 ),
     m_nterms( 0 ),
@@ -92,7 +92,7 @@ ResponseSurface<T>::ResponseSurface(
  */
 /*===========================================================================*/
 template <typename T>
-ResponseSurface<T>::~ResponseSurface( void )
+ResponseSurface<T>::~ResponseSurface()
 {
 }
 
@@ -157,7 +157,7 @@ const kvs::Vector<T>& ResponseSurface<T>::improve( const T threshold )
  */
 /*===========================================================================*/
 template <typename T>
-const size_t ResponseSurface<T>::npoints( void ) const
+size_t ResponseSurface<T>::numberOfPoints() const
 {
     return( m_npoints );
 }
@@ -169,7 +169,7 @@ const size_t ResponseSurface<T>::npoints( void ) const
  */
 /*===========================================================================*/
 template <typename T>
-const size_t ResponseSurface<T>::nvariables( void ) const
+size_t ResponseSurface<T>::numberOfVariables() const
 {
     return( m_nvariables );
 }
@@ -181,7 +181,7 @@ const size_t ResponseSurface<T>::nvariables( void ) const
  */
 /*===========================================================================*/
 template <typename T>
-const T ResponseSurface<T>::Rsquare( void ) const
+T ResponseSurface<T>::Rsquare() const
 {
     return( m_r_square );
 }
@@ -193,7 +193,7 @@ const T ResponseSurface<T>::Rsquare( void ) const
  */
 /*===========================================================================*/
 template <typename T>
-const T ResponseSurface<T>::adjustedRsquare( void ) const
+T ResponseSurface<T>::adjustedRsquare() const
 {
     return( m_adjusted_r_square );
 }
@@ -205,7 +205,7 @@ const T ResponseSurface<T>::adjustedRsquare( void ) const
  */
 /*===========================================================================*/
 template <typename T>
-const kvs::Vector<T>& ResponseSurface<T>::Tvalues( void ) const
+const kvs::Vector<T>& ResponseSurface<T>::Tvalues() const
 {
     return( m_t_values );
 }
@@ -216,7 +216,7 @@ const kvs::Vector<T>& ResponseSurface<T>::Tvalues( void ) const
  */
 /*===========================================================================*/
 template <typename T>
-void ResponseSurface<T>::solve_regression_coefficients( void )
+void ResponseSurface<T>::solve_regression_coefficients()
 {
     this->update_coefficient_matrix();
 
@@ -306,7 +306,7 @@ void ResponseSurface<T>::create_coefficient_matrix(
  */
 /*===========================================================================*/
 template <typename T>
-void ResponseSurface<T>::update_coefficient_matrix( void )
+void ResponseSurface<T>::update_coefficient_matrix()
 {
     const size_t nrows = m_coefficient_matrix.nrows();
     const size_t ncolumns = m_coefficient_matrix.ncolumns();

@@ -132,17 +132,11 @@ public:
         return os << rhs[0] << " " << rhs[1] << " " << rhs[2];
     }
 
+#if 1 // KVS_ENABLE_DEPRECATED
 public:
-    // Will be removed.
-    explicit Vector3( const T x )
-    {
-        *this = All( x );
-    }
-
-    void set( const T x )
-    {
-        *this = All( x );
-    }
+    explicit Vector3( const T x ) { *this = All( x ); }
+    void set( const T x ) { *this = All( x ); }
+#endif
 };
 
 /*==========================================================================*/

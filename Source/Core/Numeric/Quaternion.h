@@ -16,7 +16,6 @@
 
 #include <iostream>
 #include <iomanip>
-#include <kvs/ClassName>
 #include <kvs/Math>
 #include <kvs/Assert>
 #include <kvs/Vector3>
@@ -35,9 +34,7 @@ namespace kvs
 template <typename T>
 class Quaternion
 {
-    kvsClassName_without_virtual( kvs::Quaternion );
-
-protected:
+private:
 
     /* Quaternion: Q
        Q = w + xi + yj + zk
@@ -50,92 +47,54 @@ protected:
 
 public:
 
-    Quaternion<T>( void );
-
+    Quaternion<T>();
     Quaternion<T>( T x, T y, T z, T w );
-
     Quaternion<T>( const Quaternion<T>& q );
-
     Quaternion<T>( const Vector3<T>& axis, T angle );
-
     Quaternion<T>( const Matrix33<T>& mat );
-
-    //Quaternion<T>( const Matrix44<T>& mat );
-
     explicit Quaternion<T>( const T elements[4] );
 
 public:
 
     void set( T x, T y, T z, T w );
 
-    T& x( void );
+    T& x();
+    T& y();
+    T& z();
+    T& w();
+    const T& x() const;
+    const T& y() const;
+    const T& z() const;
+    const T& w() const;
 
-    const T& x( void ) const;
-
-    T& y( void );
-
-    const T& y( void ) const;
-
-    T& z( void );
-
-    const T& z( void ) const;
-
-    T& w( void );
-
-    const T& w( void ) const;
-
-public:
-
-    Quaternion<T>& zero( void );
-
-    const Quaternion<T> zero( void ) const;
-
-    Quaternion<T>& identity( void );
-
-    const Quaternion<T> identity( void ) const;
-
-    Quaternion<T>& conjunction( void );
-
-    const Quaternion<T> conjunction( void ) const;
-
-    Quaternion<T>& normalize( void );
-
-    const Quaternion<T> normalize( void ) const;
-
-    Quaternion<T>& inverse( void );
-
-    const Quaternion<T> inverse( void ) const;
-
-    Quaternion<T>& log( void );
-
-    const Quaternion<T> log( void ) const;
-
-    Quaternion<T>& exp( void );
-
-    const Quaternion<T> exp( void ) const;
-
-    const double dot( const Quaternion<T>& q ) const;
-
-    const double length( void ) const;
-
-    const double length2( void ) const;
+    Quaternion<T>& zero();
+    const Quaternion<T> zero() const;
+    Quaternion<T>& identity();
+    const Quaternion<T> identity() const;
+    Quaternion<T>& conjunction();
+    const Quaternion<T> conjunction() const;
+    Quaternion<T>& normalize();
+    const Quaternion<T> normalize() const;
+    Quaternion<T>& inverse();
+    const Quaternion<T> inverse() const;
+    Quaternion<T>& log();
+    const Quaternion<T> log() const;
+    Quaternion<T>& exp();
+    const Quaternion<T> exp() const;
+    double dot( const Quaternion<T>& q ) const;
+    double length() const;
+    double length2() const;
 
 public:
 
     T& operator [] ( size_t index );
-
     const T operator [] ( size_t index ) const;
 
     Quaternion<T>& operator = ( const Quaternion<T>& q );
-
     Quaternion<T>& operator += ( const Quaternion<T>& q );
-
     Quaternion<T>& operator -= ( const Quaternion<T>& q );
-
     Quaternion<T>& operator *= ( T a );
-
     Quaternion<T>& operator /= ( T a );
-
     Quaternion<T>& operator *= ( const Quaternion<T>& q );
 
 public:
@@ -202,12 +161,9 @@ public:
 
 public:
 
-    const kvs::Matrix33<T> toMatrix( void ) const;
-
+    const kvs::Matrix33<T> toMatrix() const;
     void toMatrix( kvs::Matrix33<T>& m ) const;
-
     void toMatrix( kvs::Matrix44<T>& m ) const;
-
     void toMatrix( T m[16] ) const;
 
 public:
@@ -234,16 +190,13 @@ public:
 
 public:
 
-    Vector3<T> axis( void );
-
-    T angle( void );
+    Vector3<T> axis();
+    T angle();
 
 public:
 
     static Vector3<T> rotate( const Vector3<T>& pos, const Vector3<T>& axis, T rad );
-
     static Vector3<T> rotate( const Vector3<T>& pos, const Quaternion<T>& q );
-
     static Quaternion<T> rotationQuaternion( Vector3<T> v0, Vector3<T> v1 );
 
 public:
@@ -284,7 +237,7 @@ public:
 };
 
 template<typename T>
-Quaternion<T>::Quaternion( void )
+Quaternion<T>::Quaternion()
 {
     m_elements[0] = T(0);
     m_elements[1] = T(0);
@@ -371,47 +324,6 @@ Quaternion<T>::Quaternion( const kvs::Matrix33<T>& m )
     m_elements[3] = w;
 }
 
-//template<typename T>
-//Quaternion<T>::Quaternion( const kvs::Matrix44<T>& m )
-//{
-//    double trace = double( m.trace() );
-//
-//    T x, y, z, w;
-//    if( trace >= 1.0 )
-//    {
-//        double sqrt_trace = std::sqrt( trace );
-//
-//        x = T( ( m[1][2] - m[2][1] ) * 0.5 / sqrt_trace );
-//        y = T( ( m[2][0] - m[0][2] ) * 0.5 / sqrt_trace );
-//        z = T( ( m[0][1] - m[1][0] ) * 0.5 / sqrt_trace );
-//        w = T( sqrt_trace * 0.5 );
-//    }
-//    else
-//    {
-//        if( m[0][0] > m[1][1] && m[0][0] > m[2][2] )
-//        {
-//            x = T( std::sqrt( double( m[0][0] - m[1][1] - m[2][2] ) + 1.0 ) * 0.5 );
-//            y = T( ( m[0][1] + m[1][0] ) * 0.25 / x );
-//            z = T( ( m[0][2] + m[2][0] ) * 0.25 / x );
-//            w = T( ( m[1][2] + m[2][1] ) * 0.25 / x );
-//        }
-//        else if( m[1][1] > m[2][2] )
-//        {
-//            y = T( std::sqrt( double( m[1][1] - m[2][2] - m[0][0] ) + 1.0 ) * 0.5 );
-//            z = T( ( m[1][2] + m[2][1] ) * 0.25 / y );
-//            x = T( ( m[1][0] + m[0][1] ) * 0.25 / y );
-//            w = T( ( m[2][0] + m[0][2] ) * 0.25 / y );
-//        }
-//        else
-//        {
-//            z = T( std::sqrt( double( m[2][2] - m[0][0] - m[1][1] ) + 1.0 ) * 0.5 );
-//            x = T( ( m[2][0] + m[0][2] ) * 0.25 / z );
-//            y = T( ( m[2][1] + m[1][2] ) * 0.25 / z );
-//            w = T( ( m[0][1] + m[1][0] ) * 0.25 / z );
-//        }
-//    }
-//}
-
 template<typename T>
 Quaternion<T>::Quaternion( const T elements[4] )
 {
@@ -431,55 +343,55 @@ void Quaternion<T>::set( T x, T y, T z, T w )
 }
 
 template<typename T>
-T& Quaternion<T>::x( void )
+T& Quaternion<T>::x()
 {
     return( m_elements[0] );
 }
 
 template<typename T>
-const T& Quaternion<T>::x( void ) const
+const T& Quaternion<T>::x() const
 {
     return( m_elements[0] );
 }
 
 template<typename T>
-T& Quaternion<T>::y( void )
+T& Quaternion<T>::y()
 {
     return( m_elements[1] );
 }
 
 template<typename T>
-const T& Quaternion<T>::y( void ) const
+const T& Quaternion<T>::y() const
 {
     return( m_elements[1] );
 }
 
 template<typename T>
-T& Quaternion<T>::z( void )
+T& Quaternion<T>::z()
 {
     return( m_elements[2] );
 }
 
 template<typename T>
-const T& Quaternion<T>::z( void ) const
+const T& Quaternion<T>::z() const
 {
     return( m_elements[2] );
 }
 
 template<typename T>
-T& Quaternion<T>::w( void )
+T& Quaternion<T>::w()
 {
     return( m_elements[3] );
 }
 
 template<typename T>
-const T& Quaternion<T>::w( void ) const
+const T& Quaternion<T>::w() const
 {
     return( m_elements[3] );
 }
 
 template<typename T>
-Quaternion<T>& Quaternion<T>::zero( void )
+Quaternion<T>& Quaternion<T>::zero()
 {
     m_elements[0] = T(0);
     m_elements[1] = T(0);
@@ -490,14 +402,14 @@ Quaternion<T>& Quaternion<T>::zero( void )
 }
 
 template<typename T>
-const Quaternion<T> Quaternion<T>::zero( void ) const
+const Quaternion<T> Quaternion<T>::zero() const
 {
     Quaternion<T> result;
     return( result.zero() );
 }
 
 template<typename T>
-Quaternion<T>& Quaternion<T>::identity( void )
+Quaternion<T>& Quaternion<T>::identity()
 {
     m_elements[0] = T(0);
     m_elements[1] = T(0);
@@ -508,14 +420,14 @@ Quaternion<T>& Quaternion<T>::identity( void )
 }
 
 template<typename T>
-const Quaternion<T> Quaternion<T>::identity( void ) const
+const Quaternion<T> Quaternion<T>::identity() const
 {
     Quaternion<T> result;
     return( result.identity() );
 }
 
 template<typename T>
-Quaternion<T>& Quaternion<T>::conjunction( void )
+Quaternion<T>& Quaternion<T>::conjunction()
 {
     m_elements[0] *= T(-1);
     m_elements[1] *= T(-1);
@@ -525,14 +437,14 @@ Quaternion<T>& Quaternion<T>::conjunction( void )
 }
 
 template<typename T>
-const Quaternion<T> Quaternion<T>::conjunction( void ) const
+const Quaternion<T> Quaternion<T>::conjunction() const
 {
     Quaternion<T> result( *this );
     return( result.conjunction() );
 }
 
 template<typename T>
-Quaternion<T>& Quaternion<T>::normalize( void )
+Quaternion<T>& Quaternion<T>::normalize()
 {
     T n = static_cast<T>( this->length() );
     n = n > T(0) ? T(1) / n : T(0);
@@ -546,14 +458,14 @@ Quaternion<T>& Quaternion<T>::normalize( void )
 }
 
 template<typename T>
-const Quaternion<T> Quaternion<T>::normalize( void ) const
+const Quaternion<T> Quaternion<T>::normalize() const
 {
     Quaternion<T> result( *this );
     return( result.normalize() );
 }
 
 template<typename T>
-Quaternion<T>& Quaternion<T>::inverse( void )
+Quaternion<T>& Quaternion<T>::inverse()
 {
     T n = static_cast<T>( this->length2() );
 
@@ -569,14 +481,14 @@ Quaternion<T>& Quaternion<T>::inverse( void )
 }
 
 template<typename T>
-const Quaternion<T> Quaternion<T>::inverse( void ) const
+const Quaternion<T> Quaternion<T>::inverse() const
 {
     Quaternion<T> result( *this );
     return( result.inverse() );
 }
 
 template<typename T>
-Quaternion<T>& Quaternion<T>::log( void )
+Quaternion<T>& Quaternion<T>::log()
 {
     double theta     = std::acos( double( m_elements[3] ) );
     double sin_theta = std::sin( theta );
@@ -600,14 +512,14 @@ Quaternion<T>& Quaternion<T>::log( void )
 }
 
 template<typename T>
-const Quaternion<T> Quaternion<T>::log( void ) const
+const Quaternion<T> Quaternion<T>::log() const
 {
     Quaternion<T> result( *this );
     return( result.log() );
 }
 
 template<typename T>
-Quaternion<T>& Quaternion<T>::exp( void )
+Quaternion<T>& Quaternion<T>::exp()
 {
     double theta2 = 0.0;
     theta2 += m_elements[0] * m_elements[0];
@@ -637,14 +549,14 @@ Quaternion<T>& Quaternion<T>::exp( void )
 }
 
 template<typename T>
-const Quaternion<T> Quaternion<T>::exp( void ) const
+const Quaternion<T> Quaternion<T>::exp() const
 {
     Quaternion<T> result( *this );
     return( result.exp() );
 }
 
 template<typename T>
-const double Quaternion<T>::dot( const Quaternion<T>& q ) const
+double Quaternion<T>::dot( const Quaternion<T>& q ) const
 {
     double result = 0.0;
     result += this->x() * q.x();
@@ -656,13 +568,13 @@ const double Quaternion<T>::dot( const Quaternion<T>& q ) const
 }
 
 template<typename T>
-const double Quaternion<T>::length( void ) const
+double Quaternion<T>::length() const
 {
     return( std::sqrt( this->length2() ) );
 }
 
 template<typename T>
-const double Quaternion<T>::length2( void ) const
+double Quaternion<T>::length2() const
 {
     double result = 0.0;
     result += m_elements[0] * m_elements[0];
@@ -762,7 +674,7 @@ Quaternion<T>& Quaternion<T>::operator *= ( const Quaternion<T>& q )
 }
 
 template<typename T>
-const kvs::Matrix33<T> Quaternion<T>::toMatrix( void ) const
+const kvs::Matrix33<T> Quaternion<T>::toMatrix() const
 {
     T length_2 = static_cast<T>( this->length2() );
     T s = ( length_2 > T(0) ) ? T(2) / length_2 : T(0);
@@ -897,7 +809,7 @@ void Quaternion<T>::toMatrix( T m[16] ) const
 }
 
 template<typename T>
-kvs::Vector3<T> Quaternion<T>::axis( void )
+kvs::Vector3<T> Quaternion<T>::axis()
 {
     T s = T( std::sin( double( this->angle() ) * 0.5 ) );
 
@@ -908,7 +820,7 @@ kvs::Vector3<T> Quaternion<T>::axis( void )
 }
 
 template<typename T>
-T Quaternion<T>::angle( void )
+T Quaternion<T>::angle()
 {
     return( T( std::acos( double( this->w() ) ) * 2.0 ) );
 }

@@ -1,7 +1,6 @@
 /*****************************************************************************/
 /**
  *  @file   BoxMuller.h
- *  @brief  
  *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
@@ -23,7 +22,6 @@
 #ifndef KVS__BOX_MULLER_H_INCLUDE
 #define KVS__BOX_MULLER_H_INCLUDE
 
-#include <kvs/ClassName>
 #include <kvs/MersenneTwister>
 #include <cmath>
 
@@ -38,35 +36,21 @@ namespace kvs
 /*==========================================================================*/
 class BoxMuller
 {
-    kvsClassName_without_virtual( kvs::BoxMuller );
-
 public:
 
-    BoxMuller( void ) : m_uniformRandom() {;}
+    BoxMuller(): m_uniform_random() {}
+    explicit BoxMuller( const unsigned long seed ): m_uniform_random( seed ) {}
 
-    explicit BoxMuller( const unsigned long seed )
-      : m_uniformRandom( seed ) {;}
+    double rand();
+    double rand( const double mu , const double sigma );
+    double randHQ( unsigned int N );
+    double randHQ( unsigned int N, const double mu, const double sigma );
 
-public:
-
-    const double rand( void );
-
-    const double rand( const double mu , const double sigma );
-
-    const double randHQ( unsigned int N );
-
-    const double randHQ( unsigned int N,
-                         const double mu ,
-                         const double sigma ) ;
-
-public:
-
-    const double operator ()( void );
+    double operator ()();
 
 private:
 
-    kvs::MersenneTwister m_uniformRandom ; ///< Uniform random number generator
-
+    kvs::MersenneTwister m_uniform_random ; ///< Uniform random number generator
 };
 
 /*===========================================================================*/
@@ -75,21 +59,21 @@ private:
  *  @return random number
  */
 /*===========================================================================*/
-inline const double BoxMuller::rand( void )
+inline double BoxMuller::rand()
 {
-  // local variables
-  double x1, x2, y ;
+    // local variables
+    double x1, x2, y ;
 
-  // Generate two uniform random numbers x1, x2 (0 <= xi < 1)
-  x1 = m_uniformRandom.rand();
-  x2 = m_uniformRandom.rand();
+    // Generate two uniform random numbers x1, x2 (0 <= xi < 1)
+    x1 = m_uniform_random.rand();
+    x2 = m_uniform_random.rand();
 
-  // Generate a Gaussian random number y of N(0,1):
-  //  "cos" can be replaced with "sin".
-  y = std::sqrt( -2.0 * std::log (x1) ) * std::cos ( 2.0 * 3.14159265358979323846 * x2 ) ;
+    // Generate a Gaussian random number y of N(0,1):
+    //  "cos" can be replaced with "sin".
+    y = std::sqrt( -2.0 * std::log (x1) ) * std::cos ( 2.0 * 3.14159265358979323846 * x2 ) ;
 
-  // result
-  return y ;
+    // result
+    return y ;
 }
 
 /*===========================================================================*/
@@ -100,9 +84,9 @@ inline const double BoxMuller::rand( void )
  *  @return random number
  */
 /*===========================================================================*/
-inline const double BoxMuller::rand( const double mu , const double sigma )
+inline double BoxMuller::rand( const double mu , const double sigma )
 {
-    return( this->rand() * sigma + mu );
+    return this->rand() * sigma + mu;
 }
 
 /*===========================================================================*/
@@ -119,21 +103,21 @@ inline const double BoxMuller::rand( const double mu , const double sigma )
  *  Note: This function is N times slower than rand().
  */
 /*===========================================================================*/
-inline const double BoxMuller::randHQ( unsigned int N )
+inline double BoxMuller::randHQ( unsigned int N )
 {
-  // square root of N
+    // square root of N
     double N_sqrt = std::sqrt( (double)N );
 
-  // Calc an average of N Gaussian random numbers y defined by
-  //  y = (y0 + y1 + y2 + ... + y_{N-1} ) / sqrt(N)
-  double y = 0.0 ;
-  for ( int i = 0; i < (int)N ; i++ ) {
-    y += rand();
-  }
-  y /= N_sqrt ;
+    // Calc an average of N Gaussian random numbers y defined by
+    //  y = (y0 + y1 + y2 + ... + y_{N-1} ) / sqrt(N)
+    double y = 0.0 ;
+    for ( int i = 0; i < (int)N ; i++ ) {
+        y += rand();
+    }
+    y /= N_sqrt ;
 
-  // result
-  return y ;
+    // result
+    return y ;
 }
 
 /*===========================================================================*/
@@ -147,11 +131,9 @@ inline const double BoxMuller::randHQ( unsigned int N )
  *  Note: This function is N times slower than rand( sigma, mu ).
  */
 /*===========================================================================*/
-inline const double BoxMuller::randHQ( unsigned int N,
-                                       const double mu ,
-                                       const double sigma )
+inline double BoxMuller::randHQ( unsigned int N, const double mu, const double sigma )
 {
-  return( this->randHQ(N) * sigma + mu );
+    return this->randHQ(N) * sigma + mu;
 }
 
 /*===========================================================================*/
@@ -160,11 +142,10 @@ inline const double BoxMuller::randHQ( unsigned int N,
  *  @return random number
  */
 /*===========================================================================*/
-inline const double BoxMuller::operator ()( void )
+inline double BoxMuller::operator ()()
 {
-    return( this->rand() );
+    return this->rand();
 }
-
 
 } // end of namespace kvs
 

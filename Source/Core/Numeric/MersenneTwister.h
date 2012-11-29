@@ -17,8 +17,6 @@
 #include <ctime>
 #include <climits>
 
-#include <kvs/ClassName>
-
 #ifdef _MSC_VER
 #pragma warning (disable : 4146)
 #endif
@@ -34,110 +32,75 @@ namespace kvs
 /*==========================================================================*/
 class MersenneTwister
 {
-    kvsClassName_without_virtual( kvs::MersenneTwister );
-
 private:
 
     enum { N = 624 };
     enum { M = 397 }; // period parameter
-
-private:
-
-    unsigned long  m_state[N]; ///< internal state
-    unsigned long* m_next;     ///< next value to get from state
-    int            m_left;     ///< number of values left before reload needed
+    unsigned long m_state[N]; ///< internal state
+    unsigned long* m_next; ///< next value to get from state
+    int m_left; ///< number of values left before reload needed
 
 public:
 
-    MersenneTwister( void );
-
+    MersenneTwister();
     explicit MersenneTwister( const unsigned long seed );
+    explicit MersenneTwister( const unsigned long* const seeds, const unsigned long length = N );
 
-    explicit MersenneTwister(
-        const unsigned long* const seeds,
-        const unsigned long        length = N );
-
-public:
-
-    void setSeed( void );
-
+    void setSeed();
     void setSeed( const unsigned long seed );
+    void setSeed( const unsigned long* const seeds, const unsigned long length = N );
 
-    void setSeed(
-        const unsigned long* const seeds,
-        const unsigned long        length = N );
+    double rand();
+    double rand( const double n );
+    double rand53();
+    unsigned long randInteger();
+    unsigned long randInteger( const unsigned long n );
 
-public:
-
-    const double rand( void );
-
-    const double rand( const double n );
-
-    const double rand53( void );
-
-    const unsigned long randInteger( void );
-
-    const unsigned long randInteger( const unsigned long n );
-
-public:
-
-    const double operator ()( void );
+    double operator ()( void );
 
 private:
 
     void initialize( const unsigned long seed );
-
     void reload( void );
+    unsigned long high_bit( const unsigned long u ) const;
+    unsigned long low_bit( const unsigned long u ) const;
+    unsigned long low_bits( const unsigned long u ) const;
+    unsigned long mix_bits( const unsigned long u, const unsigned long v ) const;
+    unsigned long twist( const unsigned long m, const unsigned long s0, const unsigned long s1 ) const;
 
-    const unsigned long high_bit( const unsigned long u ) const;
-
-    const unsigned long low_bit( const unsigned long u ) const;
-
-    const unsigned long low_bits( const unsigned long u ) const;
-
-    const unsigned long mix_bits( const unsigned long u, const unsigned long v ) const;
-
-    const unsigned long twist(
-        const unsigned long m,
-        const unsigned long s0,
-        const unsigned long s1 ) const;
-
-    static const unsigned long hash( std::time_t t, std::clock_t c );
+    static unsigned long hash( std::time_t t, std::clock_t c );
 };
 
 /*==========================================================================*/
 /**
- *  .
- *
- *  @return TODO
+ *  @brief  Returns uniform random number.
+ *  @return uniform random number
  */
 /*==========================================================================*/
-inline const double MersenneTwister::rand( void )
+inline double MersenneTwister::rand()
 {
     return( double ( this->randInteger() ) * ( 1.0 / 4294967295.0 ) );
 }
 
 /*==========================================================================*/
 /**
- *  .
- *
- *  @param n TODO
- *  @return TODO
+ *  @brief  Returns uniform random number.
+ *  @param  n [in] maximum value
+ *  @return uniform random number
  */
 /*==========================================================================*/
-inline const double MersenneTwister::rand( const double n )
+inline double MersenneTwister::rand( const double n )
 {
     return( this->rand() * n );
 }
 
 /*==========================================================================*/
 /**
- *  .
- *
- *  @return TODO
+ *  @brief  Returns uniform random number (53-bit precision).
+ *  @return uniform random number
  */
 /*==========================================================================*/
-inline const double MersenneTwister::rand53( void )
+inline double MersenneTwister::rand53()
 {
     // Generate a uniform random number (53 bits precision)
     // Based on code by Isaku Wasa.
@@ -149,12 +112,11 @@ inline const double MersenneTwister::rand53( void )
 
 /*==========================================================================*/
 /**
- *  .
- *
- *  @return TODO
+ *  @brief  Returns uniform random number (32-bit integer).
+ *  @return uniform random number
  */
 /*==========================================================================*/
-inline const unsigned long MersenneTwister::randInteger( void )
+inline unsigned long MersenneTwister::randInteger()
 {
     // Pull a 32-bit integer from the generator state
     // Every other access function simply transforms
@@ -174,13 +136,12 @@ inline const unsigned long MersenneTwister::randInteger( void )
 
 /*==========================================================================*/
 /**
- *  .
- *
- *  @param n TODO
- *  @return TODO
+ *  @brief  Returns uniform random number.
+ *  @param  n [in] maximum number
+ *  @return uniform random number
  */
 /*==========================================================================*/
-inline const unsigned long MersenneTwister::randInteger( const unsigned long n )
+inline unsigned long MersenneTwister::randInteger( const unsigned long n )
 {
     // Find which bits are used in n
     // Optimized by Magnus Jonsson (magnus@smartelectronix.com)
@@ -204,24 +165,21 @@ inline const unsigned long MersenneTwister::randInteger( const unsigned long n )
 
 /*==========================================================================*/
 /**
- *  .
- *
- *  @return TODO
+ *  @brief  Returns uniform random number.
+ *  @return uniform random number
  */
 /*==========================================================================*/
-inline const double MersenneTwister::operator ()( void )
+inline double MersenneTwister::operator ()()
 {
     return( this->rand() );
 }
 
 /*==========================================================================*/
 /**
- *  .
- *
- *  @return TODO
+ *  @brief  Generates N new values.
  */
 /*==========================================================================*/
-inline void MersenneTwister::reload( void )
+inline void MersenneTwister::reload()
 {
     // Generate N new values in state
     // Made clearer and faster by Matthew Bellew (matthew.bellew@home.com)
@@ -244,68 +202,63 @@ inline void MersenneTwister::reload( void )
 
 /*==========================================================================*/
 /**
- *  .
- *
- *  @param u TODO
- *  @return TODO
+ *  @brief  Returns high bit value.
+ *  @param  u [in] input value
+ *  @return high bit value
  */
 /*==========================================================================*/
-inline const unsigned long MersenneTwister::high_bit( const unsigned long u ) const
+inline unsigned long MersenneTwister::high_bit( const unsigned long u ) const
 {
     return( u & 0x80000000UL );
 }
 
 /*==========================================================================*/
 /**
- *  .
- *
- *  @param u TODO
- *  @return TODO
+ *  @brief  Returns low bit value.
+ *  @param  u [in] input value
+ *  @return low bit value
  */
 /*==========================================================================*/
-inline const unsigned long MersenneTwister::low_bit( const unsigned long u ) const
+inline unsigned long MersenneTwister::low_bit( const unsigned long u ) const
 {
     return( u & 0x00000001UL );
 }
 
 /*==========================================================================*/
 /**
- *  .
- *
- *  @param u TODO
- *  @return TODO
+ *  @brief  Returns low bit value.
+ *  @param  u [in] input value
+ *  @return low bit value
  */
 /*==========================================================================*/
-inline const unsigned long MersenneTwister::low_bits( const unsigned long u ) const
+inline unsigned long MersenneTwister::low_bits( const unsigned long u ) const
 {
     return( u & 0x7fffffffUL );
 }
 
 /*==========================================================================*/
 /**
- *  .
- *
- *  @param u TODO
- *  @param v TODO
- *  @return TODO
+ *  @brief  Returns mixed bit value of input values.
+ *  @param  u [in] input value 1
+ *  @param  v [in] input value 2
+ *  @return mixed bit value
  */
 /*==========================================================================*/
-inline const unsigned long MersenneTwister::mix_bits( const unsigned long u, const unsigned long v ) const
+inline unsigned long MersenneTwister::mix_bits( const unsigned long u, const unsigned long v ) const
 {
     return( high_bit( u ) | low_bits( v ) );
 }
 
 /*==========================================================================*/
 /**
- *  .
- *
- *  @param m TODO
- *  @param s0 TODO
- *  @param s1 TODO
- *  @return TODO
+ *  @brief  Returns twisted bit value of input values.
+ *  @param  m [in] input value
+ *  @param  s0 [in] input sub-value 0
+ *  @param  s1 [in] input sub-value 1
+ *  @return twisted bit value
  */
 /*==========================================================================*/
-inline const unsigned long MersenneTwister::twist(
+inline unsigned long MersenneTwister::twist(
     const unsigned long m,
     const unsigned long s0,
     const unsigned long s1 ) const

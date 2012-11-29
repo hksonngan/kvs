@@ -17,7 +17,6 @@
 
 #include <kvs/Vector>
 #include <kvs/Matrix>
-#include <kvs/ClassName>
 #include "QRDecomposer.h"
 
 
@@ -32,44 +31,20 @@ namespace kvs
 template <typename T>
 class QRSolver : public kvs::Vector<T>
 {
-    kvsClassName( kvs::QRSolver );
+private:
 
-protected:
-
-    QRDecomposer<T> m_decomposer;
+    QRDecomposer<T> m_decomposer; ///< QR decomposer
 
 public:
 
-    QRSolver( void )
-    {
-    };
+    QRSolver();
+    QRSolver( const kvs::QRDecomposer<T>& decomposer );
+    QRSolver( const kvs::Matrix<T>& A, const kvs::Vector<T>& b );
+    virtual ~QRSolver();
 
-    QRSolver( const kvs::QRDecomposer<T>& decomposer )
-    {
-        m_decomposer = decomposer;
-    };
-
-    QRSolver( const kvs::Matrix<T>& A, const kvs::Vector<T>& b )
-    {
-        this->solve( A, b );
-    };
-
-    virtual ~QRSolver( void )
-    {
-    };
-
-public:
-
-    QRSolver<T>& operator = ( const kvs::Vector<T>& v )
-    {
-        this->setSize( v.size() );
-        for( size_t i = 0; i < this->size(); i++ ){ (*this)[i] = v[i]; }
-
-        return( *this );
-    };
+    QRSolver<T>& operator = ( const kvs::Vector<T>& v );
 
     const kvs::Vector<T>& solve( const kvs::Vector<T>& b );
-
     const kvs::Vector<T>& solve( const kvs::Matrix<T>& A, const kvs::Vector<T>& b );
 };
 

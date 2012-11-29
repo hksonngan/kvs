@@ -25,7 +25,6 @@
 #include <kvs/Vector3>
 #include <kvs/Vector>
 #include <kvs/Matrix>
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -39,9 +38,7 @@ namespace kvs
 template <typename T>
 class ResponseSurface : public kvs::Vector<T>
 {
-    kvsClassName( kvs::ResponseSurface );
-
-protected:
+private:
 
     size_t m_npoints; ///< number of data points
     size_t m_nvariables; ///< number of independent variables (ex. x,y -> 2 )
@@ -55,37 +52,30 @@ protected:
 
 public:
 
-    ResponseSurface( void );
-
+    ResponseSurface();
     ResponseSurface( const kvs::Matrix<T>& variables, const kvs::Vector<T>& responses );
-
-    virtual ~ResponseSurface( void );
-
-public:
+    virtual ~ResponseSurface();
 
     const kvs::Vector<T>& solve( const kvs::Matrix<T>& variables, const kvs::Vector<T>& responses );
-
     const kvs::Vector<T>& improve( const T threshold = T( 2.45 ) );
 
-public:
-
-    const size_t npoints( void ) const;
-
-    const size_t nvariables( void ) const;
-
-    const T Rsquare( void ) const;
-
-    const T adjustedRsquare( void ) const;
-
-    const kvs::Vector<T>& Tvalues( void ) const;
+    size_t numberOfPoints() const;
+    size_t numberOfVariables() const;
+    T Rsquare() const;
+    T adjustedRsquare() const;
+    const kvs::Vector<T>& Tvalues() const;
 
 private:
 
-    void solve_regression_coefficients( void );
-
+    void solve_regression_coefficients();
     void create_coefficient_matrix( const kvs::Matrix<T>& variables );
+    void update_coefficient_matrix();
 
-    void update_coefficient_matrix( void );
+#if 1 // KVS_ENABLE_DEPRECATED
+public:
+    size_t npoints() const { return this->numberOfPoints(); }
+    size_t nvariables() const { return this->numberOfVariables(); }
+#endif
 };
 
 } // end of namespace kvs

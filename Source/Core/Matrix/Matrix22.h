@@ -142,17 +142,11 @@ public:
         return os << rhs[0] << "\n" << rhs[1];
     }
 
+#if 1 // KVS_ENABLE_DEPRECATED
 public:
-    // Will be removed.
-    explicit Matrix22( const T a )
-    {
-        *this = All( a );
-    }
-
-    void set( const T a )
-    {
-        *this = All( a );
-    }
+    explicit Matrix22( const T a ) { *this = All( a ); }
+    void set( const T a ) { *this = All( a ); }
+#endif
 };
 
 /*==========================================================================*/

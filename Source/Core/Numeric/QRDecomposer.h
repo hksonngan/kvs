@@ -19,7 +19,6 @@
 #include <kvs/Matrix44>
 #include <kvs/Matrix>
 #include <kvs/Vector>
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -33,9 +32,7 @@ namespace kvs
 template <typename T>
 class QRDecomposer
 {
-    kvsClassName_without_virtual( kvs::QRDecomposer );
-
-protected:
+private:
 
     kvs::Matrix<T> m_m;  ///< original matrix
     kvs::Matrix<T> m_qt; ///< Transpose matrix of Q matrix
@@ -43,35 +40,21 @@ protected:
 
 public:
 
-    QRDecomposer( void );
-
+    QRDecomposer();
     QRDecomposer( const kvs::Matrix33<T>& m );
-
     QRDecomposer( const kvs::Matrix44<T>& m );
-
     QRDecomposer( const kvs::Matrix<T>& m );
-
-public:
-
-    const kvs::Matrix<T> Q( void ) const;
-
-    const kvs::Matrix<T>& R( void ) const;
-
-    const kvs::Matrix<T>& Qt( void ) const;
-
-public:
 
     QRDecomposer& operator = ( const QRDecomposer& q );
 
-public:
+    const kvs::Matrix<T> Q() const;
+    const kvs::Matrix<T>& R() const;
+    const kvs::Matrix<T>& Qt() const;
 
     void setMatrix( const kvs::Matrix33<T>& m );
-
     void setMatrix( const kvs::Matrix44<T>& m );
-
     void setMatrix( const kvs::Matrix<T>& m );
-
-    void decompose( void );
+    void decompose();
 };
 
 } // end of namespace kvs

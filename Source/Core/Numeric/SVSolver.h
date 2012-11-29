@@ -17,7 +17,6 @@
 
 #include "SVDecomposer.h"
 #include <kvs/Vector>
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -31,44 +30,20 @@ namespace kvs
 template <typename T>
 class SVSolver : public kvs::Vector<T>
 {
-    kvsClassName( kvs::SVSolver );
+private:
 
-protected:
-
-    kvs::SVDecomposer<T> m_decomposer;
+    kvs::SVDecomposer<T> m_decomposer; ///< SV decomposer
 
 public:
 
-    SVSolver( void )
-    {
-    };
+    SVSolver();
+    SVSolver( const kvs::SVDecomposer<T>& decomposer );
+    SVSolver( const kvs::Matrix<T>& A, const kvs::Vector<T>& b );
+    virtual ~SVSolver();
 
-    SVSolver( const kvs::SVDecomposer<T>& decomposer )
-    {
-        m_decomposer = decomposer;
-    };
-
-    SVSolver( const kvs::Matrix<T>& A, const kvs::Vector<T>& b )
-    {
-        this->solve( A, b );
-    };
-
-    virtual ~SVSolver( void )
-    {
-    };
-
-public:
-
-    SVSolver<T>& operator = ( const kvs::Vector<T>& v )
-    {
-        this->setSize( v.size() );
-        for( size_t i = 0; i < this->size(); i++ ){ (*this)[i] = v[i]; }
-
-        return( *this );
-    };
+    SVSolver<T>& operator = ( const kvs::Vector<T>& v );
 
     const kvs::Vector<T>& solve( const kvs::Vector<T>& b );
-
     const kvs::Vector<T>& solve( const kvs::Matrix<T>& A, const kvs::Vector<T>& b );
 };
 

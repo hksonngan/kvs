@@ -24,11 +24,23 @@ template <typename T> size_t LUDecomposer<T>::m_max_iterations = 30;
 
 /*===========================================================================*/
 /**
+ *  @brief  Sets a maximum number of iterations.
+ *  @param  max_iterations [in] maximum number of iterations
+ */
+/*===========================================================================*/
+template <typename T>
+void LUDecomposer<T>::SetMaxIterations( const size_t max_iterations )
+{
+    m_max_iterations = max_iterations;
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Constructs a new LUDecomposer class.
  */
 /*===========================================================================*/
 template <typename T>
-LUDecomposer<T>::LUDecomposer( void )
+LUDecomposer<T>::LUDecomposer()
 {
 }
 
@@ -85,7 +97,7 @@ LUDecomposer<T>& LUDecomposer<T>::operator = ( const LUDecomposer<T>& l )
     m_lu = l.m_lu;
     m_pivots = l.m_pivots;
 
-    return( *this );
+    return *this;
 }
 
 /*===========================================================================*/
@@ -95,9 +107,9 @@ LUDecomposer<T>& LUDecomposer<T>::operator = ( const LUDecomposer<T>& l )
  */
 /*===========================================================================*/
 template <typename T>
-const kvs::Matrix<T>& LUDecomposer<T>::L( void ) const
+const kvs::Matrix<T>& LUDecomposer<T>::L() const
 {
-    return( m_l );
+    return m_l;
 }
 
 /*===========================================================================*/
@@ -107,9 +119,9 @@ const kvs::Matrix<T>& LUDecomposer<T>::L( void ) const
  */
 /*===========================================================================*/
 template <typename T>
-const kvs::Matrix<T>& LUDecomposer<T>::U( void ) const
+const kvs::Matrix<T>& LUDecomposer<T>::U() const
 {
-    return( m_u );
+    return m_u;
 }
 
 /*===========================================================================*/
@@ -119,9 +131,9 @@ const kvs::Matrix<T>& LUDecomposer<T>::U( void ) const
  */
 /*===========================================================================*/
 template <typename T>
-const kvs::Matrix<T>& LUDecomposer<T>::LU( void ) const
+const kvs::Matrix<T>& LUDecomposer<T>::LU() const
 {
-    return( m_lu );
+    return m_lu;
 }
 
 /*===========================================================================*/
@@ -131,9 +143,9 @@ const kvs::Matrix<T>& LUDecomposer<T>::LU( void ) const
  */
 /*===========================================================================*/
 template <typename T>
-const kvs::Vector<int>& LUDecomposer<T>::pivots( void ) const
+const kvs::Vector<int>& LUDecomposer<T>::pivots() const
 {
-    return( m_pivots );
+    return m_pivots;
 }
 
 /*===========================================================================*/
@@ -189,10 +201,10 @@ void LUDecomposer<T>::setMatrix( const kvs::Matrix44<T>& m )
 template <typename T>
 void LUDecomposer<T>::setMatrix( const Matrix<T>& m )
 {
+    m_l.setSize( m.rowSize(), m.columnSize() );
+    m_u.setSize( m.rowSize(), m.columnSize() );
+    m_pivots.setSize( m.rowSize() );
     m_lu = m;
-    m_l.setSize( m.nrows(), m.ncolumns() );
-    m_u.setSize( m.nrows(), m.ncolumns() );
-    m_pivots.setSize( m.nrows() );
 }
 
 /*===========================================================================*/
@@ -201,11 +213,11 @@ void LUDecomposer<T>::setMatrix( const Matrix<T>& m )
  */
 /*===========================================================================*/
 template <typename T>
-void LUDecomposer<T>::decompose( void )
+void LUDecomposer<T>::decompose()
 {
-    KVS_ASSERT( m_lu.nrows() == m_lu.ncolumns() );
+    KVS_ASSERT( m_lu.rowSize() == m_lu.columnSize() );
 
-    const int row = static_cast<int>(m_lu.nrows());
+    const int row = static_cast<int>(m_lu.rowSize());
 
     // Loop over rows for implicit scaling info.
     kvs::Vector<T> scaling( row );
@@ -294,12 +306,6 @@ void LUDecomposer<T>::decompose( void )
         }
         m_u[i][i] = m_lu[i][i];
     }
-}
-
-template <typename T>
-void LUDecomposer<T>::SetMaxIterations( const size_t max_iterations )
-{
-    m_max_iterations = max_iterations;
 }
 
 // template instantiation

@@ -25,7 +25,7 @@ namespace kvs
  */
 /*===========================================================================*/
 template <typename T>
-QRDecomposer<T>::QRDecomposer( void )
+QRDecomposer<T>::QRDecomposer()
 {
 }
 
@@ -70,42 +70,6 @@ QRDecomposer<T>::QRDecomposer( const kvs::Matrix<T>& m )
 
 /*===========================================================================*/
 /**
- *  @brief  Returns the Q matrix.
- *  @return Q matrix
- */
-/*===========================================================================*/
-template <typename T>
-const kvs::Matrix<T> QRDecomposer<T>::Q( void ) const
-{
-    return( m_qt.transposed() );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the R matrix.
- *  @return R matrix
- */
-/*===========================================================================*/
-template <typename T>
-const kvs::Matrix<T>& QRDecomposer<T>::R( void ) const
-{
-    return( m_r );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Retruns the transposed Q matrix.
- *  @return transposed Q matrix
- */
-/*===========================================================================*/
-template <typename T>
-const kvs::Matrix<T>& QRDecomposer<T>::Qt( void ) const
-{
-    return( m_qt );
-}
-
-/*===========================================================================*/
-/**
  *  @brief  '=' operator for the QRDecomposer class.
  *  @param  q [in] QRDecomposer
  */
@@ -117,7 +81,43 @@ QRDecomposer<T>& QRDecomposer<T>::operator = ( const QRDecomposer<T>& q )
     m_qt = q.m_qt;
     m_r = q.m_r;
 
-    return( *this );
+    return *this;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the Q matrix.
+ *  @return Q matrix
+ */
+/*===========================================================================*/
+template <typename T>
+const kvs::Matrix<T> QRDecomposer<T>::Q() const
+{
+    return m_qt.transposed();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the R matrix.
+ *  @return R matrix
+ */
+/*===========================================================================*/
+template <typename T>
+const kvs::Matrix<T>& QRDecomposer<T>::R() const
+{
+    return m_r;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Retruns the transposed Q matrix.
+ *  @return transposed Q matrix
+ */
+/*===========================================================================*/
+template <typename T>
+const kvs::Matrix<T>& QRDecomposer<T>::Qt() const
+{
+    return m_qt;
 }
 
 /*===========================================================================*/
@@ -184,7 +184,7 @@ void QRDecomposer<T>::setMatrix( const kvs::Matrix<T>& m )
  */
 /*===========================================================================*/
 template <typename T>
-void QRDecomposer<T>::decompose( void )
+void QRDecomposer<T>::decompose()
 {
     int row = m_m.nrows();
     int column = m_m.ncolumns();

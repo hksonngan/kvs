@@ -21,6 +21,66 @@ namespace kvs
 
 /*===========================================================================*/
 /**
+ *  @brief  Constructs a new LUSolver class.
+ */
+/*===========================================================================*/
+template <typename T>
+LUSolver<T>::LUSolver()
+{
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new LUSolver class.
+ *  @param  decomposer [in] LU decomposer
+ */
+/*===========================================================================*/
+template <typename T>
+LUSolver<T>::LUSolver( const kvs::LUDecomposer<T>& decomposer )
+{
+    m_decomposer = decomposer;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new LUSolver class.
+ *  @param  A [in] coefficient matrix
+ *  @param  b [in] constant term vector
+ */
+/*===========================================================================*/
+template <typename T>
+LUSolver<T>::LUSolver( const kvs::Matrix<T>& A, const kvs::Vector<T>& b )
+{
+    this->solve( A, b );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Destructs the LUSolver class.
+ */
+/*===========================================================================*/
+template <typename T>
+LUSolver<T>::~LUSolver()
+{
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  '=' operator for the LUSolver class.
+ *  @param  v [in] vector
+ */
+/*===========================================================================*/
+template <typename T>
+LUSolver<T>& LUSolver<T>::operator = ( const kvs::Vector<T>& v )
+{
+    this->setSize( v.size() );
+    for( size_t i = 0; i < this->size(); i++ ){ (*this)[i] = v[i]; }
+
+    return( *this );
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Solve the simultaneous equations.
  *  @param  b [in] right-hand side vector
  *  @return solution vector
@@ -33,7 +93,7 @@ const kvs::Vector<T>& LUSolver<T>::solve( const kvs::Vector<T>& b )
     kvs::Vector<T> x = b;
 
     // Forward substitution.
-    int row = m_decomposer.LU().nrows();
+    int row = m_decomposer.LU().rowSize();
     int ii  = -1;
     for( int i = 0; i < row; i++ )
     {
@@ -79,8 +139,8 @@ const kvs::Vector<T>& LUSolver<T>::solve( const kvs::Vector<T>& b )
 template <typename T>
 const kvs::Vector<T>& LUSolver<T>::solve( const kvs::Matrix<T>& A, const kvs::Vector<T>& b )
 {
-    KVS_ASSERT( A.nrows() == A.ncolumns() );
-    KVS_ASSERT( A.ncolumns() == b.size() );
+    KVS_ASSERT( A.rowSize() == A.columnSize() );
+    KVS_ASSERT( A.columnSize() == b.size() );
 
     // LU decomposition.
     m_decomposer.setMatrix( A );

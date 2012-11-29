@@ -20,17 +20,18 @@ namespace kvs
 
 /*==========================================================================*/
 /**
- *  Constructs a new MersenneTwister.
+ *  @brief  Constructs a new MersenneTwister.
  */
 /*==========================================================================*/
-MersenneTwister::MersenneTwister( void )
+MersenneTwister::MersenneTwister()
 {
     this->setSeed();
 }
 
 /*==========================================================================*/
 /**
- *  Constructs a new MersenneTwister.
+ *  @brief  Constructs a new MersenneTwister.
+ *  @param  seed [in] seed value
  */
 /*==========================================================================*/
 MersenneTwister::MersenneTwister( const unsigned long seed )
@@ -40,24 +41,24 @@ MersenneTwister::MersenneTwister( const unsigned long seed )
 
 /*==========================================================================*/
 /**
- *  Constructs a new MersenneTwister.
+ *  @brief  Constructs a new MersenneTwister.
+ *  @param  seeds [in] seed values
+ *  @param  length [in] number of seed values
  */
 /*==========================================================================*/
 MersenneTwister::MersenneTwister(
     const unsigned long* const seeds,
-    const unsigned long        length )
+    const unsigned long length )
 {
     this->setSeed( seeds, length );
 }
 
 /*==========================================================================*/
 /**
- *  .
- *
- *  @return TODO
+ *  @brief  Sets seed value.
  */
 /*==========================================================================*/
-void MersenneTwister::setSeed( void )
+void MersenneTwister::setSeed()
 {
     // Seed the generator with an array from /dev/urandom if available
     // Otherwise use a hash of time() and clock() values
@@ -91,10 +92,8 @@ void MersenneTwister::setSeed( void )
 
 /*==========================================================================*/
 /**
- *  .
- *
- *  @param seed TODO
- *  @return TODO
+ *  @brief  Sets seed value.
+ *  @param  seed [in] seed value
  */
 /*==========================================================================*/
 void MersenneTwister::setSeed( const unsigned long seed )
@@ -106,11 +105,9 @@ void MersenneTwister::setSeed( const unsigned long seed )
 
 /*==========================================================================*/
 /**
- *  .
- *
- *  @param seeds TODO
- *  @param length TODO
- *  @return TODO
+ *  @brief  Sets seed values.
+ *  @param  seeds [in] seed values
+ *  @param  length [in] number of seed values
  */
 /*==========================================================================*/
 void MersenneTwister::setSeed(
@@ -155,10 +152,8 @@ void MersenneTwister::setSeed(
 
 /*==========================================================================*/
 /**
- *  .
- *
- *  @param seed TODO
- *  @return TODO
+ *  @brief  Initializes state with seed value.
+ *  @param  seed [in] seed value
  */
 /*==========================================================================*/
 void MersenneTwister::initialize( const unsigned long seed )
@@ -180,14 +175,13 @@ void MersenneTwister::initialize( const unsigned long seed )
 
 /*==========================================================================*/
 /**
- *  .
- *
- *  @param t TODO
- *  @param c TODO
- *  @return TODO
+ *  @brief  Returns hash value.
+ *  @param  t [in] time value
+ *  @param  c [in] clock value
+ *  @return hash value
  */
 /*==========================================================================*/
-const unsigned long MersenneTwister::hash( std::time_t t, std::clock_t c )
+unsigned long MersenneTwister::hash( std::time_t t, std::clock_t c )
 {
     // Get a uint32 from t and c
     // Better than uint32(x) in case x is floating point in [0,1]

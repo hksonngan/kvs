@@ -17,7 +17,6 @@
 
 #include "LUDecomposer.h"
 #include <kvs/Vector>
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -31,44 +30,20 @@ namespace kvs
 template <typename T>
 class LUSolver : public kvs::Vector<T>
 {
-    kvsClassName( kvs::LUSolver );
+private:
 
-protected:
-
-    kvs::LUDecomposer<T> m_decomposer;
+    kvs::LUDecomposer<T> m_decomposer; ///< LU decomposer
 
 public:
 
-    LUSolver( void )
-    {
-    }
+    LUSolver();
+    LUSolver( const kvs::LUDecomposer<T>& decomposer );
+    LUSolver( const kvs::Matrix<T>& A, const kvs::Vector<T>& b );
+    virtual ~LUSolver();
 
-    LUSolver( const kvs::LUDecomposer<T>& decomposer )
-    {
-        m_decomposer = decomposer;
-    }
-
-    LUSolver( const kvs::Matrix<T>& A, const kvs::Vector<T>& b )
-    {
-        this->solve( A, b );
-    }
-
-    virtual ~LUSolver( void )
-    {
-    }
-
-public:
-
-    LUSolver<T>& operator = ( const kvs::Vector<T>& v )
-    {
-        this->setSize( v.size() );
-        for( size_t i = 0; i < this->size(); i++ ){ (*this)[i] = v[i]; }
-
-        return( *this );
-    }
+    LUSolver<T>& operator = ( const kvs::Vector<T>& v );
 
     const kvs::Vector<T>& solve( const kvs::Vector<T>& b );
-
     const kvs::Vector<T>& solve( const kvs::Matrix<T>& A, const kvs::Vector<T>& b );
 };
 

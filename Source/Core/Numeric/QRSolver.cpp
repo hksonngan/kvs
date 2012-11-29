@@ -21,6 +21,66 @@ namespace kvs
 
 /*===========================================================================*/
 /**
+ *  @brief  Constructs a new QRSolver class.
+ */
+/*===========================================================================*/
+template <typename T>
+QRSolver<T>::QRSolver()
+{
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new QRSolver class.
+ *  @param  decomposer [in] QR decomposer
+ */
+/*===========================================================================*/
+template <typename T>
+QRSolver<T>::QRSolver( const kvs::QRDecomposer<T>& decomposer )
+{
+    m_decomposer = decomposer;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new QRSolver class.
+ *  @param  A [in] coefficient matrix
+ *  @param  b [in] constant term vector
+ */
+/*===========================================================================*/
+template <typename T>
+QRSolver<T>::QRSolver( const kvs::Matrix<T>& A, const kvs::Vector<T>& b )
+{
+    this->solve( A, b );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Destructs the QRSolver class.
+ */
+/*===========================================================================*/
+template <typename T>
+QRSolver<T>::~QRSolver()
+{
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  '=' operator for the QRSolver class.
+ *  @param  v [in] vector
+ */
+/*===========================================================================*/
+template <typename T>
+QRSolver<T>& QRSolver<T>::operator = ( const kvs::Vector<T>& v )
+{
+    this->setSize( v.size() );
+    for( size_t i = 0; i < this->size(); i++ ){ (*this)[i] = v[i]; }
+
+    return *this;
+};
+
+/*===========================================================================*/
+/**
  *  @brief  Solve the simultaneous equations.
  *  @param  b [i] right-hand side vector
  *  @return solution vector
@@ -45,7 +105,7 @@ const kvs::Vector<T>& QRSolver<T>::solve( const kvs::Vector<T>& b )
         x[i] = v[i] / m_decomposer.R()[i][i];
     }
 
-    return( *this = x );
+    return *this = x;
 }
 
 /*===========================================================================*/
@@ -65,7 +125,7 @@ const kvs::Vector<T>& QRSolver<T>::solve( const kvs::Matrix<T>& A, const kvs::Ve
     m_decomposer.setMatrix( A );
     m_decomposer.decompose();
 
-    return( this->solve( b ) );
+    return this->solve( b );
 }
 
 // template instantiation

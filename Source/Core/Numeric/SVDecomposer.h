@@ -19,7 +19,6 @@
 #include <kvs/Matrix44>
 #include <kvs/Matrix>
 #include <kvs/Vector>
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -33,61 +32,38 @@ namespace kvs
 template <typename T>
 class SVDecomposer
 {
-    kvsClassName_without_virtual( kvs::SVDecomposer );
-
-protected:
+private:
 
     kvs::Matrix<T> m_u; ///< U matrix (left singular matrix)
     kvs::Vector<T> m_w; ///< diagonal elements of W matrix (singular values)
     kvs::Matrix<T> m_v; ///< V matrix (right singular matrix)
-
-protected:
-
     static size_t m_max_iterations; ///< maximum number of iterations
 
 public:
 
-    SVDecomposer( void );
-
-    SVDecomposer( const kvs::Matrix33<T>& m );
-
-    SVDecomposer( const kvs::Matrix44<T>& m );
-
-    SVDecomposer( const kvs::Matrix<T>& m );
+    static void SetMaxIterations( const size_t max_iterations );
 
 public:
+
+    SVDecomposer();
+    SVDecomposer( const kvs::Matrix33<T>& m );
+    SVDecomposer( const kvs::Matrix44<T>& m );
+    SVDecomposer( const kvs::Matrix<T>& m );
 
     SVDecomposer& operator = ( const SVDecomposer& s );
 
-public:
-
-    const kvs::Matrix<T>& U( void ) const;
-
-    const kvs::Vector<T>& W( void ) const;
-
-    const kvs::Matrix<T>& V( void ) const;
-
-    const kvs::Matrix<T>& leftSingularMatrix( void ) const;
-
-    const kvs::Vector<T>& singularValues( void ) const;
-
-    const kvs::Matrix<T>& rightSingularMatrix( void ) const;
-
-public:
+    const kvs::Matrix<T>& U() const;
+    const kvs::Vector<T>& W() const;
+    const kvs::Matrix<T>& V() const;
+    const kvs::Matrix<T>& leftSingularMatrix() const;
+    const kvs::Vector<T>& singularValues() const;
+    const kvs::Matrix<T>& rightSingularMatrix() const;
 
     void setMatrix( const kvs::Matrix33<T>& m );
-
     void setMatrix( const kvs::Matrix44<T>& m );
-
     void setMatrix( const kvs::Matrix<T>& m );
-
-    void decompose( void );
-
-    void correctSingularValues( void );
-
-public:
-
-    static void SetMaxIterations( const size_t max_iterations );
+    void decompose();
+    void correctSingularValues();
 
 private:
 

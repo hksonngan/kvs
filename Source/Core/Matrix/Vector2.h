@@ -125,17 +125,11 @@ public:
         return os << rhs[0] << " " << rhs[1];
     }
 
+#if 1 // KVS_ENABLE_DEPRECATED
 public:
-    // Will be romoved.
-    explicit Vector2( const T x )
-    {
-        *this = All( x );
-    }
-
-    void set( const T x )
-    {
-        *this = All( x );
-    }
+    explicit Vector2( const T x ) { *this = All( x ); }
+    void set( const T x ) { *this = All( x ); }
+#endif
 };
 
 /*==========================================================================*/

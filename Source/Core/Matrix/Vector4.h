@@ -140,17 +140,11 @@ public:
         return os << rhs[0] << " " << rhs[1] << " " << rhs[2] << " " << rhs[3];
     }
 
+#if 1 // KVS_ENABLE_DEPRECATED
 public:
-    // Will be removed.
-    explicit Vector4( const T x )
-    {
-        *this = All( x );
-    }
-
-    void set( const T x )
-    {
-        *this = All( x );
-    }
+    explicit Vector4( const T x ) { *this = All( x ); }
+    void set( const T x ) { *this = All( x ); }
+#endif
 };
 
 /*==========================================================================*/
@@ -164,7 +158,6 @@ typedef Vector4<float>         Vector4f;
 typedef Vector4<double>        Vector4d;
 typedef Vector4<float>         Vec4;
 typedef Vector4<int>           Vec4i;
-
 
 /*===========================================================================*/
 /**

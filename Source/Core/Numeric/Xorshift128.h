@@ -22,7 +22,7 @@ namespace kvs
 
 /*==========================================================================*/
 /**
- *  Xorshift128 class.
+ *  @brief  Xorshift128 class.
  */
 /*==========================================================================*/
 class Xorshift128
@@ -36,10 +36,8 @@ private:
 public:
     Xorshift128();
 
-public:
     void setSeed( kvs::UInt32 seed );
 
-public:
     float rand();
     kvs::UInt32 randInteger();
 
@@ -48,9 +46,8 @@ public:
 
 /*==========================================================================*/
 /**
- *  .
- *
- *  @return TODO
+ *  @brief  Returns uniform random number.
+ *  @return uniform random number
  */
 /*==========================================================================*/
 inline float Xorshift128::rand()
@@ -59,6 +56,12 @@ inline float Xorshift128::rand()
     return t24 * ( this->randInteger() >> 8 );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns uniform random number (32-bit precision).
+ *  @return uniform random number
+ */
+/*===========================================================================*/
 inline kvs::UInt32 Xorshift128::randInteger()
 {
     kvs::UInt32 t = ( m_x ^ ( m_x << 11 ) );
@@ -73,9 +76,8 @@ inline kvs::UInt32 Xorshift128::randInteger()
 
 /*==========================================================================*/
 /**
- *  .
- *
- *  @return TODO
+ *  @brief  Returns uniform random number.
+ *  @return uniform random number
  */
 /*==========================================================================*/
 inline float Xorshift128::operator ()()

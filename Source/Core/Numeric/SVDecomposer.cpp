@@ -25,11 +25,23 @@ template <typename T> size_t SVDecomposer<T>::m_max_iterations = 30;
 
 /*===========================================================================*/
 /**
+ *  @brief  Sets a maximum number of iterations.
+ *  @param  max_iterations [in] maximum number of iterations
+ */
+/*===========================================================================*/
+template <typename T>
+void SVDecomposer<T>::SetMaxIterations( const size_t max_iterations )
+{
+    m_max_iterations = max_iterations;
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Constructs a new SVDecomposer class.
  */
 /*===========================================================================*/
 template <typename T>
-SVDecomposer<T>::SVDecomposer( void )
+SVDecomposer<T>::SVDecomposer()
 {
 }
 
@@ -95,7 +107,7 @@ SVDecomposer<T>& SVDecomposer<T>::operator = ( const SVDecomposer<T>& s )
  */
 /*===========================================================================*/
 template <typename T>
-const kvs::Matrix<T>& SVDecomposer<T>::U( void ) const
+const kvs::Matrix<T>& SVDecomposer<T>::U() const
 {
     return( m_u );
 }
@@ -107,7 +119,7 @@ const kvs::Matrix<T>& SVDecomposer<T>::U( void ) const
  */
 /*===========================================================================*/
 template <typename T>
-const kvs::Vector<T>& SVDecomposer<T>::W( void ) const
+const kvs::Vector<T>& SVDecomposer<T>::W() const
 {
     return( m_w );
 }
@@ -119,7 +131,7 @@ const kvs::Vector<T>& SVDecomposer<T>::W( void ) const
  */
 /*===========================================================================*/
 template <typename T>
-const kvs::Matrix<T>& SVDecomposer<T>::V( void ) const
+const kvs::Matrix<T>& SVDecomposer<T>::V() const
 {
     return( m_v );
 }
@@ -131,7 +143,7 @@ const kvs::Matrix<T>& SVDecomposer<T>::V( void ) const
  */
 /*===========================================================================*/
 template <typename T>
-const kvs::Matrix<T>& SVDecomposer<T>::leftSingularMatrix( void ) const
+const kvs::Matrix<T>& SVDecomposer<T>::leftSingularMatrix() const
 {
     return( m_u );
 }
@@ -143,7 +155,7 @@ const kvs::Matrix<T>& SVDecomposer<T>::leftSingularMatrix( void ) const
  */
 /*===========================================================================*/
 template <typename T>
-const kvs::Vector<T>& SVDecomposer<T>::singularValues( void ) const
+const kvs::Vector<T>& SVDecomposer<T>::singularValues() const
 {
     return( m_w );
 }
@@ -155,7 +167,7 @@ const kvs::Vector<T>& SVDecomposer<T>::singularValues( void ) const
  */
 /*===========================================================================*/
 template <typename T>
-const kvs::Matrix<T>& SVDecomposer<T>::rightSingularMatrix( void ) const
+const kvs::Matrix<T>& SVDecomposer<T>::rightSingularMatrix() const
 {
     return( m_v );
 }
@@ -222,7 +234,7 @@ void SVDecomposer<T>::setMatrix( const Matrix<T>& m )
  */
 /*===========================================================================*/
 template <typename T>
-void SVDecomposer<T>::decompose( void )
+void SVDecomposer<T>::decompose()
 {
     int row    = m_u.nrows();
     int column = m_u.ncolumns();
@@ -545,7 +557,7 @@ void SVDecomposer<T>::sort( kvs::Matrix<T>* umat, kvs::Matrix<T>* vmat, kvs::Vec
 }
 
 template <typename T>
-void SVDecomposer<T>::correctSingularValues( void )
+void SVDecomposer<T>::correctSingularValues()
 {
     int column = m_u.ncolumns();
 
@@ -556,12 +568,6 @@ void SVDecomposer<T>::correctSingularValues( void )
     {
         if( m_w[i] < w_min ) m_w[i] = T(0);
     }
-}
-
-template <typename T>
-void SVDecomposer<T>::SetMaxIterations( const size_t max_iterations )
-{
-    m_max_iterations = max_iterations;
 }
 
 // template instantiation

@@ -22,6 +22,66 @@ namespace kvs
 
 /*===========================================================================*/
 /**
+ *  @brief  Constructs a new SVSolver class.
+ */
+/*===========================================================================*/
+template <typename T>
+SVSolver<T>::SVSolver()
+{
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new SVSolver class.
+ *  @param  decomposer [in] SV decomposer
+ */
+/*===========================================================================*/
+template <typename T>
+SVSolver<T>::SVSolver( const kvs::SVDecomposer<T>& decomposer )
+{
+    m_decomposer = decomposer;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new SVSolver class.
+ *  @param  A [in] coefficient matrix
+ *  @param  b [in] constant term vector
+ */
+/*===========================================================================*/
+template <typename T>
+SVSolver<T>::SVSolver( const kvs::Matrix<T>& A, const kvs::Vector<T>& b )
+{
+    this->solve( A, b );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Destructs the SVSolver class.
+ */
+/*===========================================================================*/
+template <typename T>
+SVSolver<T>::~SVSolver()
+{
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  '=' operator for the SVSolver class.
+ *  @param  v [in] vector
+ */
+/*===========================================================================*/
+template <typename T>
+SVSolver<T>& SVSolver<T>::operator = ( const kvs::Vector<T>& v )
+{
+    this->setSize( v.size() );
+    for( size_t i = 0; i < this->size(); i++ ){ (*this)[i] = v[i]; }
+
+    return( *this );
+};
+
+/*===========================================================================*/
+/**
  *  @brief  Solve the simultaneous equations.
  *  @param  b [i] right-hand side vector
  *  @return solution vector

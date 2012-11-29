@@ -28,7 +28,7 @@ namespace kvs
  */
 /*===========================================================================*/
 template <typename T>
-GaussEliminationSolver<T>::GaussEliminationSolver( void )
+GaussEliminationSolver<T>::GaussEliminationSolver()
 {
 }
 
@@ -51,8 +51,25 @@ GaussEliminationSolver<T>::GaussEliminationSolver( const kvs::Matrix<T>& A, cons
  */
 /*===========================================================================*/
 template <typename T>
-GaussEliminationSolver<T>::~GaussEliminationSolver( void )
+GaussEliminationSolver<T>::~GaussEliminationSolver()
 {
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  '=' operator for the GaussEliminationSolver class.
+ *  @param  v [in] vector
+ */
+/*===========================================================================*/
+template <typename T>
+GaussEliminationSolver<T>& GaussEliminationSolver<T>::operator = ( const kvs::Vector<T>& v )
+{
+    this->setSize( v.size() );
+    for ( size_t i = 0; i < this->size(); ++i )
+    {
+        (*this)[i] = v[i];
+    }
+    return *this;
 }
 
 /*===========================================================================*/
@@ -66,14 +83,14 @@ GaussEliminationSolver<T>::~GaussEliminationSolver( void )
 template <typename T>
 const kvs::Vector<T>& GaussEliminationSolver<T>::solve( const kvs::Matrix<T>& A, const kvs::Vector<T>& b )
 {
-    KVS_ASSERT( A.nrows() == A.ncolumns() );
-    KVS_ASSERT( A.ncolumns() == b.size() );
+    KVS_ASSERT( A.rowSize() == A.columnSize() );
+    KVS_ASSERT( A.columnSize() == b.size() );
 
     kvs::Matrix<T> temp_mat( A );
     kvs::Vector<T> temp_vec( b );
 
-    const int row = A.nrows();
-    const int column = A.ncolumns();
+    const int row = A.rowSize();
+    const int column = A.columnSize();
     for ( int k = 0; k < row; ++k )
     {
         // Search a pivot element.
@@ -84,7 +101,7 @@ const kvs::Vector<T>& GaussEliminationSolver<T>::solve( const kvs::Matrix<T>& A,
         if ( kvs::Math::Abs( temp_mat[index][k] ) < 1.0e-10 )
         {
             kvsMessageError("Coefficient matrix is a singular marix.");
-            return( *this );
+            return *this;
         }
 
         // Swap the k-row vector and the index-row vector.
@@ -122,24 +139,7 @@ const kvs::Vector<T>& GaussEliminationSolver<T>::solve( const kvs::Matrix<T>& A,
         }
     }
 
-    return( *this = temp_vec );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  '=' operator for the GaussEliminationSolver class.
- *  @param  v [in] vector
- */
-/*===========================================================================*/
-template <typename T>
-GaussEliminationSolver<T>& GaussEliminationSolver<T>::operator = ( const kvs::Vector<T>& v )
-{
-    this->setSize( v.size() );
-    for ( size_t i = 0; i < this->size(); ++i )
-    {
-        (*this)[i] = v[i];
-    }
-    return( *this );
+    return *this = temp_vec;
 }
 
 // template instantiation
