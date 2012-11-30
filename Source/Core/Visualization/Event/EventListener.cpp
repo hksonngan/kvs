@@ -162,9 +162,15 @@ void EventListener::onEvent( kvs::EventBase* event )
 /*===========================================================================*/
 int EventListener::eventType() const
 {
-    return( m_event_type );
+    return m_event_type;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the event name.
+ *  @return event name
+ */
+/*===========================================================================*/
 const std::string& EventListener::name() const
 {
     return m_name;
@@ -178,7 +184,7 @@ const std::string& EventListener::name() const
 /*===========================================================================*/
 kvs::ScreenBase* EventListener::screen()
 {
-    return( m_screen );
+    return m_screen;
 }
 
 /*===========================================================================*/
@@ -192,6 +198,12 @@ void EventListener::setEventType( const int event_type )
     m_event_type = event_type;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets an event name.
+ *  @param  name [in] event name
+ */
+/*===========================================================================*/
 void EventListener::setName( const std::string& name )
 {
     m_name = name;
@@ -208,6 +220,11 @@ void EventListener::setScreen( kvs::ScreenBase* screen )
     m_screen = screen;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Initialize event function.
+ */
+/*===========================================================================*/
 void EventListener::initializeEvent()
 {
 }

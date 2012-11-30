@@ -63,6 +63,12 @@ void EventHandler::detach( const kvs::EventListener* listener )
     if ( p != m_listeners.end() ) { m_listeners.erase( p ); }
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Detaches the event listener.
+ *  @param  name [in] event name
+ */
+/*===========================================================================*/
 void EventHandler::detach( const std::string& name )
 {
     std::vector<kvs::EventListener*>::iterator listener = m_listeners.begin();

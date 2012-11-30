@@ -70,7 +70,7 @@ ResizeEvent::~ResizeEvent()
 /*===========================================================================*/
 int ResizeEvent::width() const
 {
-    return( m_width );
+    return m_width;
 }
 
 /*===========================================================================*/
@@ -81,7 +81,7 @@ int ResizeEvent::width() const
 /*===========================================================================*/
 int ResizeEvent::height() const
 {
-    return( m_height );
+    return m_height;
 }
 
 /*===========================================================================*/
@@ -92,7 +92,7 @@ int ResizeEvent::height() const
 /*===========================================================================*/
 int ResizeEvent::type() const
 {
-    return( kvs::EventBase::ResizeEvent );
+    return kvs::EventBase::ResizeEvent;
 }
 
 /*===========================================================================*/

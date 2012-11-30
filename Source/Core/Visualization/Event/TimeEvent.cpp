@@ -44,7 +44,7 @@ TimeEvent::~TimeEvent()
 /*===========================================================================*/
 int TimeEvent::type() const
 {
-    return( kvs::EventBase::TimerEvent );
+    return kvs::EventBase::TimerEvent;
 }
 
 } // end of namespace kvs

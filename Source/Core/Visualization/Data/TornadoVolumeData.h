@@ -17,7 +17,6 @@
 
 #include <kvs/StructuredVolumeObject>
 #include <kvs/Vector3>
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -30,33 +29,24 @@ namespace kvs
 /*===========================================================================*/
 class TornadoVolumeData : public kvs::StructuredVolumeObject
 {
-    kvsClassName( kvs::TornadoVolumeData );
-
 public:
 
     typedef kvs::StructuredVolumeObject SuperClass;
 
-protected:
+private:
 
     int m_time; ///< time value
 
 public:
 
-    TornadoVolumeData( void );
-
+    TornadoVolumeData();
     TornadoVolumeData( const kvs::Vector3ui resolution, const int time = 0 );
+    virtual ~TornadoVolumeData();
 
-    virtual ~TornadoVolumeData( void );
-
-public:
-
-    const int time( void ) const;
-
+    const int time() const;
     void setTime( const int time );
 
-public:
-
-    SuperClass* exec( void );
+    SuperClass* exec();
 };
 
 } // end of namespace kvs

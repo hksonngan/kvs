@@ -17,17 +17,33 @@
 namespace kvs
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new PaintEvent class.
+ */
+/*===========================================================================*/
 PaintEvent::PaintEvent()
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Destroys the PaintEvent class.
+ */
+/*===========================================================================*/
 PaintEvent::~PaintEvent()
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the event type.
+ *  @return event type
+ */
+/*===========================================================================*/
 int PaintEvent::type() const
 {
-    return( EventBase::PaintEvent );
+    return EventBase::PaintEvent;
 }
 
 } // end of namespace kvs

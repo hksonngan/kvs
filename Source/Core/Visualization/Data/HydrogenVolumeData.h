@@ -17,7 +17,6 @@
 
 #include <kvs/StructuredVolumeObject>
 #include <kvs/Vector3>
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -30,23 +29,17 @@ namespace kvs
 /*===========================================================================*/
 class HydrogenVolumeData : public kvs::StructuredVolumeObject
 {
-    kvsClassName( kvs::HydrogenVolumeData );
-
 public:
 
     typedef kvs::StructuredVolumeObject SuperClass;
 
 public:
 
-    HydrogenVolumeData( void );
-
+    HydrogenVolumeData();
     HydrogenVolumeData( const kvs::Vector3ui resolution );
+    virtual ~HydrogenVolumeData();
 
-    virtual ~HydrogenVolumeData( void );
-
-public:
-
-    SuperClass* exec( void );
+    SuperClass* exec();
 };
 
 } // end of namespace kvs

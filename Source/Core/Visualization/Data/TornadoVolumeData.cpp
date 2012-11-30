@@ -39,7 +39,7 @@ TornadoVolumeData::TornadoVolumeData( const kvs::Vector3ui resolution, const int
  *  @brief  Destructs the TornadoVolumeData class.
  */
 /*===========================================================================*/
-TornadoVolumeData::~TornadoVolumeData( void )
+TornadoVolumeData::~TornadoVolumeData()
 {
 }
 
@@ -48,7 +48,7 @@ TornadoVolumeData::~TornadoVolumeData( void )
  *  @brief  Constructs a new TornadoVolumeData class.
  */
 /*===========================================================================*/
-TornadoVolumeData::TornadoVolumeData( void )
+TornadoVolumeData::TornadoVolumeData()
 {
 }
 
@@ -58,7 +58,7 @@ TornadoVolumeData::TornadoVolumeData( void )
  *  @return time value
  */
 /*===========================================================================*/
-const int TornadoVolumeData::time( void ) const
+const int TornadoVolumeData::time() const
 {
     return( m_time );
 }
@@ -84,7 +84,7 @@ void TornadoVolumeData::setTime( const int time )
  *  http://www.cse.ohio-state.edu/~crawfis/Data/Tornado/</a>
  */
 /*===========================================================================*/
-TornadoVolumeData::SuperClass* TornadoVolumeData::exec( void )
+TornadoVolumeData::SuperClass* TornadoVolumeData::exec()
 {
     const kvs::UInt64 veclen = 3;
     const kvs::UInt64 dim1 = SuperClass::resolution().x();

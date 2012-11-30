@@ -37,7 +37,7 @@ HydrogenVolumeData::HydrogenVolumeData( const kvs::Vector3ui resolution )
  *  @brief  Destructs the HydrogenVolumeData class.
  */
 /*===========================================================================*/
-HydrogenVolumeData::~HydrogenVolumeData( void )
+HydrogenVolumeData::~HydrogenVolumeData()
 {
 }
 
@@ -46,7 +46,7 @@ HydrogenVolumeData::~HydrogenVolumeData( void )
  *  @brief  Constructs a new HydrogenVolumeData class.
  */
 /*===========================================================================*/
-HydrogenVolumeData::HydrogenVolumeData( void )
+HydrogenVolumeData::HydrogenVolumeData()
 {
 }
 
@@ -56,7 +56,7 @@ HydrogenVolumeData::HydrogenVolumeData( void )
  *  @return pointer to the structured volume object
  */
 /*===========================================================================*/
-HydrogenVolumeData::SuperClass* HydrogenVolumeData::exec( void )
+HydrogenVolumeData::SuperClass* HydrogenVolumeData::exec()
 {
     const kvs::UInt64 dim1 = SuperClass::resolution().x();
     const kvs::UInt64 dim2 = SuperClass::resolution().y();
