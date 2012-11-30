@@ -27,7 +27,7 @@ namespace kvs
 
 /*==========================================================================*/
 /**
- *  Condition class.
+ *  @brief  Condition class.
  */
 /*==========================================================================*/
 class Condition
@@ -50,7 +50,7 @@ public:
     typedef pthread_cond_t Handler;
 #endif
 
-protected:
+private:
 
     int m_nsleepers; ///< number of sleep threads
     kvs::Mutex m_mutex; ///< mutex

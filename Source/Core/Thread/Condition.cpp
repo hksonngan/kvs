@@ -29,18 +29,18 @@ namespace kvs
 
 /*==========================================================================*/
 /**
- *  Constructor.
+ *  @brief  Constructs a new Condition class.
  */
 /*==========================================================================*/
-Condition::Condition()
-    : m_nsleepers( 0 )
+Condition::Condition():
+    m_nsleepers( 0 )
 {
     this->create_condition_variable();
 }
 
 /*==========================================================================*/
 /**
- *  Destructor.
+ *  @brief  Destructs the Condition class.
  */
 /*==========================================================================*/
 Condition::~Condition()
@@ -50,7 +50,7 @@ Condition::~Condition()
 
 /*==========================================================================*/
 /**
- *  Wake up a thread.
+ *  @brief  Wake up a thread.
  */
 /*==========================================================================*/
 void Condition::wakeUpOne()
@@ -66,7 +66,7 @@ void Condition::wakeUpOne()
 
 /*==========================================================================*/
 /**
- *  Wake up all threads.
+ *  @brief  Wake up all threads.
  */
 /*==========================================================================*/
 void Condition::wakeUpAll()
@@ -82,14 +82,14 @@ void Condition::wakeUpAll()
 
 /*==========================================================================*/
 /**
- *  Wait.
- *  @param mutex [in] pointer to the mutex
+ *  @brief  Wait.
+ *  @param  mutex [in] pointer to the mutex
  *  @return true, if the process is done successfully
  */
 /*==========================================================================*/
 bool Condition::wait( kvs::Mutex* mutex )
 {
-    if ( !mutex ) { return( false ); }
+    if ( !mutex ) { return false; }
 
     m_mutex.lock();
     m_nsleepers += 1;
@@ -117,14 +117,14 @@ bool Condition::wait( kvs::Mutex* mutex )
     m_mutex.unlock();
     mutex->lock();
 
-    return( ret );
+    return ret;
 }
 
 /*==========================================================================*/
 /**
- *  Wait.
- *  @param mutex [in] pointer to the mutex
- *  @param msec [in] waiting time in mili-second
+ *  @brief  Wait.
+ *  @param  mutex [in] pointer to the mutex
+ *  @param  msec [in] waiting time in mili-second
  *  @return true, if the process is done successfully
  */
 /*==========================================================================*/
@@ -166,12 +166,12 @@ bool Condition::wait( kvs::Mutex* mutex, int msec )
     m_mutex.unlock();
     mutex->lock();
 
-    return( ret );
+    return ret;
 }
 
 /*==========================================================================*/
 /**
- *  Create condition variable.
+ *  @brief  Create condition variable.
  */
 /*==========================================================================*/
 void Condition::create_condition_variable()
@@ -186,7 +186,7 @@ void Condition::create_condition_variable()
 
 /*==========================================================================*/
 /**
- *  Delete condition variable.
+ *  @brief  Delete condition variable.
  */
 /*==========================================================================*/
 void Condition::delete_condition_variable()

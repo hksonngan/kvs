@@ -28,7 +28,7 @@ namespace kvs
 
 /*==========================================================================*/
 /**
- *  Constructor.
+ *  @brief  Constructs a new Mutex class.
  */
 /*==========================================================================*/
 Mutex::Mutex()
@@ -38,7 +38,7 @@ Mutex::Mutex()
 
 /*==========================================================================*/
 /**
- *  Destructor.
+ *  @brief  Destructs the Mutex class.
  */
 /*==========================================================================*/
 Mutex::~Mutex()
@@ -48,29 +48,29 @@ Mutex::~Mutex()
 
 /*==========================================================================*/
 /**
- *  Get mutex hundler.
+ *  @brief  Returns mutex hundler.
  *  @return mutex hundler
  */
 /*==========================================================================*/
 Mutex::Handler& Mutex::handler()
 {
-    return( m_handler );
+    return m_handler;
 }
 
 /*==========================================================================*/
 /**
- *  Get mutex hundler.
+ *  @brief  Returns mutex hundler.
  *  @return mutex hundler
  */
 /*==========================================================================*/
 const Mutex::Handler& Mutex::handler() const
 {
-    return( m_handler );
+    return m_handler;
 }
 
 /*==========================================================================*/
 /**
- *  Lock.
+ *  @brief  Lock.
  */
 /*==========================================================================*/
 void Mutex::lock()
@@ -84,7 +84,7 @@ void Mutex::lock()
 
 /*==========================================================================*/
 /**
- *  Unlock.
+ *  @brief  Unlock.
  */
 /*==========================================================================*/
 void Mutex::unlock()
@@ -98,7 +98,7 @@ void Mutex::unlock()
 
 /*==========================================================================*/
 /**
- *  Test whether it is possible to lock.
+ *  @brief  Test whether it is possible to lock.
  *  @return true, if it is possible to lock
  */
 /*==========================================================================*/
@@ -108,21 +108,21 @@ bool Mutex::tryLock()
     if ( WaitForSingleObject( m_handler, 0 ) != WAIT_OBJECT_0 )
     {
         kvsMessageError( "Mutex lock test failure." );
-        return( false );
+        return false;
     }
 #else
     if ( pthread_mutex_trylock( &m_handler ) != 0 )
     {
         kvsMessageError( "Mutex lock test failure." );
-        return( false );
+        return false;
     }
 #endif
-    return( true );
+    return true;
 }
 
 /*==========================================================================*/
 /**
- *  Create the mutex.
+ *  @brief  Create the mutex.
  */
 /*==========================================================================*/
 void Mutex::create_mutex()
@@ -136,7 +136,7 @@ void Mutex::create_mutex()
 
 /*==========================================================================*/
 /**
- *  Delete the mutex.
+ *  @brief  Delete the mutex.
  */
 /*==========================================================================*/
 void Mutex::delete_mutex()

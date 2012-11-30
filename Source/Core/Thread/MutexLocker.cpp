@@ -20,19 +20,19 @@ namespace kvs
 
 /*==========================================================================*/
 /**
- *  Constructor.
- *  @param mutex [in] pointer to the mutex
+ *  @brief  Constructs a new MutexLocker class.
+ *  @param  mutex [in] pointer to the mutex
  */
 /*==========================================================================*/
-MutexLocker::MutexLocker( kvs::Mutex* mutex )
-    : m_mutex( mutex )
+MutexLocker::MutexLocker( kvs::Mutex* mutex ):
+    m_mutex( mutex )
 {
     this->relock();
 }
 
 /*==========================================================================*/
 /**
- *  Destructor.
+ *  @brief  Destructs the MutexLocker class.
  */
 /*==========================================================================*/
 MutexLocker::~MutexLocker()
@@ -42,7 +42,7 @@ MutexLocker::~MutexLocker()
 
 /*==========================================================================*/
 /**
- *  Relock.
+ *  @brief  Relock.
  */
 /*==========================================================================*/
 void MutexLocker::relock()
@@ -52,7 +52,7 @@ void MutexLocker::relock()
 
 /*==========================================================================*/
 /**
- *  Unlock.
+ *  @brief  Unlock.
  */
 /*==========================================================================*/
 void MutexLocker::unlock()
@@ -62,13 +62,13 @@ void MutexLocker::unlock()
 
 /*==========================================================================*/
 /**
- *  Get pointer to the mutex.
+ *  @brief  Returns pointer to the mutex.
  *  @return pointer to the mutex
  */
 /*==========================================================================*/
 Mutex* MutexLocker::mutex()
 {
-    return( m_mutex );
+    return m_mutex;
 }
 
 } // end of namespace kvs

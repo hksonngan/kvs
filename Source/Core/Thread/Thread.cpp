@@ -28,22 +28,22 @@ namespace
 
 /*==========================================================================*/
 /**
- *  Entry point for kvs::Thread::run.
- *  @param arg [in] pointer to arguments of thread function
- *  @return <ReturnValue>
+ *  @brief  Entry point for kvs::Thread::run method.
+ *  @param  arg [in] pointer to arguments of thread function
+ *  @return NULL
  */
 /*==========================================================================*/
 void* EntryPoint( void* arg )
 {
     ( (kvs::Thread*)arg )->run();
-    return( NULL );
+    return NULL;
 }
 
 #if !defined ( KVS_PLATFORM_WINDOWS )
 /*==========================================================================*/
 /**
- *  Sleep thread.
- *  @param t [in] sleep time
+ *  @brief  Sleep thread.
+ *  @param  t [in] sleep time
  */
 /*==========================================================================*/
 void SleepThread( struct timespec* t )
@@ -64,136 +64,17 @@ void SleepThread( struct timespec* t )
 #endif
 } // end of namesapce
 
+
 namespace kvs
 {
 
 /*==========================================================================*/
 /**
- *  Constructor.
+ *  @brief  Sleep the thread in seconds.
+ *  @param  sec [in] second
  */
 /*==========================================================================*/
-Thread::Thread()
-    : m_is_running( false )
-    , m_handler( 0 )
-    , m_routine( NULL )
-{
-}
-
-/*==========================================================================*/
-/**
- *  Constructor.
- *  @param routine [in] routine function for thread
- */
-/*==========================================================================*/
-Thread::Thread( Routine routine )
-    : m_is_running( false )
-    , m_handler( 0 )
-    , m_routine( routine )
-{
-}
-
-/*==========================================================================*/
-/**
- *  Destructor.
- */
-/*==========================================================================*/
-Thread::~Thread()
-{
-    this->delete_thread();
-}
-
-/*==========================================================================*/
-/**
- *  Get thread hundler.
- *  @return thread hundler
- */
-/*==========================================================================*/
-Thread::Handler& Thread::handler()
-{
-    return( m_handler );
-}
-
-/*==========================================================================*/
-/**
- *  Get thread hundler.
- *  @return thread hundler
- */
-/*==========================================================================*/
-const Thread::Handler& Thread::handler() const
-{
-    return( m_handler );
-}
-
-/*==========================================================================*/
-/**
- *  Test whether the thread is running.
- *  @return true, if the thread is running
- */
-/*==========================================================================*/
-bool Thread::isRunning() const
-{
-    return( m_is_running );
-}
-
-/*==========================================================================*/
-/**
- *  Start the thread.
- *  @return true, if the process is done succussfully
- */
-/*==========================================================================*/
-bool Thread::start()
-{
-    Routine routine;
-    if ( m_routine == NULL ) { routine = ( Routine ) ::EntryPoint; }
-    else { routine = m_routine; }
-
-    if ( !this->create_thread( routine, this ) )
-    {
-        kvsMessageError( "Cannot create thread." );
-        m_is_running = false;
-
-        return( false );
-    }
-
-    m_is_running = true;
-
-    return( true );
-}
-
-/*==========================================================================*/
-/**
- *  Wait the thread.
- *  @return true, if the process is done successfully
- */
-/*==========================================================================*/
-bool Thread::wait()
-{
-#if defined ( KVS_PLATFORM_WINDOWS )
-    int ret = WaitForSingleObject( m_handler, INFINITE );
-    return( ret == WAIT_FAILED ? false : true );
-#else
-    int ret = pthread_join( m_handler, NULL );
-    return( ret == 0 ? true : false );
-#endif
-}
-
-/*==========================================================================*/
-/**
- *  Quit the thread.
- */
-/*==========================================================================*/
-void Thread::quit()
-{
-    this->delete_thread();
-}
-
-/*==========================================================================*/
-/**
- *  Sleep the thread in second.
- *  @param sec [in] second
- */
-/*==========================================================================*/
-void Thread::sleep( int sec )
+void Thread::Sleep( const int sec )
 {
 #if defined ( KVS_PLATFORM_WINDOWS )
     Sleep( sec * 1000 );
@@ -209,11 +90,11 @@ void Thread::sleep( int sec )
 
 /*==========================================================================*/
 /**
- *  Sleep the thread in mili-second.
- *  @param msec [in] mili-second
+ *  @brief  Sleep the thread in milli-seconds.
+ *  @param  msec [in] milli-second
  */
 /*==========================================================================*/
-void Thread::msleep( int msec )
+void Thread::MilliSleep( const int msec )
 {
 #if defined ( KVS_PLATFORM_WINDOWS )
     Sleep( msec );
@@ -230,11 +111,11 @@ void Thread::msleep( int msec )
 
 /*==========================================================================*/
 /**
- *  Sleep the thread in micro-second.
- *  @param usec [in] micro-second
+ *  @brief  Sleep the thread in micro-seconds.
+ *  @param  usec [in] micro-second
  */
 /*==========================================================================*/
-void Thread::usleep( int usec )
+void Thread::MicroSleep( const int usec )
 {
 #if defined ( KVS_PLATFORM_WINDOWS )
     Sleep( ( usec / 1000 ) + 1 );
@@ -247,6 +128,126 @@ void Thread::usleep( int usec )
     ts.tv_nsec %= 1000000000;
     ::SleepThread( &ts );
 #endif
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Constructs a new Thread class.
+ */
+/*==========================================================================*/
+Thread::Thread():
+    m_is_running( false ),
+    m_handler( 0 ),
+    m_routine( NULL )
+{
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Constructs a new Thread class.
+ *  @param  routine [in] routine function for thread
+ */
+/*==========================================================================*/
+Thread::Thread( Routine routine ):
+    m_is_running( false ),
+    m_handler( 0 ),
+    m_routine( routine )
+{
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Destructs the Thread class.
+ */
+/*==========================================================================*/
+Thread::~Thread()
+{
+    this->delete_thread();
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Returns thread hundler.
+ *  @return thread hundler
+ */
+/*==========================================================================*/
+Thread::Handler& Thread::handler()
+{
+    return m_handler;
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Returns thread hundler.
+ *  @return thread hundler
+ */
+/*==========================================================================*/
+const Thread::Handler& Thread::handler() const
+{
+    return m_handler;
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Test whether the thread is running.
+ *  @return true, if the thread is running
+ */
+/*==========================================================================*/
+bool Thread::isRunning() const
+{
+    return m_is_running;
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Start the thread.
+ *  @return true, if the process is done succussfully
+ */
+/*==========================================================================*/
+bool Thread::start()
+{
+    Routine routine;
+    if ( m_routine == NULL ) { routine = ( Routine ) ::EntryPoint; }
+    else { routine = m_routine; }
+
+    if ( !this->create_thread( routine, this ) )
+    {
+        kvsMessageError( "Cannot create thread." );
+        m_is_running = false;
+
+        return false;
+    }
+
+    m_is_running = true;
+
+    return true;
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Wait the thread.
+ *  @return true, if the process is done successfully
+ */
+/*==========================================================================*/
+bool Thread::wait()
+{
+#if defined ( KVS_PLATFORM_WINDOWS )
+    int ret = WaitForSingleObject( m_handler, INFINITE );
+    return ret == WAIT_FAILED ? false : true;
+#else
+    int ret = pthread_join( m_handler, NULL );
+    return ret == 0 ? true : false;
+#endif
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Quit the thread.
+ */
+/*==========================================================================*/
+void Thread::quit()
+{
+    this->delete_thread();
 }
 
 /*==========================================================================*/

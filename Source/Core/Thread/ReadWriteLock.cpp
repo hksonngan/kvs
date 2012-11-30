@@ -20,19 +20,19 @@ namespace kvs
 
 /*==========================================================================*/
 /**
- *  Constructor.
+ *  @brief  Constructs a new ReadWriteLock class.
  */
 /*==========================================================================*/
-ReadWriteLock::ReadWriteLock()
-    : m_counter( 0 )
-    , m_nreaders( 0 )
-    , m_nwriters( 0 )
+ReadWriteLock::ReadWriteLock():
+    m_counter( 0 ),
+    m_nreaders( 0 ),
+    m_nwriters( 0 )
 {
 }
 
 /*==========================================================================*/
 /**
- *  Destructor.
+ *  @brief  Destructs the ReadWriteLock class.
  */
 /*==========================================================================*/
 ReadWriteLock::~ReadWriteLock()
@@ -41,7 +41,7 @@ ReadWriteLock::~ReadWriteLock()
 
 /*==========================================================================*/
 /**
- *  Lock for read access.
+ *  @brief  Lock for read access.
  */
 /*==========================================================================*/
 void ReadWriteLock::lockRead()
@@ -60,7 +60,7 @@ void ReadWriteLock::lockRead()
 
 /*==========================================================================*/
 /**
- *  Lock for write access.
+ *  @brief  Lock for write access.
  */
 /*==========================================================================*/
 void ReadWriteLock::lockWrite()
@@ -79,7 +79,7 @@ void ReadWriteLock::lockWrite()
 
 /*==========================================================================*/
 /**
- *  Test whether it is possible to lock for reader.
+ *  @brief  Test whether it is possible to lock for reader.
  *  @return true, if it is possible to lock
  */
 /*==========================================================================*/
@@ -87,16 +87,16 @@ bool ReadWriteLock::tryLockRead()
 {
     kvs::MutexLocker locker( &m_mutex );
 
-    if ( m_counter < 0 ) { return( false ); }
+    if ( m_counter < 0 ) { return false; }
 
     m_counter++;
 
-    return( true );
+    return true;
 }
 
 /*==========================================================================*/
 /**
- *  Test whether it is possible to lock for writer.
+ *  @brief  Test whether it is possible to lock for writer.
  *  @return true, if it is possible to lock
  */
 /*==========================================================================*/
@@ -104,16 +104,16 @@ bool ReadWriteLock::tryLockWrite()
 {
     kvs::MutexLocker locker( &m_mutex );
 
-    if ( m_counter != 0 ) { return( false ); }
+    if ( m_counter != 0 ) { return false; }
 
     m_counter = -1;
 
-    return( true );
+    return true;
 }
 
 /*==========================================================================*/
 /**
- *  Unlock.
+ *  @brief  Unlock.
  */
 /*==========================================================================*/
 void ReadWriteLock::unlock()

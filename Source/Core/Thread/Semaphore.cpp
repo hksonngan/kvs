@@ -21,18 +21,18 @@ namespace kvs
 
 /*==========================================================================*/
 /**
- *  Constructor.
- *  @param nresources [in] number of resources
+ *  @brief  Constructs a new Semaphore class.
+ *  @param  nresources [in] number of resources
  */
 /*==========================================================================*/
-Semaphore::Semaphore( int nresources )
-    : m_available( nresources )
+Semaphore::Semaphore( int nresources ):
+    m_available( nresources )
 {
 }
 
 /*==========================================================================*/
 /**
- *  Destructor.
+ *  @brief  Destructs the Semaphore class.
  */
 /*==========================================================================*/
 Semaphore::~Semaphore()
@@ -41,8 +41,8 @@ Semaphore::~Semaphore()
 
 /*==========================================================================*/
 /**
- *  Acquire the semaphores.
- *  @param nresources [in] number of resources
+ *  @brief  Acquire the semaphores.
+ *  @param  nresources [in] number of resources
  */
 /*==========================================================================*/
 void Semaphore::acquire( int nresources )
@@ -59,8 +59,8 @@ void Semaphore::acquire( int nresources )
 
 /*==========================================================================*/
 /**
- *  Release the semaphores.
- *  @param nresources [in] number of resources
+ *  @brief  Release the semaphores.
+ *  @param  nresources [in] number of resources
  */
 /*==========================================================================*/
 void Semaphore::release( int nresources )
@@ -73,8 +73,8 @@ void Semaphore::release( int nresources )
 
 /*==========================================================================*/
 /**
- *  Test whether it is posibble to acquire.
- *  @param nresources [in] number of resources
+ *  @brief  Test whether it is posibble to acquire.
+ *  @param  nresources [in] number of resources
  *  @return true, if it is possible to acquire
  */
 /*==========================================================================*/
@@ -82,16 +82,16 @@ bool Semaphore::tryAcquire( int nresources )
 {
     kvs::MutexLocker locker( &m_mutex );
 
-    if ( nresources > m_available ) { return( false ); }
+    if ( nresources > m_available ) { return false; }
 
     m_available -= nresources;
 
-    return( true );
+    return true;
 }
 
 /*==========================================================================*/
 /**
- *  Get the number of the available resources.
+ *  @brief  Returns the number of the available resources.
  *  @return number of the available resources
  */
 /*==========================================================================*/
@@ -99,7 +99,7 @@ int Semaphore::available()
 {
     kvs::MutexLocker locker( &m_mutex );
 
-    return( m_available );
+    return m_available;
 }
 
 } // end of namespace kvs

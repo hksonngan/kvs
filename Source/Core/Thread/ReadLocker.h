@@ -27,7 +27,7 @@ class ReadWriteLock;
 /*==========================================================================*/
 class ReadLocker
 {
-protected:
+private:
 
     kvs::ReadWriteLock* m_rwlock; ///< pointer to read-write lock
 

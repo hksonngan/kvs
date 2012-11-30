@@ -22,12 +22,12 @@ class ReadWriteLock;
 
 /*==========================================================================*/
 /**
- *  Write locker class.
+ *  @brief  Write locker class.
  */
 /*==========================================================================*/
 class WriteLocker
 {
-protected:
+private:
 
     kvs::ReadWriteLock* m_rwlock; ///< pointer to read-write lock
 

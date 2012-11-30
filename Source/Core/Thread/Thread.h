@@ -52,6 +52,12 @@ protected:
 
 public:
 
+    static void Sleep( const int sec );
+    static void MilliSleep( const int msec );
+    static void MicroSleep( const int usec );
+
+public:
+
     Thread();
     Thread( Routine routine );
     virtual ~Thread();
@@ -65,14 +71,17 @@ public:
     bool wait();
     void quit();
 
-    static void sleep( int sec );
-    static void msleep( int msec );
-    static void usleep( int usec );
-
 protected:
 
     bool create_thread( Routine routine, void* arg );
     void delete_thread();
+
+#if 1 // KVS_ENABLE_DEPLICATE
+public:
+    static void sleep( int sec ) { Thread::Sleep( sec ); }
+    static void msleep( int msec ){ Thread::MilliSleep( msec ); }
+    static void usleep( int usec ){ Thread::MicroSleep( usec ); }
+#endif
 };
 
 } // end of namespace kvs

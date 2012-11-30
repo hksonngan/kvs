@@ -20,19 +20,19 @@ namespace kvs
 
 /*==========================================================================*/
 /**
- *  Constructor.
- *  @param rwlock [in] pointer to read/write lock
+ *  @brief  Constructs a new WriteLocker class.
+ *  @param  rwlock [in] pointer to read/write lock
  */
 /*==========================================================================*/
-WriteLocker::WriteLocker( kvs::ReadWriteLock* rwlock )
-    : m_rwlock( rwlock )
+WriteLocker::WriteLocker( kvs::ReadWriteLock* rwlock ):
+    m_rwlock( rwlock )
 {
     this->relock();
 }
 
 /*==========================================================================*/
 /**
- *  Destructor.
+ *  @brief  Destructs the WriteLocker class.
  */
 /*==========================================================================*/
 WriteLocker::~WriteLocker()
@@ -42,7 +42,7 @@ WriteLocker::~WriteLocker()
 
 /*==========================================================================*/
 /**
- *  Relock.
+ *  @brief  Relock.
  */
 /*==========================================================================*/
 void WriteLocker::relock()
@@ -52,7 +52,7 @@ void WriteLocker::relock()
 
 /*==========================================================================*/
 /**
- *  Unlock.
+ *  @brief  Unlock.
  */
 /*==========================================================================*/
 void WriteLocker::unlock()
@@ -62,13 +62,13 @@ void WriteLocker::unlock()
 
 /*==========================================================================*/
 /**
- *  Get pointer to the read/write lock.
+ *  @brief  Returns pointer to the read/write lock.
  *  @return pointer to the read/write lock
  */
 /*==========================================================================*/
 kvs::ReadWriteLock* WriteLocker::readWriteLock()
 {
-    return( m_rwlock );
+    return m_rwlock;
 }
 
 } // end of namespace kvs

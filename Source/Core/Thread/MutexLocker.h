@@ -22,12 +22,12 @@ class Mutex;
 
 /*==========================================================================*/
 /**
- *  Mutex locker class.
+ *  @brief  Mutex locker class.
  */
 /*==========================================================================*/
 class MutexLocker
 {
-protected:
+private:
 
     kvs::Mutex* m_mutex; ///< pointer to mutex
 

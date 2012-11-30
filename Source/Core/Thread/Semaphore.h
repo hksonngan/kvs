@@ -28,7 +28,7 @@ namespace kvs
 /*==========================================================================*/
 class Semaphore
 {
-protected:
+private:
 
     int m_available; ///< number of available semaphores
     kvs::Mutex m_mutex; ///< mutex for locker
@@ -37,12 +37,12 @@ protected:
 public:
 
     Semaphore( int nresources = 0 );
-    virtual ~Semaphore( void );
+    virtual ~Semaphore();
 
     void acquire( int nresources = 1 );
     void release( int nresources = 1 );
     bool tryAcquire( int nresources = 1 );
-    int available( void );
+    int available();
 };
 
 } // end of namespace kvs

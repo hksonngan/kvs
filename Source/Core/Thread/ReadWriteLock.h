@@ -28,7 +28,7 @@ namespace kvs
 /*==========================================================================*/
 class ReadWriteLock
 {
-protected:
+private:
 
     int m_counter; ///< access counter
     int m_nreaders; ///< number of waiting readers

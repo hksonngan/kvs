@@ -42,35 +42,26 @@ public:
     typedef pthread_mutex_t Handler;
 #endif
 
-protected:
+private:
 
     Handler m_handler; ///< mutex handler
 
 public:
 
-    Mutex( void );
+    Mutex();
+    virtual ~Mutex();
 
-    virtual ~Mutex( void );
+    Handler& handler();
+    const Handler& handler() const;
 
-public:
-
-    Handler& handler( void );
-
-    const Handler& handler( void ) const;
-
-public:
-
-    void lock( void );
-
-    void unlock( void );
-
-    bool tryLock( void );
+    void lock();
+    void unlock();
+    bool tryLock();
 
 protected:
 
-    void create_mutex( void );
-
-    void delete_mutex( void );
+    void create_mutex();
+    void delete_mutex();
 };
 
 } // end of namespace kvs
