@@ -24,7 +24,7 @@ namespace kvs
  *  @brief  Constructs a new UnstructuredVectorToScalar class.
  */
 /*===========================================================================*/
-UnstructuredVectorToScalar::UnstructuredVectorToScalar( void )
+UnstructuredVectorToScalar::UnstructuredVectorToScalar()
 {
 }
 
@@ -44,7 +44,7 @@ UnstructuredVectorToScalar::UnstructuredVectorToScalar( const kvs::UnstructuredV
  *  @brief  Destroys the UnstructuredVolumeObject class.
  */
 /*===========================================================================*/
-UnstructuredVectorToScalar::~UnstructuredVectorToScalar( void )
+UnstructuredVectorToScalar::~UnstructuredVectorToScalar()
 {
 }
 
@@ -61,7 +61,7 @@ UnstructuredVectorToScalar::SuperClass* UnstructuredVectorToScalar::exec( const 
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is NULL.");
-        return( NULL );
+        return NULL;
     }
 
     const kvs::UnstructuredVolumeObject* volume = kvs::UnstructuredVolumeObject::DownCast( object );
@@ -69,7 +69,7 @@ UnstructuredVectorToScalar::SuperClass* UnstructuredVectorToScalar::exec( const 
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is not supported.");
-        return( NULL );
+        return NULL;
     }
 
     const std::type_info& type = volume->values().typeInfo()->type();
@@ -87,10 +87,10 @@ UnstructuredVectorToScalar::SuperClass* UnstructuredVectorToScalar::exec( const 
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Unsupported data type '%s'.", volume->values().typeInfo()->typeName() );
-        return( NULL );
+        return NULL;
     }
 
-    return( this );
+    return this;
 }
 
 /*===========================================================================*/

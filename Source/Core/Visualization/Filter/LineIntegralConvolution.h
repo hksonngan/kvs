@@ -5,7 +5,7 @@
  *  @brief  LIC (Line Integral Convolution) filtering class.
  *
  *  @author Naohisa Sakamoto
- *  @date   2010/10/12 21:07:36
+ *  @date   2012/11/30 13:06:01
  */
 /*----------------------------------------------------------------------------
  *
@@ -34,43 +34,31 @@ namespace kvs
 /*===========================================================================*/
 class LineIntegralConvolution : public kvs::FilterBase, public kvs::StructuredVolumeObject
 {
-    // Class name.
     kvsClassName( kvs::LineIntegralConvolution );
-
-    // Module information.
     kvsModuleCategory( Filter );
     kvsModuleBaseClass( kvs::FilterBase );
     kvsModuleSuperClass( kvs::StructuredVolumeObject );
 
 protected:
 
-    double                       m_length; ///< stream length
-    kvs::StructuredVolumeObject* m_noise;  ///< white noise volume
+    double m_length; ///< stream length
+    kvs::StructuredVolumeObject* m_noise; ///< white noise volume
 
 public:
 
-    LineIntegralConvolution( void );
-
+    LineIntegralConvolution();
     LineIntegralConvolution( const kvs::StructuredVolumeObject* volume );
-
     LineIntegralConvolution( const kvs::StructuredVolumeObject* volume, const double length );
-
-    virtual ~LineIntegralConvolution( void );
-
-public:
+    virtual ~LineIntegralConvolution();
 
     void setLength( const double length );
-
-public:
 
     SuperClass* exec( const kvs::ObjectBase* object );
 
 protected:
 
     void filtering( const kvs::StructuredVolumeObject* volume );
-
     void create_noise_volume( const kvs::StructuredVolumeObject* volume );
-
     template <typename T>
     void convolution( const kvs::StructuredVolumeObject* volume );
 };

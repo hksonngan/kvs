@@ -24,13 +24,12 @@ namespace kvs
 
 /*==========================================================================*/
 /**
- *  Filter base class.
+ *  @brief  Filter base class.
  */
 /*==========================================================================*/
 class FilterBase
 {
     kvsClassName( kvs::FilterBase );
-
     kvsModuleBase;
 
 protected:
@@ -39,19 +38,13 @@ protected:
 
 public:
 
-    FilterBase( void );
+    FilterBase();
+    virtual ~FilterBase();
 
-    virtual ~FilterBase( void );
-
-public:
+    bool isSuccess() const;
+    bool isFailure() const;
 
     virtual kvs::ObjectBase* exec( const kvs::ObjectBase* object ) = 0;
-
-public:
-
-    const bool isSuccess( void ) const;
-
-    const bool isFailure( void ) const;
 };
 
 } // end of namespace kvs

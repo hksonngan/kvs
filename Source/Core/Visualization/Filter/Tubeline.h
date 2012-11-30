@@ -31,10 +31,7 @@ namespace kvs
 /*===========================================================================*/
 class Tubeline : public kvs::FilterBase, public kvs::PolygonObject
 {
-    // Class name.
     kvsClassName( kvs::Tubeline );
-
-    // Module information.
     kvsModuleCategory( Filter );
     kvsModuleBaseClass( kvs::FilterBase );
     kvsModuleSuperClass( kvs::PolygonObject );
@@ -46,29 +43,18 @@ protected:
 public:
 
     Tubeline( void );
-
-    Tubeline(
-        const kvs::LineObject* object,
-        const size_t ndivisions = 6 );
-
+    Tubeline( const kvs::LineObject* object, const size_t ndivisions = 6 );
     virtual ~Tubeline( void );
 
-public:
-
-    void setNDivisions( const size_t ndivisions );
-
-public:
+    void setNumberOfDivisions( const size_t ndivisions );
 
     SuperClass* exec( const kvs::ObjectBase* object );
 
 protected:
 
     void filtering_strip( const kvs::LineObject* line );
-
     void filtering_uniline( const kvs::LineObject* line );
-
     void filtering_polyline( const kvs::LineObject* line );
-
     void filtering_segment( const kvs::LineObject* line );
 
 protected:
@@ -110,6 +96,11 @@ protected:
         const std::vector<kvs::Vector3f>& start_circle,
         const std::vector<kvs::Vector3f>& end_circle,
         const size_t vertex_number );
+
+#if 1 // KVS_ENABLE_DEPRECATED
+public:
+    void setNDivisions( const size_t ndivisions ) { this->setNumberOfDivisions( ndivisions ); }
+#endif
 };
 
 } // end of namespace kvs

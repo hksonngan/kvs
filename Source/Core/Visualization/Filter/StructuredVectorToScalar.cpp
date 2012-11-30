@@ -24,7 +24,7 @@ namespace kvs
  *  @brief  Constructs a new StructuredVectorToScalar class.
  */
 /*===========================================================================*/
-StructuredVectorToScalar::StructuredVectorToScalar( void )
+StructuredVectorToScalar::StructuredVectorToScalar()
 {
 }
 
@@ -44,7 +44,7 @@ StructuredVectorToScalar::StructuredVectorToScalar( const kvs::StructuredVolumeO
  *  @brief  Destroys the StructuredVolumeObject class.
  */
 /*===========================================================================*/
-StructuredVectorToScalar::~StructuredVectorToScalar( void )
+StructuredVectorToScalar::~StructuredVectorToScalar()
 {
 }
 
@@ -61,7 +61,7 @@ StructuredVectorToScalar::SuperClass* StructuredVectorToScalar::exec( const kvs:
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is NULL.");
-        return( NULL );
+        return NULL;
     }
 
     const kvs::StructuredVolumeObject* volume = kvs::StructuredVolumeObject::DownCast( object );
@@ -69,7 +69,7 @@ StructuredVectorToScalar::SuperClass* StructuredVectorToScalar::exec( const kvs:
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is not supported.");
-        return( NULL );
+        return NULL;
     }
 
     const std::type_info& type = volume->values().typeInfo()->type();
@@ -87,10 +87,10 @@ StructuredVectorToScalar::SuperClass* StructuredVectorToScalar::exec( const kvs:
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Unsupported data type '%s'.", volume->values().typeInfo()->typeName() );
-        return( NULL );
+        return NULL;
     }
 
-    return( this );
+    return this;
 }
 
 /*===========================================================================*/

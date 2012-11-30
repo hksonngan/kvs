@@ -21,6 +21,7 @@
 #include <kvs/ClassName>
 #include <kvs/Module>
 
+
 namespace kvs
 {
 
@@ -31,23 +32,16 @@ namespace kvs
 /*===========================================================================*/
 class StructuredVectorToScalar : public kvs::FilterBase, public kvs::StructuredVolumeObject
 {
-    // Class name.
     kvsClassName( kvs::StructuredVectorToScalar );
-
-    // Module information.
     kvsModuleCategory( Filter );
     kvsModuleBaseClass( kvs::FilterBase );
     kvsModuleSuperClass( kvs::StructuredVolumeObject );
 
 public:
 
-    StructuredVectorToScalar( void );
-
+    StructuredVectorToScalar();
     StructuredVectorToScalar( const kvs::StructuredVolumeObject* volume );
-
-    virtual ~StructuredVectorToScalar( void );
-
-public:
+    virtual ~StructuredVectorToScalar();
 
     SuperClass* exec( const kvs::ObjectBase* object );
 

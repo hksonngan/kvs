@@ -35,10 +35,7 @@ namespace kvs
 /*==========================================================================*/
 class Bounds : public kvs::FilterBase, public kvs::LineObject
 {
-    // Class name.
     kvsClassName( kvs::Bounds );
-
-    // Module information.
     kvsModuleCategory( Filter );
     kvsModuleBaseClass( kvs::FilterBase );
     kvsModuleSuperClass( kvs::LineObject );
@@ -47,49 +44,36 @@ public:
 
     enum Type
     {
-        Box    = 0, ///< box type bounds
+        Box = 0, ///< box type bounds
         Corner = 1, ///< corner type bounds
         Circle = 2, ///< circle type bounds
     };
 
 protected:
 
-    Type  m_type;         ///< bounds type
+    Type m_type; ///< bounds type
     float m_corner_scale; ///< length of corner line
-    float m_division;     ///< division of circle
+    float m_division; ///< division of circle
 
 public:
 
-    Bounds( void );
-
+    Bounds();
     Bounds( const kvs::ObjectBase* object, const Bounds::Type type = Bounds::Box );
-
     Bounds( const kvs::Vector3f& min_coord, const kvs::Vector3f& max_coord, const Bounds::Type type = Bounds::Box );
-
-    virtual ~Bounds( void );
-
-public:
+    virtual ~Bounds();
 
     SuperClass* exec( const kvs::ObjectBase* object );
 
-public:
-
     void setType( const Bounds::Type type );
-
     void setCornerScale( const float corner_scale );
-
     void setCircleDivision( const float division );
 
 private:
 
-    void initialize( void );
-
-    void create_box_bounds( void );
-
-    void create_corner_bounds( void );
-
-    void create_circle_bounds( void );
-
+    void initialize();
+    void create_box_bounds();
+    void create_corner_bounds();
+    void create_circle_bounds();
     void set_corner(
         const kvs::Vector3f&      pos1,
         const kvs::Vector3f&      pos2,

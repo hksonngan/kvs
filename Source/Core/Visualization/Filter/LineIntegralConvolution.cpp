@@ -4,7 +4,7 @@
  *  @brief  LIC (Line Integral Convolution) class.
  *
  *  @author Naohisa Sakamoto
- *  @date   2010/10/08 16:15:48
+ *  @date   2012/11/30 13:06:24
  */
 /*----------------------------------------------------------------------------
  *
@@ -28,7 +28,7 @@ namespace kvs
  *  @brief  Constructs a new LineIntegralConvolution class.
  */
 /*===========================================================================*/
-LineIntegralConvolution::LineIntegralConvolution( void ):
+LineIntegralConvolution::LineIntegralConvolution():
     m_length( 0.0 ),
     m_noise( NULL )
 {
@@ -68,7 +68,7 @@ LineIntegralConvolution::LineIntegralConvolution( const kvs::StructuredVolumeObj
  *  @brief  Destructs the LineIntegralConvolution class.
  */
 /*===========================================================================*/
-LineIntegralConvolution::~LineIntegralConvolution( void )
+LineIntegralConvolution::~LineIntegralConvolution()
 {
     if ( m_noise ){ delete m_noise; m_noise = NULL; }
 }
@@ -97,7 +97,7 @@ LineIntegralConvolution::SuperClass* LineIntegralConvolution::exec( const kvs::O
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is NULL.");
-        return( NULL );
+        return NULL;
     }
 
     const kvs::StructuredVolumeObject* volume = kvs::StructuredVolumeObject::DownCast( object );
@@ -105,20 +105,20 @@ LineIntegralConvolution::SuperClass* LineIntegralConvolution::exec( const kvs::O
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is not supported.");
-        return( NULL );
+        return NULL;
     }
 
     if ( volume->veclen() == 1 )
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is not vector data.");
-        return( NULL );
+        return NULL;
     }
 
     this->create_noise_volume( volume );
     this->filtering( volume );
 
-    return( this );
+    return this;
 }
 
 /*===========================================================================*/

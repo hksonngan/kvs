@@ -30,7 +30,7 @@ const kvs::ValueArray<kvs::Real32> GetVertexArray( const kvs::LineObject* line )
 {
     if ( line->lineType() == kvs::LineObject::Strip )
     {
-        return( line->coords() );
+        return line->coords();
     }
     else if ( line->lineType() == kvs::LineObject::Uniline )
     {
@@ -48,12 +48,12 @@ const kvs::ValueArray<kvs::Real32> GetVertexArray( const kvs::LineObject* line )
             vertices[ index + 2 ] = v[ id * dimension + 2 ];
         }
 
-        return( vertices );
+        return vertices;
     }
     else
     {
         const kvs::ValueArray<kvs::Real32> empty;
-        return( empty );
+        return empty;
     }
 }
 
@@ -86,7 +86,7 @@ const kvs::ValueArray<kvs::Real32> GetVertexArray(
             vertices[ index + 2 ] = v[ id * dimension + 2 ];
         }
 
-        return( vertices );
+        return vertices;
     }
     else if ( line->lineType() == kvs::LineObject::Segment )
     {
@@ -104,12 +104,12 @@ const kvs::ValueArray<kvs::Real32> GetVertexArray(
         vertices[4] = v[ id2 * dimension + 1 ];
         vertices[5] = v[ id2 * dimension + 2 ];
 
-        return( vertices );
+        return vertices;
     }
     else
     {
         const kvs::ValueArray<kvs::Real32> empty;
-        return( empty );
+        return empty;
     }
 }
 
@@ -136,16 +136,16 @@ const kvs::ValueArray<kvs::UInt8> GetColorArray( const kvs::LineObject* line )
             colors[ index + 2 ] = c[2];
         }
 
-        return( colors );
+        return colors;
     }
     else if ( line->ncolors() > 1 )
     {
-        return( line->colors() );
+        return line->colors();
     }
     else
     {
         const kvs::ValueArray<kvs::UInt8> empty;
-        return( empty );
+        return empty;
     }
 }
 
@@ -182,7 +182,7 @@ const kvs::ValueArray<kvs::UInt8> GetColorArray(
             colors[ index + 2 ] = c[2];
         }
 
-        return( colors );
+        return colors;
     }
     else if ( line->ncolors() > 1 )
     {
@@ -212,7 +212,7 @@ const kvs::ValueArray<kvs::UInt8> GetColorArray(
             colors[ i1 + 1 ] = c[ i2 + 1 ];
             colors[ i1 + 2 ] = c[ i2 + 2 ];
 
-            return( colors );
+            return colors;
         }
         else // kvs::LineObject::VertexColor
         {
@@ -225,13 +225,13 @@ const kvs::ValueArray<kvs::UInt8> GetColorArray(
                 colors[ index + 2 ] = c[ id * ncomponents + 2 ];
             }
 
-            return( colors );
+            return colors;
         }
     }
     else
     {
         const kvs::ValueArray<kvs::UInt8> empty;
-        return( empty );
+        return empty;
     }
 }
 
@@ -255,16 +255,16 @@ const kvs::ValueArray<kvs::Real32> GetSizeArray( const kvs::LineObject* line )
             sizes[i] = s[0];
         }
 
-        return( sizes );
+        return sizes;
     }
     else if ( line->nsizes() > 1 )
     {
-        return( line->sizes() );
+        return line->sizes();
     }
     else
     {
         const kvs::ValueArray<kvs::Real32> empty;
-        return( empty );
+        return empty;
     }
 }
 
@@ -298,7 +298,7 @@ const kvs::ValueArray<kvs::Real32> GetSizeArray(
             sizes[i] = s[0];
         }
 
-        return( sizes );
+        return sizes;
     }
     else if ( line->nsizes() > 1 )
     {
@@ -318,12 +318,12 @@ const kvs::ValueArray<kvs::Real32> GetSizeArray(
             sizes[i] = s[ i + counter ];
         }
 
-        return( sizes );
+        return sizes;
     }
     else
     {
         const kvs::ValueArray<kvs::Real32> empty;
-        return( empty );
+        return empty;
     }
 }
 
@@ -349,7 +349,7 @@ const kvs::PolygonObject::ColorType GetColorType( const kvs::LineObject* line )
         break;
     }
 
-    return( type );
+    return type;
 }
 
 /*===========================================================================*/
@@ -374,7 +374,7 @@ const size_t GetNumberOfVertices( const kvs::LineObject* line )
         break;
     }
 
-    return( nvertices );
+    return nvertices;
 }
 
 } // end of namespace
@@ -424,7 +424,7 @@ Tubeline::~Tubeline( void )
  *  @param  ndivisions [in] number of divisions
  */
 /*===========================================================================*/
-void Tubeline::setNDivisions( const size_t ndivisions )
+void Tubeline::setNumberOfDivisions( const size_t ndivisions )
 {
     m_ndivisions = ndivisions;
 }
@@ -442,7 +442,7 @@ Tubeline::SuperClass* Tubeline::exec( const kvs::ObjectBase* object )
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is NULL.");
-        return( NULL );
+        return NULL;
     }
 
     const kvs::LineObject* line = kvs::LineObject::DownCast( object );
@@ -450,7 +450,7 @@ Tubeline::SuperClass* Tubeline::exec( const kvs::ObjectBase* object )
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is not supported.");
-        return( NULL );
+        return NULL;
     }
 
     // Set the min/max coordinates.
@@ -478,10 +478,10 @@ Tubeline::SuperClass* Tubeline::exec( const kvs::ObjectBase* object )
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Unknown line type.");
-        return( NULL );
+        return NULL;
     }
 
-    return( this );
+    return this;
 }
 
 /*===========================================================================*/

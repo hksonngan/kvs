@@ -31,10 +31,7 @@ namespace kvs
 /*===========================================================================*/
 class TetrahedraToTetrahedra : public kvs::FilterBase, public kvs::UnstructuredVolumeObject
 {
-    // Class name.
     kvsClassName( kvs::TetrahedraToTetrahedra );
-
-    // Module information.
     kvsModuleCategory( Filter );
     kvsModuleBaseClass( kvs::FilterBase );
     kvsModuleSuperClass( kvs::UnstructuredVolumeObject );
@@ -44,7 +41,7 @@ public:
     enum Method
     {
         Subdivision8, ///< subdivide a quadratic tetrahedron into eight linear tetrahedra
-        Removal       ///< remove the quadratic nodes
+        Removal ///< remove the quadratic nodes
     };
 
 private:
@@ -53,17 +50,11 @@ private:
 
 public:
 
-    TetrahedraToTetrahedra( void );
-
+    TetrahedraToTetrahedra();
     TetrahedraToTetrahedra( const kvs::UnstructuredVolumeObject* volume, const Method method = Subdivision8 );
-
-    virtual ~TetrahedraToTetrahedra( void );
-
-public:
+    virtual ~TetrahedraToTetrahedra();
 
     SuperClass* exec( const kvs::ObjectBase* object );
-
-public:
 
     void setMethod( const Method method );
 

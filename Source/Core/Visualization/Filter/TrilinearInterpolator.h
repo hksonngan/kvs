@@ -35,8 +35,8 @@ class TrilinearInterpolator
 private:
 
     kvs::Vector3ui m_grid_index; ///< grid index
-    kvs::UInt32    m_index[8];   ///< neighbouring grid index
-    kvs::Real32    m_weight[8];  ///< weight for the neighbouring grid index
+    kvs::UInt32 m_index[8]; ///< neighbouring grid index
+    kvs::Real32 m_weight[8]; ///< weight for the neighbouring grid index
 
     const kvs::StructuredVolumeObject* m_reference_volume; ///< reference irregular volume data
 
@@ -44,25 +44,32 @@ public:
 
     TrilinearInterpolator( const kvs::StructuredVolumeObject* volume );
 
-public:
-
     void attachPoint( const kvs::Vector3f& point );
-
     const kvs::UInt32* indices( void ) const;
-
     template <typename T>
     const kvs::Real32 scalar( void ) const;
-
     template <typename T>
     const kvs::Vector3f gradient( void ) const;
 };
 
-inline TrilinearInterpolator::TrilinearInterpolator( const kvs::StructuredVolumeObject* volume )
-    : m_grid_index( 0, 0, 0 )
-    , m_reference_volume( volume )
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new TrilinearInterpolator class.
+ *  @param  volume [in] pointer the input volume
+ */
+/*===========================================================================*/
+inline TrilinearInterpolator::TrilinearInterpolator( const kvs::StructuredVolumeObject* volume ):
+    m_grid_index( 0, 0, 0 ),
+    m_reference_volume( volume )
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Attach a point.
+ *  @param  point [in] point
+ */
+/*===========================================================================*/
 inline void TrilinearInterpolator::attachPoint( const kvs::Vector3f& point )
 {
     const kvs::Vector3ui resolution = m_reference_volume->resolution();
@@ -116,11 +123,23 @@ inline void TrilinearInterpolator::attachPoint( const kvs::Vector3f& point )
     m_weight[7] = yz - xyz;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the pointer to the index array.
+ *  @return pointer to the index array
+ */
+/*===========================================================================*/
 inline const kvs::UInt32* TrilinearInterpolator::indices( void ) const
 {
-    return( m_index );
+    return m_index;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the interpolated scalar.
+ *  @return interpolated scalar
+ */
+/*===========================================================================*/
 template <typename T>
 inline const float TrilinearInterpolator::scalar( void ) const
 {
@@ -138,6 +157,12 @@ inline const float TrilinearInterpolator::scalar( void ) const
             data[ m_index[7] ] * m_weight[7] ) );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the gradient vector.
+ *  @return gradient vector
+ */
+/*===========================================================================*/
 template <typename T>
 inline const kvs::Vector3f TrilinearInterpolator::gradient( void ) const
 {

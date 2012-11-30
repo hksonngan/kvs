@@ -22,8 +22,8 @@ namespace kvs
  *  @brief  Constructs a new FilterBase class.
  */
 /*===========================================================================*/
-FilterBase::FilterBase( void )
-    : m_is_success( true )
+FilterBase::FilterBase():
+    m_is_success( true )
 {
 }
 
@@ -32,7 +32,7 @@ FilterBase::FilterBase( void )
  *  @brief  Destructs the FilterBase class.
  */
 /*===========================================================================*/
-FilterBase::~FilterBase( void )
+FilterBase::~FilterBase()
 {
 }
 
@@ -42,9 +42,9 @@ FilterBase::~FilterBase( void )
  *  @return true if the filter process is done successfully
  */
 /*===========================================================================*/
-const bool FilterBase::isSuccess( void ) const
+bool FilterBase::isSuccess() const
 {
-    return( m_is_success );
+    return m_is_success;
 }
 
 /*===========================================================================*/
@@ -53,9 +53,9 @@ const bool FilterBase::isSuccess( void ) const
  *  @return true if the filter process is failed
  */
 /*===========================================================================*/
-const bool FilterBase::isFailure( void ) const
+bool FilterBase::isFailure() const
 {
-    return( !m_is_success );
+    return !m_is_success;
 }
 
 } // end of namespace kvs

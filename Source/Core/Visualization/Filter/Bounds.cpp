@@ -23,7 +23,7 @@ namespace kvs
  *  @brief  Constructs a new Bounds class.
  */
 /*===========================================================================*/
-Bounds::Bounds( void ):
+Bounds::Bounds():
     m_type( Bounds::Box ),
     m_corner_scale( 0.2f ),
     m_division( 50.0f )
@@ -70,7 +70,7 @@ Bounds::Bounds( const kvs::Vector3f& min_coord, const kvs::Vector3f& max_coord, 
  *  @brief  Destructs the Bounds class.
  */
 /*===========================================================================*/
-Bounds::~Bounds( void )
+Bounds::~Bounds()
 {
 }
 
@@ -86,7 +86,7 @@ Bounds::SuperClass* Bounds::exec( const kvs::ObjectBase* object )
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is NULL.");
-        return( NULL );
+        return NULL;
     }
 
 /*
@@ -95,7 +95,7 @@ Bounds::SuperClass* Bounds::exec( const kvs::ObjectBase* object )
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is not supported.");
-        return( NULL );
+        return NULL;
     }
 */
 
@@ -123,7 +123,7 @@ Bounds::SuperClass* Bounds::exec( const kvs::ObjectBase* object )
 
     SuperClass::disableCollision();
 
-    return( this );
+    return this;
 }
 
 /*==========================================================================*/
@@ -164,7 +164,7 @@ void Bounds::setCircleDivision( const float division )
  *  @breif  Initialize the parameters.
  */
 /*==========================================================================*/
-void Bounds::initialize( void )
+void Bounds::initialize()
 {
     m_type         = Bounds::Box;
     m_corner_scale = 0.2f;
@@ -176,7 +176,7 @@ void Bounds::initialize( void )
  *  @breif  Create a box type bounds.
  */
 /*==========================================================================*/
-void Bounds::create_box_bounds( void )
+void Bounds::create_box_bounds()
 {
     std::vector<kvs::Real32> coords;
     std::vector<kvs::UInt32> connects;
@@ -228,7 +228,7 @@ void Bounds::create_box_bounds( void )
  *  @breif  Create a corner type bounds.
  */
 /*==========================================================================*/
-void Bounds::create_corner_bounds( void )
+void Bounds::create_corner_bounds()
 {
     std::vector<kvs::Real32> coords;
     std::vector<kvs::UInt32> connects;
@@ -288,7 +288,7 @@ void Bounds::create_corner_bounds( void )
  *  @breif  Create a circel type bounds.
  */
 /*==========================================================================*/
-void Bounds::create_circle_bounds( void )
+void Bounds::create_circle_bounds()
 {
     std::vector<kvs::Real32> coords;
     std::vector<kvs::UInt32> connects;

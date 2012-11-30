@@ -41,12 +41,9 @@ private:
 
 public:
 
-    IDMap( void );
+    IDMap();
 
-public:
-
-    const Bucket& bucket( void ) const;
-
+    const Bucket& bucket() const;
     void insert( const kvs::UInt32 id );
 };
 
@@ -55,7 +52,7 @@ public:
  *  @brief  Constructs a new IDMap class.
  */
 /*===========================================================================*/
-IDMap::IDMap( void ):
+IDMap::IDMap():
     m_index( 0 )
 {
 }
@@ -66,9 +63,9 @@ IDMap::IDMap( void ):
  *  @return ID bucket
  */
 /*===========================================================================*/
-const IDMap::Bucket& IDMap::bucket( void ) const
+const IDMap::Bucket& IDMap::bucket() const
 {
-    return( m_bucket );
+    return m_bucket;
 }
 
 /*===========================================================================*/
@@ -102,7 +99,7 @@ namespace kvs
  *  @brief  Constructs a new TetrahedraToTetrahedra class.
  */
 /*===========================================================================*/
-TetrahedraToTetrahedra::TetrahedraToTetrahedra( void ):
+TetrahedraToTetrahedra::TetrahedraToTetrahedra():
     m_method( TetrahedraToTetrahedra::Subdivision8 )
 {
 }
@@ -127,7 +124,7 @@ TetrahedraToTetrahedra::TetrahedraToTetrahedra(
  *  @brief  Destructs the TetrahedraToTetrahedra class.
  */
 /*===========================================================================*/
-TetrahedraToTetrahedra::~TetrahedraToTetrahedra( void )
+TetrahedraToTetrahedra::~TetrahedraToTetrahedra()
 {
 }
 
@@ -144,7 +141,7 @@ TetrahedraToTetrahedra::SuperClass* TetrahedraToTetrahedra::exec( const kvs::Obj
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is NULL.");
-        return( NULL );
+        return NULL;
     }
 
     const kvs::UnstructuredVolumeObject* volume = kvs::UnstructuredVolumeObject::DownCast( object );
@@ -152,7 +149,7 @@ TetrahedraToTetrahedra::SuperClass* TetrahedraToTetrahedra::exec( const kvs::Obj
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is not supported.");
-        return( NULL );
+        return NULL;
     }
 
     if ( volume->cellType() == kvs::UnstructuredVolumeObject::QuadraticTetrahedra )
@@ -174,7 +171,7 @@ TetrahedraToTetrahedra::SuperClass* TetrahedraToTetrahedra::exec( const kvs::Obj
             {
                 BaseClass::m_is_success = false;
                 kvsMessageError("Unsupported data type '%s'.", volume->values().typeInfo()->typeName() );
-                return( NULL );
+                return NULL;
             }
         }
         else if ( m_method == TetrahedraToTetrahedra::Removal )
@@ -194,7 +191,7 @@ TetrahedraToTetrahedra::SuperClass* TetrahedraToTetrahedra::exec( const kvs::Obj
             {
                 BaseClass::m_is_success = false;
                 kvsMessageError("Unsupported data type '%s'.", volume->values().typeInfo()->typeName() );
-                return( NULL );
+                return NULL;
             }
         }
     }
@@ -202,10 +199,10 @@ TetrahedraToTetrahedra::SuperClass* TetrahedraToTetrahedra::exec( const kvs::Obj
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is not tetrahedral cells.");
-        return( NULL );
+        return NULL;
     }
 
-    return( this );
+    return this;
 }
 
 /*===========================================================================*/
