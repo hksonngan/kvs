@@ -28,45 +28,30 @@ namespace kvs
 
 /*==========================================================================*/
 /**
- *  Structured volume object importer class.
+ *  @brief  Structured volume object importer class.
  */
 /*==========================================================================*/
-class StructuredVolumeImporter
-    : public kvs::ImporterBase
-    , public kvs::StructuredVolumeObject
+class StructuredVolumeImporter : public kvs::ImporterBase, public kvs::StructuredVolumeObject
 {
-    // Class name.
     kvsClassName( kvs::StructuredVolumeImporter );
-
-    // Module information.
     kvsModuleCategory( Importer );
     kvsModuleBaseClass( kvs::ImporterBase );
     kvsModuleSuperClass( kvs::StructuredVolumeObject );
 
 public:
 
-    StructuredVolumeImporter( void );
-
+    StructuredVolumeImporter();
     StructuredVolumeImporter( const std::string& filename );
-
     StructuredVolumeImporter( const kvs::FileFormatBase* file_format );
-
-    virtual ~StructuredVolumeImporter( void );
-
-public:
+    virtual ~StructuredVolumeImporter();
 
     SuperClass* exec( const kvs::FileFormatBase* file_format );
 
 private:
 
     void import( const kvs::KVSMLObjectStructuredVolume* kvsml );
-
     void import( const kvs::AVSField* field );
-
     void import( const kvs::DicomList* dicom_list );
-
-private:
-
     template <typename T>
     const kvs::AnyValueArray get_dicom_data( const kvs::DicomList* dicom_list, const bool shift );
 };

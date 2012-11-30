@@ -31,40 +31,27 @@ namespace kvs
  *  Unstructured volume object importer class.
  */
 /*==========================================================================*/
-class UnstructuredVolumeImporter
-    : public kvs::ImporterBase
-    , public kvs::UnstructuredVolumeObject
+class UnstructuredVolumeImporter : public kvs::ImporterBase, public kvs::UnstructuredVolumeObject
 {
-    // Class name.
     kvsClassName( kvs::UnstructuredVolumeImporter );
-
-    // Module information.
     kvsModuleCategory( Importer );
     kvsModuleBaseClass( kvs::ImporterBase );
     kvsModuleSuperClass( kvs::UnstructuredVolumeObject );
 
 public:
 
-    UnstructuredVolumeImporter( void );
-
+    UnstructuredVolumeImporter();
     UnstructuredVolumeImporter( const std::string& filename );
-
     UnstructuredVolumeImporter( const kvs::FileFormatBase* file_format );
-
-    virtual ~UnstructuredVolumeImporter( void );
-
-public:
+    virtual ~UnstructuredVolumeImporter();
 
     SuperClass* exec( const kvs::FileFormatBase* file_format );
 
 private:
 
     void import( const kvs::KVSMLObjectUnstructuredVolume* const kvsml );
-
     void import( const kvs::AVSUcd* const ucd );
-
     void import( const kvs::AVSField* const field );
-
 };
 
 } // end of namespace kvs

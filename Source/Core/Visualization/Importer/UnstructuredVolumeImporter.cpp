@@ -30,16 +30,16 @@ namespace
 /*==========================================================================*/
 const kvs::UnstructuredVolumeObject::CellType StringToCellType( const std::string& cell_type )
 {
-    if (      cell_type == "tetrahedra" ) { return( kvs::UnstructuredVolumeObject::Tetrahedra ); }
-    else if ( cell_type == "quadratic tetrahedra" ) { return( kvs::UnstructuredVolumeObject::QuadraticTetrahedra ); }
-    else if ( cell_type == "hexahedra"  ) { return( kvs::UnstructuredVolumeObject::Hexahedra );  }
-    else if ( cell_type == "quadratic hexahedra"  ) { return( kvs::UnstructuredVolumeObject::QuadraticHexahedra );  }
-    else if ( cell_type == "pyramid"  ) { return( kvs::UnstructuredVolumeObject::Pyramid );  }
-    else if ( cell_type == "point"  ) { return( kvs::UnstructuredVolumeObject::Point );  }
+    if (      cell_type == "tetrahedra" ) { return kvs::UnstructuredVolumeObject::Tetrahedra; }
+    else if ( cell_type == "quadratic tetrahedra" ) { return kvs::UnstructuredVolumeObject::QuadraticTetrahedra; }
+    else if ( cell_type == "hexahedra"  ) { return kvs::UnstructuredVolumeObject::Hexahedra;  }
+    else if ( cell_type == "quadratic hexahedra"  ) { return kvs::UnstructuredVolumeObject::QuadraticHexahedra;  }
+    else if ( cell_type == "pyramid"  ) { return kvs::UnstructuredVolumeObject::Pyramid;  }
+    else if ( cell_type == "point"  ) { return kvs::UnstructuredVolumeObject::Point;  }
     else
     {
         kvsMessageError( "Unknown cell type '%s'.", cell_type.c_str() );
-        return( kvs::UnstructuredVolumeObject::UnknownCellType );
+        return kvs::UnstructuredVolumeObject::UnknownCellType;
     }
 }
 
@@ -55,24 +55,24 @@ const kvs::UnstructuredVolumeObject::CellType ElementTypeToCellType(
 {
     if ( element_type == kvs::AVSUcd::Tetrahedra  )
     {
-        return( kvs::UnstructuredVolumeObject::Tetrahedra );
+        return kvs::UnstructuredVolumeObject::Tetrahedra;
     }
     else if ( element_type == kvs::AVSUcd::Tetrahedra2 )
     {
-        return( kvs::UnstructuredVolumeObject::QuadraticTetrahedra );
+        return kvs::UnstructuredVolumeObject::QuadraticTetrahedra;
     }
     else if ( element_type == kvs::AVSUcd::Hexahedra )
     {
-        return( kvs::UnstructuredVolumeObject::Hexahedra );
+        return kvs::UnstructuredVolumeObject::Hexahedra;
     }
     else if ( element_type == kvs::AVSUcd::Hexahedra2 )
     {
-        return( kvs::UnstructuredVolumeObject::QuadraticHexahedra );
+        return kvs::UnstructuredVolumeObject::QuadraticHexahedra;
     }
     else
     {
         kvsMessageError( "Unknown element type." );
-        return( kvs::UnstructuredVolumeObject::UnknownCellType );
+        return kvs::UnstructuredVolumeObject::UnknownCellType;
     }
 }
 
@@ -87,7 +87,7 @@ namespace kvs
  *  @brief  Constructs a new UnstructuredVolumeImporter class.
  */
 /*===========================================================================*/
-UnstructuredVolumeImporter::UnstructuredVolumeImporter( void )
+UnstructuredVolumeImporter::UnstructuredVolumeImporter()
 {
 }
 
@@ -186,7 +186,7 @@ UnstructuredVolumeImporter::UnstructuredVolumeImporter( const kvs::FileFormatBas
  *  @brief  Destructs the UnstructuredVolumeImporter class.
  */
 /*===========================================================================*/
-UnstructuredVolumeImporter::~UnstructuredVolumeImporter( void )
+UnstructuredVolumeImporter::~UnstructuredVolumeImporter()
 {
 }
 
@@ -203,7 +203,7 @@ UnstructuredVolumeImporter::SuperClass* UnstructuredVolumeImporter::exec( const 
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input file format is NULL.");
-        return( NULL );
+        return NULL;
     }
 
     if ( const kvs::KVSMLObjectUnstructuredVolume* volume = dynamic_cast<const kvs::KVSMLObjectUnstructuredVolume*>( file_format ) )
@@ -222,10 +222,10 @@ UnstructuredVolumeImporter::SuperClass* UnstructuredVolumeImporter::exec( const 
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input file format is not supported.");
-        return( NULL );
+        return NULL;
     }
 
-    return( this );
+    return this;
 }
 
 /*==========================================================================*/

@@ -27,7 +27,7 @@ namespace kvs
  *  @brief  Constructs a new ImageImporter class.
  */
 /*===========================================================================*/
-ImageImporter::ImageImporter( void )
+ImageImporter::ImageImporter()
 {
 }
 
@@ -211,7 +211,7 @@ ImageImporter::ImageImporter( const kvs::FileFormatBase* file_format )
  *  @brief  Destructs the ImageImporter class.
  */
 /*===========================================================================*/
-ImageImporter::~ImageImporter( void )
+ImageImporter::~ImageImporter()
 {
 }
 
@@ -228,7 +228,7 @@ ImageImporter::SuperClass* ImageImporter::exec( const kvs::FileFormatBase* file_
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input file format is NULL.");
-        return( NULL );
+        return NULL;
     }
 
     if ( const kvs::KVSMLObjectImage* image = dynamic_cast<const kvs::KVSMLObjectImage*>( file_format ) )
@@ -263,10 +263,10 @@ ImageImporter::SuperClass* ImageImporter::exec( const kvs::FileFormatBase* file_
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input file format is not supported.");
-        return( NULL );
+        return NULL;
     }
 
-    return( this );
+    return this;
 }
 
 /*===========================================================================*/

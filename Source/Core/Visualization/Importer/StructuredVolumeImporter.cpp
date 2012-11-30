@@ -33,13 +33,13 @@ namespace
 /*==========================================================================*/
 const kvs::StructuredVolumeObject::GridType StringToGridType( const std::string& grid_type )
 {
-    if (      grid_type == "uniform"     ) { return( kvs::StructuredVolumeObject::Uniform );     }
-    else if ( grid_type == "rectilinear" ) { return( kvs::StructuredVolumeObject::Rectilinear ); }
-    else if ( grid_type == "curvilinear" ) { return( kvs::StructuredVolumeObject::Curvilinear ); }
+    if (      grid_type == "uniform"     ) { return kvs::StructuredVolumeObject::Uniform;     }
+    else if ( grid_type == "rectilinear" ) { return kvs::StructuredVolumeObject::Rectilinear; }
+    else if ( grid_type == "curvilinear" ) { return kvs::StructuredVolumeObject::Curvilinear; }
     else
     {
         kvsMessageError( "Unknown grid type '%s'.", grid_type.c_str() );
-        return( kvs::StructuredVolumeObject::UnknownGridType );
+        return kvs::StructuredVolumeObject::UnknownGridType;
     }
 }
 
@@ -54,7 +54,7 @@ namespace kvs
  *  @brief  Constructs a new StructuredVolumeImporter class.
  */
 /*==========================================================================*/
-StructuredVolumeImporter::StructuredVolumeImporter( void )
+StructuredVolumeImporter::StructuredVolumeImporter()
 {
 }
 
@@ -153,7 +153,7 @@ StructuredVolumeImporter::StructuredVolumeImporter( const kvs::FileFormatBase* f
  *  @brief  Destructs the StructuredVolumeImporter class.
  */
 /*===========================================================================*/
-StructuredVolumeImporter::~StructuredVolumeImporter( void )
+StructuredVolumeImporter::~StructuredVolumeImporter()
 {
 }
 
@@ -170,7 +170,7 @@ StructuredVolumeImporter::SuperClass* StructuredVolumeImporter::exec( const kvs:
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input file format is NULL.");
-        return( NULL );
+        return NULL;
     }
 
     if ( const kvs::KVSMLObjectStructuredVolume* volume = dynamic_cast<const kvs::KVSMLObjectStructuredVolume*>( file_format ) )
@@ -189,10 +189,10 @@ StructuredVolumeImporter::SuperClass* StructuredVolumeImporter::exec( const kvs:
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input file format is not supported.");
-        return( NULL );
+        return NULL;
     }
 
-    return( this );
+    return this;
 }
 
 /*==========================================================================*/
@@ -360,6 +360,14 @@ void StructuredVolumeImporter::import( const kvs::DicomList* dicom_list )
     SuperClass::updateMinMaxValues();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the data values of the DICOM list.
+ *  @param  dicom_list [in] pointer to the DICOM list
+ *  @param  shift [in] check flag for value shift
+ *  @return data values
+ */
+/*===========================================================================*/
 template <typename T>
 const kvs::AnyValueArray StructuredVolumeImporter::get_dicom_data(
     const kvs::DicomList* dicom_list,
@@ -397,20 +405,15 @@ const kvs::AnyValueArray StructuredVolumeImporter::get_dicom_data(
         }
     }
 
-    return( values );
+    return values;
 }
 
 // Instatiation.
-template
-const kvs::AnyValueArray StructuredVolumeImporter::get_dicom_data<kvs::UInt8>(
+template const kvs::AnyValueArray StructuredVolumeImporter::get_dicom_data<kvs::UInt8>(
     const kvs::DicomList* dicom_list, const bool shift );
-
-template
-const kvs::AnyValueArray StructuredVolumeImporter::get_dicom_data<kvs::UInt16>(
+template const kvs::AnyValueArray StructuredVolumeImporter::get_dicom_data<kvs::UInt16>(
     const kvs::DicomList* dicom_list, const bool shift );
-
-template
-const kvs::AnyValueArray StructuredVolumeImporter::get_dicom_data<kvs::Int16>(
+template const kvs::AnyValueArray StructuredVolumeImporter::get_dicom_data<kvs::Int16>(
     const kvs::DicomList* dicom_list, const bool shift );
 
 } // end of namespace kvs

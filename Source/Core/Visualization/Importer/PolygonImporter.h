@@ -28,44 +28,31 @@ namespace kvs
 
 /*==========================================================================*/
 /**
- *  Polygon importer class.
+ *  @brief  Polygon importer class.
  */
 /*==========================================================================*/
-class PolygonImporter
-    : public kvs::ImporterBase
-    , public kvs::PolygonObject
+class PolygonImporter : public kvs::ImporterBase, public kvs::PolygonObject
 {
-    // Class name.
     kvsClassName( kvs::PolygonImporter );
-
-    // Module information.
     kvsModuleCategory( Importer );
     kvsModuleBaseClass( kvs::ImporterBase );
     kvsModuleSuperClass( kvs::PolygonObject );
 
 public:
 
-    PolygonImporter( void );
-
+    PolygonImporter();
     PolygonImporter( const std::string& filename );
-
     PolygonImporter( const kvs::FileFormatBase* file_format );
-
-    virtual ~PolygonImporter( void );
-
-public:
+    virtual ~PolygonImporter();
 
     SuperClass* exec( const kvs::FileFormatBase* file_format );
 
 private:
 
     void import( const kvs::KVSMLObjectPolygon* kvsml );
-
     void import( const kvs::Stl* stl );
-
     void import( const kvs::Ply* ply );
-
-    void set_min_max_coord( void );
+    void set_min_max_coord();
 };
 
 } // end of namespace kvs

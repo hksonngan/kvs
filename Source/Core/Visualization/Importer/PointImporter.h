@@ -26,40 +26,29 @@ namespace kvs
 
 /*==========================================================================*/
 /**
- *  Point object importer class.
+ *  @brief  Point object importer class.
  */
 /*==========================================================================*/
-class PointImporter
-    : public kvs::ImporterBase
-    , public kvs::PointObject
+class PointImporter : public kvs::ImporterBase, public kvs::PointObject
 {
-    // Class name.
     kvsClassName( kvs::PointImporter );
-
-    // Module information.
     kvsModuleCategory( Importer );
     kvsModuleBaseClass( kvs::ImporterBase );
     kvsModuleSuperClass( kvs::PointObject );
 
 public:
 
-    PointImporter( void );
-
+    PointImporter();
     PointImporter( const std::string& filename );
-
     PointImporter( const kvs::FileFormatBase* file_format );
-
-    virtual ~PointImporter( void );
-
-public:
+    virtual ~PointImporter();
 
     SuperClass* exec( const kvs::FileFormatBase* file_format );
 
 private:
 
     void import( const kvs::KVSMLObjectPoint* kvsml );
-
-    void set_min_max_coord( void );
+    void set_min_max_coord();
 };
 
 } // end of namespace kvs

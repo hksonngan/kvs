@@ -31,7 +31,6 @@ namespace kvs
 class ImporterBase
 {
     kvsClassName( kvs::ImporterBase );
-
     kvsModuleBase;
 
 protected:
@@ -40,19 +39,13 @@ protected:
 
 public:
 
-    ImporterBase( void );
+    ImporterBase();
+    virtual ~ImporterBase();
 
-    virtual ~ImporterBase( void );
-
-public:
+    bool isSuccess() const;
+    bool isFailure() const;
 
     virtual kvs::ObjectBase* exec( const kvs::FileFormatBase* file_format ) = 0;
-
-public:
-
-    const bool isSuccess( void ) const;
-
-    const bool isFailure( void ) const;
 };
 
 } // end of namespace kvs

@@ -26,7 +26,7 @@ namespace kvs
  *  @brief  Constructs a new TableImporter class.
  */
 /*===========================================================================*/
-TableImporter::TableImporter( void )
+TableImporter::TableImporter()
 {
 }
 
@@ -91,7 +91,7 @@ TableImporter::SuperClass* TableImporter::exec( const kvs::FileFormatBase* file_
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input file format is NULL.");
-        return( NULL );
+        return NULL;
     }
 
     if ( const kvs::KVSMLObjectTable* table = dynamic_cast<const kvs::KVSMLObjectTable*>( file_format ) )
@@ -102,10 +102,10 @@ TableImporter::SuperClass* TableImporter::exec( const kvs::FileFormatBase* file_
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input file format is not supported.");
-        return( NULL );
+        return NULL;
     }
 
-    return( this );
+    return this;
 }
 
 /*===========================================================================*/

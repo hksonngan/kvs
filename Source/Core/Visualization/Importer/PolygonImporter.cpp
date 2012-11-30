@@ -18,7 +18,6 @@
 #include <kvs/Vector3>
 
 
-
 namespace
 {
 
@@ -31,12 +30,12 @@ namespace
 /*==========================================================================*/
 const kvs::PolygonObject::PolygonType StringToPolygonType( const std::string& polygon_type )
 {
-    if (      polygon_type == "triangle"   ) { return( kvs::PolygonObject::Triangle ); }
-    else if ( polygon_type == "quadrangle" ) { return( kvs::PolygonObject::Quadrangle ); }
+    if (      polygon_type == "triangle"   ) { return kvs::PolygonObject::Triangle; }
+    else if ( polygon_type == "quadrangle" ) { return kvs::PolygonObject::Quadrangle; }
     else
     {
         kvsMessageError( "Unknown polygon type '%s'.", polygon_type.c_str() );
-        return( kvs::PolygonObject::UnknownPolygonType );
+        return kvs::PolygonObject::UnknownPolygonType;
     }
 }
 
@@ -49,12 +48,12 @@ const kvs::PolygonObject::PolygonType StringToPolygonType( const std::string& po
 /*==========================================================================*/
 const kvs::PolygonObject::ColorType StringToColorType( const std::string& color_type )
 {
-    if (      color_type == "vertex"  ) { return( kvs::PolygonObject::VertexColor ); }
-    else if ( color_type == "polygon" ) { return( kvs::PolygonObject::PolygonColor ); }
+    if (      color_type == "vertex"  ) { return kvs::PolygonObject::VertexColor; }
+    else if ( color_type == "polygon" ) { return kvs::PolygonObject::PolygonColor; }
     else
     {
         kvsMessageError( "Unknown polygon color type '%s'.", color_type.c_str() );
-        return( kvs::PolygonObject::UnknownColorType );
+        return kvs::PolygonObject::UnknownColorType;
     }
 }
 
@@ -67,12 +66,12 @@ const kvs::PolygonObject::ColorType StringToColorType( const std::string& color_
 /*==========================================================================*/
 const kvs::PolygonObject::NormalType StringToNormalType( const std::string& normal_type )
 {
-    if (      normal_type == "vertex"  ) { return( kvs::PolygonObject::VertexNormal ); }
-    else if ( normal_type == "polygon" ) { return( kvs::PolygonObject::PolygonNormal ); }
+    if (      normal_type == "vertex"  ) { return kvs::PolygonObject::VertexNormal; }
+    else if ( normal_type == "polygon" ) { return kvs::PolygonObject::PolygonNormal; }
     else
     {
         kvsMessageError( "Unknown polygon normal type '%s'.", normal_type.c_str() );
-        return( kvs::PolygonObject::UnknownNormalType );
+        return kvs::PolygonObject::UnknownNormalType;
     }
 }
 
@@ -87,7 +86,7 @@ namespace kvs
  *  @brief  Constructs a new PolygonImporter class.
  */
 /*==========================================================================*/
-PolygonImporter::PolygonImporter( void )
+PolygonImporter::PolygonImporter()
 {
 }
 
@@ -186,7 +185,7 @@ PolygonImporter::PolygonImporter( const kvs::FileFormatBase* file_format )
  *  @brief  Destructs the PolygonImporter class.
  */
 /*===========================================================================*/
-PolygonImporter::~PolygonImporter( void )
+PolygonImporter::~PolygonImporter()
 {
 }
 
@@ -203,7 +202,7 @@ PolygonImporter::SuperClass* PolygonImporter::exec( const kvs::FileFormatBase* f
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input file format is NULL.");
-        return( NULL );
+        return NULL;
     }
 
     if ( const kvs::KVSMLObjectPolygon* polygon = dynamic_cast<const kvs::KVSMLObjectPolygon*>( file_format ) )
@@ -222,10 +221,10 @@ PolygonImporter::SuperClass* PolygonImporter::exec( const kvs::FileFormatBase* f
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input file format is not supported.");
-        return( NULL );
+        return NULL;
     }
 
-    return( this );
+    return this;
 }
 
 /*==========================================================================*/
@@ -288,6 +287,12 @@ void PolygonImporter::import( const kvs::Stl* stl )
     this->set_min_max_coord();
 }
 
+/*==========================================================================*/
+/**
+ *  @brief  Imports the PLY format data.
+ *  @param  ply [in] pointer to the PLY format file
+ */
+/*==========================================================================*/
 void PolygonImporter::import( const kvs::Ply* ply )
 {
     SuperClass::setPolygonType( kvs::PolygonObject::Triangle );
@@ -324,7 +329,7 @@ void PolygonImporter::import( const kvs::Ply* ply )
  *  @brief  Calculates the min/max coordinate values.
  */
 /*==========================================================================*/
-void PolygonImporter::set_min_max_coord( void )
+void PolygonImporter::set_min_max_coord()
 {
     kvs::Vector3f min_coord( m_coords[0], m_coords[1], m_coords[2] );
     kvs::Vector3f max_coord( min_coord );

@@ -71,7 +71,7 @@ namespace kvs
  *  @brief  Constructs a new LineImporter class.
  */
 /*==========================================================================*/
-LineImporter::LineImporter( void )
+LineImporter::LineImporter()
 {
 }
 
@@ -128,7 +128,7 @@ LineImporter::LineImporter( const kvs::FileFormatBase* file_format )
  *  @brief  Destructs the LineImporter class.
  */
 /*===========================================================================*/
-LineImporter::~LineImporter( void )
+LineImporter::~LineImporter()
 {
 }
 
@@ -199,7 +199,7 @@ void LineImporter::import( const kvs::KVSMLObjectLine* kvsml )
  *  @brief  Calculates the min/max coordinate values.
  */
 /*==========================================================================*/
-void LineImporter::set_min_max_coord( void )
+void LineImporter::set_min_max_coord()
 {
     kvs::Vector3f min_coord( m_coords[0], m_coords[1], m_coords[2] );
     kvs::Vector3f max_coord( min_coord );

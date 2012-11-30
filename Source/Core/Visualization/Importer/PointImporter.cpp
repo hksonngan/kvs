@@ -27,7 +27,7 @@ namespace kvs
  *  @brief  Constructs a new PointImporter class.
  */
 /*==========================================================================*/
-PointImporter::PointImporter( void )
+PointImporter::PointImporter()
 {
 }
 
@@ -84,7 +84,7 @@ PointImporter::PointImporter( const kvs::FileFormatBase* file_format )
  *  @brief  Destructs the PointImporter class.
  */
 /*===========================================================================*/
-PointImporter::~PointImporter( void )
+PointImporter::~PointImporter()
 {
 }
 
@@ -155,7 +155,7 @@ void PointImporter::import( const kvs::KVSMLObjectPoint* kvsml )
  *  @brief  Calculates the min/max coordinate values.
  */
 /*==========================================================================*/
-void PointImporter::set_min_max_coord( void )
+void PointImporter::set_min_max_coord()
 {
     kvs::Vector3f min_coord( m_coords[0], m_coords[1], m_coords[2] );
     kvs::Vector3f max_coord( min_coord );

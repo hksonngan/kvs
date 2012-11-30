@@ -33,47 +33,33 @@ namespace kvs
 
 /*==========================================================================*/
 /**
- *  Image object importer class.
+ *  @brief  Image object importer class.
  */
 /*==========================================================================*/
 class ImageImporter : public kvs::ImporterBase, public kvs::ImageObject
 {
-    // Class name.
     kvsClassName( kvs::ImageImporter );
-
-    // Module information.
     kvsModuleCategory( Importer );
     kvsModuleBaseClass( kvs::ImporterBase );
     kvsModuleSuperClass( kvs::ImageObject );
 
 public:
 
-    ImageImporter( void );
-
+    ImageImporter();
     ImageImporter( const std::string& filename );
-
     ImageImporter( const kvs::FileFormatBase* file_format );
-
-    virtual ~ImageImporter( void );
-
-public:
+    virtual ~ImageImporter();
 
     SuperClass* exec( const kvs::FileFormatBase* file_format );
 
 private:
 
     void import( const kvs::KVSMLObjectImage* kvsml );
-
     void import( const kvs::Bmp* bmp );
-
     void import( const kvs::Tiff* tiff );
-
     void import( const kvs::Ppm* ppm );
-
     void import( const kvs::Pgm* pgm );
-
     void import( const kvs::Pbm* pbm );
-
     void import( const kvs::Dicom* dicom );
 };
 

@@ -26,40 +26,29 @@ namespace kvs
 
 /*==========================================================================*/
 /**
- *  Line object importer.
+ *  @brief  Line object importer.
  */
 /*==========================================================================*/
-class LineImporter
-    : public kvs::ImporterBase
-    , public kvs::LineObject
+class LineImporter : public kvs::ImporterBase, public kvs::LineObject
 {
-    // Class name.
     kvsClassName( kvs::LineImporter );
-
-    // Module information.
     kvsModuleCategory( Importer );
     kvsModuleBaseClass( kvs::ImporterBase );
     kvsModuleSuperClass( kvs::LineObject );
 
 public:
 
-    LineImporter( void );
-
+    LineImporter();
     LineImporter( const std::string& filename );
-
     LineImporter( const kvs::FileFormatBase* file_format );
-
-    virtual ~LineImporter( void );
-
-public:
+    virtual ~LineImporter();
 
     SuperClass* exec( const kvs::FileFormatBase* file_format );
 
 private:
 
     void import( const kvs::KVSMLObjectLine* kvsml );
-
-    void set_min_max_coord( void );
+    void set_min_max_coord();
 };
 
 } // end of namespace kvs

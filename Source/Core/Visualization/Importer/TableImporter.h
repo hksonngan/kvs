@@ -32,23 +32,16 @@ namespace kvs
 /*===========================================================================*/
 class TableImporter : public kvs::ImporterBase, public kvs::TableObject
 {
-    // Class name.
     kvsClassName( kvs::TableImporter );
-
-    // Module information.
     kvsModuleCategory( Importer );
     kvsModuleBaseClass( kvs::ImporterBase );
     kvsModuleSuperClass( kvs::TableObject );
 
 public:
 
-    TableImporter( void );
-
+    TableImporter();
     TableImporter( const std::string& filename );
-
     TableImporter( const kvs::FileFormatBase* file_format );
-
-public:
 
     SuperClass* exec( const kvs::FileFormatBase* file_format );
 

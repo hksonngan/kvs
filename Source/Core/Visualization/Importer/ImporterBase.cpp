@@ -22,8 +22,8 @@ namespace kvs
  *  @brief  Constructs a new ImporterBase class.
  */
 /*===========================================================================*/
-ImporterBase::ImporterBase( void )
-    : m_is_success( true )
+ImporterBase::ImporterBase():
+    m_is_success( true )
 {
 }
 
@@ -32,7 +32,7 @@ ImporterBase::ImporterBase( void )
  *  @brief  Destructs the ImageBase class.
  */
 /*===========================================================================*/
-ImporterBase::~ImporterBase( void )
+ImporterBase::~ImporterBase()
 {
 }
 
@@ -42,9 +42,9 @@ ImporterBase::~ImporterBase( void )
  *  @return true if the import process is done successfully
  */
 /*===========================================================================*/
-const bool ImporterBase::isSuccess( void ) const
+bool ImporterBase::isSuccess() const
 {
-    return( m_is_success );
+    return m_is_success;
 }
 
 /*===========================================================================*/
@@ -53,9 +53,9 @@ const bool ImporterBase::isSuccess( void ) const
  *  @return true if the object is not imported
  */
 /*===========================================================================*/
-const bool ImporterBase::isFailure( void ) const
+bool ImporterBase::isFailure() const
 {
-    return( !m_is_success );
+    return !m_is_success;
 }
 
 } // end of namespace kvs
