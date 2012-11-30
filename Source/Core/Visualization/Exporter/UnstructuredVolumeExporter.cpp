@@ -45,7 +45,7 @@ kvs::KVSMLObjectUnstructuredVolume* UnstructuredVolumeExporter<kvs::KVSMLObjectU
     {
         m_is_success = false;
         kvsMessageError("Input object is NULL.");
-        return( NULL );
+        return NULL;
     }
 
     // Cast to the structured volume object.
@@ -54,7 +54,7 @@ kvs::KVSMLObjectUnstructuredVolume* UnstructuredVolumeExporter<kvs::KVSMLObjectU
     {
         m_is_success = false;
         kvsMessageError("Input object is not structured volume object.");
-        return( NULL );
+        return NULL;
     }
 
     // Check the cell type of the given unstructured volume object.
@@ -116,7 +116,7 @@ kvs::KVSMLObjectUnstructuredVolume* UnstructuredVolumeExporter<kvs::KVSMLObjectU
         this->setMaxValue( volume->maxValue() );
     }
 
-    return( this );
+    return this;
 }
 
 /*===========================================================================*/
@@ -144,7 +144,7 @@ kvs::AVSUcd* UnstructuredVolumeExporter<kvs::AVSUcd>::exec(
     {
         m_is_success = false;
         kvsMessageError("Input object is NULL.");
-        return( NULL );
+        return NULL;
     }
 
     // Cast to the structured volume object.
@@ -153,7 +153,7 @@ kvs::AVSUcd* UnstructuredVolumeExporter<kvs::AVSUcd>::exec(
     {
         m_is_success = false;
         kvsMessageError("Input object is not structured volume object.");
-        return( NULL );
+        return NULL;
     }
 
     // Check the cell type of the given unstructured volume object.
@@ -210,7 +210,7 @@ kvs::AVSUcd* UnstructuredVolumeExporter<kvs::AVSUcd>::exec(
     this->setConnections( volume->connections() );
     this->setValues( values );
 
-    return( this );
+    return this;
 }
 
 } // end of namespace kvs

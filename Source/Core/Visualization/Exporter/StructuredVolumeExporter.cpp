@@ -32,7 +32,7 @@ const kvs::StructuredVolumeObject* CastToStructuredVolumeObject( const kvs::Obje
     if ( object->objectType() != kvs::ObjectBase::Volume )
     {
         kvsMessageError("Input object is not a volumetry object.");
-        return( NULL );
+        return NULL;
     }
 
     const kvs::VolumeObjectBase* volume =
@@ -40,10 +40,10 @@ const kvs::StructuredVolumeObject* CastToStructuredVolumeObject( const kvs::Obje
     if ( volume->volumeType() != kvs::VolumeObjectBase::Structured )
     {
         kvsMessageError("Input object is not a structured volume object.");
-        return( NULL );
+        return NULL;
     }
 
-    return( reinterpret_cast<const kvs::StructuredVolumeObject*>( volume ) );
+    return reinterpret_cast<const kvs::StructuredVolumeObject*>( volume );
 }
 
 } // end of namespace
@@ -77,7 +77,7 @@ kvs::KVSMLObjectStructuredVolume* StructuredVolumeExporter<kvs::KVSMLObjectStruc
     {
         m_is_success = false;
         kvsMessageError("Input object is NULL.");
-        return( NULL );
+        return NULL;
     }
 
     // Cast to the structured volume object.
@@ -86,7 +86,7 @@ kvs::KVSMLObjectStructuredVolume* StructuredVolumeExporter<kvs::KVSMLObjectStruc
     {
         m_is_success = false;
         kvsMessageError("Input object is not structured volume object.");
-        return( NULL );
+        return NULL;
     }
 
     // Check the grid type of the given structured volume object.
@@ -128,7 +128,7 @@ kvs::KVSMLObjectStructuredVolume* StructuredVolumeExporter<kvs::KVSMLObjectStruc
         this->setMaxValue( volume->maxValue() );
     }
 
-    return( this );
+    return this;
 }
 
 
@@ -157,7 +157,7 @@ kvs::AVSField* StructuredVolumeExporter<kvs::AVSField>::exec(
     {
         m_is_success = false;
         kvsMessageError("Input object is NULL.");
-        return( NULL );
+        return NULL;
     }
 
     // Cast to the structured volume object.
@@ -166,7 +166,7 @@ kvs::AVSField* StructuredVolumeExporter<kvs::AVSField>::exec(
     {
         m_is_success = false;
         kvsMessageError("Input object is not structured volume object.");
-        return( NULL );
+        return NULL;
     }
 
     const std::type_info& type = volume->values().typeInfo()->type();
@@ -257,7 +257,7 @@ kvs::AVSField* StructuredVolumeExporter<kvs::AVSField>::exec(
     this->setNDim( 3 );
     this->setDim( volume->resolution() );
 
-    return( this );
+    return this;
 }
 
 } // end of namespace kvs

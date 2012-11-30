@@ -27,7 +27,7 @@ namespace kvs
 
 /*===========================================================================*/
 /**
- *  Unstructured volume exporter class.
+ *  @brief  Unstructured volume exporter class.
  */
 /*===========================================================================*/
 template <typename FileFormatType>
@@ -69,7 +69,7 @@ FileFormatType* UnstructuredVolumeExporter<FileFormatType>::exec( const kvs::Obj
 
 /*===========================================================================*/
 /**
- *  Specialized structured volume exporter class for kvs::KVSMLObjectUnstructuredVolume.
+ *  @brief  Specialized structured volume exporter class for kvs::KVSMLObjectUnstructuredVolume.
  */
 /*===========================================================================*/
 template <>
@@ -85,7 +85,7 @@ public:
 
 /*===========================================================================*/
 /**
- *  Specialized structured volume exporter class for kvs::AVSUcd.
+ *  @brief  Specialized structured volume exporter class for kvs::AVSUcd.
  */
 /*===========================================================================*/
 template <>

@@ -25,7 +25,7 @@ namespace kvs
 
 /*===========================================================================*/
 /**
- *  Point exporter class.
+ *  @brief  Point exporter class.
  */
 /*===========================================================================*/
 template <typename FileFormatType>
@@ -40,21 +40,34 @@ public:
     FileFormatType* exec( const kvs::ObjectBase* object );
 };
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new PointExporter class.
+ *  @param  object [in] pointer to a point object
+ */
+/*===========================================================================*/
 template <typename FileFormatType>
 PointExporter<FileFormatType>::PointExporter( const kvs::PointObject* object )
 {
     this->exec( object );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Executes the export process.
+ *  @param  base [in] pointer to a object
+ */
+/*===========================================================================*/
 template <typename FileFormatType>
 FileFormatType* PointExporter<FileFormatType>::exec( const kvs::ObjectBase* object )
 {
-    return( NULL );
+    // This method will be specialized for each file format.
+    return NULL;
 }
 
 /*===========================================================================*/
 /**
- *  Point exporter class as KVSMLObjectPoint format.
+ *  @brief  Point exporter class as KVSMLObjectPoint format.
  */
 /*===========================================================================*/
 template <>

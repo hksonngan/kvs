@@ -36,41 +36,57 @@ protected:
 
 public:
 
-    ExporterBase( void );
-
-    virtual ~ExporterBase( void );
-
-public:
+    ExporterBase();
+    virtual ~ExporterBase();
 
     virtual FileFormatType* exec( const kvs::ObjectBase* object ) = 0;
 
-public:
-
-    const bool isSuccess( void ) const;
-
-    const bool isFailure( void ) const;
+    bool isSuccess() const;
+    bool isFailure() const;
 };
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new ExporterBase class.
+ */
+/*===========================================================================*/
 template <typename FileFormatType>
-ExporterBase<FileFormatType>::ExporterBase( void )
+ExporterBase<FileFormatType>::ExporterBase()
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Destroys the ExporterBase class.
+ */
+/*===========================================================================*/
 template <typename FileFormatType>
-ExporterBase<FileFormatType>::~ExporterBase( void )
+ExporterBase<FileFormatType>::~ExporterBase()
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Test whether the export process is done successfully.
+ *  @return true if the export process is done successfully
+ */
+/*===========================================================================*/
 template <typename FileFormatType>
-const bool ExporterBase<FileFormatType>::isSuccess( void ) const
+bool ExporterBase<FileFormatType>::isSuccess() const
 {
-    return( m_is_success );
+    return m_is_success;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Test whether the export process is failed.
+ *  @return true if the export process is failed
+ */
+/*===========================================================================*/
 template <typename FileFormatType>
-const bool ExporterBase<FileFormatType>::isFailure( void ) const
+bool ExporterBase<FileFormatType>::isFailure() const
 {
-    return( !m_is_success );
+    return !m_is_success;
 }
 
 } // end of namespace kvs

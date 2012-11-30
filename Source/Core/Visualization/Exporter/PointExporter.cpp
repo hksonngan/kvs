@@ -42,7 +42,7 @@ kvs::KVSMLObjectPoint* PointExporter<kvs::KVSMLObjectPoint>::exec( const kvs::Ob
     {
         m_is_success = false;
         kvsMessageError("Input object is NULL.");
-        return( NULL );
+        return NULL;
     }
 
     const kvs::PointObject* point = kvs::PointObject::DownCast( object );
@@ -50,7 +50,7 @@ kvs::KVSMLObjectPoint* PointExporter<kvs::KVSMLObjectPoint>::exec( const kvs::Ob
     {
         m_is_success = false;
         kvsMessageError("Input object is not point object.");
-        return( NULL );
+        return NULL;
     }
 
     this->setCoords( point->coords() );
@@ -58,7 +58,7 @@ kvs::KVSMLObjectPoint* PointExporter<kvs::KVSMLObjectPoint>::exec( const kvs::Ob
     this->setNormals( point->normals() );
     this->setSizes( point->sizes() );
 
-    return( this );
+    return this;
 }
 
 } // end of namespace kvs

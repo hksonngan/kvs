@@ -27,7 +27,7 @@ namespace kvs
 
 /*===========================================================================*/
 /**
- *  Polygon exporter class.
+ *  @brief  Polygon exporter class.
  */
 /*===========================================================================*/
 template <typename FileFormatType>
@@ -42,21 +42,34 @@ public:
     FileFormatType* exec( const kvs::ObjectBase* object );
 };
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new PolygonExporter class.
+ *  @param  object [in] pointer to a polygon object
+ */
+/*===========================================================================*/
 template <typename FileFormatType>
 PolygonExporter<FileFormatType>::PolygonExporter( const kvs::PolygonObject* object )
 {
     this->exec( object );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Executes the export process.
+ *  @param  base [in] pointer to a object
+ */
+/*===========================================================================*/
 template <typename FileFormatType>
 FileFormatType* PolygonExporter<FileFormatType>::exec( const kvs::ObjectBase* object )
 {
-    return( NULL );
+    // This method will be specialized for each file format.
+    return NULL;
 }
 
 /*===========================================================================*/
 /**
- *  Polygon exporter class as KVSMLObjectPoint format.
+ *  @brief  Polygon exporter class as KVSMLObjectPoint format.
  */
 /*===========================================================================*/
 template <>
@@ -71,7 +84,7 @@ public:
 
 /*===========================================================================*/
 /**
- *  Polygon exporter class as STL format.
+ *  @brief  Polygon exporter class as STL format.
  */
 /*===========================================================================*/
 template <>
@@ -86,7 +99,7 @@ public:
 
 /*===========================================================================*/
 /**
- *  Polygon exporter class as PLY format.
+ *  @brief  Polygon exporter class as PLY format.
  */
 /*===========================================================================*/
 template <>

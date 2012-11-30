@@ -42,7 +42,7 @@ kvs::KVSMLObjectPolygon* PolygonExporter<kvs::KVSMLObjectPolygon>::exec( const k
     {
         m_is_success = false;
         kvsMessageError("Input object is NULL.");
-        return( NULL );
+        return NULL;
     }
 
     const kvs::PolygonObject* polygon = kvs::PolygonObject::DownCast( object );
@@ -50,7 +50,7 @@ kvs::KVSMLObjectPolygon* PolygonExporter<kvs::KVSMLObjectPolygon>::exec( const k
     {
         m_is_success = false;
         kvsMessageError("Input object is not polygon object.");
-        return( NULL );
+        return NULL;
     }
 
     switch ( polygon->polygonType() )
@@ -80,7 +80,7 @@ kvs::KVSMLObjectPolygon* PolygonExporter<kvs::KVSMLObjectPolygon>::exec( const k
     this->setNormals( polygon->normals() );
     this->setOpacities( polygon->opacities() );
 
-    return( this );
+    return this;
 }
 
 PolygonExporter<kvs::Stl>::PolygonExporter( const kvs::PolygonObject* object )
@@ -94,7 +94,7 @@ kvs::Stl* PolygonExporter<kvs::Stl>::exec( const kvs::ObjectBase* object )
     {
         m_is_success = false;
         kvsMessageError("Input object is NULL.");
-        return( NULL );
+        return NULL;
     }
 
     const kvs::PolygonObject* polygon = kvs::PolygonObject::DownCast( object );
@@ -102,14 +102,14 @@ kvs::Stl* PolygonExporter<kvs::Stl>::exec( const kvs::ObjectBase* object )
     {
         m_is_success = false;
         kvsMessageError("Input object is not polygon object.");
-        return( NULL );
+        return NULL;
     }
 
     if ( polygon->polygonType() != kvs::PolygonObject::Triangle )
     {
         m_is_success = false;
         kvsMessageError("Input object is not triangle polygon.");
-        return( NULL );
+        return NULL;
     }
 
     this->setCoords( polygon->coords() );
@@ -143,7 +143,7 @@ kvs::Stl* PolygonExporter<kvs::Stl>::exec( const kvs::ObjectBase* object )
         this->setNormals( polygon->normals() );
     }
 
-    return( this );
+    return this;
 }
 
 PolygonExporter<kvs::Ply>::PolygonExporter( const kvs::PolygonObject* object )
@@ -157,7 +157,7 @@ kvs::Ply* PolygonExporter<kvs::Ply>::exec( const kvs::ObjectBase* object )
     {
         m_is_success = false;
         kvsMessageError("Input object is NULL.");
-        return( NULL );
+        return NULL;
     }
 
     const kvs::PolygonObject* polygon = kvs::PolygonObject::DownCast( object );
@@ -165,14 +165,14 @@ kvs::Ply* PolygonExporter<kvs::Ply>::exec( const kvs::ObjectBase* object )
     {
         m_is_success = false;
         kvsMessageError("Input object is not polygon object.");
-        return( NULL );
+        return NULL;
     }
 
     if ( polygon->polygonType() != kvs::PolygonObject::Triangle )
     {
         m_is_success = false;
         kvsMessageError("Input object is not triangle polygon.");
-        return( NULL );
+        return NULL;
     }
 
     this->setCoords( polygon->coords() );
@@ -333,7 +333,7 @@ kvs::Ply* PolygonExporter<kvs::Ply>::exec( const kvs::ObjectBase* object )
         this->setConnections( polygon->connections() );
     }
 
-    return( this );
+    return this;
 }
 
 } // end of namespace kvs

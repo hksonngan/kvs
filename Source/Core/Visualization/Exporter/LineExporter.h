@@ -25,7 +25,7 @@ namespace kvs
 
 /*===========================================================================*/
 /**
- *  Line exporter class.
+ *  @brief  Line exporter class.
  */
 /*===========================================================================*/
 template <typename FileFormatType>
@@ -40,21 +40,34 @@ public:
     FileFormatType* exec( const kvs::ObjectBase* object );
 };
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new LineExporter class.
+ *  @param  object [in] pointer to a line object
+ */
+/*===========================================================================*/
 template <typename FileFormatType>
 LineExporter<FileFormatType>::LineExporter( const kvs::LineObject* object )
 {
     this->exec( object );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Executes the export process.
+ *  @param  base [in] pointer to a object
+ */
+/*===========================================================================*/
 template <typename FileFormatType>
 FileFormatType* LineExporter<FileFormatType>::exec( const kvs::ObjectBase* base )
 {
-    return( NULL );
+    // This method will be specialized for each file format.
+    return NULL;
 }
 
 /*===========================================================================*/
 /**
- *  Line exporter class as KVSMLObjectLine format.
+ *  @brief  Line exporter class as KVSMLObjectLine format.
  */
 /*===========================================================================*/
 template <>

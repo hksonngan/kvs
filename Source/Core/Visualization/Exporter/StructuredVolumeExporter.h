@@ -69,7 +69,7 @@ FileFormatType* StructuredVolumeExporter<FileFormatType>::exec( const kvs::Objec
 
 /*===========================================================================*/
 /**
- *  Specialized structured volume exporter class for kvs::KVSMLObjectStructuredVolume.
+ *  @brief  Specialized structured volume exporter class for kvs::KVSMLObjectStructuredVolume.
  */
 /*===========================================================================*/
 template <>
@@ -85,7 +85,7 @@ public:
 
 /*===========================================================================*/
 /**
- *  Specialized structured volume exporter class for kvs::AVSField.
+ *  @brief  Specialized structured volume exporter class for kvs::AVSField.
  */
 /*===========================================================================*/
 template <>
