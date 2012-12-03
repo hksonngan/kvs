@@ -262,7 +262,6 @@ $(OUTDIR)/./Visualization/Mapper/TetrahedralCell.o \
 $(OUTDIR)/./Visualization/Mapper/TransferFunction.o \
 $(OUTDIR)/./Visualization/Object/AxisObject.o \
 $(OUTDIR)/./Visualization/Object/GeometryObjectBase.o \
-$(OUTDIR)/./Visualization/Object/GlyphObject.o \
 $(OUTDIR)/./Visualization/Object/ImageObject.o \
 $(OUTDIR)/./Visualization/Object/LineObject.o \
 $(OUTDIR)/./Visualization/Object/ObjectBase.o \
@@ -278,7 +277,6 @@ $(OUTDIR)/./Visualization/Pipeline/VisualizationPipeline.o \
 $(OUTDIR)/./Visualization/Renderer/ArrowGlyph.o \
 $(OUTDIR)/./Visualization/Renderer/DiamondGlyph.o \
 $(OUTDIR)/./Visualization/Renderer/GlyphBase.o \
-$(OUTDIR)/./Visualization/Renderer/GlyphRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/ImageRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/LineRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/ParallelCoordinatesRenderer.o \
