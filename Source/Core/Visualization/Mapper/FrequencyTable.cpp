@@ -24,7 +24,7 @@ namespace kvs
  *  @brief  Constructs a new FrequencyTable class.
  */
 /*==========================================================================*/
-FrequencyTable::FrequencyTable( void ):
+FrequencyTable::FrequencyTable():
     m_min_range( 0 ),
     m_max_range( 0 ),
     m_max_count( 0 ),
@@ -40,7 +40,7 @@ FrequencyTable::FrequencyTable( void ):
  *  @brief  Destructs the FrequencyTable class.
  */
 /*===========================================================================*/
-FrequencyTable::~FrequencyTable( void )
+FrequencyTable::~FrequencyTable()
 {
 }
 
@@ -50,9 +50,9 @@ FrequencyTable::~FrequencyTable( void )
  *  @return min. range
  */
 /*==========================================================================*/
-const kvs::Real64 FrequencyTable::minRange( void ) const
+kvs::Real64 FrequencyTable::minRange() const
 {
-    return( m_min_range );
+    return m_min_range;
 }
 
 /*==========================================================================*/
@@ -61,9 +61,9 @@ const kvs::Real64 FrequencyTable::minRange( void ) const
  *  @return max. range
  */
 /*==========================================================================*/
-const kvs::Real64 FrequencyTable::maxRange( void ) const
+kvs::Real64 FrequencyTable::maxRange() const
 {
-    return( m_max_range );
+    return m_max_range;
 }
 
 /*==========================================================================*/
@@ -72,24 +72,24 @@ const kvs::Real64 FrequencyTable::maxRange( void ) const
  *  @return max. counts
  */
 /*==========================================================================*/
-const size_t FrequencyTable::maxCount( void ) const
+size_t FrequencyTable::maxCount() const
 {
-    return( m_max_count );
+    return m_max_count;
 }
 
-const kvs::Real64 FrequencyTable::mean( void ) const
+kvs::Real64 FrequencyTable::mean() const
 {
-    return( m_mean );
+    return m_mean;
 }
 
-const kvs::Real64 FrequencyTable::variance( void ) const
+kvs::Real64 FrequencyTable::variance() const
 {
-    return( m_variance );
+    return m_variance;
 }
 
-const kvs::Real64 FrequencyTable::standardDeviation( void ) const
+kvs::Real64 FrequencyTable::standardDeviation() const
 {
-    return( m_standard_deviation );
+    return m_standard_deviation;
 }
 
 /*==========================================================================*/
@@ -98,9 +98,9 @@ const kvs::Real64 FrequencyTable::standardDeviation( void ) const
  *  @return number of bins
  */
 /*==========================================================================*/
-const kvs::UInt64 FrequencyTable::nbins( void ) const
+kvs::UInt64 FrequencyTable::nbins() const
 {
-    return( m_nbins );
+    return m_nbins;
 }
 
 /*==========================================================================*/
@@ -109,9 +109,9 @@ const kvs::UInt64 FrequencyTable::nbins( void ) const
  *  @return bin array
  */
 /*==========================================================================*/
-const kvs::ValueArray<size_t>& FrequencyTable::bin( void ) const
+const kvs::ValueArray<size_t>& FrequencyTable::bin() const
 {
-    return( m_bin );
+    return m_bin;
 }
 
 /*==========================================================================*/
@@ -194,9 +194,9 @@ void FrequencyTable::create( const kvs::ImageObject* image, const size_t channel
  *  @return counts
  */
 /*==========================================================================*/
-const kvs::UInt64 FrequencyTable::operator [] ( const size_t index ) const
+kvs::UInt64 FrequencyTable::operator [] ( const size_t index ) const
 {
-    return( m_bin[ index ] );
+    return m_bin[ index ];
 }
 
 /*==========================================================================*/
@@ -206,9 +206,9 @@ const kvs::UInt64 FrequencyTable::operator [] ( const size_t index ) const
  *  @return counts
  */
 /*==========================================================================*/
-const kvs::UInt64 FrequencyTable::at( const size_t index ) const
+kvs::UInt64 FrequencyTable::at( const size_t index ) const
 {
-    return( m_bin[ index ] );
+    return m_bin[ index ];
 }
 
 /*==========================================================================*/
@@ -395,12 +395,12 @@ bool FrequencyTable::is_ignore_value( const kvs::Real64 value )
     std::list<kvs::Real64>::const_iterator end = m_ignore_values.end();
     while ( ignore_value != end )
     {
-        if ( kvs::Math::Equal( value, *ignore_value ) ) return( true );
+        if ( kvs::Math::Equal( value, *ignore_value ) ) return true;
 
         ++ignore_value;
     }
 
-    return( false );
+    return false;
 }
 
 } // end of namespace kvs

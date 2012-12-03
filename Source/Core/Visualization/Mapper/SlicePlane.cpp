@@ -25,7 +25,7 @@ namespace kvs
  *  Constructs a new SlicePlane class.
  */
 /*==========================================================================*/
-SlicePlane::SlicePlane( void ):
+SlicePlane::SlicePlane():
     kvs::MapperBase(),
     kvs::PolygonObject()
 {
@@ -76,7 +76,7 @@ SlicePlane::SlicePlane(
  *  Destructs.
  */
 /*==========================================================================*/
-SlicePlane::~SlicePlane( void )
+SlicePlane::~SlicePlane()
 {
 }
 
@@ -116,7 +116,7 @@ SlicePlane::SuperClass* SlicePlane::exec( const kvs::ObjectBase* object )
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is NULL.");
-        return( NULL );
+        return NULL;
     }
 
     const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
@@ -124,12 +124,12 @@ SlicePlane::SuperClass* SlicePlane::exec( const kvs::ObjectBase* object )
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is not volume dat.");
-        return( NULL );
+        return NULL;
     }
 
     this->mapping( volume );
 
-    return( this );
+    return this;
 }
 
 /*==========================================================================*/
@@ -778,7 +778,7 @@ void SlicePlane::extract_pyramid_plane(
  *  @return table index
  */
 /*===========================================================================*/
-const size_t SlicePlane::calculate_table_index(
+size_t SlicePlane::calculate_table_index(
     const size_t x,
     const size_t y,
     const size_t z ) const
@@ -793,7 +793,7 @@ const size_t SlicePlane::calculate_table_index(
     if ( this->substitute_plane_equation( x+1, y+1, z+1 ) > 0.0f ) { table_index |=  64; }
     if ( this->substitute_plane_equation( x  , y+1, z+1 ) > 0.0f ) { table_index |= 128; }
 
-    return( table_index );
+    return table_index;
 }
 
 
@@ -804,7 +804,7 @@ const size_t SlicePlane::calculate_table_index(
  *  @return table index
  */
 /*==========================================================================*/
-const size_t SlicePlane::calculate_tetrahedra_table_index(
+size_t SlicePlane::calculate_tetrahedra_table_index(
     const size_t* local_index ) const
 {
     const kvs::Real32* const coords = BaseClass::m_volume->coords().data();
@@ -820,7 +820,7 @@ const size_t SlicePlane::calculate_tetrahedra_table_index(
     if ( this->substitute_plane_equation( vertex2 ) > 0.0 ) { table_index |= 4; }
     if ( this->substitute_plane_equation( vertex3 ) > 0.0 ) { table_index |= 8; }
 
-    return( table_index );
+    return table_index;
 }
 
 /*==========================================================================*/
@@ -830,7 +830,7 @@ const size_t SlicePlane::calculate_tetrahedra_table_index(
  *  @return table index
  */
 /*==========================================================================*/
-const size_t SlicePlane::calculate_hexahedra_table_index(
+size_t SlicePlane::calculate_hexahedra_table_index(
     const size_t* local_index ) const
 {
     const kvs::Real32* const coords = BaseClass::m_volume->coords().data();
@@ -854,7 +854,7 @@ const size_t SlicePlane::calculate_hexahedra_table_index(
     if ( this->substitute_plane_equation( vertex6 ) > 0.0 ) { table_index |=  64; }
     if ( this->substitute_plane_equation( vertex7 ) > 0.0 ) { table_index |= 128; }
 
-    return( table_index );
+    return table_index;
 }
 
 /*==========================================================================*/
@@ -864,7 +864,7 @@ const size_t SlicePlane::calculate_hexahedra_table_index(
  *  @return table index
  */
 /*==========================================================================*/
-const size_t SlicePlane::calculate_pyramid_table_index(
+size_t SlicePlane::calculate_pyramid_table_index(
     const size_t* local_index ) const
 {
     const kvs::Real32* const coords = BaseClass::m_volume->coords().data();
@@ -882,7 +882,7 @@ const size_t SlicePlane::calculate_pyramid_table_index(
     if ( this->substitute_plane_equation( vertex3 ) > 0.0 ) { table_index |=  8; }
     if ( this->substitute_plane_equation( vertex4 ) > 0.0 ) { table_index |= 16; }
 
-    return( table_index );
+    return table_index;
 }
 
 /*==========================================================================*/
@@ -894,15 +894,16 @@ const size_t SlicePlane::calculate_pyramid_table_index(
  *  @return value of a plane equation
  */
 /*==========================================================================*/
-const float SlicePlane::substitute_plane_equation(
+float SlicePlane::substitute_plane_equation(
     const size_t x,
     const size_t y,
     const size_t z ) const
 {
-    return( m_coefficients.x() * x +
-            m_coefficients.y() * y +
-            m_coefficients.z() * z +
-            m_coefficients.w() );
+    return
+        m_coefficients.x() * x +
+        m_coefficients.y() * y +
+        m_coefficients.z() * z +
+        m_coefficients.w();
 }
 
 /*==========================================================================*/
@@ -912,13 +913,14 @@ const float SlicePlane::substitute_plane_equation(
  *  @return value of a plane equation
  */
 /*==========================================================================*/
-const float SlicePlane::substitute_plane_equation(
+float SlicePlane::substitute_plane_equation(
     const kvs::Vector3f& vertex ) const
 {
-    return( m_coefficients.x() * vertex.x() +
-            m_coefficients.y() * vertex.y() +
-            m_coefficients.z() * vertex.z() +
-            m_coefficients.w() );
+    return
+        m_coefficients.x() * vertex.x() +
+        m_coefficients.y() * vertex.y() +
+        m_coefficients.z() * vertex.z() +
+        m_coefficients.w();
 }
 
 /*==========================================================================*/
@@ -937,7 +939,7 @@ const kvs::Vector3f SlicePlane::interpolate_vertex(
     const float value1 = this->substitute_plane_equation( vertex1 );
     const float ratio = kvs::Math::Abs( value0 / ( value1 - value0 ) );
 
-    return( ( 1.0f - ratio ) * vertex0 + ratio * vertex1 );
+    return ( 1.0f - ratio ) * vertex0 + ratio * vertex1;
 }
 
 /*==========================================================================*/
@@ -950,7 +952,7 @@ const kvs::Vector3f SlicePlane::interpolate_vertex(
  */
 /*==========================================================================*/
 template <typename T>
-const double SlicePlane::interpolate_value(
+double SlicePlane::interpolate_value(
     const kvs::StructuredVolumeObject* volume,
     const kvs::Vector3f&               vertex0,
     const kvs::Vector3f&               vertex1 ) const
@@ -973,7 +975,7 @@ const double SlicePlane::interpolate_value(
     const size_t index0 = static_cast<size_t>( x0 + y0 * line_size + z0 * slice_size );
     const size_t index1 = static_cast<size_t>( x1 + y1 * line_size + z1 * slice_size );
 
-    return( values[ index0 ] + ratio * ( values[ index1 ] - values[ index0 ] ) );
+    return values[ index0 ] + ratio * ( values[ index1 ] - values[ index0 ] );
 }
 
 /*==========================================================================*/
@@ -986,7 +988,7 @@ const double SlicePlane::interpolate_value(
  */
 /*==========================================================================*/
 template <typename T>
-const double SlicePlane::interpolate_value(
+double SlicePlane::interpolate_value(
     const kvs::UnstructuredVolumeObject* volume,
     const size_t                         index0,
     const size_t                         index1 ) const
@@ -998,7 +1000,7 @@ const double SlicePlane::interpolate_value(
     const float value1 = this->substitute_plane_equation( kvs::Vector3f( coords + 3 * index1 ) );
     const float ratio = kvs::Math::Abs( value0 / ( value1 - value0 ) );
 
-    return( values[ index0 ] + ratio * ( values[ index1 ] - values[ index0 ] ) );
+    return values[ index0 ] + ratio * ( values[ index1 ] - values[ index0 ] );
 }
 
 } // end of namespace kvs

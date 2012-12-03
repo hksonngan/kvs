@@ -14,7 +14,6 @@
 #ifndef KVS__PYRAMIDAL_CELL_H_INCLUDE
 #define KVS__PYRAMIDAL_CELL_H_INCLUDE
 
-#include <kvs/ClassName>
 #include <kvs/Type>
 #include <kvs/Vector4>
 #include <kvs/Matrix44>
@@ -33,13 +32,9 @@ namespace kvs
 template <typename T>
 class PyramidalCell : public kvs::CellBase<T>
 {
-    kvsClassName( kvs::PyramidalCell );
-
 public:
 
     enum { NumberOfNodes = 5 };
-
-public:
 
     typedef kvs::CellBase<T> BaseClass;
 
@@ -50,21 +45,13 @@ private:
 public:
 
     PyramidalCell( const kvs::UnstructuredVolumeObject* volume );
-
-    virtual ~PyramidalCell( void );
-
-public:
+    virtual ~PyramidalCell();
 
     const kvs::Real32* interpolationFunctions( const kvs::Vector3f& point ) const;
-
     const kvs::Real32* differentialFunctions( const kvs::Vector3f& point ) const;
-
     void bindCell( const kvs::UInt32 cell );
-
-    const kvs::Vector3f randomSampling( void ) const;
-
-    const kvs::Real32 volume( void ) const;
-
+    const kvs::Vector3f randomSampling() const;
+    const kvs::Real32 volume() const;
 };
 
 /*===========================================================================*/
@@ -89,7 +76,7 @@ inline PyramidalCell<T>::PyramidalCell( const kvs::UnstructuredVolumeObject* vol
  */
 /*===========================================================================*/
 template <typename T>
-inline PyramidalCell<T>::~PyramidalCell( void )
+inline PyramidalCell<T>::~PyramidalCell()
 {
 }
 
@@ -121,7 +108,7 @@ inline const kvs::Real32* PyramidalCell<T>::interpolationFunctions( const kvs::V
     BaseClass::m_interpolation_functions[3] = float( 0.25 * ( 1 - z ) * ( 1 + x + y + xy ) );
     BaseClass::m_interpolation_functions[4] = float( 0.25 * ( 1 - z ) * ( 1 - x + y - xy ) );
 
-    return( BaseClass::m_interpolation_functions );
+    return BaseClass::m_interpolation_functions;
 }
 
 /*==========================================================================*/
@@ -167,7 +154,7 @@ inline const kvs::Real32* PyramidalCell<T>::differentialFunctions( const kvs::Ve
     BaseClass::m_differential_functions[13] =  float( 0.25 * ( - 1 - xy ) );
     BaseClass::m_differential_functions[14] =  float( 0.25 * ( - 1 + xy ) );
 
-    return( BaseClass::m_differential_functions );
+    return BaseClass::m_differential_functions;
 }
 
 /*===========================================================================*/
@@ -201,9 +188,9 @@ inline void PyramidalCell<T>::bindCell( const kvs::UInt32 index )
  */
 /*===========================================================================*/
 template <typename T>
-inline const kvs::Real32 PyramidalCell<T>::volume( void ) const
+inline const kvs::Real32 PyramidalCell<T>::volume() const
 {
-    return( float( m_pyramid.x() * m_pyramid.y() * m_pyramid.z() / 3 ));
+    return float( m_pyramid.x() * m_pyramid.y() * m_pyramid.z() / 3);
 }
 
 /*===========================================================================*/
@@ -213,7 +200,7 @@ inline const kvs::Real32 PyramidalCell<T>::volume( void ) const
  */
 /*===========================================================================*/
 template <typename T>
-const kvs::Vector3f PyramidalCell<T>::randomSampling( void ) const
+const kvs::Vector3f PyramidalCell<T>::randomSampling() const
 {
     // Generate a point in the local coordinate.
     const float s = BaseClass::randomNumber();
@@ -241,7 +228,7 @@ const kvs::Vector3f PyramidalCell<T>::randomSampling( void ) const
     this->setLocalPoint( point );
     BaseClass::m_global_point = this->transformLocalToGlobal( point );
 
-    return( BaseClass::m_global_point );
+    return BaseClass::m_global_point;
 }
 
 } // end of namespace kvs

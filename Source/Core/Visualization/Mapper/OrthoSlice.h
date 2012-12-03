@@ -30,10 +30,7 @@ namespace kvs
 /*==========================================================================*/
 class OrthoSlice : public kvs::SlicePlane
 {
-    // Class name.
     kvsClassName( kvs::OrthoSlice );
-
-    // Module information.
     kvsModuleCategory( Mapper );
     kvsModuleSuperClass( kvs::SlicePlane );
 
@@ -52,15 +49,12 @@ protected:
 
 public:
 
-    OrthoSlice( void );
-
+    OrthoSlice();
     OrthoSlice(
         const kvs::VolumeObjectBase* volume,
-        const float                  position,
-        const AlignedAxis            aligned_axis,
+        const float position,
+        const AlignedAxis aligned_axis,
         const kvs::TransferFunction& transfer_function );
-
-public:
 
     void setPlane( const float position, const kvs::OrthoSlice::AlignedAxis axis );
 };

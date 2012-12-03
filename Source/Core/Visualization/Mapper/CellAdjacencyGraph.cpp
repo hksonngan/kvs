@@ -51,14 +51,9 @@ public:
         const kvs::UInt32 cell_id,
         const kvs::UInt32 face_id );
 
-public:
-
     const kvs::UInt32 nodeID( const size_t index ) const;
-
-    const kvs::UInt32 cellID( void ) const;
-
-    const kvs::UInt32 faceID( void ) const;
-
+    const kvs::UInt32 cellID() const;
+    const kvs::UInt32 faceID() const;
     friend const bool operator == ( const Face& f0, const Face& f1 );
 };
 
@@ -126,7 +121,7 @@ inline const kvs::UInt32 Face::nodeID( const size_t index ) const
 {
     KVS_ASSERT( index < 3 );
 
-    return( m_id[ index ] );
+    return m_id[ index ];
 }
 
 /*===========================================================================*/
@@ -135,9 +130,9 @@ inline const kvs::UInt32 Face::nodeID( const size_t index ) const
  *  @return cell ID
  */
 /*===========================================================================*/
-inline const kvs::UInt32 Face::cellID( void ) const
+inline const kvs::UInt32 Face::cellID() const
 {
-    return( m_id[3] );
+    return m_id[3];
 }
 
 /*===========================================================================*/
@@ -146,9 +141,9 @@ inline const kvs::UInt32 Face::cellID( void ) const
  *  @return face ID
  */
 /*===========================================================================*/
-inline const kvs::UInt32 Face::faceID( void ) const
+inline const kvs::UInt32 Face::faceID() const
 {
-    return( m_id[4] );
+    return m_id[4];
 }
 
 /*===========================================================================*/
@@ -168,10 +163,10 @@ inline const bool operator == ( const Face& f0, const Face& f1 )
         {
             if ( f0.nodeID(i) == f1.nodeID(j) ) { flag = true; continue; }
         }
-        if ( !flag ) return( false );
+        if ( !flag ) return false;
     }
 
-    return( true );
+    return true;
 }
 
 typedef std::multimap<kvs::UInt32,Face> FaceMap;
@@ -214,7 +209,7 @@ CellAdjacencyGraph::CellAdjacencyGraph( const kvs::UnstructuredVolumeObject* vol
  *  @brief  Destorys the CellAdjacencyGraph class.
  */
 /*===========================================================================*/
-CellAdjacencyGraph::~CellAdjacencyGraph( void )
+CellAdjacencyGraph::~CellAdjacencyGraph()
 {
 }
 
@@ -250,9 +245,9 @@ void CellAdjacencyGraph::create( const kvs::UnstructuredVolumeObject* volume )
  *  @return adjacency graph
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::UInt32>& CellAdjacencyGraph::graph( void ) const
+const kvs::ValueArray<kvs::UInt32>& CellAdjacencyGraph::graph() const
 {
-    return( m_graph );
+    return m_graph;
 }
 
 /*===========================================================================*/
@@ -261,9 +256,9 @@ const kvs::ValueArray<kvs::UInt32>& CellAdjacencyGraph::graph( void ) const
  *  @return mask for the external faces
  */
 /*===========================================================================*/
-const kvs::BitArray& CellAdjacencyGraph::mask( void ) const
+const kvs::BitArray& CellAdjacencyGraph::mask() const
 {
-    return( m_mask );
+    return m_mask;
 }
 
 /*===========================================================================*/
@@ -408,7 +403,7 @@ void CellAdjacencyGraph::create_for_hexahedral_cell( const kvs::UnstructuredVolu
  *  @brief  Sets external face numbers.
  */
 /*===========================================================================*/
-void CellAdjacencyGraph::set_external_face_number( void )
+void CellAdjacencyGraph::set_external_face_number()
 {
     const size_t nfaces = m_graph.size();
     for ( size_t i = 0, counter = 0; i < nfaces; i++ )

@@ -126,7 +126,7 @@ inline Face::Face( const kvs::UInt32 id0, const kvs::UInt32 id1, const kvs::UInt
 /*===========================================================================*/
 inline const kvs::UInt32 Face::id( const size_t index ) const
 {
-    return( m_id[ index ] );
+    return m_id[ index ];
 }
 
 /*===========================================================================*/
@@ -161,10 +161,10 @@ inline const bool operator == ( const Face& f0, const Face& f1 )
         {
             if ( f0.id(i) == f1.id(j) ) { flag = true; continue; }
         }
-        if ( !flag ) return( false );
+        if ( !flag ) return false;
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -191,7 +191,7 @@ public:
 
 public:
 
-    const Bucket& bucket( void ) const;
+    const Bucket& bucket() const;
 
     void insert( const kvs::UInt32 id0, const kvs::UInt32 id1, const kvs::UInt32 id2 );
 
@@ -217,9 +217,9 @@ inline FaceMap::FaceMap( const size_t nvertices ):
  *  @return bucket
  */
 /*===========================================================================*/
-inline const FaceMap::Bucket& FaceMap::bucket( void ) const
+inline const FaceMap::Bucket& FaceMap::bucket() const
 {
-    return( m_bucket );
+    return m_bucket;
 }
 
 /*===========================================================================*/
@@ -267,7 +267,7 @@ inline void FaceMap::insert( const kvs::UInt32 id0, const kvs::UInt32 id1, const
 inline const FaceMap::Key FaceMap::get_key( const kvs::UInt32 id0, const kvs::UInt32 id1, const kvs::UInt32 id2 )
 {
     const kvs::UInt32 sum = id0 + id1 + id2;
-    return( sum % kvs::UInt32( m_nvertices ) );
+    return sum % kvs::UInt32( m_nvertices );
 }
 
 /*===========================================================================*/
@@ -581,7 +581,7 @@ namespace kvs
  *  @brief  Constructs a new ExternalFaces class.
  */
 /*===========================================================================*/
-ExternalFaces::ExternalFaces( void ):
+ExternalFaces::ExternalFaces():
     kvs::MapperBase(),
     kvs::PolygonObject()
 {
@@ -621,7 +621,7 @@ ExternalFaces::ExternalFaces(
  *  @brief  Destructs the ExternalFaces class.
  */
 /*===========================================================================*/
-ExternalFaces::~ExternalFaces( void )
+ExternalFaces::~ExternalFaces()
 {
 }
 
@@ -638,7 +638,7 @@ ExternalFaces::SuperClass* ExternalFaces::exec( const kvs::ObjectBase* object )
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is NULL.");
-        return( NULL );
+        return NULL;
     }
 
     const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
@@ -646,7 +646,7 @@ ExternalFaces::SuperClass* ExternalFaces::exec( const kvs::ObjectBase* object )
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is not volume dat.");
-        return( NULL );
+        return NULL;
     }
 
     const kvs::VolumeObjectBase::VolumeType type = volume->volumeType();
@@ -659,7 +659,7 @@ ExternalFaces::SuperClass* ExternalFaces::exec( const kvs::ObjectBase* object )
         this->mapping( kvs::UnstructuredVolumeObject::DownCast( volume ) );
     }
 
-    return( this );
+    return this;
 }
 
 /*===========================================================================*/

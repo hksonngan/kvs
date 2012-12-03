@@ -14,7 +14,6 @@
 #ifndef KVS__CELL_ADJACENCY_GRAPH_H_INCLUDE
 #define KVS__CELL_ADJACENCY_GRAPH_H_INCLUDE
 
-#include <kvs/ClassName>
 #include <kvs/UnstructuredVolumeObject>
 #include <kvs/BitArray>
 #include <kvs/ValueArray>
@@ -30,34 +29,26 @@ namespace kvs
 /*===========================================================================*/
 class CellAdjacencyGraph
 {
-    kvsClassName_without_virtual( kvs::CellAdjacencyGraph );
-
-protected:
+private:
 
     kvs::ValueArray<kvs::UInt32> m_graph; ///< cell adjacency table
-    kvs::BitArray                m_mask;  ///< mask for the external faces
+    kvs::BitArray m_mask; ///< mask for the external faces
 
 public:
 
     explicit CellAdjacencyGraph( const kvs::UnstructuredVolumeObject* volume );
-
-    ~CellAdjacencyGraph( void );
-
-public:
+    ~CellAdjacencyGraph();
 
     void create( const kvs::UnstructuredVolumeObject* volume );
 
-    const kvs::ValueArray<kvs::UInt32>& graph( void ) const;
-
-    const kvs::BitArray& mask( void ) const;
+    const kvs::ValueArray<kvs::UInt32>& graph() const;
+    const kvs::BitArray& mask() const;
 
 private:
 
     void create_for_tetrahedral_cell( const kvs::UnstructuredVolumeObject* volume );
-
     void create_for_hexahedral_cell( const kvs::UnstructuredVolumeObject* volume );
-
-    void set_external_face_number( void );
+    void set_external_face_number();
 };
 
 } // end of namespace kvs

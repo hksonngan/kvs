@@ -128,7 +128,7 @@ kvs::ColorMap Create( const int index0, const int index1, const int index2, cons
 
     kvs::Real32 min_value = 0.0f;
     kvs::Real32 max_value = static_cast<kvs::Real32>( resolution - 1 );
-    return( kvs::ColorMap( table, min_value, max_value ) );
+    return kvs::ColorMap( table, min_value, max_value );
 }
 
 } // end of namespace RGBFormulae

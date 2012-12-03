@@ -20,7 +20,6 @@
 #include <kvs/Message>
 #include <kvs/VolumeObjectBase>
 #include <kvs/ImageObject>
-#include <kvs/ClassName>
 #include <list>
 
 
@@ -34,80 +33,50 @@ namespace kvs
 /*==========================================================================*/
 class FrequencyTable
 {
-    kvsClassName( kvs::FrequencyTable );
-
 protected:
 
-    kvs::Real64             m_min_range;     ///< min. range value
-    kvs::Real64             m_max_range;     ///< max. range value
-    size_t                  m_max_count;     ///< min. count value
-    kvs::Real64             m_mean;          ///< mean value
-    kvs::Real64             m_variance;      ///< variance value
-    kvs::Real64             m_standard_deviation; ///< standard deviation
-    kvs::UInt64             m_nbins;         ///< number of bins
-    kvs::ValueArray<size_t> m_bin;           ///< bin array
-    std::list<kvs::Real64>  m_ignore_values; ///< ignore value list
+    kvs::Real64 m_min_range; ///< min. range value
+    kvs::Real64 m_max_range; ///< max. range value
+    size_t m_max_count; ///< min. count value
+    kvs::Real64 m_mean; ///< mean value
+    kvs::Real64 m_variance; ///< variance value
+    kvs::Real64 m_standard_deviation; ///< standard deviation
+    kvs::UInt64 m_nbins; ///< number of bins
+    kvs::ValueArray<size_t> m_bin; ///< bin array
+    std::list<kvs::Real64> m_ignore_values; ///< ignore value list
 
 public:
 
-    FrequencyTable( void );
+    FrequencyTable();
+    virtual ~FrequencyTable();
 
-    virtual ~FrequencyTable( void );
-
-public:
-
-    const kvs::Real64 minRange( void ) const;
-
-    const kvs::Real64 maxRange( void ) const;
-
-    const size_t maxCount( void ) const;
-
-    const kvs::Real64 mean( void ) const;
-
-    const kvs::Real64 variance( void ) const;
-
-    const kvs::Real64 standardDeviation( void ) const;
-
-    const kvs::UInt64 nbins( void ) const;
-
-    const kvs::ValueArray<size_t>& bin( void ) const;
-
-public:
+    kvs::Real64 minRange() const;
+    kvs::Real64 maxRange() const;
+    size_t maxCount() const;
+    kvs::Real64 mean() const;
+    kvs::Real64 variance() const;
+    kvs::Real64 standardDeviation() const;
+    kvs::UInt64 nbins() const;
+    const kvs::ValueArray<size_t>& bin() const;
 
     void setIgnoreValue( const kvs::Real64 value );
-
     void setRange( const kvs::Real64 min_range, const kvs::Real64 max_range );
-
     void setNBins( const kvs::UInt64 nbins );
 
-public:
-
     void create( const kvs::VolumeObjectBase* volume );
-
     void create( const kvs::ImageObject* image, const size_t channel = 0 );
 
-public:
-
-    const kvs::UInt64 operator [] ( const size_t index ) const;
-
-    const kvs::UInt64 at( const size_t index ) const;
+    kvs::UInt64 operator [] ( const size_t index ) const;
+    kvs::UInt64 at( const size_t index ) const;
 
 private:
 
     void calculate_range( const kvs::VolumeObjectBase* volume );
-
     void calculate_range( const kvs::ImageObject* image );
-
     void count_bin( const kvs::VolumeObjectBase* volume );
-
     void count_bin( const kvs::ImageObject* image, const size_t channel );
-
-    template <typename T>
-    void binning( const kvs::VolumeObjectBase* volume );
-
-    template <typename T>
-    void binning( const kvs::ImageObject* image, const size_t channel );
-
+    template <typename T> void binning( const kvs::VolumeObjectBase* volume );
+    template <typename T> void binning( const kvs::ImageObject* image, const size_t channel );
     bool is_ignore_value( const kvs::Real64 value );
 };
 

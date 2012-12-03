@@ -24,7 +24,7 @@ namespace kvs
  *  @brief  Constructs a new MarchingTetrahedra class.
  */
 /*==========================================================================*/
-MarchingTetrahedra::MarchingTetrahedra( void ):
+MarchingTetrahedra::MarchingTetrahedra():
     kvs::MapperBase(),
     kvs::PolygonObject(),
     m_isolevel( 0 ),
@@ -70,7 +70,7 @@ MarchingTetrahedra::MarchingTetrahedra(
  *  @brief  Destroys the MarchingTetrahedra class.
  */
 /*==========================================================================*/
-MarchingTetrahedra::~MarchingTetrahedra( void )
+MarchingTetrahedra::~MarchingTetrahedra()
 {
 }
 
@@ -87,7 +87,7 @@ MarchingTetrahedra::SuperClass* MarchingTetrahedra::exec( const kvs::ObjectBase*
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is NULL.");
-        return( NULL );
+        return NULL;
     }
 
     const kvs::UnstructuredVolumeObject* volume = kvs::UnstructuredVolumeObject::DownCast( object );
@@ -95,12 +95,12 @@ MarchingTetrahedra::SuperClass* MarchingTetrahedra::exec( const kvs::ObjectBase*
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is not volume dat.");
-        return( NULL );
+        return NULL;
     }
 
     this->mapping( volume );
 
-    return( this );
+    return this;
 }
 
 /*==========================================================================*/
@@ -316,7 +316,7 @@ void MarchingTetrahedra::extract_surfaces_without_duplication(
  */
 /*==========================================================================*/
 template <typename T>
-const size_t MarchingTetrahedra::calculate_table_index( const size_t* local_index ) const
+size_t MarchingTetrahedra::calculate_table_index( const size_t* local_index ) const
 {
     const T* const values = static_cast<const T*>( BaseClass::m_volume->values().data() );
     const double isolevel = m_isolevel;
@@ -327,7 +327,7 @@ const size_t MarchingTetrahedra::calculate_table_index( const size_t* local_inde
     if ( static_cast<double>( values[ local_index[2] ] ) > isolevel ) { table_index |=   4; }
     if ( static_cast<double>( values[ local_index[3] ] ) > isolevel ) { table_index |=   8; }
 
-    return( table_index );
+    return table_index;
 }
 
 /*==========================================================================*/
@@ -357,7 +357,7 @@ const kvs::Vector3f MarchingTetrahedra::interpolate_vertex(
     const float y = coords[coord0_index+1] + ratio * ( coords[coord1_index+1] - coords[coord0_index+1] );
     const float z = coords[coord0_index+2] + ratio * ( coords[coord1_index+2] - coords[coord0_index+2] );
 
-    return( kvs::Vector3f( x, y, z ) );
+    return kvs::Vector3f( x, y, z );
 }
 
 /*==========================================================================*/
@@ -367,7 +367,7 @@ const kvs::Vector3f MarchingTetrahedra::interpolate_vertex(
  */
 /*==========================================================================*/
 template <typename T>
-const kvs::RGBColor MarchingTetrahedra::calculate_color( void )
+const kvs::RGBColor MarchingTetrahedra::calculate_color()
 {
     // Calculate the min/max values of the node data.
     if ( !BaseClass::m_volume->hasMinMaxValues() )
@@ -380,7 +380,7 @@ const kvs::RGBColor MarchingTetrahedra::calculate_color( void )
     const kvs::Real64 normalize_factor = 255.0 / ( max_value - min_value );
     const kvs::UInt8  index = static_cast<kvs::UInt8>( normalize_factor * ( m_isolevel - min_value ) );
 
-    return( BaseClass::transferFunction().colorMap()[ index ] );
+    return BaseClass::transferFunction().colorMap()[ index ];
 }
 
 #if NOT_YET_IMPLEMENTED

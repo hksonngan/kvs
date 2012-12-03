@@ -25,7 +25,7 @@ namespace kvs
  *  @brief  Constructs a new HitAndMissSampling class.
  */
 /*===========================================================================*/
-HitAndMissSampling::HitAndMissSampling( void ):
+HitAndMissSampling::HitAndMissSampling():
     kvs::MapperBase(),
     kvs::PointObject()
 {
@@ -65,7 +65,7 @@ HitAndMissSampling::HitAndMissSampling(
  *  @brief  Destroys the HitAndMissSampling class.
  */
 /*==========================================================================*/
-HitAndMissSampling::~HitAndMissSampling( void )
+HitAndMissSampling::~HitAndMissSampling()
 {
 }
 
@@ -236,11 +236,8 @@ void HitAndMissSampling::generate_particles( const kvs::StructuredVolumeObject* 
     SuperClass::setSize( 1.0f );
 }
 
-template
-void HitAndMissSampling::generate_particles<kvs::UInt8>( const kvs::StructuredVolumeObject* volume );
-
-template
-void HitAndMissSampling::generate_particles<kvs::UInt16>( const kvs::StructuredVolumeObject* volume );
+template void HitAndMissSampling::generate_particles<kvs::UInt8>( const kvs::StructuredVolumeObject* volume );
+template void HitAndMissSampling::generate_particles<kvs::UInt16>( const kvs::StructuredVolumeObject* volume );
 
 /*==========================================================================*/
 /**

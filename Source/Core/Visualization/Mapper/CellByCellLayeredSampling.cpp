@@ -32,7 +32,7 @@ namespace kvs
  *  @brief  Constructs a new CellByCellLayeredSampling class.
  */
 /*===========================================================================*/
-CellByCellLayeredSampling::CellByCellLayeredSampling( void ):
+CellByCellLayeredSampling::CellByCellLayeredSampling():
     kvs::MapperBase(),
     kvs::PointObject(),
     m_camera( 0 ),
@@ -102,7 +102,7 @@ CellByCellLayeredSampling::CellByCellLayeredSampling(
  *  @brief  Destroys the CellByCellMetropolisSampling class.
  */
 /*===========================================================================*/
-CellByCellLayeredSampling::~CellByCellLayeredSampling( void )
+CellByCellLayeredSampling::~CellByCellLayeredSampling()
 {
     m_density_map.release();
     if ( m_pregenerated_particles ) delete m_pregenerated_particles;
@@ -114,9 +114,9 @@ CellByCellLayeredSampling::~CellByCellLayeredSampling( void )
  *  @return sub-pixel level
  */
 /*===========================================================================*/
-const size_t CellByCellLayeredSampling::subpixelLevel( void ) const
+size_t CellByCellLayeredSampling::subpixelLevel() const
 {
-    return( m_subpixel_level );
+    return m_subpixel_level;
 }
 
 /*===========================================================================*/
@@ -125,9 +125,9 @@ const size_t CellByCellLayeredSampling::subpixelLevel( void ) const
  *  @return sampling step
  */
 /*===========================================================================*/
-const float CellByCellLayeredSampling::samplingStep( void ) const
+float CellByCellLayeredSampling::samplingStep() const
 {
-    return( m_sampling_step );
+    return m_sampling_step;
 }
 
 /*===========================================================================*/
@@ -136,9 +136,9 @@ const float CellByCellLayeredSampling::samplingStep( void ) const
  *  @return depth
  */
 /*===========================================================================*/
-const float CellByCellLayeredSampling::objectDepth( void ) const
+float CellByCellLayeredSampling::objectDepth() const
 {
-    return( m_object_depth );
+    return m_object_depth;
 }
 
 /*===========================================================================*/
@@ -198,7 +198,7 @@ CellByCellLayeredSampling::SuperClass* CellByCellLayeredSampling::exec( const kv
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is NULL.");
-        return( NULL );
+        return NULL;
     }
 
     const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
@@ -206,7 +206,7 @@ CellByCellLayeredSampling::SuperClass* CellByCellLayeredSampling::exec( const kv
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is not volume dat.");
-        return( NULL );
+        return NULL;
     }
 
     const kvs::VolumeObjectBase::VolumeType volume_type = volume->volumeType();
@@ -225,7 +225,7 @@ CellByCellLayeredSampling::SuperClass* CellByCellLayeredSampling::exec( const kv
         }
     }
 
-    return( this );
+    return this;
 }
 
 /*===========================================================================*/
@@ -649,7 +649,7 @@ void CellByCellLayeredSampling::roulette_selection(
  *  @return density value
  */
 /*===========================================================================*/
-const float CellByCellLayeredSampling::calculate_density( const float scalar )
+float CellByCellLayeredSampling::calculate_density( const float scalar )
 {
     const float min_value = BaseClass::transferFunction().colorMap().minValue();
     const float max_value = BaseClass::transferFunction().colorMap().maxValue();
@@ -684,7 +684,7 @@ const float CellByCellLayeredSampling::calculate_density( const float scalar )
  *  @return density value
  */
 /*===========================================================================*/
-const float CellByCellLayeredSampling::calculate_maximum_density( const float scalar0, const float scalar1 )
+float CellByCellLayeredSampling::calculate_maximum_density( const float scalar0, const float scalar1 )
 {
     if ( scalar0 > scalar1 )
     {
@@ -726,7 +726,7 @@ const float CellByCellLayeredSampling::calculate_maximum_density( const float sc
  */
 /*===========================================================================*/
 template <typename T>
-const size_t CellByCellLayeredSampling::calculate_number_of_particles(
+size_t CellByCellLayeredSampling::calculate_number_of_particles(
     const float density,
     const kvs::TetrahedralCell<T>* cell )
 {
@@ -737,7 +737,7 @@ const size_t CellByCellLayeredSampling::calculate_number_of_particles(
     size_t n = static_cast<size_t>( N );
     if ( N - n > R ) { ++n; }
 
-    return( n );
+    return n;
 }
 
 /*===========================================================================*/
@@ -747,7 +747,7 @@ const size_t CellByCellLayeredSampling::calculate_number_of_particles(
  *  @return required number of particles
  */
 /*===========================================================================*/
-const size_t CellByCellLayeredSampling::calculate_number_of_particles(
+size_t CellByCellLayeredSampling::calculate_number_of_particles(
     const size_t nparticles_in_cell )
 {
     const size_t N_in = nparticles_in_cell;
@@ -763,7 +763,7 @@ const size_t CellByCellLayeredSampling::calculate_number_of_particles(
     size_t n = static_cast<size_t>( N );
     if ( N - n > R ) { ++n; }
 
-    return( n );
+    return n;
 }
 
 /*===========================================================================*/

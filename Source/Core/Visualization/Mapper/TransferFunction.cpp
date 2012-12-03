@@ -28,9 +28,9 @@ namespace kvs
  *  @param  resolution [in] Resolution.
  */
 /*==========================================================================*/
-TransferFunction::TransferFunction( const size_t resolution )
-    : m_color_map( resolution )
-    , m_opacity_map( resolution )
+TransferFunction::TransferFunction( const size_t resolution ):
+    m_color_map( resolution ),
+    m_opacity_map( resolution )
 {
     m_color_map.create();
     m_opacity_map.create();
@@ -53,9 +53,9 @@ TransferFunction::TransferFunction( const std::string& filename )
  *  @param  color_map [in] Color map.
  */
 /*==========================================================================*/
-TransferFunction::TransferFunction( const kvs::ColorMap& color_map )
-    : m_color_map( color_map )
-    , m_opacity_map( color_map.resolution() )
+TransferFunction::TransferFunction( const kvs::ColorMap& color_map ):
+    m_color_map( color_map ),
+    m_opacity_map( color_map.resolution() )
 {
     m_opacity_map.create();
 }
@@ -66,9 +66,9 @@ TransferFunction::TransferFunction( const kvs::ColorMap& color_map )
  *  @param  opacity_map [in] Opacity map.
  */
 /*==========================================================================*/
-TransferFunction::TransferFunction( const kvs::OpacityMap& opacity_map )
-    : m_color_map( opacity_map.resolution() )
-    , m_opacity_map( opacity_map )
+TransferFunction::TransferFunction( const kvs::OpacityMap& opacity_map ):
+    m_color_map( opacity_map.resolution() ),
+    m_opacity_map( opacity_map )
 {
     m_color_map.create();
 }
@@ -82,9 +82,9 @@ TransferFunction::TransferFunction( const kvs::OpacityMap& opacity_map )
 /*==========================================================================*/
 TransferFunction::TransferFunction(
     const kvs::ColorMap&   color_map,
-    const kvs::OpacityMap& opacity_map )
-    : m_color_map( color_map )
-    , m_opacity_map( opacity_map )
+    const kvs::OpacityMap& opacity_map ):
+    m_color_map( color_map ),
+    m_opacity_map( opacity_map )
 {
 }
 
@@ -207,21 +207,21 @@ void TransferFunction::adjustRange( const kvs::VolumeObjectBase* volume )
     this->adjustRange( min_value, max_value );
 }
 
-const bool TransferFunction::hasRange( void ) const
+bool TransferFunction::hasRange( void ) const
 {
-    return( m_color_map.hasRange() && m_opacity_map.hasRange() );
+    return m_color_map.hasRange() && m_opacity_map.hasRange();
 }
 
-const float TransferFunction::minValue( void ) const
+float TransferFunction::minValue( void ) const
 {
     KVS_ASSERT( m_color_map.minValue() == m_opacity_map.minValue() );
-    return( m_color_map.minValue() );
+    return m_color_map.minValue();
 }
 
-const float TransferFunction::maxValue( void ) const
+float TransferFunction::maxValue( void ) const
 {
     KVS_ASSERT( m_color_map.maxValue() == m_opacity_map.maxValue() );
-    return( m_color_map.maxValue() );
+    return m_color_map.maxValue();
 }
 
 /*==========================================================================*/
@@ -231,7 +231,7 @@ const float TransferFunction::maxValue( void ) const
 /*==========================================================================*/
 const kvs::ColorMap& TransferFunction::colorMap( void ) const
 {
-    return( m_color_map );
+    return m_color_map;
 }
 
 /*==========================================================================*/
@@ -241,7 +241,7 @@ const kvs::ColorMap& TransferFunction::colorMap( void ) const
 /*==========================================================================*/
 const kvs::OpacityMap& TransferFunction::opacityMap( void ) const
 {
-    return( m_opacity_map );
+    return m_opacity_map;
 }
 
 /*==========================================================================*/
@@ -249,10 +249,10 @@ const kvs::OpacityMap& TransferFunction::opacityMap( void ) const
  *  @brief  Returns the resolution.
  */
 /*==========================================================================*/
-const size_t TransferFunction::resolution( void ) const
+size_t TransferFunction::resolution( void ) const
 {
     KVS_ASSERT( m_opacity_map.resolution() == m_color_map.resolution() );
-    return( m_opacity_map.resolution() );
+    return m_opacity_map.resolution();
 }
 
 /*==========================================================================*/
@@ -277,10 +277,10 @@ void TransferFunction::create( const size_t resolution )
  *  @return true, if the reading process is done successfully
  */
 /*==========================================================================*/
-const bool TransferFunction::read( const std::string& filename )
+bool TransferFunction::read( const std::string& filename )
 {
     kvs::KVSMLTransferFunction transfer_function( filename );
-    if ( transfer_function.isFailure() ) return( false );
+    if ( transfer_function.isFailure() ) return false;
 
     const float min_value = transfer_function.minValue();
     const float max_value = transfer_function.maxValue();
@@ -335,7 +335,7 @@ const bool TransferFunction::read( const std::string& filename )
         m_opacity_map = kvs::OpacityMap( transfer_function.opacities() );
     }
 
-    return( true );
+    return true;
 }
 
 /*==========================================================================*/
@@ -345,7 +345,7 @@ const bool TransferFunction::read( const std::string& filename )
  *  @return true, if the reading process is done successfully
  */
 /*==========================================================================*/
-const bool TransferFunction::write( const std::string& filename )
+bool TransferFunction::write( const std::string& filename )
 {
     kvs::KVSMLTransferFunction transfer_function;
     transfer_function.setResolution( this->resolution() );
@@ -381,7 +381,7 @@ const bool TransferFunction::write( const std::string& filename )
         transfer_function.setOpacities( m_opacity_map.table() );
     }
 
-    return( transfer_function.write( filename ) );
+    return transfer_function.write( filename );
 }
 
 /*==========================================================================*/
@@ -396,7 +396,7 @@ TransferFunction& TransferFunction::operator =( const TransferFunction& rhs )
     m_color_map   = rhs.m_color_map;
     m_opacity_map = rhs.m_opacity_map;
 
-    return( *this );
+    return *this;
 }
 
 } // end of namespace kvs

@@ -27,7 +27,7 @@ namespace kvs
  *  @brief  Constructs a new Isosurface class.
  */
 /*==========================================================================*/
-Isosurface::Isosurface( void ):
+Isosurface::Isosurface():
     kvs::MapperBase(),
     kvs::PolygonObject(),
     m_isolevel( 0 ),
@@ -102,7 +102,7 @@ Isosurface::Isosurface(
  *  @brief  Destroys the Isosurface class.
  */
 /*==========================================================================*/
-Isosurface::~Isosurface( void )
+Isosurface::~Isosurface()
 {
 }
 
@@ -130,7 +130,7 @@ Isosurface::SuperClass* Isosurface::exec( const kvs::ObjectBase* object )
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is NULL.");
-        return( NULL );
+        return NULL;
     }
 
     const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
@@ -138,12 +138,12 @@ Isosurface::SuperClass* Isosurface::exec( const kvs::ObjectBase* object )
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is not volume dat.");
-        return( NULL );
+        return NULL;
     }
 
     this->mapping( volume );
 
-    return( this );
+    return this;
 }
 
 /*==========================================================================*/

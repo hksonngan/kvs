@@ -14,7 +14,6 @@
 #ifndef KVS__QUADRATIC_TETRAHEDRAL_CELL_H_INCLUDE
 #define KVS__QUADRATIC_TETRAHEDRAL_CELL_H_INCLUDE
 
-#include <kvs/ClassName>
 #include <kvs/Type>
 #include <kvs/Vector4>
 #include <kvs/Matrix44>
@@ -33,31 +32,21 @@ namespace kvs
 template <typename T>
 class QuadraticTetrahedralCell : public kvs::CellBase<T>
 {
-    kvsClassName( kvs::QuadraticTetrahedralCell );
-
 public:
 
     enum { NumberOfNodes = kvs::UnstructuredVolumeObject::QuadraticTetrahedra };
-
-public:
 
     typedef kvs::CellBase<T> BaseClass;
 
 public:
 
     QuadraticTetrahedralCell( const kvs::UnstructuredVolumeObject* volume );
-
-    virtual ~QuadraticTetrahedralCell( void );
-
-public:
+    virtual ~QuadraticTetrahedralCell();
 
     const kvs::Real32* interpolationFunctions( const kvs::Vector3f& point ) const;
-
     const kvs::Real32* differentialFunctions( const kvs::Vector3f& point ) const;
-
-    const kvs::Vector3f randomSampling( void ) const;
-
-    const kvs::Real32 volume( void ) const;
+    const kvs::Vector3f randomSampling() const;
+    const kvs::Real32 volume() const;
 };
 
 /*===========================================================================*/
@@ -82,7 +71,7 @@ inline QuadraticTetrahedralCell<T>::QuadraticTetrahedralCell(
  */
 /*===========================================================================*/
 template <typename T>
-inline QuadraticTetrahedralCell<T>::~QuadraticTetrahedralCell( void )
+inline QuadraticTetrahedralCell<T>::~QuadraticTetrahedralCell()
 {
 }
 
@@ -166,7 +155,7 @@ inline const kvs::Real32* QuadraticTetrahedralCell<T>::differentialFunctions( co
     BaseClass::m_differential_functions[28] =  4 * y;
     BaseClass::m_differential_functions[29] =  0;
 
-    return( BaseClass::m_differential_functions );
+    return BaseClass::m_differential_functions;
 }
 
 /*===========================================================================*/
@@ -176,7 +165,7 @@ inline const kvs::Real32* QuadraticTetrahedralCell<T>::differentialFunctions( co
  */
 /*===========================================================================*/
 template <typename T>
-const kvs::Vector3f QuadraticTetrahedralCell<T>::randomSampling( void ) const
+const kvs::Vector3f QuadraticTetrahedralCell<T>::randomSampling() const
 {
     // Generate a point in the local coordinate.
     const float s = BaseClass::randomNumber();
@@ -222,7 +211,7 @@ const kvs::Vector3f QuadraticTetrahedralCell<T>::randomSampling( void ) const
     BaseClass::setLocalPoint( point );
     BaseClass::m_global_point = BaseClass::transformLocalToGlobal( point );
 
-    return( BaseClass::m_global_point );
+    return BaseClass::m_global_point;
 }
 
 /*===========================================================================*/
@@ -232,7 +221,7 @@ const kvs::Vector3f QuadraticTetrahedralCell<T>::randomSampling( void ) const
  */
 /*===========================================================================*/
 template <typename T>
-inline const kvs::Real32 QuadraticTetrahedralCell<T>::volume( void ) const
+inline const kvs::Real32 QuadraticTetrahedralCell<T>::volume() const
 {
     const kvs::Vector3f v0(   0,  0,  0 );
     const kvs::Vector3f v1(   1,  0,  0 );
@@ -265,7 +254,7 @@ inline const kvs::Real32 QuadraticTetrahedralCell<T>::volume( void ) const
         sum_metric += kvs::Math::Abs<float>( metric_element );
     }
 
-    return( sum_metric / ( 6.0f * 8.0f ) );
+    return sum_metric / ( 6.0f * 8.0f );
 }
 
 } // end of namespace kvs

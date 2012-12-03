@@ -26,7 +26,7 @@ namespace kvs
  *  @brief  Constructs a new MetropolisSampling class.
  */
 /*==========================================================================*/
-MetropolisSampling::MetropolisSampling( void ):
+MetropolisSampling::MetropolisSampling():
     kvs::MapperBase(),
     kvs::PointObject()
 {
@@ -73,7 +73,7 @@ MetropolisSampling::MetropolisSampling(
  *  @brief  Destroys the MetropolisSampling class.
  */
 /*==========================================================================*/
-MetropolisSampling::~MetropolisSampling( void )
+MetropolisSampling::~MetropolisSampling()
 {
 }
 
@@ -82,9 +82,9 @@ MetropolisSampling::~MetropolisSampling( void )
  *  @brief  Returns the number of generated particles.
  */
 /*==========================================================================*/
-const size_t MetropolisSampling::nparticles( void ) const
+size_t MetropolisSampling::nparticles() const
 {
-    return( m_nparticles );
+    return m_nparticles;
 }
 
 /*==========================================================================*/
@@ -111,7 +111,7 @@ MetropolisSampling::SuperClass* MetropolisSampling::exec( const kvs::ObjectBase*
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is NULL.");
-        return( NULL );
+        return NULL;
     }
 
     const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
@@ -119,7 +119,7 @@ MetropolisSampling::SuperClass* MetropolisSampling::exec( const kvs::ObjectBase*
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is not volume dat.");
-        return( NULL );
+        return NULL;
     }
 
     const kvs::VolumeObjectBase::VolumeType volume_type = volume->volumeType();
@@ -132,7 +132,7 @@ MetropolisSampling::SuperClass* MetropolisSampling::exec( const kvs::ObjectBase*
         this->mapping( reinterpret_cast<const kvs::UnstructuredVolumeObject*>( object ) );
     }
 
-    return( this );
+    return this;
 }
 
 /*==========================================================================*/

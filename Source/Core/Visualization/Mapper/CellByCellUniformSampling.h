@@ -35,75 +35,54 @@ namespace kvs
 /*===========================================================================*/
 class CellByCellUniformSampling : public kvs::MapperBase, public kvs::PointObject
 {
-    // Class name.
     kvsClassName( kvs::CellByCellUniformSampling );
-
-    // Module information.
     kvsModuleCategory( Mapper );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::PointObject );
 
 private:
 
-    const kvs::Camera*     m_camera;         ///< camera (reference)
-    size_t                 m_subpixel_level; ///< subpixel level
-    float                  m_sampling_step;  ///< sampling step in the object coordinate
-    float                  m_object_depth;   ///< object depth
-    kvs::ValueArray<float> m_density_map;    ///< density map
+    const kvs::Camera* m_camera; ///< camera (reference)
+    size_t m_subpixel_level; ///< subpixel level
+    float m_sampling_step; ///< sampling step in the object coordinate
+    float m_object_depth; ///< object depth
+    kvs::ValueArray<float> m_density_map; ///< density map
 
 public:
 
-    CellByCellUniformSampling( void );
-
+    CellByCellUniformSampling();
     CellByCellUniformSampling(
         const kvs::VolumeObjectBase* volume,
-        const size_t                 subpixel_level,
-        const float                  sampling_step,
+        const size_t subpixel_level,
+        const float sampling_step,
         const kvs::TransferFunction& transfer_function,
-        const float                  object_depth = 0.0f );
-
+        const float object_depth = 0.0f );
     CellByCellUniformSampling(
-        const kvs::Camera*           camera,
+        const kvs::Camera* camera,
         const kvs::VolumeObjectBase* volume,
-        const size_t                 subpixel_level,
-        const float                  sampling_step,
+        const size_t subpixel_level,
+        const float sampling_step,
         const kvs::TransferFunction& transfer_function,
-        const float                  object_depth = 0.0f );
+        const float object_depth = 0.0f );
+    virtual ~CellByCellUniformSampling();
 
-    virtual ~CellByCellUniformSampling( void );
-
-public:
-
-//    kvs::ObjectBase* exec( const kvs::ObjectBase* object );
     SuperClass* exec( const kvs::ObjectBase* object );
 
-public:
-
-    const size_t subpixelLevel( void ) const;
-
-    const float samplingStep( void ) const;
-
-    const float objectDepth( void ) const;
+    size_t subpixelLevel() const;
+    float samplingStep() const;
+    float objectDepth() const;
 
     void attachCamera( const kvs::Camera* camera );
-
     void setSubpixelLevel( const size_t subpixel_level );
-
     void setSamplingStep( const float sampling_step );
-
     void setObjectDepth( const float object_depth );
 
 private:
 
     void mapping( const kvs::Camera* camera, const kvs::StructuredVolumeObject* volume );
-
     void mapping( const kvs::Camera* camera, const kvs::UnstructuredVolumeObject* volume );
-
-    template <typename T>
-    void generate_particles( const kvs::StructuredVolumeObject* volume );
-
-    template <typename T>
-    void generate_particles( const kvs::UnstructuredVolumeObject* volume );
+    template <typename T> void generate_particles( const kvs::StructuredVolumeObject* volume );
+    template <typename T> void generate_particles( const kvs::UnstructuredVolumeObject* volume );
 };
 
 } // end of namespace kvs

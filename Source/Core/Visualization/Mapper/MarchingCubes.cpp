@@ -24,7 +24,7 @@ namespace kvs
  *  @brief  Constructs a new MarchingCubes class.
  */
 /*==========================================================================*/
-MarchingCubes::MarchingCubes( void ):
+MarchingCubes::MarchingCubes():
     kvs::MapperBase(),
     kvs::PolygonObject(),
     m_isolevel( 0 ),
@@ -65,7 +65,7 @@ MarchingCubes::MarchingCubes(
  *  @brief  Destroys the MarchingCubes class.
  */
 /*==========================================================================*/
-MarchingCubes::~MarchingCubes( void )
+MarchingCubes::~MarchingCubes()
 {
 }
 
@@ -93,7 +93,7 @@ MarchingCubes::SuperClass* MarchingCubes::exec( const kvs::ObjectBase* object )
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is NULL.");
-        return( NULL );
+        return NULL;
     }
 
     const kvs::StructuredVolumeObject* volume = kvs::StructuredVolumeObject::DownCast( object );
@@ -101,7 +101,7 @@ MarchingCubes::SuperClass* MarchingCubes::exec( const kvs::ObjectBase* object )
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is not volume dat.");
-        return( NULL );
+        return NULL;
     }
 
     // In the case of VertexNormal-type, the duplicated vertices are forcibly deleted.
@@ -112,7 +112,7 @@ MarchingCubes::SuperClass* MarchingCubes::exec( const kvs::ObjectBase* object )
 
     this->mapping( volume );
 
-    return( this );
+    return this;
 }
 
 /*==========================================================================*/
@@ -349,7 +349,7 @@ void MarchingCubes::extract_surfaces_without_duplication(
  */
 /*==========================================================================*/
 template <typename T>
-const size_t MarchingCubes::calculate_table_index( const size_t* local_index ) const
+size_t MarchingCubes::calculate_table_index( const size_t* local_index ) const
 {
     const T* const values = static_cast<const T*>( BaseClass::m_volume->values().data() );
     const double isolevel = m_isolevel;
@@ -364,7 +364,7 @@ const size_t MarchingCubes::calculate_table_index( const size_t* local_index ) c
     if ( static_cast<double>( values[ local_index[6] ] ) > isolevel ) { table_index |=  64; }
     if ( static_cast<double>( values[ local_index[7] ] ) > isolevel ) { table_index |= 128; }
 
-    return( table_index );
+    return table_index;
 }
 
 /*==========================================================================*/
@@ -403,7 +403,7 @@ const kvs::Vector3f MarchingCubes::interpolate_vertex(
     const float y = ( 1.0f - ratio ) * vertex0.y() + ratio * vertex1.y();
     const float z = ( 1.0f - ratio ) * vertex0.z() + ratio * vertex1.z();
 
-    return( kvs::Vector3f( x, y, z ) );
+    return kvs::Vector3f( x, y, z );
 }
 
 /*==========================================================================*/
@@ -413,7 +413,7 @@ const kvs::Vector3f MarchingCubes::interpolate_vertex(
  */
 /*==========================================================================*/
 template <typename T>
-const kvs::RGBColor MarchingCubes::calculate_color( void )
+const kvs::RGBColor MarchingCubes::calculate_color()
 {
     // Calculate the min/max values of the node data.
     if ( !BaseClass::m_volume->hasMinMaxValues() )
@@ -426,7 +426,7 @@ const kvs::RGBColor MarchingCubes::calculate_color( void )
     const kvs::Real64 normalize_factor = 255.0 / ( max_value - min_value );
     const kvs::UInt8  index = static_cast<kvs::UInt8>( normalize_factor * ( m_isolevel - min_value ) );
 
-    return( BaseClass::transferFunction().colorMap()[ index ] );
+    return BaseClass::transferFunction().colorMap()[ index ];
 }
 
 /*==========================================================================*/

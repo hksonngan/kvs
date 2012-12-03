@@ -33,10 +33,7 @@ namespace kvs
 /*==========================================================================*/
 class MetropolisSampling : public MapperBase, public PointObject
 {
-    // Class name.
     kvsClassName( kvs::MetropolisSampling );
-
-    // Module information.
     kvsModuleCategory( Mapper );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::PointObject );
@@ -47,43 +44,28 @@ protected:
 
 public:
 
-    MetropolisSampling( void );
-
+    MetropolisSampling();
+    MetropolisSampling( const kvs::VolumeObjectBase* volume, const size_t nparticles );
     MetropolisSampling(
         const kvs::VolumeObjectBase* volume,
-        const size_t                 nparticles );
-
-    MetropolisSampling(
-        const kvs::VolumeObjectBase* volume,
-        const size_t                 nparticles,
+        const size_t nparticles,
         const kvs::TransferFunction& transfer_function );
+    virtual ~MetropolisSampling();
 
-    virtual ~MetropolisSampling( void );
-
-public:
-
-    const size_t nparticles( void ) const;
-
+    size_t nparticles() const;
     void setNParticles( const size_t nparticles );
 
-public:
-
-//    kvs::ObjectBase* exec( const kvs::ObjectBase* object );
     SuperClass* exec( const kvs::ObjectBase* object );
 
 private:
 
     void mapping( const kvs::StructuredVolumeObject* volume );
-
     void mapping( const kvs::UnstructuredVolumeObject* volume );
-
-    template <typename T>
-    void generate_particles( const kvs::StructuredVolumeObject* volume );
-
+    template <typename T> void generate_particles( const kvs::StructuredVolumeObject* volume );
     void adopt_particle(
-        const size_t         index,
+        const size_t index,
         const kvs::Vector3f& coord,
-        const size_t         scalar,
+        const size_t scalar,
         const kvs::Vector3f& gradient );
 };
 

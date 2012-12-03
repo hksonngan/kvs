@@ -23,7 +23,7 @@ namespace kvs
  *  Constructs a new MarchingPyramid class.
  */
 /*==========================================================================*/
-MarchingPyramid::MarchingPyramid( void ):
+MarchingPyramid::MarchingPyramid():
     kvs::MapperBase(),
     kvs::PolygonObject(),
     m_isolevel( 0 ),
@@ -64,7 +64,7 @@ MarchingPyramid::MarchingPyramid(
  *  Destructs.
  */
 /*==========================================================================*/
-MarchingPyramid::~MarchingPyramid( void )
+MarchingPyramid::~MarchingPyramid()
 {
 }
 
@@ -92,7 +92,7 @@ kvs::ObjectBase* MarchingPyramid::exec( const kvs::ObjectBase* object )
     if ( object_type == kvs::ObjectBase::Geometry )
     {
         kvsMessageError("Geometry object is not supported.");
-        return( NULL );
+        return NULL;
     }
 
     // In the case of VertexNormal-type, the duplicated vertices are forcibly deleted.
@@ -110,10 +110,10 @@ kvs::ObjectBase* MarchingPyramid::exec( const kvs::ObjectBase* object )
     else // volume_type == kvs::VolumeObjectBase::Unstructured
     {
         kvsMessageError("Unstructured volume object is not supported.");
-        return( NULL );
+        return NULL;
     }
 
-    return( this );
+    return this;
 }
 
 /*==========================================================================*/
@@ -270,7 +270,7 @@ void MarchingPyramid::extract_surfaces_with_duplication(
  */
 /*==========================================================================*/
 template <typename T>
-const size_t MarchingPyramid::calculate_table_index( const size_t* local_index ) const
+size_t MarchingPyramid::calculate_table_index( const size_t* local_index ) const
 {
     const T* const values = static_cast<const T*>( BaseClass::m_volume->values().data() );
     const double isolevel = m_isolevel;
@@ -282,7 +282,7 @@ const size_t MarchingPyramid::calculate_table_index( const size_t* local_index )
     if ( static_cast<double>( values[ local_index[3] ] ) > isolevel ) { table_index |=   8; }
     if ( static_cast<double>( values[ local_index[4] ] ) > isolevel ) { table_index |=  16; }
 
-    return( table_index );
+    return table_index;
 }
 
 /*==========================================================================*/
@@ -312,7 +312,7 @@ const kvs::Vector3f MarchingPyramid::interpolate_vertex(
     const float y = coords[coord0_index+1] + ratio * ( coords[coord1_index+1] - coords[coord0_index+1] );
     const float z = coords[coord0_index+2] + ratio * ( coords[coord1_index+2] - coords[coord0_index+2] );
 
-    return( kvs::Vector3f( x, y, z ) );
+    return kvs::Vector3f( x, y, z );
 }
 
 /*==========================================================================*/
@@ -322,7 +322,7 @@ const kvs::Vector3f MarchingPyramid::interpolate_vertex(
  */
 /*==========================================================================*/
 template <typename T>
-const kvs::RGBColor MarchingPyramid::calculate_color( void )
+const kvs::RGBColor MarchingPyramid::calculate_color()
 {
     // Calculate the min/max values of the node data.
     if ( !BaseClass::m_volume->hasMinMaxValues() )
@@ -335,7 +335,7 @@ const kvs::RGBColor MarchingPyramid::calculate_color( void )
     const kvs::Real64 normalize_factor = 255.0 / ( max_value - min_value );
     const kvs::UInt8  index = static_cast<kvs::UInt8>( normalize_factor * ( m_isolevel - min_value ) );
 
-    return( BaseClass::transferFunction().colorMap()[ index ] );
+    return BaseClass::transferFunction().colorMap()[ index ];
 }
 
 /*==========================================================================*/
@@ -346,7 +346,7 @@ const kvs::RGBColor MarchingPyramid::calculate_color( void )
  */
 /*==========================================================================*/
 template <typename T>
-const size_t MarchingPyramid::calculate_special_table_index( const size_t* local_index, const size_t index ) const
+size_t MarchingPyramid::calculate_special_table_index( const size_t* local_index, const size_t index ) const
 {
     const T* const values = static_cast<const T*>( BaseClass::m_volume->values().data() );
     const double isolevel = m_isolevel;
@@ -367,7 +367,7 @@ const size_t MarchingPyramid::calculate_special_table_index( const size_t* local
     if( index == 20 && E >= 0 ) table_index = 34;
     if( index == 21 && E < 0 ) table_index = 35;
 
-    return( table_index );
+    return table_index;
 }
 
 } // end of namesapce kvs

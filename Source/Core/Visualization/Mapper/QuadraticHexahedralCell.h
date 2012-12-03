@@ -16,7 +16,6 @@
 #ifndef KVS__QUADRATIC_HEXAHEDRAL_CELL_H_INCLUDE
 #define KVS__QUADRATIC_HEXAHEDRAL_CELL_H_INCLUDE
 
-#include <kvs/ClassName>
 #include <kvs/Type>
 #include <kvs/Vector4>
 #include <kvs/Matrix44>
@@ -35,31 +34,21 @@ namespace kvs
 template <typename T>
 class QuadraticHexahedralCell : public kvs::CellBase<T>
 {
-    kvsClassName( kvs::QuadraticHexahedralCell );
-
 public:
 
     enum { NumberOfNodes = kvs::UnstructuredVolumeObject::QuadraticHexahedra };
-
-public:
 
     typedef kvs::CellBase<T> BaseClass;
 
 public:
 
     QuadraticHexahedralCell( const kvs::UnstructuredVolumeObject* volume );
-
-    virtual ~QuadraticHexahedralCell( void );
-
-public:
+    virtual ~QuadraticHexahedralCell();
 
     const kvs::Real32* interpolationFunctions( const kvs::Vector3f& point ) const;
-
     const kvs::Real32* differentialFunctions( const kvs::Vector3f& point ) const;
-
-    const kvs::Vector3f randomSampling( void ) const;
-
-    const kvs::Real32 volume( void ) const;
+    const kvs::Vector3f randomSampling() const;
+    const kvs::Real32 volume() const;
 };
 
 /*===========================================================================*/
@@ -84,7 +73,7 @@ inline QuadraticHexahedralCell<T>::QuadraticHexahedralCell(
  */
 /*===========================================================================*/
 template <typename T>
-inline QuadraticHexahedralCell<T>::~QuadraticHexahedralCell( void )
+inline QuadraticHexahedralCell<T>::~QuadraticHexahedralCell()
 {
 }
 
@@ -128,7 +117,7 @@ inline const kvs::Real32* QuadraticHexahedralCell<T>::interpolationFunctions( co
     BaseClass::m_interpolation_functions[18] = 4*xyz*( 1 - z );
     BaseClass::m_interpolation_functions[19] = ( 1 - x )*4*yz*( 1 - z );
 
-    return( BaseClass::m_interpolation_functions );
+    return BaseClass::m_interpolation_functions;
 }
 
 /*===========================================================================*/
@@ -213,7 +202,7 @@ inline const kvs::Real32* QuadraticHexahedralCell<T>::differentialFunctions( con
     BaseClass::m_differential_functions[58] =  4*x*y*(1-z)-4*x*y*z;
     BaseClass::m_differential_functions[59] =  4*(1-x)*y*(1-z)-4*(1-x)*y*z;
 
-    return( BaseClass::m_differential_functions );
+    return BaseClass::m_differential_functions;
 }
 
 /*===========================================================================*/
@@ -223,7 +212,7 @@ inline const kvs::Real32* QuadraticHexahedralCell<T>::differentialFunctions( con
  */
 /*===========================================================================*/
 template <typename T>
-const kvs::Vector3f QuadraticHexahedralCell<T>::randomSampling( void ) const
+const kvs::Vector3f QuadraticHexahedralCell<T>::randomSampling() const
 {
     // Generate a point in the local coordinate.
     const float s = BaseClass::randomNumber();
@@ -234,7 +223,7 @@ const kvs::Vector3f QuadraticHexahedralCell<T>::randomSampling( void ) const
     BaseClass::setLocalPoint( point );
     BaseClass::m_global_point = BaseClass::transformLocalToGlobal( point );
 
-    return( BaseClass::m_global_point );
+    return BaseClass::m_global_point;
 }
 
 /*===========================================================================*/
@@ -244,7 +233,7 @@ const kvs::Vector3f QuadraticHexahedralCell<T>::randomSampling( void ) const
  */
 /*===========================================================================*/
 template <typename T>
-inline const kvs::Real32 QuadraticHexahedralCell<T>::volume( void ) const
+inline const kvs::Real32 QuadraticHexahedralCell<T>::volume() const
 {
     const size_t resolution = 3;
     const float sampling_length = 1.0f / (float)resolution;
@@ -277,7 +266,7 @@ inline const kvs::Real32 QuadraticHexahedralCell<T>::volume( void ) const
 
     const float resolution3 = resolution * resolution * resolution;
 
-    return( sum_metric / resolution3 );
+    return sum_metric / resolution3;
 }
 
 } // end of namespace kvs

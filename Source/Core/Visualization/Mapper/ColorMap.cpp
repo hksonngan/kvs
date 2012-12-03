@@ -32,7 +32,7 @@ struct Equal
 
     bool operator() ( const kvs::ColorMap::Point& point ) const
     {
-        return( kvs::Math::Equal( point.first, value ) );
+        return kvs::Math::Equal( point.first, value );
     }
 };
 
@@ -40,7 +40,7 @@ struct Less
 {
     bool operator() ( const kvs::ColorMap::Point& p1, const kvs::ColorMap::Point& p2 ) const
     {
-        return( p1.first < p2.first );
+        return p1.first < p2.first;
     }
 };
 
@@ -54,7 +54,7 @@ namespace kvs
  *  @brief  Constructs a new ColorMap class.
  */
 /*==========================================================================*/
-ColorMap::ColorMap( void ):
+ColorMap::ColorMap():
     m_resolution( ::Resolution ),
     m_min_value( 0.0f ),
 //    m_max_value( ::Resolution - 1.0f ),
@@ -150,7 +150,7 @@ ColorMap::ColorMap( const ColorMap& other ):
  *  @brief  Destroys the OpacityMap class.
  */
 /*==========================================================================*/
-ColorMap::~ColorMap( void )
+ColorMap::~ColorMap()
 {
 }
 
@@ -160,9 +160,9 @@ ColorMap::~ColorMap( void )
  *  @return min value
  */
 /*===========================================================================*/
-const float ColorMap::minValue( void ) const
+float ColorMap::minValue() const
 {
-    return( m_min_value );
+    return m_min_value;
 }
 
 /*===========================================================================*/
@@ -171,9 +171,9 @@ const float ColorMap::minValue( void ) const
  *  @return max value
  */
 /*===========================================================================*/
-const float ColorMap::maxValue( void ) const
+float ColorMap::maxValue() const
 {
-    return( m_max_value );
+    return m_max_value;
 }
 
 /*==========================================================================*/
@@ -182,9 +182,9 @@ const float ColorMap::maxValue( void ) const
  *  @return resolusion
  */
 /*==========================================================================*/
-const size_t ColorMap::resolution( void ) const
+size_t ColorMap::resolution() const
 {
-    return( m_resolution );
+    return m_resolution;
 }
 
 /*===========================================================================*/
@@ -193,9 +193,9 @@ const size_t ColorMap::resolution( void ) const
  *  @return control point list
  */
 /*===========================================================================*/
-const ColorMap::Points& ColorMap::points( void ) const
+const ColorMap::Points& ColorMap::points() const
 {
-    return( m_points );
+    return m_points;
 }
 
 /*==========================================================================*/
@@ -204,14 +204,14 @@ const ColorMap::Points& ColorMap::points( void ) const
  *  @return color map table
  */
 /*==========================================================================*/
-const ColorMap::Table& ColorMap::table( void ) const
+const ColorMap::Table& ColorMap::table() const
 {
-    return( m_table );
+    return m_table;
 }
 
-const bool ColorMap::hasRange( void ) const
+bool ColorMap::hasRange() const
 {
-    return( !kvs::Math::Equal( m_min_value, m_max_value ) );
+    return !kvs::Math::Equal( m_min_value, m_max_value );
 }
 
 /*===========================================================================*/
@@ -266,7 +266,7 @@ void ColorMap::removePoint( const float value )
  *  @brief  Creates the color map.
  */
 /*==========================================================================*/
-void ColorMap::create( void )
+void ColorMap::create()
 {
 /*
     if ( kvs::Math::IsZero( m_min_value ) && kvs::Math::IsZero( m_max_value ) )
@@ -382,7 +382,7 @@ const kvs::RGBColor ColorMap::operator []( const size_t index ) const
     KVS_ASSERT( index < this->resolution() );
 
     const size_t offset = ::NumberOfChannels * index;
-    return( kvs::RGBColor( m_table.data() + offset ) );
+    return kvs::RGBColor( m_table.data() + offset );
 }
 
 /*===========================================================================*/
@@ -397,12 +397,12 @@ const kvs::RGBColor ColorMap::at( const float value ) const
     if ( value <= m_min_value )
     {
         const kvs::RGBColor color( m_table.data() );
-        return( color );
+        return color;
     }
     else if ( value >= m_max_value )
     {
         const kvs::RGBColor color( m_table.data() + ::NumberOfChannels * ( m_resolution - 1 ) );
-        return( color );
+        return color;
     }
 
     const float r = static_cast<float>( m_resolution - 1 );
@@ -424,7 +424,7 @@ const kvs::RGBColor ColorMap::at( const float value ) const
     const kvs::UInt8 G = static_cast<kvs::UInt8>( ( g1 - g0 ) * v + g0 * s1 - g1 * s0 );
     const kvs::UInt8 B = static_cast<kvs::UInt8>( ( b1 - b0 ) * v + b0 * s1 - b1 * s0 );
 
-    return( kvs::RGBColor( R, G, B ) );
+    return kvs::RGBColor( R, G, B );
 }
 
 /*==========================================================================*/
@@ -442,7 +442,7 @@ ColorMap& ColorMap::operator =( const ColorMap& rhs )
     m_points = rhs.m_points;
     m_table = rhs.m_table;
 
-    return( *this );
+    return *this;
 }
 
 } // end of namespace kvs

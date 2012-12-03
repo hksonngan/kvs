@@ -36,7 +36,6 @@ class VolumeObjectBase;
 class MapperBase
 {
     kvsClassName( kvs::MapperBase );
-
     kvsModuleBase;
 
 protected:
@@ -47,44 +46,27 @@ protected:
 
 public:
 
-    MapperBase( void );
-
+    MapperBase();
     explicit MapperBase( const kvs::TransferFunction& transfer_function );
-
-    virtual ~MapperBase( void );
-
-public:
+    virtual ~MapperBase();
 
     virtual kvs::ObjectBase* exec( const kvs::ObjectBase* object ) = 0;
 
-public:
-
     void setTransferFunction( const kvs::TransferFunction& transfer_function );
-
     void setColorMap( const kvs::ColorMap& color_map );
-
     void setOpacityMap( const kvs::OpacityMap& opacity_map );
 
-public:
-
-    const kvs::VolumeObjectBase* const volume( void ) const;
-
-    const kvs::TransferFunction& transferFunction( void ) const;
-
-    const kvs::ColorMap& colorMap( void ) const;
-
-    const kvs::OpacityMap& opacityMap( void ) const;
-
-    const bool isSuccess( void ) const;
-
-    const bool isFailure( void ) const;
+    const kvs::VolumeObjectBase* const volume() const;
+    const kvs::TransferFunction& transferFunction() const;
+    const kvs::ColorMap& colorMap() const;
+    const kvs::OpacityMap& opacityMap() const;
+    bool isSuccess() const;
+    bool isFailure() const;
 
 protected:
 
     void attach_volume( const kvs::VolumeObjectBase* volume );
-
     void set_range( const kvs::VolumeObjectBase* volume );
-
     void set_min_max_coords( const kvs::VolumeObjectBase* volume, kvs::ObjectBase* object );
 };
 

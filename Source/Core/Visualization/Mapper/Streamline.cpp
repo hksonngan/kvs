@@ -4,7 +4,7 @@
  *  @brief  
  *
  *  @author Yukio YASUHARA
- *  @date   2012/01/09 15:43:45
+ *  @date   2012/12/03 22:06:09
  */
 /*----------------------------------------------------------------------------
  *
@@ -41,7 +41,7 @@ inline const kvs::Vector3f GetInterpolatedVector( const size_t vertex_id[8], con
         ret.z() += static_cast<float>( values[ index + 2 ] * w );
     }
 
-    return( ret );
+    return ret;
 }
 
 } // end of namespace
@@ -55,7 +55,7 @@ namespace kvs
  *  @brief  Constructs a new streamline class.
  */
 /*===========================================================================*/
-Streamline::Streamline( void ):
+Streamline::Streamline():
     kvs::StreamlineBase()
 {
 }
@@ -83,7 +83,7 @@ Streamline::Streamline(
  *  @brief  Destroys the streamline class.
  */
 /*===========================================================================*/
-Streamline::~Streamline( void )
+Streamline::~Streamline()
 {
 }
 
@@ -100,7 +100,7 @@ Streamline::BaseClass::SuperClass* Streamline::exec( const kvs::ObjectBase* obje
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is NULL.");
-        return( NULL );
+        return NULL;
     }
 
     const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
@@ -108,7 +108,7 @@ Streamline::BaseClass::SuperClass* Streamline::exec( const kvs::ObjectBase* obje
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is not volume dat.");
-        return( NULL );
+        return NULL;
     }
 
     // Check whether the volume can be processed or not.
@@ -116,7 +116,7 @@ Streamline::BaseClass::SuperClass* Streamline::exec( const kvs::ObjectBase* obje
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input volume is not vector field data.");
-        return( NULL );
+        return NULL;
     }
 
     // Attach the pointer to the volume object.
@@ -132,7 +132,7 @@ Streamline::BaseClass::SuperClass* Streamline::exec( const kvs::ObjectBase* obje
 
     BaseClass::mapping( volume );
 
-    return( this );
+    return this;
 }
 
 /*===========================================================================*/
@@ -142,10 +142,10 @@ Streamline::BaseClass::SuperClass* Streamline::exec( const kvs::ObjectBase* obje
  *  @return true if the vertices are accepted
  */
 /*===========================================================================*/
-const bool Streamline::check_for_acceptance( const std::vector<kvs::Real32>& vertices )
+bool Streamline::check_for_acceptance( const std::vector<kvs::Real32>& vertices )
 {
     kvs::IgnoreUnusedVariable( vertices );
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -158,7 +158,7 @@ const bool Streamline::check_for_acceptance( const std::vector<kvs::Real32>& ver
  *  @return true, if the stremaline is integrated.
  */
 /*===========================================================================*/
-const bool Streamline::check_for_termination(
+bool Streamline::check_for_termination(
     const kvs::Vector3f& current_vertex,
     const kvs::Vector3f& direction,
     const size_t         integration_times,
@@ -168,22 +168,22 @@ const bool Streamline::check_for_termination(
 
     if ( m_enable_boundary_condition )
     {
-        if ( !BaseClass::check_for_inside_volume( next_vertex ) ) return( true );
+        if ( !BaseClass::check_for_inside_volume( next_vertex ) ) return true;
     }
 
     if ( m_enable_vector_length_condition )
     {
-//        return( BaseClass::check_for_vector_length( direction ) );
-        if ( BaseClass::check_for_vector_length( direction ) ) return( true );
+//        return BaseClass::check_for_vector_length( direction );
+        if ( BaseClass::check_for_vector_length( direction ) ) return true;
     }
 
     if ( m_enable_integration_times_condition )
     {
-//        return( BaseClass::check_for_integration_times( integration_times ) );
-        if ( BaseClass::check_for_integration_times( integration_times ) ) return( true );
+//        return BaseClass::check_for_integration_times( integration_times );
+        if ( BaseClass::check_for_integration_times( integration_times ) ) return true;
     }
 
-    return( false );
+    return false;
 }
 
 /*===========================================================================*/
@@ -196,7 +196,7 @@ const bool Streamline::check_for_termination(
 const kvs::Vector3f Streamline::calculate_vector( const kvs::Vector3f& point )
 {
     const kvs::Vector3f origin( 0.0f, 0.0f, 0.0f );
-    return( this->interpolate_vector( point, origin ) );
+    return this->interpolate_vector( point, origin );
 }
 
 /*===========================================================================*/
@@ -214,7 +214,7 @@ const kvs::RGBColor Streamline::calculate_color( const kvs::Vector3f& direction 
     const kvs::Real64 interval = max_length - min_length;
     const kvs::UInt8 level = kvs::UInt8( 255.0 * diff / interval );
 
-    return( BaseClass::transferFunction().colorMap()[level] );
+    return BaseClass::transferFunction().colorMap()[level];
 }
 
 /*===========================================================================*/
@@ -275,18 +275,18 @@ const kvs::Vector3f Streamline::interpolate_vector(
 
     // Interpolate.
     const std::type_info& type = BaseClass::volume()->values().typeInfo()->type();
-    if (      type == typeid( kvs::Int8   ) ) return( ::GetInterpolatedVector<kvs::Int8>( vertex_id, weight, BaseClass::volume() ) );
-    else if ( type == typeid( kvs::Int16  ) ) return( ::GetInterpolatedVector<kvs::Int16>( vertex_id, weight, BaseClass::volume() ) );
-    else if ( type == typeid( kvs::Int32  ) ) return( ::GetInterpolatedVector<kvs::Int32>( vertex_id, weight, BaseClass::volume() ) );
-    else if ( type == typeid( kvs::Int64  ) ) return( ::GetInterpolatedVector<kvs::Int64>( vertex_id, weight, BaseClass::volume() ) );
-    else if ( type == typeid( kvs::UInt8  ) ) return( ::GetInterpolatedVector<kvs::UInt8>( vertex_id, weight, BaseClass::volume() ) );
-    else if ( type == typeid( kvs::UInt16 ) ) return( ::GetInterpolatedVector<kvs::UInt16>( vertex_id, weight, BaseClass::volume() ) );
-    else if ( type == typeid( kvs::UInt32 ) ) return( ::GetInterpolatedVector<kvs::UInt32>( vertex_id, weight, BaseClass::volume() ) );
-    else if ( type == typeid( kvs::UInt64 ) ) return( ::GetInterpolatedVector<kvs::UInt64>( vertex_id, weight, BaseClass::volume() ) );
-    else if ( type == typeid( kvs::Real32 ) ) return( ::GetInterpolatedVector<kvs::Real32>( vertex_id, weight, BaseClass::volume() ) );
-    else if ( type == typeid( kvs::Real64 ) ) return( ::GetInterpolatedVector<kvs::Real64>( vertex_id, weight, BaseClass::volume() ) );
+    if (      type == typeid( kvs::Int8   ) ) return ::GetInterpolatedVector<kvs::Int8>( vertex_id, weight, BaseClass::volume() );
+    else if ( type == typeid( kvs::Int16  ) ) return ::GetInterpolatedVector<kvs::Int16>( vertex_id, weight, BaseClass::volume() );
+    else if ( type == typeid( kvs::Int32  ) ) return ::GetInterpolatedVector<kvs::Int32>( vertex_id, weight, BaseClass::volume() );
+    else if ( type == typeid( kvs::Int64  ) ) return ::GetInterpolatedVector<kvs::Int64>( vertex_id, weight, BaseClass::volume() );
+    else if ( type == typeid( kvs::UInt8  ) ) return ::GetInterpolatedVector<kvs::UInt8>( vertex_id, weight, BaseClass::volume() );
+    else if ( type == typeid( kvs::UInt16 ) ) return ::GetInterpolatedVector<kvs::UInt16>( vertex_id, weight, BaseClass::volume() );
+    else if ( type == typeid( kvs::UInt32 ) ) return ::GetInterpolatedVector<kvs::UInt32>( vertex_id, weight, BaseClass::volume() );
+    else if ( type == typeid( kvs::UInt64 ) ) return ::GetInterpolatedVector<kvs::UInt64>( vertex_id, weight, BaseClass::volume() );
+    else if ( type == typeid( kvs::Real32 ) ) return ::GetInterpolatedVector<kvs::Real32>( vertex_id, weight, BaseClass::volume() );
+    else if ( type == typeid( kvs::Real64 ) ) return ::GetInterpolatedVector<kvs::Real64>( vertex_id, weight, BaseClass::volume() );
 
-    return( kvs::Vector3f( 0.0f, 0.0f, 0.0f ) );
+    return kvs::Vector3f( 0.0f, 0.0f, 0.0f );
 }
 
 } // end of namespace kvs

@@ -39,7 +39,7 @@ inline kvs::Matrix44<T> ScalingMatrix( T x, T y, T z )
         0, 0, 0, 1
     };
 
-    return( kvs::Matrix44<T>( elements ) );
+    return kvs::Matrix44<T>( elements );
 }
 
 template <typename T>
@@ -53,7 +53,7 @@ inline kvs::Matrix44<T> TranslationMatrix( T x, T y, T z )
         0, 0, 0, 1
     };
 
-    return( kvs::Matrix44<T>( elements ) );
+    return kvs::Matrix44<T>( elements );
 }
 
 inline void GetViewport( const kvs::Camera* camera, GLint (*viewport)[4] )
@@ -188,7 +188,7 @@ inline void UnProject(
     *obj_z = O.z() / w;
 }
 
-inline const float CalculateObjectDepth(
+inline float CalculateObjectDepth(
     const kvs::ObjectBase* object,
     const GLdouble         modelview[16],
     const GLdouble         projection[16],
@@ -206,10 +206,10 @@ inline const float CalculateObjectDepth(
 
     const float object_depth = static_cast<float>( z );
 
-    return( object_depth );
+    return object_depth;
 }
 
-inline const float CalculateSubpixelLength(
+inline float CalculateSubpixelLength(
     const float    subpixel_level,
     const float    object_depth,
     const GLdouble modelview[16],
@@ -231,7 +231,7 @@ inline const float CalculateSubpixelLength(
 
     const float subpixel_length = static_cast<float>( ( wx_max - wx_min ) / subpixel_level );
 
-    return( subpixel_length );
+    return subpixel_length;
 }
 
 } // end of namespace
@@ -245,7 +245,7 @@ using kvs::detail::CalculateObjectDepth;
 using kvs::detail::CalculateSubpixelLength;
 #endif
 
-inline const float GetRandomNumber( void )
+inline float GetRandomNumber()
 {
     // xorshift RGNs with period at least 2^128 - 1.
 //    static float t24 = 1.0/16777216.0; /* 0.5**24 */
@@ -255,8 +255,8 @@ inline const float GetRandomNumber( void )
     x=y;y=z;z=w;
     w=(w^(w>>19))^(t^(t>>8));
 
-    return( w * ( 1.0f / 4294967296.0f ) ); // = w * ( 1.0f / kvs::Value<kvs::UInt32>::Max() + 1 )
-//    return( t24 * static_cast<float>( w >> 8 ) );
+    return w * ( 1.0f / 4294967296.0f ); // = w * ( 1.0f / kvs::Value<kvs::UInt32>::Max() + 1 )
+//    return t24 * static_cast<float>( w >> 8 );
 }
 
 inline const kvs::Vector3f RandomSamplingInCube( const kvs::Vector3f& v )
@@ -268,7 +268,7 @@ inline const kvs::Vector3f RandomSamplingInCube( const kvs::Vector3f& v )
     const float y = GetRandomNumber();
     const float z = GetRandomNumber();
     const kvs::Vector3f d( x, y, z );
-    return( v + d );
+    return v + d;
 }
 
 inline float CalculateObjectDepth( 
@@ -343,7 +343,7 @@ inline const kvs::ValueArray<float> CalculateDensityMap(
         }
     }
 
-    return( density_map );
+    return density_map;
 }
 
 } // end of namespace CellByCellParticleGenerator

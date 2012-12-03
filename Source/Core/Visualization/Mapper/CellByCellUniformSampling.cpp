@@ -36,7 +36,7 @@ namespace kvs
  *  @brief  Constructs a new CellByCellUniformSampling class.
  */
 /*===========================================================================*/
-CellByCellUniformSampling::CellByCellUniformSampling( void ):
+CellByCellUniformSampling::CellByCellUniformSampling():
     kvs::MapperBase(),
     kvs::PointObject(),
     m_camera( 0 )
@@ -102,7 +102,7 @@ CellByCellUniformSampling::CellByCellUniformSampling(
  *  @brief  Destroys the CellByCellMetropolisSampling class.
  */
 /*===========================================================================*/
-CellByCellUniformSampling::~CellByCellUniformSampling( void )
+CellByCellUniformSampling::~CellByCellUniformSampling()
 {
     m_density_map.release();
 }
@@ -113,9 +113,9 @@ CellByCellUniformSampling::~CellByCellUniformSampling( void )
  *  @return sub-pixel level
  */
 /*===========================================================================*/
-const size_t CellByCellUniformSampling::subpixelLevel( void ) const
+size_t CellByCellUniformSampling::subpixelLevel() const
 {
-    return( m_subpixel_level );
+    return m_subpixel_level;
 }
 
 /*===========================================================================*/
@@ -124,9 +124,9 @@ const size_t CellByCellUniformSampling::subpixelLevel( void ) const
  *  @return sampling step
  */
 /*===========================================================================*/
-const float CellByCellUniformSampling::samplingStep( void ) const
+float CellByCellUniformSampling::samplingStep() const
 {
-    return( m_sampling_step );
+    return m_sampling_step;
 }
 
 /*===========================================================================*/
@@ -135,9 +135,9 @@ const float CellByCellUniformSampling::samplingStep( void ) const
  *  @return depth
  */
 /*===========================================================================*/
-const float CellByCellUniformSampling::objectDepth( void ) const
+float CellByCellUniformSampling::objectDepth() const
 {
-    return( m_object_depth );
+    return m_object_depth;
 }
 
 /*===========================================================================*/
@@ -197,7 +197,7 @@ CellByCellUniformSampling::SuperClass* CellByCellUniformSampling::exec( const kv
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is NULL.");
-        return( NULL );
+        return NULL;
     }
 
     const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
@@ -205,7 +205,7 @@ CellByCellUniformSampling::SuperClass* CellByCellUniformSampling::exec( const kv
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is not volume dat.");
-        return( NULL );
+        return NULL;
     }
 
     const kvs::VolumeObjectBase::VolumeType volume_type = volume->volumeType();
@@ -238,7 +238,7 @@ CellByCellUniformSampling::SuperClass* CellByCellUniformSampling::exec( const kv
         }
     }
 
-    return( this );
+    return this;
 }
 
 /*===========================================================================*/

@@ -16,7 +16,6 @@
 
 #include <list>
 #include <utility>
-#include <kvs/ClassName>
 #include <kvs/ValueArray>
 #include <kvs/Type>
 #include <kvs/RGBColor>
@@ -32,71 +31,45 @@ namespace kvs
 /*==========================================================================*/
 class ColorMap
 {
-    kvsClassName( kvs::ColorMap );
-
 public:
 
-    typedef kvs::ValueArray<kvs::UInt8>    Table;
+    typedef kvs::ValueArray<kvs::UInt8> Table;
     typedef std::pair<float,kvs::RGBColor> Point;
-    typedef std::list<Point>               Points;
+    typedef std::list<Point> Points;
 
 private:
 
     size_t m_resolution; ///< table resolution
-    float  m_min_value;  ///< min. value
-    float  m_max_value;  ///< max. value
-    Points m_points;     ///< control point list
-    Table  m_table;      ///< value table
+    float m_min_value; ///< min. value
+    float m_max_value; ///< max. value
+    Points m_points; ///< control point list
+    Table m_table; ///< value table
 
 public:
 
-    ColorMap( void );
-
+    ColorMap();
     explicit ColorMap( const size_t resolution );
-
     explicit ColorMap( const Table& table );
-
     ColorMap( const ColorMap& other );
-
     ColorMap( const size_t resolution, const float min_value, const float max_value );
-
     ColorMap( const Table& table, const float min_value, const float max_value );
+    virtual ~ColorMap();
 
-    virtual ~ColorMap( void );
-
-public:
-
-    const float minValue( void ) const;
-
-    const float maxValue( void ) const;
-
-    const size_t resolution( void ) const;
-
-    const Points& points( void ) const;
-
-    const Table& table( void ) const;
-
-public:
-
-    const bool hasRange( void ) const;
+    float minValue() const;
+    float maxValue() const;
+    size_t resolution() const;
+    const Points& points() const;
+    const Table& table() const;
+    bool hasRange() const;
 
     void setRange( const float min_value, const float max_value );
-
     void setResolution( const size_t resolution );
-
     void addPoint( const float value, const kvs::RGBColor color );
-
     void removePoint( const float value );
-
-    void create( void );
-
-public:
+    void create();
 
     const kvs::RGBColor operator []( const size_t index ) const;
-
     const kvs::RGBColor at( const float value ) const;
-
-public:
 
     ColorMap& operator =( const ColorMap& rhs );
 };

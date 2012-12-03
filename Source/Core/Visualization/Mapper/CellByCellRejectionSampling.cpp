@@ -36,7 +36,7 @@ namespace kvs
  *  @brief  Constructs a new CellByCellRejectionSampling class.
  */
 /*===========================================================================*/
-CellByCellRejectionSampling::CellByCellRejectionSampling( void ):
+CellByCellRejectionSampling::CellByCellRejectionSampling():
     kvs::MapperBase(),
     kvs::PointObject(),
     m_camera( 0 )
@@ -102,7 +102,7 @@ CellByCellRejectionSampling::CellByCellRejectionSampling(
  *  @brief  Destroys the CellByCellMetropolisSampling class.
  */
 /*===========================================================================*/
-CellByCellRejectionSampling::~CellByCellRejectionSampling( void )
+CellByCellRejectionSampling::~CellByCellRejectionSampling()
 {
     m_density_map.release();
 }
@@ -113,9 +113,9 @@ CellByCellRejectionSampling::~CellByCellRejectionSampling( void )
  *  @return sub-pixel level
  */
 /*===========================================================================*/
-const size_t CellByCellRejectionSampling::subpixelLevel( void ) const
+size_t CellByCellRejectionSampling::subpixelLevel() const
 {
-    return( m_subpixel_level );
+    return m_subpixel_level;
 }
 
 /*===========================================================================*/
@@ -124,9 +124,9 @@ const size_t CellByCellRejectionSampling::subpixelLevel( void ) const
  *  @return sampling step
  */
 /*===========================================================================*/
-const float CellByCellRejectionSampling::samplingStep( void ) const
+float CellByCellRejectionSampling::samplingStep() const
 {
-    return( m_sampling_step );
+    return m_sampling_step;
 }
 
 /*===========================================================================*/
@@ -135,9 +135,9 @@ const float CellByCellRejectionSampling::samplingStep( void ) const
  *  @return depth
  */
 /*===========================================================================*/
-const float CellByCellRejectionSampling::objectDepth( void ) const
+float CellByCellRejectionSampling::objectDepth() const
 {
-    return( m_object_depth );
+    return m_object_depth;
 }
 
 /*===========================================================================*/
@@ -197,7 +197,7 @@ CellByCellRejectionSampling::SuperClass* CellByCellRejectionSampling::exec( cons
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is NULL.");
-        return( NULL );
+        return NULL;
     }
 
     const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
@@ -205,7 +205,7 @@ CellByCellRejectionSampling::SuperClass* CellByCellRejectionSampling::exec( cons
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is not volume dat.");
-        return( NULL );
+        return NULL;
     }
 
     const kvs::VolumeObjectBase::VolumeType volume_type = volume->volumeType();
@@ -238,7 +238,7 @@ CellByCellRejectionSampling::SuperClass* CellByCellRejectionSampling::exec( cons
         }
     }
 
-    return( this );
+    return this;
 }
 
 /*===========================================================================*/
@@ -546,7 +546,7 @@ void CellByCellRejectionSampling::generate_particles( const kvs::UnstructuredVol
  *  @return density value
  */
 /*===========================================================================*/
-const float CellByCellRejectionSampling::calculate_density( const float scalar )
+float CellByCellRejectionSampling::calculate_density( const float scalar )
 {
     const float min_value = BaseClass::transferFunction().colorMap().minValue();
     const float max_value = BaseClass::transferFunction().colorMap().maxValue();
@@ -581,7 +581,7 @@ const float CellByCellRejectionSampling::calculate_density( const float scalar )
  *  @return number of particles
  */
 /*===========================================================================*/
-const size_t CellByCellRejectionSampling::calculate_number_of_particles(
+size_t CellByCellRejectionSampling::calculate_number_of_particles(
     const float density,
     const float volume_of_cell )
 {
@@ -591,7 +591,7 @@ const size_t CellByCellRejectionSampling::calculate_number_of_particles(
     size_t n = static_cast<size_t>( N );
     if ( N - n > R ) { ++n; }
 
-    return( n );
+    return n;
 }
 
 /*===========================================================================*/
@@ -602,7 +602,7 @@ const size_t CellByCellRejectionSampling::calculate_number_of_particles(
  *  @return density value
  */
 /*===========================================================================*/
-const float CellByCellRejectionSampling::calculate_maximum_density( const float scalar0, const float scalar1 )
+float CellByCellRejectionSampling::calculate_maximum_density( const float scalar0, const float scalar1 )
 {
     if ( scalar0 > scalar1 )
     {

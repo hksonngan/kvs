@@ -14,7 +14,6 @@
 #ifndef KVS__HEXAHEDRAL_CELL_H_INCLUDE
 #define KVS__HEXAHEDRAL_CELL_H_INCLUDE
 
-#include <kvs/ClassName>
 #include <kvs/Type>
 #include <kvs/Vector4>
 #include <kvs/Matrix44>
@@ -33,31 +32,21 @@ namespace kvs
 template <typename T>
 class HexahedralCell : public kvs::CellBase<T>
 {
-    kvsClassName( kvs::HexahedralCell );
-
 public:
 
     enum { NumberOfNodes = kvs::UnstructuredVolumeObject::Hexahedra };
-
-public:
 
     typedef kvs::CellBase<T> BaseClass;
 
 public:
 
     HexahedralCell( const kvs::UnstructuredVolumeObject* volume );
-
-    virtual ~HexahedralCell( void );
-
-public:
+    virtual ~HexahedralCell();
 
     const kvs::Real32* interpolationFunctions( const kvs::Vector3f& point ) const;
-
     const kvs::Real32* differentialFunctions( const kvs::Vector3f& point ) const;
-
-    const kvs::Vector3f randomSampling( void ) const;
-
-    const kvs::Real32 volume( void ) const;
+    const kvs::Vector3f randomSampling() const;
+    const kvs::Real32 volume() const;
 };
 
 /*===========================================================================*/
@@ -82,7 +71,7 @@ inline HexahedralCell<T>::HexahedralCell(
  */
 /*===========================================================================*/
 template <typename T>
-inline HexahedralCell<T>::~HexahedralCell( void )
+inline HexahedralCell<T>::~HexahedralCell()
 {
 }
 
@@ -114,7 +103,7 @@ inline const kvs::Real32* HexahedralCell<T>::interpolationFunctions( const kvs::
     BaseClass::m_interpolation_functions[6] = xy - xyz;
     BaseClass::m_interpolation_functions[7] = y - xy - yz + xyz;
 
-    return( BaseClass::m_interpolation_functions );
+    return BaseClass::m_interpolation_functions;
 }
 
 /*==========================================================================*/
@@ -164,7 +153,7 @@ inline const kvs::Real32* HexahedralCell<T>::differentialFunctions( const kvs::V
     BaseClass::m_differential_functions[22] =  - xy;
     BaseClass::m_differential_functions[23] =  - y + xy;
 
-    return( BaseClass::m_differential_functions );
+    return BaseClass::m_differential_functions;
 }
 
 /*===========================================================================*/
@@ -174,7 +163,7 @@ inline const kvs::Real32* HexahedralCell<T>::differentialFunctions( const kvs::V
  */
 /*===========================================================================*/
 template <typename T>
-const kvs::Vector3f HexahedralCell<T>::randomSampling( void ) const
+const kvs::Vector3f HexahedralCell<T>::randomSampling() const
 {
     // Generate a point in the local coordinate.
     const float s = BaseClass::randomNumber();
@@ -185,7 +174,7 @@ const kvs::Vector3f HexahedralCell<T>::randomSampling( void ) const
     this->setLocalPoint( point );
     BaseClass::m_global_point = BaseClass::transformLocalToGlobal( point );
 
-    return( BaseClass::m_global_point );
+    return BaseClass::m_global_point;
 }
 
 /*===========================================================================*/
@@ -195,7 +184,7 @@ const kvs::Vector3f HexahedralCell<T>::randomSampling( void ) const
  */
 /*===========================================================================*/
 template <typename T>
-inline const kvs::Real32 HexahedralCell<T>::volume( void ) const
+inline const kvs::Real32 HexahedralCell<T>::volume() const
 {
     const size_t resolution = 3;
     const float sampling_length = 1.0f / (float)resolution;
@@ -228,7 +217,7 @@ inline const kvs::Real32 HexahedralCell<T>::volume( void ) const
 
     const float resolution3 = resolution * resolution * resolution;
 
-    return( sum_metric / resolution3 );
+    return sum_metric / resolution3;
 }
 
 } // end of namespace kvs

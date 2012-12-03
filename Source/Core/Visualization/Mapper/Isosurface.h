@@ -31,42 +31,32 @@ namespace kvs
 /*==========================================================================*/
 class Isosurface : public kvs::MapperBase, public kvs::PolygonObject
 {
-    // Class name.
     kvsClassName( kvs::Isosurface );
-
-    // Module information.
     kvsModuleCategory( Mapper );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::PolygonObject );
 
 private:
 
-    double m_isolevel;    ///< isosurface level
-    bool   m_duplication; ///< duplication flag
+    double m_isolevel; ///< isosurface level
+    bool m_duplication; ///< duplication flag
 
 public:
 
-    Isosurface( void );
-
+    Isosurface();
     Isosurface(
         const kvs::VolumeObjectBase* volume,
-        const double                 isolevel,
+        const double isolevel,
         const SuperClass::NormalType normal_type = SuperClass::PolygonNormal );
-
     Isosurface(
         const kvs::VolumeObjectBase* volume,
-        const double                 isolevel,
+        const double isolevel,
         const SuperClass::NormalType normal_type,
-        const bool                   duplication,
+        const bool duplication,
         const kvs::TransferFunction& transfer_function );
-
-    virtual ~Isosurface( void );
-
-public:
+    virtual ~Isosurface();
 
     void setIsolevel( const double isolevel );
-
-public:
 
     SuperClass* exec( const kvs::ObjectBase* object );
 

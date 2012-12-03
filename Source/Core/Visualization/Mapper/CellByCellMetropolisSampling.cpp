@@ -36,7 +36,7 @@ namespace kvs
  *  @brief  Constructs a new CellByCellMetropolisSampling class.
  */
 /*===========================================================================*/
-CellByCellMetropolisSampling::CellByCellMetropolisSampling( void ):
+CellByCellMetropolisSampling::CellByCellMetropolisSampling():
     kvs::MapperBase(),
     kvs::PointObject(),
     m_camera( 0 )
@@ -102,7 +102,7 @@ CellByCellMetropolisSampling::CellByCellMetropolisSampling(
  *  @brief  Destroys the CellByCellMetropolisSampling class.
  */
 /*===========================================================================*/
-CellByCellMetropolisSampling::~CellByCellMetropolisSampling( void )
+CellByCellMetropolisSampling::~CellByCellMetropolisSampling()
 {
     m_density_map.release();
 }
@@ -113,9 +113,9 @@ CellByCellMetropolisSampling::~CellByCellMetropolisSampling( void )
  *  @return sub-pixel level
  */
 /*===========================================================================*/
-const size_t CellByCellMetropolisSampling::subpixelLevel( void ) const
+size_t CellByCellMetropolisSampling::subpixelLevel() const
 {
-    return( m_subpixel_level );
+    return m_subpixel_level;
 }
 
 /*===========================================================================*/
@@ -124,9 +124,9 @@ const size_t CellByCellMetropolisSampling::subpixelLevel( void ) const
  *  @return sampling step
  */
 /*===========================================================================*/
-const float CellByCellMetropolisSampling::samplingStep( void ) const
+float CellByCellMetropolisSampling::samplingStep() const
 {
-    return( m_sampling_step );
+    return m_sampling_step;
 }
 
 /*===========================================================================*/
@@ -135,9 +135,9 @@ const float CellByCellMetropolisSampling::samplingStep( void ) const
  *  @return depth
  */
 /*===========================================================================*/
-const float CellByCellMetropolisSampling::objectDepth( void ) const
+float CellByCellMetropolisSampling::objectDepth() const
 {
-    return( m_object_depth );
+    return m_object_depth;
 }
 
 /*===========================================================================*/
@@ -197,7 +197,7 @@ CellByCellMetropolisSampling::SuperClass* CellByCellMetropolisSampling::exec( co
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is NULL.");
-        return( NULL );
+        return NULL;
     }
 
     const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
@@ -205,7 +205,7 @@ CellByCellMetropolisSampling::SuperClass* CellByCellMetropolisSampling::exec( co
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is not volume dat.");
-        return( NULL );
+        return NULL;
     }
 
     const kvs::VolumeObjectBase::VolumeType volume_type = volume->volumeType();
@@ -238,7 +238,7 @@ CellByCellMetropolisSampling::SuperClass* CellByCellMetropolisSampling::exec( co
         }
     }
 
-    return( this );
+    return this;
 }
 
 /*===========================================================================*/

@@ -33,7 +33,7 @@ namespace kvs
  *  Construct a new OrthoSlice class.
  */
 /*==========================================================================*/
-OrthoSlice::OrthoSlice( void ):
+OrthoSlice::OrthoSlice():
     m_aligned_axis( OrthoSlice::XAxis )
 {
 }

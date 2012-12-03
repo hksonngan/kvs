@@ -50,7 +50,7 @@ public:
 
     void insert( const kvs::UInt32 v0, const kvs::UInt32 v1 );
 
-    const kvs::ValueArray<kvs::UInt32> serialize( void );
+    const kvs::ValueArray<kvs::UInt32> serialize();
 };
 
 /*===========================================================================*/
@@ -101,7 +101,7 @@ void EdgeMap::insert( const kvs::UInt32 v0, const kvs::UInt32 v1 )
  *  @return serialized indices of the end vertices of the edges in the edge map
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::UInt32> EdgeMap::serialize( void )
+const kvs::ValueArray<kvs::UInt32> EdgeMap::serialize()
 {
     kvs::ValueArray<kvs::UInt32> connections( 2 * m_bucket.size() );
 
@@ -115,7 +115,7 @@ const kvs::ValueArray<kvs::UInt32> EdgeMap::serialize( void )
         e++;
     }
 
-    return( connections );
+    return connections;
 }
 
 } // end of namespace
@@ -129,7 +129,7 @@ namespace kvs
  *  @brief  Constructs a new ExtractEdges class.
  */
 /*===========================================================================*/
-ExtractEdges::ExtractEdges( void ):
+ExtractEdges::ExtractEdges():
     kvs::MapperBase(),
     kvs::LineObject()
 {
@@ -169,7 +169,7 @@ ExtractEdges::ExtractEdges(
  *  @brief  Destructs the ExtractEdges class.
  */
 /*===========================================================================*/
-ExtractEdges::~ExtractEdges( void )
+ExtractEdges::~ExtractEdges()
 {
 }
 
@@ -186,7 +186,7 @@ ExtractEdges::SuperClass* ExtractEdges::exec( const kvs::ObjectBase* object )
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is NULL.");
-        return( NULL );
+        return NULL;
     }
 
     const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
@@ -194,7 +194,7 @@ ExtractEdges::SuperClass* ExtractEdges::exec( const kvs::ObjectBase* object )
     {
         BaseClass::m_is_success = false;
         kvsMessageError("Input object is not volume dat.");
-        return( NULL );
+        return NULL;
     }
 
     const kvs::VolumeObjectBase::VolumeType type = volume->volumeType();
@@ -207,7 +207,7 @@ ExtractEdges::SuperClass* ExtractEdges::exec( const kvs::ObjectBase* object )
         this->mapping( kvs::UnstructuredVolumeObject::DownCast( volume ) );
     }
 
-    return( this );
+    return this;
 }
 
 /*===========================================================================*/

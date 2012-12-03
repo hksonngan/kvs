@@ -24,7 +24,7 @@ namespace kvs
  *  @brief  Constructs a new empty MapperBase.
  */
 /*==========================================================================*/
-MapperBase::MapperBase( void )
+MapperBase::MapperBase()
     : m_transfer_function()
     , m_volume( 0 )
     , m_is_success( false )
@@ -48,7 +48,7 @@ MapperBase::MapperBase( const TransferFunction& transfer_function )
  *  @brief  Destroys the MapperBase.
  */
 /*==========================================================================*/
-MapperBase::~MapperBase( void )
+MapperBase::~MapperBase()
 {
 }
 
@@ -91,9 +91,9 @@ void MapperBase::setOpacityMap( const kvs::OpacityMap& opacity_map )
  *  @return pointer to the volume object
  */
 /*===========================================================================*/
-const kvs::VolumeObjectBase* const MapperBase::volume( void ) const
+const kvs::VolumeObjectBase* const MapperBase::volume() const
 {
-    return( m_volume );
+    return m_volume;
 }
 
 /*===========================================================================*/
@@ -101,9 +101,9 @@ const kvs::VolumeObjectBase* const MapperBase::volume( void ) const
  *  @brief  Returns the transfer function.
  */
 /*===========================================================================*/
-const kvs::TransferFunction& MapperBase::transferFunction( void ) const
+const kvs::TransferFunction& MapperBase::transferFunction() const
 {
-    return( m_transfer_function );
+    return m_transfer_function;
 }
 
 /*===========================================================================*/
@@ -111,9 +111,9 @@ const kvs::TransferFunction& MapperBase::transferFunction( void ) const
  *  @brief  Returns the color map.
  */
 /*===========================================================================*/
-const kvs::ColorMap& MapperBase::colorMap( void ) const
+const kvs::ColorMap& MapperBase::colorMap() const
 {
-    return( m_transfer_function.colorMap() );
+    return m_transfer_function.colorMap();
 }
 
 /*===========================================================================*/
@@ -121,9 +121,9 @@ const kvs::ColorMap& MapperBase::colorMap( void ) const
  *  @brief  Returns the opacity map.
  */
 /*===========================================================================*/
-const kvs::OpacityMap& MapperBase::opacityMap( void ) const
+const kvs::OpacityMap& MapperBase::opacityMap() const
 {
-    return( m_transfer_function.opacityMap() );
+    return m_transfer_function.opacityMap();
 }
 
 /*==========================================================================*/
@@ -132,9 +132,9 @@ const kvs::OpacityMap& MapperBase::opacityMap( void ) const
  *  @return Whether the mapping is success or not.
  */
 /*==========================================================================*/
-const bool MapperBase::isSuccess( void ) const
+bool MapperBase::isSuccess() const
 {
-    return( m_is_success );
+    return m_is_success;
 }
 
 /*==========================================================================*/
@@ -143,9 +143,9 @@ const bool MapperBase::isSuccess( void ) const
  *  @return Whether the mapping is failure or not.
  */
 /*==========================================================================*/
-const bool MapperBase::isFailure( void ) const
+bool MapperBase::isFailure() const
 {
-    return( !m_is_success );
+    return !m_is_success;
 }
 
 /*===========================================================================*/

@@ -29,44 +29,32 @@ namespace kvs
 /*===========================================================================*/
 class Streamline : public kvs::StreamlineBase
 {
-    // Class name.
     kvsClassName( kvs::Streamline );
-
-    // Module information.
     kvsModuleCategory( Mapper );
     kvsModuleBaseClass( kvs::StreamlineBase );
 
 public:
 
-    Streamline( void );
-
+    Streamline();
     Streamline(
         const kvs::StructuredVolumeObject* volume,
         const kvs::PointObject* seed_points,
         const kvs::TransferFunction& transfer_function );
-
-    virtual ~Streamline( void );
-
-public:
+    virtual ~Streamline();
 
     BaseClass::SuperClass* exec( const kvs::ObjectBase* object );
 
 protected:
 
-    const bool check_for_acceptance( const std::vector<kvs::Real32>& vertices );
-
-    const bool check_for_termination(
+    bool check_for_acceptance( const std::vector<kvs::Real32>& vertices );
+    bool check_for_termination(
         const kvs::Vector3f& current_vertex,
         const kvs::Vector3f& direction,
         const size_t integration_times,
         const kvs::Vector3f& next_vertex );
-
     const kvs::Vector3f interpolate_vector( const kvs::Vector3f& vertex, const kvs::Vector3f& direction );
-
     const kvs::Vector3f calculate_vector( const kvs::Vector3f& vertex );
-
     const kvs::RGBColor calculate_color( const kvs::Vector3f& direction );
-
     void set_min_max_vector_length( const kvs::VolumeObjectBase* volume );
 };
 

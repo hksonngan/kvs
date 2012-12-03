@@ -31,50 +31,29 @@ class VolumeObjectBase;
  *  ExtractVertices class.
  */
 /*==========================================================================*/
-class ExtractVertices
-    : public kvs::MapperBase
-    , public kvs::PointObject
+class ExtractVertices : public kvs::MapperBase, public kvs::PointObject
 {
-    // Class name.
     kvsClassName( kvs::ExtractVertices );
-
-    // Module information.
     kvsModuleCategory( Mapper );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::PointObject );
 
 public:
 
-    ExtractVertices( void );
+    ExtractVertices();
+    ExtractVertices( const kvs::VolumeObjectBase* volume );
+    ExtractVertices( const kvs::VolumeObjectBase* volume, const kvs::TransferFunction& transfer_function );
+    virtual ~ExtractVertices();
 
-    ExtractVertices(
-        const kvs::VolumeObjectBase* volume );
-
-    ExtractVertices(
-        const kvs::VolumeObjectBase* volume,
-        const kvs::TransferFunction& transfer_function );
-
-    virtual ~ExtractVertices( void );
-
-public:
-
-//    kvs::ObjectBase* exec( const kvs::ObjectBase* object );
     SuperClass* exec( const kvs::ObjectBase* object );
 
 private:
 
     void mapping( const kvs::VolumeObjectBase* volume );
-
-//    void pre_process( void );
-
-    void calculate_coords( void );
-
-    void calculate_uniform_coords( void );
-
-    void calculate_rectiliner_coords( void );
-
-    template <typename T>
-    void calculate_colors( void );
+    void calculate_coords();
+    void calculate_uniform_coords();
+    void calculate_rectiliner_coords();
+    template <typename T> void calculate_colors();
 };
 
 }

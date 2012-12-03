@@ -32,10 +32,7 @@ namespace kvs
 /*===========================================================================*/
 class StreamlineBase : public kvs::MapperBase, public kvs::LineObject
 {
-    // Class name.
     kvsClassName( kvs::StreamlineBase );
-
-    // Module information.
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::LineObject );
 
@@ -69,95 +66,61 @@ protected:
 
 public:
 
-    StreamlineBase( void );
-
-    virtual ~StreamlineBase( void );
-
-public:
+    StreamlineBase();
+    virtual ~StreamlineBase();
 
     void setSeedPoints( const kvs::PointObject* seed_points );
-
     void setIntegrationMethod( const StreamlineBase::IntegrationMethod method );
-
     void setIntegrationDirection( const StreamlineBase::IntegrationDirection direction );
-
     void setIntegrationInterval( const float interval );
-
     void setVectorLengthThreshold( const float length );
-
     void setIntegrationTimesThreshold( const size_t times );
-
     void setEnableBoundaryCondition( const bool enabled );
-
     void setEnableVectorLengthCondition( const bool enabled );
-
     void setEnableIntegrationTimesCondition( const bool enabled );
-
-public:
 
     virtual kvs::ObjectBase* exec( const kvs::ObjectBase* object ) = 0;
 
 protected:
 
-    virtual const bool check_for_acceptance( const std::vector<kvs::Real32>& vertices ) = 0;
-
-    virtual const bool check_for_termination(
+    virtual bool check_for_acceptance( const std::vector<kvs::Real32>& vertices ) = 0;
+    virtual bool check_for_termination(
         const kvs::Vector3f& current_vertex,
         const kvs::Vector3f& direction,
         const size_t integration_times,
         const kvs::Vector3f& next_vertex ) = 0;
-
     virtual const kvs::Vector3f interpolate_vector( const kvs::Vector3f& vertex, const kvs::Vector3f& direction ) = 0;
-
     virtual const kvs::Vector3f calculate_vector( const kvs::Vector3f& vertex ) = 0;
-
     virtual const kvs::RGBColor calculate_color( const kvs::Vector3f& direction ) = 0;
 
-protected:
-
     void mapping( const kvs::VolumeObjectBase* volume );
-
-    void extract_lines(
-        const kvs::StructuredVolumeObject* volume );
-
-    const bool calculate_line(
-        std::vector<kvs::Real32>* vertices,
-        std::vector<kvs::UInt8>* colors,
-        const size_t index );
-
-    const bool calculate_one_side(
+    void extract_lines( const kvs::StructuredVolumeObject* volume );
+    bool calculate_line( std::vector<kvs::Real32>* vertices, std::vector<kvs::UInt8>* colors, const size_t index );
+    bool calculate_one_side(
         std::vector<kvs::Real32>* coords,
         std::vector<kvs::UInt8>* colors,
         const kvs::Vector3f& seed_point,
         const kvs::Vector3f& seed_vector );
-
-    const bool calculate_next_vertex(
+    bool calculate_next_vertex(
+        const kvs::Vector3f& current_vertex,
+        const kvs::Vector3f& current_direction,
+        kvs::Vector3f* next_vertex );
+    bool integrate_by_euler(
+        const kvs::Vector3f& current_vertex,
+        const kvs::Vector3f& current_direction,
+        kvs::Vector3f* next_vertex );
+    bool integrate_by_runge_kutta_2nd(
+        const kvs::Vector3f& current_vertex,
+        const kvs::Vector3f& current_direction,
+        kvs::Vector3f* next_vertex );
+    bool integrate_by_runge_kutta_4th(
         const kvs::Vector3f& current_vertex,
         const kvs::Vector3f& current_direction,
         kvs::Vector3f* next_vertex );
 
-    const bool integrate_by_euler(
-        const kvs::Vector3f& current_vertex,
-        const kvs::Vector3f& current_direction,
-        kvs::Vector3f* next_vertex );
-
-    const bool integrate_by_runge_kutta_2nd(
-        const kvs::Vector3f& current_vertex,
-        const kvs::Vector3f& current_direction,
-        kvs::Vector3f* next_vertex );
-
-    const bool integrate_by_runge_kutta_4th(
-        const kvs::Vector3f& current_vertex,
-        const kvs::Vector3f& current_direction,
-        kvs::Vector3f* next_vertex );
-
-protected:
-
-    const bool check_for_inside_volume( const kvs::Vector3f& seed );
-
-    const bool check_for_vector_length( const kvs::Vector3f& direction );
-
-    const bool check_for_integration_times( const size_t times );
+    bool check_for_inside_volume( const kvs::Vector3f& seed );
+    bool check_for_vector_length( const kvs::Vector3f& direction );
+    bool check_for_integration_times( const size_t times );
 };
 
 } // end of namespace kvs

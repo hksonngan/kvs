@@ -31,67 +31,40 @@ namespace kvs
 /*==========================================================================*/
 class MarchingPyramid : public kvs::MapperBase, public kvs::PolygonObject
 {
-    // Class name.
     kvsClassName( kvs::MarchingPyramid );
-
-    // Module information.
     kvsModuleCategory( Mapper );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::PolygonObject );
 
 private:
 
-    double m_isolevel;    ///< isosurface level
-    bool   m_duplication; ///< duplication flag
+    double m_isolevel; ///< isosurface level
+    bool m_duplication; ///< duplication flag
 
 public:
 
-    MarchingPyramid( void );
-
+    MarchingPyramid();
     MarchingPyramid(
         const kvs::UnstructuredVolumeObject* volume,
-        const double                       isolevel,
-        const SuperClass::NormalType       normal_type,
-        const bool                         duplication,
-        const kvs::TransferFunction&       transfer_function );
-
-    virtual ~MarchingPyramid( void );
-
-public:
+        const double isolevel,
+        const SuperClass::NormalType normal_type,
+        const bool duplication,
+        const kvs::TransferFunction& transfer_function );
+    virtual ~MarchingPyramid();
 
     void setIsolevel( const double isolevel );
-
-public:
 
     kvs::ObjectBase* exec( const kvs::ObjectBase* object );
 
 private:
 
     void mapping( const kvs::UnstructuredVolumeObject* volume );
-
-    template <typename T>
-    void extract_surfaces(
-        const kvs::UnstructuredVolumeObject* volume );
-
-    template <typename T>
-    void extract_surfaces_with_duplication(
-        const kvs::UnstructuredVolumeObject* volume );
-
-    template <typename T>
-    const size_t calculate_table_index(
-        const size_t* local_index ) const;
-
-    template <typename T>
-    const kvs::Vector3f interpolate_vertex(
-        const int vertex0,
-        const int vertex1 ) const;
-
-    template <typename T>
-    const kvs::RGBColor calculate_color( void );
-
-    template <typename T>
-    const size_t calculate_special_table_index(
-        const size_t* local_index, const size_t index ) const;
+    template <typename T> void extract_surfaces( const kvs::UnstructuredVolumeObject* volume );
+    template <typename T> void extract_surfaces_with_duplication( const kvs::UnstructuredVolumeObject* volume );
+    template <typename T> size_t calculate_table_index( const size_t* local_index ) const;
+    template <typename T> const kvs::Vector3f interpolate_vertex( const int vertex0, const int vertex1 ) const;
+    template <typename T> const kvs::RGBColor calculate_color();
+    template <typename T> size_t calculate_special_table_index( const size_t* local_index, const size_t index ) const;
 };
 
 } // end of namespace kvs
