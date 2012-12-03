@@ -1,6 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   ArrowGlyph.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -15,26 +16,31 @@
 #define KVS__ARROW_GLYPH_H_INCLUDE
 
 #include "GlyphBase.h"
-#include <kvs/MapperBase>
 #include <kvs/ClassName>
 #include <kvs/Module>
+#include <kvs/Type>
+#include <kvs/OpenGL>
 
 
 namespace kvs
 {
 
+class ObjectBase;
+class Camera;
+class Light;
+class VolumeObjectBase;
+class TransferFunction;
+class RGBColor;
+
 /*===========================================================================*/
 /**
- *  @brief  Arrow glyph class.
+ *  @brief  ArrowGlyph class.
  */
 /*===========================================================================*/
 class ArrowGlyph : public kvs::GlyphBase
 {
-    // Class name.
     kvsClassName( kvs::ArrowGlyph );
-
-    // Module information.
-    kvsModuleCategory( Mapper );
+    kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::GlyphBase );
 
 public:
@@ -45,57 +51,33 @@ public:
         TubeArrow
     };
 
-protected:
+private:
 
     GLUquadricObj* m_cylinder; ///< glyph primitive
     ArrowType m_type; ///< arrow type
+    const kvs::VolumeObjectBase* m_volume; ///< pointer to the volume object (reference)
 
 public:
 
-    ArrowGlyph( void );
-
-    ArrowGlyph(
-        const kvs::VolumeObjectBase* volume );
-
-    ArrowGlyph(
-        const kvs::VolumeObjectBase* volume,
-        const kvs::TransferFunction& transfer_function );
-
-    virtual ~ArrowGlyph( void );
-
-/*
-public:
-
-    const ObjectType objectType( void ) const
-    {
-        return( Geometry );
-    }
-*/
-public:
-
-    BaseClass::SuperClass* exec( const kvs::ObjectBase* object );
-
-    void draw( void );
-
-public:
-
-    const ArrowType type( void ) const;
+    ArrowGlyph();
+    ArrowGlyph( const kvs::VolumeObjectBase* volume );
+    ArrowGlyph( const kvs::VolumeObjectBase* volume, const kvs::TransferFunction& transfer_function );
+    virtual ~ArrowGlyph();
 
     void setType( const ArrowType type );
+    ArrowType type() const;
 
-protected:
+    void exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
 
-    void draw_lines( void );
+private:
 
-    void draw_tubes( void );
-
+    void attach_volume( const kvs::VolumeObjectBase* volume );
+    void draw();
+    void draw_lines();
+    void draw_tubes();
     void draw_line_element( const kvs::RGBColor& color, const kvs::UInt8 opacity );
-
     void draw_tube_element( const kvs::RGBColor& color, const kvs::UInt8 opacity );
-
-protected:
-
-    void initialize( void );
+    void initialize();
 };
 
 } // end of namespace kvs

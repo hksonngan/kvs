@@ -225,7 +225,6 @@ $(OUTDIR)/./Visualization/Importer/PolygonImporter.o \
 $(OUTDIR)/./Visualization/Importer/StructuredVolumeImporter.o \
 $(OUTDIR)/./Visualization/Importer/TableImporter.o \
 $(OUTDIR)/./Visualization/Importer/UnstructuredVolumeImporter.o \
-$(OUTDIR)/./Visualization/Mapper/ArrowGlyph.o \
 $(OUTDIR)/./Visualization/Mapper/Cell.o \
 $(OUTDIR)/./Visualization/Mapper/CellAdjacencyGraph.o \
 $(OUTDIR)/./Visualization/Mapper/CellByCellLayeredSampling.o \
@@ -233,12 +232,10 @@ $(OUTDIR)/./Visualization/Mapper/CellByCellMetropolisSampling.o \
 $(OUTDIR)/./Visualization/Mapper/CellByCellRejectionSampling.o \
 $(OUTDIR)/./Visualization/Mapper/CellByCellUniformSampling.o \
 $(OUTDIR)/./Visualization/Mapper/ColorMap.o \
-$(OUTDIR)/./Visualization/Mapper/DiamondGlyph.o \
 $(OUTDIR)/./Visualization/Mapper/ExternalFaces.o \
 $(OUTDIR)/./Visualization/Mapper/ExtractEdges.o \
 $(OUTDIR)/./Visualization/Mapper/ExtractVertices.o \
 $(OUTDIR)/./Visualization/Mapper/FrequencyTable.o \
-$(OUTDIR)/./Visualization/Mapper/GlyphBase.o \
 $(OUTDIR)/./Visualization/Mapper/HexahedralCell.o \
 $(OUTDIR)/./Visualization/Mapper/HitAndMissSampling.o \
 $(OUTDIR)/./Visualization/Mapper/Isosurface.o \
@@ -259,7 +256,6 @@ $(OUTDIR)/./Visualization/Mapper/QuadraticHexahedralCell.o \
 $(OUTDIR)/./Visualization/Mapper/QuadraticTetrahedralCell.o \
 $(OUTDIR)/./Visualization/Mapper/RGBFormulae.o \
 $(OUTDIR)/./Visualization/Mapper/SlicePlane.o \
-$(OUTDIR)/./Visualization/Mapper/SphereGlyph.o \
 $(OUTDIR)/./Visualization/Mapper/Streamline.o \
 $(OUTDIR)/./Visualization/Mapper/StreamlineBase.o \
 $(OUTDIR)/./Visualization/Mapper/TetrahedralCell.o \
@@ -279,6 +275,9 @@ $(OUTDIR)/./Visualization/Object/VolumeObjectBase.o \
 $(OUTDIR)/./Visualization/Pipeline/ObjectImporter.o \
 $(OUTDIR)/./Visualization/Pipeline/PipelineModule.o \
 $(OUTDIR)/./Visualization/Pipeline/VisualizationPipeline.o \
+$(OUTDIR)/./Visualization/Renderer/ArrowGlyph.o \
+$(OUTDIR)/./Visualization/Renderer/DiamondGlyph.o \
+$(OUTDIR)/./Visualization/Renderer/GlyphBase.o \
 $(OUTDIR)/./Visualization/Renderer/GlyphRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/ImageRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/LineRenderer.o \
@@ -295,6 +294,7 @@ $(OUTDIR)/./Visualization/Renderer/RendererBase.o \
 $(OUTDIR)/./Visualization/Renderer/ScatterPlotMatrixRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/ScatterPlotRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/Shader.o \
+$(OUTDIR)/./Visualization/Renderer/SphereGlyph.o \
 $(OUTDIR)/./Visualization/Renderer/VolumeRayIntersector.o \
 $(OUTDIR)/./Visualization/Renderer/VolumeRendererBase.o \
 $(OUTDIR)/./Visualization/Viewer/ApplicationBase.o \

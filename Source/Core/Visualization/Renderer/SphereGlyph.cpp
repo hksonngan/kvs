@@ -1,6 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   SphereGlyph.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -23,11 +24,11 @@ namespace kvs
  *  @brief  Constructs a new SphereGlyph class.
  */
 /*===========================================================================*/
-SphereGlyph::SphereGlyph( void ):
+SphereGlyph::SphereGlyph():
     kvs::GlyphBase(),
-    m_sphere(NULL),
-    m_nslices(10),
-    m_nstacks(10)
+    m_sphere( NULL ),
+    m_nslices( 10 ),
+    m_nstacks( 10 )
 {
 }
 
@@ -39,11 +40,11 @@ SphereGlyph::SphereGlyph( void ):
 /*===========================================================================*/
 SphereGlyph::SphereGlyph( const kvs::PointObject* point ):
     kvs::GlyphBase(),
-    m_sphere(NULL),
-    m_nslices(10),
-    m_nstacks(10)
+    m_sphere( NULL ),
+    m_nslices( 10 ),
+    m_nstacks( 10 )
 {
-    this->exec( point );
+    this->attach_point( point );
 }
 
 /*===========================================================================*/
@@ -54,11 +55,11 @@ SphereGlyph::SphereGlyph( const kvs::PointObject* point ):
 /*===========================================================================*/
 SphereGlyph::SphereGlyph( const kvs::VolumeObjectBase* volume ):
     kvs::GlyphBase(),
-    m_sphere(NULL),
-    m_nslices(10),
-    m_nstacks(10)
+    m_sphere( NULL ),
+    m_nslices( 10 ),
+    m_nstacks( 10 )
 {
-    this->exec( volume );
+    this->attach_volume( volume );
 }
 
 /*===========================================================================*/
@@ -72,12 +73,12 @@ SphereGlyph::SphereGlyph(
     const kvs::VolumeObjectBase* volume,
     const kvs::TransferFunction& transfer_function ):
     kvs::GlyphBase(),
-    m_sphere(NULL),
-    m_nslices(10),
-    m_nstacks(10)
+    m_sphere( NULL ),
+    m_nslices( 10 ),
+    m_nstacks( 10 )
 {
     BaseClass::setTransferFunction( transfer_function );
-    this->exec( volume );
+    this->attach_volume( volume );
 }
 
 /*===========================================================================*/
@@ -85,7 +86,7 @@ SphereGlyph::SphereGlyph(
  *  @brief  Destructs the Sphere glyph class.
  */
 /*===========================================================================*/
-SphereGlyph::~SphereGlyph( void )
+SphereGlyph::~SphereGlyph()
 {
     gluDeleteQuadric( m_sphere );
 }
@@ -96,7 +97,7 @@ SphereGlyph::~SphereGlyph( void )
  *  @param  nslices [in] number of slices.
  */
 /*===========================================================================*/
-void SphereGlyph::setNSlices( const size_t nslices )
+void SphereGlyph::setNumberOfSlices( const size_t nslices )
 {
     m_nslices = nslices;
 }
@@ -107,26 +108,23 @@ void SphereGlyph::setNSlices( const size_t nslices )
  *  @param  nstacks [in] number of stacks.
  */
 /*===========================================================================*/
-void SphereGlyph::setNStacks( const size_t nstacks )
+void SphereGlyph::setNumberOfStacks( const size_t nstacks )
 {
     m_nstacks = nstacks;
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Creates a sphere glyph.
- *  @param  object [in] pointer to the input object (volume object)
- *  @return pointer to the created glyph object
+ *  @brief  Executes rendering process.
+ *  @param  object [in] pointer to the volume object
+ *  @param  camera [in] pointer to the camera
+ *  @param  light [in] pointer to the light
  */
 /*===========================================================================*/
-SphereGlyph::BaseClass::SuperClass* SphereGlyph::exec( const kvs::ObjectBase* object )
+void SphereGlyph::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light )
 {
-    if ( !object )
-    {
-        BaseClass::m_is_success = false;
-        kvsMessageError("Input object is NULL.");
-        return( NULL );
-    }
+    kvs::IgnoreUnusedVariable( light );
+    kvs::IgnoreUnusedVariable( camera );
 
     if ( object->objectType() == kvs::ObjectBase::Geometry )
     {
@@ -134,19 +132,30 @@ SphereGlyph::BaseClass::SuperClass* SphereGlyph::exec( const kvs::ObjectBase* ob
         if ( geometry->geometryType() == kvs::GeometryObjectBase::Point )
         {
             const kvs::PointObject* point = kvs::PointObject::DownCast( geometry );
-            return( this->exec_point_object( point ) );
+            if ( !point ) { kvsMessageError("Input object is not point dat."); return; }
+            if ( m_point != point ) { this->attach_point( point ); }
         }
     }
     else if ( object->objectType() == kvs::ObjectBase::Volume )
     {
         const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
-        return( this->exec_volume_object( volume ) );
+        if ( !volume ) { kvsMessageError("Input object is not volume dat."); return; }
+        if ( m_volume != volume ) { this->attach_volume( volume ); }
     }
 
-    BaseClass::m_is_success = false;
-    kvsMessageError("Unsupported object.");
+    glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT );
 
-    return( NULL );
+    BaseClass::initialize();
+
+    glEnable( GL_DEPTH_TEST );
+    {
+        BaseClass::timer().start();
+        this->draw();
+        BaseClass::timer().stop();
+    }
+    glDisable( GL_DEPTH_TEST );
+
+    glPopAttrib();
 }
 
 /*===========================================================================*/
@@ -154,8 +163,10 @@ SphereGlyph::BaseClass::SuperClass* SphereGlyph::exec( const kvs::ObjectBase* ob
  *  @brief  Draw the sphere glyph.
  */
 /*===========================================================================*/
-void SphereGlyph::draw( void )
+void SphereGlyph::draw()
 {
+    this->initialize();
+
     if ( !m_sphere )
     {
         m_sphere = gluNewQuadric();
@@ -163,20 +174,15 @@ void SphereGlyph::draw( void )
         gluQuadricNormals( m_sphere, GLU_SMOOTH );
     }
 
-    this->initialize();
-#if KVS_ENABLE_DEPRECATED
-    BaseClass::applyMaterial();
-#endif
-    const size_t npoints = BaseClass::m_coords.size() / 3;
-
-    if ( BaseClass::m_directions.size() == 0 )
+    const size_t npoints = BaseClass::coords().size() / 3;
+    if ( BaseClass::directions().size() == 0 )
     {
         for ( size_t i = 0, index = 0; i < npoints; i++, index += 3 )
         {
-            const kvs::Vector3f position( BaseClass::m_coords.data() + index );
-            const kvs::Real32 size = BaseClass::m_sizes[i];
-            const kvs::RGBColor color( BaseClass::m_colors.data() + index );
-            const kvs::UInt8 opacity = BaseClass::m_opacities[i];
+            const kvs::Vector3f position( BaseClass::coords().data() + index );
+            const kvs::Real32 size = BaseClass::sizes()[i];
+            const kvs::RGBColor color( BaseClass::colors().data() + index );
+            const kvs::UInt8 opacity = BaseClass::opacities()[i];
             glPushMatrix();
             {
                 BaseClass::transform( position, size );
@@ -189,11 +195,11 @@ void SphereGlyph::draw( void )
     {
         for( size_t i = 0, index = 0; i < npoints; i++, index += 3 )
         {
-            const kvs::Vector3f position( BaseClass::m_coords.data() + index );
-            const kvs::Vector3f direction( BaseClass::m_directions.data() + index );
-            const kvs::Real32 size = BaseClass::m_sizes[i];
-            const kvs::RGBColor color( BaseClass::m_colors.data() + index );
-            const kvs::UInt8 opacity = BaseClass::m_opacities[i];
+            const kvs::Vector3f position( BaseClass::coords().data() + index );
+            const kvs::Vector3f direction( BaseClass::directions().data() + index );
+            const kvs::Real32 size = BaseClass::sizes()[i];
+            const kvs::RGBColor color( BaseClass::colors().data() + index );
+            const kvs::UInt8 opacity = BaseClass::opacities()[i];
             glPushMatrix();
             {
                 BaseClass::transform( position, direction, size );
@@ -206,64 +212,19 @@ void SphereGlyph::draw( void )
 
 /*===========================================================================*/
 /**
- *  @brief  Creates the glyph for the point object.
+ *  @brief  Attaches a point object.
  *  @param  point [in] pointer to the point object
- *  @return glyph object
  */
 /*===========================================================================*/
-SphereGlyph::BaseClass::SuperClass* SphereGlyph::exec_point_object( const kvs::PointObject* point )
+void SphereGlyph::attach_point( const kvs::PointObject* point )
 {
+    m_point = point;
+
     const size_t nvertices = point->nvertices();
-
-//    BaseClass::set_min_max_coords( point, this );
-    {
-        kvs::Vector3f min_coord( 0.0f );
-        kvs::Vector3f max_coord( 0.0f );
-
-        const kvs::Real32* coord = point->coords().data();
-        const kvs::Real32* const end = coord + point->coords().size();
-
-        kvs::Real32 x = *( coord++ );
-        kvs::Real32 y = *( coord++ );
-        kvs::Real32 z = *( coord++ );
-
-        min_coord.set( x, y, z );
-        max_coord.set( x, y, z );
-
-        while ( coord < end )
-        {
-            x = *( coord++ );
-            y = *( coord++ );
-            z = *( coord++ );
-
-            min_coord.x() = kvs::Math::Min( min_coord.x(), x );
-            min_coord.y() = kvs::Math::Min( min_coord.y(), y );
-            min_coord.z() = kvs::Math::Min( min_coord.z(), z );
-
-            max_coord.x() = kvs::Math::Max( max_coord.x(), x );
-            max_coord.y() = kvs::Math::Max( max_coord.y(), y );
-            max_coord.z() = kvs::Math::Max( max_coord.z(), z );
-        }
-
-        BaseClass::setMinMaxObjectCoords( min_coord, max_coord );
-
-        if ( !( point->hasMinMaxExternalCoords() ) )
-        {
-            BaseClass::setMinMaxExternalCoords(
-                point->minObjectCoord(),
-                point->maxObjectCoord() );
-        }
-        else
-        {
-            BaseClass::setMinMaxExternalCoords(
-                point->minExternalCoord(),
-                point->maxExternalCoord() );
-        }
-    }
 
     BaseClass::setCoords( point->coords() );
 
-    if ( BaseClass::m_direction_mode == BaseClass::DirectionByNormal )
+    if ( BaseClass::directionMode() == BaseClass::DirectionByNormal )
     {
         if ( point->nnormals() != 0 )
         {
@@ -304,87 +265,82 @@ SphereGlyph::BaseClass::SuperClass* SphereGlyph::exec_point_object( const kvs::P
     kvs::ValueArray<kvs::UInt8> opacities( nvertices );
     for ( size_t i = 0; i < nvertices; i++ ) opacities[i] = opacity;
     BaseClass::setOpacities( opacities );
-
-    return( this );
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Creates the glyph for the volume object.
+ *  @brief  Attaches a volume object.
  *  @param  volume [in] pointer to the volume object
  *  @return glyph object
  */
 /*===========================================================================*/
-SphereGlyph::BaseClass::SuperClass* SphereGlyph::exec_volume_object( const kvs::VolumeObjectBase* volume )
+void SphereGlyph::attach_volume( const kvs::VolumeObjectBase* volume )
 {
-    BaseClass::attach_volume( volume );
-    BaseClass::set_range( volume );
-    BaseClass::set_min_max_coords( volume, this );
-    BaseClass::calculate_coords( volume );
+    m_volume = volume;
+
+    BaseClass::calculateCoords( volume );
 
     const std::type_info& type = volume->values().typeInfo()->type();
     if ( type == typeid( kvs::Int8 ) )
     {
-        BaseClass::calculate_sizes<kvs::Int8>( volume );
-        BaseClass::calculate_colors<kvs::Int8>( volume );
-        BaseClass::calculate_opacities<kvs::Int8>( volume );
+        BaseClass::calculateSizes<kvs::Int8>( volume );
+        BaseClass::calculateColors<kvs::Int8>( volume );
+        BaseClass::calculateOpacities<kvs::Int8>( volume );
     }
     else if ( type == typeid( kvs::Int16 ) )
     {
-        BaseClass::calculate_sizes<kvs::Int16>( volume );
-        BaseClass::calculate_colors<kvs::Int16>( volume );
-        BaseClass::calculate_opacities<kvs::Int16>( volume );
+        BaseClass::calculateSizes<kvs::Int16>( volume );
+        BaseClass::calculateColors<kvs::Int16>( volume );
+        BaseClass::calculateOpacities<kvs::Int16>( volume );
     }
     else if ( type == typeid( kvs::Int32 ) )
     {
-        BaseClass::calculate_sizes<kvs::Int32>( volume );
-        BaseClass::calculate_colors<kvs::Int32>( volume );
-        BaseClass::calculate_opacities<kvs::Int32>( volume );
+        BaseClass::calculateSizes<kvs::Int32>( volume );
+        BaseClass::calculateColors<kvs::Int32>( volume );
+        BaseClass::calculateOpacities<kvs::Int32>( volume );
     }
     else if ( type == typeid( kvs::Int64 ) )
     {
-        BaseClass::calculate_sizes<kvs::Int64>( volume );
-        BaseClass::calculate_colors<kvs::Int64>( volume );
-        BaseClass::calculate_opacities<kvs::Int64>( volume );
+        BaseClass::calculateSizes<kvs::Int64>( volume );
+        BaseClass::calculateColors<kvs::Int64>( volume );
+        BaseClass::calculateOpacities<kvs::Int64>( volume );
     }
     else if ( type == typeid( kvs::UInt8  ) )
     {
-        BaseClass::calculate_sizes<kvs::UInt8>( volume );
-        BaseClass::calculate_colors<kvs::UInt8>( volume );
-        BaseClass::calculate_opacities<kvs::UInt8>( volume );
+        BaseClass::calculateSizes<kvs::UInt8>( volume );
+        BaseClass::calculateColors<kvs::UInt8>( volume );
+        BaseClass::calculateOpacities<kvs::UInt8>( volume );
     }
     else if ( type == typeid( kvs::UInt16 ) )
     {
-        BaseClass::calculate_sizes<kvs::UInt16>( volume );
-        BaseClass::calculate_colors<kvs::UInt16>( volume );
-        BaseClass::calculate_opacities<kvs::UInt16>( volume );
+        BaseClass::calculateSizes<kvs::UInt16>( volume );
+        BaseClass::calculateColors<kvs::UInt16>( volume );
+        BaseClass::calculateOpacities<kvs::UInt16>( volume );
     }
     else if ( type == typeid( kvs::UInt32 ) )
     {
-        BaseClass::calculate_sizes<kvs::UInt32>( volume );
-        BaseClass::calculate_colors<kvs::UInt32>( volume );
-        BaseClass::calculate_opacities<kvs::UInt32>( volume );
+        BaseClass::calculateSizes<kvs::UInt32>( volume );
+        BaseClass::calculateColors<kvs::UInt32>( volume );
+        BaseClass::calculateOpacities<kvs::UInt32>( volume );
     }
     else if ( type == typeid( kvs::UInt64 ) )
     {
-        BaseClass::calculate_sizes<kvs::UInt64>( volume );
-        BaseClass::calculate_colors<kvs::UInt64>( volume );
-        BaseClass::calculate_opacities<kvs::UInt64>( volume );
+        BaseClass::calculateSizes<kvs::UInt64>( volume );
+        BaseClass::calculateColors<kvs::UInt64>( volume );
+        BaseClass::calculateOpacities<kvs::UInt64>( volume );
     }
     else if ( type == typeid( kvs::Real32 ) )
     {
-        BaseClass::calculate_sizes<kvs::Real32>( volume );
-        BaseClass::calculate_colors<kvs::Real32>( volume );
-        BaseClass::calculate_opacities<kvs::Real32>( volume );
+        BaseClass::calculateSizes<kvs::Real32>( volume );
+        BaseClass::calculateColors<kvs::Real32>( volume );
+        BaseClass::calculateOpacities<kvs::Real32>( volume );
     }
     else if ( type == typeid( kvs::Real64 ) )
     {
-        BaseClass::calculate_sizes<kvs::Real64>( volume );
-        BaseClass::calculate_colors<kvs::Real64>( volume );
-        BaseClass::calculate_opacities<kvs::Real64>( volume );
+        BaseClass::calculateSizes<kvs::Real64>( volume );
+        BaseClass::calculateColors<kvs::Real64>( volume );
+        BaseClass::calculateOpacities<kvs::Real64>( volume );
     }
-
-    return( this );
 }
 
 /*===========================================================================*/
@@ -407,7 +363,7 @@ void SphereGlyph::draw_element( const kvs::RGBColor& color, const kvs::UInt8 opa
  *  @brief  Initialize the modelview matrix.
  */
 /*===========================================================================*/
-void SphereGlyph::initialize( void )
+void SphereGlyph::initialize()
 {
     glDisable( GL_LINE_SMOOTH );
 
@@ -418,8 +374,19 @@ void SphereGlyph::initialize( void )
 
     glShadeModel( GL_SMOOTH );
 
-    glColorMaterial( GL_FRONT, GL_AMBIENT_AND_DIFFUSE );
+    glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
     glEnable( GL_COLOR_MATERIAL );
+
+    if( !this->isShading() )
+    {
+        glDisable( GL_NORMALIZE );
+        glDisable( GL_LIGHTING );
+    }
+    else
+    {
+        glEnable( GL_NORMALIZE );
+        glEnable( GL_LIGHTING );
+    }
 }
 
 } // end of namespace kvs

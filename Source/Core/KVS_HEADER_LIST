@@ -172,7 +172,6 @@ Visualization/Importer/PolygonImporter
 Visualization/Importer/StructuredVolumeImporter
 Visualization/Importer/TableImporter
 Visualization/Importer/UnstructuredVolumeImporter
-Visualization/Mapper/ArrowGlyph
 Visualization/Mapper/Cell
 Visualization/Mapper/CellAdjacencyGraph
 Visualization/Mapper/CellBase
@@ -182,12 +181,10 @@ Visualization/Mapper/CellByCellParticleGenerator
 Visualization/Mapper/CellByCellRejectionSampling
 Visualization/Mapper/CellByCellUniformSampling
 Visualization/Mapper/ColorMap
-Visualization/Mapper/DiamondGlyph
 Visualization/Mapper/ExternalFaces
 Visualization/Mapper/ExtractEdges
 Visualization/Mapper/ExtractVertices
 Visualization/Mapper/FrequencyTable
-Visualization/Mapper/GlyphBase
 Visualization/Mapper/HexahedralCell
 Visualization/Mapper/HitAndMissSampling
 Visualization/Mapper/Isosurface
@@ -208,7 +205,6 @@ Visualization/Mapper/QuadraticHexahedralCell
 Visualization/Mapper/QuadraticTetrahedralCell
 Visualization/Mapper/RGBFormulae
 Visualization/Mapper/SlicePlane
-Visualization/Mapper/SphereGlyph
 Visualization/Mapper/Streamline
 Visualization/Mapper/StreamlineBase
 Visualization/Mapper/TetrahedralCell
@@ -229,6 +225,9 @@ Visualization/Object/VolumeObjectBase
 Visualization/Pipeline/ObjectImporter
 Visualization/Pipeline/PipelineModule
 Visualization/Pipeline/VisualizationPipeline
+Visualization/Renderer/ArrowGlyph
+Visualization/Renderer/DiamondGlyph
+Visualization/Renderer/GlyphBase
 Visualization/Renderer/GlyphRenderer
 Visualization/Renderer/ImageRenderer
 Visualization/Renderer/LineRenderer
@@ -245,6 +244,7 @@ Visualization/Renderer/RendererBase
 Visualization/Renderer/ScatterPlotMatrixRenderer
 Visualization/Renderer/ScatterPlotRenderer
 Visualization/Renderer/Shader
+Visualization/Renderer/SphereGlyph
 Visualization/Renderer/VolumeRayIntersector
 Visualization/Renderer/VolumeRendererBase
 Visualization/Viewer/ApplicationBase

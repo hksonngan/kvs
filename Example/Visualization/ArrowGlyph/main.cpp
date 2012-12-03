@@ -17,7 +17,6 @@
 #include <kvs/StructuredVolumeObject>
 #include <kvs/StructuredVolumeImporter>
 #include <kvs/ArrowGlyph>
-#include <kvs/GlyphRenderer>
 #include <kvs/TornadoVolumeData>
 #include <kvs/glut/Application>
 #include <kvs/glut/Screen>
@@ -35,40 +34,37 @@ int main( int argc, char** argv )
     kvs::glut::Application app( argc, argv );
 
     /* Read volume data from the specified data file. If the data file is not
-     * specified, scalar hydrogen volume data is created by using
-     * kvs::HydrogenVolumeData class.
+     * specified, tornado volume data is created by using kvs::TornadoVolumeData class.
      */
-    kvs::StructuredVolumeObject* volume = NULL;
-    if ( argc > 1 ) volume = new kvs::StructuredVolumeImporter( std::string( argv[1] ) );
-    else            volume = new kvs::TornadoVolumeData( kvs::Vector3ui( 8, 8, 8 ) );
+    kvs::StructuredVolumeObject* object = NULL;
+    if ( argc > 1 ) object = new kvs::StructuredVolumeImporter( std::string( argv[1] ) );
+    else            object = new kvs::TornadoVolumeData( kvs::Vector3ui( 8, 8, 8 ) );
 
-    if ( !volume )
-    {
-        kvsMessageError( "Cannot create a structured volume object." );
-        return( false );
-    }
-
-    const kvs::TransferFunction transfer_function( 256 );
-    kvs::ArrowGlyph* object = new kvs::ArrowGlyph( volume, transfer_function );
     if ( !object )
     {
-        kvsMessageError( "Cannot creat a glyph object.");
-        return( false );
+        kvsMessageError( "Cannot create a structured volume object." );
+        return false;
     }
 
-    // Set arrow type (TubeArrow or LineArrow).
+    // Create an arrow glyph renderer.
+    kvs::ArrowGlyph* glyph = new kvs::ArrowGlyph();
+    if ( !glyph )
+    {
+        kvsMessageError( "Cannot creat an arrow glyph.");
+        return false;
+    }
+
+    // Set properties.
+    const kvs::TransferFunction transfer_function( 256 );
     const kvs::ArrowGlyph::ArrowType type = kvs::ArrowGlyph::TubeArrow;
-    object->setType( type );
-
-    delete volume;
-
-    kvs::GlyphRenderer* renderer = new kvs::GlyphRenderer();
+    glyph->setTransferFunction( transfer_function );
+    glyph->setType( type );
 
     kvs::glut::Screen screen( &app );
-    screen.registerObject( object, renderer );
+    screen.registerObject( object, glyph );
     screen.setGeometry( 0, 0, 512, 512 );
     screen.setTitle( "kvs::ArrowGlyph" );
     screen.show();
 
-    return( app.run() );
+    return app.run();
 }

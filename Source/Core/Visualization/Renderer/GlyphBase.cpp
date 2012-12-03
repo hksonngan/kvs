@@ -1,6 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   GlyphBase.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -12,10 +13,9 @@
  */
 /*****************************************************************************/
 #include "GlyphBase.h"
+#include <kvs/OpenGL>
 #include <kvs/Quaternion>
-#include <kvs/Matrix>
-#include <kvs/Xform>
-#include <kvs/IgnoreUnusedVariable>
+#include <kvs/StructuredVolumeObject>
 
 
 namespace
@@ -35,11 +35,13 @@ namespace kvs
  *  @brief  Constructs a new GlyphBase class.
  */
 /*===========================================================================*/
-GlyphBase::GlyphBase( void ):
+GlyphBase::GlyphBase():
     m_size_mode( GlyphBase::SizeByDefault ),
     m_direction_mode( GlyphBase::DirectionByDefault ),
     m_color_mode( GlyphBase::ColorByMagnitude ),
-    m_opacity_mode( GlyphBase::OpacityByDefault )
+    m_opacity_mode( GlyphBase::OpacityByDefault ),
+    m_scale( 1.0f, 1.0f, 1.0f ),
+    m_tfunc()
 {
 }
 
@@ -48,7 +50,7 @@ GlyphBase::GlyphBase( void ):
  *  @brief  Destructs the GlyphBase class.
  */
 /*===========================================================================*/
-GlyphBase::~GlyphBase( void )
+GlyphBase::~GlyphBase()
 {
 }
 
@@ -98,6 +100,215 @@ void GlyphBase::setOpacityMode( const GlyphBase::OpacityMode mode )
 
 /*===========================================================================*/
 /**
+ *  @brief  Sets a coordinate value array.
+ *  @param  coords [in] coordinate value array
+ */
+/*===========================================================================*/
+void GlyphBase::setCoords( const kvs::ValueArray<kvs::Real32>& coords )
+{
+    m_coords = coords;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a size value array.
+ *  @param  sizes [in] size value array
+ */
+/*===========================================================================*/
+void GlyphBase::setSizes( const kvs::ValueArray<kvs::Real32>& sizes )
+{
+    m_sizes = sizes;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a direction vector array.
+ *  @param  directions [in] direction vector array
+ */
+/*===========================================================================*/
+void GlyphBase::setDirections( const kvs::ValueArray<kvs::Real32>& directions )
+{
+    m_directions = directions;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a color value array.
+ *  @param  colors [in] color value array
+ */
+/*===========================================================================*/
+void GlyphBase::setColors( const kvs::ValueArray<kvs::UInt8>& colors )
+{
+    m_colors = colors;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a opacity value array.
+ *  @param  opacities [in] opacity value array
+ */
+/*===========================================================================*/
+void GlyphBase::setOpacities( const kvs::ValueArray<kvs::UInt8>& opacities )
+{
+    m_opacities = opacities;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a scaling factor.
+ *  @param  scale [in] scaling factor
+ */
+/*===========================================================================*/
+void GlyphBase::setScale( const kvs::Real32 scale )
+{
+    m_scale = kvs::Vector3f( scale, scale, scale );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a scaling vector.
+ *  @param  scale [in] scaling vector
+ */
+/*===========================================================================*/
+void GlyphBase::setScale( const kvs::Vector3f& scale )
+{
+    m_scale = scale;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a transfer function.
+ *  @param  tfunc [in] transfer function
+ */
+/*===========================================================================*/
+void GlyphBase::setTransferFunction( const kvs::TransferFunction& tfunc )
+{
+    m_tfunc = tfunc;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the size mode.
+ *  @return size mode
+ */
+/*===========================================================================*/
+GlyphBase::SizeMode GlyphBase::sizeMode() const
+{
+    return m_size_mode;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the direction mode.
+ *  @return direction mode
+ */
+/*===========================================================================*/
+GlyphBase::DirectionMode GlyphBase::directionMode() const
+{
+    return m_direction_mode;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the color mode.
+ *  @return color mode
+ */
+/*===========================================================================*/
+GlyphBase::ColorMode GlyphBase::colorMode() const
+{
+    return m_color_mode;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the opacity mode.
+ *  @return opacity mode
+ */
+/*===========================================================================*/
+GlyphBase::OpacityMode GlyphBase::opacityMode() const
+{
+    return m_opacity_mode;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns a coordinate value array.
+ *  @return coordinate value array
+ */
+/*===========================================================================*/
+const kvs::ValueArray<kvs::Real32>& GlyphBase::coords() const
+{
+    return m_coords;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns a size value array.
+ *  @return size value array
+ */
+/*===========================================================================*/
+const kvs::ValueArray<kvs::Real32>& GlyphBase::sizes() const
+{
+    return m_sizes;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns a direction vector array.
+ *  @return direction vector array
+ */
+/*===========================================================================*/
+const kvs::ValueArray<kvs::Real32>& GlyphBase::directions() const
+{
+    return m_directions;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns a color value array.
+ *  @return color value array
+ */
+/*===========================================================================*/
+const kvs::ValueArray<kvs::UInt8>& GlyphBase::colors() const
+{
+    return m_colors;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns a opacity value array.
+ *  @return opacity value array
+ */
+/*===========================================================================*/
+const kvs::ValueArray<kvs::UInt8>& GlyphBase::opacities() const
+{
+    return m_opacities;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns a scaling vector.
+ *  @return scaling vector
+ */
+/*===========================================================================*/
+const kvs::Vector3f& GlyphBase::scale() const
+{
+    return m_scale;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the transfer function.
+ *  @return transfer function
+ */
+/*===========================================================================*/
+const kvs::TransferFunction& GlyphBase::transferFunction() const
+{
+    return m_tfunc;
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Transform the glyph object.
  *  @param  position [in] object position
  *  @param  size [in] object size
@@ -142,12 +353,12 @@ void GlyphBase::transform(
  *  @param  volume [in] pointer to the volume object
  */
 /*===========================================================================*/
-void GlyphBase::calculate_coords( const kvs::VolumeObjectBase* volume )
+void GlyphBase::calculateCoords( const kvs::VolumeObjectBase* volume )
 {
     const kvs::VolumeObjectBase::VolumeType type = volume->volumeType();
     if ( type == kvs::VolumeObjectBase::Structured )
     {
-        this->calculate_coords( kvs::StructuredVolumeObject::DownCast( volume ) );
+        this->calculateCoords( kvs::StructuredVolumeObject::DownCast( volume ) );
     }
     else // type == kvs::VolumeObjectBase::Unstructured
     {
@@ -161,16 +372,16 @@ void GlyphBase::calculate_coords( const kvs::VolumeObjectBase* volume )
  *  @param  volume [in] pointer to the structured volume object
  */
 /*===========================================================================*/
-void GlyphBase::calculate_coords( const kvs::StructuredVolumeObject* volume )
+void GlyphBase::calculateCoords( const kvs::StructuredVolumeObject* volume )
 {
     const kvs::VolumeObjectBase::GridType type = volume->gridType();
     if ( type == kvs::VolumeObjectBase::Uniform )
     {
-       this->calculate_uniform_coords( volume );
+       this->calculateUniformCoords( volume );
     }
     else if ( type == kvs::VolumeObjectBase::Rectilinear )
     {
-        this->calculate_rectilinear_coords( volume );
+        this->calculateRectilinearCoords( volume );
     }
     else
     {
@@ -184,7 +395,7 @@ void GlyphBase::calculate_coords( const kvs::StructuredVolumeObject* volume )
  *  @param  volume [in] pointer to the structrued volume object
  */
 /*===========================================================================*/
-void GlyphBase::calculate_uniform_coords( const kvs::StructuredVolumeObject* volume )
+void GlyphBase::calculateUniformCoords( const kvs::StructuredVolumeObject* volume )
 {
     kvs::ValueArray<kvs::Real32> coords( 3 * volume->nnodes() );
     kvs::Real32* coord = coords.data();
@@ -226,7 +437,7 @@ void GlyphBase::calculate_uniform_coords( const kvs::StructuredVolumeObject* vol
  *  @param  volume [in] pointer to the structrued volume object
  */
 /*===========================================================================*/
-void GlyphBase::calculate_rectilinear_coords( const kvs::StructuredVolumeObject* volume )
+void GlyphBase::calculateRectilinearCoords( const kvs::StructuredVolumeObject* volume )
 {
     kvs::IgnoreUnusedVariable( volume );
     kvsMessageError("Rectilinear volume has not yet support.");
@@ -239,7 +450,7 @@ void GlyphBase::calculate_rectilinear_coords( const kvs::StructuredVolumeObject*
  */
 /*===========================================================================*/
 template <typename T>
-void GlyphBase::calculate_sizes( const kvs::VolumeObjectBase* volume )
+void GlyphBase::calculateSizes( const kvs::VolumeObjectBase* volume )
 {
     const T* value = reinterpret_cast<const T*>( volume->values().data() );
     const size_t veclen = volume->veclen();
@@ -285,16 +496,16 @@ void GlyphBase::calculate_sizes( const kvs::VolumeObjectBase* volume )
     this->setSizes( sizes );
 }
 
-template void GlyphBase::calculate_sizes<kvs::Int8>( const kvs::VolumeObjectBase* volume );
-template void GlyphBase::calculate_sizes<kvs::Int16>( const kvs::VolumeObjectBase* volume );
-template void GlyphBase::calculate_sizes<kvs::Int32>( const kvs::VolumeObjectBase* volume );
-template void GlyphBase::calculate_sizes<kvs::Int64>( const kvs::VolumeObjectBase* volume );
-template void GlyphBase::calculate_sizes<kvs::UInt8>( const kvs::VolumeObjectBase* volume );
-template void GlyphBase::calculate_sizes<kvs::UInt16>( const kvs::VolumeObjectBase* volume );
-template void GlyphBase::calculate_sizes<kvs::UInt32>( const kvs::VolumeObjectBase* volume );
-template void GlyphBase::calculate_sizes<kvs::UInt64>( const kvs::VolumeObjectBase* volume );
-template void GlyphBase::calculate_sizes<kvs::Real32>( const kvs::VolumeObjectBase* volume );
-template void GlyphBase::calculate_sizes<kvs::Real64>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateSizes<kvs::Int8>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateSizes<kvs::Int16>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateSizes<kvs::Int32>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateSizes<kvs::Int64>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateSizes<kvs::UInt8>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateSizes<kvs::UInt16>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateSizes<kvs::UInt32>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateSizes<kvs::UInt64>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateSizes<kvs::Real32>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateSizes<kvs::Real64>( const kvs::VolumeObjectBase* volume );
 
 /*===========================================================================*/
 /**
@@ -303,7 +514,7 @@ template void GlyphBase::calculate_sizes<kvs::Real64>( const kvs::VolumeObjectBa
  */
 /*===========================================================================*/
 template <typename T>
-void GlyphBase::calculate_directions( const kvs::VolumeObjectBase* volume )
+void GlyphBase::calculateDirections( const kvs::VolumeObjectBase* volume )
 {
     const T* value = reinterpret_cast<const T*>( volume->values().data() );
     const size_t veclen = volume->veclen();
@@ -322,16 +533,16 @@ void GlyphBase::calculate_directions( const kvs::VolumeObjectBase* volume )
     }
 }
 
-template void GlyphBase::calculate_directions<kvs::Int8>( const kvs::VolumeObjectBase* volume );
-template void GlyphBase::calculate_directions<kvs::Int16>( const kvs::VolumeObjectBase* volume );
-template void GlyphBase::calculate_directions<kvs::Int32>( const kvs::VolumeObjectBase* volume );
-template void GlyphBase::calculate_directions<kvs::Int64>( const kvs::VolumeObjectBase* volume );
-template void GlyphBase::calculate_directions<kvs::UInt8>( const kvs::VolumeObjectBase* volume );
-template void GlyphBase::calculate_directions<kvs::UInt16>( const kvs::VolumeObjectBase* volume );
-template void GlyphBase::calculate_directions<kvs::UInt32>( const kvs::VolumeObjectBase* volume );
-template void GlyphBase::calculate_directions<kvs::UInt64>( const kvs::VolumeObjectBase* volume );
-template void GlyphBase::calculate_directions<kvs::Real32>( const kvs::VolumeObjectBase* volume );
-template void GlyphBase::calculate_directions<kvs::Real64>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateDirections<kvs::Int8>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateDirections<kvs::Int16>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateDirections<kvs::Int32>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateDirections<kvs::Int64>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateDirections<kvs::UInt8>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateDirections<kvs::UInt16>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateDirections<kvs::UInt32>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateDirections<kvs::UInt64>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateDirections<kvs::Real32>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateDirections<kvs::Real64>( const kvs::VolumeObjectBase* volume );
 
 /*===========================================================================*/
 /**
@@ -340,7 +551,7 @@ template void GlyphBase::calculate_directions<kvs::Real64>( const kvs::VolumeObj
  */
 /*===========================================================================*/
 template <typename T>
-void GlyphBase::calculate_colors( const kvs::VolumeObjectBase* volume )
+void GlyphBase::calculateColors( const kvs::VolumeObjectBase* volume )
 {
     const T* value = reinterpret_cast<const T*>( volume->values().data() );
     const size_t veclen = volume->veclen();
@@ -366,7 +577,7 @@ void GlyphBase::calculate_colors( const kvs::VolumeObjectBase* volume )
         break;
     case GlyphBase::ColorByMagnitude:
     {
-        const kvs::ColorMap color_map( BaseClass::transferFunction().colorMap() );
+        const kvs::ColorMap color_map( m_tfunc.colorMap() );
         if ( veclen == 1 )
         {
             for ( size_t i = 0; i < nnodes; i++ )
@@ -404,16 +615,16 @@ void GlyphBase::calculate_colors( const kvs::VolumeObjectBase* volume )
     this->setColors( colors );
 }
 
-template void GlyphBase::calculate_colors<kvs::Int8>( const kvs::VolumeObjectBase* volume );
-template void GlyphBase::calculate_colors<kvs::Int16>( const kvs::VolumeObjectBase* volume );
-template void GlyphBase::calculate_colors<kvs::Int32>( const kvs::VolumeObjectBase* volume );
-template void GlyphBase::calculate_colors<kvs::Int64>( const kvs::VolumeObjectBase* volume );
-template void GlyphBase::calculate_colors<kvs::UInt8>( const kvs::VolumeObjectBase* volume );
-template void GlyphBase::calculate_colors<kvs::UInt16>( const kvs::VolumeObjectBase* volume );
-template void GlyphBase::calculate_colors<kvs::UInt32>( const kvs::VolumeObjectBase* volume );
-template void GlyphBase::calculate_colors<kvs::UInt64>( const kvs::VolumeObjectBase* volume );
-template void GlyphBase::calculate_colors<kvs::Real32>( const kvs::VolumeObjectBase* volume );
-template void GlyphBase::calculate_colors<kvs::Real64>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateColors<kvs::Int8>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateColors<kvs::Int16>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateColors<kvs::Int32>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateColors<kvs::Int64>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateColors<kvs::UInt8>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateColors<kvs::UInt16>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateColors<kvs::UInt32>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateColors<kvs::UInt64>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateColors<kvs::Real32>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateColors<kvs::Real64>( const kvs::VolumeObjectBase* volume );
 
 /*===========================================================================*/
 /**
@@ -422,7 +633,7 @@ template void GlyphBase::calculate_colors<kvs::Real64>( const kvs::VolumeObjectB
  */
 /*===========================================================================*/
 template <typename T>
-void GlyphBase::calculate_opacities( const kvs::VolumeObjectBase* volume )
+void GlyphBase::calculateOpacities( const kvs::VolumeObjectBase* volume )
 {
     const T* value = reinterpret_cast<const T*>( volume->values().data() );
     const size_t veclen = volume->veclen();
@@ -468,15 +679,45 @@ void GlyphBase::calculate_opacities( const kvs::VolumeObjectBase* volume )
     this->setOpacities( opacities );
 }
 
-template void GlyphBase::calculate_opacities<kvs::Int8>( const kvs::VolumeObjectBase* volume );
-template void GlyphBase::calculate_opacities<kvs::Int16>( const kvs::VolumeObjectBase* volume );
-template void GlyphBase::calculate_opacities<kvs::Int32>( const kvs::VolumeObjectBase* volume );
-template void GlyphBase::calculate_opacities<kvs::Int64>( const kvs::VolumeObjectBase* volume );
-template void GlyphBase::calculate_opacities<kvs::UInt8>( const kvs::VolumeObjectBase* volume );
-template void GlyphBase::calculate_opacities<kvs::UInt16>( const kvs::VolumeObjectBase* volume );
-template void GlyphBase::calculate_opacities<kvs::UInt32>( const kvs::VolumeObjectBase* volume );
-template void GlyphBase::calculate_opacities<kvs::UInt64>( const kvs::VolumeObjectBase* volume );
-template void GlyphBase::calculate_opacities<kvs::Real32>( const kvs::VolumeObjectBase* volume );
-template void GlyphBase::calculate_opacities<kvs::Real64>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateOpacities<kvs::Int8>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateOpacities<kvs::Int16>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateOpacities<kvs::Int32>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateOpacities<kvs::Int64>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateOpacities<kvs::UInt8>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateOpacities<kvs::UInt16>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateOpacities<kvs::UInt32>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateOpacities<kvs::UInt64>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateOpacities<kvs::Real32>( const kvs::VolumeObjectBase* volume );
+template void GlyphBase::calculateOpacities<kvs::Real64>( const kvs::VolumeObjectBase* volume );
+
+/*==========================================================================*/
+/**
+ *  Initialize about the projection matrix.
+ */
+/*==========================================================================*/
+void GlyphBase::initialize_projection( void )
+{
+   glMatrixMode( GL_PROJECTION );
+   glMatrixMode( GL_MODELVIEW );
+}
+
+/*==========================================================================*/
+/**
+ *  Initialize about the modelview matrix.
+ */
+/*==========================================================================*/
+void GlyphBase::initialize_modelview( void )
+{
+    if( !isShading() )
+    {
+        glDisable( GL_NORMALIZE );
+        glDisable( GL_LIGHTING );
+    }
+    else
+    {
+        glEnable( GL_NORMALIZE );
+        glEnable( GL_LIGHTING );
+    }
+}
 
 } // end of namespace kvs

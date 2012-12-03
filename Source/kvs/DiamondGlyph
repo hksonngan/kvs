@@ -1,1 +1,1 @@
-#include <Core/Visualization/Mapper/DiamondGlyph.h>
+#include <Core/Visualization/Renderer/DiamondGlyph.h>

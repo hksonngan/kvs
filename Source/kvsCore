@@ -172,7 +172,6 @@
 #include <Core/Visualization/Importer/StructuredVolumeImporter.h>
 #include <Core/Visualization/Importer/TableImporter.h>
 #include <Core/Visualization/Importer/UnstructuredVolumeImporter.h>
-#include <Core/Visualization/Mapper/ArrowGlyph.h>
 #include <Core/Visualization/Mapper/Cell.h>
 #include <Core/Visualization/Mapper/CellAdjacencyGraph.h>
 #include <Core/Visualization/Mapper/CellBase.h>
@@ -182,12 +181,10 @@
 #include <Core/Visualization/Mapper/CellByCellRejectionSampling.h>
 #include <Core/Visualization/Mapper/CellByCellUniformSampling.h>
 #include <Core/Visualization/Mapper/ColorMap.h>
-#include <Core/Visualization/Mapper/DiamondGlyph.h>
 #include <Core/Visualization/Mapper/ExternalFaces.h>
 #include <Core/Visualization/Mapper/ExtractEdges.h>
 #include <Core/Visualization/Mapper/ExtractVertices.h>
 #include <Core/Visualization/Mapper/FrequencyTable.h>
-#include <Core/Visualization/Mapper/GlyphBase.h>
 #include <Core/Visualization/Mapper/HexahedralCell.h>
 #include <Core/Visualization/Mapper/HitAndMissSampling.h>
 #include <Core/Visualization/Mapper/Isosurface.h>
@@ -208,7 +205,6 @@
 #include <Core/Visualization/Mapper/QuadraticTetrahedralCell.h>
 #include <Core/Visualization/Mapper/RGBFormulae.h>
 #include <Core/Visualization/Mapper/SlicePlane.h>
-#include <Core/Visualization/Mapper/SphereGlyph.h>
 #include <Core/Visualization/Mapper/Streamline.h>
 #include <Core/Visualization/Mapper/StreamlineBase.h>
 #include <Core/Visualization/Mapper/TetrahedralCell.h>
@@ -229,6 +225,9 @@
 #include <Core/Visualization/Pipeline/ObjectImporter.h>
 #include <Core/Visualization/Pipeline/PipelineModule.h>
 #include <Core/Visualization/Pipeline/VisualizationPipeline.h>
+#include <Core/Visualization/Renderer/ArrowGlyph.h>
+#include <Core/Visualization/Renderer/DiamondGlyph.h>
+#include <Core/Visualization/Renderer/GlyphBase.h>
 #include <Core/Visualization/Renderer/GlyphRenderer.h>
 #include <Core/Visualization/Renderer/ImageRenderer.h>
 #include <Core/Visualization/Renderer/LineRenderer.h>
@@ -245,6 +244,7 @@
 #include <Core/Visualization/Renderer/ScatterPlotMatrixRenderer.h>
 #include <Core/Visualization/Renderer/ScatterPlotRenderer.h>
 #include <Core/Visualization/Renderer/Shader.h>
+#include <Core/Visualization/Renderer/SphereGlyph.h>
 #include <Core/Visualization/Renderer/VolumeRayIntersector.h>
 #include <Core/Visualization/Renderer/VolumeRendererBase.h>
 #include <Core/Visualization/Viewer/ApplicationBase.h>

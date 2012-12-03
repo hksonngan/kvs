@@ -225,7 +225,6 @@ $(OUTDIR)\.\Visualization\Importer\PolygonImporter.obj \
 $(OUTDIR)\.\Visualization\Importer\StructuredVolumeImporter.obj \
 $(OUTDIR)\.\Visualization\Importer\TableImporter.obj \
 $(OUTDIR)\.\Visualization\Importer\UnstructuredVolumeImporter.obj \
-$(OUTDIR)\.\Visualization\Mapper\ArrowGlyph.obj \
 $(OUTDIR)\.\Visualization\Mapper\Cell.obj \
 $(OUTDIR)\.\Visualization\Mapper\CellAdjacencyGraph.obj \
 $(OUTDIR)\.\Visualization\Mapper\CellByCellLayeredSampling.obj \
@@ -233,12 +232,10 @@ $(OUTDIR)\.\Visualization\Mapper\CellByCellMetropolisSampling.obj \
 $(OUTDIR)\.\Visualization\Mapper\CellByCellRejectionSampling.obj \
 $(OUTDIR)\.\Visualization\Mapper\CellByCellUniformSampling.obj \
 $(OUTDIR)\.\Visualization\Mapper\ColorMap.obj \
-$(OUTDIR)\.\Visualization\Mapper\DiamondGlyph.obj \
 $(OUTDIR)\.\Visualization\Mapper\ExternalFaces.obj \
 $(OUTDIR)\.\Visualization\Mapper\ExtractEdges.obj \
 $(OUTDIR)\.\Visualization\Mapper\ExtractVertices.obj \
 $(OUTDIR)\.\Visualization\Mapper\FrequencyTable.obj \
-$(OUTDIR)\.\Visualization\Mapper\GlyphBase.obj \
 $(OUTDIR)\.\Visualization\Mapper\HexahedralCell.obj \
 $(OUTDIR)\.\Visualization\Mapper\HitAndMissSampling.obj \
 $(OUTDIR)\.\Visualization\Mapper\Isosurface.obj \
@@ -259,7 +256,6 @@ $(OUTDIR)\.\Visualization\Mapper\QuadraticHexahedralCell.obj \
 $(OUTDIR)\.\Visualization\Mapper\QuadraticTetrahedralCell.obj \
 $(OUTDIR)\.\Visualization\Mapper\RGBFormulae.obj \
 $(OUTDIR)\.\Visualization\Mapper\SlicePlane.obj \
-$(OUTDIR)\.\Visualization\Mapper\SphereGlyph.obj \
 $(OUTDIR)\.\Visualization\Mapper\Streamline.obj \
 $(OUTDIR)\.\Visualization\Mapper\StreamlineBase.obj \
 $(OUTDIR)\.\Visualization\Mapper\TetrahedralCell.obj \
@@ -279,6 +275,9 @@ $(OUTDIR)\.\Visualization\Object\VolumeObjectBase.obj \
 $(OUTDIR)\.\Visualization\Pipeline\ObjectImporter.obj \
 $(OUTDIR)\.\Visualization\Pipeline\PipelineModule.obj \
 $(OUTDIR)\.\Visualization\Pipeline\VisualizationPipeline.obj \
+$(OUTDIR)\.\Visualization\Renderer\ArrowGlyph.obj \
+$(OUTDIR)\.\Visualization\Renderer\DiamondGlyph.obj \
+$(OUTDIR)\.\Visualization\Renderer\GlyphBase.obj \
 $(OUTDIR)\.\Visualization\Renderer\GlyphRenderer.obj \
 $(OUTDIR)\.\Visualization\Renderer\ImageRenderer.obj \
 $(OUTDIR)\.\Visualization\Renderer\LineRenderer.obj \
@@ -295,6 +294,7 @@ $(OUTDIR)\.\Visualization\Renderer\RendererBase.obj \
 $(OUTDIR)\.\Visualization\Renderer\ScatterPlotMatrixRenderer.obj \
 $(OUTDIR)\.\Visualization\Renderer\ScatterPlotRenderer.obj \
 $(OUTDIR)\.\Visualization\Renderer\Shader.obj \
+$(OUTDIR)\.\Visualization\Renderer\SphereGlyph.obj \
 $(OUTDIR)\.\Visualization\Renderer\VolumeRayIntersector.obj \
 $(OUTDIR)\.\Visualization\Renderer\VolumeRendererBase.obj \
 $(OUTDIR)\.\Visualization\Viewer\ApplicationBase.obj \

@@ -17,7 +17,6 @@
 #include <kvs/StructuredVolumeObject>
 #include <kvs/StructuredVolumeImporter>
 #include <kvs/SphereGlyph>
-#include <kvs/GlyphRenderer>
 #include <kvs/TornadoVolumeData>
 #include <kvs/glut/Application>
 #include <kvs/glut/Screen>
@@ -35,39 +34,37 @@ int main( int argc, char** argv )
     kvs::glut::Application app( argc, argv );
 
     /* Read volume data from the specified data file. If the data file is not
-     * specified, scalar hydrogen volume data is created by using
-     * kvs::HydrogenVolumeData class.
+     * specified, tornado volume data is created by using kvs::TornadoVolumeData class.
      */
-    kvs::StructuredVolumeObject* volume = NULL;
-    if ( argc > 1 ) volume = new kvs::StructuredVolumeImporter( std::string( argv[1] ) );
-    else            volume = new kvs::TornadoVolumeData( kvs::Vector3ui( 8, 8, 8 ) );
+    kvs::StructuredVolumeObject* object = NULL;
+    if ( argc > 1 ) object = new kvs::StructuredVolumeImporter( std::string( argv[1] ) );
+    else            object = new kvs::TornadoVolumeData( kvs::Vector3ui( 8, 8, 8 ) );
 
-    if ( !volume )
-    {
-        kvsMessageError( "Cannot create a structured volume object." );
-        return( false );
-    }
-
-    const kvs::TransferFunction transfer_function( 256 );
-    kvs::SphereGlyph* object = new kvs::SphereGlyph( volume, transfer_function );
     if ( !object )
     {
-        kvsMessageError( "Cannot creat a glyph object.");
-        return( false );
+        kvsMessageError( "Cannot create a structured volume object." );
+        return false;
     }
 
-    delete volume;
+    // Create an sphere glyph renderer.
+    kvs::SphereGlyph* glyph = new kvs::SphereGlyph();
+    if ( !glyph )
+    {
+        kvsMessageError( "Cannot creat a glyph renderer.");
+        return false;
+    }
 
-    object->setNSlices( 20 );
-    object->setNStacks( 20 );
-
-    kvs::GlyphRenderer* renderer = new kvs::GlyphRenderer();
+    // Set properties.
+    const kvs::TransferFunction transfer_function( 256 );
+    glyph->setTransferFunction( transfer_function );
+    glyph->setNumberOfSlices( 20 );
+    glyph->setNumberOfStacks( 20 );
 
     kvs::glut::Screen screen( &app );
-    screen.registerObject( object, renderer );
+    screen.registerObject( object, glyph );
     screen.setGeometry( 0, 0, 512, 512 );
-    screen.setTitle( "kvs::ArrowGlyph" );
+    screen.setTitle( "kvs::SphereGlyph" );
     screen.show();
 
-    return( app.run() );
+    return app.run();
 }
