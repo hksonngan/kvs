@@ -18,6 +18,7 @@
 #include <kvs/Assert>
 #include <kvs/Math>
 #include <kvs/Vector4>
+#include <kvs/Deprecated>
 
 
 namespace kvs
@@ -157,11 +158,9 @@ public:
         return os << rhs[0] << "\n" << rhs[1] << "\n" << rhs[2] << "\n" << rhs[3];
     }
 
-#if 1 // KVS_ENABLE_DEPRECATED
 public:
-    explicit Matrix44( const T a ) { *this = All( a ); }
-    void set( const T a ) { *this = All( a ); }
-#endif
+    KVS_DEPRECATED( explicit Matrix44( const T a ) ) { *this = All( a ); }
+    KVS_DEPRECATED( void set( const T a ) ) { *this = All( a ); }
 };
 
 /*==========================================================================*/

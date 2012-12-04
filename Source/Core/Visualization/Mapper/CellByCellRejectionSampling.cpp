@@ -337,7 +337,7 @@ void CellByCellRejectionSampling::generate_particles( const kvs::StructuredVolum
     const kvs::ColorMap color_map( BaseClass::transferFunction().colorMap() );
 
     // Generate particles for each cell.
-    const kvs::Vector3ui ncells( volume->resolution() - kvs::Vector3ui(1) );
+    const kvs::Vector3ui ncells( volume->resolution() - kvs::Vector3ui::All(1) );
     for ( kvs::UInt32 z = 0; z < ncells.z(); ++z )
     {
         for ( kvs::UInt32 y = 0; y < ncells.y(); ++y )

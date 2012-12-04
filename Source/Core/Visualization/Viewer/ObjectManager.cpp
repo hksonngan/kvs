@@ -976,8 +976,8 @@ void ObjectManager::update_normalize_parameters( void )
 
     if( ctr == 0 )
     {
-        m_normalize     = kvs::Vector3f( 1.0 );
-        m_object_center = kvs::Vector3f( 0.0 );
+        m_normalize     = kvs::Vector3f::All( 1.0 );
+        m_object_center = kvs::Vector3f::All( 0.0 );
     }
     else
     {

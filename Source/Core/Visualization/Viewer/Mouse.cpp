@@ -124,7 +124,7 @@ void Mouse::move( const int x, const int y )
 /*==========================================================================*/
 void Mouse::wheel( const float value )
 {
-    kvs::Vector3f scale( 1.0 );
+    kvs::Vector3f scale( 1.0f, 1.0f, 1.0f );
 
     switch( scalingType() )
     {
@@ -198,7 +198,7 @@ bool Mouse::idle( void )
                     BaseClass::m_scaling *= big_scale;
                     if( BaseClass::m_scaling.x() > 1.0f )
                     {
-                        BaseClass::m_scaling = kvs::Vector3f( 1.0f );
+                        BaseClass::m_scaling = kvs::Vector3f::All( 1.0f );
                         m_is_slow = false;
                     }
                 }
@@ -207,7 +207,7 @@ bool Mouse::idle( void )
                     BaseClass::m_scaling *= small_scale;
                     if( BaseClass::m_scaling.x() < 1.0f )
                     {
-                        BaseClass::m_scaling = kvs::Vector3f( 1.0f );
+                        BaseClass::m_scaling = kvs::Vector3f::All( 1.0f );
                         m_is_slow = false;
                     }
                 }
@@ -382,7 +382,7 @@ bool Mouse::idle( void )
             BaseClass::m_translation *= 0.9f;
             if( BaseClass::m_translation.length() < 0.001 )
             {
-                BaseClass::m_translation = kvs::Vector3f( 0.0f );
+                BaseClass::m_translation = kvs::Vector3f::All( 0.0f );
                 m_is_slow = false;
             };
             break;

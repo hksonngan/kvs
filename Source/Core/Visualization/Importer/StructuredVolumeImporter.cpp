@@ -263,7 +263,7 @@ void StructuredVolumeImporter::import( const kvs::AVSField* field )
     const float dim_x = static_cast<float>( field->dim().x() );
     const float dim_y = static_cast<float>( field->dim().y() );
     const float dim_z = static_cast<float>( field->dim().z() );
-    const kvs::Vector3f  min_obj_coord( 0.0f );
+    const kvs::Vector3f  min_obj_coord( 0.0f, 0.0f, 0.0f );
     const kvs::Vector3f  max_obj_coord( dim_x - 1.0f, dim_y - 1.0f, dim_z - 1.0f );
     SuperClass::setMinMaxObjectCoords( min_obj_coord, max_obj_coord );
 

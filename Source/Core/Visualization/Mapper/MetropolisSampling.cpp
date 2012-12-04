@@ -186,7 +186,7 @@ void MetropolisSampling::generate_particles( const kvs::StructuredVolumeObject* 
     kvs::TrilinearInterpolator interpolator( volume );
 
     // Alias.
-    const kvs::Vector3ui r = volume->resolution() - kvs::Vector3ui(1);
+    const kvs::Vector3ui r = volume->resolution() - kvs::Vector3ui::All(1);
 
     // Allocate memory for generated particles.
     SuperClass::m_coords.allocate( m_nparticles * 3 );
@@ -200,7 +200,7 @@ void MetropolisSampling::generate_particles( const kvs::StructuredVolumeObject* 
     kvs::Vector3f particle( static_cast<float>(R() * r.x()),
                             static_cast<float>(R() * r.y()),
                             static_cast<float>(R() * r.z()) );
-    kvs::Vector3f trial_particle( 0.0f );
+    kvs::Vector3f trial_particle( 0.0f, 0.0f, 0.0f );
 
     // Attach the initial particle to the interpolator and get a rho value.
     interpolator.attachPoint( particle );

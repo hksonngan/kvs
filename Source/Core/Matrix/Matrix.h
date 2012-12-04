@@ -19,6 +19,7 @@
 #include <kvs/Assert>
 #include <kvs/Math>
 #include <kvs/Vector>
+#include <kvs/Deprecated>
 
 
 namespace kvs
@@ -204,11 +205,9 @@ public:
         return os;
     }
 
-#if 1 // KVS_ENABLE_DEPRECATED
 public:
-    size_t nrows() const { return this->rowSize(); }
-    size_t ncolumns() const { return this->columnSize(); }
-#endif
+    KVS_DEPRECATED( size_t nrows() const ) { return this->rowSize(); }
+    KVS_DEPRECATED( size_t ncolumns() const ) { return this->columnSize(); }
 };
 
 /*===========================================================================*/

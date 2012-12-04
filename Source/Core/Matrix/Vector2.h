@@ -17,6 +17,7 @@
 #include <iostream> // For std::cout.
 #include <kvs/Assert>
 #include <kvs/Math>
+#include <kvs/Deprecated>
 
 
 namespace kvs
@@ -125,11 +126,9 @@ public:
         return os << rhs[0] << " " << rhs[1];
     }
 
-#if 1 // KVS_ENABLE_DEPRECATED
 public:
-    explicit Vector2( const T x ) { *this = All( x ); }
-    void set( const T x ) { *this = All( x ); }
-#endif
+    KVS_DEPRECATED( explicit Vector2( const T x ) ) { *this = All( x ); }
+    KVS_DEPRECATED( void set( const T x ) ) { *this = All( x ); }
 };
 
 /*==========================================================================*/

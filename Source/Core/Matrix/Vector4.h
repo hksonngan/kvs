@@ -19,6 +19,7 @@
 #include <kvs/Math>
 #include <kvs/Vector2>
 #include <kvs/Vector3>
+#include <kvs/Deprecated>
 
 
 namespace kvs
@@ -140,11 +141,9 @@ public:
         return os << rhs[0] << " " << rhs[1] << " " << rhs[2] << " " << rhs[3];
     }
 
-#if 1 // KVS_ENABLE_DEPRECATED
 public:
-    explicit Vector4( const T x ) { *this = All( x ); }
-    void set( const T x ) { *this = All( x ); }
-#endif
+    KVS_DEPRECATED( explicit Vector4( const T x ) ) { *this = All( x ); }
+    KVS_DEPRECATED( void set( const T x ) ) { *this = All( x ); }
 };
 
 /*==========================================================================*/

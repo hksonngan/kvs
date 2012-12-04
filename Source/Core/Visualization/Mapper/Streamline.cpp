@@ -4,7 +4,7 @@
  *  @brief  
  *
  *  @author Yukio YASUHARA
- *  @date   2012/12/03 22:06:09
+ *  @date   2012/12/04 10:06:40
  */
 /*----------------------------------------------------------------------------
  *
@@ -31,7 +31,7 @@ inline const kvs::Vector3f GetInterpolatedVector( const size_t vertex_id[8], con
 {
     const T* values = reinterpret_cast<const T*>( volume->values().data() );
 
-    kvs::Vector3f ret( 0.0f );
+    kvs::Vector3f ret( 0.0f, 0.0f, 0.0f );
     for ( size_t i = 0; i < 8; i++ )
     {
         const size_t index = 3 * vertex_id[i];

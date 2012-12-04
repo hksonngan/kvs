@@ -238,8 +238,8 @@ void UnstructuredVolumeObject::updateMinMaxCoords( void )
 /*==========================================================================*/
 void UnstructuredVolumeObject::calculate_min_max_coords( void )
 {
-    kvs::Vector3f min_coord( 0.0f );
-    kvs::Vector3f max_coord( 0.0f );
+    kvs::Vector3f min_coord( 0.0f, 0.0f, 0.0f );
+    kvs::Vector3f max_coord( 0.0f, 0.0f, 0.0f );
 
     const float*       coord = this->coords().data();
     const float* const end   = coord + this->coords().size();

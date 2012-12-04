@@ -206,8 +206,8 @@ void HitAndMissSampling::generate_particles( const kvs::StructuredVolumeObject* 
                     colors.push_back( BaseClass::colorMap()[ voxel_value ].b() );
 
                     // Calculate a normal vector at the node(i,j,k).
-                    kvs::Vector3ui front( index ); // front index
-                    kvs::Vector3ui back( index );  // back index
+                    kvs::Vector3ui front( index, index, index ); // front index
+                    kvs::Vector3ui back( index, index, index );  // back index
 
                     if(      i == 0                  ) front.x() += 1;
                     else if( i == resolution.x() - 1 ) back.x()  -= 1;
