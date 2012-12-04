@@ -77,7 +77,7 @@ namespace kvs
 void Thread::Sleep( const int sec )
 {
 #if defined ( KVS_PLATFORM_WINDOWS )
-    Sleep( sec * 1000 );
+    ::Sleep( sec * 1000 );
 #else
     struct timeval tv;
     gettimeofday( &tv, 0 );
@@ -97,7 +97,7 @@ void Thread::Sleep( const int sec )
 void Thread::MilliSleep( const int msec )
 {
 #if defined ( KVS_PLATFORM_WINDOWS )
-    Sleep( msec );
+    ::Sleep( msec );
 #else
     struct timeval tv;
     gettimeofday( &tv, 0 );
@@ -118,7 +118,7 @@ void Thread::MilliSleep( const int msec )
 void Thread::MicroSleep( const int usec )
 {
 #if defined ( KVS_PLATFORM_WINDOWS )
-    Sleep( ( usec / 1000 ) + 1 );
+    ::Sleep( ( usec / 1000 ) + 1 );
 #else
     struct timeval tv;
     gettimeofday( &tv, 0 );
