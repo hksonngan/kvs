@@ -23,17 +23,17 @@ kvs::VolumeObjectBase* VolumeObjectBase::DownCast( kvs::ObjectBase* object )
     if ( type != kvs::ObjectBase::Volume )
     {
         kvsMessageError("Input object is not a volume object.");
-        return( NULL );
+        return NULL;
     }
 
     kvs::VolumeObjectBase* volume = static_cast<kvs::VolumeObjectBase*>( object );
 
-    return( volume );
+    return volume;
 }
 
 const kvs::VolumeObjectBase* VolumeObjectBase::DownCast( const kvs::ObjectBase* object )
 {
-    return( VolumeObjectBase::DownCast( const_cast<kvs::ObjectBase*>( object ) ) );
+    return VolumeObjectBase::DownCast( const_cast<kvs::ObjectBase*>( object ) );
 }
 
 /*==========================================================================*/
@@ -68,7 +68,7 @@ std::ostream& operator << ( std::ostream& os, const kvs::VolumeObjectBase& objec
     os << "Max value:  " << object.maxValue();
     os.flags( flags );
 
-    return( os );
+    return os;
 }
 
 /*==========================================================================*/
@@ -133,12 +133,12 @@ void VolumeObjectBase::setMinMaxValues(
 
 kvs::ObjectBase::ObjectType VolumeObjectBase::objectType() const
 {
-    return( kvs::ObjectBase::Volume );
+    return kvs::ObjectBase::Volume;
 }
 
 const std::string& VolumeObjectBase::label() const
 {
-    return( m_label );
+    return m_label;
 }
 
 /*==========================================================================*/
@@ -148,7 +148,7 @@ const std::string& VolumeObjectBase::label() const
 /*==========================================================================*/
 size_t VolumeObjectBase::veclen() const
 {
-    return( m_veclen );
+    return m_veclen;
 }
 
 /*==========================================================================*/
@@ -158,7 +158,7 @@ size_t VolumeObjectBase::veclen() const
 /*==========================================================================*/
 const VolumeObjectBase::Coords& VolumeObjectBase::coords() const
 {
-    return( m_coords );
+    return m_coords;
 }
 
 /*==========================================================================*/
@@ -168,7 +168,7 @@ const VolumeObjectBase::Coords& VolumeObjectBase::coords() const
 /*==========================================================================*/
 const VolumeObjectBase::Values& VolumeObjectBase::values() const
 {
-    return( m_values );
+    return m_values;
 }
 
 /*==========================================================================*/
@@ -180,7 +180,7 @@ const VolumeObjectBase::Values& VolumeObjectBase::values() const
 /*==========================================================================*/
 bool VolumeObjectBase::hasMinMaxValues() const
 {
-    return( m_has_min_max_values );
+    return m_has_min_max_values;
 }
 
 /*==========================================================================*/
@@ -192,7 +192,7 @@ bool VolumeObjectBase::hasMinMaxValues() const
 /*==========================================================================*/
 kvs::Real64 VolumeObjectBase::minValue() const
 {
-    return( m_min_value );
+    return m_min_value;
 }
 
 /*==========================================================================*/
@@ -204,7 +204,7 @@ kvs::Real64 VolumeObjectBase::minValue() const
 /*==========================================================================*/
 kvs::Real64 VolumeObjectBase::maxValue() const
 {
-    return( m_max_value );
+    return m_max_value;
 }
 
 /*==========================================================================*/

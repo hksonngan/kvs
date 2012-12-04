@@ -338,7 +338,7 @@ void ScatterPlotMatrixRenderer::exec( kvs::ObjectBase* object, kvs::Camera* came
     const int Y0 = m_top_margin;
     const int Y1 = camera->windowHeight() - m_bottom_margin;
 
-    const int ncolumns = table->ncolumns();
+    const int ncolumns = table->numberOfColumns();
     const float X_stride = float( X1 - X0 - m_margin * ( ncolumns - 1 ) ) / ncolumns;
     const float Y_stride = float( Y1 - Y0 - m_margin * ( ncolumns - 1 ) ) / ncolumns;
 
@@ -389,7 +389,7 @@ void ScatterPlotMatrixRenderer::exec( kvs::ObjectBase* object, kvs::Camera* came
             if ( m_active_axis >= 0 )
             {
                 const kvs::AnyValueArray& color_axis_values = table->column( m_active_axis );
-                const size_t nrows = table->nrows();
+                const size_t nrows = table->numberOfRows();
                 for ( size_t k = 0; k < nrows; k++ )
                 {
                     if ( !table->insideRange( k ) ) continue;
@@ -411,7 +411,7 @@ void ScatterPlotMatrixRenderer::exec( kvs::ObjectBase* object, kvs::Camera* came
                 const kvs::UInt8 opacity = m_point_opacity;
                 glColor4ub( color.r(), color.g(), color.b(), opacity );
 
-                const size_t nrows = table->nrows();
+                const size_t nrows = table->numberOfRows();
                 for ( size_t k = 0; k < nrows; k++ )
                 {
                     if ( !table->insideRange( k ) ) continue;

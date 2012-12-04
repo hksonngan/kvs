@@ -273,7 +273,7 @@ void ScatterPlotRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kv
     kvs::IgnoreUnusedVariable( light );
 
     kvs::TableObject* table = kvs::TableObject::DownCast( object );
-    if ( !m_has_point_color ) if ( table->ncolumns() < 3 ) m_has_point_color = true;
+    if ( !m_has_point_color ) if ( table->numberOfColumns() < 3 ) m_has_point_color = true;
 
     glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT );
 
@@ -327,7 +327,7 @@ void ScatterPlotRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kv
         glColor4ub( color.r(), color.g(), color.b(), opacity );
         const kvs::Real64 x_ratio = kvs::Real64( x1 - x0 ) / ( x_max_value - x_min_value );
         const kvs::Real64 y_ratio = kvs::Real64( y1 - y0 ) / ( y_max_value - y_min_value );
-        const size_t nrows = table->nrows();
+        const size_t nrows = table->numberOfRows();
         for ( size_t i = 0; i < nrows; i++ )
         {
             if ( !table->insideRange( i ) ) continue;
@@ -351,7 +351,7 @@ void ScatterPlotRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kv
         glBegin( GL_POINTS );
         const kvs::Real64 x_ratio = kvs::Real64( x1 - x0 ) / ( x_max_value - x_min_value );
         const kvs::Real64 y_ratio = kvs::Real64( y1 - y0 ) / ( y_max_value - y_min_value );
-        const size_t nrows = table->nrows();
+        const size_t nrows = table->numberOfRows();
         for ( size_t i = 0; i < nrows; i++ )
         {
             if ( !table->insideRange( i ) ) continue;

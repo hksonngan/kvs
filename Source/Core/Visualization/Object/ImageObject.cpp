@@ -30,11 +30,11 @@ const std::string GetPixelTypeName( const kvs::ImageObject::PixelType type )
 {
     switch( type )
     {
-    case kvs::ImageObject::Gray8: return("8 bit gray pixel");
-    case kvs::ImageObject::Gray16: return("16 bit gray pixel");
-    case kvs::ImageObject::Color24: return("24 bit RGB color pixel (8x8x8 bits)");
-    case kvs::ImageObject::Color32: return("32 bit RGBA color pixel (8x8x8x8 bits)");
-    default: return("unknown pixel type");
+    case kvs::ImageObject::Gray8: return "8 bit gray pixel";
+    case kvs::ImageObject::Gray16: return "16 bit gray pixel";
+    case kvs::ImageObject::Color24: return "24 bit RGB color pixel (8x8x8 bits)";
+    case kvs::ImageObject::Color32: return "32 bit RGBA color pixel (8x8x8x8 bits)";
+    default: return "unknown pixel type";
     }
 }
 
@@ -63,10 +63,10 @@ ImageObject::ImageObject()
  */
 /*==========================================================================*/
 ImageObject::ImageObject(
-    const size_t                       width,
-    const size_t                       height,
+    const size_t width,
+    const size_t height,
     const kvs::ValueArray<kvs::UInt8>& data,
-    const ImageObject::PixelType       type ):
+    const ImageObject::PixelType type ):
     m_type( type ),
     m_width( width ),
     m_height( height ),
@@ -88,7 +88,7 @@ std::ostream& operator << ( std::ostream& os, const ImageObject& object )
     os << "Bytes per pixel:  " << object.bytesPerPixel() << std::endl;
     os << "Pixel type:  " << ::GetPixelTypeName( object.type() );
 
-    return( os );
+    return os;
 }
 
 /*===========================================================================*/
@@ -129,7 +129,7 @@ void ImageObject::deepCopy( const ImageObject& other )
 /*==========================================================================*/
 kvs::ObjectBase::ObjectType ImageObject::objectType() const
 {
-    return( kvs::ObjectBase::Image );
+    return kvs::ObjectBase::Image;
 }
 
 /*==========================================================================*/
@@ -140,7 +140,7 @@ kvs::ObjectBase::ObjectType ImageObject::objectType() const
 /*==========================================================================*/
 ImageObject::PixelType ImageObject::type() const
 {
-    return( m_type );
+    return m_type;
 }
 
 /*==========================================================================*/
@@ -151,7 +151,7 @@ ImageObject::PixelType ImageObject::type() const
 /*==========================================================================*/
 size_t ImageObject::width() const
 {
-    return( m_width );
+    return m_width;
 }
 
 /*==========================================================================*/
@@ -162,7 +162,7 @@ size_t ImageObject::width() const
 /*==========================================================================*/
 size_t ImageObject::height() const
 {
-    return( m_height );
+    return m_height;
 }
 
 /*==========================================================================*/
@@ -173,7 +173,7 @@ size_t ImageObject::height() const
 /*==========================================================================*/
 const kvs::ValueArray<kvs::UInt8>& ImageObject::data() const
 {
-    return( m_data );
+    return m_data;
 }
 
 /*==========================================================================*/
@@ -184,7 +184,7 @@ const kvs::ValueArray<kvs::UInt8>& ImageObject::data() const
 /*==========================================================================*/
 size_t ImageObject::bitsPerPixel() const
 {
-    return( m_type );
+    return m_type;
 }
 
 /*==========================================================================*/
@@ -195,7 +195,7 @@ size_t ImageObject::bitsPerPixel() const
 /*==========================================================================*/
 size_t ImageObject::bytesPerPixel() const
 {
-    return( m_type >> 3 );
+    return m_type >> 3;
 }
 
 /*==========================================================================*/
@@ -216,7 +216,7 @@ size_t ImageObject::numberOfChannels() const
     default: break;
     }
 
-    return( ret );
+    return ret;
 }
 
 /*==========================================================================*/
@@ -227,7 +227,7 @@ size_t ImageObject::numberOfChannels() const
 /*==========================================================================*/
 size_t ImageObject::get_number_of_pixels() const
 {
-    return( ( m_type >> 3 ) * m_width * m_height );
+    return ( m_type >> 3 ) * m_width * m_height;
 }
 
 } // end of namespace kvs

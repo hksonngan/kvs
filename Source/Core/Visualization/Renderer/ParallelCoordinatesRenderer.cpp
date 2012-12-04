@@ -319,7 +319,7 @@ void ParallelCoordinatesRenderer::exec( kvs::ObjectBase* object, kvs::Camera* ca
     const int y1 = camera->windowHeight() - m_bottom_margin;
 
     const size_t nrows = table->column(0).size();
-    const size_t naxes = table->ncolumns();
+    const size_t naxes = table->numberOfColumns();
     const float stride = float( x1 - x0 ) / ( naxes - 1 );
     for ( size_t i = 0; i < nrows; i++ )
     {

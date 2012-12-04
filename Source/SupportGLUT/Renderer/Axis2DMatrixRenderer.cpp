@@ -311,7 +311,7 @@ void Axis2DMatrixRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, k
     const int Y0 = m_top_margin;
     const int Y1 = camera->windowHeight() - m_bottom_margin;
 
-    const int ncolumns = table->ncolumns();
+    const int ncolumns = table->numberOfColumns();
     const float X_stride = float( X1 - X0 - m_margin * ( ncolumns - 1 ) ) / ncolumns;
     const float Y_stride = float( Y1 - Y0 - m_margin * ( ncolumns - 1 ) ) / ncolumns;
 

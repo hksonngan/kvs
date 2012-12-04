@@ -15,11 +15,12 @@
 #ifndef KVS__TABLE_OBJECT_H_INCLUDE
 #define KVS__TABLE_OBJECT_H_INCLUDE
 
+#include <vector>
 #include <kvs/ClassName>
 #include <kvs/ObjectBase>
 #include <kvs/Type>
 #include <kvs/AnyValueArray>
-#include <vector>
+#include <kvs/Deprecated>
 
 
 namespace kvs
@@ -32,10 +33,7 @@ namespace kvs
 /*===========================================================================*/
 class TableObject : public kvs::ObjectBase
 {
-    // Class name.
     kvsClassName( kvs::TableObject );
-
-    // Module information.
     kvsModuleCategory( Object );
     kvsModuleBaseClass( kvs::ObjectBase );
 
@@ -60,82 +58,52 @@ protected:
 
 public:
 
-    TableObject( void );
-
-public:
-
     static kvs::TableObject* DownCast( kvs::ObjectBase* object );
-
     static const kvs::TableObject* DownCast( const kvs::ObjectBase* object );
 
 public:
 
+    TableObject();
+
     void addColumn( const kvs::AnyValueArray& array, const std::string& label = "" );
+    template <typename T> void addColumn( const kvs::ValueArray<T>& array, const std::string& label = "" );
+    template <typename T> void addColumn( const std::vector<T>& array, const std::string& label = "" );
 
-    template <typename T>
-    void addColumn( const kvs::ValueArray<T>& array, const std::string& label = "" );
-
-    template <typename T>
-    void addColumn( const std::vector<T>& array, const std::string& label = "" );
-
-    const size_t ncolumns( void ) const;
-
-    const size_t nrows( void ) const;
-
-    const LabelList labelList( void ) const;
-
+    size_t numberOfColumns() const;
+    size_t numberOfRows() const;
+    const LabelList labelList() const;
     const std::string label( const size_t index ) const;
-
-    const ColumnList columnList( void ) const;
-
+    const ColumnList columnList() const;
     const kvs::AnyValueArray& column( const size_t index ) const;
-
-    const ValueList minValueList( void ) const;
-
-    const kvs::Real64 minValue( const size_t index ) const;
-
-    const ValueList maxValueList( void ) const;
-
-    const kvs::Real64 maxValue( const size_t index ) const;
-
-    template <typename T>
-    const T& at( const size_t row, const size_t column ) const;
+    const ValueList minValueList() const;
+    kvs::Real64 minValue( const size_t index ) const;
+    const ValueList maxValueList() const;
+    kvs::Real64 maxValue( const size_t index ) const;
+    template <typename T> const T& at( const size_t row, const size_t column ) const;
 
     void setMinValue( const size_t column_index, const kvs::Real64 value );
-
     void setMaxValue( const size_t column_index, const kvs::Real64 value );
-
     void setMinRange( const size_t column_index, const kvs::Real64 range );
-
     void setMaxRange( const size_t column_index, const kvs::Real64 range );
-
     void setRange( const size_t column_index, const kvs::Real64 min_range, const kvs::Real64 max_range );
 
     void moveMinRange( const size_t column_index, const kvs::Real64 drange );
-
     void moveMaxRange( const size_t column_index, const kvs::Real64 drange );
-
     void moveRange( const size_t column_index, const kvs::Real64 drange );
-
     void resetRange( const size_t column_index );
+    void resetRange();
 
-    void resetRange( void );
+    const ValueList& minRangeList() const;
+    const ValueList& maxRangeList() const;
+    const RangeList& insideRangeList() const;
+    kvs::Real64 minRange( const size_t column_index ) const;
+    kvs::Real64 maxRange( const size_t column_index ) const;
+    bool insideRange( const size_t row_index ) const;
+    ObjectType objectType() const;
 
 public:
-
-    const ValueList& minRangeList( void ) const;
-
-    const ValueList& maxRangeList( void ) const;
-
-    const RangeList& insideRangeList( void ) const;
-
-    const kvs::Real64 minRange( const size_t column_index ) const;
-
-    const kvs::Real64 maxRange( const size_t column_index ) const;
-
-    const bool insideRange( const size_t row_index ) const;
-
-    ObjectType objectType( void ) const;
+    KVS_DEPRECATED( size_t ncolumns() const ) { return this->numberOfColumns(); }
+    KVS_DEPRECATED( size_t nrows() const ) { return this->numberOfRows(); }
 };
 
 /*===========================================================================*/

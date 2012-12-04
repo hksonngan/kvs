@@ -19,12 +19,31 @@
 namespace kvs
 {
 
+kvs::TableObject* TableObject::DownCast( kvs::ObjectBase* object )
+{
+    const kvs::ObjectBase::ObjectType type = object->objectType();
+    if ( type != kvs::ObjectBase::Table )
+    {
+        kvsMessageError("Input object is not table object.");
+        return NULL;
+    }
+
+    kvs::TableObject* table = static_cast<kvs::TableObject*>( object );
+
+    return table;
+}
+
+const kvs::TableObject* TableObject::DownCast( const kvs::ObjectBase* object )
+{
+    return TableObject::DownCast( const_cast<kvs::ObjectBase*>( object ) );
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Constructs a new TableObject class.
  */
 /*===========================================================================*/
-TableObject::TableObject( void )
+TableObject::TableObject()
 {
     m_min_object_coord   = kvs::Vector3f( 0.0, 0.0, 0.0 );
     m_max_object_coord   = kvs::Vector3f( 0.0, 0.0, 0.0 );
@@ -33,25 +52,6 @@ TableObject::TableObject( void )
 
     m_nrows = 0;
     m_ncolumns = 0;
-}
-
-kvs::TableObject* TableObject::DownCast( kvs::ObjectBase* object )
-{
-    const kvs::ObjectBase::ObjectType type = object->objectType();
-    if ( type != kvs::ObjectBase::Table )
-    {
-        kvsMessageError("Input object is not table object.");
-        return( NULL );
-    }
-
-    kvs::TableObject* table = static_cast<kvs::TableObject*>( object );
-
-    return( table );
-}
-
-const kvs::TableObject* TableObject::DownCast( const kvs::ObjectBase* object )
-{
-    return( TableObject::DownCast( const_cast<kvs::ObjectBase*>( object ) ) );
 }
 
 /*===========================================================================*/
@@ -182,9 +182,9 @@ void TableObject::addColumn( const kvs::AnyValueArray& array, const std::string&
  *  @return number of columns
  */
 /*===========================================================================*/
-const size_t TableObject::ncolumns( void ) const
+size_t TableObject::numberOfColumns() const
 {
-    return( m_ncolumns );
+    return m_ncolumns;
 }
 
 /*===========================================================================*/
@@ -193,9 +193,9 @@ const size_t TableObject::ncolumns( void ) const
  *  @return number of rows
  */
 /*===========================================================================*/
-const size_t TableObject::nrows( void ) const
+size_t TableObject::numberOfRows() const
 {
-    return( m_nrows );
+    return m_nrows;
 }
 
 /*===========================================================================*/
@@ -204,9 +204,9 @@ const size_t TableObject::nrows( void ) const
  *  @return label list
  */
 /*===========================================================================*/
-const TableObject::LabelList TableObject::labelList( void ) const
+const TableObject::LabelList TableObject::labelList() const
 {
-    return( m_labels );
+    return m_labels;
 }
 
 /*===========================================================================*/
@@ -218,7 +218,7 @@ const TableObject::LabelList TableObject::labelList( void ) const
 /*===========================================================================*/
 const std::string TableObject::label( const size_t index ) const
 {
-    return( m_labels[index] );
+    return m_labels[index];
 }
 
 /*===========================================================================*/
@@ -227,9 +227,9 @@ const std::string TableObject::label( const size_t index ) const
  *  @return column list
  */
 /*===========================================================================*/
-const TableObject::ColumnList TableObject::columnList( void ) const
+const TableObject::ColumnList TableObject::columnList() const
 {
-    return( m_columns );
+    return m_columns;
 }
 
 /*===========================================================================*/
@@ -241,7 +241,7 @@ const TableObject::ColumnList TableObject::columnList( void ) const
 /*===========================================================================*/
 const kvs::AnyValueArray& TableObject::column( const size_t index ) const
 {
-    return( m_columns[index] );
+    return m_columns[index];
 }
 
 /*===========================================================================*/
@@ -250,9 +250,9 @@ const kvs::AnyValueArray& TableObject::column( const size_t index ) const
  *  @return minimum value list
  */
 /*===========================================================================*/
-const TableObject::ValueList TableObject::minValueList( void ) const
+const TableObject::ValueList TableObject::minValueList() const
 {
-    return( m_min_values );
+    return m_min_values;
 }
 
 /*===========================================================================*/
@@ -262,9 +262,9 @@ const TableObject::ValueList TableObject::minValueList( void ) const
  *  @return minimum value
  */
 /*===========================================================================*/
-const kvs::Real64 TableObject::minValue( const size_t index ) const
+kvs::Real64 TableObject::minValue( const size_t index ) const
 {
-    return( m_min_values[index] );
+    return m_min_values[index];
 }
 
 /*===========================================================================*/
@@ -273,9 +273,9 @@ const kvs::Real64 TableObject::minValue( const size_t index ) const
  *  @return maximum value list
  */
 /*===========================================================================*/
-const TableObject::ValueList TableObject::maxValueList( void ) const
+const TableObject::ValueList TableObject::maxValueList() const
 {
-    return( m_max_values );
+    return m_max_values;
 }
 
 /*===========================================================================*/
@@ -285,9 +285,9 @@ const TableObject::ValueList TableObject::maxValueList( void ) const
  *  @return maximum value
  */
 /*===========================================================================*/
-const kvs::Real64 TableObject::maxValue( const size_t index ) const
+kvs::Real64 TableObject::maxValue( const size_t index ) const
 {
-    return( m_max_values[index] );
+    return m_max_values[index];
 }
 
 /*===========================================================================*/
@@ -334,8 +334,8 @@ void TableObject::setMinRange( const size_t column_index, const kvs::Real64 rang
     if ( kvs::Math::Equal( min_range_old, min_range_new ) ) return;
     m_min_ranges[column_index] = min_range_new;
 
-    const size_t nrows = this->nrows();
-    const size_t ncolumns = this->ncolumns();
+    const size_t nrows = this->numberOfRows();
+    const size_t ncolumns = this->numberOfColumns();
     if ( min_range_new > min_range_old )
     {
         /* In case of flags turned off, you just have to check whether the value
@@ -396,8 +396,8 @@ void TableObject::setMaxRange( const size_t column_index, const kvs::Real64 rang
     if ( kvs::Math::Equal( max_range_old, max_range_new ) ) return;
     m_max_ranges[column_index] = max_range_new;
 
-    const size_t nrows = this->nrows();
-    const size_t ncolumns = this->ncolumns();
+    const size_t nrows = this->numberOfRows();
+    const size_t ncolumns = this->numberOfColumns();
     if ( max_range_new > max_range_old )
     {
         /* In case of flags turned on, you have to check the all of colums.
@@ -529,9 +529,9 @@ void TableObject::resetRange( const size_t column_index )
  *  @brief  Resets ranges.
  */
 /*===========================================================================*/
-void TableObject::resetRange( void )
+void TableObject::resetRange()
 {
-    const size_t ncolumns = this->ncolumns();
+    const size_t ncolumns = this->numberOfColumns();
     for ( size_t i = 0; i < ncolumns; i++ )
     {
         m_max_ranges[i] = this->maxValue(i);
@@ -547,9 +547,9 @@ void TableObject::resetRange( void )
  *  @return minimum range list
  */
 /*===========================================================================*/
-const kvs::TableObject::ValueList& TableObject::minRangeList( void ) const
+const kvs::TableObject::ValueList& TableObject::minRangeList() const
 {
-    return( m_min_ranges );
+    return m_min_ranges;
 }
 
 /*===========================================================================*/
@@ -558,9 +558,9 @@ const kvs::TableObject::ValueList& TableObject::minRangeList( void ) const
  *  @return maximum range list
  */
 /*===========================================================================*/
-const kvs::TableObject::ValueList& TableObject::maxRangeList( void ) const
+const kvs::TableObject::ValueList& TableObject::maxRangeList() const
 {
-    return( m_max_ranges );
+    return m_max_ranges;
 }
 
 /*===========================================================================*/
@@ -569,9 +569,9 @@ const kvs::TableObject::ValueList& TableObject::maxRangeList( void ) const
  *  @return inside range list
  */
 /*===========================================================================*/
-const kvs::TableObject::RangeList& TableObject::insideRangeList( void ) const
+const kvs::TableObject::RangeList& TableObject::insideRangeList() const
 {
-    return( m_inside_range_list );
+    return m_inside_range_list;
 }
 
 /*===========================================================================*/
@@ -581,9 +581,9 @@ const kvs::TableObject::RangeList& TableObject::insideRangeList( void ) const
  *  @return minimum range value
  */
 /*===========================================================================*/
-const kvs::Real64 TableObject::minRange( const size_t column_index ) const
+kvs::Real64 TableObject::minRange( const size_t column_index ) const
 {
-    return( m_min_ranges[column_index] );
+    return m_min_ranges[column_index];
 }
 
 /*===========================================================================*/
@@ -593,9 +593,9 @@ const kvs::Real64 TableObject::minRange( const size_t column_index ) const
  *  @return maximum range value
  */
 /*===========================================================================*/
-const kvs::Real64 TableObject::maxRange( const size_t column_index ) const
+kvs::Real64 TableObject::maxRange( const size_t column_index ) const
 {
-    return( m_max_ranges[column_index] );
+    return m_max_ranges[column_index];
 }
 
 /*===========================================================================*/
@@ -605,9 +605,9 @@ const kvs::Real64 TableObject::maxRange( const size_t column_index ) const
  *  @return true, if the value is inside the range
  */
 /*===========================================================================*/
-const bool TableObject::insideRange( const size_t row_index ) const
+bool TableObject::insideRange( const size_t row_index ) const
 {
-    return( m_inside_range_list[row_index] == 1 );
+    return m_inside_range_list[row_index] == 1;
 }
 
 /*===========================================================================*/
@@ -616,9 +616,9 @@ const bool TableObject::insideRange( const size_t row_index ) const
  *  @return object type
  */
 /*===========================================================================*/
-kvs::ObjectBase::ObjectType TableObject::objectType( void ) const
+kvs::ObjectBase::ObjectType TableObject::objectType() const
 {
-    return( kvs::ObjectBase::Table );
+    return kvs::ObjectBase::Table;
 }
 
 template<> void TableObject::addColumn<kvs::Int8>( const kvs::ValueArray<kvs::Int8>& array, const std::string& label );

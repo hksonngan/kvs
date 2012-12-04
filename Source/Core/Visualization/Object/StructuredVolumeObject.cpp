@@ -21,11 +21,11 @@ const std::string GetGridTypeName( const kvs::StructuredVolumeObject::GridType t
 {
     switch( type )
     {
-    case kvs::StructuredVolumeObject::Uniform: return("uniform");
-    case kvs::StructuredVolumeObject::Rectilinear: return("rectiliear");
-    case kvs::StructuredVolumeObject::Curvilinear: return( "curvilinear" );
-    case kvs::StructuredVolumeObject::Irregular: return( "irregular" );
-    default: return( "unknown grid type" );
+    case kvs::StructuredVolumeObject::Uniform: return "uniform";
+    case kvs::StructuredVolumeObject::Rectilinear: return "rectiliear";
+    case kvs::StructuredVolumeObject::Curvilinear: return "curvilinear";
+    case kvs::StructuredVolumeObject::Irregular: return "irregular";
+    default: return "unknown grid type";
     }
 }
 
@@ -50,23 +50,23 @@ StructuredVolumeObject::StructuredVolumeObject()
 kvs::StructuredVolumeObject* StructuredVolumeObject::DownCast( kvs::ObjectBase* object )
 {
     kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
-    if ( !volume ) return( NULL );
+    if ( !volume ) return NULL;
 
     const kvs::VolumeObjectBase::VolumeType type = volume->volumeType();
     if ( type != kvs::VolumeObjectBase::Structured )
     {
         kvsMessageError("Input object is not a structured volume object.");
-        return( NULL );
+        return NULL;
     }
 
     kvs::StructuredVolumeObject* structured = static_cast<kvs::StructuredVolumeObject*>( volume );
 
-    return( structured );
+    return structured;
 }
 
 const kvs::StructuredVolumeObject* StructuredVolumeObject::DownCast( const kvs::ObjectBase* object )
 {
-    return( StructuredVolumeObject::DownCast( const_cast<kvs::ObjectBase*>( object ) ) );
+    return StructuredVolumeObject::DownCast( const_cast<kvs::ObjectBase*>( object ) );
 }
 
 std::ostream& operator << ( std::ostream& os, const StructuredVolumeObject& object )
@@ -87,7 +87,7 @@ std::ostream& operator << ( std::ostream& os, const StructuredVolumeObject& obje
     os << "Min. value:  " << object.minValue() << std::endl;
     os << "Max. value:  " << object.maxValue();
 
-    return( os );
+    return os;
 }
 
 void StructuredVolumeObject::shallowCopy( const StructuredVolumeObject& object )
@@ -131,7 +131,7 @@ void StructuredVolumeObject::setResolution( const kvs::Vector3ui& resolution )
 /*==========================================================================*/
 StructuredVolumeObject::VolumeType StructuredVolumeObject::volumeType() const
 {
-    return( Structured );
+    return Structured;
 }
 
 /*==========================================================================*/
@@ -141,7 +141,7 @@ StructuredVolumeObject::VolumeType StructuredVolumeObject::volumeType() const
 /*==========================================================================*/
 StructuredVolumeObject::GridType StructuredVolumeObject::gridType() const
 {
-    return( m_grid_type );
+    return m_grid_type;
 }
 
 /*==========================================================================*/
@@ -151,7 +151,7 @@ StructuredVolumeObject::GridType StructuredVolumeObject::gridType() const
 /*==========================================================================*/
 StructuredVolumeObject::CellType StructuredVolumeObject::cellType() const
 {
-    return( Hexahedra );
+    return Hexahedra;
 }
 
 /*==========================================================================*/
@@ -161,7 +161,7 @@ StructuredVolumeObject::CellType StructuredVolumeObject::cellType() const
 /*==========================================================================*/
 const kvs::Vector3ui& StructuredVolumeObject::resolution() const
 {
-    return( m_resolution );
+    return m_resolution;
 }
 
 /*==========================================================================*/
@@ -171,7 +171,7 @@ const kvs::Vector3ui& StructuredVolumeObject::resolution() const
 /*==========================================================================*/
 size_t StructuredVolumeObject::numberOfNodesPerLine() const
 {
-    return( m_resolution.x() );
+    return m_resolution.x();
 }
 
 /*==========================================================================*/
@@ -181,7 +181,7 @@ size_t StructuredVolumeObject::numberOfNodesPerLine() const
 /*==========================================================================*/
 size_t StructuredVolumeObject::numberOfNodesPerSlice() const
 {
-    return( this->numberOfNodesPerLine() * m_resolution.y() );
+    return this->numberOfNodesPerLine() * m_resolution.y();
 }
 
 /*==========================================================================*/
@@ -191,7 +191,7 @@ size_t StructuredVolumeObject::numberOfNodesPerSlice() const
 /*==========================================================================*/
 size_t StructuredVolumeObject::numberOfNodes() const
 {
-    return( this->numberOfNodesPerSlice() * m_resolution.z() );
+    return this->numberOfNodesPerSlice() * m_resolution.z();
 }
 
 /*==========================================================================*/

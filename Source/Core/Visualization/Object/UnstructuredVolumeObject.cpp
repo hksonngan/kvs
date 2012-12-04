@@ -21,12 +21,12 @@ const std::string GetCellTypeName( const kvs::UnstructuredVolumeObject::CellType
 {
     switch( type )
     {
-    case kvs::UnstructuredVolumeObject::Tetrahedra: return( "tetrahedra" );
-    case kvs::UnstructuredVolumeObject::Hexahedra: return( "hexahedra" );
-    case kvs::UnstructuredVolumeObject::QuadraticTetrahedra: return( "quadratic tetrahedra" );
-    case kvs::UnstructuredVolumeObject::QuadraticHexahedra: return( "quadratic hexahedra" );
-    case kvs::UnstructuredVolumeObject::Pyramid: return( "pyramid" );
-    default: return( "unknown cell type" );
+    case kvs::UnstructuredVolumeObject::Tetrahedra: return "tetrahedra";
+    case kvs::UnstructuredVolumeObject::Hexahedra: return "hexahedra";
+    case kvs::UnstructuredVolumeObject::QuadraticTetrahedra: return "quadratic tetrahedra";
+    case kvs::UnstructuredVolumeObject::QuadraticHexahedra: return "quadratic hexahedra";
+    case kvs::UnstructuredVolumeObject::Pyramid: return "pyramid";
+    default: return "unknown cell type";
     }
 }
 
@@ -52,23 +52,23 @@ UnstructuredVolumeObject::UnstructuredVolumeObject()
 kvs::UnstructuredVolumeObject* UnstructuredVolumeObject::DownCast( kvs::ObjectBase* object )
 {
     kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
-    if ( !volume ) return( NULL );
+    if ( !volume ) return NULL;
 
     const kvs::VolumeObjectBase::VolumeType type = volume->volumeType();
     if ( type != kvs::VolumeObjectBase::Unstructured )
     {
         kvsMessageError("Input object is not a unstructured volume object.");
-        return( NULL );
+        return NULL;
     }
 
     kvs::UnstructuredVolumeObject* unstructured = static_cast<kvs::UnstructuredVolumeObject*>( volume );
 
-    return( unstructured );
+    return unstructured;
 }
 
 const kvs::UnstructuredVolumeObject* UnstructuredVolumeObject::DownCast( const kvs::ObjectBase* object )
 {
-    return( UnstructuredVolumeObject::DownCast( const_cast<kvs::ObjectBase*>( object ) ) );
+    return UnstructuredVolumeObject::DownCast( const_cast<kvs::ObjectBase*>( object ) );
 }
 
 std::ostream& operator << ( std::ostream& os, const UnstructuredVolumeObject& object )
@@ -89,7 +89,7 @@ std::ostream& operator << ( std::ostream& os, const UnstructuredVolumeObject& ob
     os << "Min. value:  " << object.minValue() << std::endl;
     os << "Max. value:  " << object.maxValue();
 
-    return( os );
+    return os;
 }
 
 void UnstructuredVolumeObject::shallowCopy( const UnstructuredVolumeObject& object )
@@ -160,7 +160,7 @@ void UnstructuredVolumeObject::setConnections( const Connections& connections )
 /*==========================================================================*/
 UnstructuredVolumeObject::VolumeType UnstructuredVolumeObject::volumeType() const
 {
-    return( Unstructured );
+    return Unstructured;
 }
 
 /*==========================================================================*/
@@ -170,7 +170,7 @@ UnstructuredVolumeObject::VolumeType UnstructuredVolumeObject::volumeType() cons
 /*==========================================================================*/
 UnstructuredVolumeObject::GridType UnstructuredVolumeObject::gridType() const
 {
-    return( Irregular );
+    return Irregular;
 }
 
 /*==========================================================================*/
@@ -180,7 +180,7 @@ UnstructuredVolumeObject::GridType UnstructuredVolumeObject::gridType() const
 /*==========================================================================*/
 UnstructuredVolumeObject::CellType UnstructuredVolumeObject::cellType() const
 {
-    return( m_cell_type );
+    return m_cell_type;
 }
 
 /*==========================================================================*/
@@ -191,7 +191,7 @@ UnstructuredVolumeObject::CellType UnstructuredVolumeObject::cellType() const
 /*==========================================================================*/
 size_t UnstructuredVolumeObject::numberOfNodes() const
 {
-    return( m_nnodes );
+    return m_nnodes;
 }
 
 /*==========================================================================*/
@@ -213,7 +213,7 @@ size_t UnstructuredVolumeObject::numberOfCells() const
 /*==========================================================================*/
 const UnstructuredVolumeObject::Connections& UnstructuredVolumeObject::connections() const
 {
-    return( m_connections );
+    return m_connections;
 }
 
 /*==========================================================================*/
