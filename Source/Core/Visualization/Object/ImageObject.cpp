@@ -49,7 +49,7 @@ namespace kvs
  *  @brief  Constructs a new ImageObject class.
  */
 /*===========================================================================*/
-ImageObject::ImageObject( void )
+ImageObject::ImageObject()
 {
 }
 
@@ -127,7 +127,7 @@ void ImageObject::deepCopy( const ImageObject& other )
  *  @return object type
  */
 /*==========================================================================*/
-kvs::ObjectBase::ObjectType ImageObject::objectType( void ) const
+kvs::ObjectBase::ObjectType ImageObject::objectType() const
 {
     return( kvs::ObjectBase::Image );
 }
@@ -138,7 +138,7 @@ kvs::ObjectBase::ObjectType ImageObject::objectType( void ) const
  *  @return pixel type
  */
 /*==========================================================================*/
-const ImageObject::PixelType ImageObject::type( void ) const
+ImageObject::PixelType ImageObject::type() const
 {
     return( m_type );
 }
@@ -149,7 +149,7 @@ const ImageObject::PixelType ImageObject::type( void ) const
  *  @return image width
  */
 /*==========================================================================*/
-const size_t ImageObject::width( void ) const
+size_t ImageObject::width() const
 {
     return( m_width );
 }
@@ -160,7 +160,7 @@ const size_t ImageObject::width( void ) const
  *  @return image height
  */
 /*==========================================================================*/
-const size_t ImageObject::height( void ) const
+size_t ImageObject::height() const
 {
     return( m_height );
 }
@@ -171,7 +171,7 @@ const size_t ImageObject::height( void ) const
  *  @return pixel data array
  */
 /*==========================================================================*/
-const kvs::ValueArray<kvs::UInt8>& ImageObject::data( void ) const
+const kvs::ValueArray<kvs::UInt8>& ImageObject::data() const
 {
     return( m_data );
 }
@@ -182,7 +182,7 @@ const kvs::ValueArray<kvs::UInt8>& ImageObject::data( void ) const
  *  @return number of bits per pixel
  */
 /*==========================================================================*/
-const size_t ImageObject::bitsPerPixel( void ) const
+size_t ImageObject::bitsPerPixel() const
 {
     return( m_type );
 }
@@ -193,7 +193,7 @@ const size_t ImageObject::bitsPerPixel( void ) const
  *  @return number of bytes per pixel
  */
 /*==========================================================================*/
-const size_t ImageObject::bytesPerPixel( void ) const
+size_t ImageObject::bytesPerPixel() const
 {
     return( m_type >> 3 );
 }
@@ -204,7 +204,7 @@ const size_t ImageObject::bytesPerPixel( void ) const
  *  @return number of color channels
  */
 /*==========================================================================*/
-const size_t ImageObject::nchannels( void ) const
+size_t ImageObject::numberOfChannels() const
 {
     size_t ret = 0;
     switch ( m_type )
@@ -225,7 +225,7 @@ const size_t ImageObject::nchannels( void ) const
  *  @return number of pixels
  */
 /*==========================================================================*/
-const size_t ImageObject::get_npixels( void ) const
+size_t ImageObject::get_number_of_pixels() const
 {
     return( ( m_type >> 3 ) * m_width * m_height );
 }

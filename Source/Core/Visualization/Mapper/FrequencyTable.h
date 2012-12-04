@@ -157,7 +157,7 @@ inline void FrequencyTable::binning( const kvs::VolumeObjectBase* volume )
 template <typename T>
 inline void FrequencyTable::binning( const kvs::ImageObject* image, const size_t channel )
 {
-    if ( channel >= image->nchannels() )
+    if ( channel >= image->numberOfChannels() )
     {
         kvsMessageError("Specified channel is invalid.");
         return;
@@ -166,7 +166,7 @@ inline void FrequencyTable::binning( const kvs::ImageObject* image, const size_t
     const T* values = reinterpret_cast<const T*>( image->data().data() );
 //    const kvs::Real64 width = ( m_max_range - m_min_range ) / kvs::Real64( m_nbins - 1 );
     const kvs::Real64 width = ( m_max_range - m_min_range + 1 ) / kvs::Real64( m_nbins );
-    const size_t stride  = image->nchannels();
+    const size_t stride  = image->numberOfChannels();
     const size_t npixels = image->width() * image->height();
 
     size_t total_count = 0;

@@ -32,10 +32,7 @@ namespace kvs
 /*===========================================================================*/
 class ImageObject : public kvs::ObjectBase
 {
-    // Class name.
     kvsClassName( kvs::ImageObject );
-
-    // Module information.
     kvsModuleCategory( Object );
     kvsModuleBaseClass( kvs::ObjectBase );
 
@@ -51,52 +48,40 @@ public:
 
 protected:
 
-    ImageObject::PixelType      m_type;   ///< pixel type
-    size_t                      m_width;  ///< image width
-    size_t                      m_height; ///< image height
-    kvs::ValueArray<kvs::UInt8> m_data;   ///< pixel data
+    ImageObject::PixelType m_type; ///< pixel type
+    size_t m_width; ///< image width
+    size_t m_height; ///< image height
+    kvs::ValueArray<kvs::UInt8> m_data; ///< pixel data
 
 public:
 
-    ImageObject( void );
-
+    ImageObject();
     ImageObject(
-        const size_t                       width,
-        const size_t                       height,
+        const size_t width,
+        const size_t height,
         const kvs::ValueArray<kvs::UInt8>& data,
-        const ImageObject::PixelType       type = ImageObject::Color24 );
-
-public:
+        const ImageObject::PixelType type = ImageObject::Color24 );
 
     friend std::ostream& operator << ( std::ostream& os, const ImageObject& object );
 
-public:
-
     void shallowCopy( const ImageObject& object );
-
     void deepCopy( const ImageObject& object );
 
+    ObjectType objectType() const;
+    ImageObject::PixelType type() const;
+    size_t width() const;
+    size_t height() const;
+    const kvs::ValueArray<kvs::UInt8>& data() const;
+    size_t bitsPerPixel() const;
+    size_t bytesPerPixel() const;
+    size_t numberOfChannels() const;
+
+private:
+
+    size_t get_number_of_pixels() const;
+
 public:
-
-    ObjectType objectType( void ) const;
-
-    const ImageObject::PixelType type( void ) const;
-
-    const size_t width( void ) const;
-
-    const size_t height( void ) const;
-
-    const kvs::ValueArray<kvs::UInt8>& data( void ) const;
-
-    const size_t bitsPerPixel( void ) const;
-
-    const size_t bytesPerPixel( void ) const;
-
-    const size_t nchannels( void ) const;
-
-protected:
-
-    const size_t get_npixels( void ) const;
+    KVS_DEPRECATED( size_t nchannels() const ) { return this->numberOfChannels(); }
 };
 
 } // end of namespace kvs
