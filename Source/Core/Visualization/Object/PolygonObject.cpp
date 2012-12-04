@@ -24,9 +24,9 @@ const std::string GetPolygonTypeName( const kvs::PolygonObject::PolygonType type
 {
     switch( type )
     {
-    case kvs::PolygonObject::Triangle: return("triangle");
-    case kvs::PolygonObject::Quadrangle: return("quadrangle");
-    default: return("unknown polygon type");
+    case kvs::PolygonObject::Triangle: return "triangle";
+    case kvs::PolygonObject::Quadrangle: return "quadrangle";
+    default: return "unknown polygon type";
     }
 }
 
@@ -34,9 +34,9 @@ const std::string GetColorTypeName( const kvs::PolygonObject::ColorType type )
 {
     switch( type )
     {
-    case kvs::PolygonObject::VertexColor: return("vertex color");
-    case kvs::PolygonObject::PolygonColor: return("polygon color");
-    default: return("unknown color type");
+    case kvs::PolygonObject::VertexColor: return "vertex color";
+    case kvs::PolygonObject::PolygonColor: return "polygon color";
+    default: return "unknown color type";
     }
 }
 
@@ -44,9 +44,9 @@ const std::string GetNormalTypeName( const kvs::PolygonObject::NormalType type )
 {
     switch( type )
     {
-    case kvs::PolygonObject::VertexNormal: return("vertex normal");
-    case kvs::PolygonObject::PolygonNormal: return("polygon normal");
-    default: return("unknown normal type");
+    case kvs::PolygonObject::VertexNormal: return "vertex normal";
+    case kvs::PolygonObject::PolygonNormal: return "polygon normal";
+    default: return "unknown normal type";
     }
 }
 
@@ -55,31 +55,31 @@ const std::string GetNormalTypeName( const kvs::PolygonObject::NormalType type )
 namespace kvs
 {
 
-PolygonObject::PolygonObject( void )
-{
-    this->setOpacity( 255 );
-}
-
 kvs::PolygonObject* PolygonObject::DownCast( kvs::ObjectBase* object )
 {
     kvs::GeometryObjectBase* geometry = kvs::GeometryObjectBase::DownCast( object );
-    if ( !geometry ) return( NULL );
+    if ( !geometry ) return NULL;
 
     const kvs::GeometryObjectBase::GeometryType type = geometry->geometryType();
     if ( type != kvs::GeometryObjectBase::Polygon )
     {
         kvsMessageError("Input object is not a polygon object.");
-        return( NULL );
+        return NULL;
     }
 
     kvs::PolygonObject* polygon = static_cast<kvs::PolygonObject*>( geometry );
 
-    return( polygon );
+    return polygon;
 }
 
 const kvs::PolygonObject* PolygonObject::DownCast( const kvs::ObjectBase* object )
 {
-    return( PolygonObject::DownCast( const_cast<kvs::ObjectBase*>( object ) ) );
+    return PolygonObject::DownCast( const_cast<kvs::ObjectBase*>( object ) );
+}
+
+PolygonObject::PolygonObject()
+{
+    this->setOpacity( 255 );
 }
 
 std::ostream& operator << ( std::ostream& os, const PolygonObject& object )
@@ -98,7 +98,7 @@ std::ostream& operator << ( std::ostream& os, const PolygonObject& object )
     os << "Color type:  " << ::GetColorTypeName( object.colorType() ) << std::endl;
     os << "Normal type:  " << ::GetNormalTypeName( object.normalType() );
 
-    return( os );
+    return os;
 }
 
 void PolygonObject::shallowCopy( const PolygonObject& object )
@@ -121,7 +121,7 @@ void PolygonObject::deepCopy( const PolygonObject& object )
     m_opacities = object.opacities().clone();
 }
 
-void PolygonObject::clear( void )
+void PolygonObject::clear()
 {
     BaseClass::clear();
     m_connections.release();
@@ -166,50 +166,50 @@ void PolygonObject::setOpacity( const kvs::UInt8 opacity )
     m_opacities[0] = opacity;
 }
 
-const PolygonObject::BaseClass::GeometryType PolygonObject::geometryType( void ) const
+PolygonObject::BaseClass::GeometryType PolygonObject::geometryType() const
 {
-    return( BaseClass::Polygon );
+    return BaseClass::Polygon;
 }
 
-const PolygonObject::PolygonType PolygonObject::polygonType( void ) const
+PolygonObject::PolygonType PolygonObject::polygonType() const
 {
-    return( m_polygon_type );
+    return m_polygon_type;
 }
 
-const PolygonObject::ColorType PolygonObject::colorType( void ) const
+PolygonObject::ColorType PolygonObject::colorType() const
 {
-    return( m_color_type );
+    return m_color_type;
 }
 
-const PolygonObject::NormalType PolygonObject::normalType( void ) const
+PolygonObject::NormalType PolygonObject::normalType() const
 {
-    return( m_normal_type );
+    return m_normal_type;
 }
 
-const size_t PolygonObject::nconnections( void ) const
+size_t PolygonObject::nconnections() const
 {
     const size_t nvertices_per_face = m_polygon_type;
-    return( m_connections.size() / nvertices_per_face );
+    return m_connections.size() / nvertices_per_face;
 }
 
-const size_t PolygonObject::nopacities( void ) const
+size_t PolygonObject::nopacities() const
 {
-    return( m_opacities.size() );
+    return m_opacities.size();
 }
 
-const kvs::UInt8 PolygonObject::opacity( const size_t index ) const
+kvs::UInt8 PolygonObject::opacity( const size_t index ) const
 {
-    return( m_opacities[index] );
+    return m_opacities[index];
 }
 
-const kvs::ValueArray<kvs::UInt32>& PolygonObject::connections( void ) const
+const kvs::ValueArray<kvs::UInt32>& PolygonObject::connections() const
 {
-    return( m_connections );
+    return m_connections;
 }
 
-const kvs::ValueArray<kvs::UInt8>& PolygonObject::opacities( void ) const
+const kvs::ValueArray<kvs::UInt8>& PolygonObject::opacities() const
 {
-    return( m_opacities );
+    return m_opacities;
 }
 
 } // end of namespace kvs

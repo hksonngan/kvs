@@ -135,7 +135,7 @@ public:
 
     const bool insideRange( const size_t row_index ) const;
 
-    const ObjectType objectType( void ) const;
+    ObjectType objectType( void ) const;
 };
 
 /*===========================================================================*/

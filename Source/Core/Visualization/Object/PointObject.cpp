@@ -24,10 +24,46 @@ namespace kvs
 
 /*===========================================================================*/
 /**
+ *  @brief  Downcasts to the pointer to the point object.
+ *  @param  object [in] pointer to the object
+ *  @return pointer to the point object
+ */
+/*===========================================================================*/
+kvs::PointObject* PointObject::DownCast( kvs::ObjectBase* object )
+{
+    kvs::GeometryObjectBase* geometry = kvs::GeometryObjectBase::DownCast( object );
+    if ( !geometry ) return NULL;
+
+    const kvs::GeometryObjectBase::GeometryType type = geometry->geometryType();
+    if ( type != kvs::GeometryObjectBase::Point )
+    {
+        kvsMessageError("Input object is not a point object.");
+        return NULL;
+    }
+
+    kvs::PointObject* point = static_cast<kvs::PointObject*>( geometry );
+
+    return point;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Downcasts to the pointer to the point object with 'const'.
+ *  @param  object [in] pointer to the object
+ *  @return pointer to the point object
+ */
+/*===========================================================================*/
+const kvs::PointObject* PointObject::DownCast( const kvs::ObjectBase* object )
+{
+    return PointObject::DownCast( const_cast<kvs::ObjectBase*>( object ) );
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Constructs a new PointObject class.
  */
 /*===========================================================================*/
-PointObject::PointObject( void )
+PointObject::PointObject()
 {
     this->setSize( 1 );
 }
@@ -99,42 +135,6 @@ PointObject::PointObject( const kvs::PolygonObject& polygon )
 
 /*===========================================================================*/
 /**
- *  @brief  Downcasts to the pointer to the point object.
- *  @param  object [in] pointer to the object
- *  @return pointer to the point object
- */
-/*===========================================================================*/
-kvs::PointObject* PointObject::DownCast( kvs::ObjectBase* object )
-{
-    kvs::GeometryObjectBase* geometry = kvs::GeometryObjectBase::DownCast( object );
-    if ( !geometry ) return( NULL );
-
-    const kvs::GeometryObjectBase::GeometryType type = geometry->geometryType();
-    if ( type != kvs::GeometryObjectBase::Point )
-    {
-        kvsMessageError("Input object is not a point object.");
-        return( NULL );
-    }
-
-    kvs::PointObject* point = static_cast<kvs::PointObject*>( geometry );
-
-    return( point );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Downcasts to the pointer to the point object with 'const'.
- *  @param  object [in] pointer to the object
- *  @return pointer to the point object
- */
-/*===========================================================================*/
-const kvs::PointObject* PointObject::DownCast( const kvs::ObjectBase* object )
-{
-    return( PointObject::DownCast( const_cast<kvs::ObjectBase*>( object ) ) );
-}
-
-/*===========================================================================*/
-/**
  *  @brief  '<<' operator
  */
 /*===========================================================================*/
@@ -150,7 +150,7 @@ std::ostream& operator << ( std::ostream& os, const PointObject& object )
 #endif
     os << "Number of sizes:  " << object.nsizes();
 
-    return( os );
+    return os;
 }
 
 /*===========================================================================*/
@@ -434,7 +434,7 @@ void PointObject::deepCopy( const PointObject& other )
  *  @brief  Clear the point object.
  */
 /*===========================================================================*/
-void PointObject::clear( void )
+void PointObject::clear()
 {
     BaseClass::clear();
     m_sizes.release();
@@ -469,9 +469,9 @@ void PointObject::setSize( const kvs::Real32 size )
  *  @return geometry type
  */
 /*===========================================================================*/
-const PointObject::BaseClass::GeometryType PointObject::geometryType( void ) const
+PointObject::BaseClass::GeometryType PointObject::geometryType() const
 {
-    return( BaseClass::Point );
+    return BaseClass::Point;
 }
 
 /*===========================================================================*/
@@ -480,9 +480,9 @@ const PointObject::BaseClass::GeometryType PointObject::geometryType( void ) con
  *  @return number of size values
  */
 /*===========================================================================*/
-const size_t PointObject::nsizes( void ) const
+size_t PointObject::nsizes() const
 {
-    return( m_sizes.size() );
+    return m_sizes.size();
 }
 
 /*===========================================================================*/
@@ -492,9 +492,9 @@ const size_t PointObject::nsizes( void ) const
  *  @return size value
  */
 /*===========================================================================*/
-const kvs::Real32 PointObject::size( const size_t index ) const
+kvs::Real32 PointObject::size( const size_t index ) const
 {
-    return( m_sizes[index] );
+    return m_sizes[index];
 }
 
 /*===========================================================================*/
@@ -503,9 +503,9 @@ const kvs::Real32 PointObject::size( const size_t index ) const
  *  @return size value array
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::Real32>& PointObject::sizes( void ) const
+const kvs::ValueArray<kvs::Real32>& PointObject::sizes() const
 {
-    return( m_sizes );
+    return m_sizes;
 }
 
 } // end of namespace kvs

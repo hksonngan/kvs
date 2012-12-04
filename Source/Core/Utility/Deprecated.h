@@ -35,7 +35,7 @@
 
 // Other compiler.
 #else
-#    define KVS_DEPRECATED( function, message ) function
+#    define KVS_DEPRECATED( function ) function
 #endif
 
 #endif // KVS__DEPRECATED_H_INCLUDE

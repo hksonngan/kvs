@@ -21,6 +21,7 @@
 #include <kvs/Vector3>
 #include <kvs/RGBColor>
 #include <kvs/Module>
+#include <kvs/Deprecated>
 
 
 namespace kvs
@@ -33,10 +34,7 @@ namespace kvs
 /*==========================================================================*/
 class PolygonObject : public kvs::GeometryObjectBase
 {
-    // Class name.
     kvsClassName( kvs::PolygonObject );
-
-    // Module information.
     kvsModuleCategory( Object );
     kvsModuleBaseClass( kvs::GeometryObjectBase );
 
@@ -67,225 +65,194 @@ public:
 
 protected:
 
-    PolygonType                  m_polygon_type; ///< polygon type
-    ColorType                    m_color_type;   ///< polygon color type
-    NormalType                   m_normal_type;  ///< polygon normal type
-    kvs::ValueArray<kvs::UInt32> m_connections;  ///< connection array
-    kvs::ValueArray<kvs::UInt8>  m_opacities;    ///< opacity array
-
-public:
-
-    PolygonObject( void );
-
-#if KVS_ENABLE_DEPRECATED
-    PolygonObject(
-        const kvs::ValueArray<kvs::Real32>& coords,
-        const kvs::ValueArray<kvs::UInt32>& connections,
-        const kvs::ValueArray<kvs::UInt8>&  colors,
-        const kvs::ValueArray<kvs::UInt8>&  opacities,
-        const kvs::ValueArray<kvs::Real32>& normals,
-        const PolygonType                   polygon_type,
-        const ColorType                     color_type,
-        const NormalType                    normal_type )
-    {
-        this->setCoords( coords );
-        this->setColors( colors );
-        this->setNormals( normals );
-        this->setPolygonType( polygon_type );
-        this->setColorType( color_type );
-        this->setNormalType( normal_type );
-        this->setConnections( connections );
-        this->setOpacities( opacities );
-    }
-
-    PolygonObject(
-        const kvs::ValueArray<kvs::Real32>& coords,
-        const kvs::ValueArray<kvs::UInt32>& connections,
-        const kvs::ValueArray<kvs::UInt8>&  colors,
-        const kvs::UInt8&                   opacity,
-        const kvs::ValueArray<kvs::Real32>& normals,
-        const PolygonType                   polygon_type,
-        const ColorType                     color_type,
-        const NormalType                    normal_type )
-    {
-        this->setCoords( coords );
-        this->setColors( colors );
-        this->setNormals( normals );
-        this->setPolygonType( polygon_type );
-        this->setColorType( color_type );
-        this->setNormalType( normal_type );
-        this->setConnections( connections );
-        this->setOpacity( opacity );
-    }
-
-    PolygonObject(
-        const kvs::ValueArray<kvs::Real32>& coords,
-        const kvs::ValueArray<kvs::UInt32>& connections,
-        const kvs::RGBColor&                color,
-        const kvs::ValueArray<kvs::UInt8>&  opacities,
-        const kvs::ValueArray<kvs::Real32>& normals,
-        const PolygonType                   polygon_type,
-        const NormalType                    normal_type )
-    {
-        this->setCoords( coords );
-        this->setColor( color );
-        this->setNormals( normals );
-        this->setPolygonType( polygon_type );
-        this->setColorType( PolygonObject::PolygonColor );
-        this->setNormalType( normal_type );
-        this->setConnections( connections );
-        this->setOpacities( opacities );
-    }
-
-    PolygonObject(
-        const kvs::ValueArray<kvs::Real32>& coords,
-        const kvs::ValueArray<kvs::UInt32>& connections,
-        const kvs::RGBColor&                color,
-        const kvs::UInt8&                   opacity,
-        const kvs::ValueArray<kvs::Real32>& normals,
-        const PolygonType                   polygon_type,
-        const NormalType                    normal_type )
-    {
-        this->setCoords( coords );
-        this->setColor( color );
-        this->setNormals( normals );
-        this->setPolygonType( polygon_type );
-        this->setColorType( PolygonObject::PolygonColor );
-        this->setNormalType( normal_type );
-        this->setConnections( connections );
-        this->setOpacity( opacity );
-    }
-
-    PolygonObject(
-        const kvs::ValueArray<kvs::Real32>& coords,
-        const kvs::ValueArray<kvs::UInt8>&  colors,
-        const kvs::ValueArray<kvs::UInt8>&  opacities,
-        const kvs::ValueArray<kvs::Real32>& normals,
-        const PolygonType                   polygon_type,
-        const ColorType                     color_type,
-        const NormalType                    normal_type )
-    {
-        this->setCoords( coords );
-        this->setColors( colors );
-        this->setNormals( normals );
-        this->setPolygonType( polygon_type );
-        this->setColorType( color_type );
-        this->setNormalType( normal_type );
-        this->setOpacities( opacities );
-    }
-
-    PolygonObject(
-        const kvs::ValueArray<kvs::Real32>& coords,
-        const kvs::ValueArray<kvs::UInt8>&  colors,
-        const kvs::UInt8&                   opacity,
-        const kvs::ValueArray<kvs::Real32>& normals,
-        const PolygonType                   polygon_type,
-        const ColorType                     color_type,
-        const NormalType                    normal_type )
-    {
-        this->setCoords( coords );
-        this->setColors( colors );
-        this->setNormals( normals );
-        this->setPolygonType( polygon_type );
-        this->setColorType( color_type );
-        this->setNormalType( normal_type );
-        this->setOpacity( opacity );
-    }
-
-    PolygonObject(
-        const kvs::ValueArray<kvs::Real32>& coords,
-        const kvs::RGBColor&                color,
-        const kvs::ValueArray<kvs::UInt8>&  opacities,
-        const kvs::ValueArray<kvs::Real32>& normals,
-        const PolygonType                   polygon_type,
-        const NormalType                    normal_type )
-    {
-        this->setCoords( coords );
-        this->setColor( color );
-        this->setNormals( normals );
-        this->setPolygonType( polygon_type );
-        this->setColorType( PolygonObject::PolygonColor );
-        this->setNormalType( normal_type );
-        this->setOpacities( opacities );
-    }
-
-    PolygonObject(
-        const kvs::ValueArray<kvs::Real32>& coords,
-        const kvs::RGBColor&                color,
-        const kvs::UInt8&                   opacity,
-        const kvs::ValueArray<kvs::Real32>& normals,
-        const PolygonType                   polygon_type,
-        const NormalType                    normal_type )
-    {
-        this->setCoords( coords );
-        this->setColor( color );
-        this->setNormals( normals );
-        this->setPolygonType( polygon_type );
-        this->setColorType( PolygonObject::PolygonColor );
-        this->setNormalType( normal_type );
-        this->setOpacity( opacity );
-    }
-#endif
+    PolygonType m_polygon_type; ///< polygon type
+    ColorType m_color_type; ///< polygon color type
+    NormalType m_normal_type; ///< polygon normal type
+    kvs::ValueArray<kvs::UInt32> m_connections; ///< connection array
+    kvs::ValueArray<kvs::UInt8> m_opacities; ///< opacity array
 
 public:
 
     static kvs::PolygonObject* DownCast( kvs::ObjectBase* object );
-
     static const kvs::PolygonObject* DownCast( const kvs::ObjectBase* object );
 
 public:
 
+    PolygonObject();
+
     friend std::ostream& operator << ( std::ostream& os, const PolygonObject& object );
 
-public:
-
     void shallowCopy( const PolygonObject& object );
-
     void deepCopy( const PolygonObject& object );
-
-    void clear( void );
-
-public:
+    void clear();
 
     void setPolygonType( const PolygonType polygon_type );
-
     void setColorType( const ColorType color_type );
-
     void setNormalType( const NormalType normal_type );
-
-public:
-
     void setConnections( const kvs::ValueArray<kvs::UInt32>& connections );
-
     void setColor( const kvs::RGBColor& color );
-
     void setOpacities( const kvs::ValueArray<kvs::UInt8>& opacities );
-
     void setOpacity( const kvs::UInt8 opacity );
 
-public:
+    BaseClass::GeometryType geometryType() const;
+    PolygonType polygonType() const;
+    ColorType colorType() const;
+    NormalType normalType() const;
+    size_t nconnections() const;
+    size_t nopacities() const;
+    kvs::UInt8 opacity( const size_t index = 0 ) const;
 
-    const BaseClass::GeometryType geometryType( void ) const;
-
-    const PolygonType polygonType( void ) const;
-
-    const ColorType colorType( void ) const;
-
-    const NormalType normalType( void ) const;
-
-    const size_t nconnections( void ) const;
-
-    const size_t nopacities( void ) const;
+    const kvs::ValueArray<kvs::UInt32>& connections() const;
+    const kvs::ValueArray<kvs::UInt8>& opacities() const;
 
 public:
+    KVS_DEPRECATED( PolygonObject(
+                        const kvs::ValueArray<kvs::Real32>& coords,
+                        const kvs::ValueArray<kvs::UInt32>& connections,
+                        const kvs::ValueArray<kvs::UInt8>& colors,
+                        const kvs::ValueArray<kvs::UInt8>& opacities,
+                        const kvs::ValueArray<kvs::Real32>& normals,
+                        const PolygonType polygon_type,
+                        const ColorType color_type,
+                        const NormalType normal_type ) )
+    {
+        this->setCoords( coords );
+        this->setColors( colors );
+        this->setNormals( normals );
+        this->setPolygonType( polygon_type );
+        this->setColorType( color_type );
+        this->setNormalType( normal_type );
+        this->setConnections( connections );
+        this->setOpacities( opacities );
+    }
 
-    const kvs::UInt8 opacity( const size_t index = 0 ) const;
+    KVS_DEPRECATED( PolygonObject(
+                        const kvs::ValueArray<kvs::Real32>& coords,
+                        const kvs::ValueArray<kvs::UInt32>& connections,
+                        const kvs::ValueArray<kvs::UInt8>& colors,
+                        const kvs::UInt8& opacity,
+                        const kvs::ValueArray<kvs::Real32>& normals,
+                        const PolygonType polygon_type,
+                        const ColorType color_type,
+                        const NormalType normal_type ) )
+    {
+        this->setCoords( coords );
+        this->setColors( colors );
+        this->setNormals( normals );
+        this->setPolygonType( polygon_type );
+        this->setColorType( color_type );
+        this->setNormalType( normal_type );
+        this->setConnections( connections );
+        this->setOpacity( opacity );
+    }
 
-public:
+    KVS_DEPRECATED( PolygonObject(
+                        const kvs::ValueArray<kvs::Real32>& coords,
+                        const kvs::ValueArray<kvs::UInt32>& connections,
+                        const kvs::RGBColor& color,
+                        const kvs::ValueArray<kvs::UInt8>& opacities,
+                        const kvs::ValueArray<kvs::Real32>& normals,
+                        const PolygonType polygon_type,
+                        const NormalType normal_type ) )
+    {
+        this->setCoords( coords );
+        this->setColor( color );
+        this->setNormals( normals );
+        this->setPolygonType( polygon_type );
+        this->setColorType( PolygonObject::PolygonColor );
+        this->setNormalType( normal_type );
+        this->setConnections( connections );
+        this->setOpacities( opacities );
+    }
 
-    const kvs::ValueArray<kvs::UInt32>& connections( void ) const;
+    KVS_DEPRECATED( PolygonObject(
+                        const kvs::ValueArray<kvs::Real32>& coords,
+                        const kvs::ValueArray<kvs::UInt32>& connections,
+                        const kvs::RGBColor& color,
+                        const kvs::UInt8& opacity,
+                        const kvs::ValueArray<kvs::Real32>& normals,
+                        const PolygonType polygon_type,
+                        const NormalType normal_type ) )
+    {
+        this->setCoords( coords );
+        this->setColor( color );
+        this->setNormals( normals );
+        this->setPolygonType( polygon_type );
+        this->setColorType( PolygonObject::PolygonColor );
+        this->setNormalType( normal_type );
+        this->setConnections( connections );
+        this->setOpacity( opacity );
+    }
 
-    const kvs::ValueArray<kvs::UInt8>& opacities( void ) const;
+    KVS_DEPRECATED( PolygonObject(
+                        const kvs::ValueArray<kvs::Real32>& coords,
+                        const kvs::ValueArray<kvs::UInt8>& colors,
+                        const kvs::ValueArray<kvs::UInt8>& opacities,
+                        const kvs::ValueArray<kvs::Real32>& normals,
+                        const PolygonType polygon_type,
+                        const ColorType color_type,
+                        const NormalType normal_type ) )
+    {
+        this->setCoords( coords );
+        this->setColors( colors );
+        this->setNormals( normals );
+        this->setPolygonType( polygon_type );
+        this->setColorType( color_type );
+        this->setNormalType( normal_type );
+        this->setOpacities( opacities );
+    }
+
+    KVS_DEPRECATED( PolygonObject(
+                        const kvs::ValueArray<kvs::Real32>& coords,
+                        const kvs::ValueArray<kvs::UInt8>& colors,
+                        const kvs::UInt8& opacity,
+                        const kvs::ValueArray<kvs::Real32>& normals,
+                        const PolygonType polygon_type,
+                        const ColorType color_type,
+                        const NormalType normal_type ) )
+    {
+        this->setCoords( coords );
+        this->setColors( colors );
+        this->setNormals( normals );
+        this->setPolygonType( polygon_type );
+        this->setColorType( color_type );
+        this->setNormalType( normal_type );
+        this->setOpacity( opacity );
+    }
+
+    KVS_DEPRECATED( PolygonObject(
+                        const kvs::ValueArray<kvs::Real32>& coords,
+                        const kvs::RGBColor& color,
+                        const kvs::ValueArray<kvs::UInt8>& opacities,
+                        const kvs::ValueArray<kvs::Real32>& normals,
+                        const PolygonType polygon_type,
+                        const NormalType normal_type ) )
+    {
+        this->setCoords( coords );
+        this->setColor( color );
+        this->setNormals( normals );
+        this->setPolygonType( polygon_type );
+        this->setColorType( PolygonObject::PolygonColor );
+        this->setNormalType( normal_type );
+        this->setOpacities( opacities );
+    }
+
+    KVS_DEPRECATED( PolygonObject(
+                        const kvs::ValueArray<kvs::Real32>& coords,
+                        const kvs::RGBColor& color,
+                        const kvs::UInt8& opacity,
+                        const kvs::ValueArray<kvs::Real32>& normals,
+                        const PolygonType polygon_type,
+                        const NormalType normal_type ) )
+    {
+        this->setCoords( coords );
+        this->setColor( color );
+        this->setNormals( normals );
+        this->setPolygonType( polygon_type );
+        this->setColorType( PolygonObject::PolygonColor );
+        this->setNormalType( normal_type );
+        this->setOpacity( opacity );
+    }
 };
 
 } // end of namespace kvs

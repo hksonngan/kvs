@@ -23,6 +23,7 @@
 #include <kvs/Vector3>
 #include <kvs/RGBColor>
 #include <kvs/Module>
+#include <kvs/Deprecated>
 
 
 namespace kvs
@@ -37,10 +38,7 @@ class PolygonObject;
 /*===========================================================================*/
 class LineObject : public kvs::GeometryObjectBase
 {
-    // Class name.
     kvsClassName( kvs::LineObject );
-
-    // Module information.
     kvsModuleCategory( Object );
     kvsModuleBaseClass( kvs::GeometryObjectBase );
 
@@ -64,23 +62,54 @@ public:
 
 protected:
 
-    LineType                     m_line_type;   ///< line type
-    ColorType                    m_color_type;  ///< line color type
+    LineType m_line_type; ///< line type
+    ColorType m_color_type; ///< line color type
     kvs::ValueArray<kvs::UInt32> m_connections; ///< connection array
-    kvs::ValueArray<kvs::Real32> m_sizes;       ///< size array
+    kvs::ValueArray<kvs::Real32> m_sizes; ///< size array
 
 public:
 
-    LineObject( void );
+    static kvs::LineObject* DownCast( kvs::ObjectBase* object );
+    static const kvs::LineObject* DownCast( const kvs::ObjectBase* object );
 
-#if KVS_ENABLE_DEPRECATED
-    LineObject(
-        const kvs::ValueArray<kvs::Real32>& coords,
-        const kvs::ValueArray<kvs::UInt32>& connections,
-        const kvs::ValueArray<kvs::UInt8>&  colors,
-        const kvs::ValueArray<kvs::Real32>& sizes,
-        const LineType                      line_type,
-        const ColorType                     color_type )
+public:
+
+    LineObject();
+    explicit LineObject( const kvs::PolygonObject& polygon );
+
+    friend std::ostream& operator << ( std::ostream& os, const LineObject& object );
+
+    void shallowCopy( const LineObject& object );
+    void deepCopy( const LineObject& object );
+    void clear();
+
+    void setLineType( const LineType line_type );
+    void setColorType( const ColorType color_type );
+    void setConnections( const kvs::ValueArray<kvs::UInt32>& connections );
+    void setColor( const kvs::RGBColor& color );
+    void setSizes( const kvs::ValueArray<kvs::Real32>& sizes );
+    void setSize( const kvs::Real32 size );
+
+    BaseClass::GeometryType geometryType() const;
+    LineType lineType() const;
+    ColorType colorType() const;
+    size_t nconnections() const;
+    size_t nsizes() const;
+
+    const kvs::Vector2ui connection( const size_t index = 0 ) const;
+    kvs::Real32 size( const size_t index = 0 ) const;
+
+    const kvs::ValueArray<kvs::UInt32>& connections() const;
+    const kvs::ValueArray<kvs::Real32>& sizes() const;
+
+public:
+    KVS_DEPRECATED( LineObject(
+                        const kvs::ValueArray<kvs::Real32>& coords,
+                        const kvs::ValueArray<kvs::UInt32>& connections,
+                        const kvs::ValueArray<kvs::UInt8>& colors,
+                        const kvs::ValueArray<kvs::Real32>& sizes,
+                        const LineType line_type,
+                        const ColorType color_type ) )
     {
         this->setCoords( coords );
         this->setColors( colors );
@@ -90,13 +119,13 @@ public:
         this->setSizes( sizes );
     }
 
-    LineObject(
-        const kvs::ValueArray<kvs::Real32>& coords,
-        const kvs::ValueArray<kvs::UInt32>& connections,
-        const kvs::ValueArray<kvs::UInt8>&  colors,
-        const kvs::Real32                   size,
-        const LineType                      line_type,
-        const ColorType                     color_type )
+    KVS_DEPRECATED( LineObject(
+                        const kvs::ValueArray<kvs::Real32>& coords,
+                        const kvs::ValueArray<kvs::UInt32>& connections,
+                        const kvs::ValueArray<kvs::UInt8>& colors,
+                        const kvs::Real32 size,
+                        const LineType line_type,
+                        const ColorType color_type ) )
     {
         this->setCoords( coords );
         this->setColors( colors );
@@ -106,12 +135,12 @@ public:
         this->setSize( size );
     }
 
-    LineObject(
-        const kvs::ValueArray<kvs::Real32>& coords,
-        const kvs::ValueArray<kvs::UInt32>& connections,
-        const kvs::RGBColor&                color,
-        const kvs::ValueArray<kvs::Real32>& sizes,
-        const LineType                      line_type )
+    KVS_DEPRECATED( LineObject(
+                        const kvs::ValueArray<kvs::Real32>& coords,
+                        const kvs::ValueArray<kvs::UInt32>& connections,
+                        const kvs::RGBColor& color,
+                        const kvs::ValueArray<kvs::Real32>& sizes,
+                        const LineType line_type ) )
     {
         this->setCoords( coords );
         this->setColor( color );
@@ -121,12 +150,12 @@ public:
         this->setSizes( sizes );
     }
 
-    LineObject(
-        const kvs::ValueArray<kvs::Real32>& coords,
-        const kvs::ValueArray<kvs::UInt32>& connections,
-        const kvs::RGBColor&                color,
-        const kvs::Real32                   size,
-        const LineType                      line_type )
+    KVS_DEPRECATED( LineObject(
+                        const kvs::ValueArray<kvs::Real32>& coords,
+                        const kvs::ValueArray<kvs::UInt32>& connections,
+                        const kvs::RGBColor& color,
+                        const kvs::Real32 size,
+                        const LineType line_type ) )
     {
         this->setCoords( coords );
         this->setColor( color );
@@ -136,11 +165,11 @@ public:
         this->setSize( size );
     }
 
-    LineObject(
-        const kvs::ValueArray<kvs::Real32>& coords,
-        const kvs::ValueArray<kvs::UInt8>&  colors,
-        const kvs::ValueArray<kvs::Real32>& sizes,
-        const ColorType                     color_type )
+    KVS_DEPRECATED( LineObject(
+                        const kvs::ValueArray<kvs::Real32>& coords,
+                        const kvs::ValueArray<kvs::UInt8>& colors,
+                        const kvs::ValueArray<kvs::Real32>& sizes,
+                        const ColorType color_type ) )
     {
         this->setCoords( coords );
         this->setColors( colors );
@@ -149,11 +178,11 @@ public:
         this->setSizes( sizes );
     }
 
-    LineObject(
-        const kvs::ValueArray<kvs::Real32>& coords,
-        const kvs::ValueArray<kvs::UInt8>&  colors,
-        const kvs::Real32                   size,
-        const ColorType                     color_type )
+    KVS_DEPRECATED( LineObject(
+                        const kvs::ValueArray<kvs::Real32>& coords,
+                        const kvs::ValueArray<kvs::UInt8>& colors,
+                        const kvs::Real32 size,
+                        const ColorType color_type ) )
     {
         this->setCoords( coords );
         this->setColors( colors );
@@ -162,10 +191,10 @@ public:
         this->setSize( size );
     }
 
-    LineObject(
-        const kvs::ValueArray<kvs::Real32>& coords,
-        const kvs::RGBColor&                color,
-        const kvs::ValueArray<kvs::Real32>& sizes )
+    KVS_DEPRECATED( LineObject(
+                        const kvs::ValueArray<kvs::Real32>& coords,
+                        const kvs::RGBColor& color,
+                        const kvs::ValueArray<kvs::Real32>& sizes ) )
     {
         this->setCoords( coords );
         this->setColor( color );
@@ -174,10 +203,10 @@ public:
         this->setSizes( sizes );
     }
 
-    LineObject(
-        const kvs::ValueArray<kvs::Real32>& coords,
-        const kvs::RGBColor&                color,
-        const kvs::Real32                   size )
+    KVS_DEPRECATED( LineObject(
+                        const kvs::ValueArray<kvs::Real32>& coords,
+                        const kvs::RGBColor& color,
+                        const kvs::Real32 size ) )
     {
         this->setCoords( coords );
         this->setColor( color );
@@ -186,8 +215,8 @@ public:
         this->setSize( size );
     }
 
-    LineObject(
-        const kvs::ValueArray<kvs::Real32>& coords )
+    KVS_DEPRECATED( LineObject(
+                        const kvs::ValueArray<kvs::Real32>& coords ) )
     {
         this->setCoords( coords );
         this->setColor( kvs::RGBColor( 255, 255, 255 ) );
@@ -195,69 +224,7 @@ public:
         this->setColorType( LineObject::LineColor );
         this->setSize( 1.0f );
     }
-#endif
 
-#if KVS_ENABLE_DEPRECATED
-    LineObject( const kvs::PolygonObject& polygon );
-#else
-    explicit LineObject( const kvs::PolygonObject& polygon );
-#endif
-
-public:
-
-    static kvs::LineObject* DownCast( kvs::ObjectBase* object );
-
-    static const kvs::LineObject* DownCast( const kvs::ObjectBase* object );
-
-public:
-
-    friend std::ostream& operator << ( std::ostream& os, const LineObject& object );
-
-public:
-
-    void shallowCopy( const LineObject& object );
-
-    void deepCopy( const LineObject& object );
-
-    void clear( void );
-
-public:
-
-    void setLineType( const LineType line_type );
-
-    void setColorType( const ColorType color_type );
-
-    void setConnections( const kvs::ValueArray<kvs::UInt32>& connections );
-
-    void setColor( const kvs::RGBColor& color );
-
-    void setSizes( const kvs::ValueArray<kvs::Real32>& sizes );
-
-    void setSize( const kvs::Real32 size );
-
-public:
-
-    const BaseClass::GeometryType geometryType( void ) const;
-
-    const LineType lineType( void ) const;
-
-    const ColorType colorType( void ) const;
-
-    const size_t nconnections( void ) const;
-
-    const size_t nsizes( void ) const;
-
-public:
-
-    const kvs::Vector2ui connection( const size_t index = 0 ) const;
-
-    const kvs::Real32 size( const size_t index = 0 ) const;
-
-public:
-
-    const kvs::ValueArray<kvs::UInt32>& connections( void ) const;
-
-    const kvs::ValueArray<kvs::Real32>& sizes( void ) const;
 };
 
 } // end of namespace kvs

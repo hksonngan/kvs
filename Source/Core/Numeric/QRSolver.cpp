@@ -89,7 +89,7 @@ QRSolver<T>& QRSolver<T>::operator = ( const kvs::Vector<T>& v )
 template <typename T>
 const kvs::Vector<T>& QRSolver<T>::solve( const kvs::Vector<T>& b )
 {
-    int column = m_decomposer.R().ncolumns();
+    int column = m_decomposer.R().columnSize();
     kvs::Vector<T> x( b.size() );
 
     // From Q^t * b.

@@ -61,7 +61,7 @@ private:
 
 public:
 
-    const ObjectType objectType( void ) const;
+    ObjectType objectType( void ) const;
 
     int insert( kvs::ObjectBase* obj );
 

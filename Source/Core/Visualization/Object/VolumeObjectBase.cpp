@@ -132,7 +132,7 @@ void VolumeObjectBase::setMinMaxValues(
 }
 
 
-const kvs::ObjectBase::ObjectType VolumeObjectBase::objectType( void ) const
+kvs::ObjectBase::ObjectType VolumeObjectBase::objectType( void ) const
 {
     return( kvs::ObjectBase::Volume );
 }

@@ -47,7 +47,7 @@ ObjectBase::ObjectBase( const bool collision ):
  *  @brief  Destructs the ObjectBase class.
  */
 /*===========================================================================*/
-ObjectBase::~ObjectBase( void )
+ObjectBase::~ObjectBase()
 {
 }
 
@@ -74,7 +74,7 @@ ObjectBase& ObjectBase::operator = ( const ObjectBase& object )
 #endif
     m_show_flg = object.m_show_flg;
 
-    return( *this );
+    return *this;
 }
 
 /*===========================================================================*/
@@ -99,7 +99,7 @@ std::ostream& operator << ( std::ostream& os, const ObjectBase& object )
     os << "Normalize parameter:  " << object.normalize();
     os.flags( flags );
 
-    return( os );
+    return os;
 }
 
 /*===========================================================================*/
@@ -178,7 +178,7 @@ void ObjectBase::setFace( const Face face )
  *  @brief  Shows the object.
  */
 /*===========================================================================*/
-void ObjectBase::show( void )
+void ObjectBase::show()
 {
     m_show_flg = true;
 }
@@ -188,7 +188,7 @@ void ObjectBase::show( void )
  *  @brief  Hides the object.
  */
 /*===========================================================================*/
-void ObjectBase::hide( void )
+void ObjectBase::hide()
 {
     m_show_flg = false;
 }
@@ -199,9 +199,9 @@ void ObjectBase::hide( void )
  *  @return  object name
  */
 /*===========================================================================*/
-const std::string& ObjectBase::name( void ) const
+const std::string& ObjectBase::name() const
 {
-    return( m_name );
+    return m_name;
 }
 
 /*===========================================================================*/
@@ -210,9 +210,9 @@ const std::string& ObjectBase::name( void ) const
  *  @return min object coordinate value
  */
 /*===========================================================================*/
-const kvs::Vector3f& ObjectBase::minObjectCoord( void ) const
+const kvs::Vector3f& ObjectBase::minObjectCoord() const
 {
-    return( m_min_object_coord );
+    return m_min_object_coord;
 }
 
 /*===========================================================================*/
@@ -221,9 +221,9 @@ const kvs::Vector3f& ObjectBase::minObjectCoord( void ) const
  *  @return max object coordinate value
  */
 /*===========================================================================*/
-const kvs::Vector3f& ObjectBase::maxObjectCoord( void ) const
+const kvs::Vector3f& ObjectBase::maxObjectCoord() const
 {
-    return( m_max_object_coord );
+    return m_max_object_coord;
 }
 
 /*===========================================================================*/
@@ -232,9 +232,9 @@ const kvs::Vector3f& ObjectBase::maxObjectCoord( void ) const
  *  @return min external coordinate value
  */
 /*===========================================================================*/
-const kvs::Vector3f& ObjectBase::minExternalCoord( void ) const
+const kvs::Vector3f& ObjectBase::minExternalCoord() const
 {
-    return( m_min_external_coord );
+    return m_min_external_coord;
 }
 
 /*===========================================================================*/
@@ -243,9 +243,9 @@ const kvs::Vector3f& ObjectBase::minExternalCoord( void ) const
  *  @return max external coordinate value
  */
 /*===========================================================================*/
-const kvs::Vector3f& ObjectBase::maxExternalCoord( void ) const
+const kvs::Vector3f& ObjectBase::maxExternalCoord() const
 {
-    return( m_max_external_coord );
+    return m_max_external_coord;
 }
 
 /*===========================================================================*/
@@ -254,9 +254,9 @@ const kvs::Vector3f& ObjectBase::maxExternalCoord( void ) const
  *  @return true, if the object has the min/max object coordinates.
  */
 /*===========================================================================*/
-const bool ObjectBase::hasMinMaxObjectCoords( void ) const
+bool ObjectBase::hasMinMaxObjectCoords() const
 {
-    return( m_has_min_max_object_coords );
+    return m_has_min_max_object_coords;
 }
 
 /*===========================================================================*/
@@ -265,9 +265,9 @@ const bool ObjectBase::hasMinMaxObjectCoords( void ) const
  *  @return true, if the object has the min/max external coordinates.
  */
 /*===========================================================================*/
-const bool ObjectBase::hasMinMaxExternalCoords( void ) const
+bool ObjectBase::hasMinMaxExternalCoords() const
 {
-    return( m_has_min_max_external_coords );
+    return m_has_min_max_external_coords;
 }
 
 /*===========================================================================*/
@@ -276,9 +276,9 @@ const bool ObjectBase::hasMinMaxExternalCoords( void ) const
  *  @return coordinate value of the object center
  */
 /*===========================================================================*/
-const kvs::Vector3f& ObjectBase::objectCenter( void ) const
+const kvs::Vector3f& ObjectBase::objectCenter() const
 {
-    return( m_object_center );
+    return m_object_center;
 }
 
 /*===========================================================================*/
@@ -287,9 +287,9 @@ const kvs::Vector3f& ObjectBase::objectCenter( void ) const
  *  @return object position in the external coordinate
  */
 /*===========================================================================*/
-const kvs::Vector3f& ObjectBase::externalPosition( void ) const
+const kvs::Vector3f& ObjectBase::externalPosition() const
 {
-    return( m_external_position );
+    return m_external_position;
 }
 
 /*===========================================================================*/
@@ -298,9 +298,9 @@ const kvs::Vector3f& ObjectBase::externalPosition( void ) const
  *  @return normalize vector
  */
 /*===========================================================================*/
-const kvs::Vector3f& ObjectBase::normalize( void ) const
+const kvs::Vector3f& ObjectBase::normalize() const
 {
-    return( m_normalize );
+    return m_normalize;
 }
 
 /*===========================================================================*/
@@ -309,9 +309,9 @@ const kvs::Vector3f& ObjectBase::normalize( void ) const
  *  @return true, if the object is shown.
  */
 /*===========================================================================*/
-const bool ObjectBase::isShown( void ) const
+bool ObjectBase::isShown() const
 {
-    return( m_show_flg );
+    return m_show_flg;
 }
 #if KVS_ENABLE_DEPRECATED
 /*===========================================================================*/
@@ -320,9 +320,9 @@ const bool ObjectBase::isShown( void ) const
  *  @return object material
  */
 /*===========================================================================*/
-const kvs::Material& ObjectBase::material( void ) const
+const kvs::Material& ObjectBase::material() const
 {
-    return( m_material );
+    return m_material;
 }
 #endif
 /*===========================================================================*/
@@ -351,7 +351,7 @@ const kvs::Vector2f ObjectBase::positionInDevice(
     }
     glPopMatrix();
 
-    return( ret );
+    return ret;
 }
 
 /*===========================================================================*/
@@ -381,9 +381,9 @@ const kvs::Vector3f ObjectBase::positionInWorld(
  *  @return object position in the external coordinate
  */
 /*===========================================================================*/
-const kvs::Vector3f& ObjectBase::positionInExternal( void ) const
+const kvs::Vector3f& ObjectBase::positionInExternal() const
 {
-    return( m_external_position );
+    return m_external_position;
 }
 
 /*===========================================================================*/
@@ -391,7 +391,7 @@ const kvs::Vector3f& ObjectBase::positionInExternal( void ) const
  *  @brief  Updates the normalize parameters.
  */
 /*===========================================================================*/
-void ObjectBase::updateNormalizeParameters( void )
+void ObjectBase::updateNormalizeParameters()
 {
     kvs::Vector3f diff_obj = m_max_object_coord - m_min_object_coord;
     kvs::Vector3f diff_ext = m_max_external_coord - m_min_external_coord;
@@ -465,7 +465,7 @@ void ObjectBase::transform(
  *  @brief  Applys the object material.
  */
 /*===========================================================================*/
-void ObjectBase::applyMaterial( void )
+void ObjectBase::applyMaterial()
 {
     m_material.apply();
 }
@@ -543,7 +543,7 @@ bool ObjectBase::collision(
 
     kvs::Vector2f pos_window( p_win.x(), camera->windowHeight() - p_win.y() );
 
-    return( ( pos_window - center ).length() < max_distance );
+    return ( pos_window - center ).length() < max_distance;
 }
 
 /*===========================================================================*/
@@ -602,7 +602,7 @@ bool ObjectBase::collision(
         max_distance = kvs::Math::Max( max_distance, distance );
     }
 
-    return( ( p_world - center ).length() < max_distance );
+    return ( p_world - center ).length() < max_distance;
 }
 
 /*===========================================================================*/
@@ -641,7 +641,7 @@ const kvs::Vector3f ObjectBase::object_to_world_coordinate(
  *  Enable collision detection.
  */
 /*==========================================================================*/
-void ObjectBase::enableCollision( void )
+void ObjectBase::enableCollision()
 {
     m_can_collision = true;
 }
@@ -651,7 +651,7 @@ void ObjectBase::enableCollision( void )
  *  Disable collision detection.
  */
 /*==========================================================================*/
-void ObjectBase::disableCollision( void )
+void ObjectBase::disableCollision()
 {
     m_can_collision = false;
 }
@@ -661,9 +661,9 @@ void ObjectBase::disableCollision( void )
  *  Test whether the collision is detected.
  */
 /*==========================================================================*/
-bool ObjectBase::canCollision( void ) const
+bool ObjectBase::canCollision() const
 {
-    return( m_can_collision );
+    return m_can_collision;
 }
 
 } // end of namespace kvs

@@ -144,7 +144,7 @@ public:
 
 public:
 
-    const ObjectType objectType( void ) const;
+    ObjectType objectType( void ) const;
 
     virtual const VolumeType volumeType( void ) const = 0;
 

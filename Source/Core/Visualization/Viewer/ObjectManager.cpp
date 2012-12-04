@@ -78,7 +78,7 @@ void ObjectManager::insert_root( void )
     m_root = m_object_tree.insert( m_object_tree.begin(), this );
 }
 
-const kvs::ObjectBase::ObjectType ObjectManager::objectType( void ) const
+kvs::ObjectBase::ObjectType ObjectManager::objectType( void ) const
 {
     return( kvs::ObjectBase::ObjectManager );
 }

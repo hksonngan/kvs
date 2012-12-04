@@ -21,15 +21,6 @@ namespace kvs
 
 /*===========================================================================*/
 /**
- *  @brief  Constructs a new GeometryObjectBase class.
- */
-/*===========================================================================*/
-GeometryObjectBase::GeometryObjectBase( void )
-{
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Downcast to GeometryObjectBase.
  *  @param  object [in] pointer to the object base
  *  @return pointer to the geometry object base
@@ -41,12 +32,12 @@ kvs::GeometryObjectBase* GeometryObjectBase::DownCast( kvs::ObjectBase* object )
     if ( type != kvs::ObjectBase::Geometry )
     {
         kvsMessageError("Input object is not a geometry object.");
-        return( NULL );
+        return NULL;
     }
 
     kvs::GeometryObjectBase* geometry = static_cast<kvs::GeometryObjectBase*>( object );
 
-    return( geometry );
+    return geometry;
 }
 
 /*===========================================================================*/
@@ -58,7 +49,16 @@ kvs::GeometryObjectBase* GeometryObjectBase::DownCast( kvs::ObjectBase* object )
 /*===========================================================================*/
 const kvs::GeometryObjectBase* GeometryObjectBase::DownCast( const kvs::ObjectBase* object )
 {
-    return( GeometryObjectBase::DownCast( const_cast<kvs::ObjectBase*>( object ) ) );
+    return GeometryObjectBase::DownCast( const_cast<kvs::ObjectBase*>( object ) );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new GeometryObjectBase class.
+ */
+/*===========================================================================*/
+GeometryObjectBase::GeometryObjectBase()
+{
 }
 
 /*===========================================================================*/
@@ -79,7 +79,7 @@ std::ostream& operator << ( std::ostream& os, const kvs::GeometryObjectBase& obj
     os << "Number of colors:  " << object.ncolors() << std::endl;
     os << "Number of normal vectors:  " << object.nnormals();
 
-    return( os );
+    return os;
 }
 
 /*===========================================================================*/
@@ -115,7 +115,7 @@ void GeometryObjectBase::deepCopy( const GeometryObjectBase& object )
  *  @brief  Clears the object.
  */
 /*===========================================================================*/
-void GeometryObjectBase::clear( void )
+void GeometryObjectBase::clear()
 {
     m_coords.release();
     m_colors.release();
@@ -175,9 +175,9 @@ void GeometryObjectBase::setNormals( const kvs::ValueArray<kvs::Real32>& normals
  *  @return object type
  */
 /*===========================================================================*/
-const kvs::ObjectBase::ObjectType GeometryObjectBase::objectType( void ) const
+kvs::ObjectBase::ObjectType GeometryObjectBase::objectType() const
 {
-    return( kvs::ObjectBase::Geometry );
+    return kvs::ObjectBase::Geometry;
 }
 
 /*===========================================================================*/
@@ -186,10 +186,10 @@ const kvs::ObjectBase::ObjectType GeometryObjectBase::objectType( void ) const
  *  @return number of the vertices
  */
 /*===========================================================================*/
-const size_t GeometryObjectBase::nvertices( void ) const
+size_t GeometryObjectBase::nvertices() const
 {
     const size_t dimension = 3;
-    return( m_coords.size() / dimension );
+    return m_coords.size() / dimension;
 }
 
 /*===========================================================================*/
@@ -198,10 +198,10 @@ const size_t GeometryObjectBase::nvertices( void ) const
  *  @return number of the colors
  */
 /*===========================================================================*/
-const size_t GeometryObjectBase::ncolors( void ) const
+size_t GeometryObjectBase::ncolors() const
 {
     const size_t nchannels = 3;
-    return( m_colors.size() / nchannels );
+    return m_colors.size() / nchannels;
 }
 
 /*===========================================================================*/
@@ -210,10 +210,10 @@ const size_t GeometryObjectBase::ncolors( void ) const
  *  @return number of the normal vectors
  */
 /*===========================================================================*/
-const size_t GeometryObjectBase::nnormals( void ) const
+size_t GeometryObjectBase::nnormals() const
 {
     const size_t dimension = 3;
-    return( m_normals.size() / dimension );
+    return m_normals.size() / dimension;
 }
 
 /*===========================================================================*/
@@ -226,7 +226,7 @@ const size_t GeometryObjectBase::nnormals( void ) const
 const kvs::Vector3f GeometryObjectBase::coord( const size_t index ) const
 {
     const size_t dimension = 3;
-    return( kvs::Vector3f( m_coords.data() + dimension * index ) );
+    return kvs::Vector3f( m_coords.data() + dimension * index );
 }
 
 /*===========================================================================*/
@@ -239,7 +239,7 @@ const kvs::Vector3f GeometryObjectBase::coord( const size_t index ) const
 const kvs::RGBColor GeometryObjectBase::color( const size_t index ) const
 {
     const size_t nchannels = 3;
-    return( kvs::RGBColor( m_colors.data() + nchannels * index ) );
+    return kvs::RGBColor( m_colors.data() + nchannels * index );
 }
 
 /*===========================================================================*/
@@ -252,7 +252,7 @@ const kvs::RGBColor GeometryObjectBase::color( const size_t index ) const
 const kvs::Vector3f GeometryObjectBase::normal( const size_t index ) const
 {
     const size_t dimension = 3;
-    return( kvs::Vector3f( m_normals.data() + dimension * index ) );
+    return kvs::Vector3f( m_normals.data() + dimension * index );
 }
 
 /*===========================================================================*/
@@ -261,9 +261,9 @@ const kvs::Vector3f GeometryObjectBase::normal( const size_t index ) const
  *  @return coordinate value array
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::Real32>& GeometryObjectBase::coords( void ) const
+const kvs::ValueArray<kvs::Real32>& GeometryObjectBase::coords() const
 {
-    return( m_coords );
+    return m_coords;
 }
 
 /*===========================================================================*/
@@ -272,9 +272,9 @@ const kvs::ValueArray<kvs::Real32>& GeometryObjectBase::coords( void ) const
  *  @return color value array
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::UInt8>& GeometryObjectBase::colors( void ) const
+const kvs::ValueArray<kvs::UInt8>& GeometryObjectBase::colors() const
 {
-    return( m_colors );
+    return m_colors;
 }
 
 /*===========================================================================*/
@@ -283,16 +283,16 @@ const kvs::ValueArray<kvs::UInt8>& GeometryObjectBase::colors( void ) const
  *  @return normal vector array
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::Real32>& GeometryObjectBase::normals( void ) const
+const kvs::ValueArray<kvs::Real32>& GeometryObjectBase::normals() const
 {
-    return( m_normals );
+    return m_normals;
 }
 /*==========================================================================*/
 /**
  *  @brief  Updates the min/max coordinates.
  */
 /*==========================================================================*/
-void GeometryObjectBase::updateMinMaxCoords( void )
+void GeometryObjectBase::updateMinMaxCoords()
 {
     this->calculate_min_max_coords();
 }
@@ -302,7 +302,7 @@ void GeometryObjectBase::updateMinMaxCoords( void )
  *  @brief  Calculates the min/max coordinate values.
  */
 /*==========================================================================*/
-void GeometryObjectBase::calculate_min_max_coords( void )
+void GeometryObjectBase::calculate_min_max_coords()
 {
     if ( this->coords().empty() )
         return;

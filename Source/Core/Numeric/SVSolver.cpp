@@ -90,8 +90,8 @@ SVSolver<T>& SVSolver<T>::operator = ( const kvs::Vector<T>& v )
 template <typename T>
 const kvs::Vector<T>& SVSolver<T>::solve( const kvs::Vector<T>& b )
 {
-    int row = m_decomposer.U().nrows();
-    int column = m_decomposer.U().ncolumns();
+    int row = m_decomposer.U().rowSize();
+    int column = m_decomposer.U().columnSize();
     kvs::Vector<T> x( b.size() );
 
     // Editing of the singular values.
@@ -127,7 +127,7 @@ const kvs::Vector<T>& SVSolver<T>::solve( const kvs::Vector<T>& b )
 template <typename T>
 const kvs::Vector<T>& SVSolver<T>::solve( const kvs::Matrix<T>& A, const kvs::Vector<T>& b )
 {
-    KVS_ASSERT( A.ncolumns() == b.size() );
+    KVS_ASSERT( A.columnSize() == b.size() );
 
     // Singular value decomposition.
     m_decomposer.setMatrix( A );

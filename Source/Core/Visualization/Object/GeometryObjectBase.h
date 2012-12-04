@@ -21,6 +21,7 @@
 #include <kvs/Type>
 #include <kvs/Vector3>
 #include <kvs/RGBColor>
+#include <kvs/Deprecated>
 
 
 namespace kvs
@@ -48,130 +49,99 @@ public:
 
 protected:
 
-    kvs::ValueArray<kvs::Real32> m_coords;  ///< vertex array
-    kvs::ValueArray<kvs::UInt8>  m_colors;  ///< color(r,g,b) array
+    kvs::ValueArray<kvs::Real32> m_coords; ///< vertex array
+    kvs::ValueArray<kvs::UInt8> m_colors; ///< color(r,g,b) array
     kvs::ValueArray<kvs::Real32> m_normals; ///< normal array
 
 public:
 
-    GeometryObjectBase( void );
-
-#if KVS_ENABLE_DEPRECATED
-    GeometryObjectBase(
-        const kvs::ValueArray<kvs::Real32>& coords,
-        const kvs::ValueArray<kvs::UInt8>&  colors,
-        const kvs::ValueArray<kvs::Real32>& normals )
-    {
-        this->setCoords( coords );
-        this->setColors( colors );
-        this->setNormals( normals );
-    }
-
-    GeometryObjectBase(
-        const kvs::ValueArray<kvs::Real32>& coords,
-        const kvs::RGBColor&                color,
-        const kvs::ValueArray<kvs::Real32>& normals )
-    {
-        this->setCoords( coords );
-        this->setColor( color );
-        this->setNormals( normals );
-    }
-
-    GeometryObjectBase(
-        const kvs::ValueArray<kvs::Real32>& coords,
-        const kvs::ValueArray<kvs::Real32>& normals )
-    {
-        this->setCoords( coords );
-        this->setNormals( normals );
-    }
-
-    GeometryObjectBase(
-        const kvs::ValueArray<kvs::Real32>& coords,
-        const kvs::ValueArray<kvs::UInt8>&  colors )
-    {
-        this->setCoords( coords );
-        this->setColors( colors );
-    }
-
-    GeometryObjectBase(
-        const kvs::ValueArray<kvs::Real32>& coords,
-        const kvs::RGBColor&                color )
-    {
-        this->setCoords( coords );
-        this->setColor( color );
-    }
-
-    GeometryObjectBase(
-        const kvs::ValueArray<kvs::Real32>& coords )
-    {
-        this->setCoords( coords );
-        this->setColor( kvs::RGBColor( 255, 255, 255 ) );
-    }
-#endif
-
-public:
-
     static kvs::GeometryObjectBase* DownCast( kvs::ObjectBase* object );
-
     static const kvs::GeometryObjectBase* DownCast( const kvs::ObjectBase* object );
 
 public:
 
+    GeometryObjectBase();
+
     friend std::ostream& operator << ( std::ostream& os, const GeometryObjectBase& object );
 
-public:
-
     void shallowCopy( const GeometryObjectBase& object );
-
     void deepCopy( const GeometryObjectBase& object );
-
-    void clear( void );
-
-public:
+    void clear();
 
     void setCoords( const kvs::ValueArray<kvs::Real32>& coords );
-
     void setColors( const kvs::ValueArray<kvs::UInt8>& colors );
-
     void setColor( const kvs::RGBColor& color );
-
     void setNormals( const kvs::ValueArray<kvs::Real32>& normals );
 
-public:
-
-    const ObjectType objectType( void ) const;
-
-    virtual const GeometryType geometryType( void ) const = 0;
-
-    const size_t nvertices( void ) const;
-
-    const size_t ncolors( void ) const;
-
-    const size_t nnormals( void ) const;
-
-public:
+    ObjectType objectType() const;
+    virtual GeometryType geometryType() const = 0;
+    size_t nvertices() const;
+    size_t ncolors() const;
+    size_t nnormals() const;
 
     const kvs::Vector3f coord( const size_t index = 0 ) const;
-
     const kvs::RGBColor color( const size_t index = 0 ) const;
-
     const kvs::Vector3f normal( const size_t index = 0 ) const;
+    const kvs::ValueArray<kvs::Real32>& coords() const;
+    const kvs::ValueArray<kvs::UInt8>& colors() const;
+    const kvs::ValueArray<kvs::Real32>& normals() const;
 
-public:
-
-    const kvs::ValueArray<kvs::Real32>& coords( void ) const;
-
-    const kvs::ValueArray<kvs::UInt8>& colors( void ) const;
-
-    const kvs::ValueArray<kvs::Real32>& normals( void ) const;
-
-public:
-
-    void updateMinMaxCoords( void );
+    void updateMinMaxCoords();
 
 private:
 
-    void calculate_min_max_coords( void );
+    void calculate_min_max_coords();
+
+public:
+    KVS_DEPRECATED( GeometryObjectBase(
+                        const kvs::ValueArray<kvs::Real32>& coords,
+                        const kvs::ValueArray<kvs::UInt8>& colors,
+                        const kvs::ValueArray<kvs::Real32>& normals ) )
+    {
+        this->setCoords( coords );
+        this->setColors( colors );
+        this->setNormals( normals );
+    }
+
+    KVS_DEPRECATED( GeometryObjectBase(
+                        const kvs::ValueArray<kvs::Real32>& coords,
+                        const kvs::RGBColor& color,
+                        const kvs::ValueArray<kvs::Real32>& normals ) )
+    {
+        this->setCoords( coords );
+        this->setColor( color );
+        this->setNormals( normals );
+    }
+
+    KVS_DEPRECATED( GeometryObjectBase(
+                        const kvs::ValueArray<kvs::Real32>& coords,
+                        const kvs::ValueArray<kvs::Real32>& normals ) )
+    {
+        this->setCoords( coords );
+        this->setNormals( normals );
+    }
+
+    KVS_DEPRECATED( GeometryObjectBase(
+                        const kvs::ValueArray<kvs::Real32>& coords,
+                        const kvs::ValueArray<kvs::UInt8>& colors ) )
+    {
+        this->setCoords( coords );
+        this->setColors( colors );
+    }
+
+    KVS_DEPRECATED( GeometryObjectBase(
+                        const kvs::ValueArray<kvs::Real32>& coords, const kvs::RGBColor& color ) )
+    {
+        this->setCoords( coords );
+        this->setColor( color );
+    }
+
+    KVS_DEPRECATED( GeometryObjectBase(
+                        const kvs::ValueArray<kvs::Real32>& coords ) )
+    {
+        this->setCoords( coords );
+        this->setColor( kvs::RGBColor( 255, 255, 255 ) );
+    }
 };
 
 } // end of namespace kvs

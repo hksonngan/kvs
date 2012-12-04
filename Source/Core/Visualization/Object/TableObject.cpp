@@ -616,7 +616,7 @@ const bool TableObject::insideRange( const size_t row_index ) const
  *  @return object type
  */
 /*===========================================================================*/
-const kvs::ObjectBase::ObjectType TableObject::objectType( void ) const
+kvs::ObjectBase::ObjectType TableObject::objectType( void ) const
 {
     return( kvs::ObjectBase::Table );
 }

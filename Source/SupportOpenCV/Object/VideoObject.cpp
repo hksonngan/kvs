@@ -62,7 +62,7 @@ VideoObject::~VideoObject( void )
  *  @return object type
  */
 /*===========================================================================*/
-const kvs::ObjectBase::ObjectType VideoObject::objectType( void ) const
+kvs::ObjectBase::ObjectType VideoObject::objectType( void ) const
 {
     return( kvs::ObjectBase::Image );
 }

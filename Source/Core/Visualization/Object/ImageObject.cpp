@@ -127,7 +127,7 @@ void ImageObject::deepCopy( const ImageObject& other )
  *  @return object type
  */
 /*==========================================================================*/
-const kvs::ObjectBase::ObjectType ImageObject::objectType( void ) const
+kvs::ObjectBase::ObjectType ImageObject::objectType( void ) const
 {
     return( kvs::ObjectBase::Image );
 }

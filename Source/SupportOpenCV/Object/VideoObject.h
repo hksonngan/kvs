@@ -68,7 +68,7 @@ public:
 
 public:
 
-    const ObjectType objectType( void ) const;
+    ObjectType objectType( void ) const;
 
     const int deviceID( void ) const;
 

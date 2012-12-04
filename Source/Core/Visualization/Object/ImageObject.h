@@ -78,7 +78,7 @@ public:
 
 public:
 
-    const ObjectType objectType( void ) const;
+    ObjectType objectType( void ) const;
 
     const ImageObject::PixelType type( void ) const;
 

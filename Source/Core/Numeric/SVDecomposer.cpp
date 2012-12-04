@@ -224,8 +224,8 @@ template <typename T>
 void SVDecomposer<T>::setMatrix( const Matrix<T>& m )
 {
     m_u = m;
-    m_w.setSize( m.ncolumns() );
-    m_v.setSize( m.ncolumns(), m.ncolumns() );
+    m_w.setSize( m.columnSize() );
+    m_v.setSize( m.columnSize(), m.columnSize() );
 }
 
 /*===========================================================================*/
@@ -236,8 +236,8 @@ void SVDecomposer<T>::setMatrix( const Matrix<T>& m )
 template <typename T>
 void SVDecomposer<T>::decompose()
 {
-    int row    = m_u.nrows();
-    int column = m_u.ncolumns();
+    int row    = m_u.rowSize();
+    int column = m_u.columnSize();
 
     kvs::Vector<T> rv1( column );
 
@@ -521,7 +521,7 @@ void SVDecomposer<T>::decompose()
 template <typename T>
 void SVDecomposer<T>::sort( kvs::Matrix<T>* umat, kvs::Matrix<T>* vmat, kvs::Vector<T>* wvec )
 {
-    int dim = umat->nrows();
+    int dim = umat->rowSize();
 
     for( int k = 0; k < dim - 1; k++ )
     {
@@ -559,7 +559,7 @@ void SVDecomposer<T>::sort( kvs::Matrix<T>* umat, kvs::Matrix<T>* vmat, kvs::Vec
 template <typename T>
 void SVDecomposer<T>::correctSingularValues()
 {
-    int column = m_u.ncolumns();
+    int column = m_u.columnSize();
 
     // Editing of the singular values.
     T w_max = m_w[0];

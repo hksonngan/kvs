@@ -21,6 +21,7 @@
 #include <kvs/Vector3>
 #include <kvs/RGBColor>
 #include <kvs/Module>
+#include <kvs/Deprecated>
 
 
 namespace kvs
@@ -36,10 +37,7 @@ class PolygonObject;
 /*==========================================================================*/
 class PointObject : public kvs::GeometryObjectBase
 {
-    // Class name.
     kvsClassName( kvs::PointObject );
-
-    // Module information.
     kvsModuleCategory( Object );
     kvsModuleBaseClass( kvs::GeometryObjectBase );
 
@@ -49,14 +47,37 @@ protected:
 
 public:
 
-    PointObject( void );
+    static kvs::PointObject* DownCast( kvs::ObjectBase* object );
+    static const kvs::PointObject* DownCast( const kvs::ObjectBase* object );
 
-#if KVS_ENABLE_DEPRECATED
-    PointObject(
-        const kvs::ValueArray<kvs::Real32>& coords,
-        const kvs::ValueArray<kvs::UInt8>&  colors,
-        const kvs::ValueArray<kvs::Real32>& normals,
-        const kvs::ValueArray<kvs::Real32>& sizes )
+public:
+
+    PointObject();
+    explicit PointObject( const kvs::LineObject& line );
+    explicit PointObject( const kvs::PolygonObject& polygon );
+
+    friend std::ostream& operator << ( std::ostream& os, const PointObject& object );
+
+    void add( const PointObject& other );
+    void shallowCopy( const PointObject& other );
+    void deepCopy( const PointObject& other );
+    void clear();
+
+    void setSizes( const kvs::ValueArray<kvs::Real32>& sizes );
+    void setSize( const kvs::Real32 size );
+
+    BaseClass::GeometryType geometryType() const;
+    size_t nsizes() const;
+
+    kvs::Real32 size( const size_t index = 0 ) const;
+    const kvs::ValueArray<kvs::Real32>& sizes() const;
+
+public:
+    KVS_DEPRECATED( PointObject(
+                        const kvs::ValueArray<kvs::Real32>& coords,
+                        const kvs::ValueArray<kvs::UInt8>& colors,
+                        const kvs::ValueArray<kvs::Real32>& normals,
+                        const kvs::ValueArray<kvs::Real32>& sizes ) )
     {
         this->setCoords( coords );
         this->setColors( colors );
@@ -64,11 +85,11 @@ public:
         this->setSizes( sizes );
     }
 
-    PointObject(
-        const kvs::ValueArray<kvs::Real32>& coords,
-        const kvs::ValueArray<kvs::UInt8>&  colors,
-        const kvs::ValueArray<kvs::Real32>& normals,
-        const kvs::Real32                   size )
+    KVS_DEPRECATED( PointObject(
+                        const kvs::ValueArray<kvs::Real32>& coords,
+                        const kvs::ValueArray<kvs::UInt8>& colors,
+                        const kvs::ValueArray<kvs::Real32>& normals,
+                        const kvs::Real32 size ) )
     {
         this->setCoords( coords );
         this->setColors( colors );
@@ -76,11 +97,11 @@ public:
         this->setSize( size );
     }
 
-    PointObject(
-        const kvs::ValueArray<kvs::Real32>& coords,
-        const kvs::RGBColor&                color,
-        const kvs::ValueArray<kvs::Real32>& normals,
-        const kvs::ValueArray<kvs::Real32>& sizes )
+    KVS_DEPRECATED( PointObject(
+                        const kvs::ValueArray<kvs::Real32>& coords,
+                        const kvs::RGBColor& color,
+                        const kvs::ValueArray<kvs::Real32>& normals,
+                        const kvs::ValueArray<kvs::Real32>& sizes ) )
     {
         this->setCoords( coords );
         this->setColor( color );
@@ -88,21 +109,21 @@ public:
         this->setSizes( sizes );
     }
 
-    PointObject(
-        const kvs::ValueArray<kvs::Real32>& coords,
-        const kvs::ValueArray<kvs::Real32>& normals,
-        const kvs::ValueArray<kvs::Real32>& sizes )
+    KVS_DEPRECATED( PointObject(
+                        const kvs::ValueArray<kvs::Real32>& coords,
+                        const kvs::ValueArray<kvs::Real32>& normals,
+                        const kvs::ValueArray<kvs::Real32>& sizes ) )
     {
         this->setCoords( coords );
         this->setNormals( normals );
         this->setSizes( sizes );
     }
 
-    PointObject(
-        const kvs::ValueArray<kvs::Real32>& coords,
-        const kvs::RGBColor&                color,
-        const kvs::ValueArray<kvs::Real32>& normals,
-        const kvs::Real32                   size )
+    KVS_DEPRECATED( PointObject(
+                        const kvs::ValueArray<kvs::Real32>& coords,
+                        const kvs::RGBColor& color,
+                        const kvs::ValueArray<kvs::Real32>& normals,
+                        const kvs::Real32 size ) )
     {
         this->setCoords( coords );
         this->setColor( color );
@@ -110,110 +131,59 @@ public:
         this->setSize( size );
     }
 
-    PointObject(
-        const kvs::ValueArray<kvs::Real32>& coords,
-        const kvs::ValueArray<kvs::UInt8>&  colors,
-        const kvs::ValueArray<kvs::Real32>& sizes )
+    KVS_DEPRECATED( PointObject(
+                        const kvs::ValueArray<kvs::Real32>& coords,
+                        const kvs::ValueArray<kvs::UInt8>& colors,
+                        const kvs::ValueArray<kvs::Real32>& sizes ) )
     {
         this->setCoords( coords );
         this->setColors( colors );
         this->setSizes( sizes );
     }
 
-    PointObject(
-        const kvs::ValueArray<kvs::Real32>& coords,
-        const kvs::RGBColor&                color,
-        const kvs::ValueArray<kvs::Real32>& sizes )
+    KVS_DEPRECATED( PointObject(
+                        const kvs::ValueArray<kvs::Real32>& coords,
+                        const kvs::RGBColor& color,
+                        const kvs::ValueArray<kvs::Real32>& sizes ) )
     {
         this->setCoords( coords );
         this->setColor( color );
         this->setSizes( sizes );
     }
 
-    PointObject(
-        const kvs::ValueArray<kvs::Real32>& coords,
-        const kvs::ValueArray<kvs::UInt8>&  colors,
-        const kvs::Real32                   size )
+    KVS_DEPRECATED( PointObject(
+                        const kvs::ValueArray<kvs::Real32>& coords,
+                        const kvs::ValueArray<kvs::UInt8>&  colors,
+                        const kvs::Real32 size ) )
     {
         this->setCoords( coords );
         this->setColors( colors );
         this->setSize( size );
     }
 
-    PointObject(
-        const kvs::ValueArray<kvs::Real32>& coords,
-        const kvs::RGBColor&                color,
-        const kvs::Real32                   size )
+    KVS_DEPRECATED( PointObject(
+                        const kvs::ValueArray<kvs::Real32>& coords,
+                        const kvs::RGBColor& color,
+                        const kvs::Real32 size ) )
     {
         this->setCoords( coords );
         this->setColor( color );
         this->setSize( size );
     }
 
-    PointObject(
-        const kvs::ValueArray<kvs::Real32>& coords )
+    KVS_DEPRECATED( PointObject(
+                        const kvs::ValueArray<kvs::Real32>& coords ) )
     {
         this->setCoords( coords );
         this->setColor( kvs::RGBColor( 255, 255, 255 ) );
         this->setSize( 1 );
     }
-#endif
 
-#if KVS_ENABLE_DEPRECATED
-    PointObject( const kvs::LineObject& line );
-
-    PointObject( const kvs::PolygonObject& polygon );
-#else
-    explicit PointObject( const kvs::LineObject& line );
-
-    explicit PointObject( const kvs::PolygonObject& polygon );
-#endif
-
-public:
-
-    static kvs::PointObject* DownCast( kvs::ObjectBase* object );
-
-    static const kvs::PointObject* DownCast( const kvs::ObjectBase* object );
-
-public:
-
-#if KVS_ENABLE_DEPRECATED
-    PointObject& operator += ( const PointObject& other )
+    KVS_DEPRECATED( PointObject& operator += ( const PointObject& other ) )
     {
         this->add( other );
-
         return( *this );
     }
-#endif
-    friend std::ostream& operator << ( std::ostream& os, const PointObject& object );
-
-public:
-
-    void add( const PointObject& other );
-
-    void shallowCopy( const PointObject& other );
-
-    void deepCopy( const PointObject& other );
-
-    void clear( void );
-
-public:
-
-    void setSizes( const kvs::ValueArray<kvs::Real32>& sizes );
-
-    void setSize( const kvs::Real32 size );
-
-public:
-
-    const BaseClass::GeometryType geometryType( void ) const;
-
-    const size_t nsizes( void ) const;
-
-public:
-
-    const kvs::Real32 size( const size_t index = 0 ) const;
-
-    const kvs::ValueArray<kvs::Real32>& sizes( void ) const;
 };
 
 } // end of namespace kvs
