@@ -87,8 +87,8 @@ inline void TrilinearInterpolator::attachPoint( const kvs::Vector3f& point )
     const size_t j = ( tj >= resolution.y() - 1 ) ? resolution.y() - 2 : tj;
     const size_t k = ( tk >= resolution.z() - 1 ) ? resolution.z() - 2 : tk;
 
-    const size_t line_size  = m_reference_volume->nnodesPerLine();
-    const size_t slice_size = m_reference_volume->nnodesPerSlice();
+    const size_t line_size  = m_reference_volume->numberOfNodesPerLine();
+    const size_t slice_size = m_reference_volume->numberOfNodesPerSlice();
 
     // Calculate index.
     m_grid_index.set( i, j, k );
@@ -172,8 +172,8 @@ inline const kvs::Vector3f TrilinearInterpolator::gradient( void ) const
     const T* const data = reinterpret_cast<const T*>( m_reference_volume->values().data() );
 
     const kvs::Vector3ui resolution = m_reference_volume->resolution();
-    const size_t line_size  = m_reference_volume->nnodesPerLine();
-    const size_t slice_size = m_reference_volume->nnodesPerSlice();
+    const size_t line_size  = m_reference_volume->numberOfNodesPerLine();
+    const size_t slice_size = m_reference_volume->numberOfNodesPerSlice();
 
     const size_t i = m_grid_index.x();
     const size_t j = m_grid_index.y();

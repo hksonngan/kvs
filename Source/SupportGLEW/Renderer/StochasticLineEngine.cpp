@@ -107,7 +107,7 @@ void StochasticLineEngine::attachObject( const kvs::ObjectBase* object )
     const kvs::LineObject* line = kvs::LineObject::DownCast( object );
 
     // Check line object for rendering.
-    if ( line->ncolors() != line->nvertices() && line->ncolors() > 1 )
+    if ( line->numberOfColors() != line->numberOfVertices() && line->numberOfColors() > 1 )
     {
         kvsMessageError( "Color type of this line is not vertex color." );
         exit(1);
@@ -191,11 +191,11 @@ void StochasticLineEngine::create_vertex_buffer( void )
     m_vbo.release();
     m_ibo.release();
 
-    const size_t nvertices = m_ref_line->nvertices();
-    const size_t nlines = m_ref_line->nconnections();
+    const size_t nvertices = m_ref_line->numberOfVertices();
+    const size_t nlines = m_ref_line->numberOfConnections();
 
-    const bool has_color    = m_ref_line->ncolors() > 1;
-    const bool has_connect  = m_ref_line->nconnections() > 0 &&
+    const bool has_color    = m_ref_line->numberOfColors() > 1;
+    const bool has_connect  = m_ref_line->numberOfConnections() > 0 &&
         ( m_ref_line->lineType() == kvs::LineObject::Segment ||
           m_ref_line->lineType() == kvs::LineObject::Uniline );
 
@@ -275,10 +275,10 @@ void StochasticLineEngine::draw_vertex_buffer( const float modelview_matrix[16] 
 
     this->setup_shader( modelview_matrix );
 
-    const size_t nlines = m_ref_line->nconnections();
+    const size_t nlines = m_ref_line->numberOfConnections();
 
-    const bool has_color    = m_ref_line->ncolors() > 1;
-    const bool has_connect  = m_ref_line->nconnections() > 0 &&
+    const bool has_color    = m_ref_line->numberOfColors() > 1;
+    const bool has_connect  = m_ref_line->numberOfConnections() > 0 &&
         ( m_ref_line->lineType() == kvs::LineObject::Segment ||
           m_ref_line->lineType() == kvs::LineObject::Uniline );
 
@@ -339,7 +339,7 @@ void StochasticLineEngine::draw_vertex_buffer( const float modelview_matrix[16] 
             }
             default:
             {
-                const size_t nvertices = m_ref_line->nvertices();
+                const size_t nvertices = m_ref_line->numberOfVertices();
                 glDrawArrays( GL_LINE_STRIP, 0, nvertices );
                 break;
             }

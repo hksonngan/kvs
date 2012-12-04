@@ -67,7 +67,7 @@ public:
     void setSize( const kvs::Real32 size );
 
     BaseClass::GeometryType geometryType() const;
-    size_t nsizes() const;
+    size_t numberOfSizes() const;
 
     kvs::Real32 size( const size_t index = 0 ) const;
     const kvs::ValueArray<kvs::Real32>& sizes() const;
@@ -184,6 +184,8 @@ public:
         this->add( other );
         return( *this );
     }
+
+    KVS_DEPRECATED( size_t nsizes() const ) { return this->numberOfSizes(); }
 };
 
 } // end of namespace kvs

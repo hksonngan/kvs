@@ -21,6 +21,7 @@
 #include <kvs/ValueArray>
 #include <kvs/AnyValueArray>
 #include <kvs/Math>
+#include <kvs/Deprecated>
 
 
 namespace kvs
@@ -31,17 +32,15 @@ namespace kvs
  *  VolumeObjectBase.
  */
 /*==========================================================================*/
-class VolumeObjectBase
-    : public kvs::ObjectBase
+class VolumeObjectBase : public kvs::ObjectBase
 {
     kvsClassName( kvs::VolumeObjectBase );
 
 public:
 
     typedef kvs::ObjectBase BaseClass;
-
     typedef kvs::ValueArray<float> Coords;
-    typedef kvs::AnyValueArray     Values;
+    typedef kvs::AnyValueArray Values;
 
 public:
 
@@ -75,23 +74,58 @@ private:
 
     std::string m_label; ///< data label
     size_t m_veclen; ///< Vector length.
-
     Coords m_coords; ///< Coordinate array.
     Values m_values; ///< Value array.
-
-    mutable bool        m_has_min_max_values; ///< Whether includes min/max values or not.
-    mutable kvs::Real64 m_min_value;          ///< Minimum field value.
-    mutable kvs::Real64 m_max_value;          ///< Maximum field value.
+    mutable bool m_has_min_max_values; ///< Whether includes min/max values or not.
+    mutable kvs::Real64 m_min_value; ///< Minimum field value.
+    mutable kvs::Real64 m_max_value; ///< Maximum field value.
 
 public:
 
-    VolumeObjectBase( void );
+    static kvs::VolumeObjectBase* DownCast( kvs::ObjectBase* object );
+    static const kvs::VolumeObjectBase* DownCast( const kvs::ObjectBase* object );
 
-#if KVS_ENABLE_DEPRECATED
-    VolumeObjectBase(
-        const size_t     veclen,
-        const Coords&    coords,
-        const Values&    values )
+public:
+
+    VolumeObjectBase();
+
+    friend std::ostream& operator << ( std::ostream& os, const VolumeObjectBase& object );
+
+    void setLabel( const std::string& label );
+    void setVeclen( const size_t veclen );
+    void setCoords( const Coords& values );
+    void setValues( const Values& values );
+    void setMinMaxValues( const kvs::Real64 min_value, const kvs::Real64 max_value ) const;
+
+    const std::string& label() const;
+    size_t veclen() const;
+    const Coords& coords() const;
+    const Values& values() const;
+    bool hasMinMaxValues() const;
+    kvs::Real64 minValue() const;
+    kvs::Real64 maxValue() const;
+
+    ObjectType objectType() const;
+    virtual VolumeType volumeType() const = 0;
+    virtual GridType gridType() const = 0;
+    virtual CellType cellType() const = 0;
+    virtual size_t numberOfNodes() const = 0;
+    virtual size_t numberOfCells() const = 0;
+    void updateMinMaxValues() const;
+
+    void shallowCopy( const VolumeObjectBase& object );
+    void deepCopy( const VolumeObjectBase& object );
+
+private:
+
+    template<typename T>
+    void calculate_min_max_values() const;
+
+public:
+    KVS_DEPRECATED( VolumeObjectBase(
+                        const size_t     veclen,
+                        const Coords&    coords,
+                        const Values&    values ) )
     {
         m_has_min_max_values = false;
         m_min_value = 0.0;
@@ -100,84 +134,16 @@ public:
         this->setCoords( coords );
         this->setValues( values );
     }
-#endif
-
-public:
-
-    static kvs::VolumeObjectBase* DownCast( kvs::ObjectBase* object );
-
-    static const kvs::VolumeObjectBase* DownCast( const kvs::ObjectBase* object );
-
-public:
-
-    friend std::ostream& operator << ( std::ostream& os, const VolumeObjectBase& object );
-
-public:
-
-    void setLabel( const std::string& label );
-
-    void setVeclen( const size_t veclen );
-
-    void setCoords( const Coords& values );
-
-    void setValues( const Values& values );
-
-    void setMinMaxValues(
-        const kvs::Real64 min_value,
-        const kvs::Real64 max_value ) const;
-
-public:
-
-    const std::string& label( void ) const;
-
-    const size_t veclen( void ) const;
-
-    const Coords& coords( void ) const;
-
-    const Values& values( void ) const;
-
-    const bool hasMinMaxValues( void ) const;
-
-    const kvs::Real64 minValue( void ) const;
-
-    const kvs::Real64 maxValue( void ) const;
-
-public:
-
-    ObjectType objectType( void ) const;
-
-    virtual const VolumeType volumeType( void ) const = 0;
-
-    virtual const GridType gridType( void ) const = 0;
-
-    virtual const CellType cellType( void ) const = 0;
-
-    virtual const size_t nnodes( void ) const = 0;
-
-    virtual size_t numberOfCells() const = 0;
-
-    void updateMinMaxValues( void ) const;
-
-public:
-
-    void shallowCopy( const VolumeObjectBase& object );
-
-    void deepCopy( const VolumeObjectBase& object );
-
-private:
-
-    template<typename T>
-    void calculate_min_max_values( void ) const;
 };
 
 template<typename T>
-void VolumeObjectBase::calculate_min_max_values( void ) const
+void VolumeObjectBase::calculate_min_max_values() const
 {
     KVS_ASSERT( m_values.size() != 0 );
-    KVS_ASSERT( m_values.size() == this->veclen() * this->nnodes() );
+    KVS_ASSERT( m_values.size() == this->veclen() * this->numberOfNodes() );
 
     const T*       value = reinterpret_cast<const T*>( m_values.data() );
-    const T* const end   = value + this->nnodes() * m_veclen;
+    const T* const end   = value + this->numberOfNodes() * m_veclen;
 
     if ( m_veclen == 1 )
     {

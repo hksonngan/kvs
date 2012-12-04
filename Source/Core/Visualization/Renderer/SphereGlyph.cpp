@@ -220,19 +220,19 @@ void SphereGlyph::attach_point( const kvs::PointObject* point )
 {
     m_point = point;
 
-    const size_t nvertices = point->nvertices();
+    const size_t nvertices = point->numberOfVertices();
 
     BaseClass::setCoords( point->coords() );
 
     if ( BaseClass::directionMode() == BaseClass::DirectionByNormal )
     {
-        if ( point->nnormals() != 0 )
+        if ( point->numberOfNormals() != 0 )
         {
             BaseClass::setDirections( point->normals() );
         }
     }
 
-    if ( point->nsizes() == 1 )
+    if ( point->numberOfSizes() == 1 )
     {
         const kvs::Real32 size = point->size();
         kvs::ValueArray<kvs::Real32> sizes( nvertices );
@@ -244,7 +244,7 @@ void SphereGlyph::attach_point( const kvs::PointObject* point )
         BaseClass::setSizes( point->sizes() );
     }
 
-    if ( point->ncolors() == 1 )
+    if ( point->numberOfColors() == 1 )
     {
         const kvs::RGBColor color = point->color();
         kvs::ValueArray<kvs::UInt8> colors( nvertices * 3 );

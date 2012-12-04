@@ -239,7 +239,7 @@ void ExtractEdges::mapping( const kvs::StructuredVolumeObject* volume )
 
     SuperClass::setLineType( kvs::LineObject::Segment );
     SuperClass::setColorType( kvs::LineObject::VertexColor );
-    if ( SuperClass::nsizes() == 0 ) SuperClass::setSize( 1.0f );
+    if ( SuperClass::numberOfSizes() == 0 ) SuperClass::setSize( 1.0f );
 }
 
 /*===========================================================================*/
@@ -273,7 +273,7 @@ void ExtractEdges::calculate_coords( const kvs::StructuredVolumeObject* volume )
 /*===========================================================================*/
 void ExtractEdges::calculate_uniform_coords( const kvs::StructuredVolumeObject* volume )
 {
-    kvs::ValueArray<kvs::Real32> coords( 3 * volume->nnodes() );
+    kvs::ValueArray<kvs::Real32> coords( 3 * volume->numberOfNodes() );
     kvs::Real32* coord = coords.data();
 
     const kvs::Vector3ui resolution( volume->resolution() );
@@ -329,8 +329,8 @@ void ExtractEdges::calculate_rectilinear_coords( const kvs::StructuredVolumeObje
 /*===========================================================================*/
 void ExtractEdges::calculate_connections( const kvs::StructuredVolumeObject* volume )
 {
-    const size_t line_size = volume->nnodesPerLine();
-    const size_t slice_size = volume->nnodesPerSlice();
+    const size_t line_size = volume->numberOfNodesPerLine();
+    const size_t slice_size = volume->numberOfNodesPerSlice();
     const Vector3ui resolution( volume->resolution() );
     const size_t nedges =
         3 * ( resolution.x() - 1 ) * ( resolution.y() - 1 ) * ( resolution.z() - 1 ) +
@@ -405,7 +405,7 @@ void ExtractEdges::mapping( const kvs::UnstructuredVolumeObject* volume )
 
     SuperClass::setLineType( kvs::LineObject::Segment );
     SuperClass::setColorType( kvs::LineObject::VertexColor );
-    if ( SuperClass::nsizes() == 0 ) SuperClass::setSize( 1.0f );
+    if ( SuperClass::numberOfSizes() == 0 ) SuperClass::setSize( 1.0f );
 }
 
 /*===========================================================================*/
@@ -460,8 +460,8 @@ void ExtractEdges::calculate_tetrahedra_connections(
     const kvs::UnstructuredVolumeObject* volume )
 {
     const kvs::UInt32* connections = volume->connections().data();
-    const size_t ncells = volume->ncells();
-    const size_t nnodes = volume->nnodes();
+    const size_t ncells = volume->numberOfCells();
+    const size_t nnodes = volume->numberOfNodes();
 
     ::EdgeMap edge_map( nnodes );
     for ( size_t cell_index = 0, connection_index = 0; cell_index < ncells; cell_index++ )
@@ -493,8 +493,8 @@ void ExtractEdges::calculate_hexahedra_connections(
     const kvs::UnstructuredVolumeObject* volume )
 {
     const kvs::UInt32* connections = volume->connections().data();
-    const size_t ncells = volume->ncells();
-    const size_t nnodes = volume->nnodes();
+    const size_t ncells = volume->numberOfCells();
+    const size_t nnodes = volume->numberOfNodes();
 
     ::EdgeMap edge_map( nnodes );
     for ( size_t cell_index = 0, connection_index = 0; cell_index < ncells; cell_index++ )
@@ -536,8 +536,8 @@ void ExtractEdges::calculate_quadratic_tetrahedra_connections(
     const kvs::UnstructuredVolumeObject* volume )
 {
     const kvs::UInt32* connections = volume->connections().data();
-    const size_t ncells = volume->ncells();
-    const size_t nnodes = volume->nnodes();
+    const size_t ncells = volume->numberOfCells();
+    const size_t nnodes = volume->numberOfNodes();
 
     ::EdgeMap edge_map( nnodes );
     for ( size_t cell_index = 0, connection_index = 0; cell_index < ncells; cell_index++ )
@@ -581,8 +581,8 @@ void ExtractEdges::calculate_quadratic_hexahedra_connections(
     const kvs::UnstructuredVolumeObject* volume )
 {
     const kvs::UInt32* connections = volume->connections().data();
-    const size_t ncells = volume->ncells();
-    const size_t nnodes = volume->nnodes();
+    const size_t ncells = volume->numberOfCells();
+    const size_t nnodes = volume->numberOfNodes();
 
     ::EdgeMap edge_map( nnodes );
     for ( size_t cell_index = 0, connection_index = 0; cell_index < ncells; cell_index++ )
@@ -650,7 +650,7 @@ void ExtractEdges::calculate_colors( const kvs::VolumeObjectBase* volume )
     const T* value = reinterpret_cast<const T*>( volume->values().data() );
     const T* const end = value + volume->values().size();
 
-    kvs::ValueArray<kvs::UInt8> colors( 3 * volume->nnodes() );
+    kvs::ValueArray<kvs::UInt8> colors( 3 * volume->numberOfNodes() );
     kvs::UInt8* color = colors.data();
 
     kvs::ColorMap cmap( BaseClass::colorMap() );

@@ -159,7 +159,7 @@ void ExtractVertices::calculate_uniform_coords()
     const kvs::StructuredVolumeObject* volume
         = dynamic_cast<const kvs::StructuredVolumeObject*>( m_volume );
 
-    kvs::ValueArray<float> coords( 3 * volume->nnodes() );
+    kvs::ValueArray<float> coords( 3 * volume->numberOfNodes() );
     float*                 coord = coords.data();
 
     const kvs::Vector3ui resolution( volume->resolution() );
@@ -217,7 +217,7 @@ void ExtractVertices::calculate_colors()
     const T*       value = reinterpret_cast<const T*>( volume->values().data() );
     const T* const end   = value + volume->values().size();
 
-    kvs::ValueArray<kvs::UInt8> colors( 3 * volume->nnodes() );
+    kvs::ValueArray<kvs::UInt8> colors( 3 * volume->numberOfNodes() );
     kvs::UInt8*                 color = colors.data();
 
     kvs::ColorMap cmap( BaseClass::colorMap() );

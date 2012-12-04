@@ -75,9 +75,9 @@ std::ostream& operator << ( std::ostream& os, const kvs::GeometryObjectBase& obj
 #else
     os << static_cast<const kvs::ObjectBase&>( object ) << std::endl;
 #endif
-    os << "Number of vertices:  " << object.nvertices() << std::endl;
-    os << "Number of colors:  " << object.ncolors() << std::endl;
-    os << "Number of normal vectors:  " << object.nnormals();
+    os << "Number of vertices:  " << object.numberOfVertices() << std::endl;
+    os << "Number of colors:  " << object.numberOfColors() << std::endl;
+    os << "Number of normal vectors:  " << object.numberOfNormals();
 
     return os;
 }
@@ -186,7 +186,7 @@ kvs::ObjectBase::ObjectType GeometryObjectBase::objectType() const
  *  @return number of the vertices
  */
 /*===========================================================================*/
-size_t GeometryObjectBase::nvertices() const
+size_t GeometryObjectBase::numberOfVertices() const
 {
     const size_t dimension = 3;
     return m_coords.size() / dimension;
@@ -198,7 +198,7 @@ size_t GeometryObjectBase::nvertices() const
  *  @return number of the colors
  */
 /*===========================================================================*/
-size_t GeometryObjectBase::ncolors() const
+size_t GeometryObjectBase::numberOfColors() const
 {
     const size_t nchannels = 3;
     return m_colors.size() / nchannels;
@@ -210,7 +210,7 @@ size_t GeometryObjectBase::ncolors() const
  *  @return number of the normal vectors
  */
 /*===========================================================================*/
-size_t GeometryObjectBase::nnormals() const
+size_t GeometryObjectBase::numberOfNormals() const
 {
     const size_t dimension = 3;
     return m_normals.size() / dimension;

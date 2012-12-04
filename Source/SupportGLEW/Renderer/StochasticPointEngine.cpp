@@ -466,7 +466,7 @@ void StochasticPointEngine::attachObject( const kvs::ObjectBase* object )
     m_ref_particle = point;
 
     if ( m_ref_particle->normals().data() == NULL ||
-         m_ref_particle->nnormals() == 0 )
+         m_ref_particle->numberOfNormals() == 0 )
     {
         BaseClass::disableShading();
     }
@@ -484,7 +484,7 @@ void StochasticPointEngine::create_vertexbuffer_from_point( void )
     if ( m_particles ) delete [] m_particles;
     m_particles = new Particles[ m_repetition_level ];
 
-    const size_t total_vertices = m_ref_particle->nvertices();
+    const size_t total_vertices = m_ref_particle->numberOfVertices();
 
     const bool has_normal = BaseClass::isEnabledShading();
 

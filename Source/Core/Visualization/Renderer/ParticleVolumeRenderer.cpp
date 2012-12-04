@@ -264,7 +264,7 @@ void ParticleVolumeRenderer::project_particle(
     m_buffer->attachPointObject( point );
 
     // Aliases.
-    const size_t       nv = point->nvertices();
+    const size_t       nv = point->numberOfVertices();
     const kvs::Real32* v  = point->coords().data();
 
     size_t index3 = 0;

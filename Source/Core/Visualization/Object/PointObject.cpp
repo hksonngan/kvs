@@ -148,7 +148,7 @@ std::ostream& operator << ( std::ostream& os, const PointObject& object )
 #else
     os << static_cast<const kvs::GeometryObjectBase&>( object ) << std::endl;
 #endif
-    os << "Number of sizes:  " << object.nsizes();
+    os << "Number of sizes:  " << object.numberOfSizes();
 
     return os;
 }
@@ -480,7 +480,7 @@ PointObject::BaseClass::GeometryType PointObject::geometryType() const
  *  @return number of size values
  */
 /*===========================================================================*/
-size_t PointObject::nsizes() const
+size_t PointObject::numberOfSizes() const
 {
     return m_sizes.size();
 }

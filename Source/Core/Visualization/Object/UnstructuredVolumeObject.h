@@ -27,13 +27,9 @@ namespace kvs
  *  Unstructured volume object class.
  */
 /*==========================================================================*/
-class UnstructuredVolumeObject
-    : public kvs::VolumeObjectBase
+class UnstructuredVolumeObject : public kvs::VolumeObjectBase
 {
-    // Class name.
     kvsClassName( kvs::UnstructuredVolumeObject );
-
-    // Module information.
     kvsModuleCategory( Object );
     kvsModuleBaseClass( kvs::VolumeObjectBase );
 
@@ -44,24 +40,51 @@ public:
 private:
 
     CellType m_cell_type; ///< Cell type.
-    size_t   m_nnodes;    ///< Number of nodes.
-    size_t   m_ncells;    ///< Number of cells.
-
+    size_t m_nnodes; ///< Number of nodes.
+    size_t m_ncells; ///< Number of cells.
     Connections m_connections; ///< Connection ( Node ID ) array.
 
 public:
 
-    UnstructuredVolumeObject( void );
+    static kvs::UnstructuredVolumeObject* DownCast( kvs::ObjectBase* object );
+    static const kvs::UnstructuredVolumeObject* DownCast( const kvs::ObjectBase* object );
 
-#if KVS_ENABLE_DEPRECATED
-    UnstructuredVolumeObject(
-        const CellType     cell_type,
-        const size_t       nnodes,
-        const size_t       ncells,
-        const size_t       veclen,
-        const Coords&      coords,
-        const Connections& connections,
-        const Values&      values )
+public:
+
+    UnstructuredVolumeObject();
+
+    friend std::ostream& operator << ( std::ostream& os, const UnstructuredVolumeObject& object );
+
+    void shallowCopy( const UnstructuredVolumeObject& object );
+    void deepCopy( const UnstructuredVolumeObject& object );
+
+    void setCellType( const CellType cell_type );
+    void setNumberOfNodes( const size_t nnodes );
+    void setNumberOfCells( const size_t ncells );
+    void setConnections( const Connections& connections );
+
+    VolumeType volumeType() const;
+    GridType gridType() const;
+    CellType cellType() const;
+    size_t numberOfNodes() const;
+    size_t numberOfCells() const;
+    const Connections& connections() const;
+
+    void updateMinMaxCoords();
+
+private:
+
+    void calculate_min_max_coords();
+
+public:
+    KVS_DEPRECATED( UnstructuredVolumeObject(
+                        const CellType cell_type,
+                        const size_t nnodes,
+                        const size_t ncells,
+                        const size_t veclen,
+                        const Coords& coords,
+                        const Connections& connections,
+                        const Values& values ) )
     {
         this->setVeclen( veclen );
         this->setCoords( coords );
@@ -71,57 +94,11 @@ public:
         this->setNCells( ncells );
         this->setConnections( connections );
     }
-#endif
 
-public:
-
-    static kvs::UnstructuredVolumeObject* DownCast( kvs::ObjectBase* object );
-
-    static const kvs::UnstructuredVolumeObject* DownCast( const kvs::ObjectBase* object );
-
-public:
-
-    friend std::ostream& operator << ( std::ostream& os, const UnstructuredVolumeObject& object );
-
-public:
-
-    void shallowCopy( const UnstructuredVolumeObject& object );
-
-    void deepCopy( const UnstructuredVolumeObject& object );
-
-public:
-
-    void setCellType( const CellType cell_type );
-
-    void setNNodes( const size_t nnodes );
-
-    void setNCells( const size_t ncells );
-
-    void setConnections( const Connections& connections );
-
-public:
-
-    const VolumeType volumeType( void ) const;
-
-    const GridType gridType( void ) const;
-
-    const CellType cellType( void ) const;
-
-    const size_t nnodes( void ) const;
-
-    const size_t ncells( void ) const;
-
-    size_t numberOfCells() const;
-
-    const Connections& connections( void ) const;
-
-public:
-
-    void updateMinMaxCoords( void );
-
-private:
-
-    void calculate_min_max_coords( void );
+    KVS_DEPRECATED( void setNNodes( const size_t nnodes ) ) { this->setNumberOfNodes( nnodes ); }
+    KVS_DEPRECATED( void setNCells( const size_t ncells ) ) { this->setNumberOfCells( ncells ); }
+    KVS_DEPRECATED( size_t nnodes() const ) { return this->numberOfNodes(); }
+    KVS_DEPRECATED( size_t ncells() const ) { return this->numberOfCells(); }
 };
 
 } // end of namespace kvs

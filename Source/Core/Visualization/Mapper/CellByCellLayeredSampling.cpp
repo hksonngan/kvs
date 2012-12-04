@@ -299,7 +299,7 @@ void CellByCellLayeredSampling::generate_particles( const kvs::UnstructuredVolum
     kvs::TetrahedralCell<T>* cell = new kvs::TetrahedralCell<T>( volume );
 
     // Generate particles for each cell.
-    const size_t ncells = volume->ncells();
+    const size_t ncells = volume->numberOfCells();
     for ( size_t index = 0; index < ncells; ++index )
     {
         // Bind the cell which is indicated by 'index'.
@@ -751,7 +751,7 @@ size_t CellByCellLayeredSampling::calculate_number_of_particles(
     const size_t nparticles_in_cell )
 {
     const size_t N_in = nparticles_in_cell;
-    const size_t N_all = m_pregenerated_particles->nvertices();
+    const size_t N_all = m_pregenerated_particles->numberOfVertices();
 
     const float a1 = m_A_matrix[0][0];
     const float a2 = m_A_matrix[1][1];
@@ -851,7 +851,7 @@ void CellByCellLayeredSampling::calculate_particles_in_cell(
     const kvs::Matrix33f D_inv( D.inverted() );
 
     size_t counter = 0;
-    const size_t nparticles = m_pregenerated_particles->nvertices();
+    const size_t nparticles = m_pregenerated_particles->numberOfVertices();
     for ( size_t i = 0, i3 = 0; i < nparticles; i++, i3 += 3 )
     {
         const kvs::Vector3f located_v(

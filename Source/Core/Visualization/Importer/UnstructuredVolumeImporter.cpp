@@ -251,8 +251,8 @@ void UnstructuredVolumeImporter::import( const kvs::KVSMLObjectUnstructuredVolum
     }
 
     SuperClass::setVeclen( kvsml->veclen() );
-    SuperClass::setNNodes( kvsml->nnodes() );
-    SuperClass::setNCells( kvsml->ncells() );
+    SuperClass::setNumberOfNodes( kvsml->nnodes() );
+    SuperClass::setNumberOfCells( kvsml->ncells() );
     SuperClass::setCellType( ::StringToCellType( kvsml->cellType() ) );
     SuperClass::setCoords( kvsml->coords() );
     SuperClass::setConnections( kvsml->connections() );
@@ -283,8 +283,8 @@ void UnstructuredVolumeImporter::import( const kvs::KVSMLObjectUnstructuredVolum
 void UnstructuredVolumeImporter::import( const kvs::AVSUcd* ucd )
 {
     SuperClass::setVeclen( ucd->veclens()[ ucd->componentID() ] );
-    SuperClass::setNNodes( ucd->nnodes() );
-    SuperClass::setNCells( ucd->nelements() );
+    SuperClass::setNumberOfNodes( ucd->nnodes() );
+    SuperClass::setNumberOfCells( ucd->nelements() );
     SuperClass::setCellType( ::ElementTypeToCellType( ucd->elementType() ) );
     SuperClass::setCoords( ucd->coords() );
     SuperClass::setConnections( ucd->connections() );
@@ -352,8 +352,8 @@ void UnstructuredVolumeImporter::import( const kvs::AVSField* field )
     }
 
     SuperClass::setVeclen( field->veclen() );
-    SuperClass::setNNodes( field->values().size() );
-    SuperClass::setNCells( ncells.x() * ncells.y() * ncells.z() );
+    SuperClass::setNumberOfNodes( field->values().size() );
+    SuperClass::setNumberOfCells( ncells.x() * ncells.y() * ncells.z() );
     SuperClass::setCellType( Hexahedra );
     SuperClass::setCoords( field->coords() );
     SuperClass::setConnections( connections );

@@ -226,7 +226,7 @@ template <typename T>
 void TetrahedraToTetrahedra::subdivide_8_tetrahedra( const kvs::UnstructuredVolumeObject* volume )
 {
     // Quadratic tetrahedral cells.
-    const size_t tet2_ncells = volume->ncells();
+    const size_t tet2_ncells = volume->numberOfCells();
     const kvs::UInt32* tet2_pconnections = volume->connections().data();
 
     // Tetrahedral cells.
@@ -310,8 +310,8 @@ void TetrahedraToTetrahedra::subdivide_8_tetrahedra( const kvs::UnstructuredVolu
     }
 
     SuperClass::setVeclen( volume->veclen() );
-    SuperClass::setNNodes( volume->nnodes() );
-    SuperClass::setNCells( tet_ncells );
+    SuperClass::setNumberOfNodes( volume->numberOfNodes() );
+    SuperClass::setNumberOfCells( tet_ncells );
     SuperClass::setCellType( kvs::UnstructuredVolumeObject::Tetrahedra );
     SuperClass::setCoords( volume->coords() );
     SuperClass::setConnections( tet_connections );
@@ -327,7 +327,7 @@ void TetrahedraToTetrahedra::subdivide_8_tetrahedra( const kvs::UnstructuredVolu
 template <typename T>
 void TetrahedraToTetrahedra::remove_quadratic_nodes( const kvs::UnstructuredVolumeObject* volume )
 {
-    const size_t tet2_ncells = volume->ncells();
+    const size_t tet2_ncells = volume->numberOfCells();
     const kvs::UInt32* tet2_pconnections = volume->connections().data();
     const T* tet2_pvalues = static_cast<const T*>( volume->values().data() );
     const kvs::Real32* tet2_pcoords = volume->coords().data();
@@ -407,8 +407,8 @@ void TetrahedraToTetrahedra::remove_quadratic_nodes( const kvs::UnstructuredVolu
     }
 
     SuperClass::setVeclen( volume->veclen() );
-    SuperClass::setNNodes( tet_nnodes );
-    SuperClass::setNCells( tet_ncells );
+    SuperClass::setNumberOfNodes( tet_nnodes );
+    SuperClass::setNumberOfCells( tet_ncells );
     SuperClass::setCellType( kvs::UnstructuredVolumeObject::Tetrahedra );
     SuperClass::setCoords( tet_coords );
     SuperClass::setConnections( tet_connections );

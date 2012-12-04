@@ -192,7 +192,7 @@ void StreamlineBase::extract_lines(
     std::vector<kvs::UInt8>  colors;
 
     // Calculate streamline for each seed point.
-    const size_t npoints = m_seed_points->nvertices();
+    const size_t npoints = m_seed_points->numberOfVertices();
     for ( size_t index = 0; index < npoints; index++ )
     {
         std::vector<kvs::Real32> line_coords;

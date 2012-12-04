@@ -270,8 +270,8 @@ const kvs::BitArray& CellAdjacencyGraph::mask() const
 void CellAdjacencyGraph::create_for_tetrahedral_cell( const kvs::UnstructuredVolumeObject* volume )
 {
     const kvs::UInt32* const connections = volume->connections().data();
-    const size_t nnodes = volume->nnodes();
-    const size_t ncells = volume->ncells();
+    const size_t nnodes = volume->numberOfNodes();
+    const size_t ncells = volume->numberOfCells();
     const size_t nnodes_per_cell = static_cast<size_t>( volume->cellType() );
 
     m_graph.allocate( ncells * 4 );
@@ -336,8 +336,8 @@ void CellAdjacencyGraph::create_for_tetrahedral_cell( const kvs::UnstructuredVol
 void CellAdjacencyGraph::create_for_hexahedral_cell( const kvs::UnstructuredVolumeObject* volume )
 {
     const kvs::UInt32* const connections = volume->connections().data();
-    const size_t nnodes = volume->nnodes();
-    const size_t ncells = volume->ncells();
+    const size_t nnodes = volume->numberOfNodes();
+    const size_t ncells = volume->numberOfCells();
     const size_t nnodes_per_cell = static_cast<size_t>( volume->cellType() );
 
     m_graph.allocate( ncells * 6 );

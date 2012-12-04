@@ -40,7 +40,7 @@ namespace kvs
  *  Default constructor.
  */
 /*==========================================================================*/
-UnstructuredVolumeObject::UnstructuredVolumeObject( void )
+UnstructuredVolumeObject::UnstructuredVolumeObject()
     : kvs::VolumeObjectBase()
     , m_cell_type( UnknownCellType )
     , m_nnodes( 0 )
@@ -84,8 +84,8 @@ std::ostream& operator << ( std::ostream& os, const UnstructuredVolumeObject& ob
     os << static_cast<const kvs::VolumeObjectBase&>( object ) << std::endl;
 #endif
     os << "Cell type:  " << ::GetCellTypeName( object.cellType() ) << std::endl;
-    os << "Number of nodes:  " << object.nnodes() << std::endl;
-    os << "Number of cells:  " << object.ncells() << std::endl;
+    os << "Number of nodes:  " << object.numberOfNodes() << std::endl;
+    os << "Number of cells:  " << object.numberOfCells() << std::endl;
     os << "Min. value:  " << object.minValue() << std::endl;
     os << "Max. value:  " << object.maxValue();
 
@@ -96,8 +96,8 @@ void UnstructuredVolumeObject::shallowCopy( const UnstructuredVolumeObject& obje
 {
     BaseClass::shallowCopy( object );
     m_cell_type = object.cellType();
-    m_nnodes = object.nnodes();
-    m_ncells = object.ncells();
+    m_nnodes = object.numberOfNodes();
+    m_ncells = object.numberOfCells();
     m_connections = object.connections();
 }
 
@@ -105,8 +105,8 @@ void UnstructuredVolumeObject::deepCopy( const UnstructuredVolumeObject& object 
 {
     BaseClass::deepCopy( object );
     m_cell_type = object.cellType();
-    m_nnodes = object.nnodes();
-    m_ncells = object.ncells();
+    m_nnodes = object.numberOfNodes();
+    m_ncells = object.numberOfCells();
     m_connections = object.connections().clone();
 }
 
@@ -126,7 +126,7 @@ void UnstructuredVolumeObject::setCellType( const CellType cell_type )
  *  @param nnodes [in] number of nodes
  */
 /*==========================================================================*/
-void UnstructuredVolumeObject::setNNodes( const size_t nnodes )
+void UnstructuredVolumeObject::setNumberOfNodes( const size_t nnodes )
 {
     m_nnodes = nnodes;
 }
@@ -137,7 +137,7 @@ void UnstructuredVolumeObject::setNNodes( const size_t nnodes )
  *  @param ncells [in] number of cells
  */
 /*==========================================================================*/
-void UnstructuredVolumeObject::setNCells( const size_t ncells )
+void UnstructuredVolumeObject::setNumberOfCells( const size_t ncells )
 {
     m_ncells = ncells;
 }
@@ -158,7 +158,7 @@ void UnstructuredVolumeObject::setConnections( const Connections& connections )
  *  Get the volume type.
  */
 /*==========================================================================*/
-const UnstructuredVolumeObject::VolumeType UnstructuredVolumeObject::volumeType( void ) const
+UnstructuredVolumeObject::VolumeType UnstructuredVolumeObject::volumeType() const
 {
     return( Unstructured );
 }
@@ -168,7 +168,7 @@ const UnstructuredVolumeObject::VolumeType UnstructuredVolumeObject::volumeType(
  *  Get the grid type.
  */
 /*==========================================================================*/
-const UnstructuredVolumeObject::GridType UnstructuredVolumeObject::gridType( void ) const
+UnstructuredVolumeObject::GridType UnstructuredVolumeObject::gridType() const
 {
     return( Irregular );
 }
@@ -178,7 +178,7 @@ const UnstructuredVolumeObject::GridType UnstructuredVolumeObject::gridType( voi
  *  Get the cell type.
  */
 /*==========================================================================*/
-const UnstructuredVolumeObject::CellType UnstructuredVolumeObject::cellType( void ) const
+UnstructuredVolumeObject::CellType UnstructuredVolumeObject::cellType() const
 {
     return( m_cell_type );
 }
@@ -189,7 +189,7 @@ const UnstructuredVolumeObject::CellType UnstructuredVolumeObject::cellType( voi
  *  @return number of nodes
  */
 /*==========================================================================*/
-const size_t UnstructuredVolumeObject::nnodes( void ) const
+size_t UnstructuredVolumeObject::numberOfNodes() const
 {
     return( m_nnodes );
 }
@@ -200,11 +200,6 @@ const size_t UnstructuredVolumeObject::nnodes( void ) const
  *  @return number of cells
  */
 /*==========================================================================*/
-const size_t UnstructuredVolumeObject::ncells( void ) const
-{
-    return( m_ncells );
-}
-
 size_t UnstructuredVolumeObject::numberOfCells() const
 {
     return m_ncells;
@@ -216,7 +211,7 @@ size_t UnstructuredVolumeObject::numberOfCells() const
  *  @return connection id array
  */
 /*==========================================================================*/
-const UnstructuredVolumeObject::Connections& UnstructuredVolumeObject::connections( void ) const
+const UnstructuredVolumeObject::Connections& UnstructuredVolumeObject::connections() const
 {
     return( m_connections );
 }
@@ -226,7 +221,7 @@ const UnstructuredVolumeObject::Connections& UnstructuredVolumeObject::connectio
  *  Update the min/max node coordinates.
  */
 /*==========================================================================*/
-void UnstructuredVolumeObject::updateMinMaxCoords( void )
+void UnstructuredVolumeObject::updateMinMaxCoords()
 {
     this->calculate_min_max_coords();
 }
@@ -236,7 +231,7 @@ void UnstructuredVolumeObject::updateMinMaxCoords( void )
  *  Calculate the min/max coordinate values.
  */
 /*==========================================================================*/
-void UnstructuredVolumeObject::calculate_min_max_coords( void )
+void UnstructuredVolumeObject::calculate_min_max_coords()
 {
     kvs::Vector3f min_coord( 0.0f, 0.0f, 0.0f );
     kvs::Vector3f max_coord( 0.0f, 0.0f, 0.0f );

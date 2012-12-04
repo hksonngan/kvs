@@ -98,8 +98,8 @@ public:
     PolygonType polygonType() const;
     ColorType colorType() const;
     NormalType normalType() const;
-    size_t nconnections() const;
-    size_t nopacities() const;
+    size_t numberOfConnections() const;
+    size_t numberOfOpacities() const;
     kvs::UInt8 opacity( const size_t index = 0 ) const;
 
     const kvs::ValueArray<kvs::UInt32>& connections() const;
@@ -253,6 +253,9 @@ public:
         this->setNormalType( normal_type );
         this->setOpacity( opacity );
     }
+
+    KVS_DEPRECATED( size_t nconnections() const ) { return this->numberOfConnections(); }
+    KVS_DEPRECATED( size_t nopacities() const ) { return this->numberOfOpacities(); }
 };
 
 } // end of namespace kvs

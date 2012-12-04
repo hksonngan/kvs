@@ -95,10 +95,10 @@ LineObject::LineObject( const kvs::PolygonObject& polygon )
 
     this->setLineType( LineObject::Segment );
 
-    const size_t nconnections = polygon.nconnections();
+    const size_t nconnections = polygon.numberOfConnections();
     const size_t ncorners     = size_t( polygon.polygonType() );
     const size_t npolygons    = ( nconnections == 0 ) ?
-        polygon.nvertices() / ncorners : nconnections;
+        polygon.numberOfVertices() / ncorners : nconnections;
 
     kvs::ValueArray<kvs::UInt32> connections( npolygons * ncorners * 2 );
     size_t p_index = 0;
@@ -133,8 +133,8 @@ std::ostream& operator << ( std::ostream& os, const LineObject& object )
 #else
     os << static_cast<const kvs::GeometryObjectBase&>( object ) << std::endl;
 #endif
-    os << "Number of connections:  " << object.nconnections() << std::endl;
-    os << "Number of sizes:  " << object.nsizes() << std::endl;
+    os << "Number of connections:  " << object.numberOfConnections() << std::endl;
+    os << "Number of sizes:  " << object.numberOfSizes() << std::endl;
     os << "Line type:  " << ::GetLineTypeName( object.lineType() ) << std::endl;
     os << "Color type:  " << ::GetColorTypeName( object.colorType() );
 
@@ -214,7 +214,7 @@ LineObject::ColorType LineObject::colorType() const
     return m_color_type;
 }
 
-size_t LineObject::nconnections() const
+size_t LineObject::numberOfConnections() const
 {
     return
         m_line_type == LineObject::Uniline ?
@@ -222,7 +222,7 @@ size_t LineObject::nconnections() const
         m_connections.size() / 2;
 }
 
-size_t LineObject::nsizes() const
+size_t LineObject::numberOfSizes() const
 {
     return m_sizes.size();
 }

@@ -104,8 +104,8 @@ kvs::KVSMLObjectUnstructuredVolume* UnstructuredVolumeExporter<kvs::KVSMLObjectU
     }
 
     this->setVeclen( volume->veclen() );
-    this->setNNodes( volume->nnodes() );
-    this->setNCells( volume->ncells() );
+    this->setNNodes( volume->numberOfNodes() );
+    this->setNCells( volume->numberOfCells() );
     this->setValues( volume->values() );
     this->setCoords( volume->coords() );
     this->setConnections( volume->connections() );
@@ -201,8 +201,8 @@ kvs::AVSUcd* UnstructuredVolumeExporter<kvs::AVSUcd>::exec(
     this->setNSteps( 1 );
     this->setNComponentsPerNode( 1 );
     this->setNValuesPerNode( 1 );
-    this->setNNodes( volume->nnodes() );
-    this->setNElements( volume->ncells() );
+    this->setNNodes( volume->numberOfNodes() );
+    this->setNElements( volume->numberOfCells() );
     this->setVeclens( veclens );
     this->setComponentNames( component_names );
     this->setComponentUnits( component_units );

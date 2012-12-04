@@ -103,7 +103,7 @@ template <typename T>
 void StructuredVectorToScalar::calculate_magnitude( const kvs::StructuredVolumeObject* volume )
 {
     const size_t veclen = volume->veclen();
-    const size_t nnodes = volume->nnodes();
+    const size_t nnodes = volume->numberOfNodes();
 
     kvs::ValueArray<kvs::Real32> values( nnodes );
     kvs::Real32* dst = values.data();

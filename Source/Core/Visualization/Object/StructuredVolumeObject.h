@@ -17,6 +17,7 @@
 #include <kvs/ClassName>
 #include <kvs/Module>
 #include <kvs/VolumeObjectBase>
+#include <kvs/Deprecated>
 
 
 namespace kvs
@@ -27,30 +28,54 @@ namespace kvs
  *  StructuredVolumeObject.
  */
 /*==========================================================================*/
-class StructuredVolumeObject
-    : public kvs::VolumeObjectBase
+class StructuredVolumeObject : public kvs::VolumeObjectBase
 {
-    // Class name.
     kvsClassName( kvs::StructuredVolumeObject );
-
-    // Module information.
     kvsModuleCategory( Object );
     kvsModuleBaseClass( kvs::VolumeObjectBase );
 
 private:
 
-    GridType       m_grid_type;  ///< Grid type.
+    GridType m_grid_type;  ///< Grid type.
     kvs::Vector3ui m_resolution; ///< Node resolution.
 
 public:
 
-    StructuredVolumeObject( void );
+    static kvs::StructuredVolumeObject* DownCast( kvs::ObjectBase* object );
+    static const kvs::StructuredVolumeObject* DownCast( const kvs::ObjectBase* object );
 
-#if KVS_ENABLE_DEPRECATED
-    StructuredVolumeObject(
-        const kvs::Vector3ui& resolution,
-        const size_t          veclen,
-        const Values&         values )
+public:
+
+    StructuredVolumeObject();
+
+    friend std::ostream& operator << ( std::ostream& os, const StructuredVolumeObject& object );
+
+    void shallowCopy( const StructuredVolumeObject& object );
+    void deepCopy( const StructuredVolumeObject& object );
+
+    void setGridType( const GridType grid_type );
+    void setResolution( const kvs::Vector3ui& resolution );
+
+    VolumeType volumeType() const;
+    GridType gridType() const;
+    CellType cellType() const;
+    const kvs::Vector3ui& resolution() const;
+    size_t numberOfNodesPerLine() const;
+    size_t numberOfNodesPerSlice() const;
+    size_t numberOfNodes() const;
+    size_t numberOfCells() const;
+
+    void updateMinMaxCoords();
+
+private:
+
+    void calculate_min_max_coords();
+
+public:
+    KVS_DEPRECATED( StructuredVolumeObject(
+                        const kvs::Vector3ui& resolution,
+                        const size_t veclen,
+                        const Values& values ) )
     {
         this->setVeclen( veclen );
         this->setValues( values );
@@ -58,12 +83,12 @@ public:
         this->setResolution( resolution );
     }
 
-    StructuredVolumeObject(
-        const GridType        grid_type,
-        const kvs::Vector3ui& resolution,
-        const size_t          veclen,
-        const Coords&         coords,
-        const Values&         values )
+    KVS_DEPRECATED( StructuredVolumeObject(
+                        const GridType grid_type,
+                        const kvs::Vector3ui& resolution,
+                        const size_t veclen,
+                        const Coords& coords,
+                        const Values& values ) )
     {
         this->setVeclen( veclen );
         this->setCoords( coords );
@@ -71,55 +96,10 @@ public:
         this->setGridType( grid_type );
         this->setResolution( resolution );
     }
-#endif
 
-public:
-
-    static kvs::StructuredVolumeObject* DownCast( kvs::ObjectBase* object );
-
-    static const kvs::StructuredVolumeObject* DownCast( const kvs::ObjectBase* object );
-
-public:
-
-    friend std::ostream& operator << ( std::ostream& os, const StructuredVolumeObject& object );
-
-public:
-
-    void shallowCopy( const StructuredVolumeObject& object );
-
-    void deepCopy( const StructuredVolumeObject& object );
-
-public:
-
-    void setGridType( const GridType grid_type );
-
-    void setResolution( const kvs::Vector3ui& resolution );
-
-public:
-
-    const VolumeType volumeType( void ) const;
-
-    const GridType gridType( void ) const;
-
-    const CellType cellType( void ) const;
-
-    const kvs::Vector3ui& resolution( void ) const;
-
-    const size_t nnodesPerLine( void ) const;
-
-    const size_t nnodesPerSlice( void ) const;
-
-    const size_t nnodes( void ) const;
-
-    size_t numberOfCells() const;
-
-public:
-
-    void updateMinMaxCoords( void );
-
-private:
-
-    void calculate_min_max_coords( void );
+    KVS_DEPRECATED( size_t nnodesPerLine() const ) { return this->numberOfNodesPerLine(); }
+    KVS_DEPRECATED( size_t nnodesPerSlice() const ) { return this->numberOfNodesPerSlice(); }
+    KVS_DEPRECATED( size_t nnodes() const ) { return this->numberOfNodes(); }
 };
 
 } // end of namespace kvs

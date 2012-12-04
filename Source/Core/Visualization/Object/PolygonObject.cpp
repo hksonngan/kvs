@@ -92,8 +92,8 @@ std::ostream& operator << ( std::ostream& os, const PolygonObject& object )
 #else
     os << static_cast<const kvs::GeometryObjectBase&>( object ) << std::endl;
 #endif
-    os << "Number of connections:  " << object.nconnections() << std::endl;
-    os << "Number of opacities:  " << object.nopacities() << std::endl;
+    os << "Number of connections:  " << object.numberOfConnections() << std::endl;
+    os << "Number of opacities:  " << object.numberOfOpacities() << std::endl;
     os << "Polygon type:  " << ::GetPolygonTypeName( object.polygonType() ) << std::endl;
     os << "Color type:  " << ::GetColorTypeName( object.colorType() ) << std::endl;
     os << "Normal type:  " << ::GetNormalTypeName( object.normalType() );
@@ -186,13 +186,13 @@ PolygonObject::NormalType PolygonObject::normalType() const
     return m_normal_type;
 }
 
-size_t PolygonObject::nconnections() const
+size_t PolygonObject::numberOfConnections() const
 {
     const size_t nvertices_per_face = m_polygon_type;
     return m_connections.size() / nvertices_per_face;
 }
 
-size_t PolygonObject::nopacities() const
+size_t PolygonObject::numberOfOpacities() const
 {
     return m_opacities.size();
 }

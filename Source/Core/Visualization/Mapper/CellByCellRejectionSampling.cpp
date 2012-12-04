@@ -471,7 +471,7 @@ void CellByCellRejectionSampling::generate_particles( const kvs::UnstructuredVol
     const kvs::ColorMap color_map( BaseClass::transferFunction().colorMap() );
 
     // Generate particles for each cell.
-    const size_t ncells = volume->ncells();
+    const size_t ncells = volume->numberOfCells();
     for ( size_t index = 0; index < ncells; ++index )
     {
         // Bind the cell which is indicated by 'index'.

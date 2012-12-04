@@ -17,19 +17,6 @@
 namespace kvs
 {
 
-/*==========================================================================*/
-/**
- *  Constructs a new empty VolumeObjectBase.
- */
-/*==========================================================================*/
-VolumeObjectBase::VolumeObjectBase( void )
-    : m_veclen( 0 )
-    , m_has_min_max_values( false )
-    , m_min_value( 0.0 )
-    , m_max_value( 0.0 )
-{
-}
-
 kvs::VolumeObjectBase* VolumeObjectBase::DownCast( kvs::ObjectBase* object )
 {
     const kvs::ObjectBase::ObjectType type = object->objectType();
@@ -47,6 +34,19 @@ kvs::VolumeObjectBase* VolumeObjectBase::DownCast( kvs::ObjectBase* object )
 const kvs::VolumeObjectBase* VolumeObjectBase::DownCast( const kvs::ObjectBase* object )
 {
     return( VolumeObjectBase::DownCast( const_cast<kvs::ObjectBase*>( object ) ) );
+}
+
+/*==========================================================================*/
+/**
+ *  Constructs a new empty VolumeObjectBase.
+ */
+/*==========================================================================*/
+VolumeObjectBase::VolumeObjectBase()
+    : m_veclen( 0 )
+    , m_has_min_max_values( false )
+    , m_min_value( 0.0 )
+    , m_max_value( 0.0 )
+{
 }
 
 std::ostream& operator << ( std::ostream& os, const kvs::VolumeObjectBase& object )
@@ -131,13 +131,12 @@ void VolumeObjectBase::setMinMaxValues(
     m_has_min_max_values = true;
 }
 
-
-kvs::ObjectBase::ObjectType VolumeObjectBase::objectType( void ) const
+kvs::ObjectBase::ObjectType VolumeObjectBase::objectType() const
 {
     return( kvs::ObjectBase::Volume );
 }
 
-const std::string& VolumeObjectBase::label( void ) const
+const std::string& VolumeObjectBase::label() const
 {
     return( m_label );
 }
@@ -147,7 +146,7 @@ const std::string& VolumeObjectBase::label( void ) const
  *  Returns the vector length.
  */
 /*==========================================================================*/
-const size_t VolumeObjectBase::veclen( void ) const
+size_t VolumeObjectBase::veclen() const
 {
     return( m_veclen );
 }
@@ -157,7 +156,7 @@ const size_t VolumeObjectBase::veclen( void ) const
  *  Returns the coord array.
  */
 /*==========================================================================*/
-const VolumeObjectBase::Coords& VolumeObjectBase::coords( void ) const
+const VolumeObjectBase::Coords& VolumeObjectBase::coords() const
 {
     return( m_coords );
 }
@@ -167,7 +166,7 @@ const VolumeObjectBase::Coords& VolumeObjectBase::coords( void ) const
  *  Returns the value array.
  */
 /*==========================================================================*/
-const VolumeObjectBase::Values& VolumeObjectBase::values( void ) const
+const VolumeObjectBase::Values& VolumeObjectBase::values() const
 {
     return( m_values );
 }
@@ -179,7 +178,7 @@ const VolumeObjectBase::Values& VolumeObjectBase::values( void ) const
  *  @return Whether this class has the min/max values or not.
  */
 /*==========================================================================*/
-const bool VolumeObjectBase::hasMinMaxValues( void ) const
+bool VolumeObjectBase::hasMinMaxValues() const
 {
     return( m_has_min_max_values );
 }
@@ -191,7 +190,7 @@ const bool VolumeObjectBase::hasMinMaxValues( void ) const
  *  @return Minimum value.
  */
 /*==========================================================================*/
-const kvs::Real64 VolumeObjectBase::minValue( void ) const
+kvs::Real64 VolumeObjectBase::minValue() const
 {
     return( m_min_value );
 }
@@ -203,7 +202,7 @@ const kvs::Real64 VolumeObjectBase::minValue( void ) const
  *  @return Maximum value.
  */
 /*==========================================================================*/
-const kvs::Real64 VolumeObjectBase::maxValue( void ) const
+kvs::Real64 VolumeObjectBase::maxValue() const
 {
     return( m_max_value );
 }
@@ -213,7 +212,7 @@ const kvs::Real64 VolumeObjectBase::maxValue( void ) const
  *  Update the min/max node value.
  */
 /*==========================================================================*/
-void VolumeObjectBase::updateMinMaxValues( void ) const
+void VolumeObjectBase::updateMinMaxValues() const
 {
     const std::type_info& type = m_values.typeInfo()->type();
     if (      type == typeid( kvs::Int8   ) ) { this->calculate_min_max_values<kvs::Int8  >(); }

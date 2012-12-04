@@ -181,7 +181,7 @@ void MarchingTetrahedra::extract_surfaces_with_duplication(
     const kvs::UInt32* connections =
         static_cast<const kvs::UInt32*>( volume->connections().data() );
 
-    const size_t ncells = volume->ncells();
+    const size_t ncells = volume->numberOfCells();
 
     // Extract surfaces.
     size_t index = 0;
@@ -440,7 +440,7 @@ void MarchingTetrahedra::connect_isopoints(
 
     const kvs::VertexGraph* const vertex_graph = volume->adjacency()->vertexGraph();
     const kvs::UInt32* const volume_connections = volum->connections()->data();
-    const size_t ncells = volume->ncells();
+    const size_t ncells = volume->numberOfCells();
 
     size_t index = 0;
     size_t local_index[4];

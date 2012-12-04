@@ -181,7 +181,7 @@ void MarchingHexahedra::extract_surfaces_with_duplication(
     std::vector<kvs::Real32> coords;
     std::vector<kvs::Real32> normals;
 
-    const kvs::UInt32 ncells( volume->ncells() );
+    const kvs::UInt32 ncells( volume->numberOfCells() );
     const kvs::UInt32* connections =
         static_cast<const kvs::UInt32*>( volume->connections().data() );
 

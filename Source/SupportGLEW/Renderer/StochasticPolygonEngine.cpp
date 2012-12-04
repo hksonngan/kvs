@@ -106,19 +106,19 @@ void StochasticPolygonEngine::attachObject( const kvs::ObjectBase* object )
         return;
     }
 
-    if ( polygon->ncolors() != polygon->nvertices() && polygon->ncolors() > 1 )
+    if ( polygon->numberOfColors() != polygon->numberOfVertices() && polygon->numberOfColors() > 1 )
     {
         kvsMessageError( "Color type of this polygon is not vertex color." );
         return;
     }
 
-    if ( polygon->nopacities() != polygon->nvertices() && polygon->nopacities() > 1 )
+    if ( polygon->numberOfOpacities() != polygon->numberOfVertices() && polygon->numberOfOpacities() > 1 )
     {
         kvsMessageError( "Opacity type of this polygon is not vertex opacity." );
         return;
     }
 
-    if ( polygon->nnormals() != polygon->nvertices() && polygon->nnormals() > 0 )
+    if ( polygon->numberOfNormals() != polygon->numberOfVertices() && polygon->numberOfNormals() > 0 )
     {
         kvsMessageError( "Normal type of this polygon is not supported." );
         return;
@@ -127,7 +127,7 @@ void StochasticPolygonEngine::attachObject( const kvs::ObjectBase* object )
     m_ref_polygon = polygon;
 
     if ( m_ref_polygon->normals().data() == NULL ||
-         m_ref_polygon->nnormals() == 0 )
+         m_ref_polygon->numberOfNormals() == 0 )
     {
         BaseClass::disableShading();
     }
@@ -274,13 +274,13 @@ void StochasticPolygonEngine::create_vertex_buffer( void )
     m_vbo.release();
     m_ibo.release();
 
-    const size_t nvertices = m_ref_polygon->nvertices();
-    const size_t npolygons = m_ref_polygon->nconnections();
+    const size_t nvertices = m_ref_polygon->numberOfVertices();
+    const size_t npolygons = m_ref_polygon->numberOfConnections();
 
-    const bool has_color    = m_ref_polygon->ncolors() > 1;
-    const bool has_opacity  = ( m_ref_polygon->nopacities() > 1 && has_color );
-    const bool has_normal   = ( m_ref_polygon->nnormals() > 0 && BaseClass::isEnabledShading() );
-    const bool has_connect  = m_ref_polygon->nconnections() > 0;
+    const bool has_color    = m_ref_polygon->numberOfColors() > 1;
+    const bool has_opacity  = ( m_ref_polygon->numberOfOpacities() > 1 && has_color );
+    const bool has_normal   = ( m_ref_polygon->numberOfNormals() > 0 && BaseClass::isEnabledShading() );
+    const bool has_connect  = m_ref_polygon->numberOfConnections() > 0;
 
     const size_t size_i = sizeof(IndexType) * 2 * nvertices;
     const size_t size_v = sizeof(CoordType) * 3 * nvertices;
@@ -400,12 +400,12 @@ void StochasticPolygonEngine::draw_vertex_buffer( const float modelview_matrix[1
 
     this->setup_shader( modelview_matrix );
 
-    const size_t npolygons = m_ref_polygon->nconnections();
+    const size_t npolygons = m_ref_polygon->numberOfConnections();
 
-    const bool has_color    = m_ref_polygon->ncolors() > 1;
+    const bool has_color    = m_ref_polygon->numberOfColors() > 1;
     //const bool has_opacity  = ( m_ref_polygon->nopacities() > 1 && has_color );
-    const bool has_normal   = ( m_ref_polygon->nnormals() > 0 && BaseClass::isEnabledShading() );
-    const bool has_connect  = m_ref_polygon->nconnections() > 0;
+    const bool has_normal   = ( m_ref_polygon->numberOfNormals() > 0 && BaseClass::isEnabledShading() );
+    const bool has_connect  = m_ref_polygon->numberOfConnections() > 0;
 
     glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
 

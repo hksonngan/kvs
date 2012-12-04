@@ -4,7 +4,7 @@
  *  @brief  LIC (Line Integral Convolution) class.
  *
  *  @author Naohisa Sakamoto
- *  @date   2012/11/30 13:06:24
+ *  @date   2012/12/04 15:43:29
  */
 /*----------------------------------------------------------------------------
  *
@@ -153,14 +153,14 @@ void LineIntegralConvolution::filtering( const kvs::StructuredVolumeObject* volu
 void LineIntegralConvolution::create_noise_volume( const kvs::StructuredVolumeObject* volume )
 {
     //kvs::StructuredVolumeObject::Values data;
-    kvs::ValueArray<kvs::UInt8> data( volume->nnodes() );
+    kvs::ValueArray<kvs::UInt8> data( volume->numberOfNodes() );
     kvs::UInt8* pdata = data.data();
 
     // Random number generator. R = [0,1)
     kvs::MersenneTwister R;
 
     // Create a white noise volume.
-    for ( size_t i = 0; i < volume->nnodes(); i++ )
+    for ( size_t i = 0; i < volume->numberOfNodes(); i++ )
     {
         *(pdata++) = static_cast<kvs::UInt8>( R() * 255.0 );
     }
@@ -190,7 +190,7 @@ void LineIntegralConvolution::convolution( const kvs::StructuredVolumeObject* vo
     const kvs::UInt8*           noise_data = static_cast<const kvs::UInt8*>( m_noise->values().data() );
     const T*                    src_data = static_cast<const T*>( volume->values().data() );
 
-    kvs::ValueArray<kvs::UInt8> dst_data( volume->nnodes() );
+    kvs::ValueArray<kvs::UInt8> dst_data( volume->numberOfNodes() );
 
     const kvs::Vector3ui resol( volume->resolution() );
 

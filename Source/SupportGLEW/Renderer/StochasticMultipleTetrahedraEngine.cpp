@@ -166,8 +166,8 @@ void StochasticMultipleTetrahedraEngine::create_vertexbuffer_from_volume_of( con
 {
     const kvs::UnstructuredVolumeObject* ref_volume[2] = { m_ref_volume, m_ref_volume2 };
 
-    const size_t nvertices = ref_volume[index]->nnodes();
-    const size_t ncells = ref_volume[index]->ncells();
+    const size_t nvertices = ref_volume[index]->numberOfNodes();
+    const size_t ncells = ref_volume[index]->numberOfCells();
     const size_t veclen = ref_volume[index]->veclen(); // ADD
 
 //    m_volume->create( m_nsteps, nvertices, ncells );

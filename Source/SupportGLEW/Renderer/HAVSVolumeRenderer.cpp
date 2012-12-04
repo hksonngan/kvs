@@ -702,8 +702,8 @@ void HAVSVolumeRenderer::Meshes::setVolume( const kvs::UnstructuredVolumeObject*
 
     this->clean();
 
-    m_nvertices = volume->nnodes();
-    m_ntetrahedra = volume->ncells();
+    m_nvertices = volume->numberOfNodes();
+    m_ntetrahedra = volume->numberOfCells();
     m_coords = volume->coords();
     m_connections = volume->connections();
 

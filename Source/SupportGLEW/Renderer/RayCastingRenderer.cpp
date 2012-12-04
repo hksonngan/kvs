@@ -51,7 +51,7 @@ kvs::AnyValueArray NormalizeValues(
 //    const kvs::Real32 max = static_cast<kvs::Real32>( volume->maxValue() );
 
     const kvs::Real32 scale = 1.0f / ( max_value - min_value );
-    const size_t nnodes = volume->nnodes();
+    const size_t nnodes = volume->numberOfNodes();
     const T* src = static_cast<const T*>( volume->values().data() );
 
     kvs::ValueArray<kvs::Real32> data( nnodes );

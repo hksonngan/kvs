@@ -40,7 +40,7 @@ void Rendering_Strip_VCs_S( const kvs::LineObject* line )
     glLineWidth( line->size( 0 ) );
     glBegin( GL_LINE_STRIP );
     {
-        const size_t nvertices = line->nvertices();
+        const size_t nvertices = line->numberOfVertices();
 
         for( size_t i = 0; i < nvertices; i++ )
         {
@@ -62,7 +62,7 @@ void Rendering_Strip_VCs_S( const kvs::LineObject* line )
 /*==========================================================================*/
 void Rendering_Strip_VCs_Ss( const kvs::LineObject* line )
 {
-    const size_t nlines = line->nvertices() - 1;
+    const size_t nlines = line->numberOfVertices() - 1;
     for( size_t i = 0; i < nlines; i++ )
     {
         glLineWidth( line->size(i) );
@@ -93,7 +93,7 @@ void Rendering_Strip_LC_S( const kvs::LineObject* line )
 {
     glLineWidth( line->size( 0 ) );
 
-    const size_t         nvertices = line->nvertices();
+    const size_t         nvertices = line->numberOfVertices();
     const kvs::RGBColor& color     = line->color(0);
 
     glBegin( GL_LINE_STRIP );
@@ -118,7 +118,7 @@ void Rendering_Strip_LCs_S( const kvs::LineObject* line )
 {
     glLineWidth( line->size( 0 ) );
 
-    const size_t num = line->nvertices() - 1;
+    const size_t num = line->numberOfVertices() - 1;
 
     glBegin( GL_LINES );
     {
@@ -144,7 +144,7 @@ void Rendering_Strip_LCs_S( const kvs::LineObject* line )
 /*==========================================================================*/
 void Rendering_Strip_LC_Ss( const kvs::LineObject* line )
 {
-    const size_t         num   = line->nvertices() - 1;
+    const size_t         num   = line->numberOfVertices() - 1;
     const kvs::RGBColor& color = line->color(0);
     glColor3ub( color.r(), color.g(), color.b() );
 
@@ -172,7 +172,7 @@ void Rendering_Strip_LC_Ss( const kvs::LineObject* line )
 /*==========================================================================*/
 void Rendering_Strip_LCs_Ss( const kvs::LineObject* line )
 {
-    const size_t num = line->nvertices() - 1;
+    const size_t num = line->numberOfVertices() - 1;
 
     for( size_t i = 0; i < num; i++ )
     {
@@ -204,7 +204,7 @@ void Rendering_Uniline_VCs_S( const kvs::LineObject* line )
 
     glBegin( GL_LINE_STRIP );
     {
-        const size_t nconnections = line->nconnections();
+        const size_t nconnections = line->numberOfConnections();
         for( size_t i = 0; i < nconnections; i++ )
         {
             size_t id = *( line->connections().data() + i );
@@ -227,7 +227,7 @@ void Rendering_Uniline_VCs_S( const kvs::LineObject* line )
 /*==========================================================================*/
 void Rendering_Uniline_VCs_Ss( const kvs::LineObject* line )
 {
-    const size_t num = line->nconnections() - 1;
+    const size_t num = line->numberOfConnections() - 1;
     for( size_t i = 0; i < num; i++ )
     {
         size_t id1 = *( line->connections().data() + i   );
@@ -265,7 +265,7 @@ void Rendering_Uniline_LC_S( const kvs::LineObject* line )
         const kvs::RGBColor& color = line->color(0);
         glColor3ub( color.r(), color.g(), color.b() );
 
-        const size_t nconnections = line->nconnections();
+        const size_t nconnections = line->numberOfConnections();
 
         for( size_t i = 0; i < nconnections; i++ )
         {
@@ -288,7 +288,7 @@ void Rendering_Uniline_LCs_S( const kvs::LineObject* line )
 
     glBegin( GL_LINES );
     {
-        const size_t num = line->nconnections() - 1;
+        const size_t num = line->numberOfConnections() - 1;
         for( size_t i = 0; i < num; i++ )
         {
             const kvs::RGBColor& color     = line->color(i);
@@ -314,7 +314,7 @@ void Rendering_Uniline_LC_Ss( const kvs::LineObject* line )
     const kvs::RGBColor& color = line->color(0);
     glColor3ub( color.r(), color.g(), color.b() );
 
-    const size_t num = line->nconnections() - 1;
+    const size_t num = line->numberOfConnections() - 1;
 
     for( size_t i = 0; i < num; i++ )
     {
@@ -339,7 +339,7 @@ void Rendering_Uniline_LC_Ss( const kvs::LineObject* line )
 /*==========================================================================*/
 void Rendering_Uniline_LCs_Ss( const kvs::LineObject* line )
 {
-    const size_t num = line->nconnections() - 1;
+    const size_t num = line->numberOfConnections() - 1;
     for( size_t i = 0; i < num; i++ )
     {
         const kvs::RGBColor& color     = line->color(i);
@@ -367,7 +367,7 @@ void Rendering_Polyline_VCs_S( const kvs::LineObject* line )
 {
     glLineWidth( line->size( 0 ) );
 
-    const size_t nconnections = line->nconnections();
+    const size_t nconnections = line->numberOfConnections();
     for( size_t i = 0; i < nconnections; i++ )
     {
         const size_t index = 2 * i;
@@ -398,7 +398,7 @@ void Rendering_Polyline_VCs_S( const kvs::LineObject* line )
 void Rendering_Polyline_VCs_Ss( const kvs::LineObject* line )
 {
     int ctr = 0;
-    const size_t nconnections = line->nconnections();
+    const size_t nconnections = line->numberOfConnections();
     for( size_t i = 0; i < nconnections; i++ )
     {
         const size_t index = 2*i;
@@ -437,7 +437,7 @@ void Rendering_Polyline_LC_S( const kvs::LineObject* line )
 {
     glLineWidth( line->size( 0 ) );
 
-    const size_t nconnections = line->nconnections();
+    const size_t nconnections = line->numberOfConnections();
     for( size_t i = 0; i < nconnections; i++ )
     {
         const size_t index = 2 * i;
@@ -473,7 +473,7 @@ void Rendering_Polyline_LCs_S( const kvs::LineObject* line )
     glLineWidth( line->size( 0 ) );
 
     int ctr = 0;
-    const size_t nconnections = line->nconnections();
+    const size_t nconnections = line->numberOfConnections();
     for( size_t i = 0; i < nconnections; i++ )
     {
         const size_t index = 2 * i;
@@ -507,7 +507,7 @@ void Rendering_Polyline_LCs_S( const kvs::LineObject* line )
 void Rendering_Polyline_LC_Ss( const kvs::LineObject* line )
 {
     int ctr = 0;
-    const size_t nconnections = line->nconnections();
+    const size_t nconnections = line->numberOfConnections();
     for( size_t i = 0; i < nconnections; i++ )
     {
         const size_t index = 2*i;
@@ -544,7 +544,7 @@ void Rendering_Polyline_LC_Ss( const kvs::LineObject* line )
 void Rendering_Polyline_LCs_Ss( const kvs::LineObject* line )
 {
     int ctr = 0;
-    const size_t nconnections = line->nconnections();
+    const size_t nconnections = line->numberOfConnections();
     for( size_t i = 0; i < nconnections; i++ )
     {
         const size_t index = 2*i;
@@ -583,7 +583,7 @@ void Rendering_Segment_VCs_S( const kvs::LineObject* line )
 
     glBegin( GL_LINES );
     {
-        const size_t num = line->nconnections() * 2;
+        const size_t num = line->numberOfConnections() * 2;
         for( size_t i = 0; i < num; i++ )
         {
             const size_t id = *( line->connections().data() + i );
@@ -606,7 +606,7 @@ void Rendering_Segment_VCs_S( const kvs::LineObject* line )
 /*==========================================================================*/
 void Rendering_Segment_VCs_Ss( const kvs::LineObject* line )
 {
-    const size_t nconnections = line->nconnections();
+    const size_t nconnections = line->numberOfConnections();
     for( size_t i = 0; i < nconnections; i++ )
     {
         const size_t index = 2*i;
@@ -645,7 +645,7 @@ void Rendering_Segment_LC_S( const kvs::LineObject* line )
 
     glBegin( GL_LINES );
     {
-        const size_t num = line->nconnections() * 2;
+        const size_t num = line->numberOfConnections() * 2;
         for( size_t i = 0; i < num; i++ )
         {
             const size_t id = *( line->connections().data() + i );
@@ -669,7 +669,7 @@ void Rendering_Segment_LCs_S( const kvs::LineObject* line )
 
     glBegin( GL_LINES );
     {
-        const size_t nconnections = line->nconnections();
+        const size_t nconnections = line->numberOfConnections();
         for( size_t i = 0; i < nconnections; i++ )
         {
             const kvs::RGBColor& color = line->color(i);
@@ -700,7 +700,7 @@ void Rendering_Segment_LC_Ss( const kvs::LineObject* line )
     const kvs::RGBColor& color = line->color(0);
     glColor3ub( color.r(), color.g(), color.b() );
 
-    const size_t nconnections = line->nconnections();
+    const size_t nconnections = line->numberOfConnections();
     for( size_t i = 0; i < nconnections; i++ )
     {
         const size_t index = 2*i;
@@ -728,7 +728,7 @@ void Rendering_Segment_LC_Ss( const kvs::LineObject* line )
 /*==========================================================================*/
 void Rendering_Segment_LCs_Ss( const kvs::LineObject* line )
 {
-    const size_t nconnections = line->nconnections();
+    const size_t nconnections = line->numberOfConnections();
     for( size_t i = 0; i < nconnections; i++ )
     {
         const kvs::RGBColor& color = line->color(i);
@@ -841,8 +841,8 @@ LineRenderingFunctionType Rendering[NumberOfRenderingTypes] =
 
 LineRenderingType GetLineRenderingType( const kvs::LineObject* line )
 {
-    const size_t nsizes    = line->nsizes();
-    const size_t ncolors   = line->ncolors();
+    const size_t nsizes    = line->numberOfSizes();
+    const size_t ncolors   = line->numberOfColors();
 
     switch( line->lineType() )
     {
@@ -858,7 +858,7 @@ LineRenderingType GetLineRenderingType( const kvs::LineObject* line )
 
 void LineRenderingFunction( const kvs::LineObject* line )
 {
-    if( line->nvertices() > 0 )
+    if( line->numberOfVertices() > 0 )
     {
         LineRenderingType type = GetLineRenderingType( line );
         Rendering[type]( line );

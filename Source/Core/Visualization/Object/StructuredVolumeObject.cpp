@@ -40,7 +40,7 @@ namespace kvs
  *  Constructs a new empty StructuredVolumeObject.
  */
 /*==========================================================================*/
-StructuredVolumeObject::StructuredVolumeObject( void )
+StructuredVolumeObject::StructuredVolumeObject()
     : kvs::VolumeObjectBase()
     , m_grid_type( UnknownGridType )
     , m_resolution( kvs::Vector3ui( 0, 0, 0 ) )
@@ -83,7 +83,7 @@ std::ostream& operator << ( std::ostream& os, const StructuredVolumeObject& obje
 #endif
     os << "Grid type:  " << ::GetGridTypeName( object.gridType() ) << std::endl;
     os << "Resolution:  " << object.resolution() << std::endl;
-    os << "Number of nodes:  " << object.nnodes() << std::endl;
+    os << "Number of nodes:  " << object.numberOfNodes() << std::endl;
     os << "Min. value:  " << object.minValue() << std::endl;
     os << "Max. value:  " << object.maxValue();
 
@@ -129,7 +129,7 @@ void StructuredVolumeObject::setResolution( const kvs::Vector3ui& resolution )
  *  Returns the volume type.
  */
 /*==========================================================================*/
-const StructuredVolumeObject::VolumeType StructuredVolumeObject::volumeType( void ) const
+StructuredVolumeObject::VolumeType StructuredVolumeObject::volumeType() const
 {
     return( Structured );
 }
@@ -139,7 +139,7 @@ const StructuredVolumeObject::VolumeType StructuredVolumeObject::volumeType( voi
  *  Returns the grid type.
  */
 /*==========================================================================*/
-const StructuredVolumeObject::GridType StructuredVolumeObject::gridType( void ) const
+StructuredVolumeObject::GridType StructuredVolumeObject::gridType() const
 {
     return( m_grid_type );
 }
@@ -149,7 +149,7 @@ const StructuredVolumeObject::GridType StructuredVolumeObject::gridType( void ) 
  *  Returns the cell type.
  */
 /*==========================================================================*/
-const StructuredVolumeObject::CellType StructuredVolumeObject::cellType( void ) const
+StructuredVolumeObject::CellType StructuredVolumeObject::cellType() const
 {
     return( Hexahedra );
 }
@@ -159,7 +159,7 @@ const StructuredVolumeObject::CellType StructuredVolumeObject::cellType( void ) 
  *  Returns the node resolution.
  */
 /*==========================================================================*/
-const kvs::Vector3ui& StructuredVolumeObject::resolution( void ) const
+const kvs::Vector3ui& StructuredVolumeObject::resolution() const
 {
     return( m_resolution );
 }
@@ -169,7 +169,7 @@ const kvs::Vector3ui& StructuredVolumeObject::resolution( void ) const
  *  Returns the number of nodes per line.
  */
 /*==========================================================================*/
-const size_t StructuredVolumeObject::nnodesPerLine( void ) const
+size_t StructuredVolumeObject::numberOfNodesPerLine() const
 {
     return( m_resolution.x() );
 }
@@ -179,9 +179,9 @@ const size_t StructuredVolumeObject::nnodesPerLine( void ) const
  *  Returns the number of nodes per slice.
  */
 /*==========================================================================*/
-const size_t StructuredVolumeObject::nnodesPerSlice( void ) const
+size_t StructuredVolumeObject::numberOfNodesPerSlice() const
 {
-    return( this->nnodesPerLine() * m_resolution.y() );
+    return( this->numberOfNodesPerLine() * m_resolution.y() );
 }
 
 /*==========================================================================*/
@@ -189,9 +189,9 @@ const size_t StructuredVolumeObject::nnodesPerSlice( void ) const
  *  Returns the number of nodes.
  */
 /*==========================================================================*/
-const size_t StructuredVolumeObject::nnodes( void ) const
+size_t StructuredVolumeObject::numberOfNodes() const
 {
-    return( this->nnodesPerSlice() * m_resolution.z() );
+    return( this->numberOfNodesPerSlice() * m_resolution.z() );
 }
 
 /*==========================================================================*/
@@ -199,7 +199,7 @@ const size_t StructuredVolumeObject::nnodes( void ) const
  *  Update the min/max node coordinates.
  */
 /*==========================================================================*/
-void StructuredVolumeObject::updateMinMaxCoords( void )
+void StructuredVolumeObject::updateMinMaxCoords()
 {
     this->calculate_min_max_coords();
 }
@@ -214,7 +214,7 @@ size_t StructuredVolumeObject::numberOfCells() const
  *  Calculate the min/max coordinate values.
  */
 /*==========================================================================*/
-void StructuredVolumeObject::calculate_min_max_coords( void )
+void StructuredVolumeObject::calculate_min_max_coords()
 {
     kvs::Vector3f min_coord( 0.0f, 0.0f, 0.0f );
     kvs::Vector3f max_coord( 0.0f, 0.0f, 0.0f );

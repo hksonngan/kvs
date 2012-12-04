@@ -103,7 +103,7 @@ template <typename T>
 void UnstructuredVectorToScalar::calculate_magnitude( const kvs::UnstructuredVolumeObject* volume )
 {
     const size_t veclen = volume->veclen();
-    const size_t nnodes = volume->nnodes();
+    const size_t nnodes = volume->numberOfNodes();
 
     kvs::ValueArray<kvs::Real32> values( nnodes );
     kvs::Real32* dst = values.data();
@@ -121,8 +121,8 @@ void UnstructuredVectorToScalar::calculate_magnitude( const kvs::UnstructuredVol
     }
 
     SuperClass::setVeclen( 1 );
-    SuperClass::setNNodes( volume->nnodes() );
-    SuperClass::setNCells( volume->ncells() );
+    SuperClass::setNumberOfNodes( volume->numberOfNodes() );
+    SuperClass::setNumberOfCells( volume->numberOfCells() );
     SuperClass::setCellType( volume->cellType() );
     SuperClass::setValues( kvs::AnyValueArray( values ) );
     SuperClass::setCoords( volume->coords() );

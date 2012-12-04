@@ -575,7 +575,7 @@ void ParticleBasedRenderer::attachPointObject( const kvs::PointObject* point )
     m_ref_point = point;
 
     if ( m_ref_point->normals().data() == NULL ||
-         m_ref_point->nnormals() == 0 )
+         m_ref_point->numberOfNormals() == 0 )
     {
         BaseClass::disableShading();
     }
@@ -967,7 +967,7 @@ void ParticleBasedRenderer::create_image(
     rendering_process::used_points   = 0;
     bool flag_enable_next_buffer_use = 0;
     bool flag_not_move_and_zoom_on   = repeat_count > 1 && r_count > 0; 
-    size_t num_remainder_points      = static_cast<size_t>(static_cast<float>(m_ref_point->nvertices() / m_repetition_level) * r_count);
+    size_t num_remainder_points      = static_cast<size_t>(static_cast<float>(m_ref_point->numberOfVertices() / m_repetition_level) * r_count);
     /*ADD_UEMURA(end)*/
 
     // Create image ensembles
@@ -1037,7 +1037,7 @@ void ParticleBasedRenderer::create_image(
 
                     // Project all particles in the current remainder array, and 
                     //  supplement particles later in the next loop (next remainder array) 
-                    rendering_process::used_points = m_ref_point->nvertices() / m_repetition_level - rendering_process::start_pos;
+                    rendering_process::used_points = m_ref_point->numberOfVertices() / m_repetition_level - rendering_process::start_pos;
                     this->draw_vertexbuffer( m_renderer[repeat_count + static_cast<size_t>(current_r_pos)], 
                                              m_vbo[repeat_count + static_cast<size_t>(current_r_pos)], 
                                              modelview_matrix                                               );
@@ -1384,7 +1384,7 @@ void ParticleBasedRenderer::align_particles( void )
     if ( m_particles ) delete [] m_particles;
     m_particles = new Particles[ m_repetition_level ];
 
-    const int total_vertices = m_ref_point->nvertices();
+    const int total_vertices = m_ref_point->numberOfVertices();
 
     // Source pointers.
     /*ADD_UEMURA(begin)*/
@@ -1392,8 +1392,8 @@ void ParticleBasedRenderer::align_particles( void )
     kvs::Real32* src_normal = const_cast<kvs::Real32*>(m_ref_point->normals().data());
     kvs::UInt8*  src_color  = const_cast<kvs::UInt8*>(m_ref_point->colors().data());
 
-    const bool has_color_array = m_ref_point->ncolors() == m_ref_point->nvertices();
-    const bool has_normal_array = m_ref_point->nnormals() == m_ref_point->nvertices();
+    const bool has_color_array = m_ref_point->numberOfColors() == m_ref_point->numberOfVertices();
+    const bool has_normal_array = m_ref_point->numberOfNormals() == m_ref_point->numberOfVertices();
 
     //Shuffle source coord array
     if(m_enable_shuffle){

@@ -38,7 +38,7 @@ const kvs::ValueArray<kvs::Real32> GetVertexArray( const kvs::LineObject* line )
         const kvs::UInt32* c = line->connections().data();
 
         const size_t dimension = 3;
-        const size_t nvertices = line->nconnections();
+        const size_t nvertices = line->numberOfConnections();
         kvs::ValueArray<kvs::Real32> vertices( nvertices * dimension );
         for ( size_t i = 0, index = 0; i < nvertices; i++, index += dimension )
         {
@@ -122,12 +122,12 @@ const kvs::ValueArray<kvs::Real32> GetVertexArray(
 /*===========================================================================*/
 const kvs::ValueArray<kvs::UInt8> GetColorArray( const kvs::LineObject* line )
 {
-    if ( line->ncolors() == 1 )
+    if ( line->numberOfColors() == 1 )
     {
         const kvs::UInt8* c = line->colors().data();
 
         const size_t ncomponents = 3;
-        const size_t ncolors = line->nvertices();
+        const size_t ncolors = line->numberOfVertices();
         kvs::ValueArray<kvs::UInt8> colors( ncolors * ncomponents );
         for ( size_t i = 0, index = 0; i < ncolors; i++, index += ncomponents )
         {
@@ -138,7 +138,7 @@ const kvs::ValueArray<kvs::UInt8> GetColorArray( const kvs::LineObject* line )
 
         return colors;
     }
-    else if ( line->ncolors() > 1 )
+    else if ( line->numberOfColors() > 1 )
     {
         return line->colors();
     }
@@ -172,7 +172,7 @@ const kvs::ValueArray<kvs::UInt8> GetColorArray(
     const size_t ncomponents = 3;
     const size_t ncolors = id2 - id1 + 1;
 
-    if ( line->ncolors() == 1 )
+    if ( line->numberOfColors() == 1 )
     {
         kvs::ValueArray<kvs::UInt8> colors( ncomponents * ncolors );
         for ( size_t i = 0, index = 0; i < ncolors; i++, index += ncomponents )
@@ -184,7 +184,7 @@ const kvs::ValueArray<kvs::UInt8> GetColorArray(
 
         return colors;
     }
-    else if ( line->ncolors() > 1 )
+    else if ( line->numberOfColors() > 1 )
     {
         if ( line->colorType() == kvs::LineObject::LineColor )
         {
@@ -244,11 +244,11 @@ const kvs::ValueArray<kvs::UInt8> GetColorArray(
 /*===========================================================================*/
 const kvs::ValueArray<kvs::Real32> GetSizeArray( const kvs::LineObject* line )
 {
-    if ( line->nsizes() == 1 )
+    if ( line->numberOfSizes() == 1 )
     {
         const kvs::Real32* s = line->sizes().data();
 
-        const size_t nsizes = line->nvertices() - 1;
+        const size_t nsizes = line->numberOfVertices() - 1;
         kvs::ValueArray<kvs::Real32> sizes( nsizes );
         for ( size_t i = 0; i < nsizes; i++ )
         {
@@ -257,7 +257,7 @@ const kvs::ValueArray<kvs::Real32> GetSizeArray( const kvs::LineObject* line )
 
         return sizes;
     }
-    else if ( line->nsizes() > 1 )
+    else if ( line->numberOfSizes() > 1 )
     {
         return line->sizes();
     }
@@ -290,7 +290,7 @@ const kvs::ValueArray<kvs::Real32> GetSizeArray(
     // Number of components of the size array.
     const size_t nsizes = id2 - id1 + 1;
 
-    if ( line->nsizes() == 1 )
+    if ( line->numberOfSizes() == 1 )
     {
         kvs::ValueArray<kvs::Real32> sizes( nsizes );
         for ( size_t i = 0; i < nsizes; i++ )
@@ -300,7 +300,7 @@ const kvs::ValueArray<kvs::Real32> GetSizeArray(
 
         return sizes;
     }
-    else if ( line->nsizes() > 1 )
+    else if ( line->numberOfSizes() > 1 )
     {
         kvs::ValueArray<kvs::Real32> sizes( nsizes );
 
@@ -365,10 +365,10 @@ const size_t GetNumberOfVertices( const kvs::LineObject* line )
     switch ( line->lineType() )
     {
     case kvs::LineObject::Strip:
-        nvertices = line->nvertices();
+        nvertices = line->numberOfVertices();
         break;
     case kvs::LineObject::Uniline:
-        nvertices = line->nconnections();
+        nvertices = line->numberOfConnections();
         break;
     default:
         break;
@@ -578,7 +578,7 @@ void Tubeline::filtering_polyline( const kvs::LineObject* line )
     const kvs::PolygonObject::ColorType color_type = ::GetColorType( line );
 
     const kvs::UInt32* line_connections = line->connections().data();
-    const size_t line_nconnections = line->nconnections();
+    const size_t line_nconnections = line->numberOfConnections();
     for( size_t i = 0, index = 0; i < line_nconnections; i++, index += 2 )
     {
         const size_t id1 = line_connections[ index + 0 ];
@@ -653,7 +653,7 @@ void Tubeline::filtering_segment( const kvs::LineObject* line )
     const kvs::PolygonObject::ColorType color_type = ::GetColorType( line );
 
     const kvs::UInt32* line_connections = line->connections().data();
-    const size_t line_nconnections = line->nconnections();
+    const size_t line_nconnections = line->numberOfConnections();
     for( size_t i = 0, index = 0; i < line_nconnections; i++, index += 2 )
     {
         const size_t id1 = line_connections[ index + 0 ];
@@ -663,11 +663,11 @@ void Tubeline::filtering_segment( const kvs::LineObject* line )
         const kvs::ValueArray<kvs::Real32> line_vertices = ::GetVertexArray( line, id1, id2 );
 //        const kvs::Real32 line_size = ( line->nsizes() == 1 ) ? line->size(0) : line->size(i);
         kvs::ValueArray<kvs::Real32> line_sizes(1);
-        if ( line->nsizes() == 1 ) line_sizes[0] = line->size(0);
+        if ( line->numberOfSizes() == 1 ) line_sizes[0] = line->size(0);
         else line_sizes[0] = line->size(i);
 
         kvs::ValueArray<kvs::UInt8> line_colors(6);
-        if ( line->ncolors() == 1 )
+        if ( line->numberOfColors() == 1 )
         {
             line_colors[0] = line->color(0).r();
             line_colors[1] = line->color(0).g();

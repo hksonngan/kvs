@@ -49,7 +49,7 @@ void Rendering_S_C_Ns( const kvs::PointObject* point )
 
     glBegin( GL_POINTS );
     {
-        const size_t nvertices = point->nvertices();
+        const size_t nvertices = point->numberOfVertices();
         for( size_t i = 0; i < nvertices; i++ )
         {
             const size_t i3 = i * 3;
@@ -77,7 +77,7 @@ void Rendering_S_C( const kvs::PointObject* point )
     const float* vertex = point->coords().data();
     glBegin( GL_POINTS );
     {
-        const size_t nvertices = point->nvertices();
+        const size_t nvertices = point->numberOfVertices();
         for( size_t i = 0; i < nvertices; i++ )
         {
             size_t i3 = i * 3;
@@ -105,7 +105,7 @@ void Rendering_S_Cs_Ns( const kvs::PointObject* point )
     const unsigned char* color  = point->colors().data();
     glBegin( GL_POINTS );
     {
-        const size_t nvertices = point->nvertices();
+        const size_t nvertices = point->numberOfVertices();
         for( size_t i = 0; i < nvertices; i++ )
         {
             size_t i3 = i * 3;
@@ -132,7 +132,7 @@ void Rendering_S_Cs( const kvs::PointObject* point )
     const unsigned char* color = point->colors().data();
     glBegin( GL_POINTS );
     {
-        const size_t nvertices = point->nvertices();
+        const size_t nvertices = point->numberOfVertices();
         for( size_t i = 0; i < nvertices; i++ )
         {
             const size_t i3 = i * 3;
@@ -157,7 +157,7 @@ void Rendering_S( const kvs::PointObject* point )
     const float* vertex = point->coords().data();
     glBegin( GL_POINTS );
     {
-        const size_t nvertices = point->nvertices();
+        const size_t nvertices = point->numberOfVertices();
         for( size_t i = 0; i < nvertices; i++ )
         {
             const size_t i3 = i * 3;
@@ -184,7 +184,7 @@ void Rendering_Ss_C_Ns( const kvs::PointObject* point )
     const float* vertex = point->coords().data();
     const float* normal = point->normals().data();
 
-    const size_t nvertices = point->nvertices();
+    const size_t nvertices = point->numberOfVertices();
     for( size_t i = 0; i < nvertices; i++ )
     {
         const size_t i3 = i * 3;
@@ -212,7 +212,7 @@ void Rendering_Ss_C( const kvs::PointObject* point )
     const float* size   = point->sizes().data();
     const float* vertex = point->coords().data();
 
-    const size_t nvertices = point->nvertices();
+    const size_t nvertices = point->numberOfVertices();
     for( size_t i = 0; i < nvertices; i++ )
     {
         const size_t i3 = i * 3;
@@ -240,7 +240,7 @@ void Rendering_Ss_Cs_Ns( const kvs::PointObject* point )
     const float*         normal = point->normals().data();
     const unsigned char* color  = point->colors().data();
 
-    const size_t nvertices = point->nvertices();
+    const size_t nvertices = point->numberOfVertices();
     for( size_t i = 0; i < nvertices; i++ )
     {
         const size_t i3 = i * 3;
@@ -267,7 +267,7 @@ void Rendering_Ss_Cs( const kvs::PointObject* point )
     const float*         vertex = point->coords().data();
     const unsigned char* color  = point->colors().data();
 
-    const size_t nvertices = point->nvertices();
+    const size_t nvertices = point->numberOfVertices();
     for( size_t i = 0; i < nvertices; i++ )
     {
         const size_t i3 = i * 3;
@@ -292,7 +292,7 @@ void Rendering_Ss( const kvs::PointObject* point )
     const float* size   = point->sizes().data();
     const float* vertex = point->coords().data();
 
-    const size_t nvertices = point->nvertices();
+    const size_t nvertices = point->numberOfVertices();
     for( size_t i = 0; i < nvertices; i++ )
     {
         size_t i3 = i * 3;
@@ -338,9 +338,9 @@ PointRenderingFunctionType Rendering[NumberOfRenderingTypes] =
 
 PointRenderingType GetPointRenderingType( const kvs::PointObject* point )
 {
-    const size_t nsizes    = point->nsizes();
-    const size_t ncolors   = point->ncolors();
-    const size_t nnormals  = point->nnormals();
+    const size_t nsizes    = point->numberOfSizes();
+    const size_t ncolors   = point->numberOfColors();
+    const size_t nnormals  = point->numberOfNormals();
 
     if( nsizes == 1 )
     {
@@ -364,7 +364,7 @@ PointRenderingType GetPointRenderingType( const kvs::PointObject* point )
 
 void PointRenderingFunction( const kvs::PointObject* point )
 {
-    if( point->nvertices() > 0 )
+    if( point->numberOfVertices() > 0 )
     {
         PointRenderingType type = GetPointRenderingType( point );
         Rendering[type]( point );

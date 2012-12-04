@@ -397,7 +397,7 @@ void GlyphBase::calculateCoords( const kvs::StructuredVolumeObject* volume )
 /*===========================================================================*/
 void GlyphBase::calculateUniformCoords( const kvs::StructuredVolumeObject* volume )
 {
-    kvs::ValueArray<kvs::Real32> coords( 3 * volume->nnodes() );
+    kvs::ValueArray<kvs::Real32> coords( 3 * volume->numberOfNodes() );
     kvs::Real32* coord = coords.data();
 
     const kvs::Vector3ui resolution( volume->resolution() );
@@ -454,7 +454,7 @@ void GlyphBase::calculateSizes( const kvs::VolumeObjectBase* volume )
 {
     const T* value = reinterpret_cast<const T*>( volume->values().data() );
     const size_t veclen = volume->veclen();
-    const size_t nnodes = volume->nnodes();
+    const size_t nnodes = volume->numberOfNodes();
 
     if ( !volume->hasMinMaxValues() ) { volume->updateMinMaxValues(); }
     const kvs::Real32 min_value = static_cast<kvs::Real32>(volume->minValue());
@@ -518,7 +518,7 @@ void GlyphBase::calculateDirections( const kvs::VolumeObjectBase* volume )
 {
     const T* value = reinterpret_cast<const T*>( volume->values().data() );
     const size_t veclen = volume->veclen();
-    const size_t nnodes = volume->nnodes();
+    const size_t nnodes = volume->numberOfNodes();
     if ( veclen == 3 )
     {
         kvs::ValueArray<kvs::Real32> directions( nnodes * veclen );
@@ -555,7 +555,7 @@ void GlyphBase::calculateColors( const kvs::VolumeObjectBase* volume )
 {
     const T* value = reinterpret_cast<const T*>( volume->values().data() );
     const size_t veclen = volume->veclen();
-    const size_t nnodes = volume->nnodes();
+    const size_t nnodes = volume->numberOfNodes();
 
     if ( !volume->hasMinMaxValues() ) { volume->updateMinMaxValues(); }
     const kvs::Real32 min_value = static_cast<kvs::Real32>(volume->minValue());
@@ -637,7 +637,7 @@ void GlyphBase::calculateOpacities( const kvs::VolumeObjectBase* volume )
 {
     const T* value = reinterpret_cast<const T*>( volume->values().data() );
     const size_t veclen = volume->veclen();
-    const size_t nnodes = volume->nnodes();
+    const size_t nnodes = volume->numberOfNodes();
 
     if ( !volume->hasMinMaxValues() ) { volume->updateMinMaxValues(); }
     const kvs::Real32 min_value = static_cast<kvs::Real32>(volume->minValue());

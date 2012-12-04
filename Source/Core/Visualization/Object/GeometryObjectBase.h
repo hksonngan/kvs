@@ -75,9 +75,9 @@ public:
 
     ObjectType objectType() const;
     virtual GeometryType geometryType() const = 0;
-    size_t nvertices() const;
-    size_t ncolors() const;
-    size_t nnormals() const;
+    size_t numberOfVertices() const;
+    size_t numberOfColors() const;
+    size_t numberOfNormals() const;
 
     const kvs::Vector3f coord( const size_t index = 0 ) const;
     const kvs::RGBColor color( const size_t index = 0 ) const;
@@ -142,6 +142,10 @@ public:
         this->setCoords( coords );
         this->setColor( kvs::RGBColor( 255, 255, 255 ) );
     }
+
+    KVS_DEPRECATED( size_t nvertices() const ) { return this->numberOfVertices(); }
+    KVS_DEPRECATED( size_t ncolors() const ) { return this->numberOfColors(); }
+    KVS_DEPRECATED( size_t nnormals() const ) { return this->numberOfNormals(); }
 };
 
 } // end of namespace kvs

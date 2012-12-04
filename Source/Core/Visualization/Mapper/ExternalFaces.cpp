@@ -282,7 +282,7 @@ inline void CreateTetrahedraFaceMap(
     FaceMap* face_map )
 {
     const kvs::UInt32* connections = volume->connections().data();
-    const size_t ncells = volume->ncells();
+    const size_t ncells = volume->numberOfCells();
     for ( size_t cell_index = 0, connection_index = 0; cell_index < ncells; cell_index++ )
     {
         // Local vertices of the tetrahedral cell.
@@ -312,7 +312,7 @@ inline void CreateQuadraticTetrahedraFaceMap(
     FaceMap* face_map )
 {
     const kvs::UInt32* connections = volume->connections().data();
-    const size_t ncells = volume->ncells();
+    const size_t ncells = volume->numberOfCells();
     for ( size_t cell_index = 0, connection_index = 0; cell_index < ncells; cell_index++ )
     {
         // Local vertices of the quadratic tetrahedral cell.
@@ -363,7 +363,7 @@ inline void CreateHexahedraFaceMap(
     FaceMap* face_map )
 {
     const kvs::UInt32* connections = volume->connections().data();
-    const size_t ncells = volume->ncells();
+    const size_t ncells = volume->numberOfCells();
     for ( size_t cell_index = 0, connection_index = 0; cell_index < ncells; cell_index++ )
     {
         // Local vertices of the quadratic tetrahedral cell.
@@ -410,7 +410,7 @@ inline void CreateQuadraticHexahedraFaceMap(
     FaceMap* face_map )
 {
     const kvs::UInt32* connections = volume->connections().data();
-    const size_t ncells = volume->ncells();
+    const size_t ncells = volume->numberOfCells();
     for ( size_t cell_index = 0, connection_index = 0; cell_index < ncells; cell_index++ )
     {
         // Local vertices of the quadratic tetrahedral cell.
@@ -691,7 +691,7 @@ void ExternalFaces::mapping( const kvs::StructuredVolumeObject* volume )
     SuperClass::setPolygonType( kvs::PolygonObject::Quadrangle );
     SuperClass::setColorType( kvs::PolygonObject::VertexColor );
     SuperClass::setNormalType( kvs::PolygonObject::PolygonNormal );
-    if ( SuperClass::nopacities() == 0 ) SuperClass::setOpacity( 255 );
+    if ( SuperClass::numberOfOpacities() == 0 ) SuperClass::setOpacity( 255 );
 }
 
 /*===========================================================================*/
@@ -1018,8 +1018,8 @@ void ExternalFaces::calculate_colors( const kvs::StructuredVolumeObject* volume 
     const kvs::Real64 min_value = volume->minValue();
     const kvs::Real64 max_value = volume->maxValue();
     const size_t veclen = volume->veclen();
-    const size_t nnodes_per_line = volume->nnodesPerLine();
-    const size_t nnodes_per_slice = volume->nnodesPerSlice();
+    const size_t nnodes_per_line = volume->numberOfNodesPerLine();
+    const size_t nnodes_per_slice = volume->numberOfNodesPerSlice();
     const kvs::Vector3ui resolution( volume->resolution() );
     const kvs::Vector3ui ngrids( resolution - kvs::Vector3ui( 1, 1, 1 ) );
     const T* value = reinterpret_cast<const T*>( volume->values().data() );
@@ -1324,7 +1324,7 @@ void ExternalFaces::mapping( const kvs::UnstructuredVolumeObject* volume )
     SuperClass::setPolygonType( kvs::PolygonObject::Triangle );
     SuperClass::setColorType( kvs::PolygonObject::VertexColor );
     SuperClass::setNormalType( kvs::PolygonObject::PolygonNormal );
-    if ( SuperClass::nopacities() == 0 ) SuperClass::setOpacity( 255 );
+    if ( SuperClass::numberOfOpacities() == 0 ) SuperClass::setOpacity( 255 );
 }
 
 /*===========================================================================*/
@@ -1336,7 +1336,7 @@ void ExternalFaces::mapping( const kvs::UnstructuredVolumeObject* volume )
 template <typename T>
 void ExternalFaces::calculate_tetrahedral_faces( const kvs::UnstructuredVolumeObject* volume )
 {
-    ::FaceMap face_map( volume->nnodes() );
+    ::FaceMap face_map( volume->numberOfNodes() );
     CreateTetrahedraFaceMap( volume, &face_map );
 
     kvs::ValueArray<kvs::Real32> coords;
@@ -1358,7 +1358,7 @@ void ExternalFaces::calculate_tetrahedral_faces( const kvs::UnstructuredVolumeOb
 template <typename T>
 void ExternalFaces::calculate_quadratic_tetrahedral_faces( const kvs::UnstructuredVolumeObject* volume )
 {
-    ::FaceMap face_map( volume->nnodes() );
+    ::FaceMap face_map( volume->numberOfNodes() );
     CreateQuadraticTetrahedraFaceMap( volume, &face_map );
 
     kvs::ValueArray<kvs::Real32> coords;
@@ -1380,7 +1380,7 @@ void ExternalFaces::calculate_quadratic_tetrahedral_faces( const kvs::Unstructur
 template <typename T>
 void ExternalFaces::calculate_hexahedral_faces( const kvs::UnstructuredVolumeObject* volume )
 {
-    ::FaceMap face_map( volume->nnodes() );
+    ::FaceMap face_map( volume->numberOfNodes() );
     CreateHexahedraFaceMap( volume, &face_map );
 
     kvs::ValueArray<kvs::Real32> coords;
@@ -1402,7 +1402,7 @@ void ExternalFaces::calculate_hexahedral_faces( const kvs::UnstructuredVolumeObj
 template <typename T>
 void ExternalFaces::calculate_quadratic_hexahedral_faces( const kvs::UnstructuredVolumeObject* volume )
 {
-    ::FaceMap face_map( volume->nnodes() );
+    ::FaceMap face_map( volume->numberOfNodes() );
     CreateQuadraticHexahedraFaceMap( volume, &face_map );
 
     kvs::ValueArray<kvs::Real32> coords;

@@ -93,8 +93,8 @@ public:
     BaseClass::GeometryType geometryType() const;
     LineType lineType() const;
     ColorType colorType() const;
-    size_t nconnections() const;
-    size_t nsizes() const;
+    size_t numberOfConnections() const;
+    size_t numberOfSizes() const;
 
     const kvs::Vector2ui connection( const size_t index = 0 ) const;
     kvs::Real32 size( const size_t index = 0 ) const;
@@ -225,6 +225,8 @@ public:
         this->setSize( 1.0f );
     }
 
+    KVS_DEPRECATED( size_t nconnections() const ) { return this->numberOfConnections(); }
+    KVS_DEPRECATED( size_t nsizes() const ) { return this->numberOfSizes(); }
 };
 
 } // end of namespace kvs

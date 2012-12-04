@@ -183,8 +183,8 @@ void MarchingCubes::extract_surfaces_with_duplication(
     std::vector<kvs::Real32> normals;
 
     const kvs::Vector3ui ncells( volume->resolution() - kvs::Vector3ui::All(1) );
-    const kvs::UInt32    line_size( volume->nnodesPerLine() );
-    const kvs::UInt32    slice_size( volume->nnodesPerSlice() );
+    const kvs::UInt32    line_size( volume->numberOfNodesPerLine() );
+    const kvs::UInt32    slice_size( volume->numberOfNodesPerSlice() );
 
     // Extract surfaces.
     size_t index = 0;
@@ -301,7 +301,7 @@ template <typename T>
 void MarchingCubes::extract_surfaces_without_duplication(
     const kvs::StructuredVolumeObject* volume )
 {
-    const size_t volume_size = volume->nnodes();
+    const size_t volume_size = volume->numberOfNodes();
     const size_t byte_size   = sizeof( kvs::UInt32 ) * 3 * volume_size;
     kvs::UInt32* vertex_map = static_cast<kvs::UInt32*>( malloc( byte_size ) );
     if ( !vertex_map )
@@ -390,8 +390,8 @@ const kvs::Vector3f MarchingCubes::interpolate_vertex(
     const double x1 = vertex1.x();
     const double y1 = vertex1.y();
     const double z1 = vertex1.z();
-    const kvs::UInt32 line_size  = volume->nnodesPerLine();
-    const kvs::UInt32 slice_size = volume->nnodesPerSlice();
+    const kvs::UInt32 line_size  = volume->numberOfNodesPerLine();
+    const kvs::UInt32 slice_size = volume->numberOfNodesPerSlice();
     const size_t v0_index = static_cast<size_t>( x0 + y0 * line_size + z0 * slice_size );
     const size_t v1_index = static_cast<size_t>( x1 + y1 * line_size + z1 * slice_size );
 
@@ -447,8 +447,8 @@ void MarchingCubes::calculate_isopoints(
 
     const kvs::Vector3ui resolution( volume->resolution() );
     const kvs::Vector3ui ncells( resolution - kvs::Vector3ui::All(1) );
-    const kvs::UInt32    line_size( volume->nnodesPerLine() );
-    const kvs::UInt32    slice_size( volume->nnodesPerSlice() );
+    const kvs::UInt32    line_size( volume->numberOfNodesPerLine() );
+    const kvs::UInt32    slice_size( volume->numberOfNodesPerSlice() );
     const double         isolevel = m_isolevel;
 
     kvs::UInt32 nisopoints = 0;
@@ -537,8 +537,8 @@ void MarchingCubes::connect_isopoints(
 
     const kvs::Vector3ui resolution( volume->resolution() );
     const kvs::Vector3ui ncells( resolution - kvs::Vector3ui::All(1) );
-    const kvs::UInt32    line_size( volume->nnodesPerLine() );
-    const kvs::UInt32    slice_size( volume->nnodesPerSlice() );
+    const kvs::UInt32    line_size( volume->numberOfNodesPerLine() );
+    const kvs::UInt32    slice_size( volume->numberOfNodesPerSlice() );
 
     size_t index = 0;
     size_t local_index[8];

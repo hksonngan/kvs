@@ -172,15 +172,15 @@ template <typename T>
 void HitAndMissSampling::generate_particles( const kvs::StructuredVolumeObject* volume  )
 {
     // Set the geometry arrays.
-    const size_t max_nparticles = volume->nnodes();
+    const size_t max_nparticles = volume->numberOfNodes();
     std::vector<kvs::Real32> coords;  coords.reserve( max_nparticles * 3 );
     std::vector<kvs::UInt8>  colors;  colors.reserve( max_nparticles * 3 );
     std::vector<kvs::Real32> normals; normals.reserve( max_nparticles * 3 );
 
     // Aliases.
     const kvs::Vector3ui resolution = volume->resolution();
-    const size_t line_size  = volume->nnodesPerLine();
-    const size_t slice_size = volume->nnodesPerSlice();
+    const size_t line_size  = volume->numberOfNodesPerLine();
+    const size_t slice_size = volume->numberOfNodesPerSlice();
     const T* values = reinterpret_cast<const T*>( volume->values().data() );
 
     kvs::MersenneTwister R; // Random number generator

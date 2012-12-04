@@ -190,8 +190,8 @@ void StochasticMultivariateTetrahedraEngine::create_vertexbuffer_from_volume( vo
     if ( m_volume ) delete m_volume;
     m_volume = new Volume();
 
-    const size_t nvertices = m_ref_volume->nnodes();
-    const size_t ncells = m_ref_volume->ncells();
+    const size_t nvertices = m_ref_volume->numberOfNodes();
+    const size_t ncells = m_ref_volume->numberOfCells();
     const size_t veclen = m_ref_volume->veclen();
 
     m_volume->create( m_nsteps, nvertices, ncells, veclen );
