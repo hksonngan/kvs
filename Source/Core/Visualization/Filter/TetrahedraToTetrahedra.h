@@ -17,7 +17,6 @@
 
 #include <kvs/UnstructuredVolumeObject>
 #include <kvs/FilterBase>
-#include <kvs/ClassName>
 #include <kvs/Module>
 
 
@@ -31,7 +30,7 @@ namespace kvs
 /*===========================================================================*/
 class TetrahedraToTetrahedra : public kvs::FilterBase, public kvs::UnstructuredVolumeObject
 {
-    kvsClassName( kvs::TetrahedraToTetrahedra );
+    kvsModuleName( kvs::TetrahedraToTetrahedra );
     kvsModuleCategory( Filter );
     kvsModuleBaseClass( kvs::FilterBase );
     kvsModuleSuperClass( kvs::UnstructuredVolumeObject );

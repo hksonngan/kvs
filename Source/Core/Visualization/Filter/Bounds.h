@@ -15,7 +15,6 @@
 #define KVS__BOUNDS_H_INCLUDE
 
 #include <vector>
-#include <kvs/ClassName>
 #include <kvs/Module>
 #include <kvs/ObjectBase>
 #include <kvs/LineObject>
@@ -35,7 +34,7 @@ namespace kvs
 /*==========================================================================*/
 class Bounds : public kvs::FilterBase, public kvs::LineObject
 {
-    kvsClassName( kvs::Bounds );
+    kvsModuleName( kvs::Bounds );
     kvsModuleCategory( Filter );
     kvsModuleBaseClass( kvs::FilterBase );
     kvsModuleSuperClass( kvs::LineObject );

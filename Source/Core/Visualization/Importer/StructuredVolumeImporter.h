@@ -15,7 +15,6 @@
 #define KVS__STRUCTURED_VOLUME_IMPORTER_H_INCLUDE
 
 #include "ImporterBase.h"
-#include <kvs/ClassName>
 #include <kvs/Module>
 #include <kvs/StructuredVolumeObject>
 #include <kvs/KVSMLObjectStructuredVolume>
@@ -33,7 +32,7 @@ namespace kvs
 /*==========================================================================*/
 class StructuredVolumeImporter : public kvs::ImporterBase, public kvs::StructuredVolumeObject
 {
-    kvsClassName( kvs::StructuredVolumeImporter );
+    kvsModuleName( kvs::StructuredVolumeImporter );
     kvsModuleCategory( Importer );
     kvsModuleBaseClass( kvs::ImporterBase );
     kvsModuleSuperClass( kvs::StructuredVolumeObject );

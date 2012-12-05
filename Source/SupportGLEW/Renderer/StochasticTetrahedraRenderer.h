@@ -33,10 +33,7 @@ namespace glew
 /*===========================================================================*/
 class StochasticTetrahedraRenderer : public kvs::glew::StochasticRendererBase
 {
-    // Class name.
-    kvsClassName( kvs::glew::StochasticTetrahedraRenderer );
-
-    // Module information.
+    kvsModuleName( kvs::glew::StochasticTetrahedraRenderer );
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::glew::StochasticRendererBase );
 

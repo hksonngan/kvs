@@ -14,7 +14,6 @@
 #ifndef KVS__EXTERNAL_FACES_H_INCLUDE
 #define KVS__EXTERNAL_FACES_H_INCLUDE
 
-#include <kvs/ClassName>
 #include <kvs/Module>
 #include <kvs/MapperBase>
 #include <kvs/PolygonObject>
@@ -35,7 +34,7 @@ class TransferFunction;
 /*===========================================================================*/
 class ExternalFaces : public kvs::MapperBase, public kvs::PolygonObject
 {
-    kvsClassName( kvs::ExternalFaces );
+    kvsModuleName( kvs::ExternalFaces );
     kvsModuleCategory( Mapper );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::PolygonObject );

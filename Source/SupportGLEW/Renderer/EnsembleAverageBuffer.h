@@ -17,7 +17,6 @@
 
 #include <kvs/Texture2D>
 #include <kvs/glew/FrameBufferObject>
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -33,8 +32,6 @@ namespace glew
 /*===========================================================================*/
 class EnsembleAverageBuffer
 {
-    kvsClassName( kvs::glew::EnsembleAverageBuffer );
-
 protected:
 
     bool m_enable_accum; ///< check flag for the accumulation buffer

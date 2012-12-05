@@ -17,7 +17,6 @@
 #include <kvs/PolygonObject>
 #include <kvs/StructuredVolumeObject>
 #include <kvs/MapperBase>
-#include <kvs/ClassName>
 #include <kvs/Module>
 
 
@@ -31,7 +30,7 @@ namespace kvs
 /*==========================================================================*/
 class MarchingCubes : public kvs::MapperBase, public kvs::PolygonObject
 {
-    kvsClassName( kvs::MarchingCubes );
+    kvsModuleName( kvs::MarchingCubes );
     kvsModuleCategory( Mapper );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::PolygonObject );

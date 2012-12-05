@@ -16,7 +16,6 @@
 #define KVS__GLYPH_BASE_H_INCLUDE
 
 #include <kvs/RendererBase>
-#include <kvs/ClassName>
 #include <kvs/ValueArray>
 #include <kvs/Vector3>
 #include <kvs/TransferFunction>
@@ -35,7 +34,7 @@ class StructuredVolumeObject;
 /*===========================================================================*/
 class GlyphBase : public kvs::RendererBase
 {
-    kvsClassName( kvs::GlyphBase );
+    kvsModuleName( kvs::GlyphBase );
 
 public:
 

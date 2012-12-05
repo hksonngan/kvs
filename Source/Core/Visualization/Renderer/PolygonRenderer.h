@@ -15,7 +15,6 @@
 #define KVS__POLYGON_RENDERER_H_INCLUDE
 
 #include <kvs/RendererBase>
-#include <kvs/ClassName>
 #include <kvs/Module>
 
 
@@ -29,10 +28,7 @@ namespace kvs
 /*==========================================================================*/
 class PolygonRenderer : public kvs::RendererBase
 {
-    // Class name.
-    kvsClassName( kvs::PolygonRenderer );
-
-    // Module information.
+    kvsModuleName( kvs::PolygonRenderer );
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::RendererBase );
 

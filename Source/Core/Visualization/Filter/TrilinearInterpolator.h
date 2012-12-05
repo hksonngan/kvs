@@ -14,7 +14,6 @@
 #ifndef KVS__TRILINEAR_INTERPOLATOR_H_INCLUDE
 #define KVS__TRILINEAR_INTERPOLATOR_H_INCLUDE
 
-#include <kvs/ClassName>
 #include <kvs/StructuredVolumeObject>
 #include <kvs/Vector3>
 #include <kvs/Assert>
@@ -30,8 +29,6 @@ namespace kvs
 /*==========================================================================*/
 class TrilinearInterpolator
 {
-    kvsClassName_without_virtual( kvs::TrilinearInterpolator );
-
 private:
 
     kvs::Vector3ui m_grid_index; ///< grid index

@@ -15,11 +15,14 @@
 #ifndef KVS__IMAGE_OBJECT_H_INCLUDE
 #define KVS__IMAGE_OBJECT_H_INCLUDE
 
+#include <ostream>
 #include <kvs/ObjectBase>
 #include <kvs/ClassName>
 #include <kvs/ValueArray>
 #include <kvs/Type>
 #include <kvs/Module>
+#include <kvs/Indent>
+#include <kvs/Deprecated>
 
 
 namespace kvs
@@ -32,7 +35,7 @@ namespace kvs
 /*===========================================================================*/
 class ImageObject : public kvs::ObjectBase
 {
-    kvsClassName( kvs::ImageObject );
+    kvsModuleName( kvs::ImageObject );
     kvsModuleCategory( Object );
     kvsModuleBaseClass( kvs::ObjectBase );
 
@@ -62,10 +65,9 @@ public:
         const kvs::ValueArray<kvs::UInt8>& data,
         const ImageObject::PixelType type = ImageObject::Color24 );
 
-    friend std::ostream& operator << ( std::ostream& os, const ImageObject& object );
-
     void shallowCopy( const ImageObject& object );
     void deepCopy( const ImageObject& object );
+    void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
 
     ObjectType objectType() const;
     ImageObject::PixelType type() const;
@@ -82,6 +84,7 @@ private:
 
 public:
     KVS_DEPRECATED( size_t nchannels() const ) { return this->numberOfChannels(); }
+    KVS_DEPRECATED( friend std::ostream& operator << ( std::ostream& os, const ImageObject& object ) );
 };
 
 } // end of namespace kvs

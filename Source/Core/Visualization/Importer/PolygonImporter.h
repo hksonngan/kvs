@@ -15,7 +15,6 @@
 #define KVS__POLYGON_IMPORTER_H_INCLUDE
 
 #include "ImporterBase.h"
-#include <kvs/ClassName>
 #include <kvs/Module>
 #include <kvs/PolygonObject>
 #include <kvs/KVSMLObjectPolygon>
@@ -33,7 +32,7 @@ namespace kvs
 /*==========================================================================*/
 class PolygonImporter : public kvs::ImporterBase, public kvs::PolygonObject
 {
-    kvsClassName( kvs::PolygonImporter );
+    kvsModuleName( kvs::PolygonImporter );
     kvsModuleCategory( Importer );
     kvsModuleBaseClass( kvs::ImporterBase );
     kvsModuleSuperClass( kvs::PolygonObject );

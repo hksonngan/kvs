@@ -128,6 +128,17 @@ void PolygonObject::clear()
     m_opacities.release();
 }
 
+void PolygonObject::print( std::ostream& os, const kvs::Indent& indent ) const
+{
+    os << indent << "Object type : " << "polygon object" << std::endl;
+    BaseClass::print( os, indent );
+    os << indent << "Number of connections : " << this->numberOfConnections() << std::endl;
+    os << indent << "Number of opacities : " << this->numberOfOpacities() << std::endl;
+    os << indent << "Polygon type : " << ::GetPolygonTypeName( this->polygonType() ) << std::endl;
+    os << indent << "Color type : " << ::GetColorTypeName( this->colorType() ) << std::endl;
+    os << indent << "Normal type : " << ::GetNormalTypeName( this->normalType() ) << std::endl;
+}
+
 void PolygonObject::setPolygonType( const PolygonType polygon_type )
 {
     m_polygon_type = polygon_type;

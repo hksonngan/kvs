@@ -33,10 +33,7 @@ namespace glew
 /*===========================================================================*/
 class StochasticPointRenderer : public kvs::glew::StochasticRendererBase
 {
-    // Class name.
-    kvsClassName( kvs::glew::StochasticPointRenderer );
-
-    // Module information.
+    kvsModuleName( kvs::glew::StochasticPointRenderer );
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::glew::StochasticRendererBase );
 

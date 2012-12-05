@@ -15,7 +15,6 @@
 #define KVS__UNSTRUCTURED_VOLUME_IMPORTER_H_INCLUDE
 
 #include "ImporterBase.h"
-#include <kvs/ClassName>
 #include <kvs/Module>
 #include <kvs/UnstructuredVolumeObject>
 #include <kvs/KVSMLObjectUnstructuredVolume>
@@ -33,7 +32,7 @@ namespace kvs
 /*==========================================================================*/
 class UnstructuredVolumeImporter : public kvs::ImporterBase, public kvs::UnstructuredVolumeObject
 {
-    kvsClassName( kvs::UnstructuredVolumeImporter );
+    kvsModuleName( kvs::UnstructuredVolumeImporter );
     kvsModuleCategory( Importer );
     kvsModuleBaseClass( kvs::ImporterBase );
     kvsModuleSuperClass( kvs::UnstructuredVolumeObject );

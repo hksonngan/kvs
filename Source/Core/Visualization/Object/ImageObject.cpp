@@ -121,6 +121,23 @@ void ImageObject::deepCopy( const ImageObject& other )
     this->m_data = other.data().clone();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Prints information of the image object.
+ *  @param  os [in] output stream
+ *  @param  indent [in] indent
+ */
+/*===========================================================================*/
+void ImageObject::print( std::ostream& os, const kvs::Indent& indent ) const
+{
+    os << indent << "Object type : " << "image object" << std::endl;
+    os << indent << "Width : " << this->width() << std::endl;
+    os << indent << "Height : " << this->height() << std::endl;
+    os << indent << "Bits per pixel : " << this->bitsPerPixel() << std::endl;
+    os << indent << "Bytes per pixel : " << this->bytesPerPixel() << std::endl;
+    os << indent << "Pixel type : " << ::GetPixelTypeName( this->type() ) << std::endl;
+}
+
 /*==========================================================================*/
 /**
  *  @brief  Returns the object type.

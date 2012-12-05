@@ -15,7 +15,6 @@
 #define KVS__LINE_IMPORTER_H_INCLUDE
 
 #include "ImporterBase.h"
-#include <kvs/ClassName>
 #include <kvs/Module>
 #include <kvs/LineObject>
 #include <kvs/KVSMLObjectLine>
@@ -31,7 +30,7 @@ namespace kvs
 /*==========================================================================*/
 class LineImporter : public kvs::ImporterBase, public kvs::LineObject
 {
-    kvsClassName( kvs::LineImporter );
+    kvsModuleName( kvs::LineImporter );
     kvsModuleCategory( Importer );
     kvsModuleBaseClass( kvs::ImporterBase );
     kvsModuleSuperClass( kvs::LineObject );

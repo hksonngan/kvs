@@ -33,10 +33,7 @@ namespace glew
 /*===========================================================================*/
 class StochasticLineRenderer : public kvs::glew::StochasticRendererBase
 {
-    // Class name.
-    kvsClassName( kvs::glew::StochasticLineRenderer );
-
-    // Module information.
+    kvsModuleName( kvs::glew::StochasticLineRenderer );
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::glew::StochasticRendererBase );
 

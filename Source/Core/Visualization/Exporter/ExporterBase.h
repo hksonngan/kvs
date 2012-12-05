@@ -14,7 +14,7 @@
 #ifndef KVS__EXPORTER_BASE_H_INCLUDE
 #define KVS__EXPORTER_BASE_H_INCLUDE
 
-#include <kvs/ClassName>
+#include <kvs/Module>
 
 
 namespace kvs
@@ -28,7 +28,7 @@ namespace kvs
 template <typename FileFormatType>
 class ExporterBase : public FileFormatType
 {
-    kvsClassName( kvs::ExporterBase );
+    kvsModuleName( kvs::ExporterBase );
 
 protected:
 

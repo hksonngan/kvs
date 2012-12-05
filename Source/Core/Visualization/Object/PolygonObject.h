@@ -14,13 +14,14 @@
 #ifndef KVS__POLYGON_OBJECT_H_INCLUDE
 #define KVS__POLYGON_OBJECT_H_INCLUDE
 
+#include <ostream>
 #include <kvs/GeometryObjectBase>
-#include <kvs/ClassName>
 #include <kvs/ValueArray>
 #include <kvs/Type>
 #include <kvs/Vector3>
 #include <kvs/RGBColor>
 #include <kvs/Module>
+#include <kvs/Indent>
 #include <kvs/Deprecated>
 
 
@@ -34,7 +35,7 @@ namespace kvs
 /*==========================================================================*/
 class PolygonObject : public kvs::GeometryObjectBase
 {
-    kvsClassName( kvs::PolygonObject );
+    kvsModuleName( kvs::PolygonObject );
     kvsModuleCategory( Object );
     kvsModuleBaseClass( kvs::GeometryObjectBase );
 
@@ -80,11 +81,10 @@ public:
 
     PolygonObject();
 
-    friend std::ostream& operator << ( std::ostream& os, const PolygonObject& object );
-
     void shallowCopy( const PolygonObject& object );
     void deepCopy( const PolygonObject& object );
     void clear();
+    void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
 
     void setPolygonType( const PolygonType polygon_type );
     void setColorType( const ColorType color_type );
@@ -256,6 +256,7 @@ public:
 
     KVS_DEPRECATED( size_t nconnections() const ) { return this->numberOfConnections(); }
     KVS_DEPRECATED( size_t nopacities() const ) { return this->numberOfOpacities(); }
+    KVS_DEPRECATED( friend std::ostream& operator << ( std::ostream& os, const PolygonObject& object ) );
 };
 
 } // end of namespace kvs

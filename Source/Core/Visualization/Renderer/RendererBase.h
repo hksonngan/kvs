@@ -15,7 +15,6 @@
 #define KVS__RENDERER_BASE_H_INCLUDE
 
 #include <string>
-#include <kvs/ClassName>
 #include <kvs/Timer>
 #include <kvs/Module>
 
@@ -34,8 +33,7 @@ class Light;
 /*==========================================================================*/
 class RendererBase
 {
-    kvsClassName( kvs::RendererBase );
-
+    kvsModuleName( kvs::RendererBase );
     kvsModuleBase;
 
 protected:

@@ -16,7 +16,6 @@
 #define KVS__OPENCV__VIDEO_RENDERER_H_INCLUDE
 
 #include <kvs/RendererBase>
-#include <kvs/ClassName>
 #include <kvs/Texture2D>
 #include <kvs/Module>
 #include <kvs/opencv/VideoObject>
@@ -39,10 +38,7 @@ namespace opencv
 /*===========================================================================*/
 class VideoRenderer : public kvs::RendererBase
 {
-    // Class name.
-    kvsClassName( kvs::opencv::VideoRenderer );
-
-    // Module information.
+    kvsModuleName( kvs::opencv::VideoRenderer );
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::RendererBase );
 

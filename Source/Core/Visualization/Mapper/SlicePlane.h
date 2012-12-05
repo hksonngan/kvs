@@ -21,7 +21,6 @@
 #include <kvs/Vector3>
 #include <kvs/Vector4>
 #include <kvs/MapperBase>
-#include <kvs/ClassName>
 #include <kvs/Module>
 
 
@@ -35,7 +34,7 @@ namespace kvs
 /*==========================================================================*/
 class SlicePlane : public kvs::MapperBase, public kvs::PolygonObject
 {
-    kvsClassName( kvs::SlicePlane );
+    kvsModuleName( kvs::SlicePlane );
     kvsModuleCategory( Mapper );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::PolygonObject );

@@ -14,13 +14,14 @@
 #ifndef KVS__POINT_OBJECT_H_INCLUDE
 #define KVS__POINT_OBJECT_H_INCLUDE
 
+#include <ostream>
 #include <kvs/GeometryObjectBase>
-#include <kvs/ClassName>
 #include <kvs/ValueArray>
 #include <kvs/Type>
 #include <kvs/Vector3>
 #include <kvs/RGBColor>
 #include <kvs/Module>
+#include <kvs/Indent>
 #include <kvs/Deprecated>
 
 
@@ -37,7 +38,7 @@ class PolygonObject;
 /*==========================================================================*/
 class PointObject : public kvs::GeometryObjectBase
 {
-    kvsClassName( kvs::PointObject );
+    kvsModuleName( kvs::PointObject );
     kvsModuleCategory( Object );
     kvsModuleBaseClass( kvs::GeometryObjectBase );
 
@@ -56,12 +57,11 @@ public:
     explicit PointObject( const kvs::LineObject& line );
     explicit PointObject( const kvs::PolygonObject& polygon );
 
-    friend std::ostream& operator << ( std::ostream& os, const PointObject& object );
-
     void add( const PointObject& other );
     void shallowCopy( const PointObject& other );
     void deepCopy( const PointObject& other );
     void clear();
+    void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
 
     void setSizes( const kvs::ValueArray<kvs::Real32>& sizes );
     void setSize( const kvs::Real32 size );
@@ -186,6 +186,7 @@ public:
     }
 
     KVS_DEPRECATED( size_t nsizes() const ) { return this->numberOfSizes(); }
+    KVS_DEPRECATED( friend std::ostream& operator << ( std::ostream& os, const PointObject& object ) );
 };
 
 } // end of namespace kvs

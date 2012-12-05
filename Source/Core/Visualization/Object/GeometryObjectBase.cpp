@@ -124,6 +124,21 @@ void GeometryObjectBase::clear()
 
 /*===========================================================================*/
 /**
+ *  @brief  Prints information of the geometry object.
+ *  @param  os [in] output stream
+ *  @param  indent [in] indent
+ */
+/*===========================================================================*/
+void GeometryObjectBase::print( std::ostream& os, const kvs::Indent& indent ) const
+{
+    ObjectBase::print( os, indent );
+    os << indent << "Number of vertices : " << this->numberOfVertices() << std::endl;
+    os << indent << "Number of colors : " << this->numberOfColors() << std::endl;
+    os << indent << "Number of normal vectors : " << this->numberOfNormals() << std::endl;
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Sets a coordinate value array.
  *  @param  coords [in] coordinate value array
  */

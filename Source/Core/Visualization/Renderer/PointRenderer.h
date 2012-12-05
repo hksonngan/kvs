@@ -15,7 +15,6 @@
 #define KVS__POINT_RENDERER_H_INCLUDE
 
 #include <kvs/RendererBase>
-#include <kvs/ClassName>
 #include <kvs/Module>
 
 
@@ -33,10 +32,7 @@ class Light;
 /*==========================================================================*/
 class PointRenderer : public kvs::RendererBase
 {
-    // Class name.
-    kvsClassName( kvs::PointRenderer );
-
-    // Module information.
+    kvsModuleName( kvs::PointRenderer );
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::RendererBase );
 

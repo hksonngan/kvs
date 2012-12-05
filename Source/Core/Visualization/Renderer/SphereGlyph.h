@@ -17,7 +17,6 @@
 
 #include "GlyphBase.h"
 #include <kvs/PointObject>
-#include <kvs/ClassName>
 #include <kvs/Module>
 #include <kvs/OpenGL>
 
@@ -40,7 +39,7 @@ class RGBColor;
 /*===========================================================================*/
 class SphereGlyph : public kvs::GlyphBase
 {
-    kvsClassName( kvs::SphereGlyph );
+    kvsModuleName( kvs::SphereGlyph );
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::GlyphBase );
 

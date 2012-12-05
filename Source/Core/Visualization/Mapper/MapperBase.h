@@ -14,7 +14,6 @@
 #ifndef KVS__MAPPER_BASE_H_INCLUDE
 #define KVS__MAPPER_BASE_H_INCLUDE
 
-#include <kvs/ClassName>
 #include <kvs/ObjectBase>
 #include <kvs/VolumeObjectBase>
 #include <kvs/TransferFunction>
@@ -35,7 +34,7 @@ class VolumeObjectBase;
 /*==========================================================================*/
 class MapperBase
 {
-    kvsClassName( kvs::MapperBase );
+    kvsModuleName( kvs::MapperBase );
     kvsModuleBase;
 
 protected:

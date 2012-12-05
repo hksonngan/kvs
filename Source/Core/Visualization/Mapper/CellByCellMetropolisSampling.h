@@ -20,7 +20,6 @@
 #include <kvs/VolumeObjectBase>
 #include <kvs/StructuredVolumeObject>
 #include <kvs/UnstructuredVolumeObject>
-#include <kvs/ClassName>
 #include <kvs/Module>
 #include "CellByCellParticleGenerator.h"
 
@@ -35,7 +34,7 @@ namespace kvs
 /*===========================================================================*/
 class CellByCellMetropolisSampling : public kvs::MapperBase, public kvs::PointObject
 {
-    kvsClassName( kvs::CellByCellMetropolisSampling );
+    kvsModuleName( kvs::CellByCellMetropolisSampling );
     kvsModuleCategory( Mapper );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::PointObject );

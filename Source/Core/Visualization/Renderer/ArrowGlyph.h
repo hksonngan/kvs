@@ -16,7 +16,6 @@
 #define KVS__ARROW_GLYPH_H_INCLUDE
 
 #include "GlyphBase.h"
-#include <kvs/ClassName>
 #include <kvs/Module>
 #include <kvs/Type>
 #include <kvs/OpenGL>
@@ -39,7 +38,7 @@ class RGBColor;
 /*===========================================================================*/
 class ArrowGlyph : public kvs::GlyphBase
 {
-    kvsClassName( kvs::ArrowGlyph );
+    kvsModuleName( kvs::ArrowGlyph );
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::GlyphBase );
 

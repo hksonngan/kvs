@@ -15,12 +15,14 @@
 #ifndef KVS__GEOMETRY_OBJECT_BASE_H_INCLUDE
 #define KVS__GEOMETRY_OBJECT_BASE_H_INCLUDE
 
+#include <ostream>
+#include <kvs/Module>
 #include <kvs/ObjectBase>
-#include <kvs/ClassName>
 #include <kvs/ValueArray>
 #include <kvs/Type>
 #include <kvs/Vector3>
 #include <kvs/RGBColor>
+#include <kvs/Indent>
 #include <kvs/Deprecated>
 
 
@@ -34,7 +36,7 @@ namespace kvs
 /*===========================================================================*/
 class GeometryObjectBase : public kvs::ObjectBase
 {
-    kvsClassName( kvs::GeometryObjectBase );
+    kvsModuleName( kvs::GeometryObjectBase );
 
 public:
 
@@ -62,11 +64,10 @@ public:
 
     GeometryObjectBase();
 
-    friend std::ostream& operator << ( std::ostream& os, const GeometryObjectBase& object );
-
     void shallowCopy( const GeometryObjectBase& object );
     void deepCopy( const GeometryObjectBase& object );
     void clear();
+    virtual void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
 
     void setCoords( const kvs::ValueArray<kvs::Real32>& coords );
     void setColors( const kvs::ValueArray<kvs::UInt8>& colors );
@@ -146,6 +147,7 @@ public:
     KVS_DEPRECATED( size_t nvertices() const ) { return this->numberOfVertices(); }
     KVS_DEPRECATED( size_t ncolors() const ) { return this->numberOfColors(); }
     KVS_DEPRECATED( size_t nnormals() const ) { return this->numberOfNormals(); }
+    KVS_DEPRECATED( friend std::ostream& operator << ( std::ostream& os, const GeometryObjectBase& object ) );
 };
 
 } // end of namespace kvs

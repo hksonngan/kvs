@@ -15,7 +15,6 @@
 #define KVS__IMAGE_RENDERER_H_INCLUDE
 
 #include "RendererBase.h"
-#include <kvs/ClassName>
 #include <kvs/Texture2D>
 #include <kvs/ImageObject>
 #include <kvs/Module>
@@ -35,10 +34,7 @@ class Light;
 /*==========================================================================*/
 class ImageRenderer : public kvs::RendererBase
 {
-    // Class name.
-    kvsClassName( kvs::ImageRenderer );
-
-    // Module information.
+    kvsModuleName( kvs::ImageRenderer );
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::RendererBase );
 

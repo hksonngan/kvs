@@ -16,7 +16,6 @@
 #define KVS__PARALLEL_COORDINATES_RENDERER_H_INCLUDE
 
 #include <kvs/RendererBase>
-#include <kvs/ClassName>
 #include <kvs/Module>
 #include <kvs/ColorMap>
 
@@ -35,10 +34,7 @@ class Light;
 /*===========================================================================*/
 class ParallelCoordinatesRenderer : public kvs::RendererBase
 {
-    // Class name.
-    kvsClassName( kvs::ParallelCoordinatesRenderer );
-
-    // Module information.
+    kvsModuleName( kvs::ParallelCoordinatesRenderer );
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::RendererBase );
 

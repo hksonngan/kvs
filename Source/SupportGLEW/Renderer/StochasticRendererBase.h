@@ -19,12 +19,9 @@
 #include <kvs/Module>
 #include <kvs/ObjectBase>
 #include <kvs/RendererBase>
-
 #include <kvs/glew/FrameBufferObject>
 #include <kvs/glew/EnsembleAverageBuffer>
-
 #include "StochasticRenderingEngine.h"
-
 #include <vector>
 
 
@@ -43,10 +40,7 @@ class StochasticRendererBase : public kvs::RendererBase
 {
     friend class StochasticRenderingCompositor;
 
-    // Class name.
-    kvsClassName( kvs::glew::StochasticRendererBase );
-
-    // Module information.
+    kvsModuleName( kvs::glew::StochasticRendererBase );
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::RendererBase );
 

@@ -15,7 +15,6 @@
 #define KVS__LINE_RENDERER_H_INCLUDE
 
 #include <kvs/RendererBase>
-#include <kvs/ClassName>
 #include <kvs/Module>
 
 
@@ -33,10 +32,7 @@ class Light;
 /*==========================================================================*/
 class LineRenderer : public kvs::RendererBase
 {
-    // Class name.
-    kvsClassName( kvs::LineRenderer );
-
-    // Module information.
+    kvsModuleName( kvs::LineRenderer );
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::RendererBase );
 

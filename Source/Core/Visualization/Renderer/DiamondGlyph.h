@@ -17,7 +17,6 @@
 
 #include "GlyphBase.h"
 #include <kvs/MapperBase>
-#include <kvs/ClassName>
 #include <kvs/Module>
 
 
@@ -38,7 +37,7 @@ class RGBColor;
 /*===========================================================================*/
 class DiamondGlyph : public kvs::GlyphBase
 {
-    kvsClassName( kvs::DiamondGlyph );
+    kvsModuleName( kvs::DiamondGlyph );
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::GlyphBase );
 

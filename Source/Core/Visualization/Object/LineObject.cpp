@@ -166,6 +166,16 @@ void LineObject::clear()
     m_sizes.release();
 }
 
+void LineObject::print( std::ostream& os, const kvs::Indent& indent ) const
+{
+    os << indent << "Object type : " << "line object" << std::endl;
+    BaseClass::print( os, indent );
+    os << indent << "Number of connections : " << this->numberOfConnections() << std::endl;
+    os << indent << "Number of sizes : " << this->numberOfSizes() << std::endl;
+    os << indent << "Line type : " << ::GetLineTypeName( this->lineType() ) << std::endl;
+    os << indent << "Color type : " << ::GetColorTypeName( this->colorType() ) << std::endl;
+}
+
 void LineObject::setLineType( const LineType line_type )
 {
     m_line_type = line_type;

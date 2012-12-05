@@ -17,7 +17,6 @@
 #include <kvs/PolygonObject>
 #include <kvs/VolumeObjectBase>
 #include <kvs/MapperBase>
-#include <kvs/ClassName>
 #include <kvs/Module>
 
 
@@ -31,7 +30,7 @@ namespace kvs
 /*==========================================================================*/
 class Isosurface : public kvs::MapperBase, public kvs::PolygonObject
 {
-    kvsClassName( kvs::Isosurface );
+    kvsModuleName( kvs::Isosurface );
     kvsModuleCategory( Mapper );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::PolygonObject );

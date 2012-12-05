@@ -15,7 +15,6 @@
 #define KVS__POINT_IMPORTER_H_INCLUDE
 
 #include "ImporterBase.h"
-#include <kvs/ClassName>
 #include <kvs/Module>
 #include <kvs/PointObject>
 #include <kvs/KVSMLObjectPoint>
@@ -31,7 +30,7 @@ namespace kvs
 /*==========================================================================*/
 class PointImporter : public kvs::ImporterBase, public kvs::PointObject
 {
-    kvsClassName( kvs::PointImporter );
+    kvsModuleName( kvs::PointImporter );
     kvsModuleCategory( Importer );
     kvsModuleBaseClass( kvs::ImporterBase );
     kvsModuleSuperClass( kvs::PointObject );

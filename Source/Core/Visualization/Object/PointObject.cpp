@@ -442,6 +442,20 @@ void PointObject::clear()
 
 /*===========================================================================*/
 /**
+ *  @brief  Prints information of the point object.
+ *  @param  os [in] output stream
+ *  @param  indent [in] indent
+ */
+/*===========================================================================*/
+void PointObject::print( std::ostream& os, const kvs::Indent& indent ) const
+{
+    os << indent << "Object type : " << "point object" << std::endl;
+    BaseClass::print( os, indent );
+    os << indent << "Number of sizes : " << this->numberOfSizes() << std::endl;
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Sets a size value array.
  *  @param  sizes [in] size value array
  */

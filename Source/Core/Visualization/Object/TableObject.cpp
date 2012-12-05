@@ -54,6 +54,59 @@ TableObject::TableObject()
     m_ncolumns = 0;
 }
 
+void TableObject::shallowCopy( const TableObject& other )
+{
+    BaseClass::operator=( other );
+    this->m_nrows = other.numberOfRows();
+    this->m_ncolumns = other.numberOfColumns();
+    this->m_labels = other.labelList();
+    this->m_columns = other.columnList();
+    this->m_min_values = other.minValueList();
+    this->m_max_values = other.maxValueList();
+    this->m_min_ranges = other.minRangeList();
+    this->m_max_ranges = other.maxRangeList();
+    this->m_inside_range_list = other.insideRangeList();
+}
+
+void TableObject::deepCopy( const TableObject& other )
+{
+    { m_labels.clear(); LabelList().swap( m_labels ); }
+    { m_columns.clear(); ColumnList().swap( m_columns ); }
+    { m_min_values.clear(); ValueList().swap( m_min_values ); }
+    { m_max_values.clear(); ValueList().swap( m_max_values ); }
+    { m_min_ranges.clear(); ValueList().swap( m_min_ranges ); }
+    { m_max_ranges.clear(); ValueList().swap( m_max_ranges ); }
+    { m_inside_range_list.clear(); RangeList().swap( m_inside_range_list ); }
+
+    BaseClass::operator=( other );
+    this->m_nrows = other.numberOfRows();
+    this->m_ncolumns = other.numberOfColumns();
+    for ( size_t i = 0; i < m_labels.size(); i++ ) this->m_labels.push_back( other.label(i) );
+    for ( size_t i = 0; i < m_columns.size(); i++ ) this->m_columns.push_back( other.column(i).clone() );
+    for ( size_t i = 0; i < m_min_values.size(); i++ ) this->m_min_values.push_back( other.minValue(i) );
+    for ( size_t i = 0; i < m_max_values.size(); i++ ) this->m_max_values.push_back( other.maxValue(i) );
+    for ( size_t i = 0; i < m_min_ranges.size(); i++ ) this->m_min_ranges.push_back( other.minRange(i) );
+    for ( size_t i = 0; i < m_max_ranges.size(); i++ ) this->m_max_ranges.push_back( other.maxRange(i) );
+    for ( size_t i = 0; i < m_inside_range_list.size(); i++ ) this->m_inside_range_list.push_back( other.insideRange(i) );
+}
+
+void TableObject::print( std::ostream& os, const kvs::Indent& indent ) const
+{
+    os << indent << "Object type : " << "table object" << std::endl;
+    os << indent << "Number of columns : " << this->numberOfColumns() << std::endl;
+    os << indent << "Number of rows : " << this->numberOfRows() << std::endl;
+    os << indent << "Labels for each column : ";
+    for ( size_t i = 0; i < this->labelList().size(); i++ ) os << "\"" << this->labelList()[i] << "\", "; os << std::endl;
+    os << indent << "Min. values for each column : ";
+    for ( size_t i = 0; i < this->minValueList().size(); i++ ) os << this->minValueList()[i] << ", "; os << std::endl;
+    os << indent << "Max. values for each column : ";
+    for ( size_t i = 0; i < this->maxValueList().size(); i++ ) os << this->maxValueList()[i] << ", "; os << std::endl;
+    os << indent << "Min. ranges for each column : ";
+    for ( size_t i = 0; i < this->minRangeList().size(); i++ ) os << this->minRangeList()[i] << ", "; os << std::endl;
+    os << indent << "Max. ranges for each column : ";
+    for ( size_t i = 0; i < this->maxRangeList().size(); i++ ) os << this->maxRangeList()[i] << ", "; os << std::endl;
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Adds a column.

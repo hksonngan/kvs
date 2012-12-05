@@ -16,11 +16,11 @@
 #define KVS__OBJECT_BASE_H_INCLUDE
 
 #include <iostream>
-#include <kvs/ClassName>
 #include <kvs/XformControl>
 #include <kvs/Vector2>
 #include <kvs/Vector3>
 #include <kvs/Module>
+#include <kvs/Indent>
 #include <kvs/Deprecated>
 #if KVS_ENABLE_DEPRECATED
 #include <kvs/Material>
@@ -39,8 +39,8 @@ class Camera;
 /*==========================================================================*/
 class ObjectBase : public kvs::XformControl
 {
-    kvsClassName( kvs::ObjectBase );
     kvsModuleBase;
+    kvsModuleName( kvs::ObjectBase );
 
 public:
 
@@ -87,7 +87,6 @@ public:
     virtual ~ObjectBase();
 
     ObjectBase& operator = ( const ObjectBase& object );
-    friend std::ostream& operator << ( std::ostream& os, const ObjectBase& object );
 
     void setName( const std::string& name );
     void setMinMaxObjectCoords( const kvs::Vector3f& min_coord, const kvs::Vector3f& max_coord );
@@ -98,6 +97,7 @@ public:
 #endif
     void show();
     void hide();
+    virtual void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
 
     const std::string& name() const;
     virtual ObjectType objectType() const = 0;
@@ -171,6 +171,8 @@ public:
                            * kvs::Xform::Translation( -center );
         this->multiplyXform( x );
     }
+
+    KVS_DEPRECATED( friend std::ostream& operator << ( std::ostream& os, const ObjectBase& object ) );
 };
 
 } // end of namespace kvs

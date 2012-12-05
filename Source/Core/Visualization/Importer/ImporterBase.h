@@ -16,7 +16,6 @@
 
 #include <kvs/FileFormatBase>
 #include <kvs/ObjectBase>
-#include <kvs/ClassName>
 #include <kvs/Module>
 
 
@@ -30,7 +29,7 @@ namespace kvs
 /*==========================================================================*/
 class ImporterBase
 {
-    kvsClassName( kvs::ImporterBase );
+    kvsModuleName( kvs::ImporterBase );
     kvsModuleBase;
 
 protected:

@@ -15,12 +15,13 @@
 #define KVS__VOLUME_OBJECT_BASE_H_INCLUDE
 
 #include <string>
-#include <kvs/ClassName>
+#include <ostream>
 #include <kvs/ObjectBase>
 #include <kvs/Value>
 #include <kvs/ValueArray>
 #include <kvs/AnyValueArray>
 #include <kvs/Math>
+#include <kvs/Indent>
 #include <kvs/Deprecated>
 
 
@@ -34,7 +35,7 @@ namespace kvs
 /*==========================================================================*/
 class VolumeObjectBase : public kvs::ObjectBase
 {
-    kvsClassName( kvs::VolumeObjectBase );
+    kvsModuleName( kvs::VolumeObjectBase );
 
 public:
 
@@ -89,8 +90,6 @@ public:
 
     VolumeObjectBase();
 
-    friend std::ostream& operator << ( std::ostream& os, const VolumeObjectBase& object );
-
     void setLabel( const std::string& label );
     void setVeclen( const size_t veclen );
     void setCoords( const Coords& values );
@@ -115,6 +114,7 @@ public:
 
     void shallowCopy( const VolumeObjectBase& object );
     void deepCopy( const VolumeObjectBase& object );
+    virtual void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
 
 private:
 
@@ -123,9 +123,9 @@ private:
 
 public:
     KVS_DEPRECATED( VolumeObjectBase(
-                        const size_t     veclen,
-                        const Coords&    coords,
-                        const Values&    values ) )
+                        const size_t veclen,
+                        const Coords& coords,
+                        const Values& values ) )
     {
         m_has_min_max_values = false;
         m_min_value = 0.0;
@@ -134,8 +134,15 @@ public:
         this->setCoords( coords );
         this->setValues( values );
     }
+
+    KVS_DEPRECATED( friend std::ostream& operator << ( std::ostream& os, const VolumeObjectBase& object ) );
 };
 
+/*===========================================================================*/
+/**
+ *  @brief  Calculates min./max. values.
+ */
+/*===========================================================================*/
 template<typename T>
 void VolumeObjectBase::calculate_min_max_values() const
 {

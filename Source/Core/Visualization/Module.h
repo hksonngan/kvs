@@ -20,6 +20,12 @@
 #define KVS_MODULE_OBJECT   kvs::ObjectBase::ModuleTag
 #define KVS_MODULE_RENDERER kvs::RendererBase::ModuleTag
 
+#define kvsModuleName( module_name )            \
+    public:                                     \
+    virtual const char* moduleName() const {    \
+        return #module_name;                    \
+    }
+
 #define kvsModuleBase                           \
     public:                                     \
     struct  ModuleTag{};                        \

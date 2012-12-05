@@ -18,7 +18,6 @@
 #include <kvs/VolumeObjectBase>
 #include <kvs/UnstructuredVolumeObject>
 #include <kvs/FilterBase>
-#include <kvs/ClassName>
 #include <kvs/Module>
 
 
@@ -32,7 +31,7 @@ namespace kvs
 /*===========================================================================*/
 class UnstructuredVectorToScalar : public kvs::FilterBase, public kvs::UnstructuredVolumeObject
 {
-    kvsClassName( kvs::UnstructuredVectorToScalar );
+    kvsModuleName( kvs::UnstructuredVectorToScalar );
     kvsModuleCategory( Filter );
     kvsModuleBaseClass( kvs::FilterBase );
     kvsModuleSuperClass( kvs::UnstructuredVolumeObject );

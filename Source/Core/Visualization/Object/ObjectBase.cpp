@@ -195,6 +195,31 @@ void ObjectBase::hide()
 
 /*===========================================================================*/
 /**
+ *  @brief  Prints information of the object base.
+ *  @param  os [in] output stream
+ *  @param  indent [in] indent
+ */
+/*===========================================================================*/
+void ObjectBase::print( std::ostream& os, const kvs::Indent& indent ) const
+{
+    const std::ios_base::fmtflags flags( os.flags() );
+    os << indent << "Name : " << this->name() << std::endl;
+    os.setf( std::ios::boolalpha );
+    os << indent << "Set of min/max object coord : " << this->hasMinMaxObjectCoords() << std::endl;
+    os << indent << "Set of min/max external coord : " << this->hasMinMaxObjectCoords() << std::endl;
+    os.unsetf( std::ios::boolalpha );
+    os << indent << "Min object coord : " << this->minObjectCoord() << std::endl;
+    os << indent << "Max object coord : " << this->maxObjectCoord() << std::endl;
+    os << indent << "Min external coord : " << this->minExternalCoord() << std::endl;
+    os << indent << "Max external coord : " << this->maxExternalCoord() << std::endl;
+    os << indent << "Object center : " << this->objectCenter() << std::endl;
+    os << indent << "External position : " << this->externalPosition() << std::endl;
+    os << indent << "Normalize parameter : " << this->normalize() << std::endl;
+    os.flags( flags );
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Returns object name.
  *  @return  object name
  */

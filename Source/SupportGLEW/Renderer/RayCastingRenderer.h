@@ -15,7 +15,6 @@
 #ifndef KVS__GLEW__RAY_CASTING_RENDERER_H_INCLUDE
 #define KVS__GLEW__RAY_CASTING_RENDERER_H_INCLUDE
 
-#include <kvs/ClassName>
 #include <kvs/Module>
 #include <kvs/VolumeRendererBase>
 #include <kvs/Texture1D>
@@ -46,10 +45,7 @@ namespace glew
 /*===========================================================================*/
 class RayCastingRenderer : public kvs::VolumeRendererBase
 {
-    // Class name.
-    kvsClassName( kvs::glew::RayCastingRenderer );
-
-    // Module information.
+    kvsModuleName( kvs::glew::RayCastingRenderer );
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::VolumeRendererBase );
 

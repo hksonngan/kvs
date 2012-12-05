@@ -16,7 +16,6 @@
 #define KVS__GLUT__AXIS_2D_RENDERER_H_INCLUDE
 
 #include <kvs/RendererBase>
-#include <kvs/ClassName>
 #include <kvs/Module>
 #include <kvs/RGBColor>
 #include <kvs/RGBAColor>
@@ -39,10 +38,7 @@ namespace glut
 /*===========================================================================*/
 class Axis2DRenderer : public kvs::RendererBase
 {
-    // Class name.
-    kvsClassName( kvs::glut::Axis2DRenderer );
-
-    // Module information.
+    kvsModuleName( kvs::glut::Axis2DRenderer );
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::RendererBase );
 

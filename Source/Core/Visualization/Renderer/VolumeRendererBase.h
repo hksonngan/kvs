@@ -20,7 +20,6 @@
 #include <kvs/FrameBuffer>
 #include <kvs/ValueArray>
 #include <kvs/Shader>
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -33,7 +32,7 @@ namespace kvs
 /*==========================================================================*/
 class VolumeRendererBase : public kvs::RendererBase
 {
-    kvsClassName( kvs::VolumeRendererBase );
+    kvsModuleName( kvs::VolumeRendererBase );
 
 protected:
 

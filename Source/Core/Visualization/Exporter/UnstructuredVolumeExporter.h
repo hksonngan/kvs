@@ -14,7 +14,6 @@
 #ifndef KVS__UNSTRUCTURED_VOLUME_EXPORTER_H_INCLUDE
 #define KVS__UNSTRUCTURED_VOLUME_EXPORTER_H_INCLUDE
 
-#include <kvs/ClassName>
 #include <kvs/ObjectBase>
 #include <kvs/UnstructuredVolumeObject>
 #include <kvs/KVSMLObjectUnstructuredVolume>
@@ -33,7 +32,7 @@ namespace kvs
 template <typename FileFormatType>
 class UnstructuredVolumeExporter : public kvs::ExporterBase<FileFormatType>
 {
-    kvsClassName( kvs::UnstructuredVolumeExporter );
+    kvsModuleName( kvs::UnstructuredVolumeExporter );
 
 public:
 

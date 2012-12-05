@@ -14,7 +14,6 @@
 #ifndef KVS__STREAMLINE_BASE_H_INCLUDE
 #define KVS__STREAMLINE_BASE_H_INCLUDE
 
-#include <kvs/ClassName>
 #include <kvs/Module>
 #include <kvs/MapperBase>
 #include <kvs/LineObject>
@@ -32,7 +31,7 @@ namespace kvs
 /*===========================================================================*/
 class StreamlineBase : public kvs::MapperBase, public kvs::LineObject
 {
-    kvsClassName( kvs::StreamlineBase );
+    kvsModuleName( kvs::StreamlineBase );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::LineObject );
 

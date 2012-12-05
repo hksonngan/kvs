@@ -14,7 +14,6 @@
 #ifndef KVS__EXTRACT_EDGES_H_INCLUDE
 #define KVS__EXTRACT_EDGES_H_INCLUDE
 
-#include <kvs/ClassName>
 #include <kvs/Module>
 #include <kvs/MapperBase>
 #include <kvs/LineObject>
@@ -35,7 +34,7 @@ class TransferFunction;
 /*===========================================================================*/
 class ExtractEdges : public kvs::MapperBase, public kvs::LineObject
 {
-    kvsClassName( kvs::ExtractEdges );
+    kvsModuleName( kvs::ExtractEdges );
     kvsModuleCategory( Mapper );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::LineObject );

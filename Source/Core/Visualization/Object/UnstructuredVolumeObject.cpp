@@ -110,6 +110,18 @@ void UnstructuredVolumeObject::deepCopy( const UnstructuredVolumeObject& object 
     m_connections = object.connections().clone();
 }
 
+void UnstructuredVolumeObject::print( std::ostream& os, const kvs::Indent& indent ) const
+{
+    if ( !this->hasMinMaxValues() ) this->updateMinMaxValues();
+    os << indent << "Object type : " << "unstructured volume object" << std::endl;
+    BaseClass::print( os, indent );
+    os << indent << "Cell type : " << ::GetCellTypeName( this->cellType() ) << std::endl;
+    os << indent << "Number of nodes : " << this->numberOfNodes() << std::endl;
+    os << indent << "Number of cells : " << this->numberOfCells() << std::endl;
+    os << indent << "Min. value : " << this->minValue() << std::endl;
+    os << indent << "Max. value : " << this->maxValue() << std::endl;
+}
+
 /*==========================================================================*/
 /**
  *  Set the cell type.

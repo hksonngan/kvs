@@ -14,9 +14,11 @@
 #ifndef KVS__UNSTRUCTURED_VOLUME_OBJECT_H_INCLUDE
 #define KVS__UNSTRUCTURED_VOLUME_OBJECT_H_INCLUDE
 
-#include <kvs/ClassName>
+#include <ostream>
 #include <kvs/Module>
 #include <kvs/VolumeObjectBase>
+#include <kvs/Indent>
+#include <kvs/Deprecated>
 
 
 namespace kvs
@@ -29,7 +31,7 @@ namespace kvs
 /*==========================================================================*/
 class UnstructuredVolumeObject : public kvs::VolumeObjectBase
 {
-    kvsClassName( kvs::UnstructuredVolumeObject );
+    kvsModuleName( kvs::UnstructuredVolumeObject );
     kvsModuleCategory( Object );
     kvsModuleBaseClass( kvs::VolumeObjectBase );
 
@@ -53,10 +55,9 @@ public:
 
     UnstructuredVolumeObject();
 
-    friend std::ostream& operator << ( std::ostream& os, const UnstructuredVolumeObject& object );
-
     void shallowCopy( const UnstructuredVolumeObject& object );
     void deepCopy( const UnstructuredVolumeObject& object );
+    void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
 
     void setCellType( const CellType cell_type );
     void setNumberOfNodes( const size_t nnodes );
@@ -99,6 +100,7 @@ public:
     KVS_DEPRECATED( void setNCells( const size_t ncells ) ) { this->setNumberOfCells( ncells ); }
     KVS_DEPRECATED( size_t nnodes() const ) { return this->numberOfNodes(); }
     KVS_DEPRECATED( size_t ncells() const ) { return this->numberOfCells(); }
+    KVS_DEPRECATED( friend std::ostream& operator << ( std::ostream& os, const UnstructuredVolumeObject& object ) );
 };
 
 } // end of namespace kvs

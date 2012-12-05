@@ -16,7 +16,6 @@
 #define KVS__GLUT__AXIS_2D_MATRIX_RENDERER_H_INCLUDE
 
 #include <kvs/RendererBase>
-#include <kvs/ClassName>
 #include <kvs/Module>
 #include <kvs/RGBColor>
 #include <kvs/RGBAColor>
@@ -39,10 +38,7 @@ namespace glut
 /*===========================================================================*/
 class Axis2DMatrixRenderer : public kvs::RendererBase
 {
-    // Class name.
-    kvsClassName( kvs::Axis2DMatrixRenderer );
-
-    // Module information.
+    kvsModuleName( kvs::Axis2DMatrixRenderer );
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::RendererBase );
 

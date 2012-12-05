@@ -18,7 +18,6 @@
 #include <kvs/TransferFunction>
 #include <kvs/StructuredVolumeObject>
 #include <kvs/Module>
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -31,10 +30,7 @@ namespace kvs
 /*==========================================================================*/
 class RayCastingRenderer : public kvs::VolumeRendererBase
 {
-    // Class name.
-    kvsClassName( kvs::RayCastingRenderer );
-
-    // Module information.
+    kvsModuleName( kvs::RayCastingRenderer );
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::VolumeRendererBase );
 

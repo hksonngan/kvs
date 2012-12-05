@@ -33,10 +33,7 @@ namespace glew
 /*===========================================================================*/
 class StochasticPolygonRenderer : public kvs::glew::StochasticRendererBase
 {
-    // Class name.
-    kvsClassName( kvs::glew::StochasticPolygonRenderer );
-
-    // Module information.
+    kvsModuleName( kvs::glew::StochasticPolygonRenderer );
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::glew::StochasticRendererBase );
 

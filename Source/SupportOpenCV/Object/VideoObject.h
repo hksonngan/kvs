@@ -16,7 +16,6 @@
 #define KVS__OPENCV__VIDEO_OBJECT_H_INCLUDE
 
 #include <kvs/ObjectBase>
-#include <kvs/ClassName>
 #include <kvs/Module>
 #include <kvs/opencv/CaptureDevice>
 
@@ -34,10 +33,7 @@ namespace opencv
 /*===========================================================================*/
 class VideoObject : public kvs::ObjectBase
 {
-    // Class name.
-    kvsClassName( kvs::opencv::VideoObject );
-
-    // Module information.
+    kvsModuleName( kvs::opencv::VideoObject );
     kvsModuleCategory( Object );
     kvsModuleBaseClass( kvs::ObjectBase );
 

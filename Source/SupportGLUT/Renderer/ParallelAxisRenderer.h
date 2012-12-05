@@ -16,7 +16,6 @@
 #define KVS__GLUT__PARALLEL_AXIS_RENDERER_H_INCLUDE
 
 #include <kvs/RendererBase>
-#include <kvs/ClassName>
 #include <kvs/Module>
 #include <kvs/RGBColor>
 
@@ -38,10 +37,7 @@ namespace glut
 /*===========================================================================*/
 class ParallelAxisRenderer : public kvs::RendererBase
 {
-    // Class name.
-    kvsClassName( kvs::glut::ParallelAxisRenderer );
-
-    // Module information.
+    kvsModuleName( kvs::glut::ParallelAxisRenderer );
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::RendererBase );
 

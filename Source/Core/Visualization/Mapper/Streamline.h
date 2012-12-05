@@ -14,7 +14,6 @@
 #ifndef KVS__STREAMLINE_H_INCLUDE
 #define KVS__STREAMLINE_H_INCLUDE
 
-#include <kvs/ClassName>
 #include <kvs/Module>
 #include "StreamlineBase.h"
 
@@ -29,7 +28,7 @@ namespace kvs
 /*===========================================================================*/
 class Streamline : public kvs::StreamlineBase
 {
-    kvsClassName( kvs::Streamline );
+    kvsModuleName( kvs::Streamline );
     kvsModuleCategory( Mapper );
     kvsModuleBaseClass( kvs::StreamlineBase );
 

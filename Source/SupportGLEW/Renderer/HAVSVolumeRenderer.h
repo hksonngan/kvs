@@ -29,7 +29,6 @@
 #ifndef KVS__GLEW__HAVS_VOLUME_RENDERER_H_INCLUDE
 #define KVS__GLEW__HAVS_VOLUME_RENDERER_H_INCLUDE
 
-#include <kvs/ClassName>
 #include <kvs/Module>
 #include <kvs/VolumeRendererBase>
 #include <kvs/UnstructuredVolumeObject>
@@ -59,10 +58,7 @@ namespace glew
 /*===========================================================================*/
 class HAVSVolumeRenderer : public kvs::VolumeRendererBase
 {
-    // Class name.
-    kvsClassName( ParticleVolumeRenderer );
-
-    // Module information.
+    kvsModuleName( ParticleVolumeRenderer );
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::VolumeRendererBase );
 

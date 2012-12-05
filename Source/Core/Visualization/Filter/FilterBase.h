@@ -15,7 +15,6 @@
 #define KVS__FILTER_BASE_H_INCLUDE
 
 #include <kvs/ObjectBase>
-#include <kvs/ClassName>
 #include <kvs/Module>
 
 
@@ -29,7 +28,7 @@ namespace kvs
 /*==========================================================================*/
 class FilterBase
 {
-    kvsClassName( kvs::FilterBase );
+    kvsModuleName( kvs::FilterBase );
     kvsModuleBase;
 
 protected:

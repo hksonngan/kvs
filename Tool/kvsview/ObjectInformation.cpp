@@ -51,6 +51,8 @@ ObjectInformation::ObjectInformation( const kvs::ObjectBase* object ):
 /*===========================================================================*/
 std::ostream& operator << ( std::ostream& os, const ObjectInformation& info )
 {
+    info.m_object->print( os );
+/*
     // Image object.
     if ( info.m_object->objectType() == kvs::ObjectBase::Image )
     {
@@ -93,7 +95,7 @@ std::ostream& operator << ( std::ostream& os, const ObjectInformation& info )
             os << *reinterpret_cast<const kvs::UnstructuredVolumeObject*>( volume );
         }
     }
-
+*/
     return( os );
 }
 

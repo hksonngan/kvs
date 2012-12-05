@@ -16,7 +16,6 @@
 #define KVS__TABLE_IMPORTER_H_INCLUDE
 
 #include <kvs/ImporterBase>
-#include <kvs/ClassName>
 #include <kvs/Module>
 #include <kvs/TableObject>
 #include <kvs/KVSMLObjectTable>
@@ -32,7 +31,7 @@ namespace kvs
 /*===========================================================================*/
 class TableImporter : public kvs::ImporterBase, public kvs::TableObject
 {
-    kvsClassName( kvs::TableImporter );
+    kvsModuleName( kvs::TableImporter );
     kvsModuleCategory( Importer );
     kvsModuleBaseClass( kvs::ImporterBase );
     kvsModuleSuperClass( kvs::TableObject );

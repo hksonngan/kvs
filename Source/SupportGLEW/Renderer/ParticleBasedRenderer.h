@@ -16,7 +16,6 @@
 
 #include <kvs/VolumeRendererBase>
 #include <kvs/PointObject>
-#include <kvs/ClassName>
 #include <kvs/Module>
 #include <kvs/Texture2D>
 #include <kvs/glew/RenderBuffer>
@@ -61,10 +60,7 @@ namespace rits
 /*===========================================================================*/
 class ParticleBasedRenderer : public kvs::VolumeRendererBase
 {
-    // Class name.
-    kvsClassName( kvs::glew::ParticleBasedRenderer );
-
-    // Module information.
+    kvsModuleName( kvs::glew::ParticleBasedRenderer );
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::VolumeRendererBase );
 

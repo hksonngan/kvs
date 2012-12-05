@@ -16,7 +16,6 @@
 #define KVS__GLEW__POINT_RENDERER_H_INCLUDE
 
 #include <kvs/DebugNew>
-#include <kvs/ClassName>
 #include <kvs/Module>
 #include <kvs/PointObject>
 #include <kvs/PointRenderer>
@@ -35,10 +34,7 @@ namespace glew
 
 class PointRenderer : public kvs::PointRenderer
 {
-    // Class name.
-    kvsClassName( kvs::glew::PointRenderer );
-
-    // Module information.
+    kvsModuleName( kvs::glew::PointRenderer );
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::PointRenderer );
 

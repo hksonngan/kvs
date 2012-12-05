@@ -16,7 +16,6 @@
 #define KVS__LINE_OBJECT_H_INCLUDE
 
 #include <kvs/GeometryObjectBase>
-#include <kvs/ClassName>
 #include <kvs/ValueArray>
 #include <kvs/Type>
 #include <kvs/Vector2>
@@ -38,7 +37,7 @@ class PolygonObject;
 /*===========================================================================*/
 class LineObject : public kvs::GeometryObjectBase
 {
-    kvsClassName( kvs::LineObject );
+    kvsModuleName( kvs::LineObject );
     kvsModuleCategory( Object );
     kvsModuleBaseClass( kvs::GeometryObjectBase );
 
@@ -77,11 +76,10 @@ public:
     LineObject();
     explicit LineObject( const kvs::PolygonObject& polygon );
 
-    friend std::ostream& operator << ( std::ostream& os, const LineObject& object );
-
     void shallowCopy( const LineObject& object );
     void deepCopy( const LineObject& object );
     void clear();
+    void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
 
     void setLineType( const LineType line_type );
     void setColorType( const ColorType color_type );
@@ -227,6 +225,7 @@ public:
 
     KVS_DEPRECATED( size_t nconnections() const ) { return this->numberOfConnections(); }
     KVS_DEPRECATED( size_t nsizes() const ) { return this->numberOfSizes(); }
+    KVS_DEPRECATED( friend std::ostream& operator << ( std::ostream& os, const LineObject& object ) );
 };
 
 } // end of namespace kvs

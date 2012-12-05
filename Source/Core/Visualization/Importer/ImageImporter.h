@@ -16,7 +16,6 @@
 
 #include "ImporterBase.h"
 #include <string>
-#include <kvs/ClassName>
 #include <kvs/Module>
 #include <kvs/ImageObject>
 #include <kvs/KVSMLObjectImage>
@@ -38,7 +37,7 @@ namespace kvs
 /*==========================================================================*/
 class ImageImporter : public kvs::ImporterBase, public kvs::ImageObject
 {
-    kvsClassName( kvs::ImageImporter );
+    kvsModuleName( kvs::ImageImporter );
     kvsModuleCategory( Importer );
     kvsModuleBaseClass( kvs::ImporterBase );
     kvsModuleSuperClass( kvs::ImageObject );

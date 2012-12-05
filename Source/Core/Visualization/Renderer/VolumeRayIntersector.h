@@ -17,7 +17,6 @@
 #include <kvs/Ray>
 #include <kvs/Vector3>
 #include <kvs/VolumeObjectBase>
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -30,8 +29,6 @@ namespace kvs
 /*==========================================================================*/
 class VolumeRayIntersector : public kvs::Ray
 {
-    kvsClassName_without_virtual( kvs::VolumeRayIntersector );
-
 private:
 
     kvs::Vector3f                m_vertex[8];

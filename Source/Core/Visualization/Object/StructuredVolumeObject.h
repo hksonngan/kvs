@@ -14,9 +14,10 @@
 #ifndef KVS__STRUCTURED_VOLUME_OBJECT_H_INCLUDE
 #define KVS__STRUCTURED_VOLUME_OBJECT_H_INCLUDE
 
-#include <kvs/ClassName>
+#include <ostream>
 #include <kvs/Module>
 #include <kvs/VolumeObjectBase>
+#include <kvs/Indent>
 #include <kvs/Deprecated>
 
 
@@ -30,7 +31,7 @@ namespace kvs
 /*==========================================================================*/
 class StructuredVolumeObject : public kvs::VolumeObjectBase
 {
-    kvsClassName( kvs::StructuredVolumeObject );
+    kvsModuleName( kvs::StructuredVolumeObject );
     kvsModuleCategory( Object );
     kvsModuleBaseClass( kvs::VolumeObjectBase );
 
@@ -48,10 +49,9 @@ public:
 
     StructuredVolumeObject();
 
-    friend std::ostream& operator << ( std::ostream& os, const StructuredVolumeObject& object );
-
     void shallowCopy( const StructuredVolumeObject& object );
     void deepCopy( const StructuredVolumeObject& object );
+    void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
 
     void setGridType( const GridType grid_type );
     void setResolution( const kvs::Vector3ui& resolution );
@@ -100,6 +100,7 @@ public:
     KVS_DEPRECATED( size_t nnodesPerLine() const ) { return this->numberOfNodesPerLine(); }
     KVS_DEPRECATED( size_t nnodesPerSlice() const ) { return this->numberOfNodesPerSlice(); }
     KVS_DEPRECATED( size_t nnodes() const ) { return this->numberOfNodes(); }
+    KVS_DEPRECATED( friend std::ostream& operator << ( std::ostream& os, const StructuredVolumeObject& object ) );
 };
 
 } // end of namespace kvs

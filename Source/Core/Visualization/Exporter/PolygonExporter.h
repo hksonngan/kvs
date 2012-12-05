@@ -14,7 +14,6 @@
 #ifndef KVS__POLYGON_EXPORTER_H_INCLUDE
 #define KVS__POLYGON_EXPORTER_H_INCLUDE
 
-#include <kvs/ClassName>
 #include <kvs/PolygonObject>
 #include <kvs/KVSMLObjectPolygon>
 #include <kvs/Stl>
@@ -33,7 +32,7 @@ namespace kvs
 template <typename FileFormatType>
 class PolygonExporter : public kvs::ExporterBase<FileFormatType>
 {
-    kvsClassName( kvs::PolygonExporter );
+    kvsModuleName( kvs::PolygonExporter );
 
 public:
 

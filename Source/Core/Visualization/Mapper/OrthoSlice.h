@@ -16,7 +16,6 @@
 
 #include <kvs/SlicePlane>
 #include <kvs/VolumeObjectBase>
-#include <kvs/ClassName>
 #include <kvs/Module>
 
 
@@ -30,7 +29,7 @@ namespace kvs
 /*==========================================================================*/
 class OrthoSlice : public kvs::SlicePlane
 {
-    kvsClassName( kvs::OrthoSlice );
+    kvsModuleName( kvs::OrthoSlice );
     kvsModuleCategory( Mapper );
     kvsModuleSuperClass( kvs::SlicePlane );
 

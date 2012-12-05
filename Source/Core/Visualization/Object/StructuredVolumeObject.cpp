@@ -40,10 +40,10 @@ namespace kvs
  *  Constructs a new empty StructuredVolumeObject.
  */
 /*==========================================================================*/
-StructuredVolumeObject::StructuredVolumeObject()
-    : kvs::VolumeObjectBase()
-    , m_grid_type( UnknownGridType )
-    , m_resolution( kvs::Vector3ui( 0, 0, 0 ) )
+StructuredVolumeObject::StructuredVolumeObject():
+    kvs::VolumeObjectBase(),
+    m_grid_type( UnknownGridType ),
+    m_resolution( kvs::Vector3ui( 0, 0, 0 ) )
 {
 }
 
@@ -102,6 +102,18 @@ void StructuredVolumeObject::deepCopy( const StructuredVolumeObject& object )
     BaseClass::deepCopy( object );
     this->m_grid_type = object.gridType();
     this->m_resolution = object.resolution();
+}
+
+void StructuredVolumeObject::print( std::ostream& os, const kvs::Indent& indent ) const
+{
+    if ( !this->hasMinMaxValues() ) this->updateMinMaxValues();
+    os << indent << "Object type : " << "structured volume object" << std::endl;
+    BaseClass::print( os, indent );
+    os << indent << "Grid type : " << ::GetGridTypeName( this->gridType() ) << std::endl;
+    os << indent << "Resolution : " << this->resolution() << std::endl;
+    os << indent << "Number of nodes : " << this->numberOfNodes() << std::endl;
+    os << indent << "Min. value : " << this->minValue() << std::endl;
+    os << indent << "Max. value : " << this->maxValue() << std::endl;
 }
 
 /*==========================================================================*/

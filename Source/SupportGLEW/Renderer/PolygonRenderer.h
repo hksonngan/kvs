@@ -16,7 +16,6 @@
 #define KVS__GLEW__POLYGON_RENDERER_H_INCLUDE
 
 #include <kvs/DebugNew>
-#include <kvs/ClassName>
 #include <kvs/Module>
 #include <kvs/PolygonObject>
 #include <kvs/PolygonRenderer>
@@ -35,10 +34,7 @@ namespace glew
 
 class PolygonRenderer : public kvs::PolygonRenderer
 {
-    // Class name.
-    kvsClassName( kvs::glew::PolygonRenderer );
-
-    // Module information.
+    kvsModuleName( kvs::glew::PolygonRenderer );
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::PolygonRenderer );
 

@@ -18,7 +18,6 @@
 #include <kvs/Vector3>
 #include <kvs/RGBColor>
 #include <kvs/LineObject>
-#include <kvs/ClassName>
 #include <kvs/Module>
 
 
@@ -32,10 +31,7 @@ namespace kvs
 /*===========================================================================*/
 class AxisObject : public kvs::LineObject
 {
-    // Class name.
-    kvsClassName( kvs::AxisObject );
-
-    // Module information.
+    kvsModuleName( kvs::AxisObject );
     kvsModuleCategory( Object );
     kvsModuleSuperClass( kvs::LineObject );
 

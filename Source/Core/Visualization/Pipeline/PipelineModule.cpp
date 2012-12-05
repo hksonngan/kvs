@@ -108,14 +108,14 @@ const char* PipelineModule::name( void ) const
 {
     switch ( m_category )
     {
-    case PipelineModule::Filter:   return( m_module.filter->className() );
-    case PipelineModule::Mapper:   return( m_module.mapper->className() );
-    case PipelineModule::Object:   return( m_module.object->className() );
-    case PipelineModule::Renderer: return( m_module.renderer->className() );
+    case PipelineModule::Filter:   return( m_module.filter->moduleName() );
+    case PipelineModule::Mapper:   return( m_module.mapper->moduleName() );
+    case PipelineModule::Object:   return( m_module.object->moduleName() );
+    case PipelineModule::Renderer: return( m_module.renderer->moduleName() );
     default: break;
     }
 
-    return( "Unknown class" );
+    return( "Unknown module" );
 }
 
 const bool PipelineModule::unique( void ) const

@@ -16,10 +16,12 @@
 #define KVS__TABLE_OBJECT_H_INCLUDE
 
 #include <vector>
-#include <kvs/ClassName>
+#include <ostream>
+#include <kvs/Module>
 #include <kvs/ObjectBase>
 #include <kvs/Type>
 #include <kvs/AnyValueArray>
+#include <kvs/Indent>
 #include <kvs/Deprecated>
 
 
@@ -33,7 +35,7 @@ namespace kvs
 /*===========================================================================*/
 class TableObject : public kvs::ObjectBase
 {
-    kvsClassName( kvs::TableObject );
+    kvsModuleName( kvs::TableObject );
     kvsModuleCategory( Object );
     kvsModuleBaseClass( kvs::ObjectBase );
 
@@ -64,6 +66,10 @@ public:
 public:
 
     TableObject();
+
+    void shallowCopy( const TableObject& other );
+    void deepCopy( const TableObject& other );
+    void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
 
     void addColumn( const kvs::AnyValueArray& array, const std::string& label = "" );
     template <typename T> void addColumn( const kvs::ValueArray<T>& array, const std::string& label = "" );

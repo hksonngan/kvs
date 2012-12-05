@@ -21,7 +21,6 @@
 #include <kvs/VolumeObjectBase>
 #include <kvs/UnstructuredVolumeObject>
 #include <kvs/TetrahedralCell>
-#include <kvs/ClassName>
 #include <kvs/Module>
 
 
@@ -35,7 +34,7 @@ namespace kvs
 /*===========================================================================*/
 class CellByCellLayeredSampling : public kvs::MapperBase, public kvs::PointObject
 {
-    kvsClassName( kvs::CellByCellLayeredSampling );
+    kvsModuleName( kvs::CellByCellLayeredSampling );
     kvsModuleCategory( Mapper );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::PointObject );

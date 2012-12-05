@@ -33,10 +33,7 @@ namespace glew
 /*===========================================================================*/
 class StochasticUniformGridRenderer : public kvs::glew::StochasticRendererBase
 {
-    // Class name.
-    kvsClassName( kvs::glew::StochasticUniformGridRenderer );
-
-    // Module information.
+    kvsModuleName( kvs::glew::StochasticUniformGridRenderer );
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::glew::StochasticRendererBase );
 

@@ -16,7 +16,6 @@
 #define KVS__SCATTER_PLOT_RENDERER_H_INCLUDE
 
 #include <kvs/RendererBase>
-#include <kvs/ClassName>
 #include <kvs/Module>
 #include <kvs/RGBColor>
 #include <kvs/RGBAColor>
@@ -37,10 +36,7 @@ class Light;
 /*===========================================================================*/
 class ScatterPlotRenderer : public kvs::RendererBase
 {
-    // Class name.
-    kvsClassName( kvs::ScatterPlotRenderer );
-
-    // Module information.
+    kvsModuleName( kvs::ScatterPlotRenderer );
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::RendererBase );
 

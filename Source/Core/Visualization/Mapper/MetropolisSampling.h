@@ -19,7 +19,6 @@
 #include <kvs/StructuredVolumeObject>
 #include <kvs/UnstructuredVolumeObject>
 #include <kvs/MapperBase>
-#include <kvs/ClassName>
 #include <kvs/Module>
 
 
@@ -33,7 +32,7 @@ namespace kvs
 /*==========================================================================*/
 class MetropolisSampling : public MapperBase, public PointObject
 {
-    kvsClassName( kvs::MetropolisSampling );
+    kvsModuleName( kvs::MetropolisSampling );
     kvsModuleCategory( Mapper );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::PointObject );

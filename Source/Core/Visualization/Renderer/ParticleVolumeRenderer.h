@@ -16,7 +16,6 @@
 
 #include <kvs/VolumeRendererBase>
 #include <kvs/ParticleBuffer>
-#include <kvs/ClassName>
 #include <kvs/Module>
 
 
@@ -30,10 +29,7 @@ namespace kvs
 /*==========================================================================*/
 class ParticleVolumeRenderer : public kvs::VolumeRendererBase
 {
-    // Class name.
-    kvsClassName( kvs::ParticleVolumeRenderer );
-
-    // Module information.
+    kvsModuleName( kvs::ParticleVolumeRenderer );
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::VolumeRendererBase );
 

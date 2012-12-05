@@ -14,11 +14,9 @@
 #ifndef KVS__EXTRACT_VERTICES_H_INCLUDE
 #define KVS__EXTRACT_VERTICES_H_INCLUDE
 
-#include <kvs/ClassName>
 #include <kvs/Module>
-
-#include "MapperBase.h"
 #include <kvs/PointObject>
+#include "MapperBase.h"
 
 
 namespace kvs
@@ -33,7 +31,7 @@ class VolumeObjectBase;
 /*==========================================================================*/
 class ExtractVertices : public kvs::MapperBase, public kvs::PointObject
 {
-    kvsClassName( kvs::ExtractVertices );
+    kvsModuleName( kvs::ExtractVertices );
     kvsModuleCategory( Mapper );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::PointObject );
