@@ -54,7 +54,7 @@ private:
     ImageObject::PixelType m_type; ///< pixel type
     size_t m_width; ///< image width
     size_t m_height; ///< image height
-    kvs::ValueArray<kvs::UInt8> m_data; ///< pixel data
+    kvs::ValueArray<kvs::UInt8> m_pixels; ///< pixel data
 
 public:
 
@@ -67,7 +67,7 @@ public:
     ImageObject(
         const size_t width,
         const size_t height,
-        const kvs::ValueArray<kvs::UInt8>& data,
+        const kvs::ValueArray<kvs::UInt8>& pixels,
         const ImageObject::PixelType type = ImageObject::Color24 );
 
     void shallowCopy( const ImageObject& object );
@@ -78,19 +78,20 @@ public:
     ImageObject::PixelType type() const;
     size_t width() const;
     size_t height() const;
-    const kvs::ValueArray<kvs::UInt8>& data() const;
+    const kvs::ValueArray<kvs::UInt8>& pixels() const;
     size_t bitsPerPixel() const;
     size_t bytesPerPixel() const;
     size_t numberOfChannels() const;
 
     void setSize( const size_t width, const size_t height );
-    void setData( const kvs::ValueArray<kvs::UInt8>& data, const ImageObject::PixelType type = ImageObject::Color24 );
+    void setPixels( const kvs::ValueArray<kvs::UInt8>& pixels, const ImageObject::PixelType type = ImageObject::Color24 );
 
 private:
 
     size_t get_number_of_pixels() const;
 
 public:
+    KVS_DEPRECATED( const kvs::ValueArray<kvs::UInt8>& data() const ) { return this->pixels(); }
     KVS_DEPRECATED( size_t nchannels() const ) { return this->numberOfChannels(); }
     KVS_DEPRECATED( friend std::ostream& operator << ( std::ostream& os, const ImageObject& object ) );
 };

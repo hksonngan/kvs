@@ -17,6 +17,7 @@
 #include <kvs/ValueArray>
 #include <kvs/Type>
 #include <kvs/Vector2>
+#include <kvs/Deprecated>
 
 
 namespace kvs
@@ -77,18 +78,6 @@ public:
     size_t size() const;
     const kvs::ValueArray<kvs::UInt8>& pixels() const;
 
-#if KVS_ENABLE_DEPRECATED
-    const kvs::ValueArray<kvs::UInt8>& data() const
-    {
-        return this->pixels();
-    }
-
-    kvs::ValueArray<kvs::UInt8>& data()
-    {
-        return this->pixels();
-    }
-#endif
-
     void flip();
     void copy( const kvs::ImageBase& image );
     bool create( const size_t width, const size_t height, const ImageType type );
@@ -99,6 +88,10 @@ protected:
     kvs::ValueArray<kvs::UInt8>& pixels();
     template <typename ImageDataType, typename Interpolator>
     void resize( const size_t width, const size_t height, ImageDataType* image );
+
+public:
+    KVS_DEPRECATED( const kvs::ValueArray<kvs::UInt8>& data() const ) { return this->pixels(); }
+    KVS_DEPRECATED( kvs::ValueArray<kvs::UInt8>& data() ) { return this->pixels(); }
 };
 
 template <typename ImageDataType>

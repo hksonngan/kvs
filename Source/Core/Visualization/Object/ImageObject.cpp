@@ -91,19 +91,19 @@ ImageObject::ImageObject()
  *  @brief  Constructs a new ImageObject class.
  *  @param  width [in] image width
  *  @param  height [in] image height
- *  @param  data [in] pixel data array
+ *  @param  pixels [in] pixel data array
  *  @param  type [in] color type
  */
 /*==========================================================================*/
 ImageObject::ImageObject(
     const size_t width,
     const size_t height,
-    const kvs::ValueArray<kvs::UInt8>& data,
+    const kvs::ValueArray<kvs::UInt8>& pixels,
     const ImageObject::PixelType type ):
     m_type( type ),
     m_width( width ),
     m_height( height ),
-    m_data( data )
+    m_pixels( pixels )
 {
 }
 
@@ -119,7 +119,7 @@ void ImageObject::shallowCopy( const ImageObject& other )
     this->m_type = other.type();
     this->m_width = other.width();
     this->m_height = other.height();
-    this->m_data = other.data();
+    this->m_pixels = other.pixels();
 }
 
 /*===========================================================================*/
@@ -134,7 +134,7 @@ void ImageObject::deepCopy( const ImageObject& other )
     this->m_type = other.type();
     this->m_width = other.width();
     this->m_height = other.height();
-    this->m_data = other.data().clone();
+    this->m_pixels = other.pixels().clone();
 }
 
 /*===========================================================================*/
@@ -204,9 +204,9 @@ size_t ImageObject::height() const
  *  @return pixel data array
  */
 /*==========================================================================*/
-const kvs::ValueArray<kvs::UInt8>& ImageObject::data() const
+const kvs::ValueArray<kvs::UInt8>& ImageObject::pixels() const
 {
-    return m_data;
+    return m_pixels;
 }
 
 /*==========================================================================*/
@@ -268,15 +268,15 @@ void ImageObject::setSize( const size_t width, const size_t height )
 /*===========================================================================*/
 /**
  *  @brief  Sets pixel data.
- *  @param  data [in] pixel data
+ *  @param  pixels [in] pixel data
  *  @param  type [in] pixel type
  */
 /*===========================================================================*/
-void ImageObject::setData(
+void ImageObject::setPixels(
     const kvs::ValueArray<kvs::UInt8>& pixels,
     const ImageObject::PixelType type )
 {
-    m_data = pixels;
+    m_pixels = pixels;
     m_type = type;
 }
 
