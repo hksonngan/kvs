@@ -61,11 +61,13 @@ private:
     void mapping( const kvs::StructuredVolumeObject* volume );
     void mapping( const kvs::UnstructuredVolumeObject* volume );
     template <typename T> void generate_particles( const kvs::StructuredVolumeObject* volume );
+/*
     void adopt_particle(
         const size_t index,
         const kvs::Vector3f& coord,
         const size_t scalar,
         const kvs::Vector3f& gradient );
+*/
 };
 
 } // end of namespace viz

@@ -32,7 +32,7 @@ class VisualizationPipeline;
 
 /*==========================================================================*/
 /**
- *  Pipeline class.
+ *  @brief  Pipeline class.
  */
 /*==========================================================================*/
 class PipelineModule
@@ -46,17 +46,17 @@ public:
     enum Category
     {
         Empty = 0, ///< empty module
-        Filter,    ///< filter module
-        Mapper,    ///< mapper module
-        Object,    ///< object module
-        Renderer   ///< renderer module
+        Filter, ///< filter module
+        Mapper, ///< mapper module
+        Object, ///< object module
+        Renderer ///< renderer module
     };
 
     union Module
     {
-        kvs::FilterBase*   filter;   ///< pointer to the KVS filter class
-        kvs::MapperBase*   mapper;   ///< pointer to the KVS mapper class
-        kvs::ObjectBase*   object;   ///< pointer to the KVS object class
+        kvs::FilterBase* filter; ///< pointer to the KVS filter class
+        kvs::MapperBase* mapper; ///< pointer to the KVS mapper class
+        kvs::ObjectBase* object; ///< pointer to the KVS object class
         kvs::RendererBase* renderer; ///< pointer to the KVS renderer class
     };
 
@@ -64,13 +64,12 @@ protected:
 
     bool m_auto_delete; ///< flag whether the module is deleted or not (usually 'true')
     kvs::ReferenceCounter* m_counter;  ///< Reference counter.
-    Category               m_category; ///< module category
-    Module                 m_module;   ///< pointer to the module (SHARED)
+    Category m_category; ///< module category
+    Module m_module; ///< pointer to the module (SHARED)
 
 public:
 
-    PipelineModule( void );
-
+    PipelineModule();
     template <typename T>
     explicit PipelineModule( T* module ):
         m_auto_delete( true ),
@@ -81,42 +80,27 @@ public:
         this->create_counter( 1 );
         this->read_module( module, typename kvs::ModuleTraits<T>::ModuleCategory() );
     }
-
     PipelineModule( const PipelineModule& module );
-
-    ~PipelineModule( void );
-
-public:
+    ~PipelineModule();
 
     template <typename T>
-    T* get( void ) const
+    T* get() const
     {
         return( this->get_module<T>( typename kvs::ModuleTraits<T>::ModuleCategory() ) );
     }
 
     kvs::ObjectBase* exec( const kvs::ObjectBase* object = NULL );
 
-public:
-
     PipelineModule& operator = ( const PipelineModule& module );
 
-public:
-
-    const Category category( void ) const;
-
-    const Module module( void ) const;
-
-    const kvs::FilterBase* filter( void ) const;
-
-    const kvs::MapperBase* mapper( void ) const;
-
-    const kvs::ObjectBase* object( void ) const;
-
-    const kvs::RendererBase* renderer( void ) const;
-
-    const char* name( void ) const;
-
-    const bool unique( void ) const;
+    const Category category() const;
+    const Module module() const;
+    const kvs::FilterBase* filter() const;
+    const kvs::MapperBase* mapper() const;
+    const kvs::ObjectBase* object() const;
+    const kvs::RendererBase* renderer() const;
+    const char* name() const;
+    bool unique() const;
 
 private:
 
@@ -174,23 +158,13 @@ private:
         return( reinterpret_cast<T*>( m_module.renderer ) );
     }
 
-private:
-
-    void disable_auto_delete( void );
-
-    void delete_module( void );
-
-private:
-
+    void disable_auto_delete();
+    void delete_module();
     void shallow_copy( const PipelineModule& module );
-
     void deep_copy( const PipelineModule& module );
-
     void create_counter( const size_t counter = 1 );
-
-    void ref( void );
-
-    void unref( void );
+    void ref();
+    void unref();
 };
 
 } // end of namespace kvs

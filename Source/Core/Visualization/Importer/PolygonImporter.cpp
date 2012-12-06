@@ -269,21 +269,13 @@ void PolygonImporter::import( const kvs::KVSMLObjectPolygon* kvsml )
 /*==========================================================================*/
 void PolygonImporter::import( const kvs::Stl* stl )
 {
-    m_polygon_type = kvs::PolygonObject::Triangle;
-    m_color_type = kvs::PolygonObject::PolygonColor;
-    m_normal_type = kvs::PolygonObject::PolygonNormal;
-
-    m_coords = stl->coords();
-    m_normals = stl->normals();
-
-    m_colors.allocate( 3 );
-    m_colors[0] = 255;
-    m_colors[1] = 255;
-    m_colors[2] = 255;
-
-    m_opacities.allocate( 1 );
-    m_opacities[0] = 255;
-
+    SuperClass::setPolygonType( kvs::PolygonObject::Triangle );
+    SuperClass::setColorType( kvs::PolygonObject::PolygonColor );
+    SuperClass::setNormalType( kvs::PolygonObject::PolygonNormal );
+    SuperClass::setCoords( stl->coords() );
+    SuperClass::setColor( kvs::RGBColor( 255, 255, 255 ) );
+    SuperClass::setNormals( stl->normals() );
+    SuperClass::setOpacity( 255 );
     this->set_min_max_coord();
 }
 
@@ -331,20 +323,27 @@ void PolygonImporter::import( const kvs::Ply* ply )
 /*==========================================================================*/
 void PolygonImporter::set_min_max_coord()
 {
-    kvs::Vector3f min_coord( m_coords[0], m_coords[1], m_coords[2] );
+    const float min_x = SuperClass::coords()[0];
+    const float min_y = SuperClass::coords()[1];
+    const float min_z = SuperClass::coords()[2];
+    kvs::Vector3f min_coord( min_x, min_y, min_z );
     kvs::Vector3f max_coord( min_coord );
-    const size_t  dimension = 3;
-    const size_t  nvertices = m_coords.size() / dimension;
-    size_t        index3    = 3;
+    const size_t dimension = 3;
+    const size_t nvertices = SuperClass::coords().size() / dimension;
+    size_t index3 = 3;
     for ( size_t i = 1; i < nvertices; i++, index3 += 3 )
     {
-        min_coord.x() = kvs::Math::Min( min_coord.x(), m_coords[index3] );
-        min_coord.y() = kvs::Math::Min( min_coord.y(), m_coords[index3 + 1] );
-        min_coord.z() = kvs::Math::Min( min_coord.z(), m_coords[index3 + 2] );
+        const float x = SuperClass::coords()[index3];
+        const float y = SuperClass::coords()[index3+1];
+        const float z = SuperClass::coords()[index3+2];
 
-        max_coord.x() = kvs::Math::Max( max_coord.x(), m_coords[index3] );
-        max_coord.y() = kvs::Math::Max( max_coord.y(), m_coords[index3 + 1] );
-        max_coord.z() = kvs::Math::Max( max_coord.z(), m_coords[index3 + 2] );
+        min_coord.x() = kvs::Math::Min( min_coord.x(), x );
+        min_coord.y() = kvs::Math::Min( min_coord.y(), y );
+        min_coord.z() = kvs::Math::Min( min_coord.z(), z );
+
+        max_coord.x() = kvs::Math::Max( max_coord.x(), x );
+        max_coord.y() = kvs::Math::Max( max_coord.y(), y );
+        max_coord.z() = kvs::Math::Max( max_coord.z(), z );
     }
 
     this->setMinMaxObjectCoords( min_coord, max_coord );

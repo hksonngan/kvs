@@ -59,7 +59,7 @@ public:
         UnknownColorType
     };
 
-protected:
+private:
 
     LineType m_line_type; ///< line type
     ColorType m_color_type; ///< line color type

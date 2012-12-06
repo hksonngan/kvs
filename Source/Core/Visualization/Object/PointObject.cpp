@@ -135,26 +135,6 @@ PointObject::PointObject( const kvs::PolygonObject& polygon )
 
 /*===========================================================================*/
 /**
- *  @brief  '<<' operator
- */
-/*===========================================================================*/
-std::ostream& operator << ( std::ostream& os, const PointObject& object )
-{
-    os << "Object type:  " << "point object" << std::endl;
-#ifdef KVS_COMPILER_VC
-#if KVS_COMPILER_VERSION_LESS_OR_EQUAL( 8, 0 )
-    // @TODO Cannot instance the object that is a abstract class here (error:C2259).
-#endif
-#else
-    os << static_cast<const kvs::GeometryObjectBase&>( object ) << std::endl;
-#endif
-    os << "Number of sizes:  " << object.numberOfSizes();
-
-    return os;
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Add the point object.
  *  @param  other [in] point object
  */
@@ -520,6 +500,26 @@ kvs::Real32 PointObject::size( const size_t index ) const
 const kvs::ValueArray<kvs::Real32>& PointObject::sizes() const
 {
     return m_sizes;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  '<<' operator
+ */
+/*===========================================================================*/
+std::ostream& operator << ( std::ostream& os, const PointObject& object )
+{
+    os << "Object type:  " << "point object" << std::endl;
+#ifdef KVS_COMPILER_VC
+#if KVS_COMPILER_VERSION_LESS_OR_EQUAL( 8, 0 )
+    // @TODO Cannot instance the object that is a abstract class here (error:C2259).
+#endif
+#else
+    os << static_cast<const kvs::GeometryObjectBase&>( object ) << std::endl;
+#endif
+    os << "Number of sizes:  " << object.numberOfSizes();
+
+    return os;
 }
 
 } // end of namespace kvs

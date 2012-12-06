@@ -64,7 +64,7 @@ public:
         UnknownNormalType
     };
 
-protected:
+private:
 
     PolygonType m_polygon_type; ///< polygon type
     ColorType m_color_type; ///< polygon color type

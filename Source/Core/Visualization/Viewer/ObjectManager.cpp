@@ -40,10 +40,18 @@ ObjectManager::ObjectManager( void ) :
     m_current_object_id = 0;
     this->insert_root();
 
+    ObjectBase::setMinMaxObjectCoords(
+        kvs::Vector3f(  1000000,  1000000,  1000000 ),
+        kvs::Vector3f( -1000000, -1000000, -1000000 ) );
+    ObjectBase::setMinMaxExternalCoords(
+        kvs::Vector3f( -3.0, -3.0, -3.0 ),
+        kvs::Vector3f(  3.0,  3.0,  3.0 ) );
+/*
     m_min_object_coord   = kvs::Vector3f(  1000000,  1000000,  1000000 );
     m_max_object_coord   = kvs::Vector3f( -1000000, -1000000, -1000000 );
     m_min_external_coord = kvs::Vector3f( -3.0, -3.0, -3.0 );
     m_max_external_coord = kvs::Vector3f(  3.0,  3.0,  3.0 );
+*/
 }
 
 /*==========================================================================*/
@@ -719,7 +727,7 @@ bool ObjectManager::detectCollision(
         if( !(*first)->canCollision() ) continue;
 
         const kvs::Vector2f diff =
-            (*first)->positionInDevice( camera, m_object_center, m_normalize ) - p_win;
+            (*first)->positionInDevice( camera, ObjectBase::objectCenter(), ObjectBase::normalize() ) - p_win;
 
         const double distance = diff.length();
 
@@ -731,9 +739,7 @@ bool ObjectManager::detectCollision(
     }
 
     return( m_has_active_object =
-            (*m_active_object)->collision( p_win, camera,
-                                               m_object_center,
-                                               m_normalize ) );
+            (*m_active_object)->collision( p_win, camera, ObjectBase::objectCenter(), ObjectBase::normalize() ) );
 }
 
 /*==========================================================================*/
@@ -758,7 +764,7 @@ bool ObjectManager::detectCollision( const kvs::Vector3f& p_world )
         if( !(*first)->canCollision() ) continue;
 
         const kvs::Vector3f diff =
-            (*first)->positionInWorld( m_object_center, m_normalize ) - p_world;
+            (*first)->positionInWorld( ObjectBase::objectCenter(), ObjectBase::normalize() ) - p_world;
 
         const double distance = diff.length();
 
@@ -771,8 +777,8 @@ bool ObjectManager::detectCollision( const kvs::Vector3f& p_world )
 
     return( m_has_active_object =
             (*m_active_object)->collision( p_world,
-                                           m_object_center,
-                                           m_normalize ) );
+                                           ObjectBase::objectCenter(),
+                                           ObjectBase::normalize() ) );
 }
 
 /*==========================================================================*/
@@ -897,28 +903,38 @@ void ObjectManager::update_normalize_parameters(
         kvs::Math::Equal( 0.0f, max_ext.y() ) &&
         kvs::Math::Equal( 0.0f, max_ext.z() ) ) return;
 
-    m_min_object_coord.x() = m_min_object_coord.x() < min_ext.x() ?
-        m_min_object_coord.x() : min_ext.x();
-    m_min_object_coord.y() = m_min_object_coord.y() < min_ext.y() ?
-        m_min_object_coord.y() : min_ext.y();
-    m_min_object_coord.z() = m_min_object_coord.z() < min_ext.z() ?
-        m_min_object_coord.z() : min_ext.z();
-    m_max_object_coord.x() = m_max_object_coord.x() > max_ext.x() ?
-        m_max_object_coord.x() : max_ext.x();
-    m_max_object_coord.y() = m_max_object_coord.y() > max_ext.y() ?
-        m_max_object_coord.y() : max_ext.y();
-    m_max_object_coord.z() = m_max_object_coord.z() > max_ext.z() ?
-        m_max_object_coord.z() : max_ext.z();
+/*
+    m_min_object_coord.x() = m_min_object_coord.x() < min_ext.x() ? m_min_object_coord.x() : min_ext.x();
+    m_min_object_coord.y() = m_min_object_coord.y() < min_ext.y() ? m_min_object_coord.y() : min_ext.y();
+    m_min_object_coord.z() = m_min_object_coord.z() < min_ext.z() ? m_min_object_coord.z() : min_ext.z();
 
-    const kvs::Vector3f diff_obj = m_max_object_coord - m_min_object_coord;
+    m_max_object_coord.x() = m_max_object_coord.x() > max_ext.x() ? m_max_object_coord.x() : max_ext.x();
+    m_max_object_coord.y() = m_max_object_coord.y() > max_ext.y() ? m_max_object_coord.y() : max_ext.y();
+    m_max_object_coord.z() = m_max_object_coord.z() > max_ext.z() ? m_max_object_coord.z() : max_ext.z();
+*/
+    kvs::Vector3f min_object_coord(
+        kvs::Math::Min( ObjectBase::minObjectCoord().x(), min_ext.x() ),
+        kvs::Math::Min( ObjectBase::minObjectCoord().y(), min_ext.y() ),
+        kvs::Math::Min( ObjectBase::minObjectCoord().z(), min_ext.z() ) );
+    kvs::Vector3f max_object_coord(
+        kvs::Math::Max( ObjectBase::maxObjectCoord().x(), max_ext.x() ),
+        kvs::Math::Max( ObjectBase::maxObjectCoord().y(), max_ext.y() ),
+        kvs::Math::Max( ObjectBase::maxObjectCoord().z(), max_ext.z() ) );
+    ObjectBase::setMinMaxObjectCoords( min_object_coord, max_object_coord );
+
+    const kvs::Vector3f diff_obj = max_object_coord - min_object_coord;
     const float max_diff = kvs::Math::Max( diff_obj.x(), diff_obj.y(), diff_obj.z() );
     const float normalize = 6.0f / max_diff;
 
+    ObjectBase::setNormalize( kvs::Vector3f::All( normalize ) );
+/*
     m_normalize.x() = normalize;
     m_normalize.y() = normalize;
     m_normalize.z() = normalize;
+*/
 
-    m_object_center = ( m_max_object_coord + m_min_object_coord ) * 0.5f;
+//    m_object_center = ( max_object_coord + min_object_coord ) * 0.5f;
+    ObjectBase::setObjectCenter( ( max_object_coord + min_object_coord ) * 0.5f );
 }
 
 /*==========================================================================*/
@@ -928,10 +944,18 @@ void ObjectManager::update_normalize_parameters(
 /*==========================================================================*/
 void ObjectManager::update_normalize_parameters( void )
 {
+/*
     m_min_object_coord   = kvs::Vector3f(  1000000,  1000000,  1000000 );
     m_max_object_coord   = kvs::Vector3f( -1000000, -1000000, -1000000 );
     m_min_external_coord = kvs::Vector3f( -3.0, -3.0, -3.0 );
     m_max_external_coord = kvs::Vector3f(  3.0,  3.0,  3.0 );
+*/
+    ObjectBase::setMinMaxExternalCoords(
+        kvs::Vector3f( -3.0, -3.0, -3.0 ),
+        kvs::Vector3f(  3.0,  3.0,  3.0 ) );
+
+    kvs::Vector3f min_object_coord(  1000000,  1000000,  1000000 );
+    kvs::Vector3f max_object_coord( -1000000, -1000000, -1000000 );
 
     int ctr = 0;
     if( m_object_tree.size() > 1 )
@@ -951,47 +975,52 @@ void ObjectManager::update_normalize_parameters( void )
                 kvs::Math::Equal( 0.0f, (*first)->maxExternalCoord().y() ) &&
                 kvs::Math::Equal( 0.0f, (*first)->maxExternalCoord().z() ) ) continue;
 
-            m_min_object_coord.x() =
-                m_min_object_coord.x() < (*first)->minExternalCoord().x() ?
-                m_min_object_coord.x() : (*first)->minExternalCoord().x();
-            m_min_object_coord.y() =
-                m_min_object_coord.y() < (*first)->minExternalCoord().y() ?
-                m_min_object_coord.y() : (*first)->minExternalCoord().y();
-            m_min_object_coord.z() =
-                m_min_object_coord.z() < (*first)->minExternalCoord().z() ?
-                m_min_object_coord.z() : (*first)->minExternalCoord().z();
-            m_max_object_coord.x() =
-                m_max_object_coord.x() > (*first)->maxExternalCoord().x() ?
-                m_max_object_coord.x() : (*first)->maxExternalCoord().x();
-            m_max_object_coord.y() =
-                m_max_object_coord.y() > (*first)->maxExternalCoord().y() ?
-                m_max_object_coord.y() : (*first)->maxExternalCoord().y();
-            m_max_object_coord.z() =
-                m_max_object_coord.z() > (*first)->maxExternalCoord().z() ?
-                m_max_object_coord.z() : (*first)->maxExternalCoord().z();
+/*
+            m_min_object_coord.x() = m_min_object_coord.x() < (*first)->minExternalCoord().x() ? m_min_object_coord.x() : (*first)->minExternalCoord().x();
+            m_min_object_coord.y() = m_min_object_coord.y() < (*first)->minExternalCoord().y() ? m_min_object_coord.y() : (*first)->minExternalCoord().y();
+            m_min_object_coord.z() = m_min_object_coord.z() < (*first)->minExternalCoord().z() ? m_min_object_coord.z() : (*first)->minExternalCoord().z();
+
+            m_max_object_coord.x() = m_max_object_coord.x() > (*first)->maxExternalCoord().x() ? m_max_object_coord.x() : (*first)->maxExternalCoord().x();
+            m_max_object_coord.y() = m_max_object_coord.y() > (*first)->maxExternalCoord().y() ? m_max_object_coord.y() : (*first)->maxExternalCoord().y();
+            m_max_object_coord.z() = m_max_object_coord.z() > (*first)->maxExternalCoord().z() ? m_max_object_coord.z() : (*first)->maxExternalCoord().z();
+*/
+            min_object_coord.x() = kvs::Math::Min( min_object_coord.x(), (*first)->minExternalCoord().x() );
+            min_object_coord.y() = kvs::Math::Min( min_object_coord.y(), (*first)->minExternalCoord().y() );
+            min_object_coord.z() = kvs::Math::Min( min_object_coord.z(), (*first)->minExternalCoord().z() );
+            max_object_coord.x() = kvs::Math::Max( max_object_coord.x(), (*first)->maxExternalCoord().x() );
+            max_object_coord.y() = kvs::Math::Max( max_object_coord.y(), (*first)->maxExternalCoord().y() );
+            max_object_coord.z() = kvs::Math::Max( max_object_coord.z(), (*first)->maxExternalCoord().z() );
 
             ctr++;
         }
     }
 
+    ObjectBase::setMinMaxObjectCoords( min_object_coord, max_object_coord );
+
     if( ctr == 0 )
     {
+/*
         m_normalize     = kvs::Vector3f::All( 1.0 );
         m_object_center = kvs::Vector3f::All( 0.0 );
+*/
+        ObjectBase::setNormalize( kvs::Vector3f::All( 1.0 ) );
+        ObjectBase::setObjectCenter( kvs::Vector3f::All( 0.0 ) );
     }
     else
     {
-        const kvs::Vector3f diff_obj = m_max_object_coord - m_min_object_coord;
-
+        const kvs::Vector3f diff_obj = max_object_coord - min_object_coord;
         const float max_diff = kvs::Math::Max( diff_obj.x(), diff_obj.y(), diff_obj.z() );
-
         const float normalize = 6.0f / max_diff;
 
+/*
         m_normalize.x() = normalize;
         m_normalize.y() = normalize;
         m_normalize.z() = normalize;
+*/
+        ObjectBase::setNormalize( kvs::Vector3f::All( normalize ) );
 
-        m_object_center = ( m_max_object_coord + m_min_object_coord ) * 0.5f;
+//        m_object_center = ( m_max_object_coord + m_min_object_coord ) * 0.5f;
+        ObjectBase::setObjectCenter( ( max_object_coord + min_object_coord ) * 0.5f );
     }
 }
 
@@ -1028,7 +1057,7 @@ kvs::Vector3f ObjectManager::get_rotation_center( kvs::ObjectBase* obj )
     }
     else
     {
-        return( obj->positionInWorld( m_object_center, m_normalize ) );
+        return( obj->positionInWorld( ObjectBase::objectCenter(), ObjectBase::normalize() ) );
     }
 }
 

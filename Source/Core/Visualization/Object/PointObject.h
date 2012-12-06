@@ -42,7 +42,7 @@ class PointObject : public kvs::GeometryObjectBase
     kvsModuleCategory( Object );
     kvsModuleBaseClass( kvs::GeometryObjectBase );
 
-protected:
+private:
 
     kvs::ValueArray<kvs::Real32> m_sizes; ///< size array
 

@@ -15,7 +15,6 @@
 #define KVS__OBJECT_IMPORTER_H_INCLUDE
 
 #include <string>
-#include <kvs/ClassName>
 #include <kvs/FileFormatBase>
 #include <kvs/ImporterBase>
 #include <kvs/ObjectBase>
@@ -31,43 +30,37 @@ namespace kvs
 /*==========================================================================*/
 class ObjectImporter
 {
-    kvsClassName_without_virtual( kvs::ObjectImporter );
-
 public:
 
     enum ImporterType
     {
-        Image = 0,           ///< image object importer
-        Point,               ///< point object importer
-        Line,                ///< line object importer
-        Polygon,             ///< polygon object importer
-        StructuredVolume,    ///< structured volume object importer
-        UnstructuredVolume,  ///< unstructured volume object importer
-        Unknown              ///< unknown importer
+        Image = 0, ///< image object importer
+        Point, ///< point object importer
+        Line, ///< line object importer
+        Polygon,///< polygon object importer
+        StructuredVolume, ///< structured volume object importer
+        UnstructuredVolume, ///< unstructured volume object importer
+        Unknown ///< unknown importer
     };
 
 private:
 
-    std::string          m_filename;      ///< input filename
-    ImporterType         m_importer_type; ///< importer type
-    kvs::FileFormatBase* m_file_format;   ///< pointer to the estimated file format class
-    kvs::ImporterBase*   m_importer;      ///< pointer to the estimated importer class
+    std::string m_filename; ///< input filename
+    ImporterType m_importer_type; ///< importer type
+    kvs::FileFormatBase* m_file_format; ///< pointer to the estimated file format class
+    kvs::ImporterBase* m_importer; ///< pointer to the estimated importer class
 
 public:
 
     explicit ObjectImporter( const std::string& filename );
+    ~ObjectImporter();
 
-    ~ObjectImporter( void );
-
-public:
-
-    kvs::ObjectBase* import( void );
+    kvs::ObjectBase* import();
 
 private:
 
-    bool estimate_file_format( void );
-
-    bool estimate_importer( void );
+    bool estimate_file_format();
+    bool estimate_importer();
 };
 
 } // end of namespace kvs

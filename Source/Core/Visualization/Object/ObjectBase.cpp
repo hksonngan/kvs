@@ -79,31 +79,6 @@ ObjectBase& ObjectBase::operator = ( const ObjectBase& object )
 
 /*===========================================================================*/
 /**
- *  @brief  '<<' operator.
- */
-/*===========================================================================*/
-std::ostream& operator << ( std::ostream& os, const ObjectBase& object )
-{
-    const std::ios_base::fmtflags flags( os.flags() );
-    os << "Name: " << object.name() << std::endl;
-    os.setf( std::ios::boolalpha );
-    os << "Set of min/max object coord:  " << object.hasMinMaxObjectCoords() << std::endl;
-    os << "Set of min/max external coord:  " << object.hasMinMaxObjectCoords() << std::endl;
-    os.unsetf( std::ios::boolalpha );
-    os << "Min object coord:  " << object.minObjectCoord() << std::endl;
-    os << "Max object coord:  " << object.maxObjectCoord() << std::endl;
-    os << "Min external coord:  " << object.minExternalCoord() << std::endl;
-    os << "Max external coord:  " << object.maxExternalCoord() << std::endl;
-    os << "Object center:  " << object.objectCenter() << std::endl;
-    os << "External position:  " << object.externalPosition() << std::endl;
-    os << "Normalize parameter:  " << object.normalize();
-    os.flags( flags );
-
-    return os;
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Set object name.
  *  @param  name [in] object name
  */
@@ -126,9 +101,7 @@ void ObjectBase::setMinMaxObjectCoords(
 {
     m_min_object_coord = min_coord;
     m_max_object_coord = max_coord;
-
     m_has_min_max_object_coords = true;
-
     this->updateNormalizeParameters();
 }
 
@@ -145,11 +118,10 @@ void ObjectBase::setMinMaxExternalCoords(
 {
     m_min_external_coord = min_coord;
     m_max_external_coord = max_coord;
-
     m_has_min_max_external_coords = true;
-
     this->updateNormalizeParameters();
 }
+
 #if KVS_ENABLE_DEPRECATED
 /*===========================================================================*/
 /**
@@ -173,6 +145,7 @@ void ObjectBase::setFace( const Face face )
     m_material.setFace( kvs::Material::MaterialFace( face ) );
 }
 #endif
+
 /*===========================================================================*/
 /**
  *  @brief  Shows the object.
@@ -338,6 +311,7 @@ bool ObjectBase::isShown() const
 {
     return m_show_flg;
 }
+
 #if KVS_ENABLE_DEPRECATED
 /*===========================================================================*/
 /**
@@ -350,6 +324,7 @@ const kvs::Material& ObjectBase::material() const
     return m_material;
 }
 #endif
+
 /*===========================================================================*/
 /**
  *  @brief  Returns the object position in the device coordinate.
@@ -371,7 +346,7 @@ const kvs::Vector2f ObjectBase::positionInDevice(
 
         ObjectBase::transform( global_trans, global_scale );
 
-        ret     = camera->projectObjectToWindow( m_object_center );
+        ret = camera->projectObjectToWindow( m_object_center );
         ret.y() = camera->windowHeight() - ret.y();
     }
     glPopMatrix();
@@ -459,10 +434,6 @@ void ObjectBase::updateNormalizeParameters()
  *  @brief  Transform the object.
  *  @param  global_trans [in] translation vector in the global
  *  @param  global_scale [in] scaling vector in the global
- *
- *  This method is called in the ScreenCore::paint_event_base() in default.
- *  By calling this method, the transformation of the object is applied to
- *  OpenGL rendering engine.
  */
 /*===========================================================================*/
 void ObjectBase::transform(
@@ -530,30 +501,14 @@ bool ObjectBase::collision(
 
         // Object's corner points in the object coordinate system.
         const kvs::Vector3f corners[8] = {
-            kvs::Vector3f( m_min_object_coord.x(),
-                           m_min_object_coord.y(),
-                           m_min_object_coord.z() ),
-            kvs::Vector3f( m_max_object_coord.x(),
-                           m_min_object_coord.y(),
-                           m_min_object_coord.z() ),
-            kvs::Vector3f( m_min_object_coord.x(),
-                           m_min_object_coord.y(),
-                           m_max_object_coord.z() ),
-            kvs::Vector3f( m_max_object_coord.x(),
-                           m_min_object_coord.y(),
-                           m_max_object_coord.z() ),
-            kvs::Vector3f( m_min_object_coord.x(),
-                           m_max_object_coord.y(),
-                           m_min_object_coord.z() ),
-            kvs::Vector3f( m_max_object_coord.x(),
-                           m_max_object_coord.y(),
-                           m_min_object_coord.z() ),
-            kvs::Vector3f( m_min_object_coord.x(),
-                           m_max_object_coord.y(),
-                           m_max_object_coord.z() ),
-            kvs::Vector3f( m_max_object_coord.x(),
-                           m_max_object_coord.y(),
-                           m_max_object_coord.z() ) };
+            kvs::Vector3f( m_min_object_coord.x(), m_min_object_coord.y(), m_min_object_coord.z() ),
+            kvs::Vector3f( m_max_object_coord.x(), m_min_object_coord.y(), m_min_object_coord.z() ),
+            kvs::Vector3f( m_min_object_coord.x(), m_min_object_coord.y(), m_max_object_coord.z() ),
+            kvs::Vector3f( m_max_object_coord.x(), m_min_object_coord.y(), m_max_object_coord.z() ),
+            kvs::Vector3f( m_min_object_coord.x(), m_max_object_coord.y(), m_min_object_coord.z() ),
+            kvs::Vector3f( m_max_object_coord.x(), m_max_object_coord.y(), m_min_object_coord.z() ),
+            kvs::Vector3f( m_min_object_coord.x(), m_max_object_coord.y(), m_max_object_coord.z() ),
+            kvs::Vector3f( m_max_object_coord.x(), m_max_object_coord.y(), m_max_object_coord.z() ) };
 
         // Calculate max distance between the center and the corner in
         // the window coordinate system.
@@ -592,37 +547,21 @@ bool ObjectBase::collision(
 
     // Object's corner points in the object coordinate system.
     const kvs::Vector3f corners[8] = {
-        kvs::Vector3f( m_min_object_coord.x(),
-                       m_min_object_coord.y(),
-                       m_min_object_coord.z() ),
-        kvs::Vector3f( m_max_object_coord.x(),
-                       m_min_object_coord.y(),
-                       m_min_object_coord.z() ),
-        kvs::Vector3f( m_min_object_coord.x(),
-                       m_min_object_coord.y(),
-                       m_max_object_coord.z() ),
-        kvs::Vector3f( m_max_object_coord.x(),
-                       m_min_object_coord.y(),
-                       m_max_object_coord.z() ),
-        kvs::Vector3f( m_min_object_coord.x(),
-                       m_max_object_coord.y(),
-                       m_min_object_coord.z() ),
-        kvs::Vector3f( m_max_object_coord.x(),
-                       m_max_object_coord.y(),
-                       m_min_object_coord.z() ),
-        kvs::Vector3f( m_min_object_coord.x(),
-                       m_max_object_coord.y(),
-                       m_max_object_coord.z() ),
-        kvs::Vector3f( m_max_object_coord.x(),
-                       m_max_object_coord.y(),
-                       m_max_object_coord.z() ) };
+        kvs::Vector3f( m_min_object_coord.x(), m_min_object_coord.y(), m_min_object_coord.z() ),
+        kvs::Vector3f( m_max_object_coord.x(), m_min_object_coord.y(), m_min_object_coord.z() ),
+        kvs::Vector3f( m_min_object_coord.x(), m_min_object_coord.y(), m_max_object_coord.z() ),
+        kvs::Vector3f( m_max_object_coord.x(), m_min_object_coord.y(), m_max_object_coord.z() ),
+        kvs::Vector3f( m_min_object_coord.x(), m_max_object_coord.y(), m_min_object_coord.z() ),
+        kvs::Vector3f( m_max_object_coord.x(), m_max_object_coord.y(), m_min_object_coord.z() ),
+        kvs::Vector3f( m_min_object_coord.x(), m_max_object_coord.y(), m_max_object_coord.z() ),
+        kvs::Vector3f( m_max_object_coord.x(), m_max_object_coord.y(), m_max_object_coord.z() ) };
 
     // Calculate max distance between the center and the corner in
     // the world coordinate system.
     for( int i = 0; i < 8; i++ )
     {
         const kvs::Vector3f corner =
-            object_to_world_coordinate( corners[i], global_trans, global_scale );
+            this->object_to_world_coordinate( corners[i], global_trans, global_scale );
         const float distance = static_cast<float>( ( corner - center ).length() );
         max_distance = kvs::Math::Max( max_distance, distance );
     }
@@ -689,6 +628,53 @@ void ObjectBase::disableCollision()
 bool ObjectBase::canCollision() const
 {
     return m_can_collision;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a object center in the object coordinate system.
+ *  @param  object_center [in] object center
+ */
+/*===========================================================================*/
+void ObjectBase::setObjectCenter( const kvs::Vector3f& object_center )
+{
+    m_object_center = object_center;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a normalize parameter.
+ *  @param  normalize [in] normalize parameter
+ */
+/*===========================================================================*/
+void ObjectBase::setNormalize( const kvs::Vector3f& normalize )
+{
+    m_normalize = normalize;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  '<<' operator.
+ */
+/*===========================================================================*/
+std::ostream& operator << ( std::ostream& os, const ObjectBase& object )
+{
+    const std::ios_base::fmtflags flags( os.flags() );
+    os << "Name: " << object.name() << std::endl;
+    os.setf( std::ios::boolalpha );
+    os << "Set of min/max object coord:  " << object.hasMinMaxObjectCoords() << std::endl;
+    os << "Set of min/max external coord:  " << object.hasMinMaxObjectCoords() << std::endl;
+    os.unsetf( std::ios::boolalpha );
+    os << "Min object coord:  " << object.minObjectCoord() << std::endl;
+    os << "Max object coord:  " << object.maxObjectCoord() << std::endl;
+    os << "Min external coord:  " << object.minExternalCoord() << std::endl;
+    os << "Max external coord:  " << object.maxExternalCoord() << std::endl;
+    os << "Object center:  " << object.objectCenter() << std::endl;
+    os << "External position:  " << object.externalPosition() << std::endl;
+    os << "Normalize parameter:  " << object.normalize();
+    os.flags( flags );
+
+    return os;
 }
 
 } // end of namespace kvs

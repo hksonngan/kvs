@@ -157,20 +157,27 @@ void PointImporter::import( const kvs::KVSMLObjectPoint* kvsml )
 /*==========================================================================*/
 void PointImporter::set_min_max_coord()
 {
-    kvs::Vector3f min_coord( m_coords[0], m_coords[1], m_coords[2] );
+    const float min_x = SuperClass::coords()[0];
+    const float min_y = SuperClass::coords()[1];
+    const float min_z = SuperClass::coords()[2];
+    kvs::Vector3f min_coord( min_x, min_y, min_z );
     kvs::Vector3f max_coord( min_coord );
-    const size_t  dimension = 3;
-    const size_t  nvertices = m_coords.size() / dimension;
-    size_t        index3    = 3;
+    const size_t dimension = 3;
+    const size_t nvertices = SuperClass::coords().size() / dimension;
+    size_t index3 = 3;
     for ( size_t i = 1; i < nvertices; i++, index3 += 3 )
     {
-        min_coord.x() = kvs::Math::Min( min_coord.x(), m_coords[index3] );
-        min_coord.y() = kvs::Math::Min( min_coord.y(), m_coords[index3 + 1] );
-        min_coord.z() = kvs::Math::Min( min_coord.z(), m_coords[index3 + 2] );
+        const float x = SuperClass::coords()[index3];
+        const float y = SuperClass::coords()[index3+1];
+        const float z = SuperClass::coords()[index3+2];
 
-        max_coord.x() = kvs::Math::Max( max_coord.x(), m_coords[index3] );
-        max_coord.y() = kvs::Math::Max( max_coord.y(), m_coords[index3 + 1] );
-        max_coord.z() = kvs::Math::Max( max_coord.z(), m_coords[index3 + 2] );
+        min_coord.x() = kvs::Math::Min( min_coord.x(), x );
+        min_coord.y() = kvs::Math::Min( min_coord.y(), y );
+        min_coord.z() = kvs::Math::Min( min_coord.z(), z );
+
+        max_coord.x() = kvs::Math::Max( max_coord.x(), x );
+        max_coord.y() = kvs::Math::Max( max_coord.y(), y );
+        max_coord.z() = kvs::Math::Max( max_coord.z(), z );
     }
 
     this->setMinMaxObjectCoords( min_coord, max_coord );

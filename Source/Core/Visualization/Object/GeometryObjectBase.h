@@ -44,12 +44,12 @@ public:
 
     enum GeometryType
     {
-        Point,   ///< point object
-        Line,    ///< line object
+        Point, ///< point object
+        Line, ///< line object
         Polygon, ///< polygon object
     };
 
-protected:
+private:
 
     kvs::ValueArray<kvs::Real32> m_coords; ///< vertex array
     kvs::ValueArray<kvs::UInt8> m_colors; ///< color(r,g,b) array

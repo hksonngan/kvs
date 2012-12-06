@@ -63,27 +63,6 @@ GeometryObjectBase::GeometryObjectBase()
 
 /*===========================================================================*/
 /**
- *  @brief  '<<' operator.
- */
-/*===========================================================================*/
-std::ostream& operator << ( std::ostream& os, const kvs::GeometryObjectBase& object )
-{
-#ifdef KVS_COMPILER_VC
-#if KVS_COMPILER_VERSION_LESS_OR_EQUAL( 8, 0 )
-    // @TODO Cannot instance the object that is a abstract class here (error:C2259).
-#endif
-#else
-    os << static_cast<const kvs::ObjectBase&>( object ) << std::endl;
-#endif
-    os << "Number of vertices:  " << object.numberOfVertices() << std::endl;
-    os << "Number of colors:  " << object.numberOfColors() << std::endl;
-    os << "Number of normal vectors:  " << object.numberOfNormals();
-
-    return os;
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Shallow copy.
  *  @param  object [in] object
  */
@@ -319,8 +298,7 @@ void GeometryObjectBase::updateMinMaxCoords()
 /*==========================================================================*/
 void GeometryObjectBase::calculate_min_max_coords()
 {
-    if ( this->coords().empty() )
-        return;
+    if ( this->coords().empty() ) return;
 
     KVS_ASSERT( this->coords().size() % 3 == 0 );
 
@@ -353,10 +331,29 @@ void GeometryObjectBase::calculate_min_max_coords()
 
     if ( !( this->hasMinMaxExternalCoords() ) )
     {
-        this->setMinMaxExternalCoords(
-            this->minObjectCoord(),
-            this->maxObjectCoord() );
+        this->setMinMaxExternalCoords( this->minObjectCoord(), this->maxObjectCoord() );
     }
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  '<<' operator.
+ */
+/*===========================================================================*/
+std::ostream& operator << ( std::ostream& os, const kvs::GeometryObjectBase& object )
+{
+#ifdef KVS_COMPILER_VC
+#if KVS_COMPILER_VERSION_LESS_OR_EQUAL( 8, 0 )
+    // @TODO Cannot instance the object that is a abstract class here (error:C2259).
+#endif
+#else
+    os << static_cast<const kvs::ObjectBase&>( object ) << std::endl;
+#endif
+    os << "Number of vertices:  " << object.numberOfVertices() << std::endl;
+    os << "Number of colors:  " << object.numberOfColors() << std::endl;
+    os << "Number of normal vectors:  " << object.numberOfNormals();
+
+    return os;
 }
 
 } // end of namespace kvs

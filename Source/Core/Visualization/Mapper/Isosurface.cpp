@@ -52,7 +52,7 @@ Isosurface::Isosurface(
     m_isolevel( isolevel ),
     m_duplication( true )
 {
-    SuperClass::m_normal_type = normal_type;
+    SuperClass::setNormalType( normal_type );
 
     // In the case of VertexNormal-type, the duplicated vertices are forcibly deleted.
     if ( normal_type == kvs::PolygonObject::VertexNormal )
@@ -85,7 +85,7 @@ Isosurface::Isosurface(
     m_isolevel( isolevel ),
     m_duplication( duplication )
 {
-    SuperClass::m_normal_type = normal_type;
+    SuperClass::setNormalType( normal_type );
 
     // In the case of VertexNormal-type, the duplicated vertices are forcibly deleted.
     if ( normal_type == kvs::PolygonObject::VertexNormal )
@@ -181,14 +181,14 @@ void Isosurface::mapping( const kvs::VolumeObjectBase* volume )
         }
 
         // Shallow copy.
-        SuperClass::m_coords       = polygon->coords();
-        SuperClass::m_colors       = polygon->colors();
-        SuperClass::m_normals      = polygon->normals();
-        SuperClass::m_connections  = polygon->connections();
-        SuperClass::m_opacities    = polygon->opacities();
-        SuperClass::m_polygon_type = polygon->polygonType();
-        SuperClass::m_color_type   = polygon->colorType();
-        SuperClass::m_normal_type  = polygon->normalType();
+        SuperClass::setCoords( polygon->coords() );
+        SuperClass::setColors( polygon->colors() );
+        SuperClass::setNormals( polygon->normals() );
+        SuperClass::setConnections( polygon->connections() );
+        SuperClass::setOpacities( polygon->opacities() );
+        SuperClass::setPolygonType( polygon->polygonType() );
+        SuperClass::setColorType( polygon->colorType() );
+        SuperClass::setNormalType( polygon->normalType() );
 
         SuperClass::setMinMaxObjectCoords(
             polygon->minObjectCoord(),
@@ -222,14 +222,14 @@ void Isosurface::mapping( const kvs::VolumeObjectBase* volume )
             }
 
             // Shallow copy.
-            SuperClass::m_coords       = polygon->coords();
-            SuperClass::m_colors       = polygon->colors();
-            SuperClass::m_normals      = polygon->normals();
-            SuperClass::m_connections  = polygon->connections();
-            SuperClass::m_opacities    = polygon->opacities();
-            SuperClass::m_polygon_type = polygon->polygonType();
-            SuperClass::m_color_type   = polygon->colorType();
-            SuperClass::m_normal_type  = polygon->normalType();
+            SuperClass::setCoords( polygon->coords() );
+            SuperClass::setColors( polygon->colors() );
+            SuperClass::setNormals( polygon->normals() );
+            SuperClass::setConnections( polygon->connections() );
+            SuperClass::setOpacities( polygon->opacities() );
+            SuperClass::setPolygonType( polygon->polygonType() );
+            SuperClass::setColorType( polygon->colorType() );
+            SuperClass::setNormalType( polygon->normalType() );
 
             SuperClass::setMinMaxObjectCoords(
                 polygon->minObjectCoord(),
@@ -256,14 +256,14 @@ void Isosurface::mapping( const kvs::VolumeObjectBase* volume )
             }
 
             // Shallow copy.
-            SuperClass::m_coords       = polygon->coords();
-            SuperClass::m_colors       = polygon->colors();
-            SuperClass::m_normals      = polygon->normals();
-            SuperClass::m_connections  = polygon->connections();
-            SuperClass::m_opacities    = polygon->opacities();
-            SuperClass::m_polygon_type = polygon->polygonType();
-            SuperClass::m_color_type   = polygon->colorType();
-            SuperClass::m_normal_type  = polygon->normalType();
+            SuperClass::setCoords( polygon->coords() );
+            SuperClass::setColors( polygon->colors() );
+            SuperClass::setNormals( polygon->normals() );
+            SuperClass::setConnections( polygon->connections() );
+            SuperClass::setOpacities( polygon->opacities() );
+            SuperClass::setPolygonType( polygon->polygonType() );
+            SuperClass::setColorType( polygon->colorType() );
+            SuperClass::setNormalType( polygon->normalType() );
 
             SuperClass::setMinMaxObjectCoords(
                 polygon->minObjectCoord(),
@@ -292,14 +292,14 @@ void Isosurface::mapping( const kvs::VolumeObjectBase* volume )
             }
 
             // Shallow copy.
-            SuperClass::m_coords       = polygon->coords();
-            SuperClass::m_colors       = polygon->colors();
-            SuperClass::m_normals      = polygon->normals();
-            SuperClass::m_connections  = polygon->connections();
-            SuperClass::m_opacities    = polygon->opacities();
-            SuperClass::m_polygon_type = polygon->polygonType();
-            SuperClass::m_color_type   = polygon->colorType();
-            SuperClass::m_normal_type  = polygon->normalType();
+            SuperClass::setCoords( polygon->coords() );
+            SuperClass::setColors( polygon->colors() );
+            SuperClass::setNormals( polygon->normals() );
+            SuperClass::setConnections( polygon->connections() );
+            SuperClass::setOpacities( polygon->opacities() );
+            SuperClass::setPolygonType( polygon->polygonType() );
+            SuperClass::setColorType( polygon->colorType() );
+            SuperClass::setNormalType( polygon->normalType() );
 
             SuperClass::setMinMaxObjectCoords(
                 polygon->minObjectCoord(),

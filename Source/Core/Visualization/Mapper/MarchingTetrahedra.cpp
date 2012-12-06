@@ -53,7 +53,7 @@ MarchingTetrahedra::MarchingTetrahedra(
     m_isolevel( isolevel ),
     m_duplication( duplication )
 {
-    SuperClass::m_normal_type = normal_type;
+    SuperClass::setNormalType( normal_type );
 
     // In the case of VertexNormal-type, the duplicated vertices are forcibly deleted.
     if ( normal_type == kvs::PolygonObject::VertexNormal )

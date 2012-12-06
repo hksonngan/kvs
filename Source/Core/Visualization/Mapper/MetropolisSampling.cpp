@@ -189,9 +189,14 @@ void MetropolisSampling::generate_particles( const kvs::StructuredVolumeObject* 
     const kvs::Vector3ui r = volume->resolution() - kvs::Vector3ui::All(1);
 
     // Allocate memory for generated particles.
+    kvs::ValueArray<kvs::Real32> coords( m_nparticles * 3 );
+    kvs::ValueArray<kvs::UInt8> colors( m_nparticles * 3 );
+    kvs::ValueArray<kvs::Real32> normals( m_nparticles * 3 );
+/*
     SuperClass::m_coords.allocate( m_nparticles * 3 );
     SuperClass::m_colors.allocate( m_nparticles * 3 );
     SuperClass::m_normals.allocate( m_nparticles * 3 );
+*/
 
     // Random number generator.
     kvs::MersenneTwister R;
@@ -225,7 +230,17 @@ void MetropolisSampling::generate_particles( const kvs::StructuredVolumeObject* 
         {
             // Adopt the particle.
             const kvs::Vector3f gradient = interpolator.template gradient<T>();
-            this->adopt_particle( counter, trial_particle, scalar, gradient );
+//            this->adopt_particle( counter, trial_particle, scalar, gradient );
+            const size_t index3 = counter * 3;
+            coords[ index3 + 0 ]  = trial_particle.x();
+            coords[ index3 + 1 ]  = trial_particle.y();
+            coords[ index3 + 2 ]  = trial_particle.z();
+            colors[ index3 + 0 ]  = BaseClass::colorMap()[ scalar ].r();
+            colors[ index3 + 1 ]  = BaseClass::colorMap()[ scalar ].g();
+            colors[ index3 + 2 ]  = BaseClass::colorMap()[ scalar ].b();
+            normals[ index3 + 0 ] = gradient.x();
+            normals[ index3 + 1 ] = gradient.y();
+            normals[ index3 + 2 ] = gradient.z();
 
             // Update the particle.
             particle = trial_particle;
@@ -239,7 +254,17 @@ void MetropolisSampling::generate_particles( const kvs::StructuredVolumeObject* 
             {
                 // Adopt the particle.
                 const kvs::Vector3f gradient = interpolator.template gradient<T>();
-                this->adopt_particle( counter, trial_particle, scalar, gradient );
+//                this->adopt_particle( counter, trial_particle, scalar, gradient );
+                const size_t index3 = counter * 3;
+                coords[ index3 + 0 ]  = trial_particle.x();
+                coords[ index3 + 1 ]  = trial_particle.y();
+                coords[ index3 + 2 ]  = trial_particle.z();
+                colors[ index3 + 0 ]  = BaseClass::colorMap()[ scalar ].r();
+                colors[ index3 + 1 ]  = BaseClass::colorMap()[ scalar ].g();
+                colors[ index3 + 2 ]  = BaseClass::colorMap()[ scalar ].b();
+                normals[ index3 + 0 ] = gradient.x();
+                normals[ index3 + 1 ] = gradient.y();
+                normals[ index3 + 2 ] = gradient.z();
 
                 // Update the particle.
                 particle = trial_particle;
@@ -253,7 +278,17 @@ void MetropolisSampling::generate_particles( const kvs::StructuredVolumeObject* 
                 interpolator.attachPoint( particle );
                 scalar = interpolator.template scalar<T>();
                 const kvs::Vector3f gradient = interpolator.template gradient<T>();
-                this->adopt_particle( counter, particle, scalar, gradient );
+//                this->adopt_particle( counter, particle, scalar, gradient );
+                const size_t index3 = counter * 3;
+                coords[ index3 + 0 ]  = particle.x();
+                coords[ index3 + 1 ]  = particle.y();
+                coords[ index3 + 2 ]  = particle.z();
+                colors[ index3 + 0 ]  = BaseClass::colorMap()[ scalar ].r();
+                colors[ index3 + 1 ]  = BaseClass::colorMap()[ scalar ].g();
+                colors[ index3 + 2 ]  = BaseClass::colorMap()[ scalar ].b();
+                normals[ index3 + 0 ] = gradient.x();
+                normals[ index3 + 1 ] = gradient.y();
+                normals[ index3 + 2 ] = gradient.z();
 
                 counter++;
 #else
@@ -263,6 +298,9 @@ void MetropolisSampling::generate_particles( const kvs::StructuredVolumeObject* 
         }
     }
 
+    SuperClass::setCoords( coords );
+    SuperClass::setColors( colors );
+    SuperClass::setNormals( normals );
     SuperClass::setSize( 1.0f );
 }
 
@@ -281,6 +319,7 @@ void MetropolisSampling::generate_particles<kvs::UInt16>( const kvs::StructuredV
  *  @param  gradient [in] gradient vector of the particle
  */
 /*==========================================================================*/
+/*
 void MetropolisSampling::adopt_particle(
     const size_t         index,
     const kvs::Vector3f& coord,
@@ -298,5 +337,6 @@ void MetropolisSampling::adopt_particle(
     m_normals[ index3 + 1 ] = gradient.y();
     m_normals[ index3 + 2 ] = gradient.z();
 }
+*/
 
 } // end of namespace kvs

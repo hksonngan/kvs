@@ -365,9 +365,9 @@ void CellByCellLayeredSampling::generate_particles( const kvs::UnstructuredVolum
 
     delete cell;
 
-    SuperClass::m_coords = kvs::ValueArray<kvs::Real32>( vertex_coords );
-    SuperClass::m_colors = kvs::ValueArray<kvs::UInt8>( vertex_colors );
-    SuperClass::m_normals = kvs::ValueArray<kvs::Real32>( vertex_normals );
+    SuperClass::setCoords( kvs::ValueArray<kvs::Real32>( vertex_coords ) );
+    SuperClass::setColors( kvs::ValueArray<kvs::UInt8>( vertex_colors ) );
+    SuperClass::setNormals( kvs::ValueArray<kvs::Real32>( vertex_normals ) );
     SuperClass::setSize( 1.0f );
 }
 

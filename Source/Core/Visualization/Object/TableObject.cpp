@@ -19,6 +19,13 @@
 namespace kvs
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  Downcasts to the table object from the object base.
+ *  @param  object [in] point to the object base
+ *  @return pointer to the table object
+ */
+/*===========================================================================*/
 kvs::TableObject* TableObject::DownCast( kvs::ObjectBase* object )
 {
     const kvs::ObjectBase::ObjectType type = object->objectType();
@@ -33,6 +40,13 @@ kvs::TableObject* TableObject::DownCast( kvs::ObjectBase* object )
     return table;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Downcasts to the table object from the object base with 'const'.
+ *  @param  object [in] point to the object base
+ *  @return pointer to the table object
+ */
+/*===========================================================================*/
 const kvs::TableObject* TableObject::DownCast( const kvs::ObjectBase* object )
 {
     return TableObject::DownCast( const_cast<kvs::ObjectBase*>( object ) );
@@ -45,15 +59,18 @@ const kvs::TableObject* TableObject::DownCast( const kvs::ObjectBase* object )
 /*===========================================================================*/
 TableObject::TableObject()
 {
-    m_min_object_coord   = kvs::Vector3f( 0.0, 0.0, 0.0 );
-    m_max_object_coord   = kvs::Vector3f( 0.0, 0.0, 0.0 );
-    m_min_external_coord = kvs::Vector3f( 0.0, 0.0, 0.0 );
-    m_max_external_coord = kvs::Vector3f( 0.0, 0.0, 0.0 );
-
+//    BaseClass::setMinMaxObjectCoords( kvs::Vector3f::Zero(), kvs::Vector3f::Zero() );
+//    BaseClass::setMinMaxExternalCoords( kvs::Vector3f::Zero(), kvs::Vector3f::Zero() );
     m_nrows = 0;
     m_ncolumns = 0;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Shallow copys.
+ *  @param  other [in] table object
+ */
+/*===========================================================================*/
 void TableObject::shallowCopy( const TableObject& other )
 {
     BaseClass::operator=( other );
@@ -68,6 +85,12 @@ void TableObject::shallowCopy( const TableObject& other )
     this->m_inside_range_list = other.insideRangeList();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Deep copys.
+ *  @param  other [in] table object
+ */
+/*===========================================================================*/
 void TableObject::deepCopy( const TableObject& other )
 {
     { m_labels.clear(); LabelList().swap( m_labels ); }
@@ -90,6 +113,13 @@ void TableObject::deepCopy( const TableObject& other )
     for ( size_t i = 0; i < m_inside_range_list.size(); i++ ) this->m_inside_range_list.push_back( other.insideRange(i) );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Prints information of the table object.
+ *  @param  os [in] output stream
+ *  @param  indent [in] indent
+ */
+/*===========================================================================*/
 void TableObject::print( std::ostream& os, const kvs::Indent& indent ) const
 {
     os << indent << "Object type : " << "table object" << std::endl;

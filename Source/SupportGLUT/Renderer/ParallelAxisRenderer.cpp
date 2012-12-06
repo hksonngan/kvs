@@ -305,7 +305,7 @@ void ParallelAxisRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, k
     // Draw axes.
     glLineWidth( m_axis_width );
     glBegin( GL_LINES );
-    const size_t naxes = table->ncolumns();
+    const size_t naxes = table->numberOfColumns();
     const float stride = float( x1 - x0 ) / ( naxes - 1 );
     for ( size_t i = 0; i < naxes; i++ )
     {

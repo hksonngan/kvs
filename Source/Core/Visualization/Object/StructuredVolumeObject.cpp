@@ -35,18 +35,13 @@ const std::string GetGridTypeName( const kvs::StructuredVolumeObject::GridType t
 namespace kvs
 {
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Constructs a new empty StructuredVolumeObject.
+ *  @brief  Downcasts to the structured volume object.
+ *  @param  object [in] pointer to the object base
+ *  @return pointer to the structured volume object
  */
-/*==========================================================================*/
-StructuredVolumeObject::StructuredVolumeObject():
-    kvs::VolumeObjectBase(),
-    m_grid_type( UnknownGridType ),
-    m_resolution( kvs::Vector3ui( 0, 0, 0 ) )
-{
-}
-
+/*===========================================================================*/
 kvs::StructuredVolumeObject* StructuredVolumeObject::DownCast( kvs::ObjectBase* object )
 {
     kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
@@ -64,32 +59,36 @@ kvs::StructuredVolumeObject* StructuredVolumeObject::DownCast( kvs::ObjectBase* 
     return structured;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Downcasts to the structured volume object with 'const'.
+ *  @param  object [in] pointer to the object base
+ *  @return pointer to the structured volume object
+ */
+/*===========================================================================*/
 const kvs::StructuredVolumeObject* StructuredVolumeObject::DownCast( const kvs::ObjectBase* object )
 {
     return StructuredVolumeObject::DownCast( const_cast<kvs::ObjectBase*>( object ) );
 }
 
-std::ostream& operator << ( std::ostream& os, const StructuredVolumeObject& object )
+/*==========================================================================*/
+/**
+ *  @brief  Constructs a new empty StructuredVolumeObject.
+ */
+/*==========================================================================*/
+StructuredVolumeObject::StructuredVolumeObject():
+    kvs::VolumeObjectBase(),
+    m_grid_type( UnknownGridType ),
+    m_resolution( kvs::Vector3ui( 0, 0, 0 ) )
 {
-    if ( !object.hasMinMaxValues() ) object.updateMinMaxValues();
-
-    os << "Object type:  " << "structured volume object" << std::endl;
-#ifdef KVS_COMPILER_VC
-#if KVS_COMPILER_VERSION_LESS_OR_EQUAL( 8, 0 )
-    // @TODO Cannot instance the object that is a abstract class here (error:C2259).
-#endif
-#else
-    os << static_cast<const kvs::VolumeObjectBase&>( object ) << std::endl;
-#endif
-    os << "Grid type:  " << ::GetGridTypeName( object.gridType() ) << std::endl;
-    os << "Resolution:  " << object.resolution() << std::endl;
-    os << "Number of nodes:  " << object.numberOfNodes() << std::endl;
-    os << "Min. value:  " << object.minValue() << std::endl;
-    os << "Max. value:  " << object.maxValue();
-
-    return os;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Shallow copys.
+ *  @param  object [in] structured volume object
+ */
+/*===========================================================================*/
 void StructuredVolumeObject::shallowCopy( const StructuredVolumeObject& object )
 {
     BaseClass::shallowCopy( object );
@@ -97,6 +96,12 @@ void StructuredVolumeObject::shallowCopy( const StructuredVolumeObject& object )
     this->m_resolution = object.resolution();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Deep copys.
+ *  @param  object [in] structured volume object
+ */
+/*===========================================================================*/
 void StructuredVolumeObject::deepCopy( const StructuredVolumeObject& object )
 {
     BaseClass::deepCopy( object );
@@ -104,6 +109,13 @@ void StructuredVolumeObject::deepCopy( const StructuredVolumeObject& object )
     this->m_resolution = object.resolution();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Prints information of the structured volume object.
+ *  @param  os [in] output stream
+ *  @param  indent [in] indent
+ */
+/*===========================================================================*/
 void StructuredVolumeObject::print( std::ostream& os, const kvs::Indent& indent ) const
 {
     if ( !this->hasMinMaxValues() ) this->updateMinMaxValues();
@@ -118,7 +130,7 @@ void StructuredVolumeObject::print( std::ostream& os, const kvs::Indent& indent 
 
 /*==========================================================================*/
 /**
- *  Sets the grid type.
+ *  @brief  Sets the grid type.
  */
 /*==========================================================================*/
 void StructuredVolumeObject::setGridType( const GridType grid_type )
@@ -128,7 +140,7 @@ void StructuredVolumeObject::setGridType( const GridType grid_type )
 
 /*==========================================================================*/
 /**
- *  Sets the node resolution.
+ *  @brief  Sets the node resolution.
  */
 /*==========================================================================*/
 void StructuredVolumeObject::setResolution( const kvs::Vector3ui& resolution )
@@ -138,7 +150,7 @@ void StructuredVolumeObject::setResolution( const kvs::Vector3ui& resolution )
 
 /*==========================================================================*/
 /**
- *  Returns the volume type.
+ *  @brief  Returns the volume type.
  */
 /*==========================================================================*/
 StructuredVolumeObject::VolumeType StructuredVolumeObject::volumeType() const
@@ -148,7 +160,7 @@ StructuredVolumeObject::VolumeType StructuredVolumeObject::volumeType() const
 
 /*==========================================================================*/
 /**
- *  Returns the grid type.
+ *  @brief  Returns the grid type.
  */
 /*==========================================================================*/
 StructuredVolumeObject::GridType StructuredVolumeObject::gridType() const
@@ -158,7 +170,7 @@ StructuredVolumeObject::GridType StructuredVolumeObject::gridType() const
 
 /*==========================================================================*/
 /**
- *  Returns the cell type.
+ *  @brief  Returns the cell type.
  */
 /*==========================================================================*/
 StructuredVolumeObject::CellType StructuredVolumeObject::cellType() const
@@ -168,7 +180,7 @@ StructuredVolumeObject::CellType StructuredVolumeObject::cellType() const
 
 /*==========================================================================*/
 /**
- *  Returns the node resolution.
+ *  @brief  Returns the node resolution.
  */
 /*==========================================================================*/
 const kvs::Vector3ui& StructuredVolumeObject::resolution() const
@@ -178,7 +190,7 @@ const kvs::Vector3ui& StructuredVolumeObject::resolution() const
 
 /*==========================================================================*/
 /**
- *  Returns the number of nodes per line.
+ *  @brief  Returns the number of nodes per line.
  */
 /*==========================================================================*/
 size_t StructuredVolumeObject::numberOfNodesPerLine() const
@@ -188,7 +200,7 @@ size_t StructuredVolumeObject::numberOfNodesPerLine() const
 
 /*==========================================================================*/
 /**
- *  Returns the number of nodes per slice.
+ *  @brief  Returns the number of nodes per slice.
  */
 /*==========================================================================*/
 size_t StructuredVolumeObject::numberOfNodesPerSlice() const
@@ -198,7 +210,7 @@ size_t StructuredVolumeObject::numberOfNodesPerSlice() const
 
 /*==========================================================================*/
 /**
- *  Returns the number of nodes.
+ *  @brief  Returns the number of nodes.
  */
 /*==========================================================================*/
 size_t StructuredVolumeObject::numberOfNodes() const
@@ -208,7 +220,7 @@ size_t StructuredVolumeObject::numberOfNodes() const
 
 /*==========================================================================*/
 /**
- *  Update the min/max node coordinates.
+ *  @brief  Update the min/max node coordinates.
  */
 /*==========================================================================*/
 void StructuredVolumeObject::updateMinMaxCoords()
@@ -216,6 +228,12 @@ void StructuredVolumeObject::updateMinMaxCoords()
     this->calculate_min_max_coords();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the number of cells.
+ *  @return number of cells
+ */
+/*===========================================================================*/
 size_t StructuredVolumeObject::numberOfCells() const
 {
     return ( m_resolution.x() - 1 ) * ( m_resolution.y() - 1 ) * ( m_resolution.z() - 1 );
@@ -223,7 +241,7 @@ size_t StructuredVolumeObject::numberOfCells() const
 
 /*==========================================================================*/
 /**
- *  Calculate the min/max coordinate values.
+ *  @brief  Calculate the min/max coordinate values.
  */
 /*==========================================================================*/
 void StructuredVolumeObject::calculate_min_max_coords()
@@ -302,6 +320,27 @@ void StructuredVolumeObject::calculate_min_max_coords()
             this->minObjectCoord(),
             this->maxObjectCoord() );
     }
+}
+
+std::ostream& operator << ( std::ostream& os, const StructuredVolumeObject& object )
+{
+    if ( !object.hasMinMaxValues() ) object.updateMinMaxValues();
+
+    os << "Object type:  " << "structured volume object" << std::endl;
+#ifdef KVS_COMPILER_VC
+#if KVS_COMPILER_VERSION_LESS_OR_EQUAL( 8, 0 )
+    // @TODO Cannot instance the object that is a abstract class here (error:C2259).
+#endif
+#else
+    os << static_cast<const kvs::VolumeObjectBase&>( object ) << std::endl;
+#endif
+    os << "Grid type:  " << ::GetGridTypeName( object.gridType() ) << std::endl;
+    os << "Resolution:  " << object.resolution() << std::endl;
+    os << "Number of nodes:  " << object.numberOfNodes() << std::endl;
+    os << "Min. value:  " << object.minValue() << std::endl;
+    os << "Max. value:  " << object.maxValue();
+
+    return os;
 }
 
 } // end of namespace kvs

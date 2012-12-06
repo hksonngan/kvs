@@ -230,9 +230,9 @@ void HitAndMissSampling::generate_particles( const kvs::StructuredVolumeObject* 
         } // end of j-loop
     } // end of k-loop
 
-    SuperClass::m_coords  = kvs::ValueArray<kvs::Real32>( coords );
-    SuperClass::m_colors  = kvs::ValueArray<kvs::UInt8>( colors );
-    SuperClass::m_normals = kvs::ValueArray<kvs::Real32>( normals );
+    SuperClass::setCoords( kvs::ValueArray<kvs::Real32>( coords ) );
+    SuperClass::setColors( kvs::ValueArray<kvs::UInt8>( colors ) );
+    SuperClass::setNormals( kvs::ValueArray<kvs::Real32>( normals ) );
     SuperClass::setSize( 1.0f );
 }
 

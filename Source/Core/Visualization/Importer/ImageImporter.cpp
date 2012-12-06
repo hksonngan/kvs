@@ -293,10 +293,14 @@ void ImageImporter::import( const kvs::KVSMLObjectImage* kvsml )
         return;
     }
 
+    SuperClass::setSize( kvsml->width(), kvsml->height() );
+    SuperClass::setData( kvsml->data(), pixel_type );
+/*
     SuperClass::m_width  = kvsml->width();
     SuperClass::m_height = kvsml->height();
     SuperClass::m_data   = kvsml->data(); // shallow copy
     SuperClass::m_type   = pixel_type;
+*/
 }
 
 /*==========================================================================*/
@@ -307,10 +311,15 @@ void ImageImporter::import( const kvs::KVSMLObjectImage* kvsml )
 /*==========================================================================*/
 void ImageImporter::import( const kvs::Bmp* bmp )
 {
+    kvs::ImageObject::PixelType pixel_type = static_cast<SuperClass::PixelType>( bmp->bitsPerPixel() );
+    SuperClass::setSize( bmp->width(), bmp->height() );
+    SuperClass::setData( bmp->data(), pixel_type ); // shallow copy
+/*
     SuperClass::m_width  = bmp->width();
     SuperClass::m_height = bmp->height();
     SuperClass::m_data   = bmp->data(); // shallow copy
     SuperClass::m_type   = static_cast<SuperClass::PixelType>( bmp->bitsPerPixel() );
+*/
 }
 
 /*==========================================================================*/
@@ -344,11 +353,14 @@ void ImageImporter::import( const kvs::Tiff* tiff )
     const kvs::UInt8* raw_data = static_cast<const kvs::UInt8*>( tiff->rawData().data() );
     const size_t      raw_size = tiff->rawData().byteSize();
     kvs::ValueArray<kvs::UInt8> data( raw_data, raw_size ); // deep copy
-
+    SuperClass::setSize( tiff->width(), tiff->height() );
+    SuperClass::setData( data, pixel_type ); // shallow copy
+/*
     SuperClass::m_width  = tiff->width();
     SuperClass::m_height = tiff->height();
     SuperClass::m_data   = data; // shallow copy
     SuperClass::m_type   = pixel_type;
+*/
 }
 
 /*==========================================================================*/
@@ -359,10 +371,14 @@ void ImageImporter::import( const kvs::Tiff* tiff )
 /*==========================================================================*/
 void ImageImporter::import( const kvs::Ppm* ppm )
 {
+    SuperClass::setSize( ppm->width(), ppm->height() );
+    SuperClass::setData( ppm->data(), kvs::ImageObject::Color24 ); // shallow copy
+/*
     SuperClass::m_width  = ppm->width();
     SuperClass::m_height = ppm->height();
     SuperClass::m_data   = ppm->data();
     SuperClass::m_type   = kvs::ImageObject::Color24;
+*/
 }
 
 /*==========================================================================*/
@@ -373,10 +389,14 @@ void ImageImporter::import( const kvs::Ppm* ppm )
 /*==========================================================================*/
 void ImageImporter::import( const kvs::Pgm* pgm )
 {
+    SuperClass::setSize( pgm->width(), pgm->height() );
+    SuperClass::setData( pgm->data(), kvs::ImageObject::Gray8 ); // shallow copy
+/*
     SuperClass::m_width  = pgm->width();
     SuperClass::m_height = pgm->height();
     SuperClass::m_data   = pgm->data();
     SuperClass::m_type   = kvs::ImageObject::Gray8;
+*/
 }
 
 /*==========================================================================*/
@@ -395,10 +415,14 @@ void ImageImporter::import( const kvs::Pbm* pbm )
         data[i] = pbm->data().test(i) ? 0 : 255;
     }
 
+    SuperClass::setSize( pbm->width(), pbm->height() );
+    SuperClass::setData( data, kvs::ImageObject::Gray8 ); // shallow copy
+/*
     SuperClass::m_width  = pbm->width();
     SuperClass::m_height = pbm->height();
     SuperClass::m_data   = data;
     SuperClass::m_type   = kvs::ImageObject::Gray8;
+*/
 }
 
 /*==========================================================================*/
@@ -409,10 +433,14 @@ void ImageImporter::import( const kvs::Pbm* pbm )
 /*==========================================================================*/
 void ImageImporter::import( const kvs::Dicom* dicom )
 {
+    SuperClass::setSize( dicom->column(), dicom->row() );
+    SuperClass::setData( dicom->pixelData(), kvs::ImageObject::Gray8 ); // shallow copy
+/*
     SuperClass::m_width  = dicom->column();
     SuperClass::m_height = dicom->row();
     SuperClass::m_data   = dicom->pixelData();
     SuperClass::m_type   = kvs::ImageObject::Gray8;
+*/
 }
 
 } // end of namespace kvs

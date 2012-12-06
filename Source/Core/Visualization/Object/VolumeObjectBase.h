@@ -30,7 +30,7 @@ namespace kvs
 
 /*==========================================================================*/
 /**
- *  VolumeObjectBase.
+ *  @brief  VolumeObjectBase.
  */
 /*==========================================================================*/
 class VolumeObjectBase : public kvs::ObjectBase

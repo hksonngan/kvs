@@ -46,7 +46,7 @@ public:
     typedef std::vector<kvs::Real64> ValueList;
     typedef std::vector<kvs::UInt8> RangeList;
 
-protected:
+private:
 
     size_t m_nrows; ///< number of rows
     size_t m_ncolumns; ///< number of columns

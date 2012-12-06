@@ -17,6 +17,13 @@
 namespace
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the name of the cell type as string.
+ *  @param  type [in] cell type
+ *  @return name of the cell type
+ */
+/*===========================================================================*/
 const std::string GetCellTypeName( const kvs::UnstructuredVolumeObject::CellType type )
 {
     switch( type )
@@ -32,23 +39,17 @@ const std::string GetCellTypeName( const kvs::UnstructuredVolumeObject::CellType
 
 } // end of namespace
 
+
 namespace kvs
 {
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Default constructor.
+ *  @brief  Downcasts to the unstructured volume object from the object base.
+ *  @param  object [in] pointer to the object base
+ *  @return pointer to the unstructured volume object
  */
-/*==========================================================================*/
-UnstructuredVolumeObject::UnstructuredVolumeObject()
-    : kvs::VolumeObjectBase()
-    , m_cell_type( UnknownCellType )
-    , m_nnodes( 0 )
-    , m_ncells( 0 )
-    , m_connections()
-{
-}
-
+/*===========================================================================*/
 kvs::UnstructuredVolumeObject* UnstructuredVolumeObject::DownCast( kvs::ObjectBase* object )
 {
     kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
@@ -66,32 +67,38 @@ kvs::UnstructuredVolumeObject* UnstructuredVolumeObject::DownCast( kvs::ObjectBa
     return unstructured;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Downcasts to the unstructured volume object from the object base with 'const'.
+ *  @param  object [in] pointer to the object base
+ *  @return pointer to the unstructured volume object
+ */
+/*===========================================================================*/
 const kvs::UnstructuredVolumeObject* UnstructuredVolumeObject::DownCast( const kvs::ObjectBase* object )
 {
     return UnstructuredVolumeObject::DownCast( const_cast<kvs::ObjectBase*>( object ) );
 }
 
-std::ostream& operator << ( std::ostream& os, const UnstructuredVolumeObject& object )
+/*==========================================================================*/
+/**
+ *  @brief  Constructs a new UnstructuredVolumeObject class.
+ */
+/*==========================================================================*/
+UnstructuredVolumeObject::UnstructuredVolumeObject():
+    kvs::VolumeObjectBase(),
+    m_cell_type( UnknownCellType ),
+    m_nnodes( 0 ),
+    m_ncells( 0 ),
+    m_connections()
 {
-    if ( !object.hasMinMaxValues() ) object.updateMinMaxValues();
-
-    os << "Object type:  " << "unstructured volume object" << std::endl;
-#ifdef KVS_COMPILER_VC
-#if KVS_COMPILER_VERSION_LESS_OR_EQUAL( 8, 0 )
-    // @TODO Cannot instance the object that is a abstract class here (error:C2259).
-#endif
-#else
-    os << static_cast<const kvs::VolumeObjectBase&>( object ) << std::endl;
-#endif
-    os << "Cell type:  " << ::GetCellTypeName( object.cellType() ) << std::endl;
-    os << "Number of nodes:  " << object.numberOfNodes() << std::endl;
-    os << "Number of cells:  " << object.numberOfCells() << std::endl;
-    os << "Min. value:  " << object.minValue() << std::endl;
-    os << "Max. value:  " << object.maxValue();
-
-    return os;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Shallow copys.
+ *  @param  object [in] unstructured volume object
+ */
+/*===========================================================================*/
 void UnstructuredVolumeObject::shallowCopy( const UnstructuredVolumeObject& object )
 {
     BaseClass::shallowCopy( object );
@@ -101,6 +108,12 @@ void UnstructuredVolumeObject::shallowCopy( const UnstructuredVolumeObject& obje
     m_connections = object.connections();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Deep copys.
+ *  @param  object [in] unstructured volume object
+ */
+/*===========================================================================*/
 void UnstructuredVolumeObject::deepCopy( const UnstructuredVolumeObject& object )
 {
     BaseClass::deepCopy( object );
@@ -110,6 +123,13 @@ void UnstructuredVolumeObject::deepCopy( const UnstructuredVolumeObject& object 
     m_connections = object.connections().clone();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Prints information of the unstructured volume object.
+ *  @param  os [in] output stream
+ *  @param  indent [in] indent
+ */
+/*===========================================================================*/
 void UnstructuredVolumeObject::print( std::ostream& os, const kvs::Indent& indent ) const
 {
     if ( !this->hasMinMaxValues() ) this->updateMinMaxValues();
@@ -124,7 +144,7 @@ void UnstructuredVolumeObject::print( std::ostream& os, const kvs::Indent& inden
 
 /*==========================================================================*/
 /**
- *  Set the cell type.
+ *  @brief  Sets a cell type.
  */
 /*==========================================================================*/
 void UnstructuredVolumeObject::setCellType( const CellType cell_type )
@@ -134,8 +154,8 @@ void UnstructuredVolumeObject::setCellType( const CellType cell_type )
 
 /*==========================================================================*/
 /**
- *  Set the number of nodes.
- *  @param nnodes [in] number of nodes
+ *  @brief  Sets a number of nodes.
+ *  @param  nnodes [in] number of nodes
  */
 /*==========================================================================*/
 void UnstructuredVolumeObject::setNumberOfNodes( const size_t nnodes )
@@ -145,8 +165,8 @@ void UnstructuredVolumeObject::setNumberOfNodes( const size_t nnodes )
 
 /*==========================================================================*/
 /**
- *  Set the number of cells.
- *  @param ncells [in] number of cells
+ *  @brief  Sets a number of cells.
+ *  @param  ncells [in] number of cells
  */
 /*==========================================================================*/
 void UnstructuredVolumeObject::setNumberOfCells( const size_t ncells )
@@ -156,8 +176,8 @@ void UnstructuredVolumeObject::setNumberOfCells( const size_t ncells )
 
 /*==========================================================================*/
 /**
- *  Set the connection id array.
- *  @param connections [in] coordinate array
+ *  @brief  Sets a connection id array.
+ *  @param  connections [in] coordinate array
  */
 /*==========================================================================*/
 void UnstructuredVolumeObject::setConnections( const Connections& connections )
@@ -167,7 +187,8 @@ void UnstructuredVolumeObject::setConnections( const Connections& connections )
 
 /*==========================================================================*/
 /**
- *  Get the volume type.
+ *  @brief  Returns the volume type.
+ *  @return volume type
  */
 /*==========================================================================*/
 UnstructuredVolumeObject::VolumeType UnstructuredVolumeObject::volumeType() const
@@ -177,7 +198,8 @@ UnstructuredVolumeObject::VolumeType UnstructuredVolumeObject::volumeType() cons
 
 /*==========================================================================*/
 /**
- *  Get the grid type.
+ *  @brief  Returns the grid type.
+ *  @return grid type
  */
 /*==========================================================================*/
 UnstructuredVolumeObject::GridType UnstructuredVolumeObject::gridType() const
@@ -187,7 +209,8 @@ UnstructuredVolumeObject::GridType UnstructuredVolumeObject::gridType() const
 
 /*==========================================================================*/
 /**
- *  Get the cell type.
+ *  @brief  Returns the cell type.
+ *  @return cell type
  */
 /*==========================================================================*/
 UnstructuredVolumeObject::CellType UnstructuredVolumeObject::cellType() const
@@ -197,7 +220,7 @@ UnstructuredVolumeObject::CellType UnstructuredVolumeObject::cellType() const
 
 /*==========================================================================*/
 /**
- *  Get the number of nodes.
+ *  @brief  Returns the number of nodes.
  *  @return number of nodes
  */
 /*==========================================================================*/
@@ -208,7 +231,7 @@ size_t UnstructuredVolumeObject::numberOfNodes() const
 
 /*==========================================================================*/
 /**
- *  Get the number of cells.
+ *  @brief  Returns the number of cells.
  *  @return number of cells
  */
 /*==========================================================================*/
@@ -219,7 +242,7 @@ size_t UnstructuredVolumeObject::numberOfCells() const
 
 /*==========================================================================*/
 /**
- *  Get the connection id array.
+ *  @brief  Returns the connection id array.
  *  @return connection id array
  */
 /*==========================================================================*/
@@ -230,7 +253,7 @@ const UnstructuredVolumeObject::Connections& UnstructuredVolumeObject::connectio
 
 /*==========================================================================*/
 /**
- *  Update the min/max node coordinates.
+ *  @brief  Updates the min/max node coordinates.
  */
 /*==========================================================================*/
 void UnstructuredVolumeObject::updateMinMaxCoords()
@@ -240,7 +263,7 @@ void UnstructuredVolumeObject::updateMinMaxCoords()
 
 /*==========================================================================*/
 /**
- *  Calculate the min/max coordinate values.
+ *  @brief  Calculates the min/max coordinate values.
  */
 /*==========================================================================*/
 void UnstructuredVolumeObject::calculate_min_max_coords()
@@ -281,6 +304,27 @@ void UnstructuredVolumeObject::calculate_min_max_coords()
             this->minObjectCoord(),
             this->maxObjectCoord() );
     }
+}
+
+std::ostream& operator << ( std::ostream& os, const UnstructuredVolumeObject& object )
+{
+    if ( !object.hasMinMaxValues() ) object.updateMinMaxValues();
+
+    os << "Object type:  " << "unstructured volume object" << std::endl;
+#ifdef KVS_COMPILER_VC
+#if KVS_COMPILER_VERSION_LESS_OR_EQUAL( 8, 0 )
+    // @TODO Cannot instance the object that is a abstract class here (error:C2259).
+#endif
+#else
+    os << static_cast<const kvs::VolumeObjectBase&>( object ) << std::endl;
+#endif
+    os << "Cell type:  " << ::GetCellTypeName( object.cellType() ) << std::endl;
+    os << "Number of nodes:  " << object.numberOfNodes() << std::endl;
+    os << "Number of cells:  " << object.numberOfCells() << std::endl;
+    os << "Min. value:  " << object.minValue() << std::endl;
+    os << "Max. value:  " << object.maxValue();
+
+    return os;
 }
 
 } // end of namespace kvs

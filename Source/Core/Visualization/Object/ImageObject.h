@@ -49,12 +49,17 @@ public:
         Color32 = 32  ///< 32 bit RGBA color pixel (8x8x8x8 bits)
     };
 
-protected:
+private:
 
     ImageObject::PixelType m_type; ///< pixel type
     size_t m_width; ///< image width
     size_t m_height; ///< image height
     kvs::ValueArray<kvs::UInt8> m_data; ///< pixel data
+
+public:
+
+    static kvs::ImageObject* DownCast( kvs::ObjectBase* object );
+    static const kvs::ImageObject* DownCast( const kvs::ObjectBase* object );
 
 public:
 
@@ -77,6 +82,9 @@ public:
     size_t bitsPerPixel() const;
     size_t bytesPerPixel() const;
     size_t numberOfChannels() const;
+
+    void setSize( const size_t width, const size_t height );
+    void setData( const kvs::ValueArray<kvs::UInt8>& data, const ImageObject::PixelType type = ImageObject::Color24 );
 
 private:
 

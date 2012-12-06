@@ -411,9 +411,9 @@ void CellByCellRejectionSampling::generate_particles( const kvs::StructuredVolum
         } // end of 'y' loop
     } // end of 'z' loop
 
-    SuperClass::m_coords  = kvs::ValueArray<kvs::Real32>( vertex_coords );
-    SuperClass::m_colors  = kvs::ValueArray<kvs::UInt8>( vertex_colors );
-    SuperClass::m_normals = kvs::ValueArray<kvs::Real32>( vertex_normals );
+    SuperClass::setCoords( kvs::ValueArray<kvs::Real32>( vertex_coords ) );
+    SuperClass::setColors( kvs::ValueArray<kvs::UInt8>( vertex_colors ) );
+    SuperClass::setNormals( kvs::ValueArray<kvs::Real32>( vertex_normals ) );
     SuperClass::setSize( 1.0f );
 }
 
@@ -531,9 +531,9 @@ void CellByCellRejectionSampling::generate_particles( const kvs::UnstructuredVol
         } // end of 'paricle' while-loop
     } // end of 'cell' for-loop
 
-    SuperClass::m_coords  = kvs::ValueArray<kvs::Real32>( vertex_coords );
-    SuperClass::m_colors  = kvs::ValueArray<kvs::UInt8>( vertex_colors );
-    SuperClass::m_normals = kvs::ValueArray<kvs::Real32>( vertex_normals );
+    SuperClass::setCoords( kvs::ValueArray<kvs::Real32>( vertex_coords ) );
+    SuperClass::setColors( kvs::ValueArray<kvs::UInt8>( vertex_colors ) );
+    SuperClass::setNormals( kvs::ValueArray<kvs::Real32>( vertex_normals ) );
     SuperClass::setSize( 1.0f );
 
     delete cell;

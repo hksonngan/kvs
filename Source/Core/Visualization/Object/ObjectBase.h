@@ -63,7 +63,7 @@ public:
     };
 #endif
 
-protected:
+private:
 
     bool m_can_collision; ///< flag for collision detection
     std::string m_name; ///< object name
@@ -130,6 +130,11 @@ public:
     void enableCollision();
     void disableCollision();
     bool canCollision() const;
+
+protected:
+
+    void setObjectCenter( const kvs::Vector3f& object_center );
+    void setNormalize( const kvs::Vector3f& normalize );
 
 private:
 

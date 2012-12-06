@@ -15,7 +15,6 @@
 #include <string>
 #include <kvs/DebugNew>
 #include <kvs/File>
-// KVS file format classes.
 #include <kvs/AVSField>
 #include <kvs/AVSUcd>
 #include <kvs/Bmp>
@@ -34,7 +33,6 @@
 #include <kvs/KVSMLObjectUnstructuredVolume>
 #include <kvs/XMLDocument>
 #include <kvs/DicomList>
-// KVS importer classes.
 #include <kvs/PointImporter>
 #include <kvs/LineImporter>
 #include <kvs/PolygonImporter>
@@ -46,6 +44,12 @@
 namespace kvs
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new ObjectImporter class.
+ *  @param  filename [in] filename
+ */
+/*===========================================================================*/
 ObjectImporter::ObjectImporter( const std::string& filename ):
     m_filename( filename ),
     m_importer_type( ObjectImporter::Unknown ),
@@ -54,32 +58,42 @@ ObjectImporter::ObjectImporter( const std::string& filename ):
 {
 }
 
-ObjectImporter::~ObjectImporter( void )
+/*===========================================================================*/
+/**
+ *  @brief  Destroys the ObjectImporter class.
+ */
+/*===========================================================================*/
+ObjectImporter::~ObjectImporter()
 {
     // NOTE: Never delete the m_importer in this class,
     //       since it is shared by kvs::PipelineModule.
-
     if ( m_file_format ) delete m_file_format;
 }
 
-kvs::ObjectBase* ObjectImporter::import( void )
+/*===========================================================================*/
+/**
+ *  @brief  Imports the object data.
+ *  @return pointer to the imported object
+ */
+/*===========================================================================*/
+kvs::ObjectBase* ObjectImporter::import()
 {
     if ( !this->estimate_file_format() )
     {
         kvsMessageError( "Cannot create a file format class for '%s'.", m_filename.c_str() );
-        return( NULL );
+        return NULL;
     }
 
     if ( !this->estimate_importer() )
     {
         kvsMessageError( "Cannot create a importer class for '%s'.", m_filename.c_str() );
-        return( NULL );
+        return NULL;
     }
 
     if ( !m_file_format->read( m_filename ) )
     {
         kvsMessageError( "Cannot read a '%s'.", m_filename.c_str() );
-        return( NULL );
+        return NULL;
     }
 
     kvs::ObjectBase* object = m_importer->exec( m_file_format );
@@ -91,13 +105,19 @@ kvs::ObjectBase* ObjectImporter::import( void )
         //       of m_importer is failed.
         delete m_importer;
 
-        return( NULL );
+        return NULL;
     }
 
-    return( object );
+    return object;
 }
 
-bool ObjectImporter::estimate_file_format( void )
+/*===========================================================================*/
+/**
+ *  @brief  Estimates file format.
+ *  @return true, if the specified file is supported in KVS
+ */
+/*===========================================================================*/
+bool ObjectImporter::estimate_file_format()
 {
     kvs::File file( m_filename );
     if ( kvs::AVSField::CheckExtension( file.filePath() ) )
@@ -208,10 +228,16 @@ bool ObjectImporter::estimate_file_format( void )
         m_file_format = new kvs::DicomList;
     }
 
-    return( m_file_format != NULL );
+    return m_file_format != NULL;
 }
 
-bool ObjectImporter::estimate_importer( void )
+/*===========================================================================*/
+/**
+ *  @brief  Estimates a importer for the specified file.
+ *  @return true, if the file is supported in KVS
+ */
+/*===========================================================================*/
+bool ObjectImporter::estimate_importer()
 {
     switch( m_importer_type )
     {
@@ -248,7 +274,7 @@ bool ObjectImporter::estimate_importer( void )
     default: break;
     }
 
-    return( m_importer != NULL );
+    return m_importer != NULL;
 }
 
 } // end of namespace kvs
