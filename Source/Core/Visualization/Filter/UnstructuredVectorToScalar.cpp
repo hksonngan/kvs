@@ -59,7 +59,7 @@ UnstructuredVectorToScalar::SuperClass* UnstructuredVectorToScalar::exec( const 
 {
     if ( !object )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is NULL.");
         return NULL;
     }
@@ -67,7 +67,7 @@ UnstructuredVectorToScalar::SuperClass* UnstructuredVectorToScalar::exec( const 
     const kvs::UnstructuredVolumeObject* volume = kvs::UnstructuredVolumeObject::DownCast( object );
     if ( !volume )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is not supported.");
         return NULL;
     }
@@ -85,7 +85,7 @@ UnstructuredVectorToScalar::SuperClass* UnstructuredVectorToScalar::exec( const 
     else if ( type == typeid( kvs::Real64 ) ) this->calculate_magnitude<kvs::Real64>( volume );
     else
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Unsupported data type '%s'.", volume->values().typeInfo()->typeName() );
         return NULL;
     }

@@ -43,14 +43,14 @@ TableImporter::TableImporter( const std::string& filename )
         kvs::KVSMLObjectTable* file_format = new kvs::KVSMLObjectTable( filename );
         if( !file_format )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             return;
         }
 
         if( file_format->isFailure() )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             delete file_format;
             return;
@@ -61,7 +61,7 @@ TableImporter::TableImporter( const std::string& filename )
     }
     else
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Cannot import '%s'.",filename.c_str());
         return;
     }
@@ -89,7 +89,7 @@ TableImporter::SuperClass* TableImporter::exec( const kvs::FileFormatBase* file_
 {
     if ( !file_format )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input file format is NULL.");
         return NULL;
     }
@@ -100,7 +100,7 @@ TableImporter::SuperClass* TableImporter::exec( const kvs::FileFormatBase* file_
     }
     else
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input file format is not supported.");
         return NULL;
     }

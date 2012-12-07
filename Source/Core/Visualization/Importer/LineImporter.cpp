@@ -31,14 +31,14 @@ namespace
 /*==========================================================================*/
 const kvs::LineObject::LineType StringToLineType( const std::string& line_type )
 {
-    if (      line_type == "strip"    ) { return( kvs::LineObject::Strip ); }
-    else if ( line_type == "uniline"  ) { return( kvs::LineObject::Uniline ); }
-    else if ( line_type == "polyline" ) { return( kvs::LineObject::Polyline ); }
-    else if ( line_type == "segment"  ) { return( kvs::LineObject::Segment ); }
+    if (      line_type == "strip"    ) { return kvs::LineObject::Strip; }
+    else if ( line_type == "uniline"  ) { return kvs::LineObject::Uniline; }
+    else if ( line_type == "polyline" ) { return kvs::LineObject::Polyline; }
+    else if ( line_type == "segment"  ) { return kvs::LineObject::Segment; }
     else
     {
         kvsMessageError( "Unknown line type '%s'.", line_type.c_str() );
-        return( kvs::LineObject::UnknownLineType );
+        return kvs::LineObject::UnknownLineType;
     }
 }
 
@@ -51,12 +51,12 @@ const kvs::LineObject::LineType StringToLineType( const std::string& line_type )
 /*==========================================================================*/
 const kvs::LineObject::ColorType StringToColorType( const std::string& color_type )
 {
-    if (      color_type == "vertex" ) { return( kvs::LineObject::VertexColor ); }
-    else if ( color_type == "line"   ) { return( kvs::LineObject::LineColor ); }
+    if (      color_type == "vertex" ) { return kvs::LineObject::VertexColor; }
+    else if ( color_type == "line"   ) { return kvs::LineObject::LineColor; }
     else
     {
         kvsMessageError( "Unknown line color type '%s'.", color_type.c_str() );
-        return( kvs::LineObject::UnknownColorType );
+        return kvs::LineObject::UnknownColorType;
     }
 }
 
@@ -88,14 +88,14 @@ LineImporter::LineImporter( const std::string& filename )
         kvs::KVSMLObjectLine* file_format = new kvs::KVSMLObjectLine( filename );
         if( !file_format )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             return;
         }
 
         if( file_format->isFailure() )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             delete file_format;
             return;
@@ -106,7 +106,7 @@ LineImporter::LineImporter( const std::string& filename )
     }
     else
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Cannot import '%s'.",filename.c_str());
         return;
     }
@@ -143,9 +143,9 @@ LineImporter::SuperClass* LineImporter::exec( const kvs::FileFormatBase* file_fo
 {
     if ( !file_format )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input file format is NULL.");
-        return( NULL );
+        return NULL;
     }
 
     if ( const kvs::KVSMLObjectLine* line = dynamic_cast<const kvs::KVSMLObjectLine*>( file_format ) )
@@ -154,12 +154,12 @@ LineImporter::SuperClass* LineImporter::exec( const kvs::FileFormatBase* file_fo
     }
     else
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input file format is not supported.");
-        return( NULL );
+        return NULL;
     }
 
-    return( this );
+    return this;
 }
 
 /*==========================================================================*/

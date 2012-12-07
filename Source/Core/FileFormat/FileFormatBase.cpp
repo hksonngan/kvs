@@ -43,7 +43,7 @@ FileFormatBase::~FileFormatBase()
  *  @return filename
  */
 /*===========================================================================*/
-const std::string& FileFormatBase::filename( void ) const
+const std::string& FileFormatBase::filename() const
 {
     return m_filename;
 }
@@ -54,7 +54,7 @@ const std::string& FileFormatBase::filename( void ) const
  *  @return true if the reading process is done successfully
  */
 /*==========================================================================*/
-bool FileFormatBase::isSuccess( void ) const
+bool FileFormatBase::isSuccess() const
 {
     return m_is_success;
 }
@@ -65,16 +65,28 @@ bool FileFormatBase::isSuccess( void ) const
  *  @return Whether the reading is failure or not.
  */
 /*==========================================================================*/
-bool FileFormatBase::isFailure( void ) const
+bool FileFormatBase::isFailure() const
 {
     return !m_is_success;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets a filename.
+ *  @param  filename [in] filename
+ */
+/*===========================================================================*/
 void FileFormatBase::setFilename( const std::string& filename )
 {
     m_filename = filename;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets a status of the file reading process.
+ *  @param  success [in] status of rendering process
+ */
+/*===========================================================================*/
 void FileFormatBase::setSuccess( const bool success )
 {
     m_is_success = success;

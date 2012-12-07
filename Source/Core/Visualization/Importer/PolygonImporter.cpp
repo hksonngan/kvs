@@ -103,14 +103,14 @@ PolygonImporter::PolygonImporter( const std::string& filename )
         kvs::KVSMLObjectPolygon* file_format = new kvs::KVSMLObjectPolygon( filename );
         if( !file_format )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             return;
         }
 
         if( file_format->isFailure() )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             delete file_format;
             return;
@@ -124,14 +124,14 @@ PolygonImporter::PolygonImporter( const std::string& filename )
         kvs::Stl* file_format = new kvs::Stl( filename );
         if( !file_format )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             return;
         }
 
         if( file_format->isFailure() )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             delete file_format;
             return;
@@ -145,14 +145,14 @@ PolygonImporter::PolygonImporter( const std::string& filename )
         kvs::Ply* file_format = new kvs::Ply( filename );
         if( !file_format )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             return;
         }
 
         if( file_format->isFailure() )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             delete file_format;
             return;
@@ -163,7 +163,7 @@ PolygonImporter::PolygonImporter( const std::string& filename )
     }
     else
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Cannot import '%s'.",filename.c_str());
         return;
     }
@@ -200,7 +200,7 @@ PolygonImporter::SuperClass* PolygonImporter::exec( const kvs::FileFormatBase* f
 {
     if ( !file_format )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input file format is NULL.");
         return NULL;
     }
@@ -219,7 +219,7 @@ PolygonImporter::SuperClass* PolygonImporter::exec( const kvs::FileFormatBase* f
     }
     else
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input file format is not supported.");
         return NULL;
     }

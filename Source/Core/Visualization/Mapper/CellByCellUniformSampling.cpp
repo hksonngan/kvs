@@ -195,7 +195,7 @@ CellByCellUniformSampling::SuperClass* CellByCellUniformSampling::exec( const kv
 {
     if ( !object )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is NULL.");
         return NULL;
     }
@@ -203,7 +203,7 @@ CellByCellUniformSampling::SuperClass* CellByCellUniformSampling::exec( const kv
     const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
     if ( !volume )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is not volume dat.");
         return NULL;
     }
@@ -251,9 +251,9 @@ CellByCellUniformSampling::SuperClass* CellByCellUniformSampling::exec( const kv
 void CellByCellUniformSampling::mapping( const kvs::Camera* camera, const kvs::StructuredVolumeObject* volume )
 {
     // Attach the pointer to the volume object and set the min/max coordinates.
-    BaseClass::attach_volume( volume );
-    BaseClass::set_range( volume );
-    BaseClass::set_min_max_coords( volume, this );
+    BaseClass::attachVolume( volume );
+    BaseClass::setRange( volume );
+    BaseClass::setMinMaxCoords( volume, this );
 
     // Calculate the density map.
     m_density_map = Generator::CalculateDensityMap(
@@ -275,7 +275,7 @@ void CellByCellUniformSampling::mapping( const kvs::Camera* camera, const kvs::S
     else if ( type == typeid( kvs::Real64 ) ) this->generate_particles<kvs::Real64>( volume );
     else
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Unsupported data type '%s'.", volume->values().typeInfo()->typeName() );
     }
 }
@@ -290,9 +290,9 @@ void CellByCellUniformSampling::mapping( const kvs::Camera* camera, const kvs::S
 void CellByCellUniformSampling::mapping( const kvs::Camera* camera, const kvs::UnstructuredVolumeObject* volume )
 {
     // Attach the pointer to the volume object and set the min/max coordinates.
-    BaseClass::attach_volume( volume );
-    BaseClass::set_range( volume );
-    BaseClass::set_min_max_coords( volume, this );
+    BaseClass::attachVolume( volume );
+    BaseClass::setRange( volume );
+    BaseClass::setMinMaxCoords( volume, this );
 
     // Calculate the density map.
     m_density_map = Generator::CalculateDensityMap(
@@ -359,7 +359,7 @@ void CellByCellUniformSampling::mapping( const kvs::Camera* camera, const kvs::U
     }
     else
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Unsupported data type '%s'.", volume->values().typeInfo()->typeName() );
     }
 }
@@ -496,7 +496,7 @@ void CellByCellUniformSampling::generate_particles( const kvs::UnstructuredVolum
     }
     default:
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Unsupported cell type.");
         return;
     }

@@ -109,7 +109,7 @@ MetropolisSampling::SuperClass* MetropolisSampling::exec( const kvs::ObjectBase*
 {
     if ( !object )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is NULL.");
         return NULL;
     }
@@ -117,7 +117,7 @@ MetropolisSampling::SuperClass* MetropolisSampling::exec( const kvs::ObjectBase*
     const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
     if ( !volume )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is not volume dat.");
         return NULL;
     }
@@ -144,9 +144,9 @@ MetropolisSampling::SuperClass* MetropolisSampling::exec( const kvs::ObjectBase*
 void MetropolisSampling::mapping( const kvs::StructuredVolumeObject* volume )
 {
     // Attach the pointer to the volume object.
-    BaseClass::attach_volume( volume );
-    BaseClass::set_range( volume );
-    BaseClass::set_min_max_coords( volume, this );
+    BaseClass::attachVolume( volume );
+    BaseClass::setRange( volume );
+    BaseClass::setMinMaxCoords( volume, this );
 
     // Generate the particles.
     const std::type_info& type = volume->values().typeInfo()->type();
@@ -154,7 +154,7 @@ void MetropolisSampling::mapping( const kvs::StructuredVolumeObject* volume )
     else if ( type == typeid( kvs::UInt16 ) ) this->generate_particles<kvs::UInt16>( volume );
     else
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Unsupported data type '%s'.", volume->values().typeInfo()->typeName() );
     }
 }
@@ -169,7 +169,7 @@ void MetropolisSampling::mapping( const kvs::UnstructuredVolumeObject* volume )
 {
     kvs::IgnoreUnusedVariable( volume );
 
-    BaseClass::m_is_success = false;
+    BaseClass::setSuccess( false );
     kvsMessageError("Not yet supported the metropolis method for the unstructured volume");
 }
 

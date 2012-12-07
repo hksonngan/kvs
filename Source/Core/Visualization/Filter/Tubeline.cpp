@@ -440,7 +440,7 @@ Tubeline::SuperClass* Tubeline::exec( const kvs::ObjectBase* object )
 {
     if ( !object )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is NULL.");
         return NULL;
     }
@@ -448,7 +448,7 @@ Tubeline::SuperClass* Tubeline::exec( const kvs::ObjectBase* object )
     const kvs::LineObject* line = kvs::LineObject::DownCast( object );
     if ( !line )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is not supported.");
         return NULL;
     }
@@ -476,7 +476,7 @@ Tubeline::SuperClass* Tubeline::exec( const kvs::ObjectBase* object )
     }
     else
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Unknown line type.");
         return NULL;
     }

@@ -4,7 +4,7 @@
  *  @brief  
  *
  *  @author Yukio YASUHARA
- *  @date   2012/12/04 10:06:40
+ *  @date   2012/12/07 16:13:58
  */
 /*----------------------------------------------------------------------------
  *
@@ -98,7 +98,7 @@ Streamline::BaseClass::SuperClass* Streamline::exec( const kvs::ObjectBase* obje
 {
     if ( !object )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is NULL.");
         return NULL;
     }
@@ -106,7 +106,7 @@ Streamline::BaseClass::SuperClass* Streamline::exec( const kvs::ObjectBase* obje
     const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
     if ( !volume )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is not volume dat.");
         return NULL;
     }
@@ -114,15 +114,15 @@ Streamline::BaseClass::SuperClass* Streamline::exec( const kvs::ObjectBase* obje
     // Check whether the volume can be processed or not.
     if ( volume->veclen() != 3 )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input volume is not vector field data.");
         return NULL;
     }
 
     // Attach the pointer to the volume object.
-    BaseClass::attach_volume( volume );
-    BaseClass::set_range( volume );
-    BaseClass::set_min_max_coords( volume, this );
+    BaseClass::attachVolume( volume );
+    BaseClass::setRange( volume );
+    BaseClass::setMinMaxCoords( volume, this );
 
     // set the min/max vector length.
     if ( !volume->hasMinMaxValues() )

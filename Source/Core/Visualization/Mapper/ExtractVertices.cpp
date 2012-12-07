@@ -80,7 +80,7 @@ ExtractVertices::SuperClass* ExtractVertices::exec( const kvs::ObjectBase* objec
 {
     if ( !object )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is NULL.");
         return NULL;
     }
@@ -88,7 +88,7 @@ ExtractVertices::SuperClass* ExtractVertices::exec( const kvs::ObjectBase* objec
     const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
     if ( !volume )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is not volume dat.");
         return NULL;
     }
@@ -107,9 +107,9 @@ ExtractVertices::SuperClass* ExtractVertices::exec( const kvs::ObjectBase* objec
 void ExtractVertices::mapping(
     const kvs::VolumeObjectBase* volume )
 {
-    BaseClass::attach_volume( volume );
-    BaseClass::set_range( volume );
-    BaseClass::set_min_max_coords( volume, this );
+    BaseClass::attachVolume( volume );
+    BaseClass::setRange( volume );
+    BaseClass::setMinMaxCoords( volume, this );
 
     this->calculate_coords();
 
@@ -133,7 +133,7 @@ void ExtractVertices::mapping(
 /*===========================================================================*/
 void ExtractVertices::calculate_coords()
 {
-    const VolumeObjectBase::GridType& type = m_volume->gridType();
+    const VolumeObjectBase::GridType& type = BaseClass::volume()->gridType();
 
     if ( type == VolumeObjectBase::Uniform )
     {
@@ -145,7 +145,7 @@ void ExtractVertices::calculate_coords()
     }
     else
     {
-        SuperClass::setCoords( m_volume->coords() );
+        SuperClass::setCoords( BaseClass::volume()->coords() );
     }
 }
 
@@ -157,7 +157,7 @@ void ExtractVertices::calculate_coords()
 void ExtractVertices::calculate_uniform_coords()
 {
     const kvs::StructuredVolumeObject* volume
-        = dynamic_cast<const kvs::StructuredVolumeObject*>( m_volume );
+        = dynamic_cast<const kvs::StructuredVolumeObject*>( BaseClass::volume() );
 
     kvs::ValueArray<float> coords( 3 * volume->numberOfNodes() );
     float*                 coord = coords.data();
@@ -200,7 +200,7 @@ void ExtractVertices::calculate_uniform_coords()
 /*===========================================================================*/
 void ExtractVertices::calculate_rectiliner_coords()
 {
-    BaseClass::m_is_success = false;
+    BaseClass::setSuccess( false );
     kvsMessageError("Rectilinear volume has not yet supportted.");
 }
 
@@ -212,7 +212,7 @@ void ExtractVertices::calculate_rectiliner_coords()
 template <typename T>
 void ExtractVertices::calculate_colors()
 {
-    const kvs::VolumeObjectBase* volume = m_volume;
+    const kvs::VolumeObjectBase* volume = BaseClass::volume();
 
     const T*       value = reinterpret_cast<const T*>( volume->values().data() );
     const T* const end   = value + volume->values().size();
@@ -230,7 +230,7 @@ void ExtractVertices::calculate_colors()
     const kvs::Real64 normalize_factor =
         static_cast<kvs::Real64>( cmap.resolution() - 1 ) / ( max_value - min_value );
 
-    const size_t veclen = m_volume->veclen();
+    const size_t veclen = BaseClass::volume()->veclen();
 
     if ( veclen == 1 )
     {

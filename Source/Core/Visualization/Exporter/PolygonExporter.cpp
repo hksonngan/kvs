@@ -38,9 +38,11 @@ PolygonExporter<kvs::KVSMLObjectPolygon>::PolygonExporter( const kvs::PolygonObj
 /*===========================================================================*/
 kvs::KVSMLObjectPolygon* PolygonExporter<kvs::KVSMLObjectPolygon>::exec( const kvs::ObjectBase* object )
 {
+    BaseClass::setSuccess( true );
+
     if ( !object )
     {
-        m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is NULL.");
         return NULL;
     }
@@ -48,7 +50,7 @@ kvs::KVSMLObjectPolygon* PolygonExporter<kvs::KVSMLObjectPolygon>::exec( const k
     const kvs::PolygonObject* polygon = kvs::PolygonObject::DownCast( object );
     if ( !polygon )
     {
-        m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is not polygon object.");
         return NULL;
     }
@@ -83,16 +85,31 @@ kvs::KVSMLObjectPolygon* PolygonExporter<kvs::KVSMLObjectPolygon>::exec( const k
     return this;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new PolygonExporter class for STL format.
+ *  @param  object [in] pointer to the input polygon object
+ */
+/*===========================================================================*/
 PolygonExporter<kvs::Stl>::PolygonExporter( const kvs::PolygonObject* object )
 {
     this->exec( object );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Executes the export process.
+ *  @param  object [in] pointer to the input object
+ *  @return pointer to the STL format
+ */
+/*===========================================================================*/
 kvs::Stl* PolygonExporter<kvs::Stl>::exec( const kvs::ObjectBase* object )
 {
+    BaseClass::setSuccess( true );
+
     if ( !object )
     {
-        m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is NULL.");
         return NULL;
     }
@@ -100,14 +117,14 @@ kvs::Stl* PolygonExporter<kvs::Stl>::exec( const kvs::ObjectBase* object )
     const kvs::PolygonObject* polygon = kvs::PolygonObject::DownCast( object );
     if ( !polygon )
     {
-        m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is not polygon object.");
         return NULL;
     }
 
     if ( polygon->polygonType() != kvs::PolygonObject::Triangle )
     {
-        m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is not triangle polygon.");
         return NULL;
     }
@@ -146,16 +163,31 @@ kvs::Stl* PolygonExporter<kvs::Stl>::exec( const kvs::ObjectBase* object )
     return this;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new PolygonExporter class for PLY format.
+ *  @param  object [in] pointer to the input polygon object
+ */
+/*===========================================================================*/
 PolygonExporter<kvs::Ply>::PolygonExporter( const kvs::PolygonObject* object )
 {
     this->exec( object );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Executes the export process.
+ *  @param  object [in] pointer to the input object
+ *  @return pointer to the PLY format
+ */
+/*===========================================================================*/
 kvs::Ply* PolygonExporter<kvs::Ply>::exec( const kvs::ObjectBase* object )
 {
+    BaseClass::setSuccess( true );
+
     if ( !object )
     {
-        m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is NULL.");
         return NULL;
     }
@@ -163,14 +195,14 @@ kvs::Ply* PolygonExporter<kvs::Ply>::exec( const kvs::ObjectBase* object )
     const kvs::PolygonObject* polygon = kvs::PolygonObject::DownCast( object );
     if ( !polygon )
     {
-        m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is not polygon object.");
         return NULL;
     }
 
     if ( polygon->polygonType() != kvs::PolygonObject::Triangle )
     {
-        m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is not triangle polygon.");
         return NULL;
     }

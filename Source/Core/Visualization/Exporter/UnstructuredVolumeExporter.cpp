@@ -41,9 +41,11 @@ UnstructuredVolumeExporter<kvs::KVSMLObjectUnstructuredVolume>::UnstructuredVolu
 kvs::KVSMLObjectUnstructuredVolume* UnstructuredVolumeExporter<kvs::KVSMLObjectUnstructuredVolume>::exec(
     const kvs::ObjectBase* object )
 {
+    BaseClass::setSuccess( true );
+
     if ( !object )
     {
-        m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is NULL.");
         return NULL;
     }
@@ -52,7 +54,7 @@ kvs::KVSMLObjectUnstructuredVolume* UnstructuredVolumeExporter<kvs::KVSMLObjectU
     const kvs::UnstructuredVolumeObject* volume = kvs::UnstructuredVolumeObject::DownCast( object );
     if ( !volume )
     {
-        m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is not structured volume object.");
         return NULL;
     }
@@ -97,7 +99,7 @@ kvs::KVSMLObjectUnstructuredVolume* UnstructuredVolumeExporter<kvs::KVSMLObjectU
     }
     default:
     {
-        m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Not supported cell type.");
         break;
     }
@@ -140,9 +142,11 @@ UnstructuredVolumeExporter<kvs::AVSUcd>::UnstructuredVolumeExporter(
 kvs::AVSUcd* UnstructuredVolumeExporter<kvs::AVSUcd>::exec(
     const kvs::ObjectBase* object )
 {
+    BaseClass::setSuccess( true );
+
     if ( !object )
     {
-        m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is NULL.");
         return NULL;
     }
@@ -151,7 +155,7 @@ kvs::AVSUcd* UnstructuredVolumeExporter<kvs::AVSUcd>::exec(
     const kvs::UnstructuredVolumeObject* volume = kvs::UnstructuredVolumeObject::DownCast( object );
     if ( !volume )
     {
-        m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is not structured volume object.");
         return NULL;
     }
@@ -186,7 +190,7 @@ kvs::AVSUcd* UnstructuredVolumeExporter<kvs::AVSUcd>::exec(
     }
     default:
     {
-        m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Not supported cell type.");
         break;
     }

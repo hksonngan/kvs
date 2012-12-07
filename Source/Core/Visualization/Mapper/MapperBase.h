@@ -37,7 +37,7 @@ class MapperBase
     kvsModuleName( kvs::MapperBase );
     kvsModuleBase;
 
-protected:
+private:
 
     kvs::TransferFunction m_transfer_function; ///< Transfer function.
     const kvs::VolumeObjectBase* m_volume; ///< Volume object.
@@ -64,9 +64,15 @@ public:
 
 protected:
 
-    void attach_volume( const kvs::VolumeObjectBase* volume );
-    void set_range( const kvs::VolumeObjectBase* volume );
-    void set_min_max_coords( const kvs::VolumeObjectBase* volume, kvs::ObjectBase* object );
+    void attachVolume( const kvs::VolumeObjectBase* volume );
+    void setRange( const kvs::VolumeObjectBase* volume );
+    void setMinMaxCoords( const kvs::VolumeObjectBase* volume, kvs::ObjectBase* object );
+    void setSuccess( const bool success );
+
+protected:
+    KVS_DEPRECATED( void attach_volume( const kvs::VolumeObjectBase* volume ) ) { this->attachVolume( volume ); }
+    KVS_DEPRECATED( void set_range( const kvs::VolumeObjectBase* volume ) ) { this->setRange( volume ); }
+    KVS_DEPRECATED( void set_min_max_coords( const kvs::VolumeObjectBase* volume, kvs::ObjectBase* object ) ) { this->set_min_max_coords( volume, object ); }
 };
 
 } // end of namespace kvs

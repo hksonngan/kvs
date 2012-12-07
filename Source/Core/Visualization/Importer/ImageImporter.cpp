@@ -44,14 +44,14 @@ ImageImporter::ImageImporter( const std::string& filename )
         kvs::KVSMLObjectImage* file_format = new kvs::KVSMLObjectImage( filename );
         if( !file_format )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             return;
         }
 
         if( file_format->isFailure() )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             delete file_format;
             return;
@@ -65,14 +65,14 @@ ImageImporter::ImageImporter( const std::string& filename )
         kvs::Bmp* file_format = new kvs::Bmp( filename );
         if( !file_format )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             return;
         }
 
         if( file_format->isFailure() )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             delete file_format;
             return;
@@ -86,14 +86,14 @@ ImageImporter::ImageImporter( const std::string& filename )
         kvs::Tiff* file_format = new kvs::Tiff( filename );
         if( !file_format )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             return;
         }
 
         if( file_format->isFailure() )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             delete file_format;
             return;
@@ -107,14 +107,14 @@ ImageImporter::ImageImporter( const std::string& filename )
         kvs::Ppm* file_format = new kvs::Ppm( filename );
         if( !file_format )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             return;
         }
 
         if( file_format->isFailure() )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             delete file_format;
             return;
@@ -128,14 +128,14 @@ ImageImporter::ImageImporter( const std::string& filename )
         kvs::Pgm* file_format = new kvs::Pgm( filename );
         if( !file_format )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             return;
         }
 
         if( file_format->isFailure() )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             delete file_format;
             return;
@@ -149,14 +149,14 @@ ImageImporter::ImageImporter( const std::string& filename )
         kvs::Pbm* file_format = new kvs::Pbm( filename );
         if( !file_format )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             return;
         }
 
         if( file_format->isFailure() )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             delete file_format;
             return;
@@ -170,14 +170,14 @@ ImageImporter::ImageImporter( const std::string& filename )
         kvs::Dicom* file_format = new kvs::Dicom( filename );
         if( !file_format )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             return;
         }
 
         if( file_format->isFailure() )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             delete file_format;
             return;
@@ -189,7 +189,7 @@ ImageImporter::ImageImporter( const std::string& filename )
 
     else
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Cannot import '%s'.",filename.c_str());
         return;
     }
@@ -226,7 +226,7 @@ ImageImporter::SuperClass* ImageImporter::exec( const kvs::FileFormatBase* file_
 {
     if ( !file_format )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input file format is NULL.");
         return NULL;
     }
@@ -261,7 +261,7 @@ ImageImporter::SuperClass* ImageImporter::exec( const kvs::FileFormatBase* file_
     }
     else
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input file format is not supported.");
         return NULL;
     }
@@ -288,7 +288,7 @@ void ImageImporter::import( const kvs::KVSMLObjectImage* kvsml )
     }
     else
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Unknown pixel type.");
         return;
     }
@@ -345,7 +345,7 @@ void ImageImporter::import( const kvs::Tiff* tiff )
     }
     else //  tiff->colorMode() == kvs::Tiff::UnknownColorMode
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Unknown TIFF color mode.");
         return;
     }

@@ -31,6 +31,7 @@ template <typename FileFormatType>
 class LineExporter : public kvs::ExporterBase<FileFormatType>
 {
     kvsModuleName( kvs::LineExporter );
+    kvsModuleBaseClass( kvs::ExporterBase<FileFormatType> );
 
 public:
 

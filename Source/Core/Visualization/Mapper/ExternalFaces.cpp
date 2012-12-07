@@ -636,7 +636,7 @@ ExternalFaces::SuperClass* ExternalFaces::exec( const kvs::ObjectBase* object )
 {
     if ( !object )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is NULL.");
         return NULL;
     }
@@ -644,7 +644,7 @@ ExternalFaces::SuperClass* ExternalFaces::exec( const kvs::ObjectBase* object )
     const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
     if ( !volume )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is not volume dat.");
         return NULL;
     }
@@ -670,9 +670,9 @@ ExternalFaces::SuperClass* ExternalFaces::exec( const kvs::ObjectBase* object )
 /*===========================================================================*/
 void ExternalFaces::mapping( const kvs::StructuredVolumeObject* volume )
 {
-    BaseClass::attach_volume( volume );
-    BaseClass::set_range( volume );
-    BaseClass::set_min_max_coords( volume, this );
+    BaseClass::attachVolume( volume );
+    BaseClass::setRange( volume );
+    BaseClass::setMinMaxCoords( volume, this );
 
     this->calculate_coords( volume );
 
@@ -721,7 +721,7 @@ void ExternalFaces::calculate_coords( const kvs::StructuredVolumeObject* volume 
     }
     else
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Not supported grid type.");
     }
 }
@@ -972,7 +972,7 @@ void ExternalFaces::calculate_rectilinear_coords( const kvs::StructuredVolumeObj
 {
     kvs::IgnoreUnusedVariable( volume );
 
-    BaseClass::m_is_success = false;
+    BaseClass::setSuccess( false );
     kvsMessageError("Rectilinear volume has not yet support.");
 }
 
@@ -986,7 +986,7 @@ void ExternalFaces::calculate_curvilinear_coords( const kvs::StructuredVolumeObj
 {
     kvs::IgnoreUnusedVariable( volume );
 
-    BaseClass::m_is_success = false;
+    BaseClass::setSuccess( false );
     kvsMessageError("Curvilinear volume has not yet support.");
 }
 
@@ -1000,7 +1000,7 @@ void ExternalFaces::calculate_irregular_coords( const kvs::StructuredVolumeObjec
 {
     kvs::IgnoreUnusedVariable( volume );
 
-    BaseClass::m_is_success = false;
+    BaseClass::setSuccess( false );
     kvsMessageError("Irregular volume has not yet support.");
 }
 
@@ -1247,9 +1247,9 @@ void ExternalFaces::calculate_colors( const kvs::StructuredVolumeObject* volume 
 /*===========================================================================*/
 void ExternalFaces::mapping( const kvs::UnstructuredVolumeObject* volume )
 {
-    BaseClass::attach_volume( volume );
-    BaseClass::set_range( volume );
-    BaseClass::set_min_max_coords( volume, this );
+    BaseClass::attachVolume( volume );
+    BaseClass::setRange( volume );
+    BaseClass::setMinMaxCoords( volume, this );
 
     switch ( volume->cellType() )
     {
@@ -1315,7 +1315,7 @@ void ExternalFaces::mapping( const kvs::UnstructuredVolumeObject* volume )
     }
     default:
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Not supported cell type.");
         break;
     }

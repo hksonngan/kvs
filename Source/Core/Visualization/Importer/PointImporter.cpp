@@ -44,14 +44,14 @@ PointImporter::PointImporter( const std::string& filename )
         kvs::KVSMLObjectPoint* file_format = new kvs::KVSMLObjectPoint( filename );
         if( !file_format )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             return;
         }
 
         if( file_format->isFailure() )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             delete file_format;
             return;
@@ -62,7 +62,7 @@ PointImporter::PointImporter( const std::string& filename )
     }
     else
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Cannot import '%'.",filename.c_str());
         return;
     }
@@ -99,9 +99,9 @@ PointImporter::SuperClass* PointImporter::exec( const kvs::FileFormatBase* file_
 {
     if ( !file_format )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input file format is NULL.");
-        return( NULL );
+        return NULL;
     }
 
     if ( const kvs::KVSMLObjectPoint* point = dynamic_cast<const kvs::KVSMLObjectPoint*>( file_format ) )
@@ -110,12 +110,12 @@ PointImporter::SuperClass* PointImporter::exec( const kvs::FileFormatBase* file_
     }
     else
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input file format is not supported.");
-        return( NULL );
+        return NULL;
     }
 
-    return( this );
+    return this;
 }
 
 /*==========================================================================*/
@@ -147,7 +147,7 @@ void PointImporter::import( const kvs::KVSMLObjectPoint* kvsml )
 //    SuperClass::updateMinMaxCoords();
     this->set_min_max_coord();
 
-    BaseClass::m_is_success = true;
+    BaseClass::setSuccess( true );
 }
 
 /*==========================================================================*/

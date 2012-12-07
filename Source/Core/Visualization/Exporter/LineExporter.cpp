@@ -38,9 +38,11 @@ LineExporter<kvs::KVSMLObjectLine>::LineExporter( const kvs::LineObject* object 
 /*===========================================================================*/
 kvs::KVSMLObjectLine* LineExporter<kvs::KVSMLObjectLine>::exec( const kvs::ObjectBase* object )
 {
+    BaseClass::setSuccess( true );
+
     if ( !object )
     {
-        m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is NULL.");
         return NULL;
     }
@@ -48,7 +50,7 @@ kvs::KVSMLObjectLine* LineExporter<kvs::KVSMLObjectLine>::exec( const kvs::Objec
     const kvs::LineObject* line = kvs::LineObject::DownCast( object );
     if ( !line )
     {
-        m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is not line object.");
         return NULL;
     }

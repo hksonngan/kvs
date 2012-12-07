@@ -128,7 +128,7 @@ Isosurface::SuperClass* Isosurface::exec( const kvs::ObjectBase* object )
 {
     if ( !object )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is NULL.");
         return NULL;
     }
@@ -136,7 +136,7 @@ Isosurface::SuperClass* Isosurface::exec( const kvs::ObjectBase* object )
     const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
     if ( !volume )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is not volume dat.");
         return NULL;
     }
@@ -157,7 +157,7 @@ void Isosurface::mapping( const kvs::VolumeObjectBase* volume )
     // Check whether the volume can be processed or not.
     if ( volume->veclen() != 1 )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is not scalar field dat.");
         return;
     }
@@ -175,7 +175,7 @@ void Isosurface::mapping( const kvs::VolumeObjectBase* volume )
             BaseClass::transferFunction() );
         if ( !polygon )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot create isosurfaces.");
             return;
         }
@@ -216,7 +216,7 @@ void Isosurface::mapping( const kvs::VolumeObjectBase* volume )
                 BaseClass::transferFunction() );
             if ( !polygon )
             {
-                BaseClass::m_is_success = false;
+                BaseClass::setSuccess( false );
                 kvsMessageError("Cannot create isosurfaces.");
                 return;
             }
@@ -286,7 +286,7 @@ void Isosurface::mapping( const kvs::VolumeObjectBase* volume )
                 BaseClass::transferFunction() );
             if ( !polygon )
             {
-                BaseClass::m_is_success = false;
+                BaseClass::setSuccess( false );
                 kvsMessageError("Cannot create isosurfaces.");
                 return;
             }

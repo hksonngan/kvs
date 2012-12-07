@@ -31,7 +31,7 @@ class FilterBase
     kvsModuleName( kvs::FilterBase );
     kvsModuleBase;
 
-protected:
+private:
 
     bool m_is_success; ///< check flag for the filter process
 
@@ -44,6 +44,10 @@ public:
     bool isFailure() const;
 
     virtual kvs::ObjectBase* exec( const kvs::ObjectBase* object ) = 0;
+
+protected:
+
+    void setSuccess( const bool success );
 };
 
 } // end of namespace kvs

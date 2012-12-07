@@ -114,7 +114,7 @@ SlicePlane::SuperClass* SlicePlane::exec( const kvs::ObjectBase* object )
 {
     if ( !object )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is NULL.");
         return NULL;
     }
@@ -122,7 +122,7 @@ SlicePlane::SuperClass* SlicePlane::exec( const kvs::ObjectBase* object )
     const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
     if ( !volume )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is not volume dat.");
         return NULL;
     }
@@ -143,15 +143,15 @@ void SlicePlane::mapping( const kvs::VolumeObjectBase* volume )
     // Check whether the volume can be processed or not.
     if ( volume->veclen() != 1 )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input volume is not a sclar field data.");
         return;
     }
 
     // Attach the pointer to the volume object.
-    BaseClass::attach_volume( volume );
-    BaseClass::set_range( volume );
-    BaseClass::set_min_max_coords( volume, this );
+    BaseClass::attachVolume( volume );
+    BaseClass::setRange( volume );
+    BaseClass::setMinMaxCoords( volume, this );
 
     if ( volume->volumeType() == kvs::VolumeObjectBase::Structured )
     {
@@ -171,7 +171,7 @@ void SlicePlane::mapping( const kvs::VolumeObjectBase* volume )
         else if ( type == typeid( kvs::Real64 ) ) this->extract_plane<kvs::Real64>( structured_volume );
         else
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Unsupported data type '%s'.", structured_volume->values().typeInfo()->typeName() );
         }
     }
@@ -193,7 +193,7 @@ void SlicePlane::mapping( const kvs::VolumeObjectBase* volume )
         else if ( type == typeid( kvs::Real64 ) ) this->extract_plane<kvs::Real64>( unstructured_volume );
         else
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Unsupported data type '%s'.", unstructured_volume->values().typeInfo()->typeName() );
         }
     }
@@ -807,7 +807,7 @@ size_t SlicePlane::calculate_table_index(
 size_t SlicePlane::calculate_tetrahedra_table_index(
     const size_t* local_index ) const
 {
-    const kvs::Real32* const coords = BaseClass::m_volume->coords().data();
+    const kvs::Real32* const coords = BaseClass::volume()->coords().data();
 
     const kvs::Vector3f vertex0( coords + 3 * local_index[0] );
     const kvs::Vector3f vertex1( coords + 3 * local_index[1] );
@@ -833,7 +833,7 @@ size_t SlicePlane::calculate_tetrahedra_table_index(
 size_t SlicePlane::calculate_hexahedra_table_index(
     const size_t* local_index ) const
 {
-    const kvs::Real32* const coords = BaseClass::m_volume->coords().data();
+    const kvs::Real32* const coords = BaseClass::volume()->coords().data();
 
     const kvs::Vector3f vertex0( coords + 3 * local_index[0] );
     const kvs::Vector3f vertex1( coords + 3 * local_index[1] );
@@ -867,7 +867,7 @@ size_t SlicePlane::calculate_hexahedra_table_index(
 size_t SlicePlane::calculate_pyramid_table_index(
     const size_t* local_index ) const
 {
-    const kvs::Real32* const coords = BaseClass::m_volume->coords().data();
+    const kvs::Real32* const coords = BaseClass::volume()->coords().data();
 
     const kvs::Vector3f vertex0( coords + 3 * local_index[0] );
     const kvs::Vector3f vertex1( coords + 3 * local_index[1] );

@@ -41,9 +41,11 @@ StructuredVolumeExporter<kvs::KVSMLObjectStructuredVolume>::StructuredVolumeExpo
 kvs::KVSMLObjectStructuredVolume* StructuredVolumeExporter<kvs::KVSMLObjectStructuredVolume>::exec(
     const kvs::ObjectBase* object )
 {
+    BaseClass::setSuccess( true );
+
     if ( !object )
     {
-        m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is NULL.");
         return NULL;
     }
@@ -52,7 +54,7 @@ kvs::KVSMLObjectStructuredVolume* StructuredVolumeExporter<kvs::KVSMLObjectStruc
     const kvs::StructuredVolumeObject* volume = kvs::StructuredVolumeObject::DownCast( object );
     if ( !volume )
     {
-        m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is not structured volume object.");
         return NULL;
     }
@@ -80,7 +82,7 @@ kvs::KVSMLObjectStructuredVolume* StructuredVolumeExporter<kvs::KVSMLObjectStruc
 */
     default:
     {
-        m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("'uniform' grid type is only supported.");
         break;
     }
@@ -121,9 +123,11 @@ StructuredVolumeExporter<kvs::AVSField>::StructuredVolumeExporter(
 kvs::AVSField* StructuredVolumeExporter<kvs::AVSField>::exec(
     const kvs::ObjectBase* object )
 {
+    BaseClass::setSuccess( true );
+
     if ( !object )
     {
-        m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is NULL.");
         return NULL;
     }
@@ -132,7 +136,7 @@ kvs::AVSField* StructuredVolumeExporter<kvs::AVSField>::exec(
     const kvs::StructuredVolumeObject* volume = kvs::StructuredVolumeObject::DownCast( object );
     if ( !volume )
     {
-        m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is not structured volume object.");
         return NULL;
     }
@@ -214,7 +218,7 @@ kvs::AVSField* StructuredVolumeExporter<kvs::AVSField>::exec(
 */
     default:
     {
-        m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Unknown grid type.");
         break;
     }

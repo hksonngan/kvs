@@ -33,6 +33,7 @@ template <typename FileFormatType>
 class PolygonExporter : public kvs::ExporterBase<FileFormatType>
 {
     kvsModuleName( kvs::PolygonExporter );
+    kvsModuleBaseClass( kvs::ExporterBase<FileFormatType> );
 
 public:
 

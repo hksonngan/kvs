@@ -37,13 +37,9 @@ public:
     FileFormatBase();
     virtual ~FileFormatBase();
 
-public:
-
-    const std::string& filename( void ) const;
-    bool isSuccess( void ) const;
-    bool isFailure( void ) const;
-
-public:
+    const std::string& filename() const;
+    bool isSuccess() const;
+    bool isFailure() const;
 
     virtual bool read( const std::string& filename ) = 0;
     virtual bool write( const std::string& filename ) = 0;

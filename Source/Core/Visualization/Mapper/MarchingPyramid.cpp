@@ -132,9 +132,9 @@ void MarchingPyramid::mapping( const kvs::UnstructuredVolumeObject* volume )
     }
 
     // Attach the pointer to the volume object.
-    BaseClass::attach_volume( volume );
-    BaseClass::set_range( volume );
-    BaseClass::set_min_max_coords( volume, this );
+    BaseClass::attachVolume( volume );
+    BaseClass::setRange( volume );
+    BaseClass::setMinMaxCoords( volume, this );
 
     // Extract surfaces.
     const std::type_info& type = volume->values().typeInfo()->type();
@@ -272,7 +272,7 @@ void MarchingPyramid::extract_surfaces_with_duplication(
 template <typename T>
 size_t MarchingPyramid::calculate_table_index( const size_t* local_index ) const
 {
-    const T* const values = static_cast<const T*>( BaseClass::m_volume->values().data() );
+    const T* const values = static_cast<const T*>( BaseClass::volume()->values().data() );
     const double isolevel = m_isolevel;
 
     size_t table_index = 0;
@@ -298,8 +298,8 @@ const kvs::Vector3f MarchingPyramid::interpolate_vertex(
     const int vertex0,
     const int vertex1 ) const
 {
-    const T* const values = static_cast<const T*>( BaseClass::m_volume->values().data() );
-    const kvs::Real32* const coords = BaseClass::m_volume->coords().data();
+    const T* const values = static_cast<const T*>( BaseClass::volume()->values().data() );
+    const kvs::Real32* const coords = BaseClass::volume()->coords().data();
 
     const size_t coord0_index = 3 * vertex0;
     const size_t coord1_index = 3 * vertex1;
@@ -325,13 +325,13 @@ template <typename T>
 const kvs::RGBColor MarchingPyramid::calculate_color()
 {
     // Calculate the min/max values of the node data.
-    if ( !BaseClass::m_volume->hasMinMaxValues() )
+    if ( !BaseClass::volume()->hasMinMaxValues() )
     {
-        BaseClass::m_volume->updateMinMaxValues();
+        BaseClass::volume()->updateMinMaxValues();
     }
 
-    const kvs::Real64 min_value = BaseClass::m_volume->minValue();
-    const kvs::Real64 max_value = BaseClass::m_volume->maxValue();
+    const kvs::Real64 min_value = BaseClass::volume()->minValue();
+    const kvs::Real64 max_value = BaseClass::volume()->maxValue();
     const kvs::Real64 normalize_factor = 255.0 / ( max_value - min_value );
     const kvs::UInt8  index = static_cast<kvs::UInt8>( normalize_factor * ( m_isolevel - min_value ) );
 
@@ -348,7 +348,7 @@ const kvs::RGBColor MarchingPyramid::calculate_color()
 template <typename T>
 size_t MarchingPyramid::calculate_special_table_index( const size_t* local_index, const size_t index ) const
 {
-    const T* const values = static_cast<const T*>( BaseClass::m_volume->values().data() );
+    const T* const values = static_cast<const T*>( BaseClass::volume()->values().data() );
     const double isolevel = m_isolevel;
     double v1 = static_cast<double>( values[ local_index[1] ] );
     double v2 = static_cast<double>( values[ local_index[2] ] );

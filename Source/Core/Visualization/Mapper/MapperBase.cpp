@@ -154,12 +154,18 @@ bool MapperBase::isFailure() const
  *  @param  volume [in] pointer to the volume object
  */
 /*===========================================================================*/
-void MapperBase::attach_volume( const kvs::VolumeObjectBase* volume )
+void MapperBase::attachVolume( const kvs::VolumeObjectBase* volume )
 {
     m_volume = volume;
 }
 
-void MapperBase::set_range( const kvs::VolumeObjectBase* volume )
+/*===========================================================================*/
+/**
+ *  @brief  Sets a data range of the transfer function.
+ *  @param  volume [in] pointer to volume object
+ */
+/*===========================================================================*/
+void MapperBase::setRange( const kvs::VolumeObjectBase* volume )
 {
     if ( !volume->hasMinMaxValues() ) volume->updateMinMaxValues();
     const std::type_info& type = volume->values().typeInfo()->type();
@@ -186,7 +192,7 @@ void MapperBase::set_range( const kvs::VolumeObjectBase* volume )
  *  @param  object [in] pointer to the object (The calculated coordinates are set to this object)
  */
 /*===========================================================================*/
-void MapperBase::set_min_max_coords( const kvs::VolumeObjectBase* volume, kvs::ObjectBase* object )
+void MapperBase::setMinMaxCoords( const kvs::VolumeObjectBase* volume, kvs::ObjectBase* object )
 {
     if ( !volume->hasMinMaxObjectCoords() )
     {
@@ -216,6 +222,17 @@ void MapperBase::set_min_max_coords( const kvs::VolumeObjectBase* volume, kvs::O
     const kvs::Vector3f max_ext_coord( m_volume->maxExternalCoord() );
     object->setMinMaxObjectCoords( min_obj_coord, max_obj_coord );
     object->setMinMaxExternalCoords( min_ext_coord, max_ext_coord );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a status of the mapping process.
+ *  @param  success [in] status of mapping process
+ */
+/*===========================================================================*/
+void MapperBase::setSuccess( const bool success )
+{
+    m_is_success = success;
 }
 
 } // end of namespace kvs

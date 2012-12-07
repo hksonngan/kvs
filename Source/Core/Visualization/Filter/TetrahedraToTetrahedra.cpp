@@ -139,7 +139,7 @@ TetrahedraToTetrahedra::SuperClass* TetrahedraToTetrahedra::exec( const kvs::Obj
 {
     if ( !object )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is NULL.");
         return NULL;
     }
@@ -147,7 +147,7 @@ TetrahedraToTetrahedra::SuperClass* TetrahedraToTetrahedra::exec( const kvs::Obj
     const kvs::UnstructuredVolumeObject* volume = kvs::UnstructuredVolumeObject::DownCast( object );
     if ( !volume )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is not supported.");
         return NULL;
     }
@@ -169,7 +169,7 @@ TetrahedraToTetrahedra::SuperClass* TetrahedraToTetrahedra::exec( const kvs::Obj
             else if ( type == typeid( kvs::Real64 ) ) this->subdivide_8_tetrahedra<kvs::Real64>( volume );
             else
             {
-                BaseClass::m_is_success = false;
+                BaseClass::setSuccess( false );
                 kvsMessageError("Unsupported data type '%s'.", volume->values().typeInfo()->typeName() );
                 return NULL;
             }
@@ -189,7 +189,7 @@ TetrahedraToTetrahedra::SuperClass* TetrahedraToTetrahedra::exec( const kvs::Obj
             else if ( type == typeid( kvs::Real64 ) ) this->remove_quadratic_nodes<kvs::Real64>( volume );
             else
             {
-                BaseClass::m_is_success = false;
+                BaseClass::setSuccess( false );
                 kvsMessageError("Unsupported data type '%s'.", volume->values().typeInfo()->typeName() );
                 return NULL;
             }
@@ -197,7 +197,7 @@ TetrahedraToTetrahedra::SuperClass* TetrahedraToTetrahedra::exec( const kvs::Obj
     }
     else
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is not tetrahedral cells.");
         return NULL;
     }

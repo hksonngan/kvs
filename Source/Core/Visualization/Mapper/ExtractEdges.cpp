@@ -184,7 +184,7 @@ ExtractEdges::SuperClass* ExtractEdges::exec( const kvs::ObjectBase* object )
 {
     if ( !object )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is NULL.");
         return NULL;
     }
@@ -192,7 +192,7 @@ ExtractEdges::SuperClass* ExtractEdges::exec( const kvs::ObjectBase* object )
     const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
     if ( !volume )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is not volume dat.");
         return NULL;
     }
@@ -218,9 +218,9 @@ ExtractEdges::SuperClass* ExtractEdges::exec( const kvs::ObjectBase* object )
 /*===========================================================================*/
 void ExtractEdges::mapping( const kvs::StructuredVolumeObject* volume )
 {
-    BaseClass::attach_volume( volume );
-    BaseClass::set_range( volume );
-    BaseClass::set_min_max_coords( volume, this );
+    BaseClass::attachVolume( volume );
+    BaseClass::setRange( volume );
+    BaseClass::setMinMaxCoords( volume, this );
 
     this->calculate_coords( volume );
     this->calculate_connections( volume );
@@ -317,7 +317,7 @@ void ExtractEdges::calculate_rectilinear_coords( const kvs::StructuredVolumeObje
 {
     kvs::IgnoreUnusedVariable( volume );
 
-    BaseClass::m_is_success = false;
+    BaseClass::setSuccess( false );
     kvsMessageError("Rectilinear volume has not yet supportted.");
 }
 
@@ -384,9 +384,9 @@ void ExtractEdges::calculate_connections( const kvs::StructuredVolumeObject* vol
 /*===========================================================================*/
 void ExtractEdges::mapping( const kvs::UnstructuredVolumeObject* volume )
 {
-    BaseClass::attach_volume( volume );
-    BaseClass::set_range( volume );
-    BaseClass::set_min_max_coords( volume, this );
+    BaseClass::attachVolume( volume );
+    BaseClass::setRange( volume );
+    BaseClass::setMinMaxCoords( volume, this );
 
     this->calculate_coords( volume );
     this->calculate_connections( volume );
@@ -443,7 +443,7 @@ void ExtractEdges::calculate_connections( const kvs::UnstructuredVolumeObject* v
         break;
     default:
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Unknown cell type.");
         break;
     }
@@ -662,7 +662,7 @@ void ExtractEdges::calculate_colors( const kvs::VolumeObjectBase* volume )
     const kvs::Real64 normalize_factor =
         static_cast<kvs::Real64>( cmap.resolution() - 1 ) / ( max_value - min_value );
 
-    const size_t veclen = m_volume->veclen();
+    const size_t veclen = BaseClass::volume()->veclen();
     if ( veclen == 1 )
     {
         while ( value < end )

@@ -104,14 +104,14 @@ UnstructuredVolumeImporter::UnstructuredVolumeImporter( const std::string& filen
         kvs::KVSMLObjectUnstructuredVolume* file_format = new kvs::KVSMLObjectUnstructuredVolume( filename );
         if( !file_format )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             return;
         }
 
         if( file_format->isFailure() )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             delete file_format;
             return;
@@ -125,14 +125,14 @@ UnstructuredVolumeImporter::UnstructuredVolumeImporter( const std::string& filen
         kvs::AVSUcd* file_format = new kvs::AVSUcd( filename );
         if( !file_format )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             return;
         }
 
         if( file_format->isFailure() )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             delete file_format;
             return;
@@ -146,14 +146,14 @@ UnstructuredVolumeImporter::UnstructuredVolumeImporter( const std::string& filen
         kvs::AVSField* file_format = new kvs::AVSField( filename );
         if( !file_format )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             return;
         }
 
         if( file_format->isFailure() )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             delete file_format;
             return;
@@ -164,7 +164,7 @@ UnstructuredVolumeImporter::UnstructuredVolumeImporter( const std::string& filen
     }
     else
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Cannot import '%s'.",filename.c_str());
         return;
     }
@@ -201,7 +201,7 @@ UnstructuredVolumeImporter::SuperClass* UnstructuredVolumeImporter::exec( const 
 {
     if ( !file_format )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input file format is NULL.");
         return NULL;
     }
@@ -220,7 +220,7 @@ UnstructuredVolumeImporter::SuperClass* UnstructuredVolumeImporter::exec( const 
     }
     else
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input file format is not supported.");
         return NULL;
     }
@@ -303,7 +303,7 @@ void UnstructuredVolumeImporter::import( const kvs::AVSField* field )
 {
     if( field->fieldType() != kvs::AVSField::Irregular )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Cannot import uniform/rectilinear type AVS field data.");
         return;
     }

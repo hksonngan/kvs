@@ -512,7 +512,7 @@ bool GrayImage::write( const std::string& filename )
         kvsml.setHeight( BaseClass::height() );
         kvsml.setPixelType( "gray" );
         kvsml.setWritingDataType( kvs::KVSMLObjectImage::Ascii );
-        kvsml.setData( BaseClass::pixels() );
+        kvsml.setPixels( BaseClass::pixels() );
         return( kvsml.write( filename ) );
     }
 

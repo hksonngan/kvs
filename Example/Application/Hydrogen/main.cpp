@@ -78,7 +78,7 @@ int main( int argc, char** argv )
     if ( arg.hasOption("verbose") )
     {
         std::cout << "> Structured volume object" << std::endl;
-        std::cout << *volume << std::endl << std::endl;
+        volume->print( std::cout );
     }
 
     // Output the hydrogen volume to the file.

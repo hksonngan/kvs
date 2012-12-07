@@ -91,7 +91,7 @@ MarchingCubes::SuperClass* MarchingCubes::exec( const kvs::ObjectBase* object )
 {
     if ( !object )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is NULL.");
         return NULL;
     }
@@ -99,7 +99,7 @@ MarchingCubes::SuperClass* MarchingCubes::exec( const kvs::ObjectBase* object )
     const kvs::StructuredVolumeObject* volume = kvs::StructuredVolumeObject::DownCast( object );
     if ( !volume )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is not volume dat.");
         return NULL;
     }
@@ -126,15 +126,15 @@ void MarchingCubes::mapping( const kvs::StructuredVolumeObject* volume )
     // Check whether the volume can be processed or not.
     if ( volume->veclen() != 1 )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("The input volume is not a sclar field data.");
         return;
     }
 
     // Attach the pointer to the volume object.
-    BaseClass::attach_volume( volume );
-    BaseClass::set_range( volume );
-    BaseClass::set_min_max_coords( volume, this );
+    BaseClass::attachVolume( volume );
+    BaseClass::setRange( volume );
+    BaseClass::setMinMaxCoords( volume, this );
 
     // Extract surfaces.
     const std::type_info& type = volume->values().typeInfo()->type();
@@ -150,7 +150,7 @@ void MarchingCubes::mapping( const kvs::StructuredVolumeObject* volume )
     else if ( type == typeid( kvs::Real64 ) ) this->extract_surfaces<kvs::Real64>( volume );
     else
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Unsupported data type '%s'.", volume->values().typeInfo()->typeName() );
     }
 }
@@ -351,7 +351,7 @@ void MarchingCubes::extract_surfaces_without_duplication(
 template <typename T>
 size_t MarchingCubes::calculate_table_index( const size_t* local_index ) const
 {
-    const T* const values = static_cast<const T*>( BaseClass::m_volume->values().data() );
+    const T* const values = static_cast<const T*>( BaseClass::volume()->values().data() );
     const double isolevel = m_isolevel;
 
     size_t table_index = 0;
@@ -380,9 +380,9 @@ const kvs::Vector3f MarchingCubes::interpolate_vertex(
     const kvs::Vector3f& vertex0,
     const kvs::Vector3f& vertex1 ) const
 {
-    const T* const values = static_cast<const T*>( BaseClass::m_volume->values().data() );
+    const T* const values = static_cast<const T*>( BaseClass::volume()->values().data() );
     const kvs::StructuredVolumeObject* volume =
-        reinterpret_cast<const kvs::StructuredVolumeObject*>( BaseClass::m_volume );
+        reinterpret_cast<const kvs::StructuredVolumeObject*>( BaseClass::volume() );
 
     const double x0 = vertex0.x();
     const double y0 = vertex0.y();
@@ -416,13 +416,13 @@ template <typename T>
 const kvs::RGBColor MarchingCubes::calculate_color()
 {
     // Calculate the min/max values of the node data.
-    if ( !BaseClass::m_volume->hasMinMaxValues() )
+    if ( !BaseClass::volume()->hasMinMaxValues() )
     {
-        BaseClass::m_volume->updateMinMaxValues();
+        BaseClass::volume()->updateMinMaxValues();
     }
 
-    const kvs::Real64 min_value = BaseClass::m_volume->minValue();
-    const kvs::Real64 max_value = BaseClass::m_volume->maxValue();
+    const kvs::Real64 min_value = BaseClass::volume()->minValue();
+    const kvs::Real64 max_value = BaseClass::volume()->maxValue();
     const kvs::Real64 normalize_factor = 255.0 / ( max_value - min_value );
     const kvs::UInt8  index = static_cast<kvs::UInt8>( normalize_factor * ( m_isolevel - min_value ) );
 
@@ -441,9 +441,9 @@ void MarchingCubes::calculate_isopoints(
     kvs::UInt32*&             vertex_map,
     std::vector<kvs::Real32>& coords )
 {
-    const T* const values = static_cast<const T*>( BaseClass::m_volume->values().data() );
+    const T* const values = static_cast<const T*>( BaseClass::volume()->values().data() );
     const kvs::StructuredVolumeObject* volume =
-        reinterpret_cast<const kvs::StructuredVolumeObject*>( BaseClass::m_volume );
+        reinterpret_cast<const kvs::StructuredVolumeObject*>( BaseClass::volume() );
 
     const kvs::Vector3ui resolution( volume->resolution() );
     const kvs::Vector3ui ncells( resolution - kvs::Vector3ui::All(1) );
@@ -533,7 +533,7 @@ void MarchingCubes::connect_isopoints(
     std::vector<kvs::UInt32>& connections )
 {
     const kvs::StructuredVolumeObject* volume =
-        reinterpret_cast<const kvs::StructuredVolumeObject*>( BaseClass::m_volume );
+        reinterpret_cast<const kvs::StructuredVolumeObject*>( BaseClass::volume() );
 
     const kvs::Vector3ui resolution( volume->resolution() );
     const kvs::Vector3ui ncells( resolution - kvs::Vector3ui::All(1) );

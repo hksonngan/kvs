@@ -85,7 +85,7 @@ MarchingTetrahedra::SuperClass* MarchingTetrahedra::exec( const kvs::ObjectBase*
 {
     if ( !object )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is NULL.");
         return NULL;
     }
@@ -93,7 +93,7 @@ MarchingTetrahedra::SuperClass* MarchingTetrahedra::exec( const kvs::ObjectBase*
     const kvs::UnstructuredVolumeObject* volume = kvs::UnstructuredVolumeObject::DownCast( object );
     if ( !volume )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is not volume dat.");
         return NULL;
     }
@@ -114,22 +114,22 @@ void MarchingTetrahedra::mapping( const kvs::UnstructuredVolumeObject* volume )
     // Check whether the volume can be processed or not.
     if ( volume->veclen() != 1 )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input volume is not sclar field data.");
         return;
     }
 
     if ( volume->cellType() != kvs::VolumeObjectBase::Tetrahedra )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input volume is not tetrahedra cell data.");
         return;
     }
 
     // Attach the pointer to the volume object.
-    BaseClass::attach_volume( volume );
-    BaseClass::set_range( volume );
-    BaseClass::set_min_max_coords( volume, this );
+    BaseClass::attachVolume( volume );
+    BaseClass::setRange( volume );
+    BaseClass::setMinMaxCoords( volume, this );
 
     // Extract surfaces.
     const std::type_info& type = volume->values().typeInfo()->type();
@@ -145,7 +145,7 @@ void MarchingTetrahedra::mapping( const kvs::UnstructuredVolumeObject* volume )
     else if ( type == typeid( kvs::Real64 ) ) this->extract_surfaces<kvs::Real64>( volume );
     else
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Unsupported data type '%s'.", volume->values().typeInfo()->typeName() );
     }
 }
@@ -318,7 +318,7 @@ void MarchingTetrahedra::extract_surfaces_without_duplication(
 template <typename T>
 size_t MarchingTetrahedra::calculate_table_index( const size_t* local_index ) const
 {
-    const T* const values = static_cast<const T*>( BaseClass::m_volume->values().data() );
+    const T* const values = static_cast<const T*>( BaseClass::volume()->values().data() );
     const double isolevel = m_isolevel;
 
     size_t table_index = 0;
@@ -343,8 +343,8 @@ const kvs::Vector3f MarchingTetrahedra::interpolate_vertex(
     const int vertex0,
     const int vertex1 ) const
 {
-    const T* const values = static_cast<const T*>( BaseClass::m_volume->values().data() );
-    const kvs::Real32* const coords = BaseClass::m_volume->coords().data();
+    const T* const values = static_cast<const T*>( BaseClass::volume()->values().data() );
+    const kvs::Real32* const coords = BaseClass::volume()->coords().data();
 
     const size_t coord0_index = 3 * vertex0;
     const size_t coord1_index = 3 * vertex1;
@@ -370,13 +370,13 @@ template <typename T>
 const kvs::RGBColor MarchingTetrahedra::calculate_color()
 {
     // Calculate the min/max values of the node data.
-    if ( !BaseClass::m_volume->hasMinMaxValues() )
+    if ( !BaseClass::volume()->hasMinMaxValues() )
     {
-        BaseClass::m_volume->updateMinMaxValues();
+        BaseClass::volume()->updateMinMaxValues();
     }
 
-    const kvs::Real64 min_value = BaseClass::m_volume->minValue();
-    const kvs::Real64 max_value = BaseClass::m_volume->maxValue();
+    const kvs::Real64 min_value = BaseClass::volume()->minValue();
+    const kvs::Real64 max_value = BaseClass::volume()->maxValue();
     const kvs::Real64 normalize_factor = 255.0 / ( max_value - min_value );
     const kvs::UInt8  index = static_cast<kvs::UInt8>( normalize_factor * ( m_isolevel - min_value ) );
 
@@ -397,7 +397,7 @@ void MarchingTetrahedra::calculate_isopoints(
     std::vector<kvs::Real32>& coords )
 {
     const kvs::UnstructuredVolumeObject* volume =
-        reinterpret_cast<const kvs::UnstructuredVolumeObject*>( BaseClass::m_volume );
+        reinterpret_cast<const kvs::UnstructuredVolumeObject*>( BaseClass::volume() );
 
     const T* const values = static_cast<const T*>( volume->values().data() );
     const kvs::EdgeConnections* const edge_connections = volume->adjacency()->edgeConnections();
@@ -436,7 +436,7 @@ void MarchingTetrahedra::connect_isopoints(
     std::vector<kvs::UInt32>& connections )
 {
     const kvs::UnstructuredVolumeObject* volume =
-        reinterpret_cast<const kvs::UnstructuredVolumeObject*>( BaseClass::m_volume );
+        reinterpret_cast<const kvs::UnstructuredVolumeObject*>( BaseClass::volume() );
 
     const kvs::VertexGraph* const vertex_graph = volume->adjacency()->vertexGraph();
     const kvs::UInt32* const volume_connections = volum->connections()->data();

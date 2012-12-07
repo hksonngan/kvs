@@ -30,7 +30,7 @@ class ExporterBase : public FileFormatType
 {
     kvsModuleName( kvs::ExporterBase );
 
-protected:
+private:
 
     bool m_is_success; ///< check flag for exporting
 
@@ -43,6 +43,10 @@ public:
 
     bool isSuccess() const;
     bool isFailure() const;
+
+protected:
+
+    void setSuccess( const bool success );
 };
 
 /*===========================================================================*/
@@ -87,6 +91,18 @@ template <typename FileFormatType>
 bool ExporterBase<FileFormatType>::isFailure() const
 {
     return !m_is_success;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a status of the exporting process.
+ *  @param  success [in] status of exporing process
+ */
+/*===========================================================================*/
+template <typename FileFormatType>
+void ExporterBase<FileFormatType>::setSuccess( const bool success )
+{
+    m_is_success = success;
 }
 
 } // end of namespace kvs

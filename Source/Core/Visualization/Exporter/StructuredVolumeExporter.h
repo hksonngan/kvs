@@ -33,6 +33,7 @@ template <typename FileFormatType>
 class StructuredVolumeExporter : public kvs::ExporterBase<FileFormatType>
 {
     kvsModuleName( kvs::StructuredVolumeExporter );
+    kvsModuleBaseClass( kvs::ExporterBase<FileFormatType> );
 
 public:
 

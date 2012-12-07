@@ -31,6 +31,7 @@ template <typename FileFormatType>
 class PointExporter : public kvs::ExporterBase<FileFormatType>
 {
     kvsModuleName( kvs::PointExporter );
+    kvsModuleBaseClass( kvs::ExporterBase<FileFormatType> );
 
 public:
 

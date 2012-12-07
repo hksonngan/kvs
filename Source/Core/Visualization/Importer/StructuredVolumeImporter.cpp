@@ -71,14 +71,14 @@ StructuredVolumeImporter::StructuredVolumeImporter( const std::string& filename 
         kvs::KVSMLObjectStructuredVolume* file_format = new kvs::KVSMLObjectStructuredVolume( filename );
         if( !file_format )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             return;
         }
 
         if( file_format->isFailure() )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             delete file_format;
             return;
@@ -92,14 +92,14 @@ StructuredVolumeImporter::StructuredVolumeImporter( const std::string& filename 
         kvs::AVSField* file_format = new kvs::AVSField( filename );
         if( !file_format )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             return;
         }
 
         if( file_format->isFailure() )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             delete file_format;
             return;
@@ -113,14 +113,14 @@ StructuredVolumeImporter::StructuredVolumeImporter( const std::string& filename 
         kvs::DicomList* file_format = new kvs::DicomList( filename );
         if( !file_format )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             return;
         }
 
         if( file_format->isFailure() )
         {
-            BaseClass::m_is_success = false;
+            BaseClass::setSuccess( false );
             kvsMessageError("Cannot read '%s'.",filename.c_str());
             delete file_format;
             return;
@@ -131,7 +131,7 @@ StructuredVolumeImporter::StructuredVolumeImporter( const std::string& filename 
     }
     else
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Cannot import '%s'.",filename.c_str());
         return;
     }
@@ -145,7 +145,7 @@ StructuredVolumeImporter::StructuredVolumeImporter( const std::string& filename 
 /*==========================================================================*/
 StructuredVolumeImporter::StructuredVolumeImporter( const kvs::FileFormatBase* file_format )
 {
-    if ( !this->exec( file_format ) ) BaseClass::m_is_success = true;
+    if ( !this->exec( file_format ) ) BaseClass::setSuccess( true );
 }
 
 /*===========================================================================*/
@@ -168,7 +168,7 @@ StructuredVolumeImporter::SuperClass* StructuredVolumeImporter::exec( const kvs:
 {
     if ( !file_format )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input file format is NULL.");
         return NULL;
     }
@@ -187,7 +187,7 @@ StructuredVolumeImporter::SuperClass* StructuredVolumeImporter::exec( const kvs:
     }
     else
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input file format is not supported.");
         return NULL;
     }
@@ -256,7 +256,7 @@ void StructuredVolumeImporter::import( const kvs::AVSField* field )
     if ( field->fieldType() != kvs::AVSField::Uniform )
     {
         kvsMessageError( "'Uniform' type in kvs::AVSField format is only supported." );
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         return;
     }
 
@@ -291,7 +291,7 @@ void StructuredVolumeImporter::import( const kvs::DicomList* dicom_list )
 {
     if ( dicom_list->size() == 0 )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Dicom file is not included.");
         return;
     }

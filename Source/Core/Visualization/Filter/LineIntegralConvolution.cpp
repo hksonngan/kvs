@@ -4,7 +4,7 @@
  *  @brief  LIC (Line Integral Convolution) class.
  *
  *  @author Naohisa Sakamoto
- *  @date   2012/12/04 15:43:29
+ *  @date   2012/12/07 12:41:22
  */
 /*----------------------------------------------------------------------------
  *
@@ -95,7 +95,7 @@ LineIntegralConvolution::SuperClass* LineIntegralConvolution::exec( const kvs::O
 {
     if ( !object )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is NULL.");
         return NULL;
     }
@@ -103,14 +103,14 @@ LineIntegralConvolution::SuperClass* LineIntegralConvolution::exec( const kvs::O
     const kvs::StructuredVolumeObject* volume = kvs::StructuredVolumeObject::DownCast( object );
     if ( !volume )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is not supported.");
         return NULL;
     }
 
     if ( volume->veclen() == 1 )
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input object is not vector data.");
         return NULL;
     }
@@ -138,7 +138,7 @@ void LineIntegralConvolution::filtering( const kvs::StructuredVolumeObject* volu
     else if( type == typeid(double) ) this->convolution<double>( volume );
     else
     {
-        BaseClass::m_is_success = false;
+        BaseClass::setSuccess( false );
         kvsMessageError("Input volume data type is not float/double.");
         return;
     }

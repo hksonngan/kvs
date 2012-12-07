@@ -32,7 +32,7 @@ class ImporterBase
     kvsModuleName( kvs::ImporterBase );
     kvsModuleBase;
 
-protected:
+private:
 
     bool m_is_success; ///< check flag for importing
 
@@ -45,6 +45,10 @@ public:
     bool isFailure() const;
 
     virtual kvs::ObjectBase* exec( const kvs::FileFormatBase* file_format ) = 0;
+
+protected:
+
+    void setSuccess( const bool success );
 };
 
 } // end of namespace kvs

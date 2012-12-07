@@ -58,4 +58,15 @@ bool ImporterBase::isFailure() const
     return !m_is_success;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets a status of the importing process.
+ *  @param  success [in] status of importing process
+ */
+/*===========================================================================*/
+void ImporterBase::setSuccess( const bool success )
+{
+    m_is_success = success;
+}
+
 } // end of namespace kvs
