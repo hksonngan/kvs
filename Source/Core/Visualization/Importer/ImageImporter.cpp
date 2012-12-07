@@ -294,7 +294,7 @@ void ImageImporter::import( const kvs::KVSMLObjectImage* kvsml )
     }
 
     SuperClass::setSize( kvsml->width(), kvsml->height() );
-    SuperClass::setPixels( kvsml->data(), pixel_type );
+    SuperClass::setPixels( kvsml->pixels(), pixel_type );
 /*
     SuperClass::m_width  = kvsml->width();
     SuperClass::m_height = kvsml->height();
@@ -313,7 +313,7 @@ void ImageImporter::import( const kvs::Bmp* bmp )
 {
     kvs::ImageObject::PixelType pixel_type = static_cast<SuperClass::PixelType>( bmp->bitsPerPixel() );
     SuperClass::setSize( bmp->width(), bmp->height() );
-    SuperClass::setPixels( bmp->data(), pixel_type ); // shallow copy
+    SuperClass::setPixels( bmp->pixels(), pixel_type ); // shallow copy
 /*
     SuperClass::m_width  = bmp->width();
     SuperClass::m_height = bmp->height();
@@ -372,7 +372,7 @@ void ImageImporter::import( const kvs::Tiff* tiff )
 void ImageImporter::import( const kvs::Ppm* ppm )
 {
     SuperClass::setSize( ppm->width(), ppm->height() );
-    SuperClass::setPixels( ppm->data(), kvs::ImageObject::Color24 ); // shallow copy
+    SuperClass::setPixels( ppm->pixels(), kvs::ImageObject::Color24 ); // shallow copy
 /*
     SuperClass::m_width  = ppm->width();
     SuperClass::m_height = ppm->height();
@@ -390,7 +390,7 @@ void ImageImporter::import( const kvs::Ppm* ppm )
 void ImageImporter::import( const kvs::Pgm* pgm )
 {
     SuperClass::setSize( pgm->width(), pgm->height() );
-    SuperClass::setPixels( pgm->data(), kvs::ImageObject::Gray8 ); // shallow copy
+    SuperClass::setPixels( pgm->pixels(), kvs::ImageObject::Gray8 ); // shallow copy
 /*
     SuperClass::m_width  = pgm->width();
     SuperClass::m_height = pgm->height();
@@ -412,7 +412,7 @@ void ImageImporter::import( const kvs::Pbm* pbm )
 
     for ( size_t i = 0; i < npixels; i++ )
     {
-        data[i] = pbm->data().test(i) ? 0 : 255;
+        data[i] = pbm->pixels().test(i) ? 0 : 255;
     }
 
     SuperClass::setSize( pbm->width(), pbm->height() );

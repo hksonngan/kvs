@@ -249,11 +249,11 @@ bool ColorImage::read( const std::string& filename )
         if ( kvsml.pixelType() == "color" )
         {
             const BaseClass::ImageType type = BaseClass::Color;
-            return( BaseClass::create( kvsml.width(), kvsml.height(), type, kvsml.data() ) );
+            return( BaseClass::create( kvsml.width(), kvsml.height(), type, kvsml.pixels() ) );
         }
         if ( kvsml.pixelType() == "gray" )
         {
-            kvs::GrayImage image( kvsml.width(), kvsml.height(), kvsml.data() );
+            kvs::GrayImage image( kvsml.width(), kvsml.height(), kvsml.pixels() );
             return( this->read_image( image ) );
         }
     }
@@ -263,7 +263,7 @@ bool ColorImage::read( const std::string& filename )
     {
         const kvs::Bmp bmp( filename );
         const BaseClass::ImageType type = BaseClass::Color;
-        return( BaseClass::create( bmp.width(), bmp.height(), type, bmp.data() ) );
+        return( BaseClass::create( bmp.width(), bmp.height(), type, bmp.pixels() ) );
     }
 
     // PPM image.
@@ -271,7 +271,7 @@ bool ColorImage::read( const std::string& filename )
     {
         const kvs::Ppm ppm( filename );
         const BaseClass::ImageType type = BaseClass::Color;
-        return( BaseClass::create( ppm.width(), ppm.height(), type, ppm.data() ) );
+        return( BaseClass::create( ppm.width(), ppm.height(), type, ppm.pixels() ) );
     }
 
     // PGM image.
@@ -342,7 +342,7 @@ bool ColorImage::write( const std::string& filename )
         kvsml.setHeight( BaseClass::height() );
         kvsml.setPixelType( "color" );
         kvsml.setWritingDataType( kvs::KVSMLObjectImage::Ascii );
-        kvsml.setData( BaseClass::pixels() );
+        kvsml.setPixels( BaseClass::pixels() );
         return( kvsml.write( filename ) );
     }
 

@@ -14,11 +14,12 @@
 #ifndef KVS__PBM_H_INCLUDE
 #define KVS__PBM_H_INCLUDE
 
+#include <string>
 #include <kvs/FileFormatBase>
 #include <kvs/BitArray>
 #include <kvs/Type>
 #include <kvs/Indent>
-#include <string>
+#include <kvs/Deprecated>
 #include "Header.h"
 
 
@@ -42,7 +43,7 @@ private:
     Pbm::Header m_header; ///< header information
     size_t m_width; ///< width
     size_t m_height; ///< height
-    kvs::BitArray m_data; ///< bit pixel data
+    kvs::BitArray m_pixels; ///< bit pixel data
 
 public:
 
@@ -57,7 +58,7 @@ public:
     const Pbm::Header& header() const;
     size_t width() const;
     size_t height() const;
-    const kvs::BitArray& data() const;
+    const kvs::BitArray& pixels() const;
 
     void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
     bool read( const std::string& filename );
@@ -66,6 +67,9 @@ public:
 private:
 
     void set_header();
+
+public:
+    KVS_DEPRECATED( const kvs::BitArray& data() const ) { return this->pixels(); }
 };
 
 } // end of namespace kvs

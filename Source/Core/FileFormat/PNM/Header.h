@@ -18,6 +18,7 @@
 #include <fstream>
 #include <string>
 #include <kvs/Indent>
+#include <kvs/Deprecated>
 
 
 namespace kvs
@@ -28,7 +29,7 @@ namespace pnm
 
 /*==========================================================================*/
 /**
- *  PNM image header class.
+ *  @brief  PNM image header class.
  */
 /*==========================================================================*/
 class Header
@@ -49,8 +50,6 @@ public:
     Header();
     Header( std::ifstream& ifs );
     virtual ~Header();
-
-    friend std::ostream& operator << ( std::ostream& os, const Header& header );
 
     std::string magic() const;
     size_t width() const;
@@ -81,6 +80,9 @@ private:
     void skip_header( std::ifstream& ifs );
     void skip_comment_line( std::ifstream& ifs );
     void next_line( std::ifstream& ifs );
+
+public:
+    KVS_DEPRECATED( friend std::ostream& operator << ( std::ostream& os, const Header& header ) );
 };
 
 } // end of namespace pnm

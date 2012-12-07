@@ -642,7 +642,7 @@ bool BitImage::read( const std::string& filename )
     if ( kvs::Pbm::CheckExtension( filename ) )
     {
         const kvs::Pbm pbm( filename );
-        const kvs::ValueArray<kvs::UInt8>& data = pbm.data().asValueArray();
+        const kvs::ValueArray<kvs::UInt8>& data = pbm.pixels().asValueArray();
         return( BaseClass::create( pbm.width(), pbm.height(), BaseClass::Bit, data ) );
     }
 

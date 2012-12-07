@@ -21,6 +21,13 @@
 namespace kvs
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  Checks the file extension.
+ *  @param  filename [in] filename
+ *  @return true if the file is a PPM format.
+ */
+/*===========================================================================*/
 bool Ppm::CheckExtension( const std::string& filename )
 {
     const kvs::File file( filename );
@@ -34,7 +41,7 @@ bool Ppm::CheckExtension( const std::string& filename )
 
 /*==========================================================================*/
 /**
- *  Constructor.
+ *  @brief  Constructs a new Ppm class.
  */
 /*==========================================================================*/
 Ppm::Ppm()
@@ -43,23 +50,23 @@ Ppm::Ppm()
 
 /*==========================================================================*/
 /**
- *  Constructor.
- *  @param width  [in] width
- *  @param height [in] height
- *  @param data   [in] pixel data
+ *  @brief  Constructs a new Ppm class.
+ *  @param  width  [in] width
+ *  @param  height [in] height
+ *  @param  pixels [in] pixel data
  */
 /*==========================================================================*/
-Ppm::Ppm( const size_t width, const size_t height, const kvs::ValueArray<kvs::UInt8>& data ):
+Ppm::Ppm( const size_t width, const size_t height, const kvs::ValueArray<kvs::UInt8>& pixels ):
     m_width( width ),
     m_height( height ),
-    m_data( data )
+    m_pixels( pixels )
 {
     this->set_header();
 }
 
 /*==========================================================================*/
 /**
- *  Constructor.
+ *  @brief  Constructs a new Ppm class.
  *  @param filename [in] PPM image filename
  */
 /*==========================================================================*/
@@ -70,7 +77,7 @@ Ppm::Ppm( const std::string& filename )
 
 /*==========================================================================*/
 /**
- *  Returns the header information.
+ *  @brief  Returns the header information.
  *  @return header information
  */
 /*==========================================================================*/
@@ -81,7 +88,7 @@ const Ppm::Header& Ppm::header() const
 
 /*==========================================================================*/
 /**
- *  Returns the image width.
+ *  @brief  Returns the image width.
  *  @return image width
  */
 /*==========================================================================*/
@@ -92,7 +99,7 @@ size_t Ppm::width() const
 
 /*==========================================================================*/
 /**
- *  Returns the image height.
+ *  @brief  Returns the image height.
  *  @return image height
  */
 /*==========================================================================*/
@@ -103,15 +110,22 @@ size_t Ppm::height() const
 
 /*==========================================================================*/
 /**
- *  Returns the pixel data.
+ *  @brief  Returns the pixel data.
  *  @return pixel data
  */
 /*==========================================================================*/
-const kvs::ValueArray<kvs::UInt8>& Ppm::data() const
+const kvs::ValueArray<kvs::UInt8>& Ppm::pixels() const
 {
-    return m_data;
+    return m_pixels;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Prints information of the PBM image.
+ *  @param  os [in] output stream
+ *  @param  indent [in] indent
+ */
+/*===========================================================================*/
 void Ppm::print( std::ostream& os, const kvs::Indent& indent ) const
 {
     os << indent << "Filename : " << BaseClass::filename() << std::endl;
@@ -120,8 +134,8 @@ void Ppm::print( std::ostream& os, const kvs::Indent& indent ) const
 
 /*==========================================================================*/
 /**
- *  Read PPM image.
- *  @param filename [in] filename
+ *  @brief  Reads PPM image.
+ *  @param  filename [in] filename
  *  @return true, if the reading process is done successfully
  */
 /*==========================================================================*/
@@ -143,12 +157,12 @@ bool Ppm::read( const std::string& filename )
     m_header.read( ifs );
 
     // Get the image information.
-    m_width  = m_header.width();
+    m_width = m_header.width();
     m_height = m_header.height();
 
     // Allocate the pixel data.
     const size_t npixels = m_width * m_height;
-    m_data.allocate( npixels * 3 );
+    m_pixels.allocate( npixels * 3 );
 
     // Ascii data.
     if ( m_header.isP3() )
@@ -158,15 +172,15 @@ bool Ppm::read( const std::string& filename )
             size_t r, g, b;
             ifs >> r >> g >> b;
 
-            m_data[ i3 + 0 ] = static_cast<kvs::UInt8>( r );
-            m_data[ i3 + 1 ] = static_cast<kvs::UInt8>( g );
-            m_data[ i3 + 2 ] = static_cast<kvs::UInt8>( b );
+            m_pixels[ i3 + 0 ] = static_cast<kvs::UInt8>( r );
+            m_pixels[ i3 + 1 ] = static_cast<kvs::UInt8>( g );
+            m_pixels[ i3 + 2 ] = static_cast<kvs::UInt8>( b );
         }
     }
     // Binary data.
     else if ( m_header.isP6() )
     {
-        ifs.read( reinterpret_cast<char*>( m_data.data() ), m_header.size() );
+        ifs.read( reinterpret_cast<char*>( m_pixels.data() ), m_header.size() );
     }
     else
     {
@@ -184,8 +198,8 @@ bool Ppm::read( const std::string& filename )
 
 /*==========================================================================*/
 /**
- *  Write PPM image.
- *  @param filename [in] filename
+ *  @brief  Writes PPM image.
+ *  @param  filename [in] filename
  *  @return true, if the writing process is done successfully
  */
 /*==========================================================================*/
@@ -207,7 +221,7 @@ bool Ppm::write( const std::string& filename )
     this->set_header();
     m_header.write( ofs );
 
-    ofs.write( reinterpret_cast<char*>( m_data.data() ), m_header.size() );
+    ofs.write( reinterpret_cast<char*>( m_pixels.data() ), m_header.size() );
     ofs.close();
 
     return true;
@@ -215,7 +229,7 @@ bool Ppm::write( const std::string& filename )
 
 /*===========================================================================*/
 /**
- *  @brief  Set header information.
+ *  @brief  Sets header information.
  */
 /*===========================================================================*/
 void Ppm::set_header()

@@ -163,7 +163,7 @@ inline void FrequencyTable::binning( const kvs::ImageObject* image, const size_t
         return;
     }
 
-    const T* values = reinterpret_cast<const T*>( image->data().data() );
+    const T* values = reinterpret_cast<const T*>( image->pixels().data() );
 //    const kvs::Real64 width = ( m_max_range - m_min_range ) / kvs::Real64( m_nbins - 1 );
     const kvs::Real64 width = ( m_max_range - m_min_range + 1 ) / kvs::Real64( m_nbins );
     const size_t stride  = image->numberOfChannels();

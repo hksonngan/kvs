@@ -170,9 +170,9 @@ const std::string& KVSMLObjectImage::pixelType() const
  *  @return pixel data array
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::UInt8>& KVSMLObjectImage::data() const
+const kvs::ValueArray<kvs::UInt8>& KVSMLObjectImage::pixels() const
 {
-    return m_data;
+    return m_pixels;
 }
 
 /*===========================================================================*/
@@ -225,9 +225,9 @@ void KVSMLObjectImage::setWritingDataType( const WritingDataType writing_type )
  *  @param  data [in] pixel data
  */
 /*===========================================================================*/
-void KVSMLObjectImage::setData( const kvs::ValueArray<kvs::UInt8>& data )
+void KVSMLObjectImage::setPixels( const kvs::ValueArray<kvs::UInt8>& pixels )
 {
-    m_data = data;
+    m_pixels = pixels;
 }
 
 void KVSMLObjectImage::print( std::ostream& os, const kvs::Indent& indent ) const
@@ -313,7 +313,7 @@ bool KVSMLObjectImage::read( const std::string& filename )
         const size_t npixels = m_width * m_height;
         const size_t nelements = npixels * nchannels;
         kvs::kvsml::DataArrayTag data_tag;
-        if ( !data_tag.read( pixel_tag.node(), nelements, &m_data ) )
+        if ( !data_tag.read( pixel_tag.node(), nelements, &m_pixels ) )
         {
             kvsMessageError( "Cannot read <%s> for <%s>.",
                              data_tag.name().c_str(),
@@ -375,7 +375,7 @@ bool KVSMLObjectImage::write( const std::string& filename )
     }
     else
     {
-        if ( m_data.size() > 0 )
+        if ( m_pixels.size() > 0 )
         {
             // <DataArray>
             kvs::kvsml::DataArrayTag data_tag;
@@ -391,7 +391,7 @@ bool KVSMLObjectImage::write( const std::string& filename )
             }
 
             const std::string pathname = kvs::File( filename ).pathName();
-            if ( !data_tag.write( pixel_tag.node(), m_data, pathname ) )
+            if ( !data_tag.write( pixel_tag.node(), m_pixels, pathname ) )
             {
                 kvsMessageError( "Cannot write <%s> for <%s>.",
                                  data_tag.name().c_str(),

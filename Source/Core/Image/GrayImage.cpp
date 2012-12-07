@@ -425,13 +425,13 @@ bool GrayImage::read( const std::string& filename )
         const kvs::KVSMLObjectImage kvsml( filename );
         if ( kvsml.pixelType() == "color" )
         {
-            kvs::ColorImage image( kvsml.width(), kvsml.height(), kvsml.data() );
+            kvs::ColorImage image( kvsml.width(), kvsml.height(), kvsml.pixels() );
             return( this->read_image( image ) );
         }
         if ( kvsml.pixelType() == "gray" )
         {
             const BaseClass::ImageType type = BaseClass::Gray;
-            return( BaseClass::create( kvsml.width(), kvsml.height(), type, kvsml.data() ) );
+            return( BaseClass::create( kvsml.width(), kvsml.height(), type, kvsml.pixels() ) );
         }
     }
 
@@ -448,7 +448,7 @@ bool GrayImage::read( const std::string& filename )
     {
         const kvs::Pgm pgm( filename );
         const BaseClass::ImageType type = BaseClass::Gray;
-        return( BaseClass::create( pgm.width(), pgm.height(), type, pgm.data() ) );
+        return( BaseClass::create( pgm.width(), pgm.height(), type, pgm.pixels() ) );
     }
 
     // PBM image.

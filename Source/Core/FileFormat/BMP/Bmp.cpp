@@ -23,6 +23,13 @@
 namespace kvs
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  Check the file extension.
+ *  @param  filename [in] filename
+ *  @return true, if the specified file is a Bitmap file format
+ */
+/*===========================================================================*/
 bool Bmp::CheckExtension( const std::string& filename )
 {
     const kvs::File file( filename );
@@ -36,7 +43,7 @@ bool Bmp::CheckExtension( const std::string& filename )
 
 /*==========================================================================*/
 /**
- *  Constructor.
+ *  @brief  Constructs a new Bmp class.
  */
 /*==========================================================================*/
 Bmp::Bmp()
@@ -45,25 +52,25 @@ Bmp::Bmp()
 
 /*==========================================================================*/
 /**
- *  Constructor.
- *  @param width  [in] width
- *  @param height [in] height
- *  @param data   [in] pixel data
+ *  @brief  Constructs a new Bmp class.
+ *  @param  width  [in] width
+ *  @param  height [in] height
+ *  @param  data   [in] pixel data
  */
 /*==========================================================================*/
-Bmp::Bmp( const size_t width, const size_t height, const kvs::ValueArray<kvs::UInt8>& data ):
+Bmp::Bmp( const size_t width, const size_t height, const kvs::ValueArray<kvs::UInt8>& pixels ):
     m_width( width ),
     m_height( height ),
     m_bpp( 3 ),
-    m_data( data )
+    m_pixels( pixels )
 {
     this->set_header();
 }
 
 /*==========================================================================*/
 /**
- *  Constructor.
- *  @param filename [in] filename
+ *  @brief  Constructs a new Bmp class.
+ *  @param  filename [in] filename
  */
 /*==========================================================================*/
 Bmp::Bmp( const std::string& filename )
@@ -73,7 +80,7 @@ Bmp::Bmp( const std::string& filename )
 
 /*==========================================================================*/
 /**
- *  Returns the file header.
+ *  @brief  Returns the file header.
  *  @return file header information
  */
 /*==========================================================================*/
@@ -132,11 +139,18 @@ size_t Bmp::bitsPerPixel() const
  *  @return pixel data
  */
 /*==========================================================================*/
-kvs::ValueArray<kvs::UInt8> Bmp::data() const
+const kvs::ValueArray<kvs::UInt8>& Bmp::pixels() const
 {
-    return m_data;
+    return m_pixels;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Prints information of the bitmap image.
+ *  @param  os [in] output stream
+ *  @param  indent [in] indent
+ */
+/*===========================================================================*/
 void Bmp::print( std::ostream& os, const kvs::Indent& indent ) const
 {
     os << indent << "Filename : " << BaseClass::filename() << std::endl;
@@ -146,8 +160,8 @@ void Bmp::print( std::ostream& os, const kvs::Indent& indent ) const
 
 /*==========================================================================*/
 /**
- *  Read the bitmap format image.
- *  @param filename [in] filename
+ *  @brief  Reads the bitmap format image.
+ *  @param  filename [in] filename
  *  @return true, if the read process is done successfully
  */
 /*==========================================================================*/
@@ -177,16 +191,16 @@ bool Bmp::read( const std::string& filename )
         return false;
     }
 
-    m_width  = m_info_header.width();
+    m_width = m_info_header.width();
     m_height = m_info_header.height();
-    m_bpp    = m_info_header.bpp();
+    m_bpp = m_info_header.bpp();
 
     this->skip_header_and_pallete( ifs );
 
     const size_t nchannels = 3; // NOTE: color mode only supported now.
-    m_data.allocate( m_width * m_height * nchannels );
+    m_pixels.allocate( m_width * m_height * nchannels );
 
-    kvs::UInt8* data = m_data.data();
+    kvs::UInt8* data = m_pixels.data();
 
     const size_t bpp = 3;
     const size_t bpl = m_width * bpp;
@@ -216,8 +230,8 @@ bool Bmp::read( const std::string& filename )
 
 /*==========================================================================*/
 /**
- *  Write the bitmap format image.
- *  @param filename [in] filename
+ *  @brief  Writes the bitmap format image.
+ *  @param  filename [in] filename
  *  @return true, if the write process is done successfully
  */
 /*==========================================================================*/
@@ -239,7 +253,7 @@ bool Bmp::write( const std::string& filename )
     m_file_header.write( ofs );
     m_info_header.write( ofs );
 
-    kvs::UInt8* data = m_data.data();
+    kvs::UInt8* data = m_pixels.data();
 
     const size_t bpp = 3;
     const size_t bpl = m_width * bpp;
@@ -269,8 +283,8 @@ bool Bmp::write( const std::string& filename )
 
 /*==========================================================================*/
 /**
- *  Skip the header and pallete region.
- *  @param ifs [in] input file stream
+ *  @brief  Skips the header and pallete region.
+ *  @param  ifs [in] input file stream
  */
 /*==========================================================================*/
 void Bmp::skip_header_and_pallete( std::ifstream& ifs )
@@ -281,35 +295,35 @@ void Bmp::skip_header_and_pallete( std::ifstream& ifs )
 
 /*==========================================================================*/
 /**
- *  Set the bitmap image header information.
+ *  @brief  Sets the bitmap image header information.
  */
 /*==========================================================================*/
 void Bmp::set_header()
 {
     const char*  magic_num = "BM";
-    const kvs::UInt32 offset    = 54;
-    const kvs::UInt32 bpp       = 3;
-    const kvs::UInt32 padding   = kvs::UInt32( m_height * ( m_width % 4 ) );
+    const kvs::UInt32 offset = 54;
+    const kvs::UInt32 bpp = 3;
+    const kvs::UInt32 padding = kvs::UInt32( m_height * ( m_width % 4 ) );
 
-    //m_fileh.type          = 0x4d42; // "BM"; '0x424d', if big endian.
-    //m_fileh.type          = 0x424d; // "BM"; '0x424d', if big endian.
+    //m_fileh.type = 0x4d42; // "BM"; '0x424d', if big endian.
+    //m_fileh.type = 0x424d; // "BM"; '0x424d', if big endian.
     memcpy( &( m_file_header.m_type ), magic_num, sizeof( kvs::UInt16 ) );
-    m_file_header.m_size          = kvs::UInt32( offset + m_width * m_height * bpp + padding );
-    m_file_header.m_reserved1     = 0;
-    m_file_header.m_reserved2     = 0;
-    m_file_header.m_offset        = offset;
+    m_file_header.m_size = kvs::UInt32( offset + m_width * m_height * bpp + padding );
+    m_file_header.m_reserved1 = 0;
+    m_file_header.m_reserved2 = 0;
+    m_file_header.m_offset = offset;
 
-    m_info_header.m_size          = 40;
-    m_info_header.m_width         = kvs::UInt32( m_width );
-    m_info_header.m_height        = kvs::UInt32( m_height );
-    m_info_header.m_nplanes       = 1;
-    m_info_header.m_bpp           = 24;
-    m_info_header.m_compression   = 0L; // 0L: no compress,
+    m_info_header.m_size = 40;
+    m_info_header.m_width = kvs::UInt32( m_width );
+    m_info_header.m_height = kvs::UInt32( m_height );
+    m_info_header.m_nplanes = 1;
+    m_info_header.m_bpp = 24;
+    m_info_header.m_compression = 0L; // 0L: no compress,
                                         // 1L: 8-bit run-length encoding, 2L: 4-bit
-    m_info_header.m_bitmapsize    = kvs::UInt32( m_width * m_height * bpp + padding );
-    m_info_header.m_hresolution   = 0;
-    m_info_header.m_vresolution   = 0;
-    m_info_header.m_colsused      = 0;
+    m_info_header.m_bitmapsize = kvs::UInt32( m_width * m_height * bpp + padding );
+    m_info_header.m_hresolution = 0;
+    m_info_header.m_vresolution = 0;
+    m_info_header.m_colsused = 0;
     m_info_header.m_colsimportant = 0;
 }
 

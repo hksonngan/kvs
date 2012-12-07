@@ -17,38 +17,6 @@
 #include <kvs/StructuredVolumeObject>
 
 
-namespace
-{
-
-/*===========================================================================*/
-/**
- *  @brief  Casts to a pointer to the structured volume object.
- *  @param  object [in] pointer to the object
- *  @return pointer to the structured volume object
- */
-/*===========================================================================*/
-const kvs::StructuredVolumeObject* CastToStructuredVolumeObject( const kvs::ObjectBase* object )
-{
-    if ( object->objectType() != kvs::ObjectBase::Volume )
-    {
-        kvsMessageError("Input object is not a volumetry object.");
-        return NULL;
-    }
-
-    const kvs::VolumeObjectBase* volume =
-        reinterpret_cast<const kvs::VolumeObjectBase*>( object );
-    if ( volume->volumeType() != kvs::VolumeObjectBase::Structured )
-    {
-        kvsMessageError("Input object is not a structured volume object.");
-        return NULL;
-    }
-
-    return reinterpret_cast<const kvs::StructuredVolumeObject*>( volume );
-}
-
-} // end of namespace
-
-
 namespace kvs
 {
 

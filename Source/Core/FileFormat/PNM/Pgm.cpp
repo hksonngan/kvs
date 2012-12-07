@@ -21,6 +21,13 @@
 namespace kvs
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  Checks the file extension.
+ *  @param  filename [in] filename
+ *  @return true if the file is a PGM format.
+ */
+/*===========================================================================*/
 bool Pgm::CheckExtension( const std::string& filename )
 {
     const kvs::File file( filename );
@@ -34,7 +41,7 @@ bool Pgm::CheckExtension( const std::string& filename )
 
 /*==========================================================================*/
 /**
- *  Constructor.
+ *  @brief  Constructs a new Pgm class.
  */
 /*==========================================================================*/
 Pgm::Pgm( void )
@@ -43,24 +50,24 @@ Pgm::Pgm( void )
 
 /*==========================================================================*/
 /**
- *  Constructor.
- *  @param width  [in] width
- *  @param height [in] height
- *  @param data   [in] pixel data
+ *  @brief  Constructs a new Pgm class.
+ *  @param  width  [in] width
+ *  @param  height [in] height
+ *  @param  pixels [in] pixel data
  */
 /*==========================================================================*/
-Pgm::Pgm( const size_t width, const size_t height, const kvs::ValueArray<kvs::UInt8>& data ):
+Pgm::Pgm( const size_t width, const size_t height, const kvs::ValueArray<kvs::UInt8>& pixels ):
     m_width( width ),
     m_height( height ),
-    m_data( data )
+    m_pixels( pixels )
 {
     this->set_header();
 }
 
 /*==========================================================================*/
 /**
- *  Constructor.
- *  @param filename [in] PGM image filename
+ *  @brief  Constructs a new Pgm class.
+ *  @param  filename [in] PGM image filename
  */
 /*==========================================================================*/
 Pgm::Pgm( const std::string& filename )
@@ -70,48 +77,55 @@ Pgm::Pgm( const std::string& filename )
 
 /*==========================================================================*/
 /**
- *  Returns the header information.
+ *  @brief  Returns the header information.
  *  @return header information
  */
 /*==========================================================================*/
-const Pgm::Header& Pgm::header( void ) const
+const Pgm::Header& Pgm::header() const
 {
     return m_header;
 }
 
 /*==========================================================================*/
 /**
- *  Returns the image width.
+ *  @brief  Returns the image width.
  *  @return image width
  */
 /*==========================================================================*/
-size_t Pgm::width( void ) const
+size_t Pgm::width() const
 {
     return m_width;
 }
 
 /*==========================================================================*/
 /**
- *  Returns the image height.
+ *  @brief  Returns the image height.
  *  @return image height
  */
 /*==========================================================================*/
-size_t Pgm::height( void ) const
+size_t Pgm::height() const
 {
     return m_height;
 }
 
 /*==========================================================================*/
 /**
- *  Returns the pixel data.
+ *  @brief  Returns the pixel data.
  *  @return pixel data
  */
 /*==========================================================================*/
-const kvs::ValueArray<kvs::UInt8>& Pgm::data( void ) const
+const kvs::ValueArray<kvs::UInt8>& Pgm::pixels() const
 {
-    return m_data;
+    return m_pixels;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Prints information of the PGM image.
+ *  @param  os [in] output stream
+ *  @param  indent [in] indent
+ */
+/*===========================================================================*/
 void Pgm::print( std::ostream& os, const kvs::Indent& indent ) const
 {
     os << indent << "Filename : " << BaseClass::filename() << std::endl;
@@ -120,8 +134,8 @@ void Pgm::print( std::ostream& os, const kvs::Indent& indent ) const
 
 /*==========================================================================*/
 /**
- *  Read PGM image.
- *  @param filename [in] filename
+ *  @brief  Reads PGM image.
+ *  @param  filename [in] filename
  *  @return true, if the reading process is done successfully
  */
 /*==========================================================================*/
@@ -143,12 +157,12 @@ bool Pgm::read( const std::string& filename )
     m_header.read( ifs );
 
     // Get the image information.
-    m_width   = m_header.width();
-    m_height  = m_header.height();
+    m_width = m_header.width();
+    m_height = m_header.height();
 
     // Allocate the pixel data.
     const size_t npixels = m_width * m_height;
-    m_data.allocate( npixels );
+    m_pixels.allocate( npixels );
 
     // Ascii data.
     if ( m_header.isP2() )
@@ -158,13 +172,13 @@ bool Pgm::read( const std::string& filename )
             size_t v;
             ifs >> v;
 
-            m_data[i] = static_cast<kvs::UInt8>( v );
+            m_pixels[i] = static_cast<kvs::UInt8>( v );
         }
     }
     // Binary data.
     else if ( m_header.isP5() )
     {
-        ifs.read( reinterpret_cast<char*>( m_data.data() ), m_header.size() );
+        ifs.read( reinterpret_cast<char*>( m_pixels.data() ), m_header.size() );
     }
     else
     {
@@ -182,8 +196,8 @@ bool Pgm::read( const std::string& filename )
 
 /*==========================================================================*/
 /**
- *  Write PGM image.
- *  @param filename [in] filename
+ *  @brief  Writes PGM image.
+ *  @param  filename [in] filename
  *  @return true, if the writing process is done successfully
  */
 /*==========================================================================*/
@@ -205,7 +219,7 @@ bool Pgm::write( const std::string& filename )
     this->set_header();
     m_header.write( ofs );
 
-    ofs.write( reinterpret_cast<char*>( m_data.data() ), m_header.size() );
+    ofs.write( reinterpret_cast<char*>( m_pixels.data() ), m_header.size() );
     ofs.close();
 
     return true;
@@ -213,10 +227,10 @@ bool Pgm::write( const std::string& filename )
 
 /*===========================================================================*/
 /**
- *  @brief  Set header information.
+ *  @brief  Sets header information.
  */
 /*===========================================================================*/
-void Pgm::set_header( void )
+void Pgm::set_header()
 {
     const std::string format = "P5";
     m_header.set( format, m_width, m_height );

@@ -14,13 +14,14 @@
 #ifndef KVS__BMP_H_INCLUDE
 #define KVS__BMP_H_INCLUDE
 
+#include <iostream>
+#include <fstream>
 #include <kvs/FileFormatBase>
 #include <kvs/ClassName>
 #include <kvs/Type>
 #include <kvs/ValueArray>
 #include <kvs/Indent>
-#include <iostream>
-#include <fstream>
+#include <kvs/Deprecated>
 #include "FileHeader.h"
 #include "InfoHeader.h"
 
@@ -48,7 +49,7 @@ private:
     size_t m_width; ///< width
     size_t m_height; ///< height
     size_t m_bpp; ///< bits per pixel
-    kvs::ValueArray<kvs::UInt8> m_data; ///< pixel data
+    kvs::ValueArray<kvs::UInt8> m_pixels; ///< pixel data
 
 public:
 
@@ -57,7 +58,7 @@ public:
 public:
 
     Bmp();
-    Bmp( const size_t width, const size_t height, const kvs::ValueArray<kvs::UInt8>& data );
+    Bmp( const size_t width, const size_t height, const kvs::ValueArray<kvs::UInt8>& pixels );
     Bmp( const std::string& filename );
 
     const Bmp::FileHeader& fileHeader() const;
@@ -65,7 +66,7 @@ public:
     size_t width() const;
     size_t height() const;
     size_t bitsPerPixel() const;
-    kvs::ValueArray<kvs::UInt8> data() const;
+    const kvs::ValueArray<kvs::UInt8>& pixels() const;
 
     void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
     bool read( const std::string& filename );
@@ -75,6 +76,9 @@ protected:
 
     void set_header();
     void skip_header_and_pallete( std::ifstream& ifs );
+
+public:
+    KVS_DEPRECATED( kvs::ValueArray<kvs::UInt8> data() const ) { return this->pixels(); }
 };
 
 } // end of namespace kvs
