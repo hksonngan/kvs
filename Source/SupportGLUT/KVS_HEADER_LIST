@@ -1,8 +1,8 @@
 GLUT
-Renderer/Axis2DMatrixRenderer
-Renderer/Axis2DRenderer
+Renderer/Axis2D
+Renderer/Axis2DMatrix
 Renderer/Axis3D
-Renderer/ParallelAxisRenderer
+Renderer/ParallelAxis
 Viewer/Application
 Viewer/Histogram
 Viewer/LegendBar

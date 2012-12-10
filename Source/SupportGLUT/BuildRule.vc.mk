@@ -3,10 +3,10 @@
 
 
 OBJECTS = \
-$(OUTDIR)\.\Renderer\Axis2DMatrixRenderer.obj \
-$(OUTDIR)\.\Renderer\Axis2DRenderer.obj \
+$(OUTDIR)\.\Renderer\Axis2D.obj \
+$(OUTDIR)\.\Renderer\Axis2DMatrix.obj \
 $(OUTDIR)\.\Renderer\Axis3D.obj \
-$(OUTDIR)\.\Renderer\ParallelAxisRenderer.obj \
+$(OUTDIR)\.\Renderer\ParallelAxis.obj \
 $(OUTDIR)\.\Viewer\Application.obj \
 $(OUTDIR)\.\Viewer\Histogram.obj \
 $(OUTDIR)\.\Viewer\LegendBar.obj \
