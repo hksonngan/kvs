@@ -1,6 +1,6 @@
 /*****************************************************************************/
 /**
- *  @file   Axis2DMatrixRenderer.h
+ *  @file   Axis2DMatrix.h
  *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
@@ -12,8 +12,8 @@
  *  $Id$
  */
 /*****************************************************************************/
-#ifndef KVS__GLUT__AXIS_2D_MATRIX_RENDERER_H_INCLUDE
-#define KVS__GLUT__AXIS_2D_MATRIX_RENDERER_H_INCLUDE
+#ifndef KVS__GLUT__AXIS_2D_MATRIX_H_INCLUDE
+#define KVS__GLUT__AXIS_2D_MATRIX_H_INCLUDE
 
 #include <kvs/RendererBase>
 #include <kvs/Module>
@@ -33,12 +33,12 @@ namespace glut
 
 /*===========================================================================*/
 /**
- *  @brief  Axis2DMatrixRenderer class.
+ *  @brief  Axis2DMatrix class.
  */
 /*===========================================================================*/
-class Axis2DMatrixRenderer : public kvs::RendererBase
+class Axis2DMatrix : public kvs::RendererBase
 {
-    kvsModuleName( kvs::Axis2DMatrixRenderer );
+    kvsModuleName( kvs::Axis2DMatrix );
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::RendererBase );
 
@@ -56,7 +56,7 @@ protected:
 
 public:
 
-    Axis2DMatrixRenderer( void );
+    Axis2DMatrix( void );
 
 public:
 
@@ -103,4 +103,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS__GLUT__AXIS_2D_MATRIX_RENDERER_H_INCLUDE
+#endif // KVS__GLUT__AXIS_2D_MATRIX_H_INCLUDE

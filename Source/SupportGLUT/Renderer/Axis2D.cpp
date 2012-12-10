@@ -1,6 +1,6 @@
 /*****************************************************************************/
 /**
- *  @file   Axis2DRenderer.cpp
+ *  @file   Axis2D.cpp
  *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
@@ -12,7 +12,7 @@
  *  $Id$
  */
 /*****************************************************************************/
-#include "Axis2DRenderer.h"
+#include "Axis2D.h"
 #include <kvs/OpenGL>
 #include <kvs/Camera>
 #include <kvs/Light>
@@ -85,10 +85,10 @@ namespace glut
 
 /*===========================================================================*/
 /**
- *  @brief  Constructs a new Axis2DRenderer class.
+ *  @brief  Constructs a new Axis2D class.
  */
 /*===========================================================================*/
-Axis2DRenderer::Axis2DRenderer( void ):
+Axis2D::Axis2D( void ):
     m_top_margin( 30 ),
     m_bottom_margin( 30 ),
     m_left_margin( 30 ),
@@ -106,7 +106,7 @@ Axis2DRenderer::Axis2DRenderer( void ):
  *  @param  top_margin [in] margin
  */
 /*===========================================================================*/
-void Axis2DRenderer::setTopMargin( const int top_margin )
+void Axis2D::setTopMargin( const int top_margin )
 {
     m_top_margin = top_margin;
 }
@@ -117,7 +117,7 @@ void Axis2DRenderer::setTopMargin( const int top_margin )
  *  @param  bottom_margin [in] margin
  */
 /*===========================================================================*/
-void Axis2DRenderer::setBottomMargin( const int bottom_margin )
+void Axis2D::setBottomMargin( const int bottom_margin )
 {
     m_bottom_margin = bottom_margin;
 }
@@ -128,7 +128,7 @@ void Axis2DRenderer::setBottomMargin( const int bottom_margin )
  *  @param  left_margin [in] left margin
  */
 /*===========================================================================*/
-void Axis2DRenderer::setLeftMargin( const int left_margin )
+void Axis2D::setLeftMargin( const int left_margin )
 {
     m_left_margin = left_margin;
 }
@@ -139,7 +139,7 @@ void Axis2DRenderer::setLeftMargin( const int left_margin )
  *  @param  right_margin [in] right margin
  */
 /*===========================================================================*/
-void Axis2DRenderer::setRightMargin( const int right_margin )
+void Axis2D::setRightMargin( const int right_margin )
 {
     m_right_margin = right_margin;
 }
@@ -150,7 +150,7 @@ void Axis2DRenderer::setRightMargin( const int right_margin )
  *  @param  axis_width [in] axis width
  */
 /*===========================================================================*/
-void Axis2DRenderer::setAxisWidth( const kvs::Real32 axis_width )
+void Axis2D::setAxisWidth( const kvs::Real32 axis_width )
 {
     m_axis_width = axis_width;
 }
@@ -161,7 +161,7 @@ void Axis2DRenderer::setAxisWidth( const kvs::Real32 axis_width )
  *  @param  axis_color [in] axis color
  */
 /*===========================================================================*/
-void Axis2DRenderer::setAxisColor( const kvs::RGBColor axis_color )
+void Axis2D::setAxisColor( const kvs::RGBColor axis_color )
 {
     m_axis_color = axis_color;
 }
@@ -172,7 +172,7 @@ void Axis2DRenderer::setAxisColor( const kvs::RGBColor axis_color )
  *  @param  value_color [in] value color
  */
 /*===========================================================================*/
-void Axis2DRenderer::setValueColor( const kvs::RGBColor value_color )
+void Axis2D::setValueColor( const kvs::RGBColor value_color )
 {
     m_value_color = value_color;
 }
@@ -183,7 +183,7 @@ void Axis2DRenderer::setValueColor( const kvs::RGBColor value_color )
  *  @param  label_color [in] label color
  */
 /*===========================================================================*/
-void Axis2DRenderer::setLabelColor( const kvs::RGBColor label_color )
+void Axis2D::setLabelColor( const kvs::RGBColor label_color )
 {
     m_label_color = label_color;
 }
@@ -194,7 +194,7 @@ void Axis2DRenderer::setLabelColor( const kvs::RGBColor label_color )
  *  @return top margin
  */
 /*===========================================================================*/
-const int Axis2DRenderer::topMargin( void ) const
+const int Axis2D::topMargin( void ) const
 {
     return( m_top_margin );
 }
@@ -205,7 +205,7 @@ const int Axis2DRenderer::topMargin( void ) const
  *  @return bottom margin
  */
 /*===========================================================================*/
-const int Axis2DRenderer::bottomMargin( void ) const
+const int Axis2D::bottomMargin( void ) const
 {
     return( m_bottom_margin );
 }
@@ -216,7 +216,7 @@ const int Axis2DRenderer::bottomMargin( void ) const
  *  @return left margin
  */
 /*===========================================================================*/
-const int Axis2DRenderer::leftMargin( void ) const
+const int Axis2D::leftMargin( void ) const
 {
     return( m_left_margin );
 }
@@ -227,7 +227,7 @@ const int Axis2DRenderer::leftMargin( void ) const
  *  @return right margin
  */
 /*===========================================================================*/
-const int Axis2DRenderer::rightMargin( void ) const
+const int Axis2D::rightMargin( void ) const
 {
     return( m_right_margin );
 }
@@ -238,7 +238,7 @@ const int Axis2DRenderer::rightMargin( void ) const
  *  @return axis width
  */
 /*===========================================================================*/
-const kvs::Real32 Axis2DRenderer::axisWidth( void ) const
+const kvs::Real32 Axis2D::axisWidth( void ) const
 {
     return( m_axis_width );
 }
@@ -249,7 +249,7 @@ const kvs::Real32 Axis2DRenderer::axisWidth( void ) const
  *  @return axis color.
  */
 /*===========================================================================*/
-const kvs::RGBColor Axis2DRenderer::axisColor( void ) const
+const kvs::RGBColor Axis2D::axisColor( void ) const
 {
     return( m_axis_color );
 }
@@ -260,7 +260,7 @@ const kvs::RGBColor Axis2DRenderer::axisColor( void ) const
  *  @return value color
  */
 /*===========================================================================*/
-const kvs::RGBColor Axis2DRenderer::valueColor( void ) const
+const kvs::RGBColor Axis2D::valueColor( void ) const
 {
     return( m_value_color );
 }
@@ -271,7 +271,7 @@ const kvs::RGBColor Axis2DRenderer::valueColor( void ) const
  *  @return label color
  */
 /*===========================================================================*/
-const kvs::RGBColor Axis2DRenderer::labelColor( void ) const
+const kvs::RGBColor Axis2D::labelColor( void ) const
 {
     return( m_label_color );
 }
@@ -284,7 +284,7 @@ const kvs::RGBColor Axis2DRenderer::labelColor( void ) const
  *  @param  light [in] pointer ot light
  */
 /*===========================================================================*/
-void Axis2DRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light )
+void Axis2D::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light )
 {
     kvs::TableObject* table = kvs::TableObject::DownCast( object );
 

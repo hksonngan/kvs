@@ -1,6 +1,6 @@
 /*****************************************************************************/
 /**
- *  @file   Axis2DRenderer.h
+ *  @file   Axis2D.h
  *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
@@ -12,8 +12,8 @@
  *  $Id$
  */
 /*****************************************************************************/
-#ifndef KVS__GLUT__AXIS_2D_RENDERER_H_INCLUDE
-#define KVS__GLUT__AXIS_2D_RENDERER_H_INCLUDE
+#ifndef KVS__GLUT__AXIS_2D_H_INCLUDE
+#define KVS__GLUT__AXIS_2D_H_INCLUDE
 
 #include <kvs/RendererBase>
 #include <kvs/Module>
@@ -33,12 +33,12 @@ namespace glut
 
 /*===========================================================================*/
 /**
- *  @brief  Axis2DRenderer class.
+ *  @brief  Axis 2D class.
  */
 /*===========================================================================*/
-class Axis2DRenderer : public kvs::RendererBase
+class Axis2D : public kvs::RendererBase
 {
-    kvsModuleName( kvs::glut::Axis2DRenderer );
+    kvsModuleName( kvs::glut::Axis2D );
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::RendererBase );
 
@@ -48,14 +48,14 @@ protected:
     int m_bottom_margin; ///< bottom margin
     int m_left_margin; ///< left margin
     int m_right_margin; ///< right margin
-    kvs::Real32   m_axis_width; ///< axis width
+    kvs::Real32 m_axis_width; ///< axis width
     kvs::RGBColor m_axis_color; ///< axis color
     kvs::RGBColor m_value_color; ///< value color
     kvs::RGBColor m_label_color; ///< label color
 
 public:
 
-    Axis2DRenderer( void );
+    Axis2D( void );
 
 public:
 
@@ -100,4 +100,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS__GLUT__AXIS_2D_RENDERER_H_INCLUDE
+#endif // KVS__GLUT__AXIS_2D_H_INCLUDE

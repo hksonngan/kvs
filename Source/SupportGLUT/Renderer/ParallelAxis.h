@@ -1,6 +1,6 @@
 /*****************************************************************************/
 /**
- *  @file   ParallelAxisRenderer.h
+ *  @file   ParallelAxis.h
  *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
@@ -12,8 +12,8 @@
  *  $Id$
  */
 /*****************************************************************************/
-#ifndef KVS__GLUT__PARALLEL_AXIS_RENDERER_H_INCLUDE
-#define KVS__GLUT__PARALLEL_AXIS_RENDERER_H_INCLUDE
+#ifndef KVS__GLUT__PARALLEL_AXIS_H_INCLUDE
+#define KVS__GLUT__PARALLEL_AXIS_H_INCLUDE
 
 #include <kvs/RendererBase>
 #include <kvs/Module>
@@ -32,12 +32,12 @@ namespace glut
 
 /*===========================================================================*/
 /**
- *  @brief  ParallelAxisRenderer class.
+ *  @brief  ParallelAxis class.
  */
 /*===========================================================================*/
-class ParallelAxisRenderer : public kvs::RendererBase
+class ParallelAxis : public kvs::RendererBase
 {
-    kvsModuleName( kvs::glut::ParallelAxisRenderer );
+    kvsModuleName( kvs::glut::ParallelAxis );
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::RendererBase );
 
@@ -54,7 +54,7 @@ protected:
 
 public:
 
-    ParallelAxisRenderer( void );
+    ParallelAxis( void );
 
 public:
 
@@ -99,4 +99,4 @@ public:
 
 } // end of namespace kvs
 
-#endif // KVS__GLUT__PARALLEL_AXIS_RENDERER_H_INCLUDE
+#endif // KVS__GLUT__PARALLEL_AXIS_H_INCLUDE

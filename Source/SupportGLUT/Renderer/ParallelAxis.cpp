@@ -1,6 +1,6 @@
 /*****************************************************************************/
 /**
- *  @file   ParallelAxisRenderer.cpp
+ *  @file   ParallelAxis.cpp
  *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
@@ -12,7 +12,7 @@
  *  $Id$
  */
 /*****************************************************************************/
-#include "ParallelAxisRenderer.h"
+#include "ParallelAxis.h"
 #include <kvs/OpenGL>
 #include <kvs/Camera>
 #include <kvs/Light>
@@ -86,10 +86,10 @@ namespace glut
 
 /*===========================================================================*/
 /**
- *  @brief  Constructs a new ParallelAxisRenderer class.
+ *  @brief  Constructs a new ParallelAxis class.
  */
 /*===========================================================================*/
-ParallelAxisRenderer::ParallelAxisRenderer( void ):
+ParallelAxis::ParallelAxis( void ):
     m_top_margin( 20 ),
     m_bottom_margin( 20 ),
     m_left_margin( 30 ),
@@ -107,7 +107,7 @@ ParallelAxisRenderer::ParallelAxisRenderer( void ):
  *  @return top margin
  */
 /*===========================================================================*/
-size_t ParallelAxisRenderer::topMargin( void ) const
+size_t ParallelAxis::topMargin( void ) const
 {
     return( m_top_margin );
 }
@@ -118,7 +118,7 @@ size_t ParallelAxisRenderer::topMargin( void ) const
  *  @return bottom margin
  */
 /*===========================================================================*/
-size_t ParallelAxisRenderer::bottomMargin( void ) const
+size_t ParallelAxis::bottomMargin( void ) const
 {
     return( m_bottom_margin );
 }
@@ -129,7 +129,7 @@ size_t ParallelAxisRenderer::bottomMargin( void ) const
  *  @return left margin
  */
 /*===========================================================================*/
-size_t ParallelAxisRenderer::leftMargin( void ) const
+size_t ParallelAxis::leftMargin( void ) const
 {
     return( m_left_margin );
 }
@@ -140,7 +140,7 @@ size_t ParallelAxisRenderer::leftMargin( void ) const
  *  @return right margin
  */
 /*===========================================================================*/
-size_t ParallelAxisRenderer::rightMargin( void ) const
+size_t ParallelAxis::rightMargin( void ) const
 {
     return( m_right_margin );
 }
@@ -151,7 +151,7 @@ size_t ParallelAxisRenderer::rightMargin( void ) const
  *  @return axis width
  */
 /*===========================================================================*/
-kvs::Real32 ParallelAxisRenderer::axisWidth( void ) const
+kvs::Real32 ParallelAxis::axisWidth( void ) const
 {
     return( m_axis_width );
 }
@@ -162,7 +162,7 @@ kvs::Real32 ParallelAxisRenderer::axisWidth( void ) const
  *  @return axis color.
  */
 /*===========================================================================*/
-kvs::RGBColor ParallelAxisRenderer::axisColor( void ) const
+kvs::RGBColor ParallelAxis::axisColor( void ) const
 {
     return( m_axis_color );
 }
@@ -173,7 +173,7 @@ kvs::RGBColor ParallelAxisRenderer::axisColor( void ) const
  *  @return value color
  */
 /*===========================================================================*/
-kvs::RGBColor ParallelAxisRenderer::valueColor( void ) const
+kvs::RGBColor ParallelAxis::valueColor( void ) const
 {
     return( m_value_color );
 }
@@ -184,7 +184,7 @@ kvs::RGBColor ParallelAxisRenderer::valueColor( void ) const
  *  @return label color
  */
 /*===========================================================================*/
-kvs::RGBColor ParallelAxisRenderer::labelColor( void ) const
+kvs::RGBColor ParallelAxis::labelColor( void ) const
 {
     return( m_label_color );
 }
@@ -195,7 +195,7 @@ kvs::RGBColor ParallelAxisRenderer::labelColor( void ) const
  *  @param  top_margin [in] margin
  */
 /*===========================================================================*/
-void ParallelAxisRenderer::setTopMargin( const size_t top_margin )
+void ParallelAxis::setTopMargin( const size_t top_margin )
 {
     m_top_margin = top_margin;
 }
@@ -206,7 +206,7 @@ void ParallelAxisRenderer::setTopMargin( const size_t top_margin )
  *  @param  bottom_margin [in] margin
  */
 /*===========================================================================*/
-void ParallelAxisRenderer::setBottomMargin( const size_t bottom_margin )
+void ParallelAxis::setBottomMargin( const size_t bottom_margin )
 {
     m_bottom_margin = bottom_margin;
 }
@@ -217,7 +217,7 @@ void ParallelAxisRenderer::setBottomMargin( const size_t bottom_margin )
  *  @param  left_margin [in] margin
  */
 /*===========================================================================*/
-void ParallelAxisRenderer::setLeftMargin( const size_t left_margin )
+void ParallelAxis::setLeftMargin( const size_t left_margin )
 {
     m_left_margin = left_margin;
 }
@@ -228,7 +228,7 @@ void ParallelAxisRenderer::setLeftMargin( const size_t left_margin )
  *  @param  right_margin [in] margin
  */
 /*===========================================================================*/
-void ParallelAxisRenderer::setRightMargin( const size_t right_margin )
+void ParallelAxis::setRightMargin( const size_t right_margin )
 {
     m_right_margin = right_margin;
 }
@@ -239,7 +239,7 @@ void ParallelAxisRenderer::setRightMargin( const size_t right_margin )
  *  @param  axis_width [in] axis width
  */
 /*===========================================================================*/
-void ParallelAxisRenderer::setAxisWidth( const kvs::Real32 axis_width )
+void ParallelAxis::setAxisWidth( const kvs::Real32 axis_width )
 {
     m_axis_width = axis_width;
 }
@@ -250,7 +250,7 @@ void ParallelAxisRenderer::setAxisWidth( const kvs::Real32 axis_width )
  *  @param  axis_color [in] axis color
  */
 /*===========================================================================*/
-void ParallelAxisRenderer::setAxisColor( const kvs::RGBColor axis_color )
+void ParallelAxis::setAxisColor( const kvs::RGBColor axis_color )
 {
     m_axis_color = axis_color;
 }
@@ -261,7 +261,7 @@ void ParallelAxisRenderer::setAxisColor( const kvs::RGBColor axis_color )
  *  @param  value_color [in] value color
  */
 /*===========================================================================*/
-void ParallelAxisRenderer::setValueColor( const kvs::RGBColor value_color )
+void ParallelAxis::setValueColor( const kvs::RGBColor value_color )
 {
     m_value_color = value_color;
 }
@@ -272,7 +272,7 @@ void ParallelAxisRenderer::setValueColor( const kvs::RGBColor value_color )
  *  @param  label_color [in] label color
  */
 /*===========================================================================*/
-void ParallelAxisRenderer::setLabelColor( const kvs::RGBColor label_color )
+void ParallelAxis::setLabelColor( const kvs::RGBColor label_color )
 {
     m_label_color = label_color;
 }
@@ -285,7 +285,7 @@ void ParallelAxisRenderer::setLabelColor( const kvs::RGBColor label_color )
  *  @param  light [in] pointer ot light
  */
 /*===========================================================================*/
-void ParallelAxisRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light )
+void ParallelAxis::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light )
 {
     kvs::TableObject* table = kvs::TableObject::DownCast( object );
 
