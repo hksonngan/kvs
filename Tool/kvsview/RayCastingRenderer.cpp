@@ -536,7 +536,7 @@ const bool Main::exec( void )
         kvsMessageError("Cannot execute the visulization pipeline.");
         return( false );
     }
-    screen.registerObject( &pipe );
+//    screen.registerObject( &pipe );
 
     // Verbose information.
     if ( arg.verboseMode() )
@@ -551,6 +551,9 @@ const bool Main::exec( void )
     // Apply the specified parameters to the global and the visualization pipeline.
     arg.applyTo( screen, pipe );
     arg.applyTo( screen );
+
+    // The ray casting renderer should be registered after the axis and bounds are registered.
+    screen.registerObject( const_cast<kvs::ObjectBase*>(pipe.object()), const_cast<kvs::RendererBase*>(pipe.renderer()) );
 
     // Show the screen.
     screen.show();

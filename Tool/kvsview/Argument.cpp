@@ -14,12 +14,13 @@
 #include "Argument.h"
 #include <kvs/DebugNew>
 #include <kvs/Bounds>
-#include <kvs/AxisObject>
+//#include <kvs/AxisObject>
 #include <kvs/PointRenderer>
 #include <kvs/LineRenderer>
 #include <kvs/PolygonRenderer>
 #include <kvs/Background>
-#include <kvs/glut/AxisRenderer>
+//#include <kvs/glut/AxisRenderer>
+#include <kvs/glut/Axis3D>
 #include "CommandName.h"
 #include "PointRenderer.h"
 #include "LineRenderer.h"
@@ -108,13 +109,13 @@ void Argument::Common::set_options( void )
     addOption("antialiasing", "Enable anti-aliasing. (optional)", 0, false );
     addOption("axis", "Show axis. (optional)", 0, false );
     addOption("axis_color", "Set axis color. (default: 0 0 0)", 3, false );
-    addOption("axis_tag_color", "Set axis tag color. (default: 0 0 0)", 3, false );
+    addOption("axis_label_color", "Set axis label color. (default: 0 0 0)", 3, false );
     addOption("axis_line_width", "Set axis line width. (default: 2)", 1, false );
-    addOption("axis_subline_width", "Set axis subline width. (default: 1)", 1, false );
-    addOption("axis_x_tag", "Set tag for the x-axis. (default: X)", 1, false );
-    addOption("axis_y_tag", "Set tag for the y-axis. (default: Y)", 1, false );
-    addOption("axis_z_tag", "Set tag for the z-axis. (default: Z)", 1, false );
-    addOption("axis_sublines", "Set number of sublines for each axis. (default: 5 5 5)", 3, false );
+    addOption("axis_gridline_width", "Set axis gridline width. (default: 1)", 1, false );
+    addOption("axis_x_label", "Set label for the x-axis. (default: X)", 1, false );
+    addOption("axis_y_label", "Set label for the y-axis. (default: Y)", 1, false );
+    addOption("axis_z_label", "Set label for the z-axis. (default: Z)", 1, false );
+    addOption("axis_gridlines", "Set number of gridlines for each axis. (default: 5 5 5)", 3, false );
     addOption("background_color", "Set background color. (default: 212 221 229)", 3, false );
     addOption("background_color2", "Set top and bottom side color on the background. (optional: <top: r g b> <bottom: r g b>)", 6, false );
     addOption("bounds", "Show bounding box. (optional)", 0, false );
@@ -178,85 +179,76 @@ void Argument::Common::applyTo( kvs::glut::Screen& screen, kvs::VisualizationPip
     // Axis.
     if ( this->hasOption("axis") )
     {
-        kvs::AxisObject* axis = new kvs::AxisObject();
+        kvs::glut::Axis3D* axis = new kvs::glut::Axis3D();
 
-        axis->setLineColor( kvs::RGBColor( 0, 0, 0 ) );
+        axis->setAxisColor( kvs::RGBColor( 0, 0, 0 ) );
         if ( this->hasOption("axis_color") )
         {
             const kvs::UInt8 r( static_cast<kvs::UInt8>(this->optionValue<int>("axis_color",0)) );
             const kvs::UInt8 g( static_cast<kvs::UInt8>(this->optionValue<int>("axis_color",1)) );
             const kvs::UInt8 b( static_cast<kvs::UInt8>(this->optionValue<int>("axis_color",2)) );
-            axis->setLineColor( kvs::RGBColor( r, g, b ) );
+            axis->setAxisColor( kvs::RGBColor( r, g, b ) );
         }
 
-        axis->setTagColor( kvs::RGBColor( 0, 0, 0 ) );
-        if ( this->hasOption("axis_tag_color") )
+        axis->setLabelColor( kvs::RGBColor( 0, 0, 0 ) );
+        if ( this->hasOption("axis_label_color") )
         {
-            const kvs::UInt8 r( static_cast<kvs::UInt8>(this->optionValue<int>("axis_tag_color",0)) );
-            const kvs::UInt8 g( static_cast<kvs::UInt8>(this->optionValue<int>("axis_tag_color",1)) );
-            const kvs::UInt8 b( static_cast<kvs::UInt8>(this->optionValue<int>("axis_tag_color",2)) );
-            axis->setTagColor( kvs::RGBColor( r, g, b ) );
+            const kvs::UInt8 r( static_cast<kvs::UInt8>(this->optionValue<int>("axis_label_color",0)) );
+            const kvs::UInt8 g( static_cast<kvs::UInt8>(this->optionValue<int>("axis_label_color",1)) );
+            const kvs::UInt8 b( static_cast<kvs::UInt8>(this->optionValue<int>("axis_label_color",2)) );
+            axis->setLabelColor( kvs::RGBColor( r, g, b ) );
         }
 
-        axis->setLineWidth( 2.0f );
+        axis->setAxisWidth( 3.0f );
         if ( this->hasOption("axis_line_width") )
         {
             const kvs::Real32 width( this->optionValue<kvs::Real32>("axis_line_width") );
-            axis->setLineWidth( width );
+            axis->setAxisWidth( width );
         }
 
-        axis->setSublineWidth( 1.0f );
-        if ( this->hasOption("axis_subline_width") )
+        axis->setGridlineWidth( 1.0f );
+        if ( this->hasOption("axis_gridline_width") )
         {
-            const kvs::Real32 width( this->optionValue<kvs::Real32>("axis_subline_width") );
-            axis->setSublineWidth( width );
+            const kvs::Real32 width( this->optionValue<kvs::Real32>("axis_gridline_width") );
+            axis->setGridlineWidth( width );
         }
 
-        axis->setXTag("X");
-        if ( this->hasOption("axis_x_tag") )
+        axis->setXLabel("X");
+        if ( this->hasOption("axis_x_label") )
         {
-            const std::string tag( this->optionValue<std::string>("axis_x_tag") );
-            axis->setXTag( tag );
+            const std::string label( this->optionValue<std::string>("axis_x_label") );
+            axis->setXLabel( label );
         }
 
-        axis->setYTag("Y");
-        if ( this->hasOption("axis_y_tag") )
+        axis->setYLabel("Y");
+        if ( this->hasOption("axis_y_label") )
         {
-            const std::string tag( this->optionValue<std::string>("axis_y_tag") );
-            axis->setYTag( tag );
+            const std::string label( this->optionValue<std::string>("axis_y_label") );
+            axis->setYLabel( label );
         }
 
-        axis->setZTag("Z");
-        if ( this->hasOption("axis_z_tag") )
+        axis->setZLabel("Z");
+        if ( this->hasOption("axis_z_label") )
         {
-            const std::string tag( this->optionValue<std::string>("axis_z_tag") );
-            axis->setZTag( tag );
+            const std::string label( this->optionValue<std::string>("axis_z_tag") );
+            axis->setZLabel( label );
         }
 
-        axis->setNSublines( kvs::Vector3ui( 5, 5, 5 ) );
-        if ( this->hasOption("axis_sublines") )
+        axis->setNumberOfGridlines( kvs::Vector3ui( 5, 5, 5 ) );
+        if ( this->hasOption("axis_gridlines") )
         {
-            const unsigned int nx( this->optionValue<unsigned int>("axis_sublines",0) );
-            const unsigned int ny( this->optionValue<unsigned int>("axis_sublines",1) );
-            const unsigned int nz( this->optionValue<unsigned int>("axis_sublines",2) );
-            axis->setNSublines( kvs::Vector3ui( nx, ny, nz ) );
+            const unsigned int nx( this->optionValue<unsigned int>("axis_gridlines",0) );
+            const unsigned int ny( this->optionValue<unsigned int>("axis_gridlines",1) );
+            const unsigned int nz( this->optionValue<unsigned int>("axis_gridlines",2) );
+            axis->setNumberOfGridlines( kvs::Vector3ui( nx, ny, nz ) );
         }
-
-        axis->create( pipe.object() );
-
-        kvs::VisualizationPipeline pipeline( axis );
-        kvs::PipelineModule renderer( new kvs::glut::AxisRenderer() );
-        renderer.get<kvs::glut::AxisRenderer>()->disableShading();
 
         if ( this->hasOption("antialiasing") )
         {
-            renderer.get<kvs::glut::AxisRenderer>()->enableAntiAliasing();
+            axis->enableAntiAliasing();
         }
 
-        pipeline.connect( renderer );
-        pipeline.exec();
-
-        screen.registerObject( &pipeline );
+        screen.registerObject( const_cast<kvs::ObjectBase*>( pipe.object() ), axis );
     }
 
     // Bounding box.
