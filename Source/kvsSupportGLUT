@@ -2,7 +2,6 @@
 #include <SupportGLUT/Renderer/Axis2DMatrixRenderer.h>
 #include <SupportGLUT/Renderer/Axis2DRenderer.h>
 #include <SupportGLUT/Renderer/Axis3D.h>
-#include <SupportGLUT/Renderer/AxisRenderer.h>
 #include <SupportGLUT/Renderer/ParallelAxisRenderer.h>
 #include <SupportGLUT/Viewer/Application.h>
 #include <SupportGLUT/Viewer/Histogram.h>

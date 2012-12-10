@@ -211,7 +211,6 @@ Visualization/Mapper/StreamlineBase
 Visualization/Mapper/TetrahedralCell
 Visualization/Mapper/TransferFunction
 Visualization/Module
-Visualization/Object/AxisObject
 Visualization/Object/GeometryObjectBase
 Visualization/Object/GlyphObject
 Visualization/Object/ImageObject

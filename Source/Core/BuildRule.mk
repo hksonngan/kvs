@@ -260,7 +260,6 @@ $(OUTDIR)/./Visualization/Mapper/Streamline.o \
 $(OUTDIR)/./Visualization/Mapper/StreamlineBase.o \
 $(OUTDIR)/./Visualization/Mapper/TetrahedralCell.o \
 $(OUTDIR)/./Visualization/Mapper/TransferFunction.o \
-$(OUTDIR)/./Visualization/Object/AxisObject.o \
 $(OUTDIR)/./Visualization/Object/GeometryObjectBase.o \
 $(OUTDIR)/./Visualization/Object/ImageObject.o \
 $(OUTDIR)/./Visualization/Object/LineObject.o \

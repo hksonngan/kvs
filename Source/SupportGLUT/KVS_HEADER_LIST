@@ -2,7 +2,6 @@ GLUT
 Renderer/Axis2DMatrixRenderer
 Renderer/Axis2DRenderer
 Renderer/Axis3D
-Renderer/AxisRenderer
 Renderer/ParallelAxisRenderer
 Viewer/Application
 Viewer/Histogram

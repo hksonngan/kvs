@@ -14,12 +14,10 @@
 #include "Argument.h"
 #include <kvs/DebugNew>
 #include <kvs/Bounds>
-//#include <kvs/AxisObject>
 #include <kvs/PointRenderer>
 #include <kvs/LineRenderer>
 #include <kvs/PolygonRenderer>
 #include <kvs/Background>
-//#include <kvs/glut/AxisRenderer>
 #include <kvs/glut/Axis3D>
 #include "CommandName.h"
 #include "PointRenderer.h"

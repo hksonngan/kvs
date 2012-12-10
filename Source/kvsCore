@@ -211,7 +211,6 @@
 #include <Core/Visualization/Mapper/TetrahedralCell.h>
 #include <Core/Visualization/Mapper/TransferFunction.h>
 #include <Core/Visualization/Module.h>
-#include <Core/Visualization/Object/AxisObject.h>
 #include <Core/Visualization/Object/GeometryObjectBase.h>
 #include <Core/Visualization/Object/GlyphObject.h>
 #include <Core/Visualization/Object/ImageObject.h>

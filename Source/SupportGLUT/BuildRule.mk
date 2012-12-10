@@ -6,7 +6,6 @@ OBJECTS := \
 $(OUTDIR)/./Renderer/Axis2DMatrixRenderer.o \
 $(OUTDIR)/./Renderer/Axis2DRenderer.o \
 $(OUTDIR)/./Renderer/Axis3D.o \
-$(OUTDIR)/./Renderer/AxisRenderer.o \
 $(OUTDIR)/./Renderer/ParallelAxisRenderer.o \
 $(OUTDIR)/./Viewer/Application.o \
 $(OUTDIR)/./Viewer/Histogram.o \
