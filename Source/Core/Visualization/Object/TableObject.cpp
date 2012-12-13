@@ -59,10 +59,19 @@ const kvs::TableObject* TableObject::DownCast( const kvs::ObjectBase* object )
 /*===========================================================================*/
 TableObject::TableObject()
 {
-//    BaseClass::setMinMaxObjectCoords( kvs::Vector3f::Zero(), kvs::Vector3f::Zero() );
-//    BaseClass::setMinMaxExternalCoords( kvs::Vector3f::Zero(), kvs::Vector3f::Zero() );
     m_nrows = 0;
     m_ncolumns = 0;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns object type.
+ *  @return object type
+ */
+/*===========================================================================*/
+kvs::ObjectBase::ObjectType TableObject::objectType() const
+{
+    return kvs::ObjectBase::Table;
 }
 
 /*===========================================================================*/
@@ -76,13 +85,13 @@ void TableObject::shallowCopy( const TableObject& other )
     BaseClass::operator=( other );
     this->m_nrows = other.numberOfRows();
     this->m_ncolumns = other.numberOfColumns();
-    this->m_labels = other.labelList();
-    this->m_columns = other.columnList();
-    this->m_min_values = other.minValueList();
-    this->m_max_values = other.maxValueList();
-    this->m_min_ranges = other.minRangeList();
-    this->m_max_ranges = other.maxRangeList();
-    this->m_inside_range_list = other.insideRangeList();
+    this->m_labels = other.labels();
+    this->m_columns = other.columns();
+    this->m_min_values = other.minValues();
+    this->m_max_values = other.maxValues();
+    this->m_min_ranges = other.minRanges();
+    this->m_max_ranges = other.maxRanges();
+    this->m_inside_range_flags = other.insideRangeFlags();
 }
 
 /*===========================================================================*/
@@ -93,13 +102,13 @@ void TableObject::shallowCopy( const TableObject& other )
 /*===========================================================================*/
 void TableObject::deepCopy( const TableObject& other )
 {
-    { m_labels.clear(); LabelList().swap( m_labels ); }
-    { m_columns.clear(); ColumnList().swap( m_columns ); }
-    { m_min_values.clear(); ValueList().swap( m_min_values ); }
-    { m_max_values.clear(); ValueList().swap( m_max_values ); }
-    { m_min_ranges.clear(); ValueList().swap( m_min_ranges ); }
-    { m_max_ranges.clear(); ValueList().swap( m_max_ranges ); }
-    { m_inside_range_list.clear(); RangeList().swap( m_inside_range_list ); }
+    { m_labels.clear(); Labels().swap( m_labels ); }
+    { m_columns.clear(); Columns().swap( m_columns ); }
+    { m_min_values.clear(); Values().swap( m_min_values ); }
+    { m_max_values.clear(); Values().swap( m_max_values ); }
+    { m_min_ranges.clear(); Values().swap( m_min_ranges ); }
+    { m_max_ranges.clear(); Values().swap( m_max_ranges ); }
+    { m_inside_range_flags.clear(); InsideRangeFlags().swap( m_inside_range_flags ); }
 
     BaseClass::operator=( other );
     this->m_nrows = other.numberOfRows();
@@ -110,7 +119,7 @@ void TableObject::deepCopy( const TableObject& other )
     for ( size_t i = 0; i < m_max_values.size(); i++ ) this->m_max_values.push_back( other.maxValue(i) );
     for ( size_t i = 0; i < m_min_ranges.size(); i++ ) this->m_min_ranges.push_back( other.minRange(i) );
     for ( size_t i = 0; i < m_max_ranges.size(); i++ ) this->m_max_ranges.push_back( other.maxRange(i) );
-    for ( size_t i = 0; i < m_inside_range_list.size(); i++ ) this->m_inside_range_list.push_back( other.insideRange(i) );
+    for ( size_t i = 0; i < m_inside_range_flags.size(); i++ ) this->m_inside_range_flags.push_back( other.insideRange(i) );
 }
 
 /*===========================================================================*/
@@ -126,15 +135,15 @@ void TableObject::print( std::ostream& os, const kvs::Indent& indent ) const
     os << indent << "Number of columns : " << this->numberOfColumns() << std::endl;
     os << indent << "Number of rows : " << this->numberOfRows() << std::endl;
     os << indent << "Labels for each column : ";
-    for ( size_t i = 0; i < this->labelList().size(); i++ ) os << "\"" << this->labelList()[i] << "\", "; os << std::endl;
+    for ( size_t i = 0; i < this->labels().size(); i++ ) os << "\"" << this->labels()[i] << "\", "; os << std::endl;
     os << indent << "Min. values for each column : ";
-    for ( size_t i = 0; i < this->minValueList().size(); i++ ) os << this->minValueList()[i] << ", "; os << std::endl;
+    for ( size_t i = 0; i < this->minValues().size(); i++ ) os << this->minValues()[i] << ", "; os << std::endl;
     os << indent << "Max. values for each column : ";
-    for ( size_t i = 0; i < this->maxValueList().size(); i++ ) os << this->maxValueList()[i] << ", "; os << std::endl;
+    for ( size_t i = 0; i < this->maxValues().size(); i++ ) os << this->maxValues()[i] << ", "; os << std::endl;
     os << indent << "Min. ranges for each column : ";
-    for ( size_t i = 0; i < this->minRangeList().size(); i++ ) os << this->minRangeList()[i] << ", "; os << std::endl;
+    for ( size_t i = 0; i < this->minRanges().size(); i++ ) os << this->minRanges()[i] << ", "; os << std::endl;
     os << indent << "Max. ranges for each column : ";
-    for ( size_t i = 0; i < this->maxRangeList().size(); i++ ) os << this->maxRangeList()[i] << ", "; os << std::endl;
+    for ( size_t i = 0; i < this->maxRanges().size(); i++ ) os << this->maxRanges()[i] << ", "; os << std::endl;
 }
 
 /*===========================================================================*/
@@ -256,7 +265,7 @@ void TableObject::addColumn( const kvs::AnyValueArray& array, const std::string&
     m_min_ranges.push_back( min_value );
     m_max_ranges.push_back( max_value );
 
-    m_inside_range_list.resize( m_nrows, 1 );
+    m_inside_range_flags.resize( m_nrows, 1 );
 }
 
 /*===========================================================================*/
@@ -287,9 +296,75 @@ size_t TableObject::numberOfRows() const
  *  @return label list
  */
 /*===========================================================================*/
-const TableObject::LabelList TableObject::labelList() const
+const TableObject::Labels& TableObject::labels() const
 {
     return m_labels;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns column list.
+ *  @return column list
+ */
+/*===========================================================================*/
+const TableObject::Columns& TableObject::columns() const
+{
+    return m_columns;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns minimum value list.
+ *  @return minimum value list
+ */
+/*===========================================================================*/
+const TableObject::Values& TableObject::minValues() const
+{
+    return m_min_values;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns maximum value list.
+ *  @return maximum value list
+ */
+/*===========================================================================*/
+const TableObject::Values& TableObject::maxValues() const
+{
+    return m_max_values;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns minimum range list.
+ *  @return minimum range list
+ */
+/*===========================================================================*/
+const kvs::TableObject::Values& TableObject::minRanges() const
+{
+    return m_min_ranges;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns maximum range list.
+ *  @return maximum range list
+ */
+/*===========================================================================*/
+const kvs::TableObject::Values& TableObject::maxRanges() const
+{
+    return m_max_ranges;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns inside range list.
+ *  @return inside range list
+ */
+/*===========================================================================*/
+const kvs::TableObject::InsideRangeFlags& TableObject::insideRangeFlags() const
+{
+    return m_inside_range_flags;
 }
 
 /*===========================================================================*/
@@ -299,20 +374,9 @@ const TableObject::LabelList TableObject::labelList() const
  *  @return label
  */
 /*===========================================================================*/
-const std::string TableObject::label( const size_t index ) const
+const std::string& TableObject::label( const size_t index ) const
 {
     return m_labels[index];
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns column list.
- *  @return column list
- */
-/*===========================================================================*/
-const TableObject::ColumnList TableObject::columnList() const
-{
-    return m_columns;
 }
 
 /*===========================================================================*/
@@ -329,17 +393,6 @@ const kvs::AnyValueArray& TableObject::column( const size_t index ) const
 
 /*===========================================================================*/
 /**
- *  @brief  Returns minimum value list.
- *  @return minimum value list
- */
-/*===========================================================================*/
-const TableObject::ValueList TableObject::minValueList() const
-{
-    return m_min_values;
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Returns minimum value of the column specified by the index.
  *  @param  index [in] column index
  *  @return minimum value
@@ -348,17 +401,6 @@ const TableObject::ValueList TableObject::minValueList() const
 kvs::Real64 TableObject::minValue( const size_t index ) const
 {
     return m_min_values[index];
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns maximum value list.
- *  @return maximum value list
- */
-/*===========================================================================*/
-const TableObject::ValueList TableObject::maxValueList() const
-{
-    return m_max_values;
 }
 
 /*===========================================================================*/
@@ -372,6 +414,43 @@ kvs::Real64 TableObject::maxValue( const size_t index ) const
 {
     return m_max_values[index];
 }
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns minimum range value of the column specified by the index.
+ *  @param  column_index [in] column index
+ *  @return minimum range value
+ */
+/*===========================================================================*/
+kvs::Real64 TableObject::minRange( const size_t column_index ) const
+{
+    return m_min_ranges[column_index];
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns maximum range value of the column specified by the index.
+ *  @param  column_index [in] column index
+ *  @return maximum range value
+ */
+/*===========================================================================*/
+kvs::Real64 TableObject::maxRange( const size_t column_index ) const
+{
+    return m_max_ranges[column_index];
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns true if the value of the row specified by the index is inside the range.
+ *  @param  row_index [in] row index
+ *  @return true, if the value is inside the range
+ */
+/*===========================================================================*/
+bool TableObject::insideRange( const size_t row_index ) const
+{
+    return m_inside_range_flags[row_index] == 1;
+}
+
 
 /*===========================================================================*/
 /**
@@ -433,7 +512,7 @@ void TableObject::setMinRange( const size_t column_index, const kvs::Real64 rang
             const kvs::Real64 value = column[i].to<kvs::Real64>();
             if (  min_range_old <= value && value <= min_range_new )
             {
-                m_inside_range_list[i] = 0;
+                m_inside_range_flags[i] = 0;
             }
         }
     }
@@ -446,14 +525,14 @@ void TableObject::setMinRange( const size_t column_index, const kvs::Real64 rang
          */
         for ( size_t i = 0; i < nrows; i++ )
         {
-            m_inside_range_list[i] = 1;
+            m_inside_range_flags[i] = 1;
             for ( size_t j = 0; j < ncolumns; j++ )
             {
                 const kvs::AnyValueArray& column = this->column( j );
                 const kvs::Real64 value = column[i].to<kvs::Real64>();
                 if (  !( m_min_ranges[j] <= value && value <= m_max_ranges[j] ) )
                 {
-                    m_inside_range_list[i] = 0;
+                    m_inside_range_flags[i] = 0;
                     break;
                 }
             }
@@ -490,14 +569,14 @@ void TableObject::setMaxRange( const size_t column_index, const kvs::Real64 rang
          */
         for ( size_t i = 0; i < nrows; i++ )
         {
-            m_inside_range_list[i] = 1;
+            m_inside_range_flags[i] = 1;
             for ( size_t j = 0; j < ncolumns; j++ )
             {
                 const kvs::AnyValueArray& column = this->column( j );
                 const kvs::Real64 value = column[i].to<kvs::Real64>();
                 if (  !( m_min_ranges[j] <= value && value <= m_max_ranges[j] ) )
                 {
-                    m_inside_range_list[i] = 0;
+                    m_inside_range_flags[i] = 0;
                     break;
                 }
             }
@@ -517,7 +596,7 @@ void TableObject::setMaxRange( const size_t column_index, const kvs::Real64 rang
             const kvs::Real64 value = column[i].to<kvs::Real64>();
             if (  max_range_new <= value && value <= max_range_old )
             {
-                m_inside_range_list[i] = 0;
+                m_inside_range_flags[i] = 0;
             }
         }
     }
@@ -621,87 +700,106 @@ void TableObject::resetRange()
         m_min_ranges[i] = this->minValue(i);
     }
 
-    std::fill( m_inside_range_list.begin(), m_inside_range_list.end(), 1 );
+    std::fill( m_inside_range_flags.begin(), m_inside_range_flags.end(), 1 );
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Returns minimum range list.
- *  @return minimum range list
+ *  @brief  Sets a number of rows.
+ *  @param  nrows [in] number of rows
  */
 /*===========================================================================*/
-const kvs::TableObject::ValueList& TableObject::minRangeList() const
+void TableObject::setNumberOfRows( const size_t nrows )
 {
-    return m_min_ranges;
+    m_nrows = nrows;
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Returns maximum range list.
- *  @return maximum range list
+ *  @brief  Sets a number of columns.
+ *  @param  ncolumns [in] number of columns
  */
 /*===========================================================================*/
-const kvs::TableObject::ValueList& TableObject::maxRangeList() const
+void TableObject::setNumberOfColumns( const size_t ncolumns )
 {
-    return m_max_ranges;
+    m_ncolumns = ncolumns;
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Returns inside range list.
- *  @return inside range list
+ *  @brief  Sets a label list.
+ *  @param  labels [in] label list
  */
 /*===========================================================================*/
-const kvs::TableObject::RangeList& TableObject::insideRangeList() const
+void TableObject::setLabels( const Labels& labels )
 {
-    return m_inside_range_list;
+    m_labels = labels;
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Returns minimum range value of the column specified by the index.
- *  @param  column_index [in] column index
- *  @return minimum range value
+ *  @brief  Sets a column list.
+ *  @param  columns [in] column list
  */
 /*===========================================================================*/
-kvs::Real64 TableObject::minRange( const size_t column_index ) const
+void TableObject::setColumns( const Columns& columns )
 {
-    return m_min_ranges[column_index];
+    m_columns = columns;
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Returns maximum range value of the column specified by the index.
- *  @param  column_index [in] column index
- *  @return maximum range value
+ *  @brief  Sets a minimum value list.
+ *  @param  min_values [in] minimum value list
  */
 /*===========================================================================*/
-kvs::Real64 TableObject::maxRange( const size_t column_index ) const
+void TableObject::setMinValues( const Values& min_values )
 {
-    return m_max_ranges[column_index];
+    m_min_values = min_values;
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Returns true if the value of the row specified by the index is inside the range.
- *  @param  row_index [in] row index
- *  @return true, if the value is inside the range
+ *  @brief  Sets a maximum value list.
+ *  @param  max_values [in] maximum value list
  */
 /*===========================================================================*/
-bool TableObject::insideRange( const size_t row_index ) const
+void TableObject::setMaxValues( const Values& max_values )
 {
-    return m_inside_range_list[row_index] == 1;
+    m_max_values = max_values;
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Returns object type.
- *  @return object type
+ *  @brief  Sets a minimum range list.
+ *  @param  min_ranges [in] minimum range list
  */
 /*===========================================================================*/
-kvs::ObjectBase::ObjectType TableObject::objectType() const
+void TableObject::setMinRanges( const Values& min_ranges )
 {
-    return kvs::ObjectBase::Table;
+    m_min_ranges = min_ranges;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a maximum range list.
+ *  @param  max_ranges [in] maximum range list
+ */
+/*===========================================================================*/
+void TableObject::setMaxRanges( const Values& max_ranges )
+{
+    m_max_ranges = max_ranges;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a inside-range flag list.
+ *  @param  inside_range_flags [in] inside-range flag list
+ */
+/*===========================================================================*/
+void TableObject::setInsideRangeFlags( const InsideRangeFlags& inside_range_flags )
+{
+    m_inside_range_flags = inside_range_flags;
 }
 
 template<> void TableObject::addColumn<kvs::Int8>( const kvs::ValueArray<kvs::Int8>& array, const std::string& label );

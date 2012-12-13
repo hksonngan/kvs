@@ -1,8 +1,8 @@
 #include <SupportGLUT/GLUT.h>
-#include <SupportGLUT/Renderer/Axis2DMatrixRenderer.h>
-#include <SupportGLUT/Renderer/Axis2DRenderer.h>
+#include <SupportGLUT/Renderer/Axis2D.h>
+#include <SupportGLUT/Renderer/Axis2DMatrix.h>
 #include <SupportGLUT/Renderer/Axis3D.h>
-#include <SupportGLUT/Renderer/ParallelAxisRenderer.h>
+#include <SupportGLUT/Renderer/ParallelAxis.h>
 #include <SupportGLUT/Viewer/Application.h>
 #include <SupportGLUT/Viewer/Histogram.h>
 #include <SupportGLUT/Viewer/LegendBar.h>

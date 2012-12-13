@@ -41,22 +41,22 @@ class TableObject : public kvs::ObjectBase
 
 public:
 
-    typedef std::vector<std::string> LabelList;
-    typedef std::vector<kvs::AnyValueArray> ColumnList;
-    typedef std::vector<kvs::Real64> ValueList;
-    typedef std::vector<kvs::UInt8> RangeList;
+    typedef std::vector<std::string> Labels;
+    typedef std::vector<kvs::AnyValueArray> Columns;
+    typedef std::vector<kvs::Real64> Values;
+    typedef std::vector<kvs::UInt8> InsideRangeFlags;
 
 private:
 
     size_t m_nrows; ///< number of rows
     size_t m_ncolumns; ///< number of columns
-    LabelList m_labels; ///< label list
-    ColumnList m_columns; ///< column list
-    ValueList m_min_values; ///< min. values for each column
-    ValueList m_max_values; ///< max. values for each column
-    ValueList m_min_ranges; ///< min. value range
-    ValueList m_max_ranges; ///< max. value range
-    RangeList m_inside_range_list; ///< check flags for value range
+    Labels m_labels; ///< label list
+    Columns m_columns; ///< column list
+    Values m_min_values; ///< min. values for each column
+    Values m_max_values; ///< max. values for each column
+    Values m_min_ranges; ///< min. value range
+    Values m_max_ranges; ///< max. value range
+    InsideRangeFlags m_inside_range_flags; ///< check flags for value range
 
 public:
 
@@ -67,6 +67,7 @@ public:
 
     TableObject();
 
+    ObjectType objectType() const;
     void shallowCopy( const TableObject& other );
     void deepCopy( const TableObject& other );
     void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
@@ -77,14 +78,20 @@ public:
 
     size_t numberOfColumns() const;
     size_t numberOfRows() const;
-    const LabelList labelList() const;
-    const std::string label( const size_t index ) const;
-    const ColumnList columnList() const;
+    const Labels& labels() const;
+    const Columns& columns() const;
+    const Values& minValues() const;
+    const Values& maxValues() const;
+    const Values& minRanges() const;
+    const Values& maxRanges() const;
+    const InsideRangeFlags& insideRangeFlags() const;
+    const std::string& label( const size_t index ) const;
     const kvs::AnyValueArray& column( const size_t index ) const;
-    const ValueList minValueList() const;
     kvs::Real64 minValue( const size_t index ) const;
-    const ValueList maxValueList() const;
     kvs::Real64 maxValue( const size_t index ) const;
+    kvs::Real64 minRange( const size_t column_index ) const;
+    kvs::Real64 maxRange( const size_t column_index ) const;
+    bool insideRange( const size_t row_index ) const;
     template <typename T> const T& at( const size_t row, const size_t column ) const;
 
     void setMinValue( const size_t column_index, const kvs::Real64 value );
@@ -99,17 +106,32 @@ public:
     void resetRange( const size_t column_index );
     void resetRange();
 
-    const ValueList& minRangeList() const;
-    const ValueList& maxRangeList() const;
-    const RangeList& insideRangeList() const;
-    kvs::Real64 minRange( const size_t column_index ) const;
-    kvs::Real64 maxRange( const size_t column_index ) const;
-    bool insideRange( const size_t row_index ) const;
-    ObjectType objectType() const;
+protected:
+
+    void setNumberOfRows( const size_t nrows );
+    void setNumberOfColumns( const size_t ncolumns );
+    void setLabels( const Labels& labels );
+    void setColumns( const Columns& columns );
+    void setMinValues( const Values& min_values );
+    void setMaxValues( const Values& max_values );
+    void setMinRanges( const Values& min_ranges );
+    void setMaxRanges( const Values& max_ranges );
+    void setInsideRangeFlags( const InsideRangeFlags& inside_range_flags );
 
 public:
+    typedef KVS_DEPRECATED( std::vector<std::string> LabelList );
+    typedef KVS_DEPRECATED( std::vector<kvs::AnyValueArray> ColumnList );
+    typedef KVS_DEPRECATED( std::vector<kvs::Real64> ValueList );
+    typedef KVS_DEPRECATED( std::vector<kvs::UInt8> RangeList );
     KVS_DEPRECATED( size_t ncolumns() const ) { return this->numberOfColumns(); }
     KVS_DEPRECATED( size_t nrows() const ) { return this->numberOfRows(); }
+    KVS_DEPRECATED( const Labels labelList() const ) { return this->labels(); }
+    KVS_DEPRECATED( const Columns columnList() const ) { return this->columns(); }
+    KVS_DEPRECATED( const Values minValueList() const ) { return this->minValues(); }
+    KVS_DEPRECATED( const Values maxValueList() const ) { return this->maxValues(); }
+    KVS_DEPRECATED( const Values& minRangeList() const ) { return this->minRanges(); }
+    KVS_DEPRECATED( const Values& maxRangeList() const ) { return this->maxRanges(); }
+    KVS_DEPRECATED( const InsideRangeFlags& insideRangeList() const ) { return this->insideRangeFlags(); }
 };
 
 /*===========================================================================*/

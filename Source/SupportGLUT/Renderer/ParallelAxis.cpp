@@ -292,9 +292,9 @@ void ParallelAxis::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Ligh
     ::BeginDraw();
 
     bool has_label = false;
-    for ( size_t i = 0; i < table->labelList().size(); i++ )
+    for ( size_t i = 0; i < table->labels().size(); i++ )
     {
-        if ( table->labelList().at(i).size() > 0 ) { has_label = true; break; }
+        if ( table->labels().at(i).size() > 0 ) { has_label = true; break; }
     }
 
     const int x0 = m_left_margin;
