@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file WriteMakefile.cpp
+ *  @file   WriteMakefile.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -12,51 +13,29 @@
  */
 /****************************************************************************/
 #include "WriteMakefile.h"
-
-#include <string>  // For std::string.
-#include <fstream> // For std::ifstream, std::ofstream.
-
+#include <string>
+#include <fstream>
 #include <kvs/Message>
 #include <kvs/Compiler>
-
-#if defined ( KVS_COMPILER_VC )
 #include <kvs/Directory>
 #include <kvs/FileList>
 #include <kvs/File>
-#endif
-
+#include <kvs/String>
 #include "Constant.h"
-#include "ReplaceString.h"
 
 
-namespace kvsmake
+namespace
 {
 
-void WriteMakefile( const std::string& project_name )
-{
-    //  Open a template file.
-    std::ifstream in( kvsmake::MakefileTemplate.c_str() );
-    if ( !in.is_open() )
-    {
-        kvsMessageError( "Cannot open %s.", kvsmake::MakefileTemplate.c_str() );
-        return;
-    }
-
-    //  Open a Makefile.
-    std::ofstream out( kvsmake::Makefile.c_str() );
-    if ( !out.is_open() )
-    {
-        kvsMessageError( "Cannot open %s.", kvsmake::Makefile.c_str() );
-        return;
-    }
-
-    kvsmake::WriteMakefileBody( in, out, project_name );
-}
-
-void WriteMakefileBody(
-    std::ifstream&     in,
-    std::ofstream&     out,
-    const std::string& project_name )
+/*===========================================================================*/
+/**
+ *  @brief  Writes a makefile.
+ *  @param  in [in] input stream
+ *  @param  out [in] output stream
+ *  @param  project_name [in] project name
+ */
+/*===========================================================================*/
+void Write( std::ifstream& in, std::ofstream& out, const std::string& project_name )
 {
 #if defined ( KVS_COMPILER_VC )
     // Search cpp files.
@@ -65,16 +44,14 @@ void WriteMakefileBody(
     const kvs::Directory current_dir( "." );
     const kvs::FileList& file_list = current_dir.fileList();
 
-    kvs::FileList::const_iterator       iter = file_list.begin();
+    kvs::FileList::const_iterator iter = file_list.begin();
     const kvs::FileList::const_iterator end  = file_list.end();
-
     while ( iter != end )
     {
         if ( iter->extension() == "cpp" )
         {
             sources += ( iter->fileName() + " \\\n" );
         }
-
         ++iter;
     }
 #endif
@@ -83,17 +60,46 @@ void WriteMakefileBody(
     while ( !in.eof() )
     {
         std::string line( "" );
-
         std::getline( in, line );
-
-        line = kvsmake::ReplaceString( line, "PROJECT_NAME_REPLACED_BY_KVSMAKE", project_name );
-
+        line = kvs::String::Replace( line, "PROJECT_NAME_REPLACED_BY_KVSMAKE", project_name );
 #if defined ( KVS_COMPILER_VC )
-        line = kvsmake::ReplaceString( line, "SOURCES_REPLACED_BY_KVSMAKE", sources );
+        line = kvs::String::Replace( line, "SOURCES_REPLACED_BY_KVSMAKE", sources );
 #endif
-
         out << line << std::endl;
     }
+}
+
+}
+
+namespace kvsmake
+{
+
+/*===========================================================================*/
+/**
+ *  @brief  Writes a makefile.
+ *  @param  project_name [in] project name
+ */
+/*===========================================================================*/
+bool WriteMakefile( const std::string& project_name )
+{
+    //  Open a template file.
+    std::ifstream in( kvsmake::MakefileTemplate.c_str() );
+    if ( !in.is_open() )
+    {
+        kvsMessageError( "Cannot open %s.", kvsmake::MakefileTemplate.c_str() );
+        return false;
+    }
+
+    //  Open a Makefile.
+    std::ofstream out( kvsmake::Makefile.c_str() );
+    if ( !out.is_open() )
+    {
+        kvsMessageError( "Cannot open %s.", kvsmake::Makefile.c_str() );
+        return false;
+    }
+
+    ::Write( in, out, project_name );
+    return true;
 }
 
 } // end of namespace kvsmake

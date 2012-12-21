@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file CommandName.h
+ *  @file   CommandName.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -19,9 +20,7 @@
 
 namespace kvsmake
 {
-
 const std::string CommandName = "kvsmake";
-
 }
 
 #endif // KVSMAKE__COMMAND_NAME_H_INCLUDE

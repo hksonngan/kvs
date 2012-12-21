@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file WriteQtProject.h
+ *  @file   WriteQtProject.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -14,19 +15,13 @@
 #ifndef KVSMAKE__WRITE_QT_PROJECT_H_INCLUDE
 #define KVSMAKE__WRITE_QT_PROJECT_H_INCLUDE
 
-#include <string>  // For std::string.
-#include <fstream> // For std::ifstream, std::ofstream.
+#include <string>
 
 
 namespace kvsmake
 {
 
-void WriteQtProject( const std::string& project_name );
-
-void WriteQtProjectBody(
-    std::ifstream&     in,
-    std::ofstream&     out,
-    const std::string& project_name );
+bool WriteQtProject( const std::string& project_name );
 
 } // end of namespace kvsmake
 

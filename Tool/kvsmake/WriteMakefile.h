@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file WriteMakefile.h
+ *  @file   WriteMakefile.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -14,20 +15,14 @@
 #ifndef KVSMAKE__WRITE_MAKEFILE_H_INCLUDE
 #define KVSMAKE__WRITE_MAKEFILE_H_INCLUDE
 
-#include <string>  // For std::string.
-#include <fstream> // For std::ifstream, std::ofstream.
+#include <string>
 
 
 namespace kvsmake
 {
 
-void WriteMakefile( const std::string& project_name );
+bool WriteMakefile( const std::string& project_name );
 
-void WriteMakefileBody(
-    std::ifstream&     in,
-    std::ofstream&     out,
-    const std::string& project_name );
-
-} // end of namespace kvsmake
+}
 
 #endif // KVSMAKE__WRITE_MAKEFILE_H_INCLUDE

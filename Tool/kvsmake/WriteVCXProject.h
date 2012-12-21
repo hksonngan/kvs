@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file WriteVCProject.h
+ *  @file   WriteVCProject.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -14,19 +15,13 @@
 #ifndef KVSMAKE__WRITE_VCX_PROJECT_H_INCLUDE
 #define KVSMAKE__WRITE_VCX_PROJECT_H_INCLUDE
 
-#include <string>  // For std::string.
-#include <fstream> // For std::ifstream, std::ofstream.
+#include <string>
 
 
 namespace kvsmake
 {
 
-void WriteVCXProject( const std::string& project_name );
-
-void WriteVCXProjectBody(
-    std::ifstream&     in,
-    std::ofstream&     out,
-    const std::string& project_name );
+bool WriteVCXProject( const std::string& project_name );
 
 } // end of namespace kvsmake
 

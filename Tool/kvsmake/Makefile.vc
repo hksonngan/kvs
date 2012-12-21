@@ -30,7 +30,6 @@ TARGET_EXE = $(OUTDIR)\$(PROJECT_NAME).exe
 #  Object.
 #=============================================================================
 OBJECTS = \
-$(OUTDIR)\Argument.obj \
 $(OUTDIR)\WriteMakefile.obj \
 $(OUTDIR)\WriteQtProject.obj \
 $(OUTDIR)\WriteVCProject.obj \

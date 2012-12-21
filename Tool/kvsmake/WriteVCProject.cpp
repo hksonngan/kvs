@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file WriteVCProject.cpp
+ *  @file   WriteVCProject.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -12,49 +13,28 @@
  */
 /****************************************************************************/
 #include "WriteVCProject.h"
-
-#include <string>  // For std::string.
-#include <fstream> // For std::ifstream, std::ofstream.
-
+#include <string>
+#include <fstream>
 #include <kvs/Message>
 #include <kvs/Directory>
 #include <kvs/FileList>
 #include <kvs/File>
-
+#include <kvs/String>
 #include "Constant.h"
-#include "ReplaceString.h"
 
 
-namespace kvsmake
+namespace
 {
 
-void WriteVCProject( const std::string& project_name )
-{
-    //  Open a template file.
-    std::ifstream in( kvsmake::VCProjectTemplate.c_str() );
-    if ( !in.is_open() )
-    {
-        kvsMessageError( "Cannot open %s.", kvsmake::VCProjectTemplate.c_str() );
-        return;
-    }
-
-    //  Open a project file.
-    const std::string filename( project_name + ".vcproj" );
-
-    std::ofstream out( filename.c_str() );
-    if ( !out.is_open() )
-    {
-        kvsMessageError( "Cannot open %s.", filename.c_str() );
-        return;
-    }
-
-    kvsmake::WriteVCProjectBody( in, out, project_name );
-}
-
-void WriteVCProjectBody(
-    std::ifstream&     in,
-    std::ofstream&     out,
-    const std::string& project_name )
+/*===========================================================================*/
+/**
+ *  @brief  Writes a VC project name.
+ *  @param  in [in] input stream
+ *  @param  out [in] output stream
+ *  @param  project_name [in] project name
+ */
+/*===========================================================================*/
+void Write( std::ifstream& in, std::ofstream& out, const std::string& project_name )
 {
     //  Search the project's condition.
     std::string vc_version( "" );
@@ -122,19 +102,52 @@ void WriteVCProjectBody(
     while ( !in.eof() )
     {
         std::string line( "" );
-
         std::getline( in, line );
-
-        line = kvsmake::ReplaceString( line, "VC_VERSION_REPLACED_BY_KVSMAKE", vc_version );
-        line = kvsmake::ReplaceString( line, "PROJECT_NAME_REPLACED_BY_KVSMAKE", project_name );
-        line = kvsmake::ReplaceString( line, "HEADERS_REPLACED_BY_KVSMAKE", headers );
-        line = kvsmake::ReplaceString( line, "SOURCES_REPLACED_BY_KVSMAKE", sources );
-        line = kvsmake::ReplaceString( line, "DEFINITIONS_DEBUG_REPLACED_BY_KVSMAKE", definitions_debug );
-        line = kvsmake::ReplaceString( line, "DEFINITIONS_RELEASE_REPLACED_BY_KVSMAKE", definitions_release );
-        line = kvsmake::ReplaceString( line, "LIBRARIES_REPLACED_BY_KVSMAKE", libraries );
-
+        line = kvs::String::Replace( line, "VC_VERSION_REPLACED_BY_KVSMAKE", vc_version );
+        line = kvs::String::Replace( line, "PROJECT_NAME_REPLACED_BY_KVSMAKE", project_name );
+        line = kvs::String::Replace( line, "HEADERS_REPLACED_BY_KVSMAKE", headers );
+        line = kvs::String::Replace( line, "SOURCES_REPLACED_BY_KVSMAKE", sources );
+        line = kvs::String::Replace( line, "DEFINITIONS_DEBUG_REPLACED_BY_KVSMAKE", definitions_debug );
+        line = kvs::String::Replace( line, "DEFINITIONS_RELEASE_REPLACED_BY_KVSMAKE", definitions_release );
+        line = kvs::String::Replace( line, "LIBRARIES_REPLACED_BY_KVSMAKE", libraries );
         out << line << std::endl;
     }
+}
+
+}
+
+
+namespace kvsmake
+{
+
+/*===========================================================================*/
+/**
+ *  @brief  Writes a VC project file.
+ *  @param  project_name [in] project name
+ */
+/*===========================================================================*/
+bool WriteVCProject( const std::string& project_name )
+{
+    //  Open a template file.
+    std::ifstream in( kvsmake::VCProjectTemplate.c_str() );
+    if ( !in.is_open() )
+    {
+        kvsMessageError( "Cannot open %s.", kvsmake::VCProjectTemplate.c_str() );
+        return false;
+    }
+
+    //  Open a project file.
+    const std::string filename( project_name + ".vcproj" );
+
+    std::ofstream out( filename.c_str() );
+    if ( !out.is_open() )
+    {
+        kvsMessageError( "Cannot open %s.", filename.c_str() );
+        return false;
+    }
+
+    ::Write( in, out, project_name );
+    return true;
 }
 
 } // end of namespace kvsmake
