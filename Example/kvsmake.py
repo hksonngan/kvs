@@ -74,7 +74,7 @@ def KVSMake( dir_list, option ):
         command =  "cd " + dir + s
         if dir.count('SupportQt') > 0:
             projname = dir.replace('\\','/').rpartition('/')[2]
-            command += "kvsmake -qt " + projname + s + " qmake" + s
+            command += "kvsmake -qtproj " + projname + s + " qmake" + s
             command += make_option[0]
         else:
             command += "kvsmake -G" + s
