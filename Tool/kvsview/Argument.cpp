@@ -14,6 +14,7 @@
 #include "Argument.h"
 #include <kvs/DebugNew>
 #include <kvs/Bounds>
+#include <kvs/LineObject>
 #include <kvs/PointRenderer>
 #include <kvs/LineRenderer>
 #include <kvs/PolygonRenderer>
@@ -252,18 +253,20 @@ void Argument::Common::applyTo( kvs::glut::Screen& screen, kvs::VisualizationPip
     // Bounding box.
     if ( this->hasOption("bounds") )
     {
-        kvs::LineObject* bounds = new kvs::Bounds( pipe.object() );
+        kvs::Bounds* bounds = new kvs::Bounds();
+        kvs::LineObject* line = bounds->outputLineObject( pipe.object() );
+        delete bounds;
 
-        bounds->setColor( kvs::RGBColor( 0, 0, 0 ) );
+        line->setColor( kvs::RGBColor( 0, 0, 0 ) );
         if ( this->hasOption("bounds_color") )
         {
             const kvs::UInt8 r( static_cast<kvs::UInt8>(this->optionValue<int>("bounds_color",0)) );
             const kvs::UInt8 g( static_cast<kvs::UInt8>(this->optionValue<int>("bounds_color",1)) );
             const kvs::UInt8 b( static_cast<kvs::UInt8>(this->optionValue<int>("bounds_color",2)) );
-            bounds->setColor( kvs::RGBColor( r, g, b ) );
+            line->setColor( kvs::RGBColor( r, g, b ) );
         }
 
-        kvs::VisualizationPipeline pipeline( bounds );
+        kvs::VisualizationPipeline pipeline( line );
         kvs::PipelineModule renderer( new kvs::LineRenderer() );
         renderer.get<kvs::LineRenderer>()->disableShading();
 

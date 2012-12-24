@@ -14,30 +14,29 @@
 #ifndef KVS__BOUNDS_H_INCLUDE
 #define KVS__BOUNDS_H_INCLUDE
 
-#include <vector>
 #include <kvs/Module>
-#include <kvs/ObjectBase>
-#include <kvs/LineObject>
-#include <kvs/Vector2>
-#include <kvs/Vector3>
-#include <kvs/Type>
-#include "FilterBase.h"
+#include <kvs/RendererBase>
+#include <kvs/RGBColor>
 
 
 namespace kvs
 {
+
+class ObjectBase;
+class Camera;
+class Light;
+class LineObject;
 
 /*==========================================================================*/
 /**
  *  Create bounds object from volume data.
  */
 /*==========================================================================*/
-class Bounds : public kvs::FilterBase, public kvs::LineObject
+class Bounds : public kvs::RendererBase
 {
-    kvsModuleName( kvs::Bounds );
-    kvsModuleCategory( Filter );
-    kvsModuleBaseClass( kvs::FilterBase );
-    kvsModuleSuperClass( kvs::LineObject );
+    kvsModuleName( kvstest::Bounds );
+    kvsModuleCategory( Renderer );
+    kvsModuleBaseClass( kvs::RendererBase );
 
 public:
 
@@ -51,33 +50,43 @@ public:
 protected:
 
     Type m_type; ///< bounds type
-    float m_corner_scale; ///< length of corner line
-    float m_division; ///< division of circle
+    kvs::RGBColor m_line_color;
+    kvs::Real32 m_line_width;
+    kvs::Real32 m_corner_scale; ///< length of corner line
+    kvs::Real32 m_division; ///< division of circle
+    bool m_enable_anti_aliasing; ///< flag for anti-aliasing
+    bool m_show; ///< flag for showing the bounds
 
 public:
 
     Bounds();
-    Bounds( const kvs::ObjectBase* object, const Bounds::Type type = Bounds::Box );
-    Bounds( const kvs::Vector3f& min_coord, const kvs::Vector3f& max_coord, const Bounds::Type type = Bounds::Box );
-    virtual ~Bounds();
 
-    SuperClass* exec( const kvs::ObjectBase* object );
+    void exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
 
     void setType( const Bounds::Type type );
+    void setLineColor( const kvs::RGBColor& color );
+    void setLineWidth( const kvs::Real32 width );
     void setCornerScale( const float corner_scale );
     void setCircleDivision( const float division );
 
+    void enableAntiAliasing();
+    void disableAntiAliasing();
+    void show();
+    void hide();
+
+public:
+
+    kvs::LineObject* outputLineObject( const kvs::ObjectBase* object ) const;
+
 private:
 
-    void initialize();
-    void create_box_bounds();
-    void create_corner_bounds();
-    void create_circle_bounds();
-    void set_corner(
-        const kvs::Vector3f&      pos1,
-        const kvs::Vector3f&      pos2,
-        std::vector<kvs::Real32>* vertex,
-        std::vector<kvs::UInt32>* connect );
+    void draw_box_bounds( const kvs::ObjectBase* object );
+    void draw_corner_bounds( const kvs::ObjectBase* object );
+    void draw_circle_bounds( const kvs::ObjectBase* object );
+
+    kvs::LineObject* output_box_bounds( const kvs::ObjectBase* object ) const;
+    kvs::LineObject* output_corner_bounds( const kvs::ObjectBase* object ) const;
+    kvs::LineObject* output_circle_bounds( const kvs::ObjectBase* object ) const;
 };
 
 } // end of namespace kvs

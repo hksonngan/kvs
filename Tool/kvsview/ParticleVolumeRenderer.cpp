@@ -31,6 +31,7 @@
 #include <kvs/ObjectManager>
 #include <kvs/RendererManager>
 #include <kvs/IDManager>
+#include <kvs/LineObject>
 #include <kvs/glut/Application>
 #include <kvs/glut/Screen>
 #include <kvs/glut/TransferFunctionEditor>
@@ -651,17 +652,20 @@ const bool Main::exec( void )
     // For bounding box.
     if ( arg.hasOption("bounds") )
     {
-        kvs::LineObject* bounds = new kvs::Bounds( pipe.object() );
-        bounds->setColor( kvs::RGBColor( 0, 0, 0 ) );
+        kvs::Bounds* bounds = new kvs::Bounds();
+        kvs::LineObject* line = bounds->outputLineObject( pipe.object() );
+        delete bounds;
+
+        line->setColor( kvs::RGBColor( 0, 0, 0 ) );
         if ( arg.hasOption("bounds_color") )
         {
             const kvs::UInt8 r( static_cast<kvs::UInt8>(arg.optionValue<int>("bounds_color",0)) );
             const kvs::UInt8 g( static_cast<kvs::UInt8>(arg.optionValue<int>("bounds_color",1)) );
             const kvs::UInt8 b( static_cast<kvs::UInt8>(arg.optionValue<int>("bounds_color",2)) );
-            bounds->setColor( kvs::RGBColor( r, g, b ) );
+            line->setColor( kvs::RGBColor( r, g, b ) );
         }
 
-        kvs::VisualizationPipeline p( bounds );
+        kvs::VisualizationPipeline p( line );
         p.exec();
         p.renderer()->disableShading();
 
