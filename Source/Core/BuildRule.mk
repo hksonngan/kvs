@@ -209,7 +209,6 @@ $(OUTDIR)/./Visualization/Exporter/PointExporter.o \
 $(OUTDIR)/./Visualization/Exporter/PolygonExporter.o \
 $(OUTDIR)/./Visualization/Exporter/StructuredVolumeExporter.o \
 $(OUTDIR)/./Visualization/Exporter/UnstructuredVolumeExporter.o \
-$(OUTDIR)/./Visualization/Filter/Bounds.o \
 $(OUTDIR)/./Visualization/Filter/FilterBase.o \
 $(OUTDIR)/./Visualization/Filter/LineIntegralConvolution.o \
 $(OUTDIR)/./Visualization/Filter/StructuredVectorToScalar.o \
@@ -274,6 +273,7 @@ $(OUTDIR)/./Visualization/Pipeline/ObjectImporter.o \
 $(OUTDIR)/./Visualization/Pipeline/PipelineModule.o \
 $(OUTDIR)/./Visualization/Pipeline/VisualizationPipeline.o \
 $(OUTDIR)/./Visualization/Renderer/ArrowGlyph.o \
+$(OUTDIR)/./Visualization/Renderer/Bounds.o \
 $(OUTDIR)/./Visualization/Renderer/DiamondGlyph.o \
 $(OUTDIR)/./Visualization/Renderer/GlyphBase.o \
 $(OUTDIR)/./Visualization/Renderer/ImageRenderer.o \

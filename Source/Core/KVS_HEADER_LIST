@@ -157,7 +157,6 @@ Visualization/Exporter/PointExporter
 Visualization/Exporter/PolygonExporter
 Visualization/Exporter/StructuredVolumeExporter
 Visualization/Exporter/UnstructuredVolumeExporter
-Visualization/Filter/Bounds
 Visualization/Filter/FilterBase
 Visualization/Filter/LineIntegralConvolution
 Visualization/Filter/StructuredVectorToScalar
@@ -226,6 +225,7 @@ Visualization/Pipeline/ObjectImporter
 Visualization/Pipeline/PipelineModule
 Visualization/Pipeline/VisualizationPipeline
 Visualization/Renderer/ArrowGlyph
+Visualization/Renderer/Bounds
 Visualization/Renderer/DiamondGlyph
 Visualization/Renderer/GlyphBase
 Visualization/Renderer/GlyphRenderer
