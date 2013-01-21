@@ -50,9 +50,11 @@ void PointRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Lig
         this->initialize_shaders();
     }
 
+    BaseClass::startTimer();
     m_phong_shader.bind();
     BaseClass::exec( object, camera, light );
     m_phong_shader.unbind();
+    BaseClass::stopTimer();
 }
 
 /*==========================================================================*/

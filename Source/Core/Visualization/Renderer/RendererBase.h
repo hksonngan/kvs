@@ -17,6 +17,7 @@
 #include <string>
 #include <kvs/Timer>
 #include <kvs/Module>
+#include <kvs/Deprecated>
 
 
 namespace kvs
@@ -36,52 +37,37 @@ class RendererBase
     kvsModuleName( kvs::RendererBase );
     kvsModuleBase;
 
-protected:
+private:
 
-    std::string  m_name;         ///< renderer name
-    kvs::Timer   m_timer;        ///< timer
+    std::string m_name; ///< renderer name
+    kvs::Timer m_timer; ///< timer
     mutable bool m_shading_flag; ///< shading flag
 
 public:
 
-    RendererBase( void );
-
-    virtual ~RendererBase( void );
-
-public:
+    RendererBase();
+    virtual ~RendererBase();
 
     void setName( const std::string& name );
+    const std::string& name() const;
+    const kvs::Timer& timer() const;
+    bool isShading() const;
+    void enableShading() const;
+    void disableShading() const;
 
-    const std::string& name( void ) const;
-
-    const kvs::Timer& timer( void ) const;
-
-protected:
-
-    kvs::Timer& timer( void );
-
-public:
-
-    const bool isShading( void ) const;
-
-    void enableShading( void ) const;
-
-    void disableShading( void ) const;
-
-public:
-
-    void initialize( void );
-
-    virtual void exec(
-        kvs::ObjectBase* object,
-        kvs::Camera*     camera = NULL,
-        kvs::Light*      light  = NULL ) = 0;
+    virtual void exec( kvs::ObjectBase* object, kvs::Camera* camera = NULL, kvs::Light* light  = NULL ) = 0;
 
 protected:
 
-    virtual void initialize_projection( void );
+    void startTimer();
+    void stopTimer();
 
-    virtual void initialize_modelview( void );
+protected:
+
+    KVS_DEPRECATED( kvs::Timer& timer() ) { return m_timer; }
+    void initialize();
+    virtual void initialize_projection();
+    virtual void initialize_modelview();
 };
 
 

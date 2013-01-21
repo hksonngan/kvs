@@ -60,6 +60,8 @@ void PointRenderer::exec( ObjectBase* object, Camera* camera, Light* light )
 
     kvs::PointObject* point = reinterpret_cast<kvs::PointObject*>( object );
 
+    BaseClass::startTimer();
+
     glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT );
 
     if ( point->normals().size() == 0 ) { BaseClass::disableShading(); }
@@ -92,14 +94,12 @@ void PointRenderer::exec( ObjectBase* object, Camera* camera, Light* light )
     }
 
     glEnable( GL_DEPTH_TEST );
-    {
-        this->timer().start();
-        ::PointRenderingFunction( point );
-        this->timer().stop();
-    }
+    ::PointRenderingFunction( point );
     glDisable( GL_DEPTH_TEST );
 
     glPopAttrib();
+
+    BaseClass::stopTimer();
 }
 
 /*===========================================================================*/

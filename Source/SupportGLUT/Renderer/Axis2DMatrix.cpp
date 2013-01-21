@@ -300,6 +300,8 @@ void Axis2DMatrix::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Ligh
 {
     kvs::TableObject* table = kvs::TableObject::DownCast( object );
 
+    BaseClass::startTimer();
+
     glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT );
 
     RendererBase::initialize();
@@ -394,6 +396,8 @@ void Axis2DMatrix::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Ligh
     ::EndDraw();
 
     glPopAttrib();
+
+    BaseClass::stopTimer();
 }
 
 } // end of namespace glut

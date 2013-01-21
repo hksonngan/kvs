@@ -69,13 +69,13 @@ void ParticleBufferCompositor::exec(
 
     if( m_point_object_list.size() == 0 ) return;
 
-    BaseClass::m_timer.start();
+    BaseClass::startTimer();
 
     this->create_image( camera, light );
     BaseClass::draw_image();
     this->clean_accumulator();
 
-    BaseClass::m_timer.stop();
+    BaseClass::stopTimer();
 }
 
 /*==========================================================================*/

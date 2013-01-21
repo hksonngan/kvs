@@ -18,7 +18,6 @@
 #include <kvs/ParticleBuffer>
 #include <kvs/ParticleVolumeRenderer>
 #include <kvs/ValueArray>
-#include <kvs/ClassName>
 #include <vector>
 
 
@@ -32,13 +31,10 @@ namespace kvs
 /*==========================================================================*/
 class ParticleBufferAccumulator : public kvs::ParticleBuffer
 {
-    kvsClassName( kvs::ParticleBufferAccumulator );
-
 public:
 
     typedef kvs::ParticleBuffer SuperClass;
-
-    typedef std::vector<kvs::PointObject*>            ObjectList;
+    typedef std::vector<kvs::PointObject*> ObjectList;
     typedef std::vector<kvs::ParticleVolumeRenderer*> RendererList;
 
 protected:

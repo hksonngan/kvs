@@ -21,7 +21,6 @@
 #include <kvs/RendererManager>
 #include <kvs/IDManager>
 #include <kvs/VolumeRendererBase>
-#include <kvs/ClassName>
 #include <kvs/ParticleBufferAccumulator>
 
 // Macros for test.
@@ -39,13 +38,10 @@ namespace kvs
 /*==========================================================================*/
 class ParticleBufferCompositor : public kvs::VolumeRendererBase
 {
-    kvsClassName( kvs::ParticleBufferCompositor );
-
 public:
 
     typedef kvs::VolumeRendererBase BaseClass;
-
-    typedef ParticleBufferAccumulator::ObjectList   ObjectList;
+    typedef ParticleBufferAccumulator::ObjectList ObjectList;
     typedef ParticleBufferAccumulator::RendererList RendererList;
 
 protected:
@@ -54,22 +50,22 @@ protected:
     double m_accumulation_time; ///< accumulation time
 #endif
 
-    size_t                m_num_projected_particles; ///< number of projected points
-    size_t                m_num_stored_particles;    ///< number of stored points
-    size_t                m_subpixel_level;          ///< subpixel level
-    kvs::ObjectManager*   m_object_manager;          ///< pointer to the object manager
-    kvs::RendererManager* m_renderer_manager;        ///< pointer to the renderer manager
-    kvs::IDManager*       m_id_manager;              ///< pointer to the ID manager
-    ObjectList            m_point_object_list;       ///< object list
-    RendererList          m_point_renderer_list;     ///< renderer list
-    kvs::ParticleBufferAccumulator* m_accumulator;   ///< pointer to the accumulator
+    size_t m_num_projected_particles; ///< number of projected points
+    size_t m_num_stored_particles; ///< number of stored points
+    size_t m_subpixel_level; ///< subpixel level
+    kvs::ObjectManager* m_object_manager; ///< pointer to the object manager
+    kvs::RendererManager* m_renderer_manager; ///< pointer to the renderer manager
+    kvs::IDManager* m_id_manager; ///< pointer to the ID manager
+    ObjectList m_point_object_list; ///< object list
+    RendererList m_point_renderer_list; ///< renderer list
+    kvs::ParticleBufferAccumulator* m_accumulator; ///< pointer to the accumulator
 
 public:
 
     ParticleBufferCompositor(
-        kvs::ObjectManager*   object_manager,
+        kvs::ObjectManager* object_manager,
         kvs::RendererManager* renderer_manager,
-        kvs::IDManager*       id_manager );
+        kvs::IDManager* id_manager );
 
     virtual ~ParticleBufferCompositor( void );
 

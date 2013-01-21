@@ -68,12 +68,10 @@ void RayCastingRenderer::exec(
 {
     const kvs::StructuredVolumeObject* volume = reinterpret_cast<kvs::StructuredVolumeObject*>(object);
 
-    BaseClass::m_timer.start();
-
+    BaseClass::startTimer();
     this->create_image( volume, camera, light );
     this->draw_image();
-
-    BaseClass::m_timer.stop();
+    BaseClass::stopTimer();
 }
 
 /*==========================================================================*/

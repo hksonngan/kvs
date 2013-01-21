@@ -33,6 +33,8 @@ class ObjectBase;
 namespace glew
 {
 
+class StochasticRenderingEngine;
+
 /*===========================================================================*/
 /**
  *  @brief  Compositor class for rendering multiple objects.
@@ -82,6 +84,12 @@ public:
     bool eraseObject( std::string registered_object_name );
 
     bool eraseObject( kvs::ObjectBase* registered_object );
+
+    kvs::ObjectBase* object( const std::string& object_name );
+
+    kvs::glew::StochasticRenderingEngine* engine( const std::string& object_name );
+
+    kvs::glew::StochasticRenderingEngine* engine( const kvs::ObjectBase* object );
 
     void clearEnsembleBuffer( void );
 

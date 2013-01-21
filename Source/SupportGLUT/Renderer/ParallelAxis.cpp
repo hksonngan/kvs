@@ -289,6 +289,8 @@ void ParallelAxis::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Ligh
 {
     kvs::TableObject* table = kvs::TableObject::DownCast( object );
 
+    BaseClass::startTimer();
+
     ::BeginDraw();
 
     bool has_label = false;
@@ -355,6 +357,8 @@ void ParallelAxis::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Ligh
     }
 
     ::EndDraw();
+
+    BaseClass::stopTimer();
 }
 
 } // end of namespace glut

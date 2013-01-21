@@ -14,7 +14,6 @@
 #ifndef KVS__PARTICLE_BUFFER_H_INCLUDE
 #define KVS__PARTICLE_BUFFER_H_INCLUDE
 
-#include <kvs/ClassName>
 #include <kvs/ValueArray>
 #include <kvs/Type>
 #include <kvs/Shader>
@@ -32,83 +31,52 @@ class PointObject;
 /*==========================================================================*/
 class ParticleBuffer
 {
-    kvsClassName( kvs::ParticleBuffer );
-
 protected:
 
-    size_t  m_width;                      ///< width
-    size_t  m_height;                     ///< height
-    size_t  m_size;                       ///< pixel data size [byte]
-    size_t  m_num_of_projected_particles; ///< total number of projected points
-    size_t  m_num_of_stored_particles;    ///< total number of stored points
-    size_t  m_subpixel_level;             ///< subpixel level
-    bool    m_enable_shading;             ///< shading flag
-    size_t  m_extended_width;             ///< m_width * m_subpixel_level
-
+    size_t m_width; ///< width
+    size_t m_height; ///< height
+    size_t m_size; ///< pixel data size [byte]
+    size_t m_num_of_projected_particles; ///< total number of projected points
+    size_t m_num_of_stored_particles; ///< total number of stored points
+    size_t m_subpixel_level; ///< subpixel level
+    bool m_enable_shading; ///< shading flag
+    size_t m_extended_width; ///< m_width * m_subpixel_level
     kvs::ValueArray<kvs::UInt32> m_index_buffer; ///< index buffer
     kvs::ValueArray<kvs::Real32> m_depth_buffer; ///< depth buffer
 
     // Reference shader (NOTE: not allocated in thie class).
     const kvs::Shader::shader_type* m_ref_shader;
-    const kvs::PointObject*         m_ref_point_object;
+    const kvs::PointObject* m_ref_point_object;
 
 public:
 
-    ParticleBuffer( void );
-
+    ParticleBuffer();
     ParticleBuffer( const size_t width, const size_t height, const size_t subpixel_level );
+    virtual ~ParticleBuffer();
 
-    virtual ~ParticleBuffer( void );
-
-public:
-
-    const size_t width( void ) const;
-
-    const size_t height( void ) const;
-
-    const kvs::ValueArray<kvs::UInt32>& indexBuffer( void ) const;
-
+    const size_t width() const;
+    const size_t height() const;
+    const kvs::ValueArray<kvs::UInt32>& indexBuffer() const;
     const kvs::UInt32 index( const size_t index ) const;
-
-    const kvs::ValueArray<kvs::Real32>& depthBuffer( void ) const;
-
+    const kvs::ValueArray<kvs::Real32>& depthBuffer() const;
     const kvs::Real32 depth( const size_t index ) const;
-
-    const size_t subpixelLevel( void ) const;
-
-    const kvs::Shader::shader_type* shader( void ) const;
-
-    const kvs::PointObject* pointObject( void ) const;
-
-    const size_t numOfProjectedParticles( void ) const;
-
-    const size_t numOfStoredParticles( void ) const;
-
-public:
+    const size_t subpixelLevel() const;
+    const kvs::Shader::shader_type* shader() const;
+    const kvs::PointObject* pointObject() const;
+    const size_t numOfProjectedParticles() const;
+    const size_t numOfStoredParticles() const;
 
     void setSubpixelLevel( const size_t subpixel_level );
-
     void attachShader( const kvs::Shader::shader_type* shader );
-
     void attachPointObject( const kvs::PointObject* point_object );
 
-public:
-
-    void enableShading( void );
-
-    void disableShading( void );
-
-public:
+    void enableShading();
+    void disableShading();
 
     void add( const float x, const float y, const kvs::Real32 depth, const kvs::UInt32 index );
-
     bool create( const size_t width, const size_t height, const size_t subpixel_level );
-
-    void clean( void );
-
-    void clear( void );
-
-public:
+    void clean();
+    void clear();
 
     void createImage(
         kvs::ValueArray<kvs::UInt8>*  color,

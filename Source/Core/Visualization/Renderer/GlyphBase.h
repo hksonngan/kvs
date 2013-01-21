@@ -120,11 +120,6 @@ protected:
     template <typename T> void calculateDirections( const kvs::VolumeObjectBase* volume );
     template <typename T> void calculateColors( const kvs::VolumeObjectBase* volume );
     template <typename T> void calculateOpacities( const kvs::VolumeObjectBase* volume );
-
-private:
-
-    virtual void initialize_projection();
-    virtual void initialize_modelview();
 };
 
 } // end of namespace kvs

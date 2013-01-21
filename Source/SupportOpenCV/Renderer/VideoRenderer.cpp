@@ -61,6 +61,8 @@ void VideoRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Lig
 
     kvs::opencv::VideoObject* video = reinterpret_cast<kvs::opencv::VideoObject*>( object );
 
+    BaseClass::startTimer();
+
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
     glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT );
@@ -121,6 +123,8 @@ void VideoRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Lig
     glDisable( GL_TEXTURE_2D );
 
     glPopAttrib();
+
+    BaseClass::stopTimer();
 }
 
 /*===========================================================================*/

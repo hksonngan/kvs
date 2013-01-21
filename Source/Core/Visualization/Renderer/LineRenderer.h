@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file LineRenderer.h
+ *  @file   LineRenderer.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -36,32 +37,24 @@ class LineRenderer : public kvs::RendererBase
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::RendererBase );
 
-protected:
+private:
 
     mutable bool m_enable_anti_aliasing; ///< flag for anti-aliasing (AA)
     mutable bool m_enable_multisample_anti_aliasing; ///< flag for multisample anti-aliasing (MSAA)
 
 public:
 
-    LineRenderer( void );
-
-    virtual ~LineRenderer( void );
-
-public:
+    LineRenderer();
+    virtual ~LineRenderer();
 
     void enableAntiAliasing( const bool multisample = false ) const;
-
-    void disableAntiAliasing( void ) const;
-
-public:
+    void disableAntiAliasing() const;
 
     void exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
 
-protected:
+private:
 
-    virtual void initialize_projection( void );
-
-    virtual void initialize_modelview( void );
+    void initialize();
 };
 
 } // end of namespace kvs

@@ -71,6 +71,8 @@ void Axis3D::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* lig
     kvs::IgnoreUnusedVariable( light );
     kvs::IgnoreUnusedVariable( camera );
 
+    BaseClass::startTimer();
+
     glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT );
 
     // Anti-aliasing.
@@ -133,6 +135,8 @@ void Axis3D::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* lig
 
     glDisable( GL_DEPTH_TEST );
     glPopAttrib();
+
+    BaseClass::stopTimer();
 }
 
 /*===========================================================================*/

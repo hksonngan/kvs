@@ -146,19 +146,18 @@ void ArrowGlyph::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light*
     if ( !volume ) { kvsMessageError("Input object is not volume dat."); return; }
     if ( m_volume != volume ) { this->attach_volume( volume ); }
 
+    BaseClass::startTimer();
+
     glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT );
 
-    BaseClass::initialize();
-
     glEnable( GL_DEPTH_TEST );
-    {
-        BaseClass::timer().start();
-        this->draw();
-        BaseClass::timer().stop();
-    }
+    this->initialize();
+    this->draw();
     glDisable( GL_DEPTH_TEST );
 
     glPopAttrib();
+
+    BaseClass::stopTimer();
 }
 
 /*===========================================================================*/
@@ -253,8 +252,6 @@ void ArrowGlyph::attach_volume( const kvs::VolumeObjectBase* volume )
 /*===========================================================================*/
 void ArrowGlyph::draw()
 {
-    this->initialize();
-
     if ( !m_cylinder )
     {
         m_cylinder = gluNewQuadric();
@@ -438,6 +435,19 @@ void ArrowGlyph::initialize()
     {
         glDisable( GL_NORMALIZE );
         glDisable( GL_LIGHTING );
+    }
+    else
+    {
+        if ( !BaseClass::isShading() )
+        {
+            glDisable( GL_NORMALIZE );
+            glDisable( GL_LIGHTING );
+        }
+        else
+        {
+            glEnable( GL_NORMALIZE );
+            glEnable( GL_LIGHTING );
+        }
     }
 
     glLightModeli( GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE );

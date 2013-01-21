@@ -288,6 +288,8 @@ void Axis2D::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* lig
 {
     kvs::TableObject* table = kvs::TableObject::DownCast( object );
 
+    BaseClass::startTimer();
+
     glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT );
 
     RendererBase::initialize();
@@ -346,6 +348,8 @@ void Axis2D::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* lig
     ::EndDraw();
 
     glPopAttrib();
+
+    BaseClass::stopTimer();
 }
 
 } // end of namesapce glut

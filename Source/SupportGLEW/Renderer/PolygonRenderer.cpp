@@ -64,9 +64,11 @@ void PolygonRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::L
     static bool flag = true;
     if ( flag ) { this->initialize_shaders(); flag = false; }
 
+    BaseClass::startTimer();
     m_phong_shader.bind();
     BaseClass::exec( object, camera, light );
     m_phong_shader.unbind();
+    BaseClass::stopTimer();
 }
 
 /*==========================================================================*/

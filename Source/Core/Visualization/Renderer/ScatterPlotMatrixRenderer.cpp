@@ -317,6 +317,8 @@ void ScatterPlotMatrixRenderer::exec( kvs::ObjectBase* object, kvs::Camera* came
 
     kvs::TableObject* table = kvs::TableObject::DownCast( object );
 
+    BaseClass::startTimer();
+
     glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT );
 
     RendererBase::initialize();
@@ -430,6 +432,8 @@ void ScatterPlotMatrixRenderer::exec( kvs::ObjectBase* object, kvs::Camera* came
     ::EndDraw();
 
     glPopAttrib();
+
+    BaseClass::stopTimer();
 }
 
 } // end of namespace kvs

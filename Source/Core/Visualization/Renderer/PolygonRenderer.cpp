@@ -60,6 +60,8 @@ void PolygonRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::L
 
     kvs::PolygonObject* polygon = reinterpret_cast<kvs::PolygonObject*>( object );
 
+    BaseClass::startTimer();
+
     glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT );
 
 /*
@@ -100,14 +102,12 @@ void PolygonRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::L
     }
 
     glEnable( GL_DEPTH_TEST );
-    {
-        this->timer().start();
-        ::PolygonRenderingFunction( polygon );
-        this->timer().stop();
-    }
+    ::PolygonRenderingFunction( polygon );
     glDisable( GL_DEPTH_TEST );
 
     glPopAttrib();
+
+    BaseClass::stopTimer();
 }
 
 /*===========================================================================*/

@@ -19,10 +19,10 @@ namespace kvs
 
 /*==========================================================================*/
 /**
- *  Constructor.
+ *  @brief  Constructs a new RendererBase class.
  */
 /*==========================================================================*/
-RendererBase::RendererBase( void ) :
+RendererBase::RendererBase():
     m_name("unknown"),
     m_shading_flag( true )
 {
@@ -30,16 +30,16 @@ RendererBase::RendererBase( void ) :
 
 /*==========================================================================*/
 /**
- *  Destructor.
+ *  @brief  Destruct the RendererBase class.
  */
 /*==========================================================================*/
-RendererBase::~RendererBase( void )
+RendererBase::~RendererBase()
 {
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Set renderer name.
+ *  @brief  Sets a renderer name.
  *  @param  name [in] renderer name
  */
 /*===========================================================================*/
@@ -56,66 +56,77 @@ void RendererBase::setName( const std::string& name )
 /*===========================================================================*/
 const std::string& RendererBase::name( void ) const
 {
-    return( m_name );
+    return m_name;
 }
 
 /*==========================================================================*/
 /**
- *  Get the rendering timer.
+ *  @brief  Returns the rendering timer.
+ *  @return rendering timer
  */
 /*==========================================================================*/
-const kvs::Timer& RendererBase::timer( void ) const
+const kvs::Timer& RendererBase::timer() const
 {
-    return( m_timer );
+    return m_timer;
 }
 
 /*==========================================================================*/
 /**
- *  Get the rendering timer.
- */
-/*==========================================================================*/
-kvs::Timer& RendererBase::timer( void )
-{
-    return( m_timer );
-}
-
-/*==========================================================================*/
-/**
- *  Test whether the shading is enable or disable.
+ *  @brief  Tests whether the shading is enable or disable.
  *  @return true, if the shading is enable.
  */
 /*==========================================================================*/
-const bool RendererBase::isShading( void ) const
+bool RendererBase::isShading() const
 {
-    return( m_shading_flag );
+    return m_shading_flag;
 }
 
 /*==========================================================================*/
 /**
- *  Enable to shading.
+ *  @brief  Enable to shading.
  */
 /*==========================================================================*/
-void RendererBase::enableShading( void ) const
+void RendererBase::enableShading() const
 {
     m_shading_flag = true;
 }
 
 /*==========================================================================*/
 /**
- *  Disable to shading.
+ *  @brief  Disable to shading.
  */
 /*==========================================================================*/
-void RendererBase::disableShading( void ) const
+void RendererBase::disableShading() const
 {
     m_shading_flag = false;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Starts the rendering timer.
+ */
+/*===========================================================================*/
+void RendererBase::startTimer()
+{
+    m_timer.start();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Stops the rendering timer.
+ */
+/*===========================================================================*/
+void RendererBase::stopTimer()
+{
+    m_timer.stop();
+}
+
 /*==========================================================================*/
 /**
- *  Initialize the renderer.
+ *  @brief  Initialize the renderer.
  */
 /*==========================================================================*/
-void RendererBase::initialize( void )
+void RendererBase::initialize()
 {
     initialize_projection();
     initialize_modelview();
@@ -126,7 +137,7 @@ void RendererBase::initialize( void )
  *  Initialize the projection information.
  */
 /*==========================================================================*/
-void RendererBase::initialize_projection( void )
+void RendererBase::initialize_projection()
 {
 }
 
@@ -135,7 +146,7 @@ void RendererBase::initialize_projection( void )
  *  Initialize about the modelview information.
  */
 /*==========================================================================*/
-void RendererBase::initialize_modelview( void )
+void RendererBase::initialize_modelview()
 {
 }
 

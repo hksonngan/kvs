@@ -275,6 +275,8 @@ void ScatterPlotRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kv
     kvs::TableObject* table = kvs::TableObject::DownCast( object );
     if ( !m_has_point_color ) if ( table->numberOfColumns() < 3 ) m_has_point_color = true;
 
+    BaseClass::startTimer();
+
     glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT );
 
     RendererBase::initialize();
@@ -372,6 +374,8 @@ void ScatterPlotRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kv
     ::EndDraw();
 
     glPopAttrib();
+
+    BaseClass::stopTimer();
 }
 
 } // end of namespace kvs

@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file LineRenderer.cpp
+ *  @file   LineRenderer.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -26,10 +27,10 @@ namespace kvs
 
 /*==========================================================================*/
 /**
- *  Contructor.
+ *  @brief  Contructs a new LineRenderer class.
  */
 /*==========================================================================*/
-LineRenderer::LineRenderer( void ):
+LineRenderer::LineRenderer():
     m_enable_anti_aliasing( false ),
     m_enable_multisample_anti_aliasing( false )
 {
@@ -39,19 +40,19 @@ LineRenderer::LineRenderer( void ):
 
 /*==========================================================================*/
 /**
- *  Destructor.
+ *  @brief  Destructs the LineRenderer class.
  */
 /*==========================================================================*/
-LineRenderer::~LineRenderer( void )
+LineRenderer::~LineRenderer()
 {
 }
 
 /*==========================================================================*/
 /**
- *  Line rendering method.
- *  @param object [in] pointer to the object
- *  @param camera [in] pointer to the camera
- *  @param light [in] pointer to the light
+ *  @brief  Executes the rendering process.
+ *  @param  object [in] pointer to the object
+ *  @param  camera [in] pointer to the camera
+ *  @param  light [in] pointer to the light
  */
 /*==========================================================================*/
 void LineRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light )
@@ -61,9 +62,60 @@ void LineRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Ligh
 
     kvs::LineObject* line = reinterpret_cast<kvs::LineObject*>( object );
 
+    BaseClass::startTimer();
+
     glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT );
 
-    RendererBase::initialize();
+    this->initialize();
+
+    glEnable( GL_DEPTH_TEST );
+    ::LineRenderingFunction( line );
+    glDisable( GL_DEPTH_TEST );
+
+    glPopAttrib();
+
+    BaseClass::stopTimer();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Enables anti-aliasing.
+ */
+/*===========================================================================*/
+void LineRenderer::enableAntiAliasing( const bool multisample ) const
+{
+    m_enable_anti_aliasing = true;
+    m_enable_multisample_anti_aliasing = multisample;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Disables anti-aliasing.
+ */
+/*===========================================================================*/
+void LineRenderer::disableAntiAliasing() const
+{
+    m_enable_anti_aliasing = false;
+    m_enable_multisample_anti_aliasing = false;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Initializes the OpenGL properties.
+ */
+/*===========================================================================*/
+void LineRenderer::initialize()
+{
+    glColorMaterial( GL_FRONT, GL_AMBIENT_AND_DIFFUSE );
+    glEnable( GL_COLOR_MATERIAL );
+
+    // Polygon offset.
+    glPolygonOffset( 1.0, 0.0 );
+    glEnable( GL_POLYGON_OFFSET_FILL );
+
+    // Lighting.
+    if ( !BaseClass::isShading() ) glDisable( GL_LIGHTING );
+    else glEnable( GL_LIGHTING );
 
     // Anti-aliasing.
     if ( m_enable_anti_aliasing )
@@ -86,67 +138,6 @@ void LineRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Ligh
             glHint( GL_LINE_SMOOTH_HINT, GL_NICEST );
         }
     }
-
-    glEnable( GL_DEPTH_TEST );
-    {
-        this->timer().start();
-        ::LineRenderingFunction( line );
-        this->timer().stop();
-    }
-    glDisable( GL_DEPTH_TEST );
-
-    glPopAttrib();
-}
-
-/*===========================================================================*/
-/**
- *  Enables anti-aliasing.
- */
-/*===========================================================================*/
-void LineRenderer::enableAntiAliasing( const bool multisample ) const
-{
-    m_enable_anti_aliasing = true;
-    m_enable_multisample_anti_aliasing = multisample;
-}
-
-/*===========================================================================*/
-/**
- *  Disables anti-aliasing.
- */
-/*===========================================================================*/
-void LineRenderer::disableAntiAliasing( void ) const
-{
-    m_enable_anti_aliasing = false;
-    m_enable_multisample_anti_aliasing = false;
-}
-
-/*==========================================================================*/
-/**
- *  Initialize about the projection matrix.
- */
-/*==========================================================================*/
-void LineRenderer::initialize_projection( void )
-{
-   glMatrixMode( GL_PROJECTION );
-
-   glMatrixMode( GL_MODELVIEW );
-}
-
-/*==========================================================================*/
-/**
- *  Initialize about the modelview matrix.
- */
-/*==========================================================================*/
-void LineRenderer::initialize_modelview( void )
-{
-    glColorMaterial( GL_FRONT, GL_AMBIENT_AND_DIFFUSE );
-    glEnable( GL_COLOR_MATERIAL );
-
-    glPolygonOffset( 1.0, 0.0 );
-    glEnable( GL_POLYGON_OFFSET_FILL );
-
-    if( !this->isShading() ) glDisable( GL_LIGHTING );
-    else                     glEnable( GL_LIGHTING );
 }
 
 } // end of namespace kvs

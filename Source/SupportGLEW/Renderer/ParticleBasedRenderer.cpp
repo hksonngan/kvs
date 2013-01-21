@@ -522,9 +522,9 @@ void ParticleBasedRenderer::exec(
 
     if ( point->normals().size() == 0 ) BaseClass::disableShading();
 
-    BaseClass::m_timer.start();
+    BaseClass::startTimer();
     this->create_image( point, camera, light );
-    BaseClass::m_timer.stop();
+    BaseClass::stopTimer();
 }
 
 /*===========================================================================*/

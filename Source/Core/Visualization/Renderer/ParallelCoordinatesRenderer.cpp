@@ -28,7 +28,7 @@ const int CharacterHeight = 12;
 namespace
 {
 
-void BeginDraw( void )
+void BeginDraw()
 {
     GLint vp[4]; glGetIntegerv( GL_VIEWPORT, vp );
     const GLint left = vp[0];
@@ -43,7 +43,7 @@ void BeginDraw( void )
     glDisable( GL_DEPTH_TEST );
 }
 
-void EndDraw( void )
+void EndDraw()
 {
     glPopMatrix();
     glMatrixMode( GL_MODELVIEW );
@@ -62,7 +62,7 @@ namespace kvs
  *  @brief  Constructs a new ParallelCoordinatesRenderer class.
  */
 /*===========================================================================*/
-ParallelCoordinatesRenderer::ParallelCoordinatesRenderer( void ):
+ParallelCoordinatesRenderer::ParallelCoordinatesRenderer():
     m_top_margin( 20 ),
     m_bottom_margin( 20 ),
     m_left_margin( 30 ),
@@ -138,7 +138,7 @@ void ParallelCoordinatesRenderer::enableAntiAliasing( const bool multisample ) c
  *  @brief  Disables anti-aliasing mode.
  */
 /*===========================================================================*/
-void ParallelCoordinatesRenderer::disableAntiAliasing( void ) const
+void ParallelCoordinatesRenderer::disableAntiAliasing() const
 {
     m_enable_anti_aliasing = false;
     m_enable_multisample_anti_aliasing = false;
@@ -194,7 +194,7 @@ void ParallelCoordinatesRenderer::selectAxis( const size_t index )
  *  @return top margin
  */
 /*===========================================================================*/
-int ParallelCoordinatesRenderer::topMargin( void ) const
+int ParallelCoordinatesRenderer::topMargin() const
 {
     return( m_top_margin );
 }
@@ -205,7 +205,7 @@ int ParallelCoordinatesRenderer::topMargin( void ) const
  *  @return bottom margin
  */
 /*===========================================================================*/
-int ParallelCoordinatesRenderer::bottomMargin( void ) const
+int ParallelCoordinatesRenderer::bottomMargin() const
 {
     return( m_bottom_margin );
 }
@@ -216,7 +216,7 @@ int ParallelCoordinatesRenderer::bottomMargin( void ) const
  *  @return left margin
  */
 /*===========================================================================*/
-int ParallelCoordinatesRenderer::leftMargin( void ) const
+int ParallelCoordinatesRenderer::leftMargin() const
 {
     return( m_left_margin );
 }
@@ -227,7 +227,7 @@ int ParallelCoordinatesRenderer::leftMargin( void ) const
  *  @return right margin
  */
 /*===========================================================================*/
-int ParallelCoordinatesRenderer::rightMargin( void ) const
+int ParallelCoordinatesRenderer::rightMargin() const
 {
     return( m_right_margin );
 }
@@ -238,7 +238,7 @@ int ParallelCoordinatesRenderer::rightMargin( void ) const
  *  @return index of active axis
  */
 /*===========================================================================*/
-size_t ParallelCoordinatesRenderer::activeAxis( void ) const
+size_t ParallelCoordinatesRenderer::activeAxis() const
 {
     return( m_active_axis );
 }
@@ -249,7 +249,7 @@ size_t ParallelCoordinatesRenderer::activeAxis( void ) const
  *  @return line opacity
  */
 /*===========================================================================*/
-kvs::UInt8 ParallelCoordinatesRenderer::lineOpacity( void ) const
+kvs::UInt8 ParallelCoordinatesRenderer::lineOpacity() const
 {
     return( m_line_opacity );
 }
@@ -260,7 +260,7 @@ kvs::UInt8 ParallelCoordinatesRenderer::lineOpacity( void ) const
  *  @return line width
  */
 /*===========================================================================*/
-kvs::Real32 ParallelCoordinatesRenderer::lineWidth( void ) const
+kvs::Real32 ParallelCoordinatesRenderer::lineWidth() const
 {
     return( m_line_width );
 }
@@ -279,9 +279,9 @@ void ParallelCoordinatesRenderer::exec( kvs::ObjectBase* object, kvs::Camera* ca
 
     kvs::TableObject* table = kvs::TableObject::DownCast( object );
 
-    glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT );
+    BaseClass::startTimer();
 
-    RendererBase::initialize();
+    glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT );
 
     // Anti-aliasing.
     if ( m_enable_anti_aliasing )
@@ -349,6 +349,8 @@ void ParallelCoordinatesRenderer::exec( kvs::ObjectBase* object, kvs::Camera* ca
     ::EndDraw();
 
     glPopAttrib();
+
+    BaseClass::stopTimer();
 }
 
 } // end of namespace kvs

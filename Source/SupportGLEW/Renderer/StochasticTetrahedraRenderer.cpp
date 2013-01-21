@@ -59,9 +59,9 @@ void StochasticTetrahedraRenderer::exec(
     kvs::glew::StochasticRenderingEngine* engine = BaseClass::m_rendering_engines[0];
     if ( !engine->object() ) engine->attachObject( object );
 
-    BaseClass::m_timer.start();
+    BaseClass::startTimer();
     this->create_image( camera, light );
-    BaseClass::m_timer.stop();
+    BaseClass::stopTimer();
 }
 
 /*===========================================================================*/

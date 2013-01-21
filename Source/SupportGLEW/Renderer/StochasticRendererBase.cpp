@@ -77,9 +77,9 @@ void StochasticRendererBase::exec(
 {
     kvs::IgnoreUnusedVariable( object );
 
-    BaseClass::m_timer.start();
+    BaseClass::startTimer();
     this->create_image( camera, light );
-    BaseClass::m_timer.stop();
+    BaseClass::stopTimer();
 }
 
 /*===========================================================================*/

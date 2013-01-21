@@ -41,18 +41,6 @@ const kvs::Real32 Vertices[18] =
      0.0f, -0.5f,  0.0f
 };
 
-const kvs::Real32 Normals[24] =
-{
-     0.577f,  0.577f, -0.577f,
-    -0.577f,  0.577f, -0.577f,
-    -0.577f,  0.577f,  0.577f,
-     0.577f,  0.577f,  0.577f,
-     0.577f, -0.577f, -0.577f,
-    -0.577f, -0.577f, -0.577f,
-    -0.577f, -0.577f,  0.577f,
-     0.577f, -0.577f,  0.577f
-};
-
 } // end of namespace
 
 
@@ -123,19 +111,18 @@ void DiamondGlyph::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Ligh
     if ( !volume ) { kvsMessageError("Input object is not volume dat."); return; }
     if ( m_volume != volume ) { this->attach_volume( volume ); }
 
+    BaseClass::startTimer();
+
     glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT );
 
-    BaseClass::initialize();
-
     glEnable( GL_DEPTH_TEST );
-    {
-        BaseClass::timer().start();
-        this->draw();
-        BaseClass::timer().stop();
-    }
+    this->initialize();
+    this->draw();
     glDisable( GL_DEPTH_TEST );
 
     glPopAttrib();
+
+    BaseClass::stopTimer();
 }
 
 /*===========================================================================*/
@@ -231,8 +218,6 @@ void DiamondGlyph::attach_volume( const kvs::VolumeObjectBase* volume )
 /*===========================================================================*/
 void DiamondGlyph::draw( void )
 {
-    this->initialize();
-
     const size_t npoints = BaseClass::coords().size() / 3;
     if ( BaseClass::directions().size() == 0 )
     {
@@ -295,7 +280,6 @@ void DiamondGlyph::draw_element( const kvs::RGBColor& color, const kvs::UInt8 op
             const kvs::Vector3f v12 = v2 - v1;
             const kvs::Vector3f n = v12.cross( v10 );
             glNormal3f( n.x(), n.y(), n.z() );
-//            glNormal3fv( ::Normals + offset0 );
             glVertex3fv( ::Vertices + offset0 );
             glVertex3fv( ::Vertices + offset1 );
             glVertex3fv( ::Vertices + offset2 );
@@ -323,7 +307,7 @@ void DiamondGlyph::initialize( void )
     glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
     glEnable( GL_COLOR_MATERIAL );
 
-    if( !this->isShading() )
+    if ( !BaseClass::isShading() )
     {
         glDisable( GL_NORMALIZE );
         glDisable( GL_LIGHTING );

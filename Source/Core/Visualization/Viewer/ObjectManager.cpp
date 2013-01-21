@@ -29,7 +29,7 @@ namespace kvs
  *  Default constructor.
  */
 /*==========================================================================*/
-ObjectManager::ObjectManager( void ) :
+ObjectManager::ObjectManager() :
     kvs::ObjectBase( true )
 {
     m_object_tree.clear();
@@ -46,12 +46,6 @@ ObjectManager::ObjectManager( void ) :
     ObjectBase::setMinMaxExternalCoords(
         kvs::Vector3f( -3.0, -3.0, -3.0 ),
         kvs::Vector3f(  3.0,  3.0,  3.0 ) );
-/*
-    m_min_object_coord   = kvs::Vector3f(  1000000,  1000000,  1000000 );
-    m_max_object_coord   = kvs::Vector3f( -1000000, -1000000, -1000000 );
-    m_min_external_coord = kvs::Vector3f( -3.0, -3.0, -3.0 );
-    m_max_external_coord = kvs::Vector3f(  3.0,  3.0,  3.0 );
-*/
 }
 
 /*==========================================================================*/
@@ -59,7 +53,7 @@ ObjectManager::ObjectManager( void ) :
  *  Destructor.
  */
 /*==========================================================================*/
-ObjectManager::~ObjectManager( void )
+ObjectManager::~ObjectManager()
 {
 //    this->erase();
     ObjectIterator pobject = m_object_tree.begin();
@@ -81,12 +75,12 @@ ObjectManager::~ObjectManager( void )
  *  Insert the root of the objects.
  */
 /*==========================================================================*/
-void ObjectManager::insert_root( void )
+void ObjectManager::insert_root()
 {
     m_root = m_object_tree.insert( m_object_tree.begin(), this );
 }
 
-kvs::ObjectBase::ObjectType ObjectManager::objectType( void ) const
+kvs::ObjectBase::ObjectType ObjectManager::objectType() const
 {
     return( kvs::ObjectBase::ObjectManager );
 }
@@ -336,7 +330,7 @@ void ObjectManager::change( std::string obj_name, ObjectBase* obj, bool delete_f
  *  @return number of the stored objects
  */
 /*==========================================================================*/
-const int ObjectManager::nobjects( void ) const
+const int ObjectManager::nobjects() const
 {
     return( m_object_tree.size() );
 }
@@ -347,7 +341,7 @@ const int ObjectManager::nobjects( void ) const
  *  @return pointer to the top object
  */
 /*==========================================================================*/
-kvs::ObjectBase* ObjectManager::object( void )
+kvs::ObjectBase* ObjectManager::object()
 {
     // pointer to the object
     ObjectIterator obj_ptr = m_object_tree.begin();
@@ -411,7 +405,7 @@ kvs::ObjectBase* ObjectManager::object( std::string obj_name )
  *  @return true, if some objects are included.
  */
 /*==========================================================================*/
-const bool ObjectManager::hasObject( void ) const
+const bool ObjectManager::hasObject() const
 {
     return( m_object_tree.size() > 1 );
 }
@@ -421,7 +415,7 @@ const bool ObjectManager::hasObject( void ) const
  *  Reset the xforms of the all objects.
  */
 /*==========================================================================*/
-void ObjectManager::resetXform( void )
+void ObjectManager::resetXform()
 {
     ObjectIterator first = m_object_tree.begin();
     ObjectIterator last  = m_object_tree.end();
@@ -467,7 +461,7 @@ void ObjectManager::resetXform( int obj_id )
  *  Get the xform of the object manager.
  */
 /*==========================================================================*/
-const kvs::Xform ObjectManager::xform( void ) const
+const kvs::Xform ObjectManager::xform() const
 {
     return( kvs::ObjectBase::xform() );
 }
@@ -572,7 +566,7 @@ const int ObjectManager::parentObjectID( int object_id ) const
  *  @return active object ID, if active object is nothing, -1 is returned.
  */
 /*==========================================================================*/
-const int ObjectManager::activeObjectID( void ) const
+const int ObjectManager::activeObjectID() const
 {
     if( m_has_active_object )
     {
@@ -614,7 +608,7 @@ bool ObjectManager::setActiveObjectID( int obj_id )
  *  @return pointer to the active object
  */
 /*==========================================================================*/
-kvs::ObjectBase* ObjectManager::activeObject( void )
+kvs::ObjectBase* ObjectManager::activeObject()
 {
     return( m_has_active_object ? *m_active_object : NULL );
 }
@@ -624,7 +618,7 @@ kvs::ObjectBase* ObjectManager::activeObject( void )
  *  Release the xform of the active object.
  */
 /*==========================================================================*/
-void ObjectManager::resetActiveObjectXform( void )
+void ObjectManager::resetActiveObjectXform()
 {
     if ( m_has_active_object )
     {
@@ -638,7 +632,7 @@ void ObjectManager::resetActiveObjectXform( void )
  *  Erase the active object.
  */
 /*==========================================================================*/
-void ObjectManager::eraseActiveObject( void )
+void ObjectManager::eraseActiveObject()
 {
     if( m_has_active_object )
     {
@@ -655,7 +649,7 @@ void ObjectManager::eraseActiveObject( void )
  *  Enable to move all objects.
  */
 /*==========================================================================*/
-void ObjectManager::enableAllMove( void )
+void ObjectManager::enableAllMove()
 {
     m_enable_all_move = true;
 }
@@ -665,7 +659,7 @@ void ObjectManager::enableAllMove( void )
  *  Disable to move all objects.
  */
 /*==========================================================================*/
-void ObjectManager::disableAllMove( void )
+void ObjectManager::disableAllMove()
 {
     m_enable_all_move = false;
 }
@@ -676,7 +670,7 @@ void ObjectManager::disableAllMove( void )
  *  @return true, if the object manager is able to move all objects.
  */
 /*==========================================================================*/
-const bool ObjectManager::isEnableAllMove( void ) const
+const bool ObjectManager::isEnableAllMove() const
 {
     return( m_enable_all_move );
 }
@@ -687,7 +681,7 @@ const bool ObjectManager::isEnableAllMove( void ) const
  *  @return true, if the object manager has the active object.
  */
 /*==========================================================================*/
-const bool ObjectManager::hasActiveObject( void ) const
+const bool ObjectManager::hasActiveObject() const
 {
     return( m_has_active_object );
 }
@@ -697,7 +691,7 @@ const bool ObjectManager::hasActiveObject( void ) const
  *  Release the active object.
  */
 /*==========================================================================*/
-void ObjectManager::releaseActiveObject( void )
+void ObjectManager::releaseActiveObject()
 {
     m_has_active_object = false;
 }
@@ -880,7 +874,7 @@ void ObjectManager::scale( const kvs::Vector3f& scaling )
  *  Update the external coordinate.
  */
 /*==========================================================================*/
-void ObjectManager::updateExternalCoords( void )
+void ObjectManager::updateExternalCoords()
 {
     this->update_normalize_parameters();
 }
@@ -942,7 +936,7 @@ void ObjectManager::update_normalize_parameters(
  *  Update normalize parameters.
  */
 /*==========================================================================*/
-void ObjectManager::update_normalize_parameters( void )
+void ObjectManager::update_normalize_parameters()
 {
 /*
     m_min_object_coord   = kvs::Vector3f(  1000000,  1000000,  1000000 );
@@ -1030,7 +1024,7 @@ void ObjectManager::update_normalize_parameters( void )
  *  @return pointer to the control target object
  */
 /*==========================================================================*/
-kvs::ObjectBase* ObjectManager::get_control_target( void )
+kvs::ObjectBase* ObjectManager::get_control_target()
 {
     if ( this->isEnableAllMove() )
     {
@@ -1067,7 +1061,7 @@ kvs::Vector3f ObjectManager::get_rotation_center( kvs::ObjectBase* obj )
  *  @return pointer to the top object
  */
 /*==========================================================================*/
-ObjectManager::ObjectIterator ObjectManager::get_control_first_pointer( void )
+ObjectManager::ObjectIterator ObjectManager::get_control_first_pointer()
 {
     ObjectIterator first;
 
@@ -1090,7 +1084,7 @@ ObjectManager::ObjectIterator ObjectManager::get_control_first_pointer( void )
  *  @return 
  */
 /*==========================================================================*/
-ObjectManager::ObjectIterator ObjectManager::get_control_last_pointer( void )
+ObjectManager::ObjectIterator ObjectManager::get_control_last_pointer()
 {
     ObjectIterator last;
 

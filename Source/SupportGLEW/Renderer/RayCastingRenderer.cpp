@@ -151,9 +151,9 @@ void RayCastingRenderer::exec(
 {
     kvs::StructuredVolumeObject* volume = kvs::StructuredVolumeObject::DownCast( object );
 
-    BaseClass::m_timer.start();
+    BaseClass::startTimer();
     this->create_image( volume, camera, light );
-    BaseClass::m_timer.stop();
+    BaseClass::stopTimer();
 }
 
 /*===========================================================================*/

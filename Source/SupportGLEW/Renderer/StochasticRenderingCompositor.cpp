@@ -324,6 +324,35 @@ bool StochasticRenderingCompositor::eraseObject( kvs::ObjectBase* registered_obj
     return false;
 }
 
+kvs::ObjectBase* StochasticRenderingCompositor::object( const std::string& object_name )
+{
+    // Find the object.
+    kvs::ObjectBase* registered_object = NULL;
+    std::vector<kvs::ObjectBase*>::iterator object = m_registered_objects.begin();
+    std::vector<kvs::ObjectBase*>::iterator last = m_registered_objects.end();
+    while ( object != last )
+    {
+        if ( (*object)->name() == object_name )
+        {
+            registered_object = *object;
+            break;
+        }
+        ++object;
+    }
+
+    return registered_object;
+}
+
+kvs::glew::StochasticRenderingEngine* StochasticRenderingCompositor::engine( const std::string& object_name )
+{
+    return m_renderer->find_engine( object_name );
+}
+
+kvs::glew::StochasticRenderingEngine* StochasticRenderingCompositor::engine( const kvs::ObjectBase* object )
+{
+    return m_renderer->find_engine( object );
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Clears the ensemble buffers.

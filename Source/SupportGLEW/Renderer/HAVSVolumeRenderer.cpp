@@ -140,6 +140,8 @@ void HAVSVolumeRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs
     kvs::UnstructuredVolumeObject* volume = kvs::UnstructuredVolumeObject::DownCast( object );
     if ( !m_ref_volume ) this->attachVolumeObject( volume );
 
+    BaseClass::startTimer();
+
     glPushAttrib( GL_CURRENT_BIT |
                   GL_ENABLE_BIT |
                   GL_LIGHTING_BIT );
@@ -213,6 +215,8 @@ void HAVSVolumeRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs
 
     glPopAttrib();
     glFinish();
+
+    BaseClass::stopTimer();
 }
 
 void HAVSVolumeRenderer::initialize( void )

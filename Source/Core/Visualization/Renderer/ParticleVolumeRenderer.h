@@ -39,8 +39,8 @@ public:
 
 protected:
 
-    bool   m_enable_rendering; ///< rendering flag
-    size_t m_subpixel_level;   ///< number of divisions in a pixel
+    bool m_enable_rendering; ///< rendering flag
+    size_t m_subpixel_level; ///< number of divisions in a pixel
     kvs::ParticleBuffer* m_buffer; ///< particle buffer
 
     // Reference data (NOTE: not allocated in thie class).
@@ -49,9 +49,7 @@ protected:
 public:
 
     ParticleVolumeRenderer( void );
-
     ParticleVolumeRenderer( const kvs::PointObject* point, const size_t subpixel_level = 1 );
-
     virtual ~ParticleVolumeRenderer( void );
 
 public:
@@ -61,7 +59,6 @@ public:
 public:
 
     void attachPointObject( const kvs::PointObject* point );
-
     void setSubpixelLevel( const size_t subpixel_level );
 
 /*
@@ -76,23 +73,18 @@ public:
 public:
 
     void initialize( void );
-
     const kvs::ParticleBuffer* particleBuffer( void ) const;
-
     const size_t subpixelLevel( void ) const;
 
 public:
 
     void enableRendering( void );
-
     void disableRendering( void );
 
 protected:
 
     bool create_particle_buffer( const size_t width, const size_t height, const size_t subpixel_level );
-
     void clean_particle_buffer( void );
-
     void delete_particle_buffer( void );
 
 protected:

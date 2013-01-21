@@ -690,34 +690,4 @@ template void GlyphBase::calculateOpacities<kvs::UInt64>( const kvs::VolumeObjec
 template void GlyphBase::calculateOpacities<kvs::Real32>( const kvs::VolumeObjectBase* volume );
 template void GlyphBase::calculateOpacities<kvs::Real64>( const kvs::VolumeObjectBase* volume );
 
-/*==========================================================================*/
-/**
- *  Initialize about the projection matrix.
- */
-/*==========================================================================*/
-void GlyphBase::initialize_projection( void )
-{
-   glMatrixMode( GL_PROJECTION );
-   glMatrixMode( GL_MODELVIEW );
-}
-
-/*==========================================================================*/
-/**
- *  Initialize about the modelview matrix.
- */
-/*==========================================================================*/
-void GlyphBase::initialize_modelview( void )
-{
-    if( !isShading() )
-    {
-        glDisable( GL_NORMALIZE );
-        glDisable( GL_LIGHTING );
-    }
-    else
-    {
-        glEnable( GL_NORMALIZE );
-        glEnable( GL_LIGHTING );
-    }
-}
-
 } // end of namespace kvs

@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file ImageRenderer.cpp
+ *  @file   ImageRenderer.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -23,8 +24,8 @@ namespace kvs
 
 /*==========================================================================*/
 /**
- *  Constructor.
- *  @param type [in] rendering type
+ *  @brief  Constructs a new ImageRenderer class.
+ *  @param  type [in] rendering type
  */
 /*==========================================================================*/
 ImageRenderer::ImageRenderer( const ImageRenderer::Type& type )
@@ -34,26 +35,29 @@ ImageRenderer::ImageRenderer( const ImageRenderer::Type& type )
 
 /*==========================================================================*/
 /**
- *  Destructor.
+ *  @brief  Destruct the ImageRenderer class.
  */
 /*==========================================================================*/
-ImageRenderer::~ImageRenderer( void )
+ImageRenderer::~ImageRenderer()
 {
 }
 
 /*==========================================================================*/
 /**
- *  Rendering.
- *  @param object [in] pointer to the object
- *  @param camera [in] pointer to the camera
- *  @param light [in] pointer to the light
+ *  @brief  Executes the rendering process.
+ *  @param  object [in] pointer to the object
+ *  @param  camera [in] pointer to the camera
+ *  @param  light [in] pointer to the light
  */
 /*==========================================================================*/
 void ImageRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light )
 {
     kvs::IgnoreUnusedVariable( light );
 
-    kvs::ImageObject* image = reinterpret_cast<kvs::ImageObject*>( object );
+    kvs::ImageObject* image = kvs::ImageObject::DownCast( object );
+    if ( !image ) return;
+
+    BaseClass::startTimer();
 
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
@@ -67,7 +71,7 @@ void ImageRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Lig
     switch( m_type )
     {
     case ImageRenderer::Centering:
-        this->centering( camera->windowWidth(), camera->windowHeight() );
+        this->center_alignment( camera->windowWidth(), camera->windowHeight() );
         break;
     default: break;
     }
@@ -103,12 +107,14 @@ void ImageRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Lig
     glDisable( GL_TEXTURE_2D );
 
     glPopAttrib();
+
+    BaseClass::stopTimer();
 }
 
 /*==========================================================================*/
 /**
- *  Create the texture region on the GPU.
- *  @param image [in] pointer to the image object
+ *  @brief  Creates the texture region on the GPU.
+ *  @param  image [in] pointer to the image object
  */
 /*==========================================================================*/
 void ImageRenderer::create_texture( const kvs::ImageObject* image )
@@ -116,32 +122,32 @@ void ImageRenderer::create_texture( const kvs::ImageObject* image )
     const double width  = image->width();
     const double height = image->height();
     m_initial_aspect_ratio = width / height;
-    m_left   = 0.0;
-    m_right  = 1.0;
+    m_left = 0.0;
+    m_right = 1.0;
     m_bottom = 0.0;
-    m_top    = 1.0;
+    m_top = 1.0;
 
     if ( image->type() == kvs::ImageObject::Gray8 )
     {
-        const size_t nchannels         = 1;
+        const size_t nchannels = 1;
         const size_t bytes_per_channel = 1;
         m_texture.setPixelFormat( nchannels, bytes_per_channel );
     }
     else if ( image->type() == kvs::ImageObject::Gray16 )
     {
-        const size_t nchannels         = 1;
+        const size_t nchannels = 1;
         const size_t bytes_per_channel = 2;
         m_texture.setPixelFormat( nchannels, bytes_per_channel );
     }
     else if ( image->type() == kvs::ImageObject::Color24 )
     {
-        const size_t nchannels         = 3;
+        const size_t nchannels = 3;
         const size_t bytes_per_channel = 1;
         m_texture.setPixelFormat( nchannels, bytes_per_channel );
     }
     else if ( image->type() == kvs::ImageObject::Color32 )
     {
-        const size_t nchannels         = 4;
+        const size_t nchannels = 4;
         const size_t bytes_per_channel = 1;
         m_texture.setPixelFormat( nchannels, bytes_per_channel );
     }
@@ -157,28 +163,28 @@ void ImageRenderer::create_texture( const kvs::ImageObject* image )
 
 /*==========================================================================*/
 /**
- *  Calculate centering parameters.
- *  @param width [in] image width
- *  @param height [in] image height
+ *  @brief  Calculates centering parameters.
+ *  @param  width [in] image width
+ *  @param  height [in] image height
  */
 /*==========================================================================*/
-void ImageRenderer::centering( double width, double height )
+void ImageRenderer::center_alignment( const double width, const double height )
 {
-    double current_aspect_ratio = width / height;
-    double aspect_ratio = current_aspect_ratio / m_initial_aspect_ratio;
+    const double current_aspect_ratio = width / height;
+    const double aspect_ratio = current_aspect_ratio / m_initial_aspect_ratio;
     if( aspect_ratio >= 1.0 )
     {
-        m_left   = ( 1.0 - aspect_ratio ) * 0.5;
-        m_right  = ( 1.0 + aspect_ratio ) * 0.5;
+        m_left = ( 1.0 - aspect_ratio ) * 0.5;
+        m_right = ( 1.0 + aspect_ratio ) * 0.5;
         m_bottom = 0.0;
-        m_top    = 1.0;
+        m_top = 1.0;
     }
     else
     {
-        m_left   = 0.0;
-        m_right  = 1.0;
+        m_left = 0.0;
+        m_right = 1.0;
         m_bottom = ( 1.0 - 1.0 / aspect_ratio ) * 0.5;
-        m_top    = ( 1.0 + 1.0 / aspect_ratio ) * 0.5;
+        m_top = ( 1.0 + 1.0 / aspect_ratio ) * 0.5;
     }
 }
 
