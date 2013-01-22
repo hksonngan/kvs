@@ -289,10 +289,18 @@ void GrADS::print( std::ostream& os, const kvs::Indent& indent ) const
             {
                 const std::string sep = kvs::File::Separator();
                 const std::string path = directory.directoryPath( true );
+                GriddedBinaryDataFile::Date date;
+                date.year = tdef.start.year;
+                date.month = tdef.start.month;
+                date.day = tdef.start.day;
+                date.hour = tdef.start.hour;
+                date.minute = tdef.start.minute;
+
                 GriddedBinaryDataFile data;
                 data.setFilename( path + sep + data_filename );
                 data.setSequential( sequential );
                 data.setBigEndian( big_endian );
+                data.setDate( date );
                 m_data_list.push_back( data );
                 break;
             }

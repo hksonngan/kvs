@@ -33,8 +33,20 @@ namespace grads
 /*===========================================================================*/
 class GriddedBinaryDataFile
 {
+public:
+
+    struct Date
+    {
+        int hour; ///< hour
+        int minute; ///< minute
+        int day; ///< day
+        int month; ///< month
+        int year; ///< year
+    };
+
 private:
 
+    Date m_date; ///< date
     bool m_sequential; ///< sequential data or not
     bool m_big_endian; ///< big endian data or not
     std::string m_filename; ///< data filename
@@ -44,11 +56,13 @@ public:
 
     GriddedBinaryDataFile();
 
-public:
-
+    void setDate( const Date& date );
     void setSequential( const bool sequential );
     void setBigEndian( const bool big_endian );
     void setFilename( const std::string& filename );
+    const Date& date() const;
+    bool sequential() const;
+    bool bigEndian() const;
     const std::string& filename() const;
     const kvs::ValueArray<kvs::Real32>& values() const;
     bool load() const;

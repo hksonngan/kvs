@@ -33,6 +33,26 @@ GriddedBinaryDataFile::GriddedBinaryDataFile():
     m_big_endian( false ),
     m_filename("")
 {
+    m_date.hour = 0;
+    m_date.minute = 0;
+    m_date.day = 1;
+    m_date.month = 1;
+    m_date.year = 0;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets date.
+ *  @param  date
+ */
+/*===========================================================================*/
+void GriddedBinaryDataFile::setDate( const Date& date )
+{
+    m_date.hour = date.hour;
+    m_date.minute = date.minute;
+    m_date.day = date.day;
+    m_date.month = date.month;
+    m_date.year = date.year;
 }
 
 /*===========================================================================*/
@@ -66,6 +86,39 @@ void GriddedBinaryDataFile::setBigEndian( const bool big_endian )
 void GriddedBinaryDataFile::setFilename( const std::string& filename )
 {
     m_filename = filename;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the date.
+ *  @return date
+ */
+/*===========================================================================*/
+const GriddedBinaryDataFile::Date& GriddedBinaryDataFile::date() const
+{
+    return m_date;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the sequential flag.
+ *  @return true if the data is a fortran binary format
+ */
+/*===========================================================================*/
+bool GriddedBinaryDataFile::sequential() const
+{
+    return m_sequential;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the big endian flag.
+ *  @return true if the data is big endian
+ */
+/*===========================================================================*/
+bool GriddedBinaryDataFile::bigEndian() const
+{
+    return m_big_endian;
 }
 
 /*===========================================================================*/
@@ -116,13 +169,14 @@ bool GriddedBinaryDataFile::load() const
 
     ifs.seekg( 0, std::ios::beg );
     const std::streamoff begin = ifs.tellg();
-
     const std::streamoff file_size = end - begin; // [byte]
-    const size_t nelements = static_cast<size_t>( file_size / sizeof( kvs::Real32 ) );
-    m_values.allocate( nelements );
 
     if ( m_sequential )
     {
+        const size_t element_size = sizeof( kvs::Real32 ) + 4 * sizeof( kvs::Int16 );
+        const size_t nelements = static_cast<size_t>( file_size / element_size );
+        m_values.allocate( nelements );
+
         for ( size_t i = 0; i < nelements; i++ )
         {
             kvs::Int16 padding[4];
@@ -137,6 +191,10 @@ bool GriddedBinaryDataFile::load() const
     }
     else
     {
+        const size_t element_size = sizeof( kvs::Real32 );
+        const size_t nelements = static_cast<size_t>( file_size / element_size );
+        m_values.allocate( nelements );
+
         ifs.read( (char*)( m_values.data() ), file_size );
     }
 
