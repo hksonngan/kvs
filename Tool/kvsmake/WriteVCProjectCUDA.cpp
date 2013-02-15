@@ -19,6 +19,7 @@
 #include <kvs/Directory>
 #include <kvs/FileList>
 #include <kvs/File>
+#include <kvs/String>
 #include "Constant.h"
 
 

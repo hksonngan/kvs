@@ -93,12 +93,12 @@ public:
 
         const T* v = this->coords();
         const kvs::Vector3<T> V3( v + 9 );
-        const kvs::Vector3<T> V03 = kvs::Vector3<T>( v + 0 ) - V3;
-        const kvs::Vector3<T> V13 = kvs::Vector3<T>( v + 3 ) - V3;
-        const kvs::Vector3<T> V23 = kvs::Vector3<T>( v + 6 ) - V3;
-        return kvs::Matrix33<T>( V03[0], V13[0], V23[0],
-                                 V03[1], V13[1], V23[1],
-                                 V03[2], V13[2], V23[2] );
+        const kvs::Vector3<T> V30 = kvs::Vector3<T>( v + 0 ) - V3;
+        const kvs::Vector3<T> V31 = kvs::Vector3<T>( v + 3 ) - V3;
+        const kvs::Vector3<T> V32 = kvs::Vector3<T>( v + 6 ) - V3;
+        return kvs::Matrix33<T>( V30[0], V31[0], V32[0],
+                                 V30[1], V31[1], V32[1],
+                                 V30[2], V31[2], V32[2] );
     }
 
     // hiding MixInCellFunction.globalToLocal

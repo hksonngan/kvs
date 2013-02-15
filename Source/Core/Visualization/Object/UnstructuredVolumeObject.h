@@ -91,8 +91,8 @@ public:
         this->setCoords( coords );
         this->setValues( values );
         this->setCellType( cell_type );
-        this->setNNodes( nnodes );
-        this->setNCells( ncells );
+        this->setNumberOfNodes( nnodes );
+        this->setNumberOfCells( ncells );
         this->setConnections( connections );
     }
 

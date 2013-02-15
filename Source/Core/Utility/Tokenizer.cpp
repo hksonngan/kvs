@@ -38,7 +38,7 @@ Tokenizer::Tokenizer( const std::string& source, const std::string& delimiter ):
     m_source( source ),
     m_delimiter( delimiter )
 {
-    m_next = m_source.find_first_not_of( m_delimiter, 0 );
+    m_next = m_source.find_first_not_of( m_delimiter );
 }
 
 /*==========================================================================*/
@@ -50,7 +50,7 @@ Tokenizer::Tokenizer( const std::string& source, const std::string& delimiter ):
 Tokenizer& Tokenizer::operator = ( const std::string& source )
 {
     m_source = source;
-    m_next = m_source.find_first_not_of( m_delimiter, 0 );
+    m_next = m_source.find_first_not_of( m_delimiter );
     return *this;
 }
 
@@ -73,7 +73,7 @@ bool Tokenizer::isLast() const
 /*==========================================================================*/
 std::string Tokenizer::token()
 {
-    if ( m_next == std::string::npos )
+    if ( this->isLast() )
     {
         return std::string();
     }
