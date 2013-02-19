@@ -29,6 +29,8 @@
 #define KVS_QT_VERSION 3
 #elif ( QT_VERSION >= 0x040000 && QT_VERSION < 0x050000 )
 #define KVS_QT_VERSION 4
+#elif ( QT_VERSION >= 0x050000 && QT_VERSION < 0x060000 )
+#define KVS_QT_VERSION 5
 #else
 #define KVS_QT_VERSION 0
 #endif
