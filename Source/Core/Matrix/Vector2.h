@@ -40,6 +40,8 @@ public:
 
 public:
     Vector2();
+    template <typename U>
+    explicit Vector2( const kvs::Vector2<U>& v );
     Vector2( const T x, const T y );
     explicit Vector2( const T elements[2] );
 
@@ -60,6 +62,9 @@ public:
     double length2() const;
     T dot( const Vector2& other ) const;
     const Vector2 normalized() const;
+
+    const T* data() const;
+    T* data();
 
 public:
     const T& operator []( const size_t index ) const;
@@ -176,6 +181,13 @@ template<typename T>
 inline Vector2<T>::Vector2()
 {
     this->zero();
+}
+
+template <typename T>
+template <typename U>
+inline Vector2<T>::Vector2( const kvs::Vector2<U>& v )
+{
+    this->set( static_cast<T>( v.x() ), static_cast<T>( v.y() ) );
 }
 
 /*==========================================================================*/
@@ -382,6 +394,18 @@ inline const Vector2<T> Vector2<T>::normalized() const
     const double length = this->length();
     const T normalize_factor = length > 0.0 ? static_cast<T>( 1.0 / length ) : T( 0 );
     return *this * normalize_factor;
+}
+
+template <typename T>
+inline const T* Vector2<T>::data() const
+{
+    return &m_elements[0];
+}
+
+template <typename T>
+inline T* Vector2<T>::data()
+{
+    return &m_elements[0];
 }
 
 template<typename T>

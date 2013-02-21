@@ -41,6 +41,8 @@ public:
 
 public:
     Vector3();
+    template <typename U>
+    explicit Vector3( const kvs::Vector3<U>& v );
     Vector3( const T x, const T y, const T z );
     explicit Vector3( const Vector2<T>& other, const T z );
     explicit Vector3( const T elements[3] );
@@ -67,6 +69,9 @@ public:
     T dot( const Vector3& other ) const;
     const Vector3 cross( const Vector3& other ) const;
     const Vector3 normalized() const;
+
+    const T* data() const;
+    T* data();
 
 public:
     const T& operator []( const size_t index ) const;
@@ -184,6 +189,13 @@ template<typename T>
 inline Vector3<T>::Vector3()
 {
     this->zero();
+}
+
+template <typename T>
+template <typename U>
+inline Vector3<T>::Vector3( const kvs::Vector3<U>& v )
+{
+    this->set( static_cast<T>( v.x() ), static_cast<T>( v.y() ), static_cast<T>( v.z() ) );
 }
 
 /*==========================================================================*/
@@ -479,6 +491,18 @@ inline const Vector3<T> Vector3<T>::normalized() const
     const double length = this->length();
     const T normalize_factor = length > 0.0 ? static_cast<T>( 1.0 / length ) : T( 0 );
     return *this * normalize_factor;
+}
+
+template <typename T>
+inline const T* Vector3<T>::data() const
+{
+    return &m_elements[0];
+}
+
+template <typename T>
+inline T* Vector3<T>::data()
+{
+    return &m_elements[0];
 }
 
 template<typename T>

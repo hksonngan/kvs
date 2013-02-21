@@ -42,6 +42,8 @@ public:
 
 public:
     Vector4();
+    template <typename U>
+    explicit Vector4( const kvs::Vector4<U>& v );
     Vector4( const T x, const T y, const T z, const T w );
     Vector4( const Vector2<T>& other, const T z , const T w );
     Vector4( const Vector3<T>& other, const T w );
@@ -72,6 +74,9 @@ public:
     double length2() const;
     T dot( const Vector4& other ) const;
     const Vector4 normalized() const;
+
+    const T* data() const;
+    T* data();
 
 public:
     const T& operator [] ( const size_t index ) const;
@@ -190,7 +195,14 @@ template<typename T>
 inline Vector4<T>::Vector4()
 {
     this->zero();
-};
+}
+
+template <typename T>
+template <typename U>
+inline Vector4<T>::Vector4( const kvs::Vector4<U>& v )
+{
+    this->set( static_cast<T>( v.x() ), static_cast<T>( v.y() ), static_cast<T>( v.z() ), static_cast<T>( v.w() ) );
+}
 
 /*==========================================================================*/
 /**
@@ -205,7 +217,7 @@ template<typename T>
 inline Vector4<T>::Vector4( const T x, const T y, const T z, const T w )
 {
     this->set( x, y, z, w );
-};
+}
 
 /*==========================================================================*/
 /**
@@ -219,7 +231,7 @@ template<typename T>
 inline Vector4<T>::Vector4( const Vector2<T>& other, const T z , const T w )
 {
     this->set( other, z, w );
-};
+}
 
 /*==========================================================================*/
 /**
@@ -232,7 +244,7 @@ template<typename T>
 inline Vector4<T>::Vector4( const Vector3<T>& other, const T w )
 {
     this->set( other, w );
-};
+}
 
 /*==========================================================================*/
 /**
@@ -244,7 +256,7 @@ template<typename T>
 inline Vector4<T>::Vector4( const T elements[4] )
 {
     this->set( elements );
-};
+}
 
 /*==========================================================================*/
 /**
@@ -545,6 +557,18 @@ inline const Vector4<T> Vector4<T>::normalized() const
     const double length = this->length();
     const T normalize_factor = length > 0.0 ? static_cast<T>( 1.0 / length ) : T( 0 );
     return *this * normalize_factor;
+}
+
+template <typename T>
+inline const T* Vector4<T>::data() const
+{
+    return &m_elements[0];
+}
+
+template <typename T>
+inline T* Vector4<T>::data()
+{
+    return &m_elements[0];
 }
 
 template<typename T>
