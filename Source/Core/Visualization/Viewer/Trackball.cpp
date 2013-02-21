@@ -115,7 +115,7 @@ void Trackball::setTranslation( const kvs::Vector3f& translation )
     m_translation = translation;
 }
 
-void Trackball::setRotation( const kvs::Quaternion<float>& rotation )
+void Trackball::setRotation( const kvs::Quaternion& rotation )
 {
     m_rotation = rotation;
 }
@@ -188,7 +188,7 @@ const kvs::Vector3f& Trackball::translation( void ) const
  *  Get roation matrix.
  */
 /*==========================================================================*/
-const kvs::Quaternion<float>& Trackball::rotation( void ) const
+const kvs::Quaternion& Trackball::rotation( void ) const
 {
     return( m_rotation );
 }
@@ -305,7 +305,7 @@ void Trackball::rotate( const kvs::Vector2i& start, const kvs::Vector2i& end )
     kvs::Vector3f p1w = m_ref_camera->xform().transformNormal( p1 );
     kvs::Vector3f p2w = m_ref_camera->xform().transformNormal( p2 );
 
-    m_rotation = kvs::Quaternion<float>::rotationQuaternion( p1w, p2w );
+    m_rotation = kvs::Quaternion::rotationQuaternion( p1w, p2w );
 }
 
 /*==========================================================================*/
@@ -320,7 +320,7 @@ void Trackball::reset( void )
     m_rotation_center = kvs::Vector2f( 0.0f, 0.0f );
     m_scaling         = kvs::Vector3f( 1.0f, 1.0f, 1.0f );
     m_translation     = kvs::Vector3f( 0.0f, 0.0f, 0.0f );
-    m_rotation        = kvs::Quaternion<float>( 0.0f, 0.0f, 0.0f, 1.0f );
+    m_rotation        = kvs::Quaternion( 0.0f, 0.0f, 0.0f, 1.0f );
 }
 
 /*==========================================================================*/

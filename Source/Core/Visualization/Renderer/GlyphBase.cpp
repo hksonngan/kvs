@@ -338,7 +338,7 @@ void GlyphBase::transform(
     const kvs::Vector3f c = ::DefaultDirection.cross( v );
     const float d = ::DefaultDirection.dot( v );
     const float s = static_cast<float>( std::sqrt( ( 1.0 + d ) * 2.0 ) );
-    const kvs::Quaternion<float> q( c.x()/s, c.y()/s, c.z()/s, s/2.0f );
+    const kvs::Quaternion q( c.x()/s, c.y()/s, c.z()/s, s/2.0f );
     const kvs::Matrix33f rot = q.toMatrix();
     const kvs::Xform xform( position, m_scale * size, rot );
 

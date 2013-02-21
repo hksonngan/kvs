@@ -879,8 +879,8 @@ void Tubeline::calculate_circles(
     const kvs::Vector3f base( 0.0f, 0.0f, 1.0f );
     const kvs::Vector3f axis = base.cross( vec1 );
     const float radian = static_cast<float>( std::acos( base.dot( vec1 ) / ( base.length() * vec1.length() ) ) );
-    const kvs::Quaternion<float> q( axis, radian );
-    const kvs::Matrix33<float> mat = q.toMatrix();
+    const kvs::Quaternion q( axis, radian );
+    const kvs::Matrix33f mat = q.toMatrix();
 
     float diff_rad = static_cast<float>( 2.0f * kvs::Math::PI() / m_ndivisions );
     float min_z = pre_radius - length * 0.5f;

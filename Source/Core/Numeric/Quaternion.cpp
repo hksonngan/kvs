@@ -11,14 +11,3 @@
  *  $Id$
  */
 /****************************************************************************/
-#include "Quaternion.h"
-
-
-namespace kvs
-{
-
-// template instantiation
-template class Quaternion<float>;
-template class Quaternion<double>;
-
-} // end of namespace kvs
