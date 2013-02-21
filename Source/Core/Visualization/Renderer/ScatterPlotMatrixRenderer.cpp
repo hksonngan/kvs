@@ -24,7 +24,7 @@
 namespace
 {
 
-void BeginDraw( void )
+void BeginDraw()
 {
     GLint vp[4]; glGetIntegerv( GL_VIEWPORT, vp );
     const GLint left = vp[0];
@@ -38,7 +38,7 @@ void BeginDraw( void )
     glOrtho( left, right, top, bottom, -1, 1 ); // The origin is upper-left.
 }
 
-void EndDraw( void )
+void EndDraw()
 {
     glPopMatrix();
     glMatrixMode( GL_MODELVIEW );
@@ -56,7 +56,7 @@ namespace kvs
  *  @brief  Constructs a new ScatterPlotMatrixRenderer class.
  */
 /*===========================================================================*/
-ScatterPlotMatrixRenderer::ScatterPlotMatrixRenderer( void ):
+ScatterPlotMatrixRenderer::ScatterPlotMatrixRenderer():
     m_top_margin( 30 ),
     m_bottom_margin( 30 ),
     m_left_margin( 30 ),
@@ -199,7 +199,7 @@ void ScatterPlotMatrixRenderer::selectAxis( const int index )
  *  @return top margin
  */
 /*===========================================================================*/
-const int ScatterPlotMatrixRenderer::topMargin( void ) const
+const int ScatterPlotMatrixRenderer::topMargin() const
 {
     return( m_top_margin );
 }
@@ -210,7 +210,7 @@ const int ScatterPlotMatrixRenderer::topMargin( void ) const
  *  @return bottom margin
  */
 /*===========================================================================*/
-const int ScatterPlotMatrixRenderer::bottomMargin( void ) const
+const int ScatterPlotMatrixRenderer::bottomMargin() const
 {
     return( m_bottom_margin );
 }
@@ -221,7 +221,7 @@ const int ScatterPlotMatrixRenderer::bottomMargin( void ) const
  *  @return left margin
  */
 /*===========================================================================*/
-const int ScatterPlotMatrixRenderer::leftMargin( void ) const
+const int ScatterPlotMatrixRenderer::leftMargin() const
 {
     return( m_left_margin );
 }
@@ -232,7 +232,7 @@ const int ScatterPlotMatrixRenderer::leftMargin( void ) const
  *  @return right margin
  */
 /*===========================================================================*/
-const int ScatterPlotMatrixRenderer::rightMargin( void ) const
+const int ScatterPlotMatrixRenderer::rightMargin() const
 {
     return( m_right_margin );
 }
@@ -243,7 +243,7 @@ const int ScatterPlotMatrixRenderer::rightMargin( void ) const
  *  @return margin
  */
 /*===========================================================================*/
-const int ScatterPlotMatrixRenderer::margin( void ) const
+const int ScatterPlotMatrixRenderer::margin() const
 {
     return( m_margin );
 }
@@ -254,7 +254,7 @@ const int ScatterPlotMatrixRenderer::margin( void ) const
  *  @return index of active axis
  */
 /*===========================================================================*/
-const int ScatterPlotMatrixRenderer::activeAxis( void ) const
+const int ScatterPlotMatrixRenderer::activeAxis() const
 {
     return( m_active_axis );
 }
@@ -265,7 +265,7 @@ const int ScatterPlotMatrixRenderer::activeAxis( void ) const
  *  @return point opaicty
  */
 /*===========================================================================*/
-const kvs::UInt8 ScatterPlotMatrixRenderer::pointOpacity( void ) const
+const kvs::UInt8 ScatterPlotMatrixRenderer::pointOpacity() const
 {
     return( m_point_opacity );
 }
@@ -276,7 +276,7 @@ const kvs::UInt8 ScatterPlotMatrixRenderer::pointOpacity( void ) const
  *  @return point size
  */
 /*===========================================================================*/
-const kvs::Real32 ScatterPlotMatrixRenderer::pointSize( void ) const
+const kvs::Real32 ScatterPlotMatrixRenderer::pointSize() const
 {
     return( m_point_size );
 }
@@ -287,7 +287,7 @@ const kvs::Real32 ScatterPlotMatrixRenderer::pointSize( void ) const
  *  @return color map
  */
 /*===========================================================================*/
-const kvs::ColorMap& ScatterPlotMatrixRenderer::colorMap( void ) const
+const kvs::ColorMap& ScatterPlotMatrixRenderer::colorMap() const
 {
     return( m_color_map );
 }
@@ -298,7 +298,7 @@ const kvs::ColorMap& ScatterPlotMatrixRenderer::colorMap( void ) const
  *  @return background color
  */
 /*===========================================================================*/
-const kvs::RGBAColor ScatterPlotMatrixRenderer::backgroundColor( void ) const
+const kvs::RGBAColor ScatterPlotMatrixRenderer::backgroundColor() const
 {
     return( m_background_color );
 }
@@ -320,8 +320,6 @@ void ScatterPlotMatrixRenderer::exec( kvs::ObjectBase* object, kvs::Camera* came
     BaseClass::startTimer();
 
     glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT );
-
-    RendererBase::initialize();
 
     glEnable( GL_BLEND );
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );

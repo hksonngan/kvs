@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file PolygonRenderer.cpp
+ *  @file   PolygonRenderer.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -29,7 +30,7 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-PolygonRenderer::PolygonRenderer( void ):
+PolygonRenderer::PolygonRenderer():
     m_enable_anti_aliasing( false ),
     m_enable_multisample_anti_aliasing( false ),
     m_enable_two_side_lighting( true )
@@ -41,7 +42,7 @@ PolygonRenderer::PolygonRenderer( void ):
  *  Destructor.
  */
 /*==========================================================================*/
-PolygonRenderer::~PolygonRenderer( void )
+PolygonRenderer::~PolygonRenderer()
 {
 }
 
@@ -126,23 +127,23 @@ void PolygonRenderer::enableAntiAliasing( const bool multisample ) const
  *  Disables anti-aliasing.
  */
 /*===========================================================================*/
-void PolygonRenderer::disableAntiAliasing( void ) const
+void PolygonRenderer::disableAntiAliasing() const
 {
     m_enable_anti_aliasing = false;
     m_enable_multisample_anti_aliasing = false;
 }
 
-void PolygonRenderer::enableTwoSideLighting( void ) const
+void PolygonRenderer::enableTwoSideLighting() const
 {
     m_enable_two_side_lighting = true;
 }
 
-void PolygonRenderer::disableTwoSideLighting( void ) const
+void PolygonRenderer::disableTwoSideLighting() const
 {
     m_enable_two_side_lighting = false;
 }
 
-const bool PolygonRenderer::isTwoSideLighting( void ) const
+bool PolygonRenderer::isTwoSideLighting() const
 {
     return( m_enable_two_side_lighting );
 }
@@ -152,7 +153,7 @@ const bool PolygonRenderer::isTwoSideLighting( void ) const
  *  Initialize about the projection matrix.
  */
 /*==========================================================================*/
-void PolygonRenderer::initialize_projection( void )
+void PolygonRenderer::initialize_projection()
 {
    glMatrixMode( GL_PROJECTION );
 
@@ -164,7 +165,7 @@ void PolygonRenderer::initialize_projection( void )
  *  Initialize about the modelview matrix.
  */
 /*==========================================================================*/
-void PolygonRenderer::initialize_modelview( void )
+void PolygonRenderer::initialize_modelview()
 {
     glDisable( GL_LINE_SMOOTH );
 

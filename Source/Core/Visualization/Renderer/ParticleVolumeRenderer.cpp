@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file ParticleVolumeRenderer.cpp
+ *  @file   ParticleVolumeRenderer.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -26,7 +27,7 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-ParticleVolumeRenderer::ParticleVolumeRenderer( void ):
+ParticleVolumeRenderer::ParticleVolumeRenderer():
     m_ref_point( NULL )
 {
     BaseClass::setShader( kvs::Shader::Lambert() );
@@ -58,7 +59,7 @@ ParticleVolumeRenderer::ParticleVolumeRenderer(
  *  Destructor.
  */
 /*==========================================================================*/
-ParticleVolumeRenderer::~ParticleVolumeRenderer( void )
+ParticleVolumeRenderer::~ParticleVolumeRenderer()
 {
     this->delete_particle_buffer();
 }
@@ -117,7 +118,7 @@ void ParticleVolumeRenderer::setSubpixelLevel( const size_t subpixel_level )
  *  Initialize.
  */
 /*==========================================================================*/
-void ParticleVolumeRenderer::initialize( void )
+void ParticleVolumeRenderer::initialize()
 {
     m_enable_rendering = true;
     m_subpixel_level   = 1;
@@ -129,7 +130,7 @@ void ParticleVolumeRenderer::initialize( void )
  *  Get the pointer to the point buffer.
  */
 /*==========================================================================*/
-const kvs::ParticleBuffer* ParticleVolumeRenderer::particleBuffer( void ) const
+const kvs::ParticleBuffer* ParticleVolumeRenderer::particleBuffer() const
 {
     return( m_buffer );
 }
@@ -139,7 +140,7 @@ const kvs::ParticleBuffer* ParticleVolumeRenderer::particleBuffer( void ) const
  *  Get the subpixel level.
  */
 /*==========================================================================*/
-const size_t ParticleVolumeRenderer::subpixelLevel( void ) const
+const size_t ParticleVolumeRenderer::subpixelLevel() const
 {
     return( m_subpixel_level );
 }
@@ -149,7 +150,7 @@ const size_t ParticleVolumeRenderer::subpixelLevel( void ) const
  *  Be enable rendering.
  */
 /*==========================================================================*/
-void ParticleVolumeRenderer::enableRendering( void )
+void ParticleVolumeRenderer::enableRendering()
 {
     m_enable_rendering = true;
 }
@@ -159,7 +160,7 @@ void ParticleVolumeRenderer::enableRendering( void )
  *  Be disable rendering.
  */
 /*==========================================================================*/
-void ParticleVolumeRenderer::disableRendering( void )
+void ParticleVolumeRenderer::disableRendering()
 {
     m_enable_rendering = false;
 }
@@ -185,7 +186,7 @@ bool ParticleVolumeRenderer::create_particle_buffer(
  *  Clean the particle buffer.
  */
 /*==========================================================================*/
-void ParticleVolumeRenderer::clean_particle_buffer( void )
+void ParticleVolumeRenderer::clean_particle_buffer()
 {
     m_buffer->clean();
 }
@@ -195,7 +196,7 @@ void ParticleVolumeRenderer::clean_particle_buffer( void )
  *  Delete the particle buffer.
  */
 /*==========================================================================*/
-void ParticleVolumeRenderer::delete_particle_buffer( void )
+void ParticleVolumeRenderer::delete_particle_buffer()
 {
     if( m_buffer ){ delete m_buffer; m_buffer = NULL; }
 }

@@ -26,7 +26,7 @@
 namespace kvs
 {
 
-RayCastingRenderer::RayCastingRenderer( void )
+RayCastingRenderer::RayCastingRenderer()
 {
     BaseClass::setShader( kvs::Shader::Lambert() );
     this->initialize();
@@ -46,15 +46,15 @@ RayCastingRenderer::RayCastingRenderer( const ShadingType shader )
     this->initialize();
 }
 
-RayCastingRenderer::~RayCastingRenderer( void )
+RayCastingRenderer::~RayCastingRenderer()
 {
 }
 
-void RayCastingRenderer::initialize( void )
+void RayCastingRenderer::initialize()
 {
-    m_step   = 0.5f;
+    m_step = 0.5f;
     m_opaque = 0.97f;
-    m_width  = 0;
+    m_width = 0;
     m_height = 0;
     m_ray_width = 1;
     m_enable_lod = false;
@@ -74,6 +74,38 @@ void RayCastingRenderer::exec(
     BaseClass::stopTimer();
 }
 
+void RayCastingRenderer::setSamplingStep( const float step )
+{
+    m_step = step;
+}
+
+void RayCastingRenderer::setOpaqueValue( const float opaque )
+{
+    m_opaque = opaque;
+}
+
+void RayCastingRenderer::enableLODControl( const size_t ray_width )
+{
+    m_enable_lod = true;
+    this->enableCoarseRendering( ray_width );
+}
+
+void RayCastingRenderer::disableLODControl()
+{
+    m_enable_lod = false;
+    this->disableCoarseRendering();
+}
+
+void RayCastingRenderer::enableCoarseRendering( const size_t ray_width )
+{
+    m_ray_width = ray_width;
+}
+
+void RayCastingRenderer::disableCoarseRendering()
+{
+    m_ray_width = 1;
+}
+
 /*==========================================================================*/
 /**
  *  Create rendering image.
@@ -85,11 +117,11 @@ void RayCastingRenderer::exec(
 /*==========================================================================*/
 void RayCastingRenderer::create_image(
     const kvs::StructuredVolumeObject* volume,
-    const kvs::Camera*                 camera,
-    const kvs::Light*                  light )
+    const kvs::Camera* camera,
+    const kvs::Light* light )
 {
-    if( BaseClass::m_width  != camera->windowWidth() ||
-        BaseClass::m_height != camera->windowHeight() )
+    if ( BaseClass::m_width  != camera->windowWidth() ||
+         BaseClass::m_height != camera->windowHeight() )
     {
         BaseClass::m_width  = camera->windowWidth();
         BaseClass::m_height = camera->windowHeight();
@@ -152,14 +184,14 @@ void RayCastingRenderer::create_image(
 template <typename T>
 void RayCastingRenderer::rasterize(
     const kvs::StructuredVolumeObject* volume,
-    const kvs::Camera*                 camera,
-    const kvs::Light*                  light )
+    const kvs::Camera* camera,
+    const kvs::Light* light )
 {
     // Set shader initial parameters.
     BaseClass::m_shader->set( camera, light );
 
     // Aliases.
-    kvs::UInt8*  const pixel      = BaseClass::m_color_data.data();
+    kvs::UInt8* const pixel = BaseClass::m_color_data.data();
     kvs::Real32* const depth_data = BaseClass::m_depth_data.data();
 
 #if KVS_RAY_CASTING_RENDERER__ENABLE_COMPOSITION
@@ -327,31 +359,31 @@ void RayCastingRenderer::rasterize(
 template
 void RayCastingRenderer::rasterize<kvs::UInt8>(
     const kvs::StructuredVolumeObject* volume,
-    const kvs::Camera*                 camera,
-    const kvs::Light*                  light );
+    const kvs::Camera* camera,
+    const kvs::Light* light );
 
 template
 void RayCastingRenderer::rasterize<kvs::UInt16>(
     const kvs::StructuredVolumeObject* volume,
-    const kvs::Camera*                 camera,
-    const kvs::Light*                  light );
+    const kvs::Camera* camera,
+    const kvs::Light* light );
 
 template
 void RayCastingRenderer::rasterize<kvs::Int16>(
     const kvs::StructuredVolumeObject* volume,
-    const kvs::Camera*                 camera,
-    const kvs::Light*                  light );
+    const kvs::Camera* camera,
+    const kvs::Light* light );
 
 template
 void RayCastingRenderer::rasterize<kvs::Real32>(
     const kvs::StructuredVolumeObject* volume,
-    const kvs::Camera*                 camera,
-    const kvs::Light*                  light );
+    const kvs::Camera* camera,
+    const kvs::Light* light );
 
 template
 void RayCastingRenderer::rasterize<kvs::Real64>(
     const kvs::StructuredVolumeObject* volume,
-    const kvs::Camera*                 camera,
-    const kvs::Light*                  light );
+    const kvs::Camera* camera,
+    const kvs::Light* light );
 
 } // end of namespace kvs

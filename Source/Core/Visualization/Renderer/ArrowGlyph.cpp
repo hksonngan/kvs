@@ -272,7 +272,7 @@ void ArrowGlyph::draw()
  *  @brief  Draw the arrow glyph as lines.
  */
 /*===========================================================================*/
-void ArrowGlyph::draw_lines( void )
+void ArrowGlyph::draw_lines()
 {
     const size_t npoints = BaseClass::coords().size() / 3;
     const kvs::ValueArray<kvs::Real32> coords = BaseClass::coords();
@@ -320,7 +320,7 @@ void ArrowGlyph::draw_lines( void )
  *  @brief  Draw the arrow glyph as polygons.
  */
 /*===========================================================================*/
-void ArrowGlyph::draw_tubes( void )
+void ArrowGlyph::draw_tubes()
 {
     const size_t npoints = BaseClass::coords().size() / 3;
     const kvs::ValueArray<kvs::Real32> coords = BaseClass::coords();

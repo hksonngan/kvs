@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file PointRenderer.cpp
+ *  @file   PointRenderer.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -29,7 +30,7 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-PointRenderer::PointRenderer( void ):
+PointRenderer::PointRenderer():
     m_enable_anti_aliasing( false ),
     m_enable_multisample_anti_aliasing( false ),
     m_enable_two_side_lighting( true )
@@ -41,7 +42,7 @@ PointRenderer::PointRenderer( void ):
  *  Destructor.
  */
 /*==========================================================================*/
-PointRenderer::~PointRenderer( void )
+PointRenderer::~PointRenderer()
 {
 }
 
@@ -58,7 +59,7 @@ void PointRenderer::exec( ObjectBase* object, Camera* camera, Light* light )
     kvs::IgnoreUnusedVariable( light );
     kvs::IgnoreUnusedVariable( camera );
 
-    kvs::PointObject* point = reinterpret_cast<kvs::PointObject*>( object );
+    kvs::PointObject* point = kvs::PointObject::DownCast( object );
 
     BaseClass::startTimer();
 
@@ -66,32 +67,11 @@ void PointRenderer::exec( ObjectBase* object, Camera* camera, Light* light )
 
     if ( point->normals().size() == 0 ) { BaseClass::disableShading(); }
 
-    RendererBase::initialize();
+    this->initialize();
+
 #if KVS_ENABLE_DEPRECATED
     point->applyMaterial();
 #endif
-
-    // Anti-aliasing.
-    if ( m_enable_anti_aliasing )
-    {
-#if defined ( GL_MULTISAMPLE )
-        if ( m_enable_multisample_anti_aliasing )
-        {
-            GLint buffers = 0;
-            GLint samples = 0;
-            glGetIntegerv( GL_SAMPLE_BUFFERS, &buffers );
-            glGetIntegerv( GL_SAMPLES, &samples );
-            if ( buffers > 0 && samples > 1 ) glEnable( GL_MULTISAMPLE );
-        }
-        else
-#endif
-        {
-            glEnable( GL_POINT_SMOOTH );
-            glEnable( GL_BLEND );
-            glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-            glHint( GL_POINT_SMOOTH_HINT, GL_NICEST );
-        }
-    }
 
     glEnable( GL_DEPTH_TEST );
     ::PointRenderingFunction( point );
@@ -118,52 +98,35 @@ void PointRenderer::enableAntiAliasing( const bool multisample ) const
  *  Disables anti-aliasing.
  */
 /*===========================================================================*/
-void PointRenderer::disableAntiAliasing( void ) const
+void PointRenderer::disableAntiAliasing() const
 {
     m_enable_anti_aliasing = false;
     m_enable_multisample_anti_aliasing = false;
 }
 
-void PointRenderer::enableTwoSideLighting( void ) const
+void PointRenderer::enableTwoSideLighting() const
 {
     m_enable_two_side_lighting = true;
 }
 
-void PointRenderer::disableTwoSideLighting( void ) const
+void PointRenderer::disableTwoSideLighting() const
 {
     m_enable_two_side_lighting = false;
 }
 
-const bool PointRenderer::isTwoSideLighting( void ) const
+bool PointRenderer::isTwoSideLighting() const
 {
-    return( m_enable_two_side_lighting );
+    return m_enable_two_side_lighting;
 }
 
-/*==========================================================================*/
-/**
- *  Initialize about the projection matrix.
- */
-/*==========================================================================*/
-void PointRenderer::initialize_projection( void )
-{
-   glMatrixMode( GL_PROJECTION );
-
-   glMatrixMode( GL_MODELVIEW );
-}
-
-/*==========================================================================*/
-/**
- *  Initialize about the modelview matrix.
- */
-/*==========================================================================*/
-void PointRenderer::initialize_modelview( void )
+void PointRenderer::initialize()
 {
     glShadeModel( GL_SMOOTH );
 
     glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
     glEnable( GL_COLOR_MATERIAL );
 
-    if( !this->isShading() )
+    if ( !this->isShading() )
     {
         glDisable( GL_NORMALIZE );
         glDisable( GL_LIGHTING );
@@ -175,6 +138,28 @@ void PointRenderer::initialize_modelview( void )
     }
 
     kvs::Light::setModelTwoSide( this->isTwoSideLighting() );
+
+    // Anti-aliasing.
+    if ( m_enable_anti_aliasing )
+    {
+#if defined ( GL_MULTISAMPLE )
+        if ( m_enable_multisample_anti_aliasing )
+        {
+            GLint buffers = 0;
+            GLint samples = 0;
+            glGetIntegerv( GL_SAMPLE_BUFFERS, &buffers );
+            glGetIntegerv( GL_SAMPLES, &samples );
+            if ( buffers > 0 && samples > 1 ) glEnable( GL_MULTISAMPLE );
+        }
+        else
+#endif
+        {
+            glEnable( GL_POINT_SMOOTH );
+            glEnable( GL_BLEND );
+            glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+            glHint( GL_POINT_SMOOTH_HINT, GL_NICEST );
+        }
+    }
 }
 
 } // end of namespace kvs

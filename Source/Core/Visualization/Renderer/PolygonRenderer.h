@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file PolygonRenderer.h
+ *  @file   PolygonRenderer.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -40,31 +41,21 @@ protected:
 
 public:
 
-    PolygonRenderer( void );
-
-    virtual ~PolygonRenderer( void );
-
-public:
+    PolygonRenderer();
+    virtual ~PolygonRenderer();
 
     void exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
 
-public:
-
     void enableAntiAliasing( const bool multisample = false ) const;
-
-    void disableAntiAliasing( void ) const;
-
-    void enableTwoSideLighting( void ) const;
-
-    void disableTwoSideLighting( void ) const;
-
-    const bool isTwoSideLighting( void ) const;
+    void disableAntiAliasing() const;
+    void enableTwoSideLighting() const;
+    void disableTwoSideLighting() const;
+    bool isTwoSideLighting() const;
 
 protected:
 
-    virtual void initialize_projection( void );
-
-    virtual void initialize_modelview( void );
+    virtual void initialize_projection();
+    virtual void initialize_modelview();
 };
 
 } // end of namespace kvs

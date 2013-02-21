@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file PointRenderer.h
+ *  @file   PointRenderer.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -44,31 +45,20 @@ protected:
 
 public:
 
-    PointRenderer( void );
-
-    virtual ~PointRenderer( void );
-
-public:
+    PointRenderer();
+    virtual ~PointRenderer();
 
     void enableAntiAliasing( const bool multisample = false ) const;
-
-    void disableAntiAliasing( void ) const;
-
-    void enableTwoSideLighting( void ) const;
-
-    void disableTwoSideLighting( void ) const;
-
-    const bool isTwoSideLighting( void ) const;
-
-public:
+    void disableAntiAliasing() const;
+    void enableTwoSideLighting() const;
+    void disableTwoSideLighting() const;
+    bool isTwoSideLighting() const;
 
     void exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
 
-protected:
+private:
 
-    virtual void initialize_projection( void );
-
-    virtual void initialize_modelview( void );
+    void initialize();
 };
 
 } // end of namespace kvs

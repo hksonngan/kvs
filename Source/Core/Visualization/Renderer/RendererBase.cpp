@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
  *  @file RendererBase.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -54,7 +55,7 @@ void RendererBase::setName( const std::string& name )
  *  @return renderer name
  */
 /*===========================================================================*/
-const std::string& RendererBase::name( void ) const
+const std::string& RendererBase::name() const
 {
     return m_name;
 }
@@ -119,35 +120,6 @@ void RendererBase::startTimer()
 void RendererBase::stopTimer()
 {
     m_timer.stop();
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Initialize the renderer.
- */
-/*==========================================================================*/
-void RendererBase::initialize()
-{
-    initialize_projection();
-    initialize_modelview();
-}
-
-/*==========================================================================*/
-/**
- *  Initialize the projection information.
- */
-/*==========================================================================*/
-void RendererBase::initialize_projection()
-{
-}
-
-/*==========================================================================*/
-/**
- *  Initialize about the modelview information.
- */
-/*==========================================================================*/
-void RendererBase::initialize_modelview()
-{
 }
 
 } // end of namespace kvs

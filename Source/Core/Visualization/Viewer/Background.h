@@ -42,22 +42,18 @@ public:
 
 protected:
 
-//    MipmapTexture2D m_mipmap;   ///< mipmap texture
-    Type           m_type;     ///< background type
+    Type m_type;///< background type
     kvs::RGBAColor m_color[4]; ///< color on the corners
+//    MipmapTexture2D m_mipmap;   ///< mipmap texture
 
 public:
 
-    Background( void );
-
+    Background();
     Background( const kvs::RGBAColor& color );
-
     Background( const kvs::RGBAColor& color1, const kvs::RGBAColor& color2 );
-
     Background( const kvs::RGBAColor& color0, const kvs::RGBAColor& color1,
                 const kvs::RGBAColor& color2, const kvs::RGBAColor& color3 );
-
-    virtual ~Background( void );
+    virtual ~Background();
 
 public:
 
@@ -66,27 +62,20 @@ public:
 public:
 
     void setColor( const kvs::RGBAColor& color );
-
     void setColor( const kvs::RGBAColor& color0, const kvs::RGBAColor& color1 );
-
     void setColor( const kvs::RGBAColor& color0, const kvs::RGBAColor& color1,
                    const kvs::RGBAColor& color2, const kvs::RGBAColor& color3 );
+//    void setImage( const ImageObject& image );
 
     const kvs::RGBColor& color( size_t index = 0 ) const;
 
-//    void setImage( const ImageObject& image );
-
-public:
-
-    void apply( void );
+    void apply();
 
 private:
 
-    void apply_mono_color( void );
-
-    void apply_gradation_color( void );
-
-//    void apply_image( void );
+    void apply_mono_color();
+    void apply_gradation_color();
+//    void apply_image();
 };
 
 } // end of namespace kvs

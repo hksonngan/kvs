@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file RendererBase.h
+ *  @file   RendererBase.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -65,9 +66,9 @@ protected:
 protected:
 
     KVS_DEPRECATED( kvs::Timer& timer() ) { return m_timer; }
-    void initialize();
-    virtual void initialize_projection();
-    virtual void initialize_modelview();
+    KVS_DEPRECATED( void initialize() ) { initialize_projection(); initialize_modelview(); }
+    KVS_DEPRECATED( virtual void initialize_projection() ) {}
+    KVS_DEPRECATED( virtual void initialize_modelview() ) {}
 };
 
 

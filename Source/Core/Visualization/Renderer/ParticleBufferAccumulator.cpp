@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file ParticleBufferAccumulator.cpp
+ *  @file   ParticleBufferAccumulator.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -39,7 +40,7 @@ ParticleBufferAccumulator::ParticleBufferAccumulator(
  *  Destruct this class.
  */
 /*==========================================================================*/
-ParticleBufferAccumulator::~ParticleBufferAccumulator( void )
+ParticleBufferAccumulator::~ParticleBufferAccumulator()
 {
     this->clear();
 }
@@ -72,7 +73,7 @@ bool ParticleBufferAccumulator::create(
  *  Clean this class. (not delete)
  */
 /*==========================================================================*/
-void ParticleBufferAccumulator::clean( void )
+void ParticleBufferAccumulator::clean()
 {
     SuperClass::clean();
     m_id_buffer.fill( 0 );
@@ -83,7 +84,7 @@ void ParticleBufferAccumulator::clean( void )
  *  Clear this class. (delete this class)
  */
 /*==========================================================================*/
-void ParticleBufferAccumulator::clear( void )
+void ParticleBufferAccumulator::clear()
 {
     SuperClass::clear();
     m_id_buffer.release();
@@ -97,7 +98,7 @@ void ParticleBufferAccumulator::clear( void )
  */
 /*==========================================================================*/
 void ParticleBufferAccumulator::accumulate(
-    const size_t               id,
+    const size_t id,
     const kvs::ParticleBuffer* buffer )
 {
     const size_t nsubpixels = m_width * m_height * m_subpixel_level * m_subpixel_level;

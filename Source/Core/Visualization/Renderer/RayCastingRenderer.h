@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file RayCastingRenderer.h
+ *  @file   RayCastingRenderer.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -36,75 +37,43 @@ class RayCastingRenderer : public kvs::VolumeRendererBase
 
 private:
 
-    float  m_step;       ///< sampling step
-    float  m_opaque;     ///< opaque value for early ray termination
-    size_t m_ray_width;  ///< ray width
-    bool   m_enable_lod; ///< enable LOD rendering
-    float  m_modelview_matrix[16]; ///< modelview matrix
+    float m_step; ///< sampling step
+    float m_opaque; ///< opaque value for early ray termination
+    size_t m_ray_width; ///< ray width
+    bool m_enable_lod; ///< enable LOD rendering
+    float m_modelview_matrix[16]; ///< modelview matrix
 
 public:
 
-    RayCastingRenderer( void );
-
+    RayCastingRenderer();
     RayCastingRenderer( const kvs::TransferFunction& tfunc );
-
     template <typename ShadingType>
     RayCastingRenderer( const ShadingType shader );
-
-    virtual ~RayCastingRenderer( void );
-
-public:
+    virtual ~RayCastingRenderer();
 
     void exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
 
-public:
+    void initialize();
 
-    void initialize( void );
-
-    void setSamplingStep( const float step )
-    {
-        m_step = step;
-    }
-
-    void setOpaqueValue( const float opaque )
-    {
-        m_opaque = opaque;
-    }
-
-    void enableLODControl( const size_t ray_width = 3 )
-    {
-        m_enable_lod = true;
-        this->enableCoarseRendering( ray_width );
-    }
-
-    void disableLODControl( void )
-    {
-        m_enable_lod = false;
-        this->disableCoarseRendering();
-    }
-
-    void enableCoarseRendering( const size_t ray_width = 3 )
-    {
-        m_ray_width = ray_width;
-    }
-
-    void disableCoarseRendering( void )
-    {
-        m_ray_width = 1;
-    }
+    void setSamplingStep( const float step );
+    void setOpaqueValue( const float opaque );
+    void enableLODControl( const size_t ray_width = 3 );
+    void disableLODControl();
+    void enableCoarseRendering( const size_t ray_width = 3 );
+    void disableCoarseRendering();
 
 private:
 
     void create_image(
         const kvs::StructuredVolumeObject* volume,
-        const kvs::Camera*                 camera,
-        const kvs::Light*                  light );
+        const kvs::Camera* camera,
+        const kvs::Light* light );
 
     template <typename T>
     void rasterize(
         const kvs::StructuredVolumeObject* volume,
-        const kvs::Camera*                 camera,
-        const kvs::Light*                  light );
+        const kvs::Camera* camera,
+        const kvs::Light* light );
 };
 
 } // end of namespace kvs

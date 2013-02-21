@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file ParticleBufferCompositor.cpp
+ *  @file   ParticleBufferCompositor.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -47,7 +48,7 @@ ParticleBufferCompositor::ParticleBufferCompositor(
  *  Destruct this class.
  */
 /*==========================================================================*/
-ParticleBufferCompositor::~ParticleBufferCompositor( void )
+ParticleBufferCompositor::~ParticleBufferCompositor()
 {
     this->delete_accumulator();
 }
@@ -83,7 +84,7 @@ void ParticleBufferCompositor::exec(
  *  Initialize this class.
  */
 /*==========================================================================*/
-void ParticleBufferCompositor::initialize( void )
+void ParticleBufferCompositor::initialize()
 {
 #if TEST__MESUREMENT_ACCUMLATION_TIME
     m_accumulation_time = 0.0;
@@ -142,7 +143,7 @@ void ParticleBufferCompositor::link(
  *  Return a number of projected particles.
  */
 /*==========================================================================*/
-const size_t ParticleBufferCompositor::numOfProjectedParticles( void ) const
+const size_t ParticleBufferCompositor::numOfProjectedParticles() const
 {
     return( m_num_projected_particles );
 }
@@ -152,7 +153,7 @@ const size_t ParticleBufferCompositor::numOfProjectedParticles( void ) const
  *  Return a number of stored particles
  */
 /*==========================================================================*/
-const size_t ParticleBufferCompositor::numOfStoredParticles( void ) const
+const size_t ParticleBufferCompositor::numOfStoredParticles() const
 {
     return( m_num_stored_particles );
 }
@@ -163,7 +164,7 @@ const size_t ParticleBufferCompositor::numOfStoredParticles( void ) const
  *  Retrun a accumulation time.
  */
 /*==========================================================================*/
-const double ParticleBufferCompositor::accumulationTime( void ) const
+const double ParticleBufferCompositor::accumulationTime() const
 {
     return( m_accumulation_time );
 }
@@ -174,7 +175,7 @@ const double ParticleBufferCompositor::accumulationTime( void ) const
  *  Clear the object list and the renderer list.
  */
 /*==========================================================================*/
-void ParticleBufferCompositor::clearList( void )
+void ParticleBufferCompositor::clearList()
 {
     m_point_object_list.clear();
     m_point_renderer_list.clear();
@@ -185,7 +186,7 @@ void ParticleBufferCompositor::clearList( void )
  *  Create the accumulator.
  */
 /*==========================================================================*/
-bool ParticleBufferCompositor::create_accumulator( void )
+bool ParticleBufferCompositor::create_accumulator()
 {
     const size_t width  = BaseClass::m_width;
     const size_t height = BaseClass::m_height;
@@ -207,7 +208,7 @@ bool ParticleBufferCompositor::create_accumulator( void )
  *  Clean the accumulator.
  */
 /*==========================================================================*/
-void ParticleBufferCompositor::clean_accumulator( void )
+void ParticleBufferCompositor::clean_accumulator()
 {
 #if TEST__RENDERING_ACTIVE_OBJECT_ONLY
     const size_t nrenderers = m_point_renderer_list.size();
@@ -232,7 +233,7 @@ void ParticleBufferCompositor::clean_accumulator( void )
  *  Delete the accumulator.
  */
 /*==========================================================================*/
-void ParticleBufferCompositor::delete_accumulator( void )
+void ParticleBufferCompositor::delete_accumulator()
 {
     if( m_accumulator )
     {
@@ -254,7 +255,7 @@ void ParticleBufferCompositor::delete_accumulator( void )
  *  @param light [in] pointer to the light
  */
 /*==========================================================================*/
-void ParticleBufferCompositor::create_image( Camera* camera, Light* light )
+void ParticleBufferCompositor::create_image( kvs::Camera* camera, kvs::Light* light )
 {
     if ( ( BaseClass::m_width  != camera->windowWidth() ) ||
          ( BaseClass::m_height != camera->windowHeight() ) )
@@ -345,10 +346,10 @@ void ParticleBufferCompositor::accumulate( kvs::Camera* camera, kvs::Light* ligh
  */
 /*==========================================================================*/
 void ParticleBufferCompositor::update_particle_buffer(
-    kvs::PointObject*            object,
+    kvs::PointObject* object,
     kvs::ParticleVolumeRenderer* renderer,
-    kvs::Camera*                 camera,
-    kvs::Light*                  light )
+    kvs::Camera* camera,
+    kvs::Light* light )
 {
     glPopMatrix();
     glPushMatrix();

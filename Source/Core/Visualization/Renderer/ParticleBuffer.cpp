@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file ParticleBuffer.cpp
+ *  @file   ParticleBuffer.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -20,7 +21,7 @@
 namespace kvs
 {
 
-ParticleBuffer::ParticleBuffer( void ):
+ParticleBuffer::ParticleBuffer():
     m_ref_shader( NULL ),
     m_ref_point_object( NULL )
 {
@@ -48,7 +49,7 @@ ParticleBuffer::ParticleBuffer(
  *  Destructor.
  */
 /*==========================================================================*/
-ParticleBuffer::~ParticleBuffer( void )
+ParticleBuffer::~ParticleBuffer()
 {
     this->clear();
 }
@@ -58,7 +59,7 @@ ParticleBuffer::~ParticleBuffer( void )
  *  Return the buffer width.
  */
 /*==========================================================================*/
-const size_t ParticleBuffer::width( void ) const
+const size_t ParticleBuffer::width() const
 {
     return( m_width );
 }
@@ -68,7 +69,7 @@ const size_t ParticleBuffer::width( void ) const
  *  Return the buffer height.
  */
 /*==========================================================================*/
-const size_t ParticleBuffer::height( void ) const
+const size_t ParticleBuffer::height() const
 {
     return( m_height );
 }
@@ -78,7 +79,7 @@ const size_t ParticleBuffer::height( void ) const
  *  Return the index buffer.
  */
 /*==========================================================================*/
-const kvs::ValueArray<kvs::UInt32>& ParticleBuffer::indexBuffer( void ) const
+const kvs::ValueArray<kvs::UInt32>& ParticleBuffer::indexBuffer() const
 {
     return( m_index_buffer );
 }
@@ -100,7 +101,7 @@ const kvs::UInt32 ParticleBuffer::index( const size_t index ) const
  *  Return the depth buffer.
  */
 /*==========================================================================*/
-const kvs::ValueArray<kvs::Real32>& ParticleBuffer::depthBuffer( void ) const
+const kvs::ValueArray<kvs::Real32>& ParticleBuffer::depthBuffer() const
 {
     return( m_depth_buffer );
 }
@@ -122,7 +123,7 @@ const kvs::Real32 ParticleBuffer::depth( const size_t index ) const
  *  Return the pointer to the attached shader.
  */
 /*==========================================================================*/
-const kvs::Shader::shader_type* ParticleBuffer::shader( void ) const
+const kvs::Shader::shader_type* ParticleBuffer::shader() const
 {
     return( m_ref_shader );
 }
@@ -132,7 +133,7 @@ const kvs::Shader::shader_type* ParticleBuffer::shader( void ) const
  *  Return the pointer to the attached point object.
  */
 /*==========================================================================*/
-const kvs::PointObject* ParticleBuffer::pointObject( void ) const
+const kvs::PointObject* ParticleBuffer::pointObject() const
 {
     return( m_ref_point_object );
 }
@@ -142,7 +143,7 @@ const kvs::PointObject* ParticleBuffer::pointObject( void ) const
  *  Return the number of projected particles.
  */
 /*==========================================================================*/
-const size_t ParticleBuffer::numOfProjectedParticles( void ) const
+const size_t ParticleBuffer::numOfProjectedParticles() const
 {
     return( m_num_of_projected_particles );
 }
@@ -152,7 +153,7 @@ const size_t ParticleBuffer::numOfProjectedParticles( void ) const
  *  Return the number of stored particles.
  */
 /*==========================================================================*/
-const size_t ParticleBuffer::numOfStoredParticles( void ) const
+const size_t ParticleBuffer::numOfStoredParticles() const
 {
     return( m_num_of_stored_particles );
 }
@@ -196,7 +197,7 @@ void ParticleBuffer::attachPointObject( const kvs::PointObject* point_object )
  *  Be enable shading.
  */
 /*==========================================================================*/
-void ParticleBuffer::enableShading( void )
+void ParticleBuffer::enableShading()
 {
     m_enable_shading = true;
 }
@@ -206,7 +207,7 @@ void ParticleBuffer::enableShading( void )
  *  Be disable shading.
  */
 /*==========================================================================*/
-void ParticleBuffer::disableShading( void )
+void ParticleBuffer::disableShading()
 {
     m_enable_shading = false;
 }
@@ -257,7 +258,7 @@ bool ParticleBuffer::create(
  *  Clean.
  */
 /*==========================================================================*/
-void ParticleBuffer::clean( void )
+void ParticleBuffer::clean()
 {
     m_index_buffer.fill( 0 );
     m_depth_buffer.fill( 0 );
@@ -271,7 +272,7 @@ void ParticleBuffer::clean( void )
  *  Clear.
  */
 /*==========================================================================*/
-void ParticleBuffer::clear( void )
+void ParticleBuffer::clear()
 {
     m_index_buffer.release();
     m_depth_buffer.release();

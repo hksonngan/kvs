@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file VolumeRendererBase.h
+ *  @file   VolumeRendererBase.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -36,60 +37,46 @@ class VolumeRendererBase : public kvs::RendererBase
 
 protected:
 
-    size_t                       m_width;          ///< width of rendering image
-    size_t                       m_height;         ///< height of rendering image
-    kvs::FrameBuffer             m_depth_buffer;   ///< depth buffer
-    kvs::ValueArray<kvs::Real32> m_depth_data;     ///< depth data as float type
-    kvs::FrameBuffer             m_color_buffer;   ///< color (RGBA) buffer
-    kvs::ValueArray<kvs::UInt8>  m_color_data;     ///< color (RGBA) data as uchar type
-    bool                         m_enable_shading; ///< shading flag
-    kvs::TransferFunction        m_tfunc;          ///< transfer function
-    kvs::Shader::shader_type*    m_shader;         ///< shading method
+    size_t m_width; ///< width of rendering image
+    size_t m_height; ///< height of rendering image
+    kvs::FrameBuffer m_depth_buffer; ///< depth buffer
+    kvs::ValueArray<kvs::Real32> m_depth_data; ///< depth data as float type
+    kvs::FrameBuffer m_color_buffer; ///< color (RGBA) buffer
+    kvs::ValueArray<kvs::UInt8> m_color_data; ///< color (RGBA) data as uchar type
+    bool m_enable_shading; ///< shading flag
+    kvs::TransferFunction m_tfunc; ///< transfer function
+    kvs::Shader::shader_type* m_shader; ///< shading method
 
 public:
 
-    VolumeRendererBase( void );
-
-    virtual ~VolumeRendererBase( void );
+    VolumeRendererBase();
+    virtual ~VolumeRendererBase();
 
 public:
 
     virtual void exec(
         kvs::ObjectBase* object,
-        kvs::Camera*     camera = NULL,
-        kvs::Light*      light  = NULL ) = 0;
-
-public:
+        kvs::Camera* camera = NULL,
+        kvs::Light* light  = NULL ) = 0;
 
     template <typename ShadingType>
     void setShader( const ShadingType shader );
-
     void setTransferFunction( const kvs::TransferFunction& tfunc );
 
-    void enableShading( void );
+    void enableShading();
+    void disableShading();
 
-    void disableShading( void );
+    const bool isEnabledShading() const;
+    const kvs::TransferFunction& transferFunction() const;
+    kvs::TransferFunction& transferFunction();
 
-public:
-
-    const bool isEnabledShading( void ) const;
-
-    const kvs::TransferFunction& transferFunction( void ) const;
-
-    kvs::TransferFunction& transferFunction( void );
-
-public:
-
-    void initialize( void );
-
-    void clear( void );
+    void initialize();
+    void clear();
 
 protected:
 
-    void draw_image( void );
-
+    void draw_image();
     void draw_depth_buffer( const int* viewport );
-
     void draw_color_buffer( const int* viewport );
 };
 
@@ -108,7 +95,6 @@ inline void VolumeRendererBase::setShader( const ShadingType shader )
         kvsMessageError("Cannot create a specified shader.");
     }
 };
-
 
 } // end of namespace kvs
 

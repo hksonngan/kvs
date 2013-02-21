@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file VolumeRayIntersector.cpp
+ *  @file   VolumeRayIntersector.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -18,9 +19,9 @@
 namespace kvs
 {
 
-VolumeRayIntersector::VolumeRayIntersector( const kvs::VolumeObjectBase* volume )
-    : Ray()
-    , m_reference_volume( volume )
+VolumeRayIntersector::VolumeRayIntersector( const kvs::VolumeObjectBase* volume ):
+    Ray(),
+    m_reference_volume( volume )
 {
     const float epsilon = 0.003f; // 1e-3
 

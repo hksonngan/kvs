@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file ParticleVolumeRenderer.h
+ *  @file   ParticleVolumeRenderer.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -48,56 +49,35 @@ protected:
 
 public:
 
-    ParticleVolumeRenderer( void );
+    ParticleVolumeRenderer();
     ParticleVolumeRenderer( const kvs::PointObject* point, const size_t subpixel_level = 1 );
-    virtual ~ParticleVolumeRenderer( void );
-
-public:
+    virtual ~ParticleVolumeRenderer();
 
     void exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
-
-public:
 
     void attachPointObject( const kvs::PointObject* point );
     void setSubpixelLevel( const size_t subpixel_level );
 
-/*
-    template <typename ShadingType>
-    void setShader( ShadingType shader )
-    {
-        BaseClass::setShader( shader );
-        m_buffer->attachShader( m_shader );
-    };
-*/
+    void initialize();
+    const kvs::ParticleBuffer* particleBuffer() const;
+    const size_t subpixelLevel() const;
 
-public:
-
-    void initialize( void );
-    const kvs::ParticleBuffer* particleBuffer( void ) const;
-    const size_t subpixelLevel( void ) const;
-
-public:
-
-    void enableRendering( void );
-    void disableRendering( void );
+    void enableRendering();
+    void disableRendering();
 
 protected:
 
     bool create_particle_buffer( const size_t width, const size_t height, const size_t subpixel_level );
-    void clean_particle_buffer( void );
-    void delete_particle_buffer( void );
-
-protected:
-
+    void clean_particle_buffer();
+    void delete_particle_buffer();
     void create_image(
         const kvs::PointObject* point,
-        const kvs::Camera*      camera,
-        const kvs::Light*       light );
-
+        const kvs::Camera* camera,
+        const kvs::Light* light );
     void project_particle(
         const kvs::PointObject* point,
-        const kvs::Camera*      camera,
-        const kvs::Light*       light );
+        const kvs::Camera* camera,
+        const kvs::Light* light );
 };
 
 } // end of namespace kvs

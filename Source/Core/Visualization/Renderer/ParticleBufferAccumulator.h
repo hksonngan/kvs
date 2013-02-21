@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file ParticleBufferAccumulator.h
+ *  @file   ParticleBufferAccumulator.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -48,29 +49,19 @@ public:
         const size_t height,
         const size_t subpixel_level );
 
-    virtual ~ParticleBufferAccumulator( void );
+    virtual ~ParticleBufferAccumulator();
 
 public:
 
-    bool create(
-        const size_t width,
-        const size_t height,
-        const size_t subpixel_level );
-
-    void clean( void );
-
-    void clear( void );
-
-public:
-
+    bool create( const size_t width, const size_t height, const size_t subpixel_level );
+    void clean();
+    void clear();
     void accumulate( const size_t id, const kvs::ParticleBuffer* buffer );
-
     void add( const size_t bindex, const size_t id, const kvs::Real32 depth, const kvs::UInt32 vindex );
-
     void createImage(
-        ObjectList&                   object_list,
-        RendererList&                 renderer_list,
-        kvs::ValueArray<kvs::UInt8>*  color,
+        ObjectList& object_list,
+        RendererList& renderer_list,
+        kvs::ValueArray<kvs::UInt8>* color,
         kvs::ValueArray<kvs::Real32>* depth );
 };
 

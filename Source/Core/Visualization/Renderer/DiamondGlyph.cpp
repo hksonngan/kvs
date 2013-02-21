@@ -216,7 +216,7 @@ void DiamondGlyph::attach_volume( const kvs::VolumeObjectBase* volume )
  *  @brief  Draw the diamond glyph.
  */
 /*===========================================================================*/
-void DiamondGlyph::draw( void )
+void DiamondGlyph::draw()
 {
     const size_t npoints = BaseClass::coords().size() / 3;
     if ( BaseClass::directions().size() == 0 )
@@ -293,7 +293,7 @@ void DiamondGlyph::draw_element( const kvs::RGBColor& color, const kvs::UInt8 op
  *  @brief  Initialize the modelview matrix.
  */
 /*===========================================================================*/
-void DiamondGlyph::initialize( void )
+void DiamondGlyph::initialize()
 {
     glDisable( GL_LINE_SMOOTH );
 

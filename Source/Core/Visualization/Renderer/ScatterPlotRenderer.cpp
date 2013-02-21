@@ -24,7 +24,7 @@
 namespace
 {
 
-void BeginDraw( void )
+void BeginDraw()
 {
     GLint vp[4]; glGetIntegerv( GL_VIEWPORT, vp );
     const GLint left = vp[0];
@@ -38,7 +38,7 @@ void BeginDraw( void )
     glOrtho( left, right, top, bottom, -1, 1 ); // The origin is upper-left.
 }
 
-void EndDraw( void )
+void EndDraw()
 {
     glPopMatrix();
     glMatrixMode( GL_MODELVIEW );
@@ -56,7 +56,7 @@ namespace kvs
  *  @brief  Constructs a new ScatterPlotRenderer class.
  */
 /*===========================================================================*/
-ScatterPlotRenderer::ScatterPlotRenderer( void ):
+ScatterPlotRenderer::ScatterPlotRenderer():
     m_top_margin( 30 ),
     m_bottom_margin( 30 ),
     m_left_margin( 30 ),
@@ -178,7 +178,7 @@ void ScatterPlotRenderer::setBackgroundColor( const kvs::RGBAColor background_co
  *  @return top margin
  */
 /*===========================================================================*/
-const int ScatterPlotRenderer::topMargin( void ) const
+const int ScatterPlotRenderer::topMargin() const
 {
     return( m_top_margin );
 }
@@ -189,7 +189,7 @@ const int ScatterPlotRenderer::topMargin( void ) const
  *  @return bottom margin
  */
 /*===========================================================================*/
-const int ScatterPlotRenderer::bottomMargin( void ) const
+const int ScatterPlotRenderer::bottomMargin() const
 {
     return( m_bottom_margin );
 }
@@ -200,7 +200,7 @@ const int ScatterPlotRenderer::bottomMargin( void ) const
  *  @return left margin
  */
 /*===========================================================================*/
-const int ScatterPlotRenderer::leftMargin( void ) const
+const int ScatterPlotRenderer::leftMargin() const
 {
     return( m_left_margin );
 }
@@ -211,7 +211,7 @@ const int ScatterPlotRenderer::leftMargin( void ) const
  *  @return right margin
  */
 /*===========================================================================*/
-const int ScatterPlotRenderer::rightMargin( void ) const
+const int ScatterPlotRenderer::rightMargin() const
 {
     return( m_right_margin );
 }
@@ -222,7 +222,7 @@ const int ScatterPlotRenderer::rightMargin( void ) const
  *  @return point opaicty
  */
 /*===========================================================================*/
-const kvs::UInt8 ScatterPlotRenderer::pointOpacity( void ) const
+const kvs::UInt8 ScatterPlotRenderer::pointOpacity() const
 {
     return( m_point_opacity );
 }
@@ -233,7 +233,7 @@ const kvs::UInt8 ScatterPlotRenderer::pointOpacity( void ) const
  *  @return point size
  */
 /*===========================================================================*/
-const kvs::Real32 ScatterPlotRenderer::pointSize( void ) const
+const kvs::Real32 ScatterPlotRenderer::pointSize() const
 {
     return( m_point_size );
 }
@@ -244,7 +244,7 @@ const kvs::Real32 ScatterPlotRenderer::pointSize( void ) const
  *  @return color map
  */
 /*===========================================================================*/
-const kvs::ColorMap& ScatterPlotRenderer::colorMap( void ) const
+const kvs::ColorMap& ScatterPlotRenderer::colorMap() const
 {
     return( m_color_map );
 }
@@ -255,7 +255,7 @@ const kvs::ColorMap& ScatterPlotRenderer::colorMap( void ) const
  *  @return background color
  */
 /*===========================================================================*/
-const kvs::RGBAColor ScatterPlotRenderer::backgroundColor( void ) const
+const kvs::RGBAColor ScatterPlotRenderer::backgroundColor() const
 {
     return( m_background_color );
 }
@@ -278,8 +278,6 @@ void ScatterPlotRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kv
     BaseClass::startTimer();
 
     glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT );
-
-    RendererBase::initialize();
 
     ::BeginDraw();
 

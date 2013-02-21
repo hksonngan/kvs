@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file LineRenderingFunction.h
+ *  @file   LineRenderingFunction.h
+ *  @author Yukio Yasuhara, Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *

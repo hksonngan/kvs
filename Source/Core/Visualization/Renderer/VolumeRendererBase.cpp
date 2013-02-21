@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file VolumeRendererBase.cpp
+ *  @file   VolumeRendererBase.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -24,7 +25,7 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-VolumeRendererBase::VolumeRendererBase( void )
+VolumeRendererBase::VolumeRendererBase()
 {
     this->initialize();
 }
@@ -34,7 +35,7 @@ VolumeRendererBase::VolumeRendererBase( void )
  *  Destructor.
  */
 /*==========================================================================*/
-VolumeRendererBase::~VolumeRendererBase( void )
+VolumeRendererBase::~VolumeRendererBase()
 {
     this->clear();
 }
@@ -55,7 +56,7 @@ void VolumeRendererBase::setTransferFunction( const kvs::TransferFunction& tfunc
  *  Enable shading function.
  */
 /*==========================================================================*/
-void VolumeRendererBase::enableShading( void )
+void VolumeRendererBase::enableShading()
 {
     m_enable_shading = true;
 }
@@ -65,7 +66,7 @@ void VolumeRendererBase::enableShading( void )
  *  Disable shading function.
  */
 /*==========================================================================*/
-void VolumeRendererBase::disableShading( void )
+void VolumeRendererBase::disableShading()
 {
     m_enable_shading = false;
 }
@@ -76,7 +77,7 @@ void VolumeRendererBase::disableShading( void )
  *  @return true, if the shading is enable.
  */
 /*==========================================================================*/
-const bool VolumeRendererBase::isEnabledShading( void ) const
+const bool VolumeRendererBase::isEnabledShading() const
 {
     return( m_enable_shading );
 }
@@ -87,7 +88,7 @@ const bool VolumeRendererBase::isEnabledShading( void ) const
  *  @return transfer function
  */
 /*==========================================================================*/
-const kvs::TransferFunction& VolumeRendererBase::transferFunction( void ) const
+const kvs::TransferFunction& VolumeRendererBase::transferFunction() const
 {
     return( m_tfunc );
 }
@@ -98,7 +99,7 @@ const kvs::TransferFunction& VolumeRendererBase::transferFunction( void ) const
  *  @return transfer function
  */
 /*==========================================================================*/
-kvs::TransferFunction& VolumeRendererBase::transferFunction( void )
+kvs::TransferFunction& VolumeRendererBase::transferFunction()
 {
     return( m_tfunc );
 }
@@ -108,7 +109,7 @@ kvs::TransferFunction& VolumeRendererBase::transferFunction( void )
  *  Initialize.
  */
 /*==========================================================================*/
-void VolumeRendererBase::initialize( void )
+void VolumeRendererBase::initialize()
 {
     m_width = 0;
     m_height = 0;
@@ -128,7 +129,7 @@ void VolumeRendererBase::initialize( void )
  *  Clear.
  */
 /*==========================================================================*/
-void VolumeRendererBase::clear( void )
+void VolumeRendererBase::clear()
 {
     if ( m_shader )
     {
@@ -142,7 +143,7 @@ void VolumeRendererBase::clear( void )
  *  Draw the rendering image.
  */
 /*==========================================================================*/
-void VolumeRendererBase::draw_image( void )
+void VolumeRendererBase::draw_image()
 {
     // Get viewport information.
     int viewport[4];

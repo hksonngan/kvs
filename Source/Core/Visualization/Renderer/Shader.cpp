@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file Shader.cpp
+ *  @file   Shader.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -54,7 +55,7 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-Shader::Base::Base( void )
+Shader::Base::Base()
 {
 }
 
@@ -63,7 +64,7 @@ Shader::Base::Base( void )
  *  Destructor.
  */
 /*==========================================================================*/
-Shader::Base::~Base( void )
+Shader::Base::~Base()
 {
 }
 
@@ -72,7 +73,7 @@ Shader::Base::~Base( void )
  *  Constructor.
  */
 /*==========================================================================*/
-Shader::Lambert::Lambert( void )
+Shader::Lambert::Lambert()
 {
     Ka = 0.4f;
     Kd = 0.6f;
@@ -117,7 +118,7 @@ void Shader::Lambert::set( const Camera* camera, const Light* light )
     light_position = camera->projectWorldToObject( light->position() );
 }
 
-const Shader::Type Shader::Lambert::type( void ) const
+const Shader::Type Shader::Lambert::type() const
 {
     return( Shader::LambertShading );
 }
@@ -179,7 +180,7 @@ inline const float Shader::Lambert::attenuation( const kvs::Vector3f& vertex, co
  *  Constructor.
  */
 /*==========================================================================*/
-Shader::Phong::Phong( void )
+Shader::Phong::Phong()
 {
     Ka = 0.3f;
     Kd = 0.5f;
@@ -239,7 +240,7 @@ void Shader::Phong::set( const kvs::Camera* camera, const kvs::Light* light )
  *  @return shader type
  */
 /*===========================================================================*/
-const Shader::Type Shader::Phong::type( void ) const
+const Shader::Type Shader::Phong::type() const
 {
     return( Shader::PhongShading );
 }
@@ -304,7 +305,7 @@ inline const float Shader::Phong::attenuation( const kvs::Vector3f& vertex, cons
  *  Constructor.
  */
 /*==========================================================================*/
-Shader::BlinnPhong::BlinnPhong( void )
+Shader::BlinnPhong::BlinnPhong()
 {
     Ka = 0.3f;
     Kd = 0.5f;
@@ -364,7 +365,7 @@ void Shader::BlinnPhong::set( const kvs::Camera* camera, const kvs::Light* light
  *  @return shader type
  */
 /*===========================================================================*/
-const Shader::Type Shader::BlinnPhong::type( void ) const
+const Shader::Type Shader::BlinnPhong::type() const
 {
     return( Shader::BlinnPhongShading );
 }

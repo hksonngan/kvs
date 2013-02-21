@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file PolygonRenderingFunction.h
+ *  @file   PolygonRenderingFunction.h
+ *  @author Yukio Yasuhara, Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *

@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file PointRenderingFunction.h
+ *  @file   PointRenderingFunction.h
+ *  @author Yukio Yasuhara, Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *

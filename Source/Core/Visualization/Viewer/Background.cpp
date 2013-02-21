@@ -23,7 +23,7 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-Background::Background( void )
+Background::Background()
 {
     m_type = Background::MonoColor;
 }
@@ -74,7 +74,7 @@ Background::Background(
  *  Destructor.
  */
 /*==========================================================================*/
-Background::~Background( void )
+Background::~Background()
 {
 }
 
@@ -86,7 +86,7 @@ Background::~Background( void )
 /*==========================================================================*/
 Background& Background::operator = ( const Background& bg )
 {
-    m_type     = bg.m_type;
+    m_type = bg.m_type;
     m_color[0] = bg.m_color[0];
     m_color[1] = bg.m_color[1];
     m_color[2] = bg.m_color[2];
@@ -103,7 +103,7 @@ Background& Background::operator = ( const Background& bg )
 /*==========================================================================*/
 void Background::setColor( const kvs::RGBAColor& color )
 {
-    m_type     = Background::MonoColor;
+    m_type = Background::MonoColor;
     m_color[0] = color;
 }
 
@@ -116,7 +116,7 @@ void Background::setColor( const kvs::RGBAColor& color )
 /*==========================================================================*/
 void Background::setColor( const RGBAColor& color0, const RGBAColor& color1 )
 {
-    m_type     = Background::TwoSideColor;
+    m_type = Background::TwoSideColor;
     m_color[0] = color0;
     m_color[1] = color0;
     m_color[2] = color1;
@@ -138,7 +138,7 @@ void Background::setColor(
     const kvs::RGBAColor& color2,
     const kvs::RGBAColor& color3 )
 {
-    m_type     = Background::FourCornersColor;
+    m_type = Background::FourCornersColor;
     m_color[0] = color0;
     m_color[1] = color1;
     m_color[2] = color2;
@@ -177,7 +177,7 @@ void Background::setImage( const ImageObject& image )
  *  Apply gradation color or image to the background.
  */
 /*==========================================================================*/
-void Background::apply( void )
+void Background::apply()
 {
     switch( m_type )
     {
@@ -195,7 +195,7 @@ void Background::apply( void )
  *  Apply mono color to the background.
  */
 /*==========================================================================*/
-void Background::apply_mono_color( void )
+void Background::apply_mono_color()
 {
     float r = static_cast<float>(m_color[0].r()) / 255.0f;
     float g = static_cast<float>(m_color[0].g()) / 255.0f;
@@ -209,7 +209,7 @@ void Background::apply_mono_color( void )
  *  Apply gradation color to the background.
  */
 /*==========================================================================*/
-void Background::apply_gradation_color( void )
+void Background::apply_gradation_color()
 {
     // Clear bits.
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
@@ -260,7 +260,7 @@ void Background::apply_gradation_color( void )
  */
 /*==========================================================================*/
 /*
-void Background::apply_image( void )
+void Background::apply_image()
 {
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 

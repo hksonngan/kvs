@@ -36,7 +36,7 @@ ApplicationBase::ApplicationBase( int argc, char** argv ):
  *  @brief  Destructs the ApplicationBase class.
  */
 /*===========================================================================*/
-ApplicationBase::~ApplicationBase( void )
+ApplicationBase::~ApplicationBase()
 {
 }
 
@@ -46,7 +46,7 @@ ApplicationBase::~ApplicationBase( void )
  *  @return argument count
  */
 /*===========================================================================*/
-int ApplicationBase::argc( void )
+int ApplicationBase::argc()
 {
     return( m_argc );
 }
@@ -57,7 +57,7 @@ int ApplicationBase::argc( void )
  *  @return argument values
  */
 /*===========================================================================*/
-char** ApplicationBase::argv( void )
+char** ApplicationBase::argv()
 {
     return( m_argv );
 }

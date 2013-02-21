@@ -56,53 +56,30 @@ protected:
 
 public:
 
-    ScatterPlotMatrixRenderer( void );
-
-public:
+    ScatterPlotMatrixRenderer();
 
     void setTopMargin( const int top_margin );
-
     void setBottomMargin( const int bottom_margin );
-
     void setLeftMargin( const int left_margin );
-
     void setRightMargin( const int right_margin );
-
     void setMargin( const int margin );
-
     void setPointColor( const kvs::RGBColor point_color );
-
     void setPointOpacity( const kvs::UInt8 point_opacity );
-
     void setPointSize( const kvs::Real32 point_size );
-
     void setColorMap( const kvs::ColorMap& color_map );
-
     void setBackgroundColor( const kvs::RGBAColor background_color );
-
     void selectAxis( const int index );
 
-    const int topMargin( void ) const;
-
-    const int bottomMargin( void ) const;
-
-    const int leftMargin( void ) const;
-
-    const int rightMargin( void ) const;
-
-    const int margin( void ) const;
-
-    const int activeAxis( void ) const;
-
-    const kvs::UInt8 pointOpacity( void ) const;
-
-    const kvs::Real32 pointSize( void ) const;
-
-    const kvs::ColorMap& colorMap( void ) const;
-
-    const kvs::RGBAColor backgroundColor( void ) const;
-
-public:
+    const int topMargin() const;
+    const int bottomMargin() const;
+    const int leftMargin() const;
+    const int rightMargin() const;
+    const int margin() const;
+    const int activeAxis() const;
+    const kvs::UInt8 pointOpacity() const;
+    const kvs::Real32 pointSize() const;
+    const kvs::ColorMap& colorMap() const;
+    const kvs::RGBAColor backgroundColor() const;
 
     void exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
 };

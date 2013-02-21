@@ -42,30 +42,21 @@ class ApplicationBase
 
 protected:
 
-    int m_argc;    ///< argument count
+    int m_argc; ///< argument count
     char** m_argv; ///< argument values
-
     std::list<kvs::ScreenBase*> m_screens; ///< list of the pointer to the screen
 
 public:
 
     ApplicationBase( int argc, char** argv );
+    virtual ~ApplicationBase();
 
-    virtual ~ApplicationBase( void );
-
-public:
-
-    int argc( void );
-
-    char** argv( void );
-
+    int argc();
+    char** argv();
     void attach( kvs::ScreenBase* screen );
-
     void detach( kvs::ScreenBase* screen );
-
-    virtual int run( void ) = 0;
-
-    virtual void quit( void ) = 0;
+    virtual int run() = 0;
+    virtual void quit() = 0;
 };
 
 } // end of namespace kvs

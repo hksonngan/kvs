@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file ParticleBufferCompositor.h
+ *  @file   ParticleBufferCompositor.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -66,46 +67,31 @@ public:
         kvs::ObjectManager* object_manager,
         kvs::RendererManager* renderer_manager,
         kvs::IDManager* id_manager );
-
-    virtual ~ParticleBufferCompositor( void );
-
-public:
+    virtual ~ParticleBufferCompositor();
 
     void exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
 
-public:
-
-    void initialize( void );
-
+    void initialize();
     void link( kvs::PointObject* object, kvs::ParticleVolumeRenderer* renderer );
-
-    const size_t numOfProjectedParticles( void ) const;
-
-    const size_t numOfStoredParticles( void ) const;
-
+    const size_t numOfProjectedParticles() const;
+    const size_t numOfStoredParticles() const;
 #if TEST__MESUREMENT_ACCUMLATION_TIME
-    const size_t accumulationTime( void ) const;
+    const size_t accumulationTime() const;
 #endif
+    void clearList();
 
-    void clearList( void );
+private:
 
-protected:
-
-    bool create_accumulator( void );
-
-    void clean_accumulator( void );
-
-    void delete_accumulator( void );
-
+    bool create_accumulator();
+    void clean_accumulator();
+    void delete_accumulator();
     void create_image( kvs::Camera* camera, kvs::Light* light );
-
     void accumulate( kvs::Camera* camera, kvs::Light* light );
-
     void update_particle_buffer(
-        kvs::PointObject*            object,
+        kvs::PointObject* object,
         kvs::ParticleVolumeRenderer* renderer,
-        kvs::Camera*                 camera,
-        kvs::Light*                  light );
+        kvs::Camera* camera,
+        kvs::Light* light );
 };
 
 } // end of namespace kvs
