@@ -56,8 +56,8 @@ inline kvs::Matrix44<T> LookAtMatrix44(
           zero,   zero,   zero, one
     };
 
-    return( kvs::Matrix44<T>( elements ) );
-};
+    return kvs::Matrix44<T>( elements );
+}
 
 } // end of namespace kvs
 

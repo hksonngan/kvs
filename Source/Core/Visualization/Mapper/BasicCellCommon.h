@@ -81,7 +81,7 @@ struct TetrahedricCellFunction
             z = x + y + z - 1;
             x = 1 - y - tmp;
         }
-        point = kvs::Vector3<T>( x, y, z );
+        point.set( x, y, z );
     }
 
     static bool includesLocal( const kvs::Vector3<T>& local )

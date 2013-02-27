@@ -56,8 +56,8 @@ inline kvs::Matrix44<T> OrthogonalMatrix44(
                            0,                    0,                     0,                                        1
     };
 
-    return( kvs::Matrix44<T>( elements ) );
-};
+    return kvs::Matrix44<T>( elements );
+}
 
 } // end of namespace kvs
 

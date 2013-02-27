@@ -53,7 +53,8 @@ public:
 inline float Xorshift128::rand()
 {
     const float t24 = 1.0 / 16777216.0; /* 0.5**24 */
-    return t24 * ( this->randInteger() >> 8 );
+    // Convert to int for fast conversion to float.
+    return t24 * int( this->randInteger() >> 8 );
 }
 
 /*===========================================================================*/

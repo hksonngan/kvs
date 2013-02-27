@@ -44,8 +44,8 @@ inline kvs::Matrix33<T> XRotationMatrix33( const T deg )
         0, sinA,  cosA
     };
 
-    return( kvs::Matrix33<T>( elements ) );
-};
+    return kvs::Matrix33<T>( elements );
+}
 
 /*===========================================================================*/
 /**
@@ -68,8 +68,8 @@ inline kvs::Matrix33<T> YRotationMatrix33( const T deg )
         -sinA, 0, cosA
     };
 
-    return( kvs::Matrix33<T>( elements ) );
-};
+    return kvs::Matrix33<T>( elements );
+}
 
 /*===========================================================================*/
 /**
@@ -92,8 +92,8 @@ inline kvs::Matrix33<T> ZRotationMatrix33( const T deg )
             0,     0, 1
     };
 
-    return( kvs::Matrix33<T>( elements ) );
-};
+    return kvs::Matrix33<T>( elements );
+}
 
 /*===========================================================================*/
 /**
@@ -125,8 +125,8 @@ inline kvs::Matrix33<T> EulerRotationMatrix33( const T alpha, const T beta, cons
                             -sinB * cosC,                      -sinB * sinC,        cosB
     };
 
-    return( kvs::Matrix33<T>( elements ) );
-};
+    return kvs::Matrix33<T>( elements );
+}
 
 /*===========================================================================*/
 /**
@@ -158,8 +158,8 @@ inline kvs::Matrix33<T> RPYRotationMatrix33( const T roll, const T pitch, const 
               -sinB,                      cosB * sinC,                      cosB * cosC
     };
 
-    return( kvs::Matrix33<T>( elements ) );
-};
+    return kvs::Matrix33<T>( elements );
+}
 
 /*===========================================================================*/
 /**
@@ -173,8 +173,8 @@ template <typename T>
 inline kvs::Matrix33<T> RotationMatrix33( const kvs::Vector3<T>& axis, const T deg )
 {
     const T rad      = kvs::Math::Deg2Rad( deg );
-    const T sinA     = static_cast<T>( sin( rad ) );
-    const T cosA     = static_cast<T>( cos( rad ) );
+    const T sinA     = std::sin( rad );
+    const T cosA     = std::cos( rad );
     const T inv_cosA = 1 - cosA;
 
     const kvs::Vector3<T> v = axis.normalized();
@@ -183,22 +183,15 @@ inline kvs::Matrix33<T> RotationMatrix33( const kvs::Vector3<T>& axis, const T d
     const T y = v.y();
     const T z = v.z();
 
-    const T xx = x * x;
-    const T xy = x * y;
-    const T xz = x * z;
-    const T yy = y * y;
-    const T yz = y * z;
-    const T zz = z * z;
-
     const T elements[ 9 ] =
     {
-        inv_cosA * xx + cosA    , inv_cosA * xy - sinA * z, inv_cosA * xz + sinA * y,
-        inv_cosA * xy + sinA * z, inv_cosA * yy + cosA    , inv_cosA * yz - sinA * x,
-        inv_cosA * xz - sinA * y, inv_cosA * yz + sinA * x, inv_cosA * zz + cosA
+        inv_cosA * x * x + cosA    , inv_cosA * x * y - sinA * z, inv_cosA * x * z + sinA * y,
+        inv_cosA * x * y + sinA * z, inv_cosA * y * y + cosA    , inv_cosA * y * z - sinA * x,
+        inv_cosA * x * z - sinA * y, inv_cosA * y * z + sinA * x, inv_cosA * z * z + cosA
     };
 
-    return( kvs::Matrix33<T>( elements ) );
-};
+    return kvs::Matrix33<T>( elements );
+}
 
 } // end of namespace kvs
 

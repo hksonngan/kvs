@@ -40,8 +40,8 @@ inline kvs::Matrix44<T> PerspectiveMatrix44(
     const T zfar )
 {
     const T rad  = kvs::Math::Deg2Rad( fov / 2 );
-    const T sinA = static_cast<T>( sin( rad ) );
-    const T cosA = static_cast<T>( cos( rad ) );
+    const T sinA = std::sin( rad );
+    const T cosA = std::cos( rad );
 
     KVS_ASSERT( !( kvs::Math::IsZero( sinA ) ) );
     KVS_ASSERT( !( kvs::Math::IsZero( aspect ) ) );
@@ -56,8 +56,8 @@ inline kvs::Matrix44<T> PerspectiveMatrix44(
                     0,    0,                                   -1,                                        0
     };
 
-    return( kvs::Matrix44<T>( elements ) );
-};
+    return kvs::Matrix44<T>( elements );
+}
 
 } // end of namespace kvs
 

@@ -56,8 +56,8 @@ inline kvs::Matrix44<T> FrustumMatrix44(
                                    0,                            0,                                       -1,                                    0
     };
 
-    return( kvs::Matrix44<T>( elements ) );
-};
+    return kvs::Matrix44<T>( elements );
+}
 
 } // end of namespace kvs
 

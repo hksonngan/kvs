@@ -43,8 +43,8 @@ inline kvs::Matrix33<T> ScalingMatrix33( const T sx, const T sy, const T sz )
         zero, zero, sz
     };
 
-    return( kvs::Matrix33<T>( elements ) );
-};
+    return kvs::Matrix33<T>( elements );
+}
 
 /*===========================================================================*/
 /**
@@ -56,8 +56,8 @@ inline kvs::Matrix33<T> ScalingMatrix33( const T sx, const T sy, const T sz )
 template <typename T>
 inline kvs::Matrix33<T> ScalingMatrix33( const kvs::Vector3<T>& s )
 {
-    return( kvs::ScalingMatrix33<T>( s.x(), s.y(), s.z() ) );
-};
+    return kvs::ScalingMatrix33<T>( s.x(), s.y(), s.z() );
+}
 
 /*===========================================================================*/
 /**
@@ -69,8 +69,8 @@ inline kvs::Matrix33<T> ScalingMatrix33( const kvs::Vector3<T>& s )
 template <typename T>
 inline kvs::Matrix33<T> ScalingMatrix33( const T s )
 {
-    return( kvs::ScalingMatrix33<T>( s, s, s ) );
-};
+    return kvs::ScalingMatrix33<T>( s, s, s );
+}
 
 } // end of namespace kvs
 
