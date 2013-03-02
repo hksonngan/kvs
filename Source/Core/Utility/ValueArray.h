@@ -24,7 +24,6 @@
 #include <kvs/DebugNew>
 #include <kvs/Assert>
 #include <kvs/SharedPointer>
-#include <kvs/ClassName>
 #if KVS_ENABLE_DEPRECATED
 #include <kvs/Endian>
 #endif
@@ -54,8 +53,6 @@ struct ArrayDeleter
 template<typename T>
 class ValueArray
 {
-    kvsClassName_without_virtual( kvs::ValueArray );
-
 public:
     typedef ValueArray<T>                         this_type;
     typedef T                                     value_type;
@@ -361,12 +358,6 @@ public:
     bool unique() const
     {
         return m_values.unique();
-    }
-
-    void isolate()
-    {
-        if ( !this->unique() )
-            *this = this->clone();
     }
 };
 

@@ -72,7 +72,7 @@ protected:
 protected:
     KVS_DEPRECATED( void attach_volume( const kvs::VolumeObjectBase* volume ) ) { this->attachVolume( volume ); }
     KVS_DEPRECATED( void set_range( const kvs::VolumeObjectBase* volume ) ) { this->setRange( volume ); }
-    KVS_DEPRECATED( void set_min_max_coords( const kvs::VolumeObjectBase* volume, kvs::ObjectBase* object ) ) { this->set_min_max_coords( volume, object ); }
+    KVS_DEPRECATED( void set_min_max_coords( const kvs::VolumeObjectBase* volume, kvs::ObjectBase* object ) ) { this->setMinMaxCoords( volume, object ); }
 };
 
 } // end of namespace kvs

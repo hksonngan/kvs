@@ -14,6 +14,7 @@
 /*****************************************************************************/
 #include "TableObject.h"
 #include <kvs/Value>
+#include <kvs/Math>
 
 
 namespace kvs

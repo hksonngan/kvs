@@ -14,6 +14,7 @@
 /****************************************************************************/
 #include "Ray.h"
 #include <kvs/IgnoreUnusedVariable>
+#include <kvs/Math>
 
 
 namespace kvs

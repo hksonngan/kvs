@@ -18,7 +18,7 @@
 namespace kvs
 {
 
-DisplayFormat::DisplayFormat( void ):
+DisplayFormat::DisplayFormat():
     m_double_buffer(true),
     m_color_buffer(true),
     m_depth_buffer(true),
@@ -30,60 +30,44 @@ DisplayFormat::DisplayFormat( void ):
 {
 }
 
-DisplayFormat::DisplayFormat( const DisplayFormat& format ):
-    m_double_buffer( format.doubleBuffer() ),
-    m_color_buffer( format.colorBuffer() ),
-    m_depth_buffer( format.depthBuffer() ),
-    m_accumulation_buffer( format.accumulationBuffer() ),
-    m_stencil_buffer( format.stencilBuffer() ),
-    m_stereo_buffer( format.stereoBuffer() ),
-    m_multisample_buffer( format.multisampleBuffer() ),
-    m_alpha_channel( format.alphaChannel() )
+bool DisplayFormat::doubleBuffer() const
 {
+    return m_double_buffer;
 }
 
-DisplayFormat::~DisplayFormat( void )
+bool DisplayFormat::colorBuffer() const
 {
+    return m_color_buffer;
 }
 
-const bool DisplayFormat::doubleBuffer( void ) const
+bool DisplayFormat::depthBuffer() const
 {
-    return( m_double_buffer );
+    return m_depth_buffer;
 }
 
-const bool DisplayFormat::colorBuffer( void ) const
+bool DisplayFormat::accumulationBuffer() const
 {
-    return( m_color_buffer );
+    return m_accumulation_buffer;
 }
 
-const bool DisplayFormat::depthBuffer( void ) const
+bool DisplayFormat::stencilBuffer() const
 {
-    return( m_depth_buffer );
+    return m_stencil_buffer;
 }
 
-const bool DisplayFormat::accumulationBuffer( void ) const
+bool DisplayFormat::stereoBuffer() const
 {
-    return( m_accumulation_buffer );
+    return m_stereo_buffer;
 }
 
-const bool DisplayFormat::stencilBuffer( void ) const
+bool DisplayFormat::multisampleBuffer( ) const
 {
-    return( m_stencil_buffer );
+    return m_multisample_buffer;
 }
 
-const bool DisplayFormat::stereoBuffer( void ) const
+bool DisplayFormat::alphaChannel() const
 {
-    return( m_stereo_buffer );
-}
-
-const bool DisplayFormat::multisampleBuffer( void ) const
-{
-    return( m_multisample_buffer );
-}
-
-const bool DisplayFormat::alphaChannel( void ) const
-{
-    return( m_alpha_channel );
+    return m_alpha_channel;
 }
 
 void DisplayFormat::setDoubleBuffer( const bool enable )
@@ -124,20 +108,6 @@ void DisplayFormat::setMultisampleBuffer( const bool enable )
 void DisplayFormat::setAlphaChannel( const bool enable )
 {
     m_alpha_channel = enable;
-}
-
-DisplayFormat& DisplayFormat::operator = ( const DisplayFormat& format )
-{
-    m_double_buffer = format.doubleBuffer();
-    m_color_buffer = format.colorBuffer();
-    m_depth_buffer = format.depthBuffer();
-    m_accumulation_buffer = format.accumulationBuffer();
-    m_stencil_buffer = format.stencilBuffer();
-    m_stereo_buffer = format.stereoBuffer();
-    m_multisample_buffer = format.multisampleBuffer();
-    m_alpha_channel = format.alphaChannel();
-
-    return( *this );
 }
 
 } // end of namespace kvs

@@ -316,7 +316,7 @@ public:
     AnyValueArray();
 
     template<typename T>
-    explicit AnyValueArray( const kvs::ValueArray<T>& values ):
+    AnyValueArray( const kvs::ValueArray<T>& values ):
         m_type_info( kvs::Type::GetID<T>() )
     {
         KVS_STATIC_ASSERT( is_supported<T>::value, "not supported" );
@@ -427,17 +427,20 @@ public:
 
     void swapByte()
     {
-        const std::type_info& type = this->typeInfo()->type();
-        if (      type == typeid( kvs::Int8   ) ) { kvs::Endian::Swap( static_cast<kvs::Int8*  >( this->data() ), this->size() ); }
-        else if ( type == typeid( kvs::UInt8  ) ) { kvs::Endian::Swap( static_cast<kvs::UInt8* >( this->data() ), this->size() ); }
-        else if ( type == typeid( kvs::Int16  ) ) { kvs::Endian::Swap( static_cast<kvs::Int16* >( this->data() ), this->size() ); }
-        else if ( type == typeid( kvs::UInt16 ) ) { kvs::Endian::Swap( static_cast<kvs::UInt16*>( this->data() ), this->size() ); }
-        else if ( type == typeid( kvs::Int32  ) ) { kvs::Endian::Swap( static_cast<kvs::Int32* >( this->data() ), this->size() ); }
-        else if ( type == typeid( kvs::UInt32 ) ) { kvs::Endian::Swap( static_cast<kvs::UInt32*>( this->data() ), this->size() ); }
-        else if ( type == typeid( kvs::Int64  ) ) { kvs::Endian::Swap( static_cast<kvs::Int64* >( this->data() ), this->size() ); }
-        else if ( type == typeid( kvs::UInt64 ) ) { kvs::Endian::Swap( static_cast<kvs::UInt64*>( this->data() ), this->size() ); }
-        else if ( type == typeid( kvs::Real32 ) ) { kvs::Endian::Swap( static_cast<kvs::Real32*>( this->data() ), this->size() ); }
-        else if ( type == typeid( kvs::Real64 ) ) { kvs::Endian::Swap( static_cast<kvs::Real64*>( this->data() ), this->size() ); }
+        switch ( this->typeID() )
+        {
+        case kvs::Type::TypeInt8:   kvs::Endian::Swap( static_cast<kvs::Int8*  >( this->data() ), this->size() ); break;
+        case kvs::Type::TypeUInt8:  kvs::Endian::Swap( static_cast<kvs::UInt8* >( this->data() ), this->size() ); break;
+        case kvs::Type::TypeInt16:  kvs::Endian::Swap( static_cast<kvs::Int16* >( this->data() ), this->size() ); break;
+        case kvs::Type::TypeUInt16: kvs::Endian::Swap( static_cast<kvs::UInt16*>( this->data() ), this->size() ); break;
+        case kvs::Type::TypeInt32:  kvs::Endian::Swap( static_cast<kvs::Int32* >( this->data() ), this->size() ); break;
+        case kvs::Type::TypeUInt32: kvs::Endian::Swap( static_cast<kvs::UInt32*>( this->data() ), this->size() ); break;
+        case kvs::Type::TypeInt64:  kvs::Endian::Swap( static_cast<kvs::Int64* >( this->data() ), this->size() ); break;
+        case kvs::Type::TypeUInt64: kvs::Endian::Swap( static_cast<kvs::UInt64*>( this->data() ), this->size() ); break;
+        case kvs::Type::TypeReal32: kvs::Endian::Swap( static_cast<kvs::Real32*>( this->data() ), this->size() ); break;
+        case kvs::Type::TypeReal64: kvs::Endian::Swap( static_cast<kvs::Real64*>( this->data() ), this->size() ); break;
+        default: break;
+        }
     }
 
     template<typename T>

@@ -15,11 +15,6 @@
 #ifndef KVS__DISPLAY_FORMAT_H_INCLUDE
 #define KVS__DISPLAY_FORMAT_H_INCLUDE
 
-#if KVS_ENABLE_DEPRECATED
-#include <kvs/OpenGL>
-#endif
-#include <kvs/ClassName>
-
 
 namespace kvs
 {
@@ -31,9 +26,7 @@ namespace kvs
 /*===========================================================================*/
 class DisplayFormat
 {
-    kvsClassName( kvs::DisplayFormat );
-
-protected:
+private:
 
     bool m_double_buffer; ///< double buffering (true:double buffering, false:single buffering, default:true)
     bool m_color_buffer; ///< color buffer mode (true:RGBA mode, false:color index mode, default:true)
@@ -46,51 +39,30 @@ protected:
 
 public:
 
-    DisplayFormat( void );
-
-    DisplayFormat( const DisplayFormat& format );
-
-    virtual ~DisplayFormat( void );
+    DisplayFormat();
 
 public:
 
-    const bool doubleBuffer( void ) const;
-
-    const bool colorBuffer( void ) const;
-
-    const bool depthBuffer( void ) const;
-
-    const bool accumulationBuffer( void ) const;
-
-    const bool stencilBuffer( void ) const;
-
-    const bool stereoBuffer( void ) const;
-
-    const bool multisampleBuffer( void ) const;
-
-    const bool alphaChannel( void ) const;
+    bool doubleBuffer() const;
+    bool colorBuffer() const;
+    bool depthBuffer() const;
+    bool accumulationBuffer() const;
+    bool stencilBuffer() const;
+    bool stereoBuffer() const;
+    bool multisampleBuffer() const;
+    bool alphaChannel() const;
 
 public:
 
     void setDoubleBuffer( const bool enable );
-
     void setColorBuffer( const bool enable );
-
     void setDepthBuffer( const bool enable );
-
     void setAccumulationBuffer( const bool enable );
-
     void setStencilBuffer( const bool enable );
-
     void setStereoBuffer( const bool enable );
-
     void setMultisampleBuffer( const bool enable );
-
     void setAlphaChannel( const bool enable );
 
-public:
-
-    DisplayFormat& operator = ( const DisplayFormat& format );
 };
 
 } // end of namespace kvs
