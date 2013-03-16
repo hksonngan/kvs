@@ -78,6 +78,7 @@ Numeric/ResponseSurface
 Numeric/SVDecomposer
 Numeric/SVSolver
 Numeric/Xorshift128
+OpenGL/GL
 Thread/Condition
 Thread/Mutex
 Thread/MutexLocker
