@@ -78,6 +78,7 @@
 #include <Core/Numeric/SVDecomposer.h>
 #include <Core/Numeric/SVSolver.h>
 #include <Core/Numeric/Xorshift128.h>
+#include <Core/OpenGL/GL.h>
 #include <Core/Thread/Condition.h>
 #include <Core/Thread/Mutex.h>
 #include <Core/Thread/MutexLocker.h>
