@@ -154,6 +154,7 @@ $(OUTDIR)/./Numeric/SVDecomposer.o \
 $(OUTDIR)/./Numeric/SVSolver.o \
 $(OUTDIR)/./Numeric/Xorshift128.o \
 $(OUTDIR)/./OpenGL/GL.o \
+$(OUTDIR)/./OpenGL/OpenGL.o \
 $(OUTDIR)/./Thread/Condition.o \
 $(OUTDIR)/./Thread/Mutex.o \
 $(OUTDIR)/./Thread/MutexLocker.o \

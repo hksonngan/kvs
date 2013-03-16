@@ -12,8 +12,8 @@
  *  $Id$
  */
 /*****************************************************************************/
-#ifndef KVS_GL_H_INCLUDE
-#define KVS_GL_H_INCLUDE
+#ifndef KVS__GL_H_INCLUDE
+#define KVS__GL_H_INCLUDE
 
 #include <kvs/Macro>
 #include <kvs/Breakpoint>
@@ -80,4 +80,4 @@ bool HasError( const char* file, const int line, const char* func, const char* c
 #define KVS_GL_CALL( command ) ( command )
 #endif
 
-#endif // KVS_GL_H_INCLUDE
+#endif // KVS__GL_H_INCLUDE

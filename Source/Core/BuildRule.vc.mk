@@ -154,6 +154,7 @@ $(OUTDIR)\.\Numeric\SVDecomposer.obj \
 $(OUTDIR)\.\Numeric\SVSolver.obj \
 $(OUTDIR)\.\Numeric\Xorshift128.obj \
 $(OUTDIR)\.\OpenGL\GL.obj \
+$(OUTDIR)\.\OpenGL\OpenGL.obj \
 $(OUTDIR)\.\Thread\Condition.obj \
 $(OUTDIR)\.\Thread\Mutex.obj \
 $(OUTDIR)\.\Thread\MutexLocker.obj \
