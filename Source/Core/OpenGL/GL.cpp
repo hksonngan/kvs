@@ -26,7 +26,7 @@ namespace GL
 namespace detail
 {
 
-bool HasError( const char* file, const int line, const char* func, const char* command );
+bool HasError( const char* file, const int line, const char* func, const char* command )
 {
     GLenum error = glGetError();
     if ( error == GL_NO_ERROR ) return false;
@@ -38,7 +38,9 @@ bool HasError( const char* file, const int line, const char* func, const char* c
     std::cerr << KVS_MESSAGE_RESET_COLOR;
 
     // Output message with an error string.
-    std::string error_string( static_cast<const char*>( gluErrorString( error ) ) );
+    std::string error_string;
+    const GLubyte* c = gluErrorString( error );
+    while ( *c ) error_string += *c++;
     std::cerr << ": " << error_string << std::endl;
     std::cerr << "\t" << "FILE: " << file << " (" << line << ")" << std::endl;
     std::cerr << "\t" << "FUNC: " << func << std::endl;

@@ -126,7 +126,6 @@ $(OUTDIR)\.\Matrix\Vector2.obj \
 $(OUTDIR)\.\Matrix\Vector3.obj \
 $(OUTDIR)\.\Matrix\Vector4.obj \
 $(OUTDIR)\.\Matrix\ViewingMatrix44.obj \
-$(OUTDIR)\.\Network\.#Acceptor.obj \
 $(OUTDIR)\.\Network\Acceptor.obj \
 $(OUTDIR)\.\Network\Connector.obj \
 $(OUTDIR)\.\Network\HttpConnector.obj \

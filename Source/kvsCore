@@ -79,6 +79,7 @@
 #include <Core/Numeric/SVSolver.h>
 #include <Core/Numeric/Xorshift128.h>
 #include <Core/OpenGL/GL.h>
+#include <Core/OpenGL/OpenGL.h>
 #include <Core/Thread/Condition.h>
 #include <Core/Thread/Mutex.h>
 #include <Core/Thread/MutexLocker.h>
@@ -261,7 +262,6 @@
 #include <Core/Visualization/Viewer/Mouse.h>
 #include <Core/Visualization/Viewer/MouseButton.h>
 #include <Core/Visualization/Viewer/ObjectManager.h>
-#include <Core/Visualization/Viewer/OpenGL.h>
 #include <Core/Visualization/Viewer/RendererManager.h>
 #include <Core/Visualization/Viewer/Scene.h>
 #include <Core/Visualization/Viewer/ScreenBase.h>

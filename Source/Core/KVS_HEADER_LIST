@@ -79,6 +79,7 @@ Numeric/SVDecomposer
 Numeric/SVSolver
 Numeric/Xorshift128
 OpenGL/GL
+OpenGL/OpenGL
 Thread/Condition
 Thread/Mutex
 Thread/MutexLocker
@@ -261,7 +262,6 @@ Visualization/Viewer/Material
 Visualization/Viewer/Mouse
 Visualization/Viewer/MouseButton
 Visualization/Viewer/ObjectManager
-Visualization/Viewer/OpenGL
 Visualization/Viewer/RendererManager
 Visualization/Viewer/Scene
 Visualization/Viewer/ScreenBase
