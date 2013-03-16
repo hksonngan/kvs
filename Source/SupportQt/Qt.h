@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file Qt.h
+ *  @file   Qt.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -14,9 +15,13 @@
 #ifndef KVS__QT__QT_H_INCLUDE
 #define KVS__QT__QT_H_INCLUDE
 
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+
 #include <string>
 
-/*  WARNING */
+/* WARNING */
 #ifdef KVS_QT_HAS_QGLOBAL_H
 #include <qglobal.h>
 #else
@@ -61,7 +66,7 @@ namespace qt
  *  @return description
  */
 /*===========================================================================*/
-inline const std::string Description( void )
+inline std::string Description()
 {
     const std::string description( "Qt - Cross-Platform Rich Client Development Framework" );
     return( description );
@@ -73,10 +78,10 @@ inline const std::string Description( void )
  *  @return Qt version
  */
 /*===========================================================================*/
-inline const std::string Version( void )
+inline std::string Version()
 {
     const std::string version( QT_VERSION_STR );
-    return( version );
+    return version;
 }
 
 } // end of namespace qt
