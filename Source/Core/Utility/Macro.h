@@ -24,27 +24,27 @@
 
 // Function name
 #if defined ( KVS_COMPILER_VC )
-    #if KVS_COMPILER_VERSION_LESS_THAN( 7, 0 )
-        #define KVS_MACRO_FUNC "unknown"
-    #else
-        #define KVS_MACRO_FUNC __FUNCSIG__
-    #endif
+#    if KVS_COMPILER_VERSION_LESS_THAN( 7, 0 )
+#        define KVS_MACRO_FUNC "unknown"
+#    else
+#        define KVS_MACRO_FUNC __FUNCSIG__
+#    endif
 #elif defined ( KVS_COMPILER_GCC )
-    #define KVS_MACRO_FUNC __PRETTY_FUNCTION__
+#    define KVS_MACRO_FUNC __PRETTY_FUNCTION__
 #else
-    #define KVS_MACRO_FUNC __func__
+#    define KVS_MACRO_FUNC __func__
 #endif
 
 // Wrap multistatement macros in a do-while loop.
 #define KVS_MACRO_MULTI_STATEMENT_BEGIN do {
 #if defined ( KVS_COMPILER_VC )
-    #define KVS_MACRO_MULTI_STATEMENT_END           \
+#    define KVS_MACRO_MULTI_STATEMENT_END           \
         __pragma( warning( push ) )                 \
         __pragma( warning( disable: 4127 ) )        \
         } while ( false )                           \
         __pragma( warning( pop ) )
 #elif defined ( KVS_COMPILER_GCC )
-    #define KVS_MACRO_MULTI_STATEMENT_END } while ( false )
+#    define KVS_MACRO_MULTI_STATEMENT_END } while ( false )
 #endif
 
 #endif // KVS__MACRO_H_INCLUDE
