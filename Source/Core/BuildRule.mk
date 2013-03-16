@@ -126,6 +126,7 @@ $(OUTDIR)/./Matrix/Vector2.o \
 $(OUTDIR)/./Matrix/Vector3.o \
 $(OUTDIR)/./Matrix/Vector4.o \
 $(OUTDIR)/./Matrix/ViewingMatrix44.o \
+$(OUTDIR)/./Network/.#Acceptor.o \
 $(OUTDIR)/./Network/Acceptor.o \
 $(OUTDIR)/./Network/Connector.o \
 $(OUTDIR)/./Network/HttpConnector.o \
@@ -153,6 +154,7 @@ $(OUTDIR)/./Numeric/ResponseSurface.o \
 $(OUTDIR)/./Numeric/SVDecomposer.o \
 $(OUTDIR)/./Numeric/SVSolver.o \
 $(OUTDIR)/./Numeric/Xorshift128.o \
+$(OUTDIR)/./OpenGL/GL.o \
 $(OUTDIR)/./Thread/Condition.o \
 $(OUTDIR)/./Thread/Mutex.o \
 $(OUTDIR)/./Thread/MutexLocker.o \
@@ -365,6 +367,10 @@ $(OUTDIR)/./Thread/%.o: ./Thread/%.cpp ./Thread/%.h
 	$(MKDIR) $(OUTDIR)/./Thread
 	$(CPP) -c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) -o $@ $<
 
+$(OUTDIR)/./OpenGL/%.o: ./OpenGL/%.cpp ./OpenGL/%.h
+	$(MKDIR) $(OUTDIR)/./OpenGL
+	$(CPP) -c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) -o $@ $<
+
 $(OUTDIR)/./Numeric/%.o: ./Numeric/%.cpp ./Numeric/%.h
 	$(MKDIR) $(OUTDIR)/./Numeric
 	$(CPP) -c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) -o $@ $<
@@ -487,6 +493,8 @@ install::
 	$(INSTALL) ./Network/*.h $(INSTALL_DIR)/include/Core/./Network
 	$(MKDIR) $(INSTALL_DIR)/include/Core/./Numeric
 	$(INSTALL) ./Numeric/*.h $(INSTALL_DIR)/include/Core/./Numeric
+	$(MKDIR) $(INSTALL_DIR)/include/Core/./OpenGL
+	$(INSTALL) ./OpenGL/*.h $(INSTALL_DIR)/include/Core/./OpenGL
 	$(MKDIR) $(INSTALL_DIR)/include/Core/./Thread
 	$(INSTALL) ./Thread/*.h $(INSTALL_DIR)/include/Core/./Thread
 	$(MKDIR) $(INSTALL_DIR)/include/Core/./Utility

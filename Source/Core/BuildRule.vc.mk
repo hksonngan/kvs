@@ -126,6 +126,7 @@ $(OUTDIR)\.\Matrix\Vector2.obj \
 $(OUTDIR)\.\Matrix\Vector3.obj \
 $(OUTDIR)\.\Matrix\Vector4.obj \
 $(OUTDIR)\.\Matrix\ViewingMatrix44.obj \
+$(OUTDIR)\.\Network\.#Acceptor.obj \
 $(OUTDIR)\.\Network\Acceptor.obj \
 $(OUTDIR)\.\Network\Connector.obj \
 $(OUTDIR)\.\Network\HttpConnector.obj \
@@ -153,6 +154,7 @@ $(OUTDIR)\.\Numeric\ResponseSurface.obj \
 $(OUTDIR)\.\Numeric\SVDecomposer.obj \
 $(OUTDIR)\.\Numeric\SVSolver.obj \
 $(OUTDIR)\.\Numeric\Xorshift128.obj \
+$(OUTDIR)\.\OpenGL\GL.obj \
 $(OUTDIR)\.\Thread\Condition.obj \
 $(OUTDIR)\.\Thread\Mutex.obj \
 $(OUTDIR)\.\Thread\MutexLocker.obj \
@@ -389,6 +391,12 @@ $<
 $<
 <<
 
+{.\OpenGL\}.cpp{$(OUTDIR)\.\OpenGL\}.obj::
+	IF NOT EXIST $(OUTDIR)\.\OpenGL $(MKDIR) $(OUTDIR)\.\OpenGL
+	$(CPP) /c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) /Fo$(OUTDIR)\.\OpenGL\ @<<
+$<
+<<
+
 {.\Numeric\}.cpp{$(OUTDIR)\.\Numeric\}.obj::
 	IF NOT EXIST $(OUTDIR)\.\Numeric $(MKDIR) $(OUTDIR)\.\Numeric
 	$(CPP) /c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) /Fo$(OUTDIR)\.\Numeric\ @<<
@@ -551,6 +559,8 @@ install::
 	$(INSTALL) .\Network\*.h $(INSTALL_DIR)\include\Core\.\Network
 	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\Numeric $(MKDIR) $(INSTALL_DIR)\include\Core\.\Numeric
 	$(INSTALL) .\Numeric\*.h $(INSTALL_DIR)\include\Core\.\Numeric
+	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\OpenGL $(MKDIR) $(INSTALL_DIR)\include\Core\.\OpenGL
+	$(INSTALL) .\OpenGL\*.h $(INSTALL_DIR)\include\Core\.\OpenGL
 	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\Thread $(MKDIR) $(INSTALL_DIR)\include\Core\.\Thread
 	$(INSTALL) .\Thread\*.h $(INSTALL_DIR)\include\Core\.\Thread
 	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\Utility $(MKDIR) $(INSTALL_DIR)\include\Core\.\Utility
