@@ -153,8 +153,13 @@ $(OUTDIR)/./Numeric/ResponseSurface.o \
 $(OUTDIR)/./Numeric/SVDecomposer.o \
 $(OUTDIR)/./Numeric/SVSolver.o \
 $(OUTDIR)/./Numeric/Xorshift128.o \
+$(OUTDIR)/./OpenGL/DisplayList.o \
+$(OUTDIR)/./OpenGL/FrameBuffer.o \
 $(OUTDIR)/./OpenGL/GL.o \
 $(OUTDIR)/./OpenGL/OpenGL.o \
+$(OUTDIR)/./OpenGL/Texture1D.o \
+$(OUTDIR)/./OpenGL/Texture2D.o \
+$(OUTDIR)/./OpenGL/TextureBase.o \
 $(OUTDIR)/./Thread/Condition.o \
 $(OUTDIR)/./Thread/Mutex.o \
 $(OUTDIR)/./Thread/MutexLocker.o \
@@ -300,8 +305,6 @@ $(OUTDIR)/./Visualization/Viewer/ApplicationBase.o \
 $(OUTDIR)/./Visualization/Viewer/Background.o \
 $(OUTDIR)/./Visualization/Viewer/Camera.o \
 $(OUTDIR)/./Visualization/Viewer/DisplayFormat.o \
-$(OUTDIR)/./Visualization/Viewer/DisplayList.o \
-$(OUTDIR)/./Visualization/Viewer/FrameBuffer.o \
 $(OUTDIR)/./Visualization/Viewer/IDManager.o \
 $(OUTDIR)/./Visualization/Viewer/Light.o \
 $(OUTDIR)/./Visualization/Viewer/Material.o \
@@ -310,9 +313,6 @@ $(OUTDIR)/./Visualization/Viewer/ObjectManager.o \
 $(OUTDIR)/./Visualization/Viewer/RendererManager.o \
 $(OUTDIR)/./Visualization/Viewer/Scene.o \
 $(OUTDIR)/./Visualization/Viewer/ScreenBase.o \
-$(OUTDIR)/./Visualization/Viewer/Texture1D.o \
-$(OUTDIR)/./Visualization/Viewer/Texture2D.o \
-$(OUTDIR)/./Visualization/Viewer/TextureBase.o \
 $(OUTDIR)/./Visualization/Viewer/Trackball.o \
 $(OUTDIR)/./Visualization/Viewer/Xform.o \
 $(OUTDIR)/./Visualization/Viewer/XformControl.o \

@@ -153,8 +153,13 @@ $(OUTDIR)\.\Numeric\ResponseSurface.obj \
 $(OUTDIR)\.\Numeric\SVDecomposer.obj \
 $(OUTDIR)\.\Numeric\SVSolver.obj \
 $(OUTDIR)\.\Numeric\Xorshift128.obj \
+$(OUTDIR)\.\OpenGL\DisplayList.obj \
+$(OUTDIR)\.\OpenGL\FrameBuffer.obj \
 $(OUTDIR)\.\OpenGL\GL.obj \
 $(OUTDIR)\.\OpenGL\OpenGL.obj \
+$(OUTDIR)\.\OpenGL\Texture1D.obj \
+$(OUTDIR)\.\OpenGL\Texture2D.obj \
+$(OUTDIR)\.\OpenGL\TextureBase.obj \
 $(OUTDIR)\.\Thread\Condition.obj \
 $(OUTDIR)\.\Thread\Mutex.obj \
 $(OUTDIR)\.\Thread\MutexLocker.obj \
@@ -300,8 +305,6 @@ $(OUTDIR)\.\Visualization\Viewer\ApplicationBase.obj \
 $(OUTDIR)\.\Visualization\Viewer\Background.obj \
 $(OUTDIR)\.\Visualization\Viewer\Camera.obj \
 $(OUTDIR)\.\Visualization\Viewer\DisplayFormat.obj \
-$(OUTDIR)\.\Visualization\Viewer\DisplayList.obj \
-$(OUTDIR)\.\Visualization\Viewer\FrameBuffer.obj \
 $(OUTDIR)\.\Visualization\Viewer\IDManager.obj \
 $(OUTDIR)\.\Visualization\Viewer\Light.obj \
 $(OUTDIR)\.\Visualization\Viewer\Material.obj \
@@ -310,9 +313,6 @@ $(OUTDIR)\.\Visualization\Viewer\ObjectManager.obj \
 $(OUTDIR)\.\Visualization\Viewer\RendererManager.obj \
 $(OUTDIR)\.\Visualization\Viewer\Scene.obj \
 $(OUTDIR)\.\Visualization\Viewer\ScreenBase.obj \
-$(OUTDIR)\.\Visualization\Viewer\Texture1D.obj \
-$(OUTDIR)\.\Visualization\Viewer\Texture2D.obj \
-$(OUTDIR)\.\Visualization\Viewer\TextureBase.obj \
 $(OUTDIR)\.\Visualization\Viewer\Trackball.obj \
 $(OUTDIR)\.\Visualization\Viewer\Xform.obj \
 $(OUTDIR)\.\Visualization\Viewer\XformControl.obj \

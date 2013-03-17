@@ -78,8 +78,13 @@
 #include <Core/Numeric/SVDecomposer.h>
 #include <Core/Numeric/SVSolver.h>
 #include <Core/Numeric/Xorshift128.h>
+#include <Core/OpenGL/DisplayList.h>
+#include <Core/OpenGL/FrameBuffer.h>
 #include <Core/OpenGL/GL.h>
 #include <Core/OpenGL/OpenGL.h>
+#include <Core/OpenGL/Texture1D.h>
+#include <Core/OpenGL/Texture2D.h>
+#include <Core/OpenGL/TextureBase.h>
 #include <Core/Thread/Condition.h>
 #include <Core/Thread/Mutex.h>
 #include <Core/Thread/MutexLocker.h>
@@ -253,8 +258,6 @@
 #include <Core/Visualization/Viewer/Background.h>
 #include <Core/Visualization/Viewer/Camera.h>
 #include <Core/Visualization/Viewer/DisplayFormat.h>
-#include <Core/Visualization/Viewer/DisplayList.h>
-#include <Core/Visualization/Viewer/FrameBuffer.h>
 #include <Core/Visualization/Viewer/IDManager.h>
 #include <Core/Visualization/Viewer/Key.h>
 #include <Core/Visualization/Viewer/Light.h>
@@ -265,9 +268,6 @@
 #include <Core/Visualization/Viewer/RendererManager.h>
 #include <Core/Visualization/Viewer/Scene.h>
 #include <Core/Visualization/Viewer/ScreenBase.h>
-#include <Core/Visualization/Viewer/Texture1D.h>
-#include <Core/Visualization/Viewer/Texture2D.h>
-#include <Core/Visualization/Viewer/TextureBase.h>
 #include <Core/Visualization/Viewer/Trackball.h>
 #include <Core/Visualization/Viewer/Xform.h>
 #include <Core/Visualization/Viewer/XformControl.h>

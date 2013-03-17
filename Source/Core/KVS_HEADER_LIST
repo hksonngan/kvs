@@ -78,8 +78,13 @@ Numeric/ResponseSurface
 Numeric/SVDecomposer
 Numeric/SVSolver
 Numeric/Xorshift128
+OpenGL/DisplayList
+OpenGL/FrameBuffer
 OpenGL/GL
 OpenGL/OpenGL
+OpenGL/Texture1D
+OpenGL/Texture2D
+OpenGL/TextureBase
 Thread/Condition
 Thread/Mutex
 Thread/MutexLocker
@@ -253,8 +258,6 @@ Visualization/Viewer/ApplicationBase
 Visualization/Viewer/Background
 Visualization/Viewer/Camera
 Visualization/Viewer/DisplayFormat
-Visualization/Viewer/DisplayList
-Visualization/Viewer/FrameBuffer
 Visualization/Viewer/IDManager
 Visualization/Viewer/Key
 Visualization/Viewer/Light
@@ -265,9 +268,6 @@ Visualization/Viewer/ObjectManager
 Visualization/Viewer/RendererManager
 Visualization/Viewer/Scene
 Visualization/Viewer/ScreenBase
-Visualization/Viewer/Texture1D
-Visualization/Viewer/Texture2D
-Visualization/Viewer/TextureBase
 Visualization/Viewer/Trackball
 Visualization/Viewer/Xform
 Visualization/Viewer/XformControl
