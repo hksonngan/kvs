@@ -22,7 +22,7 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-FrameBuffer::FrameBuffer( void ):
+FrameBuffer::FrameBuffer():
     m_format( 0 ),
     m_type( 0 )
 {
@@ -46,7 +46,7 @@ FrameBuffer::FrameBuffer( const GLenum format, const GLenum type ):
  *  Destructor.
  */
 /*==========================================================================*/
-FrameBuffer::~FrameBuffer( void )
+FrameBuffer::~FrameBuffer()
 {
 }
 

@@ -23,7 +23,7 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-TextureBase::TextureBase( void ):
+TextureBase::TextureBase():
     m_id( 0 ),
     m_internal_format( 0 ),
     m_external_format( 0 ),
@@ -55,7 +55,7 @@ TextureBase::TextureBase( const GLenum mag_filter, const GLenum min_filter ):
  *  Destructor.
  */
 /*==========================================================================*/
-TextureBase::~TextureBase( void )
+TextureBase::~TextureBase()
 {
 }
 
@@ -64,7 +64,7 @@ TextureBase::~TextureBase( void )
  *  Returns the texture ID.
  */
 /*==========================================================================*/
-const GLuint TextureBase::id( void ) const
+GLuint TextureBase::id() const
 {
     return( m_id );
 }
@@ -74,7 +74,7 @@ const GLuint TextureBase::id( void ) const
  *  Returns the magnification filter.
  */
 /*==========================================================================*/
-const GLenum TextureBase::magFilter( void ) const
+GLenum TextureBase::magFilter() const
 {
     return( m_mag_filter );
 }
@@ -84,7 +84,7 @@ const GLenum TextureBase::magFilter( void ) const
  *  Returns the minification filter.
  */
 /*==========================================================================*/
-const GLenum TextureBase::minFilter( void ) const
+GLenum TextureBase::minFilter() const
 {
     return( m_min_filter );
 }
@@ -94,7 +94,7 @@ const GLenum TextureBase::minFilter( void ) const
  *  Returns the internal pixel format.
  */
 /*==========================================================================*/
-const GLint TextureBase::internalFormat( void ) const
+GLint TextureBase::internalFormat() const
 {
     return( m_internal_format );
 }
@@ -104,7 +104,7 @@ const GLint TextureBase::internalFormat( void ) const
  *  Returns the external pixel format.
  */
 /*==========================================================================*/
-const GLenum TextureBase::externalFormat( void ) const
+GLenum TextureBase::externalFormat() const
 {
     return( m_external_format );
 }
@@ -114,12 +114,12 @@ const GLenum TextureBase::externalFormat( void ) const
  *  Returns the external pixel data type.
  */
 /*==========================================================================*/
-const GLenum TextureBase::externalType( void ) const
+GLenum TextureBase::externalType() const
 {
     return( m_external_type );
 }
 
-const bool TextureBase::isTexture( void ) const
+bool TextureBase::isTexture() const
 {
     return( glIsTexture( m_id ) == GL_TRUE );
 }
@@ -182,7 +182,7 @@ void TextureBase::setPixelFormat( const size_t nchannels, const size_t bytes_per
  *  @param external_format [in] external pixel format
  */
 /*==========================================================================*/
-const size_t TextureBase::get_nchannels( const GLenum external_format ) const
+size_t TextureBase::get_nchannels( const GLenum external_format ) const
 {
     size_t nchannels = 0;
 
@@ -230,7 +230,7 @@ const size_t TextureBase::get_nchannels( const GLenum external_format ) const
  *  @param external_type [in] external_pixel data type
  */
 /*==========================================================================*/
-const size_t TextureBase::get_channel_size( const GLenum external_type ) const
+size_t TextureBase::get_channel_size( const GLenum external_type ) const
 {
     size_t channel_size = 0;
 

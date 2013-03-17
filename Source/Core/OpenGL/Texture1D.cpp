@@ -24,7 +24,7 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-Texture1D::Texture1D( void ):
+Texture1D::Texture1D():
     m_is_downloaded( false ),
     m_wrap_s( GL_CLAMP ),
     m_width( 0 ),
@@ -51,7 +51,7 @@ Texture1D::Texture1D( const GLenum wrap_s ):
  *  Destructor.
  */
 /*==========================================================================*/
-Texture1D::~Texture1D( void )
+Texture1D::~Texture1D()
 {
     this->release();
 }
@@ -61,9 +61,9 @@ Texture1D::~Texture1D( void )
  *  Returns the wrap method for s-axis.
  */
 /*==========================================================================*/
-const GLenum Texture1D::wrapS( void ) const
+GLenum Texture1D::wrapS() const
 {
-    return( m_wrap_s );
+    return m_wrap_s;
 }
 
 /*==========================================================================*/
@@ -71,14 +71,14 @@ const GLenum Texture1D::wrapS( void ) const
  *  Returns the texture width.
  */
 /*==========================================================================*/
-const size_t Texture1D::width( void ) const
+size_t Texture1D::width() const
 {
-    return( m_width );
+    return m_width;
 }
 
-const bool Texture1D::isDownloaded( void ) const
+bool Texture1D::isDownloaded() const
 {
-    return( m_is_downloaded );
+    return m_is_downloaded;
 }
 
 /*==========================================================================*/
@@ -178,7 +178,7 @@ void Texture1D::download(
  *  Bind the texture.
  */
 /*==========================================================================*/
-void Texture1D::bind( void )
+void Texture1D::bind()
 {
     glBindTexture( GL_TEXTURE_1D, m_id );
 }
@@ -188,7 +188,7 @@ void Texture1D::bind( void )
  *  Unbind the texture.
  */
 /*==========================================================================*/
-void Texture1D::unbind( void )
+void Texture1D::unbind()
 {
     glBindTexture( GL_TEXTURE_1D, 0 );
 }
@@ -198,7 +198,7 @@ void Texture1D::unbind( void )
  *  Release the texture.
  */
 /*==========================================================================*/
-void Texture1D::release( void )
+void Texture1D::release()
 {
     if ( glIsTexture( m_id ) == GL_TRUE ) glDeleteTextures( 1, &m_id );
 
@@ -212,9 +212,9 @@ void Texture1D::release( void )
  *  @return Used texture memory size [byte]
  */
 /*==========================================================================*/
-unsigned int Texture1D::UsedTextureMemorySize( void )
+unsigned int Texture1D::UsedTextureMemorySize()
 {
-    return( Texture1D::get_texture_memory_size_on_gpu( GL_PROXY_TEXTURE_1D ) );
+    return Texture1D::get_texture_memory_size_on_gpu( GL_PROXY_TEXTURE_1D );
 }
 
 /*==========================================================================*/
@@ -256,7 +256,7 @@ unsigned int Texture1D::get_texture_memory_size_on_gpu( const GLenum proxy )
         GLenum pname = GL_TEXTURE_IMAGE_SIZE_ARB;
         glGetTexLevelParameteriv( proxy, 0, pname, &(size[0]) );
 #endif
-        return( size[0] );
+        return size[0];
     }
 #endif
 
@@ -280,7 +280,7 @@ unsigned int Texture1D::get_texture_memory_size_on_gpu( const GLenum proxy )
     }
 
     // compute the amount of texture memory used.
-    return( texture_size[0] * (GLint)bytes );
+    return texture_size[0] * (GLint)bytes;
 }
 
 } // end of namespace kvs

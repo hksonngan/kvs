@@ -24,7 +24,7 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-Texture2D::Texture2D( void ):
+Texture2D::Texture2D():
     m_is_downloaded( false ),
     m_wrap_s( GL_CLAMP ),
     m_wrap_t( GL_CLAMP ),
@@ -56,7 +56,7 @@ Texture2D::Texture2D( const GLenum wrap_s, const GLenum wrap_t ):
  *  Destructor.
  */
 /*==========================================================================*/
-Texture2D::~Texture2D( void )
+Texture2D::~Texture2D()
 {
     this->release();
 }
@@ -66,9 +66,9 @@ Texture2D::~Texture2D( void )
  *  Returns the wrap method for s-axis.
  */
 /*==========================================================================*/
-const GLenum Texture2D::wrapS( void ) const
+GLenum Texture2D::wrapS() const
 {
-    return( m_wrap_s );
+    return m_wrap_s;
 }
 
 /*==========================================================================*/
@@ -76,9 +76,9 @@ const GLenum Texture2D::wrapS( void ) const
  *  Returns the wrap method for t-axis.
  */
 /*==========================================================================*/
-const GLenum Texture2D::wrapT( void ) const
+GLenum Texture2D::wrapT() const
 {
-    return( m_wrap_t );
+    return m_wrap_t;
 }
 
 /*==========================================================================*/
@@ -86,9 +86,9 @@ const GLenum Texture2D::wrapT( void ) const
  *  Returns the texture width.
  */
 /*==========================================================================*/
-const size_t Texture2D::width( void ) const
+size_t Texture2D::width() const
 {
-    return( m_width );
+    return m_width;
 }
 
 /*==========================================================================*/
@@ -96,14 +96,14 @@ const size_t Texture2D::width( void ) const
  *  Returns the texture height.
  */
 /*==========================================================================*/
-const size_t Texture2D::height( void ) const
+size_t Texture2D::height() const
 {
-    return( m_height );
+    return m_height;
 }
 
-const bool Texture2D::isDownloaded( void ) const
+bool Texture2D::isDownloaded() const
 {
-    return( m_is_downloaded );
+    return m_is_downloaded;
 }
 
 /*==========================================================================*/
@@ -135,7 +135,7 @@ void Texture2D::setWrapT( const GLenum wrap_t )
 /*==========================================================================*/
 void Texture2D::create( const size_t width, const size_t height )
 {
-    m_width  = width;
+    m_width = width;
     m_height = height;
 
     if( !glIsTexture( m_id ) ) glGenTextures( 1, &m_id );
@@ -224,7 +224,7 @@ void Texture2D::download(
  *  Bind the texture.
  */
 /*==========================================================================*/
-void Texture2D::bind( void )
+void Texture2D::bind()
 {
     glBindTexture( GL_TEXTURE_2D, m_id );
 }
@@ -234,7 +234,7 @@ void Texture2D::bind( void )
  *  Unbind the texture.
  */
 /*==========================================================================*/
-void Texture2D::unbind( void )
+void Texture2D::unbind()
 {
     glBindTexture( GL_TEXTURE_2D, 0 );
 }
@@ -244,7 +244,7 @@ void Texture2D::unbind( void )
  *  Release the texture.
  */
 /*==========================================================================*/
-void Texture2D::release( void )
+void Texture2D::release()
 {
     if ( glIsTexture( m_id ) == GL_TRUE ) glDeleteTextures( 1, &m_id );
 
@@ -258,9 +258,9 @@ void Texture2D::release( void )
  *  @return Used texture memory size [byte]
  */
 /*==========================================================================*/
-unsigned int Texture2D::UsedTextureMemorySize( void )
+unsigned int Texture2D::UsedTextureMemorySize()
 {
-    return( Texture2D::get_texture_memory_size_on_gpu( GL_PROXY_TEXTURE_2D ) );
+    return Texture2D::get_texture_memory_size_on_gpu( GL_PROXY_TEXTURE_2D );
 }
 
 /*==========================================================================*/
@@ -303,7 +303,7 @@ unsigned int Texture2D::get_texture_memory_size_on_gpu( const GLenum proxy )
         GLenum pname = GL_TEXTURE_IMAGE_SIZE_ARB;
         glGetTexLevelParameteriv( proxy, 0, pname, &(size[0]) );
 #endif
-        return( size[0] );
+        return size[0];
     }
 #endif
 
@@ -327,7 +327,7 @@ unsigned int Texture2D::get_texture_memory_size_on_gpu( const GLenum proxy )
     }
 
     // compute the amount of texture memory used.
-    return( texture_size[0] * texture_size[1] * (GLint)bytes );
+    return texture_size[0] * texture_size[1] * (GLint)bytes;
 }
 
 } // end of namespace kvs

@@ -15,7 +15,6 @@
 #define KVS__FRAME_BUFFER_H_INCLUDE
 
 #include <kvs/OpenGL>
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -28,28 +27,19 @@ namespace kvs
 /*==========================================================================*/
 class FrameBuffer
 {
-    kvsClassName( kvs::FrameBuffer );
-
 protected:
 
     GLenum m_format; ///< pixel data format
-    GLenum m_type;   ///< pixel data type
+    GLenum m_type; ///< pixel data type
 
 public:
 
-    FrameBuffer( void );
-
+    FrameBuffer();
     FrameBuffer( const GLenum format, const GLenum type );
-
-    virtual ~FrameBuffer( void );
-
-public:
+    virtual ~FrameBuffer();
 
     void setFormat( const GLenum format );
-
     void setType( const GLenum type );
-
-public:
 
     void read(
         const int    width,

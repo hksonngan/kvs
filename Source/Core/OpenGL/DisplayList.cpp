@@ -26,7 +26,7 @@ namespace kvs
  *  Constructs a new DisplayList.
  */
 /*===========================================================================*/
-DisplayList::DisplayList( void ):
+DisplayList::DisplayList():
     m_id( 0 ),
     m_range( 0 )
 {
@@ -48,7 +48,7 @@ DisplayList::DisplayList( const GLsizei range )
  *  Destructs the DisplayList.
  */
 /*===========================================================================*/
-DisplayList::~DisplayList( void )
+DisplayList::~DisplayList()
 {
     this->clear();
 }
@@ -59,9 +59,9 @@ DisplayList::~DisplayList( void )
  *  @return list ID
  */
 /*===========================================================================*/
-const GLuint DisplayList::id( void ) const
+GLuint DisplayList::id() const
 {
-    return( m_id );
+    return m_id;
 }
 
 /*===========================================================================*/
@@ -70,9 +70,9 @@ const GLuint DisplayList::id( void ) const
  *  @return range of list
  */
 /*===========================================================================*/
-const GLsizei DisplayList::range( void ) const
+GLsizei DisplayList::range() const
 {
-    return( m_range );
+    return m_range;
 }
 
 /*===========================================================================*/
@@ -98,7 +98,7 @@ void DisplayList::begin( const GLuint index, const GLenum mode )
  *  Ends the registrantion of the display list.
  */
 /*===========================================================================*/
-void DisplayList::end( void )
+void DisplayList::end()
 {
     glEndList();
 }
@@ -113,11 +113,11 @@ void DisplayList::end( void )
 bool DisplayList::create( const GLsizei range )
 {
     m_id = glGenLists( range );
-    if ( m_id == 0 ) return( false );
+    if ( m_id == 0 ) return false;
 
     m_range = range;
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -125,7 +125,7 @@ bool DisplayList::create( const GLsizei range )
  *  Clears the display list.
  */
 /*===========================================================================*/
-void DisplayList::clear( void )
+void DisplayList::clear()
 {
     if ( glIsList( m_id ) == GL_TRUE )
     {

@@ -17,7 +17,6 @@
 #if KVS_ENABLE_DEPRECATED
 
 #include <kvs/OpenGL>
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -25,37 +24,24 @@ namespace kvs
 
 class DisplayList
 {
-    kvsClassName( kvs::DisplayList );
-
 protected:
 
-    GLuint  m_id;    ///< display list ID
+    GLuint m_id; ///< display list ID
     GLsizei m_range; ///< number of lists
 
 public:
 
-    DisplayList( void );
-
+    DisplayList();
     DisplayList( const GLsizei range );
+    virtual ~DisplayList();
 
-    virtual ~DisplayList( void );
-
-public:
-
-    const GLuint id( void ) const;
-
-    const GLsizei range( void ) const;
-
-public:
+    GLuint id() const;
+    GLsizei range() const;
 
     void begin( const GLuint index = 0, const GLenum mode = GL_COMPILE );
-
-    void end( void );
-
+    void end();
     bool create( const GLsizei range );
-
-    void clear( void );
-
+    void clear();
     void render( const GLuint index = 0 );
 };
 

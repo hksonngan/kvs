@@ -15,7 +15,6 @@
 #define KVS__TEXTURE_1D_H_INCLUDE
 
 #include <kvs/TextureBase>
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -28,57 +27,39 @@ namespace kvs
 /*==========================================================================*/
 class Texture1D : public kvs::TextureBase
 {
-    kvsClassName( kvs::Texture1D );
-
 public:
 
     typedef kvs::TextureBase BaseClass;
 
 protected:
 
-    bool        m_is_downloaded; ///< if true, the texture is downloaded
-    GLenum      m_wrap_s;        ///< wrap method for s-axis
-    size_t      m_width;         ///< texture width
-    const void* m_pixels;        ///< pointer to the texture data (not allocated)
+    bool m_is_downloaded; ///< if true, the texture is downloaded
+    GLenum m_wrap_s; ///< wrap method for s-axis
+    size_t m_width; ///< texture width
+    const void* m_pixels; ///< pointer to the texture data (not allocated)
 
 public:
 
-    Texture1D( void );
-
+    Texture1D();
     Texture1D( const GLenum wrap_s );
+    virtual ~Texture1D();
 
-    virtual ~Texture1D( void );
-
-public:
-
-    const GLenum wrapS( void ) const;
-
-    const size_t width( void ) const;
-
-    const bool isDownloaded( void ) const;
-
-public:
+    GLenum wrapS() const;
+    size_t width() const;
+    bool isDownloaded() const;
 
     void setWrapS( const GLenum wrap_s );
 
-public:
-
     void create( const size_t width );
-
     void download(
         const size_t width,
         const void*  pixels,
         const size_t xoffset = 0 );
+    void bind();
+    void unbind();
+    void release();
 
-    void bind( void );
-
-    void unbind( void );
-
-    void release( void );
-
-public:
-
-    static unsigned int UsedTextureMemorySize( void );
+    static unsigned int UsedTextureMemorySize();
 
 private:
 
