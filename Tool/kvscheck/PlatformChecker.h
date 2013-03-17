@@ -31,18 +31,14 @@ class PlatformChecker
 protected:
 
     std::string m_name; ///< platform name
-    std::string m_cpu;  ///< CPU name
+    std::string m_cpu; ///< CPU name
 
 public:
 
-    PlatformChecker( void );
+    PlatformChecker();
 
-public:
-
-    const std::string& name( void ) const;
-
-    const std::string& cpu( void ) const;
-
+    const std::string& name() const;
+    const std::string& cpu() const;
     friend std::ostream& operator << ( std::ostream& os, const PlatformChecker& checker );
 };
 

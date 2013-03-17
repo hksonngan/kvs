@@ -29,28 +29,21 @@ class OpenGLChecker
 {
 protected:
 
-    std::string m_vendor;       ///< vendor name
-    std::string m_renderer;     ///< renderer (GPU) name
-    std::string m_gl_version;   ///< OpenGL version
+    std::string m_vendor; ///< vendor name
+    std::string m_renderer; ///< renderer (GPU) name
+    std::string m_gl_version; ///< OpenGL version
     std::string m_glsl_version; ///< GLSL version
-    std::string m_glu_version;  ///< GLU version
+    std::string m_glu_version; ///< GLU version
 
 public:
 
     OpenGLChecker( int argc, char** argv );
 
-public:
-
-    const std::string& vendor( void ) const;
-
-    const std::string& renderer( void ) const;
-
-    const std::string& GLVersion( void ) const;
-
-    const std::string& GLUVersion( void ) const;
-
-    const std::string& GLSLVersion( void ) const;
-
+    const std::string& vendor() const;
+    const std::string& renderer() const;
+    const std::string& GLVersion() const;
+    const std::string& GLUVersion() const;
+    const std::string& GLSLVersion() const;
     friend std::ostream& operator << ( std::ostream& os, const OpenGLChecker& checker );
 };
 

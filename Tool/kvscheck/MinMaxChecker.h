@@ -31,16 +31,8 @@ class MinMaxChecker
 {
 public:
 
-    MinMaxChecker( void );
-
-public:
-
-    template <typename T>
-    const T minValueOf( void ) const;
-
-    template <typename T>
-    const T maxValueOf( void ) const;
-
+    template <typename T> const T minValueOf() const;
+    template <typename T> const T maxValueOf() const;
     friend std::ostream& operator << ( std::ostream& os, const MinMaxChecker& checker );
 };
 
@@ -51,7 +43,7 @@ public:
  */
 /*===========================================================================*/
 template <typename T>
-inline const T MinMaxChecker::minValueOf( void ) const
+inline const T MinMaxChecker::minValueOf() const
 {
     return( kvs::Value<T>::Min() );
 }
@@ -63,7 +55,7 @@ inline const T MinMaxChecker::minValueOf( void ) const
  */
 /*===========================================================================*/
 template <typename T>
-inline const T MinMaxChecker::maxValueOf( void ) const
+inline const T MinMaxChecker::maxValueOf() const
 {
     return( kvs::Value<T>::Max() );
 }

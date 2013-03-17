@@ -32,18 +32,14 @@ class SupportChecker
 protected:
 
     kvs::StringList m_descriptions; ///< KVS support library description list
-    kvs::StringList m_versions;     ///< KVS support library version list
+    kvs::StringList m_versions; ///< KVS support library version list
 
 public:
 
-    SupportChecker( void );
+    SupportChecker();
 
-public:
-
-    const kvs::StringList& descriptionList( void ) const;
-
-    const kvs::StringList& versionList( void ) const;
-
+    const kvs::StringList& descriptionList() const;
+    const kvs::StringList& versionList() const;
     friend std::ostream& operator << ( std::ostream& os, const SupportChecker& checker );
 };
 

@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file ExtensionChecker.h
+ *  @file   ExtensionChecker.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -30,19 +31,15 @@ class ExtensionChecker
 {
 protected:
 
-    kvs::StringList m_gl_extensions;  ///< OpenGL extensions
+    kvs::StringList m_gl_extensions; ///< OpenGL extensions
     kvs::StringList m_glu_extensions; ///< GLU extensions
 
 public:
 
     ExtensionChecker( int argc, char** argv );
 
-public:
-
-    const kvs::StringList& GLExtensions( void ) const;
-
-    const kvs::StringList& GLUExtensions( void ) const;
-
+    const kvs::StringList& GLExtensions() const;
+    const kvs::StringList& GLUExtensions() const;
     friend std::ostream& operator << ( std::ostream& os, const ExtensionChecker& checker );
 };
 

@@ -57,9 +57,9 @@ inline void PrintInformation( const char* class_name, std::ostream& os, const kv
     kvs::Timer timer( kvs::Timer::Start );
     FileFormatClass file( checker.filename() );
     timer.stop();
-    os << "File format class: " << class_name << std::endl;
-    os << "Reading time: " << timer.sec() << " [sec]" << std::endl;
-    os << "Information: " << std::endl;
+    os << "File format class : " << class_name << std::endl;
+    os << "Reading time      : " << timer.sec() << " [sec]" << std::endl;
+    os << "Information       : " << std::endl;
     file.print( os, kvs::Indent(2) );
 }
 
@@ -136,9 +136,9 @@ FileChecker::FileChecker( const std::string& filename )
  *  @return filename
  */
 /*===========================================================================*/
-const std::string& FileChecker::filename( void ) const
+const std::string& FileChecker::filename() const
 {
-    return( m_filename );
+    return m_filename;
 }
 
 /*===========================================================================*/
@@ -151,37 +151,37 @@ const FileChecker::FormatType FileChecker::fileFormat( void ) const
 {
     if ( kvs::AVSField::CheckExtension( m_filename ) )
     {
-        return( FileChecker::AVSFieldFormat );
+        return FileChecker::AVSFieldFormat;
     }
 
     if ( kvs::AVSUcd::CheckExtension( m_filename ) )
     {
-        return( FileChecker::AVSUcdFormat );
+        return FileChecker::AVSUcdFormat;
     }
 
     if ( kvs::Bmp::CheckExtension( m_filename ) )
     {
-        return( FileChecker::BitmapFormat );
+        return FileChecker::BitmapFormat;
     }
 
     if ( kvs::Csv::CheckExtension( m_filename ) )
     {
-        return( FileChecker::CSVFormat );
+        return FileChecker::CSVFormat;
     }
 
     if ( kvs::Dicom::CheckExtension( m_filename ) )
     {
-        return( FileChecker::DICOMFormat );
+        return FileChecker::DICOMFormat;
     }
 
     if ( kvs::Gis::CheckExtension( m_filename ) )
     {
-        return( FileChecker::GISFormat );
+        return FileChecker::GISFormat;
     }
 
     if ( kvs::GrADS::CheckExtension( m_filename ) )
     {
-        return( FileChecker::GrADSFormat );
+        return FileChecker::GrADSFormat;
     }
 
     if ( kvs::KVSMLObjectPoint::CheckExtension( m_filename ) )
@@ -190,40 +190,40 @@ const FileChecker::FormatType FileChecker::fileFormat( void ) const
          * kvs::KVSMLObjectPoint is used in order to check the file extension
          * for the KVSML format here.
          */
-        return( FileChecker::KVSMLFormat );
+        return FileChecker::KVSMLFormat;
     }
 
     if ( kvs::Ply::CheckExtension( m_filename ) )
     {
-        return( FileChecker::PLYFormat );
+        return FileChecker::PLYFormat;
     }
 
     if ( kvs::Pbm::CheckExtension( m_filename ) )
     {
-        return( FileChecker::PBMFormat );
+        return FileChecker::PBMFormat;
     }
 
     if ( kvs::Pgm::CheckExtension( m_filename ) )
     {
-        return( FileChecker::PGMFormat );
+        return FileChecker::PGMFormat;
     }
 
     if ( kvs::Ppm::CheckExtension( m_filename ) )
     {
-        return( FileChecker::PPMFormat );
+        return FileChecker::PPMFormat;
     }
 
     if ( kvs::Stl::CheckExtension( m_filename ) )
     {
-        return( FileChecker::STLFormat );
+        return FileChecker::STLFormat;
     }
 
     if ( kvs::Tiff::CheckExtension( m_filename ) )
     {
-        return( FileChecker::TIFFFormat );
+        return FileChecker::TIFFFormat;
     }
 
-    return( FileChecker::UnknownFormat );
+    return FileChecker::UnknownFormat;
 }
 
 /*==========================================================================*/
@@ -238,14 +238,14 @@ std::ostream& operator << ( std::ostream& os, const FileChecker& checker )
     if ( !kvs::File( checker.filename() ).isExisted() )
     {
         kvsMessageError("%s is not existed.", checker.filename().c_str() );
-        return( os );
+        return os;
     }
 
     // KVSML format.
     if ( checker.fileFormat() == FileChecker::KVSMLFormat )
     {
         ::PrintKVSMLInformation( os, checker );
-        return( os );
+        return os;
     }
 
     // Other supported format.
@@ -308,7 +308,7 @@ std::ostream& operator << ( std::ostream& os, const FileChecker& checker )
         break;
     }
 
-    return( os );
+    return os;
 }
 
 } // end of namespace kvscheck

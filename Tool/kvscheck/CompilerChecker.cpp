@@ -23,9 +23,9 @@ namespace kvscheck
  *  @brief  Constructs a new CompilerChecker class.
  */
 /*===========================================================================*/
-CompilerChecker::CompilerChecker( void )
+CompilerChecker::CompilerChecker()
 {
-    m_name    = kvs::Compiler::Name();
+    m_name = kvs::Compiler::Name();
     m_version = kvs::Compiler::Version();
 }
 
@@ -35,9 +35,9 @@ CompilerChecker::CompilerChecker( void )
  *  @return compiler name
  */
 /*===========================================================================*/
-const std::string& CompilerChecker::name( void ) const
+const std::string& CompilerChecker::name() const
 {
-    return( m_name );
+    return m_name;
 }
 
 /*===========================================================================*/
@@ -46,9 +46,9 @@ const std::string& CompilerChecker::name( void ) const
  *  @return compiler version
  */
 /*===========================================================================*/
-const std::string& CompilerChecker::version( void ) const
+const std::string& CompilerChecker::version() const
 {
-    return( m_version );
+    return m_version;
 }
 
 /*==========================================================================*/
@@ -60,7 +60,7 @@ const std::string& CompilerChecker::version( void ) const
 /*==========================================================================*/
 std::ostream& operator << ( std::ostream& os, const CompilerChecker& checker )
 {
-    os << "Compiler: " << checker.name() << " (" << checker.version() << ")" << std::endl;
+    os << "Compiler : " << checker.name() << " (" << checker.version() << ")" << std::endl;
 
     return( os );
 }

@@ -26,10 +26,10 @@ namespace kvscheck
  *  @brief  Constructs a new PlatformChecker class.
  */
 /*===========================================================================*/
-PlatformChecker::PlatformChecker( void )
+PlatformChecker::PlatformChecker()
 {
     m_name = kvs::Platform::Name();
-    m_cpu  = kvs::Platform::CPUName();
+    m_cpu = kvs::Platform::CPUName();
 }
 
 /*===========================================================================*/
@@ -37,9 +37,9 @@ PlatformChecker::PlatformChecker( void )
  *  @brief  Returns a platform name.
  */
 /*===========================================================================*/
-const std::string& PlatformChecker::name( void ) const
+const std::string& PlatformChecker::name() const
 {
-    return( m_name );
+    return m_name;
 }
 
 /*==========================================================================*/
@@ -47,9 +47,9 @@ const std::string& PlatformChecker::name( void ) const
  *  @brief  Returns a CPU name.
  */
 /*==========================================================================*/
-const std::string& PlatformChecker::cpu( void ) const
+const std::string& PlatformChecker::cpu() const
 {
-    return( m_cpu );
+    return m_cpu;
 }
 
 /*==========================================================================*/
@@ -62,7 +62,6 @@ const std::string& PlatformChecker::cpu( void ) const
 std::ostream& operator << ( std::ostream& os, const PlatformChecker& checker )
 {
     const std::string byte_order( kvs::Endian::IsBig() ? "Big endian" : "Little endian" );
-
     const size_t ncores = kvs::SystemInformation::NumberOfProcessors();
 
 #if defined( KVS_PLATFORM_CPU_64 )
@@ -73,12 +72,12 @@ std::ostream& operator << ( std::ostream& os, const PlatformChecker& checker )
     const size_t nbits = 0;
 #endif
 
-    os << "Platform:   " << checker.name() << std::endl;
-    os << "CPU:        " << checker.cpu() << " (" << nbits << " bits)" << std::endl;
-    os << "Cores:      " << ncores << " core(s)" << std::endl;
-    os << "Byte-order: " << byte_order;
+    os << "Platform   : " << checker.name() << std::endl;
+    os << "CPU        : " << checker.cpu() << " (" << nbits << " bits)" << std::endl;
+    os << "Cores      : " << ncores << " core(s)" << std::endl;
+    os << "Byte-order : " << byte_order;
 
-    return( os );
+    return os;
 }
 
 } // end of namespace kvscheck

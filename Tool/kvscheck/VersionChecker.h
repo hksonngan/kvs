@@ -34,12 +34,9 @@ protected:
 
 public:
 
-    VersionChecker( void );
+    VersionChecker();
 
-public:
-
-    const std::string& name( void ) const;
-
+    const std::string& name() const;
     friend std::ostream& operator << ( std::ostream& os, const VersionChecker& checker );
 };
 

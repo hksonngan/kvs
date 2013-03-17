@@ -30,19 +30,15 @@ class CompilerChecker
 {
 protected:
 
-    std::string m_name;    ///< compiler name
+    std::string m_name; ///< compiler name
     std::string m_version; ///< compiler version
 
 public:
 
-    CompilerChecker( void );
+    CompilerChecker();
 
-public:
-
-    const std::string& name( void ) const;
-
-    const std::string& version( void ) const;
-
+    const std::string& name() const;
+    const std::string& version() const;
     friend std::ostream& operator << ( std::ostream& os, const CompilerChecker& checker );
 };
 

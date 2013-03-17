@@ -43,7 +43,7 @@ namespace kvscheck
  *  @brief  Constructs a new SupportChecker class.
  */
 /*==========================================================================*/
-SupportChecker::SupportChecker( void )
+SupportChecker::SupportChecker()
 {
 #if defined( KVS_SUPPORT_GLUT )
     {
@@ -94,9 +94,9 @@ SupportChecker::SupportChecker( void )
  *  @return description list of the supported libraries
  */
 /*==========================================================================*/
-const kvs::StringList& SupportChecker::descriptionList( void ) const
+const kvs::StringList& SupportChecker::descriptionList() const
 {
-    return( m_descriptions );
+    return m_descriptions;
 }
 
 /*==========================================================================*/
@@ -105,9 +105,9 @@ const kvs::StringList& SupportChecker::descriptionList( void ) const
  *  @return version list of the supported libraries
  */
 /*==========================================================================*/
-const kvs::StringList& SupportChecker::versionList( void ) const
+const kvs::StringList& SupportChecker::versionList() const
 {
-    return( m_versions );
+    return m_versions;
 }
 
 /*==========================================================================*/
@@ -119,7 +119,7 @@ const kvs::StringList& SupportChecker::versionList( void ) const
 /*==========================================================================*/
 std::ostream& operator << ( std::ostream& os, const SupportChecker& checker )
 {
-    os << "Supported libraries:" << std::endl;
+    os << "Supported libraries :" << std::endl;
 
     const size_t nlibraries = checker.descriptionList().size();
     for ( size_t i = 0; i < nlibraries; i++ )
@@ -130,7 +130,7 @@ std::ostream& operator << ( std::ostream& os, const SupportChecker& checker )
         if ( i != nlibraries - 1 ) std::cout << std::endl;
     }
 
-    return( os );
+    return os;
 }
 
 } // end of namespace kvscheck

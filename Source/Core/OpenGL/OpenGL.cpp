@@ -15,6 +15,20 @@
 #include "OpenGL.h"
 
 
+namespace
+{
+
+std::string GetString( GLenum name )
+{
+    std::string ret;
+    const GLubyte* c = NULL;
+    KVS_GL_CALL( c = glGetString( name ) );
+    while ( *c ) ret += *c++;
+    return ret;
+}
+
+}
+
 namespace kvs
 {
 
@@ -41,8 +55,7 @@ std::string Description()
 /*===========================================================================*/
 std::string Version()
 {
-    const std::string version( (const char*)glGetString( GL_VERSION ) );
-    return version;
+    return ::GetString( GL_VERSION );
 }
 
 /*===========================================================================*/
@@ -54,15 +67,12 @@ std::string Version()
 std::string ShaderVersion()
 {
 #if defined( GL_SHADING_LANGUAGE_VERSION )
-    const std::string version( (const char*)glGetString( GL_SHADING_LANGUAGE_VERSION ) );
+    return ::GetString( GL_SHADING_LANGUAGE_VERSION );
+#elif defined( GL_SHADING_LANGUAGE_VERSION_ARB )
+    return ::GetString( GL_SHADING_LANGUAGE_VERSION_ARB );
 #else
-#if defined( GL_SHADING_LANGUAGE_VERSION_ARB )
-    const std::string version( (const char*)glGetString( GL_SHADING_LANGUAGE_VERSION_ARB ) );
-#else
-    const std::string version( "unknown" );
+    return "Unknown";
 #endif
-#endif
-    return version;
 }
 
 /*===========================================================================*/
@@ -73,8 +83,7 @@ std::string ShaderVersion()
 /*===========================================================================*/
 std::string Vendor()
 {
-    const std::string vender( (const char*)glGetString( GL_VENDOR ) );
-    return vender;
+    return ::GetString( GL_VENDOR );
 }
 
 /*===========================================================================*/
@@ -85,8 +94,7 @@ std::string Vendor()
 /*===========================================================================*/
 std::string Renderer()
 {
-    const std::string renderer( (const char*)glGetString( GL_RENDERER ) );
-    return renderer;
+    return ::GetString( GL_RENDERER );
 }
 
 /*===========================================================================*/
@@ -97,16 +105,15 @@ std::string Renderer()
 /*===========================================================================*/
 kvs::StringList ExtensionList()
 {
-    kvs::StringList extension_list;
-
-    std::stringstream list( (char*)glGetString( GL_EXTENSIONS ) );
+    kvs::StringList extensions;
+    std::stringstream list( ::GetString( GL_EXTENSIONS ) );
     std::string name;
     while ( list >> name )
     {
-        extension_list.push_back( name );
+        extensions.push_back( name );
     }
 
-    return extension_list;
+    return extensions;
 }
 
 /*===========================================================================*/
@@ -142,7 +149,9 @@ bool HasError()
 /*===========================================================================*/
 std::string ErrorString( const GLenum error_code )
 {
-    const std::string error_string( (const char*)gluErrorString( error_code ) );
+    std::string error_string;
+    const GLubyte* c = gluErrorString( error_code );
+    while ( *c ) error_string += *c++;
     return error_string;
 }
 

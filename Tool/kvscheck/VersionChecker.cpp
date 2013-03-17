@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file VersionChecker.cpp
+ *  @file   VersionChecker.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -23,7 +24,7 @@ namespace kvscheck
  *  @brief  Constructs a new VersionChecker class.
  */
 /*==========================================================================*/
-VersionChecker::VersionChecker( void )
+VersionChecker::VersionChecker()
 {
     m_name = kvs::Version::Name();
 }
@@ -33,9 +34,9 @@ VersionChecker::VersionChecker( void )
  *  @brief  Returns a KVS version name.
  */
 /*==========================================================================*/
-const std::string& VersionChecker::name( void ) const
+const std::string& VersionChecker::name() const
 {
-    return( m_name );
+    return m_name;
 }
 
 /*==========================================================================*/
@@ -48,8 +49,7 @@ const std::string& VersionChecker::name( void ) const
 std::ostream& operator << ( std::ostream& os, const VersionChecker& checker )
 {
     os << "KVS version: " << checker.name();
-
-    return( os );
+    return os;
 }
 
 } // end of namespace kvscheck

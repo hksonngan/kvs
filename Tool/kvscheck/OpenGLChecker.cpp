@@ -39,9 +39,9 @@ OpenGLChecker::OpenGLChecker( int argc, char** argv )
     glutInit( &argc, argv );
     glutCreateWindow("");
 
-    m_vendor      = kvs::OpenGL::Vendor();
-    m_renderer    = kvs::OpenGL::Renderer();
-    m_gl_version  = kvs::OpenGL::Version();
+    m_vendor = kvs::OpenGL::Vendor();
+    m_renderer = kvs::OpenGL::Renderer();
+    m_gl_version = kvs::OpenGL::Version();
     m_glsl_version = kvs::OpenGL::ShaderVersion();
 #if defined( GLU_VERSION_1_1 )
     /* The gluGetString function is not used in GLU version 1.0.
@@ -61,9 +61,9 @@ OpenGLChecker::OpenGLChecker( int argc, char** argv )
  *  @return vender information
  */
 /*===========================================================================*/
-const std::string& OpenGLChecker::vendor( void ) const
+const std::string& OpenGLChecker::vendor() const
 {
-    return( m_vendor );
+    return m_vendor;
 }
 
 /*===========================================================================*/
@@ -72,9 +72,9 @@ const std::string& OpenGLChecker::vendor( void ) const
  *  @return render information
  */
 /*===========================================================================*/
-const std::string& OpenGLChecker::renderer( void ) const
+const std::string& OpenGLChecker::renderer() const
 {
-    return( m_renderer );
+    return m_renderer;
 }
 
 /*===========================================================================*/
@@ -83,9 +83,9 @@ const std::string& OpenGLChecker::renderer( void ) const
  *  @return GL version
  */
 /*===========================================================================*/
-const std::string& OpenGLChecker::GLVersion( void ) const
+const std::string& OpenGLChecker::GLVersion() const
 {
-    return( m_gl_version );
+    return m_gl_version;
 }
 
 /*===========================================================================*/
@@ -94,9 +94,9 @@ const std::string& OpenGLChecker::GLVersion( void ) const
  *  @return GLSL version
  */
 /*===========================================================================*/
-const std::string& OpenGLChecker::GLSLVersion( void ) const
+const std::string& OpenGLChecker::GLSLVersion() const
 {
-    return( m_glsl_version );
+    return m_glsl_version;
 }
 
 /*===========================================================================*/
@@ -105,9 +105,9 @@ const std::string& OpenGLChecker::GLSLVersion( void ) const
  *  @return GLU version
  */
 /*===========================================================================*/
-const std::string& OpenGLChecker::GLUVersion( void ) const
+const std::string& OpenGLChecker::GLUVersion() const
 {
-    return( m_glu_version );
+    return m_glu_version;
 }
 
 /*==========================================================================*/
@@ -119,13 +119,12 @@ const std::string& OpenGLChecker::GLUVersion( void ) const
 /*==========================================================================*/
 std::ostream& operator << ( std::ostream& os, const OpenGLChecker& checker )
 {
-    os << "Vendor:       " << checker.vendor()    << std::endl;
-    os << "Renderer:     " << checker.renderer()  << std::endl;
-    os << "GL Version:   " << checker.GLVersion() << std::endl;
-    os << "GLSL Version: " << checker.GLSLVersion() << std::endl;
-    os << "GLU Version:  " << checker.GLUVersion();
-
-    return( os );
+    os << "Vendor       : " << checker.vendor() << std::endl;
+    os << "Renderer     : " << checker.renderer() << std::endl;
+    os << "GL Version   : " << checker.GLVersion() << std::endl;
+    os << "GLSL Version : " << checker.GLSLVersion() << std::endl;
+    os << "GLU Version  : " << checker.GLUVersion();
+    return os;
 }
 
 } // end of namespace kvscheck

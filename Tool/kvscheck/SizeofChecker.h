@@ -30,13 +30,7 @@ class SizeofChecker
 {
 public:
 
-    SizeofChecker( void );
-
-public:
-
-    template <typename T>
-    const size_t sizeOf( void ) const;
-
+    template <typename T> size_t sizeOf() const;
     friend std::ostream& operator << ( std::ostream& os, const SizeofChecker& checker );
 };
 
@@ -47,9 +41,9 @@ public:
  */
 /*===========================================================================*/
 template <typename T>
-inline const size_t SizeofChecker::sizeOf( void ) const
+inline size_t SizeofChecker::sizeOf() const
 {
-    return( sizeof( T ) );
+    return sizeof( T );
 }
 
 } // end of namespace kvscheck

@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file ExtensionChecker.cpp
+ *  @file   ExtensionChecker.cpp
+ *  @author Naohisa Sakamtoo
  */
 /*----------------------------------------------------------------------------
  *
@@ -63,9 +64,9 @@ ExtensionChecker::ExtensionChecker( int argc, char** argv )
  *  @return GL extension list
  */
 /*===========================================================================*/
-const kvs::StringList& ExtensionChecker::GLExtensions( void ) const
+const kvs::StringList& ExtensionChecker::GLExtensions() const
 {
-    return( m_gl_extensions );
+    return m_gl_extensions;
 }
 
 /*===========================================================================*/
@@ -74,9 +75,9 @@ const kvs::StringList& ExtensionChecker::GLExtensions( void ) const
  *  @return GLU extension list
  */
 /*===========================================================================*/
-const kvs::StringList& ExtensionChecker::GLUExtensions( void ) const
+const kvs::StringList& ExtensionChecker::GLUExtensions() const
 {
-    return( m_glu_extensions );
+    return m_glu_extensions;
 }
 
 /*==========================================================================*/
@@ -88,7 +89,7 @@ const kvs::StringList& ExtensionChecker::GLUExtensions( void ) const
 /*==========================================================================*/
 std::ostream& operator << ( std::ostream& os, const ExtensionChecker& checker )
 {
-    os << "GL Extensions (" << checker.GLExtensions().size() << "):" << std::endl;
+    os << "GL Extensions (" << checker.GLExtensions().size() << ") :" << std::endl;
     kvs::StringList::const_iterator gl_extension = checker.GLExtensions().begin();
     while ( gl_extension != checker.GLExtensions().end() )
     {
@@ -96,7 +97,7 @@ std::ostream& operator << ( std::ostream& os, const ExtensionChecker& checker )
         ++gl_extension;
     }
 
-    os << "GLU Extensions (" << checker.GLUExtensions().size() << "):" << std::endl;
+    os << "GLU Extensions (" << checker.GLUExtensions().size() << ") :" << std::endl;
     kvs::StringList::const_iterator glu_extension = checker.GLUExtensions().begin();
     while ( glu_extension != checker.GLUExtensions().end() )
     {
@@ -104,7 +105,7 @@ std::ostream& operator << ( std::ostream& os, const ExtensionChecker& checker )
         ++glu_extension;
     }
 
-    return( os );
+    return os;
 }
 
 } // end of namespace kvscheck
