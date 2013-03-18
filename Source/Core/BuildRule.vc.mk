@@ -159,7 +159,9 @@ $(OUTDIR)\.\OpenGL\GL.obj \
 $(OUTDIR)\.\OpenGL\OpenGL.obj \
 $(OUTDIR)\.\OpenGL\Texture1D.obj \
 $(OUTDIR)\.\OpenGL\Texture2D.obj \
+$(OUTDIR)\.\OpenGL\Texture3D.obj \
 $(OUTDIR)\.\OpenGL\TextureBase.obj \
+$(OUTDIR)\.\OpenGL\TextureRectangle.obj \
 $(OUTDIR)\.\Thread\Condition.obj \
 $(OUTDIR)\.\Thread\Mutex.obj \
 $(OUTDIR)\.\Thread\MutexLocker.obj \

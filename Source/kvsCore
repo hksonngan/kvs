@@ -84,7 +84,9 @@
 #include <Core/OpenGL/OpenGL.h>
 #include <Core/OpenGL/Texture1D.h>
 #include <Core/OpenGL/Texture2D.h>
+#include <Core/OpenGL/Texture3D.h>
 #include <Core/OpenGL/TextureBase.h>
+#include <Core/OpenGL/TextureRectangle.h>
 #include <Core/Thread/Condition.h>
 #include <Core/Thread/Mutex.h>
 #include <Core/Thread/MutexLocker.h>
