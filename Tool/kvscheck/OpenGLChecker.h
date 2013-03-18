@@ -34,6 +34,7 @@ protected:
     std::string m_gl_version; ///< OpenGL version
     std::string m_glsl_version; ///< GLSL version
     std::string m_glu_version; ///< GLU version
+    std::string m_glew_version; ///< GLEW version
 
 public:
 
@@ -42,8 +43,9 @@ public:
     const std::string& vendor() const;
     const std::string& renderer() const;
     const std::string& GLVersion() const;
-    const std::string& GLUVersion() const;
     const std::string& GLSLVersion() const;
+    const std::string& GLUVersion() const;
+    const std::string& GLEWVersion() const;
     friend std::ostream& operator << ( std::ostream& os, const OpenGLChecker& checker );
 };
 

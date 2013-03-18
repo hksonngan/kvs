@@ -42,12 +42,9 @@ OpenGLChecker::OpenGLChecker( int argc, char** argv )
     m_vendor = kvs::OpenGL::Vendor();
     m_renderer = kvs::OpenGL::Renderer();
     m_gl_version = kvs::OpenGL::Version();
-    m_glsl_version = kvs::OpenGL::ShaderVersion();
-#if defined( GLU_VERSION_1_1 )
-    /* The gluGetString function is not used in GLU version 1.0.
-     */
-    m_glu_version = std::string( (const char*)gluGetString( GLU_VERSION ) );
-#endif
+    m_glsl_version = kvs::OpenGL::GLSLVersion();
+    m_glu_version = kvs::OpenGL::GLUVersion();
+    m_glew_version = kvs::OpenGL::GLEWVersion();
 #else
     kvsMessageError(
         "It seems that KVS_SUPPORT_GLUT option is disabled in the installed KVS. "
@@ -110,6 +107,17 @@ const std::string& OpenGLChecker::GLUVersion() const
     return m_glu_version;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns GLEW version.
+ *  @return GLEW version
+ */
+/*===========================================================================*/
+const std::string& OpenGLChecker::GLEWVersion() const
+{
+    return m_glew_version;
+}
+
 /*==========================================================================*/
 /**
  *  @brief Output platform information.
@@ -123,7 +131,8 @@ std::ostream& operator << ( std::ostream& os, const OpenGLChecker& checker )
     os << "Renderer     : " << checker.renderer() << std::endl;
     os << "GL Version   : " << checker.GLVersion() << std::endl;
     os << "GLSL Version : " << checker.GLSLVersion() << std::endl;
-    os << "GLU Version  : " << checker.GLUVersion();
+    os << "GLU Version  : " << checker.GLUVersion() << std::endl;
+    os << "GLEW Version : " << checker.GLEWVersion();
     return os;
 }
 

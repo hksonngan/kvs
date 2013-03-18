@@ -29,13 +29,17 @@ namespace OpenGL
 
 std::string Description();
 std::string Version();
-std::string ShaderVersion();
+std::string GLSLVersion();
+std::string GLUVersion();
+std::string GLEWVersion();
 std::string Vendor();
 std::string Renderer();
 kvs::StringList ExtensionList();
 GLenum ErrorCode();
 bool HasError();
 std::string ErrorString( const GLenum error_code );
+
+/*KVS_DEPRECATED*/ inline std::string ShaderVersion() { return GLSLVersion(); }
 /*KVS_DEPRECATED*/ inline bool CheckError() { return !HasError(); }
 
 } // end of namespace OpenGL

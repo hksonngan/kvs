@@ -18,11 +18,28 @@
 namespace
 {
 
-std::string GetString( GLenum name )
+std::string GLGetString( GLenum name )
 {
     std::string ret;
     const GLubyte* c = NULL;
     KVS_GL_CALL( c = glGetString( name ) );
+    while ( *c ) ret += *c++;
+    return ret;
+}
+
+std::string GLUGetString( GLenum name )
+{
+    std::string ret;
+    const GLubyte* c = NULL;
+    KVS_GL_CALL( c = gluGetString( name ) );
+    while ( *c ) ret += *c++;
+    return ret;
+}
+
+std::string GLEWGetString( GLenum name )
+{
+    std::string ret;
+    const GLubyte* c = glewGetString( name );
     while ( *c ) ret += *c++;
     return ret;
 }
@@ -55,7 +72,7 @@ std::string Description()
 /*===========================================================================*/
 std::string Version()
 {
-    return ::GetString( GL_VERSION );
+    return ::GLGetString( GL_VERSION );
 }
 
 /*===========================================================================*/
@@ -64,15 +81,37 @@ std::string Version()
  *  @return GLSL version
  */
 /*===========================================================================*/
-std::string ShaderVersion()
+std::string GLSLVersion()
 {
 #if defined( GL_SHADING_LANGUAGE_VERSION )
-    return ::GetString( GL_SHADING_LANGUAGE_VERSION );
+    return ::GLGetString( GL_SHADING_LANGUAGE_VERSION );
 #elif defined( GL_SHADING_LANGUAGE_VERSION_ARB )
-    return ::GetString( GL_SHADING_LANGUAGE_VERSION_ARB );
+    return ::GLGetString( GL_SHADING_LANGUAGE_VERSION_ARB );
 #else
     return "Unknown";
 #endif
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns GLU version.
+ *  @return GLU version
+ */
+/*===========================================================================*/
+std::string GLUVersion()
+{
+    return ::GLUGetString( GLU_VERSION );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns GLEW version.
+ *  @return GLEW version
+ */
+/*===========================================================================*/
+std::string GLEWVersion()
+{
+    return ::GLEWGetString( GLEW_VERSION );
 }
 
 /*===========================================================================*/
@@ -83,7 +122,7 @@ std::string ShaderVersion()
 /*===========================================================================*/
 std::string Vendor()
 {
-    return ::GetString( GL_VENDOR );
+    return ::GLGetString( GL_VENDOR );
 }
 
 /*===========================================================================*/
@@ -94,7 +133,7 @@ std::string Vendor()
 /*===========================================================================*/
 std::string Renderer()
 {
-    return ::GetString( GL_RENDERER );
+    return ::GLGetString( GL_RENDERER );
 }
 
 /*===========================================================================*/
@@ -106,7 +145,7 @@ std::string Renderer()
 kvs::StringList ExtensionList()
 {
     kvs::StringList extensions;
-    std::stringstream list( ::GetString( GL_EXTENSIONS ) );
+    std::stringstream list( ::GLGetString( GL_EXTENSIONS ) );
     std::string name;
     while ( list >> name )
     {
