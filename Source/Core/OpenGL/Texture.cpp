@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file TextureBase.cpp
+ *  @file   Texture.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -11,7 +12,7 @@
  *  $Id$
  */
 /****************************************************************************/
-#include "TextureBase.h"
+#include "Texture.h"
 #include <kvs/Message>
 
 
@@ -23,7 +24,7 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-TextureBase::TextureBase():
+Texture::Texture():
     m_id( 0 ),
     m_internal_format( 0 ),
     m_external_format( 0 ),
@@ -40,7 +41,7 @@ TextureBase::TextureBase():
  *  @param min_filter [in] minification filter
  */
 /*==========================================================================*/
-TextureBase::TextureBase( const GLenum mag_filter, const GLenum min_filter ):
+Texture::Texture( const GLenum mag_filter, const GLenum min_filter ):
     m_id( 0 ),
     m_internal_format( 0 ),
     m_external_format( 0 ),
@@ -55,7 +56,7 @@ TextureBase::TextureBase( const GLenum mag_filter, const GLenum min_filter ):
  *  Destructor.
  */
 /*==========================================================================*/
-TextureBase::~TextureBase()
+Texture::~Texture()
 {
 }
 
@@ -64,7 +65,7 @@ TextureBase::~TextureBase()
  *  Returns the texture ID.
  */
 /*==========================================================================*/
-GLuint TextureBase::id() const
+GLuint Texture::id() const
 {
     return m_id;
 }
@@ -74,7 +75,7 @@ GLuint TextureBase::id() const
  *  Returns the magnification filter.
  */
 /*==========================================================================*/
-GLenum TextureBase::magFilter() const
+GLenum Texture::magFilter() const
 {
     return m_mag_filter;
 }
@@ -84,7 +85,7 @@ GLenum TextureBase::magFilter() const
  *  Returns the minification filter.
  */
 /*==========================================================================*/
-GLenum TextureBase::minFilter() const
+GLenum Texture::minFilter() const
 {
     return m_min_filter;
 }
@@ -94,7 +95,7 @@ GLenum TextureBase::minFilter() const
  *  Returns the internal pixel format.
  */
 /*==========================================================================*/
-GLint TextureBase::internalFormat() const
+GLint Texture::internalFormat() const
 {
     return m_internal_format;
 }
@@ -104,7 +105,7 @@ GLint TextureBase::internalFormat() const
  *  Returns the external pixel format.
  */
 /*==========================================================================*/
-GLenum TextureBase::externalFormat() const
+GLenum Texture::externalFormat() const
 {
     return m_external_format;
 }
@@ -114,12 +115,12 @@ GLenum TextureBase::externalFormat() const
  *  Returns the external pixel data type.
  */
 /*==========================================================================*/
-GLenum TextureBase::externalType() const
+GLenum Texture::externalType() const
 {
     return m_external_type;
 }
 
-bool TextureBase::isTexture() const
+bool Texture::isTexture() const
 {
     return glIsTexture( m_id ) == GL_TRUE;
 }
@@ -130,7 +131,7 @@ bool TextureBase::isTexture() const
  *  @param mag_filter [in] magnification filter
  */
 /*==========================================================================*/
-void TextureBase::setMagFilter( const GLenum mag_filter )
+void Texture::setMagFilter( const GLenum mag_filter )
 {
     m_mag_filter = mag_filter;
 }
@@ -141,7 +142,7 @@ void TextureBase::setMagFilter( const GLenum mag_filter )
  *  @param min_filter [in] minification filter
  */
 /*==========================================================================*/
-void TextureBase::setMinFilter( const GLenum min_filter )
+void Texture::setMinFilter( const GLenum min_filter )
 {
     m_min_filter = min_filter;
 }
@@ -154,7 +155,7 @@ void TextureBase::setMinFilter( const GLenum min_filter )
  *  @param external_type [in] external pixel data type
  */
 /*==========================================================================*/
-void TextureBase::setPixelFormat(
+void Texture::setPixelFormat(
     const GLint  internal_format,
     const GLenum external_format,
     const GLenum external_type )
@@ -171,7 +172,7 @@ void TextureBase::setPixelFormat(
  *  @param bytes_per_channel [in] bytes per channel (1, 2 or 4)
  */
 /*==========================================================================*/
-void TextureBase::setPixelFormat( const size_t nchannels, const size_t bytes_per_channel )
+void Texture::setPixelFormat( const size_t nchannels, const size_t bytes_per_channel )
 {
     this->estimate_pixel_format( nchannels, bytes_per_channel );
 }
@@ -182,7 +183,7 @@ void TextureBase::setPixelFormat( const size_t nchannels, const size_t bytes_per
  *  @param external_format [in] external pixel format
  */
 /*==========================================================================*/
-size_t TextureBase::get_nchannels( const GLenum external_format ) const
+size_t Texture::get_nchannels( const GLenum external_format ) const
 {
     size_t nchannels = 0;
     switch( external_format )
@@ -229,7 +230,7 @@ size_t TextureBase::get_nchannels( const GLenum external_format ) const
  *  @param external_type [in] external_pixel data type
  */
 /*==========================================================================*/
-size_t TextureBase::get_channel_size( const GLenum external_type ) const
+size_t Texture::get_channel_size( const GLenum external_type ) const
 {
     size_t channel_size = 0;
     switch( external_type )
@@ -264,7 +265,7 @@ size_t TextureBase::get_channel_size( const GLenum external_type ) const
  *  @param bytes_per_channel [in] bytes per channel
  */
 /*==========================================================================*/
-void TextureBase::estimate_pixel_format( const size_t nchannels, const size_t bytes_per_channel )
+void Texture::estimate_pixel_format( const size_t nchannels, const size_t bytes_per_channel )
 {
     // Initialize.
     this->setPixelFormat( 0, 0, 0 );
@@ -287,7 +288,7 @@ void TextureBase::estimate_pixel_format( const size_t nchannels, const size_t by
  *  @param bytes_per_channel [in] bytes per channel
  */
 /*==========================================================================*/
-void TextureBase::determine_pixel_format_for_1_channel( const size_t bytes_per_channel )
+void Texture::determine_pixel_format_for_1_channel( const size_t bytes_per_channel )
 {
     switch( bytes_per_channel )
     {
@@ -306,7 +307,7 @@ void TextureBase::determine_pixel_format_for_1_channel( const size_t bytes_per_c
  *  @param bytes_per_channel [in] bytes per channel
  */
 /*==========================================================================*/
-void TextureBase::determine_pixel_format_for_2_channel( const size_t bytes_per_channel )
+void Texture::determine_pixel_format_for_2_channel( const size_t bytes_per_channel )
 {
     switch( bytes_per_channel )
     {
@@ -325,7 +326,7 @@ void TextureBase::determine_pixel_format_for_2_channel( const size_t bytes_per_c
  *  @param bytes_per_channel [in] bytes per channel
  */
 /*==========================================================================*/
-void TextureBase::determine_pixel_format_for_3_channel( const size_t bytes_per_channel )
+void Texture::determine_pixel_format_for_3_channel( const size_t bytes_per_channel )
 {
     switch( bytes_per_channel )
     {
@@ -344,7 +345,7 @@ void TextureBase::determine_pixel_format_for_3_channel( const size_t bytes_per_c
  *  @param bytes_per_channel [in] bytes per channel
  */
 /*==========================================================================*/
-void TextureBase::determine_pixel_format_for_4_channel( const size_t bytes_per_channel )
+void Texture::determine_pixel_format_for_4_channel( const size_t bytes_per_channel )
 {
     switch( bytes_per_channel )
     {

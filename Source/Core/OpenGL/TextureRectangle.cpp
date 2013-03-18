@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file TextureRectangle.cpp
+ *  @file   TextureRectangle.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -24,7 +25,7 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-TextureRectangle::TextureRectangle( void ):
+TextureRectangle::TextureRectangle():
     m_is_downloaded( false ),
     m_wrap_s( GL_CLAMP ),
     m_wrap_t( GL_CLAMP ),
@@ -56,7 +57,7 @@ TextureRectangle::TextureRectangle( const GLenum wrap_s, const GLenum wrap_t ):
  *  Destructor.
  */
 /*==========================================================================*/
-TextureRectangle::~TextureRectangle( void )
+TextureRectangle::~TextureRectangle()
 {
     this->release();
 }
@@ -66,7 +67,7 @@ TextureRectangle::~TextureRectangle( void )
  *  Returns the wrap method for s-axis.
  */
 /*==========================================================================*/
-GLenum TextureRectangle::wrapS( void ) const
+GLenum TextureRectangle::wrapS() const
 {
     return( m_wrap_s );
 }
@@ -76,7 +77,7 @@ GLenum TextureRectangle::wrapS( void ) const
  *  Returns the wrap method for t-axis.
  */
 /*==========================================================================*/
-GLenum TextureRectangle::wrapT( void ) const
+GLenum TextureRectangle::wrapT() const
 {
     return( m_wrap_t );
 }
@@ -86,7 +87,7 @@ GLenum TextureRectangle::wrapT( void ) const
  *  Returns the texture width.
  */
 /*==========================================================================*/
-size_t TextureRectangle::width( void ) const
+size_t TextureRectangle::width() const
 {
     return( m_width );
 }
@@ -96,12 +97,12 @@ size_t TextureRectangle::width( void ) const
  *  Returns the texture height.
  */
 /*==========================================================================*/
-size_t TextureRectangle::height( void ) const
+size_t TextureRectangle::height() const
 {
     return( m_height );
 }
 
-bool TextureRectangle::isDownloaded( void ) const
+bool TextureRectangle::isDownloaded() const
 {
     return( m_is_downloaded );
 }
@@ -224,7 +225,7 @@ void TextureRectangle::download(
  *  Bind the texture.
  */
 /*==========================================================================*/
-void TextureRectangle::bind( void )
+void TextureRectangle::bind()
 {
     glBindTexture( GL_TEXTURE_RECTANGLE_ARB, m_id );
 }
@@ -234,7 +235,7 @@ void TextureRectangle::bind( void )
  *  Unbind the texture.
  */
 /*==========================================================================*/
-void TextureRectangle::unbind( void )
+void TextureRectangle::unbind()
 {
     glBindTexture( GL_TEXTURE_RECTANGLE_ARB, 0 );
 }
@@ -244,7 +245,7 @@ void TextureRectangle::unbind( void )
  *  Release the texture.
  */
 /*==========================================================================*/
-void TextureRectangle::release( void )
+void TextureRectangle::release()
 {
     if ( glIsTexture( m_id ) == GL_TRUE ) glDeleteTextures( 1, &m_id );
 
@@ -258,7 +259,7 @@ void TextureRectangle::release( void )
  *  @return Used texture memory size [byte]
  */
 /*==========================================================================*/
-unsigned int TextureRectangle::usedTextureMemorySize( void )
+unsigned int TextureRectangle::UsedTextureMemorySize()
 {
     return( TextureRectangle::get_texture_memory_size_on_gpu( GL_PROXY_TEXTURE_2D ) );
 }

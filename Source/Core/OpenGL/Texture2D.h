@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file Texture2D.h
+ *  @file   Texture2D.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -14,7 +15,7 @@
 #ifndef KVS__TEXTURE_2D_H_INCLUDE
 #define KVS__TEXTURE_2D_H_INCLUDE
 
-#include <kvs/TextureBase>
+#include <kvs/Texture>
 
 
 namespace kvs
@@ -25,11 +26,11 @@ namespace kvs
  *  2D texture class.
  */
 /*==========================================================================*/
-class Texture2D : public kvs::TextureBase
+class Texture2D : public kvs::Texture
 {
 public:
 
-    typedef kvs::TextureBase BaseClass;
+    typedef kvs::Texture BaseClass;
 
 protected:
 

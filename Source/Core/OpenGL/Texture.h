@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file TextureBase.h
+ *  @file   Texture.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -11,8 +12,8 @@
  *  $Id$
  */
 /****************************************************************************/
-#ifndef KVS__TEXTURE_BASE_H_INCLUDE
-#define KVS__TEXTURE_BASE_H_INCLUDE
+#ifndef KVS__TEXTURE_H_INCLUDE
+#define KVS__TEXTURE_H_INCLUDE
 
 #include <cctype>
 #include <kvs/OpenGL>
@@ -24,10 +25,10 @@ namespace kvs
 
 /*==========================================================================*/
 /**
- *  Texture base class.
+ *  Texture class.
  */
 /*==========================================================================*/
-class TextureBase
+class Texture
 {
 protected:
 
@@ -40,9 +41,9 @@ protected:
 
 public:
 
-    TextureBase();
-    TextureBase( const GLenum mag_filter, const GLenum min_filter );
-    virtual ~TextureBase();
+    Texture();
+    Texture( const GLenum mag_filter, const GLenum min_filter );
+    virtual ~Texture();
 
     GLuint id() const;
     GLenum magFilter() const;
@@ -70,4 +71,4 @@ private:
 
 } // end of namespace kvs
 
-#endif // KVS__TEXTURE_BASE_H_INCLUDE
+#endif // KVS__TEXTURE_H_INCLUDE

@@ -14,7 +14,7 @@
 #ifndef KVS__TEXTURE_1D_H_INCLUDE
 #define KVS__TEXTURE_1D_H_INCLUDE
 
-#include <kvs/TextureBase>
+#include <kvs/Texture>
 
 
 namespace kvs
@@ -25,11 +25,11 @@ namespace kvs
  *  1D texture class.
  */
 /*==========================================================================*/
-class Texture1D : public kvs::TextureBase
+class Texture1D : public kvs::Texture
 {
 public:
 
-    typedef kvs::TextureBase BaseClass;
+    typedef kvs::Texture BaseClass;
 
 protected:
 

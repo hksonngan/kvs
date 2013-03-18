@@ -15,7 +15,7 @@
 #define KVS__GLEW__TEXTURE_RECTANGLE_H_INCLUDE
 
 #include <kvs/OpenGL>
-#include <kvs/TextureBase>
+#include <kvs/Texture>
 #include <kvs/ClassName>
 
 
@@ -30,13 +30,13 @@ namespace glew
  *  Texture rectangle class.
  */
 /*==========================================================================*/
-class TextureRectangle : public kvs::TextureBase
+class TextureRectangle : public kvs::Texture
 {
     kvsClassName( kvs::glew::TextureRectangle );
 
 public:
 
-    typedef kvs::TextureBase BaseClass;
+    typedef kvs::Texture BaseClass;
 
 protected:
 

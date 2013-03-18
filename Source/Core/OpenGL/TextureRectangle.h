@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file TextureRectangle.h
+ *  @file   TextureRectangle.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -15,7 +16,7 @@
 #define KVS__TEXTURE_RECTANGLE_H_INCLUDE
 
 #include <kvs/OpenGL>
-#include <kvs/TextureBase>
+#include <kvs/Texture>
 
 
 namespace kvs
@@ -26,11 +27,11 @@ namespace kvs
  *  Texture rectangle class.
  */
 /*==========================================================================*/
-class TextureRectangle : public kvs::TextureBase
+class TextureRectangle : public kvs::Texture
 {
 public:
 
-    typedef kvs::TextureBase BaseClass;
+    typedef kvs::Texture BaseClass;
 
 protected:
 
@@ -67,7 +68,7 @@ public:
     void unbind();
     void release();
 
-    static unsigned int usedTextureMemorySize();
+    static unsigned int UsedTextureMemorySize();
 
 private:
 

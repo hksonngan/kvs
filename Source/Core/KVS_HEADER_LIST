@@ -82,10 +82,10 @@ OpenGL/DisplayList
 OpenGL/FrameBuffer
 OpenGL/GL
 OpenGL/OpenGL
+OpenGL/Texture
 OpenGL/Texture1D
 OpenGL/Texture2D
 OpenGL/Texture3D
-OpenGL/TextureBase
 OpenGL/TextureRectangle
 Thread/Condition
 Thread/Mutex
