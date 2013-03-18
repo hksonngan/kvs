@@ -68,7 +68,7 @@ bool HasError( const char* file, const int line, const char* func, const char* c
     if ( kvs::GL::detail::HasError( KVS_MACRO_FILE, KVS_MACRO_LINE, KVS_MACRO_FUNC, "Unknown" ) ) { KVS_BREAKPOINT; } \
     command;                                                            \
     if ( kvs::GL::detail::HasError( KVS_MACRO_FILE, KVS_MACRO_LINE, KVS_MACRO_FUNC, #command ) ) { KVS_BREAKPOINT; } \
-    KVS_END_MULTI_LINE_MACRO_END
+    KVS_MACRO_MULTI_STATEMENT_END
 #else
 #define KVS_GL_CALL( command ) ( command )
 #endif
