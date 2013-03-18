@@ -20,6 +20,8 @@
 #include <kvs/qt/Qt>
 
 
+class QApplication;
+
 namespace kvs
 {
 

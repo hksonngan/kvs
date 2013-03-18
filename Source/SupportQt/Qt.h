@@ -43,16 +43,25 @@
 #endif
 
 
-#if ( KVS_QT_VERSION >= 4 )
+#if ( KVS_QT_VERSION >= 5 )
 #include <QtCore>
 #include <QtGui>
 #include <QtOpenGL>
+#else
+#if ( KVS_QT_VERSION == 4 )
+#include <QtCore>
+#include <QtGui>
+#include <QGLWidget>
+#include <QGLFramebufferObject>
+#include <QGLPixelBuffer>
+#include <QGLBuffer>
 #else // KVS_QT_VERSION <= 3
 #include <qapplication.h>
 #include <qnamespace.h>
 #include <qtimer.h>
 #include <qevent.h>
 #include <qgl.h>
+#endif
 #endif
 
 
