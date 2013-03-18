@@ -220,7 +220,6 @@
 #include <Core/Visualization/Mapper/TransferFunction.h>
 #include <Core/Visualization/Module.h>
 #include <Core/Visualization/Object/GeometryObjectBase.h>
-#include <Core/Visualization/Object/GlyphObject.h>
 #include <Core/Visualization/Object/ImageObject.h>
 #include <Core/Visualization/Object/LineObject.h>
 #include <Core/Visualization/Object/ObjectBase.h>
@@ -237,7 +236,6 @@
 #include <Core/Visualization/Renderer/Bounds.h>
 #include <Core/Visualization/Renderer/DiamondGlyph.h>
 #include <Core/Visualization/Renderer/GlyphBase.h>
-#include <Core/Visualization/Renderer/GlyphRenderer.h>
 #include <Core/Visualization/Renderer/ImageRenderer.h>
 #include <Core/Visualization/Renderer/LineRenderer.h>
 #include <Core/Visualization/Renderer/ParallelCoordinatesRenderer.h>

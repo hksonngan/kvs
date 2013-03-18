@@ -54,13 +54,10 @@ public:
 
     void setMagFilter( const GLenum mag_filter );
     void setMinFilter( const GLenum min_filter );
-    void setPixelFormat(
-        const GLint  internal_format,
-        const GLenum external_format,
-        const GLenum external_type );
+    void setPixelFormat( const GLint  internal_format, const GLenum external_format, const GLenum external_type );
     void setPixelFormat( const size_t nchannels, const size_t bytes_per_channel );
 
-protected:
+private:
 
     size_t get_nchannels( const GLenum external_format ) const;
     size_t get_channel_size( const GLenum external_type ) const;

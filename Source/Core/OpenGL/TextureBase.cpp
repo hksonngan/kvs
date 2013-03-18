@@ -66,7 +66,7 @@ TextureBase::~TextureBase()
 /*==========================================================================*/
 GLuint TextureBase::id() const
 {
-    return( m_id );
+    return m_id;
 }
 
 /*==========================================================================*/
@@ -76,7 +76,7 @@ GLuint TextureBase::id() const
 /*==========================================================================*/
 GLenum TextureBase::magFilter() const
 {
-    return( m_mag_filter );
+    return m_mag_filter;
 }
 
 /*==========================================================================*/
@@ -86,7 +86,7 @@ GLenum TextureBase::magFilter() const
 /*==========================================================================*/
 GLenum TextureBase::minFilter() const
 {
-    return( m_min_filter );
+    return m_min_filter;
 }
 
 /*==========================================================================*/
@@ -96,7 +96,7 @@ GLenum TextureBase::minFilter() const
 /*==========================================================================*/
 GLint TextureBase::internalFormat() const
 {
-    return( m_internal_format );
+    return m_internal_format;
 }
 
 /*==========================================================================*/
@@ -106,7 +106,7 @@ GLint TextureBase::internalFormat() const
 /*==========================================================================*/
 GLenum TextureBase::externalFormat() const
 {
-    return( m_external_format );
+    return m_external_format;
 }
 
 /*==========================================================================*/
@@ -116,12 +116,12 @@ GLenum TextureBase::externalFormat() const
 /*==========================================================================*/
 GLenum TextureBase::externalType() const
 {
-    return( m_external_type );
+    return m_external_type;
 }
 
 bool TextureBase::isTexture() const
 {
-    return( glIsTexture( m_id ) == GL_TRUE );
+    return glIsTexture( m_id ) == GL_TRUE;
 }
 
 /*==========================================================================*/
@@ -161,7 +161,7 @@ void TextureBase::setPixelFormat(
 {
     m_internal_format = internal_format;
     m_external_format = external_format;
-    m_external_type   = external_type;
+    m_external_type = external_type;
 }
 
 /*==========================================================================*/
@@ -185,7 +185,6 @@ void TextureBase::setPixelFormat( const size_t nchannels, const size_t bytes_per
 size_t TextureBase::get_nchannels( const GLenum external_format ) const
 {
     size_t nchannels = 0;
-
     switch( external_format )
     {
     case GL_COLOR_INDEX:
@@ -221,7 +220,7 @@ size_t TextureBase::get_nchannels( const GLenum external_format ) const
         break;
     }
 
-    return( nchannels );
+    return nchannels;
 }
 
 /*==========================================================================*/
@@ -233,7 +232,6 @@ size_t TextureBase::get_nchannels( const GLenum external_format ) const
 size_t TextureBase::get_channel_size( const GLenum external_type ) const
 {
     size_t channel_size = 0;
-
     switch( external_type )
     {
     case GL_UNSIGNED_BYTE:
@@ -256,7 +254,7 @@ size_t TextureBase::get_channel_size( const GLenum external_type ) const
         break;
     }
 
-    return( channel_size );
+    return channel_size;
 }
 
 /*==========================================================================*/
