@@ -220,7 +220,6 @@ Visualization/Mapper/TetrahedralCell
 Visualization/Mapper/TransferFunction
 Visualization/Module
 Visualization/Object/GeometryObjectBase
-Visualization/Object/GlyphObject
 Visualization/Object/ImageObject
 Visualization/Object/LineObject
 Visualization/Object/ObjectBase
@@ -237,7 +236,6 @@ Visualization/Renderer/ArrowGlyph
 Visualization/Renderer/Bounds
 Visualization/Renderer/DiamondGlyph
 Visualization/Renderer/GlyphBase
-Visualization/Renderer/GlyphRenderer
 Visualization/Renderer/ImageRenderer
 Visualization/Renderer/LineRenderer
 Visualization/Renderer/ParallelCoordinatesRenderer
