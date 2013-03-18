@@ -32,15 +32,8 @@
 #define GLUT_DISABLE_ATEXIT_HACK
 #endif
 
-/* NOTE: GLEW header file 'glew.h' must be included before the OpenGL header files.
- * The 'glew.h' is formally included in SupportGLEW/GLEW.h. However, the 'glew.h'
- * is included in this header file when 'KVS_SUPPORT_GLEW' is defined since some
- * KVS classes that is compiled into the KVS core library uses the OpenGL functions
- * by including this header file.
- */
-#if defined( KVS_SUPPORT_GLEW )
+// GLEW header file 'glew.h' must be included before the OpenGL header files.
 #include <GL/glew.h>
-#endif
 
 #if defined( KVS_PLATFORM_MACOSX )
 #include <OpenGL/gl.h>

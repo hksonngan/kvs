@@ -46,7 +46,7 @@ cygwin* {
     DEFINES += NOMINMAX
 }
 
-DEFINES += KVS_SUPPORT_GLUT KVS_SUPPORT_QT
+DEFINES += KVS_SUPPORT_GLEW KVS_SUPPORT_GLUT KVS_SUPPORT_QT
 
 
 #=============================================================================
@@ -54,6 +54,11 @@ DEFINES += KVS_SUPPORT_GLUT KVS_SUPPORT_QT
 #=============================================================================
 INCLUDEPATH += ..
 
+KVS_GLEW_DIR = $$(KVS_GLEW_DIR)
+!isEmpty( KVS_GLEW_DIR )
+{
+    INCLUDEPATH += $$KVS_GLEW_DIR/include
+}
 
 #=============================================================================
 #  install
