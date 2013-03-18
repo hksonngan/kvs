@@ -48,7 +48,7 @@ const std::string& VersionChecker::name() const
 /*==========================================================================*/
 std::ostream& operator << ( std::ostream& os, const VersionChecker& checker )
 {
-    os << "KVS version: " << checker.name();
+    os << "KVS version : " << checker.name();
     return os;
 }
 
