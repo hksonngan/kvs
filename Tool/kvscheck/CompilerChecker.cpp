@@ -60,9 +60,8 @@ const std::string& CompilerChecker::version() const
 /*==========================================================================*/
 std::ostream& operator << ( std::ostream& os, const CompilerChecker& checker )
 {
-    os << "Compiler : " << checker.name() << " (" << checker.version() << ")" << std::endl;
-
-    return( os );
+    os << "Compiler : " << checker.name() << " (" << checker.version() << ")";
+    return os;
 }
 
 } // end of namespace kvscheck

@@ -63,7 +63,7 @@ std::ostream& operator << ( std::ostream& os, const MinMaxChecker& checker )
        << checker.minValueOf<size_t>() << ", "
        << checker.maxValueOf<size_t>() << " ]";
 
-    return( os );
+    return os;
 }
 
 } // end of namespace kvscheck
