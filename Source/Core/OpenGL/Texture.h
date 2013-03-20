@@ -16,8 +16,7 @@
 #define KVS__TEXTURE_H_INCLUDE
 
 #include <cctype>
-#include <kvs/OpenGL>
-#include <kvs/ClassName>
+#include <kvs/GL>
 
 
 namespace kvs
@@ -32,6 +31,7 @@ class Texture
 {
 protected:
 
+    GLenum m_target; ///< target
     GLuint m_id; ///< texture ID
     GLint m_internal_format; ///< internal pixel data format
     GLenum m_external_format; ///< external pixel data format
@@ -41,10 +41,9 @@ protected:
 
 public:
 
-    Texture();
-    Texture( const GLenum mag_filter, const GLenum min_filter );
-    virtual ~Texture();
+    Texture( const GLenum target );
 
+    GLenum target() const;
     GLuint id() const;
     GLenum magFilter() const;
     GLenum minFilter() const;
@@ -57,6 +56,31 @@ public:
     void setMinFilter( const GLenum min_filter );
     void setPixelFormat( const GLint  internal_format, const GLenum external_format, const GLenum external_type );
     void setPixelFormat( const size_t nchannels, const size_t bytes_per_channel );
+
+    void bind() const;
+    void unbind() const;
+    bool isValid() const;
+    bool isBinding() const;
+
+protected:
+
+    void generateTexture();
+    void deleteTexture();
+    void setImage1D( GLsizei width, const GLvoid* data );
+    void setImage2D( GLsizei width, GLsizei height, const GLvoid* data );
+    void setImage3D( GLsizei width, GLsizei height, GLsizei depth, const GLvoid* data );
+    void setImageRectangle( GLsizei width, GLsizei height, const GLvoid* data );
+    void setSubImage1D( GLsizei width, const GLvoid* data, GLint xoffset = 0 );
+    void setSubImage2D( GLsizei width, GLsizei height, const GLvoid* data, GLint xoffset = 0, GLint yoffset = 0 );
+    void setSubImage3D( GLsizei width, GLsizei height, GLsizei depth, const GLvoid* data, GLint xoffset = 0, GLint yoffset = 0, GLint zoffset = 0 );
+    void setSubImageRectangle( GLsizei width, GLsizei height, const GLvoid* data, GLint xoffset = 0, GLint yoffset = 0 );
+    void setParameter( GLenum pname, GLfloat param );
+    void setParameter( GLenum pname, GLint param );
+    void setParameter( GLenum pname, GLenum param );
+    void setParameters( GLenum pname, const GLfloat* params );
+    void setParameters( GLenum pname, const GLint* params );
+    void setPixelStorageMode( GLenum pname, GLfloat param );
+    void setPixelStorageMode( GLenum pname, GLint param );
 
 private:
 

@@ -45,7 +45,6 @@ protected:
 public:
 
     TextureRectangle();
-    TextureRectangle( const GLenum wrap_s, const GLenum wrap_t );
     virtual ~TextureRectangle();
 
     GLenum wrapS() const;
@@ -58,15 +57,13 @@ public:
     void setWrapT( const GLenum wrap_t );
 
     void create( const size_t width, const size_t height );
+    void release();
     void download(
         const size_t width,
         const size_t height,
         const void*  pixels,
         const size_t xoffset = 0,
         const size_t yoffset = 0 );
-    void bind();
-    void unbind();
-    void release();
 
     static unsigned int UsedTextureMemorySize();
 

@@ -27,30 +27,11 @@ namespace kvs
  */
 /*==========================================================================*/
 Texture3D::Texture3D():
+    Texture( GL_TEXTURE_3D ),
     m_is_downloaded( false ),
     m_wrap_s( GL_CLAMP ),
     m_wrap_t( GL_CLAMP ),
     m_wrap_r( GL_CLAMP ),
-    m_width( 0 ),
-    m_height( 0 ),
-    m_depth( 0 ),
-    m_pixels( 0 )
-{
-}
-
-/*==========================================================================*/
-/**
- *  Constructor.
- *  @param wrap_s [in] wrap method for s-axis
- *  @param wrap_t [in] wrap method for t-axis
- *  @param wrap_r [in] wrap method for r-axis
- */
-/*==========================================================================*/
-Texture3D::Texture3D( const GLenum wrap_s, const GLenum wrap_t, const GLenum wrap_r ):
-    m_is_downloaded( false ),
-    m_wrap_s( wrap_s ),
-    m_wrap_t( wrap_t ),
-    m_wrap_r( wrap_r ),
     m_width( 0 ),
     m_height( 0 ),
     m_depth( 0 ),
@@ -178,22 +159,25 @@ void Texture3D::create( const size_t width, const size_t height, const size_t de
     m_height = height;
     m_depth  = depth;
 
-    if( !glIsTexture( m_id ) ) glGenTextures( 1, &m_id );
-
-    // Bind the texture.
-    glBindTexture( GL_TEXTURE_3D, m_id );
-
-    // Set the filter methods.
-    glTexParameteri( GL_TEXTURE_3D, GL_TEXTURE_MAG_FILTER, m_mag_filter );
-    glTexParameteri( GL_TEXTURE_3D, GL_TEXTURE_MIN_FILTER, m_min_filter );
-
-    // Set the wrap methods.
-    glTexParameteri( GL_TEXTURE_3D, GL_TEXTURE_WRAP_S, m_wrap_s );
-    glTexParameteri( GL_TEXTURE_3D, GL_TEXTURE_WRAP_T, m_wrap_t );
-    glTexParameteri( GL_TEXTURE_3D, GL_TEXTURE_WRAP_R, m_wrap_r );
-
-    // Allocate memory on the GPU.
+    BaseClass::generateTexture();
+    BaseClass::bind();
+    BaseClass::setParameter( GL_TEXTURE_MAG_FILTER, m_mag_filter );
+    BaseClass::setParameter( GL_TEXTURE_MIN_FILTER, m_min_filter );
+    BaseClass::setParameter( GL_TEXTURE_WRAP_S, m_wrap_s );
+    BaseClass::setParameter( GL_TEXTURE_WRAP_T, m_wrap_t );
+    BaseClass::setParameter( GL_TEXTURE_WRAP_R, m_wrap_r );
     this->download( width, height, depth, NULL );
+}
+
+/*==========================================================================*/
+/**
+ *  Release the texture.
+ */
+/*==========================================================================*/
+void Texture3D::release()
+{
+    BaseClass::deleteTexture();
+    m_is_downloaded = false;
 }
 
 /*==========================================================================*/
@@ -217,89 +201,23 @@ void Texture3D::download(
     const size_t yoffset,
     const size_t zoffset )
 {
-    GLint swap;
-    GLint alignment;
-
-    glGetIntegerv( GL_UNPACK_SWAP_BYTES, &swap );
-    glGetIntegerv( GL_UNPACK_ALIGNMENT, &alignment );
-
-    glPixelStorei( GL_UNPACK_SWAP_BYTES, swap ? GL_TRUE : GL_FALSE );
-    glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+    const GLint swap = kvs::OpenGL::Integer( GL_UNPACK_SWAP_BYTES );
+    const GLint alignment = kvs::OpenGL::Integer( GL_UNPACK_ALIGNMENT );
+    BaseClass::setPixelStorageMode( GL_UNPACK_SWAP_BYTES, swap ? GL_TRUE : GL_FALSE );
+    BaseClass::setPixelStorageMode( GL_UNPACK_ALIGNMENT, 1 );
 
     if ( !m_is_downloaded )
     {
-//        const size_t ext_width  = 1 << ( kvs::Math::Log2Smallest( width ) );
-//        const size_t ext_height = 1 << ( kvs::Math::Log2Smallest( height ) );
-//        const size_t ext_depth  = 1 << ( kvs::Math::Log2Smallest( depth ) );
-
-        const GLint level = 0;  // level-of-detail number
-        const GLint border = 0; // border width (0 or 1)
-        glTexImage3D(
-            GL_TEXTURE_3D,
-            level,
-            BaseClass::internalFormat(),
-            width,
-            height,
-            depth,
-            border,
-            BaseClass::externalFormat(),
-            BaseClass::externalType(),
-            pixels );
-
+        BaseClass::setImage3D( width, height, depth, pixels );
         m_is_downloaded = true;
     }
     else
     {
-        const GLint level = 0;  // level-of-detail number
-        glTexSubImage3D(
-            GL_TEXTURE_3D,
-            level,
-            xoffset,
-            yoffset,
-            zoffset,
-            width,
-            height,
-            depth,
-            BaseClass::externalFormat(),
-            BaseClass::externalType(),
-            pixels );
+        BaseClass::setSubImage3D( width, height, depth, pixels, xoffset, yoffset, zoffset );
     }
 
-    glPixelStorei( GL_UNPACK_ALIGNMENT, alignment );
-    glPixelStorei( GL_UNPACK_SWAP_BYTES, swap );
-}
-
-/*==========================================================================*/
-/**
- *  Bind the texture.
- */
-/*==========================================================================*/
-void Texture3D::bind()
-{
-    glBindTexture( GL_TEXTURE_3D, m_id );
-}
-
-/*==========================================================================*/
-/**
- *  Unbind the texture.
- */
-/*==========================================================================*/
-void Texture3D::unbind()
-{
-    glBindTexture( GL_TEXTURE_3D, 0 );
-}
-
-/*==========================================================================*/
-/**
- *  Release the texture.
- */
-/*==========================================================================*/
-void Texture3D::release()
-{
-    if ( glIsTexture( m_id ) == GL_TRUE ) glDeleteTextures( 1, &m_id );
-
-    m_id = 0;
-    m_is_downloaded = false;
+    BaseClass::setPixelStorageMode( GL_UNPACK_SWAP_BYTES, swap );
+    BaseClass::setPixelStorageMode( GL_UNPACK_ALIGNMENT, alignment );
 }
 
 /*==========================================================================*/

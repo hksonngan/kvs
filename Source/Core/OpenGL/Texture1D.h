@@ -41,7 +41,6 @@ protected:
 public:
 
     Texture1D();
-    Texture1D( const GLenum wrap_s );
     virtual ~Texture1D();
 
     GLenum wrapS() const;
@@ -51,10 +50,8 @@ public:
     void setWrapS( const GLenum wrap_s );
 
     void create( const size_t width );
-    void download( const size_t width, const void* pixels, const size_t xoffset = 0 );
-    void bind();
-    void unbind();
     void release();
+    void download( const size_t width, const void* pixels, const size_t xoffset = 0 );
 
     static unsigned int UsedTextureMemorySize();
 

@@ -44,7 +44,6 @@ protected:
 public:
 
     Texture2D();
-    Texture2D( const GLenum wrap_s, const GLenum wrap_t );
     virtual ~Texture2D();
 
     GLenum wrapS() const;
@@ -63,8 +62,6 @@ public:
         const void*  pixels,
         const size_t xoffset = 0,
         const size_t yoffset = 0 );
-    void bind();
-    void unbind();
     void release();
 
     static unsigned int UsedTextureMemorySize();

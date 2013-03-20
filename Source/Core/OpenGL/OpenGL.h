@@ -39,6 +39,15 @@ GLenum ErrorCode();
 bool HasError();
 std::string ErrorString( const GLenum error_code );
 
+void GetBooleanv( GLenum pname, GLboolean* params );
+void GetDoublev( GLenum pname, GLdouble* params );
+void GetFloatv( GLenum pname, GLfloat* params );
+void GetIntegerv( GLenum pname, GLint* params );
+GLboolean Boolean( GLenum pname );
+GLdouble Double( GLenum pname );
+GLfloat Float( GLenum pname );
+GLint Integer( GLenum pname );
+
 /*KVS_DEPRECATED*/ inline std::string ShaderVersion() { return GLSLVersion(); }
 /*KVS_DEPRECATED*/ inline bool CheckError() { return !HasError(); }
 

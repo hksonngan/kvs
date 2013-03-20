@@ -28,6 +28,7 @@ namespace glew
  */
 /*==========================================================================*/
 TextureRectangle::TextureRectangle( void ):
+    Texture( GL_TEXTURE_RECTANGLE_ARB ),
     m_is_downloaded( false ),
     m_wrap_s( GL_CLAMP ),
     m_wrap_t( GL_CLAMP ),
@@ -45,6 +46,7 @@ TextureRectangle::TextureRectangle( void ):
  */
 /*==========================================================================*/
 TextureRectangle::TextureRectangle( const GLenum wrap_s, const GLenum wrap_t ):
+    Texture( GL_TEXTURE_RECTANGLE_ARB ),
     m_is_downloaded( false ),
     m_wrap_s( wrap_s ),
     m_wrap_t( wrap_t ),

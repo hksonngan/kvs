@@ -30,6 +30,7 @@ namespace glew
  */
 /*==========================================================================*/
 Texture3D::Texture3D( void ):
+    Texture( GL_TEXTURE_3D ),
     m_is_downloaded( false ),
     m_wrap_s( GL_CLAMP ),
     m_wrap_t( GL_CLAMP ),
@@ -50,6 +51,7 @@ Texture3D::Texture3D( void ):
  */
 /*==========================================================================*/
 Texture3D::Texture3D( const GLenum wrap_s, const GLenum wrap_t, const GLenum wrap_r ):
+    Texture( GL_TEXTURE_3D ),
     m_is_downloaded( false ),
     m_wrap_s( wrap_s ),
     m_wrap_t( wrap_t ),

@@ -47,7 +47,6 @@ protected:
 public:
 
     Texture3D();
-    Texture3D( const GLenum wrap_s, const GLenum wrap_t, const GLenum wrap_r );
     virtual ~Texture3D();
 
     GLenum wrapS() const;
@@ -63,6 +62,7 @@ public:
     void setWrapR( const GLenum wrap_r );
 
     void create( const size_t width, const size_t height, const size_t depth );
+    void release();
     void download(
         const size_t width,
         const size_t height,
@@ -71,9 +71,6 @@ public:
         const size_t xoffset = 0,
         const size_t yoffset = 0,
         const size_t zoffset = 0 );
-    void bind();
-    void unbind();
-    void release();
 
     static unsigned int UsedTextureMemorySize();
 

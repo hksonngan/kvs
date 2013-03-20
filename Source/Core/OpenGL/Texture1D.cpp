@@ -14,6 +14,7 @@
 /****************************************************************************/
 #include "Texture1D.h"
 #include <kvs/Math>
+#include <kvs/OpenGL>
 #include <iostream>
 
 
@@ -26,22 +27,9 @@ namespace kvs
  */
 /*==========================================================================*/
 Texture1D::Texture1D():
+    Texture( GL_TEXTURE_1D ),
     m_is_downloaded( false ),
     m_wrap_s( GL_CLAMP ),
-    m_width( 0 ),
-    m_pixels( 0 )
-{
-}
-
-/*==========================================================================*/
-/**
- *  Constructor.
- *  @param wrap_s [in] wrap method for s-axis
- */
-/*==========================================================================*/
-Texture1D::Texture1D( const GLenum wrap_s ):
-    m_is_downloaded( false ),
-    m_wrap_s( wrap_s ),
     m_width( 0 ),
     m_pixels( 0 )
 {
@@ -100,21 +88,25 @@ void Texture1D::setWrapS( const GLenum wrap_s )
 /*==========================================================================*/
 void Texture1D::create( const size_t width )
 {
-    m_width  = width;
+    m_width = width;
 
-    if( !glIsTexture( m_id ) ) glGenTextures( 1, &m_id );
-
-    // Bind the texture.
-    glBindTexture( GL_TEXTURE_1D, m_id );
-
-    // Set the filter methods.
-    glTexParameteri( GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, m_mag_filter );
-    glTexParameteri( GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, m_min_filter );
-
-    // Set the wrap methods.
-    glTexParameteri( GL_TEXTURE_1D, GL_TEXTURE_WRAP_S, m_wrap_s );
-
+    BaseClass::generateTexture();
+    BaseClass::bind();
+    BaseClass::setParameter( GL_TEXTURE_MAG_FILTER, m_mag_filter );
+    BaseClass::setParameter( GL_TEXTURE_MIN_FILTER, m_min_filter );
+    BaseClass::setParameter( GL_TEXTURE_WRAP_S, m_wrap_s );
     this->download( width, NULL );
+}
+
+/*==========================================================================*/
+/**
+ *  Release the texture.
+ */
+/*==========================================================================*/
+void Texture1D::release()
+{
+    BaseClass::deleteTexture();
+    m_is_downloaded = false;
 }
 
 /*==========================================================================*/
@@ -127,84 +119,26 @@ void Texture1D::create( const size_t width )
 /*==========================================================================*/
 void Texture1D::download(
     const size_t width,
-    const void*  pixels,
+    const void* pixels,
     const size_t xoffset )
 {
-    GLint swap;
-    GLint alignment;
-
-    glGetIntegerv( GL_UNPACK_SWAP_BYTES, &swap );
-    glGetIntegerv( GL_UNPACK_ALIGNMENT, &alignment );
-
-    glPixelStorei( GL_UNPACK_SWAP_BYTES, swap ? GL_TRUE : GL_FALSE );
-    glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+    const GLint swap = kvs::OpenGL::Integer( GL_UNPACK_SWAP_BYTES );
+    const GLint alignment = kvs::OpenGL::Integer( GL_UNPACK_ALIGNMENT );
+    BaseClass::setPixelStorageMode( GL_UNPACK_SWAP_BYTES, swap ? GL_TRUE : GL_FALSE );
+    BaseClass::setPixelStorageMode( GL_UNPACK_ALIGNMENT, 1 );
 
     if ( !m_is_downloaded )
     {
-//        const size_t ext_width  = 1 << ( kvs::Math::Log2Smallest( width ) );
-
-        const GLint level = 0;  // level-of-detail number
-        const GLint border = 0; // border width (0 or 1)
-        glTexImage1D(
-            GL_TEXTURE_1D,
-            level,
-            BaseClass::internalFormat(),
-            width,
-            border,
-            BaseClass::externalFormat(),
-            BaseClass::externalType(),
-            pixels );
-
+        BaseClass::setImage1D( width, pixels );
         m_is_downloaded = true;
     }
     else
     {
-        const GLint level = 0; // level-of-detail number
-        glTexSubImage1D(
-            GL_TEXTURE_1D,
-            level,
-            xoffset,
-            width,
-            BaseClass::externalFormat(),
-            BaseClass::externalType(),
-            pixels );
+        BaseClass::setSubImage1D( width, pixels, xoffset );
     }
 
-    glPixelStorei( GL_UNPACK_ALIGNMENT, alignment );
-    glPixelStorei( GL_UNPACK_SWAP_BYTES, swap );
-}
-
-/*==========================================================================*/
-/**
- *  Bind the texture.
- */
-/*==========================================================================*/
-void Texture1D::bind()
-{
-    glBindTexture( GL_TEXTURE_1D, m_id );
-}
-
-/*==========================================================================*/
-/**
- *  Unbind the texture.
- */
-/*==========================================================================*/
-void Texture1D::unbind()
-{
-    glBindTexture( GL_TEXTURE_1D, 0 );
-}
-
-/*==========================================================================*/
-/**
- *  Release the texture.
- */
-/*==========================================================================*/
-void Texture1D::release()
-{
-    if ( glIsTexture( m_id ) == GL_TRUE ) glDeleteTextures( 1, &m_id );
-
-    m_id = 0;
-    m_is_downloaded = false;
+    BaseClass::setPixelStorageMode( GL_UNPACK_SWAP_BYTES, swap );
+    BaseClass::setPixelStorageMode( GL_UNPACK_ALIGNMENT, alignment );
 }
 
 /*==========================================================================*/

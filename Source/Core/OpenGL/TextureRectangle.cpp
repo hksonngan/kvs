@@ -26,26 +26,10 @@ namespace kvs
  */
 /*==========================================================================*/
 TextureRectangle::TextureRectangle():
+    Texture( GL_TEXTURE_RECTANGLE ),
     m_is_downloaded( false ),
     m_wrap_s( GL_CLAMP ),
     m_wrap_t( GL_CLAMP ),
-    m_width( 0 ),
-    m_height( 0 ),
-    m_pixels( 0 )
-{
-}
-
-/*==========================================================================*/
-/**
- *  Constructor.
- *  @param wrap_s [in] wrap method for s-axis
- *  @param wrap_t [in] wrap method for t-axis
- */
-/*==========================================================================*/
-TextureRectangle::TextureRectangle( const GLenum wrap_s, const GLenum wrap_t ):
-    m_is_downloaded( false ),
-    m_wrap_s( wrap_s ),
-    m_wrap_t( wrap_t ),
     m_width( 0 ),
     m_height( 0 ),
     m_pixels( 0 )
@@ -139,20 +123,24 @@ void TextureRectangle::create( const size_t width, const size_t height )
     m_width  = width;
     m_height = height;
 
-    if( !glIsTexture( m_id ) ) glGenTextures( 1, &m_id );
-
-    // Bind the texture.
-    glBindTexture( GL_TEXTURE_RECTANGLE_ARB, m_id );
-
-    // Set the filter methods.
-    glTexParameteri( GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MAG_FILTER, m_mag_filter );
-    glTexParameteri( GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MIN_FILTER, m_min_filter );
-
-    // Set the wrap methods.
-    glTexParameteri( GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_WRAP_S, m_wrap_s );
-    glTexParameteri( GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_WRAP_T, m_wrap_t );
-
+    BaseClass::generateTexture();
+    BaseClass::bind();
+    BaseClass::setParameter( GL_TEXTURE_MAG_FILTER, m_mag_filter );
+    BaseClass::setParameter( GL_TEXTURE_MIN_FILTER, m_min_filter );
+    BaseClass::setParameter( GL_TEXTURE_WRAP_S, m_wrap_s );
+    BaseClass::setParameter( GL_TEXTURE_WRAP_T, m_wrap_t );
     this->download( width, height, NULL );
+}
+
+/*==========================================================================*/
+/**
+ *  Release the texture.
+ */
+/*==========================================================================*/
+void TextureRectangle::release()
+{
+    BaseClass::deleteTexture();
+    m_is_downloaded = false;
 }
 
 /*==========================================================================*/
@@ -172,85 +160,23 @@ void TextureRectangle::download(
     const size_t xoffset,
     const size_t yoffset )
 {
-    GLint swap;
-    GLint alignment;
-
-    glGetIntegerv( GL_UNPACK_SWAP_BYTES, &swap );
-    glGetIntegerv( GL_UNPACK_ALIGNMENT, &alignment );
-
-    glPixelStorei( GL_UNPACK_SWAP_BYTES, swap ? GL_TRUE : GL_FALSE );
-    glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+    const GLint swap = kvs::OpenGL::Integer( GL_UNPACK_SWAP_BYTES );
+    const GLint alignment = kvs::OpenGL::Integer( GL_UNPACK_ALIGNMENT );
+    BaseClass::setPixelStorageMode( GL_UNPACK_SWAP_BYTES, swap ? GL_TRUE : GL_FALSE );
+    BaseClass::setPixelStorageMode( GL_UNPACK_ALIGNMENT, 1 );
 
     if ( !m_is_downloaded )
     {
-//        const size_t ext_width  = 1 << ( kvs::Math::Log2Smallest( width ) );
-//        const size_t ext_height = 1 << ( kvs::Math::Log2Smallest( height ) );
-
-        const GLint level = 0;  // level-of-detail number
-        const GLint border = 0; // border width (0 or 1)
-        glTexImage2D(
-            GL_TEXTURE_RECTANGLE_ARB,
-            level,
-            BaseClass::internalFormat(),
-            width,
-            height,
-            border,
-            BaseClass::externalFormat(),
-            BaseClass::externalType(),
-            pixels );
-
+        BaseClass::setImageRectangle( width, height, pixels );
         m_is_downloaded = true;
     }
     else
     {
-        const GLint level = 0; // level-of-detail number
-        glTexSubImage2D(
-            GL_TEXTURE_RECTANGLE_ARB,
-            level,
-            xoffset,
-            yoffset,
-            width,
-            height,
-            BaseClass::externalFormat(),
-            BaseClass::externalType(),
-            pixels );
+        BaseClass::setSubImageRectangle( width, height, pixels, xoffset, yoffset );
     }
 
-    glPixelStorei( GL_UNPACK_ALIGNMENT, alignment );
-    glPixelStorei( GL_UNPACK_SWAP_BYTES, swap );
-}
-
-/*==========================================================================*/
-/**
- *  Bind the texture.
- */
-/*==========================================================================*/
-void TextureRectangle::bind()
-{
-    glBindTexture( GL_TEXTURE_RECTANGLE_ARB, m_id );
-}
-
-/*==========================================================================*/
-/**
- *  Unbind the texture.
- */
-/*==========================================================================*/
-void TextureRectangle::unbind()
-{
-    glBindTexture( GL_TEXTURE_RECTANGLE_ARB, 0 );
-}
-
-/*==========================================================================*/
-/**
- *  Release the texture.
- */
-/*==========================================================================*/
-void TextureRectangle::release()
-{
-    if ( glIsTexture( m_id ) == GL_TRUE ) glDeleteTextures( 1, &m_id );
-
-    m_id = 0;
-    m_is_downloaded = false;
+    BaseClass::setPixelStorageMode( GL_UNPACK_SWAP_BYTES, swap );
+    BaseClass::setPixelStorageMode( GL_UNPACK_ALIGNMENT, alignment );
 }
 
 /*==========================================================================*/

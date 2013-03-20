@@ -194,6 +194,54 @@ std::string ErrorString( const GLenum error_code )
     return error_string;
 }
 
+void GetBooleanv( GLenum pname, GLboolean* params )
+{
+    KVS_GL_CALL( glGetBooleanv( pname, params ) );
+}
+
+void GetDoublev( GLenum pname, GLdouble* params )
+{
+    KVS_GL_CALL( glGetDoublev( pname, params ) );
+}
+
+void GetFloatv( GLenum pname, GLfloat* params )
+{
+    KVS_GL_CALL( glGetFloatv( pname, params ) );
+}
+
+void GetIntegerv( GLenum pname, GLint* params )
+{
+    KVS_GL_CALL( glGetIntegerv( pname, params ) );
+}
+
+GLboolean Boolean( GLenum pname )
+{
+    GLboolean param;
+    kvs::OpenGL::GetBooleanv( pname, &param );
+    return param;
+}
+
+GLdouble Double( GLenum pname )
+{
+    GLdouble param;
+    kvs::OpenGL::GetDoublev( pname, &param );
+    return param;
+}
+
+GLfloat Float( GLenum pname )
+{
+    GLfloat param;
+    kvs::OpenGL::GetFloatv( pname, &param );
+    return param;
+}
+
+GLint Integer( GLenum pname )
+{
+    GLint param;
+    kvs::OpenGL::GetIntegerv( pname, &param );
+    return param;
+}
+
 } // end of namespace OpenGL
 
 } // end of namespace kvs
