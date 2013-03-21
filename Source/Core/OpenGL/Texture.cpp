@@ -33,7 +33,13 @@ Texture::Texture( const GLenum target ):
     m_external_format( 0 ),
     m_external_type( 0 ),
     m_mag_filter( GL_LINEAR ),
-    m_min_filter( GL_LINEAR )
+    m_min_filter( GL_LINEAR ),
+    m_wrap_s( GL_CLAMP ),
+    m_wrap_t( GL_CLAMP ),
+    m_wrap_r( GL_CLAMP ),
+    m_width( 0 ),
+    m_height( 0 ),
+    m_depth( 0 )
 {
 }
 
@@ -102,9 +108,64 @@ GLenum Texture::externalType() const
     return m_external_type;
 }
 
-bool Texture::isTexture() const
+/*==========================================================================*/
+/**
+ *  Returns the wrap method for s-axis.
+ */
+/*==========================================================================*/
+GLenum Texture::wrapS() const
 {
-    return glIsTexture( m_id ) == GL_TRUE;
+    return( m_wrap_s );
+}
+
+/*==========================================================================*/
+/**
+ *  Returns the wrap method for t-axis.
+ */
+/*==========================================================================*/
+GLenum Texture::wrapT() const
+{
+    return( m_wrap_t );
+}
+
+/*==========================================================================*/
+/**
+ *  Returns the wrap method for r-axis.
+ */
+/*==========================================================================*/
+GLenum Texture::wrapR() const
+{
+    return( m_wrap_r );
+}
+
+/*==========================================================================*/
+/**
+ *  Returns the texture width.
+ */
+/*==========================================================================*/
+size_t Texture::width() const
+{
+    return( m_width );
+}
+
+/*==========================================================================*/
+/**
+ *  Returns the texture height.
+ */
+/*==========================================================================*/
+size_t Texture::height() const
+{
+    return( m_height );
+}
+
+/*==========================================================================*/
+/**
+ *  Returns the texture depth.
+ */
+/*==========================================================================*/
+size_t Texture::depth() const
+{
+    return( m_depth );
 }
 
 /*==========================================================================*/
@@ -127,6 +188,40 @@ void Texture::setMagFilter( const GLenum mag_filter )
 void Texture::setMinFilter( const GLenum min_filter )
 {
     m_min_filter = min_filter;
+}
+
+/*==========================================================================*/
+/**
+ *  Set the wrap method for s-axis.
+ *  @param wrap_s [in] wrap method for s-axis
+ */
+/*==========================================================================*/
+void Texture::setWrapS( const GLenum wrap_s )
+{
+    m_wrap_s = wrap_s;
+}
+
+/*==========================================================================*/
+/**
+ *  Set the wrap method for t-axis.
+ *  @param wrap_t [in] wrap method for t-axis
+ */
+/*==========================================================================*/
+void Texture::setWrapT( const GLenum wrap_t )
+{
+    m_wrap_t = wrap_t;
+
+}
+
+/*==========================================================================*/
+/**
+ *  Set the wrap method for r-axis.
+ *  @param wrap_r [in] wrap method for r-axis
+ */
+/*==========================================================================*/
+void Texture::setWrapR( const GLenum wrap_r )
+{
+    m_wrap_r = wrap_r;
 }
 
 /*==========================================================================*/

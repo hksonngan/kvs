@@ -36,12 +36,6 @@ public:
 protected:
 
     bool m_is_downloaded; ///< if true, the texture is downloaded
-    GLenum m_wrap_s; ///< wrap method for s-axis
-    GLenum m_wrap_t; ///< wrap method for t-axis
-    GLenum m_wrap_r; ///< wrap method for r-axis
-    size_t m_width; ///< texture width
-    size_t m_height; ///< texture height
-    size_t m_depth; ///< texture depth
     const void* m_pixels; ///< pointer to the texture data (not allocated)
 
 public:
@@ -49,17 +43,7 @@ public:
     Texture3D();
     virtual ~Texture3D();
 
-    GLenum wrapS() const;
-    GLenum wrapT() const;
-    GLenum wrapR() const;
-    size_t width() const;
-    size_t height() const;
-    size_t depth() const;
     bool isDownloaded() const;
-
-    void setWrapS( const GLenum wrap_s );
-    void setWrapT( const GLenum wrap_t );
-    void setWrapR( const GLenum wrap_r );
 
     void create( const size_t width, const size_t height, const size_t depth );
     void release();

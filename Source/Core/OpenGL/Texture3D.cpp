@@ -29,12 +29,6 @@ namespace kvs
 Texture3D::Texture3D():
     Texture( GL_TEXTURE_3D ),
     m_is_downloaded( false ),
-    m_wrap_s( GL_CLAMP ),
-    m_wrap_t( GL_CLAMP ),
-    m_wrap_r( GL_CLAMP ),
-    m_width( 0 ),
-    m_height( 0 ),
-    m_depth( 0 ),
     m_pixels( 0 )
 {
 }
@@ -49,103 +43,9 @@ Texture3D::~Texture3D()
     this->release();
 }
 
-/*==========================================================================*/
-/**
- *  Returns the wrap method for s-axis.
- */
-/*==========================================================================*/
-GLenum Texture3D::wrapS() const
-{
-    return( m_wrap_s );
-}
-
-/*==========================================================================*/
-/**
- *  Returns the wrap method for t-axis.
- */
-/*==========================================================================*/
-GLenum Texture3D::wrapT() const
-{
-    return( m_wrap_t );
-}
-
-/*==========================================================================*/
-/**
- *  Returns the wrap method for r-axis.
- */
-/*==========================================================================*/
-GLenum Texture3D::wrapR() const
-{
-    return( m_wrap_r );
-}
-
-/*==========================================================================*/
-/**
- *  Returns the texture width.
- */
-/*==========================================================================*/
-size_t Texture3D::width() const
-{
-    return( m_width );
-}
-
-/*==========================================================================*/
-/**
- *  Returns the texture height.
- */
-/*==========================================================================*/
-size_t Texture3D::height() const
-{
-    return( m_height );
-}
-
-/*==========================================================================*/
-/**
- *  Returns the texture depth.
- */
-/*==========================================================================*/
-size_t Texture3D::depth() const
-{
-    return( m_depth );
-}
-
 bool Texture3D::isDownloaded() const
 {
     return( m_is_downloaded );
-}
-
-/*==========================================================================*/
-/**
- *  Set the wrap method for s-axis.
- *  @param wrap_s [in] wrap method for s-axis
- */
-/*==========================================================================*/
-void Texture3D::setWrapS( const GLenum wrap_s )
-{
-    m_wrap_s = wrap_s;
-}
-
-/*==========================================================================*/
-/**
- *  Set the wrap method for t-axis.
- *  @param wrap_t [in] wrap method for t-axis
- */
-/*==========================================================================*/
-void Texture3D::setWrapT( const GLenum wrap_t )
-{
-    m_wrap_t = wrap_t;
-
-}
-
-/*==========================================================================*/
-/**
- *  Set the wrap method for r-axis.
- *  @param wrap_r [in] wrap method for r-axis
- */
-/*==========================================================================*/
-void Texture3D::setWrapR( const GLenum wrap_r )
-{
-    m_wrap_r = wrap_r;
 }
 
 /*==========================================================================*/

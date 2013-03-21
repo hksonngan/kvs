@@ -34,8 +34,6 @@ public:
 protected:
 
     bool m_is_downloaded; ///< if true, the texture is downloaded
-    GLenum m_wrap_s; ///< wrap method for s-axis
-    size_t m_width; ///< texture width
     const void* m_pixels; ///< pointer to the texture data (not allocated)
 
 public:
@@ -43,11 +41,7 @@ public:
     Texture1D();
     virtual ~Texture1D();
 
-    GLenum wrapS() const;
-    size_t width() const;
     bool isDownloaded() const;
-
-    void setWrapS( const GLenum wrap_s );
 
     void create( const size_t width );
     void release();

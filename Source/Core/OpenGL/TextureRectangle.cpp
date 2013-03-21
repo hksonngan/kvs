@@ -28,10 +28,6 @@ namespace kvs
 TextureRectangle::TextureRectangle():
     Texture( GL_TEXTURE_RECTANGLE ),
     m_is_downloaded( false ),
-    m_wrap_s( GL_CLAMP ),
-    m_wrap_t( GL_CLAMP ),
-    m_width( 0 ),
-    m_height( 0 ),
     m_pixels( 0 )
 {
 }
@@ -46,71 +42,9 @@ TextureRectangle::~TextureRectangle()
     this->release();
 }
 
-/*==========================================================================*/
-/**
- *  Returns the wrap method for s-axis.
- */
-/*==========================================================================*/
-GLenum TextureRectangle::wrapS() const
-{
-    return( m_wrap_s );
-}
-
-/*==========================================================================*/
-/**
- *  Returns the wrap method for t-axis.
- */
-/*==========================================================================*/
-GLenum TextureRectangle::wrapT() const
-{
-    return( m_wrap_t );
-}
-
-/*==========================================================================*/
-/**
- *  Returns the texture width.
- */
-/*==========================================================================*/
-size_t TextureRectangle::width() const
-{
-    return( m_width );
-}
-
-/*==========================================================================*/
-/**
- *  Returns the texture height.
- */
-/*==========================================================================*/
-size_t TextureRectangle::height() const
-{
-    return( m_height );
-}
-
 bool TextureRectangle::isDownloaded() const
 {
     return( m_is_downloaded );
-}
-
-/*==========================================================================*/
-/**
- *  Set the wrap method for s-axis.
- *  @param wrap_s [in] wrap method for s-axis
- */
-/*==========================================================================*/
-void TextureRectangle::setWrapS( const GLenum wrap_s )
-{
-    m_wrap_s = wrap_s;
-}
-
-/*==========================================================================*/
-/**
- *  Set the wrap method for t-axis.
- *  @param wrap_t [in] wrap method for t-axis
- */
-/*==========================================================================*/
-void TextureRectangle::setWrapT( const GLenum wrap_t )
-{
-    m_wrap_t = wrap_t;
 }
 
 /*==========================================================================*/

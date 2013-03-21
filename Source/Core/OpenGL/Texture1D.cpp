@@ -29,8 +29,6 @@ namespace kvs
 Texture1D::Texture1D():
     Texture( GL_TEXTURE_1D ),
     m_is_downloaded( false ),
-    m_wrap_s( GL_CLAMP ),
-    m_width( 0 ),
     m_pixels( 0 )
 {
 }
@@ -45,40 +43,9 @@ Texture1D::~Texture1D()
     this->release();
 }
 
-/*==========================================================================*/
-/**
- *  Returns the wrap method for s-axis.
- */
-/*==========================================================================*/
-GLenum Texture1D::wrapS() const
-{
-    return m_wrap_s;
-}
-
-/*==========================================================================*/
-/**
- *  Returns the texture width.
- */
-/*==========================================================================*/
-size_t Texture1D::width() const
-{
-    return m_width;
-}
-
 bool Texture1D::isDownloaded() const
 {
     return m_is_downloaded;
-}
-
-/*==========================================================================*/
-/**
- *  Set the wrap method for s-axis.
- *  @param wrap_s [in] wrap method for s-axis
- */
-/*==========================================================================*/
-void Texture1D::setWrapS( const GLenum wrap_s )
-{
-    m_wrap_s = wrap_s;
 }
 
 /*==========================================================================*/

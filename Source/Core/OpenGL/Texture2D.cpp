@@ -29,10 +29,6 @@ namespace kvs
 Texture2D::Texture2D():
     Texture( GL_TEXTURE_2D ),
     m_is_downloaded( false ),
-    m_wrap_s( GL_CLAMP ),
-    m_wrap_t( GL_CLAMP ),
-    m_width( 0 ),
-    m_height( 0 ),
     m_pixels( 0 )
 {
 }
@@ -47,71 +43,9 @@ Texture2D::~Texture2D()
     this->release();
 }
 
-/*==========================================================================*/
-/**
- *  Returns the wrap method for s-axis.
- */
-/*==========================================================================*/
-GLenum Texture2D::wrapS() const
-{
-    return m_wrap_s;
-}
-
-/*==========================================================================*/
-/**
- *  Returns the wrap method for t-axis.
- */
-/*==========================================================================*/
-GLenum Texture2D::wrapT() const
-{
-    return m_wrap_t;
-}
-
-/*==========================================================================*/
-/**
- *  Returns the texture width.
- */
-/*==========================================================================*/
-size_t Texture2D::width() const
-{
-    return m_width;
-}
-
-/*==========================================================================*/
-/**
- *  Returns the texture height.
- */
-/*==========================================================================*/
-size_t Texture2D::height() const
-{
-    return m_height;
-}
-
 bool Texture2D::isDownloaded() const
 {
     return m_is_downloaded;
-}
-
-/*==========================================================================*/
-/**
- *  Set the wrap method for s-axis.
- *  @param wrap_s [in] wrap method for s-axis
- */
-/*==========================================================================*/
-void Texture2D::setWrapS( const GLenum wrap_s )
-{
-    m_wrap_s = wrap_s;
-}
-
-/*==========================================================================*/
-/**
- *  Set the wrap method for t-axis.
- *  @param wrap_t [in] wrap method for t-axis
- */
-/*==========================================================================*/
-void Texture2D::setWrapT( const GLenum wrap_t )
-{
-    m_wrap_t = wrap_t;
 }
 
 /*==========================================================================*/
