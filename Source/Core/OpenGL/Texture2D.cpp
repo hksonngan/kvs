@@ -55,15 +55,12 @@ bool Texture2D::isDownloaded() const
 /*==========================================================================*/
 void Texture2D::create( const size_t width, const size_t height )
 {
-    m_width = width;
-    m_height = height;
-
     BaseClass::generateTexture();
     BaseClass::bind();
-    BaseClass::setParameter( GL_TEXTURE_MAG_FILTER, m_mag_filter );
-    BaseClass::setParameter( GL_TEXTURE_MIN_FILTER, m_min_filter );
-    BaseClass::setParameter( GL_TEXTURE_WRAP_S, m_wrap_s );
-    BaseClass::setParameter( GL_TEXTURE_WRAP_T, m_wrap_t );
+    BaseClass::setParameter( GL_TEXTURE_MAG_FILTER, BaseClass::magFilter() );
+    BaseClass::setParameter( GL_TEXTURE_MIN_FILTER, BaseClass::minFilter() );
+    BaseClass::setParameter( GL_TEXTURE_WRAP_S, BaseClass::wrapS() );
+    BaseClass::setParameter( GL_TEXTURE_WRAP_T, BaseClass::wrapT() );
     this->download( width, height, NULL );
 }
 
@@ -95,6 +92,8 @@ void Texture2D::download(
     const size_t xoffset,
     const size_t yoffset )
 {
+    BaseClass::setSize( width, height );
+
     const GLint swap = kvs::OpenGL::Integer( GL_UNPACK_SWAP_BYTES );
     const GLint alignment = kvs::OpenGL::Integer( GL_UNPACK_ALIGNMENT );
     BaseClass::setPixelStorageMode( GL_UNPACK_SWAP_BYTES, swap ? GL_TRUE : GL_FALSE );

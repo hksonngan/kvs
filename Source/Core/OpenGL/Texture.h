@@ -30,7 +30,7 @@ namespace kvs
 /*==========================================================================*/
 class Texture
 {
-protected:
+private:
 
     GLenum m_target; ///< target
     GLuint m_id; ///< texture ID
@@ -71,6 +71,7 @@ public:
     void setWrapR( const GLenum wrap_r );
     void setPixelFormat( const GLint  internal_format, const GLenum external_format, const GLenum external_type );
     void setPixelFormat( const size_t nchannels, const size_t bytes_per_channel );
+    void setSize( const size_t width, const size_t height = 0, const size_t depth = 0 );
 
     void bind() const;
     void unbind() const;

@@ -254,6 +254,13 @@ void Texture::setPixelFormat( const size_t nchannels, const size_t bytes_per_cha
     this->estimate_pixel_format( nchannels, bytes_per_channel );
 }
 
+void Texture::setSize( const size_t width, const size_t height, const size_t depth )
+{
+    m_width = width;
+    m_height = height;
+    m_depth = depth;
+}
+
 void Texture::bind() const
 {
     KVS_ASSERT( this->isValid() );

@@ -55,17 +55,13 @@ bool Texture3D::isDownloaded() const
 /*==========================================================================*/
 void Texture3D::create( const size_t width, const size_t height, const size_t depth )
 {
-    m_width  = width;
-    m_height = height;
-    m_depth  = depth;
-
     BaseClass::generateTexture();
     BaseClass::bind();
-    BaseClass::setParameter( GL_TEXTURE_MAG_FILTER, m_mag_filter );
-    BaseClass::setParameter( GL_TEXTURE_MIN_FILTER, m_min_filter );
-    BaseClass::setParameter( GL_TEXTURE_WRAP_S, m_wrap_s );
-    BaseClass::setParameter( GL_TEXTURE_WRAP_T, m_wrap_t );
-    BaseClass::setParameter( GL_TEXTURE_WRAP_R, m_wrap_r );
+    BaseClass::setParameter( GL_TEXTURE_MAG_FILTER, BaseClass::magFilter() );
+    BaseClass::setParameter( GL_TEXTURE_MIN_FILTER, BaseClass::minFilter() );
+    BaseClass::setParameter( GL_TEXTURE_WRAP_S, BaseClass::wrapS() );
+    BaseClass::setParameter( GL_TEXTURE_WRAP_T, BaseClass::wrapT() );
+    BaseClass::setParameter( GL_TEXTURE_WRAP_R, BaseClass::wrapR() );
     this->download( width, height, depth, NULL );
 }
 
@@ -101,6 +97,8 @@ void Texture3D::download(
     const size_t yoffset,
     const size_t zoffset )
 {
+    BaseClass::setSize( width, height, depth );
+
     const GLint swap = kvs::OpenGL::Integer( GL_UNPACK_SWAP_BYTES );
     const GLint alignment = kvs::OpenGL::Integer( GL_UNPACK_ALIGNMENT );
     BaseClass::setPixelStorageMode( GL_UNPACK_SWAP_BYTES, swap ? GL_TRUE : GL_FALSE );

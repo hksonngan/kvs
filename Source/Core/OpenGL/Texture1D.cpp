@@ -55,13 +55,11 @@ bool Texture1D::isDownloaded() const
 /*==========================================================================*/
 void Texture1D::create( const size_t width )
 {
-    m_width = width;
-
     BaseClass::generateTexture();
     BaseClass::bind();
-    BaseClass::setParameter( GL_TEXTURE_MAG_FILTER, m_mag_filter );
-    BaseClass::setParameter( GL_TEXTURE_MIN_FILTER, m_min_filter );
-    BaseClass::setParameter( GL_TEXTURE_WRAP_S, m_wrap_s );
+    BaseClass::setParameter( GL_TEXTURE_MAG_FILTER, BaseClass::magFilter() );
+    BaseClass::setParameter( GL_TEXTURE_MIN_FILTER, BaseClass::minFilter() );
+    BaseClass::setParameter( GL_TEXTURE_WRAP_S, BaseClass::wrapS() );
     this->download( width, NULL );
 }
 
@@ -89,6 +87,8 @@ void Texture1D::download(
     const void* pixels,
     const size_t xoffset )
 {
+    BaseClass::setSize( width );
+
     const GLint swap = kvs::OpenGL::Integer( GL_UNPACK_SWAP_BYTES );
     const GLint alignment = kvs::OpenGL::Integer( GL_UNPACK_ALIGNMENT );
     BaseClass::setPixelStorageMode( GL_UNPACK_SWAP_BYTES, swap ? GL_TRUE : GL_FALSE );
