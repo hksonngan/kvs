@@ -11,6 +11,7 @@
  *  $Id$
  */
 /****************************************************************************/
+#if 0
 #include "TextureRectangle.h"
 #include <kvs/Math>
 #include <iostream>
@@ -338,3 +339,5 @@ unsigned int TextureRectangle::get_texture_memory_size_on_gpu( const GLenum prox
 } // end of namespace glew
 
 } // end of namespace kvs
+
+#endif

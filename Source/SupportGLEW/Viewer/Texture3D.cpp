@@ -11,6 +11,8 @@
  *  $Id$
  */
 /****************************************************************************/
+
+#if 0
 #include "../GLEW.h"
 #include "Texture3D.h"
 #include <kvs/Math>
@@ -392,3 +394,5 @@ unsigned int Texture3D::get_texture_memory_size_on_gpu( const GLenum proxy )
 } // end of namespace glew
 
 } // end of namespace kvs
+
+#endif

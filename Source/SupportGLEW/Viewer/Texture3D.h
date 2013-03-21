@@ -14,6 +14,10 @@
 #ifndef KVS__GLEW__TEXTURE_3D_H_INCLUDE
 #define KVS__GLEW__TEXTURE_3D_H_INCLUDE
 
+#include <kvs/Texture3D>
+namespace kvs { namespace glew { typedef kvs::Texture3D Texture3D; } }
+
+#if 0
 #include <kvs/OpenGL>
 #include <kvs/Texture>
 #include <kvs/ClassName>
@@ -114,3 +118,5 @@ private:
 } // end of namespace kvs
 
 #endif // KVS__GLEW__TEXTURE_3D_H_INCLUDE
+
+#endif

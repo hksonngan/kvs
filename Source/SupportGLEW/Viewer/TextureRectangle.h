@@ -14,6 +14,11 @@
 #ifndef KVS__GLEW__TEXTURE_RECTANGLE_H_INCLUDE
 #define KVS__GLEW__TEXTURE_RECTANGLE_H_INCLUDE
 
+#include <kvs/TextureRectangle>
+namespace kvs { namespace glew { typedef kvs::TextureRectangle TextureRectangle; }
+
+
+#if 0
 #include <kvs/OpenGL>
 #include <kvs/Texture>
 #include <kvs/ClassName>
@@ -104,3 +109,5 @@ private:
 } // end of namespace kvs
 
 #endif // KVS__GLEW__TEXTURE_RECTANGLE_H_INCLUDE
+
+#endif
