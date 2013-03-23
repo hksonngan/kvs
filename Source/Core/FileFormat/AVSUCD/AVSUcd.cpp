@@ -578,24 +578,19 @@ void AVSUcd::read_binary_file( const std::string& filename )
     // File information.
     char keyword[8] = {'\0'};
     fread( keyword, 7, 1, ifs );
-    std::cout << "keyword: " << std::string( keyword ) << std::endl;
 
     float version = 0.0f;
     fread( &version, 4, 1, ifs );
-    std::cout << "version: " << version << std::endl;
 
     // Step information.
     char title[71] = {'\0'};
     fread( title, 70, 1, ifs );
-    std::cout << "title: "<< std::string( title ) << std::endl;
 
     int step_number = 0;
     fread( &step_number, 4, 1, ifs );
-    std::cout << "step number: "<< step_number << std::endl;
 
     float step_time = 0.0f;
     fread( &step_time, 4, 1, ifs );
-    std::cout << "step time: " << step_time << std::endl;
 
     // Node information.
     if ( std::string( keyword ) == "AVS UCD" )
@@ -603,7 +598,6 @@ void AVSUcd::read_binary_file( const std::string& filename )
         // 32bit data.
         int nnodes = 0;
         fread( &nnodes, 4, 1, ifs );
-        std::cout << "nnodes: " << nnodes << std::endl;
         m_nnodes = static_cast<size_t>( nnodes );
     }
     else if ( std::string( keyword ) == "AVSUC64" )
@@ -611,13 +605,11 @@ void AVSUcd::read_binary_file( const std::string& filename )
         // 64bit data.
         long nnodes = 0;
         fread( &nnodes, 8, 1, ifs );
-        std::cout << "nnodes: " << nnodes << std::endl;
         m_nnodes = static_cast<size_t>( nnodes );
     }
 
     int description_type = 0;
     fread( &description_type, 4, 1, ifs );
-    std::cout << "description type: " << description_type << std::endl;
 
     m_coords.allocate( m_nnodes * 3 );
     kvs::Real32* pcoords = m_coords.data();
@@ -716,7 +708,6 @@ void AVSUcd::read_binary_file( const std::string& filename )
         // 32bit data.
         int nelements = 0;
         fread( &nelements, 4, 1, ifs );
-        std::cout << "nelements: " << nelements << std::endl;
         m_nelements = static_cast<size_t>( nelements );
 
         kvs::ValueArray<int> element_ids( m_nelements );
@@ -764,7 +755,6 @@ void AVSUcd::read_binary_file( const std::string& filename )
         // 64bit data.
         long nelements = 0;
         fread( &nelements, 8, 1, ifs );
-        std::cout << "nelements: " << nelements << std::endl;
         m_nelements = static_cast<size_t>( nelements );
 
         kvs::ValueArray<long> element_ids( m_nelements );
@@ -811,14 +801,12 @@ void AVSUcd::read_binary_file( const std::string& filename )
     // Node data.
     int ncomponents = 0;
     fread( &ncomponents, 4, 1, ifs );
-    std::cout << "ncomponents: " << ncomponents << std::endl;
     m_ncomponents_per_node = static_cast<size_t>( ncomponents );
 
     if ( ncomponents > 0 )
     {
         int data_type = 0; // 1, 2, 3, or 4
         fread( &data_type, 4, 1, ifs );
-        std::cout << "data type: " << data_type << std::endl;
 
         if ( data_type == 1 )
         {
