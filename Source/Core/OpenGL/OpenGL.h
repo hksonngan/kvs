@@ -48,8 +48,8 @@ GLdouble Double( GLenum pname );
 GLfloat Float( GLenum pname );
 GLint Integer( GLenum pname );
 
-/*KVS_DEPRECATED*/ std::string ShaderVersion() { return GLSLVersion(); }
-/*KVS_DEPRECATED*/ bool CheckError() { return !HasError(); }
+/*KVS_DEPRECATED*/ inline std::string ShaderVersion() { return GLSLVersion(); }
+/*KVS_DEPRECATED*/ inline bool CheckError() { return !HasError(); }
 
 } // end of namespace OpenGL
 
