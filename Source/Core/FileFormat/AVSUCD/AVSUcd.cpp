@@ -31,8 +31,8 @@ const std::string CycleTypeToString[ kvs::AVSUcd::CycleTypeSize ] =
 {
     "unknown",
     "data",
-    "geometry",
-    "data_geometry"
+    "geom",
+    "data_geom"
 };
 
 const std::string ElementTypeToString[ kvs::AVSUcd::ElementTypeSize ] =
@@ -92,6 +92,50 @@ kvs::AVSUcd::FormatType CheckFormatType( FILE* const ifs )
     fseek( ifs, 0, SEEK_SET );
 
     return format_type;
+}
+
+bool IsControlFile( FILE* const ifs )
+{
+    fseek( ifs, 0, SEEK_SET );
+    char buffer[ ::MaxLineLength ];
+
+    bool result = false;
+    while ( fgets( buffer, ::MaxLineLength, ifs ) != 0 )
+    {
+        // Skip comment lines.
+        if ( buffer[0] == '#' )
+        {
+            continue;
+        }
+
+        // In case of a control file, cycle type must describe in the first line.
+        if ( strncmp( buffer, "data", 4 ) == 0 ||
+             strncmp( buffer, "geom", 4 ) == 0 ||
+             strncmp( buffer, "data_geom", 9 ) == 0 )
+        {
+            result = true;
+        }
+    }
+
+    fseek( ifs, 0, SEEK_SET );
+    return result;
+}
+
+int StepNumber( const std::string& filename )
+{
+    FILE* const ifs = fopen( filename.c_str(), "rb" );
+    if ( !ifs )
+    {
+        kvsMessageError( "Cannot open %s.", filename.c_str() );
+        return -1;
+    }
+
+    int result = -1;
+    fseek( ifs, 81, SEEK_SET );
+    fread( &result, sizeof(int), 1, ifs );
+    fclose( ifs );
+
+    return result;
 }
 
 }
@@ -407,14 +451,21 @@ bool AVSUcd::read( const std::string& filename )
 
     try
     {
-        const FormatType format_type = ::CheckFormatType( ifs );
-        if ( format_type == SingleStep )
+        if ( ::IsControlFile( ifs ) )
         {
-            this->read_single_step_format( ifs );
+            this->read_control_file( ifs );
         }
-        else if ( format_type == MultiStep )
+        else
         {
-            this->read_multi_step_format( ifs );
+            const FormatType format_type = ::CheckFormatType( ifs );
+            if ( format_type == SingleStep )
+            {
+                this->read_single_step_format( ifs );
+            }
+            else if ( format_type == MultiStep )
+            {
+                this->read_multi_step_format( ifs );
+            }
         }
     }
     catch ( const char* const error )
@@ -463,6 +514,367 @@ bool AVSUcd::write( const std::string& filename )
     fclose( ofs );
 
     return true;
+}
+
+void AVSUcd::read_control_file( FILE* const ifs )
+{
+    char buffer[ ::MaxLineLength ];
+    while ( fgets( buffer, ::MaxLineLength, ifs ) != 0 )
+    {
+        // Skip comment lines.
+        if ( buffer[0] == '#' )
+        {
+            continue;
+        }
+
+        // In case of a control file, cycle type must describe in the first line.
+        if ( strncmp( buffer, "data", 4 ) == 0 ) m_cycle_type = Data;
+        else if ( strncmp( buffer, "geom", 4 ) == 0 ) m_cycle_type = Geom;
+        else if ( strncmp( buffer, "data_geom", 9 ) == 0 ) m_cycle_type = DataGeom;
+        else m_cycle_type = CycleTypeUnknown;
+        break;
+    }
+
+    const std::string path = kvs::File( BaseClass::filename() ).pathName( true );
+    std::vector<std::string> filenames;
+    while ( fgets( buffer, ::MaxLineLength, ifs ) != 0 )
+    {
+        if ( buffer[0] == '#' ) continue;
+
+        size_t last = strlen(buffer) - 1;
+        if ( buffer[last] == '\n' ) buffer[last] = '\0';
+
+        const std::string filename = path + kvs::File::Separator() + std::string( buffer );
+        filenames.push_back( filename );
+    }
+
+    m_nsteps = filenames.size();
+    this->read_binary_files( filenames );
+}
+
+void AVSUcd::read_binary_files( const std::vector<std::string>& filenames )
+{
+    for ( size_t i = 0; i < filenames.size(); i++ )
+    {
+        const std::string& filename = filenames[i];
+        const int step_id = ::StepNumber( filename ) - 1;
+        if ( step_id == static_cast<int>( m_step_id ) )
+        {
+            this->read_binary_file( filename );
+            return;
+        }
+    }
+}
+
+void AVSUcd::read_binary_file( const std::string& filename )
+{
+    FILE* const ifs = fopen( filename.c_str(), "rb" );
+    if ( !ifs )
+    {
+        kvsMessageError( "Cannot open %s.", filename.c_str() );
+        return;
+    }
+
+    // File information.
+    char keyword[8] = {'\0'};
+    fread( keyword, 7, 1, ifs );
+    std::cout << "keyword: " << std::string( keyword ) << std::endl;
+
+    float version = 0.0f;
+    fread( &version, 4, 1, ifs );
+    std::cout << "version: " << version << std::endl;
+
+    // Step information.
+    char title[71] = {'\0'};
+    fread( title, 70, 1, ifs );
+    std::cout << "title: "<< std::string( title ) << std::endl;
+
+    int step_number = 0;
+    fread( &step_number, 4, 1, ifs );
+    std::cout << "step number: "<< step_number << std::endl;
+
+    float step_time = 0.0f;
+    fread( &step_time, 4, 1, ifs );
+    std::cout << "step time: " << step_time << std::endl;
+
+    // Node information.
+    if ( std::string( keyword ) == "AVS UCD" )
+    {
+        // 32bit data.
+        int nnodes = 0;
+        fread( &nnodes, 4, 1, ifs );
+        std::cout << "nnodes: " << nnodes << std::endl;
+        m_nnodes = static_cast<size_t>( nnodes );
+    }
+    else if ( std::string( keyword ) == "AVSUC64" )
+    {
+        // 64bit data.
+        long nnodes = 0;
+        fread( &nnodes, 8, 1, ifs );
+        std::cout << "nnodes: " << nnodes << std::endl;
+        m_nnodes = static_cast<size_t>( nnodes );
+    }
+
+    int description_type = 0;
+    fread( &description_type, 4, 1, ifs );
+    std::cout << "description type: " << description_type << std::endl;
+
+    m_coords.allocate( m_nnodes * 3 );
+    kvs::Real32* pcoords = m_coords.data();
+    if ( description_type == 1 )
+    {
+        if ( std::string( keyword ) == "AVS UCD" )
+        {
+            for ( size_t i = 0; i < m_nnodes; i++ )
+            {
+                int node_number = 0; // 1, 2, 3, ...
+                fread( &node_number, 4, 1, ifs );
+
+                int node_id = node_number - 1; // 0, 1, 2, ...
+                fread( pcoords + 3 * node_id, 4, 3, ifs );
+            }
+        }
+        else if ( std::string( keyword ) == "AVSUC64" )
+        {
+            for ( size_t i = 0; i < m_nnodes; i++ )
+            {
+                long node_number = 0; // 1, 2, 3, ...
+                fread( &node_number, 8, 1, ifs );
+
+                long node_id = node_number - 1; // 0, 1, 2, ...
+                fread( pcoords + 3 * node_id, 8, 3, ifs );
+            }
+        }
+    }
+    else if ( description_type == 2 )
+    {
+        if ( std::string( keyword ) == "AVS UCD" )
+        {
+            kvs::ValueArray<int> node_ids( m_nnodes );
+            for ( size_t i = 0; i < m_nnodes; i++ )
+            {
+                int node_number = 0;
+                fread( &node_number, 4, 1, ifs );
+
+                int node_id = node_number - 1;
+                node_ids[i] = node_id;
+            }
+
+            for ( size_t i = 0; i < m_nnodes; i++ )
+            {
+                int node_id = node_ids[i];
+                fread( pcoords + 3 * node_id, 4, 1, ifs );
+            }
+
+            for ( size_t i = 0; i < m_nnodes; i++ )
+            {
+                int node_id = node_ids[i];
+                fread( pcoords + 3 * node_id + 1, 4, 1, ifs );
+            }
+
+            for ( size_t i = 0; i < m_nnodes; i++ )
+            {
+                int node_id = node_ids[i];
+                fread( pcoords + 3 * node_id + 2, 4, 1, ifs );
+            }
+        }
+        else if ( std::string( keyword ) == "AVSUC64" )
+        {
+            kvs::ValueArray<long> node_ids( m_nnodes );
+            for ( size_t i = 0; i < m_nnodes; i++ )
+            {
+                long node_number = 0;
+                fread( &node_number, 8, 1, ifs );
+
+                long node_id = node_number - 1;
+                node_ids[i] = node_id;
+            }
+
+            for ( size_t i = 0; i < m_nnodes; i++ )
+            {
+                long node_id = node_ids[i];
+                fread( pcoords + 3 * node_id, 8, 1, ifs );
+            }
+
+            for ( size_t i = 0; i < m_nnodes; i++ )
+            {
+                long node_id = node_ids[i];
+                fread( pcoords + 3 * node_id + 1, 8, 1, ifs );
+            }
+
+            for ( size_t i = 0; i < m_nnodes; i++ )
+            {
+                long node_id = node_ids[i];
+                fread( pcoords + 3 * node_id + 2, 8, 1, ifs );
+            }
+        }
+    }
+
+    // Element information.
+    if ( std::string( keyword ) == "AVS UCD" )
+    {
+        // 32bit data.
+        int nelements = 0;
+        fread( &nelements, 4, 1, ifs );
+        std::cout << "nelements: " << nelements << std::endl;
+        m_nelements = static_cast<size_t>( nelements );
+
+        kvs::ValueArray<int> element_ids( m_nelements );
+        for ( size_t i = 0; i < m_nelements; i++ )
+        {
+            int element_number = 0;
+            fread( &element_number, 4, 1, ifs );
+
+            int element_id = element_number - 1;
+            element_ids[i] = element_id;
+        }
+
+        // Material numbers.
+        fseek( ifs, m_nelements * 4, SEEK_CUR );
+
+        char element_type;
+        fread( &element_type, 1, 1, ifs );
+        fseek( ifs, m_nelements - 1, SEEK_CUR );
+
+        size_t nnodes_per_element = 0;
+        if ( element_type == 4 ) { m_element_type = Tetrahedra; nnodes_per_element = 4; }
+        else if ( element_type == 11 ) { m_element_type = Tetrahedra2; nnodes_per_element = 10; }
+        else if ( element_type == 7 ) { m_element_type = Hexahedra; nnodes_per_element = 8; }
+        else if ( element_type == 14 ) { m_element_type = Hexahedra2; nnodes_per_element = 20; }
+        else m_element_type = ElementTypeUnknown;
+
+        m_connections.allocate( m_nelements * nnodes_per_element );
+        kvs::UInt32* pconnections = m_connections.data();
+        for ( size_t i = 0; i < m_nelements; i++ )
+        {
+            int element_id = element_ids[i];
+            kvs::UInt32* target = pconnections + nnodes_per_element * element_id;
+            for ( size_t j = 0; j < nnodes_per_element; j++ )
+            {
+                int connection_number = 0;
+                fread( &connection_number, 4, 1, ifs );
+
+                int connection_id = connection_number - 1;
+                *(target++) = static_cast<kvs::UInt32>( connection_id );
+            }
+        }
+    }
+    else if ( std::string( keyword ) == "AVSUC64" )
+    {
+        // 64bit data.
+        long nelements = 0;
+        fread( &nelements, 8, 1, ifs );
+        std::cout << "nelements: " << nelements << std::endl;
+        m_nelements = static_cast<size_t>( nelements );
+
+        kvs::ValueArray<long> element_ids( m_nelements );
+        for ( size_t i = 0; i < m_nelements; i++ )
+        {
+            long element_number = 0;
+            fread( &element_number, 8, 1, ifs );
+
+            long element_id = element_number - 1;
+            element_ids[i] = element_id;
+        }
+
+        // Material numbers.
+        fseek( ifs, m_nelements * 4, SEEK_CUR );
+
+        char element_type;
+        fread( &element_type, 1, 1, ifs );
+        fseek( ifs, m_nelements - 1, SEEK_CUR );
+
+        size_t nnodes_per_element = 0;
+        if ( element_type == 4 ) { m_element_type = Tetrahedra; nnodes_per_element = 4; }
+        else if ( element_type == 11 ) { m_element_type = Tetrahedra2; nnodes_per_element = 10; }
+        else if ( element_type == 7 ) { m_element_type = Hexahedra; nnodes_per_element = 8; }
+        else if ( element_type == 14 ) { m_element_type = Hexahedra2; nnodes_per_element = 20; }
+        else m_element_type = ElementTypeUnknown;
+
+        m_connections.allocate( m_nelements * nnodes_per_element );
+        kvs::UInt32* pconnections = m_connections.data();
+        for ( size_t i = 0; i < m_nelements; i++ )
+        {
+            long element_id = element_ids[i];
+            kvs::UInt32* target = pconnections + nnodes_per_element * element_id;
+            for ( size_t j = 0; j < nnodes_per_element; j++ )
+            {
+                long connection_number = 0;
+                fread( &connection_number, 8, 1, ifs );
+
+                long connection_id = connection_number - 1;
+                *(target++) = static_cast<kvs::UInt32>( connection_id );
+            }
+        }
+    }
+
+    // Node data.
+    int ncomponents = 0;
+    fread( &ncomponents, 4, 1, ifs );
+    std::cout << "ncomponents: " << ncomponents << std::endl;
+    m_ncomponents_per_node = static_cast<size_t>( ncomponents );
+
+    if ( ncomponents > 0 )
+    {
+        int data_type = 0; // 1, 2, 3, or 4
+        fread( &data_type, 4, 1, ifs );
+        std::cout << "data type: " << data_type << std::endl;
+
+        if ( data_type == 1 )
+        {
+            for ( size_t i = 0; i < m_ncomponents_per_node; i++ )
+            {
+                char component_name[17] = {'\0'};
+                fread( component_name, 16, 1, ifs );
+
+                char unit[17] = {'\0'};
+                fread( unit, 16, 1, ifs );
+
+                int veclen = 0;
+                fread( &veclen, 4, 1, ifs );
+
+                int null_data_flag = 0;
+                fread( &null_data_flag, 4, 1, ifs );
+
+                float null_data = 0.0f;
+                fread( &null_data, 4, 1, ifs );
+
+                m_component_names.push_back( std::string( component_name ) );
+                m_component_units.push_back( std::string( unit ) );
+                m_veclens.push_back( static_cast<size_t>( veclen ) );
+            }
+
+            m_nvalues_per_node = 0;
+            for ( size_t i = 0; i < m_ncomponents_per_node; i++ )
+            {
+                m_nvalues_per_node += m_veclens[i];
+            }
+
+            size_t veclen = m_veclens[ m_component_id ];
+            size_t offset = 0; for ( size_t i = 0; i < m_component_id; i++ ) { offset += m_veclens[i]; }
+            float* one_node = new float [ m_nvalues_per_node ];
+            m_values.allocate( veclen * m_nnodes );
+            kvs::Real32* pvalues = m_values.data();
+            for ( size_t i = 0; i < m_nnodes; i++ )
+            {
+                fread( one_node, 4, m_nvalues_per_node, ifs );
+                float* v = one_node + offset;
+                for ( size_t j = 0; j < veclen; j++ )
+                {
+                    *(pvalues++) = *(v++);
+                }
+            }
+            delete [] one_node;
+        }
+        else
+        {
+            kvsMessageError("Not supported format.");
+        }
+    }
+
+    // Element data. (Currently ignored)
+
+    fclose( ifs );
 }
 
 void AVSUcd::read_single_step_format( FILE* const ifs )
@@ -520,9 +932,9 @@ void AVSUcd::read_multi_step_format( FILE* const ifs )
                 const char* const cycle_type = strtok( buffer, ::Delimiter );
 
                 m_cycle_type =
-                    !strcmp( cycle_type, "data" )      ? Data     :
-                !strcmp( cycle_type, "geom" )      ? Geom     :
-                !strcmp( cycle_type, "data_geom" ) ? DataGeom : CycleTypeUnknown;
+                    !strncmp( cycle_type, "data", 4 )      ? Data     :
+                    !strncmp( cycle_type, "geom", 4 )      ? Geom     :
+                    !strncmp( cycle_type, "data_geom", 9 ) ? DataGeom : CycleTypeUnknown;
 
                 if ( m_nsteps == 1 )
                 {

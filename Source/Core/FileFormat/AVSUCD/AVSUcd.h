@@ -143,6 +143,10 @@ public:
 
 private:
 
+    void read_control_file( FILE* const ifs );
+    void read_binary_files( const std::vector<std::string>& filenames );
+    void read_binary_file( const std::string& filename );
+
     void read_single_step_format( FILE* const ifs );
     void read_multi_step_format( FILE* const ifs );
     void read_multi_step_format_data( FILE* const ifs );
