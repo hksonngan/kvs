@@ -42,7 +42,7 @@ class Axis2DMatrix : public kvs::RendererBase
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::RendererBase );
 
-protected:
+private:
 
     int m_top_margin; ///< top margin
     int m_bottom_margin; ///< bottom margin
@@ -56,45 +56,26 @@ protected:
 
 public:
 
-    Axis2DMatrix( void );
-
-public:
+    Axis2DMatrix();
 
     void setTopMargin( const int top_margin );
-
     void setBottomMargin( const int bottom_margin );
-
     void setLeftMargin( const int left_margin );
-
     void setRightMargin( const int right_margin );
-
     void setMargin( const int margin );
-
     void setAxisWidth( const kvs::Real32 axis_width );
-
     void setAxisColor( const kvs::RGBColor axis_color );
-
     void setValueColor( const kvs::RGBColor value_color );
-
     void setLabelColor( const kvs::RGBColor label_color );
 
-    const int topMargin( void ) const;
-
-    const int bottomMargin( void ) const;
-
-    const int leftMargin( void ) const;
-
-    const int rightMargin( void ) const;
-
-    const kvs::Real32 axisWidth( void ) const;
-
-    const kvs::RGBColor axisColor( void ) const;
-
-    const kvs::RGBColor valueColor( void ) const;
-
-    const kvs::RGBColor labelColor( void ) const;
-
-public:
+    int topMargin() const;
+    int bottomMargin() const;
+    int leftMargin() const;
+    int rightMargin() const;
+    kvs::Real32 axisWidth() const;
+    const kvs::RGBColor& axisColor() const;
+    const kvs::RGBColor& valueColor() const;
+    const kvs::RGBColor& labelColor() const;
 
     void exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
 };

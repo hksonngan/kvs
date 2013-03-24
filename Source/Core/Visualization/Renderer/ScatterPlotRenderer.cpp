@@ -178,7 +178,7 @@ void ScatterPlotRenderer::setBackgroundColor( const kvs::RGBAColor background_co
  *  @return top margin
  */
 /*===========================================================================*/
-const int ScatterPlotRenderer::topMargin() const
+int ScatterPlotRenderer::topMargin() const
 {
     return( m_top_margin );
 }
@@ -189,7 +189,7 @@ const int ScatterPlotRenderer::topMargin() const
  *  @return bottom margin
  */
 /*===========================================================================*/
-const int ScatterPlotRenderer::bottomMargin() const
+int ScatterPlotRenderer::bottomMargin() const
 {
     return( m_bottom_margin );
 }
@@ -200,7 +200,7 @@ const int ScatterPlotRenderer::bottomMargin() const
  *  @return left margin
  */
 /*===========================================================================*/
-const int ScatterPlotRenderer::leftMargin() const
+int ScatterPlotRenderer::leftMargin() const
 {
     return( m_left_margin );
 }
@@ -211,7 +211,7 @@ const int ScatterPlotRenderer::leftMargin() const
  *  @return right margin
  */
 /*===========================================================================*/
-const int ScatterPlotRenderer::rightMargin() const
+int ScatterPlotRenderer::rightMargin() const
 {
     return( m_right_margin );
 }
@@ -222,7 +222,7 @@ const int ScatterPlotRenderer::rightMargin() const
  *  @return point opaicty
  */
 /*===========================================================================*/
-const kvs::UInt8 ScatterPlotRenderer::pointOpacity() const
+kvs::UInt8 ScatterPlotRenderer::pointOpacity() const
 {
     return( m_point_opacity );
 }
@@ -233,7 +233,7 @@ const kvs::UInt8 ScatterPlotRenderer::pointOpacity() const
  *  @return point size
  */
 /*===========================================================================*/
-const kvs::Real32 ScatterPlotRenderer::pointSize() const
+kvs::Real32 ScatterPlotRenderer::pointSize() const
 {
     return( m_point_size );
 }
@@ -255,7 +255,7 @@ const kvs::ColorMap& ScatterPlotRenderer::colorMap() const
  *  @return background color
  */
 /*===========================================================================*/
-const kvs::RGBAColor ScatterPlotRenderer::backgroundColor() const
+const kvs::RGBAColor& ScatterPlotRenderer::backgroundColor() const
 {
     return( m_background_color );
 }

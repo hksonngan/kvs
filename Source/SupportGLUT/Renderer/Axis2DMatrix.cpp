@@ -34,7 +34,7 @@ const int CharacterHeight = 12;
 namespace
 {
 
-void BeginDraw( void )
+void BeginDraw()
 {
     GLint vp[4]; glGetIntegerv( GL_VIEWPORT, vp );
     const GLint left = vp[0];
@@ -48,7 +48,7 @@ void BeginDraw( void )
     glOrtho( left, right, top, bottom, -1, 1 ); // The origin is upper-left.
 }
 
-void EndDraw( void )
+void EndDraw()
 {
     glPopMatrix();
     glMatrixMode( GL_MODELVIEW );
@@ -88,7 +88,7 @@ namespace glut
  *  @brief  Constructs a new Axis2DMatrix class.
  */
 /*===========================================================================*/
-Axis2DMatrix::Axis2DMatrix( void ):
+Axis2DMatrix::Axis2DMatrix():
     m_top_margin( 30 ),
     m_bottom_margin( 30 ),
     m_left_margin( 30 ),
@@ -206,7 +206,7 @@ void Axis2DMatrix::setLabelColor( const kvs::RGBColor label_color )
  *  @return top margin
  */
 /*===========================================================================*/
-const int Axis2DMatrix::topMargin( void ) const
+int Axis2DMatrix::topMargin() const
 {
     return( m_top_margin );
 }
@@ -217,7 +217,7 @@ const int Axis2DMatrix::topMargin( void ) const
  *  @return bottom margin
  */
 /*===========================================================================*/
-const int Axis2DMatrix::bottomMargin( void ) const
+int Axis2DMatrix::bottomMargin() const
 {
     return( m_bottom_margin );
 }
@@ -228,7 +228,7 @@ const int Axis2DMatrix::bottomMargin( void ) const
  *  @return left margin
  */
 /*===========================================================================*/
-const int Axis2DMatrix::leftMargin( void ) const
+int Axis2DMatrix::leftMargin() const
 {
     return( m_left_margin );
 }
@@ -239,7 +239,7 @@ const int Axis2DMatrix::leftMargin( void ) const
  *  @return right margin
  */
 /*===========================================================================*/
-const int Axis2DMatrix::rightMargin( void ) const
+int Axis2DMatrix::rightMargin() const
 {
     return( m_right_margin );
 }
@@ -250,7 +250,7 @@ const int Axis2DMatrix::rightMargin( void ) const
  *  @return axis width
  */
 /*===========================================================================*/
-const kvs::Real32 Axis2DMatrix::axisWidth( void ) const
+kvs::Real32 Axis2DMatrix::axisWidth() const
 {
     return( m_axis_width );
 }
@@ -261,7 +261,7 @@ const kvs::Real32 Axis2DMatrix::axisWidth( void ) const
  *  @return axis color.
  */
 /*===========================================================================*/
-const kvs::RGBColor Axis2DMatrix::axisColor( void ) const
+const kvs::RGBColor& Axis2DMatrix::axisColor() const
 {
     return( m_axis_color );
 }
@@ -272,7 +272,7 @@ const kvs::RGBColor Axis2DMatrix::axisColor( void ) const
  *  @return value color
  */
 /*===========================================================================*/
-const kvs::RGBColor Axis2DMatrix::valueColor( void ) const
+const kvs::RGBColor& Axis2DMatrix::valueColor() const
 {
     return( m_value_color );
 }
@@ -283,7 +283,7 @@ const kvs::RGBColor Axis2DMatrix::valueColor( void ) const
  *  @return label color
  */
 /*===========================================================================*/
-const kvs::RGBColor Axis2DMatrix::labelColor( void ) const
+const kvs::RGBColor& Axis2DMatrix::labelColor() const
 {
     return( m_label_color );
 }
@@ -303,8 +303,6 @@ void Axis2DMatrix::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Ligh
     BaseClass::startTimer();
 
     glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT );
-
-    RendererBase::initialize();
 
     ::BeginDraw();
 

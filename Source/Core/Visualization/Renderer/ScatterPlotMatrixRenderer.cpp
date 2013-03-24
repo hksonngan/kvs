@@ -199,7 +199,7 @@ void ScatterPlotMatrixRenderer::selectAxis( const int index )
  *  @return top margin
  */
 /*===========================================================================*/
-const int ScatterPlotMatrixRenderer::topMargin() const
+int ScatterPlotMatrixRenderer::topMargin() const
 {
     return( m_top_margin );
 }
@@ -210,7 +210,7 @@ const int ScatterPlotMatrixRenderer::topMargin() const
  *  @return bottom margin
  */
 /*===========================================================================*/
-const int ScatterPlotMatrixRenderer::bottomMargin() const
+int ScatterPlotMatrixRenderer::bottomMargin() const
 {
     return( m_bottom_margin );
 }
@@ -221,7 +221,7 @@ const int ScatterPlotMatrixRenderer::bottomMargin() const
  *  @return left margin
  */
 /*===========================================================================*/
-const int ScatterPlotMatrixRenderer::leftMargin() const
+int ScatterPlotMatrixRenderer::leftMargin() const
 {
     return( m_left_margin );
 }
@@ -232,7 +232,7 @@ const int ScatterPlotMatrixRenderer::leftMargin() const
  *  @return right margin
  */
 /*===========================================================================*/
-const int ScatterPlotMatrixRenderer::rightMargin() const
+int ScatterPlotMatrixRenderer::rightMargin() const
 {
     return( m_right_margin );
 }
@@ -243,7 +243,7 @@ const int ScatterPlotMatrixRenderer::rightMargin() const
  *  @return margin
  */
 /*===========================================================================*/
-const int ScatterPlotMatrixRenderer::margin() const
+int ScatterPlotMatrixRenderer::margin() const
 {
     return( m_margin );
 }
@@ -254,7 +254,7 @@ const int ScatterPlotMatrixRenderer::margin() const
  *  @return index of active axis
  */
 /*===========================================================================*/
-const int ScatterPlotMatrixRenderer::activeAxis() const
+int ScatterPlotMatrixRenderer::activeAxis() const
 {
     return( m_active_axis );
 }
@@ -265,7 +265,7 @@ const int ScatterPlotMatrixRenderer::activeAxis() const
  *  @return point opaicty
  */
 /*===========================================================================*/
-const kvs::UInt8 ScatterPlotMatrixRenderer::pointOpacity() const
+kvs::UInt8 ScatterPlotMatrixRenderer::pointOpacity() const
 {
     return( m_point_opacity );
 }
@@ -276,7 +276,7 @@ const kvs::UInt8 ScatterPlotMatrixRenderer::pointOpacity() const
  *  @return point size
  */
 /*===========================================================================*/
-const kvs::Real32 ScatterPlotMatrixRenderer::pointSize() const
+kvs::Real32 ScatterPlotMatrixRenderer::pointSize() const
 {
     return( m_point_size );
 }
@@ -298,7 +298,7 @@ const kvs::ColorMap& ScatterPlotMatrixRenderer::colorMap() const
  *  @return background color
  */
 /*===========================================================================*/
-const kvs::RGBAColor ScatterPlotMatrixRenderer::backgroundColor() const
+const kvs::RGBAColor& ScatterPlotMatrixRenderer::backgroundColor() const
 {
     return( m_background_color );
 }

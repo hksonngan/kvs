@@ -52,10 +52,9 @@ public:
     void disableTwoSideLighting() const;
     bool isTwoSideLighting() const;
 
-protected:
+private:
 
-    virtual void initialize_projection();
-    virtual void initialize_modelview();
+    void initialize();
 };
 
 } // end of namespace kvs

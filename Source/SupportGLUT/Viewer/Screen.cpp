@@ -105,6 +105,11 @@ Screen::~Screen()
     delete m_idle_mouse_timer;
 }
 
+kvs::Scene* Screen::scene()
+{
+    return m_scene;
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Sets a screen position.

@@ -88,7 +88,7 @@ namespace glut
  *  @brief  Constructs a new Axis2D class.
  */
 /*===========================================================================*/
-Axis2D::Axis2D( void ):
+Axis2D::Axis2D():
     m_top_margin( 30 ),
     m_bottom_margin( 30 ),
     m_left_margin( 30 ),
@@ -194,7 +194,7 @@ void Axis2D::setLabelColor( const kvs::RGBColor label_color )
  *  @return top margin
  */
 /*===========================================================================*/
-const int Axis2D::topMargin( void ) const
+int Axis2D::topMargin() const
 {
     return( m_top_margin );
 }
@@ -205,7 +205,7 @@ const int Axis2D::topMargin( void ) const
  *  @return bottom margin
  */
 /*===========================================================================*/
-const int Axis2D::bottomMargin( void ) const
+int Axis2D::bottomMargin() const
 {
     return( m_bottom_margin );
 }
@@ -216,7 +216,7 @@ const int Axis2D::bottomMargin( void ) const
  *  @return left margin
  */
 /*===========================================================================*/
-const int Axis2D::leftMargin( void ) const
+int Axis2D::leftMargin() const
 {
     return( m_left_margin );
 }
@@ -227,7 +227,7 @@ const int Axis2D::leftMargin( void ) const
  *  @return right margin
  */
 /*===========================================================================*/
-const int Axis2D::rightMargin( void ) const
+int Axis2D::rightMargin() const
 {
     return( m_right_margin );
 }
@@ -238,7 +238,7 @@ const int Axis2D::rightMargin( void ) const
  *  @return axis width
  */
 /*===========================================================================*/
-const kvs::Real32 Axis2D::axisWidth( void ) const
+kvs::Real32 Axis2D::axisWidth() const
 {
     return( m_axis_width );
 }
@@ -249,7 +249,7 @@ const kvs::Real32 Axis2D::axisWidth( void ) const
  *  @return axis color.
  */
 /*===========================================================================*/
-const kvs::RGBColor Axis2D::axisColor( void ) const
+const kvs::RGBColor& Axis2D::axisColor() const
 {
     return( m_axis_color );
 }
@@ -260,7 +260,7 @@ const kvs::RGBColor Axis2D::axisColor( void ) const
  *  @return value color
  */
 /*===========================================================================*/
-const kvs::RGBColor Axis2D::valueColor( void ) const
+const kvs::RGBColor& Axis2D::valueColor() const
 {
     return( m_value_color );
 }
@@ -271,7 +271,7 @@ const kvs::RGBColor Axis2D::valueColor( void ) const
  *  @return label color
  */
 /*===========================================================================*/
-const kvs::RGBColor Axis2D::labelColor( void ) const
+const kvs::RGBColor& Axis2D::labelColor() const
 {
     return( m_label_color );
 }
@@ -291,8 +291,6 @@ void Axis2D::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* lig
     BaseClass::startTimer();
 
     glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT );
-
-    RendererBase::initialize();
 
     ::BeginDraw();
 

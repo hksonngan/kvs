@@ -766,8 +766,6 @@ void ParticleVolumeRenderer::create_image(
 
     glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT | GL_LIGHTING_BIT );
 
-    RendererBase::initialize();
-
     // Following processes are executed once.
     if ( BaseClass::m_width == 0 && BaseClass::m_height == 0 )
     {

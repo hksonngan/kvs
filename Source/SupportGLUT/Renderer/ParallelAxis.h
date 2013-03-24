@@ -41,7 +41,7 @@ class ParallelAxis : public kvs::RendererBase
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::RendererBase );
 
-protected:
+private:
 
     size_t m_top_margin; ///< top margin
     size_t m_bottom_margin; ///< bottom margin
@@ -54,43 +54,25 @@ protected:
 
 public:
 
-    ParallelAxis( void );
+    ParallelAxis();
 
-public:
-
-    size_t topMargin( void ) const;
-
-    size_t bottomMargin( void ) const;
-
-    size_t leftMargin( void ) const;
-
-    size_t rightMargin( void ) const;
-
-    kvs::Real32 axisWidth( void ) const;
-
-    kvs::RGBColor axisColor( void ) const;
-
-    kvs::RGBColor valueColor( void ) const;
-
-    kvs::RGBColor labelColor( void ) const;
+    size_t topMargin() const;
+    size_t bottomMargin() const;
+    size_t leftMargin() const;
+    size_t rightMargin() const;
+    kvs::Real32 axisWidth() const;
+    const kvs::RGBColor& axisColor() const;
+    const kvs::RGBColor& valueColor() const;
+    const kvs::RGBColor& labelColor() const;
 
     void setTopMargin( const size_t top_margin );
-
     void setBottomMargin( const size_t bottom_margin );
-
     void setLeftMargin( const size_t left_margin );
-
     void setRightMargin( const size_t right_margin );
-
     void setAxisWidth( const kvs::Real32 axis_width );
-
     void setAxisColor( const kvs::RGBColor axis_color );
-
     void setValueColor( const kvs::RGBColor value_color );
-
     void setLabelColor( const kvs::RGBColor label_color );
-
-public:
 
     void exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
 };

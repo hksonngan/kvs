@@ -75,7 +75,7 @@ void PolygonRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::L
     }
 */
 
-    RendererBase::initialize();
+    this->initialize();
 #if KVS_ENABLE_DEPRECATED
     polygon->applyMaterial();
 #endif
@@ -150,22 +150,10 @@ bool PolygonRenderer::isTwoSideLighting() const
 
 /*==========================================================================*/
 /**
- *  Initialize about the projection matrix.
+ *  Initialize OpenGL status for the rendering.
  */
 /*==========================================================================*/
-void PolygonRenderer::initialize_projection()
-{
-   glMatrixMode( GL_PROJECTION );
-
-   glMatrixMode( GL_MODELVIEW );
-}
-
-/*==========================================================================*/
-/**
- *  Initialize about the modelview matrix.
- */
-/*==========================================================================*/
-void PolygonRenderer::initialize_modelview()
+void PolygonRenderer::initialize()
 {
     glDisable( GL_LINE_SMOOTH );
 

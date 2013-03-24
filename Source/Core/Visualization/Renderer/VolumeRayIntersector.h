@@ -32,16 +32,14 @@ class VolumeRayIntersector : public kvs::Ray
 {
 private:
 
-    kvs::Vector3f                m_vertex[8];
+    kvs::Vector3f m_vertex[8];
     const kvs::VolumeObjectBase* m_reference_volume;
 
 public:
 
     VolumeRayIntersector( const kvs::VolumeObjectBase* volume );
 
-public:
-
-    const bool isIntersected( void )
+    const bool isIntersected()
     {
         return(
             kvs::Ray::isIntersected( m_vertex[0], m_vertex[3], m_vertex[2], m_vertex[1] ) ||
@@ -52,7 +50,7 @@ public:
             kvs::Ray::isIntersected( m_vertex[4], m_vertex[5], m_vertex[6], m_vertex[7] ) );
     }
 
-    const bool isInside( void ) const
+    const bool isInside() const
     {
         const kvs::Vector3f point( this->point() );
 

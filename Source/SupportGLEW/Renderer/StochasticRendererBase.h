@@ -68,56 +68,33 @@ protected:
 
 public:
 
-    StochasticRendererBase( void );
-
-    virtual ~StochasticRendererBase( void );
-
-public:
+    StochasticRendererBase();
+    virtual ~StochasticRendererBase();
 
     void exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
 
-public:
-
-    void initialize( void );
-
-    void clear( void );
-
+    void initialize();
+    void clear();
     void setRenderingEngine( kvs::glew::StochasticRenderingEngine* rendering_engine );
-
-    void clearEnsembleBuffer( void );
-
+    void clearEnsembleBuffer();
     void setRepetitionLevel( const size_t repetition_level );
-
     void enableLODControl( const size_t coarse_level = 1 );
-
-    void disableLODControl( void );
+    void disableLODControl();
 
 protected:
 
     void create_image( const kvs::Camera* camera, const kvs::Light* light );
-
     kvs::glew::StochasticRenderingEngine* get_engine( const size_t index );
-
     kvs::glew::StochasticRenderingEngine* find_engine( const kvs::ObjectBase* object );
-
     kvs::glew::StochasticRenderingEngine* find_engine( const std::string object_name );
-
     bool erase_engine( const kvs::ObjectBase* object );
-
     bool erase_engine( const std::string object_name );
-
     void update_engine();
+    void enable_exact_depth_testing();
+    void disable_exact_depth_testing();
 
-    void enable_exact_depth_testing( void );
-
-    void disable_exact_depth_testing( void );
-
-protected:
-
-    void initialize_opengl( void );
-
-    void initialize_framebuffer_texture( void );
-
+    void initialize_opengl();
+    void initialize_framebuffer_texture();
     void create_texture(
         kvs::Texture2D& texture,
         kvs::glew::FrameBufferObject& framebuffer,
@@ -125,8 +102,7 @@ protected:
         GLenum external_format,
         GLenum external_type,
         GLenum attachment );
-
-    void initialize_random_texture( void );
+    void initialize_random_texture();
 };
 
 } // end of namespace glew

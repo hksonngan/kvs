@@ -72,6 +72,8 @@ public:
     Screen( kvs::glut::Application* application = 0 );
     virtual ~Screen();
 
+    kvs::Scene* scene();
+
     void setPosition( const int x, const int y );
     void setSize( const int width, const int height );
     void setGeometry( const int x, const int y, const int width, const int height );

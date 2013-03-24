@@ -45,32 +45,19 @@ protected:
 public:
 
     EnsembleAverageBuffer( const bool use_accum = false );
-
-    virtual ~EnsembleAverageBuffer( void );
-
-public:
+    virtual ~EnsembleAverageBuffer();
 
     void create( const size_t width, const size_t height );
-
-    void clear( void );
-
-    void bind( void );
-
-    void unbind( void );
-
-    void add( void );
-
-    void draw( void );
-
-    void enableAccumulationBuffer( void );
-
-    void disableAccumulationBuffer( void );
-
-    const bool isEnabledAccumulationBuffer( void );
-
-    const size_t count( void ) const;
-
-    const float opacity( void ) const;
+    void clear();
+    void bind();
+    void unbind();
+    void add();
+    void draw();
+    void enableAccumulationBuffer();
+    void disableAccumulationBuffer();
+    bool isEnabledAccumulationBuffer();
+    size_t count() const;
+    float opacity() const;
 
 protected:
 

@@ -111,7 +111,7 @@ namespace kvs
 namespace glew
 {
 
-HAVSVolumeRenderer::HAVSVolumeRenderer( void ):
+HAVSVolumeRenderer::HAVSVolumeRenderer():
     m_ref_volume( NULL )
 {
     this->initialize();
@@ -126,7 +126,7 @@ HAVSVolumeRenderer::HAVSVolumeRenderer( kvs::UnstructuredVolumeObject* volume, c
     this->setKBufferSize( k_size );
 }
 
-HAVSVolumeRenderer::~HAVSVolumeRenderer( void )
+HAVSVolumeRenderer::~HAVSVolumeRenderer()
 {
     if ( m_meshes ) delete m_meshes;
     if ( !this->isEnabledVBO() )
@@ -145,8 +145,6 @@ void HAVSVolumeRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs
     glPushAttrib( GL_CURRENT_BIT |
                   GL_ENABLE_BIT |
                   GL_LIGHTING_BIT );
-
-    RendererBase::initialize();
 
     glShadeModel( GL_SMOOTH );
     glDisable( GL_DEPTH_TEST );
@@ -219,7 +217,7 @@ void HAVSVolumeRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs
     BaseClass::stopTimer();
 }
 
-void HAVSVolumeRenderer::initialize( void )
+void HAVSVolumeRenderer::initialize()
 {
     BaseClass::m_width = 0;
     BaseClass::m_height = 0;
@@ -249,27 +247,27 @@ void HAVSVolumeRenderer::setKBufferSize( const size_t k_size )
     m_k_size = k_size;
 }
 
-void HAVSVolumeRenderer::enableVBO( void )
+void HAVSVolumeRenderer::enableVBO()
 {
     m_enable_vbo = true;
 }
 
-void HAVSVolumeRenderer::disableVBO( void )
+void HAVSVolumeRenderer::disableVBO()
 {
     m_enable_vbo = false;
 }
 
-const size_t HAVSVolumeRenderer::kBufferSize( void ) const
+size_t HAVSVolumeRenderer::kBufferSize() const
 {
     return( m_k_size );
 }
 
-const bool HAVSVolumeRenderer::isEnabledVBO( void ) const
+bool HAVSVolumeRenderer::isEnabledVBO() const
 {
     return( m_enable_vbo );
 }
 
-void HAVSVolumeRenderer::initialize_geometry( void )
+void HAVSVolumeRenderer::initialize_geometry()
 {
     if ( this->isEnabledVBO() )
     {
@@ -295,7 +293,7 @@ void HAVSVolumeRenderer::initialize_geometry( void )
     }
 }
 
-void HAVSVolumeRenderer::initialize_shader( void )
+void HAVSVolumeRenderer::initialize_shader()
 {
 #if defined( KVS_GLEW_HAVS_VOLUME_RENDERER__EMBEDDED_SHADER )
     const std::string vert_code_begin = kvs::glew::glsl::HAVSVolumeRenderer::Vertex::begin;
@@ -347,7 +345,7 @@ void HAVSVolumeRenderer::initialize_shader( void )
     }
 }
 
-void HAVSVolumeRenderer::initialize_table( void )
+void HAVSVolumeRenderer::initialize_table()
 {
     if ( !m_ref_volume->hasMinMaxValues() ) m_ref_volume->updateMinMaxValues();
     const float min_value = static_cast<float>( m_ref_volume->minValue() );
@@ -357,7 +355,7 @@ void HAVSVolumeRenderer::initialize_table( void )
     m_table.download();
 }
 
-void HAVSVolumeRenderer::initialize_framebuffer( void )
+void HAVSVolumeRenderer::initialize_framebuffer()
 {
     if ( m_k_size == 2 ) { m_ntargets = 2; }
     else { m_ntargets = 4; }
@@ -405,7 +403,7 @@ void HAVSVolumeRenderer::initialize_framebuffer( void )
     m_mrt_framebuffer.disable();
 }
 
-void HAVSVolumeRenderer::enable_MRT_rendering( void )
+void HAVSVolumeRenderer::enable_MRT_rendering()
 {
     // Enable FBO.
     m_mrt_framebuffer.bind();
@@ -434,7 +432,7 @@ void HAVSVolumeRenderer::enable_MRT_rendering( void )
     m_table.bind();
 }
 
-void HAVSVolumeRenderer::disable_MRT_rendering( void )
+void HAVSVolumeRenderer::disable_MRT_rendering()
 {
     // Disable pre-integration table.
     glActiveTexture( m_ntargets == 2 ? GL_TEXTURE2 : GL_TEXTURE4 );
@@ -472,7 +470,7 @@ void HAVSVolumeRenderer::sort_geometry( kvs::Camera* camera )
     }
 }
 
-void HAVSVolumeRenderer::draw_initialization_pass( void )
+void HAVSVolumeRenderer::draw_initialization_pass()
 {
     // Bind initializing fragment shader.
     m_shader_begin.bind();
@@ -496,7 +494,7 @@ void HAVSVolumeRenderer::draw_initialization_pass( void )
     m_shader_begin.unbind();
 }
 
-void HAVSVolumeRenderer::draw_geometry_pass( void )
+void HAVSVolumeRenderer::draw_geometry_pass()
 {
     // Bind shaders.
     m_shader_kbuffer.bind();
@@ -565,7 +563,7 @@ void HAVSVolumeRenderer::draw_geometry_pass( void )
     m_shader_kbuffer.unbind();
 }
 
-void HAVSVolumeRenderer::draw_flush_pass( void )
+void HAVSVolumeRenderer::draw_flush_pass()
 {
     // Bind flushing shader.
     m_shader_end.bind();
@@ -625,7 +623,7 @@ void HAVSVolumeRenderer::draw_flush_pass( void )
     glFlush();
 }
 
-void HAVSVolumeRenderer::draw_texture( void )
+void HAVSVolumeRenderer::draw_texture()
 {
     glDrawBuffer( GL_BACK );
 
@@ -660,7 +658,7 @@ void HAVSVolumeRenderer::draw_texture( void )
     glPopMatrix(); // Pop MODELVIEW matrix
 }
 
-HAVSVolumeRenderer::Meshes::Meshes( void ):
+HAVSVolumeRenderer::Meshes::Meshes():
     m_faces( NULL ),
     m_centers( NULL ),
     m_radix_temp( NULL ),
@@ -680,7 +678,7 @@ HAVSVolumeRenderer::Meshes::Meshes( void ):
     m_sorted_faces = NULL;
 }
 
-HAVSVolumeRenderer::Meshes::~Meshes( void )
+HAVSVolumeRenderer::Meshes::~Meshes()
 {
 }
 
@@ -731,62 +729,62 @@ void HAVSVolumeRenderer::Meshes::setVolume( const kvs::UnstructuredVolumeObject*
     m_diagonal = ( m_bb_max - m_bb_min ).length();
 }
 
-const HAVSVolumeRenderer::Face HAVSVolumeRenderer::Meshes::face( const size_t index )
+const HAVSVolumeRenderer::Face& HAVSVolumeRenderer::Meshes::face( const size_t index )
 {
     return( m_faces[index] );
 }
 
-const kvs::UInt32 HAVSVolumeRenderer::Meshes::sortedFace( const size_t face_id )
+kvs::UInt32 HAVSVolumeRenderer::Meshes::sortedFace( const size_t face_id )
 {
     return( m_sorted_faces[face_id].face() );
 }
 
-const kvs::ValueArray<kvs::Real32>& HAVSVolumeRenderer::Meshes::coords( void ) const
+const kvs::ValueArray<kvs::Real32>& HAVSVolumeRenderer::Meshes::coords() const
 {
     return( m_coords );
 }
 
-const kvs::ValueArray<kvs::UInt32>& HAVSVolumeRenderer::Meshes::connections( void ) const
+const kvs::ValueArray<kvs::UInt32>& HAVSVolumeRenderer::Meshes::connections() const
 {
     return( m_connections );
 }
 
-const kvs::ValueArray<kvs::Real32>& HAVSVolumeRenderer::Meshes::values( void ) const
+const kvs::ValueArray<kvs::Real32>& HAVSVolumeRenderer::Meshes::values() const
 {
     return( m_values );
 }
 
-const size_t HAVSVolumeRenderer::Meshes::nvertices( void ) const
+size_t HAVSVolumeRenderer::Meshes::nvertices() const
 {
     return( m_nvertices );
 }
 
-const size_t HAVSVolumeRenderer::Meshes::ntetrahedra( void ) const
+size_t HAVSVolumeRenderer::Meshes::ntetrahedra() const
 {
     return( m_ntetrahedra );
 }
 
-const size_t HAVSVolumeRenderer::Meshes::nfaces( void ) const
+size_t HAVSVolumeRenderer::Meshes::nfaces() const
 {
     return( m_nfaces );
 }
 
-const size_t HAVSVolumeRenderer::Meshes::nrenderfaces( void ) const
+size_t HAVSVolumeRenderer::Meshes::nrenderfaces() const
 {
     return( m_nrenderfaces );
 }
 
-const float HAVSVolumeRenderer::Meshes::depthScale( void ) const
+float HAVSVolumeRenderer::Meshes::depthScale() const
 {
     return( m_depth_scale );
 }
 
-const float HAVSVolumeRenderer::Meshes::diagonal( void ) const
+float HAVSVolumeRenderer::Meshes::diagonal() const
 {
     return( m_diagonal );
 }
 
-void HAVSVolumeRenderer::Meshes::build( void )
+void HAVSVolumeRenderer::Meshes::build()
 {
     typedef std::set<HAVSVolumeRenderer::Face, ::LTFace> FaceSet;
 
@@ -953,7 +951,7 @@ void HAVSVolumeRenderer::Meshes::sort( HAVSVolumeRenderer::Vertex eye )
     this->radix_sort( m_sorted_faces, m_radix_temp, 0, m_nrenderfaces );
 }
 
-void HAVSVolumeRenderer::Meshes::clean( void )
+void HAVSVolumeRenderer::Meshes::clean()
 {
     m_coords.release();
     m_connections.release();

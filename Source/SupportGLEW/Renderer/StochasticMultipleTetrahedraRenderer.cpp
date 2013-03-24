@@ -22,7 +22,7 @@ namespace kvs
 namespace glew
 {
 
-StochasticMultipleTetrahedraRenderer::StochasticMultipleTetrahedraRenderer( void ):
+StochasticMultipleTetrahedraRenderer::StochasticMultipleTetrahedraRenderer():
     m_engine( NULL )
 {
     this->set_rendering_engine( new kvs::glew::StochasticMultipleTetrahedraEngine() );
@@ -75,8 +75,6 @@ void StochasticMultipleTetrahedraRenderer::set_rendering_engine( kvs::glew::Stoc
 void StochasticMultipleTetrahedraRenderer::create_image( const kvs::Camera* camera, const kvs::Light* light )
 {
     glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT | GL_LIGHTING_BIT );
-
-    RendererBase::initialize();
 
     bool retain_ensemble_buffer = true;
 
@@ -218,7 +216,7 @@ void StochasticMultipleTetrahedraRenderer::create_image( const kvs::Camera* came
     glFinish();
 }
 
-void StochasticMultipleTetrahedraRenderer::initialize_framebuffer_texture( void )
+void StochasticMultipleTetrahedraRenderer::initialize_framebuffer_texture()
 {
     m_framebuffer.create();
     m_framebuffer.bind();

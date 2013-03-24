@@ -15,6 +15,7 @@
 #include "Widget.h"
 #include <kvs/RendererBase>
 #include <kvs/RendererManager>
+#include <sstream>
 
 
 namespace kvsview

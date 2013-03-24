@@ -19,6 +19,7 @@
 #include <kvs/PointObject>
 #include <kvs/Module>
 #include <kvs/OpenGL>
+#include <kvs/Deprecated>
 
 
 namespace kvs
@@ -72,11 +73,9 @@ private:
     void draw_element( const kvs::RGBColor& color, const kvs::UInt8 opacity );
     void initialize();
 
-#if 1 // KVS_ENABLE_DEPRECATED
 public:
-    void setNSlices( const size_t nslices ) { this->setNumberOfSlices( nslices ); }
-    void setNStacks( const size_t nstacks ) { this->setNumberOfStacks( nstacks ); }
-#endif
+    KVS_DEPRECATED( void setNSlices( const size_t nslices ) ) { this->setNumberOfSlices( nslices ); }
+    KVS_DEPRECATED( void setNStacks( const size_t nstacks ) ) { this->setNumberOfStacks( nstacks ); }
 };
 
 } // end of namespace kvs

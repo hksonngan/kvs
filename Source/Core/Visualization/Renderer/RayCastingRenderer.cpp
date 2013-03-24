@@ -63,8 +63,8 @@ void RayCastingRenderer::initialize()
 
 void RayCastingRenderer::exec(
     kvs::ObjectBase* object,
-    kvs::Camera*     camera,
-    kvs::Light*      light )
+    kvs::Camera* camera,
+    kvs::Light* light )
 {
     const kvs::StructuredVolumeObject* volume = reinterpret_cast<kvs::StructuredVolumeObject*>(object);
 

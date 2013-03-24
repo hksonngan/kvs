@@ -67,14 +67,14 @@ public:
     void setColorMap( const kvs::ColorMap& color_map );
     void setBackgroundColor( const kvs::RGBAColor background_color );
 
-    const int topMargin() const;
-    const int bottomMargin() const;
-    const int leftMargin() const;
-    const int rightMargin() const;
-    const kvs::UInt8 pointOpacity() const;
-    const kvs::Real32 pointSize() const;
+    int topMargin() const;
+    int bottomMargin() const;
+    int leftMargin() const;
+    int rightMargin() const;
+    kvs::UInt8 pointOpacity() const;
+    kvs::Real32 pointSize() const;
     const kvs::ColorMap& colorMap() const;
-    const kvs::RGBAColor backgroundColor() const;
+    const kvs::RGBAColor& backgroundColor() const;
 
     void exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
 };

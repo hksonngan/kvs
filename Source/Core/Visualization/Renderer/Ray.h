@@ -40,19 +40,18 @@ class Ray
 {
 private:
 
-    float          m_t;         ///< Parameter.
-    kvs::Vector3f  m_from;      ///< From point.
-    kvs::Vector3f  m_direction; ///< Directional vector.
-    kvs::Matrix44f m_combined;  ///< combined matrix
-    kvs::Matrix44f m_inverse;   ///< inverse matrix
-    kvs::Vector2f  m_delta;     ///<
-    kvs::Vector2f  m_constant;  ///<
+    float m_t; ///< Parameter.
+    kvs::Vector3f m_from; ///< From point.
+    kvs::Vector3f m_direction; ///< Directional vector.
+    kvs::Matrix44f m_combined; ///< combined matrix
+    kvs::Matrix44f m_inverse; ///< inverse matrix
+    kvs::Vector2f m_delta; ///<
+    kvs::Vector2f m_constant; ///<
 
 public:
 
-    Ray( void );
-
-    virtual ~Ray( void );
+    Ray();
+    virtual ~Ray();
 
 public:
 
@@ -84,7 +83,7 @@ public:
 
 public:
 
-    const float t( void ) const
+    const float t() const
     {
         return( m_t );
     }
@@ -95,7 +94,7 @@ public:
      *  @return From-point.
      */
     /*======================================================================*/
-    const kvs::Vector3f& from( void ) const
+    const kvs::Vector3f& from() const
     {
         return( m_from );
     }
@@ -106,19 +105,19 @@ public:
      *  @return Directional vectort.
      */
     /*======================================================================*/
-    const kvs::Vector3f& direction( void ) const
+    const kvs::Vector3f& direction() const
     {
         return( m_direction );
     }
 
 public:
 
-    const kvs::Vector3f point( void ) const
+    const kvs::Vector3f point() const
     {
         return( m_from + m_direction * m_t );
     }
 
-    const float depth( void ) const
+    const float depth() const
     {
         const kvs::Vector3f point( this->point() );
 

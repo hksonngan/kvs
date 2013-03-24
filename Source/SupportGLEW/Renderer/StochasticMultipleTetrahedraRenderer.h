@@ -29,7 +29,6 @@ namespace glew
 class StochasticMultipleTetrahedraRenderer : public kvs::glew::StochasticRendererBase
 {
     friend class StochasticMultipleTetrahedraCompositor;
-
     typedef kvs::glew::StochasticRendererBase BaseClass;
 
 protected:
@@ -39,29 +38,23 @@ protected:
 
 public:
 
-    StochasticMultipleTetrahedraRenderer( void );
-
+    StochasticMultipleTetrahedraRenderer();
     StochasticMultipleTetrahedraRenderer(
         const kvs::UnstructuredVolumeObject* volume1,
         const kvs::UnstructuredVolumeObject* volume2 );
-
-public:
 
     void exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
 
     void attachObjects(
         const kvs::UnstructuredVolumeObject* object1,
         const kvs::UnstructuredVolumeObject* object2 );
-
     void setTransferFunction( const kvs::TransferFunction& transfer_function, const size_t index );
 
 protected:
 
     void set_rendering_engine( kvs::glew::StochasticMultipleTetrahedraEngine* rendering_engine );
-
     void create_image( const kvs::Camera* camera, const kvs::Light* light );
-
-    void initialize_framebuffer_texture( void );
+    void initialize_framebuffer_texture();
 };
 
 } // end of namespace glew

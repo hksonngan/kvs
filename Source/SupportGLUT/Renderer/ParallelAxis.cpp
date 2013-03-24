@@ -34,7 +34,7 @@ const int CharacterHeight = 12;
 namespace
 {
 
-void BeginDraw( void )
+void BeginDraw()
 {
     GLint vp[4]; glGetIntegerv( GL_VIEWPORT, vp );
     const GLint left = vp[0];
@@ -49,7 +49,7 @@ void BeginDraw( void )
     glDisable( GL_DEPTH_TEST );
 }
 
-void EndDraw( void )
+void EndDraw()
 {
     glPopMatrix();
     glMatrixMode( GL_MODELVIEW );
@@ -89,7 +89,7 @@ namespace glut
  *  @brief  Constructs a new ParallelAxis class.
  */
 /*===========================================================================*/
-ParallelAxis::ParallelAxis( void ):
+ParallelAxis::ParallelAxis():
     m_top_margin( 20 ),
     m_bottom_margin( 20 ),
     m_left_margin( 30 ),
@@ -107,7 +107,7 @@ ParallelAxis::ParallelAxis( void ):
  *  @return top margin
  */
 /*===========================================================================*/
-size_t ParallelAxis::topMargin( void ) const
+size_t ParallelAxis::topMargin() const
 {
     return( m_top_margin );
 }
@@ -118,7 +118,7 @@ size_t ParallelAxis::topMargin( void ) const
  *  @return bottom margin
  */
 /*===========================================================================*/
-size_t ParallelAxis::bottomMargin( void ) const
+size_t ParallelAxis::bottomMargin() const
 {
     return( m_bottom_margin );
 }
@@ -129,7 +129,7 @@ size_t ParallelAxis::bottomMargin( void ) const
  *  @return left margin
  */
 /*===========================================================================*/
-size_t ParallelAxis::leftMargin( void ) const
+size_t ParallelAxis::leftMargin() const
 {
     return( m_left_margin );
 }
@@ -140,7 +140,7 @@ size_t ParallelAxis::leftMargin( void ) const
  *  @return right margin
  */
 /*===========================================================================*/
-size_t ParallelAxis::rightMargin( void ) const
+size_t ParallelAxis::rightMargin() const
 {
     return( m_right_margin );
 }
@@ -151,7 +151,7 @@ size_t ParallelAxis::rightMargin( void ) const
  *  @return axis width
  */
 /*===========================================================================*/
-kvs::Real32 ParallelAxis::axisWidth( void ) const
+kvs::Real32 ParallelAxis::axisWidth() const
 {
     return( m_axis_width );
 }
@@ -162,7 +162,7 @@ kvs::Real32 ParallelAxis::axisWidth( void ) const
  *  @return axis color.
  */
 /*===========================================================================*/
-kvs::RGBColor ParallelAxis::axisColor( void ) const
+const kvs::RGBColor& ParallelAxis::axisColor() const
 {
     return( m_axis_color );
 }
@@ -173,7 +173,7 @@ kvs::RGBColor ParallelAxis::axisColor( void ) const
  *  @return value color
  */
 /*===========================================================================*/
-kvs::RGBColor ParallelAxis::valueColor( void ) const
+const kvs::RGBColor& ParallelAxis::valueColor() const
 {
     return( m_value_color );
 }
@@ -184,7 +184,7 @@ kvs::RGBColor ParallelAxis::valueColor( void ) const
  *  @return label color
  */
 /*===========================================================================*/
-kvs::RGBColor ParallelAxis::labelColor( void ) const
+const kvs::RGBColor& ParallelAxis::labelColor() const
 {
     return( m_label_color );
 }

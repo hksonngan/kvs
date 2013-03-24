@@ -71,7 +71,6 @@ protected:
     KVS_DEPRECATED( virtual void initialize_modelview() ) {}
 };
 
-
 } // end of namespace kvs
 
 #endif // KVS__RENDERER_BASE_H_INCLUDE

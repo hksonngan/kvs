@@ -840,8 +840,6 @@ void ParticleBasedRenderer::create_image(
 
     glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT | GL_LIGHTING_BIT );
 
-    RendererBase::initialize();
-
     /*ADD_UEMURA(begin)*/
     static const float default_window_size = static_cast<float>(camera->windowHeight());
     static float scaled_window_size = static_cast<float>(camera->windowHeight());

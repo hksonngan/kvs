@@ -47,7 +47,7 @@ namespace glew
  *  @brief  Constructs a new StochasticRendererBase class
  */
 /*===========================================================================*/
-StochasticRendererBase::StochasticRendererBase( void )
+StochasticRendererBase::StochasticRendererBase()
 {
     this->initialize();
 }
@@ -57,7 +57,7 @@ StochasticRendererBase::StochasticRendererBase( void )
  *  @brief  Destroys the StochasticRendererBase class.
  */
 /*===========================================================================*/
-StochasticRendererBase::~StochasticRendererBase( void )
+StochasticRendererBase::~StochasticRendererBase()
 {
     this->clear();
 }
@@ -87,7 +87,7 @@ void StochasticRendererBase::exec(
  *  @brief  Initializes the member parameters.
  */
 /*===========================================================================*/
-void StochasticRendererBase::initialize( void )
+void StochasticRendererBase::initialize()
 {
     m_width = 0;
     m_height = 0;
@@ -112,7 +112,7 @@ void StochasticRendererBase::initialize( void )
  *  @brief  Clears the allocated member parameters.
  */
 /*===========================================================================*/
-void StochasticRendererBase::clear( void )
+void StochasticRendererBase::clear()
 {
     for ( size_t i = 0; i < m_rendering_engines.size(); i++ )
     {
@@ -149,7 +149,7 @@ void StochasticRendererBase::setRenderingEngine( kvs::glew::StochasticRenderingE
  *  @brief  Clears the ensemble buffer.
  */
 /*===========================================================================*/
-void StochasticRendererBase::clearEnsembleBuffer( void )
+void StochasticRendererBase::clearEnsembleBuffer()
 {
     m_clear_ensemble_buffer = true;
 }
@@ -183,7 +183,7 @@ void StochasticRendererBase::enableLODControl( const size_t coarse_level )
  *  @brief  Disables LOD control.
  */
 /*===========================================================================*/
-void StochasticRendererBase::disableLODControl( void )
+void StochasticRendererBase::disableLODControl()
 {
     m_enable_lod = false;
 }
@@ -198,8 +198,6 @@ void StochasticRendererBase::disableLODControl( void )
 void StochasticRendererBase::create_image( const kvs::Camera* camera, const kvs::Light* light )
 {
     glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT | GL_LIGHTING_BIT );
-
-    RendererBase::initialize();
 
     bool retain_ensemble_buffer = true;
 
@@ -461,7 +459,7 @@ void StochasticRendererBase::update_engine()
  *  @brief  Enables exact depth testing.
  */
 /*===========================================================================*/
-void StochasticRendererBase::enable_exact_depth_testing( void )
+void StochasticRendererBase::enable_exact_depth_testing()
 {
     m_enable_exact_depth_testing = true;
 }
@@ -471,7 +469,7 @@ void StochasticRendererBase::enable_exact_depth_testing( void )
  *  @brief  Disables exact depth testing.
  */
 /*===========================================================================*/
-void StochasticRendererBase::disable_exact_depth_testing( void )
+void StochasticRendererBase::disable_exact_depth_testing()
 {
     m_enable_exact_depth_testing = false;
 }
@@ -481,7 +479,7 @@ void StochasticRendererBase::disable_exact_depth_testing( void )
  *  @brief  Initializes several OpenGL state parameters.
  */
 /*===========================================================================*/
-void StochasticRendererBase::initialize_opengl( void )
+void StochasticRendererBase::initialize_opengl()
 {
     glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST );
 
@@ -493,7 +491,7 @@ void StochasticRendererBase::initialize_opengl( void )
  *  @brief  Initializes framebuffer objects and textures.
  */
 /*===========================================================================*/
-void StochasticRendererBase::initialize_framebuffer_texture( void )
+void StochasticRendererBase::initialize_framebuffer_texture()
 {
     m_framebuffer.create();
     m_framebuffer.bind();
@@ -558,7 +556,7 @@ void StochasticRendererBase::create_texture(
  *  @brief  Initializes a random number texture.
  */
 /*===========================================================================*/
-void StochasticRendererBase::initialize_random_texture( void )
+void StochasticRendererBase::initialize_random_texture()
 {
     m_random_texture.release();
     m_random_texture.setWrapS( GL_REPEAT );

@@ -70,16 +70,16 @@ public:
     void setBackgroundColor( const kvs::RGBAColor background_color );
     void selectAxis( const int index );
 
-    const int topMargin() const;
-    const int bottomMargin() const;
-    const int leftMargin() const;
-    const int rightMargin() const;
-    const int margin() const;
-    const int activeAxis() const;
-    const kvs::UInt8 pointOpacity() const;
-    const kvs::Real32 pointSize() const;
+    int topMargin() const;
+    int bottomMargin() const;
+    int leftMargin() const;
+    int rightMargin() const;
+    int margin() const;
+    int activeAxis() const;
+    kvs::UInt8 pointOpacity() const;
+    kvs::Real32 pointSize() const;
     const kvs::ColorMap& colorMap() const;
-    const kvs::RGBAColor backgroundColor() const;
+    const kvs::RGBAColor& backgroundColor() const;
 
     void exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
 };

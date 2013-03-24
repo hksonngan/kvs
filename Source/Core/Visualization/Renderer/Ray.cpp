@@ -20,14 +20,14 @@
 namespace kvs
 {
 
-Ray::Ray( void )
-    : m_t( 0 )
-    , m_from( 0, 0, 0 )
-    , m_direction( 0, 0, 0 )
+Ray::Ray():
+    m_t( 0 ),
+    m_from( 0, 0, 0 ),
+    m_direction( 0, 0, 0 )
 {
     GLfloat modelview[16];
     GLfloat projection[16];
-    GLint    viewport[4];
+    GLint viewport[4];
 
     glGetFloatv( GL_MODELVIEW_MATRIX, modelview );
     glGetFloatv( GL_PROJECTION_MATRIX, projection );
@@ -42,7 +42,7 @@ Ray::Ray( void )
     this->combine_projection_and_modelview( projection, modelview );
 }
 
-Ray::~Ray( void )
+Ray::~Ray()
 {
 }
 

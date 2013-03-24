@@ -44,7 +44,7 @@ EnsembleAverageBuffer::EnsembleAverageBuffer( const bool enable_accum ):
  *  @brief  Destructs the EnsembleAverageBuffer class.
  */
 /*===========================================================================*/
-EnsembleAverageBuffer::~EnsembleAverageBuffer( void )
+EnsembleAverageBuffer::~EnsembleAverageBuffer()
 {
 }
 
@@ -114,7 +114,7 @@ void EnsembleAverageBuffer::create( const size_t width, const size_t height )
  *  @brief  Clear the average count.
  */
 /*==========================================================================*/
-void EnsembleAverageBuffer::clear( void )
+void EnsembleAverageBuffer::clear()
 {
     if ( m_enable_accum )
     {
@@ -168,7 +168,7 @@ void EnsembleAverageBuffer::bind(void)
  *  @brief  Stop rendering to the ensemble average buffer.
  */
 /*==========================================================================*/
-void EnsembleAverageBuffer::unbind( void )
+void EnsembleAverageBuffer::unbind()
 {
     if ( m_enable_accum ) {}
     else
@@ -184,7 +184,7 @@ void EnsembleAverageBuffer::unbind( void )
  *  @brief  Add rendering result to the buffer.
  */
 /*==========================================================================*/
-void EnsembleAverageBuffer::add( void )
+void EnsembleAverageBuffer::add()
 {
     if ( m_enable_accum )
     {
@@ -202,7 +202,7 @@ void EnsembleAverageBuffer::add( void )
  *  @brief  Draw the accumulation result.
  */
 /*==========================================================================*/
-void EnsembleAverageBuffer::draw( void )
+void EnsembleAverageBuffer::draw()
 {
     if ( m_enable_accum )
     {
@@ -227,7 +227,7 @@ void EnsembleAverageBuffer::draw( void )
  *  @brief  Enables the accumulation buffer.
  */
 /*===========================================================================*/
-void EnsembleAverageBuffer::enableAccumulationBuffer( void )
+void EnsembleAverageBuffer::enableAccumulationBuffer()
 {
     GLint accum_r = 0; glGetIntegerv( GL_ACCUM_RED_BITS,   &accum_r );
     GLint accum_g = 0; glGetIntegerv( GL_ACCUM_GREEN_BITS, &accum_g );
@@ -248,7 +248,7 @@ void EnsembleAverageBuffer::enableAccumulationBuffer( void )
  *  @brief  Disables the accumulation buffer.
  */
 /*===========================================================================*/
-void EnsembleAverageBuffer::disableAccumulationBuffer( void )
+void EnsembleAverageBuffer::disableAccumulationBuffer()
 {
     m_enable_accum = false;
 }
@@ -259,7 +259,7 @@ void EnsembleAverageBuffer::disableAccumulationBuffer( void )
  *  @return true, if the accumulation buffer is enabled
  */
 /*===========================================================================*/
-const bool EnsembleAverageBuffer::isEnabledAccumulationBuffer( void )
+bool EnsembleAverageBuffer::isEnabledAccumulationBuffer()
 {
     return( m_enable_accum );
 }
@@ -270,7 +270,7 @@ const bool EnsembleAverageBuffer::isEnabledAccumulationBuffer( void )
  *  @return number of accumulations
  */
 /*===========================================================================*/
-const size_t EnsembleAverageBuffer::count( void ) const
+size_t EnsembleAverageBuffer::count() const
 {
     return( m_count );
 }
@@ -281,7 +281,7 @@ const size_t EnsembleAverageBuffer::count( void ) const
  *  @return  opacity value
  */
 /*==========================================================================*/
-const float EnsembleAverageBuffer::opacity(void) const
+float EnsembleAverageBuffer::opacity() const
 {
     if ( m_enable_accum )
     {
