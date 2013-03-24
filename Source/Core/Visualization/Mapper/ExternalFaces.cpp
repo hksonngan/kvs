@@ -84,7 +84,7 @@ inline void GetColorIndices(
  *  @brief  Triangle face class.
  */
 /*===========================================================================*/
-class Face
+class TriangleFace
 {
 private:
 
@@ -92,7 +92,7 @@ private:
 
 public:
 
-    Face( const kvs::UInt32 id0, const kvs::UInt32 id1, const kvs::UInt32 id2 );
+    TriangleFace( const kvs::UInt32 id0, const kvs::UInt32 id1, const kvs::UInt32 id2 );
 
 public:
 
@@ -100,19 +100,19 @@ public:
 
     void set( const kvs::UInt32 id0, const kvs::UInt32 id1, const kvs::UInt32 id2 );
 
-    friend const bool operator == ( const Face& f0, const Face& f1 );
+    friend const bool operator == ( const TriangleFace& f0, const TriangleFace& f1 );
 };
 
 /*===========================================================================*/
 /**
- *  @brief  Constructs a new Face class.
+ *  @brief  Constructs a new TriangleFace class.
  *  @param  id0 [in] ID 0
  *  @param  id1 [in] ID 1
  *  @param  id2 [in] ID 2
  *  @return <ReturnValue>
  */
 /*===========================================================================*/
-inline Face::Face( const kvs::UInt32 id0, const kvs::UInt32 id1, const kvs::UInt32 id2 )
+inline TriangleFace::TriangleFace( const kvs::UInt32 id0, const kvs::UInt32 id1, const kvs::UInt32 id2 )
 {
     this->set( id0, id1, id2 );
 }
@@ -124,7 +124,7 @@ inline Face::Face( const kvs::UInt32 id0, const kvs::UInt32 id1, const kvs::UInt
  *  @return vertex ID
  */
 /*===========================================================================*/
-inline const kvs::UInt32 Face::id( const size_t index ) const
+inline const kvs::UInt32 TriangleFace::id( const size_t index ) const
 {
     return m_id[ index ];
 }
@@ -137,7 +137,7 @@ inline const kvs::UInt32 Face::id( const size_t index ) const
  *  @param  id2 [in] ID 2
  */
 /*===========================================================================*/
-inline void Face::set( const kvs::UInt32 id0, const kvs::UInt32 id1, const kvs::UInt32 id2 )
+inline void TriangleFace::set( const kvs::UInt32 id0, const kvs::UInt32 id1, const kvs::UInt32 id2 )
 {
     m_id[0] = id0;
     m_id[1] = id1;
@@ -146,13 +146,13 @@ inline void Face::set( const kvs::UInt32 id0, const kvs::UInt32 id1, const kvs::
 
 /*===========================================================================*/
 /**
- *  @brief  '==' operator for the Face class.
+ *  @brief  '==' operator for the TriangleFace class.
  *  @param  f0 [in] face 0
  *  @param  f1 [in] face 1
  *  @return true, if the face 0 is equal to the face 1
  */
 /*===========================================================================*/
-inline const bool operator == ( const Face& f0, const Face& f1 )
+inline const bool operator == ( const TriangleFace& f0, const TriangleFace& f1 )
 {
     for ( size_t i = 0; i < 3; i++ )
     {
@@ -169,15 +169,104 @@ inline const bool operator == ( const Face& f0, const Face& f1 )
 
 /*===========================================================================*/
 /**
- *  @brief  Face map class.
+ *  @brief  Quadrangle face class.
  */
 /*===========================================================================*/
-class FaceMap
+class QuadrangleFace
+{
+private:
+
+    kvs::UInt32 m_id[4]; ///< vertex IDs
+
+public:
+
+    QuadrangleFace( const kvs::UInt32 id0, const kvs::UInt32 id1, const kvs::UInt32 id2, const kvs::UInt32 id3 );
+
+public:
+
+    const kvs::UInt32 id( const size_t index ) const;
+
+    void set( const kvs::UInt32 id0, const kvs::UInt32 id1, const kvs::UInt32 id2, const kvs::UInt32 id3 );
+
+    friend const bool operator == ( const QuadrangleFace& f0, const QuadrangleFace& f1 );
+};
+
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new QuadrangleFace class.
+ *  @param  id0 [in] ID 0
+ *  @param  id1 [in] ID 1
+ *  @param  id2 [in] ID 2
+ *  @param  id3 [in] ID 3
+ */
+/*===========================================================================*/
+inline QuadrangleFace::QuadrangleFace( const kvs::UInt32 id0, const kvs::UInt32 id1, const kvs::UInt32 id2, const kvs::UInt32 id3 )
+{
+    this->set( id0, id1, id2, id3 );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns a vertex ID.
+ *  @param  index [in] index (0-3)
+ *  @return vertex ID
+ */
+/*===========================================================================*/
+inline const kvs::UInt32 QuadrangleFace::id( const size_t index ) const
+{
+    return m_id[ index ];
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets vertex IDs.
+ *  @param  id0 [in] ID 0
+ *  @param  id1 [in] ID 1
+ *  @param  id2 [in] ID 2
+ */
+/*===========================================================================*/
+inline void QuadrangleFace::set( const kvs::UInt32 id0, const kvs::UInt32 id1, const kvs::UInt32 id2, const kvs::UInt32 id3 )
+{
+    m_id[0] = id0;
+    m_id[1] = id1;
+    m_id[2] = id2;
+    m_id[3] = id3;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  '==' operator for the TriangleFace class.
+ *  @param  f0 [in] face 0
+ *  @param  f1 [in] face 1
+ *  @return true, if the face 0 is equal to the face 1
+ */
+/*===========================================================================*/
+inline const bool operator == ( const QuadrangleFace& f0, const QuadrangleFace& f1 )
+{
+    for ( size_t i = 0; i < 4; i++ )
+    {
+        bool flag = false;
+        for ( size_t j = 0; j < 4; j++ )
+        {
+            if ( f0.id(i) == f1.id(j) ) { flag = true; continue; }
+        }
+        if ( !flag ) return false;
+    }
+
+    return true;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  TriangleFace map class.
+ */
+/*===========================================================================*/
+class TriangleFaceMap
 {
 public:
 
     typedef kvs::UInt32 Key;
-    typedef Face Value;
+    typedef TriangleFace Value;
     typedef std::multimap<Key,Value> Bucket;
 
 private:
@@ -187,7 +276,7 @@ private:
 
 public:
 
-    FaceMap( const size_t nvertices );
+    TriangleFaceMap( const size_t nvertices );
 
 public:
 
@@ -202,11 +291,11 @@ private:
 
 /*===========================================================================*/
 /**
- *  @brief  Constructs a new FaceMap class.
+ *  @brief  Constructs a new TriangleFaceMap class.
  *  @param  nvertices [in] number of vertices
  */
 /*===========================================================================*/
-inline FaceMap::FaceMap( const size_t nvertices ):
+inline TriangleFaceMap::TriangleFaceMap( const size_t nvertices ):
     m_nvertices( nvertices )
 {
 }
@@ -217,7 +306,7 @@ inline FaceMap::FaceMap( const size_t nvertices ):
  *  @return bucket
  */
 /*===========================================================================*/
-inline const FaceMap::Bucket& FaceMap::bucket() const
+inline const TriangleFaceMap::Bucket& TriangleFaceMap::bucket() const
 {
     return m_bucket;
 }
@@ -230,7 +319,7 @@ inline const FaceMap::Bucket& FaceMap::bucket() const
  *  @param  id2 [in] ID 2
  */
 /*===========================================================================*/
-inline void FaceMap::insert( const kvs::UInt32 id0, const kvs::UInt32 id1, const kvs::UInt32 id2 )
+inline void TriangleFaceMap::insert( const kvs::UInt32 id0, const kvs::UInt32 id1, const kvs::UInt32 id2 )
 {
     const Key key( this->get_key( id0, id1, id2 ) );
     const Value value( id0, id1, id2 );
@@ -264,9 +353,114 @@ inline void FaceMap::insert( const kvs::UInt32 id0, const kvs::UInt32 id1, const
  *  @return key
  */
 /*===========================================================================*/
-inline const FaceMap::Key FaceMap::get_key( const kvs::UInt32 id0, const kvs::UInt32 id1, const kvs::UInt32 id2 )
+inline const TriangleFaceMap::Key TriangleFaceMap::get_key( const kvs::UInt32 id0, const kvs::UInt32 id1, const kvs::UInt32 id2 )
 {
     const kvs::UInt32 sum = id0 + id1 + id2;
+    return sum % kvs::UInt32( m_nvertices );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  QuadrangleFace map class.
+ */
+/*===========================================================================*/
+class QuadrangleFaceMap
+{
+public:
+
+    typedef kvs::UInt32 Key;
+    typedef QuadrangleFace Value;
+    typedef std::multimap<Key,Value> Bucket;
+
+private:
+
+    size_t m_nvertices; ///< number of vertices of the original data
+    Bucket m_bucket; ///< bucket for the edge data
+
+public:
+
+    QuadrangleFaceMap( const size_t nvertices );
+
+public:
+
+    const Bucket& bucket() const;
+
+    void insert( const kvs::UInt32 id0, const kvs::UInt32 id1, const kvs::UInt32 id2, const kvs::UInt32 id3 );
+
+private:
+
+    const Key get_key( const kvs::UInt32 id0, const kvs::UInt32 id1, const kvs::UInt32 id2, const kvs::UInt32 id3 );
+};
+
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new QuadrangleFaceMap class.
+ *  @param  nvertices [in] number of vertices
+ */
+/*===========================================================================*/
+inline QuadrangleFaceMap::QuadrangleFaceMap( const size_t nvertices ):
+    m_nvertices( nvertices )
+{
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns a bucket for the face.
+ *  @return bucket
+ */
+/*===========================================================================*/
+inline const QuadrangleFaceMap::Bucket& QuadrangleFaceMap::bucket() const
+{
+    return m_bucket;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Inserts a face indicated by the given IDs.
+ *  @param  id0 [in] ID 0
+ *  @param  id1 [in] ID 1
+ *  @param  id2 [in] ID 2
+ *  @param  id3 [in] ID 3
+ */
+/*===========================================================================*/
+inline void QuadrangleFaceMap::insert( const kvs::UInt32 id0, const kvs::UInt32 id1, const kvs::UInt32 id2, const kvs::UInt32 id3 )
+{
+    const Key key( this->get_key( id0, id1, id2, id3 ) );
+    const Value value( id0, id1, id2, id3 );
+
+    Bucket::iterator f = m_bucket.find( key );
+    Bucket::const_iterator last = m_bucket.end();
+    if ( f != last )
+    {
+        Bucket::const_iterator upper = m_bucket.upper_bound( key );
+        do
+        {
+            if ( f->second == value )
+            {
+                // The edge has been already inserted in the bucket.
+                m_bucket.erase( f );
+                return;
+            }
+            f++;
+        } while ( f != upper );
+    }
+
+    m_bucket.insert( std::make_pair( key, value ) );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns a key for searching the face.
+ *  @param  id0 [in] ID 0
+ *  @param  id1 [in] ID 1
+ *  @param  id2 [in] ID 2
+ *  @param  id3 [in] ID 3
+ *  @return key
+ */
+/*===========================================================================*/
+inline const QuadrangleFaceMap::Key QuadrangleFaceMap::get_key( const kvs::UInt32 id0, const kvs::UInt32 id1, const kvs::UInt32 id2, const kvs::UInt32 id3 )
+{
+    const kvs::UInt32 sum = id0 + id1 + id2 + id3;
     return sum % kvs::UInt32( m_nvertices );
 }
 
@@ -279,7 +473,7 @@ inline const FaceMap::Key FaceMap::get_key( const kvs::UInt32 id0, const kvs::UI
 /*===========================================================================*/
 inline void CreateTetrahedraFaceMap(
     const kvs::UnstructuredVolumeObject* volume,
-    FaceMap* face_map )
+    TriangleFaceMap* face_map )
 {
     const kvs::UInt32* connections = volume->connections().data();
     const size_t ncells = volume->numberOfCells();
@@ -309,7 +503,7 @@ inline void CreateTetrahedraFaceMap(
 /*===========================================================================*/
 inline void CreateQuadraticTetrahedraFaceMap(
     const kvs::UnstructuredVolumeObject* volume,
-    FaceMap* face_map )
+    TriangleFaceMap* face_map )
 {
     const kvs::UInt32* connections = volume->connections().data();
     const size_t ncells = volume->numberOfCells();
@@ -360,7 +554,7 @@ inline void CreateQuadraticTetrahedraFaceMap(
 /*===========================================================================*/
 inline void CreateHexahedraFaceMap(
     const kvs::UnstructuredVolumeObject* volume,
-    FaceMap* face_map )
+    QuadrangleFaceMap* face_map )
 {
     const kvs::UInt32* connections = volume->connections().data();
     const size_t ncells = volume->numberOfCells();
@@ -377,24 +571,13 @@ inline void CreateHexahedraFaceMap(
         const kvs::UInt32 v7 = connections[ connection_index + 7 ];
         connection_index += 8;
 
-        // Local faces of the cell (12 triangle meshes).
-        face_map->insert( v0, v4, v1 );
-        face_map->insert( v1, v4, v5 );
-
-        face_map->insert( v1, v5, v2 );
-        face_map->insert( v2, v5, v6 );
-
-        face_map->insert( v2, v6, v3 );
-        face_map->insert( v3, v6, v7 );
-
-        face_map->insert( v3, v7, v0 );
-        face_map->insert( v0, v7, v4 );
-
-        face_map->insert( v0, v1, v3 );
-        face_map->insert( v3, v1, v2 );
-
-        face_map->insert( v5, v4, v6 );
-        face_map->insert( v6, v4, v7 );
+        // Local faces of the cell (6 quadrangle meshes).
+        face_map->insert( v0, v1, v2, v3 );
+        face_map->insert( v4, v5, v6, v7 );
+        face_map->insert( v0, v3, v7, v4 );
+        face_map->insert( v3, v2, v6, v7 );
+        face_map->insert( v1, v2, v6, v5 );
+        face_map->insert( v0, v1, v5, v4 );
     }
 }
 
@@ -407,7 +590,7 @@ inline void CreateHexahedraFaceMap(
 /*===========================================================================*/
 inline void CreateQuadraticHexahedraFaceMap(
     const kvs::UnstructuredVolumeObject* volume,
-    FaceMap* face_map )
+    QuadrangleFaceMap* face_map )
 {
     const kvs::UInt32* connections = volume->connections().data();
     const size_t ncells = volume->numberOfCells();
@@ -422,6 +605,8 @@ inline void CreateQuadraticHexahedraFaceMap(
         const kvs::UInt32 v5  = connections[ connection_index +  5 ];
         const kvs::UInt32 v6  = connections[ connection_index +  6 ];
         const kvs::UInt32 v7  = connections[ connection_index +  7 ];
+        // TO DO: Ingore the quadratic nodes...
+        /*
         const kvs::UInt32 v8  = connections[ connection_index +  8 ];
         const kvs::UInt32 v9  = connections[ connection_index +  9 ];
         const kvs::UInt32 v10 = connections[ connection_index + 10 ];
@@ -434,50 +619,16 @@ inline void CreateQuadraticHexahedraFaceMap(
         const kvs::UInt32 v17 = connections[ connection_index + 17 ];
         const kvs::UInt32 v18 = connections[ connection_index + 18 ];
         const kvs::UInt32 v19 = connections[ connection_index + 19 ];
+        */
         connection_index += 20;
 
-        // Local faces of the cell (36 triangle meshes).
-        face_map->insert( v0,  v16, v8  );
-        face_map->insert( v4,  v12, v16 );
-        face_map->insert( v5,  v17, v12 );
-        face_map->insert( v1,  v8,  v17 );
-        face_map->insert( v8,  v16, v17 );
-        face_map->insert( v12, v17, v16 );
-
-        face_map->insert( v1,  v17, v9  );
-        face_map->insert( v5,  v13, v17 );
-        face_map->insert( v6,  v18, v13 );
-        face_map->insert( v2,  v9,  v18 );
-        face_map->insert( v9,  v17, v18 );
-        face_map->insert( v13, v18, v17 );
-
-        face_map->insert( v2,  v18, v10 );
-        face_map->insert( v6,  v14, v18 );
-        face_map->insert( v7,  v19, v14 );
-        face_map->insert( v3,  v10, v19 );
-        face_map->insert( v10, v18, v19 );
-        face_map->insert( v14, v19, v18 );
-
-        face_map->insert( v3,  v19, v11 );
-        face_map->insert( v7,  v15, v19 );
-        face_map->insert( v4,  v16, v15 );
-        face_map->insert( v0,  v11, v16 );
-        face_map->insert( v11, v19, v16 );
-        face_map->insert( v15, v16, v19 );
-
-        face_map->insert( v0,  v8,  v11 );
-        face_map->insert( v1,  v9,  v8  );
-        face_map->insert( v2,  v10, v9  );
-        face_map->insert( v3,  v11, v10 );
-        face_map->insert( v11, v8,  v10 );
-        face_map->insert( v9,  v10, v8  );
-
-        face_map->insert( v5,  v12, v13 );
-        face_map->insert( v4,  v15, v12 );
-        face_map->insert( v7,  v14, v15 );
-        face_map->insert( v6,  v13, v14 );
-        face_map->insert( v13, v12, v14 );
-        face_map->insert( v15, v14, v12 );
+        // Local faces of the cell (6 quadrangle meshes).
+        face_map->insert( v0, v1, v2, v3 );
+        face_map->insert( v4, v5, v6, v7 );
+        face_map->insert( v0, v3, v7, v4 );
+        face_map->insert( v3, v2, v6, v7 );
+        face_map->insert( v1, v2, v6, v5 );
+        face_map->insert( v0, v1, v5, v4 );
     }
 }
 
@@ -496,7 +647,7 @@ template <typename T>
 void CalculateFaces(
     const kvs::UnstructuredVolumeObject* volume,
     const kvs::ColorMap cmap,
-    const FaceMap& face_map,
+    const TriangleFaceMap& face_map,
     kvs::ValueArray<kvs::Real32>* coords,
     kvs::ValueArray<kvs::UInt8>* colors,
     kvs::ValueArray<kvs::Real32>* normals )
@@ -522,8 +673,8 @@ void CalculateFaces(
     kvs::UInt32 node_index[3] = { 0, 0, 0 };
     kvs::UInt32 color_level[3] = { 0, 0, 0 };
 
-    FaceMap::Bucket::const_iterator f = face_map.bucket().begin();
-    FaceMap::Bucket::const_iterator last = face_map.bucket().end();
+    TriangleFaceMap::Bucket::const_iterator f = face_map.bucket().begin();
+    TriangleFaceMap::Bucket::const_iterator last = face_map.bucket().end();
     while ( f != last )
     {
         node_index[0] = f->second.id(0);
@@ -559,6 +710,105 @@ void CalculateFaces(
         *( color++ ) = cmap[ color_level[2] ].red();
         *( color++ ) = cmap[ color_level[2] ].green();
         *( color++ ) = cmap[ color_level[2] ].blue();
+
+        const kvs::Vector3f n( ( v1 - v0 ).cross( v2 - v0 ) );
+        // n0
+        *( normal++ ) = n.x();
+        *( normal++ ) = n.y();
+        *( normal++ ) = n.z();
+
+        f++;
+    }
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Calculates external faces using the face map.
+ *  @param  volume [in] pointer to the unstructured volume object
+ *  @param  cmap [in] color map
+ *  @param  face_map [in] face map
+ *  @param  coords [out] pointer to the coordinate value array
+ *  @param  colors [out] pointer to the color value array
+ *  @param  normals [out] pointer to the normal vector array
+ */
+/*===========================================================================*/
+template <typename T>
+void CalculateFaces(
+    const kvs::UnstructuredVolumeObject* volume,
+    const kvs::ColorMap cmap,
+    const QuadrangleFaceMap& face_map,
+    kvs::ValueArray<kvs::Real32>* coords,
+    kvs::ValueArray<kvs::UInt8>* colors,
+    kvs::ValueArray<kvs::Real32>* normals )
+{
+    // Parameters of the volume data.
+    if ( !volume->hasMinMaxValues() ) { volume->updateMinMaxValues(); }
+    const kvs::Real64 min_value = volume->minValue();
+    const kvs::Real64 max_value = volume->maxValue();
+    const size_t veclen = volume->veclen();
+    const T* value = reinterpret_cast<const T*>( volume->values().data() );
+
+    const size_t nfaces = face_map.bucket().size();
+    const size_t nvertices = nfaces * 4;
+    const kvs::Real32* volume_coord = volume->coords().data();
+
+    coords->allocate( nvertices * 3 );
+    colors->allocate( nvertices * 3 );
+    normals->allocate( nfaces * 3 );
+    kvs::Real32* coord = coords->data();
+    kvs::UInt8* color = colors->data();
+    kvs::Real32* normal = normals->data();
+
+    kvs::UInt32 node_index[4] = { 0, 0, 0, 0 };
+    kvs::UInt32 color_level[4] = { 0, 0, 0, 0 };
+
+    QuadrangleFaceMap::Bucket::const_iterator f = face_map.bucket().begin();
+    QuadrangleFaceMap::Bucket::const_iterator last = face_map.bucket().end();
+    while ( f != last )
+    {
+        node_index[0] = f->second.id(0);
+        node_index[1] = f->second.id(1);
+        node_index[2] = f->second.id(2);
+        node_index[3] = f->second.id(3);
+
+        const kvs::Vector3f v0( volume_coord + 3 * node_index[0] );
+        const kvs::Vector3f v1( volume_coord + 3 * node_index[1] );
+        const kvs::Vector3f v2( volume_coord + 3 * node_index[2] );
+        const kvs::Vector3f v3( volume_coord + 3 * node_index[3] );
+        // v0
+        *( coord++ ) = v0.x();
+        *( coord++ ) = v0.y();
+        *( coord++ ) = v0.z();
+        // v1
+        *( coord++ ) = v1.x();
+        *( coord++ ) = v1.y();
+        *( coord++ ) = v1.z();
+        // v2
+        *( coord++ ) = v2.x();
+        *( coord++ ) = v2.y();
+        *( coord++ ) = v2.z();
+        // v3
+        *( coord++ ) = v3.x();
+        *( coord++ ) = v3.y();
+        *( coord++ ) = v3.z();
+
+        GetColorIndices<4>( value, min_value, max_value, veclen, cmap.resolution(), node_index, &color_level );
+        // c0
+        *( color++ ) = cmap[ color_level[0] ].red();
+        *( color++ ) = cmap[ color_level[0] ].green();
+        *( color++ ) = cmap[ color_level[0] ].blue();
+        // c1
+        *( color++ ) = cmap[ color_level[1] ].red();
+        *( color++ ) = cmap[ color_level[1] ].green();
+        *( color++ ) = cmap[ color_level[1] ].blue();
+        // c2
+        *( color++ ) = cmap[ color_level[2] ].red();
+        *( color++ ) = cmap[ color_level[2] ].green();
+        *( color++ ) = cmap[ color_level[2] ].blue();
+        // c3
+        *( color++ ) = cmap[ color_level[3] ].red();
+        *( color++ ) = cmap[ color_level[3] ].green();
+        *( color++ ) = cmap[ color_level[3] ].blue();
 
         const kvs::Vector3f n( ( v1 - v0 ).cross( v2 - v0 ) );
         // n0
@@ -1321,7 +1571,6 @@ void ExternalFaces::mapping( const kvs::UnstructuredVolumeObject* volume )
     }
     }
 
-    SuperClass::setPolygonType( kvs::PolygonObject::Triangle );
     SuperClass::setColorType( kvs::PolygonObject::VertexColor );
     SuperClass::setNormalType( kvs::PolygonObject::PolygonNormal );
     if ( SuperClass::numberOfOpacities() == 0 ) SuperClass::setOpacity( 255 );
@@ -1336,7 +1585,7 @@ void ExternalFaces::mapping( const kvs::UnstructuredVolumeObject* volume )
 template <typename T>
 void ExternalFaces::calculate_tetrahedral_faces( const kvs::UnstructuredVolumeObject* volume )
 {
-    ::FaceMap face_map( volume->numberOfNodes() );
+    ::TriangleFaceMap face_map( volume->numberOfNodes() );
     CreateTetrahedraFaceMap( volume, &face_map );
 
     kvs::ValueArray<kvs::Real32> coords;
@@ -1344,6 +1593,7 @@ void ExternalFaces::calculate_tetrahedral_faces( const kvs::UnstructuredVolumeOb
     kvs::ValueArray<kvs::Real32> normals;
     ::CalculateFaces<T>( volume, BaseClass::colorMap(), face_map, &coords, &colors, &normals );
 
+    SuperClass::setPolygonType( kvs::PolygonObject::Triangle );
     SuperClass::setCoords( coords );
     SuperClass::setColors( colors );
     SuperClass::setNormals( normals );
@@ -1358,7 +1608,7 @@ void ExternalFaces::calculate_tetrahedral_faces( const kvs::UnstructuredVolumeOb
 template <typename T>
 void ExternalFaces::calculate_quadratic_tetrahedral_faces( const kvs::UnstructuredVolumeObject* volume )
 {
-    ::FaceMap face_map( volume->numberOfNodes() );
+    ::TriangleFaceMap face_map( volume->numberOfNodes() );
     CreateQuadraticTetrahedraFaceMap( volume, &face_map );
 
     kvs::ValueArray<kvs::Real32> coords;
@@ -1366,6 +1616,7 @@ void ExternalFaces::calculate_quadratic_tetrahedral_faces( const kvs::Unstructur
     kvs::ValueArray<kvs::Real32> normals;
     ::CalculateFaces<T>( volume, BaseClass::colorMap(), face_map, &coords, &colors, &normals );
 
+    SuperClass::setPolygonType( kvs::PolygonObject::Triangle );
     SuperClass::setCoords( coords );
     SuperClass::setColors( colors );
     SuperClass::setNormals( normals );
@@ -1380,7 +1631,7 @@ void ExternalFaces::calculate_quadratic_tetrahedral_faces( const kvs::Unstructur
 template <typename T>
 void ExternalFaces::calculate_hexahedral_faces( const kvs::UnstructuredVolumeObject* volume )
 {
-    ::FaceMap face_map( volume->numberOfNodes() );
+    ::QuadrangleFaceMap face_map( volume->numberOfNodes() );
     CreateHexahedraFaceMap( volume, &face_map );
 
     kvs::ValueArray<kvs::Real32> coords;
@@ -1388,6 +1639,7 @@ void ExternalFaces::calculate_hexahedral_faces( const kvs::UnstructuredVolumeObj
     kvs::ValueArray<kvs::Real32> normals;
     ::CalculateFaces<T>( volume, BaseClass::colorMap(), face_map, &coords, &colors, &normals );
 
+    SuperClass::setPolygonType( kvs::PolygonObject::Quadrangle );
     SuperClass::setCoords( coords );
     SuperClass::setColors( colors );
     SuperClass::setNormals( normals );
@@ -1402,7 +1654,7 @@ void ExternalFaces::calculate_hexahedral_faces( const kvs::UnstructuredVolumeObj
 template <typename T>
 void ExternalFaces::calculate_quadratic_hexahedral_faces( const kvs::UnstructuredVolumeObject* volume )
 {
-    ::FaceMap face_map( volume->numberOfNodes() );
+    ::QuadrangleFaceMap face_map( volume->numberOfNodes() );
     CreateQuadraticHexahedraFaceMap( volume, &face_map );
 
     kvs::ValueArray<kvs::Real32> coords;
@@ -1410,6 +1662,7 @@ void ExternalFaces::calculate_quadratic_hexahedral_faces( const kvs::Unstructure
     kvs::ValueArray<kvs::Real32> normals;
     ::CalculateFaces<T>( volume, BaseClass::colorMap(), face_map, &coords, &colors, &normals );
 
+    SuperClass::setPolygonType( kvs::PolygonObject::Quadrangle );
     SuperClass::setCoords( coords );
     SuperClass::setColors( colors );
     SuperClass::setNormals( normals );
