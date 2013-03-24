@@ -48,6 +48,17 @@ GLdouble Double( GLenum pname );
 GLfloat Float( GLenum pname );
 GLint Integer( GLenum pname );
 
+
+GLint MaxTextureSize();
+GLint Max3DTextureSize();
+GLint MaxTextureImageUnits();
+GLint MaxCombinedTextureImageUnits();
+
+void Enable( GLenum cap );
+void Disable( GLenum cap );
+void ActivateTextureUnit( GLint unit );
+
+
 /*KVS_DEPRECATED*/ inline std::string ShaderVersion() { return GLSLVersion(); }
 /*KVS_DEPRECATED*/ inline bool CheckError() { return !HasError(); }
 

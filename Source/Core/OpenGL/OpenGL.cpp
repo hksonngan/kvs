@@ -13,6 +13,7 @@
  */
 /*****************************************************************************/
 #include "OpenGL.h"
+#include <kvs/Assert>
 
 
 namespace
@@ -240,6 +241,43 @@ GLint Integer( GLenum pname )
     GLint param;
     kvs::OpenGL::GetIntegerv( pname, &param );
     return param;
+}
+
+GLint MaxTextureSize()
+{
+    return kvs::OpenGL::Integer( GL_MAX_TEXTURE_SIZE );
+}
+
+GLint Max3DTextureSize()
+{
+    return kvs::OpenGL::Integer( GL_MAX_3D_TEXTURE_SIZE );
+}
+
+GLint MaxTextureImageUnits()
+{
+    return kvs::OpenGL::Integer( GL_MAX_TEXTURE_IMAGE_UNITS );
+}
+
+GLint MaxCombinedTextureImageUnits()
+{
+    return kvs::OpenGL::Integer( GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS );
+}
+
+void Enable( GLenum cap )
+{
+    KVS_GL_CALL( glEnable( cap ) );
+}
+
+void Disable( GLenum cap )
+{
+    KVS_GL_CALL( glDisable( cap ) );
+}
+
+void ActivateTextureUnit( GLint unit )
+{
+    KVS_ASSERT( unit >= 0 );
+    KVS_ASSERT( unit < kvs::OpenGL::MaxCombinedTextureImageUnits() );
+    KVS_GL_CALL( glActiveTexture( GL_TEXTURE0 + unit ) );
 }
 
 } // end of namespace OpenGL
