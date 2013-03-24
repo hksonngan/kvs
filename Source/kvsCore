@@ -86,6 +86,7 @@
 #include <Core/OpenGL/Texture1D.h>
 #include <Core/OpenGL/Texture2D.h>
 #include <Core/OpenGL/Texture3D.h>
+#include <Core/OpenGL/TextureBinder.h>
 #include <Core/OpenGL/TextureRectangle.h>
 #include <Core/Thread/Condition.h>
 #include <Core/Thread/Mutex.h>

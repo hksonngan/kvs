@@ -86,6 +86,7 @@ OpenGL/Texture
 OpenGL/Texture1D
 OpenGL/Texture2D
 OpenGL/Texture3D
+OpenGL/TextureBinder
 OpenGL/TextureRectangle
 Thread/Condition
 Thread/Mutex
