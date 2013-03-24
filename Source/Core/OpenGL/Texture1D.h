@@ -31,10 +31,9 @@ public:
 
     typedef kvs::Texture BaseClass;
 
-protected:
+private:
 
     bool m_is_downloaded; ///< if true, the texture is downloaded
-    const void* m_pixels; ///< pointer to the texture data (not allocated)
 
 public:
 
@@ -46,12 +45,6 @@ public:
     void create( const size_t width );
     void release();
     void download( const size_t width, const void* pixels, const size_t xoffset = 0 );
-
-    static unsigned int UsedTextureMemorySize();
-
-private:
-
-    static unsigned int get_texture_memory_size_on_gpu( const GLenum proxy );
 };
 
 } // end of namespace kvs
