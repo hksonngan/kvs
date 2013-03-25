@@ -19,11 +19,11 @@
 #include <kvs/VolumeRendererBase>
 #include <kvs/Texture1D>
 #include <kvs/Texture2D>
+#include <kvs/Texture3D>
 #include <kvs/ObjectBase>
 #include <kvs/Camera>
 #include <kvs/Light>
 #include <kvs/StructuredVolumeObject>
-#include <kvs/glew/Texture3D>
 #include <kvs/glew/VertexBufferObject>
 #include <kvs/glew/ProgramObject>
 #include <kvs/glew/ShaderSource>
@@ -72,7 +72,7 @@ protected:
     kvs::Texture2D m_exit_points; ///< exit point texture
     kvs::glew::FrameBufferObject m_entry_exit_framebuffer; ///< framebuffer object for entry/exit point texture
     kvs::glew::VertexBufferObject m_bounding_cube; ///< bounding cube (VBO)
-    kvs::glew::Texture3D m_volume_data; ///< volume data (3D texture)
+    kvs::Texture3D m_volume_data; ///< volume data (3D texture)
     kvs::glew::ProgramObject m_ray_caster; ///< ray casting shader
     kvs::glew::ProgramObject m_bounding_cube_shader; ///< bounding cube shader
     kvs::Texture2D m_color_texture;
@@ -80,58 +80,33 @@ protected:
 
 public:
 
-    RayCastingRenderer( void );
-
+    RayCastingRenderer();
     RayCastingRenderer( const kvs::TransferFunction& tfunc );
-
     template <typename ShadingType>
     RayCastingRenderer( const ShadingType shader );
-
-    virtual ~RayCastingRenderer( void );
-
-public:
+    virtual ~RayCastingRenderer();
 
     void exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
 
-public:
-
-    void initialize( void );
-
     void setSamplingStep( const float step );
-
     void setOpaqueValue( const float opaque );
-
     void setDrawingBuffer( const DrawingBuffer drawing_buffer );
-
     void setTransferFunction( const kvs::TransferFunction& tfunc );
-
-    void enableJittering( void );
-
-    void disableJittering( void );
+    void enableJittering();
+    void disableJittering();
 
 protected:
 
-    void create_image(
-        const kvs::StructuredVolumeObject* volume,
-        const kvs::Camera* camera,
-        const kvs::Light* light );
-
+    void initialize();
+    void create_image( const kvs::StructuredVolumeObject* volume, const kvs::Camera* camera, const kvs::Light* light );
     void initialize_shaders( const kvs::StructuredVolumeObject* volume );
-
-    void create_entry_points( void );
-
-    void create_exit_points( void );
-
-    void create_jittering_texture( void );
-
+    void create_entry_points();
+    void create_exit_points();
+    void create_jittering_texture();
     void create_bounding_cube( const kvs::StructuredVolumeObject* volume );
-
     void create_transfer_function( const kvs::StructuredVolumeObject* volume );
-
     void create_volume_data( const kvs::StructuredVolumeObject* volume );
-
-    void draw_bounding_cube( void );
-
+    void draw_bounding_cube();
     void draw_quad( const float opacity );
 };
 

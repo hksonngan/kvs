@@ -16,6 +16,8 @@
 #include <kvs/DebugNew>
 #include <kvs/Shader>
 #include <kvs/Vector3>
+#include <kvs/OpenGL>
+#include <kvs/TextureBinder>
 #if defined ( KVS_GLEW_RAY_CASTING_RENDERER__EMBEDDED_SHADER )
 #include "RayCastingRenderer/Shader.h"
 #endif
@@ -95,7 +97,7 @@ namespace glew
  *  @brief  Constructs a new RayCastingRenderer class.
  */
 /*===========================================================================*/
-RayCastingRenderer::RayCastingRenderer( void )
+RayCastingRenderer::RayCastingRenderer()
 {
     BaseClass::setShader( kvs::Shader::Lambert() );
     this->initialize();
@@ -132,7 +134,7 @@ RayCastingRenderer::RayCastingRenderer( const ShadingType shader )
  *  @brief  Destroys the RayCastingRenderer class.
  */
 /*===========================================================================*/
-RayCastingRenderer::~RayCastingRenderer( void )
+RayCastingRenderer::~RayCastingRenderer()
 {
 }
 
@@ -154,26 +156,6 @@ void RayCastingRenderer::exec(
     BaseClass::startTimer();
     this->create_image( volume, camera, light );
     BaseClass::stopTimer();
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Initialize the member parameters.
- */
-/*===========================================================================*/
-void RayCastingRenderer::initialize( void )
-{
-    BaseClass::m_width = 0;
-    BaseClass::m_height = 0;
-
-    m_draw_front_face = true;
-    m_draw_back_face = true;
-    m_draw_volume = true;
-
-    m_enable_jittering = false;
-
-    m_step = 0.5f;
-    m_opaque = 1.0f;
 }
 
 /*===========================================================================*/
@@ -241,14 +223,34 @@ void RayCastingRenderer::setTransferFunction( const kvs::TransferFunction& tfunc
      }
 }
 
-void RayCastingRenderer::enableJittering( void )
+void RayCastingRenderer::enableJittering()
 {
     m_enable_jittering = true;
 }
 
-void RayCastingRenderer::disableJittering( void )
+void RayCastingRenderer::disableJittering()
 {
     m_enable_jittering = false;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Initialize the member parameters.
+ */
+/*===========================================================================*/
+void RayCastingRenderer::initialize()
+{
+    BaseClass::m_width = 0;
+    BaseClass::m_height = 0;
+
+    m_draw_front_face = true;
+    m_draw_back_face = true;
+    m_draw_volume = true;
+
+    m_enable_jittering = false;
+
+    m_step = 0.5f;
+    m_opaque = 1.0f;
 }
 
 /*===========================================================================*/
@@ -265,8 +267,6 @@ void RayCastingRenderer::create_image(
     const kvs::Light* light )
 {
     glPushAttrib( GL_ALL_ATTRIB_BITS );
-
-    RendererBase::initialize();
 
     // Following processes are executed once.
     if ( BaseClass::m_width == 0 && BaseClass::m_height == 0 )
@@ -333,17 +333,23 @@ void RayCastingRenderer::create_image(
         this->create_volume_data( volume );
     }
 
-    glEnable( GL_DEPTH_TEST );
-    glEnable( GL_CULL_FACE );
-    glDisable( GL_LIGHTING );
+    kvs::OpenGL::Enable( GL_DEPTH_TEST );
+    kvs::OpenGL::Enable( GL_CULL_FACE );
+    kvs::OpenGL::Disable( GL_LIGHTING );
 
-    glActiveTexture( GL_TEXTURE6 ); m_depth_texture.bind(); glEnable( GL_TEXTURE_2D );
-    glCopyTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, 0, 0, BaseClass::m_width, BaseClass::m_height );
-    glActiveTexture( GL_TEXTURE6 ); m_depth_texture.unbind(); glDisable( GL_TEXTURE_2D );
+    // Copy the depth and color buffer to each corresponding textures.
+    {
+        const GLint x = 0;
+        const GLint y = 0;
+        const GLsizei width = BaseClass::width();
+        const GLsizei height = BaseClass::height();
 
-    glActiveTexture( GL_TEXTURE7 ); m_color_texture.bind(); glEnable( GL_TEXTURE_2D );
-    glCopyTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, 0, 0, BaseClass::m_width, BaseClass::m_height );
-    glActiveTexture( GL_TEXTURE7 ); m_color_texture.unbind(); glDisable( GL_TEXTURE_2D );
+        kvs::TextureBinder depth_texture_binder( m_depth_texture, 6 );
+        KVS_GL_CALL( glCopyTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, x, y, width, height ) );
+
+        kvs::TextureBinder color_texture_binder( m_color_texture, 7 );
+        KVS_GL_CALL( glCopyTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, x, y, width, height ) );
+    }
 
     m_bounding_cube_shader.bind();
     {
@@ -383,14 +389,15 @@ void RayCastingRenderer::create_image(
 
         // Ray casting.
         m_ray_caster.bind();
-        glActiveTexture( GL_TEXTURE4 ); m_transfer_function_texture.bind(); glEnable( GL_TEXTURE_1D );
-        glActiveTexture( GL_TEXTURE5 ); m_jittering_texture.bind(); glEnable( GL_TEXTURE_2D );
-        glActiveTexture( GL_TEXTURE6 ); m_depth_texture.bind(); glEnable( GL_TEXTURE_2D );
-        glActiveTexture( GL_TEXTURE7 ); m_color_texture.bind(); glEnable( GL_TEXTURE_2D );
-        glActiveTexture( GL_TEXTURE3 ); m_entry_points.bind(); glEnable( GL_TEXTURE_2D );
-        glActiveTexture( GL_TEXTURE2 ); m_exit_points.bind(); glEnable( GL_TEXTURE_2D );
-        glActiveTexture( GL_TEXTURE1 ); m_volume_data.bind(); glEnable( GL_TEXTURE_3D );
         {
+            kvs::TextureBinder volume_data_binder( m_volume_data, 1 );
+            kvs::TextureBinder exit_points_binder( m_exit_points, 2 );
+            kvs::TextureBinder entry_points_binder( m_entry_points, 3 );
+            kvs::TextureBinder transfer_function_texture_binder( m_transfer_function_texture, 4 );
+            kvs::TextureBinder jittering_texture_binder( m_jittering_texture, 5 );
+            kvs::TextureBinder depth_texture_binder( m_depth_texture, 6 );
+            kvs::TextureBinder color_texture_binder( m_color_texture, 7 );
+
             const float f = camera->back();
             const float n = camera->front();
             const float to_zw1 = ( f * n ) / ( f - n );
@@ -414,13 +421,6 @@ void RayCastingRenderer::create_image(
             m_ray_caster.setUniformValuei( "color_texture", 7 );
             this->draw_quad( 1.0f );
         }
-        glActiveTexture( GL_TEXTURE4 ); m_transfer_function_texture.unbind(); glDisable( GL_TEXTURE_1D );
-        glActiveTexture( GL_TEXTURE3 ); m_entry_points.unbind(); glDisable( GL_TEXTURE_2D );
-        glActiveTexture( GL_TEXTURE2 ); m_exit_points.unbind(); glDisable( GL_TEXTURE_2D );
-        glActiveTexture( GL_TEXTURE5 ); m_jittering_texture.unbind(); glDisable( GL_TEXTURE_2D );
-        glActiveTexture( GL_TEXTURE6 ); m_depth_texture.unbind(); glDisable( GL_TEXTURE_2D );
-        glActiveTexture( GL_TEXTURE7 ); m_color_texture.unbind(); glDisable( GL_TEXTURE_2D );
-        glActiveTexture( GL_TEXTURE1 ); m_volume_data.unbind(); glDisable( GL_TEXTURE_3D );
         m_ray_caster.unbind();
     }
 
@@ -611,7 +611,7 @@ void RayCastingRenderer::initialize_shaders( const kvs::StructuredVolumeObject* 
  *  @brief  Create the entry points texture.
  */
 /*===========================================================================*/
-void RayCastingRenderer::create_entry_points( void )
+void RayCastingRenderer::create_entry_points()
 {
     const size_t width = BaseClass::m_width;
     const size_t height = BaseClass::m_height;
@@ -633,7 +633,7 @@ void RayCastingRenderer::create_entry_points( void )
  *  @brief  Create the exit points texture.
  */
 /*===========================================================================*/
-void RayCastingRenderer::create_exit_points( void )
+void RayCastingRenderer::create_exit_points()
 {
     const size_t width = BaseClass::m_width;
     const size_t height = BaseClass::m_height;
@@ -650,7 +650,7 @@ void RayCastingRenderer::create_exit_points( void )
     ::CheckOpenGLError( "Exit point texture allocation failed." );
 }
 
-void RayCastingRenderer::create_jittering_texture( void )
+void RayCastingRenderer::create_jittering_texture()
 {
     const size_t size = 32;
     kvs::UInt8* data = new kvs::UInt8 [ size * size ];
@@ -897,7 +897,7 @@ void RayCastingRenderer::create_volume_data( const kvs::StructuredVolumeObject* 
  *  @brief  Draws the bounding cube.
  */
 /*===========================================================================*/
-void RayCastingRenderer::draw_bounding_cube( void )
+void RayCastingRenderer::draw_bounding_cube()
 {
     m_bounding_cube.bind();
     {
