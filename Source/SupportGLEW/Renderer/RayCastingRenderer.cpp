@@ -251,6 +251,49 @@ void RayCastingRenderer::initialize()
 
     m_step = 0.5f;
     m_opaque = 1.0f;
+
+    m_depth_texture.setWrapS( GL_CLAMP_TO_BORDER );
+    m_depth_texture.setWrapT( GL_CLAMP_TO_BORDER );
+    m_depth_texture.setMagFilter( GL_LINEAR );
+    m_depth_texture.setMinFilter( GL_LINEAR );
+    m_depth_texture.setPixelFormat( GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_FLOAT  );
+
+    m_color_texture.setWrapS( GL_CLAMP_TO_BORDER );
+    m_color_texture.setWrapT( GL_CLAMP_TO_BORDER );
+    m_color_texture.setMagFilter( GL_LINEAR );
+    m_color_texture.setMinFilter( GL_LINEAR );
+    m_color_texture.setPixelFormat( GL_RGBA32F, GL_RGB, GL_FLOAT  );
+
+    m_entry_points.setWrapS( GL_CLAMP_TO_BORDER );
+    m_entry_points.setWrapT( GL_CLAMP_TO_BORDER );
+    m_entry_points.setMagFilter( GL_LINEAR );
+    m_entry_points.setMinFilter( GL_LINEAR );
+    m_entry_points.setPixelFormat( GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT );
+//    m_entry_points.setPixelFormat( GL_RGBA16F_ARB, GL_RGBA, GL_FLOAT );
+
+    m_exit_points.setWrapS( GL_CLAMP_TO_BORDER );
+    m_exit_points.setWrapT( GL_CLAMP_TO_BORDER );
+    m_exit_points.setMagFilter( GL_LINEAR );
+    m_exit_points.setMinFilter( GL_LINEAR );
+    m_exit_points.setPixelFormat( GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT  );
+//    m_exit_points.setPixelFormat( GL_RGBA16F_ARB, GL_RGBA, GL_FLOAT  );
+
+    m_jittering_texture.setWrapS( GL_REPEAT );
+    m_jittering_texture.setWrapT( GL_REPEAT );
+    m_jittering_texture.setMagFilter( GL_NEAREST );
+    m_jittering_texture.setMinFilter( GL_NEAREST );
+    m_jittering_texture.setPixelFormat( GL_LUMINANCE8, GL_LUMINANCE, GL_UNSIGNED_BYTE  );
+
+    m_transfer_function_texture.setWrapS( GL_CLAMP_TO_EDGE );
+    m_transfer_function_texture.setMagFilter( GL_LINEAR );
+    m_transfer_function_texture.setMinFilter( GL_LINEAR );
+    m_transfer_function_texture.setPixelFormat( GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT  );
+
+    m_volume_data.setWrapS( GL_CLAMP_TO_BORDER );
+    m_volume_data.setWrapT( GL_CLAMP_TO_BORDER );
+    m_volume_data.setWrapR( GL_CLAMP_TO_BORDER );
+    m_volume_data.setMagFilter( GL_LINEAR );
+    m_volume_data.setMinFilter( GL_LINEAR );
 }
 
 /*===========================================================================*/
@@ -269,7 +312,7 @@ void RayCastingRenderer::create_image(
     glPushAttrib( GL_ALL_ATTRIB_BITS );
 
     // Following processes are executed once.
-    if ( BaseClass::m_width == 0 && BaseClass::m_height == 0 )
+    if ( BaseClass::width() == 0 && BaseClass::height() == 0 )
     {
         this->initialize_shaders( volume );
         this->create_jittering_texture();
@@ -284,36 +327,25 @@ void RayCastingRenderer::create_image(
     }
 
     // Following processes are executed when the window size is changed.
-    if ( ( BaseClass::m_width  != camera->windowWidth() ) ||
-         ( BaseClass::m_height != camera->windowHeight() ) )
+    if ( ( BaseClass::width()  != camera->windowWidth() ) ||
+         ( BaseClass::height() != camera->windowHeight() ) )
     {
         BaseClass::m_width = camera->windowWidth();
         BaseClass::m_height = camera->windowHeight();
 
         m_entry_exit_framebuffer.bind();
-
-        this->create_entry_points();
-        this->create_exit_points();
-
+        m_entry_points.release();
+        m_exit_points.release();
+        m_entry_points.create( BaseClass::width(), BaseClass::height() );
+        m_exit_points.create( BaseClass::width(), BaseClass::height() );
         m_entry_exit_framebuffer.attachColorTexture( m_exit_points, 0 );
         m_entry_exit_framebuffer.attachColorTexture( m_entry_points, 1 );
         m_entry_exit_framebuffer.disable();
 
         m_depth_texture.release();
-        m_depth_texture.setWrapS( GL_CLAMP_TO_BORDER );
-        m_depth_texture.setWrapT( GL_CLAMP_TO_BORDER );
-        m_depth_texture.setMagFilter( GL_LINEAR );
-        m_depth_texture.setMinFilter( GL_LINEAR );
-        m_depth_texture.setPixelFormat( GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_FLOAT  );
-        m_depth_texture.create( BaseClass::m_width, BaseClass::m_height );
-
         m_color_texture.release();
-        m_color_texture.setWrapS( GL_CLAMP_TO_BORDER );
-        m_color_texture.setWrapT( GL_CLAMP_TO_BORDER );
-        m_color_texture.setMagFilter( GL_LINEAR );
-        m_color_texture.setMinFilter( GL_LINEAR );
-        m_color_texture.setPixelFormat( GL_RGBA32F, GL_RGB, GL_FLOAT  );
-        m_color_texture.create( BaseClass::m_width, BaseClass::m_height );
+        m_depth_texture.create( BaseClass::width(), BaseClass::height() );
+        m_color_texture.create( BaseClass::width(), BaseClass::height() );
 
         m_ray_caster.bind();
         m_ray_caster.setUniformValuef( "width", static_cast<GLfloat>( camera->windowWidth() ) );
@@ -351,41 +383,38 @@ void RayCastingRenderer::create_image(
         KVS_GL_CALL( glCopyTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, x, y, width, height ) );
     }
 
+    // Draw the bounding cube.
     m_bounding_cube_shader.bind();
+    m_entry_exit_framebuffer.bind();
+    if ( m_draw_back_face )
     {
-        m_entry_exit_framebuffer.bind();
-
         // Draw the back face of the bounding cube for the entry points.
-        if ( m_draw_back_face )
-        {
-            glDrawBuffer( GL_COLOR_ATTACHMENT0_EXT );
-            glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-            glCullFace( GL_FRONT );
-            this->draw_bounding_cube();
-        }
-
-        // Draw the front face of the bounding cube for the entry points.
-        if ( m_draw_front_face )
-        {
-            glDrawBuffer( GL_COLOR_ATTACHMENT1_EXT );
-            glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-            glCullFace( GL_BACK );
-            this->draw_bounding_cube();
-        }
-
-        m_entry_exit_framebuffer.disable();
+        KVS_GL_CALL( glDrawBuffer( GL_COLOR_ATTACHMENT0_EXT ) );
+        KVS_GL_CALL( glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ) );
+        KVS_GL_CALL( glCullFace( GL_FRONT ) );
+        this->draw_bounding_cube();
     }
+    if ( m_draw_front_face )
+    {
+        // Draw the front face of the bounding cube for the entry points.
+        KVS_GL_CALL( glDrawBuffer( GL_COLOR_ATTACHMENT1_EXT ) );
+        KVS_GL_CALL( glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ) );
+        KVS_GL_CALL( glCullFace( GL_BACK ) );
+        this->draw_bounding_cube();
+    }
+    m_entry_exit_framebuffer.disable();
     m_bounding_cube_shader.unbind();
 
+    // Draw the volume data.
     if ( m_draw_volume )
     {
-        glDisable( GL_CULL_FACE );
-        glEnable( GL_BLEND );
-        glBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_ALPHA );
+        kvs::OpenGL::Disable( GL_CULL_FACE );
+        kvs::OpenGL::Enable( GL_BLEND );
+        KVS_GL_CALL( glBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_ALPHA ) );
 
         // Enable or disable OpenGL capabilities.
-        if ( BaseClass::isEnabledShading() ) glEnable( GL_LIGHTING );
-        else glDisable( GL_LIGHTING );
+        if ( BaseClass::isEnabledShading() ) kvs::OpenGL::Enable( GL_LIGHTING );
+        else kvs::OpenGL::Disable( GL_LIGHTING );
 
         // Ray casting.
         m_ray_caster.bind();
@@ -424,10 +453,9 @@ void RayCastingRenderer::create_image(
         m_ray_caster.unbind();
     }
 
-    glActiveTexture( GL_TEXTURE0 );
-
-    glPopAttrib();
-    glFinish();
+    KVS_GL_CALL( glActiveTexture( GL_TEXTURE0 ) );
+    KVS_GL_CALL( glFinish() );
+    KVS_GL_CALL( glPopAttrib() );
 }
 
 /*==========================================================================*/
@@ -606,50 +634,6 @@ void RayCastingRenderer::initialize_shaders( const kvs::StructuredVolumeObject* 
     }
 }
 
-/*===========================================================================*/
-/**
- *  @brief  Create the entry points texture.
- */
-/*===========================================================================*/
-void RayCastingRenderer::create_entry_points()
-{
-    const size_t width = BaseClass::m_width;
-    const size_t height = BaseClass::m_height;
-
-    m_entry_points.release();
-    m_entry_points.setWrapS( GL_CLAMP_TO_BORDER );
-    m_entry_points.setWrapT( GL_CLAMP_TO_BORDER );
-    m_entry_points.setMagFilter( GL_LINEAR );
-    m_entry_points.setMinFilter( GL_LINEAR );
-    m_entry_points.setPixelFormat( GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT );
-//    m_entry_points.setPixelFormat( GL_RGBA16F_ARB, GL_RGBA, GL_FLOAT );
-    m_entry_points.create( width, height );
-
-    ::CheckOpenGLError( "Entry point texture allocation failed." );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Create the exit points texture.
- */
-/*===========================================================================*/
-void RayCastingRenderer::create_exit_points()
-{
-    const size_t width = BaseClass::m_width;
-    const size_t height = BaseClass::m_height;
-
-    m_exit_points.release();
-    m_exit_points.setWrapS( GL_CLAMP_TO_BORDER );
-    m_exit_points.setWrapT( GL_CLAMP_TO_BORDER );
-    m_exit_points.setMagFilter( GL_LINEAR );
-    m_exit_points.setMinFilter( GL_LINEAR );
-    m_exit_points.setPixelFormat( GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT  );
-//    m_exit_points.setPixelFormat( GL_RGBA16F_ARB, GL_RGBA, GL_FLOAT  );
-    m_exit_points.create( width, height );
-
-    ::CheckOpenGLError( "Exit point texture allocation failed." );
-}
-
 void RayCastingRenderer::create_jittering_texture()
 {
     const size_t size = 32;
@@ -658,11 +642,6 @@ void RayCastingRenderer::create_jittering_texture()
     for ( size_t i = 0; i < size * size; i++ ) data[i] = static_cast<kvs::UInt8>(255.0f * rand() / float(RAND_MAX));
 
     m_jittering_texture.release();
-    m_jittering_texture.setWrapS( GL_REPEAT );
-    m_jittering_texture.setWrapT( GL_REPEAT );
-    m_jittering_texture.setMagFilter( GL_NEAREST );
-    m_jittering_texture.setMinFilter( GL_NEAREST );
-    m_jittering_texture.setPixelFormat( GL_LUMINANCE8, GL_LUMINANCE, GL_UNSIGNED_BYTE  );
     m_jittering_texture.create( size, size );
     m_jittering_texture.download( size, size, data );
 
@@ -768,10 +747,6 @@ void RayCastingRenderer::create_transfer_function( const kvs::StructuredVolumeOb
         *(data++) = omap[i];
     }
 
-    m_transfer_function_texture.setWrapS( GL_CLAMP_TO_EDGE );
-    m_transfer_function_texture.setMagFilter( GL_LINEAR );
-    m_transfer_function_texture.setMinFilter( GL_LINEAR );
-    m_transfer_function_texture.setPixelFormat( GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT  );
     m_transfer_function_texture.create( width );
     m_transfer_function_texture.download( width, colors.data() );
     m_transfer_function_texture.unbind();
@@ -790,13 +765,6 @@ void RayCastingRenderer::create_volume_data( const kvs::StructuredVolumeObject* 
     const size_t width = volume->resolution().x();
     const size_t height = volume->resolution().y();
     const size_t depth = volume->resolution().z();
-
-    m_volume_data.release();
-    m_volume_data.setWrapS( GL_CLAMP_TO_BORDER );
-    m_volume_data.setWrapT( GL_CLAMP_TO_BORDER );
-    m_volume_data.setWrapR( GL_CLAMP_TO_BORDER );
-    m_volume_data.setMagFilter( GL_LINEAR );
-    m_volume_data.setMinFilter( GL_LINEAR );
 
     GLenum data_format = 0;
     GLenum data_type = 0;
@@ -883,8 +851,9 @@ void RayCastingRenderer::create_volume_data( const kvs::StructuredVolumeObject* 
         kvsMessageError( "Not supported data type '%s'.",
                          volume->values().typeInfo()->typeName() );
     }
-
     m_volume_data.setPixelFormat( data_format, GL_ALPHA, data_type );
+
+    m_volume_data.release();
     m_volume_data.create( width, height, depth );
     m_volume_data.download( width, height, depth, data_value.data() );
     m_volume_data.unbind();

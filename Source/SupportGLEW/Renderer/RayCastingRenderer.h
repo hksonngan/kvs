@@ -100,8 +100,6 @@ protected:
     void initialize();
     void create_image( const kvs::StructuredVolumeObject* volume, const kvs::Camera* camera, const kvs::Light* light );
     void initialize_shaders( const kvs::StructuredVolumeObject* volume );
-    void create_entry_points();
-    void create_exit_points();
     void create_jittering_texture();
     void create_bounding_cube( const kvs::StructuredVolumeObject* volume );
     void create_transfer_function( const kvs::StructuredVolumeObject* volume );
