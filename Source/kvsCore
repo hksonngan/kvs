@@ -80,6 +80,7 @@
 #include <Core/Numeric/Xorshift128.h>
 #include <Core/OpenGL/DisplayList.h>
 #include <Core/OpenGL/FrameBuffer.h>
+#include <Core/OpenGL/FrameBufferObject.h>
 #include <Core/OpenGL/GL.h>
 #include <Core/OpenGL/OpenGL.h>
 #include <Core/OpenGL/Texture.h>

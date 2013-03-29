@@ -263,6 +263,11 @@ GLint MaxCombinedTextureImageUnits()
     return kvs::OpenGL::Integer( GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS );
 }
 
+GLint MaxColorAttachments()
+{
+    return kvs::OpenGL::Integer( GL_MAX_COLOR_ATTACHMENTS );
+}
+
 void Enable( GLenum cap )
 {
     KVS_GL_CALL( glEnable( cap ) );

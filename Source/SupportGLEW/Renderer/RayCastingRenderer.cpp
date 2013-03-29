@@ -131,15 +131,6 @@ RayCastingRenderer::RayCastingRenderer( const ShadingType shader )
 
 /*===========================================================================*/
 /**
- *  @brief  Destroys the RayCastingRenderer class.
- */
-/*===========================================================================*/
-RayCastingRenderer::~RayCastingRenderer()
-{
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Main rendering routine.
  *  @param  object [i] pointer to the object
  *  @param  camera [i] pointer to the camera
@@ -312,7 +303,7 @@ void RayCastingRenderer::create_image(
     glPushAttrib( GL_ALL_ATTRIB_BITS );
 
     // Following processes are executed once.
-    if ( BaseClass::width() == 0 && BaseClass::height() == 0 )
+    if ( BaseClass::windowWidth() == 0 && BaseClass::windowHeight() == 0 )
     {
         this->initialize_shaders( volume );
         this->create_jittering_texture();
@@ -327,25 +318,24 @@ void RayCastingRenderer::create_image(
     }
 
     // Following processes are executed when the window size is changed.
-    if ( ( BaseClass::width()  != camera->windowWidth() ) ||
-         ( BaseClass::height() != camera->windowHeight() ) )
+    if ( ( BaseClass::windowWidth() != camera->windowWidth() ) ||
+         ( BaseClass::windowHeight() != camera->windowHeight() ) )
     {
-        BaseClass::m_width = camera->windowWidth();
-        BaseClass::m_height = camera->windowHeight();
+        BaseClass::setWindowSize( camera->windowWidth(), camera->windowHeight() );
 
         m_entry_exit_framebuffer.bind();
         m_entry_points.release();
         m_exit_points.release();
-        m_entry_points.create( BaseClass::width(), BaseClass::height() );
-        m_exit_points.create( BaseClass::width(), BaseClass::height() );
+        m_entry_points.create( BaseClass::windowWidth(), BaseClass::windowHeight() );
+        m_exit_points.create( BaseClass::windowWidth(), BaseClass::windowHeight() );
         m_entry_exit_framebuffer.attachColorTexture( m_exit_points, 0 );
         m_entry_exit_framebuffer.attachColorTexture( m_entry_points, 1 );
         m_entry_exit_framebuffer.disable();
 
         m_depth_texture.release();
         m_color_texture.release();
-        m_depth_texture.create( BaseClass::width(), BaseClass::height() );
-        m_color_texture.create( BaseClass::width(), BaseClass::height() );
+        m_depth_texture.create( BaseClass::windowWidth(), BaseClass::windowHeight() );
+        m_color_texture.create( BaseClass::windowWidth(), BaseClass::windowHeight() );
 
         m_ray_caster.bind();
         m_ray_caster.setUniformValuef( "width", static_cast<GLfloat>( camera->windowWidth() ) );
@@ -354,13 +344,13 @@ void RayCastingRenderer::create_image(
     }
 
     // Download the transfer function data to the 1D texture on the GPU.
-    if ( !m_transfer_function_texture.isTexture() )
+    if ( !m_transfer_function_texture.isValid() )
     {
         this->create_transfer_function( volume );
     }
 
     // Download the volume data to the 3D texture on the GPU.
-    if ( !m_volume_data.isTexture() )
+    if ( !m_volume_data.isValid() )
     {
         this->create_volume_data( volume );
     }
@@ -373,8 +363,8 @@ void RayCastingRenderer::create_image(
     {
         const GLint x = 0;
         const GLint y = 0;
-        const GLsizei width = BaseClass::width();
-        const GLsizei height = BaseClass::height();
+        const GLsizei width = BaseClass::windowWidth();
+        const GLsizei height = BaseClass::windowHeight();
 
         kvs::TextureBinder depth_texture_binder( m_depth_texture, 6 );
         KVS_GL_CALL( glCopyTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, x, y, width, height ) );

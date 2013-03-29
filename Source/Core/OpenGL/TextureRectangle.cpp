@@ -14,6 +14,7 @@
 /****************************************************************************/
 #include "TextureRectangle.h"
 #include <kvs/Math>
+#include <kvs/Assert>
 #include <iostream>
 
 
@@ -43,7 +44,7 @@ TextureRectangle::~TextureRectangle()
 
 bool TextureRectangle::isDownloaded() const
 {
-    return( m_is_downloaded );
+    return m_is_downloaded;
 }
 
 /*==========================================================================*/
@@ -53,6 +54,11 @@ bool TextureRectangle::isDownloaded() const
 /*==========================================================================*/
 void TextureRectangle::create( const size_t width, const size_t height )
 {
+    KVS_ASSERT( width > 0 );
+    KVS_ASSERT( width <= kvs::OpenGL::MaxTextureSize() );
+    KVS_ASSERT( height > 0 );
+    KVS_ASSERT( height <= kvs::OpenGL::MaxTextureSize() );
+
     BaseClass::generateTexture();
     BaseClass::bind();
     BaseClass::setParameter( GL_TEXTURE_MAG_FILTER, BaseClass::magFilter() );

@@ -15,6 +15,7 @@
 #include "Texture2D.h"
 #include <kvs/Math>
 #include <kvs/OpenGL>
+#include <kvs/Assert>
 #include <iostream>
 
 
@@ -54,6 +55,11 @@ bool Texture2D::isDownloaded() const
 /*==========================================================================*/
 void Texture2D::create( const size_t width, const size_t height )
 {
+    KVS_ASSERT( width > 0 );
+    KVS_ASSERT( width <= kvs::OpenGL::MaxTextureSize() );
+    KVS_ASSERT( height > 0 );
+    KVS_ASSERT( height <= kvs::OpenGL::MaxTextureSize() );
+
     BaseClass::generateTexture();
     BaseClass::bind();
     BaseClass::setParameter( GL_TEXTURE_MAG_FILTER, BaseClass::magFilter() );

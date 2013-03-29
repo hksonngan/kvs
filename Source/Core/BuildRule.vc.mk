@@ -155,6 +155,7 @@ $(OUTDIR)\.\Numeric\SVSolver.obj \
 $(OUTDIR)\.\Numeric\Xorshift128.obj \
 $(OUTDIR)\.\OpenGL\DisplayList.obj \
 $(OUTDIR)\.\OpenGL\FrameBuffer.obj \
+$(OUTDIR)\.\OpenGL\FrameBufferObject.obj \
 $(OUTDIR)\.\OpenGL\GL.obj \
 $(OUTDIR)\.\OpenGL\OpenGL.obj \
 $(OUTDIR)\.\OpenGL\Texture.obj \

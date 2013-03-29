@@ -75,8 +75,8 @@ protected:
     kvs::Texture3D m_volume_data; ///< volume data (3D texture)
     kvs::glew::ProgramObject m_ray_caster; ///< ray casting shader
     kvs::glew::ProgramObject m_bounding_cube_shader; ///< bounding cube shader
-    kvs::Texture2D m_color_texture;
-    kvs::Texture2D m_depth_texture;
+    kvs::Texture2D m_color_texture; ///< texture for color buffer
+    kvs::Texture2D m_depth_texture; ///< texture for depth buffer
 
 public:
 
@@ -84,7 +84,6 @@ public:
     RayCastingRenderer( const kvs::TransferFunction& tfunc );
     template <typename ShadingType>
     RayCastingRenderer( const ShadingType shader );
-    virtual ~RayCastingRenderer();
 
     void exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
 

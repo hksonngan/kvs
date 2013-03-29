@@ -80,6 +80,7 @@ Numeric/SVSolver
 Numeric/Xorshift128
 OpenGL/DisplayList
 OpenGL/FrameBuffer
+OpenGL/FrameBufferObject
 OpenGL/GL
 OpenGL/OpenGL
 OpenGL/Texture

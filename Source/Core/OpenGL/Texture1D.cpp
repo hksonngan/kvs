@@ -15,6 +15,7 @@
 #include "Texture1D.h"
 #include <kvs/Math>
 #include <kvs/OpenGL>
+#include <kvs/Assert>
 #include <iostream>
 
 
@@ -54,6 +55,9 @@ bool Texture1D::isDownloaded() const
 /*==========================================================================*/
 void Texture1D::create( const size_t width )
 {
+    KVS_ASSERT( width > 0 );
+    KVS_ASSERT( width <= kvs::OpenGL::MaxTextureSize() );
+
     BaseClass::generateTexture();
     BaseClass::bind();
     BaseClass::setParameter( GL_TEXTURE_MAG_FILTER, BaseClass::magFilter() );

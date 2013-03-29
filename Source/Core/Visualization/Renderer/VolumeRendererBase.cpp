@@ -40,6 +40,16 @@ VolumeRendererBase::~VolumeRendererBase()
     this->clear();
 }
 
+size_t VolumeRendererBase::windowWidth() const
+{
+    return m_width;
+}
+
+size_t VolumeRendererBase::windowHeight() const
+{
+    return m_height;
+}
+
 /*==========================================================================*/
 /**
  *  Set the transder function.
@@ -49,6 +59,12 @@ VolumeRendererBase::~VolumeRendererBase()
 void VolumeRendererBase::setTransferFunction( const kvs::TransferFunction& tfunc )
 {
     m_tfunc = tfunc;
+}
+
+void VolumeRendererBase::setWindowSize( const size_t width, const size_t height )
+{
+    m_width = width;
+    m_height = height;
 }
 
 /*==========================================================================*/

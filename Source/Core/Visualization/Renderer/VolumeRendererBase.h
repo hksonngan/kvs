@@ -59,9 +59,13 @@ public:
         kvs::Camera* camera = NULL,
         kvs::Light* light  = NULL ) = 0;
 
+    size_t windowWidth() const;
+    size_t windowHeight() const;
+
     template <typename ShadingType>
     void setShader( const ShadingType shader );
     void setTransferFunction( const kvs::TransferFunction& tfunc );
+    void setWindowSize( const size_t width, const size_t height );
 
     void enableShading();
     void disableShading();

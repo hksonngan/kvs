@@ -15,6 +15,7 @@
 #include "Texture3D.h"
 #include <kvs/Math>
 #include <kvs/OpenGL>
+#include <kvs/Assert>
 #include <iostream>
 
 
@@ -44,7 +45,7 @@ Texture3D::~Texture3D()
 
 bool Texture3D::isDownloaded() const
 {
-    return( m_is_downloaded );
+    return m_is_downloaded;
 }
 
 /*==========================================================================*/
@@ -54,6 +55,13 @@ bool Texture3D::isDownloaded() const
 /*==========================================================================*/
 void Texture3D::create( const size_t width, const size_t height, const size_t depth )
 {
+    KVS_ASSERT( width > 0 );
+    KVS_ASSERT( width <= kvs::OpenGL::MaxTextureSize() );
+    KVS_ASSERT( height > 0 );
+    KVS_ASSERT( height <= kvs::OpenGL::MaxTextureSize() );
+    KVS_ASSERT( depth > 0 );
+    KVS_ASSERT( depth <= kvs::OpenGL::MaxTextureSize() );
+
     BaseClass::generateTexture();
     BaseClass::bind();
     BaseClass::setParameter( GL_TEXTURE_MAG_FILTER, BaseClass::magFilter() );

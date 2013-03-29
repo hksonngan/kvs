@@ -53,6 +53,7 @@ GLint MaxTextureSize();
 GLint Max3DTextureSize();
 GLint MaxTextureImageUnits();
 GLint MaxCombinedTextureImageUnits();
+GLint MaxColorAttachments();
 
 void Enable( GLenum cap );
 void Disable( GLenum cap );
