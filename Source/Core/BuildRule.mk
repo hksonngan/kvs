@@ -158,6 +158,7 @@ $(OUTDIR)/./OpenGL/FrameBuffer.o \
 $(OUTDIR)/./OpenGL/FrameBufferObject.o \
 $(OUTDIR)/./OpenGL/GL.o \
 $(OUTDIR)/./OpenGL/OpenGL.o \
+$(OUTDIR)/./OpenGL/RenderBuffer.o \
 $(OUTDIR)/./OpenGL/Texture.o \
 $(OUTDIR)/./OpenGL/Texture1D.o \
 $(OUTDIR)/./OpenGL/Texture2D.o \

@@ -268,6 +268,11 @@ GLint MaxColorAttachments()
     return kvs::OpenGL::Integer( GL_MAX_COLOR_ATTACHMENTS );
 }
 
+GLint MaxRenderBufferSize()
+{
+    return kvs::OpenGL::Integer( GL_MAX_RENDERBUFFER_SIZE );
+}
+
 void Enable( GLenum cap )
 {
     KVS_GL_CALL( glEnable( cap ) );

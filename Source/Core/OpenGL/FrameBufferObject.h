@@ -15,10 +15,10 @@
 #ifndef KVS__FRAME_BUFFER_OBJECT_H_INCLUDE
 #define KVS__FRAME_BUFFER_OBJECT_H_INCLUDE
 
-#include <kvs/glew/RenderBuffer>
 #include <kvs/Texture1D>
 #include <kvs/Texture2D>
 #include <kvs/Texture3D>
+#include <kvs/RenderBuffer>
 #include <kvs/Deprecated>
 
 
@@ -56,8 +56,8 @@ public:
     void attachDepthTexture( const kvs::Texture1D& texture, const int mip_level = 0 );
     void attachDepthTexture( const kvs::Texture2D& texture, const int mip_level = 0 );
     void attachDepthTexture( const kvs::Texture3D& texture, const int mip_level = 0, const int zoffset = 0 );
-    void attachColorRenderBuffer( const kvs::glew::RenderBuffer& render_buffer, const size_t color_buffer = 0 );
-    void attachDepthRenderBuffer( const kvs::glew::RenderBuffer& render_buffer );
+    void attachColorRenderBuffer( const kvs::RenderBuffer& render_buffer, const size_t color_buffer = 0 );
+    void attachDepthRenderBuffer( const kvs::RenderBuffer& render_buffer );
 
 public:
 
