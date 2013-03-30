@@ -20,6 +20,7 @@
 #include <kvs/Texture1D>
 #include <kvs/Texture2D>
 #include <kvs/Texture3D>
+#include <kvs/FrameBufferObject>
 #include <kvs/ObjectBase>
 #include <kvs/Camera>
 #include <kvs/Light>
@@ -27,7 +28,6 @@
 #include <kvs/glew/VertexBufferObject>
 #include <kvs/glew/ProgramObject>
 #include <kvs/glew/ShaderSource>
-#include <kvs/glew/FrameBufferObject>
 
 
 namespace kvs
@@ -70,7 +70,7 @@ protected:
     kvs::Texture2D m_jittering_texture; ///< texture for stochastic jittering
     kvs::Texture2D m_entry_points; ///< entry point texture
     kvs::Texture2D m_exit_points; ///< exit point texture
-    kvs::glew::FrameBufferObject m_entry_exit_framebuffer; ///< framebuffer object for entry/exit point texture
+    kvs::FrameBufferObject m_entry_exit_framebuffer; ///< framebuffer object for entry/exit point texture
     kvs::glew::VertexBufferObject m_bounding_cube; ///< bounding cube (VBO)
     kvs::Texture3D m_volume_data; ///< volume data (3D texture)
     kvs::glew::ProgramObject m_ray_caster; ///< ray casting shader
@@ -94,7 +94,7 @@ public:
     void enableJittering();
     void disableJittering();
 
-protected:
+private:
 
     void initialize();
     void create_image( const kvs::StructuredVolumeObject* volume, const kvs::Camera* camera, const kvs::Light* light );

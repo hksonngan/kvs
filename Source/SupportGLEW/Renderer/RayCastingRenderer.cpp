@@ -43,15 +43,11 @@ void CheckOpenGLError( const char* message )
 }
 
 template <typename T>
-//kvs::AnyValueArray NormalizeValues( const kvs::StructuredVolumeObject* volume )
 kvs::AnyValueArray NormalizeValues(
     const kvs::StructuredVolumeObject* volume,
     const kvs::Real32 min_value,
     const kvs::Real32 max_value )
 {
-//    const kvs::Real32 min = static_cast<kvs::Real32>( volume->minValue() );
-//    const kvs::Real32 max = static_cast<kvs::Real32>( volume->maxValue() );
-
     const kvs::Real32 scale = 1.0f / ( max_value - min_value );
     const size_t nnodes = volume->numberOfNodes();
     const T* src = static_cast<const T*>( volume->values().data() );
@@ -260,14 +256,12 @@ void RayCastingRenderer::initialize()
     m_entry_points.setMagFilter( GL_LINEAR );
     m_entry_points.setMinFilter( GL_LINEAR );
     m_entry_points.setPixelFormat( GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT );
-//    m_entry_points.setPixelFormat( GL_RGBA16F_ARB, GL_RGBA, GL_FLOAT );
 
     m_exit_points.setWrapS( GL_CLAMP_TO_BORDER );
     m_exit_points.setWrapT( GL_CLAMP_TO_BORDER );
     m_exit_points.setMagFilter( GL_LINEAR );
     m_exit_points.setMinFilter( GL_LINEAR );
     m_exit_points.setPixelFormat( GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT  );
-//    m_exit_points.setPixelFormat( GL_RGBA16F_ARB, GL_RGBA, GL_FLOAT  );
 
     m_jittering_texture.setWrapS( GL_REPEAT );
     m_jittering_texture.setWrapT( GL_REPEAT );
@@ -330,7 +324,7 @@ void RayCastingRenderer::create_image(
         m_exit_points.create( BaseClass::windowWidth(), BaseClass::windowHeight() );
         m_entry_exit_framebuffer.attachColorTexture( m_exit_points, 0 );
         m_entry_exit_framebuffer.attachColorTexture( m_entry_points, 1 );
-        m_entry_exit_framebuffer.disable();
+        m_entry_exit_framebuffer.unbind();
 
         m_depth_texture.release();
         m_color_texture.release();
@@ -392,7 +386,7 @@ void RayCastingRenderer::create_image(
         KVS_GL_CALL( glCullFace( GL_BACK ) );
         this->draw_bounding_cube();
     }
-    m_entry_exit_framebuffer.disable();
+    m_entry_exit_framebuffer.unbind();
     m_bounding_cube_shader.unbind();
 
     // Draw the volume data.
