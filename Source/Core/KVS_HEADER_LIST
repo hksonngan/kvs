@@ -83,7 +83,10 @@ OpenGL/DisplayList
 OpenGL/FrameBuffer
 OpenGL/FrameBufferObject
 OpenGL/GL
+OpenGL/IndexBufferObject
 OpenGL/OpenGL
+OpenGL/PixelPackBufferObject
+OpenGL/PixelUnpackBufferObject
 OpenGL/RenderBuffer
 OpenGL/Texture
 OpenGL/Texture1D

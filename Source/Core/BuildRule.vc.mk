@@ -158,7 +158,10 @@ $(OUTDIR)\.\OpenGL\DisplayList.obj \
 $(OUTDIR)\.\OpenGL\FrameBuffer.obj \
 $(OUTDIR)\.\OpenGL\FrameBufferObject.obj \
 $(OUTDIR)\.\OpenGL\GL.obj \
+$(OUTDIR)\.\OpenGL\IndexBufferObject.obj \
 $(OUTDIR)\.\OpenGL\OpenGL.obj \
+$(OUTDIR)\.\OpenGL\PixelPackBufferObject.obj \
+$(OUTDIR)\.\OpenGL\PixelUnpackBufferObject.obj \
 $(OUTDIR)\.\OpenGL\RenderBuffer.obj \
 $(OUTDIR)\.\OpenGL\Texture.obj \
 $(OUTDIR)\.\OpenGL\Texture1D.obj \

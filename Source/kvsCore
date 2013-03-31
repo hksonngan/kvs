@@ -83,7 +83,10 @@
 #include <Core/OpenGL/FrameBuffer.h>
 #include <Core/OpenGL/FrameBufferObject.h>
 #include <Core/OpenGL/GL.h>
+#include <Core/OpenGL/IndexBufferObject.h>
 #include <Core/OpenGL/OpenGL.h>
+#include <Core/OpenGL/PixelPackBufferObject.h>
+#include <Core/OpenGL/PixelUnpackBufferObject.h>
 #include <Core/OpenGL/RenderBuffer.h>
 #include <Core/OpenGL/Texture.h>
 #include <Core/OpenGL/Texture1D.h>
