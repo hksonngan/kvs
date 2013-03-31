@@ -153,6 +153,7 @@ $(OUTDIR)\.\Numeric\ResponseSurface.obj \
 $(OUTDIR)\.\Numeric\SVDecomposer.obj \
 $(OUTDIR)\.\Numeric\SVSolver.obj \
 $(OUTDIR)\.\Numeric\Xorshift128.obj \
+$(OUTDIR)\.\OpenGL\BufferObject.obj \
 $(OUTDIR)\.\OpenGL\DisplayList.obj \
 $(OUTDIR)\.\OpenGL\FrameBuffer.obj \
 $(OUTDIR)\.\OpenGL\FrameBufferObject.obj \
@@ -165,6 +166,7 @@ $(OUTDIR)\.\OpenGL\Texture2D.obj \
 $(OUTDIR)\.\OpenGL\Texture3D.obj \
 $(OUTDIR)\.\OpenGL\TextureBinder.obj \
 $(OUTDIR)\.\OpenGL\TextureRectangle.obj \
+$(OUTDIR)\.\OpenGL\VertexBufferObject.obj \
 $(OUTDIR)\.\Thread\Condition.obj \
 $(OUTDIR)\.\Thread\Mutex.obj \
 $(OUTDIR)\.\Thread\MutexLocker.obj \

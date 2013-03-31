@@ -21,11 +21,11 @@
 #include <kvs/Texture2D>
 #include <kvs/Texture3D>
 #include <kvs/FrameBufferObject>
+#include <kvs/VertexBufferObject>
 #include <kvs/ObjectBase>
 #include <kvs/Camera>
 #include <kvs/Light>
 #include <kvs/StructuredVolumeObject>
-#include <kvs/glew/VertexBufferObject>
 #include <kvs/glew/ProgramObject>
 #include <kvs/glew/ShaderSource>
 
@@ -71,7 +71,7 @@ protected:
     kvs::Texture2D m_entry_points; ///< entry point texture
     kvs::Texture2D m_exit_points; ///< exit point texture
     kvs::FrameBufferObject m_entry_exit_framebuffer; ///< framebuffer object for entry/exit point texture
-    kvs::glew::VertexBufferObject m_bounding_cube; ///< bounding cube (VBO)
+    kvs::VertexBufferObject m_bounding_cube; ///< bounding cube (VBO)
     kvs::Texture3D m_volume_data; ///< volume data (3D texture)
     kvs::glew::ProgramObject m_ray_caster; ///< ray casting shader
     kvs::glew::ProgramObject m_bounding_cube_shader; ///< bounding cube shader

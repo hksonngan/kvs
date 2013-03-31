@@ -78,6 +78,7 @@
 #include <Core/Numeric/SVDecomposer.h>
 #include <Core/Numeric/SVSolver.h>
 #include <Core/Numeric/Xorshift128.h>
+#include <Core/OpenGL/BufferObject.h>
 #include <Core/OpenGL/DisplayList.h>
 #include <Core/OpenGL/FrameBuffer.h>
 #include <Core/OpenGL/FrameBufferObject.h>
@@ -90,6 +91,7 @@
 #include <Core/OpenGL/Texture3D.h>
 #include <Core/OpenGL/TextureBinder.h>
 #include <Core/OpenGL/TextureRectangle.h>
+#include <Core/OpenGL/VertexBufferObject.h>
 #include <Core/Thread/Condition.h>
 #include <Core/Thread/Mutex.h>
 #include <Core/Thread/MutexLocker.h>
