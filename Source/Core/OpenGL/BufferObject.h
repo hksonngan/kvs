@@ -32,22 +32,22 @@ public:
 
     enum AccessType
     {
-        ReadOnly  = GL_READ_ONLY_ARB,  ///< reading pixel data from PBO
-        WriteOnly = GL_WRITE_ONLY_ARB, ///< writing pixel data to PBO
-        ReadWrite = GL_READ_WRITE_ARB  ///< reading and writing
+        ReadOnly  = GL_READ_ONLY,  ///< reading pixel data from PBO
+        WriteOnly = GL_WRITE_ONLY, ///< writing pixel data to PBO
+        ReadWrite = GL_READ_WRITE  ///< reading and writing
     };
 
     enum UsageType
     {
-        StaticDraw  = GL_STATIC_DRAW_ARB,  ///< data will not be changed and sent to GPU
-        StaticRead  = GL_STATIC_READ_ARB,  ///< data will not be changed and read by the application
-        StaticCopy  = GL_STATIC_COPY_ARB,  ///< data will not be changed and used both drawing and reading
-        DynamicDraw = GL_DYNAMIC_DRAW_ARB, ///< data will be changed frequently and sent to GPU
-        DynamicRead = GL_DYNAMIC_READ_ARB, ///< data will be changed frequently and read by the application
-        DynamicCopy = GL_DYNAMIC_COPY_ARB, ///< data will be changed frequently and used both drawing and reading
-        StreamDraw  = GL_STREAM_DRAW_ARB,  ///< data will be changed every frame and sent to GPU
-        StreamRead  = GL_STREAM_READ_ARB,  ///< data will be changed every frame and read by the application
-        StreamCopy  = GL_STREAM_COPY_ARB   ///< data will be changed every frame and used both drawing and reading
+        StaticDraw  = GL_STATIC_DRAW,  ///< data will not be changed and sent to GPU
+        StaticRead  = GL_STATIC_READ,  ///< data will not be changed and read by the application
+        StaticCopy  = GL_STATIC_COPY,  ///< data will not be changed and used both drawing and reading
+        DynamicDraw = GL_DYNAMIC_DRAW, ///< data will be changed frequently and sent to GPU
+        DynamicRead = GL_DYNAMIC_READ, ///< data will be changed frequently and read by the application
+        DynamicCopy = GL_DYNAMIC_COPY, ///< data will be changed frequently and used both drawing and reading
+        StreamDraw  = GL_STREAM_DRAW,  ///< data will be changed every frame and sent to GPU
+        StreamRead  = GL_STREAM_READ,  ///< data will be changed every frame and read by the application
+        StreamCopy  = GL_STREAM_COPY   ///< data will be changed every frame and used both drawing and reading
     };
 
 protected:

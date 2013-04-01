@@ -28,7 +28,7 @@ namespace kvs
  */
 /*==========================================================================*/
 Texture3D::Texture3D():
-    Texture( GL_TEXTURE_3D ),
+    Texture( GL_TEXTURE_3D, GL_TEXTURE_BINDING_3D ),
     m_is_downloaded( false )
 {
 }

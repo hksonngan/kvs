@@ -47,6 +47,7 @@ public:
     void release();
     void bind() const;
     void unbind() const;
+    bool isCreated() const;
     bool isValid() const;
     bool isBinding() const;
 
@@ -58,6 +59,11 @@ public:
     void attachDepthTexture( const kvs::Texture3D& texture, const int mip_level = 0, const int zoffset = 0 );
     void attachColorRenderBuffer( const kvs::RenderBuffer& render_buffer, const size_t color_buffer = 0 );
     void attachDepthRenderBuffer( const kvs::RenderBuffer& render_buffer );
+
+protected:
+
+    void generateFramebuffer();
+    void deleteFramebuffer();
 
 public:
 

@@ -33,6 +33,7 @@ class Texture
 private:
 
     GLenum m_target; ///< target
+    GLenum m_binding_target; ///< binding target
     GLuint m_id; ///< texture ID
     GLint m_internal_format; ///< internal pixel data format
     GLenum m_external_format; ///< external pixel data format
@@ -48,7 +49,7 @@ private:
 
 public:
 
-    Texture( const GLenum target );
+    Texture( const GLenum target, const GLenum binding_target );
 
     GLenum target() const;
     GLuint id() const;
@@ -75,6 +76,7 @@ public:
 
     void bind() const;
     void unbind() const;
+    bool isCreated() const;
     bool isValid() const;
     bool isBinding() const;
 

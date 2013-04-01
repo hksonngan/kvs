@@ -28,7 +28,7 @@ namespace kvs
  */
 /*==========================================================================*/
 Texture1D::Texture1D():
-    Texture( GL_TEXTURE_1D ),
+    Texture( GL_TEXTURE_1D, GL_TEXTURE_BINDING_1D ),
     m_is_downloaded( false )
 {
 }

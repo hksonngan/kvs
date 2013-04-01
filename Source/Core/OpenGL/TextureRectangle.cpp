@@ -27,7 +27,7 @@ namespace kvs
  */
 /*==========================================================================*/
 TextureRectangle::TextureRectangle():
-    Texture( GL_TEXTURE_RECTANGLE ),
+    Texture( GL_TEXTURE_RECTANGLE, GL_TEXTURE_BINDING_RECTANGLE ),
     m_is_downloaded( false )
 {
 }

@@ -97,8 +97,7 @@ GLuint FrameBufferObject::id() const
 /*===========================================================================*/
 void FrameBufferObject::create()
 {
-    KVS_ASSERT( m_id == 0 );
-    KVS_GL_CALL( glGenFramebuffers( 1, &m_id ) );
+    this->generateFramebuffer();
 }
 
 /*===========================================================================*/
@@ -108,9 +107,7 @@ void FrameBufferObject::create()
 /*===========================================================================*/
 void FrameBufferObject::release()
 {
-    KVS_ASSERT( this->isValid() );
-    KVS_GL_CALL( glDeleteFramebuffers( 1, &m_id ) );
-    m_id = 0;
+    this->deleteFramebuffer();
 }
 
 /*===========================================================================*/
@@ -120,7 +117,7 @@ void FrameBufferObject::release()
 /*===========================================================================*/
 void FrameBufferObject::bind() const
 {
-    KVS_ASSERT( this->isValid() );
+    KVS_ASSERT( this->isCreated() );
     KVS_GL_CALL( glBindFramebuffer( GL_FRAMEBUFFER, m_id ) );
 }
 
@@ -135,6 +132,11 @@ void FrameBufferObject::unbind() const
     KVS_GL_CALL( glBindFramebuffer( GL_FRAMEBUFFER, 0 ) );
 }
 
+bool FrameBufferObject::isCreated() const
+{
+    return m_id > 0;
+}
+
 bool FrameBufferObject::isValid() const
 {
     GLboolean result;
@@ -144,7 +146,8 @@ bool FrameBufferObject::isValid() const
 
 bool FrameBufferObject::isBinding() const
 {
-    KVS_ASSERT( this->isValid() );
+    if ( !this->isCreated() ) return false;
+
     GLint id = kvs::OpenGL::Integer( GL_FRAMEBUFFER_BINDING );
     return static_cast<GLuint>( id ) == m_id;
 }
@@ -237,7 +240,24 @@ void FrameBufferObject::attachDepthRenderBuffer( const kvs::RenderBuffer& render
     ::GuardedBinder binder( *this );
     const GLuint id = render_buffer.id();
     const GLenum attachment = GL_DEPTH_ATTACHMENT;
-    KVS_GL_CALL( glFramebufferRenderbufferEXT( GL_FRAMEBUFFER, attachment, GL_RENDERBUFFER, id ) );
+    KVS_GL_CALL( glFramebufferRenderbuffer( GL_FRAMEBUFFER, attachment, GL_RENDERBUFFER, id ) );
+}
+
+void FrameBufferObject::generateFramebuffer()
+{
+    if ( !this->isValid() )
+    {
+        KVS_GL_CALL( glGenFramebuffers( 1, &m_id ) );
+    }
+}
+
+void FrameBufferObject::deleteFramebuffer()
+{
+    if ( this->isValid() )
+    {
+        KVS_GL_CALL( glDeleteFramebuffers( 1, &m_id ) );
+    }
+    m_id = 0;
 }
 
 } // end of namespace kvs

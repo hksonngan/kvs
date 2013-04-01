@@ -26,8 +26,9 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-Texture::Texture( const GLenum target ):
+Texture::Texture( const GLenum target, const GLenum binding_target ):
     m_target( target ),
+    m_binding_target( binding_target ),
     m_id( 0 ),
     m_internal_format( 0 ),
     m_external_format( 0 ),
@@ -115,7 +116,7 @@ GLenum Texture::externalType() const
 /*==========================================================================*/
 GLenum Texture::wrapS() const
 {
-    return( m_wrap_s );
+    return m_wrap_s;
 }
 
 /*==========================================================================*/
@@ -125,7 +126,7 @@ GLenum Texture::wrapS() const
 /*==========================================================================*/
 GLenum Texture::wrapT() const
 {
-    return( m_wrap_t );
+    return m_wrap_t;
 }
 
 /*==========================================================================*/
@@ -135,7 +136,7 @@ GLenum Texture::wrapT() const
 /*==========================================================================*/
 GLenum Texture::wrapR() const
 {
-    return( m_wrap_r );
+    return m_wrap_r;
 }
 
 /*==========================================================================*/
@@ -145,7 +146,7 @@ GLenum Texture::wrapR() const
 /*==========================================================================*/
 size_t Texture::width() const
 {
-    return( m_width );
+    return m_width;
 }
 
 /*==========================================================================*/
@@ -155,7 +156,7 @@ size_t Texture::width() const
 /*==========================================================================*/
 size_t Texture::height() const
 {
-    return( m_height );
+    return m_height;
 }
 
 /*==========================================================================*/
@@ -165,7 +166,7 @@ size_t Texture::height() const
 /*==========================================================================*/
 size_t Texture::depth() const
 {
-    return( m_depth );
+    return m_depth;
 }
 
 /*==========================================================================*/
@@ -210,7 +211,6 @@ void Texture::setWrapS( const GLenum wrap_s )
 void Texture::setWrapT( const GLenum wrap_t )
 {
     m_wrap_t = wrap_t;
-
 }
 
 /*==========================================================================*/
@@ -263,7 +263,7 @@ void Texture::setSize( const size_t width, const size_t height, const size_t dep
 
 void Texture::bind() const
 {
-    KVS_ASSERT( this->isValid() );
+    KVS_ASSERT( this->isCreated() );
     KVS_GL_CALL( glBindTexture( m_target, m_id ) );
 }
 
@@ -271,6 +271,11 @@ void Texture::unbind() const
 {
     KVS_ASSERT( this->isBinding() );
     KVS_GL_CALL( glBindTexture( m_target, 0 ) );
+}
+
+bool Texture::isCreated() const
+{
+    return m_id > 0;
 }
 
 bool Texture::isValid() const
@@ -282,30 +287,26 @@ bool Texture::isValid() const
 
 bool Texture::isBinding() const
 {
-    KVS_ASSERT( this->isValid() );
-    GLint id = 0;
-    switch ( m_target )
-    {
-    case GL_TEXTURE_1D: id = kvs::OpenGL::Integer( GL_TEXTURE_BINDING_1D ); break;
-    case GL_TEXTURE_2D: id = kvs::OpenGL::Integer( GL_TEXTURE_BINDING_2D ); break;
-    case GL_TEXTURE_3D: id = kvs::OpenGL::Integer( GL_TEXTURE_BINDING_3D ); break;
-    case GL_TEXTURE_RECTANGLE: id = kvs::OpenGL::Integer( GL_TEXTURE_BINDING_RECTANGLE ); break;
-    default: break;
-    }
+    if ( !this->isCreated() ) return false;
 
+    GLint id = kvs::OpenGL::Integer( m_binding_target );
     return static_cast<GLuint>( id ) == m_id;
 }
 
 void Texture::generateTexture()
 {
-    KVS_ASSERT( m_id == 0 );
-    KVS_GL_CALL( glGenTextures( 1, &m_id ) );
+    if ( !this->isValid() )
+    {
+        KVS_GL_CALL( glGenTextures( 1, &m_id ) );
+    }
 }
 
 void Texture::deleteTexture()
 {
-    KVS_ASSERT( this->isValid() );
-    KVS_GL_CALL( glDeleteTextures( 1, &m_id ) );
+    if ( this->isValid() )
+    {
+        KVS_GL_CALL( glDeleteTextures( 1, &m_id ) );
+    }
     m_id = 0;
 }
 
