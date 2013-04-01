@@ -164,6 +164,7 @@ $(OUTDIR)\.\OpenGL\IndexBufferObject.obj \
 $(OUTDIR)\.\OpenGL\OpenGL.obj \
 $(OUTDIR)\.\OpenGL\PixelPackBufferObject.obj \
 $(OUTDIR)\.\OpenGL\PixelUnpackBufferObject.obj \
+$(OUTDIR)\.\OpenGL\ProgramObject.obj \
 $(OUTDIR)\.\OpenGL\RenderBuffer.obj \
 $(OUTDIR)\.\OpenGL\ShaderObject.obj \
 $(OUTDIR)\.\OpenGL\ShaderSource.obj \

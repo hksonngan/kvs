@@ -89,6 +89,7 @@ OpenGL/IndexBufferObject
 OpenGL/OpenGL
 OpenGL/PixelPackBufferObject
 OpenGL/PixelUnpackBufferObject
+OpenGL/ProgramObject
 OpenGL/RenderBuffer
 OpenGL/ShaderObject
 OpenGL/ShaderSource

@@ -89,6 +89,7 @@
 #include <Core/OpenGL/OpenGL.h>
 #include <Core/OpenGL/PixelPackBufferObject.h>
 #include <Core/OpenGL/PixelUnpackBufferObject.h>
+#include <Core/OpenGL/ProgramObject.h>
 #include <Core/OpenGL/RenderBuffer.h>
 #include <Core/OpenGL/ShaderObject.h>
 #include <Core/OpenGL/ShaderSource.h>

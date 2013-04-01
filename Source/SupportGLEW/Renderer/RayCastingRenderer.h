@@ -26,8 +26,8 @@
 #include <kvs/Camera>
 #include <kvs/Light>
 #include <kvs/StructuredVolumeObject>
-#include <kvs/glew/ProgramObject>
-#include <kvs/glew/ShaderSource>
+#include <kvs/ProgramObject>
+#include <kvs/ShaderSource>
 
 
 namespace kvs
@@ -73,8 +73,8 @@ protected:
     kvs::FrameBufferObject m_entry_exit_framebuffer; ///< framebuffer object for entry/exit point texture
     kvs::VertexBufferObject m_bounding_cube; ///< bounding cube (VBO)
     kvs::Texture3D m_volume_data; ///< volume data (3D texture)
-    kvs::glew::ProgramObject m_ray_caster; ///< ray casting shader
-    kvs::glew::ProgramObject m_bounding_cube_shader; ///< bounding cube shader
+    kvs::ProgramObject m_ray_caster; ///< ray casting shader
+    kvs::ProgramObject m_bounding_cube_shader; ///< bounding cube shader
     kvs::Texture2D m_color_texture; ///< texture for color buffer
     kvs::Texture2D m_depth_texture; ///< texture for depth buffer
 

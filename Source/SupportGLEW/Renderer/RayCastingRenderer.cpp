@@ -465,8 +465,8 @@ void RayCastingRenderer::initialize_shaders( const kvs::StructuredVolumeObject* 
         const std::string frag_code = "RayCastingRenderer/bounding_cube.frag";
 #endif
 
-        kvs::glew::ShaderSource vert( vert_code );
-        kvs::glew::ShaderSource frag( frag_code );
+        kvs::ShaderSource vert( vert_code );
+        kvs::ShaderSource frag( frag_code );
         m_bounding_cube_shader.create( vert, frag );
 
         ::CheckOpenGLError( "Cannot initialize bounding cube shader." );
@@ -482,8 +482,8 @@ void RayCastingRenderer::initialize_shaders( const kvs::StructuredVolumeObject* 
         const std::string frag_code = "RayCastingRenderer/ray_caster.frag";
 #endif
 
-        kvs::glew::ShaderSource vert( vert_code );
-        kvs::glew::ShaderSource frag( frag_code );
+        kvs::ShaderSource vert( vert_code );
+        kvs::ShaderSource frag( frag_code );
 
 #if defined( _TEXTURE_RECTANGLE_ )
         frag.define("ENABLE_TEXTURE_RECTANGLE");
