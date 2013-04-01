@@ -155,14 +155,18 @@ $(OUTDIR)\.\Numeric\SVSolver.obj \
 $(OUTDIR)\.\Numeric\Xorshift128.obj \
 $(OUTDIR)\.\OpenGL\BufferObject.obj \
 $(OUTDIR)\.\OpenGL\DisplayList.obj \
+$(OUTDIR)\.\OpenGL\FragmentShader.obj \
 $(OUTDIR)\.\OpenGL\FrameBuffer.obj \
 $(OUTDIR)\.\OpenGL\FrameBufferObject.obj \
 $(OUTDIR)\.\OpenGL\GL.obj \
+$(OUTDIR)\.\OpenGL\GeometryShader.obj \
 $(OUTDIR)\.\OpenGL\IndexBufferObject.obj \
 $(OUTDIR)\.\OpenGL\OpenGL.obj \
 $(OUTDIR)\.\OpenGL\PixelPackBufferObject.obj \
 $(OUTDIR)\.\OpenGL\PixelUnpackBufferObject.obj \
 $(OUTDIR)\.\OpenGL\RenderBuffer.obj \
+$(OUTDIR)\.\OpenGL\ShaderObject.obj \
+$(OUTDIR)\.\OpenGL\ShaderSource.obj \
 $(OUTDIR)\.\OpenGL\Texture.obj \
 $(OUTDIR)\.\OpenGL\Texture1D.obj \
 $(OUTDIR)\.\OpenGL\Texture2D.obj \
@@ -170,6 +174,7 @@ $(OUTDIR)\.\OpenGL\Texture3D.obj \
 $(OUTDIR)\.\OpenGL\TextureBinder.obj \
 $(OUTDIR)\.\OpenGL\TextureRectangle.obj \
 $(OUTDIR)\.\OpenGL\VertexBufferObject.obj \
+$(OUTDIR)\.\OpenGL\VertexShader.obj \
 $(OUTDIR)\.\Thread\Condition.obj \
 $(OUTDIR)\.\Thread\Mutex.obj \
 $(OUTDIR)\.\Thread\MutexLocker.obj \

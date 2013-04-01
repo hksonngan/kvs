@@ -80,14 +80,18 @@ Numeric/SVSolver
 Numeric/Xorshift128
 OpenGL/BufferObject
 OpenGL/DisplayList
+OpenGL/FragmentShader
 OpenGL/FrameBuffer
 OpenGL/FrameBufferObject
 OpenGL/GL
+OpenGL/GeometryShader
 OpenGL/IndexBufferObject
 OpenGL/OpenGL
 OpenGL/PixelPackBufferObject
 OpenGL/PixelUnpackBufferObject
 OpenGL/RenderBuffer
+OpenGL/ShaderObject
+OpenGL/ShaderSource
 OpenGL/Texture
 OpenGL/Texture1D
 OpenGL/Texture2D
@@ -95,6 +99,7 @@ OpenGL/Texture3D
 OpenGL/TextureBinder
 OpenGL/TextureRectangle
 OpenGL/VertexBufferObject
+OpenGL/VertexShader
 Thread/Condition
 Thread/Mutex
 Thread/MutexLocker

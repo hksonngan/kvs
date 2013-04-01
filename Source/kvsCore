@@ -80,14 +80,18 @@
 #include <Core/Numeric/Xorshift128.h>
 #include <Core/OpenGL/BufferObject.h>
 #include <Core/OpenGL/DisplayList.h>
+#include <Core/OpenGL/FragmentShader.h>
 #include <Core/OpenGL/FrameBuffer.h>
 #include <Core/OpenGL/FrameBufferObject.h>
 #include <Core/OpenGL/GL.h>
+#include <Core/OpenGL/GeometryShader.h>
 #include <Core/OpenGL/IndexBufferObject.h>
 #include <Core/OpenGL/OpenGL.h>
 #include <Core/OpenGL/PixelPackBufferObject.h>
 #include <Core/OpenGL/PixelUnpackBufferObject.h>
 #include <Core/OpenGL/RenderBuffer.h>
+#include <Core/OpenGL/ShaderObject.h>
+#include <Core/OpenGL/ShaderSource.h>
 #include <Core/OpenGL/Texture.h>
 #include <Core/OpenGL/Texture1D.h>
 #include <Core/OpenGL/Texture2D.h>
@@ -95,6 +99,7 @@
 #include <Core/OpenGL/TextureBinder.h>
 #include <Core/OpenGL/TextureRectangle.h>
 #include <Core/OpenGL/VertexBufferObject.h>
+#include <Core/OpenGL/VertexShader.h>
 #include <Core/Thread/Condition.h>
 #include <Core/Thread/Mutex.h>
 #include <Core/Thread/MutexLocker.h>
