@@ -52,8 +52,15 @@ public:
     void release();
     void bind() const;
     void unbind() const;
+    bool isCreated() const;
     bool isValid() const;
     bool isBinding() const;
+
+protected:
+
+    void generateRenderbuffer();
+    void deleteRenderbuffer();
+    void setRenderbufferStorage( GLenum internal_format, GLsizei width, GLsizei height );
 };
 
 } // end of namespace kvs

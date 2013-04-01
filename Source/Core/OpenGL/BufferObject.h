@@ -74,6 +74,7 @@ public:
     void release();
     void bind() const;
     void unbind() const;
+    bool isCreated() const;
     bool isValid() const;
     bool isBinding() const;
 
@@ -83,9 +84,8 @@ public:
 
 protected:
 
-    void generateBufferObject();
-    void deleteBufferObject();
-    bool isBufferObject() const;
+    void generateBuffer();
+    void deleteBuffer();
     void setBufferData( GLsizei width, const GLvoid* data );
     void setBufferSubData( GLsizei width, const GLvoid* data, GLint xoffset = 0 );
     void* mapBuffer( const GLenum access_type );

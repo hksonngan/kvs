@@ -93,7 +93,7 @@ void BufferObject::setSize( const size_t size )
 /*===========================================================================*/
 void BufferObject::create( const size_t size )
 {
-    this->generateBufferObject();
+    this->generateBuffer();
     this->bind();
     this->download( size, NULL );
 }
@@ -105,7 +105,7 @@ void BufferObject::create( const size_t size )
 /*===========================================================================*/
 void BufferObject::release()
 {
-    this->deleteBufferObject();
+    this->deleteBuffer();
     m_is_downloaded = false;
 }
 
@@ -116,7 +116,7 @@ void BufferObject::release()
 /*===========================================================================*/
 void BufferObject::bind() const
 {
-    KVS_ASSERT( this->isValid() );
+    KVS_ASSERT( this->isCreated() );
     KVS_GL_CALL( glBindBuffer( m_target, m_id ) );
 }
 
@@ -131,14 +131,22 @@ void BufferObject::unbind() const
     KVS_GL_CALL( glBindBuffer( m_target, 0 ) );
 }
 
-bool BufferObject::isValid() const
+bool BufferObject::isCreated() const
 {
     return m_id > 0;
 }
 
+bool BufferObject::isValid() const
+{
+    GLboolean result;
+    KVS_GL_CALL( result = glIsBuffer( m_id ) );
+    return result == GL_TRUE;
+}
+
 bool BufferObject::isBinding() const
 {
-    KVS_ASSERT( this->isValid() );
+    if ( !this->isCreated() ) return false;
+
     GLint id = kvs::OpenGL::Integer( m_binding_target );
     return static_cast<GLuint>( id ) == m_id;
 }
@@ -188,23 +196,21 @@ void BufferObject::unmap()
     this->unmapBuffer();
 }
 
-void BufferObject::generateBufferObject()
+void BufferObject::generateBuffer()
 {
-    KVS_ASSERT( m_id == 0 );
-    KVS_GL_CALL( glGenBuffers( 1, &m_id ) );
+    if ( !this->isValid() )
+    {
+        KVS_GL_CALL( glGenBuffers( 1, &m_id ) );
+    }
 }
 
-void BufferObject::deleteBufferObject()
+void BufferObject::deleteBuffer()
 {
-    KVS_GL_CALL( glDeleteBuffers( 1, &m_id ) );
+    if ( this->isValid() )
+    {
+        KVS_GL_CALL( glDeleteBuffers( 1, &m_id ) );
+    }
     m_id = 0;
-}
-
-bool BufferObject::isBufferObject() const
-{
-    GLboolean result;
-    KVS_GL_CALL( result = glIsBuffer( m_id ) );
-    return result == GL_TRUE;
 }
 
 void BufferObject::setBufferData( GLsizei size, const GLvoid* data )

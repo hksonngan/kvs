@@ -102,31 +102,25 @@ void RenderBuffer::setInternalFormat( const GLenum internal_format )
 
 void RenderBuffer::create( const size_t width, const size_t height )
 {
-    KVS_ASSERT( width > 0 );
-    KVS_ASSERT( width <= kvs::OpenGL::MaxRenderBufferSize() );
-    KVS_ASSERT( height > 0 );
-    KVS_ASSERT( height <= kvs::OpenGL::MaxRenderBufferSize() );
     KVS_ASSERT( m_id == 0 );
 
     ::GuardedBinder binder( *this );
     m_width = width;
     m_height = height;
-    KVS_GL_CALL( glGenRenderbuffers( 1, &m_id ) );
-    KVS_GL_CALL( glRenderbufferStorage( GL_RENDERBUFFER, m_internal_format, m_width, m_height ) );
+    this->generateRenderbuffer();
+    this->setRenderbufferStorage( m_internal_format, m_width, m_height );
 }
 
 void RenderBuffer::release()
 {
-    KVS_ASSERT( this->isValid() );
-    KVS_GL_CALL( glDeleteRenderbuffers( 1, &m_id ) );
-    m_id = 0;
+    this->deleteRenderbuffer();
     m_width = 0;
     m_height = 0;
 }
 
 void RenderBuffer::bind() const
 {
-    KVS_ASSERT( this->isValid() );
+    KVS_ASSERT( this->isCreated() );
     KVS_GL_CALL( glBindRenderbuffer( GL_RENDERBUFFER, m_id ) );
 }
 
@@ -134,6 +128,11 @@ void RenderBuffer::unbind() const
 {
     KVS_ASSERT( this->isBinding() );
     KVS_GL_CALL( glBindRenderbuffer( GL_RENDERBUFFER, 0 ) );
+}
+
+bool RenderBuffer::isCreated() const
+{
+    return m_id > 0;
 }
 
 bool RenderBuffer::isValid() const
@@ -145,9 +144,36 @@ bool RenderBuffer::isValid() const
 
 bool RenderBuffer::isBinding() const
 {
-    KVS_ASSERT( this->isValid() );
+    if ( this->isCreated() ) return false;
+
     GLint id = kvs::OpenGL::Integer( GL_RENDERBUFFER_BINDING );
     return static_cast<GLuint>( id ) == m_id;
+}
+
+void RenderBuffer::generateRenderbuffer()
+{
+    if ( !this->isValid() )
+    {
+        KVS_GL_CALL( glGenRenderbuffers( 1, &m_id ) );
+    }
+}
+
+void RenderBuffer::deleteRenderbuffer()
+{
+    if ( this->isValid() )
+    {
+        KVS_GL_CALL( glDeleteRenderbuffers( 1, &m_id ) );
+    }
+    m_id = 0;
+}
+
+void RenderBuffer::setRenderbufferStorage( GLenum internal_format, GLsizei width, GLsizei height )
+{
+    KVS_ASSERT( width > 0 );
+    KVS_ASSERT( width <= kvs::OpenGL::MaxRenderBufferSize() );
+    KVS_ASSERT( height > 0 );
+    KVS_ASSERT( height <= kvs::OpenGL::MaxRenderBufferSize() );
+    KVS_GL_CALL( glRenderbufferStorage( GL_RENDERBUFFER, internal_format, width, height ) );
 }
 
 } // end of namespace kvs
