@@ -25,14 +25,14 @@ TextureBinder::TextureBinder( const Texture& texture, GLint unit ) :
     m_texture( texture ),
     m_unit( unit )
 {
-    KVS_ASSERT( texture.isValid() );
+    KVS_ASSERT( texture.isCreated() );
     kvs::OpenGL::ActivateTextureUnit( unit );
     texture.bind();
 }
 
 TextureBinder::~TextureBinder()
 {
-    KVS_ASSERT( m_texture.isValid() );
+    KVS_ASSERT( m_texture.isCreated() );
     kvs::OpenGL::ActivateTextureUnit( m_unit );
     KVS_GL_CALL( glBindTexture( m_texture.target(), 0 ) );
 }

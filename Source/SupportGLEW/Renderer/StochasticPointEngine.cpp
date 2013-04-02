@@ -14,6 +14,7 @@
 /*****************************************************************************/
 #include "StochasticPointEngine.h"
 #include <kvs/CellByCellParticleGenerator>
+#include <kvs/ShaderSource>
 #if defined ( KVS_GLEW_STOCHASTIC_POINT_ENGINE__EMBEDDED_SHADER )
 #include "StochasticRenderingEngine/Shader.h"
 #endif
@@ -272,7 +273,7 @@ void StochasticPointEngine::Renderer::set(
  *  @return true if the downloading is done successfully
  */
 /*===========================================================================*/
-const bool StochasticPointEngine::Renderer::download( kvs::glew::VertexBufferObject& vbo )
+const bool StochasticPointEngine::Renderer::download( kvs::VertexBufferObject& vbo )
 {
     if ( m_particles == NULL ) return( false );
 
@@ -631,8 +632,8 @@ void StochasticPointEngine::initialize_shader( void )
     const std::string frag_code = "StochasticRenderingEngine/point.frag";
 #endif
 
-    kvs::glew::ShaderSource vert( vert_code );
-    kvs::glew::ShaderSource frag( frag_code );
+    kvs::ShaderSource vert( vert_code );
+    kvs::ShaderSource frag( frag_code );
 
     if ( BaseClass::isEnabledShading() )
     {
@@ -719,7 +720,7 @@ void StochasticPointEngine::create_vertex_buffer( void )
     delete [] m_vbo;
 
     m_renderer = new Renderer[ m_repetition_level ];
-    m_vbo = new kvs::glew::VertexBufferObject[ m_repetition_level ];
+    m_vbo = new kvs::VertexBufferObject[ m_repetition_level ];
 
     size_t memorymax = 0;
     for ( size_t rp = 0; rp < m_repetition_level; rp++ )

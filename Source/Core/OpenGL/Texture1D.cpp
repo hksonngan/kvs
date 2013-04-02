@@ -56,7 +56,7 @@ bool Texture1D::isDownloaded() const
 void Texture1D::create( const size_t width, const void* data )
 {
     KVS_ASSERT( width > 0 );
-    KVS_ASSERT( width <= kvs::OpenGL::MaxTextureSize() );
+    KVS_ASSERT( static_cast<GLint>( width ) <= kvs::OpenGL::MaxTextureSize() );
 
     BaseClass::generateTexture();
     BaseClass::bind();

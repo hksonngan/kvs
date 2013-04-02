@@ -17,8 +17,8 @@
 
 #include "StochasticRenderingEngine.h"
 #include <kvs/PolygonObject>
-#include <kvs/glew/VertexBufferObject>
-#include <kvs/glew/IndexBufferObject>
+#include <kvs/VertexBufferObject>
+#include <kvs/IndexBufferObject>
 
 
 namespace kvs
@@ -51,8 +51,8 @@ protected:
 protected:
 
     const kvs::PolygonObject* m_ref_polygon; ///< pointer to a polygon object (reference only)
-    kvs::glew::VertexBufferObject m_vbo; ///< buffer object for storing the indices, coords, values, and normals of volume data
-    kvs::glew::IndexBufferObject m_ibo; ///< buffer object for stroing the connections of volume data
+    kvs::VertexBufferObject m_vbo; ///< buffer object for storing the indices, coords, values, and normals of volume data
+    kvs::IndexBufferObject m_ibo; ///< buffer object for stroing the connections of volume data
     size_t m_loc_identifier; ///< location indentifier for VBO
     size_t m_off_index; ///< offset index for VBO
     size_t m_off_coord; ///< offset index of coordinates for VBO

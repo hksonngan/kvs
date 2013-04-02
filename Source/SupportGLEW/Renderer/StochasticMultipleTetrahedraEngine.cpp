@@ -15,6 +15,7 @@
 #include "StochasticMultipleTetrahedraEngine.h"
 #include "ProjectedTetrahedraTable.h"
 #include <kvs/TetrahedralCell>
+#include <kvs/ShaderSource>
 #include <kvs/Math>
 #if defined ( KVS_GLEW_STOCHASTIC_MULTIPLE_TETRAHEDRA_ENGINE__EMBEDDED_SHADER )
 #include "StochasticRenderingEngine/Shader.h"
@@ -277,8 +278,8 @@ void StochasticMultipleTetrahedraEngine::setup_shader_of( const size_t index )
     const GLfloat screen_scale_x = m_width * 0.5f;
     const GLfloat screen_scale_y = m_height * 0.5f;
 
-    kvs::glew::ProgramObject& shader_program = index == 0 ? m_shader_program : m_shader_program2;
-    kvs::glew::PreIntegrationTable& table = index == 0 ? m_table : m_table2;
+    kvs::ProgramObject& shader_program = ( index == 0 ) ? m_shader_program : m_shader_program2;
+    kvs::glew::PreIntegrationTable& table = ( index == 0 ) ? m_table : m_table2;
 
     shader_program.setUniformValuef( "random_texture_size_inv", random_texture_size_inv );
     shader_program.setUniformValuef( "random_offset", rp_x, rp_y );
@@ -337,9 +338,9 @@ void StochasticMultipleTetrahedraEngine::initialize_shader_of( const size_t inde
         "StochasticRenderingEngine/multiple_tetrahedra2.frag";
 #endif
 
-    kvs::glew::ShaderSource vert( vert_code );
-    kvs::glew::ShaderSource geom( geom_code );
-    kvs::glew::ShaderSource frag( frag_code );
+    kvs::ShaderSource vert( vert_code );
+    kvs::ShaderSource geom( geom_code );
+    kvs::ShaderSource frag( frag_code );
 
     if ( BaseClass::isEnabledShading() )
     {
@@ -355,7 +356,7 @@ void StochasticMultipleTetrahedraEngine::initialize_shader_of( const size_t inde
         if ( status == GL_TRUE ) { frag.define("ENABLE_TWO_SIDE_LIGHTING"); }
     }
 
-    kvs::glew::ProgramObject& shader_program = index == 0 ? m_shader_program : m_shader_program2;
+    kvs::ProgramObject& shader_program = index == 0 ? m_shader_program : m_shader_program2;
     size_t& loc_identifier = index == 0 ? m_loc_identifier : m_loc_identifier2;
     size_t& loc_values = index == 0 ? m_loc_values : m_loc_values2;
 

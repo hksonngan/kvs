@@ -18,9 +18,11 @@
 #include "StochasticRenderingEngine.h"
 #include <kvs/UnstructuredVolumeObject>
 #include <kvs/TransferFunction>
-#include <kvs/glew/GeometryShader>
-#include <kvs/glew/VertexBufferObject>
-#include <kvs/glew/IndexBufferObject>
+#include <kvs/ProgramObject>
+#include <kvs/ShaderSource>
+#include <kvs/GeometryShader>
+#include <kvs/VertexBufferObject>
+#include <kvs/IndexBufferObject>
 #include <kvs/glew/PreIntegrationTable>
 
 
@@ -62,8 +64,8 @@ protected:
 
     const kvs::UnstructuredVolumeObject* m_ref_volume; ///< pointer to the volume data (reference only)
     kvs::TransferFunction m_tfunc; ///< transfer function
-    kvs::glew::VertexBufferObject m_vbo; ///< buffer object for storing the indices, coords, values, and normals of the volume data
-    kvs::glew::IndexBufferObject m_ibo; ///< buffer object for stroing the connections of the volume data
+    kvs::VertexBufferObject m_vbo; ///< buffer object for storing the indices, coords, values, and normals of the volume data
+    kvs::IndexBufferObject m_ibo; ///< buffer object for stroing the connections of the volume data
     size_t m_loc_identifier; ///< location identifier
     size_t m_loc_values; ///< location identifier of values
     Volume* m_volume; ///< volume data for rendering on GPU
@@ -119,10 +121,10 @@ protected:
     void create_vertexbuffer_from_volume( void );
 
     void create_shaders(
-        kvs::glew::ProgramObject& program_object,
-        const kvs::glew::ShaderSource& vertex_source,
-        const kvs::glew::ShaderSource& geometry_source,
-        const kvs::glew::ShaderSource& fragment_source );
+        kvs::ProgramObject& program_object,
+        const kvs::ShaderSource& vertex_source,
+        const kvs::ShaderSource& geometry_source,
+        const kvs::ShaderSource& fragment_source );
 
     void setup_shader( const float modelview_matrix[16] );
 
@@ -239,8 +241,8 @@ public:
         const size_t loc_values );
 
     const bool download(
-        kvs::glew::VertexBufferObject& vbo,
-        kvs::glew::IndexBufferObject& ibo );
+        kvs::VertexBufferObject& vbo,
+        kvs::IndexBufferObject& ibo );
 
     void draw( const size_t step ) const;
 

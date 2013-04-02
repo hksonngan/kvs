@@ -13,6 +13,7 @@
  */
 /*****************************************************************************/
 #include "StochasticLineEngine.h"
+#include <kvs/ShaderSource>
 #if defined ( KVS_GLEW_STOCHASTIC_LINE_ENGINE__EMBEDDED_SHADER )
 #include "StochasticRenderingEngine/Shader.h"
 #endif
@@ -168,8 +169,8 @@ void StochasticLineEngine::initialize_shader( void )
     const std::string frag_code = "StochasticRenderingEngine/line.frag";
 #endif
 
-    kvs::glew::ShaderSource vert( vert_code );
-    kvs::glew::ShaderSource frag( frag_code );
+    kvs::ShaderSource vert( vert_code );
+    kvs::ShaderSource frag( frag_code );
 
     if ( BaseClass::is_enabled_exact_depth_testing() )
     {

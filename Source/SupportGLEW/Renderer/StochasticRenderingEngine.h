@@ -19,9 +19,9 @@
 #include <kvs/Shader>
 #include <kvs/Texture2D>
 #include <kvs/ObjectBase>
-#include <kvs/glew/VertexShader>
-#include <kvs/glew/FragmentShader>
-#include <kvs/glew/ProgramObject>
+#include <kvs/VertexShader>
+#include <kvs/FragmentShader>
+#include <kvs/ProgramObject>
 
 
 namespace kvs
@@ -63,7 +63,7 @@ protected:
     bool m_enable_shading; ///< flag to enable shading.
     kvs::Shader::shader_type* m_shader; ///< shading method
     kvs::Texture2D m_random_texture; ///< random number texture for the stochastic color assignment in GPU.
-    kvs::glew::ProgramObject m_shader_program; ///< GLSL shader program.
+    kvs::ProgramObject m_shader_program; ///< GLSL shader program.
     bool m_enable_updating_vbo; ///< flag to enable updating vertex buffer
     bool m_enable_exact_depth_testing; ///< flag to enable exact depth testing
 

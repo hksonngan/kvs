@@ -17,6 +17,7 @@
 #include <kvs/CellByCellParticleGenerator>
 #include <kvs/Type>
 #include <kvs/Exception>
+#include <kvs/ShaderSource>
 #include <cfloat>
 #if defined ( KVS_GLEW_STOCHASTIC_TETRAHEDRA_ENGINE__EMBEDDED_SHADER )
 #include "StochasticRenderingEngine/Shader.h"
@@ -256,8 +257,8 @@ void StochasticUniformGridEngine::initialize_shader()
     const std::string frag_code = "StochasticRenderingEngine/uniform_grid.frag";
 #endif
 
-    kvs::glew::ShaderSource vert( vert_code );
-    kvs::glew::ShaderSource frag( frag_code );
+    kvs::ShaderSource vert( vert_code );
+    kvs::ShaderSource frag( frag_code );
 
     if ( BaseClass::isEnabledShading() )
     {

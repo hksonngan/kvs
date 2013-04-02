@@ -16,6 +16,7 @@
 #include "ProjectedTetrahedraTable.h"
 #include <kvs/TetrahedralCell>
 #include <kvs/Math>
+#include <kvs/TextureBinder>
 #if defined ( KVS_GLEW_STOCHASTIC_TETRAHEDRA_ENGINE__EMBEDDED_SHADER )
 #include "StochasticRenderingEngine/Shader.h"
 #endif
@@ -337,8 +338,8 @@ void StochasticTetrahedraEngine::Renderer::set(
  */
 /*===========================================================================*/
 const bool StochasticTetrahedraEngine::Renderer::download(
-    kvs::glew::VertexBufferObject& vbo,
-    kvs::glew::IndexBufferObject& ibo )
+    kvs::VertexBufferObject& vbo,
+    kvs::IndexBufferObject& ibo )
 {
     if ( m_volume == NULL ) return( false );
 
@@ -588,13 +589,13 @@ void StochasticTetrahedraEngine::clearEnsembleBuffer( void )
  */
 /*===========================================================================*/
 void StochasticTetrahedraEngine::create_shaders(
-    kvs::glew::ProgramObject& program_object,
-    const kvs::glew::ShaderSource& vertex_source,
-    const kvs::glew::ShaderSource& geometry_source,
-    const kvs::glew::ShaderSource& fragment_source )
+    kvs::ProgramObject& program_object,
+    const kvs::ShaderSource& vertex_source,
+    const kvs::ShaderSource& geometry_source,
+    const kvs::ShaderSource& fragment_source )
 {
     // Vertex shader.
-    kvs::glew::VertexShader vertex_shader;
+    kvs::VertexShader vertex_shader;
     if ( !vertex_shader.create( vertex_source ) )
     {
         GLenum error = glGetError();
@@ -604,7 +605,7 @@ void StochasticTetrahedraEngine::create_shaders(
     }
 
     // Geometry shader.
-    kvs::glew::GeometryShader geometry_shader;
+    kvs::GeometryShader geometry_shader;
     if ( !geometry_shader.create( geometry_source ) )
     {
         GLenum error = glGetError();
@@ -614,7 +615,7 @@ void StochasticTetrahedraEngine::create_shaders(
     }
 
     // Fragment shader.
-    kvs::glew::FragmentShader fragment_shader;
+    kvs::FragmentShader fragment_shader;
     if ( !fragment_shader.create( fragment_source ) )
     {
         GLenum error = glGetError();
@@ -851,9 +852,9 @@ void StochasticTetrahedraEngine::initialize_shader( void )
     const std::string frag_code = "StochasticRenderingEngine/tetrahedra.frag";
 #endif
 
-    kvs::glew::ShaderSource vert( vert_code );
-    kvs::glew::ShaderSource geom( geom_code );
-    kvs::glew::ShaderSource frag( frag_code );
+    kvs::ShaderSource vert( vert_code );
+    kvs::ShaderSource geom( geom_code );
+    kvs::ShaderSource frag( frag_code );
 
     if ( BaseClass::isEnabledShading() )
     {
@@ -983,10 +984,7 @@ void StochasticTetrahedraEngine::download_vertex_buffer( void )
 /*===========================================================================*/
 void StochasticTetrahedraEngine::draw_vertex_buffer( const float modelview_matrix[16] )
 {
-    if ( !m_table.isTexture() )
-    {
-        this->create_preintegration_table();
-    }
+    if ( !m_table.isTexture() ) { this->create_preintegration_table(); }
 
     if ( BaseClass::isEnabledShading() ) glEnable( GL_LIGHTING );
     else                                 glDisable( GL_LIGHTING );
@@ -994,23 +992,19 @@ void StochasticTetrahedraEngine::draw_vertex_buffer( const float modelview_matri
     m_vbo.bind();
     m_ibo.bind();
 
-    glActiveTexture(GL_TEXTURE0);     m_table.bind();                   glEnable(GL_TEXTURE_3D);
-    glActiveTexture(GL_TEXTURE1);     m_random_texture.bind();          glEnable(GL_TEXTURE_2D);
-    glActiveTexture(GL_TEXTURE2);     m_decomposition_texture.bind();   glEnable(GL_TEXTURE_2D);
-    glActiveTexture(GL_TEXTURE3);     m_depth_texture.bind();
-    glActiveTexture(GL_TEXTURE0);
+    kvs::TextureBinder table_binder( m_table.texture(), 0 );
+    kvs::TextureBinder random_texture_binder( m_random_texture, 1 );
+    kvs::TextureBinder decomposition_texture_binder( m_decomposition_texture, 2 );
+
+    // the depth texture is only available when the extact depth test is enabled.
+    if ( m_depth_texture.isCreated() ) { kvs::OpenGL::ActivateTextureUnit( 3 ); m_depth_texture.bind(); }
 
     m_shader_program.bind();
-
     this->setup_shader( modelview_matrix );
     m_renderer->draw( m_step );
-
     m_shader_program.unbind();
 
-    glActiveTexture(GL_TEXTURE3);    m_depth_texture.unbind();
-    glActiveTexture(GL_TEXTURE2);    m_decomposition_texture.unbind();  glDisable(GL_TEXTURE_2D);
-    glActiveTexture(GL_TEXTURE1);    m_random_texture.unbind();         glDisable(GL_TEXTURE_2D);
-    glActiveTexture(GL_TEXTURE0);    m_table.unbind();                  glDisable(GL_TEXTURE_3D);
+    if ( m_depth_texture.isCreated() ) { kvs::OpenGL::ActivateTextureUnit( 3 ); m_depth_texture.unbind(); }
 
     m_repetition_count++;
 }

@@ -15,6 +15,7 @@
 #include "StochasticMultivariateTetrahedraEngine.h"
 #include "ProjectedTetrahedraTable.h"
 #include <kvs/TetrahedralCell>
+#include <kvs/ShaderSource>
 #include <kvs/Math>
 #if defined ( KVS_GLEW_STOCHASTIC_MULTIVARIATE_TETRAHEDRA_ENGINE__EMBEDDED_SHADER )
 #include "StochasticRenderingEngine/Shader.h"
@@ -371,9 +372,9 @@ void StochasticMultivariateTetrahedraEngine::initialize_shader( void )
     const std::string frag_code = "StochasticRenderingEngine/multivariate_tetrahedra.frag";
 #endif
 
-    kvs::glew::ShaderSource vert( vert_code );
-    kvs::glew::ShaderSource geom( geom_code );
-    kvs::glew::ShaderSource frag( frag_code );
+    kvs::ShaderSource vert( vert_code );
+    kvs::ShaderSource geom( geom_code );
+    kvs::ShaderSource frag( frag_code );
 
     if ( BaseClass::isEnabledShading() )
     {

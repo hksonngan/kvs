@@ -13,6 +13,7 @@
  */
 /*****************************************************************************/
 #include "StochasticPolygonEngine.h"
+#include <kvs/ShaderSource>
 #if defined ( KVS_GLEW_STOCHASTIC_POLYGON_ENGINE__EMBEDDED_SHADER )
 #include "StochasticRenderingEngine/Shader.h"
 #endif
@@ -195,8 +196,8 @@ void StochasticPolygonEngine::initialize_shader( void )
     const std::string frag_code = "StochasticRenderingEngine/polygon.frag";
 #endif
 
-    kvs::glew::ShaderSource vert( vert_code );
-    kvs::glew::ShaderSource frag( frag_code );
+    kvs::ShaderSource vert( vert_code );
+    kvs::ShaderSource frag( frag_code );
 
     if ( BaseClass::isEnabledShading() )
     {

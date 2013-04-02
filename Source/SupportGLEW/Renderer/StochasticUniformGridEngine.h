@@ -17,8 +17,8 @@
 
 #include <kvs/PolygonObject>
 #include <kvs/StructuredVolumeObject>
-#include <kvs/glew/VertexBufferObject>
-#include <kvs/glew/IndexBufferObject>
+#include <kvs/VertexBufferObject>
+#include <kvs/IndexBufferObject>
 #include <kvs/TransferFunction>
 #include "StochasticRenderingEngine.h"
 #include <kvs/Xorshift128>

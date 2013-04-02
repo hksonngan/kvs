@@ -55,9 +55,9 @@ bool TextureRectangle::isDownloaded() const
 void TextureRectangle::create( const size_t width, const size_t height, const void* data )
 {
     KVS_ASSERT( width > 0 );
-    KVS_ASSERT( width <= kvs::OpenGL::MaxTextureSize() );
+    KVS_ASSERT( static_cast<GLint>( width ) <= kvs::OpenGL::MaxTextureSize() );
     KVS_ASSERT( height > 0 );
-    KVS_ASSERT( height <= kvs::OpenGL::MaxTextureSize() );
+    KVS_ASSERT( static_cast<GLint>( height ) <= kvs::OpenGL::MaxTextureSize() );
 
     BaseClass::generateTexture();
     BaseClass::bind();

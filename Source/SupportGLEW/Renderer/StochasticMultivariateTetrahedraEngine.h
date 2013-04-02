@@ -19,9 +19,9 @@
 #include "StochasticTetrahedraEngine.h"
 #include <kvs/UnstructuredVolumeObject>
 #include <kvs/TransferFunction>
-#include <kvs/glew/GeometryShader>
-#include <kvs/glew/VertexBufferObject>
-#include <kvs/glew/IndexBufferObject>
+#include <kvs/GeometryShader>
+#include <kvs/VertexBufferObject>
+#include <kvs/IndexBufferObject>
 #include <kvs/glew/PreIntegrationTable>
 
 

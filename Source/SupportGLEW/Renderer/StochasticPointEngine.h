@@ -17,7 +17,7 @@
 
 #include <kvs/ClassName>
 #include <kvs/PointObject>
-#include <kvs/glew/VertexBufferObject>
+#include <kvs/VertexBufferObject>
 #include "StochasticRenderingEngine.h"
 
 
@@ -55,7 +55,7 @@ protected:
 protected:
 
     const kvs::PointObject* m_ref_particle; ///< pointer to the point object (reference only)
-    kvs::glew::VertexBufferObject* m_vbo; ///< vertex buffer object (VBO) for the volume
+    kvs::VertexBufferObject* m_vbo; ///< vertex buffer object (VBO) for the volume
     size_t m_loc_identifier; ///< location indectifier of VBO
     Particles* m_particles; ///< pointer to the point set
     Renderer* m_renderer;///< pointer to the renderer for VBO
@@ -189,7 +189,7 @@ public:
         const size_t count,
         const size_t loc_identifier );
 
-    const bool download( kvs::glew::VertexBufferObject& vbo );
+    const bool download( kvs::VertexBufferObject& vbo );
 
     void draw( void ) const;
 

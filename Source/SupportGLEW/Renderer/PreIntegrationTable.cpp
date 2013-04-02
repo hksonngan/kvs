@@ -67,6 +67,11 @@ PreIntegrationTable::~PreIntegrationTable( void )
     if ( m_table ) delete [] m_table;
 }
 
+const kvs::Texture3D& PreIntegrationTable::texture() const
+{
+    return m_table_texture;
+}
+
 const int PreIntegrationTable::sizeDepth( void ) const
 {
     return( m_size_depth );

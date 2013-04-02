@@ -19,9 +19,10 @@
 #include "StochasticTetrahedraEngine.h"
 #include <kvs/UnstructuredVolumeObject>
 #include <kvs/TransferFunction>
-#include <kvs/glew/GeometryShader>
-#include <kvs/glew/VertexBufferObject>
-#include <kvs/glew/IndexBufferObject>
+#include <kvs/ProgramObject>
+#include <kvs/GeometryShader>
+#include <kvs/VertexBufferObject>
+#include <kvs/IndexBufferObject>
 #include <kvs/glew/PreIntegrationTable>
 
 
@@ -54,12 +55,12 @@ protected:
 
     const kvs::UnstructuredVolumeObject* m_ref_volume2; ///< pointer to the 2nd volume data (reference only)
     kvs::TransferFunction m_tfunc2; ///< transfer function for the 2nd volume data
-    kvs::glew::VertexBufferObject m_vbo2; ///< buffer object for storing the indices, coords, values, and normals of the 2nd volume data
-    kvs::glew::IndexBufferObject m_ibo2; ///< buffer object for stroing the connections of the 2nd volume data
+    kvs::VertexBufferObject m_vbo2; ///< buffer object for storing the indices, coords, values, and normals of the 2nd volume data
+    kvs::IndexBufferObject m_ibo2; ///< buffer object for stroing the connections of the 2nd volume data
     size_t m_loc_identifier2; ///< location identifier for the 2nd volume data
     size_t m_loc_values2; ///< location identifier of values for the volume data
     kvs::glew::PreIntegrationTable m_table2; ///< pre-integration table for the 2nd volume data
-    kvs::glew::ProgramObject m_shader_program2; ///< GLSL shader program for the 2nd volume data
+    kvs::ProgramObject m_shader_program2; ///< GLSL shader program for the 2nd volume data
     kvs::Texture2D m_extra_texture;
 
 public:

@@ -24,7 +24,7 @@
 #include <kvs/ClassName>
 #include <kvs/Vector4>
 #include <kvs/TransferFunction>
-#include <kvs/glew/Texture3D>
+#include <kvs/Texture3D>
 
 
 namespace kvs
@@ -44,11 +44,11 @@ class PreIntegrationTable
 
 protected:
 
-    kvs::Vector4f*       m_transfer_function; ///< transfer function data
-    kvs::Vector4f*       m_table;         ///< pre-integration table
-    kvs::glew::Texture3D m_table_texture; ///< pre-integration table texture
-    int                  m_size_scalar;   ///< table size for the scalar axis
-    int                  m_size_depth;    ///< table size for the depth axis
+    kvs::Vector4f* m_transfer_function; ///< transfer function data
+    kvs::Vector4f* m_table; ///< pre-integration table
+    kvs::Texture3D m_table_texture; ///< pre-integration table texture
+    int m_size_scalar; ///< table size for the scalar axis
+    int m_size_depth; ///< table size for the depth axis
 
 public:
 
@@ -59,6 +59,8 @@ public:
     ~PreIntegrationTable( void );
 
 public:
+
+    const kvs::Texture3D& texture() const;
 
     const int sizeDepth( void ) const;
 

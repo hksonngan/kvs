@@ -56,11 +56,11 @@ bool Texture3D::isDownloaded() const
 void Texture3D::create( const size_t width, const size_t height, const size_t depth, const void* data )
 {
     KVS_ASSERT( width > 0 );
-    KVS_ASSERT( width <= kvs::OpenGL::MaxTextureSize() );
+    KVS_ASSERT( static_cast<GLint>( width ) <= kvs::OpenGL::MaxTextureSize() );
     KVS_ASSERT( height > 0 );
-    KVS_ASSERT( height <= kvs::OpenGL::MaxTextureSize() );
+    KVS_ASSERT( static_cast<GLint>( height ) <= kvs::OpenGL::MaxTextureSize() );
     KVS_ASSERT( depth > 0 );
-    KVS_ASSERT( depth <= kvs::OpenGL::MaxTextureSize() );
+    KVS_ASSERT( static_cast<GLint>( depth ) <= kvs::OpenGL::MaxTextureSize() );
 
     BaseClass::generateTexture();
     BaseClass::bind();
