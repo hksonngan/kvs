@@ -255,6 +255,7 @@ Visualization/Renderer/HAVSVolumeRenderer
 Visualization/Renderer/ImageRenderer
 Visualization/Renderer/LineRenderer
 Visualization/Renderer/ParallelCoordinatesRenderer
+Visualization/Renderer/ParticleBasedRenderer
 Visualization/Renderer/ParticleBuffer
 Visualization/Renderer/ParticleBufferAccumulator
 Visualization/Renderer/ParticleBufferCompositor

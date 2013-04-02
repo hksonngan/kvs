@@ -15,12 +15,12 @@
 #ifndef KVS__PARTICLE_VOLUME_RENDERER_H_INCLUDE
 #define KVS__PARTICLE_VOLUME_RENDERER_H_INCLUDE
 
-#include "ParticleBasedRendererCPU.h"
+#include "ParticleBasedRenderer.h"
 
 namespace kvs
 {
 
-typedef cpu::ParticleBasedRenderer ParticleVolumeRenderer;
+typedef ParticleBasedRenderer ParticleVolumeRenderer;
 
 } // end of namespace kvs
 

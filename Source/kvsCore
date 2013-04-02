@@ -255,6 +255,7 @@
 #include <Core/Visualization/Renderer/ImageRenderer.h>
 #include <Core/Visualization/Renderer/LineRenderer.h>
 #include <Core/Visualization/Renderer/ParallelCoordinatesRenderer.h>
+#include <Core/Visualization/Renderer/ParticleBasedRenderer.h>
 #include <Core/Visualization/Renderer/ParticleBuffer.h>
 #include <Core/Visualization/Renderer/ParticleBufferAccumulator.h>
 #include <Core/Visualization/Renderer/ParticleBufferCompositor.h>
