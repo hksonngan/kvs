@@ -40,7 +40,7 @@
 #include <kvs/IndexBufferObject>
 #include <kvs/ProgramObject>
 #include <kvs/FrameBufferObject>
-#include <kvs/glew/PreIntegrationTable>
+#include <kvs/PreIntegrationTable>
 
 
 namespace kvs
@@ -71,7 +71,7 @@ private:
     // Reference data (NOTE: not allocated in thie class).
     const kvs::UnstructuredVolumeObject* m_ref_volume; ///< pointer to the volume data
 
-    kvs::glew::PreIntegrationTable m_table; ///< pre-integration table
+    kvs::PreIntegrationTable m_table; ///< pre-integration table
     size_t m_k_size; ///< k-buffer size (2 or 6)
     Meshes* m_meshes; ///< tetrahedral meshes for HAVS
     bool m_enable_vbo; ///< flag for checking if VBO is enabled

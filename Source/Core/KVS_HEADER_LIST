@@ -249,6 +249,7 @@ Visualization/Pipeline/VisualizationPipeline
 Visualization/Renderer/ArrowGlyph
 Visualization/Renderer/Bounds
 Visualization/Renderer/DiamondGlyph
+Visualization/Renderer/EnsembleAverageBuffer
 Visualization/Renderer/GlyphBase
 Visualization/Renderer/HAVSVolumeRenderer
 Visualization/Renderer/ImageRenderer
@@ -260,6 +261,7 @@ Visualization/Renderer/ParticleBufferCompositor
 Visualization/Renderer/ParticleVolumeRenderer
 Visualization/Renderer/PointRenderer
 Visualization/Renderer/PolygonRenderer
+Visualization/Renderer/PreIntegrationTable
 Visualization/Renderer/Ray
 Visualization/Renderer/RayCastingRenderer
 Visualization/Renderer/RendererBase

@@ -249,6 +249,7 @@
 #include <Core/Visualization/Renderer/ArrowGlyph.h>
 #include <Core/Visualization/Renderer/Bounds.h>
 #include <Core/Visualization/Renderer/DiamondGlyph.h>
+#include <Core/Visualization/Renderer/EnsembleAverageBuffer.h>
 #include <Core/Visualization/Renderer/GlyphBase.h>
 #include <Core/Visualization/Renderer/HAVSVolumeRenderer.h>
 #include <Core/Visualization/Renderer/ImageRenderer.h>
@@ -260,6 +261,7 @@
 #include <Core/Visualization/Renderer/ParticleVolumeRenderer.h>
 #include <Core/Visualization/Renderer/PointRenderer.h>
 #include <Core/Visualization/Renderer/PolygonRenderer.h>
+#include <Core/Visualization/Renderer/PreIntegrationTable.h>
 #include <Core/Visualization/Renderer/Ray.h>
 #include <Core/Visualization/Renderer/RayCastingRenderer.h>
 #include <Core/Visualization/Renderer/RendererBase.h>

@@ -298,6 +298,7 @@ $(OUTDIR)\.\Visualization\Pipeline\VisualizationPipeline.obj \
 $(OUTDIR)\.\Visualization\Renderer\ArrowGlyph.obj \
 $(OUTDIR)\.\Visualization\Renderer\Bounds.obj \
 $(OUTDIR)\.\Visualization\Renderer\DiamondGlyph.obj \
+$(OUTDIR)\.\Visualization\Renderer\EnsembleAverageBuffer.obj \
 $(OUTDIR)\.\Visualization\Renderer\GlyphBase.obj \
 $(OUTDIR)\.\Visualization\Renderer\HAVSVolumeRenderer.obj \
 $(OUTDIR)\.\Visualization\Renderer\ImageRenderer.obj \
@@ -309,6 +310,7 @@ $(OUTDIR)\.\Visualization\Renderer\ParticleBufferAccumulator.obj \
 $(OUTDIR)\.\Visualization\Renderer\ParticleBufferCompositor.obj \
 $(OUTDIR)\.\Visualization\Renderer\PointRenderer.obj \
 $(OUTDIR)\.\Visualization\Renderer\PolygonRenderer.obj \
+$(OUTDIR)\.\Visualization\Renderer\PreIntegrationTable.obj \
 $(OUTDIR)\.\Visualization\Renderer\Ray.obj \
 $(OUTDIR)\.\Visualization\Renderer\RayCastingRenderer.obj \
 $(OUTDIR)\.\Visualization\Renderer\RendererBase.obj \

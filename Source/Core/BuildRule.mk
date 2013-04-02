@@ -298,6 +298,7 @@ $(OUTDIR)/./Visualization/Pipeline/VisualizationPipeline.o \
 $(OUTDIR)/./Visualization/Renderer/ArrowGlyph.o \
 $(OUTDIR)/./Visualization/Renderer/Bounds.o \
 $(OUTDIR)/./Visualization/Renderer/DiamondGlyph.o \
+$(OUTDIR)/./Visualization/Renderer/EnsembleAverageBuffer.o \
 $(OUTDIR)/./Visualization/Renderer/GlyphBase.o \
 $(OUTDIR)/./Visualization/Renderer/HAVSVolumeRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/ImageRenderer.o \
@@ -309,6 +310,7 @@ $(OUTDIR)/./Visualization/Renderer/ParticleBufferAccumulator.o \
 $(OUTDIR)/./Visualization/Renderer/ParticleBufferCompositor.o \
 $(OUTDIR)/./Visualization/Renderer/PointRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/PolygonRenderer.o \
+$(OUTDIR)/./Visualization/Renderer/PreIntegrationTable.o \
 $(OUTDIR)/./Visualization/Renderer/Ray.o \
 $(OUTDIR)/./Visualization/Renderer/RayCastingRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/RendererBase.o \

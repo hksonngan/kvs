@@ -464,7 +464,6 @@ void HAVSVolumeRenderer::draw_initialization_pass()
         glVertex2f( 0,                  BaseClass::m_height );
         glEnd();
     }
-
     glPopMatrix(); // pop PROJECTION matrix
     glMatrixMode( GL_MODELVIEW );
     glPopMatrix(); // pop MODELVIEW matrix
@@ -478,17 +477,9 @@ void HAVSVolumeRenderer::draw_geometry_pass()
     m_shader_kbuffer.bind();
 
     const float* mat = m_modelview_matrix;
-//    const float s = std::sqrt( mat[0]*mat[0] + mat[1]*mat[1] + mat[2]*mat[2] );
-
-//    const float table_size = 128.0f; // m_table.sizeDepth()
     const float table_size = m_table.sizeDepth();
     const float edge_length = m_meshes->depthScale();
-//    const float edge_length = 1.0f;
-//    const float bb_scale = 1.0f / ( m_meshes->diagonal() * s );
-//    const float bb_scale = 1.0f / m_meshes->diagonal();
-//    const float bb_scale = m_meshes->diagonal();
     const float bb_scale = std::sqrt( mat[0]*mat[0] + mat[1]*mat[1] + mat[2]*mat[2] );
-//    const float bb_scale = 1;
 
     const float scale[4] = {
         1.0f / static_cast<float>(BaseClass::m_width),
@@ -497,7 +488,6 @@ void HAVSVolumeRenderer::draw_geometry_pass()
         1.0f / ( 2.0f * table_size )
     };
 
-//    m_shader_kbuffer.setUniformValuefv( "scale", scale, 4 );
     glUniform4fv( m_shader_kbuffer.uniformLocation("scale"), 1, scale );
     m_shader_kbuffer.setUniformValuei( "lut", m_ntargets );
     m_shader_kbuffer.setUniformValuei( "framebuffer", 0 );
