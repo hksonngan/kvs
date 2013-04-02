@@ -299,6 +299,7 @@ $(OUTDIR)\.\Visualization\Renderer\ArrowGlyph.obj \
 $(OUTDIR)\.\Visualization\Renderer\Bounds.obj \
 $(OUTDIR)\.\Visualization\Renderer\DiamondGlyph.obj \
 $(OUTDIR)\.\Visualization\Renderer\GlyphBase.obj \
+$(OUTDIR)\.\Visualization\Renderer\HAVSVolumeRenderer.obj \
 $(OUTDIR)\.\Visualization\Renderer\ImageRenderer.obj \
 $(OUTDIR)\.\Visualization\Renderer\LineRenderer.obj \
 $(OUTDIR)\.\Visualization\Renderer\ParallelCoordinatesRenderer.obj \
@@ -601,5 +602,11 @@ install::
 	$(INSTALL) .\Visualization\Pipeline\*.h $(INSTALL_DIR)\include\Core\.\Visualization\Pipeline
 	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\Visualization\Renderer $(MKDIR) $(INSTALL_DIR)\include\Core\.\Visualization\Renderer
 	$(INSTALL) .\Visualization\Renderer\*.h $(INSTALL_DIR)\include\Core\.\Visualization\Renderer
+	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\Visualization\Shader $(MKDIR) $(INSTALL_DIR)\include\Core\.\Visualization\Shader
+	$(INSTALL) .\Visualization\Shader\*.h $(INSTALL_DIR)\include\Core\.\Visualization\Shader
 	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\Visualization\Viewer $(MKDIR) $(INSTALL_DIR)\include\Core\.\Visualization\Viewer
 	$(INSTALL) .\Visualization\Viewer\*.h $(INSTALL_DIR)\include\Core\.\Visualization\Viewer
+	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\Visualization\Shader $(MKDIR) $(INSTALL_DIR)\include\Core\.\Visualization\Shader
+	$(INSTALL) .\Visualization\Shader\*.vert $(INSTALL_DIR)\include\Core\.\Visualization\Shader
+	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\Visualization\Shader $(MKDIR) $(INSTALL_DIR)\include\Core\.\Visualization\Shader
+	$(INSTALL) .\Visualization\Shader\*.frag $(INSTALL_DIR)\include\Core\.\Visualization\Shader

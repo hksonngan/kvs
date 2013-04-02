@@ -14,21 +14,106 @@
 /*****************************************************************************/
 #include "ShaderSource.h"
 #include <kvs/File>
+#include <kvs/Directory>
 #include <kvs/Message>
 #include <sstream>
 #include <fstream>
+#include <cstdlib>
+#include <vector>
 
+
+namespace
+{
+
+class SearchPath
+{
+private:
+
+    std::vector<std::string> m_search_path_list;
+
+public:
+
+    SearchPath()
+    {
+        // Add "$KVS_DIR/include/Core/Visualization/Shader".
+        const std::string sep = kvs::File::Separator();
+        const char* kvs_dir = std::getenv("KVS_DIR");
+        if ( kvs_dir != NULL )
+        {
+            std::string path = std::string( kvs_dir ) + sep;
+            path += "include" + sep;
+            path += "Core" + sep;
+            path += "Visualization" + sep;
+            path += "Shader" + sep;
+            m_search_path_list.push_back( path );
+        }
+
+        // Add current directory.
+        m_search_path_list.push_back("." + sep);
+    }
+
+    void add( const std::string& path )
+    {
+        m_search_path_list.push_back( path );
+    }
+
+    void del()
+    {
+        m_search_path_list.clear();
+    }
+
+    std::string find( const std::string& source )
+    {
+        // Search the source file from the m_search_path_list.
+        std::vector<std::string>::reverse_iterator path = m_search_path_list.rbegin();
+        std::vector<std::string>::reverse_iterator last = m_search_path_list.rend();
+        while ( path != last )
+        {
+            const std::string filename = *path + kvs::File::Separator() + source;
+            const kvs::File file( filename );
+            if ( file.exists() ) { return filename; }
+            path++;
+        }
+
+        return "";
+    }
+};
+
+SearchPath search_path;
+
+}
 
 namespace kvs
 {
 
+
+void ShaderSource::AddSearchPath( const std::string& path )
+{
+    ::search_path.add( path );
+}
+
+void ShaderSource::RemoveSearchPath()
+{
+    ::search_path.del();
+}
+
 ShaderSource::ShaderSource( const std::string& source )
 {
     const kvs::File file( source );
-    if ( file.isExisted() )
+    const std::string extension = file.extension();
+    if ( extension == "vert" || extension == "geom" || extension == "frag" )
     {
-        const std::string filename( source );
-        this->read( filename );
+        if ( file.exists() )
+        {
+            const std::string filename( source );
+            this->read( filename );
+        }
+        else
+        {
+            const std::string filename = ::search_path.find( source );
+            if ( filename.empty() ) { kvsMessageError( "Cannot find '%s'.", source.c_str() ); }
+            else { this->read( filename ); }
+        }
     }
     else
     {

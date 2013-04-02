@@ -82,3 +82,29 @@ install::
 	$(INSTALL) .\Renderer\StochasticRenderingEngine\*.h $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\StochasticRenderingEngine
 	IF NOT EXIST $(INSTALL_DIR)\include\SupportGLEW\.\Viewer $(MKDIR) $(INSTALL_DIR)\include\SupportGLEW\.\Viewer
 	$(INSTALL) .\Viewer\*.h $(INSTALL_DIR)\include\SupportGLEW\.\Viewer
+	IF NOT EXIST $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\HAVSVolumeRenderer $(MKDIR) $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\HAVSVolumeRenderer
+	$(INSTALL) .\Renderer\HAVSVolumeRenderer\*.vert $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\HAVSVolumeRenderer
+	IF NOT EXIST $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\ParticleVolumeRenderer $(MKDIR) $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\ParticleVolumeRenderer
+	$(INSTALL) .\Renderer\ParticleVolumeRenderer\*.vert $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\ParticleVolumeRenderer
+	IF NOT EXIST $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\PointRenderer $(MKDIR) $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\PointRenderer
+	$(INSTALL) .\Renderer\PointRenderer\*.vert $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\PointRenderer
+	IF NOT EXIST $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\PolygonRenderer $(MKDIR) $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\PolygonRenderer
+	$(INSTALL) .\Renderer\PolygonRenderer\*.vert $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\PolygonRenderer
+	IF NOT EXIST $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\RayCastingRenderer $(MKDIR) $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\RayCastingRenderer
+	$(INSTALL) .\Renderer\RayCastingRenderer\*.vert $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\RayCastingRenderer
+	IF NOT EXIST $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\StochasticRenderingEngine $(MKDIR) $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\StochasticRenderingEngine
+	$(INSTALL) .\Renderer\StochasticRenderingEngine\*.vert $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\StochasticRenderingEngine
+	IF NOT EXIST $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\StochasticRenderingEngine $(MKDIR) $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\StochasticRenderingEngine
+	$(INSTALL) .\Renderer\StochasticRenderingEngine\*.geom $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\StochasticRenderingEngine
+	IF NOT EXIST $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\HAVSVolumeRenderer $(MKDIR) $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\HAVSVolumeRenderer
+	$(INSTALL) .\Renderer\HAVSVolumeRenderer\*.frag $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\HAVSVolumeRenderer
+	IF NOT EXIST $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\ParticleVolumeRenderer $(MKDIR) $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\ParticleVolumeRenderer
+	$(INSTALL) .\Renderer\ParticleVolumeRenderer\*.frag $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\ParticleVolumeRenderer
+	IF NOT EXIST $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\PointRenderer $(MKDIR) $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\PointRenderer
+	$(INSTALL) .\Renderer\PointRenderer\*.frag $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\PointRenderer
+	IF NOT EXIST $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\PolygonRenderer $(MKDIR) $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\PolygonRenderer
+	$(INSTALL) .\Renderer\PolygonRenderer\*.frag $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\PolygonRenderer
+	IF NOT EXIST $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\RayCastingRenderer $(MKDIR) $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\RayCastingRenderer
+	$(INSTALL) .\Renderer\RayCastingRenderer\*.frag $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\RayCastingRenderer
+	IF NOT EXIST $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\StochasticRenderingEngine $(MKDIR) $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\StochasticRenderingEngine
+	$(INSTALL) .\Renderer\StochasticRenderingEngine\*.frag $(INSTALL_DIR)\include\SupportGLEW\.\Renderer\StochasticRenderingEngine

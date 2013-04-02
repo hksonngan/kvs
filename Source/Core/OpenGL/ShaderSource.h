@@ -28,9 +28,14 @@ namespace kvs
 /*===========================================================================*/
 class ShaderSource
 {
-protected:
+private:
 
     std::string m_code; ///< shader source code
+
+public:
+
+    static void AddSearchPath( const std::string& path );
+    static void RemoveSearchPath();
 
 public:
 

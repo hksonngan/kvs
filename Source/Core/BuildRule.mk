@@ -299,6 +299,7 @@ $(OUTDIR)/./Visualization/Renderer/ArrowGlyph.o \
 $(OUTDIR)/./Visualization/Renderer/Bounds.o \
 $(OUTDIR)/./Visualization/Renderer/DiamondGlyph.o \
 $(OUTDIR)/./Visualization/Renderer/GlyphBase.o \
+$(OUTDIR)/./Visualization/Renderer/HAVSVolumeRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/ImageRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/LineRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/ParallelCoordinatesRenderer.o \
@@ -535,5 +536,11 @@ install::
 	$(INSTALL) ./Visualization/Pipeline/*.h $(INSTALL_DIR)/include/Core/./Visualization/Pipeline
 	$(MKDIR) $(INSTALL_DIR)/include/Core/./Visualization/Renderer
 	$(INSTALL) ./Visualization/Renderer/*.h $(INSTALL_DIR)/include/Core/./Visualization/Renderer
+	$(MKDIR) $(INSTALL_DIR)/include/Core/./Visualization/Shader
+	$(INSTALL) ./Visualization/Shader/*.h $(INSTALL_DIR)/include/Core/./Visualization/Shader
 	$(MKDIR) $(INSTALL_DIR)/include/Core/./Visualization/Viewer
 	$(INSTALL) ./Visualization/Viewer/*.h $(INSTALL_DIR)/include/Core/./Visualization/Viewer
+	$(MKDIR) $(INSTALL_DIR)/include/Core/./Visualization/Shader
+	$(INSTALL) ./Visualization/Shader/*.vert $(INSTALL_DIR)/include/Core/./Visualization/Shader
+	$(MKDIR) $(INSTALL_DIR)/include/Core/./Visualization/Shader
+	$(INSTALL) ./Visualization/Shader/*.frag $(INSTALL_DIR)/include/Core/./Visualization/Shader
