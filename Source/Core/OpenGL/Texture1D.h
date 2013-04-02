@@ -42,9 +42,9 @@ public:
 
     bool isDownloaded() const;
 
-    void create( const size_t width );
+    void create( const size_t width, const void* data = NULL );
     void release();
-    void download( const size_t width, const void* pixels, const size_t xoffset = 0 );
+    void download( const size_t width, const void* data, const size_t offset = 0 );
 };
 
 } // end of namespace kvs

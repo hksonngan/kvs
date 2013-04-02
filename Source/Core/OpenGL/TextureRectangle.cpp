@@ -52,7 +52,7 @@ bool TextureRectangle::isDownloaded() const
  *  Create the texture.
  */
 /*==========================================================================*/
-void TextureRectangle::create( const size_t width, const size_t height )
+void TextureRectangle::create( const size_t width, const size_t height, const void* data )
 {
     KVS_ASSERT( width > 0 );
     KVS_ASSERT( width <= kvs::OpenGL::MaxTextureSize() );
@@ -65,7 +65,8 @@ void TextureRectangle::create( const size_t width, const size_t height )
     BaseClass::setParameter( GL_TEXTURE_MIN_FILTER, BaseClass::minFilter() );
     BaseClass::setParameter( GL_TEXTURE_WRAP_S, BaseClass::wrapS() );
     BaseClass::setParameter( GL_TEXTURE_WRAP_T, BaseClass::wrapT() );
-    this->download( width, height, NULL );
+    BaseClass::setSize( width, height );
+    this->download( width, height, data );
 }
 
 /*==========================================================================*/
@@ -92,12 +93,10 @@ void TextureRectangle::release()
 void TextureRectangle::download(
     const size_t width,
     const size_t height,
-    const void*  pixels,
+    const void*  data,
     const size_t xoffset,
     const size_t yoffset )
 {
-    BaseClass::setSize( width, height );
-
     const GLint swap = kvs::OpenGL::Integer( GL_UNPACK_SWAP_BYTES );
     const GLint alignment = kvs::OpenGL::Integer( GL_UNPACK_ALIGNMENT );
     BaseClass::setPixelStorageMode( GL_UNPACK_SWAP_BYTES, swap ? GL_TRUE : GL_FALSE );
@@ -105,12 +104,12 @@ void TextureRectangle::download(
 
     if ( !m_is_downloaded )
     {
-        BaseClass::setImageRectangle( width, height, pixels );
+        BaseClass::setImageRectangle( width, height, data );
         m_is_downloaded = true;
     }
     else
     {
-        BaseClass::setSubImageRectangle( width, height, pixels, xoffset, yoffset );
+        BaseClass::setSubImageRectangle( width, height, data, xoffset, yoffset );
     }
 
     BaseClass::setPixelStorageMode( GL_UNPACK_SWAP_BYTES, swap );

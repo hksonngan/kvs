@@ -141,8 +141,8 @@ void OpacityMapPalette::paintEvent( void )
     BaseClass::begin_draw();
     BaseClass::draw_background();
 
-    if ( !m_texture.isTexture() ) this->initialize_texture( m_opacity_map );
-    if ( !m_checkerboard.isTexture() ) this->initialize_checkerboard();
+    if ( !m_texture.isValid() ) this->initialize_texture( m_opacity_map );
+    if ( !m_checkerboard.isValid() ) this->initialize_checkerboard();
 
     // Draw the caption.
     {
@@ -277,8 +277,7 @@ void OpacityMapPalette::initialize_texture( const kvs::OpacityMap& opacity_map )
     m_texture.setMinFilter( GL_LINEAR );
     m_texture.setMagFilter( GL_LINEAR );
     m_texture.setPixelFormat( GL_ALPHA, GL_ALPHA, GL_FLOAT );
-    m_texture.create( width );
-    m_texture.download( width, data );
+    m_texture.create( width, data );
     m_texture.unbind();
 }
 
@@ -316,8 +315,7 @@ void OpacityMapPalette::initialize_checkerboard( void )
     m_checkerboard.setMagFilter( GL_NEAREST );
     m_checkerboard.setWrapS( GL_REPEAT );
     m_checkerboard.setWrapT( GL_REPEAT );
-    m_checkerboard.create( width, height );
-    m_checkerboard.download( width, height, data );
+    m_checkerboard.create( width, height, data );
     m_checkerboard.unbind();
 
     delete [] data;

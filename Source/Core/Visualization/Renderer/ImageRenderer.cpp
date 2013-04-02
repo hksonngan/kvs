@@ -156,9 +156,8 @@ void ImageRenderer::create_texture( const kvs::ImageObject* image )
         kvsMessageError("Unknown pixel color type.");
     }
 
-    m_texture.create( image->width(), image->height() );
     glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE );
-    m_texture.download( image->width(), image->height(), image->pixels().data() );
+    m_texture.create( image->width(), image->height(), image->pixels().data() );
 }
 
 /*==========================================================================*/

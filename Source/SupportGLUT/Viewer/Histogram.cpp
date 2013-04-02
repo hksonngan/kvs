@@ -244,7 +244,7 @@ void Histogram::paintEvent( void )
     BaseClass::begin_draw();
     BaseClass::draw_background();
 
-    if ( !m_texture.isTexture() ) this->create_texture();
+    if ( !m_texture.isValid() ) this->create_texture();
 
     // Draw the caption.
     {
@@ -380,7 +380,7 @@ void Histogram::draw_palette( void )
     glEnable( GL_BLEND );
     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
-    if ( m_texture.isTexture() )
+    if ( m_texture.isValid() )
     {
         m_texture.bind();
         glBegin( GL_QUADS );
@@ -517,8 +517,7 @@ void Histogram::create_texture( void )
 //    m_texture.setMagFilter( GL_NEAREST );
     m_texture.setMinFilter( GL_LINEAR );
     m_texture.setMagFilter( GL_LINEAR );
-    m_texture.create( width, height );
-    m_texture.download( width, height, this->get_histogram_image().data() );
+    m_texture.create( width, height, this->get_histogram_image().data() );
     m_texture.unbind();
 }
 

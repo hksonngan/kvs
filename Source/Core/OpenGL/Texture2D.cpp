@@ -53,7 +53,7 @@ bool Texture2D::isDownloaded() const
  *  Create the texture.
  */
 /*==========================================================================*/
-void Texture2D::create( const size_t width, const size_t height )
+void Texture2D::create( const size_t width, const size_t height, const void* data )
 {
     KVS_ASSERT( width > 0 );
     KVS_ASSERT( width <= kvs::OpenGL::MaxTextureSize() );
@@ -66,7 +66,8 @@ void Texture2D::create( const size_t width, const size_t height )
     BaseClass::setParameter( GL_TEXTURE_MIN_FILTER, BaseClass::minFilter() );
     BaseClass::setParameter( GL_TEXTURE_WRAP_S, BaseClass::wrapS() );
     BaseClass::setParameter( GL_TEXTURE_WRAP_T, BaseClass::wrapT() );
-    this->download( width, height, NULL );
+    BaseClass::setSize( width, height );
+    this->download( width, height, data );
 }
 
 /*==========================================================================*/
@@ -85,7 +86,7 @@ void Texture2D::release()
  *  Download the texture data to the GPU.
  *  @param width [in] texture width
  *  @param height [in] texture height
- *  @param pixels [in] pointer to the pixel data
+ *  @param data [in] pointer to the pixel data
  *  @param xoffset [in] texel offset in the x direction within the pixel data
  *  @param yoffset [in] texel offset in the y direction within the pixel data
  */
@@ -93,12 +94,10 @@ void Texture2D::release()
 void Texture2D::download(
     const size_t width,
     const size_t height,
-    const void* pixels,
+    const void* data,
     const size_t xoffset,
     const size_t yoffset )
 {
-    BaseClass::setSize( width, height );
-
     const GLint swap = kvs::OpenGL::Integer( GL_UNPACK_SWAP_BYTES );
     const GLint alignment = kvs::OpenGL::Integer( GL_UNPACK_ALIGNMENT );
     BaseClass::setPixelStorageMode( GL_UNPACK_SWAP_BYTES, swap ? GL_TRUE : GL_FALSE );
@@ -106,12 +105,12 @@ void Texture2D::download(
 
     if ( !m_is_downloaded )
     {
-        BaseClass::setImage2D( width, height, pixels );
+        BaseClass::setImage2D( width, height, data );
         m_is_downloaded = true;
     }
     else
     {
-        BaseClass::setSubImage2D( width, height, pixels, xoffset, yoffset );
+        BaseClass::setSubImage2D( width, height, data, xoffset, yoffset );
     }
 
     BaseClass::setPixelStorageMode( GL_UNPACK_SWAP_BYTES, swap );

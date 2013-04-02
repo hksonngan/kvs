@@ -70,7 +70,7 @@ public:
     void setUsage( const GLenum usage );
     void setSize( const size_t size );
 
-    void create( const size_t size );
+    void create( const size_t size, const void* data = NULL );
     void release();
     void bind() const;
     void unbind() const;
@@ -78,7 +78,7 @@ public:
     bool isValid() const;
     bool isBinding() const;
 
-    void download( const size_t size, const void* buffer, const size_t offset = 0 );
+    void download( const size_t size, const void* data, const size_t offset = 0 );
     void* map( const GLenum access_type = kvs::BufferObject::ReadWrite );
     void unmap();
 

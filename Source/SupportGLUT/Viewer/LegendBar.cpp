@@ -423,8 +423,8 @@ void LegendBar::create_texture( void )
     m_texture.setPixelFormat( nchannels, sizeof( kvs::UInt8 ) );
     m_texture.setMinFilter( GL_NEAREST );
     m_texture.setMagFilter( GL_NEAREST );
-    m_texture.create( width, height );
-    m_texture.download( width, height, data );
+    m_texture.create( width, height, data );
+    m_texture.unbind();
 }
 
 /*===========================================================================*/

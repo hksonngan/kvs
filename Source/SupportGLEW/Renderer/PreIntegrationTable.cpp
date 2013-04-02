@@ -273,7 +273,7 @@ void PreIntegrationTable::release( void )
 
 const bool PreIntegrationTable::isTexture( void )
 {
-    return( m_table_texture.isTexture() );
+    return( m_table_texture.isValid() );
 }
 
 const bool PreIntegrationTable::isDownloaded( void )

@@ -89,13 +89,15 @@ void BufferObject::setSize( const size_t size )
 /**
  *  Create buffer.
  *  @param  size [in] buffer size
+ *  @param  data [in] pointer to downloaded buffer data
  */
 /*===========================================================================*/
-void BufferObject::create( const size_t size )
+void BufferObject::create( const size_t size, const void* data )
 {
     this->generateBuffer();
     this->bind();
-    this->download( size, NULL );
+    this->setSize( size );
+    this->download( size, data );
 }
 
 /*===========================================================================*/
@@ -155,22 +157,20 @@ bool BufferObject::isBinding() const
 /**
  *  Download buffer data from CPU to GPU.
  *  @param  size [in] buffer data size
- *  @param  buffer [in] pointer to downloaded buffer data
+ *  @param  data [in] pointer to downloaded buffer data
  *  @param  offset [in] texel offset within the existing buffer data array
  */
 /*===========================================================================*/
-void BufferObject::download( const size_t size, const void* buffer, const size_t offset )
+void BufferObject::download( const size_t size, const void* data, const size_t offset )
 {
-    this->setSize( size );
-
     if ( !m_is_downloaded )
     {
-        this->setBufferData( size, buffer );
+        this->setBufferData( size, data );
         m_is_downloaded = true;
     }
     else
     {
-        this->setBufferSubData( size, buffer, offset );
+        this->setBufferSubData( size, data, offset );
     }
 }
 

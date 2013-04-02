@@ -53,7 +53,7 @@ bool Texture3D::isDownloaded() const
  *  Create the texture.
  */
 /*==========================================================================*/
-void Texture3D::create( const size_t width, const size_t height, const size_t depth )
+void Texture3D::create( const size_t width, const size_t height, const size_t depth, const void* data )
 {
     KVS_ASSERT( width > 0 );
     KVS_ASSERT( width <= kvs::OpenGL::MaxTextureSize() );
@@ -69,7 +69,8 @@ void Texture3D::create( const size_t width, const size_t height, const size_t de
     BaseClass::setParameter( GL_TEXTURE_WRAP_S, BaseClass::wrapS() );
     BaseClass::setParameter( GL_TEXTURE_WRAP_T, BaseClass::wrapT() );
     BaseClass::setParameter( GL_TEXTURE_WRAP_R, BaseClass::wrapR() );
-    this->download( width, height, depth, NULL );
+    BaseClass::setSize( width, height, depth );
+    this->download( width, height, depth, data );
 }
 
 /*==========================================================================*/
@@ -89,7 +90,7 @@ void Texture3D::release()
  *  @param width  [in] texture width
  *  @param height [in] texture height
  *  @param depth  [in] texture depth
- *  @param pixels [in] pointer to the pixel data
+ *  @param data [in] pointer to the pixel data
  *  @param xoffset [in] texel offset in the x direction within the pixel data
  *  @param yoffset [in] texel offset in the y direction within the pixel data
  *  @param zoffset [in] texel offset in the z direction within the pixel data
@@ -99,13 +100,11 @@ void Texture3D::download(
     const size_t width,
     const size_t height,
     const size_t depth,
-    const void*  pixels,
+    const void*  data,
     const size_t xoffset,
     const size_t yoffset,
     const size_t zoffset )
 {
-    BaseClass::setSize( width, height, depth );
-
     const GLint swap = kvs::OpenGL::Integer( GL_UNPACK_SWAP_BYTES );
     const GLint alignment = kvs::OpenGL::Integer( GL_UNPACK_ALIGNMENT );
     BaseClass::setPixelStorageMode( GL_UNPACK_SWAP_BYTES, swap ? GL_TRUE : GL_FALSE );
@@ -113,12 +112,12 @@ void Texture3D::download(
 
     if ( !m_is_downloaded )
     {
-        BaseClass::setImage3D( width, height, depth, pixels );
+        BaseClass::setImage3D( width, height, depth, data );
         m_is_downloaded = true;
     }
     else
     {
-        BaseClass::setSubImage3D( width, height, depth, pixels, xoffset, yoffset, zoffset );
+        BaseClass::setSubImage3D( width, height, depth, data, xoffset, yoffset, zoffset );
     }
 
     BaseClass::setPixelStorageMode( GL_UNPACK_SWAP_BYTES, swap );

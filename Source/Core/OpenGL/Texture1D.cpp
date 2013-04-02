@@ -53,7 +53,7 @@ bool Texture1D::isDownloaded() const
  *  Create the texture.
  */
 /*==========================================================================*/
-void Texture1D::create( const size_t width )
+void Texture1D::create( const size_t width, const void* data )
 {
     KVS_ASSERT( width > 0 );
     KVS_ASSERT( width <= kvs::OpenGL::MaxTextureSize() );
@@ -63,7 +63,8 @@ void Texture1D::create( const size_t width )
     BaseClass::setParameter( GL_TEXTURE_MAG_FILTER, BaseClass::magFilter() );
     BaseClass::setParameter( GL_TEXTURE_MIN_FILTER, BaseClass::minFilter() );
     BaseClass::setParameter( GL_TEXTURE_WRAP_S, BaseClass::wrapS() );
-    this->download( width, NULL );
+    BaseClass::setSize( width );
+    this->download( width, data );
 }
 
 /*==========================================================================*/
@@ -81,17 +82,15 @@ void Texture1D::release()
 /**
  *  Download the texture data to the GPU.
  *  @param width [in] texture width
- *  @param pixels [in] pointer to the pixel data
+ *  @param data [in] pointer to the pixel data
  *  @param xoffset [in] texel offset in the x direction within the pixel data
  */
 /*==========================================================================*/
 void Texture1D::download(
     const size_t width,
-    const void* pixels,
-    const size_t xoffset )
+    const void* data,
+    const size_t offset )
 {
-    BaseClass::setSize( width );
-
     const GLint swap = kvs::OpenGL::Integer( GL_UNPACK_SWAP_BYTES );
     const GLint alignment = kvs::OpenGL::Integer( GL_UNPACK_ALIGNMENT );
     BaseClass::setPixelStorageMode( GL_UNPACK_SWAP_BYTES, swap ? GL_TRUE : GL_FALSE );
@@ -99,12 +98,12 @@ void Texture1D::download(
 
     if ( !m_is_downloaded )
     {
-        BaseClass::setImage1D( width, pixels );
+        BaseClass::setImage1D( width, data );
         m_is_downloaded = true;
     }
     else
     {
-        BaseClass::setSubImage1D( width, pixels, xoffset );
+        BaseClass::setSubImage1D( width, data, offset );
     }
 
     BaseClass::setPixelStorageMode( GL_UNPACK_SWAP_BYTES, swap );

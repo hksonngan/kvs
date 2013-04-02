@@ -43,14 +43,9 @@ public:
 
     bool isDownloaded() const;
 
-    void create( const size_t width, const size_t height );
-    void download(
-        const size_t width,
-        const size_t height,
-        const void*  pixels,
-        const size_t xoffset = 0,
-        const size_t yoffset = 0 );
+    void create( const size_t width, const size_t height, const void* data = NULL );
     void release();
+    void download( const size_t width, const size_t height, const void* data, const size_t xoffset = 0, const size_t yoffset = 0 );
 };
 
 } // end of namespace kvs

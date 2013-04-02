@@ -626,8 +626,8 @@ void RayCastingRenderer::create_jittering_texture()
     for ( size_t i = 0; i < size * size; i++ ) data[i] = static_cast<kvs::UInt8>(255.0f * rand() / float(RAND_MAX));
 
     m_jittering_texture.release();
-    m_jittering_texture.create( size, size );
-    m_jittering_texture.download( size, size, data );
+    m_jittering_texture.create( size, size, data );
+    m_jittering_texture.unbind();
 
     delete [] data;
 
@@ -700,8 +700,7 @@ void RayCastingRenderer::create_bounding_cube( const kvs::StructuredVolumeObject
     };
 
     const size_t byte_size = sizeof(float) * nelements;
-    m_bounding_cube.create( byte_size );
-    m_bounding_cube.download( byte_size, coords );
+    m_bounding_cube.create( byte_size, coords );
     m_bounding_cube.unbind();
 
     ::CheckOpenGLError( "Cannot download bounding cube (VBO)." );
@@ -731,8 +730,7 @@ void RayCastingRenderer::create_transfer_function( const kvs::StructuredVolumeOb
         *(data++) = omap[i];
     }
 
-    m_transfer_function_texture.create( width );
-    m_transfer_function_texture.download( width, colors.data() );
+    m_transfer_function_texture.create( width, colors.data() );
     m_transfer_function_texture.unbind();
 
     ::CheckOpenGLError( "Cannot create transfer function texture." );
@@ -838,8 +836,7 @@ void RayCastingRenderer::create_volume_data( const kvs::StructuredVolumeObject* 
     m_volume_data.setPixelFormat( data_format, GL_ALPHA, data_type );
 
     m_volume_data.release();
-    m_volume_data.create( width, height, depth );
-    m_volume_data.download( width, height, depth, data_value.data() );
+    m_volume_data.create( width, height, depth, data_value.data() );
     m_volume_data.unbind();
 
     ::CheckOpenGLError( "Cannot create volume data texture." );

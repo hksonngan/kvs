@@ -44,13 +44,13 @@ public:
 
     bool isDownloaded() const;
 
-    void create( const size_t width, const size_t height, const size_t depth );
+    void create( const size_t width, const size_t height, const size_t depth, const void* data = NULL );
     void release();
     void download(
         const size_t width,
         const size_t height,
         const size_t depth,
-        const void*  pixels,
+        const void* data,
         const size_t xoffset = 0,
         const size_t yoffset = 0,
         const size_t zoffset = 0 );
