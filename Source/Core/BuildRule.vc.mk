@@ -307,7 +307,6 @@ $(OUTDIR)\.\Visualization\Renderer\ParticleBasedRendererCPU.obj \
 $(OUTDIR)\.\Visualization\Renderer\ParticleBuffer.obj \
 $(OUTDIR)\.\Visualization\Renderer\ParticleBufferAccumulator.obj \
 $(OUTDIR)\.\Visualization\Renderer\ParticleBufferCompositor.obj \
-$(OUTDIR)\.\Visualization\Renderer\ParticleVolumeRenderer.obj \
 $(OUTDIR)\.\Visualization\Renderer\PointRenderer.obj \
 $(OUTDIR)\.\Visualization\Renderer\PolygonRenderer.obj \
 $(OUTDIR)\.\Visualization\Renderer\Ray.obj \

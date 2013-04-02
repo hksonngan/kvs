@@ -1,6 +1,6 @@
 /****************************************************************************/
 /**
- *  @file   ParticleVolumeRendererCPU.h
+ *  @file   ParticleBasedRendererCPU.h
  *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
@@ -23,6 +23,8 @@
 namespace kvs
 {
 
+class ParticleBufferCompositor;
+
 namespace cpu
 {
 
@@ -31,15 +33,13 @@ namespace cpu
  *  Particle based volume renderer.
  */
 /*==========================================================================*/
-class ParticleVolumeRenderer : public kvs::VolumeRendererBase
+class ParticleBasedRenderer : public kvs::VolumeRendererBase
 {
-    kvsModuleName( kvs::cpu::ParticleVolumeRenderer );
+    friend class kvs::ParticleBufferCompositor;
+
+    kvsModuleName( kvs::cpu::ParticleBasedRenderer );
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::VolumeRendererBase );
-
-public:
-
-    friend class ParticleBufferCompositor;
 
 protected:
 
@@ -52,9 +52,9 @@ protected:
 
 public:
 
-    ParticleVolumeRenderer();
-    ParticleVolumeRenderer( const kvs::PointObject* point, const size_t subpixel_level = 1 );
-    virtual ~ParticleVolumeRenderer();
+    ParticleBasedRenderer();
+    ParticleBasedRenderer( const kvs::PointObject* point, const size_t subpixel_level = 1 );
+    virtual ~ParticleBasedRenderer();
 
     void exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
 

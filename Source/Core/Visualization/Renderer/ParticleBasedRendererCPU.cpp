@@ -30,7 +30,7 @@ namespace cpu
  *  Constructor.
  */
 /*==========================================================================*/
-ParticleVolumeRenderer::ParticleVolumeRenderer():
+ParticleBasedRenderer::ParticleBasedRenderer():
     m_ref_point( NULL )
 {
     BaseClass::setShader( kvs::Shader::Lambert() );
@@ -45,7 +45,7 @@ ParticleVolumeRenderer::ParticleVolumeRenderer():
  *  @param subpixel_level [in] subpixel level
  */
 /*==========================================================================*/
-ParticleVolumeRenderer::ParticleVolumeRenderer(
+ParticleBasedRenderer::ParticleBasedRenderer(
     const kvs::PointObject* point,
     const size_t            subpixel_level ):
     m_ref_point( NULL )
@@ -62,7 +62,7 @@ ParticleVolumeRenderer::ParticleVolumeRenderer(
  *  Destructor.
  */
 /*==========================================================================*/
-ParticleVolumeRenderer::~ParticleVolumeRenderer()
+ParticleBasedRenderer::~ParticleBasedRenderer()
 {
     this->delete_particle_buffer();
 }
@@ -75,7 +75,7 @@ ParticleVolumeRenderer::~ParticleVolumeRenderer()
  *  @param light [in] pointer to the light
  */
 /*==========================================================================*/
-void ParticleVolumeRenderer::exec(
+void ParticleBasedRenderer::exec(
     kvs::ObjectBase* object,
     kvs::Camera*     camera,
     kvs::Light*      light )
@@ -99,7 +99,7 @@ void ParticleVolumeRenderer::exec(
  *  @param point [in] pointer to the point object
  */
 /*==========================================================================*/
-void ParticleVolumeRenderer::attachPointObject( const kvs::PointObject* point )
+void ParticleBasedRenderer::attachPointObject( const kvs::PointObject* point )
 {
     m_ref_point = point;
 }
@@ -110,7 +110,7 @@ void ParticleVolumeRenderer::attachPointObject( const kvs::PointObject* point )
  *  @param subpixel_level [in] subpixel level
  */
 /*==========================================================================*/
-void ParticleVolumeRenderer::setSubpixelLevel( const size_t subpixel_level )
+void ParticleBasedRenderer::setSubpixelLevel( const size_t subpixel_level )
 {
     m_subpixel_level = subpixel_level;
 }
@@ -120,7 +120,7 @@ void ParticleVolumeRenderer::setSubpixelLevel( const size_t subpixel_level )
  *  Initialize.
  */
 /*==========================================================================*/
-void ParticleVolumeRenderer::initialize()
+void ParticleBasedRenderer::initialize()
 {
     m_enable_rendering = true;
     m_subpixel_level = 1;
@@ -132,7 +132,7 @@ void ParticleVolumeRenderer::initialize()
  *  Get the pointer to the point buffer.
  */
 /*==========================================================================*/
-const kvs::ParticleBuffer* ParticleVolumeRenderer::particleBuffer() const
+const kvs::ParticleBuffer* ParticleBasedRenderer::particleBuffer() const
 {
     return m_buffer;
 }
@@ -142,7 +142,7 @@ const kvs::ParticleBuffer* ParticleVolumeRenderer::particleBuffer() const
  *  Get the subpixel level.
  */
 /*==========================================================================*/
-size_t ParticleVolumeRenderer::subpixelLevel() const
+size_t ParticleBasedRenderer::subpixelLevel() const
 {
     return m_subpixel_level;
 }
@@ -152,7 +152,7 @@ size_t ParticleVolumeRenderer::subpixelLevel() const
  *  Be enable rendering.
  */
 /*==========================================================================*/
-void ParticleVolumeRenderer::enableRendering()
+void ParticleBasedRenderer::enableRendering()
 {
     m_enable_rendering = true;
 }
@@ -162,7 +162,7 @@ void ParticleVolumeRenderer::enableRendering()
  *  Be disable rendering.
  */
 /*==========================================================================*/
-void ParticleVolumeRenderer::disableRendering()
+void ParticleBasedRenderer::disableRendering()
 {
     m_enable_rendering = false;
 }
@@ -172,7 +172,7 @@ void ParticleVolumeRenderer::disableRendering()
  *  Create the point buffer.
  */
 /*==========================================================================*/
-bool ParticleVolumeRenderer::create_particle_buffer(
+bool ParticleBasedRenderer::create_particle_buffer(
     const size_t width,
     const size_t height,
     const size_t subpixel_level )
@@ -188,7 +188,7 @@ bool ParticleVolumeRenderer::create_particle_buffer(
  *  Clean the particle buffer.
  */
 /*==========================================================================*/
-void ParticleVolumeRenderer::clean_particle_buffer()
+void ParticleBasedRenderer::clean_particle_buffer()
 {
     m_buffer->clean();
 }
@@ -198,7 +198,7 @@ void ParticleVolumeRenderer::clean_particle_buffer()
  *  Delete the particle buffer.
  */
 /*==========================================================================*/
-void ParticleVolumeRenderer::delete_particle_buffer()
+void ParticleBasedRenderer::delete_particle_buffer()
 {
     if( m_buffer ){ delete m_buffer; m_buffer = NULL; }
 }
@@ -211,7 +211,7 @@ void ParticleVolumeRenderer::delete_particle_buffer()
  *  @param light [in] pointer to the light
  */
 /*==========================================================================*/
-void ParticleVolumeRenderer::create_image(
+void ParticleBasedRenderer::create_image(
     const kvs::PointObject* point,
     const kvs::Camera*      camera,
     const kvs::Light*       light )
@@ -248,7 +248,7 @@ void ParticleVolumeRenderer::create_image(
  *  @param light [in] pointer to the light
  */
 /*==========================================================================*/
-void ParticleVolumeRenderer::project_particle(
+void ParticleBasedRenderer::project_particle(
     const kvs::PointObject* point,
     const kvs::Camera*      camera,
     const kvs::Light*       light )
