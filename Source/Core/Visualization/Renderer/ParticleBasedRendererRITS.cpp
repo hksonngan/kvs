@@ -1,6 +1,6 @@
 /*****************************************************************************/
 /**
- *  @file   ParticleBasedRenderer.cpp
+ *  @file   ParticleBasedRendererRITS.cpp
  *  @author Makoto Uemura, Satoshi Tanaka
  */
 /*----------------------------------------------------------------------------
@@ -56,9 +56,8 @@ float screen_magnification;
 namespace kvs
 {
 
-namespace gpu
+namespace glsl
 {
-
 
 namespace rits
 {
@@ -374,12 +373,12 @@ size_t ParticleBasedRenderer::Renderer::download( kvs::VertexBufferObject& vbo )
 /*===========================================================================*/
 void ParticleBasedRenderer::Renderer::draw() const
 {
-#if defined( KVS_GPU_RITS_PARTICLE_BASED_RENDERER__NORMAL_TYPE_IS_FLOAT )
+#if defined( KVS_GLSL_RITS_PARTICLE_BASED_RENDERER__NORMAL_TYPE_IS_FLOAT )
     GLenum normal_type = GL_FLOAT;
-#elif defined( KVS_GPU_RITS_PARTICLE_BASED_RENDERER__NORMAL_TYPE_IS_BYTE )
+#elif defined( KVS_GLSL_RITS_PARTICLE_BASED_RENDERER__NORMAL_TYPE_IS_BYTE )
     GLenum normal_type = GL_BYTE;
 #else
-#error "KVS_GPU_RITS_PARTICLE_BASED_RENDERER__NORMAL_TYPE_IS_* is not defined."
+#error "KVS_GLSL_RITS_PARTICLE_BASED_RENDERER__NORMAL_TYPE_IS_* is not defined."
 #endif
     glEnableClientState(GL_VERTEX_ARRAY);
     glVertexPointer(3, GL_FLOAT, 0, (char*)(m_off_coord));
@@ -1432,12 +1431,12 @@ void ParticleBasedRenderer::align_particles()
         *(dst_coords [rp])++ = *src_coord++;
         if ( BaseClass::isEnabledShading() )
         {
-#if defined( KVS_GPU_RITS_PARTICLE_BASED_RENDERER__NORMAL_TYPE_IS_FLOAT )
+#if defined( KVS_GLSL_RITS_PARTICLE_BASED_RENDERER__NORMAL_TYPE_IS_FLOAT )
             // In case that the normal type of the particle is 'GLfloat'.
             *(dst_normals[rp])++ = (has_normal_array)? static_cast<NormalType>(*src_normal++) : static_cast<NormalType>(*src_normal);//ADD_UEMURA
             *(dst_normals[rp])++ = (has_normal_array)? static_cast<NormalType>(*src_normal++) : static_cast<NormalType>(*src_normal);//ADD_UEMURA
             *(dst_normals[rp])++ = (has_normal_array)? static_cast<NormalType>(*src_normal++) : static_cast<NormalType>(*src_normal);//ADD_UEMURA
-#elif defined( KVS_GPU_RITS_PARTICLE_BASED_RENDERER__NORMAL_TYPE_IS_BYTE )
+#elif defined( KVS_GLSL_RITS_PARTICLE_BASED_RENDERER__NORMAL_TYPE_IS_BYTE )
             // In case that the normal type of the particle is 'GLbyte'.
             kvs::Vector3f v( src_normal );
             src_normal += 3;
@@ -1446,7 +1445,7 @@ void ParticleBasedRenderer::align_particles()
             *(dst_normals[rp])++ = static_cast<NormalType>(n[1]);
             *(dst_normals[rp])++ = static_cast<NormalType>(n[2]);
 #else
-#error "KVS_GPU_RITS_PARTICLE_BASED_RENDERER__NORMAL_TYPE_IS_* is not defined."
+#error "KVS_GLSL_RITS_PARTICLE_BASED_RENDERER__NORMAL_TYPE_IS_* is not defined."
 #endif
         }
         *(dst_colors [rp])++ = (has_color_array)? static_cast<ColorType>(*src_color++) : static_cast<ColorType>(*src_color);//ADD_UEMURA
@@ -1638,6 +1637,6 @@ void ParticleBasedRenderer::setup_resize_shader()
 
 } // end of rits
 
-} // end of glew
+} // end of glsl
 
 } // end of kvs

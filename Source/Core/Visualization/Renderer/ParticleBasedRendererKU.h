@@ -1,6 +1,6 @@
 /*****************************************************************************/
 /**
- *  @file   ParticleBasedRenderer.h
+ *  @file   ParticleBasedRendererKU.h
  *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
@@ -12,8 +12,8 @@
  *  $Id$
  */
 /*****************************************************************************/
-#ifndef KVS__GPU__KU__PARTICLE_BASED_RENDERER_H_INCLUDE
-#define KVS__GPU__KU__PARTICLE_BASED_RENDERER_H_INCLUDE
+#ifndef KVS__GLSL__KU__PARTICLE_BASED_RENDERER_H_INCLUDE
+#define KVS__GLSL__KU__PARTICLE_BASED_RENDERER_H_INCLUDE
 
 #include <kvs/VolumeRendererBase>
 #include <kvs/PointObject>
@@ -31,13 +31,13 @@
 namespace kvs
 {
 
-namespace gpu
+namespace glsl
 {
 
 namespace ku
 {
 
-#define KVS_GPU_KU_PARTICLE_VOLUME_RENDERER__NORMAL_TYPE_IS_BYTE // *_BYTE or *_FLOAT
+#define KVS_GLSL_KU_PARTICLE_VOLUME_RENDERER__NORMAL_TYPE_IS_BYTE // *_BYTE or *_FLOAT
 
 /*===========================================================================*/
 /**
@@ -46,7 +46,7 @@ namespace ku
 /*===========================================================================*/
 class ParticleBasedRenderer : public kvs::VolumeRendererBase
 {
-    kvsModuleName( kvs::gpu::ku::ParticleBasedRenderer );
+    kvsModuleName( kvs::glsl::ku::ParticleBasedRenderer );
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::VolumeRendererBase );
 
@@ -60,12 +60,12 @@ protected:
     typedef GLushort IndexType;
     typedef GLubyte ColorType;
     typedef GLfloat CoordType;
-#if defined( KVS_GPU_KU_PARTICLE_VOLUME_RENDERER__NORMAL_TYPE_IS_FLOAT )
+#if defined( KVS_GLSL_KU_PARTICLE_VOLUME_RENDERER__NORMAL_TYPE_IS_FLOAT )
     typedef GLfloat NormalType;
-#elif defined( KVS_GPU_KU_PARTICLE_VOLUME_RENDERER__NORMAL_TYPE_IS_BYTE )
+#elif defined( KVS_GLSL_KU_PARTICLE_VOLUME_RENDERER__NORMAL_TYPE_IS_BYTE )
     typedef GLbyte NormalType;
 #else
-#error "KVS_GPU_KU_PARTICLE_VOLUME_RENDERER_NORMAL_TYPE_IS_* is not defined."
+#error "KVS_GLSL_KU_PARTICLE_VOLUME_RENDERER_NORMAL_TYPE_IS_* is not defined."
 #endif
 
     // Reference data (NOTE: not allocated in thie class).
@@ -213,7 +213,7 @@ public:
 
 } // end of namespace ku
 
-} // end of namespace gpu
+} // end of namespace glsl
 
 } // end of namespace kvs
 

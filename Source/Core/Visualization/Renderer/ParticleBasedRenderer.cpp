@@ -1,6 +1,6 @@
 /****************************************************************************/
 /**
- *  @file   ParticleBasedRendererCPU.cpp
+ *  @file   ParticleBasedRenderer.cpp
  *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
@@ -12,7 +12,7 @@
  *  $Id$
  */
 /****************************************************************************/
-#include "ParticleBasedRendererCPU.h"
+#include "ParticleBasedRenderer.h"
 #include <kvs/ParticleBuffer>
 #include <kvs/PointObject>
 #include <kvs/Camera>
@@ -20,9 +20,6 @@
 
 
 namespace kvs
-{
-
-namespace cpu
 {
 
 /*==========================================================================*/
@@ -306,7 +303,5 @@ void ParticleBasedRenderer::project_particle(
 
     m_buffer->createImage( &m_color_data, &m_depth_data );
 }
-
-} // end of namespace cpu
 
 } // end of namespace kvs

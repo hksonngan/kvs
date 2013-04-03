@@ -304,7 +304,7 @@ $(OUTDIR)\.\Visualization\Renderer\HAVSVolumeRenderer.obj \
 $(OUTDIR)\.\Visualization\Renderer\ImageRenderer.obj \
 $(OUTDIR)\.\Visualization\Renderer\LineRenderer.obj \
 $(OUTDIR)\.\Visualization\Renderer\ParallelCoordinatesRenderer.obj \
-$(OUTDIR)\.\Visualization\Renderer\ParticleBasedRendererCPU.obj \
+$(OUTDIR)\.\Visualization\Renderer\ParticleBasedRenderer.obj \
 $(OUTDIR)\.\Visualization\Renderer\ParticleBasedRendererKU.obj \
 $(OUTDIR)\.\Visualization\Renderer\ParticleBasedRendererRITS.obj \
 $(OUTDIR)\.\Visualization\Renderer\ParticleBuffer.obj \
@@ -315,6 +315,7 @@ $(OUTDIR)\.\Visualization\Renderer\PolygonRenderer.obj \
 $(OUTDIR)\.\Visualization\Renderer\PreIntegrationTable.obj \
 $(OUTDIR)\.\Visualization\Renderer\Ray.obj \
 $(OUTDIR)\.\Visualization\Renderer\RayCastingRenderer.obj \
+$(OUTDIR)\.\Visualization\Renderer\RayCastingRendererGLSL.obj \
 $(OUTDIR)\.\Visualization\Renderer\RendererBase.obj \
 $(OUTDIR)\.\Visualization\Renderer\ScatterPlotMatrixRenderer.obj \
 $(OUTDIR)\.\Visualization\Renderer\ScatterPlotRenderer.obj \

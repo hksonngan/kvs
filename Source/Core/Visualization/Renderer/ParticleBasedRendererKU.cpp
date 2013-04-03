@@ -32,7 +32,7 @@ const size_t VBOInterleave = 2;
 namespace kvs
 {
 
-namespace gpu
+namespace glsl
 {
 
 namespace ku
@@ -349,12 +349,12 @@ size_t ParticleBasedRenderer::Renderer::download( kvs::VertexBufferObject& vbo )
 /*===========================================================================*/
 void ParticleBasedRenderer::Renderer::draw() const
 {
-#if defined( KVS_GPU_KU_PARTICLE_VOLUME_RENDERER__NORMAL_TYPE_IS_FLOAT )
+#if defined( KVS_GLSL_KU_PARTICLE_VOLUME_RENDERER__NORMAL_TYPE_IS_FLOAT )
     GLenum normal_type = GL_FLOAT;
-#elif defined( KVS_GPU_KU_PARTICLE_VOLUME_RENDERER__NORMAL_TYPE_IS_BYTE )
+#elif defined( KVS_GLSL_KU_PARTICLE_VOLUME_RENDERER__NORMAL_TYPE_IS_BYTE )
     GLenum normal_type = GL_BYTE;
 #else
-#error "KVS_GPU_KU_PARTICLE_VOLUME_RENDERER__NORMAL_TYPE_IS_* is not defined."
+#error "KVS_GLSL_KU_PARTICLE_VOLUME_RENDERER__NORMAL_TYPE_IS_* is not defined."
 #endif
 
     glEnableClientState(GL_VERTEX_ARRAY);
@@ -1197,12 +1197,12 @@ void ParticleBasedRenderer::align_particles()
         *(dst_coords [rp])++ = *src_coord++;
         if ( BaseClass::isEnabledShading() )
         {
-#if defined( KVS_GPU_KU_PARTICLE_VOLUME_RENDERER__NORMAL_TYPE_IS_FLOAT )
+#if defined( KVS_GLSL_KU_PARTICLE_VOLUME_RENDERER__NORMAL_TYPE_IS_FLOAT )
             // In case that the normal type of the particle is 'GLfloat'.
             *(dst_normals[rp])++ = static_cast<NormalType>(*src_normal++);
             *(dst_normals[rp])++ = static_cast<NormalType>(*src_normal++);
             *(dst_normals[rp])++ = static_cast<NormalType>(*src_normal++);
-#elif defined( KVS_GPU_KU_PARTICLE_VOLUME_RENDERER__NORMAL_TYPE_IS_BYTE )
+#elif defined( KVS_GLSL_KU_PARTICLE_VOLUME_RENDERER__NORMAL_TYPE_IS_BYTE )
             // In case that the normal type of the particle is 'GLbyte'.
             kvs::Vector3f v( src_normal );
             src_normal += 3;
@@ -1211,7 +1211,7 @@ void ParticleBasedRenderer::align_particles()
             *(dst_normals[rp])++ = static_cast<NormalType>(n[1]);
             *(dst_normals[rp])++ = static_cast<NormalType>(n[2]);
 #else
-    #error "KVS_GPU_KU_PARTICLE_VOLUME_RENDERER__NORMAL_TYPE_IS_* is not defined."
+    #error "KVS_GLSL_KU_PARTICLE_VOLUME_RENDERER__NORMAL_TYPE_IS_* is not defined."
 #endif
         }
         *(dst_colors [rp])++ = *src_color++;
@@ -1398,6 +1398,6 @@ void ParticleBasedRenderer::setup_resize_shader(void)
 
 } // end of ku
 
-} // end of gpu
+} // end of glsl
 
 } // end of kvs

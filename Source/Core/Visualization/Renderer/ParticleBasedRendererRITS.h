@@ -11,8 +11,8 @@
  *  $Id$
  */
 /*****************************************************************************/
-#ifndef KVS__GPU__RITS__PARTICLE_BASED_RENDERER_H_INCLUDE
-#define KVS__GPU__RITS__PARTICLE_BASED_RENDERER_H_INCLUDE
+#ifndef KVS__GLSL__RITS__PARTICLE_BASED_RENDERER_H_INCLUDE
+#define KVS__GLSL__RITS__PARTICLE_BASED_RENDERER_H_INCLUDE
 
 #include <kvs/VolumeRendererBase>
 #include <kvs/PointObject>
@@ -32,13 +32,13 @@
 namespace kvs
 {
 
-namespace gpu
+namespace glsl
 {
 
 namespace rits
 {
 
-#define KVS_GPU_RITS_PARTICLE_BASED_RENDERER__NORMAL_TYPE_IS_BYTE // *_BYTE or *_FLOAT
+#define KVS_GLSL_RITS_PARTICLE_BASED_RENDERER__NORMAL_TYPE_IS_BYTE // *_BYTE or *_FLOAT
 
 /*===========================================================================*/
 /**
@@ -48,7 +48,7 @@ namespace rits
 /*===========================================================================*/
 class ParticleBasedRenderer : public kvs::VolumeRendererBase
 {
-    kvsModuleName( kvs::gpu::rits::ParticleBasedRenderer );
+    kvsModuleName( kvs::glsl::rits::ParticleBasedRenderer );
     kvsModuleCategory( Renderer );
     kvsModuleBaseClass( kvs::VolumeRendererBase );
 
@@ -62,12 +62,12 @@ protected:
     typedef GLushort IndexType;
     typedef GLubyte ColorType;
     typedef GLfloat CoordType;
-#if defined( KVS_GPU_RITS_PARTICLE_BASED_RENDERER__NORMAL_TYPE_IS_FLOAT )
+#if defined( KVS_GLSL_RITS_PARTICLE_BASED_RENDERER__NORMAL_TYPE_IS_FLOAT )
     typedef GLfloat NormalType;
-#elif defined( KVS_GPU_RITS_PARTICLE_BASED_RENDERER__NORMAL_TYPE_IS_BYTE )
+#elif defined( KVS_GLSL_RITS_PARTICLE_BASED_RENDERER__NORMAL_TYPE_IS_BYTE )
     typedef GLbyte NormalType;
 #else
-#error "KVS_GPU_RITS_PARTICLE_BASED_RENDERER__NORMAL_TYPE_IS_* is not defined."
+#error "KVS_GLSL_RITS_PARTICLE_BASED_RENDERER__NORMAL_TYPE_IS_* is not defined."
 #endif
 
     // Reference data (NOTE: not allocated in thie class).
@@ -227,8 +227,8 @@ public:
 
 } // end of namespace rits
 
-} // end of namespace gpu
+} // end of namespace glsl
 
 } // end of namespace kvs
 
-#endif // KVS__GPU__RITS__PARTICLE_BASED_RENDERER_H_INCLUDE
+#endif // KVS__GLSL__RITS__PARTICLE_BASED_RENDERER_H_INCLUDE

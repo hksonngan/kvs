@@ -304,7 +304,7 @@ $(OUTDIR)/./Visualization/Renderer/HAVSVolumeRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/ImageRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/LineRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/ParallelCoordinatesRenderer.o \
-$(OUTDIR)/./Visualization/Renderer/ParticleBasedRendererCPU.o \
+$(OUTDIR)/./Visualization/Renderer/ParticleBasedRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/ParticleBasedRendererKU.o \
 $(OUTDIR)/./Visualization/Renderer/ParticleBasedRendererRITS.o \
 $(OUTDIR)/./Visualization/Renderer/ParticleBuffer.o \
@@ -315,6 +315,7 @@ $(OUTDIR)/./Visualization/Renderer/PolygonRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/PreIntegrationTable.o \
 $(OUTDIR)/./Visualization/Renderer/Ray.o \
 $(OUTDIR)/./Visualization/Renderer/RayCastingRenderer.o \
+$(OUTDIR)/./Visualization/Renderer/RayCastingRendererGLSL.o \
 $(OUTDIR)/./Visualization/Renderer/RendererBase.o \
 $(OUTDIR)/./Visualization/Renderer/ScatterPlotMatrixRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/ScatterPlotRenderer.o \
