@@ -315,6 +315,7 @@ $(OUTDIR)\.\Visualization\Renderer\PointRendererGLSL.obj \
 $(OUTDIR)\.\Visualization\Renderer\PolygonRenderer.obj \
 $(OUTDIR)\.\Visualization\Renderer\PolygonRendererGLSL.obj \
 $(OUTDIR)\.\Visualization\Renderer\PreIntegrationTable.obj \
+$(OUTDIR)\.\Visualization\Renderer\ProjectedTetrahedraTable.obj \
 $(OUTDIR)\.\Visualization\Renderer\Ray.obj \
 $(OUTDIR)\.\Visualization\Renderer\RayCastingRenderer.obj \
 $(OUTDIR)\.\Visualization\Renderer\RayCastingRendererGLSL.obj \
@@ -323,6 +324,24 @@ $(OUTDIR)\.\Visualization\Renderer\ScatterPlotMatrixRenderer.obj \
 $(OUTDIR)\.\Visualization\Renderer\ScatterPlotRenderer.obj \
 $(OUTDIR)\.\Visualization\Renderer\Shader.obj \
 $(OUTDIR)\.\Visualization\Renderer\SphereGlyph.obj \
+$(OUTDIR)\.\Visualization\Renderer\StochasticLineEngine.obj \
+$(OUTDIR)\.\Visualization\Renderer\StochasticLineRenderer.obj \
+$(OUTDIR)\.\Visualization\Renderer\StochasticMultipleTetrahedraCompositor.obj \
+$(OUTDIR)\.\Visualization\Renderer\StochasticMultipleTetrahedraEngine.obj \
+$(OUTDIR)\.\Visualization\Renderer\StochasticMultipleTetrahedraRenderer.obj \
+$(OUTDIR)\.\Visualization\Renderer\StochasticMultivariateTetrahedraEngine.obj \
+$(OUTDIR)\.\Visualization\Renderer\StochasticMultivariateTetrahedraRenderer.obj \
+$(OUTDIR)\.\Visualization\Renderer\StochasticPointEngine.obj \
+$(OUTDIR)\.\Visualization\Renderer\StochasticPointRenderer.obj \
+$(OUTDIR)\.\Visualization\Renderer\StochasticPolygonEngine.obj \
+$(OUTDIR)\.\Visualization\Renderer\StochasticPolygonRenderer.obj \
+$(OUTDIR)\.\Visualization\Renderer\StochasticRendererBase.obj \
+$(OUTDIR)\.\Visualization\Renderer\StochasticRenderingCompositor.obj \
+$(OUTDIR)\.\Visualization\Renderer\StochasticRenderingEngine.obj \
+$(OUTDIR)\.\Visualization\Renderer\StochasticTetrahedraEngine.obj \
+$(OUTDIR)\.\Visualization\Renderer\StochasticTetrahedraRenderer.obj \
+$(OUTDIR)\.\Visualization\Renderer\StochasticUniformGridEngine.obj \
+$(OUTDIR)\.\Visualization\Renderer\StochasticUniformGridRenderer.obj \
 $(OUTDIR)\.\Visualization\Renderer\VolumeRayIntersector.obj \
 $(OUTDIR)\.\Visualization\Renderer\VolumeRendererBase.obj \
 $(OUTDIR)\.\Visualization\Viewer\ApplicationBase.obj \
@@ -615,5 +634,7 @@ install::
 	$(INSTALL) .\Visualization\Viewer\*.h $(INSTALL_DIR)\include\Core\.\Visualization\Viewer
 	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\Visualization\Shader $(MKDIR) $(INSTALL_DIR)\include\Core\.\Visualization\Shader
 	$(INSTALL) .\Visualization\Shader\*.vert $(INSTALL_DIR)\include\Core\.\Visualization\Shader
+	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\Visualization\Shader $(MKDIR) $(INSTALL_DIR)\include\Core\.\Visualization\Shader
+	$(INSTALL) .\Visualization\Shader\*.geom $(INSTALL_DIR)\include\Core\.\Visualization\Shader
 	IF NOT EXIST $(INSTALL_DIR)\include\Core\.\Visualization\Shader $(MKDIR) $(INSTALL_DIR)\include\Core\.\Visualization\Shader
 	$(INSTALL) .\Visualization\Shader\*.frag $(INSTALL_DIR)\include\Core\.\Visualization\Shader

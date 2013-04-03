@@ -315,6 +315,7 @@ $(OUTDIR)/./Visualization/Renderer/PointRendererGLSL.o \
 $(OUTDIR)/./Visualization/Renderer/PolygonRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/PolygonRendererGLSL.o \
 $(OUTDIR)/./Visualization/Renderer/PreIntegrationTable.o \
+$(OUTDIR)/./Visualization/Renderer/ProjectedTetrahedraTable.o \
 $(OUTDIR)/./Visualization/Renderer/Ray.o \
 $(OUTDIR)/./Visualization/Renderer/RayCastingRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/RayCastingRendererGLSL.o \
@@ -323,6 +324,24 @@ $(OUTDIR)/./Visualization/Renderer/ScatterPlotMatrixRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/ScatterPlotRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/Shader.o \
 $(OUTDIR)/./Visualization/Renderer/SphereGlyph.o \
+$(OUTDIR)/./Visualization/Renderer/StochasticLineEngine.o \
+$(OUTDIR)/./Visualization/Renderer/StochasticLineRenderer.o \
+$(OUTDIR)/./Visualization/Renderer/StochasticMultipleTetrahedraCompositor.o \
+$(OUTDIR)/./Visualization/Renderer/StochasticMultipleTetrahedraEngine.o \
+$(OUTDIR)/./Visualization/Renderer/StochasticMultipleTetrahedraRenderer.o \
+$(OUTDIR)/./Visualization/Renderer/StochasticMultivariateTetrahedraEngine.o \
+$(OUTDIR)/./Visualization/Renderer/StochasticMultivariateTetrahedraRenderer.o \
+$(OUTDIR)/./Visualization/Renderer/StochasticPointEngine.o \
+$(OUTDIR)/./Visualization/Renderer/StochasticPointRenderer.o \
+$(OUTDIR)/./Visualization/Renderer/StochasticPolygonEngine.o \
+$(OUTDIR)/./Visualization/Renderer/StochasticPolygonRenderer.o \
+$(OUTDIR)/./Visualization/Renderer/StochasticRendererBase.o \
+$(OUTDIR)/./Visualization/Renderer/StochasticRenderingCompositor.o \
+$(OUTDIR)/./Visualization/Renderer/StochasticRenderingEngine.o \
+$(OUTDIR)/./Visualization/Renderer/StochasticTetrahedraEngine.o \
+$(OUTDIR)/./Visualization/Renderer/StochasticTetrahedraRenderer.o \
+$(OUTDIR)/./Visualization/Renderer/StochasticUniformGridEngine.o \
+$(OUTDIR)/./Visualization/Renderer/StochasticUniformGridRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/VolumeRayIntersector.o \
 $(OUTDIR)/./Visualization/Renderer/VolumeRendererBase.o \
 $(OUTDIR)/./Visualization/Viewer/ApplicationBase.o \
@@ -549,5 +568,7 @@ install::
 	$(INSTALL) ./Visualization/Viewer/*.h $(INSTALL_DIR)/include/Core/./Visualization/Viewer
 	$(MKDIR) $(INSTALL_DIR)/include/Core/./Visualization/Shader
 	$(INSTALL) ./Visualization/Shader/*.vert $(INSTALL_DIR)/include/Core/./Visualization/Shader
+	$(MKDIR) $(INSTALL_DIR)/include/Core/./Visualization/Shader
+	$(INSTALL) ./Visualization/Shader/*.geom $(INSTALL_DIR)/include/Core/./Visualization/Shader
 	$(MKDIR) $(INSTALL_DIR)/include/Core/./Visualization/Shader
 	$(INSTALL) ./Visualization/Shader/*.frag $(INSTALL_DIR)/include/Core/./Visualization/Shader

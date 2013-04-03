@@ -1,0 +1,248 @@
+/*****************************************************************************/
+/**
+ *  @file   StochasticTetrahedraEngine.h
+ *  @author Jun Nishimura
+ */
+/*----------------------------------------------------------------------------
+ *
+ *  Copyright (c) Visualization Laboratory, Kyoto University.
+ *  All rights reserved.
+ *  See http://www.viz.media.kyoto-u.ac.jp/kvs/copyright/ for details.
+ *
+ *  $Id$
+ */
+/*****************************************************************************/
+#ifndef KVS__STOCHASTIC_TETRAHEDRA_ENGINE_H_INCLUDE
+#define KVS__STOCHASTIC_TETRAHEDRA_ENGINE_H_INCLUDE
+
+#include "StochasticRenderingEngine.h"
+#include <kvs/UnstructuredVolumeObject>
+#include <kvs/TransferFunction>
+#include <kvs/ProgramObject>
+#include <kvs/ShaderSource>
+#include <kvs/GeometryShader>
+#include <kvs/VertexBufferObject>
+#include <kvs/IndexBufferObject>
+#include <kvs/PreIntegrationTable>
+
+
+namespace kvs
+{
+
+/*===========================================================================*/
+/**
+ *  @brief  Stochastic rendering engine class for unstructured volume object.
+ */
+/*===========================================================================*/
+class StochasticTetrahedraEngine : public kvs::StochasticRenderingEngine
+{
+    friend class StochasticRendererBase;
+
+    // Class name.
+    kvsClassName( kvs::StochasticTetrahedraEngine );
+
+public:
+
+    class Volume;
+    class Renderer;
+
+protected:
+
+    typedef kvs::StochasticTetrahedraEngine BaseClass;
+    typedef GLushort IndexType;
+    typedef GLfloat CoordType;
+    typedef GLfloat ValueType;
+    typedef GLbyte NormalType;
+    typedef GLuint ConnectType;
+
+protected:
+
+    const kvs::UnstructuredVolumeObject* m_ref_volume; ///< pointer to the volume data (reference only)
+    kvs::TransferFunction m_tfunc; ///< transfer function
+    kvs::VertexBufferObject m_vbo; ///< buffer object for storing the indices, coords, values, and normals of the volume data
+    kvs::IndexBufferObject m_ibo; ///< buffer object for stroing the connections of the volume data
+    size_t m_loc_identifier; ///< location identifier
+    size_t m_loc_values; ///< location identifier of values
+    Volume* m_volume; ///< volume data for rendering on GPU
+    Renderer* m_renderer; ///< renderer for the volume on GPU
+    kvs::PreIntegrationTable m_table; ///< pre-integration table
+    kvs::Texture2D m_decomposition_texture; ///< texture for the tetrahedral decomposition
+    kvs::Texture2D m_depth_texture; ///< depth texture
+    float m_edge_size; ///< edge size
+    size_t m_nsteps; ///< number of time steps for time-varying volume datasets
+    size_t m_step; ///< time step for time-varying volume datasets
+
+public:
+
+    StochasticTetrahedraEngine( void );
+
+    StochasticTetrahedraEngine( const kvs::UnstructuredVolumeObject* volume, const size_t nsteps = 1 );
+
+public:
+
+    void initialize( void );
+
+    void setNSteps( const size_t nsteps );
+
+    void setStep( const size_t step );
+
+    void setEdgeSize( const float edge_size );
+
+    void setTransferFunction( const kvs::TransferFunction& tfunc );
+
+public:
+
+    const kvs::TransferFunction& transferFunction( void ) const;
+
+    kvs::TransferFunction& transferFunction( void );
+
+public:
+
+    const kvs::ObjectBase* object( void ) const;
+
+    const EngineType engineType( void ) const;
+
+    void attachObject( const kvs::ObjectBase* object );
+
+    void clearEnsembleBuffer( void );
+
+protected:
+
+    void initialize_decomposition_texture( void );
+
+    void create_preintegration_table( void );
+
+    template <typename T>
+    void create_vertexbuffer_from_volume( void );
+
+    void create_shaders(
+        kvs::ProgramObject& program_object,
+        const kvs::ShaderSource& vertex_source,
+        const kvs::ShaderSource& geometry_source,
+        const kvs::ShaderSource& fragment_source );
+
+    void setup_shader( const float modelview_matrix[16] );
+
+    void initialize_shader( void );
+
+    void create_vertex_buffer( void );
+
+    void download_vertex_buffer( void );
+
+    void draw_vertex_buffer( const float modelview_matrix[16] );
+
+    void set_depth_texture( const kvs::Texture2D& depth_texture );
+};
+
+/*===========================================================================*/
+/**
+ *  @brief  Volume data class for the stochastic renderer.
+ */
+/*===========================================================================*/
+class StochasticTetrahedraEngine::Volume
+{
+private:
+
+    size_t m_nsteps; ///< number of time steps
+    size_t m_nvertices; ///< number of vertices
+    size_t m_ncells; ///< number of cells
+    size_t m_veclen; ///< vector length of the values
+    StochasticTetrahedraEngine::IndexType* m_indices; ///< index array
+    StochasticTetrahedraEngine::CoordType* m_coords; ///< coordinate value array
+    StochasticTetrahedraEngine::ValueType* m_values; ///< color value array
+    StochasticTetrahedraEngine::NormalType* m_normals; ///< normal array
+    StochasticTetrahedraEngine::ConnectType* m_connections; ///< connection array
+
+public:
+
+    Volume( void );
+
+    ~Volume( void );
+
+public:
+
+    void release( void );
+
+    void create( const size_t nsteps, const size_t nvertices, const size_t ncells, const size_t veclen );
+
+public:
+
+    const size_t nvertices( void ) const;
+
+    const size_t ncells( void ) const;
+
+    const size_t veclen( void ) const;
+
+    const size_t byteSizePerVertex( void ) const;
+
+    const size_t byteSizeOfVertex( void ) const;
+
+    const size_t byteSizePerCell( void ) const;
+
+    const size_t byteSizeOfCell( void ) const;
+
+    const StochasticTetrahedraEngine::IndexType* indices( void ) const;
+
+    StochasticTetrahedraEngine::IndexType* indices( void );
+
+    const StochasticTetrahedraEngine::CoordType* coords( void ) const;
+
+    StochasticTetrahedraEngine::CoordType* coords( void );
+
+    const StochasticTetrahedraEngine::ValueType* values( void ) const;
+
+    StochasticTetrahedraEngine::ValueType* values( void );
+
+    const StochasticTetrahedraEngine::NormalType* normals( void ) const;
+
+    StochasticTetrahedraEngine::NormalType* normals( void );
+
+    const StochasticTetrahedraEngine::ConnectType* connections( void ) const;
+
+    StochasticTetrahedraEngine::ConnectType* connections( void );
+
+};
+
+/*===========================================================================*/
+/**
+ *  @brief  Renderer class for the stochastic renderer.
+ */
+/*===========================================================================*/
+class StochasticTetrahedraEngine::Renderer
+{
+private:
+
+    const StochasticTetrahedraEngine::Volume* m_volume; ///< pointer to the volume
+    size_t m_nsteps; ///< number of time steps
+    size_t m_nvertices; ///< number of vertices
+    size_t m_ncells; ///< number of cells
+    size_t m_off_index; ///< offset bytes for the index array
+    size_t m_off_coord; ///< offset bytes for the coodinate value array
+    size_t m_off_value; ///< offset bytes for the value array
+    size_t m_off_normal; ///< offset bytes for the normal array
+    size_t m_loc_identifier; ///< location identifier
+    size_t m_loc_values; ///< location identifier of values
+
+public:
+
+    Renderer( void );
+
+    void set(
+        const StochasticTetrahedraEngine::Volume* volume,
+        const size_t nsteps,
+        const size_t nvertices,
+        const size_t ncells,
+        const size_t loc_identifier,
+        const size_t loc_values );
+
+    const bool download(
+        kvs::VertexBufferObject& vbo,
+        kvs::IndexBufferObject& ibo );
+
+    void draw( const size_t step ) const;
+
+};
+
+} // end of namespace kvs
+
+#endif // KVS__STOCHASTIC_TETRAHEDRA_ENGINE_H_INCLUDE
