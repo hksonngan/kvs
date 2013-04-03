@@ -24,7 +24,7 @@
 #include <kvs/FragmentShader>
 #include <kvs/VertexShader>
 #include <kvs/ProgramObject>
-#include <kvs/ParticleVolumeRenderer>
+//#include <kvs/ParticleVolumeRenderer>
 //#include "EnsembleAverageBuffer.h" // SAKAMOTO-TANAKA
 #include <kvs/EnsembleAverageBuffer>
 
