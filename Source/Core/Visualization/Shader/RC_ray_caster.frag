@@ -12,9 +12,9 @@
  *  $Id: ray_caster.frag 1041 2012-03-14 15:28:49Z naohisa.sakamoto@gmail.com $
  */
 /*****************************************************************************/
-#include "../Shader/shading.h"
-#include "../Shader/volume.h"
-#include "../Shader/transfer_function.h"
+#include "shading.h"
+#include "volume.h"
+#include "transfer_function.h"
 
 uniform sampler2D        entry_points;      // entry points (front face)
 uniform sampler2D        exit_points;       // exit points (back face)
