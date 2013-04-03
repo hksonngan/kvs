@@ -78,4 +78,6 @@ private:
 
 } // end of namespace kvs
 
+#include "RayCastingRendererGLSL.h"
+
 #endif // KVS__RAY_CASTING_RENDERER_H_INCLUDE
