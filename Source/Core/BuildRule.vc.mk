@@ -305,6 +305,8 @@ $(OUTDIR)\.\Visualization\Renderer\ImageRenderer.obj \
 $(OUTDIR)\.\Visualization\Renderer\LineRenderer.obj \
 $(OUTDIR)\.\Visualization\Renderer\ParallelCoordinatesRenderer.obj \
 $(OUTDIR)\.\Visualization\Renderer\ParticleBasedRendererCPU.obj \
+$(OUTDIR)\.\Visualization\Renderer\ParticleBasedRendererKU.obj \
+$(OUTDIR)\.\Visualization\Renderer\ParticleBasedRendererRITS.obj \
 $(OUTDIR)\.\Visualization\Renderer\ParticleBuffer.obj \
 $(OUTDIR)\.\Visualization\Renderer\ParticleBufferAccumulator.obj \
 $(OUTDIR)\.\Visualization\Renderer\ParticleBufferCompositor.obj \

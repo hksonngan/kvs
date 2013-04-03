@@ -1,6 +1,6 @@
 /*****************************************************************************/
 /**
- *  @file   ParticleBasedRenderer.h
+ *  @file   ParticleBasedRendererGPU.h
  *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
@@ -12,18 +12,25 @@
  *  $Id$
  */
 /*****************************************************************************/
-#ifndef KVS__PARTICLE_BASED_RENDERER_H_INCLUDE
-#define KVS__PARTICLE_BASED_RENDERER_H_INCLUDE
+#ifndef KVS__GPU__PARTICLE_BASED_RENDERER_H_INCLUDE
+#define KVS__GPU__PARTICLE_BASED_RENDERER_H_INCLUDE
 
-#include "ParticleBasedRendererCPU.h"
-#include "ParticleBasedRendererGPU.h"
+#include "ParticleBasedRendererKU.h"
+#include "ParticleBasedRendererRITS.h"
+
 
 namespace kvs
 {
 
-typedef cpu::ParticleBasedRenderer ParticleBasedRenderer;
-//typedef gpu::ParticleBasedRenderer ParticleBasedRenderer;
+namespace gpu
+{
+
+
+typedef ku::ParticleBasedRenderer ParticleBasedRenderer;
+//typedef rits::ParticleBasedRenderer ParticleBasedRenderer;
+
+} // end of namespace gpu
 
 } // end of namespace kvs
 
-#endif // KVS__PARTICLE_BASED_RENDERER_H_INCLUDE
+#endif // KVS__GPU__PARTICLE_BASED_RENDERER_H_INCLUDE

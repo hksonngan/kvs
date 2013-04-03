@@ -305,6 +305,8 @@ $(OUTDIR)/./Visualization/Renderer/ImageRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/LineRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/ParallelCoordinatesRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/ParticleBasedRendererCPU.o \
+$(OUTDIR)/./Visualization/Renderer/ParticleBasedRendererKU.o \
+$(OUTDIR)/./Visualization/Renderer/ParticleBasedRendererRITS.o \
 $(OUTDIR)/./Visualization/Renderer/ParticleBuffer.o \
 $(OUTDIR)/./Visualization/Renderer/ParticleBufferAccumulator.o \
 $(OUTDIR)/./Visualization/Renderer/ParticleBufferCompositor.o \

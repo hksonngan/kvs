@@ -16,6 +16,7 @@
 #include <kvs/File>
 #include <kvs/Directory>
 #include <kvs/Message>
+#include <kvs/String>
 #include <sstream>
 #include <fstream>
 #include <cstdlib>
@@ -35,6 +36,11 @@ public:
 
     SearchPath()
     {
+        this->init();
+    }
+
+    void init()
+    {
         // Add "$KVS_DIR/include/Core/Visualization/Shader".
         const std::string sep = kvs::File::Separator();
         const char* kvs_dir = std::getenv("KVS_DIR");
@@ -48,7 +54,7 @@ public:
             m_search_path_list.push_back( path );
         }
 
-        // Add current directory.
+        // Add current directory (".").
         m_search_path_list.push_back("." + sep);
     }
 
@@ -86,10 +92,21 @@ SearchPath search_path;
 namespace kvs
 {
 
-
 void ShaderSource::AddSearchPath( const std::string& path )
 {
     ::search_path.add( path );
+}
+
+void ShaderSource::SetSearchPath( const std::string& path )
+{
+    ::search_path.del();
+    ::search_path.add( path );
+}
+
+void ShaderSource::ResetSearchPath()
+{
+    ::search_path.del();
+    ::search_path.init();
 }
 
 void ShaderSource::RemoveSearchPath()
@@ -154,22 +171,60 @@ void ShaderSource::define( const std::string& name )
 
 bool ShaderSource::read( const std::string& filename )
 {
-    std::ifstream ifs( filename.c_str() );
-    if ( ifs.fail() )
+    std::string code;
+    std::string content = kvs::String::FromFile( filename );
+    if ( this->read_code( filename, content, code ) )
     {
-        kvsMessageError( "Cannot open '%s'.", filename.c_str() );
-        return( false );
+        this->setCode( code );
+        return true;
     }
 
-    std::ostringstream buffer;
-    buffer << ifs.rdbuf();
+    return false;
+}
 
-    std::string code( buffer.str() );
-    ifs.close();
+bool ShaderSource::read_code( const std::string& filename, const std::string& content, std::string& code )
+{
+    std::string line;
+    std::istringstream source( content );
+    while ( std::getline( source, line ) )
+    {
+        std::string::size_type p = line.find("#include");
+        std::string::size_type c1 = line.find("//");
+        std::string::size_type c2 = line.find("/*");
+        bool comment = ( c1 != std::string::npos && c1 < p ) || ( c2 != std::string::npos && c2 < p );
 
-    this->setCode( code );
+        if ( p != std::string::npos && !comment )
+        {
+            // Found "#include" directive.
+            std::string::size_type p1 = line.find( "\"", p + 1 );
+            std::string::size_type p2 = line.find( "\"", p1 + 1 );
+            std::string name( line, p1 + 1, p2 - p1 - 1 ); // included filename
+            kvs::File file( filename ); // input shader code file
+            kvs::File included_file( file.pathName() + kvs::File::Separator() + name );
+            if ( !included_file.exists() )
+            {
+                kvsMessageError("Cannot find \'%s\'.", included_file.filePath().c_str() );
+                return false;
+            }
 
-    return( true );
+            std::string included_content = kvs::String::FromFile( included_file.filePath() );
+            if ( !included_content.empty() && included_content[ included_content.size() - 1 ] != '\n' )
+            {
+                included_content += "\n";
+            }
+
+            if ( !this->read_code( filename, included_content, code ) )
+            {
+                return false;
+            }
+        }
+        else
+        {
+            code += line + "\n";
+        }
+    }
+
+    return true;
 }
 
 } // end of namespace kvs

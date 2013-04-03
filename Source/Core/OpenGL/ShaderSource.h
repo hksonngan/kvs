@@ -35,6 +35,8 @@ private:
 public:
 
     static void AddSearchPath( const std::string& path );
+    static void SetSearchPath( const std::string& path );
+    static void ResetSearchPath();
     static void RemoveSearchPath();
 
 public:
@@ -46,6 +48,10 @@ public:
     void clearCode();
     void define( const std::string& name );
     bool read( const std::string& filename );
+
+private:
+
+    bool read_code( const std::string& filename, const std::string& content, std::string& code );
 };
 
 } // end of namespace kvs
