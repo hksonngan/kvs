@@ -59,4 +59,6 @@ private:
 
 } // end of namespace kvs
 
+#include "PolygonRendererGLSL.h"
+
 #endif // KVS__POLYGON_RENDERER_H_INCLUDE

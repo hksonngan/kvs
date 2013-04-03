@@ -63,4 +63,6 @@ private:
 
 } // end of namespace kvs
 
+#include "PointRendererGLSL.h"
+
 #endif // KVS__POINT_RENDERER_H_INCLUDE

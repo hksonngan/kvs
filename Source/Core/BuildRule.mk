@@ -311,7 +311,9 @@ $(OUTDIR)/./Visualization/Renderer/ParticleBuffer.o \
 $(OUTDIR)/./Visualization/Renderer/ParticleBufferAccumulator.o \
 $(OUTDIR)/./Visualization/Renderer/ParticleBufferCompositor.o \
 $(OUTDIR)/./Visualization/Renderer/PointRenderer.o \
+$(OUTDIR)/./Visualization/Renderer/PointRendererGLSL.o \
 $(OUTDIR)/./Visualization/Renderer/PolygonRenderer.o \
+$(OUTDIR)/./Visualization/Renderer/PolygonRendererGLSL.o \
 $(OUTDIR)/./Visualization/Renderer/PreIntegrationTable.o \
 $(OUTDIR)/./Visualization/Renderer/Ray.o \
 $(OUTDIR)/./Visualization/Renderer/RayCastingRenderer.o \
