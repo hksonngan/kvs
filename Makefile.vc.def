@@ -58,7 +58,6 @@ MAKEFILE = Makefile.vc
 LIB_KVS_CORE = kvsCore.lib
 
 LIB_KVS_SUPPORT_CAVE   = kvsSupportCAVE.lib
-LIB_KVS_SUPPORT_GLEW   = kvsSupportGLEW.lib
 LIB_KVS_SUPPORT_GLUT   = kvsSupportGLUT.lib
 LIB_KVS_SUPPORT_QT     = kvsSupportQt.lib
 LIB_KVS_SUPPORT_SAGE   = kvsSupportSAGE.lib
@@ -194,10 +193,6 @@ DEFINITIONS = $(DEFINITIONS) /DKVS_ENABLE_DEPRECATED
 
 !IF "$(KVS_SUPPORT_CAVE)" == "1"
 DEFINITIONS = $(DEFINITIONS) /DKVS_SUPPORT_CAVE
-!ENDIF
-
-!if "$(KVS_SUPPORT_GLEW)" == "1"
-DEFINITIONS = $(DEFINITIONS) /DKVS_SUPPORT_GLEW
 !ENDIF
 
 # NOTE: Since the GLEW header file that is in SupportGLEW must be included before

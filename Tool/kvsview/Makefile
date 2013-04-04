@@ -37,14 +37,11 @@ ifeq "$(KVS_SUPPORT_GLUT)" "1"
 INCLUDE_PATH += $(GLUT_INCLUDE_PATH)
 endif
 
-ifeq "$(KVS_SUPPORT_GLEW)" "1"
-INCLUDE_PATH += $(GLEW_INCLUDE_PATH)
-endif
-
 ifeq "$(KVS_SUPPORT_OPENCV)" "1"
 INCLUDE_PATH += $(OPENCV_INCLUDE_PATH)
 endif
 
+INCLUDE_PATH += $(GLEW_INCLUDE_PATH)
 INCLUDE_PATH += $(GL_INCLUDE_PATH)
 
 
@@ -67,14 +64,11 @@ ifeq "$(KVS_SUPPORT_GLUT)" "1"
 LIBRARY_PATH += -L../../Source/SupportGLUT/$(OUTDIR) $(GLUT_LIBRARY_PATH)
 endif
 
-ifeq "$(KVS_SUPPORT_GLEW)" "1"
-LIBRARY_PATH += -L../../Source/SupportGLEW/$(OUTDIR) $(GLEW_LIBRARY_PATH)
-endif
-
 ifeq "$(KVS_SUPPORT_OPENCV)" "1"
 LIBRARY_PATH += -L../../Source/SupportOpenCV/$(OUTDIR) $(OPENCV_LIBRARY_PATH)
 endif
 
+LIBRARY_PATH += $(GLEW_LIBRARY_PATH)
 LIBRARY_PATH += $(GL_LIBRARY_PATH)
 
 
@@ -97,15 +91,11 @@ ifeq "$(KVS_SUPPORT_GLUT)" "1"
 LINK_LIBRARY += -lkvsSupportGLUT $(GLUT_LINK_LIBRARY)
 endif
 
-ifeq "$(KVS_SUPPORT_GLEW)" "1"
-LINK_LIBRARY += -lkvsSupportGLEW $(GLEW_LINK_LIBRARY)
-endif
-
 ifeq "$(KVS_SUPPORT_OPENCV)" "1"
 LINK_LIBRARY += -lkvsSupportOpenCV $(OPENCV_LINK_LIBRARY)
 endif
 
-LINK_LIBRARY += $(GL_LINK_LIBRARY) -lkvsCore
+LINK_LIBRARY += $(GLEW_LINK_LIBRARY) $(GL_LINK_LIBRARY) -lkvsCore
 
 
 #=============================================================================
@@ -138,7 +128,7 @@ $(OUTDIR)/ExtractEdges.o \
 $(OUTDIR)/ExtractVertices.o \
 $(OUTDIR)/ExternalFaces.o \
 $(OUTDIR)/RayCastingRenderer.o \
-$(OUTDIR)/ParticleVolumeRenderer.o \
+$(OUTDIR)/ParticleBasedRenderer.o \
 $(OUTDIR)/Histogram.o \
 $(OUTDIR)/Widget.o \
 $(OUTDIR)/main.o \

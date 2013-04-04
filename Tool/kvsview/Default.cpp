@@ -20,9 +20,7 @@
 #include <kvs/ImageObject>
 #include <kvs/glut/Application>
 #include <kvs/glut/Screen>
-#if defined( KVS_SUPPORT_GLEW )
-#include <kvs/glew/RayCastingRenderer>
-#endif
+#include <kvs/RayCastingRenderer>
 #include "ObjectInformation.h"
 #include "TransferFunction.h"
 
@@ -130,17 +128,15 @@ const bool Main::exec( void )
         std::cout << std::endl;
     }
 
-#if defined( KVS_SUPPORT_GLEW )
     if ( pipe.object()->objectType() == kvs::ObjectBase::Volume )
     {
         const kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( pipe.object() );
         if ( volume->volumeType() == kvs::VolumeObjectBase::Structured )
         {
-            kvs::PipelineModule renderer( new kvs::glew::RayCastingRenderer );
+            kvs::PipelineModule renderer( new kvs::glsl::RayCastingRenderer );
             pipe.connect( renderer );
         }
     }
-#endif
 
     if ( !pipe.exec() )
     {

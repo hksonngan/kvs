@@ -14,10 +14,10 @@
 /*****************************************************************************/
 #include "PointRenderer.h"
 #include <kvs/DebugNew>
-#include <kvs/glew/ProgramObject>
-#include <kvs/glew/ShaderSource>
-#include <kvs/glew/VertexShader>
-#include <kvs/glew/FragmentShader>
+#include <kvs/ProgramObject>
+#include <kvs/ShaderSource>
+#include <kvs/VertexShader>
+#include <kvs/FragmentShader>
 
 
 namespace kvs

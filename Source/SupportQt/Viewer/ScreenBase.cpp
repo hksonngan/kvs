@@ -23,9 +23,6 @@
 #include <kvs/qt/Timer>
 #include <SupportQt/Viewer/KVSMouseButton.h>
 #include <SupportQt/Viewer/KVSKey.h>
-#if defined( KVS_SUPPORT_GLEW )
-#include <kvs/glew/GLEW>
-#endif
 
 
 namespace kvs
@@ -80,13 +77,13 @@ void ScreenBase::create()
     // Set screen geometry.
     QWidget::setGeometry( BaseClass::x(), BaseClass::y(), BaseClass::width(), BaseClass::height() );
 
-#if defined( KVS_SUPPORT_GLEW )
     // Initialize GLEW.
-    if ( !kvs::glew::Initialize() )
+    GLenum result = glewInit();
+    if ( result != GLEW_OK )
     {
-        kvsMessageError("GLEW initialization failed.");
+        const GLubyte* message = glewGetErrorString( result );
+        kvsMessageError( "GLEW initialization failed: %s.", message );
     }
-#endif// KVS_SUPPORT_GLEW
 
     // Create window.
     static int counter = 0;

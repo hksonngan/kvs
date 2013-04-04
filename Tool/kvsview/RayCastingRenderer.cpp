@@ -30,9 +30,6 @@
 #include <kvs/glut/Application>
 #include <kvs/glut/Screen>
 #include <kvs/glut/TransferFunctionEditor>
-#if defined( KVS_SUPPORT_GLEW )
-#include <kvs/glew/RayCastingRenderer>
-#endif
 #include "CommandName.h"
 #include "ObjectInformation.h"
 #include "FileChecker.h"
@@ -133,11 +130,7 @@ public:
         }
         else
         {
-#if defined( KVS_SUPPORT_GLEW )
-            kvs::glew::RayCastingRenderer* renderer = (kvs::glew::RayCastingRenderer*)base;
-#else
-            kvs::RayCastingRenderer* renderer = (kvs::RayCastingRenderer*)base;
-#endif
+            kvs::glsl::RayCastingRenderer* renderer = (kvs::glsl::RayCastingRenderer*)base;
             renderer->setTransferFunction( transferFunction() );
         }
 
@@ -287,11 +280,7 @@ const bool Argument::noLOD( void ) const
 /*===========================================================================*/
 const bool Argument::noGPU( void ) const
 {
-#if defined( KVS_SUPPORT_GLEW )
     return( this->hasOption("nogpu") );
-#else
-    return( true );
-#endif
 }
 
 const bool Argument::jittering( void ) const
@@ -519,18 +508,13 @@ const bool Main::exec( void )
     }
     else
     {
-#if defined( KVS_SUPPORT_GLEW )
-        kvs::PipelineModule renderer( new kvs::glew::RayCastingRenderer );
-        kvsview::RayCastingRenderer::SetupRenderer<kvs::glew::RayCastingRenderer>( arg, tfunc, renderer );
+        kvs::PipelineModule renderer( new kvs::glsl::RayCastingRenderer );
+        kvsview::RayCastingRenderer::SetupRenderer<kvs::glsl::RayCastingRenderer>( arg, tfunc, renderer );
 
         if ( arg.jittering() )
         {
-            renderer.get<kvs::glew::RayCastingRenderer>()->enableJittering();
+            renderer.get<kvs::glsl::RayCastingRenderer>()->enableJittering();
         }
-#else
-        kvs::PipelineModule renderer( new kvs::RayCastingRenderer );
-        kvsview::RayCastingRenderer::SetupRenderer<kvs::RayCastingRenderer>( arg, tfunc, renderer );
-#endif
         pipe.connect( renderer );
     }
 

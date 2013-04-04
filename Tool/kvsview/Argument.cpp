@@ -32,7 +32,7 @@
 #include "ExtractVertices.h"
 #include "ExternalFaces.h"
 #include "RayCastingRenderer.h"
-#include "ParticleVolumeRenderer.h"
+#include "ParticleBasedRenderer.h"
 #include "Histogram.h"
 
 
@@ -63,7 +63,7 @@ Argument::Argument( int argc, char** argv ):
     addOption( kvsview::ExtractVertices::CommandName, kvsview::ExtractVertices::Description, 0 );
     addOption( kvsview::ExternalFaces::CommandName, kvsview::ExternalFaces::Description, 0 );
     addOption( kvsview::RayCastingRenderer::CommandName, kvsview::RayCastingRenderer::Description, 0 );
-    addOption( kvsview::ParticleVolumeRenderer::CommandName, kvsview::ParticleVolumeRenderer::Description, 0 );
+    addOption( kvsview::ParticleBasedRenderer::CommandName, kvsview::ParticleBasedRenderer::Description, 0 );
     addOption( kvsview::Histogram::CommandName, kvsview::Histogram::Description, 0 );
 
     addValue( "input data file", false );

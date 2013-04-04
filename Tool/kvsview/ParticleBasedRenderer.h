@@ -1,6 +1,6 @@
 /*****************************************************************************/
 /**
- *  @file   ParticleVolumeRenderer.h
+ *  @file   ParticleBasedRenderer.h
  */
 /*----------------------------------------------------------------------------
  *
@@ -11,8 +11,8 @@
  *  $Id$
  */
 /*****************************************************************************/
-#ifndef KVSVIEW__PARTICLE_VOLUME_RENDERER_H_INCLUDE
-#define KVSVIEW__PARTICLE_VOLUME_RENDERER_H_INCLUDE
+#ifndef KVSVIEW__PARTICLE_BASED_RENDERER_H_INCLUDE
+#define KVSVIEW__PARTICLE_BASED_RENDERER_H_INCLUDE
 
 #include <string>
 #include <kvs/Type>
@@ -24,15 +24,15 @@
 namespace kvsview
 {
 
-namespace ParticleVolumeRenderer
+namespace ParticleBasedRenderer
 {
 
-const std::string CommandName("ParticleVolumeRenderer");
+const std::string CommandName("ParticleBasedRenderer");
 const std::string Description("Rendering a volume object. (optional)");
 
 /*===========================================================================*/
 /**
- *  Argument class for the ParticleVolumeRenderer.
+ *  Argument class for the ParticleBasedRenderer.
  */
 /*===========================================================================*/
 class Argument : public kvsview::Argument::Common
@@ -72,7 +72,7 @@ public:
 
 /*===========================================================================*/
 /**
- *  Main class for the ParticleVolumeRenderer.
+ *  Main class for the ParticleBasedRenderer.
  */
 /*===========================================================================*/
 class Main
@@ -93,8 +93,8 @@ public:
     const bool exec( void );
 };
 
-} // end of namespace ParticleVolumeRenderer
+} // end of namespace ParticleBasedRenderer
 
 } // end of namespace kvsview
 
-#endif // KVSVIEW__PARTICLE_VOLUME_RENDERER_H_INCLUDE
+#endif // KVSVIEW__PARTICLE_BASED_RENDERER_H_INCLUDE

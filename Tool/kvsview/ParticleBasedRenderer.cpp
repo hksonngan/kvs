@@ -1,6 +1,6 @@
 /*****************************************************************************/
 /**
- *  @file   ParticleVolumeRenderer.cpp
+ *  @file   ParticleBasedRenderer.cpp
  */
 /*----------------------------------------------------------------------------
  *
@@ -11,7 +11,7 @@
  *  $Id$
  */
 /*****************************************************************************/
-#include "ParticleVolumeRenderer.h"
+#include "ParticleBasedRenderer.h"
 #include <kvs/DebugNew>
 #include <kvs/IgnoreUnusedVariable>
 #include <kvs/File>
@@ -21,7 +21,7 @@
 #include <kvs/CellByCellUniformSampling>
 #include <kvs/CellByCellRejectionSampling>
 #include <kvs/CellByCellLayeredSampling>
-#include <kvs/ParticleVolumeRenderer>
+#include <kvs/ParticleBasedRenderer>
 #include <kvs/Bounds>
 #include <kvs/PaintEventListener>
 #include <kvs/MouseDoubleClickEventListener>
@@ -35,9 +35,6 @@
 #include <kvs/glut/Application>
 #include <kvs/glut/Screen>
 #include <kvs/glut/TransferFunctionEditor>
-#if defined( KVS_SUPPORT_GLEW )
-#include <kvs/glew/ParticleVolumeRenderer>
-#endif
 #include "CommandName.h"
 #include "ObjectInformation.h"
 #include "FileChecker.h"
@@ -73,7 +70,7 @@ inline const size_t GetRevisedSubpixelLevel(
 namespace kvsview
 {
 
-namespace ParticleVolumeRenderer
+namespace ParticleBasedRenderer
 {
 
 /*===========================================================================*/
@@ -86,7 +83,7 @@ namespace ParticleVolumeRenderer
 /*===========================================================================*/
 template <typename Renderer>
 const void SetupRenderer(
-    const kvsview::ParticleVolumeRenderer::Argument& arg,
+    const kvsview::ParticleBasedRenderer::Argument& arg,
     const kvs::TransferFunction& tfunc,
     Renderer* renderer )
 {
@@ -139,7 +136,7 @@ const void SetupRenderer(
 /*===========================================================================*/
 template <typename Mapper>
 const void SetupMapper(
-    const kvsview::ParticleVolumeRenderer::Argument& arg,
+    const kvsview::ParticleBasedRenderer::Argument& arg,
     const kvs::TransferFunction& tfunc,
     /* const */ kvs::glut::Screen& screen,
     Mapper* mapper )
@@ -163,13 +160,13 @@ const void SetupMapper(
 /*===========================================================================*/
 class TransferFunctionEditor : public kvs::glut::TransferFunctionEditor
 {
-    kvsview::ParticleVolumeRenderer::Argument* m_arg; ///< pointer to the argument
+    kvsview::ParticleBasedRenderer::Argument* m_arg; ///< pointer to the argument
     kvs::glut::LegendBar* m_legend_bar; ///< pointer to the legend bar
     const kvs::VolumeObjectBase* m_volume; ///< pointer to the volume object
 
 public:
 
-    TransferFunctionEditor( kvs::glut::Screen* screen, kvsview::ParticleVolumeRenderer::Argument* arg ):
+    TransferFunctionEditor( kvs::glut::Screen* screen, kvsview::ParticleBasedRenderer::Argument* arg ):
         kvs::glut::TransferFunctionEditor( screen ),
         m_arg( arg ),
         m_legend_bar( NULL ),
@@ -197,7 +194,7 @@ public:
         case 1: // Metropolis sampling
         {
             kvs::CellByCellMetropolisSampling* mapper = new kvs::CellByCellMetropolisSampling();
-            kvsview::ParticleVolumeRenderer::SetupMapper( *m_arg, tfunc, *glut_screen, mapper );
+            kvsview::ParticleBasedRenderer::SetupMapper( *m_arg, tfunc, *glut_screen, mapper );
             object = mapper->exec( m_volume );
             object->setName( ::ObjectName );
             object->setXform( xform );
@@ -206,7 +203,7 @@ public:
         case 2: // Rejection sampling
         {
             kvs::CellByCellRejectionSampling* mapper = new kvs::CellByCellRejectionSampling();
-            kvsview::ParticleVolumeRenderer::SetupMapper( *m_arg, tfunc, *glut_screen, mapper );
+            kvsview::ParticleBasedRenderer::SetupMapper( *m_arg, tfunc, *glut_screen, mapper );
             object = mapper->exec( m_volume );
             object->setName( ::ObjectName );
             object->setXform( xform );
@@ -215,7 +212,7 @@ public:
         case 3: // Layered sampling
         {
             kvs::CellByCellLayeredSampling* mapper = new kvs::CellByCellLayeredSampling();
-            kvsview::ParticleVolumeRenderer::SetupMapper( *m_arg, tfunc, *glut_screen, mapper );
+            kvsview::ParticleBasedRenderer::SetupMapper( *m_arg, tfunc, *glut_screen, mapper );
             object = mapper->exec( m_volume );
             object->setName( ::ObjectName );
             object->setXform( xform );
@@ -224,7 +221,7 @@ public:
         default: // Uniform sampling
         {
             kvs::CellByCellUniformSampling* mapper = new kvs::CellByCellUniformSampling();
-            kvsview::ParticleVolumeRenderer::SetupMapper( *m_arg, tfunc, *glut_screen, mapper );
+            kvsview::ParticleBasedRenderer::SetupMapper( *m_arg, tfunc, *glut_screen, mapper );
             object = mapper->exec( m_volume );
             object->setName( ::ObjectName );
             object->setXform( xform );
@@ -235,8 +232,8 @@ public:
         // Create new particle volume renderer.
         if ( m_arg->noGPU() )
         {
-            kvs::ParticleVolumeRenderer* renderer = new kvs::ParticleVolumeRenderer();
-            kvsview::ParticleVolumeRenderer::SetupRenderer( *m_arg, tfunc, renderer );
+            kvs::ParticleBasedRenderer* renderer = new kvs::ParticleBasedRenderer();
+            kvsview::ParticleBasedRenderer::SetupRenderer( *m_arg, tfunc, renderer );
 
             // Subpixel level.
             const size_t subpixel_level = m_arg->subpixelLevel();
@@ -246,11 +243,10 @@ public:
 
             glut_screen->registerObject( object, renderer );
         }
-#if defined( KVS_SUPPORT_GLEW )
         else
         {
-            kvs::glew::ParticleVolumeRenderer* renderer = new kvs::glew::ParticleVolumeRenderer();
-            kvsview::ParticleVolumeRenderer::SetupRenderer( *m_arg, tfunc, renderer );
+            kvs::glsl::ParticleBasedRenderer* renderer = new kvs::glsl::ParticleBasedRenderer();
+            kvsview::ParticleBasedRenderer::SetupRenderer( *m_arg, tfunc, renderer );
 
             // Subpixel level and repetition level.
             const size_t subpixel_level = m_arg->subpixelLevel();
@@ -262,7 +258,6 @@ public:
 
             glut_screen->registerObject( object, renderer );
         }
-#endif
 
         m_legend_bar->setColorMap( transferFunction().colorMap() );
 
@@ -350,10 +345,10 @@ public:
  */
 /*===========================================================================*/
 Argument::Argument( int argc, char** argv ):
-    kvsview::Argument::Common( argc, argv, "ParticleVolumeRenderer")
+    kvsview::Argument::Common( argc, argv, "ParticleBasedRenderer")
 {
-    // Parameters for the ParticleVolumeRenderer class.
-    addOption( kvsview::ParticleVolumeRenderer::CommandName, kvsview::ParticleVolumeRenderer::Description, 0 );
+    // Parameters for the ParticleBasedRenderer class.
+    addOption( kvsview::ParticleBasedRenderer::CommandName, kvsview::ParticleBasedRenderer::Description, 0 );
     addOption( "s", "Subpixel level. (default: 1)", 1, false );
     addOption( "r", "Repetition level. (default: 1)", 1, false );
     addOption( "t", "Transfer function file. (optional: <filename>)", 1, false );
@@ -435,11 +430,7 @@ const bool Argument::noLOD( void ) const
 /*===========================================================================*/
 const bool Argument::noGPU( void ) const
 {
-#if defined( KVS_SUPPORT_GLEW )
     return( this->hasOption("nogpu") );
-#else
-    return( true );
-#endif
 }
 
 const bool Argument::noZooming( void ) const
@@ -583,19 +574,19 @@ const bool Main::exec( void )
     kvs::glut::Application app( m_argc, m_argv );
 
     // Parse specified arguments.
-    kvsview::ParticleVolumeRenderer::Argument arg( m_argc, m_argv );
+    kvsview::ParticleBasedRenderer::Argument arg( m_argc, m_argv );
     if( !arg.parse() ) return( false );
 
     // Events.
-    kvsview::ParticleVolumeRenderer::KeyPressEvent key_press_event;
-    kvsview::ParticleVolumeRenderer::MouseDoubleClickEvent mouse_double_click_event;
+    kvsview::ParticleBasedRenderer::KeyPressEvent key_press_event;
+    kvsview::ParticleBasedRenderer::MouseDoubleClickEvent mouse_double_click_event;
 
     // Create screen.
     kvs::glut::Screen screen( &app );
     screen.setSize( 512, 512 );
     screen.addKeyPressEvent( &key_press_event );
     screen.addMouseDoubleClickEvent( &mouse_double_click_event );
-    screen.setTitle( kvsview::CommandName + " - " + kvsview::ParticleVolumeRenderer::CommandName );
+    screen.setTitle( kvsview::CommandName + " - " + kvsview::ParticleBasedRenderer::CommandName );
 
     // Check the input point or volume data.
     bool is_volume = false; // check flag whether the input data is volume data
@@ -679,7 +670,7 @@ const bool Main::exec( void )
     {
         kvs::PipelineModule mapper( new kvs::CellByCellMetropolisSampling );
         kvs::CellByCellMetropolisSampling* pmapper = mapper.get<kvs::CellByCellMetropolisSampling>();
-        kvsview::ParticleVolumeRenderer::SetupMapper( arg, tfunc, screen, pmapper );
+        kvsview::ParticleBasedRenderer::SetupMapper( arg, tfunc, screen, pmapper );
         pipe.connect( mapper );
         break;
     }
@@ -687,7 +678,7 @@ const bool Main::exec( void )
     {
         kvs::PipelineModule mapper( new kvs::CellByCellRejectionSampling );
         kvs::CellByCellRejectionSampling* pmapper = mapper.get<kvs::CellByCellRejectionSampling>();
-        kvsview::ParticleVolumeRenderer::SetupMapper( arg, tfunc, screen, pmapper );
+        kvsview::ParticleBasedRenderer::SetupMapper( arg, tfunc, screen, pmapper );
         pipe.connect( mapper );
         break;
     }
@@ -695,7 +686,7 @@ const bool Main::exec( void )
     {
         kvs::PipelineModule mapper( new kvs::CellByCellLayeredSampling );
         kvs::CellByCellLayeredSampling* pmapper = mapper.get<kvs::CellByCellLayeredSampling>();
-        kvsview::ParticleVolumeRenderer::SetupMapper( arg, tfunc, screen, pmapper );
+        kvsview::ParticleBasedRenderer::SetupMapper( arg, tfunc, screen, pmapper );
         pipe.connect( mapper );
         break;
     }
@@ -703,18 +694,18 @@ const bool Main::exec( void )
     {
         kvs::PipelineModule mapper( new kvs::CellByCellUniformSampling );
         kvs::CellByCellUniformSampling* pmapper = mapper.get<kvs::CellByCellUniformSampling>();
-        kvsview::ParticleVolumeRenderer::SetupMapper( arg, tfunc, screen, pmapper );
+        kvsview::ParticleBasedRenderer::SetupMapper( arg, tfunc, screen, pmapper );
         pipe.connect( mapper );
         break;
     }
     }
 
-    // Set a renderer (ParticleVolumeRenderer).
+    // Set a renderer (ParticleBasedRenderer).
     if ( arg.noGPU() )
     {
-        kvs::PipelineModule renderer( new kvs::ParticleVolumeRenderer );
-        kvs::ParticleVolumeRenderer* prenderer = renderer.get<kvs::ParticleVolumeRenderer>();
-        kvsview::ParticleVolumeRenderer::SetupRenderer( arg, tfunc, prenderer );
+        kvs::PipelineModule renderer( new kvs::ParticleBasedRenderer );
+        kvs::ParticleBasedRenderer* prenderer = renderer.get<kvs::ParticleBasedRenderer>();
+        kvsview::ParticleBasedRenderer::SetupRenderer( arg, tfunc, prenderer );
 
         // Subpixel level.
         const size_t subpixel_level = arg.subpixelLevel();
@@ -724,12 +715,11 @@ const bool Main::exec( void )
 
         pipe.connect( renderer );
     }
-#if defined( KVS_SUPPORT_GLEW )
     else
     {
-        kvs::PipelineModule renderer( new kvs::glew::ParticleVolumeRenderer );
-        kvs::glew::ParticleVolumeRenderer* prenderer = renderer.get<kvs::glew::ParticleVolumeRenderer>();
-        kvsview::ParticleVolumeRenderer::SetupRenderer( arg, tfunc, prenderer );
+        kvs::PipelineModule renderer( new kvs::glsl::ParticleBasedRenderer );
+        kvs::glsl::ParticleBasedRenderer* prenderer = renderer.get<kvs::glsl::ParticleBasedRenderer>();
+        kvsview::ParticleBasedRenderer::SetupRenderer( arg, tfunc, prenderer );
 
         // Subpixel level and repetition level.
         const size_t subpixel_level = arg.subpixelLevel();
@@ -745,7 +735,6 @@ const bool Main::exec( void )
 
         pipe.connect( renderer );
     }
-#endif
 
     // Construct the visualization pipeline.
     if ( !pipe.exec() )
@@ -776,7 +765,7 @@ const bool Main::exec( void )
     screen.show();
 
     // Create transfer function editor.
-    kvsview::ParticleVolumeRenderer::TransferFunctionEditor editor( &screen, &arg );
+    kvsview::ParticleBasedRenderer::TransferFunctionEditor editor( &screen, &arg );
     editor.setVolumeObject( volume );
     editor.setTransferFunction( arg.transferFunction( volume ) );
     editor.attachVolume( volume );
@@ -792,6 +781,6 @@ const bool Main::exec( void )
     return( arg.clear(), app.run() );
 }
 
-} // end of namespace ParticleVolumeRenderer
+} // end of namespace ParticleBasedRenderer
 
 } // end of namespace kvsview

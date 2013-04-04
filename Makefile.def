@@ -66,7 +66,6 @@ LIB_KVS_CORE := libkvsCore.a
 
 LIB_KVS_SUPPORT_CAVE      := libkvsSupportCAVE.a
 LIB_KVS_SUPPORT_CUDA      := libkvsSupportCUDA.a
-LIB_KVS_SUPPORT_GLEW      := libkvsSupportGLEW.a
 LIB_KVS_SUPPORT_GLUT      := libkvsSupportGLUT.a
 LIB_KVS_SUPPORT_OPENCABIN := libkvsSupportOpenCABIN.a
 LIB_KVS_SUPPORT_OPENCV    := libkvsSupportOpenCV.a
@@ -277,10 +276,6 @@ endif
 
 ifeq "$(KVS_SUPPORT_CAVE)" "1"
 DEFINITIONS += -DKVS_SUPPORT_CAVE
-endif
-
-ifeq "$(KVS_SUPPORT_GLEW)" "1"
-DEFINITIONS += -DKVS_SUPPORT_GLEW
 endif
 
 # NOTE: Since the GLEW header file that is in SupportGLEW must be included before

@@ -23,9 +23,6 @@
 #include <kvs/glut/Timer>
 #include <SupportGLUT/Viewer/KVSMouseButton.h>
 #include <SupportGLUT/Viewer/KVSKey.h>
-#if defined( KVS_SUPPORT_GLEW )
-#include <kvs/glew/GLEW>
-#endif
 
 
 namespace
@@ -245,13 +242,13 @@ void ScreenBase::create()
     m_id = glutGetWindow();
     ::Context[ m_id ] = this;
 
-#if defined( KVS_SUPPORT_GLEW )
     // Initialize GLEW.
-    if ( !kvs::glew::Initialize() )
+    GLenum result = glewInit();
+    if ( result != GLEW_OK )
     {
-        kvsMessageError("GLEW initialization failed.");
+        const GLubyte* message = glewGetErrorString( result );
+        kvsMessageError( "GLEW initialization failed: %s.", message );
     }
-#endif// KVS_SUPPORT_GLEW
 
     // Register the exit function.
     static bool flag = true;

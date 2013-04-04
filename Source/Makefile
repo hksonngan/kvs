@@ -27,10 +27,6 @@ ifeq "$(KVS_SUPPORT_GLUT)" "1"
 SUBDIRS += SupportGLUT
 endif
 
-ifeq "$(KVS_SUPPORT_GLEW)" "1"
-SUBDIRS += SupportGLEW
-endif
-
 ifeq "$(KVS_SUPPORT_QT)" "1"
 SUBDIRS += SupportQt
 endif
@@ -79,11 +75,6 @@ ifeq "$(KVS_SUPPORT_GLUT)" "1"
 	$(MKDIR) $(INSTALL_DIR)/include/kvs/glut
 	$(INSTALL) kvsSupportGLUT $(INSTALL_DIR)/include
 	$(INSTALL) $(shell find kvs/glut -maxdepth 1 -type f) $(INSTALL_DIR)/include/kvs/glut
-endif
-ifeq "$(KVS_SUPPORT_GLEW)" "1"
-	$(MKDIR) $(INSTALL_DIR)/include/kvs/glew
-	$(INSTALL) kvsSupportGLEW $(INSTALL_DIR)/include
-	$(INSTALL) $(shell find kvs/glew -maxdepth 1 -type f) $(INSTALL_DIR)/include/kvs/glew
 endif
 ifeq "$(KVS_SUPPORT_QT)" "1"
 	$(MKDIR) $(INSTALL_DIR)/include/kvs/qt

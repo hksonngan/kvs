@@ -35,7 +35,7 @@ int main( int argc, char** argv )
     screen.setTitle( "PointRenderer" );
     screen.show();
 
-    kvs::PolygonObject* object = NULL;
+    kvs::PointObject* object = NULL;
     if ( argc > 1 )
     {
         object = new kvs::PointImporter( argv[1] );
