@@ -323,6 +323,7 @@ $(OUTDIR)/./Visualization/Renderer/RendererBase.o \
 $(OUTDIR)/./Visualization/Renderer/ScatterPlotMatrixRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/ScatterPlotRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/Shader.o \
+$(OUTDIR)/./Visualization/Renderer/ShadingParameter.o \
 $(OUTDIR)/./Visualization/Renderer/SphereGlyph.o \
 $(OUTDIR)/./Visualization/Renderer/StochasticLineEngine.o \
 $(OUTDIR)/./Visualization/Renderer/StochasticLineRenderer.o \
