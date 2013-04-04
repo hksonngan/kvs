@@ -21,14 +21,6 @@ INSTALL_DIR  = $(KVS_DIR)
 #=============================================================================
 #  Include path.
 #=============================================================================
-!IF "$(KVS_SUPPORT_CAVE)" == "1"
-INCLUDE_PATH = $(INCLUDE_PATH) $(CAVE_INCLUDE_PATH)
-!ENDIF
-
-!IF "$(KVS_SUPPORT_SAGE)" == "1"
-INCLUDE_PATH = $(INCLUDE_PATH) $(SAGE_INCLUDE_PATH)
-!ENDIF
-
 !IF "$(KVS_SUPPORT_GLUT)" == "1"
 INCLUDE_PATH = $(INCLUDE_PATH) $(GLUT_INCLUDE_PATH)
 !ENDIF
@@ -44,16 +36,6 @@ INCLUDE_PATH = $(INCLUDE_PATH) $(GL_INCLUDE_PATH)
 #=============================================================================
 #  Library path.
 #=============================================================================
-!IF "$(KVS_SUPPORT_CAVE)" == "1"
-LIBRARY_PATH = $(LIBRARY_PATH) /LIBPATH:..\..\Source\SupportCAVE\$(OUTDIR)
-LIBRARY_PATH = $(LIBRARY_PATH) $(CAVE_LIBRARY_PATH)
-!ENDIF
-
-!IF "$(KVS_SUPPORT_SAGE)" == "1"
-LIBRARY_PATH = $(LIBRARY_PATH) /LIBPATH:..\..\Source\SupportSAGE\$(OUTDIR)
-LIBRARY_PATH = $(LIBRARY_PATH) $(SAGE_LIBRARY_PATH)
-!ENDIF
-
 !IF "$(KVS_SUPPORT_GLUT)" == "1"
 LIBRARY_PATH = $(LIBRARY_PATH) /LIBPATH:..\..\Source\SupportGLUT\$(OUTDIR)
 LIBRARY_PATH = $(LIBRARY_PATH) $(GLUT_LIBRARY_PATH)
@@ -71,20 +53,12 @@ LIBRARY_PATH = $(LIBRARY_PATH) $(GL_LIBRARY_PATH)
 #=============================================================================
 #  Link library.
 #=============================================================================
-!IF "$(KVS_SUPPORT_CAVE)" == "1"
-LINK_LIBRARY = $(LINK_LIBRARY) $(LIB_KVS_SUPPORT_CAVE) $(CAVE_LINK_LIBRARY)
-!ENDIF
-
-!IF "$(KVS_SUPPORT_SAGE)" == "1"
-LINK_LIBRARY = $(LINK_LIBRARY) $(LIB_KVS_SUPPORT_SAGE) $(SAGE_LINK_LIBRARY)
-!ENDIF
-
 !IF "$(KVS_SUPPORT_GLUT)" == "1"
 LINK_LIBRARY = $(LINK_LIBRARY) $(LIB_KVS_SUPPORT_GLUT) $(GLUT_LINK_LIBRARY)
 !ENDIF
 
 !IF "$(KVS_SUPPORT_OPENCV)" == "1"
-LINK_LIBRARY = $(LINK_LIBRARY) $(LIB_KVS_SUPPORT_GLEW) $(OPENCV_LINK_LIBRARY)
+LINK_LIBRARY = $(LINK_LIBRARY) $(LIB_KVS_SUPPORT_OPENCV) $(OPENCV_LINK_LIBRARY)
 !ENDIF
 
 LINK_LIBRARY = $(LINK_LIBRARY) $(GLEW_LINK_LIBRARY)

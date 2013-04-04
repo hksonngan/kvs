@@ -57,10 +57,8 @@ MAKEFILE = Makefile.vc
 #=============================================================================
 LIB_KVS_CORE = kvsCore.lib
 
-LIB_KVS_SUPPORT_CAVE   = kvsSupportCAVE.lib
 LIB_KVS_SUPPORT_GLUT   = kvsSupportGLUT.lib
 LIB_KVS_SUPPORT_QT     = kvsSupportQt.lib
-LIB_KVS_SUPPORT_SAGE   = kvsSupportSAGE.lib
 LIB_KVS_SUPPORT_OPENCV = kvsSupportOpenCV.lib
 
 
@@ -114,33 +112,6 @@ GLUT_LIBRARY_PATH = $(GLUT_LIBRARY_PATH) /LIBPATH:"$(KVS_GLUT_DIR)\lib"
 
 
 #=============================================================================
-#  CAVE_INCLUDE_PATH, CAVE_LIBRARY_PATH, CAVE_LINK_LIBRARY
-#=============================================================================
-!IF "$(KVS_SUPPORT_CAVE)" == "1"
-CAVE_INCLUDE_PATH =
-CAVE_LIBRARY_PATH =
-CAVE_LINK_LIBRARY = libcave_ogl_mt_MD.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib wsock32.lib
-!IFDEF KVS_CAVE_DIR
-CAVE_INCLUDE_PATH = $(CAVE_INCLUDE_PATH) /I"$(KVS_CAVE_DIR)\include"
-CAVE_LIBRARY_PATH = $(CAVE_LIBRARY_PATH) /LIBPATH:"$(KVS_CAVE_DIR)\lib32"
-!ENDIF
-!ENDIF
-
-
-#=============================================================================
-#  SAGE_INCLUDE_PATH, SAGE_LIBRARY_PATH, SAGE_LINK_LIBRARY
-#=============================================================================
-!IF "$(KVS_SUPPORT_SAGE)" == "1"
-SAGE_INCLUDE_PATH =
-SAGE_LIBRARY_PATH =
-SAGE_LINK_LIBRARY = sail.lib
-!IFDEF KVS_SAGE_DIR
-SAGE_INCLUDE_PATH = $(SAGE_INCLUDE_PATH) /I"$(KVS_SAGE_DIR)\include"
-SAGE_LIBRARY_PATH = $(SAGE_LIBRARY_PATH) /LIBPATH:"$(KVS_SAGE_DIR)\lib"
-!ENDIF
-!ENDIF
-
-#=============================================================================
 #  OPENCV_INCLUDE_PATH, OPENCV_LIBRARY_PATH, OPENCV_LINK_LIBRARY
 #=============================================================================
 !IF "$(KVS_SUPPORT_OPENCV)" == "1"
@@ -191,10 +162,6 @@ DEFINITIONS = $(DEFINITIONS) /DKVS_ENABLE_MEM_DEBUG
 DEFINITIONS = $(DEFINITIONS) /DKVS_ENABLE_DEPRECATED
 !ENDIF
 
-!IF "$(KVS_SUPPORT_CAVE)" == "1"
-DEFINITIONS = $(DEFINITIONS) /DKVS_SUPPORT_CAVE
-!ENDIF
-
 # NOTE: The GLEW header files must be included before including the OpenGL
 # header files. Therefore 'GLEW_INCLUDE_PATH' adds to 'DEFINITIONS' here.
 DEFINITIONS = $(DEFINITIONS) $(GLEW_INCLUDE_PATH)
@@ -205,10 +172,6 @@ DEFINITIONS = $(DEFINITIONS) /DKVS_SUPPORT_GLUT
 
 !IF "$(KVS_SUPPORT_QT)" == "1"
 DEFINITIONS = $(DEFINITIONS) /DKVS_SUPPORT_QT
-!ENDIF
-
-!IF "$(KVS_SUPPORT_SAGE)" == "1"
-DEFINITIONS = $(DEFINITIONS) /DKVS_SUPPORT_SAGE
 !ENDIF
 
 !IF "$(KVS_SUPPORT_OPENCV)" == "1"

@@ -67,10 +67,8 @@ LIB_KVS_CORE := libkvsCore.a
 LIB_KVS_SUPPORT_CAVE      := libkvsSupportCAVE.a
 LIB_KVS_SUPPORT_CUDA      := libkvsSupportCUDA.a
 LIB_KVS_SUPPORT_GLUT      := libkvsSupportGLUT.a
-LIB_KVS_SUPPORT_OPENCABIN := libkvsSupportOpenCABIN.a
 LIB_KVS_SUPPORT_OPENCV    := libkvsSupportOpenCV.a
 LIB_KVS_SUPPORT_QT        := libkvsSupportQt.a
-LIB_KVS_SUPPORT_SAGE      := libkvsSupportSAGE.a
 
 
 #=============================================================================
@@ -189,20 +187,6 @@ endif
 
 
 #=============================================================================
-#  SAGE_INCLUDE_PATH, SAGE_LIBRARY_PATH, SAGE_LINK_LIBRARY
-#=============================================================================
-ifeq "$(KVS_SUPPORT_SAGE)" "1"
-SAGE_INCLUDE_PATH :=
-SAGE_LIBRARY_PATH :=
-SAGE_LINK_LIBRARY := -lsail
-ifdef KVS_SAGE_DIR
-SAGE_INCLUDE_PATH := -I$(KVS_SAGE_DIR)/include
-SAGE_LIBRARY_PATH := -L$(KVS_SAGE_DIR)/lib
-endif
-endif
-
-
-#=============================================================================
 #  OPENCV_INCLUDE_PATH, OPENCV_LIBRARY_PATH, OPENCV_LINK_LIBRARY
 #=============================================================================
 ifeq "$(KVS_SUPPORT_OPENCV)" "1"
@@ -217,25 +201,6 @@ endif
 
 
 #=============================================================================
-#  OPENCABIN_INCLUDE_PATH, OPENCABIN_LIBRARY_PATH, OPENCABIN_LINK_LIBRARY
-#=============================================================================
-ifeq "$(KVS_SUPPORT_OPENCABIN)" "1"
-OPENCABIN_INCLUDE_PATH :=
-OPENCABIN_LIBRARY_PATH :=
-OPENCABIN_LINK_LIBRARY := -loclapi
-ifdef KVS_OPENCABIN_DIR
-OPENCABIN_INCLUDE_PATH += -I$(KVS_OPENCABIN_DIR)/include
-OPENCABIN_LIBRARY_PATH += -L$(KVS_OPENCABIN_DIR)/lib
-else
-ifdef OCLTOP
-OPENCABIN_INCLUDE_PATH += -I$(OCLTOP)/include
-OPENCABIN_LIBRARY_PATH += -L$(OCLTOP)/lib
-endif
-endif
-endif
-
-
-#=============================================================================
 #  Compiler option.
 #=============================================================================
 CPPFLAGS := -Wall
@@ -244,10 +209,6 @@ ifdef DEBUG
 CPPFLAGS += -O0 -ggdb3
 else
 CPPFLAGS += -O3
-endif
-
-ifeq "$(KVS_SUPPORT_OPENCABIN)" "1"
-CPPFLAGS += -fPIC
 endif
 
 ifeq "$(shell uname -s)" "Linux"
@@ -274,10 +235,6 @@ ifeq "$(KVS_ENABLE_DEPRECATED)" "1"
 DEFINITIONS += -DKVS_ENABLE_DEPRECATED
 endif
 
-ifeq "$(KVS_SUPPORT_CAVE)" "1"
-DEFINITIONS += -DKVS_SUPPORT_CAVE
-endif
-
 # NOTE: The GLEW header files must be included before including the OpenGL
 # header files. Therefore 'GLEW_INCLUDE_PATH' adds to 'DEFINITIONS' here.
 DEFINITIONS += $(GLEW_INCLUDE_PATH)
@@ -290,20 +247,12 @@ ifeq "$(KVS_SUPPORT_QT)" "1"
 DEFINITIONS += -DKVS_SUPPORT_QT
 endif
 
-ifeq "$(KVS_SUPPORT_SAGE)" "1"
-DEFINITIONS += -DKVS_SUPPORT_SAGE
-endif
-
 ifeq "$(KVS_SUPPORT_OPENCV)" "1"
 DEFINITIONS += -DKVS_SUPPORT_OPENCV
 endif
 
 ifeq "$(KVS_SUPPORT_CUDA)" "1"
 DEFINITIONS += -DKVS_SUPPORT_CUDA
-endif
-
-ifeq "$(KVS_SUPPORT_OPENCABIN)" "1"
-DEFINITIONS += -DKVS_SUPPORT_OPENCABIN
 endif
 
 

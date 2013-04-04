@@ -21,16 +21,8 @@ INSTALL_DIR  := $(KVS_DIR)
 #=============================================================================
 #  Include path.
 #=============================================================================
-ifeq "$(KVS_SUPPORT_CAVE)" "1"
-INCLUDE_PATH += $(CAVE_INCLUDE_PATH)
-endif
-
 ifeq "$(KVS_SUPPORT_CUDA)" "1"
 INCLUDE_PATH += $(CUDA_INCLUDE_PATH)
-endif
-
-ifeq "$(KVS_SUPPORT_SAGE)" "1"
-INCLUDE_PATH += $(SAGE_INCLUDE_PATH)
 endif
 
 ifeq "$(KVS_SUPPORT_GLUT)" "1"
@@ -48,16 +40,8 @@ INCLUDE_PATH += $(GL_INCLUDE_PATH)
 #=============================================================================
 #  Library path.
 #=============================================================================
-ifeq "$(KVS_SUPPORT_CAVE)" "1"
-LIBRARY_PATH += -L../../Source/SupportCAVE/$(OUTDIR) $(CAVE_LIBRARY_PATH)
-endif
-
 ifeq "$(KVS_SUPPORT_CUDA)" "1"
 LIBRARY_PATH += -L../../Source/SupportCUDA/$(OUTDIR) $(CUDA_LIBRARY_PATH)
-endif
-
-ifeq "$(KVS_SUPPORT_SAGE)" "1"
-LIBRARY_PATH += -L../../Source/SupportSAGE/$(OUTDIR) $(SAGE_LIBRARY_PATH)
 endif
 
 ifeq "$(KVS_SUPPORT_GLUT)" "1"
@@ -75,16 +59,8 @@ LIBRARY_PATH += $(GL_LIBRARY_PATH)
 #=============================================================================
 #  Link library.
 #=============================================================================
-ifeq "$(KVS_SUPPORT_CAVE)" "1"
-LINK_LIBRARY += -lkvsSupportCAVE $(CAVE_LINK_LIBRARY)
-endif
-
 ifeq "$(KVS_SUPPORT_CUDA)" "1"
 LINK_LIBRARY += $(CUDA_LINK_LIBRARY)
-endif
-
-ifeq "$(KVS_SUPPORT_SAGE)" "1"
-LINK_LIBRARY += -lkvsSupportSAGE $(SAGE_LINK_LIBRARY)
 endif
 
 ifeq "$(KVS_SUPPORT_GLUT)" "1"
