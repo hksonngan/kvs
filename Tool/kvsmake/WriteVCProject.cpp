@@ -66,9 +66,7 @@ void Write( std::ifstream& in, std::ofstream& out, const std::string& project_na
 
     // Additional dependencies (static libraries).
     std::string libraries("");
-#if defined( KVS_SUPPORT_GLEW )
-    libraries.append("kvsSupportGLEW.lib glew32.lib ");
-#endif
+    libraries.append("glew32.lib ");
 #if defined( KVS_SUPPORT_GLUT )
     libraries.append("kvsSupportGLUT.lib glut32.lib");
 #endif
@@ -78,9 +76,6 @@ void Write( std::ifstream& in, std::ofstream& out, const std::string& project_na
 
     // Preprocessor definitions.
     std::string definitions("");
-#if defined( KVS_SUPPORT_GLEW )
-    definitions.append("KVS_SUPPORT_GLEW;");
-#endif
 #if defined( KVS_SUPPORT_GLUT )
     definitions.append("KVS_SUPPORT_GLUT;");
 #endif

@@ -278,8 +278,8 @@ ifeq "$(KVS_SUPPORT_CAVE)" "1"
 DEFINITIONS += -DKVS_SUPPORT_CAVE
 endif
 
-# NOTE: Since the GLEW header file that is in SupportGLEW must be included before
-# the OpenGL header files, 'GLEW_INCLUDE_PATH' adds to 'DEFINITIONS' here.
+# NOTE: The GLEW header files must be included before including the OpenGL
+# header files. Therefore 'GLEW_INCLUDE_PATH' adds to 'DEFINITIONS' here.
 DEFINITIONS += $(GLEW_INCLUDE_PATH)
 
 ifeq "$(KVS_SUPPORT_GLUT)" "1"

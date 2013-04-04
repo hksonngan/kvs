@@ -79,7 +79,6 @@ x11 {
     LIBS += \
 $$KVS_DIR/lib/libkvsSupportQt.a \
 $$KVS_DIR/lib/libkvsSupportGLUT.a \
-$$KVS_DIR/lib/libkvsSupportGLEW.a \
 $$KVS_DIR/lib/libkvsCore.a \
 -lglut \
 -L$$GLEW_LIBRARY_PATH -lGLEW \
