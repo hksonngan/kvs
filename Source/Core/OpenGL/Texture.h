@@ -33,7 +33,7 @@ class Texture
 private:
 
     GLenum m_target; ///< target
-    GLenum m_binding_target; ///< binding target
+    GLenum m_target_binding; ///< target binding
     GLuint m_id; ///< texture ID
     GLint m_internal_format; ///< internal pixel data format
     GLenum m_external_format; ///< external pixel data format
@@ -49,9 +49,15 @@ private:
 
 public:
 
-    Texture( const GLenum target, const GLenum binding_target );
+    class Binder;
+    class GuardedBinder;
+
+public:
+
+    Texture( const GLenum target, const GLenum target_binding );
 
     GLenum target() const;
+    GLenum targetBinding() const;
     GLuint id() const;
     GLenum magFilter() const;
     GLenum minFilter() const;
@@ -114,6 +120,43 @@ public:
 
     KVS_DEPRECATED( bool isTexture() const ) { return this->isValid(); }
 };
+
+class Texture::Binder
+{
+private:
+
+    const Texture& m_texture;
+    GLint m_unit;
+
+public:
+
+    Binder( const Texture& texture, const GLint unit = 0 );
+    ~Binder();
+
+private:
+
+    Binder( const Binder& );
+    Binder& operator =( const Binder& );
+};
+
+class Texture::GuardedBinder
+{
+private:
+
+    const Texture& m_texture;
+    GLint m_id;
+
+public:
+
+    GuardedBinder( const kvs::Texture& texture );
+    ~GuardedBinder();
+
+private:
+
+    GuardedBinder( const GuardedBinder& );
+    GuardedBinder& operator =( const GuardedBinder& );
+};
+
 
 } // end of namespace kvs
 

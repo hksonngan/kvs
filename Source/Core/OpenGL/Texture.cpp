@@ -26,9 +26,9 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-Texture::Texture( const GLenum target, const GLenum binding_target ):
+Texture::Texture( const GLenum target, const GLenum target_binding ):
     m_target( target ),
-    m_binding_target( binding_target ),
+    m_target_binding( target_binding ),
     m_id( 0 ),
     m_internal_format( 0 ),
     m_external_format( 0 ),
@@ -47,6 +47,12 @@ Texture::Texture( const GLenum target, const GLenum binding_target ):
 GLenum Texture::target() const
 {
     return m_target;
+}
+
+
+GLenum Texture::targetBinding() const
+{
+    return m_target_binding;
 }
 
 /*==========================================================================*/
@@ -289,7 +295,7 @@ bool Texture::isBinding() const
 {
     if ( !this->isCreated() ) return false;
 
-    GLint id = kvs::OpenGL::Integer( m_binding_target );
+    GLint id = kvs::OpenGL::Integer( m_target_binding );
     return static_cast<GLuint>( id ) == m_id;
 }
 
@@ -605,6 +611,42 @@ void Texture::determine_pixel_format_for_4_channel( const size_t bytes_per_chann
     default:
         kvsMessageError("Bytes per channel must be 1, 2 or 4.");
         break;
+    }
+}
+
+Texture::Binder::Binder( const Texture& texture, GLint unit ) :
+    m_texture( texture ),
+    m_unit( unit )
+{
+    KVS_ASSERT( texture.isCreated() );
+    kvs::OpenGL::ActivateTextureUnit( unit );
+    texture.bind();
+}
+
+Texture::Binder::~Binder()
+{
+    KVS_ASSERT( m_texture.isCreated() );
+    kvs::OpenGL::ActivateTextureUnit( m_unit );
+    KVS_GL_CALL( glBindTexture( m_texture.target(), 0 ) );
+}
+
+Texture::GuardedBinder::GuardedBinder( const Texture& texture ):
+    m_texture( texture ),
+    m_id( kvs::OpenGL::Integer( texture.targetBinding() ) )
+{
+    KVS_ASSERT( texture.isCreated() );
+    if ( texture.id() != static_cast<GLuint>( m_id ) )
+    {
+        texture.bind();
+    }
+}
+
+Texture::GuardedBinder::~GuardedBinder()
+{
+    KVS_ASSERT( m_texture.isCreated() );
+    if ( static_cast<GLuint>( m_id ) != m_texture.id() )
+    {
+        KVS_GL_CALL( glBindRenderbuffer( m_texture.target(), m_id ) );
     }
 }
 
