@@ -33,17 +33,15 @@ public:
         m_rb( rb ),
         m_id( 0 )
     {
-        KVS_ASSERT( m_rb.isValid() );
         m_id = kvs::OpenGL::Integer( GL_RENDERBUFFER_BINDING );
         if ( m_rb.id() != static_cast<GLuint>( m_id ) ) { m_rb.bind(); }
     }
 
     ~GuardedBinder()
     {
-        KVS_ASSERT( m_rb.isValid() );
         if ( static_cast<GLuint>( m_id ) != m_rb.id() )
         {
-            KVS_GL_CALL( glBindRenderbuffer( GL_FRAMEBUFFER, m_id ) );
+            KVS_GL_CALL( glBindRenderbuffer( GL_RENDERBUFFER, m_id ) );
         }
     }
 
@@ -104,10 +102,10 @@ void RenderBuffer::create( const size_t width, const size_t height )
 {
     KVS_ASSERT( m_id == 0 );
 
-    ::GuardedBinder binder( *this );
     m_width = width;
     m_height = height;
     this->generateRenderbuffer();
+    ::GuardedBinder binder( *this );
     this->setRenderbufferStorage( m_internal_format, m_width, m_height );
 }
 

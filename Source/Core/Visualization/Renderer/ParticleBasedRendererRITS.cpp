@@ -1252,63 +1252,31 @@ void ParticleBasedRenderer::initialize_resize_texture()
         return;
     }
 
-    // Release GPU memories for the resize textures.
+    // Release GPU resources for the resize texture and the resize depthbuffer.
     m_resize_texture.release();
     m_resize_depthbuffer.release();
 
+    // Create framebuffer.
     m_resize_framebuffer.create();
     m_resize_framebuffer.bind();
-
-    m_resize_texture.release();
-    m_resize_texture.setWrapS( GL_CLAMP_TO_EDGE );
-    m_resize_texture.setWrapT( GL_CLAMP_TO_EDGE );
-    m_resize_texture.setMagFilter( GL_LINEAR );
-    m_resize_texture.setMinFilter( GL_LINEAR );
-
-    m_resize_texture.setPixelFormat( GL_RGB8, GL_RGB, GL_UNSIGNED_BYTE );
-    m_resize_texture.create( m_render_width, m_render_height );
     {
-        GLenum error = glGetError();
-        if ( error != GL_NO_ERROR )
-        {
-            kvsMessageError( "color buffer allocation failed: %s.", gluErrorString(error));
-            exit( EXIT_FAILURE );
-        }
-    }
-    m_resize_framebuffer.attachColorTexture( m_resize_texture );
+        // Set up the resize texture.
+        m_resize_texture.setWrapS( GL_CLAMP_TO_EDGE );
+        m_resize_texture.setWrapT( GL_CLAMP_TO_EDGE );
+        m_resize_texture.setMagFilter( GL_LINEAR );
+        m_resize_texture.setMinFilter( GL_LINEAR );
+        m_resize_texture.setPixelFormat( GL_RGB8, GL_RGB, GL_UNSIGNED_BYTE );
+        m_resize_texture.create( m_render_width, m_render_height );
+        m_resize_framebuffer.attachColorTexture( m_resize_texture );
 
-    if ( m_resize_depthbuffer.id() > 0 ) m_resize_depthbuffer.release();
-    m_resize_depthbuffer.setInternalFormat( GL_DEPTH_COMPONENT );
-    m_resize_depthbuffer.create( m_render_width, m_render_height );
-    {
-        GLenum error = glGetError();
-        if ( error != GL_NO_ERROR )
-        {
-            kvsMessageError( "depth buffer allocation failed: %s.", gluErrorString(error));
-            exit( EXIT_FAILURE );
-        }
-    }
-    m_resize_framebuffer.attachDepthRenderBuffer( m_resize_depthbuffer );
-    m_resize_framebuffer.bind();
-    {
-        GLenum error = glGetError();
-        if ( error != GL_NO_ERROR )
-        {
-            kvsMessageError( "framebuffer bind failed: %s.", gluErrorString(error));
-            exit( EXIT_FAILURE );
-        }
-    }
+        // Set up the resize depthbuffer.
+        m_resize_depthbuffer.setInternalFormat( GL_DEPTH_COMPONENT );
+        m_resize_depthbuffer.create( m_render_width, m_render_height );
+        m_resize_framebuffer.attachDepthRenderBuffer( m_resize_depthbuffer );
 
-    m_resize_depthbuffer.unbind();
-    m_resize_texture.unbind();
+        m_resize_texture.unbind(); /****/
+    }
     m_resize_framebuffer.unbind();
-
-    GLenum error = glGetError();
-    if ( error != GL_NO_ERROR )
-    {
-        kvsMessageError( "framebuffer allocation failed: %s.", gluErrorString(error));
-        exit( EXIT_FAILURE );
-    }
 }
 
 /*===========================================================================*/
