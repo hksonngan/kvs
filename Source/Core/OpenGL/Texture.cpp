@@ -646,7 +646,7 @@ Texture::GuardedBinder::~GuardedBinder()
     KVS_ASSERT( m_texture.isCreated() );
     if ( static_cast<GLuint>( m_id ) != m_texture.id() )
     {
-        KVS_GL_CALL( glBindRenderbuffer( m_texture.target(), m_id ) );
+        KVS_GL_CALL( glBindTexture( m_texture.target(), m_id ) );
     }
 }
 
