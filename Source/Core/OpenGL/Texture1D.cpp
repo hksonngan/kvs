@@ -59,11 +59,11 @@ void Texture1D::create( const size_t width, const void* data )
     KVS_ASSERT( static_cast<GLint>( width ) <= kvs::OpenGL::MaxTextureSize() );
 
     BaseClass::generateTexture();
-    BaseClass::bind();
+    BaseClass::setSize( width );
+    BaseClass::GuardedBinder binder( *this );
     BaseClass::setParameter( GL_TEXTURE_MAG_FILTER, BaseClass::magFilter() );
     BaseClass::setParameter( GL_TEXTURE_MIN_FILTER, BaseClass::minFilter() );
     BaseClass::setParameter( GL_TEXTURE_WRAP_S, BaseClass::wrapS() );
-    BaseClass::setSize( width );
     this->download( width, data );
 }
 

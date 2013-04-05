@@ -218,18 +218,34 @@ void StochasticMultipleTetrahedraRenderer::initialize_framebuffer_texture()
     m_framebuffer.create();
     m_framebuffer.bind();
 
-    BaseClass::create_texture( m_color_texture, m_framebuffer, GL_RGB8, GL_RGB, GL_UNSIGNED_BYTE, GL_COLOR_ATTACHMENT0_EXT );
-    BaseClass::create_texture( m_depth_texture, m_framebuffer, GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_FLOAT, GL_DEPTH_ATTACHMENT_EXT );
-    BaseClass::create_texture( m_extra_texture, m_framebuffer, GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT, GL_COLOR_ATTACHMENT1_EXT );
+    m_color_texture.release();
+    m_color_texture.setWrapS( GL_CLAMP_TO_EDGE );
+    m_color_texture.setWrapT( GL_CLAMP_TO_EDGE );
+    m_color_texture.setMagFilter( GL_LINEAR );
+    m_color_texture.setMinFilter( GL_LINEAR );
+    m_color_texture.setPixelFormat( GL_RGB8, GL_RGB, GL_UNSIGNED_BYTE );
+    m_color_texture.create( m_width, m_height );
+    m_framebuffer.attachColorTexture( m_color_texture, 0 );
+
+    m_extra_texture.release();
+    m_extra_texture.setWrapS( GL_CLAMP_TO_EDGE );
+    m_extra_texture.setWrapT( GL_CLAMP_TO_EDGE );
+    m_extra_texture.setMagFilter( GL_LINEAR );
+    m_extra_texture.setMinFilter( GL_LINEAR );
+    m_extra_texture.setPixelFormat( GL_RGBA32F, GL_RGBA, GL_FLOAT );
+    m_extra_texture.create( m_width, m_height );
+    m_framebuffer.attachColorTexture( m_extra_texture, 1 );
+
+    m_depth_texture.release();
+    m_depth_texture.setWrapS( GL_CLAMP_TO_EDGE );
+    m_depth_texture.setWrapT( GL_CLAMP_TO_EDGE );
+    m_depth_texture.setMagFilter( GL_LINEAR );
+    m_depth_texture.setMinFilter( GL_LINEAR );
+    m_depth_texture.setPixelFormat( GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_FLOAT );
+    m_depth_texture.create( m_width, m_height );
+    m_framebuffer.attachDepthTexture( m_depth_texture );
 
     m_framebuffer.unbind();
-
-    GLenum error = glGetError();
-    if ( error != GL_NO_ERROR )
-    {
-        kvsMessageError( "framebuffer allocation failed: %s.", gluErrorString(error));
-        return;
-    }
 }
 
 } // end of namespace kvs

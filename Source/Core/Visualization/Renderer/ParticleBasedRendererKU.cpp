@@ -1064,8 +1064,6 @@ void ParticleBasedRenderer::initialize_resize_texture()
         m_resize_depthbuffer.setInternalFormat( GL_DEPTH_COMPONENT );
         m_resize_depthbuffer.create( m_render_width, m_render_height );
         m_resize_framebuffer.attachDepthRenderBuffer( m_resize_depthbuffer );
-
-        m_resize_texture.unbind(); /***/
     }
     m_resize_framebuffer.unbind();
 }

@@ -61,12 +61,12 @@ void Texture2D::create( const size_t width, const size_t height, const void* dat
     KVS_ASSERT( static_cast<GLint>( height ) <= kvs::OpenGL::MaxTextureSize() );
 
     BaseClass::generateTexture();
-    BaseClass::bind();
+    BaseClass::setSize( width, height );
+    BaseClass::GuardedBinder binder( *this );
     BaseClass::setParameter( GL_TEXTURE_MAG_FILTER, BaseClass::magFilter() );
     BaseClass::setParameter( GL_TEXTURE_MIN_FILTER, BaseClass::minFilter() );
     BaseClass::setParameter( GL_TEXTURE_WRAP_S, BaseClass::wrapS() );
     BaseClass::setParameter( GL_TEXTURE_WRAP_T, BaseClass::wrapT() );
-    BaseClass::setSize( width, height );
     this->download( width, height, data );
 }
 

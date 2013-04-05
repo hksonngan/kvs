@@ -15,14 +15,13 @@
 #ifndef KVS__STOCHASTIC_RENDERER_BASE_H_INCLUDE
 #define KVS__STOCHASTIC_RENDERER_BASE_H_INCLUDE
 
-#include <kvs/ClassName>
+#include <vector>
 #include <kvs/Module>
 #include <kvs/ObjectBase>
 #include <kvs/RendererBase>
 #include <kvs/FrameBufferObject>
 #include <kvs/EnsembleAverageBuffer>
 #include "StochasticRenderingEngine.h"
-#include <vector>
 
 
 namespace kvs
@@ -92,13 +91,6 @@ protected:
 
     void initialize_opengl();
     void initialize_framebuffer_texture();
-    void create_texture(
-        kvs::Texture2D& texture,
-        kvs::FrameBufferObject& framebuffer,
-        GLint internal_format,
-        GLenum external_format,
-        GLenum external_type,
-        GLenum attachment );
     void initialize_random_texture();
 };
 

@@ -70,24 +70,7 @@ void EnsembleAverageBuffer::create( const size_t width, const size_t height )
         m_texture.setMinFilter( GL_NEAREST );
         m_texture.setPixelFormat( GL_RGB32F_ARB, GL_RGB, GL_FLOAT );
         m_texture.create( m_width, m_height );
-        {
-            GLenum error = glGetError();
-            if ( error != GL_NO_ERROR )
-            {
-                kvsMessageError( "average buffer allocation failed: %s.", gluErrorString(error) );
-                exit( EXIT_FAILURE );
-            }
-        }
         m_framebuffer.attachColorTexture( m_texture );
-        {
-            GLenum error = glGetError();
-            if ( error != GL_NO_ERROR )
-            {
-                kvsMessageError( "average buffer allocation failed: %s.", gluErrorString(error) );
-                exit( EXIT_FAILURE );
-            }
-        }
-        m_texture.unbind();
 
         m_framebuffer.unbind();
         if ( glCheckFramebufferStatusEXT( GL_FRAMEBUFFER_EXT ) != GL_FRAMEBUFFER_COMPLETE_EXT )

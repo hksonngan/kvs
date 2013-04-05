@@ -13,10 +13,11 @@
  */
 /*****************************************************************************/
 #include "StochasticRendererBase.h"
-#include "StochasticTetrahedraEngine.h"
 #include <algorithm>
 #include <cstring>
 #include <kvs/MersenneTwister>
+#include <kvs/StochasticTetrahedraEngine>
+
 
 namespace
 {
@@ -69,8 +70,8 @@ StochasticRendererBase::~StochasticRendererBase()
 /*===========================================================================*/
 void StochasticRendererBase::exec(
     kvs::ObjectBase* object,
-    kvs::Camera*     camera,
-    kvs::Light*      light )
+    kvs::Camera* camera,
+    kvs::Light* light )
 {
     kvs::IgnoreUnusedVariable( object );
 
@@ -88,20 +89,14 @@ void StochasticRendererBase::initialize()
 {
     m_width = 0;
     m_height = 0;
-
     m_repetition_level = 1;
     m_coarse_level = 1;
-
     m_random_texture_size = 1024;
-
     m_enable_lod = false;
-    memset( m_modelview_matrix, 0, sizeof( m_modelview_matrix ) );
-
     m_clear_ensemble_buffer = false;
-
     m_rendering_engines.clear();
-
     m_enable_exact_depth_testing = false;
+    memset( m_modelview_matrix, 0, sizeof( m_modelview_matrix ) );
 }
 
 /*===========================================================================*/
@@ -322,21 +317,19 @@ void StochasticRendererBase::create_image( const kvs::Camera* camera, const kvs:
         glOrtho( 0, 1, 0, 1, -1, 1 );
 
         m_color_texture.bind();
-
         glDisable( GL_DEPTH_TEST );
         glDisable( GL_LIGHTING );
         glBegin( GL_QUADS );
         glColor4f( 1.0, 1.0, 1.0, m_ensemble_buffer.opacity() );
-        glTexCoord2f( 1, 1 );  glVertex2f( 1, 1 );
-        glTexCoord2f( 0, 1 );  glVertex2f( 0, 1 );
-        glTexCoord2f( 0, 0 );  glVertex2f( 0, 0 );
-        glTexCoord2f( 1, 0 );  glVertex2f( 1, 0 );
+        glTexCoord2f( 1, 1 ); glVertex2f( 1, 1 );
+        glTexCoord2f( 0, 1 ); glVertex2f( 0, 1 );
+        glTexCoord2f( 0, 0 ); glVertex2f( 0, 0 );
+        glTexCoord2f( 1, 0 ); glVertex2f( 1, 0 );
         glEnd();
-
-        m_color_texture.unbind();
         glPopMatrix(); // Pop PROJECTION matrix
         glMatrixMode( GL_MODELVIEW );
         glPopMatrix(); // Pop MODELVIEW matrix
+        m_color_texture.unbind();
 
         m_ensemble_buffer.add();
     }
@@ -479,7 +472,6 @@ void StochasticRendererBase::disable_exact_depth_testing()
 void StochasticRendererBase::initialize_opengl()
 {
     glHint( GL_PERSPECTIVE_CORRECTION_HINT, GL_FASTEST );
-
     glClearAccum( 0.0, 0.0, 0.0, 0.0 );
 }
 
@@ -493,59 +485,25 @@ void StochasticRendererBase::initialize_framebuffer_texture()
     m_framebuffer.create();
     m_framebuffer.bind();
 
-    this->create_texture( m_color_texture, m_framebuffer, GL_RGB8, GL_RGB, GL_UNSIGNED_BYTE, GL_COLOR_ATTACHMENT0_EXT );
-    this->create_texture( m_depth_texture, m_framebuffer, GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_FLOAT, GL_DEPTH_ATTACHMENT_EXT );
+    m_color_texture.release();
+    m_color_texture.setWrapS( GL_CLAMP_TO_EDGE );
+    m_color_texture.setWrapT( GL_CLAMP_TO_EDGE );
+    m_color_texture.setMagFilter( GL_LINEAR );
+    m_color_texture.setMinFilter( GL_LINEAR );
+    m_color_texture.setPixelFormat( GL_RGB8, GL_RGB, GL_UNSIGNED_BYTE );
+    m_color_texture.create( m_width, m_height );
+    m_framebuffer.attachColorTexture( m_color_texture );
+
+    m_depth_texture.release();
+    m_depth_texture.setWrapS( GL_CLAMP_TO_EDGE );
+    m_depth_texture.setWrapT( GL_CLAMP_TO_EDGE );
+    m_depth_texture.setMagFilter( GL_LINEAR );
+    m_depth_texture.setMinFilter( GL_LINEAR );
+    m_depth_texture.setPixelFormat( GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_FLOAT );
+    m_depth_texture.create( m_width, m_height );
+    m_framebuffer.attachDepthTexture( m_depth_texture );
 
     m_framebuffer.unbind();
-
-    GLenum error = glGetError();
-    if ( error != GL_NO_ERROR )
-    {
-        kvsMessageError( "framebuffer allocation failed: %s.", gluErrorString(error));
-        return;
-    }
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Creates the texture on GPU.
- *  @param  texture [in] texture
- *  @param  framebuffer [in] framebuffer object
- *  @param  internal_format [in] internal texture format
- *  @param  external_format [in] external texture format
- *  @param  external_type [in] external texture type
- *  @param  attachment [in] attachment
- */
-/*===========================================================================*/
-void StochasticRendererBase::create_texture(
-    kvs::Texture2D& texture,
-    kvs::FrameBufferObject& framebuffer,
-    GLint internal_format,
-    GLenum external_format,
-    GLenum external_type,
-    GLenum attachment )
-{
-    texture.release();
-
-    texture.setWrapS( GL_CLAMP_TO_EDGE );
-    texture.setWrapT( GL_CLAMP_TO_EDGE );
-    texture.setMagFilter( GL_LINEAR );
-    texture.setMinFilter( GL_LINEAR );
-
-    texture.setPixelFormat( internal_format, external_format, external_type );
-    texture.create( m_width, m_height );
-    {
-        GLenum error = glGetError();
-        if ( error != GL_NO_ERROR )
-        {
-            kvsMessageError( "color buffer allocation failed: %s.", gluErrorString(error));
-            return;
-        }
-    }
-
-    glFramebufferTexture2DEXT( GL_FRAMEBUFFER_EXT, attachment, GL_TEXTURE_2D, texture.id(), 0 );
-
-    texture.unbind();
 }
 
 /*===========================================================================*/
@@ -555,32 +513,22 @@ void StochasticRendererBase::create_texture(
 /*===========================================================================*/
 void StochasticRendererBase::initialize_random_texture()
 {
-    m_random_texture.release();
-    m_random_texture.setWrapS( GL_REPEAT );
-    m_random_texture.setWrapT( GL_REPEAT );
-    m_random_texture.setMagFilter( GL_NEAREST );
-    m_random_texture.setMinFilter( GL_NEAREST );
-    m_random_texture.setPixelFormat( GL_INTENSITY8,  GL_LUMINANCE, GL_UNSIGNED_BYTE  );
-
-    m_random_texture.create( m_random_texture_size, m_random_texture_size );
-    {
-        GLenum error = glGetError();
-        if ( error != GL_NO_ERROR )
-        {
-            kvsMessageError( "color buffer allocation failed: %s.", gluErrorString(error) );
-            return;
-        }
-    }
-
-    const size_t npixels = m_random_texture_size * m_random_texture_size;
-
     kvs::MersenneTwister random;
+    const size_t npixels = m_random_texture_size * m_random_texture_size;
     GLubyte* pixels = new GLubyte[ npixels ];
     for ( size_t i = 0; i < npixels; i++ )
     {
         pixels[i] = static_cast<GLubyte>( random.randInteger() );
     }
-    m_random_texture.download( m_random_texture_size, m_random_texture_size, pixels );
+
+    m_random_texture.release();
+    m_random_texture.setWrapS( GL_REPEAT );
+    m_random_texture.setWrapT( GL_REPEAT );
+    m_random_texture.setMagFilter( GL_NEAREST );
+    m_random_texture.setMinFilter( GL_NEAREST );
+    m_random_texture.setPixelFormat( GL_INTENSITY8, GL_LUMINANCE, GL_UNSIGNED_BYTE  );
+    m_random_texture.create( m_random_texture_size, m_random_texture_size, pixels );
+
     delete [] pixels;
 }
 
