@@ -61,12 +61,6 @@ void VolumeRendererBase::setTransferFunction( const kvs::TransferFunction& tfunc
     m_tfunc = tfunc;
 }
 
-void VolumeRendererBase::setWindowSize( const size_t width, const size_t height )
-{
-    m_width = width;
-    m_height = height;
-}
-
 /*==========================================================================*/
 /**
  *  Enable shading function.
@@ -111,17 +105,6 @@ const kvs::TransferFunction& VolumeRendererBase::transferFunction() const
 
 /*==========================================================================*/
 /**
- *  Get the trunsfer function.
- *  @return transfer function
- */
-/*==========================================================================*/
-kvs::TransferFunction& VolumeRendererBase::transferFunction()
-{
-    return( m_tfunc );
-}
-
-/*==========================================================================*/
-/**
  *  Initialize.
  */
 /*==========================================================================*/
@@ -156,10 +139,47 @@ void VolumeRendererBase::clear()
 
 /*==========================================================================*/
 /**
+ *  Get the trunsfer function.
+ *  @return transfer function
+ */
+/*==========================================================================*/
+kvs::TransferFunction& VolumeRendererBase::transferFunction()
+{
+    return m_tfunc;
+}
+
+void VolumeRendererBase::setWindowSize( const size_t width, const size_t height )
+{
+    m_width = width;
+    m_height = height;
+}
+
+void VolumeRendererBase::allocateDepthData( const size_t size )
+{
+    m_depth_data.allocate( size );
+}
+
+void VolumeRendererBase::allocateColorData( const size_t size )
+{
+    m_color_data.allocate( size );
+}
+
+void VolumeRendererBase::fillDepthData( const kvs::Real32 value )
+{
+    m_depth_data.fill( value );
+}
+
+void VolumeRendererBase::fillColorData( const kvs::UInt8 value )
+{
+    m_color_data.fill( value );
+}
+
+/*==========================================================================*/
+/**
  *  Draw the rendering image.
  */
 /*==========================================================================*/
-void VolumeRendererBase::draw_image()
+void VolumeRendererBase::drawImage()
 {
     // Get viewport information.
     int viewport[4];
@@ -168,11 +188,23 @@ void VolumeRendererBase::draw_image()
     glDepthFunc( GL_LEQUAL );
     glDepthMask( GL_TRUE );
     glColorMask( GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE );
-    this->draw_depth_buffer( viewport );
+//    this->drawDepthBuffer( viewport );
+    {
+        glEnable( GL_DEPTH_TEST );
+        m_depth_buffer.draw( m_width, m_height, viewport, m_depth_data.data() );
+        glDisable( GL_DEPTH_TEST );
+    }
 
     glBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_ALPHA );
     glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE );
-    this->draw_color_buffer( viewport );
+//    this->drawColorBuffer( viewport );
+    {
+        glEnable( GL_BLEND );
+        glDisable( GL_DEPTH_TEST );
+        m_color_buffer.draw( m_width, m_height, viewport, m_color_data.data() );
+        glDisable( GL_BLEND );
+        glEnable( GL_DEPTH_TEST );
+    }
 }
 
 /*==========================================================================*/
@@ -180,7 +212,8 @@ void VolumeRendererBase::draw_image()
  *  Draw the depth buffer.
  */
 /*==========================================================================*/
-void VolumeRendererBase::draw_depth_buffer( const int* viewport )
+/*
+void VolumeRendererBase::drawDepthBuffer( const int* viewport )
 {
     // Enable/Disable OpenGL parameters.
     glEnable( GL_DEPTH_TEST );
@@ -191,13 +224,15 @@ void VolumeRendererBase::draw_depth_buffer( const int* viewport )
     // Recover OpenGL parameters.
     glDisable( GL_DEPTH_TEST );
 }
+*/
 
 /*==========================================================================*/
 /**
  *  Draw color buffer.
  */
 /*==========================================================================*/
-void VolumeRendererBase::draw_color_buffer( const int* viewport )
+/*
+void VolumeRendererBase::drawColorBuffer( const int* viewport )
 {
     // Enable/Disable OpenGL parameters.
     glEnable( GL_BLEND );
@@ -210,5 +245,6 @@ void VolumeRendererBase::draw_color_buffer( const int* viewport )
     glDisable( GL_BLEND );
     glEnable( GL_DEPTH_TEST );
 }
+*/
 
 } // end of namespace kvs

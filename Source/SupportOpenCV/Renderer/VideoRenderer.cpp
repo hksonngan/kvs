@@ -84,8 +84,8 @@ void VideoRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Lig
     const int width = frame->width;
     const int height = frame->height;
     const char* data = frame->imageData; // BGRBGRBGR...
-    m_texture.download( width, height, data );
     m_texture.bind();
+    m_texture.download( width, height, data );
 
     glMatrixMode( GL_MODELVIEW );
     glPushMatrix();
@@ -117,6 +117,8 @@ void VideoRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Lig
         glMatrixMode( GL_MODELVIEW );
     }
     glPopMatrix();
+
+    m_texture.unbind();
 
     glClearDepth( 1000 );
     glEnable( GL_DEPTH_TEST );

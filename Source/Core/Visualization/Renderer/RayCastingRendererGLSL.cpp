@@ -23,22 +23,6 @@
 namespace
 {
 
-/*===========================================================================*/
-/**
- *  @brief  Check the OpenGL error.
- *  @param  message [in] error message
- */
-/*===========================================================================*/
-void CheckOpenGLError( const char* message )
-{
-    const GLenum error = glGetError();
-    if ( error != GL_NO_ERROR )
-    {
-        kvsMessageError( "OPENGL ERROR: %s (%s)", message, gluErrorString( error ) );
-        exit( EXIT_FAILURE );
-    }
-}
-
 template <typename T>
 kvs::AnyValueArray NormalizeValues(
     const kvs::StructuredVolumeObject* volume,
@@ -132,11 +116,10 @@ RayCastingRenderer::RayCastingRenderer( const ShadingType shader )
 /*===========================================================================*/
 void RayCastingRenderer::exec(
     kvs::ObjectBase* object,
-    kvs::Camera*     camera,
-    kvs::Light*      light )
+    kvs::Camera* camera,
+    kvs::Light* light )
 {
     kvs::StructuredVolumeObject* volume = kvs::StructuredVolumeObject::DownCast( object );
-
     BaseClass::startTimer();
     this->create_image( volume, camera, light );
     BaseClass::stopTimer();
@@ -460,8 +443,6 @@ void RayCastingRenderer::initialize_shaders( const kvs::StructuredVolumeObject* 
         kvs::ShaderSource vert( vert_code );
         kvs::ShaderSource frag( frag_code );
         m_bounding_cube_shader.create( vert, frag );
-
-        ::CheckOpenGLError( "Cannot initialize bounding cube shader." );
     }
 
     // Ray caster.
@@ -600,8 +581,6 @@ void RayCastingRenderer::initialize_shaders( const kvs::StructuredVolumeObject* 
         default: /* NO SHADING */ break;
         }
         m_ray_caster.unbind();
-
-        ::CheckOpenGLError( "Cannot initialize ray caster." );
     }
 }
 
@@ -614,11 +593,8 @@ void RayCastingRenderer::create_jittering_texture()
 
     m_jittering_texture.release();
     m_jittering_texture.create( size, size, data );
-    m_jittering_texture.unbind();
 
     delete [] data;
-
-    ::CheckOpenGLError( "Jittering texture allocation failed." );
 }
 
 /*===========================================================================*/
@@ -689,8 +665,6 @@ void RayCastingRenderer::create_bounding_cube( const kvs::StructuredVolumeObject
     const size_t byte_size = sizeof(float) * nelements;
     m_bounding_cube.create( byte_size, coords );
     m_bounding_cube.unbind();
-
-    ::CheckOpenGLError( "Cannot download bounding cube (VBO)." );
 }
 
 /*===========================================================================*/
@@ -718,9 +692,6 @@ void RayCastingRenderer::create_transfer_function( const kvs::StructuredVolumeOb
     }
 
     m_transfer_function_texture.create( width, colors.data() );
-    m_transfer_function_texture.unbind();
-
-    ::CheckOpenGLError( "Cannot create transfer function texture." );
 }
 
 /*===========================================================================*/
@@ -824,9 +795,6 @@ void RayCastingRenderer::create_volume_data( const kvs::StructuredVolumeObject* 
 
     m_volume_data.release();
     m_volume_data.create( width, height, depth, data_value.data() );
-    m_volume_data.unbind();
-
-    ::CheckOpenGLError( "Cannot create volume data texture." );
 }
 
 /*===========================================================================*/

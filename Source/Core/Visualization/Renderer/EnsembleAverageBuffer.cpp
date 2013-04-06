@@ -59,24 +59,21 @@ void EnsembleAverageBuffer::create( const size_t width, const size_t height )
     }
     else
     {
-        m_texture.release();
         m_framebuffer.release();
         m_framebuffer.create();
         m_framebuffer.bind();
-
-        m_texture.setWrapS( GL_CLAMP_TO_EDGE );
-        m_texture.setWrapT( GL_CLAMP_TO_EDGE );
-        m_texture.setMagFilter( GL_NEAREST );
-        m_texture.setMinFilter( GL_NEAREST );
-        m_texture.setPixelFormat( GL_RGB32F_ARB, GL_RGB, GL_FLOAT );
-        m_texture.create( m_width, m_height );
-        m_framebuffer.attachColorTexture( m_texture );
-
-        m_framebuffer.unbind();
-        if ( glCheckFramebufferStatusEXT( GL_FRAMEBUFFER_EXT ) != GL_FRAMEBUFFER_COMPLETE_EXT )
         {
-            std::cout << "framebuffer is not complete" << std::endl;
+            m_texture.release();
+            m_texture.setWrapS( GL_CLAMP_TO_EDGE );
+            m_texture.setWrapT( GL_CLAMP_TO_EDGE );
+            m_texture.setMagFilter( GL_NEAREST );
+            m_texture.setMinFilter( GL_NEAREST );
+            m_texture.setPixelFormat( GL_RGB32F_ARB, GL_RGB, GL_FLOAT );
+            m_texture.create( m_width, m_height );
+            m_framebuffer.attachColorTexture( m_texture );
         }
+        m_framebuffer.unbind();
+        m_framebuffer.checkStatus();
     }
 }
 
@@ -117,10 +114,6 @@ void EnsembleAverageBuffer::bind()
     {
         m_count++;
         m_framebuffer.bind();
-        if ( glCheckFramebufferStatusEXT( GL_FRAMEBUFFER_EXT ) != GL_FRAMEBUFFER_COMPLETE_EXT )
-        {
-            std::cout << "framebuffer is not complete" << std::endl;
-        }
 
         glViewport( 0, 0, m_width, m_height );
         glDisable( GL_DEPTH_TEST );

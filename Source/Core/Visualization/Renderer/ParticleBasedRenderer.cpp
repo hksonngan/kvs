@@ -85,7 +85,7 @@ void ParticleBasedRenderer::exec(
 
     BaseClass::startTimer();
     this->create_image( point, camera, light );
-    BaseClass::draw_image();
+    BaseClass::drawImage();
     this->clean_particle_buffer();
     BaseClass::stopTimer();
 }

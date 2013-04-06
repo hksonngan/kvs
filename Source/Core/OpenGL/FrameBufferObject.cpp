@@ -16,45 +16,8 @@
 #include <kvs/Texture2D>
 #include <kvs/Assert>
 #include <kvs/OpenGL>
+#include <kvs/Message>
 
-
-namespace
-{
-
-class GuardedBinder
-{
-private:
-
-    const kvs::FrameBufferObject& m_fbo;
-    GLint m_id;
-
-public:
-
-    GuardedBinder( const kvs::FrameBufferObject& fbo ):
-        m_fbo( fbo ),
-        m_id( 0 )
-    {
-        KVS_ASSERT( fbo.isValid() );
-        m_id = kvs::OpenGL::Integer( GL_FRAMEBUFFER_BINDING );
-        if ( fbo.id() != static_cast<GLuint>( m_id ) ) { fbo.bind(); }
-    }
-
-    ~GuardedBinder()
-    {
-        KVS_ASSERT( m_fbo.isValid() );
-        if ( static_cast<GLuint>( m_id ) != m_fbo.id() )
-        {
-            KVS_GL_CALL( glBindFramebufferEXT( GL_FRAMEBUFFER, m_id ) );
-        }
-    }
-
-private:
-
-    GuardedBinder( const GuardedBinder& );
-    GuardedBinder& operator =( const GuardedBinder& );
-};
-
-}
 
 namespace kvs
 {
@@ -152,10 +115,44 @@ bool FrameBufferObject::isBinding() const
     return static_cast<GLuint>( id ) == m_id;
 }
 
+void FrameBufferObject::checkStatus() const
+{
+    const GLenum status = this->checkFramebufferStatus();
+    if ( status == GL_FRAMEBUFFER_COMPLETE ) { return; }
+
+    switch ( status )
+    {
+    case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
+        kvsMessageError( "Framebuffer incomplete attachement" );
+        break;
+    case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
+        kvsMessageError( "Framebuffer incomplete, missing attachment" );
+        break;
+    case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER:
+        kvsMessageError( "Framebuffer incomplete, missing draw buffer" );
+        break;
+    case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER:
+        kvsMessageError( "Framebuffer incomplete, missing read buffer" );
+        break;
+    case GL_FRAMEBUFFER_UNSUPPORTED:
+        kvsMessageError( "Unsupported framebuffer format" );
+        break;
+    case GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE:
+        kvsMessageError( "Framebuffer incomplete multisample" );
+        break;
+    case GL_FRAMEBUFFER_UNDEFINED:
+        kvsMessageError( "Framebuffer undefined" );
+        break;
+    default:
+        kvsMessageError( "Unknown framebuffer error" );
+        break;
+    }
+}
+
 void FrameBufferObject::attachColorTexture( const kvs::Texture1D& texture, const size_t color_buffer, const int mip_level )
 {
     KVS_ASSERT( static_cast<GLint>( color_buffer ) < kvs::OpenGL::MaxColorAttachments() );
-    ::GuardedBinder binder( *this );
+    GuardedBinder binder( *this );
     const GLuint id = texture.id();
     const GLenum attachment = GL_COLOR_ATTACHMENT0 + color_buffer;
     const GLenum type = GL_TEXTURE_1D;
@@ -173,7 +170,7 @@ void FrameBufferObject::attachColorTexture( const kvs::Texture1D& texture, const
 void FrameBufferObject::attachColorTexture( const kvs::Texture2D& texture, const size_t color_buffer, const int mip_level )
 {
     KVS_ASSERT( static_cast<GLint>( color_buffer ) < kvs::OpenGL::MaxColorAttachments() );
-    ::GuardedBinder binder( *this );
+    GuardedBinder binder( *this );
     const GLuint id = texture.id();
     const GLenum attachment = GL_COLOR_ATTACHMENT0 + color_buffer;
     const GLenum type = GL_TEXTURE_2D;
@@ -192,7 +189,7 @@ void FrameBufferObject::attachColorTexture( const kvs::Texture2D& texture, const
 void FrameBufferObject::attachColorTexture( const kvs::Texture3D& texture, const size_t color_buffer, const int mip_level, const int zoffset )
 {
     KVS_ASSERT( static_cast<GLint>( color_buffer ) < kvs::OpenGL::MaxColorAttachments() );
-    ::GuardedBinder binder( *this );
+    GuardedBinder binder( *this );
     const GLuint id = texture.id();
     const GLenum attachment = GL_COLOR_ATTACHMENT0 + color_buffer;
     const GLenum type = GL_TEXTURE_3D;
@@ -201,7 +198,7 @@ void FrameBufferObject::attachColorTexture( const kvs::Texture3D& texture, const
 
 void FrameBufferObject::attachDepthTexture( const kvs::Texture1D& texture, const int mip_level )
 {
-    ::GuardedBinder binder( *this );
+    GuardedBinder binder( *this );
     const GLuint id = texture.id();
     const GLenum attachment = GL_DEPTH_ATTACHMENT;
     const GLenum type = GL_TEXTURE_1D;
@@ -210,7 +207,7 @@ void FrameBufferObject::attachDepthTexture( const kvs::Texture1D& texture, const
 
 void FrameBufferObject::attachDepthTexture( const kvs::Texture2D& texture, const int mip_level )
 {
-    ::GuardedBinder binder( *this );
+    GuardedBinder binder( *this );
     const GLuint id = texture.id();
     const GLenum attachment = GL_DEPTH_ATTACHMENT;
     const GLenum type = GL_TEXTURE_2D;
@@ -219,7 +216,7 @@ void FrameBufferObject::attachDepthTexture( const kvs::Texture2D& texture, const
 
 void FrameBufferObject::attachDepthTexture( const kvs::Texture3D& texture, const int mip_level, const int zoffset )
 {
-    ::GuardedBinder binder( *this );
+    GuardedBinder binder( *this );
     const GLuint id = texture.id();
     const GLenum attachment = GL_DEPTH_ATTACHMENT;
     const GLenum type = GL_TEXTURE_3D;
@@ -229,7 +226,7 @@ void FrameBufferObject::attachDepthTexture( const kvs::Texture3D& texture, const
 void FrameBufferObject::attachColorRenderBuffer( const kvs::RenderBuffer& render_buffer, const size_t color_buffer )
 {
     KVS_ASSERT( static_cast<GLint>( color_buffer ) < kvs::OpenGL::MaxColorAttachments() );
-    ::GuardedBinder binder( *this );
+    GuardedBinder binder( *this );
     const GLuint id = render_buffer.id();
     const GLenum attachment = GL_COLOR_ATTACHMENT0 + color_buffer;
     KVS_GL_CALL( glFramebufferRenderbuffer( GL_FRAMEBUFFER, attachment, GL_RENDERBUFFER, id ) );
@@ -237,7 +234,7 @@ void FrameBufferObject::attachColorRenderBuffer( const kvs::RenderBuffer& render
 
 void FrameBufferObject::attachDepthRenderBuffer( const kvs::RenderBuffer& render_buffer )
 {
-    ::GuardedBinder binder( *this );
+    GuardedBinder binder( *this );
     const GLuint id = render_buffer.id();
     const GLenum attachment = GL_DEPTH_ATTACHMENT;
     KVS_GL_CALL( glFramebufferRenderbuffer( GL_FRAMEBUFFER, attachment, GL_RENDERBUFFER, id ) );
@@ -258,6 +255,45 @@ void FrameBufferObject::deleteFramebuffer()
         KVS_GL_CALL( glDeleteFramebuffers( 1, &m_id ) );
     }
     m_id = 0;
+}
+
+GLenum FrameBufferObject::checkFramebufferStatus() const
+{
+    GuardedBinder binder( *this );
+    GLenum status = GL_FRAMEBUFFER_COMPLETE;
+    KVS_GL_CALL( status = glCheckFramebufferStatus( GL_FRAMEBUFFER ) );
+    return status;
+}
+
+FrameBufferObject::Binder::Binder( const FrameBufferObject& fbo ) :
+    m_fbo( fbo )
+{
+    KVS_ASSERT( fbo.isCreated() );
+    fbo.bind();
+}
+
+FrameBufferObject::Binder::~Binder()
+{
+    KVS_ASSERT( m_fbo.isCreated() );
+    KVS_GL_CALL( glBindFramebuffer( GL_FRAMEBUFFER, 0 ) );
+}
+
+FrameBufferObject::GuardedBinder::GuardedBinder( const kvs::FrameBufferObject& fbo ):
+    m_fbo( fbo ),
+    m_id( 0 )
+{
+    KVS_ASSERT( fbo.isValid() );
+    m_id = kvs::OpenGL::Integer( GL_FRAMEBUFFER_BINDING );
+    if ( fbo.id() != static_cast<GLuint>( m_id ) ) { fbo.bind(); }
+}
+
+FrameBufferObject::GuardedBinder::~GuardedBinder()
+{
+    KVS_ASSERT( m_fbo.isValid() );
+    if ( static_cast<GLuint>( m_id ) != m_fbo.id() )
+    {
+        KVS_GL_CALL( glBindFramebufferEXT( GL_FRAMEBUFFER, m_id ) );
+    }
 }
 
 } // end of namespace kvs

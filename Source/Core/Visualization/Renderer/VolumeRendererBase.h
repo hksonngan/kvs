@@ -65,23 +65,27 @@ public:
     template <typename ShadingType>
     void setShader( const ShadingType shader );
     void setTransferFunction( const kvs::TransferFunction& tfunc );
-    void setWindowSize( const size_t width, const size_t height );
 
     void enableShading();
     void disableShading();
 
     const bool isEnabledShading() const;
     const kvs::TransferFunction& transferFunction() const;
-    kvs::TransferFunction& transferFunction();
 
     void initialize();
     void clear();
 
 protected:
 
-    void draw_image();
-    void draw_depth_buffer( const int* viewport );
-    void draw_color_buffer( const int* viewport );
+    kvs::TransferFunction& transferFunction();
+    void setWindowSize( const size_t width, const size_t height );
+    void allocateDepthData( const size_t size );
+    void allocateColorData( const size_t size );
+    void fillDepthData( const kvs::Real32 value );
+    void fillColorData( const kvs::UInt8 value );
+    void drawImage();
+//    void drawDepthBuffer( const int* viewport );
+//    void drawColorBuffer( const int* viewport );
 };
 
 template <typename ShadingType>

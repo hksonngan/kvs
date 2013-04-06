@@ -68,14 +68,12 @@ void ParticleBufferCompositor::exec(
 {
     kvs::IgnoreUnusedVariable( object );
 
-    if( m_point_object_list.size() == 0 ) return;
+    if ( m_point_object_list.size() == 0 ) return;
 
     BaseClass::startTimer();
-
     this->create_image( camera, light );
-    BaseClass::draw_image();
+    BaseClass::drawImage();
     this->clean_accumulator();
-
     BaseClass::stopTimer();
 }
 

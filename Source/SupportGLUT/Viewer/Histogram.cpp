@@ -513,12 +513,9 @@ void Histogram::create_texture( void )
 
     m_texture.release();
     m_texture.setPixelFormat( nchannels, sizeof( kvs::UInt8 ) );
-//    m_texture.setMinFilter( GL_NEAREST );
-//    m_texture.setMagFilter( GL_NEAREST );
     m_texture.setMinFilter( GL_LINEAR );
     m_texture.setMagFilter( GL_LINEAR );
     m_texture.create( width, height, this->get_histogram_image().data() );
-    m_texture.unbind();
 }
 
 /*===========================================================================*/

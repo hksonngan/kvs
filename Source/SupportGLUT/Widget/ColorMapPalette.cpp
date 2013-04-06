@@ -417,7 +417,6 @@ void ColorMapPalette::initialize_texture( const kvs::ColorMap& color_map )
     m_texture.setMinFilter( GL_LINEAR );
     m_texture.setMagFilter( GL_LINEAR );
     m_texture.create( width, data );
-    m_texture.unbind();
 }
 
 void ColorMapPalette::draw_palette( void )

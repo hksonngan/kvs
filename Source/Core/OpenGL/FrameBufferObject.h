@@ -15,6 +15,7 @@
 #ifndef KVS__FRAME_BUFFER_OBJECT_H_INCLUDE
 #define KVS__FRAME_BUFFER_OBJECT_H_INCLUDE
 
+#include <string>
 #include <kvs/Texture1D>
 #include <kvs/Texture2D>
 #include <kvs/Texture3D>
@@ -38,6 +39,11 @@ private:
 
 public:
 
+    class Binder;
+    class GuardedBinder;
+
+public:
+
     FrameBufferObject();
     virtual ~FrameBufferObject();
 
@@ -50,6 +56,7 @@ public:
     bool isCreated() const;
     bool isValid() const;
     bool isBinding() const;
+    void checkStatus() const;
 
     void attachColorTexture( const kvs::Texture1D& texture, const size_t color_buffer = 0, const int mip_level = 0 );
     void attachColorTexture( const kvs::Texture2D& texture, const size_t color_buffer = 0, const int mip_level = 0 );
@@ -64,10 +71,42 @@ protected:
 
     void generateFramebuffer();
     void deleteFramebuffer();
+    GLenum checkFramebufferStatus() const;
 
 public:
 
     KVS_DEPRECATED( void disable() const ) { this->unbind(); }
+};
+
+class FrameBufferObject::Binder
+{
+    const kvs::FrameBufferObject& m_fbo;
+
+public:
+
+    Binder( const kvs::FrameBufferObject& fbo );
+    ~Binder();
+
+private:
+
+    Binder( const Binder& );
+    Binder& operator =( const Binder& );
+};
+
+class FrameBufferObject::GuardedBinder
+{
+    const kvs::FrameBufferObject& m_fbo;
+    GLint m_id;
+
+public:
+
+    GuardedBinder( const kvs::FrameBufferObject& fbo );
+    ~GuardedBinder();
+
+private:
+
+    GuardedBinder( const GuardedBinder& );
+    GuardedBinder& operator =( const GuardedBinder& );
 };
 
 } // end of namespace kvs

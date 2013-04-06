@@ -66,11 +66,10 @@ void RayCastingRenderer::exec(
     kvs::Camera* camera,
     kvs::Light* light )
 {
-    const kvs::StructuredVolumeObject* volume = reinterpret_cast<kvs::StructuredVolumeObject*>(object);
-
+    const kvs::StructuredVolumeObject* volume = kvs::StructuredVolumeObject::DownCast( object );
     BaseClass::startTimer();
     this->create_image( volume, camera, light );
-    this->draw_image();
+    BaseClass::drawImage();
     BaseClass::stopTimer();
 }
 
@@ -120,21 +119,20 @@ void RayCastingRenderer::create_image(
     const kvs::Camera* camera,
     const kvs::Light* light )
 {
-    if ( BaseClass::m_width  != camera->windowWidth() ||
-         BaseClass::m_height != camera->windowHeight() )
+    if ( BaseClass::windowWidth()  != camera->windowWidth() ||
+         BaseClass::windowHeight() != camera->windowHeight() )
     {
-        BaseClass::m_width  = camera->windowWidth();
-        BaseClass::m_height = camera->windowHeight();
+        BaseClass::setWindowSize( camera->windowWidth(), camera->windowHeight() );
 
-        const size_t npixels = BaseClass::m_width * BaseClass::m_height;
-        BaseClass::m_color_data.allocate( npixels * 4 );
-        BaseClass::m_depth_data.allocate( npixels );
+        const size_t npixels = BaseClass::windowWidth() * BaseClass::windowHeight();
+        BaseClass::allocateColorData( npixels * 4 );
+        BaseClass::allocateDepthData( npixels );
 
         glGetFloatv( GL_MODELVIEW_MATRIX, m_modelview_matrix );
     }
 
-    BaseClass::m_color_data.fill( 0 );
-    BaseClass::m_depth_data.fill( 0 );
+    BaseClass::fillColorData( 0 );
+    BaseClass::fillDepthData( 0 );
 
     if ( !volume->hasMinMaxValues() ) volume->updateMinMaxValues();
     const float min_value = static_cast<float>( volume->minValue() );
@@ -142,27 +140,27 @@ void RayCastingRenderer::create_image(
     const std::type_info& type = volume->values().typeInfo()->type();
     if(      type == typeid(kvs::UInt8)  )
     {
-        if ( !m_tfunc.hasRange() ) BaseClass::m_tfunc.setRange( 0, 255 );
+        if ( !m_tfunc.hasRange() ) BaseClass::transferFunction().setRange( 0, 255 );
         this->rasterize<kvs::UInt8>( volume, camera, light );
     }
     else if( type == typeid(kvs::UInt16) )
     {
-        if ( !m_tfunc.hasRange() ) BaseClass::m_tfunc.setRange( min_value, max_value );
+        if ( !m_tfunc.hasRange() ) BaseClass::transferFunction().setRange( min_value, max_value );
         this->rasterize<kvs::UInt16>( volume, camera, light );
     }
     else if( type == typeid(kvs::Int16) )
     {
-        if ( !m_tfunc.hasRange() ) BaseClass::m_tfunc.setRange( min_value, max_value );
+        if ( !m_tfunc.hasRange() ) BaseClass::transferFunction().setRange( min_value, max_value );
         this->rasterize<kvs::Int16>( volume, camera, light );
     }
     else if( type == typeid(kvs::Real32) )
     {
-        if ( !m_tfunc.hasRange() ) BaseClass::m_tfunc.setRange( min_value, max_value );
+        if ( !m_tfunc.hasRange() ) BaseClass::transferFunction().setRange( min_value, max_value );
         this->rasterize<kvs::Real32>( volume, camera, light );
     }
     else if( type == typeid(kvs::Real64) )
     {
-        if ( !m_tfunc.hasRange() ) BaseClass::m_tfunc.setRange( min_value, max_value );
+        if ( !m_tfunc.hasRange() ) BaseClass::transferFunction().setRange( min_value, max_value );
         this->rasterize<kvs::Real64>( volume, camera, light );
     }
     else
@@ -196,8 +194,8 @@ void RayCastingRenderer::rasterize(
 
 #if KVS_RAY_CASTING_RENDERER__ENABLE_COMPOSITION
     // Readback pixels.
-    glReadPixels( 0, 0, BaseClass::m_width, BaseClass::m_height, GL_RGBA, GL_UNSIGNED_BYTE, pixel );
-    glReadPixels( 0, 0, BaseClass::m_width, BaseClass::m_height, GL_DEPTH_COMPONENT, GL_FLOAT, depth_data );
+    glReadPixels( 0, 0, BaseClass::windowWidth(), BaseClass::windowHeight(), GL_RGBA, GL_UNSIGNED_BYTE, pixel );
+    glReadPixels( 0, 0, BaseClass::windowWidth(), BaseClass::windowHeight(), GL_DEPTH_COMPONENT, GL_FLOAT, depth_data );
 #endif
 
     // LOD control.
@@ -224,8 +222,8 @@ void RayCastingRenderer::rasterize(
     kvs::VolumeRayIntersector ray( volume );
 
     // Execute ray casting.
-    const size_t height = BaseClass::m_height;
-    const size_t width  = BaseClass::m_width;
+    const size_t height = BaseClass::windowHeight();
+    const size_t width  = BaseClass::windowWidth();
 
     const float step = m_step;
     const float opaque = m_opaque;
