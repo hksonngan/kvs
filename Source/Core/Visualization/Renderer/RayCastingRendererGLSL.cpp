@@ -17,7 +17,6 @@
 #include <kvs/Shader>
 #include <kvs/Vector3>
 #include <kvs/OpenGL>
-#include <kvs/TextureBinder>
 
 
 namespace
@@ -207,8 +206,7 @@ void RayCastingRenderer::disableJittering()
 /*===========================================================================*/
 void RayCastingRenderer::initialize()
 {
-    BaseClass::m_width = 0;
-    BaseClass::m_height = 0;
+    BaseClass::setWindowSize( 0, 0 );
 
     m_draw_front_face = true;
     m_draw_back_face = true;
@@ -340,10 +338,10 @@ void RayCastingRenderer::create_image(
         const GLsizei width = BaseClass::windowWidth();
         const GLsizei height = BaseClass::windowHeight();
 
-        kvs::TextureBinder depth_texture_binder( m_depth_texture, 6 );
+        kvs::Texture::Binder depth_texture_binder( m_depth_texture, 6 );
         KVS_GL_CALL( glCopyTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, x, y, width, height ) );
 
-        kvs::TextureBinder color_texture_binder( m_color_texture, 7 );
+        kvs::Texture::Binder color_texture_binder( m_color_texture, 7 );
         KVS_GL_CALL( glCopyTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, x, y, width, height ) );
     }
 
@@ -383,13 +381,13 @@ void RayCastingRenderer::create_image(
         // Ray casting.
         m_ray_caster.bind();
         {
-            kvs::TextureBinder volume_data_binder( m_volume_data, 1 );
-            kvs::TextureBinder exit_points_binder( m_exit_points, 2 );
-            kvs::TextureBinder entry_points_binder( m_entry_points, 3 );
-            kvs::TextureBinder transfer_function_texture_binder( m_transfer_function_texture, 4 );
-            kvs::TextureBinder jittering_texture_binder( m_jittering_texture, 5 );
-            kvs::TextureBinder depth_texture_binder( m_depth_texture, 6 );
-            kvs::TextureBinder color_texture_binder( m_color_texture, 7 );
+            kvs::Texture::Binder volume_data_binder( m_volume_data, 1 );
+            kvs::Texture::Binder exit_points_binder( m_exit_points, 2 );
+            kvs::Texture::Binder entry_points_binder( m_entry_points, 3 );
+            kvs::Texture::Binder transfer_function_texture_binder( m_transfer_function_texture, 4 );
+            kvs::Texture::Binder jittering_texture_binder( m_jittering_texture, 5 );
+            kvs::Texture::Binder depth_texture_binder( m_depth_texture, 6 );
+            kvs::Texture::Binder color_texture_binder( m_color_texture, 7 );
 
             const float f = camera->back();
             const float n = camera->front();
@@ -620,7 +618,6 @@ void RayCastingRenderer::create_bounding_cube( const kvs::StructuredVolumeObject
      */
     const kvs::Vector3ui min( 0, 0, 0 );
     const kvs::Vector3ui max( volume->resolution() - kvs::Vector3ui( 1, 1, 1 ) );
-//    const kvs::Vector3ui max( volume->resolution() );
     const size_t nelements = 72; // = 4 vertices x 3 dimensions x 6 faces
 
     const float minx = static_cast<float>( min.x() );
@@ -664,7 +661,6 @@ void RayCastingRenderer::create_bounding_cube( const kvs::StructuredVolumeObject
 
     const size_t byte_size = sizeof(float) * nelements;
     m_bounding_cube.create( byte_size, coords );
-    m_bounding_cube.unbind();
 }
 
 /*===========================================================================*/
@@ -677,12 +673,12 @@ void RayCastingRenderer::create_transfer_function( const kvs::StructuredVolumeOb
 {
     kvs::IgnoreUnusedVariable( volume );
 
-    const size_t width = BaseClass::m_tfunc.resolution();
+    const size_t width = BaseClass::transferFunction().resolution();
     kvs::ValueArray<float> colors( width * 4 );
     float* data = colors.data();
 
-    const kvs::ColorMap& cmap = BaseClass::m_tfunc.colorMap();
-    const kvs::OpacityMap& omap = BaseClass::m_tfunc.opacityMap();
+    const kvs::ColorMap& cmap = BaseClass::transferFunction().colorMap();
+    const kvs::OpacityMap& omap = BaseClass::transferFunction().opacityMap();
     for ( size_t i = 0; i < width; i++ )
     {
         *(data++) = static_cast<float>( cmap[i].r() ) / 255.0f;
@@ -804,16 +800,11 @@ void RayCastingRenderer::create_volume_data( const kvs::StructuredVolumeObject* 
 /*===========================================================================*/
 void RayCastingRenderer::draw_bounding_cube()
 {
-    m_bounding_cube.bind();
-    {
-        glEnableClientState( GL_VERTEX_ARRAY );
-        {
-            glVertexPointer( 3, GL_FLOAT, 0, 0 );
-            glDrawArrays( GL_QUADS, 0, 72 );
-        }
-        glDisableClientState( GL_VERTEX_ARRAY );
-    }
-    m_bounding_cube.unbind();
+    kvs::VertexBufferObject::Binder binder( m_bounding_cube );
+    KVS_GL_CALL( glEnableClientState( GL_VERTEX_ARRAY ) );
+    KVS_GL_CALL( glVertexPointer( 3, GL_FLOAT, 0, 0 ) );
+    KVS_GL_CALL( glDrawArrays( GL_QUADS, 0, 72 ) );
+    KVS_GL_CALL( glDisableClientState( GL_VERTEX_ARRAY ) );
 }
 
 /*===========================================================================*/
@@ -824,25 +815,28 @@ void RayCastingRenderer::draw_bounding_cube()
 /*===========================================================================*/
 void RayCastingRenderer::draw_quad( const float opacity )
 {
-    glMatrixMode( GL_MODELVIEW );  glPushMatrix(); glLoadIdentity();
-    glMatrixMode( GL_PROJECTION ); glPushMatrix(); glLoadIdentity();
-    {
-        glOrtho( 0, 1, 0, 1, -1, 1 );
-        glDisable( GL_DEPTH_TEST );
-        glDisable( GL_LIGHTING );
-        glBegin( GL_QUADS );
-        {
-            glColor4f( 1.0, 1.0, 1.0, opacity );
-            glTexCoord2f( 1, 1 ); glVertex2f( 1, 1 );
-            glTexCoord2f( 0, 1 ); glVertex2f( 0, 1 );
-            glTexCoord2f( 0, 0 ); glVertex2f( 0, 0 );
-            glTexCoord2f( 1, 0 ); glVertex2f( 1, 0 );
-        }
-        glEnd();
-    }
-    glPopMatrix();
-    glMatrixMode( GL_MODELVIEW );
-    glPopMatrix();
+    kvs::OpenGL::Disable( GL_DEPTH_TEST );
+    kvs::OpenGL::Disable( GL_LIGHTING );
+
+    KVS_GL_CALL( glMatrixMode( GL_MODELVIEW ) );
+    KVS_GL_CALL( glPushMatrix() );
+    KVS_GL_CALL( glLoadIdentity() );
+    KVS_GL_CALL( glMatrixMode( GL_PROJECTION ) );
+    KVS_GL_CALL( glPushMatrix() );
+    KVS_GL_CALL( glLoadIdentity() );
+    KVS_GL_CALL( glOrtho( 0, 1, 0, 1, -1, 1 ) );
+
+    glBegin( GL_QUADS );
+    glColor4f( 1.0, 1.0, 1.0, opacity );
+    glTexCoord2f( 1, 1 ); glVertex2f( 1, 1 );
+    glTexCoord2f( 0, 1 ); glVertex2f( 0, 1 );
+    glTexCoord2f( 0, 0 ); glVertex2f( 0, 0 );
+    glTexCoord2f( 1, 0 ); glVertex2f( 1, 0 );
+    glEnd();
+
+    KVS_GL_CALL( glPopMatrix() );
+    KVS_GL_CALL( glMatrixMode( GL_MODELVIEW ) );
+    KVS_GL_CALL( glPopMatrix() );
 }
 
 } // end of namespace glsl

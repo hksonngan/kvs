@@ -352,12 +352,6 @@ size_t ParticleBasedRenderer::Renderer::download( kvs::VertexBufferObject& vbo )
     if ( has_normal ) vbo.download( size_n, ptr_n, off_n );
     vbo.download( size_c, ptr_c, off_c );
 
-    GLenum error = glGetError();
-    if ( error != GL_NO_ERROR )
-    {
-        kvsMessageError( "Vertex Buffer Object download failed: %s(%d).", gluErrorString( error ), error );
-    }
-
     m_off_index  = off_i;
     m_off_coord  = off_v;
     m_off_normal = off_n;
@@ -1467,7 +1461,9 @@ void ParticleBasedRenderer::create_vertexbuffer()
         {
             // if m_share_vbo is false, vertex buffer data is downloaded beforehand.
             m_vbo[rp].create( memorysize );
+            m_vbo[rp].bind();
             m_renderer[rp].download( m_vbo[rp] );
+            m_vbo[rp].unbind();
         }
         if ( memorymax < memorysize ) memorymax = memorysize;
     }
@@ -1495,6 +1491,7 @@ void ParticleBasedRenderer::download_vertexbuffer(
 {
     vbo.bind();
     renderer.download( vbo );
+    vbo.unbind();
 }
 
 /*==========================================================================*/
@@ -1517,6 +1514,7 @@ void ParticleBasedRenderer::draw_vertexbuffer(
     renderer.draw();
     m_zoom_shader.unbind();
     m_random_texture.unbind();
+    vbo.unbind();
 }
 
 /*===========================================================================*/
