@@ -292,17 +292,12 @@ const bool StochasticPointEngine::Renderer::download( kvs::VertexBufferObject& v
     const StochasticPointEngine::NormalType* ptr_n = has_normal ? m_particles->normals() + start * 3 : NULL;
     const StochasticPointEngine::ColorType*  ptr_c = m_particles->colors() + start * 3;
 
+    vbo.bind();
     vbo.download( size_i, ptr_i, off_i );
     vbo.download( size_v, ptr_v, off_v );
     if ( has_normal ) vbo.download( size_n, ptr_n, off_n );
     vbo.download( size_c, ptr_c, off_c );
-
-    GLenum error = glGetError();
-    if ( error != GL_NO_ERROR )
-    {
-        kvsMessageError( "Vertex Buffer Object download failed: %s(%d).", gluErrorString( error ), error );
-        return false;
-    }
+    vbo.unbind();
 
     m_off_index  = off_i;
     m_off_coord  = off_v;
@@ -736,7 +731,6 @@ void StochasticPointEngine::download_vertex_buffer( void )
 {
     for ( size_t i = 0; i < m_repetition_level; i++ )
     {
-        m_vbo[i].bind();
         m_renderer[i].download( m_vbo[i] );
     }
 }
@@ -763,6 +757,8 @@ void StochasticPointEngine::draw_vertex_buffer( const float modelview_matrix[16]
     m_shader_program.unbind();
 
     glActiveTexture( GL_TEXTURE0 ); m_random_texture.unbind(); glDisable( GL_TEXTURE_2D );
+
+    m_vbo[ m_repetition_count ].unbind();
 
     if ( ++m_repetition_count >= m_repetition_level ) m_repetition_count = 0;
 }

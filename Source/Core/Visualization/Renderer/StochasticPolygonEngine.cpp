@@ -340,6 +340,7 @@ void StochasticPolygonEngine::create_vertex_buffer( void )
     m_vbo.download( size_v, ptr_v, off_v );
     if ( has_color )  m_vbo.download( size_c, ptr_c, off_c );
     if ( has_normal ) m_vbo.download( size_n, ptr_n, off_n );
+    m_vbo.unbind();
 
     if ( has_connect )
     {
@@ -349,12 +350,7 @@ void StochasticPolygonEngine::create_vertex_buffer( void )
         m_ibo.create( size_of_polygon );
         m_ibo.bind();
         m_ibo.download( size_of_polygon, ptr_conn, 0 );
-    }
-
-    GLenum error = glGetError();
-    if ( error != GL_NO_ERROR )
-    {
-        kvsMessageError( "Vertex Buffer Object download failed: %s(%d).", gluErrorString( error ), error );
+        m_ibo.unbind();
     }
 
     m_off_index  = off_i;

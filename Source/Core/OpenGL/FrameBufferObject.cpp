@@ -282,14 +282,14 @@ FrameBufferObject::GuardedBinder::GuardedBinder( const kvs::FrameBufferObject& f
     m_fbo( fbo ),
     m_id( 0 )
 {
-    KVS_ASSERT( fbo.isValid() );
+    KVS_ASSERT( fbo.isCreated() );
     m_id = kvs::OpenGL::Integer( GL_FRAMEBUFFER_BINDING );
     if ( fbo.id() != static_cast<GLuint>( m_id ) ) { fbo.bind(); }
 }
 
 FrameBufferObject::GuardedBinder::~GuardedBinder()
 {
-    KVS_ASSERT( m_fbo.isValid() );
+    KVS_ASSERT( m_fbo.isCreated() );
     if ( static_cast<GLuint>( m_id ) != m_fbo.id() )
     {
         KVS_GL_CALL( glBindFramebufferEXT( GL_FRAMEBUFFER, m_id ) );

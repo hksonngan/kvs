@@ -50,21 +50,28 @@ public:
         StreamCopy  = GL_STREAM_COPY   ///< data will be changed every frame and used both drawing and reading
     };
 
-protected:
+private:
 
-    GLuint m_id; ///< buffer ID
     GLenum m_target; ///< target (GL_ARRAY_BUFFER or GL_ELEMENT_ARRAY_BUFFER)
-    GLenum m_binding_target; ///< binding target
+    GLenum m_target_binding; ///< target binding
+    GLuint m_id; ///< buffer ID
     GLenum m_usage; ///< usage
     size_t m_size; ///< buffer size [byte]
     bool m_is_downloaded; ///< test whether the memory is allocated on the GPU or not
 
 public:
 
-    BufferObject( const GLenum target, const GLenum binding_target, const GLenum usage );
+    class Binder;
+    class GuardedBinder;
+
+public:
+
+    BufferObject( const GLenum target, const GLenum target_binding, const GLenum usage );
     virtual ~BufferObject();
 
     GLuint id() const;
+    GLenum target() const;
+    GLenum targetBinding() const;
     size_t size() const;
 
     void setUsage( const GLenum usage );
@@ -95,6 +102,37 @@ private:
 
     BufferObject( const BufferObject& );
     BufferObject& operator =( const BufferObject& );
+};
+
+class BufferObject::Binder
+{
+    const kvs::BufferObject& m_bo;
+
+public:
+
+    Binder( const kvs::BufferObject& bo );
+    ~Binder();
+
+private:
+
+    Binder( const Binder& );
+    Binder& operator =( const Binder& );
+};
+
+class BufferObject::GuardedBinder
+{
+    const kvs::BufferObject& m_bo;
+    GLint m_id;
+
+public:
+
+    GuardedBinder( const kvs::BufferObject& bo );
+    ~GuardedBinder();
+
+private:
+
+    GuardedBinder( const GuardedBinder& );
+    GuardedBinder& operator =( const GuardedBinder& );
 };
 
 } // end of namespace kvs

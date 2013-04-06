@@ -23,14 +23,14 @@ namespace kvs
 /**
  *  Constructs a new BufferObject class.
  *  @param  target [in] bind target
- *  @param  binding_target [in] binding target
+ *  @param  target_binding [in] target binding
  *  @param  usage [in] buffer usage
  */
 /*===========================================================================*/
-BufferObject::BufferObject( const GLenum target, const GLenum binding_target, const GLenum usage ):
-    m_id( 0 ),
+BufferObject::BufferObject( const GLenum target, const GLenum target_binding, const GLenum usage ):
     m_target( target ),
-    m_binding_target( binding_target ),
+    m_target_binding( target_binding ),
+    m_id( 0 ),
     m_usage( usage ),
     m_size( 0 ),
     m_is_downloaded( false )
@@ -45,6 +45,16 @@ BufferObject::BufferObject( const GLenum target, const GLenum binding_target, co
 BufferObject::~BufferObject()
 {
     this->release();
+}
+
+GLenum BufferObject::target() const
+{
+    return m_target;
+}
+
+GLenum BufferObject::targetBinding() const
+{
+    return m_target_binding;
 }
 
 /*===========================================================================*/
@@ -95,8 +105,8 @@ void BufferObject::setSize( const size_t size )
 void BufferObject::create( const size_t size, const void* data )
 {
     this->generateBuffer();
-    this->bind();
     this->setSize( size );
+    GuardedBinder binder( *this );
     this->download( size, data );
 }
 
@@ -149,7 +159,7 @@ bool BufferObject::isBinding() const
 {
     if ( !this->isCreated() ) return false;
 
-    GLint id = kvs::OpenGL::Integer( m_binding_target );
+    GLint id = kvs::OpenGL::Integer( m_target_binding );
     return static_cast<GLuint>( id ) == m_id;
 }
 
@@ -237,6 +247,37 @@ void BufferObject::unmapBuffer()
 {
     KVS_ASSERT( this->isBinding() );
     KVS_GL_CALL( glUnmapBuffer( m_target ) );
+}
+
+BufferObject::Binder::Binder( const BufferObject& bo ) :
+    m_bo( bo )
+{
+    KVS_ASSERT( bo.isCreated() );
+    bo.bind();
+}
+
+BufferObject::Binder::~Binder()
+{
+    KVS_ASSERT( m_bo.isCreated() );
+    KVS_GL_CALL( glBindBuffer( m_bo.target(), 0 ) );
+}
+
+BufferObject::GuardedBinder::GuardedBinder( const kvs::BufferObject& bo ):
+    m_bo( bo ),
+    m_id( 0 )
+{
+    KVS_ASSERT( bo.isCreated() );
+    m_id = kvs::OpenGL::Integer( bo.targetBinding() );
+    if ( bo.id() != static_cast<GLuint>( m_id ) ) { bo.bind(); }
+}
+
+BufferObject::GuardedBinder::~GuardedBinder()
+{
+    KVS_ASSERT( m_bo.isCreated() );
+    if ( static_cast<GLuint>( m_id ) != m_bo.id() )
+    {
+        KVS_GL_CALL( glBindBuffer( m_bo.target(), m_id ) );
+    }
 }
 
 } // end of namespace kvs

@@ -216,6 +216,7 @@ void StochasticLineEngine::create_vertex_buffer()
     m_vbo.download( size_i, ptr_i, off_i );
     m_vbo.download( size_v, ptr_v, off_v );
     if ( has_color )  m_vbo.download( size_c, ptr_c, off_c );
+    m_vbo.unbind();
 
     if ( has_connect )
     {
@@ -225,12 +226,7 @@ void StochasticLineEngine::create_vertex_buffer()
         m_ibo.create( size_of_line );
         m_ibo.bind();
         m_ibo.download( size_of_line, ptr_conn, 0 );
-    }
-
-    GLenum error = glGetError();
-    if ( error != GL_NO_ERROR )
-    {
-        kvsMessageError( "Vertex Buffer Object download failed: %s(%d).", gluErrorString( error ), error );
+        m_ibo.unbind();
     }
 
     m_off_index  = off_i;
@@ -346,6 +342,9 @@ void StochasticLineEngine::draw_vertex_buffer( const float modelview_matrix[16] 
     m_shader_program.unbind();
 
     glActiveTexture(GL_TEXTURE0);    m_random_texture.unbind();         glDisable(GL_TEXTURE_2D);
+
+    m_vbo.unbind();
+    m_ibo.unbind();
 }
 
 } // end of namespace kvs

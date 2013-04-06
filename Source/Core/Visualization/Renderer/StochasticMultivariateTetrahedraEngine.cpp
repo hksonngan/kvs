@@ -502,6 +502,9 @@ void StochasticMultivariateTetrahedraEngine::draw_vertex_buffer( const float mod
     glActiveTexture(GL_TEXTURE1);    m_table2.unbind();                 glDisable(GL_TEXTURE_3D);
     glActiveTexture(GL_TEXTURE0);    m_table.unbind();                  glDisable(GL_TEXTURE_3D);
 
+    m_vbo.unbind();
+    m_ibo.unbind();
+
     m_repetition_count++;
 }
 

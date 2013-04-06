@@ -442,6 +442,8 @@ void StochasticMultipleTetrahedraEngine::download_vertex_buffer( void )
     m_vbo2.bind();
     m_ibo2.bind();
     m_renderer[1].download( m_vbo2, m_ibo2 );
+    m_vbo2.unbind();
+    m_ibo2.unbind();
 }
 
 /*===========================================================================*/
@@ -476,6 +478,8 @@ void StochasticMultipleTetrahedraEngine::draw_vertex_buffer( const float modelvi
         m_renderer[0].draw( m_step );
     }
     m_shader_program.unbind();
+    m_vbo.unbind();
+    m_ibo.unbind();
 
     m_vbo2.bind();
     m_ibo2.bind();
@@ -485,6 +489,8 @@ void StochasticMultipleTetrahedraEngine::draw_vertex_buffer( const float modelvi
         m_renderer[1].draw( m_step );
     }
     m_shader_program2.unbind();
+    m_vbo2.unbind();
+    m_ibo2.unbind();
 
     glActiveTexture(GL_TEXTURE5); m_extra_texture.unbind();
     glActiveTexture(GL_TEXTURE4); m_depth_texture.unbind();

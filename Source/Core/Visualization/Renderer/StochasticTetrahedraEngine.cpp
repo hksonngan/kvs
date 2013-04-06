@@ -352,20 +352,17 @@ const bool StochasticTetrahedraEngine::Renderer::download(
     const StochasticTetrahedraEngine::CoordType* ptr_c = m_volume->coords();
     const StochasticTetrahedraEngine::ValueType* ptr_v = m_volume->values();
     const StochasticTetrahedraEngine::NormalType* ptr_n = m_volume->normals();
-
+    vbo.bind();
     vbo.download( size_i, ptr_i, off_i );
     vbo.download( size_c, ptr_c, off_c );
     vbo.download( size_v, ptr_v, off_v );
     vbo.download( size_n, ptr_n, off_n );
+    vbo.unbind();
 
     const StochasticTetrahedraEngine::ConnectType* ptr_conn = m_volume->connections();
+    ibo.bind();
     ibo.download( m_volume->byteSizeOfCell(), ptr_conn, 0 );
-
-    GLenum error = glGetError();
-    if ( error != GL_NO_ERROR )
-    {
-        kvsMessageError( "Vertex Buffer Object download failed: %s(%d).", gluErrorString( error ), error );
-    }
+    ibo.unbind();
 
     m_off_index  = off_i;
     m_off_coord  = off_c;
