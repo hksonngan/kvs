@@ -85,22 +85,22 @@ public:
     AVSField( const std::string& filename );
     virtual ~AVSField();
 
-    int bits( void ) const;
-    bool isSigned( void ) const;
-    int veclen( void ) const;
-    int nspace( void ) const;
-    int ndim( void ) const;
-    const kvs::Vector3ui& dim( void ) const;
-    const kvs::Vector3f& minExt( void ) const;
-    const kvs::Vector3f& maxExt( void ) const;
-    bool hasMinMaxExt( void ) const;
-    const std::string& field( void ) const;
-    const std::string& type( void ) const;
-    FieldType fieldType( void ) const;
-    DataType dataType( void ) const;
-    const std::vector<std::string>& labels( void ) const;
-    const kvs::AnyValueArray& values( void ) const;
-    const kvs::ValueArray<float>& coords( void ) const;
+    int bits() const;
+    bool isSigned() const;
+    int veclen() const;
+    int nspace() const;
+    int ndim() const;
+    const kvs::Vector3ui& dim() const;
+    const kvs::Vector3f& minExt() const;
+    const kvs::Vector3f& maxExt() const;
+    bool hasMinMaxExt() const;
+    const std::string& field() const;
+    const std::string& type() const;
+    FieldType fieldType() const;
+    DataType dataType() const;
+    const std::vector<std::string>& labels() const;
+    const kvs::AnyValueArray& values() const;
+    const kvs::ValueArray<float>& coords() const;
 
     void setBits( const int bits );
     void setSigned( const bool sign );
