@@ -21,6 +21,46 @@
 namespace kvs
 {
 
+RGBColor RGBColor::Black()
+{
+    return RGBColor( 0, 0, 0 );
+}
+
+RGBColor RGBColor::White()
+{
+    return RGBColor( 255, 255, 255 );
+}
+
+RGBColor RGBColor::Red()
+{
+    return RGBColor( 255, 0, 0 );
+}
+
+RGBColor RGBColor::Green()
+{
+    return RGBColor( 0, 255, 0 );
+}
+
+RGBColor RGBColor::Blue()
+{
+    return RGBColor( 0, 0, 255 );
+}
+
+RGBColor RGBColor::Yellow()
+{
+    return RGBColor( 255, 255, 0 );
+}
+
+RGBColor RGBColor::Cyan()
+{
+    return RGBColor( 0, 255, 255 );
+}
+
+RGBColor RGBColor::Magenta()
+{
+    return RGBColor( 255, 0, 255 );
+}
+
 RGBColor::RGBColor():
     m_red( 0 ),
     m_green( 0 ),

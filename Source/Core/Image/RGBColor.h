@@ -41,6 +41,17 @@ protected:
 
 public:
 
+    static RGBColor Black();
+    static RGBColor White();
+    static RGBColor Red();
+    static RGBColor Green();
+    static RGBColor Blue();
+    static RGBColor Yellow();
+    static RGBColor Cyan();
+    static RGBColor Magenta();
+
+public:
+
     RGBColor();
     RGBColor( kvs::UInt8 red, kvs::UInt8 green, kvs::UInt8 blue );
     RGBColor( const kvs::UInt8 rgb[3] );
