@@ -348,16 +348,21 @@ $(OUTDIR)\.\Visualization\Renderer\VolumeRendererBase.obj \
 $(OUTDIR)\.\Visualization\Viewer\ApplicationBase.obj \
 $(OUTDIR)\.\Visualization\Viewer\Background.obj \
 $(OUTDIR)\.\Visualization\Viewer\Camera.obj \
+$(OUTDIR)\.\Visualization\Viewer\CameraCoordinate.obj \
 $(OUTDIR)\.\Visualization\Viewer\DisplayFormat.obj \
 $(OUTDIR)\.\Visualization\Viewer\IDManager.obj \
 $(OUTDIR)\.\Visualization\Viewer\Light.obj \
 $(OUTDIR)\.\Visualization\Viewer\Material.obj \
 $(OUTDIR)\.\Visualization\Viewer\Mouse.obj \
+$(OUTDIR)\.\Visualization\Viewer\NormalizedDeviceCoordinate.obj \
+$(OUTDIR)\.\Visualization\Viewer\ObjectCoordinate.obj \
 $(OUTDIR)\.\Visualization\Viewer\ObjectManager.obj \
 $(OUTDIR)\.\Visualization\Viewer\RendererManager.obj \
 $(OUTDIR)\.\Visualization\Viewer\Scene.obj \
 $(OUTDIR)\.\Visualization\Viewer\ScreenBase.obj \
 $(OUTDIR)\.\Visualization\Viewer\Trackball.obj \
+$(OUTDIR)\.\Visualization\Viewer\WindowCoordinate.obj \
+$(OUTDIR)\.\Visualization\Viewer\WorldCoordinate.obj \
 $(OUTDIR)\.\Visualization\Viewer\Xform.obj \
 $(OUTDIR)\.\Visualization\Viewer\XformControl.obj \
 

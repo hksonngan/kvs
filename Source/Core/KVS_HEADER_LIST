@@ -292,6 +292,7 @@ Visualization/Renderer/VolumeRendererBase
 Visualization/Viewer/ApplicationBase
 Visualization/Viewer/Background
 Visualization/Viewer/Camera
+Visualization/Viewer/Coordinate
 Visualization/Viewer/DisplayFormat
 Visualization/Viewer/IDManager
 Visualization/Viewer/Key

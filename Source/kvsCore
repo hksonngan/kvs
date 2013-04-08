@@ -292,6 +292,7 @@
 #include <Core/Visualization/Viewer/ApplicationBase.h>
 #include <Core/Visualization/Viewer/Background.h>
 #include <Core/Visualization/Viewer/Camera.h>
+#include <Core/Visualization/Viewer/Coordinate.h>
 #include <Core/Visualization/Viewer/DisplayFormat.h>
 #include <Core/Visualization/Viewer/IDManager.h>
 #include <Core/Visualization/Viewer/Key.h>
