@@ -287,7 +287,7 @@ void Argument::Common::applyTo( kvs::glut::Screen& screen, kvs::VisualizationPip
         const kvs::UInt8 r( static_cast<kvs::UInt8>(this->optionValue<int>("background_color",0)) );
         const kvs::UInt8 g( static_cast<kvs::UInt8>(this->optionValue<int>("background_color",1)) );
         const kvs::UInt8 b( static_cast<kvs::UInt8>(this->optionValue<int>("background_color",2)) );
-        screen.background()->setColor( kvs::RGBColor( r, g, b ) );
+        screen.scene()->background()->setColor( kvs::RGBColor( r, g, b ) );
     }
     else if ( this->hasOption("background_color2") )
     {
@@ -301,7 +301,7 @@ void Argument::Common::applyTo( kvs::glut::Screen& screen, kvs::VisualizationPip
         const kvs::UInt8 b2( static_cast<kvs::UInt8>(this->optionValue<int>("background_color2",5)) );
         const kvs::RGBColor bottom_color( r2, g2, b2 );
 
-        screen.background()->setColor( bottom_color, top_color );
+        screen.scene()->background()->setColor( bottom_color, top_color );
     }
 
     // Anti-aliasing.

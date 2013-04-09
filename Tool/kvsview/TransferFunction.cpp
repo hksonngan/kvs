@@ -165,7 +165,7 @@ public:
         kvs::glut::Screen* glut_screen = static_cast<kvs::glut::Screen*>( screen() );
 
         const kvs::RGBColor white( 255, 255, 255 );
-        glut_screen->background()->setColor( white );
+        glut_screen->scene()->background()->setColor( white );
 
         int vp[4]; glGetIntegerv( GL_VIEWPORT, (GLint*)vp );
         const int left = vp[0];
@@ -356,8 +356,8 @@ const bool Main::exec( void )
 
     // Create and show the rendering screen.
     kvs::glut::Screen screen( &app );
-    screen.addInitializeEvent( &initialize_event );
-    screen.addPaintEvent( &paint_event );
+    screen.addEvent( &initialize_event );
+    screen.addEvent( &paint_event );
     screen.setGeometry( 0, 0, 512, 150 );
     screen.setTitle( kvsview::CommandName + " - " + kvsview::TransferFunction::CommandName );
     screen.show();

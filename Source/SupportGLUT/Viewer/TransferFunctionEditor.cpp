@@ -177,7 +177,7 @@ TransferFunctionEditor::TransferFunctionEditor( kvs::ScreenBase* parent ):
     const int margin = 10;
     const kvs::RGBColor color( 200, 200, 200 );
 
-    SuperClass::background()->setColor( color );
+    SuperClass::scene()->background()->setColor( color );
     SuperClass::setTitle( title );
     SuperClass::setPosition( x, y );
     SuperClass::setSize( width, height );
@@ -188,7 +188,7 @@ TransferFunctionEditor::TransferFunctionEditor( kvs::ScreenBase* parent ):
     m_undo_stack.push_front( m_initial_transfer_function );
 
     m_stack_event = new StackEvent( this );
-    SuperClass::addMouseReleaseEvent( m_stack_event );
+    SuperClass::addEvent( m_stack_event );
 
     m_max_stack_size = 10;
 

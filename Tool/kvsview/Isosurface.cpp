@@ -75,7 +75,7 @@ public:
         const double level = this->value();
         const bool d = true;
         kvs::PolygonObject* object = new kvs::Isosurface( m_volume, level, m_normal, d, m_tfunc );
-        if ( object ) glut_screen->objectManager()->change( 1, object );
+        if ( object ) glut_screen->scene()->objectManager()->change( 1, object );
     }
 };
 
@@ -91,9 +91,9 @@ class KeyPressEvent : public kvs::KeyPressEventListener
         kvs::glut::Screen* glut_screen = static_cast<kvs::glut::Screen*>( screen() );
         switch ( event->key() )
         {
-        case kvs::Key::o: glut_screen->controlTarget() = kvs::Scene::TargetObject; break;
-        case kvs::Key::l: glut_screen->controlTarget() = kvs::Scene::TargetLight; break;
-        case kvs::Key::c: glut_screen->controlTarget() = kvs::Scene::TargetCamera; break;
+        case kvs::Key::o: glut_screen->scene()->controlTarget() = kvs::Scene::TargetObject; break;
+        case kvs::Key::l: glut_screen->scene()->controlTarget() = kvs::Scene::TargetLight; break;
+        case kvs::Key::c: glut_screen->scene()->controlTarget() = kvs::Scene::TargetCamera; break;
         default: break;
         }
     }
@@ -236,7 +236,7 @@ const bool Main::exec( void )
 
     // Create screen.
     kvs::glut::Screen screen( &app );
-    screen.addKeyPressEvent( &key_press_event );
+    screen.addEvent( &key_press_event );
     screen.setSize( 512, 512 );
     screen.setTitle( kvsview::CommandName + " - " + kvsview::Isosurface::CommandName );
 

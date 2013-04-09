@@ -178,7 +178,7 @@ void PolygonRenderer::initialize()
         glEnable( GL_LIGHTING );
     }
 
-    kvs::Light::setModelTwoSide( this->isTwoSideLighting() );
+    kvs::Light::SetModelTwoSide( this->isTwoSideLighting() );
 }
 
 } // end of namespace kvs

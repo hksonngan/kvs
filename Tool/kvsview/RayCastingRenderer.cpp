@@ -122,7 +122,7 @@ public:
     void apply( void )
     {
         kvs::glut::Screen* glut_screen = static_cast<kvs::glut::Screen*>( screen() );
-        const kvs::RendererBase* base = glut_screen->rendererManager()->renderer( ::RendererName );
+        const kvs::RendererBase* base = glut_screen->scene()->rendererManager()->renderer( ::RendererName );
         if ( m_no_gpu )
         {
             kvs::RayCastingRenderer* renderer = (kvs::RayCastingRenderer*)base;
@@ -161,9 +161,9 @@ public:
         kvs::glut::Screen* glut_screen = static_cast<kvs::glut::Screen*>( screen() );
         switch ( event->key() )
         {
-        case kvs::Key::o: glut_screen->controlTarget() = kvs::Scene::TargetObject; break;
-        case kvs::Key::l: glut_screen->controlTarget() = kvs::Scene::TargetLight; break;
-        case kvs::Key::c: glut_screen->controlTarget() = kvs::Scene::TargetCamera; break;
+        case kvs::Key::o: glut_screen->scene()->controlTarget() = kvs::Scene::TargetObject; break;
+        case kvs::Key::l: glut_screen->scene()->controlTarget() = kvs::Scene::TargetLight; break;
+        case kvs::Key::c: glut_screen->scene()->controlTarget() = kvs::Scene::TargetCamera; break;
         case kvs::Key::t:
         {
             if ( ::Shown ) m_editor->hide();
@@ -420,8 +420,8 @@ const bool Main::exec( void )
     // Create screen.
     kvs::glut::Screen screen( &app );
     screen.setSize( 512, 512 );
-    screen.addKeyPressEvent( &key_press_event );
-    screen.addMouseDoubleClickEvent( &mouse_double_click_event );
+    screen.addEvent( &key_press_event );
+    screen.addEvent( &mouse_double_click_event );
     screen.setTitle( kvsview::CommandName + " - " + kvsview::RayCastingRenderer::CommandName );
 
     // Check the input point data.

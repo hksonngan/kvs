@@ -137,7 +137,7 @@ void PointRenderer::initialize()
         glEnable( GL_LIGHTING );
     }
 
-    kvs::Light::setModelTwoSide( this->isTwoSideLighting() );
+    kvs::Light::SetModelTwoSide( this->isTwoSideLighting() );
 
     // Anti-aliasing.
     if ( m_enable_anti_aliasing )

@@ -146,7 +146,7 @@ const void SetupMapper(
     const size_t level = ::GetRevisedSubpixelLevel( subpixel_level, repetition_level );
     const float step = 0.5f;
     const float depth = 0.0f;
-    mapper->attachCamera( screen.camera() );
+    mapper->attachCamera( screen.scene()->camera() );
     mapper->setTransferFunction( tfunc );
     mapper->setSubpixelLevel( level );
     mapper->setSamplingStep( step );
@@ -177,12 +177,12 @@ public:
         kvs::glut::Screen* glut_screen = static_cast<kvs::glut::Screen*>( screen() );
 
         // Erase the object and renderer.
-        const kvs::ObjectBase* obj = glut_screen->objectManager()->object( ::ObjectName );
+        const kvs::ObjectBase* obj = glut_screen->scene()->objectManager()->object( ::ObjectName );
         const kvs::Xform xform = obj->xform();
-        const int obj_id = glut_screen->objectManager()->objectID( obj );
-        glut_screen->IDManager()->eraseByObjectID( obj_id );
-        glut_screen->objectManager()->erase( ::ObjectName );
-        glut_screen->rendererManager()->erase( ::RendererName );
+        const int obj_id = glut_screen->scene()->objectManager()->objectID( obj );
+        glut_screen->scene()->IDManager()->eraseByObjectID( obj_id );
+        glut_screen->scene()->objectManager()->erase( ::ObjectName );
+        glut_screen->scene()->rendererManager()->erase( ::RendererName );
 
         // Current transfer function.
         kvs::TransferFunction tfunc( transferFunction() );
@@ -291,9 +291,9 @@ public:
         kvs::glut::Screen* glut_screen = static_cast<kvs::glut::Screen*>( screen() );
         switch ( event->key() )
         {
-        case kvs::Key::o: glut_screen->controlTarget() = kvs::Scene::TargetObject; break;
-        case kvs::Key::l: glut_screen->controlTarget() = kvs::Scene::TargetLight; break;
-        case kvs::Key::c: glut_screen->controlTarget() = kvs::Scene::TargetCamera; break;
+        case kvs::Key::o: glut_screen->scene()->controlTarget() = kvs::Scene::TargetObject; break;
+        case kvs::Key::l: glut_screen->scene()->controlTarget() = kvs::Scene::TargetLight; break;
+        case kvs::Key::c: glut_screen->scene()->controlTarget() = kvs::Scene::TargetCamera; break;
         case kvs::Key::t:
         {
             if ( ::Shown ) m_editor->hide();
@@ -584,8 +584,8 @@ const bool Main::exec( void )
     // Create screen.
     kvs::glut::Screen screen( &app );
     screen.setSize( 512, 512 );
-    screen.addKeyPressEvent( &key_press_event );
-    screen.addMouseDoubleClickEvent( &mouse_double_click_event );
+    screen.addEvent( &key_press_event );
+    screen.addEvent( &mouse_double_click_event );
     screen.setTitle( kvsview::CommandName + " - " + kvsview::ParticleBasedRenderer::CommandName );
 
     // Check the input point or volume data.

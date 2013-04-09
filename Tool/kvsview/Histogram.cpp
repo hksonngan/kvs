@@ -191,7 +191,7 @@ public:
     void update( void )
     {
         kvs::glut::Screen* glut_screen = static_cast<kvs::glut::Screen*>( screen() );
-        glut_screen->background()->setColor( ::DefaultBackgroundColor );
+        glut_screen->scene()->background()->setColor( ::DefaultBackgroundColor );
 
         GLint vp[4]; glGetIntegerv( GL_VIEWPORT, vp );
         const GLint left = vp[0];
@@ -405,11 +405,11 @@ const bool Main::exec( void )
 
     // Rendering screen.
     kvs::glut::Screen screen( &app );
-    screen.addInitializeEvent( &initialize_event );
-    screen.addPaintEvent( &paint_event );
-    screen.setMousePressEvent( &mouse_press_event );
-    screen.setMouseMoveEvent( &mouse_move_event );
-    screen.addKeyPressEvent( &key_press_event );
+    screen.addEvent( &initialize_event );
+    screen.addEvent( &paint_event );
+    screen.setEvent( &mouse_press_event );
+    screen.setEvent( &mouse_move_event );
+    screen.addEvent( &key_press_event );
     screen.setGeometry( 0, 0, ::DefaultScreenWidth, ::DefaultScreenHeight );
     screen.setTitle( kvsview::CommandName + " - " + kvsview::Histogram::CommandName );
     screen.show();

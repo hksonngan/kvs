@@ -46,7 +46,7 @@ FPSLabel::FPSLabel( kvs::ScreenBase* screen, const std::string renderer_name ):
 void FPSLabel::screenUpdated( void )
 {
     kvs::glut::Screen* glut_screen = static_cast<kvs::glut::Screen*>( screen() );
-    const kvs::RendererBase* renderer = glut_screen->rendererManager()->renderer( m_renderer_name );
+    const kvs::RendererBase* renderer = glut_screen->scene()->rendererManager()->renderer( m_renderer_name );
 
     std::stringstream fps;
     fps << std::setprecision(4) << renderer->timer().fps();

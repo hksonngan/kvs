@@ -73,7 +73,7 @@ public:
         kvs::glut::Screen* glut_screen = static_cast<kvs::glut::Screen*>( screen() );
         const float position = static_cast<float>( this->value() );
         kvs::PolygonObject* object = new kvs::OrthoSlice( m_volume, position, m_axis, m_tfunc );
-        if ( object ) glut_screen->objectManager()->change( 1, object );
+        if ( object ) glut_screen->scene()->objectManager()->change( 1, object );
     }
 };
 

@@ -34,7 +34,7 @@ namespace glut
 
 OrientationAxis::OrientationAxis( kvs::glut::Screen* screen ):
     kvs::glut::WidgetBase( screen ),
-    m_object( screen->objectManager() ),
+    m_object( screen->scene()->objectManager() ),
     m_x_tag( "x" ),
     m_y_tag( "y" ),
     m_z_tag( "z" ),
