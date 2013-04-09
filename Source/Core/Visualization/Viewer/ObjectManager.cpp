@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file ObjectManager.cpp
+ *  @file   ObjectManager.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -55,7 +56,6 @@ ObjectManager::ObjectManager() :
 /*==========================================================================*/
 ObjectManager::~ObjectManager()
 {
-//    this->erase();
     ObjectIterator pobject = m_object_tree.begin();
     ObjectIterator last    = m_object_tree.end();
     ++pobject;
@@ -70,19 +70,9 @@ ObjectManager::~ObjectManager()
     m_object_map.clear();
 }
 
-/*==========================================================================*/
-/**
- *  Insert the root of the objects.
- */
-/*==========================================================================*/
-void ObjectManager::insert_root()
-{
-    m_root = m_object_tree.insert( m_object_tree.begin(), this );
-}
-
 kvs::ObjectBase::ObjectType ObjectManager::objectType() const
 {
-    return( kvs::ObjectBase::ObjectManager );
+    return kvs::ObjectBase::ObjectManager;
 }
 
 /*==========================================================================*/
@@ -95,8 +85,7 @@ kvs::ObjectBase::ObjectType ObjectManager::objectType() const
 int ObjectManager::insert( kvs::ObjectBase* obj )
 {
     obj->updateNormalizeParameters();
-    this->update_normalize_parameters( obj->minExternalCoord(),
-                                       obj->maxExternalCoord() );
+    this->update_normalize_parameters( obj->minExternalCoord(), obj->maxExternalCoord() );
 
     /* Calculate a object ID by counting the number of this method called.
      * Therefore, we define the object ID as static parameter in this method,
@@ -112,7 +101,7 @@ int ObjectManager::insert( kvs::ObjectBase* obj )
      */
     m_object_map.insert( ObjectPair( m_current_object_id, obj_ptr ) );
 
-    return( m_current_object_id );
+    return m_current_object_id;
 }
 
 /*==========================================================================*/
@@ -131,7 +120,7 @@ int ObjectManager::insert( int parent_id, kvs::ObjectBase* obj )
         obj->maxExternalCoord() );
 
     ObjectMap::iterator map_id = m_object_map.find( parent_id );
-    if( map_id == m_object_map.end() ) return( -1 );
+    if( map_id == m_object_map.end() ) return -1;
 
     // Append the object.
     m_current_object_id++;
@@ -141,7 +130,7 @@ int ObjectManager::insert( int parent_id, kvs::ObjectBase* obj )
 
     m_object_map.insert( ObjectPair( m_current_object_id, child_ptr ) );
 
-    return( m_current_object_id );
+    return m_current_object_id;
 }
 
 /*==========================================================================*/
@@ -330,9 +319,9 @@ void ObjectManager::change( std::string obj_name, ObjectBase* obj, bool delete_f
  *  @return number of the stored objects
  */
 /*==========================================================================*/
-const int ObjectManager::nobjects() const
+int ObjectManager::nobjects() const
 {
-    return( m_object_tree.size() );
+    return m_object_tree.size();
 }
 
 /*==========================================================================*/
@@ -364,12 +353,12 @@ kvs::ObjectBase* ObjectManager::object( int obj_id )
      * object pointer map. If it isn't found, this method executes nothing.
      */
     ObjectMap::iterator map_id = m_object_map.find( obj_id );
-    if( map_id == m_object_map.end() )  return( NULL );
+    if( map_id == m_object_map.end() )  return NULL;
 
     // pointer to the object
     ObjectIterator obj_ptr = map_id->second;
 
-    return( *obj_ptr );
+    return *obj_ptr;
 }
 
 /*==========================================================================*/
@@ -390,13 +379,13 @@ kvs::ObjectBase* ObjectManager::object( std::string obj_name )
         kvs::ObjectBase* obj = *ptr; // object
         if ( obj->name() == obj_name )
         {
-            return( obj );
+            return obj;
         }
 
         ++map_id;
     }
 
-    return( NULL );
+    return NULL;
 }
 
 /*==========================================================================*/
@@ -405,9 +394,9 @@ kvs::ObjectBase* ObjectManager::object( std::string obj_name )
  *  @return true, if some objects are included.
  */
 /*==========================================================================*/
-const bool ObjectManager::hasObject() const
+bool ObjectManager::hasObject() const
 {
-    return( m_object_tree.size() > 1 );
+    return m_object_tree.size() > 1;
 }
 
 /*==========================================================================*/
@@ -461,9 +450,9 @@ void ObjectManager::resetXform( int obj_id )
  *  Get the xform of the object manager.
  */
 /*==========================================================================*/
-const kvs::Xform ObjectManager::xform() const
+kvs::Xform ObjectManager::xform() const
 {
-    return( kvs::ObjectBase::xform() );
+    return kvs::ObjectBase::xform();
 }
 
 /*==========================================================================*/
@@ -472,7 +461,7 @@ const kvs::Xform ObjectManager::xform() const
  *  @param obj_id [in] object ID
  */
 /*==========================================================================*/
-const kvs::Xform ObjectManager::xform( int obj_id ) const
+kvs::Xform ObjectManager::xform( int obj_id ) const
 {
     /* Search the object which is specified by given object ID in the
      * object pointer map. If it isn't found, this method retrun initial Xform.
@@ -481,14 +470,14 @@ const kvs::Xform ObjectManager::xform( int obj_id ) const
     if( map_id == m_object_map.end() )
     {
         Xform xform;
-        return( xform );
+        return xform;
     }
 
     // Delete the object.
     ObjectIterator obj_ptr = map_id->second; // pointer to the object
     kvs::ObjectBase* obj = *obj_ptr;     // object
 
-    return( obj->xform() );
+    return obj->xform();
 }
 
 /*===========================================================================*/
@@ -498,7 +487,7 @@ const kvs::Xform ObjectManager::xform( int obj_id ) const
  *  @return object ID
  */
 /*===========================================================================*/
-const int ObjectManager::objectID( const kvs::ObjectBase *object ) const
+int ObjectManager::objectID( const kvs::ObjectBase *object ) const
 {
     for ( ObjectMap::const_iterator i = m_object_map.begin(); i != m_object_map.end(); ++i )
     {
@@ -515,7 +504,7 @@ const int ObjectManager::objectID( const kvs::ObjectBase *object ) const
  *  @return parent object ID
  */
 /*===========================================================================*/
-const int ObjectManager::parentObjectID( const ObjectIterator it ) const
+int ObjectManager::parentObjectID( const ObjectIterator it ) const
 {
     if (it == m_object_tree.end()) return -1;
     if (it.node()->parent == NULL) return -1;
@@ -530,7 +519,7 @@ const int ObjectManager::parentObjectID( const ObjectIterator it ) const
  *  @return parent object ID
  */
 /*===========================================================================*/
-const int ObjectManager::parentObjectID( const kvs::ObjectBase *object ) const
+int ObjectManager::parentObjectID( const kvs::ObjectBase *object ) const
 {
     for (ObjectIterator i = m_object_tree.begin(); i != m_object_tree.end(); ++i)
     {
@@ -549,7 +538,7 @@ const int ObjectManager::parentObjectID( const kvs::ObjectBase *object ) const
  *  @return parent object ID
  */
 /*===========================================================================*/
-const int ObjectManager::parentObjectID( int object_id ) const
+int ObjectManager::parentObjectID( int object_id ) const
 {
     if ( object_id < 0 ) return -1;
 
@@ -566,7 +555,7 @@ const int ObjectManager::parentObjectID( int object_id ) const
  *  @return active object ID, if active object is nothing, -1 is returned.
  */
 /*==========================================================================*/
-const int ObjectManager::activeObjectID() const
+int ObjectManager::activeObjectID() const
 {
     if( m_has_active_object )
     {
@@ -574,11 +563,11 @@ const int ObjectManager::activeObjectID() const
              p != m_object_map.end();
              p++ )
         {
-            if( m_active_object == p->second ) return( p->first );
+            if( m_active_object == p->second ) return p->first;
         }
     }
 
-    return( -1 );
+    return -1;
 }
 
 /*==========================================================================*/
@@ -599,7 +588,7 @@ bool ObjectManager::setActiveObjectID( int obj_id )
     m_active_object = map_id->second;
     m_has_active_object = true;
 
-    return( true );
+    return true;
 }
 
 /*==========================================================================*/
@@ -610,7 +599,7 @@ bool ObjectManager::setActiveObjectID( int obj_id )
 /*==========================================================================*/
 kvs::ObjectBase* ObjectManager::activeObject()
 {
-    return( m_has_active_object ? *m_active_object : NULL );
+    return m_has_active_object ? *m_active_object : NULL;
 }
 
 /*==========================================================================*/
@@ -670,9 +659,9 @@ void ObjectManager::disableAllMove()
  *  @return true, if the object manager is able to move all objects.
  */
 /*==========================================================================*/
-const bool ObjectManager::isEnableAllMove() const
+bool ObjectManager::isEnableAllMove() const
 {
-    return( m_enable_all_move );
+    return m_enable_all_move;
 }
 
 /*==========================================================================*/
@@ -681,9 +670,9 @@ const bool ObjectManager::isEnableAllMove() const
  *  @return true, if the object manager has the active object.
  */
 /*==========================================================================*/
-const bool ObjectManager::hasActiveObject() const
+bool ObjectManager::hasActiveObject() const
 {
-    return( m_has_active_object );
+    return m_has_active_object;
 }
 
 /*==========================================================================*/
@@ -732,8 +721,8 @@ bool ObjectManager::detectCollision(
         }
     }
 
-    return( m_has_active_object =
-            (*m_active_object)->collision( p_win, camera, ObjectBase::objectCenter(), ObjectBase::normalize() ) );
+    return m_has_active_object =
+        (*m_active_object)->collision( p_win, camera, ObjectBase::objectCenter(), ObjectBase::normalize() );
 }
 
 /*==========================================================================*/
@@ -769,10 +758,10 @@ bool ObjectManager::detectCollision( const kvs::Vector3f& p_world )
         }
     }
 
-    return( m_has_active_object =
-            (*m_active_object)->collision( p_world,
-                                           ObjectBase::objectCenter(),
-                                           ObjectBase::normalize() ) );
+    return m_has_active_object =
+        (*m_active_object)->collision( p_world,
+                                       ObjectBase::objectCenter(),
+                                       ObjectBase::normalize() );
 }
 
 /*==========================================================================*/
@@ -781,7 +770,7 @@ bool ObjectManager::detectCollision( const kvs::Vector3f& p_world )
  *  @param camera [in] pointer to the camera
  */
 /*==========================================================================*/
-const kvs::Vector2f ObjectManager::positionInDevice( kvs::Camera* camera ) const
+kvs::Vector2f ObjectManager::positionInDevice( kvs::Camera* camera ) const
 {
     kvs::Vector2f ret;
     glPushMatrix();
@@ -793,7 +782,7 @@ const kvs::Vector2f ObjectManager::positionInDevice( kvs::Camera* camera ) const
     }
     glPopMatrix();
 
-    return( ret );
+    return ret;
 }
 
 /*==========================================================================*/
@@ -881,6 +870,16 @@ void ObjectManager::updateExternalCoords()
 
 /*==========================================================================*/
 /**
+ *  Insert the root of the objects.
+ */
+/*==========================================================================*/
+void ObjectManager::insert_root()
+{
+    m_root = m_object_tree.insert( m_object_tree.begin(), this );
+}
+
+/*==========================================================================*/
+/**
  *  Update the normalize parameters.
  *  @param min_ext [in] min. external coordinate value
  *  @param max_ext [in] max. external coordinate value
@@ -897,15 +896,6 @@ void ObjectManager::update_normalize_parameters(
         kvs::Math::Equal( 0.0f, max_ext.y() ) &&
         kvs::Math::Equal( 0.0f, max_ext.z() ) ) return;
 
-/*
-    m_min_object_coord.x() = m_min_object_coord.x() < min_ext.x() ? m_min_object_coord.x() : min_ext.x();
-    m_min_object_coord.y() = m_min_object_coord.y() < min_ext.y() ? m_min_object_coord.y() : min_ext.y();
-    m_min_object_coord.z() = m_min_object_coord.z() < min_ext.z() ? m_min_object_coord.z() : min_ext.z();
-
-    m_max_object_coord.x() = m_max_object_coord.x() > max_ext.x() ? m_max_object_coord.x() : max_ext.x();
-    m_max_object_coord.y() = m_max_object_coord.y() > max_ext.y() ? m_max_object_coord.y() : max_ext.y();
-    m_max_object_coord.z() = m_max_object_coord.z() > max_ext.z() ? m_max_object_coord.z() : max_ext.z();
-*/
     kvs::Vector3f min_object_coord(
         kvs::Math::Min( ObjectBase::minObjectCoord().x(), min_ext.x() ),
         kvs::Math::Min( ObjectBase::minObjectCoord().y(), min_ext.y() ),
@@ -921,13 +911,6 @@ void ObjectManager::update_normalize_parameters(
     const float normalize = 6.0f / max_diff;
 
     ObjectBase::setNormalize( kvs::Vector3f::All( normalize ) );
-/*
-    m_normalize.x() = normalize;
-    m_normalize.y() = normalize;
-    m_normalize.z() = normalize;
-*/
-
-//    m_object_center = ( max_object_coord + min_object_coord ) * 0.5f;
     ObjectBase::setObjectCenter( ( max_object_coord + min_object_coord ) * 0.5f );
 }
 
@@ -938,12 +921,6 @@ void ObjectManager::update_normalize_parameters(
 /*==========================================================================*/
 void ObjectManager::update_normalize_parameters()
 {
-/*
-    m_min_object_coord   = kvs::Vector3f(  1000000,  1000000,  1000000 );
-    m_max_object_coord   = kvs::Vector3f( -1000000, -1000000, -1000000 );
-    m_min_external_coord = kvs::Vector3f( -3.0, -3.0, -3.0 );
-    m_max_external_coord = kvs::Vector3f(  3.0,  3.0,  3.0 );
-*/
     ObjectBase::setMinMaxExternalCoords(
         kvs::Vector3f( -3.0, -3.0, -3.0 ),
         kvs::Vector3f(  3.0,  3.0,  3.0 ) );
@@ -969,15 +946,6 @@ void ObjectManager::update_normalize_parameters()
                 kvs::Math::Equal( 0.0f, (*first)->maxExternalCoord().y() ) &&
                 kvs::Math::Equal( 0.0f, (*first)->maxExternalCoord().z() ) ) continue;
 
-/*
-            m_min_object_coord.x() = m_min_object_coord.x() < (*first)->minExternalCoord().x() ? m_min_object_coord.x() : (*first)->minExternalCoord().x();
-            m_min_object_coord.y() = m_min_object_coord.y() < (*first)->minExternalCoord().y() ? m_min_object_coord.y() : (*first)->minExternalCoord().y();
-            m_min_object_coord.z() = m_min_object_coord.z() < (*first)->minExternalCoord().z() ? m_min_object_coord.z() : (*first)->minExternalCoord().z();
-
-            m_max_object_coord.x() = m_max_object_coord.x() > (*first)->maxExternalCoord().x() ? m_max_object_coord.x() : (*first)->maxExternalCoord().x();
-            m_max_object_coord.y() = m_max_object_coord.y() > (*first)->maxExternalCoord().y() ? m_max_object_coord.y() : (*first)->maxExternalCoord().y();
-            m_max_object_coord.z() = m_max_object_coord.z() > (*first)->maxExternalCoord().z() ? m_max_object_coord.z() : (*first)->maxExternalCoord().z();
-*/
             min_object_coord.x() = kvs::Math::Min( min_object_coord.x(), (*first)->minExternalCoord().x() );
             min_object_coord.y() = kvs::Math::Min( min_object_coord.y(), (*first)->minExternalCoord().y() );
             min_object_coord.z() = kvs::Math::Min( min_object_coord.z(), (*first)->minExternalCoord().z() );
@@ -993,10 +961,6 @@ void ObjectManager::update_normalize_parameters()
 
     if( ctr == 0 )
     {
-/*
-        m_normalize     = kvs::Vector3f::All( 1.0 );
-        m_object_center = kvs::Vector3f::All( 0.0 );
-*/
         ObjectBase::setNormalize( kvs::Vector3f::All( 1.0 ) );
         ObjectBase::setObjectCenter( kvs::Vector3f::All( 0.0 ) );
     }
@@ -1005,15 +969,7 @@ void ObjectManager::update_normalize_parameters()
         const kvs::Vector3f diff_obj = max_object_coord - min_object_coord;
         const float max_diff = kvs::Math::Max( diff_obj.x(), diff_obj.y(), diff_obj.z() );
         const float normalize = 6.0f / max_diff;
-
-/*
-        m_normalize.x() = normalize;
-        m_normalize.y() = normalize;
-        m_normalize.z() = normalize;
-*/
         ObjectBase::setNormalize( kvs::Vector3f::All( normalize ) );
-
-//        m_object_center = ( m_max_object_coord + m_min_object_coord ) * 0.5f;
         ObjectBase::setObjectCenter( ( max_object_coord + min_object_coord ) * 0.5f );
     }
 }
@@ -1028,11 +984,11 @@ kvs::ObjectBase* ObjectManager::get_control_target()
 {
     if ( this->isEnableAllMove() )
     {
-        return( this );
+        return this;
     }
     else
     {
-        return( *m_active_object );
+        return *m_active_object;
     }
 }
 
@@ -1045,13 +1001,13 @@ kvs::ObjectBase* ObjectManager::get_control_target()
 /*==========================================================================*/
 kvs::Vector3f ObjectManager::get_rotation_center( kvs::ObjectBase* obj )
 {
-    if( this->isEnableAllMove() )
+    if ( this->isEnableAllMove() )
     {
-        return( this->kvs::ObjectBase::xform().translation() );
+        return this->kvs::ObjectBase::xform().translation();
     }
     else
     {
-        return( obj->positionInWorld( ObjectBase::objectCenter(), ObjectBase::normalize() ) );
+        return obj->positionInWorld( ObjectBase::objectCenter(), ObjectBase::normalize() );
     }
 }
 
@@ -1065,7 +1021,7 @@ ObjectManager::ObjectIterator ObjectManager::get_control_first_pointer()
 {
     ObjectIterator first;
 
-    if( this->isEnableAllMove() )
+    if ( this->isEnableAllMove() )
     {
         first = m_object_tree.begin();
         ++first;
@@ -1075,7 +1031,7 @@ ObjectManager::ObjectIterator ObjectManager::get_control_first_pointer()
         first = m_object_tree.begin( m_active_object );
     }
 
-    return( first );
+    return first;
 }
 
 /*==========================================================================*/
@@ -1088,7 +1044,7 @@ ObjectManager::ObjectIterator ObjectManager::get_control_last_pointer()
 {
     ObjectIterator last;
 
-    if( this->isEnableAllMove() )
+    if ( this->isEnableAllMove() )
     {
         last = m_object_tree.end();
     }
@@ -1097,7 +1053,7 @@ ObjectManager::ObjectIterator ObjectManager::get_control_last_pointer()
         last = m_object_tree.end( m_active_object );
     }
 
-    return( last );
+    return last;
 }
 
 } // end of namespace kvs

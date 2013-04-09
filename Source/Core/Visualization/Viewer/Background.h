@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file Background.h
+ *  @file   Background.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -14,7 +15,6 @@
 #ifndef KVS__BACKGROUND_H_INCLUDE
 #define KVS__BACKGROUND_H_INCLUDE
 
-#include <kvs/ClassName>
 #include <kvs/RGBAColor>
 
 
@@ -28,8 +28,6 @@ namespace kvs
 /*==========================================================================*/
 class Background
 {
-    kvsClassName( kvs::Background );
-
 public:
 
     enum Type
@@ -55,11 +53,7 @@ public:
                 const kvs::RGBAColor& color2, const kvs::RGBAColor& color3 );
     virtual ~Background();
 
-public:
-
     Background& operator = ( const Background& bg );
-
-public:
 
     void setColor( const kvs::RGBAColor& color );
     void setColor( const kvs::RGBAColor& color0, const kvs::RGBAColor& color1 );

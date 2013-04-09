@@ -17,12 +17,6 @@
 #include <string>
 #include <utility>
 #include <vector>
-#if KVS_ENABLE_DEPRECATED
-#include <map>
-#include <list>
-#include <kvs/ClassName>
-#include <kvs/RendererBase>
-#endif
 #include <kvs/SharedPointer>
 
 
@@ -38,10 +32,6 @@ class RendererBase;
 /*==========================================================================*/
 class RendererManager
 {
-#if KVS_ENABLE_DEPRECATED
-    kvsClassName( kvs::RendererManager );
-#endif
-
 private:
     typedef kvs::SharedPointer<kvs::RendererBase>    RendererSP;
     typedef std::vector<std::pair<int, RendererSP> > RendererList;
@@ -54,34 +44,23 @@ private:
 public:
     RendererManager();
     virtual ~RendererManager();
-    //~RendererManager();
 
-public:
     int insert( kvs::RendererBase* renderer );
-
     void erase( bool delete_flg );
     void erase( int renderer_id, bool delete_flg );
     void erase( const std::string& renderer_name, bool delete_flg );
-
     void change( int renderer_id, kvs::RendererBase* renderer, bool delete_flg );
     void change( const std::string& renderer_name, kvs::RendererBase* renderer, bool delete_flg );
-
     int nrenderers() const;
-
     kvs::RendererBase* renderer();
     kvs::RendererBase* renderer( int renderer_id );
     kvs::RendererBase* renderer( const std::string& renderer_name );
-
-public:
     int insert( const kvs::SharedPointer<kvs::RendererBase>& renderer );
-
     void erase();
     void erase( int renderer_id );
     void erase( const std::string& renderer_name );
-
     void change( int renderer_id, const kvs::SharedPointer<kvs::RendererBase>& renderer );
     void change( const std::string& renderer_name, const kvs::SharedPointer<kvs::RendererBase>& renderer );
-
     int numberOfRenderers() const;
     bool hasRenderer() const;
 

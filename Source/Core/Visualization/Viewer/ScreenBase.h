@@ -16,9 +16,9 @@
 
 #include <string>
 #include <kvs/DisplayFormat>
+#include <kvs/Deprecated>
 
-#if 1 // KVS_ENABLE_DEPRECATED
-#include <kvs/EventHandler>
+/*KVS_DEPRECATED*/
 #include <kvs/InitializeEventListener>
 #include <kvs/PaintEventListener>
 #include <kvs/ResizeEventListener>
@@ -28,17 +28,7 @@
 #include <kvs/MouseDoubleClickEventListener>
 #include <kvs/WheelEventListener>
 #include <kvs/KeyPressEventListener>
-#endif
-#if KVS_ENABLE_DEPRECATED
-#include <kvs/Scene>
-#include <kvs/ObjectManager>
-#include <kvs/RendererManager>
-#include <kvs/IDManager>
-#include <kvs/Mouse>
-#include <kvs/Camera>
-#include <kvs/Light>
-#include <kvs/Background>
-#endif
+
 
 namespace kvs
 {
@@ -47,15 +37,6 @@ class EventHandler;
 
 class ScreenBase
 {
-#if KVS_ENABLE_DEPRECATED
-public:
-    typedef kvs::Scene::ControlTarget ControlTarget;
-    static const ControlTarget TargetObject = kvs::Scene::TargetObject;
-    static const ControlTarget TargetCamera = kvs::Scene::TargetCamera;
-    static const ControlTarget TargetLight = kvs::Scene::TargetLight;
-    static const ControlTarget NumberOfTargets = kvs::Scene::NumberOfTargets;
-#endif
-
 private:
 
     int m_x; ///< window position (y position)
@@ -103,61 +84,15 @@ public:
     virtual void disable();
     virtual void reset();
 
-#if 1 // KVS_ENABLE_DEPRECATED
-    void addInitializeEvent( kvs::InitializeEventListener* event )
-    {
-        event->setScreen( this );
-        m_event_handler->attach( event );
-    }
-
-    void addPaintEvent( kvs::PaintEventListener* event )
-    {
-        event->setScreen( this );
-        m_event_handler->attach( event );
-    }
-
-    void addResizeEvent( kvs::ResizeEventListener* event )
-    {
-        event->setScreen( this );
-        m_event_handler->attach( event );
-    }
-
-    void addMousePressEvent( kvs::MousePressEventListener* event )
-    {
-        event->setScreen( this );
-        m_event_handler->attach( event );
-    }
-
-    void addMouseMoveEvent( kvs::MouseMoveEventListener* event )
-    {
-        event->setScreen( this );
-        m_event_handler->attach( event );
-    }
-
-    void addMouseReleaseEvent( kvs::MouseReleaseEventListener* event )
-    {
-        event->setScreen( this );
-        m_event_handler->attach( event );
-    }
-
-    void addMouseDoubleClickEvent( kvs::MouseDoubleClickEventListener* event )
-    {
-        event->setScreen( this );
-        m_event_handler->attach( event );
-    }
-
-    void addWheelEvent( kvs::WheelEventListener* event )
-    {
-        event->setScreen( this );
-        m_event_handler->attach( event );
-    }
-
-    void addKeyPressEvent( kvs::KeyPressEventListener* event )
-    {
-        event->setScreen( this );
-        m_event_handler->attach( event );
-    }
-#endif
+    KVS_DEPRECATED( void addInitializeEvent( kvs::InitializeEventListener* event ) ) { this->addEvent( event ); }
+    KVS_DEPRECATED( void addPaintEvent( kvs::PaintEventListener* event ) ) { this->addEvent( event ); }
+    KVS_DEPRECATED( void addResizeEvent( kvs::ResizeEventListener* event ) ) { this->addEvent( event ); }
+    KVS_DEPRECATED( void addMousePressEvent( kvs::MousePressEventListener* event ) ) { this->addEvent( event ); }
+    KVS_DEPRECATED( void addMouseMoveEvent( kvs::MouseMoveEventListener* event ) ) { this->addEvent( event ); }
+    KVS_DEPRECATED( void addMouseReleaseEvent( kvs::MouseReleaseEventListener* event ) ) { this->addEvent( event ); }
+    KVS_DEPRECATED( void addMouseDoubleClickEvent( kvs::MouseDoubleClickEventListener* event ) ) { this->addEvent( event ); }
+    KVS_DEPRECATED( void addWheelEvent( kvs::WheelEventListener* event ) ) { this->addEvent( event ); }
+    KVS_DEPRECATED( void addKeyPressEvent( kvs::KeyPressEventListener* event ) ) { this->addEvent( event ); }
 };
 
 } // end of namespace kvs

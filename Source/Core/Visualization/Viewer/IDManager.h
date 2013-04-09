@@ -18,7 +18,6 @@
 #include <vector>
 #include <utility>
 #include <cstdlib>
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -38,8 +37,6 @@ typedef std::list<IDPair>::reverse_iterator ID_rptr;
 /*==========================================================================*/
 class IDManager
 {
-    kvsClassName( kvs::IDManager );
-
 public:
     typedef std::pair<int,int>                  IDPair;
     typedef std::list<IDPair>                   IDs;
@@ -52,55 +49,34 @@ private:
 
 public:
 
-    IDManager( void );
+    IDManager();
+    virtual ~IDManager();
 
-    virtual ~IDManager( void );
+    IDPair operator [] ( size_t index ) const;
 
-public:
-
-    const IDPair operator [] ( size_t index ) const;
-
-    const size_t size( void ) const;
-
+    size_t size() const;
     void insert( int object_id, int renderer_id );
-
     void insertObjectID( int object_id );
-
     void insertRendererID( int renderer_id );
-
-    const std::vector<int> objectID( int renderer_id ) const;
-
-    const int objectID( void ) const;
-
-    const std::vector<int> rendererID( int object_id ) const;
-
-    const int rendererID( void ) const;
-
-    void erase( void );
-
+    std::vector<int> objectID( int renderer_id ) const;
+    int objectID() const;
+    std::vector<int> rendererID( int object_id ) const;
+    int rendererID() const;
+    void erase();
     void erase( int object_id, int renderer_id );
-
     void eraseByObjectID( int object_id );
-
     void eraseByRendererID( int renderer_id );
-
     void changeObject( int object_id );
-
     void changeObject( int renderer_id, int object_id );
-
     void changeObject( const IDPair& id_pair, int object_id );
-
     void changeRenderer( int renderer_id );
-
     void changeRenderer( int object_id, int renderer_id );
-
     void changeRenderer( const IDPair& id_pair, int renderer_id );
-
-    void flip( void );
+    void flip();
 
 private:
 
-    void update_flip_table( void );
+    void update_flip_table();
 
 private:
     IDManager( const IDManager& );

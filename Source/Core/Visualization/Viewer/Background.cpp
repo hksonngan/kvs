@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file Background.cpp
+ *  @file   Background.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -92,7 +93,7 @@ Background& Background::operator = ( const Background& bg )
     m_color[2] = bg.m_color[2];
     m_color[3] = bg.m_color[3];
 
-    return( *this );
+    return *this;
 }
 
 /*==========================================================================*/
@@ -181,13 +182,13 @@ void Background::apply()
 {
     switch( m_type )
     {
-    case Background::MonoColor:        this->apply_mono_color();      break;
-    case Background::TwoSideColor:     this->apply_gradation_color(); break;
+    case Background::MonoColor: this->apply_mono_color(); break;
+    case Background::TwoSideColor: this->apply_gradation_color(); break;
     case Background::FourCornersColor: this->apply_gradation_color(); break;
 //    case BG_IMAGE:              apply_image();           break;
     default: break;
     }
-    glFlush();
+    KVS_GL_CALL( glFlush() );
 }
 
 /*==========================================================================*/
@@ -200,8 +201,8 @@ void Background::apply_mono_color()
     float r = static_cast<float>(m_color[0].r()) / 255.0f;
     float g = static_cast<float>(m_color[0].g()) / 255.0f;
     float b = static_cast<float>(m_color[0].b()) / 255.0f;
-    glClearColor( r, g, b, 1.0f );
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    KVS_GL_CALL( glClearColor( r, g, b, 1.0f ) );
+    KVS_GL_CALL( glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ) );
 }
 
 /*==========================================================================*/
@@ -212,46 +213,35 @@ void Background::apply_mono_color()
 void Background::apply_gradation_color()
 {
     // Clear bits.
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-
-    glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT );
+    KVS_GL_CALL( glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ) );
+    KVS_GL_CALL( glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT ) );
 
     // Disable OpenGL parameters.
-    glDisable( GL_DEPTH_TEST );
+    kvs::OpenGL::Disable( GL_DEPTH_TEST );
 
     // Draw a gradation plane on the background.
-    glMatrixMode( GL_MODELVIEW );
-    glPushMatrix();
-    {
-        glLoadIdentity();
+    KVS_GL_CALL( glMatrixMode( GL_MODELVIEW ) );
+    KVS_GL_CALL( glPushMatrix() );
+    KVS_GL_CALL( glLoadIdentity() );
+    KVS_GL_CALL( glMatrixMode( GL_PROJECTION ) );
+    KVS_GL_CALL( glPushMatrix() );
+    KVS_GL_CALL( glLoadIdentity() );
+    KVS_GL_CALL( glOrtho( 0, 1, 0, 1, -1, 1 ) );
 
-        glMatrixMode( GL_PROJECTION );
-        glPushMatrix();
-        {
-            glLoadIdentity();
-            glOrtho( 0, 1, 0, 1, -1, 1 );
+    // Gradation plane.
+    glBegin( GL_QUADS );
+    glColor3ub( m_color[0].r(), m_color[0].g(), m_color[0].b() ); glVertex2d( 0.0, 0.0 );
+    glColor3ub( m_color[1].r(), m_color[1].g(), m_color[1].b() ); glVertex2d( 1.0, 0.0 );
+    glColor3ub( m_color[2].r(), m_color[2].g(), m_color[2].b() ); glVertex2d( 1.0, 1.0 );
+    glColor3ub( m_color[3].r(), m_color[3].g(), m_color[3].b() ); glVertex2d( 0.0, 1.0 );
+    glEnd();
 
-            // Gradation plane.
-            glBegin( GL_QUADS );
-            glColor3ub( m_color[0].r(), m_color[0].g(), m_color[0].b() );
-            glVertex2d( 0.0, 0.0 );
-            glColor3ub( m_color[1].r(), m_color[1].g(), m_color[1].b() );
-            glVertex2d( 1.0, 0.0 );
-            glColor3ub( m_color[2].r(), m_color[2].g(), m_color[2].b() );
-            glVertex2d( 1.0, 1.0 );
-            glColor3ub( m_color[3].r(), m_color[3].g(), m_color[3].b() );
-            glVertex2d( 0.0, 1.0 );
-            glEnd(); 
-        }
-        glPopMatrix();
-        glMatrixMode( GL_MODELVIEW );
-    }
-    glPopMatrix();
+    KVS_GL_CALL( glPopMatrix() );
+    KVS_GL_CALL( glMatrixMode( GL_MODELVIEW ) );
+    KVS_GL_CALL( glPopMatrix() );
+    KVS_GL_CALL( glClearDepth(1000) );
 
-    glClearDepth(1000);
-    glEnable( GL_DEPTH_TEST );
-
-    glPopAttrib();
+    KVS_GL_CALL( glPopAttrib() );
 }
 
 /*==========================================================================*/

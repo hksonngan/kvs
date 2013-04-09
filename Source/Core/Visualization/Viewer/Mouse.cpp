@@ -17,8 +17,8 @@
 namespace kvs
 {
 
-int   Mouse::SpinTime       = 10;
-float Mouse::WheelUpValue   = 1.05f;
+int Mouse::SpinTime = 10;
+float Mouse::WheelUpValue = 1.05f;
 float Mouse::WheelDownValue = 0.95f;
 
 /*==========================================================================*/
@@ -46,7 +46,7 @@ Mouse::Mouse( AutoMode auto_flg ) :
  *  Destructor.
  */
 /*==========================================================================*/
-Mouse::~Mouse( void )
+Mouse::~Mouse()
 {
 }
 
@@ -55,7 +55,7 @@ Mouse::~Mouse( void )
  *  @brief Reset parameters.
  */
 /*==========================================================================*/
-void Mouse::reset( void )
+void Mouse::reset()
 {
     kvs::Trackball::reset();
     m_mode         = kvs::Mouse::Rotation;
@@ -176,7 +176,7 @@ void Mouse::release( const int x, const int y )
  *  Idle event function.
  */
 /*==========================================================================*/
-bool Mouse::idle( void )
+bool Mouse::idle()
 {
     if( !( m_is_use_auto && m_is_auto ) ) return( false );
 
@@ -438,9 +438,9 @@ void Mouse::setScalingType( const bool x, const bool y, const bool z )
  *  @return translation mode
  */
 /*==========================================================================*/
-const Mouse::TransMode Mouse::mode( void ) const
+Mouse::TransMode Mouse::mode() const
 {
-    return( m_mode );
+    return m_mode;
 }
 
 /*==========================================================================*/
@@ -449,9 +449,9 @@ const Mouse::TransMode Mouse::mode( void ) const
  *  @return scaling type
  */
 /*==========================================================================*/
-const Trackball::ScalingType Mouse::scalingType( void ) const
+Trackball::ScalingType Mouse::scalingType() const
 {
-    return( m_scaling_type );
+    return m_scaling_type;
 }
 
 /*==========================================================================*/
@@ -471,9 +471,9 @@ void Mouse::setUseAuto( const bool flg )
  *  @return true, if the auto-rotation mode is enable.
  */
 /*==========================================================================*/
-bool Mouse::isUseAuto( void )
+bool Mouse::isUseAuto()
 {
-    return( m_is_use_auto );
+    return m_is_use_auto;
 }
 
 /*==========================================================================*/
@@ -482,9 +482,9 @@ bool Mouse::isUseAuto( void )
  *  @return true, if the current mode is auto-rotation mode.
  */
 /*==========================================================================*/
-bool Mouse::isAuto( void )
+bool Mouse::isAuto()
 {
-    return( m_is_auto );
+    return m_is_auto;
 }
 
 /*==========================================================================*/
@@ -493,9 +493,9 @@ bool Mouse::isAuto( void )
  *  @return true, if the current mode is slowdown-rotation mode.
  */
 /*==========================================================================*/
-bool Mouse::isSlow( void )
+bool Mouse::isSlow()
 {
-    return( m_is_slow );
+    return m_is_slow;
 }
 
 } // end of namespace kvs

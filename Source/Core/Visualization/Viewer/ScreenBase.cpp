@@ -13,6 +13,7 @@
 /****************************************************************************/
 #include "ScreenBase.h"
 #include <kvs/EventHandler>
+#include <kvs/EventListener>
 
 
 namespace kvs
@@ -49,9 +50,9 @@ ScreenBase::~ScreenBase()
  *  @return x coordinate value of the window position
  */
 /*===========================================================================*/
-int ScreenBase::x( void ) const
+int ScreenBase::x() const
 {
-    return( m_x );
+    return m_x;
 }
 
 /*===========================================================================*/
@@ -60,9 +61,9 @@ int ScreenBase::x( void ) const
  *  @return y coordinate value of the window position
  */
 /*===========================================================================*/
-int ScreenBase::y( void ) const
+int ScreenBase::y() const
 {
-    return( m_y );
+    return m_y;
 }
 
 /*===========================================================================*/
@@ -71,9 +72,9 @@ int ScreenBase::y( void ) const
  *  @return window width
  */
 /*===========================================================================*/
-int ScreenBase::width( void ) const
+int ScreenBase::width() const
 {
-    return( m_width );
+    return m_width;
 }
 
 /*===========================================================================*/
@@ -82,9 +83,9 @@ int ScreenBase::width( void ) const
  *  @return window height
  */
 /*===========================================================================*/
-int ScreenBase::height( void ) const
+int ScreenBase::height() const
 {
-    return( m_height );
+    return m_height;
 }
 
 /*===========================================================================*/
@@ -93,9 +94,9 @@ int ScreenBase::height( void ) const
  *  @return window title
  */
 /*===========================================================================*/
-const std::string& ScreenBase::title( void ) const
+const std::string& ScreenBase::title() const
 {
-    return( m_title );
+    return m_title;
 }
 
 /*===========================================================================*/
@@ -103,9 +104,9 @@ const std::string& ScreenBase::title( void ) const
  *  @brief  Returns the display format.
  */
 /*===========================================================================*/
-const kvs::DisplayFormat& ScreenBase::displayFormat( void ) const
+const kvs::DisplayFormat& ScreenBase::displayFormat() const
 {
-    return( m_display_format );
+    return m_display_format;
 }
 
 /*===========================================================================*/
@@ -116,7 +117,7 @@ const kvs::DisplayFormat& ScreenBase::displayFormat( void ) const
 /*===========================================================================*/
 kvs::EventHandler* ScreenBase::eventHandler()
 {
-    return( m_event_handler );
+    return m_event_handler;
 }
 
 /*===========================================================================*/

@@ -57,6 +57,7 @@ GLint MaxRenderBufferSize();
 
 void Enable( GLenum cap );
 void Disable( GLenum cap );
+bool IsEnabled( GLenum cap );
 void ActivateTextureUnit( GLint unit );
 
 /*KVS_DEPRECATED*/ inline std::string ShaderVersion() { return GLSLVersion(); }

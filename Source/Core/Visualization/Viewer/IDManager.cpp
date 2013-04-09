@@ -24,7 +24,7 @@ namespace kvs
  *  Default constructor.
  */
 /*==========================================================================*/
-IDManager::IDManager( void )
+IDManager::IDManager()
 {
     m_flip_table.clear();
     m_id_list.clear();
@@ -35,13 +35,13 @@ IDManager::IDManager( void )
  *  Destructor.
  */
 /*==========================================================================*/
-IDManager::~IDManager( void )
+IDManager::~IDManager()
 {
     m_flip_table.clear();
     m_id_list.clear();
 }
 
-const IDManager::IDPair IDManager::operator [] ( size_t index ) const
+IDManager::IDPair IDManager::operator [] ( size_t index ) const
 {
     const int id = m_flip_table[index];
 
@@ -55,7 +55,7 @@ const IDManager::IDPair IDManager::operator [] ( size_t index ) const
     return( (*p) );
 }
 
-const size_t IDManager::size( void ) const
+size_t IDManager::size() const
 {
     return( m_id_list.size() );
 }
@@ -78,7 +78,7 @@ void IDManager::insertRendererID( int renderer_id )
     this->update_flip_table();
 }
 
-const std::vector<int> IDManager::objectID( int renderer_id ) const
+std::vector<int> IDManager::objectID( int renderer_id ) const
 {
     std::vector<int> object_ids;
 
@@ -91,12 +91,12 @@ const std::vector<int> IDManager::objectID( int renderer_id ) const
     return( object_ids );
 }
 
-const int IDManager::objectID( void ) const
+int IDManager::objectID() const
 {
     return( m_id_list.back().first );
 }
 
-const std::vector<int> IDManager::rendererID( int object_id ) const
+std::vector<int> IDManager::rendererID( int object_id ) const
 {
     std::vector<int> renderer_ids;
 
@@ -109,12 +109,12 @@ const std::vector<int> IDManager::rendererID( int object_id ) const
     return( renderer_ids );
 }
 
-const int IDManager::rendererID( void ) const
+int IDManager::rendererID() const
 {
     return( m_id_list.back().second );
 }
 
-void IDManager::erase( void )
+void IDManager::erase()
 {
     m_id_list.clear();
     m_flip_table.clear();
@@ -238,18 +238,15 @@ void IDManager::changeRenderer( const IDPair& id_pair, int renderer_id )
     }
 }
 
-void IDManager::flip( void )
+void IDManager::flip()
 {
     std::vector<int> next( m_id_list.size() );
-
     std::copy( m_flip_table.begin(), m_flip_table.end(), next.begin() );
-
     std::next_permutation( next.begin(), next.end(), std::less<int>() );
-
     std::copy( next.begin(), next.end(), m_flip_table.begin() );
 }
 
-void IDManager::update_flip_table( void )
+void IDManager::update_flip_table()
 {
     m_flip_table.clear();
 

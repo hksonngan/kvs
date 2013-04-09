@@ -283,6 +283,13 @@ void Disable( GLenum cap )
     KVS_GL_CALL( glDisable( cap ) );
 }
 
+bool IsEnabled( GLenum cap )
+{
+    GLboolean result = GL_FALSE;
+    KVS_GL_CALL( result = glIsEnabled( cap ) );
+    return result == GL_TRUE;
+}
+
 void ActivateTextureUnit( GLint unit )
 {
     KVS_ASSERT( unit >= 0 );

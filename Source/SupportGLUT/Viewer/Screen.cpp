@@ -682,7 +682,7 @@ Screen::ControlTarget& Screen::controlTarget()
 void Screen::setPaintEvent( kvs::PaintEventListener* event )
 {
     m_enable_default_paint_event = false;
-    BaseClass::addPaintEvent( event );
+    BaseClass::addEvent( event );
 }
 
 /*===========================================================================*/
@@ -694,7 +694,7 @@ void Screen::setPaintEvent( kvs::PaintEventListener* event )
 void Screen::setResizeEvent( kvs::ResizeEventListener* event )
 {
     m_enable_default_resize_event = false;
-    BaseClass::addResizeEvent( event );
+    BaseClass::addEvent( event );
 }
 
 /*===========================================================================*/
@@ -706,7 +706,7 @@ void Screen::setResizeEvent( kvs::ResizeEventListener* event )
 void Screen::setMousePressEvent( kvs::MousePressEventListener* event )
 {
     m_enable_default_mouse_press_event = false;
-    BaseClass::addMousePressEvent( event );
+    BaseClass::addEvent( event );
 }
 
 /*===========================================================================*/
@@ -718,7 +718,7 @@ void Screen::setMousePressEvent( kvs::MousePressEventListener* event )
 void Screen::setMouseMoveEvent( kvs::MouseMoveEventListener* event )
 {
     m_enable_default_mouse_move_event = false;
-    BaseClass::addMouseMoveEvent( event );
+    BaseClass::addEvent( event );
 }
 
 /*===========================================================================*/
@@ -730,7 +730,7 @@ void Screen::setMouseMoveEvent( kvs::MouseMoveEventListener* event )
 void Screen::setMouseReleaseEvent( kvs::MouseReleaseEventListener* event )
 {
     m_enable_default_mouse_release_event = false;
-    BaseClass::addMouseReleaseEvent( event );
+    BaseClass::addEvent( event );
 }
 
 /*===========================================================================*/
@@ -742,7 +742,7 @@ void Screen::setMouseReleaseEvent( kvs::MouseReleaseEventListener* event )
 void Screen::setMouseDoubleClickEvent( kvs::MouseDoubleClickEventListener* event )
 {
     // nothing default mouse double click event.
-    BaseClass::addMouseDoubleClickEvent( event );
+    BaseClass::addEvent( event );
 }
 
 /*===========================================================================*/
@@ -754,7 +754,7 @@ void Screen::setMouseDoubleClickEvent( kvs::MouseDoubleClickEventListener* event
 void Screen::setWheelEvent( kvs::WheelEventListener* event )
 {
     m_enable_default_wheel_event = false;
-    BaseClass::addWheelEvent( event );
+    BaseClass::addEvent( event );
 }
 
 /*===========================================================================*/
@@ -766,7 +766,7 @@ void Screen::setWheelEvent( kvs::WheelEventListener* event )
 void Screen::setKeyPressEvent( kvs::KeyPressEventListener* event )
 {
     m_enable_default_key_press_event = false;
-    BaseClass::addKeyPressEvent( event );
+    BaseClass::addEvent( event );
 }
 
 } // end of namespace glut

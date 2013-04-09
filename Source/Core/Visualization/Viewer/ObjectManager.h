@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file ObjectManager.h
+ *  @file   ObjectManager.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -50,12 +51,6 @@ public:
     ObjectManager();
     virtual ~ObjectManager();
 
-private:
-
-    void insert_root();
-
-public:
-
     ObjectType objectType() const;
     int insert( kvs::ObjectBase* obj );
     int insert( int parent_id, kvs::ObjectBase* obj );
@@ -64,41 +59,35 @@ public:
     void erase( std::string obj_name, bool delete_flg = true );
     void change( int obj_id, kvs::ObjectBase* obj, bool delete_flg = true );
     void change( std::string obj_name, kvs::ObjectBase* obj, bool delete_flg = true );
-    const int nobjects() const;
+    int nobjects() const;
     kvs::ObjectBase* object();
     kvs::ObjectBase* object( int obj_id );
     kvs::ObjectBase* object( std::string obj_name );
-    const bool hasObject() const;
+    bool hasObject() const;
     void resetXform();
     void resetXform( int obj_id );
-    const kvs::Xform xform() const;
-    const kvs::Xform xform( int obj_id ) const;
-    const int objectID( const kvs::ObjectBase *object ) const;
-    const int parentObjectID( const ObjectIterator it ) const;
-    const int parentObjectID( const kvs::ObjectBase *object ) const;
-    const int parentObjectID( int object_id ) const;
-    const int activeObjectID() const;
+    kvs::Xform xform() const;
+    kvs::Xform xform( int obj_id ) const;
+    int objectID( const kvs::ObjectBase *object ) const;
+    int parentObjectID( const ObjectIterator it ) const;
+    int parentObjectID( const kvs::ObjectBase *object ) const;
+    int parentObjectID( int object_id ) const;
+    int activeObjectID() const;
     bool setActiveObjectID( int obj_id );
     kvs::ObjectBase* activeObject();
-
-public:
 
     void resetActiveObjectXform();
     void eraseActiveObject();
 
-public:
-
     void enableAllMove();
     void disableAllMove();
-    const bool isEnableAllMove() const;
-    const bool hasActiveObject() const;
+    bool isEnableAllMove() const;
+    bool hasActiveObject() const;
     void releaseActiveObject();
     bool detectCollision( const kvs::Vector2f& p_win, kvs::Camera* camera );
     bool detectCollision( const kvs::Vector3f& p_world );
 
-public:
-
-    const kvs::Vector2f positionInDevice( kvs::Camera* camera ) const;
+    kvs::Vector2f positionInDevice( kvs::Camera* camera ) const;
     void rotate( const kvs::Matrix33f& rotation );
     void translate( const kvs::Vector3f& translation );
     void scale( const kvs::Vector3f& scaling );
@@ -106,6 +95,7 @@ public:
 
 private:
 
+    void insert_root();
     void update_normalize_parameters( const kvs::Vector3f& min_ext, const kvs::Vector3f& max_ext );
     void update_normalize_parameters();
     kvs::ObjectBase* get_control_target();

@@ -16,7 +16,6 @@
 #define KVS__CAMERA_H_INCLUDE
 
 #include <kvs/XformControl>
-#include <kvs/ClassName>
 #include <kvs/Vector2>
 #include <kvs/Vector3>
 #include <kvs/Matrix33>
@@ -33,8 +32,6 @@ namespace kvs
 /*==========================================================================*/
 class Camera : public kvs::XformControl
 {
-    kvsClassName( kvs::Camera );
-
 public:
 
     enum ProjectionType
@@ -45,9 +42,7 @@ public:
     };
 
 private:
-#if KVS_ENABLE_DEPRECATED
-protected:
-#endif
+
     kvs::Vector3f m_transform_center;
     ProjectionType m_projection_type; ///< projection type
     float m_field_of_view; ///< field of view [deg]

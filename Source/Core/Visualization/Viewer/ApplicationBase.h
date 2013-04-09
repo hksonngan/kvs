@@ -15,16 +15,12 @@
 #ifndef KVS__APPLICATION_BASE_H_INCLUDE
 #define KVS__APPLICATION_BASE_H_INCLUDE
 
-#include <kvs/ClassName>
-#if KVS_ENABLE_DEPRECATED
-#include <kvs/ScreenBase>
-#endif
 #include <kvs/Compiler>
 #include <list>
-
 #if defined( KVS_COMPILER_VC )
 #pragma warning(disable:4800)
 #endif
+
 
 namespace kvs
 {
@@ -38,8 +34,6 @@ class ScreenBase;
 /*===========================================================================*/
 class ApplicationBase
 {
-    kvsClassName( kvs::ApplicationBase );
-
 protected:
 
     int m_argc; ///< argument count

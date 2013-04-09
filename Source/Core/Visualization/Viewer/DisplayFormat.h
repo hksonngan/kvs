@@ -41,8 +41,6 @@ public:
 
     DisplayFormat();
 
-public:
-
     bool doubleBuffer() const;
     bool colorBuffer() const;
     bool depthBuffer() const;
@@ -52,8 +50,6 @@ public:
     bool multisampleBuffer() const;
     bool alphaChannel() const;
 
-public:
-
     void setDoubleBuffer( const bool enable );
     void setColorBuffer( const bool enable );
     void setDepthBuffer( const bool enable );
@@ -62,7 +58,6 @@ public:
     void setStereoBuffer( const bool enable );
     void setMultisampleBuffer( const bool enable );
     void setAlphaChannel( const bool enable );
-
 };
 
 } // end of namespace kvs

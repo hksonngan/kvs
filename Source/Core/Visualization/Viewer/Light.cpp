@@ -23,6 +23,39 @@ namespace kvs
 
 /*==========================================================================*/
 /**
+ *  Set the lighting model as a local-viewer.
+ *  @param flag [in] set flag
+ */
+/*==========================================================================*/
+void Light::SetModelLocalViewer( bool flag )
+{
+    KVS_GL_CALL( glLightModeli( GL_LIGHT_MODEL_LOCAL_VIEWER, flag ) );
+}
+
+/*==========================================================================*/
+/**
+ *  Set the lighting model as a two-side.
+ *  @param flag [in] set flag
+ */
+/*==========================================================================*/
+void Light::SetModelTwoSide( bool flag )
+{
+    KVS_GL_CALL( glLightModeli( GL_LIGHT_MODEL_TWO_SIDE, flag ) );
+}
+
+/*==========================================================================*/
+/**
+ *  Set the lighting model as a ambient light.
+ *  @param ambient [in] ambient color
+ */
+/*==========================================================================*/
+void Light::SetModelAmbient( float ambient[4] )
+{
+    KVS_GL_CALL( glLightModelfv( GL_LIGHT_MODEL_AMBIENT, ambient ) );
+}
+
+/*==========================================================================*/
+/**
  *  Constructor.
  *  @param collision [in] collision dectection flag
  */
@@ -37,7 +70,7 @@ Light::Light()
  *  Destructor.
  */
 /*==========================================================================*/
-Light::~Light( void )
+Light::~Light()
 {
 }
 
@@ -46,7 +79,7 @@ Light::~Light( void )
  *  Initialize the member parameters.
  */
 /*==========================================================================*/
-void Light::initialize( void )
+void Light::initialize()
 {
     m_id = GL_LIGHT0;
     m_transform_center.set( 0, 0, 0 );
@@ -201,7 +234,7 @@ void Light::setSpecular( const kvs::RGBAColor& color )
  *  Get the light position.
  */
 /*==========================================================================*/
-const kvs::Vector3f Light::position( void ) const
+const kvs::Vector3f Light::position() const
 {
     return( this->xform().translation() );
 }
@@ -211,7 +244,7 @@ const kvs::Vector3f Light::position( void ) const
  *  Get the diffuse color of the light.
  */
 /*==========================================================================*/
-const kvs::Vector3f& Light::diffuse( void ) const
+const kvs::Vector3f& Light::diffuse() const
 {
     return( m_diffuse );
 }
@@ -221,7 +254,7 @@ const kvs::Vector3f& Light::diffuse( void ) const
  *  Get the ambient color of the light.
  */
 /*==========================================================================*/
-const kvs::Vector3f& Light::ambient( void ) const
+const kvs::Vector3f& Light::ambient() const
 {
     return( m_ambient );
 }
@@ -231,7 +264,7 @@ const kvs::Vector3f& Light::ambient( void ) const
  *  Get the specular color of the light.
  */
 /*==========================================================================*/
-const kvs::Vector3f& Light::specular( void ) const
+const kvs::Vector3f& Light::specular() const
 {
     return( m_specular );
 }
@@ -250,15 +283,13 @@ void Light::update( const kvs::Camera* camera )
     const kvs::Vector4f ambient( this->ambient(), 1.0f );
     const kvs::Vector4f specular( this->specular(), 1.0f );
 
-    glPushMatrix();
-    glLoadIdentity();
-    {
-        glLightfv( m_id, GL_POSITION, &(position[0]) );
-        glLightfv( m_id, GL_DIFFUSE,  &(diffuse[0]) );
-        glLightfv( m_id, GL_AMBIENT,  &(ambient[0]) );
-        glLightfv( m_id, GL_SPECULAR, &(specular[0]) );
-    }
-    glPopMatrix();
+    KVS_GL_CALL( glPushMatrix() );
+    KVS_GL_CALL( glLoadIdentity() );
+    KVS_GL_CALL( glLightfv( m_id, GL_POSITION, &(position[0]) ) );
+    KVS_GL_CALL( glLightfv( m_id, GL_DIFFUSE,  &(diffuse[0]) ) );
+    KVS_GL_CALL( glLightfv( m_id, GL_AMBIENT,  &(ambient[0]) ) );
+    KVS_GL_CALL( glLightfv( m_id, GL_SPECULAR, &(specular[0]) ) );
+    KVS_GL_CALL( glPopMatrix() );
 }
 
 /*==========================================================================*/
@@ -266,9 +297,9 @@ void Light::update( const kvs::Camera* camera )
  *  Turn on the light.
  */
 /*==========================================================================*/
-void Light::on( void ) const
+void Light::on() const
 {
-    glEnable( m_id );
+    kvs::OpenGL::Enable( m_id );
 }
 
 /*==========================================================================*/
@@ -276,9 +307,9 @@ void Light::on( void ) const
  *  Turn off the light.
  */
 /*==========================================================================*/
-void Light::off( void ) const
+void Light::off() const
 {
-    glDisable( m_id );
+    kvs::OpenGL::Disable( m_id );
 }
 
 /*==========================================================================*/
@@ -287,9 +318,9 @@ void Light::off( void ) const
  *  @return true, if the light is enable.
  */
 /*==========================================================================*/
-const bool Light::isEnabled( void ) const
+bool Light::isEnabled() const
 {
-    return( glIsEnabled( m_id ) == GL_TRUE );
+    return kvs::OpenGL::IsEnabled( m_id );
 }
 
 /*===========================================================================*/
@@ -297,7 +328,7 @@ const bool Light::isEnabled( void ) const
  *  @brief  Resets the xform of the light.
  */
 /*===========================================================================*/
-void Light::resetXform( void )
+void Light::resetXform()
 {
     kvs::XformControl::resetXform();
     m_transform_center.set( 0, 0, 0 );
@@ -339,39 +370,6 @@ void Light::translate( const kvs::Vector3f& translation )
 void Light::scale( const kvs::Vector3f& scaling )
 {
     this->multiplyXform( kvs::Xform::Scaling( scaling ) );
-}
-
-/*==========================================================================*/
-/**
- *  Set the lighting model as a local-viewer.
- *  @param flag [in] set flag
- */
-/*==========================================================================*/
-void Light::setModelLocalViewer( bool flag )
-{
-    glLightModeli( GL_LIGHT_MODEL_LOCAL_VIEWER, flag );
-}
-
-/*==========================================================================*/
-/**
- *  Set the lighting model as a two-side.
- *  @param flag [in] set flag
- */
-/*==========================================================================*/
-void Light::setModelTwoSide( bool flag )
-{
-    glLightModeli( GL_LIGHT_MODEL_TWO_SIDE, flag );
-}
-
-/*==========================================================================*/
-/**
- *  Set the lighting model as a ambient light.
- *  @param ambient [in] ambient color
- */
-/*==========================================================================*/
-void Light::setModelAmbient( float ambient[4] )
-{
-    glLightModelfv( GL_LIGHT_MODEL_AMBIENT, ambient );
 }
 
 } // end of namespace kvs

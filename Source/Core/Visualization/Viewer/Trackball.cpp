@@ -15,7 +15,6 @@
 #include <kvs/Camera>
 #include <kvs/Matrix33>
 #include <kvs/Quaternion>
-#include <kvs/IgnoreUnusedVariable>
 
 
 namespace
@@ -36,7 +35,7 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-Trackball::Trackball( void )
+Trackball::Trackball()
 {
     this->reset();
 }
@@ -46,7 +45,7 @@ Trackball::Trackball( void )
  *  Destructor.
  */
 /*==========================================================================*/
-Trackball::~Trackball( void )
+Trackball::~Trackball()
 {
     this->reset();
 }
@@ -67,7 +66,7 @@ void Trackball::attachCamera( kvs::Camera* camera )
  *  Reset the center of rotation.
  */
 /*==========================================================================*/
-void Trackball::resetRotationCenter( void )
+void Trackball::resetRotationCenter()
 {
     m_rotation_center = kvs::Vector2f( 0.0, 0.0 );
 }
@@ -138,9 +137,9 @@ void Trackball::setWindowSize( const int width, const int height )
  *  Get virtual trackball size.
  */
 /*==========================================================================*/
-const float Trackball::size( void ) const
+float Trackball::size() const
 {
-    return( m_size );
+    return m_size;
 }
 
 /*==========================================================================*/
@@ -148,9 +147,9 @@ const float Trackball::size( void ) const
  *  Get depth value.
  */
 /*==========================================================================*/
-const float Trackball::depthValue( void ) const
+float Trackball::depthValue() const
 {
-    return( m_depth );
+    return m_depth;
 }
 
 /*==========================================================================*/
@@ -158,9 +157,9 @@ const float Trackball::depthValue( void ) const
  *  Get center of rotation.
  */
 /*==========================================================================*/
-const kvs::Vector2f& Trackball::rotationCenter( void ) const
+const kvs::Vector2f& Trackball::rotationCenter() const
 {
-    return( m_rotation_center );
+    return m_rotation_center;
 }
 
 /*==========================================================================*/
@@ -168,9 +167,9 @@ const kvs::Vector2f& Trackball::rotationCenter( void ) const
  *  Get scaling value.
  */
 /*==========================================================================*/
-const kvs::Vector3f& Trackball::scaling( void ) const
+const kvs::Vector3f& Trackball::scaling() const
 {
-    return( m_scaling );
+    return m_scaling;
 }
 
 /*==========================================================================*/
@@ -178,9 +177,9 @@ const kvs::Vector3f& Trackball::scaling( void ) const
  *  Get translation vector.
  */
 /*==========================================================================*/
-const kvs::Vector3f& Trackball::translation( void ) const
+const kvs::Vector3f& Trackball::translation() const
 {
-    return( m_translation );
+    return m_translation;
 }
 
 /*==========================================================================*/
@@ -188,9 +187,9 @@ const kvs::Vector3f& Trackball::translation( void ) const
  *  Get roation matrix.
  */
 /*==========================================================================*/
-const kvs::Quaternion& Trackball::rotation( void ) const
+const kvs::Quaternion& Trackball::rotation() const
 {
-    return( m_rotation );
+    return m_rotation;
 }
 
 /*==========================================================================*/
@@ -198,9 +197,9 @@ const kvs::Quaternion& Trackball::rotation( void ) const
  *  Get window width.
  */
 /*==========================================================================*/
-const int Trackball::windowWidth( void ) const
+int Trackball::windowWidth() const
 {
-    return( m_window_width );
+    return m_window_width;
 }
 
 /*==========================================================================*/
@@ -208,9 +207,9 @@ const int Trackball::windowWidth( void ) const
  *  Get window height.
  */
 /*==========================================================================*/
-const int Trackball::windowHeight( void ) const
+int Trackball::windowHeight() const
 {
-    return( m_window_height );
+    return m_window_height;
 }
 
 /*==========================================================================*/
@@ -234,30 +233,14 @@ void Trackball::scale(
     const float s = 1.0f + ::ScalingFactor * ( n_old.y() - n_new.y() ) / h;
     switch ( type )
     {
-    case ScalingXYZ:
-        m_scaling.set( s, s, s );
-        break;
-    case ScalingX:
-        m_scaling.set( s, 1, 1 );
-        break;
-    case ScalingY:
-        m_scaling.set( 1, s, 1 );
-        break;
-    case ScalingZ:
-        m_scaling.set( 1, 1, s );
-        break;
-    case ScalingXY:
-        m_scaling.set( s, s, 1 );
-        break;
-    case ScalingYZ:
-        m_scaling.set( 1, s, s );
-        break;
-    case ScalingZX:
-        m_scaling.set( s, 1, s );
-        break;
-    default:
-        m_scaling.set( 1, 1, 1 );
-        break;
+    case ScalingXYZ: m_scaling.set( s, s, s ); break;
+    case ScalingX:   m_scaling.set( s, 1, 1 ); break;
+    case ScalingY:   m_scaling.set( 1, s, 1 ); break;
+    case ScalingZ:   m_scaling.set( 1, 1, s ); break;
+    case ScalingXY:  m_scaling.set( s, s, 1 ); break;
+    case ScalingYZ:  m_scaling.set( 1, s, s ); break;
+    case ScalingZX:  m_scaling.set( s, 1, s ); break;
+    default:         m_scaling.set( 1, 1, 1 ); break;
     }
 }
 
@@ -313,7 +296,7 @@ void Trackball::rotate( const kvs::Vector2i& start, const kvs::Vector2i& end )
  *  Reset.
  */
 /*==========================================================================*/
-void Trackball::reset( void )
+void Trackball::reset()
 {
     m_size            = 0.6f;
     m_depth           = 1.0f;
@@ -330,7 +313,7 @@ void Trackball::reset( void )
  *  @return distance
  */
 /*==========================================================================*/
-const float Trackball::depth_on_sphere( const kvs::Vector2f& dir ) const
+float Trackball::depth_on_sphere( const kvs::Vector2f& dir ) const
 {
     const double r = m_size;
     const double d = dir.length();
@@ -349,7 +332,7 @@ const float Trackball::depth_on_sphere( const kvs::Vector2f& dir ) const
         z = static_cast<float>( t * t / d );
     }
 
-    return( z );
+    return z;
 }
 
 /*==========================================================================*/
@@ -362,12 +345,12 @@ const float Trackball::depth_on_sphere( const kvs::Vector2f& dir ) const
  *  and the rage is [-1,-1].
  */
 /*==========================================================================*/
-const kvs::Vector2f Trackball::get_norm_position( const kvs::Vector2i& pos ) const
+kvs::Vector2f Trackball::get_norm_position( const kvs::Vector2i& pos ) const
 {
     const float x =  2.0f * ( pos.x() - m_rotation_center.x() ) / m_window_width;
     const float y = -2.0f * ( pos.y() - m_rotation_center.y() ) / m_window_height;
 
-    return( kvs::Vector2f( x, y ) );
+    return kvs::Vector2f( x, y );
 }
 
 } // end of namespace kvs
