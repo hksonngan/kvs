@@ -179,13 +179,13 @@ int main( int argc, char** argv )
 
     // Screen.
     kvs::glut::Screen screen( &app );
-    screen.addPaintEvent( &paint_event );
-    screen.addResizeEvent( &resize_event );
-    screen.addMousePressEvent( &mouse_press_event );
-    screen.addMouseMoveEvent( &mouse_move_event );
-    screen.addMouseReleaseEvent( &mouse_release_event );
-    screen.addMouseDoubleClickEvent( &mouse_double_click_event );
-    screen.addKeyPressEvent( &key_press_event );
+    screen.addEvent( &paint_event );
+    screen.addEvent( &resize_event );
+    screen.addEvent( &mouse_press_event );
+    screen.addEvent( &mouse_move_event );
+    screen.addEvent( &mouse_release_event );
+    screen.addEvent( &mouse_double_click_event );
+    screen.addEvent( &key_press_event );
     screen.addTimerEvent( &timer_event, &timer );
     screen.setTitle( "Event listener" );
     screen.setGeometry( 0, 0, 512, 512 );
