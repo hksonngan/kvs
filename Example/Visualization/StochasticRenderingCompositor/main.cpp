@@ -22,9 +22,7 @@
 #include <kvs/StochasticPolygonEngine>
 #include <kvs/StochasticTetrahedraEngine>
 #include <kvs/StochasticRenderingCompositor>
-#include <kvs/ObjectManager>
-#include <kvs/RendererManager>
-#include <kvs/IDManager>
+#include <kvs/Scene>
 
 /*===========================================================================*/
 /**
@@ -50,10 +48,7 @@ int main( int argc, char** argv )
     // Enable two-side (frontface and backface) lighting
     kvs::Light::SetModelTwoSide( true );
 
-    kvs::ObjectManager* object_manager = screen.scene()->objectManager();
-    kvs::RendererManager* renderer_manager = screen.scene()->rendererManager();
-    kvs::IDManager* id_manager = screen.scene()->IDManager();
-    kvs::StochasticRenderingCompositor compositor( object_manager, renderer_manager, id_manager );
+    kvs::StochasticRenderingCompositor compositor( screen.scene() );
     compositor.setRepetitionLevel( 50 );
     compositor.enableLODControl( 1 );
     compositor.registerObject( polygon_object, polygon_engine );
