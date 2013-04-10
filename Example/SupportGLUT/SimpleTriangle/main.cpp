@@ -63,7 +63,7 @@ int main( int argc, char** argv )
 
     // Screen.
     kvs::glut::Screen screen;
-    screen.addPaintEvent( &paint_event );
+    screen.addEvent( &paint_event );
     screen.setGeometry( 0, 0, 512, 512 );
     screen.setTitle( "SimpleTriangle" );
     screen.show();

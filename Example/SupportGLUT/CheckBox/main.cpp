@@ -103,7 +103,7 @@ int main( int argc, char** argv )
     PaintEvent paint_event;
 
     kvs::glut::Screen screen( &app );
-    screen.addPaintEvent( &paint_event );
+    screen.addEvent( &paint_event );
     screen.setTitle( "CheckBox" );
     screen.setGeometry( 0, 0, 512, 512 );
     screen.show();

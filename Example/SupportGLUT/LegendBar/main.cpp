@@ -36,7 +36,7 @@ int main( int argc, char** argv )
     kvs::StructuredVolumeObject* object = new kvs::HydrogenVolumeData( kvs::Vector3ui( 32, 32, 32 ) );
     kvs::RayCastingRenderer* renderer = new kvs::RayCastingRenderer();
     renderer->enableLODControl();
-    renderer->transferFunction().setColorMap( cmap );
+    renderer->setTransferFunction( kvs::TransferFunction( cmap ) );
 
     // Screen.
     kvs::glut::Screen screen( &app );

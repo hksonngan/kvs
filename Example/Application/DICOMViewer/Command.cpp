@@ -118,13 +118,13 @@ void Command::decrementIndex( const unsigned int value )
 /*===========================================================================*/
 void Command::updateDicomImage( void )
 {
-    m_screen->objectManager()->erase();
+    m_screen->scene()->objectManager()->erase();
 
     const kvs::Dicom* dicom  = m_parameter->dicom_list[ m_parameter->index ];
     kvs::ImageObject* object = new kvs::ImageImporter( dicom );
 
-    const int object_id = m_screen->objectManager()->insert( object );
-    m_screen->IDManager()->changeObject( object_id );
+    const int object_id = m_screen->scene()->objectManager()->insert( object );
+    m_screen->scene()->IDManager()->changeObject( object_id );
 }
 
 /*===========================================================================*/
@@ -201,7 +201,7 @@ void Command::moveMouse( kvs::MouseEvent* event )
 void Command::writeScreenImage( void )
 {
     const std::string filename = ::GetOutputFilename( m_parameter, "bmp" );
-    m_screen->camera()->snapshot().write( filename.c_str() );
+    m_screen->scene()->camera()->snapshot().write( filename.c_str() );
 }
 
 /*===========================================================================*/

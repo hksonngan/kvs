@@ -73,10 +73,10 @@ int main( int argc, char** argv )
     Event::MousePress mouse_press( &parameter );
     Event::MouseMove mouse_move( &parameter );
 
-    screen.addInitializeEvent( &init );
-    screen.addKeyPressEvent( &key_press );
-    screen.setMousePressEvent( &mouse_press );
-    screen.setMouseMoveEvent( &mouse_move );
+    screen.addEvent( &init );
+    screen.addEvent( &key_press );
+    screen.setEvent( &mouse_press );
+    screen.setEvent( &mouse_move );
     screen.setGeometry( 0, 0, parameter.width, parameter.height );
     screen.setTitle( "DICOM viewer" );
     screen.show();

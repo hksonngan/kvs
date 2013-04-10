@@ -71,14 +71,14 @@ int main( int argc, char** argv )
 
     // Screen for drawing a triangle.
     kvs::glut::Screen screen1( &app );
-    screen1.addPaintEvent( &triangle_paint_event );
+    screen1.addEvent( &triangle_paint_event );
     screen1.setTitle( "Triangle" );
     screen1.setGeometry( 0, 0, 512, 512 );
     screen1.show();
 
     // Screen for drawing a rectangle.
     kvs::glut::Screen screen2( &app );
-    screen2.addPaintEvent( &rectangle_paint_event );
+    screen2.addEvent( &rectangle_paint_event );
     screen2.setTitle( "Rectangle" );
     screen2.setGeometry( 520, 0, 512, 512 );
     screen2.show();

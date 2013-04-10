@@ -85,10 +85,10 @@ int main( int argc, char** argv )
     // Screen.
     kvs::glut::Screen screen( &app );
     screen.setTitle( "Timer event" );
-    screen.addKeyPressEvent( &key_press_event );
+    screen.addEvent( &key_press_event );
     screen.addTimerEvent( &timer_event, &timer );
     screen.registerObject( object );
     screen.show();
 
-    return( app.run() );
+    return app.run();
 }

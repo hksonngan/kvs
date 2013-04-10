@@ -36,7 +36,7 @@ void Init::update( void )
 {
     // Set background color to black.
     const kvs::RGBColor black( 0, 0, 0 );
-    static_cast<kvs::glut::Screen*>(screen())->background()->setColor( black );
+    static_cast<kvs::glut::Screen*>(screen())->scene()->background()->setColor( black );
 
     // Register the DICOM image as ImageObject to the screen.
     const kvs::Dicom* dicom = m_parameter->dicom_list[0];

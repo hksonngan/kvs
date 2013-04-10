@@ -48,11 +48,11 @@ int main( int argc, char** argv )
     screen.show();
 
     // Enable two-side (frontface and backface) lighting
-    screen.light()->setModelTwoSide( true );
+    kvs::Light::SetModelTwoSide( true );
 
-    kvs::ObjectManager* object_manager = screen.objectManager();
-    kvs::RendererManager* renderer_manager = screen.rendererManager();
-    kvs::IDManager* id_manager = screen.IDManager();
+    kvs::ObjectManager* object_manager = screen.scene()->objectManager();
+    kvs::RendererManager* renderer_manager = screen.scene()->rendererManager();
+    kvs::IDManager* id_manager = screen.scene()->IDManager();
     kvs::StochasticRenderingCompositor compositor( object_manager, renderer_manager, id_manager );
     compositor.setRepetitionLevel( 50 );
     compositor.enableLODControl( 1 );

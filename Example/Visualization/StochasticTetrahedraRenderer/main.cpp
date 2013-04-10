@@ -45,7 +45,7 @@ int main( int argc, char** argv )
     screen.show();
 
     // Enable two-side (frontface and backface) lighting
-    screen.light()->setModelTwoSide( true );
+    kvs::Light::SetModelTwoSide( true );
 
     return app.run();
 }
