@@ -24,12 +24,12 @@
 namespace kvs
 {
 
+class Scene;
 class ObjectManager;
 class RendererManager;
 class IDManager;
 class PointObject;
 class ObjectBase;
-
 class StochasticRenderingEngine;
 
 /*===========================================================================*/
@@ -57,7 +57,7 @@ public:
         kvs::ObjectManager* object_manager,
         kvs::RendererManager* renderer_manager,
         kvs::IDManager* id_manager );
-
+    StochasticRenderingCompositor( kvs::Scene* scene );
     virtual ~StochasticRenderingCompositor( void );
 
 public:

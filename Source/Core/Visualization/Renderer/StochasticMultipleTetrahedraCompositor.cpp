@@ -13,11 +13,11 @@
  */
 /*****************************************************************************/
 #include "StochasticMultipleTetrahedraCompositor.h"
+#include <kvs/Scene>
 #include <kvs/ObjectManager>
 #include <kvs/RendererManager>
 #include <kvs/IDManager>
 #include <kvs/PointObject>
-#include <kvs/ObjectManager>
 
 
 namespace kvs
@@ -30,6 +30,29 @@ StochasticMultipleTetrahedraCompositor::StochasticMultipleTetrahedraCompositor(
     m_object_manager( object_manager ),
     m_renderer_manager( renderer_manager ),
     m_id_manager( id_manager ),
+    m_object_id( 0 ),
+    m_object( new kvs::PointObject() ),
+    m_renderer( new kvs::StochasticMultipleTetrahedraRenderer() )
+{
+    const kvs::Vector3f obj_min = m_object_manager->minObjectCoord();
+    const kvs::Vector3f obj_max = m_object_manager->maxObjectCoord();
+    const kvs::Vector3f ext_min = m_object_manager->minExternalCoord();
+    const kvs::Vector3f ext_max = m_object_manager->maxExternalCoord();
+    m_object->setXform( m_object_manager->xform() );
+    m_object->saveXform();
+    m_object->setMinMaxObjectCoords( obj_min, obj_max );
+    m_object->setMinMaxExternalCoords( ext_min, ext_max );
+
+    const size_t object_id   = m_object_manager->insert( m_object );
+    const size_t renderer_id = m_renderer_manager->insert( m_renderer );
+    m_id_manager->insert( object_id, renderer_id );
+    m_object_id = object_id;
+}
+
+StochasticMultipleTetrahedraCompositor::StochasticMultipleTetrahedraCompositor( kvs::Scene* scene ):
+    m_object_manager( scene->objectManager() ),
+    m_renderer_manager( scene->rendererManager() ),
+    m_id_manager( scene->IDManager() ),
     m_object_id( 0 ),
     m_object( new kvs::PointObject() ),
     m_renderer( new kvs::StochasticMultipleTetrahedraRenderer() )

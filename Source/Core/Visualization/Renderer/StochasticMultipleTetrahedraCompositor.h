@@ -22,6 +22,7 @@
 namespace kvs
 {
 
+class Scene;
 class ObjectManager;
 class RendererManager;
 class IDManager;
@@ -47,6 +48,7 @@ public:
         kvs::ObjectManager* object_manager,
         kvs::RendererManager* renderer_manager,
         kvs::IDManager* id_manager );
+    StochasticMultipleTetrahedraCompositor( kvs::Scene* scene );
     virtual ~StochasticMultipleTetrahedraCompositor();
 
     void registerObjects(
