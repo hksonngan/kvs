@@ -66,7 +66,7 @@ protected:
 protected:
 
     KVS_DEPRECATED( kvs::Timer& timer() ) { return m_timer; }
-    KVS_DEPRECATED( void initialize() ) { initialize_projection(); initialize_modelview(); }
+    //KVS_DEPRECATED( void initialize() ) { initialize_projection(); initialize_modelview(); }
     KVS_DEPRECATED( virtual void initialize_projection() ) {}
     KVS_DEPRECATED( virtual void initialize_modelview() ) {}
 };
