@@ -50,19 +50,20 @@ public:
  *  @return true, if the message can be received from the client successfully
  */
 /*===========================================================================*/
-const bool Server( const Argument& argument )
+bool Server( const Argument& argument )
 {
     const int port = argument.hasOption("port") ? argument.optionValue<int>("port") : 5000;
 
     // Open.
-    kvs::TCPServer server; server.open();
+    kvs::TCPServer server;
+    server.open();
 
     // Bind.
     if ( server.bind( port ) < 0 )
     {
         const std::string error = server.errorString();
         kvsMessageError( "Cannot bind the port (%d). [%s]", port, error.c_str() );
-        return( false );
+        return false;
     }
 
     // Listen.
@@ -70,7 +71,7 @@ const bool Server( const Argument& argument )
     {
         const std::string error = server.errorString();
         kvsMessageError( "Cannot listen to the port (%d). [%s]", port, error.c_str() );
-        return( false );
+        return false;
     }
 
     // Accept and receive the message.
@@ -80,7 +81,7 @@ const bool Server( const Argument& argument )
     {
         const std::string error = server.errorString();
         kvsMessageError( "Cannot receive the message. [%s]", error.c_str() );
-        return( false );
+        return false;
     }
 
     if ( message.size() > 0 )
@@ -91,10 +92,10 @@ const bool Server( const Argument& argument )
     else
     {
         kvsMessageError( "Received message is empty." );
-        return( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -104,20 +105,21 @@ const bool Server( const Argument& argument )
  *  @return true, if the message can be send to the server successfully
  */
 /*===========================================================================*/
-const bool Client( const Argument& argument )
+bool Client( const Argument& argument )
 {
     const kvs::IPAddress ip( argument.hasOption("ip") ? argument.optionValue<std::string>("ip").c_str() : "localhost" );
     const int port = argument.hasOption("port") ? argument.optionValue<int>("port") : 5000;
 
     // Open.
-    kvs::TCPSocket client; client.open();
+    kvs::TCPSocket client;
+    client.open();
 
     // Connect to the server.
     if ( !client.connect( ip, port ) )
     {
         const std::string error = client.errorString();
         kvsMessageError( "Cannot connect to the server. [%s]", error.c_str() );
-        return( false );
+        return false;
     }
 
     // Send the message.
@@ -126,10 +128,10 @@ const bool Client( const Argument& argument )
     {
         const std::string error = client.errorString();
         kvsMessageError( "Cannot send the message. [%s]", error.c_str() );
-        return( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -144,9 +146,9 @@ int main( int argc, char** argv )
     Argument argument( argc, argv );
     if ( !argument.parse() ) exit( EXIT_FAILURE );
 
-    if ( argument.hasOption("server") ) return( Server( argument ) );
-    else if ( argument.hasOption("client") ) return( Client( argument ) );
+    if ( argument.hasOption("server") ) return Server( argument );
+    else if ( argument.hasOption("client") ) return Client( argument );
 
     kvsMessageError("Need to specify '-server' or '-client'.");
-    return( false );
+    return false;
 }
