@@ -21,6 +21,7 @@
 #include <kvs/IgnoreUnusedVariable>
 #include <kvs/ScreenBase>
 #include <kvs/OpenGL>
+#include <cstdio>
 
 // Default parameters.
 namespace { namespace Default
