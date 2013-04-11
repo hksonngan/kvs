@@ -58,8 +58,7 @@ class TimerEvent : public kvs::TimerEventListener
         rotation *= kvs::YRotationMatrix33<float>( deg );
         rotation *= kvs::ZRotationMatrix33<float>( deg );
 
-        kvs::ObjectManager* object_manager = static_cast<kvs::glut::Screen*>(screen())->objectManager();
-        //screen()->objectManager()->object()->rotate( rotation, center );
+        kvs::ObjectManager* object_manager = static_cast<kvs::glut::Screen*>(screen())->scene()->objectManager();
         object_manager->object()->multiplyXform( kvs::Xform::Rotation( rotation ) );
         screen()->redraw();
 
