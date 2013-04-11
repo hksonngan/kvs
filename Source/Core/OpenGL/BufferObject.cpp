@@ -139,7 +139,7 @@ void BufferObject::bind() const
 /*===========================================================================*/
 void BufferObject::unbind() const
 {
-    KVS_ASSERT( this->isBinding() );
+    KVS_ASSERT( this->isBound() );
     KVS_GL_CALL( glBindBuffer( m_target, 0 ) );
 }
 
@@ -155,7 +155,7 @@ bool BufferObject::isValid() const
     return result == GL_TRUE;
 }
 
-bool BufferObject::isBinding() const
+bool BufferObject::isBound() const
 {
     if ( !this->isCreated() ) return false;
 
@@ -225,19 +225,19 @@ void BufferObject::deleteBuffer()
 
 void BufferObject::setBufferData( GLsizei size, const GLvoid* data )
 {
-    KVS_ASSERT( this->isBinding() );
+    KVS_ASSERT( this->isBound() );
     KVS_GL_CALL( glBufferData( m_target, size, data, m_usage ) );
 }
 
 void BufferObject::setBufferSubData( GLsizei size, const GLvoid* data, GLint offset )
 {
-    KVS_ASSERT( this->isBinding() );
+    KVS_ASSERT( this->isBound() );
     KVS_GL_CALL( glBufferSubData( m_target, offset, size, data ) );
 }
 
 void* BufferObject::mapBuffer( const GLenum access_type )
 {
-    KVS_ASSERT( this->isBinding() );
+    KVS_ASSERT( this->isBound() );
     void* result = 0;
     KVS_GL_CALL( result = glMapBuffer( m_target, access_type ) );
     return result;
@@ -245,7 +245,7 @@ void* BufferObject::mapBuffer( const GLenum access_type )
 
 void BufferObject::unmapBuffer()
 {
-    KVS_ASSERT( this->isBinding() );
+    KVS_ASSERT( this->isBound() );
     KVS_GL_CALL( glUnmapBuffer( m_target ) );
 }
 

@@ -54,7 +54,7 @@ public:
     void unbind() const;
     bool isCreated() const;
     bool isValid() const;
-    bool isBinding() const;
+    bool isBound() const;
 
 protected:
 

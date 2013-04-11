@@ -83,7 +83,7 @@ public:
     void unbind() const;
     bool isCreated() const;
     bool isValid() const;
-    bool isBinding() const;
+    bool isBound() const;
 
     void download( const size_t size, const void* data, const size_t offset = 0 );
     void* map( const GLenum access_type = kvs::BufferObject::ReadWrite );

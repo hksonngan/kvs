@@ -91,7 +91,7 @@ void FrameBufferObject::bind() const
 /*===========================================================================*/
 void FrameBufferObject::unbind() const
 {
-    KVS_ASSERT( this->isBinding() );
+    KVS_ASSERT( this->isBound() );
     KVS_GL_CALL( glBindFramebuffer( GL_FRAMEBUFFER, 0 ) );
 }
 
@@ -107,7 +107,7 @@ bool FrameBufferObject::isValid() const
     return result == GL_TRUE;
 }
 
-bool FrameBufferObject::isBinding() const
+bool FrameBufferObject::isBound() const
 {
     if ( !this->isCreated() ) return false;
 

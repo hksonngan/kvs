@@ -55,7 +55,7 @@ public:
     void unbind() const;
     bool isCreated() const;
     bool isValid() const;
-    bool isBinding() const;
+    bool isBound() const;
     void checkStatus() const;
 
     void attachColorTexture( const kvs::Texture1D& texture, const size_t color_buffer = 0, const int mip_level = 0 );

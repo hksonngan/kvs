@@ -275,7 +275,7 @@ void Texture::bind() const
 
 void Texture::unbind() const
 {
-    KVS_ASSERT( this->isBinding() );
+    KVS_ASSERT( this->isBound() );
     KVS_GL_CALL( glBindTexture( m_target, 0 ) );
 }
 
@@ -291,7 +291,7 @@ bool Texture::isValid() const
     return result == GL_TRUE;
 }
 
-bool Texture::isBinding() const
+bool Texture::isBound() const
 {
     if ( !this->isCreated() ) return false;
 
@@ -319,7 +319,7 @@ void Texture::deleteTexture()
 void Texture::setImage1D( GLsizei width, const GLvoid* data )
 {
     KVS_ASSERT( m_target == GL_TEXTURE_1D );
-    KVS_ASSERT( this->isBinding() );
+    KVS_ASSERT( this->isBound() );
 
     const GLint level = 0; // level-of-detail number
     const GLint border = 0; // border width (0 or 1)
@@ -329,7 +329,7 @@ void Texture::setImage1D( GLsizei width, const GLvoid* data )
 void Texture::setImage2D( GLsizei width, GLsizei height, const GLvoid* data )
 {
     KVS_ASSERT( m_target == GL_TEXTURE_2D );
-    KVS_ASSERT( this->isBinding() );
+    KVS_ASSERT( this->isBound() );
 
     const GLint level = 0; // level-of-detail number
     const GLint border = 0; // border width (0 or 1)
@@ -339,7 +339,7 @@ void Texture::setImage2D( GLsizei width, GLsizei height, const GLvoid* data )
 void Texture::setImage3D( GLsizei width, GLsizei height, GLsizei depth, const GLvoid* data )
 {
     KVS_ASSERT( m_target == GL_TEXTURE_3D );
-    KVS_ASSERT( this->isBinding() );
+    KVS_ASSERT( this->isBound() );
 
     const GLint level = 0; // level-of-detail number
     const GLint border = 0; // border width (0 or 1)
@@ -349,7 +349,7 @@ void Texture::setImage3D( GLsizei width, GLsizei height, GLsizei depth, const GL
 void Texture::setImageRectangle( GLsizei width, GLsizei height, const GLvoid* data )
 {
     KVS_ASSERT( m_target == GL_TEXTURE_RECTANGLE );
-    KVS_ASSERT( this->isBinding() );
+    KVS_ASSERT( this->isBound() );
 
     const GLint level = 0; // level-of-detail number
     const GLint border = 0; // border width (0 or 1)
@@ -359,7 +359,7 @@ void Texture::setImageRectangle( GLsizei width, GLsizei height, const GLvoid* da
 void Texture::setSubImage1D( GLsizei width, const GLvoid* data, GLint xoffset )
 {
     KVS_ASSERT( m_target == GL_TEXTURE_1D );
-    KVS_ASSERT( this->isBinding() );
+    KVS_ASSERT( this->isBound() );
 
     const GLint level = 0; // level-of-detail number
     KVS_GL_CALL( glTexSubImage1D( m_target, level, xoffset, width, m_external_format, m_external_type, data ) );
@@ -368,7 +368,7 @@ void Texture::setSubImage1D( GLsizei width, const GLvoid* data, GLint xoffset )
 void Texture::setSubImage2D( GLsizei width, GLsizei height, const GLvoid* data, GLint xoffset, GLint yoffset )
 {
     KVS_ASSERT( m_target == GL_TEXTURE_2D );
-    KVS_ASSERT( this->isBinding() );
+    KVS_ASSERT( this->isBound() );
 
     const GLint level = 0; // level-of-detail number
     KVS_GL_CALL( glTexSubImage2D( m_target, level, xoffset, yoffset, width, height, m_external_format, m_external_type, data ) );
@@ -377,7 +377,7 @@ void Texture::setSubImage2D( GLsizei width, GLsizei height, const GLvoid* data, 
 void Texture::setSubImage3D( GLsizei width, GLsizei height, GLsizei depth, const GLvoid* data, GLint xoffset, GLint yoffset, GLint zoffset )
 {
     KVS_ASSERT( m_target == GL_TEXTURE_3D );
-    KVS_ASSERT( this->isBinding() );
+    KVS_ASSERT( this->isBound() );
 
     const GLint level = 0; // level-of-detail number
     KVS_GL_CALL( glTexSubImage3D( m_target, level, xoffset, yoffset, zoffset, width, height, depth, m_external_format, m_external_type, data ) );
@@ -386,7 +386,7 @@ void Texture::setSubImage3D( GLsizei width, GLsizei height, GLsizei depth, const
 void Texture::setSubImageRectangle( GLsizei width, GLsizei height, const GLvoid* data, GLint xoffset, GLint yoffset )
 {
     KVS_ASSERT( m_target == GL_TEXTURE_RECTANGLE );
-    KVS_ASSERT( this->isBinding() );
+    KVS_ASSERT( this->isBound() );
 
     const GLint level = 0; // level-of-detail number
     KVS_GL_CALL( glTexSubImage2D( m_target, level, xoffset, yoffset, width, height, m_external_format, m_external_type, data ) );
@@ -394,13 +394,13 @@ void Texture::setSubImageRectangle( GLsizei width, GLsizei height, const GLvoid*
 
 void Texture::setParameter( GLenum pname, GLfloat param )
 {
-    KVS_ASSERT( this->isBinding() );
+    KVS_ASSERT( this->isBound() );
     KVS_GL_CALL( glTexParameterf( m_target, pname, param ) );
 }
 
 void Texture::setParameter( GLenum pname, GLint param )
 {
-    KVS_ASSERT( this->isBinding() );
+    KVS_ASSERT( this->isBound() );
     KVS_GL_CALL( glTexParameteri( m_target, pname, param ) );
 }
 
@@ -411,25 +411,25 @@ void Texture::setParameter( GLenum pname, GLenum param )
 
 void Texture::setParameters( GLenum pname, const GLfloat* params )
 {
-    KVS_ASSERT( this->isBinding() );
+    KVS_ASSERT( this->isBound() );
     KVS_GL_CALL( glTexParameterfv( m_target, pname, params ) );
 }
 
 void Texture::setParameters( GLenum pname, const GLint* params )
 {
-    KVS_ASSERT( this->isBinding() );
+    KVS_ASSERT( this->isBound() );
     KVS_GL_CALL( glTexParameteriv( m_target, pname, params ) );
 }
 
 void Texture::setPixelStorageMode( GLenum pname, GLfloat param )
 {
-    KVS_ASSERT( this->isBinding() );
+    KVS_ASSERT( this->isBound() );
     KVS_GL_CALL( glPixelStoref( pname, param ) );
 }
 
 void Texture::setPixelStorageMode( GLenum pname, GLint param )
 {
-    KVS_ASSERT( this->isBinding() );
+    KVS_ASSERT( this->isBound() );
     KVS_GL_CALL( glPixelStorei( pname, param ) );
 }
 

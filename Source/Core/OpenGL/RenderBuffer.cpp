@@ -124,7 +124,7 @@ void RenderBuffer::bind() const
 
 void RenderBuffer::unbind() const
 {
-    KVS_ASSERT( this->isBinding() );
+    KVS_ASSERT( this->isBound() );
     KVS_GL_CALL( glBindRenderbuffer( GL_RENDERBUFFER, 0 ) );
 }
 
@@ -140,7 +140,7 @@ bool RenderBuffer::isValid() const
     return result == GL_TRUE;
 }
 
-bool RenderBuffer::isBinding() const
+bool RenderBuffer::isBound() const
 {
     if ( this->isCreated() ) return false;
 
