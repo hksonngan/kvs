@@ -15,6 +15,7 @@
 #define KVS__MESSAGE_BLOCK_H_INCLUDE
 
 #include <kvs/ValueArray>
+#include <kvs/Deprecated>
 
 
 namespace kvs
@@ -54,11 +55,11 @@ public:
     virtual ~MessageBlock();
 
     size_t size() const;
-    void* pointer();
-    const void* pointer() const;
+    void* data();
+    const void* data() const;
     size_t blockSize() const;
-    void* blockPointer();
-    const void* blockPointer() const;
+    void* blockData();
+    const void* blockData() const;
     std::string toString() const;
 
     void copy( const void* data, const size_t data_size );
@@ -66,7 +67,15 @@ public:
     template <typename T>
     void copy( const std::vector<T>& data );
     void* allocate( const size_t data_size );
-    void deallocate();
+    void release();
+
+public:
+
+    KVS_DEPRECATED( void* pointer() ) { return this->data(); }
+    KVS_DEPRECATED( const void* pointer() const ) { return this->data(); }
+    KVS_DEPRECATED( void* blockPointer() ) { this->blockData(); }
+    KVS_DEPRECATED( const void* blockPointer() const ) { this->blockData(); }
+    KVS_DEPRECATED( void deallocate() ) { this->release(); }
 };
 
 } // end of namespace kvs

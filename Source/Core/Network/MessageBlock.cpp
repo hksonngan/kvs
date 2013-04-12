@@ -98,7 +98,7 @@ size_t MessageBlock::size() const
  *  @return pointer to message
  */
 /*==========================================================================*/
-void* MessageBlock::pointer()
+void* MessageBlock::data()
 {
     return( m_block.data() + SizeOfHeader );
 }
@@ -109,7 +109,7 @@ void* MessageBlock::pointer()
  *  @return pointer to message
  */
 /*==========================================================================*/
-const void* MessageBlock::pointer() const
+const void* MessageBlock::data() const
 {
     return( m_block.data() + SizeOfHeader );
 }
@@ -131,7 +131,7 @@ size_t MessageBlock::blockSize() const
  *  @return pointer to message block
  */
 /*==========================================================================*/
-void* MessageBlock::blockPointer()
+void* MessageBlock::blockData()
 {
     return( m_block.data() );
 }
@@ -142,7 +142,7 @@ void* MessageBlock::blockPointer()
  *  @return pointer to message block
  */
 /*==========================================================================*/
-const void* MessageBlock::blockPointer() const
+const void* MessageBlock::blockData() const
 {
     return( m_block.data() );
 }
@@ -155,7 +155,7 @@ const void* MessageBlock::blockPointer() const
 /*==========================================================================*/
 std::string MessageBlock::toString() const
 {
-    const char*  c_str = reinterpret_cast<const char*>( this->pointer() );
+    const char*  c_str = reinterpret_cast<const char*>( this->data() );
     const size_t size  = this->size();
 
     return( std::string( c_str, size ) );
@@ -224,7 +224,7 @@ void* MessageBlock::allocate( size_t data_size )
  *  Deallocate.
  */
 /*==========================================================================*/
-void MessageBlock::deallocate()
+void MessageBlock::release()
 {
     m_block.release();
 }
