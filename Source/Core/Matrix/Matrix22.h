@@ -40,6 +40,7 @@ public:
     static const Matrix22 Identity();
     static const Matrix22 Diagonal( const T x );
     static const Matrix22 All( const T x );
+    static const Matrix22 Rotation( const double deg );
 
 public:
     Matrix22();
@@ -205,6 +206,17 @@ template<typename T>
 const Matrix22<T> Matrix22<T>::Diagonal( const T x )
 {
     return Identity() * x;
+}
+
+template<typename T>
+const Matrix22<T> Matrix22<T>::Rotation( const double deg )
+{
+    const T rad = kvs::Math::Deg2Rad( deg );
+    const T sinA = static_cast<T>( std::sin( rad ) );
+    const T cosA = static_cast<T>( std::cos( rad ) );
+
+    return Matrix22( cosA, -sinA,
+                     sinA,  cosA );
 }
 
 /*==========================================================================*/
