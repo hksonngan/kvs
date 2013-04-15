@@ -212,7 +212,7 @@ int TCPSocket::send( const void* message, const int message_size )
 /*==========================================================================*/
 int TCPSocket::send( const kvs::MessageBlock& message )
 {
-    return( this->send( message.blockPointer(), message.blockSize() ) );
+    return( this->send( message.blockData(), message.blockSize() ) );
 }
 
 /*==========================================================================*/
@@ -245,7 +245,7 @@ int TCPSocket::receive( MessageBlock* message )
 
     message->allocate( ntohl( message_size ) );
 
-    return( this->receive( message->blockPointer(), message->blockSize() ) );
+    return( this->receive( message->blockData(), message->blockSize() ) );
 }
 
 /*==========================================================================*/

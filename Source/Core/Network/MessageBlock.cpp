@@ -76,7 +76,7 @@ MessageBlock::MessageBlock( const std::vector<T>& message )
 /*==========================================================================*/
 MessageBlock::~MessageBlock()
 {
-    this->deallocate();
+    this->release();
 }
 
 /*==========================================================================*/

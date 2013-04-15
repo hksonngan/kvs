@@ -73,8 +73,8 @@ public:
 
     KVS_DEPRECATED( void* pointer() ) { return this->data(); }
     KVS_DEPRECATED( const void* pointer() const ) { return this->data(); }
-    KVS_DEPRECATED( void* blockPointer() ) { this->blockData(); }
-    KVS_DEPRECATED( const void* blockPointer() const ) { this->blockData(); }
+    KVS_DEPRECATED( void* blockPointer() ) { return this->blockData(); }
+    KVS_DEPRECATED( const void* blockPointer() const ) { return this->blockData(); }
     KVS_DEPRECATED( void deallocate() ) { this->release(); }
 };
 

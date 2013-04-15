@@ -233,7 +233,7 @@ int TCPServer::send( const kvs::MessageBlock& message, kvs::SocketAddress* clien
     if( id != kvs::Socket::InvalidID )
     {
         size = ::send( id,
-                       (const char*)message.blockPointer(),
+                       (const char*)message.blockData(),
                        message.blockSize(), 0 );
 
         kvs::Socket::close_socket( id );
@@ -287,7 +287,7 @@ int TCPServer::receive( kvs::MessageBlock* message, kvs::SocketAddress* client_a
         message->allocate( ntohl( data_size ) );
 
         size = kvs::Socket::receive_exact( id,
-                                           (char*)message->blockPointer(),
+                                           (char*)message->blockData(),
                                            message->blockSize() );
 
         kvs::Socket::close_socket( id );
