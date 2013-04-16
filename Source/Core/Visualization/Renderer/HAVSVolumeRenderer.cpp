@@ -28,6 +28,7 @@
 /*****************************************************************************/
 #include "HAVSVolumeRenderer.h"
 #include <set>
+#include <kvs/Coordinate>
 
 
 namespace
@@ -267,14 +268,14 @@ void HAVSVolumeRenderer::initialize_geometry()
         const size_t coords_size = m_meshes->coords().byteSize();
         const kvs::Real32* coords_pointer = m_meshes->coords().data();
         m_vertex_coords.setUsage( GL_STATIC_DRAW_ARB );
-        m_vertex_coords.create( coords_size );
-        m_vertex_coords.download( coords_size, coords_pointer );
+        m_vertex_coords.create( coords_size, coords_pointer );
+//        m_vertex_coords.download( coords_size, coords_pointer );
 
         const size_t values_size = m_meshes->values().byteSize();
         const kvs::Real32* values_pointer = m_meshes->values().data();
         m_vertex_values.setUsage( GL_STATIC_DRAW_ARB );
-        m_vertex_values.create( values_size );
-        m_vertex_values.download( values_size, values_pointer );
+        m_vertex_values.create( values_size, values_pointer );
+//        m_vertex_values.download( values_size, values_pointer );
 
         const size_t faces_size = m_meshes->nfaces() * 3 * sizeof(GLuint);
         m_vertex_indices.setUsage( GL_STREAM_DRAW_ARB );
@@ -423,12 +424,14 @@ void HAVSVolumeRenderer::disable_MRT_rendering()
 void HAVSVolumeRenderer::sort_geometry( kvs::Camera* camera )
 {
     // Visibility sorting.
-    const kvs::Vector3f position = camera->projectWorldToObject( camera->position() );
+//    const kvs::Vector3f position = camera->projectWorldToObject( camera->position() );
+    const kvs::Vector3f position = kvs::WorldCoordinate( camera->position() ).toObjectCoordinate( camera ).position();
     const HAVSVolumeRenderer::Vertex eye( position );
     m_meshes->sort( eye );
 
     if ( this->isEnabledVBO() )
     {
+        m_vertex_indices.bind();
         m_pindices = static_cast<GLuint*>( m_vertex_indices.map( kvs::IndexBufferObject::WriteOnly ) );
     }
 
@@ -445,6 +448,7 @@ void HAVSVolumeRenderer::sort_geometry( kvs::Camera* camera )
     if ( this->isEnabledVBO() )
     {
         m_vertex_indices.unmap();
+        m_vertex_indices.unbind();
     }
 }
 
