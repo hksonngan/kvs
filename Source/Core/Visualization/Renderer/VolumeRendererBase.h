@@ -45,7 +45,7 @@ protected:
     kvs::ValueArray<kvs::UInt8> m_color_data; ///< color (RGBA) data as uchar type
     bool m_enable_shading; ///< shading flag
     kvs::TransferFunction m_tfunc; ///< transfer function
-    kvs::Shader::shader_type* m_shader; ///< shading method
+    kvs::Shader::ShadingModel* m_shader; ///< shading method
 
 public:
 

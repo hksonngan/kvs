@@ -18,6 +18,7 @@
 #include <kvs/Camera>
 #include <kvs/ObjectBase>
 #include <kvs/Xform>
+#include <kvs/OpenGL>
 
 
 namespace kvs
@@ -69,6 +70,23 @@ const ObjectCoordinate WorldCoordinate::toObjectCoordinate( const kvs::ObjectBas
 {
     const kvs::Vector3f position = object->xform().inverse().transform( m_position );
     return ObjectCoordinate( position, object );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Transforms the world coordinates to the object coordinates.
+ *  @param  camera [in] pointer to the camera
+ *  @return transformed position in object coordinates
+ *
+ *  The modeling matrix can be calculated from the modelview matrix stored in
+ *  the OpenGL matrix stack and the given viewing matrix.
+ */
+/*===========================================================================*/
+const ObjectCoordinate WorldCoordinate::toObjectCoordinate( const kvs::Camera* camera ) const
+{
+    const kvs::Xform inv_modeling( camera->modelViewMatrix().inverted() * camera->viewingMatrix() );
+    const kvs::Vector3f position = inv_modeling.transform( m_position );
+    return ObjectCoordinate( position, NULL );
 }
 
 } // end of namespace kvs

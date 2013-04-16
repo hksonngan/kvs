@@ -22,7 +22,7 @@ namespace kvs
  *  Default constructor.
  */
 /*==========================================================================*/
-Xform::Xform( void ):
+Xform::Xform():
     m_matrix( 1, 0, 0, 0,
               0, 1, 0, 0,
               0, 0, 1, 0,
@@ -66,7 +66,7 @@ Xform::Xform( const kvs::Matrix44f& m ):
  *  @return translation vector
  */
 /*==========================================================================*/
-const kvs::Vector3f Xform::translation( void ) const
+const kvs::Vector3f Xform::translation() const
 {
     return kvs::Vector3f( m_matrix[0][3], m_matrix[1][3], m_matrix[2][3] );
 }
@@ -77,7 +77,7 @@ const kvs::Vector3f Xform::translation( void ) const
  *  @return rotation matrix
  */
 /*==========================================================================*/
-const kvs::Matrix33f Xform::rotation( void ) const
+const kvs::Matrix33f Xform::rotation() const
 {
     kvs::Vector3f s = this->scaling();
     return kvs::Matrix33f( m_matrix[0][0] / s.x(), m_matrix[0][1] / s.y(), m_matrix[0][2] / s.z(),
@@ -91,7 +91,7 @@ const kvs::Matrix33f Xform::rotation( void ) const
  *  @return scaled rotation matrix
  */
 /*==========================================================================*/
-const kvs::Matrix33f Xform::scaledRotation( void ) const
+const kvs::Matrix33f Xform::scaledRotation() const
 {
     return kvs::Matrix33f( m_matrix[0][0], m_matrix[0][1], m_matrix[0][2],
                            m_matrix[1][0], m_matrix[1][1], m_matrix[1][2],
@@ -104,7 +104,7 @@ const kvs::Matrix33f Xform::scaledRotation( void ) const
  *  @return rotation matrix
  */
 /*==========================================================================*/
-const kvs::Vector3f Xform::scaling( void ) const
+const kvs::Vector3f Xform::scaling() const
 {
     const float sx = (float)kvs::Vector3f( m_matrix[0][0], m_matrix[1][0], m_matrix[2][0] ).length();
     const float sy = (float)kvs::Vector3f( m_matrix[0][1], m_matrix[1][1], m_matrix[2][1] ).length();

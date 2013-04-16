@@ -16,6 +16,7 @@
 #include <kvs/RGBAColor>
 #include <kvs/Vector3>
 #include <kvs/Matrix33>
+#include <kvs/Coordinate>
 
 
 namespace kvs
@@ -276,7 +277,8 @@ const kvs::Vector3f& Light::specular() const
 /*==========================================================================*/
 void Light::update( const kvs::Camera* camera )
 {
-    const kvs::Vector3f p = camera->projectWorldToCamera( this->position() );
+//    const kvs::Vector3f p = camera->projectWorldToCamera( this->position() );
+    const kvs::Vector3f p = kvs::WorldCoordinate( this->position() ).toCameraCoordinate( camera ).position();
 
     const kvs::Vector4f position( p, 1.0f );
     const kvs::Vector4f diffuse( this->diffuse(), 1.0f );

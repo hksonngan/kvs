@@ -53,17 +53,18 @@ public:
         virtual ~Base();
 
         virtual void set( const kvs::Camera* camera, const kvs::Light* light ) = 0;
-        virtual const Shader::Type type() const = 0;
+        virtual Shader::Type type() const = 0;
         virtual const kvs::RGBColor shadedColor(
             const kvs::RGBColor& color,
             const kvs::Vector3f& vertex,
             const kvs::Vector3f& normal ) const = 0;
-        virtual const float attenuation( const kvs::Vector3f& vertex, const kvs::Vector3f& gradient ) const = 0;
+        virtual float attenuation( const kvs::Vector3f& vertex, const kvs::Vector3f& gradient ) const = 0;
     };
 
 public:
 
-    typedef Base shader_type;
+    /*KVS_DEPRECATED*/ typedef Base shader_type;
+    typedef Base ShadingModel;
 
 public:
 
@@ -74,12 +75,12 @@ public:
         Lambert( const float ka, const float kd );
 
         void set( const kvs::Camera* camera, const kvs::Light* light );
-        const Shader::Type type() const;
+        Shader::Type type() const;
         const kvs::RGBColor shadedColor(
             const kvs::RGBColor& color,
             const kvs::Vector3f& vertex,
             const kvs::Vector3f& normal ) const;
-        const float attenuation( const kvs::Vector3f& vertex, const kvs::Vector3f& gradient ) const;
+        float attenuation( const kvs::Vector3f& vertex, const kvs::Vector3f& gradient ) const;
     };
 
     struct Phong : public Base
@@ -89,12 +90,12 @@ public:
         Phong( const float ka, const float kd, const float ks, const float s );
 
         void set( const kvs::Camera* camera, const kvs::Light* light );
-        const Shader::Type type() const;
+        Shader::Type type() const;
         const kvs::RGBColor shadedColor(
             const kvs::RGBColor& color,
             const kvs::Vector3f& vertex,
             const kvs::Vector3f& normal ) const;
-        const float attenuation( const kvs::Vector3f& vertex, const kvs::Vector3f& gradient ) const;
+        float attenuation( const kvs::Vector3f& vertex, const kvs::Vector3f& gradient ) const;
     };
 
     struct BlinnPhong : public Base
@@ -104,12 +105,12 @@ public:
         BlinnPhong( const float ka, const float kd, const float ks, const float s );
 
         void set( const kvs::Camera* camera, const kvs::Light* light );
-        const Shader::Type type() const;
+        Shader::Type type() const;
         const kvs::RGBColor shadedColor(
             const kvs::RGBColor& color,
             const kvs::Vector3f& vertex,
             const kvs::Vector3f& normal ) const;
-        const float attenuation( const kvs::Vector3f& vertex, const kvs::Vector3f& gradient ) const;
+        float attenuation( const kvs::Vector3f& vertex, const kvs::Vector3f& gradient ) const;
     };
 };
 

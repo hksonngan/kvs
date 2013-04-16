@@ -123,7 +123,7 @@ const kvs::Real32 ParticleBuffer::depth( const size_t index ) const
  *  Return the pointer to the attached shader.
  */
 /*==========================================================================*/
-const kvs::Shader::shader_type* ParticleBuffer::shader() const
+const kvs::Shader::ShadingModel* ParticleBuffer::shader() const
 {
     return( m_ref_shader );
 }
@@ -175,7 +175,7 @@ void ParticleBuffer::setSubpixelLevel( const size_t subpixel_level )
  *  @param shader [in] pointer to the shader
  */
 /*==========================================================================*/
-void ParticleBuffer::attachShader( const kvs::Shader::shader_type* shader )
+void ParticleBuffer::attachShader( const kvs::Shader::ShadingModel* shader )
 {
     m_ref_shader = shader;
 }

@@ -75,69 +75,18 @@ private:
     kvs::Matrix44f m_matrix;
 
 public:
-    Xform( void );
+    Xform();
     Xform(
         const kvs::Vector3f&  translation,
         const kvs::Vector3f&  scaling,
         const kvs::Matrix33f& rotation );
     explicit Xform( const kvs::Matrix44f& mat );
 
-public:
-#if KVS_ENABLE_DEPRECATED
-    void initialize( void )
-    {
-        *this = kvs::Xform();
-    }
+    const kvs::Vector3f translation() const;
+    const kvs::Matrix33f rotation() const;
+    const kvs::Vector3f scaling() const;
+    const kvs::Matrix33f scaledRotation() const;
 
-    void clear( void )
-    {
-        this->set( kvs::Vector3f( 0, 0, 0 ),
-                   kvs::Vector3f( 0, 0, 0 ),
-                   kvs::Matrix33f( 0, 0, 0,
-                                   0, 0, 0,
-                                   0, 0, 0 ) );
-    }
-
-    void set(
-        const kvs::Vector3f&  translation,
-        const kvs::Vector3f&  scaling,
-        const kvs::Matrix33f& rotation )
-    {
-        *this = kvs::Xform( translation, scaling, rotation );
-    }
-
-    void set( const Xform& xform )
-    {
-        *this = xform;
-    }
-
-    void updateRotation( const kvs::Matrix33f& rotation )
-    {
-        *this = kvs::Xform::Rotation( rotation ) * *this;
-    }
-
-    void updateTranslation( const kvs::Vector3f& translation )
-    {
-        *this = kvs::Xform::Translation( translation ) * *this;
-    }
-
-    void updateScaling( const kvs::Vector3f& scaling )
-    {
-        *this = kvs::Xform::Scaling( scaling ) * *this;
-    }
-
-    void updateScaling( float scaling )
-    {
-        *this = kvs::Xform::Scaling( scaling ) * *this;
-    }
-#endif
-public:
-    const kvs::Vector3f translation( void ) const;
-    const kvs::Matrix33f rotation( void ) const;
-    const kvs::Vector3f scaling( void ) const;
-    const kvs::Matrix33f scaledRotation( void ) const;
-
-public:
     const kvs::Vector3f transform( const kvs::Vector3f& pos ) const;
     const kvs::Vector3f transformNormal( const kvs::Vector3f& normal ) const;
     const kvs::Vector3f project( const kvs::Vector3f& pos ) const;
@@ -156,19 +105,6 @@ public:
     {
         return kvs::Xform( lhs.toMatrix() * rhs.toMatrix() );
     }
-
-public:
-#if KVS_ENABLE_DEPRECATED
-    Xform get( void ) const
-    {
-        return *this;
-    }
-
-    void get( float (*array)[16] ) const
-    {
-        this->toArray( *array );
-    }
-#endif
 };
 
 } // end of namespace kvs

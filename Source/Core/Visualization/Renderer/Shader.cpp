@@ -16,6 +16,7 @@
 #include <kvs/Math>
 #include <kvs/IgnoreUnusedVariable>
 #include <kvs/RGBColor>
+#include <kvs/Coordinate>
 
 
 #define kvsShaderAmbientTerm( ka ) \
@@ -42,7 +43,7 @@ inline const kvs::RGBColor Shade(
     const kvs::UInt8 r = static_cast<kvs::UInt8>( kvs::Math::Min( color.r() * I1 + I2, 255.0f ) + 0.5f );
     const kvs::UInt8 g = static_cast<kvs::UInt8>( kvs::Math::Min( color.g() * I1 + I2, 255.0f ) + 0.5f );
     const kvs::UInt8 b = static_cast<kvs::UInt8>( kvs::Math::Min( color.b() * I1 + I2, 255.0f ) + 0.5f );
-    return( kvs::RGBColor( r, g, b ) );
+    return kvs::RGBColor( r, g, b );
 }
 
 } // end of namespace
@@ -115,12 +116,18 @@ Shader::Lambert::Lambert( const float ka, const float kd )
 /*==========================================================================*/
 void Shader::Lambert::set( const Camera* camera, const Light* light )
 {
-    light_position = camera->projectWorldToObject( light->position() );
+    light_position = kvs::WorldCoordinate( light->position() ).toObjectCoordinate( camera ).position();
 }
 
-const Shader::Type Shader::Lambert::type() const
+/*===========================================================================*/
+/**
+ *  @brief  Returns the shader type.
+ *  @return shader type
+ */
+/*===========================================================================*/
+Shader::Type Shader::Lambert::type() const
 {
-    return( Shader::LambertShading );
+    return Shader::LambertShading;
 }
 
 /*===========================================================================*/
@@ -145,7 +152,7 @@ const kvs::RGBColor Shader::Lambert::shadedColor(
     const float Ia = kvsShaderAmbientTerm( Ka );
     const float Id = kvsShaderDiffuseTerm( Kd, N, L );
 
-    return( color * ( Ia + Id ) );
+    return color * ( Ia + Id );
 }
 
 /*==========================================================================*/
@@ -154,7 +161,7 @@ const kvs::RGBColor Shader::Lambert::shadedColor(
  *  @return attenuation value
  */
 /*==========================================================================*/
-inline const float Shader::Lambert::attenuation( const kvs::Vector3f& vertex, const kvs::Vector3f& gradient ) const
+inline float Shader::Lambert::attenuation( const kvs::Vector3f& vertex, const kvs::Vector3f& gradient ) const
 {
     // Light vector L and normal vector N.
     const kvs::Vector3f L = ( light_position - vertex ).normalized();
@@ -172,7 +179,7 @@ inline const float Shader::Lambert::attenuation( const kvs::Vector3f& vertex, co
     const float Ia = Ka;
     const float Id = Kd * dd;
 
-    return( Ia + Id );
+    return Ia + Id;
 }
 
 /*==========================================================================*/
@@ -230,8 +237,8 @@ Shader::Phong::Phong( const float ka, const float kd, const float ks, const floa
 /*==========================================================================*/
 void Shader::Phong::set( const kvs::Camera* camera, const kvs::Light* light )
 {
-    camera_position = camera->projectWorldToObject( camera->position() );
-    light_position = camera->projectWorldToObject( light->position() );
+    camera_position = kvs::WorldCoordinate( camera->position() ).toObjectCoordinate( camera ).position();
+    light_position = kvs::WorldCoordinate( light->position() ).toObjectCoordinate( camera ).position();
 }
 
 /*===========================================================================*/
@@ -240,9 +247,9 @@ void Shader::Phong::set( const kvs::Camera* camera, const kvs::Light* light )
  *  @return shader type
  */
 /*===========================================================================*/
-const Shader::Type Shader::Phong::type() const
+Shader::Type Shader::Phong::type() const
 {
-    return( Shader::PhongShading );
+    return Shader::PhongShading;
 }
 
 /*===========================================================================*/
@@ -270,7 +277,7 @@ const kvs::RGBColor Shader::Phong::shadedColor(
     const float Id = kvsShaderDiffuseTerm( Kd, N, L );
     const float Is = kvsShaderSpecularTerm( ks, S, R, V );
 
-    return( ::Shade( color, Ia, Id, Is ) );
+    return ::Shade( color, Ia, Id, Is );
 }
 
 /*==========================================================================*/
@@ -279,7 +286,7 @@ const kvs::RGBColor Shader::Phong::shadedColor(
  *  @return attenuation value
  */
 /*==========================================================================*/
-inline const float Shader::Phong::attenuation( const kvs::Vector3f& vertex, const kvs::Vector3f& gradient ) const
+inline float Shader::Phong::attenuation( const kvs::Vector3f& vertex, const kvs::Vector3f& gradient ) const
 {
     // Light vector L, normal vector N and reflection vector R.
     const kvs::Vector3f L = ( light_position - vertex ).normalized();
@@ -297,7 +304,7 @@ inline const float Shader::Phong::attenuation( const kvs::Vector3f& vertex, cons
     const float Id = Kd * dd;
     const float Is = Ks * std::pow( ds, S );
 
-    return( Ia + Id + Is );
+    return Ia + Id + Is;
 }
 
 /*==========================================================================*/
@@ -355,8 +362,8 @@ Shader::BlinnPhong::BlinnPhong( const float ka, const float kd, const float ks, 
 /*==========================================================================*/
 void Shader::BlinnPhong::set( const kvs::Camera* camera, const kvs::Light* light )
 {
-    camera_position = camera->projectWorldToObject( camera->position() );
-    light_position = camera->projectWorldToObject( light->position() );
+    camera_position = kvs::WorldCoordinate( camera->position() ).toObjectCoordinate( camera ).position();
+    light_position = kvs::WorldCoordinate( light->position() ).toObjectCoordinate( camera ).position();
 }
 
 /*===========================================================================*/
@@ -365,9 +372,9 @@ void Shader::BlinnPhong::set( const kvs::Camera* camera, const kvs::Light* light
  *  @return shader type
  */
 /*===========================================================================*/
-const Shader::Type Shader::BlinnPhong::type() const
+Shader::Type Shader::BlinnPhong::type() const
 {
-    return( Shader::BlinnPhongShading );
+    return Shader::BlinnPhongShading;
 }
 
 /*===========================================================================*/
@@ -395,7 +402,7 @@ const kvs::RGBColor Shader::BlinnPhong::shadedColor(
     const float Id = kvsShaderDiffuseTerm( Kd, N, L );
     const float Is = kvsShaderSpecularTerm( ks, S, H, N );
 
-    return( ::Shade( color, Ia, Id, Is ) );
+    return ::Shade( color, Ia, Id, Is );
 }
 
 /*==========================================================================*/
@@ -404,7 +411,7 @@ const kvs::RGBColor Shader::BlinnPhong::shadedColor(
  *  @return attenuation value
  */
 /*==========================================================================*/
-inline const float Shader::BlinnPhong::attenuation( const kvs::Vector3f& vertex, const kvs::Vector3f& gradient ) const
+inline float Shader::BlinnPhong::attenuation( const kvs::Vector3f& vertex, const kvs::Vector3f& gradient ) const
 {
     // Camera vector C, light vector L, halfway vector H and normal vector N.
     const kvs::Vector3f C = ( camera_position - vertex ).normalized();
@@ -423,7 +430,7 @@ inline const float Shader::BlinnPhong::attenuation( const kvs::Vector3f& vertex,
     const float Id = Kd * dd;
     const float Is = Ks * ::pow( ds, S );
 
-    return( Ia + Id + Is );
+    return Ia + Id + Is;
 }
 
 } // end of namespace kvs

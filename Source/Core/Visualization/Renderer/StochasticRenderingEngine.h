@@ -58,7 +58,7 @@ protected:
     size_t m_height; ///< rendering screen height
     size_t m_repetition_count; ///< counter for the repetition process
     bool m_enable_shading; ///< flag to enable shading.
-    kvs::Shader::shader_type* m_shader; ///< shading method
+    kvs::Shader::ShadingModel* m_shader; ///< shading method
     kvs::Texture2D m_random_texture; ///< random number texture for the stochastic color assignment in GPU.
     kvs::ProgramObject m_shader_program; ///< GLSL shader program.
     bool m_enable_updating_vbo; ///< flag to enable updating vertex buffer

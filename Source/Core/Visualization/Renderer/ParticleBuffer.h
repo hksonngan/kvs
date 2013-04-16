@@ -46,7 +46,7 @@ protected:
     kvs::ValueArray<kvs::Real32> m_depth_buffer; ///< depth buffer
 
     // Reference shader (NOTE: not allocated in thie class).
-    const kvs::Shader::shader_type* m_ref_shader;
+    const kvs::Shader::ShadingModel* m_ref_shader;
     const kvs::PointObject* m_ref_point_object;
 
 public:
@@ -62,13 +62,13 @@ public:
     const kvs::ValueArray<kvs::Real32>& depthBuffer() const;
     const kvs::Real32 depth( const size_t index ) const;
     const size_t subpixelLevel() const;
-    const kvs::Shader::shader_type* shader() const;
+    const kvs::Shader::ShadingModel* shader() const;
     const kvs::PointObject* pointObject() const;
     const size_t numOfProjectedParticles() const;
     const size_t numOfStoredParticles() const;
 
     void setSubpixelLevel( const size_t subpixel_level );
-    void attachShader( const kvs::Shader::shader_type* shader );
+    void attachShader( const kvs::Shader::ShadingModel* shader );
     void attachPointObject( const kvs::PointObject* point_object );
 
     void enableShading();

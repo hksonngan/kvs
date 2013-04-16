@@ -35,7 +35,7 @@ XformControl::XformControl()
  *  Destructor.
  */
 /*==========================================================================*/
-XformControl::~XformControl( void )
+XformControl::~XformControl()
 {
 }
 
@@ -44,7 +44,7 @@ XformControl::~XformControl( void )
  *  Save xform.
  */
 /*==========================================================================*/
-void XformControl::saveXform( void )
+void XformControl::saveXform()
 {
     m_initial_xform = m_current_xform;
 }
@@ -54,7 +54,7 @@ void XformControl::saveXform( void )
  *  Reset xform.
  */
 /*==========================================================================*/
-void XformControl::resetXform( void )
+void XformControl::resetXform()
 {
     m_current_xform = m_initial_xform;
 }
@@ -70,20 +70,6 @@ void XformControl::setXform( const kvs::Xform& xform )
     m_current_xform = xform;
 }
 
-#if KVS_ENABLE_DEPRECATED
-/*==========================================================================*/
-/**
- *  Apply xform matrix.
- */
-/*==========================================================================*/
-void XformControl::applyXform( void ) const
-{
-    float xform[16];
-    this->xform().toArray( xform );
-    glMultMatrixf( xform );
-}
-#endif
-
 void XformControl::multiplyXform( const kvs::Xform& xform )
 {
     this->setXform( xform * this->xform() );
@@ -95,7 +81,7 @@ void XformControl::multiplyXform( const kvs::Xform& xform )
  *  @return xform matrix
  */
 /*==========================================================================*/
-const kvs::Xform XformControl::xform( void ) const
+const kvs::Xform XformControl::xform() const
 {
     return m_current_xform;
 }

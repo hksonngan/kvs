@@ -16,6 +16,7 @@
 #define KVS__WORLD_COORDINATE_H_INCLUDE
 
 #include <kvs/Vector3>
+#include <kvs/Matrix44>
 
 
 namespace kvs
@@ -45,6 +46,7 @@ public:
 
     const CameraCoordinate toCameraCoordinate( const kvs::Camera* camera ) const;
     const ObjectCoordinate toObjectCoordinate( const kvs::ObjectBase* object ) const;
+    const ObjectCoordinate toObjectCoordinate( const kvs::Camera* camera ) const;
 };
 
 } // end of namespace kvs

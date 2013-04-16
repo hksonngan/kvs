@@ -416,17 +416,17 @@ void Camera::update()
 {
     float ary[16];
 
-    glMatrixMode( GL_PROJECTION );
-    glLoadIdentity();
+    KVS_GL_CALL( glMatrixMode( GL_PROJECTION ) );
+    KVS_GL_CALL( glLoadIdentity() );
     kvs::Xform p( this->projectionMatrix() );
     p.toArray( ary );
-    glMultMatrixf( ary );
+    KVS_GL_CALL( glMultMatrixf( ary ) );
 
-    glMatrixMode( GL_MODELVIEW );
-    glLoadIdentity();
+    KVS_GL_CALL( glMatrixMode( GL_MODELVIEW ) );
+    KVS_GL_CALL( glLoadIdentity() );
     kvs::Xform v( this->viewingMatrix() );
     v.toArray( ary );
-    glMultMatrixf( ary );
+    KVS_GL_CALL( glMultMatrixf( ary ) );
 }
 
 /*==========================================================================*/
@@ -438,16 +438,15 @@ void Camera::update()
 kvs::ColorImage Camera::snapshot()
 {
     GLint viewport[4];
-    glGetIntegerv( GL_VIEWPORT, viewport );
+    KVS_GL_CALL( glGetIntegerv( GL_VIEWPORT, viewport ) );
 
-    const int width  = viewport[2];
+    const int width = viewport[2];
     const int height = viewport[3];
-//    const int size   = height * ( ( ( ( width * 3 ) + 3 ) >> 2 ) << 2 );
-    const int size   = height * width * 3;
+    const int size = height * width * 3;
     kvs::ValueArray<kvs::UInt8> buffer( size );
 
-    glPixelStorei( GL_PACK_ALIGNMENT, 1 );
-    glReadPixels( 0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, buffer.data() );
+    KVS_GL_CALL( glPixelStorei( GL_PACK_ALIGNMENT, 1 ) );
+    KVS_GL_CALL( glReadPixels( 0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, buffer.data() ) );
 
     kvs::ColorImage ret( width, height, buffer );
     ret.flip();
@@ -540,7 +539,7 @@ void Camera::getProjectionModelViewMatrix(
 /*==========================================================================*/
 void Camera::getProjectionMatrix( float (*projection)[16] ) const
 {
-    glGetFloatv( GL_PROJECTION_MATRIX, (GLfloat*)*projection );
+    KVS_GL_CALL( glGetFloatv( GL_PROJECTION_MATRIX, (GLfloat*)*projection ) );
 }
 
 /*==========================================================================*/
@@ -551,7 +550,7 @@ void Camera::getProjectionMatrix( float (*projection)[16] ) const
 /*==========================================================================*/
 void Camera::getModelViewMatrix( float (*modelview)[16] ) const
 {
-    glGetFloatv( GL_MODELVIEW_MATRIX, (GLfloat*)*modelview );
+    KVS_GL_CALL( glGetFloatv( GL_MODELVIEW_MATRIX, (GLfloat*)*modelview ) );
 }
 
 /*==========================================================================*/
@@ -612,9 +611,7 @@ const kvs::Vector2f Camera::projectObjectToWindow(
  *  Same as gluProject() in OpenGL.
  */
 /*==========================================================================*/
-const kvs::Vector2f Camera::projectObjectToWindow(
-    const kvs::Vector3f& p_obj,
-    float*               depth ) const
+const kvs::Vector2f Camera::projectObjectToWindow( const kvs::Vector3f& p_obj, float* depth ) const
 {
     const kvs::Xform pvm( this->projectionModelViewMatrix() );
     const kvs::Vector3f p = pvm.project( p_obj );
@@ -633,9 +630,7 @@ const kvs::Vector2f Camera::projectObjectToWindow(
  *  @return point in the object coordinate system
  */
 /*==========================================================================*/
-const kvs::Vector3f Camera::projectWindowToObject(
-    const kvs::Vector2f& p_win,
-    float                depth ) const
+const kvs::Vector3f Camera::projectWindowToObject( const kvs::Vector2f& p_win, float depth ) const
 {
     return this->projectCameraToObject( this->projectWindowToCamera( p_win, depth ) );
 }
@@ -648,28 +643,22 @@ const kvs::Vector3f Camera::projectWindowToObject(
  *  @return point in the object coordinate system.
  */
 /*==========================================================================*/
-const kvs::Vector3f Camera::projectWindowToCamera(
-    const kvs::Vector2f& p_win,
-    float                depth ) const
+const kvs::Vector3f Camera::projectWindowToCamera( const kvs::Vector2f& p_win, float depth ) const
 {
     GLdouble m[16] = { 1.0, 0.0, 0.0, 0.0,
                        0.0, 1.0, 0.0, 0.0,
                        0.0, 0.0, 1.0, 0.0,
                        0.0, 0.0, 0.0, 1.0 };
 
-    GLdouble p[16]; glGetDoublev(  GL_PROJECTION_MATRIX, p );
-    GLint    v[4];  glGetIntegerv( GL_VIEWPORT,          v );
+    GLdouble p[16]; KVS_GL_CALL( glGetDoublev(  GL_PROJECTION_MATRIX, p ) );
+    GLint    v[4];  KVS_GL_CALL( glGetIntegerv( GL_VIEWPORT,          v ) );
 
     double x = 0;
     double y = 0;
     double z = 0;
-    gluUnProject( p_win.x(), p_win.y(), depth,
-                  m,
-                  p,
-                  v,
-                  &x, &y, &z );
+    KVS_GL_CALL( gluUnProject( p_win.x(), p_win.y(), depth, m, p, v, &x, &y, &z ) );
 
-    return( kvs::Vector3f( (float)x, (float)y, (float)z ) );
+    return kvs::Vector3f( (float)x, (float)y, (float)z );
 }
 
 /*==========================================================================*/

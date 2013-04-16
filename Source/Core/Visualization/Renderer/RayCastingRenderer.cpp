@@ -228,7 +228,7 @@ void RayCastingRenderer::rasterize(
     const float step = m_step;
     const float opaque = m_opaque;
 
-    const kvs::Shader::shader_type* const shader = m_shader;
+    const kvs::Shader::ShadingModel* const shader = m_shader;
     const kvs::ColorMap&   cmap = BaseClass::transferFunction().colorMap();
     const kvs::OpacityMap& omap = BaseClass::transferFunction().opacityMap();
 

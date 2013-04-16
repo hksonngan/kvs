@@ -15,6 +15,7 @@
 #include "ObjectCoordinate.h"
 #include "WorldCoordinate.h"
 #include <kvs/ObjectBase>
+#include <kvs/Assert>
 
 
 namespace kvs
@@ -52,6 +53,8 @@ const kvs::Vector3f& ObjectCoordinate::position() const
 /*===========================================================================*/
 const WorldCoordinate ObjectCoordinate::toWorldCoordinate() const
 {
+    KVS_ASSERT( m_object != NULL );
+
     const kvs::Vector3f position = m_object->xform().transform( m_position );
     return WorldCoordinate( position );
 }

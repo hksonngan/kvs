@@ -37,7 +37,7 @@ class PolygonRenderer : public kvs::PolygonRenderer
 
 protected:
 
-    kvs::Shader::shader_type* m_shader; ///< shading method
+    kvs::Shader::ShadingModel* m_shader; ///< shading method
     kvs::ProgramObject m_phong_shader; ///< phong shader
 
 public:
