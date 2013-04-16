@@ -23,13 +23,6 @@
 namespace kvs
 {
 
-#if KVS_ENABLE_DEPRECATED
-typedef std::pair<int,int>                  IDPair;
-typedef std::list<IDPair>                   IDs;
-typedef std::list<IDPair>::iterator         ID_ptr;
-typedef std::list<IDPair>::reverse_iterator ID_rptr;
-#endif
-
 /*==========================================================================*/
 /**
  *  ID manager class.
@@ -38,9 +31,9 @@ typedef std::list<IDPair>::reverse_iterator ID_rptr;
 class IDManager
 {
 public:
-    typedef std::pair<int,int>                  IDPair;
-    typedef std::list<IDPair>                   IDs;
-    typedef std::list<IDPair>::iterator         ID_ptr;
+    typedef std::pair<int,int> IDPair;
+    typedef std::list<IDPair> IDs;
+    typedef std::list<IDPair>::iterator ID_ptr;
     typedef std::list<IDPair>::reverse_iterator ID_rptr;
 
 private:

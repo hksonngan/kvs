@@ -12,6 +12,7 @@
  */
 /****************************************************************************/
 #include "IDManager.h"
+#include <kvs/Assert>
 #include <algorithm>
 #include <functional>
 
@@ -21,7 +22,7 @@ namespace kvs
 
 /*==========================================================================*/
 /**
- *  Default constructor.
+ *  @brief  Constructs a new IDManager class.
  */
 /*==========================================================================*/
 IDManager::IDManager()
@@ -32,7 +33,7 @@ IDManager::IDManager()
 
 /*==========================================================================*/
 /**
- *  Destructor.
+ *  @brief  Destroys the IDManager class.
  */
 /*==========================================================================*/
 IDManager::~IDManager()
@@ -41,98 +42,171 @@ IDManager::~IDManager()
     m_id_list.clear();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the pair of the ID.
+ *  @param  index [in] index
+ */
+/*===========================================================================*/
 IDManager::IDPair IDManager::operator [] ( size_t index ) const
 {
     const int id = m_flip_table[index];
-
-//    ID_ptr p = begin();
     IDs::const_iterator p = m_id_list.begin();
     for( int i = 0; i < id; i++ )
     {
         p++;
     }
 
-    return( (*p) );
+    return (*p);
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the number of pairs of the ID
+ *  @return numebr of pairs of the ID
+ */
+/*===========================================================================*/
 size_t IDManager::size() const
 {
-    return( m_id_list.size() );
+    return m_id_list.size();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Inserts the object ID and renderer ID.
+ *  @param  object_id [in] object ID
+ *  @param  renderer_id [in] renderer ID
+ */
+/*===========================================================================*/
 void IDManager::insert( int object_id, int renderer_id )
 {
     m_id_list.push_back( IDPair( object_id, renderer_id ) );
     this->update_flip_table();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Inserts the object ID.
+ *  @param  object_id [in] object ID
+ *
+ *  The renderer stored in last of the ID list will be used for rendering the
+ *  inserted object.
+ */
+/*===========================================================================*/
 void IDManager::insertObjectID( int object_id )
 {
+    KVS_ASSERT( m_id_list.size() > 0 );
+
     this->insert( object_id, m_id_list.back().second );
     this->update_flip_table();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Inserts the renderer ID.
+ *  @param  renderer_id [in] renderer ID
+ *
+ *  The object stored in last of the ID list will be renderered by using the
+ *  inserted renderer.
+ */
+/*===========================================================================*/
 void IDManager::insertRendererID( int renderer_id )
 {
+    KVS_ASSERT( m_id_list.size() > 0 );
+
     this->insert( m_id_list.back().first, renderer_id );
     this->update_flip_table();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the object ID list paired by the specified renderer ID.
+ *  @param  renderer_id [in] renderer ID
+ *  @return object ID list
+ */
+/*===========================================================================*/
 std::vector<int> IDManager::objectID( int renderer_id ) const
 {
     std::vector<int> object_ids;
-
-//    for( ID_ptr p = begin(); p != end(); p++ )
-    for( IDs::const_iterator p = m_id_list.begin(); p != m_id_list.end(); p++ )
+    for ( IDs::const_iterator p = m_id_list.begin(); p != m_id_list.end(); p++ )
     {
-        if( renderer_id == p->second ) object_ids.push_back( p->first );
+        if ( renderer_id == p->second ) object_ids.push_back( p->first );
     }
 
-    return( object_ids );
+    return object_ids;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the object ID stored in the last of the ID list.
+ *  @return object ID
+ */
+/*===========================================================================*/
 int IDManager::objectID() const
 {
-    return( m_id_list.back().first );
+    return m_id_list.back().first;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the renderer ID list paired by the specified object ID.
+ *  @param  object_id [in] object ID
+ *  @return renderer ID list
+ */
+/*===========================================================================*/
 std::vector<int> IDManager::rendererID( int object_id ) const
 {
     std::vector<int> renderer_ids;
-
-//    for( ID_ptr p = begin(); p != end(); p++ )
-    for( IDs::const_iterator p = m_id_list.begin(); p != m_id_list.end(); p++ )
+    for ( IDs::const_iterator p = m_id_list.begin(); p != m_id_list.end(); p++ )
     {
-        if( object_id == p->first ) renderer_ids.push_back( p->second );
+        if ( object_id == p->first ) renderer_ids.push_back( p->second );
     }
 
-    return( renderer_ids );
+    return renderer_ids;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the renderer ID stored in the last of the ID list.
+ *  @return renderer ID
+ */
+/*===========================================================================*/
 int IDManager::rendererID() const
 {
-    return( m_id_list.back().second );
+    return m_id_list.back().second;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Erases the registered object IDs and renderer IDs.
+ */
+/*===========================================================================*/
 void IDManager::erase()
 {
     m_id_list.clear();
     m_flip_table.clear();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Erases the registered IDs specified by given IDs.
+ *  @param  object_id [in] object ID
+ *  @param  renderer_id [in] renderer ID
+ */
+/*===========================================================================*/
 void IDManager::erase( int object_id, int renderer_id )
 {
     std::vector<ID_ptr> erase_ptr;
 
-    for( ID_ptr p = m_id_list.begin(); p != m_id_list.end(); p++ )
+    for ( ID_ptr p = m_id_list.begin(); p != m_id_list.end(); p++ )
     {
-        if( object_id == p->first && renderer_id == p->second )
+        if ( object_id == p->first && renderer_id == p->second )
         {
             erase_ptr.push_back( p );
         }
     }
 
-    for( int i = 0; i < (int)erase_ptr.size(); i++ )
+    for ( int i = 0; i < (int)erase_ptr.size(); i++ )
     {
         m_id_list.erase( erase_ptr[i] );
     }
@@ -140,19 +214,25 @@ void IDManager::erase( int object_id, int renderer_id )
     this->update_flip_table();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Erases the registered IDs specified by given object ID.
+ *  @param  object_id [in] object ID
+ */
+/*===========================================================================*/
 void IDManager::eraseByObjectID( int object_id )
 {
     std::vector<ID_ptr> erase_ptr;
 
-    for( ID_ptr p = m_id_list.begin(); p != m_id_list.end(); p++ )
+    for ( ID_ptr p = m_id_list.begin(); p != m_id_list.end(); p++ )
     {
-        if( object_id == p->first )
+        if ( object_id == p->first )
         {
             erase_ptr.push_back( p );
         }
     }
 
-    for( int i = 0; i < (int)erase_ptr.size(); i++ )
+    for ( int i = 0; i < (int)erase_ptr.size(); i++ )
     {
         m_id_list.erase( erase_ptr[i] );
     }
@@ -160,19 +240,25 @@ void IDManager::eraseByObjectID( int object_id )
     this->update_flip_table();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Erases the registered IDs specified by given renderer ID.
+ *  @param  renderer_id [in] renderer ID
+ */
+/*===========================================================================*/
 void IDManager::eraseByRendererID( int renderer_id )
 {
     std::vector<ID_ptr> erase_ptr;
 
-    for( ID_ptr p = m_id_list.begin(); p != m_id_list.end(); p++ )
+    for ( ID_ptr p = m_id_list.begin(); p != m_id_list.end(); p++ )
     {
-        if( renderer_id == p->second )
+        if ( renderer_id == p->second )
         {
             erase_ptr.push_back( p );
         }
     }
 
-    for( int i = 0; i < (int)erase_ptr.size(); i++ )
+    for ( int i = 0; i < (int)erase_ptr.size(); i++ )
     {
         m_id_list.erase( erase_ptr[i] );
     }
@@ -180,16 +266,29 @@ void IDManager::eraseByRendererID( int renderer_id )
     this->update_flip_table();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Changes object ID stored in the last of the list by given object ID.
+ *  @param  object_id [in] object ID
+ */
+/*===========================================================================*/
 void IDManager::changeObject( int object_id )
 {
     m_id_list.back().first = object_id;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Changes object ID paired by given renderer ID by given object ID.
+ *  @param  renderer_id [in] renderer ID
+ *  @param  object_id [in] object ID
+ */
+/*===========================================================================*/
 void IDManager::changeObject( int renderer_id, int object_id )
 {
-    for( ID_rptr p = m_id_list.rbegin(); p != m_id_list.rend(); p++ )
+    for ( ID_rptr p = m_id_list.rbegin(); p != m_id_list.rend(); p++ )
     {
-        if( renderer_id == p->second )
+        if ( renderer_id == p->second )
         {
             p->first = object_id;
             return;
@@ -197,11 +296,18 @@ void IDManager::changeObject( int renderer_id, int object_id )
     }
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Changes object ID paired by given ID pair by given object ID.
+ *  @param  id_pair [in] pair of IDs
+ *  @param  object_id [in] object ID
+ */
+/*===========================================================================*/
 void IDManager::changeObject( const IDPair& id_pair, int object_id )
 {
-    for( ID_rptr p = m_id_list.rbegin(); p != m_id_list.rend(); p++ )
+    for ( ID_rptr p = m_id_list.rbegin(); p != m_id_list.rend(); p++ )
     {
-        if( *p == id_pair )
+        if ( *p == id_pair )
         {
             p->first = object_id;
             return;
@@ -209,16 +315,29 @@ void IDManager::changeObject( const IDPair& id_pair, int object_id )
     }
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Changes renderer ID stored in the last of the list by given renderer ID.
+ *  @param  renderer_id [in] renderer ID
+ */
+/*===========================================================================*/
 void IDManager::changeRenderer( int renderer_id )
 {
     m_id_list.back().second = renderer_id;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Changes renderer ID paired by given object ID by given renderer ID.
+ *  @param  object_id [in] object ID
+ *  @param  renderer_id [in] renderer ID
+ */
+/*===========================================================================*/
 void IDManager::changeRenderer( int object_id, int renderer_id )
 {
-    for( ID_rptr p = m_id_list.rbegin(); p != m_id_list.rend(); p++ )
+    for ( ID_rptr p = m_id_list.rbegin(); p != m_id_list.rend(); p++ )
     {
-        if( object_id == p->first )
+        if ( object_id == p->first )
         {
             p->second = renderer_id;
             return;
@@ -226,11 +345,18 @@ void IDManager::changeRenderer( int object_id, int renderer_id )
     }
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Changes renderer ID paired by given ID pair by given renderer ID.
+ *  @param  id_pair [in] pair of IDs
+ *  @param  renderer_id [in] renderer ID
+ */
+/*===========================================================================*/
 void IDManager::changeRenderer( const IDPair& id_pair, int renderer_id )
 {
-    for( ID_rptr p = m_id_list.rbegin(); p != m_id_list.rend(); p++ )
+    for ( ID_rptr p = m_id_list.rbegin(); p != m_id_list.rend(); p++ )
     {
-        if( *p == id_pair )
+        if ( *p == id_pair )
         {
             p->second = renderer_id;
             return;
@@ -238,6 +364,11 @@ void IDManager::changeRenderer( const IDPair& id_pair, int renderer_id )
     }
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Flips the ID list.
+ */
+/*===========================================================================*/
 void IDManager::flip()
 {
     std::vector<int> next( m_id_list.size() );
@@ -246,13 +377,17 @@ void IDManager::flip()
     std::copy( next.begin(), next.end(), m_flip_table.begin() );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Updates the flip table.
+ */
+/*===========================================================================*/
 void IDManager::update_flip_table()
 {
     m_flip_table.clear();
 
     const int n = size();
-
-    for( int i = 0; i < n; i++ )
+    for ( int i = 0; i < n; i++ )
     {
         m_flip_table.push_back( i );
     }

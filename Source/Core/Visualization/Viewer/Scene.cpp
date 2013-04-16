@@ -61,7 +61,7 @@ Scene::~Scene()
 /*===========================================================================*/
 kvs::Camera* Scene::camera()
 {
-    return( m_camera );
+    return m_camera;
 }
 
 /*===========================================================================*/
@@ -72,7 +72,7 @@ kvs::Camera* Scene::camera()
 /*===========================================================================*/
 kvs::Light* Scene::light()
 {
-    return( m_light );
+    return m_light;
 }
 
 /*===========================================================================*/
@@ -83,7 +83,7 @@ kvs::Light* Scene::light()
 /*===========================================================================*/
 kvs::Mouse* Scene::mouse()
 {
-    return( m_mouse );
+    return m_mouse;
 }
 
 /*===========================================================================*/
@@ -94,7 +94,7 @@ kvs::Mouse* Scene::mouse()
 /*===========================================================================*/
 kvs::Background* Scene::background()
 {
-    return( m_background );
+    return m_background;
 }
 
 /*===========================================================================*/
@@ -105,7 +105,7 @@ kvs::Background* Scene::background()
 /*===========================================================================*/
 kvs::ObjectManager* Scene::objectManager()
 {
-    return( m_object_manager );
+    return m_object_manager;
 }
 
 /*===========================================================================*/
@@ -116,7 +116,7 @@ kvs::ObjectManager* Scene::objectManager()
 /*===========================================================================*/
 kvs::RendererManager* Scene::rendererManager()
 {
-    return( m_renderer_manager );
+    return m_renderer_manager;
 }
 
 /*===========================================================================*/
@@ -127,7 +127,7 @@ kvs::RendererManager* Scene::rendererManager()
 /*===========================================================================*/
 kvs::IDManager* Scene::IDManager()
 {
-    return( m_id_manager );
+    return m_id_manager;
 }
 
 /*===========================================================================*/
@@ -138,7 +138,7 @@ kvs::IDManager* Scene::IDManager()
 /*===========================================================================*/
 Scene::ControlTarget& Scene::controlTarget()
 {
-    return( m_target );
+    return m_target;
 }
 
 /*==========================================================================*/
@@ -181,10 +181,10 @@ void Scene::paintFunction()
 
             if ( object->isShown() )
             {
-                glPushMatrix();
+                KVS_GL_CALL( glPushMatrix() );
                 object->transform( m_object_manager->objectCenter(), m_object_manager->normalize() );
                 renderer->exec( object, m_camera, m_light );
-                glPopMatrix();
+                KVS_GL_CALL( glPopMatrix() );
             }
         }
     }
@@ -192,7 +192,7 @@ void Scene::paintFunction()
     {
         float array[16];
         m_object_manager->xform().toArray( array );
-        glMultMatrixf( array );
+        KVS_GL_CALL( glMultMatrixf( array ) );
     }
 }
 
@@ -206,7 +206,7 @@ void Scene::paintFunction()
 void Scene::resizeFunction( int width, int height )
 {
     // Update the viewport for OpenGL.
-    glViewport( 0 , 0 , width , height );
+    KVS_GL_CALL( glViewport( 0 , 0 , width , height ) );
 
     // Update the window size for camera and mouse.
     m_camera->setWindowSize( width, height );
@@ -226,7 +226,7 @@ void Scene::mouseReleaseFunction( int x, int y )
     m_enable_collision_detection = false;
     m_mouse->release( x, y );
 
-    if( !( m_mouse->isUseAuto() && m_mouse->isAuto() ) )
+    if ( !( m_mouse->isUseAuto() && m_mouse->isAuto() ) )
     {
         m_object_manager->releaseActiveObject();
     }
@@ -294,7 +294,7 @@ void Scene::reset()
     m_mouse->reset();
 
     // Reset the xform of the object.
-    if( m_object_manager->hasActiveObject() )
+    if ( m_object_manager->hasActiveObject() )
     {
         m_object_manager->resetActiveObjectXform();
     }
@@ -320,20 +320,20 @@ void Scene::reset()
 /*==========================================================================*/
 bool Scene::isActiveMove( int x, int y )
 {
-    if( !m_object_manager->hasObject() ) return( true );
+    if ( !m_object_manager->hasObject() ) return true;
 
-    if( m_target == TargetObject )
+    if ( m_target == TargetObject )
     {
-        if( !m_enable_move_all && m_enable_collision_detection )
+        if ( !m_enable_move_all && m_enable_collision_detection )
         {
             const float px = static_cast<float>(x);
             const float py = static_cast<float>(y);
             const kvs::Vector2f p = kvs::Vector2f( px, py );
-            return( m_object_manager->detectCollision( p, m_camera ) );
+            return m_object_manager->detectCollision( p, m_camera );
         }
     }
 
-    return( true );
+    return true;
 }
 
 /*==========================================================================*/
@@ -384,9 +384,9 @@ void Scene::enableCollisionDetection()
 /*==========================================================================*/
 void Scene::updateControllingObject()
 {
-    if( m_target == TargetObject )
+    if ( m_target == TargetObject )
     {
-        if( m_enable_move_all )
+        if ( m_enable_move_all )
         {
             m_object_manager->enableAllMove();
             m_object_manager->releaseActiveObject();
@@ -408,7 +408,7 @@ void Scene::updateCenterOfRotation()
     // Center of rotation in the device coordinate system.
     kvs::Vector2f center( 0.0, 0.0 );
 
-    switch( m_target )
+    switch ( m_target )
     {
     case TargetCamera:
     case TargetLight:
@@ -449,7 +449,7 @@ void Scene::updateCenterOfRotation()
 /*==========================================================================*/
 void Scene::updateXform()
 {
-    switch( m_target )
+    switch ( m_target )
     {
     case TargetCamera:
         this->updateXform( m_camera );
@@ -473,7 +473,7 @@ void Scene::updateXform()
 /*==========================================================================*/
 void Scene::updateXform( kvs::ObjectManager* manager )
 {
-    switch( m_mouse->mode() )
+    switch ( m_mouse->mode() )
     {
     case kvs::Mouse::Rotation:
         manager->rotate( m_mouse->rotation().toMatrix() );
@@ -497,7 +497,7 @@ void Scene::updateXform( kvs::ObjectManager* manager )
 /*==========================================================================*/
 void Scene::updateXform( kvs::Camera* camera )
 {
-    switch( m_mouse->mode() )
+    switch ( m_mouse->mode() )
     {
     case kvs::Mouse::Rotation:
         camera->rotate( m_mouse->rotation().toMatrix().transposed() );
@@ -524,7 +524,7 @@ void Scene::updateXform( kvs::Camera* camera )
 /*==========================================================================*/
 void Scene::updateXform( kvs::Light* light )
 {
-    switch( m_mouse->mode() )
+    switch ( m_mouse->mode() )
     {
     case kvs::Mouse::Rotation:
         light->rotate( m_mouse->rotation().toMatrix() );

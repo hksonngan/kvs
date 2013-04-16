@@ -63,7 +63,7 @@ Camera::Camera()
  *  Destructor.
  */
 /*==========================================================================*/
-Camera::~Camera( void )
+Camera::~Camera()
 {
 }
 
@@ -219,9 +219,9 @@ void Camera::setWindowSize( const size_t width, const size_t height )
  *  @retval false : orthogonal camera
  */
 /*==========================================================================*/
-const bool Camera::isPerspective( void ) const
+bool Camera::isPerspective() const
 {
-    return( m_projection_type == Camera::Perspective );
+    return m_projection_type == Camera::Perspective;
 }
 
 /*===========================================================================*/
@@ -230,9 +230,9 @@ const bool Camera::isPerspective( void ) const
  *  @return projection type
  */
 /*===========================================================================*/
-const Camera::ProjectionType Camera::projectionType( void ) const
+Camera::ProjectionType Camera::projectionType() const
 {
-    return( m_projection_type );
+    return m_projection_type;
 }
 
 /*==========================================================================*/
@@ -240,7 +240,7 @@ const Camera::ProjectionType Camera::projectionType( void ) const
  *  Get the camera position.
  */
 /*==========================================================================*/
-const kvs::Vector3f Camera::position( void ) const
+const kvs::Vector3f Camera::position() const
 {
     return this->xform().translation();
 }
@@ -250,7 +250,7 @@ const kvs::Vector3f Camera::position( void ) const
  *  Get the up vector.
  */
 /*==========================================================================*/
-const kvs::Vector3f Camera::upVector( void ) const
+const kvs::Vector3f Camera::upVector() const
 {
     kvs::Matrix44f m = this->xform().toMatrix();
     return kvs::Vector3f( m[0][1], m[1][1], m[2][1] ).normalized();
@@ -261,7 +261,7 @@ const kvs::Vector3f Camera::upVector( void ) const
  *  Get the look-at point.
  */
 /*==========================================================================*/
-const kvs::Vector3f Camera::lookAt( void ) const
+const kvs::Vector3f Camera::lookAt() const
 {
     return m_transform_center;
 }
@@ -277,9 +277,9 @@ const kvs::Matrix44f Camera::viewingMatrix() const
  *  @return look-at point in the device coordinate system
  */
 /*==========================================================================*/
-const kvs::Vector2f Camera::lookAtInDevice( void ) const
+const kvs::Vector2f Camera::lookAtInDevice() const
 {
-    return( kvs::Vector2f( m_window_width / 2.0f, m_window_height / 2.0f ) );
+    return kvs::Vector2f( m_window_width / 2.0f, m_window_height / 2.0f );
 }
 
 /*==========================================================================*/
@@ -288,9 +288,9 @@ const kvs::Vector2f Camera::lookAtInDevice( void ) const
  *  @return FOV parameter
  */
 /*==========================================================================*/
-const float Camera::fieldOfView( void ) const
+float Camera::fieldOfView() const
 {
-    return( m_field_of_view );
+    return m_field_of_view;
 }
 
 /*==========================================================================*/
@@ -299,9 +299,9 @@ const float Camera::fieldOfView( void ) const
  *  @return back parameter
  */
 /*==========================================================================*/
-const float Camera::back( void ) const
+float Camera::back() const
 {
-    return( m_back );
+    return m_back;
 }
 
 /*==========================================================================*/
@@ -310,9 +310,9 @@ const float Camera::back( void ) const
  *  @return front parameter
  */
 /*==========================================================================*/
-const float Camera::front( void ) const
+float Camera::front() const
 {
-    return( m_front );
+    return m_front;
 }
 
 /*==========================================================================*/
@@ -321,9 +321,9 @@ const float Camera::front( void ) const
  *  @return left parameter
  */
 /*==========================================================================*/
-const float Camera::left( void ) const
+float Camera::left() const
 {
-    return( m_left );
+    return m_left;
 }
 
 /*==========================================================================*/
@@ -332,9 +332,9 @@ const float Camera::left( void ) const
  *  @return right parameter
  */
 /*==========================================================================*/
-const float Camera::right( void ) const
+float Camera::right() const
 {
-    return( m_right );
+    return m_right;
 }
 
 /*==========================================================================*/
@@ -343,9 +343,9 @@ const float Camera::right( void ) const
  *  @return bottom parameter
  */
 /*==========================================================================*/
-const float Camera::bottom( void ) const
+float Camera::bottom() const
 {
-    return( m_bottom );
+    return m_bottom;
 }
 
 /*==========================================================================*/
@@ -354,9 +354,9 @@ const float Camera::bottom( void ) const
  *  @return top parameter
  */
 /*==========================================================================*/
-const float Camera::top( void ) const
+float Camera::top() const
 {
-    return( m_top );
+    return m_top;
 }
 
 /*==========================================================================*/
@@ -364,9 +364,9 @@ const float Camera::top( void ) const
  *  Get the window width.
  */
 /*==========================================================================*/
-const size_t Camera::windowWidth( void ) const
+size_t Camera::windowWidth() const
 {
-    return( m_window_width );
+    return m_window_width;
 }
 
 /*==========================================================================*/
@@ -374,9 +374,9 @@ const size_t Camera::windowWidth( void ) const
  *  Get the window height.
  */
 /*==========================================================================*/
-const size_t Camera::windowHeight( void ) const
+size_t Camera::windowHeight() const
 {
-    return( m_window_height );
+    return m_window_height;
 }
 
 /*==========================================================================*/
@@ -384,7 +384,7 @@ const size_t Camera::windowHeight( void ) const
  *  Initialize the member parameters.
  */
 /*==========================================================================*/
-void Camera::initialize( void )
+void Camera::initialize()
 {
     m_projection_type = Camera::Perspective;
 
@@ -412,7 +412,7 @@ void Camera::initialize( void )
  *  Update the camera.
  */
 /*==========================================================================*/
-void Camera::update( void )
+void Camera::update()
 {
     float ary[16];
 
@@ -435,7 +435,7 @@ void Camera::update( void )
  *  @return snapshot image
  */
 /*==========================================================================*/
-kvs::ColorImage Camera::snapshot( void )
+kvs::ColorImage Camera::snapshot()
 {
     GLint viewport[4];
     glGetIntegerv( GL_VIEWPORT, viewport );
@@ -454,7 +454,7 @@ kvs::ColorImage Camera::snapshot( void )
     return ret;
 }
 
-const kvs::Matrix44f Camera::projectionMatrix( void ) const
+const kvs::Matrix44f Camera::projectionMatrix() const
 {
     const float aspect = static_cast<float>( m_window_width ) / m_window_height;
 
@@ -501,14 +501,14 @@ const kvs::Matrix44f Camera::projectionMatrix( void ) const
     }
 }
 
-const kvs::Matrix44f Camera::modelViewMatrix( void ) const
+const kvs::Matrix44f Camera::modelViewMatrix() const
 {
     float m[16];
     this->getModelViewMatrix( &m );
     return kvs::Xform::FromArray( m ).toMatrix();
 }
 
-const kvs::Matrix44f Camera::projectionModelViewMatrix( void ) const
+const kvs::Matrix44f Camera::projectionModelViewMatrix() const
 {
     return this->projectionMatrix() * this->modelViewMatrix();
 }
@@ -772,7 +772,7 @@ const kvs::Vector3f Camera::projectObjectToWorld( const kvs::Vector3f& p_obj ) c
  *  @brief  Resets the xform of the camera.
  */
 /*===========================================================================*/
-void Camera::resetXform( void )
+void Camera::resetXform()
 {
     kvs::XformControl::resetXform();
     m_transform_center.set( 0, 0, 0 );

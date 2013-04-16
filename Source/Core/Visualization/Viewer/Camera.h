@@ -58,89 +58,51 @@ private:
 public:
 
     Camera();
-
-    virtual ~Camera( void );
-
-public:
+    virtual ~Camera();
 
     void setProjectionType( const ProjectionType projection_type );
-
     void setPosition( const kvs::Vector3f& position, const kvs::Vector3f& look_at );
-
     void setPosition( const kvs::Vector3f& position, const kvs::Vector3f& look_at, const kvs::Vector3f& up );
-//deprecated
     void setPosition( const kvs::Vector3f& position );
-//deprecated
     void setUpVector( const kvs::Vector3f& up_vector );
-//deprecated
     void setLookAt( const kvs::Vector3f& look_at );
-
     void setFieldOfView( const float fov );
-
     void setBack( const float back );
-
     void setFront( const float front );
-
     void setLeft( const float left );
-
     void setRight( const float right );
-
     void setBottom( const float bottom );
-
     void setTop( const float top );
-
     void setWindowSize( const size_t width, const size_t height );
 
-public:
-
-    const bool isPerspective( void ) const;
-
-    const ProjectionType projectionType( void ) const;
-
-//deprecated
-    const kvs::Vector3f position( void ) const;
-//deprecated
-    const kvs::Vector3f upVector( void ) const;
-//deprecated
-    const kvs::Vector3f lookAt( void ) const;
-
+    bool isPerspective() const;
+    ProjectionType projectionType() const;
+    const kvs::Vector3f position() const;
+    const kvs::Vector3f upVector() const;
+    const kvs::Vector3f lookAt() const;
     const kvs::Matrix44f viewingMatrix() const;
+    const kvs::Vector2f lookAtInDevice() const;
+    float fieldOfView() const;
+    float back() const;
+    float front() const;
+    float left() const;
+    float right() const;
+    float bottom() const;
+    float top() const;
+    size_t windowWidth() const;
+    size_t windowHeight() const;
 
-    const kvs::Vector2f lookAtInDevice( void ) const;
-
-    const float fieldOfView( void ) const;
-
-    const float back( void ) const;
-
-    const float front( void ) const;
-
-    const float left( void ) const;
-
-    const float right( void ) const;
-
-    const float bottom( void ) const;
-
-    const float top( void ) const;
-
-    const size_t windowWidth( void ) const;
-
-    const size_t windowHeight( void ) const;
+    virtual void initialize();
+    virtual void update();
+    virtual kvs::ColorImage snapshot();
 
 public:
 
-    virtual void initialize( void );
-
-    virtual void update( void );
-
-    virtual kvs::ColorImage snapshot( void );
-
-public:
-
-    const kvs::Matrix44f projectionMatrix( void ) const;
+    const kvs::Matrix44f projectionMatrix() const;
 //deprecated unused
-    const kvs::Matrix44f modelViewMatrix( void ) const;
+    const kvs::Matrix44f modelViewMatrix() const;
 //deprecated unused
-    const kvs::Matrix44f projectionModelViewMatrix( void ) const;
+    const kvs::Matrix44f projectionModelViewMatrix() const;
 //deprecated unused
     void getProjectionMatrix( float (*projection)[16] ) const;
 //deprecated unused
@@ -198,12 +160,9 @@ public:
 
 public:
 
-    void resetXform( void );
-
+    void resetXform();
     void rotate( const kvs::Matrix33f& rotation );
-
     void translate( const kvs::Vector3f& translation );
-
     void scale( const kvs::Vector3f& scaling );
 };
 
