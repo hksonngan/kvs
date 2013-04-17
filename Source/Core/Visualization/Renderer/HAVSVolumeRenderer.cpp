@@ -29,6 +29,7 @@
 #include "HAVSVolumeRenderer.h"
 #include <set>
 #include <kvs/Coordinate>
+#include <kvs/OpenGL>
 
 
 namespace
@@ -81,14 +82,14 @@ struct LTFace
         {
             if ( mid1 == mid2 )
             {
-                return( max1 < max2 );
+                return max1 < max2;
             }
             else
             {
-                return( mid1 < mid2 );
+                return mid1 < mid2;
             }
         }
-        return( min1 < min2 );
+        return min1 < min2;
     }
 };
 
@@ -136,24 +137,19 @@ void HAVSVolumeRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs
 
     BaseClass::startTimer();
 
-    glPushAttrib( GL_CURRENT_BIT |
-                  GL_ENABLE_BIT |
-                  GL_LIGHTING_BIT );
+    KVS_GL_CALL( glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT | GL_LIGHTING_BIT ) );
+    KVS_GL_CALL( glShadeModel( GL_SMOOTH ) );
+    KVS_GL_CALL( glGetFloatv( GL_MODELVIEW_MATRIX, m_modelview_matrix ) );
 
-    glShadeModel( GL_SMOOTH );
-    glDisable( GL_DEPTH_TEST );
-    glDisable( GL_LIGHTING );
-    glDisable( GL_NORMALIZE );
-    glDisable( GL_BLEND );
-
-    glGetFloatv( GL_MODELVIEW_MATRIX, m_modelview_matrix );
+    kvs::OpenGL::Disable( GL_DEPTH_TEST );
+    kvs::OpenGL::Disable( GL_LIGHTING );
+    kvs::OpenGL::Disable( GL_NORMALIZE );
+    kvs::OpenGL::Disable( GL_BLEND );
 
     // Following processes are executed once.
-    if ( BaseClass::m_width == 0 && BaseClass::m_height == 0 )
+    if ( BaseClass::windowWidth() == 0 && BaseClass::windowHeight() == 0 )
     {
-        BaseClass::m_width  = camera->windowWidth();
-        BaseClass::m_height = camera->windowHeight();
-
+        BaseClass::setWindowSize( camera->windowWidth(), camera->windowHeight() );
         this->initialize_geometry();
         this->initialize_shader();
         this->initialize_table();
@@ -161,28 +157,27 @@ void HAVSVolumeRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs
     }
 
     // Following processes are executed when the window size is changed.
-    if ( ( BaseClass::m_width  != camera->windowWidth() ) ||
-         ( BaseClass::m_height != camera->windowHeight() ) )
+    if ( ( BaseClass::windowWidth() != camera->windowWidth() ) ||
+         ( BaseClass::windowHeight() != camera->windowHeight() ) )
     {
-        BaseClass::m_width  = camera->windowWidth();
-        BaseClass::m_height = camera->windowHeight();
+        BaseClass::setWindowSize( camera->windowWidth(), camera->windowHeight() );
 
         m_mrt_framebuffer.bind();
 
         // Reset FBO attachments
-        glFramebufferTexture2DEXT( GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, 0, 0 );
-        glFramebufferTexture2DEXT( GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT1_EXT, GL_TEXTURE_2D, 0, 0 );
+        KVS_GL_CALL( glFramebufferTexture2DEXT( GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, 0, 0 ) );
+        KVS_GL_CALL( glFramebufferTexture2DEXT( GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT1_EXT, GL_TEXTURE_2D, 0, 0 ) );
         if ( m_ntargets == 4)
         {
-            glFramebufferTexture2DEXT( GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT2_EXT, GL_TEXTURE_2D, 0, 0 );
-            glFramebufferTexture2DEXT( GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT3_EXT, GL_TEXTURE_2D, 0, 0 );
+            KVS_GL_CALL( glFramebufferTexture2DEXT( GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT2_EXT, GL_TEXTURE_2D, 0, 0 ) );
+            KVS_GL_CALL( glFramebufferTexture2DEXT( GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT3_EXT, GL_TEXTURE_2D, 0, 0 ) );
         }
 
         // Reallocate textures
         for ( size_t i = 0; i < m_ntargets; i++ )
         {
             m_mrt_texture[i].release();
-            m_mrt_texture[i].create( BaseClass::m_width, BaseClass::m_height );
+            m_mrt_texture[i].create( BaseClass::windowWidth(), BaseClass::windowHeight() );
         }
 
         // Attach texture to framebuffer color buffer
@@ -205,16 +200,15 @@ void HAVSVolumeRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs
     this->disable_MRT_rendering();
     this->draw_texture();
 
-    glPopAttrib();
-    glFinish();
+    KVS_GL_CALL( glPopAttrib() );
+    KVS_GL_CALL( glFinish() );
 
     BaseClass::stopTimer();
 }
 
 void HAVSVolumeRenderer::initialize()
 {
-    BaseClass::m_width = 0;
-    BaseClass::m_height = 0;
+    BaseClass::setWindowSize( 0, 0 );
 
     // Initialize in this class.
     m_table.setTableSize( 128, 128 );
@@ -253,12 +247,12 @@ void HAVSVolumeRenderer::disableVBO()
 
 size_t HAVSVolumeRenderer::kBufferSize() const
 {
-    return( m_k_size );
+    return m_k_size;
 }
 
 bool HAVSVolumeRenderer::isEnabledVBO() const
 {
-    return( m_enable_vbo );
+    return m_enable_vbo;
 }
 
 void HAVSVolumeRenderer::initialize_geometry()
@@ -269,13 +263,11 @@ void HAVSVolumeRenderer::initialize_geometry()
         const kvs::Real32* coords_pointer = m_meshes->coords().data();
         m_vertex_coords.setUsage( GL_STATIC_DRAW_ARB );
         m_vertex_coords.create( coords_size, coords_pointer );
-//        m_vertex_coords.download( coords_size, coords_pointer );
 
         const size_t values_size = m_meshes->values().byteSize();
         const kvs::Real32* values_pointer = m_meshes->values().data();
         m_vertex_values.setUsage( GL_STATIC_DRAW_ARB );
         m_vertex_values.create( values_size, values_pointer );
-//        m_vertex_values.download( values_size, values_pointer );
 
         const size_t faces_size = m_meshes->nfaces() * 3 * sizeof(GLuint);
         m_vertex_indices.setUsage( GL_STREAM_DRAW_ARB );
@@ -350,7 +342,7 @@ void HAVSVolumeRenderer::initialize_framebuffer()
         m_mrt_texture[i].setMinFilter( GL_NEAREST );
         m_mrt_texture[i].setMagFilter( GL_NEAREST );
         m_mrt_texture[i].setPixelFormat( GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT );
-        m_mrt_texture[i].create( BaseClass::m_width, BaseClass::m_height );
+        m_mrt_texture[i].create( BaseClass::windowWidth(), BaseClass::windowHeight() );
     }
 
     // Bind framebuffer object
@@ -365,19 +357,12 @@ void HAVSVolumeRenderer::initialize_framebuffer()
         m_mrt_framebuffer.attachColorTexture( m_mrt_texture[3], 3 );
     }
 
-    // Validate FBO after attaching textures
-    if ( glCheckFramebufferStatusEXT( GL_FRAMEBUFFER_EXT ) != GL_FRAMEBUFFER_COMPLETE_EXT )
-    {
-        kvsMessageError("Framebuffer incomplete.");
-        exit( EXIT_FAILURE );
-    }
-
     // Setup OpenGL state in FBO
-    glShadeModel( GL_SMOOTH );
-    glDisable( GL_DEPTH_TEST );
-    glDisable( GL_CULL_FACE );
-    glDisable( GL_LIGHTING );
-    glDisable( GL_NORMALIZE );
+    KVS_GL_CALL( glShadeModel( GL_SMOOTH ) );
+    KVS_GL_CALL( glDisable( GL_DEPTH_TEST ) );
+    KVS_GL_CALL( glDisable( GL_CULL_FACE ) );
+    KVS_GL_CALL( glDisable( GL_LIGHTING ) );
+    KVS_GL_CALL( glDisable( GL_NORMALIZE ) );
 
     m_mrt_framebuffer.unbind();
 }
@@ -393,29 +378,30 @@ void HAVSVolumeRenderer::enable_MRT_rendering()
         GL_COLOR_ATTACHMENT1_EXT,
         GL_COLOR_ATTACHMENT2_EXT,
         GL_COLOR_ATTACHMENT3_EXT };
-    glDrawBuffers( m_ntargets, buffers );
+    KVS_GL_CALL( glDrawBuffers( m_ntargets, buffers ) );
 
     // Bind textures for reading.
-    glEnable( GL_TEXTURE_2D );
-    glActiveTexture( GL_TEXTURE0 ); m_mrt_texture[0].bind();
-    glActiveTexture( GL_TEXTURE1 ); m_mrt_texture[1].bind();
+    kvs::OpenGL::Enable( GL_TEXTURE_2D );
+    kvs::OpenGL::ActivateTextureUnit( 0 ); m_mrt_texture[0].bind();
+    kvs::OpenGL::ActivateTextureUnit( 1 ); m_mrt_texture[1].bind();
     if ( m_ntargets == 4 )
     {
-        glActiveTexture( GL_TEXTURE2 ); m_mrt_texture[2].bind();
-        glActiveTexture( GL_TEXTURE3 ); m_mrt_texture[3].bind();
+        kvs::OpenGL::ActivateTextureUnit( 2 ); m_mrt_texture[2].bind();
+        kvs::OpenGL::ActivateTextureUnit( 3 ); m_mrt_texture[3].bind();
     }
 
     // Bind pre-integration table.
-    glEnable( GL_TEXTURE_3D );
-    glActiveTexture( m_ntargets == 2 ? GL_TEXTURE2 : GL_TEXTURE4 );
+    kvs::OpenGL::Enable( GL_TEXTURE_3D );
+    kvs::OpenGL::ActivateTextureUnit( m_ntargets == 2 ? 2 : 4 );
+
     m_table.bind();
 }
 
 void HAVSVolumeRenderer::disable_MRT_rendering()
 {
     // Disable pre-integration table.
-    glActiveTexture( m_ntargets == 2 ? GL_TEXTURE2 : GL_TEXTURE4 );
-    glDisable( GL_TEXTURE_3D );
+    kvs::OpenGL::ActivateTextureUnit( m_ntargets == 2 ? 2 : 4 );
+    kvs::OpenGL::Disable( GL_TEXTURE_3D );
 
     // Disable FBO rendering
     m_mrt_framebuffer.unbind();
@@ -424,7 +410,6 @@ void HAVSVolumeRenderer::disable_MRT_rendering()
 void HAVSVolumeRenderer::sort_geometry( kvs::Camera* camera )
 {
     // Visibility sorting.
-//    const kvs::Vector3f position = camera->projectWorldToObject( camera->position() );
     const kvs::Vector3f position = kvs::WorldCoordinate( camera->position() ).toObjectCoordinate( camera ).position();
     const HAVSVolumeRenderer::Vertex eye( position );
     m_meshes->sort( eye );
@@ -457,20 +442,24 @@ void HAVSVolumeRenderer::draw_initialization_pass()
     // Bind initializing fragment shader.
     m_shader_begin.bind();
 
-    glMatrixMode( GL_MODELVIEW );  glPushMatrix(); glLoadIdentity();
-    glMatrixMode( GL_PROJECTION ); glPushMatrix(); glLoadIdentity();
-    gluOrtho2D( 0, BaseClass::m_width, 0, BaseClass::m_height );
-    {
-        glBegin( GL_QUADS );
-        glVertex2f( 0,                  0 );
-        glVertex2f( BaseClass::m_width, 0 );
-        glVertex2f( BaseClass::m_width, BaseClass::m_height );
-        glVertex2f( 0,                  BaseClass::m_height );
-        glEnd();
-    }
-    glPopMatrix(); // pop PROJECTION matrix
-    glMatrixMode( GL_MODELVIEW );
-    glPopMatrix(); // pop MODELVIEW matrix
+    KVS_GL_CALL( glMatrixMode( GL_MODELVIEW ) );
+    KVS_GL_CALL( glPushMatrix() );
+    KVS_GL_CALL( glLoadIdentity() );
+    KVS_GL_CALL( glMatrixMode( GL_PROJECTION ) );
+    KVS_GL_CALL( glPushMatrix() );
+    KVS_GL_CALL( glLoadIdentity() );
+    KVS_GL_CALL( gluOrtho2D( 0, BaseClass::windowWidth(), 0, BaseClass::windowHeight() ) );
+
+    glBegin( GL_QUADS );
+    glVertex2f( 0, 0 );
+    glVertex2f( BaseClass::windowWidth(), 0 );
+    glVertex2f( BaseClass::windowWidth(), BaseClass::windowHeight() );
+    glVertex2f( 0, BaseClass::windowHeight() );
+    glEnd();
+
+    KVS_GL_CALL( glPopMatrix() );
+    KVS_GL_CALL( glMatrixMode( GL_MODELVIEW ) );
+    KVS_GL_CALL( glPopMatrix() );
 
     m_shader_begin.unbind();
 }
@@ -486,8 +475,8 @@ void HAVSVolumeRenderer::draw_geometry_pass()
     const float bb_scale = std::sqrt( mat[0]*mat[0] + mat[1]*mat[1] + mat[2]*mat[2] );
 
     const float scale[4] = {
-        1.0f / static_cast<float>(BaseClass::m_width),
-        1.0f / static_cast<float>(BaseClass::m_height),
+        1.0f / static_cast<float>(BaseClass::windowWidth()),
+        1.0f / static_cast<float>(BaseClass::windowHeight()),
         ( 1.0f - 1.0f / table_size ) / ( edge_length * bb_scale ),
         1.0f / ( 2.0f * table_size )
     };
@@ -504,32 +493,32 @@ void HAVSVolumeRenderer::draw_geometry_pass()
 
     if ( this->isEnabledVBO() )
     {
-        glEnableClientState( GL_VERTEX_ARRAY );
+        KVS_GL_CALL( glEnableClientState( GL_VERTEX_ARRAY ) );
         m_vertex_coords.bind();
-        glVertexPointer( 3, GL_FLOAT, 0, (char*)NULL );
+        KVS_GL_CALL( glVertexPointer( 3, GL_FLOAT, 0, (char*)NULL ) );
 
-        glEnableClientState( GL_TEXTURE_COORD_ARRAY );
+        KVS_GL_CALL( glEnableClientState( GL_TEXTURE_COORD_ARRAY ) );
         m_vertex_values.bind();
-        glTexCoordPointer( 1, GL_FLOAT, 0, (char*)NULL );
+        KVS_GL_CALL( glTexCoordPointer( 1, GL_FLOAT, 0, (char*)NULL ) );
 
         m_vertex_indices.bind();
-        glDrawElements( GL_TRIANGLES, m_meshes->nrenderfaces() * 3, GL_UNSIGNED_INT, (char*)NULL );
+        KVS_GL_CALL( glDrawElements( GL_TRIANGLES, m_meshes->nrenderfaces() * 3, GL_UNSIGNED_INT, (char*)NULL ) );
 
-        glDisableClientState( GL_VERTEX_ARRAY );
-        glDisableClientState( GL_TEXTURE_COORD_ARRAY );
+        KVS_GL_CALL( glDisableClientState( GL_VERTEX_ARRAY ) );
+        KVS_GL_CALL( glDisableClientState( GL_TEXTURE_COORD_ARRAY ) );
     }
     else
     {
-        glEnableClientState( GL_VERTEX_ARRAY );
-        glVertexPointer( 3, GL_FLOAT, 0, m_meshes->coords().data() );
+        KVS_GL_CALL( glEnableClientState( GL_VERTEX_ARRAY ) );
+        KVS_GL_CALL( glVertexPointer( 3, GL_FLOAT, 0, m_meshes->coords().data() ) );
 
-        glEnableClientState( GL_TEXTURE_COORD_ARRAY );
-        glTexCoordPointer( 1, GL_FLOAT, 0, m_meshes->values().data() );
+        KVS_GL_CALL( glEnableClientState( GL_TEXTURE_COORD_ARRAY ) );
+        KVS_GL_CALL( glTexCoordPointer( 1, GL_FLOAT, 0, m_meshes->values().data() ) );
 
-        glDrawElements( GL_TRIANGLES, m_meshes->nrenderfaces() * 3, GL_UNSIGNED_INT, m_pindices );
+        KVS_GL_CALL( glDrawElements( GL_TRIANGLES, m_meshes->nrenderfaces() * 3, GL_UNSIGNED_INT, m_pindices ) );
 
-        glDisableClientState( GL_VERTEX_ARRAY );
-        glDisableClientState( GL_TEXTURE_COORD_ARRAY );
+        KVS_GL_CALL( glDisableClientState( GL_VERTEX_ARRAY ) );
+        KVS_GL_CALL( glDisableClientState( GL_TEXTURE_COORD_ARRAY ) );
     }
 
     m_shader_kbuffer.unbind();
@@ -541,27 +530,19 @@ void HAVSVolumeRenderer::draw_flush_pass()
     m_shader_end.bind();
 
     const float* mat = m_modelview_matrix;
-//    const float s = std::sqrt( mat[0]*mat[0] + mat[1]*mat[1] + mat[2]*mat[2] );
-
-//    const float table_size = 128.0f; // m_table.sizeDepth()
     const float table_size = m_table.sizeDepth();
     const float edge_length = m_meshes->depthScale();
-//    const float edge_length = 1.0f;
-//    const float bb_scale = 1.0f / ( m_meshes->diagonal() * s );
-//    const float bb_scale = 1.0f / m_meshes->diagonal();
-//    const float bb_scale = m_meshes->diagonal();
     const float bb_scale = std::sqrt( mat[0]*mat[0] + mat[1]*mat[1] + mat[2]*mat[2] );
-//    const float bb_scale = 1;
 
     const float scale[4] = {
-        1.0f / static_cast<float>(BaseClass::m_width),
-        1.0f / static_cast<float>(BaseClass::m_height),
+        1.0f / static_cast<float>(BaseClass::windowWidth()),
+        1.0f / static_cast<float>(BaseClass::windowHeight()),
         ( 1.0f - 1.0f / table_size ) / ( edge_length * bb_scale ),
         1.0f / ( 2.0f * table_size )
     };
 
 //    m_shader_end.setUniformValuefv( "scale", scale, 4 );
-    glUniform4fv( m_shader_end.uniformLocation("scale"), 1, scale );
+    KVS_GL_CALL( glUniform4fv( m_shader_end.uniformLocation("scale"), 1, scale ) );
     m_shader_end.setUniformValuei( "lut", m_ntargets );
     m_shader_end.setUniformValuei( "framebuffer", 0 );
     m_shader_end.setUniformValuei( "kbuffer1", 1 );
@@ -572,62 +553,69 @@ void HAVSVolumeRenderer::draw_flush_pass()
     }
 
     // Draw k-1 quads to flush A-buffer
-    glMatrixMode( GL_MODELVIEW );  glPushMatrix(); glLoadIdentity();
-    glMatrixMode( GL_PROJECTION ); glPushMatrix(); glLoadIdentity();
-    gluOrtho2D( 0, BaseClass::m_width, 0, BaseClass::m_height );
+    KVS_GL_CALL( glMatrixMode( GL_MODELVIEW ) );
+    KVS_GL_CALL( glPushMatrix() );
+    KVS_GL_CALL( glLoadIdentity() );
+    KVS_GL_CALL( glMatrixMode( GL_PROJECTION ) );
+    KVS_GL_CALL( glPushMatrix() );
+    KVS_GL_CALL( glLoadIdentity() );
+    KVS_GL_CALL( gluOrtho2D( 0, BaseClass::windowWidth(), 0, BaseClass::windowHeight() ) );
     for ( size_t i = 0; i < this->kBufferSize() - 1; i++ )
     {
         glBegin( GL_QUADS );
-        glVertex2f( 0,                  0 );
-        glVertex2f( 0,                  BaseClass::m_height );
-        glVertex2f( BaseClass::m_width, BaseClass::m_height );
-        glVertex2f( BaseClass::m_width, 0 );
+        glVertex2f( 0, 0 );
+        glVertex2f( 0, BaseClass::windowHeight() );
+        glVertex2f( BaseClass::windowWidth(), BaseClass::windowHeight() );
+        glVertex2f( BaseClass::windowWidth(), 0 );
         glEnd();
     }
-
-    glPopMatrix(); // pop PROJECTION matrix
-    glMatrixMode( GL_MODELVIEW );
-    glPopMatrix(); // pop MODELVIEW matrix
+    KVS_GL_CALL( glPopMatrix() );
+    KVS_GL_CALL( glMatrixMode( GL_MODELVIEW ) );
+    KVS_GL_CALL( glPopMatrix() );
 
     // Disable shaders
     m_shader_end.unbind();
 
-    glFlush();
+    KVS_GL_CALL( glFlush() );
 }
 
 void HAVSVolumeRenderer::draw_texture()
 {
-    glDrawBuffer( GL_BACK );
+    KVS_GL_CALL( glDrawBuffer( GL_BACK ) );
 
     // Setup 2D view
-    glMatrixMode( GL_MODELVIEW );  glPushMatrix(); glLoadIdentity();
-    glMatrixMode( GL_PROJECTION ); glPushMatrix(); glLoadIdentity();
-    gluOrtho2D( 0, BaseClass::m_width, 0, BaseClass::m_height );
+    KVS_GL_CALL( glMatrixMode( GL_MODELVIEW ) );
+    KVS_GL_CALL( glPushMatrix() );
+    KVS_GL_CALL( glLoadIdentity() );
+    KVS_GL_CALL( glMatrixMode( GL_PROJECTION ) );
+    KVS_GL_CALL( glPushMatrix() );
+    KVS_GL_CALL( glLoadIdentity() );
+    KVS_GL_CALL( gluOrtho2D( 0, BaseClass::windowWidth(), 0, BaseClass::windowHeight() ) );
 
-    glEnable( GL_BLEND );
-    glBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_ALPHA );
+    kvs::OpenGL::Enable( GL_BLEND );
+    KVS_GL_CALL( glBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_ALPHA ) );
 
     // Bind last texture
-    glActiveTexture( GL_TEXTURE0 ); m_mrt_texture[0].bind();
+    kvs::OpenGL::ActivateTextureUnit( 0 ); m_mrt_texture[0].bind();
 
-    glEnable( GL_TEXTURE_2D );
-    glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE );
+    kvs::OpenGL::Enable( GL_TEXTURE_2D );
+    KVS_GL_CALL( glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE ) );
 
     // Draw texture using screen-aligned quad
     glBegin(GL_QUADS);
     glTexCoord2f( 0, 0 ); glVertex2f( 0, 0 );
-    glTexCoord2f( 1, 0 ); glVertex2f( BaseClass::m_width, 0 );
-    glTexCoord2f( 1, 1 ); glVertex2f( BaseClass::m_width, BaseClass::m_height );
-    glTexCoord2f( 0, 1 ); glVertex2f( 0, BaseClass::m_height );
+    glTexCoord2f( 1, 0 ); glVertex2f( BaseClass::windowWidth(), 0 );
+    glTexCoord2f( 1, 1 ); glVertex2f( BaseClass::windowWidth(), BaseClass::windowHeight() );
+    glTexCoord2f( 0, 1 ); glVertex2f( 0, BaseClass::windowHeight() );
     glEnd();
 
-    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-    glDisable( GL_BLEND );
-    glDisable( GL_TEXTURE_2D );
+    KVS_GL_CALL( glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA ) );
+    kvs::OpenGL::Disable( GL_BLEND );
+    kvs::OpenGL::Disable( GL_TEXTURE_2D );
 
-    glPopMatrix(); // Pop PROJECTION matrix
-    glMatrixMode( GL_MODELVIEW );
-    glPopMatrix(); // Pop MODELVIEW matrix
+    KVS_GL_CALL( glPopMatrix() );
+    KVS_GL_CALL( glMatrixMode( GL_MODELVIEW ) );
+    KVS_GL_CALL( glPopMatrix() );
 }
 
 HAVSVolumeRenderer::Meshes::Meshes():
@@ -685,9 +673,9 @@ void HAVSVolumeRenderer::Meshes::setVolume( const kvs::UnstructuredVolumeObject*
     if ( !volume->hasMinMaxValues() ) const_cast<kvs::UnstructuredVolumeObject*>(volume)->updateMinMaxValues();
     const size_t nvalues = volume->values().size();
     const float* values = static_cast<const float*>(volume->values().data());
-    const float  min_value = volume->minValue();
-    const float  max_value = volume->maxValue();
-    const float  range = max_value - min_value;
+    const float min_value = volume->minValue();
+    const float max_value = volume->maxValue();
+    const float range = max_value - min_value;
     m_values.allocate( nvalues );
     for ( size_t i = 0; i < nvalues; i++ )
     {
@@ -703,57 +691,57 @@ void HAVSVolumeRenderer::Meshes::setVolume( const kvs::UnstructuredVolumeObject*
 
 const HAVSVolumeRenderer::Face& HAVSVolumeRenderer::Meshes::face( const size_t index )
 {
-    return( m_faces[index] );
+    return m_faces[index];
 }
 
 kvs::UInt32 HAVSVolumeRenderer::Meshes::sortedFace( const size_t face_id )
 {
-    return( m_sorted_faces[face_id].face() );
+    return m_sorted_faces[face_id].face();
 }
 
 const kvs::ValueArray<kvs::Real32>& HAVSVolumeRenderer::Meshes::coords() const
 {
-    return( m_coords );
+    return m_coords;
 }
 
 const kvs::ValueArray<kvs::UInt32>& HAVSVolumeRenderer::Meshes::connections() const
 {
-    return( m_connections );
+    return m_connections;
 }
 
 const kvs::ValueArray<kvs::Real32>& HAVSVolumeRenderer::Meshes::values() const
 {
-    return( m_values );
+    return m_values;
 }
 
 size_t HAVSVolumeRenderer::Meshes::nvertices() const
 {
-    return( m_nvertices );
+    return m_nvertices;
 }
 
 size_t HAVSVolumeRenderer::Meshes::ntetrahedra() const
 {
-    return( m_ntetrahedra );
+    return m_ntetrahedra;
 }
 
 size_t HAVSVolumeRenderer::Meshes::nfaces() const
 {
-    return( m_nfaces );
+    return m_nfaces;
 }
 
 size_t HAVSVolumeRenderer::Meshes::nrenderfaces() const
 {
-    return( m_nrenderfaces );
+    return m_nrenderfaces;
 }
 
 float HAVSVolumeRenderer::Meshes::depthScale() const
 {
-    return( m_depth_scale );
+    return m_depth_scale;
 }
 
 float HAVSVolumeRenderer::Meshes::diagonal() const
 {
-    return( m_diagonal );
+    return m_diagonal;
 }
 
 void HAVSVolumeRenderer::Meshes::build()
@@ -771,12 +759,6 @@ void HAVSVolumeRenderer::Meshes::build()
     const kvs::UInt32* pconnections = m_connections.data();
     for ( size_t i = 0; i < m_ntetrahedra; i++ )
     {
-/*
-        const kvs::UInt32 id0 = *(pconnections++);
-        const kvs::UInt32 id1 = *(pconnections++);
-        const kvs::UInt32 id2 = *(pconnections++);
-        const kvs::UInt32 id3 = *(pconnections++);
-*/
         const kvs::UInt32 id0 = pconnections[4*i+0];
         const kvs::UInt32 id1 = pconnections[4*i+1];
         const kvs::UInt32 id2 = pconnections[4*i+2];
@@ -858,14 +840,7 @@ void HAVSVolumeRenderer::Meshes::build()
         const float d1 = ( v1 - v2 ).norm2();
         const float d2 = ( v1 - v3 ).norm2();
         const float d3 = ( v2 - v3 ).norm2();
-//        m_depth_scale = kvs::Math::Max( d1, d2, d3 );
         max_edge_length = kvs::Math::Max( max_edge_length, d1, d2, d3 );
-
-/*
-        if ( d1 > m_depth_scale ) m_depth_scale = d1;
-        if ( d2 > m_depth_scale ) m_depth_scale = d2;
-        if ( d3 > m_depth_scale ) m_depth_scale = d3;
-*/
 
         // Calculate center.
         const HAVSVolumeRenderer::Vertex center(
@@ -875,12 +850,7 @@ void HAVSVolumeRenderer::Meshes::build()
         m_centers[i] = center;
     }
 
-//    m_depth_scale = std::sqrt( m_depth_scale );
     m_depth_scale = std::sqrt( max_edge_length );
-
-//    m_depth_scale = 5.0f;
-//    std::cout << m_depth_scale << std::endl;
-
     m_diagonal = ( m_bb_max - m_bb_min ).length();
 }
 
@@ -890,15 +860,7 @@ void HAVSVolumeRenderer::Meshes::sort( HAVSVolumeRenderer::Vertex eye )
     ::FloatOrInt dist2;
     size_t sorted_face_count = 0;
     size_t i = 0;
-/*
-    for ( i = 0; i < m_nfaces; i++ )
-    {
-        const HAVSVolumeRenderer::Vertex fc = m_centers[i];
-        dist2.f = static_cast<float>(( eye - fc ).norm2());
-        sorted_face = HAVSVolumeRenderer::SortedFace( i, dist2.i );
-        m_sorted_faces[sorted_face_count++] = sorted_face;
-    }
-*/
+
     // Add boundary faces first.
     for ( i = 0; i < m_nboundaryfaces; i++ )
     {
