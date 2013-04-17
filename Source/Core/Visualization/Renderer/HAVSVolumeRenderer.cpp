@@ -162,17 +162,6 @@ void HAVSVolumeRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs
     {
         BaseClass::setWindowSize( camera->windowWidth(), camera->windowHeight() );
 
-        m_mrt_framebuffer.bind();
-
-        // Reset FBO attachments
-        KVS_GL_CALL( glFramebufferTexture2DEXT( GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, 0, 0 ) );
-        KVS_GL_CALL( glFramebufferTexture2DEXT( GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT1_EXT, GL_TEXTURE_2D, 0, 0 ) );
-        if ( m_ntargets == 4)
-        {
-            KVS_GL_CALL( glFramebufferTexture2DEXT( GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT2_EXT, GL_TEXTURE_2D, 0, 0 ) );
-            KVS_GL_CALL( glFramebufferTexture2DEXT( GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT3_EXT, GL_TEXTURE_2D, 0, 0 ) );
-        }
-
         // Reallocate textures
         for ( size_t i = 0; i < m_ntargets; i++ )
         {
@@ -180,16 +169,18 @@ void HAVSVolumeRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs
             m_mrt_texture[i].create( BaseClass::windowWidth(), BaseClass::windowHeight() );
         }
 
-        // Attach texture to framebuffer color buffer
+        // Reset attached textures.
+        m_mrt_framebuffer.detachColorTexture( 0 );
+        m_mrt_framebuffer.detachColorTexture( 1 );
         m_mrt_framebuffer.attachColorTexture( m_mrt_texture[0], 0 );
         m_mrt_framebuffer.attachColorTexture( m_mrt_texture[1], 1 );
         if ( m_ntargets == 4 )
         {
+            m_mrt_framebuffer.detachColorTexture( 2 );
+            m_mrt_framebuffer.detachColorTexture( 3 );
             m_mrt_framebuffer.attachColorTexture( m_mrt_texture[2], 2 );
             m_mrt_framebuffer.attachColorTexture( m_mrt_texture[3], 3 );
         }
-
-        m_mrt_framebuffer.unbind();
    }
 
     this->sort_geometry( camera );
@@ -331,9 +322,6 @@ void HAVSVolumeRenderer::initialize_framebuffer()
     if ( m_k_size == 2 ) { m_ntargets = 2; }
     else { m_ntargets = 4; }
 
-    // Create FBO
-    m_mrt_framebuffer.create();
-
     // Create FBO textures
     for ( size_t i = 0; i < m_ntargets; i++ )
     {
@@ -345,8 +333,8 @@ void HAVSVolumeRenderer::initialize_framebuffer()
         m_mrt_texture[i].create( BaseClass::windowWidth(), BaseClass::windowHeight() );
     }
 
-    // Bind framebuffer object
-    m_mrt_framebuffer.bind();
+    // Create FBO
+    m_mrt_framebuffer.create();
 
     // Attach texture to framebuffer color buffer
     m_mrt_framebuffer.attachColorTexture( m_mrt_texture[0], 0 );
@@ -359,12 +347,10 @@ void HAVSVolumeRenderer::initialize_framebuffer()
 
     // Setup OpenGL state in FBO
     KVS_GL_CALL( glShadeModel( GL_SMOOTH ) );
-    KVS_GL_CALL( glDisable( GL_DEPTH_TEST ) );
-    KVS_GL_CALL( glDisable( GL_CULL_FACE ) );
-    KVS_GL_CALL( glDisable( GL_LIGHTING ) );
-    KVS_GL_CALL( glDisable( GL_NORMALIZE ) );
-
-    m_mrt_framebuffer.unbind();
+    kvs::OpenGL::Disable( GL_DEPTH_TEST );
+    kvs::OpenGL::Disable( GL_CULL_FACE );
+    kvs::OpenGL::Disable( GL_LIGHTING );
+    kvs::OpenGL::Disable( GL_NORMALIZE );
 }
 
 void HAVSVolumeRenderer::enable_MRT_rendering()

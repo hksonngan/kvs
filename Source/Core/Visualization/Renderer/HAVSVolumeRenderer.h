@@ -104,7 +104,7 @@ public:
     size_t kBufferSize() const;
     bool isEnabledVBO() const;
 
-protected:
+private:
 
     void initialize_geometry();
     void initialize_shader();

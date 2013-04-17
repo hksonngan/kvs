@@ -240,6 +240,36 @@ void FrameBufferObject::attachDepthRenderBuffer( const kvs::RenderBuffer& render
     KVS_GL_CALL( glFramebufferRenderbuffer( GL_FRAMEBUFFER, attachment, GL_RENDERBUFFER, id ) );
 }
 
+void FrameBufferObject::detachColorTexture( const size_t color_buffer, const int mip_level )
+{
+    GuardedBinder binder( *this );
+    const GLenum attachment = GL_COLOR_ATTACHMENT0 + color_buffer;
+    const GLenum type = GL_TEXTURE_2D;
+    KVS_GL_CALL( glFramebufferTexture2D( GL_FRAMEBUFFER, attachment, type, 0, mip_level ) );
+}
+
+void FrameBufferObject::detachDepthTexture( const int mip_level )
+{
+    GuardedBinder binder( *this );
+    const GLenum attachment = GL_DEPTH_ATTACHMENT;
+    const GLenum type = GL_TEXTURE_2D;
+    KVS_GL_CALL( glFramebufferTexture2D( GL_FRAMEBUFFER, attachment, type, 0, mip_level ) );
+}
+
+void FrameBufferObject::detachColorRenderBuffer( const size_t color_buffer )
+{
+    GuardedBinder binder( *this );
+    const GLenum attachment = GL_COLOR_ATTACHMENT0 + color_buffer;
+    KVS_GL_CALL( glFramebufferRenderbuffer( GL_FRAMEBUFFER, attachment, GL_RENDERBUFFER, 0 ) );
+}
+
+void FrameBufferObject::detachDepthRenderBuffer()
+{
+    GuardedBinder binder( *this );
+    const GLenum attachment = GL_DEPTH_ATTACHMENT;
+    KVS_GL_CALL( glFramebufferRenderbuffer( GL_FRAMEBUFFER, attachment, GL_RENDERBUFFER, 0 ) );
+}
+
 void FrameBufferObject::generateFramebuffer()
 {
     if ( !this->isValid() )

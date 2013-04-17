@@ -67,6 +67,11 @@ public:
     void attachColorRenderBuffer( const kvs::RenderBuffer& render_buffer, const size_t color_buffer = 0 );
     void attachDepthRenderBuffer( const kvs::RenderBuffer& render_buffer );
 
+    void detachColorTexture( const size_t color_buffer = 0, const int mip_level = 0 );
+    void detachDepthTexture( const int mip_level = 0 );
+    void detachColorRenderBuffer( const size_t color_buffer = 0 );
+    void detachDepthRenderBuffer();
+
 protected:
 
     void generateFramebuffer();
