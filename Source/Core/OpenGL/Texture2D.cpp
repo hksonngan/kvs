@@ -22,6 +22,11 @@
 namespace kvs
 {
 
+void Texture2D::Unbind()
+{
+    kvs::Texture::Unbind( GL_TEXTURE_2D );
+}
+
 /*==========================================================================*/
 /**
  *  Constructor.

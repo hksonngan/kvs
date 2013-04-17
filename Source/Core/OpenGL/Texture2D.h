@@ -38,6 +38,10 @@ private:
 
 public:
 
+    static void Unbind();
+
+public:
+
     Texture2D();
     virtual ~Texture2D();
 

@@ -21,6 +21,11 @@
 namespace kvs
 {
 
+void TextureRectangle::Unbind()
+{
+    kvs::Texture::Unbind( GL_TEXTURE_RECTANGLE );
+}
+
 /*==========================================================================*/
 /**
  *  Constructor.

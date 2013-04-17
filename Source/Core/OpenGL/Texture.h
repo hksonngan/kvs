@@ -52,6 +52,11 @@ public:
     class Binder;
     class GuardedBinder;
 
+    static void Bind( const Texture& texture, const GLint unit );
+    static void Unbind( const Texture& texture, const GLint unit );
+    static void Unbind( const GLenum target );
+    static void SelectActiveUnit( const GLint unit );
+
 public:
 
     Texture( const GLenum target, const GLenum target_binding );

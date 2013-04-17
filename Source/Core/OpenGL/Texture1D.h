@@ -37,6 +37,10 @@ private:
 
 public:
 
+    static void Unbind();
+
+public:
+
     Texture1D();
     virtual ~Texture1D();
 

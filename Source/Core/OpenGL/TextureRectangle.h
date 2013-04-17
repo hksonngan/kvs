@@ -39,6 +39,10 @@ private:
 
 public:
 
+    static void Unbind();
+
+public:
+
     TextureRectangle();
     virtual ~TextureRectangle();
 

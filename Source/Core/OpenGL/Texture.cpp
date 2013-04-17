@@ -21,6 +21,32 @@
 namespace kvs
 {
 
+void Texture::Bind( const Texture& texture, const GLint unit )
+{
+    KVS_ASSERT( texture.isCreated() );
+    Texture::SelectActiveUnit( unit );
+    texture.bind();
+}
+
+void Texture::Unbind( const Texture& texture, const GLint unit )
+{
+    KVS_ASSERT( texture.isCreated() );
+    Texture::SelectActiveUnit( unit );
+    texture.unbind();
+}
+
+void Texture::Unbind( const GLenum target )
+{
+    KVS_GL_CALL( glBindTexture( target, 0 ) );
+}
+
+void Texture::SelectActiveUnit( const GLint unit )
+{
+    KVS_ASSERT( unit >= 0 );
+    KVS_ASSERT( unit < kvs::OpenGL::MaxCombinedTextureImageUnits() );
+    KVS_GL_CALL( glActiveTexture( GL_TEXTURE0 + unit ) );
+}
+
 /*==========================================================================*/
 /**
  *  Constructor.
@@ -619,14 +645,14 @@ Texture::Binder::Binder( const Texture& texture, GLint unit ) :
     m_unit( unit )
 {
     KVS_ASSERT( texture.isCreated() );
-    kvs::OpenGL::ActivateTextureUnit( unit );
+    Texture::SelectActiveUnit( unit );
     texture.bind();
 }
 
 Texture::Binder::~Binder()
 {
     KVS_ASSERT( m_texture.isCreated() );
-    kvs::OpenGL::ActivateTextureUnit( m_unit );
+    Texture::SelectActiveUnit( m_unit );
     KVS_GL_CALL( glBindTexture( m_texture.target(), 0 ) );
 }
 

@@ -382,17 +382,17 @@ void HAVSVolumeRenderer::enable_MRT_rendering()
 
     // Bind textures for reading.
     kvs::OpenGL::Enable( GL_TEXTURE_2D );
-    kvs::OpenGL::ActivateTextureUnit( 0 ); m_mrt_texture[0].bind();
-    kvs::OpenGL::ActivateTextureUnit( 1 ); m_mrt_texture[1].bind();
+    kvs::Texture::Bind( m_mrt_texture[0], 0 );
+    kvs::Texture::Bind( m_mrt_texture[1], 1 );
     if ( m_ntargets == 4 )
     {
-        kvs::OpenGL::ActivateTextureUnit( 2 ); m_mrt_texture[2].bind();
-        kvs::OpenGL::ActivateTextureUnit( 3 ); m_mrt_texture[3].bind();
+        kvs::Texture::Bind( m_mrt_texture[2], 2 );
+        kvs::Texture::Bind( m_mrt_texture[3], 3 );
     }
 
     // Bind pre-integration table.
     kvs::OpenGL::Enable( GL_TEXTURE_3D );
-    kvs::OpenGL::ActivateTextureUnit( m_ntargets == 2 ? 2 : 4 );
+    kvs::Texture::SelectActiveUnit( m_ntargets == 2 ? 2 : 4 );
 
     m_table.bind();
 }
@@ -400,7 +400,7 @@ void HAVSVolumeRenderer::enable_MRT_rendering()
 void HAVSVolumeRenderer::disable_MRT_rendering()
 {
     // Disable pre-integration table.
-    kvs::OpenGL::ActivateTextureUnit( m_ntargets == 2 ? 2 : 4 );
+    kvs::Texture::SelectActiveUnit( m_ntargets == 2 ? 2 : 4 );
     kvs::OpenGL::Disable( GL_TEXTURE_3D );
 
     // Disable FBO rendering
@@ -596,7 +596,7 @@ void HAVSVolumeRenderer::draw_texture()
     KVS_GL_CALL( glBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_ALPHA ) );
 
     // Bind last texture
-    kvs::OpenGL::ActivateTextureUnit( 0 ); m_mrt_texture[0].bind();
+    kvs::Texture::Bind( m_mrt_texture[0], 0 );
 
     kvs::OpenGL::Enable( GL_TEXTURE_2D );
     KVS_GL_CALL( glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE ) );
