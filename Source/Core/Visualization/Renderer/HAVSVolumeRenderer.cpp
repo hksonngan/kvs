@@ -346,7 +346,7 @@ void HAVSVolumeRenderer::initialize_framebuffer()
     }
 
     // Setup OpenGL state in FBO
-    KVS_GL_CALL( glShadeModel( GL_SMOOTH ) );
+    kvs::OpenGL::SetShadeModel( GL_SMOOTH );
     kvs::OpenGL::Disable( GL_DEPTH_TEST );
     kvs::OpenGL::Disable( GL_CULL_FACE );
     kvs::OpenGL::Disable( GL_LIGHTING );
@@ -364,7 +364,8 @@ void HAVSVolumeRenderer::enable_MRT_rendering()
         GL_COLOR_ATTACHMENT1_EXT,
         GL_COLOR_ATTACHMENT2_EXT,
         GL_COLOR_ATTACHMENT3_EXT };
-    KVS_GL_CALL( glDrawBuffers( m_ntargets, buffers ) );
+//    KVS_GL_CALL( glDrawBuffers( m_ntargets, buffers ) );
+    kvs::OpenGL::SetDrawBuffers( m_ntargets, buffers );
 
     // Bind textures for reading.
     kvs::OpenGL::Enable( GL_TEXTURE_2D );
@@ -428,24 +429,24 @@ void HAVSVolumeRenderer::draw_initialization_pass()
     // Bind initializing fragment shader.
     m_shader_begin.bind();
 
-    KVS_GL_CALL( glMatrixMode( GL_MODELVIEW ) );
-    KVS_GL_CALL( glPushMatrix() );
-    KVS_GL_CALL( glLoadIdentity() );
-    KVS_GL_CALL( glMatrixMode( GL_PROJECTION ) );
-    KVS_GL_CALL( glPushMatrix() );
-    KVS_GL_CALL( glLoadIdentity() );
-    KVS_GL_CALL( gluOrtho2D( 0, BaseClass::windowWidth(), 0, BaseClass::windowHeight() ) );
+    const size_t width = BaseClass::windowWidth();
+    const size_t height = BaseClass::windowHeight();
+    kvs::OpenGL::WithPushedMatrix p1( GL_MODELVIEW );
+    p1.loadIdentity();
+    {
+        kvs::OpenGL::WithPushedMatrix p2( GL_PROJECTION );
+        p2.loadIdentity();
+        {
+            kvs::OpenGL::SetOrtho( 0, width, 0, height );
 
-    glBegin( GL_QUADS );
-    glVertex2f( 0, 0 );
-    glVertex2f( BaseClass::windowWidth(), 0 );
-    glVertex2f( BaseClass::windowWidth(), BaseClass::windowHeight() );
-    glVertex2f( 0, BaseClass::windowHeight() );
-    glEnd();
-
-    KVS_GL_CALL( glPopMatrix() );
-    KVS_GL_CALL( glMatrixMode( GL_MODELVIEW ) );
-    KVS_GL_CALL( glPopMatrix() );
+            glBegin( GL_QUADS );
+            glVertex2f( 0, 0 );
+            glVertex2f( width, 0 );
+            glVertex2f( width, height );
+            glVertex2f( 0, height );
+            glEnd();
+        }
+    }
 
     m_shader_begin.unbind();
 }
@@ -459,10 +460,9 @@ void HAVSVolumeRenderer::draw_geometry_pass()
     const float table_size = m_table.sizeDepth();
     const float edge_length = m_meshes->depthScale();
     const float bb_scale = std::sqrt( mat[0]*mat[0] + mat[1]*mat[1] + mat[2]*mat[2] );
-
     const float scale[4] = {
-        1.0f / static_cast<float>(BaseClass::windowWidth()),
-        1.0f / static_cast<float>(BaseClass::windowHeight()),
+        1.0f / static_cast<float>( BaseClass::windowWidth() ),
+        1.0f / static_cast<float>( BaseClass::windowHeight() ),
         ( 1.0f - 1.0f / table_size ) / ( edge_length * bb_scale ),
         1.0f / ( 2.0f * table_size )
     };
@@ -512,20 +512,19 @@ void HAVSVolumeRenderer::draw_geometry_pass()
 
 void HAVSVolumeRenderer::draw_flush_pass()
 {
-    // Bind flushing shader.
-    m_shader_end.bind();
-
     const float* mat = m_modelview_matrix;
     const float table_size = m_table.sizeDepth();
     const float edge_length = m_meshes->depthScale();
     const float bb_scale = std::sqrt( mat[0]*mat[0] + mat[1]*mat[1] + mat[2]*mat[2] );
-
     const float scale[4] = {
-        1.0f / static_cast<float>(BaseClass::windowWidth()),
-        1.0f / static_cast<float>(BaseClass::windowHeight()),
+        1.0f / static_cast<float>( BaseClass::windowWidth() ),
+        1.0f / static_cast<float>( BaseClass::windowHeight() ),
         ( 1.0f - 1.0f / table_size ) / ( edge_length * bb_scale ),
         1.0f / ( 2.0f * table_size )
     };
+
+    // Bind flushing shader.
+    m_shader_end.bind();
 
 //    m_shader_end.setUniformValuefv( "scale", scale, 4 );
     KVS_GL_CALL( glUniform4fv( m_shader_end.uniformLocation("scale"), 1, scale ) );
@@ -539,69 +538,66 @@ void HAVSVolumeRenderer::draw_flush_pass()
     }
 
     // Draw k-1 quads to flush A-buffer
-    KVS_GL_CALL( glMatrixMode( GL_MODELVIEW ) );
-    KVS_GL_CALL( glPushMatrix() );
-    KVS_GL_CALL( glLoadIdentity() );
-    KVS_GL_CALL( glMatrixMode( GL_PROJECTION ) );
-    KVS_GL_CALL( glPushMatrix() );
-    KVS_GL_CALL( glLoadIdentity() );
-    KVS_GL_CALL( gluOrtho2D( 0, BaseClass::windowWidth(), 0, BaseClass::windowHeight() ) );
-    for ( size_t i = 0; i < this->kBufferSize() - 1; i++ )
+    const size_t width = BaseClass::windowWidth();
+    const size_t height = BaseClass::windowHeight();
+    kvs::OpenGL::WithPushedMatrix p1( GL_MODELVIEW );
+    p1.loadIdentity();
     {
-        glBegin( GL_QUADS );
-        glVertex2f( 0, 0 );
-        glVertex2f( 0, BaseClass::windowHeight() );
-        glVertex2f( BaseClass::windowWidth(), BaseClass::windowHeight() );
-        glVertex2f( BaseClass::windowWidth(), 0 );
-        glEnd();
+        kvs::OpenGL::WithPushedMatrix p2( GL_PROJECTION );
+        p2.loadIdentity();
+        {
+            kvs::OpenGL::SetOrtho( 0, width, 0, height );
+            for ( size_t i = 0; i < this->kBufferSize() - 1; i++ )
+            {
+                glBegin( GL_QUADS );
+                glVertex2f( 0, 0 );
+                glVertex2f( 0, height );
+                glVertex2f( width, height );
+                glVertex2f( width, 0 );
+                glEnd();
+            }
+        }
     }
-    KVS_GL_CALL( glPopMatrix() );
-    KVS_GL_CALL( glMatrixMode( GL_MODELVIEW ) );
-    KVS_GL_CALL( glPopMatrix() );
 
     // Disable shaders
     m_shader_end.unbind();
 
-    KVS_GL_CALL( glFlush() );
+//    KVS_GL_CALL( glFlush() );
+    kvs::OpenGL::Flush();
 }
 
 void HAVSVolumeRenderer::draw_texture()
 {
-    KVS_GL_CALL( glDrawBuffer( GL_BACK ) );
-
     // Setup 2D view
-    KVS_GL_CALL( glMatrixMode( GL_MODELVIEW ) );
-    KVS_GL_CALL( glPushMatrix() );
-    KVS_GL_CALL( glLoadIdentity() );
-    KVS_GL_CALL( glMatrixMode( GL_PROJECTION ) );
-    KVS_GL_CALL( glPushMatrix() );
-    KVS_GL_CALL( glLoadIdentity() );
-    KVS_GL_CALL( gluOrtho2D( 0, BaseClass::windowWidth(), 0, BaseClass::windowHeight() ) );
+    const size_t width = BaseClass::windowWidth();
+    const size_t height = BaseClass::windowHeight();
+    kvs::OpenGL::WithPushedMatrix p1( GL_MODELVIEW );
+    p1.loadIdentity();
+    {
+        kvs::OpenGL::WithPushedMatrix p2( GL_PROJECTION );
+        p2.loadIdentity();
+        {
+            kvs::OpenGL::SetOrtho( 0, width, 0, height );
+            kvs::OpenGL::WithEnabled texture( GL_TEXTURE_2D );
+            kvs::OpenGL::WithEnabled blend( GL_BLEND );
+            {
+                kvs::OpenGL::SetDrawBuffer( GL_BACK );
+                kvs::OpenGL::SetBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_ALPHA );
 
-    kvs::OpenGL::Enable( GL_BLEND );
-    KVS_GL_CALL( glBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_ALPHA ) );
+                // Bind the last MRT texture.
+                kvs::Texture::Bind( m_mrt_texture[0], 0 );
+                KVS_GL_CALL( glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE ) );
 
-    // Bind last texture
-    kvs::Texture::Bind( m_mrt_texture[0], 0 );
-
-    kvs::OpenGL::Enable( GL_TEXTURE_2D );
-    KVS_GL_CALL( glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE ) );
-
-    // Draw texture using screen-aligned quad
-    glBegin(GL_QUADS);
-    glTexCoord2f( 0, 0 ); glVertex2f( 0, 0 );
-    glTexCoord2f( 1, 0 ); glVertex2f( BaseClass::windowWidth(), 0 );
-    glTexCoord2f( 1, 1 ); glVertex2f( BaseClass::windowWidth(), BaseClass::windowHeight() );
-    glTexCoord2f( 0, 1 ); glVertex2f( 0, BaseClass::windowHeight() );
-    glEnd();
-
-    KVS_GL_CALL( glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA ) );
-    kvs::OpenGL::Disable( GL_BLEND );
-    kvs::OpenGL::Disable( GL_TEXTURE_2D );
-
-    KVS_GL_CALL( glPopMatrix() );
-    KVS_GL_CALL( glMatrixMode( GL_MODELVIEW ) );
-    KVS_GL_CALL( glPopMatrix() );
+                // Draw texture using screen-aligned quad
+                glBegin( GL_QUADS );
+                glTexCoord2f( 0, 0 ); glVertex2f( 0, 0 );
+                glTexCoord2f( 1, 0 ); glVertex2f( width, 0 );
+                glTexCoord2f( 1, 1 ); glVertex2f( width, height );
+                glTexCoord2f( 0, 1 ); glVertex2f( 0, height );
+                glEnd();
+            }
+        }
+    }
 }
 
 HAVSVolumeRenderer::Meshes::Meshes():

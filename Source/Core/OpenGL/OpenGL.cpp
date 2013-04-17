@@ -273,6 +273,11 @@ GLint MaxRenderBufferSize()
     return kvs::OpenGL::Integer( GL_MAX_RENDERBUFFER_SIZE );
 }
 
+void Flush()
+{
+    KVS_GL_CALL( glFlush() );
+}
+
 void Enable( GLenum cap )
 {
     KVS_GL_CALL( glEnable( cap ) );
@@ -288,6 +293,205 @@ bool IsEnabled( GLenum cap )
     GLboolean result = GL_FALSE;
     KVS_GL_CALL( result = glIsEnabled( cap ) );
     return result == GL_TRUE;
+}
+
+void SetBlendFunc( GLenum sfactor, GLenum dfactor )
+{
+    KVS_GL_CALL( glBlendFunc( sfactor, dfactor ) );
+}
+
+void SetShadeModel( GLenum mode )
+{
+    KVS_GL_CALL( glShadeModel( mode ) );
+}
+
+void SetMatrixMode( GLenum mode )
+{
+    KVS_GL_CALL( glMatrixMode( mode ) );
+}
+
+void SetDrawBuffer( GLenum mode )
+{
+    KVS_GL_CALL( glDrawBuffer( mode ) );
+}
+
+void SetDrawBuffers( GLsizei n, const GLenum* bufs )
+{
+    KVS_GL_CALL( glDrawBuffers( n, bufs ) );
+}
+
+void SetViewport( GLint x, GLint y, GLsizei width, GLsizei height )
+{
+    KVS_GL_CALL( glViewport( x, y, width, height ) );
+}
+
+void SetOrtho( GLdouble left, GLdouble right, GLdouble bottom, GLdouble top, GLdouble near, GLdouble far )
+{
+    KVS_GL_CALL( glOrtho( left, right, bottom, top, near, far ) );
+}
+
+void SetOrtho( GLdouble left, GLdouble right, GLdouble bottom, GLdouble top )
+{
+    KVS_GL_CALL( gluOrtho2D( left, right, bottom, top ) );
+}
+
+void SetPerspective( GLdouble fovy, GLdouble aspect, GLdouble near, GLdouble far )
+{
+    KVS_GL_CALL( gluPerspective( fovy, aspect, near, far ) );
+}
+
+void SetFrustum( GLdouble left, GLdouble right, GLdouble bottom, GLdouble top, GLdouble near, GLdouble far )
+{
+    KVS_GL_CALL( glFrustum( left, right, bottom, top, near, far ) );
+}
+
+void GetModelViewMatrix( GLfloat* params )
+{
+    kvs::OpenGL::GetFloatv( GL_MODELVIEW_MATRIX, params );
+}
+
+void GetProjectionMatrix( GLfloat* params )
+{
+    kvs::OpenGL::GetFloatv( GL_PROJECTION_MATRIX, params );
+}
+
+void GetViewport( GLint* params )
+{
+    kvs::OpenGL::GetIntegerv( GL_VIEWPORT, params );
+}
+
+void LoadIdentity()
+{
+    KVS_GL_CALL( glLoadIdentity() );
+}
+
+void LoadMatrix( const GLfloat* m )
+{
+    KVS_GL_CALL( glLoadMatrixf( m ) );
+}
+
+void LoadMatrix( const GLdouble* m )
+{
+    KVS_GL_CALL( glLoadMatrixd( m ) );
+}
+
+void MultMatrix( const GLfloat* m )
+{
+    KVS_GL_CALL( glMultMatrixf( m ) );
+}
+
+void MultMatrix( const GLdouble* m )
+{
+    KVS_GL_CALL( glMultMatrixd( m ) );
+}
+
+void Rotate( GLfloat angle, GLfloat x, GLfloat y, GLfloat z )
+{
+    KVS_GL_CALL( glRotatef( angle, x, y, z ) );
+}
+
+void Scale( GLfloat x, GLfloat y, GLfloat z )
+{
+    KVS_GL_CALL( glScalef( x, y, z ) );
+}
+
+void Translate( GLfloat x, GLfloat y, GLfloat z )
+{
+    KVS_GL_CALL( glTranslatef( x, y, z ) );
+}
+
+void PushMatrix()
+{
+    KVS_GL_CALL( glPushMatrix() );
+}
+
+void PopMatrix()
+{
+    KVS_GL_CALL( glPopMatrix() );
+}
+
+void PushAttrib( GLbitfield mask )
+{
+    KVS_GL_CALL( glPushAttrib( mask ) );
+}
+
+void PopAttrib()
+{
+    KVS_GL_CALL( glPopAttrib() );
+}
+
+WithPushedMatrix::WithPushedMatrix( GLenum mode )
+{
+    m_current_mode = kvs::OpenGL::Integer( GL_MATRIX_MODE );
+    kvs::OpenGL::SetMatrixMode( mode );
+    kvs::OpenGL::PushMatrix();
+}
+
+WithPushedMatrix::~WithPushedMatrix()
+{
+    kvs::OpenGL::PopMatrix();
+    kvs::OpenGL::SetMatrixMode( m_current_mode );
+}
+
+void WithPushedMatrix::loadIdentity()
+{
+    kvs::OpenGL::LoadIdentity();
+}
+
+void WithPushedMatrix::loadMatrix( const GLfloat* m )
+{
+    kvs::OpenGL::LoadMatrix( m );
+}
+
+void WithPushedMatrix::loadMatrix( const GLdouble* m )
+{
+    kvs::OpenGL::LoadMatrix( m );
+}
+
+void WithPushedMatrix::multMatrix( const GLfloat* m )
+{
+    kvs::OpenGL::MultMatrix( m );
+}
+
+void WithPushedMatrix::multMatrix( const GLdouble* m )
+{
+    kvs::OpenGL::MultMatrix( m );
+}
+
+void WithPushedMatrix::rotate( GLfloat angle, GLfloat x, GLfloat y, GLfloat z )
+{
+    kvs::OpenGL::Rotate( angle, x, y, z );
+}
+
+void WithPushedMatrix::scale( GLfloat x, GLfloat y, GLfloat z )
+{
+    kvs::OpenGL::Scale( x, y, z );
+}
+
+void WithPushedMatrix::translate( GLfloat x, GLfloat y, GLfloat z )
+{
+    kvs::OpenGL::Translate( x, y, z );
+}
+
+WithPushedAttrib::WithPushedAttrib( GLbitfield mask )
+{
+    kvs::OpenGL::PushAttrib( mask );
+}
+
+WithPushedAttrib::~WithPushedAttrib()
+{
+    kvs::OpenGL::PopAttrib();
+}
+
+WithEnabled::WithEnabled( GLenum cap ):
+    m_cap( cap )
+{
+    kvs::OpenGL::Enable( cap );
+}
+
+WithEnabled::~WithEnabled()
+{
+    kvs::OpenGL::Disable( m_cap );
 }
 
 void ActivateTextureUnit( GLint unit )

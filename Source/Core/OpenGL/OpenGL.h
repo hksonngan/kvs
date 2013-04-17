@@ -55,11 +55,76 @@ GLint MaxCombinedTextureImageUnits();
 GLint MaxColorAttachments();
 GLint MaxRenderBufferSize();
 
+void Flush();
+
 void Enable( GLenum cap );
 void Disable( GLenum cap );
 bool IsEnabled( GLenum cap );
-void ActivateTextureUnit( GLint unit );
 
+void SetBlendFunc( GLenum sfactor, GLenum dfactor );
+void SetShadeModel( GLenum mode );
+void SetMatrixMode( GLenum mode );
+void SetDrawBuffer( GLenum mode );
+void SetDrawBuffers( GLsizei n, const GLenum* bufs );
+
+void SetViewport( GLint x, GLint y, GLsizei width, GLsizei height );
+void SetOrtho( GLdouble left, GLdouble right, GLdouble bottom, GLdouble top, GLdouble near, GLdouble far );
+void SetOrtho( GLdouble left, GLdouble right, GLdouble bottom, GLdouble top );
+void SetPerspective( GLdouble fovy, GLdouble aspect, GLdouble near, GLdouble far );
+void SetFrustum( GLdouble left, GLdouble right, GLdouble bottom, GLdouble top, GLdouble near, GLdouble far );
+
+void GetModelViewMatrix( GLfloat* params );
+void GetModelViewMatrix( GLdouble* params );
+void GetProjectionMatrix( GLfloat* params );
+void GetProjectionMatrix( GLdouble* params );
+void GetViewport( GLint* params );
+
+void LoadIdentity();
+void LoadMatrix( const GLfloat* m );
+void LoadMatrix( const GLdouble* m );
+void MultMatrix( const GLfloat* m );
+void MultMatrix( const GLdouble* m );
+void Rotate( GLfloat angle, GLfloat x, GLfloat y, GLfloat z );
+void Scale( GLfloat x, GLfloat y, GLfloat z );
+void Translate( GLfloat x, GLfloat y, GLfloat z );
+
+void PushMatrix();
+void PopMatrix();
+void PushAttrib( GLbitfield mask );
+void PopAttrib();
+
+class WithPushedMatrix
+{
+    GLint m_current_mode;
+public:
+    WithPushedMatrix( GLenum mode );
+    ~WithPushedMatrix();
+    void loadIdentity();
+    void loadMatrix( const GLfloat* m );
+    void loadMatrix( const GLdouble* m );
+    void multMatrix( const GLfloat* m );
+    void multMatrix( const GLdouble* m );
+    void rotate( GLfloat angle, GLfloat x, GLfloat y, GLfloat z );
+    void scale( GLfloat x, GLfloat y, GLfloat z );
+    void translate( GLfloat x, GLfloat y, GLfloat z );
+};
+
+class WithPushedAttrib
+{
+public:
+    WithPushedAttrib( GLbitfield mask );
+    ~WithPushedAttrib();
+};
+
+class WithEnabled
+{
+    GLenum m_cap;
+public:
+    WithEnabled( GLenum cap );
+    ~WithEnabled();
+};
+
+/*KVS_DEPRECATED*/ void ActivateTextureUnit( GLint unit );
 /*KVS_DEPRECATED*/ inline std::string ShaderVersion() { return GLSLVersion(); }
 /*KVS_DEPRECATED*/ inline bool CheckError() { return !HasError(); }
 
