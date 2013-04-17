@@ -56,6 +56,10 @@ public:
     static void Unbind( const Texture& texture, const GLint unit );
     static void Unbind( const GLenum target );
     static void SelectActiveUnit( const GLint unit );
+    static void SetEnv( GLenum pname, GLfloat param );
+    static void SetEnv( GLenum pname, GLint param );
+    static void SetEnv( GLenum pname, const GLfloat* params );
+    static void SetEnv( GLenum pname, const GLint* params );
 
 public:
 

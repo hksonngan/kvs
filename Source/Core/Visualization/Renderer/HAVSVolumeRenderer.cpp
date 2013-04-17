@@ -137,9 +137,9 @@ void HAVSVolumeRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs
 
     BaseClass::startTimer();
 
-    KVS_GL_CALL( glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT | GL_LIGHTING_BIT ) );
-    KVS_GL_CALL( glShadeModel( GL_SMOOTH ) );
-    KVS_GL_CALL( glGetFloatv( GL_MODELVIEW_MATRIX, m_modelview_matrix ) );
+    kvs::OpenGL::PushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT | GL_LIGHTING_BIT );
+    kvs::OpenGL::SetShadeModel( GL_SMOOTH );
+    kvs::OpenGL::GetModelViewMatrix( m_modelview_matrix );
 
     kvs::OpenGL::Disable( GL_DEPTH_TEST );
     kvs::OpenGL::Disable( GL_LIGHTING );
@@ -191,8 +191,8 @@ void HAVSVolumeRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs
     this->disable_MRT_rendering();
     this->draw_texture();
 
-    KVS_GL_CALL( glPopAttrib() );
-    KVS_GL_CALL( glFinish() );
+    kvs::OpenGL::PopAttrib();
+    kvs::OpenGL::Finish();
 
     BaseClass::stopTimer();
 }
@@ -364,7 +364,6 @@ void HAVSVolumeRenderer::enable_MRT_rendering()
         GL_COLOR_ATTACHMENT1_EXT,
         GL_COLOR_ATTACHMENT2_EXT,
         GL_COLOR_ATTACHMENT3_EXT };
-//    KVS_GL_CALL( glDrawBuffers( m_ntargets, buffers ) );
     kvs::OpenGL::SetDrawBuffers( m_ntargets, buffers );
 
     // Bind textures for reading.
@@ -562,7 +561,6 @@ void HAVSVolumeRenderer::draw_flush_pass()
     // Disable shaders
     m_shader_end.unbind();
 
-//    KVS_GL_CALL( glFlush() );
     kvs::OpenGL::Flush();
 }
 
@@ -586,7 +584,7 @@ void HAVSVolumeRenderer::draw_texture()
 
                 // Bind the last MRT texture.
                 kvs::Texture::Bind( m_mrt_texture[0], 0 );
-                KVS_GL_CALL( glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE ) );
+                kvs::Texture::SetEnv( GL_TEXTURE_ENV_MODE, GL_REPLACE );
 
                 // Draw texture using screen-aligned quad
                 glBegin( GL_QUADS );

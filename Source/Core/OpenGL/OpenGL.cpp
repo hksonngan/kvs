@@ -278,6 +278,11 @@ void Flush()
     KVS_GL_CALL( glFlush() );
 }
 
+void Finish()
+{
+    KVS_GL_CALL( glFinish() );
+}
+
 void Enable( GLenum cap )
 {
     KVS_GL_CALL( glEnable( cap ) );

@@ -56,6 +56,7 @@ GLint MaxColorAttachments();
 GLint MaxRenderBufferSize();
 
 void Flush();
+void Finish();
 
 void Enable( GLenum cap );
 void Disable( GLenum cap );

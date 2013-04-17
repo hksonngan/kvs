@@ -47,6 +47,26 @@ void Texture::SelectActiveUnit( const GLint unit )
     KVS_GL_CALL( glActiveTexture( GL_TEXTURE0 + unit ) );
 }
 
+void Texture::SetEnv( GLenum pname, GLfloat param )
+{
+    KVS_GL_CALL( glTexEnvf( GL_TEXTURE_ENV, pname, param ) );
+}
+
+void Texture::SetEnv( GLenum pname, GLint param )
+{
+    KVS_GL_CALL( glTexEnvi( GL_TEXTURE_ENV, pname, param ) );
+}
+
+void Texture::SetEnv( GLenum pname, const GLfloat* params )
+{
+    KVS_GL_CALL( glTexEnvfv( GL_TEXTURE_ENV, pname, params ) );
+}
+
+void Texture::SetEnv( GLenum pname, const GLint* params )
+{
+    KVS_GL_CALL( glTexEnviv( GL_TEXTURE_ENV, pname, params ) );
+}
+
 /*==========================================================================*/
 /**
  *  Constructor.
