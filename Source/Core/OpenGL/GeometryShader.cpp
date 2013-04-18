@@ -13,7 +13,6 @@
  */
 /*****************************************************************************/
 #include "GeometryShader.h"
-#include <kvs/Message>
 
 
 namespace kvs
@@ -27,10 +26,8 @@ GeometryShader::GeometryShader():
 GeometryShader::GeometryShader( const kvs::ShaderSource& source ):
     kvs::ShaderObject( GL_GEOMETRY_SHADER )
 {
-    if ( !SuperClass::create( source ) )
-    {
-        kvsMessageError("Cannot create a geometry shader.");
-    }
+    SuperClass::create();
+    SuperClass::setSource( source );
 }
 
 } // end of namespace kvs

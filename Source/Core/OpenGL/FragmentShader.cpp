@@ -13,7 +13,6 @@
  */
 /*****************************************************************************/
 #include "FragmentShader.h"
-#include <kvs/Message>
 
 
 namespace kvs
@@ -38,10 +37,8 @@ FragmentShader::FragmentShader():
 FragmentShader::FragmentShader( const kvs::ShaderSource& source ):
     kvs::ShaderObject( GL_FRAGMENT_SHADER )
 {
-    if ( !SuperClass::create( source ) )
-    {
-        kvsMessageError("Cannot create a fragment shader.");
-    }
+    SuperClass::create();
+    SuperClass::setSource( source );
 }
 
 } // end of namespace kvs

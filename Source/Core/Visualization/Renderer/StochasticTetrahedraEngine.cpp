@@ -586,8 +586,8 @@ void StochasticTetrahedraEngine::create_shaders(
     const kvs::ShaderSource& fragment_source )
 {
     // Vertex shader.
-    kvs::VertexShader vertex_shader;
-    if ( !vertex_shader.create( vertex_source ) )
+    kvs::VertexShader vertex_shader( vertex_source );
+    if ( !vertex_shader.compile() )
     {
         GLenum error = glGetError();
         kvsMessageError( "VertexShader compile failed: %s(%d)\n", gluErrorString(error), error );
@@ -596,8 +596,8 @@ void StochasticTetrahedraEngine::create_shaders(
     }
 
     // Geometry shader.
-    kvs::GeometryShader geometry_shader;
-    if ( !geometry_shader.create( geometry_source ) )
+    kvs::GeometryShader geometry_shader( geometry_source );
+    if ( !geometry_shader.compile() )
     {
         GLenum error = glGetError();
         kvsMessageError( "GeometryShader compile failed: %s(%d)\n", gluErrorString(error), error );
@@ -606,8 +606,8 @@ void StochasticTetrahedraEngine::create_shaders(
     }
 
     // Fragment shader.
-    kvs::FragmentShader fragment_shader;
-    if ( !fragment_shader.create( fragment_source ) )
+    kvs::FragmentShader fragment_shader( fragment_source );
+    if ( !fragment_shader.compile() )
     {
         GLenum error = glGetError();
         kvsMessageError( "FragmentShader compile failed: %s(%d)\n", gluErrorString(error), error );

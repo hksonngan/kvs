@@ -13,7 +13,6 @@
  */
 /*****************************************************************************/
 #include "VertexShader.h"
-#include <kvs/Message>
 
 
 namespace kvs
@@ -38,10 +37,9 @@ VertexShader::VertexShader():
 VertexShader::VertexShader( const kvs::ShaderSource& source ):
     kvs::ShaderObject( GL_VERTEX_SHADER )
 {
-    if ( !SuperClass::create( source ) )
-    {
-        kvsMessageError("Cannot create a vertex shader.");
-    }
+    SuperClass::create();
+    SuperClass::setSource( source );
 }
+
 
 } // end of namespace kvs

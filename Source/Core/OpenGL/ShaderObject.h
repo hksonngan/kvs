@@ -17,6 +17,7 @@
 
 #include <kvs/ShaderSource>
 #include <kvs/GL>
+#include <kvs/Deprecated>
 
 
 namespace kvs
@@ -34,27 +35,34 @@ protected:
     GLuint m_id; ///< shader ID
     GLenum m_type; ///< shader type (GL_VERTEX_SHADER, GL_GEOMETRY_SHADER or GL_FRAGMENT_SHADER)
 
-protected:
-
-    ShaderObject();
-
 public:
 
     ShaderObject( const GLenum type );
     virtual ~ShaderObject();
 
-public:
-
     GLuint id() const;
-    std::string log();
-    std::string source();
-    void setSource( const kvs::ShaderSource& source );
+    std::string log() const;
+    std::string source() const;
+    void setSource( const kvs::ShaderSource& source ) const;
 
     void create();
-    bool create( const kvs::ShaderSource& source );
-    void clear();
-    bool compile();
-    bool compile( const kvs::ShaderSource& source );
+    void release();
+    bool compile() const;
+    bool compile( const kvs::ShaderSource& source ) const;
+
+    bool isCreated() const;
+    bool isValid() const;
+    bool isCompiled() const;
+
+protected:
+
+    ShaderObject();
+    void createID();
+    void deleteID();
+
+public:
+    KVS_DEPRECATED( bool create( const kvs::ShaderSource& source ) ) { this->create(); return this->compile( source ); }
+    KVS_DEPRECATED( void clear() ) { this->release(); }
 };
 
 } // end of namespace kvs

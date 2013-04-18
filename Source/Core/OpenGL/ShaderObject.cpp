@@ -15,14 +15,12 @@
 #include "ShaderObject.h"
 #include <kvs/DebugNew>
 #include <kvs/Message>
+#include <kvs/Assert>
+#include <vector>
 
 
 namespace kvs
 {
-
-ShaderObject::ShaderObject()
-{
-}
 
 ShaderObject::ShaderObject( const GLenum type ):
     m_id( 0 ),
@@ -32,7 +30,7 @@ ShaderObject::ShaderObject( const GLenum type ):
 
 ShaderObject::~ShaderObject()
 {
-    this->clear();
+    this->release();
 }
 
 GLuint ShaderObject::id() const
@@ -40,91 +38,99 @@ GLuint ShaderObject::id() const
     return m_id;
 }
 
-std::string ShaderObject::log()
+std::string ShaderObject::log() const
 {
+    KVS_ASSERT( this->isCreated() );
     GLint length = 0;
-    glGetShaderiv( m_id, GL_INFO_LOG_LENGTH, &length );
-    if ( length == 0 ) return( "" );
-
-    char* buffer = new char [ length ];
-    if ( !buffer )
-    {
-        kvsMessageError("Cannot allocate memory for the log.");
-        return( "" );
-    }
-
-    GLsizei buffer_size = 0;
-    glGetShaderInfoLog( m_id, length, &buffer_size, buffer );
-
-    std::string log( buffer );
-    delete [] buffer;
-
-    return log;
+    KVS_GL_CALL( glGetShaderiv( m_id, GL_INFO_LOG_LENGTH, &length ) );
+    if ( length == 0 ) return "";
+    std::vector<char> buffer( length );
+    KVS_GL_CALL( glGetShaderInfoLog( m_id, length, NULL, &buffer[0] ) );
+    return std::string( buffer.begin(), buffer.end() );
 }
 
-std::string ShaderObject::source()
+std::string ShaderObject::source() const
 {
+    KVS_ASSERT( this->isCreated() );
     GLint length = 0;
-    glGetShaderiv( m_id, GL_SHADER_SOURCE_LENGTH, &length );
-    if ( length == 0 ) return( "" );
-
-    char* buffer = new char [ length ];
-    if ( !buffer )
-    {
-        kvsMessageError("Cannot allocate memory for the shader source.");
-        return( "" );
-    }
-
-    GLsizei buffer_size = 0;
-    glGetShaderSource( m_id, length, &buffer_size, buffer );
-
-    std::string source( buffer );
-    delete [] buffer;
-
-    return( source );
+    KVS_GL_CALL( glGetShaderiv( m_id, GL_SHADER_SOURCE_LENGTH, &length ) );
+    if ( length == 0 ) return "";
+    std::vector<char> buffer( length );
+    KVS_GL_CALL( glGetShaderSource( m_id, length, NULL, &buffer[0] ) );
+    return std::string( buffer.begin(), buffer.end() );
 }
 
-void ShaderObject::setSource( const kvs::ShaderSource& source )
+void ShaderObject::setSource( const kvs::ShaderSource& source ) const
 {
+    KVS_ASSERT( this->isCreated() );
     const char* code = source.code().c_str();
-    glShaderSource( m_id, 1, &code, 0 );
+    KVS_GL_CALL( glShaderSource( m_id, 1, &code, 0 ) );
 }
 
 void ShaderObject::create()
 {
-    if( !glIsShader( m_id ) ) m_id = glCreateShader( m_type );
+    this->createID();
 }
 
-bool ShaderObject::create( const kvs::ShaderSource& source )
+void ShaderObject::release()
 {
-    this->create();
-
-    return( this->compile( source ) );
+    this->deleteID();
 }
 
-void ShaderObject::clear()
+bool ShaderObject::compile() const
 {
-    if ( glIsShader( m_id ) ) glDeleteShader( m_id );
-
-    m_id = 0;
-    m_type = 0;
+    KVS_ASSERT( this->isCreated() );
+    KVS_GL_CALL( glCompileShader( m_id ) );
+    return this->isCompiled();
 }
 
-bool ShaderObject::compile()
+bool ShaderObject::compile( const kvs::ShaderSource& source ) const
 {
-    glCompileShader( m_id );
+    this->setSource( source );
+    return this->compile();
+}
 
+bool ShaderObject::isCreated() const
+{
+    return m_id > 0;
+}
+
+bool ShaderObject::isValid() const
+{
+    GLboolean result;
+    KVS_GL_CALL( result = glIsShader( m_id ) );
+    return result == GL_TRUE;
+}
+
+bool ShaderObject::isCompiled() const
+{
     GLint error = 0;
-    glGetShaderiv( m_id, GL_COMPILE_STATUS, &error );
-
+    KVS_GL_CALL( glGetShaderiv( m_id, GL_COMPILE_STATUS, &error ) );
     return error == GL_TRUE;
 }
 
-bool ShaderObject::compile( const kvs::ShaderSource& source )
+void ShaderObject::createID()
 {
-    this->setSource( source );
-
-    return this->compile();
+    if ( !this->isValid() )
+    {
+        KVS_GL_CALL( m_id = glCreateShader( m_type ) );
+    }
 }
+
+void ShaderObject::deleteID()
+{
+    if ( this->isValid() )
+    {
+        KVS_GL_CALL( glDeleteShader( m_id ) );
+    }
+    m_id = 0;
+}
+
+
+//bool ShaderObject::create( const kvs::ShaderSource& source )
+//{
+//    this->create();
+//    return( this->compile( source ) );
+//}
 
 } // end of namespace kvs
