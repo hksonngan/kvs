@@ -59,7 +59,7 @@ GLuint ProgramObject::id() const
  *  @return information log
  */
 /*===========================================================================*/
-std::string ProgramObject::log()
+std::string ProgramObject::log() const
 {
     GLint length = 0;
     glGetProgramiv( m_id, GL_INFO_LOG_LENGTH, &length );
@@ -133,9 +133,88 @@ void ProgramObject::detach( const kvs::ShaderObject& shader ) const
 bool ProgramObject::link() const
 {
     KVS_GL_CALL( glLinkProgram( m_id ) );
-    GLint error = 0;
-    KVS_GL_CALL( glGetProgramiv( m_id, GL_LINK_STATUS, &error ) );
-    return error == GL_TRUE;
+    return this->isLinked();
+}
+
+void ProgramObject::build( const kvs::ShaderSource& vert_src, const kvs::ShaderSource& frag_src )
+{
+    kvs::VertexShader vert( vert_src );
+    if ( !vert.compile() )
+    {
+        GLenum error = glGetError();
+        kvsMessageError( "VertexShader compile failed: %s(%d)\n", gluErrorString(error), error );
+        std::cout << "error log:" << std::endl;
+        std::cout << vert.log() << std::endl;
+        KVS_THROW( kvs::OpenGLException, "VertexShader compile failed" );
+    }
+
+    kvs::FragmentShader frag( frag_src );
+    if ( !frag.compile() )
+    {
+        GLenum error = glGetError();
+        kvsMessageError( "FragmentShader compile failed: %s(%d)\n", gluErrorString(error), error );
+        std::cout << "error log:" << std::endl;
+        std::cout << frag.log() << std::endl;
+        KVS_THROW( kvs::OpenGLException, "FragmentShader compile failed" );
+    }
+
+    this->create();
+    this->attach( vert );
+    this->attach( frag );
+    if ( !this->link() )
+    {
+        GLenum error = glGetError();
+        kvsMessageError( "ProgramObject link failed: %s(%d)\n", gluErrorString(error), error );
+        std::cout << "error log:" << std::endl;
+        std::cout << this->log() << std::endl;
+        KVS_THROW( kvs::OpenGLException, "ProgramObject link failed" );
+    }
+}
+
+void ProgramObject::build( const kvs::ShaderSource& vert_src, const kvs::ShaderSource& geom_src, const kvs::ShaderSource& frag_src )
+{
+    kvs::VertexShader vert( vert_src );
+    if ( !vert.compile() )
+    {
+        GLenum error = glGetError();
+        kvsMessageError( "VertexShader compile failed: %s(%d)\n", gluErrorString(error), error );
+        std::cout << "error log:" << std::endl;
+        std::cout << vert.log() << std::endl;
+        KVS_THROW( kvs::OpenGLException, "VertexShader compile failed" );
+    }
+
+    kvs::GeometryShader geom( geom_src );
+    if ( !geom.compile() )
+    {
+        GLenum error = glGetError();
+        kvsMessageError( "GeometryShader compile failed: %s(%d)\n", gluErrorString(error), error );
+        std::cout << "error log:" << std::endl;
+        std::cout << geom.log() << std::endl;
+        KVS_THROW( kvs::OpenGLException, "GeometryShader compile failed" );
+    }
+
+    kvs::FragmentShader frag( frag_src );
+    if ( !frag.compile() )
+    {
+        GLenum error = glGetError();
+        kvsMessageError( "FragmentShader compile failed: %s(%d)\n", gluErrorString(error), error );
+        std::cout << "error log:" << std::endl;
+        std::cout << frag.log() << std::endl;
+        KVS_THROW( kvs::OpenGLException, "FragmentShader compile failed" );
+    }
+
+    this->create();
+    this->attach( vert );
+    this->attach( geom );
+    this->attach( frag );
+    if ( !this->link() )
+    {
+        GLenum error = glGetError();
+        kvsMessageError( "ProgramObject link failed: %s(%d)\n", gluErrorString(error), error );
+        std::cout << "error log:" << std::endl;
+        std::cout << this->log() << std::endl;
+        KVS_THROW( kvs::OpenGLException, "ProgramObject link failed" );
+    }
 }
 
 /*===========================================================================*/
@@ -195,7 +274,6 @@ bool ProgramObject::isLinked() const
 /*===========================================================================*/
 GLint ProgramObject::uniformLocation( const GLchar *name )
 {
-//    return glGetUniformLocation( m_id, name );
     GLint result = 0;
     KVS_GL_CALL( result = glGetUniformLocation( m_id, name ) );
     return result;

@@ -17,6 +17,7 @@
 
 #include <kvs/ShaderObject>
 #include <kvs/VertexShader>
+#include <kvs/GeometryShader>
 #include <kvs/FragmentShader>
 #include <kvs/Vector2>
 #include <kvs/Vector3>
@@ -52,13 +53,15 @@ public:
     virtual ~ProgramObject();
 
     GLuint id() const;
-    std::string log();
+    std::string log() const;
 
     void create();
     void release();
     void attach( const kvs::ShaderObject& shader ) const;
     void detach( const kvs::ShaderObject& shader ) const;
     bool link() const;
+    void build( const kvs::ShaderSource& vert_src, const kvs::ShaderSource& frag_src );
+    void build( const kvs::ShaderSource& vert_src, const kvs::ShaderSource& geom_src, const kvs::ShaderSource& frag_src );
 
     void bind() const;
     void unbind() const;

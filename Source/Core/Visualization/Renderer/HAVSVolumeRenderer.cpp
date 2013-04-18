@@ -30,6 +30,8 @@
 #include <set>
 #include <kvs/Coordinate>
 #include <kvs/OpenGL>
+#include <kvs/VertexShader>
+#include <kvs/FragmentShader>
 
 
 namespace
@@ -115,7 +117,6 @@ HAVSVolumeRenderer::HAVSVolumeRenderer():
 HAVSVolumeRenderer::HAVSVolumeRenderer( kvs::UnstructuredVolumeObject* volume, const size_t k_size )
 {
     BaseClass::setShader( kvs::Shader::Lambert() );
-
     this->initialize();
     this->attachVolumeObject( volume );
     this->setKBufferSize( k_size );
@@ -139,7 +140,7 @@ void HAVSVolumeRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs
 
     kvs::OpenGL::PushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT | GL_LIGHTING_BIT );
     kvs::OpenGL::SetShadeModel( GL_SMOOTH );
-    kvs::OpenGL::GetModelViewMatrix( m_modelview_matrix );
+    kvs::OpenGL::GetModelViewMatrix( m_modelview );
 
     kvs::OpenGL::Disable( GL_DEPTH_TEST );
     kvs::OpenGL::Disable( GL_LIGHTING );
@@ -150,10 +151,10 @@ void HAVSVolumeRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs
     if ( BaseClass::windowWidth() == 0 && BaseClass::windowHeight() == 0 )
     {
         BaseClass::setWindowSize( camera->windowWidth(), camera->windowHeight() );
-        this->initialize_geometry();
-        this->initialize_shader();
-        this->initialize_table();
-        this->initialize_framebuffer();
+        this->create_geometry();
+        this->create_shader();
+        this->create_table();
+        this->create_framebuffer();
     }
 
     // Following processes are executed when the window size is changed.
@@ -161,26 +162,7 @@ void HAVSVolumeRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs
          ( BaseClass::windowHeight() != camera->windowHeight() ) )
     {
         BaseClass::setWindowSize( camera->windowWidth(), camera->windowHeight() );
-
-        // Reallocate textures
-        for ( size_t i = 0; i < m_ntargets; i++ )
-        {
-            m_mrt_texture[i].release();
-            m_mrt_texture[i].create( BaseClass::windowWidth(), BaseClass::windowHeight() );
-        }
-
-        // Reset attached textures.
-        m_mrt_framebuffer.detachColorTexture( 0 );
-        m_mrt_framebuffer.detachColorTexture( 1 );
-        m_mrt_framebuffer.attachColorTexture( m_mrt_texture[0], 0 );
-        m_mrt_framebuffer.attachColorTexture( m_mrt_texture[1], 1 );
-        if ( m_ntargets == 4 )
-        {
-            m_mrt_framebuffer.detachColorTexture( 2 );
-            m_mrt_framebuffer.detachColorTexture( 3 );
-            m_mrt_framebuffer.attachColorTexture( m_mrt_texture[2], 2 );
-            m_mrt_framebuffer.attachColorTexture( m_mrt_texture[3], 3 );
-        }
+        this->update_framebuffer();
    }
 
     this->sort_geometry( camera );
@@ -200,8 +182,6 @@ void HAVSVolumeRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs
 void HAVSVolumeRenderer::initialize()
 {
     BaseClass::setWindowSize( 0, 0 );
-
-    // Initialize in this class.
     m_table.setTableSize( 128, 128 );
     m_k_size = 2;
     m_meshes = NULL;
@@ -221,32 +201,7 @@ void HAVSVolumeRenderer::attachVolumeObject( const kvs::UnstructuredVolumeObject
     }
 }
 
-void HAVSVolumeRenderer::setKBufferSize( const size_t k_size )
-{
-    m_k_size = k_size;
-}
-
-void HAVSVolumeRenderer::enableVBO()
-{
-    m_enable_vbo = true;
-}
-
-void HAVSVolumeRenderer::disableVBO()
-{
-    m_enable_vbo = false;
-}
-
-size_t HAVSVolumeRenderer::kBufferSize() const
-{
-    return m_k_size;
-}
-
-bool HAVSVolumeRenderer::isEnabledVBO() const
-{
-    return m_enable_vbo;
-}
-
-void HAVSVolumeRenderer::initialize_geometry()
+void HAVSVolumeRenderer::create_geometry()
 {
     if ( this->isEnabledVBO() )
     {
@@ -270,44 +225,31 @@ void HAVSVolumeRenderer::initialize_geometry()
     }
 }
 
-void HAVSVolumeRenderer::initialize_shader()
+void HAVSVolumeRenderer::create_shader()
 {
-    const std::string vert_code_begin = "HAVS_begin.vert";
-    const std::string vert_code_kbuffer = "HAVS_kbuffer.vert";
-
+    kvs::ShaderSource vert_begin( "HAVS_begin.vert" );
+    kvs::ShaderSource vert_kbuffer( "HAVS_kbuffer.vert" );
     if ( this->kBufferSize() == 2 )
     {
-        const std::string frag_code_begin = "HAVS_k2_begin.frag";
-        const std::string frag_code_end = "HAVS_k2_end.frag";
-        const std::string frag_code_kbuffer = "HAVS_k2.frag";
-
-        kvs::ShaderSource vert_begin( vert_code_begin );
-        kvs::ShaderSource vert_kbuffer( vert_code_kbuffer );
-        kvs::ShaderSource frag_begin( frag_code_begin );
-        kvs::ShaderSource frag_end( frag_code_end );
-        kvs::ShaderSource frag_kbuffer( frag_code_kbuffer );
-        m_shader_begin.create( vert_begin, frag_begin );
-        m_shader_kbuffer.create( vert_kbuffer, frag_kbuffer );
-        m_shader_end.create( vert_kbuffer, frag_end );
+        kvs::ShaderSource frag_begin( "HAVS_k2_begin.frag" );
+        kvs::ShaderSource frag_end( "HAVS_k2_end.frag" );
+        kvs::ShaderSource frag_kbuffer( "HAVS_k2.frag" );
+        m_shader_begin.build( vert_begin, frag_begin );
+        m_shader_kbuffer.build( vert_kbuffer, frag_kbuffer );
+        m_shader_end.build( vert_kbuffer, frag_end );
     }
     else
     {
-        const std::string frag_code_begin = "HAVS_k6_begin.frag";
-        const std::string frag_code_end = "HAVS_k6_end.frag";
-        const std::string frag_code_kbuffer = "HAVS_k6.frag";
-
-        kvs::ShaderSource vert_begin( vert_code_begin );
-        kvs::ShaderSource vert_kbuffer( vert_code_kbuffer );
-        kvs::ShaderSource frag_begin( frag_code_begin );
-        kvs::ShaderSource frag_end( frag_code_end );
-        kvs::ShaderSource frag_kbuffer( frag_code_kbuffer );
-        m_shader_begin.create( vert_begin, frag_begin );
-        m_shader_kbuffer.create( vert_kbuffer, frag_kbuffer );
-        m_shader_end.create( vert_kbuffer, frag_end );
+        kvs::ShaderSource frag_begin( "HAVS_k6_begin.frag" );
+        kvs::ShaderSource frag_end( "HAVS_k6_end.frag" );
+        kvs::ShaderSource frag_kbuffer( "HAVS_k6.frag" );
+        m_shader_begin.build( vert_begin, frag_begin );
+        m_shader_kbuffer.build( vert_kbuffer, frag_kbuffer );
+        m_shader_end.build( vert_kbuffer, frag_end );
     }
 }
 
-void HAVSVolumeRenderer::initialize_table()
+void HAVSVolumeRenderer::create_table()
 {
     if ( !m_ref_volume->hasMinMaxValues() ) m_ref_volume->updateMinMaxValues();
     const float min_value = static_cast<float>( m_ref_volume->minValue() );
@@ -317,7 +259,7 @@ void HAVSVolumeRenderer::initialize_table()
     m_table.download();
 }
 
-void HAVSVolumeRenderer::initialize_framebuffer()
+void HAVSVolumeRenderer::create_framebuffer()
 {
     if ( m_k_size == 2 ) { m_ntargets = 2; }
     else { m_ntargets = 4; }
@@ -351,6 +293,29 @@ void HAVSVolumeRenderer::initialize_framebuffer()
     kvs::OpenGL::Disable( GL_CULL_FACE );
     kvs::OpenGL::Disable( GL_LIGHTING );
     kvs::OpenGL::Disable( GL_NORMALIZE );
+}
+
+void HAVSVolumeRenderer::update_framebuffer()
+{
+    // Reallocate textures
+    for ( size_t i = 0; i < m_ntargets; i++ )
+    {
+        m_mrt_texture[i].release();
+        m_mrt_texture[i].create( BaseClass::windowWidth(), BaseClass::windowHeight() );
+    }
+
+    // Reset attached textures.
+    m_mrt_framebuffer.detachColorTexture( 0 );
+    m_mrt_framebuffer.detachColorTexture( 1 );
+    m_mrt_framebuffer.attachColorTexture( m_mrt_texture[0], 0 );
+    m_mrt_framebuffer.attachColorTexture( m_mrt_texture[1], 1 );
+    if ( m_ntargets == 4 )
+    {
+        m_mrt_framebuffer.detachColorTexture( 2 );
+        m_mrt_framebuffer.detachColorTexture( 3 );
+        m_mrt_framebuffer.attachColorTexture( m_mrt_texture[2], 2 );
+        m_mrt_framebuffer.attachColorTexture( m_mrt_texture[3], 3 );
+    }
 }
 
 void HAVSVolumeRenderer::enable_MRT_rendering()
@@ -451,7 +416,7 @@ void HAVSVolumeRenderer::draw_geometry_pass()
 {
     kvs::ProgramObject::Binder binder( m_shader_kbuffer );
 
-    const float* mat = m_modelview_matrix;
+    const float* mat = m_modelview;
     const float table_size = m_table.sizeDepth();
     const float edge_length = m_meshes->depthScale();
     const float bb_scale = std::sqrt( mat[0]*mat[0] + mat[1]*mat[1] + mat[2]*mat[2] );
@@ -506,7 +471,7 @@ void HAVSVolumeRenderer::draw_flush_pass()
 {
     kvs::ProgramObject::Binder binder( m_shader_end );
 
-    const float* mat = m_modelview_matrix;
+    const float* mat = m_modelview;
     const float table_size = m_table.sizeDepth();
     const float edge_length = m_meshes->depthScale();
     const float bb_scale = std::sqrt( mat[0]*mat[0] + mat[1]*mat[1] + mat[2]*mat[2] );
@@ -654,61 +619,6 @@ void HAVSVolumeRenderer::Meshes::setVolume( const kvs::UnstructuredVolumeObject*
     m_bb_min = volume->minObjectCoord();
     m_bb_max = volume->maxObjectCoord();
     m_diagonal = ( m_bb_max - m_bb_min ).length();
-}
-
-const HAVSVolumeRenderer::Face& HAVSVolumeRenderer::Meshes::face( const size_t index )
-{
-    return m_faces[index];
-}
-
-kvs::UInt32 HAVSVolumeRenderer::Meshes::sortedFace( const size_t face_id )
-{
-    return m_sorted_faces[face_id].face();
-}
-
-const kvs::ValueArray<kvs::Real32>& HAVSVolumeRenderer::Meshes::coords() const
-{
-    return m_coords;
-}
-
-const kvs::ValueArray<kvs::UInt32>& HAVSVolumeRenderer::Meshes::connections() const
-{
-    return m_connections;
-}
-
-const kvs::ValueArray<kvs::Real32>& HAVSVolumeRenderer::Meshes::values() const
-{
-    return m_values;
-}
-
-size_t HAVSVolumeRenderer::Meshes::nvertices() const
-{
-    return m_nvertices;
-}
-
-size_t HAVSVolumeRenderer::Meshes::ntetrahedra() const
-{
-    return m_ntetrahedra;
-}
-
-size_t HAVSVolumeRenderer::Meshes::nfaces() const
-{
-    return m_nfaces;
-}
-
-size_t HAVSVolumeRenderer::Meshes::nrenderfaces() const
-{
-    return m_nrenderfaces;
-}
-
-float HAVSVolumeRenderer::Meshes::depthScale() const
-{
-    return m_depth_scale;
-}
-
-float HAVSVolumeRenderer::Meshes::diagonal() const
-{
-    return m_diagonal;
 }
 
 void HAVSVolumeRenderer::Meshes::build()
