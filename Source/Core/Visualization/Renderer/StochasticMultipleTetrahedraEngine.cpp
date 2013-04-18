@@ -262,35 +262,35 @@ void StochasticMultipleTetrahedraEngine::create_vertexbuffer_from_volume_of( con
 /*===========================================================================*/
 void StochasticMultipleTetrahedraEngine::setup_shader_of( const size_t index )
 {
-    int scramble_count = m_repetition_count * 12347;
-    size_t random_texture_size = m_random_texture.width();
-    float rp_x = ( scramble_count                       ) % random_texture_size;
-    float rp_y = ( scramble_count / random_texture_size ) % random_texture_size;
-
+    const int scramble_count = m_repetition_count * 12347;
+    const size_t random_texture_size = m_random_texture.width();
+//    float rp_x = ( scramble_count                       ) % random_texture_size;
+//    float rp_y = ( scramble_count / random_texture_size ) % random_texture_size;
+    const kvs::Vector2f random_offset(
+        ( scramble_count ) % random_texture_size,
+        ( scramble_count / random_texture_size ) % random_texture_size );
     const GLfloat random_texture_size_inv = 1.0f / random_texture_size;
-
-    const GLfloat screen_scale_x = m_width * 0.5f;
-    const GLfloat screen_scale_y = m_height * 0.5f;
-
-    kvs::ProgramObject& shader_program = ( index == 0 ) ? m_shader_program : m_shader_program2;
+//    const GLfloat screen_scale_x = m_width * 0.5f;
+//    const GLfloat screen_scale_y = m_height * 0.5f;
+    const kvs::Vector2f screen_scale( m_width * 0.5f, m_height * 0.5f );
+    const kvs::Vector2f screen_scale_inv( 1.0 / m_width, 1.0 / m_height );
     kvs::PreIntegrationTable& table = ( index == 0 ) ? m_table : m_table2;
-
-    shader_program.setUniformValuef( "random_texture_size_inv", random_texture_size_inv );
-    shader_program.setUniformValuef( "random_offset", rp_x, rp_y );
-
-    shader_program.setUniformValuef( "screen_scale", screen_scale_x, screen_scale_y );
-    shader_program.setUniformValuef( "screen_scale_inv", 1.0f / m_width, 1.0f / m_height );
-
-    shader_program.setUniformValuef( "preintegration_scale_offset",
+    const kvs::Vector2f preintegration_scale_offset(
         1.0 - 1.0 / table.sizeDepth() / m_edge_size,
         1.0 / ( 2.0 * table.sizeDepth() ) );
 
-    shader_program.setUniformValuei( "preintegration_texture0", 0 );
-    shader_program.setUniformValuei( "preintegration_texture1", 1 );
-    shader_program.setUniformValuei( "random_texture", 2 );
-    shader_program.setUniformValuei( "decomposion_texture", 3 );
-    shader_program.setUniformValuei( "depth_texture", 4 );
-    shader_program.setUniformValuei( "extra_texture", 5 );
+    kvs::ProgramObject& shader_program = ( index == 0 ) ? m_shader_program : m_shader_program2;
+    shader_program.setUniform( "random_texture_size_inv", random_texture_size_inv );
+    shader_program.setUniform( "random_offset", random_offset );
+    shader_program.setUniform( "screen_scale", screen_scale );
+    shader_program.setUniform( "screen_scale_inv", screen_scale_inv );
+    shader_program.setUniform( "preintegration_scale_offset", preintegration_scale_offset );
+    shader_program.setUniform( "preintegration_texture0", 0 );
+    shader_program.setUniform( "preintegration_texture1", 1 );
+    shader_program.setUniform( "random_texture", 2 );
+    shader_program.setUniform( "decomposion_texture", 3 );
+    shader_program.setUniform( "depth_texture", 4 );
+    shader_program.setUniform( "extra_texture", 5 );
 }
 
 /*===========================================================================*/
@@ -349,8 +349,8 @@ void StochasticMultipleTetrahedraEngine::initialize_shader_of( const size_t inde
         {
             const GLfloat Ka = ((kvs::Shader::Lambert*)(BaseClass::m_shader))->Ka;
             const GLfloat Kd = ((kvs::Shader::Lambert*)(BaseClass::m_shader))->Kd;
-            shader_program.setUniformValuef( "shading.Ka", Ka );
-            shader_program.setUniformValuef( "shading.Kd", Kd );
+            shader_program.setUniform( "shading.Ka", Ka );
+            shader_program.setUniform( "shading.Kd", Kd );
             break;
         }
         case kvs::Shader::PhongShading:
@@ -359,10 +359,10 @@ void StochasticMultipleTetrahedraEngine::initialize_shader_of( const size_t inde
             const GLfloat Kd = ((kvs::Shader::Phong*)(BaseClass::m_shader))->Kd;
             const GLfloat Ks = ((kvs::Shader::Phong*)(BaseClass::m_shader))->Ks;
             const GLfloat S  = ((kvs::Shader::Phong*)(BaseClass::m_shader))->S;
-            shader_program.setUniformValuef( "shading.Ka", Ka );
-            shader_program.setUniformValuef( "shading.Kd", Kd );
-            shader_program.setUniformValuef( "shading.Ks", Ks );
-            shader_program.setUniformValuef( "shading.S",  S );
+            shader_program.setUniform( "shading.Ka", Ka );
+            shader_program.setUniform( "shading.Kd", Kd );
+            shader_program.setUniform( "shading.Ks", Ks );
+            shader_program.setUniform( "shading.S",  S );
             break;
         }
         case kvs::Shader::BlinnPhongShading:
@@ -371,10 +371,10 @@ void StochasticMultipleTetrahedraEngine::initialize_shader_of( const size_t inde
             const GLfloat Kd = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->Kd;
             const GLfloat Ks = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->Ks;
             const GLfloat S  = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->S;
-            shader_program.setUniformValuef( "shading.Ka", Ka );
-            shader_program.setUniformValuef( "shading.Kd", Kd );
-            shader_program.setUniformValuef( "shading.Ks", Ks );
-            shader_program.setUniformValuef( "shading.S",  S );
+            shader_program.setUniform( "shading.Ka", Ka );
+            shader_program.setUniform( "shading.Kd", Kd );
+            shader_program.setUniform( "shading.Ks", Ks );
+            shader_program.setUniform( "shading.S",  S );
             break;
         }
         default: /* NO SHADING */ break;

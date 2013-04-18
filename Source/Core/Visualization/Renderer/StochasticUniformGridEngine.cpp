@@ -219,21 +219,30 @@ void StochasticUniformGridEngine::clearEnsembleBuffer()
 void StochasticUniformGridEngine::setup_shader( const float /*modelview_matrix*/[16] )
 {
     const size_t random_texture_size = m_random_texture.width();
-    const float rp_x = ( float )( m_rng.randInteger() % random_texture_size );
-    const float rp_y = ( float )( m_rng.randInteger() % random_texture_size );
+//    const float rp_x = ( float )( m_rng.randInteger() % random_texture_size );
+//    const float rp_y = ( float )( m_rng.randInteger() % random_texture_size );
+    const kvs::Vector2f random_offset(
+        (float)( m_rng.randInteger() % random_texture_size ),
+        (float)( m_rng.randInteger() % random_texture_size ) );
     const GLfloat random_texture_size_inv = 1.0f / random_texture_size;
-    const GLfloat screen_scale_x = m_width * 0.5f;
-    const GLfloat screen_scale_y = m_height * 0.5f;
+//    const GLfloat screen_scale_x = m_width * 0.5f;
+//    const GLfloat screen_scale_y = m_height * 0.5f;
+    const kvs::Vector2f screen_scale( m_width * 0.5f, m_height * 0.5f );
+    const kvs::Vector2f screen_scale_inv( 1.0 / m_width, 1.0 / m_height );
     const kvs::Vector3ui volume_resolution = m_ref_volume->resolution();
+    const kvs::Vector3f volume_resolution_inv(
+        1.0f / volume_resolution.x(),
+        1.0f / volume_resolution.y(),
+        1.0f / volume_resolution.z() );
 
-    m_shader_program.setUniformValuef( "random_texture_size_inv", random_texture_size_inv );
-    m_shader_program.setUniformValuef( "random_offset", rp_x, rp_y );
-    m_shader_program.setUniformValuef( "screen_scale", screen_scale_x, screen_scale_y );
-    m_shader_program.setUniformValuef( "screen_scale_inv", 1.0f / m_width, 1.0f / m_height );
-    m_shader_program.setUniformValuef( "volume_resolution_inv", 1.0f / volume_resolution.x(), 1.0f / volume_resolution.y(), 1.0f / volume_resolution.z() );
-    m_shader_program.setUniformValuei( "volume_texture", 0 );
-    m_shader_program.setUniformValuei( "random_texture", 1 );
-    m_shader_program.setUniformValuei( "preintegration_texture", 2 );
+    m_shader_program.setUniform( "random_texture_size_inv", random_texture_size_inv );
+    m_shader_program.setUniform( "random_offset", random_offset );
+    m_shader_program.setUniform( "screen_scale", screen_scale );
+    m_shader_program.setUniform( "screen_scale_inv", screen_scale_inv );
+    m_shader_program.setUniform( "volume_resolution_inv", volume_resolution_inv );
+    m_shader_program.setUniform( "volume_texture", 0 );
+    m_shader_program.setUniform( "random_texture", 1 );
+    m_shader_program.setUniform( "preintegration_texture", 2 );
 }
 
 /*===========================================================================*/
@@ -275,8 +284,8 @@ void StochasticUniformGridEngine::initialize_shader()
         {
             const GLfloat Ka = ( ( kvs::Shader::Lambert* )( BaseClass::m_shader ) )->Ka;
             const GLfloat Kd = ( ( kvs::Shader::Lambert* )( BaseClass::m_shader ) )->Kd;
-            m_shader_program.setUniformValuef( "shading.Ka", Ka );
-            m_shader_program.setUniformValuef( "shading.Kd", Kd );
+            m_shader_program.setUniform( "shading.Ka", Ka );
+            m_shader_program.setUniform( "shading.Kd", Kd );
             break;
         }
         case kvs::Shader::PhongShading:
@@ -285,10 +294,10 @@ void StochasticUniformGridEngine::initialize_shader()
             const GLfloat Kd = ( ( kvs::Shader::Phong* )( BaseClass::m_shader ) )->Kd;
             const GLfloat Ks = ( ( kvs::Shader::Phong* )( BaseClass::m_shader ) )->Ks;
             const GLfloat S  = ( ( kvs::Shader::Phong* )( BaseClass::m_shader ) )->S;
-            m_shader_program.setUniformValuef( "shading.Ka", Ka );
-            m_shader_program.setUniformValuef( "shading.Kd", Kd );
-            m_shader_program.setUniformValuef( "shading.Ks", Ks );
-            m_shader_program.setUniformValuef( "shading.S",  S );
+            m_shader_program.setUniform( "shading.Ka", Ka );
+            m_shader_program.setUniform( "shading.Kd", Kd );
+            m_shader_program.setUniform( "shading.Ks", Ks );
+            m_shader_program.setUniform( "shading.S",  S );
             break;
         }
         case kvs::Shader::BlinnPhongShading:
@@ -297,10 +306,10 @@ void StochasticUniformGridEngine::initialize_shader()
             const GLfloat Kd = ( ( kvs::Shader::BlinnPhong* )( BaseClass::m_shader ) )->Kd;
             const GLfloat Ks = ( ( kvs::Shader::BlinnPhong* )( BaseClass::m_shader ) )->Ks;
             const GLfloat S  = ( ( kvs::Shader::BlinnPhong* )( BaseClass::m_shader ) )->S;
-            m_shader_program.setUniformValuef( "shading.Ka", Ka );
-            m_shader_program.setUniformValuef( "shading.Kd", Kd );
-            m_shader_program.setUniformValuef( "shading.Ks", Ks );
-            m_shader_program.setUniformValuef( "shading.S",  S );
+            m_shader_program.setUniform( "shading.Ka", Ka );
+            m_shader_program.setUniform( "shading.Kd", Kd );
+            m_shader_program.setUniform( "shading.Ks", Ks );
+            m_shader_program.setUniform( "shading.S",  S );
             break;
         }
         default: /* NO SHADING */ break;
@@ -442,9 +451,12 @@ void StochasticUniformGridEngine::draw_vertex_buffer( const float modelview_matr
 
     for( int n = nslices-1; n >= 0; --n, z -= dz )
     {
-        const float rp_x = ( float )( m_rng.randInteger() % random_texture_size );
-        const float rp_y = ( float )( m_rng.randInteger() % random_texture_size );
-        m_shader_program.setUniformValuef( "random_offset", rp_x, rp_y );
+//        const float rp_x = ( float )( m_rng.randInteger() % random_texture_size );
+//        const float rp_y = ( float )( m_rng.randInteger() % random_texture_size );
+        const kvs::Vector2f random_offset(
+            (float)( m_rng.randInteger() % random_texture_size ),
+            (float)( m_rng.randInteger() % random_texture_size ) );
+        m_shader_program.setUniform( "random_offset", random_offset );
 
         glBegin( GL_QUADS );
         GLdouble point[3];

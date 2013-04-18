@@ -82,12 +82,12 @@ ShadingParameter ShadingParameter::BlinnPhong( float ka, float kd, float ks, flo
 
 void ShadingParameter::apply( ProgramObject& program, const std::string& var_name ) const
 {
-    program.setUniformValuef( ( var_name + ".Ka" ).c_str(), m_Ka );
-    program.setUniformValuef( ( var_name + ".Kd" ).c_str(), m_Kd );
+    program.setUniform( ( var_name + ".Ka" ).c_str(), m_Ka );
+    program.setUniform( ( var_name + ".Kd" ).c_str(), m_Kd );
     if ( m_type == PhongShading || m_type == BlinnPhongShading )
     {
-        program.setUniformValuef( ( var_name + ".Ks" ).c_str(), m_Ks );
-        program.setUniformValuef( ( var_name + ".S" ).c_str(),  m_S );
+        program.setUniform( ( var_name + ".Ks" ).c_str(), m_Ks );
+        program.setUniform( ( var_name + ".S" ).c_str(),  m_S );
     }
 }
 

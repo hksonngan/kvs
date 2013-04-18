@@ -1182,8 +1182,8 @@ void ParticleBasedRenderer::initialize_opengl()
             {
                 const GLfloat Ka = ((kvs::Shader::Lambert*)(BaseClass::m_shader))->Ka;
                 const GLfloat Kd = ((kvs::Shader::Lambert*)(BaseClass::m_shader))->Kd;
-                m_zoom_shader.setUniformValuef( "shading.Ka", Ka );
-                m_zoom_shader.setUniformValuef( "shading.Kd", Kd );
+                m_zoom_shader.setUniform( "shading.Ka", Ka );
+                m_zoom_shader.setUniform( "shading.Kd", Kd );
                 break;
             }
             case kvs::Shader::PhongShading:
@@ -1192,10 +1192,10 @@ void ParticleBasedRenderer::initialize_opengl()
                 const GLfloat Kd = ((kvs::Shader::Phong*)(BaseClass::m_shader))->Kd;
                 const GLfloat Ks = ((kvs::Shader::Phong*)(BaseClass::m_shader))->Ks;
                 const GLfloat S  = ((kvs::Shader::Phong*)(BaseClass::m_shader))->S;
-                m_zoom_shader.setUniformValuef( "shading.Ka", Ka );
-                m_zoom_shader.setUniformValuef( "shading.Kd", Kd );
-                m_zoom_shader.setUniformValuef( "shading.Ks", Ks );
-                m_zoom_shader.setUniformValuef( "shading.S",  S );
+                m_zoom_shader.setUniform( "shading.Ka", Ka );
+                m_zoom_shader.setUniform( "shading.Kd", Kd );
+                m_zoom_shader.setUniform( "shading.Ks", Ks );
+                m_zoom_shader.setUniform( "shading.S",  S );
                 break;
             }
             case kvs::Shader::BlinnPhongShading:
@@ -1204,10 +1204,10 @@ void ParticleBasedRenderer::initialize_opengl()
                 const GLfloat Kd = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->Kd;
                 const GLfloat Ks = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->Ks;
                 const GLfloat S  = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->S;
-                m_zoom_shader.setUniformValuef( "shading.Ka", Ka );
-                m_zoom_shader.setUniformValuef( "shading.Kd", Kd );
-                m_zoom_shader.setUniformValuef( "shading.Ks", Ks );
-                m_zoom_shader.setUniformValuef( "shading.S",  S );
+                m_zoom_shader.setUniform( "shading.Ka", Ka );
+                m_zoom_shader.setUniform( "shading.Kd", Kd );
+                m_zoom_shader.setUniform( "shading.Ks", Ks );
+                m_zoom_shader.setUniform( "shading.S",  S );
                 break;
             }
             default: /* NO SHADING */ break;
@@ -1552,23 +1552,24 @@ void ParticleBasedRenderer::setup_zoom_shader( const float modelview_matrix[16] 
     const GLint   random_texture = 0;
     const GLfloat random_texture_size_inv = 1.0f / m_random_texture_size;
     const GLint   circle_threshold = static_cast<GLint>( m_circle_threshold );
-    const GLfloat screen_scale_x = m_render_width * 0.5f;
-    const GLfloat screen_scale_y = m_render_height * 0.5f;
+//    const GLfloat screen_scale_x = m_render_width * 0.5f;
+//    const GLfloat screen_scale_y = m_render_height * 0.5f;
+    const kvs::Vector2f screen_scale( m_render_width * 0.5f, m_render_height * 0.5f );
     const int zoom_mode = static_cast<int>(m_enable_zooming) + static_cast<int>(m_enable_repetition_level_zooming)*2;//ADD_UEMURA
 
-    m_zoom_shader.setUniformValuef( "densityFactor", densityFactor );
-    m_zoom_shader.setUniformValuei( "random_texture", random_texture );
-    m_zoom_shader.setUniformValuef( "random_texture_size_inv", random_texture_size_inv );
-    m_zoom_shader.setUniformValuei( "circle_threshold", circle_threshold );
+    m_zoom_shader.setUniform( "densityFactor", densityFactor );
+    m_zoom_shader.setUniform( "random_texture", random_texture );
+    m_zoom_shader.setUniform( "random_texture_size_inv", random_texture_size_inv );
+    m_zoom_shader.setUniform( "circle_threshold", circle_threshold );
     /*ADD_UEMURA(begin)*/
-    m_zoom_shader.setUniformValuei( "zoom_mode", zoom_mode );
-    m_zoom_shader.setUniformValuef( "screen_scale", screen_scale_x, screen_scale_y );
-    m_zoom_shader.setUniformValuef("object_magnification", rendering_process::object_magnification);
-    m_zoom_shader.setUniformValuef("object_center", rendering_process::object_center);
-    m_zoom_shader.setUniformValuef("screen_magnification", rendering_process::screen_magnification);
+    m_zoom_shader.setUniform( "zoom_mode", zoom_mode );
+//    m_zoom_shader.setUniformValuef( "screen_scale", screen_scale_x, screen_scale_y );
+    m_zoom_shader.setUniform( "screen_scale", screen_scale );
+    m_zoom_shader.setUniform("object_magnification", rendering_process::object_magnification);
+    m_zoom_shader.setUniform("object_center", rendering_process::object_center);
+    m_zoom_shader.setUniform("screen_magnification", rendering_process::screen_magnification);
     /*ADD_UEMURA(end)*/
 }
-
 
 /*==========================================================================*/
 /**
@@ -1577,16 +1578,31 @@ void ParticleBasedRenderer::setup_zoom_shader( const float modelview_matrix[16] 
 /*==========================================================================*/
 void ParticleBasedRenderer::setup_resize_shader()
 {
-    const GLfloat step_x = 1.0f / m_render_width;
-    const GLfloat step_y = 1.0f / m_render_height;
-    const GLfloat start_x = -step_x * ( ( m_subpixel_level - 1 ) * 0.5f );
-    const GLfloat start_y = -step_y * ( ( m_subpixel_level - 1 ) * 0.5f );
+//    const GLfloat step_x = 1.0f / m_render_width;
+//    const GLfloat step_y = 1.0f / m_render_height;
+//    const GLfloat start_x = -step_x * ( ( m_subpixel_level - 1 ) * 0.5f );
+//    const GLfloat start_y = -step_y * ( ( m_subpixel_level - 1 ) * 0.5f );
 
-    m_resize_shader.setUniformValuei( "texture", 0 );
-    m_resize_shader.setUniformValuef( "start", start_x, start_y );
-    m_resize_shader.setUniformValuef( "step", step_x,  step_y );
-    m_resize_shader.setUniformValuei( "count", m_subpixel_level, m_subpixel_level );
-    m_resize_shader.setUniformValuef( "scale", 1.0f / ( m_subpixel_level * m_subpixel_level ) );
+    const kvs::Vector2f step(
+        1.0f / m_render_width,
+        1.0f / m_render_height );
+    const kvs::Vector2f start(
+        -step.x() * ( ( m_subpixel_level - 1 ) * 0.5f ),
+        -step.y() * ( ( m_subpixel_level - 1 ) * 0.5f ) );
+    const kvs::Vector2i count(
+        m_subpixel_level,
+        m_subpixel_level );
+    const GLfloat scale = 1.0f / ( m_subpixel_level * m_subpixel_level );
+//    m_resize_shader.setUniformValuei( "texture", 0 );
+//    m_resize_shader.setUniformValuef( "start", start_x, start_y );
+//    m_resize_shader.setUniformValuef( "step", step_x,  step_y );
+//    m_resize_shader.setUniformValuei( "count", m_subpixel_level, m_subpixel_level );
+//    m_resize_shader.setUniformValuef( "scale", 1.0f / ( m_subpixel_level * m_subpixel_level ) );
+    m_resize_shader.setUniform( "texture", 0 );
+    m_resize_shader.setUniform( "start", start );
+    m_resize_shader.setUniform( "step", step );
+    m_resize_shader.setUniform( "count", count );
+    m_resize_shader.setUniform( "scale", scale );
 }
 
 } // end of rits

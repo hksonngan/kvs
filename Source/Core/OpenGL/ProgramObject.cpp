@@ -15,6 +15,7 @@
 #include "ProgramObject.h"
 #include <kvs/DebugNew>
 #include <kvs/Exception>
+#include <kvs/OpenGL>
 
 
 namespace kvs
@@ -26,7 +27,8 @@ namespace kvs
  */
 /*===========================================================================*/
 ProgramObject::ProgramObject():
-    m_id( 0 )
+    m_id( 0 ),
+    m_is_bound( false )
 {
 }
 
@@ -37,7 +39,7 @@ ProgramObject::ProgramObject():
 /*===========================================================================*/
 ProgramObject::~ProgramObject()
 {
-    this->clear();
+    this->release();
 }
 
 /*===========================================================================*/
@@ -86,7 +88,325 @@ std::string ProgramObject::log()
 /*===========================================================================*/
 void ProgramObject::create()
 {
-    if( !glIsProgram( m_id ) ) m_id = glCreateProgram();
+//    if( !glIsProgram( m_id ) ) m_id = glCreateProgram();
+    this->createID();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Clears the program object.
+ */
+/*===========================================================================*/
+void ProgramObject::release()
+{
+    this->deleteID();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Attaches a shader object to a program object.
+ *  @param  shader [in] shader object that is to be attached
+ */
+/*===========================================================================*/
+void ProgramObject::attach( const kvs::ShaderObject& shader ) const
+{
+    KVS_GL_CALL( glAttachShader( m_id, shader.id() ) );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Detaches the shader object from the program object.
+ *  @param  shader [in] shader object
+ */
+/*===========================================================================*/
+void ProgramObject::detach( const kvs::ShaderObject& shader ) const
+{
+    KVS_GL_CALL( glDetachShader( m_id, shader.id() ) );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Links the program object.
+ *  @return true if the program object is linked successfully
+ */
+/*===========================================================================*/
+bool ProgramObject::link() const
+{
+    KVS_GL_CALL( glLinkProgram( m_id ) );
+    GLint error = 0;
+    KVS_GL_CALL( glGetProgramiv( m_id, GL_LINK_STATUS, &error ) );
+    return error == GL_TRUE;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Installs the program object as part of current rendering state.
+ */
+/*===========================================================================*/
+void ProgramObject::bind() const
+{
+    KVS_ASSERT( this->isCreated() );
+    KVS_GL_CALL( glUseProgram( m_id ) );
+    m_is_bound = true;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Uninstalls the program object as part of current rendering state.
+ */
+/*===========================================================================*/
+void ProgramObject::unbind() const
+{
+    KVS_ASSERT( this->isBound() );
+    KVS_GL_CALL( glUseProgram( 0 ) );
+    m_is_bound = false;
+}
+
+bool ProgramObject::isCreated() const
+{
+    return m_id > 0;
+}
+
+bool ProgramObject::isValid() const
+{
+    GLboolean result;
+    KVS_GL_CALL( result = glIsProgram( m_id ) );
+    return result == GL_TRUE;
+}
+
+bool ProgramObject::isBound() const
+{
+    return m_is_bound;
+}
+
+bool ProgramObject::isLinked() const
+{
+    GLint error = 0;
+    KVS_GL_CALL( glGetProgramiv( m_id, GL_LINK_STATUS, &error ) );
+    return error != GL_FALSE;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the location of a uniform variable.
+ *  @param  name [in] name of the uniform variable
+ *  @return location of a specific uniform variable
+ */
+/*===========================================================================*/
+GLint ProgramObject::uniformLocation( const GLchar *name )
+{
+//    return glGetUniformLocation( m_id, name );
+    GLint result = 0;
+    KVS_GL_CALL( result = glGetUniformLocation( m_id, name ) );
+    return result;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the location of a attribute variable.
+ *  @param  name [in] name of the attribute variable
+ *  @return location of a specific attribute variable
+ */
+/*===========================================================================*/
+GLint ProgramObject::attributeLocation( const GLchar *name )
+{
+//    return glGetAttribLocation( m_id, name );
+    GLint result = 0;
+    KVS_GL_CALL( result = glGetAttribLocation( m_id, name ) );
+    return result;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Specifies the value of a uniform variable as integer.
+ *  @param  name [in] name of the uniform variable
+ *  @param  value [in] value for the uniform variable
+ */
+/*===========================================================================*/
+void ProgramObject::setUniform( const GLchar* name, const GLint value )
+{
+    GLint location = this->uniformLocation( name );
+    KVS_GL_CALL( glUniform1i( location, value ) );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Specifies the values of a uniform variable as integer.
+ *  @param  name [in] name of the uniform variable
+ *  @param  value [in] 2D vector
+ */
+/*===========================================================================*/
+void ProgramObject::setUniform( const GLchar* name, const kvs::Vector2i& value )
+{
+    GLint location = this->uniformLocation( name );
+    KVS_GL_CALL( glUniform2iv( location, 1, &value[0] ) );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Specifies the values of a uniform variable as integer.
+ *  @param  name [in] name of the uniform variable
+ *  @param  value [in] 3D vector
+ */
+/*===========================================================================*/
+void ProgramObject::setUniform( const GLchar* name, const kvs::Vector3i& value )
+{
+    GLint location = this->uniformLocation( name );
+    KVS_GL_CALL( glUniform3iv( location, 1, &value[0] ) );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Specifies the values of a uniform variable as integer.
+ *  @param  name [in] name of the uniform variable
+ *  @param  value [in] 4D vector
+ */
+/*===========================================================================*/
+void ProgramObject::setUniform( const GLchar* name, const kvs::Vector4i& value )
+{
+    GLint location = this->uniformLocation( name );
+    KVS_GL_CALL( glUniform4iv( location, 1, &value[0] ) );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Specifies the value of a uniform variable as floating point.
+ *  @param  name [in] name of the uniform variable
+ *  @param  value [in] value for the uniform variable
+ */
+/*===========================================================================*/
+void ProgramObject::setUniform( const GLchar* name, const GLfloat value )
+{
+    GLint location = this->uniformLocation( name );
+    KVS_GL_CALL( glUniform1f( location, value ) );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Specifies the values of a uniform variable as floating point.
+ *  @param  name [in] name of the uniform variable
+ *  @param  value [in] 2D vector
+ */
+/*===========================================================================*/
+void ProgramObject::setUniform( const GLchar* name, const kvs::Vector2f& value )
+{
+    GLint location = this->uniformLocation( name );
+    KVS_GL_CALL( glUniform2fv( location, 1, &value[0] ) );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Specifies the values of a uniform variable as floating point.
+ *  @param  name [in] name of the uniform variable
+ *  @param  value [in] 3D vector
+ */
+/*===========================================================================*/
+void ProgramObject::setUniform( const GLchar* name, const kvs::Vector3f& value )
+{
+    GLint location = this->uniformLocation( name );
+    KVS_GL_CALL( glUniform3fv( location, 1, &value[0] ) );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Specifies the values of a uniform variable as floating point.
+ *  @param  name [in] name of the uniform variable
+ *  @param  value [in] 4D vector
+ */
+/*===========================================================================*/
+void ProgramObject::setUniform( const GLchar* name, const kvs::Vector4f& value )
+{
+    GLint location = this->uniformLocation( name );
+    KVS_GL_CALL( glUniform4fv( location, 1, &value[0] ) );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Specifies the values of a uniform variable as floating point.
+ *  @param  name [in] name of the uniform variable
+ *  @param  value [in] 2x2 matrix
+ */
+/*===========================================================================*/
+void ProgramObject::setUniform( const GLchar* name, const kvs::Matrix22f& value )
+{
+    GLint location = this->uniformLocation( name );
+    KVS_GL_CALL( glUniformMatrix2fv( location, 1, GL_TRUE, &value[0][0] ) );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Specifies the values of a uniform variable as floating point.
+ *  @param  name [in] name of the uniform variable
+ *  @param  value [in] 3x3 matrix
+ */
+/*===========================================================================*/
+void ProgramObject::setUniform( const GLchar* name, const kvs::Matrix33f& value )
+{
+    GLint location = this->uniformLocation( name );
+    KVS_GL_CALL( glUniformMatrix3fv( location, 1, GL_TRUE, &value[0][0] ) );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Specifies the values of a uniform variable as floating point.
+ *  @param  name [in] name of the uniform variable
+ *  @param  value [in] 4x4 matrix
+ */
+/*===========================================================================*/
+void ProgramObject::setUniform( const GLchar* name, const kvs::Matrix44f& value )
+{
+    GLint location = this->uniformLocation( name );
+    KVS_GL_CALL( glUniformMatrix4fv( location, 1, GL_TRUE, &value[0][0] ) );
+}
+
+void ProgramObject::createID()
+{
+    if ( !this->isValid() )
+    {
+        KVS_GL_CALL( m_id = glCreateProgram() );
+    }
+}
+
+void ProgramObject::deleteID()
+{
+    if ( this->isValid() )
+    {
+        KVS_GL_CALL( glDeleteProgram( m_id ) );
+    }
+    m_id = 0;
+}
+
+ProgramObject::Binder::Binder( const ProgramObject& po ) :
+    m_po( po )
+{
+    KVS_ASSERT( po.isCreated() );
+    po.bind();
+}
+
+ProgramObject::Binder::~Binder()
+{
+    KVS_ASSERT( m_po.isCreated() );
+    KVS_GL_CALL( glUseProgram( 0 ) );
+}
+
+
+
+/*===========================================================================*/
+/**
+ *  @brief  Attaches a vertex shader and a fragment shader and links the program object.
+ *  @param  vertex_shader [in] vertex shader that is to be attached
+ *  @param  fragment_shader [in] fragment shader that is to be attached
+ *  @return <ReturnValue>
+ */
+/*===========================================================================*/
+bool ProgramObject::link(
+    const kvs::VertexShader &vertex_shader,
+    const kvs::FragmentShader &fragment_shader )
+{
+    this->create();
+    this->attach( fragment_shader );
+    this->attach( vertex_shader );
+    return this->link();
 }
 
 void ProgramObject::create(
@@ -124,108 +444,6 @@ void ProgramObject::create(
         std::cout << this->log() << std::endl;
         KVS_THROW( kvs::OpenGLException, "ShaderProgram link failed" );
     }
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Clears the program object.
- */
-/*===========================================================================*/
-void ProgramObject::clear()
-{
-    if ( glIsProgram( m_id ) ) glDeleteProgram( m_id );
-
-    m_id = 0;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Attaches a shader object to a program object.
- *  @param  shader [in] shader object that is to be attached
- */
-/*===========================================================================*/
-void ProgramObject::attach( const kvs::ShaderObject& shader )
-{
-    glAttachShader( m_id, shader.id() );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Attaches a vertex shader and a fragment shader and links the program object.
- *  @param  vertex_shader [in] vertex shader that is to be attached
- *  @param  fragment_shader [in] fragment shader that is to be attached
- *  @return <ReturnValue>
- */
-/*===========================================================================*/
-bool ProgramObject::link(
-    const kvs::VertexShader &vertex_shader,
-    const kvs::FragmentShader &fragment_shader )
-{
-    this->create();
-    this->attach( fragment_shader );
-    this->attach( vertex_shader );
-
-    return this->link();
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Links the program object.
- *  @return true if the program object is linked successfully
- */
-/*===========================================================================*/
-bool ProgramObject::link()
-{
-    glLinkProgram( m_id );
-
-    GLint error = 0;
-    glGetProgramiv( m_id, GL_LINK_STATUS, &error );
-
-    return error == GL_TRUE;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Installs the program object as part of current rendering state.
- */
-/*===========================================================================*/
-void ProgramObject::bind()
-{
-    glUseProgram( m_id );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Uninstalls the program object as part of current rendering state.
- */
-/*===========================================================================*/
-void ProgramObject::unbind()
-{
-    glUseProgram( 0 );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the location of a uniform variable.
- *  @param  name [in] name of the uniform variable
- *  @return location of a specific uniform variable
- */
-/*===========================================================================*/
-GLint ProgramObject::uniformLocation( const GLchar *name )
-{
-    return glGetUniformLocation( m_id, name );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the location of a attribute variable.
- *  @param  name [in] name of the attribute variable
- *  @return location of a specific attribute variable
- */
-/*===========================================================================*/
-GLint ProgramObject::attributeLocation( const GLchar *name )
-{
-    return glGetAttribLocation( m_id, name );
 }
 
 /*===========================================================================*/

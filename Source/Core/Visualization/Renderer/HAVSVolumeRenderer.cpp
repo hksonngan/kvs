@@ -379,7 +379,6 @@ void HAVSVolumeRenderer::enable_MRT_rendering()
     // Bind pre-integration table.
     kvs::OpenGL::Enable( GL_TEXTURE_3D );
     kvs::Texture::SelectActiveUnit( m_ntargets == 2 ? 2 : 4 );
-
     m_table.bind();
 }
 
@@ -388,6 +387,7 @@ void HAVSVolumeRenderer::disable_MRT_rendering()
     // Disable pre-integration table.
     kvs::Texture::SelectActiveUnit( m_ntargets == 2 ? 2 : 4 );
     kvs::OpenGL::Disable( GL_TEXTURE_3D );
+    m_table.unbind();
 
     // Disable FBO rendering
     m_mrt_framebuffer.unbind();
@@ -425,8 +425,7 @@ void HAVSVolumeRenderer::sort_geometry( kvs::Camera* camera )
 
 void HAVSVolumeRenderer::draw_initialization_pass()
 {
-    // Bind initializing fragment shader.
-    m_shader_begin.bind();
+    kvs::ProgramObject::Binder binder( m_shader_begin );
 
     const size_t width = BaseClass::windowWidth();
     const size_t height = BaseClass::windowHeight();
@@ -446,34 +445,30 @@ void HAVSVolumeRenderer::draw_initialization_pass()
             glEnd();
         }
     }
-
-    m_shader_begin.unbind();
 }
 
 void HAVSVolumeRenderer::draw_geometry_pass()
 {
-    // Bind shaders.
-    m_shader_kbuffer.bind();
+    kvs::ProgramObject::Binder binder( m_shader_kbuffer );
 
     const float* mat = m_modelview_matrix;
     const float table_size = m_table.sizeDepth();
     const float edge_length = m_meshes->depthScale();
     const float bb_scale = std::sqrt( mat[0]*mat[0] + mat[1]*mat[1] + mat[2]*mat[2] );
-    const float scale[4] = {
+    const kvs::Vector4f scale(
         1.0f / static_cast<float>( BaseClass::windowWidth() ),
         1.0f / static_cast<float>( BaseClass::windowHeight() ),
         ( 1.0f - 1.0f / table_size ) / ( edge_length * bb_scale ),
-        1.0f / ( 2.0f * table_size )
-    };
+        1.0f / ( 2.0f * table_size ) );
 
-    glUniform4fv( m_shader_kbuffer.uniformLocation("scale"), 1, scale );
-    m_shader_kbuffer.setUniformValuei( "lut", m_ntargets );
-    m_shader_kbuffer.setUniformValuei( "framebuffer", 0 );
-    m_shader_kbuffer.setUniformValuei( "kbuffer1", 1 );
+    m_shader_kbuffer.setUniform( "scale", scale );
+    m_shader_kbuffer.setUniform( "lut", GLint(m_ntargets) );
+    m_shader_kbuffer.setUniform( "framebuffer", 0 );
+    m_shader_kbuffer.setUniform( "kbuffer1", 1 );
     if ( m_ntargets == 4 )
     {
-        m_shader_kbuffer.setUniformValuei( "kbuffer2", 2 );
-        m_shader_kbuffer.setUniformValuei( "kbuffer3", 3 );
+        m_shader_kbuffer.setUniform( "kbuffer2", 2 );
+        m_shader_kbuffer.setUniform( "kbuffer3", 3 );
     }
 
     if ( this->isEnabledVBO() )
@@ -505,35 +500,30 @@ void HAVSVolumeRenderer::draw_geometry_pass()
         KVS_GL_CALL( glDisableClientState( GL_VERTEX_ARRAY ) );
         KVS_GL_CALL( glDisableClientState( GL_TEXTURE_COORD_ARRAY ) );
     }
-
-    m_shader_kbuffer.unbind();
 }
 
 void HAVSVolumeRenderer::draw_flush_pass()
 {
+    kvs::ProgramObject::Binder binder( m_shader_end );
+
     const float* mat = m_modelview_matrix;
     const float table_size = m_table.sizeDepth();
     const float edge_length = m_meshes->depthScale();
     const float bb_scale = std::sqrt( mat[0]*mat[0] + mat[1]*mat[1] + mat[2]*mat[2] );
-    const float scale[4] = {
+    const kvs::Vector4f scale(
         1.0f / static_cast<float>( BaseClass::windowWidth() ),
         1.0f / static_cast<float>( BaseClass::windowHeight() ),
         ( 1.0f - 1.0f / table_size ) / ( edge_length * bb_scale ),
-        1.0f / ( 2.0f * table_size )
-    };
+        1.0f / ( 2.0f * table_size ) );
 
-    // Bind flushing shader.
-    m_shader_end.bind();
-
-//    m_shader_end.setUniformValuefv( "scale", scale, 4 );
-    KVS_GL_CALL( glUniform4fv( m_shader_end.uniformLocation("scale"), 1, scale ) );
-    m_shader_end.setUniformValuei( "lut", m_ntargets );
-    m_shader_end.setUniformValuei( "framebuffer", 0 );
-    m_shader_end.setUniformValuei( "kbuffer1", 1 );
+    m_shader_end.setUniform( "scale", scale );
+    m_shader_end.setUniform( "lut", GLint(m_ntargets) );
+    m_shader_end.setUniform( "framebuffer", 0 );
+    m_shader_end.setUniform( "kbuffer1", 1 );
     if ( m_ntargets == 4 )
     {
-        m_shader_end.setUniformValuei( "kbuffer2", 2 );
-        m_shader_end.setUniformValuei( "kbuffer3", 3 );
+        m_shader_end.setUniform( "kbuffer2", 2 );
+        m_shader_end.setUniform( "kbuffer3", 3 );
     }
 
     // Draw k-1 quads to flush A-buffer
@@ -557,9 +547,6 @@ void HAVSVolumeRenderer::draw_flush_pass()
             }
         }
     }
-
-    // Disable shaders
-    m_shader_end.unbind();
 
     kvs::OpenGL::Flush();
 }

@@ -285,8 +285,8 @@ void RayCastingRenderer::create_image(
         m_entry_exit_framebuffer.create();
 
         m_ray_caster.bind();
-        m_ray_caster.setUniformValuef( "width", static_cast<GLfloat>( camera->windowWidth() ) );
-        m_ray_caster.setUniformValuef( "height", static_cast<GLfloat>( camera->windowHeight() ) );
+        m_ray_caster.setUniform( "width", static_cast<GLfloat>( camera->windowWidth() ) );
+        m_ray_caster.setUniform( "height", static_cast<GLfloat>( camera->windowHeight() ) );
         m_ray_caster.unbind();
     }
 
@@ -311,8 +311,8 @@ void RayCastingRenderer::create_image(
         m_color_texture.create( BaseClass::windowWidth(), BaseClass::windowHeight() );
 
         m_ray_caster.bind();
-        m_ray_caster.setUniformValuef( "width", static_cast<GLfloat>( camera->windowWidth() ) );
-        m_ray_caster.setUniformValuef( "height", static_cast<GLfloat>( camera->windowHeight() ) );
+        m_ray_caster.setUniform( "width", static_cast<GLfloat>( camera->windowWidth() ) );
+        m_ray_caster.setUniform( "height", static_cast<GLfloat>( camera->windowHeight() ) );
         m_ray_caster.unbind();
     }
 
@@ -398,19 +398,19 @@ void RayCastingRenderer::create_image(
             const float to_ze2 = ( f - n ) / ( f * n );
             const kvs::Vector3f light_position = kvs::WorldCoordinate( light->position() ).toObjectCoordinate( camera ).position();
             const kvs::Vector3f camera_position = kvs::WorldCoordinate( camera->position() ).toObjectCoordinate( camera ).position();
-            m_ray_caster.setUniformValuef( "to_zw1", to_zw1 );
-            m_ray_caster.setUniformValuef( "to_zw2", to_zw2 );
-            m_ray_caster.setUniformValuef( "to_ze1", to_ze1 );
-            m_ray_caster.setUniformValuef( "to_ze2", to_ze2 );
-            m_ray_caster.setUniformValuef( "light_position", light_position );
-            m_ray_caster.setUniformValuef( "camera_position", camera_position );
-            m_ray_caster.setUniformValuei( "volume.data", 1 );
-            m_ray_caster.setUniformValuei( "exit_points", 2 );
-            m_ray_caster.setUniformValuei( "entry_points", 3 );
-            m_ray_caster.setUniformValuei( "transfer_function.data", 4 );
-            m_ray_caster.setUniformValuei( "jittering_texture", 5 );
-            m_ray_caster.setUniformValuei( "depth_texture", 6 );
-            m_ray_caster.setUniformValuei( "color_texture", 7 );
+            m_ray_caster.setUniform( "to_zw1", to_zw1 );
+            m_ray_caster.setUniform( "to_zw2", to_zw2 );
+            m_ray_caster.setUniform( "to_ze1", to_ze1 );
+            m_ray_caster.setUniform( "to_ze2", to_ze2 );
+            m_ray_caster.setUniform( "light_position", light_position );
+            m_ray_caster.setUniform( "camera_position", camera_position );
+            m_ray_caster.setUniform( "volume.data", 1 );
+            m_ray_caster.setUniform( "exit_points", 2 );
+            m_ray_caster.setUniform( "entry_points", 3 );
+            m_ray_caster.setUniform( "transfer_function.data", 4 );
+            m_ray_caster.setUniform( "jittering_texture", 5 );
+            m_ray_caster.setUniform( "depth_texture", 6 );
+            m_ray_caster.setUniform( "color_texture", 7 );
             this->draw_quad( 1.0f );
         }
         m_ray_caster.unbind();
@@ -532,25 +532,23 @@ void RayCastingRenderer::initialize_shaders( const kvs::StructuredVolumeObject* 
         m_ray_caster.create( vert, frag );
 
         m_ray_caster.bind();
-        m_ray_caster.setUniformValuef( "volume.resolution", resolution );
-        m_ray_caster.setUniformValuef( "volume.resolution_ratio", ratio );
-        m_ray_caster.setUniformValuef( "volume.resolution_reciprocal", reciprocal );
-        m_ray_caster.setUniformValuef( "volume.min_range", min_range );
-        m_ray_caster.setUniformValuef( "volume.max_range", max_range );
-//        m_ray_caster.setUniformValuef( "volume.min_value", min_value );
-//        m_ray_caster.setUniformValuef( "volume.max_value", max_value );
-        m_ray_caster.setUniformValuef( "transfer_function.min_value", min_value );
-        m_ray_caster.setUniformValuef( "transfer_function.max_value", max_value );
-        m_ray_caster.setUniformValuef( "dt", m_step );
-        m_ray_caster.setUniformValuef( "opaque", m_opaque );
+        m_ray_caster.setUniform( "volume.resolution", resolution );
+        m_ray_caster.setUniform( "volume.resolution_ratio", ratio );
+        m_ray_caster.setUniform( "volume.resolution_reciprocal", reciprocal );
+        m_ray_caster.setUniform( "volume.min_range", min_range );
+        m_ray_caster.setUniform( "volume.max_range", max_range );
+        m_ray_caster.setUniform( "transfer_function.min_value", min_value );
+        m_ray_caster.setUniform( "transfer_function.max_value", max_value );
+        m_ray_caster.setUniform( "dt", m_step );
+        m_ray_caster.setUniform( "opaque", m_opaque );
         switch ( BaseClass::m_shader->type() )
         {
         case kvs::Shader::LambertShading:
         {
             const GLfloat Ka = ((kvs::Shader::Lambert*)(BaseClass::m_shader))->Ka;
             const GLfloat Kd = ((kvs::Shader::Lambert*)(BaseClass::m_shader))->Kd;
-            m_ray_caster.setUniformValuef( "shading.Ka", Ka );
-            m_ray_caster.setUniformValuef( "shading.Kd", Kd );
+            m_ray_caster.setUniform( "shading.Ka", Ka );
+            m_ray_caster.setUniform( "shading.Kd", Kd );
             break;
         }
         case kvs::Shader::PhongShading:
@@ -559,10 +557,10 @@ void RayCastingRenderer::initialize_shaders( const kvs::StructuredVolumeObject* 
             const GLfloat Kd = ((kvs::Shader::Phong*)(BaseClass::m_shader))->Kd;
             const GLfloat Ks = ((kvs::Shader::Phong*)(BaseClass::m_shader))->Ks;
             const GLfloat S  = ((kvs::Shader::Phong*)(BaseClass::m_shader))->S;
-            m_ray_caster.setUniformValuef( "shading.Ka", Ka );
-            m_ray_caster.setUniformValuef( "shading.Kd", Kd );
-            m_ray_caster.setUniformValuef( "shading.Ks", Ks );
-            m_ray_caster.setUniformValuef( "shading.S",  S );
+            m_ray_caster.setUniform( "shading.Ka", Ka );
+            m_ray_caster.setUniform( "shading.Kd", Kd );
+            m_ray_caster.setUniform( "shading.Ks", Ks );
+            m_ray_caster.setUniform( "shading.S",  S );
             break;
         }
         case kvs::Shader::BlinnPhongShading:
@@ -571,10 +569,10 @@ void RayCastingRenderer::initialize_shaders( const kvs::StructuredVolumeObject* 
             const GLfloat Kd = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->Kd;
             const GLfloat Ks = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->Ks;
             const GLfloat S  = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->S;
-            m_ray_caster.setUniformValuef( "shading.Ka", Ka );
-            m_ray_caster.setUniformValuef( "shading.Kd", Kd );
-            m_ray_caster.setUniformValuef( "shading.Ks", Ks );
-            m_ray_caster.setUniformValuef( "shading.S",  S );
+            m_ray_caster.setUniform( "shading.Ka", Ka );
+            m_ray_caster.setUniform( "shading.Kd", Kd );
+            m_ray_caster.setUniform( "shading.Ks", Ks );
+            m_ray_caster.setUniform( "shading.S",  S );
             break;
         }
         default: /* NO SHADING */ break;

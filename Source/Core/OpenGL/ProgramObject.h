@@ -21,6 +21,10 @@
 #include <kvs/Vector2>
 #include <kvs/Vector3>
 #include <kvs/Vector4>
+#include <kvs/Matrix22>
+#include <kvs/Matrix33>
+#include <kvs/Matrix44>
+#include <kvs/Deprecated>
 
 
 namespace kvs
@@ -36,6 +40,11 @@ class ProgramObject
 private:
 
     GLuint m_id; ///< shader ID
+    mutable bool m_is_bound; ///< binding flag
+
+public:
+
+    class Binder;
 
 public:
 
@@ -46,33 +55,73 @@ public:
     std::string log();
 
     void create();
-    void create( const kvs::ShaderSource& vertex_source, const kvs::ShaderSource& fragment_source );
-    void clear();
-    void attach( const kvs::ShaderObject& shader );
-    bool link( const kvs::VertexShader& vertex_shader, const kvs::FragmentShader& fragment_shader );
-    bool link();
-    void bind();
-    void unbind();
+    void release();
+    void attach( const kvs::ShaderObject& shader ) const;
+    void detach( const kvs::ShaderObject& shader ) const;
+    bool link() const;
+
+    void bind() const;
+    void unbind() const;
+    bool isCreated() const;
+    bool isValid() const;
+    bool isBound() const;
+    bool isLinked() const;
 
     GLint uniformLocation( const GLchar* name );
     GLint attributeLocation( const GLchar* name );
 
-    void setUniformValuei( const GLchar* name, const GLint v0 );
-    void setUniformValuei( const GLchar* name, const GLint v0, const GLint v1 );
-    void setUniformValuei( const GLchar* name, const GLint v0, const GLint v1, const GLint v2 );
-    void setUniformValuei( const GLchar* name, const GLint v0, const GLint v1, const GLint v2, const GLint v3 );
-    void setUniformValuei( const GLchar* name, const kvs::Vector2i& v );
-    void setUniformValuei( const GLchar* name, const kvs::Vector3i& v );
-    void setUniformValuei( const GLchar* name, const kvs::Vector4i& v );
-    void setUniformValuef( const GLchar* name, const GLfloat v0 );
-    void setUniformValuef( const GLchar* name, const GLfloat v0, const GLfloat v1 );
-    void setUniformValuef( const GLchar* name, const GLfloat v0, const GLfloat v1, const GLfloat v2 );
-    void setUniformValuef( const GLchar* name, const GLfloat v0, const GLfloat v1, const GLfloat v2, const GLfloat v3 );
-    void setUniformValuef( const GLchar* name, const kvs::Vector2f& v );
-    void setUniformValuef( const GLchar* name, const kvs::Vector3f& v );
-    void setUniformValuef( const GLchar* name, const kvs::Vector4f& v );
+    void setUniform( const GLchar* name, const GLint value );
+    void setUniform( const GLchar* name, const kvs::Vector2i& value );
+    void setUniform( const GLchar* name, const kvs::Vector3i& value );
+    void setUniform( const GLchar* name, const kvs::Vector4i& value );
+    void setUniform( const GLchar* name, const GLfloat value );
+    void setUniform( const GLchar* name, const kvs::Vector2f& value );
+    void setUniform( const GLchar* name, const kvs::Vector3f& value );
+    void setUniform( const GLchar* name, const kvs::Vector4f& value );
+    void setUniform( const GLchar* name, const kvs::Matrix22f& value );
+    void setUniform( const GLchar* name, const kvs::Matrix33f& value );
+    void setUniform( const GLchar* name, const kvs::Matrix44f& value );
+
+protected:
+
+    void createID();
+    void deleteID();
+
+public:
+    /*KVS_DEPRECATED*/ bool link( const kvs::VertexShader& vertex_shader, const kvs::FragmentShader& fragment_shader );
+    /*KVS_DEPRECATED*/ void create( const kvs::ShaderSource& vertex_source, const kvs::ShaderSource& fragment_source );
+    KVS_DEPRECATED( void clear() ) { this->release(); }
+    KVS_DEPRECATED( void setUniformValuei( const GLchar* name, const GLint v0 ) );
+    KVS_DEPRECATED( void setUniformValuei( const GLchar* name, const GLint v0, const GLint v1 ) );
+    KVS_DEPRECATED( void setUniformValuei( const GLchar* name, const GLint v0, const GLint v1, const GLint v2 ) );
+    KVS_DEPRECATED( void setUniformValuei( const GLchar* name, const GLint v0, const GLint v1, const GLint v2, const GLint v3 ) );
+    KVS_DEPRECATED( void setUniformValuei( const GLchar* name, const kvs::Vector2i& v ) );
+    KVS_DEPRECATED( void setUniformValuei( const GLchar* name, const kvs::Vector3i& v ) );
+    KVS_DEPRECATED( void setUniformValuei( const GLchar* name, const kvs::Vector4i& v ) );
+    KVS_DEPRECATED( void setUniformValuef( const GLchar* name, const GLfloat v0 ) );
+    KVS_DEPRECATED( void setUniformValuef( const GLchar* name, const GLfloat v0, const GLfloat v1 ) );
+    KVS_DEPRECATED( void setUniformValuef( const GLchar* name, const GLfloat v0, const GLfloat v1, const GLfloat v2 ) );
+    KVS_DEPRECATED( void setUniformValuef( const GLchar* name, const GLfloat v0, const GLfloat v1, const GLfloat v2, const GLfloat v3 ) );
+    KVS_DEPRECATED( void setUniformValuef( const GLchar* name, const kvs::Vector2f& v ) );
+    KVS_DEPRECATED( void setUniformValuef( const GLchar* name, const kvs::Vector3f& v ) );
+    KVS_DEPRECATED( void setUniformValuef( const GLchar* name, const kvs::Vector4f& v ) );
+};
+
+class ProgramObject::Binder
+{
+    const kvs::ProgramObject& m_po;
+
+public:
+
+    Binder( const kvs::ProgramObject& po );
+    ~Binder();
+
+private:
+
+    Binder( const Binder& );
+    Binder& operator =( const Binder& );
 };
 
 } // end of namespace kvs
 
-#endif // KVS__SHADER_PROGRAM_H_INCLUDE
+#endif // KVS__PROGRAM_OBJECT_H_INCLUDE

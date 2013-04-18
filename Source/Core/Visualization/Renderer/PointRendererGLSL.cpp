@@ -87,8 +87,8 @@ void PointRenderer::initialize_shaders( void )
     {
         const GLfloat Ka = ((kvs::Shader::Lambert*)(m_shader))->Ka;
         const GLfloat Kd = ((kvs::Shader::Lambert*)(m_shader))->Kd;
-        m_phong_shader.setUniformValuef( "shading.Ka", Ka );
-        m_phong_shader.setUniformValuef( "shading.Kd", Kd );
+        m_phong_shader.setUniform( "shading.Ka", Ka );
+        m_phong_shader.setUniform( "shading.Kd", Kd );
         break;
     }
     case kvs::Shader::PhongShading:
@@ -97,10 +97,10 @@ void PointRenderer::initialize_shaders( void )
         const GLfloat Kd = ((kvs::Shader::Phong*)(m_shader))->Kd;
         const GLfloat Ks = ((kvs::Shader::Phong*)(m_shader))->Ks;
         const GLfloat S  = ((kvs::Shader::Phong*)(m_shader))->S;
-        m_phong_shader.setUniformValuef( "shading.Ka", Ka );
-        m_phong_shader.setUniformValuef( "shading.Kd", Kd );
-        m_phong_shader.setUniformValuef( "shading.Ks", Ks );
-        m_phong_shader.setUniformValuef( "shading.S",  S );
+        m_phong_shader.setUniform( "shading.Ka", Ka );
+        m_phong_shader.setUniform( "shading.Kd", Kd );
+        m_phong_shader.setUniform( "shading.Ks", Ks );
+        m_phong_shader.setUniform( "shading.S",  S );
         break;
     }
     case kvs::Shader::BlinnPhongShading:
@@ -109,10 +109,10 @@ void PointRenderer::initialize_shaders( void )
         const GLfloat Kd = ((kvs::Shader::BlinnPhong*)(m_shader))->Kd;
         const GLfloat Ks = ((kvs::Shader::BlinnPhong*)(m_shader))->Ks;
         const GLfloat S  = ((kvs::Shader::BlinnPhong*)(m_shader))->S;
-        m_phong_shader.setUniformValuef( "shading.Ka", Ka );
-        m_phong_shader.setUniformValuef( "shading.Kd", Kd );
-        m_phong_shader.setUniformValuef( "shading.Ks", Ks );
-        m_phong_shader.setUniformValuef( "shading.S",  S );
+        m_phong_shader.setUniform( "shading.Ka", Ka );
+        m_phong_shader.setUniform( "shading.Kd", Kd );
+        m_phong_shader.setUniform( "shading.Ks", Ks );
+        m_phong_shader.setUniform( "shading.S",  S );
         break;
     }
     default: /* NO SHADING */ break;

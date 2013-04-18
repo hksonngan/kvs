@@ -161,18 +161,23 @@ void StochasticPolygonEngine::setup_shader( const float modelview_matrix[16] )
 {
     const size_t random_texture_size = m_random_texture.width();
     const int scramble_count = m_repetition_count++ * 12347;
-    const float rp_x = ( scramble_count ) % random_texture_size;
-    const float rp_y = ( scramble_count / random_texture_size ) % random_texture_size;
+//    const float rp_x = ( scramble_count ) % random_texture_size;
+//    const float rp_y = ( scramble_count / random_texture_size ) % random_texture_size;
+    const kvs::Vector2f random_offset(
+        ( scramble_count ) % random_texture_size,
+        ( scramble_count / random_texture_size ) % random_texture_size );
     const GLfloat random_texture_size_inv = 1.0f / random_texture_size;
-    const GLfloat screen_scale_x = m_width * 0.5f;
-    const GLfloat screen_scale_y = m_height * 0.5f;
+//    const GLfloat screen_scale_x = m_width * 0.5f;
+//    const GLfloat screen_scale_y = m_height * 0.5f;
+    const kvs::Vector2f screen_scale( m_width * 0.5f, m_height * 0.5f );
+    const kvs::Vector2f screen_scale_inv( 1.0 / m_width, 1.0 / m_height );
 
-    m_shader_program.setUniformValuef( "random_texture_size_inv", random_texture_size_inv );
-    m_shader_program.setUniformValuef( "random_offset", rp_x, rp_y );
-    m_shader_program.setUniformValuef( "screen_scale", screen_scale_x, screen_scale_y );
-    m_shader_program.setUniformValuef( "screen_scale_inv", 1.0 / m_width, 1.0 / m_height );
-    m_shader_program.setUniformValuei( "random_texture", 0 );
-    m_shader_program.setUniformValuef( "polygon_offset", m_polygon_offset );
+    m_shader_program.setUniform( "random_texture_size_inv", random_texture_size_inv );
+    m_shader_program.setUniform( "random_offset", random_offset );
+    m_shader_program.setUniform( "screen_scale", screen_scale );
+    m_shader_program.setUniform( "screen_scale_inv", screen_scale_inv );
+    m_shader_program.setUniform( "random_texture", 0 );
+    m_shader_program.setUniform( "polygon_offset", m_polygon_offset );
 }
 
 /*===========================================================================*/
@@ -220,8 +225,8 @@ void StochasticPolygonEngine::initialize_shader( void )
         {
             const GLfloat Ka = ((kvs::Shader::Lambert*)(BaseClass::m_shader))->Ka;
             const GLfloat Kd = ((kvs::Shader::Lambert*)(BaseClass::m_shader))->Kd;
-            m_shader_program.setUniformValuef( "shading.Ka", Ka );
-            m_shader_program.setUniformValuef( "shading.Kd", Kd );
+            m_shader_program.setUniform( "shading.Ka", Ka );
+            m_shader_program.setUniform( "shading.Kd", Kd );
             break;
         }
         case kvs::Shader::PhongShading:
@@ -230,10 +235,10 @@ void StochasticPolygonEngine::initialize_shader( void )
             const GLfloat Kd = ((kvs::Shader::Phong*)(BaseClass::m_shader))->Kd;
             const GLfloat Ks = ((kvs::Shader::Phong*)(BaseClass::m_shader))->Ks;
             const GLfloat S  = ((kvs::Shader::Phong*)(BaseClass::m_shader))->S;
-            m_shader_program.setUniformValuef( "shading.Ka", Ka );
-            m_shader_program.setUniformValuef( "shading.Kd", Kd );
-            m_shader_program.setUniformValuef( "shading.Ks", Ks );
-            m_shader_program.setUniformValuef( "shading.S",  S );
+            m_shader_program.setUniform( "shading.Ka", Ka );
+            m_shader_program.setUniform( "shading.Kd", Kd );
+            m_shader_program.setUniform( "shading.Ks", Ks );
+            m_shader_program.setUniform( "shading.S",  S );
             break;
         }
         case kvs::Shader::BlinnPhongShading:
@@ -242,10 +247,10 @@ void StochasticPolygonEngine::initialize_shader( void )
             const GLfloat Kd = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->Kd;
             const GLfloat Ks = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->Ks;
             const GLfloat S  = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->S;
-            m_shader_program.setUniformValuef( "shading.Ka", Ka );
-            m_shader_program.setUniformValuef( "shading.Kd", Kd );
-            m_shader_program.setUniformValuef( "shading.Ks", Ks );
-            m_shader_program.setUniformValuef( "shading.S",  S );
+            m_shader_program.setUniform( "shading.Ka", Ka );
+            m_shader_program.setUniform( "shading.Kd", Kd );
+            m_shader_program.setUniform( "shading.Ks", Ks );
+            m_shader_program.setUniform( "shading.S",  S );
             break;
         }
         default: /* NO SHADING */ break;
