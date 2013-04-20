@@ -171,15 +171,16 @@ void RayCastingRenderer::rasterize(
     // Set shader initial parameters.
     BaseClass::shader().set( camera, light );
 
-    // Aliases.
-    kvs::UInt8* const pixel = BaseClass::m_color_data.data();
-    kvs::Real32* const depth_data = BaseClass::m_depth_data.data();
-
 #if KVS_RAY_CASTING_RENDERER__ENABLE_COMPOSITION
     // Readback pixels.
-    glReadPixels( 0, 0, BaseClass::windowWidth(), BaseClass::windowHeight(), GL_RGBA, GL_UNSIGNED_BYTE, pixel );
-    glReadPixels( 0, 0, BaseClass::windowWidth(), BaseClass::windowHeight(), GL_DEPTH_COMPONENT, GL_FLOAT, depth_data );
+//    glReadPixels( 0, 0, BaseClass::windowWidth(), BaseClass::windowHeight(), GL_RGBA, GL_UNSIGNED_BYTE, pixel );
+//    glReadPixels( 0, 0, BaseClass::windowWidth(), BaseClass::windowHeight(), GL_DEPTH_COMPONENT, GL_FLOAT, depth_data );
+    BaseClass::readImage();
 #endif
+
+    // Aliases.
+    kvs::UInt8* const pixel_data = BaseClass::colorData().data();
+    kvs::Real32* const depth_data = BaseClass::depthData().data();
 
     // LOD control.
     size_t ray_width = 1;
@@ -207,13 +208,11 @@ void RayCastingRenderer::rasterize(
     // Execute ray casting.
     const size_t height = BaseClass::windowHeight();
     const size_t width  = BaseClass::windowWidth();
-
+    const kvs::Shader::ShadingModel& shader = BaseClass::shader();
+    const kvs::ColorMap& cmap = BaseClass::transferFunction().colorMap();
+    const kvs::OpacityMap& omap = BaseClass::transferFunction().opacityMap();
     const float step = m_step;
     const float opaque = m_opaque;
-
-    const kvs::Shader::ShadingModel* const shader = m_shader;
-    const kvs::ColorMap&   cmap = BaseClass::transferFunction().colorMap();
-    const kvs::OpacityMap& omap = BaseClass::transferFunction().opacityMap();
 
     size_t depth_index = 0;
     size_t pixel_index = 0;
@@ -250,7 +249,7 @@ void RayCastingRenderer::rasterize(
                         // Shading.
                         const kvs::Vector3f vertex = ray.point();
                         const kvs::Vector3f normal = interpolator.template gradient<T>();
-                        const kvs::RGBColor color = shader->shadedColor( cmap.at(s), vertex, normal );
+                        const kvs::RGBColor color = shader.shadedColor( cmap.at(s), vertex, normal );
 
                         // Front-to-back accumulation.
                         const float current_alpha = ( 1.0f - a ) * opacity;
@@ -270,9 +269,9 @@ void RayCastingRenderer::rasterize(
                     if ( depth > depth0 )
                     {
                         const float current_alpha = 1.0f - a;
-                        r += current_alpha * pixel[ pixel_index ];
-                        g += current_alpha * pixel[ pixel_index + 1 ];
-                        b += current_alpha * pixel[ pixel_index + 2 ];
+                        r += current_alpha * pixel_data[ pixel_index ];
+                        g += current_alpha * pixel_data[ pixel_index + 1 ];
+                        b += current_alpha * pixel_data[ pixel_index + 2 ];
                         a = 1.0f;
                         break;
                     }
@@ -282,10 +281,10 @@ void RayCastingRenderer::rasterize(
                 } while ( ray.isInside() );
 
                 // Set pixel value.
-                pixel[ pixel_index     ] = static_cast<kvs::UInt8>( kvs::Math::Min( r, 255.0f ) + 0.5f );
-                pixel[ pixel_index + 1 ] = static_cast<kvs::UInt8>( kvs::Math::Min( g, 255.0f ) + 0.5f );
-                pixel[ pixel_index + 2 ] = static_cast<kvs::UInt8>( kvs::Math::Min( b, 255.0f ) + 0.5f );
-                pixel[ pixel_index + 3 ] = static_cast<kvs::UInt8>( kvs::Math::Round( a * 255.0f ) );
+                pixel_data[ pixel_index     ] = static_cast<kvs::UInt8>( kvs::Math::Min( r, 255.0f ) + 0.5f );
+                pixel_data[ pixel_index + 1 ] = static_cast<kvs::UInt8>( kvs::Math::Min( g, 255.0f ) + 0.5f );
+                pixel_data[ pixel_index + 2 ] = static_cast<kvs::UInt8>( kvs::Math::Min( b, 255.0f ) + 0.5f );
+                pixel_data[ pixel_index + 3 ] = static_cast<kvs::UInt8>( kvs::Math::Round( a * 255.0f ) );
             }
             else
             {
@@ -310,10 +309,10 @@ void RayCastingRenderer::rasterize(
                 // Shift the x position of the mask by -ray_width/2.
                 const size_t X = kvs::Math::Max( int( x - ray_width / 2 ), 0 );
 
-                const kvs::UInt8  r = pixel[ pixel_index ];
-                const kvs::UInt8  g = pixel[ pixel_index + 1 ];
-                const kvs::UInt8  b = pixel[ pixel_index + 2 ];
-                const kvs::UInt8  a = pixel[ pixel_index + 3 ];
+                const kvs::UInt8  r = pixel_data[ pixel_index ];
+                const kvs::UInt8  g = pixel_data[ pixel_index + 1 ];
+                const kvs::UInt8  b = pixel_data[ pixel_index + 2 ];
+                const kvs::UInt8  a = pixel_data[ pixel_index + 3 ];
                 const kvs::Real32 d = depth_data[ depth_index ];
                 for ( size_t j = 0; j < ray_width && Y + j < height; j++ )
                 {
@@ -323,10 +322,10 @@ void RayCastingRenderer::rasterize(
                         const size_t I = X + i;
                         const size_t index = J * width + I;
                         const size_t index4 = index * 4;
-                        pixel[ index4 ] = r;
-                        pixel[ index4 + 1 ] = g;
-                        pixel[ index4 + 2 ] = b;
-                        pixel[ index4 + 3 ] = a;
+                        pixel_data[ index4 ] = r;
+                        pixel_data[ index4 + 1 ] = g;
+                        pixel_data[ index4 + 2 ] = b;
+                        pixel_data[ index4 + 3 ] = a;
                         depth_data[ index ] = d;
                     }
                 }

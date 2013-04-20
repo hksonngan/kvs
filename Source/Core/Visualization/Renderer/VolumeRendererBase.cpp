@@ -112,22 +112,6 @@ const kvs::TransferFunction& VolumeRendererBase::transferFunction() const
     return m_tfunc;
 }
 
-kvs::Shader::ShadingModel& VolumeRendererBase::shader()
-{
-    return *m_shader;
-}
-
-/*==========================================================================*/
-/**
- *  Get the trunsfer function.
- *  @return transfer function
- */
-/*==========================================================================*/
-kvs::TransferFunction& VolumeRendererBase::transferFunction()
-{
-    return m_tfunc;
-}
-
 void VolumeRendererBase::setWindowSize( const size_t width, const size_t height )
 {
     m_width = width;
@@ -152,6 +136,12 @@ void VolumeRendererBase::fillDepthData( const kvs::Real32 value )
 void VolumeRendererBase::fillColorData( const kvs::UInt8 value )
 {
     m_color_data.fill( value );
+}
+
+void VolumeRendererBase::readImage()
+{
+    m_depth_buffer.readPixels( 0, 0, m_width, m_height, m_depth_data.data() );
+    m_color_buffer.readPixels( 0, 0, m_width, m_height, m_color_data.data() );
 }
 
 /*==========================================================================*/

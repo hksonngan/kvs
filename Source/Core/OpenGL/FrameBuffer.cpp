@@ -102,16 +102,16 @@ void FrameBuffer::setType( const GLenum type )
  *  @param y [in] y value of the window coordinates
  *  @param width [in] width of the pixel rectangle
  *  @param height [in] height of the pixel rectangle
- *  @param pixels [out] pointer to an address of the pixel data
+ *  @param pixels [out] pointer to the pixel data
  *  @param buffer [in] color buffer that is read from the frame buffer
  */
 /*==========================================================================*/
 void FrameBuffer::readPixels(
     const int x,
     const int y,
-    const int width,
-    const int height,
-    void** pixels,
+    const size_t width,
+    const size_t height,
+    void* pixels,
     const GLenum buffer ) const
 {
     kvs::OpenGL::SetPixelStorageMode( GL_PACK_ALIGNMENT, 1 );
@@ -120,12 +120,12 @@ void FrameBuffer::readPixels(
     {
         GLint current_buffer = kvs::OpenGL::Integer( GL_READ_BUFFER );
         kvs::OpenGL::SetReadBuffer( buffer );
-        kvs::OpenGL::ReadPixels( x, y, width, height, m_format, m_type, *pixels );
+        kvs::OpenGL::ReadPixels( x, y, width, height, m_format, m_type, pixels );
         kvs::OpenGL::SetReadBuffer( current_buffer );
     }
     else
     {
-        kvs::OpenGL::ReadPixels( x, y, width, height, m_format, m_type, *pixels );
+        kvs::OpenGL::ReadPixels( x, y, width, height, m_format, m_type, pixels );
     }
 }
 
@@ -143,8 +143,8 @@ void FrameBuffer::readPixels(
 void FrameBuffer::drawPixels(
     const int x,
     const int y,
-    const int width,
-    const int height,
+    const size_t width,
+    const size_t height,
     const void* pixels,
     const GLenum buffer ) const
 {

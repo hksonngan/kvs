@@ -69,13 +69,16 @@ public:
 
 protected:
 
-    kvs::Shader::ShadingModel& shader();
-    kvs::TransferFunction& transferFunction();
+    kvs::ValueArray<kvs::UInt8>& colorData() { return m_color_data; }
+    kvs::ValueArray<kvs::Real32>& depthData() { return m_depth_data; }
+    kvs::Shader::ShadingModel& shader() { return *m_shader; }
+    kvs::TransferFunction& transferFunction() { return m_tfunc; }
     void setWindowSize( const size_t width, const size_t height );
     void allocateDepthData( const size_t size );
     void allocateColorData( const size_t size );
     void fillDepthData( const kvs::Real32 value );
     void fillColorData( const kvs::UInt8 value );
+    void readImage();
     void drawImage();
 };
 
