@@ -52,9 +52,6 @@ public:
     virtual ~RayCastingRenderer();
 
     void exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
-
-    void initialize();
-
     void setSamplingStep( const float step );
     void setOpaqueValue( const float opaque );
     void enableLODControl( const size_t ray_width = 3 );
@@ -63,11 +60,6 @@ public:
     void disableCoarseRendering();
 
 private:
-
-    void create_image(
-        const kvs::StructuredVolumeObject* volume,
-        const kvs::Camera* camera,
-        const kvs::Light* light );
 
     template <typename T>
     void rasterize(

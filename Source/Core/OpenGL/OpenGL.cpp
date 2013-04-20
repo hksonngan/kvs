@@ -305,6 +305,21 @@ bool IsEnabled( GLenum cap )
     return result == GL_TRUE;
 }
 
+void SetColorMask( GLboolean red, GLboolean green, GLboolean blue, GLboolean alpha )
+{
+    KVS_GL_CALL( glColorMask( red, green, blue, alpha ) );
+}
+
+void SetDepthMask( GLboolean flag )
+{
+    KVS_GL_CALL( glDepthMask( flag ) );
+}
+
+void SetDepthFunc( GLenum func )
+{
+    KVS_GL_CALL( glDepthFunc( func ) );
+}
+
 void SetBlendFunc( GLenum sfactor, GLenum dfactor )
 {
     KVS_GL_CALL( glBlendFunc( sfactor, dfactor ) );
@@ -507,6 +522,17 @@ WithEnabled::WithEnabled( GLenum cap ):
 WithEnabled::~WithEnabled()
 {
     kvs::OpenGL::Disable( m_cap );
+}
+
+WithDisabled::WithDisabled( GLenum cap ):
+    m_cap( cap )
+{
+    kvs::OpenGL::Disable( cap );
+}
+
+WithDisabled::~WithDisabled()
+{
+    kvs::OpenGL::Enable( m_cap );
 }
 
 void ActivateTextureUnit( GLint unit )

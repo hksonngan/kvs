@@ -19,6 +19,7 @@
 #include <kvs/StructuredVolumeObject>
 #include <kvs/TrilinearInterpolator>
 #include <kvs/VolumeRayIntersector>
+#include <kvs/OpenGL>
 
 
 #define KVS_RAY_CASTING_RENDERER__ENABLE_COMPOSITION 1
@@ -26,39 +27,37 @@
 namespace kvs
 {
 
-RayCastingRenderer::RayCastingRenderer()
+RayCastingRenderer::RayCastingRenderer():
+    m_step( 0.5f ),
+    m_opaque( 0.97f ),
+    m_ray_width( 1 ),
+    m_enable_lod( false )
 {
     BaseClass::setShader( kvs::Shader::Lambert() );
-    this->initialize();
 }
 
-RayCastingRenderer::RayCastingRenderer( const kvs::TransferFunction& tfunc )
+RayCastingRenderer::RayCastingRenderer( const kvs::TransferFunction& tfunc ):
+    m_step( 0.5f ),
+    m_opaque( 0.97f ),
+    m_ray_width( 1 ),
+    m_enable_lod( false )
 {
     BaseClass::setTransferFunction( tfunc );
     BaseClass::setShader( kvs::Shader::Lambert() );
-    this->initialize();
 }
 
 template <typename ShadingType>
-RayCastingRenderer::RayCastingRenderer( const ShadingType shader )
+RayCastingRenderer::RayCastingRenderer( const ShadingType shader ):
+    m_step( 0.5f ),
+    m_opaque( 0.97f ),
+    m_ray_width( 1 ),
+    m_enable_lod( false )
 {
     BaseClass::setShader( shader );
-    this->initialize();
 }
 
 RayCastingRenderer::~RayCastingRenderer()
 {
-}
-
-void RayCastingRenderer::initialize()
-{
-    m_step = 0.5f;
-    m_opaque = 0.97f;
-    m_width = 0;
-    m_height = 0;
-    m_ray_width = 1;
-    m_enable_lod = false;
-    memset( m_modelview_matrix, 0, sizeof( m_modelview_matrix ) );
 }
 
 void RayCastingRenderer::exec(
@@ -68,7 +67,56 @@ void RayCastingRenderer::exec(
 {
     const kvs::StructuredVolumeObject* volume = kvs::StructuredVolumeObject::DownCast( object );
     BaseClass::startTimer();
-    this->create_image( volume, camera, light );
+
+    if ( BaseClass::windowWidth()  != camera->windowWidth() ||
+         BaseClass::windowHeight() != camera->windowHeight() )
+    {
+        BaseClass::setWindowSize( camera->windowWidth(), camera->windowHeight() );
+
+        const size_t npixels = BaseClass::windowWidth() * BaseClass::windowHeight();
+        BaseClass::allocateColorData( npixels * 4 );
+        BaseClass::allocateDepthData( npixels );
+        kvs::OpenGL::GetModelViewMatrix( m_modelview_matrix );
+    }
+
+    BaseClass::fillColorData( 0 );
+    BaseClass::fillDepthData( 0 );
+
+    if ( !volume->hasMinMaxValues() ) volume->updateMinMaxValues();
+    const float min_value = static_cast<float>( volume->minValue() );
+    const float max_value = static_cast<float>( volume->maxValue() );
+    const std::type_info& type = volume->values().typeInfo()->type();
+    if(      type == typeid(kvs::UInt8)  )
+    {
+        if ( !BaseClass::transferFunction().hasRange() ) BaseClass::transferFunction().setRange( 0, 255 );
+        this->rasterize<kvs::UInt8>( volume, camera, light );
+    }
+    else if( type == typeid(kvs::UInt16) )
+    {
+        if ( !BaseClass::transferFunction().hasRange() ) BaseClass::transferFunction().setRange( min_value, max_value );
+        this->rasterize<kvs::UInt16>( volume, camera, light );
+    }
+    else if( type == typeid(kvs::Int16) )
+    {
+        if ( !BaseClass::transferFunction().hasRange() ) BaseClass::transferFunction().setRange( min_value, max_value );
+        this->rasterize<kvs::Int16>( volume, camera, light );
+    }
+    else if( type == typeid(kvs::Real32) )
+    {
+        if ( !BaseClass::transferFunction().hasRange() ) BaseClass::transferFunction().setRange( min_value, max_value );
+        this->rasterize<kvs::Real32>( volume, camera, light );
+    }
+    else if( type == typeid(kvs::Real64) )
+    {
+        if ( !BaseClass::transferFunction().hasRange() ) BaseClass::transferFunction().setRange( min_value, max_value );
+        this->rasterize<kvs::Real64>( volume, camera, light );
+    }
+    else
+    {
+        kvsMessageError( "Not supported data type '%s'.",
+                         volume->values().typeInfo()->typeName() );
+    }
+
     BaseClass::drawImage();
     BaseClass::stopTimer();
 }
@@ -107,71 +155,6 @@ void RayCastingRenderer::disableCoarseRendering()
 
 /*==========================================================================*/
 /**
- *  Create rendering image.
- *
- *  @param volume  [in] volume object
- *  @param camera  [in] camera
- *  @param light   [in] light
- */
-/*==========================================================================*/
-void RayCastingRenderer::create_image(
-    const kvs::StructuredVolumeObject* volume,
-    const kvs::Camera* camera,
-    const kvs::Light* light )
-{
-    if ( BaseClass::windowWidth()  != camera->windowWidth() ||
-         BaseClass::windowHeight() != camera->windowHeight() )
-    {
-        BaseClass::setWindowSize( camera->windowWidth(), camera->windowHeight() );
-
-        const size_t npixels = BaseClass::windowWidth() * BaseClass::windowHeight();
-        BaseClass::allocateColorData( npixels * 4 );
-        BaseClass::allocateDepthData( npixels );
-
-        glGetFloatv( GL_MODELVIEW_MATRIX, m_modelview_matrix );
-    }
-
-    BaseClass::fillColorData( 0 );
-    BaseClass::fillDepthData( 0 );
-
-    if ( !volume->hasMinMaxValues() ) volume->updateMinMaxValues();
-    const float min_value = static_cast<float>( volume->minValue() );
-    const float max_value = static_cast<float>( volume->maxValue() );
-    const std::type_info& type = volume->values().typeInfo()->type();
-    if(      type == typeid(kvs::UInt8)  )
-    {
-        if ( !m_tfunc.hasRange() ) BaseClass::transferFunction().setRange( 0, 255 );
-        this->rasterize<kvs::UInt8>( volume, camera, light );
-    }
-    else if( type == typeid(kvs::UInt16) )
-    {
-        if ( !m_tfunc.hasRange() ) BaseClass::transferFunction().setRange( min_value, max_value );
-        this->rasterize<kvs::UInt16>( volume, camera, light );
-    }
-    else if( type == typeid(kvs::Int16) )
-    {
-        if ( !m_tfunc.hasRange() ) BaseClass::transferFunction().setRange( min_value, max_value );
-        this->rasterize<kvs::Int16>( volume, camera, light );
-    }
-    else if( type == typeid(kvs::Real32) )
-    {
-        if ( !m_tfunc.hasRange() ) BaseClass::transferFunction().setRange( min_value, max_value );
-        this->rasterize<kvs::Real32>( volume, camera, light );
-    }
-    else if( type == typeid(kvs::Real64) )
-    {
-        if ( !m_tfunc.hasRange() ) BaseClass::transferFunction().setRange( min_value, max_value );
-        this->rasterize<kvs::Real64>( volume, camera, light );
-    }
-    else
-    {
-        kvsMessageError( "Not supported data type '%s'.",
-                         volume->values().typeInfo()->typeName() );
-    }
-}
-
-/*==========================================================================*/
-/**
  *  Rasterization.
  *
  *  @param volume  [in] volume object
@@ -186,7 +169,7 @@ void RayCastingRenderer::rasterize(
     const kvs::Light* light )
 {
     // Set shader initial parameters.
-    BaseClass::m_shader->set( camera, light );
+    BaseClass::shader().set( camera, light );
 
     // Aliases.
     kvs::UInt8* const pixel = BaseClass::m_color_data.data();
@@ -203,7 +186,7 @@ void RayCastingRenderer::rasterize(
     if ( m_enable_lod )
     {
         float modelview_matrix[16];
-        glGetFloatv( GL_MODELVIEW_MATRIX, modelview_matrix );
+        kvs::OpenGL::GetModelViewMatrix( modelview_matrix );
         for ( size_t i = 0; i < 16; i++ )
         {
             if ( m_modelview_matrix[i] != modelview_matrix[i] )
@@ -351,7 +334,7 @@ void RayCastingRenderer::rasterize(
         }
     }
 
-    glFinish();
+    kvs::OpenGL::Finish();
 }
 
 template

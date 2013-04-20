@@ -356,7 +356,7 @@ void RayCastingRenderer::initialize_shader( const kvs::StructuredVolumeObject* v
         if ( m_enable_jittering ) frag.define("ENABLE_JITTERING");
         if ( BaseClass::isEnabledShading() )
         {
-            switch ( BaseClass::m_shader->type() )
+            switch ( BaseClass::shader().type() )
             {
             case kvs::Shader::LambertShading: frag.define("ENABLE_LAMBERT_SHADING"); break;
             case kvs::Shader::PhongShading: frag.define("ENABLE_PHONG_SHADING"); break;
@@ -375,14 +375,14 @@ void RayCastingRenderer::initialize_shader( const kvs::StructuredVolumeObject* v
     const kvs::Vector3f reciprocal( 1.0f / r.x(), 1.0f / r.y(), 1.0f / r.z() );
     kvs::Real32 min_range = 0.0f;
     kvs::Real32 max_range = 0.0f;
-    kvs::Real32 min_value = BaseClass::m_tfunc.colorMap().minValue();
-    kvs::Real32 max_value = BaseClass::m_tfunc.colorMap().maxValue();
+    kvs::Real32 min_value = BaseClass::transferFunction().colorMap().minValue();
+    kvs::Real32 max_value = BaseClass::transferFunction().colorMap().maxValue();
     const std::type_info& type = volume->values().typeInfo()->type();
     if ( type == typeid( kvs::UInt8 ) )
     {
         min_range = 0.0f;
         max_range = 255.0f;
-        if ( !BaseClass::m_tfunc.hasRange() )
+        if ( !BaseClass::transferFunction().hasRange() )
         {
             min_value = 0.0f;
             max_value = 255.0f;
@@ -392,7 +392,7 @@ void RayCastingRenderer::initialize_shader( const kvs::StructuredVolumeObject* v
     {
         min_range = static_cast<kvs::Real32>( kvs::Value<kvs::UInt8>::Min() );
         max_range = static_cast<kvs::Real32>( kvs::Value<kvs::UInt8>::Max() );
-        if ( !BaseClass::m_tfunc.hasRange() )
+        if ( !BaseClass::transferFunction().hasRange() )
         {
             min_value = -128.0f;
             max_value = 127.0f;
@@ -402,7 +402,7 @@ void RayCastingRenderer::initialize_shader( const kvs::StructuredVolumeObject* v
     {
         min_range = static_cast<kvs::Real32>( kvs::Value<kvs::UInt16>::Min() );
         max_range = static_cast<kvs::Real32>( kvs::Value<kvs::UInt16>::Max() );
-        if ( !BaseClass::m_tfunc.hasRange() )
+        if ( !BaseClass::transferFunction().hasRange() )
         {
             min_value = static_cast<kvs::Real32>( volume->minValue() );
             max_value = static_cast<kvs::Real32>( volume->maxValue() );
@@ -412,7 +412,7 @@ void RayCastingRenderer::initialize_shader( const kvs::StructuredVolumeObject* v
     {
         min_range = static_cast<kvs::Real32>( kvs::Value<kvs::Int16>::Min() );
         max_range = static_cast<kvs::Real32>( kvs::Value<kvs::Int16>::Max() );
-        if ( !BaseClass::m_tfunc.hasRange() )
+        if ( !BaseClass::transferFunction().hasRange() )
         {
             min_value = static_cast<kvs::Real32>( volume->minValue() );
             max_value = static_cast<kvs::Real32>( volume->maxValue() );
@@ -440,42 +440,10 @@ void RayCastingRenderer::initialize_shader( const kvs::StructuredVolumeObject* v
     m_ray_casting_shader.setUniform( "transfer_function.max_value", max_value );
     m_ray_casting_shader.setUniform( "dt", m_step );
     m_ray_casting_shader.setUniform( "opaque", m_opaque );
-    switch ( BaseClass::m_shader->type() )
-    {
-    case kvs::Shader::LambertShading:
-    {
-        const GLfloat Ka = ((kvs::Shader::Lambert*)(BaseClass::m_shader))->Ka;
-        const GLfloat Kd = ((kvs::Shader::Lambert*)(BaseClass::m_shader))->Kd;
-        m_ray_casting_shader.setUniform( "shading.Ka", Ka );
-        m_ray_casting_shader.setUniform( "shading.Kd", Kd );
-        break;
-    }
-    case kvs::Shader::PhongShading:
-    {
-        const GLfloat Ka = ((kvs::Shader::Phong*)(BaseClass::m_shader))->Ka;
-        const GLfloat Kd = ((kvs::Shader::Phong*)(BaseClass::m_shader))->Kd;
-        const GLfloat Ks = ((kvs::Shader::Phong*)(BaseClass::m_shader))->Ks;
-        const GLfloat S  = ((kvs::Shader::Phong*)(BaseClass::m_shader))->S;
-        m_ray_casting_shader.setUniform( "shading.Ka", Ka );
-        m_ray_casting_shader.setUniform( "shading.Kd", Kd );
-        m_ray_casting_shader.setUniform( "shading.Ks", Ks );
-        m_ray_casting_shader.setUniform( "shading.S",  S );
-        break;
-    }
-    case kvs::Shader::BlinnPhongShading:
-    {
-        const GLfloat Ka = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->Ka;
-        const GLfloat Kd = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->Kd;
-        const GLfloat Ks = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->Ks;
-        const GLfloat S  = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->S;
-        m_ray_casting_shader.setUniform( "shading.Ka", Ka );
-        m_ray_casting_shader.setUniform( "shading.Kd", Kd );
-        m_ray_casting_shader.setUniform( "shading.Ks", Ks );
-        m_ray_casting_shader.setUniform( "shading.S",  S );
-        break;
-    }
-    default: /* NO SHADING */ break;
-    }
+    m_ray_casting_shader.setUniform( "shading.Ka", BaseClass::shader().Ka );
+    m_ray_casting_shader.setUniform( "shading.Kd", BaseClass::shader().Kd );
+    m_ray_casting_shader.setUniform( "shading.Ks", BaseClass::shader().Ks );
+    m_ray_casting_shader.setUniform( "shading.S",  BaseClass::shader().S );
     m_ray_casting_shader.unbind();
 }
 
@@ -642,10 +610,10 @@ void RayCastingRenderer::initialize_volume_texture( const kvs::StructuredVolumeO
         data_type = GL_FLOAT;
         kvs::Real32 min_value = static_cast<kvs::Real32>( volume->minValue() );
         kvs::Real32 max_value = static_cast<kvs::Real32>( volume->maxValue() );
-        if ( BaseClass::m_tfunc.hasRange() )
+        if ( BaseClass::transferFunction().hasRange() )
         {
-            min_value = BaseClass::m_tfunc.colorMap().minValue();
-            max_value = BaseClass::m_tfunc.colorMap().maxValue();
+            min_value = BaseClass::transferFunction().colorMap().minValue();
+            max_value = BaseClass::transferFunction().colorMap().maxValue();
         }
         data_value = ::NormalizeValues<kvs::UInt32>( volume, min_value, max_value );
     }
@@ -655,10 +623,10 @@ void RayCastingRenderer::initialize_volume_texture( const kvs::StructuredVolumeO
         data_type = GL_FLOAT;
         kvs::Real32 min_value = static_cast<kvs::Real32>( volume->minValue() );
         kvs::Real32 max_value = static_cast<kvs::Real32>( volume->maxValue() );
-        if ( BaseClass::m_tfunc.hasRange() )
+        if ( BaseClass::transferFunction().hasRange() )
         {
-            min_value = BaseClass::m_tfunc.colorMap().minValue();
-            max_value = BaseClass::m_tfunc.colorMap().maxValue();
+            min_value = BaseClass::transferFunction().colorMap().minValue();
+            max_value = BaseClass::transferFunction().colorMap().maxValue();
         }
         data_value = ::NormalizeValues<kvs::Int32>( volume, min_value, max_value );
     }
@@ -668,10 +636,10 @@ void RayCastingRenderer::initialize_volume_texture( const kvs::StructuredVolumeO
         data_type = GL_FLOAT;
         kvs::Real32 min_value = static_cast<kvs::Real32>( volume->minValue() );
         kvs::Real32 max_value = static_cast<kvs::Real32>( volume->maxValue() );
-        if ( BaseClass::m_tfunc.hasRange() )
+        if ( BaseClass::transferFunction().hasRange() )
         {
-            min_value = BaseClass::m_tfunc.colorMap().minValue();
-            max_value = BaseClass::m_tfunc.colorMap().maxValue();
+            min_value = BaseClass::transferFunction().colorMap().minValue();
+            max_value = BaseClass::transferFunction().colorMap().maxValue();
         }
         data_value = ::NormalizeValues<kvs::Real32>( volume, min_value, max_value );
     }
@@ -681,10 +649,10 @@ void RayCastingRenderer::initialize_volume_texture( const kvs::StructuredVolumeO
         data_type = GL_FLOAT;
         kvs::Real32 min_value = static_cast<kvs::Real32>( volume->minValue() );
         kvs::Real32 max_value = static_cast<kvs::Real32>( volume->maxValue() );
-        if ( BaseClass::m_tfunc.hasRange() )
+        if ( BaseClass::transferFunction().hasRange() )
         {
-            min_value = BaseClass::m_tfunc.colorMap().minValue();
-            max_value = BaseClass::m_tfunc.colorMap().maxValue();
+            min_value = BaseClass::transferFunction().colorMap().minValue();
+            max_value = BaseClass::transferFunction().colorMap().maxValue();
         }
         data_value = ::NormalizeValues<kvs::Real64>( volume, min_value, max_value );
     }

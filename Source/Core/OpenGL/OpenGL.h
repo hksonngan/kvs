@@ -63,6 +63,9 @@ void Enable( GLenum cap );
 void Disable( GLenum cap );
 bool IsEnabled( GLenum cap );
 
+void SetColorMask( GLboolean red, GLboolean green, GLboolean blue, GLboolean alpha );
+void SetDepthMask( GLboolean flag );
+void SetDepthFunc( GLenum func );
 void SetBlendFunc( GLenum sfactor, GLenum dfactor );
 void SetShadeModel( GLenum mode );
 void SetMatrixMode( GLenum mode );
@@ -125,6 +128,14 @@ class WithEnabled
 public:
     WithEnabled( GLenum cap );
     ~WithEnabled();
+};
+
+class WithDisabled
+{
+    GLenum m_cap;
+public:
+    WithDisabled( GLenum cap );
+    ~WithDisabled();
 };
 
 /*KVS_DEPRECATED*/ void ActivateTextureUnit( GLint unit );

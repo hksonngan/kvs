@@ -15,6 +15,7 @@
 #include "VolumeRendererBase.h"
 #include <kvs/Camera>
 #include <kvs/Math>
+#include <kvs/OpenGL>
 
 
 namespace kvs
@@ -25,9 +26,17 @@ namespace kvs
  *  Constructor.
  */
 /*==========================================================================*/
-VolumeRendererBase::VolumeRendererBase()
+VolumeRendererBase::VolumeRendererBase():
+    m_width( 0 ),
+    m_height( 0 ),
+    m_enable_shading( true ),
+    m_shader( NULL )
 {
-    this->initialize();
+    m_depth_buffer.setFormat( GL_DEPTH_COMPONENT );
+    m_depth_buffer.setType( GL_FLOAT );
+
+    m_color_buffer.setFormat( GL_RGBA );
+    m_color_buffer.setType( GL_UNSIGNED_BYTE );
 }
 
 /*==========================================================================*/
@@ -37,7 +46,7 @@ VolumeRendererBase::VolumeRendererBase()
 /*==========================================================================*/
 VolumeRendererBase::~VolumeRendererBase()
 {
-    this->clear();
+    if ( m_shader ) { delete m_shader; }
 }
 
 size_t VolumeRendererBase::windowWidth() const
@@ -87,9 +96,9 @@ void VolumeRendererBase::disableShading()
  *  @return true, if the shading is enable.
  */
 /*==========================================================================*/
-const bool VolumeRendererBase::isEnabledShading() const
+bool VolumeRendererBase::isEnabledShading() const
 {
-    return( m_enable_shading );
+    return m_enable_shading;
 }
 
 /*==========================================================================*/
@@ -100,41 +109,12 @@ const bool VolumeRendererBase::isEnabledShading() const
 /*==========================================================================*/
 const kvs::TransferFunction& VolumeRendererBase::transferFunction() const
 {
-    return( m_tfunc );
+    return m_tfunc;
 }
 
-/*==========================================================================*/
-/**
- *  Initialize.
- */
-/*==========================================================================*/
-void VolumeRendererBase::initialize()
+kvs::Shader::ShadingModel& VolumeRendererBase::shader()
 {
-    m_width = 0;
-    m_height = 0;
-
-    m_enable_shading = true;
-    m_shader = NULL;
-
-    m_depth_buffer.setFormat( GL_DEPTH_COMPONENT );
-    m_depth_buffer.setType( GL_FLOAT );
-
-    m_color_buffer.setFormat( GL_RGBA );
-    m_color_buffer.setType( GL_UNSIGNED_BYTE );
-}
-
-/*==========================================================================*/
-/**
- *  Clear.
- */
-/*==========================================================================*/
-void VolumeRendererBase::clear()
-{
-    if ( m_shader )
-    {
-        delete m_shader;
-        m_shader = NULL;
-    }
+    return *m_shader;
 }
 
 /*==========================================================================*/
@@ -181,70 +161,24 @@ void VolumeRendererBase::fillColorData( const kvs::UInt8 value )
 /*==========================================================================*/
 void VolumeRendererBase::drawImage()
 {
-    // Get viewport information.
-    int viewport[4];
-    glGetIntegerv( GL_VIEWPORT, (GLint*)viewport );
+    GLint viewport[4];
+    kvs::OpenGL::GetViewport( viewport );
 
-    glDepthFunc( GL_LEQUAL );
-    glDepthMask( GL_TRUE );
-    glColorMask( GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE );
-//    this->drawDepthBuffer( viewport );
+    kvs::OpenGL::SetDepthFunc( GL_LEQUAL );
+    kvs::OpenGL::SetDepthMask( GL_TRUE );
+    kvs::OpenGL::SetColorMask( GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE );
     {
-        glEnable( GL_DEPTH_TEST );
+        kvs::OpenGL::WithEnabled e( GL_DEPTH_TEST );
         m_depth_buffer.draw( m_width, m_height, viewport, m_depth_data.data() );
-        glDisable( GL_DEPTH_TEST );
     }
 
-    glBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_ALPHA );
-    glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE );
-//    this->drawColorBuffer( viewport );
+    kvs::OpenGL::SetBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_ALPHA );
+    kvs::OpenGL::SetColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE );
     {
-        glEnable( GL_BLEND );
-        glDisable( GL_DEPTH_TEST );
+        kvs::OpenGL::WithEnabled e( GL_BLEND );
+        kvs::OpenGL::WithDisabled d( GL_DEPTH_TEST );
         m_color_buffer.draw( m_width, m_height, viewport, m_color_data.data() );
-        glDisable( GL_BLEND );
-        glEnable( GL_DEPTH_TEST );
     }
 }
-
-/*==========================================================================*/
-/**
- *  Draw the depth buffer.
- */
-/*==========================================================================*/
-/*
-void VolumeRendererBase::drawDepthBuffer( const int* viewport )
-{
-    // Enable/Disable OpenGL parameters.
-    glEnable( GL_DEPTH_TEST );
-
-    // Send depth data to the frame buffer (depth buffer).
-    m_depth_buffer.draw( m_width, m_height, viewport, m_depth_data.data() );
-
-    // Recover OpenGL parameters.
-    glDisable( GL_DEPTH_TEST );
-}
-*/
-
-/*==========================================================================*/
-/**
- *  Draw color buffer.
- */
-/*==========================================================================*/
-/*
-void VolumeRendererBase::drawColorBuffer( const int* viewport )
-{
-    // Enable/Disable OpenGL parameters.
-    glEnable( GL_BLEND );
-    glDisable( GL_DEPTH_TEST );
-
-    // Send color data to the frame buffer (color buffer).
-    m_color_buffer.draw( m_width, m_height, viewport, m_color_data.data() );
-
-    // Recover OpenGL parameters.
-    glDisable( GL_BLEND );
-    glEnable( GL_DEPTH_TEST );
-}
-*/
 
 } // end of namespace kvs
