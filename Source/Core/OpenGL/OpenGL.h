@@ -70,14 +70,31 @@ void SetBlendFunc( GLenum sfactor, GLenum dfactor );
 void SetShadeModel( GLenum mode );
 void SetMatrixMode( GLenum mode );
 void SetCullFace( GLenum mode );
+void SetReadBuffer( GLenum mode );
 void SetDrawBuffer( GLenum mode );
 void SetDrawBuffers( GLsizei n, const GLenum* bufs );
+
+void SetRasterPos( GLdouble x, GLdouble y );
+void SetRasterPos( GLfloat x, GLfloat y );
+void SetRasterPos( GLint x, GLint y );
+void SetRasterPos( GLdouble x, GLdouble y, GLdouble z );
+void SetRasterPos( GLfloat x, GLfloat y, GLfloat z );
+void SetRasterPos( GLint x, GLint y, GLint z );
+void SetRasterPos( GLdouble x, GLdouble y, GLdouble z, GLdouble w );
+void SetRasterPos( GLfloat x, GLfloat y, GLfloat z, GLfloat w );
+void SetRasterPos( GLint x, GLint y, GLint z, GLint w );
+
+void SetPixelStorageMode( GLenum pname, GLfloat param );
+void SetPixelStorageMode( GLenum pname, GLint param );
 
 void SetViewport( GLint x, GLint y, GLsizei width, GLsizei height );
 void SetOrtho( GLdouble left, GLdouble right, GLdouble bottom, GLdouble top, GLdouble near, GLdouble far );
 void SetOrtho( GLdouble left, GLdouble right, GLdouble bottom, GLdouble top );
 void SetPerspective( GLdouble fovy, GLdouble aspect, GLdouble near, GLdouble far );
 void SetFrustum( GLdouble left, GLdouble right, GLdouble bottom, GLdouble top, GLdouble near, GLdouble far );
+
+void ReadPixels( GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLvoid* data );
+void DrawPixels( GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid* data );
 
 void GetModelViewMatrix( GLfloat* params );
 void GetModelViewMatrix( GLdouble* params );

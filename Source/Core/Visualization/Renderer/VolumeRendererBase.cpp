@@ -169,7 +169,7 @@ void VolumeRendererBase::drawImage()
     kvs::OpenGL::SetColorMask( GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE );
     {
         kvs::OpenGL::WithEnabled e( GL_DEPTH_TEST );
-        m_depth_buffer.draw( m_width, m_height, viewport, m_depth_data.data() );
+        m_depth_buffer.drawPixels( 0, 0, m_width, m_height, m_depth_data.data() );
     }
 
     kvs::OpenGL::SetBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_ALPHA );
@@ -177,7 +177,7 @@ void VolumeRendererBase::drawImage()
     {
         kvs::OpenGL::WithEnabled e( GL_BLEND );
         kvs::OpenGL::WithDisabled d( GL_DEPTH_TEST );
-        m_color_buffer.draw( m_width, m_height, viewport, m_color_data.data() );
+        m_color_buffer.drawPixels( 0, 0, m_width, m_height, m_color_data.data() );
     }
 }
 

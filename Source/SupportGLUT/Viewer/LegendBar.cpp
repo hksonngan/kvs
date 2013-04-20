@@ -451,6 +451,7 @@ void LegendBar::draw_color_bar( const int x, const int y, const int width, const
 
     glDisable( GL_BLEND );
     glDisable( GL_DEPTH_TEST );
+    glDisable( GL_TEXTURE_3D );
     glEnable( GL_TEXTURE_2D );
 
     m_texture.bind();

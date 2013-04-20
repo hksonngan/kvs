@@ -98,6 +98,97 @@ void FrameBuffer::setType( const GLenum type )
 /*==========================================================================*/
 /**
  *  Read the pixel data from the frame buffer.
+ *  @param x [in] x value of the window coordinates
+ *  @param y [in] y value of the window coordinates
+ *  @param width [in] width of the pixel rectangle
+ *  @param height [in] height of the pixel rectangle
+ *  @param pixels [out] pointer to an address of the pixel data
+ *  @param buffer [in] color buffer that is read from the frame buffer
+ */
+/*==========================================================================*/
+void FrameBuffer::readPixels(
+    const int x,
+    const int y,
+    const int width,
+    const int height,
+    void** pixels,
+    const GLenum buffer ) const
+{
+    kvs::OpenGL::SetPixelStorageMode( GL_PACK_ALIGNMENT, 1 );
+
+    if ( buffer != 0 )
+    {
+        GLint current_buffer = kvs::OpenGL::Integer( GL_READ_BUFFER );
+        kvs::OpenGL::SetReadBuffer( buffer );
+        kvs::OpenGL::ReadPixels( x, y, width, height, m_format, m_type, *pixels );
+        kvs::OpenGL::SetReadBuffer( current_buffer );
+    }
+    else
+    {
+        kvs::OpenGL::ReadPixels( x, y, width, height, m_format, m_type, *pixels );
+    }
+}
+
+/*==========================================================================*/
+/**
+ *  Draw the pixel data to the frame buffer.
+ *  @param x [in] x value of the window coordinates
+ *  @param y [in] y value of the window coordinates
+ *  @param width [in] width of the pixel rectangle
+ *  @param height [in] height of the pixel rectangle
+ *  @param pixels [in] pointer to the pixel data
+ *  @param buffer [in] color buffer that is read from the frame buffer
+ */
+/*==========================================================================*/
+void FrameBuffer::drawPixels(
+    const int x,
+    const int y,
+    const int width,
+    const int height,
+    const void* pixels,
+    const GLenum buffer ) const
+{
+    GLint current_buffer = 0;
+    if ( buffer != 0 )
+    {
+        current_buffer = kvs::OpenGL::Integer( GL_DRAW_BUFFER );
+        kvs::OpenGL::SetDrawBuffer( buffer );
+    }
+
+    kvs::OpenGL::WithDisabled d1( GL_TEXTURE_1D );
+    kvs::OpenGL::WithDisabled d2( GL_TEXTURE_2D );
+    kvs::OpenGL::WithDisabled d3( GL_TEXTURE_3D );
+    {
+        GLint viewport[4];
+        kvs::OpenGL::GetViewport( viewport );
+        const int left = viewport[0];
+        const int bottom = viewport[1];
+        const int right = viewport[2];
+        const int top = viewport[3];
+
+        kvs::OpenGL::WithPushedMatrix p1( GL_PROJECTION );
+        p1.loadIdentity();
+        {
+            kvs::OpenGL::WithPushedMatrix p2( GL_MODELVIEW );
+            p2.loadIdentity();
+            {
+                kvs::OpenGL::SetOrtho( left, right, bottom, top, -1, 1 );
+                kvs::OpenGL::SetPixelStorageMode( GL_UNPACK_ALIGNMENT, 1 );
+                kvs::OpenGL::SetRasterPos( x, y );
+                kvs::OpenGL::DrawPixels( width, height, m_format, m_type, pixels );
+            }
+        }
+    }
+
+    if ( buffer != 0 ) kvs::OpenGL::SetDrawBuffer( current_buffer );
+}
+
+
+
+
+/*==========================================================================*/
+/**
+ *  Read the pixel data from the frame buffer.
  *  @param width [in] width of the pixel rectangle
  *  @param height [in] height of the pixel rectangle
  *  @param  pixels [out] pointer to an address of the pixel data

@@ -340,6 +340,11 @@ void SetCullFace( GLenum mode )
     KVS_GL_CALL( glCullFace( mode ) );
 }
 
+void SetReadBuffer( GLenum mode )
+{
+    KVS_GL_CALL( glReadBuffer( mode ) );
+}
+
 void SetDrawBuffer( GLenum mode )
 {
     KVS_GL_CALL( glDrawBuffer( mode ) );
@@ -348,6 +353,61 @@ void SetDrawBuffer( GLenum mode )
 void SetDrawBuffers( GLsizei n, const GLenum* bufs )
 {
     KVS_GL_CALL( glDrawBuffers( n, bufs ) );
+}
+
+void SetRasterPos( GLdouble x, GLdouble y )
+{
+    KVS_GL_CALL( glRasterPos2d( x, y ) );
+}
+
+void SetRasterPos( GLfloat x, GLfloat y )
+{
+    KVS_GL_CALL( glRasterPos2f( x, y ) );
+}
+
+void SetRasterPos( GLint x, GLint y )
+{
+    KVS_GL_CALL( glRasterPos2i( x, y ) );
+}
+
+void SetRasterPos( GLdouble x, GLdouble y, GLdouble z )
+{
+    KVS_GL_CALL( glRasterPos3d( x, y, z ) );
+}
+
+void SetRasterPos( GLfloat x, GLfloat y, GLfloat z )
+{
+    KVS_GL_CALL( glRasterPos3f( x, y, z ) );
+}
+
+void SetRasterPos( GLint x, GLint y, GLint z )
+{
+    KVS_GL_CALL( glRasterPos3i( x, y, z ) );
+}
+
+void SetRasterPos( GLdouble x, GLdouble y, GLdouble z, GLdouble w )
+{
+    KVS_GL_CALL( glRasterPos4d( x, y, z, w ) );
+}
+
+void SetRasterPos( GLfloat x, GLfloat y, GLfloat z, GLfloat w )
+{
+    KVS_GL_CALL( glRasterPos4f( x, y, z, w ) );
+}
+
+void SetRasterPos( GLint x, GLint y, GLint z, GLint w )
+{
+    KVS_GL_CALL( glRasterPos4i( x, y, z, w ) );
+}
+
+void SetPixelStorageMode( GLenum pname, GLfloat param )
+{
+    KVS_GL_CALL( glPixelStoref( pname, param ) );
+}
+
+void SetPixelStorageMode( GLenum pname, GLint param )
+{
+    KVS_GL_CALL( glPixelStorei( pname, param ) );
 }
 
 void SetViewport( GLint x, GLint y, GLsizei width, GLsizei height )
@@ -373,6 +433,16 @@ void SetPerspective( GLdouble fovy, GLdouble aspect, GLdouble near, GLdouble far
 void SetFrustum( GLdouble left, GLdouble right, GLdouble bottom, GLdouble top, GLdouble near, GLdouble far )
 {
     KVS_GL_CALL( glFrustum( left, right, bottom, top, near, far ) );
+}
+
+void ReadPixels( GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLvoid* data )
+{
+    KVS_GL_CALL( glReadPixels( x, y, width, height, format, type, data ) );
+}
+
+void DrawPixels( GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid* data )
+{
+    KVS_GL_CALL( glDrawPixels( width, height, format, type, data ) );
 }
 
 void GetModelViewMatrix( GLfloat* params )
