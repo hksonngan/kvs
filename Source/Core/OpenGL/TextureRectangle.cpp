@@ -15,6 +15,7 @@
 #include "TextureRectangle.h"
 #include <kvs/Math>
 #include <kvs/Assert>
+#include <kvs/OpenGL>
 #include <iostream>
 
 
@@ -33,7 +34,7 @@ void TextureRectangle::Unbind()
 /*==========================================================================*/
 TextureRectangle::TextureRectangle():
     Texture( GL_TEXTURE_RECTANGLE, GL_TEXTURE_BINDING_RECTANGLE ),
-    m_is_downloaded( false )
+    m_is_loaded( false )
 {
 }
 
@@ -47,9 +48,9 @@ TextureRectangle::~TextureRectangle()
     this->release();
 }
 
-bool TextureRectangle::isDownloaded() const
+bool TextureRectangle::isLoaded() const
 {
-    return m_is_downloaded;
+    return m_is_loaded;
 }
 
 /*==========================================================================*/
@@ -71,7 +72,7 @@ void TextureRectangle::create( const size_t width, const size_t height, const vo
     BaseClass::setParameter( GL_TEXTURE_MIN_FILTER, BaseClass::minFilter() );
     BaseClass::setParameter( GL_TEXTURE_WRAP_S, BaseClass::wrapS() );
     BaseClass::setParameter( GL_TEXTURE_WRAP_T, BaseClass::wrapT() );
-    this->download( width, height, data );
+    this->load( width, height, data );
 }
 
 /*==========================================================================*/
@@ -82,12 +83,12 @@ void TextureRectangle::create( const size_t width, const size_t height, const vo
 void TextureRectangle::release()
 {
     BaseClass::deleteTexture();
-    m_is_downloaded = false;
+    m_is_loaded = false;
 }
 
 /*==========================================================================*/
 /**
- *  Download the texture data to the GPU.
+ *  Load the texture data to the GPU.
  *  @param width [in] texture width
  *  @param height [in] texture height
  *  @param pixels [in] pointer to the pixel data
@@ -95,7 +96,7 @@ void TextureRectangle::release()
  *  @param yoffset [in] texel offset in the y direction within the pixel data
  */
 /*==========================================================================*/
-void TextureRectangle::download(
+void TextureRectangle::load(
     const size_t width,
     const size_t height,
     const void*  data,
@@ -107,10 +108,10 @@ void TextureRectangle::download(
     BaseClass::setPixelStorageMode( GL_UNPACK_SWAP_BYTES, swap ? GL_TRUE : GL_FALSE );
     BaseClass::setPixelStorageMode( GL_UNPACK_ALIGNMENT, 1 );
 
-    if ( !m_is_downloaded )
+    if ( !m_is_loaded )
     {
         BaseClass::setImageRectangle( width, height, data );
-        m_is_downloaded = true;
+        m_is_loaded = true;
     }
     else
     {

@@ -438,6 +438,53 @@ void Texture::setSubImageRectangle( GLsizei width, GLsizei height, const GLvoid*
     KVS_GL_CALL( glTexSubImage2D( m_target, level, xoffset, yoffset, width, height, m_external_format, m_external_type, data ) );
 }
 
+void Texture::copyImage1D( GLint x, GLint y, GLsizei width )
+{
+    KVS_ASSERT( m_target == GL_TEXTURE_1D );
+    KVS_ASSERT( this->isBound() );
+
+    const GLint level = 0; // level-of-detail number
+    const GLint border = 0; // border width (0 or 1)
+    KVS_GL_CALL( glCopyTexImage1D( m_target, level, m_internal_format, x, y, width, border ) );
+}
+
+void Texture::copyImage2D( GLint x, GLint y, GLsizei width, GLsizei height )
+{
+    KVS_ASSERT( m_target == GL_TEXTURE_2D );
+    KVS_ASSERT( this->isBound() );
+
+    const GLint level = 0; // level-of-detail number
+    const GLint border = 0; // border width (0 or 1)
+    KVS_GL_CALL( glCopyTexImage2D( m_target, level, m_internal_format, x, y, width, height, border ) );
+}
+
+void Texture::copySubImage1D( GLint x, GLint y, GLsizei width, GLint xoffset )
+{
+    KVS_ASSERT( m_target == GL_TEXTURE_1D );
+    KVS_ASSERT( this->isBound() );
+
+    const GLint level = 0; // level-of-detail number
+    KVS_GL_CALL( glCopyTexSubImage1D( m_target, level, xoffset, x, y, width ) );
+}
+
+void Texture::copySubImage2D( GLint x, GLint y, GLsizei width, GLsizei height, GLint xoffset, GLint yoffset )
+{
+    KVS_ASSERT( m_target == GL_TEXTURE_2D );
+    KVS_ASSERT( this->isBound() );
+
+    const GLint level = 0; // level-of-detail number
+    KVS_GL_CALL( glCopyTexSubImage2D( m_target, level, xoffset, yoffset, x, y, width, height ) );
+}
+
+void Texture::copySubImage3D( GLint x, GLint y, GLsizei width, GLsizei height, GLint xoffset, GLint yoffset, GLint zoffset )
+{
+    KVS_ASSERT( m_target == GL_TEXTURE_3D );
+    KVS_ASSERT( this->isBound() );
+
+    const GLint level = 0; // level-of-detail number
+    KVS_GL_CALL( glCopyTexSubImage3D( m_target, level, xoffset, yoffset, zoffset, x, y, width, height ) );
+}
+
 void Texture::setParameter( GLenum pname, GLfloat param )
 {
     KVS_ASSERT( this->isBound() );

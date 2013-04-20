@@ -101,10 +101,10 @@ public:
     void attachVolumeObject( const kvs::UnstructuredVolumeObject* volume );
 
 private:
-    void create_geometry();
-    void create_shader();
-    void create_table();
-    void create_framebuffer();
+    void initialize_geometry();
+    void initialize_shader();
+    void initialize_table();
+    void initialize_framebuffer();
     void update_framebuffer();
     void enable_MRT_rendering();
     void disable_MRT_rendering();

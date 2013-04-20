@@ -1093,7 +1093,7 @@ void ParticleBasedRenderer::create_random_texture()
     {
         pixels[i] = static_cast<GLubyte>( random.randInteger() );
     }
-    m_random_texture.download( m_random_texture_size, m_random_texture_size, pixels );
+    m_random_texture.load( m_random_texture_size, m_random_texture_size, pixels );
     delete [] pixels;
 }
 

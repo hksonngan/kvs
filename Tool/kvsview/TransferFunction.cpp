@@ -76,7 +76,7 @@ struct Parameters
         color_map_texture.setMinFilter( GL_LINEAR );
         color_map_texture.setMagFilter( GL_LINEAR );
         color_map_texture.create( width );
-        color_map_texture.download( width, data );
+        color_map_texture.load( width, data );
 
         delete [] data;
     }
@@ -115,7 +115,7 @@ struct Parameters
         checkerboard_texture.setWrapS( GL_REPEAT );
         checkerboard_texture.setWrapT( GL_REPEAT );
         checkerboard_texture.create( width, height );
-        checkerboard_texture.download( width, height, data );
+        checkerboard_texture.load( width, height, data );
 
         delete [] data;
     }

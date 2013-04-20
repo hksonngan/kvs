@@ -34,7 +34,7 @@ void Texture1D::Unbind()
 /*==========================================================================*/
 Texture1D::Texture1D():
     Texture( GL_TEXTURE_1D, GL_TEXTURE_BINDING_1D ),
-    m_is_downloaded( false )
+    m_is_loaded( false )
 {
 }
 
@@ -48,9 +48,9 @@ Texture1D::~Texture1D()
     this->release();
 }
 
-bool Texture1D::isDownloaded() const
+bool Texture1D::isLoaded() const
 {
-    return m_is_downloaded;
+    return m_is_loaded;
 }
 
 /*==========================================================================*/
@@ -69,7 +69,7 @@ void Texture1D::create( const size_t width, const void* data )
     BaseClass::setParameter( GL_TEXTURE_MAG_FILTER, BaseClass::magFilter() );
     BaseClass::setParameter( GL_TEXTURE_MIN_FILTER, BaseClass::minFilter() );
     BaseClass::setParameter( GL_TEXTURE_WRAP_S, BaseClass::wrapS() );
-    this->download( width, data );
+    this->load( width, data );
 }
 
 /*==========================================================================*/
@@ -80,18 +80,18 @@ void Texture1D::create( const size_t width, const void* data )
 void Texture1D::release()
 {
     BaseClass::deleteTexture();
-    m_is_downloaded = false;
+    m_is_loaded = false;
 }
 
 /*==========================================================================*/
 /**
- *  Download the texture data to the GPU.
+ *  Load the texture data to the GPU.
  *  @param width [in] texture width
  *  @param data [in] pointer to the pixel data
  *  @param xoffset [in] texel offset in the x direction within the pixel data
  */
 /*==========================================================================*/
-void Texture1D::download(
+void Texture1D::load(
     const size_t width,
     const void* data,
     const size_t offset )
@@ -101,14 +101,39 @@ void Texture1D::download(
     BaseClass::setPixelStorageMode( GL_UNPACK_SWAP_BYTES, swap ? GL_TRUE : GL_FALSE );
     BaseClass::setPixelStorageMode( GL_UNPACK_ALIGNMENT, 1 );
 
-    if ( !m_is_downloaded )
+    if ( !m_is_loaded )
     {
         BaseClass::setImage1D( width, data );
-        m_is_downloaded = true;
+        m_is_loaded = true;
     }
     else
     {
         BaseClass::setSubImage1D( width, data, offset );
+    }
+
+    BaseClass::setPixelStorageMode( GL_UNPACK_SWAP_BYTES, swap );
+    BaseClass::setPixelStorageMode( GL_UNPACK_ALIGNMENT, alignment );
+}
+
+void Texture1D::loadFromFrameBuffer(
+    const int x,
+    const int y,
+    const size_t width,
+    const size_t offset )
+{
+    const GLint swap = kvs::OpenGL::Integer( GL_UNPACK_SWAP_BYTES );
+    const GLint alignment = kvs::OpenGL::Integer( GL_UNPACK_ALIGNMENT );
+    BaseClass::setPixelStorageMode( GL_UNPACK_SWAP_BYTES, swap ? GL_TRUE : GL_FALSE );
+    BaseClass::setPixelStorageMode( GL_UNPACK_ALIGNMENT, 1 );
+
+    if ( !m_is_loaded )
+    {
+        BaseClass::copyImage1D( x, y, width );
+        m_is_loaded = true;
+    }
+    else
+    {
+        BaseClass::copySubImage1D( x, y, width, offset );
     }
 
     BaseClass::setPixelStorageMode( GL_UNPACK_SWAP_BYTES, swap );

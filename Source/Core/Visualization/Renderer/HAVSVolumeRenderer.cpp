@@ -151,10 +151,10 @@ void HAVSVolumeRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs
     if ( BaseClass::windowWidth() == 0 && BaseClass::windowHeight() == 0 )
     {
         BaseClass::setWindowSize( camera->windowWidth(), camera->windowHeight() );
-        this->create_geometry();
-        this->create_shader();
-        this->create_table();
-        this->create_framebuffer();
+        this->initialize_geometry();
+        this->initialize_shader();
+        this->initialize_table();
+        this->initialize_framebuffer();
     }
 
     // Following processes are executed when the window size is changed.
@@ -201,7 +201,7 @@ void HAVSVolumeRenderer::attachVolumeObject( const kvs::UnstructuredVolumeObject
     }
 }
 
-void HAVSVolumeRenderer::create_geometry()
+void HAVSVolumeRenderer::initialize_geometry()
 {
     if ( this->isEnabledVBO() )
     {
@@ -225,7 +225,7 @@ void HAVSVolumeRenderer::create_geometry()
     }
 }
 
-void HAVSVolumeRenderer::create_shader()
+void HAVSVolumeRenderer::initialize_shader()
 {
     kvs::ShaderSource vert_begin( "HAVS_begin.vert" );
     kvs::ShaderSource vert_kbuffer( "HAVS_kbuffer.vert" );
@@ -249,7 +249,7 @@ void HAVSVolumeRenderer::create_shader()
     }
 }
 
-void HAVSVolumeRenderer::create_table()
+void HAVSVolumeRenderer::initialize_table()
 {
     if ( !m_ref_volume->hasMinMaxValues() ) m_ref_volume->updateMinMaxValues();
     const float min_value = static_cast<float>( m_ref_volume->minValue() );
@@ -259,7 +259,7 @@ void HAVSVolumeRenderer::create_table()
     m_table.download();
 }
 
-void HAVSVolumeRenderer::create_framebuffer()
+void HAVSVolumeRenderer::initialize_framebuffer()
 {
     if ( m_k_size == 2 ) { m_ntargets = 2; }
     else { m_ntargets = 4; }

@@ -34,7 +34,7 @@ void Texture2D::Unbind()
 /*==========================================================================*/
 Texture2D::Texture2D():
     Texture( GL_TEXTURE_2D, GL_TEXTURE_BINDING_2D ),
-    m_is_downloaded( false )
+    m_is_loaded( false )
 {
 }
 
@@ -48,9 +48,9 @@ Texture2D::~Texture2D()
     this->release();
 }
 
-bool Texture2D::isDownloaded() const
+bool Texture2D::isLoaded() const
 {
-    return m_is_downloaded;
+    return m_is_loaded;
 }
 
 /*==========================================================================*/
@@ -72,7 +72,7 @@ void Texture2D::create( const size_t width, const size_t height, const void* dat
     BaseClass::setParameter( GL_TEXTURE_MIN_FILTER, BaseClass::minFilter() );
     BaseClass::setParameter( GL_TEXTURE_WRAP_S, BaseClass::wrapS() );
     BaseClass::setParameter( GL_TEXTURE_WRAP_T, BaseClass::wrapT() );
-    this->download( width, height, data );
+    this->load( width, height, data );
 }
 
 /*==========================================================================*/
@@ -83,7 +83,7 @@ void Texture2D::create( const size_t width, const size_t height, const void* dat
 void Texture2D::release()
 {
     BaseClass::deleteTexture();
-    m_is_downloaded = false;
+    m_is_loaded = false;
 }
 
 /*==========================================================================*/
@@ -96,7 +96,7 @@ void Texture2D::release()
  *  @param yoffset [in] texel offset in the y direction within the pixel data
  */
 /*==========================================================================*/
-void Texture2D::download(
+void Texture2D::load(
     const size_t width,
     const size_t height,
     const void* data,
@@ -108,14 +108,41 @@ void Texture2D::download(
     BaseClass::setPixelStorageMode( GL_UNPACK_SWAP_BYTES, swap ? GL_TRUE : GL_FALSE );
     BaseClass::setPixelStorageMode( GL_UNPACK_ALIGNMENT, 1 );
 
-    if ( !m_is_downloaded )
+    if ( !m_is_loaded )
     {
         BaseClass::setImage2D( width, height, data );
-        m_is_downloaded = true;
+        m_is_loaded = true;
     }
     else
     {
         BaseClass::setSubImage2D( width, height, data, xoffset, yoffset );
+    }
+
+    BaseClass::setPixelStorageMode( GL_UNPACK_SWAP_BYTES, swap );
+    BaseClass::setPixelStorageMode( GL_UNPACK_ALIGNMENT, alignment );
+}
+
+void Texture2D::loadFromFrameBuffer(
+    const int x,
+    const int y,
+    const size_t width,
+    const size_t height,
+    const size_t xoffset,
+    const size_t yoffset )
+{
+    const GLint swap = kvs::OpenGL::Integer( GL_UNPACK_SWAP_BYTES );
+    const GLint alignment = kvs::OpenGL::Integer( GL_UNPACK_ALIGNMENT );
+    BaseClass::setPixelStorageMode( GL_UNPACK_SWAP_BYTES, swap ? GL_TRUE : GL_FALSE );
+    BaseClass::setPixelStorageMode( GL_UNPACK_ALIGNMENT, 1 );
+
+    if ( !m_is_loaded )
+    {
+        BaseClass::copyImage2D( x, y, width, height );
+        m_is_loaded = true;
+    }
+    else
+    {
+        BaseClass::copySubImage2D( x, y, width, height, xoffset, yoffset );
     }
 
     BaseClass::setPixelStorageMode( GL_UNPACK_SWAP_BYTES, swap );

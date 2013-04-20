@@ -107,6 +107,11 @@ protected:
     void setSubImage2D( GLsizei width, GLsizei height, const GLvoid* data, GLint xoffset = 0, GLint yoffset = 0 );
     void setSubImage3D( GLsizei width, GLsizei height, GLsizei depth, const GLvoid* data, GLint xoffset = 0, GLint yoffset = 0, GLint zoffset = 0 );
     void setSubImageRectangle( GLsizei width, GLsizei height, const GLvoid* data, GLint xoffset = 0, GLint yoffset = 0 );
+    void copyImage1D( GLint x, GLint y, GLsizei width );
+    void copyImage2D( GLint x, GLint y, GLsizei width, GLsizei height );
+    void copySubImage1D( GLint x, GLint y, GLsizei width, GLint xoffset = 0 );
+    void copySubImage2D( GLint x, GLint y, GLsizei width, GLsizei height, GLint xoffset = 0, GLint yoffset = 0 );
+    void copySubImage3D( GLint x, GLint y, GLsizei width, GLsizei height, GLint xoffset = 0, GLint yoffset = 0, GLint zoffset = 0 );
     void setParameter( GLenum pname, GLfloat param );
     void setParameter( GLenum pname, GLint param );
     void setParameter( GLenum pname, GLenum param );

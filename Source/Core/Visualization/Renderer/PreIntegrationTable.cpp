@@ -249,7 +249,7 @@ void PreIntegrationTable::create( const float max_edge_length )
 void PreIntegrationTable::download()
 {
     m_table_texture.bind();
-    m_table_texture.download( m_size_scalar, m_size_scalar, m_size_depth, m_table );
+    m_table_texture.load( m_size_scalar, m_size_scalar, m_size_depth, m_table );
     m_table_texture.unbind();
 }
 
@@ -280,7 +280,7 @@ bool PreIntegrationTable::isTexture()
 
 bool PreIntegrationTable::isDownloaded()
 {
-    return m_table_texture.isDownloaded();
+    return m_table_texture.isLoaded();
 }
 
 /*===========================================================================*/

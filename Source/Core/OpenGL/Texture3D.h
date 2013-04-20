@@ -15,8 +15,8 @@
 #ifndef KVS__TEXTURE_3D_H_INCLUDE
 #define KVS__TEXTURE_3D_H_INCLUDE
 
-#include <kvs/OpenGL>
 #include <kvs/Texture>
+#include <kvs/Deprecated>
 
 
 namespace kvs
@@ -35,7 +35,7 @@ public:
 
 private:
 
-    bool m_is_downloaded; ///< if true, the texture is downloaded
+    bool m_is_loaded; ///< if true, the texture is loaded
 
 public:
 
@@ -46,11 +46,11 @@ public:
     Texture3D();
     virtual ~Texture3D();
 
-    bool isDownloaded() const;
+    bool isLoaded() const;
 
     void create( const size_t width, const size_t height, const size_t depth, const void* data = NULL );
     void release();
-    void download(
+    void load(
         const size_t width,
         const size_t height,
         const size_t depth,
@@ -58,6 +58,26 @@ public:
         const size_t xoffset = 0,
         const size_t yoffset = 0,
         const size_t zoffset = 0 );
+    void loadFromFrameBuffer(
+        const int x,
+        const int y,
+        const size_t width,
+        const size_t height,
+        const size_t depth,
+        const size_t xoffset = 0,
+        const size_t yoffset = 0,
+        const size_t zoffset = 0 );
+
+public:
+    KVS_DEPRECATED( bool isDownloaded() const ) { return this->isDownloaded(); }
+    KVS_DEPRECATED( void download(
+                        const size_t width,
+                        const size_t height,
+                        const size_t depth,
+                        const void* data,
+                        const size_t xoffset = 0,
+                        const size_t yoffset = 0,
+                        const size_t zoffset = 0 ) ) { return this->load( width, height, depth, data, xoffset, yoffset, zoffset ); }
 };
 
 } // end of namespace kvs

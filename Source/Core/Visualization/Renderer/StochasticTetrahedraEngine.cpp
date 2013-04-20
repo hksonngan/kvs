@@ -16,6 +16,7 @@
 #include "ProjectedTetrahedraTable.h"
 #include <kvs/TetrahedralCell>
 #include <kvs/Math>
+#include <kvs/OpenGL>
 #include <kvs/TextureBinder>
 
 
@@ -666,7 +667,7 @@ void StochasticTetrahedraEngine::initialize_decomposition_texture( void )
         table[ i * 4 + 3 ] = kvs::ProjectedTetrahedraTable::PatternInfo[i][0] * 32;
     }
     m_decomposition_texture.bind();
-    m_decomposition_texture.download( 81, 1, table );
+    m_decomposition_texture.load( 81, 1, table );
     m_decomposition_texture.unbind();
 }
 

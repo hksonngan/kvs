@@ -16,6 +16,7 @@
 #define KVS__TEXTURE_2D_H_INCLUDE
 
 #include <kvs/Texture>
+#include <kvs/Deprecated>
 
 
 namespace kvs
@@ -34,7 +35,7 @@ public:
 
 private:
 
-    bool m_is_downloaded; ///< if true, the texture is downloaded
+    bool m_is_loaded; ///< if true, the texture is loaded
 
 public:
 
@@ -45,11 +46,32 @@ public:
     Texture2D();
     virtual ~Texture2D();
 
-    bool isDownloaded() const;
+    bool isLoaded() const;
 
     void create( const size_t width, const size_t height, const void* data = NULL );
     void release();
-    void download( const size_t width, const size_t height, const void* data, const size_t xoffset = 0, const size_t yoffset = 0 );
+    void load(
+        const size_t width,
+        const size_t height,
+        const void* data,
+        const size_t xoffset = 0,
+        const size_t yoffset = 0 );
+    void loadFromFrameBuffer(
+        const int x,
+        const int y,
+        const size_t width,
+        const size_t height,
+        const size_t xoffset = 0,
+        const size_t yoffset = 0 );
+
+public:
+    KVS_DEPRECATED( bool isDownload() const ) { return this->isLoaded(); }
+    KVS_DEPRECATED( void download(
+                        const size_t width,
+                        const size_t height,
+                        const void* data,
+                        const size_t xoffset = 0,
+                        const size_t yoffset = 0 ) ) { this->load( width, height, data, xoffset, yoffset ); }
 };
 
 } // end of namespace kvs

@@ -212,7 +212,7 @@ void OpacityMapPalette::mousePressEvent( kvs::MouseEvent* event )
             // Download to GPU.
             const size_t width = m_opacity_map.resolution();
             m_texture.bind();
-            m_texture.download( width, data );
+            m_texture.load( width, data );
             m_texture.unbind();
         }
 
@@ -430,7 +430,7 @@ void OpacityMapPalette::draw_free_hand_line( kvs::MouseEvent* event )
     // Download to GPU.
     const size_t width = m_opacity_map.resolution();
     m_texture.bind();
-    m_texture.download( width, data );
+    m_texture.load( width, data );
     m_texture.unbind();
 
     // Update the previous mouse position.
@@ -518,7 +518,7 @@ void OpacityMapPalette::draw_straight_line( kvs::MouseEvent* event )
     // Download to GPU.
     const size_t width = m_opacity_map.resolution();
     m_texture.bind();
-    m_texture.download( width, data );
+    m_texture.load( width, data );
     m_texture.unbind();
 
     // Update the previous mouse position.

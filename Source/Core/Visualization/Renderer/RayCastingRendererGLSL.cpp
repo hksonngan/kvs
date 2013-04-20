@@ -74,10 +74,15 @@ namespace glsl
  *  @brief  Constructs a new RayCastingRenderer class.
  */
 /*===========================================================================*/
-RayCastingRenderer::RayCastingRenderer()
+RayCastingRenderer::RayCastingRenderer():
+    m_draw_front_face( true ),
+    m_draw_back_face( true ),
+    m_draw_volume( true ),
+    m_enable_jittering( false ),
+    m_step( 0.5f ),
+    m_opaque( 1.0f )
 {
     BaseClass::setShader( kvs::Shader::Lambert() );
-    this->initialize();
 }
 
 /*===========================================================================*/
@@ -86,11 +91,16 @@ RayCastingRenderer::RayCastingRenderer()
  *  @param  tfunc [in] transfer function
  */
 /*===========================================================================*/
-RayCastingRenderer::RayCastingRenderer( const kvs::TransferFunction& tfunc )
+RayCastingRenderer::RayCastingRenderer( const kvs::TransferFunction& tfunc ):
+    m_draw_front_face( true ),
+    m_draw_back_face( true ),
+    m_draw_volume( true ),
+    m_enable_jittering( false ),
+    m_step( 0.5f ),
+    m_opaque( 1.0f )
 {
     BaseClass::setTransferFunction( tfunc );
     BaseClass::setShader( kvs::Shader::Lambert() );
-    this->initialize();
 }
 
 /*===========================================================================*/
@@ -100,10 +110,15 @@ RayCastingRenderer::RayCastingRenderer( const kvs::TransferFunction& tfunc )
  */
 /*===========================================================================*/
 template <typename ShadingType>
-RayCastingRenderer::RayCastingRenderer( const ShadingType shader )
+RayCastingRenderer::RayCastingRenderer( const ShadingType shader ):
+    m_draw_front_face( true ),
+    m_draw_back_face( true ),
+    m_draw_volume( true ),
+    m_enable_jittering( false ),
+    m_step( 0.5f ),
+    m_opaque( 1.0f )
 {
     BaseClass::setShader( shader );
-    this->initialize();
 }
 
 /*===========================================================================*/
@@ -119,9 +134,126 @@ void RayCastingRenderer::exec(
     kvs::Camera* camera,
     kvs::Light* light )
 {
-    kvs::StructuredVolumeObject* volume = kvs::StructuredVolumeObject::DownCast( object );
     BaseClass::startTimer();
-    this->create_image( volume, camera, light );
+    kvs::StructuredVolumeObject* volume = kvs::StructuredVolumeObject::DownCast( object );
+    kvs::OpenGL::WithPushedAttrib p( GL_ALL_ATTRIB_BITS );
+
+    // Following processes are executed once.
+    if ( BaseClass::windowWidth() == 0 && BaseClass::windowHeight() == 0 )
+    {
+        BaseClass::setWindowSize( camera->windowWidth(), camera->windowHeight() );
+        this->initialize_shader( volume );
+        this->initialize_jittering_texture();
+        this->initialize_bounding_cube_buffer( volume );
+        this->initialize_framebuffer( camera->windowWidth(), camera->windowHeight() );
+    }
+
+    // Following processes are executed when the window size is changed.
+    if ( ( BaseClass::windowWidth() != camera->windowWidth() ) ||
+         ( BaseClass::windowHeight() != camera->windowHeight() ) )
+    {
+        BaseClass::setWindowSize( camera->windowWidth(), camera->windowHeight() );
+        this->update_framebuffer( camera->windowWidth(), camera->windowHeight() );
+    }
+
+    // Download the transfer function data to the 1D texture on the GPU.
+    if ( !m_transfer_function_texture.isValid() )
+    {
+        this->initialize_transfer_function_texture();
+    }
+
+    // Download the volume data to the 3D texture on the GPU.
+    if ( !m_volume_texture.isValid() )
+    {
+        this->initialize_volume_texture( volume );
+    }
+
+    kvs::OpenGL::Enable( GL_DEPTH_TEST );
+    kvs::OpenGL::Enable( GL_CULL_FACE );
+    kvs::OpenGL::Disable( GL_LIGHTING );
+
+    // Copy the depth and color buffer to each corresponding textures.
+    {
+        const GLsizei width = BaseClass::windowWidth();
+        const GLsizei height = BaseClass::windowHeight();
+
+        kvs::Texture::Binder unit6( m_depth_texture, 6 );
+        m_depth_texture.loadFromFrameBuffer( 0, 0, width, height );
+
+        kvs::Texture::Binder unit7( m_color_texture, 7 );
+        m_color_texture.loadFromFrameBuffer( 0, 0, width, height );
+    }
+
+    // Draw the bounding cube.
+    m_bounding_cube_shader.bind();
+    m_entry_exit_framebuffer.bind();
+    if ( m_draw_back_face )
+    {
+        // Draw the back face of the bounding cube for the entry points.
+        kvs::OpenGL::SetDrawBuffer( GL_COLOR_ATTACHMENT0_EXT );
+        kvs::OpenGL::Clear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+        kvs::OpenGL::SetCullFace( GL_FRONT );
+        this->draw_bounding_cube_buffer();
+    }
+    if ( m_draw_front_face )
+    {
+        // Draw the front face of the bounding cube for the entry points.
+        kvs::OpenGL::SetDrawBuffer( GL_COLOR_ATTACHMENT1_EXT );
+        kvs::OpenGL::Clear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+        kvs::OpenGL::SetCullFace( GL_BACK );
+        this->draw_bounding_cube_buffer();
+    }
+    m_entry_exit_framebuffer.unbind();
+    m_bounding_cube_shader.unbind();
+
+    // Draw the volume data.
+    if ( m_draw_volume )
+    {
+        kvs::OpenGL::Disable( GL_CULL_FACE );
+        kvs::OpenGL::Enable( GL_BLEND );
+        kvs::OpenGL::SetBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_ALPHA );
+
+        if ( BaseClass::isEnabledShading() ) kvs::OpenGL::Enable( GL_LIGHTING );
+        else kvs::OpenGL::Disable( GL_LIGHTING );
+
+        // Ray casting.
+        m_ray_casting_shader.bind();
+        {
+            kvs::Texture::Binder unit1( m_volume_texture, 1 );
+            kvs::Texture::Binder unit2( m_exit_texture, 2 );
+            kvs::Texture::Binder unit3( m_entry_texture, 3 );
+            kvs::Texture::Binder unit4( m_transfer_function_texture, 4 );
+            kvs::Texture::Binder unit5( m_jittering_texture, 5 );
+            kvs::Texture::Binder unit6( m_depth_texture, 6 );
+            kvs::Texture::Binder unit7( m_color_texture, 7 );
+            const float f = camera->back();
+            const float n = camera->front();
+            const float to_zw1 = ( f * n ) / ( f - n );
+            const float to_zw2 = 0.5f * ( ( f + n ) / ( f - n ) ) + 0.5f;
+            const float to_ze1 = 0.5f + 0.5f * ( ( f + n ) / ( f - n ) );
+            const float to_ze2 = ( f - n ) / ( f * n );
+            const kvs::Vector3f light_position = kvs::WorldCoordinate( light->position() ).toObjectCoordinate( camera ).position();
+            const kvs::Vector3f camera_position = kvs::WorldCoordinate( camera->position() ).toObjectCoordinate( camera ).position();
+            m_ray_casting_shader.setUniform( "to_zw1", to_zw1 );
+            m_ray_casting_shader.setUniform( "to_zw2", to_zw2 );
+            m_ray_casting_shader.setUniform( "to_ze1", to_ze1 );
+            m_ray_casting_shader.setUniform( "to_ze2", to_ze2 );
+            m_ray_casting_shader.setUniform( "light_position", light_position );
+            m_ray_casting_shader.setUniform( "camera_position", camera_position );
+            m_ray_casting_shader.setUniform( "volume.data", 1 );
+            m_ray_casting_shader.setUniform( "exit_points", 2 );
+            m_ray_casting_shader.setUniform( "entry_points", 3 );
+            m_ray_casting_shader.setUniform( "transfer_function.data", 4 );
+            m_ray_casting_shader.setUniform( "jittering_texture", 5 );
+            m_ray_casting_shader.setUniform( "depth_texture", 6 );
+            m_ray_casting_shader.setUniform( "color_texture", 7 );
+            this->draw_quad( 1.0f );
+        }
+        m_ray_casting_shader.unbind();
+    }
+
+    kvs::OpenGL::Finish();
+
     BaseClass::stopTimer();
 }
 
@@ -184,7 +316,7 @@ void RayCastingRenderer::setTransferFunction( const kvs::TransferFunction& tfunc
 {
      BaseClass::setTransferFunction( tfunc );
 
-     if ( m_transfer_function_texture.isDownloaded() )
+     if ( m_transfer_function_texture.isLoaded() )
      {
          m_transfer_function_texture.release();
      }
@@ -200,264 +332,28 @@ void RayCastingRenderer::disableJittering()
     m_enable_jittering = false;
 }
 
-/*===========================================================================*/
-/**
- *  @brief  Initialize the member parameters.
- */
-/*===========================================================================*/
-void RayCastingRenderer::initialize()
-{
-    BaseClass::setWindowSize( 0, 0 );
-
-    m_draw_front_face = true;
-    m_draw_back_face = true;
-    m_draw_volume = true;
-
-    m_enable_jittering = false;
-
-    m_step = 0.5f;
-    m_opaque = 1.0f;
-
-    m_depth_texture.setWrapS( GL_CLAMP_TO_BORDER );
-    m_depth_texture.setWrapT( GL_CLAMP_TO_BORDER );
-    m_depth_texture.setMagFilter( GL_LINEAR );
-    m_depth_texture.setMinFilter( GL_LINEAR );
-    m_depth_texture.setPixelFormat( GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_FLOAT  );
-
-    m_color_texture.setWrapS( GL_CLAMP_TO_BORDER );
-    m_color_texture.setWrapT( GL_CLAMP_TO_BORDER );
-    m_color_texture.setMagFilter( GL_LINEAR );
-    m_color_texture.setMinFilter( GL_LINEAR );
-    m_color_texture.setPixelFormat( GL_RGBA32F, GL_RGB, GL_FLOAT  );
-
-    m_entry_points.setWrapS( GL_CLAMP_TO_BORDER );
-    m_entry_points.setWrapT( GL_CLAMP_TO_BORDER );
-    m_entry_points.setMagFilter( GL_LINEAR );
-    m_entry_points.setMinFilter( GL_LINEAR );
-    m_entry_points.setPixelFormat( GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT );
-
-    m_exit_points.setWrapS( GL_CLAMP_TO_BORDER );
-    m_exit_points.setWrapT( GL_CLAMP_TO_BORDER );
-    m_exit_points.setMagFilter( GL_LINEAR );
-    m_exit_points.setMinFilter( GL_LINEAR );
-    m_exit_points.setPixelFormat( GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT  );
-
-    m_jittering_texture.setWrapS( GL_REPEAT );
-    m_jittering_texture.setWrapT( GL_REPEAT );
-    m_jittering_texture.setMagFilter( GL_NEAREST );
-    m_jittering_texture.setMinFilter( GL_NEAREST );
-    m_jittering_texture.setPixelFormat( GL_LUMINANCE8, GL_LUMINANCE, GL_UNSIGNED_BYTE  );
-
-    m_transfer_function_texture.setWrapS( GL_CLAMP_TO_EDGE );
-    m_transfer_function_texture.setMagFilter( GL_LINEAR );
-    m_transfer_function_texture.setMinFilter( GL_LINEAR );
-    m_transfer_function_texture.setPixelFormat( GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT  );
-
-    m_volume_data.setWrapS( GL_CLAMP_TO_BORDER );
-    m_volume_data.setWrapT( GL_CLAMP_TO_BORDER );
-    m_volume_data.setWrapR( GL_CLAMP_TO_BORDER );
-    m_volume_data.setMagFilter( GL_LINEAR );
-    m_volume_data.setMinFilter( GL_LINEAR );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Creates a rendering image.
- *  @param  volume [in] pointer to the structured volume object
- *  @param  camera [in] pointer to the camera
- *  @param  light [in] pointer to the light
- */
-/*===========================================================================*/
-void RayCastingRenderer::create_image(
-    const kvs::StructuredVolumeObject* volume,
-    const kvs::Camera* camera,
-    const kvs::Light* light )
-{
-    glPushAttrib( GL_ALL_ATTRIB_BITS );
-
-    // Following processes are executed once.
-    if ( BaseClass::windowWidth() == 0 && BaseClass::windowHeight() == 0 )
-    {
-        this->initialize_shaders( volume );
-        this->create_jittering_texture();
-        this->create_bounding_cube( volume );
-
-        m_entry_exit_framebuffer.create();
-
-        m_ray_caster.bind();
-        m_ray_caster.setUniform( "width", static_cast<GLfloat>( camera->windowWidth() ) );
-        m_ray_caster.setUniform( "height", static_cast<GLfloat>( camera->windowHeight() ) );
-        m_ray_caster.unbind();
-    }
-
-    // Following processes are executed when the window size is changed.
-    if ( ( BaseClass::windowWidth() != camera->windowWidth() ) ||
-         ( BaseClass::windowHeight() != camera->windowHeight() ) )
-    {
-        BaseClass::setWindowSize( camera->windowWidth(), camera->windowHeight() );
-
-        m_entry_exit_framebuffer.bind();
-        m_entry_points.release();
-        m_exit_points.release();
-        m_entry_points.create( BaseClass::windowWidth(), BaseClass::windowHeight() );
-        m_exit_points.create( BaseClass::windowWidth(), BaseClass::windowHeight() );
-        m_entry_exit_framebuffer.attachColorTexture( m_exit_points, 0 );
-        m_entry_exit_framebuffer.attachColorTexture( m_entry_points, 1 );
-        m_entry_exit_framebuffer.unbind();
-
-        m_depth_texture.release();
-        m_color_texture.release();
-        m_depth_texture.create( BaseClass::windowWidth(), BaseClass::windowHeight() );
-        m_color_texture.create( BaseClass::windowWidth(), BaseClass::windowHeight() );
-
-        m_ray_caster.bind();
-        m_ray_caster.setUniform( "width", static_cast<GLfloat>( camera->windowWidth() ) );
-        m_ray_caster.setUniform( "height", static_cast<GLfloat>( camera->windowHeight() ) );
-        m_ray_caster.unbind();
-    }
-
-    // Download the transfer function data to the 1D texture on the GPU.
-    if ( !m_transfer_function_texture.isValid() )
-    {
-        this->create_transfer_function( volume );
-    }
-
-    // Download the volume data to the 3D texture on the GPU.
-    if ( !m_volume_data.isValid() )
-    {
-        this->create_volume_data( volume );
-    }
-
-    kvs::OpenGL::Enable( GL_DEPTH_TEST );
-    kvs::OpenGL::Enable( GL_CULL_FACE );
-    kvs::OpenGL::Disable( GL_LIGHTING );
-
-    // Copy the depth and color buffer to each corresponding textures.
-    {
-        const GLint x = 0;
-        const GLint y = 0;
-        const GLsizei width = BaseClass::windowWidth();
-        const GLsizei height = BaseClass::windowHeight();
-
-        kvs::Texture::Binder depth_texture_binder( m_depth_texture, 6 );
-        KVS_GL_CALL( glCopyTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, x, y, width, height ) );
-
-        kvs::Texture::Binder color_texture_binder( m_color_texture, 7 );
-        KVS_GL_CALL( glCopyTexSubImage2D( GL_TEXTURE_2D, 0, 0, 0, x, y, width, height ) );
-    }
-
-    // Draw the bounding cube.
-    m_bounding_cube_shader.bind();
-    m_entry_exit_framebuffer.bind();
-    if ( m_draw_back_face )
-    {
-        // Draw the back face of the bounding cube for the entry points.
-        KVS_GL_CALL( glDrawBuffer( GL_COLOR_ATTACHMENT0_EXT ) );
-        KVS_GL_CALL( glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ) );
-        KVS_GL_CALL( glCullFace( GL_FRONT ) );
-        this->draw_bounding_cube();
-    }
-    if ( m_draw_front_face )
-    {
-        // Draw the front face of the bounding cube for the entry points.
-        KVS_GL_CALL( glDrawBuffer( GL_COLOR_ATTACHMENT1_EXT ) );
-        KVS_GL_CALL( glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ) );
-        KVS_GL_CALL( glCullFace( GL_BACK ) );
-        this->draw_bounding_cube();
-    }
-    m_entry_exit_framebuffer.unbind();
-    m_bounding_cube_shader.unbind();
-
-    // Draw the volume data.
-    if ( m_draw_volume )
-    {
-        kvs::OpenGL::Disable( GL_CULL_FACE );
-        kvs::OpenGL::Enable( GL_BLEND );
-        KVS_GL_CALL( glBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_ALPHA ) );
-
-        // Enable or disable OpenGL capabilities.
-        if ( BaseClass::isEnabledShading() ) kvs::OpenGL::Enable( GL_LIGHTING );
-        else kvs::OpenGL::Disable( GL_LIGHTING );
-
-        // Ray casting.
-        m_ray_caster.bind();
-        {
-            kvs::Texture::Binder volume_data_binder( m_volume_data, 1 );
-            kvs::Texture::Binder exit_points_binder( m_exit_points, 2 );
-            kvs::Texture::Binder entry_points_binder( m_entry_points, 3 );
-            kvs::Texture::Binder transfer_function_texture_binder( m_transfer_function_texture, 4 );
-            kvs::Texture::Binder jittering_texture_binder( m_jittering_texture, 5 );
-            kvs::Texture::Binder depth_texture_binder( m_depth_texture, 6 );
-            kvs::Texture::Binder color_texture_binder( m_color_texture, 7 );
-
-            const float f = camera->back();
-            const float n = camera->front();
-            const float to_zw1 = ( f * n ) / ( f - n );
-            const float to_zw2 = 0.5f * ( ( f + n ) / ( f - n ) ) + 0.5f;
-            const float to_ze1 = 0.5f + 0.5f * ( ( f + n ) / ( f - n ) );
-            const float to_ze2 = ( f - n ) / ( f * n );
-            const kvs::Vector3f light_position = kvs::WorldCoordinate( light->position() ).toObjectCoordinate( camera ).position();
-            const kvs::Vector3f camera_position = kvs::WorldCoordinate( camera->position() ).toObjectCoordinate( camera ).position();
-            m_ray_caster.setUniform( "to_zw1", to_zw1 );
-            m_ray_caster.setUniform( "to_zw2", to_zw2 );
-            m_ray_caster.setUniform( "to_ze1", to_ze1 );
-            m_ray_caster.setUniform( "to_ze2", to_ze2 );
-            m_ray_caster.setUniform( "light_position", light_position );
-            m_ray_caster.setUniform( "camera_position", camera_position );
-            m_ray_caster.setUniform( "volume.data", 1 );
-            m_ray_caster.setUniform( "exit_points", 2 );
-            m_ray_caster.setUniform( "entry_points", 3 );
-            m_ray_caster.setUniform( "transfer_function.data", 4 );
-            m_ray_caster.setUniform( "jittering_texture", 5 );
-            m_ray_caster.setUniform( "depth_texture", 6 );
-            m_ray_caster.setUniform( "color_texture", 7 );
-            this->draw_quad( 1.0f );
-        }
-        m_ray_caster.unbind();
-    }
-
-    KVS_GL_CALL( glActiveTexture( GL_TEXTURE0 ) );
-    KVS_GL_CALL( glFinish() );
-    KVS_GL_CALL( glPopAttrib() );
-}
-
 /*==========================================================================*/
 /**
  *  @brief  Initialize OpenGL.
  */
 /*==========================================================================*/
-void RayCastingRenderer::initialize_shaders( const kvs::StructuredVolumeObject* volume )
+void RayCastingRenderer::initialize_shader( const kvs::StructuredVolumeObject* volume )
 {
-    const kvs::Vector3ui r = volume->resolution();
-    const kvs::Real32 max_ngrids = static_cast<kvs::Real32>( kvs::Math::Max( r.x(), r.y(), r.z() ) );
-    const kvs::Vector3f resolution( static_cast<float>(r.x()), static_cast<float>(r.y()), static_cast<float>(r.z()) );
-    const kvs::Vector3f ratio( r.x() / max_ngrids, r.y() / max_ngrids, r.z() / max_ngrids );
-    const kvs::Vector3f reciprocal( 1.0f / r.x(), 1.0f / r.y(), 1.0f / r.z() );
-
-    // Bounding cube shader.
+    // Build bounding cube shader.
     {
-        const std::string vert_code = "RC_bounding_cube.vert";
-        const std::string frag_code = "RC_bounding_cube.frag";
-
-        kvs::ShaderSource vert( vert_code );
-        kvs::ShaderSource frag( frag_code );
-        m_bounding_cube_shader.create( vert, frag );
+        kvs::ShaderSource vert("RC_bounding_cube.vert");
+        kvs::ShaderSource frag("RC_bounding_cube.frag");
+        m_bounding_cube_shader.build( vert, frag );
     }
 
-    // Ray caster.
+    // Build ray caster.
     {
-        const std::string vert_code = "RC_ray_caster.vert";
-        const std::string frag_code = "RC_ray_caster.frag";
-
-        kvs::ShaderSource vert( vert_code );
-        kvs::ShaderSource frag( frag_code );
-
+        kvs::ShaderSource vert("RC_ray_caster.vert");
+        kvs::ShaderSource frag("RC_ray_caster.frag");
 #if defined( _TEXTURE_RECTANGLE_ )
         frag.define("ENABLE_TEXTURE_RECTANGLE");
 #endif
-
         if ( m_enable_jittering ) frag.define("ENABLE_JITTERING");
-
         if ( BaseClass::isEnabledShading() )
         {
             switch ( BaseClass::m_shader->type() )
@@ -468,130 +364,136 @@ void RayCastingRenderer::initialize_shaders( const kvs::StructuredVolumeObject* 
             default: /* NO SHADING */ break;
             }
         }
-
-        kvs::Real32 min_range = 0.0f;
-        kvs::Real32 max_range = 0.0f;
-        kvs::Real32 min_value = BaseClass::m_tfunc.colorMap().minValue();
-        kvs::Real32 max_value = BaseClass::m_tfunc.colorMap().maxValue();
-        const std::type_info& type = volume->values().typeInfo()->type();
-        if ( type == typeid( kvs::UInt8 ) )
-        {
-            min_range = 0.0f;
-            max_range = 255.0f;
-            if ( !BaseClass::m_tfunc.hasRange() )
-            {
-                min_value = 0.0f;
-                max_value = 255.0f;
-            }
-        }
-        else if ( type == typeid( kvs::Int8 ) )
-        {
-            min_range = static_cast<kvs::Real32>( kvs::Value<kvs::UInt8>::Min() );
-            max_range = static_cast<kvs::Real32>( kvs::Value<kvs::UInt8>::Max() );
-            if ( !BaseClass::m_tfunc.hasRange() )
-            {
-                min_value = -128.0f;
-                max_value = 127.0f;
-            }
-        }
-        else if ( type == typeid( kvs::UInt16 ) )
-        {
-            min_range = static_cast<kvs::Real32>( kvs::Value<kvs::UInt16>::Min() );
-            max_range = static_cast<kvs::Real32>( kvs::Value<kvs::UInt16>::Max() );
-            if ( !BaseClass::m_tfunc.hasRange() )
-            {
-                min_value = static_cast<kvs::Real32>( volume->minValue() );
-                max_value = static_cast<kvs::Real32>( volume->maxValue() );
-            }
-        }
-        else if ( type == typeid( kvs::Int16 ) )
-        {
-            min_range = static_cast<kvs::Real32>( kvs::Value<kvs::Int16>::Min() );
-            max_range = static_cast<kvs::Real32>( kvs::Value<kvs::Int16>::Max() );
-            if ( !BaseClass::m_tfunc.hasRange() )
-            {
-                min_value = static_cast<kvs::Real32>( volume->minValue() );
-                max_value = static_cast<kvs::Real32>( volume->maxValue() );
-            }
-        }
-        else if ( type == typeid( kvs::UInt32 ) ||
-                  type == typeid( kvs::Int32  ) ||
-                  type == typeid( kvs::Real32 ) )
-        {
-            min_range = 0.0f;
-            max_range = 1.0f;
-            min_value = 0.0f;
-            max_value = 1.0f;
-        }
-        else
-        {
-            kvsMessageError( "Not supported data type '%s'.",
-                             volume->values().typeInfo()->typeName() );
-        }
-
-        m_ray_caster.create( vert, frag );
-
-        m_ray_caster.bind();
-        m_ray_caster.setUniform( "volume.resolution", resolution );
-        m_ray_caster.setUniform( "volume.resolution_ratio", ratio );
-        m_ray_caster.setUniform( "volume.resolution_reciprocal", reciprocal );
-        m_ray_caster.setUniform( "volume.min_range", min_range );
-        m_ray_caster.setUniform( "volume.max_range", max_range );
-        m_ray_caster.setUniform( "transfer_function.min_value", min_value );
-        m_ray_caster.setUniform( "transfer_function.max_value", max_value );
-        m_ray_caster.setUniform( "dt", m_step );
-        m_ray_caster.setUniform( "opaque", m_opaque );
-        switch ( BaseClass::m_shader->type() )
-        {
-        case kvs::Shader::LambertShading:
-        {
-            const GLfloat Ka = ((kvs::Shader::Lambert*)(BaseClass::m_shader))->Ka;
-            const GLfloat Kd = ((kvs::Shader::Lambert*)(BaseClass::m_shader))->Kd;
-            m_ray_caster.setUniform( "shading.Ka", Ka );
-            m_ray_caster.setUniform( "shading.Kd", Kd );
-            break;
-        }
-        case kvs::Shader::PhongShading:
-        {
-            const GLfloat Ka = ((kvs::Shader::Phong*)(BaseClass::m_shader))->Ka;
-            const GLfloat Kd = ((kvs::Shader::Phong*)(BaseClass::m_shader))->Kd;
-            const GLfloat Ks = ((kvs::Shader::Phong*)(BaseClass::m_shader))->Ks;
-            const GLfloat S  = ((kvs::Shader::Phong*)(BaseClass::m_shader))->S;
-            m_ray_caster.setUniform( "shading.Ka", Ka );
-            m_ray_caster.setUniform( "shading.Kd", Kd );
-            m_ray_caster.setUniform( "shading.Ks", Ks );
-            m_ray_caster.setUniform( "shading.S",  S );
-            break;
-        }
-        case kvs::Shader::BlinnPhongShading:
-        {
-            const GLfloat Ka = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->Ka;
-            const GLfloat Kd = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->Kd;
-            const GLfloat Ks = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->Ks;
-            const GLfloat S  = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->S;
-            m_ray_caster.setUniform( "shading.Ka", Ka );
-            m_ray_caster.setUniform( "shading.Kd", Kd );
-            m_ray_caster.setUniform( "shading.Ks", Ks );
-            m_ray_caster.setUniform( "shading.S",  S );
-            break;
-        }
-        default: /* NO SHADING */ break;
-        }
-        m_ray_caster.unbind();
+        m_ray_casting_shader.build( vert, frag );
     }
+
+    // Set uniform variables.
+    const kvs::Vector3ui r = volume->resolution();
+    const kvs::Real32 max_ngrids = static_cast<kvs::Real32>( kvs::Math::Max( r.x(), r.y(), r.z() ) );
+    const kvs::Vector3f resolution( static_cast<float>(r.x()), static_cast<float>(r.y()), static_cast<float>(r.z()) );
+    const kvs::Vector3f ratio( r.x() / max_ngrids, r.y() / max_ngrids, r.z() / max_ngrids );
+    const kvs::Vector3f reciprocal( 1.0f / r.x(), 1.0f / r.y(), 1.0f / r.z() );
+    kvs::Real32 min_range = 0.0f;
+    kvs::Real32 max_range = 0.0f;
+    kvs::Real32 min_value = BaseClass::m_tfunc.colorMap().minValue();
+    kvs::Real32 max_value = BaseClass::m_tfunc.colorMap().maxValue();
+    const std::type_info& type = volume->values().typeInfo()->type();
+    if ( type == typeid( kvs::UInt8 ) )
+    {
+        min_range = 0.0f;
+        max_range = 255.0f;
+        if ( !BaseClass::m_tfunc.hasRange() )
+        {
+            min_value = 0.0f;
+            max_value = 255.0f;
+        }
+    }
+    else if ( type == typeid( kvs::Int8 ) )
+    {
+        min_range = static_cast<kvs::Real32>( kvs::Value<kvs::UInt8>::Min() );
+        max_range = static_cast<kvs::Real32>( kvs::Value<kvs::UInt8>::Max() );
+        if ( !BaseClass::m_tfunc.hasRange() )
+        {
+            min_value = -128.0f;
+            max_value = 127.0f;
+        }
+    }
+    else if ( type == typeid( kvs::UInt16 ) )
+    {
+        min_range = static_cast<kvs::Real32>( kvs::Value<kvs::UInt16>::Min() );
+        max_range = static_cast<kvs::Real32>( kvs::Value<kvs::UInt16>::Max() );
+        if ( !BaseClass::m_tfunc.hasRange() )
+        {
+            min_value = static_cast<kvs::Real32>( volume->minValue() );
+            max_value = static_cast<kvs::Real32>( volume->maxValue() );
+        }
+    }
+    else if ( type == typeid( kvs::Int16 ) )
+    {
+        min_range = static_cast<kvs::Real32>( kvs::Value<kvs::Int16>::Min() );
+        max_range = static_cast<kvs::Real32>( kvs::Value<kvs::Int16>::Max() );
+        if ( !BaseClass::m_tfunc.hasRange() )
+        {
+            min_value = static_cast<kvs::Real32>( volume->minValue() );
+            max_value = static_cast<kvs::Real32>( volume->maxValue() );
+        }
+    }
+    else if ( type == typeid( kvs::UInt32 ) || type == typeid( kvs::Int32  ) || type == typeid( kvs::Real32 ) )
+    {
+        min_range = 0.0f;
+        max_range = 1.0f;
+        min_value = 0.0f;
+        max_value = 1.0f;
+    }
+    else
+    {
+        kvsMessageError( "Not supported data type '%s'.", volume->values().typeInfo()->typeName() );
+    }
+
+    m_ray_casting_shader.bind();
+    m_ray_casting_shader.setUniform( "volume.resolution", resolution );
+    m_ray_casting_shader.setUniform( "volume.resolution_ratio", ratio );
+    m_ray_casting_shader.setUniform( "volume.resolution_reciprocal", reciprocal );
+    m_ray_casting_shader.setUniform( "volume.min_range", min_range );
+    m_ray_casting_shader.setUniform( "volume.max_range", max_range );
+    m_ray_casting_shader.setUniform( "transfer_function.min_value", min_value );
+    m_ray_casting_shader.setUniform( "transfer_function.max_value", max_value );
+    m_ray_casting_shader.setUniform( "dt", m_step );
+    m_ray_casting_shader.setUniform( "opaque", m_opaque );
+    switch ( BaseClass::m_shader->type() )
+    {
+    case kvs::Shader::LambertShading:
+    {
+        const GLfloat Ka = ((kvs::Shader::Lambert*)(BaseClass::m_shader))->Ka;
+        const GLfloat Kd = ((kvs::Shader::Lambert*)(BaseClass::m_shader))->Kd;
+        m_ray_casting_shader.setUniform( "shading.Ka", Ka );
+        m_ray_casting_shader.setUniform( "shading.Kd", Kd );
+        break;
+    }
+    case kvs::Shader::PhongShading:
+    {
+        const GLfloat Ka = ((kvs::Shader::Phong*)(BaseClass::m_shader))->Ka;
+        const GLfloat Kd = ((kvs::Shader::Phong*)(BaseClass::m_shader))->Kd;
+        const GLfloat Ks = ((kvs::Shader::Phong*)(BaseClass::m_shader))->Ks;
+        const GLfloat S  = ((kvs::Shader::Phong*)(BaseClass::m_shader))->S;
+        m_ray_casting_shader.setUniform( "shading.Ka", Ka );
+        m_ray_casting_shader.setUniform( "shading.Kd", Kd );
+        m_ray_casting_shader.setUniform( "shading.Ks", Ks );
+        m_ray_casting_shader.setUniform( "shading.S",  S );
+        break;
+    }
+    case kvs::Shader::BlinnPhongShading:
+    {
+        const GLfloat Ka = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->Ka;
+        const GLfloat Kd = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->Kd;
+        const GLfloat Ks = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->Ks;
+        const GLfloat S  = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->S;
+        m_ray_casting_shader.setUniform( "shading.Ka", Ka );
+        m_ray_casting_shader.setUniform( "shading.Kd", Kd );
+        m_ray_casting_shader.setUniform( "shading.Ks", Ks );
+        m_ray_casting_shader.setUniform( "shading.S",  S );
+        break;
+    }
+    default: /* NO SHADING */ break;
+    }
+    m_ray_casting_shader.unbind();
 }
 
-void RayCastingRenderer::create_jittering_texture()
+void RayCastingRenderer::initialize_jittering_texture()
 {
-    const size_t size = 32;
-    kvs::UInt8* data = new kvs::UInt8 [ size * size ];
-    srand( (unsigned)time(NULL) );
-    for ( size_t i = 0; i < size * size; i++ ) data[i] = static_cast<kvs::UInt8>(255.0f * rand() / float(RAND_MAX));
-
     m_jittering_texture.release();
-    m_jittering_texture.create( size, size, data );
 
-    delete [] data;
+    const size_t size = 32;
+    kvs::ValueArray<kvs::UInt8> rnd( size * size );
+    srand( (unsigned)time(NULL) );
+    for ( size_t i = 0; i < size * size; i++ ) rnd[i] = static_cast<kvs::UInt8>( 255.0f * rand() / float(RAND_MAX) );
+
+    m_jittering_texture.setWrapS( GL_REPEAT );
+    m_jittering_texture.setWrapT( GL_REPEAT );
+    m_jittering_texture.setMagFilter( GL_NEAREST );
+    m_jittering_texture.setMinFilter( GL_NEAREST );
+    m_jittering_texture.setPixelFormat( GL_LUMINANCE8, GL_LUMINANCE, GL_UNSIGNED_BYTE  );
+    m_jittering_texture.create( size, size, rnd.data() );
 }
 
 /*===========================================================================*/
@@ -600,7 +502,7 @@ void RayCastingRenderer::create_jittering_texture()
  *  @param  volume [in] pointer to the structured volume object
  */
 /*===========================================================================*/
-void RayCastingRenderer::create_bounding_cube( const kvs::StructuredVolumeObject* volume )
+void RayCastingRenderer::initialize_bounding_cube_buffer( const kvs::StructuredVolumeObject* volume )
 {
     /* Index number of the bounding cube.
      *
@@ -659,18 +561,17 @@ void RayCastingRenderer::create_bounding_cube( const kvs::StructuredVolumeObject
     };
 
     const size_t byte_size = sizeof(float) * nelements;
-    m_bounding_cube.create( byte_size, coords );
+    m_bounding_cube_buffer.create( byte_size, coords );
 }
 
 /*===========================================================================*/
 /**
  *  @brief  Crates a transfer function texture.
- *  @param  volume [in] pointer to the structured volume object
  */
 /*===========================================================================*/
-void RayCastingRenderer::create_transfer_function( const kvs::StructuredVolumeObject* volume )
+void RayCastingRenderer::initialize_transfer_function_texture()
 {
-    kvs::IgnoreUnusedVariable( volume );
+    m_transfer_function_texture.release();
 
     const size_t width = BaseClass::transferFunction().resolution();
     kvs::ValueArray<float> colors( width * 4 );
@@ -686,6 +587,10 @@ void RayCastingRenderer::create_transfer_function( const kvs::StructuredVolumeOb
         *(data++) = omap[i];
     }
 
+    m_transfer_function_texture.setWrapS( GL_CLAMP_TO_EDGE );
+    m_transfer_function_texture.setMagFilter( GL_LINEAR );
+    m_transfer_function_texture.setMinFilter( GL_LINEAR );
+    m_transfer_function_texture.setPixelFormat( GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT  );
     m_transfer_function_texture.create( width, colors.data() );
 }
 
@@ -695,8 +600,10 @@ void RayCastingRenderer::create_transfer_function( const kvs::StructuredVolumeOb
  *  @param  volume [in] pointer to the structured volume object
  */
 /*===========================================================================*/
-void RayCastingRenderer::create_volume_data( const kvs::StructuredVolumeObject* volume )
+void RayCastingRenderer::initialize_volume_texture( const kvs::StructuredVolumeObject* volume )
 {
+    m_volume_texture.release();
+
     const size_t width = volume->resolution().x();
     const size_t height = volume->resolution().y();
     const size_t depth = volume->resolution().z();
@@ -786,10 +693,77 @@ void RayCastingRenderer::create_volume_data( const kvs::StructuredVolumeObject* 
         kvsMessageError( "Not supported data type '%s'.",
                          volume->values().typeInfo()->typeName() );
     }
-    m_volume_data.setPixelFormat( data_format, GL_ALPHA, data_type );
 
-    m_volume_data.release();
-    m_volume_data.create( width, height, depth, data_value.data() );
+    m_volume_texture.setPixelFormat( data_format, GL_ALPHA, data_type );
+    m_volume_texture.setWrapS( GL_CLAMP_TO_BORDER );
+    m_volume_texture.setWrapT( GL_CLAMP_TO_BORDER );
+    m_volume_texture.setWrapR( GL_CLAMP_TO_BORDER );
+    m_volume_texture.setMagFilter( GL_LINEAR );
+    m_volume_texture.setMinFilter( GL_LINEAR );
+    m_volume_texture.create( width, height, depth, data_value.data() );
+}
+
+void RayCastingRenderer::initialize_framebuffer( const size_t width, const size_t height )
+{
+    m_depth_texture.setWrapS( GL_CLAMP_TO_BORDER );
+    m_depth_texture.setWrapT( GL_CLAMP_TO_BORDER );
+    m_depth_texture.setMagFilter( GL_LINEAR );
+    m_depth_texture.setMinFilter( GL_LINEAR );
+    m_depth_texture.setPixelFormat( GL_DEPTH_COMPONENT, GL_DEPTH_COMPONENT, GL_FLOAT  );
+    m_depth_texture.create( width, height );
+
+    m_color_texture.setWrapS( GL_CLAMP_TO_BORDER );
+    m_color_texture.setWrapT( GL_CLAMP_TO_BORDER );
+    m_color_texture.setMagFilter( GL_LINEAR );
+    m_color_texture.setMinFilter( GL_LINEAR );
+    m_color_texture.setPixelFormat( GL_RGBA32F, GL_RGB, GL_FLOAT  );
+    m_color_texture.create( width, height );
+
+    m_entry_texture.setWrapS( GL_CLAMP_TO_BORDER );
+    m_entry_texture.setWrapT( GL_CLAMP_TO_BORDER );
+    m_entry_texture.setMagFilter( GL_LINEAR );
+    m_entry_texture.setMinFilter( GL_LINEAR );
+    m_entry_texture.setPixelFormat( GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT );
+    m_entry_texture.create( width, height );
+
+    m_exit_texture.setWrapS( GL_CLAMP_TO_BORDER );
+    m_exit_texture.setWrapT( GL_CLAMP_TO_BORDER );
+    m_exit_texture.setMagFilter( GL_LINEAR );
+    m_exit_texture.setMinFilter( GL_LINEAR );
+    m_exit_texture.setPixelFormat( GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT  );
+    m_exit_texture.create( width, height );
+
+    m_entry_exit_framebuffer.create();
+    m_entry_exit_framebuffer.attachColorTexture( m_exit_texture, 0 );
+    m_entry_exit_framebuffer.attachColorTexture( m_entry_texture, 1 );
+
+    m_ray_casting_shader.bind();
+    m_ray_casting_shader.setUniform( "width", static_cast<GLfloat>( width ) );
+    m_ray_casting_shader.setUniform( "height", static_cast<GLfloat>( height ) );
+    m_ray_casting_shader.unbind();
+}
+
+void RayCastingRenderer::update_framebuffer( const size_t width, const size_t height )
+{
+    m_depth_texture.release();
+    m_depth_texture.create( width, height );
+
+    m_color_texture.release();
+    m_color_texture.create( width, height );
+
+    m_entry_texture.release();
+    m_entry_texture.create( width, height );
+
+    m_exit_texture.release();
+    m_exit_texture.create( width, height );
+
+    m_entry_exit_framebuffer.attachColorTexture( m_exit_texture, 0 );
+    m_entry_exit_framebuffer.attachColorTexture( m_entry_texture, 1 );
+
+    m_ray_casting_shader.bind();
+    m_ray_casting_shader.setUniform( "width", static_cast<GLfloat>( width ) );
+    m_ray_casting_shader.setUniform( "height", static_cast<GLfloat>( height ) );
+    m_ray_casting_shader.unbind();
 }
 
 /*===========================================================================*/
@@ -797,9 +771,9 @@ void RayCastingRenderer::create_volume_data( const kvs::StructuredVolumeObject* 
  *  @brief  Draws the bounding cube.
  */
 /*===========================================================================*/
-void RayCastingRenderer::draw_bounding_cube()
+void RayCastingRenderer::draw_bounding_cube_buffer()
 {
-    kvs::VertexBufferObject::Binder binder( m_bounding_cube );
+    kvs::VertexBufferObject::Binder binder( m_bounding_cube_buffer );
     KVS_GL_CALL( glEnableClientState( GL_VERTEX_ARRAY ) );
     KVS_GL_CALL( glVertexPointer( 3, GL_FLOAT, 0, 0 ) );
     KVS_GL_CALL( glDrawArrays( GL_QUADS, 0, 72 ) );
@@ -817,25 +791,22 @@ void RayCastingRenderer::draw_quad( const float opacity )
     kvs::OpenGL::Disable( GL_DEPTH_TEST );
     kvs::OpenGL::Disable( GL_LIGHTING );
 
-    KVS_GL_CALL( glMatrixMode( GL_MODELVIEW ) );
-    KVS_GL_CALL( glPushMatrix() );
-    KVS_GL_CALL( glLoadIdentity() );
-    KVS_GL_CALL( glMatrixMode( GL_PROJECTION ) );
-    KVS_GL_CALL( glPushMatrix() );
-    KVS_GL_CALL( glLoadIdentity() );
-    KVS_GL_CALL( glOrtho( 0, 1, 0, 1, -1, 1 ) );
-
-    glBegin( GL_QUADS );
-    glColor4f( 1.0, 1.0, 1.0, opacity );
-    glTexCoord2f( 1, 1 ); glVertex2f( 1, 1 );
-    glTexCoord2f( 0, 1 ); glVertex2f( 0, 1 );
-    glTexCoord2f( 0, 0 ); glVertex2f( 0, 0 );
-    glTexCoord2f( 1, 0 ); glVertex2f( 1, 0 );
-    glEnd();
-
-    KVS_GL_CALL( glPopMatrix() );
-    KVS_GL_CALL( glMatrixMode( GL_MODELVIEW ) );
-    KVS_GL_CALL( glPopMatrix() );
+    kvs::OpenGL::WithPushedMatrix p1( GL_MODELVIEW );
+    p1.loadIdentity();
+    {
+        kvs::OpenGL::WithPushedMatrix p2( GL_PROJECTION );
+        p2.loadIdentity();
+        {
+            kvs::OpenGL::SetOrtho( 0, 1, 0, 1, -1, 1 );
+            glBegin( GL_QUADS );
+            glColor4f( 1.0, 1.0, 1.0, opacity );
+            glTexCoord2f( 1, 1 ); glVertex2f( 1, 1 );
+            glTexCoord2f( 0, 1 ); glVertex2f( 0, 1 );
+            glTexCoord2f( 0, 0 ); glVertex2f( 0, 0 );
+            glTexCoord2f( 1, 0 ); glVertex2f( 1, 0 );
+            glEnd();
+        }
+    }
 }
 
 } // end of namespace glsl

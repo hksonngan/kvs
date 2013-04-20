@@ -283,6 +283,11 @@ void Finish()
     KVS_GL_CALL( glFinish() );
 }
 
+void Clear( GLbitfield mask )
+{
+    KVS_GL_CALL( glClear( mask ) );
+}
+
 void Enable( GLenum cap )
 {
     KVS_GL_CALL( glEnable( cap ) );
@@ -313,6 +318,11 @@ void SetShadeModel( GLenum mode )
 void SetMatrixMode( GLenum mode )
 {
     KVS_GL_CALL( glMatrixMode( mode ) );
+}
+
+void SetCullFace( GLenum mode )
+{
+    KVS_GL_CALL( glCullFace( mode ) );
 }
 
 void SetDrawBuffer( GLenum mode )

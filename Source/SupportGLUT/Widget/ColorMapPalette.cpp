@@ -304,7 +304,7 @@ void ColorMapPalette::mousePressEvent( kvs::MouseEvent* event )
 
             const size_t width = m_color_map.resolution();
             m_texture.bind();
-            m_texture.download( width, data );
+            m_texture.load( width, data );
             m_texture.unbind();
         }
 
@@ -366,7 +366,7 @@ void ColorMapPalette::mouseMoveEvent( kvs::MouseEvent* event )
 
             const size_t width = m_color_map.resolution();
             m_texture.bind();
-            m_texture.download( width, data );
+            m_texture.load( width, data );
             m_texture.unbind();
         }
 

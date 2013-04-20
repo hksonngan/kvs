@@ -57,6 +57,7 @@ GLint MaxRenderBufferSize();
 
 void Flush();
 void Finish();
+void Clear( GLbitfield mask );
 
 void Enable( GLenum cap );
 void Disable( GLenum cap );
@@ -65,6 +66,7 @@ bool IsEnabled( GLenum cap );
 void SetBlendFunc( GLenum sfactor, GLenum dfactor );
 void SetShadeModel( GLenum mode );
 void SetMatrixMode( GLenum mode );
+void SetCullFace( GLenum mode );
 void SetDrawBuffer( GLenum mode );
 void SetDrawBuffers( GLsizei n, const GLenum* bufs );
 

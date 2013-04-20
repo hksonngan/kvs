@@ -76,7 +76,7 @@ void ImageRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Lig
     default: break;
     }
 
-    m_texture.download( image->width(), image->height(), image->pixels().data() );
+    m_texture.load( image->width(), image->height(), image->pixels().data() );
     m_texture.bind();
 
     glMatrixMode( GL_MODELVIEW );
