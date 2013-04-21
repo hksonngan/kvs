@@ -1069,32 +1069,21 @@ void ParticleBasedRenderer::initialize_resize_texture()
 /*===========================================================================*/
 void ParticleBasedRenderer::create_random_texture()
 {
+    const size_t npixels = m_random_texture_size * m_random_texture_size;
+    kvs::MersenneTwister random;
+    kvs::ValueArray<GLubyte> pixels( npixels );
+    for ( size_t i = 0; i < npixels; i++ )
+    {
+        pixels[i] = static_cast<GLubyte>( random.randInteger() );
+    }
+
     m_random_texture.release();
     m_random_texture.setWrapS( GL_REPEAT );
     m_random_texture.setWrapT( GL_REPEAT );
     m_random_texture.setMagFilter( GL_NEAREST );
     m_random_texture.setMinFilter( GL_NEAREST );
     m_random_texture.setPixelFormat( GL_INTENSITY8,  GL_LUMINANCE, GL_UNSIGNED_BYTE  );
-
-    m_random_texture.create( m_random_texture_size, m_random_texture_size );
-    {
-        GLenum error = glGetError();
-        if ( error != GL_NO_ERROR)
-        {
-            kvsMessageError( "color buffer allocation failed: %s.", gluErrorString(error)); exit( EXIT_FAILURE );
-        }
-    }
-
-    const size_t npixels = m_random_texture_size * m_random_texture_size;
-
-    kvs::MersenneTwister random;
-    GLubyte* pixels = new GLubyte[ npixels ];
-    for ( size_t i = 0; i < npixels; i++ )
-    {
-        pixels[i] = static_cast<GLubyte>( random.randInteger() );
-    }
-    m_random_texture.load( m_random_texture_size, m_random_texture_size, pixels );
-    delete [] pixels;
+    m_random_texture.create( m_random_texture_size, m_random_texture_size, pixels.data() );
 }
 
 /*==========================================================================*/
