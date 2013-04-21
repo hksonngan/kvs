@@ -91,8 +91,8 @@ public:
 
 protected:
 
-    void generateBuffer();
-    void deleteBuffer();
+    void createID();
+    void deleteID();
     void setBufferData( GLsizei width, const GLvoid* data );
     void setBufferSubData( GLsizei width, const GLvoid* data, GLint xoffset = 0 );
     void* mapBuffer( const GLenum access_type );

@@ -60,7 +60,7 @@ GLuint FrameBufferObject::id() const
 /*===========================================================================*/
 void FrameBufferObject::create()
 {
-    this->generateFramebuffer();
+    this->createID();
 }
 
 /*===========================================================================*/
@@ -70,7 +70,7 @@ void FrameBufferObject::create()
 /*===========================================================================*/
 void FrameBufferObject::release()
 {
-    this->deleteFramebuffer();
+    this->deleteID();
 }
 
 /*===========================================================================*/
@@ -270,7 +270,7 @@ void FrameBufferObject::detachDepthRenderBuffer()
     KVS_GL_CALL( glFramebufferRenderbuffer( GL_FRAMEBUFFER, attachment, GL_RENDERBUFFER, 0 ) );
 }
 
-void FrameBufferObject::generateFramebuffer()
+void FrameBufferObject::createID()
 {
     if ( !this->isValid() )
     {
@@ -278,7 +278,7 @@ void FrameBufferObject::generateFramebuffer()
     }
 }
 
-void FrameBufferObject::deleteFramebuffer()
+void FrameBufferObject::deleteID()
 {
     if ( this->isValid() )
     {

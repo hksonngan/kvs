@@ -63,7 +63,7 @@ void Texture1D::create( const size_t width, const void* data )
     KVS_ASSERT( width > 0 );
     KVS_ASSERT( static_cast<GLint>( width ) <= kvs::OpenGL::MaxTextureSize() );
 
-    BaseClass::generateTexture();
+    BaseClass::createID();
     BaseClass::setSize( width );
     BaseClass::GuardedBinder binder( *this );
     BaseClass::setParameter( GL_TEXTURE_MAG_FILTER, BaseClass::magFilter() );
@@ -79,7 +79,7 @@ void Texture1D::create( const size_t width, const void* data )
 /*==========================================================================*/
 void Texture1D::release()
 {
-    BaseClass::deleteTexture();
+    BaseClass::deleteID();
     m_is_loaded = false;
 }
 

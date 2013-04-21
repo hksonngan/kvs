@@ -67,7 +67,7 @@ void Texture3D::create( const size_t width, const size_t height, const size_t de
     KVS_ASSERT( depth > 0 );
     KVS_ASSERT( static_cast<GLint>( depth ) <= kvs::OpenGL::MaxTextureSize() );
 
-    BaseClass::generateTexture();
+    BaseClass::createID();
     BaseClass::setSize( width, height, depth );
     BaseClass::GuardedBinder binder( *this );
     BaseClass::setParameter( GL_TEXTURE_MAG_FILTER, BaseClass::magFilter() );
@@ -85,7 +85,7 @@ void Texture3D::create( const size_t width, const size_t height, const size_t de
 /*==========================================================================*/
 void Texture3D::release()
 {
-    BaseClass::deleteTexture();
+    BaseClass::deleteID();
     m_is_loaded = false;
 }
 

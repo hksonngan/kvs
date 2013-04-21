@@ -58,8 +58,8 @@ public:
 
 protected:
 
-    void generateRenderbuffer();
-    void deleteRenderbuffer();
+    void createID();
+    void deleteID();
     void setRenderbufferStorage( GLenum internal_format, GLsizei width, GLsizei height );
 };
 

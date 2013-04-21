@@ -65,7 +65,7 @@ void TextureRectangle::create( const size_t width, const size_t height, const vo
     KVS_ASSERT( height > 0 );
     KVS_ASSERT( static_cast<GLint>( height ) <= kvs::OpenGL::MaxTextureSize() );
 
-    BaseClass::generateTexture();
+    BaseClass::createID();
     BaseClass::setSize( width, height );
     BaseClass::GuardedBinder binder( *this );
     BaseClass::setParameter( GL_TEXTURE_MAG_FILTER, BaseClass::magFilter() );
@@ -82,7 +82,7 @@ void TextureRectangle::create( const size_t width, const size_t height, const vo
 /*==========================================================================*/
 void TextureRectangle::release()
 {
-    BaseClass::deleteTexture();
+    BaseClass::deleteID();
     m_is_loaded = false;
 }
 

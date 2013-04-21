@@ -345,7 +345,7 @@ bool Texture::isBound() const
     return static_cast<GLuint>( id ) == m_id;
 }
 
-void Texture::generateTexture()
+void Texture::createID()
 {
     if ( !this->isValid() )
     {
@@ -353,7 +353,7 @@ void Texture::generateTexture()
     }
 }
 
-void Texture::deleteTexture()
+void Texture::deleteID()
 {
     if ( this->isValid() )
     {

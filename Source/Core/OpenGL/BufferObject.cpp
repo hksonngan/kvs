@@ -104,7 +104,7 @@ void BufferObject::setSize( const size_t size )
 /*===========================================================================*/
 void BufferObject::create( const size_t size, const void* data )
 {
-    this->generateBuffer();
+    this->createID();
     this->setSize( size );
     GuardedBinder binder( *this );
     this->download( size, data );
@@ -117,7 +117,7 @@ void BufferObject::create( const size_t size, const void* data )
 /*===========================================================================*/
 void BufferObject::release()
 {
-    this->deleteBuffer();
+    this->deleteID();
     m_is_downloaded = false;
 }
 
@@ -206,7 +206,7 @@ void BufferObject::unmap()
     this->unmapBuffer();
 }
 
-void BufferObject::generateBuffer()
+void BufferObject::createID()
 {
     if ( !this->isValid() )
     {
@@ -214,7 +214,7 @@ void BufferObject::generateBuffer()
     }
 }
 
-void BufferObject::deleteBuffer()
+void BufferObject::deleteID()
 {
     if ( this->isValid() )
     {

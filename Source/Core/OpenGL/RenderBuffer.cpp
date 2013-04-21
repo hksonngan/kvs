@@ -104,14 +104,14 @@ void RenderBuffer::create( const size_t width, const size_t height )
 
     m_width = width;
     m_height = height;
-    this->generateRenderbuffer();
+    this->createID();
     ::GuardedBinder binder( *this );
     this->setRenderbufferStorage( m_internal_format, m_width, m_height );
 }
 
 void RenderBuffer::release()
 {
-    this->deleteRenderbuffer();
+    this->deleteID();
     m_width = 0;
     m_height = 0;
 }
@@ -148,7 +148,7 @@ bool RenderBuffer::isBound() const
     return static_cast<GLuint>( id ) == m_id;
 }
 
-void RenderBuffer::generateRenderbuffer()
+void RenderBuffer::createID()
 {
     if ( !this->isValid() )
     {
@@ -156,7 +156,7 @@ void RenderBuffer::generateRenderbuffer()
     }
 }
 
-void RenderBuffer::deleteRenderbuffer()
+void RenderBuffer::deleteID()
 {
     if ( this->isValid() )
     {

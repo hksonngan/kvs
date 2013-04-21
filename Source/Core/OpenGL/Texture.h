@@ -97,8 +97,8 @@ public:
 
 protected:
 
-    void generateTexture();
-    void deleteTexture();
+    void createID();
+    void deleteID();
     void setImage1D( GLsizei width, const GLvoid* data );
     void setImage2D( GLsizei width, GLsizei height, const GLvoid* data );
     void setImage3D( GLsizei width, GLsizei height, GLsizei depth, const GLvoid* data );

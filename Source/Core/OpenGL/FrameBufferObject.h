@@ -74,8 +74,8 @@ public:
 
 protected:
 
-    void generateFramebuffer();
-    void deleteFramebuffer();
+    void createID();
+    void deleteID();
     GLenum checkFramebufferStatus() const;
 
 public:
