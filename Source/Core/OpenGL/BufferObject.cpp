@@ -33,7 +33,7 @@ BufferObject::BufferObject( const GLenum target, const GLenum target_binding, co
     m_id( 0 ),
     m_usage( usage ),
     m_size( 0 ),
-    m_is_downloaded( false )
+    m_is_loaded( false )
 {
 }
 
@@ -99,7 +99,7 @@ void BufferObject::setSize( const size_t size )
 /**
  *  Create buffer.
  *  @param  size [in] buffer size
- *  @param  data [in] pointer to downloaded buffer data
+ *  @param  data [in] pointer to loaded buffer data
  */
 /*===========================================================================*/
 void BufferObject::create( const size_t size, const void* data )
@@ -107,7 +107,7 @@ void BufferObject::create( const size_t size, const void* data )
     this->createID();
     this->setSize( size );
     GuardedBinder binder( *this );
-    this->download( size, data );
+    this->load( size, data );
 }
 
 /*===========================================================================*/
@@ -118,7 +118,7 @@ void BufferObject::create( const size_t size, const void* data )
 void BufferObject::release()
 {
     this->deleteID();
-    m_is_downloaded = false;
+    m_is_loaded = false;
 }
 
 /*===========================================================================*/
@@ -165,18 +165,18 @@ bool BufferObject::isBound() const
 
 /*===========================================================================*/
 /**
- *  Download buffer data from CPU to GPU.
+ *  Load buffer data from CPU to GPU.
  *  @param  size [in] buffer data size
- *  @param  data [in] pointer to downloaded buffer data
+ *  @param  data [in] pointer to loaded buffer data
  *  @param  offset [in] texel offset within the existing buffer data array
  */
 /*===========================================================================*/
-void BufferObject::download( const size_t size, const void* data, const size_t offset )
+void BufferObject::load( const size_t size, const void* data, const size_t offset )
 {
-    if ( !m_is_downloaded )
+    if ( !m_is_loaded )
     {
         this->setBufferData( size, data );
-        m_is_downloaded = true;
+        m_is_loaded = true;
     }
     else
     {

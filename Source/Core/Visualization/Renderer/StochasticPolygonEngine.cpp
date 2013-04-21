@@ -341,10 +341,10 @@ void StochasticPolygonEngine::create_vertex_buffer( void )
 
     m_vbo.create( size_of_vertex );
     m_vbo.bind();
-    m_vbo.download( size_i, ptr_i, off_i );
-    m_vbo.download( size_v, ptr_v, off_v );
-    if ( has_color )  m_vbo.download( size_c, ptr_c, off_c );
-    if ( has_normal ) m_vbo.download( size_n, ptr_n, off_n );
+    m_vbo.load( size_i, ptr_i, off_i );
+    m_vbo.load( size_v, ptr_v, off_v );
+    if ( has_color )  m_vbo.load( size_c, ptr_c, off_c );
+    if ( has_normal ) m_vbo.load( size_n, ptr_n, off_n );
     m_vbo.unbind();
 
     if ( has_connect )
@@ -354,7 +354,7 @@ void StochasticPolygonEngine::create_vertex_buffer( void )
 
         m_ibo.create( size_of_polygon );
         m_ibo.bind();
-        m_ibo.download( size_of_polygon, ptr_conn, 0 );
+        m_ibo.load( size_of_polygon, ptr_conn, 0 );
         m_ibo.unbind();
     }
 

@@ -218,9 +218,9 @@ void StochasticLineEngine::create_vertex_buffer()
 
     m_vbo.create( size_of_vertex );
     m_vbo.bind();
-    m_vbo.download( size_i, ptr_i, off_i );
-    m_vbo.download( size_v, ptr_v, off_v );
-    if ( has_color )  m_vbo.download( size_c, ptr_c, off_c );
+    m_vbo.load( size_i, ptr_i, off_i );
+    m_vbo.load( size_v, ptr_v, off_v );
+    if ( has_color )  m_vbo.load( size_c, ptr_c, off_c );
     m_vbo.unbind();
 
     if ( has_connect )
@@ -230,7 +230,7 @@ void StochasticLineEngine::create_vertex_buffer()
 
         m_ibo.create( size_of_line );
         m_ibo.bind();
-        m_ibo.download( size_of_line, ptr_conn, 0 );
+        m_ibo.load( size_of_line, ptr_conn, 0 );
         m_ibo.unbind();
     }
 

@@ -16,6 +16,7 @@
 #define KVS__BUFFER_OBJECT_H_INCLUDE
 
 #include <kvs/GL>
+#include <kvs/Deprecated>
 
 
 namespace kvs
@@ -57,7 +58,7 @@ private:
     GLuint m_id; ///< buffer ID
     GLenum m_usage; ///< usage
     size_t m_size; ///< buffer size [byte]
-    bool m_is_downloaded; ///< test whether the memory is allocated on the GPU or not
+    bool m_is_loaded; ///< test whether the memory is allocated on the GPU or not
 
 public:
 
@@ -85,10 +86,11 @@ public:
     bool isValid() const;
     bool isBound() const;
 
-    void download( const size_t size, const void* data, const size_t offset = 0 );
+    void load( const size_t size, const void* data, const size_t offset = 0 );
     void* map( const GLenum access_type = kvs::BufferObject::ReadWrite );
     void unmap();
 
+    KVS_DEPRECATED( void download( const size_t size, const void* data, const size_t offset = 0 ) ) { this->load( size, data, offset ); }
 protected:
 
     void createID();

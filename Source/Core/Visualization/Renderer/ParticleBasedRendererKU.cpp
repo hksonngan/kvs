@@ -323,10 +323,10 @@ size_t ParticleBasedRenderer::Renderer::download( kvs::VertexBufferObject& vbo )
     const ParticleBasedRenderer::NormalType* ptr_n = has_normal ? (m_particles->normals() + start * 3) : NULL;
     const ParticleBasedRenderer::ColorType*  ptr_c = m_particles->colors()  + start * 3;
 
-    if ( has_index ) vbo.download( size_i, ptr_i, off_i );
-    vbo.download( size_v, ptr_v, off_v );
-    if ( has_normal ) vbo.download( size_n, ptr_n, off_n );
-    vbo.download( size_c, ptr_c, off_c );
+    if ( has_index ) vbo.load( size_i, ptr_i, off_i );
+    vbo.load( size_v, ptr_v, off_v );
+    if ( has_normal ) vbo.load( size_n, ptr_n, off_n );
+    vbo.load( size_c, ptr_c, off_c );
 
     m_off_index  = off_i;
     m_off_coord  = off_v;

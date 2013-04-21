@@ -293,10 +293,10 @@ const bool StochasticPointEngine::Renderer::download( kvs::VertexBufferObject& v
     const StochasticPointEngine::ColorType*  ptr_c = m_particles->colors() + start * 3;
 
     vbo.bind();
-    vbo.download( size_i, ptr_i, off_i );
-    vbo.download( size_v, ptr_v, off_v );
-    if ( has_normal ) vbo.download( size_n, ptr_n, off_n );
-    vbo.download( size_c, ptr_c, off_c );
+    vbo.load( size_i, ptr_i, off_i );
+    vbo.load( size_v, ptr_v, off_v );
+    if ( has_normal ) vbo.load( size_n, ptr_n, off_n );
+    vbo.load( size_c, ptr_c, off_c );
     vbo.unbind();
 
     m_off_index  = off_i;
