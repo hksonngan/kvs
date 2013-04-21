@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file RayCastingRenderer.cpp
+ *  @file   RayCastingRenderer.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -22,11 +23,14 @@
 #include <kvs/OpenGL>
 
 
-#define KVS_RAY_CASTING_RENDERER__ENABLE_COMPOSITION 1
-
 namespace kvs
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new RayCastingRenderer class.
+ */
+/*===========================================================================*/
 RayCastingRenderer::RayCastingRenderer():
     m_step( 0.5f ),
     m_opaque( 0.97f ),
@@ -36,6 +40,12 @@ RayCastingRenderer::RayCastingRenderer():
     BaseClass::setShader( kvs::Shader::Lambert() );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new RayCastingRenderer class.
+ *  @param  trunc [in] transfer function
+ */
+/*===========================================================================*/
 RayCastingRenderer::RayCastingRenderer( const kvs::TransferFunction& tfunc ):
     m_step( 0.5f ),
     m_opaque( 0.97f ),
@@ -46,6 +56,12 @@ RayCastingRenderer::RayCastingRenderer( const kvs::TransferFunction& tfunc ):
     BaseClass::setShader( kvs::Shader::Lambert() );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new RayCastingRenderer class.
+ *  @param  shader [in] shading model
+ */
+/*===========================================================================*/
 template <typename ShadingType>
 RayCastingRenderer::RayCastingRenderer( const ShadingType shader ):
     m_step( 0.5f ),
@@ -56,10 +72,23 @@ RayCastingRenderer::RayCastingRenderer( const ShadingType shader ):
     BaseClass::setShader( shader );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Destroys the RayCastingRenderer class.
+ */
+/*===========================================================================*/
 RayCastingRenderer::~RayCastingRenderer()
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Executes the rendering process.
+ *  @param  object [in] pointer to the object
+ *  @param  camera [in] pointer to the camera
+ *  @param  light [in] pointer to the light
+ */
+/*===========================================================================*/
 void RayCastingRenderer::exec(
     kvs::ObjectBase* object,
     kvs::Camera* camera,
@@ -68,20 +97,22 @@ void RayCastingRenderer::exec(
     const kvs::StructuredVolumeObject* volume = kvs::StructuredVolumeObject::DownCast( object );
     BaseClass::startTimer();
 
-    if ( BaseClass::windowWidth()  != camera->windowWidth() ||
+    // Screen size changed.
+    if ( BaseClass::windowWidth() != camera->windowWidth() ||
          BaseClass::windowHeight() != camera->windowHeight() )
     {
         BaseClass::setWindowSize( camera->windowWidth(), camera->windowHeight() );
-
         const size_t npixels = BaseClass::windowWidth() * BaseClass::windowHeight();
         BaseClass::allocateColorData( npixels * 4 );
         BaseClass::allocateDepthData( npixels );
-        kvs::OpenGL::GetModelViewMatrix( m_modelview_matrix );
+        kvs::OpenGL::GetModelViewMatrix( m_modelview );
     }
 
+    // Initialize frame buffer.
     BaseClass::fillColorData( 0 );
     BaseClass::fillDepthData( 0 );
 
+    // Rasterize.
     if ( !volume->hasMinMaxValues() ) volume->updateMinMaxValues();
     const float min_value = static_cast<float>( volume->minValue() );
     const float max_value = static_cast<float>( volume->maxValue() );
@@ -117,49 +148,18 @@ void RayCastingRenderer::exec(
                          volume->values().typeInfo()->typeName() );
     }
 
+    // Draw the image.
     BaseClass::drawImage();
+
     BaseClass::stopTimer();
-}
-
-void RayCastingRenderer::setSamplingStep( const float step )
-{
-    m_step = step;
-}
-
-void RayCastingRenderer::setOpaqueValue( const float opaque )
-{
-    m_opaque = opaque;
-}
-
-void RayCastingRenderer::enableLODControl( const size_t ray_width )
-{
-    m_enable_lod = true;
-    this->enableCoarseRendering( ray_width );
-}
-
-void RayCastingRenderer::disableLODControl()
-{
-    m_enable_lod = false;
-    this->disableCoarseRendering();
-}
-
-void RayCastingRenderer::enableCoarseRendering( const size_t ray_width )
-{
-    m_ray_width = ray_width;
-}
-
-void RayCastingRenderer::disableCoarseRendering()
-{
-    m_ray_width = 1;
 }
 
 /*==========================================================================*/
 /**
- *  Rasterization.
- *
- *  @param volume  [in] volume object
- *  @param camera  [in] camera
- *  @param light   [in] light
+ *  @brief  Rasterization.
+ *  @param  volume [in] pointer to the volume object
+ *  @param  camera [in] pointer to the camera
+ *  @param  light [in] pointer to the light
  */
 /*==========================================================================*/
 template <typename T>
@@ -171,14 +171,8 @@ void RayCastingRenderer::rasterize(
     // Set shader initial parameters.
     BaseClass::shader().set( camera, light );
 
-#if KVS_RAY_CASTING_RENDERER__ENABLE_COMPOSITION
     // Readback pixels.
-//    glReadPixels( 0, 0, BaseClass::windowWidth(), BaseClass::windowHeight(), GL_RGBA, GL_UNSIGNED_BYTE, pixel );
-//    glReadPixels( 0, 0, BaseClass::windowWidth(), BaseClass::windowHeight(), GL_DEPTH_COMPONENT, GL_FLOAT, depth_data );
     BaseClass::readImage();
-#endif
-
-    // Aliases.
     kvs::UInt8* const pixel_data = BaseClass::colorData().data();
     kvs::Real32* const depth_data = BaseClass::depthData().data();
 
@@ -186,17 +180,17 @@ void RayCastingRenderer::rasterize(
     size_t ray_width = 1;
     if ( m_enable_lod )
     {
-        float modelview_matrix[16];
-        kvs::OpenGL::GetModelViewMatrix( modelview_matrix );
+        float modelview[16];
+        kvs::OpenGL::GetModelViewMatrix( modelview );
         for ( size_t i = 0; i < 16; i++ )
         {
-            if ( m_modelview_matrix[i] != modelview_matrix[i] )
+            if ( m_modelview[i] != modelview[i] )
             {
                 ray_width = m_ray_width;
                 break;
             }
         }
-        memcpy( m_modelview_matrix, modelview_matrix, sizeof( modelview_matrix ) );
+        memcpy( m_modelview, modelview, sizeof( modelview ) );
     }
 
     // Set the trilinear interpolator.
@@ -213,7 +207,6 @@ void RayCastingRenderer::rasterize(
     const kvs::OpacityMap& omap = BaseClass::transferFunction().opacityMap();
     const float step = m_step;
     const float opaque = m_opaque;
-
     size_t depth_index = 0;
     size_t pixel_index = 0;
     for ( size_t y = 0; y < height; y += ray_width )
@@ -231,9 +224,7 @@ void RayCastingRenderer::rasterize(
                 float b = 0.0f;
                 float a = 0.0;
 
-#if KVS_RAY_CASTING_RENDERER__ENABLE_COMPOSITION
                 const float depth0 = depth_data[ depth_index ];
-#endif
                 depth_data[ depth_index ] = ray.depth();
 
                 do
@@ -264,7 +255,6 @@ void RayCastingRenderer::rasterize(
                         }
                     }
 
-#if KVS_RAY_CASTING_RENDERER__ENABLE_COMPOSITION
                     const float depth = ray.depth();
                     if ( depth > depth0 )
                     {
@@ -275,7 +265,6 @@ void RayCastingRenderer::rasterize(
                         a = 1.0f;
                         break;
                     }
-#endif
 
                     ray.step( step );
                 } while ( ray.isInside() );

@@ -259,28 +259,6 @@ void RayCastingRenderer::exec(
 
 /*===========================================================================*/
 /**
- *  @brief  Sets sampling step.
- *  @param  step [in] sampling step
- */
-/*===========================================================================*/
-void RayCastingRenderer::setSamplingStep( const float step )
-{
-    m_step = step;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets opaque value for the early ray termination.
- *  @param  opaque [in] opaque value
- */
-/*===========================================================================*/
-void RayCastingRenderer::setOpaqueValue( const float opaque )
-{
-    m_opaque = opaque;
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Sets drawing buffer.
  *  @param  drawing_buffer [in] drawing buffer (front, back or volume)
  */
@@ -322,19 +300,10 @@ void RayCastingRenderer::setTransferFunction( const kvs::TransferFunction& tfunc
      }
 }
 
-void RayCastingRenderer::enableJittering()
-{
-    m_enable_jittering = true;
-}
-
-void RayCastingRenderer::disableJittering()
-{
-    m_enable_jittering = false;
-}
-
 /*==========================================================================*/
 /**
- *  @brief  Initialize OpenGL.
+ *  @brief  Initialize shaders.
+ *  @params volume [in] pointer to the volume object
  */
 /*==========================================================================*/
 void RayCastingRenderer::initialize_shader( const kvs::StructuredVolumeObject* volume )
@@ -447,6 +416,11 @@ void RayCastingRenderer::initialize_shader( const kvs::StructuredVolumeObject* v
     m_ray_casting_shader.unbind();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Initialize the jittering texture.
+ */
+/*===========================================================================*/
 void RayCastingRenderer::initialize_jittering_texture()
 {
     m_jittering_texture.release();
@@ -671,6 +645,13 @@ void RayCastingRenderer::initialize_volume_texture( const kvs::StructuredVolumeO
     m_volume_texture.create( width, height, depth, data_value.data() );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Initializes the framebuffer-related resources.
+ *  @param  width [in] window width
+ *  @param  height [in] window height
+ */
+/*===========================================================================*/
 void RayCastingRenderer::initialize_framebuffer( const size_t width, const size_t height )
 {
     m_depth_texture.setWrapS( GL_CLAMP_TO_BORDER );
@@ -711,6 +692,13 @@ void RayCastingRenderer::initialize_framebuffer( const size_t width, const size_
     m_ray_casting_shader.unbind();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Updates the framebuffer-related resources.
+ *  @param  width [in] window width
+ *  @param  height [in] window height
+ */
+/*===========================================================================*/
 void RayCastingRenderer::update_framebuffer( const size_t width, const size_t height )
 {
     m_depth_texture.release();

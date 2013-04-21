@@ -19,6 +19,7 @@
 #include <kvs/TransferFunction>
 #include <kvs/StructuredVolumeObject>
 #include <kvs/Module>
+#include <kvs/Deprecated>
 
 
 namespace kvs
@@ -41,7 +42,7 @@ private:
     float m_opaque; ///< opaque value for early ray termination
     size_t m_ray_width; ///< ray width
     bool m_enable_lod; ///< enable LOD rendering
-    float m_modelview_matrix[16]; ///< modelview matrix
+    float m_modelview[16]; ///< modelview matrix
 
 public:
 
@@ -52,12 +53,10 @@ public:
     virtual ~RayCastingRenderer();
 
     void exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
-    void setSamplingStep( const float step );
-    void setOpaqueValue( const float opaque );
-    void enableLODControl( const size_t ray_width = 3 );
-    void disableLODControl();
-    void enableCoarseRendering( const size_t ray_width = 3 );
-    void disableCoarseRendering();
+    void setSamplingStep( const float step ) { m_step = step; }
+    void setOpaqueValue( const float opaque ) { m_opaque = opaque; }
+    void enableLODControl( const size_t ray_width = 3 ) { m_enable_lod = true; m_ray_width = ray_width; }
+    void disableLODControl() { m_enable_lod = false; m_ray_width = 1; }
 
 private:
 
@@ -66,6 +65,10 @@ private:
         const kvs::StructuredVolumeObject* volume,
         const kvs::Camera* camera,
         const kvs::Light* light );
+
+public:
+    KVS_DEPRECATED( void enableCoarseRendering( const size_t ray_width = 3 ) ) { m_ray_width = ray_width; }
+    KVS_DEPRECATED( void disableCoarseRendering() ) { m_ray_width = 1; }
 };
 
 } // end of namespace kvs

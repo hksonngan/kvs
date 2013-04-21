@@ -56,7 +56,6 @@ public:
         Volume
     };
 
-//protected:
 private:
 
     bool m_draw_front_face; ///< frag for drawing front face
@@ -85,12 +84,12 @@ public:
     RayCastingRenderer( const ShadingType shader );
 
     void exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
-    void setSamplingStep( const float step );
-    void setOpaqueValue( const float opaque );
     void setDrawingBuffer( const DrawingBuffer drawing_buffer );
     void setTransferFunction( const kvs::TransferFunction& tfunc );
-    void enableJittering();
-    void disableJittering();
+    void setSamplingStep( const float step ) { m_step = step; }
+    void setOpaqueValue( const float opaque ) { m_opaque = opaque; }
+    void enableJittering() { m_enable_jittering = true; }
+    void disableJittering() { m_enable_jittering = false; }
 
 private:
 
