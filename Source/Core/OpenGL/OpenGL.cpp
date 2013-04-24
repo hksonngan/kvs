@@ -460,6 +460,37 @@ void GetViewport( GLint* params )
     kvs::OpenGL::GetIntegerv( GL_VIEWPORT, params );
 }
 
+void GetViewport( GLfloat* params )
+{
+    kvs::OpenGL::GetFloatv( GL_VIEWPORT, params );
+}
+
+kvs::Mat4 modelViewMatrix()
+{
+    GLfloat m[16]; kvs::OpenGL::GetModelViewMatrix( m );
+    return kvs::Mat4(
+        m[0], m[4], m[8],  m[12],
+        m[1], m[5], m[9],  m[13],
+        m[2], m[6], m[10], m[14],
+        m[3], m[7], m[11], m[15] );
+}
+
+kvs::Mat4 projectionMatrix()
+{
+    GLfloat p[16]; kvs::OpenGL::GetProjectionMatrix( p );
+    return kvs::Mat4(
+        p[0], p[4], p[8],  p[12],
+        p[1], p[5], p[9],  p[13],
+        p[2], p[6], p[10], p[14],
+        p[3], p[7], p[11], p[15] );
+}
+
+kvs::Vec4 viewport()
+{
+    GLfloat v[4]; kvs::OpenGL::GetViewport( v );
+    return kvs::Vec4( v[0], v[1], v[2], v[3] );
+}
+
 void LoadIdentity()
 {
     KVS_GL_CALL( glLoadIdentity() );
