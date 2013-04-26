@@ -42,6 +42,7 @@ public:
     void exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
 
     void attachObject( const kvs::LineObject* object );
+    void setOpacity( const unsigned char opacity );
 };
 
 } // end of namespace kvs

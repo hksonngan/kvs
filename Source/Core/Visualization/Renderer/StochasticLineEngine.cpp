@@ -258,7 +258,7 @@ void StochasticLineEngine::download_vertex_buffer()
 void StochasticLineEngine::draw_vertex_buffer( const float modelview_matrix[16] )
 {
     m_vbo.bind();
-    m_ibo.bind();
+//    m_ibo.bind();
 
     glActiveTexture(GL_TEXTURE0);     m_random_texture.bind();          glEnable(GL_TEXTURE_2D);
 
@@ -297,6 +297,7 @@ void StochasticLineEngine::draw_vertex_buffer( const float modelview_matrix[16] 
 
     if ( has_connect )
     {
+        m_ibo.bind();
         switch ( m_ref_line->lineType() )
         {
             case kvs::LineObject::Uniline:
@@ -311,6 +312,7 @@ void StochasticLineEngine::draw_vertex_buffer( const float modelview_matrix[16] 
             }
             default: break;
         }
+        m_ibo.unbind();
     }
     else
     {
@@ -349,7 +351,7 @@ void StochasticLineEngine::draw_vertex_buffer( const float modelview_matrix[16] 
     glActiveTexture(GL_TEXTURE0);    m_random_texture.unbind();         glDisable(GL_TEXTURE_2D);
 
     m_vbo.unbind();
-    m_ibo.unbind();
+//    m_ibo.unbind();
 }
 
 } // end of namespace kvs

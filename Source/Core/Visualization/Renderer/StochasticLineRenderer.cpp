@@ -75,4 +75,10 @@ void StochasticLineRenderer::attachObject( const kvs::LineObject* object )
     BaseClass::clearEnsembleBuffer();
 }
 
+void StochasticLineRenderer::setOpacity( const unsigned char opacity )
+{
+    kvs::StochasticRenderingEngine* engine = BaseClass::m_rendering_engines[0];
+    static_cast<StochasticLineEngine*>(engine)->setOpacity( opacity );
+}
+
 } // end of namespace kvs
