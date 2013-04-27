@@ -450,9 +450,19 @@ void GetModelViewMatrix( GLfloat* params )
     kvs::OpenGL::GetFloatv( GL_MODELVIEW_MATRIX, params );
 }
 
+void GetModelViewMatrix( GLdouble* params )
+{
+    kvs::OpenGL::GetDoublev( GL_MODELVIEW_MATRIX, params );
+}
+
 void GetProjectionMatrix( GLfloat* params )
 {
     kvs::OpenGL::GetFloatv( GL_PROJECTION_MATRIX, params );
+}
+
+void GetProjectionMatrix( GLdouble* params )
+{
+    kvs::OpenGL::GetDoublev( GL_PROJECTION_MATRIX, params );
 }
 
 void GetViewport( GLint* params )
