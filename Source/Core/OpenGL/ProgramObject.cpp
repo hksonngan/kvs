@@ -28,6 +28,9 @@ namespace kvs
 /*===========================================================================*/
 ProgramObject::ProgramObject():
     m_id( 0 ),
+    m_geom_input_type( 0 ),
+    m_geom_output_type( 0 ),
+    m_geom_output_vertices( 0 ),
     m_is_bound( false )
 {
 }
@@ -88,7 +91,6 @@ std::string ProgramObject::log() const
 /*===========================================================================*/
 void ProgramObject::create()
 {
-//    if( !glIsProgram( m_id ) ) m_id = glCreateProgram();
     this->createID();
 }
 
@@ -207,6 +209,18 @@ void ProgramObject::build( const kvs::ShaderSource& vert_src, const kvs::ShaderS
     this->attach( vert );
     this->attach( geom );
     this->attach( frag );
+
+    // Set parameters for the geometry shader.
+    this->setParameter( GL_GEOMETRY_INPUT_TYPE_EXT, m_geom_input_type );
+    this->setParameter( GL_GEOMETRY_OUTPUT_TYPE_EXT, m_geom_output_type );
+    const GLint max_output_vertices = kvs::OpenGL::Integer( GL_MAX_GEOMETRY_OUTPUT_VERTICES_EXT );
+    if ( max_output_vertices < m_geom_output_vertices )
+    {
+        kvsMessageError( "GeometryShader GL_GEOMETRY_VERTICES_OUT require = %d > max = %d", m_geom_output_vertices, max_output_vertices );
+        KVS_THROW( kvs::OpenGLException, "GeometryShader cannot be attached" );
+    }
+    this->setParameter( GL_GEOMETRY_VERTICES_OUT_EXT, m_geom_output_vertices );
+
     if ( !this->link() )
     {
         GLenum error = glGetError();
@@ -437,6 +451,21 @@ void ProgramObject::setUniform( const GLchar* name, const kvs::Matrix44f& value 
     KVS_GL_CALL( glUniformMatrix4fv( location, 1, GL_TRUE, &value[0][0] ) );
 }
 
+void ProgramObject::setGeometryInputType( const GLint type )
+{
+    m_geom_input_type = type;
+}
+
+void ProgramObject::setGeometryOutputType( const GLint type )
+{
+    m_geom_output_type = type;
+}
+
+void ProgramObject::setGeometryOutputVertices( const GLint value )
+{
+    m_geom_output_vertices = value;
+}
+
 void ProgramObject::createID()
 {
     if ( !this->isValid() )
@@ -452,6 +481,12 @@ void ProgramObject::deleteID()
         KVS_GL_CALL( glDeleteProgram( m_id ) );
     }
     m_id = 0;
+}
+
+void ProgramObject::setParameter( GLenum pname, GLint value )
+{
+    KVS_ASSERT( this->isCreated() );
+    KVS_GL_CALL( glProgramParameteriEXT( this->id(), pname, value ) );
 }
 
 ProgramObject::Binder::Binder( const ProgramObject& po ) :

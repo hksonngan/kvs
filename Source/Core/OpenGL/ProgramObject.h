@@ -41,6 +41,9 @@ class ProgramObject
 private:
 
     GLuint m_id; ///< shader ID
+    GLenum m_geom_input_type; ///< input type for geometry shader
+    GLenum m_geom_output_type; ///< output type for geometry shader
+    GLint m_geom_output_vertices; ///< number of vertices for geometry shader
     mutable bool m_is_bound; ///< binding flag
 
 public:
@@ -85,10 +88,15 @@ public:
     void setUniform( const GLchar* name, const kvs::Matrix33f& value );
     void setUniform( const GLchar* name, const kvs::Matrix44f& value );
 
+    void setGeometryInputType( const GLint type );
+    void setGeometryOutputType( const GLint type );
+    void setGeometryOutputVertices( const GLint value );
+
 protected:
 
     void createID();
     void deleteID();
+    void setParameter( GLenum pname, GLint value );
 
 public:
     /*KVS_DEPRECATED*/ bool link( const kvs::VertexShader& vertex_shader, const kvs::FragmentShader& fragment_shader );
