@@ -46,7 +46,7 @@ double used_point_ratio = 1.0;
 size_t used_points = 0;
 size_t start_pos = 0;
 bool division_mode = 0;
-bool enable_hyblid_zooming;
+bool enable_hybrid_zooming;
 kvs::Vector3f object_center;
 float object_magnification;
 float screen_magnification;
@@ -538,14 +538,14 @@ void ParticleBasedRenderer::initialize()
     m_enable_pre_downloading = true;
     m_enable_accumulation_buffer = false;
     m_enable_random_texture = true;
-    m_enable_repetition_level_zooming = true;//ADD_UEMURA
+    m_enable_repetition_level_zooming = false;//ADD_UEMURA
 
     m_vbo = NULL;
     m_particles = NULL;
     m_renderer = NULL;
 
     m_enable_lod = true;
-    m_enable_zooming = false;//ADD_UEMURA
+    m_enable_zooming = true;//ADD_UEMURA
     m_enable_shuffle = true;//ADD_UEMURA
 
     memset( m_modelview_matrix, 0, sizeof( m_modelview_matrix ) );
@@ -820,7 +820,7 @@ void ParticleBasedRenderer::create_image(
 {
     kvs::IgnoreUnusedVariable( light );
 
-    rendering_process::enable_hyblid_zooming = m_enable_repetition_level_zooming && m_enable_zooming;
+    rendering_process::enable_hybrid_zooming = m_enable_repetition_level_zooming && m_enable_zooming;
 
     // Set shader initial parameters.
     //BaseClass::m_shader->set( camera, light );
@@ -900,7 +900,7 @@ void ParticleBasedRenderer::create_image(
     rendering_process::object_center        = point->objectCenter();
     rendering_process::object_magnification = point->xform().scaling().x() * rendering_process::default_camera_distance /camera->position().length();
     rendering_process::screen_magnification =  scaled_window_size / default_window_size;
-    double distance_param                   = (rendering_process::enable_hyblid_zooming)?  rendering_process::object_magnification * rendering_process::screen_magnification: 
+    double distance_param                   = (rendering_process::enable_hybrid_zooming)?  rendering_process::object_magnification * rendering_process::screen_magnification: 
                                               rendering_process::object_magnification * rendering_process::object_magnification *
                                               rendering_process::screen_magnification * rendering_process::screen_magnification;
     double used_point_ratio                 = distance_param;
