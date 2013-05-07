@@ -58,19 +58,19 @@ public:
     bool isBound() const;
     void checkStatus() const;
 
-    void attachColorTexture( const kvs::Texture1D& texture, const size_t color_buffer = 0, const int mip_level = 0 );
-    void attachColorTexture( const kvs::Texture2D& texture, const size_t color_buffer = 0, const int mip_level = 0 );
-    void attachColorTexture( const kvs::Texture3D& texture, const size_t color_buffer = 0, const int mip_level = 0, const int zoffset = 0 );
-    void attachDepthTexture( const kvs::Texture1D& texture, const int mip_level = 0 );
-    void attachDepthTexture( const kvs::Texture2D& texture, const int mip_level = 0 );
-    void attachDepthTexture( const kvs::Texture3D& texture, const int mip_level = 0, const int zoffset = 0 );
-    void attachColorRenderBuffer( const kvs::RenderBuffer& render_buffer, const size_t color_buffer = 0 );
-    void attachDepthRenderBuffer( const kvs::RenderBuffer& render_buffer );
+    void attachColorTexture( const kvs::Texture1D& texture, const size_t color_buffer = 0, const int mip_level = 0 ) const;
+    void attachColorTexture( const kvs::Texture2D& texture, const size_t color_buffer = 0, const int mip_level = 0 ) const;
+    void attachColorTexture( const kvs::Texture3D& texture, const size_t color_buffer = 0, const int mip_level = 0, const int zoffset = 0 ) const;
+    void attachDepthTexture( const kvs::Texture1D& texture, const int mip_level = 0 ) const;
+    void attachDepthTexture( const kvs::Texture2D& texture, const int mip_level = 0 ) const;
+    void attachDepthTexture( const kvs::Texture3D& texture, const int mip_level = 0, const int zoffset = 0 ) const;
+    void attachColorRenderBuffer( const kvs::RenderBuffer& render_buffer, const size_t color_buffer = 0 ) const;
+    void attachDepthRenderBuffer( const kvs::RenderBuffer& render_buffer ) const;
 
-    void detachColorTexture( const size_t color_buffer = 0, const int mip_level = 0 );
-    void detachDepthTexture( const int mip_level = 0 );
-    void detachColorRenderBuffer( const size_t color_buffer = 0 );
-    void detachDepthRenderBuffer();
+    void detachColorTexture( const size_t color_buffer = 0, const int mip_level = 0 ) const;
+    void detachDepthTexture( const int mip_level = 0 ) const;
+    void detachColorRenderBuffer( const size_t color_buffer = 0 ) const;
+    void detachDepthRenderBuffer() const;
 
 protected:
 
