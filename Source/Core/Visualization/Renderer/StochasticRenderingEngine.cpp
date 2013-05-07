@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   StochasticRenderingEngine.cpp
- *  @author Jun Nishimura
+ *  @author Jun Nishimura, Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -13,6 +13,8 @@
  */
 /*****************************************************************************/
 #include "StochasticRenderingEngine.h"
+#include <kvs/Assert>
+#include <kvs/Xorshift128>
 
 
 namespace kvs
@@ -23,171 +25,36 @@ namespace kvs
  *  @brief  Constructs a new StochasticRenderingEngine class.
  */
 /*===========================================================================*/
-StochasticRenderingEngine::StochasticRenderingEngine( void )
+StochasticRenderingEngine::StochasticRenderingEngine():
+    m_object( NULL ),
+    m_shader( NULL ),
+    m_enable_shading( true ),
+    m_repetition_level( 1 ),
+    m_repetition_count( 0 ),
+    m_random_texture_size( 512 )
 {
-    this->initialize();
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Destroys the StochasticRenderingEngine class.
+ *  @brief  Creates random texture.
  */
 /*===========================================================================*/
-StochasticRenderingEngine::~StochasticRenderingEngine( void )
+void StochasticRenderingEngine::createRandomTexture()
 {
-    this->clear();
-}
+    KVS_ASSERT( m_random_texture_size > 0 );
 
-/*===========================================================================*/
-/**
- *  @brief  Initializes the member parameters.
- */
-/*===========================================================================*/
-void StochasticRenderingEngine::initialize( void )
-{
-    m_width = 0;
-    m_height = 0;
-    m_repetition_count = 0;
-    m_enable_shading = true;
-    m_shader = NULL;
-    m_enable_updating_vbo = false;
-    m_enable_exact_depth_testing = false;
-}
+    kvs::Xorshift128 R;
+    kvs::ValueArray<kvs::Real32> random( m_random_texture_size * m_random_texture_size );
+    for ( size_t i = 0; i < random.size(); i++ ) { random[i] = R.rand(); }
 
-/*===========================================================================*/
-/**
- *  @brief  Clears the allocated member parameters.
- */
-/*===========================================================================*/
-void StochasticRenderingEngine::clear( void )
-{
-    if ( m_shader )
-    {
-        delete m_shader;
-        m_shader = NULL;
-    }
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Enables shading.
- */
-/*===========================================================================*/
-void StochasticRenderingEngine::enableShading( void )
-{
-    m_enable_shading = true;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Disable shading.
- */
-/*===========================================================================*/
-void StochasticRenderingEngine::disableShading( void )
-{
-    m_enable_shading = false;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns whether or not the shading is enabled.
- *  @return true, if the shading is enabled
- */
-/*===========================================================================*/
-const bool StochasticRenderingEngine::isEnabledShading( void ) const
-{
-    return( m_enable_shading );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets the rendering screen size.
- *  @param  width [in] rendering screen width
- *  @param  height [in] rendering screen height
- */
-/*===========================================================================*/
-void StochasticRenderingEngine::set_render_size( const size_t width, const size_t height )
-{
-    m_width = width;
-    m_height = height;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets the random number texture for the stochastic color assignment.
- *  @param  random_texture [in] random ranumber texture
- */
-/*===========================================================================*/
-void StochasticRenderingEngine::set_random_texture( const kvs::Texture2D& random_texture )
-{
-    m_random_texture = random_texture;
-}
-
-bool StochasticRenderingEngine::has_random_texture()
-{
-    return !( m_random_texture.width() == 0 && m_random_texture.height() == 0 );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Enables updating VBO.
- */
-/*===========================================================================*/
-void StochasticRenderingEngine::enable_updating_vbo( void )
-{
-    m_enable_updating_vbo = true;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Disables updating VBO.
- */
-/*===========================================================================*/
-void StochasticRenderingEngine::disable_updating_vbo( void )
-{
-    m_enable_updating_vbo = false;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns whether or not the updating of VBO is enabled.
- *  @return true, if the updating of VBO is enabled
- */
-/*===========================================================================*/
-const bool StochasticRenderingEngine::is_enabled_updating_vbo( void ) const
-{
-    return( m_enable_updating_vbo );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Enables exact depth testing.
- */
-/*===========================================================================*/
-void StochasticRenderingEngine::enable_exact_depth_testing( void )
-{
-    m_enable_exact_depth_testing = true;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Disables exact depth testing.
- */
-/*===========================================================================*/
-void StochasticRenderingEngine::disable_exact_depth_testing( void )
-{
-    m_enable_exact_depth_testing = false;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns whether or not the exact depth testing is enabled.
- *  @return true, if the exact depth testing is enabled
- */
-/*===========================================================================*/
-const bool StochasticRenderingEngine::is_enabled_exact_depth_testing( void ) const
-{
-    return m_enable_exact_depth_testing;
+    m_random_texture.release();
+    m_random_texture.setWrapS( GL_REPEAT );
+    m_random_texture.setWrapT( GL_REPEAT );
+    m_random_texture.setMagFilter( GL_NEAREST );
+    m_random_texture.setMinFilter( GL_NEAREST );
+    m_random_texture.setPixelFormat( GL_INTENSITY,  GL_LUMINANCE, GL_FLOAT );
+    m_random_texture.create( m_random_texture_size, m_random_texture_size, random.data() );
 }
 
 } // end of namespace kvs

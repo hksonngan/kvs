@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   StochasticRenderingEngine.h
- *  @author Jun Nishimura
+ *  @author Jun Nishimura, Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -15,133 +15,66 @@
 #ifndef KVS__STOCHASTIC_RENDERING_ENGINE_H_INCLUDE
 #define KVS__STOCHASTIC_RENDERING_ENGINE_H_INCLUDE
 
-#include <kvs/ClassName>
 #include <kvs/Shader>
 #include <kvs/Texture2D>
-#include <kvs/ObjectBase>
-#include <kvs/VertexShader>
-#include <kvs/FragmentShader>
-#include <kvs/ProgramObject>
 
 
 namespace kvs
 {
 
+class ObjectBase;
+class Camera;
+class Light;
+
 /*===========================================================================*/
 /**
- *  @brief  Stochastic rendering engine class.
+ *  @brief  StochasticRenderingEngine class.
  */
 /*===========================================================================*/
 class StochasticRenderingEngine
 {
-    friend class StochasticRendererBase;
+private:
 
-    // Class name.
-    kvsClassName( kvs::StochasticRenderingEngine );
+    const kvs::ObjectBase* m_object; ///< pointer to the object
+    const kvs::Shader::ShadingModel* m_shader; ///< pointer to the shader
+    bool m_enable_shading; ///< shading flag
+    size_t m_repetition_level; ///< repetition level
+    size_t m_repetition_count; ///< repetition count
+    size_t m_random_texture_size; ///< size of the random texture
+    kvs::Texture2D m_random_texture; ///< random number texture
+    kvs::Texture2D m_depth_texture; ///< depth texture
 
 public:
 
-    enum EngineType
-    {
-        Point = 0,
-        Line,
-        Polygon,
-        UniformGrid,
-        Tetrahedra,
-        MultivariateTetrahedra,
-        Unknown
-    };
+    StochasticRenderingEngine();
+    virtual ~StochasticRenderingEngine(){}
+
+    void setShader( const kvs::Shader::ShadingModel* shader ) { m_shader = shader; }
+    void setEnabledShading( const bool enable ) { m_enable_shading = enable; }
+    void setRepetitionLevel( const size_t repetition_level ) { m_repetition_level = repetition_level; }
+    void setRandomTextureSize( const size_t size ) { m_random_texture_size = size; }
+    void setDepthTexture( const kvs::Texture2D& depth_texture ) { m_depth_texture = depth_texture; }
+    bool isEnabledShading() const { return m_enable_shading; }
+    size_t repetitionLevel() const { return m_repetition_level; }
+    size_t repetitionCount() const { return m_repetition_count; }
+    size_t randomTextureSize() const { return m_random_texture_size; }
+    const kvs::Texture2D& randomTexture() const { return m_random_texture; }
+    const kvs::Texture2D& depthTexture() const { return m_depth_texture; }
+    const kvs::ObjectBase* object() const { return m_object; }
+
+    virtual void release() = 0;
+    virtual void create( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light ) = 0;
+    virtual void update( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light ) = 0;
+    virtual void setup( const bool reset_count ) = 0;
+    virtual void draw( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light ) = 0;
 
 protected:
 
-    size_t m_width; ///< rendering screen width
-    size_t m_height; ///< rendering screen height
-    size_t m_repetition_count; ///< counter for the repetition process
-    bool m_enable_shading; ///< flag to enable shading.
-    kvs::Shader::ShadingModel* m_shader; ///< shading method
-    kvs::Texture2D m_random_texture; ///< random number texture for the stochastic color assignment in GPU.
-    kvs::ProgramObject m_shader_program; ///< GLSL shader program.
-    bool m_enable_updating_vbo; ///< flag to enable updating vertex buffer
-    bool m_enable_exact_depth_testing; ///< flag to enable exact depth testing
-
-public:
-
-    StochasticRenderingEngine( void );
-
-    virtual ~StochasticRenderingEngine( void );
-
-public:
-
-    void initialize( void );
-
-    void clear( void );
-
-    template <typename ShadingType>
-    void setShader( const ShadingType shader );
-
-    void enableShading( void );
-
-    void disableShading( void );
-
-    const bool isEnabledShading( void ) const;
-
-public:
-
-    virtual const kvs::ObjectBase* object( void ) const = 0;
-
-    virtual const EngineType engineType( void ) const = 0;
-
-    virtual void attachObject( const kvs::ObjectBase* object ) = 0;
-
-    virtual void clearEnsembleBuffer( void ) = 0;
-
-protected:
-
-    void set_render_size( const size_t width, const size_t height );
-
-    void set_random_texture( const kvs::Texture2D& random_texture );
-
-    bool has_random_texture();
-
-    void enable_updating_vbo( void );
-
-    void disable_updating_vbo( void );
-
-    const bool is_enabled_updating_vbo( void ) const;
-
-    void enable_exact_depth_testing( void );
-
-    void disable_exact_depth_testing( void );
-
-    const bool is_enabled_exact_depth_testing( void ) const;
-
-protected:
-
-    virtual void setup_shader( const float modelview_matrix[16] ) = 0;
-
-    virtual void initialize_shader( void ) = 0;
-
-    virtual void create_vertex_buffer( void ) = 0;
-
-    virtual void download_vertex_buffer( void ) = 0;
-
-    virtual void draw_vertex_buffer( const float modelview_matrix[16] ) = 0;
-};
-
-template <typename ShadingType>
-inline void StochasticRenderingEngine::setShader( const ShadingType shader )
-{
-    if ( m_shader )
-    {
-        delete m_shader;
-        m_shader = NULL;
-    }
-
-    m_shader = new ShadingType( shader );
-    if ( !m_shader )
-    {
-        kvsMessageError( "Cannot create a specified shader." );
-    }
+    const kvs::Shader::ShadingModel& shader() const { return *m_shader; }
+    void resetRepetitions() { m_repetition_count = 0; }
+    void countRepetitions() { m_repetition_count++; }
+    void attachObject( const kvs::ObjectBase* object ) { m_object = object; }
+    void createRandomTexture();
 };
 
 } // end of namespace kvs

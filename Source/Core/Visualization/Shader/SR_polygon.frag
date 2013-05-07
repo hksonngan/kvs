@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   polygon.frag
- *  @author Jun Nishimura
+ *  @author Jun Nishimura, Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -14,38 +14,34 @@
 /*****************************************************************************/
 #include "shading.h"
 
+// Input
 varying vec3 position;
 varying vec3 normal;
-varying vec2 id;
-
-#if defined( ENABLE_EXACT_DEPTH_TESTING )
+varying vec2 index;
 varying float depth;
-#endif
 
+// Uniform
 uniform sampler2D random_texture;
-
-uniform vec2 screen_scale;
-uniform vec2 screen_scale_inv;
-
 uniform float random_texture_size_inv;
 uniform vec2 random_offset;
-
 uniform Shading shading;
 
-void main( void )
+vec2 RandomIndex( in vec2 p )
 {
-    if ( gl_Color.a == 0.0 ) { discard; return; }
+    float x = float( int( index.x ) * 73 );
+    float y = float( int( index.y ) * 31 );
+    return ( vec2( x, y ) + random_offset + p ) * random_texture_size_inv;
+}
 
-    if ( gl_Color.a < 0.99999 )
-    {
-        vec2 random_position = ( vec2( float( int( id.x ) * 73 ), float( int( id.y ) * 31 ) ) 
-                    + random_offset + gl_FragCoord.xy ) * random_texture_size_inv;
+void main()
+{
+    vec3 color = gl_Color.rgb;
+    float alpha = gl_Color.a;
+    if ( alpha == 0.0 ) { discard; return; }
 
-        float randf = texture2D( random_texture, random_position ).a;
-        if ( randf > gl_Color.a ) { discard; return; }
-    }
-
-    vec3 frag_color = gl_Color.rgb;
+    // Stochastic color assignment.
+    float R = texture2D( random_texture, RandomIndex( gl_FragCoord.xy ) ).a;
+    if ( R > alpha ) { discard; return; }
 
     // Light position.
     vec3 light_position = gl_LightSource[0].position.xyz;
@@ -54,24 +50,22 @@ void main( void )
     vec3 L = normalize( light_position - position );
     vec3 N = normalize( normal );
 
+    // Shading.
 #if   defined( ENABLE_LAMBERT_SHADING )
-    vec3 shaded_color = ShadingLambert( shading, frag_color, L, N );
+    vec3 shaded_color = ShadingLambert( shading, color, L, N );
 
 #elif defined( ENABLE_PHONG_SHADING )
     vec3 V = normalize( -position );
-    vec3 shaded_color = ShadingPhong( shading, frag_color, L, N, V );
+    vec3 shaded_color = ShadingPhong( shading, color, L, N, V );
 
 #elif defined( ENABLE_BLINN_PHONG_SHADING )
     vec3 V = normalize( -position );
-    vec3 shaded_color = ShadingBlinnPhong( shading, frag_color, L, N, V );
+    vec3 shaded_color = ShadingBlinnPhong( shading, color, L, N, V );
 
 #else // DISABLE SHADING
-    vec3 shaded_color = ShadingNone( shading, frag_color );
+    vec3 shaded_color = ShadingNone( shading, color );
 #endif
 
     gl_FragColor = vec4( shaded_color, 1.0 );
-
-#if defined( ENABLE_EXACT_DEPTH_TESTING )
     gl_FragDepth = depth;
-#endif
 }

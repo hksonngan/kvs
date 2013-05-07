@@ -24,40 +24,33 @@ namespace kvs
 
 /*===========================================================================*/
 /**
- *  @brief  Ensemble average buffer class.
+ *  @brief  Ensemble averagin buffer class.
  */
 /*===========================================================================*/
 class EnsembleAverageBuffer
 {
-protected:
+private:
 
-    bool m_enable_accum; ///< check flag for the accumulation buffer
-    size_t m_width; ///< buffer width
-    size_t m_height; ///< buffer height
-    size_t m_count; ///< number of accumulations
-    kvs::Texture2D m_texture; ///< texture for the repetition
-    kvs::FrameBufferObject m_framebuffer; ///< Frame Buffer Object
-    float m_accum_scale; ///< accumulation scale
+    size_t m_count; ///< number of ensembles (repetitions)
+    kvs::Texture2D m_current_color_texture; ///< current color buffer
+    kvs::Texture2D m_current_depth_texture; ///< current depth buffer
+    kvs::FrameBufferObject m_current_framebuffer; ///< current framebuffer
+    kvs::Texture2D m_accum_texture; ///< accumulated color buffer
+    kvs::FrameBufferObject m_accum_framebuffer; ///< accumulated framebuffer
 
 public:
 
-    EnsembleAverageBuffer( const bool use_accum = false );
+    const kvs::Texture2D& currentColorTexture() const { return m_current_color_texture; }
+    const kvs::Texture2D& currentDepthTexture() const { return m_current_depth_texture; }
+    const kvs::FrameBufferObject& currentFrameBufferObject() const { return m_current_framebuffer; }
 
     void create( const size_t width, const size_t height );
+    void release();
     void clear();
     void bind();
     void unbind();
     void add();
     void draw();
-    void enableAccumulationBuffer();
-    void disableAccumulationBuffer();
-    bool isEnabledAccumulationBuffer();
-    size_t count() const;
-    float opacity() const;
-
-protected:
-
-    void draw_quad( const float r, const float g, const float b, const float a );
 };
 
 } // end of namespace kvs

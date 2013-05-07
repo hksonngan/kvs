@@ -15,42 +15,101 @@
 #ifndef KVS__STOCHASTIC_MULTIPLE_TETRAHEDRA_RENDERER_H_INCLUDE
 #define KVS__STOCHASTIC_MULTIPLE_TETRAHEDRA_RENDERER_H_INCLUDE
 
+#include <kvs/Module>
+#include <kvs/TransferFunction>
+#include <kvs/PreIntegrationTable>
+#include <kvs/ProgramObject>
+#include <kvs/VertexBufferObject>
+#include <kvs/IndexBufferObject>
+#include "StochasticRenderingEngine.h"
 #include "StochasticRendererBase.h"
-#include "StochasticMultipleTetrahedraEngine.h"
-#include <kvs/UnstructuredVolumeObject>
 
 
 namespace kvs
 {
 
+class UnstructuredVolumeObject;
+
+/*===========================================================================*/
+/**
+ *  @brief  Stochastic tetrahedra renderer class.
+ */
+/*===========================================================================*/
 class StochasticMultipleTetrahedraRenderer : public kvs::StochasticRendererBase
 {
+    kvsModuleName( kvs::StochasticMultipleTetrahedraRenderer );
+    kvsModuleBaseClass( kvs::StochasticRendererBase );
+    kvsModuleCategory( Renderer );
+
     friend class StochasticMultipleTetrahedraCompositor;
-    typedef kvs::StochasticRendererBase BaseClass;
 
-protected:
+public:
 
-    kvs::StochasticMultipleTetrahedraEngine* m_engine;
-    kvs::Texture2D m_extra_texture;
+    class Engine;
 
 public:
 
     StochasticMultipleTetrahedraRenderer();
-    StochasticMultipleTetrahedraRenderer(
-        const kvs::UnstructuredVolumeObject* volume1,
-        const kvs::UnstructuredVolumeObject* volume2 );
-
     void exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
-    void attachObjects(
-        const kvs::UnstructuredVolumeObject* object1,
-        const kvs::UnstructuredVolumeObject* object2 );
     void setTransferFunction( const kvs::TransferFunction& transfer_function, const size_t index );
 
 protected:
 
-    void set_rendering_engine( kvs::StochasticMultipleTetrahedraEngine* rendering_engine );
-    void create_image( const kvs::Camera* camera, const kvs::Light* light );
-    void initialize_framebuffer_texture();
+    const kvs::UnstructuredVolumeObject* volume( const size_t index );
+    void attachVolume( const kvs::UnstructuredVolumeObject* volume, const size_t index );
+    void setExtraTexture( const kvs::Texture2D& extra_texture );
+};
+
+/*===========================================================================*/
+/**
+ *  @brief  Engine class for stochastic polygon renderer.
+ */
+/*===========================================================================*/
+class StochasticMultipleTetrahedraRenderer::Engine : public kvs::StochasticRenderingEngine
+{
+private:
+
+    const kvs::UnstructuredVolumeObject* m_volume[2]; ///< rendering volumes
+    size_t m_random_index[2]; ///< indices used for refering the random texture
+    size_t m_value[2]; ///< indices used for refering the values
+    bool m_transfer_function_changed[2]; ///< flags for changin transfer function
+    kvs::TransferFunction m_transfer_function[2]; ///< transfer functions
+    kvs::PreIntegrationTable m_preintegration_table[2]; ///< pre-integration tables
+    kvs::ProgramObject m_shader_program[2]; ///< shader programs
+    kvs::VertexBufferObject m_vbo[2]; ///< vertex buffer objects
+    kvs::IndexBufferObject m_ibo[2]; ///< index buffer objects
+    kvs::Texture2D m_decomposition_texture; ///< texture for the tetrahedral decomposition
+    kvs::Texture2D m_extra_texture; ///< extra texture (copied from the compositor)
+
+public:
+
+    Engine();
+    void release();
+    void create( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
+    void update( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
+    void setup( const bool reset_count );
+    void draw( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
+
+    void attachVolume( const kvs::UnstructuredVolumeObject* volume, const size_t index )
+    {
+        m_volume[index] = volume;
+    }
+
+    void setTransferFunction( const kvs::TransferFunction& transfer_function, const size_t index )
+    {
+        m_transfer_function[index] = transfer_function;
+        m_transfer_function_changed[index] = true;
+    }
+
+    void setExtraTexture( const kvs::Texture2D& extra_texture ) { m_extra_texture = extra_texture; }
+    const kvs::UnstructuredVolumeObject* volume( const size_t index ) { return m_volume[index]; }
+
+private:
+
+    void create_shader_program();
+    void create_buffer_object();
+    void create_preintegration_table( const size_t index );
+    void create_decomposition_texture();
 };
 
 } // end of namespace kvs

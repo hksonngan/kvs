@@ -16,13 +16,15 @@
 #include <kvs/glut/Application>
 #include <kvs/glut/Screen>
 #include <kvs/PolygonObject>
-#include <kvs/PolygonImporter>
+#include <kvs/ExternalFaces>
 #include <kvs/UnstructuredVolumeObject>
 #include <kvs/UnstructuredVolumeImporter>
-#include <kvs/StochasticPolygonEngine>
-#include <kvs/StochasticTetrahedraEngine>
+#include <kvs/StochasticPolygonRenderer>
+#include <kvs/StochasticTetrahedraRenderer>
 #include <kvs/StochasticRenderingCompositor>
 #include <kvs/Scene>
+#include <iostream>
+
 
 /*===========================================================================*/
 /**
@@ -35,24 +37,27 @@ int main( int argc, char** argv )
 {
     kvs::glut::Application app( argc, argv );
 
-    kvs::PolygonObject* polygon_object = new kvs::PolygonImporter( argv[1] );
-    kvs::StochasticPolygonEngine* polygon_engine = new kvs::StochasticPolygonEngine();
-    polygon_object->setOpacity( 128 );
+    kvs::UnstructuredVolumeObject* volume_object = new kvs::UnstructuredVolumeImporter( argv[1] );
+    volume_object->print( std::cout );
 
-    kvs::UnstructuredVolumeObject* volume_object = new kvs::UnstructuredVolumeImporter( argv[2] );
-    kvs::StochasticTetrahedraEngine* volume_engine = new kvs::StochasticTetrahedraEngine();
+    kvs::PolygonObject* polygon_object = new kvs::ExternalFaces( volume_object );
+    polygon_object->setColor( kvs::RGBColor::White() );
+    polygon_object->setOpacity( 100 );
+    polygon_object->print( std::cout << std::endl );
+
+    kvs::StochasticTetrahedraRenderer* volume_renderer = new kvs::StochasticTetrahedraRenderer();
+    kvs::StochasticPolygonRenderer* polygon_renderer = new kvs::StochasticPolygonRenderer();
 
     kvs::glut::Screen screen( &app );
+    screen.setTitle("Example program for kvs::StochasticRenderingCompositor");
+    screen.registerObject( polygon_object, polygon_renderer );
+    screen.registerObject( volume_object, volume_renderer );
     screen.show();
-
-    // Enable two-side (frontface and backface) lighting
-    kvs::Light::SetModelTwoSide( true );
 
     kvs::StochasticRenderingCompositor compositor( screen.scene() );
     compositor.setRepetitionLevel( 50 );
-    compositor.enableLODControl( 1 );
-    compositor.registerObject( polygon_object, polygon_engine );
-    compositor.registerObject( volume_object, volume_engine );
+    compositor.enableLODControl();
+    screen.setEvent( &compositor );
 
     return app.run();
 }

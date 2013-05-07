@@ -19,6 +19,7 @@
 #include <kvs/UnstructuredVolumeImporter>
 #include <kvs/TransferFunction>
 #include <kvs/StochasticTetrahedraRenderer>
+#include <iostream>
 
 
 /*===========================================================================*/
@@ -33,6 +34,7 @@ int main( int argc, char** argv )
     kvs::glut::Application app( argc, argv );
 
     kvs::UnstructuredVolumeObject* object = new kvs::UnstructuredVolumeImporter( argv[1] );
+    object->print( std::cout );
 
     kvs::TransferFunction tfunc( 256 );
     kvs::StochasticTetrahedraRenderer* renderer = new kvs::StochasticTetrahedraRenderer();
@@ -41,11 +43,9 @@ int main( int argc, char** argv )
     renderer->enableLODControl();
 
     kvs::glut::Screen screen( &app );
+    screen.setTitle(" Example program for kvs::StochasticTetrahedraRenderer");
     screen.registerObject( object, renderer );
     screen.show();
-
-    // Enable two-side (frontface and backface) lighting
-    kvs::Light::SetModelTwoSide( true );
 
     return app.run();
 }

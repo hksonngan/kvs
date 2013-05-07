@@ -26,7 +26,6 @@
 #include <kvs/ProgramObject>
 //#include <kvs/ParticleVolumeRenderer>
 //#include "EnsembleAverageBuffer.h" // SAKAMOTO-TANAKA
-#include <kvs/EnsembleAverageBuffer>
 
 
 namespace kvs
@@ -37,6 +36,44 @@ namespace glsl
 
 namespace rits
 {
+
+/*===========================================================================*/
+/**
+ *  @brief  Ensemble average buffer class.
+ */
+/*===========================================================================*/
+class EnsembleAverageBuffer
+{
+protected:
+
+    bool m_enable_accum; ///< check flag for the accumulation buffer
+    size_t m_width; ///< buffer width
+    size_t m_height; ///< buffer height
+    size_t m_count; ///< number of accumulations
+    kvs::Texture2D m_texture; ///< texture for the repetition
+    kvs::FrameBufferObject m_framebuffer; ///< Frame Buffer Object
+    float m_accum_scale; ///< accumulation scale
+
+public:
+
+    EnsembleAverageBuffer( const bool use_accum = false );
+
+    void create( const size_t width, const size_t height );
+    void clear();
+    void bind();
+    void unbind();
+    void add();
+    void draw();
+    void enableAccumulationBuffer();
+    void disableAccumulationBuffer();
+    bool isEnabledAccumulationBuffer();
+    size_t count() const;
+    float opacity() const;
+
+protected:
+
+    void draw_quad( const float r, const float g, const float b, const float a );
+};
 
 #define KVS_GLSL_RITS_PARTICLE_BASED_RENDERER__NORMAL_TYPE_IS_BYTE // *_BYTE or *_FLOAT
 
@@ -85,7 +122,7 @@ protected:
     bool m_enable_pre_downloading; ///< flag whether to donwonload the particles first
     bool m_enable_accumulation_buffer; ///< flag whether to use the accumulation buffer
     bool m_enable_random_texture; ///< flag whether to use the random number texture
-    kvs::EnsembleAverageBuffer m_ensemble_buffer; ///< ensemble average buffer
+    EnsembleAverageBuffer m_ensemble_buffer; ///< ensemble average buffer
     kvs::Texture2D m_random_texture; ///< random number texture
     kvs::ProgramObject m_zoom_shader; ///< shader (program object) for zooming
     kvs::ProgramObject m_resize_shader; ///< shader (program object) for resizing

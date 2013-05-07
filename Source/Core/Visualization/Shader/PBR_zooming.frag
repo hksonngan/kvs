@@ -18,6 +18,7 @@ varying vec3  position;
 varying vec3  normal;
 varying vec2  center;
 varying float radius;
+varying float depth;
 
 uniform Shading shading;
 
@@ -31,7 +32,7 @@ void main( void )
     // Discard a pixel outside circle.
     if ( radius > 0.0 )
     {
-        if( distance( gl_FragCoord.xy, center ) > radius ) discard;
+        if ( distance( gl_FragCoord.xy, center ) > radius ) discard;
     }
 
     // Light position.
@@ -56,6 +57,6 @@ void main( void )
     vec3 shaded_color = ShadingNone( shading, gl_Color.xyz );
 #endif
 
-    gl_FragColor.xyz = shaded_color;
-    gl_FragColor.w = 1.0;
+    gl_FragColor = vec4( shaded_color, 1.0 );
+    gl_FragDepth = depth;
 }

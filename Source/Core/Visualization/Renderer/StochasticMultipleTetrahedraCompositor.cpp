@@ -13,183 +13,336 @@
  */
 /*****************************************************************************/
 #include "StochasticMultipleTetrahedraCompositor.h"
+#include <kvs/Assert>
+#include <kvs/OpenGL>
+#include <kvs/glut/GLUT>
+#include <kvs/PaintEvent>
+#include <kvs/EventHandler>
+#include <kvs/ScreenBase>
 #include <kvs/Scene>
+#include <kvs/Camera>
+#include <kvs/Light>
+#include <kvs/Background>
 #include <kvs/ObjectManager>
 #include <kvs/RendererManager>
 #include <kvs/IDManager>
-#include <kvs/PointObject>
+#include <kvs/UnstructuredVolumeObject>
+#include "StochasticRendererBase.h"
+#include "StochasticMultipleTetrahedraRenderer.h"
 
 
 namespace kvs
 {
 
-StochasticMultipleTetrahedraCompositor::StochasticMultipleTetrahedraCompositor(
-    kvs::ObjectManager* object_manager,
-    kvs::RendererManager* renderer_manager,
-    kvs::IDManager* id_manager ):
-    m_object_manager( object_manager ),
-    m_renderer_manager( renderer_manager ),
-    m_id_manager( id_manager ),
-    m_object_id( 0 ),
-    m_object( new kvs::PointObject() ),
-    m_renderer( new kvs::StochasticMultipleTetrahedraRenderer() )
-{
-    const kvs::Vector3f obj_min = m_object_manager->minObjectCoord();
-    const kvs::Vector3f obj_max = m_object_manager->maxObjectCoord();
-    const kvs::Vector3f ext_min = m_object_manager->minExternalCoord();
-    const kvs::Vector3f ext_max = m_object_manager->maxExternalCoord();
-    m_object->setXform( m_object_manager->xform() );
-    m_object->saveXform();
-    m_object->setMinMaxObjectCoords( obj_min, obj_max );
-    m_object->setMinMaxExternalCoords( ext_min, ext_max );
-
-    const size_t object_id   = m_object_manager->insert( m_object );
-    const size_t renderer_id = m_renderer_manager->insert( m_renderer );
-    m_id_manager->insert( object_id, renderer_id );
-    m_object_id = object_id;
-}
-
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new StochasticMultipleTetrahedraCompositor class.
+ *  @param  scene [in] pointer to the scene
+ */
+/*===========================================================================*/
 StochasticMultipleTetrahedraCompositor::StochasticMultipleTetrahedraCompositor( kvs::Scene* scene ):
-    m_object_manager( scene->objectManager() ),
-    m_renderer_manager( scene->rendererManager() ),
-    m_id_manager( scene->IDManager() ),
-    m_object_id( 0 ),
-    m_object( new kvs::PointObject() ),
-    m_renderer( new kvs::StochasticMultipleTetrahedraRenderer() )
+    m_scene( scene ),
+    m_width( 0 ),
+    m_height( 0 ),
+    m_repetition_level( 1 ),
+    m_coarse_level( 1 ),
+    m_enable_lod( false ),
+    m_enable_refinement( false ),
+    m_enable_shading( true ),
+    m_renderer( NULL )
 {
-    const kvs::Vector3f obj_min = m_object_manager->minObjectCoord();
-    const kvs::Vector3f obj_max = m_object_manager->maxObjectCoord();
-    const kvs::Vector3f ext_min = m_object_manager->minExternalCoord();
-    const kvs::Vector3f ext_max = m_object_manager->maxExternalCoord();
-    m_object->setXform( m_object_manager->xform() );
-    m_object->saveXform();
-    m_object->setMinMaxObjectCoords( obj_min, obj_max );
-    m_object->setMinMaxExternalCoords( ext_min, ext_max );
-
-    const size_t object_id   = m_object_manager->insert( m_object );
-    const size_t renderer_id = m_renderer_manager->insert( m_renderer );
-    m_id_manager->insert( object_id, renderer_id );
-    m_object_id = object_id;
 }
 
-StochasticMultipleTetrahedraCompositor::~StochasticMultipleTetrahedraCompositor( void )
+/*===========================================================================*/
+/**
+ *  @brief  Updates the scene.
+ */
+/*===========================================================================*/
+void StochasticMultipleTetrahedraCompositor::update()
 {
-    std::vector<kvs::ObjectBase*>::iterator object = m_registered_objects.begin();
-    std::vector<kvs::ObjectBase*>::iterator last = m_registered_objects.end();
-    while ( object != last )
+    KVS_ASSERT( m_scene );
+
+    kvs::OpenGL::WithPushedMatrix p( GL_MODELVIEW );
+    p.loadIdentity();
     {
-        if ( *object ) delete *object;
-        ++object;
+        m_scene->camera()->update();
+        m_scene->light()->update( m_scene->camera() );
+        m_scene->background()->apply();
+
+        if ( m_scene->objectManager()->hasObject() )
+        {
+            this->draw();
+        }
     }
 
-    m_registered_objects.clear();
+    kvs::OpenGL::Flush();
+    glutSwapBuffers();
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Registers an object and rendering engine.
- *  @param  object [in] pointer to an object
- *  @param  engine [in] pointer to a rendering engine
+ *  @brief  Draws the objects with stochastic renderers.
  */
 /*===========================================================================*/
-void StochasticMultipleTetrahedraCompositor::registerObjects(
-    kvs::UnstructuredVolumeObject* object1,
-    kvs::UnstructuredVolumeObject* object2,
-    kvs::StochasticMultipleTetrahedraEngine* engine )
+void StochasticMultipleTetrahedraCompositor::draw()
 {
-    // Esitimate a suitable engine for the specified object if the engine is not specified.
-    if ( !engine )
+    kvs::OpenGL::WithPushedAttrib p( GL_ALL_ATTRIB_BITS );
+
+    this->check_window_created();
+    this->check_window_resized();
+    this->check_object_changed();
+
+    // LOD control.
+    size_t repetitions = m_repetition_level;
+    kvs::Vec3 camera_position = m_scene->camera()->position();
+    kvs::Vec3 light_position = m_scene->light()->position();
+    kvs::Mat4 object_xform = this->object_xform();
+    if ( m_camera_position != camera_position ||
+         m_light_position != light_position ||
+         m_object_xform != object_xform )
     {
-        engine = new kvs::StochasticMultipleTetrahedraEngine();
-        engine->attachObjects( object1, object2 );
+        if ( m_enable_lod )
+        {
+            repetitions = m_coarse_level;
+        }
+        m_camera_position = camera_position;
+        m_light_position = light_position;
+        m_object_xform = object_xform;
+        m_ensemble_buffer.clear();
     }
-    else
+
+    // Setup engine.
+    const bool reset_count = !m_enable_refinement;
+    this->engine_setup( reset_count );
+
+    // Ensemble rendering.
+    if ( reset_count ) m_ensemble_buffer.clear();
+    for ( size_t i = 0; i < repetitions; i++ )
     {
-        if ( !engine->object() ) { engine->attachObjects( object1, object2 ); }
+        m_ensemble_buffer.bind();
+        this->engine_draw();
+        m_ensemble_buffer.unbind();
+        m_ensemble_buffer.add();
+    }
+    m_ensemble_buffer.draw();
+
+    kvs::OpenGL::Finish();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Check whether the window is created and initialize the parameters.
+ */
+/*===========================================================================*/
+void StochasticMultipleTetrahedraCompositor::check_window_created()
+{
+    const bool window_created = m_width == 0 && m_height == 0;
+    if ( window_created )
+    {
+        const size_t width = m_scene->camera()->windowWidth();
+        const size_t height = m_scene->camera()->windowHeight();
+        m_width = width;
+        m_height = height;
+        m_ensemble_buffer.create( width, height );
+        m_ensemble_buffer.clear();
+        m_object_xform = this->object_xform();
+        m_camera_position = m_scene->camera()->position();
+        m_light_position = m_scene->light()->position();
+        this->create_extra_texture( width, height );
+        this->engine_create();
+    }
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Check whether the window is resized and update the parameters.
+ */
+/*===========================================================================*/
+void StochasticMultipleTetrahedraCompositor::check_window_resized()
+{
+    const size_t width = m_scene->camera()->windowWidth();
+    const size_t height = m_scene->camera()->windowHeight();
+    const bool window_resized = m_width != width || m_height != height;
+    if ( window_resized )
+    {
+        m_width = width;
+        m_height = height;
+        m_ensemble_buffer.release();
+        m_ensemble_buffer.create( width, height );
+        m_ensemble_buffer.clear();
+        this->create_extra_texture( width, height );
+        this->engine_update();
+    }
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Check whether the object is changed and recreated the engine.
+ */
+/*===========================================================================*/
+void StochasticMultipleTetrahedraCompositor::check_object_changed()
+{
+    typedef kvs::StochasticMultipleTetrahedraRenderer Renderer;
+
+    kvs::ObjectBase* objects[2] = { NULL, NULL };
+    size_t counter = 0;
+    const size_t size = m_scene->IDManager()->size();
+    for ( size_t i = 0; i < size; i++ )
+    {
+        kvs::IDManager::IDPair id_pair = (*m_scene->IDManager())[i];
+        kvs::ObjectBase* object = m_scene->objectManager()->object( id_pair.first );
+        kvs::RendererBase* renderer = m_scene->rendererManager()->renderer( id_pair.second );
+        if ( dynamic_cast<Renderer*>( renderer ) )
+        {
+            // Drawing object.
+            objects[ counter++ ] = object;
+        }
+
+        if ( counter == 2 ) break;
     }
 
-    m_registered_objects.push_back( object1 );
-    m_registered_objects.push_back( object2 );
-
-    // Update boundary information of the object.
-    const kvs::Vector3f o1_min_coord = object1->minObjectCoord();
-    const kvs::Vector3f o1_max_coord = object1->maxObjectCoord();
-    const kvs::Vector3f o2_min_coord = object2->minObjectCoord();
-    const kvs::Vector3f o2_max_coord = object2->maxObjectCoord();
-    kvs::Vector3f n_min_coord = m_object->minObjectCoord();
-    kvs::Vector3f n_max_coord = m_object->maxObjectCoord();
-    if ( o1_min_coord.x() < n_min_coord.x() ) n_min_coord.x() = o1_min_coord.x();
-    if ( o1_min_coord.y() < n_min_coord.y() ) n_min_coord.y() = o1_min_coord.y();
-    if ( o1_min_coord.z() < n_min_coord.z() ) n_min_coord.z() = o1_min_coord.z();
-    if ( o2_min_coord.x() < n_min_coord.x() ) n_min_coord.x() = o2_min_coord.x();
-    if ( o2_min_coord.y() < n_min_coord.y() ) n_min_coord.y() = o2_min_coord.y();
-    if ( o2_min_coord.z() < n_min_coord.z() ) n_min_coord.z() = o2_min_coord.z();
-
-    if ( o1_max_coord.x() > n_max_coord.x() ) n_max_coord.x() = o1_max_coord.x();
-    if ( o1_max_coord.y() > n_max_coord.y() ) n_max_coord.y() = o1_max_coord.y();
-    if ( o1_max_coord.z() > n_max_coord.z() ) n_max_coord.z() = o1_max_coord.z();
-    if ( o2_max_coord.x() > n_max_coord.x() ) n_max_coord.x() = o2_max_coord.x();
-    if ( o2_max_coord.y() > n_max_coord.y() ) n_max_coord.y() = o2_max_coord.y();
-    if ( o2_max_coord.z() > n_max_coord.z() ) n_max_coord.z() = o2_max_coord.z();
-
-    m_object->setMinMaxObjectCoords( n_min_coord, n_max_coord );
-    m_object->setMinMaxExternalCoords( n_min_coord, n_max_coord );
-    m_renderer->set_rendering_engine( engine );
-
-    // Update xform information of the object manager.
-    m_object_manager->change( m_object_id, m_object, false );
+    if ( counter == 2 )
+    {
+        const kvs::UnstructuredVolumeObject* volume0 = kvs::UnstructuredVolumeObject::DownCast( objects[0] );
+        const kvs::UnstructuredVolumeObject* volume1 = kvs::UnstructuredVolumeObject::DownCast( objects[1] );
+        const bool object_changed =
+            ( m_renderer->volume(0) != volume0 ) ||
+            ( m_renderer->volume(1) != volume1 );
+        if ( object_changed )
+        {
+            m_ensemble_buffer.clear();
+            m_renderer->engine().release();
+            m_renderer->attachVolume( volume0, 0 );
+            m_renderer->attachVolume( volume1, 1 );
+            m_renderer->setExtraTexture( m_extra_texture );
+            m_renderer->engine().setDepthTexture( m_ensemble_buffer.currentDepthTexture() );
+            m_renderer->engine().setShader( &m_renderer->shader() );
+            m_renderer->engine().setEnabledShading( m_enable_shading );
+            m_renderer->engine().create( NULL, m_scene->camera(), m_scene->light() );
+        }
+    }
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Clears the ensemble buffers.
+ *  @brief  Returns the xform matrix of the active object.
+ *  @return xform matrix
  */
 /*===========================================================================*/
-void StochasticMultipleTetrahedraCompositor::clearEnsembleBuffer( void )
+kvs::Mat4 StochasticMultipleTetrahedraCompositor::object_xform()
 {
-    m_renderer->clearEnsembleBuffer();
+    return m_scene->objectManager()->hasActiveObject() ?
+        m_scene->objectManager()->activeObject()->xform().toMatrix() :
+        m_scene->objectManager()->xform().toMatrix();
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Sets a repetition level
- *  @param  repetition_level [in] repetition level
+ *  @brief  Calls the create method of the engine.
  */
 /*===========================================================================*/
-void StochasticMultipleTetrahedraCompositor::setRepetitionLevel( const size_t repetition_level )
+void StochasticMultipleTetrahedraCompositor::engine_create()
 {
-    m_renderer->setRepetitionLevel( repetition_level );
+    typedef kvs::StochasticMultipleTetrahedraRenderer Renderer;
+
+    kvs::ObjectBase* objects[2] = { NULL, NULL };
+    size_t counter = 0;
+    const size_t size = m_scene->IDManager()->size();
+    for ( size_t i = 0; i < size; i++ )
+    {
+        kvs::IDManager::IDPair id_pair = (*m_scene->IDManager())[i];
+        kvs::ObjectBase* object = m_scene->objectManager()->object( id_pair.first );
+        kvs::RendererBase* renderer = m_scene->rendererManager()->renderer( id_pair.second );
+        if ( Renderer* stochastic_renderer = dynamic_cast<Renderer*>( renderer ) )
+        {
+            // Copy the pointer to the renderer used for drawing the objects.
+            if ( counter == 0 )
+            {
+                m_renderer = stochastic_renderer;
+            }
+
+            // Drawing object.
+            objects[ counter++ ] = object;
+        }
+
+        if ( counter == 2 ) break;
+    }
+
+    if ( counter == 2 )
+    {
+        const kvs::UnstructuredVolumeObject* volume0 = kvs::UnstructuredVolumeObject::DownCast( objects[0] );
+        const kvs::UnstructuredVolumeObject* volume1 = kvs::UnstructuredVolumeObject::DownCast( objects[1] );
+        m_renderer->attachVolume( volume0, 0 );
+        m_renderer->attachVolume( volume1, 1 );
+        m_renderer->setExtraTexture( m_extra_texture );
+        m_renderer->engine().setDepthTexture( m_ensemble_buffer.currentDepthTexture() );
+        m_renderer->engine().setShader( &m_renderer->shader() );
+        m_renderer->engine().setRepetitionLevel( m_repetition_level );
+        m_renderer->engine().setEnabledShading( m_enable_shading );
+        m_renderer->engine().create( NULL, m_scene->camera(), m_scene->light() );
+    }
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Enables level-of-detail control.
- *  @param  coarse_level [in] coarse rendering level
+ *  @brief  Calls the update method of the engine.
  */
 /*===========================================================================*/
-void StochasticMultipleTetrahedraCompositor::enableLODControl( const size_t coarse_level )
+void StochasticMultipleTetrahedraCompositor::engine_update()
 {
-    m_renderer->enableLODControl( coarse_level );
+    m_renderer->engine().update( NULL, m_scene->camera(), m_scene->light() );
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Disable level-of-detail control.
+ *  @brief  Calls the setup method of the engine.
+ *  @param  reset_count [in] reset count
  */
 /*===========================================================================*/
-void StochasticMultipleTetrahedraCompositor::disableLODControl( void )
+void StochasticMultipleTetrahedraCompositor::engine_setup( const bool reset_count )
 {
-    m_renderer->disableLODControl();
+    m_renderer->engine().setup( reset_count );
 }
 
-void StochasticMultipleTetrahedraCompositor::enableExactDepthTesting( void )
+/*===========================================================================*/
+/**
+ *  @brief  Calls the draw method of the engine.
+ */
+/*===========================================================================*/
+void StochasticMultipleTetrahedraCompositor::engine_draw()
 {
-    m_renderer->enable_exact_depth_testing();
+    const kvs::UnstructuredVolumeObject* volume0 = m_renderer->volume(0);
+    const kvs::UnstructuredVolumeObject* volume1 = m_renderer->volume(1);
+    if ( volume0->isShown() && volume1->isShown() )
+    {
+        KVS_GL_CALL( glPushMatrix() );
+        volume0->transform( m_scene->objectManager()->objectCenter(), m_scene->objectManager()->normalize() );
+        KVS_GL_CALL( glPopMatrix() );
+
+        KVS_GL_CALL( glPushMatrix() );
+        volume1->transform( m_scene->objectManager()->objectCenter(), m_scene->objectManager()->normalize() );
+        m_renderer->engine().draw( NULL, m_scene->camera(), m_scene->light() );
+        KVS_GL_CALL( glPopMatrix() );
+    }
 }
 
-void StochasticMultipleTetrahedraCompositor::disableExactDepthTesting( void )
+/*===========================================================================*/
+/**
+ *  @brief  Creates extra texture.
+ *  @param  width [in] window width
+ *  @param  height [in] window height
+ */
+/*===========================================================================*/
+void StochasticMultipleTetrahedraCompositor::create_extra_texture( const size_t width, const size_t height )
 {
-    m_renderer->disable_exact_depth_testing();
+    m_extra_texture.release();
+    m_extra_texture.setWrapS( GL_CLAMP_TO_EDGE );
+    m_extra_texture.setWrapT( GL_CLAMP_TO_EDGE );
+    m_extra_texture.setMagFilter( GL_LINEAR );
+    m_extra_texture.setMinFilter( GL_LINEAR );
+    m_extra_texture.setPixelFormat( GL_RGBA32F, GL_RGBA, GL_FLOAT );
+    m_extra_texture.create( width, height );
+    m_ensemble_buffer.currentFrameBufferObject().attachColorTexture( m_extra_texture, 1 );
 }
 
 } // end of namespace kvs

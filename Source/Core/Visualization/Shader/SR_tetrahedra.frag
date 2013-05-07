@@ -14,36 +14,38 @@
 /*****************************************************************************/
 #include "shading.h"
 
+// Input parameters from geometry shader
 varying vec3 position;
 varying vec3 normal;
-varying vec2 id;
-
+varying vec2 random_index;
 #if defined( ENABLE_EXACT_DEPTH_TESTING )
 varying float depth_front;
 varying float depth_back;
 #endif
-
 varying float scalar_front;
 varying float scalar_back;
 varying float distance;
 
+// Uniform parameters.
 uniform sampler3D preintegration_texture;
 uniform sampler2D random_texture;
-
 #if defined( ENABLE_EXACT_DEPTH_TESTING )
 uniform sampler2D depth_texture;
 #endif
-
 uniform vec2 screen_scale;
 uniform vec2 screen_scale_inv;
 uniform vec2 preintegration_scale_offset;
-
 uniform float random_texture_size_inv;
 uniform vec2 random_offset;
-
 uniform Shading shading;
 
-void main( void )
+
+/*===========================================================================*/
+/**
+ *  @brief  Main function of fragment shader.
+ */
+/*===========================================================================*/
+void main()
 {
 #if defined( ENABLE_EXACT_DEPTH_TESTING )
     vec4 lutdata;
@@ -66,7 +68,7 @@ void main( void )
 #endif
     if ( lutdata.a == 0.0 ) { discard; return; }
 
-    vec2 random_position = ( vec2( float( int( id.x ) * 73 ), float( int( id.y ) * 31 ) ) 
+    vec2 random_position = ( vec2( float( int( random_index.x ) * 73 ), float( int( random_index.y ) * 31 ) ) 
                 + random_offset + gl_FragCoord.xy ) * random_texture_size_inv;
 
     float randf = texture2D( random_texture, random_position ).x;

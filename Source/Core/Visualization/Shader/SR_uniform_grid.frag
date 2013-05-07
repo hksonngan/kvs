@@ -27,18 +27,12 @@ vec3 estimateGradient( in sampler3D v, in vec3 p, in vec3 o )
 }
 
 varying vec3 position;
-
-#if defined( ENABLE_EXACT_DEPTH_TESTING )
 varying float depth;
-#endif
 
 uniform sampler2D random_texture;
 uniform sampler3D volume_texture;
 uniform sampler2D preintegration_texture;
 uniform vec3 volume_resolution_inv;
-
-uniform vec2 screen_scale; // not used
-uniform vec2 screen_scale_inv; // not used
 
 uniform float random_texture_size_inv;
 uniform vec2 random_offset;
@@ -99,9 +93,7 @@ void main()
 #else // DISABLE SHADING
     vec3 shaded_color = ShadingNone( shading, frag_color );
 #endif
-    gl_FragColor = vec4( shaded_color, 1.0 );
 
-#if defined( ENABLE_EXACT_DEPTH_TESTING )
+    gl_FragColor = vec4( shaded_color, 1.0 );
     gl_FragDepth = depth;
-#endif
 }

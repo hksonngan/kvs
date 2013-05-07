@@ -16,7 +16,7 @@
 
 varying vec3 position;
 varying vec3 normal;
-varying vec2 id;
+varying vec2 random_index;
 
 varying float depth_front;
 varying float depth_back;
@@ -48,7 +48,7 @@ void main( void )
     vec4 lutdata = texture3D( preintegration_texture0, lutcoord );
     if ( lutdata.a == 0.0 ) { discard; return; }
 
-    vec2 random_position = ( vec2( float( int( id.x ) * 73 ), float( int( id.y ) * 31 ) ) 
+    vec2 random_position = ( vec2( float( int( random_index.x ) * 73 ), float( int( random_index.y ) * 31 ) ) 
                 + random_offset + gl_FragCoord.xy ) * random_texture_size_inv;
 
     float randf = texture2D( random_texture, random_position ).x;

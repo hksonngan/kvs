@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   polygon.vert
- *  @author Jun Nishimura
+ *  @author Jun Nishimura, Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -12,29 +12,24 @@
  *  $Id$
  */
 /*****************************************************************************/
-varying vec3 position;
-varying vec3 normal;
-varying vec2 id;
-
-#if defined( ENABLE_EXACT_DEPTH_TESTING )
-varying float depth;
-#endif
-
-attribute vec2 identifier;
-
+// Input
+attribute vec2 random_index;
 uniform float polygon_offset;
 
-void main( void )
+// Output
+varying vec3 position;
+varying vec3 normal;
+varying vec2 index;
+varying float depth;
+
+void main()
 {
-    gl_Position = ftransform();
+    gl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * gl_Vertex;
     gl_Position.z -= polygon_offset;
     gl_FrontColor = gl_Color;
 
     position = ( gl_ModelViewMatrix * gl_Vertex ).xyz;
     normal = ( gl_NormalMatrix * gl_Normal ).xyz;
-    id = identifier;
-
-#if defined( ENABLE_EXACT_DEPTH_TESTING )
+    index = random_index;
     depth = gl_Position.z / gl_Position.w;
-#endif
 }

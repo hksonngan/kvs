@@ -13,18 +13,14 @@
  */
 /*****************************************************************************/
 varying vec3 position;
-
-#if defined( ENABLE_EXACT_DEPTH_TESTING )
 varying float depth;
-#endif
 
-void main( void )
+
+void main()
 {
-    gl_Position = ftransform();
-    position = ( gl_ModelViewMatrix * gl_Vertex ).xyz;
+    gl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * gl_Vertex;
     gl_TexCoord[0] = gl_MultiTexCoord0;
 
-#if defined( ENABLE_EXACT_DEPTH_TESTING )
+    position = ( gl_ModelViewMatrix * gl_Vertex ).xyz;
     depth = gl_Position.z / gl_Position.w;
-#endif
 }

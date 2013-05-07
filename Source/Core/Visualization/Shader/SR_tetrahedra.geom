@@ -16,28 +16,31 @@
 #extension GL_EXT_geometry_shader4 : enable
 #extension GL_EXT_gpu_shader4 : enable
 
+// Input parameters from vertex shader.
 varying in vec4 position_in[4];
 varying in float value_in[4];
-varying in vec2 id_in[4];
+varying in vec2 random_index_in[4];
 varying in vec3 normal_in[4];
 
+// Output parameters to fragment shader.
 varying out vec3 position;
 varying out vec3 normal;
-varying out vec2 id;
-
+varying out vec2 random_index;
 #if defined( ENABLE_EXACT_DEPTH_TESTING )
 varying out float depth_front;
 varying out float depth_back;
 #endif
-
 varying out float scalar_front;
 varying out float scalar_back;
 varying out float distance;
 
+// Uniform parameters.
 uniform vec2 preintegration_scale_offset;
-uniform sampler2D decomposion_texture;
+uniform sampler2D decomposition_texture;
 
+// Global parameter.
 vec3 screen_position[4];
+
 
 int direction( in int p0, in int p1, in int p2 )
 {
@@ -401,7 +404,12 @@ void create_type_4( in int p0, in int p1, in int p2, in int p3 )
     EndPrimitive();
 }
 
-void main( void )
+/*===========================================================================*/
+/**
+ *  @brief  Main function of geometry shader.
+ */
+/*===========================================================================*/
+void main()
 {
     if ( gl_PositionIn[0].w <= 0 ||
          gl_PositionIn[1].w <= 0 ||
@@ -418,7 +426,7 @@ void main( void )
          ( screen_position[0].y < -1.0 && screen_position[1].y < -1.0 && screen_position[2].y < -1.0 && screen_position[3].y < -1.0 ) ||
          ( screen_position[0].y >  1.0 && screen_position[1].y >  1.0 && screen_position[2].y >  1.0 && screen_position[3].y >  1.0 ) ) return;
 
-    id = id_in[0] * 3.0 + id_in[1] * 5.0 + id_in[2] * 7.0 + id_in[3] * 11.0;
+    random_index = random_index_in[0] * 3.0 + random_index_in[1] * 5.0 + random_index_in[2] * 7.0 + random_index_in[3] * 11.0;
 
     int d321 = direction( 3, 2, 1 );
     int d230 = direction( 2, 3, 0 );
@@ -427,7 +435,7 @@ void main( void )
 
     int pos = d321 * 27 + d230 * 9 + d103 * 3 + d012;
     vec2 t_pos = vec2( ( float(pos) + 0.5 ) / 81.0, 0.5 );
-    vec4 info = texture2D( decomposion_texture, t_pos );
+    vec4 info = texture2D( decomposition_texture, t_pos );
     int type = int( ( info.a * 255.0 + 16.0 ) / 32.0 );
     int p0   = int( ( info.x * 255.0 + 16.0 ) / 32.0 );
     int p1   = int( ( info.y * 255.0 + 16.0 ) / 32.0 );

@@ -15,92 +15,71 @@
 #ifndef KVS__STOCHASTIC_RENDERING_COMPOSITOR_H_INCLUDE
 #define KVS__STOCHASTIC_RENDERING_COMPOSITOR_H_INCLUDE
 
-#include <string>
-#include <vector>
-#include <kvs/ClassName>
-#include "StochasticRendererBase.h"
+#include <kvs/PaintEventListener>
+#include <kvs/Matrix44>
+#include <kvs/Vector3>
+#include "EnsembleAverageBuffer.h"
 
 
 namespace kvs
 {
 
 class Scene;
-class ObjectManager;
-class RendererManager;
-class IDManager;
-class PointObject;
-class ObjectBase;
-class StochasticRenderingEngine;
 
 /*===========================================================================*/
 /**
- *  @brief  Compositor class for rendering multiple objects.
+ *  @brief  Stochastic rendering compositor class.
  */
 /*===========================================================================*/
-class StochasticRenderingCompositor
+class StochasticRenderingCompositor : public kvs::PaintEventListener
 {
-    kvsClassName( kvs::StochasticRenderingCompositor );
+private:
+
+    kvs::Scene* m_scene; ///< pointer to the scene
+    size_t m_width; ///< window width
+    size_t m_height; ///< window height
+    size_t m_repetition_level; ///< repetition level
+    size_t m_coarse_level; ///< repetition level for the coarse rendering (LOD)
+    bool m_enable_lod; ///< flag for LOD rendering
+    bool m_enable_refinement; ///< flag for progressive refinement rendering
+    bool m_enable_shading; ///< shading flag
+    kvs::Mat4 m_object_xform; ///< object xform matrix used for LOD control
+    kvs::Vec3 m_light_position; ///< light position used for LOD control
+    kvs::Vec3 m_camera_position; ///< camera position used for LOD control
+    kvs::EnsembleAverageBuffer m_ensemble_buffer; ///< ensemble averaging buffer
+
+public:
+
+    StochasticRenderingCompositor( kvs::Scene* scene );
+
+    size_t repetitionLevel() const { return m_repetition_level; }
+    bool isEnabledLODControl() const { return m_enable_lod; }
+    bool isEnabledRefinement() const { return m_enable_refinement; }
+    bool isEnabledShading() const { return m_enable_shading; }
+    void setRepetitionLevel( const size_t repetition_level ) { m_repetition_level = repetition_level; }
+    void setEnabledLODControl( const bool enable ) { m_enable_lod = enable; }
+    void setEnabledRefinement( const bool enable ) { m_enable_refinement = enable; }
+    void setEnabledShading( const bool enable ) { m_enable_shading = enable; }
+    void enableLODControl() { this->setEnabledLODControl( true ); }
+    void enableRefinement() { this->setEnabledRefinement( true ); }
+    void enableShading() { this->setEnabledShading( true ); }
+    void disableLODControl() { this->setEnabledLODControl( false ); }
+    void disableRefinement() { this->setEnabledRefinement( false ); }
+    void disableShading() { this->setEnabledShading( false ); }
 
 private:
 
-    kvs::ObjectManager* m_object_manager; ///< pointer to the object manager (reference)
-    kvs::RendererManager* m_renderer_manager; ///< pointer to the renderer manager (reference)
-    kvs::IDManager* m_id_manager; ///< pointer to the ID manager (reference)
-    int m_object_id; ///< object ID registered in the screen
-    kvs::PointObject* m_object; ///< pointer to a dummy object
-    kvs::StochasticRendererBase* m_renderer; ///< pointer to a stochastic renderer
-    std::vector<kvs::ObjectBase*> m_registered_objects; ///< list of pointer to the registered object
-
-public:
-
-    StochasticRenderingCompositor(
-        kvs::ObjectManager* object_manager,
-        kvs::RendererManager* renderer_manager,
-        kvs::IDManager* id_manager );
-    StochasticRenderingCompositor( kvs::Scene* scene );
-    virtual ~StochasticRenderingCompositor( void );
-
-public:
-
-    void registerObject( kvs::ObjectBase* object, kvs::StochasticRenderingEngine* engine = NULL );
-
-    void changeObject(
-        std::string registered_object_name,
-        kvs::ObjectBase* object,
-        bool is_delete = true );
-
-    void changeObject(
-        kvs::ObjectBase* registered_object,
-        kvs::ObjectBase* object,
-        bool is_delete = true );
-
-    bool removeObject( std::string registered_object_name );
-
-    bool removeObject( kvs::ObjectBase* registered_object );
-
-    bool eraseObject( std::string registered_object_name );
-
-    bool eraseObject( kvs::ObjectBase* registered_object );
-
-    kvs::ObjectBase* object( const std::string& object_name );
-
-    kvs::StochasticRenderingEngine* engine( const std::string& object_name );
-
-    kvs::StochasticRenderingEngine* engine( const kvs::ObjectBase* object );
-
-    void clearEnsembleBuffer( void );
-
-    void updateEngine();
-
-    void setRepetitionLevel( const size_t repetition_level );
-
-    void enableLODControl( const size_t coarse_level = 1 );
-
-    void disableLODControl( void );
-
-    void enableExactDepthTesting( void );
-
-    void disableExactDepthTesting( void );
+    StochasticRenderingCompositor();
+    void update();
+    void draw();
+    void check_window_created();
+    void check_window_resized();
+    void check_object_changed();
+    kvs::Mat4 object_xform();
+    void engines_create();
+    void engines_update();
+    void engines_setup( const bool reset_count );
+    void engines_draw();
 };
 
 } // end of namespace kvs

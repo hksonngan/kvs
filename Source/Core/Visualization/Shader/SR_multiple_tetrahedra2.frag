@@ -16,7 +16,7 @@
 
 varying vec3 position;
 varying vec3 normal;
-varying vec2 id;
+varying vec2 random_index;
 varying float depth_front;
 varying float depth_back;
 
@@ -116,7 +116,7 @@ vec4 color_of_sf_sb_d( const in vec3 lutcoord, const in int index, const in int 
     else              lutdata = texture3D( preintegration_texture1, lutcoord );
     if ( lutdata.a == 0.0 ) return( vec4( 0.0 ) );
 
-    vec2 random_position = ( vec2( float( int( id.x ) * ( 73 + rand_i ) ), float( int( id.y ) * ( 31 + rand_i ) ) ) 
+    vec2 random_position = ( vec2( float( int( random_index.x ) * ( 73 + rand_i ) ), float( int( random_index.y ) * ( 31 + rand_i ) ) ) 
                 + random_offset + gl_FragCoord.xy ) * random_texture_size_inv;
     float randf = texture2D( random_texture, random_position ).x;
     if ( randf > lutdata.a ) return( vec4( 0.0 ) );

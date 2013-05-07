@@ -15,21 +15,20 @@
 #ifndef KVS__GLSL__KU__PARTICLE_BASED_RENDERER_H_INCLUDE
 #define KVS__GLSL__KU__PARTICLE_BASED_RENDERER_H_INCLUDE
 
-#include <kvs/VolumeRendererBase>
-#include <kvs/PointObject>
+#include <kvs/RendererBase>
 #include <kvs/Module>
-#include <kvs/Texture2D>
-#include <kvs/RenderBuffer>
-#include <kvs/VertexBufferObject>
-#include <kvs/FrameBufferObject>
-#include <kvs/FragmentShader>
-#include <kvs/VertexShader>
 #include <kvs/ProgramObject>
-#include <kvs/EnsembleAverageBuffer>
+#include <kvs/VertexBufferObject>
+#include <kvs/Deprecated>
+#include "EnsembleAverageBuffer.h"
+#include "StochasticRendererBase.h"
+#include "StochasticRenderingEngine.h"
 
 
 namespace kvs
 {
+
+class PointObject;
 
 namespace glsl
 {
@@ -37,178 +36,92 @@ namespace glsl
 namespace ku
 {
 
-#define KVS_GLSL_KU_PARTICLE_VOLUME_RENDERER__NORMAL_TYPE_IS_BYTE // *_BYTE or *_FLOAT
-
 /*===========================================================================*/
 /**
- *  @brief  GPU allocation memory type.
+ *  @brief  Particle-based renderer class.
  */
 /*===========================================================================*/
-class ParticleBasedRenderer : public kvs::VolumeRendererBase
+class ParticleBasedRenderer : public kvs::StochasticRendererBase
 {
     kvsModuleName( kvs::glsl::ku::ParticleBasedRenderer );
+    kvsModuleBaseClass( kvs::StochasticRendererBase );
     kvsModuleCategory( Renderer );
-    kvsModuleBaseClass( kvs::VolumeRendererBase );
 
-protected:
+public:
 
-    class Particles;
-    class Renderer;
-
-protected:
-
-    typedef GLushort IndexType;
-    typedef GLubyte ColorType;
-    typedef GLfloat CoordType;
-#if defined( KVS_GLSL_KU_PARTICLE_VOLUME_RENDERER__NORMAL_TYPE_IS_FLOAT )
-    typedef GLfloat NormalType;
-#elif defined( KVS_GLSL_KU_PARTICLE_VOLUME_RENDERER__NORMAL_TYPE_IS_BYTE )
-    typedef GLbyte NormalType;
-#else
-#error "KVS_GLSL_KU_PARTICLE_VOLUME_RENDERER_NORMAL_TYPE_IS_* is not defined."
-#endif
-
-    // Reference data (NOTE: not allocated in thie class).
-    const kvs::PointObject* m_ref_point; ///< pointer to the point data
-
-    size_t m_subpixel_level; ///< subpixel level
-    size_t m_repetition_level; ///< repetition level
-    size_t m_coarse_level; ///< repetition level for coarse rendering (LOD)
-    float m_zooming_factor; ///< zooming factor
-    size_t m_random_texture_size; ///< size of the random number texture
-    size_t m_circle_threshold; ///< threshold for the shape of the particle
-    size_t m_render_width; ///< extended window width for subpixel processing
-    size_t m_render_height; ///< extended window height for subpixel processing
-    bool m_enable_pre_downloading; ///< flag whether to donwonload the particles first
-    bool m_enable_accumulation_buffer; ///< flag whether to use the accumulation buffer
-    bool m_enable_random_texture; ///< flag whether to use the random number texture
-    kvs::EnsembleAverageBuffer m_ensemble_buffer; ///< ensemble average buffer
-    kvs::Texture2D m_random_texture; ///< random number texture
-    kvs::ProgramObject m_zoom_shader; ///< shader (program object) for zooming
-    kvs::ProgramObject m_resize_shader; ///< shader (program object) for resizing
-    GLint m_loc_point_identifier; ///<
-    kvs::FrameBufferObject m_resize_framebuffer; ///< RGB buffer for subpixel processing
-    kvs::RenderBuffer m_resize_depthbuffer; ///< depth buffer for subpixel processing
-    kvs::Texture2D m_resize_texture; ///< texture for subpixel processing
-    kvs::VertexBufferObject* m_vbo; ///< vertex buffer object (VBO) for the particles
-    Particles* m_particles; ///< particles on GPU
-    Renderer* m_renderer; ///< renderer for VBO
-    bool m_enable_lod; ///< enable LOD rendering
-    bool m_enable_zooming; ///< enable zooming
-    float m_modelview_matrix[16]; ///< modelview matrix
+    class Engine;
 
 public:
 
     ParticleBasedRenderer();
-    ParticleBasedRenderer( kvs::PointObject* point, const size_t subpixel_level = 1, const size_t repeat_level = 1 );
-    virtual ~ParticleBasedRenderer();
-
-    void exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
-
-    void initialize();
-    void attachPointObject( const kvs::PointObject* point );
-    void setSubpixelLevel( const size_t subpixel_level );
-    void setRepetitionLevel( const size_t repetition_level );
-    void setRandomTextureSize( const size_t random_texture_size );
-    void setCircleThreshold( const size_t circle_threshold );
-    void enableLODControl( const size_t coarse_level = 1 );
-    void disableLODControl();
-    void enableZooming();
-    void disableZooming();
-    void enableCoarseRendering( const size_t coarse_level = 1 );
-    void disableCoarseRendering();
-    void enableAccumulationBuffer();
-    void disableAccumulationBuffer();
-    void enableRandomTexture();
-    void disableRandomTexture();
-
-    size_t subpixelLevel() const;
-    size_t repetitionLevel() const;
-    size_t randomTextureSize() const;
-    size_t circleThreshold() const;
-    bool isEnabledAccumulationBuffer() const;
-    bool isEnabledRandomTexture() const;
-
-protected:
-
-    void create_image( const kvs::PointObject* point, const kvs::Camera* camera, const kvs::Light* light );
-    void initialize_opengl();
-    void initialize_resize_texture();
-    void create_random_texture();
-    void align_particles();
-    void create_vertexbuffer();
-    void download_vertexbuffer( Renderer& renderer, kvs::VertexBufferObject& vbo );
-    void draw_vertexbuffer( const Renderer& renderer, kvs::VertexBufferObject& vbo, const float modelview_matrix[16] );
-    void calculate_zooming_factor( const kvs::PointObject* point, const kvs::Camera* camera );
-    void setup_zoom_shader( const float modelview_matrix[16] );
-    void setup_resize_shader();
-
-}; // end of class
-
-/*===========================================================================*/
-/**
- *  @brief  Particle class for PBVR.
- */
-/*===========================================================================*/
-class ParticleBasedRenderer::Particles
-{
-private:
-
-    size_t m_nvertices; ///< number of vertices
-    ParticleBasedRenderer::IndexType* m_indices; ///< index array
-    ParticleBasedRenderer::CoordType* m_coords; ///< coordinate value array
-    ParticleBasedRenderer::NormalType* m_normals; ///< normal vector array
-    ParticleBasedRenderer::ColorType* m_colors; ///< color value array
+    bool isEnabledShuffle() const;
+    void setEnabledShuffle( const bool enable );
+    void enableShuffle();
+    void disableShuffle();
 
 public:
+    // Invalid methods.
+    KVS_DEPRECATED( void initialize() ) {}
+    KVS_DEPRECATED( void setSubpixelLevel( const size_t level ) ) { setRepetitionLevel( level * level ); }
+    KVS_DEPRECATED( void setCircleThreshold( const size_t ) ) {}
+    KVS_DEPRECATED( void enableZooming() ) {}
+    KVS_DEPRECATED( void disableZooming() ) {}
+    KVS_DEPRECATED( void enableCoarseRendering( const size_t level = 1 ) ) {}
+    KVS_DEPRECATED( void disableCoarseRendering() ) {}
+    KVS_DEPRECATED( void enableAccumulationBuffer() ) {}
+    KVS_DEPRECATED( void disableAccumulationBuffer() ) {}
+    KVS_DEPRECATED( void enableRandomTexture() ) {}
+    KVS_DEPRECATED( void disableRandomTexture() ) {}
+    KVS_DEPRECATED( size_t subpixelLevel() const ) { return 1; }
+    KVS_DEPRECATED( size_t circleThreshold() const ) { return 3; }
+    KVS_DEPRECATED( bool isEnabledAccumulationBuffer() const ) { return false; }
+    KVS_DEPRECATED( bool isEnabledRandomTexture() const ) { return true; }
 
-    Particles();
-    ~Particles();
-
-    void release();
-    void create( const size_t nvertices, const bool has_normal, const bool has_index );
-
-    bool hasIndex() const;
-    bool hasNormal() const;
-    size_t nvertices() const;
-    size_t byteSizePerVertex() const;
-    size_t byteSize() const;
-    const ParticleBasedRenderer::IndexType* indices() const;
-    const ParticleBasedRenderer::CoordType* coords() const;
-    const ParticleBasedRenderer::NormalType* normals() const;
-    const ParticleBasedRenderer::ColorType* colors() const;
-    ParticleBasedRenderer::IndexType* indices();
-    ParticleBasedRenderer::CoordType* coords();
-    ParticleBasedRenderer::NormalType* normals();
-    ParticleBasedRenderer::ColorType* colors();
+private:
+    // Not supported progressive refinement rendering.
+    bool isEnabledRefinement() const;
+    void enableRefinement();
+    void disableRefinement();
 };
 
 /*===========================================================================*/
 /**
- *  @brief  VBO rendering information class
+ *  @brief  Engine class for particle-based renderer.
  */
 /*===========================================================================*/
-class ParticleBasedRenderer::Renderer
+class ParticleBasedRenderer::Engine : public kvs::StochasticRenderingEngine
 {
-    const ParticleBasedRenderer::Particles* m_particles; //< pointer to the particles
-    size_t m_start; ///< start number of input vertices
-    size_t m_count; ///< number of vertices
-    size_t m_off_index; ///< offset bytes for the index array
-    size_t m_off_coord; ///< offset bytes for the coodinate value array
-    size_t m_off_normal; ///< offset bytes for the normal vector array
-    size_t m_off_color; ///< offset bytes for the color value array
-    size_t m_loc_identifier; ///< 
+private:
+
+    bool m_has_normal; ///< check flag for the normal array
+    bool m_enable_shuffle; ///< flag for shuffling particles
+    size_t m_random_index; ///< index used for refering the random texture
+    float m_initial_object_depth; ///< initial object depth
+    float m_initial_object_scale; ///< initial object scale
+    float m_initial_window_width; ///< initial window width
+    float m_initial_window_height; ///< initial window height
+    kvs::ProgramObject m_shader_program; ///< zooming shader program
+    kvs::VertexBufferObject* m_vbo; ///< vertex buffer objects for each repetition
 
 public:
 
-    Renderer();
+    Engine();
+    virtual ~Engine();
+    void release();
+    void create( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
+    void update( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
+    void setup( const bool reset_count );
+    void draw( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
 
-    void set( const ParticleBasedRenderer::Particles* particles, const size_t start, const size_t count, const size_t loc_identifier );
-    size_t download( kvs::VertexBufferObject& vbo );
-    void draw() const;
-    size_t nvertices() const;
-    size_t byteSizePerVertex() const;
-    size_t byteSize() const;
+    bool isEnabledShuffle() const { return m_enable_shuffle; }
+    void setEnabledShuffle( const bool enable ) { m_enable_shuffle = enable; }
+    void enableShuffle() { this->setEnabledShuffle( true ); }
+    void disableShuffle() { this->setEnabledShuffle( false ); }
+
+private:
+
+    void create_shader_program();
+    void create_buffer_object( const kvs::PointObject* point );
 };
 
 } // end of namespace ku
@@ -217,4 +130,4 @@ public:
 
 } // end of namespace kvs
 
-#endif
+#endif // KVS__GLSL__KU__PARTICLE_BASED_RENDERER_H_INCLUDE

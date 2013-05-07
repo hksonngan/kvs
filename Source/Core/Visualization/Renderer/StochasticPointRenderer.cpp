@@ -13,7 +13,43 @@
  */
 /*****************************************************************************/
 #include "StochasticPointRenderer.h"
-#include "StochasticPointEngine.h"
+#include <cmath>
+#include <kvs/OpenGL>
+#include <kvs/PointObject>
+#include <kvs/Camera>
+#include <kvs/Light>
+#include <kvs/Assert>
+#include <kvs/Message>
+
+
+namespace
+{
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns vertex-color array.
+ *  @param  point [in] pointer to the point object
+ */
+/*===========================================================================*/
+kvs::ValueArray<kvs::UInt8> VertexColors( const kvs::PointObject* point )
+{
+    if ( point->numberOfVertices() == point->numberOfColors() ) return point->colors();
+
+    const size_t nvertices = point->numberOfVertices();
+    const kvs::RGBColor color = point->color();
+
+    kvs::ValueArray<kvs::UInt8> colors( nvertices * 3 );
+    for ( size_t i = 0; i < nvertices; i++ )
+    {
+        colors[ 3 * i + 0 ] = color.r();
+        colors[ 3 * i + 1 ] = color.g();
+        colors[ 3 * i + 2 ] = color.b();
+    }
+
+    return colors;
+}
+
+}
 
 
 namespace kvs
@@ -24,70 +60,232 @@ namespace kvs
  *  @brief  Constructs a new StochasticPointRenderer class.
  */
 /*===========================================================================*/
-StochasticPointRenderer::StochasticPointRenderer( void )
+StochasticPointRenderer::StochasticPointRenderer():
+    StochasticRendererBase( new Engine() )
 {
-    BaseClass::setRenderingEngine( new kvs::StochasticPointEngine() );
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Constructs a new StochasticPointRenderer class.
- *  @param  object [in] pointer to a point object
+ *  @brief  Sets an opacity value.
+ *  @param  opacity [in] opacity value
  */
 /*===========================================================================*/
-StochasticPointRenderer::StochasticPointRenderer( kvs::PointObject* object )
+void StochasticPointRenderer::setOpacity( const kvs::UInt8 opacity )
 {
-    BaseClass::setRenderingEngine( new kvs::StochasticPointEngine( object ) );
+    static_cast<Engine&>( engine() ).setOpacity( opacity );
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Executes the rendering process.
- *  @param  object [in] pointer to point object
- *  @param  camera [in] pointer to camera
- *  @param  light [in] pointer to light
+ *  @brief  Constructs a new Engine class.
  */
 /*===========================================================================*/
-void StochasticPointRenderer::exec(
-    kvs::ObjectBase* object,
-    kvs::Camera*     camera,
-    kvs::Light*      light )
+StochasticPointRenderer::Engine::Engine():
+    m_point_opacity( 255 ),
+    m_has_normal( false ),
+    m_random_index( 0 )
 {
-    kvs::StochasticRenderingEngine* engine = BaseClass::m_rendering_engines[0];
-    if ( !engine->object() ) engine->attachObject( object );
-
-    BaseClass::startTimer();
-    this->create_image( camera, light );
-    BaseClass::stopTimer();
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Attaches a point object.
- *  @param  object [in] pointer to a point object
+ *  @brief  Releases the GPU resources.
  */
 /*===========================================================================*/
-void StochasticPointRenderer::attachObject( const kvs::PointObject* object )
+void StochasticPointRenderer::Engine::release()
 {
-    kvs::StochasticRenderingEngine* engine = BaseClass::m_rendering_engines[0];
-    engine->attachObject( object );
-
-    BaseClass::clearEnsembleBuffer();
+    m_shader_program.release();
+    m_vbo.release();
+    m_ibo.release();
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Sets a repetition level.
- *  @param  repetition_level [in] repetition level
+ *  @brief  Create.
+ *  @param  object [in] pointer to the point object
+ *  @param  camera [in] pointer to the camera
+ *  @param  light [in] pointer to the light
  */
 /*===========================================================================*/
-void StochasticPointRenderer::setRepetitionLevel( const size_t repetition_level )
+void StochasticPointRenderer::Engine::create( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light )
 {
-    BaseClass::setRepetitionLevel( repetition_level );
+    kvs::PointObject* point = kvs::PointObject::DownCast( object );
+    m_has_normal = point->numberOfNormals() > 0;
+    if ( !m_has_normal ) setEnabledShading( false );
 
-    typedef kvs::StochasticPointEngine Engine;
-    Engine* engine = static_cast<Engine*>( BaseClass::m_rendering_engines[0] );
-    engine->setRepetitionLevel( repetition_level );
+    attachObject( object );
+    createRandomTexture();
+    this->create_shader_program();
+    this->create_buffer_object( point );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Update.
+ *  @param  object [in] pointer to the object
+ *  @param  camera [in] pointer to the camera
+ *  @param  light [in] pointer to the light
+ */
+/*===========================================================================*/
+void StochasticPointRenderer::Engine::update( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light )
+{
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Set up.
+ *  @param  reset_count [in] flag for the repetition count
+ */
+/*===========================================================================*/
+void StochasticPointRenderer::Engine::setup( const bool reset_count )
+{
+    if ( reset_count ) resetRepetitions();
+    m_random_index = m_shader_program.attributeLocation("random_index");
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Draw an ensemble.
+ *  @param  object [in] pointer to the line object
+ *  @param  camera [in] pointer to the camera
+ *  @param  light [in] pointer to the light
+ */
+/*===========================================================================*/
+void StochasticPointRenderer::Engine::draw( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light )
+{
+    kvs::PointObject* point = kvs::PointObject::DownCast( object );
+
+    kvs::VertexBufferObject::Binder bind1( m_vbo );
+    kvs::ProgramObject::Binder bind2( m_shader_program );
+    kvs::Texture::Binder bind3( randomTexture() );
+    {
+        const size_t size = randomTextureSize();
+        const int count = repetitionCount() * 12347;
+        const kvs::Vec2 random_offset( ( count ) % size, ( count / size ) % size );
+
+        m_shader_program.setUniform( "random_texture_size_inv", 1.0f / randomTextureSize() );
+        m_shader_program.setUniform( "random_offset", random_offset );
+        m_shader_program.setUniform( "random_texture", 0 );
+        m_shader_program.setUniform( "opacity", m_point_opacity / 255.0f );
+
+        const size_t nvertices = point->numberOfVertices();
+        const size_t index_size = nvertices * 2 * sizeof( kvs::UInt16 );
+        const size_t coord_size = nvertices * 3 * sizeof( kvs::Real32 );
+        const size_t color_size = nvertices * 3 * sizeof( kvs::UInt8 );
+
+        KVS_GL_CALL( glPointSize( point->size() ) );
+
+        // Enable coords.
+        KVS_GL_CALL( glEnableClientState( GL_VERTEX_ARRAY ) );
+        KVS_GL_CALL( glVertexPointer( 3, GL_FLOAT, 0, (GLbyte*)NULL + index_size ) );
+
+        // Enable colors.
+        KVS_GL_CALL( glEnableClientState( GL_COLOR_ARRAY ) );
+        KVS_GL_CALL( glColorPointer( 3, GL_UNSIGNED_BYTE, 0, (GLbyte*)NULL + index_size + coord_size ) );
+
+        // Enable normals.
+        if ( m_has_normal )
+        {
+            KVS_GL_CALL( glEnableClientState( GL_NORMAL_ARRAY ) );
+            KVS_GL_CALL( glNormalPointer( GL_FLOAT, 0, (GLbyte*)NULL + index_size + coord_size + color_size ) );
+        }
+
+        // Enable random index.
+        KVS_GL_CALL( glEnableVertexAttribArray( m_random_index ) );
+        KVS_GL_CALL( glVertexAttribPointer( m_random_index, 2, GL_UNSIGNED_SHORT, GL_FALSE, 0, (GLubyte*)NULL + 0 ) );
+
+        // Draw points.
+        KVS_GL_CALL( glDrawArrays( GL_POINTS, 0, nvertices ) );
+
+        // Disable coords.
+        KVS_GL_CALL( glDisableClientState( GL_VERTEX_ARRAY ) );
+
+        // Disable colors.
+        KVS_GL_CALL( glDisableClientState( GL_COLOR_ARRAY ) );
+
+        // Disable normals.
+        if ( m_has_normal )
+        {
+            KVS_GL_CALL( glDisableClientState( GL_NORMAL_ARRAY ) );
+        }
+
+        // Disable random index.
+        KVS_GL_CALL( glDisableVertexAttribArray( m_random_index ) );
+    }
+
+    countRepetitions();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Creates shader program.
+ */
+/*===========================================================================*/
+void StochasticPointRenderer::Engine::create_shader_program()
+{
+    kvs::ShaderSource vert( "SR_point.vert" );
+    kvs::ShaderSource frag( "SR_point.frag" );
+    if ( isEnabledShading() )
+    {
+        switch ( shader().type() )
+        {
+        case kvs::Shader::LambertShading: frag.define("ENABLE_LAMBERT_SHADING"); break;
+        case kvs::Shader::PhongShading: frag.define("ENABLE_PHONG_SHADING"); break;
+        case kvs::Shader::BlinnPhongShading: frag.define("ENABLE_BLINN_PHONG_SHADING"); break;
+        default: break; // NO SHADING
+        }
+
+        if ( kvs::OpenGL::Boolean( GL_LIGHT_MODEL_TWO_SIDE ) == GL_TRUE )
+        {
+            frag.define("ENABLE_TWO_SIDE_LIGHTING");
+        }
+    }
+    m_shader_program.build( vert, frag );
+    m_shader_program.bind();
+    m_shader_program.setUniform( "shading.Ka", shader().Ka );
+    m_shader_program.setUniform( "shading.Kd", shader().Kd );
+    m_shader_program.setUniform( "shading.Ks", shader().Ks );
+    m_shader_program.setUniform( "shading.S",  shader().S );
+    m_shader_program.unbind();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Create buffer objects.
+ *  @param  point [in] pointer to the point object
+ */
+/*===========================================================================*/
+void StochasticPointRenderer::Engine::create_buffer_object( const kvs::PointObject* point )
+{
+    const size_t nvertices = point->numberOfVertices();
+    kvs::ValueArray<kvs::UInt16> indices( nvertices * 2 );
+    for ( size_t i = 0; i < nvertices; i++ )
+    {
+        const unsigned int count = i * 12347;
+        indices[ 2 * i + 0 ] = static_cast<kvs::UInt16>( ( count ) % randomTextureSize() );
+        indices[ 2 * i + 1 ] = static_cast<kvs::UInt16>( ( count / randomTextureSize() ) % randomTextureSize() );
+    }
+    kvs::ValueArray<kvs::Real32> coords = point->coords();
+    kvs::ValueArray<kvs::UInt8> colors = ::VertexColors( point );
+    kvs::ValueArray<kvs::Real32> normals = point->normals();
+
+    const size_t index_size = indices.byteSize();
+    const size_t coord_size = coords.byteSize();
+    const size_t color_size = colors.byteSize();
+    const size_t normal_size = normals.byteSize();
+    const size_t byte_size = index_size + coord_size + color_size + normal_size;
+
+    m_vbo.create( byte_size );
+    m_vbo.bind();
+    m_vbo.load( index_size, indices.data(), 0 );
+    m_vbo.load( coord_size, coords.data(), index_size );
+    m_vbo.load( color_size, colors.data(), index_size + coord_size );
+    if ( normal_size > 0 )
+    {
+        m_vbo.load( normal_size, normals.data(), index_size + coord_size + color_size );
+    }
+    m_vbo.unbind();
 }
 
 } // end of namespace kvs

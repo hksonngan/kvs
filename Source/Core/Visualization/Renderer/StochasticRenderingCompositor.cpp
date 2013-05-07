@@ -13,17 +13,20 @@
  */
 /*****************************************************************************/
 #include "StochasticRenderingCompositor.h"
-#include "StochasticPointEngine.h"
-#include "StochasticLineEngine.h"
-#include "StochasticPolygonEngine.h"
-#include "StochasticUniformGridEngine.h"
-#include "StochasticTetrahedraEngine.h"
-#include <kvs/PointObject>
+#include <kvs/Assert>
+#include <kvs/OpenGL>
+#include <kvs/glut/GLUT>
+#include <kvs/PaintEvent>
+#include <kvs/EventHandler>
 #include <kvs/ScreenBase>
 #include <kvs/Scene>
+#include <kvs/Camera>
+#include <kvs/Light>
+#include <kvs/Background>
 #include <kvs/ObjectManager>
 #include <kvs/RendererManager>
 #include <kvs/IDManager>
+#include "StochasticRendererBase.h"
 
 
 namespace kvs
@@ -32,413 +35,274 @@ namespace kvs
 /*===========================================================================*/
 /**
  *  @brief  Constructs a new StochasticRenderingCompositor class.
- *  @param  screen [in] pointer to the screen
+ *  @param  scene [in] pointer to the scene
  */
 /*===========================================================================*/
-StochasticRenderingCompositor::StochasticRenderingCompositor(
-    kvs::ObjectManager* object_manager,
-    kvs::RendererManager* renderer_manager,
-    kvs::IDManager* id_manager ):
-    m_object_manager( object_manager ),
-    m_renderer_manager( renderer_manager ),
-    m_id_manager( id_manager ),
-    m_object_id( 0 ),
-    m_object( new kvs::PointObject() ),
-    m_renderer( new kvs::StochasticRendererBase() )
-{
-    const kvs::Vector3f obj_min = m_object_manager->minObjectCoord();
-    const kvs::Vector3f obj_max = m_object_manager->maxObjectCoord();
-    const kvs::Vector3f ext_min = m_object_manager->minExternalCoord();
-    const kvs::Vector3f ext_max = m_object_manager->maxExternalCoord();
-    m_object->setXform( m_object_manager->xform() );
-    m_object->saveXform();
-    m_object->setMinMaxObjectCoords( obj_min, obj_max );
-    m_object->setMinMaxExternalCoords( ext_min, ext_max );
-
-    const size_t object_id   = m_object_manager->insert( m_object );
-    const size_t renderer_id = m_renderer_manager->insert( m_renderer );
-    m_id_manager->insert( object_id, renderer_id );
-    m_object_id = object_id;
-}
-
 StochasticRenderingCompositor::StochasticRenderingCompositor( kvs::Scene* scene ):
-    m_object_manager( scene->objectManager() ),
-    m_renderer_manager( scene->rendererManager() ),
-    m_id_manager( scene->IDManager() ),
-    m_object_id( 0 ),
-    m_object( new kvs::PointObject() ),
-    m_renderer( new kvs::StochasticRendererBase() )
+    m_scene( scene ),
+    m_width( 0 ),
+    m_height( 0 ),
+    m_repetition_level( 1 ),
+    m_coarse_level( 1 ),
+    m_enable_lod( false ),
+    m_enable_refinement( false ),
+    m_enable_shading( true )
 {
-    const kvs::Vector3f obj_min = m_object_manager->minObjectCoord();
-    const kvs::Vector3f obj_max = m_object_manager->maxObjectCoord();
-    const kvs::Vector3f ext_min = m_object_manager->minExternalCoord();
-    const kvs::Vector3f ext_max = m_object_manager->maxExternalCoord();
-    m_object->setXform( m_object_manager->xform() );
-    m_object->saveXform();
-    m_object->setMinMaxObjectCoords( obj_min, obj_max );
-    m_object->setMinMaxExternalCoords( ext_min, ext_max );
-
-    const size_t object_id   = m_object_manager->insert( m_object );
-    const size_t renderer_id = m_renderer_manager->insert( m_renderer );
-    m_id_manager->insert( object_id, renderer_id );
-    m_object_id = object_id;
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Destroys the StochasticRenderingCompositor class.
+ *  @brief  Updates the scene.
  */
 /*===========================================================================*/
-StochasticRenderingCompositor::~StochasticRenderingCompositor( void )
+void StochasticRenderingCompositor::update()
 {
-    std::vector<kvs::ObjectBase*>::iterator object = m_registered_objects.begin();
-    std::vector<kvs::ObjectBase*>::iterator last = m_registered_objects.end();
-    while ( object != last )
-    {
-        if ( *object ) delete *object;
-        ++object;
-    }
+    KVS_ASSERT( m_scene );
 
-    m_registered_objects.clear();
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Registers an object and rendering engine.
- *  @param  object [in] pointer to an object
- *  @param  engine [in] pointer to a rendering engine
- */
-/*===========================================================================*/
-void StochasticRenderingCompositor::registerObject(
-    kvs::ObjectBase* object,
-    kvs::StochasticRenderingEngine* engine )
-{
-    // Esitimate a suitable engine for the specified object if the engine is not specified.
-    if ( !engine )
+    kvs::OpenGL::WithPushedMatrix p( GL_MODELVIEW );
+    p.loadIdentity();
     {
-        const kvs::ObjectBase::ObjectType object_type = object->objectType();
-        if ( object_type == kvs::ObjectBase::Geometry )
+        m_scene->camera()->update();
+        m_scene->light()->update( m_scene->camera() );
+        m_scene->background()->apply();
+
+        if ( m_scene->objectManager()->hasObject() )
         {
-            kvs::GeometryObjectBase* geometry = kvs::GeometryObjectBase::DownCast( object );
-            switch ( geometry->geometryType() )
-            {
-            case kvs::GeometryObjectBase::Point:
-            {
-                engine = new kvs::StochasticPointEngine();
-                engine->attachObject( object );
-                break;
-            }
-            case kvs::GeometryObjectBase::Line:
-            {
-                engine = new kvs::StochasticLineEngine();
-                engine->attachObject( object );
-                break;
-            }
-            case kvs::GeometryObjectBase::Polygon:
-            {
-                engine = new kvs::StochasticPolygonEngine();
-                engine->attachObject( object );
-                break;
-            }
-            default:
-            {
-                kvsMessageError("Not supported object.");
-                return;
-            }
-            }
-        }
-        else if ( object_type == kvs::ObjectBase::Volume )
-        {
-            kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
-            switch ( volume->volumeType() )
-            {
-            case kvs::VolumeObjectBase::Structured:
-            {
-                engine = new kvs::StochasticUniformGridEngine();
-                engine->attachObject( object );
-                break;
-            }
-            case kvs::VolumeObjectBase::Unstructured:
-            {
-                engine = new kvs::StochasticTetrahedraEngine();
-                engine->attachObject( object );
-                break;
-            }
-            default:
-            {
-                kvsMessageError("Not supported object.");
-                return;
-            }
-            }
-        }
-        else
-        {
-            kvsMessageError("Cannot register the specified object.");
-            return;
+            this->draw();
         }
     }
-    else
-    {
-        if ( !engine->object() ) engine->attachObject( object );
-    }
 
-    m_registered_objects.push_back( object );
-
-    // Update boundary information of the object.
-    const kvs::Vector3f o_min_coord = object->minObjectCoord();
-    const kvs::Vector3f o_max_coord = object->maxObjectCoord();
-    kvs::Vector3f n_min_coord = m_object->minObjectCoord();
-    kvs::Vector3f n_max_coord = m_object->maxObjectCoord();
-    if ( m_object->hasMinMaxObjectCoords() )
-    {
-        if ( o_min_coord.x() < n_min_coord.x() ) n_min_coord.x() = o_min_coord.x();
-        if ( o_min_coord.y() < n_min_coord.y() ) n_min_coord.y() = o_min_coord.y();
-        if ( o_min_coord.z() < n_min_coord.z() ) n_min_coord.z() = o_min_coord.z();
-
-        if ( o_max_coord.x() > n_max_coord.x() ) n_max_coord.x() = o_max_coord.x();
-        if ( o_max_coord.y() > n_max_coord.y() ) n_max_coord.y() = o_max_coord.y();
-        if ( o_max_coord.z() > n_max_coord.z() ) n_max_coord.z() = o_max_coord.z();
-    }
-    else
-    {
-        n_min_coord = o_min_coord;
-        n_max_coord = o_max_coord;
-    }
-
-    m_object->setMinMaxObjectCoords( n_min_coord, n_max_coord );
-    m_object->setMinMaxExternalCoords( n_min_coord, n_max_coord );
-    m_renderer->setRenderingEngine( engine );
-
-    // Update xform information of the object manager.
-    m_object_manager->change( m_object_id, m_object, false );
+    kvs::OpenGL::Flush();
+    glutSwapBuffers();
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Changes the registered object by the object name.
- *  @param  registered_object_name [in] registered object name
- *  @param  object [in] pointer to a new object
- *  @param  is_delete [in] the registered object is deleted if true
+ *  @brief  Draws the objects with stochastic renderers.
  */
 /*===========================================================================*/
-void StochasticRenderingCompositor::changeObject(
-    std::string registered_object_name,
-    kvs::ObjectBase* object,
-    bool is_delete )
+void StochasticRenderingCompositor::draw()
 {
-    // Swap the object and delete the registered object if the specified flag (is_delete) is true.
-    std::vector<kvs::ObjectBase*>::iterator obj = m_registered_objects.begin();
-    std::vector<kvs::ObjectBase*>::iterator last = m_registered_objects.end();
-    while ( obj != last )
+    kvs::OpenGL::WithPushedAttrib p( GL_ALL_ATTRIB_BITS );
+
+    this->check_window_created();
+    this->check_window_resized();
+    this->check_object_changed();
+
+    // LOD control.
+    size_t repetitions = m_repetition_level;
+    kvs::Vec3 camera_position = m_scene->camera()->position();
+    kvs::Vec3 light_position = m_scene->light()->position();
+    kvs::Mat4 object_xform = this->object_xform();
+    if ( m_camera_position != camera_position ||
+         m_light_position != light_position ||
+         m_object_xform != object_xform )
     {
-        if ( (*obj)->name() == registered_object_name )
+        if ( m_enable_lod )
         {
-            if ( is_delete ) delete *obj;
-            *obj = object;
+            repetitions = m_coarse_level;
         }
-        ++obj;
+        m_camera_position = camera_position;
+        m_light_position = light_position;
+        m_object_xform = object_xform;
+        m_ensemble_buffer.clear();
     }
 
-    // Attach the object to the rendering engine in which the specified object is registered.
-    kvs::StochasticRenderingEngine* engine = m_renderer->find_engine( registered_object_name );
-    if ( engine ) engine->attachObject( object );
+    // Setup engine.
+    const bool reset_count = !m_enable_refinement;
+    this->engines_setup( reset_count );
 
-    static_cast<kvs::StochasticRendererBase*>( m_renderer )->clearEnsembleBuffer();
+    // Ensemble rendering.
+    if ( reset_count ) m_ensemble_buffer.clear();
+    for ( size_t i = 0; i < repetitions; i++ )
+    {
+        m_ensemble_buffer.bind();
+        this->engines_draw();
+        m_ensemble_buffer.unbind();
+        m_ensemble_buffer.add();
+    }
+    m_ensemble_buffer.draw();
+
+    kvs::OpenGL::Finish();
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Changes the registered object by the pointer to the object.
- *  @param  registered_object [in] pointer to the registered object
- *  @param  object [in] pointer to a new object
- *  @param  is_delete [in] the registered object is deleted if true
+ *  @brief  Check whether the window is created and initialize the parameters.
  */
 /*===========================================================================*/
-void StochasticRenderingCompositor::changeObject(
-    kvs::ObjectBase* registered_object,
-    kvs::ObjectBase* object,
-    bool is_delete )
+void StochasticRenderingCompositor::check_window_created()
 {
-    // Swap the object and delete the registered object if the specified flag (is_delete) is true.
-    std::vector<kvs::ObjectBase*>::iterator obj = m_registered_objects.begin();
-    std::vector<kvs::ObjectBase*>::iterator last = m_registered_objects.end();
-    while ( obj != last )
+    const bool window_created = m_width == 0 && m_height == 0;
+    if ( window_created )
     {
-        if ( *obj == registered_object )
+        const size_t width = m_scene->camera()->windowWidth();
+        const size_t height = m_scene->camera()->windowHeight();
+        m_width = width;
+        m_height = height;
+        m_ensemble_buffer.create( width, height );
+        m_ensemble_buffer.clear();
+        m_object_xform = this->object_xform();
+        m_camera_position = m_scene->camera()->position();
+        m_light_position = m_scene->light()->position();
+        this->engines_create();
+    }
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Check whether the window is resized and update the parameters.
+ */
+/*===========================================================================*/
+void StochasticRenderingCompositor::check_window_resized()
+{
+    const size_t width = m_scene->camera()->windowWidth();
+    const size_t height = m_scene->camera()->windowHeight();
+    const bool window_resized = m_width != width || m_height != height;
+    if ( window_resized )
+    {
+        m_width = width;
+        m_height = height;
+        m_ensemble_buffer.release();
+        m_ensemble_buffer.create( width, height );
+        m_ensemble_buffer.clear();
+        this->engines_update();
+    }
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Check whether the object is changed and recreated the engine.
+ */
+/*===========================================================================*/
+void StochasticRenderingCompositor::check_object_changed()
+{
+    const size_t size = m_scene->IDManager()->size();
+    for ( size_t i = 0; i < size; i++ )
+    {
+        kvs::IDManager::IDPair id_pair = (*m_scene->IDManager())[i];
+        kvs::ObjectBase* object = m_scene->objectManager()->object( id_pair.first );
+        kvs::RendererBase* renderer = m_scene->rendererManager()->renderer( id_pair.second );
+        if ( kvs::StochasticRendererBase* stochastic_renderer = dynamic_cast<kvs::StochasticRendererBase*>( renderer ) )
         {
-            if ( is_delete ) delete *obj;
-            *obj = object;
+            const bool object_changed = stochastic_renderer->engine().object() != object;
+            if ( object_changed )
+            {
+                m_ensemble_buffer.clear();
+                stochastic_renderer->engine().release();
+                stochastic_renderer->engine().setDepthTexture( m_ensemble_buffer.currentDepthTexture() );
+                stochastic_renderer->engine().setShader( &stochastic_renderer->shader() );
+                stochastic_renderer->engine().setEnabledShading( m_enable_shading );
+                stochastic_renderer->engine().create( object, m_scene->camera(), m_scene->light() );
+            }
         }
-        ++obj;
     }
-
-    // Attach the object to the rendering engine in which the specified object is registered.
-    kvs::StochasticRenderingEngine* engine = m_renderer->find_engine( registered_object );
-    if ( engine ) engine->attachObject( object );
-
-    static_cast<kvs::StochasticRendererBase*>( m_renderer )->clearEnsembleBuffer();
 }
 
-bool StochasticRenderingCompositor::removeObject( std::string registered_object_name )
+/*===========================================================================*/
+/**
+ *  @brief  Returns the xform matrix of the active object.
+ *  @return xform matrix
+ */
+/*===========================================================================*/
+kvs::Mat4 StochasticRenderingCompositor::object_xform()
 {
-    // Find the object.
-    kvs::ObjectBase* registered_object = NULL;
-    std::vector<kvs::ObjectBase*>::iterator object = m_registered_objects.begin();
-    std::vector<kvs::ObjectBase*>::iterator last = m_registered_objects.end();
-    while ( object != last )
+    return m_scene->objectManager()->hasActiveObject() ?
+        m_scene->objectManager()->activeObject()->xform().toMatrix() :
+        m_scene->objectManager()->xform().toMatrix();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Calls the create method of each engine.
+ */
+/*===========================================================================*/
+void StochasticRenderingCompositor::engines_create()
+{
+    const size_t size = m_scene->IDManager()->size();
+    for ( size_t i = 0; i < size; i++ )
     {
-        if ( (*object)->name() == registered_object_name )
+        kvs::IDManager::IDPair id_pair = (*m_scene->IDManager())[i];
+        kvs::ObjectBase* object = m_scene->objectManager()->object( id_pair.first );
+        kvs::RendererBase* renderer = m_scene->rendererManager()->renderer( id_pair.second );
+        if ( kvs::StochasticRendererBase* stochastic_renderer = dynamic_cast<kvs::StochasticRendererBase*>( renderer ) )
         {
-            registered_object = *object;
-            break;
+            stochastic_renderer->engine().setDepthTexture( m_ensemble_buffer.currentDepthTexture() );
+            stochastic_renderer->engine().setShader( &stochastic_renderer->shader() );
+            stochastic_renderer->engine().setRepetitionLevel( m_repetition_level );
+            stochastic_renderer->engine().setEnabledShading( m_enable_shading );
+            stochastic_renderer->engine().create( object, m_scene->camera(), m_scene->light() );
         }
-        ++object;
     }
-
-    if ( registered_object ) return this->removeObject( registered_object );
-
-    return false;
 }
 
-bool StochasticRenderingCompositor::removeObject( kvs::ObjectBase* registered_object )
+/*===========================================================================*/
+/**
+ *  @brief  Calls the update method of each engine.
+ */
+/*===========================================================================*/
+void StochasticRenderingCompositor::engines_update()
 {
-    std::vector<kvs::ObjectBase*>::iterator end = std::remove( m_registered_objects.begin(), m_registered_objects.end(), registered_object );
-    m_registered_objects.erase( end, m_registered_objects.end() );
-    if ( m_renderer->erase_engine( registered_object ) )
+    const size_t size = m_scene->IDManager()->size();
+    for ( size_t i = 0; i < size; i++ )
     {
-        static_cast<kvs::StochasticRendererBase*>( m_renderer )->clearEnsembleBuffer();
-        return true;
-    }
-
-    return false;
-}
-
-bool StochasticRenderingCompositor::eraseObject( std::string registered_object_name )
-{
-    // Find the object.
-    kvs::ObjectBase* registered_object = NULL;
-    std::vector<kvs::ObjectBase*>::iterator object = m_registered_objects.begin();
-    std::vector<kvs::ObjectBase*>::iterator last = m_registered_objects.end();
-    while ( object != last )
-    {
-        if ( (*object)->name() == registered_object_name )
+        kvs::IDManager::IDPair id_pair = (*m_scene->IDManager())[i];
+        kvs::ObjectBase* object = m_scene->objectManager()->object( id_pair.first );
+        kvs::RendererBase* renderer = m_scene->rendererManager()->renderer( id_pair.second );
+        if ( kvs::StochasticRendererBase* stochastic_renderer = dynamic_cast<kvs::StochasticRendererBase*>( renderer ) )
         {
-            registered_object = *object;
-            break;
+            stochastic_renderer->engine().update( object, m_scene->camera(), m_scene->light() );
         }
-        ++object;
     }
-
-    if ( registered_object ) return this->eraseObject( registered_object );
-
-    return false;
 }
 
-bool StochasticRenderingCompositor::eraseObject( kvs::ObjectBase* registered_object )
+/*===========================================================================*/
+/**
+ *  @brief  Calls the setup method of each engine.
+ *  @param  reset_count [in] reset count
+ */
+/*===========================================================================*/
+void StochasticRenderingCompositor::engines_setup( const bool reset_count )
 {
-    if ( this->removeObject( registered_object ) )
+    const size_t size = m_scene->IDManager()->size();
+    for ( size_t i = 0; i < size; i++ )
     {
-        delete registered_object;
-        return true;
-    }
-
-    return false;
-}
-
-kvs::ObjectBase* StochasticRenderingCompositor::object( const std::string& object_name )
-{
-    // Find the object.
-    kvs::ObjectBase* registered_object = NULL;
-    std::vector<kvs::ObjectBase*>::iterator object = m_registered_objects.begin();
-    std::vector<kvs::ObjectBase*>::iterator last = m_registered_objects.end();
-    while ( object != last )
-    {
-        if ( (*object)->name() == object_name )
+        kvs::IDManager::IDPair id_pair = (*m_scene->IDManager())[i];
+        kvs::RendererBase* renderer = m_scene->rendererManager()->renderer( id_pair.second );
+        if ( kvs::StochasticRendererBase* stochastic_renderer = dynamic_cast<kvs::StochasticRendererBase*>( renderer ) )
         {
-            registered_object = *object;
-            break;
+            stochastic_renderer->engine().setup( reset_count );
         }
-        ++object;
     }
-
-    return registered_object;
-}
-
-kvs::StochasticRenderingEngine* StochasticRenderingCompositor::engine( const std::string& object_name )
-{
-    return m_renderer->find_engine( object_name );
-}
-
-kvs::StochasticRenderingEngine* StochasticRenderingCompositor::engine( const kvs::ObjectBase* object )
-{
-    return m_renderer->find_engine( object );
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Clears the ensemble buffers.
+ *  @brief  Calls the draw method of each engine.
  */
 /*===========================================================================*/
-void StochasticRenderingCompositor::clearEnsembleBuffer( void )
+void StochasticRenderingCompositor::engines_draw()
 {
-    m_renderer->clearEnsembleBuffer();
-}
+    kvs::Camera* camera = m_scene->camera();
+    kvs::Light* light = m_scene->light();
 
-void StochasticRenderingCompositor::updateEngine()
-{
-    m_renderer->update_engine();
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a repetition level
- *  @param  repetition_level [in] repetition level
- */
-/*===========================================================================*/
-void StochasticRenderingCompositor::setRepetitionLevel( const size_t repetition_level )
-{
-    m_renderer->setRepetitionLevel( repetition_level );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Enables level-of-detail control.
- *  @param  coarse_level [in] coarse rendering level
- */
-/*===========================================================================*/
-void StochasticRenderingCompositor::enableLODControl( const size_t coarse_level )
-{
-    m_renderer->enableLODControl( coarse_level );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Disable level-of-detail control.
- */
-/*===========================================================================*/
-void StochasticRenderingCompositor::disableLODControl( void )
-{
-    m_renderer->disableLODControl();
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Enables exact depth testing.
- */
-/*===========================================================================*/
-void StochasticRenderingCompositor::enableExactDepthTesting( void )
-{
-    m_renderer->enable_exact_depth_testing();
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Disables exact depth testing.
- */
-/*===========================================================================*/
-void StochasticRenderingCompositor::disableExactDepthTesting( void )
-{
-    m_renderer->disable_exact_depth_testing();
+    const size_t size = m_scene->IDManager()->size();
+    for ( size_t i = 0; i < size; i++ )
+    {
+        kvs::IDManager::IDPair id_pair = (*m_scene->IDManager())[i];
+        kvs::ObjectBase* object = m_scene->objectManager()->object( id_pair.first );
+        kvs::RendererBase* renderer = m_scene->rendererManager()->renderer( id_pair.second );
+        if ( kvs::StochasticRendererBase* stochastic_renderer = dynamic_cast<kvs::StochasticRendererBase*>( renderer ) )
+        {
+            if ( object->isShown() )
+            {
+                KVS_GL_CALL( glPushMatrix() );
+                object->transform( m_scene->objectManager()->objectCenter(), m_scene->objectManager()->normalize() );
+                stochastic_renderer->engine().draw( object, camera, light );
+                KVS_GL_CALL( glPopMatrix() );
+            }
+        }
+    }
 }
 
 } // end of namespace kvs

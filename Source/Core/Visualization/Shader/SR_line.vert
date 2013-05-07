@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   line.vert
- *  @author Jun Nishimura
+ *  @author Jun Nishimura, Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -12,24 +12,20 @@
  *  $Id$
  */
 /*****************************************************************************/
+// Input.
+attribute vec2 random_index;
+
+// Output.
 varying vec3 position;
-varying vec2 id;
-
-#if defined( ENABLE_EXACT_DEPTH_TESTING )
+varying vec2 index;
 varying float depth;
-#endif
 
-attribute vec2 identifier;
-
-void main( void )
+void main()
 {
-    gl_Position = ftransform();
+    gl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * gl_Vertex;
     gl_FrontColor = gl_Color;
 
     position = ( gl_ModelViewMatrix * gl_Vertex ).xyz;
-    id = identifier;
-
-#if defined( ENABLE_EXACT_DEPTH_TESTING )
+    index = random_index;
     depth = gl_Position.z / gl_Position.w;
-#endif
 }

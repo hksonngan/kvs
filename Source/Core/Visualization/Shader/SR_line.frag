@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   line.frag
- *  @author Jun Nishimura
+ *  @author Jun Nishimura, Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -12,39 +12,32 @@
  *  $Id$
  */
 /*****************************************************************************/
+// Input.
 varying vec3 position;
-varying vec2 id;
-
-#if defined( ENABLE_EXACT_DEPTH_TESTING )
+varying vec2 index;
 varying float depth;
-#endif
 
+// Uniform.
 uniform sampler2D random_texture;
-
-uniform vec2 screen_scale;
-uniform vec2 screen_scale_inv;
-
 uniform float random_texture_size_inv;
 uniform vec2 random_offset;
-
 uniform float opacity;
 
-void main( void )
+vec2 RandomIndex( in vec2 p )
+{
+    float x = float( int( index.x ) * 73 );
+    float y = float( int( index.y ) * 31 );
+    return ( vec2( x, y ) + random_offset + p ) * random_texture_size_inv;
+}
+
+void main()
 {
     if ( opacity == 0.0 ) { discard; return; }
 
-    if ( opacity < 0.99999 )
-    {
-        vec2 random_position = ( vec2( float( int( id.x ) * 73 ), float( int( id.y ) * 31 ) ) 
-                    + random_offset + gl_FragCoord.xy ) * random_texture_size_inv;
-
-        float randf = texture2D( random_texture, random_position ).a;
-        if ( randf > opacity ) { discard; return; }
-    }
+    // Stochastic color assignment.
+    float R = texture2D( random_texture, RandomIndex( gl_FragCoord.xy ) ).a;
+    if ( R > opacity ) { discard; return; }
 
     gl_FragColor = vec4( gl_Color.rgb, 1.0 );
-
-#if defined( ENABLE_EXACT_DEPTH_TESTING )
     gl_FragDepth = depth;
-#endif
 }

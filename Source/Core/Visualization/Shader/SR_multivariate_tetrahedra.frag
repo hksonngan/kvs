@@ -16,8 +16,7 @@
 
 varying vec3 position;
 varying vec3 normal;
-varying vec2 id;
-
+varying vec2 random_index;
 varying vec2 scalar_front;
 varying vec2 scalar_back;
 varying float distance;
@@ -25,20 +24,16 @@ varying float distance;
 uniform sampler3D preintegration_texture0;
 uniform sampler3D preintegration_texture1;
 uniform sampler2D random_texture;
-
 uniform vec2 screen_scale;
 uniform vec2 screen_scale_inv;
 uniform vec2 preintegration_scale_offset;
-
 uniform float random_texture_size_inv;
 uniform vec2 random_offset;
-
 uniform int start_volume;
 uniform int end_volume;
-
 uniform Shading shading;
 
-void main( void )
+void main()
 {
     int accept = 0;
     vec3 accum_color = vec3( 0.0, 0.0, 0.0 );
@@ -59,8 +54,8 @@ void main( void )
 
         if ( lutdata.a == 0.0 ) continue;
 
-        vec2 random_position = ( vec2( float( int( id.x ) * 73 ), float( int( id.y ) * 31 ) ) 
-                    + ( 1.0 + float(i) * 2.6 ) * random_offset + gl_FragCoord.xy ) * random_texture_size_inv;
+        vec2 random_position = ( vec2( float( int( random_index.x ) * 73 ), float( int( random_index.y ) * 31 ) ) 
+                                 + random_offset + gl_FragCoord.xy ) * random_texture_size_inv;
 
         float randf = texture2D( random_texture, random_position ).x;
         if ( randf > lutdata.a ) continue;
