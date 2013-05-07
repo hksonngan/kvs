@@ -22,9 +22,9 @@ namespace
 class RendererDeleter
 {
 public:
-    RendererDeleter()
+    RendererDeleter( bool auto_delete = true )
     {
-        m_auto_delete = true;
+        m_auto_delete = auto_delete;
     }
 
     void operator ()( kvs::RendererBase* ren )
@@ -87,7 +87,16 @@ RendererManager::~RendererManager()
 /*==========================================================================*/
 int RendererManager::insert( kvs::RendererBase* renderer )
 {
-    return this->insert( RendererSP( renderer, ::RendererDeleter() ) );
+    bool auto_delete = true;
+    Iterator itr = m_renderer_list.begin();
+    Iterator last = m_renderer_list.end();
+    while ( itr != last )
+    {
+        if ( itr->second.get() == renderer ) { auto_delete = false; break; }
+        ++itr;
+    }
+
+    return this->insert( RendererSP( renderer, ::RendererDeleter( auto_delete ) ) );
 }
 
 /*==========================================================================*/
