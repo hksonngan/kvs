@@ -53,7 +53,7 @@ public:
 
     const bool noGPU( void ) const;
 
-    const bool noZooming( void ) const;
+//    const bool noZooming( void ) const;
 
     const float ambient( void ) const;
 
@@ -62,8 +62,6 @@ public:
     const float specular( void ) const;
 
     const float shininess( void ) const;
-
-    const size_t subpixelLevel( void ) const;
 
     const size_t repetitionLevel( void ) const;
 

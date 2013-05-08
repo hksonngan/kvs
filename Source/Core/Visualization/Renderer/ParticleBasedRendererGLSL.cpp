@@ -1,6 +1,6 @@
 /*****************************************************************************/
 /**
- *  @file   ParticleBasedRendererKU.cpp
+ *  @file   ParticleBasedRenderer.cpp
  *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
@@ -12,7 +12,7 @@
  *  $Id$
  */
 /*****************************************************************************/
-#include "ParticleBasedRenderer.h"
+#include "ParticleBasedRendererGLSL.h"
 #include <cmath>
 #include <kvs/OpenGL>
 #include <kvs/PointObject>
@@ -66,9 +66,6 @@ namespace kvs
 {
 
 namespace glsl
-{
-
-namespace ku
 {
 
 /*===========================================================================*/
@@ -386,8 +383,6 @@ void ParticleBasedRenderer::Engine::create_buffer_object( const kvs::PointObject
         m_vbo[i].unbind();
     }
 }
-
-} // end of ku
 
 } // end of glsl
 

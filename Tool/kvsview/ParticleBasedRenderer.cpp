@@ -51,17 +51,14 @@ namespace
 
 /*===========================================================================*/
 /**
- *  @brief  Returns revised subpixel level.
- *  @param  subpixel_level [in] subpixel level
+ *  @brief  Returns subpixel level calculated from repetition level.
  *  @param  repetition_level [in] repetition level
- *  @return revised subpixel level
+ *  @return subpixel level
  */
 /*===========================================================================*/
-inline const size_t GetRevisedSubpixelLevel(
-    const size_t subpixel_level,
-    const size_t repetition_level )
+inline const size_t GetSubpixelLevel( const size_t repetition_level )
 {
-    return( static_cast<size_t>( subpixel_level * sqrtf( static_cast<float>(repetition_level) ) + 0.5f ) );
+    return( static_cast<size_t>( sqrtf( static_cast<float>( repetition_level ) ) + 0.5f ) );
 }
 
 } // end of namespace
@@ -84,14 +81,10 @@ namespace ParticleBasedRenderer
 template <typename Renderer>
 const void SetupRenderer(
     const kvsview::ParticleBasedRenderer::Argument& arg,
-    const kvs::TransferFunction& tfunc,
     Renderer* renderer )
 {
     // Renderer name.
     renderer->setName( ::RendererName );
-
-    // Transfer function.
-    renderer->setTransferFunction( tfunc );
 
     // Shading on/off.
     const bool noshading = arg.noShading();
@@ -141,14 +134,13 @@ const void SetupMapper(
     /* const */ kvs::glut::Screen& screen,
     Mapper* mapper )
 {
-    const size_t subpixel_level = arg.subpixelLevel();
     const size_t repetition_level = arg.repetitionLevel();
-    const size_t level = ::GetRevisedSubpixelLevel( subpixel_level, repetition_level );
+    const size_t subpixel_level = ::GetSubpixelLevel( repetition_level );
     const float step = 0.5f;
     const float depth = 0.0f;
     mapper->attachCamera( screen.scene()->camera() );
     mapper->setTransferFunction( tfunc );
-    mapper->setSubpixelLevel( level );
+    mapper->setSubpixelLevel( subpixel_level );
     mapper->setSamplingStep( step );
     mapper->setObjectDepth( depth );
 }
@@ -233,25 +225,22 @@ public:
         if ( m_arg->noGPU() )
         {
             kvs::ParticleBasedRenderer* renderer = new kvs::ParticleBasedRenderer();
-            kvsview::ParticleBasedRenderer::SetupRenderer( *m_arg, tfunc, renderer );
+            kvsview::ParticleBasedRenderer::SetupRenderer( *m_arg, renderer );
 
             // Subpixel level.
-            const size_t subpixel_level = m_arg->subpixelLevel();
             const size_t repetition_level = m_arg->repetitionLevel();
-            const size_t level = ::GetRevisedSubpixelLevel( subpixel_level, repetition_level );
-            renderer->setSubpixelLevel( level );
+            const size_t subpixel_level = ::GetSubpixelLevel( repetition_level );
+            renderer->setSubpixelLevel( subpixel_level );
 
             glut_screen->registerObject( object, renderer );
         }
         else
         {
             kvs::glsl::ParticleBasedRenderer* renderer = new kvs::glsl::ParticleBasedRenderer();
-            kvsview::ParticleBasedRenderer::SetupRenderer( *m_arg, tfunc, renderer );
+            kvsview::ParticleBasedRenderer::SetupRenderer( *m_arg, renderer );
 
-            // Subpixel level and repetition level.
-            const size_t subpixel_level = m_arg->subpixelLevel();
+            // repetition level.
             const size_t repetition_level = m_arg->repetitionLevel();
-            renderer->setSubpixelLevel( subpixel_level );
             renderer->setRepetitionLevel( repetition_level );
 
             if ( !m_arg->noLOD() ) renderer->enableLODControl();
@@ -349,7 +338,6 @@ Argument::Argument( int argc, char** argv ):
 {
     // Parameters for the ParticleBasedRenderer class.
     addOption( kvsview::ParticleBasedRenderer::CommandName, kvsview::ParticleBasedRenderer::Description, 0 );
-    addOption( "s", "Subpixel level. (default: 1)", 1, false );
     addOption( "r", "Repetition level. (default: 1)", 1, false );
     addOption( "t", "Transfer function file. (optional: <filename>)", 1, false );
     addOption( "T", "Transfer function file with range adjustment. (optional: <filename>)", 1, false );
@@ -433,10 +421,10 @@ const bool Argument::noGPU( void ) const
     return( this->hasOption("nogpu") );
 }
 
-const bool Argument::noZooming( void ) const
-{
-    return( this->hasOption("nozooming") );
-}
+//const bool Argument::noZooming( void ) const
+//{
+//    return( this->hasOption("nozooming") );
+//}
 
 /*===========================================================================*/
 /**
@@ -491,20 +479,6 @@ const float Argument::shininess( void ) const
     const float default_value = 100.0f;
 
     if ( this->hasOption("n") ) return( this->optionValue<float>("n") );
-    else return( default_value );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the subpixle level.
- *  @return subpixel level
- */
-/*===========================================================================*/
-const size_t Argument::subpixelLevel( void ) const
-{
-    const size_t default_value = 1;
-
-    if ( this->hasOption("s") ) return( this->optionValue<size_t>("s") );
     else return( default_value );
 }
 
@@ -705,13 +679,12 @@ const bool Main::exec( void )
     {
         kvs::PipelineModule renderer( new kvs::ParticleBasedRenderer );
         kvs::ParticleBasedRenderer* prenderer = renderer.get<kvs::ParticleBasedRenderer>();
-        kvsview::ParticleBasedRenderer::SetupRenderer( arg, tfunc, prenderer );
+        kvsview::ParticleBasedRenderer::SetupRenderer( arg, prenderer );
 
         // Subpixel level.
-        const size_t subpixel_level = arg.subpixelLevel();
         const size_t repetition_level = arg.repetitionLevel();
-        const size_t level = ::GetRevisedSubpixelLevel( subpixel_level, repetition_level );
-        prenderer->setSubpixelLevel( level );
+        const size_t subpixel_level = ::GetSubpixelLevel( repetition_level );
+        prenderer->setSubpixelLevel( subpixel_level );
 
         pipe.connect( renderer );
     }
@@ -719,19 +692,17 @@ const bool Main::exec( void )
     {
         kvs::PipelineModule renderer( new kvs::glsl::ParticleBasedRenderer );
         kvs::glsl::ParticleBasedRenderer* prenderer = renderer.get<kvs::glsl::ParticleBasedRenderer>();
-        kvsview::ParticleBasedRenderer::SetupRenderer( arg, tfunc, prenderer );
+        kvsview::ParticleBasedRenderer::SetupRenderer( arg, prenderer );
 
-        // Subpixel level and repetition level.
-        const size_t subpixel_level = arg.subpixelLevel();
+        // Repetition level.
         const size_t repetition_level = arg.repetitionLevel();
-        prenderer->setSubpixelLevel( subpixel_level );
         prenderer->setRepetitionLevel( repetition_level );
 
         if ( !arg.noLOD() ) prenderer->enableLODControl();
         else prenderer->disableLODControl();
 
-        if ( !arg.noZooming() ) prenderer->enableZooming();
-        else prenderer->disableZooming();
+//        if ( !arg.noZooming() ) prenderer->enableZooming();
+//        else prenderer->disableZooming();
 
         pipe.connect( renderer );
     }
