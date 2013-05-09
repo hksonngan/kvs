@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file Screen.h
+ *  @file   Screen.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -31,16 +32,15 @@ class RendererBase;
 class VisualizationPipeline;
 class EventHandler;
 
-/*KVS_DEPRECATED*/
-class TimerEventListener;
-class PaintEventListener;
-class ResizeEventListener;
-class MousePressEventListener;
-class MouseMoveEventListener;
-class MouseReleaseEventListener;
-class MouseDoubleClickEventListener;
-class WheelEventListener;
-class KeyPressEventListener;
+/*KVS_DEPRECATED*/ class TimerEventListener;
+/*KVS_DEPRECATED*/ class PaintEventListener;
+/*KVS_DEPRECATED*/ class ResizeEventListener;
+/*KVS_DEPRECATED*/ class MousePressEventListener;
+/*KVS_DEPRECATED*/ class MouseMoveEventListener;
+/*KVS_DEPRECATED*/ class MouseReleaseEventListener;
+/*KVS_DEPRECATED*/ class MouseDoubleClickEventListener;
+/*KVS_DEPRECATED*/ class WheelEventListener;
+/*KVS_DEPRECATED*/ class KeyPressEventListener;
 
 namespace glut
 {
@@ -48,6 +48,11 @@ namespace glut
 class Application;
 class Timer;
 
+/*===========================================================================*/
+/**
+ *  @brief  GLUT screen class.
+ */
+/*===========================================================================*/
 class Screen : public kvs::glut::ScreenBase
 {
 public:
@@ -57,13 +62,13 @@ public:
 
 private:
 
-    bool m_enable_default_paint_event;
-    bool m_enable_default_resize_event;
-    bool m_enable_default_mouse_press_event;
-    bool m_enable_default_mouse_move_event;
-    bool m_enable_default_mouse_release_event;
-    bool m_enable_default_wheel_event;
-    bool m_enable_default_key_press_event;
+    bool m_enable_default_paint_event; ///< flag for default paint event
+    bool m_enable_default_resize_event; ///< flag for default resize event
+    bool m_enable_default_mouse_press_event; ///< flag for default mouse press event
+    bool m_enable_default_mouse_move_event; ///< flag for default mouse move event
+    bool m_enable_default_mouse_release_event; ///< flag for default mouse release event
+    bool m_enable_default_wheel_event; ///< flag for default wheel event
+    bool m_enable_default_key_press_event; ///< flag for default key press event
     kvs::Scene* m_scene; ///< default scene
     kvs::glut::Timer* m_idle_mouse_timer; ///< timer for idle mouse event
     kvs::TimerEventListener* m_idle_mouse_event_listener; ///< idle mouse event listener

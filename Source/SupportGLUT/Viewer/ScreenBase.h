@@ -58,7 +58,7 @@ public:
     ScreenBase( kvs::glut::Application* application );
     virtual ~ScreenBase();
 
-    int id() const;
+    int id() const { return m_id; }
 
     virtual void create();
     virtual void show();

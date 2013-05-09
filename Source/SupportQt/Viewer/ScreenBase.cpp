@@ -31,6 +31,13 @@ namespace kvs
 namespace qt
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new ScreenBase class.
+ *  @param  application [in] pointer to the application
+ *  @param  parent [in] parent widget
+ */
+/*===========================================================================*/
 ScreenBase::ScreenBase( kvs::qt::Application* application, QWidget* parent ):
     QGLWidget( parent ),
     m_id( -1 ),
@@ -46,6 +53,11 @@ ScreenBase::ScreenBase( kvs::qt::Application* application, QWidget* parent ):
     m_wheel_event = new kvs::WheelEvent();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Destroys the ScreenBase class.
+ */
+/*===========================================================================*/
 ScreenBase::~ScreenBase()
 {
     delete m_mouse_event;
@@ -53,11 +65,11 @@ ScreenBase::~ScreenBase()
     delete m_wheel_event;
 }
 
-int ScreenBase::id() const
-{
-    return m_id;
-}
-
+/*===========================================================================*/
+/**
+ *  @brief  Creates a screen.
+ */
+/*===========================================================================*/
 void ScreenBase::create()
 {
     KVS_ASSERT( m_id == -1 );
@@ -115,7 +127,7 @@ void ScreenBase::show()
  *  @brief  Shows the window as full-screen.
  */
 /*===========================================================================*/
-void ScreenBase::showFullScreen( void )
+void ScreenBase::showFullScreen()
 {
     if ( m_is_fullscreen ) return;
     m_is_fullscreen = true;
@@ -132,7 +144,7 @@ void ScreenBase::showFullScreen( void )
  *  @brief  Shows the window as normal screen.
  */
 /*===========================================================================*/
-void ScreenBase::showNormal( void )
+void ScreenBase::showNormal()
 {
     if ( !m_is_fullscreen ) return;
     m_is_fullscreen = false;
@@ -147,7 +159,7 @@ void ScreenBase::showNormal( void )
  *  @brief  Hides the window.
  */
 /*===========================================================================*/
-void ScreenBase::hide( void )
+void ScreenBase::hide()
 {
     QWidget::hide();
 }
@@ -157,7 +169,7 @@ void ScreenBase::hide( void )
  *  @brief  Pops up the window.
  */
 /*===========================================================================*/
-void ScreenBase::popUp( void )
+void ScreenBase::popUp()
 {
 #if ( KVS_QT_VERSION >= 4 )
     QWidget::activateWindow();
@@ -171,7 +183,7 @@ void ScreenBase::popUp( void )
  *  @brief  Pushes down the window.
  */
 /*===========================================================================*/
-void ScreenBase::pushDown( void )
+void ScreenBase::pushDown()
 {
     QWidget::clearFocus();
 }
@@ -181,7 +193,7 @@ void ScreenBase::pushDown( void )
  *  @brief  Redraws the window.
  */
 /*===========================================================================*/
-void ScreenBase::redraw( void )
+void ScreenBase::redraw()
 {
     QGLWidget::updateGL();
 }
@@ -214,8 +226,8 @@ void ScreenBase::enable(){}
 void ScreenBase::disable(){}
 void ScreenBase::reset(){}
 
-void ScreenBase::initializeEvent( void ){}
-void ScreenBase::paintEvent( void ){}
+void ScreenBase::initializeEvent(){}
+void ScreenBase::paintEvent(){}
 void ScreenBase::resizeEvent( int, int ){}
 void ScreenBase::mousePressEvent( kvs::MouseEvent* ){}
 void ScreenBase::mouseMoveEvent( kvs::MouseEvent* ){}
@@ -229,7 +241,7 @@ void ScreenBase::keyPressEvent( kvs::KeyEvent* ){}
  *  @brief  Initialize event for Qt.
  */
 /*===========================================================================*/
-void ScreenBase::initializeGL( void )
+void ScreenBase::initializeGL()
 {
     this->initializeEvent();
 }
@@ -239,7 +251,7 @@ void ScreenBase::initializeGL( void )
  *  @brief  Paint event for Qt.
  */
 /*===========================================================================*/
-void ScreenBase::paintGL( void )
+void ScreenBase::paintGL()
 {
     this->paintEvent();
 }

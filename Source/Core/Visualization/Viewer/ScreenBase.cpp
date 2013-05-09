@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file ScreenBase.cpp
+ *  @file   ScreenBase.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -46,143 +47,11 @@ ScreenBase::~ScreenBase()
 
 /*===========================================================================*/
 /**
- *  @brief  Returns the x coordinate value of the window position.
- *  @return x coordinate value of the window position
+ *  @brief  Adds an event to the event handler.
+ *  @param  event [in] pointer to an event
+ *  @param  name [in] event name
  */
 /*===========================================================================*/
-int ScreenBase::x() const
-{
-    return m_x;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the y coordinate value of the window position.
- *  @return y coordinate value of the window position
- */
-/*===========================================================================*/
-int ScreenBase::y() const
-{
-    return m_y;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the window width.
- *  @return window width
- */
-/*===========================================================================*/
-int ScreenBase::width() const
-{
-    return m_width;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the window height.
- *  @return window height
- */
-/*===========================================================================*/
-int ScreenBase::height() const
-{
-    return m_height;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the window title.
- *  @return window title
- */
-/*===========================================================================*/
-const std::string& ScreenBase::title() const
-{
-    return m_title;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the display format.
- */
-/*===========================================================================*/
-const kvs::DisplayFormat& ScreenBase::displayFormat() const
-{
-    return m_display_format;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the pointer to the event handler.
- *  @return pointer to the event handler
- */
-/*===========================================================================*/
-kvs::EventHandler* ScreenBase::eventHandler()
-{
-    return m_event_handler;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a window position.
- *  @param  x [in] x coordinate value of the window
- *  @param  y [in] y coordinate value of the window
- */
-/*===========================================================================*/
-void ScreenBase::setPosition( const int x, const int y )
-{
-    m_x = x;
-    m_y = y;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a window size.
- *  @param  width [in] window width
- *  @param  height [in] window height
- */
-/*===========================================================================*/
-void ScreenBase::setSize( const int width, const int height )
-{
-    m_width  = width;
-    m_height = height;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a window geometry (position and size).
- *  @param  x [in] x coordinate value of the window
- *  @param  y [in] y coordinate value of the window
- *  @param  width [in] window width
- *  @param  height [in] window height
- */
-/*===========================================================================*/
-void ScreenBase::setGeometry( const int x, const int y, const int width, const int height )
-{
-    this->setPosition( x, y );
-    this->setSize( width, height );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a window title.
- *  @param  title [in] window title
- */
-/*===========================================================================*/
-void ScreenBase::setTitle( const std::string& title )
-{
-    m_title = title;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a display format.
- *  @param  display_format [in] display format
- */
-/*===========================================================================*/
-void ScreenBase::setDisplayFormat( const kvs::DisplayFormat& display_format )
-{
-    m_display_format = display_format;
-}
-
 void ScreenBase::addEvent( kvs::EventListener* event, const std::string& name )
 {
     event->setScreen( this );
@@ -190,16 +59,29 @@ void ScreenBase::addEvent( kvs::EventListener* event, const std::string& name )
     m_event_handler->attach( event );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Removes the event from the event handler.
+ *  @param  event [in] pointer to the event
+ */
+/*===========================================================================*/
 void ScreenBase::removeEvent( const kvs::EventListener* event )
 {
     m_event_handler->detach( event );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Removes the event from the event handler.
+ *  @param  name [in] event name
+ */
+/*===========================================================================*/
 void ScreenBase::removeEvent( const std::string& name )
 {
     m_event_handler->detach( name );
 }
 
+/*
 void ScreenBase::create(){}
 void ScreenBase::show(){}
 void ScreenBase::showFullScreen(){}
@@ -213,5 +95,6 @@ bool ScreenBase::isFullScreen() const { return false; }
 void ScreenBase::enable(){}
 void ScreenBase::disable(){}
 void ScreenBase::reset(){}
+*/
 
 } // end of namespace kvs

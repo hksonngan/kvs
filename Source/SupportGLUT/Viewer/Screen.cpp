@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file Screen.cpp
+ *  @file   Screen.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -57,7 +58,7 @@ namespace
 /*===========================================================================*/
 class IdleMouseEvent : public kvs::TimerEventListener
 {
-    kvs::glut::Screen* m_screen;
+    kvs::glut::Screen* m_screen; ///< pointer to the screen (reference only)
 
 public:
 
@@ -105,6 +106,12 @@ Screen::~Screen()
     delete m_idle_mouse_timer;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the pointer to the scene.
+ *  @return pointer to the scene
+ */
+/*===========================================================================*/
 kvs::Scene* Screen::scene()
 {
     return m_scene;
@@ -134,7 +141,7 @@ void Screen::setSize( const int width, const int height )
     BaseClass::setSize( width, height );
 
     if ( m_scene->camera() ) m_scene->camera()->setWindowSize( width, height );
-    if ( m_scene->mouse()  ) m_scene->mouse()->setWindowSize( width, height );
+    if ( m_scene->mouse() ) m_scene->mouse()->setWindowSize( width, height );
 }
 
 /*===========================================================================*/
@@ -152,16 +159,35 @@ void Screen::setGeometry( const int x, const int y, const int width, const int h
     this->setSize( width, height );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets a background color.
+ *  @param  color [in] RGB color
+ */
+/*===========================================================================*/
 void Screen::setBackgroundColor( const kvs::RGBColor& color )
 {
     m_scene->background()->setColor( color );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets a control target.
+ *  @param  target [in] control target
+ */
+/*===========================================================================*/
 void Screen::setControlTarget( const ControlTarget target )
 {
     m_scene->controlTarget() = target;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets an event (disable defualt event correspond to the given event).
+ *  @param  event [in] pointer to an event
+ *  @param  name [in] event name
+ */
+/*===========================================================================*/
 void Screen::setEvent( kvs::EventListener* event, const std::string& name )
 {
     switch ( event->eventType() )
@@ -197,7 +223,7 @@ const std::pair<int,int> Screen::registerObject( kvs::ObjectBase* object, kvs::R
         if ( !pipeline.exec() )
         {
             kvsMessageError("Cannot create a renderer for the given object.");
-            return( std::pair<int,int>( -1, -1 ) );
+            return std::pair<int,int>( -1, -1 );
         }
 
         renderer = const_cast<kvs::RendererBase*>( pipeline.renderer() );
@@ -227,7 +253,7 @@ const std::pair<int,int> Screen::registerObject( kvs::ObjectBase* object, kvs::R
     // Insert the IDs into the ID manager.
     m_scene->IDManager()->insert( object_id, renderer_id );
 
-    return( std::pair<int,int>( object_id, renderer_id ) );
+    return std::pair<int,int>( object_id, renderer_id );
 }
 
 /*===========================================================================*/
@@ -252,11 +278,21 @@ const std::pair<int,int> Screen::registerObject( kvs::VisualizationPipeline* pip
     return( std::pair<int,int>( object_id, renderer_id ) );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Enables mosue operation.
+ */
+/*===========================================================================*/
 void Screen::enable()
 {
     m_scene->enableAllMove();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Disables mosue operation.
+ */
+/*===========================================================================*/
 void Screen::disable()
 {
     m_scene->disableAllMove();
@@ -424,17 +460,15 @@ void Screen::idleMouseEvent()
 /*===========================================================================*/
 void Screen::defaultPaintEvent()
 {
-    glMatrixMode( GL_MODELVIEW );
-    glLoadIdentity();
-    glPushMatrix();
+    kvs::OpenGL::WithPushedMatrix p( GL_MODELVIEW );
+    p.loadIdentity();
+    {
+        m_scene->paintFunction();
+        kvs::PaintEvent event;
+        BaseClass::eventHandler()->notify( &event );
+    }
 
-    m_scene->paintFunction();
-    kvs::PaintEvent event;
-    BaseClass::eventHandler()->notify( &event );
-
-    glPopMatrix();
-
-    glFlush();
+    kvs::OpenGL::Flush();
     glutSwapBuffers();
 }
 

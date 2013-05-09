@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file ScreenBase.h
+ *  @file   ScreenBase.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -35,6 +36,11 @@ namespace kvs
 
 class EventHandler;
 
+/*===========================================================================*/
+/**
+ *  @brief  Screen base class.
+ */
+/*===========================================================================*/
 class ScreenBase
 {
 private:
@@ -52,37 +58,37 @@ public:
     ScreenBase();
     virtual ~ScreenBase();
 
-    int x() const;
-    int y() const;
-    int width() const;
-    int height() const;
-    const std::string& title() const;
-    const kvs::DisplayFormat& displayFormat() const;
-    kvs::EventHandler* eventHandler();
+    int x() const { return m_x; }
+    int y() const { return m_y; }
+    int width() const { return m_width; }
+    int height() const { return m_height; }
+    const std::string& title() const { return m_title; }
+    const kvs::DisplayFormat& displayFormat() const { return m_display_format; }
+    kvs::EventHandler* eventHandler() { return m_event_handler; }
 
-    void setPosition( const int x, const int y );
-    void setSize( const int width, const int height );
-    void setGeometry( const int x, const int y, const int width, const int height );
-    void setTitle( const std::string& title );
-    void setDisplayFormat( const kvs::DisplayFormat& display_format );
+    void setPosition( const int x, const int y ) { m_x = x; m_y = y; }
+    void setSize( const int width, const int height ) { m_width = width; m_height = height; }
+    void setGeometry( const int x, const int y, const int width, const int height ) { m_x = x; m_y = y; m_width = width; m_height = height; }
+    void setTitle( const std::string& title ) { m_title = title; }
+    void setDisplayFormat( const kvs::DisplayFormat& display_format ) { m_display_format = display_format; }
 
     void addEvent( kvs::EventListener* event, const std::string& name = "" );
     void removeEvent( const kvs::EventListener* event );
     void removeEvent( const std::string& name );
 
-    virtual void create();
-    virtual void show();
-    virtual void hide();
-    virtual void showFullScreen();
-    virtual void showNormal();
-    virtual void popUp();
-    virtual void pushDown();
-    virtual void redraw();
-    virtual void resize( int width, int height );
-    virtual bool isFullScreen() const;
-    virtual void enable();
-    virtual void disable();
-    virtual void reset();
+    virtual void create() {}
+    virtual void show() {}
+    virtual void hide() {}
+    virtual void showFullScreen() {}
+    virtual void showNormal() {}
+    virtual void popUp() {}
+    virtual void pushDown() {}
+    virtual void redraw() {}
+    virtual void resize( int, int ) {}
+    virtual bool isFullScreen() const { return false; }
+    virtual void enable() {}
+    virtual void disable() {}
+    virtual void reset() {}
 
     KVS_DEPRECATED( void addInitializeEvent( kvs::InitializeEventListener* event ) ) { this->addEvent( event ); }
     KVS_DEPRECATED( void addPaintEvent( kvs::PaintEventListener* event ) ) { this->addEvent( event ); }

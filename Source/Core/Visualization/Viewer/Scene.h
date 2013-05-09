@@ -64,14 +64,14 @@ public:
     Scene();
     virtual ~Scene();
 
-    kvs::Camera* camera();
-    kvs::Light* light();
-    kvs::Mouse* mouse();
-    kvs::Background* background();
-    kvs::ObjectManager* objectManager();
-    kvs::RendererManager* rendererManager();
-    kvs::IDManager* IDManager();
-    ControlTarget& controlTarget();
+    kvs::Camera* camera() { return m_camera; }
+    kvs::Light* light() { return m_light; }
+    kvs::Mouse* mouse() { return m_mouse; }
+    kvs::Background* background() { return m_background; }
+    kvs::ObjectManager* objectManager() { return m_object_manager; }
+    kvs::RendererManager* rendererManager() { return m_renderer_manager; }
+    kvs::IDManager* IDManager() { return m_id_manager; }
+    ControlTarget& controlTarget() { return m_target; }
 
     void initializeFunction();
     void paintFunction();

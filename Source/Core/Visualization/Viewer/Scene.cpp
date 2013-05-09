@@ -28,6 +28,11 @@
 namespace kvs
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new Scene class.
+ */
+/*===========================================================================*/
 Scene::Scene():
     m_target( Scene::TargetObject ),
     m_enable_move_all( true ),
@@ -42,6 +47,11 @@ Scene::Scene():
     m_id_manager = new kvs::IDManager();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Destroys the Scene class.
+ */
+/*===========================================================================*/
 Scene::~Scene()
 {
     delete m_camera;
@@ -51,94 +61,6 @@ Scene::~Scene()
     delete m_object_manager;
     delete m_renderer_manager;
     delete m_id_manager;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the pointer to the camera.
- *  @return pointer to the camera
- */
-/*===========================================================================*/
-kvs::Camera* Scene::camera()
-{
-    return m_camera;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the pointer to the light.
- *  @return pointer to the light
- */
-/*===========================================================================*/
-kvs::Light* Scene::light()
-{
-    return m_light;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the pointer to the mouse.
- *  @return pointer to the mouse
- */
-/*===========================================================================*/
-kvs::Mouse* Scene::mouse()
-{
-    return m_mouse;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the pointer to the background class.
- *  @return pointer to the background class
- */
-/*===========================================================================*/
-kvs::Background* Scene::background()
-{
-    return m_background;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the pointer to the object manager.
- *  @return pointer to the object manager
- */
-/*===========================================================================*/
-kvs::ObjectManager* Scene::objectManager()
-{
-    return m_object_manager;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the pointer to the renderer manager.
- *  @return pointer to the renderer manager
- */
-/*===========================================================================*/
-kvs::RendererManager* Scene::rendererManager()
-{
-    return m_renderer_manager;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the pointer to the ID manager.
- *  @return pointer to the ID manager
- */
-/*===========================================================================*/
-kvs::IDManager* Scene::IDManager()
-{
-    return m_id_manager;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the control target.
- *  @return control target
- */
-/*===========================================================================*/
-Scene::ControlTarget& Scene::controlTarget()
-{
-    return m_target;
 }
 
 /*==========================================================================*/
@@ -181,10 +103,10 @@ void Scene::paintFunction()
 
             if ( object->isShown() )
             {
-                KVS_GL_CALL( glPushMatrix() );
+                kvs::OpenGL::PushMatrix();
                 object->transform( m_object_manager->objectCenter(), m_object_manager->normalize() );
                 renderer->exec( object, m_camera, m_light );
-                KVS_GL_CALL( glPopMatrix() );
+                kvs::OpenGL::PopMatrix();
             }
         }
     }
@@ -192,7 +114,7 @@ void Scene::paintFunction()
     {
         float array[16];
         m_object_manager->xform().toArray( array );
-        KVS_GL_CALL( glMultMatrixf( array ) );
+        kvs::OpenGL::MultMatrix( array );
     }
 }
 
@@ -206,7 +128,7 @@ void Scene::paintFunction()
 void Scene::resizeFunction( int width, int height )
 {
     // Update the viewport for OpenGL.
-    KVS_GL_CALL( glViewport( 0 , 0 , width , height ) );
+    kvs::OpenGL::SetViewport( 0, 0, width, height );
 
     // Update the window size for camera and mouse.
     m_camera->setWindowSize( width, height );
@@ -418,7 +340,7 @@ void Scene::updateCenterOfRotation()
         center = m_camera->lookAtInDevice();
         break;
     case TargetObject:
-        if( m_enable_move_all || !m_object_manager->hasObject() )
+        if ( m_enable_move_all || !m_object_manager->hasObject() )
         {
             center = m_object_manager->positionInDevice( m_camera );
         }

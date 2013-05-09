@@ -58,7 +58,7 @@ public:
     ScreenBase( kvs::qt::Application* application = 0, QWidget* parent = 0 );
     virtual ~ScreenBase();
 
-    int id() const;
+    int id() const { return m_id; }
 
     virtual void create();
     virtual void show();

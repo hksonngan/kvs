@@ -36,7 +36,7 @@ kvs::glut::ScreenBase* Context[ MaxNumberOfScreens ];
  *  @brief  Function that is called when the application is terminated.
  */
 /*===========================================================================*/
-void ExitFunction( void )
+void ExitFunction()
 {
     for ( size_t i = 0; i < MaxNumberOfScreens; i++)
     {
@@ -58,7 +58,7 @@ namespace glut
  *  @brief  Display function for glutDisplayFunc.
  */
 /*===========================================================================*/
-void DisplayFunction( void )
+void DisplayFunction()
 {
     const int id = glutGetWindow();
     ::Context[id]->paintEvent();
@@ -184,6 +184,12 @@ void SpecialKeyPressFunction( int key, int x, int y )
     ::Context[id]->keyPressEvent( ::Context[id]->m_key_event );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new ScreenBase class.
+ *  @param  application [in] pointer to the application
+ */
+/*===========================================================================*/
 ScreenBase::ScreenBase( kvs::glut::Application* application ):
     m_id( -1 ),
     m_mouse_event( 0 ),
@@ -200,6 +206,11 @@ ScreenBase::ScreenBase( kvs::glut::Application* application ):
     m_elapse_time_counter.start();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Destructs the ScreenBase class.
+ */
+/*===========================================================================*/
 ScreenBase::~ScreenBase()
 {
     delete m_mouse_event;
@@ -210,11 +221,11 @@ ScreenBase::~ScreenBase()
     glutDestroyWindow( m_id );
 }
 
-int ScreenBase::id() const
-{
-    return m_id;
-}
-
+/*===========================================================================*/
+/**
+ *  @brief  Creates the screen.
+ */
+/*===========================================================================*/
 void ScreenBase::create()
 {
     KVS_ASSERT( m_id == -1 );
@@ -292,7 +303,7 @@ void ScreenBase::show()
  *  @brief  Shows the window as full-screen.
  */
 /*===========================================================================*/
-void ScreenBase::showFullScreen( void )
+void ScreenBase::showFullScreen()
 {
     if ( m_is_fullscreen ) return;
     m_is_fullscreen = true;
@@ -309,7 +320,7 @@ void ScreenBase::showFullScreen( void )
  *  @brief  Shows the window as normal screen.
  */
 /*===========================================================================*/
-void ScreenBase::showNormal( void )
+void ScreenBase::showNormal()
 {
     if ( !m_is_fullscreen ) return;
     m_is_fullscreen = false;
@@ -324,7 +335,7 @@ void ScreenBase::showNormal( void )
  *  @brief  Hides the window.
  */
 /*===========================================================================*/
-void ScreenBase::hide( void )
+void ScreenBase::hide()
 {
     glutSetWindow( m_id );
     glutHideWindow();
@@ -335,7 +346,7 @@ void ScreenBase::hide( void )
  *  @brief  Pops up the window.
  */
 /*===========================================================================*/
-void ScreenBase::popUp( void )
+void ScreenBase::popUp()
 {
     glutPopWindow();
 }
@@ -345,7 +356,7 @@ void ScreenBase::popUp( void )
  *  @brief  Pushes down the window.
  */
 /*===========================================================================*/
-void ScreenBase::pushDown( void )
+void ScreenBase::pushDown()
 {
     glutPushWindow();
 }
@@ -355,7 +366,7 @@ void ScreenBase::pushDown( void )
  *  @brief  Redraws the window.
  */
 /*===========================================================================*/
-void ScreenBase::redraw( void )
+void ScreenBase::redraw()
 {
     glutSetWindow( m_id );
     glutPostRedisplay();
@@ -389,8 +400,8 @@ void ScreenBase::enable(){}
 void ScreenBase::disable(){}
 void ScreenBase::reset(){}
 
-void ScreenBase::initializeEvent( void ){}
-void ScreenBase::paintEvent( void ){}
+void ScreenBase::initializeEvent(){}
+void ScreenBase::paintEvent(){}
 void ScreenBase::resizeEvent( int, int ){}
 void ScreenBase::mousePressEvent( kvs::MouseEvent* ){}
 void ScreenBase::mouseMoveEvent( kvs::MouseEvent* ){}

@@ -144,16 +144,35 @@ void Screen::setGeometry( const int x, const int y, const int width, const int h
     this->setSize( width, height );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets a background color.
+ *  @param  color [in] RGB color
+ */
+/*===========================================================================*/
 void Screen::setBackgroundColor( const kvs::RGBColor& color )
 {
     m_scene->background()->setColor( color );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets a control target.
+ *  @param  target [in] control target
+ */
+/*===========================================================================*/
 void Screen::setControlTarget( const ControlTarget target )
 {
     m_scene->controlTarget() = target;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets an event.
+ *  @param  event [in] pointer to an event
+ *  @param  name [in] event name
+ */
+/*===========================================================================*/
 void Screen::setEvent( kvs::EventListener* event, const std::string& name )
 {
     switch ( event->eventType() )
@@ -244,11 +263,21 @@ const std::pair<int,int> Screen::registerObject( kvs::VisualizationPipeline* pip
     return( std::pair<int,int>( object_id, renderer_id ) );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Enables mouse operation.
+ */
+/*===========================================================================*/
 void Screen::enable()
 {
     m_scene->enableAllMove();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Disables mouse operation.
+ */
+/*===========================================================================*/
 void Screen::disable()
 {
     m_scene->disableAllMove();
@@ -269,7 +298,7 @@ void Screen::reset()
  *  @brief  Initialization event.
  */
 /*===========================================================================*/
-void Screen::initializeEvent( void )
+void Screen::initializeEvent()
 {
     QObject::connect( m_idle_mouse_timer, SIGNAL( timeout() ), this, SLOT( idleMouseEvent() ) );
     m_idle_mouse_timer->start( kvs::Mouse::SpinTime );
@@ -292,7 +321,7 @@ void Screen::initializeEvent( void )
  *  @brief  Paint event.
  */
 /*===========================================================================*/
-void Screen::paintEvent( void )
+void Screen::paintEvent()
 {
     if ( m_enable_default_paint_event ) this->defaultPaintEvent();
     else
@@ -395,7 +424,7 @@ void Screen::keyPressEvent( kvs::KeyEvent* event )
  *  @brief  Default idle mouse event.
  */
 /*===========================================================================*/
-void Screen::idleMouseEvent( void )
+void Screen::idleMouseEvent()
 {
     if ( m_scene->mouse()->idle() )
     {
@@ -414,20 +443,17 @@ void Screen::idleMouseEvent( void )
  *  @brief  Default paint event.
  */
 /*===========================================================================*/
-void Screen::defaultPaintEvent( void )
+void Screen::defaultPaintEvent()
 {
-    glMatrixMode( GL_MODELVIEW );
-    glLoadIdentity();
-    glPushMatrix();
+    kvs::OpenGL::WithPushedMatrix p( GL_MODELVIEW );
+    p.loadIdentity();
+    {
+        m_scene->paintFunction();
+        kvs::PaintEvent event;
+        BaseClass::eventHandler()->notify( &event );
+    }
 
-    m_scene->paintFunction();
-    kvs::PaintEvent event;
-    BaseClass::eventHandler()->notify( &event );
-
-    glPopMatrix();
-
-    glFlush();
-
+    kvs::OpenGL::Flush();
     /* There is no need to explicitly call 'QGLWidget::swapBuffers()', because
      * it is done automatically after paintGL() has been executed.
      */
