@@ -85,13 +85,13 @@ public:
 
 protected:
 
-    kvs::ValueArray<kvs::UInt8>& pixels();
+    kvs::ValueArray<kvs::UInt8>& pixelData();
     template <typename ImageDataType, typename Interpolator>
-    void resize( const size_t width, const size_t height, ImageDataType* image );
+    void resizeImage( const size_t width, const size_t height, ImageDataType* image );
 
 public:
     KVS_DEPRECATED( const kvs::ValueArray<kvs::UInt8>& data() const ) { return this->pixels(); }
-    KVS_DEPRECATED( kvs::ValueArray<kvs::UInt8>& data() ) { return this->pixels(); }
+    KVS_DEPRECATED( kvs::ValueArray<kvs::UInt8>& data() ) { return this->pixelData(); }
 };
 
 template <typename ImageDataType>

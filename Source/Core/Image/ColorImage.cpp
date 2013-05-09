@@ -138,7 +138,7 @@ kvs::RGBColor ColorImage::pixel( const size_t i, const size_t j ) const
 void ColorImage::setPixel( const size_t index, const kvs::RGBColor& pixel )
 {
     const size_t index3 = index * 3;
-    kvs::UInt8* pixels = BaseClass::pixels().data();
+    kvs::UInt8* pixels = BaseClass::pixelData().data();
     pixels[ index3 + 0 ] = pixel.r();
     pixels[ index3 + 1 ] = pixel.g();
     pixels[ index3 + 2 ] = pixel.b();
@@ -155,7 +155,7 @@ void ColorImage::setPixel( const size_t index, const kvs::RGBColor& pixel )
 void ColorImage::setPixel( const size_t i, const size_t j, const kvs::RGBColor& pixel )
 {
     const size_t index3 = ( BaseClass::width() * j + i ) * 3;
-    kvs::UInt8* pixels = BaseClass::pixels().data();
+    kvs::UInt8* pixels = BaseClass::pixelData().data();
     pixels[ index3 + 0 ] = pixel.r();
     pixels[ index3 + 1 ] = pixel.g();
     pixels[ index3 + 2 ] = pixel.b();
@@ -171,7 +171,7 @@ void ColorImage::scale( const double ratio )
 {
     const size_t width = static_cast<size_t>( BaseClass::width() * ratio );
     const size_t height = static_cast<size_t>( BaseClass::height() * ratio );
-    BaseClass::resize<ColorImage,ColorImage::Bilinear>( width, height, this );
+    BaseClass::resizeImage<ColorImage,ColorImage::Bilinear>( width, height, this );
 }
 
 /*===========================================================================*/
@@ -188,7 +188,7 @@ void ColorImage::scale( const double ratio, InterpolationMethod method )
 
     const size_t width = static_cast<size_t>( BaseClass::width() * ratio );
     const size_t height = static_cast<size_t>( BaseClass::height() * ratio );
-    BaseClass::resize<ColorImage,InterpolationMethod>( width, height, this );
+    BaseClass::resizeImage<ColorImage,InterpolationMethod>( width, height, this );
 }
 
 // Specialization.
@@ -207,7 +207,7 @@ void ColorImage::scale( const double ratio, ColorImage::Bilinear method );
 /*===========================================================================*/
 void ColorImage::resize( const size_t width, const size_t height )
 {
-    BaseClass::resize<ColorImage,ColorImage::Bilinear>( width, height, this );
+    BaseClass::resizeImage<ColorImage,ColorImage::Bilinear>( width, height, this );
 }
 
 /*===========================================================================*/
@@ -223,7 +223,7 @@ void ColorImage::resize( const size_t width, const size_t height, InterpolationM
 {
     kvs::IgnoreUnusedVariable( method );
 
-    BaseClass::resize<ColorImage,InterpolationMethod>( width, height, this );
+    BaseClass::resizeImage<ColorImage,InterpolationMethod>( width, height, this );
 }
 
 // Specialization.
@@ -394,7 +394,7 @@ bool ColorImage::read_image( const kvs::GrayImage& image )
         return( false );
     }
 
-    kvs::UInt8* pixels = BaseClass::pixels().data();
+    kvs::UInt8* pixels = BaseClass::pixelData().data();
     const kvs::UInt8* data = image.pixels().data();
     const size_t npixels = BaseClass::numberOfPixels();
     for ( size_t index = 0, index3 = 0; index < npixels; index++, index3 += 3 )
@@ -422,7 +422,7 @@ bool ColorImage::read_image( const kvs::BitImage& image )
         return( false );
     }
 
-    kvs::UInt8* pixels = BaseClass::pixels().data();
+    kvs::UInt8* pixels = BaseClass::pixelData().data();
     const size_t width = image.width();
     const size_t height = image.height();
     size_t index3 = 0;

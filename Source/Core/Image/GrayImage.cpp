@@ -271,7 +271,7 @@ GrayImage::GrayImage( const kvs::ColorImage& image )
 {
     BaseClass::create( image.width(), image.height(), kvs::ImageBase::Gray );
     GrayImage::MeanValue method;
-    method( image, BaseClass::pixels() );
+    method( image, BaseClass::pixelData() );
 }
 
 /*===========================================================================*/
@@ -321,7 +321,7 @@ kvs::UInt8 GrayImage::pixel( const size_t i, const size_t j ) const
 /*==========================================================================*/
 void GrayImage::setPixel( const size_t index, const kvs::UInt8 pixel )
 {
-    kvs::UInt8* pixels = BaseClass::pixels().data();
+    kvs::UInt8* pixels = BaseClass::pixelData().data();
     pixels[ index ] = pixel;
 }
 
@@ -335,7 +335,7 @@ void GrayImage::setPixel( const size_t index, const kvs::UInt8 pixel )
 /*==========================================================================*/
 void GrayImage::setPixel( const size_t i, const size_t j, const kvs::UInt8 pixel )
 {
-    kvs::UInt8* pixels = BaseClass::pixels().data();
+    kvs::UInt8* pixels = BaseClass::pixelData().data();
     pixels[ BaseClass::width() * j + i ] = pixel;
 }
 
@@ -349,7 +349,7 @@ void GrayImage::scale( const double ratio )
 {
     const size_t width = static_cast<size_t>( BaseClass::width() * ratio );
     const size_t height = static_cast<size_t>( BaseClass::height() * ratio );
-    BaseClass::resize<GrayImage,GrayImage::Bilinear>( width, height, this );
+    BaseClass::resizeImage<GrayImage,GrayImage::Bilinear>( width, height, this );
 }
 
 /*===========================================================================*/
@@ -366,7 +366,7 @@ void GrayImage::scale( const double ratio, InterpolationMethod method )
 
     const size_t width = static_cast<size_t>( this->width() * ratio );
     const size_t height = static_cast<size_t>( this->height() * ratio );
-    BaseClass::resize<GrayImage,InterpolationMethod>( width, height, this );
+    BaseClass::resizeImage<GrayImage,InterpolationMethod>( width, height, this );
 }
 
 // Specialization.
@@ -385,7 +385,7 @@ void GrayImage::scale( const double ratio, GrayImage::Bilinear method );
 /*===========================================================================*/
 void GrayImage::resize( const size_t width, const size_t height )
 {
-    BaseClass::resize<GrayImage,GrayImage::Bilinear>( width, height, this );
+    BaseClass::resizeImage<GrayImage,GrayImage::Bilinear>( width, height, this );
 }
 
 /*===========================================================================*/
@@ -400,7 +400,7 @@ template <typename InterpolationMethod>
 void GrayImage::resize( const size_t width, const size_t height, InterpolationMethod method )
 {
     kvs::IgnoreUnusedVariable( method );
-    BaseClass::resize<GrayImage,InterpolationMethod>( width, height, this );
+    BaseClass::resizeImage<GrayImage,InterpolationMethod>( width, height, this );
 }
 
 // Specialization.
@@ -559,7 +559,7 @@ bool GrayImage::read_image( const kvs::ColorImage& image )
     }
 
     GrayImage::MeanValue method;
-    method( image, BaseClass::pixels() );
+    method( image, BaseClass::pixelData() );
 
     return( true );
 }
@@ -578,7 +578,7 @@ bool GrayImage::read_image( const kvs::BitImage& image )
         return( false );
     }
 
-    kvs::UInt8* pixels = BaseClass::pixels().data();
+    kvs::UInt8* pixels = BaseClass::pixelData().data();
     const size_t width = image.width();
     const size_t height = image.height();
     size_t index = 0;

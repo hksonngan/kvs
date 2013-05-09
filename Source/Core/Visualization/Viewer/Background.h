@@ -16,6 +16,8 @@
 #define KVS__BACKGROUND_H_INCLUDE
 
 #include <kvs/RGBAColor>
+#include <kvs/ColorImage>
+#include <kvs/Texture2D>
 
 
 namespace kvs
@@ -32,34 +34,34 @@ public:
 
     enum Type
     {
-        MonoColor = 0,    ///< mono color background
-        TwoSideColor,     ///< gradation color background using two colors
+        MonoColor = 0, ///< mono color background
+        TwoSideColor, ///< gradation color background using two colors
         FourCornersColor, ///< gradation color background using four colors
-//        Image             ///< image background
+        Image ///< image background
     };
 
 protected:
 
     Type m_type;///< background type
+    bool m_image_changed; ///< flag for changing background image
     kvs::RGBAColor m_color[4]; ///< color on the corners
-//    MipmapTexture2D m_mipmap;   ///< mipmap texture
+    kvs::ColorImage m_image; ///< background image
+    kvs::Texture2D m_texture; ///< background image texture
 
 public:
 
     Background();
     Background( const kvs::RGBAColor& color );
     Background( const kvs::RGBAColor& color1, const kvs::RGBAColor& color2 );
-    Background( const kvs::RGBAColor& color0, const kvs::RGBAColor& color1,
-                const kvs::RGBAColor& color2, const kvs::RGBAColor& color3 );
+    Background( const kvs::RGBAColor& color0, const kvs::RGBAColor& color1, const kvs::RGBAColor& color2, const kvs::RGBAColor& color3 );
     virtual ~Background();
 
     Background& operator = ( const Background& bg );
 
     void setColor( const kvs::RGBAColor& color );
     void setColor( const kvs::RGBAColor& color0, const kvs::RGBAColor& color1 );
-    void setColor( const kvs::RGBAColor& color0, const kvs::RGBAColor& color1,
-                   const kvs::RGBAColor& color2, const kvs::RGBAColor& color3 );
-//    void setImage( const ImageObject& image );
+    void setColor( const kvs::RGBAColor& color0, const kvs::RGBAColor& color1, const kvs::RGBAColor& color2, const kvs::RGBAColor& color3 );
+    void setImage( const kvs::ColorImage& image );
 
     const kvs::RGBColor& color( size_t index = 0 ) const;
 
@@ -69,7 +71,7 @@ private:
 
     void apply_mono_color();
     void apply_gradation_color();
-//    void apply_image();
+    void apply_image();
 };
 
 } // end of namespace kvs

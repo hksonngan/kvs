@@ -146,6 +146,19 @@ void Background::setColor(
     m_color[3] = color3;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets an image data.
+ *  @param  image [in] input data
+ */
+/*===========================================================================*/
+void Background::setImage( const kvs::ColorImage& image )
+{
+    m_type = Background::Image;
+    m_image = image;
+    m_image_changed = true;
+}
+
 /*==========================================================================*/
 /**
  *  Get the background color.
@@ -159,22 +172,6 @@ const kvs::RGBColor& Background::color( size_t index ) const
 
 /*==========================================================================*/
 /**
- *  
- *  @param  image   
- */
-/*==========================================================================*/
-/*
-void Background::setImage( const ImageObject& image )
-{
-    m_type = BG_IMAGE;
-
-    m_mipmap.copy( image );
-    m_mipmap.bind();
-}
-*/
-
-/*==========================================================================*/
-/**
  *  Apply gradation color or image to the background.
  */
 /*==========================================================================*/
@@ -185,7 +182,7 @@ void Background::apply()
     case Background::MonoColor: this->apply_mono_color(); break;
     case Background::TwoSideColor: this->apply_gradation_color(); break;
     case Background::FourCornersColor: this->apply_gradation_color(); break;
-//    case BG_IMAGE:              apply_image();           break;
+    case Background::Image: this->apply_image(); break;
     default: break;
     }
     KVS_GL_CALL( glFlush() );
@@ -249,21 +246,32 @@ void Background::apply_gradation_color()
  *  Apply image to the background.
  */
 /*==========================================================================*/
-/*
 void Background::apply_image()
 {
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
     glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT );
 
-    // Disable OpenGL parameters.
     glDisable( GL_DEPTH_TEST );
-
-    // Enable OpenGL parameters.
+    glDisable( GL_TEXTURE_1D );
+    glDisable( GL_TEXTURE_3D );
     glEnable( GL_TEXTURE_2D );
 
+    if ( m_image_changed )
+    {
+        m_texture.release();
+        m_texture.setWrapS( GL_CLAMP_TO_EDGE );
+        m_texture.setWrapT( GL_CLAMP_TO_EDGE );
+        m_texture.setMagFilter( GL_LINEAR );
+        m_texture.setMinFilter( GL_LINEAR );
+        m_texture.setPixelFormat( GL_RGB8, GL_RGB, GL_UNSIGNED_BYTE );
+        m_texture.create( m_image.width(), m_image.height(), m_image.pixels().data() );
+        m_image_changed = false;
+        //m_image.release();
+    }
+
     // Bind the texture image as mipmap texture.
-    m_mipmap.bind();
+    m_texture.bind();
 
     // Texture mapping onto the background.
     glMatrixMode( GL_MODELVIEW );
@@ -290,13 +298,16 @@ void Background::apply_image()
     }
     glPopMatrix();
 
+    m_texture.unbind();
+
     glClearDepth(1000);
     glEnable( GL_DEPTH_TEST );
     glDisable( GL_TEXTURE_2D );
+    glEnable( GL_TEXTURE_1D );
+    glEnable( GL_TEXTURE_3D );
 
     glPopAttrib();
 }
-*/
 
 } // end of namespace kvs
 

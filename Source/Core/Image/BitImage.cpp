@@ -434,7 +434,7 @@ BitImage::BitImage( const kvs::GrayImage& image )
 {
     BaseClass::create( image.width(), image.height(), kvs::ImageBase::Bit );
     BitImage::PTile method;
-    method( image, BaseClass::pixels() );
+    method( image, BaseClass::pixelData() );
 }
 
 /*===========================================================================*/
@@ -552,7 +552,7 @@ void BitImage::fill( const bool bit )
 {
     const kvs::UInt8 mask = ( bit ) ? ( ::SetBitMask[8] ) : ( ::ResetBitMask[8] );
 
-    kvs::UInt8* pixels = BaseClass::pixels().data();
+    kvs::UInt8* pixels = BaseClass::pixelData().data();
     for( size_t j = 0; j < BaseClass::height(); j++ )
     {
         const size_t line_head = j * BaseClass::bytesPerLine();
@@ -585,7 +585,7 @@ void BitImage::invert( const size_t index )
 /*===========================================================================*/
 void BitImage::invert( const size_t i, const size_t j )
 {
-    kvs::UInt8* pixels = BaseClass::pixels().data();
+    kvs::UInt8* pixels = BaseClass::pixelData().data();
     pixels[ j * BaseClass::bytesPerLine() + ( i >> 3 ) ] ^= ::SetBitMask[ i & 7 ];
 }
 
@@ -598,7 +598,7 @@ void BitImage::invert()
 {
     const size_t height = BaseClass::height();
     const size_t bpl = BaseClass::bytesPerLine();
-    kvs::UInt8* pixels = BaseClass::pixels().data();
+    kvs::UInt8* pixels = BaseClass::pixelData().data();
     for( size_t j = 0; j < height; j++ )
     {
         const size_t line_head = j * bpl;
@@ -633,7 +633,7 @@ bool BitImage::read( const std::string& filename )
         }
 
         BitImage::PTile method;
-        method( image, BaseClass::pixels() );
+        method( image, BaseClass::pixelData() );
 
         return( true );
     }
@@ -704,7 +704,7 @@ bool BitImage::write( const std::string& filename )
 /*===========================================================================*/
 void BitImage::set_bit( const size_t i, const size_t j )
 {
-    kvs::UInt8* pixels = BaseClass::pixels().data();
+    kvs::UInt8* pixels = BaseClass::pixelData().data();
     pixels[ j * BaseClass::bytesPerLine() +( i >> 3 ) ] |= ::SetBitMask[ i & 7 ];
 }
 
@@ -717,7 +717,7 @@ void BitImage::set_bit( const size_t i, const size_t j )
 /*===========================================================================*/
 void BitImage::reset_bit( const size_t i, const size_t j )
 {
-    kvs::UInt8* pixels = BaseClass::pixels().data();
+    kvs::UInt8* pixels = BaseClass::pixelData().data();
     pixels[ j * BaseClass::bytesPerLine() + ( i >> 3 ) ] &= ::ResetBitMask[ i & 7 ];
 }
 

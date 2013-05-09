@@ -112,7 +112,7 @@ template <typename GrayScalingMethod>
 inline GrayImage::GrayImage( const kvs::ColorImage& image, GrayScalingMethod method )
 {
     BaseClass::create( image.width(), image.height(), kvs::ImageBase::Gray );
-    method( image, BaseClass::pixels() );
+    method( image, BaseClass::pixelData() );
 }
 
 } // end of namespace kvs

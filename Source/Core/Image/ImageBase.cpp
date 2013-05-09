@@ -250,7 +250,7 @@ void ImageBase::copy( const ImageBase& image )
  *  Get the pointer to the pixel data.
  */
 /*==========================================================================*/
-kvs::ValueArray<kvs::UInt8>& ImageBase::pixels()
+kvs::ValueArray<kvs::UInt8>& ImageBase::pixelData()
 {
     return( m_pixels );
 }
@@ -333,7 +333,7 @@ bool ImageBase::create(
 }
 
 template <typename ImageDataType, typename Interpolator>
-void ImageBase::resize( const size_t width, const size_t height, ImageDataType* image )
+void ImageBase::resizeImage( const size_t width, const size_t height, ImageDataType* image )
 {
     // Resized image.
     ImageDataType resized_image( width, height );
@@ -364,25 +364,25 @@ void ImageBase::resize( const size_t width, const size_t height, ImageDataType* 
 
 // Specialization.
 template
-void ImageBase::resize<kvs::GrayImage,ImageBase::NearestNeighborInterpolatorGray>(
+void ImageBase::resizeImage<kvs::GrayImage,ImageBase::NearestNeighborInterpolatorGray>(
     const size_t width,
     const size_t height,
     kvs::GrayImage* image );
 
 template
-void ImageBase::resize<kvs::ColorImage,ImageBase::NearestNeighborInterpolatorColor>(
+void ImageBase::resizeImage<kvs::ColorImage,ImageBase::NearestNeighborInterpolatorColor>(
     const size_t  width,
     const size_t  height,
     kvs::ColorImage* image );
 
 template
-void ImageBase::resize<kvs::GrayImage,ImageBase::BilinearInterpolatorGray>(
+void ImageBase::resizeImage<kvs::GrayImage,ImageBase::BilinearInterpolatorGray>(
     const size_t width,
     const size_t height,
     kvs::GrayImage* image );
 
 template
-void ImageBase::resize<kvs::ColorImage,ImageBase::BilinearInterpolatorColor>(
+void ImageBase::resizeImage<kvs::ColorImage,ImageBase::BilinearInterpolatorColor>(
     const size_t width,
     const size_t height,
     kvs::ColorImage* image );

@@ -122,7 +122,7 @@ template <typename BinarizationMethod>
 inline BitImage::BitImage( const kvs::GrayImage& image, BinarizationMethod method )
 {
     BaseClass::create( image.width(), image.height(), kvs::ImageBase::Bit );
-    method( image, BaseClass::pixels() );
+    method( image, BaseClass::pixelData() );
 }
 
 } // end of namespace kvs

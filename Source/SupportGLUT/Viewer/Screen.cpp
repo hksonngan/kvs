@@ -170,6 +170,22 @@ void Screen::setBackgroundColor( const kvs::RGBColor& color )
     m_scene->background()->setColor( color );
 }
 
+void Screen::setBackgroundColor( const kvs::RGBColor& color1, const kvs::RGBColor& color2 )
+{
+    m_scene->background()->setColor( color1, color2 );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a background image.
+ *  @param  image [in] RGB image
+ */
+/*===========================================================================*/
+void Screen::setBackgroundImage( const kvs::ColorImage& image )
+{
+    m_scene->background()->setImage( image );
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Sets a control target.
