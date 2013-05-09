@@ -18,6 +18,8 @@
 #include "ScreenBase.h"
 #include <kvs/Scene>
 #include <kvs/Mouse>
+#include <kvs/RGBColor>
+#include <kvs/ColorImage>
 #include <kvs/qt/Timer>
 #include <kvs/Deprecated>
 #include <list>
@@ -83,6 +85,8 @@ public:
     void setSize( const int width, const int height );
     void setGeometry( const int x, const int y, const int width, const int height );
     void setBackgroundColor( const kvs::RGBColor& color );
+    void setBackgroundColor( const kvs::RGBColor& color1, const kvs::RGBColor& color2 );
+    void setBackgroundImage( const kvs::ColorImage& image );
     void setControlTarget( const ControlTarget target );
     void setEvent( kvs::EventListener* event, const std::string& name = "" );
 
