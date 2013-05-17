@@ -201,7 +201,8 @@ void FrameBuffer::read(
     void**       pixels,
     const GLenum buffer )
 {
-    this->read( 0, 0, width, height, m_format, m_type, pixels, buffer );
+//    this->read( 0, 0, width, height, m_format, m_type, pixels, buffer );
+    this->readPixels( 0, 0, width, height, pixels, buffer );
 }
 
 /*==========================================================================*/
@@ -223,7 +224,8 @@ void FrameBuffer::read(
     void**       pixels,
     const GLenum buffer )
 {
-    this->read( x, y, width, height, m_format, m_type, pixels, buffer );
+//    this->read( x, y, width, height, m_format, m_type, pixels, buffer );
+    this->readPixels( x, y, width, height, pixels, buffer );
 }
 
 /*==========================================================================*/
@@ -284,7 +286,8 @@ void FrameBuffer::draw(
     const int x = viewport[0];
     const int y = viewport[1];
 
-    this->draw( x, y, width, height, m_format, m_type, viewport, pixels, buffer );
+//    this->draw( x, y, width, height, m_format, m_type, viewport, pixels, buffer );
+    this->drawPixels( x, y, width, height, pixels, buffer );
 }
 
 /*==========================================================================*/
@@ -307,7 +310,8 @@ void FrameBuffer::draw(
     const int x = viewport[0];
     const int y = viewport[1];
 
-    this->draw( x, y, width, height, m_format, m_type, viewport, pixels, buffer );
+//    this->draw( x, y, width, height, m_format, m_type, viewport, pixels, buffer );
+    this->drawPixels( x, y, width, height, pixels, buffer );
 }
 
 /*==========================================================================*/
@@ -329,9 +333,10 @@ void FrameBuffer::draw(
     const void*  pixels,
     const GLenum buffer )
 {
-    int viewport[4]; glGetIntegerv( GL_VIEWPORT, (GLint*)viewport );
+//    int viewport[4]; glGetIntegerv( GL_VIEWPORT, (GLint*)viewport );
 
-    this->draw( x, y, width, height, m_format, m_type, viewport, pixels, buffer );
+//    this->draw( x, y, width, height, m_format, m_type, viewport, pixels, buffer );
+    this->drawPixels( x, y, width, height, pixels, buffer );
 }
 
 /*==========================================================================*/
@@ -355,7 +360,8 @@ void FrameBuffer::draw(
     const void*  pixels,
     const GLenum buffer )
 {
-    this->draw( x, y, width, height, m_format, m_type, viewport, pixels, buffer );
+//    this->draw( x, y, width, height, m_format, m_type, viewport, pixels, buffer );
+    this->drawPixels( x, y, width, height, pixels, buffer );
 }
 
 /*==========================================================================*/

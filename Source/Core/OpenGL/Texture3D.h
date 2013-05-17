@@ -69,7 +69,7 @@ public:
         const size_t zoffset = 0 );
 
 public:
-    KVS_DEPRECATED( bool isDownloaded() const ) { return this->isDownloaded(); }
+    KVS_DEPRECATED( bool isDownloaded() const ) { return this->isLoaded(); }
     KVS_DEPRECATED( void download(
                         const size_t width,
                         const size_t height,
