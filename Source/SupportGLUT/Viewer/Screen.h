@@ -90,6 +90,7 @@ public:
     void setBackgroundImage( const kvs::ColorImage& image );
     void setControlTarget( const ControlTarget target );
     void setEvent( kvs::EventListener* event, const std::string& name = "" );
+    void addEvent( kvs::EventListener* event, const std::string& name = "" );
 
     const std::pair<int,int> registerObject( kvs::ObjectBase* object, kvs::RendererBase* renderer = 0 );
     const std::pair<int,int> registerObject( kvs::VisualizationPipeline* pipeline );

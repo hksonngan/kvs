@@ -100,28 +100,6 @@ void EventHandler::notify( kvs::EventBase* event )
         }
         ++listener;
     }
-
-/*
-    while ( listener != end )
-    {
-        if ( !event )
-        {
-            if ( (*listener)->eventType() & kvs::EventBase::PaintEvent )
-            {
-                (*listener)->onEvent();
-            }
-        }
-        else
-        {
-            if ( (*listener)->eventType() & event->type() )
-            {
-                (*listener)->onEvent( event );
-            }
-        }
-
-        ++listener;
-    }
-*/
 }
 
 /*===========================================================================*/

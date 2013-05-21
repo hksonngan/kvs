@@ -196,6 +196,20 @@ void Screen::setEvent( kvs::EventListener* event, const std::string& name )
     case kvs::EventBase::KeyPressEvent: m_enable_default_key_press_event = false; break;
     default: break;
     }
+    event->setScene( m_scene );
+    BaseClass::addEvent( event, name );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Adds an event to the event handler.
+ *  @param  event [in] pointer to an event
+ *  @param  name [in] event name
+ */
+/*===========================================================================*/
+void Screen::addEvent( kvs::EventListener* event, const std::string& name )
+{
+    event->setScene( m_scene );
     BaseClass::addEvent( event, name );
 }
 
