@@ -446,6 +446,7 @@ kvs::ColorImage Camera::snapshot()
     kvs::ValueArray<kvs::UInt8> buffer( size );
 
     KVS_GL_CALL( glPixelStorei( GL_PACK_ALIGNMENT, 1 ) );
+    KVS_GL_CALL( glReadBuffer( GL_FRONT ) );
     KVS_GL_CALL( glReadPixels( 0, 0, width, height, GL_RGB, GL_UNSIGNED_BYTE, buffer.data() ) );
 
     kvs::ColorImage ret( width, height, buffer );
