@@ -170,6 +170,8 @@ Visualization/Event/PaintEvent
 Visualization/Event/PaintEventListener
 Visualization/Event/ResizeEvent
 Visualization/Event/ResizeEventListener
+Visualization/Event/ScreenCaptureEvent
+Visualization/Event/TargetChangeEvent
 Visualization/Event/TimeEvent
 Visualization/Event/TimerEventListener
 Visualization/Event/WheelEvent

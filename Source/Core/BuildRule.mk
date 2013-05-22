@@ -223,6 +223,8 @@ $(OUTDIR)/./Visualization/Event/PaintEvent.o \
 $(OUTDIR)/./Visualization/Event/PaintEventListener.o \
 $(OUTDIR)/./Visualization/Event/ResizeEvent.o \
 $(OUTDIR)/./Visualization/Event/ResizeEventListener.o \
+$(OUTDIR)/./Visualization/Event/ScreenCaptureEvent.o \
+$(OUTDIR)/./Visualization/Event/TargetChangeEvent.o \
 $(OUTDIR)/./Visualization/Event/TimeEvent.o \
 $(OUTDIR)/./Visualization/Event/TimerEventListener.o \
 $(OUTDIR)/./Visualization/Event/WheelEvent.o \

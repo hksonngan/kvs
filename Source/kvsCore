@@ -170,6 +170,8 @@
 #include <Core/Visualization/Event/PaintEventListener.h>
 #include <Core/Visualization/Event/ResizeEvent.h>
 #include <Core/Visualization/Event/ResizeEventListener.h>
+#include <Core/Visualization/Event/ScreenCaptureEvent.h>
+#include <Core/Visualization/Event/TargetChangeEvent.h>
 #include <Core/Visualization/Event/TimeEvent.h>
 #include <Core/Visualization/Event/TimerEventListener.h>
 #include <Core/Visualization/Event/WheelEvent.h>

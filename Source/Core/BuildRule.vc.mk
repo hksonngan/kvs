@@ -223,6 +223,8 @@ $(OUTDIR)\.\Visualization\Event\PaintEvent.obj \
 $(OUTDIR)\.\Visualization\Event\PaintEventListener.obj \
 $(OUTDIR)\.\Visualization\Event\ResizeEvent.obj \
 $(OUTDIR)\.\Visualization\Event\ResizeEventListener.obj \
+$(OUTDIR)\.\Visualization\Event\ScreenCaptureEvent.obj \
+$(OUTDIR)\.\Visualization\Event\TargetChangeEvent.obj \
 $(OUTDIR)\.\Visualization\Event\TimeEvent.obj \
 $(OUTDIR)\.\Visualization\Event\TimerEventListener.obj \
 $(OUTDIR)\.\Visualization\Event\WheelEvent.obj \
