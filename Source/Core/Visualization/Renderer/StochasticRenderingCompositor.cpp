@@ -73,7 +73,6 @@ void StochasticRenderingCompositor::update()
     }
 
     kvs::OpenGL::Flush();
-    glutSwapBuffers();
 }
 
 /*===========================================================================*/

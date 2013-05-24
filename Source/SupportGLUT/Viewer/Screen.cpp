@@ -374,6 +374,7 @@ void Screen::paintEvent()
         kvs::PaintEvent event;
         BaseClass::eventHandler()->notify( &event );
     }
+    glutSwapBuffers();
 }
 
 /*===========================================================================*/
@@ -499,7 +500,6 @@ void Screen::defaultPaintEvent()
     }
 
     kvs::OpenGL::Flush();
-    glutSwapBuffers();
 }
 
 /*===========================================================================*/
