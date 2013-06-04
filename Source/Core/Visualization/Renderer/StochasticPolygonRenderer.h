@@ -46,6 +46,7 @@ public:
 public:
 
     StochasticPolygonRenderer();
+    void setPolygonOffset( const float polygon_offset );
 };
 
 /*===========================================================================*/
@@ -73,6 +74,11 @@ public:
     void update( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
     void setup( const bool reset_count );
     void draw( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
+
+    void setPolygonOffset( const float offset )
+    {
+        m_polygon_offset = offset;
+    }
 
 private:
 

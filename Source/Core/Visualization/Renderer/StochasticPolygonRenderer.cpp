@@ -123,6 +123,17 @@ StochasticPolygonRenderer::StochasticPolygonRenderer():
 
 /*===========================================================================*/
 /**
+ *  @brief  Sets a polygon offset.
+ *  @param  offset [in] offset value
+ */
+/*===========================================================================*/
+void StochasticPolygonRenderer::setPolygonOffset( const float offset )
+{
+    static_cast<Engine&>( engine() ).setPolygonOffset( offset );
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Constructs a new Engine class.
  */
 /*===========================================================================*/
