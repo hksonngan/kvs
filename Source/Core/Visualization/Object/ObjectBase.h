@@ -120,7 +120,7 @@ public:
 
     virtual void updateMinMaxCoords(){};
     void updateNormalizeParameters();
-    void transform( const kvs::Vector3f& global_trans, const kvs::Vector3f& global_scale ) const;
+    void transform( const kvs::Vector3f& Tg, const kvs::Vector3f& Sg ) const;
 #if KVS_ENABLE_DEPRECATED
     void applyMaterial();
 #endif

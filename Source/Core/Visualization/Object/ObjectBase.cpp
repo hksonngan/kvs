@@ -432,27 +432,23 @@ void ObjectBase::updateNormalizeParameters()
 /*===========================================================================*/
 /**
  *  @brief  Transform the object.
- *  @param  global_trans [in] translation vector in the global
- *  @param  global_scale [in] scaling vector in the global
+ *  @param  Tg [in] translation vector in the global
+ *  @param  Sg [in] scaling vector in the global
  */
 /*===========================================================================*/
-void ObjectBase::transform(
-    const kvs::Vector3f& global_trans,
-    const kvs::Vector3f& global_scale ) const
+void ObjectBase::transform( const kvs::Vector3f& Tg, const kvs::Vector3f& Sg ) const
 {
-    /* Apply the transformation from the world coordinate system by using
-     * the object's xform. You see also kvs::XformControl class and kvs::Xform
-     * class in detail.
-     */
-    float xform[16];
-    this->xform().toArray( xform );
-    glMultMatrixf( xform );
+    float X[16]; this->xform().toArray( X );
+    const kvs::Vector3f& Te = m_external_position;
+    const kvs::Vector3f& Sl = m_normalize;
+    const kvs::Vector3f& Tl = m_object_center;
 
-    glScalef( global_scale.x(), global_scale.y(), global_scale.z() );
-    glTranslatef( -global_trans.x(), -global_trans.y(), -global_trans.z() );
-    glTranslatef( m_external_position.x(), m_external_position.y(), m_external_position.z() );
-    glScalef( m_normalize.x(), m_normalize.y(), m_normalize.z() );
-    glTranslatef( -m_object_center.x(), -m_object_center.y(), -m_object_center.z() );
+    kvs::OpenGL::MultMatrix( X );
+    kvs::OpenGL::Scale( Sg.x(), Sg.y(), Sg.z() );
+    kvs::OpenGL::Translate( -Tg.x(), -Tg.y(), -Tg.z() );
+    kvs::OpenGL::Translate( Te.x(), Te.y(), Te.z() );
+    kvs::OpenGL::Scale( Sl.x(), Sl.y(), Sl.z() );
+    kvs::OpenGL::Translate( -Tl.x(), -Tl.y(), -Tl.z() );
 }
 
 #if KVS_ENABLE_DEPRECATED
