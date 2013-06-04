@@ -177,7 +177,7 @@ const kvs::RGBColor& Background::color( size_t index ) const
 /*==========================================================================*/
 void Background::apply()
 {
-    switch( m_type )
+    switch ( m_type )
     {
     case Background::MonoColor: this->apply_mono_color(); break;
     case Background::TwoSideColor: this->apply_gradation_color(); break;
@@ -195,9 +195,10 @@ void Background::apply()
 /*==========================================================================*/
 void Background::apply_mono_color()
 {
-    float r = static_cast<float>(m_color[0].r()) / 255.0f;
-    float g = static_cast<float>(m_color[0].g()) / 255.0f;
-    float b = static_cast<float>(m_color[0].b()) / 255.0f;
+    float r = static_cast<float>( m_color[0].r() ) / 255.0f;
+    float g = static_cast<float>( m_color[0].g() ) / 255.0f;
+    float b = static_cast<float>( m_color[0].b() ) / 255.0f;
+    KVS_GL_CALL( glClearDepth( 1.0 ) );
     KVS_GL_CALL( glClearColor( r, g, b, 1.0f ) );
     KVS_GL_CALL( glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ) );
 }
@@ -210,11 +211,16 @@ void Background::apply_mono_color()
 void Background::apply_gradation_color()
 {
     // Clear bits.
+    KVS_GL_CALL( glClearDepth( 1.0 ) );
     KVS_GL_CALL( glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ) );
-    KVS_GL_CALL( glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT ) );
+    KVS_GL_CALL( glPushAttrib( GL_ALL_ATTRIB_BITS ) );
 
     // Disable OpenGL parameters.
+    kvs::OpenGL::Disable( GL_BLEND );
     kvs::OpenGL::Disable( GL_DEPTH_TEST );
+    kvs::OpenGL::Disable( GL_TEXTURE_1D );
+    kvs::OpenGL::Disable( GL_TEXTURE_3D );
+    kvs::OpenGL::Enable( GL_TEXTURE_2D );
 
     // Draw a gradation plane on the background.
     KVS_GL_CALL( glMatrixMode( GL_MODELVIEW ) );
@@ -236,8 +242,6 @@ void Background::apply_gradation_color()
     KVS_GL_CALL( glPopMatrix() );
     KVS_GL_CALL( glMatrixMode( GL_MODELVIEW ) );
     KVS_GL_CALL( glPopMatrix() );
-    KVS_GL_CALL( glClearDepth(1000) );
-
     KVS_GL_CALL( glPopAttrib() );
 }
 
