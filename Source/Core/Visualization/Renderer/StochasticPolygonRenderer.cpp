@@ -220,7 +220,9 @@ void StochasticPolygonRenderer::Engine::draw( kvs::ObjectBase* object, kvs::Came
     {
         const size_t size = randomTextureSize();
         const int count = repetitionCount() * 12347;
-        const kvs::Vec2 random_offset( ( count ) % size, ( count / size ) % size );
+        const float offset_x = static_cast<float>( ( count ) % size );
+        const float offset_y = static_cast<float>( ( count / size ) % size );
+        const kvs::Vec2 random_offset( offset_x, offset_y );
 
         m_shader_program.setUniform( "random_texture_size_inv", 1.0f / randomTextureSize() );
         m_shader_program.setUniform( "random_offset", random_offset );

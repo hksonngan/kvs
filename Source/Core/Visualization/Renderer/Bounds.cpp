@@ -355,7 +355,8 @@ void Bounds::draw_circle_bounds( const kvs::ObjectBase* object )
     const kvs::Real32 y_center = ( y_max + y_min ) * 0.5f;
     const kvs::Real32 z_center = ( z_max + z_min ) * 0.5f;
 
-    const kvs::Real32 diff_angle = ( 2.0f * kvs::Math::PI() ) / m_division;
+    const kvs::Real32 pi = static_cast<kvs::Real32>( kvs::Math::PI() );
+    const kvs::Real32 diff_angle = ( 2.0f * pi ) / m_division;
 
     const kvs::Real32 x1 = x_diff * 0.5f;
     const kvs::Real32 y1 = y_diff * 0.5f;

@@ -185,8 +185,8 @@ void ParticleBasedRenderer::Engine::create( kvs::ObjectBase* object, kvs::Camera
     const kvs::Vec4 O = P * M * I;
     m_initial_object_depth = O.z();
     m_initial_object_scale = point->xform().scaling().x();
-    m_initial_window_width = camera->windowWidth();
-    m_initial_window_height = camera->windowHeight();
+    m_initial_window_width = static_cast<float>( camera->windowWidth() );
+    m_initial_window_height = static_cast<float>( camera->windowHeight() );
 }
 
 /*===========================================================================*/
@@ -199,7 +199,7 @@ void ParticleBasedRenderer::Engine::create( kvs::ObjectBase* object, kvs::Camera
 /*===========================================================================*/
 void ParticleBasedRenderer::Engine::update( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light )
 {
-    m_initial_window_width = camera->windowWidth();
+    m_initial_window_width = static_cast<float>( camera->windowWidth() );
 }
 
 /*===========================================================================*/
@@ -233,8 +233,8 @@ void ParticleBasedRenderer::Engine::draw( kvs::ObjectBase* object, kvs::Camera* 
     kvs::ProgramObject::Binder bind2( m_shader_program );
     kvs::Texture::Binder bind3( randomTexture() );
     {
-        const float width = camera->windowWidth();
-        const float height = camera->windowHeight();
+        const float width = static_cast<float>( camera->windowWidth() );
+        const float height = static_cast<float>( camera->windowHeight() );
         const float scale = point->xform().scaling().x();
 
         const float D0 = m_initial_object_depth;

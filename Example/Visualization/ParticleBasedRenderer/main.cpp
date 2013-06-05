@@ -73,7 +73,7 @@ int main( int argc, char** argv )
      */
     const size_t repetitions = 4;
     const size_t subpixels = 1; // fixed to '1'
-    const size_t level = subpixels * std::sqrt( double( repetitions ) );
+    const size_t level = static_cast<size_t>( subpixels * std::sqrt( double( repetitions ) ) );
     const float step = 0.5f;
     const kvs::TransferFunction tfunc( 256 );
     kvs::PointObject* object = new kvs::CellByCellMetropolisSampling( volume, level, step, tfunc );

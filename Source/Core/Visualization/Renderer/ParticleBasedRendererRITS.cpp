@@ -1153,7 +1153,7 @@ void ParticleBasedRenderer::create_image(
          ( BaseClass::m_height != camera->windowHeight() ) )
 
     {
-        scaled_window_size =camera->windowHeight();//ADD_UEMURA
+        scaled_window_size = static_cast<float>( camera->windowHeight() );//ADD_UEMURA
         BaseClass::m_width  = camera->windowWidth();
         BaseClass::m_height = camera->windowHeight();
 
@@ -1172,13 +1172,13 @@ void ParticleBasedRenderer::create_image(
     // Distance parameter: (d_0/d)^2
     //   d_0: Initial camera distance, d: current camera distance
     rendering_process::object_center        = point->objectCenter();
-    rendering_process::object_magnification = point->xform().scaling().x() * rendering_process::default_camera_distance /camera->position().length();
+    rendering_process::object_magnification = static_cast<float>( point->xform().scaling().x() * rendering_process::default_camera_distance /camera->position().length() );
     rendering_process::screen_magnification =  scaled_window_size / default_window_size;
     double distance_param                   = (rendering_process::enable_hybrid_zooming)?  rendering_process::object_magnification * rendering_process::screen_magnification: 
                                               rendering_process::object_magnification * rendering_process::object_magnification *
                                               rendering_process::screen_magnification * rendering_process::screen_magnification;
     double used_point_ratio                 = distance_param;
-    size_t Lr                               = 1.0/distance_param*m_repetition_level;
+    size_t Lr                               = static_cast<size_t>( 1.0 / distance_param*m_repetition_level );
 
     if(used_point_ratio > 1 || !m_enable_repetition_level_zooming) used_point_ratio = 1.0;
     rendering_process::used_point_ratio = used_point_ratio;

@@ -308,8 +308,8 @@ void ParallelCoordinatesRenderer::exec( kvs::ObjectBase* object, kvs::Camera* ca
 
     ::BeginDraw();
 
-    const kvs::Real64 color_axis_min_value = table->minValue( m_active_axis );
-    const kvs::Real64 color_axis_max_value = table->maxValue( m_active_axis );
+    const float color_axis_min_value = static_cast<float>( table->minValue( m_active_axis ) );
+    const float color_axis_max_value = static_cast<float>( table->maxValue( m_active_axis ) );
     const kvs::AnyValueArray& color_axis_values = table->column( m_active_axis );
     m_color_map.setRange( color_axis_min_value, color_axis_max_value );
 
@@ -329,7 +329,7 @@ void ParallelCoordinatesRenderer::exec( kvs::ObjectBase* object, kvs::Camera* ca
         glBegin( GL_LINE_STRIP );
 
         const kvs::Real64 color_value = color_axis_values[i].to<kvs::Real64>();
-        const kvs::RGBColor color = m_color_map.at( color_value );
+        const kvs::RGBColor color = m_color_map.at( static_cast<float>( color_value ) );
         glColor4ub( color.r(), color.g(), color.b(), m_line_opacity );
 
         for ( size_t j = 0; j < naxes; j++ )
@@ -338,9 +338,9 @@ void ParallelCoordinatesRenderer::exec( kvs::ObjectBase* object, kvs::Camera* ca
             const kvs::Real64 max_value = table->maxValue(j);
             const kvs::Real64 value = table->column(j)[i].to<kvs::Real64>();
 
-            const float x = m_left_margin + stride * j;
-            const float y = y1 - ( y1 - y0 ) * ( value - min_value ) / ( max_value - min_value );
-            glVertex2f( x, y );
+            const kvs::Real64 x = m_left_margin + stride * j;
+            const kvs::Real64 y = y1 - ( y1 - y0 ) * ( value - min_value ) / ( max_value - min_value );
+            glVertex2d( x, y );
         }
 
         glEnd();

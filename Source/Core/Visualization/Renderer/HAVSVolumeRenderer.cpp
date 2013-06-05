@@ -255,7 +255,7 @@ void HAVSVolumeRenderer::initialize_table()
     const float min_value = static_cast<float>( m_ref_volume->minValue() );
     const float max_value = static_cast<float>( m_ref_volume->maxValue() );
     m_table.setTransferFunction( BaseClass::transferFunction(), min_value, max_value );
-    m_table.create( m_meshes->depthScale() * 2.0 );
+    m_table.create( m_meshes->depthScale() * 2.0f );
     m_table.download();
 }
 
@@ -403,10 +403,10 @@ void HAVSVolumeRenderer::draw_initialization_pass()
             kvs::OpenGL::SetOrtho( 0, width, 0, height );
 
             glBegin( GL_QUADS );
-            glVertex2f( 0, 0 );
-            glVertex2f( width, 0 );
-            glVertex2f( width, height );
-            glVertex2f( 0, height );
+            glVertex2i( 0, 0 );
+            glVertex2i( width, 0 );
+            glVertex2i( width, height );
+            glVertex2i( 0, height );
             glEnd();
         }
     }
@@ -417,7 +417,7 @@ void HAVSVolumeRenderer::draw_geometry_pass()
     kvs::ProgramObject::Binder binder( m_shader_kbuffer );
 
     const float* mat = m_modelview;
-    const float table_size = m_table.sizeDepth();
+    const float table_size = static_cast<float>( m_table.sizeDepth() );
     const float edge_length = m_meshes->depthScale();
     const float bb_scale = std::sqrt( mat[0]*mat[0] + mat[1]*mat[1] + mat[2]*mat[2] );
     const kvs::Vector4f scale(
@@ -472,7 +472,7 @@ void HAVSVolumeRenderer::draw_flush_pass()
     kvs::ProgramObject::Binder binder( m_shader_end );
 
     const float* mat = m_modelview;
-    const float table_size = m_table.sizeDepth();
+    const float table_size = static_cast<float>( m_table.sizeDepth() );
     const float edge_length = m_meshes->depthScale();
     const float bb_scale = std::sqrt( mat[0]*mat[0] + mat[1]*mat[1] + mat[2]*mat[2] );
     const kvs::Vector4f scale(
@@ -504,10 +504,10 @@ void HAVSVolumeRenderer::draw_flush_pass()
             for ( size_t i = 0; i < this->kBufferSize() - 1; i++ )
             {
                 glBegin( GL_QUADS );
-                glVertex2f( 0, 0 );
-                glVertex2f( 0, height );
-                glVertex2f( width, height );
-                glVertex2f( width, 0 );
+                glVertex2i( 0, 0 );
+                glVertex2i( 0, height );
+                glVertex2i( width, height );
+                glVertex2i( width, 0 );
                 glEnd();
             }
         }
@@ -540,10 +540,10 @@ void HAVSVolumeRenderer::draw_texture()
 
                 // Draw texture using screen-aligned quad
                 glBegin( GL_QUADS );
-                glTexCoord2f( 0, 0 ); glVertex2f( 0, 0 );
-                glTexCoord2f( 1, 0 ); glVertex2f( width, 0 );
-                glTexCoord2f( 1, 1 ); glVertex2f( width, height );
-                glTexCoord2f( 0, 1 ); glVertex2f( 0, height );
+                glTexCoord2i( 0, 0 ); glVertex2i( 0, 0 );
+                glTexCoord2i( 1, 0 ); glVertex2i( width, 0 );
+                glTexCoord2i( 1, 1 ); glVertex2i( width, height );
+                glTexCoord2i( 0, 1 ); glVertex2i( 0, height );
                 glEnd();
             }
         }
@@ -605,8 +605,8 @@ void HAVSVolumeRenderer::Meshes::setVolume( const kvs::UnstructuredVolumeObject*
     if ( !volume->hasMinMaxValues() ) const_cast<kvs::UnstructuredVolumeObject*>(volume)->updateMinMaxValues();
     const size_t nvalues = volume->values().size();
     const float* values = static_cast<const float*>(volume->values().data());
-    const float min_value = volume->minValue();
-    const float max_value = volume->maxValue();
+    const float min_value = static_cast<float>( volume->minValue() );
+    const float max_value = static_cast<float>( volume->maxValue() );
     const float range = max_value - min_value;
     m_values.allocate( nvalues );
     for ( size_t i = 0; i < nvalues; i++ )
@@ -618,7 +618,7 @@ void HAVSVolumeRenderer::Meshes::setVolume( const kvs::UnstructuredVolumeObject*
     if ( !volume->hasMinMaxObjectCoords() ) const_cast<kvs::UnstructuredVolumeObject*>(volume)->updateMinMaxCoords();
     m_bb_min = volume->minObjectCoord();
     m_bb_max = volume->maxObjectCoord();
-    m_diagonal = ( m_bb_max - m_bb_min ).length();
+    m_diagonal = static_cast<float>( ( m_bb_max - m_bb_min ).length() );
 }
 
 void HAVSVolumeRenderer::Meshes::build()
@@ -728,7 +728,7 @@ void HAVSVolumeRenderer::Meshes::build()
     }
 
     m_depth_scale = std::sqrt( max_edge_length );
-    m_diagonal = ( m_bb_max - m_bb_min ).length();
+    m_diagonal = static_cast<float>( ( m_bb_max - m_bb_min ).length() );
 }
 
 void HAVSVolumeRenderer::Meshes::sort( HAVSVolumeRenderer::Vertex eye )

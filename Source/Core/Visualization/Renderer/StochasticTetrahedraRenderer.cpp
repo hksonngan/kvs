@@ -259,7 +259,7 @@ void StochasticTetrahedraRenderer::Engine::update( kvs::ObjectBase* object, kvs:
     kvs::ProgramObject::Binder bind( m_shader_program );
     {
         const kvs::Vec2 screen_scale( camera->windowWidth() * 0.5f, camera->windowHeight() * 0.5f );
-        const kvs::Vec2 screen_scale_inv( 1.0 / camera->windowWidth(), 1.0 / camera->windowHeight() );
+        const kvs::Vec2 screen_scale_inv( 1.0f / camera->windowWidth(), 1.0f / camera->windowHeight() );
         m_shader_program.setUniform( "screen_scale", screen_scale );
         m_shader_program.setUniform( "screen_scale_inv", screen_scale_inv );
     }
@@ -308,7 +308,9 @@ void StochasticTetrahedraRenderer::Engine::draw( kvs::ObjectBase* object, kvs::C
     {
         const size_t size = randomTextureSize();
         const int count = repetitionCount() * 12347;
-        const kvs::Vec2 random_offset( ( count ) % size, ( count / size ) % size );
+        const float offset_x = static_cast<float>( ( count ) % size );
+        const float offset_y = static_cast<float>( ( count / size ) % size );
+        const kvs::Vec2 random_offset( offset_x, offset_y );
         m_shader_program.setUniform( "random_offset", random_offset );
 
         const size_t nnodes = volume->numberOfNodes();
@@ -416,8 +418,8 @@ void StochasticTetrahedraRenderer::Engine::create_shader_program()
         // Pre-integration table.
         const float edge_size = 1.0f;
         const kvs::Vec2 preintegration_scale_offset(
-            1.0 - 1.0 / m_preintegration_table.sizeDepth() / edge_size,
-            1.0 / ( 2.0 * m_preintegration_table.sizeDepth() ) );
+            1.0f - 1.0f / m_preintegration_table.sizeDepth() / edge_size,
+            1.0f / ( 2.0f * m_preintegration_table.sizeDepth() ) );
         m_shader_program.setUniform( "preintegration_scale_offset", preintegration_scale_offset );
         m_shader_program.setUniform( "preintegration_texture", 1 );
 
@@ -488,7 +490,7 @@ void StochasticTetrahedraRenderer::Engine::create_buffer_object( const kvs::Unst
 /*===========================================================================*/
 void StochasticTetrahedraRenderer::Engine::create_preintegration_table()
 {
-    const size_t edge_size = 1.0f;
+    const float edge_size = 1.0f;
     m_preintegration_table.setTableSize( 128, 128 );
     m_preintegration_table.setTransferFunction( m_transfer_function, 0.0f, 1.0f );
     m_preintegration_table.create( edge_size );

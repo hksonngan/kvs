@@ -309,10 +309,10 @@ void ScatterPlotRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kv
         const GLubyte a = static_cast<GLubyte>( m_background_color.a() * 255.0f );
         glBegin( GL_QUADS );
         glColor4ub( r, g, b, a );
-        glVertex2f( x0, y0 );
-        glVertex2f( x1, y0 );
-        glVertex2f( x1, y1 );
-        glVertex2f( x0, y1 );
+        glVertex2i( x0, y0 );
+        glVertex2i( x1, y0 );
+        glVertex2i( x1, y1 );
+        glVertex2i( x0, y1 );
         glEnd();
     }
 
@@ -334,16 +334,16 @@ void ScatterPlotRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kv
 
             const kvs::Real64 x_value = x_values[i].to<kvs::Real64>();
             const kvs::Real64 y_value = y_values[i].to<kvs::Real64>();
-            const float x = x0 + ( x_value - x_min_value ) * x_ratio;
-            const float y = y1 - ( y_value - y_min_value ) * y_ratio;
-            glVertex2f( x, y );
+            const double x = x0 + ( x_value - x_min_value ) * x_ratio;
+            const double y = y1 - ( y_value - y_min_value ) * y_ratio;
+            glVertex2d( x, y );
         }
         glEnd();
     }
     else
     {
-        const kvs::Real64 color_axis_min_value = table->minValue(2);
-        const kvs::Real64 color_axis_max_value = table->maxValue(2);
+        const float color_axis_min_value = static_cast<float>( table->minValue(2) );
+        const float color_axis_max_value = static_cast<float>( table->maxValue(2) );
         const kvs::AnyValueArray& color_axis_values = table->column(2);
         m_color_map.setRange( color_axis_min_value, color_axis_max_value );
 
@@ -357,14 +357,14 @@ void ScatterPlotRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kv
             if ( !table->insideRange( i ) ) continue;
 
             const kvs::Real64 color_value = color_axis_values[i].to<kvs::Real64>();
-            const kvs::RGBColor color = m_color_map.at( color_value );
+            const kvs::RGBColor color = m_color_map.at( static_cast<float>( color_value) );
             glColor4ub( color.r(), color.g(), color.b(), opacity );
 
             const kvs::Real64 x_value = x_values[i].to<kvs::Real64>();
             const kvs::Real64 y_value = y_values[i].to<kvs::Real64>();
-            const float x = x0 + ( x_value - x_min_value ) * x_ratio;
-            const float y = y1 - ( y_value - y_min_value ) * y_ratio;
-            glVertex2f( x, y );
+            const double x = x0 + ( x_value - x_min_value ) * x_ratio;
+            const double y = y1 - ( y_value - y_min_value ) * y_ratio;
+            glVertex2d( x, y );
         }
         glEnd();
     }

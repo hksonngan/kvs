@@ -211,7 +211,7 @@ const Matrix22<T> Matrix22<T>::Diagonal( const T x )
 template<typename T>
 const Matrix22<T> Matrix22<T>::Rotation( const double deg )
 {
-    const T rad = kvs::Math::Deg2Rad( deg );
+    const T rad = static_cast<T>( kvs::Math::Deg2Rad( deg ) );
     const T sinA = static_cast<T>( std::sin( rad ) );
     const T cosA = static_cast<T>( std::cos( rad ) );
 

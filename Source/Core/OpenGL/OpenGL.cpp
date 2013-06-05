@@ -415,9 +415,9 @@ void SetViewport( GLint x, GLint y, GLsizei width, GLsizei height )
     KVS_GL_CALL( glViewport( x, y, width, height ) );
 }
 
-void SetOrtho( GLdouble left, GLdouble right, GLdouble bottom, GLdouble top, GLdouble near, GLdouble far )
+void SetOrtho( GLdouble left, GLdouble right, GLdouble bottom, GLdouble top, GLdouble front, GLdouble back )
 {
-    KVS_GL_CALL( glOrtho( left, right, bottom, top, near, far ) );
+    KVS_GL_CALL( glOrtho( left, right, bottom, top, front, back ) );
 }
 
 void SetOrtho( GLdouble left, GLdouble right, GLdouble bottom, GLdouble top )
@@ -425,14 +425,14 @@ void SetOrtho( GLdouble left, GLdouble right, GLdouble bottom, GLdouble top )
     KVS_GL_CALL( gluOrtho2D( left, right, bottom, top ) );
 }
 
-void SetPerspective( GLdouble fovy, GLdouble aspect, GLdouble near, GLdouble far )
+void SetPerspective( GLdouble fovy, GLdouble aspect, GLdouble front, GLdouble back )
 {
-    KVS_GL_CALL( gluPerspective( fovy, aspect, near, far ) );
+    KVS_GL_CALL( gluPerspective( fovy, aspect, front, back ) );
 }
 
-void SetFrustum( GLdouble left, GLdouble right, GLdouble bottom, GLdouble top, GLdouble near, GLdouble far )
+void SetFrustum( GLdouble left, GLdouble right, GLdouble bottom, GLdouble top, GLdouble front, GLdouble back )
 {
-    KVS_GL_CALL( glFrustum( left, right, bottom, top, near, far ) );
+    KVS_GL_CALL( glFrustum( left, right, bottom, top, front, back ) );
 }
 
 void ReadPixels( GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLvoid* data )

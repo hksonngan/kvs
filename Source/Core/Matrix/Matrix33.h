@@ -224,9 +224,9 @@ const Matrix33<T> Matrix33<T>::Diagonal( const T x )
 template<typename T>
 const Matrix33<T> Matrix33<T>::Rotation( const Vector3<T>& axis, const double deg )
 {
-    const T rad = kvs::Math::Deg2Rad( deg );
-    const T sinA = std::sin( rad );
-    const T cosA = std::cos( rad );
+    const T rad = static_cast<T>( kvs::Math::Deg2Rad( deg ) );
+    const T sinA = static_cast<T>( std::sin( rad ) );
+    const T cosA = static_cast<T>( std::cos( rad ) );
     const T inv_cosA = 1 - cosA;
 
     const kvs::Vector3<T> v = axis.normalized();
@@ -243,9 +243,9 @@ const Matrix33<T> Matrix33<T>::Rotation( const Vector3<T>& axis, const double de
 template <typename T>
 const Matrix33<T> Matrix33<T>::RotationX( const double deg )
 {
-    const T rad = kvs::Math::Deg2Rad( deg );
-    const T sinA = std::sin( rad );
-    const T cosA = std::cos( rad );
+    const T rad = static_cast<T>( kvs::Math::Deg2Rad( deg ) );
+    const T sinA = static_cast<T>( std::sin( rad ) );
+    const T cosA = static_cast<T>( std::cos( rad ) );
 
     return Matrix33(
         1,    0,     0,
@@ -256,9 +256,9 @@ const Matrix33<T> Matrix33<T>::RotationX( const double deg )
 template <typename T>
 const Matrix33<T> Matrix33<T>::RotationY( const double deg )
 {
-    const T rad = kvs::Math::Deg2Rad( deg );
-    const T sinA = std::sin( rad );
-    const T cosA = std::cos( rad );
+    const T rad = static_cast<T>( kvs::Math::Deg2Rad( deg ) );
+    const T sinA = static_cast<T>( std::sin( rad ) );
+    const T cosA = static_cast<T>( std::cos( rad ) );
 
     return Matrix33(
          cosA, 0, sinA,
@@ -269,9 +269,9 @@ const Matrix33<T> Matrix33<T>::RotationY( const double deg )
 template <typename T>
 const Matrix33<T> Matrix33<T>::RotationZ( const double deg )
 {
-    const T rad = kvs::Math::Deg2Rad( deg );
-    const T sinA = std::sin( rad );
-    const T cosA = std::cos( rad );
+    const T rad = static_cast<T>( kvs::Math::Deg2Rad( deg ) );
+    const T sinA = static_cast<T>( std::sin( rad ) );
+    const T cosA = static_cast<T>( std::cos( rad ) );
 
     return Matrix33(
          cosA, -sinA, 0,
