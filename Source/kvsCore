@@ -279,7 +279,9 @@
 #include <Core/Visualization/Renderer/StochasticMultivariateTetrahedraRenderer.h>
 #include <Core/Visualization/Renderer/StochasticPointRenderer.h>
 #include <Core/Visualization/Renderer/StochasticPolygonRenderer.h>
+#include <Core/Visualization/Renderer/StochasticRendererBase.h>
 #include <Core/Visualization/Renderer/StochasticRenderingCompositor.h>
+#include <Core/Visualization/Renderer/StochasticRenderingEngine.h>
 #include <Core/Visualization/Renderer/StochasticTetrahedraRenderer.h>
 #include <Core/Visualization/Renderer/StochasticUniformGridRenderer.h>
 #include <Core/Visualization/Renderer/VolumeRayIntersector.h>

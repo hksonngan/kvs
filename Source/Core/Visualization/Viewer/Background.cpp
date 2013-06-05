@@ -167,7 +167,7 @@ void Background::setImage( const kvs::ColorImage& image )
 /*==========================================================================*/
 const kvs::RGBColor& Background::color( size_t index ) const
 {
-    return( m_color[index] );
+    return m_color[index];
 }
 
 /*==========================================================================*/
@@ -185,7 +185,7 @@ void Background::apply()
     case Background::Image: this->apply_image(); break;
     default: break;
     }
-    KVS_GL_CALL( glFlush() );
+    kvs::OpenGL::Flush();
 }
 
 /*==========================================================================*/
@@ -200,7 +200,7 @@ void Background::apply_mono_color()
     float b = static_cast<float>( m_color[0].b() ) / 255.0f;
     KVS_GL_CALL( glClearDepth( 1.0 ) );
     KVS_GL_CALL( glClearColor( r, g, b, 1.0f ) );
-    KVS_GL_CALL( glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ) );
+    kvs::OpenGL::Clear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 }
 
 /*==========================================================================*/
@@ -210,39 +210,34 @@ void Background::apply_mono_color()
 /*==========================================================================*/
 void Background::apply_gradation_color()
 {
-    // Clear bits.
     KVS_GL_CALL( glClearDepth( 1.0 ) );
-    KVS_GL_CALL( glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT ) );
-    KVS_GL_CALL( glPushAttrib( GL_ALL_ATTRIB_BITS ) );
+    kvs::OpenGL::Clear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-    // Disable OpenGL parameters.
-    kvs::OpenGL::Disable( GL_BLEND );
-    kvs::OpenGL::Disable( GL_DEPTH_TEST );
-    kvs::OpenGL::Disable( GL_TEXTURE_1D );
-    kvs::OpenGL::Disable( GL_TEXTURE_3D );
-    kvs::OpenGL::Enable( GL_TEXTURE_2D );
+    kvs::OpenGL::WithPushedAttrib a( GL_ALL_ATTRIB_BITS );
+    {
+        kvs::OpenGL::Disable( GL_BLEND );
+        kvs::OpenGL::Disable( GL_DEPTH_TEST );
+        kvs::OpenGL::Disable( GL_LIGHTING );
+        kvs::OpenGL::Disable( GL_TEXTURE_1D );
+        kvs::OpenGL::Disable( GL_TEXTURE_2D );
+        kvs::OpenGL::Disable( GL_TEXTURE_3D );
 
-    // Draw a gradation plane on the background.
-    KVS_GL_CALL( glMatrixMode( GL_MODELVIEW ) );
-    KVS_GL_CALL( glPushMatrix() );
-    KVS_GL_CALL( glLoadIdentity() );
-    KVS_GL_CALL( glMatrixMode( GL_PROJECTION ) );
-    KVS_GL_CALL( glPushMatrix() );
-    KVS_GL_CALL( glLoadIdentity() );
-    KVS_GL_CALL( glOrtho( 0, 1, 0, 1, -1, 1 ) );
-
-    // Gradation plane.
-    glBegin( GL_QUADS );
-    glColor3ub( m_color[0].r(), m_color[0].g(), m_color[0].b() ); glVertex2d( 0.0, 0.0 );
-    glColor3ub( m_color[1].r(), m_color[1].g(), m_color[1].b() ); glVertex2d( 1.0, 0.0 );
-    glColor3ub( m_color[2].r(), m_color[2].g(), m_color[2].b() ); glVertex2d( 1.0, 1.0 );
-    glColor3ub( m_color[3].r(), m_color[3].g(), m_color[3].b() ); glVertex2d( 0.0, 1.0 );
-    glEnd();
-
-    KVS_GL_CALL( glPopMatrix() );
-    KVS_GL_CALL( glMatrixMode( GL_MODELVIEW ) );
-    KVS_GL_CALL( glPopMatrix() );
-    KVS_GL_CALL( glPopAttrib() );
+        kvs::OpenGL::WithPushedMatrix m( GL_MODELVIEW );
+        m.loadIdentity();
+        {
+            kvs::OpenGL::WithPushedMatrix p( GL_PROJECTION );
+            p.loadIdentity();
+            {
+                kvs::OpenGL::SetOrtho( 0, 1, 0, 1, -1, 1 );
+                glBegin( GL_QUADS );
+                glColor3ub( m_color[0].r(), m_color[0].g(), m_color[0].b() ); glVertex2d( 0.0, 0.0 );
+                glColor3ub( m_color[1].r(), m_color[1].g(), m_color[1].b() ); glVertex2d( 1.0, 0.0 );
+                glColor3ub( m_color[2].r(), m_color[2].g(), m_color[2].b() ); glVertex2d( 1.0, 1.0 );
+                glColor3ub( m_color[3].r(), m_color[3].g(), m_color[3].b() ); glVertex2d( 0.0, 1.0 );
+                glEnd();
+            }
+        }
+    }
 }
 
 /*==========================================================================*/
@@ -252,65 +247,47 @@ void Background::apply_gradation_color()
 /*==========================================================================*/
 void Background::apply_image()
 {
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    KVS_GL_CALL( glClearDepth( 1.0 ) );
+    kvs::OpenGL::Clear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 
-    glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT );
-
-    glDisable( GL_DEPTH_TEST );
-    glDisable( GL_TEXTURE_1D );
-    glDisable( GL_TEXTURE_3D );
-    glEnable( GL_TEXTURE_2D );
-
-    if ( m_image_changed )
+    kvs::OpenGL::WithPushedAttrib a( GL_ALL_ATTRIB_BITS );
     {
-        m_texture.release();
-        m_texture.setWrapS( GL_CLAMP_TO_EDGE );
-        m_texture.setWrapT( GL_CLAMP_TO_EDGE );
-        m_texture.setMagFilter( GL_LINEAR );
-        m_texture.setMinFilter( GL_LINEAR );
-        m_texture.setPixelFormat( GL_RGB8, GL_RGB, GL_UNSIGNED_BYTE );
-        m_texture.create( m_image.width(), m_image.height(), m_image.pixels().data() );
-        m_image_changed = false;
-        //m_image.release();
-    }
+        kvs::OpenGL::Disable( GL_BLEND );
+        kvs::OpenGL::Disable( GL_DEPTH_TEST );
+        kvs::OpenGL::Disable( GL_LIGHTING );
+        kvs::OpenGL::Disable( GL_TEXTURE_1D );
+        kvs::OpenGL::Disable( GL_TEXTURE_3D );
+        kvs::OpenGL::Enable( GL_TEXTURE_2D );
 
-    // Bind the texture image as mipmap texture.
-    m_texture.bind();
-
-    // Texture mapping onto the background.
-    glMatrixMode( GL_MODELVIEW );
-    glPushMatrix();
-    {
-        glLoadIdentity();
-
-        glMatrixMode( GL_PROJECTION );
-        glPushMatrix();
+        if ( m_image_changed )
         {
-            glLoadIdentity();
-            glOrtho( 0, 1, 0, 1, -1, 1 );
-
-            // Texture mapping onto the background.
-            glBegin( GL_QUADS );
-            glTexCoord2f( 0.0, 0.0 ); glVertex2f(  1.0,  1.0 );
-            glTexCoord2f( 0.0, 1.0 ); glVertex2f(  1.0,  0.0 );
-            glTexCoord2f( 1.0, 1.0 ); glVertex2f(  0.0,  0.0 );
-            glTexCoord2f( 1.0, 0.0 ); glVertex2f(  0.0,  1.0 );
-            glEnd();
+            m_texture.release();
+            m_texture.setWrapS( GL_CLAMP_TO_EDGE );
+            m_texture.setWrapT( GL_CLAMP_TO_EDGE );
+            m_texture.setMagFilter( GL_LINEAR );
+            m_texture.setMinFilter( GL_LINEAR );
+            m_texture.setPixelFormat( GL_RGB8, GL_RGB, GL_UNSIGNED_BYTE );
+            m_texture.create( m_image.width(), m_image.height(), m_image.pixels().data() );
+            m_image_changed = false;
         }
-        glPopMatrix();
-        glMatrixMode( GL_MODELVIEW );
+
+        kvs::Texture::Binder binder( m_texture );
+        kvs::OpenGL::WithPushedMatrix m( GL_MODELVIEW );
+        m.loadIdentity();
+        {
+            kvs::OpenGL::WithPushedMatrix p( GL_PROJECTION );
+            p.loadIdentity();
+            {
+                kvs::OpenGL::SetOrtho( 0, 1, 0, 1, -1, 1 );
+                glBegin( GL_QUADS );
+                glTexCoord2f( 0.0, 0.0 ); glVertex2f(  1.0,  1.0 );
+                glTexCoord2f( 0.0, 1.0 ); glVertex2f(  1.0,  0.0 );
+                glTexCoord2f( 1.0, 1.0 ); glVertex2f(  0.0,  0.0 );
+                glTexCoord2f( 1.0, 0.0 ); glVertex2f(  0.0,  1.0 );
+                glEnd();
+            }
+        }
     }
-    glPopMatrix();
-
-    m_texture.unbind();
-
-    glClearDepth(1000);
-    glEnable( GL_DEPTH_TEST );
-    glDisable( GL_TEXTURE_2D );
-    glEnable( GL_TEXTURE_1D );
-    glEnable( GL_TEXTURE_3D );
-
-    glPopAttrib();
 }
 
 } // end of namespace kvs
