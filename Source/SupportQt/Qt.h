@@ -54,7 +54,9 @@
 #include <QGLWidget>
 #include <QGLFramebufferObject>
 #include <QGLPixelBuffer>
+#if QT_VERSION >= 0x040700
 #include <QGLBuffer>
+#endif
 #else // KVS_QT_VERSION <= 3
 #include <qapplication.h>
 #include <qnamespace.h>
