@@ -14,6 +14,10 @@
 /*****************************************************************************/
 #include "GeometryShader.h"
 
+#ifndef GL_GEOMETRY_SHADER
+#define GL_GEOMETRY_SHADER 0x8DD9
+#endif
+
 
 namespace kvs
 {
