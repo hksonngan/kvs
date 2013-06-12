@@ -27,6 +27,12 @@
 #endif
 #include <kvs/Message>
 
+#ifdef PATH_MAX
+#define MAX_PATH_LENGTH PATH_MAX
+#else
+#define MAX_PATH_LENGTH 4096
+#endif
+
 
 namespace
 {
@@ -41,11 +47,11 @@ namespace
 inline std::string GetCurrentPath()
 {
 #if defined ( KVS_PLATFORM_WINDOWS )
-    char current_path[256];
-    _getcwd( current_path, 256 );
+    char current_path[MAX_PATH_LENGTH];
+    _getcwd( current_path, MAX_PATH_LENGTH );
 #else
-    char current_path[PATH_MAX];
-    if ( !getcwd( current_path, PATH_MAX ) )
+    char current_path[MAX_PATH_LENGTH];
+    if ( !getcwd( current_path, MAX_PATH_LENGTH ) )
     {
         kvsMessageError( "%s", strerror( errno ) );
         return ".";
@@ -65,10 +71,10 @@ inline std::string GetCurrentPath()
 inline std::string GetAbsolutePath( const std::string& path )
 {
 #if defined ( KVS_PLATFORM_WINDOWS )
-    char absolute_path[256];
-    _fullpath( absolute_path, const_cast<char*>( path.c_str() ), 256 );
+    char absolute_path[MAX_PATH_LENGTH];
+    _fullpath( absolute_path, const_cast<char*>( path.c_str() ), MAX_PATH_LENGTH );
 #else
-    char absolute_path[PATH_MAX];
+    char absolute_path[MAX_PATH_LENGTH];
 #if defined ( KVS_PLATFORM_CYGWIN )
     /* WARNING: In the case of the cygwin environment, the realpath function
      * returns NULL as the absolute path when an error occurs, for example,
@@ -156,13 +162,83 @@ namespace kvs
 
 /*==========================================================================*/
 /**
+ *  Get the separator.
+ *  @return separator
+ */
+/*==========================================================================*/
+std::string Directory::Separator()
+{
+    return File::Separator();
+}
+
+/*==========================================================================*/
+/**
+ *  Make directory.
+ *  @param directory_path [in] directory path
+ *  @return true, if the directory is maked successfully
+ */
+/*==========================================================================*/
+bool Directory::Make( const std::string& directory_path )
+{
+#if defined ( KVS_PLATFORM_WINDOWS )
+    return _mkdir( ::GetAbsolutePath( directory_path ).c_str() ) == 0;
+#else
+    return mkdir( ::GetAbsolutePath( directory_path ).c_str(), 0777 ) == 0;
+#endif
+}
+
+/*==========================================================================*/
+/**
+ *  Remove directory.
+ *  @param directory_path [in] directory path
+ *  @return true, if the directory is removed successfully
+ */
+/*==========================================================================*/
+bool Directory::Remove( const std::string& directory_path )
+{
+#if defined ( KVS_PLATFORM_WINDOWS )
+    return _rmdir( ::GetAbsolutePath( directory_path ).c_str() ) == 0;
+#else
+    return  rmdir( ::GetAbsolutePath( directory_path ).c_str() ) == 0;
+#endif
+}
+
+/*==========================================================================*/
+/**
+ *  Change directory.
+ *  @param directory_path [in] directory path
+ *  @return true, if the directory is changed successfully
+ */
+/*==========================================================================*/
+bool Directory::Change( const std::string& directory_path )
+{
+#if defined ( KVS_PLATFORM_WINDOWS )
+    return _chdir( ::GetAbsolutePath( directory_path ).c_str() ) == 0;
+#else
+    return chdir( ::GetAbsolutePath( directory_path ).c_str() ) == 0;
+#endif
+}
+
+/*==========================================================================*/
+/**
+ *  Get current directory path.
+ *  @return current directory path
+ */
+/*==========================================================================*/
+Directory Directory::Current()
+{
+    return Directory( ::GetCurrentPath() );
+}
+
+/*==========================================================================*/
+/**
  *  Constructor.
  */
 /*==========================================================================*/
-Directory::Directory()
-    : m_directory_path( "" )
-    , m_directory_name( "" )
-    , m_file_list()
+Directory::Directory():
+    m_directory_path( "" ),
+    m_directory_name( "" ),
+    m_file_list()
 {
 }
 
@@ -172,10 +248,10 @@ Directory::Directory()
  *  @param directory_path [in] directory path
  */
 /*==========================================================================*/
-Directory::Directory( const std::string& directory_path )
-    : m_directory_path( directory_path )
-    , m_directory_name( "" )
-    , m_file_list()
+Directory::Directory( const std::string& directory_path ):
+    m_directory_path( directory_path ),
+    m_directory_name( "" ),
+    m_file_list()
 {
     this->parse( directory_path );
     this->sort();
@@ -288,7 +364,7 @@ bool Directory::parse( const std::string& directory_path )
     WIN32_FIND_DATAA find_data;
     HANDLE           hFind;
 
-    char bufname[256];
+    char bufname[MAX_PATH_LENGTH];
 
     strcpy( bufname, m_directory_path.c_str() );
     int len = strlen( bufname );
@@ -389,76 +465,6 @@ kvs::FileList::const_iterator Directory::find( const File& file ) const
     kvs::FileList::const_iterator end   = m_file_list.end();
 
     return std::find( begin, end, file );
-}
-
-/*==========================================================================*/
-/**
- *  Get the separator.
- *  @return separator
- */
-/*==========================================================================*/
-std::string Directory::Separator()
-{
-    return File::Separator();
-}
-
-/*==========================================================================*/
-/**
- *  Make directory.
- *  @param directory_path [in] directory path
- *  @return true, if the directory is maked successfully
- */
-/*==========================================================================*/
-bool Directory::Make( const std::string& directory_path )
-{
-#if defined ( KVS_PLATFORM_WINDOWS )
-    return _mkdir( ::GetAbsolutePath( directory_path ).c_str() ) == 0;
-#else
-    return mkdir( ::GetAbsolutePath( directory_path ).c_str(), 0777 ) == 0;
-#endif
-}
-
-/*==========================================================================*/
-/**
- *  Remove directory.
- *  @param directory_path [in] directory path
- *  @return true, if the directory is removed successfully
- */
-/*==========================================================================*/
-bool Directory::Remove( const std::string& directory_path )
-{
-#if defined ( KVS_PLATFORM_WINDOWS )
-    return _rmdir( ::GetAbsolutePath( directory_path ).c_str() ) == 0;
-#else
-    return  rmdir( ::GetAbsolutePath( directory_path ).c_str() ) == 0;
-#endif
-}
-
-/*==========================================================================*/
-/**
- *  Change directory.
- *  @param directory_path [in] directory path
- *  @return true, if the directory is changed successfully
- */
-/*==========================================================================*/
-bool Directory::Change( const std::string& directory_path )
-{
-#if defined ( KVS_PLATFORM_WINDOWS )
-    return _chdir( ::GetAbsolutePath( directory_path ).c_str() ) == 0;
-#else
-    return chdir( ::GetAbsolutePath( directory_path ).c_str() ) == 0;
-#endif
-}
-
-/*==========================================================================*/
-/**
- *  Get current directory path.
- *  @return current directory path
- */
-/*==========================================================================*/
-Directory Directory::Current()
-{
-    return Directory( ::GetCurrentPath() );
 }
 
 } // end of namespace kvs

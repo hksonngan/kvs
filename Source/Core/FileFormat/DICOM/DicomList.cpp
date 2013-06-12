@@ -4,7 +4,7 @@
  *  @brief  DICOM list class.
  *
  *  @author Naohisa Sakamoto
- *  @date   2012/09/18 23:27:12
+ *  @date   2013/06/12 11:26:39
  */
 /*----------------------------------------------------------------------------
  *
@@ -66,7 +66,7 @@ bool DicomList::SortingBySliceLocation::operator () (
 bool DicomList::CheckDirectory( const std::string& dirname, const bool extension_check )
 {
     kvs::Directory dir( dirname );
-    if( !dir.isExisted() )
+    if( !dir.exists() )
     {
         kvsMessageError( "%s is not existed.", dir.directoryPath().c_str() );
         return false;
@@ -394,7 +394,7 @@ bool DicomList::read( const std::string& dirname )
     BaseClass::setSuccess( true );
 
     kvs::Directory dir( dirname );
-    if( !dir.isExisted() )
+    if( !dir.exists() )
     {
         kvsMessageError( "%s is not existed.", dir.directoryPath().c_str() );
         BaseClass::setSuccess( false );

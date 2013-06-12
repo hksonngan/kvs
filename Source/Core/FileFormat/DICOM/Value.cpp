@@ -12,6 +12,7 @@
  */
 /****************************************************************************/
 #include "Value.h"
+#include <kvs/IgnoreUnusedVariable>
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -434,6 +435,8 @@ bool dcm::Value::read_data( std::ifstream& ifs, const bool swap )
     unsigned short data_tag[2];
     data_tag[0] = dcm::StreamReader::Get<unsigned short>( ifs, swap );
     data_tag[1] = dcm::StreamReader::Get<unsigned short>( ifs, swap );
+    kvs::IgnoreUnusedVariable( data_tag[0] );
+    kvs::IgnoreUnusedVariable( data_tag[1] );
 
     // Read VR (2 bytes).
     char vr[2+1];

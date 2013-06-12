@@ -23,6 +23,7 @@
 #include <kvs/glut/Timer>
 #include <SupportGLUT/Viewer/KVSMouseButton.h>
 #include <SupportGLUT/Viewer/KVSKey.h>
+#include <cstdlib>
 
 
 namespace

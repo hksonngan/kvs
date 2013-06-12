@@ -14,6 +14,7 @@
 /*****************************************************************************/
 #include "Application.h"
 #include <kvs/glut/GLUT>
+#include <cstdlib>
 
 
 namespace kvs
@@ -45,7 +46,7 @@ Application::Application( int argc, char** argv ):
  *  @brief  Destructs the Application class.
  */
 /*===========================================================================*/
-Application::~Application( void )
+Application::~Application()
 {
 }
 
@@ -55,7 +56,7 @@ Application::~Application( void )
  *  @return true, if the process is done successfully
  */
 /*===========================================================================*/
-int Application::run( void )
+int Application::run()
 {
     static bool flag = true;
     if ( flag )
@@ -64,7 +65,7 @@ int Application::run( void )
         glutMainLoop();
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -72,7 +73,7 @@ int Application::run( void )
  *  @brief  Quits the application.
  */
 /*===========================================================================*/
-void Application::quit( void )
+void Application::quit()
 {
     exit(0);
 }
