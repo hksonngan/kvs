@@ -397,7 +397,7 @@ bool Directory::parse( const std::string& directory_path )
 
     FindClose( hFind );
 #else
-    if ( this->isExisted() )
+    if ( this->exists() )
     {
         DIR* dir = opendir( m_directory_path.c_str() );
 
