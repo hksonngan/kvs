@@ -111,6 +111,7 @@ Thread/Thread
 Thread/WriteLocker
 Utility/AnyValue
 Utility/AnyValueArray
+Utility/AnyValueTable
 Utility/Assert
 Utility/Binary
 Utility/BitArray
@@ -149,6 +150,7 @@ Utility/Tree
 Utility/Type
 Utility/Value
 Utility/ValueArray
+Utility/ValueTable
 Utility/Version
 Utility/WeakPointer
 Visualization/Data/HydrogenVolumeData

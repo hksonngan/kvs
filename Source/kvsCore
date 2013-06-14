@@ -111,6 +111,7 @@
 #include <Core/Thread/WriteLocker.h>
 #include <Core/Utility/AnyValue.h>
 #include <Core/Utility/AnyValueArray.h>
+#include <Core/Utility/AnyValueTable.h>
 #include <Core/Utility/Assert.h>
 #include <Core/Utility/Binary.h>
 #include <Core/Utility/BitArray.h>
@@ -149,6 +150,7 @@
 #include <Core/Utility/Type.h>
 #include <Core/Utility/Value.h>
 #include <Core/Utility/ValueArray.h>
+#include <Core/Utility/ValueTable.h>
 #include <Core/Utility/Version.h>
 #include <Core/Utility/WeakPointer.h>
 #include <Core/Visualization/Data/HydrogenVolumeData.h>

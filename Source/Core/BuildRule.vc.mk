@@ -186,6 +186,7 @@ $(OUTDIR)\.\Thread\Thread.obj \
 $(OUTDIR)\.\Thread\WriteLocker.obj \
 $(OUTDIR)\.\Utility\AnyValue.obj \
 $(OUTDIR)\.\Utility\AnyValueArray.obj \
+$(OUTDIR)\.\Utility\AnyValueTable.obj \
 $(OUTDIR)\.\Utility\BitArray.obj \
 $(OUTDIR)\.\Utility\CommandLine.obj \
 $(OUTDIR)\.\Utility\Date.obj \
@@ -204,6 +205,7 @@ $(OUTDIR)\.\Utility\Tokenizer.obj \
 $(OUTDIR)\.\Utility\Type.obj \
 $(OUTDIR)\.\Utility\Value.obj \
 $(OUTDIR)\.\Utility\ValueArray.obj \
+$(OUTDIR)\.\Utility\ValueTable.obj \
 $(OUTDIR)\.\Visualization\Data\HydrogenVolumeData.obj \
 $(OUTDIR)\.\Visualization\Data\TornadoVolumeData.obj \
 $(OUTDIR)\.\Visualization\Event\EventBase.obj \
