@@ -141,8 +141,11 @@ $(OUTDIR)\.\Network\TCPBarrierServer.obj \
 $(OUTDIR)\.\Network\TCPServer.obj \
 $(OUTDIR)\.\Network\TCPSocket.obj \
 $(OUTDIR)\.\Network\Url.obj \
+$(OUTDIR)\.\Numeric\AdaptiveKMeans.obj \
 $(OUTDIR)\.\Numeric\EigenDecomposer.obj \
+$(OUTDIR)\.\Numeric\FastKMeans.obj \
 $(OUTDIR)\.\Numeric\GaussEliminationSolver.obj \
+$(OUTDIR)\.\Numeric\KMeans.obj \
 $(OUTDIR)\.\Numeric\LUDecomposer.obj \
 $(OUTDIR)\.\Numeric\LUSolver.obj \
 $(OUTDIR)\.\Numeric\MersenneTwister.obj \

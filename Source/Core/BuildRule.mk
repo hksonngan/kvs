@@ -141,8 +141,11 @@ $(OUTDIR)/./Network/TCPBarrierServer.o \
 $(OUTDIR)/./Network/TCPServer.o \
 $(OUTDIR)/./Network/TCPSocket.o \
 $(OUTDIR)/./Network/Url.o \
+$(OUTDIR)/./Numeric/AdaptiveKMeans.o \
 $(OUTDIR)/./Numeric/EigenDecomposer.o \
+$(OUTDIR)/./Numeric/FastKMeans.o \
 $(OUTDIR)/./Numeric/GaussEliminationSolver.o \
+$(OUTDIR)/./Numeric/KMeans.o \
 $(OUTDIR)/./Numeric/LUDecomposer.o \
 $(OUTDIR)/./Numeric/LUSolver.o \
 $(OUTDIR)/./Numeric/MersenneTwister.o \

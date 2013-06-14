@@ -65,9 +65,12 @@ Network/TCPBarrierServer
 Network/TCPServer
 Network/TCPSocket
 Network/Url
+Numeric/AdaptiveKMeans
 Numeric/BoxMuller
 Numeric/EigenDecomposer
+Numeric/FastKMeans
 Numeric/GaussEliminationSolver
+Numeric/KMeans
 Numeric/LUDecomposer
 Numeric/LUSolver
 Numeric/MersenneTwister
