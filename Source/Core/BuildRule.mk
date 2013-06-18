@@ -240,6 +240,7 @@ $(OUTDIR)/./Visualization/Exporter/PolygonExporter.o \
 $(OUTDIR)/./Visualization/Exporter/StructuredVolumeExporter.o \
 $(OUTDIR)/./Visualization/Exporter/UnstructuredVolumeExporter.o \
 $(OUTDIR)/./Visualization/Filter/FilterBase.o \
+$(OUTDIR)/./Visualization/Filter/KMeansClustering.o \
 $(OUTDIR)/./Visualization/Filter/LineIntegralConvolution.o \
 $(OUTDIR)/./Visualization/Filter/StructuredVectorToScalar.o \
 $(OUTDIR)/./Visualization/Filter/TetrahedraToTetrahedra.o \

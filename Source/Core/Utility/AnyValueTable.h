@@ -194,6 +194,11 @@ public:
         return ( *this )[ column_index ].at<T>( row_index );
     }
 
+    const Columns& columns() const
+    {
+        return m_columns;
+    }
+
     size_t size() const
     {
         size_t ncells = 0;
@@ -208,6 +213,11 @@ public:
     bool empty() const
     {
         return this->columnSize() == 0;
+    }
+
+    void clear()
+    {
+        m_columns.clear();
     }
 
     void swap( AnyValueTable& other )

@@ -64,7 +64,7 @@ public:
     void setSeedingMethod( SeedingMethod seeding_method ) { m_seeding_method = seeding_method; }
     void setSeed( const size_t seed ) { m_random.setSeed( seed ); }
     void setNumberOfClusters( const size_t nclusters ) { m_nclusters = nclusters; }
-    void setMaxInterations( const size_t max_iterations ) { m_max_iterations = max_iterations; }
+    void setMaxIterations( const size_t max_iterations ) { m_max_iterations = max_iterations; }
     void setTolerance( const float tolerance ) { m_tolerance = tolerance; }
     void setInputTableData( const kvs::AnyValueTable& table ) { m_input_table = table; }
 

@@ -188,6 +188,7 @@
 #include <Core/Visualization/Exporter/StructuredVolumeExporter.h>
 #include <Core/Visualization/Exporter/UnstructuredVolumeExporter.h>
 #include <Core/Visualization/Filter/FilterBase.h>
+#include <Core/Visualization/Filter/KMeansClustering.h>
 #include <Core/Visualization/Filter/LineIntegralConvolution.h>
 #include <Core/Visualization/Filter/StructuredVectorToScalar.h>
 #include <Core/Visualization/Filter/TetrahedraToTetrahedra.h>

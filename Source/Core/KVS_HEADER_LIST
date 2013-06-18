@@ -188,6 +188,7 @@ Visualization/Exporter/PolygonExporter
 Visualization/Exporter/StructuredVolumeExporter
 Visualization/Exporter/UnstructuredVolumeExporter
 Visualization/Filter/FilterBase
+Visualization/Filter/KMeansClustering
 Visualization/Filter/LineIntegralConvolution
 Visualization/Filter/StructuredVectorToScalar
 Visualization/Filter/TetrahedraToTetrahedra
