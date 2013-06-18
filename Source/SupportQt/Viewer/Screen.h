@@ -80,6 +80,8 @@ public:
     Screen( kvs::qt::Application* application = 0, QWidget* parent = 0 );
     virtual ~Screen();
 
+    kvs::Scene* scene();
+
     void setTitle( const std::string& title );
     void setPosition( const int x, const int y );
     void setSize( const int width, const int height );

@@ -85,6 +85,17 @@ Screen::~Screen()
 
 /*===========================================================================*/
 /**
+ *  @brief  Return pointer to the scene.
+ *  @return pointer to the scene
+ */
+/*===========================================================================*/
+kvs::Scene* Screen::scene()
+{
+    return m_scene;
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Sets a window title.
  *  @param  title [in] title
  */
