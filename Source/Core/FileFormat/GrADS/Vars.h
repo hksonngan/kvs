@@ -43,6 +43,7 @@ struct Vars
 
     std::list<Var> values; ///< value list
 
+    int indexOf( const std::string& varname ) const;
     bool read( std::string line, std::ifstream& ifs );
 };
 

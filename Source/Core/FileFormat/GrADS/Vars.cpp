@@ -26,6 +26,28 @@ namespace grads
 
 /*===========================================================================*/
 /**
+ *  @brief  Return index of the given variable.
+ *  @param  varname [in] variable name
+ *  @return index
+ */
+/*===========================================================================*/
+int Vars::indexOf( const std::string& varname ) const
+{
+    std::list<Var>::const_iterator var = values.begin();
+    std::list<Var>::const_iterator last = values.end();
+    int counter = 0;
+    while ( var != last )
+    {
+        if ( var->varname == varname ) { return counter; }
+        counter++;
+        var++;
+    }
+
+    return -1; // not found
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Reads VARS entry.
  *  @param  line [in] read line
  *  @param  ifs [in] input file stream

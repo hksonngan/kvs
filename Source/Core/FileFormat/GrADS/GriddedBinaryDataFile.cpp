@@ -143,6 +143,18 @@ const kvs::ValueArray<kvs::Real32>& GriddedBinaryDataFile::values() const
     return m_values;
 }
 
+const kvs::ValueArray<kvs::Real32> GriddedBinaryDataFile::values( const size_t vindex, const kvs::Vector3ui& dim ) const
+{
+    const size_t size = dim.x() * dim.y() * dim.z();
+    if ( m_values.size() < ( vindex + 1 ) * size ) return kvs::ValueArray<kvs::Real32>();
+
+    kvs::ValueArray<kvs::Real32> dst( size );
+    kvs::Real32* src = m_values.data() + vindex * size;
+    for ( size_t i = 0; i < size; i++ ) { dst[i] = src[i]; }
+
+    return dst;
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Loads data values from the specified data file.
