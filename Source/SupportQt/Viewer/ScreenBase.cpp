@@ -265,6 +265,17 @@ void ScreenBase::paintGL()
 /*===========================================================================*/
 void ScreenBase::resizeGL( int width, int height )
 {
+#if ( KVS_QT_VERSION == 5 )
+#if QT_VERSION < 0x050100
+    // BUG??? In Qt version of 5.0.1 and 5.0.2, 'width' and 'height' passed as
+    // arguments of this function are twice the size of width() and height()
+    // in QWidget. Therefore, these two arguments will be modified here.
+    // I expect the developper to fixe this bug in the next version of Qt.
+    if ( width != QWidget::width() ) { width = QWidget::width(); }
+    if ( height != QWidget::height() ) { height = QWidget::height(); }
+#endif
+#endif
+
     this->resizeEvent( width, height );
 }
 
