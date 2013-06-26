@@ -89,6 +89,8 @@ void ScreenBase::create()
     // Set screen geometry.
     QWidget::setGeometry( BaseClass::x(), BaseClass::y(), BaseClass::width(), BaseClass::height() );
 
+    QGLWidget::makeCurrent();
+
     // Initialize GLEW.
     GLenum result = glewInit();
     if ( result != GLEW_OK )
