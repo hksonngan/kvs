@@ -267,15 +267,17 @@ void ScreenBase::paintGL()
 /*===========================================================================*/
 void ScreenBase::resizeGL( int width, int height )
 {
-#if ( KVS_QT_VERSION == 5 )
-#if QT_VERSION < 0x050100
-    // BUG??? In Qt version of 5.0.1 and 5.0.2, 'width' and 'height' passed as
-    // arguments of this function are twice the size of width() and height()
-    // in QWidget. Therefore, these two arguments will be modified here.
-    // I expect the developper to fixe this bug in the next version of Qt.
-    if ( width != QWidget::width() ) { width = QWidget::width(); }
-    if ( height != QWidget::height() ) { height = QWidget::height(); }
-#endif
+#if ( KVS_QT_VERSION >= 5 )
+    // NOTE: High-dpi model such as retina display has been supported in Qt5.
+    // Therefore, when using Qt5 on Mac with retina display, the 'width' and
+    // 'height' specified as arguments of this method will be scaled by a device
+    // pixel ratio (DPR) parameter. However, in the current KVS, the DPR has
+    // not been supported. Due to this problem, the rendering image generated
+    // by the pixel-based rendering technique, such as ray casting renderer
+    // and particle-based renderer, will be partially broken.
+    const qreal scale = QGLWidget::devicePixelRatio();
+    width = static_cast<size_t>( width / scale + 0.5 );
+    height = static_cast<size_t>( height / scale + 0.5 );
 #endif
 
     this->resizeEvent( width, height );

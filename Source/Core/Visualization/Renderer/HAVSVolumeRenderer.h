@@ -365,8 +365,6 @@ private:
     kvs::Vector3f m_bb_min;
     kvs::Vector3f m_bb_max;
     float m_depth_scale;
-    float m_min_scalar;
-    float m_max_scalar;
 
 public:
     Meshes();

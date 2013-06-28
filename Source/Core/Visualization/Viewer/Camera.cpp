@@ -437,11 +437,13 @@ void Camera::update()
 /*==========================================================================*/
 kvs::ColorImage Camera::snapshot()
 {
-    GLint viewport[4];
-    KVS_GL_CALL( glGetIntegerv( GL_VIEWPORT, viewport ) );
+//    GLint viewport[4];
+//    KVS_GL_CALL( glGetIntegerv( GL_VIEWPORT, viewport ) );
 
-    const int width = viewport[2];
-    const int height = viewport[3];
+//    const int width = viewport[2];
+//    const int height = viewport[3];
+    const int width = static_cast<int>( m_window_width );
+    const int height = static_cast<int>( m_window_height );
     const int size = height * width * 3;
     kvs::ValueArray<kvs::UInt8> buffer( size );
 

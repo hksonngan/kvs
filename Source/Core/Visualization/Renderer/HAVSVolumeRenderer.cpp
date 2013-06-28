@@ -561,9 +561,7 @@ HAVSVolumeRenderer::Meshes::Meshes():
     m_ninternalfaces( 0 ),
     m_nrenderfaces( 0 ),
     m_diagonal( 0.0f ),
-    m_depth_scale( 0.0f ),
-    m_min_scalar( 0.0f ),
-    m_max_scalar( 0.0f )
+    m_depth_scale( 0.0f )
 {
     m_bb_min = kvs::Vector3f( 0.0f, 0.0f, 0.0f );
     m_bb_max = kvs::Vector3f( 0.0f, 0.0f, 0.0f );
