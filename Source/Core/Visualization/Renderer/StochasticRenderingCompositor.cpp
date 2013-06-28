@@ -27,6 +27,7 @@
 #include <kvs/RendererManager>
 #include <kvs/IDManager>
 #include "StochasticRendererBase.h"
+#include "ParticleBasedRenderer.h"
 
 
 namespace kvs
@@ -192,7 +193,18 @@ void StochasticRenderingCompositor::check_object_changed()
                 stochastic_renderer->engine().setDepthTexture( m_ensemble_buffer.currentDepthTexture() );
                 stochastic_renderer->engine().setShader( &stochastic_renderer->shader() );
                 stochastic_renderer->engine().setEnabledShading( m_enable_shading );
-                stochastic_renderer->engine().create( object, m_scene->camera(), m_scene->light() );
+
+                if ( kvs::glsl::ParticleBasedRenderer* particle_renderer = dynamic_cast<kvs::glsl::ParticleBasedRenderer*>( stochastic_renderer ) )
+                {
+                    KVS_GL_CALL( glPushMatrix() );
+                    object->transform( m_scene->objectManager()->objectCenter(), m_scene->objectManager()->normalize() );
+                    particle_renderer->engine().create( object, m_scene->camera(), m_scene->light() );
+                    KVS_GL_CALL( glPopMatrix() );
+                }
+                else
+                {
+                    stochastic_renderer->engine().create( object, m_scene->camera(), m_scene->light() );
+                }
             }
         }
     }
@@ -230,7 +242,18 @@ void StochasticRenderingCompositor::engines_create()
             stochastic_renderer->engine().setShader( &stochastic_renderer->shader() );
             stochastic_renderer->engine().setRepetitionLevel( m_repetition_level );
             stochastic_renderer->engine().setEnabledShading( m_enable_shading );
-            stochastic_renderer->engine().create( object, m_scene->camera(), m_scene->light() );
+
+            if ( kvs::glsl::ParticleBasedRenderer* particle_renderer = dynamic_cast<kvs::glsl::ParticleBasedRenderer*>( stochastic_renderer ) )
+            {
+                KVS_GL_CALL( glPushMatrix() );
+                object->transform( m_scene->objectManager()->objectCenter(), m_scene->objectManager()->normalize() );
+                particle_renderer->engine().create( object, m_scene->camera(), m_scene->light() );
+                KVS_GL_CALL( glPopMatrix() );
+            }
+            else
+            {
+                stochastic_renderer->engine().create( object, m_scene->camera(), m_scene->light() );
+            }
         }
     }
 }
