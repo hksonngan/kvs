@@ -325,7 +325,7 @@ void ObjectManager::change( std::string obj_name, ObjectBase* obj, bool delete_f
  *  @return number of the stored objects
  */
 /*==========================================================================*/
-int ObjectManager::nobjects() const
+int ObjectManager::numberOfObjects() const
 {
     return m_object_tree.size();
 }

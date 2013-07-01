@@ -301,17 +301,6 @@ void RendererManager::change( const std::string& renderer_name, const kvs::Share
  *  @return number of the stored renderers
  */
 /*==========================================================================*/
-int RendererManager::nrenderers() const
-{
-    return this->numberOfRenderers();
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Returns the number of the stored renderers.
- *  @return number of the stored renderers
- */
-/*==========================================================================*/
 int RendererManager::numberOfRenderers() const
 {
     return m_renderer_list.size();

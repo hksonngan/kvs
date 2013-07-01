@@ -23,6 +23,7 @@
 #include <kvs/IDManager>
 #include <kvs/ObjectBase>
 #include <kvs/RendererBase>
+#include <kvs/VisualizationPipeline>
 
 
 namespace kvs
@@ -63,146 +64,146 @@ Scene::~Scene()
     delete m_id_manager;
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  @brief  Initalizes the screen.
+ *  @brief  Registers an object with a renderer.
+ *  @param  object [in] pointer to the object
+ *  @param  renderer [in] pointer to the renderer
+ *  @return Pair of IDs (object ID and renderer ID)
  */
-/*==========================================================================*/
-void Scene::initializeFunction()
+/*===========================================================================*/
+const std::pair<int,int> Scene::registerObject( kvs::ObjectBase* object, kvs::RendererBase* renderer )
 {
-    // Set the lighting parameters.
-    m_light->on();
-
-    // Attach the Camera to the Mouse
-    m_mouse->attachCamera( m_camera );
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Core paint event function.
- */
-/*==========================================================================*/
-void Scene::paintFunction()
-{
-    // Update the camera and light.
-    m_camera->update();
-    m_light->update( m_camera );
-
-    // Set the background color or image.
-    m_background->apply();
-
-    // Rendering the resistered object by using the corresponding renderer.
-    if ( m_object_manager->hasObject() )
+    /* If the given pointer to the renderer is null, a renderer for the given
+     * object is automatically created by using visualization pipeline class.
+     */
+    if ( !renderer )
     {
-        const int size = m_id_manager->size();
-        for ( int index = 0; index < size; index++ )
+        kvs::VisualizationPipeline pipeline( object );
+        if ( !pipeline.exec() )
         {
-            kvs::IDManager::IDPair id_pair = (*m_id_manager)[index];
-            kvs::ObjectBase* object = m_object_manager->object( id_pair.first );
-            kvs::RendererBase* renderer = m_renderer_manager->renderer( id_pair.second );
-
-            if ( object->isShown() )
-            {
-                kvs::OpenGL::PushMatrix();
-                object->transform( m_object_manager->objectCenter(), m_object_manager->normalize() );
-                renderer->exec( object, m_camera, m_light );
-                kvs::OpenGL::PopMatrix();
-            }
+            kvsMessageError("Cannot create a renderer for the given object.");
+            return std::pair<int,int>( -1, -1 );
         }
+
+        renderer = const_cast<kvs::RendererBase*>( pipeline.renderer() );
     }
-    else
+
+    if ( !object->hasMinMaxObjectCoords() )
     {
-        float array[16];
-        m_object_manager->xform().toArray( array );
-        kvs::OpenGL::MultMatrix( array );
+        object->updateMinMaxCoords();
     }
-}
 
-/*==========================================================================*/
-/**
- *  @brief  Core resize event function.
- *  @param  width [in] screen width
- *  @param  height [in] screen height
- */
-/*==========================================================================*/
-void Scene::resizeFunction( int width, int height )
-{
-    // Update the viewport for OpenGL.
-    kvs::OpenGL::SetViewport( 0, 0, width, height );
+    /* If the object has not been registered in the object managet,
+     * the object is registered and then its ID is returned.
+     */
+    int object_id = m_object_manager->objectID( object );
+    if ( object_id == -1 ) object_id = m_object_manager->insert( object );
 
-    // Update the window size for camera and mouse.
-    m_camera->setWindowSize( width, height );
-    m_mouse->setWindowSize( width, height );
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Function which is called when the mouse button is released.
- *  @param  x [in] x coordinate value of the mouse cursor position
- *  @param  y [in] y coordinate value of the mouse cursor position
- */
-/*==========================================================================*/
-void Scene::mouseReleaseFunction( int x, int y )
-{
-    m_enable_move_all = true;
-    m_enable_collision_detection = false;
-    m_mouse->release( x, y );
-
-    if ( !( m_mouse->isUseAuto() && m_mouse->isAuto() ) )
+    /* If the renderer has not been registered in the renderer managet,
+     * the renderer is registered and then its ID is returned.
+     */
+    int renderer_id = -1;
+    for ( int i = 0; i < m_renderer_manager->nrenderers(); i++ )
     {
-        m_object_manager->releaseActiveObject();
+        if ( m_renderer_manager->renderer(i) == renderer ) renderer_id = i;
     }
-}
+    if ( renderer_id == -1 ) renderer_id = m_renderer_manager->insert( renderer );
 
-/*==========================================================================*/
-/**
- *  @brief  Function which is called when the mouse button is released.
- *  @param  x [in] x coordinate value of the mouse cursor position
- *  @param  y [in] y coordinate value of the mouse cursor position
- *  @param  mode [in] mouse translation mode
- */
-/*==========================================================================*/
-void Scene::mousePressFunction( int x, int y, kvs::Mouse::TransMode mode )
-{
-    if ( m_enable_move_all || m_object_manager->hasActiveObject() )
-    {
-        this->updateControllingObject();
-        m_mouse->setMode( mode );
-        m_mouse->press( x, y );
-    }
-}
+    // Insert the IDs into the ID manager.
+    m_id_manager->insert( object_id, renderer_id );
 
-/*==========================================================================*/
-/**
- *  @brief  Function which is called when the mouse cursor is moved.
- *  @param  x [in] x coordinate value of the mouse cursor position
- *  @param  y [in] y coordinate value of the mouse cursor position
- */
-/*==========================================================================*/
-void Scene::mouseMoveFunction( int x, int y )
-{
-    if ( m_enable_move_all || m_object_manager->hasActiveObject() )
-    {
-        m_mouse->move( x, y );
-        this->updateXform();
-    }
+    return std::pair<int,int>( object_id, renderer_id );
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Function which is called when the mouse wheel is scrolled.
- *  @param  value [in] incremental value
+ *  @brief  Removes the object specified by the given object ID.
+ *  @param  object_id [in] object ID
+ *  @param  delete_object [in] if true, the object will be deleted
+ *  @param  delete_renderer [in] if true, the renderers for the object will be deleted
  */
 /*===========================================================================*/
-void Scene::wheelFunction( int value )
+void Scene::removeObject( int object_id, bool delete_object, bool delete_renderer )
 {
-    if ( m_enable_move_all || m_object_manager->hasActiveObject() )
+    // Remove the object specified by the given object ID for the object manager.
+    m_object_manager->erase( object_id, delete_object );
+
+    // Remove the all of renderers assigned for the specified object from the renderer manager.
+    const std::vector<int> renderer_ids = m_id_manager->rendererID( object_id );
+    for ( size_t i = 0; i < renderer_ids.size(); i++ )
     {
-        this->updateControllingObject();
-        m_mouse->setMode( kvs::Mouse::Scaling );
-        m_mouse->press( 0, 0 );
-        m_mouse->move( 0, value );
+        m_renderer_manager->erase( renderer_ids[i], delete_renderer );
     }
+
+    // Remove IDs specified by the given object ID from the ID manager.
+    m_id_manager->eraseByObjectID( object_id );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Removes the object specified by the given object name.
+ *  @param  object_name [in] object name
+ *  @param  delete_object [in] if true, the registered object will be deleted
+ *  @param  delete_renderer [in] if true, the registered renderers for the object will be deleted
+ */
+/*===========================================================================*/
+void Scene::removeObject( std::string object_name, bool delete_object, bool delete_renderer )
+{
+    const int object_id = m_object_manager->objectID( m_object_manager->object( object_name ) );
+    this->removeObject( object_id, delete_object, delete_renderer );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Replaces the object specified by the given object ID with the input object.
+ *  @param  object_id [in] object ID
+ *  @param  object [in] pointer to the object will be registered
+ *  @param  delete_object [in] if true, the registered object will be deleted
+ */
+/*===========================================================================*/
+void Scene::replaceObject( int object_id, kvs::ObjectBase* object, bool delete_object )
+{
+    m_object_manager->change( object_id, object, delete_object );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Replaces the object specified by the given object name with the input object.
+ *  @param  object_id [in] object name
+ *  @param  object [in] pointer to the object will be registered
+ *  @param  delete_object [in] if true, the registered object will be deleted
+ */
+/*===========================================================================*/
+void Scene::replaceObject( std::string object_name, kvs::ObjectBase* object, bool delete_object )
+{
+    m_object_manager->change( object_name, object, delete_object );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Replaces the renderer specified by the given renderer ID with the input renderer.
+ *  @param  renderer_id [in] renderer ID
+ *  @param  renderer [in] pointer to the renderer will be registered
+ *  @param  delete_renderer [in] if true, the registered renderer will be deleted
+ */
+/*===========================================================================*/
+void Scene::replaceRenderer( int renderer_id, kvs::RendererBase* renderer, bool delete_renderer )
+{
+    m_renderer_manager->change( renderer_id, renderer, delete_renderer );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Replaces the renderer specified by the given renderer name with the input renderer.
+ *  @param  renderer_name [in] renderer name
+ *  @param  renderer [in] pointer to the renderer will be registered
+ *  @param  delete_renderer [in] if true, the registered renderer will be deleted
+ */
+/*===========================================================================*/
+void Scene::replaceRenderer( std::string renderer_name, kvs::RendererBase* renderer, bool delete_renderer )
+{
+    m_renderer_manager->change( renderer_name, renderer, delete_renderer );
 }
 
 /*===========================================================================*/
@@ -459,6 +460,148 @@ void Scene::updateXform( kvs::Light* light )
         break;
     default:
         break;
+    }
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Initalizes the screen.
+ */
+/*==========================================================================*/
+void Scene::initializeFunction()
+{
+    // Set the lighting parameters.
+    m_light->on();
+
+    // Attach the Camera to the Mouse
+    m_mouse->attachCamera( m_camera );
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Core paint event function.
+ */
+/*==========================================================================*/
+void Scene::paintFunction()
+{
+    // Update the camera and light.
+    m_camera->update();
+    m_light->update( m_camera );
+
+    // Set the background color or image.
+    m_background->apply();
+
+    // Rendering the resistered object by using the corresponding renderer.
+    if ( m_object_manager->hasObject() )
+    {
+        const int size = m_id_manager->size();
+        for ( int index = 0; index < size; index++ )
+        {
+            kvs::IDManager::IDPair id_pair = (*m_id_manager)[index];
+            kvs::ObjectBase* object = m_object_manager->object( id_pair.first );
+            kvs::RendererBase* renderer = m_renderer_manager->renderer( id_pair.second );
+
+            if ( object->isShown() )
+            {
+                kvs::OpenGL::PushMatrix();
+                object->transform( m_object_manager->objectCenter(), m_object_manager->normalize() );
+                renderer->exec( object, m_camera, m_light );
+                kvs::OpenGL::PopMatrix();
+            }
+        }
+    }
+    else
+    {
+        float array[16];
+        m_object_manager->xform().toArray( array );
+        kvs::OpenGL::MultMatrix( array );
+    }
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Core resize event function.
+ *  @param  width [in] screen width
+ *  @param  height [in] screen height
+ */
+/*==========================================================================*/
+void Scene::resizeFunction( int width, int height )
+{
+    // Update the viewport for OpenGL.
+    kvs::OpenGL::SetViewport( 0, 0, width, height );
+
+    // Update the window size for camera and mouse.
+    m_camera->setWindowSize( width, height );
+    m_mouse->setWindowSize( width, height );
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Function which is called when the mouse button is released.
+ *  @param  x [in] x coordinate value of the mouse cursor position
+ *  @param  y [in] y coordinate value of the mouse cursor position
+ */
+/*==========================================================================*/
+void Scene::mouseReleaseFunction( int x, int y )
+{
+    m_enable_move_all = true;
+    m_enable_collision_detection = false;
+    m_mouse->release( x, y );
+
+    if ( !( m_mouse->isUseAuto() && m_mouse->isAuto() ) )
+    {
+        m_object_manager->releaseActiveObject();
+    }
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Function which is called when the mouse button is released.
+ *  @param  x [in] x coordinate value of the mouse cursor position
+ *  @param  y [in] y coordinate value of the mouse cursor position
+ *  @param  mode [in] mouse translation mode
+ */
+/*==========================================================================*/
+void Scene::mousePressFunction( int x, int y, kvs::Mouse::TransMode mode )
+{
+    if ( m_enable_move_all || m_object_manager->hasActiveObject() )
+    {
+        this->updateControllingObject();
+        m_mouse->setMode( mode );
+        m_mouse->press( x, y );
+    }
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Function which is called when the mouse cursor is moved.
+ *  @param  x [in] x coordinate value of the mouse cursor position
+ *  @param  y [in] y coordinate value of the mouse cursor position
+ */
+/*==========================================================================*/
+void Scene::mouseMoveFunction( int x, int y )
+{
+    if ( m_enable_move_all || m_object_manager->hasActiveObject() )
+    {
+        m_mouse->move( x, y );
+        this->updateXform();
+    }
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Function which is called when the mouse wheel is scrolled.
+ *  @param  value [in] incremental value
+ */
+/*===========================================================================*/
+void Scene::wheelFunction( int value )
+{
+    if ( m_enable_move_all || m_object_manager->hasActiveObject() )
+    {
+        this->updateControllingObject();
+        m_mouse->setMode( kvs::Mouse::Scaling );
+        m_mouse->press( 0, 0 );
+        m_mouse->move( 0, value );
     }
 }
 

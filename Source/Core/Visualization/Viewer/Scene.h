@@ -28,6 +28,8 @@ class Background;
 class ObjectManager;
 class RendererManager;
 class IDManager;
+class ObjectBase;
+class RendererBase;
 
 /*===========================================================================*/
 /**
@@ -64,6 +66,27 @@ public:
     Scene();
     virtual ~Scene();
 
+    const std::pair<int,int> registerObject( kvs::ObjectBase* object, kvs::RendererBase* renderer = 0 );
+    void removeObject( int object_id, bool delete_object = true, bool delete_renderer = true );
+    void removeObject( std::string object_name, bool delete_object = true, bool delete_renderer = true );
+    void replaceObject( int object_id, kvs::ObjectBase* object, bool delete_object = true );
+    void replaceObject( std::string object_name, kvs::ObjectBase* object, bool delete_object = true );
+    void replaceRenderer( int renderer_id, kvs::RendererBase* renderer, bool delete_renderer = true );
+    void replaceRenderer( std::string renderer_name, kvs::RendererBase* renderer, bool delete_renderer = true );
+
+    void reset();
+    bool isActiveMove( int x, int y );
+    void disableAllMove();
+    void enableAllMove();
+    void disableCollisionDetection();
+    void enableCollisionDetection();
+    void updateControllingObject();
+    void updateCenterOfRotation();
+    void updateXform();
+    void updateXform( kvs::ObjectManager* manager );
+    void updateXform( kvs::Camera* camera );
+    void updateXform( kvs::Light* light );
+
     kvs::Camera* camera() { return m_camera; }
     kvs::Light* light() { return m_light; }
     kvs::Mouse* mouse() { return m_mouse; }
@@ -80,19 +103,6 @@ public:
     void mousePressFunction( int x, int y, kvs::Mouse::TransMode mode );
     void mouseMoveFunction( int x, int y );
     void wheelFunction( int value );
-
-    void reset();
-    bool isActiveMove( int x, int y );
-    void disableAllMove();
-    void enableAllMove();
-    void disableCollisionDetection();
-    void enableCollisionDetection();
-    void updateControllingObject();
-    void updateCenterOfRotation();
-    void updateXform();
-    void updateXform( kvs::ObjectManager* manager );
-    void updateXform( kvs::Camera* camera );
-    void updateXform( kvs::Light* light );
 };
 
 } // end of namespace kvs

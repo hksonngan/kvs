@@ -19,6 +19,7 @@
 #include <map>
 #include <kvs/ObjectBase>
 #include <kvs/Tree>
+#include <kvs/Deprecated>
 
 
 namespace kvs
@@ -59,7 +60,7 @@ public:
     void erase( std::string obj_name, bool delete_flg = true );
     void change( int obj_id, kvs::ObjectBase* obj, bool delete_flg = true );
     void change( std::string obj_name, kvs::ObjectBase* obj, bool delete_flg = true );
-    int nobjects() const;
+    int numberOfObjects() const;
     kvs::ObjectBase* object();
     kvs::ObjectBase* object( int obj_id );
     kvs::ObjectBase* object( std::string obj_name );
@@ -106,6 +107,9 @@ private:
 private:
     ObjectManager( const ObjectManager& );
     ObjectManager& operator =( const ObjectManager& );
+
+public:
+    KVS_DEPRECATED( int nobjects() const ) { return numberOfObjects(); }
 };
 
 } // end of namespace kvs

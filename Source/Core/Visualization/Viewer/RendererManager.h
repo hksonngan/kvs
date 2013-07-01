@@ -18,6 +18,7 @@
 #include <utility>
 #include <vector>
 #include <kvs/SharedPointer>
+#include <kvs/Deprecated>
 
 
 namespace kvs
@@ -51,10 +52,10 @@ public:
     void erase( const std::string& renderer_name, bool delete_flg );
     void change( int renderer_id, kvs::RendererBase* renderer, bool delete_flg );
     void change( const std::string& renderer_name, kvs::RendererBase* renderer, bool delete_flg );
-    int nrenderers() const;
     kvs::RendererBase* renderer();
     kvs::RendererBase* renderer( int renderer_id );
     kvs::RendererBase* renderer( const std::string& renderer_name );
+
     int insert( const kvs::SharedPointer<kvs::RendererBase>& renderer );
     void erase();
     void erase( int renderer_id );
@@ -74,6 +75,9 @@ private:
 private:
     RendererManager( const RendererManager& );
     RendererManager& operator =( const RendererManager& );
+
+public:
+    KVS_DEPRECATED( int nrenderers() const ) { return numberOfRenderers(); }
 };
 
 } // end of namespace kvs
