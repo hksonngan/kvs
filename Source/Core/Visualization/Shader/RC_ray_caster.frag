@@ -80,13 +80,13 @@ float ray_depth( in float t, in float entry_depth, in float exit_depth )
     return zw_current;
 }
 
-void main( void )
+void main()
 {
     // Entry and exit point.
     vec2 index = vec2( gl_FragCoord.x / width, gl_FragCoord.y / height );
     vec3 entry_point = ( volume.resolution - vec3(1.0) ) * texture2D( entry_points, index ).xyz;
     vec3 exit_point = ( volume.resolution - vec3(1.0) ) * texture2D( exit_points, index ).xyz;
-    if ( entry_point == exit_point ) { discard; } // out of cube
+    if ( entry_point == exit_point ) { discard; } // out of volume
 
     // Ray direction.
     vec3 direction = dt * normalize( exit_point - entry_point );
@@ -103,22 +103,29 @@ void main( void )
     vec4 dst = vec4( 0.0, 0.0, 0.0, 0.0 );
 
     // Transfer function scale.
-//    float tfunc_scale = 1.0 / ( volume.max_value - volume.min_value );
     float tfunc_scale = 1.0 / ( transfer_function.max_value - transfer_function.min_value );
 
     float entry_depth = texture2D( entry_points, index ).w;
     float exit_depth = texture2D( exit_points, index ).w;
     float depth0 = texture2D( depth_texture, index ).x;
     vec3 color0 = texture2D( color_texture, index ).rgb;
-    for ( int i = 0; i < nsteps; i++ )
+    int i = 0;
+    do
     {
         // Get the scalar value from the 3D texture.
-        vec3 volume_index = vec3( position / ( volume.resolution - vec3(1.0) ) );
+        //     NOTE: The volume index which is a index to access the volume data
+        //     represented as 3D texture can be calculate as follows:
+        //
+        //         vec3 A = ( R - vec3(1.0) ) / R; // ajusting parameter
+        //         vec3 I = vec3( P + vec3(0.5) ) * A / ( R - vec3(1.0) );
+        //                = vec3( P + vec3(0.5) ) / R;
+        //
+        //     where, I: volume index, P: position, R: volume resolution.
+        vec3 volume_index = vec3( ( position + vec3(0.5) ) / volume.resolution );
         vec4 value = texture3D( volume.data, volume_index );
         float scalar = mix( volume.min_range, volume.max_range, value.w );
 
         // Get the source color from the transfer function.
-//        float tfunc_index = ( scalar - volume.min_value ) * tfunc_scale;
         float tfunc_index = ( scalar - transfer_function.min_value ) * tfunc_scale;
         vec4 src = texture1D( transfer_function.data, tfunc_index );
         if ( src.a != 0.0 )
@@ -167,7 +174,7 @@ void main( void )
         }
 
         position += direction;
-    }
+    } while ( i++ < nsteps );
 
     gl_FragColor = dst;
 }
