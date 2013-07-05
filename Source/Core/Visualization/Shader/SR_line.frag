@@ -1,6 +1,6 @@
 /*****************************************************************************/
 /**
- *  @file   line.frag
+ *  @file   SR_line.frag
  *  @author Jun Nishimura, Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
@@ -12,17 +12,25 @@
  *  $Id$
  */
 /*****************************************************************************/
-// Input.
-varying vec3 position;
-varying vec2 index;
-varying float depth;
+// Input parameters from vertex shader.
+varying vec3 position; // vertex position in camera coordinate
+varying vec2 index; // index for accessing to the random texture
+varying float depth; // depth value of the vertex in normalized device coordinate
 
-// Uniform.
-uniform sampler2D random_texture;
-uniform float random_texture_size_inv;
-uniform vec2 random_offset;
-uniform float opacity;
+// Uniform parameters.
+uniform sampler2D random_texture; // random texture to generate random number
+uniform float random_texture_size_inv; // reciprocal value of the random texture size
+uniform vec2 random_offset; // offset values for accessing to the random texture
+uniform float opacity; // opacity value
 
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns random index.
+ *  @param  p [in] pixel coordinate value
+ *  @return random index as 2d vector
+ */
+/*===========================================================================*/
 vec2 RandomIndex( in vec2 p )
 {
     float x = float( int( index.x ) * 73 );
@@ -30,6 +38,11 @@ vec2 RandomIndex( in vec2 p )
     return ( vec2( x, y ) + random_offset + p ) * random_texture_size_inv;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Main function of fragment shader.
+ */
+/*===========================================================================*/
 void main()
 {
     if ( opacity == 0.0 ) { discard; return; }

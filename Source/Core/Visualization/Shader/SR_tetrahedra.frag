@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   tetrahedra.frag
- *  @author Jun Nishimura
+ *  @author Jun Nishimura, Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -15,30 +15,81 @@
 #include "shading.h"
 
 // Input parameters from geometry shader
-varying vec3 position;
-varying vec3 normal;
-varying vec2 random_index;
+varying vec3 position; // vertex position in camera coordinate
+varying vec3 normal; // normal vector in camera coordinate
+varying vec2 random_index; // index for accessing to the random texture
+varying float scalar_front; // scalar value on the front face
+varying float scalar_back; // scalar value on the back face
+varying float distance; // distance between the front and back face
 #if defined( ENABLE_EXACT_DEPTH_TESTING )
-varying float depth_front;
-varying float depth_back;
+varying float depth_front; // depth value at the front face
+varying float depth_back; // depth value at the back face
 #endif
-varying float scalar_front;
-varying float scalar_back;
-varying float distance;
+varying float wc_inv_front; // reciprocal value of the w-component at the front face in clip coordinate
+varying float wc_inv_back; // reciprocal value of the w-component at the back face in clip coordinate
 
 // Uniform parameters.
-uniform sampler3D preintegration_texture;
-uniform sampler2D random_texture;
+uniform sampler3D preintegration_texture; // pre-integration texture
+uniform sampler2D random_texture; // random number texture
 #if defined( ENABLE_EXACT_DEPTH_TESTING )
-uniform sampler2D depth_texture;
+uniform sampler2D depth_texture; // depth texture
 #endif
-uniform vec2 screen_scale;
-uniform vec2 screen_scale_inv;
-uniform vec2 preintegration_scale_offset;
-uniform float random_texture_size_inv;
-uniform vec2 random_offset;
-uniform Shading shading;
+uniform vec2 screen_scale; // not used...
+uniform vec2 screen_scale_inv; // reciprocal values of width and height of screen
+uniform vec2 preintegration_scale_offset; // offset values for pre-integration table
+uniform float random_texture_size_inv; // reciprocal value of random texture size
+uniform vec2 random_offset; // offset values for accessing to the random texture
+uniform Shading shading; // shading parameters
 
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns a random number.
+ *  @return random number
+ */
+/*===========================================================================*/
+float RandomNumber()
+{
+    vec2 index =
+        ( vec2( float( int( random_index.x ) * 73 ), float( int( random_index.y ) * 31 ) )
+          + random_offset + gl_FragCoord.xy ) * random_texture_size_inv;
+    return texture2D( random_texture, index ).x;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns pre-integrated values.
+ *  @return pre-integrated values
+ */
+/*===========================================================================*/
+vec4 LookupPreIntegration()
+{
+#if defined( ENABLE_EXACT_DEPTH_TESTING )
+    vec2 index = gl_FragCoord.xy * screen_scale_inv;
+    float depth = texture2D( depth_texture, index ).x;
+    if ( depth < 1.0 && depth_front <= depth && depth <= depth_back )
+    {
+        float ratio = ( depth - depth_front ) / ( depth_back - depth_front );
+        float Sf = scalar_front;
+        float Sb = ( 1.0 - ratio ) * scalar_front + ratio * scalar_back;
+        float d = ratio * distance;
+
+        Sf /= wc_inv_front;
+        Sb /= wc_inv_back;
+
+        return texture3D( preintegration_texture, vec3( Sf, Sb, d ) );
+    }
+#endif
+
+    float Sf = scalar_front;
+    float Sb = scalar_back;
+    float d = distance;
+
+    Sf /= wc_inv_front;
+    Sb /= wc_inv_back;
+
+    return texture3D( preintegration_texture, vec3( Sf, Sb, d ) );
+}
 
 /*===========================================================================*/
 /**
@@ -47,55 +98,34 @@ uniform Shading shading;
 /*===========================================================================*/
 void main()
 {
-#if defined( ENABLE_EXACT_DEPTH_TESTING )
-    vec4 lutdata;
-    vec2 screen_coord = gl_FragCoord.xy * screen_scale_inv;
-    float geom_d = texture2D( depth_texture, screen_coord ).x;
-    if ( geom_d < 1.0 && depth_front <= geom_d && geom_d <= depth_back )
-    {
-        float ratio = ( geom_d - depth_front ) / ( depth_back - depth_front );
-        vec3 lutcoord = vec3( scalar_front, ( 1.0 - ratio ) * scalar_front + ratio * scalar_back, ratio * distance );
-        lutdata = texture3D( preintegration_texture, lutcoord );
-    }
-    else
-    {
-        vec3 lutcoord = vec3( scalar_front, scalar_back, distance );
-        lutdata = texture3D( preintegration_texture, lutcoord );
-    }
-#else
-    vec3 lutcoord = vec3( scalar_front, scalar_back, distance );
-    vec4 lutdata = texture3D( preintegration_texture, lutcoord );
-#endif
-    if ( lutdata.a == 0.0 ) { discard; return; }
+    vec4 preintegrated = LookupPreIntegration();
+    if ( preintegrated.a == 0.0 ) { discard; return; }
 
-    vec2 random_position = ( vec2( float( int( random_index.x ) * 73 ), float( int( random_index.y ) * 31 ) ) 
-                + random_offset + gl_FragCoord.xy ) * random_texture_size_inv;
+    float R = RandomNumber();
+    if ( R > preintegrated.a ) { discard; return; }
 
-    float randf = texture2D( random_texture, random_position ).x;
-    if ( randf > lutdata.a ) { discard; return; }
+    vec3 color = preintegrated.xyz / preintegrated.a;
 
-    vec3 frag_color = lutdata.xyz / lutdata.a;
-
-    // Light position.
+    // Light position in camera coordinate.
     vec3 light_position = gl_LightSource[0].position.xyz;
 
-    // Light vector (L) and Normal vector (N)
+    // Light vector (L) and Normal vector (N) in camera coordinate.
     vec3 L = normalize( light_position - position );
     vec3 N = normalize( normal );
 
 #if   defined( ENABLE_LAMBERT_SHADING )
-    vec3 shaded_color = ShadingLambert( shading, frag_color, L, N );
+    vec3 shaded_color = ShadingLambert( shading, color, L, N );
 
 #elif defined( ENABLE_PHONG_SHADING )
     vec3 V = normalize( - position );
-    vec3 shaded_color = ShadingPhong( shading, frag_color, L, N, V );
+    vec3 shaded_color = ShadingPhong( shading, color, L, N, V );
 
 #elif defined( ENABLE_BLINN_PHONG_SHADING )
     vec3 V = normalize( - position );
-    vec3 shaded_color = ShadingBlinnPhong( shading, frag_color, L, N, V );
+    vec3 shaded_color = ShadingBlinnPhong( shading, color, L, N, V );
 
 #else // DISABLE SHADING
-    vec3 shaded_color = ShadingNone( shading, frag_color );
+    vec3 shaded_color = ShadingNone( shading, color );
 #endif
 
     gl_FragColor = vec4( shaded_color, 1.0 );

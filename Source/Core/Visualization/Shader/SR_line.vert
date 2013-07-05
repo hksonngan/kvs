@@ -1,6 +1,6 @@
 /*****************************************************************************/
 /**
- *  @file   line.vert
+ *  @file   SR_line.vert
  *  @author Jun Nishimura, Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
@@ -12,14 +12,20 @@
  *  $Id$
  */
 /*****************************************************************************/
-// Input.
-attribute vec2 random_index;
+// Input parameters.
+attribute vec2 random_index; // index for accessing to the random texture
 
-// Output.
-varying vec3 position;
-varying vec2 index;
-varying float depth;
+// Output parameters to fragment shader.
+varying vec3 position; // vertex position in camera coordinate
+varying vec2 index; // index for accessing to the random texture
+varying float depth; // depth value of the vertex in normalized device coordinate
 
+
+/*===========================================================================*/
+/**
+ *  @brief  Main function of vertex shader.
+ */
+/*===========================================================================*/
 void main()
 {
     gl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * gl_Vertex;

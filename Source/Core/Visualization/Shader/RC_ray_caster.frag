@@ -16,28 +16,38 @@
 #include "volume.h"
 #include "transfer_function.h"
 
-uniform sampler2D        entry_points;      // entry points (front face)
-uniform sampler2D        exit_points;       // exit points (back face)
-uniform vec3             offset;            // offset width for the gradient
-uniform float            dt;                // sampling step
-uniform float            opaque;            // opaque value
-uniform vec3             light_position;    // light position in the object coordinate
-uniform vec3             camera_position;   // camera position in the object coordinate
-uniform Volume           volume;            // volume data
-uniform Shading          shading;           // shading parameter
+// Uniform parameters.
+uniform sampler2D entry_points; // entry points (front face)
+uniform sampler2D exit_points; // exit points (back face)
+uniform vec3 offset; // offset width for the gradient
+uniform float dt; // sampling step
+uniform float opaque; // opaque value
+uniform vec3 light_position; // light position in the object coordinate
+uniform vec3 camera_position; // camera position in the object coordinate
+uniform Volume volume; // volume data
+uniform Shading shading; // shading parameter
 uniform TransferFunction transfer_function; // 1D transfer function
-uniform sampler2D        jittering_texture; // texture for jittering
-uniform float            width;             // screen width
-uniform float            height;            // screen height
-uniform sampler2D        depth_texture;     // depth texture for depth buffer
-uniform sampler2D        color_texture;     // color texture for color buffer
-uniform float            to_zw1;            // scaling parameter: (f*n)/(f-n)
-uniform float            to_zw2;            // scaling parameter: 0.5*((f+n)/(f-n))+0.5
-uniform float            to_ze1;            // scaling parameter: 0.5 + 0.5*((f+n)/(f-n))
-uniform float            to_ze2;            // scaling parameter: (f-n)/(f*n)
+uniform sampler2D jittering_texture; // texture for jittering
+uniform float width; // screen width
+uniform float height; // screen height
+uniform sampler2D depth_texture; // depth texture for depth buffer
+uniform sampler2D color_texture; // color texture for color buffer
+uniform float to_zw1; // scaling parameter: (f*n)/(f-n)
+uniform float to_zw2; // scaling parameter: 0.5*((f+n)/(f-n))+0.5
+uniform float to_ze1; // scaling parameter: 0.5 + 0.5*((f+n)/(f-n))
+uniform float to_ze2; // scaling parameter: (f-n)/(f*n)
 
 
-vec3 estimateGradient( in sampler3D v, in vec3 p, in vec3 o )
+/*===========================================================================*/
+/**
+ *  @brief  Returns gradient vector estimated from six adjacent scalars.
+ *  @param  v [in] volume data
+ *  @param  p [in] sampling point
+ *  @param  o [in] offset
+ *  @return gradient vector
+ */
+/*===========================================================================*/
+vec3 EstimateGradient( in sampler3D v, in vec3 p, in vec3 o )
 {
     float s0 = texture3D( v, p + vec3( o.x, 0.0, 0.0 ) ).w;
     float s1 = texture3D( v, p + vec3( 0.0, o.y, 0.0 ) ).w;
@@ -46,40 +56,74 @@ vec3 estimateGradient( in sampler3D v, in vec3 p, in vec3 o )
     float s4 = texture3D( v, p - vec3( 0.0, o.y, 0.0 ) ).w;
     float s5 = texture3D( v, p - vec3( 0.0, 0.0, o.z ) ).w;
 
-    return( vec3( s3 - s0, s4 - s1, s5 - s2 ) );
+    return vec3( s3 - s0, s4 - s1, s5 - s2 );
 }
 
-vec3 estimateGradient8( in sampler3D v, in vec3 p, in vec3 o )
+/*===========================================================================*/
+/**
+ *  @brief  Returns gradient vector estimated from eight adjacent scalars.
+ *  @param  v [in] volume data
+ *  @param  p [in] sampling point
+ *  @param  o [in] offset
+ *  @return gradient vector
+ */
+/*===========================================================================*/
+vec3 EstimateGradient8( in sampler3D v, in vec3 p, in vec3 o )
 {
-    vec3 g0 = estimateGradient( v, p, o );
-    vec3 g1 = estimateGradient( v, p + vec3( -o.x, -o.y, -o.z ), o );
-    vec3 g2 = estimateGradient( v, p + vec3(  o.x,  o.y,  o.z ), o );
-    vec3 g3 = estimateGradient( v, p + vec3( -o.x,  o.y, -o.z ), o );
-    vec3 g4 = estimateGradient( v, p + vec3(  o.x, -o.y,  o.z ), o );
-    vec3 g5 = estimateGradient( v, p + vec3( -o.x, -o.y,  o.z ), o );
-    vec3 g6 = estimateGradient( v, p + vec3(  o.x,  o.y, -o.z ), o );
-    vec3 g7 = estimateGradient( v, p + vec3( -o.x,  o.y,  o.z ), o );
-    vec3 g8 = estimateGradient( v, p + vec3(  o.x, -o.y, -o.z ), o );
+    vec3 g0 = EstimateGradient( v, p, o );
+    vec3 g1 = EstimateGradient( v, p + vec3( -o.x, -o.y, -o.z ), o );
+    vec3 g2 = EstimateGradient( v, p + vec3(  o.x,  o.y,  o.z ), o );
+    vec3 g3 = EstimateGradient( v, p + vec3( -o.x,  o.y, -o.z ), o );
+    vec3 g4 = EstimateGradient( v, p + vec3(  o.x, -o.y,  o.z ), o );
+    vec3 g5 = EstimateGradient( v, p + vec3( -o.x, -o.y,  o.z ), o );
+    vec3 g6 = EstimateGradient( v, p + vec3(  o.x,  o.y, -o.z ), o );
+    vec3 g7 = EstimateGradient( v, p + vec3( -o.x,  o.y,  o.z ), o );
+    vec3 g8 = EstimateGradient( v, p + vec3(  o.x, -o.y, -o.z ), o );
     vec3 mix0 = mix( mix( g1, g2, 0.5 ), mix( g3, g4, 0.5 ), 0.5 );
     vec3 mix1 = mix( mix( g5, g6, 0.5 ), mix( g7, g8, 0.5 ), 0.5 );
 
-    return( mix( g0, mix( mix0, mix1, 0.5 ), 0.75 ) );
+    return mix( g0, mix( mix0, mix1, 0.5 ), 0.75 );
 }
 
-float ray_depth( in float t, in float entry_depth, in float exit_depth )
+/*===========================================================================*/
+/**
+ *  @brief  Return ray depth in window coordinate.
+ *  @param  t [in] ratio parameter [0-1]
+ *  @param  entry_depth [in] depth at entry point in window coodinate
+ *  @param  exit_depth [in] depth at exit point in window coordinate
+ *  @return depth in window coordinate
+ */
+/*===========================================================================*/
+float RayDepth( in float t, in float entry_depth, in float exit_depth )
 {
+    // Calculate the depth value in window coordinate.
+    // See: http://www.opengl.org/resources/faq/technical/depthbuffer.htm
+
+    // zw_front: depth value at the entry point in window coordinate
+    // ze_front: depth value at the entry point in camera (eye) coordinate
     float zw_front = entry_depth;
     float ze_front = 1.0 / ((zw_front - to_ze1)*to_ze2);
 
+    // zw_front: depth value at the exit point in window coordinate
+    // ze_front: depth value at the exit point in camera (eye) coordinate
     float zw_back = exit_depth;
     float ze_back = 1.0 / ((zw_back - to_ze1)*to_ze2);
 
+    // First, the depth value at the dividing point (ze_current) in
+    // camera coordinate is calculated with linear interpolation.
+    // And then, the depth value in window coordinate (zw_current) is
+    // converted from ze_current.
     float ze_current = ze_front + t * (ze_back - ze_front);
     float zw_current = (1.0/ze_current)*to_zw1 + to_zw2;
 
     return zw_current;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Main function of fragment shader.
+ */
+/*===========================================================================*/
 void main()
 {
     // Entry and exit point.
@@ -101,8 +145,6 @@ void main()
     int nsteps = int( floor( segment / dt ) );
     vec3 position = entry_point;
     vec4 dst = vec4( 0.0, 0.0, 0.0, 0.0 );
-
-    // Transfer function scale.
     float tfunc_scale = 1.0 / ( transfer_function.max_value - transfer_function.min_value );
 
     float entry_depth = texture2D( entry_points, index ).w;
@@ -113,14 +155,14 @@ void main()
     do
     {
         // Get the scalar value from the 3D texture.
-        //     NOTE: The volume index which is a index to access the volume data
-        //     represented as 3D texture can be calculate as follows:
+        // NOTE: The volume index which is a index to access the volume data
+        // represented as 3D texture can be calculate as follows:
         //
-        //         vec3 A = ( R - vec3(1.0) ) / R; // ajusting parameter
-        //         vec3 I = vec3( P + vec3(0.5) ) * A / ( R - vec3(1.0) );
-        //                = vec3( P + vec3(0.5) ) / R;
+        //     vec3 A = ( R - vec3(1.0) ) / R; // ajusting parameter
+        //     vec3 I = vec3( P + vec3(0.5) ) * A / ( R - vec3(1.0) );
+        //            = vec3( P + vec3(0.5) ) / R;
         //
-        //     where, I: volume index, P: position, R: volume resolution.
+        // where, I: volume index, P: sampling point, R: volume resolution.
         vec3 volume_index = vec3( ( position + vec3(0.5) ) / volume.resolution );
         vec4 value = texture3D( volume.data, volume_index );
         float scalar = mix( volume.min_range, volume.max_range, value.w );
@@ -130,10 +172,11 @@ void main()
         vec4 src = texture1D( transfer_function.data, tfunc_index );
         if ( src.a != 0.0 )
         {
-            // Get the normal vector.
+            // Get the normal vector in object coordinate.
             vec3 offset_index = vec3( volume.resolution_reciprocal );
-            vec3 normal = estimateGradient( volume.data, volume_index, offset_index );
+            vec3 normal = EstimateGradient( volume.data, volume_index, offset_index );
 
+            // Light vector (L) and normal vector (N) in camera coordinate.
             vec3 L = normalize( light_position - position );
             vec3 N = normalize( gl_NormalMatrix * normal );
 
@@ -164,8 +207,10 @@ void main()
             }
         }
 
+        // Depth comparison between the depth at the sampling point
+        // and depth stored in the depth buffer.
         float t = float(i) / float( nsteps - 1 );
-        float depth = ray_depth( t, entry_depth, exit_depth );
+        float depth = RayDepth( t, entry_depth, exit_depth );
         if ( depth > depth0 )
         {
             dst.rgb += ( 1.0 - dst.a ) * color0.rgb;

@@ -1,9 +1,26 @@
-varying float depth;
+/*****************************************************************************/
+/**
+ *  @file   RC_bounding_cube.vert
+ *  @author Naohisa Sakamoto
+ */
+/*----------------------------------------------------------------------------
+ *
+ *  Copyright (c) Visualization Laboratory, Kyoto University.
+ *  All rights reserved.
+ *  See http://www.viz.media.kyoto-u.ac.jp/kvs/copyright/ for details.
+ *
+ *  $Id$
+ */
+/*****************************************************************************/
 
-void main( void )
+
+/*===========================================================================*/
+/**
+ *  @brief  Main function of vertex shader.
+ */
+/*===========================================================================*/
+void main()
 {
-    gl_FrontColor = gl_Vertex;
     gl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * gl_Vertex;
-
-    depth = ( 1.0 + gl_Position.z / gl_Position.w ) * 0.5;
+    gl_FrontColor = gl_Vertex;
 }

@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   tetrahedra.geom
- *  @author Jun Nishimura
+ *  @author Jun Nishimura, Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -17,390 +17,461 @@
 #extension GL_EXT_gpu_shader4 : enable
 
 // Input parameters from vertex shader.
-varying in vec4 position_in[4];
-varying in float value_in[4];
-varying in vec2 random_index_in[4];
-varying in vec3 normal_in[4];
+varying in vec4 position_in[4]; // vertex positions in camera coordinate
+varying in vec4 position_ndc_in[4]; // vertex positions in normalized device coordinate
+varying in vec3 normal_in[4]; // normal vectors in camera coordinate
+varying in float value_in[4]; // scalar values for the vertex
+varying in vec2 random_index_in[4]; // indices for accessing to the random texture
 
 // Output parameters to fragment shader.
-varying out vec3 position;
-varying out vec3 normal;
-varying out vec2 random_index;
+varying out vec3 position; // vertex position in camera coordinate
+varying out vec3 normal; // normal vector in camera coordinate
+varying out vec2 random_index; // index for accessing to the random texture
+varying out float scalar_front; // scalar value on the front face
+varying out float scalar_back; // scalar value on the back face
+varying out float distance; // distance between the front and back face
 #if defined( ENABLE_EXACT_DEPTH_TESTING )
-varying out float depth_front;
-varying out float depth_back;
+varying out float depth_front; // depth value at the front face
+varying out float depth_back; // depth value at the back face
 #endif
-varying out float scalar_front;
-varying out float scalar_back;
-varying out float distance;
+varying out float wc_inv_front; // reciprocal value of the w-component at the front face in clip coordinate
+varying out float wc_inv_back; // reciprocal value of the w-component at the back face in clip coordinate
 
 // Uniform parameters.
-uniform vec2 preintegration_scale_offset;
-uniform sampler2D decomposition_texture;
-
-// Global parameter.
-vec3 screen_position[4];
+uniform vec2 preintegration_scale_offset; // offset values for pre-integration table
+uniform sampler2D decomposition_texture; // decomposition texture
 
 
-int direction( in int p0, in int p1, in int p2 )
+/*===========================================================================*/
+/**
+ *  @brief  Returns cross product of the specified 2d vectors.
+ *  @param  v0 [in] 2d vector 0
+ *  @param  v1 [in] 2d vector 1
+ *  @return cross product
+ */
+/*===========================================================================*/
+float Cross( in vec2 v0, in vec2 v1 )
 {
-    vec2 v1 = screen_position[p1].xy - screen_position[p0].xy;
-    vec2 v2 = screen_position[p2].xy - screen_position[p0].xy;
-    float cross_product = v1.x * v2.y - v1.y * v2.x;
-    return( int( sign( cross_product ) + 1.0 ) );
+    return v0.x * v1.y - v0.y * v1.x;
 }
 
-void emitExistPoint( const in int index, const in float dist )
+/*===========================================================================*/
+/**
+ *  @brief  Returns intersection ratios for each line segment.
+ *  @param  v0 [in] 2d vector 1
+ *  @param  v1 [in] 2d vector 2
+ *  @param  v [in] base 2d vector
+ *  @return intersection ratios as 2d vector
+ */
+/*===========================================================================*/
+vec2 IntersectionRatio( in vec2 v0, in vec2 v1, in vec2 v )
 {
-    gl_Position = gl_PositionIn[index]; 
-    position    = position_in[index].xyz;
+    float temp = 1.0 / Cross( v0, v1 );
+    float t0 = Cross( v, v1 ) * temp;
+    float t1 = Cross( v, v0 ) * temp;
+    return abs( vec2( t0, t1 ) );
+}
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns direction.
+ *  @param  p0 [in] index of vertex 0
+ *  @param  p1 [in] index of vertex 1
+ *  @param  p2 [in] index of vertex 2
+ *  @return direction
+ */
+/*===========================================================================*/
+int Direction( in int p0, in int p1, in int p2 )
+{
+    vec2 v1 = position_ndc_in[p1].xy - position_ndc_in[p0].xy;
+    vec2 v2 = position_ndc_in[p2].xy - position_ndc_in[p0].xy;
+    return int( sign( Cross( v1, v2 ) ) + 1.0 );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns distance for accessing pre-integration table.
+ *  @param  dist [in] distance in camera coordinate
+ *  @return distance
+ */
+/*===========================================================================*/
+float Distance( const in float dist )
+{
+    return dist * preintegration_scale_offset.x + preintegration_scale_offset.y;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Emits point specified by the given index with distance.
+ *  @param  index [in] index of the point
+ *  @param  dist [in] distance for the point
+ */
+/*===========================================================================*/
+void EmitOriginalPoint( const in int index, const in float dist )
+{
+    gl_Position = gl_PositionIn[index];
+
+    // Vertex position and normal vector in camera coodinate
+    position = position_in[index].xyz;
+    normal = normal_in[index].xyz;
+
+    // Indices for accessing the pre-integration table
+    scalar_front = value_in[index];
+    scalar_back  = value_in[index];
+    distance = dist;
+
+    // Depth values in camera coordinate' (acctually not cam. coord.)
 #if defined( ENABLE_EXACT_DEPTH_TESTING )
     depth_front = gl_PositionIn[index].z / gl_PositionIn[index].w;
     depth_back  = depth_front;
 #endif
 
-    normal = normal_in[index].xyz;
+    wc_inv_front = position_ndc_in[index].w;
+    wc_inv_back  = position_ndc_in[index].w;
 
-    scalar_front = value_in[index];
-    scalar_back  = value_in[index];
-    distance     = dist;
     EmitVertex();
 }
 
-void emitNewPoint(
-    const in vec4 center_position,
-    const in vec3 center_position_3D,
-#if defined( ENABLE_EXACT_DEPTH_TESTING )
-    const in float center_another_depth,
-#endif
-    const in vec3 center_normal_3D,
-    const in float center_scalar_front,
-    const in float center_scalar_back,
-    const in float center_distance )
+/*===========================================================================*/
+/**
+ *  @brief  Emits crossing point.
+ *  @param  c_gl_Position [in] position of the point with w-component
+ *  @param  c_position [in] position of the point
+ *  @param  c_normal [in] normal vector of the point
+ *  @param  c_scalar_front [in] scalar value of the point on the front face
+ *  @param  c_scalar_back [in] scalar value of the point on the back face
+ *  @param  c_dist [in] distance between the front and back face
+ *  @param  c_depth [in] depth value of the point
+ */
+/*===========================================================================*/
+void EmitCrossingPoint(
+    const in vec4 c_gl_Position,
+    const in vec3 c_position,
+    const in vec3 c_normal,
+    const in float c_scalar_front,
+    const in float c_scalar_back,
+    const in float c_dist,
+    const in float c_depth,
+    const in float c_wc_inv_front,
+    const in float c_wc_inv_back
+    )
 {
-    gl_Position = center_position;
-    position    = center_position_3D;
+    gl_Position = c_gl_Position;
 
+    // Vertex position and normal vector in camera coodinate
+    position = c_position;
+    normal = c_normal;
+
+    // Indices for accessing the pre-integration table
+    scalar_front = c_scalar_front;
+    scalar_back  = c_scalar_back;
+    distance = c_dist;
+
+    // Depth values in camera coordinate' (acctually not cam. coord.)
 #if defined( ENABLE_EXACT_DEPTH_TESTING )
-    depth_front = center_position.z / center_position.w;
-    depth_back  = center_another_depth;
+    depth_front = c_gl_Position.z / c_gl_Position.w;
+    depth_back  = c_depth;
 #endif
 
-    normal = center_normal_3D;
+    wc_inv_front = c_wc_inv_front;
+    wc_inv_back = c_wc_inv_back;
 
-    scalar_front = center_scalar_front;
-    scalar_back  = center_scalar_back;
-    distance     = center_distance;
     EmitVertex();
 }
 
-float distance_to_texture_coord( const in float distance )
+/*===========================================================================*/
+/**
+ *  @brief  Decomposes a tetrahedral cell into three triangles.
+ *  @param  p0 [in] index of the vertex 0
+ *  @param  p1 [in] index of the vertex 1
+ *  @param  p2 [in] index of the vertex 2
+ *  @param  p3 [in] index of the vertex 3
+ *
+ *  Case 1:
+ *
+ *  p3-------------p2
+ *    \ ~-_   _-~ /
+ *     \   ~p0   /
+ *      \   |   /
+ *       \  |  /
+ *        \ | /
+ *         \|/
+ *         p1
+ */
+/*===========================================================================*/
+void DecomposeInCase1( in int p0, in int p1, in int p2, in int p3 )
 {
-    return( distance * preintegration_scale_offset.x + preintegration_scale_offset.y );
-}
+    // Parameters for interpolation.
+    float S  = abs( Cross( position_ndc_in[p2].xy - position_ndc_in[p1].xy, position_ndc_in[p3].xy - position_ndc_in[p1].xy ) );
+    float S1 = abs( Cross( position_ndc_in[p2].xy - position_ndc_in[p0].xy, position_ndc_in[p3].xy - position_ndc_in[p0].xy ) );
+    float S2 = abs( Cross( position_ndc_in[p1].xy - position_ndc_in[p0].xy, position_ndc_in[p3].xy - position_ndc_in[p0].xy ) );
+    float t1 = S1 / S;
+    float t2 = S2 / S;
+    float t3 = 1.0 - ( t1 + t2 );
+    vec3 t = vec3( t1, t2, t3 );
 
-void calculate_across_triangle_to_line_2D( out float r2, out float r3, in int p0, in int p1, in int p2, in int p3 )
-{
-    vec2 v01 = screen_position[p0].xy - screen_position[p1].xy;
-    vec2 v21 = screen_position[p2].xy - screen_position[p1].xy;
-    vec2 v31 = screen_position[p3].xy - screen_position[p1].xy;
-    float delta = v21.x * v31.y - v31.x * v21.y;
-    if ( delta == 0 )
+    vec3 px = vec3( position_in[p1].x, position_in[p2].x, position_in[p3].x );
+    vec3 py = vec3( position_in[p1].y, position_in[p2].y, position_in[p3].y );
+    vec3 pz = vec3( position_in[p1].z, position_in[p2].z, position_in[p3].z );
+    vec3 pw = vec3( position_in[p1].w, position_in[p2].w, position_in[p3].w );
+    vec3 nx = vec3( normal_in[p1].x, normal_in[p2].x, normal_in[p3].x );
+    vec3 ny = vec3( normal_in[p1].y, normal_in[p2].y, normal_in[p3].y );
+    vec3 nz = vec3( normal_in[p1].z, normal_in[p2].z, normal_in[p3].z );
+    vec3 v  = vec3( value_in[p1], value_in[p2], value_in[p3] );
+    vec3 w  = vec3( position_ndc_in[p1].w, position_ndc_in[p2].w, position_ndc_in[p3].w );
+
+    // Calculate position (p123), normal vector (n123) and scalar value (s123)
+    // at the center point in camera coordinate.
+    vec4 p123 = vec4( dot( px, t ), dot( py, t ), dot( pz, t ), dot( pw, t ) );
+    vec3 n123 = vec3( dot( nx, t ), dot( ny, t ), dot( nz, t ) );
+    float s123 = dot( v, t );
+    float w123 = dot( w, t );
+
+    // Parameters at the center point for passing to fragment shader.
+    vec4 c_gl_Position;
+    vec3 c_position;
+    vec3 c_normal;
+    float c_scalar_front;
+    float c_scalar_back;
+    float c_distance = Distance( length( position_in[p0] - p123 ) );
+    float c_depth = 0.0;
+    float c_wc_inv_front;
+    float c_wc_inv_back;
+
+    // In case that the vertex specified by p0 is behind the center point.
+    if ( length( p123.z ) < length( position_in[p0].z ) )
     {
-        r2 = r3 = 1.0 / 3.0;
-        return;
-    }
+        c_gl_Position = gl_ProjectionMatrix * p123; // in clip coordinate
+        c_position = p123.xyz; // in camera coordinate
+        c_normal = n123.xyz; // in camera coordinate
 
-    float delta_inv = 1.0 / delta;
-    r2 = delta_inv * (  v31.y * v01.x - v31.x * v01.y );
-    r3 = delta_inv * ( -v21.y * v01.x + v21.x * v01.y );
-}
+        c_scalar_front = s123;
+        c_scalar_back = value_in[p0];
 
-float perspective_correct( const in float r, const in float p0z, const in float p1z )
-{
-    if ( p0z == p1z ) return r;
-
-    float p0z_inv = 1.0 / p0z;
-    float p1z_inv = 1.0 / p1z;
-    float pz_inv  = p0z_inv + ( p1z_inv - p0z_inv ) * r;
-    float pz = 1.0 / pz_inv;
-
-    float result = ( pz - p0z ) / ( p1z - p0z );
-    if ( result < 0.0 ) result = 0.0;
-    if ( result > 1.0 ) result = 1.0;
-    return( result );
-}
-
-void perspective_correct_triangle( inout float r2, inout float r3, in int p0, in int p1, in int p2, in int p3 )
-{
-    if ( r2 + r3 <= 0 ) return;
-    float p1z    = gl_PositionIn[p1].w;
-    float p2z    = gl_PositionIn[p2].w;
-    float p3z    = gl_PositionIn[p3].w;
-    float k_2D   = r2 + r3;
-    float r23_2D = r3 / k_2D;
-
-    float r23_3D = perspective_correct( r23_2D, p2z, p3z );
-
-    float p23z = p2z + ( p3z - p2z ) * r23_3D;
-    float k_3D = perspective_correct( k_2D, p1z, p23z );
-
-    r3 = r23_3D * k_3D;
-    r2 = k_3D - r3;
-}
-
-void perspective_correct_line( inout float r, const in int p0, const in int p1 )
-{
-    float p0z  = gl_PositionIn[p0].w;
-    float p1z  = gl_PositionIn[p1].w;
-    float r_3D = perspective_correct( r, p0z, p1z );
-
-    r = r_3D;
-}
-
-void calculate_across_line_to_line_2D( out float r1, out float r3, in int p0, in int p1, in int p2, in int p3 )
-{
-    vec2 v02 = screen_position[p0].xy - screen_position[p2].xy;
-    vec2 v01 = screen_position[p0].xy - screen_position[p1].xy;
-    vec2 v32 = screen_position[p3].xy - screen_position[p2].xy;
-    float delta = v01.x * v32.y - v32.x * v01.y;
-    if ( delta == 0 )
-    {
-        r1 = r3 = 1.0 / 2.0;
-        return;
-    }
-    float delta_inv = 1.0 / delta;
-    r1 = delta_inv * (  v32.y * v02.x - v32.x * v02.y );
-    r3 = delta_inv * ( -v01.y * v02.x + v01.x * v02.y );
-}
-
-//   type 1
-//
-//   p3-------------p2
-//     \ ~-_   _-~ /
-//      \   ~p0   /
-//       \   |   /
-//        \  |  /
-//         \ | /
-//          \|/
-//           p1
-//
-void create_type_1( in int p0, in int p1, in int p2, in int p3 )
-{
-   float r2, r3;
-   calculate_across_triangle_to_line_2D( r2, r3, p0, p1, p2, p3 );
-   perspective_correct_triangle( r2, r3, p0, p1, p2, p3 );
-
-   vec4  p123 = position_in[p1] + ( position_in[p2]  - position_in[p1] ) * r2 + ( position_in[p3] - position_in[p1] ) * r3;
-   float s123 = value_in[p1] + ( value_in[p2] - value_in[p1] ) * r2 + ( value_in[p3] - value_in[p1] ) * r3;
-
-   vec4 center_position;
-   vec3 center_position_3D;
-   float center_scalar_front, center_scalar_back; 
-
-   vec3 n123 = normal_in[p1] + ( normal_in[p2] - normal_in[p1] ) * r2 + ( normal_in[p3] - normal_in[p1] ) * p3;
-   vec3 center_normal_3D;
-
-#if defined( ENABLE_EXACT_DEPTH_TESTING )
-    float a_depth;
-#endif
-
-   if ( length( p123.z ) < length( position_in[p0].z ) )
-   {
 #if defined( ENABLE_EXACT_DEPTH_TESTING )
         vec4 tmp = gl_PositionIn[p0];
-        a_depth = tmp.z / tmp.w;
+        c_depth = tmp.z / tmp.w; // in camera coordinate'
 #endif
 
-       center_position = gl_ProjectionMatrix * p123;
-       center_position_3D = p123.xyz;
+        c_wc_inv_front = w123;
+        c_wc_inv_back = position_ndc_in[p0].w;
+    }
+    // In case that the center point is behind the vertex specified by p0.
+    else
+    {
+        c_gl_Position = gl_PositionIn[p0]; // in camera coordinate
+        c_position = position_in[p0].xyz; // in camera coordinate
+        c_normal = normal_in[p0].xyz; // in camera coordinate
 
-       center_normal_3D = n123.xyz;
+        c_scalar_front = value_in[p0];
+        c_scalar_back = s123;
 
-       center_scalar_front = s123;
-       center_scalar_back = value_in[p0];
-   }
-   else
-   {
 #if defined( ENABLE_EXACT_DEPTH_TESTING )
         vec4 tmp = gl_ProjectionMatrix * p123;
-        a_depth = tmp.z / tmp.w;
+        c_depth = tmp.z / tmp.w; // in normalized device coordinate
 #endif
 
-       center_position = gl_PositionIn[p0];
-       center_position_3D = position_in[p0].xyz;
-
-       center_normal_3D = normal_in[p0].xyz;
-
-       center_scalar_front = value_in[p0];
-       center_scalar_back = s123;
-   }
-
-   float center_distance = distance_to_texture_coord( length( position_in[p0] - p123 ) );
+        c_wc_inv_front = position_ndc_in[p0].w;
+        c_wc_inv_back = w123;
+    }
 
     // p1-p2-C p2-C-p3 C-p3-p1
-    emitExistPoint( p1, 0.0 );
-    emitExistPoint( p2, 0.0 );
-#if defined( ENABLE_EXACT_DEPTH_TESTING )
-    emitNewPoint( center_position, center_position_3D, a_depth, center_normal_3D, center_scalar_front, center_scalar_back, center_distance );
-#else
-    emitNewPoint( center_position, center_position_3D, center_normal_3D, center_scalar_front, center_scalar_back, center_distance );
-#endif
-    emitExistPoint( p3, 0.0 );
-    emitExistPoint( p1, 0.0 );
+    EmitOriginalPoint( p1, 0.0 );
+    EmitOriginalPoint( p2, 0.0 );
+    EmitCrossingPoint( c_gl_Position, c_position, c_normal, c_scalar_front, c_scalar_back, c_distance, c_depth, c_wc_inv_front, c_wc_inv_back );
+    EmitOriginalPoint( p3, 0.0 );
+    EmitOriginalPoint( p1, 0.0 );
+
     EndPrimitive();
 }
 
-//    type 2
-//           p0
-//        _-~ | ~-_
-//     _-~    |    ~-_ 
-//   p3 -  -  | -  -  p2
-//     \      |      /
-//       \    |    /
-//         \  |  /
-//           \|/
-//            p1
-//
-void create_type_2( in int p0, in int p1, in int p2, in int p3 )
+/*===========================================================================*/
+/**
+ *  @brief  Decomposes a tetrahedral cell into four triangles.
+ *  @param  p0 [in] index of the vertex 0
+ *  @param  p1 [in] index of the vertex 1
+ *  @param  p2 [in] index of the vertex 2
+ *  @param  p3 [in] index of the vertex 3
+ *
+ *  Case 2:
+ *
+ *           p0
+ *        _-~ | ~-_
+ *     _-~    |    ~-_ 
+ *   p3 -  -  | -  -  p2
+ *     \      |      /
+ *       \    |    /
+ *         \  |  /
+ *           \|/
+ *            p1
+ */
+/*===========================================================================*/
+void DecomposeInCase2( in int p0, in int p1, in int p2, in int p3 )
 {
+    // Parameters for interpolation.
+    vec2 t = IntersectionRatio( position_ndc_in[p1].xy - position_ndc_in[p0].xy,
+                                position_ndc_in[p3].xy - position_ndc_in[p2].xy,
+                                position_ndc_in[p2].xy - position_ndc_in[p0].xy );
+    vec2 t01 = vec2( 1.0 - t.x, t.x );
+    vec2 t23 = vec2( 1.0 - t.y, t.y );
 
-   float r1, r3;
-   calculate_across_line_to_line_2D( r1, r3, p0, p1, p2, p3 );
-   perspective_correct_line( r1, p0, p1 );
-   perspective_correct_line( r3, p2, p3 );
+    // Calculate positions (p01, p23), normal vectors (n01, n23), and scalar
+    // values (s01, s23) at the crossing point in camera coordinate. Here,
+    // (p01, n01, s01) and (p23, n23, s23) are defined on the line p0-p1 and
+    // p2-p3, respectively.
+    vec4  p01 = t01.x * position_in[p0] + t01.y * position_in[p1];
+    vec3  n01 = t01.x * normal_in[p0] + t01.y * normal_in[p1];
+    float s01 = t01.x * value_in[p0] + t01.y * value_in[p1];
+    float w01 = t01.x * position_ndc_in[p0].w + t01.y * position_ndc_in[p1].w;
 
-   vec4  p01 = position_in[p0] + ( position_in[p1] - position_in[p0] ) * r1;
-   float s01 = value_in[p0] + ( value_in[p1] - value_in[p0] ) * r1;
+    vec4  p23 = t23.x * position_in[p2] + t23.y * position_in[p3];
+    vec3  n23 = t23.x * normal_in[p2] + t23.y * normal_in[p3];
+    float s23 = t23.x * value_in[p2] + t23.y * value_in[p3];
+    float w23 = t23.x * position_ndc_in[p2].w + t23.y * position_ndc_in[p3].w;
 
-   vec4  p23 = position_in[p2] + ( position_in[p3]  - position_in[p2] ) * r3;
-   float s23 = value_in[p2] + ( value_in[p3] - value_in[p2] ) * r3;
+    // Parameters at the center point for passing to fragment shader.
+    vec4 c_gl_Position;
+    vec3 c_position;
+    vec3 c_normal;
+    float c_scalar_front;
+    float c_scalar_back;
+    float c_distance = Distance( length( p01.z - p23.z ) );
+    float c_depth = 0.0;
+    float c_wc_inv_front;
+    float c_wc_inv_back;
 
-   vec4 center_position;
-   vec3 center_position_3D;
-   float center_scalar_front, center_scalar_back; 
+    // In case that the vertex p23 is behind the vertex p01.
+    if ( length( p01.xyz ) < length( p23.xyz ) )
+    {
+        c_gl_Position = gl_ProjectionMatrix * p01;
+        c_position = p01.xyz;
+        c_normal = n01.xyz;
+        c_scalar_front = s01;
+        c_scalar_back = s23;
 
-   vec3 n01 = normal_in[p0] + ( normal_in[p1] - normal_in[p0] ) * r1;
-   vec3 n23 = normal_in[p2] + ( normal_in[p3] - normal_in[p2] ) * r3;
-   vec3 center_normal_3D;
-
-#if defined( ENABLE_EXACT_DEPTH_TESTING )
-    float a_depth;
-#endif
-
-   if ( length( p01.xyz ) < length( p23.xyz ) )
-   {
 #if defined( ENABLE_EXACT_DEPTH_TESTING )
         vec4 tmp = gl_ProjectionMatrix * p23;
-        a_depth = tmp.z / tmp.w;
+        c_depth = tmp.z / tmp.w;
 #endif
 
-       center_position = gl_ProjectionMatrix * p01;
-       center_position_3D = p01.xyz;
+        c_wc_inv_front = w01;
+        c_wc_inv_back = w23;
+    }
+    // In case that the vertex p01 is behind the vertex p23.
+    else
+    {
+        c_gl_Position = gl_ProjectionMatrix * p23;
+        c_position = p23.xyz;
+        c_normal = n23.xyz;
+        c_scalar_front = s23;
+        c_scalar_back = s01;
 
-       center_normal_3D = n01.xyz;
-
-       center_scalar_front = s01;
-       center_scalar_back = s23;
-   }
-   else
-   {
 #if defined( ENABLE_EXACT_DEPTH_TESTING )
         vec4 tmp = gl_ProjectionMatrix * p01;
-        a_depth = tmp.z / tmp.w;
+        c_depth = tmp.z / tmp.w;
 #endif
 
-       center_position = gl_ProjectionMatrix * p23;
-       center_position_3D = p23.xyz;
-
-       center_normal_3D = n23.xyz;
-
-       center_scalar_front = s23;
-       center_scalar_back = s01;
-   }
-
-   float center_distance = distance_to_texture_coord( length( p01.z - p23.z ) );
+        c_wc_inv_front = w23;
+        c_wc_inv_back = w01;
+    }
 
     // right half: p0-p2-C, p2-C-p1
-    emitExistPoint( p0, 0.0 );
-    emitExistPoint( p2, 0.0 );
-#if defined( ENABLE_EXACT_DEPTH_TESTING )
-    emitNewPoint( center_position, center_position_3D, a_depth, center_normal_3D, center_scalar_front, center_scalar_back, center_distance );
-#else
-    emitNewPoint( center_position, center_position_3D, center_normal_3D, center_scalar_front, center_scalar_back, center_distance );
-#endif
-    emitExistPoint( p1, 0.0 );
+    EmitOriginalPoint( p0, 0.0 );
+    EmitOriginalPoint( p2, 0.0 );
+    EmitCrossingPoint( c_gl_Position, c_position, c_normal, c_scalar_front, c_scalar_back, c_distance, c_depth, c_wc_inv_front, c_wc_inv_back );
+    EmitOriginalPoint( p1, 0.0 );
     EndPrimitive();
 
     // left half: p0-p3-C, p3-C-p1
-    emitExistPoint( p0, 0.0 );
-    emitExistPoint( p3, 0.0 );
-#if defined( ENABLE_EXACT_DEPTH_TESTING )
-    emitNewPoint( center_position, center_position_3D, a_depth, center_normal_3D, center_scalar_front, center_scalar_back, center_distance );
-#else
-    emitNewPoint( center_position, center_position_3D, center_normal_3D, center_scalar_front, center_scalar_back, center_distance );
-#endif
-    emitExistPoint( p1, 0.0 );
+    EmitOriginalPoint( p0, 0.0 );
+    EmitOriginalPoint( p3, 0.0 );
+    EmitCrossingPoint( c_gl_Position, c_position, c_normal, c_scalar_front, c_scalar_back, c_distance, c_depth, c_wc_inv_front, c_wc_inv_back );
+    EmitOriginalPoint( p1, 0.0 );
     EndPrimitive();
 }
 
-//    type 3
-//           p2
-//        _-~ |
-//     _-~    |
-//   p0-------p1
-//     \      |
-//       \    |
-//         \  |
-//           \|
-//            p3
-//
-//    in type 2, two arealess triangle are generated.
-//    but this pattern is very rare case.
-//
-void create_type_3( in int p0, in int p1, in int p2, in int p3 )
+/*===========================================================================*/
+/**
+ *  @brief  Decomposes a tetrahedral cell int two triangles.
+ *  @param  p0 [in] index of the vertex 0
+ *  @param  p1 [in] index of the vertex 1
+ *  @param  p2 [in] index of the vertex 2
+ *  @param  p3 [in] index of the vertex 3
+ *
+ *  Case 3: This is a special case of case 2.
+ *
+ *           p2
+ *        _-~ |
+ *     _-~    |
+ *   p0-------p1
+ *     \      |
+ *       \    |
+ *         \  |
+ *           \|
+ *            p3
+ */
+/*===========================================================================*/
+void DecomposeInCase3( in int p0, in int p1, in int p2, in int p3 )
 {
-    create_type_2( p0, p1, p2, p3 );
+    DecomposeInCase2( p0, p1, p2, p3 );
 }
 
-//    type 4
-//           p0
-//            | ~-_
-//            |    ~-_ 
-//            |       p2,p3
-//            |      /
-//            |    /
-//            |  /
-//            |/
-//            p1
-//
-void create_type_4( in int p0, in int p1, in int p2, in int p3 )
+/*===========================================================================*/
+/**
+ *  @brief  Decomposes a tetrahedral cell into a single triangle.
+ *  @param  p0 [in] index of the vertex 0
+ *  @param  p1 [in] index of the vertex 1
+ *  @param  p2 [in] index of the vertex 2
+ *  @param  p3 [in] index of the vertex 3
+ *
+ *  Case 4: This is a special case of case 2.
+ *
+ *           p0
+ *            | ~-_
+ *            |    ~-_ 
+ *            |       p2,p3
+ *            |      /
+ *            |    /
+ *            |  /
+ *            |/
+ *            p1
+ */
+/*===========================================================================*/
+void DecomposeInCase4( in int p0, in int p1, in int p2, in int p3 )
 {
-    int pFront, pBack;
+    int p_front;
+    int p_back;
+
     if ( position_in[p2].z < position_in[p3].z )
     {
-        pFront = p2;
-        pBack = p3;
+        p_front = p2;
+        p_back = p3;
     }
     else
     {
-        pFront = p3;
-        pBack = p2;
+        p_front = p3;
+        p_back = p2;
     }
 
+    float c_distance = Distance( length( length( position_in[p_back] - position_in[p_front] ) ) );
+    float c_depth = 0.0;
+
+    EmitOriginalPoint( p0, 0.0 );
+    EmitOriginalPoint( p1, 0.0 );
 #if defined( ENABLE_EXACT_DEPTH_TESTING )
-    float a_depth = gl_PositionIn[pBack].z / gl_PositionIn[pBack].w;
+    vec4 c_gl_Position = gl_PositionIn[p_front];
+    vec3 c_position = position_in[p_front].xyz;
+    vec3 c_normal = normal_in[p_front].xyz;
+    float c_scalar_front = value_in[p_front];
+    float c_scalar_back = value_in[p_back];
+    c_depth = gl_PositionIn[pBack].z / gl_PositionIn[pBack].w;
+    float c_wc_inv_front = position_ndc_in[p_front].w;
+    float c_wc_inv_back = position_ndc_in[p_back].w;
+    EmitCrossingPoint( c_gl_Position, c_position, c_normal, c_scalar_front, c_scalar_back, c_distance, c_depth, c_wc_inv_front, c_wc_inv_back );
+#else
+    EmitOriginalPoint( p_front, c_distance );
 #endif
 
-    float center_distance = distance_to_texture_coord( length( position_in[pBack] - position_in[pFront] ) );
-    emitExistPoint( p0, 0.0 );
-    emitExistPoint( p1, 0.0 );
-#if defined( ENABLE_EXACT_DEPTH_TESTING )
-    emitNewPoint( gl_PositionIn[pFront], position_in[pFront].xyz, a_depth, normal_in[pFront].xyz, value_in[pBack], value_in[pFront], center_distance );
-#else
-    emitExistPoint( pFront, center_distance );
-#endif
     EndPrimitive();
 }
 
@@ -416,22 +487,17 @@ void main()
          gl_PositionIn[2].w <= 0 ||
          gl_PositionIn[3].w <= 0 ) return;
 
-    screen_position[0] = gl_PositionIn[0].xyz / gl_PositionIn[0].w;
-    screen_position[1] = gl_PositionIn[1].xyz / gl_PositionIn[1].w;
-    screen_position[2] = gl_PositionIn[2].xyz / gl_PositionIn[2].w;
-    screen_position[3] = gl_PositionIn[3].xyz / gl_PositionIn[3].w;
-
-    if ( ( screen_position[0].x < -1.0 && screen_position[1].x < -1.0 && screen_position[2].x < -1.0 && screen_position[3].x < -1.0 ) ||
-         ( screen_position[0].x >  1.0 && screen_position[1].x >  1.0 && screen_position[2].x >  1.0 && screen_position[3].x >  1.0 ) ||
-         ( screen_position[0].y < -1.0 && screen_position[1].y < -1.0 && screen_position[2].y < -1.0 && screen_position[3].y < -1.0 ) ||
-         ( screen_position[0].y >  1.0 && screen_position[1].y >  1.0 && screen_position[2].y >  1.0 && screen_position[3].y >  1.0 ) ) return;
+    if ( ( position_ndc_in[0].x < -1.0 && position_ndc_in[1].x < -1.0 && position_ndc_in[2].x < -1.0 && position_ndc_in[3].x < -1.0 ) ||
+         ( position_ndc_in[0].x >  1.0 && position_ndc_in[1].x >  1.0 && position_ndc_in[2].x >  1.0 && position_ndc_in[3].x >  1.0 ) ||
+         ( position_ndc_in[0].y < -1.0 && position_ndc_in[1].y < -1.0 && position_ndc_in[2].y < -1.0 && position_ndc_in[3].y < -1.0 ) ||
+         ( position_ndc_in[0].y >  1.0 && position_ndc_in[1].y >  1.0 && position_ndc_in[2].y >  1.0 && position_ndc_in[3].y >  1.0 ) ) return;
 
     random_index = random_index_in[0] * 3.0 + random_index_in[1] * 5.0 + random_index_in[2] * 7.0 + random_index_in[3] * 11.0;
 
-    int d321 = direction( 3, 2, 1 );
-    int d230 = direction( 2, 3, 0 );
-    int d103 = direction( 1, 0, 3 );
-    int d012 = direction( 0, 1, 2 );
+    int d321 = Direction( 3, 2, 1 );
+    int d230 = Direction( 2, 3, 0 );
+    int d103 = Direction( 1, 0, 3 );
+    int d012 = Direction( 0, 1, 2 );
 
     int pos = d321 * 27 + d230 * 9 + d103 * 3 + d012;
     vec2 t_pos = vec2( ( float(pos) + 0.5 ) / 81.0, 0.5 );
@@ -442,21 +508,8 @@ void main()
     int p2   = int( ( info.z * 255.0 + 16.0 ) / 32.0 );
     int p3   = 6 - ( p0 + p1 + p2 );
 
-    if ( type == 1 )
-    {
-        create_type_1( p0, p1, p2, p3 );
-    }
-    else if ( type == 2 )
-    {
-        create_type_2( p0, p1, p2, p3 );
-    }
-    else if ( type == 3 )
-    {
-        create_type_3( p0, p1, p2, p3 );
-    }
-    else if ( type == 4 )
-    {
-        create_type_4( p0, p1, p2, p3 );
-    }
-
+    if      ( type == 1 ) { DecomposeInCase1( p0, p1, p2, p3 ); }
+    else if ( type == 2 ) { DecomposeInCase2( p0, p1, p2, p3 ); }
+    else if ( type == 3 ) { DecomposeInCase3( p0, p1, p2, p3 ); }
+    else if ( type == 4 ) { DecomposeInCase4( p0, p1, p2, p3 ); }
 }

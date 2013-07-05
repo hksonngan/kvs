@@ -12,16 +12,22 @@
  *  $Id$
  */
 /*****************************************************************************/
-// Input
-attribute vec2 random_index;
-uniform float polygon_offset;
+// Input parameters.
+attribute vec2 random_index; // index for accessing to the random texture
+uniform float polygon_offset; // polygon offset in clip coordinate
 
-// Output
-varying vec3 position;
-varying vec3 normal;
-varying vec2 index;
-varying float depth;
+// Output parameters to fragment shader.
+varying vec3 position; // vertex position in camera coordinate
+varying vec3 normal; // normal vector in camera coodinate
+varying vec2 index; // index for accessing to the random texture
+varying float depth; // depth value of the vertex in normalized device coordinate
 
+
+/*===========================================================================*/
+/**
+ *  @brief  Main function of vertex shader.
+ */
+/*===========================================================================*/
 void main()
 {
     gl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * gl_Vertex;
@@ -29,7 +35,7 @@ void main()
     gl_FrontColor = gl_Color;
 
     position = ( gl_ModelViewMatrix * gl_Vertex ).xyz;
-    normal = ( gl_NormalMatrix * gl_Normal ).xyz;
+    normal = gl_NormalMatrix * gl_Normal;
     index = random_index;
     depth = gl_Position.z / gl_Position.w;
 }
