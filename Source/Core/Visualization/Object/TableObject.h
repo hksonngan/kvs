@@ -129,8 +129,8 @@ public:
     KVS_DEPRECATED( const Values& minRangeList() const ) { return this->minRanges(); }
     KVS_DEPRECATED( const Values& maxRangeList() const ) { return this->maxRanges(); }
     KVS_DEPRECATED( const InsideRangeFlags& insideRangeList() const ) { return this->insideRangeFlags(); }
-    KVS_DEPRECATED( template <typename T> void addColumn( const kvs::ValueArray<T>& array, const std::string& label = "" ) );
-    KVS_DEPRECATED( template <typename T> void addColumn( const std::vector<T>& array, const std::string& label = "" ) );
+    template <typename T> KVS_DEPRECATED( void addColumn( const kvs::ValueArray<T>& array, const std::string& label = "" ) );
+    template <typename T> KVS_DEPRECATED( void addColumn( const std::vector<T>& array, const std::string& label = "" ) );
 };
 
 /*===========================================================================*/

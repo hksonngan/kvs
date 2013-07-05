@@ -99,13 +99,13 @@ void InitializeCenterWithSmartSeeding(
     for ( size_t i = 1; i < nclusters; i++ )
     {
         kvs::Real32 S = 0.0;
-        kvs::Real32 D[ nrows ];
+        kvs::Real32* D = new kvs::Real32 [ nrows ];
         for ( size_t j = 0; j < nrows; j++ )
         {
             kvs::Real32 distance = kvs::Value<kvs::Real32>::Max();
             for ( size_t k = 0; k < nclusters; k++ )
             {
-                const kvs::Real32 d = ::GetEuclideanDistance( table.rowAsValueArray<kvs::Real32>(j), center[k] );
+                const kvs::Real32 d = GetEuclideanDistance( table.rowAsValueArray<kvs::Real32>(j), center[k] );
                 if ( d < distance ) { distance = d; }
             }
             D[j] = distance;
@@ -128,6 +128,8 @@ void InitializeCenterWithSmartSeeding(
         {
             center[i].at(j) = table.column(j).at<kvs::Real32>( index );
         }
+
+        delete [] D;
     }
 }
 

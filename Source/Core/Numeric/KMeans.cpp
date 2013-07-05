@@ -146,7 +146,7 @@ void InitializeCentersWithSmartSeeding(
     for ( size_t i = 1; i < nclusters; i++ )
     {
         kvs::Real32 S = 0.0;
-        kvs::Real32 D[ nrows ];
+        kvs::Real32* D = new kvs::Real32 [ nrows ];
         for ( size_t j = 0; j < nrows; j++ )
         {
             kvs::Real32 distance = kvs::Value<kvs::Real32>::Max();
@@ -175,6 +175,7 @@ void InitializeCentersWithSmartSeeding(
         {
             centers[i].at(j) = table.column(j).at<kvs::Real32>(index);
         }
+        delete [] D;
     }
 }
 
