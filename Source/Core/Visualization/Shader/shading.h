@@ -12,7 +12,7 @@
  *  $Id: shading.h 1015 2012-02-09 07:42:04Z naohisa.sakamoto@gmail.com $
  */
 /*****************************************************************************/
-struct Shading
+struct ShadingParameter
 {
     float Ka; // ambient
     float Kd; // diffuse
@@ -20,12 +20,12 @@ struct Shading
     float S;  // shininess
 };
 
-vec3 ShadingNone( in Shading shading, in vec3 color )
+vec3 ShadingNone( in ShadingParameter shading, in vec3 color )
 {
     return( color );
 }
 
-vec3 ShadingLambert( in Shading shading, in vec3 color, in vec3 L, in vec3 N )
+vec3 ShadingLambert( in ShadingParameter shading, in vec3 color, in vec3 L, in vec3 N )
 {
 #if defined( ENABLE_TWO_SIDE_LIGHTING )
     float dd = abs( dot( N, L ) );
@@ -39,7 +39,7 @@ vec3 ShadingLambert( in Shading shading, in vec3 color, in vec3 L, in vec3 N )
     return( color * ( Ia + Id ) );
 }
 
-vec3 ShadingPhong( in Shading shading, in vec3 color, in vec3 L, in vec3 N, in vec3 V )
+vec3 ShadingPhong( in ShadingParameter shading, in vec3 color, in vec3 L, in vec3 N, in vec3 V )
 {
     vec3 R = reflect( -L, N );
 #if defined( ENABLE_TWO_SIDE_LIGHTING )
@@ -58,7 +58,7 @@ vec3 ShadingPhong( in Shading shading, in vec3 color, in vec3 L, in vec3 N, in v
     return( color * ( Ia + Id ) + Is );
 }
 
-vec3 ShadingBlinnPhong( in Shading shading, in vec3 color, in vec3 L, in vec3 N, in vec3 V )
+vec3 ShadingBlinnPhong( in ShadingParameter shading, in vec3 color, in vec3 L, in vec3 N, in vec3 V )
 {
     vec3 H = normalize( L + V );
 #if defined( ENABLE_TWO_SIDE_LIGHTING )

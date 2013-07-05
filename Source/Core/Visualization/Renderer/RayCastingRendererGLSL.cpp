@@ -240,7 +240,7 @@ void RayCastingRenderer::exec(
             m_ray_casting_shader.setUniform( "to_ze2", to_ze2 );
             m_ray_casting_shader.setUniform( "light_position", light_position );
             m_ray_casting_shader.setUniform( "camera_position", camera_position );
-            m_ray_casting_shader.setUniform( "volume.data", 1 );
+            m_ray_casting_shader.setUniform( "volume_data", 1 );
             m_ray_casting_shader.setUniform( "exit_points", 2 );
             m_ray_casting_shader.setUniform( "entry_points", 3 );
             m_ray_casting_shader.setUniform( "transfer_function.data", 4 );

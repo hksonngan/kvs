@@ -24,8 +24,9 @@ uniform float dt; // sampling step
 uniform float opaque; // opaque value
 uniform vec3 light_position; // light position in the object coordinate
 uniform vec3 camera_position; // camera position in the object coordinate
-uniform Volume volume; // volume data
-uniform Shading shading; // shading parameter
+uniform VolumeParameter volume; // volume parameter
+uniform sampler3D volume_data; // volume data
+uniform ShadingParameter shading; // shading parameter
 uniform TransferFunction transfer_function; // 1D transfer function
 uniform sampler2D jittering_texture; // texture for jittering
 uniform float width; // screen width
@@ -36,54 +37,6 @@ uniform float to_zw1; // scaling parameter: (f*n)/(f-n)
 uniform float to_zw2; // scaling parameter: 0.5*((f+n)/(f-n))+0.5
 uniform float to_ze1; // scaling parameter: 0.5 + 0.5*((f+n)/(f-n))
 uniform float to_ze2; // scaling parameter: (f-n)/(f*n)
-
-
-/*===========================================================================*/
-/**
- *  @brief  Returns gradient vector estimated from six adjacent scalars.
- *  @param  v [in] volume data
- *  @param  p [in] sampling point
- *  @param  o [in] offset
- *  @return gradient vector
- */
-/*===========================================================================*/
-vec3 EstimateGradient( in sampler3D v, in vec3 p, in vec3 o )
-{
-    float s0 = texture3D( v, p + vec3( o.x, 0.0, 0.0 ) ).w;
-    float s1 = texture3D( v, p + vec3( 0.0, o.y, 0.0 ) ).w;
-    float s2 = texture3D( v, p + vec3( 0.0, 0.0, o.z ) ).w;
-    float s3 = texture3D( v, p - vec3( o.x, 0.0, 0.0 ) ).w;
-    float s4 = texture3D( v, p - vec3( 0.0, o.y, 0.0 ) ).w;
-    float s5 = texture3D( v, p - vec3( 0.0, 0.0, o.z ) ).w;
-
-    return vec3( s3 - s0, s4 - s1, s5 - s2 );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns gradient vector estimated from eight adjacent scalars.
- *  @param  v [in] volume data
- *  @param  p [in] sampling point
- *  @param  o [in] offset
- *  @return gradient vector
- */
-/*===========================================================================*/
-vec3 EstimateGradient8( in sampler3D v, in vec3 p, in vec3 o )
-{
-    vec3 g0 = EstimateGradient( v, p, o );
-    vec3 g1 = EstimateGradient( v, p + vec3( -o.x, -o.y, -o.z ), o );
-    vec3 g2 = EstimateGradient( v, p + vec3(  o.x,  o.y,  o.z ), o );
-    vec3 g3 = EstimateGradient( v, p + vec3( -o.x,  o.y, -o.z ), o );
-    vec3 g4 = EstimateGradient( v, p + vec3(  o.x, -o.y,  o.z ), o );
-    vec3 g5 = EstimateGradient( v, p + vec3( -o.x, -o.y,  o.z ), o );
-    vec3 g6 = EstimateGradient( v, p + vec3(  o.x,  o.y, -o.z ), o );
-    vec3 g7 = EstimateGradient( v, p + vec3( -o.x,  o.y,  o.z ), o );
-    vec3 g8 = EstimateGradient( v, p + vec3(  o.x, -o.y, -o.z ), o );
-    vec3 mix0 = mix( mix( g1, g2, 0.5 ), mix( g3, g4, 0.5 ), 0.5 );
-    vec3 mix1 = mix( mix( g5, g6, 0.5 ), mix( g7, g8, 0.5 ), 0.5 );
-
-    return mix( g0, mix( mix0, mix1, 0.5 ), 0.75 );
-}
 
 /*===========================================================================*/
 /**
@@ -164,7 +117,7 @@ void main()
         //
         // where, I: volume index, P: sampling point, R: volume resolution.
         vec3 volume_index = vec3( ( position + vec3(0.5) ) / volume.resolution );
-        vec4 value = texture3D( volume.data, volume_index );
+        vec4 value = texture3D( volume_data, volume_index );
         float scalar = mix( volume.min_range, volume.max_range, value.w );
 
         // Get the source color from the transfer function.
@@ -174,7 +127,7 @@ void main()
         {
             // Get the normal vector in object coordinate.
             vec3 offset_index = vec3( volume.resolution_reciprocal );
-            vec3 normal = EstimateGradient( volume.data, volume_index, offset_index );
+            vec3 normal = VolumeGradient( volume_data, volume_index, offset_index );
 
             // Light vector (L) and normal vector (N) in camera coordinate.
             vec3 L = normalize( light_position - position );
