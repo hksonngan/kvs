@@ -24,7 +24,7 @@ varying float depth; // depth value of the vertex in normalized device coordinat
 uniform sampler2D random_texture; // random texture to generate random number
 uniform float random_texture_size_inv; // reciprocal value of the random texture size
 uniform vec2 random_offset; // offset values for accessing to the random texture
-uniform Shading shading; // shading parameters
+uniform ShadingParameter shading; // shading parameters
 uniform float opacity; // opacity value
 
 

@@ -243,7 +243,7 @@ void RayCastingRenderer::exec(
             m_ray_casting_shader.setUniform( "volume_data", 1 );
             m_ray_casting_shader.setUniform( "exit_points", 2 );
             m_ray_casting_shader.setUniform( "entry_points", 3 );
-            m_ray_casting_shader.setUniform( "transfer_function.data", 4 );
+            m_ray_casting_shader.setUniform( "transfer_function_data", 4 );
             m_ray_casting_shader.setUniform( "jittering_texture", 5 );
             m_ray_casting_shader.setUniform( "depth_texture", 6 );
             m_ray_casting_shader.setUniform( "color_texture", 7 );

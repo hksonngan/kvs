@@ -12,9 +12,8 @@
  *  $Id: transfer_function.h 602 2010-08-19 02:43:34Z naohisa.sakamoto $
  */
 /*****************************************************************************/
-struct TransferFunction
+struct TransferFunctionParameter
 {
-    sampler1D data; // transfer function data
     float min_value; // min. scalar value
     float max_value; // max. scalar value
 };

@@ -20,7 +20,7 @@ varying vec2  center;
 varying float radius;
 varying float depth;
 
-uniform Shading shading;
+uniform ShadingParameter shading;
 
 /*===========================================================================*/
 /**

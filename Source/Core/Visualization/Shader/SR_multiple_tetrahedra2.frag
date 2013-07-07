@@ -37,7 +37,7 @@ uniform vec2 preintegration_scale_offset;
 uniform float random_texture_size_inv;
 uniform vec2 random_offset;
 
-uniform Shading shading;
+uniform ShadingParameter shading;
 
 float distance_to_d( const in float distance )
 {

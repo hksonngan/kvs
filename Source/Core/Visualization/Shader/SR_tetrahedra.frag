@@ -39,7 +39,7 @@ uniform vec2 screen_scale_inv; // reciprocal values of width and height of scree
 uniform vec2 preintegration_scale_offset; // offset values for pre-integration table
 uniform float random_texture_size_inv; // reciprocal value of random texture size
 uniform vec2 random_offset; // offset values for accessing to the random texture
-uniform Shading shading; // shading parameters
+uniform ShadingParameter shading; // shading parameters
 
 
 /*===========================================================================*/

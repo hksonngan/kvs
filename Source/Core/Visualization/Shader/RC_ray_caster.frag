@@ -27,7 +27,8 @@ uniform vec3 camera_position; // camera position in the object coordinate
 uniform VolumeParameter volume; // volume parameter
 uniform sampler3D volume_data; // volume data
 uniform ShadingParameter shading; // shading parameter
-uniform TransferFunction transfer_function; // 1D transfer function
+uniform TransferFunctionParameter transfer_function; // transfer function
+uniform sampler1D transfer_function_data; // 1D transfer function data
 uniform sampler2D jittering_texture; // texture for jittering
 uniform float width; // screen width
 uniform float height; // screen height
@@ -122,7 +123,7 @@ void main()
 
         // Get the source color from the transfer function.
         float tfunc_index = ( scalar - transfer_function.min_value ) * tfunc_scale;
-        vec4 src = texture1D( transfer_function.data, tfunc_index );
+        vec4 src = texture1D( transfer_function_data, tfunc_index );
         if ( src.a != 0.0 )
         {
             // Get the normal vector in object coordinate.

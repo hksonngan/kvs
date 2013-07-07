@@ -24,7 +24,7 @@ uniform float scale;
  *  @brief  Resize texture.
  */
 /*===========================================================================*/
-void main( void )
+void main()
 {
 #if 0 // don't use linear interpolation
     int x, y;

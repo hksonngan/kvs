@@ -37,7 +37,7 @@ uniform vec3 volume_resolution_inv;
 uniform float random_texture_size_inv;
 uniform vec2 random_offset;
 
-uniform Shading shading;
+uniform ShadingParameter shading;
 const float distance = 0.02;
 
 void main()

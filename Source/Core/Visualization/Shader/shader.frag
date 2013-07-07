@@ -14,12 +14,17 @@
 /*****************************************************************************/
 #include "shading.h"
 
-varying vec3    position;
-varying vec3    normal;
-uniform Shading shading;
+varying vec3 position;
+varying vec3 normal;
+uniform ShadingParameter shading;
 
 
-void main( void )
+/*===========================================================================*/
+/**
+ *  @brief  Main function of fragment shader.
+ */
+/*===========================================================================*/
+void main()
 {
     vec3 L = normalize( gl_LightSource[0].position.xyz - position );
     vec3 N = normalize( normal );

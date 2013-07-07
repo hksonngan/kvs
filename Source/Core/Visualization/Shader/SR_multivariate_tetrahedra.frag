@@ -31,7 +31,7 @@ uniform float random_texture_size_inv;
 uniform vec2 random_offset;
 uniform int start_volume;
 uniform int end_volume;
-uniform Shading shading;
+uniform ShadingParameter shading;
 
 void main()
 {
