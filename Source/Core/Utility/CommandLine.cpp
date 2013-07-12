@@ -20,7 +20,6 @@
 #include <cstdlib>
 #include <kvs/CommandLine>
 #include <kvs/Message>
-#include <kvs/Math>
 
 
 namespace kvs
@@ -658,7 +657,7 @@ void CommandLine::addOption(
     size_t nvalues,
     bool is_required )
 {
-    m_max_length = Math::Max( name.length() + 1, m_max_length );
+    m_max_length = name.length() + 1 > m_max_length ? name.length() + 1 : m_max_length;
 
     Option option( name, description, nvalues, is_required );
     m_options.push_back( option );

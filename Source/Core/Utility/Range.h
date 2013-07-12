@@ -1,6 +1,5 @@
 #pragma once
 #include <kvs/Assert>
-#include <kvs/Math>
 #include <kvs/Value>
 #include <kvs/ValueArray>
 #include <kvs/AnyValueArray>
@@ -31,14 +30,14 @@ public:
 
     void extend( double x )
     {
-        m_lower = kvs::Math::Min( m_lower, x );
-        m_upper = kvs::Math::Max( m_upper, x );
+        m_lower = m_lower < x ? m_lower : x;
+        m_upper = m_upper > x ? m_upper : x;
     }
 
     void extend( const Range& other )
     {
-        m_lower = kvs::Math::Min( m_lower, other.m_lower );
-        m_upper = kvs::Math::Max( m_upper, other.m_upper );
+        m_lower = m_lower < other.m_lower ? m_lower : other.m_lower;
+        m_upper = m_upper > other.m_upper ? m_upper : other.m_upper;
     }
 
     bool hasLength() const

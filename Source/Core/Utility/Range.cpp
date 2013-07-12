@@ -1,9 +1,20 @@
 #include "Range.h"
+#include <cmath>
 #include <kvs/Assert>
-#include <kvs/Math>
 #include <kvs/Value>
 #include <kvs/Type>
 
+
+namespace
+{
+
+template <typename T>
+inline T Square( T a )
+{
+    return a * a;
+}
+
+}
 
 namespace kvs
 {
@@ -11,8 +22,6 @@ namespace kvs
 template <typename T>
 kvs::Range CalculateValueRange( const kvs::ValueArray<T>& ary, int dim )
 {
-    using kvs::Math::Square;
-
     KVS_ASSERT( dim > 0 );
     KVS_ASSERT( ary.size() % dim == 0 );
 
@@ -32,8 +41,8 @@ kvs::Range CalculateValueRange( const kvs::ValueArray<T>& ary, int dim )
         while ( value < end )
         {
             double magnitude
-            = Square( double( value[0] ) )
-            + Square( double( value[1] ) );
+                = ::Square( double( value[0] ) )
+                + ::Square( double( value[1] ) );
             value += 2;
             range.extend( magnitude );
         }
@@ -43,9 +52,9 @@ kvs::Range CalculateValueRange( const kvs::ValueArray<T>& ary, int dim )
         while ( value < end )
         {
             double magnitude
-            = Square( double( value[0] ) )
-            + Square( double( value[1] ) )
-            + Square( double( value[2] ) );
+                = ::Square( double( value[0] ) )
+                + ::Square( double( value[1] ) )
+                + ::Square( double( value[2] ) );
             value += 3;
             range.extend( magnitude );
         }
@@ -57,7 +66,7 @@ kvs::Range CalculateValueRange( const kvs::ValueArray<T>& ary, int dim )
             double magnitude = 0;
             for ( int i = 0; i < dim; ++i )
             {
-                magnitude += Square( double( *( value++ ) ) );
+                magnitude += ::Square( double( *( value++ ) ) );
             }
             range.extend( magnitude );
         }
