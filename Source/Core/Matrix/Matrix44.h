@@ -16,7 +16,6 @@
 
 #include <iostream>
 #include <kvs/Assert>
-#include <kvs/Math>
 #include <kvs/Vector4>
 #include <kvs/Deprecated>
 

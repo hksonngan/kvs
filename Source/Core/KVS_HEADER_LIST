@@ -73,7 +73,6 @@ Numeric/GaussEliminationSolver
 Numeric/KMeans
 Numeric/LUDecomposer
 Numeric/LUSolver
-Numeric/Math
 Numeric/MersenneTwister
 Numeric/QRDecomposer
 Numeric/QRSolver
@@ -135,6 +134,7 @@ Utility/FileList
 Utility/IgnoreUnusedVariable
 Utility/Indent
 Utility/Macro
+Utility/Math
 Utility/MemoryDebugger
 Utility/MemoryTracer
 Utility/Message

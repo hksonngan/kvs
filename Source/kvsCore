@@ -73,7 +73,6 @@
 #include <Core/Numeric/KMeans.h>
 #include <Core/Numeric/LUDecomposer.h>
 #include <Core/Numeric/LUSolver.h>
-#include <Core/Numeric/Math.h>
 #include <Core/Numeric/MersenneTwister.h>
 #include <Core/Numeric/QRDecomposer.h>
 #include <Core/Numeric/QRSolver.h>
@@ -135,6 +134,7 @@
 #include <Core/Utility/IgnoreUnusedVariable.h>
 #include <Core/Utility/Indent.h>
 #include <Core/Utility/Macro.h>
+#include <Core/Utility/Math.h>
 #include <Core/Utility/MemoryDebugger.h>
 #include <Core/Utility/MemoryTracer.h>
 #include <Core/Utility/Message.h>
