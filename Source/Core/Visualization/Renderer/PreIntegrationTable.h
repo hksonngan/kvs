@@ -56,7 +56,7 @@ public:
     void setTableSize( const int size_scalar, const int size_depth );
     void setTransferFunction( const kvs::TransferFunction& transfer_function, const float min_scalar, const float max_scalar );
 
-    void create( const float max_edge_length );
+    void create( const float max_size_of_cell );
     void download();
     void bind();
     void unbind();

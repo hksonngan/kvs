@@ -22,6 +22,17 @@
 #include <vector>
 
 
+namespace
+{
+
+float AdjustedAlpha( const float alpha, const float dt )
+{
+    return 1.0f - std::pow( 1.0f - alpha, dt );
+}
+
+}
+
+
 namespace kvs
 {
 
@@ -194,10 +205,10 @@ void PreIntegrationTable::setTransferFunction(
 /*===========================================================================*/
 /**
  *  @brief  Compute pre-integration table by numerical integration.
- *  @param  max_edge_length [in]
+ *  @param  max_size_of_cell [in] maximum size of the cell
  */
 /*===========================================================================*/
-void PreIntegrationTable::create( const float max_edge_length )
+void PreIntegrationTable::create( const float max_size_of_cell )
 {
     m_table_texture.setWrapS( GL_CLAMP_TO_EDGE );
     m_table_texture.setWrapT( GL_CLAMP_TO_EDGE );
@@ -227,10 +238,12 @@ void PreIntegrationTable::create( const float max_edge_length )
 
     // Build first level of the table.
     {
-        const float dl = max_edge_length / float( m_size_depth - 1 );
+        const float dl = max_size_of_cell / float( m_size_depth - 1 );
         float l = dl;
-        this->compute_exact_level( 1, l );
-        for ( size_t i = 2; i < static_cast<size_t>( m_size_depth ); i++ )
+//        this->compute_exact_level( 1, l );
+//        for ( size_t i = 2; i < static_cast<size_t>( m_size_depth ); i++ )
+        this->compute_exact_level( 0, l );
+        for ( size_t i = 1; i < static_cast<size_t>( m_size_depth ); i++ )
         {
             l += dl;
             this->compute_incremental_level( i, i - 1, 1, l, dl );
@@ -302,10 +315,11 @@ void PreIntegrationTable::compute_exact_level( const int level, const float dl )
             if ( i == j ) // sb == sf
             {
                 kvs::Vector4f c = m_transfer_function[i];
-                c[3] = 1.0f - std::pow( 1.0f - c[3], dl );
-                c[0] *= c[3];
-                c[1] *= c[3];
-                c[2] *= c[3];
+                const float a = ::AdjustedAlpha( c[3], dl );
+                c[0] = c[0] * a;
+                c[1] = c[1] * a;
+                c[2] = c[2] * a;
+                c[3] = a;
                 m_table[ offset + i * m_size_scalar + j ] = c;
             }
 
@@ -318,15 +332,17 @@ void PreIntegrationTable::compute_exact_level( const int level, const float dl )
                     const float dbeta = 1.0f / static_cast<float>( M );
                     const float dgamma = 1.0f / static_cast<float>( i - j );
                     kvs::Vector4f c0 = m_transfer_function[k];
-                    c0[3] = 1.0f - std::pow( 1.0f - c0[3], dl * dbeta * dgamma );
-                    c0[0] *= c0[3];
-                    c0[1] *= c0[3];
-                    c0[2] *= c0[3];
+                    const float a0 = ::AdjustedAlpha( c0[3], dl * dbeta * dgamma );
+                    c0[0] = c0[0] * a0;
+                    c0[1] = c0[1] * a0;
+                    c0[2] = c0[2] * a0;
+                    c0[3] = a0;
                     kvs::Vector4f c1 = m_transfer_function[k+1];
-                    c1[3] = 1.0f - std::pow( 1.0f - c1[3], dl * dbeta * dgamma );
-                    c1[0] *= c1[3];
-                    c1[1] *= c1[3];
-                    c1[2] *= c1[3];
+                    const float a1 = ::AdjustedAlpha( c1[3], dl * dbeta * dgamma );
+                    c1[0] = c1[0] * a1;
+                    c1[1] = c1[1] * a1;
+                    c1[2] = c1[2] * a1;
+                    c1[3] = a1;
                     for ( int m = 0; m < M; m++, beta += dbeta )
                     {
                         const kvs::Vector4f ck = c0 * ( 1.0f - beta ) + c1 * beta;
@@ -345,15 +361,17 @@ void PreIntegrationTable::compute_exact_level( const int level, const float dl )
                     const float dbeta = 1.0f / static_cast<float>(M);
                     const float dgamma = 1.0f / static_cast<float>( j - i );
                     kvs::Vector4f c0 = m_transfer_function[k];
-                    c0[3] = 1.0f - std::pow( 1.0f - c0[3], dl * dbeta * dgamma );
-                    c0[0] *= c0[3];
-                    c0[1] *= c0[3];
-                    c0[2] *= c0[3];
+                    const float a0 = ::AdjustedAlpha( c0[3], dl * dbeta * dgamma );
+                    c0[0] = c0[0] * a0;
+                    c0[1] = c0[1] * a0;
+                    c0[2] = c0[2] * a0;
+                    c0[3] = a0;
                     kvs::Vector4f c1 = m_transfer_function[k-1];
-                    c1[3] = 1.0f - std::pow( 1.0f - c1[3], dl * dbeta * dgamma );
-                    c1[0] *= c1[3];
-                    c1[1] *= c1[3];
-                    c1[2] *= c1[3];
+                    const float a1 = ::AdjustedAlpha( c1[3], dl * dbeta * dgamma );
+                    c1[0] = c1[0] * a1;
+                    c1[1] = c1[1] * a1;
+                    c1[2] = c1[2] * a1;
+                    c1[3] = a1;
                     for ( int m = 0; m < M; m++, beta += dbeta )
                     {
                         const kvs::Vector4f ck = c0 * ( 1.0f - beta ) + c1 * beta;

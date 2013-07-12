@@ -166,6 +166,34 @@ inline T Square( T a )
 }
 
 template <typename T>
+inline T Fract( T x )
+{
+    // T must be a floating-point.
+    return x - Floor( x );
+}
+
+template <typename T>
+inline T Mod( T x, T y )
+{
+    // T must be a floating-point.
+    return x - y * Floor( x / y );
+}
+
+template <typename T>
+inline T Mix( T x, T y, T a )
+{
+    // T must be a floating-point.
+    return x * ( 1 - a ) + y * a;
+}
+
+template <typename T>
+inline T Step( T edge, T x )
+{
+    // T must be a floating-point.
+    return x < edge ? T(0) : T(1);
+}
+
+template <typename T>
 inline T Pythag( T a, T b )
 {
     T abs_a = Abs( a );
@@ -285,6 +313,11 @@ inline double PI()
 {
     return 6 * std::asin( 0.5 );
 }
+
+
+
+
+
 
 #if KVS_ENABLE_DEPRECATED
 template <typename T>

@@ -416,9 +416,9 @@ void StochasticTetrahedraRenderer::Engine::create_shader_program()
         m_shader_program.setUniform( "random_texture", 0 );
 
         // Pre-integration table.
-        const float edge_size = 1.0f;
+        const float max_size_of_cell = 1.0f;
         const kvs::Vec2 preintegration_scale_offset(
-            1.0f - 1.0f / m_preintegration_table.sizeDepth() / edge_size,
+            1.0f - 1.0f / m_preintegration_table.sizeDepth() / max_size_of_cell,
             1.0f / ( 2.0f * m_preintegration_table.sizeDepth() ) );
         m_shader_program.setUniform( "preintegration_scale_offset", preintegration_scale_offset );
         m_shader_program.setUniform( "preintegration_texture", 1 );
