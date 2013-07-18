@@ -44,6 +44,32 @@ struct Less
     }
 };
 
+kvs::RGBColor Interpolate(
+    const float s,
+    const float s0,
+    const float s1,
+    const kvs::RGBColor& c0,
+    const kvs::RGBColor& c1 )
+{
+    const float r0 = static_cast<float>( c0.r() );
+    const float g0 = static_cast<float>( c0.g() );
+    const float b0 = static_cast<float>( c0.b() );
+
+    const float r1 = static_cast<float>( c1.r() );
+    const float g1 = static_cast<float>( c1.g() );
+    const float b1 = static_cast<float>( c1.b() );
+
+    const float w = ( s - s0 ) / ( s1 - s0 );
+    const float r = kvs::Math::Mix( r0, r1, w );
+    const float g = kvs::Math::Mix( g0, g1, w );
+    const float b = kvs::Math::Mix( b0, b1, w );
+
+    const kvs::UInt8 R = static_cast<kvs::UInt8>( r );
+    const kvs::UInt8 G = static_cast<kvs::UInt8>( g );
+    const kvs::UInt8 B = static_cast<kvs::UInt8>( b );
+    return kvs::RGBColor( R, G, B );
+};
+
 }
 
 namespace kvs
@@ -57,7 +83,6 @@ namespace kvs
 ColorMap::ColorMap():
     m_resolution( ::Resolution ),
     m_min_value( 0.0f ),
-//    m_max_value( ::Resolution - 1.0f ),
     m_max_value( 0.0f ),
     m_points(),
     m_table()
@@ -73,7 +98,6 @@ ColorMap::ColorMap():
 ColorMap::ColorMap( const size_t resolution ):
     m_resolution( resolution ),
     m_min_value( 0.0f ),
-//    m_max_value( resolution - 1.0f ),
     m_max_value( 0.0f ),
     m_points(),
     m_table()
@@ -89,7 +113,6 @@ ColorMap::ColorMap( const size_t resolution ):
 ColorMap::ColorMap( const ColorMap::Table& table ):
     m_resolution( table.size() / 3 ),
     m_min_value( 0.0f ),
-//    m_max_value( table.size() - 1.0f ),
     m_max_value( 0.0f ),
     m_points(),
     m_table( table )
@@ -268,12 +291,6 @@ void ColorMap::removePoint( const float value )
 /*==========================================================================*/
 void ColorMap::create()
 {
-/*
-    if ( kvs::Math::IsZero( m_min_value ) && kvs::Math::IsZero( m_max_value ) )
-    {
-        this->setRange( 0.0f, static_cast<float>( m_resolution - 1 ) );
-    }
-*/
     kvs::Real32 min_value = 0.0f;
     kvs::Real32 max_value = static_cast<kvs::Real32>( m_resolution - 1 );
     if ( this->hasRange() )
@@ -340,13 +357,7 @@ void ColorMap::create()
                     const float s1 = p1.first;
                     const kvs::RGBColor c0 = p0.second;
                     const kvs::RGBColor c1 = p1.second;
-                    const float r = c0.r() + ( c1.r() - c0.r() ) * ( f - s0 ) / ( s1 - s0 );
-                    const float g = c0.g() + ( c1.g() - c0.g() ) * ( f - s0 ) / ( s1 - s0 );
-                    const float b = c0.b() + ( c1.b() - c0.b() ) * ( f - s0 ) / ( s1 - s0 );
-                    const kvs::UInt8 R = static_cast<kvs::UInt8>( r );
-                    const kvs::UInt8 G = static_cast<kvs::UInt8>( g );
-                    const kvs::UInt8 B = static_cast<kvs::UInt8>( b );
-                    color = kvs::RGBColor( R, G, B );
+                    color = ::Interpolate( f, s0, s1, c0, c1 );
                     break;
                 }
                 else

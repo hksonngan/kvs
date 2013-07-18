@@ -104,7 +104,7 @@ const std::pair<int,int> Scene::registerObject( kvs::ObjectBase* object, kvs::Re
      * the renderer is registered and then its ID is returned.
      */
     int renderer_id = -1;
-    for ( int i = 0; i < m_renderer_manager->nrenderers(); i++ )
+    for ( int i = 0; i < m_renderer_manager->numberOfRenderers(); i++ )
     {
         if ( m_renderer_manager->renderer(i) == renderer ) renderer_id = i;
     }

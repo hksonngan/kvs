@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file OpacityMap.cpp
+ *  @file   OpacityMap.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -41,6 +42,17 @@ struct Less
     }
 };
 
+float Interpolate(
+    const float s,
+    const float s0,
+    const float s1,
+    const float a0,
+    const float a1 )
+{
+    const float w = ( s - s0 ) / ( s1 - s0 );
+    return kvs::Math::Mix( a0, a1, w );
+};
+
 } // end of namespace
 
 
@@ -55,7 +67,6 @@ namespace kvs
 OpacityMap::OpacityMap():
     m_resolution( ::Resolution ),
     m_min_value( 0.0f ),
-//    m_max_value( ::Resolution - 1.0f ),
     m_max_value( 0.0f ),
     m_points(),
     m_table()
@@ -71,7 +82,6 @@ OpacityMap::OpacityMap():
 OpacityMap::OpacityMap( const size_t resolution ):
     m_resolution( resolution ),
     m_min_value( 0.0f ),
-//    m_max_value( resolution - 1.0f ),
     m_max_value( 0.0f ),
     m_points(),
     m_table()
@@ -87,7 +97,6 @@ OpacityMap::OpacityMap( const size_t resolution ):
 OpacityMap::OpacityMap( const Table& table ):
     m_resolution( table.size() ),
     m_min_value( 0.0f ),
-//    m_max_value( table.size() - 1.0f ),
     m_max_value( 0.0f ),
     m_points(),
     m_table( table )
@@ -207,6 +216,12 @@ const OpacityMap::Table& OpacityMap::table() const
     return m_table;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns true if the range is specified.
+ *  @return ture if the range is specified
+ */
+/*===========================================================================*/
 bool OpacityMap::hasRange() const
 {
     return !kvs::Math::Equal( m_min_value, m_max_value );
@@ -266,12 +281,6 @@ void OpacityMap::removePoint( const float value )
 /*==========================================================================*/
 void OpacityMap::create()
 {
-/*
-    if ( kvs::Math::IsZero( m_min_value ) && kvs::Math::IsZero( m_max_value ) )
-    {
-        this->setRange( 0.0f, static_cast<float>( m_resolution - 1 ) );
-    }
-*/
     kvs::Real32 min_value = 0.0f;
     kvs::Real32 max_value = static_cast<kvs::Real32>( m_resolution - 1 );
     if ( this->hasRange() )
@@ -322,7 +331,7 @@ void OpacityMap::create()
                     const float s1 = p1.first;
                     const float a0 = p0.second;
                     const float a1 = p1.second;
-                    opacity = a0 + ( a1 - a0 ) * ( f - s0 ) / ( s1 - s0 );
+                    opacity = ::Interpolate( f, s0, s1, a0, a1 );
                     break;
                 }
                 else
