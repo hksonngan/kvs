@@ -23,6 +23,7 @@
 #include <kvs/Type>
 #include <kvs/TetrahedralCell>
 #include <kvs/ProjectedTetrahedraTable>
+#include <kvs/PreIntegrationTable3D>
 
 
 namespace
@@ -222,7 +223,7 @@ void StochasticTetrahedraRenderer::Engine::release()
     m_vbo.release();
     m_ibo.release();
     m_decomposition_texture.release();
-    m_preintegration_table.release();
+    m_preintegration_texture.release();
     m_transfer_function_changed = true;
 }
 
@@ -242,7 +243,7 @@ void StochasticTetrahedraRenderer::Engine::create( kvs::ObjectBase* object, kvs:
     createRandomTexture();
     this->create_shader_program();
     this->create_buffer_object( volume );
-    this->create_preintegration_table();
+    this->create_preintegration_texture();
     this->create_decomposition_texture();
 }
 
@@ -257,12 +258,11 @@ void StochasticTetrahedraRenderer::Engine::create( kvs::ObjectBase* object, kvs:
 void StochasticTetrahedraRenderer::Engine::update( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light )
 {
     kvs::ProgramObject::Binder bind( m_shader_program );
-    {
-        const kvs::Vec2 screen_scale( camera->windowWidth() * 0.5f, camera->windowHeight() * 0.5f );
-        const kvs::Vec2 screen_scale_inv( 1.0f / camera->windowWidth(), 1.0f / camera->windowHeight() );
-        m_shader_program.setUniform( "screen_scale", screen_scale );
-        m_shader_program.setUniform( "screen_scale_inv", screen_scale_inv );
-    }
+
+    const kvs::Vec2 screen_scale( camera->windowWidth() * 0.5f, camera->windowHeight() * 0.5f );
+    const kvs::Vec2 screen_scale_inv( 1.0f / camera->windowWidth(), 1.0f / camera->windowHeight() );
+    m_shader_program.setUniform( "screen_scale", screen_scale );
+    m_shader_program.setUniform( "screen_scale_inv", screen_scale_inv );
 }
 
 /*===========================================================================*/
@@ -281,8 +281,8 @@ void StochasticTetrahedraRenderer::Engine::setup( const bool reset_count )
     if ( m_transfer_function_changed )
     {
         // Re-create pre-integration table.
-        m_preintegration_table.release();
-        this->create_preintegration_table();
+        m_preintegration_texture.release();
+        this->create_preintegration_texture();
     }
 }
 
@@ -302,7 +302,7 @@ void StochasticTetrahedraRenderer::Engine::draw( kvs::ObjectBase* object, kvs::C
     kvs::IndexBufferObject::Binder bind2( m_ibo );
     kvs::ProgramObject::Binder bind3( m_shader_program );
     kvs::Texture::Binder bind4( randomTexture(), 0 );
-    kvs::Texture::Binder bind5( m_preintegration_table.texture(), 1 );
+    kvs::Texture::Binder bind5( m_preintegration_texture, 1 );
     kvs::Texture::Binder bind6( m_decomposition_texture, 2 );
     if ( depthTexture().isCreated() ) { kvs::Texture::Bind( depthTexture(), 3 ); }
     {
@@ -417,9 +417,10 @@ void StochasticTetrahedraRenderer::Engine::create_shader_program()
 
         // Pre-integration table.
         const float max_size_of_cell = 1.0f;
+        const size_t depth_resolution = 128;
         const kvs::Vec2 preintegration_scale_offset(
-            1.0f - 1.0f / m_preintegration_table.sizeDepth() / max_size_of_cell,
-            1.0f / ( 2.0f * m_preintegration_table.sizeDepth() ) );
+            1.0f - 1.0f / depth_resolution / max_size_of_cell,
+            1.0f / ( 2.0f * depth_resolution ) );
         m_shader_program.setUniform( "preintegration_scale_offset", preintegration_scale_offset );
         m_shader_program.setUniform( "preintegration_texture", 1 );
 
@@ -485,16 +486,28 @@ void StochasticTetrahedraRenderer::Engine::create_buffer_object( const kvs::Unst
 
 /*===========================================================================*/
 /**
- *  @brief  Creates pre-integration table.
+ *  @brief  Creates pre-integration texture.
  */
 /*===========================================================================*/
-void StochasticTetrahedraRenderer::Engine::create_preintegration_table()
+void StochasticTetrahedraRenderer::Engine::create_preintegration_texture()
 {
-    const float edge_size = 1.0f;
-    m_preintegration_table.setTableSize( 128, 128 );
-    m_preintegration_table.setTransferFunction( m_transfer_function, 0.0f, 1.0f );
-    m_preintegration_table.create( edge_size );
-    m_preintegration_table.download();
+    const float max_size_of_cell = 1.0f;
+    const size_t dim_scalar = 128;
+    const size_t dim_depth = 128;
+    kvs::PreIntegrationTable3D table;
+    table.setScalarResolution( dim_scalar );
+    table.setDepthResolution( dim_depth );
+    table.setTransferFunction( m_transfer_function, 0.0f, 1.0f );
+    table.create( max_size_of_cell );
+
+    m_preintegration_texture.setWrapS( GL_CLAMP_TO_EDGE );
+    m_preintegration_texture.setWrapT( GL_CLAMP_TO_EDGE );
+    m_preintegration_texture.setWrapR( GL_CLAMP_TO_EDGE );
+    m_preintegration_texture.setMagFilter( GL_LINEAR );
+    m_preintegration_texture.setMinFilter( GL_LINEAR );
+    m_preintegration_texture.setPixelFormat( GL_RGBA8, GL_RGBA, GL_FLOAT );
+    m_preintegration_texture.create( dim_scalar, dim_scalar, dim_depth, table.table().data() );
+
     m_transfer_function_changed = false;
 }
 

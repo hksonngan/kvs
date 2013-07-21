@@ -17,7 +17,7 @@
 
 #include <kvs/Module>
 #include <kvs/TransferFunction>
-#include <kvs/PreIntegrationTable>
+#include <kvs/Texture3D>
 #include <kvs/ProgramObject>
 #include <kvs/VertexBufferObject>
 #include <kvs/IndexBufferObject>
@@ -74,7 +74,7 @@ private:
     size_t m_value[2]; ///< indices used for refering the values
     bool m_transfer_function_changed[2]; ///< flags for changin transfer function
     kvs::TransferFunction m_transfer_function[2]; ///< transfer functions
-    kvs::PreIntegrationTable m_preintegration_table[2]; ///< pre-integration tables
+    kvs::Texture3D m_preintegration_texture[2]; ///< pre-integration textures
     kvs::ProgramObject m_shader_program[2]; ///< shader programs
     kvs::VertexBufferObject m_vbo[2]; ///< vertex buffer objects
     kvs::IndexBufferObject m_ibo[2]; ///< index buffer objects
@@ -108,7 +108,7 @@ private:
 
     void create_shader_program();
     void create_buffer_object();
-    void create_preintegration_table( const size_t index );
+    void create_preintegration_texture( const size_t index );
     void create_decomposition_texture();
 };
 

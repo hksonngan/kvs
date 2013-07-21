@@ -271,6 +271,7 @@ Visualization/Renderer/ParticleVolumeRenderer
 Visualization/Renderer/PointRenderer
 Visualization/Renderer/PolygonRenderer
 Visualization/Renderer/PreIntegrationTable
+Visualization/Renderer/PreIntegrationTable3D
 Visualization/Renderer/ProjectedTetrahedraTable
 Visualization/Renderer/Ray
 Visualization/Renderer/RayCastingRenderer

@@ -33,6 +33,7 @@
 #include <kvs/VolumeRendererBase>
 #include <kvs/UnstructuredVolumeObject>
 #include <kvs/Texture2D>
+#include <kvs/Texture3D>
 #include <kvs/FragmentShader>
 #include <kvs/VertexShader>
 #include <kvs/ProgramObject>
@@ -40,7 +41,6 @@
 #include <kvs/IndexBufferObject>
 #include <kvs/ProgramObject>
 #include <kvs/FrameBufferObject>
-#include <kvs/PreIntegrationTable>
 
 
 namespace kvs
@@ -69,7 +69,7 @@ private:
     // Reference data (NOTE: not allocated in thie class).
     const kvs::UnstructuredVolumeObject* m_ref_volume; ///< pointer to the volume data
 
-    kvs::PreIntegrationTable m_table; ///< pre-integration table
+    kvs::Texture3D m_preintegration_texture; ///< pre-integration texture
     size_t m_k_size; ///< k-buffer size (2 or 6)
     Meshes* m_meshes; ///< tetrahedral meshes for HAVS
     bool m_enable_vbo; ///< flag for checking if VBO is enabled

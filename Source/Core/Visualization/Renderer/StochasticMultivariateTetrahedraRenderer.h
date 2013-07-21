@@ -17,7 +17,7 @@
 
 #include <kvs/Module>
 #include <kvs/TransferFunction>
-#include <kvs/PreIntegrationTable>
+#include <kvs/Texture3D>
 #include <kvs/ProgramObject>
 #include <kvs/VertexBufferObject>
 #include <kvs/IndexBufferObject>
@@ -67,7 +67,7 @@ private:
     bool m_show_component[2]; ///< flags for showing the component
     bool m_transfer_function_changed[2]; ///< flags for changin transfer function
     kvs::TransferFunction m_transfer_function[2]; ///< transfer functions for the component
-    kvs::PreIntegrationTable m_preintegration_table[2]; ///< pre-integration tables for the component #1
+    kvs::Texture3D m_preintegration_texture[2]; ///< pre-integration tables for the component #1
     kvs::Texture2D m_decomposition_texture; ///< texture for the tetrahedral decomposition
     kvs::ProgramObject m_shader_program; ///< shader program
     kvs::VertexBufferObject m_vbo; ///< vertex buffer object
@@ -94,7 +94,7 @@ private:
 
     void create_shader_program();
     void create_buffer_object( const kvs::UnstructuredVolumeObject* volume );
-    void create_preintegration_table( const size_t index );
+    void create_preintegration_texture( const size_t index );
     void create_decomposition_texture();
 };
 

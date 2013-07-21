@@ -32,6 +32,7 @@
 #include <kvs/OpenGL>
 #include <kvs/VertexShader>
 #include <kvs/FragmentShader>
+#include <kvs/PreIntegrationTable3D>
 
 
 namespace
@@ -182,7 +183,6 @@ void HAVSVolumeRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs
 void HAVSVolumeRenderer::initialize()
 {
     BaseClass::setWindowSize( 0, 0 );
-    m_table.setTableSize( 128, 128 );
     m_k_size = 2;
     m_meshes = NULL;
     m_enable_vbo = true;
@@ -252,11 +252,25 @@ void HAVSVolumeRenderer::initialize_shader()
 void HAVSVolumeRenderer::initialize_table()
 {
     if ( !m_ref_volume->hasMinMaxValues() ) m_ref_volume->updateMinMaxValues();
+
     const float min_value = static_cast<float>( m_ref_volume->minValue() );
     const float max_value = static_cast<float>( m_ref_volume->maxValue() );
-    m_table.setTransferFunction( BaseClass::transferFunction(), min_value, max_value );
-    m_table.create( m_meshes->depthScale() * 2.0f );
-    m_table.download();
+    const float max_size_of_cell = m_meshes->depthScale() * 2.0f;
+    const size_t dim_scalar = 128;
+    const size_t dim_depth = 128;
+    kvs::PreIntegrationTable3D table;
+    table.setScalarResolution( dim_scalar );
+    table.setDepthResolution( dim_depth );
+    table.setTransferFunction( BaseClass::transferFunction(), min_value, max_value );
+    table.create( max_size_of_cell );
+
+    m_preintegration_texture.setWrapS( GL_CLAMP_TO_EDGE );
+    m_preintegration_texture.setWrapT( GL_CLAMP_TO_EDGE );
+    m_preintegration_texture.setWrapR( GL_CLAMP_TO_EDGE );
+    m_preintegration_texture.setMagFilter( GL_LINEAR );
+    m_preintegration_texture.setMinFilter( GL_LINEAR );
+    m_preintegration_texture.setPixelFormat( GL_RGBA8, GL_RGBA, GL_FLOAT );
+    m_preintegration_texture.create( dim_scalar, dim_scalar, dim_depth, table.table().data() );
 }
 
 void HAVSVolumeRenderer::initialize_framebuffer()
@@ -344,7 +358,7 @@ void HAVSVolumeRenderer::enable_MRT_rendering()
     // Bind pre-integration table.
     kvs::OpenGL::Enable( GL_TEXTURE_3D );
     kvs::Texture::SelectActiveUnit( m_ntargets == 2 ? 2 : 4 );
-    m_table.bind();
+    m_preintegration_texture.bind();
 }
 
 void HAVSVolumeRenderer::disable_MRT_rendering()
@@ -352,7 +366,7 @@ void HAVSVolumeRenderer::disable_MRT_rendering()
     // Disable pre-integration table.
     kvs::Texture::SelectActiveUnit( m_ntargets == 2 ? 2 : 4 );
     kvs::OpenGL::Disable( GL_TEXTURE_3D );
-    m_table.unbind();
+    m_preintegration_texture.unbind();
 
     // Disable FBO rendering
     m_mrt_framebuffer.unbind();
@@ -417,7 +431,7 @@ void HAVSVolumeRenderer::draw_geometry_pass()
     kvs::ProgramObject::Binder binder( m_shader_kbuffer );
 
     const float* mat = m_modelview;
-    const float table_size = static_cast<float>( m_table.sizeDepth() );
+    const float table_size = 128.0f;
     const float edge_length = m_meshes->depthScale();
     const float bb_scale = std::sqrt( mat[0]*mat[0] + mat[1]*mat[1] + mat[2]*mat[2] );
     const kvs::Vector4f scale(
@@ -472,7 +486,7 @@ void HAVSVolumeRenderer::draw_flush_pass()
     kvs::ProgramObject::Binder binder( m_shader_end );
 
     const float* mat = m_modelview;
-    const float table_size = static_cast<float>( m_table.sizeDepth() );
+    const float table_size = 128.0f;
     const float edge_length = m_meshes->depthScale();
     const float bb_scale = std::sqrt( mat[0]*mat[0] + mat[1]*mat[1] + mat[2]*mat[2] );
     const kvs::Vector4f scale(

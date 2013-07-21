@@ -274,7 +274,7 @@ const std::pair<int,int> Screen::registerObject( kvs::ObjectBase* object, kvs::R
      * the renderer is registered and then its ID is returned.
      */
     int renderer_id = -1;
-    for ( int i = 0; i < m_scene->rendererManager()->nrenderers(); i++ )
+    for ( int i = 0; i < m_scene->rendererManager()->numberOfRenderers(); i++ )
     {
         if ( m_scene->rendererManager()->renderer(i) == renderer ) renderer_id = i;
     }
