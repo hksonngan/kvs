@@ -312,6 +312,31 @@ size_t TransferFunction::resolution() const
     return m_opacity_map.resolution();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns RGBA table as value array.
+ *  @return RGBA table
+ */
+/*===========================================================================*/
+kvs::ValueArray<kvs::Real32> TransferFunction::table() const
+{
+    const size_t width = this->resolution();
+    kvs::ValueArray<kvs::Real32> table( width * 4 );
+    float* data = table.data();
+
+    const kvs::ColorMap& cmap = this->colorMap();
+    const kvs::OpacityMap& omap = this->opacityMap();
+    for ( size_t i = 0; i < width; i++ )
+    {
+        *(data++) = static_cast<float>( cmap[i].r() ) / 255.0f;
+        *(data++) = static_cast<float>( cmap[i].g() ) / 255.0f;
+        *(data++) = static_cast<float>( cmap[i].b() ) / 255.0f;
+        *(data++) = omap[i];
+    }
+
+    return table;
+}
+
 /*==========================================================================*/
 /**
  *  @brief  Create the alpha map.

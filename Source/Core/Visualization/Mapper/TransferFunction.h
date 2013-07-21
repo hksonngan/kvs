@@ -18,6 +18,7 @@
 #include <kvs/ColorMap>
 #include <kvs/OpacityMap>
 #include <kvs/VolumeObjectBase>
+#include <kvs/ValueArray>
 
 
 namespace kvs
@@ -58,6 +59,7 @@ public:
     const kvs::ColorMap& colorMap() const;
     const kvs::OpacityMap& opacityMap() const;
     size_t resolution() const;
+    kvs::ValueArray<kvs::Real32> table() const;
 
     void create( const size_t resolution );
     bool read( const std::string& filename );

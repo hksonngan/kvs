@@ -513,27 +513,15 @@ void RayCastingRenderer::initialize_bounding_cube_buffer( const kvs::StructuredV
 /*===========================================================================*/
 void RayCastingRenderer::initialize_transfer_function_texture()
 {
-    m_transfer_function_texture.release();
-
     const size_t width = BaseClass::transferFunction().resolution();
-    kvs::ValueArray<float> colors( width * 4 );
-    float* data = colors.data();
+    const kvs::ValueArray<kvs::Real32> table = BaseClass::transferFunction().table();
 
-    const kvs::ColorMap& cmap = BaseClass::transferFunction().colorMap();
-    const kvs::OpacityMap& omap = BaseClass::transferFunction().opacityMap();
-    for ( size_t i = 0; i < width; i++ )
-    {
-        *(data++) = static_cast<float>( cmap[i].r() ) / 255.0f;
-        *(data++) = static_cast<float>( cmap[i].g() ) / 255.0f;
-        *(data++) = static_cast<float>( cmap[i].b() ) / 255.0f;
-        *(data++) = omap[i];
-    }
-
+    m_transfer_function_texture.release();
     m_transfer_function_texture.setWrapS( GL_CLAMP_TO_EDGE );
     m_transfer_function_texture.setMagFilter( GL_LINEAR );
     m_transfer_function_texture.setMinFilter( GL_LINEAR );
     m_transfer_function_texture.setPixelFormat( GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT  );
-    m_transfer_function_texture.create( width, colors.data() );
+    m_transfer_function_texture.create( width, table.data() );
 }
 
 /*===========================================================================*/
