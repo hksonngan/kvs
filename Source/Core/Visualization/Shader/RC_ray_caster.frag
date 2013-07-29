@@ -105,8 +105,9 @@ void main()
     float exit_depth = texture2D( exit_points, index ).w;
     float depth0 = texture2D( depth_texture, index ).x;
     vec3 color0 = texture2D( color_texture, index ).rgb;
-    int i = 0;
-    do
+
+    if ( nsteps == 0 ) nsteps++;
+    for ( int i = 0; i < nsteps; i++ )
     {
         // Get the scalar value from the 3D texture.
         // NOTE: The volume index which is a index to access the volume data
@@ -173,7 +174,7 @@ void main()
         }
 
         position += direction;
-    } while ( i++ < nsteps );
+    }
 
     gl_FragColor = dst;
 }
