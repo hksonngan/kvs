@@ -80,6 +80,7 @@ public:
     const kvs::Vector3f position() const;
     const kvs::Vector3f upVector() const;
     const kvs::Vector3f lookAt() const;
+    const kvs::Matrix44f projectionMatrix() const;
     const kvs::Matrix44f viewingMatrix() const;
     const kvs::Vector2f lookAtInDevice() const;
     float fieldOfView() const;
@@ -98,7 +99,6 @@ public:
 
 public:
 
-    const kvs::Matrix44f projectionMatrix() const;
 //deprecated unused
     const kvs::Matrix44f modelViewMatrix() const;
 //deprecated unused

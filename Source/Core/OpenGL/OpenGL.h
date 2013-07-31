@@ -104,9 +104,9 @@ void GetProjectionMatrix( GLfloat* params );
 void GetProjectionMatrix( GLdouble* params );
 void GetViewport( GLint* params );
 void GetViewport( GLfloat* params );
-kvs::Mat4 modelViewMatrix();
-kvs::Mat4 projectionMatrix();
-kvs::Vec4 viewport();
+kvs::Mat4 ModelViewMatrix();
+kvs::Mat4 ProjectionMatrix();
+kvs::Vec4 Viewport();
 
 void LoadIdentity();
 void LoadMatrix( const GLfloat* m );

@@ -475,7 +475,7 @@ void GetViewport( GLfloat* params )
     kvs::OpenGL::GetFloatv( GL_VIEWPORT, params );
 }
 
-kvs::Mat4 modelViewMatrix()
+kvs::Mat4 ModelViewMatrix()
 {
     GLfloat m[16]; kvs::OpenGL::GetModelViewMatrix( m );
     return kvs::Mat4(
@@ -485,7 +485,7 @@ kvs::Mat4 modelViewMatrix()
         m[3], m[7], m[11], m[15] );
 }
 
-kvs::Mat4 projectionMatrix()
+kvs::Mat4 ProjectionMatrix()
 {
     GLfloat p[16]; kvs::OpenGL::GetProjectionMatrix( p );
     return kvs::Mat4(
@@ -495,7 +495,7 @@ kvs::Mat4 projectionMatrix()
         p[3], p[7], p[11], p[15] );
 }
 
-kvs::Vec4 viewport()
+kvs::Vec4 Viewport()
 {
     GLfloat v[4]; kvs::OpenGL::GetViewport( v );
     return kvs::Vec4( v[0], v[1], v[2], v[3] );

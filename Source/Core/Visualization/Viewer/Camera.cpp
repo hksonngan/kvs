@@ -266,6 +266,65 @@ const kvs::Vector3f Camera::lookAt() const
     return m_transform_center;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns projection matrix.
+ *  @return projection matrix
+ */
+/*===========================================================================*/
+const kvs::Matrix44f Camera::projectionMatrix() const
+{
+    const float aspect = static_cast<float>( m_window_width ) / m_window_height;
+
+    if ( m_projection_type == Camera::Perspective )
+    {
+        return kvs::PerspectiveMatrix44<float>( m_field_of_view, aspect, m_front, m_back );
+    }
+    else if ( m_projection_type == Camera::Orthogonal )
+    {
+        // Orthogonal camera mode
+        if ( aspect >= 1.0f )
+        {
+            return kvs::OrthogonalMatrix44<float>( 
+                m_left * aspect, 
+                m_right * aspect, 
+                m_bottom, m_top, 
+                m_front, m_back );
+        }
+        else
+        {
+            return kvs::OrthogonalMatrix44<float>( 
+                m_left, m_right, 
+                m_bottom / aspect, m_top / aspect, 
+                m_front, m_back );
+        }
+    }
+    else
+    {
+        // Frustum camera mode
+        if ( aspect >= 1.0f )
+        {
+            return kvs::FrustumMatrix44<float>( 
+                m_left * aspect, m_right * aspect, 
+                m_bottom, m_top, 
+                m_front, m_back );
+        }
+        else
+        {
+            return kvs::FrustumMatrix44<float>( 
+                m_left, m_right, 
+                m_bottom / aspect, m_top / aspect, 
+                m_front, m_back );
+        }
+    }
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns viewing matrix.
+ *  @return viewing matrix
+ */
+/*===========================================================================*/
 const kvs::Matrix44f Camera::viewingMatrix() const
 {
     return this->xform().inverse().toMatrix();
@@ -437,11 +496,6 @@ void Camera::update()
 /*==========================================================================*/
 kvs::ColorImage Camera::snapshot()
 {
-//    GLint viewport[4];
-//    KVS_GL_CALL( glGetIntegerv( GL_VIEWPORT, viewport ) );
-
-//    const int width = viewport[2];
-//    const int height = viewport[3];
     const int width = static_cast<int>( m_window_width );
     const int height = static_cast<int>( m_window_height );
     const int size = height * width * 3;
@@ -454,53 +508,6 @@ kvs::ColorImage Camera::snapshot()
     kvs::ColorImage ret( width, height, buffer );
     ret.flip();
     return ret;
-}
-
-const kvs::Matrix44f Camera::projectionMatrix() const
-{
-    const float aspect = static_cast<float>( m_window_width ) / m_window_height;
-
-    if ( m_projection_type == Camera::Perspective )
-    {
-        return kvs::PerspectiveMatrix44<float>( m_field_of_view, aspect, m_front, m_back );
-    }
-    else if ( m_projection_type == Camera::Orthogonal )
-    {
-        // Orthogonal camera mode
-        if ( aspect >= 1.0f )
-        {
-            return kvs::OrthogonalMatrix44<float>( 
-                m_left * aspect, 
-                m_right * aspect, 
-                m_bottom, m_top, 
-                m_front, m_back );
-        }
-        else
-        {
-            return kvs::OrthogonalMatrix44<float>( 
-                m_left, m_right, 
-                m_bottom / aspect, m_top / aspect, 
-                m_front, m_back );
-        }
-    }
-    else
-    {
-        // Frustum camera mode
-        if ( aspect >= 1.0f )
-        {
-            return kvs::FrustumMatrix44<float>( 
-                m_left * aspect, m_right * aspect, 
-                m_bottom, m_top, 
-                m_front, m_back );
-        }
-        else
-        {
-            return kvs::FrustumMatrix44<float>( 
-                m_left, m_right, 
-                m_bottom / aspect, m_top / aspect, 
-                m_front, m_back );
-        }
-    }
 }
 
 const kvs::Matrix44f Camera::modelViewMatrix() const

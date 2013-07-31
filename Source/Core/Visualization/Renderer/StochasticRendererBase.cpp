@@ -74,7 +74,7 @@ void StochasticRendererBase::exec( kvs::ObjectBase* object, kvs::Camera* camera,
         m_height = height;
         m_ensemble_buffer.create( width, height );
         m_ensemble_buffer.clear();
-        m_modelview = kvs::OpenGL::modelViewMatrix();
+        m_modelview = kvs::OpenGL::ModelViewMatrix();
         m_light_position = light->position();
         m_engine->setShader( &shader() );
         m_engine->setRepetitionLevel( m_repetition_level );
@@ -106,7 +106,7 @@ void StochasticRendererBase::exec( kvs::ObjectBase* object, kvs::Camera* camera,
     // LOD control.
     size_t repetitions = m_repetition_level;
     kvs::Vec3 light_position = light->position();
-    kvs::Mat4 modelview = kvs::OpenGL::modelViewMatrix();
+    kvs::Mat4 modelview = kvs::OpenGL::ModelViewMatrix();
     if ( m_light_position != light_position || m_modelview != modelview )
     {
         if ( m_enable_lod )

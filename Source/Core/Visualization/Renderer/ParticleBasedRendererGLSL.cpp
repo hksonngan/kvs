@@ -180,8 +180,8 @@ void ParticleBasedRenderer::Engine::create( kvs::ObjectBase* object, kvs::Camera
 
     // Initial values for calculating the object depth.
     const kvs::Vec4 I( point->objectCenter(), 1.0f );
-    const kvs::Mat4 M = kvs::OpenGL::modelViewMatrix();
-    const kvs::Mat4 P = kvs::OpenGL::projectionMatrix();
+    const kvs::Mat4 M = kvs::OpenGL::ModelViewMatrix();
+    const kvs::Mat4 P = kvs::OpenGL::ProjectionMatrix();
     const kvs::Vec4 O = P * M * I;
     m_initial_object_depth = O.z();
     m_initial_object_scale = point->xform().scaling().x();
