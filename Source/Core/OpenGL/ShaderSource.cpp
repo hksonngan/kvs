@@ -200,7 +200,8 @@ bool ShaderSource::read_code( const std::string& filename, const std::string& co
             std::string::size_type p2 = line.find( "\"", p1 + 1 );
             std::string name( line, p1 + 1, p2 - p1 - 1 ); // included filename
             kvs::File file( filename ); // input shader code file
-            kvs::File included_file( file.pathName() + kvs::File::Separator() + name );
+//            kvs::File included_file( file.pathName() + kvs::File::Separator() + name );
+            kvs::File included_file( ::search_path.find( file.pathName() + kvs::File::Separator() + name ) );
             if ( !included_file.exists() )
             {
                 kvsMessageError("Cannot find \'%s\'.", included_file.filePath().c_str() );
