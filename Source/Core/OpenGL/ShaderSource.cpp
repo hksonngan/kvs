@@ -26,6 +26,35 @@
 namespace
 {
 
+
+/*===========================================================================*/
+/**
+ *  @brief  Return KVS shader path ("$KVS_DIR/include/Core/Visualization/Shader").
+ *  @return shader path
+ */
+/*===========================================================================*/
+std::string KVSShaderPath()
+{
+    const std::string sep = kvs::File::Separator();
+    const char* kvs_dir = std::getenv("KVS_DIR");
+    if ( kvs_dir != NULL )
+    {
+        std::string path = std::string( kvs_dir ) + sep;
+        path += "include" + sep;
+        path += "Core" + sep;
+        path += "Visualization" + sep;
+        path += "Shader" + sep;
+        return path;
+    }
+
+    return "";
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Search shader path class.
+ */
+/*===========================================================================*/
 class SearchPath
 {
 private:
@@ -42,16 +71,10 @@ public:
     void init()
     {
         // Add "$KVS_DIR/include/Core/Visualization/Shader".
-        const std::string sep = kvs::File::Separator();
-        const char* kvs_dir = std::getenv("KVS_DIR");
-        if ( kvs_dir != NULL )
+        const std::string kvs_shader_path = KVSShaderPath();
+        if ( !kvs_shader_path.empty() )
         {
-            std::string path = std::string( kvs_dir ) + sep;
-            path += "include" + sep;
-            path += "Core" + sep;
-            path += "Visualization" + sep;
-            path += "Shader" + sep;
-            m_search_path_list.push_back( path );
+            m_search_path_list.push_back( kvs_shader_path );
         }
 
         // Add current directory (".").
@@ -92,28 +115,56 @@ SearchPath search_path;
 namespace kvs
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  Adds search path.
+ *  @param  path [in] path
+ */
+/*===========================================================================*/
 void ShaderSource::AddSearchPath( const std::string& path )
 {
     ::search_path.add( path );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets search path (registerd path will be removed).
+ *  @param  path [in] path
+ */
+/*===========================================================================*/
 void ShaderSource::SetSearchPath( const std::string& path )
 {
     ::search_path.del();
     ::search_path.add( path );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Resets the search path (only initial path will be set).
+ */
+/*===========================================================================*/
 void ShaderSource::ResetSearchPath()
 {
     ::search_path.del();
     ::search_path.init();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Remove the search path (search path will be empty).
+ */
+/*===========================================================================*/
 void ShaderSource::RemoveSearchPath()
 {
     ::search_path.del();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new ShaderSource class.
+ *  @param  source [in] filename of shader source
+ */
+/*===========================================================================*/
 ShaderSource::ShaderSource( const std::string& source )
 {
     const kvs::File file( source );
@@ -139,21 +190,43 @@ ShaderSource::ShaderSource( const std::string& source )
     }
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns the shade code.
+ */
+/*===========================================================================*/
 const std::string& ShaderSource::code() const
 {
     return m_code;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Sets the shader code.
+ *  @param  code [in] shade code
+ */
+/*===========================================================================*/
 void ShaderSource::setCode( const std::string& code )
 {
     m_code = code;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Clears the shader code.
+ */
+/*===========================================================================*/
 void ShaderSource::clearCode()
 {
     m_code.erase();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Defines a macro in the shader code.
+ *  @param  name [in] name of macro
+ */
+/*===========================================================================*/
 void ShaderSource::define( const std::string& name )
 {
     const std::string define = "#define " + name + "\n";
@@ -169,6 +242,13 @@ void ShaderSource::define( const std::string& name )
     }
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Reads shader code from file.
+ *  @param  filename [in] filename of shader code
+ *  @return true if the reading process is done successfully
+ */
+/*===========================================================================*/
 bool ShaderSource::read( const std::string& filename )
 {
     std::string code;
@@ -182,6 +262,15 @@ bool ShaderSource::read( const std::string& filename )
     return false;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Reads shader code and included header file.
+ *  @param  filename [in] filename of shader code
+ *  @param  content [in] content of shader code (included header file contents)
+ *  @param  code [in] read shader code
+ *  @return true if the reading process is done successfully
+ */
+/*===========================================================================*/
 bool ShaderSource::read_code( const std::string& filename, const std::string& content, std::string& code )
 {
     std::string line;
@@ -196,12 +285,28 @@ bool ShaderSource::read_code( const std::string& filename, const std::string& co
         if ( p != std::string::npos && !comment )
         {
             // Found "#include" directive.
+            std::string included_filename;
             std::string::size_type p1 = line.find( "\"", p + 1 );
             std::string::size_type p2 = line.find( "\"", p1 + 1 );
-            std::string name( line, p1 + 1, p2 - p1 - 1 ); // included filename
-            kvs::File file( filename ); // input shader code file
-//            kvs::File included_file( file.pathName() + kvs::File::Separator() + name );
-            kvs::File included_file( ::search_path.find( file.pathName() + kvs::File::Separator() + name ) );
+            if ( p1 != std::string::npos )
+            {
+                // Search the file from the specified path in search_path.
+                included_filename = std::string( line, p1 + 1, p2 - p1 - 1 ); // without the path
+                included_filename = ::search_path.find( included_filename ); // with the path
+            }
+            else
+            {
+                // Search the file from the KVS shader path.
+                p1 = line.find( "<", p + 1 );
+                p2 = line.find( ">", p1 + 1 );
+                if ( p1 != std::string::npos )
+                {
+                    included_filename = std::string( line, p1 + 1, p2 - p1 - 1 ); // without the path
+                    included_filename = ::KVSShaderPath() + included_filename; // with the path
+                }
+            }
+
+            kvs::File included_file( included_filename );
             if ( !included_file.exists() )
             {
                 kvsMessageError("Cannot find \'%s\'.", included_file.filePath().c_str() );
