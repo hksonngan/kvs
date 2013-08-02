@@ -81,7 +81,7 @@ public:
             path++;
         }
 
-        return "";
+        return source;
     }
 };
 
