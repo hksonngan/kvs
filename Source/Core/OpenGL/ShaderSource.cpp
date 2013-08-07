@@ -78,7 +78,8 @@ public:
         }
 
         // Add current directory (".").
-        m_search_path_list.push_back("." + sep);
+        const std::string sep = kvs::File::Separator();
+        m_search_path_list.push_back("." + sep );
     }
 
     void add( const std::string& path )
@@ -98,7 +99,8 @@ public:
         std::vector<std::string>::reverse_iterator last = m_search_path_list.rend();
         while ( path != last )
         {
-            const std::string filename = *path + kvs::File::Separator() + source;
+            const std::string sep = kvs::File::Separator();
+            const std::string filename = *path + sep + source;
             const kvs::File file( filename );
             if ( file.exists() ) { return filename; }
             path++;
