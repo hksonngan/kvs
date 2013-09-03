@@ -27,3 +27,33 @@
 #define GeomOut varying out
 #define FragIn varying
 #endif
+
+// Interpolation qualifiers.
+#if __VERSION__ >= 130
+#define VertOutWithFlat flat VertOut
+#define VertOutWithSmooth smooth VertOut
+#define VertOutWithNoperspective noperspective VertOut
+#define GeomInWithFlat flat GeomIn
+#define GeomInWithSmooth smooth GeomIn
+#define GeomInWithNoperspective noperspective GeomIn
+#define GeomOutWithFlat flat GeomOut
+#define GeomOutWithSmooth smooth GeomOut
+#define GeomOutWithNoperspective noperspective GeomOut
+#define FragInWithFlat flat FragIn
+#define FragInWithSmooth smooth FragIn
+#define FragInWithNoperspective noperspective FragIn
+#else
+// not supported under GLSL 1.20
+#define VertOutWithFlat VertOut
+#define VertOutWithSmooth VertOut
+#define VertOutWithNoperspective VertOut
+#define GeomInWithFlat GeomIn
+#define GeomInWithSmooth GeomIn
+#define GeomInWithNoperspective GeomIn
+#define GeomOutWithFlat GeomOut
+#define GeomOutWithSmooth GeomOut
+#define GeomOutWithNoperspective GeomOut
+#define FragInWithFlat FragIn
+#define FragInWithSmooth FragIn
+#define FragInWithNoperspective FragIn
+#endif
