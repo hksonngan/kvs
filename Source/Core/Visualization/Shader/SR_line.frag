@@ -12,10 +12,13 @@
  *  $Id$
  */
 /*****************************************************************************/
+#version 120
+#include "qualifire.h"
+#include "texture.h"
+
+
 // Input parameters from vertex shader.
-varying vec3 position; // vertex position in camera coordinate
-varying vec2 index; // index for accessing to the random texture
-varying float depth; // depth value of the vertex in normalized device coordinate
+FragIn vec2 index; // index for accessing to the random texture
 
 // Uniform parameters.
 uniform sampler2D random_texture; // random texture to generate random number
@@ -48,9 +51,8 @@ void main()
     if ( opacity == 0.0 ) { discard; return; }
 
     // Stochastic color assignment.
-    float R = texture2D( random_texture, RandomIndex( gl_FragCoord.xy ) ).a;
+    float R = LookupTexture2D( random_texture, RandomIndex( gl_FragCoord.xy ) ).a;
     if ( R > opacity ) { discard; return; }
 
     gl_FragColor = vec4( gl_Color.rgb, 1.0 );
-    gl_FragDepth = depth;
 }

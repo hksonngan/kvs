@@ -12,13 +12,18 @@
  *  $Id$
  */
 /*****************************************************************************/
+#version 120
+#include "qualifire.h"
+
+
 // Input parameters.
-attribute vec2 random_index; // index for accessing to the random texture
+VertIn vec2 random_index; // index for accessing to the random texture
 
 // Output parameters to fragment shader.
-varying vec3 position; // vertex position in camera coordinate
-varying vec2 index; // index for accessing to the random texture
-varying float depth; // depth value of the vertex in normalized device coordinate
+VertOut vec2 index; // index for accessing to the random texture
+
+// Uniform variables (OpenGL variables).
+uniform mat4 ModelViewProjectionMatrix; // model-view projection matrix
 
 
 /*===========================================================================*/
@@ -28,10 +33,8 @@ varying float depth; // depth value of the vertex in normalized device coordinat
 /*===========================================================================*/
 void main()
 {
-    gl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * gl_Vertex;
+    gl_Position = ModelViewProjectionMatrix * gl_Vertex;
     gl_FrontColor = gl_Color;
 
-    position = ( gl_ModelViewMatrix * gl_Vertex ).xyz;
     index = random_index;
-    depth = gl_Position.z / gl_Position.w;
 }

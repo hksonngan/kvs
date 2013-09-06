@@ -15,32 +15,50 @@
 #version 120
 #extension GL_EXT_geometry_shader4 : enable
 #extension GL_EXT_gpu_shader4 : enable
+#include "qualifire.h"
+#include "texture.h"
+
 
 // Input parameters from vertex shader.
-varying in vec4 position_in[4]; // vertex positions in camera coordinate
-varying in vec4 position_ndc_in[4]; // vertex positions in normalized device coordinate
-varying in vec3 normal_in[4]; // normal vectors in camera coordinate
-varying in float value_in[4]; // scalar values for the vertex
-varying in vec2 random_index_in[4]; // indices for accessing to the random texture
+GeomIn vec4 position_in[4]; // vertex positions in camera coordinate
+GeomIn vec4 position_ndc_in[4]; // vertex positions in normalized device coordinate
+GeomIn vec3 normal_in[4]; // normal vectors in camera coordinate
+GeomIn float value_in[4]; // scalar values for the vertex
+GeomIn vec2 random_index_in[4]; // indices for accessing to the random texture
 
 // Output parameters to fragment shader.
-varying out vec3 position; // vertex position in camera coordinate
-varying out vec3 normal; // normal vector in camera coordinate
-varying out vec2 random_index; // index for accessing to the random texture
-varying out float scalar_front; // scalar value on the front face
-varying out float scalar_back; // scalar value on the back face
-varying out float distance; // distance between the front and back face
+GeomOut vec3 position; // vertex position in camera coordinate
+GeomOut vec3 normal; // normal vector in camera coordinate
+GeomOut vec2 random_index; // index for accessing to the random texture
+GeomOut float scalar_front; // scalar value on the front face
+GeomOut float scalar_back; // scalar value on the back face
+GeomOut float distance; // distance between the front and back face
+GeomOut float wc_inv_front; // reciprocal value of the w-component at the front face in clip coordinate
+GeomOut float wc_inv_back; // reciprocal value of the w-component at the back face in clip coordinate
 #if defined( ENABLE_EXACT_DEPTH_TESTING )
-varying out float depth_front; // depth value at the front face
-varying out float depth_back; // depth value at the back face
+GeomOut float depth_front; // depth value at the front face
+GeomOut float depth_back; // depth value at the back face
 #endif
-varying out float wc_inv_front; // reciprocal value of the w-component at the front face in clip coordinate
-varying out float wc_inv_back; // reciprocal value of the w-component at the back face in clip coordinate
 
 // Uniform parameters.
 uniform vec2 preintegration_scale_offset; // offset values for pre-integration table
 uniform sampler2D decomposition_texture; // decomposition texture
 
+
+// Returns random index.
+#define RANDOM_INDEX( index )                                           \
+    index[0] * 3.0 + index[1] * 5.0 + index[2] * 7.0 + index[3] * 11.0
+
+// Returns true if the point in clip coordinate is out of the front clipping face.
+#define OUT_OF_RANGE_IN_CLP( clip )                                    \
+    ( clip[0].w <= 0 || clip[1].w <= 0 || clip[2].w <= 0 || clip[3].w <= 0 )
+
+// Returns true if the point in NDC is inside the view volume.
+#define OUT_OF_RANGE_IN_NDC( ndc )                                      \
+    ( ( ndc[0].x < -1.0 && ndc[1].x < -1.0 && ndc[2].x < -1.0 && ndc[3].x < -1.0 ) || \
+      ( ndc[0].x >  1.0 && ndc[1].x >  1.0 && ndc[2].x >  1.0 && ndc[3].x >  1.0 ) || \
+      ( ndc[0].y < -1.0 && ndc[1].y < -1.0 && ndc[2].y < -1.0 && ndc[3].y < -1.0 ) || \
+      ( ndc[0].y >  1.0 && ndc[1].y >  1.0 && ndc[2].y >  1.0 && ndc[3].y >  1.0 )  )
 
 /*===========================================================================*/
 /**
@@ -120,7 +138,7 @@ void EmitOriginalPoint( const in int index, const in float dist )
     scalar_back  = value_in[index];
     distance = dist;
 
-    // Depth values in camera coordinate' (acctually not cam. coord.)
+    // Depth values in normalized device coordinate
 #if defined( ENABLE_EXACT_DEPTH_TESTING )
     depth_front = gl_PositionIn[index].z / gl_PositionIn[index].w;
     depth_back  = depth_front;
@@ -167,7 +185,7 @@ void EmitCrossingPoint(
     scalar_back  = c_scalar_back;
     distance = c_dist;
 
-    // Depth values in camera coordinate' (acctually not cam. coord.)
+    // Depth values in normalized device coordinate
 #if defined( ENABLE_EXACT_DEPTH_TESTING )
     depth_front = c_gl_Position.z / c_gl_Position.w;
     depth_back  = c_depth;
@@ -250,7 +268,7 @@ void DecomposeInCase1( in int p0, in int p1, in int p2, in int p3 )
 
 #if defined( ENABLE_EXACT_DEPTH_TESTING )
         vec4 tmp = gl_PositionIn[p0];
-        c_depth = tmp.z / tmp.w; // in camera coordinate'
+        c_depth = tmp.z / tmp.w; // in normalized device coordinate
 #endif
 
         c_wc_inv_front = w123;
@@ -278,7 +296,16 @@ void DecomposeInCase1( in int p0, in int p1, in int p2, in int p3 )
     // p1-p2-C p2-C-p3 C-p3-p1
     EmitOriginalPoint( p1, 0.0 );
     EmitOriginalPoint( p2, 0.0 );
-    EmitCrossingPoint( c_gl_Position, c_position, c_normal, c_scalar_front, c_scalar_back, c_distance, c_depth, c_wc_inv_front, c_wc_inv_back );
+    EmitCrossingPoint(
+        c_gl_Position,
+        c_position,
+        c_normal,
+        c_scalar_front,
+        c_scalar_back,
+        c_distance,
+        c_depth,
+        c_wc_inv_front,
+        c_wc_inv_back );
     EmitOriginalPoint( p3, 0.0 );
     EmitOriginalPoint( p1, 0.0 );
 
@@ -351,7 +378,7 @@ void DecomposeInCase2( in int p0, in int p1, in int p2, in int p3 )
 
 #if defined( ENABLE_EXACT_DEPTH_TESTING )
         vec4 tmp = gl_ProjectionMatrix * p23;
-        c_depth = tmp.z / tmp.w;
+        c_depth = tmp.z / tmp.w; // in normalized device coordinate
 #endif
 
         c_wc_inv_front = w01;
@@ -368,7 +395,7 @@ void DecomposeInCase2( in int p0, in int p1, in int p2, in int p3 )
 
 #if defined( ENABLE_EXACT_DEPTH_TESTING )
         vec4 tmp = gl_ProjectionMatrix * p01;
-        c_depth = tmp.z / tmp.w;
+        c_depth = tmp.z / tmp.w; // in normalized decive coordinate
 #endif
 
         c_wc_inv_front = w23;
@@ -378,14 +405,32 @@ void DecomposeInCase2( in int p0, in int p1, in int p2, in int p3 )
     // right half: p0-p2-C, p2-C-p1
     EmitOriginalPoint( p0, 0.0 );
     EmitOriginalPoint( p2, 0.0 );
-    EmitCrossingPoint( c_gl_Position, c_position, c_normal, c_scalar_front, c_scalar_back, c_distance, c_depth, c_wc_inv_front, c_wc_inv_back );
+    EmitCrossingPoint(
+        c_gl_Position,
+        c_position,
+        c_normal,
+        c_scalar_front,
+        c_scalar_back,
+        c_distance,
+        c_depth,
+        c_wc_inv_front,
+        c_wc_inv_back );
     EmitOriginalPoint( p1, 0.0 );
     EndPrimitive();
 
     // left half: p0-p3-C, p3-C-p1
     EmitOriginalPoint( p0, 0.0 );
     EmitOriginalPoint( p3, 0.0 );
-    EmitCrossingPoint( c_gl_Position, c_position, c_normal, c_scalar_front, c_scalar_back, c_distance, c_depth, c_wc_inv_front, c_wc_inv_back );
+    EmitCrossingPoint(
+        c_gl_Position,
+        c_position,
+        c_normal,
+        c_scalar_front,
+        c_scalar_back,
+        c_distance,
+        c_depth,
+        c_wc_inv_front,
+        c_wc_inv_back );
     EmitOriginalPoint( p1, 0.0 );
     EndPrimitive();
 }
@@ -464,10 +509,19 @@ void DecomposeInCase4( in int p0, in int p1, in int p2, in int p3 )
     vec3 c_normal = normal_in[p_front].xyz;
     float c_scalar_front = value_in[p_front];
     float c_scalar_back = value_in[p_back];
-    c_depth = gl_PositionIn[p_back].z / gl_PositionIn[p_back].w;
+    c_depth = gl_PositionIn[pBack].z / gl_PositionIn[pBack].w;
     float c_wc_inv_front = position_ndc_in[p_front].w;
     float c_wc_inv_back = position_ndc_in[p_back].w;
-    EmitCrossingPoint( c_gl_Position, c_position, c_normal, c_scalar_front, c_scalar_back, c_distance, c_depth, c_wc_inv_front, c_wc_inv_back );
+    EmitCrossingPoint(
+        c_gl_Position,
+        c_position,
+        c_normal,
+        c_scalar_front,
+        c_scalar_back,
+        c_distance,
+        c_depth,
+        c_wc_inv_front,
+        c_wc_inv_back );
 #else
     EmitOriginalPoint( p_front, c_distance );
 #endif
@@ -482,31 +536,24 @@ void DecomposeInCase4( in int p0, in int p1, in int p2, in int p3 )
 /*===========================================================================*/
 void main()
 {
-    if ( gl_PositionIn[0].w <= 0 ||
-         gl_PositionIn[1].w <= 0 ||
-         gl_PositionIn[2].w <= 0 ||
-         gl_PositionIn[3].w <= 0 ) return;
+    if ( OUT_OF_RANGE_IN_CLP( gl_PositionIn ) ) return;
+    if ( OUT_OF_RANGE_IN_NDC( position_ndc_in ) ) return;
 
-    if ( ( position_ndc_in[0].x < -1.0 && position_ndc_in[1].x < -1.0 && position_ndc_in[2].x < -1.0 && position_ndc_in[3].x < -1.0 ) ||
-         ( position_ndc_in[0].x >  1.0 && position_ndc_in[1].x >  1.0 && position_ndc_in[2].x >  1.0 && position_ndc_in[3].x >  1.0 ) ||
-         ( position_ndc_in[0].y < -1.0 && position_ndc_in[1].y < -1.0 && position_ndc_in[2].y < -1.0 && position_ndc_in[3].y < -1.0 ) ||
-         ( position_ndc_in[0].y >  1.0 && position_ndc_in[1].y >  1.0 && position_ndc_in[2].y >  1.0 && position_ndc_in[3].y >  1.0 ) ) return;
-
-    random_index = random_index_in[0] * 3.0 + random_index_in[1] * 5.0 + random_index_in[2] * 7.0 + random_index_in[3] * 11.0;
+    random_index = RANDOM_INDEX( random_index_in );
 
     int d321 = Direction( 3, 2, 1 );
     int d230 = Direction( 2, 3, 0 );
     int d103 = Direction( 1, 0, 3 );
     int d012 = Direction( 0, 1, 2 );
 
-    int pos = d321 * 27 + d230 * 9 + d103 * 3 + d012;
-    vec2 t_pos = vec2( ( float(pos) + 0.5 ) / 81.0, 0.5 );
-    vec4 info = texture2D( decomposition_texture, t_pos );
+    int p = d321 * 27 + d230 * 9 + d103 * 3 + d012;
+    vec2 t = vec2( ( float(p) + 0.5 ) / 81.0, 0.5 );
+    vec4 info = LookupTexture2D( decomposition_texture, t );
     int type = int( ( info.a * 255.0 + 16.0 ) / 32.0 );
-    int p0   = int( ( info.x * 255.0 + 16.0 ) / 32.0 );
-    int p1   = int( ( info.y * 255.0 + 16.0 ) / 32.0 );
-    int p2   = int( ( info.z * 255.0 + 16.0 ) / 32.0 );
-    int p3   = 6 - ( p0 + p1 + p2 );
+    int p0 = int( ( info.x * 255.0 + 16.0 ) / 32.0 );
+    int p1 = int( ( info.y * 255.0 + 16.0 ) / 32.0 );
+    int p2 = int( ( info.z * 255.0 + 16.0 ) / 32.0 );
+    int p3 = 6 - ( p0 + p1 + p2 );
 
     if      ( type == 1 ) { DecomposeInCase1( p0, p1, p2, p3 ); }
     else if ( type == 2 ) { DecomposeInCase2( p0, p1, p2, p3 ); }

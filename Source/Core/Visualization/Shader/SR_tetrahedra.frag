@@ -12,34 +12,50 @@
  *  $Id$
  */
 /*****************************************************************************/
+#version 120
 #include "shading.h"
+#include "qualifire.h"
+#include "texture.h"
+
 
 // Input parameters from geometry shader
-varying vec3 position; // vertex position in camera coordinate
-varying vec3 normal; // normal vector in camera coordinate
-varying vec2 random_index; // index for accessing to the random texture
-varying float scalar_front; // scalar value on the front face
-varying float scalar_back; // scalar value on the back face
-varying float distance; // distance between the front and back face
+FragIn vec3 position; // vertex position in camera coordinate
+FragIn vec3 normal; // normal vector in camera coordinate
+FragIn vec2 random_index; // index for accessing to the random texture
+FragIn float scalar_front; // scalar value on the front face
+FragIn float scalar_back; // scalar value on the back face
+FragIn float distance; // distance between the front and back face in NDC
+FragIn float wc_inv_front; // reciprocal value of the w-component at the front face in clip coordinate
+FragIn float wc_inv_back; // reciprocal value of the w-component at the back face in clip coordinate
 #if defined( ENABLE_EXACT_DEPTH_TESTING )
-varying float depth_front; // depth value at the front face
-varying float depth_back; // depth value at the back face
+FragIn float depth_front; // depth value at the front face in NDC
+FragIn float depth_back; // depth value at the back face in NDC
 #endif
-varying float wc_inv_front; // reciprocal value of the w-component at the front face in clip coordinate
-varying float wc_inv_back; // reciprocal value of the w-component at the back face in clip coordinate
 
 // Uniform parameters.
 uniform sampler3D preintegration_texture; // pre-integration texture
 uniform sampler2D random_texture; // random number texture
+uniform vec2 screen_scale_inv; // reciprocal values of width and height of screen
+uniform float random_texture_size_inv; // reciprocal value of random texture size
+uniform vec2 random_offset; // offset values for accessing to the random texture
+uniform float delta_s;
+uniform float delta_d;
+uniform ShadingParameter shading; // shading parameters
 #if defined( ENABLE_EXACT_DEPTH_TESTING )
 uniform sampler2D depth_texture; // depth texture
 #endif
-uniform vec2 screen_scale; // not used...
-uniform vec2 screen_scale_inv; // reciprocal values of width and height of screen
-uniform vec2 preintegration_scale_offset; // offset values for pre-integration table
-uniform float random_texture_size_inv; // reciprocal value of random texture size
-uniform vec2 random_offset; // offset values for accessing to the random texture
-uniform ShadingParameter shading; // shading parameters
+
+
+// Returns an adjected index for refering the texture.
+#define ADJUST( index )                                 \
+    vec3(                                               \
+        delta_s + index.x * ( 1.0 - 2.0 * delta_s ),    \
+        delta_s + index.y * ( 1.0 - 2.0 * delta_s ),    \
+        delta_d + index.z * ( 1.0 - 2.0 * delta_s ) )
+
+// Returns a depth value in window coordinate.
+#define DEPTH( z ) \
+    ( gl_DepthRange.diff * Z + gl_DepthRange.near + gl_DepthRange.far ) / 2.0
 
 
 /*===========================================================================*/
@@ -50,10 +66,11 @@ uniform ShadingParameter shading; // shading parameters
 /*===========================================================================*/
 float RandomNumber()
 {
-    vec2 index =
-        ( vec2( float( int( random_index.x ) * 73 ), float( int( random_index.y ) * 31 ) )
-          + random_offset + gl_FragCoord.xy ) * random_texture_size_inv;
-    return texture2D( random_texture, index ).x;
+    float x = float( int( random_index.x ) * 73 );
+    float y = float( int( random_index.y ) * 31 );
+    vec2 p = gl_FragCoord.xy;
+    vec2 index = ( vec2( x, y ) + random_offset + p ) * random_texture_size_inv;
+    return LookupTexture2D( random_texture, index ).x;
 }
 
 /*===========================================================================*/
@@ -66,7 +83,7 @@ vec4 LookupPreIntegration()
 {
 #if defined( ENABLE_EXACT_DEPTH_TESTING )
     vec2 index = gl_FragCoord.xy * screen_scale_inv;
-    float depth = texture2D( depth_texture, index ).x;
+    float depth = LookupTexture2D( depth_texture, index ).x;
     if ( depth < 1.0 && depth_front <= depth && depth <= depth_back )
     {
         float ratio = ( depth - depth_front ) / ( depth_back - depth_front );
@@ -77,7 +94,7 @@ vec4 LookupPreIntegration()
         Sf /= wc_inv_front;
         Sb /= wc_inv_back;
 
-        return texture3D( preintegration_texture, vec3( Sf, Sb, d ) );
+        return LookupTexture3D( preintegration_texture, ADJUST( vec3( Sf, Sb, d ) ) );
     }
 #endif
 
@@ -88,7 +105,7 @@ vec4 LookupPreIntegration()
     Sf /= wc_inv_front;
     Sb /= wc_inv_back;
 
-    return texture3D( preintegration_texture, vec3( Sf, Sb, d ) );
+    return LookupTexture3D( preintegration_texture, ADJUST( vec3( Sf, Sb, d ) ) );
 }
 
 /*===========================================================================*/
@@ -104,6 +121,7 @@ void main()
     float R = RandomNumber();
     if ( R > preintegrated.a ) { discard; return; }
 
+    // Color value for the ray segment.
     vec3 color = preintegrated.xyz / preintegrated.a;
 
     // Light position in camera coordinate.
@@ -130,6 +148,6 @@ void main()
 
     gl_FragColor = vec4( shaded_color, 1.0 );
 #if defined( ENABLE_EXACT_DEPTH_TESTING )
-    gl_FragDepth = depth_front;
+    gl_FragDepth = DEPTH( depth_front );
 #endif
 }

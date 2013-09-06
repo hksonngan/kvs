@@ -12,13 +12,16 @@
  *  $Id$
  */
 /*****************************************************************************/
+#version 120
 #include "shading.h"
+#include "qualifire.h"
+#include "texture.h"
+
 
 // Input parameters from vertex shader.
-varying vec3 position; // vertex position in camera coordinate
-varying vec3 normal; // normal vector in camera coodinate
-varying vec2 index; // index for accessing to the random texture
-varying float depth; // depth value of the vertex in normalized device coordinate
+FragIn vec3 position; // vertex position in camera coordinate
+FragIn vec3 normal; // normal vector in camera coodinate
+FragIn vec2 index; // index for accessing to the random texture
 
 // Uniform parameters.
 uniform sampler2D random_texture; // random texture to generate random number
@@ -53,7 +56,7 @@ void main()
     if ( opacity == 0.0 ) { discard; return; }
 
     // Stochastic color assignment.
-    float R = texture2D( random_texture, RandomIndex( gl_FragCoord.xy ) ).a;
+    float R = LookupTexture2D( random_texture, RandomIndex( gl_FragCoord.xy ) ).a;
     if ( R > opacity ) { discard; return; }
 
     // Light position in camera coordinate.
@@ -80,5 +83,4 @@ void main()
 #endif
 
     gl_FragColor = vec4( shaded_color, 1.0 );
-    gl_FragDepth = depth;
 }

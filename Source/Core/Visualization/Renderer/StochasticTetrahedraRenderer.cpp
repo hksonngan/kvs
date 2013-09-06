@@ -21,6 +21,7 @@
 #include <kvs/Assert>
 #include <kvs/Message>
 #include <kvs/Type>
+#include <kvs/Xorshift128>
 #include <kvs/TetrahedralCell>
 #include <kvs/ProjectedTetrahedraTable>
 #include <kvs/PreIntegrationTable3D>
@@ -28,6 +29,19 @@
 
 namespace
 {
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns a random number as integer value.
+ *  @return random number
+ */
+/*===========================================================================*/
+int RandomNumber()
+{
+    const int C = 12347;
+    static kvs::Xorshift128 R;
+    return C * R.randInteger();
+}
 
 /*===========================================================================*/
 /**
@@ -42,7 +56,7 @@ kvs::ValueArray<kvs::UInt16> RandomIndices( const kvs::UnstructuredVolumeObject*
     kvs::ValueArray<kvs::UInt16> indices( nnodes * 2 );
     for ( size_t i = 0; i < nnodes; i++ )
     {
-        const unsigned int count = i * 12347;
+        const unsigned int count = i * ::RandomNumber();
         indices[ 2 * i + 0 ] = static_cast<kvs::UInt16>( ( count ) % size );
         indices[ 2 * i + 1 ] = static_cast<kvs::UInt16>( ( count / size ) % size );
     }
@@ -259,9 +273,9 @@ void StochasticTetrahedraRenderer::Engine::update( kvs::ObjectBase* object, kvs:
 {
     kvs::ProgramObject::Binder bind( m_shader_program );
 
-    const kvs::Vec2 screen_scale( camera->windowWidth() * 0.5f, camera->windowHeight() * 0.5f );
-    const kvs::Vec2 screen_scale_inv( 1.0f / camera->windowWidth(), 1.0f / camera->windowHeight() );
-    m_shader_program.setUniform( "screen_scale", screen_scale );
+    const size_t width = camera->windowWidth();
+    const size_t height = camera->windowHeight();
+    const kvs::Vec2 screen_scale_inv( 1.0f / width, 1.0f / height );
     m_shader_program.setUniform( "screen_scale_inv", screen_scale_inv );
 }
 
@@ -306,12 +320,21 @@ void StochasticTetrahedraRenderer::Engine::draw( kvs::ObjectBase* object, kvs::C
     kvs::Texture::Binder bind6( m_decomposition_texture, 2 );
     if ( depthTexture().isCreated() ) { kvs::Texture::Bind( depthTexture(), 3 ); }
     {
+        const kvs::Mat4 M = kvs::OpenGL::ModelViewMatrix();
+        const kvs::Mat4 PM = kvs::OpenGL::ProjectionMatrix() * M;
+        const kvs::Mat3 N = kvs::Mat3( M[0].xyz(), M[1].xyz(), M[2].xyz() );
+        m_shader_program.setUniform( "ModelViewMatrix", M );
+        m_shader_program.setUniform( "ModelViewProjectionMatrix", PM );
+        m_shader_program.setUniform( "NormalMatrix", N );
+
         const size_t size = randomTextureSize();
-        const int count = repetitionCount() * 12347;
+        const int count = repetitionCount() * ::RandomNumber();
         const float offset_x = static_cast<float>( ( count ) % size );
         const float offset_y = static_cast<float>( ( count / size ) % size );
         const kvs::Vec2 random_offset( offset_x, offset_y );
         m_shader_program.setUniform( "random_offset", random_offset );
+        m_shader_program.setUniform( "delta_s", 0.5f / m_preintegration_texture.width() );
+        m_shader_program.setUniform( "delta_d", 0.5f / m_preintegration_texture.depth() );
 
         const size_t nnodes = volume->numberOfNodes();
         const size_t ncells = volume->numberOfCells();
@@ -416,7 +439,7 @@ void StochasticTetrahedraRenderer::Engine::create_shader_program()
         m_shader_program.setUniform( "random_texture", 0 );
 
         // Pre-integration table.
-        const float max_size_of_cell = 1.0f;
+        const float max_size_of_cell = 1.0f; // equivalent to sampling step
         const size_t depth_resolution = 128;
         const kvs::Vec2 preintegration_scale_offset(
             1.0f - 1.0f / depth_resolution / max_size_of_cell,

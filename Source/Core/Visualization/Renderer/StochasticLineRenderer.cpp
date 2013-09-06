@@ -20,10 +20,24 @@
 #include <kvs/Light>
 #include <kvs/Assert>
 #include <kvs/Message>
+#include <kvs/Xorshift128>
 
 
 namespace
 {
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns a random number as integer value.
+ *  @return random number
+ */
+/*===========================================================================*/
+int RandomNumber()
+{
+    const int C = 12347;
+    static kvs::Xorshift128 R;
+    return C * R.randInteger();
+}
 
 /*===========================================================================*/
 /**
@@ -160,12 +174,15 @@ void StochasticLineRenderer::Engine::draw( kvs::ObjectBase* object, kvs::Camera*
     kvs::ProgramObject::Binder bind2( m_shader_program );
     kvs::Texture::Binder bind3( randomTexture() );
     {
+        const kvs::Mat4 M = kvs::OpenGL::ModelViewMatrix();
+        const kvs::Mat4 PM = kvs::OpenGL::ProjectionMatrix() * M;
+        m_shader_program.setUniform( "ModelViewProjectionMatrix", PM );
+
         const size_t size = randomTextureSize();
-        const int count = repetitionCount() * 12347;
+        const int count = repetitionCount() * ::RandomNumber();
         const float offset_x = static_cast<float>( ( count ) % size );
         const float offset_y = static_cast<float>( ( count / size ) % size );
         const kvs::Vec2 random_offset( offset_x, offset_y );
-
         m_shader_program.setUniform( "random_texture_size_inv", 1.0f / randomTextureSize() );
         m_shader_program.setUniform( "random_offset", random_offset );
         m_shader_program.setUniform( "random_texture", 0 );

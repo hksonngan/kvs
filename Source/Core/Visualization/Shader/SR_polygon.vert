@@ -12,15 +12,25 @@
  *  $Id$
  */
 /*****************************************************************************/
+#version 120
+#include "qualifire.h"
+
+
 // Input parameters.
-attribute vec2 random_index; // index for accessing to the random texture
-uniform float polygon_offset; // polygon offset in clip coordinate
+VertIn vec2 random_index; // index for accessing to the random texture
 
 // Output parameters to fragment shader.
-varying vec3 position; // vertex position in camera coordinate
-varying vec3 normal; // normal vector in camera coodinate
-varying vec2 index; // index for accessing to the random texture
-varying float depth; // depth value of the vertex in normalized device coordinate
+VertOut vec3 position; // vertex position in camera coordinate
+VertOut vec3 normal; // normal vector in camera coodinate
+VertOut vec2 index; // index for accessing to the random texture
+
+// Uniform parameter.
+uniform float polygon_offset; // polygon offset in clip coordinate
+
+// Uniform variables (OpenGL variables).
+uniform mat4 ModelViewMatrix; // model-view matrix
+uniform mat4 ModelViewProjectionMatrix; // model-view projection matrix
+uniform mat3 NormalMatrix; // normal matrix
 
 
 /*===========================================================================*/
@@ -30,12 +40,11 @@ varying float depth; // depth value of the vertex in normalized device coordinat
 /*===========================================================================*/
 void main()
 {
-    gl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * gl_Vertex;
+    gl_Position = ModelViewProjectionMatrix * gl_Vertex;
     gl_Position.z -= polygon_offset;
     gl_FrontColor = gl_Color;
 
-    position = ( gl_ModelViewMatrix * gl_Vertex ).xyz;
-    normal = gl_NormalMatrix * gl_Normal;
+    position = ( ModelViewMatrix * gl_Vertex ).xyz;
+    normal = NormalMatrix * gl_Normal;
     index = random_index;
-    depth = gl_Position.z / gl_Position.w;
 }
