@@ -80,7 +80,7 @@ void PolygonRenderer::initialize_shaders()
     kvs::ShaderSource vert( vert_code );
     kvs::ShaderSource frag( frag_code );
 
-    if ( BaseClass::isShading() )
+    if ( BaseClass::isEnabledShading() )
     {
         switch ( m_shader->type() )
         {

@@ -114,7 +114,7 @@ void LineRenderer::initialize()
     glEnable( GL_POLYGON_OFFSET_FILL );
 
     // Lighting.
-    if ( !BaseClass::isShading() ) glDisable( GL_LIGHTING );
+    if ( !BaseClass::isEnabledShading() ) glDisable( GL_LIGHTING );
     else glEnable( GL_LIGHTING );
 
     // Anti-aliasing.

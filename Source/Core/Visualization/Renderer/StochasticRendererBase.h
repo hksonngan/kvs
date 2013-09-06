@@ -64,17 +64,13 @@ public:
     size_t repetitionLevel() const { return m_repetition_level; }
     bool isEnabledLODControl() const { return m_enable_lod; }
     bool isEnabledRefinement() const { return m_enable_refinement; }
-    bool isEnabledShading() const { return m_enable_shading; }
     void setRepetitionLevel( const size_t repetition_level ) { m_repetition_level = repetition_level; }
     void setEnabledLODControl( const bool enable ) { m_enable_lod = enable; }
     void setEnabledRefinement( const bool enable ) { m_enable_refinement = enable; }
-    void setEnabledShading( const bool enable ) { m_enable_shading = enable; }
     void enableLODControl() { this->setEnabledLODControl( true ); }
     void enableRefinement() { this->setEnabledRefinement( true ); }
-    void enableShading() { this->setEnabledShading( true ); }
     void disableLODControl() { this->setEnabledLODControl( false ); }
     void disableRefinement() { this->setEnabledRefinement( false ); }
-    void disableShading() { this->setEnabledShading( false ); }
     const kvs::Shader::ShadingModel& shader() const { return *m_shader; }
     const kvs::StochasticRenderingEngine& engine() const { return *m_engine; }
     template <typename ShadingType>

@@ -66,7 +66,7 @@ void PolygonRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::L
     glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT );
 
 /*
-    if ( this->isShading() )
+    if ( this->isEnabledShading() )
     {
         if ( polygon->normals().size() == 0 )
         {
@@ -167,7 +167,7 @@ void PolygonRenderer::initialize()
     glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
     glEnable( GL_COLOR_MATERIAL );
 
-    if( !this->isShading() )
+    if( !this->isEnabledShading() )
     {
         glDisable( GL_NORMALIZE );
         glDisable( GL_LIGHTING );

@@ -126,7 +126,7 @@ void PointRenderer::initialize()
     glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
     glEnable( GL_COLOR_MATERIAL );
 
-    if ( !this->isShading() )
+    if ( !this->isEnabledShading() )
     {
         glDisable( GL_NORMALIZE );
         glDisable( GL_LIGHTING );

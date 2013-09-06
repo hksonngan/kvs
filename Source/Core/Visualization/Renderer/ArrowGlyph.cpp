@@ -438,7 +438,7 @@ void ArrowGlyph::initialize()
     }
     else
     {
-        if ( !BaseClass::isShading() )
+        if ( !BaseClass::isEnabledShading() )
         {
             glDisable( GL_NORMALIZE );
             glDisable( GL_LIGHTING );

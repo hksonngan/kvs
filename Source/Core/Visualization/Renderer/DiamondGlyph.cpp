@@ -307,7 +307,7 @@ void DiamondGlyph::initialize()
     glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
     glEnable( GL_COLOR_MATERIAL );
 
-    if ( !BaseClass::isShading() )
+    if ( !BaseClass::isEnabledShading() )
     {
         glDisable( GL_NORMALIZE );
         glDisable( GL_LIGHTING );

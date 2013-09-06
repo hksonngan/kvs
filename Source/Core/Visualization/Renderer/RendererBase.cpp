@@ -25,7 +25,7 @@ namespace kvs
 /*==========================================================================*/
 RendererBase::RendererBase():
     m_name("unknown"),
-    m_shading_flag( true )
+    m_enable_shading( true )
 {
 }
 
@@ -36,70 +36,6 @@ RendererBase::RendererBase():
 /*==========================================================================*/
 RendererBase::~RendererBase()
 {
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a renderer name.
- *  @param  name [in] renderer name
- */
-/*===========================================================================*/
-void RendererBase::setName( const std::string& name )
-{
-    m_name = name;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns renderer name.
- *  @return renderer name
- */
-/*===========================================================================*/
-const std::string& RendererBase::name() const
-{
-    return m_name;
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Returns the rendering timer.
- *  @return rendering timer
- */
-/*==========================================================================*/
-const kvs::Timer& RendererBase::timer() const
-{
-    return m_timer;
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Tests whether the shading is enable or disable.
- *  @return true, if the shading is enable.
- */
-/*==========================================================================*/
-bool RendererBase::isShading() const
-{
-    return m_shading_flag;
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Enable to shading.
- */
-/*==========================================================================*/
-void RendererBase::enableShading() const
-{
-    m_shading_flag = true;
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Disable to shading.
- */
-/*==========================================================================*/
-void RendererBase::disableShading() const
-{
-    m_shading_flag = false;
 }
 
 /*===========================================================================*/

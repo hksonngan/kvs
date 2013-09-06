@@ -13,29 +13,26 @@
  */
 /*****************************************************************************/
 
-vec4 LookupTexture( in sampler1D sampler, in float coord )
-{
-#if __VERSION__ >= 150
-    return texture( sampler, coord );
+#if __VERSION__ >= 130
+#define LookupTexture1D( sampler, coord ) \
+    texture( sampler, coord )
 #else
-    return texture1D( sampler, coord );
+#define LookupTexture1D( sampler, coord ) \
+    texture1D( sampler, coord )
 #endif
-}
 
-vec4 LookupTexture( in sampler2D sampler, in vec2 coord )
-{
-#if __VERSION__ >= 150
-    return texture( sampler, coord );
+#if __VERSION__ >= 130
+#define LookupTexture2D( sampler, coord ) \
+    texture( sampler, coord )
 #else
-    return texture2D( sampler, coord );
+#define LookupTexture2D( sampler, coord ) \
+    texture2D( sampler, coord )
 #endif
-}
 
-vec4 LookupTexture( in sampler3D sampler, in vec3 coord )
-{
-#if __VERSION__ >= 150
-    return texture( sampler, coord );
+#if __VERSION__ >= 130
+#define LookupTexture3D( sampler, coord ) \
+    texture( sampler, coord )
 #else
-    return texture3D( sampler, coord );
+#define LookupTexture3D( sampler, coord ) \
+    texture3D( sampler, coord )
 #endif
-}
