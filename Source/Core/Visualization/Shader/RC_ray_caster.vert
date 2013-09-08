@@ -12,6 +12,12 @@
  *  $Id$
  */
 /*****************************************************************************/
+#version 120
+#include "qualifire.h"
+
+
+// Output parameters.
+VertOut vec3 position_ndc; // vertex position in normalized device coordinate
 
 /*===========================================================================*/
 /**
@@ -20,6 +26,8 @@
 /*===========================================================================*/
 void main()
 {
-    gl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * gl_Vertex;
+    gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
     gl_FrontColor = gl_Color;
+
+    position_ndc = gl_Position.xyz / gl_Position.w;
 }
