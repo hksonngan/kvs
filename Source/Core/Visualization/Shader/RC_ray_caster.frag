@@ -46,6 +46,9 @@ uniform float to_zw2; // scaling parameter: 0.5*((f+n)/(f-n))+0.5
 uniform float to_ze1; // scaling parameter: 0.5 + 0.5*((f+n)/(f-n))
 uniform float to_ze2; // scaling parameter: (f-n)/(f*n)
 
+// Uniform variables (OpenGL variables).
+uniform mat4 ModelViewProjectionMatrixInverse; // inverse matrix of model-view projection matrix
+
 
 /*===========================================================================*/
 /**
@@ -90,7 +93,7 @@ float RayDepth( in float t, in float entry_depth, in float exit_depth )
 /*===========================================================================*/
 vec3 NDC2Obj( const in vec3 ndc )
 {
-    vec4 temp = gl_ModelViewProjectionMatrixInverse * vec4( ndc, 1.0 );
+    vec4 temp = ModelViewProjectionMatrixInverse * vec4( ndc, 1.0 );
     return temp.xyz / temp.w;
 }
 

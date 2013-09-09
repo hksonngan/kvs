@@ -12,6 +12,11 @@
  *  $Id$
  */
 /*****************************************************************************/
+#version 120
+
+
+// Uniform variables (OpenGL variables).
+uniform mat4 ModelViewProjectionMatrix; // model-view projection matrix
 
 
 /*===========================================================================*/
@@ -21,6 +26,6 @@
 /*===========================================================================*/
 void main()
 {
-    gl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * gl_Vertex;
+    gl_Position = ModelViewProjectionMatrix * gl_Vertex;
     gl_FrontColor = gl_Vertex;
 }

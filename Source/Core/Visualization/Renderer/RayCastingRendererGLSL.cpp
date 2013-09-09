@@ -184,8 +184,13 @@ void RayCastingRenderer::exec(
         m_color_texture.loadFromFrameBuffer( 0, 0, width, height );
     }
 
+    // OpenGL variables.
+    const kvs::Mat4 PM = kvs::OpenGL::ProjectionMatrix() * kvs::OpenGL::ModelViewMatrix();
+    const kvs::Mat4 PM_inverse = PM.inverted();
+
     // Draw the bounding cube.
     m_bounding_cube_shader.bind();
+    m_bounding_cube_shader.setUniform( "ModelViewProjectionMatrix", PM );
     m_entry_exit_framebuffer.bind();
     if ( m_draw_back_face )
     {
@@ -226,6 +231,10 @@ void RayCastingRenderer::exec(
             kvs::Texture::Binder unit5( m_jittering_texture, 5 );
             kvs::Texture::Binder unit6( m_depth_texture, 6 );
             kvs::Texture::Binder unit7( m_color_texture, 7 );
+
+            m_ray_casting_shader.setUniform( "ModelViewProjectionMatrix", PM );
+            m_ray_casting_shader.setUniform( "ModelViewProjectionMatrixInverse", PM_inverse );
+
             const float f = camera->back();
             const float n = camera->front();
             const float to_zw1 = ( f * n ) / ( f - n );
