@@ -177,10 +177,10 @@ void RayCastingRenderer::exec(
         const GLsizei width = BaseClass::windowWidth();
         const GLsizei height = BaseClass::windowHeight();
 
-        kvs::Texture::Binder unit6( m_depth_texture, 6 );
+        kvs::Texture::Binder unit6( m_depth_texture, 5 );
         m_depth_texture.loadFromFrameBuffer( 0, 0, width, height );
 
-        kvs::Texture::Binder unit7( m_color_texture, 7 );
+        kvs::Texture::Binder unit7( m_color_texture, 6 );
         m_color_texture.loadFromFrameBuffer( 0, 0, width, height );
     }
 
@@ -224,13 +224,13 @@ void RayCastingRenderer::exec(
         // Ray casting.
         m_ray_casting_shader.bind();
         {
-            kvs::Texture::Binder unit1( m_volume_texture, 1 );
-            kvs::Texture::Binder unit2( m_exit_texture, 2 );
-            kvs::Texture::Binder unit3( m_entry_texture, 3 );
-            kvs::Texture::Binder unit4( m_transfer_function_texture, 4 );
-            kvs::Texture::Binder unit5( m_jittering_texture, 5 );
-            kvs::Texture::Binder unit6( m_depth_texture, 6 );
-            kvs::Texture::Binder unit7( m_color_texture, 7 );
+            kvs::Texture::Binder unit1( m_volume_texture, 0 );
+            kvs::Texture::Binder unit2( m_exit_texture, 1 );
+            kvs::Texture::Binder unit3( m_entry_texture, 2 );
+            kvs::Texture::Binder unit4( m_transfer_function_texture, 3 );
+            kvs::Texture::Binder unit5( m_jittering_texture, 4 );
+            kvs::Texture::Binder unit6( m_depth_texture, 5 );
+            kvs::Texture::Binder unit7( m_color_texture, 6 );
 
             m_ray_casting_shader.setUniform( "ModelViewProjectionMatrix", PM );
             m_ray_casting_shader.setUniform( "ModelViewProjectionMatrixInverse", PM_inverse );
@@ -249,13 +249,13 @@ void RayCastingRenderer::exec(
             m_ray_casting_shader.setUniform( "to_ze2", to_ze2 );
             m_ray_casting_shader.setUniform( "light_position", light_position );
             m_ray_casting_shader.setUniform( "camera_position", camera_position );
-            m_ray_casting_shader.setUniform( "volume_data", 1 );
-            m_ray_casting_shader.setUniform( "exit_points", 2 );
-            m_ray_casting_shader.setUniform( "entry_points", 3 );
-            m_ray_casting_shader.setUniform( "transfer_function_data", 4 );
-            m_ray_casting_shader.setUniform( "jittering_texture", 5 );
-            m_ray_casting_shader.setUniform( "depth_texture", 6 );
-            m_ray_casting_shader.setUniform( "color_texture", 7 );
+            m_ray_casting_shader.setUniform( "volume_data", 0 );
+            m_ray_casting_shader.setUniform( "exit_points", 1 );
+            m_ray_casting_shader.setUniform( "entry_points", 2 );
+            m_ray_casting_shader.setUniform( "transfer_function_data", 3 );
+            m_ray_casting_shader.setUniform( "jittering_texture", 4 );
+            m_ray_casting_shader.setUniform( "depth_texture", 5 );
+            m_ray_casting_shader.setUniform( "color_texture", 6 );
             this->draw_quad( 1.0f );
         }
         m_ray_casting_shader.unbind();
