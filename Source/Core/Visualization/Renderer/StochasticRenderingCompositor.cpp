@@ -46,8 +46,7 @@ StochasticRenderingCompositor::StochasticRenderingCompositor( kvs::Scene* scene 
     m_repetition_level( 1 ),
     m_coarse_level( 1 ),
     m_enable_lod( false ),
-    m_enable_refinement( false ),
-    m_enable_shading( true )
+    m_enable_refinement( false )
 {
 }
 
@@ -196,7 +195,7 @@ void StochasticRenderingCompositor::check_object_changed()
                 stochastic_renderer->engine().release();
                 stochastic_renderer->engine().setDepthTexture( m_ensemble_buffer.currentDepthTexture() );
                 stochastic_renderer->engine().setShader( &stochastic_renderer->shader() );
-                stochastic_renderer->engine().setEnabledShading( m_enable_shading );
+                stochastic_renderer->engine().setEnabledShading( stochastic_renderer->isEnabledShading() );
 
                 if ( kvs::glsl::ParticleBasedRenderer* particle_renderer = dynamic_cast<kvs::glsl::ParticleBasedRenderer*>( stochastic_renderer ) )
                 {
@@ -245,7 +244,7 @@ void StochasticRenderingCompositor::engines_create()
             stochastic_renderer->engine().setDepthTexture( m_ensemble_buffer.currentDepthTexture() );
             stochastic_renderer->engine().setShader( &stochastic_renderer->shader() );
             stochastic_renderer->engine().setRepetitionLevel( m_repetition_level );
-            stochastic_renderer->engine().setEnabledShading( m_enable_shading );
+            stochastic_renderer->engine().setEnabledShading( stochastic_renderer->isEnabledShading() );
 
             if ( kvs::glsl::ParticleBasedRenderer* particle_renderer = dynamic_cast<kvs::glsl::ParticleBasedRenderer*>( stochastic_renderer ) )
             {

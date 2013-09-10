@@ -46,7 +46,6 @@ private:
     size_t m_coarse_level; ///< repetition level for the coarse rendering (LOD)
     bool m_enable_lod; ///< flag for LOD rendering
     bool m_enable_refinement; ///< flag for progressive refinement rendering
-    bool m_enable_shading; ///< shading flag
     kvs::Mat4 m_modelview; ///< modelview matrix used for LOD control
     kvs::Vec3 m_light_position; ///< light position used for LOD control
     kvs::EnsembleAverageBuffer m_ensemble_buffer; ///< ensemble averaging buffer
