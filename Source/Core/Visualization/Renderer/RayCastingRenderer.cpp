@@ -74,15 +74,6 @@ RayCastingRenderer::RayCastingRenderer( const ShadingType shader ):
 
 /*===========================================================================*/
 /**
- *  @brief  Destroys the RayCastingRenderer class.
- */
-/*===========================================================================*/
-RayCastingRenderer::~RayCastingRenderer()
-{
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Executes the rendering process.
  *  @param  object [in] pointer to the object
  *  @param  camera [in] pointer to the camera
@@ -197,7 +188,10 @@ void RayCastingRenderer::rasterize(
     kvs::TrilinearInterpolator interpolator( volume );
 
     // Calculate the ray in the object coordinate system.
-    kvs::VolumeRayIntersector ray( volume );
+    float modelview[16]; kvs::OpenGL::GetModelViewMatrix( static_cast<GLfloat*>( modelview ) );
+    float projection[16]; kvs::OpenGL::GetProjectionMatrix( static_cast<GLfloat*>( projection ) );
+    int viewport[4]; kvs::OpenGL::GetViewport( static_cast<GLint*>( viewport ) );
+    kvs::VolumeRayIntersector ray( volume, modelview, projection, viewport );
 
     // Execute ray casting.
     const size_t height = BaseClass::windowHeight();

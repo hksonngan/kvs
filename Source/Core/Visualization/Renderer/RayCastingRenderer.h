@@ -50,7 +50,6 @@ public:
     RayCastingRenderer( const kvs::TransferFunction& tfunc );
     template <typename ShadingType>
     RayCastingRenderer( const ShadingType shader );
-    virtual ~RayCastingRenderer();
 
     void exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
     void setSamplingStep( const float step ) { m_step = step; }

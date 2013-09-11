@@ -17,7 +17,7 @@
 
 #include <kvs/Vector3>
 #include <kvs/Matrix44>
-#include <kvs/OpenGL>
+//#include <kvs/OpenGL>
 
 
 namespace kvs
@@ -41,104 +41,59 @@ class Ray
 private:
 
     float m_t; ///< Parameter.
-    kvs::Vector3f m_from; ///< From point.
-    kvs::Vector3f m_direction; ///< Directional vector.
-    kvs::Matrix44f m_combined; ///< combined matrix
-    kvs::Matrix44f m_inverse; ///< inverse matrix
-    kvs::Vector2f m_delta; ///<
-    kvs::Vector2f m_constant; ///<
+    kvs::Vec3 m_from; ///< From point.
+    kvs::Vec3 m_direction; ///< Directional vector.
+    kvs::Mat4 m_combined; ///< combined matrix
+    kvs::Mat4 m_inverse; ///< inverse matrix
+    kvs::Vec2 m_delta; ///< variables used to calculate m_from and m_direction
+    kvs::Vec2 m_constant; ///< variables used to calculate m_from and m_direction
 
 public:
 
-    Ray();
-    virtual ~Ray();
+    Ray( const float modelview[16], const float projection[16], const int viewport[4] );
 
-public:
+    void setOrigin( const int win_x, const int win_y );
+    void setT( const float t ) { m_t = t; }
+    float t() const { return m_t; }
+    const kvs::Vec3& from() const { return m_from; }
+    const kvs::Vec3& direction() const { return m_direction; }
+    const kvs::Vec3 point() const { return m_from + m_direction * m_t; }
 
-    virtual void setOrigin( const int win_x, const int win_y );
-
-    /*======================================================================*/
-    /**
-     *  Set the parameter t.
-     *  @param t [in] Parameter t.
-     */
-    /*======================================================================*/
-    void setT( const float t )
+    float depth() const
     {
-        m_t = t;
-    }
-
-public:
-
-    const bool isIntersected(
-        const kvs::Vector3f& v0,
-        const kvs::Vector3f& v1,
-        const kvs::Vector3f& v2 );
-
-    const bool isIntersected(
-        const kvs::Vector3f& v0,
-        const kvs::Vector3f& v1,
-        const kvs::Vector3f& v2,
-        const kvs::Vector3f& v3 );
-
-public:
-
-    const float t() const
-    {
-        return( m_t );
-    }
-
-    /*======================================================================*/
-    /**
-     *  Return the from-point of this ray.
-     *  @return From-point.
-     */
-    /*======================================================================*/
-    const kvs::Vector3f& from() const
-    {
-        return( m_from );
-    }
-
-    /*======================================================================*/
-    /**
-     *  Return the directional vector of this ray.
-     *  @return Directional vectort.
-     */
-    /*======================================================================*/
-    const kvs::Vector3f& direction() const
-    {
-        return( m_direction );
-    }
-
-public:
-
-    const kvs::Vector3f point() const
-    {
-        return( m_from + m_direction * m_t );
-    }
-
-    const float depth() const
-    {
-        const kvs::Vector3f point( this->point() );
+        const kvs::Vec3 p( this->point() );
 
         const float view2 =
-            point.x() * m_combined[2][0] +
-            point.y() * m_combined[2][1] +
-            point.z() * m_combined[2][2] +
+            p.x() * m_combined[2][0] +
+            p.y() * m_combined[2][1] +
+            p.z() * m_combined[2][2] +
             m_combined[2][3];
 
         const float view3 =
-            point.x() * m_combined[3][0] +
-            point.y() * m_combined[3][1] +
-            point.z() * m_combined[3][2] +
+            p.x() * m_combined[3][0] +
+            p.y() * m_combined[3][1] +
+            p.z() * m_combined[3][2] +
             m_combined[3][3];
 
-        return( ( 1.0f + view2 / view3 ) * 0.5f );
+        // depth in window coordinate
+        return ( 1.0f + view2 / view3 ) * 0.5f;
     }
+
+    bool isIntersected(
+        const kvs::Vec3& v0,
+        const kvs::Vec3& v1,
+        const kvs::Vec3& v2 );
+
+    bool isIntersected(
+        const kvs::Vec3& v0,
+        const kvs::Vec3& v1,
+        const kvs::Vec3& v2,
+        const kvs::Vec3& v3 );
 
 private:
 
-    void combine_projection_and_modelview( GLfloat projection[16], GLfloat modelview[16] );
+//    void combine_projection_and_modelview( GLfloat projection[16], GLfloat modelview[16] );
+    void combine_projection_and_modelview( const float projection[16], const float modelview[16] );
 
 public:
 

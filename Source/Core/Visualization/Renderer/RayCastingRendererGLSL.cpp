@@ -23,6 +23,15 @@
 namespace
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  Normalizes value array.
+ *  @param  volume [in] pointer to the volume object
+ *  @param  min_value [in] minimum value of the volume data
+ *  @param  max_value [in] maximum value of the volume data
+ *  @return normalized value array
+ */
+/*===========================================================================*/
 template <typename T>
 kvs::AnyValueArray NormalizeValues(
     const kvs::StructuredVolumeObject* volume,
@@ -43,6 +52,13 @@ kvs::AnyValueArray NormalizeValues(
     return kvs::AnyValueArray( data );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns unsigned value array converted from signed value array.
+ *  @param  volume [in] pointer to the volume object
+ *  @return unsigned value array
+ */
+/*===========================================================================*/
 template <typename DstType, typename SrcType>
 kvs::AnyValueArray SignedToUnsigned( const kvs::StructuredVolumeObject* volume )
 {

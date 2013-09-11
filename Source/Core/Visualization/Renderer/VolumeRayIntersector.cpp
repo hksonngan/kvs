@@ -19,8 +19,21 @@
 namespace kvs
 {
 
-VolumeRayIntersector::VolumeRayIntersector( const kvs::VolumeObjectBase* volume ):
-    Ray(),
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new VolumeRayIntersector class.
+ *  @param  volume [in] pointer to the volume object
+ *  @param  modelview [in] modelview matrix
+ *  @param  projection [in] projection matrix
+ *  @param  viewport [in] viewport
+*/
+/*===========================================================================*/
+VolumeRayIntersector::VolumeRayIntersector(
+    const kvs::VolumeObjectBase* volume,
+    const float modelview[16],
+    const float projection[16],
+    const int viewport[4] ):
+    Ray( modelview, projection, viewport ),
     m_reference_volume( volume )
 {
     const float epsilon = 0.003f; // 1e-3

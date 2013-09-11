@@ -37,7 +37,11 @@ private:
 
 public:
 
-    VolumeRayIntersector( const kvs::VolumeObjectBase* volume );
+    VolumeRayIntersector(
+        const kvs::VolumeObjectBase* volume,
+        const float modelview[16],
+        const float projection[16],
+        const int viewport[4] );
 
     const bool isIntersected()
     {
