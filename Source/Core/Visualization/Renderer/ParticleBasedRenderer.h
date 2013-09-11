@@ -18,6 +18,7 @@
 #include <kvs/VolumeRendererBase>
 #include <kvs/ParticleBuffer>
 #include <kvs/Module>
+#include <kvs/Deprecated>
 
 
 namespace kvs
@@ -40,12 +41,12 @@ class ParticleBasedRenderer : public kvs::VolumeRendererBase
 
 protected:
 
+    // Reference data (NOTE: not allocated in thie class).
+    const kvs::PointObject* m_ref_point; ///< pointer to the point data
+
     bool m_enable_rendering; ///< rendering flag
     size_t m_subpixel_level; ///< number of divisions in a pixel
     kvs::ParticleBuffer* m_buffer; ///< particle buffer
-
-    // Reference data (NOTE: not allocated in thie class).
-    const kvs::PointObject* m_ref_point; ///< pointer to the point data
 
 public:
 
@@ -54,24 +55,26 @@ public:
     virtual ~ParticleBasedRenderer();
 
     void exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
-
-    void attachPointObject( const kvs::PointObject* point );
-    void setSubpixelLevel( const size_t subpixel_level );
-
-    void initialize();
-    const kvs::ParticleBuffer* particleBuffer() const;
-    size_t subpixelLevel() const;
-
-    void enableRendering();
-    void disableRendering();
+    void attachPointObject( const kvs::PointObject* point ) { m_ref_point = point; }
+    void setSubpixelLevel( const size_t subpixel_level ) { m_subpixel_level = subpixel_level; }
+    const kvs::ParticleBuffer* particleBuffer() const { return m_buffer; }
+    size_t subpixelLevel() const { return m_subpixel_level; }
+    void enableRendering() { m_enable_rendering = true; }
+    void disableRendering() { m_enable_rendering = false; }
 
 protected:
 
-    bool create_particle_buffer( const size_t width, const size_t height, const size_t subpixel_level );
-    void clean_particle_buffer();
-    void delete_particle_buffer();
+    bool createParticleBuffer( const size_t width, const size_t height, const size_t subpixel_level );
+    void cleanParticleBuffer();
+    void deleteParticleBuffer();
+
+private:
+
     void create_image( const kvs::PointObject* point, const kvs::Camera* camera, const kvs::Light* light );
     void project_particle( const kvs::PointObject* point, const kvs::Camera* camera, const kvs::Light* light );
+
+public:
+    KVS_DEPRECATED( void initialize() ) { m_enable_rendering = true; m_subpixel_level = 1; m_buffer = NULL; }
 };
 
 } // end of namespace kvs

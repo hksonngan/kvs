@@ -28,11 +28,12 @@ namespace kvs
  */
 /*==========================================================================*/
 ParticleBasedRenderer::ParticleBasedRenderer():
-    m_ref_point( NULL )
+    m_ref_point( NULL ),
+    m_enable_rendering( true ),
+    m_subpixel_level( 1 ),
+    m_buffer( NULL )
 {
     BaseClass::setShader( kvs::Shader::Lambert() );
-
-    this->initialize();
 }
 
 /*==========================================================================*/
@@ -44,12 +45,13 @@ ParticleBasedRenderer::ParticleBasedRenderer():
 /*==========================================================================*/
 ParticleBasedRenderer::ParticleBasedRenderer(
     const kvs::PointObject* point,
-    const size_t            subpixel_level ):
-    m_ref_point( NULL )
+    const size_t subpixel_level ):
+    m_ref_point( NULL ),
+    m_enable_rendering( true ),
+    m_subpixel_level( 1 ),
+    m_buffer( NULL )
 {
     BaseClass::setShader( kvs::Shader::Lambert() );
-
-    this->initialize();
     this->setSubpixelLevel( subpixel_level );
     this->attachPointObject( point );
 }
@@ -61,7 +63,7 @@ ParticleBasedRenderer::ParticleBasedRenderer(
 /*==========================================================================*/
 ParticleBasedRenderer::~ParticleBasedRenderer()
 {
-    this->delete_particle_buffer();
+    this->deleteParticleBuffer();
 }
 
 /*==========================================================================*/
@@ -74,94 +76,22 @@ ParticleBasedRenderer::~ParticleBasedRenderer()
 /*==========================================================================*/
 void ParticleBasedRenderer::exec(
     kvs::ObjectBase* object,
-    kvs::Camera*     camera,
-    kvs::Light*      light )
+    kvs::Camera* camera,
+    kvs::Light* light )
 {
-    if( !m_enable_rendering ) return;
+    if ( !m_enable_rendering ) return;
 
     kvs::PointObject* point = kvs::PointObject::DownCast( object );
     if ( !m_ref_point ) this->attachPointObject( point );
     if ( point->normals().size() == 0 ) BaseClass::disableShading();
 
     BaseClass::startTimer();
-    this->create_image( point, camera, light );
-    BaseClass::drawImage();
-    this->clean_particle_buffer();
+    {
+        this->create_image( point, camera, light );
+        BaseClass::drawImage();
+        this->cleanParticleBuffer();
+    }
     BaseClass::stopTimer();
-}
-
-/*==========================================================================*/
-/**
- *  Attach the point object.
- *  @param point [in] pointer to the point object
- */
-/*==========================================================================*/
-void ParticleBasedRenderer::attachPointObject( const kvs::PointObject* point )
-{
-    m_ref_point = point;
-}
-
-/*==========================================================================*/
-/**
- *  Set the subpixel level.
- *  @param subpixel_level [in] subpixel level
- */
-/*==========================================================================*/
-void ParticleBasedRenderer::setSubpixelLevel( const size_t subpixel_level )
-{
-    m_subpixel_level = subpixel_level;
-}
-
-/*==========================================================================*/
-/**
- *  Initialize.
- */
-/*==========================================================================*/
-void ParticleBasedRenderer::initialize()
-{
-    m_enable_rendering = true;
-    m_subpixel_level = 1;
-    m_buffer = NULL;
-}
-
-/*==========================================================================*/
-/**
- *  Get the pointer to the point buffer.
- */
-/*==========================================================================*/
-const kvs::ParticleBuffer* ParticleBasedRenderer::particleBuffer() const
-{
-    return m_buffer;
-}
-
-/*==========================================================================*/
-/**
- *  Get the subpixel level.
- */
-/*==========================================================================*/
-size_t ParticleBasedRenderer::subpixelLevel() const
-{
-    return m_subpixel_level;
-}
-
-/*==========================================================================*/
-/**
- *  Be enable rendering.
- */
-/*==========================================================================*/
-void ParticleBasedRenderer::enableRendering()
-{
-    m_enable_rendering = true;
-}
-
-/*==========================================================================*/
-/**
- *  Be disable rendering.
- */
-/*==========================================================================*/
-void ParticleBasedRenderer::disableRendering()
-{
-    m_enable_rendering = false;
 }
 
 /*==========================================================================*/
@@ -169,13 +99,13 @@ void ParticleBasedRenderer::disableRendering()
  *  Create the point buffer.
  */
 /*==========================================================================*/
-bool ParticleBasedRenderer::create_particle_buffer(
+bool ParticleBasedRenderer::createParticleBuffer(
     const size_t width,
     const size_t height,
     const size_t subpixel_level )
 {
     m_buffer = new kvs::ParticleBuffer( width, height, subpixel_level );
-    if( !m_buffer ) return( false );
+    if ( !m_buffer ) return( false );
 
     return( true );
 }
@@ -185,7 +115,7 @@ bool ParticleBasedRenderer::create_particle_buffer(
  *  Clean the particle buffer.
  */
 /*==========================================================================*/
-void ParticleBasedRenderer::clean_particle_buffer()
+void ParticleBasedRenderer::cleanParticleBuffer()
 {
     m_buffer->clean();
 }
@@ -195,9 +125,9 @@ void ParticleBasedRenderer::clean_particle_buffer()
  *  Delete the particle buffer.
  */
 /*==========================================================================*/
-void ParticleBasedRenderer::delete_particle_buffer()
+void ParticleBasedRenderer::deleteParticleBuffer()
 {
-    if( m_buffer ){ delete m_buffer; m_buffer = NULL; }
+    if ( m_buffer ) { delete m_buffer; m_buffer = NULL; }
 }
 
 /*==========================================================================*/
@@ -210,29 +140,31 @@ void ParticleBasedRenderer::delete_particle_buffer()
 /*==========================================================================*/
 void ParticleBasedRenderer::create_image(
     const kvs::PointObject* point,
-    const kvs::Camera*      camera,
-    const kvs::Light*       light )
+    const kvs::Camera* camera,
+    const kvs::Light* light )
 {
+    // Current rendering window size.
+    const size_t current_width = BaseClass::windowWidth();
+    const size_t current_height = BaseClass::windowHeight();
+
+    // Updated rendering window size
+    const size_t width = camera->windowWidth();
+    const size_t height = camera->windowHeight();
+
     // Create memory region for the buffers, if the screen size is changed.
-    if( ( BaseClass::m_width  != camera->windowWidth() ) ||
-        ( BaseClass::m_height != camera->windowHeight() ) )
+    if ( ( current_width != width ) || ( current_height != height ) )
     {
-        BaseClass::m_width  = camera->windowWidth();
-        BaseClass::m_height = camera->windowHeight();
+        BaseClass::setWindowSize( width, height );
+        BaseClass::allocateColorData( width * height * 4 );
+        BaseClass::allocateDepthData( width * height );
 
-        BaseClass::m_color_data.allocate( m_width * m_height * 4 );
-        BaseClass::m_depth_data.allocate( m_width * m_height );
-
-        this->delete_particle_buffer();
-        this->create_particle_buffer(
-            BaseClass::m_width,
-            BaseClass::m_height,
-            m_subpixel_level );
+        this->deleteParticleBuffer();
+        this->createParticleBuffer( width, height, m_subpixel_level );
     }
 
     // Initialize the frame buffers.
-    BaseClass::m_color_data.fill( 0 );
-    BaseClass::m_depth_data.fill( 0 );
+    BaseClass::fillColorData( 0 );
+    BaseClass::fillDepthData( 0 );
 
     this->project_particle( point, camera, light );
 }
@@ -247,28 +179,28 @@ void ParticleBasedRenderer::create_image(
 /*==========================================================================*/
 void ParticleBasedRenderer::project_particle(
     const kvs::PointObject* point,
-    const kvs::Camera*      camera,
-    const kvs::Light*       light )
+    const kvs::Camera* camera,
+    const kvs::Light* light )
 {
     float t[16]; camera->getCombinedMatrix( &t );
     const size_t w = camera->windowWidth() / 2;
     const size_t h = camera->windowHeight() / 2;
 
     // Set shader initial parameters.
-    BaseClass::m_shader->set( camera, light );
+    BaseClass::shader().set( camera, light );
 
     // Attach the shader and the point object to the point buffer.
-    m_buffer->attachShader( BaseClass::m_shader );
+    m_buffer->attachShader( &BaseClass::shader() );
     m_buffer->attachPointObject( point );
 
     // Aliases.
-    const size_t       nv = point->numberOfVertices();
+    const size_t nv = point->numberOfVertices();
     const kvs::Real32* v  = point->coords().data();
 
     size_t index3 = 0;
-    const size_t bounds_width  = m_width  - 1;
-    const size_t bounds_height = m_height - 1;
-    for( size_t index = 0; index < nv; index++, index3 += 3 )
+    const size_t bounds_width = BaseClass::windowWidth() - 1;
+    const size_t bounds_height = BaseClass::windowHeight() - 1;
+    for ( size_t index = 0; index < nv; index++, index3 += 3 )
     {
         /* Calculate the projected point position in the window coordinate system.
          * Ex.) Camera::projectObjectToWindow().
@@ -288,9 +220,9 @@ void ParticleBasedRenderer::project_particle(
         const float depth   = ( 1.0f + p_tmp[2] ) * 0.5f;
 
         // Store the projected point in the point buffer.
-        if( ( 0 < p_win_x ) & ( 0 < p_win_y ) )
+        if ( ( 0 < p_win_x ) & ( 0 < p_win_y ) )
         {
-            if( ( p_win_x < bounds_width ) & ( p_win_y < bounds_height ) )
+            if ( ( p_win_x < bounds_width ) & ( p_win_y < bounds_height ) )
             {
                 m_buffer->add( p_win_x, p_win_y, depth, index );
             }
@@ -298,10 +230,10 @@ void ParticleBasedRenderer::project_particle(
     }
 
     // Shading calculation.
-    if( m_enable_shading ) m_buffer->enableShading();
-    else                   m_buffer->disableShading();
+    if ( BaseClass::isEnabledShading() ) m_buffer->enableShading();
+    else m_buffer->disableShading();
 
-    m_buffer->createImage( &m_color_data, &m_depth_data );
+    m_buffer->createImage( &BaseClass::colorData(), &BaseClass::depthData() );
 }
 
 } // end of namespace kvs

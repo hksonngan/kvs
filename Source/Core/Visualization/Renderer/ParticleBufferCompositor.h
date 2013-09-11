@@ -23,10 +23,7 @@
 #include <kvs/IDManager>
 #include <kvs/VolumeRendererBase>
 #include <kvs/ParticleBufferAccumulator>
-
-// Macros for test.
-#define TEST__MESUREMENT_ACCUMLATION_TIME  0
-#define TEST__RENDERING_ACTIVE_OBJECT_ONLY 0
+#include <kvs/Deprecated>
 
 
 namespace kvs
@@ -45,12 +42,9 @@ public:
     typedef ParticleBufferAccumulator::ObjectList ObjectList;
     typedef ParticleBufferAccumulator::RendererList RendererList;
 
-protected:
+private:
 
-#if TEST__MESUREMENT_ACCUMLATION_TIME
     double m_accumulation_time; ///< accumulation time
-#endif
-
     size_t m_num_projected_particles; ///< number of projected points
     size_t m_num_stored_particles; ///< number of stored points
     size_t m_subpixel_level; ///< subpixel level
@@ -70,14 +64,10 @@ public:
     virtual ~ParticleBufferCompositor();
 
     void exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
-
-    void initialize();
+    size_t accumulationTime() const { return m_accumulation_time; }
+    size_t numberOfProjectedParticles() const { return m_num_projected_particles; }
+    size_t numberOfStoredParticles() const { return m_num_stored_particles; }
     void link( kvs::PointObject* object, kvs::ParticleVolumeRenderer* renderer );
-    const size_t numOfProjectedParticles() const;
-    const size_t numOfStoredParticles() const;
-#if TEST__MESUREMENT_ACCUMLATION_TIME
-    const size_t accumulationTime() const;
-#endif
     void clearList();
 
 private:
@@ -92,6 +82,10 @@ private:
         kvs::ParticleVolumeRenderer* renderer,
         kvs::Camera* camera,
         kvs::Light* light );
+
+public:
+    KVS_DEPRECATED( const size_t numOfProjectedParticles() const ) { return this->numberOfProjectedParticles(); }
+    KVS_DEPRECATED( const size_t numOfStoredParticles() const ) { return this->numberOfStoredParticles(); }
 };
 
 } // end of namespace kvs

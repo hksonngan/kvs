@@ -29,7 +29,7 @@ namespace kvs
 VolumeRendererBase::VolumeRendererBase():
     m_width( 0 ),
     m_height( 0 ),
-    m_enable_shading( true ),
+//    m_enable_shading( true ),
     m_shader( NULL )
 {
     m_depth_buffer.setFormat( GL_DEPTH_COMPONENT );
@@ -49,46 +49,36 @@ VolumeRendererBase::~VolumeRendererBase()
     if ( m_shader ) { delete m_shader; }
 }
 
-size_t VolumeRendererBase::windowWidth() const
-{
-    return m_width;
-}
-
-size_t VolumeRendererBase::windowHeight() const
-{
-    return m_height;
-}
-
 /*==========================================================================*/
 /**
  *  Set the transder function.
  *  @param tfunc [in] transfer function
  */
 /*==========================================================================*/
-void VolumeRendererBase::setTransferFunction( const kvs::TransferFunction& tfunc )
-{
-    m_tfunc = tfunc;
-}
+//void VolumeRendererBase::setTransferFunction( const kvs::TransferFunction& tfunc )
+//{
+//    m_tfunc = tfunc;
+//}
 
 /*==========================================================================*/
 /**
  *  Enable shading function.
  */
 /*==========================================================================*/
-void VolumeRendererBase::enableShading()
-{
-    m_enable_shading = true;
-}
+//void VolumeRendererBase::enableShading()
+//{
+//    m_enable_shading = true;
+//}
 
 /*==========================================================================*/
 /**
  *  Disable shading function.
  */
 /*==========================================================================*/
-void VolumeRendererBase::disableShading()
-{
-    m_enable_shading = false;
-}
+//void VolumeRendererBase::disableShading()
+//{
+//    m_enable_shading = false;
+//}
 
 /*==========================================================================*/
 /**
@@ -96,10 +86,10 @@ void VolumeRendererBase::disableShading()
  *  @return true, if the shading is enable.
  */
 /*==========================================================================*/
-bool VolumeRendererBase::isEnabledShading() const
-{
-    return m_enable_shading;
-}
+//bool VolumeRendererBase::isEnabledShading() const
+//{
+//    return m_enable_shading;
+//}
 
 /*==========================================================================*/
 /**
@@ -107,10 +97,10 @@ bool VolumeRendererBase::isEnabledShading() const
  *  @return transfer function
  */
 /*==========================================================================*/
-const kvs::TransferFunction& VolumeRendererBase::transferFunction() const
-{
-    return m_tfunc;
-}
+//const kvs::TransferFunction& VolumeRendererBase::transferFunction() const
+//{
+//    return m_tfunc;
+//}
 
 void VolumeRendererBase::setWindowSize( const size_t width, const size_t height )
 {

@@ -795,8 +795,7 @@ void ParticleBasedRenderer::exec(
 /*===========================================================================*/
 void ParticleBasedRenderer::initialize()
 {
-    BaseClass::m_width = 0;
-    BaseClass::m_height = 0;
+    BaseClass::setWindowSize( 0, 0 );
 
     m_subpixel_level = 1;
     m_repetition_level = 1;
@@ -1097,7 +1096,7 @@ void ParticleBasedRenderer::create_image(
     rendering_process::enable_hybrid_zooming = m_enable_repetition_level_zooming && m_enable_zooming;
 
     // Set shader initial parameters.
-    //BaseClass::m_shader->set( camera, light );
+    //BaseClass::shader().set( camera, light );
 
     glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT | GL_LIGHTING_BIT );
 
@@ -1107,7 +1106,7 @@ void ParticleBasedRenderer::create_image(
     /*ADD_UEMURA(end)*/
 
     // Following processes are executed once.
-    if ( BaseClass::m_width == 0 && BaseClass::m_height == 0 )
+    if ( BaseClass::windowWidth() == 0 && BaseClass::windowHeight() == 0 )
     {
         if ( m_enable_accumulation_buffer )
         {
@@ -1149,20 +1148,19 @@ void ParticleBasedRenderer::create_image(
     }
 
     // Following processes are executed when the window size is changed.
-    if ( ( BaseClass::m_width  != camera->windowWidth() ) ||
-         ( BaseClass::m_height != camera->windowHeight() ) )
+    if ( ( BaseClass::windowWidth()  != camera->windowWidth() ) ||
+         ( BaseClass::windowHeight() != camera->windowHeight() ) )
 
     {
         scaled_window_size = static_cast<float>( camera->windowHeight() );//ADD_UEMURA
-        BaseClass::m_width  = camera->windowWidth();
-        BaseClass::m_height = camera->windowHeight();
+        BaseClass::setWindowSize( camera->windowWidth(), camera->windowHeight() );
 
-        m_render_width  = BaseClass::m_width  * m_subpixel_level;
-        m_render_height = BaseClass::m_height * m_subpixel_level;
+        m_render_width  = BaseClass::windowWidth()  * m_subpixel_level;
+        m_render_height = BaseClass::windowHeight() * m_subpixel_level;
 
         if ( coarse_level != 1 )
         {
-            m_ensemble_buffer.create( BaseClass::m_width, BaseClass::m_height );
+            m_ensemble_buffer.create( BaseClass::windowWidth(), BaseClass::windowHeight() );
         }
 
         this->initialize_resize_texture();
@@ -1353,7 +1351,7 @@ void ParticleBasedRenderer::create_image(
         if ( enable_resizing )
         {
             m_resize_framebuffer.unbind(); // render to the screen
-            glViewport( 0, 0, BaseClass::m_width, BaseClass::m_height );
+            glViewport( 0, 0, BaseClass::windowWidth(), BaseClass::windowHeight() );
 
             if ( enable_averaging )
             {
@@ -1434,7 +1432,7 @@ void ParticleBasedRenderer::initialize_opengl()
 
         if ( BaseClass::isEnabledShading() )
         {
-            switch ( BaseClass::m_shader->type() )
+            switch ( BaseClass::shader().type() )
             {
             case kvs::Shader::LambertShading: frag.define("ENABLE_LAMBERT_SHADING"); break;
             case kvs::Shader::PhongShading: frag.define("ENABLE_PHONG_SHADING"); break;
@@ -1450,38 +1448,28 @@ void ParticleBasedRenderer::initialize_opengl()
         if ( BaseClass::isEnabledShading() )
         {
             m_zoom_shader.bind();
-            switch ( BaseClass::m_shader->type() )
+            switch ( BaseClass::shader().type() )
             {
             case kvs::Shader::LambertShading:
             {
-                const GLfloat Ka = ((kvs::Shader::Lambert*)(BaseClass::m_shader))->Ka;
-                const GLfloat Kd = ((kvs::Shader::Lambert*)(BaseClass::m_shader))->Kd;
-                m_zoom_shader.setUniform( "shading.Ka", Ka );
-                m_zoom_shader.setUniform( "shading.Kd", Kd );
+                m_zoom_shader.setUniform( "shading.Ka", BaseClass::shader().Ka );
+                m_zoom_shader.setUniform( "shading.Kd", BaseClass::shader().Kd );
                 break;
             }
             case kvs::Shader::PhongShading:
             {
-                const GLfloat Ka = ((kvs::Shader::Phong*)(BaseClass::m_shader))->Ka;
-                const GLfloat Kd = ((kvs::Shader::Phong*)(BaseClass::m_shader))->Kd;
-                const GLfloat Ks = ((kvs::Shader::Phong*)(BaseClass::m_shader))->Ks;
-                const GLfloat S  = ((kvs::Shader::Phong*)(BaseClass::m_shader))->S;
-                m_zoom_shader.setUniform( "shading.Ka", Ka );
-                m_zoom_shader.setUniform( "shading.Kd", Kd );
-                m_zoom_shader.setUniform( "shading.Ks", Ks );
-                m_zoom_shader.setUniform( "shading.S",  S );
+                m_zoom_shader.setUniform( "shading.Ka", BaseClass::shader().Ka );
+                m_zoom_shader.setUniform( "shading.Kd", BaseClass::shader().Kd );
+                m_zoom_shader.setUniform( "shading.Ks", BaseClass::shader().Ks );
+                m_zoom_shader.setUniform( "shading.S",  BaseClass::shader().S );
                 break;
             }
             case kvs::Shader::BlinnPhongShading:
             {
-                const GLfloat Ka = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->Ka;
-                const GLfloat Kd = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->Kd;
-                const GLfloat Ks = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->Ks;
-                const GLfloat S  = ((kvs::Shader::BlinnPhong*)(BaseClass::m_shader))->S;
-                m_zoom_shader.setUniform( "shading.Ka", Ka );
-                m_zoom_shader.setUniform( "shading.Kd", Kd );
-                m_zoom_shader.setUniform( "shading.Ks", Ks );
-                m_zoom_shader.setUniform( "shading.S",  S );
+                m_zoom_shader.setUniform( "shading.Ka", BaseClass::shader().Ka );
+                m_zoom_shader.setUniform( "shading.Kd", BaseClass::shader().Kd );
+                m_zoom_shader.setUniform( "shading.Ks", BaseClass::shader().Ks );
+                m_zoom_shader.setUniform( "shading.S",  BaseClass::shader().S );
                 break;
             }
             default: /* NO SHADING */ break;
