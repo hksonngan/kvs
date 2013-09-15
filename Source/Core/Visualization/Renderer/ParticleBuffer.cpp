@@ -21,6 +21,11 @@
 namespace kvs
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new ParticleBuffer class.
+ */
+/*===========================================================================*/
 ParticleBuffer::ParticleBuffer():
     m_ref_shader( NULL ),
     m_ref_point_object( NULL )
@@ -56,164 +61,6 @@ ParticleBuffer::~ParticleBuffer()
 
 /*==========================================================================*/
 /**
- *  Return the buffer width.
- */
-/*==========================================================================*/
-const size_t ParticleBuffer::width() const
-{
-    return( m_width );
-}
-
-/*==========================================================================*/
-/**
- *  Return the buffer height.
- */
-/*==========================================================================*/
-const size_t ParticleBuffer::height() const
-{
-    return( m_height );
-}
-
-/*==========================================================================*/
-/**
- *  Return the index buffer.
- */
-/*==========================================================================*/
-const kvs::ValueArray<kvs::UInt32>& ParticleBuffer::indexBuffer() const
-{
-    return( m_index_buffer );
-}
-
-/*==========================================================================*/
-/**
- *  Return the index which is stored in the index buffer.
- *  @param index [in] buffer index
- *  @return stored index in the index buffer
- */
-/*==========================================================================*/
-const kvs::UInt32 ParticleBuffer::index( const size_t index ) const
-{
-    return( m_index_buffer[index] );
-}
-
-/*==========================================================================*/
-/**
- *  Return the depth buffer.
- */
-/*==========================================================================*/
-const kvs::ValueArray<kvs::Real32>& ParticleBuffer::depthBuffer() const
-{
-    return( m_depth_buffer );
-}
-
-/*==========================================================================*/
-/**
- *  Return the depth which is stored in the depth buffer.
- *  @param index [in] buffer index
- *  @return stored depth in the depth buffer
- */
-/*==========================================================================*/
-const kvs::Real32 ParticleBuffer::depth( const size_t index ) const
-{
-    return( m_depth_buffer[index] );
-}
-
-/*==========================================================================*/
-/**
- *  Return the pointer to the attached shader.
- */
-/*==========================================================================*/
-const kvs::Shader::ShadingModel* ParticleBuffer::shader() const
-{
-    return( m_ref_shader );
-}
-
-/*==========================================================================*/
-/**
- *  Return the pointer to the attached point object.
- */
-/*==========================================================================*/
-const kvs::PointObject* ParticleBuffer::pointObject() const
-{
-    return( m_ref_point_object );
-}
-
-/*==========================================================================*/
-/**
- *  Return the number of projected particles.
- */
-/*==========================================================================*/
-const size_t ParticleBuffer::numOfProjectedParticles() const
-{
-    return( m_num_of_projected_particles );
-}
-
-/*==========================================================================*/
-/**
- *  Return the number of stored particles.
- */
-/*==========================================================================*/
-const size_t ParticleBuffer::numOfStoredParticles() const
-{
-    return( m_num_of_stored_particles );
-}
-
-/*==========================================================================*/
-/**
- *  Set the subpixel level.
- *  @param subpixel_level [in] subpixel level
- */
-/*==========================================================================*/
-void ParticleBuffer::setSubpixelLevel( const size_t subpixel_level )
-{
-    m_subpixel_level = subpixel_level;
-}
-
-/*==========================================================================*/
-/**
- *  Attach the shader.
- *  @param shader [in] pointer to the shader
- */
-/*==========================================================================*/
-void ParticleBuffer::attachShader( const kvs::Shader::ShadingModel* shader )
-{
-    m_ref_shader = shader;
-}
-
-/*==========================================================================*/
-/**
- *  Attach the point object.
- *  @param point_object [in] pointer to the point object
- */
-/*==========================================================================*/
-void ParticleBuffer::attachPointObject( const kvs::PointObject* point_object )
-{
-    m_ref_point_object = NULL;
-    m_ref_point_object = point_object;
-}
-
-/*==========================================================================*/
-/**
- *  Be enable shading.
- */
-/*==========================================================================*/
-void ParticleBuffer::enableShading()
-{
-    m_enable_shading = true;
-}
-
-/*==========================================================================*/
-/**
- *  Be disable shading.
- */
-/*==========================================================================*/
-void ParticleBuffer::disableShading()
-{
-    m_enable_shading = false;
-}
-
-/*==========================================================================*/
-/**
  *  Create.
  *  @param width [in] width
  *  @param height [in] height
@@ -228,19 +75,19 @@ bool ParticleBuffer::create(
 {
     const size_t npixels = width * height;
 
-    m_width                   = width;
-    m_height                  = height;
-    m_subpixel_level          = subpixel_level;
-    m_size                    = npixels * 4;
+    m_width = width;
+    m_height = height;
+    m_subpixel_level = subpixel_level;
+    m_size = npixels * 4;
     m_num_of_projected_particles = 0;
-    m_num_of_stored_particles    = 0;
-    m_enable_shading          = true;
-    m_extended_width          = m_width * m_subpixel_level;
+    m_num_of_stored_particles = 0;
+    m_enable_shading = true;
+    m_extended_width = m_width * m_subpixel_level;
 
     if( m_width == 0 || m_height == 0 )
     {
         kvsMessageError("Cannot create the pixel data for the particle buffer.");
-        return( false );
+        return false;
     }
 
     const size_t subpixeled_npixels = npixels * subpixel_level * subpixel_level;
@@ -250,7 +97,7 @@ bool ParticleBuffer::create(
     m_index_buffer.fill( 0 );
     m_depth_buffer.fill( 0 );
 
-    return( true );
+    return true;
 }
 
 /*==========================================================================*/
@@ -264,7 +111,7 @@ void ParticleBuffer::clean()
     m_depth_buffer.fill( 0 );
 
     m_num_of_projected_particles = 0;
-    m_num_of_stored_particles    = 0;
+    m_num_of_stored_particles  = 0;
 }
 
 /*==========================================================================*/
@@ -286,15 +133,22 @@ void ParticleBuffer::clear()
  */
 /*==========================================================================*/
 void ParticleBuffer::createImage(
-    kvs::ValueArray<kvs::UInt8>*  color,
+    kvs::ValueArray<kvs::UInt8>* color,
     kvs::ValueArray<kvs::Real32>* depth )
 {
-    if( m_enable_shading ) this->create_image_with_shading( color, depth );
-    else                   this->create_image_without_shading( color, depth );
+    if ( m_enable_shading ) this->create_image_with_shading( color, depth );
+    else this->create_image_without_shading( color, depth );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Creates the rendering image with shading.
+ *  @param  color [in] pointer to color data
+ *  @param  depth [in] pointer to depth data
+ */
+/*===========================================================================*/
 void ParticleBuffer::create_image_with_shading(
-    kvs::ValueArray<kvs::UInt8>*  color,
+    kvs::ValueArray<kvs::UInt8>* color,
     kvs::ValueArray<kvs::Real32>* depth )
 {
     const kvs::Real32* point_coords = m_ref_point_object->coords().data();
@@ -304,8 +158,8 @@ void ParticleBuffer::create_image_with_shading(
     const float inv_ssize = 1.0f / ( m_subpixel_level * m_subpixel_level );
     const float normalize_alpha = 255.0f * inv_ssize;
 
-    size_t pindex   = 0;
-    size_t pindex4  = 0;
+    size_t pindex = 0;
+    size_t pindex4 = 0;
     size_t by_start = 0;
     const size_t bw = m_extended_width;
     for( size_t py = 0; py < m_height; py++, by_start += m_subpixel_level )
@@ -350,13 +204,20 @@ void ParticleBuffer::create_image_with_shading(
             (*color)[ pindex4 + 1 ] = static_cast<kvs::UInt8>( kvs::Math::Min( G, 255.0f ) + 0.5f );
             (*color)[ pindex4 + 2 ] = static_cast<kvs::UInt8>( kvs::Math::Min( B, 255.0f ) + 0.5f );
             (*color)[ pindex4 + 3 ] = static_cast<kvs::UInt8>( npoints * normalize_alpha );
-            (*depth)[ pindex ]      = ( npoints == 0 ) ? 1.0f : D;
+            (*depth)[ pindex ] = ( npoints == 0 ) ? 1.0f : D;
         }
     }
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Creates the rendering image without shading.
+ *  @param  color [in] pointer to color data
+ *  @param  depth [in] pointer to depth data
+ */
+/*===========================================================================*/
 void ParticleBuffer::create_image_without_shading(
-    kvs::ValueArray<kvs::UInt8>*  color,
+    kvs::ValueArray<kvs::UInt8>* color,
     kvs::ValueArray<kvs::Real32>* depth )
 {
     const kvs::UInt8* point_color = m_ref_point_object->colors().data();
@@ -364,8 +225,8 @@ void ParticleBuffer::create_image_without_shading(
     const float inv_ssize = 1.0f / ( m_subpixel_level * m_subpixel_level );
     const float normalize_alpha = 255.0f * inv_ssize;
 
-    size_t pindex   = 0;
-    size_t pindex4  = 0;
+    size_t pindex = 0;
+    size_t pindex4 = 0;
     size_t by_start = 0;
     const size_t bw = m_extended_width;
     for( size_t py = 0; py < m_height; py++, by_start += m_subpixel_level )
@@ -405,7 +266,7 @@ void ParticleBuffer::create_image_without_shading(
             (*color)[ pindex4 + 1 ] = static_cast<kvs::UInt8>(G);
             (*color)[ pindex4 + 2 ] = static_cast<kvs::UInt8>(B);
             (*color)[ pindex4 + 3 ] = static_cast<kvs::UInt8>( npoints * normalize_alpha );
-            (*depth)[ pindex ]      = ( npoints == 0 ) ? 1.0f : D;
+            (*depth)[ pindex ] = ( npoints == 0 ) ? 1.0f : D;
         }
     }
 }

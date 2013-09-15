@@ -43,7 +43,7 @@ public:
         const float projection[16],
         const int viewport[4] );
 
-    const bool isIntersected()
+    bool isIntersected()
     {
         return(
             kvs::Ray::isIntersected( m_vertex[0], m_vertex[3], m_vertex[2], m_vertex[1] ) ||
@@ -54,7 +54,7 @@ public:
             kvs::Ray::isIntersected( m_vertex[4], m_vertex[5], m_vertex[6], m_vertex[7] ) );
     }
 
-    const bool isInside() const
+    bool isInside() const
     {
         const kvs::Vector3f point( this->point() );
 
@@ -64,12 +64,12 @@ public:
             {
                 if ( m_vertex[0].x() < point.x() && point.x() < m_vertex[6].x() )
                 {
-                    return( true );
+                    return true;
                 }
             }
         }
 
-        return( false );
+        return false;
     }
 
     void step( const float delta_t )

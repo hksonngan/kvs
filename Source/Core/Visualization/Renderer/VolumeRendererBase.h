@@ -35,12 +35,10 @@ class VolumeRendererBase : public kvs::RendererBase
 {
     kvsModuleName( kvs::VolumeRendererBase );
 
-//protected:
 private:
 
     size_t m_width; ///< width of rendering image
     size_t m_height; ///< height of rendering image 
-//    bool m_enable_shading; ///< shading flag
     kvs::ValueArray<kvs::Real32> m_depth_data; ///< depth data as float type
     kvs::ValueArray<kvs::UInt8> m_color_data; ///< color (RGBA) data as uchar type
     kvs::FrameBuffer m_depth_buffer; ///< depth buffer
@@ -63,9 +61,6 @@ public:
     template <typename ShadingType>
     void setShader( const ShadingType shader );
     void setTransferFunction( const kvs::TransferFunction& tfunc ) { m_tfunc = tfunc; }
-//    void enableShading();
-//    void disableShading();
-//    bool isEnabledShading() const;
     const kvs::TransferFunction& transferFunction() const { return m_tfunc; }
 
 protected:
@@ -74,7 +69,7 @@ protected:
     kvs::ValueArray<kvs::Real32>& depthData() { return m_depth_data; }
     kvs::Shader::ShadingModel& shader() { return *m_shader; }
     kvs::TransferFunction& transferFunction() { return m_tfunc; }
-    void setWindowSize( const size_t width, const size_t height );
+    void setWindowSize( const size_t width, const size_t height ) { m_width = width; m_height = height; }
     void allocateDepthData( const size_t size );
     void allocateColorData( const size_t size );
     void fillDepthData( const kvs::Real32 value );

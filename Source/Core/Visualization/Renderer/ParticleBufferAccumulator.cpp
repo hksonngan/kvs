@@ -123,27 +123,27 @@ void ParticleBufferAccumulator::accumulate(
  */
 /*==========================================================================*/
 void ParticleBufferAccumulator::add(
-    const size_t      index,
-    const size_t      id,
+    const size_t index,
+    const size_t id,
     const kvs::Real32 depth,
     const kvs::UInt32 vindex )
 {
-    const kvs::Real32 buffer_depth = SuperClass::m_depth_buffer[index];
-    if( buffer_depth > 0.0f )
+    const kvs::Real32 buffer_depth = SuperClass::depthBuffer( index );
+    if ( buffer_depth > 0.0f )
     {
         // Detect collision.
-        if( buffer_depth > depth )
+        if ( buffer_depth > depth )
         {
-            SuperClass::m_depth_buffer[index] = depth;
-            SuperClass::m_index_buffer[index] = vindex;
+            SuperClass::depthBuffer()[index] = depth;
+            SuperClass::indexBuffer()[index] = vindex;
             m_id_buffer[index] = static_cast<kvs::UInt8>( id );
         }
     }
     else
     {
         // Not collision.
-        SuperClass::m_depth_buffer[index] = depth;
-        SuperClass::m_index_buffer[index] = vindex;
+        SuperClass::depthBuffer()[index] = depth;
+        SuperClass::indexBuffer()[index] = vindex;
         m_id_buffer[index] = static_cast<kvs::UInt8>( id );
     }
 }

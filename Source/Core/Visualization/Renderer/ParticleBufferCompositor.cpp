@@ -16,6 +16,7 @@
 #include <kvs/DebugNew>
 #include <kvs/Vector3>
 #include <kvs/Matrix33>
+#include <kvs/OpenGL>
 #include <kvs/IgnoreUnusedVariable>
 
 
@@ -306,17 +307,16 @@ void ParticleBufferCompositor::update_particle_buffer(
     kvs::Camera* camera,
     kvs::Light* light )
 {
-    glPopMatrix();
-    glPushMatrix();
-    {
-        const kvs::Vector3f object_center = m_object_manager->objectCenter();
-        const kvs::Vector3f object_scale = m_object_manager->normalize();
+    kvs::OpenGL::PopMatrix();
+    kvs::OpenGL::PushMatrix();
 
-        object->transform( object_center, object_scale );
-        renderer->create_image( object, camera, light );
-    }
-    glPopMatrix();
-    glPushMatrix();
+    const kvs::Vector3f object_center = m_object_manager->objectCenter();
+    const kvs::Vector3f object_scale = m_object_manager->normalize();
+    object->transform( object_center, object_scale );
+    renderer->create_image( object, camera, light );
+
+    kvs::OpenGL::PopMatrix();
+    kvs::OpenGL::PushMatrix();
 }
 
 } // end of namespace kvs

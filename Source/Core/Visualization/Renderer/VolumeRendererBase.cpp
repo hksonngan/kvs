@@ -29,7 +29,6 @@ namespace kvs
 VolumeRendererBase::VolumeRendererBase():
     m_width( 0 ),
     m_height( 0 ),
-//    m_enable_shading( true ),
     m_shader( NULL )
 {
     m_depth_buffer.setFormat( GL_DEPTH_COMPONENT );
@@ -49,85 +48,55 @@ VolumeRendererBase::~VolumeRendererBase()
     if ( m_shader ) { delete m_shader; }
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  Set the transder function.
- *  @param tfunc [in] transfer function
+ *  @brief  Allocates a memory for the depth data.
+ *  @param  size [in] number of element of the data
  */
-/*==========================================================================*/
-//void VolumeRendererBase::setTransferFunction( const kvs::TransferFunction& tfunc )
-//{
-//    m_tfunc = tfunc;
-//}
-
-/*==========================================================================*/
-/**
- *  Enable shading function.
- */
-/*==========================================================================*/
-//void VolumeRendererBase::enableShading()
-//{
-//    m_enable_shading = true;
-//}
-
-/*==========================================================================*/
-/**
- *  Disable shading function.
- */
-/*==========================================================================*/
-//void VolumeRendererBase::disableShading()
-//{
-//    m_enable_shading = false;
-//}
-
-/*==========================================================================*/
-/**
- *  Test whether the shading is enable or disable.
- *  @return true, if the shading is enable.
- */
-/*==========================================================================*/
-//bool VolumeRendererBase::isEnabledShading() const
-//{
-//    return m_enable_shading;
-//}
-
-/*==========================================================================*/
-/**
- *  Get the trunsfer function.
- *  @return transfer function
- */
-/*==========================================================================*/
-//const kvs::TransferFunction& VolumeRendererBase::transferFunction() const
-//{
-//    return m_tfunc;
-//}
-
-void VolumeRendererBase::setWindowSize( const size_t width, const size_t height )
-{
-    m_width = width;
-    m_height = height;
-}
-
+/*===========================================================================*/
 void VolumeRendererBase::allocateDepthData( const size_t size )
 {
     m_depth_data.allocate( size );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Allocates a memory for the color data.
+ *  @param  size [in] number of element of the data
+ */
+/*===========================================================================*/
 void VolumeRendererBase::allocateColorData( const size_t size )
 {
     m_color_data.allocate( size );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Fills a value into the depth data.
+ *  @param  value [in] depth value
+ */
+/*===========================================================================*/
 void VolumeRendererBase::fillDepthData( const kvs::Real32 value )
 {
     m_depth_data.fill( value );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Fills a value into the color data.
+ *  @param  value [in] color value (single component)
+ */
+/*===========================================================================*/
 void VolumeRendererBase::fillColorData( const kvs::UInt8 value )
 {
     m_color_data.fill( value );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Reads color and depth buffers.
+ */
+/*===========================================================================*/
 void VolumeRendererBase::readImage()
 {
     m_depth_buffer.readPixels( 0, 0, m_width, m_height, m_depth_data.data() );

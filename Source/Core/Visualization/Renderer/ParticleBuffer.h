@@ -18,6 +18,7 @@
 #include <kvs/ValueArray>
 #include <kvs/Type>
 #include <kvs/Shader>
+#include <kvs/Deprecated>
 
 
 namespace kvs
@@ -55,43 +56,42 @@ public:
     ParticleBuffer( const size_t width, const size_t height, const size_t subpixel_level );
     virtual ~ParticleBuffer();
 
-    const size_t width() const;
-    const size_t height() const;
-    const kvs::ValueArray<kvs::UInt32>& indexBuffer() const;
-    const kvs::UInt32 index( const size_t index ) const;
-    const kvs::ValueArray<kvs::Real32>& depthBuffer() const;
-    const kvs::Real32 depth( const size_t index ) const;
-    const size_t subpixelLevel() const;
-    const kvs::Shader::ShadingModel* shader() const;
-    const kvs::PointObject* pointObject() const;
-    const size_t numOfProjectedParticles() const;
-    const size_t numOfStoredParticles() const;
-
-    void setSubpixelLevel( const size_t subpixel_level );
-    void attachShader( const kvs::Shader::ShadingModel* shader );
-    void attachPointObject( const kvs::PointObject* point_object );
-
-    void enableShading();
-    void disableShading();
+    size_t width() const { return m_width; }
+    size_t height() const { return m_height; }
+    const kvs::ValueArray<kvs::UInt32>& indexBuffer() const { return m_index_buffer; }
+    kvs::UInt32 index( const size_t index ) const { return m_index_buffer[index]; }
+    const kvs::ValueArray<kvs::Real32>& depthBuffer() const { return m_depth_buffer; }
+    kvs::Real32 depth( const size_t index ) const { return m_depth_buffer[index]; }
+    size_t subpixelLevel() const { return m_subpixel_level; }
+    const kvs::Shader::ShadingModel* shader() const { return m_ref_shader; }
+    const kvs::PointObject* pointObject() const { return m_ref_point_object; }
+    size_t numberOfProjectedParticles() const { return m_num_of_projected_particles; }
+    size_t numberOfStoredParticles() const { return m_num_of_stored_particles; }
+    void setSubpixelLevel( const size_t subpixel_level ) { m_subpixel_level = subpixel_level; }
+    void attachShader( const kvs::Shader::ShadingModel* shader ) { m_ref_shader = shader; }
+    void attachPointObject( const kvs::PointObject* point_object ) { m_ref_point_object = point_object; }
+    void enableShading() { m_enable_shading = true; }
+    void disableShading() { m_enable_shading = false; }
 
     void add( const float x, const float y, const kvs::Real32 depth, const kvs::UInt32 index );
     bool create( const size_t width, const size_t height, const size_t subpixel_level );
     void clean();
     void clear();
-
-    void createImage(
-        kvs::ValueArray<kvs::UInt8>*  color,
-        kvs::ValueArray<kvs::Real32>* depth );
+    void createImage( kvs::ValueArray<kvs::UInt8>* color, kvs::ValueArray<kvs::Real32>* depth );
 
 protected:
 
-    void create_image_with_shading(
-        kvs::ValueArray<kvs::UInt8>*  color,
-        kvs::ValueArray<kvs::Real32>* depth );
+    kvs::ValueArray<kvs::UInt32>& indexBuffer() { return m_index_buffer; }
+    kvs::ValueArray<kvs::UInt8>& depthBuffer() { return m_depth_buffer; }
 
-    void create_image_without_shading(
-        kvs::ValueArray<kvs::UInt8>*  color,
-        kvs::ValueArray<kvs::Real32>* depth );
+private:
+
+    void create_image_with_shading( kvs::ValueArray<kvs::UInt8>* color, kvs::ValueArray<kvs::Real32>* depth );
+    void create_image_without_shading( kvs::ValueArray<kvs::UInt8>* color, kvs::ValueArray<kvs::Real32>* depth );
+
+public:
+    KVS_DEPRECATED( const size_t numOfProjectedParticles() const ) { return this->numberOfProjectedParticles(); }
+    KVS_DEPRECATED( const size_t numOfStoredParticles() const ) { return this->numberOfStoredParticles(); }
 };
 
 /*==========================================================================*/

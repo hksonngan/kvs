@@ -38,7 +38,7 @@ public:
     typedef std::vector<kvs::PointObject*> ObjectList;
     typedef std::vector<kvs::ParticleVolumeRenderer*> RendererList;
 
-protected:
+private:
 
     kvs::ValueArray<kvs::UInt8> m_id_buffer; ///< object ID buffer [0,255]
 
@@ -48,10 +48,7 @@ public:
         const size_t width,
         const size_t height,
         const size_t subpixel_level );
-
     virtual ~ParticleBufferAccumulator();
-
-public:
 
     bool create( const size_t width, const size_t height, const size_t subpixel_level );
     void clean();
