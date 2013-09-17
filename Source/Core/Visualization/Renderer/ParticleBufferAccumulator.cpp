@@ -128,7 +128,7 @@ void ParticleBufferAccumulator::add(
     const kvs::Real32 depth,
     const kvs::UInt32 vindex )
 {
-    const kvs::Real32 buffer_depth = SuperClass::depthBuffer( index );
+    const kvs::Real32 buffer_depth = SuperClass::depth( index );
     if ( buffer_depth > 0.0f )
     {
         // Detect collision.
