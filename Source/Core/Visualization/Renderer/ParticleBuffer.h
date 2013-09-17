@@ -82,7 +82,7 @@ public:
 protected:
 
     kvs::ValueArray<kvs::UInt32>& indexBuffer() { return m_index_buffer; }
-    kvs::ValueArray<kvs::UInt8>& depthBuffer() { return m_depth_buffer; }
+    kvs::ValueArray<kvs::Real32>& depthBuffer() { return m_depth_buffer; }
 
 private:
 
