@@ -138,7 +138,9 @@
 #include <Core/Utility/MemoryDebugger.h>
 #include <Core/Utility/MemoryTracer.h>
 #include <Core/Utility/Message.h>
+#include <Core/Utility/Noncopyable.h>
 #include <Core/Utility/Platform.h>
+#include <Core/Utility/Program.h>
 #include <Core/Utility/Range.h>
 #include <Core/Utility/ReferenceCounter.h>
 #include <Core/Utility/SharedPointer.h>

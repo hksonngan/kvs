@@ -199,6 +199,7 @@ $(OUTDIR)\.\Utility\File.obj \
 $(OUTDIR)\.\Utility\Indent.obj \
 $(OUTDIR)\.\Utility\MemoryTracer.obj \
 $(OUTDIR)\.\Utility\Message.obj \
+$(OUTDIR)\.\Utility\Program.obj \
 $(OUTDIR)\.\Utility\Range.obj \
 $(OUTDIR)\.\Utility\ReferenceCounter.obj \
 $(OUTDIR)\.\Utility\String.obj \
