@@ -29,6 +29,562 @@
 namespace kvs
 {
 
+namespace internal
+{
+
+/*==========================================================================*/
+/**
+ *  @struct Tree node structure.
+ */
+/*==========================================================================*/
+template <typename T>
+struct TreeNode
+{
+    TreeNode* parent; ///< pointer to the parent node
+    TreeNode* first_child; ///< pointer to the first child node
+    TreeNode* last_child; ///< pointer to the last child node
+    TreeNode* prev_sibling; ///< pointer to the previous sibling node
+    TreeNode* next_sibling; ///< pointer to the next sibling node
+    T data; ///< node data
+
+    TreeNode() {}
+    TreeNode( const T& x ) : data( x ) {}
+};
+
+template <typename T> class TreeIteratorBase;
+template <typename T> class TreePreOrderIterator;
+template <typename T> class TreePostOrderIterator;
+template <typename T> class TreeSiblingIterator;
+template <typename T> class TreeBreadthFirstIterator;
+template <typename T> class TreeLeafIterator;
+
+/*==========================================================================*/
+/**
+ *  Base iterator class for the tree class.
+ */
+/*==========================================================================*/
+template <typename T>
+class TreeIteratorBase
+{
+    // Friend classes.
+    friend class TreePreOrderIterator<T>;
+    friend class TreePostOrderIterator<T>;
+    friend class TreeSiblingIterator<T>;
+    friend class TreeBreadthFirstIterator<T>;
+    friend class TreeLeafIterator<T>;
+
+public:
+
+    // Type definitions.
+    typedef T value_type;
+    typedef T* pointer;
+    typedef T& reference;
+    typedef std::size_t size_type;
+    typedef std::ptrdiff_t difference_type;
+    typedef std::bidirectional_iterator_tag iterator_category;
+
+protected:
+
+    TreeNode<T>* m_node; ///< pointer to the node
+    bool m_skip_current_children; ///< check flag
+
+public:
+
+    TreeIteratorBase():
+        m_node( 0 ),
+        m_skip_current_children( false ) {}
+
+    TreeIteratorBase( TreeNode<T>* node ):
+        m_node( node ),
+        m_skip_current_children( false ) {}
+
+    virtual ~TreeIteratorBase() {}
+
+public:
+
+    virtual TreeIteratorBase&  operator ++ () = 0;
+    virtual TreeIteratorBase&  operator -- () = 0;
+
+    TreeIteratorBase& operator += ( unsigned int num )
+    {
+        while ( num > 0 ) { ++( *this ); --num; }
+        return *this;
+    }
+
+    TreeIteratorBase& operator -= ( unsigned int num )
+    {
+        while ( num > 0 ) { --( *this ); --num; }
+        return *this;
+    }
+
+    bool operator == ( const TreeIteratorBase& other ) const
+    {
+        return m_node == other.m_node;
+    }
+
+    bool operator != ( const TreeIteratorBase& other ) const
+    {
+        return !( *this == other );
+    }
+
+public:
+
+    reference operator * () const
+    {
+        return m_node->data;
+    }
+
+    pointer operator -> () const
+    {
+        return &( m_node->data );
+    }
+
+public:
+
+    TreeSiblingIterator<T> begin() const
+    {
+        TreeSiblingIterator<T> ret( m_node->first_child );
+        ret.m_parent = m_node;
+
+        return ret;
+    }
+
+    TreeSiblingIterator<T> end() const
+    {
+        TreeSiblingIterator<T> ret( 0 );
+        ret.m_parent = m_node;
+
+        return ret;
+    }
+
+    TreeNode<T>* node()
+    {
+        return m_node;
+    }
+
+    TreeNode<T>* node() const
+    {
+        return m_node;
+    }
+
+    void skipChildren()
+    {
+        m_skip_current_children = true;
+    }
+
+    unsigned int numberOfChildren() const
+    {
+        TreeNode<T>* p = m_node->first_child;
+        if ( p == 0 ) return 0;
+
+        unsigned int counter = 1;
+        while ( p != m_node->last_child )
+        {
+            ++counter;
+            p = p->next_sibling;
+        }
+
+        return counter;
+    }
+};
+
+/*==========================================================================*/
+/**
+ *  Pre-order iterator.
+ */
+/*==========================================================================*/
+template <typename T>
+class TreePreOrderIterator : public TreeIteratorBase<T>
+{
+    using TreeIteratorBase<T>::m_node;
+    using TreeIteratorBase<T>::m_skip_current_children;
+
+public:
+
+    TreePreOrderIterator():
+        TreeIteratorBase<T>( 0 ) {}
+
+    TreePreOrderIterator( TreeNode<T>* node ):
+        TreeIteratorBase<T>( node ) {}
+
+    TreePreOrderIterator( const TreeIteratorBase<T>& other ):
+        TreeIteratorBase<T>( other.node() ) {}
+
+    TreePreOrderIterator( const TreeSiblingIterator<T>& other ):
+        TreeIteratorBase<T>( other.node() )
+    {
+        if ( m_node == 0 )
+        {
+            if ( other.rangeLast() != 0 )
+            {
+                m_node = other.rangeLast();
+            }
+            else
+            {
+                m_node = other.m_parent;
+            }
+
+            TreeIteratorBase<T>::skipChildren();
+            ++( *this );
+        }
+    }
+
+public:
+
+    virtual TreeIteratorBase<T>& operator ++ ()
+    {
+        KVS_ASSERT( m_node != 0 );
+
+        if ( !m_skip_current_children &&
+            m_node->first_child != 0 )
+        {
+            m_node = m_node->first_child;
+        }
+        else
+        {
+            m_skip_current_children = false;
+
+            while ( m_node->next_sibling == 0 )
+            {
+                m_node = m_node->parent;
+                if ( m_node == 0 ) return *this;
+            }
+            m_node = m_node->next_sibling;
+        }
+
+        return *this;
+    }
+
+    virtual TreeIteratorBase<T>& operator -- ()
+    {
+        KVS_ASSERT( m_node != 0 );
+
+        if ( m_node->prev_sibling )
+        {
+            m_node = m_node->prev_sibling;
+            while ( m_node->last_child )
+            {
+                m_node = m_node->last_child;
+            }
+        }
+        else
+        {
+            m_node = m_node->parent;
+            if ( m_node == 0 ) return *this;
+        }
+
+        return *this;
+    }
+};
+
+/*==========================================================================*/
+/**
+ *  Post-order iterator.
+ */
+/*==========================================================================*/
+template <typename T>
+class TreePostOrderIterator : public TreeIteratorBase<T>
+{
+    using TreeIteratorBase<T>::m_node;
+    using TreeIteratorBase<T>::m_skip_current_children;
+
+public:
+
+    TreePostOrderIterator():
+        TreeIteratorBase<T>( 0 ) {}
+
+    TreePostOrderIterator( TreeNode<T>* t ):
+        TreeIteratorBase<T>( t ) {}
+
+    TreePostOrderIterator( const TreeIteratorBase<T>& other ):
+        TreeIteratorBase<T>( other.node() ) {}
+
+    TreePostOrderIterator( const TreeSiblingIterator<T>& other ):
+        TreeIteratorBase<T>( other.node() )
+    {
+        if ( m_node == 0 )
+        {
+            if ( other.range_last() != 0 ) m_node = other.range_last();
+            else m_node = other.parent;
+            TreeIteratorBase<T>::skip_children();
+            ++( *this );
+        }
+    }
+
+public:
+
+    virtual TreeIteratorBase<T>& operator ++ ()
+    {
+        KVS_ASSERT( m_node != 0 );
+
+        if ( m_node->next_sibling == 0 )
+        {
+            m_node = m_node->parent;
+        }
+        else
+        {
+            m_node = m_node->next_sibling;
+            if ( m_skip_current_children )
+            {
+                m_skip_current_children = false;
+            }
+            else
+            {
+                while ( m_node->first_child ) m_node = m_node->first_child;
+            }
+        }
+
+        return *this;
+    }
+
+    virtual TreeIteratorBase<T>&  operator--()
+    {
+        KVS_ASSERT( m_node != 0 );
+
+        if ( m_skip_current_children || m_node->last_child == 0 )
+        {
+            m_skip_current_children = false;
+
+            while ( m_node->prev_sibling == 0 ) m_node = m_node->parent;
+            m_node = m_node->prev_sibling;
+        }
+        else
+        {
+            m_node = m_node->last_child;
+        }
+
+        return *this;
+    }
+
+    void descend_all()
+    {
+        KVS_ASSERT( m_node != 0 );
+
+        while ( m_node->first_child ) m_node = m_node->first_child;
+    }
+};
+
+/*==========================================================================*/
+/**
+ *  Sibling iterator.
+ */
+/*==========================================================================*/
+template <typename T>
+class TreeSiblingIterator : public TreeIteratorBase<T>
+{
+    using TreeIteratorBase<T>::m_node;
+
+public:
+
+    TreeNode<T>* m_parent;
+
+public:
+
+    TreeSiblingIterator():
+        TreeIteratorBase<T>() {}
+
+    TreeSiblingIterator( const TreeSiblingIterator<T>& other ):
+        TreeIteratorBase<T>( other ),
+        m_parent( other.m_parent ) {}
+
+    TreeSiblingIterator( const TreeIteratorBase<T>& other ):
+        TreeIteratorBase<T>( other.node() )
+    {
+        this->set_parent();
+    }
+
+    TreeSiblingIterator( TreeNode<T>* t ):
+        TreeIteratorBase<T>( t )
+    {
+        this->set_parent();
+    }
+
+    virtual TreeIteratorBase<T>& operator ++ ()
+    {
+        if ( m_node ) m_node = m_node->next_sibling;
+
+        return *this;
+    }
+
+    virtual TreeIteratorBase<T>& operator -- ()
+    {
+        if ( m_node )
+        {
+            m_node = m_node->prev_sibling;
+        }
+        else
+        {
+            KVS_ASSERT( m_parent != 0 );
+
+            m_node = m_parent->last_child;
+        }
+
+        return *this;
+    }
+
+    TreeNode<T>* rangeFirst() const
+    {
+        TreeNode<T>* tmp = m_parent->first_child;
+        return tmp;
+    }
+
+    TreeNode<T>* rangeLast() const
+    {
+        return m_parent->last_child;
+    }
+
+private:
+
+    void set_parent()
+    {
+        m_parent = 0;
+
+        if ( m_node == 0 ) return;
+        if ( m_node->parent != 0 ) m_parent = m_node->parent;
+    }
+};
+
+/*==========================================================================*/
+/**
+ *  Breadth first iterator.
+ */
+/*==========================================================================*/
+template <typename T>
+class TreeBreadthFirstIterator : public TreeIteratorBase<T>
+{
+    using TreeIteratorBase<T>::m_node;
+
+private:
+
+    std::queue<TreeNode<T>*> m_node_queue;
+
+public:
+
+    TreeBreadthFirstIterator():
+        TreeIteratorBase<T>() {}
+
+    TreeBreadthFirstIterator( TreeNode<T>* t ):
+        TreeIteratorBase<T>( t )
+    {
+        m_node_queue.push( t );
+    }
+
+    TreeBreadthFirstIterator( const TreeIteratorBase<T>& other ):
+        TreeIteratorBase<T>( other.node() )
+    {
+        m_node_queue.push( other.node() );
+    }
+
+    virtual TreeIteratorBase<T>& operator ++ ()
+    {
+        TreeSiblingIterator<T> sibling = this->begin();
+        while ( sibling != this->end() )
+        {
+            m_node_queue.push( sibling.node() );
+            ++sibling;
+        }
+
+        m_node_queue.pop();
+        if ( m_node_queue.size() > 0 )
+        {
+            m_node = m_node_queue.front();
+        }
+        else
+        {
+            m_node = 0;
+        }
+
+        return *this;
+    }
+
+private:
+
+    virtual TreeIteratorBase<T>&  operator -- ()
+    {
+        KVS_ASSERT( false );
+        return *this;
+    }
+};
+
+/*==========================================================================*/
+/**
+ *  Leaf iterator.
+ */
+/*==========================================================================*/
+template <typename T>
+class TreeLeafIterator : public TreeIteratorBase<T>
+{
+    using TreeIteratorBase<T>::m_node;
+
+public:
+
+    TreeLeafIterator():
+        TreeIteratorBase<T>( 0 ) {}
+
+    TreeLeafIterator( TreeNode<T>* t ):
+        TreeIteratorBase<T>( t ) {}
+
+    TreeLeafIterator( const TreeIteratorBase<T>& other ):
+        TreeIteratorBase<T>( other.node() ) {}
+
+    TreeLeafIterator( const TreeSiblingIterator<T>& other ):
+        TreeIteratorBase<T>( other.node() )
+    {
+        if ( m_node == 0 )
+        {
+            if ( other.range_last() != 0 )
+            {
+                m_node = other.range_last();
+            }
+            else
+            {
+                m_node = other.m_parent;
+            }
+
+            ++( *this );
+        }
+    }
+
+    virtual TreeIteratorBase<T>& operator ++ ()
+    {
+        while ( m_node->next_sibling == 0 )
+        {
+            if ( m_node->parent == 0 ) return *this;
+            m_node = m_node->parent;
+        }
+
+        m_node = m_node->next_sibling;
+
+        while ( m_node->last_child )
+        {
+            m_node = m_node->first_child;
+        }
+
+        return *this;
+    }
+
+    virtual TreeIteratorBase<T>& operator -- ()
+    {
+        while ( m_node->prev_sibling == 0 )
+        {
+            if ( m_node->parent == 0 ) return *this;
+            m_node = m_node->parent;
+        }
+
+        m_node = m_node->prev_sibling;
+
+        while ( m_node->last_child )
+        {
+            m_node = m_node->last_child;
+        }
+
+        return *this;
+    }
+};
+
+} // end of namespace internal
+
+
 /*==========================================================================*/
 /**
  *  Tree class.
@@ -41,26 +597,21 @@ class Tree
 
 public:
 
-    struct Node;
-
-    class iterator_base;
-    class pre_order_iterator;
-    class post_order_iterator;
-    class sibling_iterator;
-    class breadth_first_iterator;
-    class leaf_iterator;
-
-public:
-
     // Type definitions.
-    typedef Tree<T>                   tree_type;
-    typedef Node                      node_type;
-    typedef T                         value_type;
-    typedef pre_order_iterator        iterator;
+    typedef T value_type;
+    typedef Tree<T> tree_type;
+    typedef internal::TreeNode<T> node_type;
+    typedef internal::TreePreOrderIterator<T> iterator;
+    typedef internal::TreeIteratorBase<T> iterator_base;
+    typedef internal::TreePreOrderIterator<T> pre_order_iterator;
+    typedef internal::TreePostOrderIterator<T> post_order_iterator;
+    typedef internal::TreeSiblingIterator<T> sibling_iterator;
+    typedef internal::TreeBreadthFirstIterator<T> breadth_first_iterator;
+    typedef internal::TreeLeafIterator<T> leaf_iterator;
 
 protected:
 
-    node_type*     m_head;      ///< head node
+    node_type* m_head; ///< head node
 
 public:
 
@@ -398,590 +949,6 @@ public:
 
         return ret;
     }
-};
-
-/*==========================================================================*/
-/**
- *  @struct TreeNode
- *  Tree node structure.
- */
-/*==========================================================================*/
-template <typename T>
-struct Tree<T>::Node
-{
-    Node() {}
-    Node( const T& x ) : data( x ) {}
-
-    Node* parent;       ///< pointer to the parent node
-    Node* first_child;  ///< pointer to the first child node
-    Node* last_child;   ///< pointer to the last child node
-    Node* prev_sibling; ///< pointer to the previous sibling node
-    Node* next_sibling; ///< pointer to the next sibling node
-    T     data;         ///< node data
-};
-
-/*==========================================================================*/
-/**
- *  Base iterator class for the tree class.
- */
-/*==========================================================================*/
-template <typename T>
-class Tree<T>::iterator_base
-{
-    // Friend classes.
-    friend class pre_order_iterator;
-    friend class post_order_iterator;
-    friend class sibling_iterator;
-    friend class breadth_first_iterator;
-    friend class leaf_iterator;
-
-public:
-
-    // Type definitions.
-    typedef T                               value_type;
-    typedef T*                              pointer;
-    typedef T&                              reference;
-    typedef std::size_t                     size_type;
-    typedef std::ptrdiff_t                  difference_type;
-    typedef std::bidirectional_iterator_tag iterator_category;
-
-protected:
-
-    node_type* m_node;                  ///< pointer to the node
-    bool       m_skip_current_children; ///< check flag
-
-public:
-
-    iterator_base():
-        m_node( 0 ),
-        m_skip_current_children( false )
-    {
-    }
-
-    iterator_base( node_type* node ):
-        m_node( node ),
-        m_skip_current_children( false )
-    {
-    }
-
-    virtual ~iterator_base()
-    {
-    }
-
-public:
-
-    virtual iterator_base&  operator ++ () = 0;
-    virtual iterator_base&  operator -- () = 0;
-
-    iterator_base& operator += ( unsigned int num )
-    {
-        while ( num > 0 )
-        {
-            ++( *this );
-            --num;
-        }
-        return *this;
-    }
-
-    iterator_base& operator -= ( unsigned int num )
-    {
-        while ( num > 0 )
-        {
-            --( *this );
-            --num;
-        }
-        return *this;
-    }
-
-    bool operator == ( const iterator_base& other ) const
-    {
-        return m_node == other.m_node;
-    }
-
-    bool operator != ( const iterator_base& other ) const
-    {
-        return !( *this == other );
-    }
-
-public:
-
-    reference operator * () const
-    {
-        return m_node->data;
-    }
-
-    pointer operator -> () const
-    {
-        return &( m_node->data );
-    }
-
-public:
-
-    typename tree_type::sibling_iterator begin() const
-    {
-        sibling_iterator ret( m_node->first_child );
-        ret.m_parent = m_node;
-
-        return ret;
-    }
-
-    typename tree_type::sibling_iterator end() const
-    {
-        sibling_iterator ret( 0 );
-        ret.m_parent = m_node;
-
-        return ret;
-    }
-
-    node_type* node()
-    {
-        return m_node;
-    }
-
-    node_type* node() const
-    {
-        return m_node;
-    }
-
-    void skipChildren()
-    {
-        m_skip_current_children = true;
-    }
-
-    unsigned int numberOfChildren() const
-    {
-        node_type* p = m_node->first_child;
-        if ( p == 0 ) return 0;
-
-        unsigned int counter = 1;
-        while ( p != m_node->last_child )
-        {
-            ++counter;
-            p = p->next_sibling;
-        }
-
-        return counter;
-    }
-};
-
-/*==========================================================================*/
-/**
- *  Pre-order iterator.
- */
-/*==========================================================================*/
-template <typename T>
-class Tree<T>::pre_order_iterator : public Tree<T>::iterator_base
-{
-    using iterator_base::m_node;
-    using iterator_base::m_skip_current_children;
-
-public:
-
-    pre_order_iterator():
-        iterator_base( 0 )
-    {
-    }
-
-    pre_order_iterator( node_type* node ):
-        iterator_base( node )
-    {
-    }
-
-    pre_order_iterator( const iterator_base& other ):
-        iterator_base( other.node() )
-    {
-    }
-
-    pre_order_iterator( const sibling_iterator& other ):
-        iterator_base( other.node() )
-    {
-        if ( m_node == 0 )
-        {
-            if ( other.rangeLast() != 0 )
-            {
-                m_node = other.rangeLast();
-            }
-            else
-            {
-                m_node = other.m_parent;
-            }
-
-            iterator_base::skipChildren();
-            ++( *this );
-        }
-    }
-
-public:
-
-    virtual iterator_base& operator ++ ()
-    {
-        KVS_ASSERT( m_node != 0 );
-
-        if ( !m_skip_current_children &&
-            m_node->first_child != 0 )
-        {
-            m_node = m_node->first_child;
-        }
-        else
-        {
-            m_skip_current_children = false;
-
-            while ( m_node->next_sibling == 0 )
-            {
-                m_node = m_node->parent;
-                if ( m_node == 0 ) return *this;
-            }
-            m_node = m_node->next_sibling;
-        }
-
-        return *this;
-    }
-
-    virtual iterator_base& operator -- ()
-    {
-        KVS_ASSERT( m_node != 0 );
-
-        if ( m_node->prev_sibling )
-        {
-            m_node = m_node->prev_sibling;
-            while ( m_node->last_child )
-            {
-                m_node = m_node->last_child;
-            }
-        }
-        else
-        {
-            m_node = m_node->parent;
-            if ( m_node == 0 ) return *this;
-        }
-
-        return *this;
-    }
-};
-
-/*==========================================================================*/
-/**
- *  Post-order iterator.
- */
-/*==========================================================================*/
-template <typename T>
-class Tree<T>::post_order_iterator : public Tree<T>::iterator_base
-{
-    using iterator_base::m_node;
-    using iterator_base::m_skip_current_children;
-
-public:
-
-    post_order_iterator():
-        iterator_base( 0 )
-    {
-    }
-
-    post_order_iterator( node_type* t ):
-        iterator_base( t )
-    {
-    }
-
-    post_order_iterator( const iterator_base& other ):
-        iterator_base( other.node() )
-    {
-    }
-
-    post_order_iterator( const sibling_iterator& other ):
-        iterator_base( other.node() )
-    {
-        if ( m_node == 0 )
-        {
-            if ( other.range_last() != 0 ) m_node = other.range_last();
-            else                          m_node = other.parent;
-            iterator_base::skip_children();
-            ++( *this );
-        }
-    }
-
-public:
-
-    virtual iterator_base& operator ++ ()
-    {
-        KVS_ASSERT( m_node != 0 );
-
-        if ( m_node->next_sibling == 0 )
-        {
-            m_node = m_node->parent;
-        }
-        else
-        {
-            m_node = m_node->next_sibling;
-            if ( m_skip_current_children )
-            {
-                m_skip_current_children = false;
-            }
-            else
-            {
-                while ( m_node->first_child ) m_node = m_node->first_child;
-            }
-        }
-
-        return *this;
-    }
-
-    virtual iterator_base&  operator--()
-    {
-        KVS_ASSERT( m_node != 0 );
-
-        if ( m_skip_current_children || m_node->last_child == 0 )
-        {
-            m_skip_current_children = false;
-
-            while ( m_node->prev_sibling == 0 ) m_node = m_node->parent;
-            m_node = m_node->prev_sibling;
-        }
-        else
-        {
-            m_node = m_node->last_child;
-        }
-
-        return *this;
-    }
-
-    void descend_all()
-    {
-        KVS_ASSERT( m_node != 0 );
-
-        while ( m_node->first_child ) m_node = m_node->first_child;
-    }
-};
-
-/*==========================================================================*/
-/**
- *  Sibling iterator.
- */
-/*==========================================================================*/
-template <typename T>
-class Tree<T>::sibling_iterator : public Tree<T>::iterator_base
-{
-    using iterator_base::m_node;
-
-public:
-
-    node_type* m_parent;
-
-public:
-
-    sibling_iterator():
-        iterator_base()
-    {
-    }
-
-    sibling_iterator( node_type* t ):
-        iterator_base( t )
-    {
-        this->set_parent();
-    }
-
-    sibling_iterator( const sibling_iterator& other ):
-        iterator_base( other ),
-        m_parent( other.m_parent )
-    {
-    }
-
-    sibling_iterator( const iterator_base& other ):
-        iterator_base( other.node() )
-    {
-        this->set_parent();
-    }
-
-    virtual iterator_base& operator ++ ()
-    {
-        if ( m_node ) m_node = m_node->next_sibling;
-
-        return *this;
-    }
-
-    virtual iterator_base& operator -- ()
-    {
-        if ( m_node )
-        {
-            m_node = m_node->prev_sibling;
-        }
-        else
-        {
-            KVS_ASSERT( m_parent != 0 );
-
-            m_node = m_parent->last_child;
-        }
-
-        return *this;
-    }
-
-    node_type* rangeFirst() const
-    {
-        node_type* tmp = m_parent->first_child;
-        return tmp;
-    }
-
-    node_type* rangeLast() const
-    {
-        return m_parent->last_child;
-    }
-
-private:
-
-    void set_parent()
-    {
-        m_parent = 0;
-
-        if ( m_node == 0 )         return;
-        if ( m_node->parent != 0 ) m_parent = m_node->parent;
-    }
-};
-
-/*==========================================================================*/
-/**
- *  Breadth first iterator.
- */
-/*==========================================================================*/
-template <typename T>
-class Tree<T>::breadth_first_iterator : public Tree<T>::iterator_base
-{
-    using iterator_base::m_node;
-
-private:
-
-    std::queue<node_type*> m_node_queue;
-
-public:
-
-    breadth_first_iterator():
-        iterator_base()
-    {
-    }
-
-    breadth_first_iterator( node_type* t ):
-        iterator_base( t )
-    {
-        m_node_queue.push( t );
-    }
-
-    breadth_first_iterator( const iterator_base& other ):
-        iterator_base( other.node() )
-    {
-        m_node_queue.push( other.node() );
-    }
-
-    virtual iterator_base& operator ++ ()
-    {
-        sibling_iterator sibling = this->begin();
-        while ( sibling != this->end() )
-        {
-            m_node_queue.push( sibling.node() );
-            ++sibling;
-        }
-
-        m_node_queue.pop();
-        if ( m_node_queue.size() > 0 )
-        {
-            m_node = m_node_queue.front();
-        }
-        else
-        {
-            m_node = 0;
-        }
-
-        return *this;
-    }
-
-private:
-
-    virtual iterator_base&  operator -- ()
-    {
-        KVS_ASSERT( false );
-        return *this;
-    }
-};
-
-/*==========================================================================*/
-/**
- *  Leaf iterator.
- */
-/*==========================================================================*/
-template <typename T>
-class Tree<T>::leaf_iterator : public Tree<T>::iterator_base
-{
-    using iterator_base::m_node;
-
-public:
-
-    leaf_iterator():
-        iterator_base( 0 )
-    {
-    }
-
-    leaf_iterator( node_type* t ):
-        iterator_base( t )
-    {
-    }
-
-    leaf_iterator( const sibling_iterator& other ):
-        iterator_base( other.node() )
-    {
-        if ( m_node == 0 )
-        {
-            if ( other.range_last() != 0 )
-            {
-                m_node = other.range_last();
-            }
-            else
-            {
-                m_node = other.m_parent;
-            }
-
-            ++( *this );
-        }
-    }
-
-    leaf_iterator( const iterator_base& other ):
-        iterator_base( other.node() )
-    {
-    }
-
-    virtual iterator_base& operator ++ ()
-    {
-        while ( m_node->next_sibling == 0 )
-        {
-            if ( m_node->parent == 0 ) return *this;
-            m_node = m_node->parent;
-        }
-
-        m_node = m_node->next_sibling;
-
-        while ( m_node->last_child )
-        {
-            m_node = m_node->first_child;
-        }
-
-        return *this;
-    }
-
-    virtual iterator_base& operator -- ()
-    {
-        while ( m_node->prev_sibling == 0 )
-        {
-            if ( m_node->parent == 0 ) return *this;
-            m_node = m_node->parent;
-        }
-
-        m_node = m_node->prev_sibling;
-
-        while ( m_node->last_child )
-        {
-            m_node = m_node->last_child;
-        }
-
-        return *this;
-    }
-
-
 };
 
 } // end of namespace kvs
