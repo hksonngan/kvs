@@ -20,10 +20,9 @@
 #include <iterator>
 #include <set>
 #include <queue>
-#include <kvs/ClassName>
 #include <kvs/Assert>
 #include <kvs/Message>
-#include <kvs/Compiler>
+#include <kvs/Deprecated>
 
 
 namespace kvs
@@ -593,8 +592,6 @@ public:
 template <typename T>
 class Tree
 {
-    kvsClassName( kvs::Tree );
-
 public:
 
     // Type definitions.
