@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file Tree.h
+ *  @file   Tree.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -50,6 +51,7 @@ struct TreeNode
     TreeNode( const T& x ) : data( x ) {}
 };
 
+// Forward declarations of iterators.
 template <typename T> class TreeIteratorBase;
 template <typename T> class TreePreOrderIterator;
 template <typename T> class TreePostOrderIterator;
@@ -59,7 +61,7 @@ template <typename T> class TreeLeafIterator;
 
 /*==========================================================================*/
 /**
- *  Base iterator class for the tree class.
+ *  @brief  Base class of the tree iterator.
  */
 /*==========================================================================*/
 template <typename T>
@@ -76,8 +78,8 @@ public:
 
     // Type definitions.
     typedef T value_type;
-    typedef T* pointer;
-    typedef T& reference;
+    typedef value_type* pointer;
+    typedef value_type& reference;
     typedef std::size_t size_type;
     typedef std::ptrdiff_t difference_type;
     typedef std::bidirectional_iterator_tag iterator_category;
@@ -189,7 +191,7 @@ public:
 
 /*==========================================================================*/
 /**
- *  Pre-order iterator.
+ *  @brief  Pre-order iterator.
  */
 /*==========================================================================*/
 template <typename T>
@@ -278,7 +280,7 @@ public:
 
 /*==========================================================================*/
 /**
- *  Post-order iterator.
+ *  @brief  Post-order iterator.
  */
 /*==========================================================================*/
 template <typename T>
@@ -365,7 +367,7 @@ public:
 
 /*==========================================================================*/
 /**
- *  Sibling iterator.
+ *  @brief  Sibling iterator.
  */
 /*==========================================================================*/
 template <typename T>
