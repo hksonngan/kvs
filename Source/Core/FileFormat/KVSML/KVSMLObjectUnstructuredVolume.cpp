@@ -509,6 +509,13 @@ bool KVSMLObjectUnstructuredVolume::read( const std::string& filename )
         return false;
     }
 
+    if ( m_cell_type == "point" )
+    {
+        // In case of point, <Cell> tag is not specified in the format.
+        BaseClass::setSuccess( true );
+        return true;
+    }
+
     // <Cell>
     kvs::kvsml::CellTag cell_tag;
     if ( !cell_tag.read( volume_tag.node() ) )
@@ -658,6 +665,14 @@ bool KVSMLObjectUnstructuredVolume::write( const std::string& filename )
                          coords.name().c_str(),
                          coord_tag.name().c_str() );
         return false;
+    }
+
+    if ( m_cell_type == "point" )
+    {
+        const bool success = document.write( filename );
+        BaseClass::setSuccess( success );
+
+        return success;
     }
 
     // <Cell ncells="xxx">
