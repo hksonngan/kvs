@@ -15,8 +15,7 @@
 #ifndef KVS__CUDA__DEVICE_H_INCUDE
 #define KVS__CUDA__DEVICE_H_INCUDE
 
-#include <kvs/Deprecated>
 #include "DriverAPI/Device.h"
-namespace kvs { namespace cuda { typename DriverAPI::Device Device; } }
+namespace kvs { namespace cuda { typedef DriverAPI::Device Device; } }
 
 #endif // KVS__CUDA__DEVICE_H_INCUDE

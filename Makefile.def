@@ -154,6 +154,7 @@ CUDA_INCLUDE_PATH += -I$(KVS_CUDA_DIR)/include
 ifeq "$(shell uname -m)" "x86_64"
 ifeq "$(shell uname -s)" "Darwin"
 CUDA_LIBRARY_PATH += -L$(KVS_CUDA_DIR)/lib
+CUDA_LINK_LIBRARY += -F/Library/Frameworks -framework CUDA
 else
 CUDA_LIBRARY_PATH += -L$(KVS_CUDA_DIR)/lib64
 endif

@@ -14,6 +14,7 @@
  */
 /*****************************************************************************/
 #include <iostream>
+#include <kvs/cuda/CUDA>
 #include <kvs/cuda/Device>
 
 
@@ -26,7 +27,11 @@
 /*===========================================================================*/
 int main( int argc, char** argv )
 {
-    kvs::cuda::Initialize( argc, argv );
+    if ( !kvs::cuda::Initialize( argc, argv ) )
+    {
+        kvsMessageError( "Cannot initialize CUDA." );
+        return 1;
+    }
 
     const size_t ngpus = kvs::cuda::Device::count();
     std::cout << "Num. of GPUs: " << ngpus << std::endl;

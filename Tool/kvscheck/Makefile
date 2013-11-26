@@ -60,7 +60,7 @@ LIBRARY_PATH += $(GL_LIBRARY_PATH)
 #  Link library.
 #=============================================================================
 ifeq "$(KVS_SUPPORT_CUDA)" "1"
-LINK_LIBRARY += $(CUDA_LINK_LIBRARY)
+LINK_LIBRARY += -lkvsSupportCUDA $(CUDA_LINK_LIBRARY)
 endif
 
 ifeq "$(KVS_SUPPORT_GLUT)" "1"
