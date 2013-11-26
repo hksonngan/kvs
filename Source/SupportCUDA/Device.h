@@ -18,7 +18,6 @@
 #include "CUDA.h"
 #include <string>
 #include <kvs/Vector3>
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -34,64 +33,40 @@ namespace cuda
 /*===========================================================================*/
 class Device
 {
-    kvsClassName_without_virtual( kvs::cuda::Device );
+private:
 
-protected:
-
-    CUdevice  m_handler;      ///< device handler
-    CUdevprop m_property;     ///< cuda device properties
-    size_t    m_free_memory;  ///< free amount of memory on the device
-    size_t    m_total_memory; ///< total amount of memory on the device
+    CUdevice m_handler; ///< device handler
+    CUdevprop m_property; ///< cuda device properties
+    size_t m_free_memory; ///< free amount of memory on the device
+    size_t m_total_memory; ///< total amount of memory on the device
 
 public:
 
-    Device( void );
-
+    Device();
     Device( const int ordinal );
+    ~Device();
 
-    ~Device( void );
+    void update();
+    bool create( const int ordinal );
 
-public:
+    CUdevice handler();
+    int majorRevision() const;
+    int minorRevision() const;
+    std::string name() const;
+    size_t totalMemory() const;
+    size_t freeMemory() const;
+    int maxThreadsPerBlock() const;
+    kvs::Vector3i maxThreadsDimension() const;
+    kvs::Vector3i maxGridSize() const;
+    int sharedMemoryPerBlock() const;
+    int totalConstantMemory() const;
+    int warpSize() const;
+    int memoryPitch() const;
+    int registersPerBlock() const;
+    int clockRate() const;
+    int textureAlignment() const;
 
-    void update( void );
-
-    const bool create( const int ordinal );
-
-public:
-
-    CUdevice handler( void );
-
-    const int majorRevision( void ) const;
-
-    const int minorRevision( void ) const;
-
-    const std::string name( void ) const;
-
-    const size_t totalMemory( void ) const;
-
-    const size_t freeMemory( void ) const;
-
-    const int maxThreadsPerBlock( void ) const;
-
-    const kvs::Vector3i maxThreadsDimension( void ) const;
-
-    const kvs::Vector3i maxGridSize( void ) const;
-
-    const int sharedMemoryPerBlock( void ) const;
-
-    const int totalConstantMemory( void ) const;
-
-    const int warpSize( void ) const;
-
-    const int memoryPitch( void ) const;
-
-    const int registersPerBlock( void ) const;
-
-    const int clockRate( void ) const;
-
-    const int textureAlignment( void ) const;
-
-    static const int count( void );
+    static int count();
 };
 
 } // end of namespace cuda

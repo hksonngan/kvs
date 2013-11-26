@@ -28,7 +28,7 @@ namespace cuda
  *  @brief  Constructs a new Context class.
  */
 /*===========================================================================*/
-Context::Context( void ):
+Context::Context():
     m_handler( 0 )
 {
 }
@@ -49,7 +49,7 @@ Context::Context( kvs::cuda::Device& device )
  *  @brief  Destructs the Context class.
  */
 /*===========================================================================*/
-Context::~Context( void )
+Context::~Context()
 {
     CUresult result = cuCtxDetach( m_handler );
     if ( result != CUDA_SUCCESS )
@@ -65,16 +65,16 @@ Context::~Context( void )
  *  @return true, if the context is created successfully
  */
 /*===========================================================================*/
-const bool Context::create( kvs::cuda::Device& device )
+bool Context::create( kvs::cuda::Device& device )
 {
     CUresult result = cuCtxCreate( &m_handler, 0, device.handler() );
     if ( result != CUDA_SUCCESS )
     {
         kvsMessageError( "CUDA; %s.", kvs::cuda::ErrorString( result ) );
-        return( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 } // end of namespace cuda

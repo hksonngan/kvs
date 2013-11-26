@@ -17,9 +17,7 @@
 
 #include <kvs/Message>
 #include <kvs/String>
-
 #include <cuda.h>
-
 #include "ErrorString.h"
 
 
@@ -37,16 +35,16 @@ namespace cuda
  *  @return true, if the initialization is done successfully
  */
 /*===========================================================================*/
-inline const bool Initialize( int argc, char** argv )
+inline bool Initialize( int argc, char** argv )
 {
     CUresult result = cuInit( 0 );
     if ( result != CUDA_SUCCESS )
     {
         kvsMessageError( "CUDA; %s.", kvs::cuda::ErrorString( result ) );
-        return( false );
+        return false;
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -55,10 +53,10 @@ inline const bool Initialize( int argc, char** argv )
  *  @return description
  */
 /*===========================================================================*/
-inline const std::string Description( void )
+inline std::string Description()
 {
     const std::string description( "CUDA - Compute Unified Device Architecture" );
-    return( description );
+    return description;
 }
 
 /*===========================================================================*/
@@ -67,7 +65,7 @@ inline const std::string Description( void )
  *  @return CUDA version
  */
 /*===========================================================================*/
-inline const std::string Version( void )
+inline std::string Version()
 {
     const int major_version = CUDA_VERSION / 1000;
     const int minor_version = ( CUDA_VERSION - major_version * 1000 ) / 10;
@@ -75,7 +73,7 @@ inline const std::string Version( void )
     const std::string version(
         kvs::String::ToString( major_version ) + "." +
         kvs::String::ToString( minor_version ) );
-    return( version );
+    return version;
 }
 
 } // end of namespace cuda

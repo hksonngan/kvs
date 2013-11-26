@@ -29,7 +29,7 @@ namespace cuda
  *  @brief  Constructs a new Device class.
  */
 /*===========================================================================*/
-Device::Device( void ):
+Device::Device():
     m_handler( 0 ),
     m_free_memory( 0 ),
     m_total_memory( 0 )
@@ -52,7 +52,7 @@ Device::Device( const int ordinal )
  *  @brief  Destructs the Device class.
  */
 /*===========================================================================*/
-Device::~Device( void )
+Device::~Device()
 {
 }
 
@@ -61,7 +61,7 @@ Device::~Device( void )
  *  @brief  Updates device information.
  */
 /*===========================================================================*/
-void Device::update( void )
+void Device::update()
 {
     kvs::cuda::Context context( *this );
 
@@ -97,7 +97,7 @@ void Device::update( void )
  *  @return true, if the device is created successfully
  */
 /*===========================================================================*/
-const bool Device::create( const int ordinal )
+bool Device::create( const int ordinal )
 {
     // Get a device handler.
     {
@@ -105,7 +105,7 @@ const bool Device::create( const int ordinal )
         if ( result != CUDA_SUCCESS )
         {
             kvsMessageError( "CUDA; %s.", kvs::cuda::ErrorString( result ) );
-            return( false );
+            return false;
         }
     }
 
@@ -115,11 +115,11 @@ const bool Device::create( const int ordinal )
         if ( result != CUDA_SUCCESS )
         {
             kvsMessageError( "CUDA; %s.", kvs::cuda::ErrorString( result ) );
-            return( false );
+            return false;
         }
     }
 
-    return( true );
+    return true;
 }
 
 /*===========================================================================*/
@@ -128,9 +128,9 @@ const bool Device::create( const int ordinal )
  *  @return device handler
  */
 /*===========================================================================*/
-CUdevice Device::handler( void )
+CUdevice Device::handler()
 {
-    return( m_handler );
+    return m_handler;
 }
 
 /*===========================================================================*/
@@ -139,7 +139,7 @@ CUdevice Device::handler( void )
  *  @return major revision number
  */
 /*===========================================================================*/
-const int Device::majorRevision( void ) const
+int Device::majorRevision() const
 {
     int major_revision = 0;
     int minor_revision = 0;
@@ -158,7 +158,7 @@ const int Device::majorRevision( void ) const
  *  @return minor revision number
  */
 /*===========================================================================*/
-const int Device::minorRevision( void ) const
+int Device::minorRevision() const
 {
     int major_revision = 0;
     int minor_revision = 0;
@@ -177,7 +177,7 @@ const int Device::minorRevision( void ) const
  *  @return device name
  */
 /*===========================================================================*/
-const std::string Device::name( void ) const
+std::string Device::name() const
 {
     const int length = 256;
     char name[ length ];
@@ -187,7 +187,7 @@ const std::string Device::name( void ) const
         kvsMessageError( "CUDA; %s.", kvs::cuda::ErrorString( result ) );
     }
 
-    return( name );
+    return name;
 }
 
 /*===========================================================================*/
@@ -196,9 +196,9 @@ const std::string Device::name( void ) const
  *  @return total memory size in byte
  */
 /*===========================================================================*/
-const size_t Device::totalMemory( void ) const
+size_t Device::totalMemory() const
 {
-    return( m_total_memory );
+    return m_total_memory;
 }
 
 /*===========================================================================*/
@@ -207,9 +207,9 @@ const size_t Device::totalMemory( void ) const
  *  @return free memory size in byte
  */
 /*===========================================================================*/
-const size_t Device::freeMemory( void ) const
+size_t Device::freeMemory() const
 {
-    return( m_free_memory );
+    return m_free_memory;
 }
 
 /*===========================================================================*/
@@ -218,9 +218,9 @@ const size_t Device::freeMemory( void ) const
  *  @return max. number of threads per block.
  */
 /*===========================================================================*/
-const int Device::maxThreadsPerBlock( void ) const
+int Device::maxThreadsPerBlock() const
 {
-    return( m_property.maxThreadsPerBlock );
+    return m_property.maxThreadsPerBlock;
 }
 
 /*===========================================================================*/
@@ -229,9 +229,9 @@ const int Device::maxThreadsPerBlock( void ) const
  *  @return max. size of each dimension of a block.
  */
 /*===========================================================================*/
-const kvs::Vector3i Device::maxThreadsDimension( void ) const
+kvs::Vector3i Device::maxThreadsDimension() const
 {
-    return( kvs::Vector3i( m_property.maxThreadsDim ) );
+    return kvs::Vector3i( m_property.maxThreadsDim );
 }
 
 /*===========================================================================*/
@@ -240,9 +240,9 @@ const kvs::Vector3i Device::maxThreadsDimension( void ) const
  *  @return max. size of each dimension of a block.
  */
 /*===========================================================================*/
-const kvs::Vector3i Device::maxGridSize( void ) const
+kvs::Vector3i Device::maxGridSize() const
 {
-    return( kvs::Vector3i( m_property.maxGridSize ) );
+    return kvs::Vector3i( m_property.maxGridSize );
 }
 
 /*===========================================================================*/
@@ -251,9 +251,9 @@ const kvs::Vector3i Device::maxGridSize( void ) const
  *  @return shared memory available per block
  */
 /*===========================================================================*/
-const int Device::sharedMemoryPerBlock( void ) const
+int Device::sharedMemoryPerBlock() const
 {
-    return( m_property.sharedMemPerBlock );
+    return m_property.sharedMemPerBlock;
 }
 
 /*===========================================================================*/
@@ -262,9 +262,9 @@ const int Device::sharedMemoryPerBlock( void ) const
  *  @return constant memory available on device
  */
 /*===========================================================================*/
-const int Device::totalConstantMemory( void ) const
+int Device::totalConstantMemory() const
 {
-    return( m_property.totalConstantMemory );
+    return m_property.totalConstantMemory;
 }
 
 /*===========================================================================*/
@@ -273,9 +273,9 @@ const int Device::totalConstantMemory( void ) const
  *  @return warp size in threads
  */
 /*===========================================================================*/
-const int Device::warpSize( void ) const
+int Device::warpSize() const
 {
-    return( m_property.SIMDWidth );
+    return m_property.SIMDWidth;
 }
 
 /*===========================================================================*/
@@ -284,9 +284,9 @@ const int Device::warpSize( void ) const
  *  @return max. pitch
  */
 /*===========================================================================*/
-const int Device::memoryPitch( void ) const
+int Device::memoryPitch() const
 {
-    return( m_property.memPitch );
+    return m_property.memPitch;
 }
 
 /*===========================================================================*/
@@ -295,9 +295,9 @@ const int Device::memoryPitch( void ) const
  *  @return number of registers available per block
  */
 /*===========================================================================*/
-const int Device::registersPerBlock( void ) const
+int Device::registersPerBlock() const
 {
-    return( m_property.regsPerBlock );
+    return m_property.regsPerBlock;
 }
 
 /*===========================================================================*/
@@ -306,9 +306,9 @@ const int Device::registersPerBlock( void ) const
  *  @return clock frequency
  */
 /*===========================================================================*/
-const int Device::clockRate( void ) const
+int Device::clockRate() const
 {
-    return( m_property.clockRate );
+    return m_property.clockRate;
 }
 
 /*===========================================================================*/
@@ -317,9 +317,9 @@ const int Device::clockRate( void ) const
  *  @return alignment requirement for textures
  */
 /*===========================================================================*/
-const int Device::textureAlignment( void ) const
+int Device::textureAlignment() const
 {
-    return( m_property.textureAlign );
+    return m_property.textureAlign;
 }
 
 /*===========================================================================*/
@@ -328,7 +328,7 @@ const int Device::textureAlignment( void ) const
  *  @return number of compute-capable devices
  */
 /*===========================================================================*/
-const int Device::count( void )
+int Device::count()
 {
     int count = 0;
     CUresult result = cuDeviceGetCount( &count );
@@ -337,7 +337,7 @@ const int Device::count( void )
         kvsMessageError( "CUDA; %s.", kvs::cuda::ErrorString( result ) );
     }
 
-    return( count );
+    return count;
 }
 
 } // end of namespace cuda
