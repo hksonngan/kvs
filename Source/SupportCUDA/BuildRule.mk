@@ -3,16 +3,18 @@
 
 
 OBJECTS := \
-$(OUTDIR)/./Context.o \
-$(OUTDIR)/./Device.o \
+$(OUTDIR)/./DriverAPI/Context.o \
+$(OUTDIR)/./DriverAPI/Device.o \
 
 
 
-$(OUTDIR)/./%.o: ./%.cpp ./%.h
-	$(MKDIR) $(OUTDIR)/.
+$(OUTDIR)/./DriverAPI/%.o: ./DriverAPI/%.cpp ./DriverAPI/%.h
+	$(MKDIR) $(OUTDIR)/./DriverAPI
 	$(CPP) -c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) -o $@ $<
 
 
 install::
 	$(MKDIR) $(INSTALL_DIR)/include/SupportCUDA/.
 	$(INSTALL) ./*.h $(INSTALL_DIR)/include/SupportCUDA/.
+	$(MKDIR) $(INSTALL_DIR)/include/SupportCUDA/./DriverAPI
+	$(INSTALL) ./DriverAPI/*.h $(INSTALL_DIR)/include/SupportCUDA/./DriverAPI

@@ -3,14 +3,14 @@
 
 
 OBJECTS = \
-$(OUTDIR)\.\Context.obj \
-$(OUTDIR)\.\Device.obj \
+$(OUTDIR)\.\DriverAPI\Context.obj \
+$(OUTDIR)\.\DriverAPI\Device.obj \
 
 
 
-{.\}.cpp{$(OUTDIR)\.\}.obj::
-	IF NOT EXIST $(OUTDIR)\. $(MKDIR) $(OUTDIR)\.
-	$(CPP) /c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) /Fo$(OUTDIR)\.\ @<<
+{.\DriverAPI\}.cpp{$(OUTDIR)\.\DriverAPI\}.obj::
+	IF NOT EXIST $(OUTDIR)\.\DriverAPI $(MKDIR) $(OUTDIR)\.\DriverAPI
+	$(CPP) /c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) /Fo$(OUTDIR)\.\DriverAPI\ @<<
 $<
 <<
 
@@ -18,3 +18,5 @@ $<
 install::
 	IF NOT EXIST $(INSTALL_DIR)\include\SupportCUDA\. $(MKDIR) $(INSTALL_DIR)\include\SupportCUDA\.
 	$(INSTALL) .\*.h $(INSTALL_DIR)\include\SupportCUDA\.
+	IF NOT EXIST $(INSTALL_DIR)\include\SupportCUDA\.\DriverAPI $(MKDIR) $(INSTALL_DIR)\include\SupportCUDA\.\DriverAPI
+	$(INSTALL) .\DriverAPI\*.h $(INSTALL_DIR)\include\SupportCUDA\.\DriverAPI

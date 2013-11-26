@@ -17,8 +17,9 @@
 
 #include <kvs/Message>
 #include <kvs/String>
+#include <kvs/Deprecated>
 #include <cuda.h>
-#include "ErrorString.h"
+#include "DriverAPI/Initialize.h"
 
 
 namespace kvs
@@ -27,25 +28,7 @@ namespace kvs
 namespace cuda
 {
 
-/*===========================================================================*/
-/**
- *  @brief  Initializes CUDA.
- *  @param  argc [in] argument count
- *  @param  argv [in] argument values
- *  @return true, if the initialization is done successfully
- */
-/*===========================================================================*/
-inline bool Initialize( int argc, char** argv )
-{
-    CUresult result = cuInit( 0 );
-    if ( result != CUDA_SUCCESS )
-    {
-        kvsMessageError( "CUDA; %s.", kvs::cuda::ErrorString( result ) );
-        return false;
-    }
-
-    return true;
-}
+KVS_DEPRECATED( inline bool Initialize( int argc, char** argv ) { return DriverAPI::Initialize( argc, argv ); } );
 
 /*===========================================================================*/
 /**
