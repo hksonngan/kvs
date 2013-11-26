@@ -118,7 +118,10 @@ print( "" )
 for dirname in object_dir_list:
     print( "" )
     print( "$(OUTDIR)/%s/%%.o: %s/%%.cpp %s/%%.h" % ( dirname, dirname, dirname ) )
-    print( "\t$(MKDIR) $(OUTDIR)/%s" % dirname )
+    if dirname == ".":
+        print( "\t$(MKDIR) $(OUTDIR)" )
+    else:
+        print( "\t$(MKDIR) $(OUTDIR)/%s" % dirname )
     print( "\t$(CPP) -c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) -o $@ $<" )
 
 print( "" )
