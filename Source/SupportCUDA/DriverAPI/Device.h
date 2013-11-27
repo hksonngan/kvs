@@ -32,15 +32,20 @@ namespace DriverAPI
 
 /*===========================================================================*/
 /**
- *  @brief  Device class.
+ *  @brief  Device class (driver API).
  */
 /*===========================================================================*/
 class Device
 {
+public:
+
+    typedef CUdevice Handler;
+    typedef CUdevprop Property;
+
 private:
 
-    CUdevice m_handler; ///< device handler
-    CUdevprop m_property; ///< cuda device properties
+    Handler m_handler; ///< device handler
+    Property m_property; ///< cuda device properties
     size_t m_free_memory; ///< free amount of memory on the device
     size_t m_total_memory; ///< total amount of memory on the device
 
@@ -54,10 +59,10 @@ public:
     Device( const int ordinal );
     ~Device();
 
-    void update();
     bool create( const int ordinal );
+    void update();
 
-    CUdevice handler();
+    Handler handler();
     int majorRevision() const;
     int minorRevision() const;
     std::string name() const;

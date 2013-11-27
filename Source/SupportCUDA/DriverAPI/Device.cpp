@@ -79,6 +79,38 @@ Device::~Device()
 
 /*===========================================================================*/
 /**
+ *  @brief  Creates a compute-capable device.
+ *  @param  ordinal [in] ordinal (ID of the compute-capable device)
+ *  @return true, if the device is created successfully
+ */
+/*===========================================================================*/
+bool Device::create( const int ordinal )
+{
+    // Get a device handler.
+    {
+        CUresult result = cuDeviceGet( &m_handler, ordinal );
+        if ( result != CUDA_SUCCESS )
+        {
+            kvsMessageError( "CUDA; %s.", kvs::cuda::DriverAPI::ErrorString( result ) );
+            return false;
+        }
+    }
+
+    // Get device properties.
+    {
+        CUresult result = cuDeviceGetProperties( &m_property, m_handler );
+        if ( result != CUDA_SUCCESS )
+        {
+            kvsMessageError( "CUDA; %s.", kvs::cuda::DriverAPI::ErrorString( result ) );
+            return false;
+        }
+    }
+
+    return true;
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Updates device information.
  */
 /*===========================================================================*/
@@ -113,43 +145,11 @@ void Device::update()
 
 /*===========================================================================*/
 /**
- *  @brief  Creates a compute-capable device.
- *  @param  ordinal [in] ordinal (ID of the compute-capable device)
- *  @return true, if the device is created successfully
- */
-/*===========================================================================*/
-bool Device::create( const int ordinal )
-{
-    // Get a device handler.
-    {
-        CUresult result = cuDeviceGet( &m_handler, ordinal );
-        if ( result != CUDA_SUCCESS )
-        {
-            kvsMessageError( "CUDA; %s.", kvs::cuda::DriverAPI::ErrorString( result ) );
-            return false;
-        }
-    }
-
-    // Get device properties.
-    {
-        CUresult result = cuDeviceGetProperties( &m_property, m_handler );
-        if ( result != CUDA_SUCCESS )
-        {
-            kvsMessageError( "CUDA; %s.", kvs::cuda::DriverAPI::ErrorString( result ) );
-            return false;
-        }
-    }
-
-    return true;
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Returns the device handler.
  *  @return device handler
  */
 /*===========================================================================*/
-CUdevice Device::handler()
+Device::Handler Device::handler()
 {
     return m_handler;
 }
@@ -170,7 +170,7 @@ int Device::majorRevision() const
         kvsMessageError( "CUDA; %s.", kvs::cuda::DriverAPI::ErrorString( result ) );
     }
 
-    return( major_revision );
+    return major_revision;
 }
 
 /*===========================================================================*/
@@ -189,7 +189,7 @@ int Device::minorRevision() const
         kvsMessageError( "CUDA; %s.", kvs::cuda::DriverAPI::ErrorString( result ) );
     }
 
-    return( minor_revision );
+    return minor_revision;
 }
 
 /*===========================================================================*/
