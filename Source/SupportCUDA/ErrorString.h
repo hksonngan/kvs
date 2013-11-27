@@ -17,6 +17,7 @@
 
 #include <kvs/Deprecated>
 #include "DriverAPI/ErrorString.h"
+#include "RuntimeAPI/ErrorString.h"
 
 
 namespace kvs

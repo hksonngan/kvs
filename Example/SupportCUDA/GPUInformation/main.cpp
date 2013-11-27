@@ -33,7 +33,7 @@ int main( int argc, char** argv )
         return 1;
     }
 
-    const size_t ngpus = kvs::cuda::Device::count();
+    const size_t ngpus = kvs::cuda::Device::Count();
     std::cout << "Num. of GPUs: " << ngpus << std::endl;
 
     for ( size_t i = 0; i < ngpus; i++ )
