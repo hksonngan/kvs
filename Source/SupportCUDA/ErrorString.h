@@ -25,7 +25,7 @@ namespace kvs
 namespace cuda
 {
 
-KVS_DEPRECATED( inline const char* ErrorString( const CUresult error ) { return DriverAPI::ErrorString( error ); } );
+KVS_DEPRECATED( inline const char* ErrorString( const CUresult error ) ) { return DriverAPI::ErrorString( error ); }
 
 } // end of namespace cuda
 

@@ -29,6 +29,24 @@ namespace DriverAPI
 
 /*===========================================================================*/
 /**
+ *  @brief  Returns a number of compute-capable devices.
+ *  @return number of compute-capable devices
+ */
+/*===========================================================================*/
+int Device::Count()
+{
+    int count = 0;
+    CUresult result = cuDeviceGetCount( &count );
+    if ( result != CUDA_SUCCESS )
+    {
+        kvsMessageError( "CUDA; %s.", kvs::cuda::DriverAPI::ErrorString( result ) );
+    }
+
+    return count;
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Constructs a new Device class.
  */
 /*===========================================================================*/
@@ -323,24 +341,6 @@ int Device::clockRate() const
 int Device::textureAlignment() const
 {
     return m_property.textureAlign;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a number of compute-capable devices.
- *  @return number of compute-capable devices
- */
-/*===========================================================================*/
-int Device::count()
-{
-    int count = 0;
-    CUresult result = cuDeviceGetCount( &count );
-    if ( result != CUDA_SUCCESS )
-    {
-        kvsMessageError( "CUDA; %s.", kvs::cuda::DriverAPI::ErrorString( result ) );
-    }
-
-    return count;
 }
 
 } // end of namespace DriverAPI

@@ -18,6 +18,7 @@
 #include <cuda.h>
 #include <string>
 #include <kvs/Vector3>
+#include <kvs/Deprecated>
 
 
 namespace kvs
@@ -45,6 +46,10 @@ private:
 
 public:
 
+    static int Count();
+
+public:
+
     Device();
     Device( const int ordinal );
     ~Device();
@@ -69,7 +74,8 @@ public:
     int clockRate() const;
     int textureAlignment() const;
 
-    static int count();
+public:
+    KVS_DEPRECATED( static int count() ) { return Count(); }
 };
 
 } // end of namespace cuda
