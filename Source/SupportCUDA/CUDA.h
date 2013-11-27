@@ -28,7 +28,8 @@ namespace kvs
 namespace cuda
 {
 
-KVS_DEPRECATED( inline bool Initialize( int argc, char** argv ) ) { return DriverAPI::Initialize( argc, argv ); }
+// KVS_DEPRECATED
+inline bool Initialize( int argc, char** argv ) { return DriverAPI::Initialize( argc, argv ); }
 
 /*===========================================================================*/
 /**
