@@ -18,6 +18,6 @@
 #include "DriverAPI/Device.h"
 #include "RuntimeAPI/Device.h"
 
-namespace kvs { namespace cuda { typedef DriverAPI::Device Device; } }
+namespace kvs { namespace cuda { typedef RuntimeAPI::Device Device; } }
 
 #endif // KVS__CUDA__DEVICE_H_INCUDE

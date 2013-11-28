@@ -17,6 +17,9 @@
 #include <kvs/cuda/CUDA>
 #include <kvs/cuda/Device>
 
+// If "USE_DRIVER_API" is set to '0', the GPU information will be shown with
+// the runtime APIs, otherwise the runtime APIs will be used for it.
+#define USE_DRIVER_API 0
 
 /*===========================================================================*/
 /**
@@ -27,18 +30,34 @@
 /*===========================================================================*/
 int main( int argc, char** argv )
 {
-    if ( !kvs::cuda::Initialize( argc, argv ) )
+#if USE_DRIVER_API
+    std::cout << "GPUInformation with CUDA driver APIs." << std::endl;
+
+    if ( !kvs::cuda::DriverAPI::Initialize( argc, argv ) )
     {
         kvsMessageError( "Cannot initialize CUDA." );
         return 1;
     }
+#else // USE_RUNTIME_API
+    std::cout << "GPUInformation with CUDA runtime APIs." << std::endl;
+#endif
 
-    const size_t ngpus = kvs::cuda::Device::Count();
+#if USE_DRIVER_API
+    const size_t ngpus = kvs::cuda::DriverAPI::Device::Count();
     std::cout << "Num. of GPUs: " << ngpus << std::endl;
+#else // USE_RUNTIME_API
+    const size_t ngpus = kvs::cuda::RuntimeAPI::Device::Count();
+    std::cout << "Num. of GPUs: " << ngpus << std::endl;
+#endif
 
     for ( size_t i = 0; i < ngpus; i++ )
     {
-        kvs::cuda::Device device( i );
+#if USE_DRIVER_API
+        kvs::cuda::DriverAPI::Device device( i );
+#else // USE_RUNTIME_API
+        kvs::cuda::RuntimeAPI::Device device( i );
+#endif
+
         std::cout << "ID: " << i << std::endl;
         std::cout << "Name: " << device.name() << std::endl;
         std::cout << "Compute capability: " << device.majorRevision() << "." << device.minorRevision() << std::endl;
