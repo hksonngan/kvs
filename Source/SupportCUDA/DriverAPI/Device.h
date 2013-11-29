@@ -12,10 +12,8 @@
  *  $Id: Device.h 1652 2013-11-26 04:44:15Z naohisa.sakamoto@gmail.com $
  */
 /*****************************************************************************/
-#ifndef KVS__CUDA__DRIVERAPI__DEVICE_H_INCUDE
-#define KVS__CUDA__DRIVERAPI__DEVICE_H_INCUDE
-
-#include <cuda.h>
+#pragma once
+#include "../CUDA.h"
 #include <string>
 #include <kvs/Vector3>
 #include <kvs/Deprecated>
@@ -88,5 +86,3 @@ public:
 } // end of namespace cuda
 
 } // end of namespace kvs
-
-#endif // KVS__CUDA__DRIVERAPI__DEVICE_H_INCUDE

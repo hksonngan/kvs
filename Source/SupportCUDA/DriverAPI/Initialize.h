@@ -12,13 +12,7 @@
  *  $Id$
  */
 /*****************************************************************************/
-#ifndef KVS__CUDA__DRIVERAPI__INITIALIZE_H_INCLUDE
-#define KVS__CUDA__DRIVERAPI__INITIALIZE_H_INCLUDE
-
-#include <kvs/Message>
-#include <cuda.h>
-#include "ErrorString.h"
-
+#pragma once
 
 namespace kvs
 {
@@ -29,30 +23,10 @@ namespace cuda
 namespace DriverAPI
 {
 
-/*===========================================================================*/
-/**
- *  @brief  Initializes CUDA.
- *  @param  argc [in] argument count
- *  @param  argv [in] argument values
- *  @return true, if the initialization is done successfully
- */
-/*===========================================================================*/
-inline bool Initialize( int argc, char** argv )
-{
-    CUresult result = cuInit( 0 );
-    if ( result != CUDA_SUCCESS )
-    {
-        kvsMessageError( "CUDA; %s.", kvs::cuda::DriverAPI::ErrorString( result ) );
-        return false;
-    }
-
-    return true;
-}
+bool Initialize( int argc, char** argv );
 
 } // end of namespace DriverAPI
 
 } // end of namespace cuda
 
 } // end of namespace kvs
-
-#endif // KVS__CUDA__DRIVERAPI__INITIALIZE_H_INCLUDE

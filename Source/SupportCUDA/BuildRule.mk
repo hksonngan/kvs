@@ -5,7 +5,10 @@
 OBJECTS := \
 $(OUTDIR)/./DriverAPI/Context.o \
 $(OUTDIR)/./DriverAPI/Device.o \
+$(OUTDIR)/./DriverAPI/ErrorString.o \
+$(OUTDIR)/./DriverAPI/Initialize.o \
 $(OUTDIR)/./RuntimeAPI/Device.o \
+$(OUTDIR)/./RuntimeAPI/ErrorString.o \
 
 
 

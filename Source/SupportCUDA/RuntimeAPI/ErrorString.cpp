@@ -1,6 +1,6 @@
 /*****************************************************************************/
 /**
- *  @file   CUDA.h
+ *  @file   ErrorString.h
  *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
@@ -12,11 +12,7 @@
  *  $Id$
  */
 /*****************************************************************************/
-#pragma once
-#include <cuda.h>
-#include <cuda_runtime.h>
-#include <kvs/Message>
-#include <kvs/String>
+#include "ErrorString.h"
 
 
 namespace kvs
@@ -25,34 +21,44 @@ namespace kvs
 namespace cuda
 {
 
+namespace RuntimeAPI
+{
+
 /*===========================================================================*/
 /**
- *  @brief  Returns CUDA description.
- *  @return description
+ *  @brief  Returns the error message from an error code.
+ *  @param  error [in] CUDA error code
+ *  @return error message
  */
 /*===========================================================================*/
-inline std::string Description()
+const char* ErrorString( const cudaError_t error )
 {
-    const std::string description( "CUDA - Compute Unified Device Architecture" );
-    return description;
+    return cudaGetErrorString( error );
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Returns CUDA version.
- *  @return CUDA version
+ *  @brief  Returns the last error code from a runtime call.
+ *  @return error code
  */
 /*===========================================================================*/
-inline std::string Version()
+cudaError_t LastError()
 {
-    const int major_version = CUDA_VERSION / 1000;
-    const int minor_version = ( CUDA_VERSION - major_version * 1000 ) / 10;
-
-    const std::string version(
-        kvs::String::ToString( major_version ) + "." +
-        kvs::String::ToString( minor_version ) );
-    return version;
+    return cudaGetLastError();
 }
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the last error code from a runtime call.
+ *  @return error code
+ */
+/*===========================================================================*/
+cudaError_t peekAtLastError()
+{
+    return cudaPeekAtLastError();
+}
+
+} // end of namespace DriverAPI
 
 } // end of namespace cuda
 

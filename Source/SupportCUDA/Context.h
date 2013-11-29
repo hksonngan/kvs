@@ -12,10 +12,7 @@
  *  $Id$
  */
 /*****************************************************************************/
-#ifndef KVS__CUDA__CONTEXT_H_INCLUDE
-#define KVS__CUDA__CONTEXT_H_INCLUDE
-
+#pragma once
 #include "DriverAPI/Context.h"
-namespace kvs { namespace cuda { typedef kvs::cuda::DriverAPI::Context Context; } }
 
-#endif // KVS__CUDA__CONTEXT_H_INCLUDE
+namespace kvs { namespace cuda { typedef kvs::cuda::DriverAPI::Context Context; } }

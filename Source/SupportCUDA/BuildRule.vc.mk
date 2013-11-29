@@ -5,7 +5,10 @@
 OBJECTS = \
 $(OUTDIR)\.\DriverAPI\Context.obj \
 $(OUTDIR)\.\DriverAPI\Device.obj \
+$(OUTDIR)\.\DriverAPI\ErrorString.obj \
+$(OUTDIR)\.\DriverAPI\Initialize.obj \
 $(OUTDIR)\.\RuntimeAPI\Device.obj \
+$(OUTDIR)\.\RuntimeAPI\ErrorString.obj \
 
 
 

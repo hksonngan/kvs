@@ -12,11 +12,8 @@
  *  $Id$
  */
 /*****************************************************************************/
-#ifndef KVS__CUDA__RUNTIMEAPI__DEVICE_H_INCUDE
-#define KVS__CUDA__RUNTIMEAPI__DEVICE_H_INCUDE
-
-#include <cuda.h>
-#include <cuda_runtime.h>
+#pragma once
+#include "../CUDA.h"
 #include <string>
 #include <kvs/Vector3>
 
@@ -85,5 +82,3 @@ public:
 } // end of namespace cuda
 
 } // end of namespace kvs
-
-#endif // KVS__CUDA__RUNTIMEAPI__DEVICE_H_INCUDE

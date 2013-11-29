@@ -1,6 +1,6 @@
 /*****************************************************************************/
 /**
- *  @file   Context.h
+ *  @file   Initialize.h
  *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
@@ -9,12 +9,13 @@
  *  All rights reserved.
  *  See http://www.viz.media.kyoto-u.ac.jp/kvs/copyright/ for details.
  *
- *  $Id: Context.h 1652 2013-11-26 04:44:15Z naohisa.sakamoto@gmail.com $
+ *  $Id$
  */
 /*****************************************************************************/
-#pragma once
-#include "../CUDA.h"
-#include "Device.h"
+#include "Initialize.h"
+#include "ErrorString.h"
+#include "CUDA.h"
+#include <kvs/Message>
 
 
 namespace kvs
@@ -28,23 +29,23 @@ namespace DriverAPI
 
 /*===========================================================================*/
 /**
- *  @brief  Context class.
+ *  @brief  Initializes CUDA.
+ *  @param  argc [in] argument count
+ *  @param  argv [in] argument values
+ *  @return true, if the initialization is done successfully
  */
 /*===========================================================================*/
-class Context
+bool Initialize( int argc, char** argv )
 {
-private:
+    CUresult result = cuInit( 0 );
+    if ( result != CUDA_SUCCESS )
+    {
+        kvsMessageError( "CUDA; %s.", kvs::cuda::DriverAPI::ErrorString( result ) );
+        return false;
+    }
 
-    CUcontext m_handler; ///< context handler
-
-public:
-
-    Context();
-    Context( kvs::cuda::DriverAPI::Device& device );
-    ~Context();
-
-    bool create( kvs::cuda::DriverAPI::Device& device );
-};
+    return true;
+}
 
 } // end of namespace DriverAPI
 

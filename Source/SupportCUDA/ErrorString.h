@@ -12,9 +12,7 @@
  *  $Id$
  */
 /*****************************************************************************/
-#ifndef KVS__ERROR_STRING_H_INCLUDE
-#define KVS__ERROR_STRING_H_INCLUDE
-
+#pragma once
 #include <kvs/Deprecated>
 #include "DriverAPI/ErrorString.h"
 #include "RuntimeAPI/ErrorString.h"
@@ -32,5 +30,3 @@ inline const char* ErrorString( const CUresult error ) { return kvs::cuda::Runti
 } // end of namespace cuda
 
 } // end of namespace kvs
-
-#endif // KVS__ERROR_STRING_H_INCLUDE
