@@ -83,10 +83,10 @@ public:
     KVS_DEPRECATED( static int count() ) { return Count(); }
 };
 
+} // end of namespace DriverAPI
+
 } // end of namespace cuda
 
 } // end of namespace kvs
-
-} // end of namespace DriverAPI
 
 #endif // KVS__CUDA__DRIVERAPI__DEVICE_H_INCUDE

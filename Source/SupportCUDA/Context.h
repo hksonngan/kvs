@@ -16,6 +16,6 @@
 #define KVS__CUDA__CONTEXT_H_INCLUDE
 
 #include "DriverAPI/Context.h"
-namespace kvs { namespace cuda { typedef DriverAPI::Context Context; } }
+namespace kvs { namespace cuda { typedef kvs::cuda::DriverAPI::Context Context; } }
 
 #endif // KVS__CUDA__CONTEXT_H_INCLUDE
