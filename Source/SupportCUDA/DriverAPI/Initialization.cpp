@@ -13,8 +13,7 @@
  */
 /*****************************************************************************/
 #include "Initialization.h"
-#include "ErrorString.h"
-#include "CUDA.h"
+#include "DriverAPI.h"
 #include <kvs/Message>
 
 
@@ -37,12 +36,8 @@ namespace DriverAPI
 /*===========================================================================*/
 bool Initialization( int argc, char** argv )
 {
-    CUresult result = cuInit( 0 );
-    if ( result != CUDA_SUCCESS )
-    {
-        kvsMessageError( "CUDA; %s.", kvs::cuda::DriverAPI::ErrorString( result ) );
-        return false;
-    }
+    KVS_CU_CALL( cuInit( 0 ) );
+    if ( kvs::cuda::DriverAPI::HasError() ) return false;
 
     return true;
 }

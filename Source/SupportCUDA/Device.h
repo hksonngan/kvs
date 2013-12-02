@@ -13,7 +13,6 @@
  */
 /*****************************************************************************/
 #pragma once
-#include "DriverAPI/Device.h"
 #include "RuntimeAPI/Device.h"
 
 namespace kvs { namespace cuda { typedef kvs::cuda::RuntimeAPI::Device Device; } }

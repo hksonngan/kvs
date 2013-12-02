@@ -83,25 +83,11 @@ Device::~Device()
 /*===========================================================================*/
 bool Device::create( const int ordinal )
 {
-    // Get a device handler.
-    {
-        CUresult result = cuDeviceGet( &m_handler, ordinal );
-        if ( result != CUDA_SUCCESS )
-        {
-            kvsMessageError( "CUDA; %s.", kvs::cuda::DriverAPI::ErrorString( result ) );
-            return false;
-        }
-    }
+    KVS_CU_CALL( cuDeviceGet( &m_handler, ordinal ) );
+    if ( kvs::cuda::DriverAPI::HasError() ) return false;
 
-    // Get device properties.
-    {
-        CUresult result = cuDeviceGetProperties( &m_property, m_handler );
-        if ( result != CUDA_SUCCESS )
-        {
-            kvsMessageError( "CUDA; %s.", kvs::cuda::DriverAPI::ErrorString( result ) );
-            return false;
-        }
-    }
+    KVS_CU_CALL( cuDeviceGetProperties( &m_property, m_handler ) );
+    if ( kvs::cuda::DriverAPI::HasError() ) return false;
 
     return true;
 }

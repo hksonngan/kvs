@@ -67,12 +67,8 @@ Context::~Context()
 /*===========================================================================*/
 bool Context::create( kvs::cuda::DriverAPI::Device& device )
 {
-    CUresult result = cuCtxCreate( &m_handler, 0, device.handler() );
-    if ( result != CUDA_SUCCESS )
-    {
-        kvsMessageError( "CUDA; %s.", kvs::cuda::DriverAPI::ErrorString( result ) );
-        return false;
-    }
+    KVS_CU_CALL( cuCtxCreate( &m_handler, 0, device.handler() ) );
+    if ( kvs::cuda::DriverAPI::HasError() ) return false;
 
     return true;
 }

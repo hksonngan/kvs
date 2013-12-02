@@ -85,10 +85,10 @@ bool Device::create( const int ordinal )
     m_handler = ordinal;
 
     KVS_CUDA_CALL( cudaSetDevice( m_handler ) );
-    if ( kvs::cuda::RuntimeAPI::PeekAtLastError() != cudaSuccess ) return false;
+    if ( kvs::cuda::RuntimeAPI::HasError() ) return false;
 
     KVS_CUDA_CALL( cudaGetDeviceProperties( &m_property, m_handler ) );
-    if ( kvs::cuda::RuntimeAPI::PeekAtLastError() != cudaSuccess ) return false;
+    if ( kvs::cuda::RuntimeAPI::HasError() ) return false;
 
     return true;
 }

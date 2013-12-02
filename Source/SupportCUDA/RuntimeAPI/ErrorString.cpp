@@ -58,6 +58,11 @@ cudaError_t PeekAtLastError()
     return cudaPeekAtLastError();
 }
 
+bool HasError()
+{
+    return PeekAtLastError() != cudaSuccess;
+}
+
 } // end of namespace DriverAPI
 
 } // end of namespace cuda

@@ -28,6 +28,7 @@ namespace DriverAPI
 const char* ErrorString( const CUresult error );
 CUresult LastError();
 CUresult PeekAtLastError();
+bool HasError();
 
 } // end of namespace DriverAPI
 

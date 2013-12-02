@@ -16,6 +16,8 @@
 #include "../CUDA.h"
 #include <kvs/Macro>
 #include <kvs/Breakpoint>
+#include "Device.h"
+#include "ErrorString.h"
 
 
 namespace kvs
