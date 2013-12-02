@@ -13,6 +13,7 @@
  */
 /*****************************************************************************/
 #include "ErrorString.h"
+#include "DriverAPI.h"
 
 
 namespace kvs
@@ -66,6 +67,16 @@ const char* ErrorString( const CUresult error )
     case CUDA_ERROR_UNKNOWN:           return "Unknown";
     default: return "Invalid error code";
     }
+}
+
+CUresult LastError()
+{
+    return internal::GetLastError();
+}
+
+CUresult PeekAtLastError()
+{
+    return internal::PeekAtLastError();
 }
 
 } // end of namespace DriverAPI

@@ -14,6 +14,7 @@
 /*****************************************************************************/
 #include "Context.h"
 #include "ErrorString.h"
+#include "DriverAPI.h"
 #include <kvs/Message>
 
 
@@ -54,11 +55,7 @@ Context::Context( kvs::cuda::DriverAPI::Device& device )
 /*===========================================================================*/
 Context::~Context()
 {
-    CUresult result = cuCtxDetach( m_handler );
-    if ( result != CUDA_SUCCESS )
-    {
-        kvsMessageError( "CUDA; %s.", kvs::cuda::DriverAPI::ErrorString( result ) );
-    }
+    KVS_CU_CALL( cuCtxDetach( m_handler ) );
 }
 
 /*===========================================================================*/

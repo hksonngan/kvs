@@ -15,6 +15,7 @@
 #include "Device.h"
 #include "ErrorString.h"
 #include "Context.h"
+#include "DriverAPI.h"
 #include <kvs/Message>
 
 
@@ -36,11 +37,7 @@ namespace DriverAPI
 int Device::Count()
 {
     int count = 0;
-    CUresult result = cuDeviceGetCount( &count );
-    if ( result != CUDA_SUCCESS )
-    {
-        kvsMessageError( "CUDA; %s.", kvs::cuda::DriverAPI::ErrorString( result ) );
-    }
+    KVS_CU_CALL( cuDeviceGetCount( &count ) );
 
     return count;
 }
@@ -124,7 +121,7 @@ void Device::update()
      * 'cuMemGetInfo_v2' is defined as follows:
      * CUresult cuMemGetInfo_v2( size_t * free, size_t * total )
      */
-    CUresult result = cuMemGetInfo( &m_free_memory, &m_total_memory );
+    KVS_CU_CALL( cuMemGetInfo( &m_free_memory, &m_total_memory ) );
 #else
     /* The function 'cuMemGetInfo' is defined as follows:
      * CUresult cuMemGetInfo( unsigned int * free, unsigned int * total )
@@ -133,14 +130,10 @@ void Device::update()
      */
     unsigned int free_memory = 0;
     unsigned int total_memory = 0;
-    CUresult result = cuMemGetInfo( &free_memory, &total_memory );
+    KVS_CU_CALL( cuMemGetInfo( &free_memory, &total_memory ) );
     m_free_memory = static_cast<size_t>( free_memory );
     m_total_memory = static_cast<size_t>( total_memory );
 #endif
-    if ( result != CUDA_SUCCESS )
-    {
-        kvsMessageError( "CUDA; %s.", kvs::cuda::DriverAPI::ErrorString( result ) );
-    }
 }
 
 /*===========================================================================*/
@@ -164,11 +157,7 @@ int Device::majorRevision() const
 {
     int major_revision = 0;
     int minor_revision = 0;
-    CUresult result = cuDeviceComputeCapability( &major_revision, &minor_revision, m_handler );
-    if ( result != CUDA_SUCCESS )
-    {
-        kvsMessageError( "CUDA; %s.", kvs::cuda::DriverAPI::ErrorString( result ) );
-    }
+    KVS_CU_CALL( cuDeviceComputeCapability( &major_revision, &minor_revision, m_handler ) );
 
     return major_revision;
 }
@@ -183,11 +172,7 @@ int Device::minorRevision() const
 {
     int major_revision = 0;
     int minor_revision = 0;
-    CUresult result = cuDeviceComputeCapability( &major_revision, &minor_revision, m_handler );
-    if ( result != CUDA_SUCCESS )
-    {
-        kvsMessageError( "CUDA; %s.", kvs::cuda::DriverAPI::ErrorString( result ) );
-    }
+    KVS_CU_CALL( cuDeviceComputeCapability( &major_revision, &minor_revision, m_handler ) );
 
     return minor_revision;
 }
@@ -202,11 +187,7 @@ std::string Device::name() const
 {
     const int length = 256;
     char name[ length ];
-    CUresult result = cuDeviceGetName( name, length, m_handler );
-    if ( result != CUDA_SUCCESS )
-    {
-        kvsMessageError( "CUDA; %s.", kvs::cuda::DriverAPI::ErrorString( result ) );
-    }
+    KVS_CU_CALL( cuDeviceGetName( name, length, m_handler ) );
 
     return name;
 }

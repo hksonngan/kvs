@@ -1,6 +1,6 @@
 /*****************************************************************************/
 /**
- *  @file   Initialize.h
+ *  @file   Initialization.h
  *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
@@ -23,7 +23,7 @@ namespace cuda
 namespace DriverAPI
 {
 
-bool Initialize( int argc, char** argv );
+bool Initialization( int argc, char** argv );
 
 } // end of namespace DriverAPI
 

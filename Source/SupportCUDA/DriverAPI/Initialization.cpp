@@ -1,6 +1,6 @@
 /*****************************************************************************/
 /**
- *  @file   Initialize.h
+ *  @file   Initialization.h
  *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
@@ -12,7 +12,7 @@
  *  $Id$
  */
 /*****************************************************************************/
-#include "Initialize.h"
+#include "Initialization.h"
 #include "ErrorString.h"
 #include "CUDA.h"
 #include <kvs/Message>
@@ -35,7 +35,7 @@ namespace DriverAPI
  *  @return true, if the initialization is done successfully
  */
 /*===========================================================================*/
-bool Initialize( int argc, char** argv )
+bool Initialization( int argc, char** argv )
 {
     CUresult result = cuInit( 0 );
     if ( result != CUDA_SUCCESS )

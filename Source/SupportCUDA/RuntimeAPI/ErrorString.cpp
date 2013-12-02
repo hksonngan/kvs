@@ -53,7 +53,7 @@ cudaError_t LastError()
  *  @return error code
  */
 /*===========================================================================*/
-cudaError_t peekAtLastError()
+cudaError_t PeekAtLastError()
 {
     return cudaPeekAtLastError();
 }

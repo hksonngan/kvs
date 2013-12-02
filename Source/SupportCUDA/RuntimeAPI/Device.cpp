@@ -14,6 +14,7 @@
 /*****************************************************************************/
 #include "Device.h"
 #include "ErrorString.h"
+#include "RuntimeAPI.h"
 #include <kvs/Message>
 
 
@@ -36,11 +37,7 @@ namespace RuntimeAPI
 int Device::Count()
 {
     int count = 0;
-    cudaError_t result = cudaGetDeviceCount( &count );
-    if ( result != cudaSuccess )
-    {
-        kvsMessageError( "CUDA; %s.", kvs::cuda::RuntimeAPI::ErrorString( result ) );
-    }
+    KVS_CUDA_CALL( cudaGetDeviceCount( &count ) );
 
     return count;
 }
@@ -87,25 +84,11 @@ bool Device::create( const int ordinal )
 {
     m_handler = ordinal;
 
-    // Get a device handler.
-    {
-        cudaError_t result = cudaSetDevice( m_handler );
-        if ( result != cudaSuccess )
-        {
-            kvsMessageError( "CUDA; %s.", kvs::cuda::RuntimeAPI::ErrorString( result ) );
-            return false;
-        }
-    }
+    KVS_CUDA_CALL( cudaSetDevice( m_handler ) );
+    if ( kvs::cuda::RuntimeAPI::PeekAtLastError() != cudaSuccess ) return false;
 
-    // Get device properties.
-    {
-        cudaError_t result = cudaGetDeviceProperties( &m_property, m_handler );
-        if ( result != cudaSuccess )
-        {
-            kvsMessageError( "CUDA; %s.", kvs::cuda::RuntimeAPI::ErrorString( result ) );
-            return false;
-        }
-    }
+    KVS_CUDA_CALL( cudaGetDeviceProperties( &m_property, m_handler ) );
+    if ( kvs::cuda::RuntimeAPI::PeekAtLastError() != cudaSuccess ) return false;
 
     return true;
 }
@@ -117,11 +100,7 @@ bool Device::create( const int ordinal )
 /*===========================================================================*/
 void Device::update()
 {
-    cudaError_t result = cudaMemGetInfo( &m_free_memory, &m_total_memory );
-    if ( result != cudaSuccess )
-    {
-        kvsMessageError( "CUDA; %s.", kvs::cuda::RuntimeAPI::ErrorString( result ) );
-    }
+    KVS_CUDA_CALL( cudaMemGetInfo( &m_free_memory, &m_total_memory ) );
 }
 
 /*===========================================================================*/

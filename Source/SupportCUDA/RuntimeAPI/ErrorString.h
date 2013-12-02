@@ -27,7 +27,7 @@ namespace RuntimeAPI
 
 const char* ErrorString( const cudaError_t error );
 cudaError_t LastError();
-cudaError_t peekAtLastError();
+cudaError_t PeekAtLastError();
 
 } // end of namespace DriverAPI
 
