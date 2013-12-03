@@ -49,6 +49,7 @@ private:
 
 public:
 
+    static bool IsEnabled();
     static int Count();
 
 public:

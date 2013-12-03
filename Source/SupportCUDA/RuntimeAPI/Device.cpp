@@ -27,6 +27,20 @@ namespace cuda
 namespace RuntimeAPI
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  Checks the CUDA compatibility.
+ *  @return true if the device supports CUDA
+ */
+/*===========================================================================*/
+bool Device::IsEnabled()
+{
+    int count = 0;
+    cudaError_t error = cudaGetDeviceCount( &count );
+    if ( error != cudaSuccess ) return false;
+
+    return count > 0;
+}
 
 /*===========================================================================*/
 /**

@@ -30,6 +30,21 @@ namespace DriverAPI
 
 /*===========================================================================*/
 /**
+ *  @brief  Checks the CUDA compatibility.
+ *  @return true if the device supports CUDA
+ */
+/*===========================================================================*/
+bool Device::IsEnabled()
+{
+    int count = 0;
+    CUresult error = cuDeviceGetCount( &count );
+    if ( error != CUDA_SUCCESS ) return false;
+
+    return count > 0;
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Returns a number of compute-capable devices.
  *  @return number of compute-capable devices
  */

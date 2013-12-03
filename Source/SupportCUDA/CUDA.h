@@ -15,7 +15,6 @@
 #pragma once
 #include <cuda.h>
 #include <cuda_runtime.h>
-#include <kvs/Message>
 #include <kvs/String>
 
 
