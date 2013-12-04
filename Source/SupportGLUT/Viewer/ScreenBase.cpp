@@ -369,8 +369,10 @@ void ScreenBase::pushDown()
 /*===========================================================================*/
 void ScreenBase::redraw()
 {
+    const int id = glutGetWindow();
     glutSetWindow( m_id );
     glutPostRedisplay();
+    glutSetWindow( id );
 }
 
 /*===========================================================================*/
