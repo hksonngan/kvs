@@ -23,10 +23,13 @@
 
 
 // Static parameters.
+#include <vector>
 namespace { size_t Counter = 0; }
 namespace { bool Flag = true; }
-namespace { const size_t MaxNumberOfPipelines = 256; }
-namespace { kvs::VisualizationPipeline* context[::MaxNumberOfPipelines]; }
+//namespace { const size_t MaxNumberOfPipelines = 256; }
+//namespace { kvs::VisualizationPipeline* context[::MaxNumberOfPipelines]; }
+namespace { std::vector<kvs::VisualizationPipeline*> context; }
+
 
 namespace
 {
@@ -38,10 +41,12 @@ namespace
 /*===========================================================================*/
 void ExitFunction()
 {
-    for ( size_t i = 0; i < ::MaxNumberOfPipelines; i++)
+//    for ( size_t i = 0; i < ::MaxNumberOfPipelines; i++)
+    for ( size_t i = 0; i < ::context.size(); i++)
     {
         if ( ::context[i] ) ::context[i]->~VisualizationPipeline();
     }
+    ::context.clear();
 }
 
 } // end of namespace
@@ -62,7 +67,8 @@ VisualizationPipeline::VisualizationPipeline():
     m_object( NULL ),
     m_renderer( NULL )
 {
-    ::context[ m_id ] = this;
+//    ::context[ m_id ] = this;
+    ::context.push_back( this );
     if ( ::Flag ) { atexit( ::ExitFunction ); ::Flag = false; }
 }
 
@@ -79,7 +85,8 @@ VisualizationPipeline::VisualizationPipeline( const std::string& filename ):
     m_object( NULL ),
     m_renderer( NULL )
 {
-    ::context[ m_id ] = this;
+//    ::context[ m_id ] = this;
+    ::context.push_back( this );
     if ( ::Flag ) { atexit( ::ExitFunction ); ::Flag = false; }
 }
 
@@ -96,7 +103,8 @@ VisualizationPipeline::VisualizationPipeline( kvs::ObjectBase* object ):
     m_object( NULL ),
     m_renderer( NULL )
 {
-    ::context[ m_id ] = this;
+//    ::context[ m_id ] = this;
+    ::context.push_back( this );
     if ( ::Flag ) { atexit( ::ExitFunction ); ::Flag = false; }
 
     kvs::PipelineModule module( object );
