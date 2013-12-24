@@ -19,8 +19,9 @@
 #include <kvs/Module>
 #include <kvs/ProgramObject>
 #include <kvs/VertexBufferObject>
+#include <kvs/Vector4>
+#include <kvs/Matrix44>
 #include <kvs/Deprecated>
-#include "EnsembleAverageBuffer.h"
 #include "StochasticRendererBase.h"
 #include "StochasticRenderingEngine.h"
 
@@ -51,10 +52,14 @@ public:
 public:
 
     ParticleBasedRenderer();
+    ParticleBasedRenderer( const kvs::Mat4& m, const kvs::Mat4& p, const kvs::Vec4& v );
     bool isEnabledShuffle() const;
     void setEnabledShuffle( const bool enable );
     void enableShuffle();
     void disableShuffle();
+    const kvs::Mat4& initialModelViewMatrix() const;
+    const kvs::Mat4& initialProjectionMatrix() const;
+    const kvs::Vec4& initialViewport() const;
 
 public:
     // Invalid methods.
@@ -93,16 +98,17 @@ private:
     bool m_has_normal; ///< check flag for the normal array
     bool m_enable_shuffle; ///< flag for shuffling particles
     size_t m_random_index; ///< index used for refering the random texture
+    kvs::Mat4 m_initial_modelview; ///< initial modelview matrix
+    kvs::Mat4 m_initial_projection; ///< initial projection matrix
+    kvs::Vec4 m_initial_viewport; ///< initial viewport
     float m_initial_object_depth; ///< initial object depth
-    float m_initial_object_scale; ///< initial object scale
-    float m_initial_window_width; ///< initial window width
-    float m_initial_window_height; ///< initial window height
     kvs::ProgramObject m_shader_program; ///< zooming shader program
     kvs::VertexBufferObject* m_vbo; ///< vertex buffer objects for each repetition
 
 public:
 
     Engine();
+    Engine( const kvs::Mat4& m, const kvs::Mat4& p, const kvs::Vec4& v );
     virtual ~Engine();
     void release();
     void create( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
@@ -114,6 +120,9 @@ public:
     void setEnabledShuffle( const bool enable ) { m_enable_shuffle = enable; }
     void enableShuffle() { this->setEnabledShuffle( true ); }
     void disableShuffle() { this->setEnabledShuffle( false ); }
+    const kvs::Mat4& initialModelViewMatrix() const { return m_initial_modelview; }
+    const kvs::Mat4& initialProjectionMatrix() const { return m_initial_projection; }
+    const kvs::Vec4& initialViewport() const { return m_initial_viewport; }
 
 private:
 

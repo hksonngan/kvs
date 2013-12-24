@@ -84,6 +84,20 @@ ParticleBasedRenderer::ParticleBasedRenderer():
 
 /*===========================================================================*/
 /**
+ *  @brief  Constructs a new ParticleBasedRenderer class.
+ *  @param  m [in] initial modelview matrix
+ *  @param  p [in] initial projection matrix
+ *  @param  v [in] initial viewport
+ */
+/*===========================================================================*/
+ParticleBasedRenderer::ParticleBasedRenderer( const kvs::Mat4& m, const kvs::Mat4& p, const kvs::Vec4& v ):
+    StochasticRendererBase( new Engine( m, p, v ) )
+{
+    BaseClass::setEnabledTransformation( true );
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Returns true if the particle shuffling is enabled
  *  @return true, if the shuffling is enabled
  */
@@ -126,6 +140,39 @@ void ParticleBasedRenderer::disableShuffle()
 
 /*===========================================================================*/
 /**
+ *  @brief  Returns the initial modelview matrix.
+ *  @param  initial modelview matrix
+ */
+/*===========================================================================*/
+const kvs::Mat4& ParticleBasedRenderer::initialModelViewMatrix() const
+{
+    return static_cast<const Engine&>( engine() ).initialModelViewMatrix();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the initial projection matrix.
+ *  @param  initial projection matrix
+ */
+/*===========================================================================*/
+const kvs::Mat4& ParticleBasedRenderer::initialProjectionMatrix() const
+{
+    return static_cast<const Engine&>( engine() ).initialProjectionMatrix();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the initial viewport.
+ *  @param  initial viewport
+ */
+/*===========================================================================*/
+const kvs::Vec4& ParticleBasedRenderer::initialViewport() const
+{
+    return static_cast<const Engine&>( engine() ).initialViewport();
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Constructs a new Engine class.
  */
 /*===========================================================================*/
@@ -133,10 +180,30 @@ ParticleBasedRenderer::Engine::Engine():
     m_has_normal( false ),
     m_enable_shuffle( true ),
     m_random_index( 0 ),
+    m_initial_modelview( kvs::Mat4::Zero() ),
+    m_initial_projection( kvs::Mat4::Zero() ),
+    m_initial_viewport( kvs::Vec4::Zero() ),
     m_initial_object_depth( 0 ),
-    m_initial_object_scale( 1 ),
-    m_initial_window_width( 1 ),
-    m_initial_window_height( 1 ),
+    m_vbo( NULL )
+{
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new Engine class.
+ *  @param  m [in] initial modelview matrix
+ *  @param  p [in] initial projection matrix
+ *  @param  v [in] initial viewport
+ */
+/*===========================================================================*/
+ParticleBasedRenderer::Engine::Engine( const kvs::Mat4& m, const kvs::Mat4& p, const kvs::Vec4& v ):
+    m_has_normal( false ),
+    m_enable_shuffle( true ),
+    m_random_index( 0 ),
+    m_initial_modelview( m ),
+    m_initial_projection( p ),
+    m_initial_viewport( v ),
+    m_initial_object_depth( 0 ),
     m_vbo( NULL )
 {
 }
@@ -183,14 +250,25 @@ void ParticleBasedRenderer::Engine::create( kvs::ObjectBase* object, kvs::Camera
     this->create_buffer_object( point );
 
     // Initial values for calculating the object depth.
+    if ( kvs::Math::IsZero( m_initial_modelview[3][3] ) )
+    {
+        m_initial_modelview = kvs::OpenGL::ModelViewMatrix();
+    }
+
+    if ( kvs::Math::IsZero( m_initial_projection[3][3] ) )
+    {
+        m_initial_projection = kvs::OpenGL::ProjectionMatrix();
+    }
+
+    if ( kvs::Math::IsZero( m_initial_viewport[2] ) )
+    {
+        m_initial_viewport[2] = static_cast<float>( camera->windowWidth() );
+        m_initial_viewport[3] = static_cast<float>( camera->windowHeight() );
+    }
+
     const kvs::Vec4 I( point->objectCenter(), 1.0f );
-    const kvs::Mat4 M = kvs::OpenGL::ModelViewMatrix();
-    const kvs::Mat4 P = kvs::OpenGL::ProjectionMatrix();
-    const kvs::Vec4 O = P * M * I;
+    const kvs::Vec4 O = m_initial_projection * m_initial_modelview * I;
     m_initial_object_depth = O.z();
-    m_initial_object_scale = point->xform().scaling().x();
-    m_initial_window_width = static_cast<float>( camera->windowWidth() );
-    m_initial_window_height = static_cast<float>( camera->windowHeight() );
 }
 
 /*===========================================================================*/
@@ -203,7 +281,7 @@ void ParticleBasedRenderer::Engine::create( kvs::ObjectBase* object, kvs::Camera
 /*===========================================================================*/
 void ParticleBasedRenderer::Engine::update( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light )
 {
-    m_initial_window_width = static_cast<float>( camera->windowWidth() );
+    m_initial_viewport[2] = static_cast<float>( camera->windowWidth() );
 }
 
 /*===========================================================================*/
@@ -237,17 +315,19 @@ void ParticleBasedRenderer::Engine::draw( kvs::ObjectBase* object, kvs::Camera* 
     kvs::ProgramObject::Binder bind2( m_shader_program );
     kvs::Texture::Binder bind3( randomTexture() );
     {
+        const kvs::Mat4& m0 = m_initial_modelview;
+        const float scale0 = kvs::Vec3( m0[0][0], m0[1][0], m0[2][0] ).length();
+        const float width0 = m_initial_viewport[2];
+        const float height0 = m_initial_viewport[3];
+
+        const kvs::Mat4 m = kvs::OpenGL::ModelViewMatrix();
+        const float scale = kvs::Vec3( m[0][0], m[1][0], m[2][0] ).length();
         const float width = static_cast<float>( camera->windowWidth() );
         const float height = static_cast<float>( camera->windowHeight() );
-        const float scale = point->xform().scaling().x();
-
-        const float D0 = m_initial_object_depth;
-        const float width0 = m_initial_window_width;
-        const float height0 = m_initial_window_height;
-        const float scale0 = m_initial_object_scale;
 
         const float Cr = ( width / width0 ) * ( height / height0 );
         const float Cs = scale / scale0;
+        const float D0 = m_initial_object_depth;
         const float object_depth = Cr * Cs * D0;
 
         m_shader_program.setUniform( "object_depth", object_depth );
