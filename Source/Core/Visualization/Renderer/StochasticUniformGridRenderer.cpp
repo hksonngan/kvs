@@ -23,101 +23,82 @@
 #include <kvs/ValueArray>
 #include <kvs/Camera>
 #include <kvs/Light>
+#include <kvs/Coordinate>
 #include <kvs/Assert>
 #include <kvs/Message>
+#include <kvs/Xorshift128>
 
 
 namespace
 {
 
-double AlphaToRho( double alpha )
+/*===========================================================================*/
+/**
+ *  @brief  Returns a random number as integer value.
+ *  @return random number
+ */
+/*===========================================================================*/
+int RandomNumber()
 {
-    //const double pi = 3.141592;
-    //const double dt = 0.5;
-    //const double r = 1;
-    //return std::log( 1 - alpha ) / ( pi * r * r * dt );
-    return alpha;
+    const int C = 12347;
+    static kvs::Xorshift128 R;
+    return C * R.randInteger();
 }
 
-kvs::ValueArray<float> PreIntegrationTable( const kvs::TransferFunction& tf )
+/*===========================================================================*/
+/**
+ *  @brief  Normalizes value array.
+ *  @param  volume [in] pointer to the volume object
+ *  @param  min_value [in] minimum value of the volume data
+ *  @param  max_value [in] maximum value of the volume data
+ *  @return normalized value array
+ */
+/*===========================================================================*/
+template <typename T>
+kvs::AnyValueArray NormalizeValues(
+    const kvs::StructuredVolumeObject* volume,
+    const kvs::Real32 min_value,
+    const kvs::Real32 max_value )
 {
-    kvs::ColorMap cmap = tf.colorMap();
-    kvs::OpacityMap omap = tf.opacityMap();
+    const kvs::Real32 scale = 1.0f / ( max_value - min_value );
+    const size_t nnodes = volume->numberOfNodes();
+    const T* src = static_cast<const T*>( volume->values().data() );
 
-    KVS_ASSERT( cmap.resolution() == omap.resolution() );
-
-    const int res = ( int )cmap.resolution();
-    kvs::ValueArray<double> table( res * 4 );
-    table[0] = table[1] = table[2] = table[3] = 0.0;
-
-    const double L = 1.0 / ( res - 1 );
-    double R = 0.0;
-    double G = 0.0;
-    double B = 0.0;
-    double Rho = 0.0;
-    kvs::RGBColor c0 = cmap[ 0 ];
-    double r0 = c0.r() / 255.0;
-    double g0 = c0.g() / 255.0;
-    double b0 = c0.b() / 255.0;
-    double rho0 = AlphaToRho( omap[ 0 ] );
-    for ( int i = 1; i < res; ++i )
+    kvs::ValueArray<kvs::Real32> data( nnodes );
+    kvs::Real32* dst = data.data();
+    for ( size_t i = 0; i < nnodes; i++ )
     {
-        kvs::RGBColor c = cmap[ i ];
-        double r1 = c.r() / 255.0;
-        double g1 = c.g() / 255.0;
-        double b1 = c.b() / 255.0;
-        double rho1 = AlphaToRho( omap[ i ] );
-
-        R += L / 6.0 * ( ( rho1 + rho0 ) * ( r1 + r0 ) + rho1 * r1 + rho0 * r0 );
-        G += L / 6.0 * ( ( rho1 + rho0 ) * ( g1 + g0 ) + rho1 * g1 + rho0 * g0 );
-        B += L / 6.0 * ( ( rho1 + rho0 ) * ( b1 + b0 ) + rho1 * b1 + rho0 * b0 );
-        Rho += L / 2.0 * ( rho1 + rho0 );
-
-        table[ i * 4 + 0 ] = R;
-        table[ i * 4 + 1 ] = G;
-        table[ i * 4 + 2 ] = B;
-        table[ i * 4 + 3 ] = Rho;
-
-        r0 = r1;
-        g0 = g1;
-        b0 = b1;
-        rho0 = rho1;
+        *(dst++) = static_cast<kvs::Real32>(( *(src++) - min_value ) * scale);
     }
 
-    kvs::ValueArray<float> table2d( res * res * 4 );
-    for ( int i = 0; i < res; ++i )
+    return kvs::AnyValueArray( data );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns unsigned value array converted from signed value array.
+ *  @param  volume [in] pointer to the volume object
+ *  @return unsigned value array
+ */
+/*===========================================================================*/
+template <typename DstType, typename SrcType>
+kvs::AnyValueArray SignedToUnsigned( const kvs::StructuredVolumeObject* volume )
+{
+    const SrcType min = kvs::Value<SrcType>::Min();
+    const size_t nvalues = volume->values().size();
+    const SrcType* src = static_cast<const SrcType*>( volume->values().data() );
+
+    kvs::ValueArray<DstType> data( nvalues );
+    DstType* dst = data.data();
+    for ( size_t i = 0; i < nvalues; i++ )
     {
-        for ( int j = 0; j < res; ++j )
-        {
-            const int index = 4 * ( res * i + j );
-            if ( i == j )
-            {
-                kvs::RGBColor c = cmap[ i ];
-                const float a = omap[ i ];
-                table2d[ index + 0 ] = a * c.r() / 255.0f;
-                table2d[ index + 1 ] = a * c.g() / 255.0f;
-                table2d[ index + 2 ] = a * c.b() / 255.0f;
-                table2d[ index + 3 ] = a;
-            }
-            else
-            {
-                const double sf = i / ( double )( res - 1 );
-                const double sb = j / ( double )( res - 1 );
-                const double factor = 1 / ( sb - sf );
-                for ( int k = 0; k < 4; ++k )
-                {
-                    table2d[ index + k ] = ( float )( ( table[ j * 4 + k ] - table[ i * 4 + k ] ) * factor );
-                }
-            }
-        }
+        *(dst++) = static_cast<DstType>( *(src++) - min );
     }
 
-    // a( sf, sb, d ) = 1 - exp( - d / ( sb - sf ) * ( A( sf ) - A( sb ) ) )
-    // c( sf, sb, d ) = d / ( sb - sf ) * ( C( sb ) - C( sf ) )
-    return table2d;
+    return kvs::AnyValueArray( data );
 }
 
-}
+} // end of namespace
 
 
 namespace kvs
@@ -135,13 +116,13 @@ StochasticUniformGridRenderer::StochasticUniformGridRenderer():
 
 /*===========================================================================*/
 /**
- *  @brief  Sets a number of slices.
- *  @param  nslices [in] number of slices
+ *  @brief  Sets a sampling step.
+ *  @param  transfer_function [in] transfer function
  */
 /*===========================================================================*/
-void StochasticUniformGridRenderer::setNumberOfSlices( const size_t nslices )
+void StochasticUniformGridRenderer::setSamplingStep( const float step )
 {
-    static_cast<Engine&>( engine() ).setNumberOfSlices( nslices );
+    static_cast<Engine&>( engine() ).setSamplingStep( step );
 }
 
 /*===========================================================================*/
@@ -162,7 +143,7 @@ void StochasticUniformGridRenderer::setTransferFunction( const kvs::TransferFunc
 /*===========================================================================*/
 StochasticUniformGridRenderer::Engine::Engine():
     m_random_index( 0 ),
-    m_nslices( 128 ),
+    m_step( 0.5f ),
     m_transfer_function_changed( true )
 {
 }
@@ -174,9 +155,14 @@ StochasticUniformGridRenderer::Engine::Engine():
 /*===========================================================================*/
 void StochasticUniformGridRenderer::Engine::release()
 {
-    m_shader_program.release();
+    m_transfer_function_texture.release();
+    m_entry_texture.release();
+    m_exit_texture.release();
     m_volume_texture.release();
-    m_preintegration_table.release();
+    m_entry_exit_framebuffer.release();
+    m_bounding_cube_buffer.release();
+    m_ray_casting_shader.release();
+    m_bounding_cube_shader.release();
     m_transfer_function_changed = true;
 }
 
@@ -194,9 +180,11 @@ void StochasticUniformGridRenderer::Engine::create( kvs::ObjectBase* object, kvs
 
     attachObject( object );
     createRandomTexture();
-    this->create_shader_program();
-    this->create_texture_object( volume );
-    this->create_preintegration_table();
+    this->create_shader_program( volume );
+    this->create_volume_texture( volume );
+    this->create_transfer_function_texture();
+    this->create_bounding_cube_buffer( volume );
+    this->create_framebuffer( camera->windowWidth(), camera->windowHeight() );
 }
 
 /*===========================================================================*/
@@ -209,6 +197,7 @@ void StochasticUniformGridRenderer::Engine::create( kvs::ObjectBase* object, kvs
 /*===========================================================================*/
 void StochasticUniformGridRenderer::Engine::update( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light )
 {
+    this->update_framebuffer( camera->windowWidth(), camera->windowHeight() );
 }
 
 /*===========================================================================*/
@@ -220,14 +209,40 @@ void StochasticUniformGridRenderer::Engine::update( kvs::ObjectBase* object, kvs
 void StochasticUniformGridRenderer::Engine::setup( const bool reset_count )
 {
     if ( reset_count ) resetRepetitions();
-    m_random_index = m_shader_program.attributeLocation("random_index");
+    m_random_index = m_ray_casting_shader.attributeLocation("random_index");
 
     if ( m_transfer_function_changed )
     {
-        // Re-create pre-integration table.
-        m_preintegration_table.release();
-        this->create_preintegration_table();
+        m_transfer_function_texture.release();
+        this->create_transfer_function_texture();
     }
+
+    kvs::OpenGL::Enable( GL_DEPTH_TEST );
+    kvs::OpenGL::Enable( GL_CULL_FACE );
+    kvs::OpenGL::Disable( GL_LIGHTING );
+
+    kvs::ProgramObject::Binder unit0( m_ray_casting_shader );
+    kvs::ProgramObject::Binder unit1( m_bounding_cube_shader );
+    kvs::FrameBufferObject::Binder unit( m_entry_exit_framebuffer );
+
+    // OpenGL variables.
+    const kvs::Mat4 PM = kvs::OpenGL::ProjectionMatrix() * kvs::OpenGL::ModelViewMatrix();
+    const kvs::Mat4 PM_inverse = PM.inverted();
+    m_ray_casting_shader.setUniform( "ModelViewProjectionMatrix", PM );
+    m_ray_casting_shader.setUniform( "ModelViewProjectionMatrixInverse", PM_inverse );
+    m_bounding_cube_shader.setUniform( "ModelViewProjectionMatrix", PM );
+
+    // Draw the back face of the bounding cube for the entry points.
+    kvs::OpenGL::SetDrawBuffer( GL_COLOR_ATTACHMENT0_EXT );
+    kvs::OpenGL::Clear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    kvs::OpenGL::SetCullFace( GL_FRONT );
+    this->draw_bounding_cube_buffer();
+
+    // Draw the front face of the bounding cube for the entry points.
+    kvs::OpenGL::SetDrawBuffer( GL_COLOR_ATTACHMENT1_EXT );
+    kvs::OpenGL::Clear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    kvs::OpenGL::SetCullFace( GL_BACK );
+    this->draw_bounding_cube_buffer();
 }
 
 /*===========================================================================*/
@@ -240,92 +255,49 @@ void StochasticUniformGridRenderer::Engine::setup( const bool reset_count )
 /*===========================================================================*/
 void StochasticUniformGridRenderer::Engine::draw( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light )
 {
-    kvs::StructuredVolumeObject* volume = kvs::StructuredVolumeObject::DownCast( object );
+    kvs::OpenGL::Disable( GL_CULL_FACE );
+    kvs::OpenGL::Enable( GL_BLEND );
+    kvs::OpenGL::SetBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_ALPHA );
 
-    kvs::Texture::Binder bind1( m_volume_texture, 0 );
-    kvs::Texture::Binder bind2( randomTexture(), 1 );
-    kvs::Texture::Binder bind3( m_preintegration_table, 2 );
-    kvs::ProgramObject::Binder bind4( m_shader_program );
-    {
-        const size_t size = randomTextureSize();
-        const float offset_x = (float)( m_random.randInteger() % size );
-        const float offset_y = (float)( m_random.randInteger() % size );
-        const kvs::Vec2 random_offset( offset_x, offset_y );
-        const float inv_x = 1.0f / volume->resolution().x();
-        const float inv_y = 1.0f / volume->resolution().y();
-        const float inv_z = 1.0f / volume->resolution().z();
-        const kvs::Vec3 volume_resolution_inv( inv_x, inv_y, inv_z );
+    if ( isEnabledShading() ) kvs::OpenGL::Enable( GL_LIGHTING );
+    else kvs::OpenGL::Disable( GL_LIGHTING );
 
-        m_shader_program.setUniform( "random_texture_size_inv", 1.0f / randomTextureSize() );
-        m_shader_program.setUniform( "random_offset", random_offset );
-        m_shader_program.setUniform( "volume_resolution_inv", volume_resolution_inv );
-        m_shader_program.setUniform( "volume_texture", 0 );
-        m_shader_program.setUniform( "random_texture", 1 );
-        m_shader_program.setUniform( "preintegration_texture", 2 );
-    }
-    {
-        kvs::OpenGL::Disable( GL_LIGHTING );
-        kvs::OpenGL::Disable( GL_CULL_FACE );
-        KVS_GL_CALL( glPolygonMode( GL_FRONT_AND_BACK, GL_FILL ) );
+    // Ray casting.
+    kvs::ProgramObject::Binder unit( m_ray_casting_shader );
+    kvs::Texture::Binder unit1( m_volume_texture, 0 );
+    kvs::Texture::Binder unit2( m_exit_texture, 1 );
+    kvs::Texture::Binder unit3( m_entry_texture, 2 );
+    kvs::Texture::Binder unit4( m_transfer_function_texture, 3 );
+    kvs::Texture::Binder unit5( randomTexture(), 4 );
 
-        GLdouble m[16]; kvs::OpenGL::GetModelViewMatrix( m );
-        GLdouble p[16]; kvs::OpenGL::GetProjectionMatrix( p );
-        GLint v[4]; kvs::OpenGL::GetViewport( v );
+    const size_t size = randomTextureSize();
+    const int count = repetitionCount() * ::RandomNumber();
+    const float offset_x = static_cast<float>( ( count ) % size );
+    const float offset_y = static_cast<float>( ( count / size ) % size );
+    const kvs::Vec2 random_offset( offset_x, offset_y );
+    m_ray_casting_shader.setUniform( "random_texture_size_inv", 1.0f / randomTextureSize() );
+    m_ray_casting_shader.setUniform( "random_offset", random_offset );
 
-        kvs::Vector3ui res = volume->resolution();
-        double xmin=FLT_MAX, xmax=-FLT_MAX, ymin=FLT_MAX, ymax=-FLT_MAX, zmin=FLT_MAX, zmax=-FLT_MAX;
-        for ( int i = 0; i < 8; ++i )
-        {
-            float bbx = ( i&1 ) ? ( float )res.x() : 0.0f;
-            float bby = ( i&2 ) ? ( float )res.y() : 0.0f;
-            float bbz = ( i&4 ) ? ( float )res.z() : 0.0f;
-
-            double x,y,z;
-            KVS_GL_CALL( gluProject( bbx,bby,bbz, m, p, v, &x, &y, &z ) );
-            if ( x < xmin ) xmin = x;
-            if ( x > xmax ) xmax = x;
-            if ( y < ymin ) ymin = y;
-            if ( y > ymax ) ymax = y;
-            if ( z < zmin ) zmin = z;
-            if ( z > zmax ) zmax = z;
-        }
-
-        double fx = 1.0 / res.x();
-        double fy = 1.0 / res.y();
-        double fz = 1.0 / res.z();
-
-        int nslices = m_nslices;
-        float dz = ( float )( ( zmax-zmin ) / nslices );
-        float z  = ( float )zmax - dz/2.0f;
-
-        const size_t random_texture_size = randomTexture().width();
-        for ( int n = nslices-1; n >= 0; --n, z -= dz )
-        {
-            const kvs::Vector2f random_offset(
-                (float)( m_random.randInteger() % random_texture_size ),
-                (float)( m_random.randInteger() % random_texture_size ) );
-            m_shader_program.setUniform( "random_offset", random_offset );
-
-            glBegin( GL_QUADS );
-            GLdouble point[3];
-            gluUnProject( xmin,ymin,z, m, p, v, point + 0, point + 1, point + 2 );
-            glTexCoord3d( fx*point[0], fy*point[1], fz*point[2] );
-            glVertex3dv( point );
-
-            gluUnProject( xmax,ymin,z, m, p, v, point + 0, point + 1, point + 2 );
-            glTexCoord3d( fx*point[0], fy*point[1], fz*point[2] );
-            glVertex3dv( point );
-
-            gluUnProject( xmax,ymax,z, m, p, v, point + 0, point + 1, point + 2 );
-            glTexCoord3d( fx*point[0], fy*point[1], fz*point[2] );
-            glVertex3dv( point );
-
-            gluUnProject( xmin,ymax,z, m, p, v, point + 0, point + 1, point + 2 );
-            glTexCoord3d( fx*point[0], fy*point[1], fz*point[2] );
-            glVertex3dv( point );
-            glEnd(); // GL_QUADS
-        }
-    }
+    const float f = camera->back();
+    const float n = camera->front();
+    const float to_zw1 = ( f * n ) / ( f - n );
+    const float to_zw2 = 0.5f * ( ( f + n ) / ( f - n ) ) + 0.5f;
+    const float to_ze1 = 0.5f + 0.5f * ( ( f + n ) / ( f - n ) );
+    const float to_ze2 = ( f - n ) / ( f * n );
+    const kvs::Vector3f light_position = kvs::WorldCoordinate( light->position() ).toObjectCoordinate( camera ).position();
+    const kvs::Vector3f camera_position = kvs::WorldCoordinate( camera->position() ).toObjectCoordinate( camera ).position();
+    m_ray_casting_shader.setUniform( "to_zw1", to_zw1 );
+    m_ray_casting_shader.setUniform( "to_zw2", to_zw2 );
+    m_ray_casting_shader.setUniform( "to_ze1", to_ze1 );
+    m_ray_casting_shader.setUniform( "to_ze2", to_ze2 );
+    m_ray_casting_shader.setUniform( "light_position", light_position );
+    m_ray_casting_shader.setUniform( "camera_position", camera_position );
+    m_ray_casting_shader.setUniform( "volume_data", 0 );
+    m_ray_casting_shader.setUniform( "exit_points", 1 );
+    m_ray_casting_shader.setUniform( "entry_points", 2 );
+    m_ray_casting_shader.setUniform( "transfer_function_data", 3 );
+    m_ray_casting_shader.setUniform( "random_texture", 4 );
+    this->draw_quad();
 
     countRepetitions();
 }
@@ -333,43 +305,121 @@ void StochasticUniformGridRenderer::Engine::draw( kvs::ObjectBase* object, kvs::
 /*===========================================================================*/
 /**
  *  @brief  Creates shader program.
+ *  @param  volume [in] pointer to the structured volume object
  */
 /*===========================================================================*/
-void StochasticUniformGridRenderer::Engine::create_shader_program()
+void StochasticUniformGridRenderer::Engine::create_shader_program( const kvs::StructuredVolumeObject* volume )
 {
-    kvs::ShaderSource vert( "SR_uniform_grid.vert" );
-    kvs::ShaderSource frag( "SR_uniform_grid.frag" );
-    if ( isEnabledShading() )
+    // Build bounding cube shader.
     {
-        switch ( shader().type() )
-        {
-        case kvs::Shader::LambertShading: frag.define("ENABLE_LAMBERT_SHADING"); break;
-        case kvs::Shader::PhongShading: frag.define("ENABLE_PHONG_SHADING"); break;
-        case kvs::Shader::BlinnPhongShading: frag.define("ENABLE_BLINN_PHONG_SHADING"); break;
-        default: break; // NO SHADING
-        }
+        kvs::ShaderSource vert("RC_bounding_cube.vert");
+        kvs::ShaderSource frag("RC_bounding_cube.frag");
+        m_bounding_cube_shader.build( vert, frag );
+    }
 
-        if ( kvs::OpenGL::Boolean( GL_LIGHT_MODEL_TWO_SIDE ) == GL_TRUE )
+    // Build ray caster.
+    {
+        kvs::ShaderSource vert("SR_uniform_grid.vert");
+        kvs::ShaderSource frag("SR_uniform_grid.frag");
+        if ( isEnabledShading() )
         {
-            frag.define("ENABLE_TWO_SIDE_LIGHTING");
+            switch ( shader().type() )
+            {
+            case kvs::Shader::LambertShading: frag.define("ENABLE_LAMBERT_SHADING"); break;
+            case kvs::Shader::PhongShading: frag.define("ENABLE_PHONG_SHADING"); break;
+            case kvs::Shader::BlinnPhongShading: frag.define("ENABLE_BLINN_PHONG_SHADING"); break;
+            default: /* NO SHADING */ break;
+            }
+        }
+        m_ray_casting_shader.build( vert, frag );
+    }
+
+    // Set uniform variables.
+    const kvs::Vector3ui r = volume->resolution();
+    const kvs::Real32 max_ngrids = static_cast<kvs::Real32>( kvs::Math::Max( r.x(), r.y(), r.z() ) );
+    const kvs::Vector3f resolution( static_cast<float>(r.x()), static_cast<float>(r.y()), static_cast<float>(r.z()) );
+    const kvs::Vector3f ratio( r.x() / max_ngrids, r.y() / max_ngrids, r.z() / max_ngrids );
+    const kvs::Vector3f reciprocal( 1.0f / r.x(), 1.0f / r.y(), 1.0f / r.z() );
+    kvs::Real32 min_range = 0.0f;
+    kvs::Real32 max_range = 0.0f;
+    kvs::Real32 min_value = m_transfer_function.colorMap().minValue();
+    kvs::Real32 max_value = m_transfer_function.colorMap().maxValue();
+    const std::type_info& type = volume->values().typeInfo()->type();
+    if ( type == typeid( kvs::UInt8 ) )
+    {
+        min_range = 0.0f;
+        max_range = 255.0f;
+        if ( !m_transfer_function.hasRange() )
+        {
+            min_value = 0.0f;
+            max_value = 255.0f;
         }
     }
-    m_shader_program.build( vert, frag );
-    m_shader_program.bind();
-    m_shader_program.setUniform( "shading.Ka", shader().Ka );
-    m_shader_program.setUniform( "shading.Kd", shader().Kd );
-    m_shader_program.setUniform( "shading.Ks", shader().Ks );
-    m_shader_program.setUniform( "shading.S",  shader().S );
-    m_shader_program.unbind();
+    else if ( type == typeid( kvs::Int8 ) )
+    {
+        min_range = static_cast<kvs::Real32>( kvs::Value<kvs::UInt8>::Min() );
+        max_range = static_cast<kvs::Real32>( kvs::Value<kvs::UInt8>::Max() );
+        if ( !m_transfer_function.hasRange() )
+        {
+            min_value = -128.0f;
+            max_value = 127.0f;
+        }
+    }
+    else if ( type == typeid( kvs::UInt16 ) )
+    {
+        min_range = static_cast<kvs::Real32>( kvs::Value<kvs::UInt16>::Min() );
+        max_range = static_cast<kvs::Real32>( kvs::Value<kvs::UInt16>::Max() );
+        if ( !m_transfer_function.hasRange() )
+        {
+            min_value = static_cast<kvs::Real32>( volume->minValue() );
+            max_value = static_cast<kvs::Real32>( volume->maxValue() );
+        }
+    }
+    else if ( type == typeid( kvs::Int16 ) )
+    {
+        min_range = static_cast<kvs::Real32>( kvs::Value<kvs::Int16>::Min() );
+        max_range = static_cast<kvs::Real32>( kvs::Value<kvs::Int16>::Max() );
+        if ( !m_transfer_function.hasRange() )
+        {
+            min_value = static_cast<kvs::Real32>( volume->minValue() );
+            max_value = static_cast<kvs::Real32>( volume->maxValue() );
+        }
+    }
+    else if ( type == typeid( kvs::UInt32 ) || type == typeid( kvs::Int32  ) || type == typeid( kvs::Real32 ) )
+    {
+        min_range = 0.0f;
+        max_range = 1.0f;
+        min_value = 0.0f;
+        max_value = 1.0f;
+    }
+    else
+    {
+        kvsMessageError( "Not supported data type '%s'.", volume->values().typeInfo()->typeName() );
+    }
+
+    m_ray_casting_shader.bind();
+    m_ray_casting_shader.setUniform( "volume.resolution", resolution );
+    m_ray_casting_shader.setUniform( "volume.resolution_ratio", ratio );
+    m_ray_casting_shader.setUniform( "volume.resolution_reciprocal", reciprocal );
+    m_ray_casting_shader.setUniform( "volume.min_range", min_range );
+    m_ray_casting_shader.setUniform( "volume.max_range", max_range );
+    m_ray_casting_shader.setUniform( "transfer_function.min_value", min_value );
+    m_ray_casting_shader.setUniform( "transfer_function.max_value", max_value );
+    m_ray_casting_shader.setUniform( "dt", m_step );
+    m_ray_casting_shader.setUniform( "shading.Ka", shader().Ka );
+    m_ray_casting_shader.setUniform( "shading.Kd", shader().Kd );
+    m_ray_casting_shader.setUniform( "shading.Ks", shader().Ks );
+    m_ray_casting_shader.setUniform( "shading.S",  shader().S );
+    m_ray_casting_shader.unbind();
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Create texture objects.
+ *  @brief  Create volume texture object.
  *  @param  volume [in] pointer to the structured volume object
  */
 /*===========================================================================*/
-void StochasticUniformGridRenderer::Engine::create_texture_object( const kvs::StructuredVolumeObject* volume )
+void StochasticUniformGridRenderer::Engine::create_volume_texture( const kvs::StructuredVolumeObject* volume )
 {
     if ( volume->gridType() != kvs::StructuredVolumeObject::Uniform )
     {
@@ -383,11 +433,95 @@ void StochasticUniformGridRenderer::Engine::create_texture_object( const kvs::St
         return;
     }
 
+    GLenum data_format = 0;
     GLenum data_type = 0;
+    kvs::AnyValueArray data_value;
     switch ( volume->values().typeID() )
     {
-    case kvs::Type::TypeUInt8: data_type = GL_UNSIGNED_BYTE; break;
-    case kvs::Type::TypeReal32: data_type = GL_FLOAT; break;
+    case kvs::Type::TypeUInt8:
+    {
+        data_format = GL_ALPHA8;
+        data_type = GL_UNSIGNED_BYTE;
+        data_value = volume->values();
+        break;
+    }
+    case kvs::Type::TypeUInt16:
+    {
+        data_format = GL_ALPHA16;
+        data_type = GL_UNSIGNED_SHORT;
+        data_value = volume->values();
+        break;
+    }
+    case kvs::Type::TypeInt8:
+    {
+        data_format = GL_ALPHA8;
+        data_type = GL_UNSIGNED_BYTE;
+        data_value = ::SignedToUnsigned<kvs::UInt8,kvs::Int8>( volume );
+        break;
+    }
+    case kvs::Type::TypeInt16:
+    {
+        data_format = GL_ALPHA16;
+        data_type = GL_UNSIGNED_SHORT;
+        data_value = ::SignedToUnsigned<kvs::UInt16,kvs::Int16>( volume );
+        break;
+    }
+    case kvs::Type::TypeUInt32:
+    {
+        data_format = GL_ALPHA;
+        data_type = GL_FLOAT;
+        kvs::Real32 min_value = static_cast<kvs::Real32>( volume->minValue() );
+        kvs::Real32 max_value = static_cast<kvs::Real32>( volume->maxValue() );
+        if ( m_transfer_function.hasRange() )
+        {
+            min_value = m_transfer_function.colorMap().minValue();
+            max_value = m_transfer_function.colorMap().maxValue();
+        }
+        data_value = ::NormalizeValues<kvs::UInt32>( volume, min_value, max_value );
+        break;
+    }
+    case kvs::Type::TypeInt32:
+    {
+        data_format = GL_ALPHA;
+        data_type = GL_FLOAT;
+        kvs::Real32 min_value = static_cast<kvs::Real32>( volume->minValue() );
+        kvs::Real32 max_value = static_cast<kvs::Real32>( volume->maxValue() );
+        if ( m_transfer_function.hasRange() )
+        {
+            min_value = m_transfer_function.colorMap().minValue();
+            max_value = m_transfer_function.colorMap().maxValue();
+        }
+        data_value = ::NormalizeValues<kvs::Int32>( volume, min_value, max_value );
+        break;
+    }
+    case kvs::Type::TypeReal32:
+    {
+        data_format = GL_ALPHA;
+        data_type = GL_FLOAT;
+        kvs::Real32 min_value = static_cast<kvs::Real32>( volume->minValue() );
+        kvs::Real32 max_value = static_cast<kvs::Real32>( volume->maxValue() );
+        if ( m_transfer_function.hasRange() )
+        {
+            min_value = m_transfer_function.colorMap().minValue();
+            max_value = m_transfer_function.colorMap().maxValue();
+        }
+        data_value = ::NormalizeValues<kvs::Real32>( volume, min_value, max_value );
+        break;
+    }
+    case kvs::Type::TypeReal64:
+    {
+        data_format = GL_ALPHA;
+        data_type = GL_FLOAT;
+        kvs::Real32 min_value = static_cast<kvs::Real32>( volume->minValue() );
+        kvs::Real32 max_value = static_cast<kvs::Real32>( volume->maxValue() );
+        if ( m_transfer_function.hasRange() )
+        {
+            min_value = m_transfer_function.colorMap().minValue();
+            max_value = m_transfer_function.colorMap().maxValue();
+        }
+        data_value = ::NormalizeValues<kvs::Real64>( volume, min_value, max_value );
+        break;
+    }
     default:
     {
         kvsMessageError("Not supported data type.");
@@ -398,26 +532,197 @@ void StochasticUniformGridRenderer::Engine::create_texture_object( const kvs::St
     const size_t width = volume->resolution().x();
     const size_t height = volume->resolution().y();
     const size_t depth = volume->resolution().z();
-    m_volume_texture.setPixelFormat( GL_RED, GL_RED, data_type );
-    m_volume_texture.setWrapS( GL_CLAMP_TO_EDGE );
-    m_volume_texture.setWrapT( GL_CLAMP_TO_EDGE );
-    m_volume_texture.setWrapR( GL_CLAMP_TO_EDGE );
+    m_volume_texture.setPixelFormat( data_format, GL_ALPHA, data_type );
+    m_volume_texture.setWrapS( GL_CLAMP_TO_BORDER );
+    m_volume_texture.setWrapT( GL_CLAMP_TO_BORDER );
+    m_volume_texture.setWrapR( GL_CLAMP_TO_BORDER );
     m_volume_texture.setMagFilter( GL_LINEAR );
     m_volume_texture.setMinFilter( GL_LINEAR );
-    m_volume_texture.create( width, height, depth, volume->values().data() );
+    m_volume_texture.create( width, height, depth, data_value.data() );
 }
 
-void StochasticUniformGridRenderer::Engine::create_preintegration_table()
+/*===========================================================================*/
+/**
+ *  @brief  Creates trasfer function texture.
+ */
+/*===========================================================================*/
+void StochasticUniformGridRenderer::Engine::create_transfer_function_texture()
 {
-    const size_t resolution = m_transfer_function.resolution();
-    kvs::ValueArray<float> preintegration = ::PreIntegrationTable( m_transfer_function );
-    m_preintegration_table.setPixelFormat( GL_RGBA, GL_RGBA, GL_FLOAT );
-    m_preintegration_table.setWrapS( GL_CLAMP_TO_EDGE );
-    m_preintegration_table.setWrapT( GL_CLAMP_TO_EDGE );
-    m_preintegration_table.setMagFilter( GL_LINEAR );
-    m_preintegration_table.setMinFilter( GL_LINEAR );
-    m_preintegration_table.create( resolution, resolution, preintegration.data() );
+    const size_t width = m_transfer_function.resolution();
+    const kvs::ValueArray<kvs::Real32> table = m_transfer_function.table();
+    m_transfer_function_texture.setWrapS( GL_CLAMP_TO_EDGE );
+    m_transfer_function_texture.setMagFilter( GL_LINEAR );
+    m_transfer_function_texture.setMinFilter( GL_LINEAR );
+    m_transfer_function_texture.setPixelFormat( GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT  );
+    m_transfer_function_texture.create( width, table.data() );
     m_transfer_function_changed = false;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Creates bounding box buffer.
+ *  @param  volume [in] pointer to the volume object
+ */
+/*===========================================================================*/
+void StochasticUniformGridRenderer::Engine::create_bounding_cube_buffer( const kvs::StructuredVolumeObject* volume )
+{
+    /* Index number of the bounding cube.
+     *
+     *       4 ------------ 5
+     *     / |            / |
+     *    /  |           /  |
+     *   7--------------6   |
+     *   |   |          |   |
+     *   |   0 ---------|-- 1
+     *   |  /           |  /
+     *   | /            | /
+     *   3 ------------ 2
+     *
+     */
+    const kvs::Vector3ui min( 0, 0, 0 );
+    const kvs::Vector3ui max( volume->resolution() - kvs::Vector3ui( 1, 1, 1 ) );
+    const size_t nelements = 72; // = 4 vertices x 3 dimensions x 6 faces
+
+    const float minx = static_cast<float>( min.x() );
+    const float miny = static_cast<float>( min.y() );
+    const float minz = static_cast<float>( min.z() );
+    const float maxx = static_cast<float>( max.x() );
+    const float maxy = static_cast<float>( max.y() );
+    const float maxz = static_cast<float>( max.z() );
+
+    const float coords[ nelements ] = {
+        minx, miny, minz, // 0
+        maxx, miny, minz, // 1
+        maxx, miny, maxz, // 2
+        minx, miny, maxz, // 3
+
+        minx, maxy, maxz, // 7
+        maxx, maxy, maxz, // 6
+        maxx, maxy, minz, // 5
+        minx, maxy, minz, // 4
+
+        minx, maxy, minz, // 4
+        maxx, maxy, minz, // 5
+        maxx, miny, minz, // 1
+        minx, miny, minz, // 0
+
+        maxx, maxy, minz, // 5
+        maxx, maxy, maxz, // 6
+        maxx, miny, maxz, // 2
+        maxx, miny, minz, // 1
+
+        maxx, maxy, maxz, // 6
+        minx, maxy, maxz, // 7
+        minx, miny, maxz, // 3
+        maxx, miny, maxz, // 2
+
+        minx, miny, minz, // 0
+        minx, miny, maxz, // 3
+        minx, maxy, maxz, // 7
+        minx, maxy, minz  // 4
+    };
+
+    const size_t byte_size = sizeof(float) * nelements;
+    m_bounding_cube_buffer.create( byte_size, coords );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Creates framebuffer.
+ *  @param  width [in] window width
+ *  @param  height [in] window height
+ */
+/*===========================================================================*/
+void StochasticUniformGridRenderer::Engine::create_framebuffer( const size_t width, const size_t height )
+{
+    m_entry_texture.setWrapS( GL_CLAMP_TO_BORDER );
+    m_entry_texture.setWrapT( GL_CLAMP_TO_BORDER );
+    m_entry_texture.setMagFilter( GL_LINEAR );
+    m_entry_texture.setMinFilter( GL_LINEAR );
+    m_entry_texture.setPixelFormat( GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT );
+    m_entry_texture.create( width, height );
+
+    m_exit_texture.setWrapS( GL_CLAMP_TO_BORDER );
+    m_exit_texture.setWrapT( GL_CLAMP_TO_BORDER );
+    m_exit_texture.setMagFilter( GL_LINEAR );
+    m_exit_texture.setMinFilter( GL_LINEAR );
+    m_exit_texture.setPixelFormat( GL_RGBA32F_ARB, GL_RGBA, GL_FLOAT  );
+    m_exit_texture.create( width, height );
+
+    m_entry_exit_framebuffer.create();
+    m_entry_exit_framebuffer.attachColorTexture( m_exit_texture, 0 );
+    m_entry_exit_framebuffer.attachColorTexture( m_entry_texture, 1 );
+
+    m_ray_casting_shader.bind();
+    m_ray_casting_shader.setUniform( "width", static_cast<GLfloat>( width ) );
+    m_ray_casting_shader.setUniform( "height", static_cast<GLfloat>( height ) );
+    m_ray_casting_shader.unbind();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Updates framebuffer
+ *  @param  width [in] window width
+ *  @param  height [in] window height
+ */
+/*===========================================================================*/
+void StochasticUniformGridRenderer::Engine::update_framebuffer( const size_t width, const size_t height )
+{
+    m_entry_texture.release();
+    m_entry_texture.create( width, height );
+
+    m_exit_texture.release();
+    m_exit_texture.create( width, height );
+
+    m_entry_exit_framebuffer.attachColorTexture( m_exit_texture, 0 );
+    m_entry_exit_framebuffer.attachColorTexture( m_entry_texture, 1 );
+
+    m_ray_casting_shader.bind();
+    m_ray_casting_shader.setUniform( "width", static_cast<GLfloat>( width ) );
+    m_ray_casting_shader.setUniform( "height", static_cast<GLfloat>( height ) );
+    m_ray_casting_shader.unbind();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Draws bounding box buffer.
+ */
+/*===========================================================================*/
+void StochasticUniformGridRenderer::Engine::draw_bounding_cube_buffer()
+{
+    kvs::VertexBufferObject::Binder binder( m_bounding_cube_buffer );
+    KVS_GL_CALL( glEnableClientState( GL_VERTEX_ARRAY ) );
+    KVS_GL_CALL( glVertexPointer( 3, GL_FLOAT, 0, 0 ) );
+    KVS_GL_CALL( glDrawArrays( GL_QUADS, 0, 72 ) );
+    KVS_GL_CALL( glDisableClientState( GL_VERTEX_ARRAY ) );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Draws quad to run shaders.
+ */
+/*===========================================================================*/
+void StochasticUniformGridRenderer::Engine::draw_quad()
+{
+    kvs::OpenGL::Disable( GL_DEPTH_TEST );
+    kvs::OpenGL::Disable( GL_LIGHTING );
+
+    kvs::OpenGL::WithPushedMatrix p1( GL_MODELVIEW );
+    p1.loadIdentity();
+    {
+        kvs::OpenGL::WithPushedMatrix p2( GL_PROJECTION );
+        p2.loadIdentity();
+        {
+            kvs::OpenGL::SetOrtho( 0, 1, 0, 1, -1, 1 );
+            glBegin( GL_QUADS );
+            glColor3f( 1.0, 1.0, 1.0 );
+            glTexCoord2f( 1, 1 ); glVertex2f( 1, 1 );
+            glTexCoord2f( 0, 1 ); glVertex2f( 0, 1 );
+            glTexCoord2f( 0, 0 ); glVertex2f( 0, 0 );
+            glTexCoord2f( 1, 0 ); glVertex2f( 1, 0 );
+            glEnd();
+        }
+    }
 }
 
 } // end of namespace kvs

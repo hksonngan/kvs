@@ -1,7 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   uniform_grid.vert
- *  @author Naoya Maeda
+ *  @author Naohisa Sakamoto, Naoya Maeda
  */
 /*----------------------------------------------------------------------------
  *
@@ -12,15 +12,26 @@
  *  $Id$
  */
 /*****************************************************************************/
-varying vec3 position;
-varying float depth;
+#version 120
+#include "qualifire.h"
+
+// Output parameters.
+VertOut vec3 position_ndc; // vertex position in normalized device coordinate
+
+// Uniform variables (OpenGL variables).
+uniform mat4 ModelViewProjectionMatrix; // model-view projection matrix
 
 
+/*===========================================================================*/
+/**
+ *  @brief  Main function of vertex shader.
+ */
+/*===========================================================================*/
 void main()
 {
-    gl_Position = gl_ProjectionMatrix * gl_ModelViewMatrix * gl_Vertex;
-    gl_TexCoord[0] = gl_MultiTexCoord0;
+//    gl_Position = ModelViewProjectionMatrix * gl_Vertex;
+    gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
+    gl_FrontColor = gl_Color;
 
-    position = ( gl_ModelViewMatrix * gl_Vertex ).xyz;
-    depth = gl_Position.z / gl_Position.w;
+    position_ndc = gl_Position.xyz / gl_Position.w;
 }
