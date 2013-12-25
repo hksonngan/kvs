@@ -185,7 +185,7 @@ void main()
 #endif
 
         accum_alpha += ( 1.0 - accum_alpha ) * c.a;
-        if ( R < accum_alpha )
+        if ( R <= accum_alpha )
         {
             // Get the normal vector in object coordinate.
             vec3 offset_index = vec3( volume.resolution_reciprocal );
