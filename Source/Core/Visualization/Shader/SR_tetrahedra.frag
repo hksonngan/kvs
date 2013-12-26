@@ -54,7 +54,7 @@ uniform sampler2D depth_texture; // depth texture
         delta_d + index.z * ( 1.0 - 2.0 * delta_s ) )
 
 // Returns a depth value in window coordinate.
-#define DEPTH( z ) \
+#define DEPTH( Z ) \
     ( gl_DepthRange.diff * Z + gl_DepthRange.near + gl_DepthRange.far ) / 2.0
 
 
