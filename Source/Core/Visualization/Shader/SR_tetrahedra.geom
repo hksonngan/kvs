@@ -509,7 +509,7 @@ void DecomposeInCase4( in int p0, in int p1, in int p2, in int p3 )
     vec3 c_normal = normal_in[p_front].xyz;
     float c_scalar_front = value_in[p_front];
     float c_scalar_back = value_in[p_back];
-    c_depth = gl_PositionIn[pBack].z / gl_PositionIn[pBack].w;
+    c_depth = gl_PositionIn[p_back].z / gl_PositionIn[p_back].w;
     float c_wc_inv_front = position_ndc_in[p_front].w;
     float c_wc_inv_back = position_ndc_in[p_back].w;
     EmitCrossingPoint(
