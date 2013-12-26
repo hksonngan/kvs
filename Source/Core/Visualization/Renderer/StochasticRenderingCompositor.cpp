@@ -192,17 +192,17 @@ void StochasticRenderingCompositor::check_object_changed()
             if ( object_changed )
             {
                 m_ensemble_buffer.clear();
-                stochastic_renderer->engine().release();
+
+                if ( stochastic_renderer->engine().object() ) stochastic_renderer->engine().release();
                 stochastic_renderer->engine().setDepthTexture( m_ensemble_buffer.currentDepthTexture() );
                 stochastic_renderer->engine().setShader( &stochastic_renderer->shader() );
+                stochastic_renderer->engine().setRepetitionLevel( m_repetition_level );
                 stochastic_renderer->engine().setEnabledShading( stochastic_renderer->isEnabledShading() );
 
-//                if ( kvs::glsl::ParticleBasedRenderer* particle_renderer = dynamic_cast<kvs::glsl::ParticleBasedRenderer*>( stochastic_renderer ) )
                 if ( stochastic_renderer->isEnabledTransformation() )
                 {
                     KVS_GL_CALL( glPushMatrix() );
                     object->transform( m_scene->objectManager()->objectCenter(), m_scene->objectManager()->normalize() );
-//                    particle_renderer->engine().create( object, m_scene->camera(), m_scene->light() );
                     stochastic_renderer->engine().create( object, m_scene->camera(), m_scene->light() );
                     KVS_GL_CALL( glPopMatrix() );
                 }
@@ -248,12 +248,10 @@ void StochasticRenderingCompositor::engines_create()
             stochastic_renderer->engine().setRepetitionLevel( m_repetition_level );
             stochastic_renderer->engine().setEnabledShading( stochastic_renderer->isEnabledShading() );
 
-//            if ( kvs::glsl::ParticleBasedRenderer* particle_renderer = dynamic_cast<kvs::glsl::ParticleBasedRenderer*>( stochastic_renderer ) )
             if ( stochastic_renderer->isEnabledTransformation() )
             {
                 KVS_GL_CALL( glPushMatrix() );
                 object->transform( m_scene->objectManager()->objectCenter(), m_scene->objectManager()->normalize() );
-//                particle_renderer->engine().create( object, m_scene->camera(), m_scene->light() );
                 stochastic_renderer->engine().create( object, m_scene->camera(), m_scene->light() );
                 KVS_GL_CALL( glPopMatrix() );
             }
@@ -280,7 +278,10 @@ void StochasticRenderingCompositor::engines_update()
         kvs::RendererBase* renderer = m_scene->rendererManager()->renderer( id_pair.second );
         if ( kvs::StochasticRendererBase* stochastic_renderer = dynamic_cast<kvs::StochasticRendererBase*>( renderer ) )
         {
+            KVS_GL_CALL( glPushMatrix() );
+            object->transform( m_scene->objectManager()->objectCenter(), m_scene->objectManager()->normalize() );
             stochastic_renderer->engine().update( object, m_scene->camera(), m_scene->light() );
+            KVS_GL_CALL( glPopMatrix() );
         }
     }
 }
@@ -297,10 +298,14 @@ void StochasticRenderingCompositor::engines_setup( const bool reset_count )
     for ( size_t i = 0; i < size; i++ )
     {
         kvs::IDManager::IDPair id_pair = (*m_scene->IDManager())[i];
+        kvs::ObjectBase* object = m_scene->objectManager()->object( id_pair.first );
         kvs::RendererBase* renderer = m_scene->rendererManager()->renderer( id_pair.second );
         if ( kvs::StochasticRendererBase* stochastic_renderer = dynamic_cast<kvs::StochasticRendererBase*>( renderer ) )
         {
+            KVS_GL_CALL( glPushMatrix() );
+            object->transform( m_scene->objectManager()->objectCenter(), m_scene->objectManager()->normalize() );
             stochastic_renderer->engine().setup( reset_count );
+            KVS_GL_CALL( glPopMatrix() );
         }
     }
 }

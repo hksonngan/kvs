@@ -221,15 +221,16 @@ void StochasticUniformGridRenderer::Engine::setup( const bool reset_count )
     kvs::OpenGL::Enable( GL_CULL_FACE );
     kvs::OpenGL::Disable( GL_LIGHTING );
 
-    kvs::ProgramObject::Binder unit0( m_ray_casting_shader );
-    kvs::ProgramObject::Binder unit1( m_bounding_cube_shader );
-    kvs::FrameBufferObject::Binder unit( m_entry_exit_framebuffer );
-
     // OpenGL variables.
     const kvs::Mat4 PM = kvs::OpenGL::ProjectionMatrix() * kvs::OpenGL::ModelViewMatrix();
     const kvs::Mat4 PM_inverse = PM.inverted();
+    m_ray_casting_shader.bind();
     m_ray_casting_shader.setUniform( "ModelViewProjectionMatrix", PM );
     m_ray_casting_shader.setUniform( "ModelViewProjectionMatrixInverse", PM_inverse );
+    m_ray_casting_shader.unbind();
+
+    kvs::ProgramObject::Binder unit0( m_bounding_cube_shader );
+    kvs::FrameBufferObject::Binder unit1( m_entry_exit_framebuffer );
     m_bounding_cube_shader.setUniform( "ModelViewProjectionMatrix", PM );
 
     // Draw the back face of the bounding cube for the entry points.
