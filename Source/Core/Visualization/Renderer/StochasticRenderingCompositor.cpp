@@ -199,17 +199,17 @@ void StochasticRenderingCompositor::check_object_changed()
                 stochastic_renderer->engine().setRepetitionLevel( m_repetition_level );
                 stochastic_renderer->engine().setEnabledShading( stochastic_renderer->isEnabledShading() );
 
-                if ( stochastic_renderer->isEnabledTransformation() )
-                {
-                    KVS_GL_CALL( glPushMatrix() );
-                    object->transform( m_scene->objectManager()->objectCenter(), m_scene->objectManager()->normalize() );
+//                if ( stochastic_renderer->isEnabledTransformation() )
+//                {
+//                    KVS_GL_CALL( glPushMatrix() );
+//                    object->transform( m_scene->objectManager()->objectCenter(), m_scene->objectManager()->normalize() );
                     stochastic_renderer->engine().create( object, m_scene->camera(), m_scene->light() );
-                    KVS_GL_CALL( glPopMatrix() );
-                }
-                else
-                {
-                    stochastic_renderer->engine().create( object, m_scene->camera(), m_scene->light() );
-                }
+//                    KVS_GL_CALL( glPopMatrix() );
+//                }
+//                else
+//                {
+//                    stochastic_renderer->engine().create( object, m_scene->camera(), m_scene->light() );
+//                }
             }
         }
     }
@@ -248,17 +248,17 @@ void StochasticRenderingCompositor::engines_create()
             stochastic_renderer->engine().setRepetitionLevel( m_repetition_level );
             stochastic_renderer->engine().setEnabledShading( stochastic_renderer->isEnabledShading() );
 
-            if ( stochastic_renderer->isEnabledTransformation() )
-            {
+//            if ( stochastic_renderer->isEnabledTransformation() )
+//            {
                 KVS_GL_CALL( glPushMatrix() );
                 object->transform( m_scene->objectManager()->objectCenter(), m_scene->objectManager()->normalize() );
                 stochastic_renderer->engine().create( object, m_scene->camera(), m_scene->light() );
                 KVS_GL_CALL( glPopMatrix() );
-            }
-            else
-            {
-                stochastic_renderer->engine().create( object, m_scene->camera(), m_scene->light() );
-            }
+//            }
+//            else
+//            {
+//                stochastic_renderer->engine().create( object, m_scene->camera(), m_scene->light() );
+//            }
         }
     }
 }
@@ -320,22 +320,31 @@ void StochasticRenderingCompositor::engines_draw()
     kvs::Camera* camera = m_scene->camera();
     kvs::Light* light = m_scene->light();
 
-    const size_t size = m_scene->IDManager()->size();
-    for ( size_t i = 0; i < size; i++ )
+    if ( m_scene->objectManager()->hasObject() )
     {
-        kvs::IDManager::IDPair id_pair = (*m_scene->IDManager())[i];
-        kvs::ObjectBase* object = m_scene->objectManager()->object( id_pair.first );
-        kvs::RendererBase* renderer = m_scene->rendererManager()->renderer( id_pair.second );
-        if ( kvs::StochasticRendererBase* stochastic_renderer = dynamic_cast<kvs::StochasticRendererBase*>( renderer ) )
+        const size_t size = m_scene->IDManager()->size();
+        for ( size_t i = 0; i < size; i++ )
         {
-            if ( object->isShown() )
+            kvs::IDManager::IDPair id_pair = (*m_scene->IDManager())[i];
+            kvs::ObjectBase* object = m_scene->objectManager()->object( id_pair.first );
+            kvs::RendererBase* renderer = m_scene->rendererManager()->renderer( id_pair.second );
+            if ( kvs::StochasticRendererBase* stochastic_renderer = dynamic_cast<kvs::StochasticRendererBase*>( renderer ) )
             {
-                KVS_GL_CALL( glPushMatrix() );
-                object->transform( m_scene->objectManager()->objectCenter(), m_scene->objectManager()->normalize() );
-                stochastic_renderer->engine().draw( object, camera, light );
-                KVS_GL_CALL( glPopMatrix() );
+                if ( object->isShown() )
+                {
+                    KVS_GL_CALL( glPushMatrix() );
+                    object->transform( m_scene->objectManager()->objectCenter(), m_scene->objectManager()->normalize() );
+                    stochastic_renderer->engine().draw( object, camera, light );
+                    KVS_GL_CALL( glPopMatrix() );
+                }
             }
         }
+    }
+    else
+    {
+        float array[16];
+        m_scene->objectManager()->xform().toArray( array );
+        kvs::OpenGL::MultMatrix( array );
     }
 }
 

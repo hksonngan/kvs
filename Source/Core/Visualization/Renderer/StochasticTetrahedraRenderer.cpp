@@ -298,6 +298,15 @@ void StochasticTetrahedraRenderer::Engine::setup( const bool reset_count )
         m_preintegration_texture.release();
         this->create_preintegration_texture();
     }
+
+    const kvs::Mat4 M = kvs::OpenGL::ModelViewMatrix();
+    const kvs::Mat4 PM = kvs::OpenGL::ProjectionMatrix() * M;
+    const kvs::Mat3 N = kvs::Mat3( M[0].xyz(), M[1].xyz(), M[2].xyz() );
+    m_shader_program.bind();
+    m_shader_program.setUniform( "ModelViewMatrix", M );
+    m_shader_program.setUniform( "ModelViewProjectionMatrix", PM );
+    m_shader_program.setUniform( "NormalMatrix", N );
+    m_shader_program.unbind();
 }
 
 /*===========================================================================*/
@@ -320,13 +329,6 @@ void StochasticTetrahedraRenderer::Engine::draw( kvs::ObjectBase* object, kvs::C
     kvs::Texture::Binder bind6( m_decomposition_texture, 2 );
     if ( depthTexture().isCreated() ) { kvs::Texture::Bind( depthTexture(), 3 ); }
     {
-        const kvs::Mat4 M = kvs::OpenGL::ModelViewMatrix();
-        const kvs::Mat4 PM = kvs::OpenGL::ProjectionMatrix() * M;
-        const kvs::Mat3 N = kvs::Mat3( M[0].xyz(), M[1].xyz(), M[2].xyz() );
-        m_shader_program.setUniform( "ModelViewMatrix", M );
-        m_shader_program.setUniform( "ModelViewProjectionMatrix", PM );
-        m_shader_program.setUniform( "NormalMatrix", N );
-
         const size_t size = randomTextureSize();
         const int count = repetitionCount() * ::RandomNumber();
         const float offset_x = static_cast<float>( ( count ) % size );

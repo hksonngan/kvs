@@ -50,6 +50,7 @@ uniform vec2 random_offset; // offset values for accessing to the random texture
 // Uniform variables (OpenGL variables).
 uniform mat4 ModelViewProjectionMatrixInverse; // inverse matrix of model-view projection matrix
 
+
 /*===========================================================================*/
 /**
  *  @brief  Returns random index.
@@ -212,7 +213,7 @@ void main()
             float w = float(i) / float( nsteps - 1 );
             float depth = RayDepth( w, entry_depth, exit_depth );
 
-            gl_FragColor = vec4( c.rgb, 1 );
+            gl_FragColor = vec4( c.rgb, 1.0 );
             gl_FragDepth = depth;
             return;
         }

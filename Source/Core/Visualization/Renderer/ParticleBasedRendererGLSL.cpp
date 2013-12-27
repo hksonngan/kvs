@@ -79,7 +79,7 @@ ParticleBasedRenderer::ParticleBasedRenderer():
     // The tranformation flag should be enabled in order to calculate the
     // object depth when calling the create-function of the engine. This is
     // only available for stochastic composition of multiple objects.
-    BaseClass::setEnabledTransformation( true );
+//    BaseClass::setEnabledTransformation( true );
 }
 
 /*===========================================================================*/
@@ -93,7 +93,7 @@ ParticleBasedRenderer::ParticleBasedRenderer():
 ParticleBasedRenderer::ParticleBasedRenderer( const kvs::Mat4& m, const kvs::Mat4& p, const kvs::Vec4& v ):
     StochasticRendererBase( new Engine( m, p, v ) )
 {
-    BaseClass::setEnabledTransformation( true );
+//    BaseClass::setEnabledTransformation( true );
 }
 
 /*===========================================================================*/

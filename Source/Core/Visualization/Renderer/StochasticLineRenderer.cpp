@@ -156,6 +156,12 @@ void StochasticLineRenderer::Engine::setup( const bool reset_count )
 {
     if ( reset_count ) resetRepetitions();
     m_random_index = m_shader_program.attributeLocation("random_index");
+
+    const kvs::Mat4 M = kvs::OpenGL::ModelViewMatrix();
+    const kvs::Mat4 PM = kvs::OpenGL::ProjectionMatrix() * M;
+    m_shader_program.bind();
+    m_shader_program.setUniform( "ModelViewProjectionMatrix", PM );
+    m_shader_program.unbind();
 }
 
 /*===========================================================================*/
@@ -174,10 +180,6 @@ void StochasticLineRenderer::Engine::draw( kvs::ObjectBase* object, kvs::Camera*
     kvs::ProgramObject::Binder bind2( m_shader_program );
     kvs::Texture::Binder bind3( randomTexture() );
     {
-        const kvs::Mat4 M = kvs::OpenGL::ModelViewMatrix();
-        const kvs::Mat4 PM = kvs::OpenGL::ProjectionMatrix() * M;
-        m_shader_program.setUniform( "ModelViewProjectionMatrix", PM );
-
         const size_t size = randomTextureSize();
         const int count = repetitionCount() * ::RandomNumber();
         const float offset_x = static_cast<float>( ( count ) % size );

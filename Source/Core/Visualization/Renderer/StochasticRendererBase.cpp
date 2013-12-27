@@ -35,7 +35,7 @@ StochasticRendererBase::StochasticRendererBase( kvs::StochasticRenderingEngine* 
     m_coarse_level( 1 ),
     m_enable_lod( false ),
     m_enable_refinement( false ),
-    m_enable_transformation( false ),
+//    m_enable_transformation( false ),
     m_shader( new kvs::Shader::Lambert() ),
     m_engine( engine )
 {

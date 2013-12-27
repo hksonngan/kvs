@@ -217,10 +217,6 @@ void StochasticUniformGridRenderer::Engine::setup( const bool reset_count )
         this->create_transfer_function_texture();
     }
 
-    kvs::OpenGL::Enable( GL_DEPTH_TEST );
-    kvs::OpenGL::Enable( GL_CULL_FACE );
-    kvs::OpenGL::Disable( GL_LIGHTING );
-
     // OpenGL variables.
     const kvs::Mat4 PM = kvs::OpenGL::ProjectionMatrix() * kvs::OpenGL::ModelViewMatrix();
     const kvs::Mat4 PM_inverse = PM.inverted();
@@ -228,6 +224,10 @@ void StochasticUniformGridRenderer::Engine::setup( const bool reset_count )
     m_ray_casting_shader.setUniform( "ModelViewProjectionMatrix", PM );
     m_ray_casting_shader.setUniform( "ModelViewProjectionMatrixInverse", PM_inverse );
     m_ray_casting_shader.unbind();
+
+//    kvs::OpenGL::Enable( GL_DEPTH_TEST );
+    kvs::OpenGL::Enable( GL_CULL_FACE );
+    kvs::OpenGL::Disable( GL_LIGHTING );
 
     kvs::ProgramObject::Binder unit0( m_bounding_cube_shader );
     kvs::FrameBufferObject::Binder unit1( m_entry_exit_framebuffer );
@@ -244,6 +244,8 @@ void StochasticUniformGridRenderer::Engine::setup( const bool reset_count )
     kvs::OpenGL::Clear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     kvs::OpenGL::SetCullFace( GL_BACK );
     this->draw_bounding_cube_buffer();
+
+    kvs::OpenGL::Disable( GL_CULL_FACE );
 }
 
 /*===========================================================================*/
@@ -256,9 +258,10 @@ void StochasticUniformGridRenderer::Engine::setup( const bool reset_count )
 /*===========================================================================*/
 void StochasticUniformGridRenderer::Engine::draw( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light )
 {
-    kvs::OpenGL::Disable( GL_CULL_FACE );
-    kvs::OpenGL::Enable( GL_BLEND );
-    kvs::OpenGL::SetBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_ALPHA );
+//    kvs::OpenGL::Enable( GL_DEPTH_TEST );
+//    kvs::OpenGL::Disable( GL_CULL_FACE );
+//    kvs::OpenGL::Enable( GL_BLEND );
+//    kvs::OpenGL::SetBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_ALPHA );
 
     if ( isEnabledShading() ) kvs::OpenGL::Enable( GL_LIGHTING );
     else kvs::OpenGL::Disable( GL_LIGHTING );
@@ -705,7 +708,7 @@ void StochasticUniformGridRenderer::Engine::draw_bounding_cube_buffer()
 /*===========================================================================*/
 void StochasticUniformGridRenderer::Engine::draw_quad()
 {
-    kvs::OpenGL::Disable( GL_DEPTH_TEST );
+//    kvs::OpenGL::Disable( GL_DEPTH_TEST );
     kvs::OpenGL::Disable( GL_LIGHTING );
 
     kvs::OpenGL::WithPushedMatrix p1( GL_MODELVIEW );
