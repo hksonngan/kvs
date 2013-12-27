@@ -26,9 +26,7 @@ FragIn vec3 position_ndc;
 // Uniform parameters.
 uniform sampler2D entry_points; // entry points (front face)
 uniform sampler2D exit_points; // exit points (back face)
-uniform vec3 offset; // offset width for the gradient
 uniform float dt; // sampling step
-uniform float opaque; // opaque value
 uniform vec3 light_position; // light position in the object coordinate
 uniform vec3 camera_position; // camera position in the object coordinate
 uniform VolumeParameter volume; // volume parameter
@@ -36,7 +34,6 @@ uniform sampler3D volume_data; // volume data
 uniform ShadingParameter shading; // shading parameter
 uniform TransferFunctionParameter transfer_function; // transfer function
 uniform sampler1D transfer_function_data; // 1D transfer function data
-uniform sampler2D jittering_texture; // texture for jittering
 uniform float width; // screen width
 uniform float height; // screen height
 uniform float to_zw1; // scaling parameter: (f*n)/(f-n)

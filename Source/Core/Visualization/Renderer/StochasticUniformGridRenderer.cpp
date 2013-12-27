@@ -217,21 +217,25 @@ void StochasticUniformGridRenderer::Engine::setup( const bool reset_count )
         this->create_transfer_function_texture();
     }
 
-    // OpenGL variables.
     const kvs::Mat4 PM = kvs::OpenGL::ProjectionMatrix() * kvs::OpenGL::ModelViewMatrix();
     const kvs::Mat4 PM_inverse = PM.inverted();
     m_ray_casting_shader.bind();
     m_ray_casting_shader.setUniform( "ModelViewProjectionMatrix", PM );
     m_ray_casting_shader.setUniform( "ModelViewProjectionMatrixInverse", PM_inverse );
+    m_ray_casting_shader.setUniform( "random_texture_size_inv", 1.0f / randomTextureSize() );
+    m_ray_casting_shader.setUniform( "volume_data", 0 );
+    m_ray_casting_shader.setUniform( "exit_points", 1 );
+    m_ray_casting_shader.setUniform( "entry_points", 2 );
+    m_ray_casting_shader.setUniform( "transfer_function_data", 3 );
+    m_ray_casting_shader.setUniform( "random_texture", 4 );
     m_ray_casting_shader.unbind();
-
-//    kvs::OpenGL::Enable( GL_DEPTH_TEST );
-    kvs::OpenGL::Enable( GL_CULL_FACE );
-    kvs::OpenGL::Disable( GL_LIGHTING );
 
     kvs::ProgramObject::Binder unit0( m_bounding_cube_shader );
     kvs::FrameBufferObject::Binder unit1( m_entry_exit_framebuffer );
     m_bounding_cube_shader.setUniform( "ModelViewProjectionMatrix", PM );
+
+    kvs::OpenGL::Enable( GL_CULL_FACE );
+    kvs::OpenGL::Disable( GL_LIGHTING );
 
     // Draw the back face of the bounding cube for the entry points.
     kvs::OpenGL::SetDrawBuffer( GL_COLOR_ATTACHMENT0_EXT );
@@ -258,29 +262,15 @@ void StochasticUniformGridRenderer::Engine::setup( const bool reset_count )
 /*===========================================================================*/
 void StochasticUniformGridRenderer::Engine::draw( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light )
 {
-//    kvs::OpenGL::Enable( GL_DEPTH_TEST );
-//    kvs::OpenGL::Disable( GL_CULL_FACE );
-//    kvs::OpenGL::Enable( GL_BLEND );
-//    kvs::OpenGL::SetBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_ALPHA );
+    kvs::Texture::Binder unit0( m_volume_texture, 0 );
+    kvs::Texture::Binder unit1( m_exit_texture, 1 );
+    kvs::Texture::Binder unit2( m_entry_texture, 2 );
+    kvs::Texture::Binder unit3( m_transfer_function_texture, 3 );
+    kvs::Texture::Binder unit4( randomTexture(), 4 );
+    kvs::ProgramObject::Binder unit( m_ray_casting_shader );
 
     if ( isEnabledShading() ) kvs::OpenGL::Enable( GL_LIGHTING );
     else kvs::OpenGL::Disable( GL_LIGHTING );
-
-    // Ray casting.
-    kvs::ProgramObject::Binder unit( m_ray_casting_shader );
-    kvs::Texture::Binder unit1( m_volume_texture, 0 );
-    kvs::Texture::Binder unit2( m_exit_texture, 1 );
-    kvs::Texture::Binder unit3( m_entry_texture, 2 );
-    kvs::Texture::Binder unit4( m_transfer_function_texture, 3 );
-    kvs::Texture::Binder unit5( randomTexture(), 4 );
-
-    const size_t size = randomTextureSize();
-    const int count = repetitionCount() * ::RandomNumber();
-    const float offset_x = static_cast<float>( ( count ) % size );
-    const float offset_y = static_cast<float>( ( count / size ) % size );
-    const kvs::Vec2 random_offset( offset_x, offset_y );
-    m_ray_casting_shader.setUniform( "random_texture_size_inv", 1.0f / randomTextureSize() );
-    m_ray_casting_shader.setUniform( "random_offset", random_offset );
 
     const float f = camera->back();
     const float n = camera->front();
@@ -296,11 +286,13 @@ void StochasticUniformGridRenderer::Engine::draw( kvs::ObjectBase* object, kvs::
     m_ray_casting_shader.setUniform( "to_ze2", to_ze2 );
     m_ray_casting_shader.setUniform( "light_position", light_position );
     m_ray_casting_shader.setUniform( "camera_position", camera_position );
-    m_ray_casting_shader.setUniform( "volume_data", 0 );
-    m_ray_casting_shader.setUniform( "exit_points", 1 );
-    m_ray_casting_shader.setUniform( "entry_points", 2 );
-    m_ray_casting_shader.setUniform( "transfer_function_data", 3 );
-    m_ray_casting_shader.setUniform( "random_texture", 4 );
+
+    const size_t size = randomTextureSize();
+    const int count = repetitionCount() * ::RandomNumber();
+    const float offset_x = static_cast<float>( ( count ) % size );
+    const float offset_y = static_cast<float>( ( count / size ) % size );
+    const kvs::Vec2 random_offset( offset_x, offset_y );
+    m_ray_casting_shader.setUniform( "random_offset", random_offset );
     this->draw_quad();
 
     countRepetitions();
@@ -708,7 +700,6 @@ void StochasticUniformGridRenderer::Engine::draw_bounding_cube_buffer()
 /*===========================================================================*/
 void StochasticUniformGridRenderer::Engine::draw_quad()
 {
-//    kvs::OpenGL::Disable( GL_DEPTH_TEST );
     kvs::OpenGL::Disable( GL_LIGHTING );
 
     kvs::OpenGL::WithPushedMatrix p1( GL_MODELVIEW );
