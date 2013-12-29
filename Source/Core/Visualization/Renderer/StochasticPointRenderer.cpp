@@ -156,6 +156,18 @@ void StochasticPointRenderer::Engine::setup( const bool reset_count )
 {
     if ( reset_count ) resetRepetitions();
     m_random_index = m_shader_program.attributeLocation("random_index");
+
+    const kvs::Mat4 M = kvs::OpenGL::ModelViewMatrix();
+    const kvs::Mat4 PM = kvs::OpenGL::ProjectionMatrix() * M;
+    const kvs::Mat3 N = kvs::Mat3( M[0].xyz(), M[1].xyz(), M[2].xyz() );
+    m_shader_program.bind();
+    m_shader_program.setUniform( "ModelViewMatrix", M );
+    m_shader_program.setUniform( "ModelViewProjectionMatrix", PM );
+    m_shader_program.setUniform( "NormalMatrix", N );
+    m_shader_program.setUniform( "random_texture_size_inv", 1.0f / randomTextureSize() );
+    m_shader_program.setUniform( "random_texture", 0 );
+    m_shader_program.setUniform( "opacity", m_point_opacity / 255.0f );
+    m_shader_program.unbind();
 }
 
 /*===========================================================================*/
@@ -174,22 +186,12 @@ void StochasticPointRenderer::Engine::draw( kvs::ObjectBase* object, kvs::Camera
     kvs::ProgramObject::Binder bind2( m_shader_program );
     kvs::Texture::Binder bind3( randomTexture() );
     {
-        const kvs::Mat4 M = kvs::OpenGL::ModelViewMatrix();
-        const kvs::Mat4 PM = kvs::OpenGL::ProjectionMatrix() * M;
-        const kvs::Mat3 N = kvs::Mat3( M[0].xyz(), M[1].xyz(), M[2].xyz() );
-        m_shader_program.setUniform( "ModelViewMatrix", M );
-        m_shader_program.setUniform( "ModelViewProjectionMatrix", PM );
-        m_shader_program.setUniform( "NormalMatrix", N );
-
         const size_t size = randomTextureSize();
         const int count = repetitionCount() * ::RandomNumber();
         const float offset_x = static_cast<float>( ( count ) % size );
         const float offset_y = static_cast<float>( ( count / size ) % size );
         const kvs::Vec2 random_offset( offset_x, offset_y );
-        m_shader_program.setUniform( "random_texture_size_inv", 1.0f / randomTextureSize() );
         m_shader_program.setUniform( "random_offset", random_offset );
-        m_shader_program.setUniform( "random_texture", 0 );
-        m_shader_program.setUniform( "opacity", m_point_opacity / 255.0f );
 
         const size_t nvertices = point->numberOfVertices();
         const size_t index_size = nvertices * 2 * sizeof( kvs::UInt16 );

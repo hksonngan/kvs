@@ -306,6 +306,8 @@ void StochasticTetrahedraRenderer::Engine::setup( const bool reset_count )
     m_shader_program.setUniform( "ModelViewMatrix", M );
     m_shader_program.setUniform( "ModelViewProjectionMatrix", PM );
     m_shader_program.setUniform( "NormalMatrix", N );
+    m_shader_program.setUniform( "delta_s", 0.5f / m_preintegration_texture.width() );
+    m_shader_program.setUniform( "delta_d", 0.5f / m_preintegration_texture.depth() );
     m_shader_program.unbind();
 }
 
@@ -335,8 +337,6 @@ void StochasticTetrahedraRenderer::Engine::draw( kvs::ObjectBase* object, kvs::C
         const float offset_y = static_cast<float>( ( count / size ) % size );
         const kvs::Vec2 random_offset( offset_x, offset_y );
         m_shader_program.setUniform( "random_offset", random_offset );
-        m_shader_program.setUniform( "delta_s", 0.5f / m_preintegration_texture.width() );
-        m_shader_program.setUniform( "delta_d", 0.5f / m_preintegration_texture.depth() );
 
         const size_t nnodes = volume->numberOfNodes();
         const size_t ncells = volume->numberOfCells();
