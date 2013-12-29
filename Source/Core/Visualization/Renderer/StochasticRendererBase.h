@@ -46,7 +46,6 @@ private:
     size_t m_coarse_level; ///< repetition level for the coarse rendering (LOD)
     bool m_enable_lod; ///< flag for LOD rendering
     bool m_enable_refinement; ///< flag for progressive refinement rendering
-//    bool m_enable_transformation; ///< flag for stochastic rendering compositor
     kvs::Mat4 m_modelview; ///< modelview matrix used for LOD control
     kvs::Vec3 m_light_position; ///< light position used for LOD control
     kvs::EnsembleAverageBuffer m_ensemble_buffer; ///< ensemble averaging buffer
@@ -80,8 +79,6 @@ protected:
 
     kvs::Shader::ShadingModel& shader() { return *m_shader; }
     kvs::StochasticRenderingEngine& engine() { return *m_engine; }
-//    bool isEnabledTransformation() const { return m_enable_transformation; }
-//    void setEnabledTransformation( const bool enable ) { m_enable_transformation = enable; }
 };
 
 template <typename ShadingType>
