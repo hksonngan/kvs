@@ -112,10 +112,10 @@ void StochasticMultipleTetrahedraCompositor::draw()
     }
 
     // Setup engine.
-    const bool reset_count = !m_enable_refinement;
-    this->engine_setup( reset_count );
+    this->engine_setup();
 
     // Ensemble rendering.
+    const bool reset_count = !m_enable_refinement;
     if ( reset_count ) m_ensemble_buffer.clear();
     for ( size_t i = 0; i < repetitions; i++ )
     {
@@ -279,7 +279,11 @@ void StochasticMultipleTetrahedraCompositor::engine_create()
         m_renderer->engine().setShader( &m_renderer->shader() );
         m_renderer->engine().setRepetitionLevel( m_repetition_level );
         m_renderer->engine().setEnabledShading( m_enable_shading );
+
+        KVS_GL_CALL( glPushMatrix() );
+        volume0->transform( m_scene->objectManager()->objectCenter(), m_scene->objectManager()->normalize() );
         m_renderer->engine().create( NULL, m_scene->camera(), m_scene->light() );
+        KVS_GL_CALL( glPopMatrix() );
     }
 }
 
@@ -290,18 +294,29 @@ void StochasticMultipleTetrahedraCompositor::engine_create()
 /*===========================================================================*/
 void StochasticMultipleTetrahedraCompositor::engine_update()
 {
+    const kvs::UnstructuredVolumeObject* volume0 = m_renderer->volume(0);
+
+    KVS_GL_CALL( glPushMatrix() );
+    volume0->transform( m_scene->objectManager()->objectCenter(), m_scene->objectManager()->normalize() );
     m_renderer->engine().update( NULL, m_scene->camera(), m_scene->light() );
+    KVS_GL_CALL( glPopMatrix() );
 }
 
 /*===========================================================================*/
 /**
  *  @brief  Calls the setup method of the engine.
- *  @param  reset_count [in] reset count
  */
 /*===========================================================================*/
-void StochasticMultipleTetrahedraCompositor::engine_setup( const bool reset_count )
+void StochasticMultipleTetrahedraCompositor::engine_setup()
 {
-    m_renderer->engine().setup( reset_count );
+    const kvs::UnstructuredVolumeObject* volume0 = m_renderer->volume(0);
+    const bool reset_count = !m_enable_refinement;
+
+    KVS_GL_CALL( glPushMatrix() );
+    volume0->transform( m_scene->objectManager()->objectCenter(), m_scene->objectManager()->normalize() );
+    if ( reset_count ) m_renderer->engine().resetRepetitions();
+    m_renderer->engine().setup( NULL, m_scene->camera(), m_scene->light() );
+    KVS_GL_CALL( glPopMatrix() );
 }
 
 /*===========================================================================*/
@@ -322,6 +337,7 @@ void StochasticMultipleTetrahedraCompositor::engine_draw()
         KVS_GL_CALL( glPushMatrix() );
         volume1->transform( m_scene->objectManager()->objectCenter(), m_scene->objectManager()->normalize() );
         m_renderer->engine().draw( NULL, m_scene->camera(), m_scene->light() );
+        m_renderer->engine().countRepetitions();
         KVS_GL_CALL( glPopMatrix() );
     }
 }

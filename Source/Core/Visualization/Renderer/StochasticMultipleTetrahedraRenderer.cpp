@@ -336,7 +336,7 @@ void StochasticMultipleTetrahedraRenderer::Engine::create( kvs::ObjectBase* obje
 /*===========================================================================*/
 /**
  *  @brief  Update.
- *  @param  polygon [in] pointer to the polygon object
+ *  @param  object [in] pointer to the object
  *  @param  camera [in] pointer to the camera
  *  @param  light [in] pointer to the light
  */
@@ -348,13 +348,13 @@ void StochasticMultipleTetrahedraRenderer::Engine::update( kvs::ObjectBase* obje
 /*===========================================================================*/
 /**
  *  @brief  Set up.
- *  @param  reset_count [in] flag for the repetition count
+ *  @param  object [in] pointer to the object
+ *  @param  camera [in] pointer to the camera
+ *  @param  light [in] pointer to the light
  */
 /*===========================================================================*/
-void StochasticMultipleTetrahedraRenderer::Engine::setup( const bool reset_count )
+void StochasticMultipleTetrahedraRenderer::Engine::setup( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light )
 {
-    if ( reset_count ) resetRepetitions();
-
     for ( size_t i = 0; i < 2; i++ )
     {
         m_random_index[i] = m_shader_program[i].attributeLocation("random_index");
@@ -473,8 +473,6 @@ void StochasticMultipleTetrahedraRenderer::Engine::draw( kvs::ObjectBase* object
     }
     if ( depthTexture().isCreated() ) { kvs::Texture::Unbind( depthTexture(), 4 ); }
     if ( m_extra_texture.isCreated() ) { kvs::Texture::Unbind( m_extra_texture, 5 ); }
-
-    countRepetitions();
 }
 
 /*===========================================================================*/

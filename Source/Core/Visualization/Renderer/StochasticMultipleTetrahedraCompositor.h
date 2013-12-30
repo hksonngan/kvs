@@ -81,7 +81,7 @@ private:
     kvs::Mat4 object_xform();
     void engine_create();
     void engine_update();
-    void engine_setup( const bool reset_count );
+    void engine_setup();
     void engine_draw();
     void create_extra_texture( const size_t width, const size_t height );
 };

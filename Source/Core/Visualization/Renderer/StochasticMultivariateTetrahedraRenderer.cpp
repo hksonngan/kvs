@@ -311,7 +311,7 @@ void StochasticMultivariateTetrahedraRenderer::Engine::create( kvs::ObjectBase* 
 /*===========================================================================*/
 /**
  *  @brief  Update.
- *  @param  polygon [in] pointer to the polygon object
+ *  @param  object [in] pointer to the polygon object
  *  @param  camera [in] pointer to the camera
  *  @param  light [in] pointer to the light
  */
@@ -323,12 +323,13 @@ void StochasticMultivariateTetrahedraRenderer::Engine::update( kvs::ObjectBase* 
 /*===========================================================================*/
 /**
  *  @brief  Set up.
- *  @param  reset_count [in] flag for the repetition count
+ *  @param  object [in] pointer to the polygon object
+ *  @param  camera [in] pointer to the camera
+ *  @param  light [in] pointer to the light
  */
 /*===========================================================================*/
-void StochasticMultivariateTetrahedraRenderer::Engine::setup( const bool reset_count )
+void StochasticMultivariateTetrahedraRenderer::Engine::setup( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light )
 {
-    if ( reset_count ) resetRepetitions();
     m_random_index = m_shader_program.attributeLocation("random_index");
     m_value = m_shader_program.attributeLocation("value");
 
@@ -439,8 +440,6 @@ void StochasticMultivariateTetrahedraRenderer::Engine::draw( kvs::ObjectBase* ob
         // Disable random index.
         KVS_GL_CALL( glDisableVertexAttribArray( m_random_index ) );
     }
-
-    countRepetitions();
 }
 
 /*===========================================================================*/

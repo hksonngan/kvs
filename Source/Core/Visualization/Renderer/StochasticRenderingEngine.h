@@ -33,6 +33,10 @@ class Light;
 /*===========================================================================*/
 class StochasticRenderingEngine
 {
+    friend class StochasticRendererBase;
+    friend class StochasticRenderingCompositor;
+    /*DEPRECATED*/ friend class StochasticMultipleTetrahedraCompositor;
+
 private:
 
     const kvs::ObjectBase* m_object; ///< pointer to the object
@@ -65,7 +69,7 @@ public:
     virtual void release() = 0;
     virtual void create( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light ) = 0;
     virtual void update( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light ) = 0;
-    virtual void setup( const bool reset_count ) = 0;
+    virtual void setup( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light ) = 0;
     virtual void draw( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light ) = 0;
 
 protected:

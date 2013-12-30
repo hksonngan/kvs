@@ -174,7 +174,7 @@ void StochasticPolygonRenderer::Engine::release()
 /*===========================================================================*/
 /**
  *  @brief  Create shaders, VBO, and framebuffers.
- *  @param  polygon [in] pointer to the polygon object
+ *  @param  object [in] pointer to the object
  *  @param  camera [in] pointer to the camera
  *  @param  light [in] pointer to the light
  */
@@ -195,7 +195,7 @@ void StochasticPolygonRenderer::Engine::create( kvs::ObjectBase* object, kvs::Ca
 /*===========================================================================*/
 /**
  *  @brief  Update.
- *  @param  polygon [in] pointer to the polygon object
+ *  @param  object [in] pointer to the object
  *  @param  camera [in] pointer to the camera
  *  @param  light [in] pointer to the light
  */
@@ -207,12 +207,13 @@ void StochasticPolygonRenderer::Engine::update( kvs::ObjectBase* object, kvs::Ca
 /*===========================================================================*/
 /**
  *  @brief  Set up.
- *  @param  reset_count [in] flag for the repetition count
+ *  @param  polygon [in] pointer to the object
+ *  @param  camera [in] pointer to the camera
+ *  @param  light [in] pointer to the light
  */
 /*===========================================================================*/
-void StochasticPolygonRenderer::Engine::setup( const bool reset_count )
+void StochasticPolygonRenderer::Engine::setup( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light )
 {
-    if ( reset_count ) resetRepetitions();
     m_random_index = m_shader_program.attributeLocation("random_index");
 
     const kvs::Mat4 M = kvs::OpenGL::ModelViewMatrix();
@@ -231,7 +232,7 @@ void StochasticPolygonRenderer::Engine::setup( const bool reset_count )
 /*===========================================================================*/
 /**
  *  @brief  Draw an ensemble.
- *  @param  polygon [in] pointer to the polygon object
+ *  @param  object [in] pointer to the object
  *  @param  camera [in] pointer to the camera
  *  @param  light [in] pointer to the light
  */
@@ -305,8 +306,6 @@ void StochasticPolygonRenderer::Engine::draw( kvs::ObjectBase* object, kvs::Came
         // Disable random index.
         KVS_GL_CALL( glDisableVertexAttribArray( m_random_index ) );
     }
-
-    countRepetitions();
 }
 
 /*===========================================================================*/

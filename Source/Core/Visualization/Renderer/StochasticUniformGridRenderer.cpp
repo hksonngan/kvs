@@ -203,12 +203,13 @@ void StochasticUniformGridRenderer::Engine::update( kvs::ObjectBase* object, kvs
 /*===========================================================================*/
 /**
  *  @brief  Set up.
- *  @param  reset_count [in] flag for the repetition count
+ *  @param  object [in] pointer to the object
+ *  @param  camera [in] pointer to the camera
+ *  @param  light [in] pointer to the light
  */
 /*===========================================================================*/
-void StochasticUniformGridRenderer::Engine::setup( const bool reset_count )
+void StochasticUniformGridRenderer::Engine::setup( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light )
 {
-    if ( reset_count ) resetRepetitions();
     m_random_index = m_ray_casting_shader.attributeLocation("random_index");
 
     if ( m_transfer_function_changed )
@@ -294,8 +295,6 @@ void StochasticUniformGridRenderer::Engine::draw( kvs::ObjectBase* object, kvs::
     const kvs::Vec2 random_offset( offset_x, offset_y );
     m_ray_casting_shader.setUniform( "random_offset", random_offset );
     this->draw_quad();
-
-    countRepetitions();
 }
 
 /*===========================================================================*/

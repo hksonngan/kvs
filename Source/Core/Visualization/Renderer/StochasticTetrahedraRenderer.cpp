@@ -282,13 +282,13 @@ void StochasticTetrahedraRenderer::Engine::update( kvs::ObjectBase* object, kvs:
 /*===========================================================================*/
 /**
  *  @brief  Set up.
- *  @param  reset_count [in] flag for the repetition count
+ *  @param  polygon [in] pointer to the polygon object
+ *  @param  camera [in] pointer to the camera
+ *  @param  light [in] pointer to the light
  */
 /*===========================================================================*/
-void StochasticTetrahedraRenderer::Engine::setup( const bool reset_count )
+void StochasticTetrahedraRenderer::Engine::setup( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light )
 {
-    if ( reset_count ) resetRepetitions();
-
     m_random_index = m_shader_program.attributeLocation("random_index");
     m_value = m_shader_program.attributeLocation("value");
 
@@ -381,8 +381,6 @@ void StochasticTetrahedraRenderer::Engine::draw( kvs::ObjectBase* object, kvs::C
         KVS_GL_CALL( glDisableVertexAttribArray( m_random_index ) );
     }
     if ( depthTexture().isCreated() ) { kvs::Texture::Unbind( depthTexture(), 3 ); }
-
-    countRepetitions();
 }
 
 /*===========================================================================*/

@@ -79,7 +79,7 @@ public:
     void release();
     void create( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
     void update( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
-    void setup( const bool reset_count );
+    void setup( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
     void draw( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
 
     void showComponent( const size_t index ) { m_show_component[index] = true; }

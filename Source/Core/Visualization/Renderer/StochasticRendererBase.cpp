@@ -119,7 +119,8 @@ void StochasticRendererBase::exec( kvs::ObjectBase* object, kvs::Camera* camera,
 
     // Setup engine.
     const bool reset_count = !m_enable_refinement;
-    m_engine->setup( reset_count );
+    if ( reset_count ) m_engine->resetRepetitions();
+    m_engine->setup( object, camera, light );
 
     // Ensemble rendering.
     if ( reset_count ) m_ensemble_buffer.clear();
@@ -127,6 +128,7 @@ void StochasticRendererBase::exec( kvs::ObjectBase* object, kvs::Camera* camera,
     {
         m_ensemble_buffer.bind();
         m_engine->draw( object, camera, light );
+        m_engine->countRepetitions();
         m_ensemble_buffer.unbind();
         m_ensemble_buffer.add();
     }

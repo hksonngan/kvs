@@ -114,10 +114,10 @@ void StochasticRenderingCompositor::draw()
     }
 
     // Setup engine.
-    const bool reset_count = !m_enable_refinement;
-    this->engines_setup( reset_count );
+    this->engines_setup();
 
     // Ensemble rendering.
+    const bool reset_count = !m_enable_refinement;
     if ( reset_count ) m_ensemble_buffer.clear();
     for ( size_t i = 0; i < repetitions; i++ )
     {
@@ -260,6 +260,9 @@ void StochasticRenderingCompositor::engines_create()
 /*===========================================================================*/
 void StochasticRenderingCompositor::engines_update()
 {
+    kvs::Camera* camera = m_scene->camera();
+    kvs::Light* light = m_scene->light();
+
     const size_t size = m_scene->IDManager()->size();
     for ( size_t i = 0; i < size; i++ )
     {
@@ -270,7 +273,7 @@ void StochasticRenderingCompositor::engines_update()
         {
             kvs::OpenGL::PushMatrix();
             object->transform( m_scene->objectManager()->objectCenter(), m_scene->objectManager()->normalize() );
-            stochastic_renderer->engine().update( object, m_scene->camera(), m_scene->light() );
+            stochastic_renderer->engine().update( object, camera, light );
             kvs::OpenGL::PopMatrix();
         }
     }
@@ -279,11 +282,14 @@ void StochasticRenderingCompositor::engines_update()
 /*===========================================================================*/
 /**
  *  @brief  Calls the setup method of each engine.
- *  @param  reset_count [in] reset count
  */
 /*===========================================================================*/
-void StochasticRenderingCompositor::engines_setup( const bool reset_count )
+void StochasticRenderingCompositor::engines_setup()
 {
+    kvs::Camera* camera = m_scene->camera();
+    kvs::Light* light = m_scene->light();
+    const bool reset_count = !m_enable_refinement;
+
     const size_t size = m_scene->IDManager()->size();
     for ( size_t i = 0; i < size; i++ )
     {
@@ -294,7 +300,8 @@ void StochasticRenderingCompositor::engines_setup( const bool reset_count )
         {
             kvs::OpenGL::PushMatrix();
             object->transform( m_scene->objectManager()->objectCenter(), m_scene->objectManager()->normalize() );
-            stochastic_renderer->engine().setup( reset_count );
+            if ( reset_count ) stochastic_renderer->engine().resetRepetitions();
+            stochastic_renderer->engine().setup( object, camera, light );
             kvs::OpenGL::PopMatrix();
         }
     }
@@ -323,6 +330,7 @@ void StochasticRenderingCompositor::engines_draw()
                 kvs::OpenGL::PushMatrix();
                 object->transform( m_scene->objectManager()->objectCenter(), m_scene->objectManager()->normalize() );
                 stochastic_renderer->engine().draw( object, camera, light );
+                stochastic_renderer->engine().countRepetitions();
                 kvs::OpenGL::PopMatrix();
             }
         }

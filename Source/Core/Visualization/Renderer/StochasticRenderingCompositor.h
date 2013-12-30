@@ -74,7 +74,7 @@ private:
     kvs::Mat4 object_xform();
     void engines_create();
     void engines_update();
-    void engines_setup( const bool reset_count );
+    void engines_setup();
     void engines_draw();
 
 public:

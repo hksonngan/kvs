@@ -149,12 +149,13 @@ void StochasticPointRenderer::Engine::update( kvs::ObjectBase* object, kvs::Came
 /*===========================================================================*/
 /**
  *  @brief  Set up.
- *  @param  reset_count [in] flag for the repetition count
+ *  @param  object [in] pointer to the object
+ *  @param  camera [in] pointer to the camera
+ *  @param  light [in] pointer to the light
  */
 /*===========================================================================*/
-void StochasticPointRenderer::Engine::setup( const bool reset_count )
+void StochasticPointRenderer::Engine::setup( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light )
 {
-    if ( reset_count ) resetRepetitions();
     m_random_index = m_shader_program.attributeLocation("random_index");
 
     const kvs::Mat4 M = kvs::OpenGL::ModelViewMatrix();
@@ -237,8 +238,6 @@ void StochasticPointRenderer::Engine::draw( kvs::ObjectBase* object, kvs::Camera
         // Disable random index.
         KVS_GL_CALL( glDisableVertexAttribArray( m_random_index ) );
     }
-
-    countRepetitions();
 }
 
 /*===========================================================================*/
