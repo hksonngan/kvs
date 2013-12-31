@@ -263,7 +263,7 @@ void ParticleBufferCompositor::accumulate( kvs::Camera* camera, kvs::Light* ligh
         if ( m_object_manager->hasActiveObject() )
         {
             if ( m_object_manager->activeObject() == object ||
-                 renderer->particleBuffer()->numOfStoredParticles() == 0 )
+                 renderer->particleBuffer()->numberOfStoredParticles() == 0 )
             {
                 m_point_renderer_list[id]->cleanParticleBuffer();
                 this->update_particle_buffer( object, renderer, camera, light );
@@ -288,8 +288,8 @@ void ParticleBufferCompositor::accumulate( kvs::Camera* camera, kvs::Light* ligh
         &BaseClass::colorData(),
         &BaseClass::depthData() );
 
-    m_num_projected_particles = m_accumulator->numOfProjectedParticles();
-    m_num_stored_particles = m_accumulator->numOfStoredParticles();
+    m_num_projected_particles = m_accumulator->numberOfProjectedParticles();
+    m_num_stored_particles = m_accumulator->numberOfStoredParticles();
 }
 
 /*==========================================================================*/

@@ -282,12 +282,15 @@ void ParticleBasedRenderer::Engine::update( kvs::ObjectBase* object, kvs::Camera
 /*===========================================================================*/
 /**
  *  @brief  Setup.
- *  @param  reset_count [in] flag for the repetition count
+ *  @param  point [in] pointer to the point object
+ *  @param  camera [in] pointer to the camera
+ *  @param  light [in] pointer to the light
  */
 /*===========================================================================*/
-void ParticleBasedRenderer::Engine::setup( const bool reset_count )
+void ParticleBasedRenderer::Engine::setup( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light )
 {
-    resetRepetitions(); // counter must be reset with no referrence to 'reset_count'
+    // The repetition counter must be reset here.
+    resetRepetitions();
 
     kvs::OpenGL::Enable( GL_DEPTH_TEST );
     kvs::OpenGL::Enable( GL_VERTEX_PROGRAM_POINT_SIZE );
@@ -375,7 +378,7 @@ void ParticleBasedRenderer::Engine::draw( kvs::ObjectBase* object, kvs::Camera* 
         KVS_GL_CALL( glDisableVertexAttribArray( m_random_index ) );
     }
 
-    countRepetitions();
+//    countRepetitions();
 }
 
 /*===========================================================================*/
