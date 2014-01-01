@@ -103,7 +103,7 @@ struct Parameters
     void createHistogramTexture( void )
     {
         const size_t nchannels = 4;
-        const size_t width = static_cast<size_t>( this->frequency_table.nbins() );
+        const size_t width = static_cast<size_t>( this->frequency_table.numberOfBins() );
         const size_t height = width;
 
         this->histogram_texture.setPixelFormat( nchannels, sizeof( kvs::UInt8 ) );
@@ -120,7 +120,7 @@ struct Parameters
     const kvs::ValueArray<kvs::UInt8> histogramImage( void )
     {
         const size_t nchannels = 4;
-        const size_t width = static_cast<size_t>( frequency_table.nbins() );
+        const size_t width = static_cast<size_t>( frequency_table.numberOfBins() );
         const size_t height = width;
         const size_t npixels = width * height;
 
@@ -392,7 +392,7 @@ const bool Main::exec( void )
         std::cout << "HISTOGRAM INFORMATION" << std::endl;
         std::cout << "min range: " << params.frequency_table.minRange() << std::endl;
         std::cout << "max range: " << params.frequency_table.maxRange() << std::endl;
-        std::cout << "number of bins: " << params.frequency_table.nbins() << std::endl;
+        std::cout << "number of bins: " << params.frequency_table.numberOfBins() << std::endl;
         std::cout << "max count: " << params.frequency_table.maxCount() << std::endl;
     }
 

@@ -53,38 +53,38 @@ public:
 
 protected:
 
-    std::string          m_caption;           ///< caption
-    kvs::FrequencyTable  m_table;             ///< frequency distribution table
-    kvs::RGBAColor       m_graph_color;       ///< graph color
-    float                m_bias_parameter;    ///< bias parameter
-    kvs::Texture2D       m_texture;           ///< histogram texture
-    kvs::glut::Rectangle m_palette;           ///< palette
-    kvs::RGBColor        m_upper_edge_color;  ///< upper edge color
-    kvs::RGBColor        m_lower_edge_color;  ///< lower edge color
-    kvs::Vector2i        m_previous_position; ///< mouse previous position
+    std::string m_caption; ///< caption
+    kvs::FrequencyTable m_table; ///< frequency distribution table
+    kvs::RGBAColor m_graph_color; ///< graph color
+    float m_bias_parameter; ///< bias parameter
+    kvs::Texture2D m_texture; ///< histogram texture
+    kvs::glut::Rectangle m_palette; ///< palette
+    kvs::RGBColor m_upper_edge_color; ///< upper edge color
+    kvs::RGBColor m_lower_edge_color; ///< lower edge color
+    kvs::Vector2i m_previous_position; ///< mouse previous position
 
 public:
 
     Histogram( kvs::ScreenBase* screen = 0 );
-    virtual ~Histogram( void );
+    virtual ~Histogram();
 
-    virtual void screenUpdated( void ) {};
-    virtual void screenResized( void ) {};
+    virtual void screenUpdated() {}
+    virtual void screenResized() {}
 
-    const std::string& caption( void ) const;
-    const kvs::FrequencyTable& table( void ) const;
+    const std::string& caption() const { return m_caption; }
+    const kvs::FrequencyTable& table() const { return m_table; }
 
-    void setCaption( const std::string& caption );
-    void setGraphColor( const kvs::RGBAColor& graph_color );
-    void setBiasParameter( const float bias_parameter );
-    void setIgnoreValue( const kvs::Real64 value );
-    void setRange( const kvs::Real64 min_range, const kvs::Real64 max_range );
-    void setNumberOfBins( const kvs::UInt64 nbins );
+    void setCaption( const std::string& caption ) { m_caption = caption; }
+    void setGraphColor( const kvs::RGBAColor& graph_color ) { m_graph_color = graph_color; }
+    void setBiasParameter( const float bias_parameter ) { m_bias_parameter = bias_parameter; }
+    void setIgnoreValue( const kvs::Real64 value ) { m_table.setIgnoreValue( value ); }
+    void setRange( const kvs::Real64 min_range, const kvs::Real64 max_range ) { m_table.setRange( min_range, max_range ); }
+    void setNumberOfBins( const kvs::UInt64 nbins ) { m_table.setNumberOfBins( nbins ); }
 
     void create( const kvs::VolumeObjectBase* volume );
     void create( const kvs::ImageObject* image );
 
-    void paintEvent( void );
+    void paintEvent();
     void resizeEvent( int width, int height );
     void mousePressEvent( kvs::MouseEvent* event );
     void mouseMoveEvent( kvs::MouseEvent* event );
@@ -92,13 +92,13 @@ public:
 
 private:
 
-    int get_fitted_width( void );
-    int get_fitted_height( void );
-    void draw_palette( void );
-    const kvs::ValueArray<kvs::UInt8> get_histogram_image( void ) const;
-//    void calculate_density_curve( void );
-    void create_texture( void );
-    void update_texture( void );
+    int get_fitted_width();
+    int get_fitted_height();
+    void draw_palette();
+    const kvs::ValueArray<kvs::UInt8> get_histogram_image() const;
+//    void calculate_density_curve();
+    void create_texture();
+    void update_texture();
 };
 
 } // end of namespace glut

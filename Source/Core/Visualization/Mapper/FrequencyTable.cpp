@@ -46,110 +46,6 @@ FrequencyTable::~FrequencyTable()
 
 /*==========================================================================*/
 /**
- *  @brief  Returns the min. range.
- *  @return min. range
- */
-/*==========================================================================*/
-kvs::Real64 FrequencyTable::minRange() const
-{
-    return m_min_range;
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Returns the max. range.
- *  @return max. range
- */
-/*==========================================================================*/
-kvs::Real64 FrequencyTable::maxRange() const
-{
-    return m_max_range;
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Returns the max. counts of the bins.
- *  @return max. counts
- */
-/*==========================================================================*/
-size_t FrequencyTable::maxCount() const
-{
-    return m_max_count;
-}
-
-kvs::Real64 FrequencyTable::mean() const
-{
-    return m_mean;
-}
-
-kvs::Real64 FrequencyTable::variance() const
-{
-    return m_variance;
-}
-
-kvs::Real64 FrequencyTable::standardDeviation() const
-{
-    return m_standard_deviation;
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Returns the number of bins.
- *  @return number of bins
- */
-/*==========================================================================*/
-kvs::UInt64 FrequencyTable::nbins() const
-{
-    return m_nbins;
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Returns the bin array.
- *  @return bin array
- */
-/*==========================================================================*/
-const kvs::ValueArray<size_t>& FrequencyTable::bin() const
-{
-    return m_bin;
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Sets an ignore value.
- */
-/*==========================================================================*/
-void FrequencyTable::setIgnoreValue( const kvs::Real64 value )
-{
-    m_ignore_values.push_back( value );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets data range.
- *  @param  min_range [in] min value range
- *  @param  max_range [in] max value range
- */
-/*===========================================================================*/
-void FrequencyTable::setRange( const kvs::Real64 min_range, const kvs::Real64 max_range )
-{
-    m_min_range = min_range;
-    m_max_range = max_range;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a number of bins
- *  @param  nbins [in] number of bins
- */
-/*===========================================================================*/
-void FrequencyTable::setNBins( const kvs::UInt64 nbins )
-{
-    m_nbins = nbins;
-}
-
-/*==========================================================================*/
-/**
  *  @brief  Creates a frequency distribution table for a structured volume object.
  *  @param  volume [in] pointer to the volume object
  */
@@ -232,8 +128,8 @@ void FrequencyTable::calculate_range( const kvs::VolumeObjectBase* volume )
     {
         if ( kvs::Math::IsZero( m_min_range ) && kvs::Math::IsZero( m_max_range ) )
         {
-            m_min_range = kvs::Value<kvs::Int8>::Min();
-            m_max_range = kvs::Value<kvs::Int8>::Max();
+            m_min_range = static_cast<kvs::Real64>( kvs::Value<kvs::Int8>::Min() );
+            m_max_range = static_cast<kvs::Real64>( kvs::Value<kvs::Int8>::Max() );
         }
     }
 
@@ -241,8 +137,8 @@ void FrequencyTable::calculate_range( const kvs::VolumeObjectBase* volume )
     {
         if ( kvs::Math::IsZero( m_min_range ) && kvs::Math::IsZero( m_max_range ) )
         {
-            m_min_range = kvs::Value<kvs::UInt8>::Min();
-            m_max_range = kvs::Value<kvs::UInt8>::Max();
+            m_min_range = static_cast<kvs::Real64>( kvs::Value<kvs::UInt8>::Min() );
+            m_max_range = static_cast<kvs::Real64>( kvs::Value<kvs::UInt8>::Max() );
         }
     }
 
@@ -250,8 +146,16 @@ void FrequencyTable::calculate_range( const kvs::VolumeObjectBase* volume )
     {
         if ( kvs::Math::IsZero( m_min_range ) && kvs::Math::IsZero( m_max_range ) )
         {
-            m_min_range = kvs::Value<kvs::Int16>::Min();
-            m_max_range = kvs::Value<kvs::Int16>::Max();
+            if ( volume->hasMinMaxValues() )
+            {
+                m_min_range = volume->minValue();
+                m_max_range = volume->maxValue();
+            }
+            else
+            {
+                m_min_range = static_cast<kvs::Real64>( kvs::Value<kvs::Int16>::Min() );
+                m_max_range = static_cast<kvs::Real64>( kvs::Value<kvs::Int16>::Max() );
+            }
         }
     }
 
@@ -259,8 +163,16 @@ void FrequencyTable::calculate_range( const kvs::VolumeObjectBase* volume )
     {
         if ( kvs::Math::IsZero( m_min_range ) && kvs::Math::IsZero( m_max_range ) )
         {
-            m_min_range = kvs::Value<kvs::UInt16>::Min();
-            m_max_range = kvs::Value<kvs::UInt16>::Max();
+            if ( volume->hasMinMaxValues() )
+            {
+                m_min_range = volume->minValue();
+                m_max_range = volume->maxValue();
+            }
+            else
+            {
+                m_min_range = static_cast<kvs::Real64>( kvs::Value<kvs::UInt16>::Min() );
+                m_max_range = static_cast<kvs::Real64>( kvs::Value<kvs::UInt16>::Max() );
+            }
         }
     }
 
@@ -268,8 +180,16 @@ void FrequencyTable::calculate_range( const kvs::VolumeObjectBase* volume )
     {
         if ( kvs::Math::IsZero( m_min_range ) && kvs::Math::IsZero( m_max_range ) )
         {
-            m_min_range = kvs::Value<kvs::Int32>::Min();
-            m_max_range = kvs::Value<kvs::Int32>::Max();
+            if ( volume->hasMinMaxValues() )
+            {
+                m_min_range = volume->minValue();
+                m_max_range = volume->maxValue();
+            }
+            else
+            {
+                m_min_range = static_cast<kvs::Real64>( kvs::Value<kvs::Int32>::Min() );
+                m_max_range = static_cast<kvs::Real64>( kvs::Value<kvs::Int32>::Max() );
+            }
         }
     }
 
@@ -277,8 +197,16 @@ void FrequencyTable::calculate_range( const kvs::VolumeObjectBase* volume )
     {
         if ( kvs::Math::IsZero( m_min_range ) && kvs::Math::IsZero( m_max_range ) )
         {
-            m_min_range = kvs::Value<kvs::UInt32>::Min();
-            m_max_range = kvs::Value<kvs::UInt32>::Max();
+            if ( volume->hasMinMaxValues() )
+            {
+                m_min_range = volume->minValue();
+                m_max_range = volume->maxValue();
+            }
+            else
+            {
+                m_min_range = static_cast<kvs::Real64>( kvs::Value<kvs::UInt32>::Min() );
+                m_max_range = static_cast<kvs::Real64>( kvs::Value<kvs::UInt32>::Max() );
+            }
         }
     }
 
@@ -286,8 +214,16 @@ void FrequencyTable::calculate_range( const kvs::VolumeObjectBase* volume )
     {
         if ( kvs::Math::IsZero( m_min_range ) && kvs::Math::IsZero( m_max_range ) )
         {
-            m_min_range = static_cast<kvs::Real64>( kvs::Value<kvs::Int64>::Min() );
-            m_max_range = static_cast<kvs::Real64>( kvs::Value<kvs::Int64>::Max() );
+            if ( volume->hasMinMaxValues() )
+            {
+                m_min_range = volume->minValue();
+                m_max_range = volume->maxValue();
+            }
+            else
+            {
+                m_min_range = static_cast<kvs::Real64>( kvs::Value<kvs::Int64>::Min() );
+                m_max_range = static_cast<kvs::Real64>( kvs::Value<kvs::Int64>::Max() );
+            }
         }
     }
 
@@ -295,8 +231,16 @@ void FrequencyTable::calculate_range( const kvs::VolumeObjectBase* volume )
     {
         if ( kvs::Math::IsZero( m_min_range ) && kvs::Math::IsZero( m_max_range ) )
         {
-            m_min_range = static_cast<kvs::Real64>( kvs::Value<kvs::UInt64>::Min() );
-            m_max_range = static_cast<kvs::Real64>( kvs::Value<kvs::UInt64>::Max() );
+            if ( volume->hasMinMaxValues() )
+            {
+                m_min_range = volume->minValue();
+                m_max_range = volume->maxValue();
+            }
+            else
+            {
+                m_min_range = static_cast<kvs::Real64>( kvs::Value<kvs::UInt64>::Min() );
+                m_max_range = static_cast<kvs::Real64>( kvs::Value<kvs::UInt64>::Max() );
+            }
         }
     }
 
@@ -324,15 +268,15 @@ void FrequencyTable::calculate_range( const kvs::ImageObject* image )
     case kvs::ImageObject::Color24: // RGB
     case kvs::ImageObject::Color32: // RGBA
     {
-        m_min_range = kvs::Value<kvs::UInt8>::Min();
-        m_max_range = kvs::Value<kvs::UInt8>::Max();
+        m_min_range = static_cast<kvs::Real64>( kvs::Value<kvs::UInt8>::Min() );
+        m_max_range = static_cast<kvs::Real64>( kvs::Value<kvs::UInt8>::Max() );
         m_nbins     = kvs::UInt64(1) << 8;
         break;
     }
     case kvs::ImageObject::Gray16:
     {
-        m_min_range = kvs::Value<kvs::UInt16>::Min();
-        m_max_range = kvs::Value<kvs::UInt16>::Max();
+        m_min_range = static_cast<kvs::Real64>( kvs::Value<kvs::UInt16>::Min() );
+        m_max_range = static_cast<kvs::Real64>( kvs::Value<kvs::UInt16>::Max() );
         m_nbins     = kvs::UInt64(1) << 16;
         break;
     }

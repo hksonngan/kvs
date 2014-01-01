@@ -69,7 +69,7 @@ void DrawRectangle(
 /*
 const kvs::Real32 GaussianKernel( const kvs::Real32 x )
 {
-    return( std::exp( ( -0.5f ) * x * x ) / std::sqrt( 2.0f * M_PI ) );
+    return std::exp( ( -0.5f ) * x * x ) / std::sqrt( 2.0f * M_PI );
 }
 */
 
@@ -114,77 +114,8 @@ Histogram::Histogram( kvs::ScreenBase* screen ):
  *  @brief  Destructs the Histogram class.
  */
 /*===========================================================================*/
-Histogram::~Histogram( void )
+Histogram::~Histogram()
 {
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns caption.
- */
-/*===========================================================================*/
-const std::string& Histogram::caption( void ) const
-{
-    return( m_caption );
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Returns the frequency distribution table.
- *  @return frequency distribution table
- */
-/*==========================================================================*/
-const kvs::FrequencyTable& Histogram::table( void ) const
-{
-    return( m_table );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a caption.
- *  @param  caption [in] caption
- */
-/*===========================================================================*/
-void Histogram::setCaption( const std::string& caption )
-{
-    m_caption = caption;
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Sets the graph color.
- *  @param  graph_color [in] graph color
- */
-/*==========================================================================*/
-void Histogram::setGraphColor( const kvs::RGBAColor& graph_color )
-{
-    m_graph_color = graph_color;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a bias parameter.
- *  @param  bias_parameter [in] bias parameter for the bias function
- */
-/*===========================================================================*/
-void Histogram::setBiasParameter( const float bias_parameter )
-{
-    /* Bias function: b(f,g) = f^{ln(g)/ln(0.5)}
-     *   f: frequecny count that is normalized in [0,1]
-     *   g: bias parameter in [0,1]
-     */
-    m_bias_parameter = kvs::Math::Clamp( bias_parameter, 0.0f, 1.0f );
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Sets the ignore value.
- *  @param  value [in] ignore value
- */
-/*==========================================================================*/
-void Histogram::setIgnoreValue( const kvs::Real64 value )
-{
-    m_table.setIgnoreValue( value );
 }
 
 /*==========================================================================*/
@@ -212,30 +143,7 @@ void Histogram::create( const kvs::ImageObject* image )
 //    this->calculate_density_curve();
 }
 
-/*===========================================================================*/
-/**
- *  @brief  Sets data range.
- *  @param  min_range [in] min value range
- *  @param  max_range [in] max value range
- */
-/*===========================================================================*/
-void Histogram::setRange( const kvs::Real64 min_range, const kvs::Real64 max_range )
-{
-    m_table.setRange( min_range, max_range );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a number of bins.
- *  @param  nbins [in] number of bins
- */
-/*===========================================================================*/
-void Histogram::setNumberOfBins( const kvs::UInt64 nbins )
-{
-    m_table.setNBins( nbins );
-}
-
-void Histogram::paintEvent( void )
+void Histogram::paintEvent()
 {
     this->screenUpdated();
 
@@ -337,15 +245,15 @@ void Histogram::mouseReleaseEvent( kvs::MouseEvent* event )
     }
 }
 
-int Histogram::get_fitted_width( void )
+int Histogram::get_fitted_width()
 {
     const size_t width = m_caption.size() * BaseClass::characterWidth() + BaseClass::margin() * 2;
-    return( kvs::Math::Max( width, ::Default::Width ) );
+    return kvs::Math::Max( width, ::Default::Width );
 }
 
-int Histogram::get_fitted_height( void )
+int Histogram::get_fitted_height()
 {
-    return( ::Default::Height + BaseClass::characterHeight() + BaseClass::margin() * 2 );
+    return ::Default::Height + BaseClass::characterHeight() + BaseClass::margin() * 2;
 }
 
 /*==========================================================================*/
@@ -353,7 +261,7 @@ int Histogram::get_fitted_height( void )
  *  @brief  Draws the frequency distribution graph.
  */
 /*==========================================================================*/
-void Histogram::draw_palette( void )
+void Histogram::draw_palette()
 {
     glPushAttrib( GL_ALL_ATTRIB_BITS );
 
@@ -398,7 +306,7 @@ void Histogram::draw_palette( void )
     if ( m_density_curve.size() > 0 )
     {
         const float g = m_bias_parameter;
-        const float scale_width = static_cast<float>( m_palette.width() ) / m_table.nbins();
+        const float scale_width = static_cast<float>( m_palette.width() ) / m_table.numberOfBins();
         const float scale_height = static_cast<float>( m_palette.height() );
         glBegin( GL_LINE_STRIP );
         glColor3ub( 255, 0, 0 );
@@ -423,10 +331,10 @@ void Histogram::draw_palette( void )
  *  @brief  Returns the histogram image.
  */
 /*===========================================================================*/
-const kvs::ValueArray<kvs::UInt8> Histogram::get_histogram_image( void ) const
+const kvs::ValueArray<kvs::UInt8> Histogram::get_histogram_image() const
 {
     const size_t nchannels = 4;
-    const size_t width = m_table.nbins();
+    const size_t width = m_table.numberOfBins();
     const size_t height = width;
     const size_t npixels = width * height;
 
@@ -434,11 +342,14 @@ const kvs::ValueArray<kvs::UInt8> Histogram::get_histogram_image( void ) const
     kvs::ValueArray<kvs::UInt8> data( npixels * nchannels );
     data.fill( 0 );
 
-    const float g = m_bias_parameter;
+    const float g = kvs::Math::Clamp( m_bias_parameter, 0.0f, 1.0f );
     const kvs::Real32 normalized_factor = 1.0f / m_table.maxCount();
     for ( size_t i = 0; i < width; i++ )
     {
         // Calculate bias parameter.
+        // Bias function: b(f,g) = f^{ln(g)/ln(0.5)}
+        //  f: frequecny count that is normalized in [0,1]
+        //  g: bias parameter in [0,1]
         const size_t n = m_table.bin().at(i); // frequency count
         const float f = n * normalized_factor; // normalized frequency count in [0,1]
         const float b = std::pow( f, static_cast<float>( std::log(g) / std::log(0.5) ) );
@@ -454,14 +365,14 @@ const kvs::ValueArray<kvs::UInt8> Histogram::get_histogram_image( void ) const
         }
     }
 
-    return( data );
+    return data;
 }
 
 /*
-void Histogram::calculate_density_curve( void )
+void Histogram::calculate_density_curve()
 {
     // Temporary array (biased histogram).
-    const size_t width = m_table.nbins();
+    const size_t width = m_table.numberOfBins();
     kvs::ValueArray<kvs::Real32> temp( width );
     temp.fill( 0 );
 
@@ -505,10 +416,10 @@ void Histogram::calculate_density_curve( void )
  *  @brief  Creates the histogram texture.
  */
 /*===========================================================================*/
-void Histogram::create_texture( void )
+void Histogram::create_texture()
 {
     const size_t nchannels = 4;
-    const size_t width = m_table.nbins();
+    const size_t width = m_table.numberOfBins();
     const size_t height = width;
 
     m_texture.release();
@@ -523,7 +434,7 @@ void Histogram::create_texture( void )
  *  @brief  Updates the histogram texture.
  */
 /*===========================================================================*/
-void Histogram::update_texture( void )
+void Histogram::update_texture()
 {
     this->create_texture();
 }
