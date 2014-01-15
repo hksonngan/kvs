@@ -357,6 +357,29 @@ kvs::RendererBase* RendererManager::renderer( std::string name )
 
 /*===========================================================================*/
 /**
+ *  @brief  Returns ID of the specified renderer.
+ *  @param  renderer [in] pointer to the renderer
+ *  @return ID of the renderer
+ */
+/*===========================================================================*/
+int RendererManager::rendererID( const kvs::RendererBase* renderer ) const
+{
+    RendererList::const_iterator registered_renderer = m_renderer_list.begin();
+    RendererList::const_iterator last = m_renderer_list.end();
+    while ( registered_renderer != last )
+    {
+        if ( registered_renderer->second.get() == renderer )
+        {
+            return registered_renderer->first;
+        }
+        ++registered_renderer;
+    }
+
+    return -1;
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Returns the interator to the renderer specified by the ID.
  *  @param  id [in] renderer ID
  *  @return interotr of the renderer

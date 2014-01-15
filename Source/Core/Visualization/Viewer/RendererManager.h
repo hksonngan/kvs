@@ -55,6 +55,7 @@ public:
     kvs::RendererBase* renderer();
     kvs::RendererBase* renderer( int id );
     kvs::RendererBase* renderer( std::string name );
+    int rendererID( const kvs::RendererBase* renderer ) const;
 
     int insert( const kvs::SharedPointer<kvs::RendererBase>& renderer );
     void erase();

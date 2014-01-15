@@ -74,9 +74,8 @@ Scene::~Scene()
 /*===========================================================================*/
 const std::pair<int,int> Scene::registerObject( kvs::ObjectBase* object, kvs::RendererBase* renderer )
 {
-    /* If the given pointer to the renderer is null, a renderer for the given
-     * object is automatically created by using visualization pipeline class.
-     */
+    // If the given pointer to the renderer is null, a renderer for the given
+    // object is automatically created by using visualization pipeline class.
     if ( !renderer )
     {
         kvs::VisualizationPipeline pipeline( object );
@@ -94,20 +93,14 @@ const std::pair<int,int> Scene::registerObject( kvs::ObjectBase* object, kvs::Re
         object->updateMinMaxCoords();
     }
 
-    /* If the object has not been registered in the object managet,
-     * the object is registered and then its ID is returned.
-     */
+    // If the object has not been registered in the object managet,
+    // the object is registered and then its ID is returned.
     int object_id = m_object_manager->objectID( object );
     if ( object_id == -1 ) object_id = m_object_manager->insert( object );
 
-    /* If the renderer has not been registered in the renderer managet,
-     * the renderer is registered and then its ID is returned.
-     */
-    int renderer_id = -1;
-    for ( int i = 0; i < m_renderer_manager->numberOfRenderers(); i++ )
-    {
-        if ( m_renderer_manager->renderer(i) == renderer ) renderer_id = i;
-    }
+    // If the renderer has not been registered in the renderer managet,
+    // the renderer is registered and then its ID is returned.
+    int renderer_id = m_renderer_manager->rendererID( renderer );
     if ( renderer_id == -1 ) renderer_id = m_renderer_manager->insert( renderer );
 
     // Insert the IDs into the ID manager.
@@ -129,7 +122,8 @@ void Scene::removeObject( int object_id, bool delete_object, bool delete_rendere
     // Remove the object specified by the given object ID for the object manager.
     m_object_manager->erase( object_id, delete_object );
 
-    // Remove the all of renderers assigned for the specified object from the renderer manager.
+    // Remove the all of renderers assigned for the specified object from
+    // the renderer manager.
     const std::vector<int> renderer_ids = m_id_manager->rendererID( object_id );
     for ( size_t i = 0; i < renderer_ids.size(); i++ )
     {
@@ -150,7 +144,8 @@ void Scene::removeObject( int object_id, bool delete_object, bool delete_rendere
 /*===========================================================================*/
 void Scene::removeObject( std::string object_name, bool delete_object, bool delete_renderer )
 {
-    const int object_id = m_object_manager->objectID( m_object_manager->object( object_name ) );
+    const kvs::ObjectBase* object = m_object_manager->object( object_name );
+    const int object_id = m_object_manager->objectID( object );
     this->removeObject( object_id, delete_object, delete_renderer );
 }
 
@@ -329,15 +324,14 @@ void Scene::updateControllingObject()
 void Scene::updateCenterOfRotation()
 {
     // Center of rotation in the device coordinate system.
-    kvs::Vector2f center( 0.0, 0.0 );
+    kvs::Vec2 center( 0.0, 0.0 );
 
     switch ( m_target )
     {
     case TargetCamera:
     case TargetLight:
-        /* Get an at-point of the camera, which is the center of rotation,
-         * in the device coord.
-         */
+        // Get an at-point of the camera, which is the center of rotation,
+        // in the device coord.
         center = m_camera->lookAtInDevice();
         break;
     case TargetObject:
@@ -347,14 +341,13 @@ void Scene::updateCenterOfRotation()
         }
         else
         {
-            /* If the object manager has no active object, the center
-             * of rotation is not updated.
-             */
+            // If the object manager has no active object, the center
+            // of rotation is not updated.
             if ( !m_object_manager->hasActiveObject() ) return;
 
             kvs::ObjectBase* object = m_object_manager->activeObject();
-            const kvs::Vector3f& t = m_object_manager->objectCenter();
-            const kvs::Vector3f& s = m_object_manager->normalize();
+            const kvs::Vec3& t = m_object_manager->objectCenter();
+            const kvs::Vec3& s = m_object_manager->normalize();
             center = object->positionInDevice( m_camera, t, s );
         }
         break;
@@ -430,8 +423,8 @@ void Scene::updateXform( kvs::Camera* camera )
         break;
     case kvs::Mouse::Scaling:
     {
-        const kvs::Vector3f s = m_mouse->scaling();
-        camera->scale( kvs::Vector3f( 1 / s.x(), 1 / s.y(), 1 / s.z() ) );
+        const kvs::Vec3 s = m_mouse->scaling();
+        camera->scale( kvs::Vec3( 1 / s.x(), 1 / s.y(), 1 / s.z() ) );
         break;
     }
     default:
