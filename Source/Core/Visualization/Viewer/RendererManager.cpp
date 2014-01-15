@@ -44,7 +44,7 @@ private:
     bool m_auto_delete;
 };
 
-void DisableDelete( const kvs::SharedPointer<kvs::RendererBase>& sp )
+void DisableAutoDelete( const kvs::SharedPointer<kvs::RendererBase>& sp )
 {
     // Disable deletion if the deleter type of sp is RendererDeleter.
     RendererDeleter* d = kvs::get_deleter<RendererDeleter>( sp );
@@ -88,33 +88,37 @@ RendererManager::~RendererManager()
 int RendererManager::insert( kvs::RendererBase* renderer )
 {
     bool auto_delete = true;
-    Iterator itr = m_renderer_list.begin();
-    Iterator last = m_renderer_list.end();
-    while ( itr != last )
+    RendererIterator registered_renderer = m_renderer_list.begin();
+    RendererIterator last = m_renderer_list.end();
+    while ( registered_renderer != last )
     {
-        if ( itr->second.get() == renderer ) { auto_delete = false; break; }
-        ++itr;
+        if ( registered_renderer->second.get() == renderer )
+        {
+            auto_delete = false;
+            break;
+        }
+        ++registered_renderer;
     }
 
-    return this->insert( RendererSP( renderer, ::RendererDeleter( auto_delete ) ) );
+    return this->insert( RendererPointer( renderer, ::RendererDeleter( auto_delete ) ) );
 }
 
 /*==========================================================================*/
 /**
  *  @brief  Erase the renderer.
- *  @param  delete_flg [in] deleting the allocated memory flag
+ *  @param  delete_flag [in] deleting the allocated memory flag
  */
 /*==========================================================================*/
-void RendererManager::erase( bool delete_flg )
+void RendererManager::erase( bool delete_flag )
 {
-    if ( !delete_flg )
+    if ( !delete_flag )
     {
-        Iterator itr = m_renderer_list.begin();
-        Iterator last = m_renderer_list.end();
-        while ( itr != last )
+        RendererIterator registered_renderer = m_renderer_list.begin();
+        RendererIterator last = m_renderer_list.end();
+        while ( registered_renderer != last )
         {
-            ::DisableDelete( itr->second );
-            ++itr;
+            ::DisableAutoDelete( registered_renderer->second );
+            ++registered_renderer;
         }
     }
 
@@ -124,88 +128,87 @@ void RendererManager::erase( bool delete_flg )
 /*==========================================================================*/
 /**
  *  @brief  Erase the renderer which is specified by the given ID.
- *  @param  renderer_id [in] renderer ID
- *  @param  delete_flg [in] deleting the allocated memory flag
+ *  @param  id [in] renderer ID
+ *  @param  delete_flag [in] deleting the allocated memory flag
  */
 /*==========================================================================*/
-void RendererManager::erase( int renderer_id, bool delete_flg )
+void RendererManager::erase( int id, bool delete_flag )
 {
-    Iterator itr = this->find_renderer( renderer_id );
-    if ( itr == m_renderer_list.end() ) return;
+    RendererIterator renderer = this->find_renderer( id );
+    if ( renderer == m_renderer_list.end() ) return;
 
-    if ( !delete_flg )
+    if ( !delete_flag )
     {
-        ::DisableDelete( itr->second );
+        ::DisableAutoDelete( renderer->second );
     }
 
-    m_renderer_list.erase( itr );
+    m_renderer_list.erase( renderer );
 }
 
 /*==========================================================================*/
 /**
  *  @breif  Erase the renderer which is specified by the given name.
- *  @param  renderer_name [in] renderer name
- *  @param  delete_flg [in] deleting the allocated memory flag
+ *  @param  name [in] renderer name
+ *  @param  delete_flag [in] deleting the allocated memory flag
  */
 /*==========================================================================*/
-void RendererManager::erase( const std::string& renderer_name, bool delete_flg )
+void RendererManager::erase( std::string name, bool delete_flag )
 {
-    Iterator itr = this->find_renderer( renderer_name );
-    if ( itr == m_renderer_list.end() ) return;
+    RendererIterator renderer = this->find_renderer( name );
+    if ( renderer == m_renderer_list.end() ) return;
 
-    if ( !delete_flg )
+    if ( !delete_flag )
     {
-        ::DisableDelete( itr->second );
+        ::DisableAutoDelete( renderer->second );
     }
 
-    m_renderer_list.erase( itr );
+    m_renderer_list.erase( renderer );
 }
 
 /*==========================================================================*/
 /**
  *  @brief  Change the renderer by the specificated renderer ID.
- *  @param  renderer_id [in] renderer ID stored in the renderer manager
+ *  @param  id [in] renderer ID stored in the renderer manager
  *  @param  renderer [in] pointer to the inserting renderer
  *  @param  delete_flg [in] deleting the allocated memory flag
  */
 /*==========================================================================*/
-void RendererManager::change( int renderer_id, kvs::RendererBase* renderer, bool delete_flg )
+void RendererManager::change( int id, kvs::RendererBase* renderer, bool delete_flag )
 {
-    /* Search the object which is specified by given renderer ID in the
-     * renderer pointer list. If it isn't found, this method executes nothing.
-     */
-    Iterator itr = this->find_renderer( renderer_id );
-    if ( itr == m_renderer_list.end() ) return;
+    // Search the object which is specified by given renderer ID in the
+    // renderer pointer list. If it isn't found, this method executes nothing.
+    RendererIterator registered_renderer = this->find_renderer( id );
+    if ( registered_renderer == m_renderer_list.end() ) return;
 
-    if ( !delete_flg )
+    if ( !delete_flag )
     {
-        ::DisableDelete( itr->second );
+        ::DisableAutoDelete( registered_renderer->second );
     }
 
     // Change the renderer.
-    itr->second = RendererSP( renderer, ::RendererDeleter() );
+    registered_renderer->second = RendererPointer( renderer, ::RendererDeleter() );
 }
 
 /*==========================================================================*/
 /**
  *  @breif  Change the renderer by the specificated renderer name.
- *  @param  renderer_name [in] renderer name stored in the renderer manager
+ *  @param  name [in] renderer name stored in the renderer manager
  *  @param  renderer [in] pointer to the inserting renderer
- *  @param  delete_flg [in] deleting the allocated memory flag
+ *  @param  delete_flag [in] deleting the allocated memory flag
  */
 /*==========================================================================*/
-void RendererManager::change( const std::string& renderer_name, kvs::RendererBase* renderer, bool delete_flg )
+void RendererManager::change( std::string name, kvs::RendererBase* renderer, bool delete_flag )
 {
-    Iterator itr = this->find_renderer( renderer_name );
-    if ( itr == m_renderer_list.end() ) return;
+    RendererIterator registered_renderer = this->find_renderer( name );
+    if ( registered_renderer == m_renderer_list.end() ) return;
 
-    if ( !delete_flg )
+    if ( !delete_flag )
     {
-        ::DisableDelete( itr->second );
+        ::DisableAutoDelete( registered_renderer->second );
     }
 
     // Change the renderer.
-    itr->second = RendererSP( renderer, ::RendererDeleter() );
+    registered_renderer->second = RendererPointer( renderer, ::RendererDeleter() );
 }
 
 /*==========================================================================*/
@@ -235,64 +238,63 @@ void RendererManager::erase()
 /*==========================================================================*/
 /**
  *  @brief  Erase the renderer which is specified by the given ID.
- *  @param  renderer_id [in] renderer ID
+ *  @param  id [in] renderer ID
  */
 /*==========================================================================*/
-void RendererManager::erase( int renderer_id )
+void RendererManager::erase( int id )
 {
-    Iterator itr = this->find_renderer( renderer_id );
-    if ( itr == m_renderer_list.end() ) return;
+    RendererIterator renderer = this->find_renderer( id );
+    if ( renderer == m_renderer_list.end() ) return;
 
-    m_renderer_list.erase( itr );
+    m_renderer_list.erase( renderer );
 }
 
 /*==========================================================================*/
 /**
  *  @brief  Erase the renderer which is specified by the given name.
- *  @param  renderer_name [in] renderer name
+ *  @param  name [in] renderer name
  */
 /*==========================================================================*/
-void RendererManager::erase( const std::string& renderer_name )
+void RendererManager::erase( std::string name )
 {
-    Iterator itr = this->find_renderer( renderer_name );
-    if ( itr == m_renderer_list.end() ) return;
+    RendererIterator renderer = this->find_renderer( name );
+    if ( renderer == m_renderer_list.end() ) return;
 
-    m_renderer_list.erase( itr );
+    m_renderer_list.erase( renderer );
 }
 
 /*==========================================================================*/
 /**
  *  @brief  Change the renderer by the specificated renderer ID.
- *  @param  renderer_id [in] renderer ID stored in the renderer manager
+ *  @param  id [in] renderer ID stored in the renderer manager
  *  @param  renderer [in] pointer to the inserting renderer
  */
 /*==========================================================================*/
-void RendererManager::change( int renderer_id, const kvs::SharedPointer<kvs::RendererBase>& renderer )
+void RendererManager::change( int id, const kvs::SharedPointer<kvs::RendererBase>& renderer )
 {
-    /* Search the object which is specified by given renderer ID in the
-     * renderer pointer list. If it isn't found, this method executes nothing.
-     */
-    Iterator itr = this->find_renderer( renderer_id );
-    if ( itr == m_renderer_list.end() ) return;
+    // Search the object which is specified by given renderer ID in the
+    // renderer pointer list. If it isn't found, this method executes nothing.
+    RendererIterator registered_renderer = this->find_renderer( id );
+    if ( registered_renderer == m_renderer_list.end() ) return;
 
     // Change the renderer.
-    itr->second = renderer;
+    registered_renderer->second = renderer;
 }
 
 /*==========================================================================*/
 /**
  *  @brief  Change the renderer by the specificated renderer name.
- *  @param  renderer_name [in] renderer name stored in the renderer manager
+ *  @param  name [in] renderer name stored in the renderer manager
  *  @param  renderer [in] pointer to the inserting renderer
  */
 /*==========================================================================*/
-void RendererManager::change( const std::string& renderer_name, const kvs::SharedPointer<kvs::RendererBase>& renderer )
+void RendererManager::change( std::string name, const kvs::SharedPointer<kvs::RendererBase>& renderer )
 {
-    Iterator itr = this->find_renderer( renderer_name );
-    if ( itr == m_renderer_list.end() ) return;
+    RendererIterator registered_renderer = this->find_renderer( name );
+    if ( registered_renderer == m_renderer_list.end() ) return;
 
     // Change the renderer.
-    itr->second = renderer;
+    registered_renderer->second = renderer;
 }
 
 /*==========================================================================*/
@@ -320,34 +322,36 @@ kvs::RendererBase* RendererManager::renderer()
 /*==========================================================================*/
 /**
  *  @breig  Returns the renderer which is specified by the given ID.
- *  @param  renderer_id [in] renderer ID
+ *  @param  id [in] renderer ID
  *  @return pointer to the renderer
  */
 /*==========================================================================*/
-kvs::RendererBase* RendererManager::renderer( int renderer_id )
+kvs::RendererBase* RendererManager::renderer( int id )
 {
-    Iterator itr = this->find_renderer( renderer_id );
-    if ( itr != m_renderer_list.end() )
+    RendererIterator registered_renderer = this->find_renderer( id );
+    if ( registered_renderer != m_renderer_list.end() )
     {
-        return itr->second.get();
+        return registered_renderer->second.get();
     }
+
     return NULL;
 }
 
 /*==========================================================================*/
 /**
  *  @brief  Returns the renderer which is specified by the given name.
- *  @param  renderer_name [in] renderer name
+ *  @param  name [in] renderer name
  *  @return pointer to the renderer
  */
 /*==========================================================================*/
-kvs::RendererBase* RendererManager::renderer( const std::string& renderer_name )
+kvs::RendererBase* RendererManager::renderer( std::string name )
 {
-    Iterator itr = this->find_renderer( renderer_name );
-    if ( itr != m_renderer_list.end() )
+    RendererIterator registered_renderer = this->find_renderer( name );
+    if ( registered_renderer != m_renderer_list.end() )
     {
-        return itr->second.get();
+        return registered_renderer->second.get();
     }
+
     return NULL;
 }
 
@@ -358,40 +362,42 @@ kvs::RendererBase* RendererManager::renderer( const std::string& renderer_name )
  *  @return interotr of the renderer
  */
 /*===========================================================================*/
-RendererManager::Iterator RendererManager::find_renderer( int id )
+RendererManager::RendererIterator RendererManager::find_renderer( int id )
 {
-    Iterator itr = m_renderer_list.begin();
-    Iterator last = m_renderer_list.end();
-    while ( itr != last )
+    RendererIterator registered_renderer = m_renderer_list.begin();
+    RendererIterator last = m_renderer_list.end();
+    while ( registered_renderer != last )
     {
-        if ( itr->first == id )
+        if ( registered_renderer->first == id )
         {
-            return itr;
+            return registered_renderer;
         }
-        ++itr;
+        ++registered_renderer;
     }
+
     return last;
 }
 
 /*===========================================================================*/
 /**
  *  @brief  Returns the interator to the renderer specified by the name.
- *  @param  id [in] renderer ID
- *  @return interotr of the renderer
+ *  @param  name [in] renderer name
+ *  @return interator of the renderer
  */
 /*===========================================================================*/
-RendererManager::Iterator RendererManager::find_renderer( const std::string& name )
+RendererManager::RendererIterator RendererManager::find_renderer( std::string name )
 {
-    Iterator itr = m_renderer_list.begin();
-    Iterator last = m_renderer_list.end();
-    while ( itr != last )
+    RendererIterator registered_renderer = m_renderer_list.begin();
+    RendererIterator last = m_renderer_list.end();
+    while ( registered_renderer != last )
     {
-        if ( itr->second->name() == name )
+        if ( registered_renderer->second->name() == name )
         {
-            return itr;
+            return registered_renderer;
         }
-        ++itr;
+        ++registered_renderer;
     }
+
     return last;
 }
 

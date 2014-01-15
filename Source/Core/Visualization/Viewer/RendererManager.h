@@ -34,9 +34,9 @@ class RendererBase;
 class RendererManager
 {
 private:
-    typedef kvs::SharedPointer<kvs::RendererBase>    RendererSP;
-    typedef std::vector<std::pair<int, RendererSP> > RendererList;
-    typedef RendererList::iterator                   Iterator;
+    typedef kvs::SharedPointer<kvs::RendererBase> RendererPointer;
+    typedef std::vector<std::pair<int, RendererPointer> > RendererList;
+    typedef RendererList::iterator RendererIterator;
 
 private:
     RendererList m_renderer_list;
@@ -47,21 +47,22 @@ public:
     virtual ~RendererManager();
 
     int insert( kvs::RendererBase* renderer );
-    void erase( bool delete_flg );
-    void erase( int renderer_id, bool delete_flg );
-    void erase( const std::string& renderer_name, bool delete_flg );
-    void change( int renderer_id, kvs::RendererBase* renderer, bool delete_flg );
-    void change( const std::string& renderer_name, kvs::RendererBase* renderer, bool delete_flg );
+    void erase( bool delete_flag );
+    void erase( int id, bool delete_flag );
+    void erase( std::string name, bool delete_flag );
+    void change( int id, kvs::RendererBase* renderer, bool delete_flag );
+    void change( std::string name, kvs::RendererBase* renderer, bool delete_flag );
     kvs::RendererBase* renderer();
-    kvs::RendererBase* renderer( int renderer_id );
-    kvs::RendererBase* renderer( const std::string& renderer_name );
+    kvs::RendererBase* renderer( int id );
+    kvs::RendererBase* renderer( std::string name );
 
     int insert( const kvs::SharedPointer<kvs::RendererBase>& renderer );
     void erase();
-    void erase( int renderer_id );
-    void erase( const std::string& renderer_name );
-    void change( int renderer_id, const kvs::SharedPointer<kvs::RendererBase>& renderer );
-    void change( const std::string& renderer_name, const kvs::SharedPointer<kvs::RendererBase>& renderer );
+    void erase( int id );
+    void erase( std::string name );
+    void change( int id, const kvs::SharedPointer<kvs::RendererBase>& renderer );
+    void change( std::string name, const kvs::SharedPointer<kvs::RendererBase>& renderer );
+
     int numberOfRenderers() const;
     bool hasRenderer() const;
 
@@ -69,8 +70,8 @@ public:
     //const kvs::SharedPointer<kvs::RendererBase>& renderer( const std::string& renderer_name );
 
 private:
-    Iterator find_renderer( int id );
-    Iterator find_renderer( const std::string& name );
+    RendererIterator find_renderer( int id );
+    RendererIterator find_renderer( std::string name );
 
 private:
     RendererManager( const RendererManager& );

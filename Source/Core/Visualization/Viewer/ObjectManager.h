@@ -32,7 +32,7 @@ namespace kvs
 /*==========================================================================*/
 class ObjectManager : public kvs::ObjectBase
 {
-public:
+private:
     typedef kvs::Tree<kvs::ObjectBase*> ObjectTree;
     typedef ObjectTree::iterator ObjectIterator;
     typedef std::pair<int,ObjectIterator> ObjectPair;
