@@ -53,54 +53,55 @@ public:
     virtual ~ObjectManager();
 
     ObjectType objectType() const;
-    int insert( kvs::ObjectBase* obj );
-    int insert( int parent_id, kvs::ObjectBase* obj );
-    void erase( bool delete_flg = true );
-    void erase( int obj_id, bool delete_flg = true );
-    void erase( std::string obj_name, bool delete_flg = true );
-    void change( int obj_id, kvs::ObjectBase* obj, bool delete_flg = true );
-    void change( std::string obj_name, kvs::ObjectBase* obj, bool delete_flg = true );
+    int insert( kvs::ObjectBase* object );
+    int insert( int id, kvs::ObjectBase* object );
+    void erase( bool delete_flag = true );
+    void erase( int id, bool delete_flag = true );
+    void erase( std::string name, bool delete_flag = true );
+    void change( int id, kvs::ObjectBase* object, bool delete_flag = true );
+    void change( std::string name, kvs::ObjectBase* object, bool delete_flag = true );
+
     int numberOfObjects() const;
     kvs::ObjectBase* object();
-    kvs::ObjectBase* object( int obj_id );
-    kvs::ObjectBase* object( std::string obj_name );
+    kvs::ObjectBase* object( int id );
+    kvs::ObjectBase* object( std::string name );
     bool hasObject() const;
     void resetXform();
-    void resetXform( int obj_id );
+    void resetXform( int id );
     kvs::Xform xform() const;
-    kvs::Xform xform( int obj_id ) const;
+    kvs::Xform xform( int id ) const;
     int objectID( const kvs::ObjectBase *object ) const;
     int parentObjectID( const ObjectIterator it ) const;
     int parentObjectID( const kvs::ObjectBase *object ) const;
-    int parentObjectID( int object_id ) const;
-    int activeObjectID() const;
-    bool setActiveObjectID( int obj_id );
-    kvs::ObjectBase* activeObject();
+    int parentObjectID( int id ) const;
 
+    kvs::ObjectBase* activeObject();
+    int activeObjectID() const;
+    bool setActiveObject( int id );
     void resetActiveObjectXform();
     void eraseActiveObject();
+    bool hasActiveObject() const;
+    void releaseActiveObject();
 
     void enableAllMove();
     void disableAllMove();
     bool isEnableAllMove() const;
-    bool hasActiveObject() const;
-    void releaseActiveObject();
-    bool detectCollision( const kvs::Vector2f& p_win, kvs::Camera* camera );
-    bool detectCollision( const kvs::Vector3f& p_world );
+    bool detectCollision( const kvs::Vec2& p_win, kvs::Camera* camera );
+    bool detectCollision( const kvs::Vec3& p_world );
 
-    kvs::Vector2f positionInDevice( kvs::Camera* camera ) const;
-    void rotate( const kvs::Matrix33f& rotation );
-    void translate( const kvs::Vector3f& translation );
-    void scale( const kvs::Vector3f& scaling );
+    kvs::Vec2 positionInDevice( kvs::Camera* camera ) const;
+    void rotate( const kvs::Mat3& rotation );
+    void translate( const kvs::Vec3& translation );
+    void scale( const kvs::Vec3& scaling );
     void updateExternalCoords();
 
 private:
 
     void insert_root();
-    void update_normalize_parameters( const kvs::Vector3f& min_ext, const kvs::Vector3f& max_ext );
+    void update_normalize_parameters( const kvs::Vec3& min_ext, const kvs::Vec3& max_ext );
     void update_normalize_parameters();
     kvs::ObjectBase* get_control_target();
-    kvs::Vector3f get_rotation_center( kvs::ObjectBase* obj );
+    kvs::Vec3 get_rotation_center( kvs::ObjectBase* object );
     ObjectIterator get_control_first_pointer();
     ObjectIterator get_control_last_pointer();
 
@@ -110,6 +111,7 @@ private:
 
 public:
     KVS_DEPRECATED( int nobjects() const ) { return numberOfObjects(); }
+    KVS_DEPRECATED( bool setActiveObjectID( int id ) ) { return setActiveObject( id ); }
 };
 
 } // end of namespace kvs
