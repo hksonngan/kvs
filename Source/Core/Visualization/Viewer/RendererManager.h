@@ -55,6 +55,9 @@ public:
     kvs::RendererBase* renderer();
     kvs::RendererBase* renderer( int id );
     kvs::RendererBase* renderer( std::string name );
+
+    int numberOfRenderers() const;
+    bool hasRenderer() const;
     int rendererID( const kvs::RendererBase* renderer ) const;
 
     int insert( const kvs::SharedPointer<kvs::RendererBase>& renderer );
@@ -64,11 +67,8 @@ public:
     void change( int id, const kvs::SharedPointer<kvs::RendererBase>& renderer );
     void change( std::string name, const kvs::SharedPointer<kvs::RendererBase>& renderer );
 
-    int numberOfRenderers() const;
-    bool hasRenderer() const;
-
-    //const kvs::SharedPointer<kvs::RendererBase>& renderer( int renderer_id );
-    //const kvs::SharedPointer<kvs::RendererBase>& renderer( const std::string& renderer_name );
+    //const kvs::SharedPointer<kvs::RendererBase>& renderer( int id );
+    //const kvs::SharedPointer<kvs::RendererBase>& renderer( std::string name );
 
 private:
     RendererIterator find_renderer( int id );

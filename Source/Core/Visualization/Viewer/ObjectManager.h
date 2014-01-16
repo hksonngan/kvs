@@ -60,27 +60,28 @@ public:
     void erase( std::string name, bool delete_flag = true );
     void change( int id, kvs::ObjectBase* object, bool delete_flag = true );
     void change( std::string name, kvs::ObjectBase* object, bool delete_flag = true );
-
-    int numberOfObjects() const;
     kvs::ObjectBase* object();
     kvs::ObjectBase* object( int id );
     kvs::ObjectBase* object( std::string name );
+
+    int numberOfObjects() const;
     bool hasObject() const;
-    void resetXform();
-    void resetXform( int id );
-    kvs::Xform xform() const;
-    kvs::Xform xform( int id ) const;
     int objectID( const kvs::ObjectBase *object ) const;
     int parentObjectID( const ObjectIterator it ) const;
     int parentObjectID( const kvs::ObjectBase *object ) const;
     int parentObjectID( int id ) const;
 
+    kvs::Xform xform() const;
+    kvs::Xform xform( int id ) const;
+    void resetXform();
+    void resetXform( int id );
+
     kvs::ObjectBase* activeObject();
     int activeObjectID() const;
+    bool hasActiveObject() const;
     bool setActiveObject( int id );
     void resetActiveObjectXform();
     void eraseActiveObject();
-    bool hasActiveObject() const;
     void releaseActiveObject();
 
     void enableAllMove();

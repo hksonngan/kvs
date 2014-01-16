@@ -213,6 +213,98 @@ void RendererManager::change( std::string name, kvs::RendererBase* renderer, boo
 
 /*==========================================================================*/
 /**
+ *  @brief  Returns the renderer.
+ *  @return pointer to the renderer
+ */
+/*==========================================================================*/
+kvs::RendererBase* RendererManager::renderer()
+{
+    return m_renderer_list.begin()->second.get();
+}
+
+/*==========================================================================*/
+/**
+ *  @breig  Returns the renderer which is specified by the given ID.
+ *  @param  id [in] renderer ID
+ *  @return pointer to the renderer
+ */
+/*==========================================================================*/
+kvs::RendererBase* RendererManager::renderer( int id )
+{
+    RendererIterator registered_renderer = this->find_renderer( id );
+    if ( registered_renderer != m_renderer_list.end() )
+    {
+        return registered_renderer->second.get();
+    }
+
+    return NULL;
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Returns the renderer which is specified by the given name.
+ *  @param  name [in] renderer name
+ *  @return pointer to the renderer
+ */
+/*==========================================================================*/
+kvs::RendererBase* RendererManager::renderer( std::string name )
+{
+    RendererIterator registered_renderer = this->find_renderer( name );
+    if ( registered_renderer != m_renderer_list.end() )
+    {
+        return registered_renderer->second.get();
+    }
+
+    return NULL;
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Returns the number of the stored renderers.
+ *  @return number of the stored renderers
+ */
+/*==========================================================================*/
+int RendererManager::numberOfRenderers() const
+{
+    return m_renderer_list.size();
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Test whether the renderer manager has renderers.
+ *  @return true, if the renderer manager has renderers.
+ */
+/*==========================================================================*/
+bool RendererManager::hasRenderer() const
+{
+    return m_renderer_list.size() != 0;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns ID of the specified renderer.
+ *  @param  renderer [in] pointer to the renderer
+ *  @return ID of the renderer
+ */
+/*===========================================================================*/
+int RendererManager::rendererID( const kvs::RendererBase* renderer ) const
+{
+    RendererList::const_iterator registered_renderer = m_renderer_list.begin();
+    RendererList::const_iterator last = m_renderer_list.end();
+    while ( registered_renderer != last )
+    {
+        if ( registered_renderer->second.get() == renderer )
+        {
+            return registered_renderer->first;
+        }
+        ++registered_renderer;
+    }
+
+    return -1;
+}
+
+/*==========================================================================*/
+/**
  *  @brief  Insert the renderer.
  *  @param  renderer [in] pointer to the renderer
  *  @return renderer ID
@@ -297,87 +389,6 @@ void RendererManager::change( std::string name, const kvs::SharedPointer<kvs::Re
     registered_renderer->second = renderer;
 }
 
-/*==========================================================================*/
-/**
- *  @brief  Returns the number of the stored renderers.
- *  @return number of the stored renderers
- */
-/*==========================================================================*/
-int RendererManager::numberOfRenderers() const
-{
-    return m_renderer_list.size();
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Returns the renderer.
- *  @return pointer to the renderer
- */
-/*==========================================================================*/
-kvs::RendererBase* RendererManager::renderer()
-{
-    return m_renderer_list.begin()->second.get();
-}
-
-/*==========================================================================*/
-/**
- *  @breig  Returns the renderer which is specified by the given ID.
- *  @param  id [in] renderer ID
- *  @return pointer to the renderer
- */
-/*==========================================================================*/
-kvs::RendererBase* RendererManager::renderer( int id )
-{
-    RendererIterator registered_renderer = this->find_renderer( id );
-    if ( registered_renderer != m_renderer_list.end() )
-    {
-        return registered_renderer->second.get();
-    }
-
-    return NULL;
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Returns the renderer which is specified by the given name.
- *  @param  name [in] renderer name
- *  @return pointer to the renderer
- */
-/*==========================================================================*/
-kvs::RendererBase* RendererManager::renderer( std::string name )
-{
-    RendererIterator registered_renderer = this->find_renderer( name );
-    if ( registered_renderer != m_renderer_list.end() )
-    {
-        return registered_renderer->second.get();
-    }
-
-    return NULL;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns ID of the specified renderer.
- *  @param  renderer [in] pointer to the renderer
- *  @return ID of the renderer
- */
-/*===========================================================================*/
-int RendererManager::rendererID( const kvs::RendererBase* renderer ) const
-{
-    RendererList::const_iterator registered_renderer = m_renderer_list.begin();
-    RendererList::const_iterator last = m_renderer_list.end();
-    while ( registered_renderer != last )
-    {
-        if ( registered_renderer->second.get() == renderer )
-        {
-            return registered_renderer->first;
-        }
-        ++registered_renderer;
-    }
-
-    return -1;
-}
-
 /*===========================================================================*/
 /**
  *  @brief  Returns the interator to the renderer specified by the ID.
@@ -422,17 +433,6 @@ RendererManager::RendererIterator RendererManager::find_renderer( std::string na
     }
 
     return last;
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Test whether the renderer manager has renderers.
- *  @return true, if the renderer manager has renderers.
- */
-/*==========================================================================*/
-bool RendererManager::hasRenderer() const
-{
-    return m_renderer_list.size() != 0;
 }
 
 } // end of namespace kvs
