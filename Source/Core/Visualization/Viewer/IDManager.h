@@ -18,6 +18,7 @@
 #include <vector>
 #include <utility>
 #include <cstdlib>
+#include <kvs/Deprecated>
 
 
 namespace kvs
@@ -45,8 +46,7 @@ public:
     IDManager();
     virtual ~IDManager();
 
-    IDPair operator [] ( size_t index ) const;
-
+    IDPair id( size_t index ) const;
     size_t size() const;
     void insert( int object_id, int renderer_id );
     void insertObjectID( int object_id );
@@ -74,6 +74,9 @@ private:
 private:
     IDManager( const IDManager& );
     IDManager& operator =( const IDManager& );
+
+public:
+    KVS_DEPRECATED( IDPair operator [] ( size_t index ) const ) { return this->id( index ); }
 };
 
 } // end of namespace kvs

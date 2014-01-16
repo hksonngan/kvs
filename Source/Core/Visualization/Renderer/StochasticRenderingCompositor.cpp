@@ -187,9 +187,9 @@ void StochasticRenderingCompositor::check_object_changed()
     const size_t size = m_scene->IDManager()->size();
     for ( size_t i = 0; i < size; i++ )
     {
-        kvs::IDManager::IDPair id_pair = (*m_scene->IDManager())[i];
-        kvs::ObjectBase* object = m_scene->objectManager()->object( id_pair.first );
-        kvs::RendererBase* renderer = m_scene->rendererManager()->renderer( id_pair.second );
+        kvs::IDManager::IDPair id = m_scene->IDManager()->id( i );
+        kvs::ObjectBase* object = m_scene->objectManager()->object( id.first );
+        kvs::RendererBase* renderer = m_scene->rendererManager()->renderer( id.second );
         if ( kvs::StochasticRendererBase* stochastic_renderer = dynamic_cast<kvs::StochasticRendererBase*>( renderer ) )
         {
             const bool object_changed = stochastic_renderer->engine().object() != object;
@@ -235,9 +235,9 @@ void StochasticRenderingCompositor::engines_create()
     const size_t size = m_scene->IDManager()->size();
     for ( size_t i = 0; i < size; i++ )
     {
-        kvs::IDManager::IDPair id_pair = (*m_scene->IDManager())[i];
-        kvs::ObjectBase* object = m_scene->objectManager()->object( id_pair.first );
-        kvs::RendererBase* renderer = m_scene->rendererManager()->renderer( id_pair.second );
+        kvs::IDManager::IDPair id = m_scene->IDManager()->id( i );
+        kvs::ObjectBase* object = m_scene->objectManager()->object( id.first );
+        kvs::RendererBase* renderer = m_scene->rendererManager()->renderer( id.second );
         if ( kvs::StochasticRendererBase* stochastic_renderer = dynamic_cast<kvs::StochasticRendererBase*>( renderer ) )
         {
             stochastic_renderer->engine().setDepthTexture( m_ensemble_buffer.currentDepthTexture() );
@@ -266,9 +266,9 @@ void StochasticRenderingCompositor::engines_update()
     const size_t size = m_scene->IDManager()->size();
     for ( size_t i = 0; i < size; i++ )
     {
-        kvs::IDManager::IDPair id_pair = (*m_scene->IDManager())[i];
-        kvs::ObjectBase* object = m_scene->objectManager()->object( id_pair.first );
-        kvs::RendererBase* renderer = m_scene->rendererManager()->renderer( id_pair.second );
+        kvs::IDManager::IDPair id = m_scene->IDManager()->id( i );
+        kvs::ObjectBase* object = m_scene->objectManager()->object( id.first );
+        kvs::RendererBase* renderer = m_scene->rendererManager()->renderer( id.second );
         if ( kvs::StochasticRendererBase* stochastic_renderer = dynamic_cast<kvs::StochasticRendererBase*>( renderer ) )
         {
             kvs::OpenGL::PushMatrix();
@@ -293,9 +293,9 @@ void StochasticRenderingCompositor::engines_setup()
     const size_t size = m_scene->IDManager()->size();
     for ( size_t i = 0; i < size; i++ )
     {
-        kvs::IDManager::IDPair id_pair = (*m_scene->IDManager())[i];
-        kvs::ObjectBase* object = m_scene->objectManager()->object( id_pair.first );
-        kvs::RendererBase* renderer = m_scene->rendererManager()->renderer( id_pair.second );
+        kvs::IDManager::IDPair id = m_scene->IDManager()->id( i );
+        kvs::ObjectBase* object = m_scene->objectManager()->object( id.first );
+        kvs::RendererBase* renderer = m_scene->rendererManager()->renderer( id.second );
         if ( kvs::StochasticRendererBase* stochastic_renderer = dynamic_cast<kvs::StochasticRendererBase*>( renderer ) )
         {
             kvs::OpenGL::PushMatrix();
@@ -320,9 +320,9 @@ void StochasticRenderingCompositor::engines_draw()
     const size_t size = m_scene->IDManager()->size();
     for ( size_t i = 0; i < size; i++ )
     {
-        kvs::IDManager::IDPair id_pair = (*m_scene->IDManager())[i];
-        kvs::ObjectBase* object = m_scene->objectManager()->object( id_pair.first );
-        kvs::RendererBase* renderer = m_scene->rendererManager()->renderer( id_pair.second );
+        kvs::IDManager::IDPair id = m_scene->IDManager()->id( i );
+        kvs::ObjectBase* object = m_scene->objectManager()->object( id.first );
+        kvs::RendererBase* renderer = m_scene->rendererManager()->renderer( id.second );
         if ( kvs::StochasticRendererBase* stochastic_renderer = dynamic_cast<kvs::StochasticRendererBase*>( renderer ) )
         {
             if ( object->isShown() )

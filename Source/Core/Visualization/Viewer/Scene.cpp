@@ -487,17 +487,18 @@ void Scene::paintFunction()
     // Rendering the resistered object by using the corresponding renderer.
     if ( m_object_manager->hasObject() )
     {
+        const kvs::Vec3 center = m_object_manager->objectCenter();
+        const kvs::Vec3 scale = m_object_manager->normalize();
         const int size = m_id_manager->size();
         for ( int index = 0; index < size; index++ )
         {
-            kvs::IDManager::IDPair id_pair = (*m_id_manager)[index];
-            kvs::ObjectBase* object = m_object_manager->object( id_pair.first );
-            kvs::RendererBase* renderer = m_renderer_manager->renderer( id_pair.second );
-
+            kvs::IDManager::IDPair id = m_id_manager->id( index );
+            kvs::ObjectBase* object = m_object_manager->object( id.first );
+            kvs::RendererBase* renderer = m_renderer_manager->renderer( id.second );
             if ( object->isShown() )
             {
                 kvs::OpenGL::PushMatrix();
-                object->transform( m_object_manager->objectCenter(), m_object_manager->normalize() );
+                object->transform( center, scale );
                 renderer->exec( object, m_camera, m_light );
                 kvs::OpenGL::PopMatrix();
             }

@@ -189,9 +189,9 @@ void StochasticMultipleTetrahedraCompositor::check_object_changed()
     const size_t size = m_scene->IDManager()->size();
     for ( size_t i = 0; i < size; i++ )
     {
-        kvs::IDManager::IDPair id_pair = (*m_scene->IDManager())[i];
-        kvs::ObjectBase* object = m_scene->objectManager()->object( id_pair.first );
-        kvs::RendererBase* renderer = m_scene->rendererManager()->renderer( id_pair.second );
+        kvs::IDManager::IDPair id = m_scene->IDManager()->id( i );
+        kvs::ObjectBase* object = m_scene->objectManager()->object( id.first );
+        kvs::RendererBase* renderer = m_scene->rendererManager()->renderer( id.second );
         if ( dynamic_cast<Renderer*>( renderer ) )
         {
             // Drawing object.
@@ -250,9 +250,9 @@ void StochasticMultipleTetrahedraCompositor::engine_create()
     const size_t size = m_scene->IDManager()->size();
     for ( size_t i = 0; i < size; i++ )
     {
-        kvs::IDManager::IDPair id_pair = (*m_scene->IDManager())[i];
-        kvs::ObjectBase* object = m_scene->objectManager()->object( id_pair.first );
-        kvs::RendererBase* renderer = m_scene->rendererManager()->renderer( id_pair.second );
+        kvs::IDManager::IDPair id = m_scene->IDManager()->id( i );
+        kvs::ObjectBase* object = m_scene->objectManager()->object( id.first );
+        kvs::RendererBase* renderer = m_scene->rendererManager()->renderer( id.second );
         if ( Renderer* stochastic_renderer = dynamic_cast<Renderer*>( renderer ) )
         {
             // Copy the pointer to the renderer used for drawing the objects.

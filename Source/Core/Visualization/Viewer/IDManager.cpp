@@ -48,7 +48,7 @@ IDManager::~IDManager()
  *  @param  index [in] index
  */
 /*===========================================================================*/
-IDManager::IDPair IDManager::operator [] ( size_t index ) const
+IDManager::IDPair IDManager::id( size_t index ) const
 {
     const int id = m_flip_table[index];
     IDs::const_iterator p = m_id_list.begin();
@@ -57,7 +57,7 @@ IDManager::IDPair IDManager::operator [] ( size_t index ) const
         p++;
     }
 
-    return (*p);
+    return *p;
 }
 
 /*===========================================================================*/
