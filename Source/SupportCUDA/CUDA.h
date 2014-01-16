@@ -13,9 +13,22 @@
  */
 /*****************************************************************************/
 #pragma once
-#include <cuda.h>
-#include <cuda_runtime.h>
+
 #include <kvs/String>
+#include <kvs/Compiler>
+#include <cuda.h>
+
+// Disable warning for CUDA runtime header.
+#if defined( KVS_COMPILER_GCC )
+#if ( defined(__clang__) && __clang_major__ >= 3 )
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunneeded-internal-declaration"
+#include <cuda_runtime.h>
+#pragma GCC diagnostic pop
+#else
+#include <cuda_runtime.h>
+#endif
+#endif
 
 
 namespace kvs

@@ -33,8 +33,7 @@ VolumeRayIntersector::VolumeRayIntersector(
     const float modelview[16],
     const float projection[16],
     const int viewport[4] ):
-    Ray( modelview, projection, viewport ),
-    m_reference_volume( volume )
+    Ray( modelview, projection, viewport )
 {
     const float epsilon = 0.003f; // 1e-3
 

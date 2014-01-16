@@ -30,31 +30,6 @@
 namespace
 {
 
-/*===========================================================================*/
-/**
- *  @brief  Interpolates color values.
- *  @param  ratio [in] ratio [0-1]
- *  @param  c0 [in] color value 0
- *  @param  c1 [in] color value 1
- *  @return interpolated color value
- */
-/*===========================================================================*/
-const kvs::RGBColor GetInterpolatedColor( const float ratio, const kvs::RGBColor& c0, const kvs::RGBColor& c1 )
-{
-    const kvs::UInt8 r = static_cast<kvs::UInt8>( ratio * c0.r() + ( 1.0f - ratio ) * c1.r() + 0.5f );
-    const kvs::UInt8 g = static_cast<kvs::UInt8>( ratio * c0.g() + ( 1.0f - ratio ) * c1.g() + 0.5f );
-    const kvs::UInt8 b = static_cast<kvs::UInt8>( ratio * c0.b() + ( 1.0f - ratio ) * c1.b() + 0.5f );
-
-    return( kvs::RGBColor( r, g, b ) );
-}
-
-} // end of namespace
-
-
-
-namespace
-{
-
 class ResetButton : public kvs::glut::PushButton
 {
     kvs::glut::TransferFunctionEditor* m_editor;

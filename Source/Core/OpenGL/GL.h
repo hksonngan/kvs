@@ -32,9 +32,26 @@
 #define GLUT_DISABLE_ATEXIT_HACK
 #endif
 
+// Silence deprecated OpenGL warnings.
+#if defined( KVS_PLATFORM_MACOSX )
+#include <AvailabilityMacros.h>
+#if MAC_OS_X_VERSION_MIN_REQUIRED >= 1090
+#include <OpenGL/OpenGLAvailability.h>
+#undef OPENGL_DEPRECATED
+#undef OPENGL_DEPRECATED_MSG
+#undef OPENGL_ENUM_DEPRECATED
+#undef OPENGL_ENUM_DEPRECATED_MSG
+#define OPENGL_DEPRECATED(from, to)
+#define OPENGL_DEPRECATED_MSG(from, to, msg)
+#define OPENGL_ENUM_DEPRECATED(from, to)
+#define OPENGL_ENUM_DEPRECATED_MSG(from, to, msg)
+#endif
+#endif
+
 // GLEW header file 'glew.h' must be included before the OpenGL header files.
 #include <GL/glew.h>
 
+// OpenGL headers.
 #if defined( KVS_PLATFORM_MACOSX )
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>

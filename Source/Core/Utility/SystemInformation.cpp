@@ -42,11 +42,12 @@ namespace
  *  @return warning message
  */
 /*==========================================================================*/
+#if defined ( KVS_ENABLE_DEBUG )
 const char* GetWarningMessage( int number, const char* message )
 {
     return number == EINVAL ? strerror( number ) : message;
 }
-
+#endif
 }
 
 

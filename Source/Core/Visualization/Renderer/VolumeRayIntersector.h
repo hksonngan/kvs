@@ -33,7 +33,6 @@ class VolumeRayIntersector : public kvs::Ray
 private:
 
     kvs::Vector3f m_vertex[8];
-    const kvs::VolumeObjectBase* m_reference_volume;
 
 public:
 
