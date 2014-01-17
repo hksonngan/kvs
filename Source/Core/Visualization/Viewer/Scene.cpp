@@ -254,26 +254,6 @@ bool Scene::isActiveMove( int x, int y )
     return true;
 }
 
-/*==========================================================================*/
-/**
- *  @brief  Disable move-all mode.
- */
-/*==========================================================================*/
-void Scene::disableAllMove()
-{
-    m_enable_move_all = false;
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Enable move-all mode.
- */
-/*==========================================================================*/
-void Scene::enableAllMove()
-{
-    m_enable_move_all = true;
-}
-
 /*===========================================================================*/
 /**
  *  @brief  Disable collision detection mode.
@@ -306,12 +286,12 @@ void Scene::updateControllingObject()
     {
         if ( m_enable_move_all )
         {
-            m_object_manager->enableAllMove();
+            m_enable_move_all = true;
             m_object_manager->releaseActiveObject();
         }
         else
         {
-            m_object_manager->disableAllMove();
+            m_enable_move_all = false;
         }
     }
 }

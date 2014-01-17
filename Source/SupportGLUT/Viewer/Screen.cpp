@@ -475,7 +475,7 @@ void Screen::idleMouseEvent()
     if ( m_scene->mouse()->idle() )
     {
         if ( !( m_scene->controlTarget() == kvs::Scene::TargetObject &&
-                !m_scene->objectManager()->isEnableAllMove()   &&
+                !m_scene->isEnabledAllMove() &&
                 !m_scene->objectManager()->hasActiveObject() ) )
         {
             m_scene->updateXform();
@@ -577,7 +577,7 @@ void Screen::defaultMouseMoveEvent( kvs::MouseEvent* event )
     BaseClass::eventHandler()->notify( event );
     if ( m_scene->controlTarget() == kvs::Scene::TargetObject )
     {
-        if ( !m_scene->objectManager()->isEnableAllMove() )
+        if ( !m_scene->isEnabledAllMove() )
         {
             if ( !m_scene->objectManager()->hasActiveObject() )
             {

@@ -76,8 +76,6 @@ public:
 
     void reset();
     bool isActiveMove( int x, int y );
-    void disableAllMove();
-    void enableAllMove();
     void disableCollisionDetection();
     void enableCollisionDetection();
     void updateControllingObject();
@@ -86,6 +84,11 @@ public:
     void updateXform( kvs::ObjectManager* manager );
     void updateXform( kvs::Camera* camera );
     void updateXform( kvs::Light* light );
+
+    bool isEnabledAllMove() const { return m_enable_move_all; }
+    void setEnabledAllMove( bool enable ) { m_enable_move_all = enable; }
+    void enableAllMove() { this->setEnabledAllMove( true ); }
+    void disableAllMove() { this->setEnabledAllMove( false ); }
 
     kvs::Camera* camera() { return m_camera; }
     kvs::Light* light() { return m_light; }

@@ -40,7 +40,6 @@ private:
 
 private:
     bool m_has_active_object; ///< If active object exists true.
-    bool m_enable_all_move; ///< If All object move together true.
     ObjectIterator m_root; ///< pointer to the root of the tree
     ObjectIterator m_active_object; ///< pointer to the active object
     ObjectMap m_object_map; ///< object map
@@ -84,9 +83,6 @@ public:
     void eraseActiveObject();
     void releaseActiveObject();
 
-    void enableAllMove();
-    void disableAllMove();
-    bool isEnableAllMove() const;
     bool detectCollision( const kvs::Vec2& p_win, kvs::Camera* camera );
     bool detectCollision( const kvs::Vec3& p_world );
 

@@ -35,7 +35,6 @@ ObjectManager::ObjectManager() :
 {
     m_object_tree.clear();
     m_has_active_object = false;
-    m_enable_all_move = true;
     m_object_map.clear();
 
     m_current_object_id = 0;
@@ -618,37 +617,6 @@ void ObjectManager::releaseActiveObject()
 
 /*==========================================================================*/
 /**
- *  @brief  Enable to move all objects.
- */
-/*==========================================================================*/
-void ObjectManager::enableAllMove()
-{
-    m_enable_all_move = true;
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Disable to move all objects.
- */
-/*==========================================================================*/
-void ObjectManager::disableAllMove()
-{
-    m_enable_all_move = false;
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Check whether the object manager is able to move all objects or not.
- *  @return true, if the object manager is able to move all objects.
- */
-/*==========================================================================*/
-bool ObjectManager::isEnableAllMove() const
-{
-    return m_enable_all_move;
-}
-
-/*==========================================================================*/
-/**
  *  @brief  Test the collision detection.
  *  @param  p_win [in] point in the window coordinate
  *  @param  camera [in] pointer to the camera
@@ -964,15 +932,20 @@ kvs::ObjectBase* ObjectManager::get_control_target()
 /*==========================================================================*/
 kvs::Vec3 ObjectManager::get_rotation_center( kvs::ObjectBase* object )
 {
-    if ( this->isEnableAllMove() )
+    if ( m_has_active_object )
     {
-        return this->kvs::ObjectBase::xform().translation();
-    }
-    else
-    {
+        // In this case, a gravity of center of the object, which can be
+        // assumed as the active object, in the world coordinate system
+        // will be returned.
         const kvs::Vec3 center = ObjectBase::objectCenter();
         const kvs::Vec3 scale = ObjectBase::normalize();
         return object->positionInWorld( center, scale );
+    }
+    else
+    {
+        // In this case, a gravity of center of the object manager will
+        // be returned.
+        return this->xform().translation();
     }
 }
 
