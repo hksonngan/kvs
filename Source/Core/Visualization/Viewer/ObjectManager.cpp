@@ -346,6 +346,17 @@ kvs::ObjectBase* ObjectManager::object( std::string name )
 
 /*==========================================================================*/
 /**
+ *  @brief  Returns the pointer to the active object.
+ *  @return pointer to the active object
+ */
+/*==========================================================================*/
+kvs::ObjectBase* ObjectManager::activeObject()
+{
+    return m_has_active_object ? *m_active_object : NULL;
+}
+
+/*==========================================================================*/
+/**
  *  @brief  Returns the number of the stored objects in the object manager.
  *  @return number of the stored objects
  */
@@ -364,6 +375,17 @@ int ObjectManager::numberOfObjects() const
 bool ObjectManager::hasObject() const
 {
     return m_object_tree.size() > 1;
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Check whether the object manager has the active object.
+ *  @return true, if the object manager has the active object.
+ */
+/*==========================================================================*/
+bool ObjectManager::hasActiveObject() const
+{
+    return m_has_active_object;
 }
 
 /*===========================================================================*/
@@ -445,6 +467,28 @@ int ObjectManager::parentObjectID( int id ) const
 
 /*==========================================================================*/
 /**
+ *  @brief  Returns the active object ID.
+ *  @return active object ID, if active object is nothing, -1 is returned.
+ */
+/*==========================================================================*/
+int ObjectManager::activeObjectID() const
+{
+    if ( m_has_active_object )
+    {
+        ObjectMap::const_iterator map_id = m_object_map.begin();
+        ObjectMap::const_iterator map_end = m_object_map.end();
+        while ( map_id != map_end )
+        {
+            if ( m_active_object == map_id->second ) { return map_id->first; }
+            ++map_id;
+        }
+    }
+
+    return -1;
+}
+
+/*==========================================================================*/
+/**
  *  @brief  Returns the xform of the object manager.
  */
 /*==========================================================================*/
@@ -515,46 +559,16 @@ void ObjectManager::resetXform( int id )
 
 /*==========================================================================*/
 /**
- *  @brief  Returns the pointer to the active object.
- *  @return pointer to the active object
+ *  @brief  Release the xform of the active object.
  */
 /*==========================================================================*/
-kvs::ObjectBase* ObjectManager::activeObject()
-{
-    return m_has_active_object ? *m_active_object : NULL;
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Returns the active object ID.
- *  @return active object ID, if active object is nothing, -1 is returned.
- */
-/*==========================================================================*/
-int ObjectManager::activeObjectID() const
+void ObjectManager::resetActiveObjectXform()
 {
     if ( m_has_active_object )
     {
-        ObjectMap::const_iterator map_id = m_object_map.begin();
-        ObjectMap::const_iterator map_end = m_object_map.end();
-        while ( map_id != map_end )
-        {
-            if ( m_active_object == map_id->second ) { return map_id->first; }
-            ++map_id;
-        }
+        (*m_active_object)->resetXform();
+        (*m_active_object)->multiplyXform( this->xform() );
     }
-
-    return -1;
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Check whether the object manager has the active object.
- *  @return true, if the object manager has the active object.
- */
-/*==========================================================================*/
-bool ObjectManager::hasActiveObject() const
-{
-    return m_has_active_object;
 }
 
 /*==========================================================================*/
@@ -573,20 +587,6 @@ bool ObjectManager::setActiveObject( int id )
     m_has_active_object = true;
 
     return true;
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Release the xform of the active object.
- */
-/*==========================================================================*/
-void ObjectManager::resetActiveObjectXform()
-{
-    if ( m_has_active_object )
-    {
-        (*m_active_object)->resetXform();
-        (*m_active_object)->multiplyXform( this->xform() );
-    }
 }
 
 /*==========================================================================*/
@@ -724,24 +724,6 @@ bool ObjectManager::detectCollision( const kvs::Vec3& p_world )
 
 /*==========================================================================*/
 /**
- *  @brief  Returns the position of the object manager in the device coordinate.
- *  @param  camera [in] pointer to the camera
- */
-/*==========================================================================*/
-kvs::Vec2 ObjectManager::positionInDevice( kvs::Camera* camera ) const
-{
-    kvs::OpenGL::PushMatrix();
-    camera->update();
-    kvs::Vec3 p = kvs::ObjectBase::xform().translation();
-    kvs::Vec2 ret = camera->projectObjectToWindow( p );
-    ret.y() = camera->windowHeight() - ret.y();
-    kvs::OpenGL::PopMatrix();
-
-    return ret;
-}
-
-/*==========================================================================*/
-/**
  *  @brief  Rotate the all objects.
  *  @param  rotation [in] current rotation matrix.
  */
@@ -819,6 +801,24 @@ void ObjectManager::scale( const kvs::Vec3& scaling )
         (*registered_object)->multiplyXform( x );
         ++registered_object;
     }
+}
+
+/*==========================================================================*/
+/**
+ *  @brief  Returns the position of the object manager in the device coordinate.
+ *  @param  camera [in] pointer to the camera
+ */
+/*==========================================================================*/
+kvs::Vec2 ObjectManager::positionInDevice( kvs::Camera* camera ) const
+{
+    kvs::OpenGL::PushMatrix();
+    camera->update();
+    kvs::Vec3 p = kvs::ObjectBase::xform().translation();
+    kvs::Vec2 ret = camera->projectObjectToWindow( p );
+    ret.y() = camera->windowHeight() - ret.y();
+    kvs::OpenGL::PopMatrix();
+
+    return ret;
 }
 
 /*==========================================================================*/
@@ -945,13 +945,13 @@ void ObjectManager::update_normalize_parameters()
 /*==========================================================================*/
 kvs::ObjectBase* ObjectManager::get_control_target()
 {
-    if ( this->isEnableAllMove() )
+    if ( m_has_active_object )
     {
-        return this;
+        return *m_active_object;
     }
     else
     {
-        return *m_active_object;
+        return this;
     }
 }
 
@@ -971,8 +971,8 @@ kvs::Vec3 ObjectManager::get_rotation_center( kvs::ObjectBase* object )
     else
     {
         const kvs::Vec3 center = ObjectBase::objectCenter();
-        const kvs::Vec3 scaling = ObjectBase::normalize();
-        return object->positionInWorld( center, scaling );
+        const kvs::Vec3 scale = ObjectBase::normalize();
+        return object->positionInWorld( center, scale );
     }
 }
 
@@ -984,18 +984,16 @@ kvs::Vec3 ObjectManager::get_rotation_center( kvs::ObjectBase* object )
 /*==========================================================================*/
 ObjectManager::ObjectIterator ObjectManager::get_control_first_pointer()
 {
-    ObjectIterator object;
-    if ( this->isEnableAllMove() )
+    if ( m_has_active_object )
     {
-        object = m_object_tree.begin();
-        ++object;
+        return m_object_tree.begin( m_active_object );
     }
     else
     {
-        object = m_object_tree.begin( m_active_object );
+        ObjectIterator object = m_object_tree.begin();
+        ++object; // Skip the root object.
+        return object;
     }
-
-    return object;
 }
 
 /*==========================================================================*/
@@ -1006,17 +1004,14 @@ ObjectManager::ObjectIterator ObjectManager::get_control_first_pointer()
 /*==========================================================================*/
 ObjectManager::ObjectIterator ObjectManager::get_control_last_pointer()
 {
-    ObjectIterator object;
-    if ( this->isEnableAllMove() )
+    if ( m_has_active_object )
     {
-        object = m_object_tree.end();
+        return m_object_tree.end( m_active_object );
     }
     else
     {
-        object = m_object_tree.end( m_active_object );
+        return m_object_tree.end();
     }
-
-    return object;
 }
 
 } // end of namespace kvs

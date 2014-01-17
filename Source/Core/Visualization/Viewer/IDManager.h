@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file IDManager.h
+ *  @file   IDManager.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -33,16 +34,15 @@ class IDManager
 {
 public:
     typedef std::pair<int,int> IDPair;
-    typedef std::list<IDPair> IDs;
-    typedef std::list<IDPair>::iterator ID_ptr;
-    typedef std::list<IDPair>::reverse_iterator ID_rptr;
+    typedef std::list<IDPair> IDList;
+    typedef std::list<IDPair>::iterator IDIterator;
+    typedef std::list<IDPair>::reverse_iterator IDReverseIterator;
 
 private:
-    std::vector<int> m_flip_table;
-    IDs m_id_list;
+    std::vector<int> m_flip_table; ///< accessor to ID list
+    IDList m_id_list; ///< ID list
 
 public:
-
     IDManager();
     virtual ~IDManager();
 
@@ -68,7 +68,6 @@ public:
     void flip();
 
 private:
-
     void update_flip_table();
 
 private:

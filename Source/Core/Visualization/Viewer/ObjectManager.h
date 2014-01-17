@@ -63,24 +63,24 @@ public:
     kvs::ObjectBase* object();
     kvs::ObjectBase* object( int id );
     kvs::ObjectBase* object( std::string name );
+    kvs::ObjectBase* activeObject();
 
     int numberOfObjects() const;
     bool hasObject() const;
+    bool hasActiveObject() const;
     int objectID( const kvs::ObjectBase *object ) const;
     int parentObjectID( const ObjectIterator it ) const;
     int parentObjectID( const kvs::ObjectBase *object ) const;
     int parentObjectID( int id ) const;
+    int activeObjectID() const;
 
     kvs::Xform xform() const;
     kvs::Xform xform( int id ) const;
     void resetXform();
     void resetXform( int id );
-
-    kvs::ObjectBase* activeObject();
-    int activeObjectID() const;
-    bool hasActiveObject() const;
-    bool setActiveObject( int id );
     void resetActiveObjectXform();
+
+    bool setActiveObject( int id );
     void eraseActiveObject();
     void releaseActiveObject();
 
@@ -90,10 +90,11 @@ public:
     bool detectCollision( const kvs::Vec2& p_win, kvs::Camera* camera );
     bool detectCollision( const kvs::Vec3& p_world );
 
-    kvs::Vec2 positionInDevice( kvs::Camera* camera ) const;
     void rotate( const kvs::Mat3& rotation );
     void translate( const kvs::Vec3& translation );
     void scale( const kvs::Vec3& scaling );
+
+    kvs::Vec2 positionInDevice( kvs::Camera* camera ) const;
     void updateExternalCoords();
 
 private:

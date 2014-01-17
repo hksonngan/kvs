@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file IDManager.cpp
+ *  @file   IDManager.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -51,11 +52,8 @@ IDManager::~IDManager()
 IDManager::IDPair IDManager::id( size_t index ) const
 {
     const int id = m_flip_table[index];
-    IDs::const_iterator p = m_id_list.begin();
-    for( int i = 0; i < id; i++ )
-    {
-        p++;
-    }
+    IDList::const_iterator p = m_id_list.begin();
+    for( int i = 0; i < id; i++ ) { p++; }
 
     return *p;
 }
@@ -128,7 +126,7 @@ void IDManager::insertRendererID( int renderer_id )
 std::vector<int> IDManager::objectID( int renderer_id ) const
 {
     std::vector<int> object_ids;
-    for ( IDs::const_iterator p = m_id_list.begin(); p != m_id_list.end(); p++ )
+    for ( IDList::const_iterator p = m_id_list.begin(); p != m_id_list.end(); p++ )
     {
         if ( renderer_id == p->second ) object_ids.push_back( p->first );
     }
@@ -157,7 +155,7 @@ int IDManager::objectID() const
 std::vector<int> IDManager::rendererID( int object_id ) const
 {
     std::vector<int> renderer_ids;
-    for ( IDs::const_iterator p = m_id_list.begin(); p != m_id_list.end(); p++ )
+    for ( IDList::const_iterator p = m_id_list.begin(); p != m_id_list.end(); p++ )
     {
         if ( object_id == p->first ) renderer_ids.push_back( p->second );
     }
@@ -196,9 +194,9 @@ void IDManager::erase()
 /*===========================================================================*/
 void IDManager::erase( int object_id, int renderer_id )
 {
-    std::vector<ID_ptr> erase_ptr;
+    std::vector<IDIterator> erase_ptr;
 
-    for ( ID_ptr p = m_id_list.begin(); p != m_id_list.end(); p++ )
+    for ( IDIterator p = m_id_list.begin(); p != m_id_list.end(); p++ )
     {
         if ( object_id == p->first && renderer_id == p->second )
         {
@@ -222,9 +220,9 @@ void IDManager::erase( int object_id, int renderer_id )
 /*===========================================================================*/
 void IDManager::eraseByObjectID( int object_id )
 {
-    std::vector<ID_ptr> erase_ptr;
+    std::vector<IDIterator> erase_ptr;
 
-    for ( ID_ptr p = m_id_list.begin(); p != m_id_list.end(); p++ )
+    for ( IDIterator p = m_id_list.begin(); p != m_id_list.end(); p++ )
     {
         if ( object_id == p->first )
         {
@@ -248,9 +246,9 @@ void IDManager::eraseByObjectID( int object_id )
 /*===========================================================================*/
 void IDManager::eraseByRendererID( int renderer_id )
 {
-    std::vector<ID_ptr> erase_ptr;
+    std::vector<IDIterator> erase_ptr;
 
-    for ( ID_ptr p = m_id_list.begin(); p != m_id_list.end(); p++ )
+    for ( IDIterator p = m_id_list.begin(); p != m_id_list.end(); p++ )
     {
         if ( renderer_id == p->second )
         {
@@ -286,7 +284,7 @@ void IDManager::changeObject( int object_id )
 /*===========================================================================*/
 void IDManager::changeObject( int renderer_id, int object_id )
 {
-    for ( ID_rptr p = m_id_list.rbegin(); p != m_id_list.rend(); p++ )
+    for ( IDReverseIterator p = m_id_list.rbegin(); p != m_id_list.rend(); p++ )
     {
         if ( renderer_id == p->second )
         {
@@ -305,7 +303,7 @@ void IDManager::changeObject( int renderer_id, int object_id )
 /*===========================================================================*/
 void IDManager::changeObject( const IDPair& id_pair, int object_id )
 {
-    for ( ID_rptr p = m_id_list.rbegin(); p != m_id_list.rend(); p++ )
+    for ( IDReverseIterator p = m_id_list.rbegin(); p != m_id_list.rend(); p++ )
     {
         if ( *p == id_pair )
         {
@@ -335,7 +333,7 @@ void IDManager::changeRenderer( int renderer_id )
 /*===========================================================================*/
 void IDManager::changeRenderer( int object_id, int renderer_id )
 {
-    for ( ID_rptr p = m_id_list.rbegin(); p != m_id_list.rend(); p++ )
+    for ( IDReverseIterator p = m_id_list.rbegin(); p != m_id_list.rend(); p++ )
     {
         if ( object_id == p->first )
         {
@@ -354,7 +352,7 @@ void IDManager::changeRenderer( int object_id, int renderer_id )
 /*===========================================================================*/
 void IDManager::changeRenderer( const IDPair& id_pair, int renderer_id )
 {
-    for ( ID_rptr p = m_id_list.rbegin(); p != m_id_list.rend(); p++ )
+    for ( IDReverseIterator p = m_id_list.rbegin(); p != m_id_list.rend(); p++ )
     {
         if ( *p == id_pair )
         {
@@ -386,7 +384,7 @@ void IDManager::update_flip_table()
 {
     m_flip_table.clear();
 
-    const int n = size();
+    const int n = this->size();
     for ( int i = 0; i < n; i++ )
     {
         m_flip_table.push_back( i );
