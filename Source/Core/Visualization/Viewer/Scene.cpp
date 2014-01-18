@@ -36,7 +36,7 @@ namespace kvs
 /*===========================================================================*/
 Scene::Scene():
     m_target( Scene::TargetObject ),
-    m_enable_move_all( true ),
+    m_enable_object_operation( true ),
     m_enable_collision_detection( false )
 {
     m_camera = new kvs::Camera();
@@ -242,7 +242,7 @@ bool Scene::isActiveMove( int x, int y )
 
     if ( m_target == TargetObject )
     {
-        if ( !m_enable_move_all && m_enable_collision_detection )
+        if ( !m_enable_object_operation && m_enable_collision_detection )
         {
             const float px = static_cast<float>(x);
             const float py = static_cast<float>(y);
@@ -254,27 +254,6 @@ bool Scene::isActiveMove( int x, int y )
     return true;
 }
 
-/*===========================================================================*/
-/**
- *  @brief  Disable collision detection mode.
- */
-/*===========================================================================*/
-void Scene::disableCollisionDetection()
-{
-    m_enable_collision_detection = false;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Enable collision detection mode.
- */
-/*===========================================================================*/
-void Scene::enableCollisionDetection()
-{
-    m_enable_move_all = false;
-    m_enable_collision_detection = true;
-}
-
 /*==========================================================================*/
 /**
  *  @brief  Updates the controlling object.
@@ -284,14 +263,9 @@ void Scene::updateControllingObject()
 {
     if ( m_target == TargetObject )
     {
-        if ( m_enable_move_all )
+        if ( m_enable_object_operation )
         {
-            m_enable_move_all = true;
             m_object_manager->releaseActiveObject();
-        }
-        else
-        {
-            m_enable_move_all = false;
         }
     }
 }
@@ -315,7 +289,7 @@ void Scene::updateCenterOfRotation()
         center = m_camera->lookAtInDevice();
         break;
     case TargetObject:
-        if ( m_enable_move_all || !m_object_manager->hasObject() )
+        if ( m_enable_object_operation || !m_object_manager->hasObject() )
         {
             center = m_object_manager->positionInDevice( m_camera );
         }
@@ -436,6 +410,27 @@ void Scene::updateXform( kvs::Light* light )
     }
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Disable collision detection mode.
+ */
+/*===========================================================================*/
+void Scene::disableCollisionDetection()
+{
+    m_enable_collision_detection = false;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Enable collision detection mode.
+ */
+/*===========================================================================*/
+void Scene::enableCollisionDetection()
+{
+    m_enable_object_operation = false;
+    m_enable_collision_detection = true;
+}
+
 /*==========================================================================*/
 /**
  *  @brief  Initalizes the screen.
@@ -518,7 +513,7 @@ void Scene::resizeFunction( int width, int height )
 /*==========================================================================*/
 void Scene::mouseReleaseFunction( int x, int y )
 {
-    m_enable_move_all = true;
+    m_enable_object_operation = true;
     m_enable_collision_detection = false;
     m_mouse->release( x, y );
 
@@ -538,7 +533,7 @@ void Scene::mouseReleaseFunction( int x, int y )
 /*==========================================================================*/
 void Scene::mousePressFunction( int x, int y, kvs::Mouse::TransMode mode )
 {
-    if ( m_enable_move_all || m_object_manager->hasActiveObject() )
+    if ( m_enable_object_operation || m_object_manager->hasActiveObject() )
     {
         this->updateControllingObject();
         m_mouse->setMode( mode );
@@ -555,7 +550,7 @@ void Scene::mousePressFunction( int x, int y, kvs::Mouse::TransMode mode )
 /*==========================================================================*/
 void Scene::mouseMoveFunction( int x, int y )
 {
-    if ( m_enable_move_all || m_object_manager->hasActiveObject() )
+    if ( m_enable_object_operation || m_object_manager->hasActiveObject() )
     {
         m_mouse->move( x, y );
         this->updateXform();
@@ -570,7 +565,7 @@ void Scene::mouseMoveFunction( int x, int y )
 /*===========================================================================*/
 void Scene::wheelFunction( int value )
 {
-    if ( m_enable_move_all || m_object_manager->hasActiveObject() )
+    if ( m_enable_object_operation || m_object_manager->hasActiveObject() )
     {
         this->updateControllingObject();
         m_mouse->setMode( kvs::Mouse::Scaling );

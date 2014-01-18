@@ -234,46 +234,7 @@ void Screen::addEvent( kvs::EventListener* event, const std::string& name )
 /*===========================================================================*/
 const std::pair<int,int> Screen::registerObject( kvs::ObjectBase* object, kvs::RendererBase* renderer )
 {
-    /* If the given pointer to the renderer is null, a renderer for the given
-     * object is automatically created by using visualization pipeline class.
-     */
-    if ( !renderer )
-    {
-        kvs::VisualizationPipeline pipeline( object );
-        if ( !pipeline.exec() )
-        {
-            kvsMessageError("Cannot create a renderer for the given object.");
-            return( std::pair<int,int>( -1, -1 ) );
-        }
-
-        renderer = const_cast<kvs::RendererBase*>( pipeline.renderer() );
-    }
-
-    if ( !object->hasMinMaxObjectCoords() )
-    {
-        object->updateMinMaxCoords();
-    }
-
-    /* If the object has not been registered in the object managet,
-     * the object is registered and then its ID is returned.
-     */
-    int object_id = m_scene->objectManager()->objectID( object );
-    if ( object_id == -1 ) object_id = m_scene->objectManager()->insert( object );
-
-    /* If the renderer has not been registered in the renderer managet,
-     * the renderer is registered and then its ID is returned.
-     */
-    int renderer_id = -1;
-    for ( int i = 0; i < m_scene->rendererManager()->nrenderers(); i++ )
-    {
-        if ( m_scene->rendererManager()->renderer(i) == renderer ) renderer_id = i;
-    }
-    if ( renderer_id == -1 ) renderer_id = m_scene->rendererManager()->insert( renderer );
-
-    // Insert the IDs into the ID manager.
-    m_scene->IDManager()->insert( object_id, renderer_id );
-
-    return( std::pair<int,int>( object_id, renderer_id ) );
+    return m_scene->registerObject( object, renderer );
 }
 
 /*===========================================================================*/
@@ -285,9 +246,8 @@ const std::pair<int,int> Screen::registerObject( kvs::ObjectBase* object, kvs::R
 /*===========================================================================*/
 const std::pair<int,int> Screen::registerObject( kvs::VisualizationPipeline* pipeline )
 {
-    /* WARNING: It is necessary to increment the reference counter of the
-     * pipeline.object() and the pipeline.renderer().
-     */
+    // WARNING: It is necessary to increment the reference counter of the
+    // pipeline.object() and the pipeline.renderer().
     kvs::ObjectBase* object = const_cast<kvs::ObjectBase*>( pipeline->object() );
     kvs::RendererBase* renderer = const_cast<kvs::RendererBase*>( pipeline->renderer() );
 
@@ -295,7 +255,7 @@ const std::pair<int,int> Screen::registerObject( kvs::VisualizationPipeline* pip
     const int renderer_id = m_scene->rendererManager()->insert( renderer );
     m_scene->IDManager()->insert( object_id, renderer_id );
 
-    return( std::pair<int,int>( object_id, renderer_id ) );
+    return std::pair<int,int>( object_id, renderer_id );
 }
 
 /*===========================================================================*/
@@ -305,7 +265,7 @@ const std::pair<int,int> Screen::registerObject( kvs::VisualizationPipeline* pip
 /*===========================================================================*/
 void Screen::enable()
 {
-    m_scene->enableAllMove();
+    m_scene->enableObjectOperation();
 }
 
 /*===========================================================================*/
@@ -315,7 +275,7 @@ void Screen::enable()
 /*===========================================================================*/
 void Screen::disable()
 {
-    m_scene->disableAllMove();
+    m_scene->disableObjectOperation();
 }
 
 /*===========================================================================*/
@@ -464,7 +424,7 @@ void Screen::idleMouseEvent()
     if ( m_scene->mouse()->idle() )
     {
         if ( !( m_scene->controlTarget() == kvs::Scene::TargetObject &&
-                !m_scene->isEnabledAllMove()   &&
+                !m_scene->isEnabledObjectOperation()   &&
                 !m_scene->objectManager()->hasActiveObject() ) )
         {
             m_scene->updateXform();
@@ -568,7 +528,7 @@ void Screen::defaultMouseMoveEvent( kvs::MouseEvent* event )
     BaseClass::eventHandler()->notify( event );
     if ( m_scene->controlTarget() == kvs::Scene::TargetObject )
     {
-        if ( !m_scene->isEnabledAllMove() )
+        if ( !m_scene->isEnabledObjectOperation() )
         {
             if ( !m_scene->objectManager()->hasActiveObject() )
             {
@@ -648,7 +608,7 @@ void Screen::defaultKeyPressEvent( kvs::KeyEvent* event )
 /*===========================================================================*/
 kvs::Camera* Screen::camera()
 {
-    return( m_scene->camera() );
+    return m_scene->camera();
 }
 
 /*===========================================================================*/
@@ -659,7 +619,7 @@ kvs::Camera* Screen::camera()
 /*===========================================================================*/
 kvs::Light* Screen::light()
 {
-    return( m_scene->light() );
+    return m_scene->light();
 }
 
 /*===========================================================================*/
@@ -670,7 +630,7 @@ kvs::Light* Screen::light()
 /*===========================================================================*/
 kvs::Mouse* Screen::mouse()
 {
-    return( m_scene->mouse() );
+    return m_scene->mouse();
 }
 
 /*===========================================================================*/
@@ -681,7 +641,7 @@ kvs::Mouse* Screen::mouse()
 /*===========================================================================*/
 kvs::Background* Screen::background()
 {
-    return( m_scene->background() );
+    return m_scene->background();
 }
 
 /*===========================================================================*/
@@ -692,7 +652,7 @@ kvs::Background* Screen::background()
 /*===========================================================================*/
 kvs::ObjectManager* Screen::objectManager()
 {
-    return( m_scene->objectManager() );
+    return m_scene->objectManager();
 }
 
 /*===========================================================================*/
@@ -703,7 +663,7 @@ kvs::ObjectManager* Screen::objectManager()
 /*===========================================================================*/
 kvs::RendererManager* Screen::rendererManager()
 {
-    return( m_scene->rendererManager() );
+    return m_scene->rendererManager();
 }
 
 /*===========================================================================*/
@@ -714,7 +674,7 @@ kvs::RendererManager* Screen::rendererManager()
 /*===========================================================================*/
 kvs::IDManager* Screen::IDManager()
 {
-    return( m_scene->IDManager() );
+    return m_scene->IDManager();
 }
 
 /*===========================================================================*/
@@ -725,7 +685,7 @@ kvs::IDManager* Screen::IDManager()
 /*===========================================================================*/
 Screen::ControlTarget& Screen::controlTarget()
 {
-    return( m_scene->controlTarget() );
+    return m_scene->controlTarget();
 }
 
 /*===========================================================================*/

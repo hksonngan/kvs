@@ -58,7 +58,7 @@ private:
     kvs::RendererManager* m_renderer_manager; ///< renderer manager
     kvs::IDManager* m_id_manager; ///< ID manager ( object_id, renderer_id )
     ControlTarget m_target; ///< control target
-    bool m_enable_move_all;  ///< flag for object movement
+    bool m_enable_object_operation;  ///< flag for object operation
     bool m_enable_collision_detection; ///< flag for collision detection
 
 public:
@@ -76,8 +76,6 @@ public:
 
     void reset();
     bool isActiveMove( int x, int y );
-    void disableCollisionDetection();
-    void enableCollisionDetection();
     void updateControllingObject();
     void updateCenterOfRotation();
     void updateXform();
@@ -85,10 +83,13 @@ public:
     void updateXform( kvs::Camera* camera );
     void updateXform( kvs::Light* light );
 
-    bool isEnabledAllMove() const { return m_enable_move_all; }
-    void setEnabledAllMove( bool enable ) { m_enable_move_all = enable; }
-    void enableAllMove() { this->setEnabledAllMove( true ); }
-    void disableAllMove() { this->setEnabledAllMove( false ); }
+    void disableCollisionDetection();
+    void enableCollisionDetection();
+
+    bool isEnabledObjectOperation() const { return m_enable_object_operation; }
+    void setEnabledObjectOperation( bool enable ) { m_enable_object_operation = enable; }
+    void enableObjectOperation() { this->setEnabledObjectOperation( true ); }
+    void disableObjectOperation() { this->setEnabledObjectOperation( false ); }
 
     kvs::Camera* camera() { return m_camera; }
     kvs::Light* light() { return m_light; }
