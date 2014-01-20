@@ -32,13 +32,13 @@ ObjectBase::ObjectBase( const bool collision ):
     kvs::XformControl(),
     m_can_collision( collision ),
     m_name("unknown"),
-    m_min_object_coord( kvs::Vector3f( -3.0, -3.0, -3.0 ) ),
-    m_max_object_coord( kvs::Vector3f(  3.0,  3.0,  3.0 ) ),
-    m_min_external_coord( kvs::Vector3f( -3.0, -3.0, -3.0 ) ),
-    m_max_external_coord( kvs::Vector3f(  3.0,  3.0,  3.0 ) ),
+    m_min_object_coord( kvs::Vec3( -3.0, -3.0, -3.0 ) ),
+    m_max_object_coord( kvs::Vec3(  3.0,  3.0,  3.0 ) ),
+    m_min_external_coord( kvs::Vec3( -3.0, -3.0, -3.0 ) ),
+    m_max_external_coord( kvs::Vec3(  3.0,  3.0,  3.0 ) ),
     m_has_min_max_object_coords( false ),
     m_has_min_max_external_coords( false ),
-    m_show_flg( true )
+    m_show_flag( true )
 {
 }
 
@@ -69,23 +69,9 @@ ObjectBase& ObjectBase::operator = ( const ObjectBase& object )
     m_object_center = object.m_object_center;
     m_external_position = object.m_external_position;
     m_normalize = object.m_normalize;
-#if KVS_ENABLE_DEPRECATED
-    m_material = object.m_material;
-#endif
-    m_show_flg = object.m_show_flg;
+    m_show_flag = object.m_show_flag;
 
     return *this;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Set object name.
- *  @param  name [in] object name
- */
-/*===========================================================================*/
-void ObjectBase::setName( const std::string& name )
-{
-    m_name = name;
 }
 
 /*===========================================================================*/
@@ -96,8 +82,8 @@ void ObjectBase::setName( const std::string& name )
  */
 /*===========================================================================*/
 void ObjectBase::setMinMaxObjectCoords(
-    const kvs::Vector3f& min_coord,
-    const kvs::Vector3f& max_coord )
+    const kvs::Vec3& min_coord,
+    const kvs::Vec3& max_coord )
 {
     m_min_object_coord = min_coord;
     m_max_object_coord = max_coord;
@@ -113,57 +99,13 @@ void ObjectBase::setMinMaxObjectCoords(
  */
 /*===========================================================================*/
 void ObjectBase::setMinMaxExternalCoords(
-    const kvs::Vector3f& min_coord,
-    const kvs::Vector3f& max_coord )
+    const kvs::Vec3& min_coord,
+    const kvs::Vec3& max_coord )
 {
     m_min_external_coord = min_coord;
     m_max_external_coord = max_coord;
     m_has_min_max_external_coords = true;
     this->updateNormalizeParameters();
-}
-
-#if KVS_ENABLE_DEPRECATED
-/*===========================================================================*/
-/**
- *  @breif  Sets the object material.
- *  @param  material [in] object material
- */
-/*===========================================================================*/
-void ObjectBase::setMaterial( const kvs::Material& material )
-{
-    m_material = material;
-}
-
-/*===========================================================================*/
-/**
- *  @breif  Sets the material face.
- *  @param  face [in] material face
- */
-/*===========================================================================*/
-void ObjectBase::setFace( const Face face )
-{
-    m_material.setFace( kvs::Material::MaterialFace( face ) );
-}
-#endif
-
-/*===========================================================================*/
-/**
- *  @brief  Shows the object.
- */
-/*===========================================================================*/
-void ObjectBase::show()
-{
-    m_show_flg = true;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Hides the object.
- */
-/*===========================================================================*/
-void ObjectBase::hide()
-{
-    m_show_flg = false;
 }
 
 /*===========================================================================*/
@@ -193,140 +135,6 @@ void ObjectBase::print( std::ostream& os, const kvs::Indent& indent ) const
 
 /*===========================================================================*/
 /**
- *  @brief  Returns object name.
- *  @return  object name
- */
-/*===========================================================================*/
-const std::string& ObjectBase::name() const
-{
-    return m_name;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the min object coordinate value.
- *  @return min object coordinate value
- */
-/*===========================================================================*/
-const kvs::Vector3f& ObjectBase::minObjectCoord() const
-{
-    return m_min_object_coord;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the max object coordinate value.
- *  @return max object coordinate value
- */
-/*===========================================================================*/
-const kvs::Vector3f& ObjectBase::maxObjectCoord() const
-{
-    return m_max_object_coord;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the min external coordinate value.
- *  @return min external coordinate value
- */
-/*===========================================================================*/
-const kvs::Vector3f& ObjectBase::minExternalCoord() const
-{
-    return m_min_external_coord;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the max external coordinate value.
- *  @return max external coordinate value
- */
-/*===========================================================================*/
-const kvs::Vector3f& ObjectBase::maxExternalCoord() const
-{
-    return m_max_external_coord;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Test whether the object has the min/max object coordinates or not.
- *  @return true, if the object has the min/max object coordinates.
- */
-/*===========================================================================*/
-bool ObjectBase::hasMinMaxObjectCoords() const
-{
-    return m_has_min_max_object_coords;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Test whether the object has the min/max external coordinates or not.
- *  @return true, if the object has the min/max external coordinates.
- */
-/*===========================================================================*/
-bool ObjectBase::hasMinMaxExternalCoords() const
-{
-    return m_has_min_max_external_coords;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the coordinate value of the object center.
- *  @return coordinate value of the object center
- */
-/*===========================================================================*/
-const kvs::Vector3f& ObjectBase::objectCenter() const
-{
-    return m_object_center;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the object position in the external coordinate.
- *  @return object position in the external coordinate
- */
-/*===========================================================================*/
-const kvs::Vector3f& ObjectBase::externalPosition() const
-{
-    return m_external_position;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the normalize vector.
- *  @return normalize vector
- */
-/*===========================================================================*/
-const kvs::Vector3f& ObjectBase::normalize() const
-{
-    return m_normalize;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Test whether the object is shown or not.
- *  @return true, if the object is shown.
- */
-/*===========================================================================*/
-bool ObjectBase::isShown() const
-{
-    return m_show_flg;
-}
-
-#if KVS_ENABLE_DEPRECATED
-/*===========================================================================*/
-/**
- *  @brief  Returns the object material.
- *  @return object material
- */
-/*===========================================================================*/
-const kvs::Material& ObjectBase::material() const
-{
-    return m_material;
-}
-#endif
-
-/*===========================================================================*/
-/**
  *  @brief  Returns the object position in the device coordinate.
  *  @param  camera [in] camera
  *  @param  global_trans [in] translation vector in the global
@@ -334,13 +142,13 @@ const kvs::Material& ObjectBase::material() const
  *  @return object position in the device coordinate
  */
 /*===========================================================================*/
-const kvs::Vector2f ObjectBase::positionInDevice(
-    kvs::Camera*         camera,
-    const kvs::Vector3f& global_trans,
-    const kvs::Vector3f& global_scale ) const
+const kvs::Vec2 ObjectBase::positionInDevice(
+    kvs::Camera* camera,
+    const kvs::Vec3& global_trans,
+    const kvs::Vec3& global_scale ) const
 {
-    kvs::Vector2f ret;
-    glPushMatrix();
+    kvs::Vec2 ret;
+    kvs::OpenGL::PushMatrix();
     {
         camera->update();
 
@@ -349,7 +157,7 @@ const kvs::Vector2f ObjectBase::positionInDevice(
         ret = camera->projectObjectToWindow( m_object_center );
         ret.y() = camera->windowHeight() - ret.y();
     }
-    glPopMatrix();
+    kvs::OpenGL::PopMatrix();
 
     return ret;
 }
@@ -362,11 +170,11 @@ const kvs::Vector2f ObjectBase::positionInDevice(
  *  @return object position in the world coordinate
  */
 /*===========================================================================*/
-const kvs::Vector3f ObjectBase::positionInWorld(
-    const kvs::Vector3f& global_trans,
-    const kvs::Vector3f& global_scale ) const
+const kvs::Vec3 ObjectBase::positionInWorld(
+    const kvs::Vec3& global_trans,
+    const kvs::Vec3& global_scale ) const
 {
-    kvs::Vector3f init_pos = m_external_position - global_trans;
+    kvs::Vec3 init_pos = m_external_position - global_trans;
 
     init_pos.x() *= global_scale.x();
     init_pos.y() *= global_scale.y();
@@ -377,24 +185,13 @@ const kvs::Vector3f ObjectBase::positionInWorld(
 
 /*===========================================================================*/
 /**
- *  @brief  Returns the object position in the external coordinate.
- *  @return object position in the external coordinate
- */
-/*===========================================================================*/
-const kvs::Vector3f& ObjectBase::positionInExternal() const
-{
-    return m_external_position;
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Updates the normalize parameters.
  */
 /*===========================================================================*/
 void ObjectBase::updateNormalizeParameters()
 {
-    kvs::Vector3f diff_obj = m_max_object_coord - m_min_object_coord;
-    kvs::Vector3f diff_ext = m_max_external_coord - m_min_external_coord;
+    kvs::Vec3 diff_obj = m_max_object_coord - m_min_object_coord;
+    kvs::Vec3 diff_ext = m_max_external_coord - m_min_external_coord;
 
     m_object_center = ( m_max_object_coord + m_min_object_coord ) * 0.5;
     m_external_position = ( m_max_external_coord + m_min_external_coord ) * 0.5;
@@ -405,7 +202,7 @@ void ObjectBase::updateNormalizeParameters()
     {
         // In the case of 'diff_obj == (0,0,0)', such as a point object composed of
         // a single vertex point, the normalization parameters is set to '(1,1,1)'.
-        m_normalize = kvs::Vector3f( 1.0f, 1.0f, 1.0f );
+        m_normalize = kvs::Vec3( 1.0f, 1.0f, 1.0f );
     }
     else
     {
@@ -436,12 +233,12 @@ void ObjectBase::updateNormalizeParameters()
  *  @param  Sg [in] scaling vector in the global
  */
 /*===========================================================================*/
-void ObjectBase::transform( const kvs::Vector3f& Tg, const kvs::Vector3f& Sg ) const
+void ObjectBase::transform( const kvs::Vec3& Tg, const kvs::Vec3& Sg ) const
 {
     float X[16]; this->xform().toArray( X );
-    const kvs::Vector3f& Te = m_external_position;
-    const kvs::Vector3f& Sl = m_normalize;
-    const kvs::Vector3f& Tl = m_object_center;
+    const kvs::Vec3& Te = m_external_position;
+    const kvs::Vec3& Sl = m_normalize;
+    const kvs::Vec3& Tl = m_object_center;
 
     kvs::OpenGL::MultMatrix( X );
     kvs::OpenGL::Scale( Sg.x(), Sg.y(), Sg.z() );
@@ -450,18 +247,6 @@ void ObjectBase::transform( const kvs::Vector3f& Tg, const kvs::Vector3f& Sg ) c
     kvs::OpenGL::Scale( Sl.x(), Sl.y(), Sl.z() );
     kvs::OpenGL::Translate( -Tl.x(), -Tl.y(), -Tl.z() );
 }
-
-#if KVS_ENABLE_DEPRECATED
-/*===========================================================================*/
-/**
- *  @brief  Applys the object material.
- */
-/*===========================================================================*/
-void ObjectBase::applyMaterial()
-{
-    m_material.apply();
-}
-#endif
 
 /*===========================================================================*/
 /**
@@ -477,17 +262,17 @@ void ObjectBase::applyMaterial()
  */
 /*===========================================================================*/
 bool ObjectBase::collision(
-    const kvs::Vector2f& p_win,
+    const kvs::Vec2& p_win,
     kvs::Camera* camera,
-    const kvs::Vector3f& global_trans,
-    const kvs::Vector3f& global_scale )
+    const kvs::Vec3& global_trans,
+    const kvs::Vec3& global_scale )
 {
     float max_distance = -1.0f;
 
     // Center of this object in the window coordinate system.
-    kvs::Vector2f center;
+    kvs::Vec2 center;
 
-    glPushMatrix();
+    kvs::OpenGL::PushMatrix();
     {
         camera->update();
 
@@ -496,28 +281,28 @@ bool ObjectBase::collision(
         center = camera->projectObjectToWindow( m_object_center );
 
         // Object's corner points in the object coordinate system.
-        const kvs::Vector3f corners[8] = {
-            kvs::Vector3f( m_min_object_coord.x(), m_min_object_coord.y(), m_min_object_coord.z() ),
-            kvs::Vector3f( m_max_object_coord.x(), m_min_object_coord.y(), m_min_object_coord.z() ),
-            kvs::Vector3f( m_min_object_coord.x(), m_min_object_coord.y(), m_max_object_coord.z() ),
-            kvs::Vector3f( m_max_object_coord.x(), m_min_object_coord.y(), m_max_object_coord.z() ),
-            kvs::Vector3f( m_min_object_coord.x(), m_max_object_coord.y(), m_min_object_coord.z() ),
-            kvs::Vector3f( m_max_object_coord.x(), m_max_object_coord.y(), m_min_object_coord.z() ),
-            kvs::Vector3f( m_min_object_coord.x(), m_max_object_coord.y(), m_max_object_coord.z() ),
-            kvs::Vector3f( m_max_object_coord.x(), m_max_object_coord.y(), m_max_object_coord.z() ) };
+        const kvs::Vec3 corners[8] = {
+            kvs::Vec3( m_min_object_coord.x(), m_min_object_coord.y(), m_min_object_coord.z() ),
+            kvs::Vec3( m_max_object_coord.x(), m_min_object_coord.y(), m_min_object_coord.z() ),
+            kvs::Vec3( m_min_object_coord.x(), m_min_object_coord.y(), m_max_object_coord.z() ),
+            kvs::Vec3( m_max_object_coord.x(), m_min_object_coord.y(), m_max_object_coord.z() ),
+            kvs::Vec3( m_min_object_coord.x(), m_max_object_coord.y(), m_min_object_coord.z() ),
+            kvs::Vec3( m_max_object_coord.x(), m_max_object_coord.y(), m_min_object_coord.z() ),
+            kvs::Vec3( m_min_object_coord.x(), m_max_object_coord.y(), m_max_object_coord.z() ),
+            kvs::Vec3( m_max_object_coord.x(), m_max_object_coord.y(), m_max_object_coord.z() ) };
 
         // Calculate max distance between the center and the corner in
         // the window coordinate system.
         for( int i = 0; i < 8; i++ )
         {
-            const kvs::Vector2f corner = camera->projectObjectToWindow( corners[i] );
+            const kvs::Vec2 corner = camera->projectObjectToWindow( corners[i] );
             const float distance = static_cast<float>( ( corner - center ).length() );
             max_distance = kvs::Math::Max( max_distance, distance );
         }
     }
-    glPopMatrix();
+    kvs::OpenGL::PopMatrix();
 
-    kvs::Vector2f pos_window( p_win.x(), camera->windowHeight() - p_win.y() );
+    kvs::Vec2 pos_window( p_win.x(), camera->windowHeight() - p_win.y() );
 
     return ( pos_window - center ).length() < max_distance;
 }
@@ -532,31 +317,31 @@ bool ObjectBase::collision(
  */
 /*===========================================================================*/
 bool ObjectBase::collision(
-    const kvs::Vector3f& p_world,
-    const kvs::Vector3f& global_trans,
-    const kvs::Vector3f& global_scale )
+    const kvs::Vec3& p_world,
+    const kvs::Vec3& global_trans,
+    const kvs::Vec3& global_scale )
 {
     float max_distance = -1.0f;
-    kvs::Vector3f center;
+    kvs::Vec3 center;
 
     center = object_to_world_coordinate( m_object_center, global_trans, global_scale );
 
     // Object's corner points in the object coordinate system.
-    const kvs::Vector3f corners[8] = {
-        kvs::Vector3f( m_min_object_coord.x(), m_min_object_coord.y(), m_min_object_coord.z() ),
-        kvs::Vector3f( m_max_object_coord.x(), m_min_object_coord.y(), m_min_object_coord.z() ),
-        kvs::Vector3f( m_min_object_coord.x(), m_min_object_coord.y(), m_max_object_coord.z() ),
-        kvs::Vector3f( m_max_object_coord.x(), m_min_object_coord.y(), m_max_object_coord.z() ),
-        kvs::Vector3f( m_min_object_coord.x(), m_max_object_coord.y(), m_min_object_coord.z() ),
-        kvs::Vector3f( m_max_object_coord.x(), m_max_object_coord.y(), m_min_object_coord.z() ),
-        kvs::Vector3f( m_min_object_coord.x(), m_max_object_coord.y(), m_max_object_coord.z() ),
-        kvs::Vector3f( m_max_object_coord.x(), m_max_object_coord.y(), m_max_object_coord.z() ) };
+    const kvs::Vec3 corners[8] = {
+        kvs::Vec3( m_min_object_coord.x(), m_min_object_coord.y(), m_min_object_coord.z() ),
+        kvs::Vec3( m_max_object_coord.x(), m_min_object_coord.y(), m_min_object_coord.z() ),
+        kvs::Vec3( m_min_object_coord.x(), m_min_object_coord.y(), m_max_object_coord.z() ),
+        kvs::Vec3( m_max_object_coord.x(), m_min_object_coord.y(), m_max_object_coord.z() ),
+        kvs::Vec3( m_min_object_coord.x(), m_max_object_coord.y(), m_min_object_coord.z() ),
+        kvs::Vec3( m_max_object_coord.x(), m_max_object_coord.y(), m_min_object_coord.z() ),
+        kvs::Vec3( m_min_object_coord.x(), m_max_object_coord.y(), m_max_object_coord.z() ),
+        kvs::Vec3( m_max_object_coord.x(), m_max_object_coord.y(), m_max_object_coord.z() ) };
 
     // Calculate max distance between the center and the corner in
     // the world coordinate system.
     for( int i = 0; i < 8; i++ )
     {
-        const kvs::Vector3f corner =
+        const kvs::Vec3 corner =
             this->object_to_world_coordinate( corners[i], global_trans, global_scale );
         const float distance = static_cast<float>( ( corner - center ).length() );
         max_distance = kvs::Math::Max( max_distance, distance );
@@ -574,12 +359,12 @@ bool ObjectBase::collision(
  *  @return projected point in the world coodinate.
  */
 /*===========================================================================*/
-const kvs::Vector3f ObjectBase::object_to_world_coordinate(
-    const kvs::Vector3f& p_obj,
-    const kvs::Vector3f& global_trans,
-    const kvs::Vector3f& global_scale ) const
+const kvs::Vec3 ObjectBase::object_to_world_coordinate(
+    const kvs::Vec3& p_obj,
+    const kvs::Vec3& global_trans,
+    const kvs::Vec3& global_scale ) const
 {
-    kvs::Vector3f p_external = p_obj - m_object_center;
+    kvs::Vec3 p_external = p_obj - m_object_center;
 
     p_external.x() *= m_normalize.x();
     p_external.y() *= m_normalize.y();
@@ -587,7 +372,7 @@ const kvs::Vector3f ObjectBase::object_to_world_coordinate(
 
     p_external += m_external_position;
 
-    kvs::Vector3f p_world = p_external - global_trans;
+    kvs::Vec3 p_world = p_external - global_trans;
 
     p_world.x() *= global_scale.x();
     p_world.y() *= global_scale.y();
@@ -632,7 +417,7 @@ bool ObjectBase::canCollision() const
  *  @param  object_center [in] object center
  */
 /*===========================================================================*/
-void ObjectBase::setObjectCenter( const kvs::Vector3f& object_center )
+void ObjectBase::setObjectCenter( const kvs::Vec3& object_center )
 {
     m_object_center = object_center;
 }
@@ -643,7 +428,7 @@ void ObjectBase::setObjectCenter( const kvs::Vector3f& object_center )
  *  @param  normalize [in] normalize parameter
  */
 /*===========================================================================*/
-void ObjectBase::setNormalize( const kvs::Vector3f& normalize )
+void ObjectBase::setNormalize( const kvs::Vec3& normalize )
 {
     m_normalize = normalize;
 }
