@@ -32,7 +32,7 @@ GeomOut vec3 normal; // normal vector in camera coordinate
 GeomOut vec2 random_index; // index for accessing to the random texture
 GeomOut float scalar_front; // scalar value on the front face
 GeomOut float scalar_back; // scalar value on the back face
-GeomOut float distance; // distance between the front and back face
+GeomOut float segment_length; // distance between the front and back face
 GeomOut float wc_inv_front; // reciprocal value of the w-component at the front face in clip coordinate
 GeomOut float wc_inv_back; // reciprocal value of the w-component at the back face in clip coordinate
 #if defined( ENABLE_EXACT_DEPTH_TESTING )
@@ -136,7 +136,7 @@ void EmitOriginalPoint( const in int index, const in float dist )
     // Indices for accessing the pre-integration table
     scalar_front = value_in[index];
     scalar_back  = value_in[index];
-    distance = dist;
+    segment_length = dist;
 
     // Depth values in normalized device coordinate
 #if defined( ENABLE_EXACT_DEPTH_TESTING )
@@ -183,7 +183,7 @@ void EmitCrossingPoint(
     // Indices for accessing the pre-integration table
     scalar_front = c_scalar_front;
     scalar_back  = c_scalar_back;
-    distance = c_dist;
+    segment_length = c_dist;
 
     // Depth values in normalized device coordinate
 #if defined( ENABLE_EXACT_DEPTH_TESTING )
@@ -251,7 +251,7 @@ void DecomposeInCase1( in int p0, in int p1, in int p2, in int p3 )
     vec3 c_normal;
     float c_scalar_front;
     float c_scalar_back;
-    float c_distance = Distance( length( position_in[p0] - p123 ) );
+    float c_segment_length = Distance( length( position_in[p0] - p123 ) );
     float c_depth = 0.0;
     float c_wc_inv_front;
     float c_wc_inv_back;
@@ -302,7 +302,7 @@ void DecomposeInCase1( in int p0, in int p1, in int p2, in int p3 )
         c_normal,
         c_scalar_front,
         c_scalar_back,
-        c_distance,
+        c_segment_length,
         c_depth,
         c_wc_inv_front,
         c_wc_inv_back );
@@ -362,7 +362,7 @@ void DecomposeInCase2( in int p0, in int p1, in int p2, in int p3 )
     vec3 c_normal;
     float c_scalar_front;
     float c_scalar_back;
-    float c_distance = Distance( length( p01.z - p23.z ) );
+    float c_segment_length = Distance( length( p01.z - p23.z ) );
     float c_depth = 0.0;
     float c_wc_inv_front;
     float c_wc_inv_back;
@@ -411,7 +411,7 @@ void DecomposeInCase2( in int p0, in int p1, in int p2, in int p3 )
         c_normal,
         c_scalar_front,
         c_scalar_back,
-        c_distance,
+        c_segment_length,
         c_depth,
         c_wc_inv_front,
         c_wc_inv_back );
@@ -427,7 +427,7 @@ void DecomposeInCase2( in int p0, in int p1, in int p2, in int p3 )
         c_normal,
         c_scalar_front,
         c_scalar_back,
-        c_distance,
+        c_segment_length,
         c_depth,
         c_wc_inv_front,
         c_wc_inv_back );
@@ -498,7 +498,7 @@ void DecomposeInCase4( in int p0, in int p1, in int p2, in int p3 )
         p_back = p2;
     }
 
-    float c_distance = Distance( length( length( position_in[p_back] - position_in[p_front] ) ) );
+    float c_segment_length = Distance( length( length( position_in[p_back] - position_in[p_front] ) ) );
     float c_depth = 0.0;
 
     EmitOriginalPoint( p0, 0.0 );
@@ -518,12 +518,12 @@ void DecomposeInCase4( in int p0, in int p1, in int p2, in int p3 )
         c_normal,
         c_scalar_front,
         c_scalar_back,
-        c_distance,
+        c_segment_length,
         c_depth,
         c_wc_inv_front,
         c_wc_inv_back );
 #else
-    EmitOriginalPoint( p_front, c_distance );
+    EmitOriginalPoint( p_front, c_segment_length );
 #endif
 
     EndPrimitive();

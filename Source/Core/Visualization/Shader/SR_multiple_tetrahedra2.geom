@@ -30,7 +30,7 @@ varying out float depth_back;
 
 varying out float scalar_front;
 varying out float scalar_back;
-varying out float distance;
+varying out float segment_length;
 
 uniform vec2 preintegration_scale_offset;
 uniform sampler2D decomposition_texture;
@@ -56,7 +56,7 @@ void emitExistPoint( const in int index, const in float dist )
 
     scalar_front = value_in[index];
     scalar_back  = value_in[index];
-    distance     = dist;
+    segment_length     = dist;
     EmitVertex();
 }
 
@@ -78,7 +78,7 @@ void emitNewPoint(
 
     scalar_front = center_scalar_front;
     scalar_back  = center_scalar_back;
-    distance     = center_distance;
+    segment_length     = center_distance;
     EmitVertex();
 }
 
@@ -91,9 +91,9 @@ void emitNewPoint(
 //    return x.xyz;
 //}
 
-float distance_to_texture_coord( const in float distance )
+float distance_to_texture_coord( const in float dist )
 {
-    return( distance * preintegration_scale_offset.x + preintegration_scale_offset.y );
+    return( dist * preintegration_scale_offset.x + preintegration_scale_offset.y );
 }
 
 void calculate_across_triangle_to_line_2D( out float r2, out float r3, in int p0, in int p1, in int p2, in int p3 )

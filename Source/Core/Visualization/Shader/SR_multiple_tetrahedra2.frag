@@ -22,7 +22,7 @@ varying float depth_back;
 
 varying float scalar_front;
 varying float scalar_back;
-varying float distance;
+varying float segment_length;
 
 uniform sampler3D preintegration_texture0;
 uniform sampler3D preintegration_texture1;
@@ -39,9 +39,9 @@ uniform vec2 random_offset;
 
 uniform ShadingParameter shading;
 
-float distance_to_d( const in float distance )
+float distance_to_d( const in float dist )
 {
-    return( ( distance - preintegration_scale_offset.y ) / preintegration_scale_offset.x );
+    return( ( dist - preintegration_scale_offset.y ) / preintegration_scale_offset.x );
 }
 
 int check_overlap_case( void )
@@ -154,7 +154,7 @@ vec4 two_color_average( const in vec4 color1, const in vec4 color2 )
 // ---------------------------------
 void calculate_case_0( void )
 {
-    vec3 lutcoord = vec3( scalar_front, scalar_back, distance );
+    vec3 lutcoord = vec3( scalar_front, scalar_back, segment_length );
     vec4 shaded_color = color_of_sf_sb_d( lutcoord, 1, 0 );
     if ( shaded_color.a == 0.0 ) { discard; return; }
 
@@ -201,9 +201,9 @@ void calculate_case_1( void )
         vec3 lutcoord1 = vec3(
             ( 1.0 - ratio1 ) * extra.x + ratio1 * extra.y,
             ( 1.0 - ratio2 ) * extra.x + ratio2 * extra.y,
-            distance );
+            segment_length );
 
-        vec3 lutcoord2 = vec3( scalar_front, scalar_back, distance );
+        vec3 lutcoord2 = vec3( scalar_front, scalar_back, segment_length );
 
         vec4 shaded_color1 = color_of_sf_sb_d( lutcoord1, 0, 1 );
         vec4 shaded_color2 = color_of_sf_sb_d( lutcoord2, 1, 2 );
@@ -257,7 +257,7 @@ void calculate_case_2( void )
         vec3 lutcoord = vec3(
             scalar_front,
             ( 1.0 - ratio ) * scalar_front + ratio * scalar_back,
-            ratio * distance );
+            ratio * segment_length );
         vec4 shaded_color = color_of_sf_sb_d( lutcoord, 1, 0 );
         if ( shaded_color.a > 0.0 )
         {
@@ -331,7 +331,7 @@ void calculate_case_3( void )
         vec3 lutcoord = vec3(
             scalar_front,
             ( 1.0 - ratio ) * scalar_front + ratio * scalar_back,
-            ratio * distance );
+            ratio * segment_length );
         vec4 shaded_color = color_of_sf_sb_d( lutcoord, 1, 0 );
         if ( shaded_color.a > 0.0 )
         {
@@ -367,7 +367,7 @@ void calculate_case_3( void )
         vec3 lutcoord = vec3(
             ( 1.0 - ratio ) * scalar_front + ratio * scalar_back,
             scalar_back,
-            ( 1.0 - ratio ) * distance );
+            ( 1.0 - ratio ) * segment_length );
         vec4 shaded_color = color_of_sf_sb_d( lutcoord, 1, 3 );
         if ( shaded_color.a > 0.0 )
         {
@@ -442,7 +442,7 @@ void calculate_case_4( void )
         vec3 lutcoord = vec3(
             ( 1.0 - ratio ) * scalar_front + ratio * scalar_back,
             scalar_back,
-            ( 1.0 - ratio ) * distance );
+            ( 1.0 - ratio ) * segment_length );
         vec4 shaded_color = color_of_sf_sb_d( lutcoord, 1, 15 );
         if ( shaded_color.a > 0.0 )
         {

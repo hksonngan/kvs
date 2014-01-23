@@ -23,7 +23,7 @@ varying float depth_back;
 
 varying float scalar_front;
 varying float scalar_back;
-varying float distance;
+varying float segment_length;
 
 uniform sampler3D preintegration_texture0;
 uniform sampler2D random_texture;
@@ -37,14 +37,14 @@ uniform vec2 random_offset;
 
 uniform ShadingParameter shading;
 
-float distance_to_d( const in float distance )
+float distance_to_d( const in float dist )
 {
-    return( ( distance - preintegration_scale_offset.y ) / preintegration_scale_offset.x );
+    return( ( dist - preintegration_scale_offset.y ) / preintegration_scale_offset.x );
 }
 
 void main( void )
 {
-    vec3 lutcoord = vec3( scalar_front, scalar_back, distance );
+    vec3 lutcoord = vec3( scalar_front, scalar_back, segment_length );
     vec4 lutdata = texture3D( preintegration_texture0, lutcoord );
     if ( lutdata.a == 0.0 ) { discard; return; }
 

@@ -24,7 +24,7 @@ FragIn vec3 normal; // normal vector in camera coordinate
 FragIn vec2 random_index; // index for accessing to the random texture
 FragIn float scalar_front; // scalar value on the front face
 FragIn float scalar_back; // scalar value on the back face
-FragIn float distance; // distance between the front and back face in NDC
+FragIn float segment_length; // distance between the front and back face in NDC
 FragIn float wc_inv_front; // reciprocal value of the w-component at the front face in clip coordinate
 FragIn float wc_inv_back; // reciprocal value of the w-component at the back face in clip coordinate
 #if defined( ENABLE_EXACT_DEPTH_TESTING )
@@ -89,7 +89,7 @@ vec4 LookupPreIntegration()
         float ratio = ( depth - depth_front ) / ( depth_back - depth_front );
         float Sf = scalar_front;
         float Sb = ( 1.0 - ratio ) * scalar_front + ratio * scalar_back;
-        float d = ratio * distance;
+        float d = ratio * segment_length;
 
         Sf /= wc_inv_front;
         Sb /= wc_inv_back;
@@ -100,7 +100,7 @@ vec4 LookupPreIntegration()
 
     float Sf = scalar_front;
     float Sb = scalar_back;
-    float d = distance;
+    float d = segment_length;
 
     Sf /= wc_inv_front;
     Sb /= wc_inv_back;

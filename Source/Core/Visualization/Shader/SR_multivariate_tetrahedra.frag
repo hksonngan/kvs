@@ -19,7 +19,7 @@ varying vec3 normal;
 varying vec2 random_index;
 varying vec2 scalar_front;
 varying vec2 scalar_back;
-varying float distance;
+varying float segment_length;
 
 uniform sampler3D preintegration_texture0;
 uniform sampler3D preintegration_texture1;
@@ -43,12 +43,12 @@ void main()
         vec4 lutdata;
         if ( i == 0 )
         {
-            vec3 lutcoord = vec3( scalar_front.x, scalar_back.x, distance );
+            vec3 lutcoord = vec3( scalar_front.x, scalar_back.x, segment_length );
             lutdata = texture3D( preintegration_texture0, lutcoord );
         }
         else
         {
-            vec3 lutcoord = vec3( scalar_front.y, scalar_back.y, distance );
+            vec3 lutcoord = vec3( scalar_front.y, scalar_back.y, segment_length );
             lutdata = texture3D( preintegration_texture1, lutcoord );
         }
 
