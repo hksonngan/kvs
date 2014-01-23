@@ -246,8 +246,7 @@ bool Scene::isActiveMove( int x, int y )
         {
             const float px = static_cast<float>(x);
             const float py = static_cast<float>(y);
-            const kvs::Vector2f p = kvs::Vector2f( px, py );
-            return m_object_manager->detectCollision( p, m_camera );
+            return this->detect_collision( kvs::Vec2( px, py ) );
         }
     }
 
@@ -291,7 +290,9 @@ void Scene::updateCenterOfRotation()
     case TargetObject:
         if ( m_enable_object_operation || !m_object_manager->hasObject() )
         {
-            center = m_object_manager->positionInDevice( m_camera );
+            // The center of rotation will be set to the gravity of the object
+            // manager in device coordinates.
+            center = this->position_in_device();
         }
         else
         {
@@ -299,10 +300,10 @@ void Scene::updateCenterOfRotation()
             // of rotation is not updated.
             if ( !m_object_manager->hasActiveObject() ) return;
 
+            // The center of rotation will be set to the gravity of the object
+            // in device coordinates.
             kvs::ObjectBase* object = m_object_manager->activeObject();
-            const kvs::Vec3& t = m_object_manager->objectCenter();
-            const kvs::Vec3& s = m_object_manager->normalize();
-            center = object->positionInDevice( m_camera, t, s );
+            center = this->position_in_device( object );
         }
         break;
     default:
@@ -412,23 +413,82 @@ void Scene::updateXform( kvs::Light* light )
 
 /*===========================================================================*/
 /**
- *  @brief  Disable collision detection mode.
+ *  @brief  Updates the modeling matrinx for the object.
+ *  @param  object [in] pointer to the object
  */
 /*===========================================================================*/
-void Scene::disableCollisionDetection()
+void Scene::updateGLModelingMatrix( const kvs::ObjectBase* object ) const
 {
-    m_enable_collision_detection = false;
+    float X[16]; object->xform().toArray( X );
+    const kvs::Vec3 Te = object->externalPosition();
+    const kvs::Vec3 Sl = object->normalize();
+    const kvs::Vec3 Tl = object->objectCenter();
+    const kvs::Vec3 Sg = m_object_manager->normalize();
+    const kvs::Vec3 Tg = m_object_manager->objectCenter();
+
+    kvs::OpenGL::SetMatrixMode( GL_MODELVIEW );
+    kvs::OpenGL::MultMatrix( X );
+    kvs::OpenGL::Scale( Sg.x(), Sg.y(), Sg.z() );
+    kvs::OpenGL::Translate( -Tg.x(), -Tg.y(), -Tg.z() );
+    kvs::OpenGL::Translate( Te.x(), Te.y(), Te.z() );
+    kvs::OpenGL::Scale( Sl.x(), Sl.y(), Sl.z() );
+    kvs::OpenGL::Translate( -Tl.x(), -Tl.y(), -Tl.z() );
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Enable collision detection mode.
+ *  @brief  Updates the modeling matrinx for the object manager.
+ *  @param  object [in] pointer to the object
  */
 /*===========================================================================*/
-void Scene::enableCollisionDetection()
+void Scene::updateGLModelingMatrix() const
 {
-    m_enable_object_operation = false;
-    m_enable_collision_detection = true;
+    float X[16]; m_object_manager->xform().toArray( X );
+
+    kvs::OpenGL::SetMatrixMode( GL_MODELVIEW );
+    kvs::OpenGL::MultMatrix( X );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Updates the viewing matrinx.
+ */
+/*===========================================================================*/
+void Scene::updateGLViewingMatrix() const
+{
+    float m[16];
+
+    kvs::OpenGL::SetMatrixMode( GL_MODELVIEW );
+    kvs::OpenGL::LoadIdentity();
+    kvs::Xform v( m_camera->viewingMatrix() ); v.toArray( m );
+    kvs::OpenGL::MultMatrix( m );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Updates the projection matrinx.
+ */
+/*===========================================================================*/
+void Scene::updateGLProjectionMatrix() const
+{
+    float m[16];
+
+    kvs::OpenGL::SetMatrixMode( GL_PROJECTION );
+    kvs::OpenGL::LoadIdentity();
+    kvs::Xform p( m_camera->projectionMatrix() ); p.toArray( m );
+    kvs::OpenGL::MultMatrix( m );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Enables or disables the collision detection.
+ *  @param  enable [in] flag for the collision detection
+ */
+/*===========================================================================*/
+void Scene::setEnabledCollisionDetection( bool enable )
+{
+    m_enable_collision_detection = enable;
+    if ( enable ) m_enable_object_operation = false;
 }
 
 /*==========================================================================*/
@@ -452,8 +512,10 @@ void Scene::initializeFunction()
 /*==========================================================================*/
 void Scene::paintFunction()
 {
-    // Update the camera and light.
-    m_camera->update();
+//    m_camera->update();
+    this->updateGLProjectionMatrix();
+    this->updateGLViewingMatrix();
+
     m_light->update( m_camera );
 
     // Set the background color or image.
@@ -462,8 +524,6 @@ void Scene::paintFunction()
     // Rendering the resistered object by using the corresponding renderer.
     if ( m_object_manager->hasObject() )
     {
-        const kvs::Vec3 center = m_object_manager->objectCenter();
-        const kvs::Vec3 scale = m_object_manager->normalize();
         const int size = m_id_manager->size();
         for ( int index = 0; index < size; index++ )
         {
@@ -473,7 +533,7 @@ void Scene::paintFunction()
             if ( object->isShown() )
             {
                 kvs::OpenGL::PushMatrix();
-                object->transform( center, scale );
+                this->updateGLModelingMatrix( object );
                 renderer->exec( object, m_camera, m_light );
                 kvs::OpenGL::PopMatrix();
             }
@@ -481,9 +541,7 @@ void Scene::paintFunction()
     }
     else
     {
-        float array[16];
-        m_object_manager->xform().toArray( array );
-        kvs::OpenGL::MultMatrix( array );
+        this->updateGLModelingMatrix();
     }
 }
 
@@ -572,6 +630,145 @@ void Scene::wheelFunction( int value )
         m_mouse->press( 0, 0 );
         m_mouse->move( 0, value );
     }
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the gravity of the center of the object in device nordinates.
+ *  @param  object [in] pointer to the object
+ *  @return gravity of the center of the object in device nordinates
+ */
+/*===========================================================================*/
+kvs::Vec2 Scene::position_in_device( const kvs::ObjectBase* object ) const
+{
+    kvs::Vec2 p_dev;
+    kvs::Vec3 p_obj = object->objectCenter();
+    kvs::OpenGL::PushMatrix();
+    {
+        this->updateGLProjectionMatrix();
+        this->updateGLViewingMatrix();
+        this->updateGLModelingMatrix( object );
+
+        p_dev = m_camera->projectObjectToWindow( p_obj );
+        p_dev.y() = m_camera->windowHeight() - p_dev.y();
+    }
+    kvs::OpenGL::PopMatrix();
+
+    return p_dev;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the gravity of the center of the object manager in device nordinates.
+ *  @return gravity of the center of the object manager in device nordinates
+ */
+/*===========================================================================*/
+kvs::Vec2 Scene::position_in_device() const
+{
+    kvs::Vec2 p_dev;
+    kvs::Vec3 p_obj = m_object_manager->xform().translation();
+    kvs::OpenGL::PushMatrix();
+    {
+        this->updateGLProjectionMatrix();
+        this->updateGLViewingMatrix();
+
+        p_dev = m_camera->projectObjectToWindow( p_obj );
+        p_dev.y() = m_camera->windowHeight() - p_dev.y();
+    }
+    kvs::OpenGL::PopMatrix();
+
+    return p_dev;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns true if the object collision is detected by clicking the mouse.
+ *  @param  p_win [in] clicking position in the window coordinates
+ *  @return true if the collision is detected
+ */
+/*===========================================================================*/
+bool Scene::detect_collision( const kvs::Vec2& p_win )
+{
+    double min_distance = 100000.0;
+
+    int active_object_id = -1;
+    kvs::ObjectBase* active_object = 0;
+    const size_t size = m_id_manager->size();
+    for ( size_t i = 0; i < size; i++ )
+    {
+        kvs::IDManager::IDPair id = m_id_manager->id( i );
+        kvs::ObjectBase* object = m_object_manager->object( id.first );
+        const kvs::Vec2 p = this->position_in_device( object );
+        const kvs::Vec2 diff = p - p_win;
+        const double distance = diff.length();
+        if ( distance < min_distance )
+        {
+            min_distance = distance;
+            active_object_id = id.first;
+            active_object = object;
+        }
+    }
+
+    bool has_active_object = false;
+    if ( this->detect_collision( active_object, p_win ) )
+    {
+        m_object_manager->setActiveObject( active_object_id );
+        has_active_object = true;
+    }
+
+    return has_active_object;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns true if the object is selected by clicking the mouse.
+ *  @param  object [in] pointer to the object
+ *  @param  p_win [in] clicking position in the window coordinates
+ *  @return true if the object is selected
+ */
+/*===========================================================================*/
+bool Scene::detect_collision( const kvs::ObjectBase* object, const kvs::Vec2& p_win )
+{
+    float max_distance = -1.0f;
+
+    // Center of this object in the window coordinate system.
+    kvs::Vec2 center;
+
+    kvs::OpenGL::PushMatrix();
+    {
+        this->updateGLProjectionMatrix();
+        this->updateGLViewingMatrix();
+        this->updateGLModelingMatrix( object );
+
+        center = m_camera->projectObjectToWindow( object->objectCenter() );
+
+        // Object's corner points in the object coordinate system.
+        const kvs::Vec3 min_object_coord = object->minObjectCoord();
+        const kvs::Vec3 max_object_coord = object->maxObjectCoord();
+        const kvs::Vec3 corners[8] = {
+            kvs::Vec3( min_object_coord.x(), min_object_coord.y(), min_object_coord.z() ),
+            kvs::Vec3( max_object_coord.x(), min_object_coord.y(), min_object_coord.z() ),
+            kvs::Vec3( min_object_coord.x(), min_object_coord.y(), max_object_coord.z() ),
+            kvs::Vec3( max_object_coord.x(), min_object_coord.y(), max_object_coord.z() ),
+            kvs::Vec3( min_object_coord.x(), max_object_coord.y(), min_object_coord.z() ),
+            kvs::Vec3( max_object_coord.x(), max_object_coord.y(), min_object_coord.z() ),
+            kvs::Vec3( min_object_coord.x(), max_object_coord.y(), max_object_coord.z() ),
+            kvs::Vec3( max_object_coord.x(), max_object_coord.y(), max_object_coord.z() ) };
+
+        // Calculate max distance between the center and the corner in
+        // the window coordinate system.
+        for( int i = 0; i < 8; i++ )
+        {
+            const kvs::Vec2 corner = m_camera->projectObjectToWindow( corners[i] );
+            const float distance = static_cast<float>( ( corner - center ).length() );
+            max_distance = kvs::Math::Max( max_distance, distance );
+        }
+    }
+    kvs::OpenGL::PopMatrix();
+
+    kvs::Vec2 pos_window( p_win.x(), m_camera->windowHeight() - p_win.y() );
+
+    return ( pos_window - center ).length() < max_distance;
 }
 
 } // end of namespace kvs

@@ -53,7 +53,6 @@ public:
 
 private:
 
-    bool m_can_collision; ///< flag for collision detection
     std::string m_name; ///< object name
     kvs::Vec3 m_min_object_coord; ///< min coord in the object coordinate system
     kvs::Vec3 m_max_object_coord; ///< max coord in the object coordinate system
@@ -68,7 +67,7 @@ private:
 
 public:
 
-    ObjectBase( const bool collision = true );
+    ObjectBase();
     virtual ~ObjectBase();
 
     ObjectBase& operator = ( const ObjectBase& object );
@@ -92,37 +91,19 @@ public:
     const kvs::Vec3& externalPosition() const { return m_external_position; }
     const kvs::Vec3& normalize() const { return m_normalize; }
     bool isShown() const { return m_show_flag; }
-    const kvs::Vec2 positionInDevice( kvs::Camera* camera, const kvs::Vec3& global_trans, const kvs::Vec3& global_scale ) const;
-    const kvs::Vec3 positionInWorld( const kvs::Vec3& global_trans, const kvs::Vec3& global_scale ) const;
-    const kvs::Vec3& positionInExternal() const { return m_external_position; }
 
     virtual void updateMinMaxCoords(){};
     void updateNormalizeParameters();
-    void transform( const kvs::Vec3& Tg, const kvs::Vec3& Sg ) const;
-    bool collision( const kvs::Vec2& p_win, kvs::Camera* camera, const kvs::Vec3& global_trans, const kvs::Vec3& global_scale );
-    bool collision( const kvs::Vec3& p_world, const kvs::Vec3& global_trans, const kvs::Vec3& global_scale );
-
-    void enableCollision();
-    void disableCollision();
-    bool canCollision() const;
 
 protected:
 
-    void setObjectCenter( const kvs::Vec3& object_center );
-    void setNormalize( const kvs::Vec3& normalize );
-
-private:
-
-    const kvs::Vec3 object_to_world_coordinate(
-        const kvs::Vec3& p_obj,
-        const kvs::Vec3& global_trans,
-        const kvs::Vec3& global_scale ) const;
+    void setObjectCenter( const kvs::Vec3& object_center ) { m_object_center = object_center; }
+    void setNormalize( const kvs::Vec3& normalize ) { m_normalize = normalize; }
 
 public:
 
-    KVS_DEPRECATED( ObjectBase( const kvs::Vec3& translation, const kvs::Vec3& scaling, const kvs::Mat3& rotation, const bool collision = true ) )
+    KVS_DEPRECATED( ObjectBase( const kvs::Vec3& translation, const kvs::Vec3& scaling, const kvs::Mat3& rotation ) )
     {
-        m_can_collision = collision;
         m_name = std::string("unknown");
         m_min_object_coord = kvs::Vec3( -3.0, -3.0, -3.0 );
         m_max_object_coord = kvs::Vec3(  3.0,  3.0,  3.0 );

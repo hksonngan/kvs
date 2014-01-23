@@ -204,7 +204,7 @@ void StochasticRenderingCompositor::check_object_changed()
                 stochastic_renderer->engine().setEnabledShading( stochastic_renderer->isEnabledShading() );
 
                 kvs::OpenGL::PushMatrix();
-                object->transform( m_scene->objectManager()->objectCenter(), m_scene->objectManager()->normalize() );
+                m_scene->updateGLModelingMatrix( object );
                 stochastic_renderer->engine().create( object, m_scene->camera(), m_scene->light() );
                 kvs::OpenGL::PopMatrix();
             }
@@ -246,7 +246,7 @@ void StochasticRenderingCompositor::engines_create()
             stochastic_renderer->engine().setEnabledShading( stochastic_renderer->isEnabledShading() );
 
             kvs::OpenGL::PushMatrix();
-            object->transform( m_scene->objectManager()->objectCenter(), m_scene->objectManager()->normalize() );
+            m_scene->updateGLModelingMatrix( object );
             stochastic_renderer->engine().create( object, m_scene->camera(), m_scene->light() );
             kvs::OpenGL::PopMatrix();
         }
@@ -272,7 +272,7 @@ void StochasticRenderingCompositor::engines_update()
         if ( kvs::StochasticRendererBase* stochastic_renderer = dynamic_cast<kvs::StochasticRendererBase*>( renderer ) )
         {
             kvs::OpenGL::PushMatrix();
-            object->transform( m_scene->objectManager()->objectCenter(), m_scene->objectManager()->normalize() );
+            m_scene->updateGLModelingMatrix( object );
             stochastic_renderer->engine().update( object, camera, light );
             kvs::OpenGL::PopMatrix();
         }
@@ -299,7 +299,7 @@ void StochasticRenderingCompositor::engines_setup()
         if ( kvs::StochasticRendererBase* stochastic_renderer = dynamic_cast<kvs::StochasticRendererBase*>( renderer ) )
         {
             kvs::OpenGL::PushMatrix();
-            object->transform( m_scene->objectManager()->objectCenter(), m_scene->objectManager()->normalize() );
+            m_scene->updateGLModelingMatrix( object );
             if ( reset_count ) stochastic_renderer->engine().resetRepetitions();
             stochastic_renderer->engine().setup( object, camera, light );
             kvs::OpenGL::PopMatrix();
@@ -328,7 +328,7 @@ void StochasticRenderingCompositor::engines_draw()
             if ( object->isShown() )
             {
                 kvs::OpenGL::PushMatrix();
-                object->transform( m_scene->objectManager()->objectCenter(), m_scene->objectManager()->normalize() );
+                m_scene->updateGLModelingMatrix( object );
                 stochastic_renderer->engine().draw( object, camera, light );
                 stochastic_renderer->engine().countRepetitions();
                 kvs::OpenGL::PopMatrix();

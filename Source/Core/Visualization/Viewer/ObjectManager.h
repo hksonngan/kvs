@@ -83,14 +83,10 @@ public:
     void eraseActiveObject();
     void releaseActiveObject();
 
-    bool detectCollision( const kvs::Vec2& p_win, kvs::Camera* camera );
-    bool detectCollision( const kvs::Vec3& p_world );
-
     void rotate( const kvs::Mat3& rotation );
     void translate( const kvs::Vec3& translation );
     void scale( const kvs::Vec3& scaling );
 
-    kvs::Vec2 positionInDevice( kvs::Camera* camera ) const;
     void updateExternalCoords();
 
 private:

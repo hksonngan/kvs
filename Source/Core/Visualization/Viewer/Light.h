@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file Light.h
+ *  @file   Light.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -33,11 +34,11 @@ class RGBAColor;
 class Light : public kvs::XformControl
 {
 private:
-    kvs::Vector3f m_transform_center;
+    kvs::Vec3 m_transform_center;
     unsigned int  m_id; ///< light ID
-    kvs::Vector3f m_diffuse; ///< diffuse color
-    kvs::Vector3f m_ambient; ///< ambient color
-    kvs::Vector3f m_specular; ///< specular color
+    kvs::Vec3 m_diffuse; ///< diffuse color
+    kvs::Vec3 m_ambient; ///< ambient color
+    kvs::Vec3 m_specular; ///< specular color
 
 public:
 
@@ -52,7 +53,7 @@ public:
 
     void setID( const unsigned int id );
     void setPosition( const float x, const float y, const float z );
-    void setPosition( const kvs::Vector3f& position );
+    void setPosition( const kvs::Vec3& position );
     void setColor( const float r, const float g, const float b );
     void setColor( const kvs::RGBAColor& color );
     void setDiffuse( const float r, const float g, const float b );
@@ -62,10 +63,10 @@ public:
     void setSpecular( const float r, const float g, const float b );
     void setSpecular( const kvs::RGBAColor& color );
 
-    const kvs::Vector3f position() const;
-    const kvs::Vector3f& diffuse() const;
-    const kvs::Vector3f& ambient() const;
-    const kvs::Vector3f& specular() const;
+    const kvs::Vec3 position() const;
+    const kvs::Vec3& diffuse() const;
+    const kvs::Vec3& ambient() const;
+    const kvs::Vec3& specular() const;
 
     virtual void update( const kvs::Camera* camera );
     void initialize();
@@ -74,9 +75,9 @@ public:
     bool isEnabled() const;
 
     void resetXform();
-    void rotate( const kvs::Matrix33f& rotation );
-    void translate( const kvs::Vector3f& translation );
-    void scale( const kvs::Vector3f& scaling );
+    void rotate( const kvs::Mat3& rotation );
+    void translate( const kvs::Vec3& translation );
+    void scale( const kvs::Vec3& scaling );
 
 public:
 

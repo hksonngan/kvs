@@ -83,13 +83,20 @@ public:
     void updateXform( kvs::Camera* camera );
     void updateXform( kvs::Light* light );
 
-    void disableCollisionDetection();
-    void enableCollisionDetection();
+    void updateGLModelingMatrix( const kvs::ObjectBase* object ) const;
+    void updateGLModelingMatrix() const;
+    void updateGLViewingMatrix() const;
+    void updateGLProjectionMatrix() const;
 
-    bool isEnabledObjectOperation() const { return m_enable_object_operation; }
+    void setEnabledCollisionDetection( bool enable );
+    void enableCollisionDetection() { this->setEnabledCollisionDetection( true ); }
+    void disableCollisionDetection() { this->setEnabledCollisionDetection( false ); }
+    bool isEnabledCollisionDetection() const { return m_enable_collision_detection; }
+
     void setEnabledObjectOperation( bool enable ) { m_enable_object_operation = enable; }
     void enableObjectOperation() { this->setEnabledObjectOperation( true ); }
     void disableObjectOperation() { this->setEnabledObjectOperation( false ); }
+    bool isEnabledObjectOperation() const { return m_enable_object_operation; }
 
     kvs::Camera* camera() { return m_camera; }
     kvs::Light* light() { return m_light; }
@@ -107,6 +114,13 @@ public:
     void mousePressFunction( int x, int y, kvs::Mouse::TransMode mode );
     void mouseMoveFunction( int x, int y );
     void wheelFunction( int value );
+
+private:
+
+    kvs::Vec2 position_in_device( const kvs::ObjectBase* object ) const;
+    kvs::Vec2 position_in_device() const;
+    bool detect_collision( const kvs::Vec2& p_win );
+    bool detect_collision( const kvs::ObjectBase* object, const kvs::Vec2& p_win );
 };
 
 } // end of namespace kvs

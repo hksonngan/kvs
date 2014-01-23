@@ -26,14 +26,14 @@
 namespace
 {
 
-const kvs::Xform MakeCameraXform( const kvs::Vector3f& eye, 
-                                  const kvs::Vector3f& center, 
-                                  const kvs::Vector3f& up )
+const kvs::Xform MakeCameraXform( const kvs::Vec3& eye, 
+                                  const kvs::Vec3& center, 
+                                  const kvs::Vec3& up )
 {
-    const kvs::Vector3f y = up.normalized();
-    const kvs::Vector3f z = ( eye - center ).normalized();
-    const kvs::Vector3f x = y.cross( z ).normalized();
-    const kvs::Vector3f t = eye;
+    const kvs::Vec3 y = up.normalized();
+    const kvs::Vec3 z = ( eye - center ).normalized();
+    const kvs::Vec3 x = y.cross( z ).normalized();
+    const kvs::Vec3 t = eye;
 
     const kvs::Matrix44f m( x[0], y[0], z[0], t[0], 
                             x[1], y[1], z[1], t[1], 
@@ -78,12 +78,12 @@ void Camera::setProjectionType( const Camera::ProjectionType projection_type )
     m_projection_type = projection_type;
 }
 
-void Camera::setPosition( const kvs::Vector3f& position, const kvs::Vector3f& look_at )
+void Camera::setPosition( const kvs::Vec3& position, const kvs::Vec3& look_at )
 {
     this->setPosition( position, look_at, this->upVector() );
 }
 
-void Camera::setPosition( const kvs::Vector3f& position, const kvs::Vector3f& look_at, const kvs::Vector3f& up )
+void Camera::setPosition( const kvs::Vec3& position, const kvs::Vec3& look_at, const kvs::Vec3& up )
 {
     m_transform_center = look_at;
     this->setXform( ::MakeCameraXform( position, look_at, up ) );
@@ -95,7 +95,7 @@ void Camera::setPosition( const kvs::Vector3f& position, const kvs::Vector3f& lo
  *  @param position [in] camera position
  */
 /*==========================================================================*/
-void Camera::setPosition( const kvs::Vector3f& position )
+void Camera::setPosition( const kvs::Vec3& position )
 {
     this->setPosition( position, this->lookAt(), this->upVector() );
 }
@@ -106,7 +106,7 @@ void Camera::setPosition( const kvs::Vector3f& position )
  *  @param up [in] up vector
  */
 /*==========================================================================*/
-void Camera::setUpVector( const kvs::Vector3f& up_vector )
+void Camera::setUpVector( const kvs::Vec3& up_vector )
 {
     this->setPosition( this->position(), this->lookAt(), up_vector );
 }
@@ -117,7 +117,7 @@ void Camera::setUpVector( const kvs::Vector3f& up_vector )
  *  @param at [in] look-at point
  */
 /*==========================================================================*/
-void Camera::setLookAt( const kvs::Vector3f& look_at )
+void Camera::setLookAt( const kvs::Vec3& look_at )
 {
     this->setPosition( this->position(), look_at, this->upVector() );
 }
@@ -240,7 +240,7 @@ Camera::ProjectionType Camera::projectionType() const
  *  Get the camera position.
  */
 /*==========================================================================*/
-const kvs::Vector3f Camera::position() const
+const kvs::Vec3 Camera::position() const
 {
     return this->xform().translation();
 }
@@ -250,10 +250,10 @@ const kvs::Vector3f Camera::position() const
  *  Get the up vector.
  */
 /*==========================================================================*/
-const kvs::Vector3f Camera::upVector() const
+const kvs::Vec3 Camera::upVector() const
 {
     kvs::Matrix44f m = this->xform().toMatrix();
-    return kvs::Vector3f( m[0][1], m[1][1], m[2][1] ).normalized();
+    return kvs::Vec3( m[0][1], m[1][1], m[2][1] ).normalized();
 }
 
 /*==========================================================================*/
@@ -261,7 +261,7 @@ const kvs::Vector3f Camera::upVector() const
  *  Get the look-at point.
  */
 /*==========================================================================*/
-const kvs::Vector3f Camera::lookAt() const
+const kvs::Vec3 Camera::lookAt() const
 {
     return m_transform_center;
 }
@@ -336,9 +336,9 @@ const kvs::Matrix44f Camera::viewingMatrix() const
  *  @return look-at point in the device coordinate system
  */
 /*==========================================================================*/
-const kvs::Vector2f Camera::lookAtInDevice() const
+const kvs::Vec2 Camera::lookAtInDevice() const
 {
-    return kvs::Vector2f( m_window_width / 2.0f, m_window_height / 2.0f );
+    return kvs::Vec2( m_window_width / 2.0f, m_window_height / 2.0f );
 }
 
 /*==========================================================================*/
@@ -447,9 +447,9 @@ void Camera::initialize()
 {
     m_projection_type = Camera::Perspective;
 
-    const kvs::Vector3f init_pos( 0, 0, 12 );
-    const kvs::Vector3f init_look_at( 0, 0, 0 );
-    const kvs::Vector3f init_up( 0, 1, 0 );
+    const kvs::Vec3 init_pos( 0, 0, 12 );
+    const kvs::Vec3 init_look_at( 0, 0, 0 );
+    const kvs::Vec3 init_up( 0, 1, 0 );
 
     this->setPosition( init_pos, init_look_at, init_up );
     this->saveXform();
@@ -602,13 +602,13 @@ void Camera::getCombinedMatrix(
  *  Same as gluProject() in OpenGL.
  */
 /*==========================================================================*/
-const kvs::Vector2f Camera::projectObjectToWindow(
+const kvs::Vec2 Camera::projectObjectToWindow(
     float  p_obj_x,
     float  p_obj_y,
     float  p_obj_z,
     float* depth ) const
 {
-    return this->projectObjectToWindow( kvs::Vector3f( p_obj_x, p_obj_y, p_obj_z ), depth );
+    return this->projectObjectToWindow( kvs::Vec3( p_obj_x, p_obj_y, p_obj_z ), depth );
 }
 
 /*==========================================================================*/
@@ -621,14 +621,14 @@ const kvs::Vector2f Camera::projectObjectToWindow(
  *  Same as gluProject() in OpenGL.
  */
 /*==========================================================================*/
-const kvs::Vector2f Camera::projectObjectToWindow( const kvs::Vector3f& p_obj, float* depth ) const
+const kvs::Vec2 Camera::projectObjectToWindow( const kvs::Vec3& p_obj, float* depth ) const
 {
     const kvs::Xform pvm( this->projectionModelViewMatrix() );
-    const kvs::Vector3f p = pvm.project( p_obj );
+    const kvs::Vec3 p = pvm.project( p_obj );
 
     if ( depth ) *depth = ( 1.0f + p[2] ) * 0.5f;
 
-    return kvs::Vector2f( ( 1.0f + p[0] ) * m_window_width * 0.5f,
+    return kvs::Vec2( ( 1.0f + p[0] ) * m_window_width * 0.5f,
                           ( 1.0f + p[1] ) * m_window_height * 0.5f );
 }
 
@@ -640,7 +640,7 @@ const kvs::Vector2f Camera::projectObjectToWindow( const kvs::Vector3f& p_obj, f
  *  @return point in the object coordinate system
  */
 /*==========================================================================*/
-const kvs::Vector3f Camera::projectWindowToObject( const kvs::Vector2f& p_win, float depth ) const
+const kvs::Vec3 Camera::projectWindowToObject( const kvs::Vec2& p_win, float depth ) const
 {
     return this->projectCameraToObject( this->projectWindowToCamera( p_win, depth ) );
 }
@@ -653,7 +653,7 @@ const kvs::Vector3f Camera::projectWindowToObject( const kvs::Vector2f& p_win, f
  *  @return point in the object coordinate system.
  */
 /*==========================================================================*/
-const kvs::Vector3f Camera::projectWindowToCamera( const kvs::Vector2f& p_win, float depth ) const
+const kvs::Vec3 Camera::projectWindowToCamera( const kvs::Vec2& p_win, float depth ) const
 {
     GLdouble m[16] = { 1.0, 0.0, 0.0, 0.0,
                        0.0, 1.0, 0.0, 0.0,
@@ -668,7 +668,7 @@ const kvs::Vector3f Camera::projectWindowToCamera( const kvs::Vector2f& p_win, f
     double z = 0;
     KVS_GL_CALL( gluUnProject( p_win.x(), p_win.y(), depth, m, p, v, &x, &y, &z ) );
 
-    return kvs::Vector3f( (float)x, (float)y, (float)z );
+    return kvs::Vec3( (float)x, (float)y, (float)z );
 }
 
 /*==========================================================================*/
@@ -679,9 +679,7 @@ const kvs::Vector3f Camera::projectWindowToCamera( const kvs::Vector2f& p_win, f
  *  @return a point in the world coordinate system
  */
 /*==========================================================================*/
-const kvs::Vector3f Camera::projectWindowToWorld(
-    const kvs::Vector2f& p_win,
-    float                depth ) const
+const kvs::Vec3 Camera::projectWindowToWorld( const kvs::Vec2& p_win, float depth ) const
 {
     return this->projectCameraToWorld( this->projectWindowToCamera( p_win, depth ) );
 }
@@ -693,8 +691,7 @@ const kvs::Vector3f Camera::projectWindowToWorld(
  *  @return point in the object coordinate system
  */
 /*==========================================================================*/
-const kvs::Vector3f Camera::projectObjectToCamera(
-    const kvs::Vector3f& p_obj ) const
+const kvs::Vec3 Camera::projectObjectToCamera( const kvs::Vec3& p_obj ) const
 {
     const kvs::Xform modelview( this->modelViewMatrix() );
     return modelview.transform( p_obj );
@@ -707,8 +704,8 @@ const kvs::Vector3f Camera::projectObjectToCamera(
  *  @return point in the object coordinate system
  */
 /*==========================================================================*/
-const kvs::Vector3f Camera::projectCameraToObject(
-    const kvs::Vector3f& p_cam ) const
+const kvs::Vec3 Camera::projectCameraToObject(
+    const kvs::Vec3& p_cam ) const
 {
     const kvs::Xform modelview( this->modelViewMatrix() );
     return modelview.inverse().transform( p_cam );
@@ -721,7 +718,7 @@ const kvs::Vector3f Camera::projectCameraToObject(
  *  @return point in the camera coordinate system
  */
 /*==========================================================================*/
-const kvs::Vector3f Camera::projectWorldToCamera( const kvs::Vector3f& p_wld ) const
+const kvs::Vec3 Camera::projectWorldToCamera( const kvs::Vec3& p_wld ) const
 {
     const kvs::Xform viewing( this->viewingMatrix() );
     return viewing.transform( p_wld );
@@ -734,7 +731,7 @@ const kvs::Vector3f Camera::projectWorldToCamera( const kvs::Vector3f& p_wld ) c
  *  @return point in the world coordinate system
  */
 /*==========================================================================*/
-const kvs::Vector3f Camera::projectCameraToWorld( const kvs::Vector3f& p_cam ) const
+const kvs::Vec3 Camera::projectCameraToWorld( const kvs::Vec3& p_cam ) const
 {
     const kvs::Xform inv_viewing( this->xform() );
     return inv_viewing.transform( p_cam );
@@ -747,7 +744,7 @@ const kvs::Vector3f Camera::projectCameraToWorld( const kvs::Vector3f& p_cam ) c
  *  @return point in the object coordinate system
  */
 /*==========================================================================*/
-const kvs::Vector3f Camera::projectWorldToObject( const kvs::Vector3f& p_wld ) const
+const kvs::Vec3 Camera::projectWorldToObject( const kvs::Vec3& p_wld ) const
 {
     const kvs::Xform inv_modeling( this->modelViewMatrix().inverted() * this->viewingMatrix() );
     return inv_modeling.transform( p_wld );
@@ -760,7 +757,7 @@ const kvs::Vector3f Camera::projectWorldToObject( const kvs::Vector3f& p_wld ) c
  *  @return point in the world coordinate system
  */
 /*==========================================================================*/
-const kvs::Vector3f Camera::projectObjectToWorld( const kvs::Vector3f& p_obj ) const
+const kvs::Vec3 Camera::projectObjectToWorld( const kvs::Vec3& p_obj ) const
 {
     const kvs::Xform modeling( this->xform().toMatrix() * this->modelViewMatrix() );
     return modeling.transform( p_obj );
@@ -783,9 +780,9 @@ void Camera::resetXform()
  *  @param rot [in] rotation matrix.
  */
 /*==========================================================================*/
-void Camera::rotate( const kvs::Matrix33f& rotation )
+void Camera::rotate( const kvs::Mat3& rotation )
 {
-    const kvs::Vector3f t = m_transform_center;
+    const kvs::Vec3 t = m_transform_center;
     const kvs::Xform x = kvs::Xform::Translation( t )
                        * kvs::Xform::Rotation( rotation )
                        * kvs::Xform::Translation( -t );
@@ -798,7 +795,7 @@ void Camera::rotate( const kvs::Matrix33f& rotation )
  *  @param translation [in] translation vector
  */
 /*==========================================================================*/
-void Camera::translate( const kvs::Vector3f& translation )
+void Camera::translate( const kvs::Vec3& translation )
 {
     this->multiplyXform( kvs::Xform::Translation( translation ) );
     m_transform_center += translation;
@@ -810,7 +807,7 @@ void Camera::translate( const kvs::Vector3f& translation )
  *  @param scaling [in] scaling vector
  */
 /*==========================================================================*/
-void Camera::scale( const kvs::Vector3f& scaling )
+void Camera::scale( const kvs::Vec3& scaling )
 {
     this->multiplyXform( kvs::Xform::Scaling( scaling ) );
 }

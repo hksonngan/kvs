@@ -235,9 +235,9 @@ void Light::setSpecular( const kvs::RGBAColor& color )
  *  Get the light position.
  */
 /*==========================================================================*/
-const kvs::Vector3f Light::position() const
+const kvs::Vec3 Light::position() const
 {
-    return( this->xform().translation() );
+    return this->xform().translation();
 }
 
 /*==========================================================================*/
@@ -245,9 +245,9 @@ const kvs::Vector3f Light::position() const
  *  Get the diffuse color of the light.
  */
 /*==========================================================================*/
-const kvs::Vector3f& Light::diffuse() const
+const kvs::Vec3& Light::diffuse() const
 {
-    return( m_diffuse );
+    return m_diffuse;
 }
 
 /*==========================================================================*/
@@ -255,9 +255,9 @@ const kvs::Vector3f& Light::diffuse() const
  *  Get the ambient color of the light.
  */
 /*==========================================================================*/
-const kvs::Vector3f& Light::ambient() const
+const kvs::Vec3& Light::ambient() const
 {
-    return( m_ambient );
+    return m_ambient;
 }
 
 /*==========================================================================*/
@@ -265,9 +265,9 @@ const kvs::Vector3f& Light::ambient() const
  *  Get the specular color of the light.
  */
 /*==========================================================================*/
-const kvs::Vector3f& Light::specular() const
+const kvs::Vec3& Light::specular() const
 {
-    return( m_specular );
+    return m_specular;
 }
 
 /*==========================================================================*/
@@ -277,13 +277,13 @@ const kvs::Vector3f& Light::specular() const
 /*==========================================================================*/
 void Light::update( const kvs::Camera* camera )
 {
-//    const kvs::Vector3f p = camera->projectWorldToCamera( this->position() );
-    const kvs::Vector3f p = kvs::WorldCoordinate( this->position() ).toCameraCoordinate( camera ).position();
+//    const kvs::Vec3 p = camera->projectWorldToCamera( this->position() );
+    const kvs::Vec3 p = kvs::WorldCoordinate( this->position() ).toCameraCoordinate( camera ).position();
 
-    const kvs::Vector4f position( p, 1.0f );
-    const kvs::Vector4f diffuse( this->diffuse(), 1.0f );
-    const kvs::Vector4f ambient( this->ambient(), 1.0f );
-    const kvs::Vector4f specular( this->specular(), 1.0f );
+    const kvs::Vec4 position( p, 1.0f );
+    const kvs::Vec4 diffuse( this->diffuse(), 1.0f );
+    const kvs::Vec4 ambient( this->ambient(), 1.0f );
+    const kvs::Vec4 specular( this->specular(), 1.0f );
 
     KVS_GL_CALL( glPushMatrix() );
     KVS_GL_CALL( glLoadIdentity() );
@@ -342,9 +342,9 @@ void Light::resetXform()
  *  @param rotation [in] rotation matrix
  */
 /*==========================================================================*/
-void Light::rotate( const kvs::Matrix33f& rotation )
+void Light::rotate( const kvs::Mat3& rotation )
 {
-    const kvs::Vector3f t = m_transform_center;
+    const kvs::Vec3 t = m_transform_center;
     const kvs::Xform x = kvs::Xform::Translation( t )
                        * kvs::Xform::Rotation( rotation )
                        * kvs::Xform::Translation( -t );
@@ -357,7 +357,7 @@ void Light::rotate( const kvs::Matrix33f& rotation )
  *  @param translation [in] translation vector
  */
 /*==========================================================================*/
-void Light::translate( const kvs::Vector3f& translation )
+void Light::translate( const kvs::Vec3& translation )
 {
     this->multiplyXform( kvs::Xform::Translation( translation ) );
     m_transform_center += translation;
@@ -369,7 +369,7 @@ void Light::translate( const kvs::Vector3f& translation )
  *  @param scaling [in] scaling vector.
  */
 /*==========================================================================*/
-void Light::scale( const kvs::Vector3f& scaling )
+void Light::scale( const kvs::Vec3& scaling )
 {
     this->multiplyXform( kvs::Xform::Scaling( scaling ) );
 }

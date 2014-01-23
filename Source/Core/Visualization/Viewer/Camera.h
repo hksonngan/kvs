@@ -43,7 +43,7 @@ public:
 
 private:
 
-    kvs::Vector3f m_transform_center;
+    kvs::Vec3 m_transform_center;
     ProjectionType m_projection_type; ///< projection type
     float m_field_of_view; ///< field of view [deg]
     float m_front; ///< front plane position
@@ -61,11 +61,11 @@ public:
     virtual ~Camera();
 
     void setProjectionType( const ProjectionType projection_type );
-    void setPosition( const kvs::Vector3f& position, const kvs::Vector3f& look_at );
-    void setPosition( const kvs::Vector3f& position, const kvs::Vector3f& look_at, const kvs::Vector3f& up );
-    void setPosition( const kvs::Vector3f& position );
-    void setUpVector( const kvs::Vector3f& up_vector );
-    void setLookAt( const kvs::Vector3f& look_at );
+    void setPosition( const kvs::Vec3& position, const kvs::Vec3& look_at );
+    void setPosition( const kvs::Vec3& position, const kvs::Vec3& look_at, const kvs::Vec3& up );
+    void setPosition( const kvs::Vec3& position );
+    void setUpVector( const kvs::Vec3& up_vector );
+    void setLookAt( const kvs::Vec3& look_at );
     void setFieldOfView( const float fov );
     void setBack( const float back );
     void setFront( const float front );
@@ -77,12 +77,12 @@ public:
 
     bool isPerspective() const;
     ProjectionType projectionType() const;
-    const kvs::Vector3f position() const;
-    const kvs::Vector3f upVector() const;
-    const kvs::Vector3f lookAt() const;
+    const kvs::Vec3 position() const;
+    const kvs::Vec3 upVector() const;
+    const kvs::Vec3 lookAt() const;
     const kvs::Matrix44f projectionMatrix() const;
     const kvs::Matrix44f viewingMatrix() const;
-    const kvs::Vector2f lookAtInDevice() const;
+    const kvs::Vec2 lookAtInDevice() const;
     float fieldOfView() const;
     float back() const;
     float front() const;
@@ -122,48 +122,48 @@ public:
         const float modelview[16],
         float (*combined)[16] ) const;
 //deprecated unused
-    const kvs::Vector2f projectObjectToWindow(
+    const kvs::Vec2 projectObjectToWindow(
         float  p_obj_x,
         float  p_obj_y,
         float  p_obj_z,
         float* depth = NULL ) const;
 //deprecated used at ObjectBase.cpp and ObjectManager.cpp
-    const kvs::Vector2f projectObjectToWindow(
-        const kvs::Vector3f& p_obj,
+    const kvs::Vec2 projectObjectToWindow(
+        const kvs::Vec3& p_obj,
         float*               depth = NULL ) const;
 
 public:
 //deprecated unused
-    const kvs::Vector3f projectWindowToObject(
-        const kvs::Vector2f& p_win,
+    const kvs::Vec3 projectWindowToObject(
+        const kvs::Vec2& p_win,
         float                depth = 0.0 ) const;
 //deprecated unused
-    const kvs::Vector3f projectWindowToCamera(
-        const kvs::Vector2f& p_win,
+    const kvs::Vec3 projectWindowToCamera(
+        const kvs::Vec2& p_win,
         float                depth = 0.0 ) const;
 //deprecated unused
-    const kvs::Vector3f projectWindowToWorld(
-        const kvs::Vector2f& p_win,
+    const kvs::Vec3 projectWindowToWorld(
+        const kvs::Vec2& p_win,
         float                depth = 0.0 ) const;
 //deprecated unused
-    const kvs::Vector3f projectObjectToCamera( const kvs::Vector3f& p_obj ) const;
+    const kvs::Vec3 projectObjectToCamera( const kvs::Vec3& p_obj ) const;
 //deprecated unused
-    const kvs::Vector3f projectCameraToObject( const kvs::Vector3f& p_cam ) const;
+    const kvs::Vec3 projectCameraToObject( const kvs::Vec3& p_cam ) const;
 //deprecated used at Light.cpp
-    const kvs::Vector3f projectWorldToCamera( const kvs::Vector3f& p_wld ) const;
+    const kvs::Vec3 projectWorldToCamera( const kvs::Vec3& p_wld ) const;
 //deprecated unused
-    const kvs::Vector3f projectCameraToWorld( const kvs::Vector3f& p_cam ) const;
+    const kvs::Vec3 projectCameraToWorld( const kvs::Vec3& p_cam ) const;
 //deprecated used at Shader.cpp, HAVSVolumeRenderer and RayCastingRenderer.cpp
-    const kvs::Vector3f projectWorldToObject( const kvs::Vector3f& p_wld ) const;
+    const kvs::Vec3 projectWorldToObject( const kvs::Vec3& p_wld ) const;
 //deprecated unused
-    const kvs::Vector3f projectObjectToWorld( const kvs::Vector3f& p_obj ) const;
+    const kvs::Vec3 projectObjectToWorld( const kvs::Vec3& p_obj ) const;
 
 public:
 
     void resetXform();
-    void rotate( const kvs::Matrix33f& rotation );
-    void translate( const kvs::Vector3f& translation );
-    void scale( const kvs::Vector3f& scaling );
+    void rotate( const kvs::Mat3& rotation );
+    void translate( const kvs::Vec3& translation );
+    void scale( const kvs::Vec3& scaling );
 };
 
 } // end of namespace kvs

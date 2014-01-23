@@ -30,8 +30,7 @@ namespace kvs
  *  @brief  Creates a new ObjectManager class.
  */
 /*===========================================================================*/
-ObjectManager::ObjectManager() :
-    kvs::ObjectBase( true )
+ObjectManager::ObjectManager()
 {
     m_object_tree.clear();
     m_has_active_object = false;
@@ -617,81 +616,6 @@ void ObjectManager::releaseActiveObject()
 
 /*==========================================================================*/
 /**
- *  @brief  Test the collision detection.
- *  @param  p_win [in] point in the window coordinate
- *  @param  camera [in] pointer to the camera
- *  @return true, if the collision is detected.
- */
-/*==========================================================================*/
-bool ObjectManager::detectCollision( const kvs::Vec2& p_win, kvs::Camera* camera )
-{
-    const kvs::Vec3 center = ObjectBase::objectCenter();
-    const kvs::Vec3 scale = ObjectBase::normalize();
-
-    double min_distance = 100000.0;
-    ObjectIterator object = m_object_tree.begin();
-    ObjectIterator last = m_object_tree.end();
-    ++object; // Skip the root object.
-    while ( object != last )
-    {
-        if ( !(*object)->canCollision() ) { continue; }
-
-        const kvs::Vec2 p = (*object)->positionInDevice( camera, center, scale );
-        const kvs::Vec2 diff = p - p_win;
-        const double distance = diff.length();
-        if ( distance < min_distance )
-        {
-            min_distance = distance;
-            m_active_object = object;
-        }
-
-        ++object;
-    }
-
-    m_has_active_object =
-        (*m_active_object)->collision( p_win, camera, center, scale );
-
-    return m_has_active_object;
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Test the collision detection.
- *  @param  p_world [in] point in the world coordinate
- *  @return true, if the collision is detected.
- */
-/*==========================================================================*/
-bool ObjectManager::detectCollision( const kvs::Vec3& p_world )
-{
-    const kvs::Vec3 center = ObjectBase::objectCenter();
-    const kvs::Vec3 scale = ObjectBase::normalize();
-
-    double min_distance = 100000;
-    ObjectIterator object = m_object_tree.begin();
-    ObjectIterator last = m_object_tree.end();
-    ++object; // Skip the root object.
-    while ( object != last )
-    {
-        if ( !(*object)->canCollision() ) { continue; }
-
-        const kvs::Vec3 p = (*object)->positionInWorld( center, scale );
-        const kvs::Vec3 diff = p - p_world;
-        const double distance = diff.length();
-        if ( distance < min_distance )
-        {
-            min_distance = distance;
-            m_active_object = object;
-        }
-    }
-
-    m_has_active_object =
-        (*m_active_object)->collision( p_world, center, scale );
-
-    return m_has_active_object;
-}
-
-/*==========================================================================*/
-/**
  *  @brief  Rotate the all objects.
  *  @param  rotation [in] current rotation matrix.
  */
@@ -769,24 +693,6 @@ void ObjectManager::scale( const kvs::Vec3& scaling )
         (*registered_object)->multiplyXform( x );
         ++registered_object;
     }
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Returns the position of the object manager in the device coordinate.
- *  @param  camera [in] pointer to the camera
- */
-/*==========================================================================*/
-kvs::Vec2 ObjectManager::positionInDevice( kvs::Camera* camera ) const
-{
-    kvs::OpenGL::PushMatrix();
-    camera->update();
-    kvs::Vec3 p = kvs::ObjectBase::xform().translation();
-    kvs::Vec2 ret = camera->projectObjectToWindow( p );
-    ret.y() = camera->windowHeight() - ret.y();
-    kvs::OpenGL::PopMatrix();
-
-    return ret;
 }
 
 /*==========================================================================*/
@@ -937,9 +843,10 @@ kvs::Vec3 ObjectManager::get_rotation_center( kvs::ObjectBase* object )
         // In this case, a gravity of center of the object, which can be
         // assumed as the active object, in the world coordinate system
         // will be returned.
-        const kvs::Vec3 center = ObjectBase::objectCenter();
-        const kvs::Vec3 scale = ObjectBase::normalize();
-        return object->positionInWorld( center, scale );
+        const kvs::Vec3 Tg = ObjectBase::objectCenter();
+        const kvs::Vec3 Sg = ObjectBase::normalize();
+        const kvs::Vec3 p_world = ( object->externalPosition() - Tg ) * Sg;
+        return object->xform().transform( p_world );
     }
     else
     {

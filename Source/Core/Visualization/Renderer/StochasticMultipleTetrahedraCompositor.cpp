@@ -280,10 +280,10 @@ void StochasticMultipleTetrahedraCompositor::engine_create()
         m_renderer->engine().setRepetitionLevel( m_repetition_level );
         m_renderer->engine().setEnabledShading( m_enable_shading );
 
-        KVS_GL_CALL( glPushMatrix() );
-        volume0->transform( m_scene->objectManager()->objectCenter(), m_scene->objectManager()->normalize() );
+        kvs::OpenGL::PushMatrix();
+        m_scene->updateGLModelingMatrix( volume0 );
         m_renderer->engine().create( NULL, m_scene->camera(), m_scene->light() );
-        KVS_GL_CALL( glPopMatrix() );
+        kvs::OpenGL::PopMatrix();
     }
 }
 
@@ -296,10 +296,10 @@ void StochasticMultipleTetrahedraCompositor::engine_update()
 {
     const kvs::UnstructuredVolumeObject* volume0 = m_renderer->volume(0);
 
-    KVS_GL_CALL( glPushMatrix() );
-    volume0->transform( m_scene->objectManager()->objectCenter(), m_scene->objectManager()->normalize() );
+    kvs::OpenGL::PushMatrix();
+    m_scene->updateGLModelingMatrix( volume0 );
     m_renderer->engine().update( NULL, m_scene->camera(), m_scene->light() );
-    KVS_GL_CALL( glPopMatrix() );
+    kvs::OpenGL::PopMatrix();
 }
 
 /*===========================================================================*/
@@ -312,11 +312,11 @@ void StochasticMultipleTetrahedraCompositor::engine_setup()
     const kvs::UnstructuredVolumeObject* volume0 = m_renderer->volume(0);
     const bool reset_count = !m_enable_refinement;
 
-    KVS_GL_CALL( glPushMatrix() );
-    volume0->transform( m_scene->objectManager()->objectCenter(), m_scene->objectManager()->normalize() );
+    kvs::OpenGL::PushMatrix();
+    m_scene->updateGLModelingMatrix( volume0 );
     if ( reset_count ) m_renderer->engine().resetRepetitions();
     m_renderer->engine().setup( NULL, m_scene->camera(), m_scene->light() );
-    KVS_GL_CALL( glPopMatrix() );
+    kvs::OpenGL::PopMatrix();
 }
 
 /*===========================================================================*/
@@ -330,15 +330,15 @@ void StochasticMultipleTetrahedraCompositor::engine_draw()
     const kvs::UnstructuredVolumeObject* volume1 = m_renderer->volume(1);
     if ( volume0->isShown() && volume1->isShown() )
     {
-        KVS_GL_CALL( glPushMatrix() );
-        volume0->transform( m_scene->objectManager()->objectCenter(), m_scene->objectManager()->normalize() );
-        KVS_GL_CALL( glPopMatrix() );
+        kvs::OpenGL::PushMatrix();
+        m_scene->updateGLModelingMatrix( volume0 );
+        kvs::OpenGL::PopMatrix();
 
-        KVS_GL_CALL( glPushMatrix() );
-        volume1->transform( m_scene->objectManager()->objectCenter(), m_scene->objectManager()->normalize() );
+        kvs::OpenGL::PushMatrix();
+        m_scene->updateGLModelingMatrix( volume1 );
         m_renderer->engine().draw( NULL, m_scene->camera(), m_scene->light() );
         m_renderer->engine().countRepetitions();
-        KVS_GL_CALL( glPopMatrix() );
+        kvs::OpenGL::PopMatrix();
     }
 }
 

@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file RendererManager.h
+ *  @file   RendererManager.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -39,8 +40,8 @@ private:
     typedef RendererList::iterator RendererIterator;
 
 private:
-    RendererList m_renderer_list;
-    int m_renderer_id;
+    RendererList m_renderer_list; ///< renderer list
+    int m_renderer_id; ///< renderer ID
 
 public:
     RendererManager();

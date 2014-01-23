@@ -25,17 +25,15 @@ namespace kvs
 /*===========================================================================*/
 /**
  *  @brief  Constructs a new ObjectBase class.
- *  @param  collision [in] collision detection flag
  */
 /*===========================================================================*/
-ObjectBase::ObjectBase( const bool collision ):
+ObjectBase::ObjectBase():
     kvs::XformControl(),
-    m_can_collision( collision ),
     m_name("unknown"),
-    m_min_object_coord( kvs::Vec3( -3.0, -3.0, -3.0 ) ),
-    m_max_object_coord( kvs::Vec3(  3.0,  3.0,  3.0 ) ),
-    m_min_external_coord( kvs::Vec3( -3.0, -3.0, -3.0 ) ),
-    m_max_external_coord( kvs::Vec3(  3.0,  3.0,  3.0 ) ),
+    m_min_object_coord( kvs::Vec3::All( -3.0 ) ),
+    m_max_object_coord( kvs::Vec3::All(  3.0 ) ),
+    m_min_external_coord( kvs::Vec3::All( -3.0 ) ),
+    m_max_external_coord( kvs::Vec3::All(  3.0 ) ),
     m_has_min_max_object_coords( false ),
     m_has_min_max_external_coords( false ),
     m_show_flag( true )
@@ -135,56 +133,6 @@ void ObjectBase::print( std::ostream& os, const kvs::Indent& indent ) const
 
 /*===========================================================================*/
 /**
- *  @brief  Returns the object position in the device coordinate.
- *  @param  camera [in] camera
- *  @param  global_trans [in] translation vector in the global
- *  @param  global_scale [in] scaling vector in the global
- *  @return object position in the device coordinate
- */
-/*===========================================================================*/
-const kvs::Vec2 ObjectBase::positionInDevice(
-    kvs::Camera* camera,
-    const kvs::Vec3& global_trans,
-    const kvs::Vec3& global_scale ) const
-{
-    kvs::Vec2 ret;
-    kvs::OpenGL::PushMatrix();
-    {
-        camera->update();
-
-        ObjectBase::transform( global_trans, global_scale );
-
-        ret = camera->projectObjectToWindow( m_object_center );
-        ret.y() = camera->windowHeight() - ret.y();
-    }
-    kvs::OpenGL::PopMatrix();
-
-    return ret;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the object position in the world coordinate.
- *  @param  global_trans [in] translation vector in the global
- *  @param  global_scale [in] scaling vector in the global
- *  @return object position in the world coordinate
- */
-/*===========================================================================*/
-const kvs::Vec3 ObjectBase::positionInWorld(
-    const kvs::Vec3& global_trans,
-    const kvs::Vec3& global_scale ) const
-{
-    kvs::Vec3 init_pos = m_external_position - global_trans;
-
-    init_pos.x() *= global_scale.x();
-    init_pos.y() *= global_scale.y();
-    init_pos.z() *= global_scale.z();
-
-    return this->xform().transform( init_pos );
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Updates the normalize parameters.
  */
 /*===========================================================================*/
@@ -224,213 +172,6 @@ void ObjectBase::updateNormalizeParameters()
             ( kvs::Math::Equal( diff_obj.y(), 0.0f ) ) ? diff_ext.x() / diff_obj.x() :
             kvs::Math::Max( diff_ext.x() / diff_obj.x(), diff_ext.y() / diff_obj.y() );
     }
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Transform the object.
- *  @param  Tg [in] translation vector in the global
- *  @param  Sg [in] scaling vector in the global
- */
-/*===========================================================================*/
-void ObjectBase::transform( const kvs::Vec3& Tg, const kvs::Vec3& Sg ) const
-{
-    float X[16]; this->xform().toArray( X );
-    const kvs::Vec3& Te = m_external_position;
-    const kvs::Vec3& Sl = m_normalize;
-    const kvs::Vec3& Tl = m_object_center;
-
-    kvs::OpenGL::MultMatrix( X );
-    kvs::OpenGL::Scale( Sg.x(), Sg.y(), Sg.z() );
-    kvs::OpenGL::Translate( -Tg.x(), -Tg.y(), -Tg.z() );
-    kvs::OpenGL::Translate( Te.x(), Te.y(), Te.z() );
-    kvs::OpenGL::Scale( Sl.x(), Sl.y(), Sl.z() );
-    kvs::OpenGL::Translate( -Tl.x(), -Tl.y(), -Tl.z() );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Executes collision detection.
- *  @param  p_win [in] point in the window coordinate system
- *  @param  camera [in] pointer to the camera
- *  @param  global_trans [in] translation vector in the global
- *  @param  global_scale [in] scaling vector in the global
- *  @return true, if the collision is detected.
- *
- *  This method in current version is not accurate. In this version,
- *  we don't take account of depth from camera position to the object.
- */
-/*===========================================================================*/
-bool ObjectBase::collision(
-    const kvs::Vec2& p_win,
-    kvs::Camera* camera,
-    const kvs::Vec3& global_trans,
-    const kvs::Vec3& global_scale )
-{
-    float max_distance = -1.0f;
-
-    // Center of this object in the window coordinate system.
-    kvs::Vec2 center;
-
-    kvs::OpenGL::PushMatrix();
-    {
-        camera->update();
-
-        ObjectBase::transform( global_trans, global_scale );
-
-        center = camera->projectObjectToWindow( m_object_center );
-
-        // Object's corner points in the object coordinate system.
-        const kvs::Vec3 corners[8] = {
-            kvs::Vec3( m_min_object_coord.x(), m_min_object_coord.y(), m_min_object_coord.z() ),
-            kvs::Vec3( m_max_object_coord.x(), m_min_object_coord.y(), m_min_object_coord.z() ),
-            kvs::Vec3( m_min_object_coord.x(), m_min_object_coord.y(), m_max_object_coord.z() ),
-            kvs::Vec3( m_max_object_coord.x(), m_min_object_coord.y(), m_max_object_coord.z() ),
-            kvs::Vec3( m_min_object_coord.x(), m_max_object_coord.y(), m_min_object_coord.z() ),
-            kvs::Vec3( m_max_object_coord.x(), m_max_object_coord.y(), m_min_object_coord.z() ),
-            kvs::Vec3( m_min_object_coord.x(), m_max_object_coord.y(), m_max_object_coord.z() ),
-            kvs::Vec3( m_max_object_coord.x(), m_max_object_coord.y(), m_max_object_coord.z() ) };
-
-        // Calculate max distance between the center and the corner in
-        // the window coordinate system.
-        for( int i = 0; i < 8; i++ )
-        {
-            const kvs::Vec2 corner = camera->projectObjectToWindow( corners[i] );
-            const float distance = static_cast<float>( ( corner - center ).length() );
-            max_distance = kvs::Math::Max( max_distance, distance );
-        }
-    }
-    kvs::OpenGL::PopMatrix();
-
-    kvs::Vec2 pos_window( p_win.x(), camera->windowHeight() - p_win.y() );
-
-    return ( pos_window - center ).length() < max_distance;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Executes collision detection.
- *  @param  p_world [in] point in the world coordinate system
- *  @param  global_trans [in] translation vector in the global
- *  @param  global_scale [in] scaling vector in the global
- *  @return true, if the collision is detected.
- */
-/*===========================================================================*/
-bool ObjectBase::collision(
-    const kvs::Vec3& p_world,
-    const kvs::Vec3& global_trans,
-    const kvs::Vec3& global_scale )
-{
-    float max_distance = -1.0f;
-    kvs::Vec3 center;
-
-    center = object_to_world_coordinate( m_object_center, global_trans, global_scale );
-
-    // Object's corner points in the object coordinate system.
-    const kvs::Vec3 corners[8] = {
-        kvs::Vec3( m_min_object_coord.x(), m_min_object_coord.y(), m_min_object_coord.z() ),
-        kvs::Vec3( m_max_object_coord.x(), m_min_object_coord.y(), m_min_object_coord.z() ),
-        kvs::Vec3( m_min_object_coord.x(), m_min_object_coord.y(), m_max_object_coord.z() ),
-        kvs::Vec3( m_max_object_coord.x(), m_min_object_coord.y(), m_max_object_coord.z() ),
-        kvs::Vec3( m_min_object_coord.x(), m_max_object_coord.y(), m_min_object_coord.z() ),
-        kvs::Vec3( m_max_object_coord.x(), m_max_object_coord.y(), m_min_object_coord.z() ),
-        kvs::Vec3( m_min_object_coord.x(), m_max_object_coord.y(), m_max_object_coord.z() ),
-        kvs::Vec3( m_max_object_coord.x(), m_max_object_coord.y(), m_max_object_coord.z() ) };
-
-    // Calculate max distance between the center and the corner in
-    // the world coordinate system.
-    for( int i = 0; i < 8; i++ )
-    {
-        const kvs::Vec3 corner =
-            this->object_to_world_coordinate( corners[i], global_trans, global_scale );
-        const float distance = static_cast<float>( ( corner - center ).length() );
-        max_distance = kvs::Math::Max( max_distance, distance );
-    }
-
-    return ( p_world - center ).length() < max_distance;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Projects the point from the object coord. to world coord.
- *  @param  p_obj [in] point in the object coordinate
- *  @param  global_trans [in] translation vector in the global
- *  @param  global_scale [in] scaling vector in the global
- *  @return projected point in the world coodinate.
- */
-/*===========================================================================*/
-const kvs::Vec3 ObjectBase::object_to_world_coordinate(
-    const kvs::Vec3& p_obj,
-    const kvs::Vec3& global_trans,
-    const kvs::Vec3& global_scale ) const
-{
-    kvs::Vec3 p_external = p_obj - m_object_center;
-
-    p_external.x() *= m_normalize.x();
-    p_external.y() *= m_normalize.y();
-    p_external.z() *= m_normalize.z();
-
-    p_external += m_external_position;
-
-    kvs::Vec3 p_world = p_external - global_trans;
-
-    p_world.x() *= global_scale.x();
-    p_world.y() *= global_scale.y();
-    p_world.z() *= global_scale.z();
-
-    return this->xform().transform( p_world );
-}
-
-/*==========================================================================*/
-/**
- *  Enable collision detection.
- */
-/*==========================================================================*/
-void ObjectBase::enableCollision()
-{
-    m_can_collision = true;
-}
-
-/*==========================================================================*/
-/**
- *  Disable collision detection.
- */
-/*==========================================================================*/
-void ObjectBase::disableCollision()
-{
-    m_can_collision = false;
-}
-
-/*==========================================================================*/
-/**
- *  Test whether the collision is detected.
- */
-/*==========================================================================*/
-bool ObjectBase::canCollision() const
-{
-    return m_can_collision;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a object center in the object coordinate system.
- *  @param  object_center [in] object center
- */
-/*===========================================================================*/
-void ObjectBase::setObjectCenter( const kvs::Vec3& object_center )
-{
-    m_object_center = object_center;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a normalize parameter.
- *  @param  normalize [in] normalize parameter
- */
-/*===========================================================================*/
-void ObjectBase::setNormalize( const kvs::Vec3& normalize )
-{
-    m_normalize = normalize;
 }
 
 /*===========================================================================*/
