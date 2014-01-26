@@ -435,6 +435,26 @@ void SetFrustum( GLdouble left, GLdouble right, GLdouble bottom, GLdouble top, G
     KVS_GL_CALL( glFrustum( left, right, bottom, top, front, back ) );
 }
 
+void SetLight( GLenum light, GLenum pname, GLfloat param )
+{
+    KVS_GL_CALL( glLightf( light, pname, param ) );
+}
+
+void SetLight( GLenum light, GLenum pname, GLfixed param )
+{
+    KVS_GL_CALL( glLightx( light, pname, param ) );
+}
+
+void SetLight( GLenum light, GLenum pname, GLfloat* params )
+{
+    KVS_GL_CALL( glLightfv( light, pname, params ) );
+}
+
+void SetLight( GLenum light, GLenum pname, GLfixed* params )
+{
+    KVS_GL_CALL( glLightxv( light, pname, params ) );
+}
+
 void ReadPixels( GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLvoid* data )
 {
     KVS_GL_CALL( glReadPixels( x, y, width, height, format, type, data ) );

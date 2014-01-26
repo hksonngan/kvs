@@ -63,6 +63,7 @@ public:
     void setSpecular( const float r, const float g, const float b );
     void setSpecular( const kvs::RGBAColor& color );
 
+    unsigned int id() const { return m_id; }
     const kvs::Vec3 position() const;
     const kvs::Vec3& diffuse() const;
     const kvs::Vec3& ambient() const;

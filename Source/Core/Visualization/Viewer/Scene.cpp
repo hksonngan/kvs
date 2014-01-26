@@ -24,6 +24,7 @@
 #include <kvs/ObjectBase>
 #include <kvs/RendererBase>
 #include <kvs/VisualizationPipeline>
+#include <kvs/Coordinate>
 
 
 namespace kvs
@@ -444,7 +445,6 @@ void Scene::updateGLModelingMatrix( const kvs::ObjectBase* object ) const
 void Scene::updateGLModelingMatrix() const
 {
     float X[16]; m_object_manager->xform().toArray( X );
-
     kvs::OpenGL::SetMatrixMode( GL_MODELVIEW );
     kvs::OpenGL::MultMatrix( X );
 }
@@ -457,7 +457,6 @@ void Scene::updateGLModelingMatrix() const
 void Scene::updateGLViewingMatrix() const
 {
     float m[16];
-
     kvs::OpenGL::SetMatrixMode( GL_MODELVIEW );
     kvs::OpenGL::LoadIdentity();
     kvs::Xform v( m_camera->viewingMatrix() ); v.toArray( m );
@@ -472,11 +471,32 @@ void Scene::updateGLViewingMatrix() const
 void Scene::updateGLProjectionMatrix() const
 {
     float m[16];
-
     kvs::OpenGL::SetMatrixMode( GL_PROJECTION );
     kvs::OpenGL::LoadIdentity();
     kvs::Xform p( m_camera->projectionMatrix() ); p.toArray( m );
     kvs::OpenGL::MultMatrix( m );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Updates the light source parameters.
+ */
+/*===========================================================================*/
+void Scene::updateGLLightParameters() const
+{
+    const kvs::Vec3 p = kvs::WorldCoordinate( m_light->position() ).toCameraCoordinate( m_camera ).position();
+    const kvs::Vec4 position( p, 1.0f );
+    const kvs::Vec4 diffuse( m_light->diffuse(), 1.0f );
+    const kvs::Vec4 ambient( m_light->ambient(), 1.0f );
+    const kvs::Vec4 specular( m_light->specular(), 1.0f );
+
+    kvs::OpenGL::PushMatrix();
+    kvs::OpenGL::LoadIdentity();
+    kvs::OpenGL::SetLight( m_light->id(), GL_POSITION, (GLfloat*)&(position[0]) );
+    kvs::OpenGL::SetLight( m_light->id(), GL_DIFFUSE,  (GLfloat*)&(diffuse[0]) );
+    kvs::OpenGL::SetLight( m_light->id(), GL_AMBIENT,  (GLfloat*)&(ambient[0]) );
+    kvs::OpenGL::SetLight( m_light->id(), GL_SPECULAR, (GLfloat*)&(specular[0]) );
+    kvs::OpenGL::PopMatrix();
 }
 
 /*===========================================================================*/
@@ -513,10 +533,10 @@ void Scene::initializeFunction()
 void Scene::paintFunction()
 {
 //    m_camera->update();
+//    m_light->update( m_camera );
     this->updateGLProjectionMatrix();
     this->updateGLViewingMatrix();
-
-    m_light->update( m_camera );
+    this->updateGLLightParameters();
 
     // Set the background color or image.
     m_background->apply();

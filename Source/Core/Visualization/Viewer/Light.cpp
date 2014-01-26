@@ -285,13 +285,13 @@ void Light::update( const kvs::Camera* camera )
     const kvs::Vec4 ambient( this->ambient(), 1.0f );
     const kvs::Vec4 specular( this->specular(), 1.0f );
 
-    KVS_GL_CALL( glPushMatrix() );
-    KVS_GL_CALL( glLoadIdentity() );
-    KVS_GL_CALL( glLightfv( m_id, GL_POSITION, &(position[0]) ) );
-    KVS_GL_CALL( glLightfv( m_id, GL_DIFFUSE,  &(diffuse[0]) ) );
-    KVS_GL_CALL( glLightfv( m_id, GL_AMBIENT,  &(ambient[0]) ) );
-    KVS_GL_CALL( glLightfv( m_id, GL_SPECULAR, &(specular[0]) ) );
-    KVS_GL_CALL( glPopMatrix() );
+    kvs::OpenGL::PushMatrix();
+    kvs::OpenGL::LoadIdentity();
+    kvs::OpenGL::SetLight( m_id, GL_POSITION, (GLfloat*)&(position[0]) );
+    kvs::OpenGL::SetLight( m_id, GL_DIFFUSE,  (GLfloat*)&(diffuse[0]) );
+    kvs::OpenGL::SetLight( m_id, GL_AMBIENT,  (GLfloat*)&(ambient[0]) );
+    kvs::OpenGL::SetLight( m_id, GL_SPECULAR, (GLfloat*)&(specular[0]) );
+    kvs::OpenGL::PopMatrix();
 }
 
 /*==========================================================================*/

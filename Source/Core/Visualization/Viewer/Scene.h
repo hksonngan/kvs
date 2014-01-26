@@ -87,6 +87,7 @@ public:
     void updateGLModelingMatrix() const;
     void updateGLViewingMatrix() const;
     void updateGLProjectionMatrix() const;
+    void updateGLLightParameters() const;
 
     void setEnabledCollisionDetection( bool enable );
     void enableCollisionDetection() { this->setEnabledCollisionDetection( true ); }

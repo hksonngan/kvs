@@ -65,8 +65,9 @@ void StochasticMultipleTetrahedraCompositor::update()
     kvs::OpenGL::WithPushedMatrix p( GL_MODELVIEW );
     p.loadIdentity();
     {
-        m_scene->camera()->update();
-        m_scene->light()->update( m_scene->camera() );
+        m_scene->updateGLProjectionMatrix();
+        m_scene->updateGLViewingMatrix();
+        m_scene->updateGLLightParameters();
         m_scene->background()->apply();
 
         if ( m_scene->objectManager()->hasObject() )
@@ -243,6 +244,7 @@ kvs::Mat4 StochasticMultipleTetrahedraCompositor::object_xform()
 /*===========================================================================*/
 void StochasticMultipleTetrahedraCompositor::engine_create()
 {
+    typedef kvs::UnstructuredVolumeObject Object;
     typedef kvs::StochasticMultipleTetrahedraRenderer Renderer;
 
     kvs::ObjectBase* objects[2] = { NULL, NULL };
@@ -270,8 +272,8 @@ void StochasticMultipleTetrahedraCompositor::engine_create()
 
     if ( counter == 2 )
     {
-        const kvs::UnstructuredVolumeObject* volume0 = kvs::UnstructuredVolumeObject::DownCast( objects[0] );
-        const kvs::UnstructuredVolumeObject* volume1 = kvs::UnstructuredVolumeObject::DownCast( objects[1] );
+        const Object* volume0 = Object::DownCast( objects[0] );
+        const Object* volume1 = Object::DownCast( objects[1] );
         m_renderer->attachVolume( volume0, 0 );
         m_renderer->attachVolume( volume1, 1 );
         m_renderer->setExtraTexture( m_extra_texture );
