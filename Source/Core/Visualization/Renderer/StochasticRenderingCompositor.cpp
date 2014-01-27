@@ -127,7 +127,7 @@ void StochasticRenderingCompositor::draw()
     }
 
     KVS_GL_CALL( glBindFramebuffer( GL_DRAW_FRAMEBUFFER, 0 ) );
-    kvs::OpenGL::DrawBuffer( GL_BACK );
+    kvs::OpenGL::SetDrawBuffer( GL_BACK );
 
     m_ensemble_buffer.draw();
 }
@@ -332,7 +332,7 @@ void StochasticRenderingCompositor::engines_draw()
         kvs::IDManager::IDPair id = m_scene->IDManager()->id( i );
         kvs::ObjectBase* object = m_scene->objectManager()->object( id.first );
         kvs::RendererBase* renderer = m_scene->rendererManager()->renderer( id.second );
-        if ( kvs::Renderer* stochastic_renderer = dynamic_cast<Renderer*>( renderer ) )
+        if ( Renderer* stochastic_renderer = dynamic_cast<Renderer*>( renderer ) )
         {
             if ( object->isShown() )
             {
