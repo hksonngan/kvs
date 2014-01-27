@@ -35,16 +35,30 @@
     virtual const char* moduleName() const { return #this_class; }      \
     static this_class* DownCast( kvs:: category##Base* m )              \
     {                                                                   \
-        if ( m && strcmp( m->moduleName(), #this_class ) )              \
-        {                                                               \
-            return static_cast<this_class *>( m );                      \
-        }                                                               \
-        return NULL;                                                    \
+        return dynamic_cast<this_class *>( m );                         \
     };                                                                  \
     static const this_class* DownCast( const kvs:: category##Base* m )  \
     {                                                                   \
         return DownCast( const_cast<kvs:: category##Base *>( m ) );     \
     }
+
+// TODO: Remove dynamic_cast from the DownCast method.
+// The implementation of the module in KVS need to be changed in order
+// to remove dynamic_cast from the DownCast method. Here is a simple
+// implementation of the DownCast method without dynamic_cast. In the
+// current implementation of the module, the module name of the object
+// module will be inherited from the importer, filter or mapper modules.
+// Therefore, moduleName() cannot be compared with #this_class in the
+// following code.
+//
+//    static this_class* DownCast( kvs:: category##Base* m )
+//    {
+//        if ( m && strcmp( m->moduleName(), #this_class ) )
+//        {
+//            return static_cast<this_class *>( m );
+//        }
+//        return NULL;
+//    };
 
 /* DEPRECATED */
 #define kvsModuleCategory( module_category )                            \
