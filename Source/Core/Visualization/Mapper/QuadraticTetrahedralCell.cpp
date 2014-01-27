@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file QuadraticTetrahedralCell.cpp
+ *  @file   QuadraticTetrahedralCell.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *

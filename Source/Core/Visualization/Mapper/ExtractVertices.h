@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file ExtractVertices.h
+ *  @file   ExtractVertices.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -31,8 +32,7 @@ class VolumeObjectBase;
 /*==========================================================================*/
 class ExtractVertices : public kvs::MapperBase, public kvs::PointObject
 {
-    kvsModuleName( kvs::ExtractVertices );
-    kvsModuleCategory( Mapper );
+    kvsModule( Mapper, kvs::ExtractVertices, kvs::MapperBase );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::PointObject );
 

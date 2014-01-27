@@ -24,42 +24,6 @@ namespace kvs
 
 /*===========================================================================*/
 /**
- *  @brief  Downcasts to the pointer to the point object.
- *  @param  object [in] pointer to the object
- *  @return pointer to the point object
- */
-/*===========================================================================*/
-kvs::PointObject* PointObject::DownCast( kvs::ObjectBase* object )
-{
-    kvs::GeometryObjectBase* geometry = kvs::GeometryObjectBase::DownCast( object );
-    if ( !geometry ) return NULL;
-
-    const kvs::GeometryObjectBase::GeometryType type = geometry->geometryType();
-    if ( type != kvs::GeometryObjectBase::Point )
-    {
-        kvsMessageError("Input object is not a point object.");
-        return NULL;
-    }
-
-    kvs::PointObject* point = static_cast<kvs::PointObject*>( geometry );
-
-    return point;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Downcasts to the pointer to the point object with 'const'.
- *  @param  object [in] pointer to the object
- *  @return pointer to the point object
- */
-/*===========================================================================*/
-const kvs::PointObject* PointObject::DownCast( const kvs::ObjectBase* object )
-{
-    return PointObject::DownCast( const_cast<kvs::ObjectBase*>( object ) );
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Constructs a new PointObject class.
  */
 /*===========================================================================*/

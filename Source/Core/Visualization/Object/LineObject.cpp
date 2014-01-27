@@ -60,44 +60,9 @@ const std::string GetColorTypeName( const kvs::LineObject::ColorType type )
 
 } // end of namespace
 
+
 namespace kvs
 {
-
-/*===========================================================================*/
-/**
- *  @brief  Downcasts to line object.
- *  @param  object [in] pointer to the object base
- *  @return pointer to the line object
- */
-/*===========================================================================*/
-kvs::LineObject* LineObject::DownCast( kvs::ObjectBase* object )
-{
-    kvs::GeometryObjectBase* geometry = kvs::GeometryObjectBase::DownCast( object );
-    if ( !geometry ) return NULL;
-
-    const kvs::GeometryObjectBase::GeometryType type = geometry->geometryType();
-    if ( type != kvs::GeometryObjectBase::Line )
-    {
-        kvsMessageError("Input object is not a line object.");
-        return NULL;
-    }
-
-    kvs::LineObject* line = static_cast<kvs::LineObject*>( geometry );
-
-    return line;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Downcasts to line object with 'const'.
- *  @param  object [in] pointer to the object base
- *  @return pointer to the line object
- */
-/*===========================================================================*/
-const kvs::LineObject* LineObject::DownCast( const kvs::ObjectBase* object )
-{
-    return LineObject::DownCast( const_cast<kvs::ObjectBase*>( object ) );
-}
 
 /*===========================================================================*/
 /**

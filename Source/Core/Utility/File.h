@@ -20,7 +20,6 @@
 #include <cstdlib>
 #include <climits>
 #endif
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -33,8 +32,6 @@ namespace kvs
 /*==========================================================================*/
 class File
 {
-    kvsClassName( kvs::File );
-
 #if KVS_ENABLE_DEPRECATED
 protected:
 #else

@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file VolumeObjectBase.h
+ *  @file   VolumeObjectBase.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -35,7 +36,7 @@ namespace kvs
 /*==========================================================================*/
 class VolumeObjectBase : public kvs::ObjectBase
 {
-    kvsModuleName( kvs::VolumeObjectBase );
+    kvsModule( Object, kvs::VolumeObjectBase, kvs::ObjectBase );
 
 public:
 
@@ -80,11 +81,6 @@ private:
     mutable bool m_has_min_max_values; ///< Whether includes min/max values or not.
     mutable kvs::Real64 m_min_value; ///< Minimum field value.
     mutable kvs::Real64 m_max_value; ///< Maximum field value.
-
-public:
-
-    static kvs::VolumeObjectBase* DownCast( kvs::ObjectBase* object );
-    static const kvs::VolumeObjectBase* DownCast( const kvs::ObjectBase* object );
 
 public:
 

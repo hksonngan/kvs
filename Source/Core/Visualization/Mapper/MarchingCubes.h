@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file MarchingCubes.h
+ *  @file   MarchingCubes.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -30,8 +31,7 @@ namespace kvs
 /*==========================================================================*/
 class MarchingCubes : public kvs::MapperBase, public kvs::PolygonObject
 {
-    kvsModuleName( kvs::MarchingCubes );
-    kvsModuleCategory( Mapper );
+    kvsModule( Mapper, kvs::MarchingCubes, kvs::MapperBase );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::PolygonObject );
 

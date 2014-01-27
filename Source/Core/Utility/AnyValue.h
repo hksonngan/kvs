@@ -20,7 +20,6 @@
 #include <cstring>
 #include <kvs/DebugNew>
 #include <kvs/Type>
-#include <kvs/ClassName>
 
 
 namespace kvs
@@ -33,8 +32,6 @@ namespace kvs
 /*==========================================================================*/
 class AnyValue
 {
-    kvsClassName_without_virtual( kvs::AnyValue );
-
 public:
 
     class TypeInfo

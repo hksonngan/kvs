@@ -36,8 +36,7 @@ class Camera;
 /*==========================================================================*/
 class ObjectBase : public kvs::XformControl
 {
-    kvsModuleBase;
-    kvsModuleName( kvs::ObjectBase );
+    kvsModuleBase( kvs::ObjectBase );
 
 public:
 

@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file MapperBase.h
+ *  @file   MapperBase.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -34,8 +35,7 @@ class VolumeObjectBase;
 /*==========================================================================*/
 class MapperBase
 {
-    kvsModuleName( kvs::MapperBase );
-    kvsModuleBase;
+    kvsModuleBase( kvs::MapperBase );
 
 private:
 

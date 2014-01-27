@@ -41,9 +41,8 @@ namespace glsl
 /*===========================================================================*/
 class ParticleBasedRenderer : public kvs::StochasticRendererBase
 {
-    kvsModuleName( kvs::glsl::ParticleBasedRenderer );
+    kvsModule( Renderer, kvs::glsl::ParticleBasedRenderer, kvs::StochasticRendererBase );
     kvsModuleBaseClass( kvs::StochasticRendererBase );
-    kvsModuleCategory( Renderer );
 
 public:
 

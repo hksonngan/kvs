@@ -1,17 +1,15 @@
 /*****************************************************************************/
 /**
- *  @file   line_integral_convolution.cpp
- *  @brief  LIC (Line Integral Convolution) class.
- *
+ *  @file   LineIntegralConvolution.cpp
  *  @author Naohisa Sakamoto
- *  @date   2012/12/07 12:41:22
  */
 /*----------------------------------------------------------------------------
  *
- *  $Author: kawamura $
- *  $Date: 2009/01/15 12:52:12 $
- *  $Source: /home/Repository/viz-server2/cvsroot/KVS_RC1/Source/Core/Visualization/Filter/LineIntegralConvolution.cpp,v $
- *  $Revision: 1.2 $
+ *  Copyright (c) Visualization Laboratory, Kyoto University.
+ *  All rights reserved.
+ *  See http://www.viz.media.kyoto-u.ac.jp/kvs/copyright/ for details.
+ *
+ *  $Id$
  */
 /*****************************************************************************/
 #include "LineIntegralConvolution.h"
@@ -32,7 +30,6 @@ LineIntegralConvolution::LineIntegralConvolution():
     m_length( 0.0 ),
     m_noise( NULL )
 {
-
 }
 
 /*===========================================================================*/

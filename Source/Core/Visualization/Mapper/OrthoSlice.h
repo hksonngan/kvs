@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file OrthoSlice.h
+ *  @file   OrthoSlice.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -29,8 +30,7 @@ namespace kvs
 /*==========================================================================*/
 class OrthoSlice : public kvs::SlicePlane
 {
-    kvsModuleName( kvs::OrthoSlice );
-    kvsModuleCategory( Mapper );
+    kvsModule( Mapper, kvs::OrthoSlice, kvs::SlicePlane );
     kvsModuleSuperClass( kvs::SlicePlane );
 
 public:

@@ -37,9 +37,8 @@ class UnstructuredVolumeObject;
 /*===========================================================================*/
 class StochasticMultipleTetrahedraRenderer : public kvs::StochasticRendererBase
 {
-    kvsModuleName( kvs::StochasticMultipleTetrahedraRenderer );
+    kvsModule( Renderer, kvs::StochasticMultipleTetrahedraRenderer, kvs::StochasticRendererBase );
     kvsModuleBaseClass( kvs::StochasticRendererBase );
-    kvsModuleCategory( Renderer );
 
     friend class StochasticMultipleTetrahedraCompositor;
 

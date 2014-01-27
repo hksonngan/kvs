@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file StructuredVolumeObject.cpp
+ *  @file   StructuredVolumeObject.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -34,42 +35,6 @@ const std::string GetGridTypeName( const kvs::StructuredVolumeObject::GridType t
 
 namespace kvs
 {
-
-/*===========================================================================*/
-/**
- *  @brief  Downcasts to the structured volume object.
- *  @param  object [in] pointer to the object base
- *  @return pointer to the structured volume object
- */
-/*===========================================================================*/
-kvs::StructuredVolumeObject* StructuredVolumeObject::DownCast( kvs::ObjectBase* object )
-{
-    kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
-    if ( !volume ) return NULL;
-
-    const kvs::VolumeObjectBase::VolumeType type = volume->volumeType();
-    if ( type != kvs::VolumeObjectBase::Structured )
-    {
-        kvsMessageError("Input object is not a structured volume object.");
-        return NULL;
-    }
-
-    kvs::StructuredVolumeObject* structured = static_cast<kvs::StructuredVolumeObject*>( volume );
-
-    return structured;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Downcasts to the structured volume object with 'const'.
- *  @param  object [in] pointer to the object base
- *  @return pointer to the structured volume object
- */
-/*===========================================================================*/
-const kvs::StructuredVolumeObject* StructuredVolumeObject::DownCast( const kvs::ObjectBase* object )
-{
-    return StructuredVolumeObject::DownCast( const_cast<kvs::ObjectBase*>( object ) );
-}
 
 /*==========================================================================*/
 /**

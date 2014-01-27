@@ -1,6 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   ExternalFaces.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -34,8 +35,7 @@ class TransferFunction;
 /*===========================================================================*/
 class ExternalFaces : public kvs::MapperBase, public kvs::PolygonObject
 {
-    kvsModuleName( kvs::ExternalFaces );
-    kvsModuleCategory( Mapper );
+    kvsModule( Mapper, kvs::ExternalFaces, kvs::MapperBase );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::PolygonObject );
 

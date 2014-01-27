@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file VolumeObjectBase.cpp
+ *  @file   VolumeObjectBase.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -16,39 +17,6 @@
 
 namespace kvs
 {
-
-/*===========================================================================*/
-/**
- *  @brief  Downcasts to the pointer to the volume object base.
- *  @param  object [in] pointer to the object base
- *  @return pointer to the volume object base
- */
-/*===========================================================================*/
-kvs::VolumeObjectBase* VolumeObjectBase::DownCast( kvs::ObjectBase* object )
-{
-    const kvs::ObjectBase::ObjectType type = object->objectType();
-    if ( type != kvs::ObjectBase::Volume )
-    {
-        kvsMessageError("Input object is not a volume object.");
-        return NULL;
-    }
-
-    kvs::VolumeObjectBase* volume = static_cast<kvs::VolumeObjectBase*>( object );
-
-    return volume;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Downcasts to the pointer to the volume object base with 'const'.
- *  @param  object [in] pointer to the object base
- *  @return pointer to the volume object base
- */
-/*===========================================================================*/
-const kvs::VolumeObjectBase* VolumeObjectBase::DownCast( const kvs::ObjectBase* object )
-{
-    return VolumeObjectBase::DownCast( const_cast<kvs::ObjectBase*>( object ) );
-}
 
 /*==========================================================================*/
 /**

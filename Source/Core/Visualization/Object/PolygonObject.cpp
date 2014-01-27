@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file PolygonObject.cpp
+ *  @file   PolygonObject.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -73,44 +74,9 @@ const std::string GetNormalTypeName( const kvs::PolygonObject::NormalType type )
 
 } // end of namespace
 
+
 namespace kvs
 {
-
-/*===========================================================================*/
-/**
- *  @brief  Downcasts the object base to the polygon object.
- *  @param  object [in] pointer to the object base
- *  @return pointer to the polygon object
- */
-/*===========================================================================*/
-kvs::PolygonObject* PolygonObject::DownCast( kvs::ObjectBase* object )
-{
-    kvs::GeometryObjectBase* geometry = kvs::GeometryObjectBase::DownCast( object );
-    if ( !geometry ) return NULL;
-
-    const kvs::GeometryObjectBase::GeometryType type = geometry->geometryType();
-    if ( type != kvs::GeometryObjectBase::Polygon )
-    {
-        kvsMessageError("Input object is not a polygon object.");
-        return NULL;
-    }
-
-    kvs::PolygonObject* polygon = static_cast<kvs::PolygonObject*>( geometry );
-
-    return polygon;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Downcasts the object base to the polygon object with 'const'.
- *  @param  object [in] pointer to the object base
- *  @return pointer to the polygon object
- */
-/*===========================================================================*/
-const kvs::PolygonObject* PolygonObject::DownCast( const kvs::ObjectBase* object )
-{
-    return PolygonObject::DownCast( const_cast<kvs::ObjectBase*>( object ) );
-}
 
 /*===========================================================================*/
 /**

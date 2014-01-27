@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file MarchingTetrahedraTable.cpp
+ *  @file   MarchingTetrahedraTable.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *

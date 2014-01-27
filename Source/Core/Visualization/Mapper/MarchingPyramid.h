@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file MarchingPyramid.h
+ *  @file   MarchingPyramid.h
+ *  @author Jun Nishimura, Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -30,8 +31,7 @@ namespace kvs
 /*==========================================================================*/
 class MarchingPyramid : public kvs::MapperBase, public kvs::PolygonObject
 {
-    kvsModuleName( kvs::MarchingPyramid );
-    kvsModuleCategory( Mapper );
+    kvsModule( Mapper, kvs::MarchingPyramid, kvs::MapperBase );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::PolygonObject );
 

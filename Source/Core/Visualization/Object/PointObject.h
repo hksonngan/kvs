@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file PointObject.h
+ *  @file   PointObject.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -38,18 +39,12 @@ class PolygonObject;
 /*==========================================================================*/
 class PointObject : public kvs::GeometryObjectBase
 {
-    kvsModuleName( kvs::PointObject );
-    kvsModuleCategory( Object );
+    kvsModule( Object, kvs::PointObject, kvs::GeometryObjectBase );
     kvsModuleBaseClass( kvs::GeometryObjectBase );
 
 private:
 
     kvs::ValueArray<kvs::Real32> m_sizes; ///< size array
-
-public:
-
-    static kvs::PointObject* DownCast( kvs::ObjectBase* object );
-    static const kvs::PointObject* DownCast( const kvs::ObjectBase* object );
 
 public:
 

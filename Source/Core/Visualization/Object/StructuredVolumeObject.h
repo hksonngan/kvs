@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file StructuredVolumeObject.h
+ *  @file   StructuredVolumeObject.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -31,19 +32,13 @@ namespace kvs
 /*==========================================================================*/
 class StructuredVolumeObject : public kvs::VolumeObjectBase
 {
-    kvsModuleName( kvs::StructuredVolumeObject );
-    kvsModuleCategory( Object );
+    kvsModule( Object, kvs::StructuredVolumeObject, kvs::VolumeObjectBase );
     kvsModuleBaseClass( kvs::VolumeObjectBase );
 
 private:
 
     GridType m_grid_type;  ///< Grid type.
     kvs::Vector3ui m_resolution; ///< Node resolution.
-
-public:
-
-    static kvs::StructuredVolumeObject* DownCast( kvs::ObjectBase* object );
-    static const kvs::StructuredVolumeObject* DownCast( const kvs::ObjectBase* object );
 
 public:
 

@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file CellByCellUniformSampling.cpp
+ *  @file   CellByCellUniformSampling.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *

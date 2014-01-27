@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file UnstructuredVolumeImporter.cpp
+ *  @file   UnstructuredVolumeImporter.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *

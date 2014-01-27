@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file PolygonObject.h
+ *  @file   PolygonObject.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -35,8 +36,7 @@ namespace kvs
 /*==========================================================================*/
 class PolygonObject : public kvs::GeometryObjectBase
 {
-    kvsModuleName( kvs::PolygonObject );
-    kvsModuleCategory( Object );
+    kvsModule( Object, kvs::PolygonObject, kvs::GeometryObjectBase );
     kvsModuleBaseClass( kvs::GeometryObjectBase );
 
 public:
@@ -74,8 +74,8 @@ private:
 
 public:
 
-    static kvs::PolygonObject* DownCast( kvs::ObjectBase* object );
-    static const kvs::PolygonObject* DownCast( const kvs::ObjectBase* object );
+//    static kvs::PolygonObject* DownCast( kvs::ObjectBase* object );
+//    static const kvs::PolygonObject* DownCast( const kvs::ObjectBase* object );
 
 public:
 

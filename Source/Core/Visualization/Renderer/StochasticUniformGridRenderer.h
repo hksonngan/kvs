@@ -38,9 +38,8 @@ class StructuredVolumeObject;
 /*===========================================================================*/
 class StochasticUniformGridRenderer : public kvs::StochasticRendererBase
 {
-    kvsModuleName( kvs::StochasticUniformGridRenderer );
+    kvsModule( Renderer, kvs::StochasticUniformGridRenderer, kvs::StochasticRendererBase );
     kvsModuleBaseClass( kvs::StochasticRendererBase );
-    kvsModuleCategory( Renderer );
 
 public:
 

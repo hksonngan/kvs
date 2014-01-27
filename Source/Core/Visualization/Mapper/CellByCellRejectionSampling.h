@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file CellByCellRejectionSampling.h
+ *  @file   CellByCellRejectionSampling.h
+ *  @author Takuma Kawamura, Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -35,8 +36,7 @@ namespace kvs
 /*===========================================================================*/
 class CellByCellRejectionSampling : public kvs::MapperBase, public kvs::PointObject
 {
-    kvsModuleName( kvs::CellByCellRejectionSampling );
-    kvsModuleCategory( Mapper );
+    kvsModule( Mapper, kvs::CellByCellRejectionSampling, kvs::MapperBase );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::PointObject );
 

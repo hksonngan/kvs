@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file StructuredVolumeImporter.h
+ *  @file   StructuredVolumeImporter.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -32,8 +33,7 @@ namespace kvs
 /*==========================================================================*/
 class StructuredVolumeImporter : public kvs::ImporterBase, public kvs::StructuredVolumeObject
 {
-    kvsModuleName( kvs::StructuredVolumeImporter );
-    kvsModuleCategory( Importer );
+    kvsModule( Importer, kvs::StructuredVolumeImporter, kvs::ImporterBase );
     kvsModuleBaseClass( kvs::ImporterBase );
     kvsModuleSuperClass( kvs::StructuredVolumeObject );
 

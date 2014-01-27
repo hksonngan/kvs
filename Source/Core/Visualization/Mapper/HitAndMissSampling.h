@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file HitAndMissSampling.h
+ *  @file   HitAndMissSampling.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -32,8 +33,7 @@ namespace kvs
 /*==========================================================================*/
 class HitAndMissSampling : public kvs::MapperBase, public kvs::PointObject
 {
-    kvsModuleName( kvs::HitAndMissSampling );
-    kvsModuleCategory( Mapper );
+    kvsModule( Mapper, kvs::HitAndMissSampling, kvs::MapperBase );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::PointObject );
 

@@ -1,6 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   ParticleBasedRendererRITS.h
+ *  @author Makoto Uemura, Satoshi Tanaka
  */
 /*----------------------------------------------------------------------------
  *
@@ -85,8 +86,7 @@ protected:
 /*===========================================================================*/
 class ParticleBasedRenderer : public kvs::VolumeRendererBase
 {
-    kvsModuleName( kvs::glsl::rits::ParticleBasedRenderer );
-    kvsModuleCategory( Renderer );
+    kvsModule( Renderer, kvs::glsl::rits::ParticleBasedRenderer, kvs::VolumeRendererBase );
     kvsModuleBaseClass( kvs::VolumeRendererBase );
 
 protected:

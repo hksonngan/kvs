@@ -35,8 +35,7 @@ class ParticleBasedRenderer : public kvs::VolumeRendererBase
 {
     friend class kvs::ParticleBufferCompositor;
 
-    kvsModuleName( kvs::cpu::ParticleBasedRenderer );
-    kvsModuleCategory( Renderer );
+    kvsModule( Renderer, kvs::ParticleBasedRenderer, kvs::VolumeRendererBase );
     kvsModuleBaseClass( kvs::VolumeRendererBase );
 
 protected:

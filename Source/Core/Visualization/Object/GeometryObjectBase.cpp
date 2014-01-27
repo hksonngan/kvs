@@ -21,39 +21,6 @@ namespace kvs
 
 /*===========================================================================*/
 /**
- *  @brief  Downcast to GeometryObjectBase.
- *  @param  object [in] pointer to the object base
- *  @return pointer to the geometry object base
- */
-/*===========================================================================*/
-kvs::GeometryObjectBase* GeometryObjectBase::DownCast( kvs::ObjectBase* object )
-{
-    const kvs::ObjectBase::ObjectType type = object->objectType();
-    if ( type != kvs::ObjectBase::Geometry )
-    {
-        kvsMessageError("Input object is not a geometry object.");
-        return NULL;
-    }
-
-    kvs::GeometryObjectBase* geometry = static_cast<kvs::GeometryObjectBase*>( object );
-
-    return geometry;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Downcast to GeometryObjectBase with 'const'.
- *  @param  object [in] pointer to the object base
- *  @return pointer to the geometry object base
- */
-/*===========================================================================*/
-const kvs::GeometryObjectBase* GeometryObjectBase::DownCast( const kvs::ObjectBase* object )
-{
-    return GeometryObjectBase::DownCast( const_cast<kvs::ObjectBase*>( object ) );
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Constructs a new GeometryObjectBase class.
  */
 /*===========================================================================*/

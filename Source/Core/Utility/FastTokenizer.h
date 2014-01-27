@@ -16,7 +16,6 @@
 #define KVS__FAST_TOKENIZER_H_INCLUDE
 
 #include <cstring>
-#include <kvs/ClassName>
 #include <kvs/Assert>
 
 
@@ -30,8 +29,6 @@ namespace kvs
 /*==========================================================================*/
 class FastTokenizer
 {
-    kvsClassName_without_virtual( kvs::FastTokenizer );
-
 private:
 
     enum { BufferSize = 256 };

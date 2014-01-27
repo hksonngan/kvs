@@ -16,7 +16,6 @@
 
 #include <limits>
 #if KVS_ENABLE_DEPRECATED
-#include <kvs/ClassName>
 #include <kvs/Endian>
 #endif
 
@@ -32,7 +31,6 @@ template<typename T>
 class Value
 {
 #if KVS_ENABLE_DEPRECATED
-    kvsClassName_without_virtual( kvs::Value );
 
 protected:
 

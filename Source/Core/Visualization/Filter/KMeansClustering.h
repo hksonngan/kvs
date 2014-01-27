@@ -30,8 +30,7 @@ namespace kvs
 /*===========================================================================*/
 class KMeansClustering : public kvs::FilterBase, public kvs::TableObject
 {
-    kvsModuleName( kvs::KMeansClustering );
-    kvsModuleCategory( Filter );
+    kvsModule( Filter, kvs::KMeansClustering, kvs::FilterBase );
     kvsModuleBaseClass( kvs::FilterBase );
     kvsModuleSuperClass( kvs::TableObject );
 

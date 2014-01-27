@@ -15,7 +15,6 @@
 #define KVS__REFERENCE_COUNTER_H_INCLUDE
 
 #include <cstddef>
-#include <kvs/ClassName>
 #if defined ( KVS_ENABLE_THREAD_SAFE )
 #include <kvs/Mutex>
 #endif
@@ -31,8 +30,6 @@ namespace kvs
 /*==========================================================================*/
 class ReferenceCounter
 {
-    kvsClassName_without_virtual( kvs::ReferenceCounter );
-
 private:
 
 #if defined ( KVS_ENABLE_THREAD_SAFE )

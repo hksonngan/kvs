@@ -29,8 +29,7 @@ namespace kvs
 /*==========================================================================*/
 class PolygonRenderer : public kvs::RendererBase
 {
-    kvsModuleName( kvs::PolygonRenderer );
-    kvsModuleCategory( Renderer );
+    kvsModule( Renderer, kvs::PolygonRenderer, kvs::RendererBase );
     kvsModuleBaseClass( kvs::RendererBase );
 
 protected:

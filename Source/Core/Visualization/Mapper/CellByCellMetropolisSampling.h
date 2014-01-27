@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file CellByCellMetropolisSampling.h
+ *  @file   CellByCellMetropolisSampling.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -34,8 +35,7 @@ namespace kvs
 /*===========================================================================*/
 class CellByCellMetropolisSampling : public kvs::MapperBase, public kvs::PointObject
 {
-    kvsModuleName( kvs::CellByCellMetropolisSampling );
-    kvsModuleCategory( Mapper );
+    kvsModule( Mapper, kvs::CellByCellMetropolisSampling, kvs::MapperBase );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::PointObject );
 

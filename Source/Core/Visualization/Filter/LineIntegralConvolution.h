@@ -1,18 +1,15 @@
-
 /*****************************************************************************/
 /**
- *  @file   line_integral_convolution.h
- *  @brief  LIC (Line Integral Convolution) filtering class.
- *
+ *  @file   LineIntegralConvolution.h
  *  @author Naohisa Sakamoto
- *  @date   2012/12/05 15:23:06
  */
 /*----------------------------------------------------------------------------
  *
- *  $Author: kawamura $
- *  $Date: 2009/01/15 12:52:12 $
- *  $Source: /home/Repository/viz-server2/cvsroot/KVS_RC1/Source/Core/Visualization/Filter/LineIntegralConvolution.h,v $
- *  $Revision: 1.2 $
+ *  Copyright (c) Visualization Laboratory, Kyoto University.
+ *  All rights reserved.
+ *  See http://www.viz.media.kyoto-u.ac.jp/kvs/copyright/ for details.
+ *
+ *  $Id$
  */
 /*****************************************************************************/
 #ifndef KVS__LINE_INTEGRAL_CONVOLUTION_H_INCLUDE
@@ -33,8 +30,7 @@ namespace kvs
 /*===========================================================================*/
 class LineIntegralConvolution : public kvs::FilterBase, public kvs::StructuredVolumeObject
 {
-    kvsModuleName( kvs::LineIntegralConvolution );
-    kvsModuleCategory( Filter );
+    kvsModule( Filter, kvs::LineIntegralConvolution, kvs::FilterBase );
     kvsModuleBaseClass( kvs::FilterBase );
     kvsModuleSuperClass( kvs::StructuredVolumeObject );
 

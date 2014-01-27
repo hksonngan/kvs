@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file UnstructuredVolumeObject.h
+ *  @file   UnstructuredVolumeObject.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -31,8 +32,7 @@ namespace kvs
 /*==========================================================================*/
 class UnstructuredVolumeObject : public kvs::VolumeObjectBase
 {
-    kvsModuleName( kvs::UnstructuredVolumeObject );
-    kvsModuleCategory( Object );
+    kvsModule( Object, kvs::UnstructuredVolumeObject, kvs::VolumeObjectBase );
     kvsModuleBaseClass( kvs::VolumeObjectBase );
 
 public:
@@ -45,11 +45,6 @@ private:
     size_t m_nnodes; ///< Number of nodes.
     size_t m_ncells; ///< Number of cells.
     Connections m_connections; ///< Connection ( Node ID ) array.
-
-public:
-
-    static kvs::UnstructuredVolumeObject* DownCast( kvs::ObjectBase* object );
-    static const kvs::UnstructuredVolumeObject* DownCast( const kvs::ObjectBase* object );
 
 public:
 

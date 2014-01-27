@@ -19,7 +19,6 @@
 #include <algorithm>
 #include <functional>
 #include <kvs/FileList>
-#include <kvs/ClassName>
 #include <kvs/Deprecated>
 
 
@@ -33,8 +32,6 @@ namespace kvs
 /*==========================================================================*/
 class Directory
 {
-    kvsClassName( kvs::Direcotry );
-
 private:
 
     std::string m_directory_path; ///< directory path (ex. "/tmp/abc/")

@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file LineImporter.h
+ *  @file   LineImporter.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -30,8 +31,7 @@ namespace kvs
 /*==========================================================================*/
 class LineImporter : public kvs::ImporterBase, public kvs::LineObject
 {
-    kvsModuleName( kvs::LineImporter );
-    kvsModuleCategory( Importer );
+    kvsModule( Importer, kvs::LineImporter, kvs::ImporterBase );
     kvsModuleBaseClass( kvs::ImporterBase );
     kvsModuleSuperClass( kvs::LineObject );
 

@@ -35,8 +35,7 @@ namespace kvs
 /*===========================================================================*/
 class ImageObject : public kvs::ObjectBase
 {
-    kvsModuleName( kvs::ImageObject );
-    kvsModuleCategory( Object );
+    kvsModule( Object, kvs::ImageObject, kvs::ObjectBase );
     kvsModuleBaseClass( kvs::ObjectBase );
 
 public:
@@ -55,11 +54,6 @@ private:
     size_t m_width; ///< image width
     size_t m_height; ///< image height
     kvs::ValueArray<kvs::UInt8> m_pixels; ///< pixel data
-
-public:
-
-    static kvs::ImageObject* DownCast( kvs::ObjectBase* object );
-    static const kvs::ImageObject* DownCast( const kvs::ObjectBase* object );
 
 public:
 

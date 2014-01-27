@@ -33,8 +33,7 @@ class Light;
 /*==========================================================================*/
 class PointRenderer : public kvs::RendererBase
 {
-    kvsModuleName( kvs::PointRenderer );
-    kvsModuleCategory( Renderer );
+    kvsModule( Renderer, kvs::PointRenderer, kvs::RendererBase );
     kvsModuleBaseClass( kvs::RendererBase );
 
 protected:

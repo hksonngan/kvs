@@ -34,8 +34,7 @@ namespace kvs
 /*===========================================================================*/
 class CellByCellLayeredSampling : public kvs::MapperBase, public kvs::PointObject
 {
-    kvsModuleName( kvs::CellByCellLayeredSampling );
-    kvsModuleCategory( Mapper );
+    kvsModule( Mapper, kvs::CellByCellLayeredSampling, kvs::MapperBase );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::PointObject );
 

@@ -1,8 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   QuadraticTetrahedralCell.h
- *  @author Naohisa Sakamoto
- *  @brief  Quadratic tetrahedral cell class.
+ *  @author Takuma Kawamura, Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *

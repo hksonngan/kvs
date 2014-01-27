@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file PolygonImporter.h
+ *  @file   PolygonImporter.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -32,8 +33,7 @@ namespace kvs
 /*==========================================================================*/
 class PolygonImporter : public kvs::ImporterBase, public kvs::PolygonObject
 {
-    kvsModuleName( kvs::PolygonImporter );
-    kvsModuleCategory( Importer );
+    kvsModule( Importer, kvs::PolygonImporter, kvs::ImporterBase );
     kvsModuleBaseClass( kvs::ImporterBase );
     kvsModuleSuperClass( kvs::PolygonObject );
 

@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file Isosurface.h
+ *  @file   Isosurface.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -30,8 +31,7 @@ namespace kvs
 /*==========================================================================*/
 class Isosurface : public kvs::MapperBase, public kvs::PolygonObject
 {
-    kvsModuleName( kvs::Isosurface );
-    kvsModuleCategory( Mapper );
+    kvsModule( Mapper, kvs::Isosurface, kvs::MapperBase );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::PolygonObject );
 

@@ -1,6 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   Tubeline.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -30,8 +31,7 @@ namespace kvs
 /*===========================================================================*/
 class Tubeline : public kvs::FilterBase, public kvs::PolygonObject
 {
-    kvsModuleName( kvs::Tubeline );
-    kvsModuleCategory( Filter );
+    kvsModule( Filter, kvs::Tubeline, kvs::FilterBase );
     kvsModuleBaseClass( kvs::FilterBase );
     kvsModuleSuperClass( kvs::PolygonObject );
 

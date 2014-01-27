@@ -1,8 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   HexahedralCell.cpp
- *  @author Takuma KAWAMURA
- *  @brief  Quadratic tetrahedral cell class.
+ *  @author Takuma Kawamura, Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *

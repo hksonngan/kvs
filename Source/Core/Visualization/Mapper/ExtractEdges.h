@@ -1,6 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   ExtractEdges.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -34,8 +35,7 @@ class TransferFunction;
 /*===========================================================================*/
 class ExtractEdges : public kvs::MapperBase, public kvs::LineObject
 {
-    kvsModuleName( kvs::ExtractEdges );
-    kvsModuleCategory( Mapper );
+    kvsModule( Mapper, kvs::ExtractEdges, kvs::MapperBase );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::LineObject );
 

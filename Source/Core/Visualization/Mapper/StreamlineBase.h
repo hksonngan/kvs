@@ -1,6 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   StreamlineBase.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -31,7 +32,7 @@ namespace kvs
 /*===========================================================================*/
 class StreamlineBase : public kvs::MapperBase, public kvs::LineObject
 {
-    kvsModuleName( kvs::StreamlineBase );
+    kvsModule( Mapper, kvs::StreamlineBase, kvs::MapperBase );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::LineObject );
 

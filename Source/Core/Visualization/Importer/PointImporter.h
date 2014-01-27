@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file PointImporter.h
+ *  @file   PointImporter.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -30,8 +31,7 @@ namespace kvs
 /*==========================================================================*/
 class PointImporter : public kvs::ImporterBase, public kvs::PointObject
 {
-    kvsModuleName( kvs::PointImporter );
-    kvsModuleCategory( Importer );
+    kvsModule( Importer, kvs::PointImporter, kvs::ImporterBase );
     kvsModuleBaseClass( kvs::ImporterBase );
     kvsModuleSuperClass( kvs::PointObject );
 

@@ -34,8 +34,7 @@ class Light;
 /*===========================================================================*/
 class ParallelCoordinatesRenderer : public kvs::RendererBase
 {
-    kvsModuleName( kvs::ParallelCoordinatesRenderer );
-    kvsModuleCategory( Renderer );
+    kvsModule( Renderer, kvs::ParallelCoordinatesRenderer, kvs::RendererBase );
     kvsModuleBaseClass( kvs::RendererBase );
 
 private:

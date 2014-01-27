@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file MarchingTetrahedra.h
+ *  @file   MarchingTetrahedra.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -30,8 +31,7 @@ namespace kvs
 /*==========================================================================*/
 class MarchingTetrahedra : public kvs::MapperBase, public kvs::PolygonObject
 {
-    kvsModuleName( kvs::MarchingTetrahedra );
-    kvsModuleCategory( Mapper );
+    kvsModule( Mapper, kvs::MarchingTetrahedra, kvs::MapperBase );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::PolygonObject );
 

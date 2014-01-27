@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file ImporterBase.h
+ *  @file   ImporterBase.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -29,8 +30,7 @@ namespace kvs
 /*==========================================================================*/
 class ImporterBase
 {
-    kvsModuleName( kvs::ImporterBase );
-    kvsModuleBase;
+    kvsModuleBase( kvs::ImporterBase );
 
 private:
 

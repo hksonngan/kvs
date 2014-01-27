@@ -1,6 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   Streamline.h
+ *  @author Yukio Yasuhara, Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -28,8 +29,7 @@ namespace kvs
 /*===========================================================================*/
 class Streamline : public kvs::StreamlineBase
 {
-    kvsModuleName( kvs::Streamline );
-    kvsModuleCategory( Mapper );
+    kvsModule( Mapper, kvs::Streamline, kvs::StreamlineBase );
     kvsModuleBaseClass( kvs::StreamlineBase );
 
 public:

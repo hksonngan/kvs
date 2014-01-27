@@ -18,7 +18,6 @@
 #include <string>
 #include <cstdio>
 #include <cstdarg>
-#include <kvs/ClassName>
 #include <kvs/Macro>
 #include <kvs/Platform>
 
@@ -81,8 +80,6 @@ namespace kvs
 /*==========================================================================*/
 class Message
 {
-    kvsClassName_without_virtual( kvs::Message );
-
 public:
 
     enum MessageType

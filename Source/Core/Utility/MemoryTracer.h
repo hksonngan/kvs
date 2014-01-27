@@ -18,7 +18,6 @@
 #include <map>
 #include <ostream>
 #include <kvs/Platform>
-#include <kvs/ClassName>
 
 
 #if defined ( KVS_ENABLE_MEM_DEBUG )
@@ -44,8 +43,6 @@ namespace kvs
 /*===========================================================================*/
 class MemoryTracer
 {
-    kvsClassName( kvs::MemoryTracer );
-
 public:
 
     class Lock;

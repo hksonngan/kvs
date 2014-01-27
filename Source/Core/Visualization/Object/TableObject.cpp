@@ -22,39 +22,6 @@ namespace kvs
 
 /*===========================================================================*/
 /**
- *  @brief  Downcasts to the table object from the object base.
- *  @param  object [in] point to the object base
- *  @return pointer to the table object
- */
-/*===========================================================================*/
-kvs::TableObject* TableObject::DownCast( kvs::ObjectBase* object )
-{
-    const kvs::ObjectBase::ObjectType type = object->objectType();
-    if ( type != kvs::ObjectBase::Table )
-    {
-        kvsMessageError("Input object is not table object.");
-        return NULL;
-    }
-
-    kvs::TableObject* table = static_cast<kvs::TableObject*>( object );
-
-    return table;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Downcasts to the table object from the object base with 'const'.
- *  @param  object [in] point to the object base
- *  @return pointer to the table object
- */
-/*===========================================================================*/
-const kvs::TableObject* TableObject::DownCast( const kvs::ObjectBase* object )
-{
-    return TableObject::DownCast( const_cast<kvs::ObjectBase*>( object ) );
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Constructs a new TableObject class.
  */
 /*===========================================================================*/

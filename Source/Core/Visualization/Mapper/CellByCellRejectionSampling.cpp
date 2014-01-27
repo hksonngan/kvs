@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file CellByCellRejectionSampling.cpp
+ *  @file   CellByCellRejectionSampling.cpp
+ *  @author Takum Kawamura, Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *

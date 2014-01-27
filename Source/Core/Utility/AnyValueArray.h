@@ -23,7 +23,6 @@
 #include <kvs/Type>
 #include <kvs/SharedPointer>
 #include <kvs/ValueArray>
-#include <kvs/ClassName>
 #if KVS_ENABLE_DEPRECATED
 #include <kvs/Endian>
 #include <kvs/String>
@@ -298,8 +297,6 @@ public:
 /*==========================================================================*/
 class AnyValueArray
 {
-    kvsClassName_without_virtual( kvs::AnyValueArray );
-
 public:
     typedef kvs::temporal::TypeInfo TypeInfo;
     typedef kvs::detail::AnyValueArrayElement value_type;

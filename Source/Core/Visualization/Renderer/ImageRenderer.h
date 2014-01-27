@@ -35,8 +35,7 @@ class Light;
 /*==========================================================================*/
 class ImageRenderer : public kvs::RendererBase
 {
-    kvsModuleName( kvs::ImageRenderer );
-    kvsModuleCategory( Renderer );
+    kvsModule( Renderer, kvs::ImageRenderer, kvs::RendererBase );
     kvsModuleBaseClass( kvs::RendererBase );
 
 public:

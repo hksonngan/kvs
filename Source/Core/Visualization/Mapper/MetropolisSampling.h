@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file MetropolisSampling.h
+ *  @file   MetropolisSampling.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -32,8 +33,7 @@ namespace kvs
 /*==========================================================================*/
 class MetropolisSampling : public MapperBase, public PointObject
 {
-    kvsModuleName( kvs::MetropolisSampling );
-    kvsModuleCategory( Mapper );
+    kvsModule( Mapper, kvs::MetropolisSampling, kvs::MapperBase );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::PointObject );
 

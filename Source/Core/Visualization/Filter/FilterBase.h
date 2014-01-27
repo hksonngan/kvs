@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file FilterBase.h
+ *  @file   FilterBase.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -28,8 +29,7 @@ namespace kvs
 /*==========================================================================*/
 class FilterBase
 {
-    kvsModuleName( kvs::FilterBase );
-    kvsModuleBase;
+    kvsModuleBase( kvs::FilterBase );
 
 private:
 

@@ -35,8 +35,7 @@ class LineObject;
 /*==========================================================================*/
 class Bounds : public kvs::RendererBase
 {
-    kvsModuleName( kvstest::Bounds );
-    kvsModuleCategory( Renderer );
+    kvsModule( Renderer, kvs::Bounds, kvs::RendererBase );
     kvsModuleBaseClass( kvs::RendererBase );
 
 public:

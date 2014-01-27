@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file SlicePlane.h
+ *  @file   SlicePlane.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -34,8 +35,7 @@ namespace kvs
 /*==========================================================================*/
 class SlicePlane : public kvs::MapperBase, public kvs::PolygonObject
 {
-    kvsModuleName( kvs::SlicePlane );
-    kvsModuleCategory( Mapper );
+    kvsModule( Mapper, kvs::SlicePlane, kvs::MapperBase );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::PolygonObject );
 

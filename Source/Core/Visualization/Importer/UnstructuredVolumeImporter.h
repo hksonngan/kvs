@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file UnstructuredVolumeImporter.h
+ *  @file   UnstructuredVolumeImporter.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -32,8 +33,7 @@ namespace kvs
 /*==========================================================================*/
 class UnstructuredVolumeImporter : public kvs::ImporterBase, public kvs::UnstructuredVolumeObject
 {
-    kvsModuleName( kvs::UnstructuredVolumeImporter );
-    kvsModuleCategory( Importer );
+    kvsModule( Importer, kvs::UnstructuredVolumeImporter, kvs::ImporterBase );
     kvsModuleBaseClass( kvs::ImporterBase );
     kvsModuleSuperClass( kvs::UnstructuredVolumeObject );
 

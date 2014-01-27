@@ -33,7 +33,6 @@
 #endif
 #include <kvs/Type>
 #include <kvs/Message>
-#include <kvs/ClassName>
 #include <kvs/IgnoreUnusedVariable>
 
 /* Hight precision CPU counter using RDTCS or QPC. It becomes possible to use

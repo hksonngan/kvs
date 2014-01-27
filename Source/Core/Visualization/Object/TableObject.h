@@ -36,8 +36,7 @@ namespace kvs
 /*===========================================================================*/
 class TableObject : public kvs::ObjectBase
 {
-    kvsModuleName( kvs::TableObject );
-    kvsModuleCategory( Object );
+    kvsModule( Object, kvs::TableObject, kvs::ObjectBase );
     kvsModuleBaseClass( kvs::ObjectBase );
 
 public:
@@ -58,11 +57,6 @@ private:
     Values m_min_ranges; ///< min. value range
     Values m_max_ranges; ///< max. value range
     InsideRangeFlags m_inside_range_flags; ///< check flags for value range
-
-public:
-
-    static kvs::TableObject* DownCast( kvs::ObjectBase* object );
-    static const kvs::TableObject* DownCast( const kvs::ObjectBase* object );
 
 public:
 

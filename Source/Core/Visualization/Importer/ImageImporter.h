@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file ImageImporter.h
+ *  @file   ImageImporter.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -37,8 +38,7 @@ namespace kvs
 /*==========================================================================*/
 class ImageImporter : public kvs::ImporterBase, public kvs::ImageObject
 {
-    kvsModuleName( kvs::ImageImporter );
-    kvsModuleCategory( Importer );
+    kvsModule( Importer, kvs::ImageImporter, kvs::ImporterBase );
     kvsModuleBaseClass( kvs::ImporterBase );
     kvsModuleSuperClass( kvs::ImageObject );
 

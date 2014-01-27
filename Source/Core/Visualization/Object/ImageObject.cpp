@@ -46,39 +46,6 @@ namespace kvs
 
 /*===========================================================================*/
 /**
- *  @brief  Downcasts to the image object.
- *  @param  object [in] pointer to the object base
- *  @return pointer to the image object
- */
-/*===========================================================================*/
-kvs::ImageObject* ImageObject::DownCast( kvs::ObjectBase* object )
-{
-    const kvs::ObjectBase::ObjectType type = object->objectType();
-    if ( type != kvs::ObjectBase::Image )
-    {
-        kvsMessageError("Input object is not an image object.");
-        return NULL;
-    }
-
-    kvs::ImageObject* image = static_cast<kvs::ImageObject*>( object );
-
-    return image;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Downcasts to the image object with 'const'.
- *  @param  object [in] pointer to the object base
- *  @return pointer to the image object
- */
-/*===========================================================================*/
-const kvs::ImageObject* ImageObject::DownCast( const kvs::ObjectBase* object )
-{
-    return ImageObject::DownCast( const_cast<kvs::ObjectBase*>( object ) );
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Constructs a new ImageObject class.
  */
 /*===========================================================================*/

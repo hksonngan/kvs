@@ -31,8 +31,7 @@ namespace kvs
 /*===========================================================================*/
 class StructuredVectorToScalar : public kvs::FilterBase, public kvs::StructuredVolumeObject
 {
-    kvsModuleName( kvs::StructuredVectorToScalar );
-    kvsModuleCategory( Filter );
+    kvsModule( Filter, kvs::StructuredVectorToScalar, kvs::FilterBase );
     kvsModuleBaseClass( kvs::FilterBase );
     kvsModuleSuperClass( kvs::StructuredVolumeObject );
 

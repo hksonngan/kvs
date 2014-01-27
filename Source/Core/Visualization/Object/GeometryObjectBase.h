@@ -36,7 +36,7 @@ namespace kvs
 /*===========================================================================*/
 class GeometryObjectBase : public kvs::ObjectBase
 {
-    kvsModuleName( kvs::GeometryObjectBase );
+    kvsModule( Object, kvs::GeometryObjectBase, kvs::ObjectBase );
 
 public:
 
@@ -54,11 +54,6 @@ private:
     kvs::ValueArray<kvs::Real32> m_coords; ///< vertex array
     kvs::ValueArray<kvs::UInt8> m_colors; ///< color(r,g,b) array
     kvs::ValueArray<kvs::Real32> m_normals; ///< normal array
-
-public:
-
-    static kvs::GeometryObjectBase* DownCast( kvs::ObjectBase* object );
-    static const kvs::GeometryObjectBase* DownCast( const kvs::ObjectBase* object );
 
 public:
 

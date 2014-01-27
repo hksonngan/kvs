@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file UnstructuredVolumeObject.cpp
+ *  @file   UnstructuredVolumeObject.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -42,42 +43,6 @@ const std::string GetCellTypeName( const kvs::UnstructuredVolumeObject::CellType
 
 namespace kvs
 {
-
-/*===========================================================================*/
-/**
- *  @brief  Downcasts to the unstructured volume object from the object base.
- *  @param  object [in] pointer to the object base
- *  @return pointer to the unstructured volume object
- */
-/*===========================================================================*/
-kvs::UnstructuredVolumeObject* UnstructuredVolumeObject::DownCast( kvs::ObjectBase* object )
-{
-    kvs::VolumeObjectBase* volume = kvs::VolumeObjectBase::DownCast( object );
-    if ( !volume ) return NULL;
-
-    const kvs::VolumeObjectBase::VolumeType type = volume->volumeType();
-    if ( type != kvs::VolumeObjectBase::Unstructured )
-    {
-        kvsMessageError("Input object is not a unstructured volume object.");
-        return NULL;
-    }
-
-    kvs::UnstructuredVolumeObject* unstructured = static_cast<kvs::UnstructuredVolumeObject*>( volume );
-
-    return unstructured;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Downcasts to the unstructured volume object from the object base with 'const'.
- *  @param  object [in] pointer to the object base
- *  @return pointer to the unstructured volume object
- */
-/*===========================================================================*/
-const kvs::UnstructuredVolumeObject* UnstructuredVolumeObject::DownCast( const kvs::ObjectBase* object )
-{
-    return UnstructuredVolumeObject::DownCast( const_cast<kvs::ObjectBase*>( object ) );
-}
 
 /*==========================================================================*/
 /**
