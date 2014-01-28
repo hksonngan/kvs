@@ -15,6 +15,7 @@
 #ifndef KVS__STOCHASTIC_RENDERING_COMPOSITOR_H_INCLUDE
 #define KVS__STOCHASTIC_RENDERING_COMPOSITOR_H_INCLUDE
 
+#include <kvs/Timer>
 #include <kvs/PaintEventListener>
 #include <kvs/Matrix44>
 #include <kvs/Vector3>
@@ -36,6 +37,7 @@ class StochasticRenderingCompositor : public kvs::PaintEventListener
 {
 private:
 
+    kvs::Timer m_timer;
     kvs::Scene* m_scene; ///< pointer to the scene
     size_t m_width; ///< window width
     size_t m_height; ///< window height
@@ -52,6 +54,7 @@ public:
 
     StochasticRenderingCompositor( kvs::Scene* scene );
 
+    const kvs::Timer& timer() const { return m_timer; }
     size_t repetitionLevel() const { return m_repetition_level; }
     bool isEnabledLODControl() const { return m_enable_lod; }
     bool isEnabledRefinement() const { return m_enable_refinement; }

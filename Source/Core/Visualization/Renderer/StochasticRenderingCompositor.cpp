@@ -76,8 +76,6 @@ void StochasticRenderingCompositor::update()
             m_scene->updateGLModelingMatrix();
         }
     }
-
-    kvs::OpenGL::Flush();
 }
 
 /*===========================================================================*/
@@ -87,6 +85,7 @@ void StochasticRenderingCompositor::update()
 /*===========================================================================*/
 void StochasticRenderingCompositor::draw()
 {
+    m_timer.start();
     kvs::OpenGL::WithPushedAttrib p( GL_ALL_ATTRIB_BITS );
 
     this->check_window_created();
@@ -126,10 +125,13 @@ void StochasticRenderingCompositor::draw()
         m_ensemble_buffer.add();
     }
 
-    KVS_GL_CALL( glBindFramebuffer( GL_DRAW_FRAMEBUFFER, 0 ) );
-    kvs::OpenGL::SetDrawBuffer( GL_BACK );
+//    KVS_GL_CALL( glBindFramebuffer( GL_DRAW_FRAMEBUFFER, 0 ) );
+//    kvs::OpenGL::SetDrawBuffer( GL_BACK );
 
     m_ensemble_buffer.draw();
+
+    kvs::OpenGL::Finish();
+    m_timer.stop();
 }
 
 /*===========================================================================*/
@@ -191,7 +193,7 @@ void StochasticRenderingCompositor::check_object_changed()
         kvs::IDManager::IDPair id = m_scene->IDManager()->id( i );
         kvs::ObjectBase* object = m_scene->objectManager()->object( id.first );
         kvs::RendererBase* renderer = m_scene->rendererManager()->renderer( id.second );
-        if ( Renderer* stochastic_renderer = dynamic_cast<Renderer*>( renderer ) )
+        if ( Renderer* stochastic_renderer = Renderer::DownCast( renderer ) )
         {
             const bool object_changed = stochastic_renderer->engine().object() != object;
             if ( object_changed )
@@ -241,7 +243,7 @@ void StochasticRenderingCompositor::engines_create()
         kvs::IDManager::IDPair id = m_scene->IDManager()->id( i );
         kvs::ObjectBase* object = m_scene->objectManager()->object( id.first );
         kvs::RendererBase* renderer = m_scene->rendererManager()->renderer( id.second );
-        if ( Renderer* stochastic_renderer = dynamic_cast<Renderer*>( renderer ) )
+        if ( Renderer* stochastic_renderer = Renderer::DownCast( renderer ) )
         {
             stochastic_renderer->engine().setDepthTexture( m_ensemble_buffer.currentDepthTexture() );
             stochastic_renderer->engine().setShader( &stochastic_renderer->shader() );
@@ -274,7 +276,7 @@ void StochasticRenderingCompositor::engines_update()
         kvs::IDManager::IDPair id = m_scene->IDManager()->id( i );
         kvs::ObjectBase* object = m_scene->objectManager()->object( id.first );
         kvs::RendererBase* renderer = m_scene->rendererManager()->renderer( id.second );
-        if ( Renderer* stochastic_renderer = dynamic_cast<Renderer*>( renderer ) )
+        if ( Renderer* stochastic_renderer = Renderer::DownCast( renderer ) )
         {
             kvs::OpenGL::PushMatrix();
             m_scene->updateGLModelingMatrix( object );
@@ -303,7 +305,7 @@ void StochasticRenderingCompositor::engines_setup()
         kvs::IDManager::IDPair id = m_scene->IDManager()->id( i );
         kvs::ObjectBase* object = m_scene->objectManager()->object( id.first );
         kvs::RendererBase* renderer = m_scene->rendererManager()->renderer( id.second );
-        if ( Renderer* stochastic_renderer = dynamic_cast<Renderer*>( renderer ) )
+        if ( Renderer* stochastic_renderer = Renderer::DownCast( renderer ) )
         {
             kvs::OpenGL::PushMatrix();
             m_scene->updateGLModelingMatrix( object );
@@ -332,7 +334,7 @@ void StochasticRenderingCompositor::engines_draw()
         kvs::IDManager::IDPair id = m_scene->IDManager()->id( i );
         kvs::ObjectBase* object = m_scene->objectManager()->object( id.first );
         kvs::RendererBase* renderer = m_scene->rendererManager()->renderer( id.second );
-        if ( Renderer* stochastic_renderer = dynamic_cast<Renderer*>( renderer ) )
+        if ( Renderer* stochastic_renderer = Renderer::DownCast( renderer ) )
         {
             if ( object->isShown() )
             {

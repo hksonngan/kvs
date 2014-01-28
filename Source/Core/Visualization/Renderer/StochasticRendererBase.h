@@ -18,6 +18,7 @@
 #include <kvs/RendererBase>
 #include <kvs/Shader>
 #include <kvs/Matrix44>
+#include <kvs/Module>
 #include "EnsembleAverageBuffer.h"
 #include "StochasticRenderingEngine.h"
 
@@ -36,6 +37,8 @@ class Light;
 /*===========================================================================*/
 class StochasticRendererBase : public kvs::RendererBase
 {
+    kvsModule( Renderer, kvs::StochasticRendererBase, kvs::RendererBase );
+
     friend class StochasticRenderingCompositor;
 
 private:

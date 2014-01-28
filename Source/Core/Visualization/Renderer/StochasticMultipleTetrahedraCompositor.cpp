@@ -193,7 +193,7 @@ void StochasticMultipleTetrahedraCompositor::check_object_changed()
         kvs::IDManager::IDPair id = m_scene->IDManager()->id( i );
         kvs::ObjectBase* object = m_scene->objectManager()->object( id.first );
         kvs::RendererBase* renderer = m_scene->rendererManager()->renderer( id.second );
-        if ( dynamic_cast<Renderer*>( renderer ) )
+        if ( Renderer::DownCast( renderer ) )
         {
             // Drawing object.
             objects[ counter++ ] = object;
@@ -255,7 +255,7 @@ void StochasticMultipleTetrahedraCompositor::engine_create()
         kvs::IDManager::IDPair id = m_scene->IDManager()->id( i );
         kvs::ObjectBase* object = m_scene->objectManager()->object( id.first );
         kvs::RendererBase* renderer = m_scene->rendererManager()->renderer( id.second );
-        if ( Renderer* stochastic_renderer = dynamic_cast<Renderer*>( renderer ) )
+        if ( Renderer* stochastic_renderer = Renderer::DownCast( renderer ) )
         {
             // Copy the pointer to the renderer used for drawing the objects.
             if ( counter == 0 )

@@ -62,7 +62,7 @@ StochasticRendererBase::~StochasticRendererBase()
 void StochasticRendererBase::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light )
 {
     startTimer();
-    kvs::OpenGL::WithPushedAttrib p(  GL_ALL_ATTRIB_BITS );
+    kvs::OpenGL::WithPushedAttrib p( GL_ALL_ATTRIB_BITS );
 
     const size_t width = camera->windowWidth();
     const size_t height = camera->windowHeight();
