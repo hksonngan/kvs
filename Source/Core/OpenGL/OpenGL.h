@@ -96,9 +96,7 @@ void SetPerspective( GLdouble fovy, GLdouble aspect, GLdouble near, GLdouble far
 void SetFrustum( GLdouble left, GLdouble right, GLdouble bottom, GLdouble top, GLdouble near, GLdouble far );
 
 void SetLight( GLenum light, GLenum pname, GLfloat param );
-void SetLight( GLenum light, GLenum pname, GLfixed param );
 void SetLight( GLenum light, GLenum pname, GLfloat* params );
-void SetLight( GLenum light, GLenum pname, GLfixed* params );
 
 void ReadPixels( GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLvoid* data );
 void DrawPixels( GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid* data );
