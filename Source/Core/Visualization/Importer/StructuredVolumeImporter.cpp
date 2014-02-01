@@ -305,7 +305,7 @@ void StructuredVolumeImporter::import( const kvs::DicomList* dicom_list )
     const size_t z_size = dicom_list->nslices();
     const float x_ratio = dicom_list->pixelSpacing()[0];
     const float y_ratio = dicom_list->pixelSpacing()[1];
-    const float z_ratio = kvs::Math::IsZero( spacing ) ? thickness : spacing;
+    const float z_ratio = kvs::Math::IsZero( spacing ) ? kvs::Math::IsZero( thickness ) ? x_ratio : thickness : spacing;
 
     const kvs::Vector3f min_obj_coord( 0.0f, 0.0f, 0.0f );
     const kvs::Vector3f max_obj_coord( x_size - 1.0f, y_size - 1.0f, z_size - 1.0f );
