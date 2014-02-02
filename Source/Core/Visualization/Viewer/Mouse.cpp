@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file Mouse.cpp
+ *  @file   Mouse.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -29,7 +30,7 @@ float Mouse::WheelDownValue = 0.95f;
 /*==========================================================================*/
 Mouse::Mouse( AutoMode auto_flg ) :
     m_mode( Mouse::Rotation ),
-    m_scaling_type( ScalingXYZ ),
+    m_scaling_type( Trackball::ScalingXYZ ),
     m_old( Vector2i(0,0) ),
     m_new( Vector2i(0,0) ),
     m_start( Vector2i(0,0) ),
@@ -57,9 +58,9 @@ Mouse::~Mouse()
 /*==========================================================================*/
 void Mouse::reset()
 {
-    kvs::Trackball::reset();
+    m_trackball.reset();
     m_mode         = kvs::Mouse::Rotation;
-    m_scaling_type = kvs::Trackball::ScalingXYZ;
+    m_scaling_type = Trackball::ScalingXYZ;
     m_old          = kvs::Vector2i(0,0);
     m_new          = kvs::Vector2i(0,0);
     m_start        = kvs::Vector2i(0,0);
@@ -97,16 +98,16 @@ void Mouse::move( const int x, const int y )
 {
     m_new = kvs::Vector2i( x, y );
 
-    switch( m_mode )
+    switch ( m_mode )
     {
     case Mouse::Scaling:
-        scale( m_old, m_new, m_scaling_type );
+        m_trackball.scale( m_old, m_new, m_scaling_type );
         break;
     case Mouse::Rotation:
-        rotate( m_old, m_new );
+        m_trackball.rotate( m_old, m_new );
         break;
     case Mouse::Translation:
-        translate( m_old, m_new );
+        m_trackball.translate( m_old, m_new );
         break;
     default:
         break;
@@ -126,19 +127,19 @@ void Mouse::wheel( const float value )
 {
     kvs::Vector3f scale( 1.0f, 1.0f, 1.0f );
 
-    switch( scalingType() )
+    switch ( scalingType() )
     {
-    case ScalingXYZ: scale     *= value; break;
-    case ScalingX:   scale.x() *= value; break;
-    case ScalingY:   scale.y() *= value; break;
-    case ScalingZ:   scale.z() *= value; break;
-    case ScalingXY:  scale.x() *= value; scale.y() *= value; break;
-    case ScalingYZ:  scale.y() *= value; scale.z() *= value; break;
-    case ScalingZX:  scale.z() *= value; scale.x() *= value; break;
+    case Trackball::ScalingXYZ: scale     *= value; break;
+    case Trackball::ScalingX:   scale.x() *= value; break;
+    case Trackball::ScalingY:   scale.y() *= value; break;
+    case Trackball::ScalingZ:   scale.z() *= value; break;
+    case Trackball::ScalingXY:  scale.x() *= value; scale.y() *= value; break;
+    case Trackball::ScalingYZ:  scale.y() *= value; scale.z() *= value; break;
+    case Trackball::ScalingZX:  scale.z() *= value; scale.x() *= value; break;
     default: break;
     }
 
-    BaseClass::setScaling( scale );
+    m_trackball.setScaling( scale );
 
     m_old = m_new;
 }
@@ -178,186 +179,188 @@ void Mouse::release( const int x, const int y )
 /*==========================================================================*/
 bool Mouse::idle()
 {
-    if( !( m_is_use_auto && m_is_auto ) ) return( false );
+    if ( !( m_is_use_auto && m_is_auto ) ) return( false );
 
-    if( m_is_slow )
+    if ( m_is_slow )
     {
-        switch( m_mode )
+        switch ( m_mode )
         {
         case Mouse::Scaling:
         {
+            kvs::Vec3 scaling = m_trackball.scaling();
+
             const float big_scale   = 1.0003f;
             const float small_scale = 0.9997f;
-            switch( scalingType() )
+            switch ( scalingType() )
             {
 
-            case ScalingXYZ:
+            case Trackball::ScalingXYZ:
             {
-                if( BaseClass::m_scaling.x() < 1.0f )
+                if ( scaling.x() < 1.0f )
                 {
-                    BaseClass::m_scaling *= big_scale;
-                    if( BaseClass::m_scaling.x() > 1.0f )
+                    scaling *= big_scale;
+                    if ( scaling.x() > 1.0f )
                     {
-                        BaseClass::m_scaling = kvs::Vector3f::All( 1.0f );
+                        scaling = kvs::Vector3f::All( 1.0f );
                         m_is_slow = false;
                     }
                 }
-                else if( BaseClass::m_scaling.x() > 1.0f )
+                else if ( scaling.x() > 1.0f )
                 {
-                    BaseClass::m_scaling *= small_scale;
-                    if( BaseClass::m_scaling.x() < 1.0f )
+                    scaling *= small_scale;
+                    if ( scaling.x() < 1.0f )
                     {
-                        BaseClass::m_scaling = kvs::Vector3f::All( 1.0f );
+                        scaling = kvs::Vector3f::All( 1.0f );
                         m_is_slow = false;
                     }
                 }
                 break;
             }
 
-            case ScalingX:
+            case Trackball::ScalingX:
             {
-                if( BaseClass::m_scaling.x() < 1.0f )
+                if ( scaling.x() < 1.0f )
                 {
-                    BaseClass::m_scaling.x() *= big_scale;
-                    if( BaseClass::m_scaling.x() > 1.0f )
+                    scaling.x() *= big_scale;
+                    if ( scaling.x() > 1.0f )
                     {
-                        BaseClass::m_scaling.x() = 1.0f;
+                        scaling.x() = 1.0f;
                         m_is_slow = false;
                     }
                 }
-                else if( BaseClass::m_scaling.x() > 1.0f )
+                else if ( scaling.x() > 1.0f )
                 {
-                    BaseClass::m_scaling.x() *= small_scale;
-                    if( BaseClass::m_scaling.x() < 1.0f )
+                    scaling.x() *= small_scale;
+                    if ( scaling.x() < 1.0f )
                     {
-                        BaseClass::m_scaling.x() = 1.0f;
+                        scaling.x() = 1.0f;
                         m_is_slow = false;
                     }
                 }
                 break;
             }
 
-            case ScalingY:
+            case Trackball::ScalingY:
             {
-                if( BaseClass::m_scaling.y() < 1.0f )
+                if ( scaling.y() < 1.0f )
                 {
-                    BaseClass::m_scaling.y() *= big_scale;
-                    if( BaseClass::m_scaling.y() > 1.0f )
+                    scaling.y() *= big_scale;
+                    if ( scaling.y() > 1.0f )
                     {
-                        BaseClass::m_scaling.y() = 1.0f;
+                        scaling.y() = 1.0f;
                         m_is_slow = false;
                     }
                 }
-                else if( BaseClass::m_scaling.y() > 1.0f )
+                else if ( scaling.y() > 1.0f )
                 {
-                    BaseClass::m_scaling.y() *= small_scale;
-                    if( BaseClass::m_scaling.y() < 1.0f )
+                    scaling.y() *= small_scale;
+                    if ( scaling.y() < 1.0f )
                     {
-                        BaseClass::m_scaling.y() = 1.0f;
+                        scaling.y() = 1.0f;
                         m_is_slow = false;
                     }
                 }
                 break;
             }
 
-            case ScalingZ:
+            case Trackball::ScalingZ:
             {
-                if( BaseClass::m_scaling.z() < 1.0f )
+                if ( scaling.z() < 1.0f )
                 {
-                    BaseClass::m_scaling.z() *= big_scale;
-                    if( BaseClass::m_scaling.z() > 1.0f )
+                    scaling.z() *= big_scale;
+                    if ( scaling.z() > 1.0f )
                     {
-                        BaseClass::m_scaling.z() = 1.0f;
+                        scaling.z() = 1.0f;
                         m_is_slow = false;
                     }
                 }
-                else if( BaseClass::m_scaling.z() > 1.0f )
+                else if ( scaling.z() > 1.0f )
                 {
-                    BaseClass::m_scaling.z() *= small_scale;
-                    if( BaseClass::m_scaling.z() < 1.0f )
+                    scaling.z() *= small_scale;
+                    if ( scaling.z() < 1.0f )
                     {
-                        BaseClass::m_scaling.z() = 1.0f;
+                        scaling.z() = 1.0f;
                         m_is_slow = false;
                     }
                 }
                 break;
             }
 
-            case ScalingXY:
+            case Trackball::ScalingXY:
             {
-                if( BaseClass::m_scaling.x() < 1.0f )
+                if ( scaling.x() < 1.0f )
                 {
-                    BaseClass::m_scaling.x() *= big_scale;
-                    BaseClass::m_scaling.y() *= big_scale;
-                    if( BaseClass::m_scaling.x() > 1.0f )
+                    scaling.x() *= big_scale;
+                    scaling.y() *= big_scale;
+                    if ( scaling.x() > 1.0f )
                     {
-                        BaseClass::m_scaling.x() = 1.0f;
-                        BaseClass::m_scaling.y() = 1.0f;
+                        scaling.x() = 1.0f;
+                        scaling.y() = 1.0f;
                         m_is_slow = false;
                     }
                 }
-                else if( BaseClass::m_scaling.x() > 1.0f )
+                else if ( scaling.x() > 1.0f )
                 {
-                    BaseClass::m_scaling.x() *= small_scale;
-                    BaseClass::m_scaling.y() *= small_scale;
-                    if( BaseClass::m_scaling.x() < 1.0f )
+                    scaling.x() *= small_scale;
+                    scaling.y() *= small_scale;
+                    if ( scaling.x() < 1.0f )
                     {
-                        BaseClass::m_scaling.x() = 1.0f;
-                        BaseClass::m_scaling.y() = 1.0f;
+                        scaling.x() = 1.0f;
+                        scaling.y() = 1.0f;
                         m_is_slow = false;
                     }
                 }
                 break;
             }
 
-            case ScalingYZ:
+            case Trackball::ScalingYZ:
             {
-                if( BaseClass::m_scaling.y() < 1.0f )
+                if ( scaling.y() < 1.0f )
                 {
-                    BaseClass::m_scaling.y() *= big_scale;
-                    BaseClass::m_scaling.z() *= big_scale;
-                    if( BaseClass::m_scaling.y() > 1.0f )
+                    scaling.y() *= big_scale;
+                    scaling.z() *= big_scale;
+                    if ( scaling.y() > 1.0f )
                     {
-                        BaseClass::m_scaling.y() = 1.0f;
-                        BaseClass::m_scaling.z() = 1.0f;
+                        scaling.y() = 1.0f;
+                        scaling.z() = 1.0f;
                         m_is_slow = false;
                     }
                 }
-                else if( BaseClass::m_scaling.y() > 1.0f )
+                else if ( scaling.y() > 1.0f )
                 {
-                    BaseClass::m_scaling.y() *= small_scale;
-                    BaseClass::m_scaling.z() *= small_scale;
-                    if( BaseClass::m_scaling.y() < 1.0f )
+                    scaling.y() *= small_scale;
+                    scaling.z() *= small_scale;
+                    if ( scaling.y() < 1.0f )
                     {
-                        BaseClass::m_scaling.y() = 1.0f;
-                        BaseClass::m_scaling.z() = 1.0f;
+                        scaling.y() = 1.0f;
+                        scaling.z() = 1.0f;
                         m_is_slow = false;
                     }
                 }
                 break;
             }
 
-            case ScalingZX:
+            case Trackball::ScalingZX:
             {
-                if( BaseClass::m_scaling.z() < 1.0f )
+                if ( scaling.z() < 1.0f )
                 {
-                    BaseClass::m_scaling.z() *= big_scale;
-                    BaseClass::m_scaling.x() *= big_scale;
-                    if( BaseClass::m_scaling.z() > 1.0f )
+                    scaling.z() *= big_scale;
+                    scaling.x() *= big_scale;
+                    if ( scaling.z() > 1.0f )
                     {
-                        BaseClass::m_scaling.z() = 1.0f;
-                        BaseClass::m_scaling.x() = 1.0f;
+                        scaling.z() = 1.0f;
+                        scaling.x() = 1.0f;
                         m_is_slow = false;
                     }
                 }
-                else if( BaseClass::m_scaling.z() > 1.0f )
+                else if ( scaling.z() > 1.0f )
                 {
-                    BaseClass::m_scaling.z() *= small_scale;
-                    BaseClass::m_scaling.x() *= small_scale;
-                    if( BaseClass::m_scaling.z() < 1.0f )
+                    scaling.z() *= small_scale;
+                    scaling.x() *= small_scale;
+                    if ( scaling.z() < 1.0f )
                     {
-                        BaseClass::m_scaling.z() = 1.0f;
-                        BaseClass::m_scaling.x() = 1.0f;
+                        scaling.z() = 1.0f;
+                        scaling.x() = 1.0f;
                         m_is_slow = false;
                     }
                 }
@@ -366,25 +369,31 @@ bool Mouse::idle()
 
             default: break;
             }
+
+            m_trackball.setScaling( scaling );
             break;
         } // Mouse::Scaling
 
         case Mouse::Rotation:
         {
-            BaseClass::m_rotation.x() *= 0.9f;
-            BaseClass::m_rotation.y() *= 0.9f;
-            BaseClass::m_rotation.z() *= 0.9f;
+            kvs::Quaternion rotation = m_trackball.rotation();
+            rotation.x() *= 0.9f;
+            rotation.y() *= 0.9f;
+            rotation.z() *= 0.9f;
+            m_trackball.setRotation( rotation );
             break;
         }
 
         case Mouse::Translation:
         {
-            BaseClass::m_translation *= 0.9f;
-            if( BaseClass::m_translation.length() < 0.001 )
+            kvs::Vec3 translation = m_trackball.translation();
+            translation *= 0.9f;
+            if ( translation.length() < 0.001 )
             {
-                BaseClass::m_translation = kvs::Vector3f::All( 0.0f );
+                translation = kvs::Vector3f::All( 0.0f );
                 m_is_slow = false;
             };
+            m_trackball.setTranslation( translation );
             break;
         }
         default:
@@ -392,7 +401,7 @@ bool Mouse::idle()
         }
     }
 
-    return( true );
+    return true;
 }
 
 /*==========================================================================*/
@@ -428,8 +437,8 @@ void Mouse::setScalingType( const Trackball::ScalingType type )
 void Mouse::setScalingType( const bool x, const bool y, const bool z )
 {
     m_scaling_type = x ?
-        ( y ? ( z ? ScalingXYZ : ScalingXY ) : ( z ? ScalingZX : ScalingX   ) ) :
-        ( y ? ( z ? ScalingYZ  : ScalingY  ) : ( z ? ScalingZ  : ScalingNot ) );
+        ( y ? ( z ? Trackball::ScalingXYZ : Trackball::ScalingXY ) : ( z ? Trackball::ScalingZX : Trackball::ScalingX   ) ) :
+        ( y ? ( z ? Trackball::ScalingYZ  : Trackball::ScalingY  ) : ( z ? Trackball::ScalingZ  : Trackball::ScalingNot ) );
 }
 
 /*==========================================================================*/

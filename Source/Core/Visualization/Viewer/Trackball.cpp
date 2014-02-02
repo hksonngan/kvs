@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file Trackball.cpp
+ *  @file   Trackball.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -17,22 +18,13 @@
 #include <kvs/Quaternion>
 
 
-namespace
-{
-
-const float ScalingFactor = 100.0f;
-const float Sqrt2 = 1.4142135623730950488f;
-const float HalfOfSqrt2 = 0.7071067811865475244f;
-
-} // end of namespace
-
 
 namespace kvs
 {
 
 /*==========================================================================*/
 /**
- *  Constructor.
+ *  @brief  Constructs a new Trackball class.
  */
 /*==========================================================================*/
 Trackball::Trackball()
@@ -42,7 +34,7 @@ Trackball::Trackball()
 
 /*==========================================================================*/
 /**
- *  Destructor.
+ *  @brief  Destroys the Trackball class.
  */
 /*==========================================================================*/
 Trackball::~Trackball()
@@ -52,185 +44,22 @@ Trackball::~Trackball()
 
 /*==========================================================================*/
 /**
- *  Attach the camera.
- *  @param camera [in] pointer to the camera
+ *  @brief  Scaling operation.
+ *  @param  start [in] start dragging point
+ *  @param  end [in] end dragging point
  */
 /*==========================================================================*/
-void Trackball::attachCamera( kvs::Camera* camera )
+void Trackball::scale( const kvs::Vec2i& start, const kvs::Vec2i& end, ScalingType type )
 {
-    m_ref_camera = camera;
-}
+    const float ScalingFactor = 100.0f;
 
-/*==========================================================================*/
-/**
- *  Reset the center of rotation.
- */
-/*==========================================================================*/
-void Trackball::resetRotationCenter()
-{
-    m_rotation_center = kvs::Vector2f( 0.0, 0.0 );
-}
-
-/*==========================================================================*/
-/**
- *  Set virtual trackball size
- *  @param size [in] trackball size
- */
-/*==========================================================================*/
-void Trackball::setTrackballSize( const float size )
-{
-    m_size = size;
-}
-
-/*==========================================================================*/
-/**
- *  Set depth value.
- *  @param depth [in] depth
- */
-/*==========================================================================*/
-void Trackball::setDepthValue( const float depth )
-{
-    m_depth = depth;
-}
-
-/*==========================================================================*/
-/**
- *  Set the center of rotation.
- *  @param center [in] center of rotation
- */
-/*==========================================================================*/
-void Trackball::setRotationCenter( const kvs::Vector2f& center )
-{
-    m_rotation_center = center;
-}
-
-void Trackball::setScaling( const kvs::Vector3f& scaling )
-{
-    m_scaling = scaling;
-}
-
-void Trackball::setTranslation( const kvs::Vector3f& translation )
-{
-    m_translation = translation;
-}
-
-void Trackball::setRotation( const kvs::Quaternion& rotation )
-{
-    m_rotation = rotation;
-}
-
-/*==========================================================================*/
-/**
- *  Set window size.
- *  @param width [in] window width
- *  @param height [in] window height
- */
-/*==========================================================================*/
-void Trackball::setWindowSize( const int width, const int height )
-{
-    m_window_width  = width;
-    m_window_height = height;
-}
-
-/*==========================================================================*/
-/**
- *  Get virtual trackball size.
- */
-/*==========================================================================*/
-float Trackball::size() const
-{
-    return m_size;
-}
-
-/*==========================================================================*/
-/**
- *  Get depth value.
- */
-/*==========================================================================*/
-float Trackball::depthValue() const
-{
-    return m_depth;
-}
-
-/*==========================================================================*/
-/**
- *  Get center of rotation.
- */
-/*==========================================================================*/
-const kvs::Vector2f& Trackball::rotationCenter() const
-{
-    return m_rotation_center;
-}
-
-/*==========================================================================*/
-/**
- *  Get scaling value.
- */
-/*==========================================================================*/
-const kvs::Vector3f& Trackball::scaling() const
-{
-    return m_scaling;
-}
-
-/*==========================================================================*/
-/**
- *  Get translation vector.
- */
-/*==========================================================================*/
-const kvs::Vector3f& Trackball::translation() const
-{
-    return m_translation;
-}
-
-/*==========================================================================*/
-/**
- *  Get roation matrix.
- */
-/*==========================================================================*/
-const kvs::Quaternion& Trackball::rotation() const
-{
-    return m_rotation;
-}
-
-/*==========================================================================*/
-/**
- *  Get window width.
- */
-/*==========================================================================*/
-int Trackball::windowWidth() const
-{
-    return m_window_width;
-}
-
-/*==========================================================================*/
-/**
- *  Get window height.
- */
-/*==========================================================================*/
-int Trackball::windowHeight() const
-{
-    return m_window_height;
-}
-
-/*==========================================================================*/
-/**
- *  Scaling.
- *  @param start [in] start dragging point
- *  @param end [in] end dragging point
- */
-/*==========================================================================*/
-void Trackball::scale(
-    const kvs::Vector2i& start,
-    const kvs::Vector2i& end,
-    ScalingType          type )
-{
-    m_scaling = kvs::Vector3f( 1.0, 1.0, 1.0 );
+    m_scaling = kvs::Vec3( 1.0, 1.0, 1.0 );
 
     const kvs::Vector2f n_old = this->get_norm_position( start );
     const kvs::Vector2f n_new = this->get_norm_position( end );
 
     const float h = static_cast<float>( m_window_height );
-    const float s = 1.0f + ::ScalingFactor * ( n_old.y() - n_new.y() ) / h;
+    const float s = 1.0f + ScalingFactor * ( n_old.y() - n_new.y() ) / h;
     switch ( type )
     {
     case ScalingXYZ: m_scaling.set( s, s, s ); break;
@@ -246,15 +75,15 @@ void Trackball::scale(
 
 /*==========================================================================*/
 /**
- *  Translation function
- *  @param start [in] start dragging point in the window coordinate system
- *  @param end [in] end dragging point in the widnow coordinate system
+ *  @brief  Translation operation.
+ *  @param  start [in] start dragging point in the window coordinate system
+ *  @param  end [in] end dragging point in the widnow coordinate system
  */
 /*==========================================================================*/
-void Trackball::translate( const kvs::Vector2i& start, const kvs::Vector2i& end )
+void Trackball::translate( const kvs::Vec2i& start, const kvs::Vec2i& end )
 {
-    kvs::Vector2i diff = end - start;
-    kvs::Vector3f trans;
+    kvs::Vec2i diff = end - start;
+    kvs::Vec3 trans;
     trans.x() = (float)diff.x() * 10.0f / m_window_width;
     trans.y() = -(float)diff.y() * 10.0f / m_window_height;
     trans.z() = 0;
@@ -265,28 +94,28 @@ void Trackball::translate( const kvs::Vector2i& start, const kvs::Vector2i& end 
 
 /*==========================================================================*/
 /**
- *  Rotation function
- *  @param start [in] start dragging point in the window coordinate system
- *  @param end [in] end dragging point in the window coordinate system
+ *  @brief  Rotation operation.
+ *  @param  start [in] start dragging point in the window coordinate system
+ *  @param  end [in] end dragging point in the window coordinate system
  */
 /*==========================================================================*/
-void Trackball::rotate( const kvs::Vector2i& start, const kvs::Vector2i& end )
+void Trackball::rotate( const kvs::Vec2i& start, const kvs::Vec2i& end )
 {
-    if( start == end )
+    if ( start == end )
     {
         m_rotation.set( 0.0, 0.0, 0.0, 1.0 );
         return;
     }
 
-    kvs::Vector2f n_old( this->get_norm_position( start ) );
-    kvs::Vector2f n_new( this->get_norm_position( end   ) );
+    kvs::Vec2 n_old( this->get_norm_position( start ) );
+    kvs::Vec2 n_new( this->get_norm_position( end   ) );
 
-    kvs::Vector3f p1( n_old, this->depth_on_sphere( n_old ) );
-    kvs::Vector3f p2( n_new, this->depth_on_sphere( n_new ) );
+    kvs::Vec3 p1( n_old, this->depth_on_sphere( n_old ) );
+    kvs::Vec3 p2( n_new, this->depth_on_sphere( n_new ) );
 
     // Transform to world coordinate.
-    kvs::Vector3f p1w = m_ref_camera->xform().transformNormal( p1 );
-    kvs::Vector3f p2w = m_ref_camera->xform().transformNormal( p2 );
+    kvs::Vec3 p1w = m_ref_camera->xform().transformNormal( p1 );
+    kvs::Vec3 p2w = m_ref_camera->xform().transformNormal( p2 );
 
     m_rotation = kvs::Quaternion::rotationQuaternion( p1w, p2w );
 }
@@ -298,12 +127,12 @@ void Trackball::rotate( const kvs::Vector2i& start, const kvs::Vector2i& end )
 /*==========================================================================*/
 void Trackball::reset()
 {
-    m_size            = 0.6f;
-    m_depth           = 1.0f;
-    m_rotation_center = kvs::Vector2f( 0.0f, 0.0f );
-    m_scaling         = kvs::Vector3f( 1.0f, 1.0f, 1.0f );
-    m_translation     = kvs::Vector3f( 0.0f, 0.0f, 0.0f );
-    m_rotation        = kvs::Quaternion( 0.0f, 0.0f, 0.0f, 1.0f );
+    m_size = 0.6f;
+    m_depth = 1.0f;
+    m_rotation_center = kvs::Vec2( 0.0f, 0.0f );
+    m_scaling = kvs::Vec3( 1.0f, 1.0f, 1.0f );
+    m_translation = kvs::Vec3( 0.0f, 0.0f, 0.0f );
+    m_rotation = kvs::Quaternion( 0.0f, 0.0f, 0.0f, 1.0f );
 }
 
 /*==========================================================================*/
@@ -313,22 +142,24 @@ void Trackball::reset()
  *  @return distance
  */
 /*==========================================================================*/
-float Trackball::depth_on_sphere( const kvs::Vector2f& dir ) const
+float Trackball::depth_on_sphere( const kvs::Vec2& dir ) const
 {
+    const float Sqrt2 = 1.4142135623730950488f;
+    const float HalfOfSqrt2 = 0.7071067811865475244f;
+
     const double r = m_size;
     const double d = dir.length();
-    float z;
 
-    // inside sphere
-    if( d < r * ::HalfOfSqrt2 )
+    float z;
+    if ( d < r * HalfOfSqrt2 )
     {
+        // inside sphere
         z = static_cast<float>( std::sqrt( r * r - d * d ) );
     }
-
-    // on hyperbola
     else
     {
-        const double t = r / ::Sqrt2;
+        // on hyperbola
+        const double t = r / Sqrt2;
         z = static_cast<float>( t * t / d );
     }
 
@@ -345,12 +176,12 @@ float Trackball::depth_on_sphere( const kvs::Vector2f& dir ) const
  *  and the rage is [-1,-1].
  */
 /*==========================================================================*/
-kvs::Vector2f Trackball::get_norm_position( const kvs::Vector2i& pos ) const
+kvs::Vec2 Trackball::get_norm_position( const kvs::Vec2i& pos ) const
 {
     const float x =  2.0f * ( pos.x() - m_rotation_center.x() ) / m_window_width;
     const float y = -2.0f * ( pos.y() - m_rotation_center.y() ) / m_window_height;
 
-    return kvs::Vector2f( x, y );
+    return kvs::Vec2( x, y );
 }
 
 } // end of namespace kvs

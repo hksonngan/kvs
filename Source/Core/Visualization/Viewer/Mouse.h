@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file Mouse.h
+ *  @file   Mouse.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -15,9 +16,6 @@
 #define KVS__MOUSE_H_INCLUDE
 
 #include <kvs/Trackball>
-#if KVS_ENABLE_DEPRECATED
-#include <kvs/OpenGL>
-#endif
 #include <kvs/Timer>
 #include <kvs/Vector2>
 
@@ -30,11 +28,11 @@ namespace kvs
  *  Mouse class
  */
 /*==========================================================================*/
-class Mouse : public kvs::Trackball
+class Mouse
 {
-    typedef kvs::Trackball BaseClass;
-
 public:
+
+    typedef kvs::Trackball::ScalingType ScalingType;
 
     enum TransMode
     {
@@ -55,6 +53,7 @@ public:
 
 protected:
 
+    kvs::Trackball m_trackball;
     TransMode m_mode; ///< transform mode
     ScalingType m_scaling_type; ///< scaling type
     kvs::Vector2i m_old; ///< old mouse position on the window coordinate (org: upper-left)
@@ -83,6 +82,13 @@ public:
     void setScalingType( const bool x, const bool y, const bool z );
     TransMode mode() const;
     ScalingType scalingType() const;
+
+    void attachCamera( kvs::Camera* camera ) { m_trackball.attachCamera( camera ); }
+    void setRotationCenter( const kvs::Vec2& center ) { m_trackball.setRotationCenter( center ); }
+    void setWindowSize( const int w, const int h ) { m_trackball.setWindowSize( w, h ); }
+    const kvs::Vec3& scaling() const { return m_trackball.scaling(); }
+    const kvs::Vec3& translation() const { return m_trackball.translation(); }
+    const kvs::Quaternion& rotation() const { return m_trackball.rotation(); }
 
     void setUseAuto( const bool flg );
     bool isUseAuto();
