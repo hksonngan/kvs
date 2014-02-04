@@ -135,7 +135,6 @@ void Screen::setSize( const int width, const int height )
     BaseClass::setSize( width, height );
 
     if ( m_scene->camera() ) m_scene->camera()->setWindowSize( width, height );
-    if ( m_scene->mouse()  ) m_scene->mouse()->setWindowSize( width, height );
 
     QWidget::resize( width, height );
 }
@@ -296,7 +295,8 @@ void Screen::reset()
 void Screen::initializeEvent()
 {
     QObject::connect( m_idle_mouse_timer, SIGNAL( timeout() ), this, SLOT( idleMouseEvent() ) );
-    m_idle_mouse_timer->start( kvs::Mouse::SpinTime );
+    const int interval = 10; // in msec.
+    m_idle_mouse_timer->start( interval );
 
     std::list<kvs::qt::Timer*>::iterator timer = BaseClass::timerEventHandler().begin();
     std::list<kvs::qt::Timer*>::iterator end = BaseClass::timerEventHandler().end();
@@ -482,7 +482,7 @@ void Screen::defaultMousePressEvent( kvs::MouseEvent* event )
         BaseClass::eventHandler()->notify( event );
         if ( !m_scene->isActiveMove( event->x(), event->y() ) ) return;
 
-        kvs::Mouse::TransMode mode;
+        kvs::Mouse::OperationMode mode;
         switch ( event->modifiers() )
         {
         case kvs::Key::ShiftModifier:

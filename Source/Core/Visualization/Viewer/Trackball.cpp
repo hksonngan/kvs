@@ -18,7 +18,6 @@
 #include <kvs/Quaternion>
 
 
-
 namespace kvs
 {
 
@@ -39,7 +38,6 @@ Trackball::Trackball()
 /*==========================================================================*/
 Trackball::~Trackball()
 {
-    this->reset();
 }
 
 /*==========================================================================*/
@@ -49,28 +47,15 @@ Trackball::~Trackball()
  *  @param  end [in] end dragging point
  */
 /*==========================================================================*/
-void Trackball::scale( const kvs::Vec2i& start, const kvs::Vec2i& end, ScalingType type )
+void Trackball::scale( const kvs::Vec2i& start, const kvs::Vec2i& end )
 {
-    const float ScalingFactor = 100.0f;
+    const kvs::Vec2 n_old = this->get_norm_position( start );
+    const kvs::Vec2 n_new = this->get_norm_position( end );
 
-    m_scaling = kvs::Vec3( 1.0, 1.0, 1.0 );
+    const float h = static_cast<float>( m_ref_camera->windowHeight() );
+    const float s = 1.0f + m_scaling_factor * ( n_old.y() - n_new.y() ) / h;
 
-    const kvs::Vector2f n_old = this->get_norm_position( start );
-    const kvs::Vector2f n_new = this->get_norm_position( end );
-
-    const float h = static_cast<float>( m_window_height );
-    const float s = 1.0f + ScalingFactor * ( n_old.y() - n_new.y() ) / h;
-    switch ( type )
-    {
-    case ScalingXYZ: m_scaling.set( s, s, s ); break;
-    case ScalingX:   m_scaling.set( s, 1, 1 ); break;
-    case ScalingY:   m_scaling.set( 1, s, 1 ); break;
-    case ScalingZ:   m_scaling.set( 1, 1, s ); break;
-    case ScalingXY:  m_scaling.set( s, s, 1 ); break;
-    case ScalingYZ:  m_scaling.set( 1, s, s ); break;
-    case ScalingZX:  m_scaling.set( s, 1, s ); break;
-    default:         m_scaling.set( 1, 1, 1 ); break;
-    }
+    m_scaling = kvs::Vec3::All( s );
 }
 
 /*==========================================================================*/
@@ -82,11 +67,10 @@ void Trackball::scale( const kvs::Vec2i& start, const kvs::Vec2i& end, ScalingTy
 /*==========================================================================*/
 void Trackball::translate( const kvs::Vec2i& start, const kvs::Vec2i& end )
 {
-    kvs::Vec2i diff = end - start;
-    kvs::Vec3 trans;
-    trans.x() = (float)diff.x() * 10.0f / m_window_width;
-    trans.y() = -(float)diff.y() * 10.0f / m_window_height;
-    trans.z() = 0;
+    const kvs::Vec2i diff = end - start;
+    const float w = m_ref_camera->windowWidth();
+    const float h = m_ref_camera->windowHeight();
+    const kvs::Vec3 trans( diff.x() * 10.0f / w, -diff.y() * 10.0f / h, 0.0f );
 
     // Transform camera to world.
     m_translation = m_ref_camera->xform().transformNormal( trans );
@@ -107,28 +91,29 @@ void Trackball::rotate( const kvs::Vec2i& start, const kvs::Vec2i& end )
         return;
     }
 
-    kvs::Vec2 n_old( this->get_norm_position( start ) );
-    kvs::Vec2 n_new( this->get_norm_position( end   ) );
+    const kvs::Vec2 n_old( this->get_norm_position( start ) );
+    const kvs::Vec2 n_new( this->get_norm_position( end   ) );
 
-    kvs::Vec3 p1( n_old, this->depth_on_sphere( n_old ) );
-    kvs::Vec3 p2( n_new, this->depth_on_sphere( n_new ) );
+    const kvs::Vec3 p1( n_old, this->depth_on_sphere( n_old ) );
+    const kvs::Vec3 p2( n_new, this->depth_on_sphere( n_new ) );
 
     // Transform to world coordinate.
-    kvs::Vec3 p1w = m_ref_camera->xform().transformNormal( p1 );
-    kvs::Vec3 p2w = m_ref_camera->xform().transformNormal( p2 );
+    const kvs::Vec3 p1w = m_ref_camera->xform().transformNormal( p1 );
+    const kvs::Vec3 p2w = m_ref_camera->xform().transformNormal( p2 );
 
     m_rotation = kvs::Quaternion::rotationQuaternion( p1w, p2w );
 }
 
 /*==========================================================================*/
 /**
- *  Reset.
+ *  @brief  Resets parameters.
  */
 /*==========================================================================*/
 void Trackball::reset()
 {
     m_size = 0.6f;
     m_depth = 1.0f;
+    m_scaling_factor = 100.0f;
     m_rotation_center = kvs::Vec2( 0.0f, 0.0f );
     m_scaling = kvs::Vec3( 1.0f, 1.0f, 1.0f );
     m_translation = kvs::Vec3( 0.0f, 0.0f, 0.0f );
@@ -137,49 +122,48 @@ void Trackball::reset()
 
 /*==========================================================================*/
 /**
- *  Calculate a distance between 'dir' and the virtual sphere.
- *  @param dir [in] position
+ *  @brief  Calculates a distance between 'pos' and the virtual sphere.
+ *  @param  pos [in] position in the normalized device coordinates
  *  @return distance
  */
 /*==========================================================================*/
-float Trackball::depth_on_sphere( const kvs::Vec2& dir ) const
+float Trackball::depth_on_sphere( const kvs::Vec2& pos ) const
 {
     const float Sqrt2 = 1.4142135623730950488f;
     const float HalfOfSqrt2 = 0.7071067811865475244f;
 
     const double r = m_size;
-    const double d = dir.length();
-
-    float z;
+    const double d = pos.length();
     if ( d < r * HalfOfSqrt2 )
     {
         // inside sphere
-        z = static_cast<float>( std::sqrt( r * r - d * d ) );
+        return static_cast<float>( std::sqrt( r * r - d * d ) );
     }
     else
     {
         // on hyperbola
         const double t = r / Sqrt2;
-        z = static_cast<float>( t * t / d );
+        return static_cast<float>( t * t / d );
     }
-
-    return z;
 }
 
 /*==========================================================================*/
 /**
- *  Get the mouse position.
- *  @return mouse position (on the normal device coordinate system)
+ *  @brief  Returns mosue position in the normalized device coordinates.
+ *  @param  pos [in] mouse position
+ *  @return mouse position
  *
- *  Get the mouse position on the normal device coordinate system.
- *  A center of the normal device coordinate system is a center of the image
- *  and the rage is [-1,-1].
  */
 /*==========================================================================*/
 kvs::Vec2 Trackball::get_norm_position( const kvs::Vec2i& pos ) const
 {
-    const float x =  2.0f * ( pos.x() - m_rotation_center.x() ) / m_window_width;
-    const float y = -2.0f * ( pos.y() - m_rotation_center.y() ) / m_window_height;
+    // Normalized Device coordinates: A center of the normalized device
+    // coordinates is a center of the image and the rage is [-1,-1].
+
+    const float w = m_ref_camera->windowWidth();
+    const float h = m_ref_camera->windowHeight();
+    const float x =  2.0f * ( pos.x() - m_rotation_center.x() ) / w;
+    const float y = -2.0f * ( pos.y() - m_rotation_center.y() ) / h;
 
     return kvs::Vec2( x, y );
 }

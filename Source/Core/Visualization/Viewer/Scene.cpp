@@ -345,7 +345,7 @@ void Scene::updateXform()
 /*==========================================================================*/
 void Scene::updateXform( kvs::ObjectManager* manager )
 {
-    switch ( m_mouse->mode() )
+    switch ( m_mouse->operationMode() )
     {
     case kvs::Mouse::Rotation:
         manager->rotate( m_mouse->rotation().toMatrix() );
@@ -369,7 +369,7 @@ void Scene::updateXform( kvs::ObjectManager* manager )
 /*==========================================================================*/
 void Scene::updateXform( kvs::Camera* camera )
 {
-    switch ( m_mouse->mode() )
+    switch ( m_mouse->operationMode() )
     {
     case kvs::Mouse::Rotation:
         camera->rotate( m_mouse->rotation().toMatrix().transposed() );
@@ -396,7 +396,7 @@ void Scene::updateXform( kvs::Camera* camera )
 /*==========================================================================*/
 void Scene::updateXform( kvs::Light* light )
 {
-    switch ( m_mouse->mode() )
+    switch ( m_mouse->operationMode() )
     {
     case kvs::Mouse::Rotation:
         light->rotate( m_mouse->rotation().toMatrix() );
@@ -579,7 +579,6 @@ void Scene::resizeFunction( int width, int height )
 
     // Update the window size for camera and mouse.
     m_camera->setWindowSize( width, height );
-    m_mouse->setWindowSize( width, height );
 }
 
 /*==========================================================================*/
@@ -595,7 +594,7 @@ void Scene::mouseReleaseFunction( int x, int y )
     m_enable_collision_detection = false;
     m_mouse->release( x, y );
 
-    if ( !( m_mouse->isUseAuto() && m_mouse->isAuto() ) )
+    if ( !( m_mouse->isEnabledAutoUpdating() && m_mouse->isUpdating() ) )
     {
         m_object_manager->releaseActiveObject();
     }
@@ -606,15 +605,15 @@ void Scene::mouseReleaseFunction( int x, int y )
  *  @brief  Function which is called when the mouse button is released.
  *  @param  x [in] x coordinate value of the mouse cursor position
  *  @param  y [in] y coordinate value of the mouse cursor position
- *  @param  mode [in] mouse translation mode
+ *  @param  mode [in] mouse operation mode
  */
 /*==========================================================================*/
-void Scene::mousePressFunction( int x, int y, kvs::Mouse::TransMode mode )
+void Scene::mousePressFunction( int x, int y, kvs::Mouse::OperationMode mode )
 {
     if ( m_enable_object_operation || m_object_manager->hasActiveObject() )
     {
         this->updateControllingObject();
-        m_mouse->setMode( mode );
+        m_mouse->setOperationMode( mode );
         m_mouse->press( x, y );
     }
 }
@@ -646,7 +645,7 @@ void Scene::wheelFunction( int value )
     if ( m_enable_object_operation || m_object_manager->hasActiveObject() )
     {
         this->updateControllingObject();
-        m_mouse->setMode( kvs::Mouse::Scaling );
+        m_mouse->setOperationMode( kvs::Mouse::Scaling );
         m_mouse->press( 0, 0 );
         m_mouse->move( 0, value );
     }

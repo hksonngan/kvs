@@ -32,68 +32,52 @@ class Mouse
 {
 public:
 
-    typedef kvs::Trackball::ScalingType ScalingType;
-
-    enum TransMode
+    enum OperationMode
     {
-        Rotation    = 0, ///< rotation mode
+        Rotation = 0, ///< rotation mode
         Translation = 1, ///< translation mode
-        Scaling     = 2  ///< scaling mode
+        Scaling = 2  ///< scaling mode
     };
 
-    enum AutoMode
-    {
-        AutoOff = 0, ///< auto rotation mode off
-        AutoOn  = 1  ///< auto rotation mode on
-    };
+private:
 
-    static int SpinTime; ///< spin time
-    static float WheelUpValue;   ///< wheel up value
-    static float WheelDownValue; ///< wheel down value
-
-protected:
-
-    kvs::Trackball m_trackball;
-    TransMode m_mode; ///< transform mode
-    ScalingType m_scaling_type; ///< scaling type
-    kvs::Vector2i m_old; ///< old mouse position on the window coordinate (org: upper-left)
-    kvs::Vector2i m_new; ///< new mouse position on the window coordinate (org: upper-left)
-    kvs::Vector2i m_start; ///< position at start of rotation
-    kvs::Vector2i m_stop; ///< position at stop of rotation
+    kvs::Trackball m_trackball; ///< trackball
+    OperationMode m_operation_mode; ///< operation mode
+    kvs::Vec2i m_old; ///< old mouse position on the window coordinate (org: upper-left)
+    kvs::Vec2i m_new; ///< new mouse position on the window coordinate (org: upper-left)
+    kvs::Vec2i m_start; ///< position at start of rotation
+    kvs::Vec2i m_stop; ///< position at stop of rotation
     kvs::Timer m_timer; ///< auto check timer
-    bool m_is_auto; ///< auto flag (true: if auto mode)
-    bool m_is_slow; ///< slow flag (true: if slow mode)
-    bool m_is_use_auto; ///< auto use flag (true: if user use auto mode )
+    bool m_enable_auto_updating; ///< flag for auto-updating of the transformation
+    bool m_is_updating; ///< if true, the transformation is now updating
+    bool m_is_damping; ///< slow flag (true: if slow mode)
 
 public:
 
-    Mouse( AutoMode auto_flg = AutoOn );
+    Mouse();
     virtual ~Mouse();
 
-    void reset();
     void press( const int x, const int y );
     void move( const int x, const int y );
     void wheel( const float value );
     void release( const int x, const int y );
     bool idle();
+    void reset();
 
-    void setMode( const TransMode mode );
-    void setScalingType( const ScalingType type );
-    void setScalingType( const bool x, const bool y, const bool z );
-    TransMode mode() const;
-    ScalingType scalingType() const;
+    void setOperationMode( const OperationMode mode ) { m_operation_mode = mode; }
+    OperationMode operationMode() const { return m_operation_mode; }
 
     void attachCamera( kvs::Camera* camera ) { m_trackball.attachCamera( camera ); }
     void setRotationCenter( const kvs::Vec2& center ) { m_trackball.setRotationCenter( center ); }
-    void setWindowSize( const int w, const int h ) { m_trackball.setWindowSize( w, h ); }
     const kvs::Vec3& scaling() const { return m_trackball.scaling(); }
     const kvs::Vec3& translation() const { return m_trackball.translation(); }
     const kvs::Quaternion& rotation() const { return m_trackball.rotation(); }
 
-    void setUseAuto( const bool flg );
-    bool isUseAuto();
-    bool isAuto();
-    bool isSlow();
+    void setEnabledAutoUpdating( const bool enable ) { m_enable_auto_updating = enable; }
+    void enableAutoUpdating() { this->setEnabledAutoUpdating( true ); }
+    void disableAutoUpdating() { this->setEnabledAutoUpdating( false ); }
+    bool isEnabledAutoUpdating() const { return m_enable_auto_updating; }
+    bool isUpdating() { return m_is_updating; }
 };
 
 } // end of namespace kvs

@@ -112,7 +112,7 @@ public:
     void paintFunction();
     void resizeFunction( int width, int height );
     void mouseReleaseFunction( int x, int y );
-    void mousePressFunction( int x, int y, kvs::Mouse::TransMode mode );
+    void mousePressFunction( int x, int y, kvs::Mouse::OperationMode mode );
     void mouseMoveFunction( int x, int y );
     void wheelFunction( int value );
 
