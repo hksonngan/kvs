@@ -105,15 +105,31 @@ LineObject::LineObject( const kvs::PolygonObject& polygon )
         polygon.numberOfVertices() / ncorners : nconnections;
 
     kvs::ValueArray<kvs::UInt32> connections( npolygons * ncorners * 2 );
-    size_t p_index = 0;
-    size_t l_index = 0;
-    for( size_t i = 0; i < npolygons; i++ )
+    if ( nconnections > 0 )
     {
-        for( size_t j = 0; j < ncorners; j++ )
+        size_t p_index = 0;
+        size_t l_index = 0;
+        for( size_t i = 0; i < npolygons; i++ )
         {
-            connections[ l_index++ ] = p_index++;
+            for( size_t j = 0; j < ncorners; j++ )
+            {
+                connections[ l_index++ ] = polygon.connections().at( p_index++ );
+                connections[ l_index ] = polygon.connections().at( j == ncorners - 1 ? p_index - ncorners * (i+1) : p_index );
+            }
         }
-        connections[ l_index++ ] = p_index - ncorners;
+    }
+    else
+    {
+        size_t p_index = 0;
+        size_t l_index = 0;
+        for( size_t i = 0; i < npolygons; i++ )
+        {
+            for( size_t j = 0; j < ncorners; j++ )
+            {
+                connections[ l_index++ ] = p_index++;
+                connections[ l_index ] = j == ncorners - 1 ? p_index - ncorners * (i+1) : p_index;
+            }
+        }
     }
 
     this->setConnections( connections );
