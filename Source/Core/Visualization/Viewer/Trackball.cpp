@@ -101,7 +101,7 @@ void Trackball::rotate( const kvs::Vec2i& start, const kvs::Vec2i& end )
     const kvs::Vec3 p1w = m_ref_camera->xform().transformNormal( p1 );
     const kvs::Vec3 p2w = m_ref_camera->xform().transformNormal( p2 );
 
-    m_rotation = kvs::Quaternion::rotationQuaternion( p1w, p2w );
+    m_rotation = kvs::Quaternion::RotationQuaternion( p1w, p2w );
 }
 
 /*==========================================================================*/
