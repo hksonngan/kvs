@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file Quaternion.h
+ *  @file   Quaternion.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -21,81 +22,135 @@
 #include <kvs/Vector4>
 #include <kvs/Matrix33>
 #include <kvs/Matrix44>
+#include <kvs/Deprecated>
 
 
 namespace kvs
 {
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
-*  Quaternion class
-*/
-/*==========================================================================*/
-
+ *  @brief  Quaternion class.
+ */
+/*===========================================================================*/
 class Quaternion
 {
 private:
 
-    /* Quaternion: Q
-       Q = w + xi + yj + zk
-         x = m_elements[0],
-         y = m_elements[1],
-         z = m_elements[2],
-         w = m_elements[3]
-     */
-    kvs::Vector4<float> m_elements;
+    // Quaternion: Q = w + xi + yj + zk
+    //    x = m_elements[0],
+    //    y = m_elements[1],
+    //    z = m_elements[2],
+    //    w = m_elements[3]
+    kvs::Vec4 m_elements; ///< elements of quaternion
+
+public:
+
+    static const Quaternion Zero();
+    static const Quaternion Identity();
+    static const kvs::Vec3 Rotate( const kvs::Vec3& pos, const kvs::Vec3& axis, float rad );
+    static const kvs::Vec3 Rotate( const kvs::Vec3& pos, const Quaternion& q );
+    static const Quaternion RotationQuaternion( kvs::Vec3 v0, kvs::Vec3 v1 );
+    static const Quaternion LinearInterpolation( const Quaternion& q1, const Quaternion& q2, double t, bool for_rotation );
+    static const Quaternion SphericalLinearInterpolation( const Quaternion& q1, const Quaternion& q2, double t, bool invert, bool for_rotation );
+    static const Quaternion SphericalCubicInterpolation( const Quaternion& q1, const Quaternion& q2, const Quaternion& a, const Quaternion& b, double t, bool for_rotation );
+    static const Quaternion SplineInterpolation( const Quaternion& q1, const Quaternion& q2, const Quaternion& q3, const Quaternion& q4, double t, bool for_rotation );
+    static const Quaternion Spline( const Quaternion& qnm1, const Quaternion& qn, const Quaternion& qnp1 );
 
 public:
 
     Quaternion();
     Quaternion( float x, float y, float z, float w );
-    Quaternion( const Vector3<float>& axis, float angle );
-    explicit Quaternion( const Matrix33<float>& mat );
+    Quaternion( const kvs::Vec3& axis, float angle );
+    explicit Quaternion( const kvs::Mat3& mat );
     explicit Quaternion( const float elements[4] );
 
 public:
 
-    void set( float x, float y, float z, float w );
+    void set( float x, float y, float z, float w ) { m_elements.set( x, y, z, w ); }
 
-    float& x();
-    float& y();
-    float& z();
-    float& w();
-    const float& x() const;
-    const float& y() const;
-    const float& z() const;
-    const float& w() const;
+    float& x() { return m_elements[0]; }
+    float& y() { return m_elements[1]; }
+    float& z() { return m_elements[2]; }
+    float& w() { return m_elements[3]; }
+    float x() const { return m_elements[0]; }
+    float y() const { return m_elements[1]; }
+    float z() const { return m_elements[2]; }
+    float w() const { return m_elements[3]; }
 
-    Quaternion& zero();
-    const Quaternion zero() const;
-    Quaternion& identity();
-    const Quaternion identity() const;
-    Quaternion& conjugate();
-    const Quaternion conjugate() const;
-    Quaternion& normalize();
-    const Quaternion normalize() const;
-    Quaternion& inverse();
-    const Quaternion inverse() const;
-    Quaternion& log();
-    const Quaternion log() const;
-    Quaternion& exp();
-    const Quaternion exp() const;
-    double dot( const Quaternion& q ) const;
-    double length() const;
-    double length2() const;
+    void zero() { *this = Zero(); }
+    void identity() { *this = Identity(); }
+    void conjugate();
+    void normalize();
+    void invert();
 
-public:
+    Quaternion conjugated() const;
+    Quaternion normalized() const;
+    Quaternion inverted() const;
+    Quaternion log() const;
+    Quaternion exp() const;
 
-    float& operator [] ( size_t index );
-    const float& operator [] ( size_t index ) const;
+    double dot( const Quaternion& q ) const { return m_elements.dot( q.m_elements ); }
+    double length() const { return m_elements.length(); }
+    double length2() const { return m_elements.length2(); }
 
-    Quaternion& operator += ( const Quaternion& q );
-    Quaternion& operator -= ( const Quaternion& q );
-    Quaternion& operator *= ( float a );
-    Quaternion& operator /= ( float a );
-    Quaternion& operator *= ( const Quaternion& q );
+    void toMatrix( kvs::Mat3& m ) const;
+    void toMatrix( kvs::Mat4& m ) const;
+    void toMatrix( float m[16] ) const;
+    kvs::Mat3 toMatrix() const;
+    kvs::Vec3 axis() const;
+    float angle() const;
 
 public:
+
+    float& operator [] ( size_t index )
+    {
+        return m_elements[ index ];
+    }
+
+    const float& operator [] ( size_t index ) const
+    {
+        return m_elements[ index ];
+    }
+
+    Quaternion& operator += ( const Quaternion& q )
+    {
+        m_elements += q.m_elements;
+        return *this;
+    }
+
+    Quaternion& operator -= ( const Quaternion& q )
+    {
+        m_elements -= q.m_elements;
+        return *this;
+    }
+
+    Quaternion& operator *= ( float a )
+    {
+        m_elements *= a;
+        return *this;
+    }
+
+    Quaternion& operator /= ( float a )
+    {
+        m_elements /= a;
+        return *this;
+    }
+
+    Quaternion& operator *= ( const Quaternion& q )
+    {
+        float x = this->x();
+        float y = this->y();
+        float z = this->z();
+        float w = this->w();
+
+        this->set( w * q.x() + x * q.w() + y * q.z() - z * q.y(),
+                   w * q.y() - x * q.z() + y * q.w() + z * q.x(),
+                   w * q.z() + x * q.y() - y * q.x() + z * q.w(),
+                   w * q.w() - x * q.x() - y * q.y() - z * q.z() );
+
+        return *this;
+    }
 
     friend bool operator == ( const Quaternion& a, const Quaternion& b )
     {
@@ -142,15 +197,6 @@ public:
         return Quaternion( a ) *= b;
     }
 
-public:
-
-    const kvs::Matrix33<float> toMatrix() const;
-    void toMatrix( kvs::Matrix33<float>& m ) const;
-    void toMatrix( kvs::Matrix44<float>& m ) const;
-    void toMatrix( float m[16] ) const;
-
-public:
-
     friend std::ostream& operator << ( std::ostream& os, const Quaternion& q )
     {
         const size_t width     = 8;
@@ -173,71 +219,124 @@ public:
 
 public:
 
-    Vector3<float> axis();
-    float angle();
+    KVS_DEPRECATED( static Vector3<float> rotate(
+        const kvs::Vec3& pos,
+        const kvs::Vec3& axis, float rad ) )
+    {
+        return Quaternion::Rotate( pos, axis, rad );
+    }
 
-public:
+    KVS_DEPRECATED( static Vector3<float> rotate(
+        const kvs::Vec3& pos,
+        const Quaternion& q ) )
+    {
+        return Quaternion::Rotate( pos, q );
+    }
 
-    static Vector3<float> rotate( const Vector3<float>& pos, const Vector3<float>& axis, float rad );
-    static Vector3<float> rotate( const Vector3<float>& pos, const Quaternion& q );
-    static Quaternion rotationQuaternion( Vector3<float> v0, Vector3<float> v1 );
+    KVS_DEPRECATED( static Quaternion rotationQuaternion(
+        kvs::Vec3 v0,
+        kvs::Vec3 v1 ) )
+    {
+        return Quaternion::RotationQuaternion( v0, v1 );
+    }
 
-public:
-
-    static Quaternion linearInterpolation(
+    KVS_DEPRECATED( static Quaternion linearInterpolation(
         const Quaternion& q1,
         const Quaternion& q2,
         double t,
-        bool for_rotation );
+        bool for_rotation ) )
+    {
+        return Quaternion::LinearInterpolation( q1, q2, t, for_rotation );
+    }
 
-    static Quaternion sphericalLinearInterpolation(
+    KVS_DEPRECATED( static Quaternion sphericalLinearInterpolation(
         const Quaternion& q1,
         const Quaternion& q2,
         double t,
         bool invert,
-        bool for_rotation );
+        bool for_rotation ) )
+    {
+        return Quaternion::SphericalLinearInterpolation( q1, q2, t, invert, for_rotation );
+    }
 
-    static Quaternion sphericalCubicInterpolation(
+    KVS_DEPRECATED( static Quaternion sphericalCubicInterpolation(
         const Quaternion& q1,
         const Quaternion& q2,
         const Quaternion& a,
         const Quaternion& b,
         double t,
-        bool for_rotation );
+        bool for_rotation ) )
+    {
+        return Quaternion::SphericalCubicInterpolation( q1, q2, a, b, t, for_rotation );
+    }
 
-    static Quaternion splineInterpolation(
+    KVS_DEPRECATED( static Quaternion splineInterpolation(
         const Quaternion& q1,
         const Quaternion& q2,
         const Quaternion& q3,
         const Quaternion& q4,
         double t,
-        bool for_rotation );
+        bool for_rotation ) )
+    {
+        return Quaternion::SplineInterpolation( q1, q2, q3, q4, t, for_rotation );
+    }
 
-    static Quaternion spline(
+    KVS_DEPRECATED( static Quaternion spline(
         const Quaternion& qnm1,
         const Quaternion& qn,
-        const Quaternion& qnp1 );
+        const Quaternion& qnp1 ) )
+    {
+        return Quaternion::Spline( qnm1, qn, qnp1 );
+    }
 };
 
-inline Quaternion::Quaternion()
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new Quaternion class.
+ */
+/*===========================================================================*/
+inline Quaternion::Quaternion():
+    m_elements( 0, 0, 0, 0 )
 {
 }
 
-inline Quaternion::Quaternion( float x, float y, float z, float w ) : 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new Quaternion class.
+ *  @param  x [in] element of i-term
+ *  @param  y [in] element of j-term
+ *  @param  z [in] element of k-term
+ *  @param  w [in] real number
+ */
+/*===========================================================================*/
+inline Quaternion::Quaternion( float x, float y, float z, float w ):
     m_elements( x, y, z, w )
 {
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new Quaternion class.
+ *  @param  axis [in] rotation axis
+ *  @param  angle [in] rotation angle
+ */
+/*===========================================================================*/
 inline Quaternion::Quaternion( const kvs::Vector3<float>& axis, float angle )
 {
     float s = static_cast<float>( std::sin( angle * 0.5 ) );
     float w = static_cast<float>( std::cos( angle * 0.5 ) );
 
-    kvs::Vector3<float> n = axis.normalized();
-    kvs::Vector3<float> v = s * n;
+    kvs::Vec3 n = axis.normalized();
+    kvs::Vec3 v = s * n;
     m_elements.set( v, w );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new Quaternion class.
+ *  @param  m [in] rotation matrix
+ */
+/*===========================================================================*/
 inline Quaternion::Quaternion( const kvs::Matrix33<float>& m )
 {
     double trace = double( m.trace() + 1.0 );
@@ -279,256 +378,159 @@ inline Quaternion::Quaternion( const kvs::Matrix33<float>& m )
     m_elements.set( x, y, z, w );
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Constructs a new Quaternion class.
+ *  @param  elements [in] elements of rotation matrix
+ */
+/*===========================================================================*/
 inline Quaternion::Quaternion( const float elements[4] ) :
     m_elements( elements )
 {
 }
 
-inline void Quaternion::set( float x, float y, float z, float w )
+/*===========================================================================*/
+/**
+ *  @brief  Conjugates the quaternion.
+ */
+/*===========================================================================*/
+inline void Quaternion::conjugate()
 {
-    m_elements.set( x, y, z, w );
+    m_elements[0] *= -1.0f;
+    m_elements[1] *= -1.0f;
+    m_elements[2] *= -1.0f;
 }
 
-inline float& Quaternion::x()
-{
-    return m_elements[0];
-}
-
-inline const float& Quaternion::x() const
-{
-    return m_elements[0];
-}
-
-inline float& Quaternion::y()
-{
-    return m_elements[1];
-}
-
-inline const float& Quaternion::y() const
-{
-    return m_elements[1];
-}
-
-inline float& Quaternion::z()
-{
-    return m_elements[2];
-}
-
-inline const float& Quaternion::z() const
-{
-    return m_elements[2];
-}
-
-inline float& Quaternion::w()
-{
-    return m_elements[3];
-}
-
-inline const float& Quaternion::w() const
-{
-    return m_elements[3];
-}
-
-inline Quaternion& Quaternion::zero()
-{
-    m_elements.set( 0, 0, 0, 0 );
-    return *this;
-}
-
-inline const Quaternion Quaternion::zero() const
-{
-    Quaternion result;
-    return result.zero();
-}
-
-inline Quaternion& Quaternion::identity()
-{
-    m_elements.set( 0, 0, 0, 1 );
-    return *this;
-}
-
-inline const Quaternion Quaternion::identity() const
-{
-    Quaternion result;
-    return result.identity();
-}
-
-inline Quaternion& Quaternion::conjugate()
-{
-    m_elements[0] *= float(-1);
-    m_elements[1] *= float(-1);
-    m_elements[2] *= float(-1);
-    return *this;
-}
-
-inline const Quaternion Quaternion::conjugate() const
-{
-    Quaternion result( *this );
-    return result.conjugate();
-}
-
-inline Quaternion& Quaternion::normalize()
+/*===========================================================================*/
+/**
+ *  @brief  Normalizes the quaternion.
+ */
+/*===========================================================================*/
+inline void Quaternion::normalize()
 {
     float n = static_cast<float>( this->length() );
-    n = n > float(0) ? float(1) / n : float(0);
-    m_elements *= n;
-    return *this;
+    if ( n > 0 ) { m_elements /= n; }
 }
 
-inline const Quaternion Quaternion::normalize() const
-{
-    Quaternion result( *this );
-    return result.normalize();
-}
-
-inline Quaternion& Quaternion::inverse()
+/*===========================================================================*/
+/**
+ *  @brief  Inverts the quaternion.
+ */
+/*===========================================================================*/
+inline void Quaternion::invert()
 {
     float n = static_cast<float>( this->length2() );
-
-    if ( n > 0 )
-    {
-        m_elements[0] /= -n;
-        m_elements[1] /= -n;
-        m_elements[2] /= -n;
-        m_elements[3] /=  n;
-    }
-    return *this;
+    if ( n > 0 ) { this->conjugate(); m_elements /= n; }
 }
 
-inline const Quaternion Quaternion::inverse() const
+/*===========================================================================*/
+/**
+ *  @brief  Returns conjugated quaternion.
+ *  @return conjugated quaternion
+ */
+/*===========================================================================*/
+inline Quaternion Quaternion::conjugated() const
 {
     Quaternion result( *this );
-    return result.inverse();
-}
-
-inline Quaternion& Quaternion::log()
-{
-    double theta     = std::acos( double( m_elements[3] ) );
-    double sin_theta = std::sin( theta );
-
-    m_elements[3] = 0;
-
-    if ( sin_theta > 0 )
-    {
-        m_elements[0] = float( theta * m_elements[0] / sin_theta );
-        m_elements[1] = float( theta * m_elements[1] / sin_theta );
-        m_elements[2] = float( theta * m_elements[2] / sin_theta );
-    }
-    else
-    {
-        m_elements[0] = 0;
-        m_elements[1] = 0;
-        m_elements[2] = 0;
-    }
-    return *this;
-}
-
-inline const Quaternion Quaternion::log() const
-{
-    Quaternion result( *this );
-    return result.log();
-}
-
-inline Quaternion& Quaternion::exp()
-{
-    double theta2 = m_elements.xyz().length2();
-    double theta     = std::sqrt( theta2 );
-    double cos_theta = std::cos( theta );
-
-    m_elements[3] = float( cos_theta );
-
-    if ( theta > 0 )
-    {
-        double sin_theta = std::sin( theta );
-        m_elements[0] = float( sin_theta * m_elements[0] / theta );
-        m_elements[1] = float( sin_theta * m_elements[1] / theta );
-        m_elements[2] = float( sin_theta * m_elements[2] / theta );
-    }
-    else
-    {
-        m_elements[0] = 0;
-        m_elements[1] = 0;
-        m_elements[2] = 0;
-    }
-    return *this;
-}
-
-inline const Quaternion Quaternion::exp() const
-{
-    Quaternion result( *this );
-    return result.exp();
-}
-
-inline double Quaternion::dot( const Quaternion& q ) const
-{
-    double result = 0.0;
-    result += this->x() * q.x();
-    result += this->y() * q.y();
-    result += this->z() * q.z();
-    result += this->w() * q.w();
+    result.conjugate();
     return result;
 }
 
-inline double Quaternion::length() const
+/*===========================================================================*/
+/**
+ *  @brief  Returns normalized quaternion.
+ *  @return normalized quaternion
+ */
+/*===========================================================================*/
+inline Quaternion Quaternion::normalized() const
 {
-    return m_elements.length();
+    Quaternion result( *this );
+    result.normalize();
+    return result;
 }
 
-inline double Quaternion::length2() const
+/*===========================================================================*/
+/**
+ *  @brief  Returns inverted quaternion.
+ *  @return inverted quaternion
+ */
+/*===========================================================================*/
+inline Quaternion Quaternion::inverted() const
 {
-    return m_elements.length2();
+    Quaternion result( *this );
+    result.invert();
+    return result;
 }
 
-inline float& Quaternion::operator [] ( size_t index )
+/*===========================================================================*/
+/**
+ *  @brief  Returns logarithm of quaternion.
+ *  @return logarithm of quaternion
+ */
+/*===========================================================================*/
+inline Quaternion Quaternion::log() const
 {
-    return m_elements[ index ];
+    Quaternion result( *this );
+
+    double theta = std::acos( double( result.w() ) );
+    double sin_theta = std::sin( theta );
+    if ( sin_theta > 0 )
+    {
+        result.x() = float( theta * result.x() / sin_theta );
+        result.y() = float( theta * result.y() / sin_theta );
+        result.z() = float( theta * result.z() / sin_theta );
+        result.w() = 0;
+    }
+    else
+    {
+        result.x() = 0;
+        result.y() = 0;
+        result.z() = 0;
+        result.w() = 0;
+    }
+
+    return result;
 }
 
-inline const float& Quaternion::operator [] ( size_t index ) const
+/*===========================================================================*/
+/**
+ *  @brief  Returns exponential of quaternion.
+ *  @return exponential of quaternion
+ */
+/*===========================================================================*/
+inline Quaternion Quaternion::exp() const
 {
-    return m_elements[ index ];
-}
+    Quaternion result( *this );
 
-inline Quaternion& Quaternion::operator += ( const Quaternion& q )
-{
-    m_elements += q.m_elements;
+    double theta2 = m_elements.xyz().length2();
+    double theta = std::sqrt( theta2 );
+    double cos_theta = std::cos( theta );
+    if ( theta > 0 )
+    {
+        double sin_theta = std::sin( theta );
+        result.x() = float( sin_theta * result.x() / theta );
+        result.y() = float( sin_theta * result.y() / theta );
+        result.z() = float( sin_theta * result.z() / theta );
+        result.w() = float( cos_theta );
+    }
+    else
+    {
+        result.x() = 0;
+        result.y() = 0;
+        result.z() = 0;
+        result.w() = float( cos_theta );
+    }
+
     return *this;
 }
 
-inline Quaternion& Quaternion::operator -= ( const Quaternion& q )
-{
-    m_elements -= q.m_elements;
-    return *this;
-}
-
-inline Quaternion& Quaternion::operator *= ( float a )
-{
-    m_elements *= a;
-    return *this;
-}
-
-inline Quaternion& Quaternion::operator /= ( float a )
-{
-    m_elements /= a;
-    return *this;
-}
-
-inline Quaternion& Quaternion::operator *= ( const Quaternion& q )
-{
-    float x = this->x();
-    float y = this->y();
-    float z = this->z();
-    float w = this->w();
-
-    this->set( w * q.x() + x * q.w() + y * q.z() - z * q.y(),
-               w * q.y() - x * q.z() + y * q.w() + z * q.x(),
-               w * q.z() + x * q.y() - y * q.x() + z * q.w(),
-               w * q.w() - x * q.x() - y * q.y() - z * q.z() );
-
-    return *this;
-}
-
-inline const kvs::Matrix33<float> Quaternion::toMatrix() const
+/*===========================================================================*/
+/**
+ *  @brief  Calculates 3x3 matrix of the quaternion.
+ *  @param  m [in/out] 3x3 matrix
+ */
+/*===========================================================================*/
+inline void Quaternion::toMatrix( kvs::Mat3& m ) const
 {
     float length_2 = static_cast<float>( this->length2() );
     float s = ( length_2 > 0 ) ? float(2) / length_2 : 0;
@@ -543,29 +545,26 @@ inline const kvs::Matrix33<float> Quaternion::toMatrix() const
     float wy = this->w() * this->y() * s;
     float wz = this->w() * this->z() * s;
 
-    kvs::Matrix33<float> ret;
-    ret[0][0] = 1.0f - ( yy + zz );
-    ret[1][0] = xy + wz;
-    ret[2][0] = xz - wy;
+    m[0][0] = 1.0f - ( yy + zz );
+    m[1][0] = xy + wz;
+    m[2][0] = xz - wy;
 
-    ret[0][1] = xy - wz;
-    ret[1][1] = 1.0f - ( xx + zz );
-    ret[2][1] = yz + wx;
+    m[0][1] = xy - wz;
+    m[1][1] = 1.0f - ( xx + zz );
+    m[2][1] = yz + wx;
 
-    ret[0][2] = xz + wy;
-    ret[1][2] = yz - wx;
-    ret[2][2] = 1.0f - ( xx + yy );
-
-    return ret;
+    m[0][2] = xz + wy;
+    m[1][2] = yz - wx;
+    m[2][2] = 1.0f - ( xx + yy );
 }
 
-
-inline void Quaternion::toMatrix( kvs::Matrix33<float>& m ) const
-{
-    m = this->toMatrix();
-}
-
-inline void Quaternion::toMatrix( kvs::Matrix44<float>& m ) const
+/*===========================================================================*/
+/**
+ *  @brief  Calculates 4x4 matrix of the quaternion.
+ *  @param  m [in/out] 4x4 matrix
+ */
+/*===========================================================================*/
+inline void Quaternion::toMatrix( kvs::Mat4& m ) const
 {
     float length_2 = static_cast<float>( this->length2() );
     float s = ( length_2 > float(0) ) ? float(2) / length_2 : float(0);
@@ -580,27 +579,33 @@ inline void Quaternion::toMatrix( kvs::Matrix44<float>& m ) const
     float wy = this->w() * this->y() * s;
     float wz = this->w() * this->z() * s;
 
-    m[0][0] = float(1) - ( yy + zz );
+    m[0][0] = 1.0f - ( yy + zz );
     m[1][0] = xy + wz;
     m[2][0] = xz - wy;
-    m[3][0] = float(0);
+    m[3][0] = 0.0f;
 
     m[0][1] = xy - wz;
-    m[1][1] = float(1) - ( xx + zz );
+    m[1][1] = 1.0f - ( xx + zz );
     m[2][1] = yz + wx;
-    m[3][1] = float(0);
+    m[3][1] = 0.0f;
 
     m[0][2] = xz + wy;
     m[1][2] = yz - wx;
-    m[2][2] = float(1) - ( xx + yy );
-    m[3][2] = float(0);
+    m[2][2] = 1.0f - ( xx + yy );
+    m[3][2] = 0.0f;
 
-    m[0][3] = float(0);
-    m[1][3] = float(0);
-    m[2][3] = float(0);
-    m[3][3] = float(1);
+    m[0][3] = 0.0f;
+    m[1][3] = 0.0f;
+    m[2][3] = 0.0f;
+    m[3][3] = 1.0f;
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Calculates 4x4 matrix of the quaternion.
+ *  @param  m [in/out] 4x4 matrix
+ */
+/*===========================================================================*/
 inline void Quaternion::toMatrix( float m[16] ) const
 {
     float length_2 = static_cast<float>( this->length2() );
@@ -616,171 +621,60 @@ inline void Quaternion::toMatrix( float m[16] ) const
     float wy = this->w() * this->y() * s;
     float wz = this->w() * this->z() * s;
 
-    m[0]  = float(1) - ( yy + zz );
+    m[0]  = 1.0f - ( yy + zz );
     m[1]  = xy + wz;
     m[2]  = xz - wy;
-    m[3]  = float(0);
+    m[3]  = 0.0f;
 
     m[4]  = xy - wz;
-    m[5]  = float(1) - ( xx + zz );
+    m[5]  = 1.0f - ( xx + zz );
     m[6]  = yz + wx;
-    m[7]  = float(0);
+    m[7]  = 0.0f;
 
     m[8]  = xz + wy;
     m[9]  = yz - wx;
-    m[10] = float(1) - ( xx + yy );
-    m[11] = float(0);
+    m[10] = 1.0f - ( xx + yy );
+    m[11] = 0.0f;
 
-    m[12] = float(0);
-    m[13] = float(0);
-    m[14] = float(0);
-    m[15] = float(1);
+    m[12] = 0.0f;
+    m[13] = 0.0f;
+    m[14] = 0.0f;
+    m[15] = 1.0f;
 }
 
-inline kvs::Vector3<float> Quaternion::axis()
+/*===========================================================================*/
+/**
+ *  @brief  Returns 3x3 matrix of the quaternion.
+ *  @return 3x3 matrix
+ */
+/*===========================================================================*/
+inline kvs::Mat3 Quaternion::toMatrix() const
+{
+    kvs::Mat3 result; this->toMatrix( result );
+    return result;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns rotation axis.
+ *  @return rotation axis
+ */
+/*===========================================================================*/
+inline kvs::Vec3 Quaternion::axis() const
 {
     float s = float( std::sin( double( this->angle() ) * 0.5 ) );
     return m_elements.xyz() / s;
 }
 
-inline float Quaternion::angle()
+/*===========================================================================*/
+/**
+ *  @brief  Returns rotation angle.
+ *  @return rotation angle
+ */
+/*===========================================================================*/
+inline float Quaternion::angle() const
 {
     return float( std::acos( double( this->w() ) ) * 2.0 );
-}
-
-inline kvs::Vector3<float> Quaternion::rotate( const kvs::Vector3<float>& pos, const kvs::Vector3<float>& axis, float rad )
-{
-    const Quaternion p( pos.x(), pos.y(), pos.z(), float(0) );
-    const Quaternion rotate_quat( axis, rad );
-    const Quaternion rotate_conj = rotate_quat.conjugate();
-    const Quaternion rotate_pos = rotate_quat * p * rotate_conj;
-    return rotate_pos.m_elements.xyz();
-}
-
-inline kvs::Vector3<float> Quaternion::rotate( const kvs::Vector3<float>& pos, const kvs::Quaternion& q )
-{
-    const Quaternion p( pos.x(), pos.y(), pos.z(), float(0) );
-    const Quaternion rotate_conj = q.conjugate();
-    const Quaternion rotate_pos = q * p * rotate_conj;
-    return rotate_pos.m_elements.xyz();
-}
-
-inline Quaternion Quaternion::rotationQuaternion( Vector3<float> v0, Vector3<float> v1 )
-{
-    Quaternion q;
-
-    v0.normalize();
-    v1.normalize();
-
-    kvs::Vector3<float> c = v0.cross( v1 );
-    float               d = v0.x() * v1.x() + v0.y() * v1.y() + v0.z() * v1.z();
-    double              s = std::sqrt( double( ( 1 + d ) * 2.0 ) );
-
-    q.x() = float( c.x() / s );
-    q.y() = float( c.y() / s );
-    q.z() = float( c.z() / s );
-    q.w() = float( s / 2.0 );
-
-    return q;
-}
-
-inline Quaternion Quaternion::linearInterpolation(
-    const Quaternion& q1,
-    const Quaternion& q2,
-    double            t,
-    bool              for_rotation )
-{
-    Quaternion ret = q1 + float(t) * ( q2 - q1 );
-
-    if ( for_rotation ) { ret.normalize(); }
-
-    return ret;
-}
-
-inline Quaternion Quaternion::sphericalLinearInterpolation(
-    const Quaternion& q1,
-    const Quaternion& q2,
-    double            t,
-    bool              invert,
-    bool              for_rotation )
-{
-    Quaternion tmp1 = q1; tmp1.normalize();
-    Quaternion tmp2 = q2; tmp2.normalize();
-
-    double dot = tmp1.dot( tmp2 );
-
-    Quaternion q3;
-
-    // dot = cos( theta )
-    // if (dot < 0), q1 and q2 are more than 90 degrees apart,
-    // so we can invert one to reduce spining
-
-    if ( invert && dot < 0 )
-    {
-        dot = -dot;
-        q3  = -q2;
-    }
-    else
-    {
-        q3 = q2;
-    }
-
-    if ( (  invert && dot < 0.95 ) ||
-         ( !invert && dot > -0.95 && dot < 0.95 ) )
-    {
-        double angle   = std::acos( dot );
-        double sina    = std::sin( angle );
-        double sinat   = std::sin( angle * t );
-        double sinaomt = std::sin( angle * (1-t) );
-
-        return ( q1 * float( sinaomt ) + q3 * float( sinat ) ) / float( sina );
-    }
-    // if the angle is small, use linear interpolation
-    else
-    {
-        return linearInterpolation( q1, q3, t, for_rotation );
-    }
-}
-
-inline Quaternion Quaternion::sphericalCubicInterpolation(
-    const Quaternion& q1,
-    const Quaternion& q2,
-    const Quaternion& a,
-    const Quaternion& b,
-    double            t,
-    bool              for_rotation )
-{
-    Quaternion c = sphericalLinearInterpolation( q1, q2, t, false, for_rotation );
-    Quaternion d = sphericalLinearInterpolation(  a,  b, t, false, for_rotation );
-
-    return sphericalLinearInterpolation( c, d, 2.0 * t * (1-t), false, for_rotation );
-}
-
-inline Quaternion Quaternion::splineInterpolation(
-    const Quaternion& q1,
-    const Quaternion& q2,
-    const Quaternion& q3,
-    const Quaternion& q4,
-    double               t,
-    bool                 for_rotation )
-{
-    Quaternion a = spline( q1, q2, q3 );
-    Quaternion b = spline( q2, q3, q4 );
-
-    return sphericalCubicInterpolation( q2, q3, a, b, t, for_rotation );
-}
-
-inline Quaternion Quaternion::spline(
-    const Quaternion& qnm1,
-    const Quaternion& qn,
-    const Quaternion& qnp1 )
-{
-    Quaternion tmpm1 = qnm1; tmpm1.normalize();
-    Quaternion tmpp1 = qnp1; tmpp1.normalize();
-
-    Quaternion qni = qn.conjugate(); qni.normalize();
-
-    return qn * ( ( ( qni * tmpm1 ).log() + ( qni * tmpp1 ).log() ) / -4 ).exp();
 }
 
 } // end of namespace kvs
