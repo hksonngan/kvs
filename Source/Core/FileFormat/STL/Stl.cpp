@@ -1,6 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   Stl.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -14,26 +15,26 @@
 #include "Stl.h"
 #include <cstring>
 #include <kvs/File>
+#include <kvs/Assert>
 
 
 namespace
 {
-
 const int MaxLineLength = 256;
-
 const char* const Delimiter = " \t\n\r";
-
-const std::string FileTypeToString[2] =
-{
-    "ascii",
-    "binary"
-};
-
+const std::string FileTypeToString[2] = { "ascii", "binary" };
 }
 
 namespace
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  Returns true if the file type is 'ascii'.
+ *  @param  ifs [in] file pointer
+ *  @return true ('ascii') or false ('binary')
+ */
+/*===========================================================================*/
 bool IsAsciiType( FILE* ifs )
 {
     // Go back file-pointer to head.
@@ -89,7 +90,7 @@ bool Stl::CheckExtension( const std::string& filename )
  *  @brief  Constructs a new STL class.
  */
 /*===========================================================================*/
-Stl::Stl( void ):
+Stl::Stl():
     m_file_type( Stl::Ascii )
 {
 }
@@ -111,87 +112,17 @@ Stl::Stl( const std::string& filename ):
  *  @brief  Destructs the STL class.
  */
 /*===========================================================================*/
-Stl::~Stl( void )
+Stl::~Stl()
 {
 }
 
 /*===========================================================================*/
 /**
- *  @brief  Returns a file type.
- *  @return file type
+ *  @brief  Prints the file information.
+ *  @param  os [in] output stream
+ *  @param  indent [in] indent
  */
 /*===========================================================================*/
-Stl::FileType Stl::fileType( void ) const
-{
-    return m_file_type;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a normal vector array.
- *  @return noraml vector array
- */
-/*===========================================================================*/
-const kvs::ValueArray<kvs::Real32>& Stl::normals( void ) const
-{
-    return m_normals;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a coordinate value array.
- *  @return coodinate value array
- */
-/*===========================================================================*/
-const kvs::ValueArray<kvs::Real32>& Stl::coords( void ) const
-{
-    return m_coords;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a number of triangles.
- *  @return number of triangles
- */
-/*===========================================================================*/
-size_t Stl::ntriangles( void ) const
-{
-    return m_normals.size() / 3;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets file type.
- *  @param  file_type [in] file type (kvs::Stl::Ascii or kvs::Stl::Binary)
- */
-/*===========================================================================*/
-void Stl::setFileType( const FileType file_type )
-{
-    m_file_type = file_type;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Set a normal vector array.
- *  @param  normals [in] normal vector array
- */
-/*===========================================================================*/
-void Stl::setNormals( const kvs::ValueArray<kvs::Real32>& normals )
-{
-    m_normals = normals;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Set a coordinate vector array.
- *  @param  coords [in] coordinate vector array
- */
-/*===========================================================================*/
-void Stl::setCoords( const kvs::ValueArray<kvs::Real32>& coords )
-{
-    m_coords = coords;
-}
-
 void Stl::print( std::ostream& os, const kvs::Indent& indent ) const
 {
     os << indent << "Filename : " << BaseClass::filename() << std::endl;
@@ -220,7 +151,6 @@ bool Stl::read( const std::string& filename )
     }
 
     bool success = false;
-//    if ( this->is_ascii_type( ifs ) )
     if ( ::IsAsciiType( ifs ) )
     {
         m_file_type = Stl::Ascii;
@@ -247,6 +177,8 @@ bool Stl::read( const std::string& filename )
 /*===========================================================================*/
 bool Stl::write( const std::string& filename )
 {
+    KVS_ASSERT( ( m_normals.size() / 3 ) == ( m_coords.size() / 9 ) );
+
     BaseClass::setFilename( filename );
     BaseClass::setSuccess( true );
 

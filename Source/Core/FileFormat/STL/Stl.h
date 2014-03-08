@@ -1,6 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   Stl.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -21,6 +22,7 @@
 #include <kvs/FileFormatBase>
 #include <kvs/Type>
 #include <kvs/Indent>
+#include <kvs/Deprecated>
 
 
 namespace kvs
@@ -59,14 +61,14 @@ public:
     Stl( const std::string& filename );
     virtual ~Stl();
 
-    FileType fileType() const;
-    const kvs::ValueArray<kvs::Real32>& normals() const;
-    const kvs::ValueArray<kvs::Real32>& coords() const;
-    size_t ntriangles() const;
+    FileType fileType() const { return m_file_type; }
+    const kvs::ValueArray<kvs::Real32>& normals() const { return m_normals; }
+    const kvs::ValueArray<kvs::Real32>& coords() const { return m_coords; }
+    size_t numberOfTriangles() const { return m_normals.size() / 3; }
 
-    void setFileType( const FileType file_type );
-    void setNormals( const kvs::ValueArray<kvs::Real32>& normals );
-    void setCoords( const kvs::ValueArray<kvs::Real32>& coords );
+    void setFileType( const FileType file_type ) { m_file_type = file_type; }
+    void setNormals( const kvs::ValueArray<kvs::Real32>& normals ) { m_normals = normals; }
+    void setCoords( const kvs::ValueArray<kvs::Real32>& coords ) { m_coords = coords; }
 
     void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
     bool read( const std::string& filename );
@@ -79,6 +81,9 @@ private:
     bool read_binary( FILE* ifs );
     bool write_ascii( FILE* ifs );
     bool write_binary( FILE* ifs );
+
+public:
+    KVS_DEPRECATED( size_t ntriangles() const ) { return this->numberOfTriangles(); }
 };
 
 } // end of namespace kvs
