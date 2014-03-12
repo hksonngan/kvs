@@ -31,7 +31,7 @@ namespace glsl
 
 class PolygonRenderer : public kvs::PolygonRenderer
 {
-    kvsModule( Renderer, kvs::glsl::PolygonRenderer, kvs::PolygonRenderer );
+    kvsModule( kvs::glsl::PolygonRenderer, Renderer );
     kvsModuleBaseClass( kvs::PolygonRenderer );
 
 protected:

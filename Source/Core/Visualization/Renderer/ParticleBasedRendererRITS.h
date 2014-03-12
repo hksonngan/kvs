@@ -86,7 +86,7 @@ protected:
 /*===========================================================================*/
 class ParticleBasedRenderer : public kvs::VolumeRendererBase
 {
-    kvsModule( Renderer, kvs::glsl::rits::ParticleBasedRenderer, kvs::VolumeRendererBase );
+    kvsModule( kvs::glsl::rits::ParticleBasedRenderer, Renderer );
     kvsModuleBaseClass( kvs::VolumeRendererBase );
 
 protected:

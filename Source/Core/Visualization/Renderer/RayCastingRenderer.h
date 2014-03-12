@@ -32,7 +32,7 @@ namespace kvs
 /*==========================================================================*/
 class RayCastingRenderer : public kvs::VolumeRendererBase
 {
-    kvsModule( Renderer, kvs::RayCastingRenderer, kvs::VolumeRendererBase );
+    kvsModule( kvs::RayCastingRenderer, Renderer );
     kvsModuleBaseClass( kvs::VolumeRendererBase );
 
 private:

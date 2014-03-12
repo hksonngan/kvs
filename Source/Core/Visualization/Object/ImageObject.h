@@ -35,7 +35,7 @@ namespace kvs
 /*===========================================================================*/
 class ImageObject : public kvs::ObjectBase
 {
-    kvsModule( Object, kvs::ImageObject, kvs::ObjectBase );
+    kvsModule( kvs::ImageObject, Object );
     kvsModuleBaseClass( kvs::ObjectBase );
 
 public:

@@ -32,7 +32,7 @@ namespace kvs
 /*===========================================================================*/
 class StreamlineBase : public kvs::MapperBase, public kvs::LineObject
 {
-    kvsModule( Mapper, kvs::StreamlineBase, kvs::MapperBase );
+    kvsModule( kvs::StreamlineBase, Mapper );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::LineObject );
 

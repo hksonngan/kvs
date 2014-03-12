@@ -33,7 +33,7 @@ namespace kvs
 /*==========================================================================*/
 class StructuredVolumeImporter : public kvs::ImporterBase, public kvs::StructuredVolumeObject
 {
-    kvsModule( Importer, kvs::StructuredVolumeImporter, kvs::ImporterBase );
+    kvsModule( kvs::StructuredVolumeImporter, Importer );
     kvsModuleBaseClass( kvs::ImporterBase );
     kvsModuleSuperClass( kvs::StructuredVolumeObject );
 

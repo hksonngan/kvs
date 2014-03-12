@@ -38,7 +38,7 @@ namespace kvs
 /*==========================================================================*/
 class ImageImporter : public kvs::ImporterBase, public kvs::ImageObject
 {
-    kvsModule( Importer, kvs::ImageImporter, kvs::ImporterBase );
+    kvsModule( kvs::ImageImporter, Importer );
     kvsModuleBaseClass( kvs::ImporterBase );
     kvsModuleSuperClass( kvs::ImageObject );
 

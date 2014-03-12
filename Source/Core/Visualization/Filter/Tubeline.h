@@ -31,7 +31,7 @@ namespace kvs
 /*===========================================================================*/
 class Tubeline : public kvs::FilterBase, public kvs::PolygonObject
 {
-    kvsModule( Filter, kvs::Tubeline, kvs::FilterBase );
+    kvsModule( kvs::Tubeline, Filter );
     kvsModuleBaseClass( kvs::FilterBase );
     kvsModuleSuperClass( kvs::PolygonObject );
 

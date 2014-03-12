@@ -34,7 +34,7 @@ class StructuredVolumeObject;
 /*===========================================================================*/
 class GlyphBase : public kvs::RendererBase
 {
-    kvsModule( Renderer, kvs::GlyphBase, kvs::RendererBase );
+    kvsModule( kvs::GlyphBase, Renderer );
 
 public:
 

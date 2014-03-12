@@ -31,7 +31,7 @@ namespace kvs
 /*==========================================================================*/
 class MarchingCubes : public kvs::MapperBase, public kvs::PolygonObject
 {
-    kvsModule( Mapper, kvs::MarchingCubes, kvs::MapperBase );
+    kvsModule( kvs::MarchingCubes, Mapper );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::PolygonObject );
 

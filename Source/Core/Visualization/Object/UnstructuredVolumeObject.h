@@ -32,7 +32,7 @@ namespace kvs
 /*==========================================================================*/
 class UnstructuredVolumeObject : public kvs::VolumeObjectBase
 {
-    kvsModule( Object, kvs::UnstructuredVolumeObject, kvs::VolumeObjectBase );
+    kvsModule( kvs::UnstructuredVolumeObject, Object );
     kvsModuleBaseClass( kvs::VolumeObjectBase );
 
 public:

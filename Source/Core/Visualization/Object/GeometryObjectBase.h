@@ -36,7 +36,7 @@ namespace kvs
 /*===========================================================================*/
 class GeometryObjectBase : public kvs::ObjectBase
 {
-    kvsModule( Object, kvs::GeometryObjectBase, kvs::ObjectBase );
+    kvsModule( kvs::GeometryObjectBase, Object );
 
 public:
 

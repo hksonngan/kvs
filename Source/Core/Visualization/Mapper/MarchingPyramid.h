@@ -31,7 +31,7 @@ namespace kvs
 /*==========================================================================*/
 class MarchingPyramid : public kvs::MapperBase, public kvs::PolygonObject
 {
-    kvsModule( Mapper, kvs::MarchingPyramid, kvs::MapperBase );
+    kvsModule( kvs::MarchingPyramid, Mapper );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::PolygonObject );
 

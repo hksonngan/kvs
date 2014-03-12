@@ -35,7 +35,7 @@ namespace kvs
 /*==========================================================================*/
 class SlicePlane : public kvs::MapperBase, public kvs::PolygonObject
 {
-    kvsModule( Mapper, kvs::SlicePlane, kvs::MapperBase );
+    kvsModule( kvs::SlicePlane, Mapper );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::PolygonObject );
 

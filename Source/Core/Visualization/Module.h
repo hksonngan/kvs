@@ -18,9 +18,9 @@
 #include <cstring>
 
 #define KVS_MODULE_IMPORTER kvs::ImporterBase::ModuleTag
-#define KVS_MODULE_FILTER   kvs::FilterBase::ModuleTag
-#define KVS_MODULE_MAPPER   kvs::MapperBase::ModuleTag
-#define KVS_MODULE_OBJECT   kvs::ObjectBase::ModuleTag
+#define KVS_MODULE_FILTER kvs::FilterBase::ModuleTag
+#define KVS_MODULE_MAPPER kvs::MapperBase::ModuleTag
+#define KVS_MODULE_OBJECT kvs::ObjectBase::ModuleTag
 #define KVS_MODULE_RENDERER kvs::RendererBase::ModuleTag
 
 #define kvsModuleBase( this_class )                                     \
@@ -29,7 +29,7 @@
     typedef ModuleTag ModuleCategory;                                   \
     virtual const char* moduleName() const { return #this_class; }
 
-#define kvsModule( category, this_class, super_class )                  \
+#define kvsModule( this_class, category )                               \
     public:                                                             \
     typedef kvs:: category##Base::ModuleTag ModuleCategory;             \
     virtual const char* moduleName() const { return #this_class; }      \

@@ -53,7 +53,7 @@ namespace kvs
 /*===========================================================================*/
 class HAVSVolumeRenderer : public kvs::VolumeRendererBase
 {
-    kvsModule( Renderer, kvs::HAVSVolumeRenderer, kvs::VolumeRendererBase );
+    kvsModule( kvs::HAVSVolumeRenderer, Renderer );
     kvsModuleBaseClass( kvs::VolumeRendererBase );
 
 public:

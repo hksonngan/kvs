@@ -35,7 +35,7 @@ class LineObject;
 /*===========================================================================*/
 class StochasticLineRenderer : public kvs::StochasticRendererBase
 {
-    kvsModule( Renderer, kvs::StochasticLineRenderer, kvs::StochasticRendererBase );
+    kvsModule( kvs::StochasticLineRenderer, Renderer );
     kvsModuleBaseClass( kvs::StochasticRendererBase );
 
 public:

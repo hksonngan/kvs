@@ -33,7 +33,7 @@ namespace kvs
 /*==========================================================================*/
 class PolygonImporter : public kvs::ImporterBase, public kvs::PolygonObject
 {
-    kvsModule( Importer, kvs::PolygonImporter, kvs::ImporterBase );
+    kvsModule( kvs::PolygonImporter, Importer );
     kvsModuleBaseClass( kvs::ImporterBase );
     kvsModuleSuperClass( kvs::PolygonObject );
 

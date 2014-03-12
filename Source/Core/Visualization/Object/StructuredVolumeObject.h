@@ -16,7 +16,7 @@
 #define KVS__STRUCTURED_VOLUME_OBJECT_H_INCLUDE
 
 #include <ostream>
-//#include <kvs/Module>
+#include <kvs/Module>
 #include <kvs/VolumeObjectBase>
 #include <kvs/Indent>
 #include <kvs/Deprecated>
@@ -32,7 +32,7 @@ namespace kvs
 /*==========================================================================*/
 class StructuredVolumeObject : public kvs::VolumeObjectBase
 {
-    kvsModule( Object, kvs::StructuredVolumeObject, kvs::VolumeObjectBase );
+    kvsModule( kvs::StructuredVolumeObject, Object );
     kvsModuleBaseClass( kvs::VolumeObjectBase );
 
 private:

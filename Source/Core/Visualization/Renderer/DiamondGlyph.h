@@ -37,7 +37,7 @@ class RGBColor;
 /*===========================================================================*/
 class DiamondGlyph : public kvs::GlyphBase
 {
-    kvsModule( Renderer, kvs::DiamondGlyph, kvs::GlyphBase );
+    kvsModule( kvs::DiamondGlyph, Renderer );
     kvsModuleBaseClass( kvs::GlyphBase );
 
 private:

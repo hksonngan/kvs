@@ -39,7 +39,7 @@ class PolygonObject;
 /*==========================================================================*/
 class PointObject : public kvs::GeometryObjectBase
 {
-    kvsModule( Object, kvs::PointObject, kvs::GeometryObjectBase );
+    kvsModule( kvs::PointObject, Object );
     kvsModuleBaseClass( kvs::GeometryObjectBase );
 
 private:

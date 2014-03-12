@@ -31,7 +31,7 @@ namespace kvs
 /*===========================================================================*/
 class TableImporter : public kvs::ImporterBase, public kvs::TableObject
 {
-    kvsModule( Importer, kvs::TableImporter, kvs::ImporterBase );
+    kvsModule( kvs::TableImporter, Importer );
     kvsModuleBaseClass( kvs::ImporterBase );
     kvsModuleSuperClass( kvs::TableObject );
 

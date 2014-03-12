@@ -33,7 +33,7 @@ namespace kvs
 /*==========================================================================*/
 class MetropolisSampling : public MapperBase, public PointObject
 {
-    kvsModule( Mapper, kvs::MetropolisSampling, kvs::MapperBase );
+    kvsModule( kvs::MetropolisSampling, Mapper );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::PointObject );
 

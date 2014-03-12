@@ -43,7 +43,7 @@ namespace glsl
 /*===========================================================================*/
 class RayCastingRenderer : public kvs::VolumeRendererBase
 {
-    kvsModule( Renderer, kvs::glsl::RayCastingRenderer, kvs::VolumeRendererBase );
+    kvsModule( kvs::glsl::RayCastingRenderer, Renderer );
     kvsModuleBaseClass( kvs::VolumeRendererBase );
 
 public:

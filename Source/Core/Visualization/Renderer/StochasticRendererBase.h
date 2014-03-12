@@ -37,7 +37,7 @@ class Light;
 /*===========================================================================*/
 class StochasticRendererBase : public kvs::RendererBase
 {
-    kvsModule( Renderer, kvs::StochasticRendererBase, kvs::RendererBase );
+    kvsModule( kvs::StochasticRendererBase, Renderer );
 
     friend class StochasticRenderingCompositor;
 

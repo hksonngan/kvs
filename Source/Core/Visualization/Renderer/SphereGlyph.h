@@ -40,7 +40,7 @@ class RGBColor;
 /*===========================================================================*/
 class SphereGlyph : public kvs::GlyphBase
 {
-    kvsModule( Renderer, kvs::SphereGlyph, kvs::GlyphBase );
+    kvsModule( kvs::SphereGlyph, Renderer );
     kvsModuleBaseClass( kvs::GlyphBase );
 
 private:

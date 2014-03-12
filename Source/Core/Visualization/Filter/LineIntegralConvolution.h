@@ -30,7 +30,7 @@ namespace kvs
 /*===========================================================================*/
 class LineIntegralConvolution : public kvs::FilterBase, public kvs::StructuredVolumeObject
 {
-    kvsModule( Filter, kvs::LineIntegralConvolution, kvs::FilterBase );
+    kvsModule( kvs::LineIntegralConvolution, Filter );
     kvsModuleBaseClass( kvs::FilterBase );
     kvsModuleSuperClass( kvs::StructuredVolumeObject );
 

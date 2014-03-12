@@ -36,7 +36,7 @@ namespace kvs
 /*==========================================================================*/
 class VolumeObjectBase : public kvs::ObjectBase
 {
-    kvsModule( Object, kvs::VolumeObjectBase, kvs::ObjectBase );
+    kvsModule( kvs::VolumeObjectBase, Object );
 
 public:
 

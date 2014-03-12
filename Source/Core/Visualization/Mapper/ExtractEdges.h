@@ -35,7 +35,7 @@ class TransferFunction;
 /*===========================================================================*/
 class ExtractEdges : public kvs::MapperBase, public kvs::LineObject
 {
-    kvsModule( Mapper, kvs::ExtractEdges, kvs::MapperBase );
+    kvsModule( kvs::ExtractEdges, Mapper );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::LineObject );
 

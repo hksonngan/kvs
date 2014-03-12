@@ -32,7 +32,7 @@ class VolumeObjectBase;
 /*==========================================================================*/
 class ExtractVertices : public kvs::MapperBase, public kvs::PointObject
 {
-    kvsModule( Mapper, kvs::ExtractVertices, kvs::MapperBase );
+    kvsModule( kvs::ExtractVertices, Mapper );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::PointObject );
 

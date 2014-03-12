@@ -35,7 +35,7 @@ class PolygonObject;
 /*===========================================================================*/
 class StochasticPolygonRenderer : public kvs::StochasticRendererBase
 {
-    kvsModule( Renderer, kvs::StochasticPolygonRenderer, kvs::StochasticRendererBase );
+    kvsModule( kvs::StochasticPolygonRenderer, Renderer );
     kvsModuleBaseClass( kvs::StochasticRendererBase );
 
 public:

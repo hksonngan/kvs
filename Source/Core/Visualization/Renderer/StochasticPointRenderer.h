@@ -35,7 +35,7 @@ class PointObject;
 /*===========================================================================*/
 class StochasticPointRenderer : public kvs::StochasticRendererBase
 {
-    kvsModule( Renderer, kvs::StochasticPointRenderer, kvs::StochasticRendererBase );
+    kvsModule( kvs::StochasticPointRenderer, Renderer );
     kvsModuleBaseClass( kvs::StochasticRendererBase );
 
 public:

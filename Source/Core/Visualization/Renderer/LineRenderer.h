@@ -33,7 +33,7 @@ class Light;
 /*==========================================================================*/
 class LineRenderer : public kvs::RendererBase
 {
-    kvsModule( Renderer, kvs::LineRenderer, kvs::RendererBase );
+    kvsModule( kvs::LineRenderer, Renderer );
     kvsModuleBaseClass( kvs::RendererBase );
 
 private:

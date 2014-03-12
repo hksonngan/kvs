@@ -36,7 +36,7 @@ namespace kvs
 /*===========================================================================*/
 class TableObject : public kvs::ObjectBase
 {
-    kvsModule( Object, kvs::TableObject, kvs::ObjectBase );
+    kvsModule( kvs::TableObject, Object );
     kvsModuleBaseClass( kvs::ObjectBase );
 
 public:

@@ -31,7 +31,7 @@ namespace glsl
 
 class PointRenderer : public kvs::PointRenderer
 {
-    kvsModule( Renderer, kvs::glsl::PointRenderer, kvs::PointRenderer );
+    kvsModule( kvs::glsl::PointRenderer, Renderer );
     kvsModuleBaseClass( kvs::PointRenderer );
 
 protected:

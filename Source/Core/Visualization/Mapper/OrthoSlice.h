@@ -30,7 +30,7 @@ namespace kvs
 /*==========================================================================*/
 class OrthoSlice : public kvs::SlicePlane
 {
-    kvsModule( Mapper, kvs::OrthoSlice, kvs::SlicePlane );
+    kvsModule( kvs::OrthoSlice, Mapper );
     kvsModuleSuperClass( kvs::SlicePlane );
 
 public:

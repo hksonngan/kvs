@@ -33,7 +33,7 @@ namespace kvs
 /*==========================================================================*/
 class HitAndMissSampling : public kvs::MapperBase, public kvs::PointObject
 {
-    kvsModule( Mapper, kvs::HitAndMissSampling, kvs::MapperBase );
+    kvsModule( kvs::HitAndMissSampling, Mapper );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::PointObject );
 

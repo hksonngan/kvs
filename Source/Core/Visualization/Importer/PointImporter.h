@@ -31,7 +31,7 @@ namespace kvs
 /*==========================================================================*/
 class PointImporter : public kvs::ImporterBase, public kvs::PointObject
 {
-    kvsModule( Importer, kvs::PointImporter, kvs::ImporterBase );
+    kvsModule( kvs::PointImporter, Importer );
     kvsModuleBaseClass( kvs::ImporterBase );
     kvsModuleSuperClass( kvs::PointObject );
 

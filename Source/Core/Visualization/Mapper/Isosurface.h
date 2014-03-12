@@ -31,7 +31,7 @@ namespace kvs
 /*==========================================================================*/
 class Isosurface : public kvs::MapperBase, public kvs::PolygonObject
 {
-    kvsModule( Mapper, kvs::Isosurface, kvs::MapperBase );
+    kvsModule( kvs::Isosurface, Mapper );
     kvsModuleBaseClass( kvs::MapperBase );
     kvsModuleSuperClass( kvs::PolygonObject );
 

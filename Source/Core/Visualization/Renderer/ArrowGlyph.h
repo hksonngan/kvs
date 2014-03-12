@@ -38,7 +38,7 @@ class RGBColor;
 /*===========================================================================*/
 class ArrowGlyph : public kvs::GlyphBase
 {
-    kvsModule( Renderer, kvs::ArrowGlyph, kvs::GlyphBase );
+    kvsModule( kvs::ArrowGlyph, Renderer );
     kvsModuleBaseClass( kvs::GlyphBase );
 
 public:

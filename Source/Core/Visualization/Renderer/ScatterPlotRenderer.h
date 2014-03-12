@@ -36,7 +36,7 @@ class Light;
 /*===========================================================================*/
 class ScatterPlotRenderer : public kvs::RendererBase
 {
-    kvsModule( Renderer, kvs::ScatterPlotRenderer, kvs::RendererBase );
+    kvsModule( kvs::ScatterPlotRenderer, Renderer );
     kvsModuleBaseClass( kvs::RendererBase );
 
 protected:

@@ -31,7 +31,7 @@ namespace kvs
 /*==========================================================================*/
 class LineImporter : public kvs::ImporterBase, public kvs::LineObject
 {
-    kvsModule( Importer, kvs::LineImporter, kvs::ImporterBase );
+    kvsModule( kvs::LineImporter, Importer );
     kvsModuleBaseClass( kvs::ImporterBase );
     kvsModuleSuperClass( kvs::LineObject );
 

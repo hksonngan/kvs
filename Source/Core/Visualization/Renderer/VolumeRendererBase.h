@@ -33,7 +33,7 @@ namespace kvs
 /*==========================================================================*/
 class VolumeRendererBase : public kvs::RendererBase
 {
-    kvsModule( Renderer, kvs::VolumeRendererBase, kvs::RendererBase );
+    kvsModule( kvs::VolumeRendererBase, Renderer );
 
 private:
 
