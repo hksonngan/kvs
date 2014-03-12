@@ -65,14 +65,14 @@ protected:
 public:
 
     LegendBar( kvs::ScreenBase* screen = 0 );
-    virtual ~LegendBar( void );
+    virtual ~LegendBar();
 
-    virtual void screenUpdated( void ){};
-    virtual void screenResized( void ){};
+    virtual void screenUpdated(){};
+    virtual void screenResized(){};
 
-    const std::string& caption( void ) const;
-    double minValue( void ) const;
-    double maxValue( void ) const;
+    const std::string& caption() const;
+    double minValue() const;
+    double maxValue() const;
 
     void setCaption( const std::string& caption );
     void setOrientation( const OrientationType orientation );
@@ -83,20 +83,20 @@ public:
     void setBorderWidth( const float border_width );
     void setBorderColor( const kvs::RGBColor& border_color );
     void setColorMap( const kvs::ColorMap& colormap );
-    void enableAntiAliasing( void );
-    void disableAntiAliasing( void );
-    void showRange( void );
-    void hideRange( void );
+    void enableAntiAliasing();
+    void disableAntiAliasing();
+    void showRange();
+    void hideRange();
 
-    void paintEvent( void );
+    void paintEvent();
     void resizeEvent( int width, int height );
 
 private:
 
-    int get_fitted_width( void );
-    int get_fitted_height( void );
-    void create_texture( void );
-    void release_texture( void );
+    int get_fitted_width();
+    int get_fitted_height();
+    void create_texture();
+    void release_texture();
     void draw_color_bar( const int x, const int y, const int width, const int height );
     void draw_border( const int x, const int y, const int width, const int height );
 };

@@ -51,18 +51,18 @@ protected:
 public:
 
     WidgetBase( kvs::ScreenBase* screen );
-    virtual ~WidgetBase( void );
+    virtual ~WidgetBase();
 
 public:
 
-    int margin( void ) const;
-    bool isShown( void ) const;
-    const kvs::RGBColor& textColor( void ) const;
-    const kvs::RGBAColor& backgroundColor( void ) const;
-    const kvs::RGBAColor& backgroundBorderColor( void ) const;
-    float backgroundBorderWidth( void ) const;
-    int characterWidth( void ) const;
-    int characterHeight( void ) const;
+    int margin() const;
+    bool isShown() const;
+    const kvs::RGBColor& textColor() const;
+    const kvs::RGBAColor& backgroundColor() const;
+    const kvs::RGBAColor& backgroundBorderColor() const;
+    float backgroundBorderWidth() const;
+    int characterWidth() const;
+    int characterHeight() const;
 
     void setMargin( const int margin );
     void setTextColor( const kvs::RGBColor& text_color );
@@ -72,25 +72,25 @@ public:
     void setBackgroundBorderOpacity( const float opacity );
     void setBackgroundBorderWidth( const float border_width );
 
-    void show( void );
-    void hide( void );
+    void show();
+    void hide();
 
 protected:
 
-    kvs::ScreenBase* screen( void );
+    kvs::ScreenBase* screen();
 
-    virtual void begin_draw( void );
-    virtual void end_draw( void );
-    virtual void draw_background( void );
+    virtual void begin_draw();
+    virtual void end_draw();
+    virtual void draw_background();
     virtual void draw_text( const int x, const int y, const std::string& text );
     virtual void swap_color( kvs::RGBColor& color1, kvs::RGBColor& color2 );
     virtual kvs::RGBColor get_darkened_color( const kvs::RGBColor& color, const float darkness );
-    virtual int get_fitted_width( void );
-    virtual int get_fitted_height( void );
+    virtual int get_fitted_width();
+    virtual int get_fitted_height();
 
 private:
 
-    WidgetBase( void ){}
+    WidgetBase(){}
 };
 
 } // end of namespace glut

@@ -71,7 +71,7 @@ LegendBar::LegendBar( kvs::ScreenBase* screen ):
  *  @brief  Destroys the LegendBar class.
  */
 /*===========================================================================*/
-LegendBar::~LegendBar( void )
+LegendBar::~LegendBar()
 {
 }
 
@@ -81,17 +81,17 @@ LegendBar::~LegendBar( void )
  *  @return legend bar caption
  */
 /*===========================================================================*/
-const std::string& LegendBar::caption( void ) const
+const std::string& LegendBar::caption() const
 {
     return( m_caption );
 }
 
-double LegendBar::minValue( void ) const
+double LegendBar::minValue() const
 {
     return( m_min_value );
 }
 
-double LegendBar::maxValue( void ) const
+double LegendBar::maxValue() const
 {
     return( m_max_value );
 }
@@ -213,7 +213,7 @@ void LegendBar::setColorMap( const kvs::ColorMap& colormap )
  *  @brief  Enables anti-aliasing.
  */
 /*============================================================================*/
-void LegendBar::enableAntiAliasing( void )
+void LegendBar::enableAntiAliasing()
 {
     m_enable_anti_aliasing = true;
 }
@@ -223,7 +223,7 @@ void LegendBar::enableAntiAliasing( void )
  *  @brief  Disables anti-aliasing.
  */
 /*============================================================================*/
-void LegendBar::disableAntiAliasing( void )
+void LegendBar::disableAntiAliasing()
 {
     m_enable_anti_aliasing = false;
 }
@@ -233,7 +233,7 @@ void LegendBar::disableAntiAliasing( void )
  *  @brief  Shows the range values.
  */
 /*===========================================================================*/
-void LegendBar::showRange( void )
+void LegendBar::showRange()
 {
     m_show_range_value = true;
 }
@@ -243,7 +243,7 @@ void LegendBar::showRange( void )
  *  @brief  Hides the range values.
  */
 /*===========================================================================*/
-void LegendBar::hideRange( void )
+void LegendBar::hideRange()
 {
     m_show_range_value = false;
 }
@@ -253,7 +253,7 @@ void LegendBar::hideRange( void )
  *  @brief  Paint event.
  */
 /*===========================================================================*/
-void LegendBar::paintEvent( void )
+void LegendBar::paintEvent()
 {
     this->screenUpdated();
 
@@ -358,7 +358,7 @@ void LegendBar::resizeEvent( int width, int height )
  *  @return screen width
  */
 /*===========================================================================*/
-int LegendBar::get_fitted_width( void )
+int LegendBar::get_fitted_width()
 {
     size_t width = 0;
     switch ( m_orientation )
@@ -390,7 +390,7 @@ int LegendBar::get_fitted_width( void )
  *  @return screen height
  */
 /*===========================================================================*/
-int LegendBar::get_fitted_height( void )
+int LegendBar::get_fitted_height()
 {
     size_t height = 0;
     switch( m_orientation )
@@ -412,7 +412,7 @@ int LegendBar::get_fitted_height( void )
  *  @brief  Create a texture for the color map.
  */
 /*===========================================================================*/
-void LegendBar::create_texture( void )
+void LegendBar::create_texture()
 {
     const size_t      nchannels  = 3;
     const size_t      width  = m_colormap.resolution();
@@ -431,7 +431,7 @@ void LegendBar::create_texture( void )
  *  @brief  Release the texture for the color map.
  */
 /*===========================================================================*/
-void LegendBar::release_texture( void )
+void LegendBar::release_texture()
 {
     m_texture.release();
 }

@@ -24,6 +24,7 @@ int counter = 0;
 std::map<int,kvs::glut::Timer*> context;
 }
 
+
 namespace kvs
 {
 
@@ -102,7 +103,7 @@ Timer::Timer( kvs::EventHandler* handler, int msec ):
  *  @brief  Destructs the Timer class.
  */
 /*===========================================================================*/
-Timer::~Timer( void )
+Timer::~Timer()
 {
     ::context.erase( m_id );
     if ( m_time_event ) delete m_time_event;
@@ -129,7 +130,7 @@ void Timer::start( int msec )
  *  @brief  Starts the timer.
  */
 /*===========================================================================*/
-void Timer::start( void )
+void Timer::start()
 {
     this->start( m_interval );
 }
@@ -139,10 +140,9 @@ void Timer::start( void )
  *  @brief  Stops the timer.
  */
 /*===========================================================================*/
-void Timer::stop( void )
+void Timer::stop()
 {
-    /* WARNING: Cannot stop the timer due to the GLUT restriction.
-     */
+    /* WARNING: Cannot stop the timer due to the GLUT restriction. */
     m_is_stopped = true;
 }
 
@@ -185,9 +185,9 @@ void Timer::setEventHandler( kvs::EventHandler* handler )
  *  @return true, if the timer is stopped
  */
 /*===========================================================================*/
-bool Timer::isStopped( void ) const
+bool Timer::isStopped() const
 {
-    return( m_is_stopped );
+    return m_is_stopped;
 }
 
 /*===========================================================================*/
@@ -196,9 +196,9 @@ bool Timer::isStopped( void ) const
  *  @return interval time
  */
 /*===========================================================================*/
-int Timer::interval( void ) const
+int Timer::interval() const
 {
-    return( m_interval );
+    return m_interval;
 }
 
 /*===========================================================================*/
@@ -206,7 +206,7 @@ int Timer::interval( void ) const
  *  @brief  Timer event.
  */
 /*===========================================================================*/
-void Timer::timerEvent( void )
+void Timer::timerEvent()
 {
     if ( !m_is_stopped )
     {

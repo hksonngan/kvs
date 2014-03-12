@@ -34,10 +34,10 @@ class Application : public kvs::ApplicationBase
 public:
 
     Application( int argc, char** argv );
-    virtual ~Application( void );
+    virtual ~Application();
 
-    virtual int run( void );
-    virtual void quit( void );
+    virtual int run();
+    virtual void quit();
 };
 
 } // end of namespace glut

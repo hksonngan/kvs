@@ -47,21 +47,21 @@ public:
     Timer( int msec = 0 );
     Timer( kvs::EventListener* listener, int msec = 0 );
     Timer( kvs::EventHandler* handler, int msec = 0 );
-    virtual ~Timer( void );
+    virtual ~Timer();
 
     void start( int msec );
-    void start( void );
-    void stop( void );
+    void start();
+    void stop();
     void setInterval( int msec );
     void setEventListener( kvs::EventListener* listener );
     void setEventHandler( kvs::EventHandler* handler );
 
-    bool isStopped( void ) const;
-    int interval( void ) const;
+    bool isStopped() const;
+    int interval() const;
 
 protected:
 
-    void timerEvent( void );
+    void timerEvent();
     friend void TimerEventFunction( int id );
 };
 

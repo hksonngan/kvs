@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file OrientationAxis.h
+ *  @file   OrientationAxis.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -82,52 +83,54 @@ public:
 
     OrientationAxis( kvs::glut::Screen* screen );
     OrientationAxis( kvs::ScreenBase* screen, const kvs::ObjectBase* object );
-    virtual ~OrientationAxis( void );
+    virtual ~OrientationAxis();
 
 public:
 
-    virtual void screenUpdated( void ){};
-    virtual void screenResized( void ){};
+    virtual void screenUpdated() {}
+    virtual void screenResized() {}
 
-    const std::string& xTag( void ) const;
-    const std::string& yTag( void ) const;
-    const std::string& zTag( void ) const;
-    const kvs::RGBColor& xAxisColor( void ) const;
-    const kvs::RGBColor& yAxisColor( void ) const;
-    const kvs::RGBColor& zAxisColor( void ) const;
-    const float axisLineWidth( void ) const;
-    const kvs::RGBColor& boxColor( void ) const;
-    const kvs::RGBColor& boxLineColor( void ) const;
-    const float boxLineWidth( void ) const;
-    const AxisType axisType( void ) const;
-    const BoxType boxType( void ) const;
-    const ProjectionType projectionType( void ) const;
+    const std::string& xTag() const { return m_x_tag; }
+    const std::string& yTag() const { return m_y_tag; }
+    const std::string& zTag() const { return m_z_tag; }
+    const kvs::RGBColor& xAxisColor() const { return m_x_axis_color; }
+    const kvs::RGBColor& yAxisColor() const { return m_y_axis_color; }
+    const kvs::RGBColor& zAxisColor() const { return m_z_axis_color; }
+    const kvs::RGBColor& boxColor() const { return m_box_color; }
+    const kvs::RGBColor& boxLineColor() const { return m_box_line_color; }
+    float axisLineWidth() const { return m_axis_line_width; }
+    float boxLineWidth() const { return m_box_line_width; }
+    AxisType axisType() const { return m_axis_type; }
+    BoxType boxType() const { return m_box_type; }
+    ProjectionType projectionType() const { return m_projection_type; }
+    bool isEnabledAntiAliasing() const { return m_enable_anti_aliasing; }
 
-    void setObject( const kvs::ObjectBase* object );
-    void setSize( const size_t size );
-    void setXTag( const std::string& tag );
-    void setYTag( const std::string& tag );
-    void setZTag( const std::string& tag );
-    void setXAxisColor( const kvs::RGBColor& color );
-    void setYAxisColor( const kvs::RGBColor& color );
-    void setZAxisColor( const kvs::RGBColor& color );
-    void setAxisLineWidth( const float width );
-    void setBoxColor( const kvs::RGBColor& color );
-    void setBoxLineColor( const kvs::RGBColor& color );
-    void setBoxLineWidth( const float width );
-    void setAxisType( const AxisType type );
-    void setBoxType( const BoxType type );
-    void setProjectionType( const ProjectionType type );
-    void enableAntiAliasing( void );
-    void disableAntiAliasing( void );
+    void setObject( const kvs::ObjectBase* object ) { m_object = object; }
+    void setSize( const size_t size ) { m_width = size; m_height = size; }
+    void setXTag( const std::string& tag ) { m_x_tag = tag; }
+    void setYTag( const std::string& tag ) { m_y_tag = tag; }
+    void setZTag( const std::string& tag ) { m_z_tag = tag; }
+    void setXAxisColor( const kvs::RGBColor& color ) { m_x_axis_color = color; }
+    void setYAxisColor( const kvs::RGBColor& color ) { m_y_axis_color = color; }
+    void setZAxisColor( const kvs::RGBColor& color ) { m_z_axis_color = color; }
+    void setAxisLineWidth( const float width ) { m_axis_line_width = width; }
+    void setBoxColor( const kvs::RGBColor& color ) { m_box_color = color; }
+    void setBoxLineColor( const kvs::RGBColor& color ) { m_box_line_color = color; }
+    void setBoxLineWidth( const float width ) { m_box_line_width = width; }
+    void setAxisType( const AxisType type ) { m_axis_type = type; }
+    void setBoxType( const BoxType type ) { m_box_type = type; }
+    void setProjectionType( const ProjectionType type ) { m_projection_type = type; }
+    void setEnabledAntiAliasing( const bool enable ) { m_enable_anti_aliasing = enable; }
+    void enableAntiAliasing() { this->setEnabledAntiAliasing( true ); }
+    void disableAntiAliasing() { this->setEnabledAntiAliasing( false ); }
 
-    void paintEvent( void );
+    void paintEvent();
     void resizeEvent( int width, int height );
 
 private:
 
-    int get_fitted_width( void );
-    int get_fitted_height( void );
+    int get_fitted_width();
+    int get_fitted_height();
     void draw_centered_axis( const float length );
     void draw_cornered_axis( const float length );
     void draw_wired_box( const float length );

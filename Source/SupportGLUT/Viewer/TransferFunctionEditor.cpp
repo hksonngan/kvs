@@ -42,7 +42,7 @@ public:
     {
     }
 
-    void released( void )
+    void released()
     {
         m_editor->reset();
     }
@@ -60,7 +60,7 @@ public:
     {
     }
 
-    void released( void )
+    void released()
     {
         m_editor->apply();
     }
@@ -78,7 +78,7 @@ public:
     {
     }
 
-    void released( void )
+    void released()
     {
         m_editor->save();
     }
@@ -96,7 +96,7 @@ public:
     {
     }
 
-    void released( void )
+    void released()
     {
         m_editor->undo();
     }
@@ -114,7 +114,7 @@ public:
     {
     }
 
-    void released( void )
+    void released()
     {
         m_editor->redo();
     }
@@ -234,7 +234,7 @@ TransferFunctionEditor::TransferFunctionEditor( kvs::ScreenBase* parent ):
     m_apply_button->show();
 }
 
-TransferFunctionEditor::~TransferFunctionEditor( void )
+TransferFunctionEditor::~TransferFunctionEditor()
 {
     if ( m_stack_event ) delete m_stack_event;
     if ( m_color_palette ) delete m_color_palette;
@@ -248,37 +248,37 @@ TransferFunctionEditor::~TransferFunctionEditor( void )
     if ( m_save_button ) delete m_save_button;
 }
 
-kvs::ScreenBase* TransferFunctionEditor::screen( void )
+kvs::ScreenBase* TransferFunctionEditor::screen()
 {
     return( m_screen );
 }
 
-const kvs::glut::ColorPalette* TransferFunctionEditor::colorPalette( void ) const
+const kvs::glut::ColorPalette* TransferFunctionEditor::colorPalette() const
 {
     return( m_color_palette );
 }
 
-const kvs::glut::ColorMapPalette* TransferFunctionEditor::colorMapPalette( void ) const
+const kvs::glut::ColorMapPalette* TransferFunctionEditor::colorMapPalette() const
 {
     return( m_color_map_palette );
 }
 
-const kvs::glut::OpacityMapPalette* TransferFunctionEditor::opacityMapPalette( void ) const
+const kvs::glut::OpacityMapPalette* TransferFunctionEditor::opacityMapPalette() const
 {
     return( m_opacity_map_palette );
 }
 
-const kvs::ColorMap TransferFunctionEditor::colorMap( void ) const
+const kvs::ColorMap TransferFunctionEditor::colorMap() const
 {
     return( m_color_map_palette->colorMap() );
 }
 
-const kvs::OpacityMap TransferFunctionEditor::opacityMap( void ) const
+const kvs::OpacityMap TransferFunctionEditor::opacityMap() const
 {
     return( m_opacity_map_palette->opacityMap() );
 }
 
-const kvs::TransferFunction TransferFunctionEditor::transferFunction( void ) const
+const kvs::TransferFunction TransferFunctionEditor::transferFunction() const
 {
 //    const kvs::Real32 min_value = m_initial_transfer_function.colorMap().minValue();
 //    const kvs::Real32 max_value = m_initial_transfer_function.colorMap().maxValue();
@@ -289,17 +289,17 @@ const kvs::TransferFunction TransferFunctionEditor::transferFunction( void ) con
     return( transfer_function );
 }
 
-size_t TransferFunctionEditor::undoStackSize( void ) const
+size_t TransferFunctionEditor::undoStackSize() const
 {
     return( m_undo_stack.size() );
 }
 
-size_t TransferFunctionEditor::redoStackSize( void ) const
+size_t TransferFunctionEditor::redoStackSize() const
 {
     return( m_redo_stack.size() );
 }
 
-size_t TransferFunctionEditor::maxStackSize( void ) const
+size_t TransferFunctionEditor::maxStackSize() const
 {
     return( m_max_stack_size );
 }
@@ -349,7 +349,7 @@ void TransferFunctionEditor::setMaxStackSize( const size_t stack_size )
     m_max_stack_size = stack_size;
 }
 
-void TransferFunctionEditor::reset( void )
+void TransferFunctionEditor::reset()
 {
     m_color_map_palette->setColorMap( m_initial_transfer_function.colorMap() );
     m_opacity_map_palette->setOpacityMap( m_initial_transfer_function.opacityMap() );
@@ -357,11 +357,11 @@ void TransferFunctionEditor::reset( void )
     this->redraw();
 }
 
-void TransferFunctionEditor::apply( void )
+void TransferFunctionEditor::apply()
 {
 }
 
-void TransferFunctionEditor::save( void )
+void TransferFunctionEditor::save()
 {
     const std::string date = kvs::Date().toString("");
     const std::string time = kvs::Time().toString("");
@@ -371,7 +371,7 @@ void TransferFunctionEditor::save( void )
     transfer_function.write( filename );
 }
 
-void TransferFunctionEditor::undo( void )
+void TransferFunctionEditor::undo()
 {
     if ( m_undo_stack.size() > 1 )
     {
@@ -387,7 +387,7 @@ void TransferFunctionEditor::undo( void )
     }
 }
 
-void TransferFunctionEditor::redo( void )
+void TransferFunctionEditor::redo()
 {
     if ( m_redo_stack.size() > 1 )
     {

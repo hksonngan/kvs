@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file OrientationAxis.cpp
+ *  @file   OrientationAxis.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -93,337 +94,8 @@ OrientationAxis::OrientationAxis( kvs::ScreenBase* screen, const kvs::ObjectBase
  *  @brief  Destroys the orientation axis class.
  */
 /*===========================================================================*/
-OrientationAxis::~OrientationAxis( void )
+OrientationAxis::~OrientationAxis()
 {
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the X axis tag.
- *  @return X axis tag
- */
-/*===========================================================================*/
-const std::string& OrientationAxis::xTag( void ) const
-{
-    return( m_x_tag );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the Y axis tag.
- *  @return Y axis tag
- */
-/*===========================================================================*/
-const std::string& OrientationAxis::yTag( void ) const
-{
-    return( m_y_tag );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the Z axis tag.
- *  @return Z axis tag
- */
-/*===========================================================================*/
-const std::string& OrientationAxis::zTag( void ) const
-{
-    return( m_z_tag );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the X axis color.
- *  @return X axis color
- */
-/*===========================================================================*/
-const kvs::RGBColor& OrientationAxis::xAxisColor( void ) const
-{
-    return( m_x_axis_color );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the Y axis color.
- *  @return Y axis color
- */
-/*===========================================================================*/
-const kvs::RGBColor& OrientationAxis::yAxisColor( void ) const
-{
-    return( m_y_axis_color );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the Z axis color.
- *  @return Z axis color
- */
-/*===========================================================================*/
-const kvs::RGBColor& OrientationAxis::zAxisColor( void ) const
-{
-    return( m_z_axis_color );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the line width of the axis.
- *  @return line width
- */
-/*===========================================================================*/
-const float OrientationAxis::axisLineWidth( void ) const
-{
-    return( m_axis_line_width );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the box color.
- *  @return box color
- */
-/*===========================================================================*/
-const kvs::RGBColor& OrientationAxis::boxColor( void ) const
-{
-    return( m_box_color );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the box line color.
- *  @return box line color
- */
-/*===========================================================================*/
-const kvs::RGBColor& OrientationAxis::boxLineColor( void ) const
-{
-    return( m_box_line_color );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the line width of the box.
- *  @return line width
- */
-/*===========================================================================*/
-const float OrientationAxis::boxLineWidth( void ) const
-{
-    return( m_box_line_width );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the axis type.
- *  @return Axis type
- */
-/*===========================================================================*/
-const OrientationAxis::AxisType OrientationAxis::axisType( void ) const
-{
-    return( m_axis_type );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the box type.
- *  @return box type
- */
-/*===========================================================================*/
-const OrientationAxis::BoxType OrientationAxis::boxType( void ) const
-{
-    return( m_box_type );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the projection type.
- *  @return projection type
- */
-/*===========================================================================*/
-const OrientationAxis::ProjectionType OrientationAxis::projectionType( void ) const
-{
-    return( m_projection_type );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a object for obtaining the rotation matrix.
- *  @param  object [in] pointer to the object
- */
-/*===========================================================================*/
-void OrientationAxis::setObject( const kvs::ObjectBase* object )
-{
-    m_object = object;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets the window size.
- *  @param  size [in] window size
- */
-/*===========================================================================*/
-void OrientationAxis::setSize( const size_t size )
-{
-    m_width = size;
-    m_height = size;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets the X axis tag.
- *  @param  tag [in] X axis tag
- */
-/*===========================================================================*/
-void OrientationAxis::setXTag( const std::string& tag )
-{
-    m_x_tag = tag;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets the Y axis tag.
- *  @param  tag [in] Y axis tag
- */
-/*===========================================================================*/
-void OrientationAxis::setYTag( const std::string& tag )
-{
-    m_y_tag = tag;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets the Z axis tag.
- *  @param  tag [in] Z axis tag
- */
-/*===========================================================================*/
-void OrientationAxis::setZTag( const std::string& tag )
-{
-    m_z_tag = tag;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets the X axis color.
- *  @param  color [in] X axis color
- */
-/*===========================================================================*/
-void OrientationAxis::setXAxisColor( const kvs::RGBColor& color )
-{
-    m_x_axis_color = color;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets the Y axis color.
- *  @param  color [in] Y axis color
- */
-/*===========================================================================*/
-void OrientationAxis::setYAxisColor( const kvs::RGBColor& color )
-{
-    m_y_axis_color = color;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets the Z axis color.
- *  @param  color [in] Z axis color
- */
-/*===========================================================================*/
-void OrientationAxis::setZAxisColor( const kvs::RGBColor& color )
-{
-    m_z_axis_color = color;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets the line width of the axis.
- *  @param  width [in] line width
- */
-/*===========================================================================*/
-void OrientationAxis::setAxisLineWidth( const float width )
-{
-    m_axis_line_width = width;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets the box color.
- *  @param  color [in] box color
- */
-/*===========================================================================*/
-void OrientationAxis::setBoxColor( const kvs::RGBColor& color )
-{
-    m_box_color = color;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets the box line color.
- *  @param  color [in] box line color
- */
-/*===========================================================================*/
-void OrientationAxis::setBoxLineColor( const kvs::RGBColor& color )
-{
-    m_box_line_color = color;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets the line width of the box.
- *  @param  width [in] line width
- */
-/*===========================================================================*/
-void OrientationAxis::setBoxLineWidth( const float width )
-{
-    m_box_line_width = width;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets the axis type.
- *  @param  axis_type [in] axis type
- */
-/*===========================================================================*/
-void OrientationAxis::setAxisType( const OrientationAxis::AxisType axis_type )
-{
-    m_axis_type = axis_type;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets the box type.
- *  @param  box_type [in] box type
- */
-/*===========================================================================*/
-void OrientationAxis::setBoxType( const OrientationAxis::BoxType box_type )
-{
-    m_box_type = box_type;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets the projection type.
- *  @param  projection_type [in] projection type
- */
-/*===========================================================================*/
-void OrientationAxis::setProjectionType( const OrientationAxis::ProjectionType projection_type )
-{
-    m_projection_type = projection_type;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Enables anti-aliasing.
- */
-/*===========================================================================*/
-void OrientationAxis::enableAntiAliasing( void )
-{
-    m_enable_anti_aliasing = true;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Disables anti-aliasing.
- */
-/*===========================================================================*/
-void OrientationAxis::disableAntiAliasing( void )
-{
-    m_enable_anti_aliasing = false;
 }
 
 /*===========================================================================*/
@@ -431,7 +103,7 @@ void OrientationAxis::disableAntiAliasing( void )
  *  @brief  Paint event.
  */
 /*===========================================================================*/
-void OrientationAxis::paintEvent( void )
+void OrientationAxis::paintEvent()
 {
     this->screenUpdated();
 
@@ -562,9 +234,9 @@ void OrientationAxis::resizeEvent( int width, int height )
  *  @return screen width
  */
 /*===========================================================================*/
-int OrientationAxis::get_fitted_width( void )
+int OrientationAxis::get_fitted_width()
 {
-    return( ::Default::AxisWindowSize );
+    return ::Default::AxisWindowSize;
 }
 
 /*===========================================================================*/
@@ -573,9 +245,9 @@ int OrientationAxis::get_fitted_width( void )
  *  @return screen height
  */
 /*===========================================================================*/
-int OrientationAxis::get_fitted_height( void )
+int OrientationAxis::get_fitted_height()
 {
-    return( ::Default::AxisWindowSize );
+    return ::Default::AxisWindowSize;
 }
 
 /*===========================================================================*/

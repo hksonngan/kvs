@@ -41,29 +41,29 @@ public:
 
 inline int KVSMouseButton::Button( int button )
 {
-    switch( button )
+    switch ( button )
     {
-    case GLUT_LEFT_BUTTON:   return( kvs::MouseButton::Left );
-    case GLUT_MIDDLE_BUTTON: return( kvs::MouseButton::Middle );
-    case GLUT_RIGHT_BUTTON:  return( kvs::MouseButton::Right );
-    case GLUT_WHEEL_UP:      return( kvs::MouseButton::WheelUp );
-    case GLUT_WHEEL_DOWN:    return( kvs::MouseButton::WheelDown );
+    case GLUT_LEFT_BUTTON:   return kvs::MouseButton::Left;
+    case GLUT_MIDDLE_BUTTON: return kvs::MouseButton::Middle;
+    case GLUT_RIGHT_BUTTON:  return kvs::MouseButton::Right;
+    case GLUT_WHEEL_UP:      return kvs::MouseButton::WheelUp;
+    case GLUT_WHEEL_DOWN:    return kvs::MouseButton::WheelDown;
     default: break;
     }
 
-    return( button );
+    return button;
 }
 
 inline int KVSMouseButton::State( int state )
 {
-    switch( state )
+    switch ( state )
     {
-    case GLUT_UP:   return( kvs::MouseButton::Up );
-    case GLUT_DOWN: return( kvs::MouseButton::Down );
+    case GLUT_UP:   return kvs::MouseButton::Up;
+    case GLUT_DOWN: return kvs::MouseButton::Down;
     default: break;
     }
 
-    return( state );
+    return state;
 }
 
 } // end of namespace glut
