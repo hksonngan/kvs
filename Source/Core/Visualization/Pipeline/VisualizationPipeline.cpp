@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file VisualizationPipeline.cpp
+ *  @file   VisualizationPipeline.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -26,8 +27,6 @@
 #include <vector>
 namespace { size_t Counter = 0; }
 namespace { bool Flag = true; }
-//namespace { const size_t MaxNumberOfPipelines = 256; }
-//namespace { kvs::VisualizationPipeline* context[::MaxNumberOfPipelines]; }
 namespace { std::vector<kvs::VisualizationPipeline*> context; }
 
 
@@ -41,7 +40,6 @@ namespace
 /*===========================================================================*/
 void ExitFunction()
 {
-//    for ( size_t i = 0; i < ::MaxNumberOfPipelines; i++)
     for ( size_t i = 0; i < ::context.size(); i++)
     {
         if ( ::context[i] ) ::context[i]->~VisualizationPipeline();
@@ -67,7 +65,6 @@ VisualizationPipeline::VisualizationPipeline():
     m_object( NULL ),
     m_renderer( NULL )
 {
-//    ::context[ m_id ] = this;
     ::context.push_back( this );
     if ( ::Flag ) { atexit( ::ExitFunction ); ::Flag = false; }
 }
@@ -85,7 +82,6 @@ VisualizationPipeline::VisualizationPipeline( const std::string& filename ):
     m_object( NULL ),
     m_renderer( NULL )
 {
-//    ::context[ m_id ] = this;
     ::context.push_back( this );
     if ( ::Flag ) { atexit( ::ExitFunction ); ::Flag = false; }
 }
@@ -100,15 +96,11 @@ VisualizationPipeline::VisualizationPipeline( kvs::ObjectBase* object ):
     m_id( ::Counter++ ),
     m_filename(""),
     m_cache( true ),
-    m_object( NULL ),
+    m_object( object ),
     m_renderer( NULL )
 {
-//    ::context[ m_id ] = this;
     ::context.push_back( this );
     if ( ::Flag ) { atexit( ::ExitFunction ); ::Flag = false; }
-
-    kvs::PipelineModule module( object );
-    m_module_list.push_front( module );
 }
 
 /*===========================================================================*/
@@ -152,12 +144,18 @@ bool VisualizationPipeline::import()
             return false;
         }
 
-        // Create object module.
-        if ( !this->create_object_module( m_filename ) )
+        // Import object.
+        kvs::ObjectImporter importer( m_filename );
+        kvs::ObjectBase* object = importer.import();
+        if ( !object )
         {
-            kvsMessageError( "Cannot create a object from '%s'.", m_filename.c_str() );
+            kvsMessageError( "Cannot import an object." );
             return false;
         }
+
+        // Attache the imported object.
+        m_object = object;
+
     }
 
     return true;
@@ -178,7 +176,7 @@ bool VisualizationPipeline::exec()
         return false;
     }
 
-    kvs::ObjectBase* object = NULL;
+    const kvs::ObjectBase* object = m_object;
     ModuleList::iterator module = m_module_list.begin();
     ModuleList::iterator last   = m_module_list.end();
 
@@ -186,7 +184,7 @@ bool VisualizationPipeline::exec()
     if ( this->hasRenderer() ) --last;
 
     // Execute the filter or the mapper module.
-    while( module != last )
+    while ( module != last )
     {
         object = module->exec( object );
         if ( !object )
@@ -196,17 +194,6 @@ bool VisualizationPipeline::exec()
         }
 
         ++module;
-    }
-
-    // WARNING: The object module that is registerd in the KVS's object manager
-    // is disconnected from the pipeline module for the object with the reference counter.
-    // The pointer to the disconnected object (m_object) is transfered to the object
-    // manager using the insert method in the KVS's global class. As a result, the ownership
-    // of the object is changed to the object manager from the pipeline module.
-    if ( module == last )
-    {
-        --module;
-        module->disable_auto_delete();
     }
 
     // Attache the pointer to the object that is registered in the object manager.
@@ -277,7 +264,7 @@ void VisualizationPipeline::disableCache()
 /*===========================================================================*/
 bool VisualizationPipeline::hasObject() const
 {
-    return this->count_module( kvs::PipelineModule::Object ) > 0;
+    return m_object != NULL;
 }
 
 /*===========================================================================*/
@@ -358,34 +345,6 @@ std::ostream& operator << ( std::ostream& os, const VisualizationPipeline& pipel
 
 /*===========================================================================*/
 /**
- *  @brief  Creates a object module.
- *  @param  filename [in] input data filename
- *  @return true, if the object is created successfully.
- */
-/*===========================================================================*/
-bool VisualizationPipeline::create_object_module( const std::string& filename )
-{
-    // Read a file and import a object.
-    kvs::ObjectImporter importer( filename );
-    kvs::ObjectBase* object = importer.import();
-    if ( !object )
-    {
-        kvsMessageError( "Cannot import a object." );
-        return false;
-    }
-
-    // Store the imported object to the module list.
-    kvs::PipelineModule module( object );
-    m_module_list.push_front( module );
-
-    // Attache the imported object.
-    m_object = object;
-
-    return true;
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Create a renderer module according to the rendering object.
  *  @param  object [in] pointer to the object
  *  @return true, if the renderer is created successfully.
@@ -397,17 +356,11 @@ bool VisualizationPipeline::create_renderer_module( const kvs::ObjectBase* objec
     {
     case kvs::ObjectBase::Geometry:
     {
-        const kvs::GeometryObjectBase* geometry =
-            reinterpret_cast<const kvs::GeometryObjectBase*>( object );
-
-        return this->create_renderer_module( geometry );
+        return this->create_renderer_module( kvs::GeometryObjectBase::DownCast( object ) );
     }
     case kvs::ObjectBase::Volume:
     {
-        const kvs::VolumeObjectBase* volume =
-            reinterpret_cast<const kvs::VolumeObjectBase*>( object );
-
-        return this->create_renderer_module( volume );
+        return this->create_renderer_module( kvs::VolumeObjectBase::DownCast( object ) );
     }
     case kvs::ObjectBase::Image:
     {
@@ -504,7 +457,7 @@ VisualizationPipeline::ModuleList::iterator VisualizationPipeline::find_module(
 {
     ModuleList::iterator module = m_module_list.begin();
     ModuleList::iterator end = m_module_list.end();
-    while( module != end )
+    while ( module != end )
     {
         if ( module->category() == category )
         {
@@ -531,7 +484,7 @@ size_t VisualizationPipeline::count_module(
 
     ModuleList::const_iterator module = m_module_list.begin();
     ModuleList::const_iterator end = m_module_list.end();
-    while( module != end )
+    while ( module != end )
     {
         if ( module->category() == category )
         {

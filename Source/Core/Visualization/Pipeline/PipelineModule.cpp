@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file PipelineModule.cpp
+ *  @file   PipelineModule.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -65,12 +66,9 @@ PipelineModule::~PipelineModule()
 /*===========================================================================*/
 kvs::ObjectBase* PipelineModule::exec( const kvs::ObjectBase* object )
 {
-    if ( !object )
-    {
-        return m_category == PipelineModule::Object ? m_module.object : NULL;
-    }
+    if ( !object ) return NULL;
 
-    switch( m_category )
+    switch ( m_category )
     {
     case PipelineModule::Filter: return m_module.filter->exec( object );
     case PipelineModule::Mapper: return m_module.mapper->exec( object );
@@ -105,72 +103,6 @@ PipelineModule& PipelineModule::operator = ( const PipelineModule& module )
 
 /*===========================================================================*/
 /**
- *  @brief  Returns the module category.
- *  @return module category
- */
-/*===========================================================================*/
-const PipelineModule::Category PipelineModule::category() const
-{
-    return( m_category );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the module.
- *  @return module
- */
-/*===========================================================================*/
-const PipelineModule::Module PipelineModule::module() const
-{
-    return( m_module );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the pointer to the filter.
- *  @return pointer to the filter
- */
-/*===========================================================================*/
-const kvs::FilterBase* PipelineModule::filter() const
-{
-    return( m_module.filter );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the pointer to the mapper.
- *  @return pointer to the mapper
- */
-/*===========================================================================*/
-const kvs::MapperBase* PipelineModule::mapper() const
-{
-    return( m_module.mapper );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the pointer to the object.
- *  @return pointer to the object
- */
-/*===========================================================================*/
-const kvs::ObjectBase* PipelineModule::object() const
-{
-    return( m_module.object );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the pointer to the renderer.
- *  @return pointer to the renderer
- */
-/*===========================================================================*/
-const kvs::RendererBase* PipelineModule::renderer() const
-{
-    return( m_module.renderer );
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Returns the name of the module.
  *  @return name of the module
  */
@@ -179,14 +111,13 @@ const char* PipelineModule::name() const
 {
     switch ( m_category )
     {
-    case PipelineModule::Filter: return( m_module.filter->moduleName() );
-    case PipelineModule::Mapper: return( m_module.mapper->moduleName() );
-    case PipelineModule::Object: return( m_module.object->moduleName() );
-    case PipelineModule::Renderer: return( m_module.renderer->moduleName() );
+    case PipelineModule::Filter: return m_module.filter->moduleName();
+    case PipelineModule::Mapper: return m_module.mapper->moduleName();
+    case PipelineModule::Renderer: return m_module.renderer->moduleName();
     default: break;
     }
 
-    return( "Unknown module" );
+    return "Unknown module";
 }
 
 /*===========================================================================*/
@@ -197,7 +128,7 @@ const char* PipelineModule::name() const
 /*===========================================================================*/
 bool PipelineModule::unique() const
 {
-    return( m_counter ? m_counter->value() == 1 : true );
+    return m_counter ? m_counter->value() == 1 : true;
 }
 
 /*===========================================================================*/
@@ -225,11 +156,10 @@ void PipelineModule::delete_module()
     // as friend class in this class definition.
     if ( !m_auto_delete ) return;
 
-    switch( m_category )
+    switch ( m_category )
     {
-    case PipelineModule::Filter:   if ( m_module.filter   ) delete m_module.filter;  m_module.filter   = NULL; break;
-    case PipelineModule::Mapper:   if ( m_module.mapper   ) delete m_module.mapper;  m_module.mapper   = NULL; break;
-    case PipelineModule::Object:   if ( m_module.object   ) delete m_module.object;  m_module.object   = NULL; break;
+    case PipelineModule::Filter: if ( m_module.filter ) delete m_module.filter; m_module.filter = NULL; break;
+    case PipelineModule::Mapper: if ( m_module.mapper ) delete m_module.mapper; m_module.mapper = NULL; break;
     case PipelineModule::Renderer: if ( m_module.renderer ) delete m_module.renderer;m_module.renderer = NULL; break;
     default: break;
     }
@@ -244,9 +174,9 @@ void PipelineModule::delete_module()
 void PipelineModule::shallow_copy( const PipelineModule& module )
 {
     this->unref();
-    m_counter  = module.m_counter;
+    m_counter = module.m_counter;
     m_category = module.m_category;
-    m_module   = module.m_module;
+    m_module = module.m_module;
     this->ref();
 }
 
@@ -261,7 +191,7 @@ void PipelineModule::deep_copy( const PipelineModule& module )
     this->unref();
     this->create_counter();
     m_category = module.m_category;
-    m_module   = module.m_module;
+    m_module = module.m_module;
 }
 
 /*===========================================================================*/

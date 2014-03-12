@@ -74,11 +74,6 @@ private:
 
 public:
 
-//    static kvs::PolygonObject* DownCast( kvs::ObjectBase* object );
-//    static const kvs::PolygonObject* DownCast( const kvs::ObjectBase* object );
-
-public:
-
     PolygonObject();
 
     void shallowCopy( const PolygonObject& object );
@@ -94,7 +89,7 @@ public:
     void setOpacities( const kvs::ValueArray<kvs::UInt8>& opacities );
     void setOpacity( const kvs::UInt8 opacity );
 
-    BaseClass::GeometryType geometryType() const;
+    GeometryType geometryType() const;
     PolygonType polygonType() const;
     ColorType colorType() const;
     NormalType normalType() const;

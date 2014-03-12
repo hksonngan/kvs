@@ -129,7 +129,40 @@ kvs::Stl* PolygonExporter<kvs::Stl>::exec( const kvs::ObjectBase* object )
         return NULL;
     }
 
-    this->setCoords( polygon->coords() );
+    if ( polygon->numberOfConnections() == 0 )
+    {
+        this->setCoords( polygon->coords() );
+    }
+    else
+    {
+        const size_t npolygons = polygon->connections().size() / 3;
+        const kvs::UInt32* pconnections = polygon->connections().data();
+        const kvs::Real32* pcoords = polygon->coords().data();
+        kvs::ValueArray<kvs::Real32> coords( npolygons * 9 );
+        for ( size_t i = 0; i < npolygons; i++ )
+        {
+            const kvs::UInt32 index0 = *(pconnections++);
+            const kvs::UInt32 index1 = *(pconnections++);
+            const kvs::UInt32 index2 = *(pconnections++);
+
+            const kvs::Vec3 coord0( pcoords + 3 * index0 );
+            const kvs::Vec3 coord1( pcoords + 3 * index1 );
+            const kvs::Vec3 coord2( pcoords + 3 * index2 );
+
+            coords[ 9 * i + 0 ] = coord0.x();
+            coords[ 9 * i + 1 ] = coord0.y();
+            coords[ 9 * i + 2 ] = coord0.z();
+
+            coords[ 9 * i + 3 ] = coord1.x();
+            coords[ 9 * i + 4 ] = coord1.y();
+            coords[ 9 * i + 5 ] = coord1.z();
+
+            coords[ 9 * i + 6 ] = coord2.x();
+            coords[ 9 * i + 7 ] = coord2.y();
+            coords[ 9 * i + 8 ] = coord2.z();
+        }
+        this->setCoords( coords );
+    }
 
     if ( polygon->normalType() == kvs::PolygonObject::VertexNormal )
     {

@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file VisualizationPipeline.h
+ *  @file   VisualizationPipeline.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -77,7 +78,6 @@ public:
 
 private:
 
-    bool create_object_module( const std::string& filename );
     bool create_renderer_module( const kvs::ObjectBase* object );
     bool create_renderer_module( const kvs::GeometryObjectBase* geometry );
     bool create_renderer_module( const kvs::VolumeObjectBase* volume );

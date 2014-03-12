@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file PipelineModule.h
+ *  @file   PipelineModule.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -45,7 +46,6 @@ public:
         Empty = 0, ///< empty module
         Filter, ///< filter module
         Mapper, ///< mapper module
-        Object, ///< object module
         Renderer ///< renderer module
     };
 
@@ -53,7 +53,6 @@ public:
     {
         kvs::FilterBase* filter; ///< pointer to the KVS filter class
         kvs::MapperBase* mapper; ///< pointer to the KVS mapper class
-        kvs::ObjectBase* object; ///< pointer to the KVS object class
         kvs::RendererBase* renderer; ///< pointer to the KVS renderer class
     };
 
@@ -90,12 +89,11 @@ public:
 
     PipelineModule& operator = ( const PipelineModule& module );
 
-    const Category category() const;
-    const Module module() const;
-    const kvs::FilterBase* filter() const;
-    const kvs::MapperBase* mapper() const;
-    const kvs::ObjectBase* object() const;
-    const kvs::RendererBase* renderer() const;
+    const Category category() const { return m_category; }
+    const Module module() const { return m_module; }
+    const kvs::FilterBase* filter() const { return m_module.filter; }
+    const kvs::MapperBase* mapper() const { return m_module.mapper; }
+    const kvs::RendererBase* renderer() const { return m_module.renderer; }
     const char* name() const;
     bool unique() const;
 
@@ -113,13 +111,6 @@ private:
     {
         m_category = PipelineModule::Mapper;
         m_module.mapper = module;
-    }
-
-    template <typename T>
-    void read_module( T* module, KVS_MODULE_OBJECT )
-    {
-        m_category = PipelineModule::Object;
-        m_module.object = module;
     }
 
     template <typename T>
@@ -141,12 +132,6 @@ private:
     T* get_module( KVS_MODULE_MAPPER ) const
     {
         return( reinterpret_cast<T*>( m_module.mapper ) );
-    }
-
-    template <typename T>
-    T* get_module( KVS_MODULE_OBJECT ) const
-    {
-        return( reinterpret_cast<T*>( m_module.object ) );
     }
 
     template <typename T>

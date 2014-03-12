@@ -67,11 +67,6 @@ private:
 
 public:
 
-//    static kvs::LineObject* DownCast( kvs::ObjectBase* object );
-//    static const kvs::LineObject* DownCast( const kvs::ObjectBase* object );
-
-public:
-
     LineObject();
     explicit LineObject( const kvs::PolygonObject& polygon );
 
@@ -87,7 +82,7 @@ public:
     void setSizes( const kvs::ValueArray<kvs::Real32>& sizes );
     void setSize( const kvs::Real32 size );
 
-    BaseClass::GeometryType geometryType() const;
+    GeometryType geometryType() const;
     LineType lineType() const;
     ColorType colorType() const;
     size_t numberOfConnections() const;
