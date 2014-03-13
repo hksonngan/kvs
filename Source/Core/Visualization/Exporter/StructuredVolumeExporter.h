@@ -1,6 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   StructuredVolumeExporter.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -32,7 +33,7 @@ namespace kvs
 template <typename FileFormatType>
 class StructuredVolumeExporter : public kvs::ExporterBase<FileFormatType>
 {
-    kvsModuleName( kvs::StructuredVolumeExporter );
+//    kvsModule( kvs::StructuredVolumeExporter, Exporter );
     kvsModuleBaseClass( kvs::ExporterBase<FileFormatType> );
 
 public:

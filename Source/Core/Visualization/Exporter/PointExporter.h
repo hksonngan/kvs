@@ -1,6 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   PointExporter.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -30,7 +31,7 @@ namespace kvs
 template <typename FileFormatType>
 class PointExporter : public kvs::ExporterBase<FileFormatType>
 {
-    kvsModuleName( kvs::PointExporter );
+//    kvsModule( kvs::PointExporter, Exporter );
     kvsModuleBaseClass( kvs::ExporterBase<FileFormatType> );
 
 public:

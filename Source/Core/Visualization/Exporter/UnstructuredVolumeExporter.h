@@ -1,6 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   UnstructuredVolumeExporter.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -32,7 +33,7 @@ namespace kvs
 template <typename FileFormatType>
 class UnstructuredVolumeExporter : public kvs::ExporterBase<FileFormatType>
 {
-    kvsModuleName( kvs::UnstructuredVolumeExporter );
+//    kvsModule( kvs::UnstructuredVolumeExporter, Exporter );
     kvsModuleBaseClass( kvs::ExporterBase<FileFormatType> );
 
 public:
@@ -64,7 +65,7 @@ UnstructuredVolumeExporter<FileFormatType>::UnstructuredVolumeExporter(
 template <typename FileFormatType>
 FileFormatType* UnstructuredVolumeExporter<FileFormatType>::exec( const kvs::ObjectBase* object )
 {
-    return( NULL );
+    return NULL;
 }
 
 /*===========================================================================*/

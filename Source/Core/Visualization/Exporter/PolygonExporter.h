@@ -1,6 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   PolygonExporter.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -32,7 +33,7 @@ namespace kvs
 template <typename FileFormatType>
 class PolygonExporter : public kvs::ExporterBase<FileFormatType>
 {
-    kvsModuleName( kvs::PolygonExporter );
+//    kvsModule( kvs::PolygonExporter, Exporter );
     kvsModuleBaseClass( kvs::ExporterBase<FileFormatType> );
 
 public:

@@ -1,6 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   ExporterBase.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -28,7 +29,7 @@ namespace kvs
 template <typename FileFormatType>
 class ExporterBase : public FileFormatType
 {
-    kvsModuleName( kvs::ExporterBase );
+    kvsModuleBase( kvs::ExporterBase );
 
 private:
 
@@ -36,74 +37,18 @@ private:
 
 public:
 
-    ExporterBase();
-    virtual ~ExporterBase();
+    ExporterBase() {}
+    virtual ~ExporterBase() {}
 
     virtual FileFormatType* exec( const kvs::ObjectBase* object ) = 0;
 
-    bool isSuccess() const;
-    bool isFailure() const;
+    bool isSuccess() const { return m_is_success; }
+    bool isFailure() const { return !m_is_success; }
 
 protected:
 
-    void setSuccess( const bool success );
+    void setSuccess( const bool success ) { m_is_success = success; }
 };
-
-/*===========================================================================*/
-/**
- *  @brief  Constructs a new ExporterBase class.
- */
-/*===========================================================================*/
-template <typename FileFormatType>
-ExporterBase<FileFormatType>::ExporterBase()
-{
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Destroys the ExporterBase class.
- */
-/*===========================================================================*/
-template <typename FileFormatType>
-ExporterBase<FileFormatType>::~ExporterBase()
-{
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Test whether the export process is done successfully.
- *  @return true if the export process is done successfully
- */
-/*===========================================================================*/
-template <typename FileFormatType>
-bool ExporterBase<FileFormatType>::isSuccess() const
-{
-    return m_is_success;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Test whether the export process is failed.
- *  @return true if the export process is failed
- */
-/*===========================================================================*/
-template <typename FileFormatType>
-bool ExporterBase<FileFormatType>::isFailure() const
-{
-    return !m_is_success;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a status of the exporting process.
- *  @param  success [in] status of exporing process
- */
-/*===========================================================================*/
-template <typename FileFormatType>
-void ExporterBase<FileFormatType>::setSuccess( const bool success )
-{
-    m_is_success = success;
-}
 
 } // end of namespace kvs
 

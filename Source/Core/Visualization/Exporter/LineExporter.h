@@ -1,6 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   LineExporter.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -30,7 +31,7 @@ namespace kvs
 template <typename FileFormatType>
 class LineExporter : public kvs::ExporterBase<FileFormatType>
 {
-    kvsModuleName( kvs::LineExporter );
+//    kvsModule( kvs::LineExporter, Exporter );
     kvsModuleBaseClass( kvs::ExporterBase<FileFormatType> );
 
 public:
