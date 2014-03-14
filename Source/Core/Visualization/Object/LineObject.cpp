@@ -17,6 +17,7 @@
 #include <kvs/PolygonObject>
 #include <kvs/Assert>
 #include <kvs/Type>
+#include <map>
 
 
 namespace
@@ -57,6 +58,71 @@ const std::string GetColorTypeName( const kvs::LineObject::ColorType type )
     default: return "unknown color type";
     }
 }
+
+/*===========================================================================*/
+/**
+ *  @brief  Edge map class (hash map table for the edge data).
+ */
+/*===========================================================================*/
+class EdgeMap
+{
+public:
+
+    typedef kvs::UInt32 Key;
+    typedef std::pair<kvs::UInt32,kvs::UInt32> Value;
+    typedef std::multimap<Key,Value> Bucket;
+
+private:
+
+    size_t m_nvertices; ///< number of vertices of the original data
+    Bucket m_bucket; ///< bucket for the edge data
+
+public:
+
+    EdgeMap( const size_t nvertices ):
+        m_nvertices( nvertices ) {}
+
+    void insert( const kvs::UInt32 v0, const kvs::UInt32 v1 )
+    {
+        const Key key = ( v0 + v1 ) % kvs::UInt32( m_nvertices );
+
+        Bucket::iterator e = m_bucket.find( key );
+        Bucket::const_iterator last = m_bucket.end();
+        if ( e != last )
+        {
+            Bucket::const_iterator upper = m_bucket.upper_bound( key );
+            while ( e != upper )
+            {
+                if ( ( e->second.first == v0 && e->second.second == v1 ) ||
+                     ( e->second.first == v1 && e->second.second == v0 ) )
+                {
+                    // The edge has been already inserted in the bucket.
+                    return;
+                }
+                e++;
+            }
+        }
+
+        m_bucket.insert( std::make_pair( key, std::make_pair( v0, v1 ) ) );
+    }
+
+    const kvs::ValueArray<kvs::UInt32> serialize()
+    {
+        kvs::ValueArray<kvs::UInt32> connections( 2 * m_bucket.size() );
+
+        Bucket::const_iterator e = m_bucket.begin();
+        Bucket::const_iterator last = m_bucket.end();
+        size_t connection_index = 0;
+        while ( e != last )
+        {
+            connections[ connection_index++ ] = e->second.first;
+            connections[ connection_index++ ] = e->second.second;
+            e++;
+        }
+
+        return connections;
+    }
+};
 
 } // end of namespace
 
@@ -104,35 +170,68 @@ LineObject::LineObject( const kvs::PolygonObject& polygon )
     const size_t npolygons = ( nconnections == 0 ) ?
         polygon.numberOfVertices() / ncorners : nconnections;
 
-    kvs::ValueArray<kvs::UInt32> connections( npolygons * ncorners * 2 );
+    ::EdgeMap edge_map( polygon.numberOfVertices() );
     if ( nconnections > 0 )
     {
-        size_t p_index = 0;
-        size_t l_index = 0;
-        for( size_t i = 0; i < npolygons; i++ )
+        if ( polygon.polygonType() == kvs::PolygonObject::Triangle )
         {
-            for( size_t j = 0; j < ncorners; j++ )
+            for ( size_t i = 0; i < npolygons; i++ )
             {
-                connections[ l_index++ ] = polygon.connections().at( p_index++ );
-                connections[ l_index ] = polygon.connections().at( j == ncorners - 1 ? p_index - ncorners * (i+1) : p_index );
+                const kvs::UInt32 v0 =  polygon.connections().at( 3 * i );
+                const kvs::UInt32 v1 =  polygon.connections().at( 3 * i + 1 );
+                const kvs::UInt32 v2 =  polygon.connections().at( 3 * i + 2 );
+                edge_map.insert( v0, v1 );
+                edge_map.insert( v1, v2 );
+                edge_map.insert( v2, v0 );
+            }
+        }
+        else if ( polygon.polygonType() == kvs::PolygonObject::Quadrangle )
+        {
+            ::EdgeMap edge_map( polygon.numberOfVertices() );
+            for ( size_t i = 0; i < npolygons; i++ )
+            {
+                const kvs::UInt32 v0 =  polygon.connections().at( 4 * i );
+                const kvs::UInt32 v1 =  polygon.connections().at( 4 * i + 1 );
+                const kvs::UInt32 v2 =  polygon.connections().at( 4 * i + 2 );
+                const kvs::UInt32 v3 =  polygon.connections().at( 4 * i + 3 );
+                edge_map.insert( v0, v1 );
+                edge_map.insert( v1, v2 );
+                edge_map.insert( v2, v3 );
+                edge_map.insert( v3, v0 );
             }
         }
     }
     else
     {
-        size_t p_index = 0;
-        size_t l_index = 0;
-        for( size_t i = 0; i < npolygons; i++ )
+        if ( polygon.polygonType() == kvs::PolygonObject::Triangle )
         {
-            for( size_t j = 0; j < ncorners; j++ )
+            for ( size_t i = 0; i < npolygons; i++ )
             {
-                connections[ l_index++ ] = p_index++;
-                connections[ l_index ] = j == ncorners - 1 ? p_index - ncorners * (i+1) : p_index;
+                const kvs::UInt32 v0 =  3 * i;
+                const kvs::UInt32 v1 =  3 * i + 1;
+                const kvs::UInt32 v2 =  3 * i + 2;
+                edge_map.insert( v0, v1 );
+                edge_map.insert( v1, v2 );
+                edge_map.insert( v2, v0 );
+            }
+        }
+        else if ( polygon.polygonType() == kvs::PolygonObject::Quadrangle )
+        {
+            ::EdgeMap edge_map( polygon.numberOfVertices() );
+            for ( size_t i = 0; i < npolygons; i++ )
+            {
+                const kvs::UInt32 v0 =  4 * i;
+                const kvs::UInt32 v1 =  4 * i + 1;
+                const kvs::UInt32 v2 =  4 * i + 2;
+                const kvs::UInt32 v3 =  4 * i + 3;
+                edge_map.insert( v0, v1 );
+                edge_map.insert( v1, v2 );
+                edge_map.insert( v2, v3 );
+                edge_map.insert( v3, v0 );
             }
         }
     }
-
-    this->setConnections( connections );
+    this->setConnections( edge_map.serialize() );
 
     BaseClass::setMinMaxObjectCoords(
         polygon.minObjectCoord(),
