@@ -101,6 +101,10 @@ public:
     virtual void redo();
     virtual void save();
     virtual void apply();
+
+protected:
+
+    virtual void initializeEvent() { this->reset(); }
 };
 
 /*===========================================================================*/

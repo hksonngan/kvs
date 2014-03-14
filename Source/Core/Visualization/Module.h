@@ -17,10 +17,11 @@
 
 #include <cstring>
 
+#define KVS_MODULE_OBJECT kvs::ObjectBase::ModuleTag
 #define KVS_MODULE_IMPORTER kvs::ImporterBase::ModuleTag
+#define KVS_MODULE_EXPORTER kvs::ExporterBase::ModuleTag
 #define KVS_MODULE_FILTER kvs::FilterBase::ModuleTag
 #define KVS_MODULE_MAPPER kvs::MapperBase::ModuleTag
-#define KVS_MODULE_OBJECT kvs::ObjectBase::ModuleTag
 #define KVS_MODULE_RENDERER kvs::RendererBase::ModuleTag
 
 #define kvsModuleBase( this_class )                                     \
