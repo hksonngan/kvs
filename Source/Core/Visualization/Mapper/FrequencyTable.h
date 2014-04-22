@@ -98,7 +98,7 @@ inline void FrequencyTable::binning( const kvs::VolumeObjectBase* volume )
     const size_t veclen = volume->veclen();
     const T* values = reinterpret_cast<const T*>( volume->values().data() );
     const T* const end = values + volume->numberOfNodes() * veclen;
-    const kvs::Real64 width = ( m_max_range - m_min_range ) / kvs::Real64( m_nbins );
+    const kvs::Real64 width = ( m_max_range - m_min_range ) / kvs::Real64( m_nbins - 1 );
 
     size_t total_count = 0;
 
@@ -112,8 +112,10 @@ inline void FrequencyTable::binning( const kvs::VolumeObjectBase* volume )
 
             if ( !this->is_ignore_value( value ) )
             {
-                kvs::UInt64 index = static_cast<kvs::UInt64>( ( value - m_min_range ) / width );
-                index = kvs::Math::Clamp( index, kvs::UInt64(0), m_nbins - 1 );
+//                kvs::UInt64 index = static_cast<kvs::UInt64>( ( value - m_min_range ) / width );
+//                index = kvs::Math::Clamp( index, kvs::UInt64(0), m_nbins - 1 );
+                kvs::Real64 temp = static_cast<kvs::UInt64>( ( value - m_min_range ) / width );
+                kvs::UInt64 index = kvs::Math::Floor( temp );
 
                 m_bin[index] = m_bin[index] + 1;
                 m_max_count = kvs::Math::Max( m_max_count, m_bin[index] );
@@ -137,8 +139,10 @@ inline void FrequencyTable::binning( const kvs::VolumeObjectBase* volume )
 
             if ( !this->is_ignore_value( magnitude ) )
             {
-                kvs::UInt64 index = static_cast<kvs::UInt64>( ( magnitude - m_min_range ) / width );
-                index = kvs::Math::Clamp( index, kvs::UInt64(0), m_nbins - 1 );
+//                kvs::UInt64 index = static_cast<kvs::UInt64>( ( magnitude - m_min_range ) / width );
+//                index = kvs::Math::Clamp( index, kvs::UInt64(0), m_nbins - 1 );
+                kvs::Real64 temp = static_cast<kvs::UInt64>( ( magnitude - m_min_range ) / width );
+                kvs::UInt64 index = kvs::Math::Floor( temp );
 
                 m_bin[index] = m_bin[index] + 1;
                 m_max_count = kvs::Math::Max( m_max_count, m_bin[index] );
@@ -174,7 +178,7 @@ inline void FrequencyTable::binning( const kvs::ImageObject* image, const size_t
     }
 
     const T* values = reinterpret_cast<const T*>( image->pixels().data() );
-    const kvs::Real64 width = ( m_max_range - m_min_range ) / kvs::Real64( m_nbins );
+    const kvs::Real64 width = ( m_max_range - m_min_range ) / kvs::Real64( m_nbins - 1 );
     const size_t stride  = image->numberOfChannels();
     const size_t npixels = image->width() * image->height();
 
