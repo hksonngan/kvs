@@ -571,6 +571,16 @@ void PopAttrib()
     KVS_GL_CALL( glPopAttrib() );
 }
 
+void PushClientAttrib( GLbitfield mask )
+{
+    KVS_GL_CALL( glPushClientAttrib( mask ) );
+}
+
+void PopClientAttrib()
+{
+    KVS_GL_CALL( glPopClientAttrib() );
+}
+
 WithPushedMatrix::WithPushedMatrix( GLenum mode )
 {
     m_current_mode = kvs::OpenGL::Integer( GL_MATRIX_MODE );
@@ -632,6 +642,16 @@ WithPushedAttrib::WithPushedAttrib( GLbitfield mask )
 WithPushedAttrib::~WithPushedAttrib()
 {
     kvs::OpenGL::PopAttrib();
+}
+
+WithPushedClientAttrib::WithPushedClientAttrib( GLbitfield mask )
+{
+    kvs::OpenGL::PushClientAttrib( mask );
+}
+
+WithPushedClientAttrib::~WithPushedClientAttrib()
+{
+    kvs::OpenGL::PopClientAttrib();
 }
 
 WithEnabled::WithEnabled( GLenum cap ):

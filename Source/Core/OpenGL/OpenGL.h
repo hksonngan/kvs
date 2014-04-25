@@ -124,6 +124,8 @@ void PushMatrix();
 void PopMatrix();
 void PushAttrib( GLbitfield mask );
 void PopAttrib();
+void PushClientAttrib( GLbitfield mask );
+void PopClientAttrib();
 
 class WithPushedMatrix
 {
@@ -146,6 +148,13 @@ class WithPushedAttrib
 public:
     WithPushedAttrib( GLbitfield mask );
     ~WithPushedAttrib();
+};
+
+class WithPushedClientAttrib
+{
+public:
+    WithPushedClientAttrib( GLbitfield mask );
+    ~WithPushedClientAttrib();
 };
 
 class WithEnabled
