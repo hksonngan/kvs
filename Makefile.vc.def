@@ -57,6 +57,7 @@ MAKEFILE = Makefile.vc
 #=============================================================================
 LIB_KVS_CORE = kvsCore.lib
 
+LIB_KVS_SUPPORT_CUDA   = libkvsSupportCUDA.lib
 LIB_KVS_SUPPORT_GLUT   = kvsSupportGLUT.lib
 LIB_KVS_SUPPORT_QT     = kvsSupportQt.lib
 LIB_KVS_SUPPORT_OPENCV = kvsSupportOpenCV.lib
@@ -108,6 +109,28 @@ GLUT_LINK_LIBRARY = glut32.lib
 GLUT_INCLUDE_PATH = $(GLUT_INCLUDE_PATH) /I"$(KVS_GLUT_DIR)\include"
 GLUT_LIBRARY_PATH = $(GLUT_LIBRARY_PATH) /LIBPATH:"$(KVS_GLUT_DIR)\lib"
 !ENDIF
+!ENDIF
+
+#=============================================================================
+#  CUDA_INCLUDE_PATH, CUDA_LIBRARY_PATH, CUDA_LINK_LIBRARY
+#=============================================================================
+!IF "$(KVS_SUPPORT_CUDA)" == "1"
+CUDA_INCLUDE_PATH =
+CUDA_LIBRARY_PATH =
+CUDA_LINK_LIBRARY = cuda.lib cudart.lib
+!IFDEF KVS_CUDA_DIR
+CUDA_INCLUDE_PATH = $(CUDA_INCLUDE_PATH) /I"$(KVS_CUDA_DIR)\include"
+CUDA_LIBRARY_PATH = $(CUDA_LIBRARY_PATH) /LIBPATH:"$(KVS_CUDA_DIR)\lib\win32"
+!ENDIF
+!IFDEF KVS_CUDA_SDK_DIR
+CUDA_INCLUDE_PATH = $(CUDA_INCLUDE_PATH) /I"$(KVS_CUDA_SDK_DIR)\common\inc"
+CUDA_LIBRARY_PATH = $(CUDA_LIBRARY_PATH) /LIBPATH:"$(KVS_CUDA_SDK_DIR)\lib\win32"
+#CUDA_LINK_LIBRARY = cutil.lib
+CUDA_LINK_LIBRARY = $(CUDA_LINK_LIBRARY)
+!ENDIF
+
+NVCC = nvcc
+NVCCFLAGS = --host-compilation C++
 !ENDIF
 
 
@@ -187,6 +210,10 @@ DEFINITIONS = $(DEFINITIONS) /DKVS_SUPPORT_CUDA
 #  Linker option.
 #=============================================================================
 LDFLAGS = /MANIFEST
+
+!IFDEF DEBUG
+LDFLAGS = $(LDFLAGS) /DEBUG
+!ENDIF
 
 !IFDEF NOCONSOLE
 LDFLAGS = /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup /MANIFEST
