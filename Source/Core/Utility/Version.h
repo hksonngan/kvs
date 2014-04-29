@@ -16,7 +16,7 @@
 
 // KVS version: <major_version>.<minor_version>.<patch_version>
 #define KVS_VERSION_MAJOR  2
-#define KVS_VERSION_MINOR  2
+#define KVS_VERSION_MINOR  3
 #define KVS_VERSION_PATCH  0
 
 #define KVS_VERSION_NUMBER( x )           # x
