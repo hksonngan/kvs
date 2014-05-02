@@ -73,6 +73,8 @@ public:
     bool hasRange() const;
 
     void setColorSpace( const ColorSpace space ) { m_color_space = space; }
+    void setColorSpaceToRGB() { this->setColorSpace( RGBSpace ); }
+    void setColorSpaceToHSV() { this->setColorSpace( HSVSpace ); }
     void setRange( const float min_value, const float max_value ) { m_min_value = min_value; m_max_value = max_value; }
     void setResolution( const size_t resolution ) { m_resolution = resolution; }
     void addPoint( const float value, const kvs::RGBColor color );
