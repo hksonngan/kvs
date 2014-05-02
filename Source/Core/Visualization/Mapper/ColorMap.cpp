@@ -71,6 +71,20 @@ kvs::RGBColor Interpolate(
     return kvs::RGBColor( R, G, B );
 };
 
+kvs::RGBColor Interpolate(
+    const float s,
+    const float s0,
+    const float s1,
+    const kvs::HSVColor& c0,
+    const kvs::HSVColor& c1 )
+{
+    const float w = ( s - s0 ) / ( s1 - s0 );
+    const float H = kvs::Math::Mix( c0.h(), c1.h(), w );
+    const float S = kvs::Math::Mix( c0.s(), c1.s(), w );
+    const float V = kvs::Math::Mix( c0.v(), c1.v(), w );
+    return kvs::RGBColor( kvs::HSVColor( H, S, V ) );
+};
+
 }
 
 namespace kvs
@@ -82,6 +96,7 @@ namespace kvs
  */
 /*==========================================================================*/
 ColorMap::ColorMap():
+    m_color_space( RGBSpace ),
     m_resolution( ::Resolution ),
     m_min_value( 0.0f ),
     m_max_value( 0.0f ),
@@ -97,6 +112,7 @@ ColorMap::ColorMap():
  */
 /*==========================================================================*/
 ColorMap::ColorMap( const size_t resolution ):
+    m_color_space( RGBSpace ),
     m_resolution( resolution ),
     m_min_value( 0.0f ),
     m_max_value( 0.0f ),
@@ -112,6 +128,7 @@ ColorMap::ColorMap( const size_t resolution ):
  */
 /*==========================================================================*/
 ColorMap::ColorMap( const ColorMap::Table& table ):
+    m_color_space( RGBSpace ),
     m_resolution( table.size() / 3 ),
     m_min_value( 0.0f ),
     m_max_value( 0.0f ),
@@ -129,6 +146,7 @@ ColorMap::ColorMap( const ColorMap::Table& table ):
  */
 /*==========================================================================*/
 ColorMap::ColorMap( const size_t resolution, const float min_value, const float max_value ):
+    m_color_space( RGBSpace ),
     m_resolution( resolution ),
     m_min_value( min_value ),
     m_max_value( max_value ),
@@ -146,6 +164,7 @@ ColorMap::ColorMap( const size_t resolution, const float min_value, const float 
  */
 /*==========================================================================*/
 ColorMap::ColorMap( const ColorMap::Table& table, const float min_value, const float max_value ):
+    m_color_space( RGBSpace ),
     m_resolution( table.size() / 3 ),
     m_min_value( min_value ),
     m_max_value( max_value ),
@@ -161,6 +180,7 @@ ColorMap::ColorMap( const ColorMap::Table& table, const float min_value, const f
  */
 /*==========================================================================*/
 ColorMap::ColorMap( const ColorMap& other ):
+    m_color_space( other.m_color_space ),
     m_resolution( other.m_resolution ),
     m_min_value( other.m_min_value ),
     m_max_value( other.m_max_value ),
@@ -180,59 +200,10 @@ ColorMap::~ColorMap()
 
 /*===========================================================================*/
 /**
- *  @brief  Returns the min value.
- *  @return min value
+ *  @brief  Returns true if the range is specified.
+ *  @return true (specified) or false (not specified)
  */
 /*===========================================================================*/
-float ColorMap::minValue() const
-{
-    return m_min_value;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the max value.
- *  @return max value
- */
-/*===========================================================================*/
-float ColorMap::maxValue() const
-{
-    return m_max_value;
-}
-
-/*==========================================================================*/
-/**
- *  Returns the resolution of the color map.
- *  @return resolusion
- */
-/*==========================================================================*/
-size_t ColorMap::resolution() const
-{
-    return m_resolution;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the control point list.
- *  @return control point list
- */
-/*===========================================================================*/
-const ColorMap::Points& ColorMap::points() const
-{
-    return m_points;
-}
-
-/*==========================================================================*/
-/**
- *  Returns the color map table.
- *  @return color map table
- */
-/*==========================================================================*/
-const ColorMap::Table& ColorMap::table() const
-{
-    return m_table;
-}
-
 bool ColorMap::hasRange() const
 {
     return !kvs::Math::Equal( m_min_value, m_max_value );
@@ -240,38 +211,26 @@ bool ColorMap::hasRange() const
 
 /*===========================================================================*/
 /**
- *  @brief  Sets a table resolution.
- *  @param  resolution [in] table resolution
- */
-/*===========================================================================*/
-void ColorMap::setResolution( const size_t resolution )
-{
-    m_resolution = resolution;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets min and max values.
- *  @param  min_value [in] min. value
- *  @param  max_value [in] max. value
- */
-/*===========================================================================*/
-void ColorMap::setRange( const float min_value, const float max_value )
-{
-    m_min_value = min_value;
-    m_max_value = max_value;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Adds a control point.
+ *  @brief  Adds a control point as RGB color.
  *  @param  value [in] scalar value in [min_value, max_value]
- *  @param  color [in] color value
+ *  @param  color [in] RGB color value
  */
 /*===========================================================================*/
 void ColorMap::addPoint( const float value, const kvs::RGBColor color )
 {
     m_points.push_back( Point( value, color ) );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Adds a control point as HSV color
+ *  @param  value [in] scalar value in [min_value, max_value]
+ *  @param  color [in] HSV color value
+ */
+/*===========================================================================*/
+void ColorMap::addPoint( const float value, const kvs::HSVColor color )
+{
+    this->addPoint( value, kvs::RGBColor( color ) );
 }
 
 /*===========================================================================*/
@@ -356,9 +315,18 @@ void ColorMap::create()
                     // Interpolate.
                     const float s0 = p0.first;
                     const float s1 = p1.first;
-                    const kvs::RGBColor c0 = p0.second;
-                    const kvs::RGBColor c1 = p1.second;
-                    color = ::Interpolate( f, s0, s1, c0, c1 );
+                    if ( m_color_space == RGBSpace )
+                    {
+                        const kvs::RGBColor c0 = p0.second;
+                        const kvs::RGBColor c1 = p1.second;
+                        color = ::Interpolate( f, s0, s1, c0, c1 );
+                    }
+                    else if ( m_color_space == HSVSpace )
+                    {
+                        const kvs::HSVColor c0 = p0.second;
+                        const kvs::HSVColor c1 = p1.second;
+                        color = ::Interpolate( f, s0, s1, c0, c1 );
+                    }
                     break;
                 }
                 else

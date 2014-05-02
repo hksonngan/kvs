@@ -20,6 +20,7 @@
 #include <kvs/ValueArray>
 #include <kvs/Type>
 #include <kvs/RGBColor>
+#include <kvs/HSVColor>
 
 
 namespace kvs
@@ -38,8 +39,15 @@ public:
     typedef std::pair<float,kvs::RGBColor> Point;
     typedef std::list<Point> Points;
 
+    enum ColorSpace
+    {
+        RGBSpace,
+        HSVSpace
+    };
+
 private:
 
+    ColorSpace m_color_space; ///< color space for interpolation
     size_t m_resolution; ///< table resolution
     float m_min_value; ///< min. value
     float m_max_value; ///< max. value
@@ -56,16 +64,19 @@ public:
     ColorMap( const Table& table, const float min_value, const float max_value );
     virtual ~ColorMap();
 
-    float minValue() const;
-    float maxValue() const;
-    size_t resolution() const;
-    const Points& points() const;
-    const Table& table() const;
+    ColorSpace colorSpace() const { return m_color_space; }
+    float minValue() const { return m_min_value; }
+    float maxValue() const { return m_max_value; }
+    size_t resolution() const { return m_resolution; }
+    const Points& points() const { return m_points; }
+    const Table& table() const { return m_table; }
     bool hasRange() const;
 
-    void setRange( const float min_value, const float max_value );
-    void setResolution( const size_t resolution );
+    void setColorSpace( const ColorSpace space ) { m_color_space = space; }
+    void setRange( const float min_value, const float max_value ) { m_min_value = min_value; m_max_value = max_value; }
+    void setResolution( const size_t resolution ) { m_resolution = resolution; }
     void addPoint( const float value, const kvs::RGBColor color );
+    void addPoint( const float value, const kvs::HSVColor color );
     void removePoint( const float value );
     void create();
 
