@@ -123,83 +123,6 @@ void ImageObject::print( std::ostream& os, const kvs::Indent& indent ) const
 
 /*==========================================================================*/
 /**
- *  @brief  Returns the object type.
- *  @return object type
- */
-/*==========================================================================*/
-kvs::ObjectBase::ObjectType ImageObject::objectType() const
-{
-    return kvs::ObjectBase::Image;
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Returns the pixel type.
- *  @return pixel type
- */
-/*==========================================================================*/
-ImageObject::PixelType ImageObject::type() const
-{
-    return m_type;
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Returns the image width.
- *  @return image width
- */
-/*==========================================================================*/
-size_t ImageObject::width() const
-{
-    return m_width;
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Returns the image height.
- *  @return image height
- */
-/*==========================================================================*/
-size_t ImageObject::height() const
-{
-    return m_height;
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Returns the pixel data array.
- *  @return pixel data array
- */
-/*==========================================================================*/
-const kvs::ValueArray<kvs::UInt8>& ImageObject::pixels() const
-{
-    return m_pixels;
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Returns the number of bits per pixel.
- *  @return number of bits per pixel
- */
-/*==========================================================================*/
-size_t ImageObject::bitsPerPixel() const
-{
-    return m_type;
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Returns the number of bytes per pixel.
- *  @return number of bytes per pixel
- */
-/*==========================================================================*/
-size_t ImageObject::bytesPerPixel() const
-{
-    return m_type >> 3;
-}
-
-/*==========================================================================*/
-/**
  *  @brief  Returns the number of color channels.
  *  @return number of color channels
  */
@@ -217,45 +140,6 @@ size_t ImageObject::numberOfChannels() const
     }
 
     return ret;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets an image size (width and height).
- *  @param  width [in] image width
- *  @param  height [in] image height
- */
-/*===========================================================================*/
-void ImageObject::setSize( const size_t width, const size_t height )
-{
-    m_width = width;
-    m_height = height;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets pixel data.
- *  @param  pixels [in] pixel data
- *  @param  type [in] pixel type
- */
-/*===========================================================================*/
-void ImageObject::setPixels(
-    const kvs::ValueArray<kvs::UInt8>& pixels,
-    const ImageObject::PixelType type )
-{
-    m_pixels = pixels;
-    m_type = type;
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Returns the number of pixels.
- *  @return number of pixels
- */
-/*==========================================================================*/
-size_t ImageObject::get_number_of_pixels() const
-{
-    return ( m_type >> 3 ) * m_width * m_height;
 }
 
 /*===========================================================================*/

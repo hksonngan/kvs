@@ -127,8 +127,8 @@ void PointObject::add( const PointObject& other )
             BaseClass::updateMinMaxCoords();
         }
 
-        kvs::Vector3f min_object_coord( BaseClass::minObjectCoord() );
-        kvs::Vector3f max_object_coord( BaseClass::maxObjectCoord() );
+        kvs::Vec3 min_object_coord( BaseClass::minObjectCoord() );
+        kvs::Vec3 max_object_coord( BaseClass::maxObjectCoord() );
 
         min_object_coord.x() = kvs::Math::Min( min_object_coord.x(), other.minObjectCoord().x() );
         min_object_coord.y() = kvs::Math::Min( min_object_coord.y(), other.minObjectCoord().y() );
@@ -400,17 +400,6 @@ void PointObject::print( std::ostream& os, const kvs::Indent& indent ) const
 
 /*===========================================================================*/
 /**
- *  @brief  Sets a size value array.
- *  @param  sizes [in] size value array
- */
-/*===========================================================================*/
-void PointObject::setSizes( const kvs::ValueArray<kvs::Real32>& sizes )
-{
-    m_sizes = sizes;
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Sets a size value.
  *  @param  size [in] size value
  */
@@ -419,51 +408,6 @@ void PointObject::setSize( const kvs::Real32 size )
 {
     m_sizes.allocate( 1 );
     m_sizes[0] = size;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the geometry type.
- *  @return geometry type
- */
-/*===========================================================================*/
-PointObject::BaseClass::GeometryType PointObject::geometryType() const
-{
-    return BaseClass::Point;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the number of size values.
- *  @return number of size values
- */
-/*===========================================================================*/
-size_t PointObject::numberOfSizes() const
-{
-    return m_sizes.size();
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the size value which is specified by the index.
- *  @param  index [in] index of the size value array
- *  @return size value
- */
-/*===========================================================================*/
-kvs::Real32 PointObject::size( const size_t index ) const
-{
-    return m_sizes[index];
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the size value array.
- *  @return size value array
- */
-/*===========================================================================*/
-const kvs::ValueArray<kvs::Real32>& PointObject::sizes() const
-{
-    return m_sizes;
 }
 
 /*===========================================================================*/

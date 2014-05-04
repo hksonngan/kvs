@@ -303,39 +303,6 @@ void LineObject::print( std::ostream& os, const kvs::Indent& indent ) const
 
 /*===========================================================================*/
 /**
- *  @brief  Sets a line type.
- *  @param  line_type [in] line type
- */
-/*===========================================================================*/
-void LineObject::setLineType( const LineType line_type )
-{
-    m_line_type = line_type;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a color type.
- *  @param  color_type [in] color type
- */
-/*===========================================================================*/
-void LineObject::setColorType( const ColorType color_type )
-{
-    m_color_type = color_type;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a connection array.
- *  @param  connections [in] connection array
- */
-/*===========================================================================*/
-void LineObject::setConnections( const kvs::ValueArray<kvs::UInt32>& connections )
-{
-    m_connections = connections;
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Sets a color value.
  *  @param  color [in] color value
  */
@@ -343,19 +310,7 @@ void LineObject::setConnections( const kvs::ValueArray<kvs::UInt32>& connections
 void LineObject::setColor( const kvs::RGBColor& color )
 {
     BaseClass::setColor( color );
-
     m_color_type = LineObject::LineColor;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a size array.
- *  @param  sizes [in] size array
- */
-/*===========================================================================*/
-void LineObject::setSizes( const kvs::ValueArray<kvs::Real32>& sizes )
-{
-    m_sizes = sizes;
 }
 
 /*===========================================================================*/
@@ -368,39 +323,6 @@ void LineObject::setSize( const kvs::Real32 size )
 {
     m_sizes.allocate( 1 );
     m_sizes[0] = size;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the geometry type.
- *  @return geometry type
- */
-/*===========================================================================*/
-LineObject::BaseClass::GeometryType LineObject::geometryType() const
-{
-    return BaseClass::Line;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the line type.
- *  @return line type
- */
-/*===========================================================================*/
-LineObject::LineType LineObject::lineType() const
-{
-    return m_line_type;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the color type.
- *  @return color type
- */
-/*===========================================================================*/
-LineObject::ColorType LineObject::colorType() const
-{
-    return m_color_type;
 }
 
 /*===========================================================================*/
@@ -435,9 +357,9 @@ size_t LineObject::numberOfSizes() const
  *  @return connection
  */
 /*===========================================================================*/
-const kvs::Vector2ui LineObject::connection( const size_t index ) const
+const kvs::Vec2ui LineObject::connection( const size_t index ) const
 {
-    return kvs::Vector2ui( (unsigned int*)m_connections.data() + 2 * index );
+    return kvs::Vec2ui( (unsigned int*)m_connections.data() + 2 * index );
 }
 
 /*===========================================================================*/
@@ -450,28 +372,6 @@ const kvs::Vector2ui LineObject::connection( const size_t index ) const
 kvs::Real32 LineObject::size( const size_t index ) const
 {
     return m_sizes[index];
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the connection array
- *  @return connection array
- */
-/*===========================================================================*/
-const kvs::ValueArray<kvs::UInt32>& LineObject::connections() const
-{
-    return m_connections;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the size array.
- *  @return size array
- */
-/*===========================================================================*/
-const kvs::ValueArray<kvs::Real32>& LineObject::sizes() const
-{
-    return m_sizes;
 }
 
 std::ostream& operator << ( std::ostream& os, const LineObject& object )

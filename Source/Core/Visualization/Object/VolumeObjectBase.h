@@ -86,31 +86,31 @@ public:
 
     VolumeObjectBase();
 
-    void setLabel( const std::string& label );
-    void setVeclen( const size_t veclen );
-    void setCoords( const Coords& values );
-    void setValues( const Values& values );
+    void shallowCopy( const VolumeObjectBase& object );
+    void deepCopy( const VolumeObjectBase& object );
+    virtual void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
+
+    void setLabel( const std::string& label ) { m_label = label; }
+    void setVeclen( const size_t veclen ) { m_veclen = veclen; }
+    void setCoords( const Coords& coords ) { m_coords = coords; }
+    void setValues( const Values& values ) { m_values = values; }
     void setMinMaxValues( const kvs::Real64 min_value, const kvs::Real64 max_value ) const;
 
-    const std::string& label() const;
-    size_t veclen() const;
-    const Coords& coords() const;
-    const Values& values() const;
-    bool hasMinMaxValues() const;
-    kvs::Real64 minValue() const;
-    kvs::Real64 maxValue() const;
+    const std::string& label() const { return m_label; }
+    size_t veclen() const { return m_veclen; }
+    const Coords& coords() const { return m_coords; }
+    const Values& values() const { return m_values; }
+    bool hasMinMaxValues() const { return m_has_min_max_values; }
+    kvs::Real64 minValue() const { return m_min_value; }
+    kvs::Real64 maxValue() const { return m_max_value; }
 
-    ObjectType objectType() const;
+    ObjectType objectType() const { return Volume; }
     virtual VolumeType volumeType() const = 0;
     virtual GridType gridType() const = 0;
     virtual CellType cellType() const = 0;
     virtual size_t numberOfNodes() const = 0;
     virtual size_t numberOfCells() const = 0;
     void updateMinMaxValues() const;
-
-    void shallowCopy( const VolumeObjectBase& object );
-    void deepCopy( const VolumeObjectBase& object );
-    virtual void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
 
 private:
 

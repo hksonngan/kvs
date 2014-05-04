@@ -58,14 +58,14 @@ public:
     void clear();
     void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
 
-    void setSizes( const kvs::ValueArray<kvs::Real32>& sizes );
+    void setSizes( const kvs::ValueArray<kvs::Real32>& sizes ) { m_sizes = sizes; }
     void setSize( const kvs::Real32 size );
 
-    BaseClass::GeometryType geometryType() const;
-    size_t numberOfSizes() const;
+    BaseClass::GeometryType geometryType() const { return Point; }
+    size_t numberOfSizes() const { return m_sizes.size(); }
 
-    kvs::Real32 size( const size_t index = 0 ) const;
-    const kvs::ValueArray<kvs::Real32>& sizes() const;
+    kvs::Real32 size( const size_t index = 0 ) const { return m_sizes[index]; }
+    const kvs::ValueArray<kvs::Real32>& sizes() const { return m_sizes; }
 
 public:
     KVS_DEPRECATED( PointObject(

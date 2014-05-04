@@ -52,7 +52,7 @@ public:
 private:
 
     kvs::ValueArray<kvs::Real32> m_coords; ///< vertex array
-    kvs::ValueArray<kvs::UInt8> m_colors; ///< color(r,g,b) array
+    kvs::ValueArray<kvs::UInt8> m_colors; ///< color (r,g,b) array
     kvs::ValueArray<kvs::Real32> m_normals; ///< normal array
 
 public:
@@ -64,23 +64,24 @@ public:
     void clear();
     virtual void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
 
-    void setCoords( const kvs::ValueArray<kvs::Real32>& coords );
-    void setColors( const kvs::ValueArray<kvs::UInt8>& colors );
+    void setCoords( const kvs::ValueArray<kvs::Real32>& coords ) {  m_coords = coords; }
+    void setColors( const kvs::ValueArray<kvs::UInt8>& colors ) { m_colors = colors; }
+    void setNormals( const kvs::ValueArray<kvs::Real32>& normals ) { m_normals = normals; }
     void setColor( const kvs::RGBColor& color );
-    void setNormals( const kvs::ValueArray<kvs::Real32>& normals );
 
-    ObjectType objectType() const;
     virtual GeometryType geometryType() const = 0;
+    ObjectType objectType() const { return Geometry; }
     size_t numberOfVertices() const;
     size_t numberOfColors() const;
     size_t numberOfNormals() const;
 
-    const kvs::Vector3f coord( const size_t index = 0 ) const;
+    const kvs::ValueArray<kvs::Real32>& coords() const { return m_coords; }
+    const kvs::ValueArray<kvs::UInt8>& colors() const { return m_colors; }
+    const kvs::ValueArray<kvs::Real32>& normals() const { return m_normals; }
+
+    const kvs::Vec3 coord( const size_t index = 0 ) const;
     const kvs::RGBColor color( const size_t index = 0 ) const;
-    const kvs::Vector3f normal( const size_t index = 0 ) const;
-    const kvs::ValueArray<kvs::Real32>& coords() const;
-    const kvs::ValueArray<kvs::UInt8>& colors() const;
-    const kvs::ValueArray<kvs::Real32>& normals() const;
+    const kvs::Vec3 normal( const size_t index = 0 ) const;
 
     void updateMinMaxCoords();
 

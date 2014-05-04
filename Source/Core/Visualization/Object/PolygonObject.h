@@ -81,24 +81,24 @@ public:
     void clear();
     void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
 
-    void setPolygonType( const PolygonType polygon_type );
-    void setColorType( const ColorType color_type );
-    void setNormalType( const NormalType normal_type );
-    void setConnections( const kvs::ValueArray<kvs::UInt32>& connections );
+    void setPolygonType( const PolygonType polygon_type ) { m_polygon_type = polygon_type; }
+    void setColorType( const ColorType color_type ) { m_color_type = color_type; }
+    void setNormalType( const NormalType normal_type ) { m_normal_type = normal_type; }
+    void setConnections( const kvs::ValueArray<kvs::UInt32>& connections ) { m_connections = connections; }
+    void setOpacities( const kvs::ValueArray<kvs::UInt8>& opacities ) { m_opacities = opacities; }
     void setColor( const kvs::RGBColor& color );
-    void setOpacities( const kvs::ValueArray<kvs::UInt8>& opacities );
     void setOpacity( const kvs::UInt8 opacity );
 
-    GeometryType geometryType() const;
-    PolygonType polygonType() const;
-    ColorType colorType() const;
-    NormalType normalType() const;
+    GeometryType geometryType() const { return Polygon; }
+    PolygonType polygonType() const { return m_polygon_type; }
+    ColorType colorType() const { return m_color_type; }
+    NormalType normalType() const { return m_normal_type; }
     size_t numberOfConnections() const;
-    size_t numberOfOpacities() const;
-    kvs::UInt8 opacity( const size_t index = 0 ) const;
+    size_t numberOfOpacities() const { return m_opacities.size(); }
+    kvs::UInt8 opacity( const size_t index = 0 ) const { return m_opacities[index]; }
 
-    const kvs::ValueArray<kvs::UInt32>& connections() const;
-    const kvs::ValueArray<kvs::UInt8>& opacities() const;
+    const kvs::ValueArray<kvs::UInt32>& connections() const { return m_connections; }
+    const kvs::ValueArray<kvs::UInt8>& opacities() const { return m_opacities; }
 
 public:
     KVS_DEPRECATED( PolygonObject(

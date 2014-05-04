@@ -54,17 +54,17 @@ public:
     void deepCopy( const UnstructuredVolumeObject& object );
     void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
 
-    void setCellType( const CellType cell_type );
-    void setNumberOfNodes( const size_t nnodes );
-    void setNumberOfCells( const size_t ncells );
-    void setConnections( const Connections& connections );
+    void setCellType( const CellType cell_type ) { m_cell_type = cell_type; }
+    void setNumberOfNodes( const size_t nnodes ) { m_nnodes = nnodes; }
+    void setNumberOfCells( const size_t ncells ) { m_ncells = ncells; }
+    void setConnections( const Connections& connections ) { m_connections = connections; }
 
-    VolumeType volumeType() const;
-    GridType gridType() const;
-    CellType cellType() const;
-    size_t numberOfNodes() const;
-    size_t numberOfCells() const;
-    const Connections& connections() const;
+    VolumeType volumeType() const { return Unstructured; }
+    GridType gridType() const { return Irregular; }
+    CellType cellType() const { return m_cell_type; }
+    size_t numberOfNodes() const { return m_nnodes; }
+    size_t numberOfCells() const { return m_ncells; }
+    const Connections& connections() const { return m_connections; }
 
     void updateMinMaxCoords();
 

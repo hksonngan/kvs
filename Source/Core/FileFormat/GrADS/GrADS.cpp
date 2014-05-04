@@ -30,9 +30,9 @@ const char* MonthName[] = {
     "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"
 };
 
-const int DaysInMonth[] = {
-    31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
-};
+//const int DaysInMonth[] = {
+//    31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
+//};
 
 std::string ReplaceYear( const std::string& filename, const int year )
 {

@@ -23,7 +23,7 @@ namespace
 
 const unsigned int ItemTagSize     = 4;
 const unsigned int ItemLengthSize  = 4;
-const unsigned int ItemEmptyLength = 4;
+//const unsigned int ItemEmptyLength = 4;
 
 } // end of namespace
 

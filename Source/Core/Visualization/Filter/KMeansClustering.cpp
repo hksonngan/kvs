@@ -150,7 +150,7 @@ void KMeansClustering::simple_kmeans( const kvs::TableObject* object )
     kmeans.run();
 
     this->setTable( object->table(), object->labels() );
-    this->addColumn( kmeans.clusterIDs(), "cluster ID" );
+    this->addColumn( kvs::AnyValueArray( kmeans.clusterIDs() ), "cluster ID" );
 
     if ( m_cluster_centers ) delete [] m_cluster_centers;
     m_cluster_centers = new kvs::ValueArray<kvs::Real32> [ m_nclusters ];
@@ -178,7 +178,7 @@ void KMeansClustering::fast_kmeans( const kvs::TableObject* object )
     kmeans.run();
 
     this->setTable( object->table(), object->labels() );
-    this->addColumn( kmeans.clusterIDs(), "cluster ID" );
+    this->addColumn( kvs::AnyValueArray( kmeans.clusterIDs() ), "cluster ID" );
 
     if ( m_cluster_centers ) delete [] m_cluster_centers;
     m_cluster_centers = new kvs::ValueArray<kvs::Real32> [ m_nclusters ];
@@ -208,7 +208,7 @@ void KMeansClustering::adaptive_kmeans( const kvs::TableObject* object )
     kmeans.run();
 
     this->setTable( object->table(), object->labels() );
-    this->addColumn( kmeans.clusterIDs(), "cluster ID" );
+    this->addColumn( kvs::AnyValueArray( kmeans.clusterIDs() ), "cluster ID" );
 
     // 'm_nclusters' is set to the estimated number of clusters after
     // the clustering process.

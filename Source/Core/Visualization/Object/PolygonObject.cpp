@@ -152,50 +152,6 @@ void PolygonObject::print( std::ostream& os, const kvs::Indent& indent ) const
 
 /*===========================================================================*/
 /**
- *  @brief  Sets a polygon type.
- *  @param  polygon_type [in] polygon type
- */
-/*===========================================================================*/
-void PolygonObject::setPolygonType( const PolygonType polygon_type )
-{
-    m_polygon_type = polygon_type;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a color type
- *  @param  color_type [in] color type
- */
-/*===========================================================================*/
-void PolygonObject::setColorType( const ColorType color_type )
-{
-    m_color_type = color_type;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a normal type.
- *  @param  normal_type [in] normal type
- */
-/*===========================================================================*/
-void PolygonObject::setNormalType( const NormalType normal_type )
-{
-    m_normal_type = normal_type;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a connection array.
- *  @param  connections [in] connection array
- */
-/*===========================================================================*/
-void PolygonObject::setConnections( const kvs::ValueArray<kvs::UInt32>& connections )
-{
-    m_connections = connections;
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Sets a color value.
  *  @param  color [in] color value
  */
@@ -203,19 +159,7 @@ void PolygonObject::setConnections( const kvs::ValueArray<kvs::UInt32>& connecti
 void PolygonObject::setColor( const kvs::RGBColor& color )
 {
     BaseClass::setColor( color );
-
     m_color_type = PolygonObject::PolygonColor;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets an opacity array.
- *  @param  opacities [in] opacity array
- */
-/*===========================================================================*/
-void PolygonObject::setOpacities( const kvs::ValueArray<kvs::UInt8>& opacities )
-{
-    m_opacities = opacities;
 }
 
 /*===========================================================================*/
@@ -232,50 +176,6 @@ void PolygonObject::setOpacity( const kvs::UInt8 opacity )
 
 /*===========================================================================*/
 /**
- *  @brief  Returns the geometry type.
- *  @return geometry type
- */
-/*===========================================================================*/
-PolygonObject::BaseClass::GeometryType PolygonObject::geometryType() const
-{
-    return BaseClass::Polygon;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the polygon type.
- *  @return polygon type
- */
-/*===========================================================================*/
-PolygonObject::PolygonType PolygonObject::polygonType() const
-{
-    return m_polygon_type;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the color type.
- *  @return color type
- */
-/*===========================================================================*/
-PolygonObject::ColorType PolygonObject::colorType() const
-{
-    return m_color_type;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the normal type.
- *  @return normal type
- */
-/*===========================================================================*/
-PolygonObject::NormalType PolygonObject::normalType() const
-{
-    return m_normal_type;
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Returns the number of connections.
  *  @return number of connections
  */
@@ -284,51 +184,6 @@ size_t PolygonObject::numberOfConnections() const
 {
     const size_t nvertices_per_face = m_polygon_type;
     return m_connections.size() / nvertices_per_face;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the number of opacity values.
- *  @return number of opacity values
- */
-/*===========================================================================*/
-size_t PolygonObject::numberOfOpacities() const
-{
-    return m_opacities.size();
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the opacity specified by the index.
- *  @param  index [in] index of the opacity array
- *  @return opacity value
- */
-/*===========================================================================*/
-kvs::UInt8 PolygonObject::opacity( const size_t index ) const
-{
-    return m_opacities[index];
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the connection array.
- *  @return connection array
- */
-/*===========================================================================*/
-const kvs::ValueArray<kvs::UInt32>& PolygonObject::connections() const
-{
-    return m_connections;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the opacity array.
- *  @return opacity array
- */
-/*===========================================================================*/
-const kvs::ValueArray<kvs::UInt8>& PolygonObject::opacities() const
-{
-    return m_opacities;
 }
 
 std::ostream& operator << ( std::ostream& os, const PolygonObject& object )

@@ -22,11 +22,6 @@
 
 namespace
 {
-const int CharacterHeight = 12;
-}
-
-namespace
-{
 
 void BeginDraw()
 {

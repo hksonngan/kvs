@@ -38,7 +38,7 @@ class StructuredVolumeObject : public kvs::VolumeObjectBase
 private:
 
     GridType m_grid_type;  ///< Grid type.
-    kvs::Vector3ui m_resolution; ///< Node resolution.
+    kvs::Vec3ui m_resolution; ///< Node resolution.
 
 public:
 
@@ -48,13 +48,13 @@ public:
     void deepCopy( const StructuredVolumeObject& object );
     void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
 
-    void setGridType( const GridType grid_type );
-    void setResolution( const kvs::Vector3ui& resolution );
+    void setGridType( const GridType grid_type ) { m_grid_type = grid_type; }
+    void setResolution( const kvs::Vec3ui& resolution ) { m_resolution = resolution; }
 
-    VolumeType volumeType() const;
-    GridType gridType() const;
-    CellType cellType() const;
-    const kvs::Vector3ui& resolution() const;
+    VolumeType volumeType() const { return Structured; }
+    GridType gridType() const { return m_grid_type; }
+    CellType cellType() const { return Hexahedra; }
+    const kvs::Vec3ui& resolution() const { return m_resolution; }
     size_t numberOfNodesPerLine() const;
     size_t numberOfNodesPerSlice() const;
     size_t numberOfNodes() const;

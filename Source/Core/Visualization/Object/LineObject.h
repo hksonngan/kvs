@@ -75,24 +75,24 @@ public:
     void clear();
     void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
 
-    void setLineType( const LineType line_type );
-    void setColorType( const ColorType color_type );
-    void setConnections( const kvs::ValueArray<kvs::UInt32>& connections );
+    void setLineType( const LineType line_type ) { m_line_type = line_type; }
+    void setColorType( const ColorType color_type ) { m_color_type = color_type; }
+    void setConnections( const kvs::ValueArray<kvs::UInt32>& connections ) { m_connections = connections; }
+    void setSizes( const kvs::ValueArray<kvs::Real32>& sizes ) { m_sizes = sizes; }
     void setColor( const kvs::RGBColor& color );
-    void setSizes( const kvs::ValueArray<kvs::Real32>& sizes );
     void setSize( const kvs::Real32 size );
 
-    GeometryType geometryType() const;
-    LineType lineType() const;
-    ColorType colorType() const;
+    GeometryType geometryType() const { return Line; }
+    LineType lineType() const { return m_line_type; }
+    ColorType colorType() const { return m_color_type; }
     size_t numberOfConnections() const;
     size_t numberOfSizes() const;
 
-    const kvs::Vector2ui connection( const size_t index = 0 ) const;
+    const kvs::Vec2ui connection( const size_t index = 0 ) const;
     kvs::Real32 size( const size_t index = 0 ) const;
 
-    const kvs::ValueArray<kvs::UInt32>& connections() const;
-    const kvs::ValueArray<kvs::Real32>& sizes() const;
+    const kvs::ValueArray<kvs::UInt32>& connections() const { return m_connections; }
+    const kvs::ValueArray<kvs::Real32>& sizes() const { return m_sizes; }
 
 public:
     KVS_DEPRECATED( LineObject(

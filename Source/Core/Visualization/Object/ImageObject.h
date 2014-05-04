@@ -62,27 +62,23 @@ public:
         const size_t width,
         const size_t height,
         const kvs::ValueArray<kvs::UInt8>& pixels,
-        const ImageObject::PixelType type = ImageObject::Color24 );
+        const PixelType type = Color24 );
 
     void shallowCopy( const ImageObject& object );
     void deepCopy( const ImageObject& object );
     void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
 
-    ObjectType objectType() const;
-    ImageObject::PixelType type() const;
-    size_t width() const;
-    size_t height() const;
-    const kvs::ValueArray<kvs::UInt8>& pixels() const;
-    size_t bitsPerPixel() const;
-    size_t bytesPerPixel() const;
+    ObjectType objectType() const { return Image; }
+    ImageObject::PixelType type() const { return m_type; }
+    size_t width() const { return m_width; }
+    size_t height() const { return m_height; }
+    const kvs::ValueArray<kvs::UInt8>& pixels() const { return m_pixels; }
+    size_t bitsPerPixel() const { return m_type; }
+    size_t bytesPerPixel() const { return m_type >> 3; }
     size_t numberOfChannels() const;
 
-    void setSize( const size_t width, const size_t height );
-    void setPixels( const kvs::ValueArray<kvs::UInt8>& pixels, const ImageObject::PixelType type = ImageObject::Color24 );
-
-private:
-
-    size_t get_number_of_pixels() const;
+    void setSize( const size_t width, const size_t height ) { m_width = width; m_height = height; }
+    void setPixels( const kvs::ValueArray<kvs::UInt8>& pixels, const PixelType type = Color24 ) { m_pixels = pixels; m_type = type; }
 
 public:
     KVS_DEPRECATED( const kvs::ValueArray<kvs::UInt8>& data() const ) { return this->pixels(); }

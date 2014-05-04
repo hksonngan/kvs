@@ -44,7 +44,7 @@ namespace kvs
 StructuredVolumeObject::StructuredVolumeObject():
     kvs::VolumeObjectBase(),
     m_grid_type( UnknownGridType ),
-    m_resolution( kvs::Vector3ui( 0, 0, 0 ) )
+    m_resolution( kvs::Vec3ui( 0, 0, 0 ) )
 {
 }
 
@@ -95,66 +95,6 @@ void StructuredVolumeObject::print( std::ostream& os, const kvs::Indent& indent 
 
 /*==========================================================================*/
 /**
- *  @brief  Sets the grid type.
- */
-/*==========================================================================*/
-void StructuredVolumeObject::setGridType( const GridType grid_type )
-{
-    m_grid_type = grid_type;
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Sets the node resolution.
- */
-/*==========================================================================*/
-void StructuredVolumeObject::setResolution( const kvs::Vector3ui& resolution )
-{
-    m_resolution = resolution;
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Returns the volume type.
- */
-/*==========================================================================*/
-StructuredVolumeObject::VolumeType StructuredVolumeObject::volumeType() const
-{
-    return Structured;
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Returns the grid type.
- */
-/*==========================================================================*/
-StructuredVolumeObject::GridType StructuredVolumeObject::gridType() const
-{
-    return m_grid_type;
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Returns the cell type.
- */
-/*==========================================================================*/
-StructuredVolumeObject::CellType StructuredVolumeObject::cellType() const
-{
-    return Hexahedra;
-}
-
-/*==========================================================================*/
-/**
- *  @brief  Returns the node resolution.
- */
-/*==========================================================================*/
-const kvs::Vector3ui& StructuredVolumeObject::resolution() const
-{
-    return m_resolution;
-}
-
-/*==========================================================================*/
-/**
  *  @brief  Returns the number of nodes per line.
  */
 /*==========================================================================*/
@@ -183,16 +123,6 @@ size_t StructuredVolumeObject::numberOfNodes() const
     return this->numberOfNodesPerSlice() * m_resolution.z();
 }
 
-/*==========================================================================*/
-/**
- *  @brief  Update the min/max node coordinates.
- */
-/*==========================================================================*/
-void StructuredVolumeObject::updateMinMaxCoords()
-{
-    this->calculate_min_max_coords();
-}
-
 /*===========================================================================*/
 /**
  *  @brief  Returns the number of cells.
@@ -206,13 +136,23 @@ size_t StructuredVolumeObject::numberOfCells() const
 
 /*==========================================================================*/
 /**
+ *  @brief  Update the min/max node coordinates.
+ */
+/*==========================================================================*/
+void StructuredVolumeObject::updateMinMaxCoords()
+{
+    this->calculate_min_max_coords();
+}
+
+/*==========================================================================*/
+/**
  *  @brief  Calculate the min/max coordinate values.
  */
 /*==========================================================================*/
 void StructuredVolumeObject::calculate_min_max_coords()
 {
-    kvs::Vector3f min_coord( 0.0f, 0.0f, 0.0f );
-    kvs::Vector3f max_coord( 0.0f, 0.0f, 0.0f );
+    kvs::Vec3 min_coord( 0.0f, 0.0f, 0.0f );
+    kvs::Vec3 max_coord( 0.0f, 0.0f, 0.0f );
 
     switch ( m_grid_type )
     {
