@@ -170,6 +170,7 @@ public:
 typedef Matrix44<float>  Matrix44f;
 typedef Matrix44<double> Matrix44d;
 typedef Matrix44<float>  Mat4;
+typedef Matrix44<double> Mat4d;
 
 
 /*===========================================================================*/

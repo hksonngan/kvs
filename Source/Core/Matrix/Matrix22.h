@@ -157,6 +157,7 @@ public:
 typedef Matrix22<float>  Matrix22f;
 typedef Matrix22<double> Matrix22d;
 typedef Matrix22<float>  Mat2;
+typedef Matrix22<double> Mat2d;
 
 
 /*===========================================================================*/

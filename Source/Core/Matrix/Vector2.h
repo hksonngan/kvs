@@ -147,6 +147,8 @@ typedef Vector2<float>        Vector2f;
 typedef Vector2<double>       Vector2d;
 typedef Vector2<float>        Vec2;
 typedef Vector2<int>          Vec2i;
+typedef Vector2<unsigned int> Vec2ui;
+typedef Vector2<double>       Vec2d;
 
 
 /*===========================================================================*/

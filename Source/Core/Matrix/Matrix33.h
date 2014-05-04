@@ -168,6 +168,8 @@ public:
 typedef Matrix33<float>  Matrix33f;
 typedef Matrix33<double> Matrix33d;
 typedef Matrix33<float>  Mat3;
+typedef Matrix33<double> Mat3d;
+
 
 /*===========================================================================*/
 /**

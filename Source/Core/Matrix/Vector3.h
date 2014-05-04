@@ -155,6 +155,7 @@ typedef Vector3<double>       Vector3d;
 typedef Vector3<float>        Vec3;
 typedef Vector3<int>          Vec3i;
 typedef Vector3<unsigned int> Vec3ui;
+typedef Vector3<double>       Vec3d;
 
 
 /*===========================================================================*/
