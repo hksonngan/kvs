@@ -52,6 +52,7 @@ public:
 
 private:
 
+    ObjectType m_object_type; ///< object type
     std::string m_name; ///< object name
     kvs::Vec3 m_min_object_coord; ///< min coord in the object coordinate system
     kvs::Vec3 m_max_object_coord; ///< max coord in the object coordinate system
@@ -78,7 +79,7 @@ public:
     void hide() { m_show_flag = false; }
     virtual void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
 
-    virtual ObjectType objectType() const = 0;
+    ObjectType objectType() const { return m_object_type; }
     const std::string& name() const { return m_name; }
     const kvs::Vec3& minObjectCoord() const { return m_min_object_coord; }
     const kvs::Vec3& maxObjectCoord() const { return m_max_object_coord; }
@@ -96,6 +97,7 @@ public:
 
 protected:
 
+    void setObjectType( ObjectType object_type ) { m_object_type = object_type; }
     void setObjectCenter( const kvs::Vec3& object_center ) { m_object_center = object_center; }
     void setNormalize( const kvs::Vec3& normalize ) { m_normalize = normalize; }
 

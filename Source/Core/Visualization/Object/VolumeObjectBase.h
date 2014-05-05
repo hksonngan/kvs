@@ -50,6 +50,7 @@ public:
     {
         Structured = 0, ///< Structured volume.
         Unstructured,   ///< Unstructured volume.
+        UnknownVolumeType ///< unknow volume type
     };
 
     enum GridType
@@ -74,6 +75,7 @@ public:
 
 private:
 
+    VolumeType m_volume_type; ///< volume type
     std::string m_label; ///< data label
     size_t m_veclen; ///< Vector length.
     Coords m_coords; ///< Coordinate array.
@@ -104,13 +106,16 @@ public:
     kvs::Real64 minValue() const { return m_min_value; }
     kvs::Real64 maxValue() const { return m_max_value; }
 
-    ObjectType objectType() const { return Volume; }
-    virtual VolumeType volumeType() const = 0;
+    VolumeType volumeType() const { return m_volume_type; }
     virtual GridType gridType() const = 0;
     virtual CellType cellType() const = 0;
     virtual size_t numberOfNodes() const = 0;
     virtual size_t numberOfCells() const = 0;
     void updateMinMaxValues() const;
+
+protected:
+
+    void setVolumeType( VolumeType volume_type ) { m_volume_type = volume_type; }
 
 private:
 

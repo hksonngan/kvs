@@ -56,6 +56,7 @@ UnstructuredVolumeObject::UnstructuredVolumeObject():
     m_ncells( 0 ),
     m_connections()
 {
+    BaseClass::setVolumeType( Unstructured );
 }
 
 /*===========================================================================*/

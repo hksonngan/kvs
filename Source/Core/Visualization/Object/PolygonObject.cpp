@@ -85,6 +85,7 @@ namespace kvs
 /*===========================================================================*/
 PolygonObject::PolygonObject()
 {
+    BaseClass::setGeometryType( Polygon );
     this->setOpacity( 255 );
 }
 

@@ -89,7 +89,7 @@ public:
     void setColor( const kvs::RGBColor& color );
     void setOpacity( const kvs::UInt8 opacity );
 
-    GeometryType geometryType() const { return Polygon; }
+//    GeometryType geometryType() const { return Polygon; }
     PolygonType polygonType() const { return m_polygon_type; }
     ColorType colorType() const { return m_color_type; }
     NormalType normalType() const { return m_normal_type; }

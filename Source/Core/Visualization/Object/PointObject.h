@@ -61,7 +61,7 @@ public:
     void setSizes( const kvs::ValueArray<kvs::Real32>& sizes ) { m_sizes = sizes; }
     void setSize( const kvs::Real32 size );
 
-    BaseClass::GeometryType geometryType() const { return Point; }
+//    BaseClass::GeometryType geometryType() const { return Point; }
     size_t numberOfSizes() const { return m_sizes.size(); }
 
     kvs::Real32 size( const size_t index = 0 ) const { return m_sizes[index]; }

@@ -68,7 +68,6 @@ public:
     void deepCopy( const ImageObject& object );
     void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
 
-    ObjectType objectType() const { return Image; }
     ImageObject::PixelType type() const { return m_type; }
     size_t width() const { return m_width; }
     size_t height() const { return m_height; }

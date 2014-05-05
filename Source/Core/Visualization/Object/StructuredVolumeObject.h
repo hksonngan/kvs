@@ -51,7 +51,6 @@ public:
     void setGridType( const GridType grid_type ) { m_grid_type = grid_type; }
     void setResolution( const kvs::Vec3ui& resolution ) { m_resolution = resolution; }
 
-    VolumeType volumeType() const { return Structured; }
     GridType gridType() const { return m_grid_type; }
     CellType cellType() const { return Hexahedra; }
     const kvs::Vec3ui& resolution() const { return m_resolution; }

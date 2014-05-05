@@ -47,10 +47,12 @@ public:
         Point, ///< point object
         Line, ///< line object
         Polygon, ///< polygon object
+        UnknownGeometryType ///< unknown geometry
     };
 
 private:
 
+    GeometryType m_geometry_type; ///< geometry type
     kvs::ValueArray<kvs::Real32> m_coords; ///< vertex array
     kvs::ValueArray<kvs::UInt8> m_colors; ///< color (r,g,b) array
     kvs::ValueArray<kvs::Real32> m_normals; ///< normal array
@@ -69,8 +71,7 @@ public:
     void setNormals( const kvs::ValueArray<kvs::Real32>& normals ) { m_normals = normals; }
     void setColor( const kvs::RGBColor& color );
 
-    virtual GeometryType geometryType() const = 0;
-    ObjectType objectType() const { return Geometry; }
+    GeometryType geometryType() const { return m_geometry_type; }
     size_t numberOfVertices() const;
     size_t numberOfColors() const;
     size_t numberOfNormals() const;
@@ -84,6 +85,10 @@ public:
     const kvs::Vec3 normal( const size_t index = 0 ) const;
 
     void updateMinMaxCoords();
+
+protected:
+
+    void setGeometryType( GeometryType geometry_type ) { m_geometry_type = geometry_type; }
 
 private:
 

@@ -137,6 +137,7 @@ namespace kvs
 /*===========================================================================*/
 LineObject::LineObject()
 {
+    BaseClass::setGeometryType( Line );
     this->setSize( 1 );
 }
 
@@ -148,6 +149,7 @@ LineObject::LineObject()
 /*===========================================================================*/
 LineObject::LineObject( const kvs::PolygonObject& polygon )
 {
+    BaseClass::setGeometryType( Line );
     BaseClass::setCoords( polygon.coords() );
 
     if( polygon.colorType() == kvs::PolygonObject::VertexColor )

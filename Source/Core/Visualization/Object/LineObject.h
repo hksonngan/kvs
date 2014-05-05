@@ -82,7 +82,7 @@ public:
     void setColor( const kvs::RGBColor& color );
     void setSize( const kvs::Real32 size );
 
-    GeometryType geometryType() const { return Line; }
+//    GeometryType geometryType() const { return Line; }
     LineType lineType() const { return m_line_type; }
     ColorType colorType() const { return m_color_type; }
     size_t numberOfConnections() const;

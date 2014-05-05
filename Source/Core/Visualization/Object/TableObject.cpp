@@ -27,6 +27,7 @@ namespace kvs
 /*===========================================================================*/
 TableObject::TableObject()
 {
+    BaseClass::setObjectType( Table );
     m_nrows = 0;
     m_ncolumns = 0;
 }

@@ -78,7 +78,6 @@ public:
     void resetRange( const size_t column_index );
     void resetRange();
 
-    ObjectType objectType() const { return kvs::ObjectBase::Table; }
     size_t numberOfColumns() const { return m_ncolumns; }
     size_t numberOfRows() const { return m_nrows; }
     const kvs::AnyValueTable& table() const { return m_table; }

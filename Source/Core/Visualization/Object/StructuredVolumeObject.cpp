@@ -46,6 +46,7 @@ StructuredVolumeObject::StructuredVolumeObject():
     m_grid_type( UnknownGridType ),
     m_resolution( kvs::Vec3ui( 0, 0, 0 ) )
 {
+    BaseClass::setVolumeType( Structured );
 }
 
 /*===========================================================================*/

@@ -24,8 +24,10 @@ namespace kvs
  *  @brief  Constructs a new GeometryObjectBase class.
  */
 /*===========================================================================*/
-GeometryObjectBase::GeometryObjectBase()
+GeometryObjectBase::GeometryObjectBase():
+    m_geometry_type( UnknownGeometryType )
 {
+    BaseClass::setObjectType( Geometry );
 }
 
 /*===========================================================================*/
@@ -37,6 +39,7 @@ GeometryObjectBase::GeometryObjectBase()
 void GeometryObjectBase::shallowCopy( const GeometryObjectBase& object )
 {
     BaseClass::operator=( object );
+    m_geometry_type = object.geometryType();
     m_coords = object.coords();
     m_colors = object.colors();
     m_normals = object.normals();
@@ -51,6 +54,7 @@ void GeometryObjectBase::shallowCopy( const GeometryObjectBase& object )
 void GeometryObjectBase::deepCopy( const GeometryObjectBase& object )
 {
     BaseClass::operator=( object );
+    m_geometry_type = object.geometryType();
     m_coords = object.coords().clone();
     m_colors = object.colors().clone();
     m_normals = object.normals().clone();

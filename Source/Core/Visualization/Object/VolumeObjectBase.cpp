@@ -24,11 +24,13 @@ namespace kvs
  */
 /*==========================================================================*/
 VolumeObjectBase::VolumeObjectBase():
+    m_volume_type( UnknownVolumeType ),
     m_veclen( 0 ),
     m_has_min_max_values( false ),
     m_min_value( 0.0 ),
     m_max_value( 0.0 )
 {
+    BaseClass::setObjectType( Volume );
 }
 
 /*==========================================================================*/
@@ -76,6 +78,7 @@ void VolumeObjectBase::updateMinMaxValues() const
 void VolumeObjectBase::shallowCopy( const VolumeObjectBase& object )
 {
     BaseClass::operator=( object );
+    m_volume_type = object.volumeType();
     m_has_min_max_values = object.hasMinMaxValues();
     m_min_value = object.minValue();
     m_max_value = object.maxValue();
@@ -94,6 +97,7 @@ void VolumeObjectBase::shallowCopy( const VolumeObjectBase& object )
 void VolumeObjectBase::deepCopy( const VolumeObjectBase& object )
 {
     BaseClass::operator=( object );
+    m_volume_type = object.volumeType();
     m_has_min_max_values = object.hasMinMaxValues();
     m_min_value = object.minValue();
     m_max_value = object.maxValue();

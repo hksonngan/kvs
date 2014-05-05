@@ -59,7 +59,6 @@ public:
     void setNumberOfCells( const size_t ncells ) { m_ncells = ncells; }
     void setConnections( const Connections& connections ) { m_connections = connections; }
 
-    VolumeType volumeType() const { return Unstructured; }
     GridType gridType() const { return Irregular; }
     CellType cellType() const { return m_cell_type; }
     size_t numberOfNodes() const { return m_nnodes; }

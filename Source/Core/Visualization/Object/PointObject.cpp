@@ -29,6 +29,7 @@ namespace kvs
 /*===========================================================================*/
 PointObject::PointObject()
 {
+    BaseClass::setGeometryType( Point );
     this->setSize( 1 );
 }
 
@@ -40,6 +41,7 @@ PointObject::PointObject()
 /*===========================================================================*/
 PointObject::PointObject( const kvs::LineObject& line )
 {
+    BaseClass::setGeometryType( Point );
     BaseClass::setCoords( line.coords() );
 
     if( line.colorType() == kvs::LineObject::VertexColor )
@@ -70,6 +72,7 @@ PointObject::PointObject( const kvs::LineObject& line )
 /*===========================================================================*/
 PointObject::PointObject( const kvs::PolygonObject& polygon )
 {
+    BaseClass::setGeometryType( Point );
     BaseClass::setCoords( polygon.coords() );
 
     if( polygon.colorType() == kvs::PolygonObject::VertexColor )

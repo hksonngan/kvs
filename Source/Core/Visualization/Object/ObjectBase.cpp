@@ -29,7 +29,8 @@ namespace kvs
 /*===========================================================================*/
 ObjectBase::ObjectBase():
     kvs::XformControl(),
-    m_name("unknown"),
+    m_object_type( UnknownObject ),
+    m_name( "unknown" ),
     m_min_object_coord( kvs::Vec3::All( -3.0 ) ),
     m_max_object_coord( kvs::Vec3::All(  3.0 ) ),
     m_min_external_coord( kvs::Vec3::All( -3.0 ) ),
@@ -57,6 +58,7 @@ ObjectBase::~ObjectBase()
 ObjectBase& ObjectBase::operator = ( const ObjectBase& object )
 {
     kvs::XformControl::operator =( object );
+    m_object_type = object.m_object_type;
     m_name = object.m_name;
     m_min_object_coord = object.m_min_object_coord;
     m_max_object_coord = object.m_max_object_coord;
