@@ -124,6 +124,76 @@ public:
     }
 };
 
+kvs::ValueArray<kvs::UInt32> GetConnections( const kvs::PolygonObject& polygon )
+{
+    const size_t nconnections = polygon.numberOfConnections();
+    const size_t ncorners = size_t( polygon.polygonType() );
+    const size_t npolygons = ( nconnections == 0 ) ?
+        polygon.numberOfVertices() / ncorners : nconnections;
+
+    EdgeMap edge_map( polygon.numberOfVertices() );
+    if ( nconnections > 0 )
+    {
+        if ( polygon.polygonType() == kvs::PolygonObject::Triangle )
+        {
+            for ( size_t i = 0; i < npolygons; i++ )
+            {
+                const kvs::UInt32 v0 =  polygon.connections().at( 3 * i );
+                const kvs::UInt32 v1 =  polygon.connections().at( 3 * i + 1 );
+                const kvs::UInt32 v2 =  polygon.connections().at( 3 * i + 2 );
+                edge_map.insert( v0, v1 );
+                edge_map.insert( v1, v2 );
+                edge_map.insert( v2, v0 );
+            }
+        }
+        else if ( polygon.polygonType() == kvs::PolygonObject::Quadrangle )
+        {
+            for ( size_t i = 0; i < npolygons; i++ )
+            {
+                const kvs::UInt32 v0 =  polygon.connections().at( 4 * i );
+                const kvs::UInt32 v1 =  polygon.connections().at( 4 * i + 1 );
+                const kvs::UInt32 v2 =  polygon.connections().at( 4 * i + 2 );
+                const kvs::UInt32 v3 =  polygon.connections().at( 4 * i + 3 );
+                edge_map.insert( v0, v1 );
+                edge_map.insert( v1, v2 );
+                edge_map.insert( v2, v3 );
+                edge_map.insert( v3, v0 );
+            }
+        }
+    }
+    else
+    {
+        if ( polygon.polygonType() == kvs::PolygonObject::Triangle )
+        {
+            for ( size_t i = 0; i < npolygons; i++ )
+            {
+                const kvs::UInt32 v0 =  3 * i;
+                const kvs::UInt32 v1 =  3 * i + 1;
+                const kvs::UInt32 v2 =  3 * i + 2;
+                edge_map.insert( v0, v1 );
+                edge_map.insert( v1, v2 );
+                edge_map.insert( v2, v0 );
+            }
+        }
+        else if ( polygon.polygonType() == kvs::PolygonObject::Quadrangle )
+        {
+            for ( size_t i = 0; i < npolygons; i++ )
+            {
+                const kvs::UInt32 v0 =  4 * i;
+                const kvs::UInt32 v1 =  4 * i + 1;
+                const kvs::UInt32 v2 =  4 * i + 2;
+                const kvs::UInt32 v3 =  4 * i + 3;
+                edge_map.insert( v0, v1 );
+                edge_map.insert( v1, v2 );
+                edge_map.insert( v2, v3 );
+                edge_map.insert( v3, v0 );
+            }
+        }
+    }
+
+    return edge_map.serialize();
+}
+
 } // end of namespace
 
 
@@ -164,76 +234,8 @@ LineObject::LineObject( const kvs::PolygonObject& polygon )
     }
 
     this->setSize( 1.0f );
-
     this->setLineType( LineObject::Segment );
-
-    const size_t nconnections = polygon.numberOfConnections();
-    const size_t ncorners = size_t( polygon.polygonType() );
-    const size_t npolygons = ( nconnections == 0 ) ?
-        polygon.numberOfVertices() / ncorners : nconnections;
-
-    ::EdgeMap edge_map( polygon.numberOfVertices() );
-    if ( nconnections > 0 )
-    {
-        if ( polygon.polygonType() == kvs::PolygonObject::Triangle )
-        {
-            for ( size_t i = 0; i < npolygons; i++ )
-            {
-                const kvs::UInt32 v0 =  polygon.connections().at( 3 * i );
-                const kvs::UInt32 v1 =  polygon.connections().at( 3 * i + 1 );
-                const kvs::UInt32 v2 =  polygon.connections().at( 3 * i + 2 );
-                edge_map.insert( v0, v1 );
-                edge_map.insert( v1, v2 );
-                edge_map.insert( v2, v0 );
-            }
-        }
-        else if ( polygon.polygonType() == kvs::PolygonObject::Quadrangle )
-        {
-            ::EdgeMap edge_map( polygon.numberOfVertices() );
-            for ( size_t i = 0; i < npolygons; i++ )
-            {
-                const kvs::UInt32 v0 =  polygon.connections().at( 4 * i );
-                const kvs::UInt32 v1 =  polygon.connections().at( 4 * i + 1 );
-                const kvs::UInt32 v2 =  polygon.connections().at( 4 * i + 2 );
-                const kvs::UInt32 v3 =  polygon.connections().at( 4 * i + 3 );
-                edge_map.insert( v0, v1 );
-                edge_map.insert( v1, v2 );
-                edge_map.insert( v2, v3 );
-                edge_map.insert( v3, v0 );
-            }
-        }
-    }
-    else
-    {
-        if ( polygon.polygonType() == kvs::PolygonObject::Triangle )
-        {
-            for ( size_t i = 0; i < npolygons; i++ )
-            {
-                const kvs::UInt32 v0 =  3 * i;
-                const kvs::UInt32 v1 =  3 * i + 1;
-                const kvs::UInt32 v2 =  3 * i + 2;
-                edge_map.insert( v0, v1 );
-                edge_map.insert( v1, v2 );
-                edge_map.insert( v2, v0 );
-            }
-        }
-        else if ( polygon.polygonType() == kvs::PolygonObject::Quadrangle )
-        {
-            ::EdgeMap edge_map( polygon.numberOfVertices() );
-            for ( size_t i = 0; i < npolygons; i++ )
-            {
-                const kvs::UInt32 v0 =  4 * i;
-                const kvs::UInt32 v1 =  4 * i + 1;
-                const kvs::UInt32 v2 =  4 * i + 2;
-                const kvs::UInt32 v3 =  4 * i + 3;
-                edge_map.insert( v0, v1 );
-                edge_map.insert( v1, v2 );
-                edge_map.insert( v2, v3 );
-                edge_map.insert( v3, v0 );
-            }
-        }
-    }
-    this->setConnections( edge_map.serialize() );
+    this->setConnections( ::GetConnections( polygon ) );
 
     BaseClass::setMinMaxObjectCoords(
         polygon.minObjectCoord(),
