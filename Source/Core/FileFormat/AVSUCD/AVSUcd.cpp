@@ -728,10 +728,13 @@ void AVSUcd::read_binary_file( const std::string& filename )
         fseek( ifs, m_nelements - 1, SEEK_CUR );
 
         size_t nnodes_per_element = 0;
-        if ( element_type == 4 ) { m_element_type = Tetrahedra; nnodes_per_element = 4; }
+        if ( element_type == 0 ) { m_element_type = Point; nnodes_per_element = 1; }
+        else if ( element_type == 4 ) { m_element_type = Tetrahedra; nnodes_per_element = 4; }
         else if ( element_type == 11 ) { m_element_type = Tetrahedra2; nnodes_per_element = 10; }
         else if ( element_type == 7 ) { m_element_type = Hexahedra; nnodes_per_element = 8; }
         else if ( element_type == 14 ) { m_element_type = Hexahedra2; nnodes_per_element = 20; }
+        else if ( element_type == 5 ) { m_element_type = Pyramid; nnodes_per_element = 5; }
+        else if ( element_type == 6 ) { m_element_type = Prism; nnodes_per_element = 6; }
         else m_element_type = ElementTypeUnknown;
 
         m_connections.allocate( m_nelements * nnodes_per_element );
@@ -775,10 +778,13 @@ void AVSUcd::read_binary_file( const std::string& filename )
         fseek( ifs, m_nelements - 1, SEEK_CUR );
 
         size_t nnodes_per_element = 0;
-        if ( element_type == 4 ) { m_element_type = Tetrahedra; nnodes_per_element = 4; }
+        if ( element_type == 0 ) { m_element_type = Point; nnodes_per_element = 1; }
+        else if ( element_type == 4 ) { m_element_type = Tetrahedra; nnodes_per_element = 4; }
         else if ( element_type == 11 ) { m_element_type = Tetrahedra2; nnodes_per_element = 10; }
         else if ( element_type == 7 ) { m_element_type = Hexahedra; nnodes_per_element = 8; }
         else if ( element_type == 14 ) { m_element_type = Hexahedra2; nnodes_per_element = 20; }
+        else if ( element_type == 5 ) { m_element_type = Pyramid; nnodes_per_element = 5; }
+        else if ( element_type == 6 ) { m_element_type = Prism; nnodes_per_element = 6; }
         else m_element_type = ElementTypeUnknown;
 
         m_connections.allocate( m_nelements * nnodes_per_element );
@@ -1064,12 +1070,19 @@ void AVSUcd::read_connections( FILE* const ifs )
         const char* const element_type = strtok( 0, ::Delimiter );
 
         m_element_type =
-            !strcmp( element_type, "tet"  ) ? Tetrahedra  :
+            !strcmp( element_type, "pt"  ) ? Point :
+            !strcmp( element_type, "tet"  ) ? Tetrahedra :
             !strcmp( element_type, "tet2" ) ? Tetrahedra2 :
-            !strcmp( element_type, "hex2" ) ? Hexahedra2   :
-            !strcmp( element_type, "hex" ) ? Hexahedra  : ElementTypeUnknown;
+            !strcmp( element_type, "hex2" ) ? Hexahedra2 :
+            !strcmp( element_type, "hex" ) ? Hexahedra :
+            !strcmp( element_type, "pyr" ) ? Pyramid :
+            !strcmp( element_type, "prism" ) ? Prism : ElementTypeUnknown;
 
-        if ( m_element_type == Tetrahedra )
+        if ( m_element_type == Point )
+        {
+            m_connections.allocate( 1 * m_nelements );
+        }
+        else if ( m_element_type == Tetrahedra )
         {
             m_connections.allocate( 4 * m_nelements );
         }
@@ -1085,6 +1098,14 @@ void AVSUcd::read_connections( FILE* const ifs )
         {
             m_connections.allocate( 20 * m_nelements );
         }
+        else if ( m_element_type == Pyramid )
+        {
+            m_connections.allocate( 5 * m_nelements );
+        }
+        else if ( m_element_type == Prism )
+        {
+            m_connections.allocate( 6 * m_nelements );
+        }
         else
         {
             throw "Unknown element type.";
@@ -1098,7 +1119,31 @@ void AVSUcd::read_connections( FILE* const ifs )
     kvs::UInt32*       connection = m_connections.data();
     kvs::UInt32* const end        = connection + m_connections.size();
 
-    if ( m_element_type == Tetrahedra )
+    if ( m_element_type == Point )
+    {
+        *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+
+        while ( connection < end )
+        {
+            if ( fgets( buffer, ::MaxLineLength, ifs ) )
+            {
+                // skip element index.
+                strtok( buffer, ::Delimiter );
+
+                // skip material index.
+                strtok( 0, ::Delimiter );
+
+                const char* const element_type = strtok( 0, ::Delimiter );
+                if ( strcmp( element_type, "pt" ) != 0 )
+                {
+                    throw "Multi-element type is not supported.";
+                }
+
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+            }
+        }
+    }
+    else if ( m_element_type == Tetrahedra )
     {
         *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
         *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
@@ -1270,6 +1315,72 @@ void AVSUcd::read_connections( FILE* const ifs )
             }
         }
     }
+    else if ( m_element_type == Pyramid )
+    {
+        *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+        *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+        *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+        *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+        *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+
+        while ( connection < end )
+        {
+            if ( fgets( buffer, ::MaxLineLength, ifs ) )
+            {
+                // skip element index.
+                strtok( buffer, ::Delimiter );
+
+                // skip material index.
+                strtok( 0, ::Delimiter );
+
+                const char* const element_type = strtok( 0, ::Delimiter );
+                if ( strcmp( element_type, "pyr" ) != 0 )
+                {
+                    throw "Multi-element type is not supported.";
+                }
+
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+            }
+        }
+    }
+    else if ( m_element_type == Prism )
+    {
+        *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+        *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+        *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+        *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+        *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+        *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+
+        while ( connection < end )
+        {
+            if ( fgets( buffer, ::MaxLineLength, ifs ) )
+            {
+                // skip element index.
+                strtok( buffer, ::Delimiter );
+
+                // skip material index.
+                strtok( 0, ::Delimiter );
+
+                const char* const element_type = strtok( 0, ::Delimiter );
+                if ( strcmp( element_type, "prism" ) != 0 )
+                {
+                    throw "Multi-element type is not supported.";
+                }
+
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+                *( connection++ ) = atoi( strtok( 0, ::Delimiter ) ) - 1;
+            }
+        }
+    }
     else
     {
         throw "Unknown element type.";
@@ -1402,7 +1513,18 @@ void AVSUcd::write_connections( FILE* const ofs ) const
     const kvs::UInt32*       connection = m_connections.data();
     const kvs::UInt32* const end        = connection + m_connections.size();
 
-    if ( m_element_type == Tetrahedra )
+    if ( m_element_type == Point )
+    {
+        while ( connection < end )
+        {
+            const kvs::UInt32 node_id0 = *( connection++ ) + 1;
+
+            fprintf( ofs, "%u 0 pt %u\n",
+                     static_cast<unsigned int>( element_id++ ),
+                     node_id0 );
+        }
+    }
+    else if ( m_element_type == Tetrahedra )
     {
         while ( connection < end )
         {
@@ -1487,6 +1609,46 @@ void AVSUcd::write_connections( FILE* const ofs ) const
             }
 
             fprintf( ofs, "\n" );
+        }
+    }
+    else if ( m_element_type == Pyramid )
+    {
+        while ( connection < end )
+        {
+            const kvs::UInt32 node_id0 = *( connection++ ) + 1;
+            const kvs::UInt32 node_id1 = *( connection++ ) + 1;
+            const kvs::UInt32 node_id2 = *( connection++ ) + 1;
+            const kvs::UInt32 node_id3 = *( connection++ ) + 1;
+            const kvs::UInt32 node_id4 = *( connection++ ) + 1;
+
+            fprintf( ofs, "%u 0 tet %u %u %u %u %u\n",
+                     static_cast<unsigned int>( element_id++ ),
+                     node_id0,
+                     node_id1,
+                     node_id2,
+                     node_id3,
+                     node_id4 );
+        }
+    }
+    else if ( m_element_type == Prism )
+    {
+        while ( connection < end )
+        {
+            const kvs::UInt32 node_id0 = *( connection++ ) + 1;
+            const kvs::UInt32 node_id1 = *( connection++ ) + 1;
+            const kvs::UInt32 node_id2 = *( connection++ ) + 1;
+            const kvs::UInt32 node_id3 = *( connection++ ) + 1;
+            const kvs::UInt32 node_id4 = *( connection++ ) + 1;
+            const kvs::UInt32 node_id5 = *( connection++ ) + 1;
+
+            fprintf( ofs, "%u 0 tet %u %u %u %u %u %u\n",
+                     static_cast<unsigned int>( element_id++ ),
+                     node_id0,
+                     node_id1,
+                     node_id2,
+                     node_id3,
+                     node_id4,
+                     node_id5 );
         }
     }
     else
