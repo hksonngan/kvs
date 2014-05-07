@@ -27,13 +27,14 @@ namespace
 /*===========================================================================*/
 const std::string GetCellTypeName( const kvs::UnstructuredVolumeObject::CellType type )
 {
-    switch( type )
+    switch ( type )
     {
     case kvs::UnstructuredVolumeObject::Tetrahedra: return "tetrahedra";
     case kvs::UnstructuredVolumeObject::Hexahedra: return "hexahedra";
     case kvs::UnstructuredVolumeObject::QuadraticTetrahedra: return "quadratic tetrahedra";
     case kvs::UnstructuredVolumeObject::QuadraticHexahedra: return "quadratic hexahedra";
     case kvs::UnstructuredVolumeObject::Pyramid: return "pyramid";
+    case kvs::UnstructuredVolumeObject::Point: return "point";
     default: return "unknown cell type";
     }
 }
@@ -51,12 +52,12 @@ namespace kvs
 /*==========================================================================*/
 UnstructuredVolumeObject::UnstructuredVolumeObject():
     kvs::VolumeObjectBase(),
-    m_cell_type( UnknownCellType ),
     m_nnodes( 0 ),
     m_ncells( 0 ),
     m_connections()
 {
     BaseClass::setVolumeType( Unstructured );
+    BaseClass::setGridType( Irregular );
 }
 
 /*===========================================================================*/
@@ -68,7 +69,6 @@ UnstructuredVolumeObject::UnstructuredVolumeObject():
 void UnstructuredVolumeObject::shallowCopy( const UnstructuredVolumeObject& object )
 {
     BaseClass::shallowCopy( object );
-    m_cell_type = object.cellType();
     m_nnodes = object.numberOfNodes();
     m_ncells = object.numberOfCells();
     m_connections = object.connections();
@@ -83,7 +83,6 @@ void UnstructuredVolumeObject::shallowCopy( const UnstructuredVolumeObject& obje
 void UnstructuredVolumeObject::deepCopy( const UnstructuredVolumeObject& object )
 {
     BaseClass::deepCopy( object );
-    m_cell_type = object.cellType();
     m_nnodes = object.numberOfNodes();
     m_ncells = object.numberOfCells();
     m_connections = object.connections().clone();

@@ -41,7 +41,7 @@ public:
 
 private:
 
-    CellType m_cell_type; ///< Cell type.
+//    CellType m_cell_type; ///< Cell type.
     size_t m_nnodes; ///< Number of nodes.
     size_t m_ncells; ///< Number of cells.
     Connections m_connections; ///< Connection ( Node ID ) array.
@@ -54,13 +54,13 @@ public:
     void deepCopy( const UnstructuredVolumeObject& object );
     void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
 
-    void setCellType( const CellType cell_type ) { m_cell_type = cell_type; }
+    void setCellType( const CellType cell_type ) { BaseClass::setCellType( cell_type ); }
     void setNumberOfNodes( const size_t nnodes ) { m_nnodes = nnodes; }
     void setNumberOfCells( const size_t ncells ) { m_ncells = ncells; }
     void setConnections( const Connections& connections ) { m_connections = connections; }
 
-    GridType gridType() const { return Irregular; }
-    CellType cellType() const { return m_cell_type; }
+//    GridType gridType() const { return Irregular; }
+//    CellType cellType() const { return m_cell_type; }
     size_t numberOfNodes() const { return m_nnodes; }
     size_t numberOfCells() const { return m_ncells; }
     const Connections& connections() const { return m_connections; }

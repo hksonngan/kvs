@@ -50,12 +50,12 @@ public:
     {
         Structured = 0, ///< Structured volume.
         Unstructured,   ///< Unstructured volume.
-        UnknownVolumeType ///< unknow volume type
+        UnknownVolumeType ///< Unknow volume type.
     };
 
     enum GridType
     {
-        UnknownGridType = 0,
+        UnknownGridType = 0, ///< Unknown grid type.
         Uniform,             ///< Uniform grid.
         Rectilinear,         ///< Rectilinear grid.
         Curvilinear,         ///< Curvilinear grid.
@@ -64,7 +64,7 @@ public:
 
     enum CellType
     {
-        UnknownCellType     = 0,
+        UnknownCellType     = 0,  ///< Unknown cell type.
         Tetrahedra          = 4,  ///< Tetrahedral cell.
         Hexahedra           = 8,  ///< Hexahedral cell.
         QuadraticTetrahedra = 10, ///< Quadratic tetrahedral cell.
@@ -76,13 +76,15 @@ public:
 private:
 
     VolumeType m_volume_type; ///< volume type
+    GridType m_grid_type; ///< grid type
+    CellType m_cell_type; ///< cell type
     std::string m_label; ///< data label
     size_t m_veclen; ///< Vector length.
-    Coords m_coords; ///< Coordinate array.
-    Values m_values; ///< Value array.
-    mutable bool m_has_min_max_values; ///< Whether includes min/max values or not.
-    mutable kvs::Real64 m_min_value; ///< Minimum field value.
-    mutable kvs::Real64 m_max_value; ///< Maximum field value.
+    Coords m_coords; ///< Coordinate array
+    Values m_values; ///< Value array
+    mutable bool m_has_min_max_values; ///< Whether includes min/max values or not
+    mutable kvs::Real64 m_min_value; ///< Minimum field value
+    mutable kvs::Real64 m_max_value; ///< Maximum field value
 
 public:
 
@@ -107,8 +109,8 @@ public:
     kvs::Real64 maxValue() const { return m_max_value; }
 
     VolumeType volumeType() const { return m_volume_type; }
-    virtual GridType gridType() const = 0;
-    virtual CellType cellType() const = 0;
+    GridType gridType() const { return m_grid_type; }
+    CellType cellType() const { return m_cell_type; }
     virtual size_t numberOfNodes() const = 0;
     virtual size_t numberOfCells() const = 0;
     void updateMinMaxValues() const;
@@ -116,11 +118,8 @@ public:
 protected:
 
     void setVolumeType( VolumeType volume_type ) { m_volume_type = volume_type; }
-
-private:
-
-    template<typename T>
-    void calculate_min_max_values() const;
+    void setGridType( GridType grid_type ) { m_grid_type = grid_type; }
+    void setCellType( CellType cell_type ) { m_cell_type = cell_type; }
 
 public:
     KVS_DEPRECATED( VolumeObjectBase(
@@ -138,60 +137,6 @@ public:
 
     KVS_DEPRECATED( friend std::ostream& operator << ( std::ostream& os, const VolumeObjectBase& object ) );
 };
-
-/*===========================================================================*/
-/**
- *  @brief  Calculates min./max. values.
- */
-/*===========================================================================*/
-template<typename T>
-void VolumeObjectBase::calculate_min_max_values() const
-{
-    KVS_ASSERT( m_values.size() != 0 );
-    KVS_ASSERT( m_values.size() == this->veclen() * this->numberOfNodes() );
-
-    const T*       value = reinterpret_cast<const T*>( m_values.data() );
-    const T* const end   = value + this->numberOfNodes() * m_veclen;
-
-    if ( m_veclen == 1 )
-    {
-        T min_value = *value;
-        T max_value = *value;
-
-        while ( value < end )
-        {
-            min_value = kvs::Math::Min( *value, min_value );
-            max_value = kvs::Math::Max( *value, max_value );
-            ++value;
-        }
-
-        this->setMinMaxValues(
-            static_cast<kvs::Real64>( min_value ),
-            static_cast<kvs::Real64>( max_value ) );
-    }
-    else
-    {
-        kvs::Real64 min_value = kvs::Value<kvs::Real64>::Max();
-        kvs::Real64 max_value = kvs::Value<kvs::Real64>::Min();
-
-        const size_t veclen = m_veclen;
-
-        while ( value < end )
-        {
-            kvs::Real64 magnitude = 0.0;
-            for ( size_t i = 0; i < veclen; ++i )
-            {
-                magnitude += static_cast<kvs::Real64>( ( *value ) * ( *value ) );
-                ++value;
-            }
-
-            min_value = kvs::Math::Min( magnitude, min_value );
-            max_value = kvs::Math::Max( magnitude, max_value );
-        }
-
-        this->setMinMaxValues( std::sqrt( min_value ), std::sqrt( max_value ) );
-    }
-}
 
 } // end of namespace kvs
 

@@ -13,7 +13,60 @@
  */
 /****************************************************************************/
 #include "VolumeObjectBase.h"
+#include <kvs/Range>
 
+
+namespace
+{
+
+template<typename T>
+kvs::Range GetMinMaxValues( const kvs::VolumeObjectBase* volume )
+{
+    KVS_ASSERT( volume->values().size() != 0 );
+    KVS_ASSERT( volume->values().size() == volume->veclen() * volume->numberOfNodes() );
+
+    const T* value = reinterpret_cast<const T*>( volume->values().data() );
+    const T* const end = value + volume->numberOfNodes() * volume->veclen();
+
+    if ( volume->veclen() == 1 )
+    {
+        T min_value = *value;
+        T max_value = *value;
+
+        while ( value < end )
+        {
+            min_value = kvs::Math::Min( *value, min_value );
+            max_value = kvs::Math::Max( *value, max_value );
+            ++value;
+        }
+
+        return kvs::Range( static_cast<double>( min_value ), static_cast<double>( max_value ) );
+    }
+    else
+    {
+        kvs::Real64 min_value = kvs::Value<kvs::Real64>::Max();
+        kvs::Real64 max_value = kvs::Value<kvs::Real64>::Min();
+
+        const size_t veclen = volume->veclen();
+
+        while ( value < end )
+        {
+            kvs::Real64 magnitude = 0.0;
+            for ( size_t i = 0; i < veclen; ++i )
+            {
+                magnitude += static_cast<kvs::Real64>( ( *value ) * ( *value ) );
+                ++value;
+            }
+
+            min_value = kvs::Math::Min( magnitude, min_value );
+            max_value = kvs::Math::Max( magnitude, max_value );
+        }
+
+        return kvs::Range( std::sqrt( min_value ), std::sqrt( max_value ) );
+    }
+}
+
+}
 
 namespace kvs
 {
@@ -25,6 +78,8 @@ namespace kvs
 /*==========================================================================*/
 VolumeObjectBase::VolumeObjectBase():
     m_volume_type( UnknownVolumeType ),
+    m_grid_type( UnknownGridType ),
+    m_cell_type( UnknownCellType ),
     m_veclen( 0 ),
     m_has_min_max_values( false ),
     m_min_value( 0.0 ),
@@ -56,17 +111,23 @@ void VolumeObjectBase::setMinMaxValues(
 /*==========================================================================*/
 void VolumeObjectBase::updateMinMaxValues() const
 {
-    const std::type_info& type = m_values.typeInfo()->type();
-    if (      type == typeid( kvs::Int8   ) ) { this->calculate_min_max_values<kvs::Int8  >(); }
-    else if ( type == typeid( kvs::Int16  ) ) { this->calculate_min_max_values<kvs::Int16 >(); }
-    else if ( type == typeid( kvs::Int32  ) ) { this->calculate_min_max_values<kvs::Int32 >(); }
-    else if ( type == typeid( kvs::Int64  ) ) { this->calculate_min_max_values<kvs::Int64 >(); }
-    else if ( type == typeid( kvs::UInt8  ) ) { this->calculate_min_max_values<kvs::UInt8 >(); }
-    else if ( type == typeid( kvs::UInt16 ) ) { this->calculate_min_max_values<kvs::UInt16>(); }
-    else if ( type == typeid( kvs::UInt32 ) ) { this->calculate_min_max_values<kvs::UInt32>(); }
-    else if ( type == typeid( kvs::UInt64 ) ) { this->calculate_min_max_values<kvs::UInt64>(); }
-    else if ( type == typeid( kvs::Real32 ) ) { this->calculate_min_max_values<kvs::Real32>(); }
-    else if ( type == typeid( kvs::Real64 ) ) { this->calculate_min_max_values<kvs::Real64>(); }
+    kvs::Range range;
+    switch ( m_values.typeID() )
+    {
+    case kvs::Type::TypeInt8:   { range = ::GetMinMaxValues<kvs::Int8  >( this ); break; }
+    case kvs::Type::TypeInt16:  { range = ::GetMinMaxValues<kvs::Int16 >( this ); break; }
+    case kvs::Type::TypeInt32:  { range = ::GetMinMaxValues<kvs::Int32 >( this ); break; }
+    case kvs::Type::TypeInt64:  { range = ::GetMinMaxValues<kvs::Int64 >( this ); break; }
+    case kvs::Type::TypeUInt8:  { range = ::GetMinMaxValues<kvs::UInt8 >( this ); break; }
+    case kvs::Type::TypeUInt16: { range = ::GetMinMaxValues<kvs::UInt16>( this ); break; }
+    case kvs::Type::TypeUInt32: { range = ::GetMinMaxValues<kvs::UInt32>( this ); break; }
+    case kvs::Type::TypeUInt64: { range = ::GetMinMaxValues<kvs::UInt64>( this ); break; }
+    case kvs::Type::TypeReal32: { range = ::GetMinMaxValues<kvs::Real32>( this ); break; }
+    case kvs::Type::TypeReal64: { range = ::GetMinMaxValues<kvs::Real64>( this ); break; }
+    default: break;
+    }
+
+    this->setMinMaxValues( range.lower(), range.upper() );
 }
 
 /*===========================================================================*/
@@ -79,6 +140,8 @@ void VolumeObjectBase::shallowCopy( const VolumeObjectBase& object )
 {
     BaseClass::operator=( object );
     m_volume_type = object.volumeType();
+    m_grid_type = object.gridType();
+    m_cell_type = object.cellType();
     m_has_min_max_values = object.hasMinMaxValues();
     m_min_value = object.minValue();
     m_max_value = object.maxValue();
@@ -98,6 +161,8 @@ void VolumeObjectBase::deepCopy( const VolumeObjectBase& object )
 {
     BaseClass::operator=( object );
     m_volume_type = object.volumeType();
+    m_grid_type = object.gridType();
+    m_cell_type = object.cellType();
     m_has_min_max_values = object.hasMinMaxValues();
     m_min_value = object.minValue();
     m_max_value = object.maxValue();
