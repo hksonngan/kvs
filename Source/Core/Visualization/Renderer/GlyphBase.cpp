@@ -374,12 +374,12 @@ void GlyphBase::calculateCoords( const kvs::VolumeObjectBase* volume )
 /*===========================================================================*/
 void GlyphBase::calculateCoords( const kvs::StructuredVolumeObject* volume )
 {
-    const kvs::VolumeObjectBase::GridType type = volume->gridType();
-    if ( type == kvs::VolumeObjectBase::Uniform )
+    const kvs::StructuredVolumeObject::GridType type = volume->gridType();
+    if ( type == kvs::StructuredVolumeObject::Uniform )
     {
        this->calculateUniformCoords( volume );
     }
-    else if ( type == kvs::VolumeObjectBase::Rectilinear )
+    else if ( type == kvs::StructuredVolumeObject::Rectilinear )
     {
         this->calculateRectilinearCoords( volume );
     }

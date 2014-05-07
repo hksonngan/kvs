@@ -207,7 +207,7 @@ void Isosurface::mapping( const kvs::VolumeObjectBase* volume )
 
         switch ( unstructured_volume->cellType() )
         {
-        case kvs::VolumeObjectBase::Tetrahedra:
+        case kvs::UnstructuredVolumeObject::Tetrahedra:
         {
             kvs::PolygonObject* polygon = new kvs::MarchingTetrahedra(
                 unstructured_volume,
@@ -242,7 +242,7 @@ void Isosurface::mapping( const kvs::VolumeObjectBase* volume )
             delete polygon;
             break;
         }
-        case kvs::VolumeObjectBase::Hexahedra:
+        case kvs::UnstructuredVolumeObject::Hexahedra:
         {
             kvs::PolygonObject* polygon = new kvs::MarchingHexahedra(
                 unstructured_volume,
@@ -277,7 +277,7 @@ void Isosurface::mapping( const kvs::VolumeObjectBase* volume )
 
             break;
         }
-        case kvs::VolumeObjectBase::Pyramid:
+        case kvs::UnstructuredVolumeObject::Pyramid:
         {
             kvs::PolygonObject* polygon = new kvs::MarchingPyramid(
                 unstructured_volume,

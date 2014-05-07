@@ -52,12 +52,12 @@ namespace kvs
 /*==========================================================================*/
 UnstructuredVolumeObject::UnstructuredVolumeObject():
     kvs::VolumeObjectBase(),
+    m_cell_type( UnknownCellType ),
     m_nnodes( 0 ),
     m_ncells( 0 ),
     m_connections()
 {
     BaseClass::setVolumeType( Unstructured );
-    BaseClass::setGridType( Irregular );
 }
 
 /*===========================================================================*/
@@ -69,6 +69,7 @@ UnstructuredVolumeObject::UnstructuredVolumeObject():
 void UnstructuredVolumeObject::shallowCopy( const UnstructuredVolumeObject& object )
 {
     BaseClass::shallowCopy( object );
+    m_cell_type = object.cellType();
     m_nnodes = object.numberOfNodes();
     m_ncells = object.numberOfCells();
     m_connections = object.connections();
@@ -83,6 +84,7 @@ void UnstructuredVolumeObject::shallowCopy( const UnstructuredVolumeObject& obje
 void UnstructuredVolumeObject::deepCopy( const UnstructuredVolumeObject& object )
 {
     BaseClass::deepCopy( object );
+    m_cell_type = object.cellType();
     m_nnodes = object.numberOfNodes();
     m_ncells = object.numberOfCells();
     m_connections = object.connections().clone();

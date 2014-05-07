@@ -436,27 +436,27 @@ void CellByCellRejectionSampling::generate_particles( const kvs::UnstructuredVol
     kvs::CellBase<T>* cell = NULL;
     switch ( volume->cellType() )
     {
-    case kvs::VolumeObjectBase::Tetrahedra:
+    case kvs::UnstructuredVolumeObject::Tetrahedra:
     {
         cell = new kvs::TetrahedralCell<T>( volume );
         break;
     }
-    case kvs::VolumeObjectBase::QuadraticTetrahedra:
+    case kvs::UnstructuredVolumeObject::QuadraticTetrahedra:
     {
         cell = new kvs::QuadraticTetrahedralCell<T>( volume );
         break;
     }
-    case kvs::VolumeObjectBase::Hexahedra:
+    case kvs::UnstructuredVolumeObject::Hexahedra:
     {
         cell = new kvs::HexahedralCell<T>( volume );
         break;
     }
-    case kvs::VolumeObjectBase::QuadraticHexahedra:
+    case kvs::UnstructuredVolumeObject::QuadraticHexahedra:
     {
         cell = new kvs::QuadraticHexahedralCell<T>( volume );
         break;
     }
-    case kvs::VolumeObjectBase::Pyramid:
+    case kvs::UnstructuredVolumeObject::Pyramid:
     {
         cell = new kvs::PyramidalCell<T>( volume );
         break;

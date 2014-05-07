@@ -953,22 +953,18 @@ void ExternalFaces::mapping( const kvs::StructuredVolumeObject* volume )
 /*===========================================================================*/
 void ExternalFaces::calculate_coords( const kvs::StructuredVolumeObject* volume )
 {
-    const kvs::VolumeObjectBase::GridType type = volume->gridType();
-    if ( type == kvs::VolumeObjectBase::Uniform )
+    const kvs::StructuredVolumeObject::GridType type = volume->gridType();
+    if ( type == kvs::StructuredVolumeObject::Uniform )
     {
         this->calculate_uniform_coords( volume );
     }
-    else if ( type == kvs::VolumeObjectBase::Rectilinear )
+    else if ( type == kvs::StructuredVolumeObject::Rectilinear )
     {
         this->calculate_rectilinear_coords( volume );
     }
-    else if ( type == kvs::VolumeObjectBase::Curvilinear )
+    else if ( type == kvs::StructuredVolumeObject::Curvilinear )
     {
         this->calculate_curvilinear_coords( volume );
-    }
-    else if ( type == kvs::VolumeObjectBase::Irregular )
-    {
-        this->calculate_irregular_coords( volume );
     }
     else
     {
@@ -1239,20 +1235,6 @@ void ExternalFaces::calculate_curvilinear_coords( const kvs::StructuredVolumeObj
 
     BaseClass::setSuccess( false );
     kvsMessageError("Curvilinear volume has not yet support.");
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Calculates vertex values of the irregular volume object.
- *  @param  volume [in] pointer to the structured volume object
- */
-/*===========================================================================*/
-void ExternalFaces::calculate_irregular_coords( const kvs::StructuredVolumeObject* volume )
-{
-    kvs::IgnoreUnusedVariable( volume );
-
-    BaseClass::setSuccess( false );
-    kvsMessageError("Irregular volume has not yet support.");
 }
 
 /*===========================================================================*/

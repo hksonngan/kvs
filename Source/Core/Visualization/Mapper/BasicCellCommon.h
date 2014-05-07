@@ -177,10 +177,16 @@ private:
     T* m_differential_factors;
 
 protected:
-    explicit BasicCellImplementBase( const kvs::VolumeObjectBase* volume )
+    explicit BasicCellImplementBase( const kvs::VolumeObjectBase* object )
     {
-        m_nnodes = (int)volume->cellType(); // ok?
-        m_value_dimension = volume->veclen();
+        m_nnodes = 8; // in the case of structured volume object
+        if ( object->volumeType() == kvs::VolumeObjectBase::Unstructured )
+        {
+            typedef kvs::UnstructuredVolumeObject Volume;
+            const Volume* volume = Volume::DownCast( object );
+            m_nnodes = (int)volume->cellType(); // ok?
+        }
+        m_value_dimension = object->veclen();
     }
 
 public:

@@ -251,12 +251,12 @@ void ExtractEdges::mapping( const kvs::StructuredVolumeObject* volume )
 /*===========================================================================*/
 void ExtractEdges::calculate_coords( const kvs::StructuredVolumeObject* volume )
 {
-    const kvs::VolumeObjectBase::GridType type = volume->gridType();
-    if ( type == kvs::VolumeObjectBase::Uniform )
+    const kvs::StructuredVolumeObject::GridType type = volume->gridType();
+    if ( type == kvs::StructuredVolumeObject::Uniform )
     {
        this->calculate_uniform_coords( volume );
     }
-    else if ( type == kvs::VolumeObjectBase::Rectilinear )
+    else if ( type == kvs::StructuredVolumeObject::Rectilinear )
     {
         this->calculate_rectilinear_coords( volume );
     }
@@ -428,18 +428,18 @@ void ExtractEdges::calculate_coords( const kvs::UnstructuredVolumeObject* volume
 /*===========================================================================*/
 void ExtractEdges::calculate_connections( const kvs::UnstructuredVolumeObject* volume )
 {
-    switch( volume->cellType() )
+    switch ( volume->cellType() )
     {
-    case kvs::VolumeObjectBase::Tetrahedra:
+    case kvs::UnstructuredVolumeObject::Tetrahedra:
         this->calculate_tetrahedra_connections( volume );
         break;
-    case kvs::VolumeObjectBase::Hexahedra:
+    case kvs::UnstructuredVolumeObject::Hexahedra:
         this->calculate_hexahedra_connections( volume );
         break;
-    case kvs::VolumeObjectBase::QuadraticTetrahedra:
+    case kvs::UnstructuredVolumeObject::QuadraticTetrahedra:
         this->calculate_quadratic_tetrahedra_connections( volume );
         break;
-    case kvs::VolumeObjectBase::QuadraticHexahedra:
+    case kvs::UnstructuredVolumeObject::QuadraticHexahedra:
         this->calculate_quadratic_hexahedra_connections( volume );
         break;
     default:

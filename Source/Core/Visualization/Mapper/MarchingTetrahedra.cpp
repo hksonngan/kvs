@@ -120,7 +120,7 @@ void MarchingTetrahedra::mapping( const kvs::UnstructuredVolumeObject* volume )
         return;
     }
 
-    if ( volume->cellType() != kvs::VolumeObjectBase::Tetrahedra )
+    if ( volume->cellType() != kvs::UnstructuredVolumeObject::Tetrahedra )
     {
         BaseClass::setSuccess( false );
         kvsMessageError("Input volume is not tetrahedra cell data.");

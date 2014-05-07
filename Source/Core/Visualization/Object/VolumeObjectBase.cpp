@@ -78,8 +78,6 @@ namespace kvs
 /*==========================================================================*/
 VolumeObjectBase::VolumeObjectBase():
     m_volume_type( UnknownVolumeType ),
-    m_grid_type( UnknownGridType ),
-    m_cell_type( UnknownCellType ),
     m_veclen( 0 ),
     m_has_min_max_values( false ),
     m_min_value( 0.0 ),
@@ -140,8 +138,6 @@ void VolumeObjectBase::shallowCopy( const VolumeObjectBase& object )
 {
     BaseClass::operator=( object );
     m_volume_type = object.volumeType();
-    m_grid_type = object.gridType();
-    m_cell_type = object.cellType();
     m_has_min_max_values = object.hasMinMaxValues();
     m_min_value = object.minValue();
     m_max_value = object.maxValue();
@@ -161,8 +157,6 @@ void VolumeObjectBase::deepCopy( const VolumeObjectBase& object )
 {
     BaseClass::operator=( object );
     m_volume_type = object.volumeType();
-    m_grid_type = object.gridType();
-    m_cell_type = object.cellType();
     m_has_min_max_values = object.hasMinMaxValues();
     m_min_value = object.minValue();
     m_max_value = object.maxValue();

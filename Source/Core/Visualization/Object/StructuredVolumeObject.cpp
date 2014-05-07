@@ -43,10 +43,10 @@ namespace kvs
 /*==========================================================================*/
 StructuredVolumeObject::StructuredVolumeObject():
     kvs::VolumeObjectBase(),
+    m_grid_type( UnknownGridType ),
     m_resolution( kvs::Vec3ui( 0, 0, 0 ) )
 {
     BaseClass::setVolumeType( Structured );
-    BaseClass::setCellType( Hexahedra );
 }
 
 /*===========================================================================*/
@@ -58,6 +58,7 @@ StructuredVolumeObject::StructuredVolumeObject():
 void StructuredVolumeObject::shallowCopy( const StructuredVolumeObject& object )
 {
     BaseClass::shallowCopy( object );
+    this->m_grid_type = object.gridType();
     this->m_resolution = object.resolution();
 }
 
@@ -70,6 +71,7 @@ void StructuredVolumeObject::shallowCopy( const StructuredVolumeObject& object )
 void StructuredVolumeObject::deepCopy( const StructuredVolumeObject& object )
 {
     BaseClass::deepCopy( object );
+    this->m_grid_type = object.gridType();
     this->m_resolution = object.resolution();
 }
 
@@ -153,7 +155,7 @@ void StructuredVolumeObject::calculate_min_max_coords()
     kvs::Vec3 min_coord( 0.0f, 0.0f, 0.0f );
     kvs::Vec3 max_coord( 0.0f, 0.0f, 0.0f );
 
-    switch ( BaseClass::gridType() )
+    switch ( m_grid_type )
     {
     case Uniform:
     {

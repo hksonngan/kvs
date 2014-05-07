@@ -53,31 +53,9 @@ public:
         UnknownVolumeType ///< Unknow volume type.
     };
 
-    enum GridType
-    {
-        UnknownGridType = 0, ///< Unknown grid type.
-        Uniform,             ///< Uniform grid.
-        Rectilinear,         ///< Rectilinear grid.
-        Curvilinear,         ///< Curvilinear grid.
-        Irregular,           ///< Irregular grid.
-    };
-
-    enum CellType
-    {
-        UnknownCellType     = 0,  ///< Unknown cell type.
-        Tetrahedra          = 4,  ///< Tetrahedral cell.
-        Hexahedra           = 8,  ///< Hexahedral cell.
-        QuadraticTetrahedra = 10, ///< Quadratic tetrahedral cell.
-        QuadraticHexahedra  = 20, ///< Quadratic Hexahedral cell.
-        Pyramid             = 5,  ///< Pyramidal cell.
-        Point               = 1   ///< Point.
-    };
-
 private:
 
     VolumeType m_volume_type; ///< volume type
-    GridType m_grid_type; ///< grid type
-    CellType m_cell_type; ///< cell type
     std::string m_label; ///< data label
     size_t m_veclen; ///< Vector length.
     Coords m_coords; ///< Coordinate array
@@ -109,8 +87,6 @@ public:
     kvs::Real64 maxValue() const { return m_max_value; }
 
     VolumeType volumeType() const { return m_volume_type; }
-    GridType gridType() const { return m_grid_type; }
-    CellType cellType() const { return m_cell_type; }
     virtual size_t numberOfNodes() const = 0;
     virtual size_t numberOfCells() const = 0;
     void updateMinMaxValues() const;
@@ -118,8 +94,6 @@ public:
 protected:
 
     void setVolumeType( VolumeType volume_type ) { m_volume_type = volume_type; }
-    void setGridType( GridType grid_type ) { m_grid_type = grid_type; }
-    void setCellType( CellType cell_type ) { m_cell_type = cell_type; }
 
 public:
     KVS_DEPRECATED( VolumeObjectBase(

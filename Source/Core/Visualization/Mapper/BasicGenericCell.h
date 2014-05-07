@@ -180,12 +180,14 @@ private:
     CellFunctionCallerBase* m_cell;
 
 public:
-    BasicGenericCell( const kvs::VolumeObjectBase* volume )
+    BasicGenericCell( const kvs::VolumeObjectBase* object )
     {
-        switch ( volume->volumeType() )
+        switch ( object->volumeType() )
         {
         case kvs::VolumeObjectBase::Structured:
         {
+            typedef kvs::StructuredVolumeObject Volume;
+            const Volume* volume = Volume::DownCast( object );
             switch ( volume->gridType() )
             {
             case kvs::StructuredVolumeObject::Uniform:
@@ -197,6 +199,8 @@ public:
         }
         case kvs::VolumeObjectBase::Unstructured:
         {
+            typedef kvs::UnstructuredVolumeObject Volume;
+            const Volume* volume = Volume::DownCast( object );
             switch ( volume->cellType() )
             {
             case kvs::UnstructuredVolumeObject::Tetrahedra:

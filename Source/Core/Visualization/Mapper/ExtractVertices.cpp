@@ -134,13 +134,16 @@ void ExtractVertices::mapping(
 /*===========================================================================*/
 void ExtractVertices::calculate_coords()
 {
-    const VolumeObjectBase::GridType& type = BaseClass::volume()->gridType();
+    KVS_ASSERT( BaseClass::volume()->volumeType() == VolumeObjectBase::Structured );
+    typedef kvs::StructuredVolumeObject Volume;
+    const Volume* volume = Volume::DownCast( BaseClass::volume() );
 
-    if ( type == VolumeObjectBase::Uniform )
+    const StructuredVolumeObject::GridType& type = volume->gridType();
+    if ( type == StructuredVolumeObject::Uniform )
     {
        this->calculate_uniform_coords();
     }
-    else if ( type == VolumeObjectBase::Rectilinear )
+    else if ( type == StructuredVolumeObject::Rectilinear )
     {
         this->calculate_rectiliner_coords();
     }

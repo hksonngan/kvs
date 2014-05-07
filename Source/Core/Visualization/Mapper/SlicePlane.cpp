@@ -354,17 +354,17 @@ void SlicePlane::extract_plane(
 {
     switch ( volume->cellType() )
     {
-        case kvs::VolumeObjectBase::Tetrahedra:
+        case kvs::UnstructuredVolumeObject::Tetrahedra:
         {
             this->extract_tetrahedra_plane<T>( volume );
             break;
         }
-        case kvs::VolumeObjectBase::Hexahedra:
+        case kvs::UnstructuredVolumeObject::Hexahedra:
         {
             this->extract_hexahedra_plane<T>( volume );
             break;
         }
-        case kvs::VolumeObjectBase::Pyramid:
+        case kvs::UnstructuredVolumeObject::Pyramid:
         {
             this->extract_pyramid_plane<T>( volume );
             break;

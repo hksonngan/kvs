@@ -55,7 +55,6 @@ private:
     void calculate_uniform_coords( const kvs::StructuredVolumeObject* volume );
     void calculate_rectilinear_coords( const kvs::StructuredVolumeObject* volume );
     void calculate_curvilinear_coords( const kvs::StructuredVolumeObject* volume );
-    void calculate_irregular_coords( const kvs::StructuredVolumeObject* volume );
     template <typename T> void calculate_colors( const kvs::StructuredVolumeObject* volume );
 
     void mapping( const kvs::UnstructuredVolumeObject* volume );
