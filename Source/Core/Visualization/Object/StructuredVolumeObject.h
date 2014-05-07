@@ -43,7 +43,6 @@ public:
         Uniform,             ///< Uniform grid.
         Rectilinear,         ///< Rectilinear grid.
         Curvilinear,         ///< Curvilinear grid.
-        Irregular,           ///< Irregular grid.
     };
 
 private:

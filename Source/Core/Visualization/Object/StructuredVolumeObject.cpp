@@ -25,7 +25,6 @@ const std::string GetGridTypeName( const kvs::StructuredVolumeObject::GridType t
     case kvs::StructuredVolumeObject::Uniform: return "uniform";
     case kvs::StructuredVolumeObject::Rectilinear: return "rectiliear";
     case kvs::StructuredVolumeObject::Curvilinear: return "curvilinear";
-    case kvs::StructuredVolumeObject::Irregular: return "irregular";
     default: return "unknown grid type";
     }
 }
