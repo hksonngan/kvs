@@ -282,6 +282,7 @@ $(OUTDIR)\.\Visualization\Mapper\MarchingTetrahedraTable.obj \
 $(OUTDIR)\.\Visualization\Mapper\MetropolisSampling.obj \
 $(OUTDIR)\.\Visualization\Mapper\OpacityMap.obj \
 $(OUTDIR)\.\Visualization\Mapper\OrthoSlice.obj \
+$(OUTDIR)\.\Visualization\Mapper\PrismaticCell.obj \
 $(OUTDIR)\.\Visualization\Mapper\PyramidalCell.obj \
 $(OUTDIR)\.\Visualization\Mapper\QuadraticHexahedralCell.obj \
 $(OUTDIR)\.\Visualization\Mapper\QuadraticTetrahedralCell.obj \
