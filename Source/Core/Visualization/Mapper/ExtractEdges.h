@@ -63,6 +63,7 @@ private:
     void calculate_hexahedra_connections( const kvs::UnstructuredVolumeObject* volume );
     void calculate_quadratic_tetrahedra_connections( const kvs::UnstructuredVolumeObject* volume );
     void calculate_quadratic_hexahedra_connections( const kvs::UnstructuredVolumeObject* volume );
+    void calculate_prism_connections( const kvs::UnstructuredVolumeObject* volume );
     template <typename T> void calculate_colors( const kvs::VolumeObjectBase* volume );
 };
 

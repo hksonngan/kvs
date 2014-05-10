@@ -24,6 +24,7 @@
 #include <kvs/HexahedralCell>
 #include <kvs/QuadraticHexahedralCell>
 #include <kvs/PyramidalCell>
+#include <kvs/PrismaticCell>
 
 
 namespace Generator = kvs::CellByCellParticleGenerator;
@@ -459,6 +460,11 @@ void CellByCellRejectionSampling::generate_particles( const kvs::UnstructuredVol
     case kvs::UnstructuredVolumeObject::Pyramid:
     {
         cell = new kvs::PyramidalCell<T>( volume );
+        break;
+    }
+    case kvs::UnstructuredVolumeObject::Prism:
+    {
+        cell = new kvs::PrismaticCell<T>( volume );
         break;
     }
     default:

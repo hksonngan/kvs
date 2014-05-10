@@ -442,6 +442,9 @@ void ExtractEdges::calculate_connections( const kvs::UnstructuredVolumeObject* v
     case kvs::UnstructuredVolumeObject::QuadraticHexahedra:
         this->calculate_quadratic_hexahedra_connections( volume );
         break;
+    case kvs::UnstructuredVolumeObject::Prism:
+        this->calculate_prism_connections( volume );
+        break;
     default:
     {
         BaseClass::setSuccess( false );
@@ -634,6 +637,37 @@ void ExtractEdges::calculate_quadratic_hexahedra_connections(
         edge_map.insert( local_vertex18, local_vertex6  );
         edge_map.insert( local_vertex3,  local_vertex19 );
         edge_map.insert( local_vertex19, local_vertex7  );
+    }
+
+    SuperClass::setConnections( edge_map.serialize() );
+}
+
+void ExtractEdges::calculate_prism_connections( const kvs::UnstructuredVolumeObject* volume )
+{
+    const kvs::UInt32* connections = volume->connections().data();
+    const size_t ncells = volume->numberOfCells();
+    const size_t nnodes = volume->numberOfNodes();
+
+    ::EdgeMap edge_map( nnodes );
+    for ( size_t cell_index = 0, connection_index = 0; cell_index < ncells; cell_index++ )
+    {
+        const kvs::UInt32 local_vertex0 = connections[ connection_index     ];
+        const kvs::UInt32 local_vertex1 = connections[ connection_index + 1 ];
+        const kvs::UInt32 local_vertex2 = connections[ connection_index + 2 ];
+        const kvs::UInt32 local_vertex3 = connections[ connection_index + 3 ];
+        const kvs::UInt32 local_vertex4 = connections[ connection_index + 4 ];
+        const kvs::UInt32 local_vertex5 = connections[ connection_index + 5 ];
+        connection_index += 6;
+
+        edge_map.insert( local_vertex0, local_vertex1 );
+        edge_map.insert( local_vertex1, local_vertex2 );
+        edge_map.insert( local_vertex2, local_vertex0 );
+        edge_map.insert( local_vertex3, local_vertex4 );
+        edge_map.insert( local_vertex4, local_vertex5 );
+        edge_map.insert( local_vertex5, local_vertex3 );
+        edge_map.insert( local_vertex0, local_vertex3 );
+        edge_map.insert( local_vertex1, local_vertex4 );
+        edge_map.insert( local_vertex2, local_vertex5 );
     }
 
     SuperClass::setConnections( edge_map.serialize() );

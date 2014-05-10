@@ -18,12 +18,13 @@
 #include <kvs/Camera>
 #include <kvs/TrilinearInterpolator>
 #include <kvs/Value>
-#include "CellBase.h"
-#include "TetrahedralCell.h"
-#include "QuadraticTetrahedralCell.h"
-#include "HexahedralCell.h"
-#include "QuadraticHexahedralCell.h"
-#include "PyramidalCell.h"
+#include <kvs/CellBase>
+#include <kvs/TetrahedralCell>
+#include <kvs/QuadraticTetrahedralCell>
+#include <kvs/HexahedralCell>
+#include <kvs/QuadraticHexahedralCell>
+#include <kvs/PyramidalCell>
+#include <kvs/PrismaticCell>
 
 
 namespace Generator = kvs::CellByCellParticleGenerator;
@@ -493,6 +494,11 @@ void CellByCellUniformSampling::generate_particles( const kvs::UnstructuredVolum
     case kvs::UnstructuredVolumeObject::Pyramid:
     {
         cell = new kvs::PyramidalCell<T>( volume );
+        break;
+    }
+    case kvs::UnstructuredVolumeObject::Prism:
+    {
+        cell = new kvs::PrismaticCell<T>( volume );
         break;
     }
     default:
