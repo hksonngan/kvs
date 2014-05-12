@@ -26,8 +26,7 @@ std::string CellTypeName[9] = {
     "quadratic hexahedra",
     "pyramid",
     "point",
-    "prism",
-    "hybrid"
+    "prism"
 };
 
 size_t NumberOfCellNodes[9] = {
@@ -38,8 +37,7 @@ size_t NumberOfCellNodes[9] = {
     20, // QuadraticHexahedra
     5,  // Pyramid
     1,  // Point
-    6,  // Prism
-    0   // Hybrid
+    6   // Prism
 };
 
 } // end of namespace
@@ -58,8 +56,7 @@ UnstructuredVolumeObject::UnstructuredVolumeObject():
     m_cell_type( UnknownCellType ),
     m_nnodes( 0 ),
     m_ncells( 0 ),
-    m_connections(),
-    m_cell_types()
+    m_connections()
 {
     BaseClass::setVolumeType( Unstructured );
 }
@@ -77,7 +74,6 @@ void UnstructuredVolumeObject::shallowCopy( const UnstructuredVolumeObject& obje
     m_nnodes = object.numberOfNodes();
     m_ncells = object.numberOfCells();
     m_connections = object.connections();
-    m_cell_types = object.cellTypes();
 }
 
 /*===========================================================================*/
@@ -93,7 +89,6 @@ void UnstructuredVolumeObject::deepCopy( const UnstructuredVolumeObject& object 
     m_nnodes = object.numberOfNodes();
     m_ncells = object.numberOfCells();
     m_connections = object.connections().clone();
-    m_cell_types = object.cellTypes().clone();
 }
 
 /*===========================================================================*/
@@ -117,19 +112,6 @@ void UnstructuredVolumeObject::print( std::ostream& os, const kvs::Indent& inden
 
 /*===========================================================================*/
 /**
- *  @brief  Returns the cell type specified by the index
- *  @param  index [in] cell index
- *  @return cell type
- */
-/*===========================================================================*/
-UnstructuredVolumeObject::CellType UnstructuredVolumeObject::cellType( const size_t index ) const
-{
-    KVS_ASSERT( m_cell_type == Hybrid );
-    return CellType( m_cell_types[ index ] );
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Returns the number of cell nodes.
  *  @return number of cell nodes
  */
@@ -137,32 +119,6 @@ UnstructuredVolumeObject::CellType UnstructuredVolumeObject::cellType( const siz
 size_t UnstructuredVolumeObject::numberOfCellNodes() const
 {
     return ::NumberOfCellNodes[ size_t( m_cell_type ) ];
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the number of cell nodes.
- *  @param  cell_type [in] cell type
- *  @return number of cell nodes
- */
-/*===========================================================================*/
-size_t UnstructuredVolumeObject::numberOfCellNodes( const CellType cell_type ) const
-{
-    KVS_ASSERT( cell_type != Hybrid );
-    return ::NumberOfCellNodes[ size_t( cell_type ) ];
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the number of cell nodes specified by the index.
- *  @param  index [in] cell index
- *  @return number of cell nodes
- */
-/*===========================================================================*/
-size_t UnstructuredVolumeObject::numberOfCellNodes( const size_t index ) const
-{
-    KVS_ASSERT( m_cell_type == Hybrid );
-    return this->numberOfCellNodes( this->cellType( index ) );
 }
 
 /*==========================================================================*/

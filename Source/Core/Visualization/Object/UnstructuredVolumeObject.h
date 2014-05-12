@@ -38,7 +38,6 @@ class UnstructuredVolumeObject : public kvs::VolumeObjectBase
 public:
 
     typedef kvs::ValueArray<kvs::UInt32> Connections;
-    typedef kvs::ValueArray<kvs::UInt8> CellTypes;
 
     enum CellType
     {
@@ -49,8 +48,7 @@ public:
         QuadraticHexahedra, ///< Quadratic Hexahedral cell.
         Pyramid, ///< Pyramidal cell.
         Point, ///< Point cell.
-        Prism, ///< Prism cell.
-        Hybrid, ///< Hybrid cell.
+        Prism ///< Prism cell.
     };
 
 private:
@@ -59,7 +57,6 @@ private:
     size_t m_nnodes; ///< Number of nodes.
     size_t m_ncells; ///< Number of cells.
     Connections m_connections; ///< Connection ( Node ID ) array.
-    CellTypes m_cell_types; ///< Cell type array.
 
 public:
 
@@ -73,18 +70,13 @@ public:
     void setNumberOfNodes( const size_t nnodes ) { m_nnodes = nnodes; }
     void setNumberOfCells( const size_t ncells ) { m_ncells = ncells; }
     void setConnections( const Connections& connections ) { m_connections = connections; }
-    void setCellTypes( const CellTypes& cell_types ) { m_cell_types = cell_types; }
 
     CellType cellType() const { return m_cell_type; }
     size_t numberOfNodes() const { return m_nnodes; }
     size_t numberOfCells() const { return m_ncells; }
     const Connections& connections() const { return m_connections; }
-    const CellTypes& cellTypes() const { return m_cell_types; }
 
-    CellType cellType( const size_t index ) const;
     size_t numberOfCellNodes() const;
-    size_t numberOfCellNodes( const CellType cell_type ) const;
-    size_t numberOfCellNodes( const size_t index ) const;
     void updateMinMaxCoords();
 
 public:
