@@ -82,7 +82,8 @@ public:
 template <typename T>
 inline CellBase<T>::CellBase(
     const kvs::UnstructuredVolumeObject* volume ):
-    m_nnodes( volume->cellType() ),
+//    m_nnodes( volume->cellType() ),
+    m_nnodes( volume->numberOfCellNodes() ),
     m_global_point( 0, 0, 0 ),
     m_local_point( 0, 0, 0 ),
     m_reference_volume( volume )

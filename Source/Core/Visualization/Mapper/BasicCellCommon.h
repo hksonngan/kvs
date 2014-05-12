@@ -184,7 +184,8 @@ protected:
         {
             typedef kvs::UnstructuredVolumeObject Volume;
             const Volume* volume = Volume::DownCast( object );
-            m_nnodes = (int)volume->cellType(); // ok?
+//            m_nnodes = (int)volume->cellType(); // ok?
+            m_nnodes = volume->numberOfCellNodes();
         }
         m_value_dimension = object->veclen();
     }

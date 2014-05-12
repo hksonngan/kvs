@@ -18,27 +18,29 @@
 namespace
 {
 
-/*===========================================================================*/
-/**
- *  @brief  Returns the name of the cell type as string.
- *  @param  type [in] cell type
- *  @return name of the cell type
- */
-/*===========================================================================*/
-const std::string GetCellTypeName( const kvs::UnstructuredVolumeObject::CellType type )
-{
-    switch ( type )
-    {
-    case kvs::UnstructuredVolumeObject::Tetrahedra: return "tetrahedra";
-    case kvs::UnstructuredVolumeObject::Hexahedra: return "hexahedra";
-    case kvs::UnstructuredVolumeObject::QuadraticTetrahedra: return "quadratic tetrahedra";
-    case kvs::UnstructuredVolumeObject::QuadraticHexahedra: return "quadratic hexahedra";
-    case kvs::UnstructuredVolumeObject::Pyramid: return "pyramid";
-    case kvs::UnstructuredVolumeObject::Point: return "point";
-    case kvs::UnstructuredVolumeObject::Prism: return "prism";
-    default: return "unknown cell type";
-    }
-}
+std::string CellTypeName[9] = {
+    "unknown cell type",
+    "tetrahedra",
+    "hexahedra",
+    "quadratic tetrahedra",
+    "quadratic hexahedra",
+    "pyramid",
+    "point",
+    "prism",
+    "hybrid"
+};
+
+size_t NumberOfCellNodes[9] = {
+    0,  // UnknownCellType
+    4,  // Tetrahedra
+    8,  // Hexahedra
+    10, // QuadraticTetrahedra
+    20, // QuadraticHexahedra
+    5,  // Pyramid
+    1,  // Point
+    6,  // Prism
+    0   // Hybrid
+};
 
 } // end of namespace
 
@@ -56,7 +58,8 @@ UnstructuredVolumeObject::UnstructuredVolumeObject():
     m_cell_type( UnknownCellType ),
     m_nnodes( 0 ),
     m_ncells( 0 ),
-    m_connections()
+    m_connections(),
+    m_cell_types()
 {
     BaseClass::setVolumeType( Unstructured );
 }
@@ -74,6 +77,7 @@ void UnstructuredVolumeObject::shallowCopy( const UnstructuredVolumeObject& obje
     m_nnodes = object.numberOfNodes();
     m_ncells = object.numberOfCells();
     m_connections = object.connections();
+    m_cell_types = object.cellTypes();
 }
 
 /*===========================================================================*/
@@ -89,6 +93,7 @@ void UnstructuredVolumeObject::deepCopy( const UnstructuredVolumeObject& object 
     m_nnodes = object.numberOfNodes();
     m_ncells = object.numberOfCells();
     m_connections = object.connections().clone();
+    m_cell_types = object.cellTypes().clone();
 }
 
 /*===========================================================================*/
@@ -103,11 +108,61 @@ void UnstructuredVolumeObject::print( std::ostream& os, const kvs::Indent& inden
     if ( !this->hasMinMaxValues() ) this->updateMinMaxValues();
     os << indent << "Object type : " << "unstructured volume object" << std::endl;
     BaseClass::print( os, indent );
-    os << indent << "Cell type : " << ::GetCellTypeName( this->cellType() ) << std::endl;
+    os << indent << "Cell type : " << ::CellTypeName[ this->cellType() ] << std::endl;
     os << indent << "Number of nodes : " << this->numberOfNodes() << std::endl;
     os << indent << "Number of cells : " << this->numberOfCells() << std::endl;
     os << indent << "Min. value : " << this->minValue() << std::endl;
     os << indent << "Max. value : " << this->maxValue() << std::endl;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the cell type specified by the index
+ *  @param  index [in] cell index
+ *  @return cell type
+ */
+/*===========================================================================*/
+UnstructuredVolumeObject::CellType UnstructuredVolumeObject::cellType( const size_t index ) const
+{
+    KVS_ASSERT( m_cell_type == Hybrid );
+    return CellType( m_cell_types[ index ] );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the number of cell nodes.
+ *  @return number of cell nodes
+ */
+/*===========================================================================*/
+size_t UnstructuredVolumeObject::numberOfCellNodes() const
+{
+    return ::NumberOfCellNodes[ size_t( m_cell_type ) ];
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the number of cell nodes.
+ *  @param  cell_type [in] cell type
+ *  @return number of cell nodes
+ */
+/*===========================================================================*/
+size_t UnstructuredVolumeObject::numberOfCellNodes( const CellType cell_type ) const
+{
+    KVS_ASSERT( cell_type != Hybrid );
+    return ::NumberOfCellNodes[ size_t( cell_type ) ];
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the number of cell nodes specified by the index.
+ *  @param  index [in] cell index
+ *  @return number of cell nodes
+ */
+/*===========================================================================*/
+size_t UnstructuredVolumeObject::numberOfCellNodes( const size_t index ) const
+{
+    KVS_ASSERT( m_cell_type == Hybrid );
+    return this->numberOfCellNodes( this->cellType( index ) );
 }
 
 /*==========================================================================*/
@@ -117,21 +172,11 @@ void UnstructuredVolumeObject::print( std::ostream& os, const kvs::Indent& inden
 /*==========================================================================*/
 void UnstructuredVolumeObject::updateMinMaxCoords()
 {
-    this->calculate_min_max_coords();
-}
+    kvs::Vec3 min_coord( 0.0f, 0.0f, 0.0f );
+    kvs::Vec3 max_coord( 0.0f, 0.0f, 0.0f );
 
-/*==========================================================================*/
-/**
- *  @brief  Calculates the min/max coordinate values.
- */
-/*==========================================================================*/
-void UnstructuredVolumeObject::calculate_min_max_coords()
-{
-    kvs::Vector3f min_coord( 0.0f, 0.0f, 0.0f );
-    kvs::Vector3f max_coord( 0.0f, 0.0f, 0.0f );
-
-    const float*       coord = this->coords().data();
-    const float* const end   = coord + this->coords().size();
+    const float* coord = this->coords().data();
+    const float* const end = coord + this->coords().size();
 
     float x = *( coord++ );
     float y = *( coord++ );
@@ -177,7 +222,7 @@ std::ostream& operator << ( std::ostream& os, const UnstructuredVolumeObject& ob
 #else
     os << static_cast<const kvs::VolumeObjectBase&>( object ) << std::endl;
 #endif
-    os << "Cell type:  " << ::GetCellTypeName( object.cellType() ) << std::endl;
+    os << "Cell type:  " << ::CellTypeName[ object.cellType() ] << std::endl;
     os << "Number of nodes:  " << object.numberOfNodes() << std::endl;
     os << "Number of cells:  " << object.numberOfCells() << std::endl;
     os << "Min. value:  " << object.minValue() << std::endl;

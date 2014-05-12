@@ -340,6 +340,7 @@ void CellByCellRejectionSampling::generate_particles( const kvs::StructuredVolum
 
     // Generate particles for each cell.
     const kvs::Vector3ui ncells( volume->resolution() - kvs::Vector3ui::All(1) );
+    const size_t ncellnodes = 8;
     for ( kvs::UInt32 z = 0; z < ncells.z(); ++z )
     {
         for ( kvs::UInt32 y = 0; y < ncells.y(); ++y )
@@ -360,10 +361,9 @@ void CellByCellRejectionSampling::generate_particles( const kvs::StructuredVolum
                 const T S[8] = {
                     pvalues[index[0]], pvalues[index[1]], pvalues[index[2]], pvalues[index[3]],
                     pvalues[index[4]], pvalues[index[5]], pvalues[index[6]], pvalues[index[7]] };
-                const size_t nnodes = 8;
                 T S_min = S[0];
                 T S_max = S[0];
-                for ( size_t i = 1; i < nnodes; i++ )
+                for ( size_t i = 1; i < ncellnodes; i++ )
                 {
                     S_min = kvs::Math::Min( S_min, S[i] );
                     S_max = kvs::Math::Max( S_max, S[i] );
@@ -479,6 +479,7 @@ void CellByCellRejectionSampling::generate_particles( const kvs::UnstructuredVol
 
     // Generate particles for each cell.
     const size_t ncells = volume->numberOfCells();
+    const size_t ncellnodes = volume->numberOfCellNodes();
     for ( size_t index = 0; index < ncells; ++index )
     {
         // Bind the cell which is indicated by 'index'.
@@ -490,10 +491,9 @@ void CellByCellRejectionSampling::generate_particles( const kvs::UnstructuredVol
         const size_t nparticles = this->calculate_number_of_particles( density, cell->volume() );
 
         const T* S = cell->scalars();
-        const size_t nnodes = volume->cellType();
         T S_min = S[0];
         T S_max = S[0];
-        for ( size_t i = 1; i < nnodes; i++ )
+        for ( size_t i = 1; i < ncellnodes; i++ )
         {
             S_min = kvs::Math::Min( S_min, S[i] );
             S_max = kvs::Math::Max( S_max, S[i] );

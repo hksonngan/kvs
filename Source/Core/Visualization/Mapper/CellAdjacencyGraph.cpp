@@ -272,7 +272,8 @@ void CellAdjacencyGraph::create_for_tetrahedral_cell( const kvs::UnstructuredVol
     const kvs::UInt32* const connections = volume->connections().data();
     const size_t nnodes = volume->numberOfNodes();
     const size_t ncells = volume->numberOfCells();
-    const size_t nnodes_per_cell = static_cast<size_t>( volume->cellType() );
+//    const size_t nnodes_per_cell = static_cast<size_t>( volume->cellType() );
+    const size_t nnodes_per_cell = volume->numberOfCellNodes();
 
     m_graph.allocate( ncells * 4 );
     m_graph.fill( 0 );
@@ -338,7 +339,8 @@ void CellAdjacencyGraph::create_for_hexahedral_cell( const kvs::UnstructuredVolu
     const kvs::UInt32* const connections = volume->connections().data();
     const size_t nnodes = volume->numberOfNodes();
     const size_t ncells = volume->numberOfCells();
-    const size_t nnodes_per_cell = static_cast<size_t>( volume->cellType() );
+//    const size_t nnodes_per_cell = static_cast<size_t>( volume->cellType() );
+    const size_t nnodes_per_cell = volume->numberOfCellNodes();
 
     m_graph.allocate( ncells * 6 );
     m_graph.fill( 0 );
