@@ -198,6 +198,36 @@ void Screen::setControlTarget( const ControlTarget target )
 
 /*===========================================================================*/
 /**
+ *  @brief  Sets a control target to an object.
+ */
+/*===========================================================================*/
+void Screen::setControlTargetToObject()
+{
+    this->setControlTarget( kvs::Scene::TargetObject );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a control target to a camera.
+ */
+/*===========================================================================*/
+void Screen::setControlTargetToCamera()
+{
+    this->setControlTarget( kvs::Scene::TargetCamera );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a control target to a light.
+ */
+/*===========================================================================*/
+void Screen::setControlTargetToLight()
+{
+    this->setControlTarget( kvs::Scene::TargetLight );
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Sets an event (disable defualt event correspond to the given event).
  *  @param  event [in] pointer to an event
  *  @param  name [in] event name

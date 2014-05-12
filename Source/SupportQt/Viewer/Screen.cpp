@@ -186,6 +186,21 @@ void Screen::setControlTarget( const ControlTarget target )
     m_scene->controlTarget() = target;
 }
 
+void Screen::setControlTargetToObject()
+{
+    this->setControlTarget( kvs::Scene::TargetObject );
+}
+
+void Screen::setControlTargetToCamera()
+{
+    this->setControlTarget( kvs::Scene::TargetCamera );
+}
+
+void Screen::setControlTargetToLight()
+{
+    this->setControlTarget( kvs::Scene::TargetLight );
+}
+
 /*===========================================================================*/
 /**
  *  @brief  Sets an event.

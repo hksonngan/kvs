@@ -89,6 +89,9 @@ public:
     void setBackgroundColor( const kvs::RGBColor& color1, const kvs::RGBColor& color2 );
     void setBackgroundImage( const kvs::ColorImage& image );
     void setControlTarget( const ControlTarget target );
+    void setControlTargetToObject();
+    void setControlTargetToCamera();
+    void setControlTargetToLight();
     void setEvent( kvs::EventListener* event, const std::string& name = "" );
     void addEvent( kvs::EventListener* event, const std::string& name = "" );
 
