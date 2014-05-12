@@ -61,6 +61,9 @@ public:
     virtual ~Camera();
 
     void setProjectionType( const ProjectionType projection_type );
+    void setProjectionTypeToPerspective();
+    void setProjectionTypeToOrthogonal();
+    void setProjectionTypeToFrustum();
     void setPosition( const kvs::Vec3& position, const kvs::Vec3& look_at );
     void setPosition( const kvs::Vec3& position, const kvs::Vec3& look_at, const kvs::Vec3& up );
     void setPosition( const kvs::Vec3& position );

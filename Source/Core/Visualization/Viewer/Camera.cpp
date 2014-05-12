@@ -78,6 +78,21 @@ void Camera::setProjectionType( const Camera::ProjectionType projection_type )
     m_projection_type = projection_type;
 }
 
+void Camera::setProjectionTypeToPerspective()
+{
+    this->setProjectionType( Perspective );
+}
+
+void Camera::setProjectionTypeToOrthogonal()
+{
+    this->setProjectionType( Orthogonal );
+}
+
+void Camera::setProjectionTypeToFrustum()
+{
+    this->setProjectionType( Frustum );
+}
+
 void Camera::setPosition( const kvs::Vec3& position, const kvs::Vec3& look_at )
 {
     this->setPosition( position, look_at, this->upVector() );
