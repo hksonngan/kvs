@@ -51,7 +51,6 @@ public:
     ObjectManager();
     virtual ~ObjectManager();
 
-    ObjectType objectType() const;
     int insert( kvs::ObjectBase* object );
     int insert( int id, kvs::ObjectBase* object );
     void erase( bool delete_flag = true );

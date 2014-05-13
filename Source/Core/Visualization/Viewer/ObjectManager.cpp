@@ -32,6 +32,8 @@ namespace kvs
 /*===========================================================================*/
 ObjectManager::ObjectManager()
 {
+    ObjectBase::setObjectType( kvs::ObjectBase::ObjectManager );
+
     m_object_tree.clear();
     m_has_active_object = false;
     m_object_map.clear();
@@ -66,17 +68,6 @@ ObjectManager::~ObjectManager()
 
     m_object_tree.clear();
     m_object_map.clear();
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the object type (ObjectManager).
- *  @return object type
- */
-/*===========================================================================*/
-kvs::ObjectBase::ObjectType ObjectManager::objectType() const
-{
-    return kvs::ObjectBase::ObjectManager;
 }
 
 /*==========================================================================*/
