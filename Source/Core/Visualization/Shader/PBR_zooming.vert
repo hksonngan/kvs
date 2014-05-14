@@ -25,7 +25,6 @@ varying vec3 position;
 varying vec3 normal;
 varying vec2 center;
 varying float radius;
-varying float depth;
 
 
 /*===========================================================================*/
@@ -85,5 +84,4 @@ void main()
 
     normal = gl_Normal.xyz;
     position = vec3( gl_ModelViewMatrix * gl_Vertex );
-    depth = gl_Position.z / gl_Position.w;
 }

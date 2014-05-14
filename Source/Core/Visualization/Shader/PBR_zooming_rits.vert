@@ -31,7 +31,6 @@ varying vec3  position;
 varying vec3  normal;
 varying vec2  center;
 varying float radius;
-varying float depth;
 
 #if defined( ENABLE_RANDOM_TEXTURE )
 /*===========================================================================*/
@@ -132,7 +131,6 @@ void main( void )
 
     normal = gl_Normal.xyz;
     position = vec3( gl_ModelViewMatrix * gl_Vertex );
-    depth = gl_Position.z / gl_Position.w;
 
     vec3 view_p_pos = (gl_ModelViewMatrix  * gl_Vertex).xyz; //ADD_UEMURA
     vec3 view_default_d_0 = (gl_ModelViewMatrix  * vec4(object_center, 1.0)).xyz; //ADD_UEMURA

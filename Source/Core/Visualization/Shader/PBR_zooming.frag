@@ -18,7 +18,6 @@ varying vec3  position;
 varying vec3  normal;
 varying vec2  center;
 varying float radius;
-varying float depth;
 
 uniform ShadingParameter shading;
 
@@ -58,5 +57,4 @@ void main( void )
 #endif
 
     gl_FragColor = vec4( shaded_color, 1.0 );
-    gl_FragDepth = depth;
 }
