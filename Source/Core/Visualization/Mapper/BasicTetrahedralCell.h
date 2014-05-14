@@ -39,7 +39,8 @@ private:
     explicit BasicTetrahedralCell( const kvs::VolumeObjectBase* volume ) :
         detail::BasicUnstructuredCellImplementBase<T>( volume )
     {
-        KVS_ASSERT( volume->cellType() == kvs::UnstructuredVolumeObject::Tetrahedra );
+        KVS_ASSERT( volume->volumeType() == kvs::VolumeObjectBase::Unstructured );
+        KVS_ASSERT( kvs::UnstructuredVolumeObject::DownCast( volume )->cellType() == kvs::UnstructuredVolumeObject::Tetrahedra );
     }
 
 public:

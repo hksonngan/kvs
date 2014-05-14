@@ -38,7 +38,8 @@ private:
     explicit BasicPyramidalCell( const kvs::VolumeObjectBase* volume ) :
         detail::BasicUnstructuredCellImplementBase<T>( volume )
     {
-        KVS_ASSERT( volume->cellType() == kvs::UnstructuredVolumeObject::Pyramid );
+        KVS_ASSERT( volume->volumeType() == kvs::VolumeObjectBase::Unstructured );
+        KVS_ASSERT( kvs::UnstructuredVolumeObject::DownCast( volume )->cellType() == kvs::UnstructuredVolumeObject::Pyramid );
     }
 
 public:

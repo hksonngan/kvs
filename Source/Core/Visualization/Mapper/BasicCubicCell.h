@@ -48,8 +48,8 @@ private:
         detail::BasicCellImplementBase<T>( volume )
     {
         KVS_ASSERT( volume->volumeType() == kvs::VolumeObjectBase::Structured );
-        KVS_ASSERT( volume->gridType() == kvs::StructuredVolumeObject::Uniform );
-        const kvs::StructuredVolumeObject* str_volume = static_cast<const kvs::StructuredVolumeObject*>( volume );
+        KVS_ASSERT( kvs::StructuredVolumeObject::DownCast( volume )->gridType() == kvs::StructuredVolumeObject::Uniform );
+        const kvs::StructuredVolumeObject* str_volume = kvs::StructuredVolumeObject::DownCast( volume );
 
         m_volume_values = str_volume->values().data();
         m_volume_resolution = str_volume->resolution();
