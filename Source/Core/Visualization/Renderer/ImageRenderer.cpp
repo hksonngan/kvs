@@ -127,25 +127,25 @@ void ImageRenderer::create_texture( const kvs::ImageObject* image )
     m_bottom = 0.0;
     m_top = 1.0;
 
-    if ( image->type() == kvs::ImageObject::Gray8 )
+    if ( image->pixelType() == kvs::ImageObject::Gray8 )
     {
         const size_t nchannels = 1;
         const size_t bytes_per_channel = 1;
         m_texture.setPixelFormat( nchannels, bytes_per_channel );
     }
-    else if ( image->type() == kvs::ImageObject::Gray16 )
+    else if ( image->pixelType() == kvs::ImageObject::Gray16 )
     {
         const size_t nchannels = 1;
         const size_t bytes_per_channel = 2;
         m_texture.setPixelFormat( nchannels, bytes_per_channel );
     }
-    else if ( image->type() == kvs::ImageObject::Color24 )
+    else if ( image->pixelType() == kvs::ImageObject::Color24 )
     {
         const size_t nchannels = 3;
         const size_t bytes_per_channel = 1;
         m_texture.setPixelFormat( nchannels, bytes_per_channel );
     }
-    else if ( image->type() == kvs::ImageObject::Color32 )
+    else if ( image->pixelType() == kvs::ImageObject::Color32 )
     {
         const size_t nchannels = 4;
         const size_t bytes_per_channel = 1;

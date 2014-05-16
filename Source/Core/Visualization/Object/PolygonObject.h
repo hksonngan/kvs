@@ -82,8 +82,14 @@ public:
     void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
 
     void setPolygonType( const PolygonType polygon_type ) { m_polygon_type = polygon_type; }
+    void setPolygonTypeToTriangle() { this->setPolygonType( Triangle ); }
+    void setPolygonTypeToQuadrangle() { this->setPolygonType( Quadrangle ); }
     void setColorType( const ColorType color_type ) { m_color_type = color_type; }
+    void setColorTypeToVertex() { this->setColorType( VertexColor ); }
+    void setColorTypeToPolygon() { this->setColorType( PolygonColor ); }
     void setNormalType( const NormalType normal_type ) { m_normal_type = normal_type; }
+    void setNormalTypeToVertex() { this->setNormalType( VertexNormal ); }
+    void setNormalTypeToPolygon() { this->setNormalType( PolygonNormal ); }
     void setConnections( const kvs::ValueArray<kvs::UInt32>& connections ) { m_connections = connections; }
     void setOpacities( const kvs::ValueArray<kvs::UInt8>& opacities ) { m_opacities = opacities; }
     void setColor( const kvs::RGBColor& color );

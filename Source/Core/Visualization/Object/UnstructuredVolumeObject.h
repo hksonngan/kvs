@@ -67,6 +67,13 @@ public:
     void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
 
     void setCellType( CellType cell_type ) { m_cell_type = cell_type; }
+    void setCellTypeToTetrahedra() { this->setCellType( Tetrahedra ); }
+    void setCellTypeToHexahedra() { this->setCellType( Hexahedra ); }
+    void setCellTypeToQuadraticTetrahedra() { this->setCellType( QuadraticTetrahedra ); }
+    void setCellTypeToQuadraticHexahedra() { this->setCellType( QuadraticHexahedra ); }
+    void setCellTypeToPyramid() { this->setCellType( Pyramid ); }
+    void setCellTypeToPoint() { this->setCellType( Point ); }
+    void setCellTypeToPrism() { this->setCellType( Prism ); }
     void setNumberOfNodes( const size_t nnodes ) { m_nnodes = nnodes; }
     void setNumberOfCells( const size_t ncells ) { m_ncells = ncells; }
     void setConnections( const Connections& connections ) { m_connections = connections; }

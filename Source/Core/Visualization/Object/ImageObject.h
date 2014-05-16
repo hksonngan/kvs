@@ -68,7 +68,7 @@ public:
     void deepCopy( const ImageObject& object );
     void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
 
-    ImageObject::PixelType type() const { return m_type; }
+    PixelType pixelType() const { return m_type; }
     size_t width() const { return m_width; }
     size_t height() const { return m_height; }
     const kvs::ValueArray<kvs::UInt8>& pixels() const { return m_pixels; }
@@ -83,6 +83,7 @@ public:
     KVS_DEPRECATED( const kvs::ValueArray<kvs::UInt8>& data() const ) { return this->pixels(); }
     KVS_DEPRECATED( size_t nchannels() const ) { return this->numberOfChannels(); }
     KVS_DEPRECATED( friend std::ostream& operator << ( std::ostream& os, const ImageObject& object ) );
+    KVS_DEPRECATED( PixelType type() const ) { return this->pixelType(); }
 };
 
 } // end of namespace kvs

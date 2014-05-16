@@ -84,7 +84,7 @@ ImageObject::ImageObject(
 void ImageObject::shallowCopy( const ImageObject& other )
 {
     BaseClass::operator=( other );
-    this->m_type = other.type();
+    this->m_type = other.pixelType();
     this->m_width = other.width();
     this->m_height = other.height();
     this->m_pixels = other.pixels();
@@ -99,7 +99,7 @@ void ImageObject::shallowCopy( const ImageObject& other )
 void ImageObject::deepCopy( const ImageObject& other )
 {
     BaseClass::operator=( other );
-    this->m_type = other.type();
+    this->m_type = other.pixelType();
     this->m_width = other.width();
     this->m_height = other.height();
     this->m_pixels = other.pixels().clone();
@@ -119,7 +119,7 @@ void ImageObject::print( std::ostream& os, const kvs::Indent& indent ) const
     os << indent << "Height : " << this->height() << std::endl;
     os << indent << "Bits per pixel : " << this->bitsPerPixel() << std::endl;
     os << indent << "Bytes per pixel : " << this->bytesPerPixel() << std::endl;
-    os << indent << "Pixel type : " << ::GetPixelTypeName( this->type() ) << std::endl;
+    os << indent << "Pixel type : " << ::GetPixelTypeName( this->pixelType() ) << std::endl;
 }
 
 /*==========================================================================*/
@@ -155,7 +155,7 @@ std::ostream& operator << ( std::ostream& os, const ImageObject& object )
     os << "Height:  " << object.height() << std::endl;
     os << "Bits per pixel:  " << object.bitsPerPixel() << std::endl;
     os << "Bytes per pixel:  " << object.bytesPerPixel() << std::endl;
-    os << "Pixel type:  " << ::GetPixelTypeName( object.type() );
+    os << "Pixel type:  " << ::GetPixelTypeName( object.pixelType() );
 
     return os;
 }

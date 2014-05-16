@@ -76,7 +76,13 @@ public:
     void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
 
     void setLineType( const LineType line_type ) { m_line_type = line_type; }
+    void setLineTypeToStrip() { this->setLineType( Strip ); }
+    void setLineTypeToUniline() { this->setLineType( Uniline ); }
+    void setLineTypeToPolyline() { this->setLineType( Polyline ); }
+    void setLineTypeToSegment() { this->setLineType( Segment ); }
     void setColorType( const ColorType color_type ) { m_color_type = color_type; }
+    void setColorTypeToVertex() { this->setColorType( VertexColor ); }
+    void setColorTypeToLine() { this->setColorType( LineColor ); }
     void setConnections( const kvs::ValueArray<kvs::UInt32>& connections ) { m_connections = connections; }
     void setSizes( const kvs::ValueArray<kvs::Real32>& sizes ) { m_sizes = sizes; }
     void setColor( const kvs::RGBColor& color );

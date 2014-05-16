@@ -59,6 +59,9 @@ public:
     void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
 
     void setGridType( GridType grid_type ) { m_grid_type = grid_type; }
+    void setGridTypeToUniform() { this->setGridType( Uniform ); }
+    void setGridTypeToRectilinear() { this->setGridType( Rectilinear ); }
+    void setGridTypeToCurvilinear() { this->setGridType( Curvilinear ); }
     void setResolution( const kvs::Vec3ui& resolution ) { m_resolution = resolution; }
 
     GridType gridType() const { return m_grid_type; }
