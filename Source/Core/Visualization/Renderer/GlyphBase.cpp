@@ -439,8 +439,34 @@ void GlyphBase::calculateUniformCoords( const kvs::StructuredVolumeObject* volum
 /*===========================================================================*/
 void GlyphBase::calculateRectilinearCoords( const kvs::StructuredVolumeObject* volume )
 {
-    kvs::IgnoreUnusedVariable( volume );
-    kvsMessageError("Rectilinear volume has not yet support.");
+    kvs::ValueArray<kvs::Real32> coords( 3 * volume->numberOfNodes() );
+    kvs::Real32* coord = coords.data();
+
+    const size_t dimx = volume->resolution().x();
+    const size_t dimy = volume->resolution().y();
+    const size_t dimz = volume->resolution().z();
+
+    const kvs::Real32* xcoord = volume->coords().data();
+    const kvs::Real32* ycoord = xcoord + dimx;
+    const kvs::Real32* zcoord = ycoord + dimy;
+
+    for ( size_t k = 0; k < dimz; ++k )
+    {
+        const float z = zcoord[k];
+        for ( size_t j = 0; j < dimy; ++j )
+        {
+            const float y = ycoord[j];
+            for ( size_t i = 0; i < dimx; ++i )
+            {
+                const float x = xcoord[i];
+                *( coord++ ) = x;
+                *( coord++ ) = y;
+                *( coord++ ) = z;
+            }
+        }
+    }
+
+    this->setCoords( coords );
 }
 
 /*===========================================================================*/

@@ -263,7 +263,7 @@ void FrequencyTable::calculate_range( const kvs::VolumeObjectBase* volume )
 /*==========================================================================*/
 void FrequencyTable::calculate_range( const kvs::ImageObject* image )
 {
-    switch ( image->type() )
+    switch ( image->pixelType() )
     {
     case kvs::ImageObject::Gray8:
     case kvs::ImageObject::Color24: // RGB
@@ -313,7 +313,7 @@ void FrequencyTable::count_bin( const kvs::VolumeObjectBase* volume )
 /*==========================================================================*/
 void FrequencyTable::count_bin( const kvs::ImageObject* image, const size_t channel )
 {
-    switch ( image->type() )
+    switch ( image->pixelType() )
     {
     case kvs::ImageObject::Gray8:
     case kvs::ImageObject::Color24: // RGB

@@ -1217,10 +1217,243 @@ void ExternalFaces::calculate_uniform_coords( const kvs::StructuredVolumeObject*
 /*===========================================================================*/
 void ExternalFaces::calculate_rectilinear_coords( const kvs::StructuredVolumeObject* volume )
 {
-    kvs::IgnoreUnusedVariable( volume );
+    const size_t dimx = volume->resolution().x();
+    const size_t dimy = volume->resolution().y();
+    const size_t dimz = volume->resolution().z();
+    const kvs::Real32* xcoords = volume->coords().data();
+    const kvs::Real32* ycoords = xcoords + dimx;
+    const kvs::Real32* zcoords = ycoords + dimy;
 
-    BaseClass::setSuccess( false );
-    kvsMessageError("Rectilinear volume has not yet support.");
+    const size_t nfaces =
+        2 * ( dimx - 1 ) * ( dimy - 1 ) +
+        2 * ( dimy - 1 ) * ( dimz - 1 ) +
+        2 * ( dimz - 1 ) * ( dimx - 1 );
+    const size_t nvertices = nfaces * 4;
+
+    kvs::ValueArray<kvs::Real32> coords( 3 * nvertices );
+    kvs::Real32* coord = coords.data();
+
+    kvs::ValueArray<kvs::Real32> normals( 3 * nfaces );
+    kvs::Real32* normal = normals.data();
+
+    // XY (Z=zcoords[0]) plane.
+    {
+        const float z = zcoords[0];
+        const kvs::Vec3 n( 0.0f, 0.0f, -1.0f );
+        for ( size_t j = 0; j < dimy - 1; j++ )
+        {
+            const float y0 = ycoords[j];
+            const float y1 = ycoords[j+1];
+            for ( size_t i = 0; i < dimx - 1; i++ )
+            {
+                const float x0 = xcoords[i];
+                const float x1 = xcoords[i+1];
+                // v3
+                *( coord++ ) = x0;
+                *( coord++ ) = y1;
+                *( coord++ ) = z;
+                // v2
+                *( coord++ ) = x1;
+                *( coord++ ) = y1;
+                *( coord++ ) = z;
+                // v1
+                *( coord++ ) = x1;
+                *( coord++ ) = y0;
+                *( coord++ ) = z;
+                // v0
+                *( coord++ ) = x0;
+                *( coord++ ) = y0;
+                *( coord++ ) = z;
+                // n0
+                *( normal++ ) = n.x();
+                *( normal++ ) = n.y();
+                *( normal++ ) = n.z();
+            }
+        }
+    }
+
+    // XY (Z=zcoords[dimz-1]) plane.
+    {
+        const float z = zcoords[dimz-1];
+        const kvs::Vec3 n( 0.0f, 0.0f, 1.0f );
+        for ( size_t j = 0; j < dimy - 1; j++ )
+        {
+            const float y0 = ycoords[j];
+            const float y1 = ycoords[j+1];
+            for ( size_t i = 0; i < dimx - 1; i++ )
+            {
+                const float x0 = xcoords[i];
+                const float x1 = xcoords[i+1];
+                // v0
+                *( coord++ ) = x0;
+                *( coord++ ) = y0;
+                *( coord++ ) = z;
+                // v1
+                *( coord++ ) = x1;
+                *( coord++ ) = y0;
+                *( coord++ ) = z;
+                // v2
+                *( coord++ ) = x1;
+                *( coord++ ) = y1;
+                *( coord++ ) = z;
+                // v3
+                *( coord++ ) = x0;
+                *( coord++ ) = y1;
+                *( coord++ ) = z;
+                // n0
+                *( normal++ ) = n.x();
+                *( normal++ ) = n.y();
+                *( normal++ ) = n.z();
+            }
+        }
+    }
+
+    // YZ (X=xcoords[0]) plane.
+    {
+        const float x = xcoords[0];
+        const kvs::Vec3 n( -1.0f, 0.0f, 0.0f );
+        for ( size_t j = 0; j < dimy - 1; j++ )
+        {
+            const float y0 = ycoords[j];
+            const float y1 = ycoords[j+1];
+            for ( size_t k = 0; k < dimz - 1; k++ )
+            {
+                const float z0 = zcoords[k];
+                const float z1 = zcoords[k+1];
+                // v0
+                *( coord++ ) = x;
+                *( coord++ ) = y0;
+                *( coord++ ) = z0;
+                // v1
+                *( coord++ ) = x;
+                *( coord++ ) = y0;
+                *( coord++ ) = z1;
+                // v2
+                *( coord++ ) = x;
+                *( coord++ ) = y1;
+                *( coord++ ) = z1;
+                // v3
+                *( coord++ ) = x;
+                *( coord++ ) = y1;
+                *( coord++ ) = z0;
+                // n0
+                *( normal++ ) = n.x();
+                *( normal++ ) = n.y();
+                *( normal++ ) = n.z();
+            }
+        }
+    }
+
+    // YZ (X=xcoords[dimx-1]) plane.
+    {
+        const float x = xcoords[dimx-1];
+        const kvs::Vec3 n( 1.0f, 0.0f, 0.0f );
+        for ( size_t j = 0; j < dimy - 1; j++ )
+        {
+            const float y0 = ycoords[j];
+            const float y1 = ycoords[j+1];
+            for ( size_t k = 0; k < dimz - 1; k++ )
+            {
+                const float z0 = zcoords[k];
+                const float z1 = zcoords[k+1];
+                // v3
+                *( coord++ ) = x;
+                *( coord++ ) = y1;
+                *( coord++ ) = z0;
+                // v2
+                *( coord++ ) = x;
+                *( coord++ ) = y1;
+                *( coord++ ) = z1;
+                // v1
+                *( coord++ ) = x;
+                *( coord++ ) = y0;
+                *( coord++ ) = z1;
+                // v0
+                *( coord++ ) = x;
+                *( coord++ ) = y0;
+                *( coord++ ) = z0;
+                // n0
+                *( normal++ ) = n.x();
+                *( normal++ ) = n.y();
+                *( normal++ ) = n.z();
+            }
+        }
+    }
+
+    // XZ (Y=ycoords[0]) plane.
+    {
+        const float y = ycoords[0];
+        const kvs::Vec3 n( 0.0f, -1.0f, 0.0f );
+        for ( size_t k = 0; k < dimz - 1; k++ )
+        {
+            const float z0 = zcoords[k];
+            const float z1 = zcoords[k+1];
+            for ( size_t i = 0; i < dimx - 1; i++ )
+            {
+                const float x0 = xcoords[i];
+                const float x1 = xcoords[i+1];
+                // v0
+                *( coord++ ) = x0;
+                *( coord++ ) = y;
+                *( coord++ ) = z0;
+                // v1
+                *( coord++ ) = x1;
+                *( coord++ ) = y;
+                *( coord++ ) = z0;
+                // v2
+                *( coord++ ) = x1;
+                *( coord++ ) = y;
+                *( coord++ ) = z1;
+                // v3
+                *( coord++ ) = x0;
+                *( coord++ ) = y;
+                *( coord++ ) = z1;
+                // n0
+                *( normal++ ) = n.x();
+                *( normal++ ) = n.y();
+                *( normal++ ) = n.z();
+            }
+        }
+    }
+
+    // XZ (Y=ycoords[dimy-1]) plane.
+    {
+        const float y = ycoords[dimy-1];
+        const kvs::Vec3 n( 0.0f, 1.0f, 0.0f );
+        for ( size_t k = 0; k < dimz - 1; k++ )
+        {
+            const float z0 = zcoords[k];
+            const float z1 = zcoords[k+1];
+            for ( size_t i = 0; i < dimx - 1; i++ )
+            {
+                const float x0 = xcoords[i];
+                const float x1 = xcoords[i+1];
+                // v3
+                *( coord++ ) = x0;
+                *( coord++ ) = y;
+                *( coord++ ) = z1;
+                // v2
+                *( coord++ ) = x1;
+                *( coord++ ) = y;
+                *( coord++ ) = z1;
+                // v1
+                *( coord++ ) = x1;
+                *( coord++ ) = y;
+                *( coord++ ) = z0;
+                // v0
+                *( coord++ ) = x0;
+                *( coord++ ) = y;
+                *( coord++ ) = z0;
+                // n0
+                *( normal++ ) = n.x();
+                *( normal++ ) = n.y();
+                *( normal++ ) = n.z();
+            }
+        }
+    }
+
+    SuperClass::setCoords( coords );
+    SuperClass::setNormals( normals );
 }
 
 /*===========================================================================*/
