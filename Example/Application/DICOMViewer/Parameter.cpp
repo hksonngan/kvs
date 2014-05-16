@@ -73,7 +73,7 @@ const bool Parameter::read_from_file( const std::string& name )
 {
     // Check file existence.
     kvs::File file( name );
-    if( !file.isExisted() )
+    if( !file.exists() )
     {
         kvsMessageError( "%s is not existed.", name.c_str() );
         return( false );
@@ -103,7 +103,7 @@ const bool Parameter::read_from_directory( const std::string& name, const bool e
 {
     // Check directory existence.
     kvs::Directory dir( name );
-    if( !dir.isExisted() )
+    if( !dir.exists() )
     {
         kvsMessageError( "%s is not existed.", name.c_str() );
         return( false );
