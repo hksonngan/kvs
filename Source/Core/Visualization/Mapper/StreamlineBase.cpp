@@ -69,94 +69,6 @@ void StreamlineBase::setSeedPoints( const kvs::PointObject* seed_points )
 
 /*===========================================================================*/
 /**
- *  @brief  Set the integration method.
- *  @param  method [in] integral method
- */
-/*===========================================================================*/
-void StreamlineBase::setIntegrationMethod( const StreamlineBase::IntegrationMethod method )
-{
-    m_integration_method = method;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Set the integration direction.
- *  @param  direction [in] integration direction
- */
-/*===========================================================================*/
-void StreamlineBase::setIntegrationDirection( const StreamlineBase::IntegrationDirection direction )
-{
-    m_integration_direction = direction;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Set the integration interval.
- *  @param  interval [in] integration interval
- */
-/*===========================================================================*/
-void StreamlineBase::setIntegrationInterval( const float interval )
-{
-    m_integration_interval = interval;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Set the threshold of the vector length.
- *  @param  length [in] vector length
- */
-/*===========================================================================*/
-void StreamlineBase::setVectorLengthThreshold( const float length )
-{
-    m_vector_length_threshold = length;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Set the threshold of the integration times.
- *  @param  times [in] integration times
- */
-/*===========================================================================*/
-void StreamlineBase::setIntegrationTimesThreshold( const size_t times )
-{
-    m_integration_times_threshold = times;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Set the flag for the boundary condition.
- *  @param  enabled [in] flag
- */
-/*===========================================================================*/
-void StreamlineBase::setEnableBoundaryCondition( const bool enabled )
-{
-    m_enable_boundary_condition = enabled;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Set the flag for vector length condition.
- *  @param  enabled [in] flag
- */
-/*===========================================================================*/
-void StreamlineBase::setEnableVectorLengthCondition( const bool enabled )
-{
-    m_enable_vector_length_condition = enabled;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Set the flag for the integration times condition.
- *  @param  enabled [in] flag
- */
-/*===========================================================================*/
-void StreamlineBase::setEnableIntegrationTimesCondition( const bool enabled )
-{
-    m_enable_integration_times_condition = enabled;
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Calculates the streamlines.
  *  @param  volume [in] pointer to the input volume object
  */
@@ -244,10 +156,10 @@ bool StreamlineBase::calculate_line(
     std::vector<kvs::UInt8>* colors,
     const size_t index )
 {
-    const kvs::Vector3f seed_point = m_seed_points->coord( index );
+    const kvs::Vec3 seed_point = m_seed_points->coord( index );
     if ( !this->check_for_inside_volume( seed_point ) ) return false;
 
-    const kvs::Vector3f seed_vector = this->calculate_vector( seed_point );
+    const kvs::Vec3 seed_vector = this->calculate_vector( seed_point );
     if ( m_integration_direction == StreamlineBase::BothDirections )
     {
         // Forward direction.
@@ -320,20 +232,20 @@ bool StreamlineBase::calculate_line(
 bool StreamlineBase::calculate_one_side(
     std::vector<kvs::Real32>* coords,
     std::vector<kvs::UInt8>* colors,
-    const kvs::Vector3f& seed_point,
-    const kvs::Vector3f& seed_vector )
+    const kvs::Vec3& seed_point,
+    const kvs::Vec3& seed_vector )
 {
     // Register the seed point.
-    kvs::Vector3f current_vertex = seed_point;
-    kvs::Vector3f next_vertex = seed_point;
+    kvs::Vec3 current_vertex = seed_point;
+    kvs::Vec3 next_vertex = seed_point;
 
     coords->push_back( seed_point.x() );
     coords->push_back( seed_point.y() );
     coords->push_back( seed_point.z() );
 
     // Register the vector on the seed point.
-    kvs::Vector3f current_vector = seed_vector;
-    kvs::Vector3f previous_vector = seed_vector;
+    kvs::Vec3 current_vector = seed_vector;
+    kvs::Vec3 previous_vector = seed_vector;
 
     // Set the color of seed point.
     kvs::RGBColor col = this->calculate_color( current_vector );
@@ -396,9 +308,9 @@ bool StreamlineBase::calculate_one_side(
  */
 /*===========================================================================*/
 bool StreamlineBase::calculate_next_vertex(
-    const kvs::Vector3f& current_vertex,
-    const kvs::Vector3f& current_direction,
-    kvs::Vector3f* next_vertex )
+    const kvs::Vec3& current_vertex,
+    const kvs::Vec3& current_direction,
+    kvs::Vec3* next_vertex )
 {
     switch( m_integration_method )
     {
@@ -425,9 +337,9 @@ bool StreamlineBase::calculate_next_vertex(
  */
 /*===========================================================================*/
 bool StreamlineBase::integrate_by_euler(
-    const kvs::Vector3f& current_vertex,
-    const kvs::Vector3f& current_direction,
-    kvs::Vector3f* next_vertex )
+    const kvs::Vec3& current_vertex,
+    const kvs::Vec3& current_direction,
+    kvs::Vec3* next_vertex )
 {
     if ( m_enable_boundary_condition )
     {
@@ -435,7 +347,7 @@ bool StreamlineBase::integrate_by_euler(
     }
 
     const float integration_direction = static_cast<float>( m_integration_direction );
-    const kvs::Vector3f k1 = current_direction.normalized() * integration_direction;
+    const kvs::Vec3 k1 = current_direction.normalized() * integration_direction;
     *next_vertex = current_vertex + m_integration_interval * k1;
 
     return true;
@@ -451,9 +363,9 @@ bool StreamlineBase::integrate_by_euler(
  */
 /*===========================================================================*/
 bool StreamlineBase::integrate_by_runge_kutta_2nd(
-    const kvs::Vector3f& current_vertex,
-    const kvs::Vector3f& current_direction,
-    kvs::Vector3f* next_vertex )
+    const kvs::Vec3& current_vertex,
+    const kvs::Vec3& current_direction,
+    kvs::Vec3* next_vertex )
 {
     if ( m_enable_boundary_condition )
     {
@@ -461,17 +373,17 @@ bool StreamlineBase::integrate_by_runge_kutta_2nd(
     }
 
     const float integration_direction = static_cast<float>( m_integration_direction );
-    const kvs::Vector3f k1 = current_direction.normalized() * integration_direction;
+    const kvs::Vec3 k1 = current_direction.normalized() * integration_direction;
     // Interpolate vector from vertex of cell.
-    const kvs::Vector3f vertex = current_vertex + 0.5f * m_integration_interval * k1;
+    const kvs::Vec3 vertex = current_vertex + 0.5f * m_integration_interval * k1;
 
     if ( m_enable_boundary_condition )
     {
         if ( !this->check_for_inside_volume( vertex ) ) return false;
     }
 
-    const kvs::Vector3f direction = this->interpolate_vector( vertex, current_direction );
-    const kvs::Vector3f k2 = direction.normalized() * integration_direction;
+    const kvs::Vec3 direction = this->interpolate_vector( vertex, current_direction );
+    const kvs::Vec3 k2 = direction.normalized() * integration_direction;
     *next_vertex = vertex + m_integration_interval * k2;
 
     return true;
@@ -487,9 +399,9 @@ bool StreamlineBase::integrate_by_runge_kutta_2nd(
  */
 /*===========================================================================*/
 bool StreamlineBase::integrate_by_runge_kutta_4th(
-    const kvs::Vector3f& current_vertex,
-    const kvs::Vector3f& current_direction,
-    kvs::Vector3f* next_vertex )
+    const kvs::Vec3& current_vertex,
+    const kvs::Vec3& current_direction,
+    kvs::Vec3* next_vertex )
 {
     if ( m_enable_boundary_condition )
     {
@@ -499,45 +411,45 @@ bool StreamlineBase::integrate_by_runge_kutta_4th(
     // Calculate integration interval.
 //    const float interval = m_integration_interval / static_cast<float>(current_direction.length());
 
-//    const kvs::Vector3f k1 = interval * current_direction;
+//    const kvs::Vec3 k1 = interval * current_direction;
     const float integration_direction = static_cast<float>( m_integration_direction );
-    const kvs::Vector3f k1 = current_direction.normalized() * integration_direction;
+    const kvs::Vec3 k1 = current_direction.normalized() * integration_direction;
 
     // Interpolate vector from vertex of cell.
-    const kvs::Vector3f vertex2 = current_vertex + 0.5f * m_integration_interval * k1;
+    const kvs::Vec3 vertex2 = current_vertex + 0.5f * m_integration_interval * k1;
 
     if ( m_enable_boundary_condition )
     {
         if ( !this->check_for_inside_volume( vertex2 ) ) return false;
     }
 
-    const kvs::Vector3f direction2 = this->interpolate_vector( vertex2, current_direction );
-//    const kvs::Vector3f k2 = interval * direction2;
-    const kvs::Vector3f k2 = direction2.normalized() * integration_direction;
+    const kvs::Vec3 direction2 = this->interpolate_vector( vertex2, current_direction );
+//    const kvs::Vec3 k2 = interval * direction2;
+    const kvs::Vec3 k2 = direction2.normalized() * integration_direction;
 
     // Interpolate vector from vertex of cell.
-    const kvs::Vector3f vertex3 = current_vertex + 0.5f * m_integration_interval * k2;
+    const kvs::Vec3 vertex3 = current_vertex + 0.5f * m_integration_interval * k2;
 
     if ( m_enable_boundary_condition )
     {
         if ( !this->check_for_inside_volume( vertex3 ) ) return false;
     }
 
-    const kvs::Vector3f direction3 = this->interpolate_vector( vertex3, current_direction );
-//    const kvs::Vector3f k3 = interval * direction3;
-    const kvs::Vector3f k3 = direction3.normalized() * integration_direction;
+    const kvs::Vec3 direction3 = this->interpolate_vector( vertex3, current_direction );
+//    const kvs::Vec3 k3 = interval * direction3;
+    const kvs::Vec3 k3 = direction3.normalized() * integration_direction;
 
     // Interpolate vector from vertex of cell.
-    const kvs::Vector3f vertex4 = current_vertex + m_integration_interval * k3;
+    const kvs::Vec3 vertex4 = current_vertex + m_integration_interval * k3;
 
     if ( m_enable_boundary_condition )
     {
         if ( !this->check_for_inside_volume( vertex4 ) ) return false;
     }
 
-    const kvs::Vector3f direction4 = this->interpolate_vector( vertex4, current_direction );
-//    const kvs::Vector3f k4 = interval * direction4;
-    const kvs::Vector3f k4 = direction4.normalized() * integration_direction;
+    const kvs::Vec3 direction4 = this->interpolate_vector( vertex4, current_direction );
+//    const kvs::Vec3 k4 = interval * direction4;
+    const kvs::Vec3 k4 = direction4.normalized() * integration_direction;
 
     *next_vertex = current_vertex + integration_direction * ( k1 + 2.0f * ( k2 + k3 ) + k4 ) / 6.0f;
 
@@ -551,7 +463,7 @@ bool StreamlineBase::integrate_by_runge_kutta_4th(
  *  @return true, if the seed point is inside the volume
  */
 /*===========================================================================*/
-bool StreamlineBase::check_for_inside_volume( const kvs::Vector3f& point )
+bool StreamlineBase::check_for_inside_volume( const kvs::Vec3& point )
 {
     const kvs::StructuredVolumeObject* structured_volume =
         reinterpret_cast<const kvs::StructuredVolumeObject*>( BaseClass::volume() );
@@ -573,7 +485,7 @@ bool StreamlineBase::check_for_inside_volume( const kvs::Vector3f& point )
  *  @return true if the vector length is smaller than the threshold
  */
 /*===========================================================================*/
-bool StreamlineBase::check_for_vector_length( const kvs::Vector3f& direction )
+bool StreamlineBase::check_for_vector_length( const kvs::Vec3& direction )
 {
     return direction.length() < m_vector_length_threshold;
 }

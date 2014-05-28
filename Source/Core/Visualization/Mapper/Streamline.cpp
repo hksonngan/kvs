@@ -25,11 +25,14 @@ namespace
 {
 
 template <typename T>
-inline const kvs::Vector3f GetInterpolatedVector( const size_t vertex_id[8], const float weight[8], const kvs::VolumeObjectBase* volume )
+inline const kvs::Vec3 GetInterpolatedVector(
+    const size_t vertex_id[8],
+    const float weight[8],
+    const kvs::VolumeObjectBase* volume )
 {
     const T* values = reinterpret_cast<const T*>( volume->values().data() );
 
-    kvs::Vector3f ret( 0.0f, 0.0f, 0.0f );
+    kvs::Vec3 ret( 0.0f, 0.0f, 0.0f );
     for ( size_t i = 0; i < 8; i++ )
     {
         const size_t index = 3 * vertex_id[i];
@@ -157,10 +160,10 @@ bool Streamline::check_for_acceptance( const std::vector<kvs::Real32>& vertices 
  */
 /*===========================================================================*/
 bool Streamline::check_for_termination(
-    const kvs::Vector3f& current_vertex,
-    const kvs::Vector3f& direction,
-    const size_t         integration_times,
-    const kvs::Vector3f& next_vertex )
+    const kvs::Vec3& current_vertex,
+    const kvs::Vec3& direction,
+    const size_t integration_times,
+    const kvs::Vec3& next_vertex )
 {
     kvs::IgnoreUnusedVariable( current_vertex );
 
@@ -191,9 +194,9 @@ bool Streamline::check_for_termination(
  *  @return interpolated vector
  */
 /*===========================================================================*/
-const kvs::Vector3f Streamline::calculate_vector( const kvs::Vector3f& point )
+const kvs::Vec3 Streamline::calculate_vector( const kvs::Vec3& point )
 {
-    const kvs::Vector3f origin( 0.0f, 0.0f, 0.0f );
+    const kvs::Vec3 origin( 0.0f, 0.0f, 0.0f );
     return this->interpolate_vector( point, origin );
 }
 
@@ -204,7 +207,7 @@ const kvs::Vector3f Streamline::calculate_vector( const kvs::Vector3f& point )
  *  @return color
  */
 /*===========================================================================*/
-const kvs::RGBColor Streamline::calculate_color( const kvs::Vector3f& direction )
+const kvs::RGBColor Streamline::calculate_color( const kvs::Vec3& direction )
 {
     const kvs::Real64 min_length = BaseClass::volume()->minValue();
     const kvs::Real64 max_length = BaseClass::volume()->maxValue();
@@ -223,9 +226,9 @@ const kvs::RGBColor Streamline::calculate_color( const kvs::Vector3f& direction 
  *  @return interpolated vector
  */
 /*===========================================================================*/
-const kvs::Vector3f Streamline::interpolate_vector(
-    const kvs::Vector3f& vertex,
-    const kvs::Vector3f& previous_vector )
+const kvs::Vec3 Streamline::interpolate_vector(
+    const kvs::Vec3& vertex,
+    const kvs::Vec3& previous_vector )
 {
     kvs::IgnoreUnusedVariable( previous_vector );
 
@@ -249,7 +252,7 @@ const kvs::Vector3f Streamline::interpolate_vector(
     vertex_id[7] = vertex_id[6] - 1;
 
     // Weight.
-    const kvs::Vector3f local_coord(
+    const kvs::Vec3 local_coord(
         2.0f * ( vertex.x() - cell_x ) - 1.0f,
         2.0f * ( vertex.y() - cell_y ) - 1.0f,
         2.0f * ( vertex.z() - cell_z ) - 1.0f );
@@ -284,7 +287,7 @@ const kvs::Vector3f Streamline::interpolate_vector(
     else if ( type == typeid( kvs::Real32 ) ) return ::GetInterpolatedVector<kvs::Real32>( vertex_id, weight, BaseClass::volume() );
     else if ( type == typeid( kvs::Real64 ) ) return ::GetInterpolatedVector<kvs::Real64>( vertex_id, weight, BaseClass::volume() );
 
-    return kvs::Vector3f( 0.0f, 0.0f, 0.0f );
+    return kvs::Vec3( 0.0f, 0.0f, 0.0f );
 }
 
 } // end of namespace kvs

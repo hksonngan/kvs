@@ -47,13 +47,13 @@ protected:
 
     bool check_for_acceptance( const std::vector<kvs::Real32>& vertices );
     bool check_for_termination(
-        const kvs::Vector3f& current_vertex,
-        const kvs::Vector3f& direction,
+        const kvs::Vec3& current_vertex,
+        const kvs::Vec3& direction,
         const size_t integration_times,
-        const kvs::Vector3f& next_vertex );
-    const kvs::Vector3f interpolate_vector( const kvs::Vector3f& vertex, const kvs::Vector3f& direction );
-    const kvs::Vector3f calculate_vector( const kvs::Vector3f& vertex );
-    const kvs::RGBColor calculate_color( const kvs::Vector3f& direction );
+        const kvs::Vec3& next_vertex );
+    const kvs::Vec3 interpolate_vector( const kvs::Vec3& vertex, const kvs::Vec3& direction );
+    const kvs::Vec3 calculate_vector( const kvs::Vec3& vertex );
+    const kvs::RGBColor calculate_color( const kvs::Vec3& direction );
     void set_min_max_vector_length( const kvs::VolumeObjectBase* volume );
 };
 
