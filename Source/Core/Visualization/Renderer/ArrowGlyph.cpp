@@ -305,12 +305,15 @@ void ArrowGlyph::draw_lines()
             const kvs::Real32 size = sizes[i];
             const kvs::RGBColor color( colors.data() + index );
             const kvs::UInt8 opacity = opacities[i];
-            glPushMatrix();
+            if ( direction.length() > 0.0f )
             {
-                BaseClass::transform( position, direction, size );
-                this->draw_line_element( color, opacity );
+                glPushMatrix();
+                {
+                    BaseClass::transform( position, direction, size );
+                    this->draw_line_element( color, opacity );
+                }
+                glPopMatrix();
             }
-            glPopMatrix();
         }
     }
 }
@@ -353,12 +356,15 @@ void ArrowGlyph::draw_tubes()
             const kvs::Real32 size = sizes[i];
             const kvs::RGBColor color( colors.data() + index );
             const kvs::UInt8 opacity = opacities[i];
-            glPushMatrix();
+            if ( direction.length() > 0.0f )
             {
-                BaseClass::transform( position, direction, size );
-                this->draw_tube_element( color, opacity );
+                glPushMatrix();
+                {
+                    BaseClass::transform( position, direction, size );
+                    this->draw_tube_element( color, opacity );
+                }
+                glPopMatrix();
             }
-            glPopMatrix();
         }
     }
 }
