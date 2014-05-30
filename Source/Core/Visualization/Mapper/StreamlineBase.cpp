@@ -409,9 +409,7 @@ bool StreamlineBase::integrate_by_runge_kutta_4th(
     }
 
     // Calculate integration interval.
-//    const float interval = m_integration_interval / static_cast<float>(current_direction.length());
 
-//    const kvs::Vec3 k1 = interval * current_direction;
     const float integration_direction = static_cast<float>( m_integration_direction );
     const kvs::Vec3 k1 = current_direction.normalized() * integration_direction;
 
@@ -424,7 +422,6 @@ bool StreamlineBase::integrate_by_runge_kutta_4th(
     }
 
     const kvs::Vec3 direction2 = this->interpolate_vector( vertex2, current_direction );
-//    const kvs::Vec3 k2 = interval * direction2;
     const kvs::Vec3 k2 = direction2.normalized() * integration_direction;
 
     // Interpolate vector from vertex of cell.
@@ -436,7 +433,6 @@ bool StreamlineBase::integrate_by_runge_kutta_4th(
     }
 
     const kvs::Vec3 direction3 = this->interpolate_vector( vertex3, current_direction );
-//    const kvs::Vec3 k3 = interval * direction3;
     const kvs::Vec3 k3 = direction3.normalized() * integration_direction;
 
     // Interpolate vector from vertex of cell.
@@ -448,7 +444,6 @@ bool StreamlineBase::integrate_by_runge_kutta_4th(
     }
 
     const kvs::Vec3 direction4 = this->interpolate_vector( vertex4, current_direction );
-//    const kvs::Vec3 k4 = interval * direction4;
     const kvs::Vec3 k4 = direction4.normalized() * integration_direction;
 
     *next_vertex = current_vertex + integration_direction * ( k1 + 2.0f * ( k2 + k3 ) + k4 ) / 6.0f;
@@ -465,17 +460,45 @@ bool StreamlineBase::integrate_by_runge_kutta_4th(
 /*===========================================================================*/
 bool StreamlineBase::check_for_inside_volume( const kvs::Vec3& point )
 {
-    const kvs::StructuredVolumeObject* structured_volume =
-        reinterpret_cast<const kvs::StructuredVolumeObject*>( BaseClass::volume() );
-    const float dimx = static_cast<float>( structured_volume->resolution().x() - 1 );
-    const float dimy = static_cast<float>( structured_volume->resolution().y() - 1 );
-    const float dimz = static_cast<float>( structured_volume->resolution().z() - 1 );
+    switch ( BaseClass::volume()->volumeType() )
+    {
+    case kvs::VolumeObjectBase::Structured:
+    {
+        const kvs::StructuredVolumeObject* structured_volume =
+            kvs::StructuredVolumeObject::DownCast( BaseClass::volume() );
+        switch ( structured_volume->gridType() )
+        {
+        case kvs::StructuredVolumeObject::Uniform:
+        {
+            const float dimx = static_cast<float>( structured_volume->resolution().x() - 1 );
+            const float dimy = static_cast<float>( structured_volume->resolution().y() - 1 );
+            const float dimz = static_cast<float>( structured_volume->resolution().z() - 1 );
 
-    if ( point.x() < 0.0f || dimx < point.x() ) return false;
-    if ( point.y() < 0.0f || dimy < point.y() ) return false;
-    if ( point.z() < 0.0f || dimz < point.z() ) return false;
+            if ( point.x() < 0.0f || dimx < point.x() ) return false;
+            if ( point.y() < 0.0f || dimy < point.y() ) return false;
+            if ( point.z() < 0.0f || dimz < point.z() ) return false;
 
-    return true;
+            return true;
+        }
+        case kvs::StructuredVolumeObject::Rectilinear:
+        {
+            const kvs::Vec3& min_obj = structured_volume->minObjectCoord();
+            const kvs::Vec3& max_obj = structured_volume->maxObjectCoord();
+
+            if ( point.x() < min_obj.x() || max_obj.x() < point.x() ) return false;
+            if ( point.y() < min_obj.y() || max_obj.y() < point.y() ) return false;
+            if ( point.z() < min_obj.z() || max_obj.z() < point.z() ) return false;
+
+            return true;
+        }
+        default: break;
+        }
+        break;
+    }
+    default: break;
+    }
+
+    return false;
 }
 
 /*===========================================================================*/
