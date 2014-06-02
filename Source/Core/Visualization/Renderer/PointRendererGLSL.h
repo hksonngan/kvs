@@ -20,7 +20,8 @@
 #include <kvs/PointObject>
 #include <kvs/Shader>
 #include <kvs/ProgramObject>
-#include <kvs/ShaderSource>
+#include <kvs/VertexBufferObject>
+#include <kvs/IndexBufferObject>
 
 
 namespace kvs
@@ -29,15 +30,26 @@ namespace kvs
 namespace glsl
 {
 
+/*===========================================================================*/
+/**
+ *  @brief  Point renderer class with VBO
+ */
+/*===========================================================================*/
 class PointRenderer : public kvs::PointRenderer
 {
     kvsModule( kvs::glsl::PointRenderer, Renderer );
     kvsModuleBaseClass( kvs::PointRenderer );
 
-protected:
+private:
 
+    size_t m_width; ///< window width
+    size_t m_height; ///< window height
+    const kvs::ObjectBase* m_object; ///< pointer to the rendering object
+    bool m_has_normal; ///< check flag for the normal array
     kvs::Shader::ShadingModel* m_shader; ///< shading method
-    kvs::ProgramObject m_phong_shader; ///< phong shader
+    kvs::ProgramObject m_shader_program; ///< shader program
+    kvs::VertexBufferObject m_vbo; ///< vertex buffer object
+    kvs::IndexBufferObject m_ibo; ///< index buffer object
 
 public:
 
@@ -53,7 +65,8 @@ public:
 
 private:
 
-    void initialize_shaders( void );
+    void create_shader_program();
+    void create_buffer_object( const kvs::PointObject* point );
 };
 
 template <typename ShadingType>
