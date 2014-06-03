@@ -13,10 +13,97 @@
  */
 /*****************************************************************************/
 #include "PolygonRenderer.h"
+#include <kvs/OpenGL>
 #include <kvs/ProgramObject>
 #include <kvs/ShaderSource>
 #include <kvs/VertexShader>
 #include <kvs/FragmentShader>
+
+
+namespace
+{
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns vertex-color array.
+ *  @param  polygon [in] pointer to the polygon object
+ */
+/*===========================================================================*/
+kvs::ValueArray<kvs::UInt8> VertexColors( const kvs::PolygonObject* polygon )
+{
+    const size_t nvertices = polygon->numberOfVertices();
+    const bool is_single_color = polygon->colors().size() == 3;
+    const bool is_single_alpha = polygon->opacities().size() == 1;
+    const kvs::UInt8* pcolors = polygon->colors().data();
+    const kvs::UInt8* palphas = polygon->opacities().data();
+
+    kvs::ValueArray<kvs::UInt8> colors( nvertices * 4 );
+    for ( size_t i = 0; i < nvertices; i++ )
+    {
+        colors[ 4 * i + 0 ] = is_single_color ? pcolors[0] : pcolors[ 3 * i + 0 ];
+        colors[ 4 * i + 1 ] = is_single_color ? pcolors[1] : pcolors[ 3 * i + 1 ];
+        colors[ 4 * i + 2 ] = is_single_color ? pcolors[2] : pcolors[ 3 * i + 2 ];
+        colors[ 4 * i + 3 ] = is_single_alpha ? palphas[0] : palphas[i];
+    }
+
+    return colors;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns vertex-normal array.
+ *  @param  polygon [in] pointer to the polygon object
+ */
+/*===========================================================================*/
+kvs::ValueArray<kvs::Real32> VertexNormals( const kvs::PolygonObject* polygon )
+{
+    if ( polygon->normals().size() != 0 &&
+         polygon->normalType() == kvs::PolygonObject::VertexNormal )
+    {
+        return polygon->normals();
+    }
+
+    const size_t nconnections = polygon->numberOfConnections();
+    const size_t nvertices = polygon->numberOfVertices();
+    const size_t npolygons = nconnections == 0 ? nvertices / 3 : nconnections;
+    const kvs::Real32* pcoords = polygon->coords().data();
+    const kvs::UInt32* pconnections = polygon->connections().data();
+
+    kvs::ValueArray<kvs::Real32> normals( nvertices * 3 );
+    normals.fill( 0 );
+    for ( size_t i = 0; i < npolygons; i++ )
+    {
+        size_t index[3];
+        kvs::Vec3 vertex[3];
+        for ( size_t j = 0; j < 3; j++ )
+        {
+            index[j] = nconnections > 0 ? pconnections[ 3 * i + j ] : 3 * i + j;
+            vertex[j] = kvs::Vec3( pcoords + 3 * index[j] );
+        }
+
+        const kvs::Vec3 normal( ( vertex[1] - vertex[0] ).cross( vertex[2] - vertex[0] ) );
+        for ( size_t j = 0; j < 3; j++ )
+        {
+            normals[ 3 * index[j] + 0 ] += normal.x();
+            normals[ 3 * index[j] + 1 ] += normal.y();
+            normals[ 3 * index[j] + 2 ] += normal.z();
+        }
+    }
+
+    const kvs::Real32* pnormals = normals.data();
+    for ( size_t i = 0; i < nvertices; i++ )
+    {
+        kvs::Vec3 normal( pnormals + 3 * i );
+        normal.normalize();
+        normals[ 3 * i + 0 ] = normal.x();
+        normals[ 3 * i + 1 ] = normal.y();
+        normals[ 3 * i + 2 ] = normal.z();
+    }
+
+    return normals;
+}
+
+} // end of namespace
 
 
 namespace kvs
@@ -31,9 +118,14 @@ namespace glsl
  */
 /*===========================================================================*/
 PolygonRenderer::PolygonRenderer():
+    m_width( 0 ),
+    m_height( 0 ),
+    m_object( NULL ),
+    m_has_normal( false ),
+    m_has_connection( false ),
     m_shader( NULL )
 {
-    this->setShader( kvs::Shader::Phong() );
+    this->setShader( kvs::Shader::Lambert() );
 }
 
 /*===========================================================================*/
@@ -48,7 +140,7 @@ PolygonRenderer::~PolygonRenderer()
 
 /*===========================================================================*/
 /**
- *  @brief  Main rendering routine.
+ *  @brief  Executes rendering process.
  *  @param  object [in] pointer to the object
  *  @param  camera [in] pointer to the camera
  *  @param  light [in] pointer to the light
@@ -56,81 +148,186 @@ PolygonRenderer::~PolygonRenderer()
 /*===========================================================================*/
 void PolygonRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light )
 {
-    // Following process is executed once.
-    static bool flag = true;
-    if ( flag ) { this->initialize_shaders(); flag = false; }
+    kvs::PolygonObject* polygon = kvs::PolygonObject::DownCast( object );
+    m_has_normal = polygon->normals().size() > 0;
+    m_has_connection = polygon->numberOfConnections() > 0;
+    if ( !m_has_normal ) setEnabledShading( false );
 
     BaseClass::startTimer();
-    m_phong_shader.bind();
-    BaseClass::exec( object, camera, light );
-    m_phong_shader.unbind();
+    kvs::OpenGL::WithPushedAttrib p( GL_ALL_ATTRIB_BITS );
+    kvs::OpenGL::Enable( GL_DEPTH_TEST );
+
+    const size_t width = camera->windowWidth();
+    const size_t height = camera->windowHeight();
+    const bool window_created = m_width == 0 && m_height == 0;
+    if ( window_created )
+    {
+        m_width = width;
+        m_height = height;
+        m_object = object;
+        this->create_shader_program();
+        this->create_buffer_object( polygon );
+    }
+
+    const bool window_resized = m_width != width || m_height != height;
+    if ( window_resized )
+    {
+        m_width = width;
+        m_height = height;
+    }
+
+    const bool object_changed = m_object != object;
+    if ( object_changed )
+    {
+        m_object = object;
+        m_shader_program.release();
+        m_vbo.release();
+        m_ibo.release();
+        this->create_shader_program();
+        this->create_buffer_object( polygon );
+    }
+
+    kvs::VertexBufferObject::Binder bind1( m_vbo );
+    kvs::ProgramObject::Binder bind2( m_shader_program );
+    {
+        const kvs::Mat4 M = kvs::OpenGL::ModelViewMatrix();
+        const kvs::Mat4 PM = kvs::OpenGL::ProjectionMatrix() * M;
+        const kvs::Mat3 N = kvs::Mat3( M[0].xyz(), M[1].xyz(), M[2].xyz() );
+        m_shader_program.setUniform( "ModelViewMatrix", M );
+        m_shader_program.setUniform( "ModelViewProjectionMatrix", PM );
+        m_shader_program.setUniform( "NormalMatrix", N );
+
+        const size_t nconnections = polygon->numberOfConnections();
+        const size_t nvertices = polygon->numberOfVertices();
+        const size_t npolygons = nconnections == 0 ? nvertices / 3 : nconnections;
+        const size_t coord_size = nvertices * 3 * sizeof( kvs::Real32 );
+        const size_t color_size = nvertices * 4 * sizeof( kvs::UInt8 );
+
+        KVS_GL_CALL( glPolygonMode( GL_FRONT_AND_BACK, GL_FILL ) );
+
+        // Enable coords.
+        KVS_GL_CALL( glEnableClientState( GL_VERTEX_ARRAY ) );
+        KVS_GL_CALL( glVertexPointer( 3, GL_FLOAT, 0, (GLbyte*)NULL + 0 ) );
+
+        // Enable colors.
+        KVS_GL_CALL( glEnableClientState( GL_COLOR_ARRAY ) );
+        KVS_GL_CALL( glColorPointer( 4, GL_UNSIGNED_BYTE, 0, (GLbyte*)NULL + coord_size ) );
+
+        // Enable normals.
+        if ( m_has_normal )
+        {
+            KVS_GL_CALL( glEnableClientState( GL_NORMAL_ARRAY ) );
+            KVS_GL_CALL( glNormalPointer( GL_FLOAT, 0, (GLbyte*)NULL + coord_size + color_size ) );
+        }
+
+        // Draw triangles.
+        if ( m_has_connection )
+        {
+            kvs::IndexBufferObject::Binder bind3( m_ibo );
+            KVS_GL_CALL( glDrawElements( GL_TRIANGLES, 3 * npolygons, GL_UNSIGNED_INT, 0 ) );
+        }
+        else
+        {
+            KVS_GL_CALL( glDrawArrays( GL_TRIANGLES, 0, 3 * npolygons ) );
+        }
+
+        // Disable coords.
+        KVS_GL_CALL( glDisableClientState( GL_VERTEX_ARRAY ) );
+
+        // Disable colors.
+        KVS_GL_CALL( glDisableClientState( GL_COLOR_ARRAY ) );
+
+        // Disable normals.
+        if ( m_has_normal )
+        {
+            KVS_GL_CALL( glDisableClientState( GL_NORMAL_ARRAY ) );
+        }
+    }
+
     BaseClass::stopTimer();
 }
 
-/*==========================================================================*/
+/*===========================================================================*/
 /**
- *  @brief  Initialize OpenGL.
+ *  @brief  Creates shader program.
  */
-/*==========================================================================*/
-void PolygonRenderer::initialize_shaders()
+/*===========================================================================*/
+void PolygonRenderer::create_shader_program()
 {
-    const std::string vert_code = "shader.vert";
-    const std::string frag_code = "shader.frag";
-
-    kvs::ShaderSource vert( vert_code );
-    kvs::ShaderSource frag( frag_code );
-
-    if ( BaseClass::isEnabledShading() )
+    kvs::ShaderSource vert( "shader.vert" );
+    kvs::ShaderSource frag( "shader.frag" );
+    if ( isEnabledShading() )
     {
         switch ( m_shader->type() )
         {
         case kvs::Shader::LambertShading: frag.define("ENABLE_LAMBERT_SHADING"); break;
         case kvs::Shader::PhongShading: frag.define("ENABLE_PHONG_SHADING"); break;
         case kvs::Shader::BlinnPhongShading: frag.define("ENABLE_BLINN_PHONG_SHADING"); break;
-        default: /* NO SHADING */ break;
+        default: break; // NO SHADING
+        }
+
+        if ( kvs::OpenGL::Boolean( GL_LIGHT_MODEL_TWO_SIDE ) == GL_TRUE )
+        {
+            frag.define("ENABLE_TWO_SIDE_LIGHTING");
         }
     }
 
-    m_phong_shader.create( vert, frag );
+    m_shader_program.build( vert, frag );
+    m_shader_program.bind();
+    m_shader_program.setUniform( "shading.Ka", m_shader->Ka );
+    m_shader_program.setUniform( "shading.Kd", m_shader->Kd );
+    m_shader_program.setUniform( "shading.Ks", m_shader->Ks );
+    m_shader_program.setUniform( "shading.S",  m_shader->S );
+    m_shader_program.unbind();
+}
 
-    m_phong_shader.bind();
-    switch ( m_shader->type() )
+/*===========================================================================*/
+/**
+ *  @brief  Creates buffer object.
+ *  @param  polygon [in] pointer to the polygon object
+ */
+/*===========================================================================*/
+void PolygonRenderer::create_buffer_object( const kvs::PolygonObject* polygon )
+{
+    if ( polygon->polygonType() != kvs::PolygonObject::Triangle )
     {
-    case kvs::Shader::LambertShading:
+        kvsMessageError("Not supported polygon type.");
+        return;
+    }
+
+    if ( polygon->colors().size() != 3 && polygon->colorType() == kvs::PolygonObject::PolygonColor )
     {
-        const GLfloat Ka = ((kvs::Shader::Lambert*)(m_shader))->Ka;
-        const GLfloat Kd = ((kvs::Shader::Lambert*)(m_shader))->Kd;
-        m_phong_shader.setUniform( "shading.Ka", Ka );
-        m_phong_shader.setUniform( "shading.Kd", Kd );
-        break;
+        kvsMessageError("Not supported polygon color type.");
+        return;
     }
-    case kvs::Shader::PhongShading:
+
+    kvs::ValueArray<kvs::Real32> coords = polygon->coords();
+    kvs::ValueArray<kvs::UInt8> colors = ::VertexColors( polygon );
+    kvs::ValueArray<kvs::Real32> normals = ::VertexNormals( polygon );
+
+    const size_t coord_size = coords.byteSize();
+    const size_t color_size = colors.byteSize();
+    const size_t normal_size = normals.byteSize();
+    const size_t byte_size = coord_size + color_size + normal_size;
+
+    m_vbo.create( byte_size );
+    m_vbo.bind();
+    m_vbo.load( coord_size, coords.data(), 0 );
+    m_vbo.load( color_size, colors.data(), coord_size );
+    if ( normal_size > 0 )
     {
-        const GLfloat Ka = ((kvs::Shader::Phong*)(m_shader))->Ka;
-        const GLfloat Kd = ((kvs::Shader::Phong*)(m_shader))->Kd;
-        const GLfloat Ks = ((kvs::Shader::Phong*)(m_shader))->Ks;
-        const GLfloat S  = ((kvs::Shader::Phong*)(m_shader))->S;
-        m_phong_shader.setUniform( "shading.Ka", Ka );
-        m_phong_shader.setUniform( "shading.Kd", Kd );
-        m_phong_shader.setUniform( "shading.Ks", Ks );
-        m_phong_shader.setUniform( "shading.S",  S );
-        break;
+        m_vbo.load( normal_size, normals.data(), coord_size + color_size );
     }
-    case kvs::Shader::BlinnPhongShading:
+    m_vbo.unbind();
+
+    if ( m_has_connection )
     {
-        const GLfloat Ka = ((kvs::Shader::BlinnPhong*)(m_shader))->Ka;
-        const GLfloat Kd = ((kvs::Shader::BlinnPhong*)(m_shader))->Kd;
-        const GLfloat Ks = ((kvs::Shader::BlinnPhong*)(m_shader))->Ks;
-        const GLfloat S  = ((kvs::Shader::BlinnPhong*)(m_shader))->S;
-        m_phong_shader.setUniform( "shading.Ka", Ka );
-        m_phong_shader.setUniform( "shading.Kd", Kd );
-        m_phong_shader.setUniform( "shading.Ks", Ks );
-        m_phong_shader.setUniform( "shading.S",  S );
-        break;
+        const size_t connection_size = polygon->connections().byteSize();
+        m_ibo.create( connection_size );
+        m_ibo.bind();
+        m_ibo.load( connection_size, polygon->connections().data(), 0 );
+        m_ibo.unbind();
     }
-    default: /* NO SHADING */ break;
-    }
-    m_phong_shader.unbind();
 }
 
 } // end of namespace glsl

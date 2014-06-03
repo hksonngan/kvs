@@ -21,7 +21,6 @@
 #include <kvs/Shader>
 #include <kvs/ProgramObject>
 #include <kvs/VertexBufferObject>
-#include <kvs/IndexBufferObject>
 
 
 namespace kvs
@@ -49,7 +48,6 @@ private:
     kvs::Shader::ShadingModel* m_shader; ///< shading method
     kvs::ProgramObject m_shader_program; ///< shader program
     kvs::VertexBufferObject m_vbo; ///< vertex buffer object
-    kvs::IndexBufferObject m_ibo; ///< index buffer object
 
 public:
 

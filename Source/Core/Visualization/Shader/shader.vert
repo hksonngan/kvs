@@ -12,8 +12,18 @@
  *  $Id: shading.vert 476 2010-02-14 15:45:46Z naohisa.sakamoto $
  */
 /*****************************************************************************/
-varying vec3 position;
-varying vec3 normal;
+#version 120
+#include "qualifire.h"
+
+// Output parameters to fragment shader.
+VertOut vec3 position;
+VertOut vec3 normal;
+
+// Uniform variables (OpenGL variables).
+uniform mat4 ModelViewMatrix; // model-view matrix
+uniform mat4 ModelViewProjectionMatrix; // model-view projection matrix
+uniform mat3 NormalMatrix; // normal matrix
+
 
 /*===========================================================================*/
 /**
@@ -22,9 +32,9 @@ varying vec3 normal;
 /*===========================================================================*/
 void main()
 {
+    gl_Position = ModelViewProjectionMatrix * gl_Vertex;
     gl_FrontColor = gl_Color;
-    gl_Position = ftransform();
 
-    position = vec3( gl_ModelViewMatrix * gl_Vertex );
-    normal = gl_NormalMatrix * gl_Normal.xyz;
+    position = ( ModelViewMatrix * gl_Vertex ).xyz;
+    normal = NormalMatrix * gl_Normal;
 }

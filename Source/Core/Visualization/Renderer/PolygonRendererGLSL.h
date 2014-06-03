@@ -20,7 +20,8 @@
 #include <kvs/PolygonObject>
 #include <kvs/Shader>
 #include <kvs/ProgramObject>
-#include <kvs/ShaderSource>
+#include <kvs/VertexBufferObject>
+#include <kvs/IndexBufferObject>
 
 
 namespace kvs
@@ -36,8 +37,15 @@ class PolygonRenderer : public kvs::PolygonRenderer
 
 protected:
 
+    size_t m_width; ///< window width
+    size_t m_height; ///< window height
+    const kvs::ObjectBase* m_object; ///< pointer to the rendering object
+    bool m_has_normal; ///< check flag for the normal array
+    bool m_has_connection; ///< check flag for the connection array
     kvs::Shader::ShadingModel* m_shader; ///< shading method
-    kvs::ProgramObject m_phong_shader; ///< phong shader
+    kvs::ProgramObject m_shader_program; ///< shader program
+    kvs::VertexBufferObject m_vbo; ///< vertex buffer object
+    kvs::IndexBufferObject m_ibo; ///< index buffer object
 
 public:
 
@@ -53,7 +61,8 @@ public:
 
 private:
 
-    void initialize_shaders();
+    void create_shader_program();
+    void create_buffer_object( const kvs::PolygonObject* point );
 };
 
 template <typename ShadingType>
