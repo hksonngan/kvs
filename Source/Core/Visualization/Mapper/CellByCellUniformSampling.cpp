@@ -408,7 +408,8 @@ void CellByCellUniformSampling::generate_particles( const kvs::StructuredVolumeO
 
                 // Calculate a density.
                 const float  average_scalar = interpolator.scalar<T>();
-                const size_t average_degree = static_cast<size_t>( ( average_scalar - min_value ) * normalize_factor );
+                size_t average_degree = static_cast<size_t>( ( average_scalar - min_value ) * normalize_factor );
+                average_degree = kvs::Math::Clamp( average_degree, 0, max_range );
                 const float  density = density_map[ average_degree ];
 
                 // Calculate a number of particles in this cell.
@@ -528,7 +529,8 @@ void CellByCellUniformSampling::generate_particles( const kvs::UnstructuredVolum
 
         // Calculate a density.
         const float  average_scalar = cell->averagedScalar();
-        const size_t average_degree = static_cast<size_t>( ( average_scalar - min_value ) * normalize_factor );
+        size_t average_degree = static_cast<size_t>( ( average_scalar - min_value ) * normalize_factor );
+        average_degree = kvs::Math::Clamp( average_degree, 0, max_range );
         const float  density = density_map[ average_degree ];
 
         // Calculate a number of particles in this cell.
