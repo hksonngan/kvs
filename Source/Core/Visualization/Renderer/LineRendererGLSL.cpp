@@ -115,6 +115,8 @@ void LineRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Ligh
 
     kvs::OpenGL::WithPushedAttrib p( GL_ALL_ATTRIB_BITS );
     kvs::OpenGL::Enable( GL_DEPTH_TEST );
+    kvs::OpenGL::Enable( GL_BLEND );
+    kvs::OpenGL::SetBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
     const size_t width = camera->windowWidth();
     const size_t height = camera->windowHeight();
