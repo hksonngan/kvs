@@ -40,7 +40,9 @@ void main()
     float center_line_width = line_width * 0.5 - outline_width;
     if ( distance( gl_FragCoord.xy, center ) >= center_line_width )
     {
-        gl_FragColor = vec4( outline_color, 1.0 );
+        // The opacity value is set to 0.9 for diminishing aliasing.
+        float opacity = 0.9;
+        gl_FragColor = vec4( outline_color, opacity );
         return;
     }
 
