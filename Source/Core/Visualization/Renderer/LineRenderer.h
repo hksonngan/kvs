@@ -58,4 +58,6 @@ private:
 
 } // end of namespace kvs
 
-#endif // KVS_CORE_LINE_RENDERER_H_INCLUDE
+#include "LineRendererGLSL.h"
+
+#endif // KVS__LINE_RENDERER_H_INCLUDE

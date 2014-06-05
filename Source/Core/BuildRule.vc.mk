@@ -313,6 +313,7 @@ $(OUTDIR)\.\Visualization\Renderer\GlyphBase.obj \
 $(OUTDIR)\.\Visualization\Renderer\HAVSVolumeRenderer.obj \
 $(OUTDIR)\.\Visualization\Renderer\ImageRenderer.obj \
 $(OUTDIR)\.\Visualization\Renderer\LineRenderer.obj \
+$(OUTDIR)\.\Visualization\Renderer\LineRendererGLSL.obj \
 $(OUTDIR)\.\Visualization\Renderer\ParallelCoordinatesRenderer.obj \
 $(OUTDIR)\.\Visualization\Renderer\ParticleBasedRenderer.obj \
 $(OUTDIR)\.\Visualization\Renderer\ParticleBasedRendererGLSL.obj \

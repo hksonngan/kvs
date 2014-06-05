@@ -313,6 +313,7 @@ $(OUTDIR)/./Visualization/Renderer/GlyphBase.o \
 $(OUTDIR)/./Visualization/Renderer/HAVSVolumeRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/ImageRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/LineRenderer.o \
+$(OUTDIR)/./Visualization/Renderer/LineRendererGLSL.o \
 $(OUTDIR)/./Visualization/Renderer/ParallelCoordinatesRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/ParticleBasedRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/ParticleBasedRendererGLSL.o \
