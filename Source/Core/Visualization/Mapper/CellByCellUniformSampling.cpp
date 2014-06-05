@@ -384,6 +384,7 @@ void CellByCellUniformSampling::generate_particles( const kvs::StructuredVolumeO
     kvs::TrilinearInterpolator interpolator( volume );
 
     // Set parameters for normalization of the node values.
+    const size_t max_range = BaseClass::transferFunction().resolution() - 1;
     const float min_value = BaseClass::transferFunction().colorMap().minValue();
     const float max_value = BaseClass::transferFunction().colorMap().maxValue();
     const float normalize_factor = BaseClass::transferFunction().resolution() / ( max_value - min_value );
@@ -409,7 +410,7 @@ void CellByCellUniformSampling::generate_particles( const kvs::StructuredVolumeO
                 // Calculate a density.
                 const float  average_scalar = interpolator.scalar<T>();
                 size_t average_degree = static_cast<size_t>( ( average_scalar - min_value ) * normalize_factor );
-                average_degree = kvs::Math::Clamp( average_degree, 0, max_range );
+                average_degree = kvs::Math::Clamp<size_t>( average_degree, 0, max_range );
                 const float  density = density_map[ average_degree ];
 
                 // Calculate a number of particles in this cell.
@@ -530,7 +531,7 @@ void CellByCellUniformSampling::generate_particles( const kvs::UnstructuredVolum
         // Calculate a density.
         const float  average_scalar = cell->averagedScalar();
         size_t average_degree = static_cast<size_t>( ( average_scalar - min_value ) * normalize_factor );
-        average_degree = kvs::Math::Clamp( average_degree, 0, max_range );
+        average_degree = kvs::Math::Clamp<size_t>( average_degree, 0, max_range );
         const float  density = density_map[ average_degree ];
 
         // Calculate a number of particles in this cell.

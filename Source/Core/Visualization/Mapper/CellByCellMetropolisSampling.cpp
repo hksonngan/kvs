@@ -411,7 +411,7 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::StructuredVolu
                 // Calculate a density.
                 const float  average_scalar = interpolator.template scalar<T>();
                 size_t average_degree = static_cast<size_t>( ( average_scalar - min_value ) * normalize_factor );
-                average_degree = kvs::Math::Clamp( average_degree, 0, max_range );
+                average_degree = kvs::Math::Clamp<size_t>( average_degree, 0, max_range );
                 const float  average_density = density_map[ average_degree ];
 
                 // Calculate a number of particles in this cell.
@@ -641,7 +641,7 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::UnstructuredVo
         // Calculate a density.
         const float  average_scalar = cell->averagedScalar();
         size_t average_degree = static_cast<size_t>( ( average_scalar - min_value ) * normalize_factor );
-        average_degree = kvs::Math::Clamp( average_degree, 0, max_range );
+        average_degree = kvs::Math::Clamp<size_t>( average_degree, 0, max_range );
         const float  average_density = density_map[ average_degree ];
 
         // Calculate a number of particles in this cell.
