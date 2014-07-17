@@ -96,6 +96,7 @@ public:
                         const Connections& connections,
                         const Values& values ) )
     {
+        BaseClass::setVolumeType( Unstructured );
         this->setVeclen( veclen );
         this->setCoords( coords );
         this->setValues( values );

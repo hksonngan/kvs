@@ -83,6 +83,7 @@ public:
                         const size_t veclen,
                         const Values& values ) )
     {
+        BaseClass::setVolumeType( Structured );
         this->setVeclen( veclen );
         this->setValues( values );
         this->setGridType( Uniform );
@@ -96,6 +97,7 @@ public:
                         const Coords& coords,
                         const Values& values ) )
     {
+        BaseClass::setVolumeType( Structured );
         this->setVeclen( veclen );
         this->setCoords( coords );
         this->setValues( values );
