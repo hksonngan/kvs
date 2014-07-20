@@ -57,47 +57,39 @@ kvs::ValueArray<kvs::UInt8> VertexColors( const kvs::PolygonObject* polygon )
 /*===========================================================================*/
 kvs::ValueArray<kvs::Real32> VertexNormals( const kvs::PolygonObject* polygon )
 {
-    if ( polygon->normals().size() != 0 &&
-         polygon->normalType() == kvs::PolygonObject::VertexNormal )
+    if ( polygon->normals().size() == 0 )
     {
-        return polygon->normals();
+        return kvs::ValueArray<kvs::Real32>();
     }
 
-    const size_t nconnections = polygon->numberOfConnections();
-    const size_t nvertices = polygon->numberOfVertices();
-    const size_t npolygons = nconnections == 0 ? nvertices / 3 : nconnections;
-    const kvs::Real32* pcoords = polygon->coords().data();
-    const kvs::UInt32* pconnections = polygon->connections().data();
-
-    kvs::ValueArray<kvs::Real32> normals( nvertices * 3 );
-    normals.fill( 0 );
-    for ( size_t i = 0; i < npolygons; i++ )
+    kvs::ValueArray<kvs::Real32> normals;
+    switch ( polygon->normalType() )
     {
-        size_t index[3];
-        kvs::Vec3 vertex[3];
-        for ( size_t j = 0; j < 3; j++ )
-        {
-            index[j] = nconnections > 0 ? pconnections[ 3 * i + j ] : 3 * i + j;
-            vertex[j] = kvs::Vec3( pcoords + 3 * index[j] );
-        }
-
-        const kvs::Vec3 normal( ( vertex[1] - vertex[0] ).cross( vertex[2] - vertex[0] ) );
-        for ( size_t j = 0; j < 3; j++ )
-        {
-            normals[ 3 * index[j] + 0 ] += normal.x();
-            normals[ 3 * index[j] + 1 ] += normal.y();
-            normals[ 3 * index[j] + 2 ] += normal.z();
-        }
+    case kvs::PolygonObject::VertexNormal:
+    {
+        normals = polygon->normals();
+        break;
     }
-
-    const kvs::Real32* pnormals = normals.data();
-    for ( size_t i = 0; i < nvertices; i++ )
+    case kvs::PolygonObject::PolygonNormal:
     {
-        kvs::Vec3 normal( pnormals + 3 * i );
-        normal.normalize();
-        normals[ 3 * i + 0 ] = normal.x();
-        normals[ 3 * i + 1 ] = normal.y();
-        normals[ 3 * i + 2 ] = normal.z();
+        // Same normal vectors are assigned for each vertex of the polygon.
+        const size_t npolygons = polygon->normals().size() / 3;
+        const size_t nnormals = npolygons * 3;
+        normals.allocate( nnormals * 3 );
+        kvs::Real32* pnormals = normals.data();
+        for ( size_t i = 0; i < npolygons; i++ )
+        {
+            const kvs::Vec3 n = polygon->normal(i);
+            for ( size_t j = 0; j < 3; j++ )
+            {
+                *(pnormals++) = n.x();
+                *(pnormals++) = n.y();
+                *(pnormals++) = n.z();
+            }
+        }
+        break;
+    }
+    default: break;
     }
 
     return normals;
