@@ -295,6 +295,13 @@ void ParticleBasedRenderer::Engine::setup( kvs::ObjectBase* object, kvs::Camera*
     kvs::OpenGL::Enable( GL_DEPTH_TEST );
     kvs::OpenGL::Enable( GL_VERTEX_PROGRAM_POINT_SIZE );
     m_random_index = m_shader_program.attributeLocation("random_index");
+
+    const kvs::Mat4 M = kvs::OpenGL::ModelViewMatrix();
+    const kvs::Mat4 P = kvs::OpenGL::ProjectionMatrix();
+    m_shader_program.bind();
+    m_shader_program.setUniform( "ModelViewMatrix", M );
+    m_shader_program.setUniform( "ProjectionMatrix", P );
+    m_shader_program.unbind();
 }
 
 /*===========================================================================*/
@@ -326,8 +333,10 @@ void ParticleBasedRenderer::Engine::draw( kvs::ObjectBase* object, kvs::Camera* 
         const float Cr = ( width / width0 ) * ( height / height0 );
         const float Cs = scale / scale0;
         const float D0 = m_initial_object_depth;
-        const float object_depth = Cr * Cs * D0;
+        const float object_scale = Cr * Cs;
+        const float object_depth = object_scale * D0;
 
+        m_shader_program.setUniform( "object_scale", object_scale );
         m_shader_program.setUniform( "object_depth", object_depth );
         m_shader_program.setUniform( "random_texture", 0 );
         m_shader_program.setUniform( "random_texture_size_inv", 1.0f / randomTextureSize() );
