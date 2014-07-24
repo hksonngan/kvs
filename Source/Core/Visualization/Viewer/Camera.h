@@ -43,7 +43,7 @@ public:
 
 private:
 
-    kvs::Vec3 m_transform_center;
+    kvs::Vec3 m_transform_center; // transform center
     ProjectionType m_projection_type; ///< projection type
     float m_field_of_view; ///< field of view [deg]
     float m_front; ///< front plane position
@@ -60,45 +60,50 @@ public:
     Camera();
     virtual ~Camera();
 
-    void setProjectionType( const ProjectionType projection_type );
-    void setProjectionTypeToPerspective();
-    void setProjectionTypeToOrthogonal();
-    void setProjectionTypeToFrustum();
+    void setProjectionType( const ProjectionType type ) { m_projection_type = type; }
+    void setProjectionTypeToPerspective() { this->setProjectionType( Perspective ); }
+    void setProjectionTypeToOrthogonal() { this->setProjectionType( Orthogonal ); }
+    void setProjectionTypeToFrustum() { this->setProjectionType( Frustum ); }
+    void setFieldOfView( const float fov ) { m_field_of_view = fov; }
+    void setBack( const float back ) { m_back = back; }
+    void setFront( const float front ) { m_front = front; }
+    void setLeft( const float left ) { m_left = left; }
+    void setRight( const float right ) { m_right = right; }
+    void setBottom( const float bottom ) { m_bottom = bottom; }
+    void setTop( const float top ) { m_top = top; }
+    void setWindowSize( const size_t width, const size_t height );
+    void setPosition( const kvs::Vec3& position );
     void setPosition( const kvs::Vec3& position, const kvs::Vec3& look_at );
     void setPosition( const kvs::Vec3& position, const kvs::Vec3& look_at, const kvs::Vec3& up );
-    void setPosition( const kvs::Vec3& position );
     void setUpVector( const kvs::Vec3& up_vector );
     void setLookAt( const kvs::Vec3& look_at );
-    void setFieldOfView( const float fov );
-    void setBack( const float back );
-    void setFront( const float front );
-    void setLeft( const float left );
-    void setRight( const float right );
-    void setBottom( const float bottom );
-    void setTop( const float top );
-    void setWindowSize( const size_t width, const size_t height );
 
-    bool isPerspective() const;
-    ProjectionType projectionType() const;
+    bool isPerspective() const { return m_projection_type == Perspective; }
+    ProjectionType projectionType() const { return m_projection_type; }
+    float fieldOfView() const { return m_field_of_view; }
+    float back() const { return m_back; }
+    float front() const { return m_front; }
+    float left() const { return m_left; }
+    float right() const { return m_right; }
+    float bottom() const { return m_bottom; }
+    float top() const { return m_top; }
+    size_t windowWidth() const { return m_window_width; }
+    size_t windowHeight() const { return m_window_height; }
     const kvs::Vec3 position() const;
     const kvs::Vec3 upVector() const;
     const kvs::Vec3 lookAt() const;
-    const kvs::Matrix44f projectionMatrix() const;
-    const kvs::Matrix44f viewingMatrix() const;
+    const kvs::Mat4 projectionMatrix() const;
+    const kvs::Mat4 viewingMatrix() const;
     const kvs::Vec2 lookAtInDevice() const;
-    float fieldOfView() const;
-    float back() const;
-    float front() const;
-    float left() const;
-    float right() const;
-    float bottom() const;
-    float top() const;
-    size_t windowWidth() const;
-    size_t windowHeight() const;
 
     virtual void initialize();
     virtual void update();
     virtual kvs::ColorImage snapshot();
+
+    void resetXform();
+    void rotate( const kvs::Mat3& rotation );
+    void translate( const kvs::Vec3& translation );
+    void scale( const kvs::Vec3& scaling );
 
 public:
 
@@ -160,13 +165,6 @@ public:
     const kvs::Vec3 projectWorldToObject( const kvs::Vec3& p_wld ) const;
 //deprecated unused
     const kvs::Vec3 projectObjectToWorld( const kvs::Vec3& p_obj ) const;
-
-public:
-
-    void resetXform();
-    void rotate( const kvs::Mat3& rotation );
-    void translate( const kvs::Vec3& translation );
-    void scale( const kvs::Vec3& scaling );
 };
 
 } // end of namespace kvs

@@ -26,19 +26,22 @@
 namespace
 {
 
-const kvs::Xform MakeCameraXform( const kvs::Vec3& eye, 
-                                  const kvs::Vec3& center, 
-                                  const kvs::Vec3& up )
+const kvs::Xform MakeCameraXform(
+    const kvs::Vec3& eye,
+    const kvs::Vec3& center,
+    const kvs::Vec3& up )
 {
-    const kvs::Vec3 y = up.normalized();
     const kvs::Vec3 z = ( eye - center ).normalized();
-    const kvs::Vec3 x = y.cross( z ).normalized();
+    const kvs::Vec3 x = up.cross( z ).normalized();
+    const kvs::Vec3 y = z.cross( x ).normalized();
     const kvs::Vec3 t = eye;
 
-    const kvs::Matrix44f m( x[0], y[0], z[0], t[0], 
-                            x[1], y[1], z[1], t[1], 
-                            x[2], y[2], z[2], t[2], 
-                            0, 0, 0, 1 );
+    const kvs::Mat4 m(
+        x[0], y[0], z[0], t[0],
+        x[1], y[1], z[1], t[1],
+        x[2], y[2], z[2], t[2],
+        0,    0,    0,    1 );
+
     return kvs::Xform( m );
 }
 
@@ -67,41 +70,17 @@ Camera::~Camera()
 {
 }
 
-/*===========================================================================*/
+/*==========================================================================*/
 /**
- *  @brief  Sets the projection type of the camera.
- *  @param  projection_type [in] projection type
+ *  Set a window size.
+ *  @param width [in] window width
+ *  @param height [in] window height
  */
-/*===========================================================================*/
-void Camera::setProjectionType( const Camera::ProjectionType projection_type )
+/*==========================================================================*/
+void Camera::setWindowSize( const size_t width, const size_t height )
 {
-    m_projection_type = projection_type;
-}
-
-void Camera::setProjectionTypeToPerspective()
-{
-    this->setProjectionType( Perspective );
-}
-
-void Camera::setProjectionTypeToOrthogonal()
-{
-    this->setProjectionType( Orthogonal );
-}
-
-void Camera::setProjectionTypeToFrustum()
-{
-    this->setProjectionType( Frustum );
-}
-
-void Camera::setPosition( const kvs::Vec3& position, const kvs::Vec3& look_at )
-{
-    this->setPosition( position, look_at, this->upVector() );
-}
-
-void Camera::setPosition( const kvs::Vec3& position, const kvs::Vec3& look_at, const kvs::Vec3& up )
-{
-    m_transform_center = look_at;
-    this->setXform( ::MakeCameraXform( position, look_at, up ) );
+    m_window_width  = width;
+    m_window_height = height;
 }
 
 /*==========================================================================*/
@@ -113,6 +92,32 @@ void Camera::setPosition( const kvs::Vec3& position, const kvs::Vec3& look_at, c
 void Camera::setPosition( const kvs::Vec3& position )
 {
     this->setPosition( position, this->lookAt(), this->upVector() );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a camera position with a target position in the world coordinates.
+ *  @param  position [in] camera position
+ *  @param  look_at [in] target position
+ */
+/*===========================================================================*/
+void Camera::setPosition( const kvs::Vec3& position, const kvs::Vec3& look_at )
+{
+    this->setPosition( position, look_at, this->upVector() );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets a camera position with a target position in the world coordinates.
+ *  @param  position [in] camera position
+ *  @param  look_at [in] target position
+ *  @param  up [in] camera's up vector
+ */
+/*===========================================================================*/
+void Camera::setPosition( const kvs::Vec3& position, const kvs::Vec3& look_at, const kvs::Vec3& up )
+{
+    m_transform_center = look_at;
+    this->setXform( ::MakeCameraXform( position, look_at, up ) );
 }
 
 /*==========================================================================*/
@@ -139,119 +144,6 @@ void Camera::setLookAt( const kvs::Vec3& look_at )
 
 /*==========================================================================*/
 /**
- *  Set a field of view (FOV) parameter.
- *  @param fov [in] FOV parameter [deg]
- */
-/*==========================================================================*/
-void Camera::setFieldOfView( const float fov )
-{
-    m_field_of_view = fov;
-}
-
-/*==========================================================================*/
-/**
- *  Set a back parameter.
- *  @param back [in] back parameter
- */
-/*==========================================================================*/
-void Camera::setBack( const float back )
-{
-    m_back = back;
-}
-
-/*==========================================================================*/
-/**
- *  Set a front parameter.
- *  @param front [in] front parameter
- */
-/*==========================================================================*/
-void Camera::setFront( const float front )
-{
-    m_front = front;
-}
-
-/*==========================================================================*/
-/**
- *  Set a left parameter.
- *  @param left [in] left parameter
- */
-/*==========================================================================*/
-void Camera::setLeft( const float left )
-{
-    m_left = left;
-}
-
-/*==========================================================================*/
-/**
- *  Set a right parameter.
- *  @param right [in] right parameter
- */
-/*==========================================================================*/
-void Camera::setRight( const float right )
-{
-    m_right = right;
-}
-
-/*==========================================================================*/
-/**
- *  Set a bottom parameter.
- *  @param bottom [in] bottom parameter
- */
-/*==========================================================================*/
-void Camera::setBottom( const float bottom )
-{
-    m_bottom = bottom;
-}
-
-/*==========================================================================*/
-/**
- *  Set a top parameter.
- *  @param top [in] top parameter
- */
-/*==========================================================================*/
-void Camera::setTop( const float top )
-{
-    m_top = top;
-}
-
-/*==========================================================================*/
-/**
- *  Set a window size.
- *  @param width [in] window width
- *  @param height [in] window height
- */
-/*==========================================================================*/
-void Camera::setWindowSize( const size_t width, const size_t height )
-{
-    m_window_width  = width;
-    m_window_height = height;
-}
-
-/*==========================================================================*/
-/**
- *  Determine if this camera is perspective camera.
- *  @retval true  : persepctive camera
- *  @retval false : orthogonal camera
- */
-/*==========================================================================*/
-bool Camera::isPerspective() const
-{
-    return m_projection_type == Camera::Perspective;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the projection type of the camera.
- *  @return projection type
- */
-/*===========================================================================*/
-Camera::ProjectionType Camera::projectionType() const
-{
-    return m_projection_type;
-}
-
-/*==========================================================================*/
-/**
  *  Get the camera position.
  */
 /*==========================================================================*/
@@ -267,7 +159,7 @@ const kvs::Vec3 Camera::position() const
 /*==========================================================================*/
 const kvs::Vec3 Camera::upVector() const
 {
-    kvs::Matrix44f m = this->xform().toMatrix();
+    const kvs::Mat4 m = this->xform().toMatrix();
     return kvs::Vec3( m[0][1], m[1][1], m[2][1] ).normalized();
 }
 
@@ -287,7 +179,7 @@ const kvs::Vec3 Camera::lookAt() const
  *  @return projection matrix
  */
 /*===========================================================================*/
-const kvs::Matrix44f Camera::projectionMatrix() const
+const kvs::Mat4 Camera::projectionMatrix() const
 {
     const float aspect = static_cast<float>( m_window_width ) / m_window_height;
 
@@ -300,17 +192,17 @@ const kvs::Matrix44f Camera::projectionMatrix() const
         // Orthogonal camera mode
         if ( aspect >= 1.0f )
         {
-            return kvs::OrthogonalMatrix44<float>( 
-                m_left * aspect, 
-                m_right * aspect, 
-                m_bottom, m_top, 
+            return kvs::OrthogonalMatrix44<float>(
+                m_left * aspect,
+                m_right * aspect,
+                m_bottom, m_top,
                 m_front, m_back );
         }
         else
         {
-            return kvs::OrthogonalMatrix44<float>( 
+            return kvs::OrthogonalMatrix44<float>(
                 m_left, m_right, 
-                m_bottom / aspect, m_top / aspect, 
+                m_bottom / aspect, m_top / aspect,
                 m_front, m_back );
         }
     }
@@ -319,16 +211,16 @@ const kvs::Matrix44f Camera::projectionMatrix() const
         // Frustum camera mode
         if ( aspect >= 1.0f )
         {
-            return kvs::FrustumMatrix44<float>( 
-                m_left * aspect, m_right * aspect, 
-                m_bottom, m_top, 
+            return kvs::FrustumMatrix44<float>(
+                m_left * aspect, m_right * aspect,
+                m_bottom, m_top,
                 m_front, m_back );
         }
         else
         {
-            return kvs::FrustumMatrix44<float>( 
-                m_left, m_right, 
-                m_bottom / aspect, m_top / aspect, 
+            return kvs::FrustumMatrix44<float>(
+                m_left, m_right,
+                m_bottom / aspect, m_top / aspect,
                 m_front, m_back );
         }
     }
@@ -340,7 +232,7 @@ const kvs::Matrix44f Camera::projectionMatrix() const
  *  @return viewing matrix
  */
 /*===========================================================================*/
-const kvs::Matrix44f Camera::viewingMatrix() const
+const kvs::Mat4 Camera::viewingMatrix() const
 {
     return this->xform().inverse().toMatrix();
 }
@@ -354,103 +246,6 @@ const kvs::Matrix44f Camera::viewingMatrix() const
 const kvs::Vec2 Camera::lookAtInDevice() const
 {
     return kvs::Vec2( m_window_width / 2.0f, m_window_height / 2.0f );
-}
-
-/*==========================================================================*/
-/**
- *  Get a field of view (FOV) parameter.
- *  @return FOV parameter
- */
-/*==========================================================================*/
-float Camera::fieldOfView() const
-{
-    return m_field_of_view;
-}
-
-/*==========================================================================*/
-/**
- *  Get a back parameter.
- *  @return back parameter
- */
-/*==========================================================================*/
-float Camera::back() const
-{
-    return m_back;
-}
-
-/*==========================================================================*/
-/**
- *  Get a front parameter.
- *  @return front parameter
- */
-/*==========================================================================*/
-float Camera::front() const
-{
-    return m_front;
-}
-
-/*==========================================================================*/
-/**
- *  Get a left parameter.
- *  @return left parameter
- */
-/*==========================================================================*/
-float Camera::left() const
-{
-    return m_left;
-}
-
-/*==========================================================================*/
-/**
- *  Get a right parameter.
- *  @return right parameter
- */
-/*==========================================================================*/
-float Camera::right() const
-{
-    return m_right;
-}
-
-/*==========================================================================*/
-/**
- *  Get a bottom parameter.
- *  @return bottom parameter
- */
-/*==========================================================================*/
-float Camera::bottom() const
-{
-    return m_bottom;
-}
-
-/*==========================================================================*/
-/**
- *  Get a top parameter.
- *  @return top parameter
- */
-/*==========================================================================*/
-float Camera::top() const
-{
-    return m_top;
-}
-
-/*==========================================================================*/
-/**
- *  Get the window width.
- */
-/*==========================================================================*/
-size_t Camera::windowWidth() const
-{
-    return m_window_width;
-}
-
-/*==========================================================================*/
-/**
- *  Get the window height.
- */
-/*==========================================================================*/
-size_t Camera::windowHeight() const
-{
-    return m_window_height;
 }
 
 /*==========================================================================*/
@@ -523,6 +318,55 @@ kvs::ColorImage Camera::snapshot()
     kvs::ColorImage ret( width, height, buffer );
     ret.flip();
     return ret;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Resets the xform of the camera.
+ */
+/*===========================================================================*/
+void Camera::resetXform()
+{
+    kvs::XformControl::resetXform();
+    m_transform_center.set( 0, 0, 0 );
+}
+
+/*==========================================================================*/
+/**
+ *  Rotate the camera.
+ *  @param rot [in] rotation matrix.
+ */
+/*==========================================================================*/
+void Camera::rotate( const kvs::Mat3& rotation )
+{
+    const kvs::Vec3 t = m_transform_center;
+    const kvs::Xform x = kvs::Xform::Translation( t )
+                       * kvs::Xform::Rotation( rotation )
+                       * kvs::Xform::Translation( -t );
+    this->multiplyXform( x );
+}
+
+/*==========================================================================*/
+/**
+ *  Translate the camera.
+ *  @param translation [in] translation vector
+ */
+/*==========================================================================*/
+void Camera::translate( const kvs::Vec3& translation )
+{
+    this->multiplyXform( kvs::Xform::Translation( translation ) );
+    m_transform_center += translation;
+}
+
+/*==========================================================================*/
+/**
+ *  Scale the camera.
+ *  @param scaling [in] scaling vector
+ */
+/*==========================================================================*/
+void Camera::scale( const kvs::Vec3& scaling )
+{
+    this->multiplyXform( kvs::Xform::Scaling( scaling ) );
 }
 
 const kvs::Matrix44f Camera::modelViewMatrix() const
@@ -644,7 +488,7 @@ const kvs::Vec2 Camera::projectObjectToWindow( const kvs::Vec3& p_obj, float* de
     if ( depth ) *depth = ( 1.0f + p[2] ) * 0.5f;
 
     return kvs::Vec2( ( 1.0f + p[0] ) * m_window_width * 0.5f,
-                          ( 1.0f + p[1] ) * m_window_height * 0.5f );
+                      ( 1.0f + p[1] ) * m_window_height * 0.5f );
 }
 
 /*==========================================================================*/
@@ -776,55 +620,6 @@ const kvs::Vec3 Camera::projectObjectToWorld( const kvs::Vec3& p_obj ) const
 {
     const kvs::Xform modeling( this->xform().toMatrix() * this->modelViewMatrix() );
     return modeling.transform( p_obj );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Resets the xform of the camera.
- */
-/*===========================================================================*/
-void Camera::resetXform()
-{
-    kvs::XformControl::resetXform();
-    m_transform_center.set( 0, 0, 0 );
-}
-
-/*==========================================================================*/
-/**
- *  Rotate the camera.
- *  @param rot [in] rotation matrix.
- */
-/*==========================================================================*/
-void Camera::rotate( const kvs::Mat3& rotation )
-{
-    const kvs::Vec3 t = m_transform_center;
-    const kvs::Xform x = kvs::Xform::Translation( t )
-                       * kvs::Xform::Rotation( rotation )
-                       * kvs::Xform::Translation( -t );
-    this->multiplyXform( x );
-}
-
-/*==========================================================================*/
-/**
- *  Translate the camera.
- *  @param translation [in] translation vector
- */
-/*==========================================================================*/
-void Camera::translate( const kvs::Vec3& translation )
-{
-    this->multiplyXform( kvs::Xform::Translation( translation ) );
-    m_transform_center += translation;
-}
-
-/*==========================================================================*/
-/**
- *  Scale the camera.
- *  @param scaling [in] scaling vector
- */
-/*==========================================================================*/
-void Camera::scale( const kvs::Vec3& scaling )
-{
-    this->multiplyXform( kvs::Xform::Scaling( scaling ) );
 }
 
 } // end of namespace kvs
