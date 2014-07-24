@@ -108,9 +108,9 @@ public:
 public:
 
 //deprecated unused
-    const kvs::Matrix44f modelViewMatrix() const;
+    const kvs::Mat4 modelViewMatrix() const;
 //deprecated unused
-    const kvs::Matrix44f projectionModelViewMatrix() const;
+    const kvs::Mat4 projectionModelViewMatrix() const;
 //deprecated unused
     void getProjectionMatrix( float (*projection)[16] ) const;
 //deprecated unused
@@ -122,7 +122,6 @@ public:
         const float projection[16],
         const float modelview[16],
         float (*projection_modelview)[16] ) const;
-public:
     void getCombinedMatrix( float (*combined)[16] ) const;
 //deprecated unused
     void getCombinedMatrix(
@@ -136,23 +135,13 @@ public:
         float  p_obj_z,
         float* depth = NULL ) const;
 //deprecated used at ObjectBase.cpp and ObjectManager.cpp
-    const kvs::Vec2 projectObjectToWindow(
-        const kvs::Vec3& p_obj,
-        float*               depth = NULL ) const;
-
-public:
+    const kvs::Vec2 projectObjectToWindow( const kvs::Vec3& p_obj, float* depth = NULL ) const;
 //deprecated unused
-    const kvs::Vec3 projectWindowToObject(
-        const kvs::Vec2& p_win,
-        float                depth = 0.0 ) const;
+    const kvs::Vec3 projectWindowToObject( const kvs::Vec2& p_win, float depth = 0.0 ) const;
 //deprecated unused
-    const kvs::Vec3 projectWindowToCamera(
-        const kvs::Vec2& p_win,
-        float                depth = 0.0 ) const;
+    const kvs::Vec3 projectWindowToCamera( const kvs::Vec2& p_win, float depth = 0.0 ) const;
 //deprecated unused
-    const kvs::Vec3 projectWindowToWorld(
-        const kvs::Vec2& p_win,
-        float                depth = 0.0 ) const;
+    const kvs::Vec3 projectWindowToWorld( const kvs::Vec2& p_win, float depth = 0.0 ) const;
 //deprecated unused
     const kvs::Vec3 projectObjectToCamera( const kvs::Vec3& p_obj ) const;
 //deprecated unused

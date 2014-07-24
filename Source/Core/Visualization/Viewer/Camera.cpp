@@ -369,22 +369,22 @@ void Camera::scale( const kvs::Vec3& scaling )
     this->multiplyXform( kvs::Xform::Scaling( scaling ) );
 }
 
-const kvs::Matrix44f Camera::modelViewMatrix() const
+const kvs::Mat4 Camera::modelViewMatrix() const
 {
     float m[16];
     this->getModelViewMatrix( &m );
     return kvs::Xform::FromArray( m ).toMatrix();
 }
 
-const kvs::Matrix44f Camera::projectionModelViewMatrix() const
+const kvs::Mat4 Camera::projectionModelViewMatrix() const
 {
     return this->projectionMatrix() * this->modelViewMatrix();
 }
 
 void Camera::getProjectionModelViewMatrix( float (*projection_modelview)[16] ) const
 {
-    kvs::Matrix44f M = this->modelViewMatrix();
-    kvs::Matrix44f P = this->projectionMatrix();
+    kvs::Mat4 M = this->modelViewMatrix();
+    kvs::Mat4 P = this->projectionMatrix();
     kvs::Xform x( P * M );
     x.toArray( *projection_modelview );
 }
