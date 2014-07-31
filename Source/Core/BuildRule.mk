@@ -258,6 +258,7 @@ $(OUTDIR)/./Visualization/Importer/TableImporter.o \
 $(OUTDIR)/./Visualization/Importer/UnstructuredVolumeImporter.o \
 $(OUTDIR)/./Visualization/Mapper/Cell.o \
 $(OUTDIR)/./Visualization/Mapper/CellAdjacencyGraph.o \
+$(OUTDIR)/./Visualization/Mapper/CellBase.o \
 $(OUTDIR)/./Visualization/Mapper/CellByCellLayeredSampling.o \
 $(OUTDIR)/./Visualization/Mapper/CellByCellMetropolisSampling.o \
 $(OUTDIR)/./Visualization/Mapper/CellByCellRejectionSampling.o \

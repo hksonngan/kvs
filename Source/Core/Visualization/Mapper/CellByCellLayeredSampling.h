@@ -91,24 +91,24 @@ public:
 private:
 
     void mapping( const kvs::Camera* camera, const kvs::UnstructuredVolumeObject* volume );
-    template <typename T> void generate_particles( const kvs::UnstructuredVolumeObject* volume );
+    void generate_particles( const kvs::UnstructuredVolumeObject* volume );
     void pregenerate_particles( const size_t nparticles );
-    template <typename T> void uniform_sampling(
-        const kvs::TetrahedralCell<T>* cell,
+    void uniform_sampling(
+        const kvs::TetrahedralCell* cell,
         const kvs::TransferFunction& tfunc,
         const size_t nparticles,
         std::vector<kvs::Real32>* coords,
         std::vector<kvs::UInt8>* colors,
         std::vector<kvs::Real32>* normals );
-    template <typename T> void rejection_sampling(
-        const kvs::TetrahedralCell<T>* cell,
+    void rejection_sampling(
+        const kvs::TetrahedralCell* cell,
         const kvs::TransferFunction& tfunc,
         const size_t nparticles,
         std::vector<kvs::Real32>* coords,
         std::vector<kvs::UInt8>* colors,
         std::vector<kvs::Real32>* normals );
-    template <typename T> void roulette_selection(
-        const kvs::TetrahedralCell<T>* cell,
+    void roulette_selection(
+        const kvs::TetrahedralCell* cell,
         const kvs::TransferFunction& tfunc,
         const size_t nparticles,
         std::vector<kvs::Real32>* coords,
@@ -116,9 +116,9 @@ private:
         std::vector<kvs::Real32>* normals );
     float calculate_density( const float scalar );
     float calculate_maximum_density( const float scalar0, const float scalar1 );
-    template <typename T> size_t calculate_number_of_particles( const float density, const kvs::TetrahedralCell<T>* cell );
+    size_t calculate_number_of_particles( const float density, const kvs::TetrahedralCell* cell );
     size_t calculate_number_of_particles( const size_t nparticles_in_cell );
-    template <typename T> void calculate_particles_in_cell( const kvs::TetrahedralCell<T>* cell );
+    void calculate_particles_in_cell( const kvs::TetrahedralCell* cell );
 };
 
 } // end of namespace kvs

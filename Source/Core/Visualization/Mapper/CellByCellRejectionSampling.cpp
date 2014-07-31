@@ -302,20 +302,7 @@ void CellByCellRejectionSampling::mapping( const kvs::Camera* camera, const kvs:
         BaseClass::transferFunction().opacityMap() );
 
     // Generate the particles.
-    const std::type_info& type = volume->values().typeInfo()->type();
-    if (      type == typeid( kvs::Int8   ) ) this->generate_particles<kvs::Int8>( volume );
-    else if ( type == typeid( kvs::Int16  ) ) this->generate_particles<kvs::Int16>( volume );
-    else if ( type == typeid( kvs::Int32  ) ) this->generate_particles<kvs::Int32>( volume );
-    else if ( type == typeid( kvs::UInt8  ) ) this->generate_particles<kvs::UInt8>( volume );
-    else if ( type == typeid( kvs::UInt16 ) ) this->generate_particles<kvs::UInt16>( volume );
-    else if ( type == typeid( kvs::UInt32 ) ) this->generate_particles<kvs::UInt32>( volume );
-    else if ( type == typeid( kvs::Real32 ) ) this->generate_particles<kvs::Real32>( volume );
-    else if ( type == typeid( kvs::Real64 ) ) this->generate_particles<kvs::Real64>( volume );
-    else
-    {
-        BaseClass::setSuccess( false );
-        kvsMessageError("Unsupported data type '%s'.", volume->values().typeInfo()->typeName() );
-    }
+    this->generate_particles( volume );
 }
 
 /*===========================================================================*/
@@ -425,7 +412,6 @@ void CellByCellRejectionSampling::generate_particles( const kvs::StructuredVolum
  *  @param  volume [in] pointer to the input volume object
  */
 /*===========================================================================*/
-template <typename T>
 void CellByCellRejectionSampling::generate_particles( const kvs::UnstructuredVolumeObject* volume )
 {
     // Vertex data arrays. (output)
@@ -434,37 +420,37 @@ void CellByCellRejectionSampling::generate_particles( const kvs::UnstructuredVol
     std::vector<kvs::Real32> vertex_normals;
 
     // Set a tetrahedral cell interpolator.
-    kvs::CellBase<T>* cell = NULL;
+    kvs::CellBase* cell = NULL;
     switch ( volume->cellType() )
     {
     case kvs::UnstructuredVolumeObject::Tetrahedra:
     {
-        cell = new kvs::TetrahedralCell<T>( volume );
+        cell = new kvs::TetrahedralCell( volume );
         break;
     }
     case kvs::UnstructuredVolumeObject::QuadraticTetrahedra:
     {
-        cell = new kvs::QuadraticTetrahedralCell<T>( volume );
+        cell = new kvs::QuadraticTetrahedralCell( volume );
         break;
     }
     case kvs::UnstructuredVolumeObject::Hexahedra:
     {
-        cell = new kvs::HexahedralCell<T>( volume );
+        cell = new kvs::HexahedralCell( volume );
         break;
     }
     case kvs::UnstructuredVolumeObject::QuadraticHexahedra:
     {
-        cell = new kvs::QuadraticHexahedralCell<T>( volume );
+        cell = new kvs::QuadraticHexahedralCell( volume );
         break;
     }
     case kvs::UnstructuredVolumeObject::Pyramid:
     {
-        cell = new kvs::PyramidalCell<T>( volume );
+        cell = new kvs::PyramidalCell( volume );
         break;
     }
     case kvs::UnstructuredVolumeObject::Prism:
     {
-        cell = new kvs::PrismaticCell<T>( volume );
+        cell = new kvs::PrismaticCell( volume );
         break;
     }
     default:
@@ -490,9 +476,9 @@ void CellByCellRejectionSampling::generate_particles( const kvs::UnstructuredVol
         const float density = this->calculate_density( averaged_scalar );
         const size_t nparticles = this->calculate_number_of_particles( density, cell->volume() );
 
-        const T* S = cell->scalars();
-        T S_min = S[0];
-        T S_max = S[0];
+        const float* S = cell->scalars();
+        float S_min = S[0];
+        float S_max = S[0];
         for ( size_t i = 1; i < ncellnodes; i++ )
         {
             S_min = kvs::Math::Min( S_min, S[i] );

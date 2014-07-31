@@ -258,20 +258,7 @@ void CellByCellLayeredSampling::mapping( const kvs::Camera* camera, const kvs::U
         BaseClass::transferFunction().opacityMap() );
 
     // Generate the particles.
-    const std::type_info& type = volume->values().typeInfo()->type();
-    if (      type == typeid( kvs::Int8   ) ) this->generate_particles<kvs::Int8>( volume );
-    else if ( type == typeid( kvs::Int16  ) ) this->generate_particles<kvs::Int16>( volume );
-    else if ( type == typeid( kvs::Int32  ) ) this->generate_particles<kvs::Int32>( volume );
-    else if ( type == typeid( kvs::UInt8  ) ) this->generate_particles<kvs::UInt8>( volume );
-    else if ( type == typeid( kvs::UInt16 ) ) this->generate_particles<kvs::UInt16>( volume );
-    else if ( type == typeid( kvs::UInt32 ) ) this->generate_particles<kvs::UInt32>( volume );
-    else if ( type == typeid( kvs::Real32 ) ) this->generate_particles<kvs::Real32>( volume );
-    else if ( type == typeid( kvs::Real64 ) ) this->generate_particles<kvs::Real64>( volume );
-    else
-    {
-        BaseClass::setSuccess( false );
-        kvsMessageError("Unsupported data type '%s'.", volume->values().typeInfo()->typeName() );
-    }
+    this->generate_particles( volume );
 }
 
 /*===========================================================================*/
@@ -280,7 +267,6 @@ void CellByCellLayeredSampling::mapping( const kvs::Camera* camera, const kvs::U
  *  @param  volume [in] pointer to the input volume object
  */
 /*===========================================================================*/
-template <typename T>
 void CellByCellLayeredSampling::generate_particles( const kvs::UnstructuredVolumeObject* volume )
 {
     // Tiny value.
@@ -296,7 +282,7 @@ void CellByCellLayeredSampling::generate_particles( const kvs::UnstructuredVolum
     std::vector<kvs::Real32> vertex_normals;
 
     // Set a tetrahedral cell interpolator.
-    kvs::TetrahedralCell<T>* cell = new kvs::TetrahedralCell<T>( volume );
+    kvs::TetrahedralCell* cell = new kvs::TetrahedralCell( volume );
 
     // Generate particles for each cell.
     const size_t ncells = volume->numberOfCells();
@@ -305,9 +291,9 @@ void CellByCellLayeredSampling::generate_particles( const kvs::UnstructuredVolum
         // Bind the cell which is indicated by 'index'.
         cell->bindCell( index );
 
-        const T* S = cell->scalars();
-        const T S_min = kvs::Math::Min( S[0], S[1], S[2], S[3] );
-        const T S_max = kvs::Math::Max( S[0], S[1], S[2], S[3] );
+        const kvs::Real32* S = cell->scalars();
+        const kvs::Real32 S_min = kvs::Math::Min( S[0], S[1], S[2], S[3] );
+        const kvs::Real32 S_max = kvs::Math::Max( S[0], S[1], S[2], S[3] );
 
         // Uniform sampling.
         if ( kvs::Math::Equal( S[0], S[1] ) &&
@@ -318,7 +304,7 @@ void CellByCellLayeredSampling::generate_particles( const kvs::UnstructuredVolum
             const float density = this->calculate_density( scalar );
             const size_t nparticles = this->calculate_number_of_particles( density, cell );
 
-            this->uniform_sampling<T>(
+            this->uniform_sampling(
                 cell, BaseClass::transferFunction(), nparticles,
                 &vertex_coords, &vertex_colors, &vertex_normals );
         }
@@ -330,7 +316,7 @@ void CellByCellLayeredSampling::generate_particles( const kvs::UnstructuredVolum
             const float density = this->calculate_density( scalar );
             const size_t nparticles = this->calculate_number_of_particles( density, cell );
 
-            this->rejection_sampling<T>(
+            this->rejection_sampling(
                 cell, BaseClass::transferFunction(), nparticles,
                 &vertex_coords, &vertex_colors, &vertex_normals );
         }
@@ -356,7 +342,7 @@ void CellByCellLayeredSampling::generate_particles( const kvs::UnstructuredVolum
                     cell, BaseClass::transferFunction(), N_in,
                     &vertex_coords, &vertex_colors, &vertex_normals );
 
-                this->rejection_sampling<T>(
+                this->rejection_sampling(
                     cell, BaseClass::transferFunction(), N_tet - N_in,
                     &vertex_coords, &vertex_colors, &vertex_normals );
             }
@@ -475,9 +461,8 @@ void CellByCellLayeredSampling::pregenerate_particles( const size_t nparticles )
  *  @param  normals [out] pointer to the normal vector array
  */
 /*===========================================================================*/
-template <typename T>
 void CellByCellLayeredSampling::uniform_sampling(
-    const kvs::TetrahedralCell<T>* cell,
+    const kvs::TetrahedralCell* cell,
     const kvs::TransferFunction& tfunc,
     const size_t nparticles,
     std::vector<kvs::Real32>* coords,
@@ -522,16 +507,15 @@ void CellByCellLayeredSampling::uniform_sampling(
  *  @param  normals [out] pointer to the normal vector array
  */
 /*===========================================================================*/
-template <typename T>
 void CellByCellLayeredSampling::rejection_sampling(
-    const kvs::TetrahedralCell<T>* cell,
+    const kvs::TetrahedralCell* cell,
     const kvs::TransferFunction& tfunc,
     const size_t nparticles,
     std::vector<kvs::Real32>* coords,
     std::vector<kvs::UInt8>*  colors,
     std::vector<kvs::Real32>* normals )
 {
-    const T* S = cell->scalars();
+    const float* S = cell->scalars();
     const float S_min = static_cast<float>( kvs::Math::Min( S[0], S[1], S[2], S[3] ) );
     const float S_max = static_cast<float>( kvs::Math::Max( S[0], S[1], S[2], S[3] ) );
     const float p_max = this->calculate_maximum_density( S_min, S_max ) / nparticles;
@@ -582,9 +566,8 @@ void CellByCellLayeredSampling::rejection_sampling(
  *  @param  normals [out] pointer to the normal vector array
  */
 /*===========================================================================*/
-template <typename T>
 void CellByCellLayeredSampling::roulette_selection(
-    const kvs::TetrahedralCell<T>* cell,
+    const kvs::TetrahedralCell* cell,
     const kvs::TransferFunction& tfunc,
     const size_t nparticles,
     std::vector<kvs::Real32>* coords,
@@ -725,10 +708,9 @@ float CellByCellLayeredSampling::calculate_maximum_density( const float scalar0,
  *  @return number of particles
  */
 /*===========================================================================*/
-template <typename T>
 size_t CellByCellLayeredSampling::calculate_number_of_particles(
     const float density,
-    const kvs::TetrahedralCell<T>* cell )
+    const kvs::TetrahedralCell* cell )
 {
     const float volume_of_cell = cell->volume();
     const float N = density * volume_of_cell;
@@ -772,13 +754,12 @@ size_t CellByCellLayeredSampling::calculate_number_of_particles(
  *  @param  cell [in] pointer to cell
  */
 /*===========================================================================*/
-template <typename T>
 void CellByCellLayeredSampling::calculate_particles_in_cell(
-    const kvs::TetrahedralCell<T>* cell )
+    const kvs::TetrahedralCell* cell )
 {
-    const T* S = cell->scalars();
-    const T S_min = kvs::Math::Min( S[0], S[1], S[2], S[3] );
-    const T S_max = kvs::Math::Max( S[0], S[1], S[2], S[3] );
+    const float* S = cell->scalars();
+    const float S_min = kvs::Math::Min( S[0], S[1], S[2], S[3] );
+    const float S_max = kvs::Math::Max( S[0], S[1], S[2], S[3] );
 
     const float min_value = BaseClass::transferFunction().colorMap().minValue();
     const float max_value = BaseClass::transferFunction().colorMap().maxValue();

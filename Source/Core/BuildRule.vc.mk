@@ -258,6 +258,7 @@ $(OUTDIR)\.\Visualization\Importer\TableImporter.obj \
 $(OUTDIR)\.\Visualization\Importer\UnstructuredVolumeImporter.obj \
 $(OUTDIR)\.\Visualization\Mapper\Cell.obj \
 $(OUTDIR)\.\Visualization\Mapper\CellAdjacencyGraph.obj \
+$(OUTDIR)\.\Visualization\Mapper\CellBase.obj \
 $(OUTDIR)\.\Visualization\Mapper\CellByCellLayeredSampling.obj \
 $(OUTDIR)\.\Visualization\Mapper\CellByCellMetropolisSampling.obj \
 $(OUTDIR)\.\Visualization\Mapper\CellByCellRejectionSampling.obj \

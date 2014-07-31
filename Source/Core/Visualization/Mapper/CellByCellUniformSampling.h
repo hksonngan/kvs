@@ -81,7 +81,7 @@ private:
     void mapping( const kvs::Camera* camera, const kvs::StructuredVolumeObject* volume );
     void mapping( const kvs::Camera* camera, const kvs::UnstructuredVolumeObject* volume );
     template <typename T> void generate_particles( const kvs::StructuredVolumeObject* volume );
-    template <typename T> void generate_particles( const kvs::UnstructuredVolumeObject* volume );
+    void generate_particles( const kvs::UnstructuredVolumeObject* volume );
 };
 
 } // end of namespace kvs

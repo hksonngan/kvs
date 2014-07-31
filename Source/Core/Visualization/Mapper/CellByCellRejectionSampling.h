@@ -82,7 +82,7 @@ private:
     void mapping( const kvs::Camera* camera, const kvs::StructuredVolumeObject* volume );
     void mapping( const kvs::Camera* camera, const kvs::UnstructuredVolumeObject* volume );
     template <typename T> void generate_particles( const kvs::StructuredVolumeObject* volume );
-    template <typename T> void generate_particles( const kvs::UnstructuredVolumeObject* volume );
+    void generate_particles( const kvs::UnstructuredVolumeObject* volume );
     float calculate_density( const float scalar );
     size_t calculate_number_of_particles( const float density, const float volume_of_cell );
     float calculate_maximum_density( const float scalar0, const float scalar1 );

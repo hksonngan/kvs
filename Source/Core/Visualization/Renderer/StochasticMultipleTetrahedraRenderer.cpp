@@ -101,12 +101,14 @@ kvs::ValueArray<kvs::Real32> NormalizedValues( const kvs::UnstructuredVolumeObje
  *  @param  volume [in] pointer to the volume object
  */
 /*===========================================================================*/
-template <typename T>
-kvs::ValueArray<kvs::Real32> VertexNormalsForType( const kvs::UnstructuredVolumeObject* volume )
+kvs::ValueArray<kvs::Real32> VertexNormals( const kvs::UnstructuredVolumeObject* volume )
 {
+    KVS_ASSERT( volume->values().typeID() == kvs::Type::TypeReal32 ||
+                volume->values().typeID() == kvs::Type::TypeReal64 );
+
     const size_t nnodes = volume->numberOfNodes();
     const size_t ncells = volume->numberOfCells();
-    kvs::TetrahedralCell<T> cell( volume );
+    kvs::TetrahedralCell cell( volume );
     kvs::ValueArray<kvs::Int32> counter( nnodes );
     kvs::ValueArray<kvs::Real32> normals( nnodes * 3 );
     counter.fill(0);
@@ -153,25 +155,6 @@ kvs::ValueArray<kvs::Real32> VertexNormalsForType( const kvs::UnstructuredVolume
     }
 
     return normals;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns normal vector array for type of value array of the input volume.
- *  @param  volume [in] pointer to the volume object
- */
-/*===========================================================================*/
-kvs::ValueArray<kvs::Real32> VertexNormals( const kvs::UnstructuredVolumeObject* volume )
-{
-    switch ( volume->values().typeID() )
-    {
-    case kvs::Type::TypeReal32: return VertexNormalsForType<kvs::Real32>( volume );
-    case kvs::Type::TypeReal64: return VertexNormalsForType<kvs::Real64>( volume );
-    default: break;
-    }
-
-    kvsMessageError("Not supported data type.");
-    return kvs::ValueArray<kvs::Real32>();
 }
 
 }

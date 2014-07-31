@@ -304,65 +304,7 @@ void CellByCellMetropolisSampling::mapping( const kvs::Camera* camera, const kvs
         BaseClass::transferFunction().opacityMap() );
 
     // Generate the particles.
-//    if ( !volume->hasMinMaxValues() ) volume->updateMinMaxValues();
-//    const float min_value = static_cast<float>( volume->minValue() );
-//    const float max_value = static_cast<float>( volume->maxValue() );
-    const std::type_info& type = volume->values().typeInfo()->type();
-    if (      type == typeid( kvs::Int8   ) )
-    {
-//        if ( !m_transfer_function.hasRange() ) BaseClass::m_transfer_function.setRange( -128, 127 );
-        this->generate_particles<kvs::Int8>( volume );
-    }
-    else if ( type == typeid( kvs::Int16  ) )
-    {
-//        if ( !m_transfer_function.hasRange() ) BaseClass::m_transfer_function.setRange( min_value, max_value );
-        this->generate_particles<kvs::Int16>( volume );
-    }
-    else if ( type == typeid( kvs::Int32  ) )
-    {
-//        if ( !m_transfer_function.hasRange() ) BaseClass::m_transfer_function.setRange( min_value, max_value );
-        this->generate_particles<kvs::Int32>( volume );
-    }
-    else if ( type == typeid( kvs::Int64  ) )
-    {
-//        if ( !m_transfer_function.hasRange() ) BaseClass::m_transfer_function.setRange( min_value, max_value );
-        this->generate_particles<kvs::Int64>( volume );
-    }
-    else if ( type == typeid( kvs::UInt8  ) )
-    {
-//        if ( !m_transfer_function.hasRange() ) BaseClass::m_transfer_function.setRange( 0, 255 );
-        this->generate_particles<kvs::UInt8>( volume );
-    }
-    else if ( type == typeid( kvs::UInt16 ) )
-    {
-//        if ( !m_transfer_function.hasRange() ) BaseClass::m_transfer_function.setRange( min_value, max_value );
-        this->generate_particles<kvs::UInt16>( volume );
-    }
-    else if ( type == typeid( kvs::UInt32 ) )
-    {
-//        if ( !m_transfer_function.hasRange() ) BaseClass::m_transfer_function.setRange( min_value, max_value );
-        this->generate_particles<kvs::UInt32>( volume );
-    }
-    else if ( type == typeid( kvs::UInt64 ) )
-    {
-//        if ( !m_transfer_function.hasRange() ) BaseClass::m_transfer_function.setRange( min_value, max_value );
-        this->generate_particles<kvs::UInt64>( volume );
-    }
-    else if ( type == typeid( kvs::Real32 ) )
-    {
-//        if ( !m_transfer_function.hasRange() ) BaseClass::m_transfer_function.setRange( min_value, max_value );
-        this->generate_particles<kvs::Real32>( volume );
-    }
-    else if ( type == typeid( kvs::Real64 ) )
-    {
-//        if ( !m_transfer_function.hasRange() ) BaseClass::m_transfer_function.setRange( min_value, max_value );
-        this->generate_particles<kvs::Real64>( volume );
-    }
-    else
-    {
-        BaseClass::setSuccess( false );
-        kvsMessageError("Unsupported data type '%s'.", volume->values().typeInfo()->typeName() );
-    }
+    this->generate_particles( volume );
 }
 
 /*===========================================================================*/
@@ -383,8 +325,6 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::StructuredVolu
     kvs::TrilinearInterpolator interpolator( volume );
 
     // Set parameters for normalization of the node values.
-//    const float min_value = ( typeid(T) == typeid( kvs::UInt8 ) ) ? 0.0f : static_cast<float>( volume->minValue() );
-//    const float max_value = ( typeid(T) == typeid( kvs::UInt8 ) ) ? 255.0f : static_cast<float>( volume->maxValue() );
     const float min_value = BaseClass::transferFunction().colorMap().minValue();
     const float max_value = BaseClass::transferFunction().colorMap().maxValue();
     const size_t max_range = BaseClass::transferFunction().resolution() - 1;
@@ -438,7 +378,6 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::StructuredVolu
                 degree_trial = kvs::Math::Clamp<size_t>( degree_trial, 0, max_range );
                 float density_trial = density_map[ degree_trial ];
 
-//                while( kvs::Math::IsZero( density ) )
                 const size_t max_loop = nparticles_in_cell * 10;
                 for ( size_t i = 0; i < max_loop; i++ )
                 {
@@ -573,7 +512,6 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::StructuredVolu
  *  @param  volume [in] pointer to the input volume object
  */
 /*===========================================================================*/
-template <typename T>
 void CellByCellMetropolisSampling::generate_particles( const kvs::UnstructuredVolumeObject* volume )
 {
     // Vertex data arrays. (output)
@@ -582,37 +520,37 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::UnstructuredVo
     std::vector<kvs::Real32> vertex_normals;
 
     // Set a tetrahedral cell interpolator.
-    kvs::CellBase<T>* cell = NULL;
+    kvs::CellBase* cell = NULL;
     switch ( volume->cellType() )
     {
     case kvs::UnstructuredVolumeObject::Tetrahedra:
     {
-        cell = new kvs::TetrahedralCell<T>( volume );
+        cell = new kvs::TetrahedralCell( volume );
         break;
     }
     case kvs::UnstructuredVolumeObject::QuadraticTetrahedra:
     {
-        cell = new kvs::QuadraticTetrahedralCell<T>( volume );
+        cell = new kvs::QuadraticTetrahedralCell( volume );
         break;
     }
     case kvs::UnstructuredVolumeObject::Hexahedra:
     {
-        cell = new kvs::HexahedralCell<T>( volume );
+        cell = new kvs::HexahedralCell( volume );
         break;
     }
     case kvs::UnstructuredVolumeObject::QuadraticHexahedra:
     {
-        cell = new kvs::QuadraticHexahedralCell<T>( volume );
+        cell = new kvs::QuadraticHexahedralCell( volume );
         break;
     }
     case kvs::UnstructuredVolumeObject::Pyramid:
     {
-        cell = new kvs::PyramidalCell<T>( volume );
+        cell = new kvs::PyramidalCell( volume );
         break;
     }
     case kvs::UnstructuredVolumeObject::Prism:
     {
-        cell = new kvs::PrismaticCell<T>( volume );
+        cell = new kvs::PrismaticCell( volume );
         break;
     }
     default:
@@ -668,7 +606,6 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::UnstructuredVo
         float         density_trial;
         kvs::Vector3f g_trial;
 
-//        while( kvs::Math::IsZero( density ) )
         const size_t max_loop = nparticles_in_cell * 10;
         for ( size_t i = 0; i < max_loop; i++ )
         {
@@ -683,7 +620,7 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::UnstructuredVo
         //Generate N particles
         size_t nduplications = 0; // number of duplications
         size_t counter = 0;
-        while( counter < nparticles_in_cell )
+        while ( counter < nparticles_in_cell )
         {
             //set trial position and density
             point_trial = cell->randomSampling();
@@ -696,7 +633,7 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::UnstructuredVo
             //calculate ratio
             double ratio = density_trial / density;
 
-            if( ratio >= 1.0 ) // accept trial point
+            if ( ratio >= 1.0 ) // accept trial point
             {
                 // calculate color
                 const kvs::RGBColor color( color_map.at( scalar_trial ) );
@@ -726,7 +663,7 @@ void CellByCellMetropolisSampling::generate_particles( const kvs::UnstructuredVo
             }
             else
             {
-                if( ratio >= Generator::GetRandomNumber() ) // accept point trial
+                if ( ratio >= Generator::GetRandomNumber() ) // accept point trial
                 {
                     // calculate color
                     const kvs::RGBColor color( color_map.at( scalar_trial ) );
