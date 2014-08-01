@@ -66,7 +66,7 @@ public:
     bool bigEndian() const;
     const std::string& filename() const;
     const kvs::ValueArray<kvs::Real32>& values() const;
-    const kvs::ValueArray<kvs::Real32> values( const size_t vindex, const kvs::Vector3ui& dim ) const;
+    const kvs::ValueArray<kvs::Real32> values( const size_t vindex, const kvs::Vec3ui& dim ) const;
     bool load() const;
     void free() const;
 };
