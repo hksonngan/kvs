@@ -45,8 +45,8 @@ private:
 
 public:
 
-    RendererBase();
-    virtual ~RendererBase();
+    RendererBase(): m_name( "unknown" ), m_enable_shading( true ) {}
+    virtual ~RendererBase() {}
 
     void setName( const std::string& name ) { m_name = name; }
     void setEnabledShading( const bool enable ) { m_enable_shading = enable; }
@@ -55,13 +55,12 @@ public:
     bool isEnabledShading() const { return m_enable_shading; }
     void enableShading() const { m_enable_shading = true; }
     void disableShading() const { m_enable_shading = false; }
-
     virtual void exec( kvs::ObjectBase* object, kvs::Camera* camera = NULL, kvs::Light* light  = NULL ) = 0;
 
 protected:
 
-    void startTimer();
-    void stopTimer();
+    void startTimer() { m_timer.start(); }
+    void stopTimer() { m_timer.stop(); }
 
 protected:
 

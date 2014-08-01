@@ -240,16 +240,13 @@ $(OUTDIR)/./Visualization/Exporter/PointExporter.o \
 $(OUTDIR)/./Visualization/Exporter/PolygonExporter.o \
 $(OUTDIR)/./Visualization/Exporter/StructuredVolumeExporter.o \
 $(OUTDIR)/./Visualization/Exporter/UnstructuredVolumeExporter.o \
-$(OUTDIR)/./Visualization/Filter/FilterBase.o \
 $(OUTDIR)/./Visualization/Filter/KMeansClustering.o \
 $(OUTDIR)/./Visualization/Filter/LineIntegralConvolution.o \
 $(OUTDIR)/./Visualization/Filter/StructuredVectorToScalar.o \
 $(OUTDIR)/./Visualization/Filter/TetrahedraToTetrahedra.o \
-$(OUTDIR)/./Visualization/Filter/TrilinearInterpolator.o \
 $(OUTDIR)/./Visualization/Filter/Tubeline.o \
 $(OUTDIR)/./Visualization/Filter/UnstructuredVectorToScalar.o \
 $(OUTDIR)/./Visualization/Importer/ImageImporter.o \
-$(OUTDIR)/./Visualization/Importer/ImporterBase.o \
 $(OUTDIR)/./Visualization/Importer/LineImporter.o \
 $(OUTDIR)/./Visualization/Importer/PointImporter.o \
 $(OUTDIR)/./Visualization/Importer/PolygonImporter.o \
@@ -331,7 +328,6 @@ $(OUTDIR)/./Visualization/Renderer/ProjectedTetrahedraTable.o \
 $(OUTDIR)/./Visualization/Renderer/Ray.o \
 $(OUTDIR)/./Visualization/Renderer/RayCastingRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/RayCastingRendererGLSL.o \
-$(OUTDIR)/./Visualization/Renderer/RendererBase.o \
 $(OUTDIR)/./Visualization/Renderer/ScatterPlotMatrixRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/ScatterPlotRenderer.o \
 $(OUTDIR)/./Visualization/Renderer/Shader.o \

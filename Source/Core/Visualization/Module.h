@@ -16,6 +16,7 @@
 #define KVS__MODULE_H_INCLUDE
 
 #include <cstring>
+#include <kvs/SharedPointer>
 
 #define KVS_MODULE_OBJECT kvs::ObjectBase::ModuleTag
 #define KVS_MODULE_IMPORTER kvs::ImporterBase::ModuleTag
@@ -28,12 +29,25 @@
     public:                                                             \
     struct  ModuleTag{};                                                \
     typedef ModuleTag ModuleCategory;                                   \
+    typedef kvs::SharedPointer<this_class > Pointer;                    \
     virtual const char* moduleName() const { return #this_class; }
 
 #define kvsModule( this_class, category )                               \
     public:                                                             \
     typedef kvs:: category##Base::ModuleTag ModuleCategory;             \
+    typedef kvs::SharedPointer<this_class > Pointer;                    \
     virtual const char* moduleName() const { return #this_class; }      \
+    static Pointer DownCast( kvs:: category##Base::Pointer& m )         \
+    {                                                                   \
+        typedef this_class T;                                           \
+        typedef kvs:: category##Base U;                                 \
+        return kvs::dynamic_pointer_cast<T,U>( m );                     \
+    };                                                                  \
+    static const Pointer DownCast( const kvs:: category##Base::Pointer& m ) \
+    {                                                                   \
+        typedef kvs:: category##Base U;                                 \
+        return DownCast( kvs::const_pointer_cast<U,U>( m ) );           \
+    };                                                                  \
     static this_class* DownCast( kvs:: category##Base* m )              \
     {                                                                   \
         return dynamic_cast<this_class *>( m );                         \
