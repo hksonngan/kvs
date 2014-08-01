@@ -34,20 +34,19 @@ private:
 
 public:
 
-    FileFormatBase();
-    virtual ~FileFormatBase();
+    FileFormatBase(): m_filename(""), m_is_success( false ) {}
+    virtual ~FileFormatBase() {}
 
-    const std::string& filename() const;
-    bool isSuccess() const;
-    bool isFailure() const;
-
+    const std::string& filename() const { return m_filename; }
+    bool isSuccess() const { return m_is_success; }
+    bool isFailure() const { return !m_is_success; }
     virtual bool read( const std::string& filename ) = 0;
     virtual bool write( const std::string& filename ) = 0;
 
 protected:
 
-    void setFilename( const std::string& filename );
-    void setSuccess( const bool success );
+    void setFilename( const std::string& filename ) { m_filename = filename; }
+    void setSuccess( const bool success ) { m_is_success = success; }
 };
 
 } // end of namespace kvs

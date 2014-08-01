@@ -18,7 +18,6 @@ $(OUTDIR)/./FileFormat/DICOM/Tag.o \
 $(OUTDIR)/./FileFormat/DICOM/VR.o \
 $(OUTDIR)/./FileFormat/DICOM/Value.o \
 $(OUTDIR)/./FileFormat/DICOM/Window.o \
-$(OUTDIR)/./FileFormat/FileFormatBase.o \
 $(OUTDIR)/./FileFormat/FrontFlow/BoundaryData.o \
 $(OUTDIR)/./FileFormat/FrontFlow/Data.o \
 $(OUTDIR)/./FileFormat/FrontFlow/DataSet.o \
@@ -495,10 +494,6 @@ $(OUTDIR)/./FileFormat/AVSUCD/%.o: ./FileFormat/AVSUCD/%.cpp ./FileFormat/AVSUCD
 
 $(OUTDIR)/./FileFormat/AVSField/%.o: ./FileFormat/AVSField/%.cpp ./FileFormat/AVSField/%.h
 	$(MKDIR) $(OUTDIR)/./FileFormat/AVSField
-	$(CPP) -c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) -o $@ $<
-
-$(OUTDIR)/./FileFormat/%.o: ./FileFormat/%.cpp ./FileFormat/%.h
-	$(MKDIR) $(OUTDIR)/./FileFormat
 	$(CPP) -c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) -o $@ $<
 
 

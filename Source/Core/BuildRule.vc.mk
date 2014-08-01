@@ -18,7 +18,6 @@ $(OUTDIR)\.\FileFormat\DICOM\Tag.obj \
 $(OUTDIR)\.\FileFormat\DICOM\VR.obj \
 $(OUTDIR)\.\FileFormat\DICOM\Value.obj \
 $(OUTDIR)\.\FileFormat\DICOM\Window.obj \
-$(OUTDIR)\.\FileFormat\FileFormatBase.obj \
 $(OUTDIR)\.\FileFormat\FrontFlow\BoundaryData.obj \
 $(OUTDIR)\.\FileFormat\FrontFlow\Data.obj \
 $(OUTDIR)\.\FileFormat\FrontFlow\DataSet.obj \
@@ -558,12 +557,6 @@ $<
 {.\FileFormat\AVSField\}.cpp{$(OUTDIR)\.\FileFormat\AVSField\}.obj::
 	IF NOT EXIST $(OUTDIR)\.\FileFormat\AVSField $(MKDIR) $(OUTDIR)\.\FileFormat\AVSField
 	$(CPP) /c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) /Fo$(OUTDIR)\.\FileFormat\AVSField\ @<<
-$<
-<<
-
-{.\FileFormat\}.cpp{$(OUTDIR)\.\FileFormat\}.obj::
-	IF NOT EXIST $(OUTDIR)\.\FileFormat $(MKDIR) $(OUTDIR)\.\FileFormat
-	$(CPP) /c $(CPPFLAGS) $(DEFINITIONS) $(INCLUDE_PATH) /Fo$(OUTDIR)\.\FileFormat\ @<<
 $<
 <<
 
