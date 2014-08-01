@@ -15,6 +15,7 @@
 #ifndef KVS__EXPORTER_BASE_H_INCLUDE
 #define KVS__EXPORTER_BASE_H_INCLUDE
 
+#include <kvs/FileFormatBase>
 #include <kvs/Module>
 
 
@@ -26,8 +27,7 @@ namespace kvs
  *  @brief  Exporter base class.
  */
 /*===========================================================================*/
-template <typename FileFormatType>
-class ExporterBase : public FileFormatType
+class ExporterBase
 {
     kvsModuleBase( kvs::ExporterBase );
 
@@ -40,10 +40,9 @@ public:
     ExporterBase() {}
     virtual ~ExporterBase() {}
 
-    virtual FileFormatType* exec( const kvs::ObjectBase* object ) = 0;
-
     bool isSuccess() const { return m_is_success; }
     bool isFailure() const { return !m_is_success; }
+    virtual kvs::FileFormatBase* exec( const kvs::ObjectBase* object ) = 0;
 
 protected:
 

@@ -29,42 +29,14 @@ namespace kvs
  */
 /*===========================================================================*/
 template <typename FileFormatType>
-class PointExporter : public kvs::ExporterBase<FileFormatType>
+class PointExporter : public kvs::ExporterBase, public FileFormatType
 {
-//    kvsModule( kvs::PointExporter, Exporter );
-    kvsModuleBaseClass( kvs::ExporterBase<FileFormatType> );
+    kvsModule( kvs::PointExporter<FileFormatType>, Exporter );
+    kvsModuleBaseClass( kvs::ExporterBase );
 
 public:
-
-    PointExporter( const kvs::PointObject* object );
-
-    FileFormatType* exec( const kvs::ObjectBase* object );
+    FileFormatType* exec( const kvs::ObjectBase* ) { return NULL; }
 };
-
-/*===========================================================================*/
-/**
- *  @brief  Constructs a new PointExporter class.
- *  @param  object [in] pointer to a point object
- */
-/*===========================================================================*/
-template <typename FileFormatType>
-PointExporter<FileFormatType>::PointExporter( const kvs::PointObject* object )
-{
-    this->exec( object );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Executes the export process.
- *  @param  base [in] pointer to a object
- */
-/*===========================================================================*/
-template <typename FileFormatType>
-FileFormatType* PointExporter<FileFormatType>::exec( const kvs::ObjectBase* object )
-{
-    // This method will be specialized for each file format.
-    return NULL;
-}
 
 /*===========================================================================*/
 /**
@@ -72,12 +44,12 @@ FileFormatType* PointExporter<FileFormatType>::exec( const kvs::ObjectBase* obje
  */
 /*===========================================================================*/
 template <>
-class PointExporter<kvs::KVSMLObjectPoint> : public kvs::ExporterBase<kvs::KVSMLObjectPoint>
+class PointExporter<kvs::KVSMLObjectPoint> :
+        public kvs::ExporterBase,
+        public kvs::KVSMLObjectPoint
 {
 public:
-
     PointExporter( const kvs::PointObject* object );
-
     kvs::KVSMLObjectPoint* exec( const kvs::ObjectBase* object );
 };
 

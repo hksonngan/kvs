@@ -31,42 +31,14 @@ namespace kvs
  */
 /*===========================================================================*/
 template <typename FileFormatType>
-class PolygonExporter : public kvs::ExporterBase<FileFormatType>
+class PolygonExporter : public kvs::ExporterBase, public FileFormatType
 {
-//    kvsModule( kvs::PolygonExporter, Exporter );
-    kvsModuleBaseClass( kvs::ExporterBase<FileFormatType> );
+    kvsModule( kvs::PolygonExporter<FileFormatType>, Exporter );
+    kvsModuleBaseClass( kvs::ExporterBase );
 
 public:
-
-    PolygonExporter( const kvs::PolygonObject* object );
-
-    FileFormatType* exec( const kvs::ObjectBase* object );
+    FileFormatType* exec( const kvs::ObjectBase* ) { return NULL; }
 };
-
-/*===========================================================================*/
-/**
- *  @brief  Constructs a new PolygonExporter class.
- *  @param  object [in] pointer to a polygon object
- */
-/*===========================================================================*/
-template <typename FileFormatType>
-PolygonExporter<FileFormatType>::PolygonExporter( const kvs::PolygonObject* object )
-{
-    this->exec( object );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Executes the export process.
- *  @param  base [in] pointer to a object
- */
-/*===========================================================================*/
-template <typename FileFormatType>
-FileFormatType* PolygonExporter<FileFormatType>::exec( const kvs::ObjectBase* object )
-{
-    // This method will be specialized for each file format.
-    return NULL;
-}
 
 /*===========================================================================*/
 /**
@@ -74,12 +46,12 @@ FileFormatType* PolygonExporter<FileFormatType>::exec( const kvs::ObjectBase* ob
  */
 /*===========================================================================*/
 template <>
-class PolygonExporter<kvs::KVSMLObjectPolygon> : public kvs::ExporterBase<kvs::KVSMLObjectPolygon>
+class PolygonExporter<kvs::KVSMLObjectPolygon> :
+        public kvs::ExporterBase,
+        public kvs::KVSMLObjectPolygon
 {
 public:
-
     PolygonExporter( const kvs::PolygonObject* object );
-
     kvs::KVSMLObjectPolygon* exec( const kvs::ObjectBase* object );
 };
 
@@ -89,12 +61,12 @@ public:
  */
 /*===========================================================================*/
 template <>
-class PolygonExporter<kvs::Stl> : public kvs::ExporterBase<kvs::Stl>
+class PolygonExporter<kvs::Stl> :
+        public kvs::ExporterBase,
+        public kvs::Stl
 {
 public:
-
     PolygonExporter( const kvs::PolygonObject* object );
-
     kvs::Stl* exec( const kvs::ObjectBase* object );
 };
 
@@ -104,12 +76,12 @@ public:
  */
 /*===========================================================================*/
 template <>
-class PolygonExporter<kvs::Ply> : public kvs::ExporterBase<kvs::Ply>
+class PolygonExporter<kvs::Ply> :
+        public kvs::ExporterBase,
+        public kvs::Ply
 {
 public:
-
     PolygonExporter( const kvs::PolygonObject* object );
-
     kvs::Ply* exec( const kvs::ObjectBase* object );
 };
 

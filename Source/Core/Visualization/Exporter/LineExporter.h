@@ -29,42 +29,14 @@ namespace kvs
  */
 /*===========================================================================*/
 template <typename FileFormatType>
-class LineExporter : public kvs::ExporterBase<FileFormatType>
+class LineExporter : public kvs::ExporterBase, public FileFormatType
 {
-//    kvsModule( kvs::LineExporter, Exporter );
-    kvsModuleBaseClass( kvs::ExporterBase<FileFormatType> );
+    kvsModule( kvs::LineExporter<FileFormatType>, Exporter );
+    kvsModuleBaseClass( kvs::ExporterBase );
 
 public:
-
-    LineExporter( const kvs::LineObject* object );
-
-    FileFormatType* exec( const kvs::ObjectBase* object );
+    FileFormatType* exec( const kvs::ObjectBase* ) { return NULL; }
 };
-
-/*===========================================================================*/
-/**
- *  @brief  Constructs a new LineExporter class.
- *  @param  object [in] pointer to a line object
- */
-/*===========================================================================*/
-template <typename FileFormatType>
-LineExporter<FileFormatType>::LineExporter( const kvs::LineObject* object )
-{
-    this->exec( object );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Executes the export process.
- *  @param  base [in] pointer to a object
- */
-/*===========================================================================*/
-template <typename FileFormatType>
-FileFormatType* LineExporter<FileFormatType>::exec( const kvs::ObjectBase* base )
-{
-    // This method will be specialized for each file format.
-    return NULL;
-}
 
 /*===========================================================================*/
 /**
@@ -72,12 +44,12 @@ FileFormatType* LineExporter<FileFormatType>::exec( const kvs::ObjectBase* base 
  */
 /*===========================================================================*/
 template <>
-class LineExporter<kvs::KVSMLObjectLine> : public kvs::ExporterBase<kvs::KVSMLObjectLine>
+class LineExporter<kvs::KVSMLObjectLine> :
+        public kvs::ExporterBase,
+        public kvs::KVSMLObjectLine
 {
 public:
-
     LineExporter( const kvs::LineObject* object );
-
     kvs::KVSMLObjectLine* exec( const kvs::ObjectBase* object );
 };
 

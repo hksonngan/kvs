@@ -31,42 +31,14 @@ namespace kvs
  */
 /*===========================================================================*/
 template <typename FileFormatType>
-class UnstructuredVolumeExporter : public kvs::ExporterBase<FileFormatType>
+class UnstructuredVolumeExporter : public kvs::ExporterBase, public FileFormatType
 {
-//    kvsModule( kvs::UnstructuredVolumeExporter, Exporter );
-    kvsModuleBaseClass( kvs::ExporterBase<FileFormatType> );
+    kvsModule( kvs::UnstructuredVolumeExporter<FileFormatType>, Exporter );
+    kvsModuleBaseClass( kvs::ExporterBase );
 
 public:
-
-    UnstructuredVolumeExporter( const kvs::UnstructuredVolumeObject* object );
-
-    FileFormatType* exec( const kvs::ObjectBase* object );
+    FileFormatType* exec( const kvs::ObjectBase* ) { return NULL; }
 };
-
-/*===========================================================================*/
-/**
- *  @brief  Constructs a FileFormat data from given unstructured volume object.
- *  @param  object [in] pointer to the unstructured volume object
- */
-/*===========================================================================*/
-template <typename FileFormatType>
-UnstructuredVolumeExporter<FileFormatType>::UnstructuredVolumeExporter(
-    const kvs::UnstructuredVolumeObject* object )
-{
-    this->exec( object );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Exports to a spcified FileFormat data.
- *  @param  object [in] pointer to the unstructured volume object
- */
-/*===========================================================================*/
-template <typename FileFormatType>
-FileFormatType* UnstructuredVolumeExporter<FileFormatType>::exec( const kvs::ObjectBase* object )
-{
-    return NULL;
-}
 
 /*===========================================================================*/
 /**
@@ -75,12 +47,11 @@ FileFormatType* UnstructuredVolumeExporter<FileFormatType>::exec( const kvs::Obj
 /*===========================================================================*/
 template <>
 class UnstructuredVolumeExporter<kvs::KVSMLObjectUnstructuredVolume> :
-        public kvs::ExporterBase<kvs::KVSMLObjectUnstructuredVolume>
+        public kvs::ExporterBase,
+        public kvs::KVSMLObjectUnstructuredVolume
 {
 public:
-
     UnstructuredVolumeExporter( const kvs::UnstructuredVolumeObject* object );
-
     kvs::KVSMLObjectUnstructuredVolume* exec( const kvs::ObjectBase* object );
 };
 
@@ -91,12 +62,11 @@ public:
 /*===========================================================================*/
 template <>
 class UnstructuredVolumeExporter<kvs::AVSUcd> :
-        public kvs::ExporterBase<kvs::AVSUcd>
+        public kvs::ExporterBase,
+        public kvs::AVSUcd
 {
 public:
-
     UnstructuredVolumeExporter( const kvs::UnstructuredVolumeObject* object );
-
     kvs::AVSUcd* exec( const kvs::ObjectBase* object );
 };
 

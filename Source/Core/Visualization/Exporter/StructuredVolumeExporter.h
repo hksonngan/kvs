@@ -31,42 +31,14 @@ namespace kvs
  */
 /*===========================================================================*/
 template <typename FileFormatType>
-class StructuredVolumeExporter : public kvs::ExporterBase<FileFormatType>
+class StructuredVolumeExporter : public kvs::ExporterBase, public FileFormatType
 {
-//    kvsModule( kvs::StructuredVolumeExporter, Exporter );
-    kvsModuleBaseClass( kvs::ExporterBase<FileFormatType> );
+    kvsModule( kvs::StructuredVolumeExporter<FileFormatType>, Exporter );
+    kvsModuleBaseClass( kvs::ExporterBase );
 
 public:
-
-    StructuredVolumeExporter( const kvs::StructuredVolumeObject* object );
-
-    FileFormatType* exec( const kvs::ObjectBase* object );
+    FileFormatType* exec( const kvs::ObjectBase* ) { return NULL; }
 };
-
-/*===========================================================================*/
-/**
- *  @brief  Constructs a FileFormat data from given structured volume object.
- *  @param  object [in] pointer to the structured volume object
- */
-/*===========================================================================*/
-template <typename FileFormatType>
-StructuredVolumeExporter<FileFormatType>::StructuredVolumeExporter(
-    const kvs::StructuredVolumeObject* object )
-{
-    this->exec( object );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Exports to a spcified FileFormat data.
- *  @param  object [in] pointer to the structured volume object
- */
-/*===========================================================================*/
-template <typename FileFormatType>
-FileFormatType* StructuredVolumeExporter<FileFormatType>::exec( const kvs::ObjectBase* object )
-{
-    return( NULL );
-}
 
 /*===========================================================================*/
 /**
@@ -74,13 +46,12 @@ FileFormatType* StructuredVolumeExporter<FileFormatType>::exec( const kvs::Objec
  */
 /*===========================================================================*/
 template <>
-class StructuredVolumeExporter<kvs::KVSMLObjectStructuredVolume> :
-        public kvs::ExporterBase<kvs::KVSMLObjectStructuredVolume>
+class StructuredVolumeExporter<kvs::KVSMLObjectStructuredVolume>:
+        public kvs::ExporterBase,
+        public kvs::KVSMLObjectStructuredVolume
 {
 public:
-
     StructuredVolumeExporter( const kvs::StructuredVolumeObject* object );
-
     kvs::KVSMLObjectStructuredVolume* exec( const kvs::ObjectBase* object );
 };
 
@@ -90,13 +61,12 @@ public:
  */
 /*===========================================================================*/
 template <>
-class StructuredVolumeExporter<kvs::AVSField> :
-        public kvs::ExporterBase<kvs::AVSField>
+class StructuredVolumeExporter<kvs::AVSField>:
+        public kvs::ExporterBase,
+        public kvs::AVSField
 {
 public:
-
     StructuredVolumeExporter( const kvs::StructuredVolumeObject* object );
-
     kvs::AVSField* exec( const kvs::ObjectBase* object );
 };
 
