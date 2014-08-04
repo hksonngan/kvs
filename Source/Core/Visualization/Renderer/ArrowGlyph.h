@@ -62,9 +62,8 @@ public:
     ArrowGlyph( const kvs::VolumeObjectBase* volume, const kvs::TransferFunction& transfer_function );
     virtual ~ArrowGlyph();
 
-    void setType( const ArrowType type );
-    ArrowType type() const;
-
+    void setType( const ArrowType type ) { m_type = type; }
+    ArrowType type() const { return m_type; }
     void exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
 
 private:

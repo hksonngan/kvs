@@ -20,7 +20,7 @@
 
 namespace
 {
-const kvs::Vector3f DefaultDirection = kvs::Vector3f( 0.0, 1.0, 0.0 );
+const kvs::Vec3 DefaultDirection = kvs::Vec3( 0.0, 1.0, 0.0 );
 const kvs::Real32 DefaultSize = 1.0f;
 const kvs::RGBColor DefaultColor = kvs::RGBColor( 255, 255, 255 );
 const kvs::UInt8 DefaultOpacity = 255;
@@ -56,259 +56,6 @@ GlyphBase::~GlyphBase()
 
 /*===========================================================================*/
 /**
- *  @brief  Sets a size mode.
- *  @param  mode [in] size mode
- */
-/*===========================================================================*/
-void GlyphBase::setSizeMode( const GlyphBase::SizeMode mode )
-{
-    m_size_mode = mode;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a direction mode.
- *  @param  mode [in] direction mode
- */
-/*===========================================================================*/
-void GlyphBase::setDirectionMode( const GlyphBase::DirectionMode mode )
-{
-    m_direction_mode = mode;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a color mode.
- *  @param  mode [in] color mode
- */
-/*===========================================================================*/
-void GlyphBase::setColorMode( const GlyphBase::ColorMode mode )
-{
-    m_color_mode = mode;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a opacity mode.
- *  @param  mode [in] opacity mode
- */
-/*===========================================================================*/
-void GlyphBase::setOpacityMode( const GlyphBase::OpacityMode mode )
-{
-    m_opacity_mode = mode;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a coordinate value array.
- *  @param  coords [in] coordinate value array
- */
-/*===========================================================================*/
-void GlyphBase::setCoords( const kvs::ValueArray<kvs::Real32>& coords )
-{
-    m_coords = coords;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a size value array.
- *  @param  sizes [in] size value array
- */
-/*===========================================================================*/
-void GlyphBase::setSizes( const kvs::ValueArray<kvs::Real32>& sizes )
-{
-    m_sizes = sizes;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a direction vector array.
- *  @param  directions [in] direction vector array
- */
-/*===========================================================================*/
-void GlyphBase::setDirections( const kvs::ValueArray<kvs::Real32>& directions )
-{
-    m_directions = directions;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a color value array.
- *  @param  colors [in] color value array
- */
-/*===========================================================================*/
-void GlyphBase::setColors( const kvs::ValueArray<kvs::UInt8>& colors )
-{
-    m_colors = colors;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a opacity value array.
- *  @param  opacities [in] opacity value array
- */
-/*===========================================================================*/
-void GlyphBase::setOpacities( const kvs::ValueArray<kvs::UInt8>& opacities )
-{
-    m_opacities = opacities;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a scaling factor.
- *  @param  scale [in] scaling factor
- */
-/*===========================================================================*/
-void GlyphBase::setScale( const kvs::Real32 scale )
-{
-    m_scale = kvs::Vector3f( scale, scale, scale );
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a scaling vector.
- *  @param  scale [in] scaling vector
- */
-/*===========================================================================*/
-void GlyphBase::setScale( const kvs::Vector3f& scale )
-{
-    m_scale = scale;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a transfer function.
- *  @param  tfunc [in] transfer function
- */
-/*===========================================================================*/
-void GlyphBase::setTransferFunction( const kvs::TransferFunction& tfunc )
-{
-    m_tfunc = tfunc;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the size mode.
- *  @return size mode
- */
-/*===========================================================================*/
-GlyphBase::SizeMode GlyphBase::sizeMode() const
-{
-    return m_size_mode;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the direction mode.
- *  @return direction mode
- */
-/*===========================================================================*/
-GlyphBase::DirectionMode GlyphBase::directionMode() const
-{
-    return m_direction_mode;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the color mode.
- *  @return color mode
- */
-/*===========================================================================*/
-GlyphBase::ColorMode GlyphBase::colorMode() const
-{
-    return m_color_mode;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the opacity mode.
- *  @return opacity mode
- */
-/*===========================================================================*/
-GlyphBase::OpacityMode GlyphBase::opacityMode() const
-{
-    return m_opacity_mode;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a coordinate value array.
- *  @return coordinate value array
- */
-/*===========================================================================*/
-const kvs::ValueArray<kvs::Real32>& GlyphBase::coords() const
-{
-    return m_coords;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a size value array.
- *  @return size value array
- */
-/*===========================================================================*/
-const kvs::ValueArray<kvs::Real32>& GlyphBase::sizes() const
-{
-    return m_sizes;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a direction vector array.
- *  @return direction vector array
- */
-/*===========================================================================*/
-const kvs::ValueArray<kvs::Real32>& GlyphBase::directions() const
-{
-    return m_directions;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a color value array.
- *  @return color value array
- */
-/*===========================================================================*/
-const kvs::ValueArray<kvs::UInt8>& GlyphBase::colors() const
-{
-    return m_colors;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a opacity value array.
- *  @return opacity value array
- */
-/*===========================================================================*/
-const kvs::ValueArray<kvs::UInt8>& GlyphBase::opacities() const
-{
-    return m_opacities;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a scaling vector.
- *  @return scaling vector
- */
-/*===========================================================================*/
-const kvs::Vector3f& GlyphBase::scale() const
-{
-    return m_scale;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the transfer function.
- *  @return transfer function
- */
-/*===========================================================================*/
-const kvs::TransferFunction& GlyphBase::transferFunction() const
-{
-    return m_tfunc;
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Transform the glyph object.
  *  @param  position [in] object position
  *  @param  size [in] object size
@@ -330,16 +77,16 @@ void GlyphBase::transform( const kvs::Vector3f& position, const kvs::Real32 size
  */
 /*===========================================================================*/
 void GlyphBase::transform(
-    const kvs::Vector3f& position,
-    const kvs::Vector3f& direction,
+    const kvs::Vec3& position,
+    const kvs::Vec3& direction,
     const kvs::Real32 size )
 {
-    const kvs::Vector3f v = direction.normalized();
-    const kvs::Vector3f c = ::DefaultDirection.cross( v );
+    const kvs::Vec3 v = direction.normalized();
+    const kvs::Vec3 c = ::DefaultDirection.cross( v );
     const float d = ::DefaultDirection.dot( v );
     const float s = static_cast<float>( std::sqrt( ( 1.0 + d ) * 2.0 ) );
     const kvs::Quaternion q( c.x()/s, c.y()/s, c.z()/s, s/2.0f );
-    const kvs::Matrix33f rot = q.toMatrix();
+    const kvs::Mat3 rot = q.toMatrix();
     const kvs::Xform xform( position, m_scale * size, rot );
 
     float array[16];
@@ -400,27 +147,23 @@ void GlyphBase::calculateUniformCoords( const kvs::StructuredVolumeObject* volum
     kvs::ValueArray<kvs::Real32> coords( 3 * volume->numberOfNodes() );
     kvs::Real32* coord = coords.data();
 
-    const kvs::Vector3ui resolution( volume->resolution() );
-    const kvs::Vector3f  volume_size( volume->maxExternalCoord() - volume->minExternalCoord() );
-    const kvs::Vector3ui ngrids( resolution - kvs::Vector3ui( 1, 1, 1 ) );
-    const kvs::Vector3f  grid_size(
+    const kvs::Vec3ui resolution( volume->resolution() );
+    const kvs::Vec3 volume_size( volume->maxExternalCoord() - volume->minExternalCoord() );
+    const kvs::Vec3ui ngrids( resolution - kvs::Vec3ui( 1, 1, 1 ) );
+    const kvs::Vec3 grid_size(
         ( ngrids.x() == 0 ) ? 0.0f : volume_size.x() / static_cast<float>( ngrids.x() ),
         ( ngrids.y() == 0 ) ? 0.0f : volume_size.y() / static_cast<float>( ngrids.y() ),
         ( ngrids.z() == 0 ) ? 0.0f : volume_size.z() / static_cast<float>( ngrids.z() ) );
 
     for ( size_t k = 0; k < resolution.z(); ++k )
     {
-        const float z =
-            grid_size.z() * static_cast<float>( k );
+        const float z = grid_size.z() * static_cast<float>( k );
         for ( size_t j = 0; j < resolution.y(); ++j )
         {
-            const float y =
-                grid_size.y() * static_cast<float>( j );
+            const float y = grid_size.y() * static_cast<float>( j );
             for ( size_t i = 0; i < resolution.x(); ++i )
             {
-                const float x =
-                    grid_size.x() * static_cast<float>( i );
-
+                const float x = grid_size.x() * static_cast<float>( i );
                 *( coord++ ) = x;
                 *( coord++ ) = y;
                 *( coord++ ) = z;

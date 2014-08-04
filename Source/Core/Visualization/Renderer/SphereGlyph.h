@@ -59,8 +59,8 @@ public:
     SphereGlyph( const kvs::VolumeObjectBase* volume, const kvs::TransferFunction& transfer_function );
     virtual ~SphereGlyph();
 
-    void setNumberOfSlices( const size_t nslices );
-    void setNumberOfStacks( const size_t nstacks );
+    void setNumberOfSlices( const size_t nslices ) { m_nslices = nslices; }
+    void setNumberOfStacks( const size_t nstacks ) { m_nstacks = nstacks; }
 
     void exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
 

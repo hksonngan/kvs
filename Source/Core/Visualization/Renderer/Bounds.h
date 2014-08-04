@@ -62,17 +62,15 @@ public:
     Bounds();
 
     void exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
-
-    void setType( const Bounds::Type type );
-    void setLineColor( const kvs::RGBColor& color );
-    void setLineWidth( const kvs::Real32 width );
-    void setCornerScale( const float corner_scale );
-    void setCircleDivision( const float division );
-
-    void enableAntiAliasing();
-    void disableAntiAliasing();
-    void show();
-    void hide();
+    void setType( const Bounds::Type type ) { m_type = type; }
+    void setLineColor( const kvs::RGBColor& color ) { m_line_color = color; }
+    void setLineWidth( const kvs::Real32 width ) { m_line_width = width; }
+    void setCornerScale( const float corner_scale ) { m_corner_scale = corner_scale; }
+    void setCircleDivision( const float division ) { m_division = division; }
+    void enableAntiAliasing() { m_enable_anti_aliasing = true; }
+    void disableAntiAliasing() { m_enable_anti_aliasing = false; }
+    void show() { m_show = true; }
+    void hide() { m_show = false; }
 
 public:
 
@@ -83,7 +81,6 @@ private:
     void draw_box_bounds( const kvs::ObjectBase* object );
     void draw_corner_bounds( const kvs::ObjectBase* object );
     void draw_circle_bounds( const kvs::ObjectBase* object );
-
     kvs::LineObject* output_box_bounds( const kvs::ObjectBase* object ) const;
     kvs::LineObject* output_corner_bounds( const kvs::ObjectBase* object ) const;
     kvs::LineObject* output_circle_bounds( const kvs::ObjectBase* object ) const;

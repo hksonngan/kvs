@@ -56,24 +56,24 @@ public:
 
     ScatterPlotRenderer();
 
-    void setTopMargin( const int top_margin );
-    void setBottomMargin( const int bottom_margin );
-    void setLeftMargin( const int left_margin );
-    void setRightMargin( const int right_margin );
-    void setPointColor( const kvs::RGBColor point_color );
-    void setPointOpacity( const kvs::UInt8 point_opacity );
-    void setPointSize( const kvs::Real32 point_size );
-    void setColorMap( const kvs::ColorMap& color_map );
-    void setBackgroundColor( const kvs::RGBAColor background_color );
+    void setTopMargin( const int margin ) { m_top_margin = margin; }
+    void setBottomMargin( const int margin ) { m_bottom_margin = margin; }
+    void setLeftMargin( const int margin ) { m_left_margin = margin; }
+    void setRightMargin( const int margin ) { m_right_margin = margin; }
+    void setPointColor( const kvs::RGBColor color ) { m_has_point_color = true; m_point_color = color; }
+    void setPointOpacity( const kvs::UInt8 opacity ) { m_point_opacity = opacity; }
+    void setPointSize( const kvs::Real32 size ) { m_point_size = size; }
+    void setColorMap( const kvs::ColorMap& color_map ) { m_has_point_color = true; m_color_map = color_map; }
+    void setBackgroundColor( const kvs::RGBAColor color ) { m_background_color = color; }
 
-    int topMargin() const;
-    int bottomMargin() const;
-    int leftMargin() const;
-    int rightMargin() const;
-    kvs::UInt8 pointOpacity() const;
-    kvs::Real32 pointSize() const;
-    const kvs::ColorMap& colorMap() const;
-    const kvs::RGBAColor& backgroundColor() const;
+    int topMargin() const { return m_top_margin; }
+    int bottomMargin() const { return m_bottom_margin; }
+    int leftMargin() const { return m_left_margin; }
+    int rightMargin() const { return m_right_margin; }
+    kvs::UInt8 pointOpacity() const { return m_point_opacity; }
+    kvs::Real32 pointSize() const { return m_point_size; }
+    const kvs::ColorMap& colorMap() const { return m_color_map; }
+    const kvs::RGBAColor& backgroundColor() const { return m_background_color; }
 
     void exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
 };

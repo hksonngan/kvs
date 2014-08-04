@@ -109,28 +109,6 @@ ArrowGlyph::~ArrowGlyph()
 
 /*===========================================================================*/
 /**
- *  @brief  Sets an arrow type.
- *  @param  type [in] arrow type
- */
-/*===========================================================================*/
-void ArrowGlyph::setType( const ArrowType type )
-{
-    m_type = type;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returs an arrow type.
- *  @return arrow type
- */
-/*===========================================================================*/
-ArrowGlyph::ArrowType ArrowGlyph::type() const
-{
-    return m_type;
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Executes rendering process.
  *  @param  object [in] pointer to the volume object
  *  @param  camera [in] pointer to the camera

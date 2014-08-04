@@ -83,35 +83,34 @@ public:
 
     virtual void exec( kvs::ObjectBase* object, kvs::Camera* camera = NULL, kvs::Light* light = NULL ) = 0;
 
-    void setSizeMode( const SizeMode mode );
-    void setDirectionMode( const DirectionMode mode );
-    void setColorMode( const ColorMode mode );
-    void setOpacityMode( const OpacityMode mode );
-    void setCoords( const kvs::ValueArray<kvs::Real32>& coords );
-    void setSizes( const kvs::ValueArray<kvs::Real32>& sizes );
-    void setDirections( const kvs::ValueArray<kvs::Real32>& directions );
-    void setColors( const kvs::ValueArray<kvs::UInt8>& colors );
-    void setOpacities( const kvs::ValueArray<kvs::UInt8>& opacities );
-    void setScale( const kvs::Real32 scale );
-    void setScale( const kvs::Vector3f& scale );
-    void setTransferFunction( const kvs::TransferFunction& tfunc );
-
-    SizeMode sizeMode() const;
-    DirectionMode directionMode() const;
-    ColorMode colorMode() const;
-    OpacityMode opacityMode() const;
-    const kvs::ValueArray<kvs::Real32>& coords() const;
-    const kvs::ValueArray<kvs::Real32>& sizes() const;
-    const kvs::ValueArray<kvs::Real32>& directions() const;
-    const kvs::ValueArray<kvs::UInt8>& colors() const;
-    const kvs::ValueArray<kvs::UInt8>& opacities() const;
-    const kvs::Vector3f& scale() const;
-    const kvs::TransferFunction& transferFunction() const;
+    void setSizeMode( const SizeMode mode ) { m_size_mode = mode; }
+    void setDirectionMode( const DirectionMode mode ) { m_direction_mode = mode; }
+    void setColorMode( const ColorMode mode ) { m_color_mode = mode; }
+    void setOpacityMode( const OpacityMode mode ) { m_opacity_mode = mode; }
+    void setCoords( const kvs::ValueArray<kvs::Real32>& coords ) { m_coords = coords; }
+    void setSizes( const kvs::ValueArray<kvs::Real32>& sizes ) { m_sizes = sizes; }
+    void setDirections( const kvs::ValueArray<kvs::Real32>& directions ) { m_directions = directions; }
+    void setColors( const kvs::ValueArray<kvs::UInt8>& colors ) { m_colors = colors; }
+    void setOpacities( const kvs::ValueArray<kvs::UInt8>& opacities ) { m_opacities = opacities; }
+    void setScale( const kvs::Real32 scale ) { m_scale = kvs::Vec3::All( scale ); }
+    void setScale( const kvs::Vec3& scale ) { m_scale = scale; }
+    void setTransferFunction( const kvs::TransferFunction& tfunc ) { m_tfunc = tfunc; }
+    SizeMode sizeMode() const { return m_size_mode; }
+    DirectionMode directionMode() const { return m_direction_mode; }
+    ColorMode colorMode() const { return m_color_mode; }
+    OpacityMode opacityMode() const { return m_opacity_mode; }
+    const kvs::ValueArray<kvs::Real32>& coords() const { return m_coords; }
+    const kvs::ValueArray<kvs::Real32>& sizes() const { return m_sizes; }
+    const kvs::ValueArray<kvs::Real32>& directions() const { return m_directions; }
+    const kvs::ValueArray<kvs::UInt8>& colors() const { return m_colors; }
+    const kvs::ValueArray<kvs::UInt8>& opacities() const { return m_opacities; }
+    const kvs::Vec3& scale() const { return m_scale; }
+    const kvs::TransferFunction& transferFunction() const { return m_tfunc; }
 
 protected:
 
-    void transform( const kvs::Vector3f& position, const kvs::Real32 size );
-    void transform( const kvs::Vector3f& position, const kvs::Vector3f& direction, const kvs::Real32 size );
+    void transform( const kvs::Vec3& position, const kvs::Real32 size );
+    void transform( const kvs::Vec3& position, const kvs::Vec3& direction, const kvs::Real32 size );
     void calculateCoords( const kvs::VolumeObjectBase* volume );
     void calculateCoords( const kvs::StructuredVolumeObject* volume );
     void calculateUniformCoords( const kvs::StructuredVolumeObject* volume );

@@ -93,28 +93,6 @@ SphereGlyph::~SphereGlyph()
 
 /*===========================================================================*/
 /**
- *  @brief  Sets a number of slices (subdivisions) of the sphere.
- *  @param  nslices [in] number of slices.
- */
-/*===========================================================================*/
-void SphereGlyph::setNumberOfSlices( const size_t nslices )
-{
-    m_nslices = nslices;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a number of stacks (subdivisions) of the sphere.
- *  @param  nstacks [in] number of stacks.
- */
-/*===========================================================================*/
-void SphereGlyph::setNumberOfStacks( const size_t nstacks )
-{
-    m_nstacks = nstacks;
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Executes rendering process.
  *  @param  object [in] pointer to the volume object
  *  @param  camera [in] pointer to the camera

@@ -54,24 +54,23 @@ public:
 
     ParallelCoordinatesRenderer();
 
-    void setTopMargin( const int top_margin );
-    void setBottomMargin( const int bottom_margin );
-    void setLeftMargin( const int left_margin );
-    void setRightMargin( const int right_margin );
+    void setTopMargin( const int top_margin ) { m_top_margin = top_margin; }
+    void setBottomMargin( const int bottom_margin ) { m_bottom_margin = bottom_margin; }
+    void setLeftMargin( const int left_margin ) { m_left_margin = left_margin; }
+    void setRightMargin( const int right_margin ) { m_right_margin = right_margin; }
+    void setLineOpacity( const kvs::UInt8 opacity ) { m_line_opacity = opacity; }
+    void setLineWidth( const kvs::Real32 width ) { m_line_width = width; }
+    void setColorMap( const kvs::ColorMap& color_map ) { m_color_map = color_map; }
+    void selectAxis( const size_t index ) { m_active_axis = index; }
+    int topMargin() const { return m_top_margin; }
+    int bottomMargin() const { return m_bottom_margin; }
+    int leftMargin() const { return m_left_margin; }
+    int rightMargin() const { return m_right_margin; }
+    size_t activeAxis() const { return m_active_axis; }
+    kvs::UInt8 lineOpacity() const { return m_line_opacity; }
+    kvs::Real32 lineWidth() const { return m_line_width; }
     void enableAntiAliasing( const bool multisample = false ) const;
     void disableAntiAliasing() const;
-    void setLineOpacity( const kvs::UInt8 opacity );
-    void setLineWidth( const kvs::Real32 width );
-    void setColorMap( const kvs::ColorMap& color_map );
-    void selectAxis( const size_t index );
-
-    int topMargin() const;
-    int bottomMargin() const;
-    int leftMargin() const;
-    int rightMargin() const;
-    size_t activeAxis() const;
-    kvs::UInt8 lineOpacity() const;
-    kvs::Real32 lineWidth() const;
 
     void exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
 };
