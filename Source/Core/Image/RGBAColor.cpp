@@ -44,37 +44,39 @@ RGBAColor::RGBAColor( const kvs::RGBColor& rgb, float opacity ):
 
 RGBAColor& RGBAColor::operator = ( const RGBAColor& rgba )
 {
-    m_red     = rgba.m_red;
-    m_green   = rgba.m_green;
-    m_blue    = rgba.m_blue;
+    m_red = rgba.m_red;
+    m_green = rgba.m_green;
+    m_blue = rgba.m_blue;
     m_opacity = rgba.m_opacity;
-
-    return( *this );
+    return *this;
 }
 
 RGBAColor& RGBAColor::operator = ( const RGBColor& rgb )
 {
-    m_red     = rgb.r();
-    m_green   = rgb.g();
-    m_blue    = rgb.b();
+    m_red = rgb.r();
+    m_green = rgb.g();
+    m_blue = rgb.b();
     m_opacity = 1.0f;
-
-    return( *this );
+    return *this;
 }
 
-float RGBAColor::a() const
+RGBAColor& RGBAColor::operator = ( const kvs::Vec4& rgba )
 {
-    return( m_opacity );
+    KVS_ASSERT( 0.0f <= rgba.x() && rgba.x() <= 1.0f );
+    KVS_ASSERT( 0.0f <= rgba.y() && rgba.y() <= 1.0f );
+    KVS_ASSERT( 0.0f <= rgba.z() && rgba.z() <= 1.0f );
+    KVS_ASSERT( 0.0f <= rgba.w() && rgba.w() <= 1.0f );
+
+    m_red = kvs::Math::Round( rgba.x() * 255.0f );
+    m_green = kvs::Math::Round( rgba.y() * 255.0f );
+    m_blue = kvs::Math::Round( rgba.z() * 255.0f );
+    m_opacity = rgba.w();
+    return *this;
 }
 
-float RGBAColor::alpha() const
+kvs::Vec4 RGBAColor::toVec4() const
 {
-    return( m_opacity );
-}
-
-float RGBAColor::opacity() const
-{
-    return( m_opacity );
+    return kvs::Vec4( toVec3(), m_opacity );
 }
 
 } // end of namespace kvs

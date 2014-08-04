@@ -16,6 +16,7 @@
 
 #include "RGBColor.h"
 #include <kvs/Type>
+#include <kvs/Vector4>
 
 
 namespace kvs
@@ -38,17 +39,20 @@ public:
     RGBAColor( kvs::UInt8 red, kvs::UInt8 greeb, kvs::UInt8 blue, float opacity = 1.0f );
     RGBAColor( const kvs::UInt8 rgb[3], float opacity = 1.0f );
     RGBAColor( const kvs::RGBColor& rgb, float opacity = 1.0f );
+    RGBAColor( const kvs::Vec4& rgba );
 
 public:
 
     RGBAColor& operator = ( const RGBAColor& rgba );
     RGBAColor& operator = ( const RGBColor& rgb );
+    RGBAColor& operator = ( const kvs::Vec4& rgba );
 
 public:
 
-    float a() const;
-    float alpha() const;
-    float opacity() const;
+    float a() const { return m_opacity; }
+    float alpha() const { return m_opacity; }
+    float opacity() const { return m_opacity; }
+    kvs::Vec4 toVec4() const;
 };
 
 } // end of namespace kvs

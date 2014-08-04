@@ -18,6 +18,7 @@
 #include <iomanip>
 #include <kvs/Math>
 #include <kvs/Type>
+#include <kvs/Vector3>
 
 
 namespace kvs
@@ -57,6 +58,7 @@ public:
     RGBColor( const kvs::UInt8 rgb[3] );
     RGBColor( const RGBColor& rgb );
     RGBColor( const HSVColor& hsv );
+    RGBColor( const kvs::Vec3& rgb );
 
 public:
 
@@ -65,6 +67,7 @@ public:
     RGBColor& operator = ( const RGBColor& rgb );
     RGBColor& operator = ( const RGBAColor& rgba );
     RGBColor& operator = ( const HSVColor& hsv );
+    RGBColor& operator = ( const kvs::Vec3& rgb );
 
 public:
 
@@ -136,12 +139,13 @@ public:
 
 public:
 
-    kvs::UInt8 r() const;
-    kvs::UInt8 red() const;
-    kvs::UInt8 g() const;
-    kvs::UInt8 green() const;
-    kvs::UInt8 b() const;
-    kvs::UInt8 blue() const;
+    kvs::UInt8 r() const { return m_red; }
+    kvs::UInt8 g() const { return m_green; }
+    kvs::UInt8 b() const { return m_blue; }
+    kvs::UInt8 red() const { return m_red; }
+    kvs::UInt8 green() const { return m_green; }
+    kvs::UInt8 blue() const { return m_blue; }
+    kvs::Vec3 toVec3() const;
 };
 
 } // end of namespace kvs

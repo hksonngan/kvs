@@ -13,6 +13,7 @@
 /****************************************************************************/
 #include <kvs/Math>
 #include <kvs/Type>
+#include <kvs/Assert>
 #include "RGBColor.h"
 #include "HSVColor.h"
 #include "RGBAColor.h"
@@ -94,12 +95,17 @@ RGBColor::RGBColor( const HSVColor& hsv )
     *this = hsv;
 }
 
+RGBColor::RGBColor( const kvs::Vec3& rgb )
+{
+    *this = rgb;
+}
+
 RGBColor& RGBColor::operator += ( const RGBColor& rgb )
 {
     m_red   += rgb.m_red;
     m_green += rgb.m_green;
     m_blue  += rgb.m_blue;
-    return( *this );
+    return *this;
 }
 
 RGBColor& RGBColor::operator -= ( const RGBColor& rgb )
@@ -107,7 +113,7 @@ RGBColor& RGBColor::operator -= ( const RGBColor& rgb )
     m_red   -= rgb.m_red;
     m_green -= rgb.m_green;
     m_blue  -= rgb.m_blue;
-    return( *this );
+    return *this;
 }
 
 RGBColor& RGBColor::operator = ( const RGBColor& rgb )
@@ -115,7 +121,7 @@ RGBColor& RGBColor::operator = ( const RGBColor& rgb )
     m_red   = rgb.m_red;
     m_green = rgb.m_green;
     m_blue  = rgb.m_blue;
-    return( *this );
+    return *this;
 }
 
 /*==========================================================================*/
@@ -130,7 +136,7 @@ RGBColor& RGBColor::operator = ( const RGBAColor& rgba )
     m_green = rgba.g();
     m_blue  = rgba.b();
 
-    return( *this );
+    return *this;
 }
 
 /*==========================================================================*/
@@ -208,7 +214,19 @@ RGBColor& RGBColor::operator = ( const HSVColor& hsv )
         m_blue  = static_cast<kvs::UInt8>( tmp_b * 255.0f + 0.5f );
     }
 
-    return( *this );
+    return *this;
+}
+
+RGBColor& RGBColor::operator = ( const kvs::Vec3& rgb )
+{
+    KVS_ASSERT( 0.0f <= rgb.x() && rgb.x() <= 1.0f );
+    KVS_ASSERT( 0.0f <= rgb.y() && rgb.y() <= 1.0f );
+    KVS_ASSERT( 0.0f <= rgb.z() && rgb.z() <= 1.0f );
+
+    m_red = kvs::Math::Round( rgb.x() * 255.0f );
+    m_green = kvs::Math::Round( rgb.y() * 255.0f );
+    m_blue = kvs::Math::Round( rgb.z() * 255.0f );
+    return *this;
 }
 
 void RGBColor::set( kvs::UInt8 red, kvs::UInt8 green, kvs::UInt8 blue )
@@ -218,34 +236,12 @@ void RGBColor::set( kvs::UInt8 red, kvs::UInt8 green, kvs::UInt8 blue )
     m_blue = blue;
 }
 
-kvs::UInt8 RGBColor::r() const
+kvs::Vec3 RGBColor::toVec3() const
 {
-    return( m_red );
-}
-
-kvs::UInt8 RGBColor::red() const
-{
-    return( m_red );
-}
-
-kvs::UInt8 RGBColor::g() const
-{
-    return( m_green );
-}
-
-kvs::UInt8 RGBColor::green() const
-{
-    return( m_green );
-}
-
-kvs::UInt8 RGBColor::b() const
-{
-    return( m_blue );
-}
-
-kvs::UInt8 RGBColor::blue() const
-{
-    return( m_blue );
+    const float r = static_cast<float>( m_red ) / 255.0f;
+    const float g = static_cast<float>( m_green ) / 255.0f;
+    const float b = static_cast<float>( m_blue ) / 255.0f;
+    return kvs::Vec3( r, g, b );
 }
 
 } // end of namespace kvs
