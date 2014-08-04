@@ -64,10 +64,10 @@ public:
     void setSpecular( const kvs::RGBAColor& color );
 
     unsigned int id() const { return m_id; }
+    const kvs::Vec3& diffuse() const { return m_diffuse; }
+    const kvs::Vec3& ambient() const { return m_ambient; }
+    const kvs::Vec3& specular() const { return m_specular; }
     const kvs::Vec3 position() const;
-    const kvs::Vec3& diffuse() const;
-    const kvs::Vec3& ambient() const;
-    const kvs::Vec3& specular() const;
 
     virtual void update( const kvs::Camera* camera );
     void initialize();

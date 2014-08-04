@@ -84,7 +84,7 @@ void Light::initialize()
 {
     m_id = GL_LIGHT0;
     m_transform_center.set( 0, 0, 0 );
-    this->setXform( kvs::Xform::Translation( kvs::Vector3f( 0, 0, 12 ) ) );
+    this->setXform( kvs::Xform::Translation( kvs::Vec3( 0, 0, 12 ) ) );
     this->saveXform();
     m_diffuse.set( 1.0, 1.0, 1.0 );
     m_ambient.set( 0.0, 0.0, 0.0 );
@@ -112,7 +112,7 @@ void Light::setID( const unsigned int id )
 /*==========================================================================*/
 void Light::setPosition( const float x, const float y, const float z )
 {
-    this->setPosition( kvs::Vector3f( x, y, z ) );
+    this->setPosition( kvs::Vec3( x, y, z ) );
 }
 
 /*==========================================================================*/
@@ -121,7 +121,7 @@ void Light::setPosition( const float x, const float y, const float z )
  *  @param position [in] light position
  */
 /*==========================================================================*/
-void Light::setPosition( const kvs::Vector3f& position )
+void Light::setPosition( const kvs::Vec3& position )
 {
     this->setXform( kvs::Xform::Translation( position ) );
 }
@@ -136,7 +136,7 @@ void Light::setPosition( const kvs::Vector3f& position )
 /*==========================================================================*/
 void Light::setColor( const float r, const float g, const float b )
 {
-    m_diffuse.set( r, g, b );
+    this->setDiffuse( r, g, b );
 }
 
 /*==========================================================================*/
@@ -147,9 +147,7 @@ void Light::setColor( const float r, const float g, const float b )
 /*==========================================================================*/
 void Light::setColor( const kvs::RGBAColor& color )
 {
-    m_diffuse.set( static_cast<float>(color.r()) / 255.0f,
-                   static_cast<float>(color.g()) / 255.0f,
-                   static_cast<float>(color.b()) / 255.0f );
+    this->setDiffuse( color );
 }
 
 /*==========================================================================*/
@@ -173,9 +171,7 @@ void Light::setDiffuse( const float r, const float g, const float b )
 /*==========================================================================*/
 void Light::setDiffuse( const kvs::RGBAColor& color )
 {
-    m_diffuse.set( static_cast<float>(color.r()) / 255.0f,
-                   static_cast<float>(color.g()) / 255.0f,
-                   static_cast<float>(color.b()) / 255.0f );
+    m_diffuse = color.toVec3();
 }
 
 /*==========================================================================*/
@@ -199,9 +195,7 @@ void Light::setAmbient( const float r, const float g, const float b )
 /*==========================================================================*/
 void Light::setAmbient( const kvs::RGBAColor& color )
 {
-    m_ambient.set( static_cast<float>(color.r()) / 255.0f,
-                   static_cast<float>(color.g()) / 255.0f,
-                   static_cast<float>(color.b()) / 255.0f );
+    m_ambient = color.toVec3();
 }
 
 /*==========================================================================*/
@@ -225,9 +219,7 @@ void Light::setSpecular( const float r, const float g, const float b )
 /*==========================================================================*/
 void Light::setSpecular( const kvs::RGBAColor& color )
 {
-    m_specular.set( static_cast<float>(color.r()) / 255.0f,
-                    static_cast<float>(color.g()) / 255.0f,
-                    static_cast<float>(color.b()) / 255.0f );
+    m_specular = color.toVec3();
 }
 
 /*==========================================================================*/
@@ -242,42 +234,12 @@ const kvs::Vec3 Light::position() const
 
 /*==========================================================================*/
 /**
- *  Get the diffuse color of the light.
- */
-/*==========================================================================*/
-const kvs::Vec3& Light::diffuse() const
-{
-    return m_diffuse;
-}
-
-/*==========================================================================*/
-/**
- *  Get the ambient color of the light.
- */
-/*==========================================================================*/
-const kvs::Vec3& Light::ambient() const
-{
-    return m_ambient;
-}
-
-/*==========================================================================*/
-/**
- *  Get the specular color of the light.
- */
-/*==========================================================================*/
-const kvs::Vec3& Light::specular() const
-{
-    return m_specular;
-}
-
-/*==========================================================================*/
-/**
  *  Update the light.
  */
 /*==========================================================================*/
 void Light::update( const kvs::Camera* camera )
 {
-//    const kvs::Vec3 p = camera->projectWorldToCamera( this->position() );
+    // World coordinate to camera coordinate.
     const kvs::Vec3 p = kvs::WorldCoordinate( this->position() ).toCameraCoordinate( camera ).position();
 
     const kvs::Vec4 position( p, 1.0f );
