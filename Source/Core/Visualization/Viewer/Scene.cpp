@@ -421,7 +421,7 @@ void Scene::updateXform( kvs::Light* light )
 void Scene::updateGLModelingMatrix( const kvs::ObjectBase* object ) const
 {
     float X[16]; object->xform().toArray( X );
-    const kvs::Vec3 Te = object->externalPosition();
+    const kvs::Vec3 Te = object->externalCenter();
     const kvs::Vec3 Sl = object->normalize();
     const kvs::Vec3 Tl = object->objectCenter();
     const kvs::Vec3 Sg = m_object_manager->normalize();
@@ -532,8 +532,6 @@ void Scene::initializeFunction()
 /*==========================================================================*/
 void Scene::paintFunction()
 {
-//    m_camera->update();
-//    m_light->update( m_camera );
     this->updateGLProjectionMatrix();
     this->updateGLViewingMatrix();
     this->updateGLLightParameters();

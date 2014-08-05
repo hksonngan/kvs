@@ -60,8 +60,8 @@ private:
     kvs::Vec3 m_max_external_coord; ///< max coord in the external coordinate system
     bool m_has_min_max_object_coords; ///< has min-max coorinate values ?
     bool m_has_min_max_external_coords; ///< has min-max coorinate values ?
-    kvs::Vec3 m_object_center; ///< center of gravity in object coordinate system
-    kvs::Vec3 m_external_position; ///< position in external coordinate system
+    kvs::Vec3 m_object_center; ///< center of the object in object coordinate system
+    kvs::Vec3 m_external_center; ///< center of the object in external object coordinate system
     kvs::Vec3 m_normalize; ///< normalize parameter
     bool m_show_flag; ///< flag for showing object
 
@@ -88,7 +88,7 @@ public:
     bool hasMinMaxObjectCoords() const { return m_has_min_max_object_coords; }
     bool hasMinMaxExternalCoords() const { return m_has_min_max_external_coords; }
     const kvs::Vec3& objectCenter() const { return m_object_center; }
-    const kvs::Vec3& externalPosition() const { return m_external_position; }
+    const kvs::Vec3& externalCenter() const { return m_external_center; }
     const kvs::Vec3& normalize() const { return m_normalize; }
     bool isShown() const { return m_show_flag; }
 
@@ -135,6 +135,8 @@ public:
     }
 
     KVS_DEPRECATED( friend std::ostream& operator << ( std::ostream& os, const ObjectBase& object ) );
+
+    KVS_DEPRECATED( const kvs::Vec3& externalPosition() const ) { return this->externalCenter(); }
 };
 
 } // end of namespace kvs

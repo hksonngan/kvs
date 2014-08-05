@@ -67,7 +67,7 @@ ObjectBase& ObjectBase::operator = ( const ObjectBase& object )
     m_has_min_max_object_coords = object.m_has_min_max_object_coords;
     m_has_min_max_external_coords = object.m_has_min_max_external_coords;
     m_object_center = object.m_object_center;
-    m_external_position = object.m_external_position;
+    m_external_center = object.m_external_center;
     m_normalize = object.m_normalize;
     m_show_flag = object.m_show_flag;
 
@@ -128,7 +128,7 @@ void ObjectBase::print( std::ostream& os, const kvs::Indent& indent ) const
     os << indent << "Min external coord : " << this->minExternalCoord() << std::endl;
     os << indent << "Max external coord : " << this->maxExternalCoord() << std::endl;
     os << indent << "Object center : " << this->objectCenter() << std::endl;
-    os << indent << "External position : " << this->externalPosition() << std::endl;
+    os << indent << "External center : " << this->externalCenter() << std::endl;
     os << indent << "Normalize parameter : " << this->normalize() << std::endl;
     os.flags( flags );
 }
@@ -144,7 +144,7 @@ void ObjectBase::updateNormalizeParameters()
     kvs::Vec3 diff_ext = m_max_external_coord - m_min_external_coord;
 
     m_object_center = ( m_max_object_coord + m_min_object_coord ) * 0.5;
-    m_external_position = ( m_max_external_coord + m_min_external_coord ) * 0.5;
+    m_external_center = ( m_max_external_coord + m_min_external_coord ) * 0.5;
 
     if ( kvs::Math::Equal( diff_obj.x(), 0.0f ) &&
          kvs::Math::Equal( diff_obj.y(), 0.0f ) &&
@@ -194,7 +194,7 @@ std::ostream& operator << ( std::ostream& os, const ObjectBase& object )
     os << "Min external coord:  " << object.minExternalCoord() << std::endl;
     os << "Max external coord:  " << object.maxExternalCoord() << std::endl;
     os << "Object center:  " << object.objectCenter() << std::endl;
-    os << "External position:  " << object.externalPosition() << std::endl;
+    os << "External center:  " << object.externalCenter() << std::endl;
     os << "Normalize parameter:  " << object.normalize();
     os.flags( flags );
 

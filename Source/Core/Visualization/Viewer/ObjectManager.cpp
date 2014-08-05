@@ -836,7 +836,7 @@ kvs::Vec3 ObjectManager::get_rotation_center( kvs::ObjectBase* object )
         // will be returned.
         const kvs::Vec3 Tg = ObjectBase::objectCenter();
         const kvs::Vec3 Sg = ObjectBase::normalize();
-        const kvs::Vec3 p_world = ( object->externalPosition() - Tg ) * Sg;
+        const kvs::Vec3 p_world = ( object->externalCenter() - Tg ) * Sg;
         return object->xform().transform( p_world );
     }
     else

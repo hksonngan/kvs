@@ -30,7 +30,7 @@ namespace
 void UpdateGLModelingMatrix( const kvs::ObjectBase* object, const kvs::Vec3& Tg, const kvs::Vec3& Sg )
 {
     float X[16]; object->xform().toArray( X );
-    const kvs::Vec3& Te = object->externalPosition();
+    const kvs::Vec3& Te = object->externalCenter();
     const kvs::Vec3& Sl = object->normalize();
     const kvs::Vec3& Tl = object->objectCenter();
 
