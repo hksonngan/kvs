@@ -34,13 +34,13 @@ class NormalizedDeviceCoordinate
 {
 private:
 
-    kvs::Vector3f m_position; ///< position in normalized device coordinates
+    kvs::Vec3 m_position; ///< position in normalized device coordinates
 
 public:
 
-    NormalizedDeviceCoordinate( const kvs::Vector3f& position );
+    NormalizedDeviceCoordinate( const kvs::Vec3& position );
 
-    const kvs::Vector3f& position() const;
+    const kvs::Vec3& position() const { return m_position; }
     const WindowCoordinate toWindowCoordinate( const int x, const int y, const size_t width, const size_t height ) const;
     const CameraCoordinate toCameraCoordinate( const kvs::Camera* camera ) const;
 };

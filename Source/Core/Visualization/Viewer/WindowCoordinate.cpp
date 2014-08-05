@@ -63,14 +63,14 @@ float WindowCoordinate::InvertDepth( const float depth )
 /**
  *  @brief  Constructs a new WindowCoordinate class.
  *  @param  position [in] position in the window coordinates
- *  @param  x [in] window position x
- *  @param  y [in] winodw position y
- *  @param  width [in] window width
- *  @param  height [in] window height
+ *  @param  x [in] x coordinate value of left corner of the viewport
+ *  @param  y [in] y coordinate value of left corner of the viewport
+ *  @param  width [in] width of the viewport
+ *  @param  height [in] height of the viewport
  */
 /*===========================================================================*/
 WindowCoordinate::WindowCoordinate(
-    const kvs::Vector3f& position,
+    const kvs::Vec3& position,
     const int x,
     const int y,
     const size_t width,
@@ -85,17 +85,6 @@ WindowCoordinate::WindowCoordinate(
 
 /*===========================================================================*/
 /**
- *  @brief  Returns the position in the widnow coordinates.
- *  @return position in the winodw coordinates
- */
-/*===========================================================================*/
-const kvs::Vector3f& WindowCoordinate::position() const
-{
-    return m_position;
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Transforms the widnow coordinates to the normalized device coordinates.
  *  @return transformed position in the normalized device coordinates
  */
@@ -105,7 +94,7 @@ const NormalizedDeviceCoordinate WindowCoordinate::toNormalizedDeviceCoordinate(
     const float x = ( m_position[0] - m_x ) / m_width * 2.0f - 1.0f;
     const float y = ( m_position[1] - m_y ) / m_height * 2.0f - 1.0f;
     const float z = WindowCoordinate::InvertDepth( m_position[2] ) * 2.0f - 1.0f;
-    const kvs::Vector3f position( x, y, z );
+    const kvs::Vec3 position( x, y, z );
     return NormalizedDeviceCoordinate( position );
 }
 

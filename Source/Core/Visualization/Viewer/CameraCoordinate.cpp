@@ -36,24 +36,13 @@ CameraCoordinate::CameraCoordinate( const kvs::Vector3f& position, const kvs::Ca
 
 /*===========================================================================*/
 /**
- *  @brief  Returns the position in camera coordinates.
- *  @return position in camera coordinates
- */
-/*===========================================================================*/
-const kvs::Vector3f& CameraCoordinate::position() const
-{
-    return m_position;
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Transforms camera coordinates to normalized device coordinates.
  *  @return normalized device coordinates
  */
 /*===========================================================================*/
 const NormalizedDeviceCoordinate CameraCoordinate::toNormalizedDeviceCoordinate() const
 {
-    const kvs::Vector3f position = kvs::Xform( m_camera->projectionMatrix() ).project( m_position );
+    const kvs::Vec3 position = kvs::Xform( m_camera->projectionMatrix() ).project( m_position );
     return NormalizedDeviceCoordinate( position );
 }
 

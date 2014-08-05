@@ -28,21 +28,10 @@ namespace kvs
  *  @param  object [in] pointer to an object defines object coordinates
  */
 /*===========================================================================*/
-ObjectCoordinate::ObjectCoordinate( const kvs::Vector3f& position, const kvs::ObjectBase* object ):
+ObjectCoordinate::ObjectCoordinate( const kvs::Vec3& position, const kvs::ObjectBase* object ):
     m_position( position ),
     m_object( object )
 {
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the position in object coordinates.
- *  @return position in object coordinates
- */
-/*===========================================================================*/
-const kvs::Vector3f& ObjectCoordinate::position() const
-{
-    return m_position;
 }
 
 /*===========================================================================*/
@@ -55,7 +44,7 @@ const WorldCoordinate ObjectCoordinate::toWorldCoordinate() const
 {
     KVS_ASSERT( m_object != NULL );
 
-    const kvs::Vector3f position = m_object->xform().transform( m_position );
+    const kvs::Vec3 position = m_object->xform().transform( m_position );
     return WorldCoordinate( position );
 }
 

@@ -36,14 +36,13 @@ class WorldCoordinate
 {
 private:
 
-    kvs::Vector3f m_position; ///< position in world coordinates
+    kvs::Vec3 m_position; ///< position in world coordinates
 
 public:
 
-    WorldCoordinate( const kvs::Vector3f& position );
+    WorldCoordinate( const kvs::Vec3& position );
 
-    const kvs::Vector3f& position() const;
-
+    const kvs::Vec3& position() const { return m_position; }
     const CameraCoordinate toCameraCoordinate( const kvs::Camera* camera ) const;
     const ObjectCoordinate toObjectCoordinate( const kvs::ObjectBase* object ) const;
     const ObjectCoordinate toObjectCoordinate( const kvs::Camera* camera ) const;

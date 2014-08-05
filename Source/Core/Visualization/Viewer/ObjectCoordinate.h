@@ -38,9 +38,9 @@ private:
 
 public:
 
-    ObjectCoordinate( const kvs::Vector3f& position, const kvs::ObjectBase* object );
+    ObjectCoordinate( const kvs::Vec3& position, const kvs::ObjectBase* object );
 
-    const kvs::Vector3f& position() const;
+    const kvs::Vec3& position() const { return m_position; }
     const WorldCoordinate toWorldCoordinate() const;
 };
 

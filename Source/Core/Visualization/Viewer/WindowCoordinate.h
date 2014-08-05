@@ -32,11 +32,11 @@ class WindowCoordinate
 {
 private:
 
-    kvs::Vector3f m_position; ///< position in window coordinates
-    int m_x; ///< window position x
-    int m_y; ///< window position y
-    size_t m_width; ///< widnow width
-    size_t m_height; ///< window height
+    kvs::Vec3 m_position; ///< position in window coordinates
+    int m_x; ///< x coordinate value of left corner of the viewport
+    int m_y; ///< y coordinate value of left corner of the viewport
+    size_t m_width; ///< width of the viewport
+    size_t m_height; ///< height of the viewport
     static float m_front; ///< depth value of the front clipping plane
     static float m_back; ///< depth value of the back clipping plane
 
@@ -48,9 +48,9 @@ public:
 
 public:
 
-    WindowCoordinate( const kvs::Vector3f& position, const int x, const int y, const size_t width, const size_t height );
+    WindowCoordinate( const kvs::Vec3& position, const int x, const int y, const size_t width, const size_t height );
 
-    const kvs::Vector3f& position() const;
+    const kvs::Vec3& position() const { return m_position; }
     const NormalizedDeviceCoordinate toNormalizedDeviceCoordinate() const;
 };
 

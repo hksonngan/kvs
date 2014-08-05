@@ -30,20 +30,9 @@ namespace kvs
  *  @param  position [in] position in world coordinates
  */
 /*===========================================================================*/
-WorldCoordinate::WorldCoordinate( const kvs::Vector3f& position ):
+WorldCoordinate::WorldCoordinate( const kvs::Vec3& position ):
     m_position( position )
 {
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the position in world coordinates.
- *  @return position in world coordinates
- */
-/*===========================================================================*/
-const kvs::Vector3f& WorldCoordinate::position() const
-{
-    return m_position;
 }
 
 /*===========================================================================*/
@@ -55,7 +44,7 @@ const kvs::Vector3f& WorldCoordinate::position() const
 /*===========================================================================*/
 const CameraCoordinate WorldCoordinate::toCameraCoordinate( const kvs::Camera* camera ) const
 {
-    const kvs::Vector3f position = kvs::Xform( camera->viewingMatrix() ).transform( m_position );
+    const kvs::Vec3 position = kvs::Xform( camera->viewingMatrix() ).transform( m_position );
     return CameraCoordinate( position, camera );
 }
 
@@ -68,7 +57,7 @@ const CameraCoordinate WorldCoordinate::toCameraCoordinate( const kvs::Camera* c
 /*===========================================================================*/
 const ObjectCoordinate WorldCoordinate::toObjectCoordinate( const kvs::ObjectBase* object ) const
 {
-    const kvs::Vector3f position = object->xform().inverse().transform( m_position );
+    const kvs::Vec3 position = object->xform().inverse().transform( m_position );
     return ObjectCoordinate( position, object );
 }
 
@@ -85,7 +74,7 @@ const ObjectCoordinate WorldCoordinate::toObjectCoordinate( const kvs::ObjectBas
 const ObjectCoordinate WorldCoordinate::toObjectCoordinate( const kvs::Camera* camera ) const
 {
     const kvs::Xform inv_modeling( camera->modelViewMatrix().inverted() * camera->viewingMatrix() );
-    const kvs::Vector3f position = inv_modeling.transform( m_position );
+    const kvs::Vec3 position = inv_modeling.transform( m_position );
     return ObjectCoordinate( position, NULL );
 }
 
