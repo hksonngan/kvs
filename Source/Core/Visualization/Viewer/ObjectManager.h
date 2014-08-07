@@ -97,6 +97,9 @@ private:
     kvs::Vec3 get_rotation_center( kvs::ObjectBase* object );
     ObjectIterator get_control_first_pointer();
     ObjectIterator get_control_last_pointer();
+    kvs::Xform get_centering_xform( kvs::ObjectBase* object );
+    void push_centering_xform();
+    void pop_centering_xform();
 
 private:
     ObjectManager( const ObjectManager& );

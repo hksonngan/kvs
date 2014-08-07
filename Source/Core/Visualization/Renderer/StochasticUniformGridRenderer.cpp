@@ -279,8 +279,8 @@ void StochasticUniformGridRenderer::Engine::draw( kvs::ObjectBase* object, kvs::
     const float to_zw2 = 0.5f * ( ( f + n ) / ( f - n ) ) + 0.5f;
     const float to_ze1 = 0.5f + 0.5f * ( ( f + n ) / ( f - n ) );
     const float to_ze2 = ( f - n ) / ( f * n );
-    const kvs::Vector3f light_position = kvs::WorldCoordinate( light->position() ).toObjectCoordinate( camera ).position();
-    const kvs::Vector3f camera_position = kvs::WorldCoordinate( camera->position() ).toObjectCoordinate( camera ).position();
+    const kvs::Vector3f light_position = kvs::WorldCoordinate( light->position() ).toObjectCoordinate( object ).position();
+    const kvs::Vector3f camera_position = kvs::WorldCoordinate( camera->position() ).toObjectCoordinate( object ).position();
     m_ray_casting_shader.setUniform( "to_zw1", to_zw1 );
     m_ray_casting_shader.setUniform( "to_zw2", to_zw2 );
     m_ray_casting_shader.setUniform( "to_ze1", to_ze1 );

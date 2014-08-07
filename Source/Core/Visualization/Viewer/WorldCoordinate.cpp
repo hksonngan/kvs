@@ -71,11 +71,11 @@ const ObjectCoordinate WorldCoordinate::toObjectCoordinate( const kvs::ObjectBas
  *  the OpenGL matrix stack and the given viewing matrix.
  */
 /*===========================================================================*/
-const ObjectCoordinate WorldCoordinate::toObjectCoordinate( const kvs::Camera* camera ) const
-{
-    const kvs::Xform inv_modeling( camera->modelViewMatrix().inverted() * camera->viewingMatrix() );
-    const kvs::Vec3 position = inv_modeling.transform( m_position );
-    return ObjectCoordinate( position, NULL );
-}
+//const ObjectCoordinate WorldCoordinate::toObjectCoordinate( const kvs::Camera* camera ) const
+//{
+//    const kvs::Xform inv_modeling( camera->modelViewMatrix().inverted() * camera->viewingMatrix() );
+//    const kvs::Vec3 position = inv_modeling.transform( m_position );
+//    return ObjectCoordinate( position, NULL );
+//}
 
 } // end of namespace kvs

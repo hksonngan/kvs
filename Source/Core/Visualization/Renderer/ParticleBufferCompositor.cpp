@@ -27,20 +27,11 @@
 namespace
 {
 
-void UpdateGLModelingMatrix( const kvs::ObjectBase* object, const kvs::Vec3& Tg, const kvs::Vec3& Sg )
+void UpdateGLModelingMatrix( const kvs::ObjectBase* object )
 {
     float X[16]; object->xform().toArray( X );
-    const kvs::Vec3& Te = object->externalCenter();
-    const kvs::Vec3& Sl = object->normalize();
-    const kvs::Vec3& Tl = object->objectCenter();
-
     kvs::OpenGL::SetMatrixMode( GL_MODELVIEW );
     kvs::OpenGL::MultMatrix( X );
-    kvs::OpenGL::Scale( Sg.x(), Sg.y(), Sg.z() );
-    kvs::OpenGL::Translate( -Tg.x(), -Tg.y(), -Tg.z() );
-    kvs::OpenGL::Translate( Te.x(), Te.y(), Te.z() );
-    kvs::OpenGL::Scale( Sl.x(), Sl.y(), Sl.z() );
-    kvs::OpenGL::Translate( -Tl.x(), -Tl.y(), -Tl.z() );
 }
 
 }
@@ -331,9 +322,7 @@ void ParticleBufferCompositor::update_particle_buffer(
     kvs::OpenGL::PopMatrix();
     kvs::OpenGL::PushMatrix();
 
-    const kvs::Vector3f object_center = m_object_manager->objectCenter();
-    const kvs::Vector3f object_scale = m_object_manager->normalize();
-    UpdateGLModelingMatrix( object, object_center, object_scale );
+    UpdateGLModelingMatrix( object );
     renderer->create_image( object, camera, light );
 
     kvs::OpenGL::PopMatrix();

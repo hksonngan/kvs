@@ -45,7 +45,7 @@ public:
     const kvs::Vec3& position() const { return m_position; }
     const CameraCoordinate toCameraCoordinate( const kvs::Camera* camera ) const;
     const ObjectCoordinate toObjectCoordinate( const kvs::ObjectBase* object ) const;
-    const ObjectCoordinate toObjectCoordinate( const kvs::Camera* camera ) const;
+//    const ObjectCoordinate toObjectCoordinate( const kvs::Camera* camera ) const;
 };
 
 } // end of namespace kvs

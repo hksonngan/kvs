@@ -232,8 +232,8 @@ void RayCastingRenderer::rasterize(
                     if ( !kvs::Math::IsZero( opacity ) )
                     {
                         // Shading.
-                        const kvs::Vector3f vertex = ray.point();
-                        const kvs::Vector3f normal = interpolator.template gradient<T>();
+                        const kvs::Vec3 vertex = ray.point();
+                        const kvs::Vec3 normal = interpolator.template gradient<T>();
                         const kvs::RGBColor color = shader.shadedColor( cmap.at(s), vertex, normal );
 
                         // Front-to-back accumulation.

@@ -107,7 +107,7 @@ private:
     void update_framebuffer();
     void enable_MRT_rendering();
     void disable_MRT_rendering();
-    void sort_geometry( kvs::Camera* camera );
+    void sort_geometry( kvs::Camera* camera, kvs::ObjectBase* object );
     void draw_initialization_pass();
     void draw_geometry_pass();
     void draw_flush_pass();

@@ -421,19 +421,8 @@ void Scene::updateXform( kvs::Light* light )
 void Scene::updateGLModelingMatrix( const kvs::ObjectBase* object ) const
 {
     float X[16]; object->xform().toArray( X );
-    const kvs::Vec3 Te = object->externalCenter();
-    const kvs::Vec3 Sl = object->normalize();
-    const kvs::Vec3 Tl = object->objectCenter();
-    const kvs::Vec3 Sg = m_object_manager->normalize();
-    const kvs::Vec3 Tg = m_object_manager->objectCenter();
-
     kvs::OpenGL::SetMatrixMode( GL_MODELVIEW );
     kvs::OpenGL::MultMatrix( X );
-    kvs::OpenGL::Scale( Sg.x(), Sg.y(), Sg.z() );
-    kvs::OpenGL::Translate( -Tg.x(), -Tg.y(), -Tg.z() );
-    kvs::OpenGL::Translate( Te.x(), Te.y(), Te.z() );
-    kvs::OpenGL::Scale( Sl.x(), Sl.y(), Sl.z() );
-    kvs::OpenGL::Translate( -Tl.x(), -Tl.y(), -Tl.z() );
 }
 
 /*===========================================================================*/

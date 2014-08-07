@@ -79,23 +79,27 @@ ObjectManager::~ObjectManager()
 /*==========================================================================*/
 int ObjectManager::insert( kvs::ObjectBase* object )
 {
-    // Updates the normalize parameters of the object manager and the object.
-    const kvs::Vec3 min_ext = object->minExternalCoord();
-    const kvs::Vec3 max_ext = object->maxExternalCoord();
-    this->update_normalize_parameters( min_ext, max_ext );
-    object->updateNormalizeParameters();
+    this->push_centering_xform();
+    {
+        // Updates the normalize parameters of the object manager and the object.
+        const kvs::Vec3 min_ext = object->minExternalCoord();
+        const kvs::Vec3 max_ext = object->maxExternalCoord();
+        this->update_normalize_parameters( min_ext, max_ext );
+        object->updateNormalizeParameters();
 
-    // Calculate the object ID by counting the number of this method called.
-    // Therefore, we define the object ID as static parameter in this method
-    // and count it.
-    m_current_object_id++;
+        // Calculate the object ID by counting the number of this method called.
+        // Therefore, we define the object ID as static parameter in this method
+        // and count it.
+        m_current_object_id++;
 
-    // A pair of the object ID and a pointer to the object is inserted to
-    // the object map. The pointer to the object is got by inserting the
-    // object to the object master base.
-    ObjectIterator parent = m_root;
-    ObjectIterator current = m_object_tree.appendChild( parent, object );
-    m_object_map.insert( ObjectPair( m_current_object_id, current ) );
+        // A pair of the object ID and a pointer to the object is inserted to
+        // the object map. The pointer to the object is got by inserting the
+        // object to the object master base.
+        ObjectIterator parent = m_root;
+        ObjectIterator current = m_object_tree.appendChild( parent, object );
+        m_object_map.insert( ObjectPair( m_current_object_id, current ) );
+    }
+    this->pop_centering_xform();
 
     return m_current_object_id;
 }
@@ -110,22 +114,26 @@ int ObjectManager::insert( kvs::ObjectBase* object )
 /*==========================================================================*/
 int ObjectManager::insert( int id, kvs::ObjectBase* object )
 {
-    // Updates the normalize parameters of the object manager and the object.
-    const kvs::Vec3 min_ext = object->minExternalCoord();
-    const kvs::Vec3 max_ext = object->maxExternalCoord();
-    this->update_normalize_parameters( min_ext, max_ext );
-    object->updateNormalizeParameters();
-
     // Finds the parent object by the specified ID.
     ObjectMap::iterator map_id = m_object_map.find( id );
     if ( map_id == m_object_map.end() ) { return -1; }
 
-    // Append the object.
-    m_current_object_id++;
+    this->push_centering_xform();
+    {
+        // Updates the normalize parameters of the object manager and the object.
+        const kvs::Vec3 min_ext = object->minExternalCoord();
+        const kvs::Vec3 max_ext = object->maxExternalCoord();
+        this->update_normalize_parameters( min_ext, max_ext );
+        object->updateNormalizeParameters();
 
-    ObjectIterator parent = map_id->second;
-    ObjectIterator current = m_object_tree.appendChild( parent, object );
-    m_object_map.insert( ObjectPair( m_current_object_id, current ) );
+        // Append the object.
+        m_current_object_id++;
+
+        ObjectIterator parent = map_id->second;
+        ObjectIterator current = m_object_tree.appendChild( parent, object );
+        m_object_map.insert( ObjectPair( m_current_object_id, current ) );
+    }
+    this->pop_centering_xform();
 
     return m_current_object_id;
 }
@@ -516,7 +524,13 @@ void ObjectManager::resetXform()
 {
     ObjectIterator object = m_object_tree.begin();
     ObjectIterator last = m_object_tree.end();
-    while ( object != last ) { (*object)->resetXform(); ++object; }
+    while ( object != last )
+    {
+        const kvs::Xform C = this->get_centering_xform( *object );
+        (*object)->resetXform();
+        (*object)->setXform( (*object)->xform() * C );
+        ++object;
+    }
 
     kvs::ObjectBase::resetXform();
 }
@@ -536,12 +550,14 @@ void ObjectManager::resetXform( int id )
     ObjectIterator child_object = m_object_tree.begin( object );
     ObjectIterator last = m_object_tree.end( object );
 
-    const kvs::Xform x = this->xform() * (*object)->xform().inverse();
+    const kvs::Xform c = this->get_centering_xform( *object );
+    const kvs::Xform x = this->xform() * ( (*object)->xform() * c ).inverse();
     (*object)->setXform( this->xform() );
 
     while ( child_object != last )
     {
-        (*child_object)->setXform( x * (*child_object)->xform() );
+        const kvs::Xform c0 = this->get_centering_xform( *child_object );
+        (*child_object)->setXform( x * (*child_object)->xform() * c0 );
         ++child_object;
     }
 }
@@ -555,7 +571,9 @@ void ObjectManager::resetActiveObjectXform()
 {
     if ( m_has_active_object )
     {
+        const kvs::Xform C = this->get_centering_xform( *m_active_object );
         (*m_active_object)->resetXform();
+        (*m_active_object)->setXform( (*m_active_object)->xform() * C );
         (*m_active_object)->multiplyXform( this->xform() );
     }
 }
@@ -822,7 +840,7 @@ kvs::ObjectBase* ObjectManager::get_control_target()
 
 /*==========================================================================*/
 /**
- *  @brief  Returns the rotation center.
+ *  @brief  Returns the rotation center in the world coordinate system.
  *  @param  object [in] pointer to the object
  *  @return rotation center
  */
@@ -834,10 +852,8 @@ kvs::Vec3 ObjectManager::get_rotation_center( kvs::ObjectBase* object )
         // In this case, a gravity of center of the object, which can be
         // assumed as the active object, in the world coordinate system
         // will be returned.
-        const kvs::Vec3 Tg = ObjectBase::objectCenter();
-        const kvs::Vec3 Sg = ObjectBase::normalize();
-        const kvs::Vec3 p_world = ( object->externalCenter() - Tg ) * Sg;
-        return object->xform().transform( p_world );
+        const kvs::Vec3 C = ObjectBase::objectCenter();
+        return object->xform().transform( C );
     }
     else
     {
@@ -882,6 +898,59 @@ ObjectManager::ObjectIterator ObjectManager::get_control_last_pointer()
     else
     {
         return m_object_tree.end();
+    }
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Returns the xform used for the auto-normalization and centering of the object.
+ *  @param  object [in] pointer to the object
+ *  @return xform
+ */
+/*===========================================================================*/
+kvs::Xform ObjectManager::get_centering_xform( kvs::ObjectBase* object )
+{
+    const kvs::Xform Te = kvs::Xform::Translation( object->externalCenter() );
+    const kvs::Xform Sl = kvs::Xform::Scaling( object->normalize() );
+    const kvs::Xform Tl = kvs::Xform::Translation( -1.0f * object->objectCenter() );
+    const kvs::Xform Sg = kvs::Xform::Scaling( this->normalize() );
+    const kvs::Xform Tg = kvs::Xform::Translation( -1.0f * this->objectCenter() );
+    return Sg * Tg * Te * Sl * Tl;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Removes the centering xform from all registered objects.
+ */
+/*===========================================================================*/
+void ObjectManager::push_centering_xform()
+{
+    ObjectIterator registered_object = this->get_control_first_pointer();
+    ObjectIterator last = this->get_control_last_pointer();
+    while ( registered_object != last )
+    {
+        kvs::Xform C = this->get_centering_xform( *registered_object );
+        kvs::Xform X = (*registered_object)->xform() * C.inverse();
+        (*registered_object)->setXform( X );
+        ++registered_object;
+    }
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Applys the centering xform to all registered objects.
+ */
+/*===========================================================================*/
+void ObjectManager::pop_centering_xform()
+{
+    ObjectIterator registered_object = this->get_control_first_pointer();
+    ObjectIterator last = this->get_control_last_pointer();
+    while ( registered_object != last )
+    {
+        kvs::Xform C = this->get_centering_xform( *registered_object );
+        kvs::Xform X = (*registered_object)->xform() * C;
+        (*registered_object)->setXform( X );
+        ++registered_object;
     }
 }
 

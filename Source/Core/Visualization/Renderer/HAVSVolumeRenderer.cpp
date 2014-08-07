@@ -166,7 +166,7 @@ void HAVSVolumeRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs
         this->update_framebuffer();
    }
 
-    this->sort_geometry( camera );
+    this->sort_geometry( camera, object );
     this->enable_MRT_rendering();
     this->draw_initialization_pass();
     this->draw_geometry_pass();
@@ -372,10 +372,10 @@ void HAVSVolumeRenderer::disable_MRT_rendering()
     m_mrt_framebuffer.unbind();
 }
 
-void HAVSVolumeRenderer::sort_geometry( kvs::Camera* camera )
+void HAVSVolumeRenderer::sort_geometry( kvs::Camera* camera, kvs::ObjectBase* object )
 {
-    // Visibility sorting.
-    const kvs::Vector3f position = kvs::WorldCoordinate( camera->position() ).toObjectCoordinate( camera ).position();
+    // Visibility sorting in the object coordinate system.
+    const kvs::Vec3 position = kvs::WorldCoordinate( camera->position() ).toObjectCoordinate( object ).position();
     const HAVSVolumeRenderer::Vertex eye( position );
     m_meshes->sort( eye );
 

@@ -112,11 +112,13 @@ Shader::Lambert::Lambert( const float ka, const float kd )
  *  Set the camera and light.
  *  @param camera [in] pointer to the camera
  *  @param light [in] pointer to the light
+ *  @param object [in] pointer to the object
  */
 /*==========================================================================*/
-void Shader::Lambert::set( const Camera* camera, const Light* light )
+void Shader::Lambert::set( const kvs::Camera* camera, const kvs::Light* light, const kvs::ObjectBase* object )
 {
-    light_position = kvs::WorldCoordinate( light->position() ).toObjectCoordinate( camera ).position();
+    kvs::IgnoreUnusedVariable( camera );
+    light_position = kvs::WorldCoordinate( light->position() ).toObjectCoordinate( object ).position();
 }
 
 /*===========================================================================*/
@@ -233,12 +235,13 @@ Shader::Phong::Phong( const float ka, const float kd, const float ks, const floa
  *  Set the camera and light.
  *  @param camera [in] pointer to the camera
  *  @param light [in] pointer to the light
+ *  @param object [in] pointer to the object
  */
 /*==========================================================================*/
-void Shader::Phong::set( const kvs::Camera* camera, const kvs::Light* light )
+void Shader::Phong::set( const kvs::Camera* camera, const kvs::Light* light, const kvs::ObjectBase* object )
 {
-    camera_position = kvs::WorldCoordinate( camera->position() ).toObjectCoordinate( camera ).position();
-    light_position = kvs::WorldCoordinate( light->position() ).toObjectCoordinate( camera ).position();
+    camera_position = kvs::WorldCoordinate( camera->position() ).toObjectCoordinate( object ).position();
+    light_position = kvs::WorldCoordinate( light->position() ).toObjectCoordinate( object ).position();
 }
 
 /*===========================================================================*/
@@ -358,12 +361,13 @@ Shader::BlinnPhong::BlinnPhong( const float ka, const float kd, const float ks, 
  *  Set the camera and light
  *  @param camera [in] pointer to the camera
  *  @param light [in] pointer to the light
+ *  @param object [in] pointer to the object
  */
 /*==========================================================================*/
-void Shader::BlinnPhong::set( const kvs::Camera* camera, const kvs::Light* light )
+void Shader::BlinnPhong::set( const kvs::Camera* camera, const kvs::Light* light, const kvs::ObjectBase* object )
 {
-    camera_position = kvs::WorldCoordinate( camera->position() ).toObjectCoordinate( camera ).position();
-    light_position = kvs::WorldCoordinate( light->position() ).toObjectCoordinate( camera ).position();
+    camera_position = kvs::WorldCoordinate( camera->position() ).toObjectCoordinate( object ).position();
+    light_position = kvs::WorldCoordinate( light->position() ).toObjectCoordinate( object ).position();
 }
 
 /*===========================================================================*/

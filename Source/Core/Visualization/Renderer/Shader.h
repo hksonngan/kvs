@@ -18,6 +18,7 @@
 #include <kvs/Vector3>
 #include <kvs/Camera>
 #include <kvs/Light>
+#include <kvs/ObjectBase>
 
 
 namespace kvs
@@ -52,7 +53,7 @@ public:
         Base();
         virtual ~Base();
 
-        virtual void set( const kvs::Camera* camera, const kvs::Light* light ) = 0;
+        virtual void set( const kvs::Camera* camera, const kvs::Light* light, const kvs::ObjectBase* object ) = 0;
         virtual Shader::Type type() const = 0;
         virtual const kvs::RGBColor shadedColor(
             const kvs::RGBColor& color,
@@ -74,7 +75,7 @@ public:
         Lambert( const Lambert& shader );
         Lambert( const float ka, const float kd );
 
-        void set( const kvs::Camera* camera, const kvs::Light* light );
+        void set( const kvs::Camera* camera, const kvs::Light* light, const kvs::ObjectBase* object );
         Shader::Type type() const;
         const kvs::RGBColor shadedColor(
             const kvs::RGBColor& color,
@@ -89,7 +90,7 @@ public:
         Phong( const Phong& shader );
         Phong( const float ka, const float kd, const float ks, const float s );
 
-        void set( const kvs::Camera* camera, const kvs::Light* light );
+        void set( const kvs::Camera* camera, const kvs::Light* light, const kvs::ObjectBase* object );
         Shader::Type type() const;
         const kvs::RGBColor shadedColor(
             const kvs::RGBColor& color,
@@ -104,7 +105,7 @@ public:
         BlinnPhong( const BlinnPhong& shader );
         BlinnPhong( const float ka, const float kd, const float ks, const float s );
 
-        void set( const kvs::Camera* camera, const kvs::Light* light );
+        void set( const kvs::Camera* camera, const kvs::Light* light, const kvs::ObjectBase* object );
         Shader::Type type() const;
         const kvs::RGBColor shadedColor(
             const kvs::RGBColor& color,

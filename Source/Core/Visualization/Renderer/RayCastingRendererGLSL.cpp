@@ -257,8 +257,8 @@ void RayCastingRenderer::exec(
             const float to_zw2 = 0.5f * ( ( f + n ) / ( f - n ) ) + 0.5f;
             const float to_ze1 = 0.5f + 0.5f * ( ( f + n ) / ( f - n ) );
             const float to_ze2 = ( f - n ) / ( f * n );
-            const kvs::Vector3f light_position = kvs::WorldCoordinate( light->position() ).toObjectCoordinate( camera ).position();
-            const kvs::Vector3f camera_position = kvs::WorldCoordinate( camera->position() ).toObjectCoordinate( camera ).position();
+            const kvs::Vec3 light_position = kvs::WorldCoordinate( light->position() ).toObjectCoordinate( object ).position();
+            const kvs::Vec3 camera_position = kvs::WorldCoordinate( camera->position() ).toObjectCoordinate( object ).position();
             m_ray_casting_shader.setUniform( "to_zw1", to_zw1 );
             m_ray_casting_shader.setUniform( "to_zw2", to_zw2 );
             m_ray_casting_shader.setUniform( "to_ze1", to_ze1 );
@@ -364,9 +364,9 @@ void RayCastingRenderer::initialize_shader( const kvs::StructuredVolumeObject* v
     // Set uniform variables.
     const kvs::Vector3ui r = volume->resolution();
     const kvs::Real32 max_ngrids = static_cast<kvs::Real32>( kvs::Math::Max( r.x(), r.y(), r.z() ) );
-    const kvs::Vector3f resolution( static_cast<float>(r.x()), static_cast<float>(r.y()), static_cast<float>(r.z()) );
-    const kvs::Vector3f ratio( r.x() / max_ngrids, r.y() / max_ngrids, r.z() / max_ngrids );
-    const kvs::Vector3f reciprocal( 1.0f / r.x(), 1.0f / r.y(), 1.0f / r.z() );
+    const kvs::Vec3 resolution( static_cast<float>(r.x()), static_cast<float>(r.y()), static_cast<float>(r.z()) );
+    const kvs::Vec3 ratio( r.x() / max_ngrids, r.y() / max_ngrids, r.z() / max_ngrids );
+    const kvs::Vec3 reciprocal( 1.0f / r.x(), 1.0f / r.y(), 1.0f / r.z() );
     kvs::Real32 min_range = 0.0f;
     kvs::Real32 max_range = 0.0f;
     kvs::Real32 min_value = BaseClass::transferFunction().colorMap().minValue();
