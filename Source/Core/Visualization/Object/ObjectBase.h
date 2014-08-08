@@ -19,6 +19,7 @@
 #include <kvs/XformControl>
 #include <kvs/Vector2>
 #include <kvs/Vector3>
+#include <kvs/Matrix44>
 #include <kvs/Module>
 #include <kvs/Indent>
 #include <kvs/Deprecated>
@@ -90,10 +91,11 @@ public:
     const kvs::Vec3& objectCenter() const { return m_object_center; }
     const kvs::Vec3& externalCenter() const { return m_external_center; }
     const kvs::Vec3& normalize() const { return m_normalize; }
+    const kvs::Mat4 modelingMatrix() const { return this->xform().toMatrix(); }
     bool isShown() const { return m_show_flag; }
 
-    virtual void updateMinMaxCoords(){};
     void updateNormalizeParameters();
+    virtual void updateMinMaxCoords(){};
 
 protected:
 
