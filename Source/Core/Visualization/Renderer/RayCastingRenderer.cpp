@@ -160,7 +160,7 @@ void RayCastingRenderer::rasterize(
     const kvs::Light* light )
 {
     // Set shader initial parameters.
-    BaseClass::shader().set( camera, light );
+    BaseClass::shader().set( camera, light, volume );
 
     // Readback pixels.
     BaseClass::readImage();

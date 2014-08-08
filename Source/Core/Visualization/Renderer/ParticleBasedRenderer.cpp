@@ -187,7 +187,7 @@ void ParticleBasedRenderer::project_particle(
     const size_t h = camera->windowHeight() / 2;
 
     // Set shader initial parameters.
-    BaseClass::shader().set( camera, light );
+    BaseClass::shader().set( camera, light, point );
 
     // Attach the shader and the point object to the point buffer.
     m_buffer->attachShader( &BaseClass::shader() );
