@@ -20,6 +20,7 @@
 #include <kvs/Macro>
 #include <kvs/Platform>
 #include <kvs/Version>
+#include <kvs/Endian>
 
 
 namespace
@@ -737,7 +738,21 @@ bool AVSField::read_node( FILE* ifs )
     }
 
 #if defined ( KVS_PLATFORM_BIG_ENDIAN )
-    m_values.swapByte();
+//    m_values.swapByte();
+    switch ( m_values.typeID() )
+    {
+    case kvs::Type::TypeInt8:   kvs::Endian::Swap( static_cast<kvs::Int8*  >( m_values.data() ), m_values.size() ); break;
+    case kvs::Type::TypeUInt8:  kvs::Endian::Swap( static_cast<kvs::UInt8* >( m_values.data() ), m_values.size() ); break;
+    case kvs::Type::TypeInt16:  kvs::Endian::Swap( static_cast<kvs::Int16* >( m_values.data() ), m_values.size() ); break;
+    case kvs::Type::TypeUInt16: kvs::Endian::Swap( static_cast<kvs::UInt16*>( m_values.data() ), m_values.size() ); break;
+    case kvs::Type::TypeInt32:  kvs::Endian::Swap( static_cast<kvs::Int32* >( m_values.data() ), m_values.size() ); break;
+    case kvs::Type::TypeUInt32: kvs::Endian::Swap( static_cast<kvs::UInt32*>( m_values.data() ), m_values.size() ); break;
+    case kvs::Type::TypeInt64:  kvs::Endian::Swap( static_cast<kvs::Int64* >( m_values.data() ), m_values.size() ); break;
+    case kvs::Type::TypeUInt64: kvs::Endian::Swap( static_cast<kvs::UInt64*>( m_values.data() ), m_values.size() ); break;
+    case kvs::Type::TypeReal32: kvs::Endian::Swap( static_cast<kvs::Real32*>( m_values.data() ), m_values.size() ); break;
+    case kvs::Type::TypeReal64: kvs::Endian::Swap( static_cast<kvs::Real64*>( m_values.data() ), m_values.size() ); break;
+    default: break;
+    }
 #endif
 
     return true;
