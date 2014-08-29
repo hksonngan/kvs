@@ -37,6 +37,7 @@ const kvs::UnstructuredVolumeObject::CellType StringToCellType( const std::strin
     else if ( cell_type == "quadratic hexahedra"  ) { return kvs::UnstructuredVolumeObject::QuadraticHexahedra;  }
     else if ( cell_type == "pyramid"  ) { return kvs::UnstructuredVolumeObject::Pyramid;  }
     else if ( cell_type == "point"  ) { return kvs::UnstructuredVolumeObject::Point;  }
+    else if ( cell_type == "prism"  ) { return kvs::UnstructuredVolumeObject::Prism;  }
     else
     {
         kvsMessageError( "Unknown cell type '%s'.", cell_type.c_str() );
@@ -69,6 +70,18 @@ const kvs::UnstructuredVolumeObject::CellType ElementTypeToCellType(
     else if ( element_type == kvs::AVSUcd::Hexahedra2 )
     {
         return kvs::UnstructuredVolumeObject::QuadraticHexahedra;
+    }
+    else if ( element_type == kvs::AVSUcd::Point )
+    {
+        return kvs::UnstructuredVolumeObject::Point;
+    }
+    else if ( element_type == kvs::AVSUcd::Pyramid )
+    {
+        return kvs::UnstructuredVolumeObject::Pyramid;
+    }
+    else if ( element_type == kvs::AVSUcd::Prism )
+    {
+        return kvs::UnstructuredVolumeObject::Prism;
     }
     else
     {
