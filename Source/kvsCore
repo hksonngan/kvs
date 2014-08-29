@@ -207,12 +207,16 @@
 #include <Core/Visualization/Importer/UnstructuredVolumeImporter.h>
 #include <Core/Visualization/Mapper/Cell.h>
 #include <Core/Visualization/Mapper/CellAdjacencyGraph.h>
+#include <Core/Visualization/Mapper/CellAdjacencyGraphLocator.h>
 #include <Core/Visualization/Mapper/CellBase.h>
 #include <Core/Visualization/Mapper/CellByCellLayeredSampling.h>
 #include <Core/Visualization/Mapper/CellByCellMetropolisSampling.h>
 #include <Core/Visualization/Mapper/CellByCellParticleGenerator.h>
 #include <Core/Visualization/Mapper/CellByCellRejectionSampling.h>
 #include <Core/Visualization/Mapper/CellByCellUniformSampling.h>
+#include <Core/Visualization/Mapper/CellLocator.h>
+#include <Core/Visualization/Mapper/CellTree.h>
+#include <Core/Visualization/Mapper/CellTreeLocator.h>
 #include <Core/Visualization/Mapper/ColorMap.h>
 #include <Core/Visualization/Mapper/ExternalFaces.h>
 #include <Core/Visualization/Mapper/ExtractEdges.h>

@@ -254,11 +254,15 @@ $(OUTDIR)\.\Visualization\Importer\TableImporter.obj \
 $(OUTDIR)\.\Visualization\Importer\UnstructuredVolumeImporter.obj \
 $(OUTDIR)\.\Visualization\Mapper\Cell.obj \
 $(OUTDIR)\.\Visualization\Mapper\CellAdjacencyGraph.obj \
+$(OUTDIR)\.\Visualization\Mapper\CellAdjacencyGraphLocator.obj \
 $(OUTDIR)\.\Visualization\Mapper\CellBase.obj \
 $(OUTDIR)\.\Visualization\Mapper\CellByCellLayeredSampling.obj \
 $(OUTDIR)\.\Visualization\Mapper\CellByCellMetropolisSampling.obj \
 $(OUTDIR)\.\Visualization\Mapper\CellByCellRejectionSampling.obj \
 $(OUTDIR)\.\Visualization\Mapper\CellByCellUniformSampling.obj \
+$(OUTDIR)\.\Visualization\Mapper\CellLocator.obj \
+$(OUTDIR)\.\Visualization\Mapper\CellTree.obj \
+$(OUTDIR)\.\Visualization\Mapper\CellTreeLocator.obj \
 $(OUTDIR)\.\Visualization\Mapper\ColorMap.obj \
 $(OUTDIR)\.\Visualization\Mapper\ExternalFaces.obj \
 $(OUTDIR)\.\Visualization\Mapper\ExtractEdges.obj \

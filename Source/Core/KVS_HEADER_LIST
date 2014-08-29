@@ -207,12 +207,16 @@ Visualization/Importer/TableImporter
 Visualization/Importer/UnstructuredVolumeImporter
 Visualization/Mapper/Cell
 Visualization/Mapper/CellAdjacencyGraph
+Visualization/Mapper/CellAdjacencyGraphLocator
 Visualization/Mapper/CellBase
 Visualization/Mapper/CellByCellLayeredSampling
 Visualization/Mapper/CellByCellMetropolisSampling
 Visualization/Mapper/CellByCellParticleGenerator
 Visualization/Mapper/CellByCellRejectionSampling
 Visualization/Mapper/CellByCellUniformSampling
+Visualization/Mapper/CellLocator
+Visualization/Mapper/CellTree
+Visualization/Mapper/CellTreeLocator
 Visualization/Mapper/ColorMap
 Visualization/Mapper/ExternalFaces
 Visualization/Mapper/ExtractEdges
