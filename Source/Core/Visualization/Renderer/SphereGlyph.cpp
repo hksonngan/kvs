@@ -122,16 +122,10 @@ void SphereGlyph::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light
     }
 
     BaseClass::startTimer();
-
-    glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT );
-
-    glEnable( GL_DEPTH_TEST );
+    kvs::OpenGL::WithPushedAttrib p( GL_ALL_ATTRIB_BITS );
+    kvs::OpenGL::Enable( GL_DEPTH_TEST );
     this->initialize();
     this->draw();
-    glDisable( GL_DEPTH_TEST );
-
-    glPopAttrib();
-
     BaseClass::stopTimer();
 }
 
@@ -158,12 +152,10 @@ void SphereGlyph::draw()
             const kvs::Real32 size = BaseClass::sizes()[i];
             const kvs::RGBColor color( BaseClass::colors().data() + index );
             const kvs::UInt8 opacity = BaseClass::opacities()[i];
-            glPushMatrix();
-            {
-                BaseClass::transform( position, size );
-                this->draw_element( color, opacity );
-            }
-            glPopMatrix();
+            kvs::OpenGL::PushMatrix();
+            BaseClass::transform( position, size );
+            this->draw_element( color, opacity );
+            kvs::OpenGL::PopMatrix();
         }
     }
     else
@@ -175,12 +167,10 @@ void SphereGlyph::draw()
             const kvs::Real32 size = BaseClass::sizes()[i];
             const kvs::RGBColor color( BaseClass::colors().data() + index );
             const kvs::UInt8 opacity = BaseClass::opacities()[i];
-            glPushMatrix();
-            {
-                BaseClass::transform( position, direction, size );
-                this->draw_element( color, opacity );
-            }
-            glPopMatrix();
+            kvs::OpenGL::PushMatrix();
+            BaseClass::transform( position, direction, size );
+            this->draw_element( color, opacity ); 
+            kvs::OpenGL::PopMatrix();
         }
     }
 }
@@ -226,8 +216,8 @@ void SphereGlyph::attach_point( const kvs::PointObject* point )
         for ( size_t i = 0, j = 0; i < nvertices; i++, j += 3 )
         {
             colors[j]   = color.r();
-            colors[j+1] = color.r();
-            colors[j+2] = color.r();
+            colors[j+1] = color.g();
+            colors[j+2] = color.b();
         }
         BaseClass::setColors( colors );
     }
@@ -327,7 +317,7 @@ void SphereGlyph::attach_volume( const kvs::VolumeObjectBase* volume )
 /*===========================================================================*/
 void SphereGlyph::draw_element( const kvs::RGBColor& color, const kvs::UInt8 opacity )
 {
-    glColor4ub( color.r(), color.g(), color.b(), opacity );
+    KVS_GL_CALL( glColor4ub( color.r(), color.g(), color.b(), opacity ) );
 
     const GLdouble radius = 0.5;
     gluSphere( m_sphere, radius, static_cast<GLint>(m_nslices), static_cast<GLint>(m_nstacks) );
@@ -340,27 +330,23 @@ void SphereGlyph::draw_element( const kvs::RGBColor& color, const kvs::UInt8 opa
 /*===========================================================================*/
 void SphereGlyph::initialize()
 {
-    glDisable( GL_LINE_SMOOTH );
+    kvs::OpenGL::SetBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+    kvs::OpenGL::SetPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+    kvs::OpenGL::SetShadeModel( GL_SMOOTH );
+    kvs::OpenGL::SetColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
 
-    glEnable( GL_BLEND );
-    glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-
-    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
-
-    glShadeModel( GL_SMOOTH );
-
-    glColorMaterial( GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE );
-    glEnable( GL_COLOR_MATERIAL );
-
+    kvs::OpenGL::Disable( GL_LINE_SMOOTH );
+    kvs::OpenGL::Enable( GL_BLEND );
+    kvs::OpenGL::Enable( GL_COLOR_MATERIAL );
     if ( !BaseClass::isEnabledShading() )
     {
-        glDisable( GL_NORMALIZE );
-        glDisable( GL_LIGHTING );
+        kvs::OpenGL::Disable( GL_NORMALIZE );
+        kvs::OpenGL::Disable( GL_LIGHTING );
     }
     else
     {
-        glEnable( GL_NORMALIZE );
-        glEnable( GL_LIGHTING );
+        kvs::OpenGL::Enable( GL_NORMALIZE );
+        kvs::OpenGL::Enable( GL_LIGHTING );
     }
 }
 

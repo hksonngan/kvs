@@ -330,6 +330,16 @@ void SetShadeModel( GLenum mode )
     KVS_GL_CALL( glShadeModel( mode ) );
 }
 
+void SetPolygonMode( GLenum face, GLenum mode )
+{
+    KVS_GL_CALL( glPolygonMode( face, mode ) );
+}
+
+void SetColorMaterial( GLenum face, GLenum mode )
+{
+    KVS_GL_CALL( glColorMaterial( face, mode ) );
+}
+
 void SetMatrixMode( GLenum mode )
 {
     KVS_GL_CALL( glMatrixMode( mode ) );

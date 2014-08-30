@@ -71,6 +71,8 @@ void SetDepthFunc( GLenum func );
 void SetBlendFunc( GLenum sfactor, GLenum dfactor );
 void SetShadeModel( GLenum mode );
 void SetMatrixMode( GLenum mode );
+void SetPolygonMode( GLenum face, GLenum mode );
+void SetColorMaterial( GLenum face, GLenum mode );
 void SetCullFace( GLenum mode );
 void SetReadBuffer( GLenum mode );
 void SetDrawBuffer( GLenum mode );
