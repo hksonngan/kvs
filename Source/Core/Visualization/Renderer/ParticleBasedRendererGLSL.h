@@ -53,9 +53,13 @@ public:
     ParticleBasedRenderer();
     ParticleBasedRenderer( const kvs::Mat4& m, const kvs::Mat4& p, const kvs::Vec4& v );
     bool isEnabledShuffle() const;
+    bool isEnabledZooming() const;
     void setEnabledShuffle( const bool enable );
+    void setEnabledZooming( const bool enable );
     void enableShuffle();
+    void enableZooming();
     void disableShuffle();
+    void disableZooming();
     const kvs::Mat4& initialModelViewMatrix() const;
     const kvs::Mat4& initialProjectionMatrix() const;
     const kvs::Vec4& initialViewport() const;
@@ -65,8 +69,6 @@ public:
     KVS_DEPRECATED( void initialize() ) {}
     KVS_DEPRECATED( void setSubpixelLevel( const size_t level ) ) { setRepetitionLevel( level * level ); }
     KVS_DEPRECATED( void setCircleThreshold( const size_t ) ) {}
-    KVS_DEPRECATED( void enableZooming() ) {}
-    KVS_DEPRECATED( void disableZooming() ) {}
     KVS_DEPRECATED( void enableCoarseRendering( const size_t level = 1 ) ) {}
     KVS_DEPRECATED( void disableCoarseRendering() ) {}
     KVS_DEPRECATED( void enableAccumulationBuffer() ) {}
@@ -96,6 +98,7 @@ private:
 
     bool m_has_normal; ///< check flag for the normal array
     bool m_enable_shuffle; ///< flag for shuffling particles
+    bool m_enable_zooming; ///< flag for zooming particles
     size_t m_random_index; ///< index used for refering the random texture
     kvs::Mat4 m_initial_modelview; ///< initial modelview matrix
     kvs::Mat4 m_initial_projection; ///< initial projection matrix
@@ -116,9 +119,13 @@ public:
     void draw( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Light* light );
 
     bool isEnabledShuffle() const { return m_enable_shuffle; }
+    bool isEnabledZooming() const { return m_enable_zooming; }
     void setEnabledShuffle( const bool enable ) { m_enable_shuffle = enable; }
+    void setEnabledZooming( const bool enable ) { m_enable_zooming = enable; }
     void enableShuffle() { this->setEnabledShuffle( true ); }
+    void enableZooming() { this->setEnabledZooming( true ); }
     void disableShuffle() { this->setEnabledShuffle( false ); }
+    void disableZooming() { this->setEnabledZooming( false ); }
     const kvs::Mat4& initialModelViewMatrix() const { return m_initial_modelview; }
     const kvs::Mat4& initialProjectionMatrix() const { return m_initial_projection; }
     const kvs::Vec4& initialViewport() const { return m_initial_viewport; }

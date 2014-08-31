@@ -104,6 +104,17 @@ bool ParticleBasedRenderer::isEnabledShuffle() const
 
 /*===========================================================================*/
 /**
+ *  @brief  Returns true if the particle zooming is enabled
+ *  @return true, if the zooming is enabled
+ */
+/*===========================================================================*/
+bool ParticleBasedRenderer::isEnabledZooming() const
+{
+    return static_cast<const Engine&>( engine() ).isEnabledZooming();
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Sets enable-flag for the particle shuffling.
  *  @param  enable [in] enable-flag
  */
@@ -111,6 +122,17 @@ bool ParticleBasedRenderer::isEnabledShuffle() const
 void ParticleBasedRenderer::setEnabledShuffle( const bool enable )
 {
     static_cast<Engine&>( engine() ).setEnabledShuffle( enable );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Sets enable-flag for the particle zooming.
+ *  @param  enable [in] enable-flag
+ */
+/*===========================================================================*/
+void ParticleBasedRenderer::setEnabledZooming( const bool enable )
+{
+    static_cast<Engine&>( engine() ).setEnabledZooming( enable );
 }
 
 /*===========================================================================*/
@@ -125,12 +147,32 @@ void ParticleBasedRenderer::enableShuffle()
 
 /*===========================================================================*/
 /**
+ *  @brief  Enable the particle zooming.
+ */
+/*===========================================================================*/
+void ParticleBasedRenderer::enableZooming()
+{
+    static_cast<Engine&>( engine() ).enableZooming();
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Disable the particle shuffling.
  */
 /*===========================================================================*/
 void ParticleBasedRenderer::disableShuffle()
 {
     static_cast<Engine&>( engine() ).disableShuffle();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Disable the particle zooming.
+ */
+/*===========================================================================*/
+void ParticleBasedRenderer::disableZooming()
+{
+    static_cast<Engine&>( engine() ).disableZooming();
 }
 
 /*===========================================================================*/
@@ -174,6 +216,7 @@ const kvs::Vec4& ParticleBasedRenderer::initialViewport() const
 ParticleBasedRenderer::Engine::Engine():
     m_has_normal( false ),
     m_enable_shuffle( true ),
+    m_enable_zooming( true ),
     m_random_index( 0 ),
     m_initial_modelview( kvs::Mat4::Zero() ),
     m_initial_projection( kvs::Mat4::Zero() ),
@@ -414,6 +457,11 @@ void ParticleBasedRenderer::Engine::create_shader_program()
         {
             frag.define("ENABLE_TWO_SIDE_LIGHTING");
         }
+    }
+
+    if ( isEnabledZooming() )
+    {
+        vert.define("ENABLE_PARTICLE_ZOOMING");
     }
 
     m_shader_program.build( vert, frag );
