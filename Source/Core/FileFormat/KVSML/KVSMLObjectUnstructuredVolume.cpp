@@ -118,6 +118,8 @@ KVSMLObjectUnstructuredVolume::KVSMLObjectUnstructuredVolume():
     m_cell_type( "" ),
     m_has_label( false ),
     m_label( "" ),
+    m_has_unit( false ),
+    m_unit( "" ),
     m_veclen( 0 ),
     m_nnodes( 0 ),
     m_ncells( 0 ),
@@ -139,6 +141,8 @@ KVSMLObjectUnstructuredVolume::KVSMLObjectUnstructuredVolume( const std::string&
     m_cell_type( "" ),
     m_has_label( false ),
     m_label( "" ),
+    m_has_unit( false ),
+    m_unit( "" ),
     m_veclen( 0 ),
     m_nnodes( 0 ),
     m_ncells( 0 ),
@@ -152,239 +156,11 @@ KVSMLObjectUnstructuredVolume::KVSMLObjectUnstructuredVolume( const std::string&
 
 /*===========================================================================*/
 /**
- *  @brief  Returns the KVSML tag.
- *  @return KVSML tag
+ *  @brief  Prints the information of this file.
+ *  @param  os [in] output stream
+ *  @param  indent [in] indent
  */
 /*===========================================================================*/
-const kvs::kvsml::KVSMLTag& KVSMLObjectUnstructuredVolume::KVSMLTag() const
-{
-    return m_kvsml_tag;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the object tag.
- *  @return object tag
- */
-/*===========================================================================*/
-const kvs::kvsml::ObjectTag& KVSMLObjectUnstructuredVolume::objectTag() const
-{
-    return m_object_tag;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the cell type as string.
- *  @return cell type
- */
-/*===========================================================================*/
-const std::string& KVSMLObjectUnstructuredVolume::cellType() const
-{
-    return m_cell_type;
-}
-
-bool KVSMLObjectUnstructuredVolume::hasLabel() const
-{
-    return m_has_label;
-}
-
-const std::string& KVSMLObjectUnstructuredVolume::label() const
-{
-    return m_label;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the vector length.
- *  @return vector length
- */
-/*===========================================================================*/
-size_t KVSMLObjectUnstructuredVolume::veclen() const
-{
-    return m_veclen;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the number of nodes.
- *  @return number of nodes
- */
-/*===========================================================================*/
-size_t KVSMLObjectUnstructuredVolume::nnodes() const
-{
-    return m_nnodes;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the number of cells.
- *  @return number of cells
- */
-/*===========================================================================*/
-size_t KVSMLObjectUnstructuredVolume::ncells() const
-{
-    return m_ncells;
-}
-
-bool KVSMLObjectUnstructuredVolume::hasMinValue() const
-{
-    return m_has_min_value;
-}
-
-bool KVSMLObjectUnstructuredVolume::hasMaxValue() const
-{
-    return m_has_max_value;
-}
-
-double KVSMLObjectUnstructuredVolume::minValue() const
-{
-    return m_min_value;
-}
-
-double KVSMLObjectUnstructuredVolume::maxValue() const
-{
-    return m_max_value;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the value array.
- *  @return value array
- */
-/*===========================================================================*/
-const kvs::AnyValueArray& KVSMLObjectUnstructuredVolume::values() const
-{
-    return m_values;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the coordinate array.
- *  @return coordinate array
- */
-/*===========================================================================*/
-const kvs::ValueArray<kvs::Real32>& KVSMLObjectUnstructuredVolume::coords() const
-{
-    return m_coords;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the connection array.
- *  @return connection array
- */
-/*===========================================================================*/
-const kvs::ValueArray<kvs::UInt32>& KVSMLObjectUnstructuredVolume::connections() const
-{
-    return m_connections;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a writing data type.
- *  @param  writing_type [in] writing data type
- */
-/*===========================================================================*/
-void KVSMLObjectUnstructuredVolume::setWritingDataType( const WritingDataType writing_type )
-{
-    m_writing_type = writing_type;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a cell type.
- *  @param  cell_type [in] cell type
- */
-/*===========================================================================*/
-void KVSMLObjectUnstructuredVolume::setCellType( const std::string& cell_type )
-{
-    m_cell_type = cell_type;
-}
-
-void KVSMLObjectUnstructuredVolume::setLabel( const std::string& label )
-{
-    m_has_label = true;
-    m_label = label;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a vector length.
- *  @param  veclen [in] vector length
- */
-/*===========================================================================*/
-void KVSMLObjectUnstructuredVolume::setVeclen( const size_t veclen )
-{
-    m_veclen = veclen;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a number of nodes.
- *  @param  nnodes [in] number of nodes
- */
-/*===========================================================================*/
-void KVSMLObjectUnstructuredVolume::setNNodes( const size_t nnodes )
-{
-    m_nnodes = nnodes;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a number of cells.
- *  @param  ncells [in] number of cells
- */
-/*===========================================================================*/
-void KVSMLObjectUnstructuredVolume::setNCells( const size_t ncells )
-{
-    m_ncells = ncells;
-}
-
-void KVSMLObjectUnstructuredVolume::setMinValue( const double min_value )
-{
-    m_has_min_value = true;
-    m_min_value = min_value;
-}
-
-void KVSMLObjectUnstructuredVolume::setMaxValue( const double max_value )
-{
-    m_has_max_value = true;
-    m_max_value = max_value;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a value array.
- *  @param  values [in] value array
- */
-/*===========================================================================*/
-void KVSMLObjectUnstructuredVolume::setValues( const kvs::AnyValueArray& values )
-{
-    m_values = values;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a coordinate array.
- *  @param  coords [in] coordinate array
- */
-/*===========================================================================*/
-void KVSMLObjectUnstructuredVolume::setCoords( const kvs::ValueArray<kvs::Real32>& coords )
-{
-    m_coords = coords;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a connection array.
- *  @param  connections [in] connection array
- */
-/*===========================================================================*/
-void KVSMLObjectUnstructuredVolume::setConnections( const kvs::ValueArray<kvs::UInt32>& connections )
-{
-    m_connections = connections;
-}
-
 void KVSMLObjectUnstructuredVolume::print( std::ostream& os, const kvs::Indent& indent ) const
 {
     os << indent << "Filename : " << BaseClass::filename() << std::endl;
@@ -392,6 +168,8 @@ void KVSMLObjectUnstructuredVolume::print( std::ostream& os, const kvs::Indent& 
     os << indent << "Veclen : " << m_veclen << std::endl;
     os << indent << "Number of nodes : " << m_nnodes << std::endl;
     os << indent << "Number of cells : " << m_ncells << std::endl;
+    if ( m_has_label ) { os << indent << "Value label : " << m_label << std::endl; }
+    if ( m_has_unit ) { os << indent << "Value unit : " << m_unit << std::endl; }
     os << indent << "Value type : " << m_values.typeInfo()->typeName();
 }
 
@@ -465,6 +243,9 @@ bool KVSMLObjectUnstructuredVolume::read( const std::string& filename )
 
     m_has_label = value_tag.hasLabel();
     if ( m_has_label ) { m_label = value_tag.label(); }
+
+    m_has_unit = value_tag.hasUnit();
+    if ( m_has_unit ) { m_unit = value_tag.unit(); }
 
     if ( !value_tag.hasVeclen() )
     {
@@ -608,6 +389,7 @@ bool KVSMLObjectUnstructuredVolume::write( const std::string& filename )
     value_tag.setVeclen( m_veclen );
 
     if ( m_has_label ) { value_tag.setLabel( m_label ); }
+    if ( m_has_unit ) { value_tag.setUnit( m_unit ); }
     if ( m_has_min_value ) { value_tag.setMinValue( m_min_value ); }
     if ( m_has_max_value ) { value_tag.setMaxValue( m_max_value ); }
 

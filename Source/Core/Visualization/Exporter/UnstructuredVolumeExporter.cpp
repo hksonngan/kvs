@@ -60,6 +60,9 @@ kvs::KVSMLObjectUnstructuredVolume* UnstructuredVolumeExporter<kvs::KVSMLObjectU
         return NULL;
     }
 
+    if ( volume->label() != "" ) { this->setLabel( volume->label() ); }
+    if ( volume->unit() != "" ) { this->setUnit( volume->unit() ); }
+
     // Check the cell type of the given unstructured volume object.
     switch ( volume->cellType() )
     {

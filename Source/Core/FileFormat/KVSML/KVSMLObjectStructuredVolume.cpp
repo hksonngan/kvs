@@ -92,6 +92,8 @@ KVSMLObjectStructuredVolume::KVSMLObjectStructuredVolume():
     m_grid_type( "" ),
     m_has_label( false ),
     m_label( "" ),
+    m_has_unit( false ),
+    m_unit( "" ),
     m_veclen( 0 ),
     m_resolution( 0, 0, 0 ),
     m_has_min_value( false ),
@@ -112,6 +114,8 @@ KVSMLObjectStructuredVolume::KVSMLObjectStructuredVolume( const std::string& fil
     m_grid_type( "" ),
     m_has_label( false ),
     m_label( "" ),
+    m_has_unit( false ),
+    m_unit( "" ),
     m_veclen( 0 ),
     m_resolution( 0, 0, 0 ),
     m_has_min_value( false ),
@@ -124,189 +128,19 @@ KVSMLObjectStructuredVolume::KVSMLObjectStructuredVolume( const std::string& fil
 
 /*===========================================================================*/
 /**
- *  @brief  Returns the KVSML tag.
- *  @return KVSML tag
+ *  @brief  Prints the information of this file.
+ *  @param  os [in] output stream
+ *  @param  indent [in] indent
  */
 /*===========================================================================*/
-const kvs::kvsml::KVSMLTag& KVSMLObjectStructuredVolume::KVSMLTag() const
-{
-    return m_kvsml_tag;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the object tag.
- *  @return object tag
- */
-/*===========================================================================*/
-const kvs::kvsml::ObjectTag& KVSMLObjectStructuredVolume::objectTag() const
-{
-    return m_object_tag;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the grid type.
- *  @return grid type
- */
-/*===========================================================================*/
-const std::string& KVSMLObjectStructuredVolume::gridType() const
-{
-    return m_grid_type;
-}
-
-bool KVSMLObjectStructuredVolume::hasLabel() const
-{
-    return m_has_label;
-}
-
-const std::string& KVSMLObjectStructuredVolume::label() const
-{
-    return m_label;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the vector length.
- *  @return vector length
- */
-/*===========================================================================*/
-size_t KVSMLObjectStructuredVolume::veclen() const
-{
-    return m_veclen;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the grid resolution.
- *  @return grid resolution
- */
-/*===========================================================================*/
-const kvs::Vector3ui& KVSMLObjectStructuredVolume::resolution() const
-{
-    return m_resolution;
-}
-
-bool KVSMLObjectStructuredVolume::hasMinValue() const
-{
-    return m_has_min_value;
-}
-
-bool KVSMLObjectStructuredVolume::hasMaxValue() const
-{
-    return m_has_max_value;
-}
-
-double KVSMLObjectStructuredVolume::minValue() const
-{
-    return m_min_value;
-}
-
-double KVSMLObjectStructuredVolume::maxValue() const
-{
-    return m_max_value;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the value array.
- *  @return value array
- */
-/*===========================================================================*/
-const kvs::AnyValueArray& KVSMLObjectStructuredVolume::values() const
-{
-    return m_values;
-}
-
-const kvs::ValueArray<float>& KVSMLObjectStructuredVolume::coords() const
-{
-    return m_coords;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a writing data type.
- *  @param  writing_type [in] wirting data type
- */
-/*===========================================================================*/
-void KVSMLObjectStructuredVolume::setWritingDataType( const WritingDataType writing_type )
-{
-    m_writing_type = writing_type;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a grid type.
- *  @param  grid_type [in] grid type
- */
-/*===========================================================================*/
-void KVSMLObjectStructuredVolume::setGridType( const std::string& grid_type )
-{
-    m_grid_type = grid_type;
-}
-
-void KVSMLObjectStructuredVolume::setLabel( const std::string& label )
-{
-    m_has_label = true;
-    m_label = label;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a vector length.
- *  @param  veclen [in] vector length
- */
-/*===========================================================================*/
-void KVSMLObjectStructuredVolume::setVeclen( const size_t veclen )
-{
-    m_veclen = veclen;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a grid resolution.
- *  @param  resolution [in] grid resolution
- */
-/*===========================================================================*/
-void KVSMLObjectStructuredVolume::setResolution( const kvs::Vector3ui& resolution )
-{
-    m_resolution = resolution;
-}
-
-void KVSMLObjectStructuredVolume::setMinValue( const double min_value )
-{
-    m_has_min_value = true;
-    m_min_value = min_value;
-}
-
-void KVSMLObjectStructuredVolume::setMaxValue( const double max_value )
-{
-    m_has_max_value = true;
-    m_max_value = max_value;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a value array.
- *  @param  values [in] value array
- */
-/*===========================================================================*/
-void KVSMLObjectStructuredVolume::setValues( const kvs::AnyValueArray& values )
-{
-    m_values = values;
-}
-
-void KVSMLObjectStructuredVolume::setCoords( const kvs::ValueArray<float>& coords )
-{
-    m_coords = coords;
-}
-
 void KVSMLObjectStructuredVolume::print( std::ostream& os, const kvs::Indent& indent ) const
 {
     os << indent << "Filename : " << BaseClass::filename() << std::endl;
     os << indent << "Grid type : " << m_grid_type << std::endl;
     os << indent << "Veclen : " << m_veclen << std::endl;
     os << indent << "Resolution : " << m_resolution << std::endl;
+    if ( m_has_label ) { os << indent << "Value label : " << m_label << std::endl; }
+    if ( m_has_unit ) { os << indent << "Value unit : " << m_unit << std::endl; }
     os << indent << "Value type : " << m_values.typeInfo()->typeName();
 }
 
@@ -380,6 +214,9 @@ bool KVSMLObjectStructuredVolume::read( const std::string& filename )
 
     m_has_label = value_tag.hasLabel();
     if ( m_has_label ) { m_label = value_tag.label(); }
+
+    m_has_unit = value_tag.hasUnit();
+    if ( m_has_unit ) { m_unit = value_tag.unit(); }
 
     if ( !value_tag.hasVeclen() )
     {
@@ -505,11 +342,12 @@ bool KVSMLObjectStructuredVolume::write( const std::string& filename )
         return false;
     }
 
-    // <Value label="xxx" veclen="xxx" min_value="xxx" max_value="xxx">
+    // <Value label="xxx" unit="xxx" veclen="xxx" min_value="xxx" max_value="xxx">
     kvs::kvsml::ValueTag value_tag;
     value_tag.setVeclen( m_veclen );
 
     if ( m_has_label ) { value_tag.setLabel( m_label ); }
+    if ( m_has_unit ) { value_tag.setUnit( m_unit ); }
     if ( m_has_min_value ) { value_tag.setMinValue( m_min_value ); }
     if ( m_has_max_value ) { value_tag.setMaxValue( m_max_value ); }
 

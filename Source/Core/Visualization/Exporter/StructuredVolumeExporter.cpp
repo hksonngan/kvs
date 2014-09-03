@@ -60,6 +60,9 @@ kvs::KVSMLObjectStructuredVolume* StructuredVolumeExporter<kvs::KVSMLObjectStruc
         return NULL;
     }
 
+    if ( volume->label() != "" ) { this->setLabel( volume->label() ); }
+    if ( volume->unit() != "" ) { this->setUnit( volume->unit() ); }
+
     // Check the grid type of the given structured volume object.
     switch ( volume->gridType() )
     {

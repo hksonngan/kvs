@@ -57,6 +57,7 @@ private:
 
     VolumeType m_volume_type; ///< volume type
     std::string m_label; ///< data label
+    std::string m_unit; ///< data unit
     size_t m_veclen; ///< Vector length.
     Coords m_coords; ///< Coordinate array
     Values m_values; ///< Value array
@@ -73,12 +74,14 @@ public:
     virtual void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
 
     void setLabel( const std::string& label ) { m_label = label; }
+    void setUnit( const std::string& unit ) { m_unit = unit; }
     void setVeclen( const size_t veclen ) { m_veclen = veclen; }
     void setCoords( const Coords& coords ) { m_coords = coords; }
     void setValues( const Values& values ) { m_values = values; }
     void setMinMaxValues( const kvs::Real64 min_value, const kvs::Real64 max_value ) const;
 
     const std::string& label() const { return m_label; }
+    const std::string& unit() const { return m_unit; }
     size_t veclen() const { return m_veclen; }
     const Coords& coords() const { return m_coords; }
     const Values& values() const { return m_values; }

@@ -264,6 +264,9 @@ void UnstructuredVolumeImporter::import( const kvs::KVSMLObjectUnstructuredVolum
         SuperClass::setMinMaxObjectCoords( min_coord, max_coord );
     }
 
+    if ( kvsml->hasLabel() ) { SuperClass::setLabel( kvsml->label() ); }
+    if ( kvsml->hasUnit() ) { SuperClass::setUnit( kvsml->unit() ); }
+
     SuperClass::setVeclen( kvsml->veclen() );
     SuperClass::setNumberOfNodes( kvsml->nnodes() );
     SuperClass::setNumberOfCells( kvsml->ncells() );

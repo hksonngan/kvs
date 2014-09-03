@@ -54,8 +54,10 @@ private:
     std::string m_grid_type; ///< grid type
     bool m_has_label; ///< data label is specified or not
     std::string m_label; ///< data label
+    bool m_has_unit; ///< data unit is specified or not
+    std::string m_unit; ///< data unit
     size_t m_veclen; ///< vector length
-    kvs::Vector3ui m_resolution; ///< grid resolution
+    kvs::Vec3ui m_resolution; ///< grid resolution
     bool m_has_min_value; ///< min. value is specified or not
     bool m_has_max_value; ///< max. value is specified or not
     double m_min_value; ///< min. value
@@ -73,29 +75,32 @@ public:
     KVSMLObjectStructuredVolume();
     KVSMLObjectStructuredVolume( const std::string& filename );
 
-    const kvs::kvsml::KVSMLTag& KVSMLTag() const;
-    const kvs::kvsml::ObjectTag& objectTag() const;
-    const std::string& gridType() const;
-    bool hasLabel() const;
-    const std::string& label() const;
-    size_t veclen() const;
-    const kvs::Vector3ui& resolution() const;
-    bool hasMinValue() const;
-    bool hasMaxValue() const;
-    double minValue() const;
-    double maxValue() const;
-    const kvs::AnyValueArray& values() const;
-    const kvs::ValueArray<float>& coords() const;
+    const kvs::kvsml::KVSMLTag& KVSMLTag() const { return m_kvsml_tag; }
+    const kvs::kvsml::ObjectTag& objectTag() const { return m_object_tag; }
+    const std::string& gridType() const { return m_grid_type; }
+    bool hasLabel() const { return m_has_label; }
+    const std::string& label() const { return m_label; }
+    bool hasUnit() const { return m_has_unit; }
+    const std::string& unit() const { return m_unit; }
+    size_t veclen() const { return m_veclen; }
+    const kvs::Vec3ui& resolution() const { return m_resolution; }
+    bool hasMinValue() const { return m_has_min_value; }
+    bool hasMaxValue() const { return m_has_max_value; }
+    double minValue() const { return m_min_value; }
+    double maxValue() const { return m_max_value; }
+    const kvs::AnyValueArray& values() const { return m_values; }
+    const kvs::ValueArray<float>& coords() const { return m_coords; }
 
-    void setWritingDataType( const WritingDataType writing_type );
-    void setGridType( const std::string& grid_type );
-    void setLabel( const std::string& label );
-    void setVeclen( const size_t veclen );
-    void setResolution( const kvs::Vector3ui& resolution );
-    void setMinValue( const double min_value );
-    void setMaxValue( const double max_value );
-    void setValues( const kvs::AnyValueArray& values );
-    void setCoords( const kvs::ValueArray<float>& coords );
+    void setWritingDataType( const WritingDataType type ) { m_writing_type = type; }
+    void setGridType( const std::string& type ) { m_grid_type = type; }
+    void setLabel( const std::string& label ) { m_has_label = true; m_label = label; }
+    void setUnit( const std::string& unit ) { m_has_unit = true; m_unit = unit; }
+    void setVeclen( const size_t veclen ) { m_veclen = veclen; }
+    void setResolution( const kvs::Vec3ui& resolution ) { m_resolution = resolution; }
+    void setMinValue( const double value ) { m_has_min_value = true; m_min_value = value; }
+    void setMaxValue( const double value ) { m_has_max_value = true; m_max_value = value; }
+    void setValues( const kvs::AnyValueArray& values ) { m_values = values; }
+    void setCoords( const kvs::ValueArray<float>& coords ) { m_coords = coords; }
 
     void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
     bool read( const std::string& filename );

@@ -219,6 +219,9 @@ void StructuredVolumeImporter::import(
         SuperClass::setMinMaxObjectCoords( min_coord, max_coord );
     }
 
+    if ( kvsml->hasLabel() ) { SuperClass::setLabel( kvsml->label() ); }
+    if ( kvsml->hasUnit() ) { SuperClass::setUnit( kvsml->unit() ); }
+
     SuperClass::setGridType( ::StringToGridType( kvsml->gridType() ) );
     SuperClass::setResolution( kvsml->resolution() );
     SuperClass::setVeclen( kvsml->veclen() );

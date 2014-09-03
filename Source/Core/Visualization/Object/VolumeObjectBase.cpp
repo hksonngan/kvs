@@ -78,6 +78,8 @@ namespace kvs
 /*==========================================================================*/
 VolumeObjectBase::VolumeObjectBase():
     m_volume_type( UnknownVolumeType ),
+    m_label( "" ),
+    m_unit( "" ),
     m_veclen( 0 ),
     m_has_min_max_values( false ),
     m_min_value( 0.0 ),
