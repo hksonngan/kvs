@@ -39,102 +39,14 @@ namespace kvsml
 DataArrayTag::DataArrayTag():
     kvs::kvsml::TagBase( "DataArray" ),
     m_has_type( false ),
-    m_type( "" ),
     m_has_file( false ),
-    m_file( "" ),
     m_has_format( false ),
-    m_format( "" )
+    m_has_endian( false ),
+    m_type( "" ),
+    m_file( "" ),
+    m_format( "" ),
+    m_endian( "" )
 {
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Tests whether the tag has 'type' or not.
- *  @return true, if the tag has 'type'
- */
-/*===========================================================================*/
-bool DataArrayTag::hasType() const
-{
-    return m_has_type;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a type that is specfied by 'type'.
- *  @return type
- */
-/*===========================================================================*/
-const std::string& DataArrayTag::type() const
-{
-    return m_type;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Tests whether the tag has 'file' or not.
- *  @return true, if the tag has 'file'
- */
-/*===========================================================================*/
-bool DataArrayTag::hasFile() const
-{
-    return m_has_file;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a external file name that is specfied by 'file'.
- *  @return external file name
- */
-/*===========================================================================*/
-const std::string& DataArrayTag::file() const
-{
-    return m_file;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Tests whether the tag has 'format' or not.
- *  @return true, if the tag has 'format'
- */
-/*===========================================================================*/
-bool DataArrayTag::hasFormat() const
-{
-    return m_has_format;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a external file format that is specfied by 'format'.
- *  @return external file format
- */
-/*===========================================================================*/
-const std::string& DataArrayTag::format() const
-{
-    return m_format;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a external file name.
- *  @param  file [in] external file name
- */
-/*===========================================================================*/
-void DataArrayTag::setFile( const std::string& file )
-{
-    m_has_file = true;
-    m_file = file;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a external file format.
- *  @param  format [in] external file format
- */
-/*===========================================================================*/
-void DataArrayTag::setFormat( const std::string& format )
-{
-    m_has_format = true;
-    m_format = format;
 }
 
 /*===========================================================================*/
@@ -152,9 +64,7 @@ bool DataArrayTag::read(
     kvs::AnyValueArray* data )
 {
     BaseClass::read( parent );
-
     this->read_attribute();
-
     return this->read_data( nelements, data );
 }
 
@@ -240,7 +150,7 @@ bool DataArrayTag::write(
         return node->InsertEndChild( text ) != NULL;
     }
 
-    // External data: <DataArray type="xxx" format="xxx" file="xxx"/>
+    // External data: <DataArray type="xxx" format="xxx" file="xxx" endian="xxx"/>
     else
     {
         if ( !m_has_format )
@@ -249,8 +159,16 @@ bool DataArrayTag::write(
             return false;
         }
 
-        element.setAttribute( "file", m_file );
         element.setAttribute( "format", m_format );
+        element.setAttribute( "file", m_file );
+
+        if ( m_format == "binary" )
+        {
+            if ( kvs::Endian::IsBig() ) { m_endian = "big"; }
+            if ( kvs::Endian::IsLittle() ) { m_endian = "little"; }
+            element.setAttribute( "endian", m_endian );
+        }
+
         parent->InsertEndChild( element );
 
         // Write the data to the external data file.
@@ -271,7 +189,7 @@ void DataArrayTag::read_attribute()
 
     // type="xxx"
     const std::string type = kvs::XMLElement::AttributeValue( element, "type" );
-    if( type != "" )
+    if ( type != "" )
     {
         m_has_type = true;
         m_type = type;
@@ -279,7 +197,7 @@ void DataArrayTag::read_attribute()
 
     // file="xxx"
     const std::string file = kvs::XMLElement::AttributeValue( element, "file" );
-    if( file != "" )
+    if ( file != "" )
     {
         m_has_file = true;
         m_file = file;
@@ -287,10 +205,18 @@ void DataArrayTag::read_attribute()
 
     // format="xxx"
     const std::string format = kvs::XMLElement::AttributeValue( element, "format" );
-    if( format != "" )
+    if ( format != "" )
     {
         m_has_format = true;
         m_format = format;
+    }
+
+    // endian="xxx"
+    const std::string endian = kvs::XMLElement::AttributeValue( element, "endian" );
+    if ( endian != "" )
+    {
+        m_has_endian = true;
+        m_endian = endian;
     }
 }
 
@@ -394,11 +320,22 @@ bool DataArrayTag::read_data( const size_t nelements, kvs::AnyValueArray* data )
     // External data.
     else
     {
-        // <DataArray file="xxx" type="xxx" format="xxx"/>
+        // <DataArray file="xxx" type="xxx" format="xxx" endian="xxx"/>
         if( m_format == "" )
         {
             kvsMessageError( "'format' is not specified in <%s>.", tag_name.c_str() );
             return false;
+        }
+
+        // Check byte swapping.
+        bool byte_swap = false;
+        if ( m_format == "binary" )
+        {
+            if ( m_has_endian )
+            {
+                if ( kvs::Endian::IsBig() && m_endian == "little" ) { byte_swap = true; }
+                if ( kvs::Endian::IsLittle() && m_endian == "big" ) { byte_swap = true; }
+            }
         }
 
         // Filename as an absolute path.
@@ -414,6 +351,8 @@ bool DataArrayTag::read_data( const size_t nelements, kvs::AnyValueArray* data )
                 kvsMessageError( "Cannot read the data array in <%s>.", tag_name.c_str() );
                 return false;
             }
+
+            if ( byte_swap ) { kvs::Endian::Swap( (kvs::Int8*)( data->data() ), nelements ); }
         }
         else if( m_type == "unsigned char" || m_type == "uchar" )
         {
@@ -422,6 +361,8 @@ bool DataArrayTag::read_data( const size_t nelements, kvs::AnyValueArray* data )
                 kvsMessageError( "Cannot read the data array in <%s>.", tag_name.c_str() );
                 return false;
             }
+
+            if ( byte_swap ) { kvs::Endian::Swap( (kvs::UInt8*)( data->data() ), nelements ); }
         }
         else if ( m_type == "short" )
         {
@@ -430,6 +371,8 @@ bool DataArrayTag::read_data( const size_t nelements, kvs::AnyValueArray* data )
                 kvsMessageError( "Cannot read the data array in <%s>.", tag_name.c_str() );
                 return false;
             }
+
+            if ( byte_swap ) { kvs::Endian::Swap( (kvs::Int16*)( data->data() ), nelements ); }
         }
         else if ( m_type == "unsigned short" || m_type == "ushort" )
         {
@@ -438,6 +381,8 @@ bool DataArrayTag::read_data( const size_t nelements, kvs::AnyValueArray* data )
                 kvsMessageError( "Cannot read the data array in <%s>.", tag_name.c_str() );
                 return false;
             }
+
+            if ( byte_swap ) { kvs::Endian::Swap( (kvs::UInt16*)( data->data() ), nelements ); }
         }
         else if ( m_type == "int" )
         {
@@ -446,6 +391,8 @@ bool DataArrayTag::read_data( const size_t nelements, kvs::AnyValueArray* data )
                 kvsMessageError( "Cannot read the data array in <%s>.", tag_name.c_str() );
                 return false;
             }
+
+            if ( byte_swap ) { kvs::Endian::Swap( (kvs::Int32*)( data->data() ), nelements ); }
         }
         else if ( m_type == "unsigned int" || m_type == "uint" )
         {
@@ -454,6 +401,8 @@ bool DataArrayTag::read_data( const size_t nelements, kvs::AnyValueArray* data )
                 kvsMessageError( "Cannot read the data array in <%s>.", tag_name.c_str() );
                 return false;
             }
+
+            if ( byte_swap ) { kvs::Endian::Swap( (kvs::UInt32*)( data->data() ), nelements ); }
         }
         else if ( m_type == "float" )
         {
@@ -462,6 +411,8 @@ bool DataArrayTag::read_data( const size_t nelements, kvs::AnyValueArray* data )
                 kvsMessageError( "Cannot read the data array in <%s>.", tag_name.c_str() );
                 return false;
             }
+
+            if ( byte_swap ) { kvs::Endian::Swap( (kvs::Real32*)( data->data() ), nelements ); }
         }
         else if ( m_type == "double" )
         {
@@ -470,6 +421,8 @@ bool DataArrayTag::read_data( const size_t nelements, kvs::AnyValueArray* data )
                 kvsMessageError( "Cannot read the data array in <%s>.", tag_name.c_str() );
                 return false;
             }
+
+            if ( byte_swap ) { kvs::Endian::Swap( (kvs::Real64*)( data->data() ), nelements ); }
         }
         else
         {

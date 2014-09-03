@@ -18,6 +18,7 @@
 #include <kvs/ValueArray>
 #include <kvs/AnyValueArray>
 #include <kvs/File>
+#include <kvs/Endian>
 #include <kvs/XMLNode>
 #include <kvs/XMLElement>
 #include <kvs/XMLDocument>
@@ -45,11 +46,13 @@ public:
 private:
 
     bool m_has_type; ///< flag to check whether 'type' is specified or not
-    std::string m_type; ///< data type string
     bool m_has_file; ///< flag to check whether 'file' is specified or not
-    std::string m_file; ///< external file name
     bool m_has_format; ///< flag to check whether 'format' is specified or not
+    bool m_has_endian; ///< flag to check whether 'endian' is specified or not
+    std::string m_type; ///< data type string
+    std::string m_file; ///< external file name
     std::string m_format; ///< external file format
+    std::string m_endian; ///< endianness of the binary data
 
 public:
 
@@ -57,17 +60,18 @@ public:
 
 public:
 
-    bool hasType() const;
-    const std::string& type() const;
-    bool hasFile() const;
-    const std::string& file() const;
-    bool hasFormat() const;
-    const std::string& format() const;
+    bool hasType() const { return m_has_type; }
+    bool hasFile() const { return m_has_file; }
+    bool hasFormat() const { return m_has_format; }
+    bool hasEndian() const { return m_has_endian; }
+    const std::string& type() const { return m_type; }
+    const std::string& file() const { return m_file; }
+    const std::string& format() const { return m_format; }
+    const std::string& endian() const { return m_endian; }
 
-public:
-
-    void setFile( const std::string& file );
-    void setFormat( const std::string& format );
+    void setFile( const std::string& file ) { m_has_file = true; m_file = file; }
+    void setFormat( const std::string& format ) { m_has_format = true; m_format = format; }
+    void setEndian( const std::string& endian ) { m_has_endian = true; m_endian = endian; }
 
 public:
 
@@ -106,17 +110,8 @@ inline bool DataArrayTag::read(
     const size_t nelements,
     kvs::ValueArray<T>* data )
 {
-    const std::string tag_name = BaseClass::name();
-
-    BaseClass::m_node = kvs::XMLNode::FindChildNode( parent, tag_name );
-    if( !BaseClass::m_node )
-    {
-        kvsMessageError( "Cannot find <%s>.", tag_name.c_str() );
-        return false;
-    }
-
+    BaseClass::read( parent );
     this->read_attribute();
-
     return this->read_data<T>( nelements, data );
 }
 
@@ -164,7 +159,7 @@ inline bool DataArrayTag::write(
         return node->InsertEndChild( text ) != NULL;
     }
 
-    // External data: <DataArray type="xxx" format="xxx" file="xxx"/>
+    // External data: <DataArray type="xxx" format="xxx" file="xxx" endian="xxx"/>
     else
     {
         if ( !m_has_format )
@@ -173,8 +168,16 @@ inline bool DataArrayTag::write(
             return false;
         }
 
-        element.setAttribute( "file", m_file );
         element.setAttribute( "format", m_format );
+        element.setAttribute( "file", m_file );
+
+        if ( m_format == "binary" )
+        {
+            if ( kvs::Endian::IsBig() ) { m_endian = "big"; }
+            if ( kvs::Endian::IsLittle() ) { m_endian = "little"; }
+            element.setAttribute( "endian", m_endian );
+        }
+
         parent->InsertEndChild( element );
 
         // Set text.
@@ -219,11 +222,22 @@ bool DataArrayTag::read_data( const size_t nelements, kvs::ValueArray<T>* data )
     // External data.
     else
     {
-        // <DataArray file="xxx" type="xxx" format="xxx"/>
+        // <DataArray file="xxx" type="xxx" format="xxx" endian="xxx"/>
         if( m_format == "" )
         {
             kvsMessageError( "'format' is not specified in <%s>.", tag_name.c_str() );
             return false;
+        }
+
+        // Check byte swapping.
+        bool byte_swap = false;
+        if ( m_format == "binary" )
+        {
+            if ( m_has_endian )
+            {
+                if ( kvs::Endian::IsBig() && m_endian == "little" ) { byte_swap = true; }
+                if ( kvs::Endian::IsLittle() && m_endian == "big" ) { byte_swap = true; }
+            }
         }
 
         // Filename as an absolute path.
@@ -301,6 +315,8 @@ bool DataArrayTag::read_data( const size_t nelements, kvs::ValueArray<T>* data )
             kvsMessageError( "'type' is not specified or unknown data type in <%s>.", tag_name.c_str() );
             return false;
         }
+
+        if ( byte_swap ) { kvs::Endian::Swap( data->data(), nelements ); }
     }
 
     return true;
