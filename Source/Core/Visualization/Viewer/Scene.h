@@ -74,6 +74,15 @@ public:
     void replaceRenderer( int renderer_id, kvs::RendererBase* renderer, bool delete_renderer = true );
     void replaceRenderer( std::string renderer_name, kvs::RendererBase* renderer, bool delete_renderer = true );
 
+    int numberOfObjects() const;
+    bool hasObjects() const;
+    bool hasObject( int id ) const;
+    bool hasObject( std::string name ) const;
+    kvs::ObjectBase* object( int id = -1 );
+    kvs::ObjectBase* object( std::string name );
+    kvs::RendererBase* renderer( int id = -1 );
+    kvs::RendererBase* renderer( std::string name );
+
     void reset();
     bool isActiveMove( int x, int y );
     void updateControllingObject();

@@ -204,6 +204,102 @@ void Scene::replaceRenderer( std::string renderer_name, kvs::RendererBase* rende
 
 /*===========================================================================*/
 /**
+ *  @brief  Returns number of objects contained in the scene.
+ *  @return number of objects
+ */
+/*===========================================================================*/
+int Scene::numberOfObjects() const
+{
+    return m_object_manager->numberOfObjects();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Return true if the scene has one or more objects.
+ *  @return true if the scene has one or more objects
+ */
+/*===========================================================================*/
+bool Scene::hasObjects() const
+{
+    return m_object_manager->hasObject();
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Return true if the scene has the object specified by given ID.
+ *  @param  id [in] object ID
+ *  @return true if the scene has the object
+ */
+/*===========================================================================*/
+bool Scene::hasObject( int id ) const
+{
+    return m_object_manager->object( id ) != NULL;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Return true if the scene has the object specified by given name.
+ *  @param  name [in] object name
+ *  @return true if the scene has the object
+ */
+/*===========================================================================*/
+bool Scene::hasObject( std::string name ) const
+{
+    return m_object_manager->object( name ) != NULL;
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Return pointer to the object specified by given ID.
+ *  @param  id [in] object ID
+ *  @return pointer to the object
+ */
+/*===========================================================================*/
+kvs::ObjectBase* Scene::object( int id )
+{
+    if ( id < 0 ) { return m_object_manager->object(); }
+    return m_object_manager->object( id );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Return pointer to the object specified by given name.
+ *  @param  name [in] object name
+ *  @return pointer to the object
+ */
+/*===========================================================================*/
+kvs::ObjectBase* Scene::object( std::string name )
+{
+    return m_object_manager->object( name );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Return pointer to the renderer specified by given ID.
+ *  @param  id [in] renderer ID
+ *  @return pointer to the renderer
+ */
+/*===========================================================================*/
+kvs::RendererBase* Scene::renderer( int id )
+{
+    if ( id < 0 ) { return m_renderer_manager->renderer(); }
+    return m_renderer_manager->renderer( id );
+}
+
+/*===========================================================================*/
+/**
+ *  @brief  Return pointer to the renderer specified by given name.
+ *  @param  name [in] renderer name
+ *  @return pointer to the renderer
+ */
+/*===========================================================================*/
+kvs::RendererBase* Scene::renderer( std::string name )
+{
+    return m_renderer_manager->renderer( name );
+}
+
+/*===========================================================================*/
+/**
  *  @brief  Resets the x-form matrix of the basic screen components.
  */
 /*===========================================================================*/
