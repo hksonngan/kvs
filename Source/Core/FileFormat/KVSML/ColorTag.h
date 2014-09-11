@@ -37,7 +37,6 @@ public:
 public:
 
     ColorTag();
-
 };
 
 } // end of namespace kvsml

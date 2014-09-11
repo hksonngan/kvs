@@ -1,6 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   NodeTag.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -44,16 +45,10 @@ public:
 
     NodeTag();
 
-public:
+    bool hasNNodes() const { return m_has_nnodes; }
+    size_t nnodes() const { return m_nnodes; }
 
-    bool hasNNodes() const;
-    size_t nnodes() const;
-
-public:
-
-    void setNNodes( const size_t nnodes );
-
-public:
+    void setNNodes( const size_t nnodes ) { m_has_nnodes = true; m_nnodes = nnodes; }
 
     bool read( const kvs::XMLNode::SuperClass* parent );
     bool write( kvs::XMLNode::SuperClass* parent );

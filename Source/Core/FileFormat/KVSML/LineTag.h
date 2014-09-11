@@ -1,6 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   LineTag.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -44,16 +45,10 @@ public:
 
     LineTag();
 
-public:
+    bool hasNLines() const { return m_has_nlines; }
+    size_t nlines() const { return m_nlines; }
 
-    bool hasNLines() const;
-    size_t nlines() const;
-
-public:
-
-    void setNLines( const size_t nlines );
-
-public:
+    void setNLines( const size_t nlines ) { m_has_nlines = true; m_nlines = nlines; }
 
     bool read( const kvs::XMLNode::SuperClass* parent );
     bool write( kvs::XMLNode::SuperClass* parent );

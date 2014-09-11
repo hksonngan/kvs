@@ -1,6 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   LineObjectTag.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -32,78 +33,10 @@ namespace kvsml
 LineObjectTag::LineObjectTag():
     kvs::kvsml::TagBase( "LineObject" ),
     m_has_line_type( false ),
-    m_line_type( "" ),
     m_has_color_type( false ),
+    m_line_type( "" ),
     m_color_type( "" )
 {
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Tests whether the 'line_type' is specified or not.
- *  @return true, if the 'line_type' is specified
- */
-/*===========================================================================*/
-bool LineObjectTag::hasLineType() const
-{
-    return m_has_line_type;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a line type as string.
- *  @return line type
- */
-/*===========================================================================*/
-const std::string& LineObjectTag::lineType() const
-{
-    return m_line_type;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Tests whether the 'color_type' is specified or not.
- *  @return true, if the 'color_type' is specified
- */
-/*===========================================================================*/
-bool LineObjectTag::hasColorType() const
-{
-    return m_has_color_type;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a color type as string.
- *  @return line type
- */
-/*===========================================================================*/
-const std::string& LineObjectTag::colorType() const
-{
-    return m_color_type;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a line type as string.
- *  @param  line_type [in] line type
- */
-/*===========================================================================*/
-void LineObjectTag::setLineType( const std::string& line_type )
-{
-    m_has_line_type = true;
-    m_line_type = line_type;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a color type as string.
- *  @param  color_type [in] color type
- */
-/*===========================================================================*/
-void LineObjectTag::setColorType( const std::string& color_type )
-{
-    m_has_color_type = true;
-    m_color_type = color_type;
 }
 
 /*===========================================================================*/

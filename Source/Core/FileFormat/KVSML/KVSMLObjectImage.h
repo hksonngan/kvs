@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file KVSMLObjectImage.h
+ *  @file   KVSMLObjectImage.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -65,18 +66,18 @@ public:
     KVSMLObjectImage();
     KVSMLObjectImage( const std::string& filename );
 
-    const kvs::kvsml::KVSMLTag& KVSMLTag() const;
-    const kvs::kvsml::ObjectTag& objectTag() const;
-    size_t width() const;
-    size_t height() const;
-    const std::string& pixelType() const;
-    const kvs::ValueArray<kvs::UInt8>& pixels() const;
+    const kvs::kvsml::KVSMLTag& KVSMLTag() const { return m_kvsml_tag; }
+    const kvs::kvsml::ObjectTag& objectTag() const { return m_object_tag; }
+    size_t width() const { return m_width; }
+    size_t height() const { return m_height; }
+    const std::string& pixelType() const { return m_pixel_type; }
+    const kvs::ValueArray<kvs::UInt8>& pixels() const { return m_pixels; }
 
-    void setWidth( const size_t width );
-    void setHeight( const size_t height );
-    void setPixelType( const std::string& pixel_type );
-    void setWritingDataType( const WritingDataType writing_type );
-    void setPixels( const kvs::ValueArray<kvs::UInt8>& pixels );
+    void setWidth( const size_t width ) { m_width = width; }
+    void setHeight( const size_t height ) { m_height = height; }
+    void setPixelType( const std::string& type ) { m_pixel_type = type; }
+    void setWritingDataType( const WritingDataType type ) { m_writing_type = type; }
+    void setPixels( const kvs::ValueArray<kvs::UInt8>& pixels ) { m_pixels = pixels; }
 
     void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
     bool read( const std::string& filename );

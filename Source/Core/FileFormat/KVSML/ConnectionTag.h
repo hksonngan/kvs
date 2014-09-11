@@ -37,7 +37,6 @@ public:
 public:
 
     ConnectionTag();
-
 };
 
 } // end of namespace kvsml

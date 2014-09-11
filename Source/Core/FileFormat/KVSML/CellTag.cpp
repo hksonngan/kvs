@@ -38,40 +38,6 @@ CellTag::CellTag():
 
 /*===========================================================================*/
 /**
- *  @brief  Checks whether the ncells is specified or not
- *  @return true, if the ncells is specified
- */
-/*===========================================================================*/
-bool CellTag::hasNCells() const
-{
-    return m_has_ncells;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a number of cells.
- *  @return number of cells
- */
-/*===========================================================================*/
-size_t CellTag::ncells() const
-{
-    return m_ncells;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a number of cells.
- *  @param  ncells [in] number of cells
- */
-/*===========================================================================*/
-void CellTag::setNCells( const size_t ncells )
-{
-    m_has_ncells = true;
-    m_ncells = ncells;
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Reads the cell tag.
  *  @param  parent [in] pointer to the parent node
  *  @return true, if the reading process is done successfully

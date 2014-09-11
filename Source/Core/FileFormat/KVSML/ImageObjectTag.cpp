@@ -32,78 +32,10 @@ namespace kvsml
 ImageObjectTag::ImageObjectTag():
     kvs::kvsml::TagBase( "ImageObject" ),
     m_has_width( false ),
-    m_width( 0 ),
     m_has_height( false ),
+    m_width( 0 ),
     m_height( 0 )
 {
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Tests whether the image object tag has 'width' or not.
- *  @return true, if the image object tag has 'width'
- */
-/*===========================================================================*/
-bool ImageObjectTag::hasWidth() const
-{
-    return m_has_width;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a image width.
- *  @return image width
- */
-/*===========================================================================*/
-size_t ImageObjectTag::width() const
-{
-    return m_width;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Tests whether the image object tag has 'height' or not.
- *  @return true, if the image object tag has 'height'
- */
-/*===========================================================================*/
-bool ImageObjectTag::hasHeight() const
-{
-    return m_has_height;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a image height.
- *  @return image height
- */
-/*===========================================================================*/
-size_t ImageObjectTag::height() const
-{
-    return m_height;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a image width.
- *  @param  width [in] image width
- */
-/*===========================================================================*/
-void ImageObjectTag::setWidth( const size_t width )
-{
-    m_has_width = true;
-    m_width = width;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a image height.
- *  @param  height [in] image height
- */
-/*===========================================================================*/
-void ImageObjectTag::setHeight( const size_t height )
-{
-    m_has_height = true;
-    m_height = height;
 }
 
 /*===========================================================================*/

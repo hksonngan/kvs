@@ -45,16 +45,10 @@ public:
 
     KVSMLTag();
 
-public:
+    bool hasVersion() const { return m_version.hasValue(); }
+    const TagAttribute<std::string>& version() const { return m_version; }
 
-    bool hasVersion() const;
-    const TagAttribute<std::string>& version() const;
-
-public:
-
-    void setVersion( const std::string& version );
-
-public:
+    void setVersion( const std::string& version ) { m_version = version; }
 
     bool read( const kvs::XMLDocument* document );
     bool write( kvs::XMLDocument* document );

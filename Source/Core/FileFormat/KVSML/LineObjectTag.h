@@ -1,6 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   LineObjectTag.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -40,27 +41,21 @@ public:
 private:
 
     bool m_has_line_type; ///< flag to check whether 'line_type' is specified or not
-    std::string m_line_type; ///< line type
     bool m_has_color_type; ///< flag to check whether 'color_type' is specified or not
+    std::string m_line_type; ///< line type
     std::string m_color_type; ///< color type
 
 public:
 
     LineObjectTag();
 
-public:
+    bool hasLineType() const { return m_has_line_type; }
+    bool hasColorType() const { return m_has_color_type; }
+    const std::string& lineType() const { return m_line_type; }
+    const std::string& colorType() const { return m_color_type; }
 
-    bool hasLineType() const;
-    const std::string& lineType() const;
-    bool hasColorType() const;
-    const std::string& colorType() const;
-
-public:
-
-    void setLineType( const std::string& line_type );
-    void setColorType( const std::string& color_type );
-
-public:
+    void setLineType( const std::string& type ) { m_has_line_type = true; m_line_type = type; }
+    void setColorType( const std::string& type ) { m_has_color_type = true; m_color_type = type; }
 
     bool read( const kvs::XMLNode::SuperClass* parent );
     bool write( kvs::XMLNode::SuperClass* parent );

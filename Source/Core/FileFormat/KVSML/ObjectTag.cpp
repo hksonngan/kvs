@@ -1,6 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   ObjectTag.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -31,11 +32,11 @@ namespace kvsml
 /*===========================================================================*/
 ObjectTag::ObjectTag():
     kvs::kvsml::TagBase( "Object" ),
-    m_type( "" ),
     m_has_external_coord( false ),
+    m_has_object_coord( false ),
+    m_type( "" ),
     m_min_external_coord( -3.0f, -3.0f, -3.0f ),
     m_max_external_coord(  3.0f,  3.0f,  3.0f ),
-    m_has_object_coord( false ),
     m_min_object_coord( -3.0f, -3.0f, -3.0f ),
     m_max_object_coord(  3.0f,  3.0f,  3.0f )
 {

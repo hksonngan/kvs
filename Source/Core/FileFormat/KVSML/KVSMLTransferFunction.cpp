@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file KVSMLTransferFunction.cpp
+ *  @file   KVSMLTransferFunction.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -110,94 +111,6 @@ KVSMLTransferFunction::~KVSMLTransferFunction()
 
 /*===========================================================================*/
 /**
- *  @brief  Returns a KVSML tag.
- *  @return KVSML tag
- */
-/*===========================================================================*/
-const kvs::kvsml::KVSMLTag& KVSMLTransferFunction::KVSMLTag() const
-{
-    return m_kvsml_tag;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a resolution.
- *  @return resolution
- */
-/*===========================================================================*/
-size_t KVSMLTransferFunction::resolution() const
-{
-    return m_resolution;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the min scalar value.
- *  @return min scalar value
- */
-/*===========================================================================*/
-float KVSMLTransferFunction::minValue() const
-{
-    return m_min_value;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the max scalar value.
- *  @return max scalar value
- */
-/*===========================================================================*/
-float KVSMLTransferFunction::maxValue() const
-{
-    return m_max_value;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the opacity point list.
- *  @return opacity point list
- */
-/*===========================================================================*/
-const KVSMLTransferFunction::OpacityPointList& KVSMLTransferFunction::opacityPointList() const
-{
-    return m_opacity_point_list;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the color point list.
- *  @return color point list
- */
-/*===========================================================================*/
-const KVSMLTransferFunction::ColorPointList& KVSMLTransferFunction::colorPointList() const
-{
-    return m_color_point_list;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns an opacity array.
- *  @return opacity array
- */
-/*===========================================================================*/
-const kvs::ValueArray<kvs::Real32>& KVSMLTransferFunction::opacities() const
-{
-    return m_opacities;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a color array.
- *  @return color array
- */
-/*===========================================================================*/
-const kvs::ValueArray<kvs::UInt8>& KVSMLTransferFunction::colors() const
-{
-    return m_colors;
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Adds a opacity point.
  *  @param  value [in] scalar value
  *  @param  opacity [in] opacity value
@@ -222,61 +135,11 @@ void KVSMLTransferFunction::addColorPoint( const float value, const kvs::RGBColo
 
 /*===========================================================================*/
 /**
- *  @brief  Sets a resolution.
- *  @param  resolution [in] resolution
+ *  @brief  Prints the information of this file.
+ *  @param  os [in] output stream
+ *  @param  indent [in] indent
  */
 /*===========================================================================*/
-void KVSMLTransferFunction::setResolution( const size_t resolution )
-{
-    m_resolution = resolution;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets min/max scalar values.
- *  @param  min_value [in] min scalar value
- *  @param  max_value [in] max scalar value
- */
-/*===========================================================================*/
-void KVSMLTransferFunction::setRange( const float min_value, const float max_value )
-{
-    m_min_value = min_value;
-    m_max_value = max_value;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a writing data type.
- *  @param  writing_type [in] writing data type
- */
-/*===========================================================================*/
-void KVSMLTransferFunction::setWritingDataType( const WritingDataType writing_type )
-{
-    m_writing_type = writing_type;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets an opacity array.
- *  @param  opacities [in] opacity array
- */
-/*===========================================================================*/
-void KVSMLTransferFunction::setOpacities( const kvs::ValueArray<kvs::Real32>& opacities )
-{
-    m_opacities = opacities;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a color array.
- *  @param  colors [in] color array
- */
-/*===========================================================================*/
-void KVSMLTransferFunction::setColors( const kvs::ValueArray<kvs::UInt8>& colors )
-{
-    m_colors = colors;
-}
-
 void KVSMLTransferFunction::print( std::ostream& os, const kvs::Indent& indent ) const
 {
     os << indent << "Filename : " << BaseClass::filename() << std::endl;

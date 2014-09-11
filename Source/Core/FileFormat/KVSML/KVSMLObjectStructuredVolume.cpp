@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file KVSMLObjectStructuredVolume.cpp
+ *  @file   KVSMLObjectStructuredVolume.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -91,13 +92,13 @@ KVSMLObjectStructuredVolume::KVSMLObjectStructuredVolume():
     m_writing_type( kvs::KVSMLObjectStructuredVolume::Ascii ),
     m_grid_type( "" ),
     m_has_label( false ),
-    m_label( "" ),
     m_has_unit( false ),
+    m_has_min_value( false ),
+    m_has_max_value( false ),
+    m_label( "" ),
     m_unit( "" ),
     m_veclen( 0 ),
     m_resolution( 0, 0, 0 ),
-    m_has_min_value( false ),
-    m_has_max_value( false ),
     m_min_value( 0.0 ),
     m_max_value( 0.0 )
 {
@@ -113,13 +114,13 @@ KVSMLObjectStructuredVolume::KVSMLObjectStructuredVolume( const std::string& fil
     m_writing_type( kvs::KVSMLObjectStructuredVolume::Ascii ),
     m_grid_type( "" ),
     m_has_label( false ),
-    m_label( "" ),
     m_has_unit( false ),
+    m_has_min_value( false ),
+    m_has_max_value( false ),
+    m_label( "" ),
     m_unit( "" ),
     m_veclen( 0 ),
     m_resolution( 0, 0, 0 ),
-    m_has_min_value( false ),
-    m_has_max_value( false ),
     m_min_value( 0.0 ),
     m_max_value( 0.0 )
 {

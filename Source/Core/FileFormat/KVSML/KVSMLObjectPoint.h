@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file KVSMLObjectPoint.h
+ *  @file    KVSMLObjectPoint.h
+ *  @authors Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -64,18 +65,18 @@ public:
     KVSMLObjectPoint();
     KVSMLObjectPoint( const std::string& filename );
 
-    const kvs::kvsml::KVSMLTag& KVSMLTag() const;
-    const kvs::kvsml::ObjectTag& objectTag() const;
-    const kvs::ValueArray<kvs::Real32>& coords() const;
-    const kvs::ValueArray<kvs::UInt8>& colors() const;
-    const kvs::ValueArray<kvs::Real32>& normals() const;
-    const kvs::ValueArray<kvs::Real32>& sizes() const;
+    const kvs::kvsml::KVSMLTag& KVSMLTag() const { return m_kvsml_tag; }
+    const kvs::kvsml::ObjectTag& objectTag() const { return m_object_tag; }
+    const kvs::ValueArray<kvs::Real32>& coords() const { return m_coords; }
+    const kvs::ValueArray<kvs::UInt8>& colors() const { return m_colors; }
+    const kvs::ValueArray<kvs::Real32>& normals() const { return m_normals; }
+    const kvs::ValueArray<kvs::Real32>& sizes() const { return m_sizes; }
 
-    void setWritingDataType( const WritingDataType writing_type );
-    void setCoords( const kvs::ValueArray<kvs::Real32>& coords );
-    void setColors( const kvs::ValueArray<kvs::UInt8>& colors );
-    void setNormals( const kvs::ValueArray<kvs::Real32>& normals );
-    void setSizes( const kvs::ValueArray<kvs::Real32>& sizes );
+    void setWritingDataType( const WritingDataType type ) { m_writing_type = type; }
+    void setCoords( const kvs::ValueArray<kvs::Real32>& coords ) { m_coords = coords; }
+    void setColors( const kvs::ValueArray<kvs::UInt8>& colors ) { m_colors = colors; }
+    void setNormals( const kvs::ValueArray<kvs::Real32>& normals ) { m_normals = normals; }
+    void setSizes( const kvs::ValueArray<kvs::Real32>& sizes ) { m_sizes = sizes; }
 
     void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
     bool read( const std::string& filename );

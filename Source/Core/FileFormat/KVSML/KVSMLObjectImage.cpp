@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file KVSMLObjectImage.cpp
+ *  @file   KVSMLObjectImage.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -111,125 +112,11 @@ KVSMLObjectImage::KVSMLObjectImage( const std::string& filename ):
 
 /*===========================================================================*/
 /**
- *  @brief  Returns the KVSML tag.
- *  @return KVSML tag
+ *  @brief  Prints file information.
+ *  @param  os [in] output stream
+ *  @param  indent [in] indent for each line
  */
 /*===========================================================================*/
-const kvs::kvsml::KVSMLTag& KVSMLObjectImage::KVSMLTag() const
-{
-    return m_kvsml_tag;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the object tag.
- *  @return object tag
- */
-/*===========================================================================*/
-const kvs::kvsml::ObjectTag& KVSMLObjectImage::objectTag() const
-{
-    return m_object_tag;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a image width.
- *  @return image width
- */
-/*===========================================================================*/
-size_t KVSMLObjectImage::width() const
-{
-    return m_width;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a image height.
- *  @return image height
- */
-/*===========================================================================*/
-size_t KVSMLObjectImage::height() const
-{
-    return m_height;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a pixel type.
- *  @return pixel type
- */
-/*===========================================================================*/
-const std::string& KVSMLObjectImage::pixelType() const
-{
-    return m_pixel_type;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a pixel data array.
- *  @return pixel data array
- */
-/*===========================================================================*/
-const kvs::ValueArray<kvs::UInt8>& KVSMLObjectImage::pixels() const
-{
-    return m_pixels;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a image width.
- *  @param  width [in] image width
- */
-/*===========================================================================*/
-void KVSMLObjectImage::setWidth( const size_t width )
-{
-    m_width = width;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a image height.
- *  @param  height [in] image height
- */
-/*===========================================================================*/
-void KVSMLObjectImage::setHeight( const size_t height )
-{
-    m_height = height;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a pixel type.
- *  @param  pixel_type [in] pixel type
- */
-/*===========================================================================*/
-void KVSMLObjectImage::setPixelType( const std::string& pixel_type )
-{
-    m_pixel_type = pixel_type;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Set a writing type.
- *  @param  writing_type [in] writing type
- */
-/*===========================================================================*/
-void KVSMLObjectImage::setWritingDataType( const WritingDataType writing_type )
-{
-    m_writing_type = writing_type;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Set a pixel data array.
- *  @param  data [in] pixel data
- */
-/*===========================================================================*/
-void KVSMLObjectImage::setPixels( const kvs::ValueArray<kvs::UInt8>& pixels )
-{
-    m_pixels = pixels;
-}
-
 void KVSMLObjectImage::print( std::ostream& os, const kvs::Indent& indent ) const
 {
     os << indent << "Filename : " << BaseClass::filename() << std::endl;

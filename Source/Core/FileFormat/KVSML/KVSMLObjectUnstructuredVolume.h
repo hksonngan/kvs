@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file KVSMLObjectUnstructuredVolume.h
+ *  @file   KVSMLObjectUnstructuredVolume.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -53,14 +54,14 @@ private:
     WritingDataType m_writing_type; ///< writing data type
     std::string m_cell_type; ///< cell type
     bool m_has_label; ///< data label is specified or not
-    std::string m_label; ///< data label
     bool m_has_unit; ///< data unit is specified or not
+    bool m_has_min_value; ///< min. value is specified or not
+    bool m_has_max_value; ///< max. value is specified or not
+    std::string m_label; ///< data label
     std::string m_unit; ///< data unit
     size_t m_veclen; ///< vector length
     size_t m_nnodes; ///< number of nodes
     size_t m_ncells; ///< number of cells
-    bool m_has_min_value; ///< min. value is specified or not
-    bool m_has_max_value; ///< max. value is specified or not
     double m_min_value; ///< min. value
     double m_max_value; ///< max. value
     kvs::AnyValueArray m_values; ///< field value array
@@ -81,14 +82,14 @@ public:
     const kvs::kvsml::ObjectTag& objectTag() const { return m_object_tag; }
     const std::string& cellType() const { return m_cell_type; }
     bool hasLabel() const { return m_has_label; }
-    const std::string& label() const { return m_label; }
     bool hasUnit() const { return m_has_unit; }
+    bool hasMinValue() const { return m_has_min_value; }
+    bool hasMaxValue() const { return m_has_max_value; }
+    const std::string& label() const { return m_label; }
     const std::string& unit() const { return m_unit; }
     size_t veclen() const { return m_veclen; }
     size_t nnodes() const { return m_nnodes; }
     size_t ncells() const { return m_ncells; }
-    bool hasMinValue() const { return m_has_min_value; }
-    bool hasMaxValue() const { return m_has_max_value; }
     double minValue() const { return m_min_value; }
     double maxValue() const { return m_max_value; }
     const kvs::AnyValueArray& values() const { return m_values; }

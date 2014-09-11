@@ -46,50 +46,6 @@ ColorMapValueTag::ColorMapValueTag():
 
 /*===========================================================================*/
 /**
- *  @brief  Returns the scalar value.
- *  @return scalar value
- */
-/*===========================================================================*/
-float ColorMapValueTag::scalar() const
-{
-    return m_scalar;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the color value.
- *  @return color value
- */
-/*===========================================================================*/
-const kvs::RGBColor& ColorMapValueTag::color() const
-{
-    return m_color;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a scalar value.
- *  @param  scalar [in] scalar value
- */
-/*===========================================================================*/
-void ColorMapValueTag::setScalar( const float scalar )
-{
-    m_scalar = scalar;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a color value.
- *  @param  color [in] color value
- */
-/*===========================================================================*/
-void ColorMapValueTag::setColor( const kvs::RGBColor& color )
-{
-    m_color = color;
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Read the attribute values.
  *  @param  parent [in] pointer to the parent node
  *  @return true if the reading process is done successfully
@@ -170,22 +126,10 @@ bool ColorMapValueTag::read( const kvs::XMLElement::SuperClass* element )
 bool ColorMapValueTag::write( kvs::XMLNode::SuperClass* parent )
 {
     kvs::XMLElement element( BaseClass::name() );
-
-    {
-        element.setAttribute( "s", m_scalar );
-    }
-
-    {
-        element.setAttribute( "r", m_color.r() );
-    }
-
-    {
-        element.setAttribute( "g", m_color.g() );
-    }
-
-    {
-        element.setAttribute( "b", m_color.b() );
-    }
+    element.setAttribute( "s", m_scalar );
+    element.setAttribute( "r", m_color.r() );
+    element.setAttribute( "g", m_color.g() );
+    element.setAttribute( "b", m_color.b() );
 
     return BaseClass::write_with_element( parent, element );
 }

@@ -38,39 +38,6 @@ KVSMLTag::KVSMLTag():
 
 /*===========================================================================*/
 /**
- *  @brief  Returns a flag to check whether 'version' is specified or not.
- *  @return true, if 'version' is specified as attribute
- */
-/*===========================================================================*/
-bool KVSMLTag::hasVersion() const
-{
-    return m_version.hasValue();
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a version number of the KVSML format.
- *  @return version number as string
- */
-/*===========================================================================*/
-const TagAttribute<std::string>& KVSMLTag::version() const
-{
-    return m_version;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a KVSML version.
- *  @param  version [in] version string
- */
-/*===========================================================================*/
-void KVSMLTag::setVersion( const std::string& version )
-{
-    m_version = version;
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Reads the KVSML tag.
  *  @param  document [in] pointer to the XML document
  *  @return true, if the reading process is done successfully.

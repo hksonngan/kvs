@@ -103,123 +103,6 @@ KVSMLObjectTable::KVSMLObjectTable( const std::string& filename ):
 
 /*===========================================================================*/
 /**
- *  @brief  Returns the KVSML tag.
- *  @return KVSML tag
- */
-/*===========================================================================*/
-const kvs::kvsml::KVSMLTag& KVSMLObjectTable::KVSMLTag() const
-{
-    return m_kvsml_tag;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the object tag.
- *  @return object tag
- */
-/*===========================================================================*/
-const kvs::kvsml::ObjectTag& KVSMLObjectTable::objectTag() const
-{
-    return m_object_tag;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns number of rows.
- *  @return number of rows
- */
-/*===========================================================================*/
-size_t KVSMLObjectTable::nrows() const
-{
-    return m_nrows;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns number of columns.
- *  @return number of columns
- */
-/*===========================================================================*/
-size_t KVSMLObjectTable::ncolumns() const
-{
-    return m_ncolumns;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns label list.
- *  @return label list
- */
-/*===========================================================================*/
-const std::vector<std::string>& KVSMLObjectTable::labelList() const
-{
-    return m_labels;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns column list.
- *  @return column list
- */
-/*===========================================================================*/
-const std::vector<kvs::AnyValueArray>& KVSMLObjectTable::columnList() const
-{
-    return m_columns;
-}
-
-const std::vector<bool>& KVSMLObjectTable::hasMinValueList() const
-{
-    return m_has_min_values;
-}
-
-const std::vector<bool>& KVSMLObjectTable::hasMaxValueList() const
-{
-    return m_has_max_values;
-}
-
-const std::vector<bool>& KVSMLObjectTable::hasMinRangeList() const
-{
-    return m_has_min_ranges;
-}
-
-const std::vector<bool>& KVSMLObjectTable::hasMaxRangeList() const
-{
-    return m_has_max_ranges;
-}
-
-const std::vector<double>& KVSMLObjectTable::minValueList() const
-{
-    return m_min_values;
-}
-
-const std::vector<double>& KVSMLObjectTable::maxValueList() const
-{
-    return m_max_values;
-}
-
-const std::vector<double>& KVSMLObjectTable::minRangeList() const
-{
-    return m_min_ranges;
-}
-
-const std::vector<double>& KVSMLObjectTable::maxRangeList() const
-{
-    return m_max_ranges;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a writing data type.
- *  @param  writing_type [in] writing data type
- */
-/*===========================================================================*/
-void KVSMLObjectTable::setWritingDataType( const WritingDataType writing_type )
-{
-    m_writing_type = writing_type;
-}
-
-/*===========================================================================*/
-/**
  *  @brief  Sets a min. value.
  *  @param  value [in] min. value
  */
@@ -282,6 +165,13 @@ void KVSMLObjectTable::addColumn( const kvs::AnyValueArray& column, const std::s
     m_nrows = m_nrows > column.size() ? m_nrows : column.size();
 }
 
+/*===========================================================================*/
+/**
+ *  @brief  Prints the information of this file.
+ *  @param  os [in] output stream
+ *  @param  indent [in] indent
+ */
+/*===========================================================================*/
 void KVSMLObjectTable::print( std::ostream& os, const kvs::Indent& indent ) const
 {
     os << indent << "Filename : " << BaseClass::filename() << std::endl;

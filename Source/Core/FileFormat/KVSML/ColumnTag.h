@@ -55,26 +55,22 @@ public:
 
     ColumnTag();
 
-public:
+    bool hasLabel() const { return m_has_label; }
+    bool hasMinValue() const { return m_has_min_value; }
+    bool hasMaxValue() const { return m_has_max_value; }
+    bool hasMinRange() const { return m_has_min_range; }
+    bool hasMaxRange() const { return m_has_max_range; }
+    const std::string& label() const { return m_label; }
+    double minValue() const { return m_min_value; }
+    double maxValue() const { return m_max_value; }
+    double minRange() const { return m_min_range; }
+    double maxRange() const { return m_max_range; }
 
-    bool hasLabel() const;
-    bool hasMinValue() const;
-    bool hasMaxValue() const;
-    bool hasMinRange() const;
-    bool hasMaxRange() const;
-    const std::string& label() const;
-    double minValue() const;
-    double maxValue() const;
-    double minRange() const;
-    double maxRange() const;
-
-    void setLabel( const std::string& label );
-    void setMinValue( const double value );
-    void setMaxValue( const double value );
-    void setMinRange( const double range );
-    void setMaxRange( const double range );
-
-public:
+    void setLabel( const std::string& label ) { m_has_label = true; m_label = label; }
+    void setMinValue( const double value ) { m_has_min_value = true; m_min_value = value; }
+    void setMaxValue( const double value ) { m_has_max_value = true; m_max_value = value; }
+    void setMinRange( const double range ) { m_has_min_range = true; m_min_range = range; }
+    void setMaxRange( const double range ) { m_has_max_range = true; m_max_range = range; }
 
     bool read( const kvs::XMLNode::SuperClass* parent );
     bool read( const kvs::XMLElement::SuperClass* element );

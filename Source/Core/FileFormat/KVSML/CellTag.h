@@ -44,16 +44,9 @@ public:
 
     CellTag();
 
-public:
-
-    bool hasNCells() const;
-    size_t ncells() const;
-
-public:
-
-    void setNCells( const size_t ncells );
-
-public:
+    bool hasNCells() const { return m_has_ncells; }
+    size_t ncells() const { return m_ncells; }
+    void setNCells( const size_t ncells ) { m_has_ncells = true; m_ncells = ncells; }
 
     bool read( const kvs::XMLNode::SuperClass* parent );
     bool write( kvs::XMLNode::SuperClass* parent );

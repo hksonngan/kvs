@@ -37,7 +37,6 @@ public:
 public:
 
     CoordTag();
-
 };
 
 } // end of namespace kvsml

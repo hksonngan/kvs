@@ -58,8 +58,6 @@ public:
 
     DataArrayTag();
 
-public:
-
     bool hasType() const { return m_has_type; }
     bool hasFile() const { return m_has_file; }
     bool hasFormat() const { return m_has_format; }
@@ -72,8 +70,6 @@ public:
     void setFile( const std::string& file ) { m_has_file = true; m_file = file; }
     void setFormat( const std::string& format ) { m_has_format = true; m_format = format; }
     void setEndian( const std::string& endian ) { m_has_endian = true; m_endian = endian; }
-
-public:
 
     bool read( const kvs::XMLNode::SuperClass* parent, const size_t nelements, kvs::AnyValueArray* data );
     template <typename T>
@@ -88,8 +84,6 @@ private:
     bool read_data( const size_t nelements, kvs::AnyValueArray* data );
     template <typename T>
     bool read_data( const size_t nelements, kvs::ValueArray<T>* data );
-
-private:
 
     bool read( const kvs::XMLNode::SuperClass* parent );
     bool write( kvs::XMLNode::SuperClass* parent );

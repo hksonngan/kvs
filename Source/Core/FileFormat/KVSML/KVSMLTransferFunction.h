@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file KVSMLTransferFunction.h
+ *  @file   KVSMLTransferFunction.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -72,22 +73,22 @@ public:
     KVSMLTransferFunction( const std::string& filename );
     virtual ~KVSMLTransferFunction();
 
-    const kvs::kvsml::KVSMLTag& KVSMLTag() const;
-    size_t resolution() const;
-    float minValue() const;
-    float maxValue() const;
-    const OpacityPointList& opacityPointList() const;
-    const ColorPointList& colorPointList() const;
-    const kvs::ValueArray<kvs::Real32>& opacities() const;
-    const kvs::ValueArray<kvs::UInt8>& colors() const;
+    const kvs::kvsml::KVSMLTag& KVSMLTag() const { return m_kvsml_tag; }
+    size_t resolution() const { return m_resolution; }
+    float minValue() const { return m_min_value; }
+    float maxValue() const { return m_max_value; }
+    const OpacityPointList& opacityPointList() const { return m_opacity_point_list; }
+    const ColorPointList& colorPointList() const { return m_color_point_list; }
+    const kvs::ValueArray<kvs::Real32>& opacities() const { return m_opacities; }
+    const kvs::ValueArray<kvs::UInt8>& colors() const { return m_colors; }
 
+    void setResolution( const size_t resolution ) { m_resolution = resolution; }
+    void setRange( const float min_value, const float max_value ) { m_min_value = min_value; m_max_value = max_value; }
+    void setWritingDataType( const WritingDataType type ) { m_writing_type = type; }
+    void setOpacities( const kvs::ValueArray<kvs::Real32>& opacities ) { m_opacities = opacities; }
+    void setColors( const kvs::ValueArray<kvs::UInt8>& colors ) { m_colors = colors; }
     void addOpacityPoint( const float value, const float opacity );
     void addColorPoint( const float value, const kvs::RGBColor color );
-    void setResolution( const size_t resolution );
-    void setRange( const float min_value, const float max_value );
-    void setWritingDataType( const WritingDataType writing_type );
-    void setOpacities( const kvs::ValueArray<kvs::Real32>& opacities );
-    void setColors( const kvs::ValueArray<kvs::UInt8>& colors );
 
     void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
     bool read( const std::string& filename );

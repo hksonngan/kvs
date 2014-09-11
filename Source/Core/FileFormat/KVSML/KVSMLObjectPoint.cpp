@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file KVSMLObjectPoint.cpp
+ *  @file   KVSMLObjectPoint.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -112,121 +113,11 @@ KVSMLObjectPoint::KVSMLObjectPoint( const std::string& filename ):
 
 /*===========================================================================*/
 /**
- *  @brief  Returns the KVSML tag.
- *  @return KVSML tag
+ *  @brief  Prints file information.
+ *  @param  os [in] output stream
+ *  @param  indent [in] indent for each line
  */
 /*===========================================================================*/
-const kvs::kvsml::KVSMLTag& KVSMLObjectPoint::KVSMLTag() const
-{
-    return m_kvsml_tag;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the object tag.
- *  @return object tag
- */
-/*===========================================================================*/
-const kvs::kvsml::ObjectTag& KVSMLObjectPoint::objectTag() const
-{
-    return m_object_tag;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the coordinate value array.
- */
-/*===========================================================================*/
-const kvs::ValueArray<kvs::Real32>& KVSMLObjectPoint::coords() const
-{
-    return m_coords;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the color value array.
- */
-/*===========================================================================*/
-const kvs::ValueArray<kvs::UInt8>& KVSMLObjectPoint::colors() const
-{
-    return m_colors;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the normal vector array.
- */
-/*===========================================================================*/
-const kvs::ValueArray<kvs::Real32>& KVSMLObjectPoint::normals() const
-{
-    return m_normals;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the size value array.
- */
-/*===========================================================================*/
-const kvs::ValueArray<kvs::Real32>& KVSMLObjectPoint::sizes() const
-{
-    return m_sizes;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Set a writing type.
- *  @param  writing_type [in] writing type
- */
-/*===========================================================================*/
-void KVSMLObjectPoint::setWritingDataType( const WritingDataType writing_type )
-{
-    m_writing_type = writing_type;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Set a coordinate value array.
- *  @param  coords [in] coordinate value array
- */
-/*===========================================================================*/
-void KVSMLObjectPoint::setCoords( const kvs::ValueArray<kvs::Real32>& coords )
-{
-    m_coords = coords;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Set a color value array.
- *  @param  colors [in] color value array
- */
-/*===========================================================================*/
-void KVSMLObjectPoint::setColors( const kvs::ValueArray<kvs::UInt8>& colors )
-{
-    m_colors = colors;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Set a normal vector array.
- *  @param  normals [in] normal vector array
- */
-/*===========================================================================*/
-void KVSMLObjectPoint::setNormals( const kvs::ValueArray<kvs::Real32>& normals )
-{
-    m_normals = normals;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Set a size value array.
- *  @param  sizes [in] size value array
- */
-/*===========================================================================*/
-void KVSMLObjectPoint::setSizes( const kvs::ValueArray<kvs::Real32>& sizes )
-{
-    m_sizes = sizes;
-}
-
 void KVSMLObjectPoint::print( std::ostream& os, const kvs::Indent& indent ) const
 {
     os << indent << "Filename : " << BaseClass::filename() << std::endl;

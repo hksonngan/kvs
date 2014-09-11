@@ -75,22 +75,22 @@ public:
     KVSMLObjectTable();
     KVSMLObjectTable( const std::string& filename );
 
-    const kvs::kvsml::KVSMLTag& KVSMLTag() const;
-    const kvs::kvsml::ObjectTag& objectTag() const;
-    size_t nrows() const;
-    size_t ncolumns() const;
-    const std::vector<std::string>& labelList() const;
-    const std::vector<kvs::AnyValueArray>& columnList() const;
-    const std::vector<bool>& hasMinValueList() const;
-    const std::vector<bool>& hasMaxValueList() const;
-    const std::vector<bool>& hasMinRangeList() const;
-    const std::vector<bool>& hasMaxRangeList() const;
-    const std::vector<double>& minValueList() const;
-    const std::vector<double>& maxValueList() const;
-    const std::vector<double>& minRangeList() const;
-    const std::vector<double>& maxRangeList() const;
+    const kvs::kvsml::KVSMLTag& KVSMLTag() const { return m_kvsml_tag; }
+    const kvs::kvsml::ObjectTag& objectTag() const { return m_object_tag; }
+    size_t nrows() const { return m_nrows; }
+    size_t ncolumns() const { return m_ncolumns; }
+    const std::vector<std::string>& labelList() const { return m_labels; }
+    const std::vector<kvs::AnyValueArray>& columnList() const { return m_columns; }
+    const std::vector<bool>& hasMinValueList() const { return m_has_min_values; }
+    const std::vector<bool>& hasMaxValueList() const { return m_has_max_values; }
+    const std::vector<bool>& hasMinRangeList() const { return m_has_min_ranges; }
+    const std::vector<bool>& hasMaxRangeList() const { return m_has_max_ranges; }
+    const std::vector<double>& minValueList() const { return m_min_values; }
+    const std::vector<double>& maxValueList() const { return m_max_values; }
+    const std::vector<double>& minRangeList() const { return m_min_ranges; }
+    const std::vector<double>& maxRangeList() const { return m_max_ranges; }
 
-    void setWritingDataType( const WritingDataType writing_type );
+    void setWritingDataType( const WritingDataType type ) { m_writing_type = type; }
     void setMinValue( const size_t column_index, const double value );
     void setMaxValue( const size_t column_index, const double value );
     void setMinRange( const size_t column_index, const double range );

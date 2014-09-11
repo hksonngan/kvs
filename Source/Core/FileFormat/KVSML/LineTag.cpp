@@ -1,6 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   LineTag.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -34,40 +35,6 @@ LineTag::LineTag():
     m_has_nlines( false ),
     m_nlines( 0 )
 {
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Tests whether the line tag has 'nlines' or not.
- *  @return true, if the line tag has 'nlines'
- */
-/*===========================================================================*/
-bool LineTag::hasNLines() const
-{
-    return m_has_nlines;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a number of lines.
- *  @return number of lines
- */
-/*===========================================================================*/
-size_t LineTag::nlines() const
-{
-    return m_nlines;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a number of lines
- *  @param  nlines [in] number of lines
- */
-/*===========================================================================*/
-void LineTag::setNLines( const size_t nlines )
-{
-    m_has_nlines = true;
-    m_nlines = nlines;
 }
 
 /*===========================================================================*/

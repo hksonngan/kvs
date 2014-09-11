@@ -40,9 +40,7 @@ public:
 public:
 
     ColorMapTag();
-
 };
-
 
 /*===========================================================================*/
 /**
@@ -64,14 +62,10 @@ public:
 
     ColorMapValueTag();
 
-public:
-
-    float scalar() const;
-    const kvs::RGBColor& color() const;
-    void setScalar( const float scalar );
-    void setColor( const kvs::RGBColor& color );
-
-public:
+    float scalar() const { return m_scalar; }
+    const kvs::RGBColor& color() const { return m_color; }
+    void setScalar( const float scalar ) { m_scalar = scalar; }
+    void setColor( const kvs::RGBColor& color ) { m_color = color; }
 
     bool read( const kvs::XMLNode::SuperClass* parent );
     bool read( const kvs::XMLElement::SuperClass* element );

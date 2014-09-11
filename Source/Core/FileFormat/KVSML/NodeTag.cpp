@@ -1,6 +1,7 @@
 /*****************************************************************************/
 /**
  *  @file   NodeTag.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -34,40 +35,6 @@ NodeTag::NodeTag():
     m_has_nnodes( false ),
     m_nnodes( 0 )
 {
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Tests whether the node tag has the 'nnodes' atribute value.
- *  @return true, if the node tag has the 'nnodes' attribute value
- */
-/*===========================================================================*/
-bool NodeTag::hasNNodes() const
-{
-    return m_has_nnodes;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns a number of nodes.
- *  @return number of nodes
- */
-/*===========================================================================*/
-size_t NodeTag::nnodes() const
-{
-    return m_nnodes;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a number of nodes.
- *  @param  nnodes [in] number of nodes
- */
-/*===========================================================================*/
-void NodeTag::setNNodes( const size_t nnodes )
-{
-    m_has_nnodes = true;
-    m_nnodes = nnodes;
 }
 
 /*===========================================================================*/

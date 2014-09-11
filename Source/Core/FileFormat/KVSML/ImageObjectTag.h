@@ -40,27 +40,21 @@ public:
 private:
 
     bool m_has_width; ///< flag to check whether 'width' is specified or not
-    size_t m_width; ///< image width
     bool m_has_height; ///< flag to check whether 'height' is specified or not
+    size_t m_width; ///< image width
     size_t m_height; ///< image height
 
 public:
 
     ImageObjectTag();
 
-public:
+    bool hasWidth() const { return m_has_height; }
+    bool hasHeight() const { return m_has_height; }
+    size_t width() const { return m_width; }
+    size_t height() const { return m_height; }
 
-    bool hasWidth() const;
-    size_t width() const;
-    bool hasHeight() const;
-    size_t height() const;
-
-public:
-
-    void setWidth( const size_t width );
-    void setHeight( const size_t height );
-
-public:
+    void setWidth( const size_t width ) { m_has_width = true; m_width = width; }
+    void setHeight( const size_t height ) { m_has_height = true; m_height = height; }
 
     bool read( const kvs::XMLNode::SuperClass* parent );
     bool write( kvs::XMLNode::SuperClass* parent );

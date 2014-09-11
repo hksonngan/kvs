@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file KVSMLObjectLine.cpp
+ *  @file   KVSMLObjectLine.cpp
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -107,169 +108,11 @@ KVSMLObjectLine::KVSMLObjectLine( const std::string& filename ):
 
 /*===========================================================================*/
 /**
- *  @brief  Returns the KVSML tag.
- *  @return KVSML tag
+ *  @brief  Prints file information.
+ *  @param  os [in] output stream
+ *  @param  indent [in] indent for each line
  */
 /*===========================================================================*/
-const kvs::kvsml::KVSMLTag& KVSMLObjectLine::KVSMLTag() const
-{
-    return m_kvsml_tag;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the object tag.
- *  @return object tag
- */
-/*===========================================================================*/
-const kvs::kvsml::ObjectTag& KVSMLObjectLine::objectTag() const
-{
-    return m_object_tag;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the line type.
- *  @return line type
- */
-/*===========================================================================*/
-const std::string& KVSMLObjectLine::lineType() const
-{
-    return m_line_type;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the color type.
- *  @return color type
- */
-/*===========================================================================*/
-const std::string& KVSMLObjectLine::colorType() const
-{
-    return m_color_type;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the coordinate value array.
- *  @return coordinate value array
- */
-/*===========================================================================*/
-const kvs::ValueArray<kvs::Real32>& KVSMLObjectLine::coords() const
-{
-    return m_coords;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the color value array.
- *  @return color value array
- */
-/*===========================================================================*/
-const kvs::ValueArray<kvs::UInt8>& KVSMLObjectLine::colors() const
-{
-    return m_colors;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the connection data array.
- *  @return connection data array
- */
-/*===========================================================================*/
-const kvs::ValueArray<kvs::UInt32>& KVSMLObjectLine::connections() const
-{
-    return m_connections;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Returns the size value array.
- *  @return size value array
- */
-/*===========================================================================*/
-const kvs::ValueArray<kvs::Real32>& KVSMLObjectLine::sizes() const
-{
-    return m_sizes;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a writing type.
- *  @param  writing_type [in] writing type
- */
-/*===========================================================================*/
-void KVSMLObjectLine::setWritingDataType( const WritingDataType writing_type )
-{
-    m_writing_type = writing_type;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a line type.
- *  @param  line_type [in] line type (strip, uniline, polyline or segment)
- */
-/*===========================================================================*/
-void KVSMLObjectLine::setLineType( const std::string& line_type )
-{
-    m_line_type = line_type;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a color type.
- *  @param  color_type [in] color type (vertex or line)
- */
-/*===========================================================================*/
-void KVSMLObjectLine::setColorType( const std::string& color_type )
-{
-    m_color_type = color_type;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a coordinate value array.
- *  @param  coords [in] coordinate value array
- */
-/*===========================================================================*/
-void KVSMLObjectLine::setCoords( const kvs::ValueArray<kvs::Real32>& coords )
-{
-    m_coords = coords;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a color value array.
- *  @param  colors [in] color value array
- */
-/*===========================================================================*/
-void KVSMLObjectLine::setColors( const kvs::ValueArray<kvs::UInt8>& colors )
-{
-    m_colors = colors;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a connection data array.
- *  @param  connections [in] connection data array
- */
-/*===========================================================================*/
-void KVSMLObjectLine::setConnections( const kvs::ValueArray<kvs::UInt32>& connections )
-{
-    m_connections = connections;
-}
-
-/*===========================================================================*/
-/**
- *  @brief  Sets a size value array.
- *  @param  sizes [in] size value array
- */
-/*===========================================================================*/
-void KVSMLObjectLine::setSizes( const kvs::ValueArray<kvs::Real32>& sizes )
-{
-    m_sizes = sizes;
-}
-
 void KVSMLObjectLine::print( std::ostream& os, const kvs::Indent& indent ) const
 {
     os << indent << "Filename : " << BaseClass::filename() << std::endl;

@@ -1,6 +1,7 @@
 /****************************************************************************/
 /**
- *  @file KVSMLObjectLine.h
+ *  @file   KVSMLObjectLine.h
+ *  @author Naohisa Sakamoto
  */
 /*----------------------------------------------------------------------------
  *
@@ -66,22 +67,22 @@ public:
     KVSMLObjectLine();
     KVSMLObjectLine( const std::string& filename );
 
-    const kvs::kvsml::KVSMLTag& KVSMLTag() const;
-    const kvs::kvsml::ObjectTag& objectTag() const;
-    const std::string& lineType() const;
-    const std::string& colorType() const;
-    const kvs::ValueArray<kvs::Real32>& coords() const;
-    const kvs::ValueArray<kvs::UInt8>& colors() const;
-    const kvs::ValueArray<kvs::UInt32>& connections() const;
-    const kvs::ValueArray<kvs::Real32>& sizes() const;
+    const kvs::kvsml::KVSMLTag& KVSMLTag() const { return m_kvsml_tag; }
+    const kvs::kvsml::ObjectTag& objectTag() const { return m_object_tag; }
+    const std::string& lineType() const { return m_line_type; }
+    const std::string& colorType() const { return m_color_type; }
+    const kvs::ValueArray<kvs::Real32>& coords() const { return m_coords; }
+    const kvs::ValueArray<kvs::UInt8>& colors() const { return m_colors; }
+    const kvs::ValueArray<kvs::UInt32>& connections() const { return m_connections; }
+    const kvs::ValueArray<kvs::Real32>& sizes() const { return m_sizes; }
 
-    void setWritingDataType( const WritingDataType writing_type );
-    void setLineType( const std::string& line_type );
-    void setColorType( const std::string& color_type );
-    void setCoords( const kvs::ValueArray<kvs::Real32>& coords );
-    void setColors( const kvs::ValueArray<kvs::UInt8>& colors );
-    void setConnections( const kvs::ValueArray<kvs::UInt32>& connections );
-    void setSizes( const kvs::ValueArray<kvs::Real32>& sizes );
+    void setWritingDataType( const WritingDataType type ) { m_writing_type = type; }
+    void setLineType( const std::string& type ) { m_line_type = type; }
+    void setColorType( const std::string& type ) { m_color_type = type; }
+    void setCoords( const kvs::ValueArray<kvs::Real32>& coords ) { m_coords = coords; }
+    void setColors( const kvs::ValueArray<kvs::UInt8>& colors ) { m_colors = colors; }
+    void setConnections( const kvs::ValueArray<kvs::UInt32>& connections ) { m_connections = connections; }
+    void setSizes( const kvs::ValueArray<kvs::Real32>& sizes ) { m_sizes = sizes; }
 
     void print( std::ostream& os, const kvs::Indent& indent = kvs::Indent(0) ) const;
     bool read( const std::string& filename );
