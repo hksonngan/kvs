@@ -108,6 +108,7 @@ public:
                         const LineType line_type,
                         const ColorType color_type ) )
     {
+        setGeometryType( Line );
         this->setCoords( coords );
         this->setColors( colors );
         this->setLineType( line_type );
@@ -124,6 +125,7 @@ public:
                         const LineType line_type,
                         const ColorType color_type ) )
     {
+        setGeometryType( Line );
         this->setCoords( coords );
         this->setColors( colors );
         this->setLineType( line_type );
@@ -139,6 +141,7 @@ public:
                         const kvs::ValueArray<kvs::Real32>& sizes,
                         const LineType line_type ) )
     {
+        setGeometryType( Line );
         this->setCoords( coords );
         this->setColor( color );
         this->setLineType( line_type );
@@ -154,6 +157,7 @@ public:
                         const kvs::Real32 size,
                         const LineType line_type ) )
     {
+        setGeometryType( Line );
         this->setCoords( coords );
         this->setColor( color );
         this->setLineType( line_type );
@@ -168,6 +172,7 @@ public:
                         const kvs::ValueArray<kvs::Real32>& sizes,
                         const ColorType color_type ) )
     {
+        setGeometryType( Line );
         this->setCoords( coords );
         this->setColors( colors );
         this->setLineType( LineObject::Strip );
@@ -181,6 +186,7 @@ public:
                         const kvs::Real32 size,
                         const ColorType color_type ) )
     {
+        setGeometryType( Line );
         this->setCoords( coords );
         this->setColors( colors );
         this->setLineType( LineObject::Strip );
@@ -193,6 +199,7 @@ public:
                         const kvs::RGBColor& color,
                         const kvs::ValueArray<kvs::Real32>& sizes ) )
     {
+        setGeometryType( Line );
         this->setCoords( coords );
         this->setColor( color );
         this->setLineType( LineObject::Strip );
@@ -205,6 +212,7 @@ public:
                         const kvs::RGBColor& color,
                         const kvs::Real32 size ) )
     {
+        setGeometryType( Line );
         this->setCoords( coords );
         this->setColor( color );
         this->setLineType( LineObject::Strip );
@@ -215,6 +223,7 @@ public:
     KVS_DEPRECATED( LineObject(
                         const kvs::ValueArray<kvs::Real32>& coords ) )
     {
+        setGeometryType( Line );
         this->setCoords( coords );
         this->setColor( kvs::RGBColor( 255, 255, 255 ) );
         this->setLineType( LineObject::Strip );

@@ -73,6 +73,7 @@ public:
                         const kvs::ValueArray<kvs::Real32>& normals,
                         const kvs::ValueArray<kvs::Real32>& sizes ) )
     {
+        setGeometryType( Point );
         this->setCoords( coords );
         this->setColors( colors );
         this->setNormals( normals );
@@ -85,6 +86,7 @@ public:
                         const kvs::ValueArray<kvs::Real32>& normals,
                         const kvs::Real32 size ) )
     {
+        setGeometryType( Point );
         this->setCoords( coords );
         this->setColors( colors );
         this->setNormals( normals );
@@ -97,6 +99,7 @@ public:
                         const kvs::ValueArray<kvs::Real32>& normals,
                         const kvs::ValueArray<kvs::Real32>& sizes ) )
     {
+        setGeometryType( Point );
         this->setCoords( coords );
         this->setColor( color );
         this->setNormals( normals );
@@ -108,6 +111,7 @@ public:
                         const kvs::ValueArray<kvs::Real32>& normals,
                         const kvs::ValueArray<kvs::Real32>& sizes ) )
     {
+        setGeometryType( Point );
         this->setCoords( coords );
         this->setNormals( normals );
         this->setSizes( sizes );
@@ -119,6 +123,7 @@ public:
                         const kvs::ValueArray<kvs::Real32>& normals,
                         const kvs::Real32 size ) )
     {
+        setGeometryType( Point );
         this->setCoords( coords );
         this->setColor( color );
         this->setNormals( normals );
@@ -130,6 +135,7 @@ public:
                         const kvs::ValueArray<kvs::UInt8>& colors,
                         const kvs::ValueArray<kvs::Real32>& sizes ) )
     {
+        setGeometryType( Point );
         this->setCoords( coords );
         this->setColors( colors );
         this->setSizes( sizes );
@@ -140,6 +146,7 @@ public:
                         const kvs::RGBColor& color,
                         const kvs::ValueArray<kvs::Real32>& sizes ) )
     {
+        setGeometryType( Point );
         this->setCoords( coords );
         this->setColor( color );
         this->setSizes( sizes );
@@ -150,6 +157,7 @@ public:
                         const kvs::ValueArray<kvs::UInt8>&  colors,
                         const kvs::Real32 size ) )
     {
+        setGeometryType( Point );
         this->setCoords( coords );
         this->setColors( colors );
         this->setSize( size );
@@ -160,6 +168,7 @@ public:
                         const kvs::RGBColor& color,
                         const kvs::Real32 size ) )
     {
+        setGeometryType( Point );
         this->setCoords( coords );
         this->setColor( color );
         this->setSize( size );
@@ -168,6 +177,7 @@ public:
     KVS_DEPRECATED( PointObject(
                         const kvs::ValueArray<kvs::Real32>& coords ) )
     {
+        setGeometryType( Point );
         this->setCoords( coords );
         this->setColor( kvs::RGBColor( 255, 255, 255 ) );
         this->setSize( 1 );

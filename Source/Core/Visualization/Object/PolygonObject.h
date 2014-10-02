@@ -116,6 +116,7 @@ public:
                         const ColorType color_type,
                         const NormalType normal_type ) )
     {
+        setGeometryType( Polygon );
         this->setCoords( coords );
         this->setColors( colors );
         this->setNormals( normals );
@@ -136,6 +137,7 @@ public:
                         const ColorType color_type,
                         const NormalType normal_type ) )
     {
+        setGeometryType( Polygon );
         this->setCoords( coords );
         this->setColors( colors );
         this->setNormals( normals );
@@ -155,6 +157,7 @@ public:
                         const PolygonType polygon_type,
                         const NormalType normal_type ) )
     {
+        setGeometryType( Polygon );
         this->setCoords( coords );
         this->setColor( color );
         this->setNormals( normals );
@@ -174,6 +177,7 @@ public:
                         const PolygonType polygon_type,
                         const NormalType normal_type ) )
     {
+        setGeometryType( Polygon );
         this->setCoords( coords );
         this->setColor( color );
         this->setNormals( normals );
@@ -193,6 +197,7 @@ public:
                         const ColorType color_type,
                         const NormalType normal_type ) )
     {
+        setGeometryType( Polygon );
         this->setCoords( coords );
         this->setColors( colors );
         this->setNormals( normals );
@@ -211,6 +216,7 @@ public:
                         const ColorType color_type,
                         const NormalType normal_type ) )
     {
+        setGeometryType( Polygon );
         this->setCoords( coords );
         this->setColors( colors );
         this->setNormals( normals );
@@ -228,6 +234,7 @@ public:
                         const PolygonType polygon_type,
                         const NormalType normal_type ) )
     {
+        setGeometryType( Polygon );
         this->setCoords( coords );
         this->setColor( color );
         this->setNormals( normals );
@@ -245,6 +252,7 @@ public:
                         const PolygonType polygon_type,
                         const NormalType normal_type ) )
     {
+        setGeometryType( Polygon );
         this->setCoords( coords );
         this->setColor( color );
         this->setNormals( normals );
