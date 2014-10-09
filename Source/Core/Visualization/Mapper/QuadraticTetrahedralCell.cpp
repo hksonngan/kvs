@@ -53,22 +53,23 @@ const kvs::Real32* QuadraticTetrahedralCell::interpolationFunctions( const kvs::
     const float x = point[0];
     const float y = point[1];
     const float z = point[2];
+    const float w = 1 - x - y - z;
 
     const float xy = x * y;
     const float yz = y * z;
     const float zx = z * x;
 
     kvs::Real32* N = BaseClass::interpolationFunctions();
-    N[0] = 2.0f * ( 1.0f - x - y - z ) * ( 0.5f - x - y - z );
-    N[1] = 2.0f *  x * ( x - 0.5f );
-    N[2] = 2.0f *  z * ( z - 0.5f );
-    N[3] = 2.0f *  y * ( y - 0.5f );
-    N[4] = 4.0f *  x * ( 1.0f - x - y - z );
-    N[5] = 4.0f *  z * ( 1.0f - x - y - z );
-    N[6] = 4.0f *  y * ( 1.0f - x - y - z );
-    N[7] = 4.0f * zx;
-    N[8] = 4.0f * yz;
-    N[9] = 4.0f * xy;
+    N[0] = w * (2 * w - 1); // (0, 0, 0)
+    N[1] = x * (2 * x - 1); // (1, 0, 0)
+    N[2] = z * (2 * z - 1); // (0, 0, 1)
+    N[3] = y * (2 * y - 1); // (0, 1, 0)
+    N[4] = 4 * x * w; // (1/2,   0,   0)
+    N[5] = 4 * z * w; // (  0,   0, 1/2)
+    N[6] = 4 * y * w; // (  0, 1/2,   0)
+    N[7] = 4 * z * x; // (1/2,   0, 1/2)
+    N[8] = 4 * y * z; // (  0, 1/2, 1/2)
+    N[9] = 4 * x * y; // (1/2, 1/2,   0)
 
     return N;
 }
@@ -84,6 +85,7 @@ const kvs::Real32* QuadraticTetrahedralCell::differentialFunctions( const kvs::V
     const float x = point.x();
     const float y = point.y();
     const float z = point.z();
+    const float w = 1 - x - y - z;
 
     const size_t nnodes = BaseClass::numberOfCellNodes();
     kvs::Real32* dN = BaseClass::differentialFunctions();
@@ -91,38 +93,41 @@ const kvs::Real32* QuadraticTetrahedralCell::differentialFunctions( const kvs::V
     kvs::Real32* dNdy = dNdx + nnodes;
     kvs::Real32* dNdz = dNdy + nnodes;
 
-    dNdx[0] =  4 * ( x + y + z ) - 3;
+    // dNdx
+    dNdx[0] = -4 * w + 1;
     dNdx[1] =  4 * x - 1;
     dNdx[2] =  0;
     dNdx[3] =  0;
-    dNdx[4] =  4 * ( 1 - 2 * x - y - z );
+    dNdx[4] =  4 * (w - x);
     dNdx[5] = -4 * z;
     dNdx[6] = -4 * y;
     dNdx[7] =  4 * z;
     dNdx[8] =  0;
     dNdx[9] =  4 * y;
 
-    dNdy[0] =  4 * ( x + y + z ) - 3;
+    // dNdy
+    dNdy[0] = -4 * w + 1;
     dNdy[1] =  0;
     dNdy[2] =  0;
     dNdy[3] =  4 * y - 1;
     dNdy[4] = -4 * x;
     dNdy[5] = -4 * z;
-    dNdy[6] =  4 * ( 1 - x - 2 * y - z );
+    dNdy[6] =  4 * (w - y);
     dNdy[7] =  0;
     dNdy[8] =  4 * z;
     dNdy[9] =  4 * x;
 
-    dNdz[20] =  4 * ( x + y + z ) - 3;
-    dNdz[21] =  0;
-    dNdz[22] =  4 * z - 1;
-    dNdz[23] =  0;
-    dNdz[24] = -4 * x;
-    dNdz[25] =  4 * ( 1 - x - y - 2 * z );
-    dNdz[26] = -4 * y;
-    dNdz[27] =  4 * x;
-    dNdz[28] =  4 * y;
-    dNdz[29] =  0;
+    // dNdz
+    dNdz[0] = -4 * w + 1;
+    dNdz[1] =  0;
+    dNdz[2] =  4 * z - 1;
+    dNdz[3] =  0;
+    dNdz[4] = -4 * x;
+    dNdz[5] =  4 * (w - z);
+    dNdz[6] = -4 * y;
+    dNdz[7] =  4 * x;
+    dNdz[8] =  4 * y;
+    dNdz[9] =  0;
 
     return dN;
 }
