@@ -28,11 +28,13 @@ uniform ShadingParameter shading;
 /*===========================================================================*/
 void main( void )
 {
-    // Discard a pixel outside circle.
+#if defined( ENABLE_PARTICLE_ZOOMING )
+    // Discard pixels outside circle.
     if ( radius > 0.0 )
     {
         if ( distance( gl_FragCoord.xy, center ) > radius ) discard;
     }
+#endif
 
     // Light position.
     vec3 light_position = gl_LightSource[0].position.xyz;

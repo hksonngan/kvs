@@ -103,11 +103,10 @@ void main()
 {
     gl_FrontColor = gl_Color;
     gl_Position = ProjectionMatrix * ModelViewMatrix * gl_Vertex;
+
 #if defined( ENABLE_PARTICLE_ZOOMING )
     gl_PointSize = zooming( gl_Position );
 #else
-    center = screen_scale + ( ( gl_Position.xy / gl_Position.w ) * screen_scale );
-    radius = 0.5;
     gl_PointSize = 1.0;
 #endif
 
