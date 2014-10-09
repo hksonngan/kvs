@@ -462,6 +462,7 @@ void ParticleBasedRenderer::Engine::create_shader_program()
     if ( isEnabledZooming() )
     {
         vert.define("ENABLE_PARTICLE_ZOOMING");
+        frag.define("ENABLE_PARTICLE_ZOOMING");
     }
 
     m_shader_program.build( vert, frag );
