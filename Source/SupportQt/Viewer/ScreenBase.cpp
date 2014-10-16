@@ -268,6 +268,7 @@ void ScreenBase::paintGL()
 void ScreenBase::resizeGL( int width, int height )
 {
 #if QT_VERSION >= QT_VERSION_CHECK( 5, 1, 0 )
+#if QT_VERSION <  QT_VERSION_CHECK( 5, 2, 0 )
     // NOTE: High-dpi model such as retina display has been supported in Qt5.
     // Therefore, when using Qt5 on Mac with retina display, the 'width' and
     // 'height' specified as arguments of this method will be scaled by a device
@@ -278,6 +279,7 @@ void ScreenBase::resizeGL( int width, int height )
     const qreal scale = QGLWidget::devicePixelRatio();
     width = static_cast<size_t>( width / scale + 0.5 );
     height = static_cast<size_t>( height / scale + 0.5 );
+#endif
 #endif
 
     this->resizeEvent( width, height );
