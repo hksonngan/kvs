@@ -295,42 +295,45 @@ void TableObject::setMinRange( const size_t column_index, const kvs::Real64 rang
 
     const size_t nrows = this->numberOfRows();
     const size_t ncolumns = this->numberOfColumns();
-    if ( min_range_new > min_range_old )
+    if ( m_table.columns().size() > 0 )
     {
-        /* In case of flags turned off, you just have to check whether the value
-         * in the specified column is included in the range.
-         *
-         *  (before) |xxx+oooooooo*xxxxxx|  o: on, x: off, +: min_range, *: max_range
-         *  (after)  |xxxAxxxxBooo*xxxxxx|  A: min_range_old, B: min_range_new
-         */
-        const kvs::AnyValueArray& column = this->column( column_index );
-        for ( size_t i = 0; i < nrows; i++ )
+        if ( min_range_new > min_range_old )
         {
-            const kvs::Real64 value = column[i].to<kvs::Real64>();
-            if (  min_range_old <= value && value <= min_range_new )
+            /* In case of flags turned off, you just have to check whether the value
+             * in the specified column is included in the range.
+             *
+             *  (before) |xxx+oooooooo*xxxxxx|  o: on, x: off, +: min_range, *: max_range
+             *  (after)  |xxxAxxxxBooo*xxxxxx|  A: min_range_old, B: min_range_new
+             */
+            const kvs::AnyValueArray& column = this->column( column_index );
+            for ( size_t i = 0; i < nrows; i++ )
             {
-                m_inside_range_flags[i] = 0;
-            }
-        }
-    }
-    else
-    {
-        /* In case of flags turned on, you have to check the all of colums.
-         *
-         *  (before) |xxxxxxxx+ooo*xxxxxx|  o: on, x: off, +: min_range, *: max_range
-         *  (after)  |xxxAooooBooo*xxxxxx|  A: min_range, B: min_range_old
-         */
-        for ( size_t i = 0; i < nrows; i++ )
-        {
-            m_inside_range_flags[i] = 1;
-            for ( size_t j = 0; j < ncolumns; j++ )
-            {
-                const kvs::AnyValueArray& column = this->column( j );
                 const kvs::Real64 value = column[i].to<kvs::Real64>();
-                if (  !( m_min_ranges[j] <= value && value <= m_max_ranges[j] ) )
+                if (  min_range_old <= value && value <= min_range_new )
                 {
                     m_inside_range_flags[i] = 0;
-                    break;
+                }
+            }
+        }
+        else
+        {
+            /* In case of flags turned on, you have to check the all of colums.
+             *
+             *  (before) |xxxxxxxx+ooo*xxxxxx|  o: on, x: off, +: min_range, *: max_range
+             *  (after)  |xxxAooooBooo*xxxxxx|  A: min_range, B: min_range_old
+             */
+            for ( size_t i = 0; i < nrows; i++ )
+            {
+                m_inside_range_flags[i] = 1;
+                for ( size_t j = 0; j < ncolumns; j++ )
+                {
+                    const kvs::AnyValueArray& column = this->column( j );
+                    const kvs::Real64 value = column[i].to<kvs::Real64>();
+                    if (  !( m_min_ranges[j] <= value && value <= m_max_ranges[j] ) )
+                    {
+                        m_inside_range_flags[i] = 0;
+                        break;
+                    }
                 }
             }
         }
@@ -357,43 +360,46 @@ void TableObject::setMaxRange( const size_t column_index, const kvs::Real64 rang
 
     const size_t nrows = this->numberOfRows();
     const size_t ncolumns = this->numberOfColumns();
-    if ( max_range_new > max_range_old )
+    if ( m_table.columns().size() > 0 )
     {
-        /* In case of flags turned on, you have to check the all of colums.
-         *
-         *  (before) |xxx*oooooooo+xxxxxx|  o: on, x: off, *: min_range, +: max_range
-         *  (after)  |xxx*ooooooooAoooBxx|  A: max_range_old, B: max_range_new
-         */
-        for ( size_t i = 0; i < nrows; i++ )
+        if ( max_range_new > max_range_old )
         {
-            m_inside_range_flags[i] = 1;
-            for ( size_t j = 0; j < ncolumns; j++ )
+            /* In case of flags turned on, you have to check the all of colums.
+             *
+             *  (before) |xxx*oooooooo+xxxxxx|  o: on, x: off, *: min_range, +: max_range
+             *  (after)  |xxx*ooooooooAoooBxx|  A: max_range_old, B: max_range_new
+             */
+            for ( size_t i = 0; i < nrows; i++ )
             {
-                const kvs::AnyValueArray& column = this->column( j );
-                const kvs::Real64 value = column[i].to<kvs::Real64>();
-                if (  !( m_min_ranges[j] <= value && value <= m_max_ranges[j] ) )
+                m_inside_range_flags[i] = 1;
+                for ( size_t j = 0; j < ncolumns; j++ )
                 {
-                    m_inside_range_flags[i] = 0;
-                    break;
+                    const kvs::AnyValueArray& column = this->column( j );
+                    const kvs::Real64 value = column[i].to<kvs::Real64>();
+                    if (  !( m_min_ranges[j] <= value && value <= m_max_ranges[j] ) )
+                    {
+                        m_inside_range_flags[i] = 0;
+                        break;
+                    }
                 }
             }
         }
-    }
-    else
-    {
-        /* In case of flags turned off, you just have to check whether the value
-         * in the specified column is included in the range.
-         *
-         *  (before) |xxx*oooooooo+xxxxxx|  o: on, x: off, *: min_range, +: max_range
-         *  (after)  |xxx*ooooBxxxAxxxxxx|  A: max_range_old, B: max_range_new
-         */
-        const kvs::AnyValueArray& column = this->column( column_index );
-        for ( size_t i = 0; i < nrows; i++ )
+        else
         {
-            const kvs::Real64 value = column[i].to<kvs::Real64>();
-            if (  max_range_new <= value && value <= max_range_old )
+            /* In case of flags turned off, you just have to check whether the value
+             * in the specified column is included in the range.
+             *
+             *  (before) |xxx*oooooooo+xxxxxx|  o: on, x: off, *: min_range, +: max_range
+             *  (after)  |xxx*ooooBxxxAxxxxxx|  A: max_range_old, B: max_range_new
+             */
+            const kvs::AnyValueArray& column = this->column( column_index );
+            for ( size_t i = 0; i < nrows; i++ )
             {
-                m_inside_range_flags[i] = 0;
+                const kvs::Real64 value = column[i].to<kvs::Real64>();
+                if (  max_range_new <= value && value <= max_range_old )
+                {
+                    m_inside_range_flags[i] = 0;
+                }
             }
         }
     }

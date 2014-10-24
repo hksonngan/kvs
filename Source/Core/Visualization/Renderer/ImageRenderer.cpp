@@ -17,6 +17,7 @@
 #include <kvs/ImageObject>
 #include <kvs/Message>
 #include <kvs/IgnoreUnusedVariable>
+#include <kvs/OpenGL>
 
 
 namespace kvs
@@ -57,56 +58,43 @@ void ImageRenderer::exec( kvs::ObjectBase* object, kvs::Camera* camera, kvs::Lig
     kvs::ImageObject* image = kvs::ImageObject::DownCast( object );
     if ( !image ) return;
 
+    if ( !m_texture.isCreated() )
+    {
+        this->create_texture( image );
+    }
+
+    if ( m_type == Centering )
+    {
+        this->center_alignment( camera->windowWidth(), camera->windowHeight() );
+    }
+
     BaseClass::startTimer();
 
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-
-    glPushAttrib( GL_CURRENT_BIT | GL_ENABLE_BIT );
-
-    if ( !glIsTexture( m_texture.id() ) ) this->create_texture( image );
-
-    glDisable( GL_DEPTH_TEST );
-    glEnable( GL_TEXTURE_2D );
-
-    switch( m_type )
+    kvs::OpenGL::Clear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    kvs::OpenGL::WithPushedAttrib p( GL_ALL_ATTRIB_BITS );
     {
-    case ImageRenderer::Centering:
-        this->center_alignment( camera->windowWidth(), camera->windowHeight() );
-        break;
-    default: break;
-    }
+        kvs::OpenGL::Disable( GL_DEPTH_TEST );
+        kvs::OpenGL::Disable( GL_TEXTURE_1D );
+        kvs::OpenGL::Disable( GL_TEXTURE_3D );
+        kvs::OpenGL::Enable( GL_TEXTURE_2D );
 
-    m_texture.load( image->width(), image->height(), image->pixels().data() );
-    m_texture.bind();
-
-    glMatrixMode( GL_MODELVIEW );
-    glPushMatrix();
-    {
-        glLoadIdentity();
-
-        glMatrixMode( GL_PROJECTION );
-        glPushMatrix();
+        kvs::Texture::Binder unit( m_texture );
+        kvs::OpenGL::WithPushedMatrix p1( GL_MODELVIEW );
+        p1.loadIdentity();
         {
-            glLoadIdentity();
-            glOrtho( m_left, m_right, m_bottom, m_top, -1, 1 );
-
-            glBegin( GL_QUADS );
-            glTexCoord2f( 0.0, 0.0 ); glVertex2f(  0.0,  1.0 );
-            glTexCoord2f( 0.0, 1.0 ); glVertex2f(  0.0,  0.0 );
-            glTexCoord2f( 1.0, 1.0 ); glVertex2f(  1.0,  0.0 );
-            glTexCoord2f( 1.0, 0.0 ); glVertex2f(  1.0,  1.0 );
-            glEnd();
+            kvs::OpenGL::WithPushedMatrix p2( GL_PROJECTION );
+            p2.loadIdentity();
+            {
+                kvs::OpenGL::SetOrtho( m_left, m_right, m_bottom, m_top, -1, 1 );
+                glBegin( GL_QUADS );
+                glTexCoord2f( 0.0, 0.0 ); glVertex2f(  0.0,  1.0 );
+                glTexCoord2f( 0.0, 1.0 ); glVertex2f(  0.0,  0.0 );
+                glTexCoord2f( 1.0, 1.0 ); glVertex2f(  1.0,  0.0 );
+                glTexCoord2f( 1.0, 0.0 ); glVertex2f(  1.0,  1.0 );
+                glEnd();
+            }
         }
-        glPopMatrix();
-        glMatrixMode( GL_MODELVIEW );
     }
-    glPopMatrix();
-
-    glClearDepth( 1000 );
-    glEnable( GL_DEPTH_TEST );
-    glDisable( GL_TEXTURE_2D );
-
-    glPopAttrib();
 
     BaseClass::stopTimer();
 }
@@ -156,7 +144,7 @@ void ImageRenderer::create_texture( const kvs::ImageObject* image )
         kvsMessageError("Unknown pixel color type.");
     }
 
-    glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE );
+    kvs::Texture::SetEnv( GL_TEXTURE_ENV_MODE, GL_REPLACE );
     m_texture.create( image->width(), image->height(), image->pixels().data() );
 }
 
