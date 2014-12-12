@@ -96,6 +96,11 @@ kvs::KVSMLObjectUnstructuredVolume* UnstructuredVolumeExporter<kvs::KVSMLObjectU
         this->setCellType("pyramid");
         break;
     }
+    case kvs::UnstructuredVolumeObject::Prism:
+    {
+        this->setCellType("prism");
+        break;
+    }
     case kvs::UnstructuredVolumeObject::Point:
     {
         this->setCellType("point");
