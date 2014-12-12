@@ -230,6 +230,8 @@
 #include <Core/Visualization/Mapper/MarchingCubesTable.h>
 #include <Core/Visualization/Mapper/MarchingHexahedra.h>
 #include <Core/Visualization/Mapper/MarchingHexahedraTable.h>
+#include <Core/Visualization/Mapper/MarchingPrism.h>
+#include <Core/Visualization/Mapper/MarchingPrismTable.h>
 #include <Core/Visualization/Mapper/MarchingPyramid.h>
 #include <Core/Visualization/Mapper/MarchingPyramidTable.h>
 #include <Core/Visualization/Mapper/MarchingTetrahedra.h>

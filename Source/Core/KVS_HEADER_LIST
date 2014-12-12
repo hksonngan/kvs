@@ -230,6 +230,8 @@ Visualization/Mapper/MarchingCubes
 Visualization/Mapper/MarchingCubesTable
 Visualization/Mapper/MarchingHexahedra
 Visualization/Mapper/MarchingHexahedraTable
+Visualization/Mapper/MarchingPrism
+Visualization/Mapper/MarchingPrismTable
 Visualization/Mapper/MarchingPyramid
 Visualization/Mapper/MarchingPyramidTable
 Visualization/Mapper/MarchingTetrahedra

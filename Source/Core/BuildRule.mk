@@ -276,6 +276,8 @@ $(OUTDIR)/./Visualization/Mapper/MarchingCubes.o \
 $(OUTDIR)/./Visualization/Mapper/MarchingCubesTable.o \
 $(OUTDIR)/./Visualization/Mapper/MarchingHexahedra.o \
 $(OUTDIR)/./Visualization/Mapper/MarchingHexahedraTable.o \
+$(OUTDIR)/./Visualization/Mapper/MarchingPrism.o \
+$(OUTDIR)/./Visualization/Mapper/MarchingPrismTable.o \
 $(OUTDIR)/./Visualization/Mapper/MarchingPyramid.o \
 $(OUTDIR)/./Visualization/Mapper/MarchingPyramidTable.o \
 $(OUTDIR)/./Visualization/Mapper/MarchingTetrahedra.o \

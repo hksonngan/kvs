@@ -18,6 +18,7 @@
 #include <kvs/MarchingTetrahedra>
 #include <kvs/MarchingHexahedra>
 #include <kvs/MarchingPyramid>
+#include <kvs/MarchingPrism>
 
 
 namespace kvs
@@ -310,6 +311,41 @@ void Isosurface::mapping( const kvs::VolumeObjectBase* volume )
                 polygon->maxExternalCoord() );
 
             delete polygon;
+            break;
+        }
+        case kvs::UnstructuredVolumeObject::Prism:
+        {
+            kvs::PolygonObject* polygon = new kvs::MarchingPrism(
+                unstructured_volume,
+                m_isolevel,
+                SuperClass::normalType(),
+                m_duplication,
+                BaseClass::transferFunction() );
+            if ( !polygon )
+            {
+                kvsMessageError("Cannot create isosurfaces.");
+                return;
+            }
+
+            // Shallow copy.
+            SuperClass::setCoords( polygon->coords() );
+            SuperClass::setColors( polygon->colors() );
+            SuperClass::setNormals( polygon->normals() );
+            SuperClass::setConnections( polygon->connections() );
+            SuperClass::setOpacities( polygon->opacities() );
+            SuperClass::setPolygonType( polygon->polygonType() );
+            SuperClass::setColorType( polygon->colorType() );
+            SuperClass::setNormalType( polygon->normalType() );
+
+            SuperClass::setMinMaxObjectCoords(
+                polygon->minObjectCoord(),
+                polygon->maxObjectCoord() );
+            SuperClass::setMinMaxExternalCoords(
+                polygon->minExternalCoord(),
+                polygon->maxExternalCoord() );
+
+            delete polygon;
+
             break;
         }
         default: break;

@@ -276,6 +276,8 @@ $(OUTDIR)\.\Visualization\Mapper\MarchingCubes.obj \
 $(OUTDIR)\.\Visualization\Mapper\MarchingCubesTable.obj \
 $(OUTDIR)\.\Visualization\Mapper\MarchingHexahedra.obj \
 $(OUTDIR)\.\Visualization\Mapper\MarchingHexahedraTable.obj \
+$(OUTDIR)\.\Visualization\Mapper\MarchingPrism.obj \
+$(OUTDIR)\.\Visualization\Mapper\MarchingPrismTable.obj \
 $(OUTDIR)\.\Visualization\Mapper\MarchingPyramid.obj \
 $(OUTDIR)\.\Visualization\Mapper\MarchingPyramidTable.obj \
 $(OUTDIR)\.\Visualization\Mapper\MarchingTetrahedra.obj \

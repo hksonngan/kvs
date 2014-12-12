@@ -528,10 +528,22 @@ void AVSUcd::read_control_file( FILE* const ifs )
         }
 
         // In case of a control file, cycle type must describe in the first line.
-        if ( strncmp( buffer, "data", 4 ) == 0 ) m_cycle_type = Data;
-        else if ( strncmp( buffer, "geom", 4 ) == 0 ) m_cycle_type = Geom;
-        else if ( strncmp( buffer, "data_geom", 9 ) == 0 ) m_cycle_type = DataGeom;
-        else m_cycle_type = CycleTypeUnknown;
+        if ( strncmp( buffer, "data_geom", 9 ) == 0 )
+        {
+            m_cycle_type = DataGeom;
+        }
+        else if ( strncmp( buffer, "data", 4 ) == 0 )
+        {
+            m_cycle_type = Data;
+        }
+        else if ( strncmp( buffer, "geom", 4 ) == 0 )
+        {
+            m_cycle_type = Geom;
+        }
+        else
+        {
+            m_cycle_type = CycleTypeUnknown;
+        }
         break;
     }
 
@@ -578,9 +590,11 @@ void AVSUcd::read_binary_file( const std::string& filename )
     // File information.
     char keyword[8] = {'\0'};
     fread( keyword, 7, 1, ifs );
+    KVS_ASSERT( std::string( keyword ) == "AVS UCD" || std::string( keyword ) == "AVSUC64" );
 
     float version = 0.0f;
     fread( &version, 4, 1, ifs );
+    KVS_ASSERT( version == 1.0f );
 
     // Step information.
     char title[71] = {'\0'};
@@ -588,6 +602,7 @@ void AVSUcd::read_binary_file( const std::string& filename )
 
     int step_number = 0;
     fread( &step_number, 4, 1, ifs );
+    KVS_ASSERT( step_number > 0 );
 
     float step_time = 0.0f;
     fread( &step_time, 4, 1, ifs );
@@ -634,7 +649,7 @@ void AVSUcd::read_binary_file( const std::string& filename )
                 fread( &node_number, 8, 1, ifs );
 
                 long node_id = node_number - 1; // 0, 1, 2, ...
-                fread( pcoords + 3 * node_id, 8, 3, ifs );
+                fread( pcoords + 3 * node_id, 4, 3, ifs );
             }
         }
     }
@@ -685,19 +700,19 @@ void AVSUcd::read_binary_file( const std::string& filename )
             for ( size_t i = 0; i < m_nnodes; i++ )
             {
                 long node_id = node_ids[i];
-                fread( pcoords + 3 * node_id, 8, 1, ifs );
+                fread( pcoords + 3 * node_id, 4, 1, ifs );
             }
 
             for ( size_t i = 0; i < m_nnodes; i++ )
             {
                 long node_id = node_ids[i];
-                fread( pcoords + 3 * node_id + 1, 8, 1, ifs );
+                fread( pcoords + 3 * node_id + 1, 4, 1, ifs );
             }
 
             for ( size_t i = 0; i < m_nnodes; i++ )
             {
                 long node_id = node_ids[i];
-                fread( pcoords + 3 * node_id + 2, 8, 1, ifs );
+                fread( pcoords + 3 * node_id + 2, 4, 1, ifs );
             }
         }
     }
